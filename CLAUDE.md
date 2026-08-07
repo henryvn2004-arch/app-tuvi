@@ -72,21 +72,57 @@ van-han → **bỏ hẳn thẻ**; `ngay-tot` → `CONTENT_REV = 2026-08-04` (m�
   thật và bài kiểm bắt được.
 - **Không bump `?v=`** — chỉ sửa route server, không đụng asset client.
 
-### CÒN LẠI — hai đòn Henry CHƯA duyệt (đã trình, chọn "chỉ làm A")
-- **B — chia `sitemap.xml` thành index theo nhóm** (seo-pages · van-han ·
-  khao-luan · nghien-cuu · tu-dien · tools). Làm vì **ĐO ĐƯỢC** trong GSC, không
-  phải vì tốc độ.
-- **C — `noindex` 18.679 `menh-kho/[năm]/[ngày]` + 1.444 `la-so` pregen.** Đây là
-  đòn DUY NHẤT có thể đổi chất lượng nhận diện tên miền. Bằng chứng bloat:
-  `/menh-kho/1999/03-11` 17 impression vị trí **1,41**, **0 nhấp**;
-  `/la-so/ky-mao-12-03-1999-gio-suu-nu-2027` **162 impression, vị trí 1,41, 0
-  nhấp** — dòng nhiều impression nhất cả site. Truy vấn kéo chúng lên là `"1983"`,
-  `"1976 12"`, `"13 7 2001"`.
-- 🔑 **Rút khỏi sitemap KHÔNG deindex.** Bằng chứng: pregen bị rút từ #358 mà
-  `/la-so/*` vẫn ăn impression đều. Muốn gỡ thật phải `noindex`.
-- 🔴 **Mâu thuẫn CÓ SẴN chưa vá:** `robots.txt` tuyên bố "sitemap-pregen ĐÃ RÚT"
-  nhưng **1.444 URL `laso_pregen` vẫn nằm trong `sitemap.xml`** (đọc từ bảng, chứ
-  không phải từ file đã rút). Rút một cửa mà để cửa kia mở.
+### ✅ B — chia `sitemap.xml` thành sitemapindex 6 con (Henry: *"làm tiếp đi"*)
+`trang` (70) · `noi-dung` (khao-luan + nghien-cuu + tu-dien + tai-lieu + sach) ·
+`seo` (8.478) · `van-han` (576) · `la-so` (laso_public) · `la-so-pregen` (1.444).
+- **Chia theo thứ mình sẽ HÀNH ĐỘNG KHÁC NHAU khi chúng hỏng**, không phải chia
+  cho tròn số: trang tĩnh rớt index = sự cố · bài người viết rớt = thiếu link ·
+  trang SEO rớt = mỏng/trùng · `la-so-pregen` là nhóm đang bị rút, theo riêng để
+  biết khi nào xong.
+- **`laso_public` TÁCH khỏi `laso_pregen`** dù cùng sống ở `/la-so/*`: một bên
+  giữ index (người đã trả tiền), một bên đang deindex. Gộp thì báo cáo nhóm này
+  lúc nào cũng đỏ vì nhóm kia.
+- **KHÔNG nộp `sitemap-hubs`/`sitemap-ngay-tot` vào index** — chúng đã nộp thẳng
+  trong GSC; nộp cả hai đường là một URL đếm hai lần, đúng thứ chia nhóm sinh ra
+  để tránh.
+- Phần dùng chung gom vào `lib/seo/sitemap-source.ts` — 6 route mà mỗi cái chép
+  một bản `fetchAllSlugs` là đúng bẫy `parseLlmJson` đã trả giá.
+
+### ✅ C — `noindex, follow` cho các họ trang mỏng
+18.628 `menh-kho/[năm]/[ngày]` + `/la-so/*` dựng sẵn + `/la-so/*` tính tại chỗ.
+Quyết định + cách lật lại gom trong **`lib/seo/index-policy.ts`**.
+- 🔑 **Vì sao `noindex` chứ không phải rút khỏi sitemap:** bài học #358 —
+  **rút khỏi sitemap KHÔNG deindex**. Pregen bị rút từ hồi đó mà `/la-so/*` vẫn
+  ăn impression đều, vẫn hạng 1,4. Sitemap là LỜI MỜI, không phải LỆNH.
+- 🔑 **Và vì thế URL `noindex` CỐ Ý VẪN NẰM TRONG sitemap** dù Google khuyên
+  đừng: muốn Google gỡ một trang thì nó phải **crawl lại** để đọc thẻ, mà sitemap
+  là đường mời crawl nhanh nhất. Gỡ khỏi sitemap CÙNG LÚC đặt noindex là lặp lại
+  đúng sai lầm cũ. ⏭️ Gỡ SAU khi GSC báo đã hết index.
+- **GIỮ index, đừng đụng:** `laso_public` (người dùng đã TRẢ TIỀN rồi chia sẻ) ·
+  51 hub NĂM (đường duy nhất Google bò xuống day hub để đọc được thẻ noindex) ·
+  toàn bộ `/ngay-tot/*` (có cầu thật).
+- **`follow` chứ không `nofollow`**: đây là tầng điều hướng tới nội dung thật.
+
+### Verify B + C
+- **28 ca trên route thật**: sitemapindex đúng 6 con · 0 URL nằm ở hai nhóm ·
+  0 `changefreq`/`priority` · **A/B tập URL cũ (một cục) vs mới (6 con): 657 =
+  657, 0 mất, 0 thừa**.
+- **noindex**: day hub ✓ · pregen ✓ · ISR ✓ — kèm **4 ca ĐỐI CHỨNG phải KHÔNG
+  bị noindex**: 🔴 `laso_public` (đã trả tiền) · hub NĂM · `/van-han/*` · và
+  `laso_public` vẫn khai `index, follow`.
+- 🪤 **ĐỐI CHỨNG bản trước C**: đúng **3 ca noindex đỏ**, 5 ca đối chứng vẫn xanh
+  ở cả hai phía ⇒ bài kiểm đo đúng thứ đang đổi, không xanh vì lý do khác.
+- **lastmod của batch A còn nguyên sau khi tách**: 657 URL, **0 đóng dấu hôm
+  nay**, `updated_at` vẫn thắng `created_at`, dòng thiếu ngày vẫn bỏ thẻ.
+
+### CÒN LẠI
+- ⚠️ **Số trang index sẽ TỤT MẠNH sau deploy** — đó là fix chạy đúng, không phải
+  hỏng. Impression cũng tụt, nhưng phần tụt là impression **0 nhấp**.
+- ⏭️ **Việc theo dõi:** GSC → Pages → lọc theo `sitemap-la-so-pregen.xml`; khi
+  "Excluded by 'noindex'" phủ gần hết thì XOÁ file đó + gỡ khỏi sitemapindex.
+  Tương tự cho day hub trong `sitemap-hubs.xml`.
+- **Chưa đo được với dữ liệu THẬT** — preview Vercel khoá sau SSO nên toàn bộ
+  verify dừng ở stub PostgREST. Sau deploy mở `sitemap.xml` là thấy ngay.
 - **IndexNow không dùng được cho Google** (chỉ Bing/Yandex), và Google đã bỏ
   endpoint ping sitemap từ 6/2023.
 
