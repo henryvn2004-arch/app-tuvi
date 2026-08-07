@@ -57,11 +57,12 @@ async function handle(request: NextRequest) {
     if (fired.length && TG_CHAT_ID) {
       const time = new Date().toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' });
       const text = `🚨 Cảnh báo bất thường — ${time}\n\n` + fired.map((f) => `• ${f.text}`).join('\n');
-      await tgSendMessage(TG_CHAT_ID, text);
-      delivered = true;
-      // Chỉ đóng dấu cooldown khi tin đã tới nơi. tgSendMessage ném lỗi thì
-      // dòng này không chạy, lượt sau (3 giờ nữa) sẽ báo lại — đúng ý muốn.
-      await commitAnomalyCooldown(fired.map((f) => f.key));
+      delivered = await tgSendMessage(TG_CHAT_ID, text);
+      // Chỉ đóng dấu cooldown khi tin THẬT SỰ tới nơi (delivered=true).
+      // tgSendMessage KHÔNG throw khi Telegram từ chối (chat_id sai, bot bị
+      // chặn/gỡ...) — trước đây dòng này chạy vô điều kiện nên một lượt gửi
+      // hỏng vẫn đóng dấu cooldown 20h, coi như "đã báo" dù chưa ai nhận được.
+      if (delivered) await commitAnomalyCooldown(fired.map((f) => f.key));
     }
     if (fired.length) await logOpsAlerts(fired, delivered);
 
@@ -77,7 +78,9 @@ async function handle(request: NextRequest) {
       note: fired.length
         ? delivered
           ? `đã đẩy ${fired.length} cảnh báo qua Telegram`
-          : `${fired.length} cảnh báo ĐÃ GHI nhưng CHƯA ĐẨY — thiếu ADMIN_TELEGRAM_CHAT_ID`
+          : TG_CHAT_ID
+            ? `${fired.length} cảnh báo ĐÃ GHI nhưng Telegram TỪ CHỐI gửi — xem log server (chat_id sai? bot bị chặn/gỡ?)`
+            : `${fired.length} cảnh báo ĐÃ GHI nhưng CHƯA ĐẨY — thiếu ADMIN_TELEGRAM_CHAT_ID`
         : TG_CHAT_ID
           ? undefined
           : 'chưa có ADMIN_TELEGRAM_CHAT_ID (không có cảnh báo nào để đẩy)',
