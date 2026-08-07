@@ -623,24 +623,69 @@
     });
     var x = el.querySelector('[data-act="hist-close"]'); if (x) x.addEventListener('click', function () { el.style.display = 'none'; });
   }
+  function openHistPanel() {
+    var el = document.getElementById('railHist'); if (!el) return;
+    el.style.display = 'block'; renderHistInto(el);
+  }
   function toggleHistPanel() {
     var el = document.getElementById('railHist'); if (!el) return;
-    if (!el.style.display || el.style.display === 'none') { el.style.display = 'block'; renderHistInto(el); }
+    if (!el.style.display || el.style.display === 'none') openHistPanel();
     else { el.style.display = 'none'; }
   }
   // ── UI: "Phiên gần đây" ở empty-state (tool đặt <div id="shellRecent">) ──
+  // Nhãn phải mô tả CUỘC HỘI THOẠI, không phải lá số. Title do tool tự ghép từ
+  // tên + ngày sinh (vd `'Luận giải '+ten+' · '+ngay+' · năm '+namxem`) nên nhiều
+  // phiên KHÁC NHAU của cùng một lá số ra chuỗi y hệt — danh sách trông như bị
+  // lặp, người dùng không phân biệt được nên không bấm. Mà `saveCurrent` chỉ lưu
+  // phiên khi đã có ít nhất một lượt hỏi–đáp ⇒ thứ phân biệt chúng luôn tồn tại:
+  // CÂU HỎI ĐẦU. Đưa nó lên dòng chính, tên/ngày sinh tụt xuống dòng phụ.
+  function sessTopic(s) {
+    var ms = s.messages || [];
+    for (var i = 0; i < ms.length; i++) if (ms[i].role === 'user' && ms[i].content) return ms[i].content.slice(0, 120);
+    return (s.lastMsg || s.title || 'Phiên').slice(0, 120);
+  }
+  // Dòng phụ dựng TỪ DỮ LIỆU LÁ SỐ, KHÔNG cắt chuỗi title: tiền tố title là chữ
+  // mỗi tool tự viết, còn nhãn tool trong sidebar đọc từ `tool_pricing.label` —
+  // hai bên khác hoa/thường ('Luận giải' vs 'Luận Giải') nên cắt theo chuỗi sẽ
+  // trượt IM LẶNG, để lại đúng phần thừa mình định bỏ.
+  function sessSubject(s) {
+    var b = s.restore && s.restore.birth ? normBirth(s.restore.birth) : null;
+    if (!b || !b.ngay || !b.thang || !b.nam) return '';
+    var who = String(b.hoten || '').trim();
+    return (who ? who + ' · ' : '') + (+b.ngay) + '/' + (+b.thang) + '/' + b.nam;
+  }
+  // Khoá gộp CỐ Ý bỏ TÊN: cùng một người hay bị gõ hai kiểu ('TL' vs 'Thuy Lưu')
+  // → tính cả tên vào khoá thì đếm ra hai lá số khác nhau.
+  function sessBirthKey(s) {
+    var b = s.restore && s.restore.birth ? normBirth(s.restore.birth) : null;
+    if (!b || !b.ngay || !b.thang || !b.nam) return '';
+    return [b.nam, b.thang, b.ngay, b.gioIdx == null ? '?' : b.gioIdx, b.gioitinh || '?'].join('|');
+  }
+  var RECENT_SHOW = 2; // phần còn lại nằm sau "Tất cả (N)" → panel Lịch sử của rail
   function renderRecent(el) {
     if (!el || !ACTIVE || !HIST_ON) { if (el) { el.style.display = 'none'; el.innerHTML = ''; } return; }
     histListAll(ACTIVE, function (list) {
       if (!list.length) { el.style.display = 'none'; el.innerHTML = ''; return; }
       el.style.display = '';
-      el.innerHTML = '<div class="recent-h">Phiên gần đây</div><div class="recent-list">' +
-        list.slice(0, 6).map(function (s) {
+      // Đếm số phiên theo LÁ SỐ để nói "· 3 phiên" thay vì bày 3 dòng trông y hệt.
+      var cnt = {};
+      list.forEach(function (s) { var k = sessBirthKey(s); if (k) cnt[k] = (cnt[k] || 0) + 1; });
+      el.innerHTML = '<div class="recent-h"><span>Phiên gần đây</span>' +
+        (list.length > RECENT_SHOW ? '<button type="button" class="recent-all" data-act="recent-all">Tất cả (' + list.length + ') ›</button>' : '') +
+        '</div><div class="recent-list">' +
+        list.slice(0, RECENT_SHOW).map(function (s) {
+          var k = sessBirthKey(s), sub = sessSubject(s);
+          if (sub && k && cnt[k] > 1) sub += ' · ' + cnt[k] + ' phiên';
           return '<button class="recent-item" type="button" data-id="' + esc(s.id) + '">' +
-            '<span class="ri-t">' + esc(s.title || 'Phiên') + '</span>' +
+            '<span class="ri-m"><span class="ri-t">' + esc(sessTopic(s)) + '</span>' +
+            (sub ? '<span class="ri-b">' + esc(sub) + '</span>' : '') + '</span>' +
             '<span class="ri-s">' + esc(relTime(s.updatedAt)) + '</span></button>';
         }).join('') + '</div>';
       el.querySelectorAll('.recent-item').forEach(function (b) { b.addEventListener('click', function () { restoreSession(b.getAttribute('data-id')); }); });
+      // Mở rail TRƯỚC rồi mới mở panel: trên mobile rail nằm ngoài màn hình, chỉ
+      // bật panel thôi thì bấm xong không thấy gì xảy ra.
+      var all = el.querySelector('[data-act="recent-all"]');
+      if (all) all.addEventListener('click', function () { Shell.openRail(); openHistPanel(); });
     });
   }
   function renderRecentAll() { var el = document.getElementById('shellRecent'); if (el) renderRecent(el); }

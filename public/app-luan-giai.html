@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"></noscript>
-<link rel="stylesheet" href="/shell.css?v=16">
+<link rel="stylesheet" href="/shell.css?v=17">
 <link rel="stylesheet" href="/laso-chart.css?v=3">
 <style>
 /* Center riêng của trang Luận giải */
@@ -36,7 +36,7 @@
 .sc .lb{font-size:11px;color:var(--text-lt);text-transform:uppercase;letter-spacing:.04em}
 .sc .vl{font-family:var(--serif);font-size:24px;font-weight:600;margin-top:2px;display:flex;align-items:baseline;gap:3px}
 .sc .vl small{font-size:12px;color:var(--text-lt);font-family:var(--sans)}
-.sc.good .vl{color:var(--green)}.sc.warn .vl{color:var(--gold-soft)}.sc.pri .vl{color:var(--red)}
+.sc.good .vl{color:var(--tx-green)}.sc.warn .vl{color:var(--gold-soft)}.sc.pri .vl{color:var(--tx-red)}
 .pbar{height:5px;border-radius:5px;background:var(--paper-2);margin-top:7px;overflow:hidden}
 .pbar i{display:block;height:100%;border-radius:5px}
 /* sections */
@@ -54,14 +54,14 @@
 .cung-row:last-child{border-bottom:none}
 .cung-row .nm{font-family:var(--serif);font-size:14px;width:96px;flex:0 0 auto}
 .cung-row .stars{font-size:12px;color:var(--text-lt);flex:1;min-width:0}
-.cung-row .stars b{color:var(--red);font-weight:600}
+.cung-row .stars b{color:var(--tx-red);font-weight:600}
 .cung-row .mb{width:74px;flex:0 0 auto}
 .cung-row .num{width:34px;text-align:right;font-family:var(--serif);font-weight:600;font-size:14px;font-variant-numeric:tabular-nums}
 .ask{margin-top:11px;display:inline-flex;align-items:center;gap:7px;font-size:12.5px;color:var(--gold-soft);border:1px dashed var(--gold-soft);border-radius:8px;padding:7px 12px;cursor:pointer;background:var(--gold-lt);font-family:inherit}
 .hoa-list{display:flex;flex-direction:column;gap:8px}
 .hoa-item{display:flex;align-items:center;gap:10px;font-size:13px}
 .hoa-badge{font-family:var(--serif);font-weight:700;font-size:12px;padding:2px 9px;border-radius:6px;flex:0 0 auto;width:74px;text-align:center}
-.fold-toggle{font-size:12.5px;color:var(--blue);cursor:pointer;margin-bottom:14px;display:inline-block}
+.fold-toggle{font-size:12.5px;color:var(--tx-blue);cursor:pointer;margin-bottom:14px;display:inline-block}
 #miniChart{display:block;margin-bottom:20px}
 /* ── Khối deterministic 24 phần (port từ luan-giai.html buildPreGenHtml) ── */
 .pregen-block{background:#F5F5F5;border:1px solid #e0e0e0;border-radius:8px;padding:12px 16px;margin:12px 0}
@@ -90,12 +90,12 @@
 .claude-content p:last-child{margin-bottom:0}
 .claude-content strong{color:var(--text)}
 .claude-content em{color:var(--gold-soft);font-style:italic}
-.claude-content h3{font-family:var(--serif);font-size:14.5px;font-weight:600;color:var(--navy);margin:14px 0 8px}
+.claude-content h3{font-family:var(--serif);font-size:14.5px;font-weight:600;color:var(--heading);margin:14px 0 8px}
 .claude-content .md-table-wrap{overflow-x:auto;margin:12px 0}
 .claude-content .md-table{width:100%;border-collapse:collapse;font-size:12.5px}
 .claude-content .md-table th{background:var(--navy);color:#fff;padding:8px 10px;text-align:left;font-size:10px;text-transform:uppercase;letter-spacing:.05em}
 .claude-content .md-table td{padding:7px 10px;border-bottom:1px solid var(--line)}
-.laso-error{font-size:12.5px;color:var(--red);padding:8px 0}
+.laso-error{font-size:12.5px;color:var(--tx-red);padding:8px 0}
 .lg-unlock{background:var(--white);border:1px solid var(--gold-soft);border-radius:11px;padding:18px 20px;margin-bottom:22px;text-align:center}
 .lg-unlock p{font-size:12.5px;color:var(--text-lt);margin-top:8px}
 .lg-progress{font-size:12.5px;color:var(--text-lt);margin-bottom:16px;padding:10px 0;border-bottom:1px solid var(--line)}
@@ -168,7 +168,7 @@ window.SHELL_INTRO={key:'luan-giai',title:'Luận giải Tử Vi',desc:'Lập l�
 <script src="/auth.js?v=2"></script>
 <script src="/tuvi-paywall.js?v=17"></script>
   <script src="/nav.js?v=22" data-icons-only></script>
-<script src="/shell.js?v=63"></script>
+<script src="/shell.js?v=64"></script>
 <script>
 // ── Form nhập (dùng chung TuviForm — có "Sinh ở ngoài Việt Nam?" + parity giờ
 // sinh lịch sử với standalone) ──
@@ -246,7 +246,7 @@ function renderLuan(ls,fd,namxem){
   // score cards
   document.getElementById('lgScores').innerHTML=
     card('Tổng quan lá số',overall) + card('Đại vận '+(dvHT?dvHT.tuoiStart+'–'+dvHT.tuoiEnd+'t':''),dvTong) +
-    '<div class="sc"><div class="lb">Cách cục</div><div class="vl" style="font-size:19px;color:var(--navy)">'+((ls.cachCuc&&ls.cachCuc.length)||0)+'</div><div class="pbar"><i style="width:100%;background:var(--gold-soft)"></i></div></div>';
+    '<div class="sc"><div class="lb">Cách cục</div><div class="vl" style="font-size:19px;color:var(--heading)">'+((ls.cachCuc&&ls.cachCuc.length)||0)+'</div><div class="pbar"><i style="width:100%;background:var(--gold-soft)"></i></div></div>';
 
   function card(lb,t){ var col=t!=null?scoreColor(t):'var(--text-lt)'; return '<div class="sc"><div class="lb">'+esc(lb)+'</div><div class="vl" style="color:'+col+'">'+(t!=null?t:'—')+'<small>/10</small></div><div class="pbar"><i style="width:'+(t!=null?t*10:0)+'%;background:'+col+'"></i></div></div>'; }
 

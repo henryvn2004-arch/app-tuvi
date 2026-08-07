@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"></noscript>
-<link rel="stylesheet" href="/shell.css?v=16">
+<link rel="stylesheet" href="/shell.css?v=17">
 <style>
 .pt-card{background:var(--white);border:1px solid var(--line);border-radius:14px;padding:20px 22px;box-shadow:var(--shadow);max-width:680px;margin-bottom:16px}
 .pt-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:4px;display:flex;align-items:center;gap:8px}
@@ -25,9 +25,9 @@
 .gua-badge{display:none;background:var(--paper);border:1.5px solid var(--border-lt);border-radius:9px;padding:11px 14px;margin-top:10px}
 .gua-badge.show{display:flex;align-items:center;gap:11px}
 .gua-icon{font-size:26px}
-.gua-name{font-size:13px;font-weight:700;color:var(--navy);font-family:var(--serif)}
+.gua-name{font-size:13px;font-weight:700;color:var(--heading);font-family:var(--serif)}
 .gua-dirs{font-size:11px;color:var(--text-mid);margin-top:3px;line-height:1.6}
-.gua-dirs .g{color:var(--green);font-weight:600} .gua-dirs .b{color:var(--red);font-weight:600}
+.gua-dirs .g{color:var(--tx-green);font-weight:600} .gua-dirs .b{color:var(--tx-red);font-weight:600}
 .upload-zone{border:2px dashed var(--line-2);border-radius:10px;padding:28px;text-align:center;cursor:pointer;transition:all .2s;background:var(--paper)}
 .upload-zone:hover,.upload-zone.drag-over{border-color:var(--blue);background:var(--gold-lt)}
 .upload-zone input{display:none}
@@ -38,7 +38,7 @@
 .preview-img{width:100%;max-height:320px;object-fit:contain;border-radius:7px;border:1px solid var(--border-lt);background:#000}
 .preview-change{position:absolute;top:7px;right:7px;background:rgba(0,0,0,.55);color:#fff;border:none;padding:4px 10px;border-radius:5px;font-size:11px;cursor:pointer}
 .cost-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;font-size:12px;color:var(--text-mid);flex-wrap:wrap;gap:6px}
-.cost-row strong{color:var(--navy)}
+.cost-row strong{color:var(--heading)}
 .btn-analyze{width:100%;padding:13px;background:var(--navy);color:var(--gold);border:none;border-radius:9px;font-size:14px;font-weight:700;cursor:pointer;font-family:var(--serif);display:flex;align-items:center;justify-content:center;gap:7px}
 .btn-analyze:hover{opacity:.88} .btn-analyze:disabled{opacity:.5;cursor:not-allowed}
 .error-box{background:#FFF5F5;border:1px solid #FECACA;border-radius:7px;padding:10px;font-size:12px;color:var(--red);display:none;margin-bottom:10px}
@@ -48,21 +48,21 @@
 .loading-spinner{width:36px;height:36px;border:3px solid var(--border-lt);border-top-color:var(--navy);border-radius:50%;animation:ptspin 1s linear infinite;margin:0 auto 14px}
 @keyframes ptspin{to{transform:rotate(360deg)}}
 .ls-step{font-size:12px;color:var(--text-lt);padding:2px 0;transition:color .3s}
-.ls-step.active{color:var(--blue);font-weight:600} .ls-step.done{color:var(--green)}
+.ls-step.active{color:var(--tx-blue);font-weight:600} .ls-step.done{color:var(--tx-green)}
 #results-section{display:none}
 .score-compare{display:grid;grid-template-columns:1fr auto 1fr;gap:14px;align-items:center;margin-bottom:6px}
 .score-label{font-size:10px;color:var(--text-lt);font-weight:700;letter-spacing:.5px;text-transform:uppercase;margin-bottom:5px}
 .score-num{font-size:34px;font-weight:700;font-family:var(--serif)}
-.score-before .score-num{color:var(--red)} .score-after .score-num{color:var(--green)}
+.score-before .score-num{color:var(--tx-red)} .score-after .score-num{color:var(--tx-green)}
 .score-bar-wrap{height:6px;background:var(--border-lt);border-radius:3px;overflow:hidden;margin-top:6px}
 .score-bar{height:100%;border-radius:3px;width:0;transition:width 1s ease}
 .score-before .score-bar{background:var(--red)} .score-after .score-bar{background:var(--green)}
-.delta-num{font-size:20px;font-weight:700;color:var(--green);font-family:var(--serif);text-align:center}
+.delta-num{font-size:20px;font-weight:700;color:var(--tx-green);font-family:var(--serif);text-align:center}
 .delta-lbl{font-size:10px;color:var(--text-lt);text-align:center;margin-top:3px}
 .score-expl{font-size:12px;color:var(--text-mid);line-height:1.65;margin-top:10px;padding-top:10px;border-top:1px solid var(--border-lt)}
 .tag-list{display:flex;flex-wrap:wrap;gap:6px;margin-top:7px}
 .tag{display:flex;align-items:center;gap:4px;background:var(--paper);border:1px solid var(--border-lt);border-radius:16px;padding:3px 9px;font-size:11px;color:var(--text-mid)}
-.tag .tag-pos{font-weight:600;color:var(--navy)}
+.tag .tag-pos{font-weight:600;color:var(--heading)}
 .fp-compare{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 @media(max-width:520px){.fp-compare{grid-template-columns:1fr}}
 .fp-half{text-align:center}
@@ -83,18 +83,18 @@
 .priority-medium .rec-badge{background:#FEF3C7;color:#92400E}
 .priority-low .rec-badge{background:#D1FAE5;color:#065F46}
 .rec-body{flex:1}
-.rec-title{font-size:13px;font-weight:600;color:var(--navy);margin-bottom:3px;font-family:var(--serif)}
+.rec-title{font-size:13px;font-weight:600;color:var(--heading);margin-bottom:3px;font-family:var(--serif)}
 .rec-move{font-size:11px;color:var(--text-mid);margin-bottom:4px}
-.pos-from{color:var(--red)} .pos-to{color:var(--green);font-weight:600} .pos-keep{color:var(--green);font-weight:600}
+.pos-from{color:var(--tx-red)} .pos-to{color:var(--tx-green);font-weight:600} .pos-keep{color:var(--tx-green);font-weight:600}
 .rec-reason{font-size:11px;color:var(--text-mid);line-height:1.6}
-.rec-impr{font-size:10px;color:var(--green);font-weight:700;margin-top:3px}
+.rec-impr{font-size:10px;color:var(--tx-green);font-weight:700;margin-top:3px}
 .shop-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:9px}
 .shop-item{border:1px solid var(--border-lt);border-radius:9px;padding:12px;background:var(--paper)}
 .shop-hdr{display:flex;align-items:center;gap:7px;margin-bottom:7px}
-.shop-icon{font-size:20px} .shop-name{font-size:12px;font-weight:600;color:var(--navy)}
+.shop-icon{font-size:20px} .shop-name{font-size:12px;font-weight:600;color:var(--heading)}
 .shop-urg{font-size:9px;padding:2px 5px;border-radius:7px;margin-left:auto;white-space:nowrap}
 .urg-must{background:#FEE2E2;color:var(--red)} .urg-good{background:#FEF3C7;color:#92400E} .urg-opt{background:#F3F4F6;color:#6B7280}
-.shop-pos{font-size:10px;color:var(--blue);font-weight:600;margin-bottom:3px}
+.shop-pos{font-size:10px;color:var(--tx-blue);font-weight:600;margin-bottom:3px}
 .shop-reason{font-size:10px;color:var(--text-mid);line-height:1.5;margin-bottom:4px}
 .shop-price{font-size:10px;color:var(--text-lt)}
 .advice-text{font-size:13px;color:var(--text-mid);line-height:1.75;background:var(--paper);border-left:3px solid var(--gold);padding:12px 14px;border-radius:0 7px 7px 0}
@@ -240,7 +240,7 @@
 
         <div class="pt-card" id="renderCard" style="display:none">
           <h2>🏠 Render Phòng Phong Thủy Bằng AI
-            <span style="font-size:10px;background:var(--gold-lt);color:var(--blue);padding:2px 8px;border-radius:10px;font-weight:600"><span data-tvp-price="phong-thuy-render">…</span> Lượng</span>
+            <span style="font-size:10px;background:var(--gold-lt);color:var(--tx-blue);padding:2px 8px;border-radius:10px;font-weight:600"><span data-tvp-price="phong-thuy-render">…</span> Lượng</span>
           </h2>
           <p class="sub">AI sẽ render lại ảnh phòng của bạn theo màu sắc ngũ hành và bố trí phong thủy tối ưu.</p>
 
@@ -281,7 +281,7 @@ window.SHELL_INTRO={key:'phong-thuy',title:'Phong Thủy Nội Thất',desc:'Ch�
 <script src="/auth.js?v=2"></script>
 <script src="/tuvi-paywall.js?v=17"></script>
   <script src="/nav.js?v=22" data-icons-only></script>
-<script src="/shell.js?v=63"></script>
+<script src="/shell.js?v=64"></script>
 <script src="/tools-shared/ai-loading-steps.js?v=2"></script>
 <script>
 function initPhongThuy(){

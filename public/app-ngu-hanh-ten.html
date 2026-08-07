@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"></noscript>
-<link rel="stylesheet" href="/shell.css?v=16">
+<link rel="stylesheet" href="/shell.css?v=17">
 <style>
 .form-card{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);max-width:600px}
 .form-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:3px}
@@ -22,7 +22,7 @@
 .hint{font-size:11.5px;color:var(--text-lt);margin-top:-6px;margin-bottom:12px}
 .btn-go{background:var(--red);color:#fff;border:none;border-radius:8px;padding:10px 22px;font-size:14px;font-weight:600;cursor:pointer;font-family:var(--serif)}
 .btn-go:disabled{opacity:.6;cursor:not-allowed}
-.err{color:var(--red);font-size:13px;margin-top:8px;display:none}
+.err{color:var(--tx-red);font-size:13px;margin-top:8px;display:none}
 .err.active{display:block}
 #resPanel{display:none;max-width:720px}
 /* Ô giữa "tài liệu" nền sáng cố định, khớp bản standalone /tools/ngu-hanh-ten.html */
@@ -100,7 +100,7 @@
           <div class="res-block-body">
             <div class="syl-cards" id="sylCards"></div>
             <div id="unknownSection" class="unk-wrap" style="display:none">
-              <div style="font-size:12px;font-weight:600;color:#444;margin-bottom:10px">⚠ Chưa tìm thấy chữ Hán cho các chữ dưới — nhập số nét thủ công (tra tại <a href="https://hanzii.net" target="_blank" style="color:var(--blue)">hanzii.net</a>):</div>
+              <div style="font-size:12px;font-weight:600;color:#444;margin-bottom:10px">⚠ Chưa tìm thấy chữ Hán cho các chữ dưới — nhập số nét thủ công (tra tại <a href="https://hanzii.net" target="_blank" style="color:var(--tx-blue)">hanzii.net</a>):</div>
               <div id="unknownInputs" style="display:flex;gap:16px;flex-wrap:wrap;align-items:flex-end"></div>
             </div>
             <div class="uphead">Cân Bằng Ngũ Hành</div>
@@ -122,7 +122,7 @@ window.SHELL_INTRO={key:'ngu-hanh-ten',title:'Ngũ hành tên',desc:'Nhập tên
 <script src="/tools-shared/ngu-hanh-ten.js?v=1"></script>
 <script src="/auth.js?v=2"></script>
   <script src="/nav.js?v=22" data-icons-only></script>
-<script src="/shell.js?v=63"></script>
+<script src="/shell.js?v=64"></script>
 <script>
 // Ô giữa dùng CHUNG module /tools-shared/ngu-hanh-ten.js với trang standalone.
 let _syls = [];

@@ -7,7 +7,7 @@
 <link rel="icon" type="image/webp" href="/seal.webp"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"></noscript>
-<link rel="stylesheet" href="/shell.css?v=16"/>
+<link rel="stylesheet" href="/shell.css?v=17"/>
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 <style>
 /* Trang Tài khoản trong shell: 2 cột (sidebar + nội dung, không rail) */
@@ -18,7 +18,12 @@
 @media(max-width:900px){.shell{grid-template-columns:1fr}}
 .ws-body{padding:0}
 /* Style account port từ profile.html — scope trong .acct-scope để không đụng shell */
-.acct-scope{color:var(--acct-text,#1a1a1a)}
+/* Trang này là port từ profile.html: nó TỰ khai trọn một bảng màu SÁNG
+   (--bg:#FFFFFF, 15 mặt nền #fff) và không có bản dark. Trước đây nó nằm
+   trên nền tối của shell nên chữ tối rơi trên nền tối. Ghim hẳn thành đảo
+   SÁNG cho khớp chính bảng màu của nó — dark thật cho trang này là việc
+   riêng, phải soi lại cả 15 mặt nền chứ không đổi được bằng vài biến. */
+.acct-scope{color:var(--acct-text,#1a1a1a);background:var(--bg);min-height:100%}
 .acct-scope .page-wrap{max-width:960px;margin:0 auto;padding:1.5rem 1.5rem 3rem}
 .acct-scope{
   --navy:#061A2E;--navy-mid:#0D3B5E;--blue:#1455A4;
@@ -641,7 +646,7 @@ window.iconHtml=window.iconHtml||function(k){return (window.ICONS&&window.ICONS[
 </script>
 <script src="/auth.js?v=2"></script>
   <script src="/nav.js?v=22" data-icons-only></script>
-<script src="/shell.js?v=63"></script>
+<script src="/shell.js?v=64"></script>
 <script>
 // HỘI THOẠI (shell history) cho tab Lịch Sử của hub Tài khoản: gộp mọi công cụ
 // từ localStorage (app_hist_v1_*) + server (/api/tuvi-chats type app-*). Bấm 1

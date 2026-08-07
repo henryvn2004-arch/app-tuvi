@@ -5,6 +5,160 @@
 
 ---
 
+## 🌗 Dark mode: MÀU THƯƠNG HIỆU LÀ MẶT NỀN, đừng dùng làm chữ (2026-08-07, cùng PR)
+
+Henry: *"Ok sửa luôn đi"* mục nợ `--gold-lt` tao ghi ở vòng trên. Đo ra thì cái
+nợ đó chỉ là **một mẩu**: khối `:root[data-theme="dark"]` của `shell.css` khai lại
+`--text/--line/--paper/--white/--shadow` nhưng **không khai lại một màu thương
+hiệu nào**, nên mọi màu đó dùng làm CHỮ đều chìm.
+
+| Màu | Làm chữ | Contrast trên thẻ dark `#161d27` |
+|---|---:|---|
+| `--navy` `#061A2E` | **71 chỗ / 17 file** | **1,04:1** — vô hình hoàn toàn |
+| `--red` `#C0392B` | 50 / 31 | 3,12:1 |
+| `--blue` `#1455A4` | 19 / 14 | 2,31:1 |
+| `--green` `#1E6B3C` | 15 / 5 | 2,60:1 |
+
+### 🔑 Căn nguyên: TOKEN HAI VAI — và vì thế KHÔNG được khai lại ở dark
+`--navy` vừa là **mặt nền** sidebar/thẻ hero vừa là **màu chữ tiêu đề**. `--red` là
+**nền nút CTA** (`.btn-go` ~30 trang · `.btn.pri` · `.send` của rail) *và* màu chữ
+lỗi. Khai lại chúng ở dark là sidebar hoá sáng, nút CTA đổi màu. ⇒ Phải **TÁCH VAI**:
+- Giữ `--navy/--red/--blue/--green` = MẶT NỀN, không đụng.
+- Thêm `--heading` · `--tx-red` · `--tx-blue` · `--tx-green` cho CHỮ, **giá trị
+  light TRÙNG KHÍT màu gốc** ⇒ light mode không đổi một pixel, dark có bản sáng.
+- `--gold-lt` cũng hai vai: 53 chỗ làm **nền**, nhưng **6 chỗ trong `app-home.html`
+  làm CHỮ** trên thẻ "Vận hôm nay" — thẻ đó navy **cố định cả hai theme**. Đổi mù
+  là 6 chỗ đó tụt **16,04 → 1,07:1**. Tách ra `--gold-on-navy` (không theo theme).
+
+### Chọn `--gold-lt` dark bằng ΔE, KHÔNG bằng contrast-ratio
+`#241f14` — **ΔE 16,2** so với thẻ, trong khi hover ở light mode chỉ **ΔE 6,1**;
+và là ứng viên duy nhất giữ `--text-lt` ở AA (4,51). Contrast-ratio nền-vs-nền ra
+**1,03** nghe như "không phân biệt được" nhưng đó là **thước đo sai cho hai MẶT
+PHẲNG khác hue**: nó chỉ đo độ sáng. Trùng giá trị `admin.css` đã chọn từ trước.
+
+### 🪤 Ba cái bẫy, cả ba chỉ lộ khi ĐO chứ không khi đọc code
+1. **`app-tai-khoan.html` là ĐẢO SÁNG** — port từ `profile.html`, tự khai trọn bảng
+   màu sáng trong `.acct-scope` (15 mặt nền `#fff`) và **không có bản dark**. Bộ đổi
+   token của tao sửa 12 chỗ ở đó ⇒ chữ SÁNG trên nền TRẮNG. Đã **hoàn nguyên cả
+   file** rồi ghim `.acct-scope{background:var(--bg)}` cho khớp chính bảng màu của
+   nó. Dark thật cho trang đó là việc riêng — phải soi lại cả 15 mặt nền.
+2. **Bộ dò "đảo sáng" của tao bỏ qua OAN 2 chỗ**: `.rail-upsell` khai
+   `background:var(--gold-lt,#F9F4EB)` — cái **fallback** `#F9F4EB` làm bộ dò tưởng
+   là nền sáng cố định. Nền nó THEO THEME. Phải vá tay 2 chỗ con.
+3. **Hai bản vá của chính tao đá nhau**: đổi `h2` của trang Tài khoản sang
+   `--heading` (sáng ở dark) rồi lại ghim trang thành đảo SÁNG ⇒ chữ sáng trên nền
+   trắng, 1,05 → 1,25. Trả `h2` về `--navy`.
+
+### Verify — đo trong TRÌNH DUYỆT trên cả 35 trang, không tin grep
+- **A) LIGHT mode phải không đổi**: so màu chữ tính được của **5.022 phần tử** giữa
+  bản mới và **worktree ở `git HEAD`** → **0 lệch ngoài ý muốn**, đúng **1 chỗ đổi
+  có khai trước (`.step-counter` `#444`→`--text-mid` `#4a4a4a`, lệch 6/255)**.
+- **B) DARK mode**: leo cây cha lấy nền hiệu dụng rồi chấm contrast thật trên
+  **4.133 phần tử có chữ**: **vô hình (<2:1) 16 → 0** · dưới AA 403 → 375.
+- 🪤 **Bản đầu của bài kiểm A/B SAI**: chỉ tráo `shell.css` mà giữ HTML mới ⇒ biến
+  mới thành `undefined` → rơi về màu thừa kế → báo "40 chỗ lệch" **oan**. Đối chứng
+  phải là **CẢ CÂY** (dùng `git worktree`), không phải một file.
+- 🪤 Ca T8 của vòng trước hoá **flaky**: trang tải lại `?auto=1` tự tiêu thụ
+  `app_restore` lúc boot nên test đọc ra `null` tuỳ lúc. Chặn lượt tải đó bằng trang
+  trắng để phép đo tất định. Và ca ĐỐI CHỨNG phải neo `origin/main`, **không neo
+  `HEAD`** — stack thêm commit là `HEAD` dịch, đối chứng tự so với chính mình.
+- `typecheck` 0 · `lint` 0 lỗi (72 warning pre-existing) · `prettier` sạch ·
+  `check:prices`/`check:groups`/`check:nostore` sạch · engine 185 pass.
+
+### CÒN LẠI
+- **375 chỗ vẫn dưới AA ở dark**, phần lớn là `--gold-soft` làm chữ (**47 chỗ,
+  4,25:1**). CỐ Ý không đụng: ở **light** nó đang là **3,64:1** — tức dark còn khá
+  hơn light, không phải hồi quy; và nó kiêm luôn màu VIỀN nên đổi là lan khắp nơi.
+- **Trang Tài khoản ghim sáng**, chưa có dark thật (32 chỗ).
+- Bộ đo chỉ thấy **trạng thái ĐẦU** của mỗi trang (form, chưa có kết quả) nên phần
+  kết quả luận giải chưa được quét.
+- `admin.css` có `--gold-lt` riêng cùng giá trị `#241f14` — hai file hai bảng màu,
+  cố ý không gộp.
+
+---
+
+## 🕘 "Phiên gần đây": nhãn mô tả LÁ SỐ trong khi cái phân biệt là HỘI THOẠI (2026-08-07, PR này)
+
+Henry gửi ảnh `/app/luan-giai` trên iPhone: *"Chắc phải tìm cách display cái mục
+Phiên gần đây lại sao cho hợp lý. Chứ càng về sau càng nhiều phiên thì nó cứ dài
+ra ah?"*
+
+### 🔴 ĐÍNH CHÍNH tiền đề: nó KHÔNG dài ra — đã chặn ở 6 dòng từ đầu
+`shell.js` vốn `list.slice(0, 6)`, lưu tối đa 40 (`HIST_CAP`). Chạy 100 phiên vẫn
+đúng 6 dòng. Lỗi thật là **6 dòng đó vừa tốn chỗ vừa không nói được gì**, và nó tệ
+dần theo thời gian không phải vì DÀI THÊM mà vì càng ngày càng **GIỐNG NHAU**.
+
+### 🔑 Căn nguyên: nhãn mô tả LÁ SỐ, còn thứ phân biệt các phiên là CUỘC HỘI THOẠI
+`app-luan-giai.html` dựng title = `'Luận giải '+tên+' · '+ngày+' · năm '+namxem`.
+Trên chính trang Luận Giải thì `"Luận giải "` thừa (đang đứng ở đó) và
+`" · năm 2026"` thừa (mặc định, giống nhau cả 6 dòng) ⇒ **21/33 ký tự = 64% là
+boilerplate**, phần khác nhau chỉ còn tên + ngày, mà tên thì bị cắt cụt.
+- Ảnh của Henry có **3 dòng chữ y hệt** `Luận giải DT · 9/5/1984 · năm 2026`.
+  Đọc `saveCurrent()`: phiên **chỉ được lưu khi đã có ít nhất một lượt hỏi–đáp**
+  (`if (!msgs.length) return`) ⇒ đó là **3 cuộc trò chuyện KHÁC NHAU** về cùng một
+  lá số, không phải rác trùng lặp. Nhãn không nói được điều đó nên trông như lặp →
+  không ai bấm → 6 dòng chiếm 40% màn hình đầu để phục vụ ~0 cú bấm.
+- ⇒ Thứ phân biệt chúng LUÔN TỒN TẠI và đã nằm sẵn trong record: **câu hỏi đầu**.
+
+### Lỗi kèm: chiếm 40% màn hình đầu, và nằm TRÊN form
+`#shellRecent` đặt trước `.form-card` ở **cả 27 trang tool**. Mỗi dòng ~43px
+(padding 9 + font 12.8 + gap 6) → 6 dòng + tiêu đề ≈ **284px** ≈ 40% chiều cao
+dùng được của iPhone, cộng thẻ intro phía trên thì cái form — thứ người ta vào
+trang để dùng — bị đẩy hẳn xuống dưới màn hình đầu.
+
+### Ba bề mặt cùng nói một thứ trong một màn hình
+`Phiên gần đây` (trên form) · **`Sổ lá số`** (chip trong form) · **`Lịch sử`**
+(panel trong rail, đã có xoá). `restoreSession()` reload `?auto=1` → **tính lại
+center rồi mới replay transcript** ⇒ phần "lá số" của nó trùng khít chip Sổ lá số
+ngay bên dưới; giá trị RIÊNG duy nhất là **đoạn hội thoại** — đúng thứ nhãn không
+hề nhắc tới.
+
+### Cách vá (Henry chốt phương án B sau khi xem 7 hướng)
+- **Dòng chính = câu hỏi đầu của phiên**, tên/ngày sinh tụt xuống dòng phụ.
+- **Chỉ hiện 2 dòng**, phần còn lại sau nút `Tất cả (N) ›` → **mở panel Lịch sử
+  CÓ SẴN** trong rail (chỗ đó đã có xoá, không phải viết mới).
+- **Gộp đếm theo lá số**: `DT · 9/5/1984 · 3 phiên` thay vì bày 3 dòng trông y hệt.
+- ⚠️ **Dòng phụ dựng TỪ `restore.birth`, KHÔNG cắt chuỗi title**: tiền tố title là
+  chữ mỗi tool tự viết, còn nhãn tool trong sidebar đọc từ `tool_pricing.label` —
+  hai bên khác hoa/thường (`Luận giải` vs `Luận Giải`) nên cắt theo chuỗi sẽ trượt
+  IM LẶNG, để lại đúng phần thừa mình định bỏ.
+- ⚠️ **Khoá gộp CỐ Ý bỏ TÊN**: cùng một người hay bị gõ hai kiểu — ảnh của Henry có
+  `TL` và `Thuy Lưu` cùng ngày `30/8/1983`. Tính tên vào khoá là đếm ra hai lá số.
+- **Mở rail TRƯỚC rồi mới mở panel** khi bấm `Tất cả`: trên mobile rail nằm ngoài
+  màn hình, chỉ bật panel thôi thì bấm xong không thấy gì xảy ra.
+- `min-width:0` trên `.ri-m` là BẮT BUỘC — thiếu nó thì `text-overflow` của con
+  không chạy, câu hỏi dài phình dòng thay vì cắt bằng ba chấm.
+- Sửa **`shell.js` + `shell.css`** ⇒ 27 trang tool tự đổi. Không migration, không
+  đụng API, không đụng `restoreSession`. Bump `shell.js?v=64` · `shell.css?v=17`
+  (35 trang; `git diff` xác nhận HTML **chỉ có đúng 2 dòng version mỗi file**).
+
+### Verify
+`typecheck` 0 lỗi · `lint` 0 lỗi (72 warning pre-existing) · `prettier` sạch ·
+`check:prices` + `check:groups` + `check:nostore` sạch · engine **185 pass** ·
+`node --check`.
+- **34 ca Playwright trên TRANG THẬT** `/app/luan-giai` + `/app/phong-thuy` với
+  `shell.js` THẬT, seed đúng 6 phiên trong ảnh Henry: đúng 2 dòng · dòng chính là
+  câu hỏi · **0 lượt lọt chữ "Luận giải"/"năm 2026"** · gộp đúng `3 phiên` và lá số
+  1 phiên thì KHÔNG hiện số đếm · cao **129px** · 390px và 1440px không tràn ngang.
+- 🪤 **ĐỐI CHỨNG nạp đè bản cũ lấy từ git HEAD**: 6 dòng, **2 dòng chữ y hệt nhau**,
+  cao **265px** ⇒ lỗi có thật và bản mới cắt được ~nửa, bài kiểm không đỗ giả.
+- Ca biên: 2 phiên → **không dựng nút "Tất cả"** · phiên không có lá số (tool ảnh)
+  → 1 dòng, **không dựng dòng phụ rỗng** · câu hỏi dài 270 ký tự → ellipsis, vẫn 1
+  dòng · câu hỏi chứa `<img onerror>` + `<script>` **không chạy** mà vẫn hiện nguyên
+  văn · bấm `Tất cả` → rail mở + panel liệt kê **đủ 6 phiên kèm nút xoá** · bấm một
+  dòng → đúng `?auto=1` + đúng id trong `sessionStorage`.
+
+### CÒN LẠI
+- **Nợ CÓ SẴN, cố ý không vá ở đây:** `--gold-lt` không được khai lại trong khối
+  `[data-theme="dark"]` nên mọi `:hover` dùng nó (`.chip`, `.row`, `.intro-card`,
+  `.recent-item`) ra nền kem sáng + chữ sáng ở dark mode. Có sẵn từ trước, nằm trên
+  4 thành phần dùng chung — trộn vào PR này là đúng thứ repo tự dặn tránh. Nút
+  `.recent-all` mới CỐ Ý dùng `--paper-2` (có khai lại ở dark) để không nhân thêm.
+- Con số cần nhìn sau 1–2 tuần: có ai bấm `Tất cả (N)` không. Không ai bấm nghĩa là
+  2 dòng đã đủ và phần còn lại chỉ nên sống trong rail.
+
+---
+
 ## 🎯 M3 — Nhiệm vụ onboarding: đổi CÙNG khoản tiền lấy được gì (2026-08-07, PR này)
 
 Henry: *"ok. A. skip P1. làm M3"*, rồi bổ sung đúng chỗ tao suýt khoá cứng:

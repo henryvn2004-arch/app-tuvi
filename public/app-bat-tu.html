@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"></noscript>
-<link rel="stylesheet" href="/shell.css?v=16">
+<link rel="stylesheet" href="/shell.css?v=17">
 <style>
 /* Center riêng của trang Bát Tự */
 .form-card{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);max-width:640px}
@@ -76,17 +76,17 @@ table.tutru td.row-label{font-size:10.5px;color:#9a8a6a;text-transform:uppercase
 .dv-row:last-child{border-bottom:none}
 .dv-row.cur{background:var(--gold-lt);margin:0 -8px;padding:8px;border-radius:8px;border-bottom:1px solid transparent}
 .dv-row .cc{font-family:var(--serif);font-size:14px;width:78px;flex:0 0 auto}
-.dv-row .cc b{color:var(--red)}
+.dv-row .cc b{color:var(--tx-red)}
 .dv-row .rng{font-size:12px;color:var(--text-lt);width:120px;flex:0 0 auto}
 .dv-row .tt{font-size:12px;color:var(--text-mid);flex:1;min-width:0}
 .dv-row .num{width:34px;text-align:right;font-family:var(--serif);font-weight:600;font-size:14px}
 .chips{display:flex;gap:7px;flex-wrap:wrap}
 .chip{font-size:12px;padding:4px 10px;border-radius:20px;border:1px solid var(--line-2);color:var(--text-mid);background:var(--paper)}
-.chip.g{color:var(--green);border-color:var(--green)}
-.chip.r{color:var(--red);border-color:var(--red)}
+.chip.g{color:var(--tx-green);border-color:var(--green)}
+.chip.r{color:var(--tx-red);border-color:var(--red)}
 .chip.w{color:var(--gold-soft);border-color:var(--gold-soft)}
 .ask{margin-top:12px;display:inline-flex;align-items:center;gap:7px;font-size:12.5px;color:var(--gold-soft);border:1px dashed var(--gold-soft);border-radius:8px;padding:7px 12px;cursor:pointer;background:var(--gold-lt);font-family:inherit}
-.laso-error{color:var(--red);padding:14px;border:1px solid var(--red);border-radius:10px;background:var(--white)}
+.laso-error{color:var(--tx-red);padding:14px;border:1px solid var(--red);border-radius:10px;background:var(--white)}
 /* ── Khối deterministic 16 phần (port từ tu-binh.html buildPreGenForPhan) ── */
 :root{--bg-soft:#f5f6f8;--navy-mid:#1a3a6a}
 .pregen-block{background:var(--bg-soft);border:1px solid var(--border-lt);border-radius:8px;padding:14px 16px;margin-bottom:14px}
@@ -94,18 +94,18 @@ table.tutru td.row-label{font-size:10.5px;color:#9a8a6a;text-transform:uppercase
 .pregen-block.warn{border-left:3px solid var(--red);background:#FDF6F5}
 .pregen-title{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);margin-bottom:10px}
 .pregen-yn{font-size:13px;line-height:1.55;padding:4px 8px;border-radius:2px;margin-bottom:4px}
-.pregen-yn.yn-cat{background:rgba(30,107,60,0.08);color:var(--green)}
-.pregen-yn.yn-hung{background:rgba(192,57,43,0.07);color:var(--red)}
+.pregen-yn.yn-cat{background:rgba(30,107,60,0.08);color:var(--tx-green)}
+.pregen-yn.yn-hung{background:rgba(192,57,43,0.07);color:var(--tx-red)}
 .pregen-yn.yn-neutral{background:rgba(154,123,58,0.07);color:var(--text-mid)}
 .pregen-yn.yn-great-hung{background:var(--red);color:#fff;font-weight:600}
-.pregen-cach-name{font-family:'Noto Serif',serif;font-size:16px;color:var(--navy);margin-bottom:4px}
+.pregen-cach-name{font-family:'Noto Serif',serif;font-size:16px;color:var(--heading);margin-bottom:4px}
 .pregen-cach-desc{font-size:12px;color:var(--text-mid);line-height:1.6}
 .pregen-cach-source{font-size:10px;color:var(--text-lt);font-style:italic;margin-top:6px}
 .pregen-domain-bar{display:grid;grid-template-columns:110px 1fr 50px;gap:12px;align-items:center;margin:8px 0}
-.pregen-domain-name{font-size:13px;color:var(--navy);font-weight:600}
+.pregen-domain-name{font-size:13px;color:var(--heading);font-weight:600}
 .pregen-domain-track{background:var(--border-lt);height:14px;position:relative;overflow:hidden;border-radius:3px}
 .pregen-domain-fill{background:linear-gradient(90deg,var(--blue),var(--navy-mid));height:100%;transition:width .6s ease}
-.pregen-domain-score{font-size:14px;font-weight:700;color:var(--blue);text-align:right;font-family:'Noto Serif',serif}
+.pregen-domain-score{font-size:14px;font-weight:700;color:var(--tx-blue);text-align:right;font-family:'Noto Serif',serif}
 .pregen-domain-reasons{font-size:11px;color:var(--text-lt);margin-top:4px;padding-left:122px;line-height:1.5}
 @media (max-width:800px){.pregen-domain-reasons{padding-left:0}}
 .phan-empty{font-size:12.5px;color:var(--text-lt);font-style:italic;padding:4px 0}
@@ -115,7 +115,7 @@ table.tutru td.row-label{font-size:10.5px;color:#9a8a6a;text-transform:uppercase
 .claude-content p:last-child{margin-bottom:0}
 .claude-content strong{color:var(--text)}
 .claude-content em{color:var(--gold-soft);font-style:italic}
-.claude-content h3{font-family:var(--serif);font-size:14.5px;font-weight:600;color:var(--navy);margin:14px 0 8px}
+.claude-content h3{font-family:var(--serif);font-size:14.5px;font-weight:600;color:var(--heading);margin:14px 0 8px}
 .claude-content .md-table-wrap{overflow-x:auto;margin:12px 0}
 .claude-content .md-table{width:100%;border-collapse:collapse;font-size:12.5px}
 .claude-content .md-table th{background:var(--navy);color:#fff;padding:8px 10px;text-align:left;font-size:10px;text-transform:uppercase;letter-spacing:.05em}
@@ -194,7 +194,7 @@ window.SHELL_INTRO={key:'bat-tu',title:'Lá số Bát Tự (Tứ Trụ)',desc:'L
 <script src="/auth.js?v=2"></script>
 <script src="/tuvi-paywall.js?v=17"></script>
   <script src="/nav.js?v=22" data-icons-only></script>
-<script src="/shell.js?v=63"></script>
+<script src="/shell.js?v=64"></script>
 <script>
 // Bát Tự dùng ĐÚNG giờ đại diện của địa chi giờ (23,1,3,…) để tứ trụ trên
 // trang KHỚP TUYỆT ĐỐI với bát tự server tính cho rail (server map hourBranch
@@ -278,8 +278,8 @@ function renderBatTu(bt,namxem){
   function card(lb,t,note){ var col=t!=null?scoreColor(t):'var(--text-lt)'; return '<div class="sc"><div class="lb">'+esc(lb)+'</div><div class="vl" style="color:'+col+'">'+(t!=null?t:'—')+'<small>/10</small></div><div class="pbar"><i style="width:'+(t!=null?t*10:0)+'%;background:'+col+'"></i></div></div>'; }
   document.getElementById('btScores').innerHTML=
     card('Cường nhược nhật can',cn?cn.score:null)+
-    (dvh?card('Đại vận '+dvh.tuoiStart+'–'+dvh.tuoiEnd+'t',dvh.score):'<div class="sc"><div class="lb">Khởi vận</div><div class="vl" style="font-size:19px;color:var(--navy)">'+(bt.tuoiKhoiVan||'—')+'t</div><div class="pbar"><i style="width:100%;background:var(--gold-soft)"></i></div></div>')+
-    '<div class="sc"><div class="lb">Cách cục</div><div class="vl" style="font-size:16px;color:var(--navy)">'+esc(cc?cc.primary:'—')+'</div><div class="pbar"><i style="width:100%;background:var(--gold-soft)"></i></div></div>';
+    (dvh?card('Đại vận '+dvh.tuoiStart+'–'+dvh.tuoiEnd+'t',dvh.score):'<div class="sc"><div class="lb">Khởi vận</div><div class="vl" style="font-size:19px;color:var(--heading)">'+(bt.tuoiKhoiVan||'—')+'t</div><div class="pbar"><i style="width:100%;background:var(--gold-soft)"></i></div></div>')+
+    '<div class="sc"><div class="lb">Cách cục</div><div class="vl" style="font-size:16px;color:var(--heading)">'+esc(cc?cc.primary:'—')+'</div><div class="pbar"><i style="width:100%;background:var(--gold-soft)"></i></div></div>';
 
   // ── 16 phần — port deterministic (BatTuCore.buildPreGenForPhan) + nút hỏi rail mỗi phần ──
   var LABELS=BatTuCore.PHAN_LABELS;
