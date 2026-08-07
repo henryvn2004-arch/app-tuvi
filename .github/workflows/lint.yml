@@ -31,6 +31,14 @@ jobs:
       - name: Không có giá chép cứng
         run: npm run check:prices
 
+      # Chặn tái phát lượt GET Supabase thiếu `cache:'no-store'`. Next bọc fetch
+      # TOÀN CỤC và nhớ kết quả kể cả trong route force-dynamic — bug này đã cắn
+      # ba lần, lần nào cũng im lặng: bản chia sẻ đã gỡ vẫn render, bộ giám sát
+      # báo job "chưa hề chạy", và nặng nhất là trừ tiền xong vẫn nhận 402 rồi
+      # người dùng bấm lại và bị trừ LẦN HAI.
+      - name: GET Supabase đều có no-store
+        run: npm run check:nostore
+
       # Chặn tái phát bảng 64 quẻ sai mã hào: đã có lúc 49/64 quẻ mang mã của
       # quẻ khác (77% lượt gieo ra sai lời đoán) mà không gì báo, vì nhánh "tìm
       # quẻ gần nhất" nuốt hết. 64 chuỗi nhị phân thì mắt không soi được.

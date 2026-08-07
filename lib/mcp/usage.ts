@@ -38,7 +38,7 @@ export async function distinctVanHanYears(key: string): Promise<Set<number> | nu
   try {
     const res = await fetch(
       `${SUPABASE_URL}/rest/v1/mcp_usage?key=eq.${encodeURIComponent(key)}&tool=eq.van_han&select=input`,
-      { headers: SB_HEADERS },
+      { cache: 'no-store', headers: SB_HEADERS },
     );
     if (!res.ok) return null;
     const rows = (await res.json()) as { input?: { nam_xem?: number } }[];

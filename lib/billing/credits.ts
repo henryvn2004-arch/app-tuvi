@@ -44,6 +44,7 @@ export async function getUserFromToken(token: string): Promise<AuthUser | null> 
   try {
     const res = await fetch(`${SUPABASE_URL}/auth/v1/user`, {
       headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${token}` },
+      cache: 'no-store',
     });
     if (!res.ok) return null;
     const u = (await res.json()) as { id?: string; email?: string };

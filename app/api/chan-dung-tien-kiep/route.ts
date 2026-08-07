@@ -31,6 +31,7 @@ import {
 } from '@/lib/agent/past-life-story';
 import { generatePortraitImage } from '@/lib/image/openai-image';
 import type { BirthParams } from '@/lib/contract/v1';
+import { authUserFromRequest, parseLlmJson } from '@/lib/api/tool-helpers';
 import { withToolOutcome } from '@/lib/ops/tool-outcome';
 import {
   lookupPortraitCache,
@@ -48,70 +49,6 @@ const TOOL_ID = 'chan-dung-tien-kiep';
 
 const SUPABASE_URL = process.env.SUPABASE_URL!;
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY!;
-
-// ── Auth (cùng pattern app/api/chan-dung-vo-chong/route.ts) ─────────────
-async function getUserFromToken(token: string) {
-  const res = await fetch(`${SUPABASE_URL}/auth/v1/user`, {
-    headers: { Authorization: `Bearer ${token}`, apikey: SUPABASE_KEY },
-  });
-  if (!res.ok) return null;
-  const u = await res.json();
-  return u?.id ? u : null;
-}
-
-async function authUser(
-  request: NextRequest,
-): Promise<{ error: string; status: number } | { user: { id: string } }> {
-  const auth = request.headers.get('Authorization');
-  if (!auth?.startsWith('Bearer ')) return { error: 'Unauthorized', status: 401 };
-  const user = await getUserFromToken(auth.slice(7));
-  if (!user?.id) return { error: 'Unauthorized', status: 401 };
-  return { user };
-}
-
-// Bóc JSON từ câu trả lời LLM.
-//
-// Bản cũ chỉ `JSON.parse(text.replace(fences).trim())` — giòn tới mức chỉ cần
-// model thêm một câu dẫn ("Đây là câu chuyện:") hoặc một dòng ghi chú ở cuối là
-// hỏng cả lượt, và người dùng nhận "Lỗi phân tích kết quả AI." dù model đã trả
-// nội dung đầy đủ. Prompt truyện nay dài (~9k token đầu vào) nên Flash càng dễ
-// thêm chữ ngoài JSON.
-//
-// Nay: gỡ fence → nếu parse thẳng không được thì CẮT LẤY KHỐI {...} cân bằng
-// ngoài cùng rồi parse lại (bỏ mọi thứ trước/sau nó).
-function parseJSON(text: string): unknown {
-  const t = String(text || '').replace(/```json|```/g, '').trim();
-  try {
-    return JSON.parse(t);
-  } catch {
-    /* thử cắt khối {...} bên dưới */
-  }
-  // Thử TỪNG khối {...} cân bằng, từ trái sang: khối đầu tiên parse được thì
-  // lấy. Cố ý không dừng ở khối đầu tiên tìm thấy — model hay chèn ngoặc nhọn
-  // trong lời dẫn ("{quan trọng}") và khối rác đó sẽ nuốt mất JSON thật.
-  for (let i = t.indexOf('{'); i >= 0; i = t.indexOf('{', i + 1)) {
-    let depth = 0;
-    let inStr = false;
-    let esc = false;
-    for (let k = i; k < t.length; k++) {
-      const c = t[k];
-      if (esc) { esc = false; continue; }
-      if (c === '\\') { esc = true; continue; }
-      if (c === '"') { inStr = !inStr; continue; }
-      if (inStr) continue; // ngoặc nhọn trong lời thoại không tính
-      if (c === '{') depth++;
-      else if (c === '}' && --depth === 0) {
-        try {
-          return JSON.parse(t.slice(i, k + 1));
-        } catch {
-          /* khối này không phải JSON ta cần → thử khối kế tiếp */
-        }
-        break;
-      }
-    }
-  }
-  return null;
-}
 
 /** Lập lá số + dựng hồ sơ nhân vật — dùng chung cho cả 2 pha. */
 type BuiltProfile =
@@ -214,7 +151,7 @@ async function handleStory(birth: BirthParams, userId: string, key: string, eraI
 
   let res = await askStory(false);
   if (!res) return err('Lỗi AI khi viết câu chuyện. Vui lòng thử lại.', 500);
-  let parsed = parseJSON(res.raw) as StoryJson | null;
+  let parsed = parseLlmJson(res.raw) as StoryJson | null;
 
   // Parse hỏng → THỬ LẠI MỘT LƯỢT. Trước đây fail là trả lỗi luôn, người dùng
   // mất Lượng mà không có gì. Log kèm độ dài + đầu/đuôi bản thô để lần sau
@@ -227,7 +164,7 @@ async function handleStory(birth: BirthParams, userId: string, key: string, eraI
     void logLlmParseFail('chan-dung-tien-kiep', res.model, t, 1);
     res = await askStory(true);
     if (!res) return err('Lỗi AI khi viết câu chuyện. Vui lòng thử lại.', 500);
-    parsed = parseJSON(res.raw) as StoryJson | null;
+    parsed = parseLlmJson(res.raw) as StoryJson | null;
   }
   // biDanh (vế thơ) là phần TRANG TRÍ — thiếu vẫn hiển thị được vì danh xưng
   // chính (chức phận) do engine chốt, không phụ thuộc LLM. Chỉ moTaNhanVat + acts
@@ -321,7 +258,7 @@ async function handleImage(userId: string, birth: BirthParams, key: string, eraI
       cache_creation_input_tokens: 0,
       cache_read_input_tokens: 0,
     });
-    const parsed = parseJSON(llmRes.text) as { imagePrompt?: string } | null;
+    const parsed = parseLlmJson(llmRes.text) as { imagePrompt?: string } | null;
     faceDescriptionEn = String(parsed?.imagePrompt || '').trim();
   } catch {
     /* best-effort — thiếu đoạn tả mặt vẫn vẽ được bằng phần khung server ghép */
@@ -387,14 +324,14 @@ async function handleImage(userId: string, birth: BirthParams, key: string, eraI
 
 // ── History ─────────────────────────────────────────────────────────────
 async function handleHistory(request: NextRequest) {
-  const auth = await authUser(request);
+  const auth = await authUserFromRequest(request);
   if ('error' in auth) return err(auth.error, auth.status);
 
   const r = await fetch(
     `${SUPABASE_URL}/rest/v1/past_life_portraits?user_id=eq.${auth.user.id}` +
       '&select=id,created_at,image_url,occupation_title,occupation_star,portrait_age,era' +
       '&order=created_at.desc&limit=20',
-    { headers: { Authorization: `Bearer ${SUPABASE_KEY}`, apikey: SUPABASE_KEY } },
+    { cache: 'no-store', headers: { Authorization: `Bearer ${SUPABASE_KEY}`, apikey: SUPABASE_KEY } },
   );
   if (!r.ok) return err('Lỗi tải lịch sử.', 500);
   return ok({ success: true, items: await r.json() });
@@ -406,7 +343,7 @@ async function handleHistory(request: NextRequest) {
 // CẢ HAI pha đều có sẵn trong cache. Thiếu một pha thì pha đó vẫn phải gen
 // thật (tốn tiền model) nên vẫn phải trả tiền như thường.
 async function handleCacheStatus(request: NextRequest, sp: URLSearchParams) {
-  const auth = await authUser(request);
+  const auth = await authUserFromRequest(request);
   if ('error' in auth) return err(auth.error, auth.status);
 
   const key = lasoKey(birthFromQuery(sp), sp.get('era') || undefined);
@@ -425,7 +362,7 @@ export async function OPTIONS() {
 }
 
 async function runPost(request: NextRequest) {
-  const auth = await authUser(request);
+  const auth = await authUserFromRequest(request);
   if ('error' in auth) return err(auth.error, auth.status);
 
   const body = await parseBody(request);

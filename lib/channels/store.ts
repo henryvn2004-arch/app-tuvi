@@ -42,7 +42,7 @@ export async function chatLoadSession(platform: string, chatId: number | string)
   try {
     const res = await fetch(
       `${SUPABASE_URL}/rest/v1/chat_sessions?platform=eq.${encodeURIComponent(platform)}&chat_id=eq.${encodeURIComponent(String(chatId))}&select=messages,birth&limit=1`,
-      { headers: SB_HEADERS },
+      { cache: 'no-store', headers: SB_HEADERS },
     );
     if (!res.ok) return { messages: [], birth: null };
     const rows = (await res.json()) as { messages?: ChatMessage[]; birth?: BirthParams | null }[];
@@ -110,7 +110,7 @@ export async function chatListProfiles(platform: string, chatId: number | string
   try {
     const res = await fetch(
       `${SUPABASE_URL}/rest/v1/chat_profiles?platform=eq.${enc(platform)}&chat_id=eq.${enc(String(chatId))}&select=name,birth&order=updated_at.desc`,
-      { headers: SB_HEADERS },
+      { cache: 'no-store', headers: SB_HEADERS },
     );
     if (!res.ok) return [];
     const rows = (await res.json()) as { name?: string; birth?: BirthParams }[];
@@ -205,7 +205,7 @@ export async function chatConsumeLinkToken(
     const nowIso = new Date().toISOString();
     const res = await fetch(
       `${SUPABASE_URL}/rest/v1/chat_link_tokens?token=eq.${encodeURIComponent(token)}&platform=eq.${encodeURIComponent(platform)}&select=user_id,expires_at,used_at&limit=1`,
-      { headers: SB_HEADERS },
+      { cache: 'no-store', headers: SB_HEADERS },
     );
     if (!res.ok) return null;
     const rows = (await res.json()) as { user_id?: string; expires_at?: string; used_at?: string | null }[];
@@ -240,7 +240,7 @@ export async function chatResolveLinkedUser(platform: string, externalId: string
   try {
     const res = await fetch(
       `${SUPABASE_URL}/rest/v1/chat_links?platform=eq.${encodeURIComponent(platform)}&external_id=eq.${encodeURIComponent(externalId)}&select=user_id&limit=1`,
-      { headers: SB_HEADERS },
+      { cache: 'no-store', headers: SB_HEADERS },
     );
     if (!res.ok) return null;
     const rows = (await res.json()) as { user_id?: string }[];
@@ -256,7 +256,7 @@ export async function chatGetLinkedExternalId(platform: string, userId: string):
   try {
     const res = await fetch(
       `${SUPABASE_URL}/rest/v1/chat_links?platform=eq.${encodeURIComponent(platform)}&user_id=eq.${encodeURIComponent(userId)}&select=external_id&limit=1`,
-      { headers: SB_HEADERS },
+      { cache: 'no-store', headers: SB_HEADERS },
     );
     if (!res.ok) return null;
     const rows = (await res.json()) as { external_id?: string }[];
@@ -293,7 +293,7 @@ export async function chatGetFreeUsageToday(platform: string, externalId: string
   try {
     const res = await fetch(
       `${SUPABASE_URL}/rest/v1/chat_usage?platform=eq.${encodeURIComponent(platform)}&external_id=eq.${encodeURIComponent(externalId)}&day=eq.${todayVN()}&select=count&limit=1`,
-      { headers: SB_HEADERS },
+      { cache: 'no-store', headers: SB_HEADERS },
     );
     if (!res.ok) return 0;
     const rows = (await res.json()) as { count?: number }[];
