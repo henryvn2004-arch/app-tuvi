@@ -115,11 +115,18 @@ sw.js + pwa-push.js + 3 khối script nội tuyến.
   lặng biến mất. Chỉ lộ vì `push_optin_shown` (bắn 6 giây sau) thì có mà
   `push_open` thì không. Nay xếp hàng chờ.
 
-### 🔑 VIỆC TAY HENRY — chưa làm thì tin nhắc vẫn là bản cũ
-Sau khi deploy, deploy lại edge function `send-daily-push` bằng nội dung
-`_patches/edge-send-daily-push.deno.ts` (Supabase Dashboard → Edge Functions,
-hoặc Claude làm qua MCP). Không làm cũng KHÔNG hỏng gì — service worker đã hiện
-được thông báo, chỉ là chữ vẫn lặp lại như cũ.
+### ✅ Đã deploy — KHÔNG còn việc tay
+Prod đã ra (`bd466cd`); `www.tuviminhbao.com/sw.js` verify có ĐỦ hai handler +
+`tuvi-v5`. Edge function `send-daily-push` deploy tới **version 6**, `ACTIVE`,
+`verify_jwt:false` giữ nguyên (hàm tự xác thực bằng `x-cron-secret`).
+- 🪤 **Lượt deploy đầu (v5) tao viết chú thích đầu file KHÁC bản trong repo** —
+  logic y hệt, nhưng "bản đang chạy khác bản trong repo" đúng là bệnh mà PR này
+  sinh ra để chữa. Đẩy lại v6 bằng **nguyên văn** file repo (md5
+  `372c54f64161dcde195846bbbd233f58`, 5.135 ký tự) rồi đọc ngược bằng
+  `get_edge_function` để chốt khớp. **Deploy edge function thì phải đọc ngược
+  lại bản đang chạy, đừng tin lượt ghi.**
+- Lượt cron 00:00Z ngày 07/08 chạy **TRƯỚC** khi deploy nên vẫn là chữ cũ; lượt
+  đầu tiên mang nội dung mới là **00:00Z ngày 08/08** (7h sáng VN).
 
 ### CÒN LẠI
 - **iOS chỉ nhận web push khi đã "Thêm vào màn hình chính"** — không có cách nào
