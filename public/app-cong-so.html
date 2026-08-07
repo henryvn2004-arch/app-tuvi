@@ -15,7 +15,12 @@
 .fg{display:flex;flex-direction:column;gap:5px}
 .fg label{font-size:10.5px;font-weight:600;color:var(--text-lt);letter-spacing:.04em;text-transform:uppercase}
 .fg input,.fg select{border:1px solid var(--line-2);border-radius:7px;padding:8px 10px;font-size:13.5px;font-family:inherit;color:var(--text);background:var(--paper);outline:none}
-.fg select{min-width:200px}
+/* ⚠️ CHỈ nhắm ô CỦA CHÍNH TRANG, không nhắm `.fg select` chung.
+   `TuviForm` dựng ngày · tháng · giờ · phút · giới tính thành <select> nằm
+   trong ĐÚNG khuôn `.frow`/`.fg` này, nên một luật width nhắm `.fg select` sẽ
+   bơm cả năm ô đó lên 200px trong khung rộng 74–90px: chúng tràn ra và đè lên
+   nhau, hàng ngày-tháng-năm-giờ-phút thành một đống chữ chồng chéo. */
+#trangThai{min-width:200px}
 .btn-go{background:var(--red);color:#fff;border:none;border-radius:8px;padding:10px 22px;font-size:14px;font-weight:600;cursor:pointer;font-family:var(--serif)}
 .err{color:var(--red);font-size:13px;margin-top:8px;display:none}.err.active{display:block}
 #resPanel{display:none;max-width:880px}

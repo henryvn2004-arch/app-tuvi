@@ -5,7 +5,96 @@
 
 ---
 
-## 🔔 R1a — NỐI LẠI kênh nhắc hằng ngày (2026-08-07, PR này)
+## 🔒 Tấm khoá tính thử CẮT MẤT NÚT MỞ (2026-08-07, PR này)
+
+Henry gửi ảnh chụp trên laptop: *"cái box nó nhỏ quá, ko thấy dc cái button,
+cũng ko scroll lên scroll xuống dc trong cái box đó"*.
+
+### 🔴 Lỗi CẤU TRÚC, không phải thiếu padding
+`.tpw-lock-veil` để `position:absolute; inset:0` ⇒ **toàn bộ chữ thật** (tiêu đề
+· danh sách khối khoá · số dư · **NÚT**) nằm NGOÀI luồng. Chiều cao khung do 6
+vạch mờ TRANG TRÍ quyết định (192px). Danh sách 6 khối khoá đẩy nội dung lên
+~240px → tràn → `overflow:hidden` cắt đúng cái nút, mà absolute thì cũng không
+cuộn được. **Đo được: nút tràn 24px.**
+- Chỗ này ĐÃ vá một lần bằng cách nới padding vạch mờ (`.tpw-prev .tpw-lock-blur
+  {padding:26px 20px 40px}`, có chú thích ngay trên nó). Vá triệu chứng: thêm
+  một dòng item là vỡ lại — và đó chính là chuyện vừa xảy ra.
+- 🔑 Người dùng nhìn thấy **một tấm khoá không có đường mở**. Đây là bậc CUỐI
+  của phễu W1, tức chỗ đắt nhất để hỏng.
+
+### Cách vá — đảo vai hai lớp
+Vạch mờ thành dải trang trí có **chiều cao riêng** (`height:106px`); lớp chữ về
+**trong luồng** và là thứ quyết định chiều cao. Lớp chữ chồng lên ĐUÔI dải mờ
+bằng `margin-top` âm + `padding-top` bù, nên vẫn ra cảm giác "có chữ bị che"
+nhưng tiêu đề và danh sách luôn nằm trên nền đã đặc. **Không ca nội dung nào cắt
+được nữa** — kể cả 12 item tiêu đề dài.
+- Nhân tiện: danh sách khối khoá cho vào khung nền giấy có viền (trước là chữ
+  trần trên vạch mờ, đọc rất mệt), nút rộng tối thiểu 240px và full-width dưới
+  520px.
+- Sửa ở `tuvi-paywall.js` nên **cả 5 tool đang dùng `lockPreview` cùng đổi**
+  (nguoi-khac · day-con · nhan-mach · 2 tool chân dung), và tường TỪ CHỐI
+  (`_softLock`, dùng ở mọi tool trả phí) cũng hết nguy cơ cắt nút.
+- Bump `tuvi-paywall.js?v=17` — **gộp luôn drift có sẵn**: 20 trang standalone
+  đang ở `v=13` còn 25 trang shell ở `v=16`.
+
+### Verify
+`tsc` 0 lỗi · `lint` 0 lỗi (72 warning pre-existing) · `prettier` sạch ·
+`check:prices` sạch · `node --check` paywall.
+- **T8 — 5 TRANG THẬT × 3 khổ màn (1440 · 1024 · 390)**: nút nằm TRỌN trong
+  khung · nút thấy được · **không phải cuộn trong khung** · hiện đủ 6 khối khoá
+  · không tràn ngang · 0 lỗi JS. **Ca cực đoan 12 item tiêu đề dài** ở cả 1440
+  lẫn 390: vẫn không cắt, khung tự cao lên.
+- 🪤 **Ca ĐỐI CHỨNG bản CŨ lấy từ git HEAD** (nạp đè `tuvi-paywall.js` bằng
+  `page.route`): **đúng là bị cắt** ⇒ bài kiểm không đỗ giả.
+- 🪤 CSS nằm trong template literal của JS — dấu ` trong chú thích đóng chuỗi
+  sớm, `node --check` đỏ ngay. Chú thích trong khối CSS đó không được dùng
+  backtick.
+
+### CÒN LẠI
+- Mới sửa tấm khoá. **Các tool CHƯA có tính thử thì vẫn chưa có** — mở thêm là
+  việc riêng (mỗi tool cần tách `runPreview` + `renderMeta`/`renderProse` theo
+  đúng khuôn W1/W1b).
+
+---
+
+## 🧩 CSS CỦA TRANG ĐÈ VỠ FORM DÙNG CHUNG (2026-08-07, cùng PR)
+
+Henry gửi ảnh `/app/cong-so` trên laptop màn lớn: hàng NGÀY · THÁNG · NĂM · GIỜ
+· PHÚT chồng chéo lên nhau, "Giờ âm" đè lên ô Phút.
+
+### 🔴 Một dòng CSS, và nó là cả một LOẠI lỗi
+`app-cong-so.html` có `.fg select{min-width:200px}` — viết cho ô riêng của trang
+(`#trangThai`, "Bạn đang ở vị trí nào"). Nhưng **`TuviForm` dựng markup của nó
+vào ĐÚNG khuôn `.frow`/`.fg` mà trang cấp** (đó là giao ước sẵn có: trang lo
+CSS, component lo markup). Nên luật ấy trúng luôn **5 select của TuviForm** —
+ngày · tháng · giờ · phút · giới tính — bơm mỗi cái lên 200px trong ô rộng
+74–90px. Đo được: `#ngay` w=200 trong ô 74px.
+- 🔑 Loại lỗi này **không đọc code nào bắt được**: cả trang lẫn component đều
+  đúng khi đọc riêng, chỉ vỡ khi hai bên gặp nhau trong trình duyệt.
+- Vá: đổi sang `#trangThai{min-width:200px}` — nhắm ĐÚNG ô của trang. Kèm chú
+  thích ngay tại chỗ nói vì sao không được nhắm `.fg select`.
+
+### Quy ước rút ra
+**CSS của trang nhắm ô nhập PHẢI scope theo id/lớp RIÊNG của trang, không nhắm
+`.fg input` / `.fg select` chung** khi trang đó có mount `TuviForm`. Muốn đổi
+dáng cả form thì sửa trong `tuvi-form.js`.
+
+### Verify — T9, bộ quét dựng thật rồi ĐO
+Không tin vào grep: quét **CẢ 25 trang shell + 20 trang standalone × 3 khổ màn
+(1440 · 1024 · 390)**, mỗi trang dựng thật rồi đo 4 bất biến — ô nhập không
+tràn khỏi ô chứa · ô chứa không tràn · hàng không tràn khỏi khung · **không hai
+ô nào đè lên nhau**.
+- Trước khi vá: **đúng một trang đỏ** (`app-cong-so`), ở cả 3 khổ. Sau khi vá:
+  **70 lượt kiểm đều xanh, 0 trang vỡ.**
+- 🪤 **Đã red-team**: đặt lại dòng CSS cũ → T9 đỏ đúng trang đó ở cả 3 khổ ⇒ bộ
+  quét thật sự bắt được, không xanh vì lý do khác.
+- ⚠️ Chữ "Dựng hồ sơ" trong ảnh Henry gửi trông như bị tách dấu — **nguồn không
+  sai** (đã quét NFD toàn bộ `public/`: 0 ký tự tổ hợp ngoài mấy regex bỏ dấu
+  hợp lệ), render lại ở đây ra đúng. Đó là font fallback trên máy Henry.
+
+---
+
+## 🔔 R1a — NỐI LẠI kênh nhắc hằng ngày (2026-08-07, PR trước)
 
 Henry duyệt sau khi tao báo: mục R1 của backlog (*"nhắc đúng lúc, cá nhân hoá
 theo lá số, và một lý do để mở ra"*) **giả định một tệp người nhận không tồn
