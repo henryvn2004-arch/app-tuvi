@@ -52,7 +52,7 @@ export async function POST(request: NextRequest) {
     // Tìm pending order
     const findRes = await fetch(
       `${SUPABASE_URL}/rest/v1/bank_orders?order_code=eq.${encodeURIComponent(orderCode)}&status=eq.pending&limit=1`,
-      { headers: SB }
+      { cache: 'no-store', headers: SB }
     );
     const rows: Record<string, unknown>[] = findRes.ok ? await findRes.json() : [];
     if (!rows.length) {

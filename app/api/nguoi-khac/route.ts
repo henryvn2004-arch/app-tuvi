@@ -28,6 +28,7 @@ import {
   buildNguoiKhacPrompt,
 } from '@/lib/agent/nguoi-khac-prompt';
 import type { BirthParams } from '@/lib/contract/v1';
+import { authUserFromRequest, parseLlmJson } from '@/lib/api/tool-helpers';
 import { withToolOutcome } from '@/lib/ops/tool-outcome';
 import {
   lasoKey,
@@ -42,54 +43,6 @@ const TOOL_ID = 'nguoi-khac';
 
 const SUPABASE_URL = process.env.SUPABASE_URL!;
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY!;
-
-async function authUser(
-  request: NextRequest,
-): Promise<{ error: string; status: number } | { user: { id: string } }> {
-  const auth = request.headers.get('Authorization');
-  if (!auth?.startsWith('Bearer ')) return { error: 'Unauthorized', status: 401 };
-  const res = await fetch(`${SUPABASE_URL}/auth/v1/user`, {
-    headers: { Authorization: auth, apikey: SUPABASE_KEY },
-    cache: 'no-store',
-  });
-  if (!res.ok) return { error: 'Unauthorized', status: 401 };
-  const u = await res.json();
-  if (!u?.id) return { error: 'Unauthorized', status: 401 };
-  return { user: { id: u.id as string } };
-}
-
-// Bóc JSON từ câu trả lời LLM — bản dùng chung với 2 route chân dung (bản giòn
-// đã trả giá một lần: model thêm một câu dẫn là hỏng cả lượt đã tính tiền).
-function parseJSON(text: string): unknown {
-  const t = String(text || '').replace(/```json|```/g, '').trim();
-  try {
-    return JSON.parse(t);
-  } catch {
-    /* thử cắt khối {...} cân bằng bên dưới */
-  }
-  for (let i = t.indexOf('{'); i >= 0; i = t.indexOf('{', i + 1)) {
-    let depth = 0;
-    let inStr = false;
-    let esc = false;
-    for (let k = i; k < t.length; k++) {
-      const c = t[k];
-      if (esc) { esc = false; continue; }
-      if (c === '\\') { esc = true; continue; }
-      if (c === '"') { inStr = !inStr; continue; }
-      if (inStr) continue;
-      if (c === '{') depth++;
-      else if (c === '}' && --depth === 0) {
-        try {
-          return JSON.parse(t.slice(i, k + 1));
-        } catch {
-          /* khối này không phải JSON ta cần → thử khối kế tiếp */
-        }
-        break;
-      }
-    }
-  }
-  return null;
-}
 
 function validBirth(b: unknown): b is BirthParams {
   const x = b as BirthParams | undefined;
@@ -208,7 +161,7 @@ async function buildReport(
 
   let res = await ask(false);
   if (!res) return err('Lỗi AI khi dựng bản luận. Vui lòng thử lại.', 500);
-  let parsed = parseJSON(res.text) as CamNang | null;
+  let parsed = parseLlmJson(res.text) as CamNang | null;
 
   if (!okShape(parsed)) {
     const t = String(res.text || '');
@@ -216,7 +169,7 @@ async function buildReport(
     void logLlmParseFail(TOOL_ID, res.model, t, 1);
     res = await ask(true);
     if (!res) return err('Lỗi AI khi dựng bản luận. Vui lòng thử lại.', 500);
-    parsed = parseJSON(res.text) as CamNang | null;
+    parsed = parseLlmJson(res.text) as CamNang | null;
   }
   if (!okShape(parsed)) {
     const t = String(res.text || '');
@@ -291,7 +244,7 @@ async function runPreview(request: NextRequest) {
 }
 
 async function runPost(request: NextRequest) {
-  const auth = await authUser(request);
+  const auth = await authUserFromRequest(request);
   if ('error' in auth) return err(auth.error, auth.status);
 
   const body = await parseBody(request);
@@ -347,7 +300,7 @@ async function runPost(request: NextRequest) {
 }
 
 async function handleHistory(request: NextRequest) {
-  const auth = await authUser(request);
+  const auth = await authUserFromRequest(request);
   if ('error' in auth) return err(auth.error, auth.status);
   const r = await fetch(
     `${SUPABASE_URL}/rest/v1/nguoi_khac_reports?user_id=eq.${auth.user.id}` +
@@ -360,7 +313,7 @@ async function handleHistory(request: NextRequest) {
 }
 
 async function handleCacheStatus(request: NextRequest, sp: URLSearchParams) {
-  const auth = await authUser(request);
+  const auth = await authUserFromRequest(request);
   if ('error' in auth) return err(auth.error, auth.status);
   const n = (k: string) => Number(sp.get(k) || 0);
   const birth: BirthParams = {

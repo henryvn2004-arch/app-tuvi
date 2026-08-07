@@ -87,7 +87,7 @@ export async function collectPackItems(days = 7, limit = 5): Promise<PackItem[]>
     `&created_at=gte.${since}` +
     `&select=id,tool_id,title,image_url,text_content,blocks,view_count,created_at` +
     `&order=view_count.desc,created_at.desc&limit=${limit}`;
-  const res = await fetch(`${SUPABASE_URL}/rest/v1/shared_results${qs}`, { headers: SB_HEADERS });
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/shared_results${qs}`, { cache: 'no-store', headers: SB_HEADERS });
   if (!res.ok) throw new Error(`shared_results: ${await res.text()}`);
   const rows = (await res.json()) as ShareRow[];
 

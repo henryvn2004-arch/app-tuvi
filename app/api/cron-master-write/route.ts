@@ -17,7 +17,7 @@ const ARTICLES_PER_RUN = 1;
 
 // ── Supabase helper ────────────────────────────────────────────────────────────
 async function sbFetch(path: string, opts: RequestInit = {}) {
-  const res = await fetch(`${SUPABASE_URL}/rest/v1${path}`, {
+  const res = await fetch(`${SUPABASE_URL}/rest/v1${path}`, { cache: 'no-store',
     ...opts,
     headers: {
       'Content-Type': 'application/json',

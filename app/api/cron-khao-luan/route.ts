@@ -19,7 +19,7 @@ const OPENAI_KEY    = process.env.OPENAI_API_KEY!;
 const ARTICLES_PER_RUN = 1;
 
 async function sbFetch(path: string, opts: RequestInit = {}) {
-  const res = await fetch(`${SUPABASE_URL}/rest/v1${path}`, {
+  const res = await fetch(`${SUPABASE_URL}/rest/v1${path}`, { cache: 'no-store',
     ...opts,
     headers: { 'Content-Type':'application/json', 'apikey':SUPABASE_KEY, 'Authorization':`Bearer ${SUPABASE_KEY}`, ...(opts.headers as Record<string,string>||{}) },
   });
