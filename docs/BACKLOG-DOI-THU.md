@@ -37,7 +37,7 @@ Công sức: **S** < 1 ngày · **M** 2–4 ngày · **L** > 1 tuần.
 | ID | Việc | Công | Khi nào |
 |---|---|---|---|
 | **P1** | Tách Lượng làm 2 loại: mua = vĩnh viễn, tặng = có hạn | M | 🟢 |
-| **P2** | Bậc thưởng nạp tăng dần, hiện % thưởng trên trang nạp | S | 🟢 |
+| **P2** | ~~Bậc thưởng nạp tăng dần, hiện % thưởng trên trang nạp~~ | S | ✅ ĐÃ CÓ |
 | **P3** | Bán kèm giảm giá tại màn thanh toán, **giới hạn 1 món** | M | 🟡 |
 | **P4** | Neo giá: hiện "tổng giá trị" khi gộp gói | S | 🟡 |
 | **P5** | Thử nâng giá theo bậc (A/B) — bắt đầu ở 2 tool chân dung | M | 🟡 |
@@ -95,12 +95,40 @@ một ⇒ không được vế nào.
 Lượng tặng trước, Lượng mua sau). **Chỉ áp cho Lượng cấp MỚI** — đặt hạn cho
 Lượng người ta đã cầm là phá lòng tin.
 
-### P2. Bậc thưởng nạp tăng dần 🟢 S
+### P2. Bậc thưởng nạp tăng dần ✅ ĐÃ CÓ TỪ TRƯỚC (không phải việc mới)
 **Họ:** 300 → 0% · 600 → 8,3% · 1.200 → 8,3% · 3.000 → 10% · 3.600 → 11,1% ·
 4.800 → **12,5%**. Thưởng hiện thành **phiếu rời** (3 phiếu ×100) chứ không cộng
 thẳng — trông "được nhiều món" hơn là "được thêm ít phần trăm".
-**Mình:** gói 99k/199k/499k/999k có bậc giá tốt dần nhưng **không nói ra**.
-**Việc:** hiện thẳng "% thưởng" từng bậc trên `topup.html`.
+
+🔴 **ĐÍNH CHÍNH (07/08) — câu "mình không nói ra" là SAI lúc viết.** PR #350
+(31/07, dựng lại trang nạp) đã làm đúng việc này **5 ngày TRƯỚC** khi dòng
+backlog này ra đời. `renderPackages()` trong `topup.html` tính đơn giá + mức rẻ
+hơn **ngay lúc chạy từ chính `credit_packages`** (không chép số — đúng luật
+`check:prices`), mốc so là gói có đơn giá CAO NHẤT trong bảng, và chỉ hiện huy
+hiệu khi ≥5%. Render thật ra:
+
+| Gói | Trang đang hiện |
+|---|---|
+| Khởi Đầu 99.000đ / 100 | `990đ / Lượng` |
+| Phổ Thông 199.000đ / 240 | `829đ / Lượng` · **rẻ hơn 16%** |
+| Cao Cấp 499.000đ / 700 | `713đ / Lượng` · **rẻ hơn 28%** |
+| VIP 999.000đ / 1.600 | `624đ / Lượng` · **rẻ hơn 37%** |
+
+Tiêu đề trang: *"chỉ từ 624đ / Lượng"*. Thẻ nào cũng ghi *"Không hết hạn"*.
+
+🔑 **Bài học lặp lần thứ hai trong cùng một tuần** (lần đầu là R1 — giả định một
+tệp người nhận không tồn tại): **backlog viết từ việc soi ĐỐI THỦ, không phải từ
+việc soi CHÍNH MÌNH.** Trước khi làm bất cứ mục nào ở đây, mở file thật ra đọc —
+đừng tin dòng mô tả.
+
+⚠️ Cũng CỐ Ý không đổi sang cách nói **"+58,6% Lượng tặng thêm"** của họ: mình
+không có phiếu thưởng nào thật, giảm giá đã nằm sẵn trong số Lượng. Ghi "tặng
+thêm" là mời người ta đi tìm một món quà không tồn tại; còn "rẻ hơn 37%" thì lấy
+hai con số ngay trên thẻ chia ra là kiểm chứng được.
+
+**Phần DUY NHẤT còn thật:** mẹo hiện thưởng thành **phiếu rời**. Nhưng nó chỉ có
+nghĩa khi đã tách "Lượng tặng" khỏi "Lượng mua" ⇒ thuộc **P1**, không phải mục
+riêng.
 
 ### P3. Bán kèm tại màn thanh toán 🟡 M
 Nguyên văn trang họ: *"Bạn đã chọn 【Bát tự cách cục】NT$480, được hưởng ưu đãi
