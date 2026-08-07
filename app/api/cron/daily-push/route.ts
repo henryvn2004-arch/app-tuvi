@@ -12,6 +12,14 @@
 // `lib/push/daily-message.ts` — nếu app native ra mắt thì hai kênh vẫn nói đúng
 // một câu về cùng một ngày.
 //
+// ⚠️ BẪY CHO NGÀY APP NATIVE RA MẮT: job này và `/api/cron-push` cùng đặt lịch
+// `0 0 * * *`. Hiện không đụng nhau vì `push_tokens` rỗng, nhưng người vừa cài
+// app vừa đã bật thông báo trên web sẽ nhận HAI thông báo lúc 7h — và vì nội
+// dung nay giống hệt nhau nên nhìn ra ngay là lỗi. CỐ Ý chưa viết bước khử
+// trùng (bỏ token của user đã có dòng `push_subscriptions`): dựng lưới cho một
+// tình huống chưa tồn tại thì lúc nó tồn tại thật, lưới thường đã sai. Ai bật
+// app native trước tiên phải xử lý chỗ này.
+//
 // Trơ nếu chưa cấu hình: thiếu FIREBASE_SERVICE_ACCOUNT hoặc 0 token → no-op.
 // Bảo vệ: chỉ chạy khi Vercel cron (Authorization: Bearer CRON_SECRET) hoặc
 // header x-vercel-cron. Xem _patches/migration-push-tokens.sql.
