@@ -42,12 +42,12 @@ Công sức: **S** < 1 ngày · **M** 2–4 ngày · **L** > 1 tuần.
 | **P4** | Neo giá: hiện "tổng giá trị" khi gộp gói | S | 🟡 |
 | **P5** | Thử nâng giá theo bậc (A/B) — bắt đầu ở 2 tool chân dung | M | 🟡 |
 | **P6** | Xem lại trần ảnh free 6/ngày sau khi đổi giá | S | 🟡 |
-| **W1** | `Tính thử miễn phí` → chặn ở phần luận sâu (không chặn trước cửa) | L | 🟢 |
+| **W1** | ~~`Tính thử miễn phí` → chặn ở phần luận sâu~~ | L | ✅ XONG |
 | **W2** | ~~Bản xem trước che chữ thay vì modal chặn~~ | M | ✅ XONG |
 | **W3** | ~~Hiện "còn X Lượng · thao tác này tốn Y" ngay trên nút~~ | S | ✅ XONG |
 | **T1** | ~~**Lá số NGƯỜI KHÁC**~~ (sếp/đồng nghiệp/người thân) — cẩm nang ứng xử | M | ✅ XONG |
-| **T2** | ~~Gói Cha Mẹ~~ → tool `day-con` "Dạy Con Theo Lá Số" | L | ✅ XONG |
-| **T3** | ~~Gói Kinh doanh/Sale~~ → tool `nhan-mach` "Sổ Nhân Mạch" | L | ✅ XONG |
+| **T2** | ~~Gói Cha Mẹ~~ → tool `day-con` **Dạy Con Theo Lá Số** | M | ✅ XONG |
+| **T3** | ~~Gói Kinh doanh/Sale~~ → tool `nhan-mach` **Sổ Nhân Mạch** (đọc cả nhóm) | M | ✅ XONG |
 | **T4** | **Đèn cầu an online** (có hạn 1 năm → tái tục) | M | 🟡 |
 | **T5** | Xin keo / thỉnh thần online | M | 🟡 |
 | **T6** | ~~**Duyên nợ tiền kiếp 2 người**~~ — tool đã dựng trên engine sẵn có | M | ✅ XONG |
@@ -61,7 +61,7 @@ Công sức: **S** < 1 ngày · **M** 2–4 ngày · **L** > 1 tuần.
 | **U1** | **Đa phái tử vi** (Trung Châu · Tam Hợp · Tứ Hoá Phi Tinh · Khâm Thiên) | L | 🔴 |
 | **U2** | Nhúng cổ tịch tra tại chỗ | L | 🔴 |
 | **U3** | Lá số nhiều tầng: lưu nguyệt · lưu nhật · lưu thời | M | 🟡 |
-| **U4** | ~~**Sổ lá số**~~ — lưu nhiều lá số, đồng bộ tài khoản (không theo máy) | M | ✅ XONG |
+| **U4** | ~~**Sổ lá số**~~ — đồng bộ tài khoản, không theo máy | M | ✅ XONG |
 | **S1** | Gói **Hội viên năm** — vận riêng hằng ngày + tool chữ không giới hạn | L | 🔴 |
 | **S2** | Ưu đãi hội viên khi mua lẻ (họ giảm 33%) | S | 🔴 |
 | **H1** | **Chợ tư vấn thầy thật**, ăn hoa hồng | L | 🔴 |
@@ -74,7 +74,7 @@ Công sức: **S** < 1 ngày · **M** 2–4 ngày · **L** > 1 tuần.
 | **M5** | Kênh phân phối bên thứ ba (Zalo OA / báo / partner) | M | 🟡 |
 | **R1** | Vận hôm nay → nhắc hằng ngày qua push/Zalo | M | 🟢 |
 | **R2** | Chuỗi ngày ghé thăm | S | 🟡 |
-| **D1** | Đo tỉ lệ **xem → mua** theo từng tool | S | 🟢 |
+| **D1** | ~~Đo tỉ lệ **xem → mua** theo từng tool~~ | S | ✅ XONG |
 | **D2** | Hạ tầng A/B giá | M | 🟡 |
 
 ---
@@ -130,14 +130,32 @@ phải tính lại. Một câu SQL, không cần deploy.
 
 ## W — Paywall & chuyển đổi
 
-### W1. Tính thử miễn phí → chặn ở phần luận sâu 🟢 L
+### W1. Tính thử miễn phí → chặn ở phần luận sâu ✅ XONG (3 tool cẩm nang) ⭐
 **Bằng chứng ở tầng code:** 29/71 trang sản phẩm của họ **giấu giá tới sau khi
 bấm**, trang chỉ có hai nút `免費試算` → `付費鑑定`. Người dùng Dcard mô tả:
 *"che một đống đoạn mờ để câu"*.
 **Mình đang ngược:** chặn TRƯỚC khi người ta thấy chất lượng.
-**Việc:** cho chạy tool ra kết quả cấu trúc (lá số, bảng, 2–3 đoạn luận thật
-hay), chặn đúng chỗ tò mò nhất. Đây là **mục có tác động lớn nhất trong cả
-backlog** và cũng là mục tốn công nhất — đụng gần như mọi trang tool + paywall.
+
+**Đã làm cho `nguoi-khac` · `day-con` · `nhan-mach`:** bấm nút là **tool chạy
+thật**, bày tầng deterministic rồi mới khoá phần chữ.
+- 🔑 **Chỗ khiến nó gần như 0đ:** tầng deterministic của ba tool này là **tra
+  bảng thuần** — kiểu người, toạ độ, 5 mặt đọc, 6 thẻ cách dạy, chặng đi học,
+  phân bố nhóm, cặp giẫm-chân/bù-nhau, thứ tự tiếp cận. **0 lượt LLM.** Chỉ
+  phần chữ mới tốn tiền, và chỉ phần đó bị khoá.
+- `runPreview()` là **hàm RIÊNG** trong mỗi route, rẽ nhánh ngay tại `POST`
+  trước cả `withToolOutcome`. Không `toolPaymentDenied`, không `llmTextFull`,
+  không ghi lịch sử / cache / lượt rail. Trộn hai đường vào một hàm rồi tin vào
+  một câu `if` là cách nhanh nhất để một hôm nào đó đường trả tiền lọt cửa.
+- **KHÔNG đòi đăng nhập** — cả điểm của W1 là bỏ tường trước khi người ta thấy
+  chất lượng, mà màn đăng nhập cũng là một bức tường.
+- `TuviPaywall.lockPreview()` — tường liệt kê **ĐÚNG TÊN** những khối đang khoá
+  thay vì mấy vạch mờ vô nghĩa của W2 (W2 là lời TỪ CHỐI, cái này là lời MỜI).
+- Mỗi trang tách `render()` thành `renderMeta()` / `renderProse()` — **tách theo
+  ĐƯỜNG TIỀN, không theo bố cục**. Có test đọc mã canh renderMeta không đọc một
+  khoá chữ nào.
+
+**Chưa làm:** 2 tool chân dung — ở đó giá trị chính LÀ bức ảnh, cho xem trước
+là cho không hàng. Phải nghĩ cách khác.
 
 ### W2. Che chữ thay vì modal ✅ XONG
 Modal chặn = "cửa đóng". Che mờ = "gần lấy được rồi". Cùng một hành vi, hai cảm
@@ -332,8 +350,21 @@ nhân hoá theo lá số, và một lý do để mở ra**.
 
 ## D — Đo lường
 
-**D1 🟢 S** — hiện chưa trả lời được *"tool nào có người xem mà không ai mua"*.
-Có `tool_open`/`tool_run`/`topup_start` rồi, thiếu ghép thành tỉ lệ theo tool.
+**D1 ✅ XONG** — panel **"Phễu Theo Tool"** trong Marketing: mở → chạy → tính
+thử → bấm mở → mua → Lượng, đếm theo NGƯỜI, tô đỏ tool trả phí có ≥3 người mở
+mà chưa ai mua.
+- 🔴 **Phát hiện chính khi làm: BA HỆ TÊN TOOL đang lệch nhau trên prod** —
+  `events.tool_id` (shell) vs `tool_pricing.tool_id` vs `credit_transactions.type`.
+  `luan-giai` / `laso` / `use_laso` là cùng một tool. Join thô thì Luận Giải hiện
+  ra *"24 người mở, 0 người mua"* trong khi nó đã bán **1.500 Lượng cho 3 người**
+  — kết luận sai dẫn tới quyết định sai, đúng thứ D1 sinh ra để chặn.
+  Vá bằng `tool_canon()`; kèm **bộ dò id lạc** hiện thẳng trên panel, và chính
+  nó bắt được tên lệch thứ tư (`dat-ten-doanh-nghiep`) ngay lượt chạy đầu.
+- `topup_start` **không thay được** cho bậc "định mua": đo prod **552/553** lượt
+  của nó đến từ chính trang nạp, không mang tool nào. Vì thế mới thêm
+  `preview_shown` + `unlock_click`.
+⚠️ **Còn thiếu:** hai cột tính thử/bấm mở chỉ có ở 3 tool đã làm W1; tool khác
+để gạch ngang chứ KHÔNG hiện 0% (0% đọc thành "ai cũng bỏ đi").
 **D2 🟡 M** — hạ tầng A/B giá, tiền đề bắt buộc của P5.
 
 ---
@@ -356,11 +387,17 @@ Xếp theo **tác động ÷ công sức**, và **không mục nào phụ thuộ
 
 | # | Việc | Vì sao chọn nó bây giờ |
 |---|---|---|
-| 1 | **D1** — đo tỉ lệ *xem → mua* theo từng tool | 🔑 Đợt vừa rồi thêm **6 tool mới** mà **không có cách nào biết tool nào bán được**. Công S. Mọi quyết định dưới đây đều cần số này trước. |
-| 2 | **R1** — Vận hôm nay → nhắc hằng ngày | Móc quay lại duy nhất đang có; **S1 chờ đúng nó** để chứng minh có người quay lại |
-| 3 | **P2** — bậc thưởng nạp tăng dần | Công S, đụng trang nạp, không rủi ro |
-| 4 | **M3** — nhiệm vụ onboarding chia nhỏ | Ví mới có 25 Lượng mà tool mới giá 15–20 ⇒ gần như chỉ đủ một lượt |
-| 5 | **W1** — tính thử miễn phí, chặn ở phần luận sâu | Tác động lớn nhất, nhưng công L và đụng mọi trang tool ⇒ vẫn để cuối |
+| ~~1~~ | ~~**D1** — đo *xem → mua* theo từng tool~~ ✅ | Xong ở #436 |
+| ~~5~~ | ~~**W1** — tính thử miễn phí~~ ✅ | Xong ở #434 cho 3 tool cẩm nang |
+| **1** | **R1** — Vận hôm nay → nhắc hằng ngày | Móc quay lại duy nhất đang có; **S1 chờ đúng nó** để chứng minh có người quay lại |
+| **2** | **P2** — bậc thưởng nạp tăng dần | Công S, đụng trang nạp, không rủi ro |
+| **3** | **M3** — nhiệm vụ onboarding chia nhỏ | Ví mới có 25 Lượng mà tool mới giá 15–20 ⇒ gần như chỉ đủ một lượt |
+| **4** | **P1** — tách Lượng mua / Lượng tặng | Sau khi D1 có số thì đây là mục giá đầu tiên có cơ sở để làm |
+| **5** | **W1 mở rộng** — port tính thử sang các tool còn lại | 3 tool cẩm nang đã có; 2 tool chân dung và Duyên Nợ thì chưa |
+
+🔑 **D1 vừa xong nghĩa là từ giờ mới có số để quyết mấy mục GIÁ.** Trước đó mọi
+tranh luận nâng giá / bỏ tool đều là đoán. Đợi vài tuần cho phễu theo tool tích
+đủ dữ liệu rồi hãy đụng P5 (thử nâng giá) và D2 (A/B giá).
 
 ⚠️ **S1 (hội viên năm) vẫn KHÔNG nên làm trước R1.** Dựng đường thu tiền định kỳ
 cho thứ chưa đo được có ai quay lại lần hai hay không là dựng nhầm thứ tự.

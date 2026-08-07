@@ -60,9 +60,9 @@
 .nk-item .viec{font-size:13px;line-height:1.7;color:#2a2118}
 .nk-item .vidu{font-size:12.5px;line-height:1.7;color:#5a5145;font-style:italic;margin-top:4px}
 .nk-motcau{margin-top:16px;padding:14px 16px;background:#FBF8F1;border:1px solid #EADFC8;border-radius:10px;font-family:var(--serif);font-size:15px;line-height:1.75;color:#061A2E;font-weight:700}
-.nk-basis{margin-top:14px;font-size:12.5px}
-.nk-basis summary{cursor:pointer;color:#7A5F26;font-weight:600}
-.nk-basis ul{margin:9px 0 0 18px;color:#5a5145;line-height:1.8}
+.nk-basis-list{margin:0 0 0 18px;color:#5a5145;line-height:1.9;font-size:12.8px}
+.nk-basis-list li{margin-bottom:3px}
+.nk-basis-list b{color:#2a2118}
 #histList{display:flex;flex-direction:column;gap:6px;margin-top:4px;font-size:12.5px;color:#5a5145}
 </style>
 </head>
@@ -135,13 +135,16 @@
                 <div class="nk-badges" id="nkBadges"></div>
                 <div class="nk-birth" id="birthLine" style="display:none"></div>
               </div>
-              <p class="nk-para" id="tinhKhi"></p>
               <div class="nk-sub">Câu hỏi chạy ngầm trong đầu họ</div>
               <div class="nk-chips" id="cauHoiChips"></div>
-              <div class="nk-sub">Điều họ coi trọng</div>
-              <p class="nk-para" id="coiTrong"></p>
-              <div class="nk-sub">Điều làm họ khó chịu</div>
-              <p class="nk-para" id="chamNoc"></p>
+              <div id="proseTop" style="display:none">
+                <div class="nk-sub">Con người này vận hành thế nào</div>
+                <p class="nk-para" id="tinhKhi"></p>
+                <div class="nk-sub">Điều họ coi trọng</div>
+                <p class="nk-para" id="coiTrong"></p>
+                <div class="nk-sub">Điều làm họ khó chịu</div>
+                <p class="nk-para" id="chamNoc"></p>
+              </div>
             </div>
           </div>
         </div>
@@ -172,11 +175,27 @@
         <div class="res-block" id="endBlock" style="display:none">
           <div class="res-block-body">
             <div class="nk-motcau" id="motCau"></div>
-            <details class="nk-basis" id="basisBlock" style="display:none">
-              <summary>Cơ sở trong lá số</summary>
-              <ul id="basisList"></ul>
-            </details>
           </div>
+        </div>
+
+        <!-- Cơ sở trong lá số — trước đây nằm nép trong <details> ở cuối, sau
+             phần chữ. W1 đổi vai của nó: đây LÀ phần tính thử miễn phí, tức là
+             bằng chứng duy nhất người chưa trả tiền có để đánh giá tool. Bày
+             mở, đặt trước tường. -->
+        <div class="res-block" id="basisBlock" style="display:none">
+          <div class="res-block-header"><span class="res-block-title">Cơ Sở Trong Lá Số</span></div>
+          <div class="res-block-body">
+            <ul class="nk-basis-list" id="basisList"></ul>
+          </div>
+        </div>
+
+        <!-- W1 — tường "đã tính thử". Phần trên đã chạy THẬT và miễn phí; tấm
+             khoá này chỉ đứng trên phần chữ. `data-tvp-lock` để lượt từ chối
+             (thiếu Lượng) của paywall cũng rơi đúng vào đây thay vì nhảy lên
+             cạnh nút chạy tool ở màn hình trước. -->
+        <div class="res-block" id="lockBlock" style="display:none">
+          <div class="res-block-header"><span class="res-block-title">Phần Luận Chưa Mở</span></div>
+          <div class="res-block-body" id="lockHost" data-tvp-lock style="padding-top:6px"></div>
         </div>
 
         <div class="res-block" style="background:#FBF3DE;border-color:#e8d9b0">
@@ -201,7 +220,7 @@
 window.SHELL_INTRO={key:'nguoi-khac',title:'Lá Số Người Khác',desc:'Đưa lá số của <b>sếp, đồng nghiệp, cấp dưới hay người thân</b> vào đây để biết họ <b>vận hành thế nào</b>, <b>nên nói gì</b>, <b>tránh nói gì</b> và <b>lúc nào nên đưa việc lớn tới</b>. Đọc theo cung Mệnh, Phúc Đức, Thiên Di, Quan Lộc, Nô Bộc.'};</script>
 <script src="/laso-chart.js?v=3"></script>
 <script src="/tuvi-form.js?v=1"></script>
-<script src="/tuvi-paywall.js?v=14"></script>
+<script src="/tuvi-paywall.js?v=16"></script>
 <script src="/auth.js?v=2"></script>
   <script src="/nav.js?v=22" data-icons-only></script>
 <script src="/shell.js?v=60"></script>
@@ -289,6 +308,20 @@ function _cacheQuery(b, self, qh) {
   return q;
 }
 
+// ── W1: bấm nút là CHẠY THẬT, miễn phí ─────────────────────────────────────
+//
+// Trước đây bấm nút là gặp paywall ngay — tức phải trả tiền mới biết tool có
+// đúng không. Nay: chạy tầng deterministic (0 lượt LLM, 0đ), bày kiểu người +
+// 5 mặt đọc + đại vận + vận năm, rồi mới dựng tường trên đúng phần chữ.
+var NK_KHOA = [
+  'Con người này vận hành thế nào',
+  'Điều họ coi trọng · điều làm họ khó chịu',
+  'Nên nói gì — 3 việc kèm câu nói thật',
+  'Tránh nói gì — 3 việc kèm câu nói thật',
+  'Lúc nào nên đưa việc lớn tới',
+  'Một câu chốt',
+];
+
 async function analyze() {
   showError('');
   var b = _birthOf('');
@@ -296,23 +329,80 @@ async function analyze() {
   var qh = document.getElementById('quanHe').value;
   var self = _birthOf('self');
   _last = b; _lastSelf = self;
-
   _currentSlug = TuviPaywall.generateToolSlug('nguoi-khac-' + qh + '-' + b.day + b.month + b.year);
-  await TuviPaywall.requireCreditsCachedQuery(
-    '/api/nguoi-khac', _cacheQuery(b, self, qh), _currentSlug,
-    async function (freeRerun) { await _doGenerate(freeRerun, qh); },
-    '✓ Bạn đã xem bản này rồi — mở lại, không trừ Lượng');
+
+  _openPanel();
+  _loadingCtl = AiLoadingSteps.mount('loadingSteps', NK_STEPS.slice(0, 2));
+  _loadingCtl.start();
+  var prev;
+  try {
+    var r = await fetch('/api/nguoi-khac?preview=1', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        birth: b, birthSelf: self || undefined, name: b.name || '', quanHe: qh,
+      }),
+    });
+    prev = await r.json();
+    if (!r.ok || !prev.success) throw new Error(prev.error || 'Lỗi ' + r.status);
+  } catch (e) {
+    _loadingCtl && _loadingCtl.stop();
+    _closePanel();
+    showError('Lỗi: ' + (e.message || 'Không thể kết nối. Vui lòng thử lại.'));
+    return;
+  }
+  _loadingCtl && _loadingCtl.finish();
+  document.getElementById('loading').style.display = 'none';
+  document.getElementById('card').style.display = 'block';
+  document.getElementById('btnEdit').style.display = '';
+  renderMeta(prev);
+  // D1 — bậc "đã tính thử" của phễu theo tool. Bắn ở ĐÂY chứ không ở lúc bấm
+  // nút: bấm rồi mà lá số hỏng thì không có gì để xem, tính vào phễu là thổi
+  // mẫu số lên rồi tỉ lệ mở nhìn tệ hơn thực tế.
+  try { if (window.Track) window.Track.event('preview_shown', { tool_id: 'nguoi-khac' }); } catch (e) { /* đo hỏng không chặn gì */ }
+  if (window.SHELL_INTRO) Shell.dismissIntro(window.SHELL_INTRO.key);
+
+  // Đã trả tiền cho đúng lá số này từ trước → mở thẳng, không dựng tường.
+  var free = false;
+  try { free = await TuviPaywall.isFreeRerun('/api/nguoi-khac', _cacheQuery(b, self, qh)); } catch (e) { free = false; }
+  if (free) {
+    TuviPaywall._banner('✓ Bạn đã xem bản này rồi — mở lại, không trừ Lượng');
+    await _doGenerate(true, qh);
+    return;
+  }
+  document.getElementById('lockBlock').style.display = 'block';
+  await TuviPaywall.lockPreview({
+    host: document.getElementById('lockHost'),
+    title: '⊙ Còn phần luận chưa mở',
+    items: NK_KHOA,
+    cta: 'Mở bản cẩm nang đầy đủ',
+    slug: function () { return _currentSlug; },
+    onUnlock: function () { return _doGenerate(false, qh); },
+  });
 }
 
-async function _doGenerate(freeRerun, qh) {
+function _openPanel() {
   document.getElementById('birthPanel').style.display = 'none';
   document.getElementById('resPanel').style.display = 'block';
   document.getElementById('loading').style.display = 'block';
   document.getElementById('card').style.display = 'none';
-  ['sayBlock', 'timeBlock', 'withBlock', 'endBlock', 'basisBlock'].forEach(function (id) {
+  ['sayBlock', 'timeBlock', 'withBlock', 'endBlock', 'basisBlock', 'lockBlock'].forEach(function (id) {
     document.getElementById(id).style.display = 'none';
   });
-  _loadingCtl = AiLoadingSteps.mount('loadingSteps', NK_STEPS);
+  document.getElementById('proseTop').style.display = 'none';
+}
+
+function _closePanel() {
+  document.getElementById('loading').style.display = 'none';
+  document.getElementById('resPanel').style.display = 'none';
+  document.getElementById('birthPanel').style.display = 'block';
+}
+
+async function _doGenerate(freeRerun, qh) {
+  document.getElementById('lockBlock').style.display = 'none';
+  TuviPaywall._closeLock();
+  _loadingCtl = AiLoadingSteps.mount('loadingSteps', NK_STEPS.slice(2));
+  document.getElementById('loading').style.display = 'block';
   _loadingCtl.start();
 
   var token = window.Auth?.getSession()?.access_token || '';
@@ -333,14 +423,15 @@ async function _doGenerate(freeRerun, qh) {
     // paywall thay vì ném một lỗi khó hiểu.
     if (res.status === 402 && freeRerun) {
       _loadingCtl && _loadingCtl.stop();
-      showForm();
       document.getElementById('loading').style.display = 'none';
+      document.getElementById('lockBlock').style.display = 'block';
       await TuviPaywall.requireCredits(_currentSlug, async function () { await _doGenerate(false, qh); });
       return;
     }
     if (!res.ok || !data.success) throw new Error(data.error || 'Lỗi ' + res.status);
     _lastData = data;
-    render(data);
+    renderMeta(data);
+    renderProse(data);
     _loadingCtl && _loadingCtl.finish();
     document.getElementById('loading').style.display = 'none';
     document.getElementById('card').style.display = 'block';
@@ -368,11 +459,13 @@ async function _doGenerate(freeRerun, qh) {
       ],
     });
   } catch (e) {
+    // 🔑 KHÔNG đóng cả bảng như bản trước. Người dùng đang nhìn phần tính thử
+    // (thứ họ vừa xem xong và có thể vừa trả tiền cho phần sau) — quẳng họ về
+    // form trống là xoá luôn cái đó. Giữ nguyên màn hình, dựng lại tường.
     _loadingCtl && _loadingCtl.stop();
     document.getElementById('loading').style.display = 'none';
-    document.getElementById('resPanel').style.display = 'none';
-    document.getElementById('birthPanel').style.display = 'block';
-    showError('Lỗi: ' + (e.message || 'Không thể kết nối. Vui lòng thử lại.'));
+    document.getElementById('lockBlock').style.display = 'block';
+    TuviPaywall._banner('Chưa mở được phần luận: ' + (e.message || 'lỗi kết nối') + '. Bạn thử lại giúp.');
   }
 }
 
@@ -385,7 +478,12 @@ function _mucHtml(list) {
   }).join('');
 }
 
-function render(data) {
+// W1 — hai hàm vẽ, tách theo ĐƯỜNG TIỀN chứ không theo bố cục:
+//   renderMeta  = thứ engine tra bảng ra, 0đ  → vẽ ngay ở lượt tính thử
+//   renderProse = thứ model viết, tốn tiền    → chỉ vẽ sau khi đã trả
+// Gộp lại một hàm như bản trước là sớm muộn có một khối chữ lọt vào lượt miễn
+// phí mà không ai để ý.
+function renderMeta(data) {
   var qh = data.quanHe || {};
   var kieu = data.kieu || {};
   document.getElementById('nkName').textContent = data.ten || qh.label || 'Người này';
@@ -405,12 +503,39 @@ function render(data) {
   if (line) { bl.textContent = 'Lá số: ' + line; bl.style.display = 'block'; }
   else { bl.style.display = 'none'; }
 
-  document.getElementById('tinhKhi').textContent = data.tinhKhi || '';
-  document.getElementById('coiTrong').textContent = data.coiTrong || '';
-  document.getElementById('chamNoc').textContent = data.chamNoc || '';
   document.getElementById('cauHoiChips').innerHTML = (kieu.cauHoi || []).map(function (c) {
     return '<span class="nk-chip">' + esc(c) + '</span>';
   }).join('');
+
+  var rows = [];
+  (data.matDoc || []).forEach(function (m) {
+    rows.push('<li><b>' + esc(m.nhan) + '</b> — cung ' + esc(m.cung) +
+      (m.muon ? ' (mượn xung chiếu)' : '') + ': ' +
+      esc((m.sao || []).join(', ') || 'không có chính tinh') +
+      ((m.cachCuc || []).length ? ' · ' + esc(m.cachCuc.join('; ')) : '') + '</li>');
+  });
+  if (data.than && data.than.cung) rows.push('<li><b>Cung an Thân</b> — ' + esc(data.than.cung) + '</li>');
+  if (data.daiVan) {
+    rows.push('<li><b>Đại vận đang chạy</b> — ' + data.daiVan.tuoiStart + '–' + data.daiVan.tuoiEnd +
+      ' tuổi, cung ' + esc(data.daiVan.cung) +
+      (data.daiVan.diem == null ? '' : ', ' + data.daiVan.diem + '/10') + '</li>');
+  }
+  if (data.vanNam) {
+    rows.push('<li><b>Vận năm ' + data.vanNam.nam + '</b> — ' +
+      (data.vanNam.diem == null ? 'chưa chấm' : data.vanNam.diem + '/10') +
+      (data.vanNam.huong ? ', đà ' + esc(data.vanNam.huong) : '') + '</li>');
+  }
+  if (rows.length) {
+    document.getElementById('basisList').innerHTML = rows.join('');
+    document.getElementById('basisBlock').style.display = 'block';
+  }
+}
+
+function renderProse(data) {
+  document.getElementById('tinhKhi').textContent = data.tinhKhi || '';
+  document.getElementById('coiTrong').textContent = data.coiTrong || '';
+  document.getElementById('chamNoc').textContent = data.chamNoc || '';
+  document.getElementById('proseTop').style.display = 'block';
 
   var nen = _mucHtml(data.nenNoi), tranh = _mucHtml(data.tranhNoi);
   if (nen || tranh) {
@@ -440,29 +565,6 @@ function render(data) {
 
   if (data.motCau) document.getElementById('motCau').textContent = data.motCau;
   document.getElementById('endBlock').style.display = 'block';
-
-  var rows = [];
-  (data.matDoc || []).forEach(function (m) {
-    rows.push('<li><b>' + esc(m.nhan) + '</b> — cung ' + esc(m.cung) +
-      (m.muon ? ' (mượn xung chiếu)' : '') + ': ' +
-      esc((m.sao || []).join(', ') || 'không có chính tinh') +
-      ((m.cachCuc || []).length ? ' · ' + esc(m.cachCuc.join('; ')) : '') + '</li>');
-  });
-  if (data.than && data.than.cung) rows.push('<li><b>Cung an Thân</b> — ' + esc(data.than.cung) + '</li>');
-  if (data.daiVan) {
-    rows.push('<li><b>Đại vận đang chạy</b> — ' + data.daiVan.tuoiStart + '–' + data.daiVan.tuoiEnd +
-      ' tuổi, cung ' + esc(data.daiVan.cung) +
-      (data.daiVan.diem == null ? '' : ', ' + data.daiVan.diem + '/10') + '</li>');
-  }
-  if (data.vanNam) {
-    rows.push('<li><b>Vận năm ' + data.vanNam.nam + '</b> — ' +
-      (data.vanNam.diem == null ? 'chưa chấm' : data.vanNam.diem + '/10') +
-      (data.vanNam.huong ? ', đà ' + esc(data.vanNam.huong) : '') + '</li>');
-  }
-  if (rows.length) {
-    document.getElementById('basisList').innerHTML = rows.join('');
-    document.getElementById('basisBlock').style.display = 'block';
-  }
 }
 
 function showForm() {

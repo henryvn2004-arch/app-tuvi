@@ -229,6 +229,40 @@ async function buildReport(p: NhanMachProfile, userId: string, key: string, coLa
   return ok(payload);
 }
 
+/**
+ * W1 — TÍNH THỬ MIỄN PHÍ. Xem chú thích dài ở `app/api/nguoi-khac/route.ts`.
+ *
+ * ⚠️ Ở đây có thêm một chi tiết riêng: lượt tính thử lập tới `MAX_NGUOI` lá số
+ * trong một request. Vẫn là tra bảng nên 0đ tiền model, nhưng đó là CPU thật —
+ * trần 8 người của engine cũng chính là trần cho đường này.
+ */
+async function runPreview(request: NextRequest) {
+  const body = await parseBody(request);
+  const raw = Array.isArray(body.nguoi) ? (body.nguoi as Record<string, unknown>[]) : [];
+  const hopLe = raw.filter((n) => validBirth(n?.birth)).slice(0, MAX_NGUOI);
+  if (hopLe.length < MIN_NGUOI) {
+    return err(`Cần ít nhất ${MIN_NGUOI} người có đủ ngày sinh để đọc được cả nhóm.`, 400);
+  }
+  const list: NguoiVao[] = [];
+  for (let i = 0; i < hopLe.length; i++) {
+    const b = hopLe[i].birth as BirthParams;
+    const r = computeLaso(b);
+    if (!r.ok || !r.ls) return err(`Không lập được lá số của "${cleanTen(hopLe[i].ten, i)}".`, 400);
+    list.push({
+      ten: cleanTen(hopLe[i].ten, i),
+      vai: resolveQuanHe(String(hopLe[i].vai || '')),
+      ls: r.ls,
+      gioiTinh: b.gender === 'nu' ? 'nu' : 'nam',
+    });
+  }
+  let lsBan: Laso | null = null;
+  if (validBirth(body.birthSelf)) {
+    const rb = computeLaso(body.birthSelf as BirthParams);
+    if (rb.ok && rb.ls) lsBan = rb.ls;
+  }
+  return ok({ success: true, preview: true, ...meta(computeNhanMach(list, lsBan)) });
+}
+
 async function runPost(request: NextRequest) {
   const auth = await authUserFromRequest(request);
   if ('error' in auth) return err(auth.error, auth.status);
@@ -318,5 +352,7 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
+  const url = new URL(request.url);
+  if (url.searchParams.get('preview') === '1') return runPreview(request);
   return withToolOutcome(TOOL_ID, () => runPost(request));
 }

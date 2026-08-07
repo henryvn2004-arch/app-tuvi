@@ -5,7 +5,180 @@
 
 ---
 
-## 👶👥 T2 "Dạy Con" + T3 "Sổ Nhân Mạch" (2026-08-06, PR này)
+## 📉 D1 — Phễu theo tool, và 🔴 BA HỆ TÊN TOOL ĐANG LỆCH NHAU (2026-08-07, PR này)
+
+Henry: *"Ok D1 trước đi"* — mục backlog *"tool nào có người xem mà không ai
+mua"*. Sau W1 nó còn cấp hơn: không có nó thì W1 vừa ship xong mà không biết có
+tác dụng gì.
+
+### 🔴 Phát hiện chính, KHÔNG nằm trong đề bài
+Ba nơi gọi tên tool bằng ba hệ khác nhau, và chúng **không khớp**:
+
+| Khái niệm | `events.tool_id` (shell) | `tool_pricing.tool_id` | `credit_transactions.type` |
+|---|---|---|---|
+| Luận Giải | `luan-giai` | `laso` | `use_laso` |
+| Bát Tự | `bat-tu` | `tu-binh` | `use_tubinh` |
+| Chọn Ngày | `chon-ngay` | `chon-ngay-tot` | `use_chon_ngay_tot` |
+| Đặt Tên | `dat-ten` | `dat-ten-con` | `use_dat_ten_con` |
+| Đặt Tên DN | `dat-ten-dn` | `dat-ten-dn` | `use_dat_ten_doanh_nghiep` |
+
+**Bản đầu tiên tao viết join thô và nó ra: `luan-giai` — 24 người mở, 0 người
+mua.** Trong khi `use_laso` đã bán **1.500 Lượng cho 3 người**. Tức panel sinh
+ra để chống quyết định sai thì suýt tự đẻ ra một quyết định sai.
+- Vá bằng `tool_canon()` — quy mọi biến thể về `tool_pricing.tool_id` (id mà giá
+  và nhãn treo vào). Còn có **`type` lẫn cả gạch ngang lẫn gạch dưới** trong
+  cùng một bảng (`use_chan_dung_vo_chong` vs `use_chan-dung-tien-kiep`) — đúng
+  cái bẫy `viral-budget.ts` đã phải học khi đếm lượt gen free.
+- **`tool_funnel_lac()` — bộ dò id lạc**, hiện thẳng trên panel. Chính nó bắt
+  được tên lệch thứ tư (`dat-ten-doanh-nghiep`) ngay lượt chạy đầu tiên. Không
+  có bộ dò thì mỗi tool mới đặt tên lệch lại âm thầm tụt khỏi bảng.
+
+### 🔑 `topup_start` KHÔNG dùng được cho bậc "định mua"
+Đo prod: **552/553** lượt của nó đến từ chính trang nạp (`from=topup_page`),
+**0 lượt mang `tool_id`**. Vì thế mới phải thêm hai loại event mới —
+`preview_shown` (tính thử ra kết quả) và `unlock_click` (bấm nút mở bản đầy đủ).
+- `unlock_click` bắn từ **`lockPreview` trong `tuvi-paywall.js`**, không phải
+  từng trang: mọi tool dựng tường qua hàm đó là tự có bậc này.
+- `preview_shown` bắn từ trang, **sau khi renderMeta**, không phải lúc bấm nút —
+  bấm rồi mà lá số hỏng thì không có gì để xem, tính vào phễu là thổi mẫu số.
+
+### Panel "Phễu Theo Tool" (trang Marketing)
+Mở → chạy → tính thử → bấm mở → mua → Lượng. **Mọi cột đếm NGƯỜI** (đăng nhập
+thì theo tài khoản, không thì theo trình duyệt — cùng quy ước
+`dashboard_engagement`, hai panel đếm khác nhau là không so được).
+- Tô đỏ tool **trả phí** có **≥3 người mở mà 0 người mua**. Ngưỡng 3 vì một tool
+  1 người mở 0 người mua chưa nói lên gì — gắn cờ đỏ cho nó là dạy người đọc bỏ
+  qua cờ đỏ. Tool **miễn phí** không bao giờ bị tô (nó có bán gì đâu).
+- Tool chưa làm W1 thì hai cột tính thử/bấm mở để **gạch ngang, KHÔNG hiện 0%** —
+  0% đọc thành "ai cũng bỏ đi".
+- Action RIÊNG `admin-tool-funnel` chứ không nhét vào `admin-marketing` (chỗ đó
+  đã gánh 8 RPC + GA4), cùng tiền lệ `admin-viral`.
+- ⚠️ Quy ước khoảng ngày **nửa mở `[from, to)` và client cộng sẵn một ngày vào
+  `to`** — y hệt mọi RPC marketing khác. Hai RPC cùng trang mà hiểu khác nhau về
+  mốc cuối là hai bảng lệch đúng một ngày, kiểu lệch không ai nhìn ra.
+
+### Verify
+`tsc` 0 lỗi · `lint` 0 lỗi (72 warning pre-existing) · `prettier --check .` sạch
+· `check:prices` sạch · engine **185 pass** · `node --check` 4 khối script admin
+· bộ kiểm cấu trúc W1 vẫn xanh.
+**16 ca Playwright trên CHÍNH `renderToolFunnel` trong `admin.html`**: cờ đỏ chỉ
+bật đúng ca (trả phí + đủ mẫu + 0 mua), **3 ca ĐỐI CHỨNG không được bật** (đã có
+người mua · tool miễn phí · dưới ngưỡng mẫu) · tool có W1 hiện đúng tỉ lệ 4/9 =
+44% · tool chưa có W1 ra gạch ngang · nhãn chứa `<img onerror>` không chạy mà
+vẫn hiện nguyên văn · danh sách id lạc kèm hướng dẫn sửa · dark mode · rỗng →
+câu tử tế.
+**12 ca trên 3 TRANG THẬT**: `preview_shown` bắn đúng tool sau lượt tính thử,
+`unlock_click` **chưa bắn** lúc đó, bấm mở mới bắn, 0 lỗi JS.
+- 🪤 Playwright đặt `navigator.webdriver=true` nên `track.js` tự no-op — phải
+  `defineProperty` cho nó về `false` mới đo được đường của người thật.
+
+### Số đo ngay khi bật (2026-04-01 → 08-07)
+| Tool | Mở | Chạy | Mua | Lượng |
+|---|---:|---:|---:|---:|
+| Luận Giải | 24 | 24 | 3 | 1.500 |
+| Chân Dung Vợ Chồng | 10 | 1 | 1 | 788 |
+| Chân Dung Tiền Kiếp | 5 | 1 | 1 | 425 |
+| Tử Bình | 3 | 2 | 2 | 1.050 |
+⚠️ **Chân Dung Vợ Chồng: 10 người mở, 1 người CHẠY.** Rơi 90% ở bước bấm nút —
+đó là tool đắt thứ hai và là tool viral chính. Đây đúng là loại câu hỏi D1 sinh
+ra để đặt, và nó cũng là lý do W1 nên mở rộng sang 2 tool chân dung.
+
+### CÒN LẠI
+- Hai cột tính thử/bấm mở **mới có số từ hôm nay** — 3 tool W1 vừa ship. Tỉ lệ
+  bấm-mở cần vài chục lượt mới đọc được.
+- Chưa tách phễu theo **kênh** (organic vs share vs quảng bá). Cần join thêm
+  `user_attribution`, và chỉ có nghĩa khi lưu lượng lớn hơn nhiều.
+- `tool_canon()` là **bảng chép tay** — thêm tool mà tên ba nơi không khớp thì
+  phải thêm dòng. Bộ dò id lạc là lưới đỡ, nhưng nó chỉ kêu SAU khi có dữ liệu.
+
+---
+
+## 🔓 W1 — TÍNH THỬ MIỄN PHÍ: bấm nút là tool CHẠY THẬT (2026-08-06, PR trước)
+
+Henry: *"Ok w1 đi"* — mục backlog tự đánh giá là **tác động lớn nhất cả
+backlog**. W2 trước đó mới làm nửa hình thức: tấm khoá mềm hiện ra nhưng **chữ
+mờ là chữ GIẢ**, tool vẫn chưa hề chạy.
+
+### Đảo chiều: chặn TRƯỚC → cho xem RỒI mới chặn
+Trước: bấm nút → paywall → phải trả tiền mới biết tool có đúng không.
+Nay: bấm nút → **tool chạy thật** → bày tầng cấu trúc → tường chỉ đứng trên
+phần chữ.
+
+### 🔑 Chỗ khiến W1 gần như 0đ — và nó là cả thiết kế
+Tầng deterministic của 3 tool cẩm nang (`nguoi-khac` · `day-con` · `nhan-mach`)
+là **tra bảng thuần**: kiểu người, toạ độ hai trục, 5 mặt đọc, **6 thẻ cách
+dạy** (`KIEU_HOC`), chặng đi học, phân bố nhóm, **cặp giẫm-chân/bù-nhau**, thứ
+tự tiếp cận, cơ sở lá số. **0 lượt LLM, 0đ.** Chỉ phần CHỮ mới tốn tiền.
+⇒ Không có đường farm tiền model, vì lượt tính thử không gọi model.
+
+### `runPreview()` là HÀM RIÊNG, không phải một cờ trong `runPost`
+Rẽ nhánh ngay tại `POST`, **trước cả `withToolOutcome`**. Trong đó KHÔNG có
+`toolPaymentDenied`, `llmTextFull`, `insertHistoryRow`, `putCachedPortrait`,
+`railFreeGrant`, `refundIfSystemFailure`.
+- **Vì sao không dùng cờ:** đây là chốt chặn thanh toán của tool đang bán. Trộn
+  hai đường vào một hàm rồi tin vào một câu `if` là cách nhanh nhất để một hôm
+  nào đó đường trả tiền lọt qua cửa.
+- **KHÔNG đòi đăng nhập.** Cả điểm của W1 là bỏ tường trước khi người ta thấy
+  chất lượng — mà màn đăng nhập cũng là một bức tường. Chi phí chỉ là CPU lập
+  lá số, ngang mấy tool free vốn đã mở công khai.
+
+### `TuviPaywall.lockPreview()` — khác `_softLock` ở đúng một điểm
+`_softLock` (W2) là lời **TỪ CHỐI** (thiếu Lượng / chạm trần) nên mấy vạch mờ
+sau nó là chữ giả cho có. `lockPreview` là lời **MỜI**: người dùng chưa bị từ
+chối gì, nên nó liệt kê **ĐÚNG TÊN** những khối đang khoá. Fail-closed y hệt:
+đọc hụt bảng giá → KHÔNG dựng tường.
+
+### Mỗi trang tách `render()` → `renderMeta()` / `renderProse()`
+**Tách theo ĐƯỜNG TIỀN, không theo bố cục.** Gộp một hàm là sớm muộn có một
+khối chữ lọt vào lượt miễn phí mà không ai để ý.
+- Thứ tự DOM đặt sao cho **lượt tính thử luôn thấy tường ở CUỐI**: khối chữ nằm
+  xen giữa nhưng đang `display:none`, mở xong tường biến mất và mọi thứ về đúng
+  chỗ. Không phải sắp lại hai lần.
+- **Bóc "Cơ sở trong lá số" khỏi `<details>` ở cuối trang** thành khối mở sẵn:
+  W1 đổi vai của nó — đây LÀ bằng chứng duy nhất người chưa trả tiền có để đánh
+  giá tool.
+- 🔑 `nhan-mach` điền chữ vào **ĐÚNG thẻ người đã dựng** ở lượt tính thử (dò
+  `data-ten`) thay vì dựng lại danh sách: dựng lại thì thứ tự trôi theo thứ tự
+  model trả về, mà nó không cam kết gì.
+- Lỗi ở lượt trả tiền **KHÔNG quẳng người ta về form trống nữa** — họ đang nhìn
+  phần tính thử và có thể vừa trả tiền cho phần sau; giữ màn hình, dựng lại
+  tường, báo bằng banner.
+
+### Verify
+`tsc` 0 lỗi · `lint` 0 lỗi (72 warning pre-existing) · `prettier --check .` sạch
+· `check:prices` sạch · engine **185 pass** · `node --check` 6 khối script nội
+tuyến · engine test T2/T3 vẫn xanh (4.896 lá số + 152 nhóm).
+**24 bất biến ĐỌC THẲNG MÃ NGUỒN 3 route**: `runPreview` không chứa một trong 8
+ký hiệu cấm, + **ca ĐỐI CHỨNG `runPost` PHẢI có** chốt thanh toán và lượt gọi
+model (không thì bản kiểm xanh vì lý do sai), + rẽ nhánh nằm trước
+`withToolOutcome`, + `renderMeta` không đọc một khoá chữ nào và `renderProse`
+đọc đủ.
+**30 ca Playwright trên 3 TRANG THẬT**: bấm nút → **0 lượt `action=deduct`**,
+POST duy nhất là `preview=1`, không modal chặn · bày đủ kiểu người / cơ sở lá
+số / 6 thẻ cách dạy / cặp giẫm-chân · **quét toàn bộ text kết quả: 0 câu chữ
+model lọt** · tường liệt kê đúng tên khối khoá + số dư + giá · bấm mở → có
+`deduct`, có POST đường trả tiền, tường biến mất, chữ hiện đủ, **phần miễn phí
+vẫn còn nguyên** · **khách CHƯA đăng nhập vẫn tính thử được** và tường mời đăng
+nhập thay vì nói số dư · đã trả tiền từ trước → mở thẳng, không tường, không
+trừ Lượng · thiếu Lượng → tường "còn thiếu N", **không bị quẳng về form** ·
+`nhan-mach` mở xong **thứ tự người không đổi** · 390px không tràn ngang.
+- 🪤 Một ca đỏ là **lỗi TEST**: bản kiểm "rẽ nhánh trước `withToolOutcome`" dò
+  vị trí chuỗi, mà CHÚ THÍCH của `nguoi-khac` có nhắc chữ `withToolOutcome`.
+  Phải bỏ chú thích trước khi dò.
+
+### CÒN LẠI
+- **2 tool chân dung chưa có tính thử** — ở đó giá trị chính LÀ bức ảnh, cho
+  xem trước là cho không hàng. Phải nghĩ cách khác (hé tên nhân vật + nền văn
+  minh mà giấu ảnh + truyện?), và cách đó tốn một lượt LLM nên không còn 0đ.
+- Chưa đo được **tỉ lệ bấm "Mở bản đầy đủ"** sau khi xem tính thử — đó chính là
+  con số nói W1 có ăn hay không. Cần một event riêng (`preview_shown` /
+  `preview_unlock`) rồi ghép trong panel Marketing.
+- Lượt tính thử **không giới hạn** và không đăng nhập. Chi phí là CPU lập lá số
+  nên chấp nhận được, nhưng nếu có ngày bị quét thì cần trần theo IP.
+
+---
+
+## 👶👥 T2 "Dạy Con" + T3 "Sổ Nhân Mạch" (2026-08-06, PR trước)
 
 Henry: *"Ok. Làm tiếp t2/t3 đi"* — mục cuối của nhóm T trong `BACKLOG-DOI-THU.md`.
 

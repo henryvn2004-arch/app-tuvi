@@ -125,7 +125,13 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
 .tpw-lock-t{font-family:'Noto Serif',Georgia,serif;font-size:15px;font-weight:700;color:#061A2E;margin-bottom:4px}
 .tpw-lock-s{font-size:12.5px;color:#666;margin-bottom:13px;line-height:1.55}
 .tpw-lock-x{background:none;border:none;color:#999;font-size:12px;font-family:inherit;cursor:pointer;margin-top:9px;text-decoration:underline}
-.tpw-lock-x:hover{color:#666}`;
+.tpw-lock-x:hover{color:#666}
+/* W1 — tường "đã tính thử": liệt kê ĐÚNG tên khối đang khoá. Cao hơn tường từ
+   chối nên phần mờ phía sau phải dày hơn, nếu không chữ tràn ra ngoài khung. */
+.tpw-prev .tpw-lock-blur{padding:26px 20px 40px}
+.tpw-prev-list{list-style:none;margin:2px 0 11px;padding:0;font-size:12.5px;line-height:1.85;color:#4a4234;text-align:left;max-width:340px}
+.tpw-prev-list li{position:relative;padding-left:17px}
+.tpw-prev-list li::before{content:'⊙';position:absolute;left:0;color:#C9A84C;font-size:11px}`;
     document.head.appendChild(s);
   }
 
@@ -332,6 +338,78 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
     return true;
   }
 
+  // ── W1: tường "ĐÃ tính thử" ──────────────────────────────────────────
+  //
+  // Khác `_softLock` ở đúng một điểm, và điểm đó là cả W1: `_softLock` là lời
+  // TỪ CHỐI (thiếu Lượng / chạm trần) nên mấy thanh mờ sau nó chỉ là chữ giả
+  // cho có. Ở đây người dùng CHƯA bị từ chối gì — tool đã chạy thật, phần cấu
+  // trúc đã bày ra trên màn hình, và tấm khoá này chỉ đứng trên phần CHỮ.
+  //
+  // Vì thế nó liệt kê ĐÚNG TÊN những khối đang khoá (`items`) thay vì mấy vạch
+  // mờ vô nghĩa: người ta thấy chính xác cái gì còn ở sau tường.
+  //
+  // Fail-closed y như mọi đường khác: đọc hụt bảng giá → KHÔNG dựng tường, báo
+  // "chưa đọc được giá". Dựng một cái tường ghi giá đoán còn tệ hơn không dựng.
+  async function lockPreview(o) {
+    const host = o && o.host;
+    if (!host) return false;
+    _css();
+    _closeLock();
+
+    const product = (_cfg && _cfg.product) || '';
+    let cost = null;
+    try { cost = await _priceOf(product); } catch (e) { cost = null; }
+    if (cost == null) { _priceUnknown(); return false; }
+    let balance = null;
+    try { balance = await getBalance(); } catch (e) { balance = null; }
+
+    let money;
+    if (balance == null) {
+      money = 'Mở đầy đủ tốn <b>' + cost + ' Lượng</b> · ' +
+        '<a onclick="TuviPaywall._login()">đăng nhập</a> để xem số dư';
+    } else if (balance < cost) {
+      money = 'Bạn còn <b>' + balance + '</b> · cần <b>' + cost + '</b> — thiếu ' + (cost - balance) +
+        ', <a href="/topup.html" onclick="' + _topupClick('preview', cost - balance) + '">nạp thêm →</a>';
+    } else {
+      money = 'Bạn còn <b>' + balance + ' Lượng</b> · mở đầy đủ tốn <b>' + cost + '</b>';
+    }
+
+    const items = (o.items || []).map((t) => '<li>' + _esc(t) + '</li>').join('');
+
+    _lockEl = document.createElement('div');
+    _lockEl.className = 'tpw-lock tpw-prev';
+    _lockEl.innerHTML =
+      '<div class="tpw-lock-blur" aria-hidden="true">' +
+        '<i style="width:96%"></i><i style="width:88%"></i><i style="width:93%"></i>' +
+        '<i style="width:70%"></i><i style="width:91%"></i><i style="width:58%"></i>' +
+      '</div>' +
+      '<div class="tpw-lock-veil">' +
+        '<div class="tpw-lock-t">' + _esc(o.title || 'Bản luận đầy đủ') + '</div>' +
+        (items ? '<ul class="tpw-prev-list">' + items + '</ul>' : '') +
+        '<div class="tpw-lock-s">' + money + '</div>' +
+        '<button class="tpw-btn topup" type="button">' + _esc(o.cta || 'Mở bản đầy đủ') + '</button>' +
+      '</div>';
+    host.appendChild(_lockEl);
+
+    // Nút dùng listener chứ không phải chuỗi onclick: nó phải giữ được closure
+    // `onUnlock` của trang. Đường trả tiền vẫn là `requireCredits` như cũ —
+    // W1 KHÔNG mở thêm đường nào để lấy phần chữ.
+    const btn = _lockEl.querySelector('button.tpw-btn');
+    if (btn) {
+      btn.addEventListener('click', function () {
+        // D1 — bậc "bấm mở" của phễu theo tool. Đặt Ở ĐÂY chứ không ở từng
+        // trang: mọi tool dựng tường qua hàm này là tự có bậc đó, không phải
+        // nhớ rải thêm một lời gọi mỗi lần thêm tool.
+        try {
+          if (window.Track) window.Track.event('unlock_click', { tool_id: product, meta: { cost: cost } });
+        } catch (e) { /* đo hỏng không được chặn lượt mua */ }
+        const slug = typeof o.slug === 'function' ? o.slug() : o.slug || '';
+        requireCredits(slug, function () { return o.onUnlock(); });
+      });
+    }
+    return true;
+  }
+
   // Chuỗi onclick dùng chung cho mọi nút nạp — trước đây chép tay ở 2 chỗ và
   // đã lệch nhau (chỗ đóng modal, chỗ không).
   function _topupClick(from, need) {
@@ -521,6 +599,16 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
       '✓ Bạn đã tạo kết quả cho lá số này — mở lại, không trừ Lượng');
   }
 
+  /**
+   * "Lượt này có miễn phí không" — dùng cho luồng W1, nơi trang phải BIẾT
+   * TRƯỚC để quyết định dựng tường hay mở thẳng. Cùng một `_isFreeRerunQ` với
+   * `requireCreditsCachedQuery`; mở ra thay vì để trang tự hỏi `cache-status`
+   * là để hai bên không bao giờ trả lời khác nhau cho cùng một lá số.
+   */
+  async function isFreeRerun(endpoint, query) {
+    return _isFreeRerunQ(endpoint, query);
+  }
+
   /** Bản nhận QUERY tự dựng — cho tool có nhiều hơn một lá số. */
   async function requireCreditsCachedQuery(endpoint, query, slug, callback, banner) {
     return _cachedFlow(_isFreeRerunQ(endpoint, query), slug, callback,
@@ -640,7 +728,7 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
   return {
     init, requireCredits, requireCreditsCached, requireCreditsCachedQuery,
     generateToolSlug, ensureCredits, deductSilent, getBalance, fillPriceSlots,
-    mountCostHints, refreshCostHints,
+    mountCostHints, refreshCostHints, lockPreview, isFreeRerun,
     _banner, _close, _closeLock, _login,
   };
 })();
