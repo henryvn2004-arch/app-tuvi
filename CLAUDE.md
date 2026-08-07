@@ -435,6 +435,87 @@ script nội tuyến.
 
 ---
 
+## 🔒 Trả nợ kỹ thuật: parser LLM giòn · `no-store` · 4 trang SEO (2026-08-07, PR này)
+
+Henry đưa lại chính danh sách "nợ kỹ thuật, không gấp" tao viết ở lượt trước:
+*"fix mấy lỗi này trước đi"*. Đo trước khi sửa thì **hai trong bốn mục không hề
+"không gấp"** — chúng đang sống trên đường tiền và đường xác thực.
+
+### 🔴 Parser LLM giòn — 2 route đang BÁN vẫn chạy bản đã trả giá
+`parseLlmJson` (bóc từng khối `{...}` cân bằng) sinh ra chính vì bản giòn
+`JSON.parse(strip fences)` đã làm hỏng **một lượt đã tính tiền** trên prod. Ba
+route được vá lẻ, **`chan-dung-vo-chong` (20 Lượng) và `phong-thuy` thì không** —
+đúng hai chỗ chưa ai đụng lại từ hồi đó. Nay **7/7 route đi qua
+`lib/api/tool-helpers.ts`**, 0 bản chép tay.
+- 🐞 Lộ thêm một lỗi kiểu bị GIẤU: bản chép tay ở `phong-thuy` trả `any` ngầm
+  nên `tsc` không thấy gì; đổi sang `parseLlmJson` (trả `unknown`) là đỏ ngay.
+  **Bản chép tay không chỉ trôi khỏi nhau — nó còn tắt luôn bộ kiểm kiểu.**
+
+### 🔴 `no-store`: cửa xác thực của `/api/payment` đang thiếu
+Không phải chuyện hiệu năng. `getUserFromToken` ở đây gác **toàn bộ**
+`/api/payment` **gồm cả nhánh admin** — một phản hồi bị Next nhớ lại nghĩa là
+phiên đã huỷ / quyền vừa bị gỡ **vẫn qua cửa**. Vá cùng `lib/billing/credits.ts`
++ 69 lượt GET khác (70 tổng).
+- **`scripts/check-supabase-no-store.mjs` — bộ dò cắm vào CI lint.** Đây mới là
+  phần đáng giá: bug này đã cắn **ba lần**, lần nào cũng im lặng (bản chia sẻ đã
+  gỡ vẫn render · bộ giám sát báo job "CHƯA HỀ chạy" · **trừ tiền xong vẫn nhận
+  402 → người dùng bấm lại → trừ LẦN HAI**). Rà tay lần bốn thì lần năm lại sót.
+- **Miễn trừ có LÝ DO ghi thẳng trong bộ dò**, không phải allowlist câm: 3 route
+  SEO/sitemap dùng `s-maxage` + `stale-while-revalidate` — ở đó cache là TÍNH
+  NĂNG. Nhận cả `no-store` khai inline lẫn qua hằng số cùng file (`SB_FRESH`).
+- 🔑 **Verify bộ dò bằng cách DỰNG LẠI ĐÚNG BUG CŨ**: gỡ `no-store` khỏi
+  `credits.ts` → bộ dò bắt đúng dòng 45 → khôi phục → xanh. Bộ dò chưa từng bắt
+  được gì thì không chứng minh được nó biết bắt.
+
+### 4 trang SEO standalone — và cái cổng phải qua trước khi viết
+`#358` đã chốt **"NGỪNG gen trang"**, nút thắt là thẩm quyền tên miền chứ không
+phải số lượng trang. Nên phải đo lại trước: `pagesWithImpressions` **612 → 665
+trong 7 ngày**, so với **+5 trong 3 tuần** ở lần đo trước ⇒ mốc quyết định trong
+`#361` đã bật, đủ điều kiện viết tiếp.
+- `cong-so` · `day-con` · `nguoi-khac` · `nhan-mach` — dùng lại `tools.css` sẵn
+  có, mỗi trang 2 khối JSON-LD, **một `<h1>` duy nhất** (đúng nợ 115 trang 2 H1
+  đã backfill), FAQ `<details>` hiện trên trang.
+- 🐞 **Ca test đỏ là lỗi THẬT của tao**: chữ trong `FAQPage` schema tao viết tắt
+  đi so với `<summary>` hiện trên trang. Google phạt đúng chỗ khai FAQ mà nội
+  dung không nhìn thấy được. Nay ép khớp **nguyên văn**.
+- 🐞 Một ca đỏ khác là **lỗi TEST**: bộ dò link chết chỉ tra file trong `public/`
+  nên báo oan mọi rewrite của Next. Phải khai danh sách đường dẫn do Next phục vụ.
+- **Lộ ra 16 trang standalone CHƯA TỪNG có trong sitemap**, gồm `mai-hoa` và
+  `ky-mon` — hai trang dựng riêng để làm SEO. Đã thêm 13 (bỏ `kim-lau.html` vì
+  nó 301 sang `/kim-lau`, nộp cả hai là tự cạnh tranh với chính mình).
+
+### 🪤 Gộp `main` giữa chừng — 5 xung đột, và bài học `--ours` lại đúng
+`main` đi trước 6 commit (W1b · duyên nợ 5 lá số · master grouping · R1a). Xung
+đột nằm ĐÚNG vùng vừa sửa: hai route bị main thêm lại **bản chép tay của chính
+helper tao đang gỡ**, `lint.yml`/`package.json` thì mỗi bên thêm một bộ dò.
+- Giải bằng tay từng khối: giữ **cả hai** bộ dò (`check:nostore` + `check:groups`
+  — hai bug khác nhau), giữ **tính năng mới của main** (`runPreview` W1b, nhánh
+  `faces` N-người) nhưng **bỏ bản chép tay** và cho chúng dùng parser chung.
+- **Đếm lại dấu hiệu CẢ HAI bên sau khi giải** (đúng bài học `git checkout
+  --ours` đã mất 5 file): `runPreview` vẫn **0/7 ký hiệu cấm** + ca ĐỐI CHỨNG
+  đường trả tiền vẫn có `toolPaymentDenied` và `llmTextFull` · `faces` N-người
+  còn đủ 10 chỗ · `ai-loading-steps` 19/19 file ở `v=2` · `shell.js` 35/35 ở
+  `v=62`. Hết `<<<<<<<` **không** nghĩa là xong.
+
+### Verify
+`tsc` 0 lỗi · `lint` 0 lỗi (72 warning pre-existing) · `prettier --check .` sạch
+· `check:prices` · `check:groups` · **`check:nostore`** sạch · engine **185 pass**
+· `node --check` 4 khối script nội tuyến · **44 assertion trên `tool-helpers`
+THẬT**: 7 dạng output model mà bản giòn HỎNG thì bản chung bóc đúng (câu dẫn ·
+ghi chú cuối · cả hai · `{}` rác trong lời dẫn · fence lồng), + ca ĐỐI CHỨNG
+JSON cụt/rỗng vẫn phải trả `null` · **56 assertion trên 4 trang SEO**: đúng 1
+`<h1>` · canonical/og/twitter khớp · **FAQ schema khớp NGUYÊN VĂN `<summary>`** ·
+0 link chết · tiêu đề ≤ 63 ký tự · có từ khoá đích.
+
+### CÒN LẠI
+- 4 trang mới **chưa có link vào từ trang đã index** — mới có sitemap + liên kết
+  chéo giữa chính chúng. `cong-cu` vẫn cố ý trỏ `/app`.
+- `isHoangOc` (`tools-shared/kim-lau.js:45`) là `t % 5 === 0` trong khi Hoang Ốc
+  là vòng **6 trạng thái**. Nghi sai từ `#359`, **vẫn chưa tra đủ chắc để sửa** —
+  sửa mò một công thức cổ pháp còn tệ hơn để nguyên.
+
+---
+
 ## 📉 D1 — Phễu theo tool, và 🔴 BA HỆ TÊN TOOL ĐANG LỆCH NHAU (2026-08-07, PR trước)
 
 Henry: *"Ok D1 trước đi"* — mục backlog *"tool nào có người xem mà không ai
