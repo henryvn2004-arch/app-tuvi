@@ -32,6 +32,10 @@ import {
   majorsOrBorrow,
   starLabel,
   kieuCuaCung,
+  resolveVanNam,
+  vanNamLine,
+  LUAT_VAN_NAM,
+  type VanNam,
 } from './cong-so';
 
 type Rec = Record<string, unknown>;
@@ -151,13 +155,6 @@ export interface MatDoc {
   diem: number | null;
 }
 
-export interface VanNam {
-  nam: number;
-  diem: number | null;
-  huong: string | null;
-  tieuHanCung: string | null;
-}
-
 export interface VoiBan {
   /** Cung trong lá số NGƯỜI XEM nói về hạng người này. */
   cung: string;
@@ -206,13 +203,6 @@ function thanCung(ls: Laso): { cung: string; y: string } {
   return { cung, y: THAN_Y[cung] || '' };
 }
 
-/** `tieuVanScores[].direction` của engine là chuỗi TIẾNG ANH — dịch tại đúng
- *  một chỗ, đúng như `cong-so.ts` đã phải làm sau khi chữ Anh lọt giao diện. */
-const HUONG_VI: Record<string, string> = {
-  up: 'đang lên',
-  down: 'đang xuống',
-  flat: 'đi ngang',
-};
 
 /**
  * Hồ sơ ứng xử với MỘT người, suy từ lá số của chính họ.
@@ -249,16 +239,7 @@ export function computeNguoiKhac(
     };
   });
 
-  const tvs = (ls.tieuVanScores as Rec[]) || [];
-  const tvNam = tvs.find((t) => t.nam === nam);
-  const vanNam: VanNam | null = tvNam
-    ? {
-        nam,
-        diem: typeof tvNam.mainScore === 'number' ? (tvNam.mainScore as number) : null,
-        huong: HUONG_VI[String(tvNam.direction || '')] || null,
-        tieuHanCung: (tvNam.tieuHanCung as string) || null,
-      }
-    : null;
+  const vanNam = resolveVanNam(ls, nam);
 
   const dv = ls.daiVanHienTai as Rec | undefined;
   const dvP = dv && typeof dv.cungIdx === 'number' ? ((ls.palaces as Rec[]) || [])[dv.cungIdx as number] : undefined;
@@ -341,10 +322,10 @@ export function railData(p: NguoiKhacProfile): Record<string, string | number | 
       (m.cachCuc.length ? ' — ' + m.cachCuc.join('; ') : '');
   }
   if (p.vanNam) {
-    d.vanNamNay =
-      `${p.vanNam.nam}: ${p.vanNam.diem == null ? 'chưa chấm' : p.vanNam.diem + '/10'}` +
-      (p.vanNam.huong ? ` (${p.vanNam.huong})` : '') +
-      (p.vanNam.tieuHanCung ? ` · tiểu hạn ở cung ${p.vanNam.tieuHanCung}` : '');
+    // Dùng CHUNG `vanNamLine` với prompt để hai chỗ không nói khác nhau; kèm
+    // `LUAT_VAN_NAM` chặn rail tự chấm điểm cho năm (luật `execTraVanHan`).
+    d.vanNamNay = vanNamLine(p.vanNam);
+    d.luatVanNam = LUAT_VAN_NAM;
   }
   if (p.daiVan) {
     d.daiVanDangChay =

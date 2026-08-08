@@ -1292,6 +1292,8 @@ const GENERIC_LABELS: Record<string, string> = {
   diemThapNhat: 'Ba mặt yếu nhất (thang 10, tương đối trong chính người này)',
   cachCucQuanLoc: 'Cách cục tại cung Quan Lộc',
   loTrinh40Nam: 'Bốn chặng 40 năm đi làm', vanNamNay: 'Vận năm nay',
+  luatVanNam: 'LUẬT đọc vận năm (bắt buộc theo)',
+  luatThuTuTiepCan: 'LUẬT đọc thứ tự tiếp cận (bắt buộc theo)',
   ghepDoi: 'Kiểu người ở ba cung nhân sự (Phụ Mẫu · Huynh Đệ · Nô Bộc)',
   kieuNenTimDeBu: 'Kiểu NÊN TÌM để bù khuyết cho mình',
   linhVucHop: 'LĨNH VỰC hợp (suy từ chức phận cung Quan Lộc)',

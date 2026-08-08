@@ -89,6 +89,27 @@ const DCHI_TO_POS: Record<number,[number,number]> = {
 const SAT_SET = new Set(['Kình Dương','Đà La','Hỏa Tinh','Linh Tinh','Địa Không','Địa Kiếp','Tang Môn','Bạch Hổ']);
 const HOA_COL: Record<string,string> = {'Lộc':'#1E6B3C','Quyền':'#7B3FA0','Khoa':'#1455A4','Kỵ':'#C0392B'};
 
+/**
+ * Đại vận chứa năm đang xem.
+ *
+ * 🐞 Bản cũ dùng `dvs.find(d => d.isCurrentDV)` — nhưng engine KHÔNG BAO GIỜ đặt
+ * cờ `isCurrentDV` (grep `public/tuvi-ansao-engine.js`: 0 lượt; nó trả một object
+ * riêng `daiVanHienTai`). Nên `curDV` luôn `undefined`, và mọi khối phụ thuộc nó
+ * lặng lẽ biến mất: đoạn "Đại vận đang chạy", phần tô sáng cung đại vận trên bảng
+ * lá số, và một mục FAQ. Lỗi im lặng — trang vẫn dựng đủ, chỉ thiếu vài khối mà
+ * không có gì báo. Verify bằng cách render trang thật: `grep 'Đại vận đang chạy'`
+ * ra 0 lượt trước khi vá, có sau khi vá.
+ *
+ * Điều này làm lỗi "điểm vận năm" nặng thêm một bậc trên `luan-giai`: thẻ đại vận
+ * (điểm THẬT) chưa từng hiện, nên con số duy nhất người đọc thấy cho giai đoạn
+ * này chính là điểm nội suy — không có gì cạnh bên để đối chiếu.
+ */
+function curDaiVan(ls: Rec, dvs: Rec[]): Rec | undefined {
+  const t = Number(ls.tuoiXem);
+  if (!t) return undefined;
+  return dvs.find((d) => Number(d.tuoiStart) <= t && t <= Number(d.tuoiEnd));
+}
+
 function renderGrid(ls: Rec): string {
   const palaces = (ls.palaces as Rec[]) || [];
   const dcMap: Record<number,Rec> = {};
@@ -101,7 +122,7 @@ function renderGrid(ls: Rec): string {
   grid[1][1] = grid[1][2] = grid[2][1] = grid[2][2] = 'center';
 
   const dvs   = (ls.daiVans as Rec[]) || [];
-  const curDV = dvs.find(d => d.isCurrentDV) as Rec|undefined;
+  const curDV = curDaiVan(ls, dvs) as Rec|undefined;
   const menhP = palaces.find(p => p.isMenh) as Rec|undefined;
 
   function renderCell(p: Rec): string {
@@ -186,7 +207,7 @@ function buildLuanGiaiHTML(ls: Rec, params: IsrParams, slug: string): string {
   const canChiNam  = String(ls.canChiNam||'');
   const napAm      = String(ls.napAmHanh||'');
   const cuc        = String(ls.cucName||ls.cuc||'');
-  const curDV      = dvs.find(d => d.isCurrentDV) as Rec|undefined;
+  const curDV      = curDaiVan(ls, dvs) as Rec|undefined;
   const gioistr    = gioi === 'nu' ? 'Nữ' : 'Nam';
   const gioName    = GIO_NAMES[params.gioIdx];
   const canChi     = `${CAN_NAMES[params.canIdx]} ${CHI_NAMES[params.chiIdx]}`;
@@ -242,8 +263,13 @@ function buildLuanGiaiHTML(ls: Rec, params: IsrParams, slug: string): string {
 
   // Vận năm namXem (sơ lược)
   const tvThis  = tieuVanSc.find(t => Number(t.nam) === namXem) as Rec|undefined;
-  const tvScore = tvThis ? Number(tvThis.mainScore||0) : 0;
   const tvDC    = tvThis ? String(tvThis.diaChi||'') : '';
+  // 🔑 CỐ Ý không còn "điểm/10" cho năm. `mainScore` là đường LÀM MƯỢT nội suy
+  // giữa các mốc đại vận (xem chú thích `VanNam` trong lib/engine/cong-so.ts),
+  // không đọc một ngôi sao nào của năm — bày nó cạnh thẻ đại vận thật là đặt
+  // hai con số mâu thuẫn sát nhau. Năm đọc bằng cung hạn + cán cân cát/sát.
+  const tvCat   = tvThis ? Number(tvThis.catCount||0) : 0;
+  const tvSat   = tvThis ? Number(tvThis.satCount||0) : 0;
   const dvSc    = curDV ? ((curDV.scoring as Rec)||{}) : {};
   const dvTotal = curDV ? Number((dvSc as Rec).tong||0) : 0;
   const dvDC    = curDV ? String(curDV.diaChi||'') : '';
@@ -259,7 +285,8 @@ function buildLuanGiaiHTML(ls: Rec, params: IsrParams, slug: string): string {
       ${tvThis ? `<div style="flex:1;min-width:140px;background:#EEF4FF;border-radius:8px;padding:14px 16px;border:1px solid #1455A420">
         <div style="font-size:11px;color:#888;margin-bottom:4px">TIỂU VẬN NĂM ${namXem}</div>
         <div style="font-size:18px;font-weight:700;color:#061A2E">${esc(tvDC)}</div>
-        ${tvScore>0?`<div style="font-size:13px;color:${tvScore>=7?'#1E6B3C':tvScore>=4?'#9A7B3A':'#C0392B'};font-weight:600">${tvScore.toFixed(1)}/10 điểm</div>`:''}
+        ${(tvCat||tvSat)?`<div style="font-size:13px;color:${tvCat>tvSat?'#1E6B3C':tvCat<tvSat?'#C0392B':'#9A7B3A'};font-weight:600">cát ${tvCat} / sát ${tvSat}</div>`:''}
+        <div style="font-size:11px;color:#777">năm không có điểm riêng — đọc trong khung đại vận bên cạnh</div>
       </div>` : ''}
     </div>` : '';
 
