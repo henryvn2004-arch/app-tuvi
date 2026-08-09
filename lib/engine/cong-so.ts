@@ -1038,7 +1038,7 @@ export function railDataDayDu(p: CongSoProfile): Record<string, string | number 
   const nh = p.nhanh;
   return {
     ...railData(p),
-    nhanhGoiY: nh.goiY.map((g) => `${g.ten} (${g.diem}%)`).join(' · '),
+    nhanhNghe: nh.goiY.map((g) => `${g.ten} (${g.diem}%)`).join(' · '),
     nhanhChiTiet: nh.goiY
       .map((g) => `${g.ten}: ${g.chat} Việc cụ thể: ${g.viec.join(', ')}.`)
       .join(' | '),
