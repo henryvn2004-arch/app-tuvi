@@ -20,10 +20,17 @@
  */
 import { readFileSync } from 'fs';
 import { createRequire } from 'module';
-import ts from 'typescript';
 
 const require = createRequire(import.meta.url);
 const ROOT = new URL('..', import.meta.url).pathname;
+
+// TypeScript nạp bằng require, KHÔNG bằng `import ts from 'typescript'`:
+// từ TS 6, `lib/typescript.js` gán module.exports qua một SETTER, mà bộ dò CJS
+// của Node 20 (bản CI chạy) không nhận ra → `ts` thành `undefined` và script
+// chết ở `ts.ModuleKind`. Node 22 (máy dev) thì nhận ra, nên lỗi CHỈ hiện ở CI
+// — kiểu đỏ mà chạy local mãi không tái hiện được.
+// `gen-que-images.mjs` vốn đã dùng require, chính nó không dính.
+const ts = require('typescript');
 
 const { QUE } = require(ROOT + 'public/tools-shared/kinh-dich.js');
 
