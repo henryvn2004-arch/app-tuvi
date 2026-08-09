@@ -28,8 +28,12 @@ Henry: *"Vercel smoke test dùng để test gì thế? Sao giờ thiết kế l�
 
 ### 🔓 Mở cửa SSO cho CI mà KHÔNG mở preview cho công chúng
 Dùng **Protection Bypass for Automation** (Vercel → Settings → Deployment
-Protection), secret để trong GitHub Actions tên `VERCEL_BYPASS_SECRET`; hai
-config Playwright gửi kèm `x-vercel-protection-bypass` + `x-vercel-set-bypass-cookie`.
+Protection), secret để trong GitHub Actions tên `VERCEL_BYPASS_SECRET`.
+- **smoke** gửi kèm header `x-vercel-protection-bypass` + `x-vercel-set-bypass-cookie`.
+- **E2E dùng COOKIE, KHÔNG dùng header** — `tests/auth.setup.ts` gắn vé vào
+  QUERY ở đúng lượt điều hướng đầu, server trả `_vercel_jwt`, cookie đó nằm
+  trong `storageState` nên mọi test sau qua cửa. Lý do bắt buộc phải khác smoke:
+  xem bẫy số 4 bên dưới.
 - ⛔ **KHÔNG tắt Vercel Authentication.** Preview **dùng chung env với
   production** (cùng `SUPABASE_SERVICE_KEY`, cùng key model, cùng key thanh
   toán) và URL preview nằm ngay trên comment của PR ⇒ mở công khai là ai cũng
@@ -39,7 +43,7 @@ config Playwright gửi kèm `x-vercel-protection-bypass` + `x-vercel-set-bypass
 - Thiếu secret thì config **bỏ header đi**, đường prod chạy y như cũ (domain
   prod không bị gác) — nên hỏng secret không kéo sập lượt đo prod.
 
-### 🪤 Ba cái bẫy, cả ba chỉ lộ khi ĐO
+### 🪤 Bốn cái bẫy, cả bốn chỉ lộ khi ĐO
 1. **`request.newContext()` KHÔNG thừa hưởng `use` của config.** Chỉ **FIXTURE**
    `request` (tham số của test) mới mang `baseURL` + `extraHTTPHeaders`. Bản cũ
    tự tạo context ở 4 ca API ⇒ trên preview mấy ca đó ăn 401 trong khi ca
@@ -52,6 +56,17 @@ config Playwright gửi kèm `x-vercel-protection-bypass` + `x-vercel-set-bypass
    nên PR không tự kiểm được chính nó. **Sai** — run sinh ra mang đúng tiêu đề
    mới của nhánh PR, và số dòng trong log khớp spec mới. **GitHub dùng YAML +
    code từ COMMIT CỦA DEPLOYMENT.** Nhờ vậy PR tự kiểm được chính nó.
+4. 🔴 **`extraHTTPHeaders` áp lên CẢ REQUEST KHÁC ORIGIN.** Đây là lỗi CI đỏ
+   thật, do chính tao gây ra khi bê cách của smoke sang E2E: gắn header lạ vào
+   một request cross-origin làm nó thành **preflight**, mà `fonts.gstatic.com`
+   không cho phép header đó ⇒ *"Request header field x-vercel-set-bypass-cookie
+   is not allowed by Access-Control-Allow-Headers"* ⇒ font hỏng ⇒ **26 ca
+   "không có JS errors nghiêm trọng" đỏ** (136 ca khác vẫn xanh, tức bypass
+   chạy đúng — chỉ CÁCH GẮN là sai).
+   - 🔑 **Luật: bộ test nào có soi lỗi console thì KHÔNG được dùng
+     `extraHTTPHeaders` để mang vé — phải dùng COOKIE.** Cookie chỉ gửi tới
+     đúng domain của nó, không đụng host lạ. Smoke giữ header được vì nó không
+     soi console; nếu sau này thêm assertion đó thì phải đổi luôn.
 
 ### 🐞 Bắt kèm — 42% lượt smoke prod đỏ suốt 6 ngày là BÁO ĐỘNG GIẢ
 Lượt smoke đầu của PR #463 đỏ ca `luan-giai.html: paywall block`. Đo lại lịch
@@ -77,9 +92,21 @@ vì chuyện này từ 29/07.
   thiết kế. Rồi **trên prod THẬT** sau merge: `PROD_URL=https://tuviminhbao.com`,
   **7/7 xanh**.
 - **Header đi ra thật hay không** — server giả ghi lại header từng request:
-  smoke **19/19** · E2E **4/4** (gồm điều hướng trình duyệt, asset con, và ca
-  API). **ĐỐI CHỨNG không secret: 0/19 và 0/4**, mà bộ smoke **vẫn 7/7 xanh** ⇒
-  đường prod không đổi hành vi.
+  smoke **19/19**. **ĐỐI CHỨNG không secret: 0/19**, mà bộ smoke **vẫn 7/7
+  xanh** ⇒ đường prod không đổi hành vi.
+- **Vé cookie của E2E** — dựng 2 server giả (app có SSO + host font khác origin
+  từ chối header lạ trong preflight, y như gstatic):
+
+  | | kết quả | lỗi console | host font |
+  |---|---|---|---|
+  | bản header | 🔴 đỏ | có | dính preflight/x-vercel |
+  | bản cookie | ✅ xanh | **0** | **0 request dính** |
+
+  Và chuỗi thật: query bootstrap → `_vercel_jwt` **có mặt trong `storageState`**
+  → test sau vào được **chỉ bằng cookie**. **ĐỐI CHỨNG bỏ cookie đi → ĐỎ (401)**.
+- 🪤 **Ca đối chứng đầu của tao ĐỖ GIẢ**: chạy `--project=chromium` vẫn kéo theo
+  `dependencies: ['setup']` nên nó **dựng lại cookie** rồi mới đo → "pass" vô
+  nghĩa. Muốn đối chứng thật thì phải bỏ hẳn nhánh setup.
 - **ĐỐI CHỨNG bản git HEAD** cho ca paywall, trên stub dựng đúng cuộc đua: HEAD
   **đỏ cả hai** tình huống muộn, bản mới **xanh cả hai**, và **vẫn đỏ khi thật sự
   không có tường** (chống đỗ giả).
