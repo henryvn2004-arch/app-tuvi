@@ -5,6 +5,150 @@
 
 ---
 
+## 🧒 Dạy Con: khung "5 TRỤC · 8 CHẤT" — bản luận có xương sống (2026-08-09, PR này)
+
+Henry: *"cách luận giải và trình bày đang hơi lộn xộn ko theo 1 framework nào…
+tham khảo Big Five (lite), SDQ, Multiple Intelligences rồi tự lên 1 framework
+riêng… Có dc con số đánh giá, biểu đồ càng tốt."* Flow chốt: lá số → assessment
+đa chiều (gồm năng khiếu) → định hướng → phương pháp → hoạt động đề xuất.
+
+### 🔴 Chẩn đúng bệnh: không phải thiếu chữ, là thiếu KHUNG
+Bản cũ đưa cha mẹ một nhãn kiểu người + sáu thẻ chữ. Không đo được gì, không so
+được hai đứa trẻ, không nói được "mạnh chỗ nào" — nên phần chữ do model viết
+trôi tự do, mỗi lượt một dáng. Nay có khung CỐ ĐỊNH cho chữ bám vào, và **mỗi
+khoá JSON là một bậc**: đo → đọc → định hướng → phương pháp → hoạt động.
+
+### 🔑 MƯỢN HÌNH DẠNG, KHÔNG MƯỢN UY TÍN
+- **Nền: "goodness of fit" (Thomas & Chess)** — không có khí chất tốt/xấu, kết
+  quả nằm ở chỗ KHỚP giữa đứa trẻ và cách người lớn nuôi. Đây vốn đã là câu
+  tool tự nói ở phần ranh giới đạo đức; nay nó thành CẤU TRÚC chứ không còn là
+  lời dặn.
+- **5 trục ← hình dạng Big Five**: trục LIÊN TỤC, hai cực đều có giá trị. Một
+  đứa trẻ không "là" hướng nội — nó nằm đâu đó trên trục.
+- **8 chất ← hình dạng Multiple Intelligences**: nhiều miền song song thay vì
+  MỘT con số thông minh. Đây là phần trả lời "con có năng khiếu gì".
+- ⛔ **CỐ Ý KHÔNG mượn SDQ.** SDQ là bộ **sàng lọc LÂM SÀNG** (rối loạn cảm
+  xúc/hành vi/tăng động). Suy một bảng sàng lọc sức khoẻ tâm thần từ ngày sinh
+  là thứ nguy hiểm nhất tool này làm được, và đá thẳng vào luật sẵn có (không
+  đọc Tật Ách, không phán "khó dạy"). Trục 5 đo **NGƯỠNG CẢM NHẬN**, không đo
+  lo âu — prompt cấm hẳn chữ lo âu/trầm cảm/rối loạn/tăng động/"đi khám".
+- Trang + prompt CẤM nêu tên hay đối chiếu DISC/MBTI/Big Five/MI/SDQ/IQ. Gọi
+  đúng tên: **một khung đọc lá số do trang dựng**.
+
+### 🔴 Bài học nặng nhất: điểm thô KHÔNG so được giữa các miền
+Lượt đo đầu: `hieu-nguoi` **50,8% lá số nổi** (19 ngôi sao cùng đổ vào miền đó
+⇒ nó thành "lá số có sao tốt nào không"), `am-nhac` **1,6%**; trục `nhip` sd
+0,96 (60% ca rơi vào "cân" ⇒ trục không nói gì) còn `nep` lệch hẳn lên 5,66.
+🔑 **Căn nguyên: điểm thô phụ thuộc SỐ SAO tôi gán cho miền, không phụ thuộc
+tín hiệu.** Nhân một hệ số chung không chữa được — mỗi trục lệch một kiểu.
+- Vá bằng **chuẩn hoá theo từng miền** (z-score trên mốc đo được, bake sẵn vào
+  `TRUC_NORM`/`KHIEU_NORM`), + tỉa bảng sao (bỏ nhóm quý tinh chung khỏi
+  `hieu-nguoi`). **5 = mức GIỮA của phân bố**, mỗi 1,8 điểm = 1 độ lệch chuẩn.
+- Sau khi vá, đo lại **6.048 lá số**: cả 5 trục và 8 chất đều TB **5,00** · sd
+  **1,78–1,80** · chạm trần/sàn **<0,5%** · %nổi mỗi chất **19,6–24,4%**.
+- ⚠️ **Trang PHẢI nói đúng nghĩa con số**: "so với phần lớn lá số trẻ em",
+  KHÔNG phải "được 7 phần 10". Có luật riêng trong system prompt + rail wrapper.
+
+### Ba quyết định đáng nhớ
+1. **Ngưỡng nổi 6,5 giữ nguyên ca "KHÔNG chất nào nổi" (~14–17% lá số).** Hạ
+   ngưỡng cho lá số nào cũng có năng khiếu thì câu "con nổi ở X" hết nghĩa và
+   cha mẹ nào đọc cũng thấy đúng — dấu hiệu của bảng không nói gì. Ca đó trang
+   nói THẲNG kèm việc nên làm (cho thử rộng), có ca đối chứng canh.
+2. **~35% ca mỗi trục rơi vào "cân" ⇒ phải viết nội dung cho ca CÂN.** Không
+   viết thì một phần ba ô trên trang hiện ra trống và cha mẹ đọc thành "máy
+   không đọc được con tôi". Nằm giữa là tính chất có thật: con dùng được cả hai
+   kiểu, nên bối cảnh mới là thứ quyết định — chỗ người lớn có nhiều quyền nhất.
+3. **HAI TRỤC ĐỘC LẬP cho bậc hoạt động** (cùng mẹo bảng ngành của Công Sở):
+   **chọn GÌ** ← chất × nhóm tuổi · **tham gia KIỂU NÀO** ← kiểu người. Viết
+   8×4 + 4 khối thay vì 8×4×4 ô. Hai đứa cùng nổi chất vận động vẫn phải chọn
+   lớp khác nhau nếu một đứa cần thi đấu còn đứa kia cần nhóm nhỏ ổn định.
+
+### 📊 Biểu đồ — hai dạng, chọn theo VIỆC người đọc phải làm
+- **5 trục → thanh HAI CỰC** (việc: đọc cực tính) · **8 chất → cột XẾP GIẢM
+  DẦN** (việc: so độ lớn, tìm cái cao nhất).
+- **KHÔNG dùng radar** dù đó là lối vẽ quen của MI và dù Công Sở đã có radar:
+  câu cha mẹ hỏi là "con mạnh chỗ nào", tức thứ tự phải đọc được bằng mắt chứ
+  không phải so góc. Cột xếp hạng cũng tránh luôn bẫy nhãn-tràn-khung của radar.
+- Dựng bằng **DOM + CSS, không canvas** — nhãn tiếng Việt có dấu tự xuống dòng,
+  tự co ở 390px, đọc được bằng trình đọc màn hình.
+- 🔑 **CỐ Ý KHÔNG dùng thang hai màu nóng–lạnh cho trục hai cực** dù đó là lối
+  vẽ chuẩn cho dữ liệu phân cực: đỏ–xanh gắn sẵn nghĩa tốt–xấu, mà cả khung
+  dựng trên đúng câu "hai cực đều có giá trị". **Vị trí mang nghĩa, màu chỉ nói
+  đậm/nhạt.** Hai màu `#7A5F26` / `#9C937F` — đo được tương phản với nền trắng
+  ≥3:1 và tách nhau ΔE 16,9 kể cả với mắt loạn sắc.
+- **Vạch ngưỡng nằm TRONG từng thanh**, không phải một đường phủ cả khối: bản
+  đầu tính chiều cao bằng (số hàng × 22px) và **lệch đúng một hàng** — chỉ lộ
+  khi chụp ảnh ra nhìn, không lộ khi đọc code.
+
+### 🐞 Ba lỗi tự bắt, không phải Henry báo
+1. **Va chạm khoá `hoatDong`**: `meta()` trả bảng hoạt động, model cũng trả
+   khoá `hoatDong` là đoạn văn — mà `payload` spread `meta()` TRƯỚC. Trùng tên
+   là bảng bị đè bằng một đoạn văn và khối gợi ý **biến mất mà không lỗi nào
+   bắn ra**. Đổi tên trường bảng thành `goiYHoatDong`.
+2. **Nợ CÓ SẴN, xác nhận bằng đối chứng git HEAD**: `tieuHanCung`/`luuNienCung`
+   in thẳng tên cung vào prompt, và tiểu hạn rơi được vào **Tật Ách / Phu Thê /
+   Tài Bạch** — đúng mấy cung `KHONG_DOC` cấm đọc cho trẻ. Có ở HEAD dòng
+   123–124 y hệt bản mới ⇒ không phải hồi quy. Khung mới nâng mức rủi ro nên
+   thêm câu chặn: tên cung chỉ là **CHỖ ĐỨNG của năm**, không phải lời mời đọc
+   nội dung cung đó.
+3. **Cột điểm lẫn hai dạng** (`8,2` cạnh `5`) vì `r1(5.0)` ra `5`. Ép một chữ
+   số thập phân — cột số lẫn dạng là mắt phải dịch lại từng dòng.
+
+### 🪤 Hai lỗi của BÀI KIỂM (không phải của code)
+- Bộ dò "khoá thô lọt prompt" báo oan **992 ca** vì `s.includes('hoa')` khớp
+  vào chữ **"Khoa"** (Hoá Khoa, khoa giáp). Phải so theo **BIÊN TỪ**.
+- Bộ dò cung cấm so theo **từng DÒNG** trong khi câu chặn cố ý đứng riêng một
+  dòng → đỏ oan. Phải kiểm ở mức CẢ PROMPT.
+
+### Verify
+`tsc` 0 lỗi · `lint` 0 lỗi (72 warning pre-existing) · `prettier` sạch ·
+`check:prices` + `check:groups` + `check:nostore` sạch · engine **185 pass** ·
+`node --check` 2 khối script nội tuyến.
+- **30.209 bất biến trên MODULE THẬT, 1.584 lá số**: 5 trục luôn đủ và trong
+  dải · nhãn cực không bao giờ ngược điểm · ca cân LUÔN có nội dung · 8 chất
+  sắp giảm dần · `noiBat` ≤3 và luôn ≥ngưỡng · `chuaRo` khớp `coNoiBat` · gợi ý
+  hoạt động không nhánh nào rỗng · **`railData` PHẲNG 100%** (bẫy
+  `extractGenericContext`) · 0 rò `undefined`/`NaN`/`[object` · deterministic.
+- 🔴 **Bất biến ĐẠO ĐỨC chạy tự động**: `CUNG_DUOC_DOC ∩ KHONG_DOC = ∅` — khung
+  đọc đúng 6 cung (Mệnh · Thiên Di · Phúc Đức · Quan Lộc · Huynh Đệ · Nô Bộc).
+- **14.734 bất biến trên PROMPT THẬT, 640 lá số**: đủ 5 bậc · mọi trục/chất có
+  mặt kèm điểm · **0 khoá thô lọt** · ca chưa rõ chất thì prompt nói THẲNG ·
+  system prompt còn đủ 7 chốt chặn · rail wrapper mang luật đọc điểm.
+- **8 ca Playwright trên TRANG THẬT** `/app/day-con` qua Next dev, route preview
+  chạy THẬT: bấm nút → **0 lượt `action=deduct`**, POST duy nhất là `preview=1`
+  · chấm mỗi trục nằm ĐÚNG vị trí điểm · 8 cột xếp giảm dần và vạch ngưỡng
+  thẳng hàng ở 65% · hàng ★ luôn ≥65%, hàng thường luôn <65% · **ĐỐI CHỨNG**
+  không đọc được tuổi → không dựng khối hoạt động · **ĐỐI CHỨNG** không chất
+  nào nổi → nói thẳng, 0 hàng ★, 0 thẻ giả · mở khoá → 3 đoạn chữ rơi đúng bậc
+  và phần tính thử **còn nguyên byte** · 390/768/1440px không tràn ngang.
+- 🪤 **ĐÃ RED-TEAM cả ba bộ** (bộ dò chưa từng bắt được gì thì không chứng minh
+  được nó biết bắt): cho khung đọc cung Tật Ách → đỏ · bỏ sắp giảm dần → đỏ ·
+  hạ ngưỡng nổi về 0 → đỏ · rò khoá thô vào prompt → đỏ · bỏ câu chặn cung cấm
+  → đỏ · im lặng ở ca chưa rõ chất → đỏ · đảo thứ tự cột trên trang → đỏ.
+- **KHÔNG bump `?v=`**: chỉ sửa CSS/JS **nội tuyến trong chính file HTML**, mà
+  HTML trả `max-age=0, must-revalidate` nên tới người dùng ngay; không đụng
+  `shell.js` / `tuvi-paywall.js` / asset dùng chung nào.
+
+### CÒN LẠI
+- **Toàn bộ tầng khung là TRA BẢNG ⇒ nằm trong phần TÍNH THỬ MIỄN PHÍ (W1)**,
+  0 lượt LLM, 0đ. Tường vẫn chỉ đứng trên phần chữ. Con số cần nhìn sau 1–2
+  tuần: tỉ lệ **mở → tính thử → bấm mở** của `day-con` trong panel Phễu Theo
+  Tool có nhảy không.
+- **Nội dung 5 trục × 3 ca + 8 chất + 8×4 bảng hoạt động là tao tự viết**, chưa
+  ai review — cùng dạng nợ với 384 hào từ và 4 kiểu của Công Sở. Sửa là sửa
+  data thuần trong `TRUC` / `KHIEU` / `HOAT_DONG`, không đụng logic.
+- **Mốc chuẩn hoá đo trên LƯỚI lá số tổng hợp, không phải trẻ em thật.** Nó nói
+  "so với phân bố lá số", đúng như trang đang viết — đừng nâng cấp câu đó thành
+  "so với trẻ cùng lứa".
+- **Chưa gọi LLM thật một lượt nào** — không có key trong container. Verify
+  dừng ở tầng prompt (cấu trúc + chốt chặn) và tầng render.
+- `app-day-con.html` vẫn là **đảo SÁNG** (nền `#fff` chép cứng như mọi trang
+  tool anh em) nên biểu đồ cố ý dùng cùng bảng màu sáng đó. Dark mode cho nhóm
+  trang tool là việc riêng.
+- Danh sách hoạt động **chưa phân theo vùng** — câu lạc bộ ở tỉnh khác hẳn Hà
+  Nội/TP.HCM. Nếu thấy đáng thì thêm một ô chọn tỉnh rồi lọc, không đụng logic.
+---
+
 ## 🖨️✦ Lưu PDF + orb mời hỏi — cùng đưa lên tầng SHELL (2026-08-09, PR này)
 
 Henry: *"làm cái hiệu ứng glowing (orb khói) xung quanh cái icon nút Hỏi trên
