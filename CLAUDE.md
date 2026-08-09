@@ -5,6 +5,83 @@
 
 ---
 
+## 🀄 Rà tool khác cùng họ lỗi → Bát Tự: rail KHÔNG hề nhận Thập Thần (2026-08-09, PR này)
+
+Henry: *"xem lại lỗi này có bị tương tự cho các tool tử vi khác trong shell ko"*.
+
+### Cách rà — đo, không đọc mắt
+Mỗi tool: lấy **payload THẬT** (chạy chính module `tools-shared/` hoặc engine
+server) → đưa qua **`buildChatContext` THẬT** → đếm giá trị nào tool tính ra mà
+**không hề xuất hiện** trong prompt rail.
+
+**Sạch (0 thất lạc): 12 tool** — `nap-am` · `kim-lau` · `than-so-hoc` ·
+`bat-trach` · `hoang-dao` · `ngay-tot` · `luc-nham` · `ngu-hanh-ten` ·
+`kinh-dich` · `mai-hoa` · `sinh-con` · `cong-so`.
+- 🪤 Lượt đo đầu tao báo `kim-lau` mất `rows[20]` + `hienTai{}` vì giả định nó
+  đi qua `extractGenericContext` (hàm này bỏ IM LẶNG mọi object/array). **Sai** —
+  nó có extractor riêng, đo đầu-cuối ra **51/51 lá tới model**. Giả định về
+  đường đi của dữ liệu phải KIỂM, không suy từ tên hàm.
+- `ky-mon` đủ (extractor duyệt `Object.entries` + xử riêng 3 mảng).
+  `xem-tuoi`/`xem-lam-an`/`tuong-hop` nhận trọn lá số và **cố ý tóm tắt** —
+  không đo bằng thước "mọi lá phải lọt".
+
+### 🔴 `tu-binh` — đúng cùng một bệnh
+**`computeTuBinh` trả 25 khoá, `extractTuBinhContext` đọc 12.** Đo được
+**113/151 giá trị chữ không tới model**. Nặng nhất: **`thapThan`** — Thập Thần,
+cột `app-bat-tu.html` vẽ dưới mỗi trụ (dòng 300 · 310 · 426). Người dùng nhìn
+thấy *"Thất Sát trụ tháng"*, hỏi rail nghĩa là gì → rail **không có dữ liệu**,
+buộc phải luận chay theo can chi.
+- Kèm theo: `daiVans` (cả dải 9 chặng — rail chỉ biết chặng HIỆN TẠI và KẾ
+  TIẾP) · `cuongNhuoc.dacDiaDetails`/`dacTheDetails` (lý do ra điểm thân
+  vượng/nhược) · `cachCuc.type` · `luuNien.relations`/`factors`/`napAm` ·
+  ghi chú từng thần sát · `nhatChi`/`nhatCanAmDuong`/`tuoiKhoiVan`/`daiVanThuan`.
+- 🔑 `hinhXungHaiHop` trước chỉ in **SỐ ĐẾM** (*"Tam hợp 1, Lục hại 2"*) — model
+  biết CÓ mà không biết LÀ GÌ, không luận được. Nay nêu đích danh cặp nào ở trụ nào.
+- CLAUDE.md từng ghi *"rail /app/bat-tu chưa nhận tầng phân tích bát tự mới"* —
+  phép đo cho thấy **rộng hơn lời ghi đó**: ngay `thapThan` mà CHÍNH engine của
+  rail tự tính ra cũng không được chuyển tiếp.
+
+**Sau khi vá: 113 → 37 giá trị, cả 37 là cắt CÓ CHỦ Ý** (yếu tố ra điểm của 9
+đại vận cắt còn 2 nặng nhất/chặng; `thanSat` `found:false` không liệt kê).
+
+| | cũ | mới |
+|---|---:|---:|
+| context rail bát tự | 6.724 | 9.027 ký tự |
+| mục vận-hạn có mặt | **0/7** | **7/7** |
+
+### 🧷 `scripts/check-rail-fields.mjs` (bộ dò thứ 13)
+Engine trả trường nào thì extractor phải đọc trường đó; khoá cố ý bỏ phải khai
+`SKIP` **kèm lý do**. Chạy engine vanilla thật, **không cần tsc**.
+- 🪤 **Red-team lộ bộ dò BỎ LỌT đúng con bug nó sinh ra để bắt, HAI lần:**
+  (a) `body.includes('.thapThan')` được thoả bởi `.thapThanCan` → phải dò theo
+  **BIÊN TỪ**; (b) sửa xong vẫn xanh oan vì **chú thích của chính tao** nhắc
+  `` `thapThan` `` → phải **CẮT CHÚ THÍCH trước khi quét**. 🔑 Xanh oan nguy hiểm
+  hơn đỏ oan: đỏ oan thì người ta đi tìm, xanh oan thì không ai biết.
+- 🪤 Và hai lượt red-team đầu **"đỗ giả" vì đột biến KHÔNG ăn** (regex trong
+  script vá không khớp). Phải **assert đột biến đã ăn** rồi mới đọc kết quả —
+  đúng bài học "mọi lượt thay bằng script phải assert".
+- 3/3 ca đỏ đúng (gỡ `thapThan` · engine thêm trường mới · `SKIP` khai thừa),
+  đối chứng khôi phục xanh, 0 file rác.
+
+### Verify
+`tsc` 0 · `lint` 0 lỗi (72 warning pre-existing) · `prettier` cả cây sạch ·
+**13/13 bộ dò sạch**.
+- 🪤 **ĐỐI CHỨNG `origin/main` bằng `git worktree`**: mục vận-hạn **0/7 → 7/7**
+  trên 2 lá số ⇒ lỗi có thật, phép đo bắt được.
+- Diff gói gọn trong **đúng một hàm** (`extractTuBinhContext`) — các tool khác
+  không đổi một byte context.
+
+### CÒN LẠI
+- **Chưa gọi LLM thật** — đo tới tầng dữ liệu vào prompt, không tới tầng chữ.
+- `check:railfields` mới phủ **Bát Tự**. Tool khác đang sạch nhưng chưa có máy
+  canh; mở rộng khi thêm engine mới có extractor hand-pick.
+- `chon-ngay-tot` · `dat-ten-con` · `dat-ten-dn` chưa dựng được payload trong
+  harness (API khác) → **chưa đo**, không phải đã sạch.
+- `thanSat` `found:false` (vd *"Không Vong tại Thân, Dậu"*) cố ý không gửi —
+  nếu thấy đáng thì mở, đây là quyết định nội dung chứ không phải bug.
+
+---
+
 ## 🔗 Luận Giải 24 phần bỏ qua data engine — MỐC SECTION HỎNG, bộ cắt CÂM (2026-08-09, PR này)
 
 Henry gửi một lá số thật: *"phần luận giải hầu như ko đề cập gì đến các phần ở

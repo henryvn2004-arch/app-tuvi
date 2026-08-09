@@ -21,6 +21,7 @@
     "check:hoatdong": "node scripts/check-hoat-dong-tre.mjs",
     "check:hexagrams": "node scripts/check-hexagram-table.mjs",
     "check:laso": "node scripts/check-laso-markers.mjs",
+    "check:railfields": "node scripts/check-rail-fields.mjs",
     "check:hao": "node scripts/check-hao-data.mjs",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
