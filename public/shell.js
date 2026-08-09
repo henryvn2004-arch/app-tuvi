@@ -1414,6 +1414,12 @@
 
   function loadRailStatus() {
     var token = getToken();
+    // Chưa có token NHƯNG Auth đang khôi phục phiên ⇒ CHƯA BIẾT người này là ai.
+    // Hỏi ví lúc này là nhận về trạng thái khách vô danh, và với máy đã tiêu hết
+    // câu dùng thử thì đồng hồ hiện "Đã hết câu dùng thử · Đăng ký nhận thêm"
+    // cho đúng một người đang đăng nhập. Thà im lặng vài giây — vòng theo dõi
+    // phiên ở cuối file sẽ gọi lại ngay khi biết chắc.
+    if (!token && window.Auth && Auth.isRestoring && Auth.isRestoring()) return;
     var url = token
       ? '/api/payment?action=rail-status'
       : '/api/payment?action=rail-status&anon=' + encodeURIComponent(anonId());
@@ -2241,12 +2247,27 @@
     });
     // Theo dõi phiên đăng nhập tới khi SẴN SÀNG (Auth có thể refresh token async
     // qua cookie): cập nhật avatar/tên + nạp lại lịch sử NGAY khi token xuất hiện.
-    var tries = 0, hadTok = !!getToken();
+    var tries = 0, hadTok = !!getToken(), wasRestoring = false;
     var t = setInterval(function () {
       paintAuth();
       var tok = !!getToken();
-      if (tok && !hadTok) { hadTok = true; pushLocalToServer(); refreshHistoryUI(); } // đăng nhập vừa sẵn sàng → đẩy local + kéo lịch sử server về
-      if (++tries > 30) clearInterval(t);
+      // Khôi phục xong mà VẪN không có token ⇒ đúng là khách vãng lai. Giờ mới
+      // hỏi ví được (lượt trong `setContext` đã cố ý bỏ qua lúc còn chưa biết).
+      var restoring = !!(window.Auth && Auth.isRestoring && Auth.isRestoring());
+      if (wasRestoring && !restoring && !tok) loadRailStatus();
+      wasRestoring = restoring;
+      // 🐞 `loadRailStatus()` ở đây là BẮT BUỘC, không phải cho đẹp. Nó chỉ chạy
+      // một lần trong `setContext`, mà lúc đó token thường CHƯA có (access token
+      // ~1h nên mở lại tab là hết hạn, Auth phải refresh qua cookie BẤT ĐỒNG BỘ).
+      // Không có token ⇒ hỏi `rail-status` theo đường KHÁCH VÔ DANH ⇒ đồng hồ
+      // chốt `_rc.anon=true`, và với máy đã tiêu hết 3 câu dùng thử thì nó hiện
+      // "Đã hết câu dùng thử · Đăng ký nhận thêm" cho ĐÚNG một người đang đăng
+      // nhập. Lịch sử đã có đường tự lành ở ngay dòng này từ trước; ví thì chưa.
+      if (tok && !hadTok) { hadTok = true; pushLocalToServer(); refreshHistoryUI(); loadRailStatus(); } // đăng nhập vừa sẵn sàng → đẩy local + kéo lịch sử + nạp lại ví
+      // Dừng NGAY khi đã bắt được token; còn không thì kiên nhẫn tới ~18 giây.
+      // Mốc cũ 9 giây là quá ngắn cho lượt refresh phải đi qua cookie server —
+      // quá hạn thì đồng hồ ví kẹt vĩnh viễn ở trạng thái khách vô danh.
+      if (tok || ++tries > 60) clearInterval(t);
     }, 300);
     // Empty-state intro (hướng B): trang khai window.SHELL_INTRO={key,title,desc}
     // + có #introHost → shell tự hiện cho người mới, ẩn sau lần dùng đầu.
