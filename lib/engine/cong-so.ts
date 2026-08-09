@@ -968,6 +968,20 @@ function goiYGhep(cung: string, menh: KieuId, cua: KieuId | null, nenTim: KieuId
 /** ⚠️ `extractGenericContext` BỎ QUA im lặng mọi giá trị là object/mảng —
  * payload gửi rail bắt buộc phẳng, mọi danh sách phải dẹp thành chuỗi ngay tại
  * đây. Đã trả giá một lần ở thẻ Vận hôm nay. */
+/**
+ * Bản hồ sơ cho lượt TÍNH THỬ — y hệt bản đầy đủ nhưng KHÔNG có tầng nhánh.
+ *
+ * 🔑 Tách thành hàm riêng chứ không lọc tại chỗ trong route: `GET /api/cong-so`
+ * trả `Cache-Control: public, s-maxage=86400`, tức một lần rò là CDN phát lại
+ * phần trả tiền cho MỌI người và không có cách nào thu hồi. Đường tiền phải cắt
+ * được bằng một dòng đọc ra được, và có bài kiểm canh đúng dòng đó.
+ */
+export function hoSoTinhThu(p: CongSoProfile): Omit<CongSoProfile, 'nhanh'> {
+  const { nhanh: _bo, ...conLai } = p;
+  void _bo;
+  return conLai;
+}
+
 export function railData(p: CongSoProfile): Record<string, string | number | boolean> {
   const top = [...p.radar].sort((a, b) => b.diem - a.diem);
   return {
@@ -1006,5 +1020,40 @@ export function railData(p: CongSoProfile): Record<string, string | number | boo
     luatVanNam: LUAT_VAN_NAM,
     ghepDoi: p.doi.map((d) => `${d.vai} (cung ${d.cung}): kiểu ${d.kieuTen}`).join(' | '),
     kieuNenTimDeBu: KIEU[BU[p.phan.kieu]].ten,
+  };
+}
+
+/**
+ * Rail data KÈM tầng nhánh — chỉ dựng trên đường ĐÃ TRẢ TIỀN.
+ *
+ * Tách khỏi `railData` là cố ý: lượt tính thử đi qua GET có cache CDN công
+ * khai, nhét nhánh vào đó là phát không phần trả tiền. Và nếu rail biết nhánh
+ * ngay từ lượt free thì người ta hỏi rail thay vì mở tầng nhánh — tự tay phá
+ * đúng thứ mình vừa dựng để bán.
+ *
+ * ⚠️ Payload gửi rail phải PHẲNG — `extractGenericContext` bỏ IM LẶNG mọi giá
+ * trị là object.
+ */
+export function railDataDayDu(p: CongSoProfile): Record<string, string | number | boolean> {
+  const nh = p.nhanh;
+  return {
+    ...railData(p),
+    nhanhGoiY: nh.goiY.map((g) => `${g.ten} (${g.diem}%)`).join(' · '),
+    nhanhChiTiet: nh.goiY
+      .map((g) => `${g.ten}: ${g.chat} Việc cụ thể: ${g.viec.join(', ')}.`)
+      .join(' | '),
+    lyDoTungNhanh: nh.goiY.map((g) => `${g.ten} ← ${g.vi.join(', ') || 'không trục nào nổi bật'}`).join(' | '),
+    chatNguoiNoiBat: nh.chatNguoi.map((t) => `${t.ten} (${t.cao})`).join(' · ') || 'không trục nào nổi trội',
+    ngheKhongDoiHoi: nh.neTranh.map((t) => `${t.ten} — ${t.thap}`).join(' | ') || '—',
+    canhBaoLechBac: nh.lechBac
+      ? 'MỌI nhánh gợi ý đều lệch bậc chức phận hiện tại — đây là HƯỚNG hợp với chất người, chưa phải chỗ đứng ngay bây giờ. Phải nói rõ chỗ này, đừng bày như thể họ vào được ngay.'
+      : 'Không',
+    canhBaoMoNhat: nh.moNhat
+      ? 'Lá số KHÔNG chỉ ra một nhánh nào nổi bật trong lĩnh vực này. Nói thẳng là chưa đủ tín hiệu, đừng chọn đại một nhánh rồi luận như thể chắc chắn.'
+      : 'Không',
+    luatDocTrucThap:
+      'Trục thấp nghĩa là NGHỀ KHÔNG ĐÒI HỎI trục đó, TUYỆT ĐỐI không đọc thành "người này thiếu". Ví dụ nghề sáng tác chấm thấp ở trục đáng-tin-cậy chỉ có nghĩa nghề đó không đo người bằng giờ giấc và quy trình.',
+    luatDocNhanh:
+      'Nhánh là CÁCH LÀM trong lĩnh vực, không phải một lĩnh vực khác. Phần trăm là độ KHỚP giữa chất người và chất việc, KHÔNG phải xác suất thành công — cấm đọc thành "80% khả năng thành công".',
   };
 }

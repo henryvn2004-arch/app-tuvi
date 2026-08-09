@@ -224,7 +224,11 @@ export const NHANH: Record<DomainId, NhanhDef[]> = {
   ],
   van: [
     {
-      id: 'nghien-cuu', ten: 'Nghiên cứu · phân tích',
+      // ⚠️ Trước tên là "Nghiên cứu · phân tích" — TRÙNG CHUỖI với một dòng
+      // trong `DOMAIN_NGANH` mà tầng 1 (miễn phí) đã bày ra. Người trả tiền mở
+      // ra thấy lại đúng chữ vừa đọc free là cảm giác trả tiền cho thứ đã có.
+      // 🔑 Luật: tên nhánh nói CÁCH LÀM, không nói lĩnh vực — lĩnh vực là tầng 1.
+      id: 'nghien-cuu', ten: 'Đào sâu · gỡ bài toán mới',
       chat: 'Đề bài chưa có lời giải sẵn, và phần lớn thời gian là chưa biết mình đúng hay sai.',
       viec: ['Nghiên cứu thị trường, phân tích dữ liệu', 'R&D sản phẩm, nghiên cứu ứng dụng', 'Tư vấn chiến lược, phân tích chính sách', 'Quy hoạch, phân tích môi trường', 'Chuyên gia nội dung chuyên ngành'],
       bac: ['kha', 'cao'],
