@@ -589,7 +589,11 @@
       '<p class="cs-note">Con số phần trăm là độ <b>khớp giữa chất người và chất việc</b>, ' +
         '<b>không phải</b> khả năng thành công. Danh sách nghề là quy chiếu của trang cho ' +
         'bối cảnh Việt Nam; đang làm nghề không có trong danh sách thì đối chiếu theo ' +
-        '<b>chất việc</b>, đừng đọc thành “bạn đang làm sai nghề”.</p></div>'
+        '<b>chất việc</b>, đừng đọc thành “bạn đang làm sai nghề”. ' +
+        // Đường dẫn ghi công — giấy phép CC BY của bộ dữ liệu dùng để CHẤM đòi
+        // ghi công, nhưng bản đọc KHÔNG nêu tên nguồn (xem CLAUDE.md). Một link
+        // ở cuối phần là chỗ đúng: không chen vào nội dung, mà vẫn có đường tới.
+        '<a href="/nguon-du-lieu.html" target="_blank" rel="noopener">Nguồn dữ liệu →</a></p></div>'
     );
     return h.join('');
   }
