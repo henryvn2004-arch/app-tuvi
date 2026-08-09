@@ -213,7 +213,7 @@
 window.SHELL_INTRO={key:'nhan-mach',title:'Sổ Nhân Mạch',desc:'Đưa <b>cả đội</b> hoặc <b>danh sách khách</b> vào một chỗ để biết <b>nhóm thiếu kiểu người nào</b>, <b>ai với ai dễ giẫm chân</b>, và <b>tuần này nên gặp ai trước</b>. Khác công cụ Lá Số Người Khác ở chỗ nó đọc cả nhóm cùng lúc.'};</script>
 <script src="/laso-chart.js?v=3"></script>
 <script src="/tuvi-form.js?v=1"></script>
-<script src="/tuvi-paywall.js?v=17"></script>
+<script src="/tuvi-paywall.js?v=18"></script>
 <script src="/auth.js?v=2"></script>
   <script src="/nav.js?v=22" data-icons-only></script>
 <script src="/shell.js?v=65"></script>
@@ -511,6 +511,13 @@ async function _doGenerate() {
     if (window.SHELL_INTRO) Shell.dismissIntro(window.SHELL_INTRO.key);
     _loadHistory();
 
+    // B1 — khoảnh khắc VỪA ĐỌC XONG mà số dư đã hụt: vừa thích vừa tiếc, đúng
+    // chỗ lời mời có sức nhất. Widget tự ẩn nếu còn đủ Lượng cho một lượt nữa
+    // (còn tiền thì để người ta mua, chen lời mời vào chỉ làm chậm một lượt đã
+    // bán được). Trước đây chỉ 3 tool ẢNH có chỗ xin này — 3 tool cẩm nang thì
+    // không, nên người đọc xong bản cuối cùng của mình rời đi mà không ai hỏi.
+    _mountInviteCta();
+
     // Rail đi đường SCENARIO (không phải birth): nhóm này có nhiều lá số nên
     // không có một `birth` nào đại diện được. Dữ liệu gửi rail là bản PHẲNG do
     // chính route trả về.
@@ -630,6 +637,20 @@ function renderMeta(data) {
     document.getElementById('orderBlock').style.display = 'block';
   }
 
+}
+
+/** Nạp `invite-cta.js` theo yêu cầu — trang không cần nó cho tới lúc này. */
+function _mountInviteCta() {
+  var host = document.getElementById('resPanel');
+  if (!host) return;
+  var go = function () {
+    if (window.InviteCta) window.InviteCta.mount(host, { toolId: 'nhan-mach', toolLabel: 'bản đọc nhóm' });
+  };
+  if (window.InviteCta) return go();
+  if (document.getElementById('_ivc_js')) return;
+  var s = document.createElement('script');
+  s.id = '_ivc_js'; s.src = '/invite-cta.js?v=1'; s.async = true; s.onload = go;
+  document.head.appendChild(s);
 }
 
 function renderProse(data) {

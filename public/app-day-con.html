@@ -242,7 +242,7 @@
 window.SHELL_INTRO={key:'day-con',title:'Dạy Con Theo Lá Số',desc:'Đưa lá số của con vào đây để biết <b>con tiếp thu kiểu nào</b>, <b>ra bài thế nào thì con chịu làm</b>, <b>kiểu kỷ luật nào phản tác dụng</b>, và <b>chỗ cha mẹ với con hay va nhau</b>. Đọc theo cung Mệnh, Phúc Đức, Phụ Mẫu, Thiên Di, Quan Lộc.'};</script>
 <script src="/laso-chart.js?v=3"></script>
 <script src="/tuvi-form.js?v=1"></script>
-<script src="/tuvi-paywall.js?v=17"></script>
+<script src="/tuvi-paywall.js?v=18"></script>
 <script src="/auth.js?v=2"></script>
   <script src="/nav.js?v=22" data-icons-only></script>
 <script src="/shell.js?v=65"></script>
@@ -456,6 +456,13 @@ async function _doGenerate(freeRerun, lo) {
     if (window.SHELL_INTRO) Shell.dismissIntro(window.SHELL_INTRO.key);
     _loadHistory();
 
+    // B1 — khoảnh khắc VỪA ĐỌC XONG mà số dư đã hụt: vừa thích vừa tiếc, đúng
+    // chỗ lời mời có sức nhất. Widget tự ẩn nếu còn đủ Lượng cho một lượt nữa
+    // (còn tiền thì để người ta mua, chen lời mời vào chỉ làm chậm một lượt đã
+    // bán được). Trước đây chỉ 3 tool ẢNH có chỗ xin này — 3 tool cẩm nang thì
+    // không, nên người đọc xong bản cuối cùng của mình rời đi mà không ai hỏi.
+    _mountInviteCta();
+
     // Rail nạp lá số CỦA CON (để hỏi sâu về bé) + lá số cha/mẹ qua `wrapBirthB`
     // nếu có. Lớp vỏ phía server có luật ĐÈ lên luật xưng hô — nếu không, rail
     // sẽ gọi người đang chat theo giới tính của đứa trẻ.
@@ -610,6 +617,20 @@ function renderMeta(data) {
     document.getElementById('basisList').innerHTML = rows.join('');
     document.getElementById('basisBlock').style.display = 'block';
   }
+}
+
+/** Nạp `invite-cta.js` theo yêu cầu — trang không cần nó cho tới lúc này. */
+function _mountInviteCta() {
+  var host = document.getElementById('resPanel');
+  if (!host) return;
+  var go = function () {
+    if (window.InviteCta) window.InviteCta.mount(host, { toolId: 'day-con', toolLabel: 'bản luận' });
+  };
+  if (window.InviteCta) return go();
+  if (document.getElementById('_ivc_js')) return;
+  var s = document.createElement('script');
+  s.id = '_ivc_js'; s.src = '/invite-cta.js?v=1'; s.async = true; s.onload = go;
+  document.head.appendChild(s);
 }
 
 function renderProse(data) {

@@ -36,6 +36,12 @@ const ALLOWED = new Set([
   // không ai mua", mà đó đúng là câu D1 đặt ra. `topup_start` KHÔNG thay được:
   // đo trên prod 552/553 lượt của nó đến từ chính trang nạp, không mang tool.
   'preview_shown', 'unlock_click',
+  // B1 — lời mời hiện ngay trên tấm tường. TÁCH khỏi `cta_click` vì hai bậc
+  // hỏng theo hai kiểu khác hẳn: `invite_shown` = 0 nghĩa là lời mời KHÔNG BAO
+  // GIỜ đủ điều kiện hiện ra (chưa ai đăng nhập mà hết Lượng), còn hiện mà
+  // không ai bấm là lỗi CÂU CHỮ. Gộp lại thì cả hai đọc thành một con số 0
+  // giống nhau — mà `referrals` đang đúng bằng 0, nên phải phân biệt được.
+  'invite_shown',
   // R1a — phễu của kênh nhắc hằng ngày: thấy lời mời → bật/từ chối → mở từ
   // thông báo. Ba bậc phải TÁCH nhau vì mỗi bậc hỏng theo một kiểu khác hẳn:
   // không ai thấy lời mời (đặt sai chỗ) · thấy mà không bật (câu chữ) · bật mà

@@ -5,7 +5,7 @@
 
 ---
 
-## 🧠 Hiệu ứng tâm lý — A3 + A2 + A4 cho Lá Số Người Khác (2026-08-09, PR này)
+## 🧠 Hiệu ứng tâm lý — A3 + A2 + A4 + B1 cho Lá Số Người Khác (2026-08-09, PR này)
 
 Henry đưa danh sách hiệu ứng tâm lý (Zeigarnik · Barnum · Scarcity · Loss
 Aversion · Peak-End · Social Proof…), yêu cầu lên kế hoạch tổng thể rồi mới làm.
@@ -122,12 +122,71 @@ cùng tập id · cùng nhãn · cùng cờ `hop`.
    Supabase ⇒ không stub giá thì tường **không bao giờ dựng** và bài kiểm đo nhầm
    đường lùi. IDs form là `ngay`/`thang`/`nam` + **`tvf-gio`** (không đồng nhất).
 
+### ✅ B1 — ĐƯỜNG MỜI ngay trên tấm tường (cùng PR, sau khi Henry chốt "làm B1")
+
+🔴 **ĐÍNH CHÍNH tiền đề của chính bản kế hoạch.** Tao đã viết *"thưởng 15 Lượng
+< mọi giá tool (20–100) nên phần thưởng vừa trừu tượng vừa không đủ"*. Đo lại
+trên prod: **`nguoi-khac` = 15 Lượng · `day-con` = 15 · thưởng mời = 15** ⇒
+**mời 1 người = ĐÚNG 1 lượt tool này.** Phần thưởng vốn đã đủ. Cái thiếu là
+**không ai biết**, và nó **chưa bao giờ xuất hiện đúng lúc người ta thèm**.
+⇒ KHÔNG dựng cơ chế thưởng/voucher mới. Chỉ đưa thứ có sẵn ra đúng chỗ, đúng lúc.
+
+**Hai chỗ đặt, theo hai trạng thái cảm xúc khác nhau:**
+1. **Trên tấm tường** (`_inviteRow` trong `tuvi-paywall.js`) — lúc đang nhìn thẳng
+   vào 8 khối bị khoá nêu đích danh. Vòng tò mò mở to nhất. **Viết trong
+   `lockPreview` nên CẢ 5 tool W1 tự có**, không cắm lẻ từng trang.
+2. **Sau khi đọc xong** (`InviteCta`) — vừa thích vừa tiếc. Widget này ĐÃ CÓ từ
+   V2.3 nhưng **chỉ nằm ở 3 tool ẢNH**; 3 tool cẩm nang không có, nên người đọc
+   xong bản cuối cùng của mình rời đi mà không ai hỏi. Nay mount đủ.
+
+⚠️ **CÂU CHỮ: thưởng chỉ về khi người được mời ĐĂNG KÝ, không phải khi bấm gửi
+link.** Nên CẤM viết *"mời 1 người → mở NGAY"* — bản kế hoạch đầu của tao ghi
+đúng chữ đó, và nó là **hứa hụt**, ở đúng bậc cuối phễu tức chỗ đắt nhất để mất
+niềm tin. Có ca test canh chuỗi "mở ngay".
+
+**Năm điều kiện IM LẶNG** (mỗi cái một lý do riêng, đừng gộp):
+`chưa đăng nhập` (không có mã) · `thưởng = 0` (admin tắt) · `chạm trần mời 30
+ngày` · `cần nhiều lượt hơn trần còn lại` (nêu con số với không tới cũng là hứa
+hụt) · **`số dư đã đủ trả`** — còn tiền thì để người ta mua, chen lời mời vào chỉ
+làm chậm một lượt đã bán được.
+
+🔑 **Chèn SAU khi tường đã dựng và KHÔNG `await`.** Lời mời là phần cộng thêm,
+không được đứng chắn giữa người dùng và tấm tường — `my-referral` hỏng hay mạng
+chậm thì tường vẫn hiện đủ như cũ. Kèm chốt `document.body.contains(veil)` sau
+lượt fetch: tường có thể đã bị gỡ trong lúc chờ, chèn vào node mồ côi là hiện một
+thẻ trôi nổi.
+
+**`invite_shown` là loại event RIÊNG**, không gộp `cta_click`: `invite_shown = 0`
+nghĩa là lời mời **không bao giờ đủ điều kiện hiện ra**, còn hiện mà không ai bấm
+là lỗi **câu chữ**. Gộp lại thì cả hai đọc thành một con số 0 giống nhau — mà
+`referrals` đang đúng bằng 0, nên phải phân biệt được.
+
+**Verify B1:** **48 ca Playwright trên TRANG THẬT** + `tuvi-paywall.js` THẬT —
+ca chính nói đúng "Mời 1 người · +15 Lượng" · link mang `ref=` + UTM + trỏ về
+CHÍNH tool · bắn `invite_shown`, bấm chép bắn `cta_click` · **7 ca phải im lặng,
+và ở CẢ 7 tường vẫn còn nguyên nút mở + danh sách khối khoá** · thưởng 5 thì tự
+tính lại thành "Mời 3 người" · 390px không tràn · **nút mở KHÔNG bị đẩy ra ngoài
+khung** (canh đúng lỗi "tấm khoá cắt mất nút mở" đã từng xảy ra) · **18 ca cho
+`InviteCta` trên cả 3 tool cẩm nang** (đúng nhãn, đúng link, `nhan-mach` giá 20 tự
+ra "Mời 2 bạn") kèm đối chứng còn-đủ-Lượng thì im.
+🪤 **ĐỐI CHỨNG bản trước B1: không có đường mời** ⇒ bài kiểm không đỗ giả.
+Bump `tuvi-paywall.js?v=17→18` (26 trang, `git diff --numstat` xác nhận đúng 1
+dòng/file trừ 3 trang có thêm mount).
+
+🪤 **Hai ca đỏ đầu đều là lỗi TEST, cả hai đều là bẫy "stub trượt":**
+(a) số dư đi qua **`/api/payment?action=balance`**, KHÔNG phải `rest/v1/user_credits`
+— stub trượt nên `balance` rơi về 0 và ca "còn đủ Lượng" đo nhầm đường;
+(b) **`track.js` kiểm `navigator.webdriver` NGAY LÚC NẠP** rồi no-op cả module,
+nên đặt cờ bằng `page.evaluate` sau khi tải trang là quá muộn — phải
+`addInitScript`. Ngược hẳn stub `Auth`: cái đó đặt sớm thì bị `auth.js` ghi đè.
+
 ### ⏭️ CÒN LẠI của kế hoạch (Henry đã duyệt khung, chưa code)
 - **A1 — cắt dữ liệu engine của preview** (2/5 mặt đọc, bỏ đại vận/tiểu hạn).
   CỐ Ý để sau: A3 chỉ THÊM nên đo được ngay, A1 LẤY ĐI nên đi sau khi đã có thứ bù.
-- **B1 (mạnh nhất còn lại) — mời 1 người để mở ngay một khối đang khoá** của
-  chính bản này. Hiện thưởng 15 Lượng < mọi giá tool (20–100) nên phần thưởng vừa
-  trừu tượng vừa không đủ ⇒ `referrals` = 0 là phải.
+- ⚠️ **B1 mới phủ người ĐÃ ĐĂNG NHẬP mà hết Lượng.** Ở 60 tài khoản / ~4 người
+  ngày thì tệp đó rất mỏng — đừng kỳ vọng `referrals` nhảy ngay. Con số phải nhìn
+  TRƯỚC là **`invite_shown`**: nó = 0 nghĩa là điều kiện không bao giờ thoả (phải
+  nới, ví dụ hiện cả khi còn đủ Lượng), chứ không phải câu chữ dở.
 - **B2** — trang `/ket-qua` chở giá trị của NGƯỜI NHẬN (ô nhập ngày sinh ngay tại
   đó, W1 vốn không đòi auth) thay vì là ngõ cụt. **B3** — Peak-End cho đoạn kết.
 - **C1** — bày engine ra (*"đọc từ N dữ kiện"* + 1 trích dẫn cổ thư thật): đây là
