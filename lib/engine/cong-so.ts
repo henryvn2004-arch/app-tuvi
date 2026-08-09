@@ -48,6 +48,7 @@
 import type { Laso } from '@/lib/engine/laso';
 import { MENH_ROLE, resolveCareerBase, type CareerBase } from '@/lib/engine/past-life';
 import { currentNamXem } from '@/lib/engine/namxem';
+import { chonNhanh, type DomainId, type NhanhKetQua } from '@/lib/engine/nghe-nghiep';
 
 type Rec = Record<string, unknown>;
 interface StarObj {
@@ -709,8 +710,10 @@ export interface NganhGoiY {
   sacThai: string[];
 }
 
-function goiYNganh(ls: Laso, kieu: KieuId): NganhGoiY {
-  const cb = resolveCareerBase(ls);
+// `cb` truyền VÀO chứ không tự gọi lại `resolveCareerBase` — tầng nhánh cũng
+// cần đúng bản đọc chức phận đó. Gọi hai lần là mở đường cho hai bản trôi khỏi
+// nhau, đúng bẫy repo đã trả giá ở can chi ngày.
+function goiYNganh(cb: CareerBase, kieu: KieuId): NganhGoiY {
   const d = DOMAIN_NGANH[cb.domain];
   return {
     linhVuc: d.linhVuc,
@@ -800,6 +803,13 @@ export interface CongSoProfile {
   loiTrangThai: string;
   /** Gợi ngành nghề cụ thể — đọc chức phận cung Quan Lộc theo CẶP chính tinh. */
   nganh: NganhGoiY;
+  /**
+   * TẦNG 4 — nhánh cụ thể trong lĩnh vực (xem `lib/engine/nghe-nghiep.ts`).
+   * Tách hẳn khỏi `nganh` chứ không nhét vào trong: đây là phần TRẢ TIỀN, và
+   * đường tiền phải cắt được bằng một dòng chứ không phải bằng cách lọc field
+   * — đúng khuôn W1 đã dựng cho 3 tool cẩm nang.
+   */
+  nhanh: NhanhKetQua;
   quanLoc: { sao: string[]; muon: boolean; diem: number | null; cachCuc: string[] };
 }
 
@@ -814,6 +824,9 @@ export function computeCongSo(ls: Laso, trangThai: TrangThai = 'nhan-vien', namX
   // bịa ra một bộ điểm "năm nay" là dựng dữ liệu. Cùng lý do, `resolveVanNam`
   // KHÔNG trả điểm cho năm mà trả điểm của KHUNG đại vận.
   const vanNam = resolveVanNam(ls, nam);
+  // MỘT lượt đọc chức phận, dùng chung cho cả `nganh` (tầng 1–3) lẫn `nhanh`
+  // (tầng 4) — xem chú thích ở `goiYNganh`.
+  const careerBase = resolveCareerBase(ls);
 
   const radar: RadarItem[] = RADAR_CUNG.map((r) => {
     const p = palaceByName(ls, r.cung);
@@ -913,7 +926,8 @@ export function computeCongSo(ls: Laso, trangThai: TrangThai = 'nhan-vien', namX
     vanNam,
     doi,
     loiTrangThai: LOI_THEO_TRANG_THAI[trangThai][phan.kieu],
-    nganh: goiYNganh(ls, phan.kieu),
+    nganh: goiYNganh(careerBase, phan.kieu),
+    nhanh: chonNhanh(ls, careerBase.domain as DomainId, careerBase.tier),
     quanLoc: {
       sao: quanB.stars.map(starLabel),
       muon: quanB.muon,
