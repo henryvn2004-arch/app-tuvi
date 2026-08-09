@@ -180,9 +180,114 @@ dòng/file trừ 3 trang có thêm mount).
 nên đặt cờ bằng `page.evaluate` sau khi tải trang là quá muộn — phải
 `addInitScript`. Ngược hẳn stub `Auth`: cái đó đặt sớm thì bị `auth.js` ghi đè.
 
+### ✅ A1 — cắt preview, và 🔴 LỚP THỨ BA của rò cung cấm (cùng PR, sau B1)
+
+Henry: *"làm tiếp đi, theo thứ tự mày đề xuất"*. A1 cố ý đi SAU cùng vì nó LẤY ĐI.
+Nhưng đo trước khi cắt thì lộ ra thứ **nặng hơn hẳn chuyện tiền**.
+
+#### 🔴 `KHONG_DOC` lọc CUNG, không lọc CÂU CHỮ của cung được đọc
+5 cung ĐƯỢC đọc (Mệnh · Phúc Đức · Thiên Di · Quan Lộc · Nô Bộc) mang theo
+`cachCucTungCung` — chuỗi engine viết cho bản luận TRỌN ĐỜI của CHÍNH CHỦ — và
+chính chúng nói về chết chóc, bệnh tật, hôn nhân, tiền bạc. Đi **thẳng** ra giao
+diện + prompt + rail, không qua cửa nào. Đo trên `git HEAD`:
+
+| | Lá Số Người Khác (1.152) | **Dạy Con — lá số TRẺ EM** (384) |
+|---|---:|---:|
+| in chữ thọ mệnh/chết chóc | **84,6%** | **75,5%** |
+| in chữ bệnh tật | 62,6% | 40,6% |
+| dính ít nhất một nhóm | **94,0%** | **80,5%** |
+
+Nguyên văn lọt ra màn hình MIỄN PHÍ, về một đứa trẻ: *"Tuần/Triệt tại Thiên Di:
+phiền lòng, **chết xa nhà**"* · *"suốt đời sầu khổ, **trai sát vợ, gái khắc
+chồng**"*. Vá bằng `locCachCuc()` ở **tầng engine** ⇒ cả ba đường tiêu thụ cùng
+sạch (vá một đường quên hai đường kia đúng là lỗi vụ rò tên cung).
+- 🔑 **CHẶN CẢ LĨNH VỰC, KHÔNG CHỈ CHẶN CÂU XẤU.** Bản đầu chỉ chặn register báo
+  động → vẫn in *"giàu sang, sống lâu"*, *"tăng thọ"*. Chặn "giảm thọ" mà in
+  "sống lâu" là tuỳ tiện, người biết tử vi nhìn ra ngay là tool tự mâu thuẫn với
+  lời nó hứa. **Khen cũng không nói.**
+- 🔑 **Bắt GỐC TỪ, đừng liệt kê cụm.** Bản có đủ `giảm thọ|đoản thọ|tăng thọ|
+  trường thọ` vẫn để lọt **328 lượt** vì engine còn viết `tăng tuổi thọ` và
+  `phúc thọ`. Liệt kê cụm thì luôn thiếu đúng cụm mình chưa nghĩ ra.
+- ⚠️ **`kinh doanh` CỐ Ý không chặn** — đó là NĂNG LỰC nghề (Quan Lộc), khác MỨC
+  giàu nghèo (Tài Bạch). Chặn là cắt mất đúng thứ tool sinh ra để nói.
+- **LỌC TRƯỚC, CẮT `slice(0,3)` SAU** — ngược lại thì lá số có 3 dòng đầu toàn
+  chữ cấm bị mất trắng khối cơ sở trong khi dòng thứ 4 dùng được vẫn nằm đó.
+- **Cung an Thân trả `null` khi rơi vào cung cấm** (33,3% lá số): `THAN_Y['Phu
+  Thê']` nguyên văn là *"bị chi phối bởi người bạn đời và đời sống gia đình"* —
+  đó CHÍNH LÀ lời đọc cung Phu Thê, chỉ khoác tên khác.
+- 🔑 **Chọn kiểu `| null` chứ không trả chuỗi rỗng** — và chính trình biên dịch
+  chỉ ra `railData` đang gán `cungThan` VÔ ĐIỀU KIỆN. Trả `''` thì lỗi đó lọt im
+  lặng. Áp dụng cho cả `day-con`.
+- ⛔ **KHÔNG áp cho Công Sở** — tool đó đọc lá số CHÍNH CHỦ.
+- Đo sau khi lọc: còn **9,19 dòng/hồ sơ** (thô 11,41), **0% hồ sơ mất trắng**.
+
+#### A1 — cắt theo NGUYÊN TẮC, không cắt cho tròn số
+`MAT_DOC_PREVIEW = ['Mệnh','Thiên Di']` đặt ở **engine** (tường khoá và payload
+lệch nhau là hứa hụt hoặc phát không).
+- **Giữ Mệnh + Thiên Di**: hai mặt người hỏi TỰ KIỂM CHỨNG được (cốt cách, "mặt
+  bạn gặp nhiều nhất") ⇒ giữ nguyên lá chắn cho phản đối *"AI nó bịa thôi"*.
+- **Bán Phúc Đức + Quan Lộc + Nô Bộc**: đòn bẩy thuyết phục · mặt bàn thương
+  lượng · mặt quan hệ — thứ DÙNG ĐƯỢC VÀO VIỆC.
+- Hai mặt free **chỉ còn TÊN SAO**, bỏ `cachCuc`/`diem`: tên sao đối chiếu được
+  với bất kỳ trang tử vi nào ⇒ đủ chứng minh; `cachCuc` là bản diễn giải, tức hàng.
+- **Bỏ hẳn `daiVan` + `vanNam`** khỏi preview — dữ liệu THỜI ĐIỂM, mà `thoiDiem`
+  là một khối đang bán. Phát nguyên liệu thô của nó là tự bán rẻ nó.
+- Khối khoá mới `matDoc` gọi ĐÍCH DANH: *"3 mặt còn lại — nền tâm tính · cách làm
+  việc · với người xung quanh (đọc ở Liêm Trinh, Tử Vi, Thất Sát)"*.
+
+#### 🐞 Bắt kèm — hai tham số cùng loại xử lý KHÁC nhau
+`computeNguoiKhac` resolve `viec` bên trong nhưng TIN thẳng `quanHeId`; `day-con`
+cũng vậy với `moiLoId`. Id lạ → `QUAN_HE[id]` là `undefined` → hồ sơ thiếu hẳn
+`quanHe`, và chỗ VỠ là `railData` ở tận cuối đường chứ không phải chỗ nhập sai.
+Route luôn resolve trước nên chưa ai vấp — nhưng **chính bài kiểm của tao vấp**,
+và đó là bằng chứng cái bẫy có thật. Nay cả hai đều resolve tại chỗ.
+
+#### Verify
+`tsc` 0 · `lint` 0 lỗi (72 warning pre-existing) · `prettier` sạch · 5 bộ dò
+(`prices`/`groups`/`nostore`/`viec`/`share`) sạch · engine **185 pass** ·
+`node --check` 2 khối script nội tuyến.
+- **21 bất biến trên MODULE THẬT, 1.728 lá số + 360 lá số TRẺ EM**: 0 câu cách
+  cục lọt · cung Thân không bao giờ nêu cung cấm (giữ 66,7%, giấu 33,3%) ·
+  railData sạch · prompt sạch VÀ vẫn 0 rò tên cung (không hồi quy vòng trước) ·
+  preview đúng 2/5 mặt · **mọi id tường khoá là trường payload thật** · tất định.
+- **33 ca Playwright trên TRANG THẬT** qua Next dev: khối cơ sở đúng 2 dòng chỉ
+  tên sao · 0 dấu `·` (cách cục) · không đại vận/vận năm/Thân · quét TOÀN BỘ chữ
+  hiện ra: 0 chữ cấm, 0 tên cung cấm, trên 5 lá số × 4 quan hệ · tường gọi đúng
+  ba mặt bị giữ kèm chính tinh thật · nút mở không bị đẩy ra ngoài · 390px không tràn.
+- 🪤 **ĐỐI CHỨNG `git HEAD`** (worktree): **7.356** câu lọt ở nguoi-khac,
+  **1.445** ở day-con, **576** hồ sơ nêu cung Thân cấm, **4.781** trường rail,
+  **400/400** prompt ⇒ lỗi có thật, bài kiểm không đỗ giả.
+- 🪤 **ĐỐI CHỨNG tầng TRANG**: nhét payload hình dạng CŨ vào chính `renderMeta`
+  → bộ dò bắt đúng ⇒ trang là bộ vẽ CÂM, lá chắn nằm TRỌN ở tầng payload, và bộ
+  dò không xanh vì quét nhầm chỗ.
+- **Hồi quy**: 4 bộ kiểm vòng trước vẫn xanh (A3 module 17 · A3 trang 23 · B1 48
+  · InviteCta 18).
+
+#### 🪤 Bốn cái bẫy vòng này
+1. **`hourBranch` là ĐỊA CHI 0..11, không phải giờ đồng hồ** — lưới đo đầu dùng
+   0,4,8,12,16,20 nên rơi hết. Lộ vì **có in cỡ mẫu** (`0/1152`). Luật cũ, lại cứu.
+2. **Ba lần dương-tính-giả, cả ba đều bắt nhầm LÁ CHẮN thành lỗ hổng**: câu luật
+   `LUAT_VAN_NAM_AN_CUNG` · khối lời hứa `#ethicsNote` trên trang · nhãn quan hệ
+   *"Con cái"* người dùng tự chọn. 🔑 **Bộ dò chữ cấm phải trừ ra chỗ BUỘC PHẢI
+   nhắc chữ cấm để cấm.** Kèm chốt `t.length < 200 → throw` để phép cắt trượt thì
+   ĐỎ chứ không xanh-vì-đo-vào-chuỗi-rỗng.
+3. **Test tự chép tay id** (`nhan-vien`, `khach-hang` không tồn tại) → hồ sơ dựng
+   ra thiếu `quanHe`. Nay đọc `NK.QUAN_HE_IDS` thẳng từ module.
+4. **Assert đếm cả dòng khai báo hàm** nên `python3` bỏ ghi file mà vẫn in ra kết
+   quả cũ — tưởng patch không ăn. Assert phải đếm đúng thứ mình đang đổi.
+
+#### CÒN LẠI
+- **3 dòng `portrait_cache` cũ** (day-con 2 · nhan-mach 1, đều là bản test của
+  Henry; `nguoi-khac` = 0) giữ nguyên chữ chưa lọc — payload đã lưu, engine không
+  dựng lại. CỐ Ý không thêm bộ lọc thứ hai ở client để dọn 3 dòng: đó là bản sao
+  thứ hai sẽ trôi khỏi nhau, đắt hơn cái nó vá.
+- **Chưa đối chứng tầng TRANG với `git HEAD`** — `git worktree` + symlink
+  `node_modules` không chạy được với Turbopack (đã ghi ở track sitemap). Đối chứng
+  dừng ở tầng module + tầng payload, cả hai đã đủ chứng minh.
+- ⚠️ **Tỉ lệ mở sẽ đổi sau deploy** — free mỏng hơn hẳn. Con số phải nhìn là
+  `preview_shown → unlock_click`; tụt thì nới lại `MAT_DOC_PREVIEW` (một dòng).
+
 ### ⏭️ CÒN LẠI của kế hoạch (Henry đã duyệt khung, chưa code)
-- **A1 — cắt dữ liệu engine của preview** (2/5 mặt đọc, bỏ đại vận/tiểu hạn).
-  CỐ Ý để sau: A3 chỉ THÊM nên đo được ngay, A1 LẤY ĐI nên đi sau khi đã có thứ bù.
 - ⚠️ **B1 mới phủ người ĐÃ ĐĂNG NHẬP mà hết Lượng.** Ở 60 tài khoản / ~4 người
   ngày thì tệp đó rất mỏng — đừng kỳ vọng `referrals` nhảy ngay. Con số phải nhìn
   TRƯỚC là **`invite_shown`**: nó = 0 nghĩa là điều kiện không bao giờ thoả (phải

@@ -27,6 +27,7 @@ import {
   resolveViec,
   khoiKhoa,
   viecChoQuanHe,
+  MAT_DOC_PREVIEW,
   type NguoiKhacProfile,
 } from '@/lib/engine/nguoi-khac';
 import {
@@ -93,18 +94,29 @@ interface CamNang {
 /**
  * Phần deterministic trả kèm — client dựng được khung ngay cả khi phần chữ mỏng.
  *
- * `full=false` (đường TÍNH THỬ) cắt bớt phần MÔ TẢ TÍNH CÁCH của kiểu người
- * (`dongLuc` · `datChat` · `manh` · `yeu` · `moiTruongHop` · `moiTruongKy`).
+ * `full=false` (đường TÍNH THỬ) cắt hai lớp:
  *
- * 🔑 VÌ SAO: giao diện KHÔNG vẽ mấy trường đó ra ở bất kỳ đâu (đã kiểm cả
- * `renderMeta` lẫn `renderProse`), mà rail thì tự tính lại ở server qua
- * `wrap:'nguoi-khac'` — tức chúng chưa từng được dùng ở client. Nhưng lượt tính
- * thử KHÔNG đòi đăng nhập, nên trước đây mở devtools là có sẵn bản mô tả tính
- * cách đầy đủ mà không trả một đồng nào. Cắt ở tầng payload, đừng trông vào
- * việc giao diện "quên" vẽ.
+ * **A4 — vá lỗ payload.** Bỏ phần MÔ TẢ TÍNH CÁCH của kiểu người (`dongLuc` ·
+ * `datChat` · `manh` · `yeu` · `moiTruongHop` · `moiTruongKy`). Giao diện KHÔNG
+ * vẽ mấy trường đó ở bất kỳ đâu, mà rail thì tự tính lại ở server — tức chúng
+ * chưa từng được client dùng. Nhưng lượt tính thử KHÔNG đòi đăng nhập, nên mở
+ * devtools là có sẵn bản mô tả tính cách đầy đủ, 0đ. Cắt ở tầng payload, đừng
+ * trông vào việc giao diện "quên" vẽ.
  *
- * Đường trả tiền GIỮ NGUYÊN cả gói — cắt luôn ở đó là đổi hình dạng payload đã
- * nằm trong `portrait_cache`, thứ không đáng đánh đổi để dọn vài trường thừa.
+ * **A1 — cắt dữ liệu ENGINE.** Đây là bước LẤY ĐI, cố ý đi SAU A3 (bước chỉ
+ * THÊM) để phần free mất đi đã có thứ bù vào:
+ *   • `matDoc` còn **2/5 mặt** (`MAT_DOC_PREVIEW` — xem lý do chia ở engine),
+ *     và hai mặt đó chỉ còn TÊN SAO, **không kèm `cachCuc` hay `diem`**. Tên
+ *     sao là thứ đối chiếu được với bất kỳ trang tử vi nào ⇒ đủ chứng minh
+ *     engine đọc thật; còn `cachCuc` là bản diễn giải, tức là hàng.
+ *   • `daiVan` + `vanNam` bỏ hẳn — đó là dữ liệu THỜI ĐIỂM, mà "lúc nào nên đưa
+ *     việc lớn tới" (`thoiDiem`) chính là một khối trả tiền. Phát nguyên liệu
+ *     thô của một khối đang bán là tự bán rẻ nó.
+ *   • `than` + `voiBanCoSo` bỏ — `renderProse` mới dùng tới, tức đường tính thử
+ *     đang chở hai trường không ai vẽ.
+ *
+ * Đường trả tiền GIỮ NGUYÊN hình dạng cả gói — đổi shape payload đã nằm trong
+ * `portrait_cache` không đáng để dọn vài trường thừa.
  */
 function meta(p: NguoiKhacProfile, ten: string, full = true) {
   return {
@@ -132,11 +144,14 @@ function meta(p: NguoiKhacProfile, ten: string, full = true) {
     kieuPhu: p.kieuPhu ? { id: p.kieuPhu.id, ten: p.kieuPhu.ten, motCau: p.kieuPhu.motCau } : null,
     lai: p.phan.lai,
     toaDo: { x: p.phan.xNorm, y: p.phan.yNorm },
-    than: p.than,
-    matDoc: p.matDoc,
-    vanNam: p.vanNam,
-    daiVan: p.daiVan,
-    voiBanCoSo: p.voiBan,
+    matDoc: full
+      ? p.matDoc
+      : p.matDoc
+          .filter((m) => (MAT_DOC_PREVIEW as readonly string[]).includes(m.cung))
+          .map((m) => ({ cung: m.cung, nhan: m.nhan, sao: m.sao, muon: m.muon })),
+    ...(full
+      ? { than: p.than, vanNam: p.vanNam, daiVan: p.daiVan, voiBanCoSo: p.voiBan }
+      : {}),
     namXem: p.namXem,
   };
 }

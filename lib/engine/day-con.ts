@@ -41,7 +41,7 @@ import {
   LUAT_VAN_NAM_AN_CUNG,
   type VanNam,
 } from './cong-so';
-import { KHONG_DOC } from './nguoi-khac';
+import { KHONG_DOC, locCachCuc } from './nguoi-khac';
 
 type Rec = Record<string, unknown>;
 
@@ -323,7 +323,10 @@ export function computeDayCon(
       y: m.y,
       sao: b.stars.map(starLabel),
       muon: b.muon,
-      cachCuc: (cachCucTung[m.cung] || []).slice(0, 3),
+      // 🔒 Lọc chữ cấm TRƯỚC rồi mới cắt 3 dòng (xem `locCachCuc`). Đây là lá
+      // số một ĐỨA TRẺ: bản chưa vá in ra "chết xa nhà", "trai sát vợ, gái khắc
+      // chồng" ở 75,5% số lá số đo được.
+      cachCuc: locCachCuc(cachCucTung[m.cung]).slice(0, 3),
       diem: typeof sc?.tong === 'number' ? (sc.tong as number) : null,
     };
   });
@@ -387,7 +390,11 @@ export function computeDayCon(
     // 🪤 Giới tính KHÔNG nằm trong lá số engine trả về — phải truyền vào. Đọc
     // `ls.gioiTinh` là luôn ra 'nam', sai im lặng cho một nửa số trẻ.
     gioiTinh,
-    moiLo: MOI_LO[moiLoId],
+    // 🪤 Resolve Ở ĐÂY, cùng lý do với `resolveQuanHe` của `nguoi-khac`: id lạ
+    // (hoặc `null` do một đường gọi mới quên truyền) thì `MOI_LO[id]` là
+    // `undefined`, hồ sơ dựng ra thiếu hẳn `moiLo`, và chỗ VỠ là `railData` ở
+    // tận cuối đường chứ không phải chỗ nhập sai.
+    moiLo: MOI_LO[resolveMoiLo(moiLoId)],
     kieu: KIEU[phan.kieu],
     kieuPhu: phan.kieuPhu ? KIEU[phan.kieuPhu] : null,
     phan,
@@ -401,9 +408,11 @@ export function computeDayCon(
 }
 
 // 🪤 Lá số KHÔNG có trường `cungThan` — chỉ có cờ `isThan` trên từng cung.
+// 🔒 Trả '' khi Thân đóng vào cung `KHONG_DOC` — cùng lý do với `nguoi-khac`.
 function thanCung(ls: Laso): string {
   const p = ((ls.palaces as Rec[]) || []).find((x) => x && x.isThan === true);
-  return String(p?.cungName || '');
+  const cung = String(p?.cungName || '');
+  return (KHONG_DOC as readonly string[]).includes(cung) ? '' : cung;
 }
 
 /** Danh sách cung tool này KHÔNG đọc — dùng chung với `nguoi-khac` để không có
@@ -432,8 +441,8 @@ export function railData(p: DayConProfile): Record<string, string | number | boo
     thuConCanHoc: p.hoc.canHoc,
     dauHieuNhanBiet: p.hoc.dauHieu.join(' · '),
     laiKieu: p.phan.lai,
-    cungThan: p.than.cung,
   };
+  if (p.than.cung) d.cungThan = p.than.cung;
   if (p.tuoi != null) d.tuoiTre = p.tuoi;
   if (p.kieuPhu) d.kieuPhu = p.kieuPhu.ten;
   for (const m of p.matDoc) {

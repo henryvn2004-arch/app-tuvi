@@ -89,7 +89,7 @@ export function buildNguoiKhacPrompt(p: NguoiKhacProfile, ten: string): string {
         `\n   Dùng để nói về: ${m.y}`,
     );
   }
-  if (p.than.cung) L.push(`• Cung an Thân: ${p.than.cung} — ${p.than.y}`);
+  if (p.than) L.push(`• Cung an Thân: ${p.than.cung} — ${p.than.y}`);
   L.push('');
 
   L.push('— LÚC NÀY HỌ ĐANG Ở ĐÂU TRONG ĐỜI —');

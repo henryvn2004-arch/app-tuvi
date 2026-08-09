@@ -216,7 +216,10 @@
           <div class="res-block-body" id="lockHost" data-tvp-lock style="padding-top:6px"></div>
         </div>
 
-        <div class="res-block" style="background:#FBF3DE;border-color:#e8d9b0">
+        <!-- Khối LỜI HỨA. Có id để bộ kiểm "chữ cấm lọt màn hình" trừ nó ra:
+             chính nó buộc phải nhắc "sức khoẻ / tiền bạc riêng / hôn nhân" thì
+             mới nói được là KHÔNG đọc mấy thứ đó. -->
+        <div class="res-block" id="ethicsNote" style="background:#FBF3DE;border-color:#e8d9b0">
           <div class="res-block-body" style="font-size:12.5px;line-height:1.68;color:#5a5145">
             💡 Bản cẩm nang này phác hoạ từ các dữ liệu trong lá số Tử Vi, kết hợp kinh nghiệm nghiên cứu của tiền nhân để lại. Mang tính tham khảo.<br><br>
             ⚖️ Đây là khung <b>hiểu để sống chung</b>, không phải để điều khiển ai. Người được xem không có mặt ở đây, nên bản luận cố ý <b>không đọc sức khoẻ, tiền bạc riêng hay chuyện hôn nhân</b> của họ. Tính cách không tốt cũng không xấu — chỉ hợp hoặc không hợp bối cảnh.
@@ -613,6 +616,10 @@ function renderMeta(data) {
     return '<span class="nk-chip">' + esc(c) + '</span>';
   }).join('');
 
+  // ⚠️ HÀM NÀY CHẠY TRÊN CẢ HAI ĐƯỜNG và payload hai bên KHÁC NHAU (A1):
+  // lượt tính thử chỉ có 2/5 mặt đọc, mỗi mặt CHỈ CÓ TÊN SAO, và KHÔNG có
+  // `than`/`daiVan`/`vanNam`. Mọi chỗ dưới đây phải giữ nguyên lối canh `if` —
+  // bỏ canh đi là lượt tính thử ném lỗi ngay bậc đầu phễu.
   var rows = [];
   (data.matDoc || []).forEach(function (m) {
     rows.push('<li><b>' + esc(m.nhan) + '</b> — cung ' + esc(m.cung) +

@@ -244,6 +244,75 @@ export function resolveQuanHe(v?: string | null): QuanHeId {
 // trong payload thì model không có gì để luận, kể cả khi bị dụ.
 export const KHONG_DOC = ['Tật Ách', 'Tài Bạch', 'Phu Thê', 'Tử Tức', 'Điền Trạch'] as const;
 
+/**
+ * 🔴 LỚP THỨ BA của cùng ràng buộc trên — LỌC CHÍNH CÂU CHỮ, không chỉ lọc cung.
+ *
+ * `KHONG_DOC` chặn được việc ĐỌC 5 cung đó. Nhưng 5 cung ĐƯỢC ĐỌC (Mệnh · Phúc
+ * Đức · Thiên Di · Quan Lộc · Nô Bộc) mang theo `cachCucTungCung` — chuỗi diễn
+ * giải engine viết cho một bản luận TRỌN ĐỜI của CHÍNH CHỦ — và chính mấy chuỗi
+ * đó nói về chết chóc, bệnh tật, hôn nhân, con cái, tiền bạc. Chúng đi THẲNG ra
+ * giao diện, vào prompt và vào rail mà không qua cửa nào.
+ *
+ * Đo trên bản chưa vá:
+ *   • Lá Số Người Khác — 1.152 lá số: 84,6% in chữ thọ mệnh/chết chóc, 62,6%
+ *     bệnh tật, 94,0% dính ít nhất một nhóm.
+ *   • Dạy Con — 384 lá số TRẺ EM: 75,5% chết chóc, 40,6% bệnh tật. Nguyên văn
+ *     lọt ra màn hình: *"Tuần/Triệt tại Thiên Di: phiền lòng, chết xa nhà"*,
+ *     *"trai sát vợ, gái khắc chồng"* — về một đứa trẻ.
+ *
+ * 🔑 CHẶN CẢ LĨNH VỰC, KHÔNG CHỈ CHẶN CÂU XẤU. Bản đầu tao chỉ chặn register báo
+ * động, đo ra vẫn để lọt *"giàu sang, sống lâu"* và *"tăng thọ"* — tức chặn
+ * "giảm thọ" nhưng in "sống lâu", chặn "nghèo" nhưng in "giàu sang". Tuỳ tiện,
+ * và người biết tử vi nhìn ra ngay là tool tự mâu thuẫn với lời nó hứa. Lời hứa
+ * là KHÔNG NÓI về thân thể/thọ mệnh/hôn nhân/con cái/tiền bạc/nhà đất của người
+ * vắng mặt — khen cũng không.
+ *
+ * ⚠️ `kinh doanh` CỐ Ý KHÔNG chặn: đó là NĂNG LỰC nghề (cung Quan Lộc), khác
+ * hẳn MỨC GIÀU NGHÈO (cung Tài Bạch). Chặn nó là cắt mất đúng thứ tool này sinh
+ * ra để nói.
+ *
+ * Bỏ NGUYÊN DÒNG chứ không cắt mệnh đề: chuỗi là văn xuôi tự do, dấu phân cách
+ * không thống nhất, mổ giữa câu là sinh ra câu cụt vô nghĩa. Đo sau khi lọc:
+ * còn 7,13 dòng/hồ sơ (thô 11,41) và **0% hồ sơ mất trắng** — khối "cơ sở" vẫn
+ * đủ dày để làm bằng chứng engine đọc thật.
+ *
+ * ⛔ KHÔNG áp cho Tử Vi Công Sở: tool đó đọc lá số CHÍNH CHỦ, người ta tự đưa lá
+ * số mình vào, nói về sức khoẻ hay tiền bạc của họ là việc bình thường.
+ */
+const CAM_NOI = new RegExp(
+  [
+    // thọ mệnh — khen hay chê đều không nói.
+    // ⚠️ Bắt GỐC TỪ `thọ`, không liệt kê từng cụm: bản đầu tao ghi đủ
+    // `giảm thọ|đoản thọ|tăng thọ|trường thọ` mà vẫn để lọt **328 lượt** vì
+    // engine còn viết `tăng tuổi thọ` và `phúc thọ`. Liệt kê cụm thì luôn thiếu
+    // đúng cụm mình chưa nghĩ ra.
+    'thọ|sống lâu|yểu|chết|tử vong|mất sớm|khó nuôi|tang chế|tang môn',
+    // Tật Ách — cũng bắt gốc từ `tật`, vì "mang tật" và "tật lưng" lọt qua mọi
+    // biến thể ghép sẵn.
+    'bệnh|tật|tai nạn|mổ xẻ|phẫu thuật|tàn phế|ốm đau',
+    // Phu Thê
+    'vợ|chồng|hôn nhân|thê thiếp|lấy lẽ|đa phu|đa thê|ngoại tình|ly dị|ly hôn',
+    // Tử Tức
+    'con cái|đông con|hiếm con|muộn con|quý tử|sảy thai|vô sinh',
+    // Tài Bạch — MỨC giàu nghèo, không phải năng lực làm ăn
+    'giàu|phú quý|tài lộc|tiền của|của cải|nghèo|túng|phá sản|khánh kiệt|tán tài|nợ nần',
+    // Điền Trạch
+    'nhà cửa|ruộng đất|điền sản|bất động sản',
+  ].join('|'),
+  'i',
+);
+
+/**
+ * Lọc danh sách cách cục trước khi cho ra khỏi engine.
+ *
+ * Dùng cho MỌI tool đọc lá số người KHÔNG có mặt. Áp ở tầng engine nên cả ba
+ * đường tiêu thụ (giao diện · prompt · rail) cùng sạch — vá một đường rồi quên
+ * hai đường kia đúng là lỗi đã mắc ở vụ rò tên cung.
+ */
+export function locCachCuc(lines: readonly string[] | undefined): string[] {
+  return (lines || []).filter((c) => !CAM_NOI.test(c));
+}
+
 /** Các cung được đọc, kèm nhãn nói rõ nó dùng để làm gì trong bản cẩm nang. */
 const MAT_DOC: { cung: string; nhan: string; y: string }[] = [
   { cung: 'Mệnh', nhan: 'Cốt cách', y: 'Con người gốc — cái không đổi dù đổi việc, đổi chỗ' },
@@ -252,6 +321,25 @@ const MAT_DOC: { cung: string; nhan: string; y: string }[] = [
   { cung: 'Quan Lộc', nhan: 'Cách làm việc', y: 'Họ coi trọng gì trong công việc, làm kiểu nào thì thấy đúng' },
   { cung: 'Nô Bộc', nhan: 'Với người xung quanh', y: 'Họ kết giao và giữ người thế nào' },
 ];
+
+/**
+ * A1 — hai mặt đọc bản TÍNH THỬ được phát, ba mặt còn lại nằm sau tường.
+ *
+ * 🔑 Chia theo NGUYÊN TẮC "miễn phí = DANH TÍNH, trả tiền = QUYẾT ĐỊNH", không
+ * chia cho tròn số:
+ *   • **Mệnh** và **Thiên Di** là hai mặt người hỏi TỰ KIỂM CHỨNG ĐƯỢC — cốt
+ *     cách và "mặt bạn gặp nhiều nhất". Chúng làm nhiệm vụ chứng minh engine
+ *     đọc đúng lá số một người có thật, tức giữ nguyên lá chắn cho phản đối số
+ *     1 *"AI nó bịa thôi"*. Bỏ nốt hai mặt này là bỏ luôn bằng chứng.
+ *   • **Phúc Đức** (cái làm họ thấy yên → đòn bẩy thuyết phục), **Quan Lộc**
+ *     (họ coi trọng gì khi làm việc → mặt bàn thương lượng) và **Nô Bộc** (họ
+ *     giữ người thế nào → mặt quan hệ) là thứ DÙNG ĐƯỢC VÀO VIỆC. Đó là món
+ *     hàng.
+ *
+ * Đặt ở engine chứ không ở route: tường khoá gọi tên đúng ba mặt bị giữ lại,
+ * hai bên lệch nhau là hứa hụt hoặc phát không.
+ */
+export const MAT_DOC_PREVIEW = ['Mệnh', 'Thiên Di'] as const;
 
 export interface MatDoc {
   cung: string;
@@ -286,8 +374,8 @@ export interface NguoiKhacProfile {
   kieu: KieuDef;
   kieuPhu: KieuDef | null;
   phan: PhanKieu;
-  /** Cung an Thân — nửa đời sau họ dồn về đâu. */
-  than: { cung: string; y: string };
+  /** Cung an Thân — nửa đời sau họ dồn về đâu. `null` khi rơi vào cung cấm. */
+  than: { cung: string; y: string } | null;
   matDoc: MatDoc[];
   vanNam: VanNam | null;
   /** Đại vận đang chạy của HỌ — dùng cho phần "lúc nào nên nhờ vả". */
@@ -308,9 +396,19 @@ const THAN_Y: Record<string, string> = {
 // 🪤 Lá số KHÔNG có trường `cungThan` — chỉ có cờ `isThan` trên từng cung (đã
 // kiểm trên engine thật). Đọc `ls.cungThan` là ra `undefined` rồi cả khối này
 // rỗng một cách im lặng.
-function thanCung(ls: Laso): { cung: string; y: string } {
+/**
+ * Cung an Thân — nửa đời sau họ dồn về đâu.
+ *
+ * 🔒 Trả `null` khi Thân đóng vào một cung `KHONG_DOC` (đo được **33,3%** lá số:
+ * Thân chỉ rơi vào 6 cung, mà Tài Bạch và Phu Thê nằm trong danh sách cấm).
+ * `THAN_Y['Phu Thê']` nguyên văn là *"càng về sau càng bị chi phối bởi người bạn
+ * đời và đời sống gia đình"* — đó CHÍNH LÀ một lời đọc cung Phu Thê, chỉ khoác
+ * cái tên khác. Nói nó ra là đi vòng qua cửa vừa khoá.
+ */
+function thanCung(ls: Laso): { cung: string; y: string } | null {
   const p = ((ls.palaces as Rec[]) || []).find((x) => x && x.isThan === true);
   const cung = String(p?.cungName || '');
+  if (!cung || (KHONG_DOC as readonly string[]).includes(cung)) return null;
   return { cung, y: THAN_Y[cung] || '' };
 }
 
@@ -331,7 +429,12 @@ export function computeNguoiKhac(
   viecId?: ViecId,
 ): NguoiKhacProfile {
   const nam = namXem ?? (typeof ls.namXem === 'number' ? (ls.namXem as number) : currentNamXem());
-  const quanHe = QUAN_HE[quanHeId];
+  // 🪤 `resolveQuanHe` gọi Ở ĐÂY cho cân với `resolveViec` ngay dưới. Trước đây
+  // hàm này TIN thẳng `quanHeId`: id lạ → `QUAN_HE[id]` là `undefined` → hồ sơ
+  // dựng ra thiếu hẳn `quanHe`, và chỗ vỡ là `railData` ở tận cuối đường, không
+  // phải chỗ nhập sai. Route hiện luôn resolve trước nên chưa ai vấp, nhưng để
+  // hai tham số cùng loại xử lý khác nhau là bày sẵn bẫy cho đường gọi sau.
+  const quanHe = QUAN_HE[resolveQuanHe(quanHeId)];
   // Việc không hợp với quan hệ đang chọn thì rơi về 'hieu-them' — người dùng
   // đổi quan hệ sau khi đã chọn việc là ra tổ hợp vô nghĩa ("giao việc cho
   // sếp"), mà tổ hợp đó đi thẳng vào prompt.
@@ -351,7 +454,10 @@ export function computeNguoiKhac(
       y: m.y,
       sao: b.stars.map(starLabel),
       muon: b.muon,
-      cachCuc: (cachCucTung[m.cung] || []).slice(0, 3),
+      // ⚠️ LỌC TRƯỚC, CẮT SAU. Cắt 3 dòng đầu rồi mới lọc thì gặp lá số có 3
+      // dòng đầu toàn chữ cấm là mất trắng khối cơ sở, trong khi dòng thứ 4
+      // dùng được vẫn nằm đó.
+      cachCuc: locCachCuc(cachCucTung[m.cung]).slice(0, 3),
       diem: typeof sc?.tong === 'number' ? (sc.tong as number) : null,
     };
   });
@@ -432,6 +538,22 @@ export function khoiKhoa(p: NguoiKhacProfile): { id: string; tieuDe: string }[] 
     k.push({ id: 'keHoach', tieuDe: `Cách đi cho việc: ${p.viec.label.replace(/^Sắp |^Phải |^Cần |^Muốn /, '')}` });
   }
   k.push({ id: 'tinhKhi', tieuDe: `Người kiểu ${p.kieu.ten} này vận hành thế nào trong đời thật` });
+
+  // A1 — ba mặt đọc bị giữ lại. `id` là `matDoc`, một trường CÓ THẬT trong
+  // payload trả tiền, đúng luật cứng của A2. Tiêu đề gọi ĐÍCH DANH cung và
+  // chính tinh đang ngồi đó: nói "còn 3 mặt nữa" thì không mở được vòng tò mò
+  // nào, nói "cung Quan Lộc của họ có Tử Vi + Thất Sát" thì mở được.
+  const giu = p.matDoc.filter((m) => !(MAT_DOC_PREVIEW as readonly string[]).includes(m.cung));
+  if (giu.length) {
+    const ten = giu.map((m) => m.nhan.toLowerCase()).join(' · ');
+    const sao = giu.flatMap((m) => m.sao).slice(0, 3).join(', ');
+    k.push({
+      id: 'matDoc',
+      tieuDe: sao
+        ? `${giu.length} mặt còn lại của người này — ${ten} (đọc ở ${sao})`
+        : `${giu.length} mặt còn lại của người này — ${ten}`,
+    });
+  }
   k.push({ id: 'coiTrong', tieuDe: 'Họ coi trọng cái gì — và sợ mất cái gì' });
   k.push({ id: 'chamNoc', tieuDe: 'Điều làm người này khó chịu nhất' });
   k.push({ id: 'nenNoi', tieuDe: 'Ba việc nên nói, kèm câu nói thật để dùng luôn' });
@@ -474,9 +596,14 @@ export function railData(p: NguoiKhacProfile): Record<string, string | number | 
     moiTruongKy: p.kieu.moiTruongKy,
     cauHoiChayNgam: p.kieu.cauHoi.join(' · '),
     laiKieu: p.phan.lai,
-    cungThan: p.than.cung,
-    cungThanY: p.than.y,
   };
+  // 🔒 Thân rơi vào cung cấm → KHÔNG gửi rail. Trước đây gán vô điều kiện, nên
+  // nếu chỉ trả chuỗi rỗng thay vì `null` thì lỗi này lọt im lặng — chính chỗ
+  // này là lý do chọn kiểu `| null` để trình biên dịch chỉ ra.
+  if (p.than) {
+    d.cungThan = p.than.cung;
+    d.cungThanY = p.than.y;
+  }
   if (p.kieuPhu) d.kieuPhu = p.kieuPhu.ten;
   if (p.phan.vaiTro) d.vaiTroMenh = p.phan.vaiTro.role;
   for (const m of p.matDoc) {
