@@ -8,8 +8,10 @@ import { execLasoTool, toolLabel } from '@/lib/agent/tools';
 import { buildChatContext, XUNG_HO_RULE, nguoiXemLine } from '@/lib/agent/prompts';
 // LLM Gemini-primary + Anthropic-backup (provider từ app_config
 // 'chat.standalone_provider'). callLLMTools trả shape Anthropic → giữ nguyên
-// vòng lặp tool bên dưới; llmText cho luận 24 phần (phan).
-import { llmText, callLLMTools } from '@/lib/llm/complete';
+// vòng lặp tool bên dưới; llmTextFull cho luận 24 phần (phan) — bản `Full` để
+// lấy được usage + thời lượng, xem chú thích tại chỗ gọi.
+import { llmTextFull, callLLMTools } from '@/lib/llm/complete';
+import { logLlmUsage } from '@/lib/agent/usage';
 import { withToolOutcome } from '@/lib/ops/tool-outcome';
 
 // ─── System prompt ─────────────────────────────────────────────
@@ -440,7 +442,28 @@ async function runPost(request: NextRequest) {
 
     // Prompt + dữ liệu GIỮ NGUYÊN; chỉ đổi backend provider (Gemini-primary,
     // Anthropic-backup). Bỏ cache_control (tối ưu riêng Anthropic; Gemini cache ngầm).
-    const text = await llmText({ system: SYSTEM_PROMPT, prompt, maxTokens: maxTok });
+    //
+    // Dùng llmTextFull thay llmText để LẤY ĐƯỢC usage + thời lượng: trước đây
+    // route này KHÔNG ghi một dòng `llm_usage` nào, nên Luận Giải — tool bán
+    // chạy nhất (1.500 Lượng / 3 người) — hoàn toàn vô hình trong panel Biên
+    // Lợi Nhuận, và cũng không có số nào để đặt ETA cho 24 phần.
+    const r = await llmTextFull({ system: SYSTEM_PROMPT, prompt, maxTokens: maxTok });
+    const text = r.text;
+    // tool_id 'laso' = ĐÚNG `tool_pricing.tool_id` của Luận Giải (events dùng
+    // 'luan-giai', giao dịch dùng 'use_laso' — ba hệ tên lệch nhau, xem
+    // tool_canon() trong CLAUDE.md). Ghi theo id mà GIÁ treo vào thì bucket chi
+    // phí mới ghép được với bucket doanh thu.
+    void logLlmUsage(
+      'laso',
+      r.model,
+      {
+        input_tokens: r.usage.input_tokens,
+        cache_creation_input_tokens: 0,
+        cache_read_input_tokens: 0,
+        output_tokens: r.usage.output_tokens,
+      },
+      r.durationMs,
+    );
 
     let chartData = null;
     const chartMatch = text.match(/```chartdata\s*([\s\S]*?)```/);

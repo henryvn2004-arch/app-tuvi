@@ -5,6 +5,79 @@
 
 ---
 
+## ⏱️ ETA TỰ HIỆU CHỈNH + `llm_usage` cuối cùng cũng có THỜI LƯỢNG (2026-08-09, PR sau #457)
+
+Henry: *"Có nên estimate thời gian chạy của từng tool xong… show estimated time
+cho users?"* → *"làm tiếp theo suggest của mày luôn"*.
+
+### 🔴 Tiền đề hỏng: KHÔNG ĐO ĐƯỢC GÌ CẢ
+`events.llm_usage.meta` chỉ có `model` · `cost_vnd` · các loại token —
+**không có một trường thời lượng nào**. Con số "45–60 giây" duy nhất đang có là
+suy gián tiếp từ khoảng cách hai mốc log của **hai pha chạy song song**, mẹo chỉ
+dùng được cho đúng tool chân dung. Mọi tool còn lại: trắng.
+
+### 🔑 ETA tĩnh là một LỜI HỨA — và repo này đã thấy nó nói dối
+Đổi `gpt-image-1` → `gpt-image-2` làm thời gian vẽ **gấp đôi** (22s → 46s), mà
+con số trong tài liệu đứng yên, lại còn ghi theo `quality:high` trong khi thực
+tế chạy `medium`. ⇒ **Nếu hiện ETA thì phải suy từ SỐ ĐO, không được chép cứng.**
+
+### ✅ Cách giải: đo NGAY TRONG PHIÊN, không cần dữ liệu lịch sử
+`AiLoadingSteps.pacer()` — tool chạy nhiều phần tuần tự (luận giải 24, xem tuổi
+9) thì **xong vài phần là biết nhịp của chính phiên này**: máy này, mạng này,
+tải server lúc này. Miễn nhiễm với đổi model. Hiện `Phần 7 / 24 · còn khoảng 3
+phút`, và `expectSec` của `mountWait` **ăn luôn nhịp đo được** nên thanh tiến
+trình quay lại (trước đó `expectSec:0` đã bỏ thanh vì không có số).
+- ⚠️ **`minSamples = 2`, KHÔNG phải 1** — phần 1 nạp **10 tài liệu RAG** trong
+  khi các phần sau chỉ 7 (`matchCount: p===1?10:7`) nên chậm bất thường. Lấy
+  đúng mẫu đó nhân lên 23 phần là hứa sai ngay từ dòng đầu.
+- **TRUNG VỊ chứ không trung bình**: một lượt nghẽn mạng không được kéo lệch cả
+  dự đoán. (Ca kiểm: 3 lượt 0,2s + 1 lượt 1,5s → trung vị 0,20 còn trung bình
+  0,52.)
+- **Chỉ ghi nhịp ở nhánh THÀNH CÔNG** — một phần chết giữa chừng có thời lượng
+  thật nhưng không đại diện.
+- Chưa đủ mẫu → `remainText()` trả `''` ⇒ **im lặng, không hứa**.
+
+### ✅ Vá lỗ đo: `llm_usage` nay có `duration_ms`
+Đo **bên trong** `llmTextFull` và `generatePortraitImage` rồi trả kèm, thay vì
+bắt 10 chỗ gọi tự bấm giờ — chỗ nào quên thì quên im lặng. **18 chỗ ghi**, gồm
+cả rail (`run.ts` đo TRỌN lượt kể cả các vòng tool-use — đó mới là thời gian
+người dùng thật sự ngồi chờ).
+
+### 🔴 Và lộ ra: `/api/lasotuvi` CHƯA HỀ ghi `llm_usage`
+Tool **bán chạy nhất** (Luận Giải, 1.500 Lượng / 3 người) hoàn toàn **vô hình
+trong panel Biên Lợi Nhuận** từ trước tới nay. Nay `llmText` → `llmTextFull` +
+`logLlmUsage`.
+- ⚠️ Ghi `tool_id='laso'` = ĐÚNG `tool_pricing.tool_id`, không phải `'luan-giai'`
+  (events) hay `'use_laso'` (giao dịch) — ba hệ tên lệch nhau, xem `tool_canon()`.
+  Ghi theo id mà GIÁ treo vào thì bucket chi phí mới ghép được với doanh thu.
+
+### Verify
+`tsc` 0 · `lint` 0 lỗi (72 warning pre-existing) · `prettier` sạch ·
+`check:prices`/`groups`/`nostore` sạch · engine **185 pass**.
+- **17 ca trên `pacer` THẬT**: 0 và 1 mẫu đều im lặng · trung vị chịu được ngoại
+  lai · câu chữ giây/1 phút/N phút · hết phần và số âm đều im · `reset()` xoá
+  sạch · `end()` lẻ không đẻ mẫu rác · nối vào `mountWait` thì thanh quay lại.
+- **62 + 76 + 60 ca hồi quy** của ba bộ kiểm trước: vẫn xanh.
+- 🪤 **Đối chứng HẾT HẠN** — 4 ca `[v1]` mô tả diff của PR trước, mà PR đó đã vào
+  `origin/main` nên chúng đỏ oan. 🔑 **Đối chứng phải theo kịp diff HIỆN TẠI;
+  neo đúng `origin/main` vẫn chưa đủ nếu nội dung ca đã lỗi thời.**
+- 🪤 Lệnh script thay chuỗi 4 dấu cách **khớp lồng** vào chuỗi 6 dấu cách → chèn
+  `reset()` hai lần ở 2 chỗ. Vô hại (idempotent) nhưng phải đếm lại mới thấy.
+- Bump `ai-loading-steps.js?v=4→5` (24 trang).
+
+### CÒN LẠI
+- **Chưa có bề mặt đọc `duration_ms`** — dữ liệu bắt đầu chảy từ lượt deploy này.
+  Sau 1–2 tuần thì thêm cột "thời lượng p50/p75" vào panel Biên LN, và mở
+  `expectSec` thật cho các tool CHẠY MỘT PHẦN (chân dung, phong thuỷ…) — nhóm
+  nhiều phần đã tự lo bằng pacer.
+- **`/api/lasotuvi?action=chat`** (đường rail cũ, dùng ở profile/chatbot) vẫn
+  chưa ghi usage — nó đi qua `callLLMTools` trong vòng lặp tool, cần cộng dồn
+  riêng. Đường `phan` (đường bán tiền) đã xong.
+- **20 trang STREAM** vẫn chưa đo được "thời gian tới token đầu tiên" — đó mới là
+  con số quyết định có cần orb ở đó hay không.
+
+---
+
 ## 📏 LUẬT CHỈ BÁO CHỜ + mở orb ra toàn site (2026-08-09, PR sau #455)
 
 Henry: *"orb cho ≥10 giây. Mấy tool luận giải chạy lâu, apply luôn. 58 tools thì

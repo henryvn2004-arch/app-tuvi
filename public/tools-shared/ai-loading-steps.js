@@ -139,6 +139,67 @@
   // Chỉ dựng khung (head + hộp bước + dòng đếm giây) ở lượt ĐẦU, các lượt sau
   // chỉ thay ruột hộp bước. Nếu gán lại cả el.innerHTML mỗi lần đổi bước thì
   // orb ở `head` bị dựng lại và animation giật về đầu ngay giữa chừng.
+  // ============================================================
+  // pacer — ETA TỰ HIỆU CHỈNH cho tool chạy NHIỀU PHẦN tuần tự
+  // (luận giải 24 phần, xem tuổi 9 phần).
+  //
+  // Vì sao không dùng ETA tĩnh: một con số chép cứng nói dối vào đúng ngày đổi
+  // model — repo này đã dính (gpt-image-1 → gpt-image-2 làm thời gian vẽ gấp
+  // đôi, mà con số trong tài liệu vẫn đứng yên). Đo ngay TRONG phiên thì miễn
+  // nhiễm với đổi model, đổi máy, và tải server lúc đó.
+  //
+  //   var pace = AiLoadingSteps.pacer();
+  //   pace.begin();  ... pace.end();          // bọc quanh MỖI phần
+  //   pace.perPartSec()        → số giây/phần, null khi chưa đủ mẫu
+  //   pace.remainText(conLai)  → 'còn khoảng 3 phút' | '' khi chưa đủ mẫu
+  //
+  // ⚠️ MIN_SAMPLES = 2 vì PHẦN ĐẦU luôn chậm bất thường: nó nạp 10 tài liệu
+  // RAG trong khi các phần sau chỉ 7 (`matchCount: p===1?10:7`). Lấy một mẫu
+  // duy nhất đó nhân lên 23 phần là hứa sai ngay từ dòng đầu.
+  // ============================================================
+  function pacer(opts) {
+    opts = opts || {};
+    var minSamples = opts.minSamples || 2;
+    var samples = [];
+    var t0 = 0;
+
+    function perPartSec() {
+      if (samples.length < minSamples) return null;
+      // TRUNG VỊ chứ không phải trung bình: một lượt chậm bất thường (mạng
+      // chớp, model nghẽn) không được kéo lệch cả dự đoán.
+      var s = samples.slice().sort(function (a, b) { return a - b; });
+      var m = s.length >> 1;
+      return s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2;
+    }
+
+    return {
+      begin: function () { t0 = Date.now(); },
+      // CỐ Ý chỉ gọi ở nhánh THÀNH CÔNG: một phần chết giữa chừng có thời lượng
+      // thật nhưng không đại diện cho phần chạy được.
+      end: function () {
+        if (!t0) return;
+        samples.push((Date.now() - t0) / 1000);
+        t0 = 0;
+      },
+      reset: function () { samples = []; t0 = 0; },
+      perPartSec: perPartSec,
+      // Cách viết thời lượng MỘT phần — gom ở đây để hai trang không tự chế hai
+      // kiểu, và để không bao giờ in ra "khoảng 0 giây" vì làm tròn.
+      perPartText: function () {
+        var per = perPartSec();
+        return per ? 'khoảng ' + Math.max(1, Math.round(per)) + ' giây' : '';
+      },
+      remainText: function (remaining) {
+        var per = perPartSec();
+        if (!per || !(remaining > 0)) return '';
+        var s = per * remaining;
+        if (s < 45) return 'còn khoảng ' + (Math.round(s / 5) * 5 || 5) + ' giây';
+        if (s < 90) return 'còn khoảng 1 phút';
+        return 'còn khoảng ' + Math.round(s / 60) + ' phút';
+      },
+    };
+  }
+
   function render(el, rows, head) {
     var box = el.querySelector('.ai-steps-box');
     if (!box) {
@@ -342,5 +403,5 @@
     };
   }
 
-  window.AiLoadingSteps = { mount: mount, mountWait: mountWait, orbHtml: orbHtml };
+  window.AiLoadingSteps = { mount: mount, mountWait: mountWait, orbHtml: orbHtml, pacer: pacer };
 })();
