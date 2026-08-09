@@ -41,24 +41,73 @@ chồng lên nhau.
 - Ô mối lo `chon-duong` của T2 hứa *"chất việc hợp với con"* mà engine T2 không
   tính gì về chất việc — đã ghi chú thẳng tại chỗ là phần đó nằm ở tool này.
 
-### 🔑 LUẬT CỨNG: hình thiên hướng CHỈ khai thành phần DƯƠNG
-Các trục có nền lệch nhau rất xa trên lá số trẻ em (tỉ mỉ TB **+1,26** · chính
-trực +1,08 · chịu áp lực +1,01 · hợp tác **−0,53**). Hai hệ quả, đo được cả hai:
-1. Hình nhấn vào trục nền CAO thì **tự được cộng điểm** — bản đầu `Vận động`
-   chiếm 14,7% chỉ vì nó nhấn `chịu áp lực`. Vá bằng **TRỪ NỀN** (hình trung
-   bình 9 hướng) trước khi chấm. Ở Công Sở chuyện này TỰ TRIỆT vì mọi nhánh
-   trong một lĩnh vực cùng chịu độ lệch đó; ở đây không có cổng lĩnh vực.
-2. Hình khai số **ÂM lớn** ở trục nền cao thì bị **phạt oan** — `Tưởng tượng`
-   tụt còn **0,2%**, gần như chết, vì nó khai `tiMi: −1,5`. Vá bằng cách chỉ
-   khai "hướng này cần gì", để phép trừ nền tự sinh phần âm.
-- ⚠️ **Trừ nền ở phía HÌNH, KHÔNG z-score phía NGƯỜI** — luật 1 của
-  `nghe-nghiep.ts` vẫn nguyên hiệu lực.
-- Sau khi vá: **9/9 hướng đều sống (4,7%–21,0%)**, cặp giống nhau nhất 0,40
-  (trước 0,77), bộ-3 trùng 1/17.
-- 🪤 Bản đầu có hướng `Kể chuyện` cosine **0,77** với `Giao thiệp` — cả hai dựng
-  trên `hướng người + tự tin` nên một cái nuốt cái kia (1,4%). Đổi thành **Tưởng
-  tượng · sáng tạo**, bỏ hẳn trục hướng-người: đó là đứa vẽ/bịa chuyện một mình,
-  một đứa trẻ KHÁC hẳn đứa đọc được không khí trong phòng.
+### 🔄 ĐỔI TẦNG CHẤM: dựng THẲNG trên 5 trục · 8 chất của `#458`
+Henry: *"Ok làm theo đề xuất của mày đi"* — chốt phương án tôi đề nghị ở cuối
+vòng trước thay vì ship bản vá bằng lời khai.
+
+**Bệnh:** bản đầu chấm trên 21 trục riêng của `nghe-nghiep.ts`, không dính gì
+tới khung `day-con` bán ngay cạnh. Đo ra: bé có CHẤT #1 bên kia là *"Hiểu người
+& dẫn nhóm"* thì bản đó xếp #1 là *"Tỉ mỉ · làm cho đúng"* ở **65%** số ca.
+
+**Vá:** chấm thẳng trên chính 13 chiều `day-con` đo. Hai tool không thể lệch
+nhau về NGUYÊN TẮC nữa, chứ không phải nhờ một câu chú thích.
+
+| Đo trên 2.496 lá số | 21 trục | 13 chiều |
+|---|---:|---:|
+| Chất#1 → đúng hướng kỳ vọng ở **#1** | 38,5% | **61,7%** |
+| …lọt **TOP-3** (thứ phụ huynh thật sự đọc) | — | **91,2%** |
+| Ca nghịch tai `hiểu người` → `tỉ mỉ` | **65%** | **24,6%** |
+| …và `dẫn dắt` vẫn lọt top-3 cho nhóm đó | — | **92,6%** |
+
+- ✅ **Ranh giới Phụ Mẫu vẫn giữ** — kiểm TRƯỚC khi mượn vector: `assess` đọc
+  Mệnh · Thiên Di · Phúc Đức · Quan Lộc · Huynh Đệ · Nô Bộc, **không có Phụ
+  Mẫu**. Mượn nền của nó không phá được thế phân vai với `day-con`.
+- **Không còn 100% là ĐÚNG, không phải thiếu sót**: `day-con` đo NĂNG KHIẾU
+  (giỏi MÔN gì), tool này đo CHẤT VIỆC (hợp KIỂU LÀM VIỆC nào). Chung thước đo,
+  khác câu hỏi.
+- 🔑 **Toàn bộ mẹo TRỪ NỀN + "chỉ khai thành phần dương" của bản cũ BỊ GỠ** —
+  13 chiều đã z-score sẵn từng chiều nên nền phẳng từ gốc. Bớt được một tầng
+  mẹo là bớt một chỗ trôi.
+- 🪤 **NHƯNG lộ ra một bẫy MỚI cùng họ: 13 chiều KHÔNG độc lập** (cùng đọc một
+  bộ cung). Đo được `nhip ↔ van-dong` **+0,71** · `nhip ↔ thien-nhien` −0,55 ·
+  `nhay ↔ hieu-minh` +0,48. Hình nạp hai chiều tương quan mạnh CÙNG chiều thì
+  tự cộng điểm (đếm hai lần một tín hiệu); nạp NGƯỢC chiều thì tự triệt tiêu.
+  Lượt đo đầu dính cả hai: `van-dong` nạp nhip+van-dong ⇒ **27,6%**, `ben-bi`
+  kéo −nhay ngược hieu-minh ⇒ **4,4%**, `kham-pha` **2,4%**.
+  ⇒ **Luật: trong MỘT hình không nạp hai chiều |corr| > 0,45.** Sau khi tách:
+  cả 9 hướng sống **8,2–14,8%** (bản 21 trục 4,7–21,0), bộ-3 hay gặp nhất
+  **1/28** (trước 1/17), cặp hình giống nhau nhất 0,40.
+- 🪤 `dan-dat` ↔ `giao-thiep` lượt đầu cosine **0,86** — đúng bẫy `Kể chuyện`
+  0,77 lặp lại. Tách bằng trục `hoa`: dẫn dắt **giữ ý mình** (hoa thấp), giao
+  thiệp **thuận nhóm** (hoa cao). Hai hình cùng đọc người nhưng ngược cực.
+- **Ngưỡng 0,25 → 0,20** để `chuaRoNet` giữ **7,1%**, bám mức cũ 6,6%: đổi tầng
+  chấm thì KHÔNG được lặng lẽ đổi luôn tần suất tool nói "chưa rõ nét" — đó là
+  một câu người dùng đọc được, không phải hằng số nội bộ.
+- 🔴 **Bất biến tự-mâu-thuẫn nay BẤT KHẢ THI VỀ CẤU TRÚC, không nhờ bộ lọc**:
+  `khongDoiHoi` chỉ lấy từ CHẤT âm, mà trọng số chất luôn ≥ 0 ⇒ tích `val × w`
+  ≤ 0 khi val < 0 ⇒ chất thấp không bao giờ vượt nổi ngưỡng để lọt vào phần lý
+  do. Red-team gỡ chốt `|val| > 0.25` **vẫn 0 lỗi** — đúng như dự đoán; chốt đó
+  nay chỉ lọc chiều gần mức giữa (665 lượt trích dẫn yếu), không còn gánh phần
+  đúng/sai. Bất biến đáng canh vì thế là chốt GỐC: **0 hình khai chất âm**.
+- **Chất thấp có bảng chữ RIÊNG** (`CHAT_KHONG_DOI_HOI`, 8 câu tự viết), cố ý
+  KHÔNG mượn `motCau` của `KHIEU` — câu đó tả năng khiếu, ghép vào ngữ cảnh
+  "thấp" là thành lời chê ngay.
+- Lời khai trên trang + prompt rail viết lại: không còn nói *"hai trục khác
+  nhau"* (nay sai) mà nói **cùng một thước đo, khác câu hỏi**, và rail được dặn
+  NỐI hai bên lại thay vì phân trần.
+
+### 🗑️ Tầng chấm 21 trục — ĐÃ GỠ, giữ lại đây làm bài học
+Bản đầu chấm trên 21 trục của `nghe-nghiep.ts` và phải dựng hai mẹo để sống
+được: **TRỪ NỀN** (trục lá số trẻ em lệch nhau rất xa — tỉ mỉ TB +1,26 · hợp
+tác −0,53) và **chỉ khai thành phần DƯƠNG** (khai âm ở trục nền cao thì bị
+phạt oan; `Tưởng tượng` từng tụt còn **0,2%**). Cả hai nay **không còn cần** —
+13 chiều của `#458` đã z-score sẵn từng chiều.
+- 🔑 Bài học giữ lại: **mẹo bù trừ ở tầng chấm là dấu hiệu nền dữ liệu chưa
+  chuẩn hoá.** Chuẩn hoá đúng chỗ (phía dữ liệu) thì mẹo tự biến mất; càng
+  nhiều mẹo càng nhiều chỗ trôi.
+- 🪤 Và bẫy "hai hình nuốt nhau" thì **KHÔNG** biến mất theo: `Kể chuyện` ↔
+  `Giao thiệp` 0,77 ở bản 21 trục, `dan-dat` ↔ `giao-thiep` **0,86** ở bản 13
+  chiều. Đổi nền không cứu được chỗ này — phải tách bằng một chiều ngược cực.
 
 ### Ranh giới trẻ em nằm ở TẦNG DỮ LIỆU, không chỉ ở lời dặn
 - **Cờ `bayNghe`**: dưới 8 tuổi thì `ngheViDu` trả **mảng RỖNG** ở mọi hướng.
@@ -97,12 +146,30 @@ chất việc + một lượt LLM.
 
 ### Verify
 `tsc` 0 · `lint` 0 lỗi (72 warning pre-existing) · `prettier` quét cả cây sạch ·
-`check:prices`/`check:groups`/`check:nostore` sạch · engine **185 pass** ·
-`node --check` 2 khối script nội tuyến.
+**9/9 bộ dò sạch** (`prices`/`groups`/`nostore`/`share`/`keyframes`/`hexagrams`/
+`hao`/`motifs`/`terms`) · engine **185 pass** · `node --check` 2 khối script.
 - **4.680 lá số × 8 bất biến = 259.208 assertion, 0 lỗi**: đủ 3 hướng · hoạt
   động khớp ĐÚNG lứa tuổi · trẻ nhỏ 0 tên nghề · rail phẳng · deterministic ·
   **0 ca bản đọc tự mâu thuẫn** (trục nêu làm lý do không nằm trong "việc không
   đòi hỏi" — đúng lỗi đã vấp ở tầng nhánh nghề).
+- **26.362 assertion RIÊNG cho tầng chấm mới** trên 2.496 lá số: điểm giảm dần
+  và trong dải · 0 rò `undefined`/`NaN`/`[object` · deterministic · 0 ca tự mâu
+  thuẫn · tính thử **0 khoá trả tiền** · trẻ nhỏ 0 tên nghề · rail phẳng.
+- **Tần suất khối rỗng** (trang phải chịu được): `chatNguoi` rỗng **0,0%** ·
+  `khongDoiHoi` rỗng 2,0% · hướng không có lý do 2,9%. Trang đã có nhánh ẩn.
+- 🪤 **Red-team vòng này — 2 ca, và một ca CỐ Ý không đỏ:**
+  (a) nạp lại `nhip` vào `van-dong` (corr +0,71) → **13,9% vọt lên 19,1%**, dải
+  nới từ 8,2–14,8 ra 5,8–19,1 ⇒ luật chống chồng tín hiệu có thật, đo được.
+  (b) cho một hình khai **chất ÂM** → bộ dò bắt đúng dòng, exit 1.
+  (c) gỡ chốt `|val| > 0.25` → **VẪN 0 lỗi**, đúng như dự đoán: tự mâu thuẫn
+  nay bất khả thi về CẤU TRÚC (xem trên), chốt đó chỉ còn lọc chiều gần mức
+  giữa (665 lượt trích dẫn yếu). **Ca không đỏ này là kết quả, không phải bài
+  kiểm hỏng** — nhưng phải giải thích được vì sao, nếu không nó chỉ là một bộ
+  dò câm.
+- 🪤 **Bộ dựng harness thất bại IM LẶNG**: thêm `--paths` vào dòng lệnh thì tsc
+  từ chối (TS6064) → không emit → `|| true` nuốt → phép đo chạy trên bản JS
+  **CŨ** và ra 100% một hướng. Đúng bài học "mọi lượt thay bằng script phải
+  assert". Đã thêm assert bản dựng phải chứa `day-con-assess`.
 - **40/40 ca đọc thẳng mã nguồn**: `runPreview` không chứa một trong **10** ký
   hiệu cấm · rẽ nhánh trước `withToolOutcome` · + ca ĐỐI CHỨNG đường trả tiền
   PHẢI có `toolPaymentDenied` + `llmTextFull` + `hoSoDayDu` + ghi cache.
@@ -151,10 +218,10 @@ KHIẾU** (con giỏi MÔN gì — ngôn ngữ, con số, âm nhạc), tool này
   đo *chất việc* còn Dạy Con đo *năng khiếu*, kèm link sang; **prompt rail có
   luật cứng** — nếu người dùng nhắc kết quả bên kia thì phải giải thích là HAI
   TRỤC, và **TUYỆT ĐỐI không nói bên nào sai**.
-- ⏭️ **Việc đáng làm sau, chưa làm**: dựng thiên hướng THẲNG trên 8 chất của
-  `#458` thay vì trên 21 trục riêng — lúc đó hai tool không thể lệch nhau về
-  nguyên tắc, không phải nhờ một câu chú thích. Đổi là đổi tầng chấm, cần đo lại
-  toàn bộ phân bố nên tách PR riêng.
+- ✅ **ĐÃ LÀM trong chính PR này** (Henry: *"Ok làm theo đề xuất của mày đi"*):
+  dựng thiên hướng thẳng trên 13 chiều của `#458`. Xem mục "ĐỔI TẦNG CHẤM" ở
+  trên — con số trong bảng này (38,5% / 0,0% / 65%) là của bản 21 trục **đã bị
+  thay**, giữ lại để so.
 
 ### 🪤 DỰNG TRANG TRÊN MỘT KHUNG KHÔNG TỒN TẠI — và test của tao không bắt được
 Bản đầu của trang dựng bằng `.sidebar` / `.work` / `.work-inner` — **ba lớp

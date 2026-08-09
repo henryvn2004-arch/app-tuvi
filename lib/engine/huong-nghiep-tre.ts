@@ -8,24 +8,42 @@
 //   • `nguoi-khac`→ sống chung cho êm
 //   • `cong-so`   → đời đi làm của một NGƯỜI TRƯỞNG THÀNH
 //
-// ── VÌ SAO KHÔNG GỘP VÀO `day-con` — số đo, không phải cảm tính ──
-// `day-con` phân trẻ thành ĐÚNG 4 KIỂU (tứ tượng) rồi tra `KIEU_HOC`. Đo trên
-// 2.496 lá số trẻ em: 21 trục tính khí cắt cùng tệp đó ra **359 bộ trục khác
-// nhau**, và hai đứa CÙNG một kiểu chỉ giống nhau **cosine 0,54**. Tức 4 kiểu
-// mới nói được khoảng một nửa. Bộ trục phổ biến nhất trong một kiểu chỉ chiếm
-// 5–12% ⇒ tầng này có nội dung thật, không phải đội tên khác cho 4 kiểu.
+// ── NỀN CHẤM: 5 TRỤC + 8 CHẤT của `day-con-assess`, KHÔNG phải 21 trục ──
+// 🔑 Bản đầu chấm trên 21 trục tính khí của `nghe-nghiep.ts` — nền riêng, không
+// dính gì tới khung `day-con` đang bán cạnh nó. Đo ra chỗ nguy hiểm: bé có
+// CHẤT #1 bên kia là "Hiểu người & dẫn nhóm" thì bản đó xếp #1 là "Tỉ mỉ · làm
+// cho đúng" ở **65%** số ca. Về lý không mâu thuẫn (hai trục khác nhau), nhưng
+// một phụ huynh trả tiền cho CẢ HAI tool 15 Lượng về CÙNG một đứa trẻ đọc ra
+// hai kết luận đá nhau — và mất tin vào cả hai.
 //
-// ── LUẬT VIẾT `hinh`: CHỈ KHAI THÀNH PHẦN DƯƠNG ──
-// 🔑 Đo ra: các trục có nền lệch nhau rất xa trên lá số trẻ em (tỉ mỉ TB +1,26 ·
-// chính trực +1,08 · chịu áp lực +1,01 · hợp tác −0,53). Hình nào khai số ÂM
-// lớn ở một trục nền CAO thì bị phạt oan — bản đầu viết kiểu đó làm hướng
-// "Tưởng tượng" tụt còn **0,2%**, gần như chết. Ở Công Sở chuyện này TỰ TRIỆT
-// vì mọi nhánh trong một lĩnh vực cùng chịu độ lệch ấy; ở đây không có cổng
-// lĩnh vực nên phải xử lý tay.
-// ⇒ Mỗi hướng chỉ khai "cần gì" (số dương). Phần "không cần" để phép TRỪ NỀN
-//   tự sinh ra. Sau khi sửa: cả 9 hướng đều sống (4,7%–21,0%).
-// ⚠️ Trừ nền ở phía HÌNH, TUYỆT ĐỐI không z-score phía NGƯỜI — luật 1 của
-//   `nghe-nghiep.ts` vẫn giữ nguyên hiệu lực.
+// Nên tầng chấm nay dựng THẲNG trên chính 13 chiều `day-con` đo (5 trục tính
+// khí + 8 chất năng khiếu). Hai tool không thể lệch nhau về NGUYÊN TẮC nữa,
+// chứ không phải nhờ một câu chú thích. Đo lại trên 2.496 lá số:
+//
+//   Chất #1 dẫn đúng hướng kỳ vọng ở vị trí #1 : 38,5% → **61,7%**
+//   …lọt TOP-3 (thứ phụ huynh thật sự đọc)     :        **91,2%**
+//   Ca nghịch tai "hiểu người" → "tỉ mỉ" ở #1   : 65%   → **24,6%**
+//
+// ⚠️ Hai tool VẪN trả lời hai câu khác nhau: `day-con` đo NĂNG KHIẾU (giỏi MÔN
+// gì), tool này đo CHẤT VIỆC (hợp KIỂU LÀM VIỆC nào). Chung thước đo, khác câu
+// hỏi — đó là lý do 61,7% chứ không phải 100%.
+//
+// ── HAI LUẬT VIẾT `hinh`, cả hai đều rút ra từ phép đo ──
+// 1. KHÔNG trừ nền, KHÔNG "chỉ khai thành phần dương" như bản 21 trục. 13 chiều
+//    này đã z-score sẵn TỪNG chiều (5 = mức giữa, mỗi 1,8 điểm = 1 độ lệch
+//    chuẩn) nên nền phẳng từ gốc; hai mẹo đó thành thừa.
+// 2. 🔑 NHƯNG 13 chiều KHÔNG độc lập — chúng cùng đọc một bộ cung. Đo được
+//    `nhip ↔ van-dong` **+0,71**, `nhip ↔ thien-nhien` −0,55, `nhay ↔ hieu-minh`
+//    +0,48. Hình nào nạp hai chiều tương quan mạnh CÙNG chiều thì tự cộng điểm
+//    (đếm hai lần một tín hiệu); nạp hai chiều tương quan mạnh NGƯỢC chiều thì
+//    tự triệt tiêu. Bản đầu dính cả hai: `van-dong` nạp nhip+van-dong ⇒ **27,6%**,
+//    `ben-bi` kéo −nhay ngược hieu-minh ⇒ **4,4%**.
+//    ⇒ **Trong MỘT hình, không nạp hai chiều |corr| > 0,45.** Sau khi tách:
+//      cả 9 hướng sống ở **8,2–14,8%** (bản 21 trục 4,7–21,0), bộ-3 hay gặp
+//      nhất 1/28 (trước 1/17), cặp hình giống nhau nhất 0,40.
+// 3. Trục ĐƯỢC khai số âm — trục hai cực, cực thấp có nội dung thật (đó là cả
+//    thiết kế của `day-con`). **Chất thì KHÔNG**: số âm ở chất đọc thành "hợp
+//    với đứa KÉM môn này", đúng thứ ranh giới trẻ em cấm. Có bài kiểm canh.
 //
 // ── ⚠️ RANH GIỚI, và nó là ràng buộc DỮ LIỆU chứ không phải lời dặn ──
 // Đối tượng là **một đứa trẻ chưa trưởng thành và không có mặt**. Nên module:
@@ -40,7 +58,7 @@
 //     thử rộng" — đó là lời khuyên ĐÚNG, không phải lời bào chữa cho tool.
 //
 // ── ⚠️ NGUỒN, nói rõ để khỏi mượn uy tín nhầm ──
-// `THIEN_HUONG` (9 hướng × 21 trục + toàn bộ phần chữ) là bảng QUY CHIẾU TỰ
+// `THIEN_HUONG` (9 hướng × 13 chiều + toàn bộ phần chữ) là bảng QUY CHIẾU TỰ
 // ĐẶT, cùng dạng nợ với `KIEU_HOC` của Dạy Con và `DOMAIN_NGANH` của Công Sở.
 // Cổ thư không có khái niệm "thiên hướng của trẻ" bằng thang điểm. Sửa là sửa
 // data thuần, không đụng logic.
@@ -59,11 +77,47 @@ import {
   namSinhTuLaSo,
 } from './cong-so';
 import { KHONG_DOC } from './nguoi-khac';
-import { vectorNguoi, TRUC_IDS, TRUC, type TrucId } from './nghe-nghiep';
+import {
+  assessChild,
+  TRUC,
+  TRUC_IDS,
+  KHIEU,
+  KHIEU_IDS,
+  type TrucId,
+  type KhieuId,
+  type Assessment,
+} from './day-con-assess';
 
 type Rec = Record<string, unknown>;
+
+// ── 13 chiều chấm ───────────────────────────────────────────
+// Thứ tự cố định: 5 trục trước, 8 chất sau. `hinh` của mỗi hướng khai theo id
+// nên đổi thứ tự ở đây không làm lệch bảng — nhưng vẫn giữ ổn định để số đo
+// cũ đọc lại được.
 type Vec = number[];
-const V = (o: Partial<Record<TrucId, number>>): Vec => TRUC_IDS.map((t) => o[t] ?? 0);
+type Hinh = Partial<Record<TrucId | KhieuId, number>>;
+const V = (o: Hinh): Vec => [
+  ...TRUC_IDS.map((t) => o[t] ?? 0),
+  ...KHIEU_IDS.map((k) => o[k] ?? 0),
+];
+
+/**
+ * Vector người: 13 chiều, quy về đơn vị ĐỘ LỆCH CHUẨN quanh mốc 5.
+ *
+ * `day-con-assess` đã chuẩn hoá sẵn từng chiều về TB 5 / sd 1,8 trên lưới 6.048
+ * lá số trẻ em, nên ở đây chỉ việc dời gốc — KHÔNG z-score lại lần nữa (làm thế
+ * là chuẩn hoá hai lần, và luật 1 của `nghe-nghiep.ts` vẫn giữ nguyên: không
+ * z-score phía NGƯỜI theo từng lá số).
+ */
+const SD = 1.8;
+function vector13(a: Assessment): Vec {
+  const t = Object.fromEntries(a.truc.map((x) => [x.id, x.diem]));
+  const k = Object.fromEntries(a.khieu.map((x) => [x.id, x.diem]));
+  return [
+    ...TRUC_IDS.map((id) => ((t[id] ?? 5) - 5) / SD),
+    ...KHIEU_IDS.map((id) => ((k[id] ?? 5) - 5) / SD),
+  ];
+}
 
 // ── Lứa tuổi ────────────────────────────────────────────────
 // Ba lớp, không phải bốn: hoạt động cho đứa 5 tuổi và đứa 7 tuổi gần như một,
@@ -199,8 +253,12 @@ export interface HuongDef {
   chatViec: string;
   /** Nghề có chất đó. CHỈ hiện từ lứa `giua` trở lên, và luôn là "để hình dung". */
   ngheViDu: string[];
-  /** Hình 21 trục. CHỈ THÀNH PHẦN DƯƠNG — xem luật ở đầu file. */
-  hinh: Partial<Record<TrucId, number>>;
+  /**
+   * Hình 13 chiều (5 trục + 8 chất của `day-con-assess`) — xem 3 luật viết ở
+   * đầu file. Tóm tắt: trục ĐƯỢC âm, chất KHÔNG; và không nạp hai chiều
+   * |corr| > 0,45 trong cùng một hình.
+   */
+  hinh: Hinh;
 }
 
 export const THIEN_HUONG: Record<HuongId, HuongDef> = {
@@ -247,7 +305,9 @@ export const THIEN_HUONG: Record<HuongId, HuongDef> = {
       'Nghiên cứu ứng dụng, phát triển sản phẩm',
       'Kỹ thuật viên chẩn đoán, sửa chữa chuyên sâu',
     ],
-    hinh: { hamTimHieu: 2.1, chuDong: 1.7, sangTao: 1.1, chiuMoHo: 1.2 },
+    // Neo T:nep THẤP — "chưa theo nếp, còn đang thử". Nhịp nhanh là phần của
+    // hướng này, vì thế `van-dong` CỐ Ý không nạp `nhip` nữa (corr +0,71).
+    hinh: { nep: -1.8, nhip: 0.9, 'suy-luan': 0.7, 'hinh-khoi': 0.5 },
   },
 
   'dan-dat': {
@@ -293,7 +353,10 @@ export const THIEN_HUONG: Record<HuongId, HuongDef> = {
       'Chỉ huy công trường, quản lý vận hành',
       'Quản lý dịch vụ, nhà hàng, khách sạn',
     ],
-    hinh: { camTrich: 2.1, tuTin: 1.7, chuDong: 1.3, chinhTruc: 1.1, chiTienThu: 1.0 },
+    // Neo K:hieu-nguoi + GIỮ Ý MÌNH (hoa thấp) — người DẪN, không phải người hoà.
+    // Chính trục `hoa` tách hướng này khỏi `giao-thiep` (cùng đọc người nhưng
+    // ngược cực): bản đầu để hai hình cosine 0,86 và chúng nuốt nhau.
+    hinh: { 'hieu-nguoi': 2.2, hoa: -1.0, huong: 0.7 },
   },
 
   'tuong-tuong': {
@@ -339,7 +402,9 @@ export const THIEN_HUONG: Record<HuongId, HuongDef> = {
       'Kiến trúc, thiết kế sản phẩm',
       'Sáng tạo nội dung, đạo diễn',
     ],
-    hinh: { sangTao: 2.3, chiuMoHo: 1.4, uyenChuyen: 1.0, tuTin: 0.6 },
+    // Neo K:hinh-khoi. `am-nhac` corr +0,42 — chấp nhận vì đó ĐÚNG là một cụm
+    // thẩm mỹ, không phải hai tín hiệu rời bị đếm hai lần.
+    hinh: { 'hinh-khoi': 2.0, 'am-nhac': 1.1, nep: -0.6 },
   },
 
   'cham-soc': {
@@ -385,7 +450,8 @@ export const THIEN_HUONG: Record<HuongId, HuongDef> = {
       'Giáo viên, nhất là bậc nhỏ',
       'Nhân sự, chăm sóc khách hàng chuyên sâu',
     ],
-    hinh: { thauCam: 2.1, chanThanh: 1.7, khiemNhuong: 1.5, hopTac: 1.4, lacQuan: 0.9 },
+    // Neo K:thien-nhien. Bỏ `nhay` (corr +0,49 với thien-nhien ⇒ đếm hai lần).
+    hinh: { 'thien-nhien': 2.1, 'hieu-nguoi': 0.8, hoa: 0.7 },
   },
 
   'lam-dung': {
@@ -431,7 +497,8 @@ export const THIEN_HUONG: Record<HuongId, HuongDef> = {
       'Luật, công chứng, tuân thủ',
       'Quản lý chất lượng, an toàn',
     ],
-    hinh: { tiMi: 2.1, dangTinCay: 1.8, thanTrong: 1.5, chinhTruc: 1.2 },
+    // Hình DUY NHẤT neo vào một trục ở cực CAO.
+    hinh: { nep: 2.0, 'suy-luan': 0.8, 'hinh-khoi': 0.4 },
   },
 
   'ben-bi': {
@@ -477,7 +544,9 @@ export const THIEN_HUONG: Record<HuongId, HuongDef> = {
       'Vận động viên, nhạc công chuyên nghiệp',
       'Kỹ thuật chuyên sâu, lập trình hệ thống',
     ],
-    hinh: { benBi: 2.1, tuChu: 1.7, chiuApLuc: 1.2, tiMi: 0.9 },
+    // Neo K:hieu-minh. Bỏ hẳn `nhay` (+0,48 với hieu-minh) và `van-dong` (−0,48):
+    // bản đầu nạp cả hai NGƯỢC chiều nên tự triệt tiêu, chỉ còn 4,4%.
+    hinh: { 'hieu-minh': 2.0, nep: 0.9 },
   },
 
   'giao-thiep': {
@@ -523,7 +592,8 @@ export const THIEN_HUONG: Record<HuongId, HuongDef> = {
       'Tư vấn, đàm phán thương mại',
       'Luật sư tranh tụng, đại diện',
     ],
-    hinh: { huongNguoi: 2.1, uyenChuyen: 1.6, tuTin: 1.3, lacQuan: 1.2, chiTienThu: 1.0 },
+    // Neo K:ngon-ngu + THUẬN nhóm (hoa cao) — ngược hẳn `dan-dat` ở trục `hoa`.
+    hinh: { 'ngon-ngu': 2.0, huong: 1.0, hoa: 0.7 },
   },
 
   'suy-luan': {
@@ -569,7 +639,7 @@ export const THIEN_HUONG: Record<HuongId, HuongDef> = {
       'Tài chính, thẩm định, quản trị rủi ro',
       'Kỹ thuật thiết kế, quy hoạch',
     ],
-    hinh: { hamTimHieu: 1.9, tiMi: 1.6, thanTrong: 1.2, tuChu: 0.8 },
+    hinh: { 'suy-luan': 2.2, huong: -0.8 },
   },
 
   'van-dong': {
@@ -615,26 +685,21 @@ export const THIEN_HUONG: Record<HuongId, HuongDef> = {
       'Cứu hộ, an ninh, quân đội',
       'Kinh doanh có địa bàn, phát triển thị trường',
     ],
-    hinh: { chuDong: 2.0, chiuApLuc: 1.5, tuTin: 1.4, benBi: 1.2, chiTienThu: 1.0 },
+    // Neo K:van-dong. Bỏ `nhip` (+0,71!) và `nhay` (−0,47) — chính hai cái đó
+    // thổi hình này lên 27,6% ở lượt đo đầu.
+    hinh: { 'van-dong': 2.2, hoa: -0.4 },
   },
 };
 
 export const HUONG_IDS = Object.keys(THIEN_HUONG) as HuongId[];
 
 // ── Chấm ────────────────────────────────────────────────────
-// Hình đã TRỪ NỀN một lần lúc nạp module (xem luật ở đầu file). Tính sẵn thay
-// vì tính mỗi lượt: bảng là hằng, và tính lại mỗi lượt là mời một lỗi trôi.
-const HINH_VEC: Record<HuongId, Vec> = (() => {
-  const tho = Object.fromEntries(
-    HUONG_IDS.map((id) => [id, V(THIEN_HUONG[id].hinh)]),
-  ) as Record<HuongId, Vec>;
-  const nen = TRUC_IDS.map(
-    (_, i) => HUONG_IDS.reduce((s, id) => s + tho[id][i], 0) / HUONG_IDS.length,
-  );
-  return Object.fromEntries(
-    HUONG_IDS.map((id) => [id, tho[id].map((x, i) => x - nen[i])]),
-  ) as Record<HuongId, Vec>;
-})();
+// KHÔNG còn bước trừ nền của bản 21 trục: 13 chiều đã z-score sẵn từng chiều
+// nên nền phẳng từ gốc (xem luật 1 ở đầu file). Tính sẵn một lần lúc nạp
+// module — bảng là hằng, tính lại mỗi lượt là mời một lỗi trôi.
+const HINH_VEC: Record<HuongId, Vec> = Object.fromEntries(
+  HUONG_IDS.map((id) => [id, V(THIEN_HUONG[id].hinh)]),
+) as Record<HuongId, Vec>;
 
 function cosine(a: Vec, b: Vec): number {
   let d = 0, na = 0, nb = 0;
@@ -642,8 +707,34 @@ function cosine(a: Vec, b: Vec): number {
   return na && nb ? d / Math.sqrt(na * nb) : 0;
 }
 
-/** Ngưỡng "nghiêng hẳn". Dưới ngưỡng ⇒ `chuaRoNet` (đo được 6,1% lá số). */
-const NGUONG = 0.25;
+/**
+ * Ngưỡng "nghiêng hẳn". Dưới ngưỡng ⇒ `chuaRoNet`.
+ *
+ * Chọn 0,20 để tỉ lệ `chuaRoNet` (**7,1%**) bám sát mức của bản 21 trục (6,6%):
+ * đổi TẦNG CHẤM thì không được lặng lẽ đổi luôn tần suất tool nói "chưa rõ
+ * nét" — đó là một câu người dùng đọc được, không phải một hằng số nội bộ.
+ * Đo trên 2.496 lá số: 0,18 → 5,4% · 0,20 → 7,1% · 0,25 → 11,9%.
+ */
+const NGUONG = 0.2;
+
+/**
+ * Chất điểm THẤP đọc thế nào — luôn nói về VIỆC, không nói về đứa trẻ.
+ *
+ * 🔴 Đây là chỗ nguy hiểm nhất của cả module. Trục thì hai cực đều có nội dung
+ * thật nên không có đường đọc thành lời chê; CHẤT thì có. Nên phần chữ ở đây
+ * tôi viết riêng, cố ý KHÔNG mượn `motCau` của `KHIEU` (câu đó tả năng khiếu,
+ * ghép vào ngữ cảnh "thấp" là thành lời chê ngay).
+ */
+const CHAT_KHONG_DOI_HOI: Record<KhieuId, string> = {
+  'ngon-ngu': 'Việc hợp với cháu không đòi hỏi phải nói nhiều hay diễn đạt trước đám đông',
+  'suy-luan': 'Việc hợp với cháu không đòi hỏi phải ngồi lần ra quy luật hay tính toán dài',
+  'hinh-khoi': 'Việc hợp với cháu không đòi hỏi con mắt hình khối hay thẩm mỹ',
+  'van-dong': 'Việc hợp với cháu không đòi hỏi phải khéo tay hay vận động nhiều',
+  'am-nhac': 'Việc hợp với cháu không đòi hỏi tai nhạc hay cảm nhịp',
+  'hieu-nguoi': 'Việc hợp với cháu không đòi hỏi phải đọc ý người khác hay giữ nhịp một nhóm',
+  'hieu-minh': 'Việc hợp với cháu không đòi hỏi phải tự học một mình trong thời gian dài',
+  'thien-nhien': 'Việc hợp với cháu không đòi hỏi chăm sóc cây cối, con vật hay người đang cần',
+};
 
 export interface HuongGoiY {
   id: HuongId;
@@ -652,13 +743,13 @@ export interface HuongGoiY {
   dauHieu: string[];
   /** 0–100, để XẾP THỨ TỰ. Không bày như "độ chính xác" — nó là độ nghiêng. */
   diem: number;
-  /** Trục kéo hướng này lên, đọc theo mặt CAO. */
+  /** Chiều kéo hướng này lên, đọc theo ĐÚNG cực mà đứa trẻ đang đứng. */
   vi: string[];
 }
 
 export interface HuongTreKetQua {
   goiY: HuongGoiY[];
-  /** Ba trục nổi nhất của chính lá số. */
+  /** Ba chiều nổi nhất của chính lá số (trục đọc theo cực, chất đọc khi CAO). */
   chatNguoi: { ten: string; cao: string }[];
   /**
    * Trục thấp — đọc theo mặt "việc không đòi hỏi", KHÔNG đọc là "con thiếu".
@@ -670,24 +761,47 @@ export interface HuongTreKetQua {
   chuaRoNet: boolean;
 }
 
-/** Ba thiên hướng nghiêng nhất của một lá số trẻ. */
-export function chonThienHuong(ls: Laso, soLuong = 3): HuongTreKetQua {
-  const v = vectorNguoi(ls);
-  const xep = HUONG_IDS.map((id) => ({ id, s: cosine(v, HINH_VEC[id]) })).sort((a, b) => b.s - a.s);
+/** Nhãn của chiều thứ `i`, đọc theo ĐÚNG cực đứa trẻ đang đứng. */
+function nhanChieu(i: number, val: number): { ten: string; mo: string } {
+  if (i < TRUC_IDS.length) {
+    const t = TRUC[TRUC_IDS[i]];
+    // Trục HAI CỰC: cực thấp không phải "thiếu", nó là một cách sống khác và có
+    // nội dung riêng. Đọc đúng cực chứ không mặc định đọc cực cao.
+    const c = val >= 0 ? t.cao : t.thap;
+    return { ten: t.ten, mo: `${c.nhan} — ${c.bieuHien}` };
+  }
+  const k = KHIEU[KHIEU_IDS[i - TRUC_IDS.length]];
+  return { ten: k.ten, mo: k.motCau };
+}
+
+/**
+ * Ba thiên hướng nghiêng nhất của một lá số trẻ.
+ *
+ * Nhận `Assessment` chứ không nhận `Laso`: khung 5 trục · 8 chất đắt hơn hẳn
+ * một phép tra bảng, và `computeHuongNghiepTre` còn dùng nó cho phần khác —
+ * gọi `assessChild` hai lần là làm cùng một việc hai lượt.
+ */
+export function chonThienHuong(a: Assessment, soLuong = 3): HuongTreKetQua {
+  const v = vector13(a);
+  const xep = HUONG_IDS.map((id) => ({ id, s: cosine(v, HINH_VEC[id]) })).sort((x, y) => y.s - x.s);
 
   const goiY: HuongGoiY[] = xep.slice(0, soLuong).map(({ id, s }) => {
     const h = THIEN_HUONG[id];
     const hv = HINH_VEC[id];
-    // Trục vừa mạnh ở đứa trẻ, vừa là chỗ hướng này đòi cao hơn mặt bằng.
-    // ⚠️ `manh > 0.2` là BẮT BUỘC: tích v×hình ra DƯƠNG khi CẢ HAI cùng ÂM, nên
-    // thiếu chốt này thì một trục YẾU vẫn lọt vào phần giải thích và bản đọc tự
-    // mâu thuẫn ngay trong một màn hình. Đã vấp đúng lỗi này ở tầng nhánh nghề.
-    const vi = TRUC_IDS
-      .map((t, i) => ({ t, gop: v[i] * hv[i], manh: v[i] }))
-      .filter((x) => x.gop > 0.15 && x.manh > 0.2)
-      .sort((a, b) => b.gop - a.gop)
+    // Chiều vừa ĐÓNG GÓP nhiều cho hướng này, vừa là chỗ đứa trẻ thật sự lệch.
+    // ⚠️ Chốt `Math.abs(manh) > 0.25` là BẮT BUỘC: tích v×hình ra DƯƠNG cả khi
+    // hai vế CÙNG ÂM, nên thiếu nó thì một chiều đứa trẻ gần mức giữa vẫn lọt
+    // vào phần giải thích và bản đọc tự mâu thuẫn ngay trong một màn hình. Đã
+    // vấp đúng lỗi này ở tầng nhánh nghề của Công Sở.
+    const vi = v
+      .map((val, i) => ({ i, val, gop: val * hv[i] }))
+      .filter((x) => x.gop > 0.15 && Math.abs(x.val) > 0.25)
+      .sort((p, q) => q.gop - p.gop)
       .slice(0, 3)
-      .map((x) => `${TRUC[x.t].ten} — ${TRUC[x.t].cao}`);
+      .map((x) => {
+        const n = nhanChieu(x.i, x.val);
+        return `${n.ten} — ${n.mo}`;
+      });
     return {
       id,
       ten: h.ten,
@@ -698,13 +812,29 @@ export function chonThienHuong(ls: Laso, soLuong = 3): HuongTreKetQua {
     };
   });
 
-  const xepTruc = TRUC_IDS.map((t, i) => ({ t, val: v[i] })).sort((a, b) => b.val - a.val);
+  // Chất người: chiều lệch xa mức giữa nhất, KHÔNG phân biệt trục hay chất —
+  // đó đều là "đọc được gì về đứa trẻ này".
+  const xepChieu = v
+    .map((val, i) => ({ i, val }))
+    .sort((p, q) => Math.abs(q.val) - Math.abs(p.val));
+
   return {
     goiY,
-    chatNguoi: xepTruc.filter((x) => x.val > 0.3).slice(0, 3)
-      .map((x) => ({ ten: TRUC[x.t].ten, cao: TRUC[x.t].cao })),
-    khongDoiHoi: xepTruc.filter((x) => x.val < -0.3).slice(-2)
-      .map((x) => ({ ten: TRUC[x.t].ten, thap: TRUC[x.t].thap })),
+    chatNguoi: xepChieu
+      .filter((x) => Math.abs(x.val) > 0.4)
+      .slice(0, 3)
+      .map((x) => {
+        const n = nhanChieu(x.i, x.val);
+        return { ten: n.ten, cao: n.mo };
+      }),
+    // 🔴 CHỈ lấy từ CHẤT, và chỉ khi chất đó thấp rõ. Trục thì hai cực đều có
+    // nội dung nên không có "không đòi hỏi" nào để nói; ép trục vào đây là bịa
+    // ra một lời chê từ một tính chất trung tính.
+    khongDoiHoi: KHIEU_IDS.map((id, j) => ({ id, val: v[TRUC_IDS.length + j] }))
+      .filter((x) => x.val < -0.5)
+      .sort((p, q) => p.val - q.val)
+      .slice(0, 2)
+      .map((x) => ({ ten: KHIEU[x.id].ten, thap: CHAT_KHONG_DOI_HOI[x.id] })),
     chuaRoNet: xep[0].s < NGUONG,
   };
 }
@@ -814,7 +944,9 @@ export function computeHuongNghiepTre(
     kieu: KIEU[phan.kieu],
     kieuPhu: phan.kieuPhu ? KIEU[phan.kieuPhu] : null,
     phan,
-    huong: chonThienHuong(ls),
+    // Khung 5 trục · 8 chất dựng MỘT lần rồi dùng chung — đây là nền chấm, và
+    // nó là CHÍNH khung `day-con` đang bán cạnh tool này (xem đầu file).
+    huong: chonThienHuong(assessChild(ls)),
     matDoc,
     changDangO,
     bayNghe: lop !== 'nho',
