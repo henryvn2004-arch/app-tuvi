@@ -24,25 +24,40 @@ import { createRequire } from 'module';
 const require = createRequire(import.meta.url);
 const ROOT = new URL('..', import.meta.url).pathname;
 
-// TypeScript nạp bằng require, KHÔNG bằng `import ts from 'typescript'`:
-// từ TS 6, `lib/typescript.js` gán module.exports qua một SETTER, mà bộ dò CJS
-// của Node 20 (bản CI chạy) không nhận ra → `ts` thành `undefined` và script
-// chết ở `ts.ModuleKind`. Node 22 (máy dev) thì nhận ra, nên lỗi CHỈ hiện ở CI
-// — kiểu đỏ mà chạy local mãi không tái hiện được.
-// `gen-que-images.mjs` vốn đã dùng require, chính nó không dính.
-const ts = require('typescript');
-
 const { QUE } = require(ROOT + 'public/tools-shared/kinh-dich.js');
 
-// Nạp file TS bằng cách biên dịch tại chỗ — cùng cách `gen-que-images.mjs` làm,
-// để script canh đọc CHÍNH file mà route dùng chứ không phải một bản chép.
+// Nạp file TS mà KHÔNG dùng compiler API của `typescript`.
+//
+// Vì sao: bản cũ gọi `ts.transpileModule` và chết trên CI với
+// "Cannot read properties of undefined (reading 'CommonJS')" — trên Node 20
+// (bản CI ghim) `typescript` 6.x trả về một object THIẾU `ModuleKind`, còn
+// Node 22 (máy dev) thì đủ. Đổi `import ts` → `require('typescript')` KHÔNG
+// cứu được: lượt CI sau vẫn đỏ y hệt. Đây là kiểu lỗi chỉ hiện ở CI, chạy
+// local mãi không tái hiện — và nó chặn MỌI PR trong repo.
+//
+// `que-motifs.ts` là DATA THUẦN: đúng một `export const`, không import, không
+// hàm, không `as const`. Nên bỏ hẳn compiler đi, chỉ đổi khai báo export thành
+// gán CJS. Rẻ hơn và không còn phụ thuộc cách đóng gói của TypeScript.
+// ⚠️ Phép thay phải ASSERT là đã ăn — thay hụt mà im lặng thì bộ dò tự tắt.
 const src = readFileSync(ROOT + 'lib/media/que-motifs.ts', 'utf8');
-const js = ts.transpileModule(src, {
-  compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2020 },
-}).outputText;
+const DECL = /export\s+const\s+QUE_MOTIFS\s*:\s*Record<number,\s*string\[\]>\s*=/;
+if (!DECL.test(src)) {
+  console.error(
+    '✗ check-que-motifs: không tìm thấy khai báo `export const QUE_MOTIFS: Record<number, string[]> =`\n' +
+      '  trong lib/media/que-motifs.ts. File đổi cấu trúc → sửa lại phép nạp ở đây.'
+  );
+  process.exit(1);
+}
 const mod = { exports: {} };
-new Function('module', 'exports', js)(mod, mod.exports);
+new Function('module', 'exports', src.replace(DECL, 'module.exports.QUE_MOTIFS ='))(
+  mod,
+  mod.exports
+);
 const { QUE_MOTIFS } = mod.exports;
+if (!QUE_MOTIFS || typeof QUE_MOTIFS !== 'object') {
+  console.error('✗ check-que-motifs: nạp được file nhưng QUE_MOTIFS rỗng — phép nạp hỏng.');
+  process.exit(1);
+}
 
 let bad = 0;
 const fail = (m) => {
