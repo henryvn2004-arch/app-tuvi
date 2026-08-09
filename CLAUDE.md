@@ -5,6 +5,153 @@
 
 ---
 
+## 🧭 Tool MỚI: Hướng Nghiệp Sớm Cho Con (2026-08-09, PR này)
+
+Henry: *"Sau đó làm 1 tool mới cho trẻ em - Định hướng nghề nghiệp, cũng dựa
+trên nền tool này nhưng mà mang tính định hướng hơn và đối tượng xem là bố mẹ/
+ông bà, xem xong phải suggest cách họ định hướng, các hoạt động nên làm để trẻ
+làm quen và phát huy."* → `/app/huong-nghiep-tre`, **15 Lượng**, khuôn W1.
+
+### 🔑 CÂU HỎI CHẶN đo TRƯỚC khi viết một dòng nào
+CLAUDE.md tự dặn phải đo overlap với T2 "Dạy Con" trước khi dựng. Đo trên
+**2.496 lá số trẻ em** (sinh 2008–2020):
+
+| | |
+|---|---:|
+| T2 phân trẻ thành | **4 kiểu** |
+| 21 trục cắt cùng tệp đó ra | **359 bộ trục** |
+| Hai đứa **CÙNG một kiểu**, cosine vector | **0,54** |
+| Bộ trục phổ biến nhất trong một kiểu chiếm | 5–12% |
+
+Riêng kiểu "Hỗ trợ" ra **134 bộ khác nhau**. ⇒ 4 kiểu mới nói được khoảng một
+nửa về đứa trẻ; tầng 21 trục có nội dung thật, không phải đội tên khác.
+
+### Vì sao TOOL RIÊNG mà không gộp như Công Sở
+Công Sở gộp được vì tầng nhánh trả lời **CÙNG câu hỏi** (nghề nghiệp) — chi tiết
+hoá thứ đã bày. Ở đây khác: `day-con` hỏi *dạy kiểu nào thì vào*, tool này hỏi
+*cho con làm quen với gì*. Cùng đối tượng, khác câu hỏi — như Công Sở với Luận
+Giải cùng đọc một người trưởng thành. Hai tool dùng CHUNG `phanKieu`/`KIEU` nên
+không bao giờ nói khác nhau, và **`day-con` giữ riêng cung Phụ Mẫu** (mặt "con
+nhìn cha mẹ thế nào") còn tool này KHÔNG đọc cung đó — cắt để hai bên không
+chồng lên nhau.
+- 🔴 **`day-con.ts` còn ghi luật Henry ĐÃ BÃI BỎ** (*"KHÔNG trả bảng nghề — chốt
+  nghề cho một đứa 10 tuổi là thứ nguy hiểm nhất tool này làm được"*). Đã thay
+  bằng khối đính chính dẫn nguyên văn Henry. Luật cũ nhầm **ĐỊNH HƯỚNG** với
+  **CHỐT**.
+- Ô mối lo `chon-duong` của T2 hứa *"chất việc hợp với con"* mà engine T2 không
+  tính gì về chất việc — đã ghi chú thẳng tại chỗ là phần đó nằm ở tool này.
+
+### 🔑 LUẬT CỨNG: hình thiên hướng CHỈ khai thành phần DƯƠNG
+Các trục có nền lệch nhau rất xa trên lá số trẻ em (tỉ mỉ TB **+1,26** · chính
+trực +1,08 · chịu áp lực +1,01 · hợp tác **−0,53**). Hai hệ quả, đo được cả hai:
+1. Hình nhấn vào trục nền CAO thì **tự được cộng điểm** — bản đầu `Vận động`
+   chiếm 14,7% chỉ vì nó nhấn `chịu áp lực`. Vá bằng **TRỪ NỀN** (hình trung
+   bình 9 hướng) trước khi chấm. Ở Công Sở chuyện này TỰ TRIỆT vì mọi nhánh
+   trong một lĩnh vực cùng chịu độ lệch đó; ở đây không có cổng lĩnh vực.
+2. Hình khai số **ÂM lớn** ở trục nền cao thì bị **phạt oan** — `Tưởng tượng`
+   tụt còn **0,2%**, gần như chết, vì nó khai `tiMi: −1,5`. Vá bằng cách chỉ
+   khai "hướng này cần gì", để phép trừ nền tự sinh phần âm.
+- ⚠️ **Trừ nền ở phía HÌNH, KHÔNG z-score phía NGƯỜI** — luật 1 của
+  `nghe-nghiep.ts` vẫn nguyên hiệu lực.
+- Sau khi vá: **9/9 hướng đều sống (4,7%–21,0%)**, cặp giống nhau nhất 0,40
+  (trước 0,77), bộ-3 trùng 1/17.
+- 🪤 Bản đầu có hướng `Kể chuyện` cosine **0,77** với `Giao thiệp` — cả hai dựng
+  trên `hướng người + tự tin` nên một cái nuốt cái kia (1,4%). Đổi thành **Tưởng
+  tượng · sáng tạo**, bỏ hẳn trục hướng-người: đó là đứa vẽ/bịa chuyện một mình,
+  một đứa trẻ KHÁC hẳn đứa đọc được không khí trong phòng.
+
+### Ranh giới trẻ em nằm ở TẦNG DỮ LIỆU, không chỉ ở lời dặn
+- **Cờ `bayNghe`**: dưới 8 tuổi thì `ngheViDu` trả **mảng RỖNG** ở mọi hướng.
+  Bày danh sách nghề cho đứa 5 tuổi vừa vô nghĩa vừa mời cha mẹ chốt sớm. Trang
+  là lớp thứ HAI, không phải chốt chặn duy nhất.
+- Dùng chung `KHONG_DOC` — không đọc Tật Ách, Phu Thê (hôn nhân của một đứa
+  trẻ!), Tài Bạch, Tử Tức, Điền Trạch. Không điểm tổng, không xếp hạng.
+- 🔴 **Trục thấp đọc là "việc không đòi hỏi", không phải "con thiếu".** Với trẻ
+  em luật này gắt hơn người lớn: cha mẹ đọc một câu chê rồi tin thì câu đó theo
+  đứa bé nhiều năm. Nói ở cả tầng data, tầng prompt, và in thẳng lên trang.
+- **`chuaRoNet` là trạng thái CÓ THẬT, không phải đường lùi**: 6,6% lá số không
+  hướng nào vượt ngưỡng. Trang nói thẳng *"ở tuổi này chưa rõ nét là bình
+  thường, nên cho thử rộng"* — đó là lời khuyên ĐÚNG, và prompt bị cấm giấu nó
+  để bản đọc nghe chắc chắn hơn.
+
+### Đường tiền (khuôn W1)
+Miễn phí: thiên hướng đứng đầu + **dấu hiệu quan sát được ở nhà** (thứ cha mẹ
+dùng để đối chiếu "có đúng con mình không") + chất người + cơ sở lá số.
+Trả tiền: đủ ba hướng + hoạt động theo lứa tuổi + việc người lớn nên/tránh +
+chất việc + một lượt LLM.
+- `hoSoTinhThu()` / `hoSoDayDu()` là hàm RIÊNG — đường tiền cắt được bằng MỘT
+  dòng đọc ra được, có bài kiểm canh đúng dòng đó.
+- **Ba lớp tuổi** (3–7 · 8–12 · 13–18) × 9 hướng = 27 khối hoạt động. Chia ba
+  chứ không bốn: hoạt động cho đứa 5 và đứa 7 gần như một, còn 12 với 16 khác
+  hẳn — chia theo chỗ THẬT SỰ đổi.
+- ⚠️ **`namXem` PHẢI vào khoá cache**: tool đọc TUỔI để chọn lứa hoạt động, nên
+  cùng một lá số ở hai năm phải ra hai bản. Thiếu năm trong khoá là đứa 12 tuổi
+  sang năm vẫn nhận bộ hoạt động của lứa cũ.
+- `cache-status` **tự tính năm xem qua engine**, không nhận từ query — client tự
+  khai năm là mở đường tra một khoá khác với khoá lượt dựng sẽ dùng.
+- Rail chỉ biết ba thiên hướng SAU khi mua (`railDataDayDu`) — biết sớm thì
+  người ta hỏi rail thay vì mua. Có bài kiểm canh khối vỏ không nêu tên hướng.
+- **CỐ Ý không gọi `Shell.prefillForm()`**: lá số shell đang nhớ là của NGƯỜI
+  DÙNG, form này là của CON. Đổ vào là người ta bấm luôn rồi nhận bản đọc về
+  chính mình dưới nhãn "con" — sai im lặng, không có gì báo.
+
+### Verify
+`tsc` 0 · `lint` 0 lỗi (72 warning pre-existing) · `prettier` quét cả cây sạch ·
+`check:prices`/`check:groups`/`check:nostore` sạch · engine **185 pass** ·
+`node --check` 2 khối script nội tuyến.
+- **4.680 lá số × 8 bất biến = 259.208 assertion, 0 lỗi**: đủ 3 hướng · hoạt
+  động khớp ĐÚNG lứa tuổi · trẻ nhỏ 0 tên nghề · rail phẳng · deterministic ·
+  **0 ca bản đọc tự mâu thuẫn** (trục nêu làm lý do không nằm trong "việc không
+  đòi hỏi" — đúng lỗi đã vấp ở tầng nhánh nghề).
+- **40/40 ca đọc thẳng mã nguồn**: `runPreview` không chứa một trong **10** ký
+  hiệu cấm · rẽ nhánh trước `withToolOutcome` · + ca ĐỐI CHỨNG đường trả tiền
+  PHẢI có `toolPaymentDenied` + `llmTextFull` + `hoSoDayDu` + ghi cache.
+- **19/19 ca trên ROUTE THẬT qua Next dev**: tính thử 200 không cần đăng nhập ·
+  payload thật **0 khoá trả tiền** · 0 cung cấm · `moiLo` rác rơi về danh sách
+  trắng · đường trả tiền không auth → 401.
+- **45/45 ca Playwright trên TRANG THẬT**: tính thử → 0 POST đường tiền, 0
+  `deduct`, quét toàn bộ chữ hiện ra **0 mẩu trả tiền lọt** · bấm mở → có
+  deduct + đủ ba hướng + phần miễn phí còn nguyên byte · **trẻ nhỏ → 0 tên nghề
+  lọt** · ĐỐI CHỨNG 402 → dựng lại tường, không quẳng về form · đọc hụt bảng giá
+  → **không trừ Lượng** (fail-closed) · XSS từ cả tên lẫn chuỗi server không
+  chạy · 390px không tràn.
+- 🪤 **Red-team lộ ra bài kiểm trang KHÔNG canh được rò rỉ SERVER**: bộ quét đọc
+  `innerText`, tức đo *người dùng thấy gì*, nên payload thừa không lọt màn hình
+  ⇒ 40/40 vẫn xanh khi cố ý cho preview trả bản đầy đủ. Red-team đúng tầng
+  (engine) thì bắt **18.720 lỗi đỏ** trên đúng 4 assertion. Đã biến chính tính
+  chất đó thành ca thật (CA8: server rò thì trang vẫn không vẽ).
+- 🪤 Hai ca đỏ trên route đều là **lỗi TEST**: (a) `motCau` cũng là tên trường
+  của `kieu` (câu tóm kiểu — MIỄN PHÍ) nên dò chuỗi thô báo đỏ oan, phải dò khoá
+  TOP-LEVEL; (b) token sai ra **500** thay vì 401 — nhưng `day-con` và
+  `nguoi-khac` (đang chạy prod) ra **y hệt 500** trong container này ⇒ hiện tượng
+  của môi trường (không có credential Supabase thật), không phải của tool mới.
+
+### 🐞 Bắt kèm: 7 khoá rail in NGUYÊN KHOÁ KỸ THUẬT vào prompt
+`extractGenericContext` rơi về `GENERIC_LABELS[k] || k`, nên `laiKieu: true` ·
+`cungMệnh: Cự Môn` · `hopHayVa: …` đi thẳng vào prompt. Nợ CÓ SẴN — `day-con`
+phát đúng mấy khoá đó. Vá một chỗ là cả hai tool được; nay **0 khoá thiếu nhãn**
+trên cả hai (quét 336 lá số).
+
+### CÒN LẠI
+- ⚠️ **VIỆC TAY: chạy `_patches/migration-huong-nghiep-tre.sql` rồi bật SAU KHI
+  DEPLOY**, không được trước — `cong-cu.html` và `tuvi-paywall.js` đều lọc
+  `enabled=eq.true`, bật sớm là người thật bấm vào trang chưa tồn tại:
+  ```sql
+  update tool_pricing set enabled = true, updated_at = now()
+   where tool_id = 'huong-nghiep-tre';
+  ```
+- **`THIEN_HUONG` (9 hướng × 21 trục + toàn bộ phần chữ) là bảng TỰ ĐẶT**, cùng
+  dạng nợ với `KIEU_HOC`, `DOMAIN_NGANH`, `SAO_TRUC`. Cổ thư không có khái niệm
+  "thiên hướng của trẻ" bằng thang điểm. Sửa là sửa data thuần.
+- **27 khối hoạt động chưa ai review** — đây là phần người trả tiền đọc kỹ nhất.
+- **Chưa có trang standalone SEO.** *"định hướng nghề nghiệp cho con"* có cầu
+  thật, đáng làm sau.
+- Con số cần nhìn sau 1–2 tuần: cột *mở → tính thử → bấm mở* của
+  `huong-nghiep-tre` trong panel Phễu Theo Tool, đặt cạnh `day-con` (cùng 15
+  Lượng, cùng đối tượng) để biết câu hỏi nào bán tốt hơn.
+
+---
+
 ## 📏 LUẬT CHỈ BÁO CHỜ + mở orb ra toàn site (2026-08-09, PR sau #455)
 
 Henry: *"orb cho ≥10 giây. Mấy tool luận giải chạy lâu, apply luôn. 58 tools thì
