@@ -908,7 +908,7 @@ select.form-input { cursor: pointer; }
     </div><!-- end result-sidebar -->
     <div class="result-main">
 
-    <div class="phan-loading" id="phan-loading"><div class="phan-loading-spinner"></div><div class="phan-loading-text" id="phan-loading-text">Đang tải...</div></div>
+    <div class="phan-loading" id="phan-loading"><div class="phan-loading-orb"></div><div class="phan-loading-text" id="phan-loading-text">Đang tải...</div></div>
     <div class="result-body" id="result-body"></div>
 
     </div><!-- end result-main -->
@@ -4188,6 +4188,18 @@ TuviPaywall.init({
 </div>
 
 <script src="/nav.js?v=22"></script>
+<script src="/tools-shared/ai-loading-steps.js?v=4"></script>
+<script>
+/* Chờ luận giải 24 phần là quãng chờ MỘT CỤC ≥10 giây ⇒ orb, thay spinner 28px
+   (luật ở đầu tools-shared/ai-loading-steps.js). Giữ nguyên cơ chế bật/tắt
+   bằng class .active của trang — chỉ đổi thứ nằm bên trong. */
+(function () {
+  var slot = document.querySelector('#phan-loading .phan-loading-orb');
+  if (slot && window.AiLoadingSteps && window.AiLoadingSteps.orbHtml) {
+    slot.outerHTML = window.AiLoadingSteps.orbHtml({ size: 46 });
+  }
+})();
+</script>
 <script src="/chatbot.js"></script>
 <script>
   window._tuviChatConfig = {
