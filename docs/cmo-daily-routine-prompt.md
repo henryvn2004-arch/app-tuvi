@@ -3,6 +3,18 @@
 Cặp song sinh của `coo-daily-routine-prompt.md`: một bản lo **vận hành** (07:00),
 bản này lo **tăng trưởng** (08:10).
 
+## Vì sao thay bản cũ
+
+Routine CMO cũ chạy tốt, nhưng **prompt của nó không sửa được, vĩnh viễn** —
+`update_trigger` từ chối vì nó bind vào phiên không thuộc phiên gọi. Đã đụng
+tường này một lần: muốn thêm bước đọc GA4 vào prompt mà không được, cuối cùng
+phải đi đường vòng là sửa *cron* để ghi GA4 vào DB.
+
+Nặng hơn: bản cũ ra đời **trước** track COO nên không có bước **kiểm `ts` còn
+tươi**. Cron `cmo-digest` chết một sáng thì nó đọc dòng mới nhất — của hôm qua —
+rồi trình bày như số hôm nay, im lặng. **Một báo cáo đọc số cũ trông y hệt một
+báo cáo khoẻ**, không phân biệt được bằng mắt.
+
 Cấu hình routine (MCP `claude-code-remote` → `create_trigger`):
 
 | Trường | Giá trị |
@@ -51,6 +63,16 @@ vì nó cử người đi sửa thứ không hỏng.
 Neo baseline là để routine **không kêu y hệt nhau mỗi sáng** về những chuyện đã
 kết luận xong. Bộ dò kêu nhầm mỗi ngày thì chẳng mấy chốc bị ngó lơ — hỏng đúng
 như khi nó im lặng.
+
+## Mốc 612 — vì sao nằm trong prompt
+
+`gsc.pagesWithImpressions.count` là con số Henry chốt làm **mốc quyết định hướng
+SEO** (#361): đo được **612** cuối tháng 7, hẹn đọc lại sau 2–4 tuần. Bật lên rõ
+⇒ mô hình gen trang chạy được; giậm chân ⇒ nút thắt là **thẩm quyền tên miền**,
+không phải số lượng trang, và **đừng viết thêm trang**.
+
+Một cái mốc hẹn "đọc lại sau vài tuần" thì rất dễ quên. Nhét vào báo cáo hằng
+ngày là cách rẻ nhất để nó tự nhắc. (Đo ngày 05/08: **645**.)
 
 ---
 
