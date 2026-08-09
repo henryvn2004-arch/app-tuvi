@@ -166,6 +166,7 @@
 <script src="/tuvi-paywall.js?v=17"></script>
   <script src="/nav.js?v=22" data-icons-only></script>
 <script src="/shell.js?v=64"></script>
+<script src="/tools-shared/ai-loading-steps.js?v=4"></script>
 <script>
 // ── MODE: 1 trang phục vụ 3 route — /app/xem-tuoi (vợ chồng), /app/xem-lam-an
 // (hợp tác làm ăn), /app/tuong-hop (hai người bất kỳ). Cùng bộ máy calcTuongHop;
@@ -528,7 +529,19 @@ async function _loadNextPhanAI(){
   var m=idx===0?null:_compatResult.items[idx-1];
   document.getElementById('xtProgress').textContent='Đang luận giải phần '+(idx+1)+' / 9...';
   var box=document.getElementById('claude-content-'+idx);
-  if(box){ box.style.display='block'; box.innerHTML='<div class="phan-empty">Đang luận giải…</div>'; }
+  // Chờ MỘT CỤC ≥10 giây ⇒ orb (luật ở đầu ai-loading-steps.js). expectSec:0 vì
+  // chưa đo được thời lượng một phần — chỉ đếm giây, không hứa bao giờ xong.
+  var w=null;
+  if(box){
+    box.style.display='block';
+    box.innerHTML='<div class="phan-empty">Đang luận giải…</div>';
+    if(window.AiLoadingSteps&&AiLoadingSteps.mountWait){
+      w=AiLoadingSteps.mountWait(box,{label:'Đang luận giải phần '+(idx+1)+'…',expectSec:0});
+      w.start();
+    }
+  }
+  // PHẢI stop trước mọi lượt ghi đè `box`.
+  var doneWait=function(){ if(w){ w.stop(); w=null; } };
   var secEl=document.getElementById('sec-'+idx);
   if(secEl)secEl.scrollIntoView({behavior:'smooth',block:'start'});
   try{
@@ -543,8 +556,10 @@ async function _loadNextPhanAI(){
     var data=await resp.json();
     var text=data.luanGiai||'';
     _xemTuoiStore[idx]=text;
+    doneWait();
     if(box)box.innerHTML=text.split('\n\n').filter(Boolean).map(function(p){return '<p>'+p+'</p>';}).join('');
   }catch(e){
+    doneWait();
     if(box)box.innerHTML='<div class="laso-error">Lỗi khi luận giải phần '+(idx+1)+': '+esc(e.message)+' <button class="btn" onclick="window._xtRetryPhan()">↻ Thử lại</button></div>';
     return;
   }

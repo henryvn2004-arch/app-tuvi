@@ -5,6 +5,81 @@
 
 ---
 
+## 📏 LUẬT CHỈ BÁO CHỜ + mở orb ra toàn site (2026-08-09, PR sau #455)
+
+Henry: *"orb cho ≥10 giây. Mấy tool luận giải chạy lâu, apply luôn. 58 tools thì
+nhiều chỗ > 10s mà nhỉ. Check lại cho kỹ rồi thay luôn"*.
+
+### Luật (chép trong `tools-shared/ai-loading-steps.js`, đọc trước khi thêm chỗ chờ mới)
+| Quãng chờ | Dùng |
+|---|---|
+| **≥10 giây, chờ MỘT CỤC** (LLM/sinh ảnh, màn hình đứng im) | **orb 62px** — `mountWait`, hoặc `mount` (orb bật sẵn) |
+| < 10 giây, hoặc nằm TRONG một nút/một dòng | spinner 14px `.ai-spin` |
+| Chữ CHẢY DẦN (SSE/stream) | **KHÔNG đụng** — dòng chữ đang chạy đã là chỉ báo tốt nhất |
+| Tải danh sách / điều hướng | skeleton hoặc không gì |
+
+### 🔴 ĐÍNH CHÍNH tiền đề "58 tool nhiều chỗ >10s"
+Đo thật: **44 trang** gọi endpoint LLM, nhưng **20 trong số đó STREAM** (chữ chảy
+dần) ⇒ không có quãng chờ trắng, chồng orb lên chỉ che nội dung. Số chỗ THẬT SỰ
+chờ một cục mà thiếu chỉ báo dài chỉ có **5**. Đừng đếm theo số tool.
+
+### Đã làm
+- **`mount()` bật orb MẶC ĐỊNH** → 19 trang tự đổi, 0 dòng sửa từng trang.
+- **`app-luan-giai` + `app-xem-tuoi`**: trước chỉ có **một dòng chữ TĨNH**
+  `"Đang luận giải…"` cho mỗi phần (24 và 9 phần) → nay `mountWait`.
+- **`luan-giai.html`**: đổi spinner 28px trong `.phan-loading` thành orb, **giữ
+  nguyên cơ chế bật/tắt bằng `.active`** — chỉ thay thứ nằm bên trong.
+- **`xem-tuoi` + `xem-lam-an`**: `TuviGrid.loadingHtml` nhận `opts.orb`. ⚠️ Hàm
+  này dùng ở **CẢ HAI bậc** — an sao (chạy tại máy, mili-giây) và luận giải AI.
+  Chỉ bật orb ở bậc sau; bật cả hai là orb loé rồi tắt.
+- ⛔ **KHÔNG đụng** rail chat (`.typing` 3 chấm) và spinner trong nút.
+
+### 🔑 `expectSec: 0` — KHÔNG ĐO ĐƯỢC thì KHÔNG HỨA
+`/api/lasotuvi` **không ghi `llm_usage`** (phát hiện khi đi đo — nghĩa là panel
+Biên LN đang thiếu hẳn tool luận giải, nợ riêng chưa vá) ⇒ không có số liệu thời
+lượng một phần. Nên thêm chế độ `expectSec:0`: **bỏ hẳn thanh tiến trình**, chỉ
+đếm giây, sau 45 giây thì trấn an. **Thanh chạy theo một con số bịa còn tệ hơn
+không có thanh — nó là một lời hứa, hứa hụt thì lần sau không ai tin nữa.**
+
+### 🐞 Vá cái bẫy do CHÍNH vòng trước đẻ ra
+Hàm tự-lành của `paint()` (`!el.contains(ref.note) → build()`) sẽ **dựng lại chỉ
+báo ĐÈ LÊN** nội dung nếu trang quên `stop()`. Ba chỗ đang dùng đều `stop()` đúng
+nên chưa cắn ai, nhưng sắp thêm 5 chỗ nữa. Nay đổi thành **TỰ DỪNG im lặng**.
+- 🔑 **Quên `stop()` chỉ được phép để lại một đồng hồ chạy ngầm vô hại, KHÔNG
+  được phép xoá mất kết quả của người dùng.** Ca đối chứng trên bản v1 xác nhận
+  lỗi có thật: nội dung bị wipe sau 2,5 giây.
+
+### Verify
+`tsc` 0 · `lint` 0 lỗi (72 warning pre-existing) · `prettier` sạch ·
+`check:prices`/`groups`/`nostore` sạch · engine **185 pass**.
+- **64 ca trên module thật**, gồm 🪤 **ĐỐI CHỨNG neo bản v1 đã merge** (không neo
+  bản tiền-orb — `HEAD` đã dịch): v1 mount() không orb · v1 vẫn hứa thời lượng ·
+  **v1 xoá mất kết quả khi quên stop()**.
+- **76 ca trên 12 TRANG THẬT** × 390px và 1280px: 12/12 nạp được module, 0 lỗi JS
+  · `luan-giai` orb đúng 46px và `.active` còn nguyên · **an sao KHÔNG orb, luận
+  giải CÓ orb** · `mount()` orb 54px không méo, không tràn ngang · **ghi kết quả
+  đè mà không stop → không bị vẽ đè**.
+- **60 ca hồi quy** trên 3 trang orb của vòng trước: vẫn xanh.
+- 🪤 **Ba ca đỏ, cả ba là lỗi TEST, và cả ba đều là bẫy CŨ lặp lại**:
+  (a) đo trên cây có tổ tiên `display:none` (`#result-section`) → 0×0 — lần thứ
+  hai vấp; (b) **đối chứng neo `HEAD`** nên sau khi stack thêm commit thì nó tự
+  so với chính mình — đúng thứ CLAUDE.md đã dặn "neo `origin/main`", vẫn vấp;
+  (c) lệnh thay chuỗi trong script vá bài kiểm **không khớp nên không thay gì**
+  mà vẫn in "✓" vì tao quên `assert`. 🔑 **Mọi lượt thay chuỗi bằng script phải
+  assert số lượt khớp — không thì nó thất bại IM LẶNG y như bug nó đi vá.**
+- Bump `ai-loading-steps.js?v=3→4` (24 trang) · `tuvi-grid.js?v=2→3` (3 trang).
+
+### CÒN LẠI
+- **20 trang STREAM cố ý không đụng.** Nếu sau này thấy quãng chờ tới token đầu
+  tiên lâu thì mới cân, và chỉ hiện orb tới lúc token đầu về.
+- **~26 bản `@keyframes spin` chép tay** vẫn nằm rải rác (blog, khao-luan,
+  topup, auth-callback…) — nợ DRY thật, nhưng phần lớn là chờ NGẮN nên đúng luật;
+  gom về một chỗ là refactor thuần, tách PR riêng.
+- **`/api/lasotuvi` không ghi `llm_usage`** ⇒ Biên LN thiếu tool luận giải, và
+  không đo được thời lượng để đặt ETA. Vá là mở được `expectSec` thật.
+
+---
+
 ## 🧭 Tử Vi Công Sở: thêm TẦNG NHÁNH NGHỀ (2026-08-09, PR #454)
 
 Henry mở mục Tài chính, chốt B1 = *"số tôi hợp làm ngành nào?"*. Đi qua ba lần
