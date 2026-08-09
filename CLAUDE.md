@@ -5,6 +5,345 @@
 
 ---
 
+## 🧭 Tool MỚI: Hướng Nghiệp Sớm Cho Con (2026-08-09, PR này)
+
+Henry: *"Sau đó làm 1 tool mới cho trẻ em - Định hướng nghề nghiệp, cũng dựa
+trên nền tool này nhưng mà mang tính định hướng hơn và đối tượng xem là bố mẹ/
+ông bà, xem xong phải suggest cách họ định hướng, các hoạt động nên làm để trẻ
+làm quen và phát huy."* → `/app/huong-nghiep-tre`, **15 Lượng**, khuôn W1.
+
+### 🔑 CÂU HỎI CHẶN đo TRƯỚC khi viết một dòng nào
+CLAUDE.md tự dặn phải đo overlap với T2 "Dạy Con" trước khi dựng. Đo trên
+**2.496 lá số trẻ em** (sinh 2008–2020):
+
+| | |
+|---|---:|
+| T2 phân trẻ thành | **4 kiểu** |
+| 21 trục cắt cùng tệp đó ra | **359 bộ trục** |
+| Hai đứa **CÙNG một kiểu**, cosine vector | **0,54** |
+| Bộ trục phổ biến nhất trong một kiểu chiếm | 5–12% |
+
+Riêng kiểu "Hỗ trợ" ra **134 bộ khác nhau**. ⇒ 4 kiểu mới nói được khoảng một
+nửa về đứa trẻ; tầng 21 trục có nội dung thật, không phải đội tên khác.
+
+### Vì sao TOOL RIÊNG mà không gộp như Công Sở
+Công Sở gộp được vì tầng nhánh trả lời **CÙNG câu hỏi** (nghề nghiệp) — chi tiết
+hoá thứ đã bày. Ở đây khác: `day-con` hỏi *dạy kiểu nào thì vào*, tool này hỏi
+*cho con làm quen với gì*. Cùng đối tượng, khác câu hỏi — như Công Sở với Luận
+Giải cùng đọc một người trưởng thành. Hai tool dùng CHUNG `phanKieu`/`KIEU` nên
+không bao giờ nói khác nhau, và **`day-con` giữ riêng cung Phụ Mẫu** (mặt "con
+nhìn cha mẹ thế nào") còn tool này KHÔNG đọc cung đó — cắt để hai bên không
+chồng lên nhau.
+- 🔴 **`day-con.ts` còn ghi luật Henry ĐÃ BÃI BỎ** (*"KHÔNG trả bảng nghề — chốt
+  nghề cho một đứa 10 tuổi là thứ nguy hiểm nhất tool này làm được"*). Đã thay
+  bằng khối đính chính dẫn nguyên văn Henry. Luật cũ nhầm **ĐỊNH HƯỚNG** với
+  **CHỐT**.
+- Ô mối lo `chon-duong` của T2 hứa *"chất việc hợp với con"* mà engine T2 không
+  tính gì về chất việc — đã ghi chú thẳng tại chỗ là phần đó nằm ở tool này.
+
+### 🔄 ĐỔI TẦNG CHẤM: dựng THẲNG trên 5 trục · 8 chất của `#458`
+Henry: *"Ok làm theo đề xuất của mày đi"* — chốt phương án tôi đề nghị ở cuối
+vòng trước thay vì ship bản vá bằng lời khai.
+
+**Bệnh:** bản đầu chấm trên 21 trục riêng của `nghe-nghiep.ts`, không dính gì
+tới khung `day-con` bán ngay cạnh. Đo ra: bé có CHẤT #1 bên kia là *"Hiểu người
+& dẫn nhóm"* thì bản đó xếp #1 là *"Tỉ mỉ · làm cho đúng"* ở **65%** số ca.
+
+**Vá:** chấm thẳng trên chính 13 chiều `day-con` đo. Hai tool không thể lệch
+nhau về NGUYÊN TẮC nữa, chứ không phải nhờ một câu chú thích.
+
+| Đo trên 2.496 lá số | 21 trục | 13 chiều |
+|---|---:|---:|
+| Chất#1 → đúng hướng kỳ vọng ở **#1** | 38,5% | **61,7%** |
+| …lọt **TOP-3** (thứ phụ huynh thật sự đọc) | — | **91,2%** |
+| Ca nghịch tai `hiểu người` → `tỉ mỉ` | **65%** | **24,6%** |
+| …và `dẫn dắt` vẫn lọt top-3 cho nhóm đó | — | **92,6%** |
+
+- ✅ **Ranh giới Phụ Mẫu vẫn giữ** — kiểm TRƯỚC khi mượn vector: `assess` đọc
+  Mệnh · Thiên Di · Phúc Đức · Quan Lộc · Huynh Đệ · Nô Bộc, **không có Phụ
+  Mẫu**. Mượn nền của nó không phá được thế phân vai với `day-con`.
+- **Không còn 100% là ĐÚNG, không phải thiếu sót**: `day-con` đo NĂNG KHIẾU
+  (giỏi MÔN gì), tool này đo CHẤT VIỆC (hợp KIỂU LÀM VIỆC nào). Chung thước đo,
+  khác câu hỏi.
+- 🔑 **Toàn bộ mẹo TRỪ NỀN + "chỉ khai thành phần dương" của bản cũ BỊ GỠ** —
+  13 chiều đã z-score sẵn từng chiều nên nền phẳng từ gốc. Bớt được một tầng
+  mẹo là bớt một chỗ trôi.
+- 🪤 **NHƯNG lộ ra một bẫy MỚI cùng họ: 13 chiều KHÔNG độc lập** (cùng đọc một
+  bộ cung). Đo được `nhip ↔ van-dong` **+0,71** · `nhip ↔ thien-nhien` −0,55 ·
+  `nhay ↔ hieu-minh` +0,48. Hình nạp hai chiều tương quan mạnh CÙNG chiều thì
+  tự cộng điểm (đếm hai lần một tín hiệu); nạp NGƯỢC chiều thì tự triệt tiêu.
+  Lượt đo đầu dính cả hai: `van-dong` nạp nhip+van-dong ⇒ **27,6%**, `ben-bi`
+  kéo −nhay ngược hieu-minh ⇒ **4,4%**, `kham-pha` **2,4%**.
+  ⇒ **Luật: trong MỘT hình không nạp hai chiều |corr| > 0,45.** Sau khi tách:
+  cả 9 hướng sống **8,2–14,8%** (bản 21 trục 4,7–21,0), bộ-3 hay gặp nhất
+  **1/28** (trước 1/17), cặp hình giống nhau nhất 0,40.
+- 🪤 `dan-dat` ↔ `giao-thiep` lượt đầu cosine **0,86** — đúng bẫy `Kể chuyện`
+  0,77 lặp lại. Tách bằng trục `hoa`: dẫn dắt **giữ ý mình** (hoa thấp), giao
+  thiệp **thuận nhóm** (hoa cao). Hai hình cùng đọc người nhưng ngược cực.
+- **Ngưỡng 0,25 → 0,20** để `chuaRoNet` giữ **7,1%**, bám mức cũ 6,6%: đổi tầng
+  chấm thì KHÔNG được lặng lẽ đổi luôn tần suất tool nói "chưa rõ nét" — đó là
+  một câu người dùng đọc được, không phải hằng số nội bộ.
+- 🔴 **Bất biến tự-mâu-thuẫn nay BẤT KHẢ THI VỀ CẤU TRÚC, không nhờ bộ lọc**:
+  `khongDoiHoi` chỉ lấy từ CHẤT âm, mà trọng số chất luôn ≥ 0 ⇒ tích `val × w`
+  ≤ 0 khi val < 0 ⇒ chất thấp không bao giờ vượt nổi ngưỡng để lọt vào phần lý
+  do. Red-team gỡ chốt `|val| > 0.25` **vẫn 0 lỗi** — đúng như dự đoán; chốt đó
+  nay chỉ lọc chiều gần mức giữa (665 lượt trích dẫn yếu), không còn gánh phần
+  đúng/sai. Bất biến đáng canh vì thế là chốt GỐC: **0 hình khai chất âm**.
+- **Chất thấp có bảng chữ RIÊNG** (`CHAT_KHONG_DOI_HOI`, 8 câu tự viết), cố ý
+  KHÔNG mượn `motCau` của `KHIEU` — câu đó tả năng khiếu, ghép vào ngữ cảnh
+  "thấp" là thành lời chê ngay.
+- Lời khai trên trang + prompt rail viết lại: không còn nói *"hai trục khác
+  nhau"* (nay sai) mà nói **cùng một thước đo, khác câu hỏi**, và rail được dặn
+  NỐI hai bên lại thay vì phân trần.
+
+### 🗑️ Tầng chấm 21 trục — ĐÃ GỠ, giữ lại đây làm bài học
+Bản đầu chấm trên 21 trục của `nghe-nghiep.ts` và phải dựng hai mẹo để sống
+được: **TRỪ NỀN** (trục lá số trẻ em lệch nhau rất xa — tỉ mỉ TB +1,26 · hợp
+tác −0,53) và **chỉ khai thành phần DƯƠNG** (khai âm ở trục nền cao thì bị
+phạt oan; `Tưởng tượng` từng tụt còn **0,2%**). Cả hai nay **không còn cần** —
+13 chiều của `#458` đã z-score sẵn từng chiều.
+- 🔑 Bài học giữ lại: **mẹo bù trừ ở tầng chấm là dấu hiệu nền dữ liệu chưa
+  chuẩn hoá.** Chuẩn hoá đúng chỗ (phía dữ liệu) thì mẹo tự biến mất; càng
+  nhiều mẹo càng nhiều chỗ trôi.
+- 🪤 Và bẫy "hai hình nuốt nhau" thì **KHÔNG** biến mất theo: `Kể chuyện` ↔
+  `Giao thiệp` 0,77 ở bản 21 trục, `dan-dat` ↔ `giao-thiep` **0,86** ở bản 13
+  chiều. Đổi nền không cứu được chỗ này — phải tách bằng một chiều ngược cực.
+
+### 🧷 Bắt kèm lúc gộp `#465`: port cơ chế `_shape` cho cache
+`#465` phát hiện `portrait_cache` **khoá theo lá số, KHÔNG theo shape** — đổi
+cấu trúc payload xong thì dòng cũ vẫn trả nguyên trạng mãi mãi (bên `day-con`
+đã cắn thật: 4 khối im lặng biến mất, không lỗi nào bắn ra). Tool này có ĐÚNG
+thiết kế cache đó, và PR này vừa đổi cấu trúc payload ⇒ port ngay `SHAPE = 1` +
+`shapeStale()` + `overwrite` khi dựng lại.
+- Chưa cắn được ai vì tool còn `enabled=false`, nhưng 27 khối hoạt động **chưa
+  ai review** — sửa bảng đó là đổi payload, và lúc ấy mới cần thì đã muộn.
+- ⚠️ `_shape` **KHÔNG vào `lasoKey`**: đổi khoá là mồ côi cả cache lẫn
+  `userOwnsLaso` ⇒ người đã trả tiền bị tính lại. Giữ khoá thì lượt dựng lại
+  vẫn miễn phí đúng cho họ.
+
+### Ranh giới trẻ em nằm ở TẦNG DỮ LIỆU, không chỉ ở lời dặn
+- **Cờ `bayNghe`**: dưới 8 tuổi thì `ngheViDu` trả **mảng RỖNG** ở mọi hướng.
+  Bày danh sách nghề cho đứa 5 tuổi vừa vô nghĩa vừa mời cha mẹ chốt sớm. Trang
+  là lớp thứ HAI, không phải chốt chặn duy nhất.
+- Dùng chung `KHONG_DOC` — không đọc Tật Ách, Phu Thê (hôn nhân của một đứa
+  trẻ!), Tài Bạch, Tử Tức, Điền Trạch. Không điểm tổng, không xếp hạng.
+- 🔴 **Trục thấp đọc là "việc không đòi hỏi", không phải "con thiếu".** Với trẻ
+  em luật này gắt hơn người lớn: cha mẹ đọc một câu chê rồi tin thì câu đó theo
+  đứa bé nhiều năm. Nói ở cả tầng data, tầng prompt, và in thẳng lên trang.
+- **`chuaRoNet` là trạng thái CÓ THẬT, không phải đường lùi**: 6,6% lá số không
+  hướng nào vượt ngưỡng. Trang nói thẳng *"ở tuổi này chưa rõ nét là bình
+  thường, nên cho thử rộng"* — đó là lời khuyên ĐÚNG, và prompt bị cấm giấu nó
+  để bản đọc nghe chắc chắn hơn.
+
+### Đường tiền (khuôn W1)
+Miễn phí: thiên hướng đứng đầu + **dấu hiệu quan sát được ở nhà** (thứ cha mẹ
+dùng để đối chiếu "có đúng con mình không") + chất người + cơ sở lá số.
+Trả tiền: đủ ba hướng + hoạt động theo lứa tuổi + việc người lớn nên/tránh +
+chất việc + một lượt LLM.
+- `hoSoTinhThu()` / `hoSoDayDu()` là hàm RIÊNG — đường tiền cắt được bằng MỘT
+  dòng đọc ra được, có bài kiểm canh đúng dòng đó.
+- **Ba lớp tuổi** (3–7 · 8–12 · 13–18) × 9 hướng = 27 khối hoạt động. Chia ba
+  chứ không bốn: hoạt động cho đứa 5 và đứa 7 gần như một, còn 12 với 16 khác
+  hẳn — chia theo chỗ THẬT SỰ đổi.
+- ⚠️ **`namXem` PHẢI vào khoá cache**: tool đọc TUỔI để chọn lứa hoạt động, nên
+  cùng một lá số ở hai năm phải ra hai bản. Thiếu năm trong khoá là đứa 12 tuổi
+  sang năm vẫn nhận bộ hoạt động của lứa cũ.
+- `cache-status` **tự tính năm xem qua engine**, không nhận từ query — client tự
+  khai năm là mở đường tra một khoá khác với khoá lượt dựng sẽ dùng.
+- Rail chỉ biết ba thiên hướng SAU khi mua (`railDataDayDu`) — biết sớm thì
+  người ta hỏi rail thay vì mua. Có bài kiểm canh khối vỏ không nêu tên hướng.
+- **CỐ Ý không gọi `Shell.prefillForm()`**: lá số shell đang nhớ là của NGƯỜI
+  DÙNG, form này là của CON. Đổ vào là người ta bấm luôn rồi nhận bản đọc về
+  chính mình dưới nhãn "con" — sai im lặng, không có gì báo.
+
+### 🔍 Soi 27 khối hoạt động — 3 lỗi thật, và một lời khai của tao hẹp hơn tên gọi
+Phần này là thứ người TRẢ TIỀN đọc kỹ nhất mà không bất biến nào với tới: mọi
+bài kiểm khác nói về CẤU TRÚC (điểm giảm dần, đủ ba hướng, rail phẳng), không
+nói gì về CHỮ. Soi tay 108 hoạt động (9 hướng × 3 lứa × 4 ô) bằng phép đo.
+
+- 🔴 **`bayNghe` KHÔNG với tới chữ trong `hoatDong`** — nó chỉ làm rỗng mảng
+  `ngheViDu`. `giao-thiep/nho` vì thế ghi *"Trò chơi đổi vai: bán hàng, bác sĩ,
+  cô giáo"* và **đi thẳng ra trang cho đứa 5 tuổi**. Bản thân trò đóng vai là
+  hoạt động ĐÚNG cho lứa đó; cái sai là gọi tên nghề — trên một trang tên là
+  *hướng nghiệp cho con*, danh từ nghề đứng cạnh thiên hướng đọc thành lời gợi ý
+  chốt nghề. Sửa thành *"đổi vai có hai phía: người mua kẻ bán, người hỏi người
+  trả lời"* — giữ nguyên độ cụ thể, bỏ nhãn nghề.
+  🔑 **Và đây là chỗ tao phải đính chính chính mình:** câu verify *"trẻ nhỏ → 0
+  tên nghề lọt"* ĐÚNG trong phạm vi nó đo (các phần tử của `ngheViDu`) nhưng
+  **hẹp hơn hẳn cái tên gọi của nó**. Bài kiểm đặt tên theo điều muốn chứng
+  minh, không theo điều thực sự đo — loại sai lệch tự đánh lừa nguy hiểm nhất.
+- 🪤 **Bẫy "hai hình nuốt nhau" LỘ LẠI Ở TẦNG CHỮ**: `dan-dat/lon` và
+  `giao-thiep/giua` cùng ghi *"Bán một thứ có thật…"* (Jaccard **0,55**). Đúng
+  cặp đã phải tách ở TẦNG CHẤM (cosine 0,86) — **sửa trọng số không cứu được
+  chỗ này**. Ô đó còn lạc khỏi chính khối của nó (ba ô kia đều là *dẫn người*).
+  Thay bằng *"dẫn một nhóm qua một lần bất đồng thật — nơi nó phải chốt trong
+  khi vài người không đồng ý"*: đúng cực `hoa` thấp phân biệt dẫn dắt với giao
+  thiệp.
+- Ô thứ ba: hai khối mở đầu y hệt *"Học nghiêm túc một môn…"* (0,36) — đổi một bên.
+
+**Hai con số trả lời hai mối lo đang treo trong mục CÒN LẠI:**
+| | |
+|---|---:|
+| Chồng lấn giữa 3 lứa trong cùng một hướng (Jaccard) | **≤ 0,15** cả 9 hướng |
+| Hoạt động cần TIỀN / dịch vụ gần nhà | **11/108 = 10,2%** |
+⇒ Chia ba lứa **có nội dung thật**, không phải đội tên khác (mốc trước chỉ là
+lập luận "chia theo chỗ THẬT SỰ đổi", nay có số). Và lo "chưa phân theo vùng"
+nhẹ hơn tưởng: **90% hoạt động làm được không cần tiền**, không khối nào có quá
+nửa số ô cần chi.
+
+### 🧷 `scripts/check-hoat-dong-tre.mjs` (bộ dò thứ 10) — chặn tái phát
+Ba luật, **cả ba rút từ lỗi vừa bắt được thật**, không phải lo hão: lứa 3–7 cấm
+tên nghề · lứa 3–7 cấm ngôn ngữ thi thố · hai hướng khác nhau cấm gợi cùng một
+việc (Jaccard < 0,5). Cộng chốt đếm: đúng 27 khối, mỗi khối **≥ 4 ô**.
+- **Luật 2 chỉ khoá ĐÚNG lứa nhỏ, không cấm tiệt**: đo ra 9 hoạt động có chữ
+  thi/giải/cấp bậc và **cả 9 đều ở lứa 8–12 và 13–18**, 0 ở lứa 3–7. Đó là hình
+  dạng ĐÚNG (thi đấu có chỗ của nó với trẻ lớn) — chốt lại để lượt sửa sau không
+  lặng lẽ kéo nó xuống, chứ không phải để dọn dẹp.
+- 🪤 **Red-team lộ ngưỡng của chính tao sai**: đặt "khối quá mỏng" ở `< 3` thì
+  bỏ một ô (4→3) **vẫn xanh**. Ngưỡng phải là `< 4`. Bộ dò mà không red-team thì
+  con số trong nó chỉ là phỏng đoán.
+- **4/4 ca đỏ đúng · 2/2 đối chứng im** (thi thố ở lứa 13–18 hợp lệ → im; sửa
+  chữ vô hại → im), và diff sau red-team sạch đúng 3 dòng sửa thật.
+
+### ⚠️ Sửa 27 khối này về sau: khi nào phải bump `_shape`
+`_shape` gác **CẤU TRÚC payload**, không gác chữ. Đổi chữ hoạt động thì dòng
+cache cũ trả chữ CŨ (khó chịu, không vỡ); đổi/thêm/bớt KHOÁ thì trang ẩn khối
+im lặng (đúng lỗi `day-con` đã cắn). ⇒ **Sửa chữ: không bump. Đổi cấu trúc: bắt
+buộc bump.** Vòng này giữ `SHAPE = 1` vì tool còn `enabled=false`, chưa dòng
+cache nào tồn tại.
+
+### 🪤 Gộp #467: trang MỚI nằm lại phiên bản asset cũ
+#467 bump `shell.js?v=67` trên 35 trang có sẵn; trang mới của PR này không có
+trên main nên **auto-merge để nó ở `v=66`**, kèm `shell.css` lạc ở `v=17`. Không
+lỗi nào bắn ra — chỉ là một trang ăn bản shell cũ. 🔑 **Gộp base xong phải đếm
+lại phiên bản asset trên CẢ cây**, đừng tin "hết `<<<<<<<` là xong" (bài học
+`git checkout --ours` lặp lại ở dạng khác).
+
+### Verify
+`tsc` 0 · `lint` 0 lỗi (72 warning pre-existing) · `prettier` quét cả cây sạch ·
+**10/10 bộ dò sạch** (`prices`/`groups`/`nostore`/`share`/`keyframes`/
+**`hoatdong`**/`hexagrams`/`hao`/`motifs`/`terms`) · engine **185 pass** ·
+`node --check` 2 khối script.
+- **4.680 lá số × 8 bất biến = 259.208 assertion, 0 lỗi**: đủ 3 hướng · hoạt
+  động khớp ĐÚNG lứa tuổi · trẻ nhỏ 0 tên nghề · rail phẳng · deterministic ·
+  **0 ca bản đọc tự mâu thuẫn** (trục nêu làm lý do không nằm trong "việc không
+  đòi hỏi" — đúng lỗi đã vấp ở tầng nhánh nghề).
+- **26.362 assertion RIÊNG cho tầng chấm mới** trên 2.496 lá số: điểm giảm dần
+  và trong dải · 0 rò `undefined`/`NaN`/`[object` · deterministic · 0 ca tự mâu
+  thuẫn · tính thử **0 khoá trả tiền** · trẻ nhỏ 0 tên nghề · rail phẳng.
+- **Tần suất khối rỗng** (trang phải chịu được): `chatNguoi` rỗng **0,0%** ·
+  `khongDoiHoi` rỗng 2,0% · hướng không có lý do 2,9%. Trang đã có nhánh ẩn.
+- 🪤 **Red-team vòng này — 2 ca, và một ca CỐ Ý không đỏ:**
+  (a) nạp lại `nhip` vào `van-dong` (corr +0,71) → **13,9% vọt lên 19,1%**, dải
+  nới từ 8,2–14,8 ra 5,8–19,1 ⇒ luật chống chồng tín hiệu có thật, đo được.
+  (b) cho một hình khai **chất ÂM** → bộ dò bắt đúng dòng, exit 1.
+  (c) gỡ chốt `|val| > 0.25` → **VẪN 0 lỗi**, đúng như dự đoán: tự mâu thuẫn
+  nay bất khả thi về CẤU TRÚC (xem trên), chốt đó chỉ còn lọc chiều gần mức
+  giữa (665 lượt trích dẫn yếu). **Ca không đỏ này là kết quả, không phải bài
+  kiểm hỏng** — nhưng phải giải thích được vì sao, nếu không nó chỉ là một bộ
+  dò câm.
+- 🪤 **Bộ dựng harness thất bại IM LẶNG**: thêm `--paths` vào dòng lệnh thì tsc
+  từ chối (TS6064) → không emit → `|| true` nuốt → phép đo chạy trên bản JS
+  **CŨ** và ra 100% một hướng. Đúng bài học "mọi lượt thay bằng script phải
+  assert". Đã thêm assert bản dựng phải chứa `day-con-assess`.
+- **40/40 ca đọc thẳng mã nguồn**: `runPreview` không chứa một trong **10** ký
+  hiệu cấm · rẽ nhánh trước `withToolOutcome` · + ca ĐỐI CHỨNG đường trả tiền
+  PHẢI có `toolPaymentDenied` + `llmTextFull` + `hoSoDayDu` + ghi cache.
+- **19/19 ca trên ROUTE THẬT qua Next dev**: tính thử 200 không cần đăng nhập ·
+  payload thật **0 khoá trả tiền** · 0 cung cấm · `moiLo` rác rơi về danh sách
+  trắng · đường trả tiền không auth → 401.
+- **61/61 ca Playwright trên TRANG THẬT**: tính thử → 0 POST đường tiền, 0
+  `deduct`, quét toàn bộ chữ hiện ra **0 mẩu trả tiền lọt** · bấm mở → có
+  deduct + đủ ba hướng + phần miễn phí còn nguyên byte · **trẻ nhỏ → 0 tên nghề
+  lọt** · ĐỐI CHỨNG 402 → dựng lại tường, không quẳng về form · đọc hụt bảng giá
+  → **không trừ Lượng** (fail-closed) · XSS từ cả tên lẫn chuỗi server không
+  chạy · 390px không tràn · **khung shell đúng chuẩn** (xem bẫy ngay dưới).
+- 🪤 **Red-team lộ ra bài kiểm trang KHÔNG canh được rò rỉ SERVER**: bộ quét đọc
+  `innerText`, tức đo *người dùng thấy gì*, nên payload thừa không lọt màn hình
+  ⇒ 40/40 vẫn xanh khi cố ý cho preview trả bản đầy đủ. Red-team đúng tầng
+  (engine) thì bắt **18.720 lỗi đỏ** trên đúng 4 assertion. Đã biến chính tính
+  chất đó thành ca thật (CA8: server rò thì trang vẫn không vẽ).
+- 🪤 Hai ca đỏ trên route đều là **lỗi TEST**: (a) `motCau` cũng là tên trường
+  của `kieu` (câu tóm kiểu — MIỄN PHÍ) nên dò chuỗi thô báo đỏ oan, phải dò khoá
+  TOP-LEVEL; (b) token sai ra **500** thay vì 401 — nhưng `day-con` và
+  `nguoi-khac` (đang chạy prod) ra **y hệt 500** trong container này ⇒ hiện tượng
+  của môi trường (không có credential Supabase thật), không phải của tool mới.
+
+### 🔴 GỘP GIỮA CHỪNG: `#458` vừa cho Dạy Con một khung RẤT GIỐNG — đo rồi mới kết luận
+Trong lúc làm PR này, `#458` merge vào main và thêm cho `day-con` (tầng **MIỄN
+PHÍ**): 5 trục tính khí + **8 CHẤT năng khiếu** + **gợi ý hoạt động theo chất ×
+nhóm tuổi**. Nghe như đúng thứ tool này làm. Đo trên 792 lá số trẻ em:
+
+| | |
+|---|---:|
+| Đoán hướng#1 (tool này) từ chất#1 (Dạy Con) | **38,5%** |
+| Mốc so: hai bảng là MỘT | 100% |
+| Mốc so: độc lập hoàn toàn | ~11% |
+| Cụm chữ **hoạt động** trùng nhau | **0/1600 (0,0%)** |
+
+⇒ **Không phải bản sao.** Hai bảng đo hai trục khác nhau: `day-con` đo **NĂNG
+KHIẾU** (con giỏi MÔN gì — ngôn ngữ, con số, âm nhạc), tool này đo **CHẤT VIỆC**
+(con hợp KIỂU LÀM VIỆC nào — tỉ mỉ, dẫn dắt, khám phá).
+
+- 🪤 **Nhưng chỗ nguy hiểm không phải trùng lặp, mà là NGHE NHƯ NÓI NGƯỢC**: bé
+  có chất #1 *"Hiểu người & dẫn nhóm"* thì tool này xếp #1 là *"Tỉ mỉ · làm cho
+  đúng"* ở **65%** số ca. Về lý thì không mâu thuẫn (hai trục), nhưng một phụ
+  huynh trả tiền cho CẢ HAI tool 15 Lượng về CÙNG một đứa trẻ sẽ đọc thành hai
+  kết luận đá nhau — và mất tin vào cả hai.
+- ✅ Vá bằng lời khai, không bằng cách đổi thuật toán: trang nói thẳng tool này
+  đo *chất việc* còn Dạy Con đo *năng khiếu*, kèm link sang; **prompt rail có
+  luật cứng** — nếu người dùng nhắc kết quả bên kia thì phải giải thích là HAI
+  TRỤC, và **TUYỆT ĐỐI không nói bên nào sai**.
+- ✅ **ĐÃ LÀM trong chính PR này** (Henry: *"Ok làm theo đề xuất của mày đi"*):
+  dựng thiên hướng thẳng trên 13 chiều của `#458`. Xem mục "ĐỔI TẦNG CHẤM" ở
+  trên — con số trong bảng này (38,5% / 0,0% / 65%) là của bản 21 trục **đã bị
+  thay**, giữ lại để so.
+
+### 🪤 DỰNG TRANG TRÊN MỘT KHUNG KHÔNG TỒN TẠI — và test của tao không bắt được
+Bản đầu của trang dựng bằng `.sidebar` / `.work` / `.work-inner` — **ba lớp
+`shell.css` KHÔNG hề khai**. 35 trang shell đều dùng `.sb` / `.ws` /
+`.ws-top` / `.ws-body`; trang mới là trang DUY NHẤT lạc khung.
+- 🔴 **Playwright vẫn xanh 45/45** vì nó chỉ kiểm NỘI DUNG (chữ hiện đúng chưa,
+  có rò tầng trả tiền không) chứ không kiểm KHUNG. Ngay cả ca "390px không tràn
+  ngang" cũng xanh — không có lưới shell thì mọi thứ xếp dọc, càng không tràn.
+- Thứ bắt được là **`check:share`** (guard của PR #456, gộp vào giữa chừng): nó
+  đòi `.ws-actions` làm chỗ chèn nút Chia sẻ. Guard viết cho việc khác lại bắt
+  đúng lỗi này — vì nó neo vào **dấu hiệu THẬT của shell**, không neo vào chữ.
+- 🔑 **Quy ước rút ra: trang shell mới phải kiểm cả KHUNG, không chỉ kiểm chữ.**
+  Đã thêm CA9 (13 assertion): đúng `aside.sb` / `main.ws#ws` / `.ws-top` /
+  `.ws-actions` / `.ws-body` / rail · đúng MỘT mốc `data-ws-result` · **0 lớp
+  chết `.work`/`.work-inner`** · và nút Chia sẻ do SHELL tự bật khi có kết quả,
+  tự gỡ khi quay về form.
+
+### 🐞 Bắt kèm: 7 khoá rail in NGUYÊN KHOÁ KỸ THUẬT vào prompt
+`extractGenericContext` rơi về `GENERIC_LABELS[k] || k`, nên `laiKieu: true` ·
+`cungMệnh: Cự Môn` · `hopHayVa: …` đi thẳng vào prompt. Nợ CÓ SẴN — `day-con`
+phát đúng mấy khoá đó. Vá một chỗ là cả hai tool được; nay **0 khoá thiếu nhãn**
+trên cả hai (quét 336 lá số).
+
+### CÒN LẠI
+- ⚠️ **VIỆC TAY: chạy `_patches/migration-huong-nghiep-tre.sql` rồi bật SAU KHI
+  DEPLOY**, không được trước — `cong-cu.html` và `tuvi-paywall.js` đều lọc
+  `enabled=eq.true`, bật sớm là người thật bấm vào trang chưa tồn tại:
+  ```sql
+  update tool_pricing set enabled = true, updated_at = now()
+   where tool_id = 'huong-nghiep-tre';
+  ```
+- **`THIEN_HUONG` (9 hướng × 21 trục + toàn bộ phần chữ) là bảng TỰ ĐẶT**, cùng
+  dạng nợ với `KIEU_HOC`, `DOMAIN_NGANH`, `SAO_TRUC`. Cổ thư không có khái niệm
+  "thiên hướng của trẻ" bằng thang điểm. Sửa là sửa data thuần.
+- **27 khối hoạt động nay có MÁY canh, vẫn CHƯA CÓ NGƯỜI đọc.** `check:hoatdong`
+  chặn được ba lỗi đo ra được (tên nghề lứa nhỏ · thi thố lứa nhỏ · hai hướng
+  trùng việc) — nó **không** nói được hoạt động ấy có phải lời khuyên tốt cho
+  một đứa trẻ thật hay không. Đây vẫn là phần người trả tiền đọc kỹ nhất và là
+  phần duy nhất của tool chưa ai ngoài tao đọc qua.
+- **Chưa có trang standalone SEO.** *"định hướng nghề nghiệp cho con"* có cầu
+  thật, đáng làm sau.
+- Con số cần nhìn sau 1–2 tuần: cột *mở → tính thử → bấm mở* của
+  `huong-nghiep-tre` trong panel Phễu Theo Tool, đặt cạnh `day-con` (cùng 15
+  Lượng, cùng đối tượng) để biết câu hỏi nào bán tốt hơn.
+---
+
 ## 🧪 CI đo BẢN CŨ chứ không đo PR — cả 3 workflow sang preview (2026-08-09, PR #463 · #466 · PR này)
 
 Henry: *"Vercel smoke test dùng để test gì thế? Sao giờ thiết kế lại skip test
@@ -4227,6 +4566,26 @@ gỡ nào chắc chắn.
   và `unit-test` thì KHÔNG.
 - ⇒ Khi gặp ca này, chạy đủ bộ tại chỗ rồi **nói thẳng trên PR là CI vắng mặt**.
   Đừng để PR trông "xanh": xanh ở đây nghĩa là các check KHÔNG TỒN TẠI.
+
+**Thêm số liệu 2026-08-09 (PR #462), và nó ĐÍNH CHÍNH nốt cách gỡ còn lại:**
+cùng một PR, hai lượt push liền nhau ra hai kết quả khác nhau —
+| Lượt push | HEAD là gì | Kết quả |
+|---|---|---|
+| có gộp base, **HEAD CHÍNH LÀ commit merge** | merge | **đủ 7 check** |
+| có gộp base trong dải push, nhưng **HEAD là commit thường** đứng sau | thường | **chỉ `smoke` + Vercel** |
+⇒ *"Gộp base rồi push"* **KHÔNG đủ** — nghi là phải để **commit merge nằm ở
+đúng HEAD**. Chưa đủ mẫu để chốt thành luật (n=2), ghi lại để lượt sau đối
+chiếu thay vì thử mò lại từ đầu.
+- 🔑 **Trước khi tốn công kích lại CI, hỏi: CI còn thêm được gì cho ĐÚNG diff
+  này?** Lúc PR #462 gặp ca này, `playwright` và `lighthouse` còn trỏ **URL
+  prod** nên chúng đo sức khoẻ prod chứ không đo nhánh; phần thật sự phủ diff
+  chỉ còn `lint` · `typecheck` · `unit-test`, cả ba chạy tại chỗ được.
+- 🔴 **LẬP LUẬN TRÊN NAY ĐÃ HẾT HẠN — đừng chép lại.** #466 rồi #468 (gộp ngay
+  sau đó, trong cùng buổi) chuyển **cả E2E lẫn Lighthouse** sang đo **chính bản
+  preview vừa deploy**. Từ nay hai check đó vắng mặt là **mất phủ THẬT cho
+  nhánh**, không còn là "đo prod". Đây là lần thứ ba trong repo một ĐỐI CHỨNG
+  hết hạn vì chính hạ tầng nó neo vào đã đổi — xem lại mục *CI đo BẢN CŨ* ngay
+  dưới trước khi viện dẫn lập luận này.
 
 ### ⚠️ (ghi chép cũ) CI: workflow `pull_request` có lúc KHÔNG fire
 2 commit liên tiếp chỉ có Vercel + `smoke` chạy; lint/typecheck/test/lighthouse **không hề

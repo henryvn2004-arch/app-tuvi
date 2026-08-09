@@ -154,7 +154,7 @@ export interface ChatRequestV1 {
    * tự tính lại từ birth (computePastLife deterministic) — vừa an toàn, vừa
    * chắc chắn trùng nhân vật đang hiện trên màn hình.
    */
-  wrap?: 'past-life' | 'past-life-bond' | 'nguoi-khac' | 'day-con';
+  wrap?: 'past-life' | 'past-life-bond' | 'nguoi-khac' | 'day-con' | 'huong-nghiep-tre';
   /**
    * Quan hệ với người trong lá số — chỉ dùng với `wrap: 'nguoi-khac'`.
    *
@@ -315,12 +315,16 @@ export function validateChatRequest(body: unknown):
     return { ok: false, error: 'Thiếu client.platform / client.version' };
   }
 
+  // 🪤 Thêm giá trị `wrap` mới thì PHẢI thêm cả ở đây, không chỉ ở kiểu union
+  // phía trên — kiểu chỉ chặn lúc biên dịch, còn cửa thật là hàm này. Đã vấp
+  // một lần: hai tool vision thiếu trong danh sách và rail của chúng ăn 400.
   if (
     b.wrap != null &&
     b.wrap !== 'past-life' &&
     b.wrap !== 'past-life-bond' &&
     b.wrap !== 'nguoi-khac' &&
-    b.wrap !== 'day-con'
+    b.wrap !== 'day-con' &&
+    b.wrap !== 'huong-nghiep-tre'
   ) {
     return { ok: false, error: 'wrap không hợp lệ' };
   }

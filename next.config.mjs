@@ -40,6 +40,7 @@ const nextConfig = {
       { source: '/app/duyen-no-tien-kiep', destination: '/app-duyen-no-tien-kiep.html' },
       { source: '/app/nguoi-khac', destination: '/app-nguoi-khac.html' },
       { source: '/app/day-con', destination: '/app-day-con.html' },
+      { source: '/app/huong-nghiep-tre', destination: '/app-huong-nghiep-tre.html' },
       { source: '/app/nhan-mach', destination: '/app-nhan-mach.html' },
       { source: '/xem-tuoi',            destination: '/xem-tuoi.html'        },
       { source: '/xem-lam-an',          destination: '/xem-lam-an.html'      },

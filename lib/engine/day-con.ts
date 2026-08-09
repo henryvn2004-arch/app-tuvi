@@ -17,9 +17,18 @@
 // phán sai mà cha mẹ tin sẽ theo nó nhiều năm. Vì thế module:
 //   • dùng lại `KHONG_DOC` — không trả Tật Ách (bệnh), Phu Thê (hôn nhân của
 //     một đứa trẻ!), Tài Bạch, Tử Tức, Điền Trạch;
-//   • KHÔNG trả bảng nghề nghiệp (`resolveCareerBase`) dù engine có sẵn — chốt
-//     nghề cho một đứa 10 tuổi là thứ nguy hiểm nhất tool này có thể làm;
 //   • không xếp hạng, không có điểm tổng "đứa này được mấy phần".
+//
+// 🔴 ĐÍNH CHÍNH (2026-08-09): chỗ này TỪNG ghi luật "KHÔNG trả bảng nghề dù
+// engine có sẵn — chốt nghề cho một đứa 10 tuổi là thứ nguy hiểm nhất tool này
+// làm được". Henry đã lật: *"Định hướng nghề nghiệp thì định hướng để tham khảo
+// thôi. Nó giúp ích cho đứa trẻ. Mà bình thường gia đình cũng đã định hướng cho
+// nó rồi."* Luật cũ nhầm ĐỊNH HƯỚNG với CHỐT. Ranh giới còn giữ: nói bằng *xu
+// hướng và việc nên cho làm quen*, không nói bằng *nghề phải theo*.
+// ⇒ Phần hướng nghiệp nay là một tool RIÊNG (`huong-nghiep-tre.ts`), không gộp
+//   vào đây — đo được: 4 kiểu của tool này chỉ nói được khoảng một nửa (hai đứa
+//   cùng kiểu chỉ giống nhau cosine 0,54 trên 21 trục tính khí). Tool đó dùng
+//   CHUNG `phanKieu`/`KIEU` với đây nên hai bên không bao giờ nói khác nhau.
 // Tầng prompt cấm thêm một lần nữa (đỗ/trượt, so sánh anh em, "khó dạy").
 // ============================================================
 
@@ -86,6 +95,8 @@ export const MOI_LO: Record<MoiLoId, MoiLoDef> = {
   'chon-duong': {
     id: 'chon-duong',
     label: 'Sắp phải chọn trường / chọn ngành',
+    // ⚠️ Mục này CHỈ đổi giọng bản luận; phần thiên hướng và hoạt động cụ thể
+    // nằm ở tool `huong-nghiep-tre`. Đừng hứa ở đây thứ engine này không tính.
     can: 'Chất việc hợp với con, và cách hỏi con để con tự nói ra — KHÔNG phải một cái tên ngành.',
   },
   'khong-noi-chuyen': {
