@@ -90,12 +90,23 @@
    cả khung này dựng trên đúng một câu "hai cực đều có giá trị". Màu nói giá
    trị là màu phá mất câu đó. Ở đây VỊ TRÍ mang nghĩa, màu chỉ nói đậm/nhạt. */
 .fw-note{font-size:11.5px;color:#7a705f;line-height:1.7;margin-top:12px}
-.fw-step{display:inline-block;font-size:9.5px;font-weight:700;letter-spacing:1.2px;
-  background:#EFE7D6;color:#7A5F26;border-radius:4px;padding:2px 7px;margin-right:8px;vertical-align:2px}
+
+/* Vạch chia NHÓM. Cố ý KHÔNG đánh số bước: số bước là trình tự nội bộ của khung,
+   người đọc không quan tâm — mà đánh số nửa vời thì họ đi tìm mấy bước còn lại.
+   Nhãn ở đây tả NỘI DUNG nhóm, nên thiếu một khối cũng không đọc ra là hụt. */
+.dc-sec{display:flex;align-items:center;gap:11px;margin:26px 0 13px;max-width:880px}
+.dc-sec b{font-family:var(--serif);font-size:12px;font-weight:700;letter-spacing:1.7px;
+  text-transform:uppercase;color:#8a7f6a;white-space:nowrap}
+.dc-sec i{flex:1;height:1px;background:#E3DFD5;display:block}
 
 /* 5 trục — thanh hai cực */
 .tr-list{display:flex;flex-direction:column;gap:17px}
-.tr-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px;margin-bottom:7px}
+/* Điểm nằm ở CỘT RIÊNG, không nằm trong luồng chữ có thể xuống dòng. Bản đầu để
+   `flex-wrap` + `margin-left:auto` chung một hàng: trục nào tên dài là câu hỏi
+   rớt xuống dòng hai và kéo con số xuống theo ⇒ năm con số không thẳng cột, mắt
+   phải đi tìm từng cái. Việc của người đọc ở đây là SO năm trục với nhau. */
+.tr-head{display:flex;align-items:baseline;gap:10px;margin-bottom:7px}
+.tr-headmain{flex:1;min-width:0;display:flex;flex-wrap:wrap;align-items:baseline;gap:8px}
 .tr-head b{font-family:var(--serif);font-size:13.5px;color:#061A2E}
 .tr-q{font-size:11.5px;color:#7a705f}
 .tr-bar{position:relative;height:20px}
@@ -220,61 +231,59 @@
               </div>
               <div class="dc-sub">Dấu hiệu nhận ra ở nhà</div>
               <div class="dc-chips" id="dauHieuChips"></div>
+              <!-- Không lặp lại nhãn "Con là người thế nào": tiêu đề khối ngay
+                   phía trên đã nói đúng câu đó, in hai lần đọc thành lộn xộn. -->
               <div id="proseTop" style="display:none">
-                <div class="dc-sub">Con là người thế nào</div>
-                <p class="dc-para" id="conNguoi"></p>
+                <p class="dc-para" id="conNguoi" style="margin-top:16px"></p>
               </div>
             </div>
           </div>
         </div>
+
+        <!-- ── ĐO ĐƯỢC GÌ ─────────────────────────────────────────────── -->
+        <div class="dc-sec" id="secDo" style="display:none"><b>Đo được gì</b><i></i></div>
+
+        <div class="res-block" id="trucBlock" style="display:none">
+          <div class="res-block-header"><span class="res-block-title">Năm Trục Tính Khí</span></div>
+          <div class="res-block-body">
+            <div class="tr-list" id="trucList"></div>
+            <p class="fw-note"><b>5 là mức giữa</b> của hàng nghìn lá số trẻ em, không phải “được 5 trên 10”. Dải xám là vùng con dùng được cả hai kiểu. Hai đầu trục đều có giá trị.</p>
+          </div>
+        </div>
+
+        <div class="res-block" id="khieuBlock" style="display:none">
+          <div class="res-block-header"><span class="res-block-title">Tám Chất Năng Khiếu</span></div>
+          <div class="res-block-body">
+            <div class="kh-wrap" id="khieuChart"></div>
+            <p class="dc-para" id="chatNoi" style="display:none;margin-top:14px"></p>
+            <div class="kh-cards" id="khieuCards"></div>
+            <p class="fw-note">Vượt vạch đứt là chất <b>đáng cho thử</b>, không phải năng khiếu đã xác nhận. Đối chiếu với dấu hiệu ở nhà — không khớp thì tin mắt mình.</p>
+          </div>
+        </div>
+
+        <!-- ── NÊN LÀM GÌ ─────────────────────────────────────────────── -->
+        <div class="dc-sec" id="secLam" style="display:none"><b>Nên làm gì</b><i></i></div>
 
         <div class="res-block" id="loBlock" style="display:none">
           <div class="res-block-header"><span class="res-block-title" id="loTitle">Điều Bạn Đang Lo</span></div>
           <div class="res-block-body"><p class="dc-para" id="loLang"></p></div>
         </div>
 
-        <!-- ══ BẬC 1a — 5 trục tính khí ══ -->
-        <div class="res-block" id="trucBlock" style="display:none">
-          <div class="res-block-header"><span class="res-block-title"><span class="fw-step">BƯỚC 1</span>Chân Dung Theo 5 Trục</span></div>
-          <div class="res-block-body">
-            <div class="tr-list" id="trucList"></div>
-            <p class="fw-note">Thang 0–10, trong đó <b>5 là mức giữa</b> của phân bố đo trên hàng nghìn lá số trẻ em — <b>không phải “được 5 trên 10”</b>. Dải xám ở giữa là vùng con dùng được cả hai kiểu. <b>Hai đầu mỗi trục đều có giá trị</b>: không đầu nào là ưu điểm và đầu nào là nhược điểm.</p>
-          </div>
-        </div>
-
-        <!-- ══ BẬC 1b — 8 chất năng khiếu ══ -->
-        <div class="res-block" id="khieuBlock" style="display:none">
-          <div class="res-block-header"><span class="res-block-title"><span class="fw-step">BƯỚC 2</span>Tám Chất Năng Khiếu</span></div>
-          <div class="res-block-body">
-            <div class="kh-wrap" id="khieuChart"></div>
-            <p class="dc-para" id="chatNoi" style="display:none;margin-top:14px"></p>
-            <div class="kh-cards" id="khieuCards"></div>
-            <p class="fw-note">Điểm ở đây so con với <b>phân bố lá số trẻ em</b>, không so với bạn cùng lớp và không đo năng lực thật. Chất vượt vạch đứt là chất <b>đáng cho thử</b> — hãy đối chiếu với phần “dấu hiệu ở nhà”; không khớp thì tin mắt mình, đừng tin bảng.</p>
-          </div>
-        </div>
-
-        <!-- ══ BẬC 3 — định hướng ══ -->
         <div class="res-block" id="dhBlock" style="display:none">
-          <div class="res-block-header"><span class="res-block-title"><span class="fw-step">BƯỚC 3</span>Định Hướng</span></div>
+          <div class="res-block-header"><span class="res-block-title">Định Hướng</span></div>
           <div class="res-block-body">
             <p class="dc-para" id="dinhHuong"></p>
-            <p class="fw-note">Đây là <b>kiểu môi trường học</b> hợp với con, cố ý <b>không chốt ngành hay nghề</b>. Chốt nghề cho một đứa trẻ là thứ nguy hiểm nhất một bản luận có thể làm.</p>
+            <p class="fw-note">Đây là <b>kiểu môi trường học</b> hợp với con — cố ý không chốt ngành hay nghề.</p>
           </div>
         </div>
 
-        <!-- ══ BẬC 4 — phương pháp giáo dục ══ -->
+        <!-- Gộp bảng 6 thẻ + đoạn văn "vào con bằng cách nào": trước là HAI khối
+             nói cùng một việc nằm cạnh nhau, đọc thành lặp. -->
         <div class="res-block" id="howCardsBlock" style="display:none">
-          <div class="res-block-header"><span class="res-block-title"><span class="fw-step">BƯỚC 4</span>Phương Pháp Giáo Dục</span></div>
+          <div class="res-block-header"><span class="res-block-title">Cách Dạy Con Này</span></div>
           <div class="res-block-body">
             <div class="dc-how" id="howCards"></div>
-            <p class="fw-note">Phần này là <b>quy chiếu của trang</b> theo kiểu người đọc từ lá số, không phải chữ trong cổ thư.</p>
-          </div>
-        </div>
-
-        <div class="res-block" id="howBlock" style="display:none">
-          <div class="res-block-header"><span class="res-block-title">Vào Con Bằng Cách Nào</span></div>
-          <div class="res-block-body">
-            <p class="dc-para" id="vaoBangGi"></p>
+            <p class="dc-para" id="vaoBangGi" style="display:none;margin-top:15px"></p>
             <p class="dc-para" id="khoaLai" style="display:none"></p>
           </div>
         </div>
@@ -289,17 +298,19 @@
           </div>
         </div>
 
-        <!-- ══ BẬC 5 — hoạt động đề xuất ══ -->
         <div class="res-block" id="hdBlock" style="display:none">
-          <div class="res-block-header"><span class="res-block-title"><span class="fw-step">BƯỚC 5</span>Hoạt Động Nên Cho Con Thử</span></div>
+          <div class="res-block-header"><span class="res-block-title">Hoạt Động Nên Cho Con Thử</span></div>
           <div class="res-block-body">
             <p class="dc-para" id="hdBand" style="font-size:12.5px;color:#5a5145"></p>
             <p class="dc-para" id="hoatDongVi" style="display:none"></p>
             <div class="kh-cards" id="hdList"></div>
             <div class="kh-card" id="hdFormat" style="margin-top:12px"></div>
-            <p class="fw-note">Danh sách này là <b>gợi ý để thử</b>, không phải chỉ định. Cổ thư nói về chất của con người — nó không biết câu lạc bộ nào đang mở ở chỗ bạn. Cho con <b>thử một buổi</b> rồi nhìn phản ứng thật vẫn là phép kiểm chính xác hơn mọi bảng.</p>
+            <p class="fw-note">Gợi ý để thử, không phải chỉ định — cổ thư nói về chất người, nó không biết câu lạc bộ nào đang mở ở chỗ bạn. Cho con thử một buổi rồi nhìn phản ứng thật.</p>
           </div>
         </div>
+
+        <!-- ── BỐI CẢNH ───────────────────────────────────────────────── -->
+        <div class="dc-sec" id="secNen" style="display:none"><b>Bối cảnh</b><i></i></div>
 
         <div class="res-block" id="changBlock" style="display:none">
           <div class="res-block-header"><span class="res-block-title">Các Chặng Đi Học</span></div>
@@ -335,16 +346,6 @@
         <div class="res-block" id="lockBlock" style="display:none">
           <div class="res-block-header"><span class="res-block-title">Phần Luận Chưa Mở</span></div>
           <div class="res-block-body" id="lockHost" data-tvp-lock style="padding-top:6px"></div>
-        </div>
-
-        <div class="res-block" id="fwBlock" style="display:none">
-          <div class="res-block-header"><span class="res-block-title">Khung Này Là Gì</span></div>
-          <div class="res-block-body" style="font-size:12.7px;line-height:1.8;color:#2a2118">
-            <p style="margin-bottom:10px">Bản đọc đi theo năm bậc: <b>đo</b> → <b>đọc</b> → <b>định hướng</b> → <b>phương pháp</b> → <b>hoạt động</b>. Nền của nó là một câu: <b>không có tính khí tốt hay xấu — chỉ có hợp hay không hợp với cách người lớn đang làm.</b> Vì thế mọi trục đều có hai đầu và cả hai đầu đều dạy được.</p>
-            <p style="margin-bottom:10px"><b>Năm trục</b> lấy hình dạng của các bộ khí chất trẻ em hiện đại: trục liên tục thay vì bốn ô nhãn cứng, vì một đứa trẻ không “là” hướng nội — nó nằm ở đâu đó trên trục. <b>Tám chất</b> lấy hình dạng của lối đọc nhiều miền năng khiếu song song, thay vì quy tất cả về một con số thông minh.</p>
-            <p style="margin-bottom:10px">⚠️ <b>Mượn hình dạng, không mượn uy tín.</b> Đây <b>không</b> phải trắc nghiệm tâm lý, không phải bộ công cụ đã kiểm định, và số ở đây <b>không</b> phải chỉ số IQ hay EQ. Nó là một khung đọc lá số do trang dựng. Phần có gốc cổ pháp là <b>đặc chất từng ngôi sao</b> (Văn Xương chủ văn chương khoa giáp, Thiên Cơ chủ cơ trí mưu lược, Thiên Lương là ấm tinh chủ y dược che chở…); việc quy mấy đặc chất đó về năm trục và tám miền hiện đại là <b>bước dịch của trang</b>.</p>
-            <p style="margin:0">⛔ Khung cố ý <b>không</b> có mục sàng lọc hành vi hay cảm xúc bất thường. Trục “độ nhạy cảm xúc” đo <b>ngưỡng cảm nhận</b> — nó không nói gì về sức khoẻ tâm thần, và không thay được ý kiến của người có chuyên môn.</p>
-          </div>
         </div>
 
         <div class="res-block" style="background:#FBF3DE;border-color:#e8d9b0">
@@ -531,12 +532,13 @@ function _openPanel() {
   document.getElementById('resPanel').style.display = 'block';
   document.getElementById('loading').style.display = 'block';
   document.getElementById('card').style.display = 'none';
-  ['loBlock', 'trucBlock', 'khieuBlock', 'dhBlock', 'howCardsBlock', 'howBlock',
-   'doBlock', 'hdBlock', 'changBlock', 'withBlock', 'endBlock', 'fwBlock',
+  ['secDo', 'secLam', 'secNen',
+   'loBlock', 'trucBlock', 'khieuBlock', 'dhBlock', 'howCardsBlock',
+   'doBlock', 'hdBlock', 'changBlock', 'withBlock', 'endBlock',
    'basisBlock', 'lockBlock'].forEach(function (id) {
     document.getElementById(id).style.display = 'none';
   });
-  ['proseTop', 'changNay', 'voiChaMe', 'chatNoi', 'hoatDongVi'].forEach(function (id) {
+  ['proseTop', 'changNay', 'voiChaMe', 'chatNoi', 'hoatDongVi', 'vaoBangGi'].forEach(function (id) {
     document.getElementById(id).style.display = 'none';
   });
 }
@@ -609,26 +611,52 @@ async function _doGenerate(freeRerun, lo) {
     // Chia sẻ CHỈ gắn ở đường đã mở khoá (renderProse), không gắn ở lượt tính
     // thử — bản chia sẻ mà rỗng phần chữ thì người mở link không hiểu đang xem
     // gì. `Shell.setShareable` tự chèn khối lá số từ `ctx.birth` phía trên.
+    // Bản chia sẻ đi bằng `blocks` chứ không phải một cục chữ: trang /ket-qua
+    // dựng mỗi block thành MỘT thẻ có tiêu đề, y hệt bố cục ở đây. Gộp hết vào
+    // `text` thì người mở link nhận một đoạn dài không có chỗ nghỉ — và con số
+    // đo được (thứ đáng khoe nhất) chìm nghỉm giữa mấy dòng chữ.
+    var blocks = [];
+    blocks.push({
+      header: 'Chân dung',
+      text: [
+        ten + ' nghiêng về kiểu ' + data.kieu.ten + ' (' + data.kieu.tuTuong + ')',
+        data.kieu.motCau,
+        data.moiLo && data.moiLo.label ? 'Điều cha mẹ đang lo: ' + data.moiLo.label : '',
+      ].filter(Boolean).join('\n'),
+    });
+    if ((data.truc || []).length) {
+      blocks.push({
+        header: 'Năm trục tính khí',
+        text: data.truc.map(function (t) {
+          return t.ten + ' — ' + n1(t.diem) + '/10 · ' + (t.nghieng ? t.cuc.nhan : 'nằm giữa, dùng được cả hai');
+        }).join('\n') + '\n\n5 là mức giữa của hàng nghìn lá số trẻ em, không phải “được 5 trên 10”. Hai đầu trục đều có giá trị.',
+      });
+    }
+    if ((data.khieu || []).length) {
+      var noiBat = data.khieu.filter(function (k) { return k.noiBat; });
+      blocks.push({
+        header: 'Tám chất năng khiếu',
+        text: data.khieu.map(function (k) {
+          return (k.noiBat ? '★ ' : '· ') + k.ten + ' — ' + n1(k.diem) + '/10';
+        }).join('\n') + '\n\n' + (noiBat.length
+          ? '★ = vượt ngưỡng “đáng cho thử”, không phải năng khiếu đã xác nhận.'
+          : 'Chưa chất nào vượt ngưỡng — nên cho thử rộng rồi nhìn phản ứng thật.'),
+      });
+    }
+    var cuoi = [
+      data.dinhHuong ? 'Định hướng: ' + data.dinhHuong : '',
+      data.hoc && data.hoc.kyLuatHong ? 'Kỷ luật phản tác dụng: ' + data.hoc.kyLuatHong : '',
+      data.motCau ? '— ' + data.motCau : '',
+    ].filter(Boolean).join('\n\n');
+    if (cuoi) blocks.push({ header: 'Định hướng & cách dạy', text: cuoi });
+
     Shell.setShareable({
       kind: 'text',
       toolId: 'day-con',
       title: 'Dạy con theo lá số — ' + ten,
-      text: [
-        ten + ' nghiêng về kiểu ' + data.kieu.ten + ' (' + data.kieu.tuTuong + ')',
-        data.kieu.motCau,
-        (data.truc || []).length
-          ? 'Năm trục: ' + data.truc.map(function (t) {
-              return t.ten + ' ' + n1(t.diem) + (t.nghieng ? ' → ' + t.cuc.nhan : ' → nằm giữa');
-            }).join(' · ')
-          : '',
-        (data.khieu || []).filter(function (k) { return k.noiBat; }).length
-          ? 'Chất đáng cho thử: ' + data.khieu.filter(function (k) { return k.noiBat; })
-              .map(function (k) { return k.ten + ' ' + n1(k.diem) + '/10'; }).join(', ')
-          : 'Chưa chất nào nổi hẳn — nên cho thử rộng',
-        data.moiLo && data.moiLo.label ? 'Điều đang lo: ' + data.moiLo.label : '',
-        data.hoc && data.hoc.kyLuatHong ? 'Kỷ luật phản tác dụng: ' + data.hoc.kyLuatHong : '',
-        data.motCau ? '— ' + data.motCau : '',
-      ].filter(Boolean).join('\n'),
+      blocks: blocks,
+      // Đường lùi cho bản render cũ chỉ đọc `text`.
+      text: blocks.map(function (b) { return b.header + '\n' + b.text; }).join('\n\n'),
     });
   } catch (e) {
     // Giữ nguyên phần tính thử đang hiện — quẳng người ta về form trống là xoá
@@ -673,9 +701,10 @@ function renderTruc(list) {
              '<p><b>Nên:</b> ' + esc(t.canND.dayThe) + '</p>';
     }
     return '<div class="tr-row">' +
-      '<div class="tr-head"><b>' + esc(t.ten) + '</b>' +
-        '<span class="tr-q">' + esc(t.cauHoi) + '</span>' +
-        '<span class="tr-val' + (can ? ' can' : '') + '" style="margin-left:auto">' + n1(t.diem) + '/10</span></div>' +
+      '<div class="tr-head">' +
+        '<span class="tr-headmain"><b>' + esc(t.ten) + '</b>' +
+        '<span class="tr-q">' + esc(t.cauHoi) + '</span></span>' +
+        '<span class="tr-val' + (can ? ' can' : '') + '">' + n1(t.diem) + '/10</span></div>' +
       '<div class="tr-bar">' +
         '<div class="tr-track"></div><div class="tr-band"></div><div class="tr-mid"></div>' +
         '<div class="tr-dot' + (can ? ' can' : '') + '" style="left:' + pct.toFixed(1) + '%"></div>' +
@@ -799,7 +828,6 @@ function renderMeta(data) {
   renderTruc(data.truc);
   renderKhieu(data);
   renderHoatDong(data.goiYHoatDong);
-  document.getElementById('fwBlock').style.display = 'block';
 
   if (hoc.tiepThu) {
     var cards = [
@@ -879,6 +907,24 @@ function renderMeta(data) {
     document.getElementById('basisList').innerHTML = rows.join('');
     document.getElementById('basisBlock').style.display = 'block';
   }
+  _syncSections();
+}
+
+/** Vạch chia nhóm chỉ hiện khi nhóm đó THẬT SỰ có khối nào đang hiện — một cái
+ *  tiêu đề đứng trên khoảng trống còn khó hiểu hơn là không có tiêu đề. */
+var DC_SECS = [
+  ['secDo', ['trucBlock', 'khieuBlock']],
+  ['secLam', ['loBlock', 'dhBlock', 'howCardsBlock', 'doBlock', 'hdBlock']],
+  ['secNen', ['changBlock', 'withBlock', 'endBlock', 'basisBlock']],
+];
+function _syncSections() {
+  DC_SECS.forEach(function (s) {
+    var on = s[1].some(function (id) {
+      var el = document.getElementById(id);
+      return el && el.style.display !== 'none';
+    });
+    document.getElementById(s[0]).style.display = on ? 'flex' : 'none';
+  });
 }
 
 function renderProse(data) {
@@ -909,10 +955,14 @@ function renderProse(data) {
   }
 
   if (data.vaoBangGi) {
-    document.getElementById('vaoBangGi').textContent = data.vaoBangGi;
+    var vb = document.getElementById('vaoBangGi');
+    vb.textContent = data.vaoBangGi;
+    vb.style.display = 'block';
     var kl = document.getElementById('khoaLai');
     if (data.khoaLai) { kl.textContent = data.khoaLai; kl.style.display = 'block'; }
-    document.getElementById('howBlock').style.display = 'block';
+    // Đoạn văn này nay nằm TRONG khối "Cách Dạy Con Này" — ở lượt tính thử khối
+    // đó đã hiện sẵn bằng 6 thẻ, nên chỉ cần mở đoạn văn ra là đủ.
+    document.getElementById('howCardsBlock').style.display = 'block';
   }
 
   var nen = _mucHtml(data.nenLam), tranh = _mucHtml(data.tranhLam);
@@ -936,6 +986,7 @@ function renderProse(data) {
 
   if (data.motCau) document.getElementById('motCau').textContent = data.motCau;
   document.getElementById('endBlock').style.display = 'block';
+  _syncSections();
 }
 
 function showForm() {
