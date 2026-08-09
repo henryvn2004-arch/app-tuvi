@@ -129,6 +129,63 @@ Actions, tên **`VERCEL_BYPASS_SECRET`**. Xoay secret là một cú bấm, khôn
   chất này khi đọc một PR thiếu check.
 - Phạm vi lịch sử tao soi được chỉ từ **04/08** trở lại (giới hạn phân trang
   API); chưa xác minh mọi lượt đỏ trước đó cùng một nguyên nhân.
+## 🔐 Rail đòi ĐĂNG NHẬP với người ĐANG đăng nhập — đồng hồ ví chốt quá sớm (2026-08-09, PR sau #465)
+
+Henry: *"tao thử cái tool chạy ok. Xong qua rail hỏi thì nó lại báo tao phải đăng
+nhập mới hỏi dc. Trong khi tao đang đăng nhập"*.
+
+### 🔴 Không phải lỗi xác thực. Là lỗi THỜI ĐIỂM ĐỌC.
+`loadRailStatus()` chỉ chạy **một lần**, trong `setContext`. Nó đọc `getToken()`
+ngay lúc đó — mà access token Supabase sống ~1h nên **mở lại tab là hết hạn**, và
+`auth.js` phải refresh qua cookie **BẤT ĐỒNG BỘ**. Trong quãng đó `getSession()`
+trả `null` ⇒ rail hỏi `rail-status` theo đường **khách vô danh** ⇒ chốt
+`_rc.anon=true`, và máy nào đã tiêu hết 3 câu dùng thử thì đồng hồ hiện **"Đã hết
+câu dùng thử · Đăng ký nhận thêm"** cho đúng một người đang đăng nhập. Không có
+gì gọi lại, nên nó **kẹt vĩnh viễn** tới khi tải lại trang.
+- 🔑 **Đường tự lành ĐÃ CÓ SẴN cho lịch sử, chỉ thiếu cho ví.** Vòng theo dõi
+  phiên ở cuối `shell.js` bắt đúng cạnh "token vừa xuất hiện" rồi gọi
+  `pushLocalToServer()` + `refreshHistoryUI()` — chú thích ngay tại đó đã mô tả
+  chính xác cái bẫy này. `loadRailStatus()` bị bỏ quên khỏi danh sách.
+- **Bằng chứng loại trừ, đo trên prod trước khi sửa:** `anon_rail_trial` /
+  `anon_rail_hits` lần cuối động **07/08** (không phải hôm nay) và **0 giao dịch
+  `chat`** trong 6 giờ ⇒ lượt của Henry **chưa từng chạm server**. Tức không phải
+  token hỏng, không phải hết Lượng — anh nhìn đồng hồ rồi dừng lại.
+
+### Vá ba lớp
+1. **Gọi lại `loadRailStatus()` ngay khi token xuất hiện** — cùng chỗ, cùng cạnh
+   với lịch sử.
+2. **`Auth.isRestoring()` (mới)** — `loadRailStatus` **không hỏi gì** khi chưa có
+   token *và* Auth đang khôi phục: chưa biết người này là ai thì đừng kết luận là
+   khách. Nhờ vậy hết cả **cái loé ~2 giây** hiện sai, và tiết kiệm một lượt gọi
+   (`["anon","auth"]` → `["auth"]`). ⚠️ `_refreshViaServer` có **3 đường ra** —
+   phải hạ cờ bằng `finally`, kẹt cờ là kẹt luôn đồng hồ.
+3. **Vòng theo dõi dừng NGAY khi bắt được token**, và nới trần 9 → **18 giây**:
+   lượt refresh phải đi qua cookie server có thể lâu hơn 9 giây, quá hạn là kẹt.
+   Khôi phục xong mà vẫn không có token ⇒ đúng là khách ⇒ mới hỏi ví.
+
+### Verify
+`tsc` 0 · `lint` 0 lỗi (72 warning pre-existing) · `prettier` sạch · 5 bộ dò sạch
+· `node --check` `auth.js` + `shell.js`.
+- **3 ca Playwright trên TRANG THẬT**, dựng lại đúng tình huống (phiên còn hạn
+  **refresh token**, access token **đã hết hạn**, lượt refresh chậm 1,5 giây, máy
+  mang `anon_id` đã tiêu hết lượt): bản mới **không loé chữ sai** rồi về **"Còn 24
+  câu hỏi"** · 🪤 **ĐỐI CHỨNG nạp đè `shell.js` bản `origin/main`: kẹt nguyên ở
+  "Đã hết câu dùng thử · Đăng ký nhận thêm"** ⇒ lỗi có thật · **ĐỐI CHỨNG khách
+  THẬT** (không phiên, không cookie bền) vẫn thấy **"Dùng thử: còn 2 câu"** —
+  bản vá không nuốt mất đồng hồ dùng thử.
+- **6 trang shell** boot sạch: có `Shell`+`Auth`, 0 lỗi JS, 0px tràn ngang.
+- 🪤 **Lỗi của BÀI KIỂM, suýt kết luận ngược**: catch-all `page.route(SUPA+'/**')`
+  đăng ký **SAU** route riêng nên nuốt luôn lượt refresh token ⇒ cả hai bản đều
+  "hỏng" và bản vá trông như không ăn. **Catch-all phải đứng TRƯỚC** — đúng bẫy
+  CLAUDE.md đã ghi ở track Duyên Nợ, vấp lại lần thứ hai.
+- Bump `shell.js?v=66→67` (35 trang). **Không bump `auth.js`** — asset `public/`
+  trả `max-age=0, must-revalidate` nên tới người dùng ngay (tiền lệ #361).
+
+### CÒN LẠI
+- **Chưa đo trên máy thật của Henry** — mới dựng lại tình huống bằng phiên giả.
+  Dấu hiệu đã sửa đúng: mở `/app/day-con` sau khi để tab qua đêm, đồng hồ rail
+  phải hiện *"Còn N câu hỏi"* chứ không phải lời mời đăng ký.
+- `rail-status` vẫn là lượt gọi RIÊNG, chưa gộp vào lượt nào sẵn có.
 
 ---
 
