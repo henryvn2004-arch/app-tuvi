@@ -57,10 +57,13 @@ interface Muc {
 }
 interface HuongDan {
   conNguoi?: string;
+  chatNoi?: string;
+  dinhHuong?: string;
   vaoBangGi?: string;
   khoaLai?: string;
   nenLam?: Muc[];
   tranhLam?: Muc[];
+  hoatDong?: string;
   loLang?: string;
   changNay?: string;
   voiChaMe?: string;
@@ -92,6 +95,17 @@ function meta(p: DayConProfile, ten: string) {
     vanNam: p.vanNam,
     voiChaMeCoSo: p.voiChaMe,
     namXem: p.namXem,
+    // Khung "5 Trục · 8 Chất" — tra bảng thuần, 0 lượt LLM ⇒ thuộc phần TÍNH
+    // THỬ MIỄN PHÍ (W1). Tường chỉ đứng trên phần chữ do model viết.
+    truc: p.assess.truc,
+    khieu: p.assess.khieu,
+    khieuNoiBat: p.assess.noiBat.map((k) => k.id),
+    coNoiBat: p.assess.coNoiBat,
+    chatThapNhat: p.assess.canDo,
+    // 🪤 TÊN KHÁC khoá `hoatDong` mà model trả về. `payload` spread `meta()`
+    // TRƯỚC rồi mới gán các khoá chữ — trùng tên là bảng hoạt động bị đè bằng
+    // một đoạn văn, và trang mất hẳn khối gợi ý mà KHÔNG có lỗi nào bắn ra.
+    goiYHoatDong: p.hoatDong,
   };
 }
 
@@ -125,7 +139,9 @@ async function buildReport(
             : ''),
         json: true,
         jsonSchema: DAY_CON_SCHEMA,
-        maxTokens: 3200,
+        // 3.200 đủ cho 9 khoá; khung mới thêm `chatNoi`/`dinhHuong`/`hoatDong`
+        // nên nới lên — chạm trần là JSON cụt và cả lượt rơi vào nhánh thử lại.
+        maxTokens: 4400,
       });
       void logLlmUsage(TOOL_ID, r.model, {
         input_tokens: r.usage.input_tokens,
@@ -168,10 +184,15 @@ async function buildReport(
     success: true,
     ...meta(p, ten),
     conNguoi: clean(parsed.conNguoi),
+    chatNoi: clean(parsed.chatNoi),
+    dinhHuong: clean(parsed.dinhHuong),
     vaoBangGi: clean(parsed.vaoBangGi),
     khoaLai: clean(parsed.khoaLai),
     nenLam: normMuc(parsed.nenLam),
     tranhLam: normMuc(parsed.tranhLam),
+    // Không đọc được tuổi thì KHÔNG nhận phần này dù model có viết — nó sẽ là
+    // lời chung chung không dựa trên nhóm tuổi nào. Cùng lối với `voiChaMe`.
+    hoatDong: p.hoatDong ? clean(parsed.hoatDong) : '',
     loLang: clean(parsed.loLang),
     changNay: clean(parsed.changNay),
     // Không có lá số cha/mẹ thì KHÔNG nhận phần đó dù model có viết — nó sẽ là
