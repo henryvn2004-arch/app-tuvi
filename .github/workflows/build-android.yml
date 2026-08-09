@@ -83,7 +83,7 @@ jobs:
       # Đăng APK lên Releases → tải trực tiếp file .apk trên điện thoại (không zip,
       # không cần đăng nhập vì repo public). Tag cố định apk-latest → luôn ghi đè bản mới.
       - name: Publish APK to Release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           tag_name: apk-latest
           name: APK mới nhất (debug)
