@@ -169,6 +169,7 @@ window.SHELL_INTRO={key:'luan-giai',title:'Luận giải Tử Vi',desc:'Lập l�
 <script src="/tuvi-paywall.js?v=17"></script>
   <script src="/nav.js?v=22" data-icons-only></script>
 <script src="/shell.js?v=64"></script>
+<script src="/tools-shared/ai-loading-steps.js?v=4"></script>
 <script>
 // ── Form nhập (dùng chung TuviForm — có "Sinh ở ngoài Việt Nam?" + parity giờ
 // sinh lịch sử với standalone) ──
@@ -471,7 +472,22 @@ async function _loadNextPhanAI(){
   var p=_currentPhan;
   document.getElementById('lgProgress').textContent='Đang luận giải phần '+p+' / '+LuanGiaiCore.TONG_PHAN+'...';
   var box=document.getElementById('claude-content-'+p);
-  if(box){ box.style.display='block'; box.innerHTML='<div class="phan-empty">Đang luận giải…</div>'; }
+  // Chờ MỘT CỤC (không stream) và tốn hơn 10 giây ⇒ orb, theo luật ở đầu
+  // ai-loading-steps.js. Trước đây chỗ này chỉ có một dòng chữ TĨNH nên người
+  // dùng đọc thành "treo" rồi bấm lại — mà bấm lại là một lượt gọi model nữa.
+  // expectSec:0 = chưa đo được thời lượng một phần (route /api/lasotuvi không
+  // ghi llm_usage) ⇒ chỉ đếm giây, KHÔNG hứa bao giờ xong.
+  var w=null;
+  if(box){
+    box.style.display='block';
+    box.innerHTML='<div class="phan-empty">Đang luận giải…</div>';
+    if(window.AiLoadingSteps&&AiLoadingSteps.mountWait){
+      w=AiLoadingSteps.mountWait(box,{label:'Đang luận giải phần '+p+'…',expectSec:0});
+      w.start();
+    }
+  }
+  // PHẢI stop trước mọi lượt ghi đè `box`, nếu không đồng hồ chạy ngầm.
+  var doneWait=function(){ if(w){ w.stop(); w=null; } };
   // Cuộn tới đúng phần đang stream — không thì user tưởng trang đứng im (đã fix
   // theo phản hồi Henry). .sec đã có scroll-margin-top neo theo --ws-top-h (bù header + .jump sticky).
   var secEl=document.getElementById('sec-'+p);
@@ -486,12 +502,15 @@ async function _loadNextPhanAI(){
     var resp=await fetch('/api/lasotuvi',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({hoTen:_hoTen,ngay:_ngay,thang:_thang,nam:_nam,gioiTinh:_gioitinh,namXem:_namXem,laSoText:_laSoText,phan:p,docs:docs})});
     var data=await resp.json();
     if(data.error||!data.luanGiai){
+      doneWait();
       if(box)box.innerHTML='<div class="laso-error">Lỗi khi luận giải phần '+p+'. <button class="btn" onclick="window._lgRetryPhan()">↻ Thử lại</button></div>';
       return;
     }
     _luanGiaiStore[p]=data.luanGiai;
+    doneWait();
     if(box)box.innerHTML=renderMarkdown(data.luanGiai);
   }catch(e){
+    doneWait();
     if(box)box.innerHTML='<div class="laso-error">Lỗi phần '+p+': '+esc(e.message)+' <button class="btn" onclick="window._lgRetryPhan()">↻ Thử lại</button></div>';
     return;
   }

@@ -17,6 +17,24 @@
 //   // ... await fetch(...)
 //   ctl.finish();   // thành công — đánh dấu xong hết
 //   ctl.stop();     // lỗi/huỷ — dọn sạch, không để lại state cũ
+//
+// ============================================================
+// 📏 LUẬT CHỌN CHỈ BÁO — theo ĐỘ DÀI QUÃNG CHỜ, không theo sở thích
+//
+//   ≥ 10 giây, chờ MỘT CỤC (gọi LLM/sinh ảnh, màn hình đứng im)
+//       → orb 62px: `mountWait`, hoặc `mount` (orb bật sẵn).
+//       Đây là chỗ người ta ngồi nhìn chằm chằm rồi tưởng treo và BẤM LẠI —
+//       mà bấm lại là một lượt gọi model nữa, tốn tiền thật.
+//
+//   < 10 giây, hoặc nằm TRONG một nút / một dòng
+//       → giữ spinner 14px `.ai-spin`. Orb lóe 300ms rồi biến mất còn khó
+//       chịu hơn không có gì, và không nhét vừa vào nút.
+//
+//   Chữ CHẢY DẦN (SSE/stream) → KHÔNG đụng vào.
+//       Bản thân dòng chữ đang chạy đã là chỉ báo tốt nhất; chồng orb lên
+//       chỉ che mất nội dung. Rail chat giữ 3 chấm `.typing` của shell.css.
+//
+//   Tải danh sách / điều hướng trang → skeleton hoặc không gì cả.
 // ============================================================
 
 (function () {
@@ -143,16 +161,16 @@
       .join('');
   }
 
-  // opts (tuỳ chọn): { orb: true, variant: 'a', orbSize: 54 }
-  // Orb ở đây MẶC ĐỊNH TẮT — `mount` đang chạy trên 19 trang, bật đại trà là
-  // đổi giao diện cả 19 chỗ trong một lượt mà chưa ai nhìn qua. Bật cho một
-  // trang: AiLoadingSteps.mount('id', steps, { orb: true }).
+  // opts (tuỳ chọn): { orb: false, variant: 'a', orbSize: 54 }
+  // Orb MẶC ĐỊNH BẬT: mọi nơi gọi `mount` đều là một lượt chờ LLM/sinh ảnh
+  // chạy một cục ≥10 giây — đúng ngưỡng của luật ở đầu file. Trang nào muốn
+  // lùi về spinner cũ thì truyền { orb: false }.
   function mount(containerOrId, steps, opts) {
     var el = typeof containerOrId === 'string' ? document.getElementById(containerOrId) : containerOrId;
     if (!el) return { start: function () {}, finish: function () {}, stop: function () {} };
     ensureStyle();
     opts = opts || {};
-    var head = opts.orb
+    var head = opts.orb !== false
       ? '<div style="display:flex;justify-content:center;margin-bottom:14px">' +
         orbHtml({ size: Number(opts.orbSize) || 54, variant: opts.variant || 'a' }) +
         '</div>'
@@ -239,8 +257,13 @@
     ensureStyle();
     opts = opts || {};
     var label = opts.label || 'Đang vẽ tranh…';
+    // `expectSec: 0` = CHƯA ĐO ĐƯỢC thời lượng ⇒ không hứa gì, và bỏ luôn thanh
+    // tiến trình. Thanh chạy theo một con số bịa còn tệ hơn không có thanh:
+    // nó là một lời hứa, mà hứa hụt thì lần sau không ai tin nữa.
+    var hasEta = opts.expectSec !== 0;
     var expect = opts.expectSec || 52;
     var expectText = opts.expectText || 'khoảng 45–60 giây';
+    var CALM_AFTER = 45; // giây — mốc trấn an khi không có ETA
     var useOrb = opts.orb !== false;
     var variant = opts.variant || 'a';
     var timer = null;
@@ -261,7 +284,7 @@
         '<div class="ai-wait-top">' +
         (useOrb ? '' : '<span class="ai-spin"></span>') +
         '<span class="ai-wait-label"></span></div>' +
-        '<div class="ai-wait-bar"><i></i></div>' +
+        (hasEta ? '<div class="ai-wait-bar"><i></i></div>' : '') +
         '<div class="ai-wait-note"></div>' +
         '</div>';
       ref = {
@@ -275,21 +298,34 @@
     }
 
     function paint() {
-      // Trang có thể thay nội dung khung từ bên ngoài (nhánh lỗi ghi đè
-      // textContent) — lúc đó ref trỏ vào node đã lìa cây, ghi vào là mất hút.
-      if (!ref || !el.contains(ref.note)) build();
+      // Trang đã thay nội dung khung từ bên ngoài (ghi kết quả, ghi lời báo
+      // lỗi) ⇒ TỰ DỪNG, tuyệt đối KHÔNG dựng lại. Dựng lại là vẽ đè lên đúng
+      // thứ trang vừa ghi ra — quên một lượt `stop()` sẽ thành xoá mất kết quả
+      // của người dùng thay vì chỉ để lại một cái đồng hồ chạy ngầm vô hại.
+      if (!ref || !el.contains(ref.note)) {
+        if (timer) { clearInterval(timer); timer = null; }
+        return;
+      }
       var s = Math.max(0, Math.round((Date.now() - startedAt) / 1000));
-      // Trần 96%: thanh chạy đầy trong khi việc CHƯA xong còn tệ hơn không có
-      // thanh nào — người dùng tin là xong rồi và bỏ đi.
-      var pct = Math.min(96, Math.round((s / expect) * 100));
-      ref.bar.style.width = pct + '%';
+      if (hasEta) {
+        // Trần 96%: thanh chạy đầy trong khi việc CHƯA xong còn tệ hơn không có
+        // thanh nào — người dùng tin là xong rồi và bỏ đi.
+        var pct = Math.min(96, Math.round((s / expect) * 100));
+        if (ref.bar) ref.bar.style.width = pct + '%';
+      }
       ref.note.textContent = override
         ? override
-        : s <= expect
-          ? 'Thường mất ' + expectText + ' · đã chờ ' + s + ' giây'
-          // Quá hẹn thì ĐỔI LỜI chứ không đứng im: nói rõ vẫn đang chạy, để
-          // người ta không đóng trang hay bấm lại (bấm lại = tốn thêm tiền).
-          : 'Lâu hơn thường lệ — vẫn đang vẽ, đừng đóng trang (đã chờ ' + s + ' giây)';
+        : hasEta
+          ? s <= expect
+            ? 'Thường mất ' + expectText + ' · đã chờ ' + s + ' giây'
+            // Quá hẹn thì ĐỔI LỜI chứ không đứng im: nói rõ vẫn đang chạy, để
+            // người ta không đóng trang hay bấm lại (bấm lại = tốn thêm tiền).
+            : 'Lâu hơn thường lệ — vẫn đang vẽ, đừng đóng trang (đã chờ ' + s + ' giây)'
+          // Không có ETA: chỉ đếm giây, và trấn an khi đã lâu — không hứa
+          // lúc nào xong vì chưa đo được.
+          : s < CALM_AFTER
+            ? 'Đã chờ ' + s + ' giây'
+            : 'Vẫn đang chạy, đừng đóng trang (đã chờ ' + s + ' giây)';
     }
 
     return {

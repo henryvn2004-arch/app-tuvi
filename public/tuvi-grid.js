@@ -274,8 +274,17 @@ const TuviGrid = (() => {
   }
 
   // ── loadingHtml: .tvm-wrap loading block ─────────────────────
-  function loadingHtml(label = 'Đang xử lý...', sub = 'Vui lòng chờ...') {
+  // opts.orb — CHỈ bật cho quãng chờ ≥10 giây (lượt gọi LLM), theo luật ở đầu
+  // tools-shared/ai-loading-steps.js. Hàm này còn được dùng cho bước an sao
+  // chạy ngay tại máy (mili-giây); nhét orb vào đó là nó loé rồi tắt, khó chịu
+  // hơn không có. Không nạp được ai-loading-steps thì rơi về đúng khối cũ.
+  function loadingHtml(label = 'Đang xử lý...', sub = 'Vui lòng chờ...', opts = {}) {
+    const orb =
+      opts.orb && window.AiLoadingSteps && window.AiLoadingSteps.orbHtml
+        ? `<div style="display:flex;justify-content:center;margin-bottom:14px">${window.AiLoadingSteps.orbHtml({ size: 54 })}</div>`
+        : '';
     return `<div class="tvm-wrap">
+      ${orb}
       <div class="tvm-header">
         <div class="tvm-avatar">✦</div>
         <div>
