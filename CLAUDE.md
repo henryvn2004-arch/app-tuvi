@@ -5,6 +5,94 @@
 
 ---
 
+## 🐞 Dạy Con: khung mới KHÔNG hiện — vì `portrait_cache` không có phiên bản SHAPE (2026-08-09, PR sau #458)
+
+Henry gửi link chia sẻ + 4 lời: *"sắp xếp sao cho nó khoa học hơn"* · *"tự dưng
+có phần Bước 4, user tự hỏi mấy bước kia đâu… User ko care bước gì cả đâu"* ·
+*"ko cần giải thích dài dòng cách làm framework đằng sau"* · *"mà ko có chart gì
+ah? Metrics để đánh giá."*
+
+### 🔴 Ba lời đầu là chuyện trình bày. Lời thứ tư là LỖI THẬT, và nó giải thích cả lời thứ hai.
+Đo `portrait_cache` trên prod: **2/2 dòng `day-con` tạo 07–08/08**, tức TRƯỚC lượt
+deploy khung sáng 09/08, và **không dòng nào có `truc` · `khieu` · `goiYHoatDong`
+· `dinhHuong`**. Henry chạy lại đúng lá số đã chạy hôm trước ⇒ cache hit ⇒ trả
+payload cũ ⇒ 4 khối mới **im lặng ẩn hết**, chỉ khối "phương pháp giáo dục" sống
+sót vì nó đọc `data.hoc.cards` vốn đã có từ trước. **Đó chính xác là "tự dưng có
+phần Bước 4" và "ko có chart gì".** Không lỗi nào bắn ra.
+- 🔑 **Căn nguyên: khoá cache là LÁ SỐ, không phải SHAPE.** Đổi cấu trúc payload
+  xong thì mọi dòng cũ vẫn được trả nguyên trạng, **mãi mãi** — `putCachedPortrait`
+  còn `resolution=ignore-duplicates` nên bản mới không bao giờ đè lên được.
+- Vá bằng `SHAPE = 2` đóng dấu vào payload + `shapeStale()`: dòng thiếu dấu hoặc
+  dấu cũ ⇒ coi như **trượt cache** ⇒ dựng lại ⇒ **GHI ĐÈ** (`putCachedPortrait`
+  thêm cờ `overwrite`, mặc định `false` nên 3 tool kia không đổi hành vi).
+- ⚠️ **CỐ Ý KHÔNG nhét SHAPE vào `lasoKey`** dù đó là cách hiển nhiên: đổi khoá
+  là mồ côi cache **và** `userOwnsLaso` ⇒ người đã trả tiền bị tính lại (đúng bài
+  học khoá cặp Duyên Nợ). Giữ khoá nguyên nên `free` vẫn đúng — vế `free` phải
+  xét **`cachedRaw`** (bản thô) chứ không phải `cached` (đã lọc), có bộ dò canh.
+- Không ghi đè thì còn tệ hơn bug: mỗi lượt xem lại **đốt thêm một lượt model**
+  mà dòng hỏng vẫn nằm nguyên.
+- ⏭️ **3 tool kia (`nguoi-khac` · `nhan-mach` · 2 chân dung) vẫn còn nguyên cái
+  bẫy** — chưa gắn dấu SHAPE. Đổi payload của chúng mà quên là tái phát y hệt.
+
+### Trình bày — bỏ đúng thứ Henry chỉ
+- **Gỡ sạch 5 badge `BƯỚC n`.** Chỉ 5/17 khối có số nên đánh số đọc thành nửa vời
+  — người ta đi tìm mấy bước còn lại. Thay bằng **3 vạch chia nhóm** (`Đo được gì`
+  · `Nên làm gì` · `Bối cảnh`): nhãn tả **NỘI DUNG**, không tả trình tự, nên
+  thiếu một khối cũng không đọc ra là hụt. Vạch tự ẩn khi nhóm rỗng (có ca đối
+  chứng) — tiêu đề đứng trên khoảng trống còn khó hiểu hơn không có tiêu đề.
+- **Gỡ hẳn khối "Khung Này Là Gì"** (4 đoạn phương pháp luận, 1.721 ký tự) và
+  **rút mọi `fw-note` xuống một dòng**. Ranh giới đạo đức vẫn còn nguyên ở khối
+  caveat cuối trang — thứ bỏ đi là phần khoe cách dựng khung.
+- **Gộp "Phương Pháp Giáo Dục" + "Vào Con Bằng Cách Nào"** thành *Cách Dạy Con
+  Này*: hai khối cạnh nhau nói cùng một việc, đọc thành lặp.
+- **Dời "Điều Bạn Đang Lo"** xuống đầu nhóm *Nên làm gì* — nó trả lời đúng ô mối
+  lo cha mẹ vừa chọn, đứng lạc ở trên thì không ăn nhập với gì.
+- Bỏ nhãn `Con là người thế nào` in **hai lần trong cùng một thẻ**.
+
+### 🐞 Lỗi chỉ lộ khi CHỤP ẢNH RA NHÌN, không lộ khi đọc code
+`.tr-head` để `flex-wrap` + `margin-left:auto`: trục nào tên dài thì câu hỏi rớt
+xuống dòng hai và **kéo con số xuống theo** ⇒ năm con số không thẳng cột. Mà việc
+của người đọc ở đây đúng là **so năm trục với nhau**. Tách điểm ra cột riêng
+(`.tr-headmain` flex:1) — đo lại: 5 mép phải **723px, khớp tuyệt đối**.
+
+### Bản chia sẻ: từ một cục chữ thành khối có cấu trúc
+`/ket-qua` dựng **mỗi `block` thành một thẻ có tiêu đề** — trước đó `day-con` gửi
+`kind:'text'` nên tất cả dồn vào một đoạn `<br>` nối nhau và con số chìm nghỉm.
+Nay 4 block: *Chân dung* · *Năm trục tính khí* (5 dòng có điểm) · *Tám chất năng
+khiếu* (8 dòng xếp giảm dần, ★ đánh dấu chất vượt ngưỡng) · *Định hướng & cách
+dạy*. Vẫn giữ `text` làm đường lùi.
+- Bảng cột không căn được bằng chữ (font tỉ lệ) nên **thứ tự** gánh vai xếp hạng.
+
+### Verify
+`tsc` 0 · `lint` 0 lỗi (72 warning pre-existing) · `prettier` sạch · 7 bộ dò sạch
+· engine **185 pass** · `node --check` khối script nội tuyến.
+- **30.209 bất biến module** + **14.734 bất biến prompt**: vẫn xanh, 0 fail.
+- **11 bất biến ĐỌC THẲNG MÃ NGUỒN** chốt chặn cache, đã **red-team cả ba ca**:
+  `free` xét `cached` thay vì `cachedRaw` → đỏ · quên cờ ghi đè → đỏ · nhét SHAPE
+  vào khoá cache → đỏ.
+- 🪤 **Bộ dò ca thứ ba BÁO OAN XANH lượt đầu**: `lasoKey\([^)]*SHAPE` — `[^)]*`
+  dừng ở dấu `)` của `cacheExtra(...)` nên không bao giờ với tới phần sau. Phải
+  soi **CẢ DÒNG** dựng khoá.
+- **Playwright trên TRANG THẬT** qua Next dev, chạy CẢ đường tính thử lẫn đường
+  đã mở khoá bằng chính `_doGenerate`: 3 vạch nhóm hiện đúng · **0 chữ "BƯỚC"** ·
+  cột điểm 5 trục thẳng hàng · payload chia sẻ có **đủ 5 dòng trục + 8 dòng chất
+  kèm điểm** · ĐỐI CHỨNG ẩn hết khối của một nhóm → vạch nhóm biến mất · 390px
+  tràn ngang **0px** · 0 lỗi JS.
+- 🪤 Hai lỗi của BÀI KIỂM: bộ lọc `:not([style*="display: none"])` không khớp vì
+  inline style viết `display:none` **không có dấu cách** → phải đo bằng
+  `offsetParent`; và cwd của shell **còn nằm ở `tuvi-engine`** từ lệnh trước nên
+  `computeLaso` đọc hụt engine, cả bộ 30.209 ca tụt xuống 97 ca xanh vô nghĩa.
+
+### CÒN LẠI
+- **Chưa gọi LLM thật lượt nào** — phần chữ trong ảnh chụp là chữ giả bơm vào
+  đúng shape payload; khung và số liệu thì chạy engine thật.
+- Hai dòng cache cũ trên prod sẽ **tự dựng lại ở lượt mở tiếp theo** (miễn phí
+  cho người đã trả tiền), mỗi dòng tốn đúng một lượt model.
+- Lượt dựng lại vì shape cũ ghi thêm **một dòng lịch sử trùng** cho chính chủ —
+  vô hại, cố ý không vá để khỏi đụng nhánh dùng chung.
+
+---
+
 ## 🧹 Vá nốt hai món nợ: rail cũ vô hình + `animation` trỏ vào keyframe ma (2026-08-09, PR sau #459)
 
 Henry: *"làm nốt luôn đi"* — hai món tao cố ý để lại ở PR trước.
