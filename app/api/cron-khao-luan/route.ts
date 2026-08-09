@@ -136,7 +136,7 @@ Trả về JSON thuần (KHÔNG backtick):
     output_tokens: r.usage.output_tokens,
     cache_creation_input_tokens: 0,
     cache_read_input_tokens: 0,
-  });
+  }, r.durationMs);
   const article = parseLlmJson(r.text) as KhaoLuanArticle | null;
   if (!article) {
     console.warn(

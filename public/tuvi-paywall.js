@@ -44,6 +44,7 @@ const TuviPaywall = (() => {
     'duyen-no-tien-kiep': { title: 'Duyên Nợ Tiền Kiếp' },
     'nguoi-khac': { title: 'Lá Số Người Khác' },
     'day-con': { title: 'Dạy Con Theo Lá Số' },
+    'huong-nghiep-tre': { title: 'Hướng Nghiệp Sớm Cho Con' },
     'nhan-mach': { title: 'Sổ Nhân Mạch' },
   };
 
@@ -72,6 +73,7 @@ const TuviPaywall = (() => {
     'duyen-no-tien-kiep': 'use_duyen_no_tien_kiep',
     'nguoi-khac': 'use_nguoi_khac',
     'day-con': 'use_day_con',
+    'huong-nghiep-tre': 'use_huong_nghiep_tre',
     'nhan-mach': 'use_nhan_mach',
   };
 

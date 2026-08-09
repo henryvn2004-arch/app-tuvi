@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hướng Nghiệp Sớm Cho Con — Tử Vi Minh Bảo</title>
+<meta name="description" content="Nhập lá số của con — nhận thiên hướng đọc từ lá số, hoạt động nên cho làm quen theo đúng lứa tuổi, và việc người lớn nên làm hay nên thôi.">
+<link rel="icon" type="image/webp" href="/seal.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"></noscript>
+<link rel="stylesheet" href="/shell.css?v=18">
+<style>
+.form-card{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);max-width:860px}
+.form-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:3px}
+.form-card p.sub{font-size:12.5px;color:var(--text-lt);margin-bottom:14px}
+.frow{display:flex;gap:11px;flex-wrap:wrap;align-items:flex-end;margin-bottom:12px}
+.fg{display:flex;flex-direction:column;gap:5px}
+.fg label{font-size:10.5px;font-weight:600;color:var(--text-lt);letter-spacing:.04em;text-transform:uppercase}
+.fg input,.fg select{border:1px solid var(--line-2);border-radius:7px;padding:8px 10px;font-size:13.5px;font-family:inherit;color:var(--text);background:var(--paper);outline:none}
+.fg input:focus,.fg select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(20,85,164,.12)}
+/* ⚠️ CSS của trang nhắm ô nhập PHẢI scope theo id RIÊNG, KHÔNG nhắm `.fg select`
+   chung — TuviForm dựng markup vào đúng khuôn .frow/.fg này, nên một luật chung
+   sẽ bơm cả 5 select của form ngày sinh. Đã trả giá một lần ở trang Công Sở. */
+#moiLo{min-width:280px;max-width:520px}
+.btn-go{background:var(--red);color:#fff;border:none;border-radius:8px;padding:10px 22px;font-size:14px;font-weight:600;cursor:pointer;font-family:var(--serif)}
+.btn-go:disabled{opacity:.6;cursor:not-allowed}
+.err{color:var(--tx-red);font-size:13px;margin-top:8px;display:none}
+.err.active{display:block}
+.res-block{border:1px solid #E8E8E8;border-radius:10px;margin-bottom:16px;background:#fff;overflow:hidden;max-width:880px}
+.res-block-header{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;background:#F5F4F0;border-bottom:1px solid #E8E8E8}
+.res-block-title{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#061A2E}
+.res-block-body{padding:18px;color:#2a2118}
+#loading{display:none;text-align:center;padding:30px 10px;color:var(--text-lt)}
+.hn-hero{text-align:center;padding:2px 6px 14px}
+.hn-name{font-family:var(--serif);font-size:22px;line-height:1.4;color:#061A2E;font-weight:700}
+.hn-role{font-size:12.5px;color:var(--text-lt);margin-top:3px}
+.hn-badges{display:flex;gap:7px;flex-wrap:wrap;justify-content:center;margin-top:10px}
+.hn-badge{display:inline-block;padding:5px 13px;border-radius:999px;background:#F3EAD6;color:#7A5F26;font-size:12px;font-weight:700}
+.hn-badge.alt{background:#EFEBE3;color:#5a5145;font-weight:600}
+.hn-birth{margin-top:9px;font-size:11.5px;color:var(--text-lt)}
+.hn-vai{margin-top:11px;font-size:12.5px;line-height:1.7;color:#5a5145;background:#FBF8F1;border:1px solid #EADFC8;border-radius:9px;padding:10px 13px;text-align:left}
+.hn-para{font-size:13.5px;line-height:1.88;color:#2a2118;margin:0 0 12px}
+.hn-para:last-child{margin-bottom:0}
+.hn-sub{font-size:10px;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;color:#7A5F26;margin:16px 0 7px}
+.hn-sub:first-child{margin-top:0}
+/* Thẻ thiên hướng */
+.hn-h{border:1px solid #EADFC8;border-radius:10px;padding:14px 15px;background:#FBF8F1;margin-bottom:13px}
+.hn-h:last-child{margin-bottom:0}
+.hn-h-top{display:flex;align-items:baseline;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.hn-h-ten{font-family:var(--serif);font-size:16px;font-weight:700;color:#061A2E}
+.hn-h-diem{font-size:11.5px;color:#7A5F26;font-weight:700;white-space:nowrap}
+.hn-h-chat{font-size:13px;line-height:1.78;color:#2a2118;margin-top:6px}
+.hn-h-vi{font-size:12px;line-height:1.7;color:#5a5145;margin-top:8px}
+.hn-chips{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px}
+.hn-chip{font-size:11.5px;padding:4px 10px;border-radius:999px;background:#fff;border:1px solid #EADFC8;color:#5a5145}
+.hn-list{margin:7px 0 0;padding-left:18px}
+.hn-list li{font-size:13px;line-height:1.78;color:#2a2118;margin-bottom:5px}
+.hn-list li:last-child{margin-bottom:0}
+/* Nên / Tránh — hai cột để đọc so sánh, không đọc nối tiếp */
+.hn-two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:760px){.hn-two{grid-template-columns:1fr}}
+.hn-col h4{font-family:var(--serif);font-size:14px;font-weight:700;margin-bottom:9px}
+.hn-col.yes h4{color:#1E6B3C}
+.hn-col.no h4{color:#A8342A}
+.hn-item{border-left:2px solid #E0D6C0;padding:0 0 12px 13px}
+.hn-col.yes .hn-item{border-left-color:#BFD9C7}
+.hn-col.no .hn-item{border-left-color:#E7C4BF}
+.hn-item:last-child{padding-bottom:0}
+.hn-item .viec{font-size:13px;line-height:1.7;color:#2a2118}
+.hn-item .vsao{font-size:12.5px;line-height:1.7;color:#5a5145;font-style:italic;margin-top:4px}
+.hn-motcau{font-family:var(--serif);font-size:16px;line-height:1.75;color:#061A2E;font-style:italic;text-align:center;padding:6px 10px}
+.hn-basis-list{margin:0;padding-left:18px}
+.hn-basis-list li{font-size:12.5px;line-height:1.8;color:#4a4a4a;margin-bottom:6px}
+/* Cảnh báo — nền vàng nhạt, KHÔNG dùng đỏ: đây là lời nói thật về lá số, không
+   phải lỗi của đứa trẻ. */
+.hn-warn{background:#FBF3DE;border:1px solid #e8d9b0;border-radius:9px;padding:12px 14px;font-size:12.5px;line-height:1.75;color:#5a5145;margin-bottom:13px}
+.hn-note{font-size:11.5px;color:#7a705f;line-height:1.7;margin-top:11px}
+.hist-row{display:flex;justify-content:space-between;gap:10px;padding:9px 0;border-bottom:1px solid var(--line-2);font-size:12.5px}
+.hist-row:last-child{border-bottom:none}
+.hist-row .n{font-weight:600;color:var(--heading)}
+.hist-row .d{color:var(--text-lt);white-space:nowrap}
+</style>
+</head>
+<body>
+<div class="shell">
+  <aside class="sb" id="shell-sidebar"></aside>
+
+  <main class="ws" id="ws">
+    <div class="ws-top">
+      <button class="btn mobile-only" onclick="document.getElementById('shell-sidebar').classList.toggle('open');window.shellSyncBackdrop&&shellSyncBackdrop()" aria-label="Menu">☰</button>
+      <div class="ws-title"><b>Hướng Nghiệp Sớm Cho Con</b><span>Nên cho con làm quen với thứ gì từ bây giờ</span></div>
+      <!-- `.ws-actions` là chỗ shell CHÈN nút Chia sẻ vào. Thiếu nó thì shell
+           không có nơi đặt nút và trang lặng lẽ mất tính năng — `check:share`
+           canh đúng chỗ này. -->
+      <div class="ws-actions">
+        <button class="btn" id="btnEdit" onclick="_closePanel()" style="display:none">Xem Bé Khác</button>
+        <button class="btn mobile-only" onclick="Shell.openRail()">✦ Hỏi</button>
+      </div>
+    </div>
+    <div class="ws-body">
+      <div id="introHost"></div>
+      <div id="shellRecent"></div>
+
+      <div id="birthPanel">
+        <div class="form-card">
+          <h2>Hướng Nghiệp Sớm Cho Con</h2>
+          <p class="sub">Nhập lá số của con hoặc cháu. Bản đọc nói <b>thiên hướng</b>, <b>việc nên cho làm quen theo đúng lứa tuổi</b>, và <b>người lớn nên làm gì / nên thôi gì</b>.</p>
+          <div id="formHost"></div>
+          <div class="frow">
+            <div class="fg" style="flex:1">
+              <label for="moiLo">Điều bạn đang lo</label>
+              <select id="moiLo" onchange="onMoiLoChange()"></select>
+            </div>
+          </div>
+          <p class="sub" id="loHint" style="margin-bottom:14px"></p>
+          <button class="btn-go" id="btnGo" onclick="analyze()">Xem thiên hướng của con</button>
+          <div class="err" id="error-msg"></div>
+        </div>
+      </div>
+
+      <!-- `data-ws-result` là giao ước DUY NHẤT với shell: nó tự theo dõi khối
+           này để bật/gỡ nút Chia sẻ và vứt payload lượt trước. Quên khai thì
+           trang lặng lẽ mất nút — có `check:share` canh. -->
+      <div id="resPanel" data-ws-result style="display:none">
+        <div id="loading">
+          <div id="loadingSteps"></div>
+        </div>
+
+        <div id="card" style="display:none">
+          <div class="res-block">
+            <div class="res-block-body">
+              <div class="hn-hero">
+                <div class="hn-name" id="heroName"></div>
+                <div class="hn-role" id="heroRole"></div>
+                <div class="hn-badges" id="heroBadges"></div>
+                <div class="hn-birth" id="heroBirth"></div>
+                <div class="hn-vai" id="heroVai"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- MIỄN PHÍ: thiên hướng đứng đầu + dấu hiệu để cha mẹ đối chiếu -->
+          <div class="res-block" id="huongDauBlock" style="display:none">
+            <div class="res-block-header"><span class="res-block-title">Thiên Hướng Nổi Nhất</span></div>
+            <div class="res-block-body">
+              <div id="chuaRoNet" class="hn-warn" style="display:none"></div>
+              <div id="huongDau"></div>
+              <p class="hn-note">Thiên hướng là <b>xu hướng để cho làm quen</b>, không phải nghề đã chốt. Bảng này là quy chiếu của trang, không phải chữ trong cổ thư.<br>
+                Tool này đọc con trên <b>cùng một thước đo</b> với <a href="/app/day-con">Dạy Con Theo Lá Số</a> — cùng 5 trục tính khí và 8 chất năng khiếu ấy — nhưng trả lời một câu khác: bên kia hỏi <i>con giỏi môn gì</i>, ở đây hỏi <i>con hợp kiểu làm việc nào</i>. Vì chung thước đo nên hai bên không nói ngược nhau; vì khác câu hỏi nên thứ tự có thể không trùng khít.</p>
+            </div>
+          </div>
+
+          <!-- MIỄN PHÍ: chất người đọc ra từ lá số -->
+          <div class="res-block" id="chatBlock" style="display:none">
+            <div class="res-block-header"><span class="res-block-title">Chất Người Đọc Ra Từ Lá Số</span></div>
+            <div class="res-block-body">
+              <div class="hn-sub">Nổi nhất</div>
+              <ul class="hn-list" id="chatNguoi"></ul>
+              <div id="khongDoiHoiWrap" style="display:none">
+                <div class="hn-sub">Việc hợp với con thường không đòi hỏi</div>
+                <ul class="hn-list" id="khongDoiHoi"></ul>
+                <p class="hn-note">🔴 Mấy mặt này <b>không phải chỗ con thiếu</b>. Nó chỉ có nghĩa là việc hợp với con không lấy mặt đó ra để chấm.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- TRẢ TIỀN từ đây trở xuống -->
+          <div class="res-block" id="proseTopBlock" style="display:none">
+            <div class="res-block-header"><span class="res-block-title">Nhìn Ra Con</span></div>
+            <div class="res-block-body">
+              <p class="hn-para" id="nhinRaCon"></p>
+              <p class="hn-para" id="viSaoHuongNay"></p>
+            </div>
+          </div>
+
+          <div class="res-block" id="loBlock" style="display:none">
+            <div class="res-block-header"><span class="res-block-title" id="loTitle">Điều Bạn Đang Lo</span></div>
+            <div class="res-block-body"><p class="hn-para" id="loLang"></p></div>
+          </div>
+
+          <div class="res-block" id="baHuongBlock" style="display:none">
+            <div class="res-block-header"><span class="res-block-title">Ba Hướng Đáng Cho Con Thử</span></div>
+            <div class="res-block-body">
+              <div id="baHuong"></div>
+            </div>
+          </div>
+
+          <div class="res-block" id="doBlock" style="display:none">
+            <div class="res-block-header"><span class="res-block-title" id="doTitle">Bắt Đầu Từ Đâu</span></div>
+            <div class="res-block-body">
+              <div class="hn-two">
+                <div class="hn-col yes"><h4>Làm trong tháng này</h4><div id="batDauTuDau"></div></div>
+                <div class="hn-col no"><h4>Thôi làm</h4><div id="tranhLam"></div></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="res-block" id="noiBlock" style="display:none">
+            <div class="res-block-header"><span class="res-block-title">Mở Lời Với Con Thế Nào</span></div>
+            <div class="res-block-body"><p class="hn-para" id="noiTheNao"></p></div>
+          </div>
+
+          <div class="res-block" id="mocBlock" style="display:none">
+            <div class="res-block-header"><span class="res-block-title">Sang Lứa Sau Thì Đổi Gì</span></div>
+            <div class="res-block-body"><p class="hn-para" id="mocKeTiep"></p></div>
+          </div>
+
+          <div class="res-block" id="endBlock" style="display:none">
+            <div class="res-block-body">
+              <div class="hn-motcau" id="motCau"></div>
+            </div>
+          </div>
+
+          <!-- MIỄN PHÍ: bằng chứng engine đọc đúng lá số -->
+          <div class="res-block" id="basisBlock" style="display:none">
+            <div class="res-block-header"><span class="res-block-title">Cơ Sở Trong Lá Số</span></div>
+            <div class="res-block-body">
+              <ul class="hn-basis-list" id="basisList"></ul>
+            </div>
+          </div>
+
+          <!-- W1 — tường "đã tính thử": phần trên đã chạy THẬT và miễn phí. -->
+          <div class="res-block" id="lockBlock" style="display:none">
+            <div class="res-block-header"><span class="res-block-title">Phần Định Hướng Chưa Mở</span></div>
+            <div class="res-block-body" id="lockHost" data-tvp-lock style="padding-top:6px"></div>
+          </div>
+
+          <div class="res-block" style="background:#FBF3DE;border-color:#e8d9b0">
+            <div class="res-block-body" style="font-size:12.5px;line-height:1.68;color:#5a5145">
+              💡 Bản này phác hoạ từ các dữ liệu trong lá số Tử Vi, kết hợp kinh nghiệm nghiên cứu của tiền nhân để lại. Phần <b>thiên hướng và hoạt động</b> là quy chiếu của trang, không phải chữ trong cổ thư. Xem <a href="/nguon-du-lieu.html">nguồn dữ liệu</a>.<br><br>
+              ⚖️ Đây là bản <b>định hướng để tham khảo</b>, không phải để chốt đường cho con. Đứa trẻ chưa trưởng thành và không có mặt ở đây, nên bản đọc cố ý <b>không đoán đỗ trượt, không hứa thành công, không đọc sức khoẻ hay chuyện tình duyên</b> của con. Thiên hướng nói con <i>nên được cho thử gì</i>, không nói con <i>phải làm nghề gì</i>.
+            </div>
+          </div>
+
+          <div class="res-block" id="histBlock" style="display:none">
+            <div class="res-block-header"><span class="res-block-title">Đã Xem Trước Đó</span></div>
+            <div class="res-block-body"><div id="histList"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <aside class="rail" id="shell-rail"></aside>
+</div>
+
+<script>window.SHELL_ACTIVE='huong-nghiep-tre';window.SHELL_HISTORY=true;
+window.SHELL_INTRO={key:'huong-nghiep-tre',title:'Hướng Nghiệp Sớm Cho Con',desc:'Đưa lá số của con vào đây để biết <b>con nghiêng về thiên hướng nào</b>, <b>nên cho con làm quen với việc gì ở đúng lứa tuổi này</b>, và <b>người lớn nên làm gì / nên thôi gì</b>. Đây là bản định hướng để tham khảo — không chốt nghề cho con.'};</script>
+<script src="/laso-chart.js?v=3"></script>
+<script src="/tuvi-form.js?v=1"></script>
+<script src="/tuvi-paywall.js?v=18"></script>
+<script src="/auth.js?v=2"></script>
+  <script src="/nav.js?v=22" data-icons-only></script>
+<script src="/shell.js?v=68"></script>
+<script src="/tools-shared/ai-loading-steps.js?v=5"></script>
+<script>
+
+var _currentSlug = '';
+var _last = null;
+var HN_STEPS = [
+  { label: 'Lập lá số & phân kiểu người', ms: 1300 },
+  { label: 'Chấm 21 trục tính khí, chọn thiên hướng', ms: 2200 },
+  { label: 'Viết bản định hướng theo lứa tuổi', ms: 0 },
+];
+var _loadingCtl = null;
+
+// Danh sách mối lo dựng TỪ SERVER-SIDE nào? Không — nó là hằng của engine, và
+// chép hai bản thì hai bản trôi khỏi nhau. Đây là bản DUY NHẤT ở phía client,
+// server đọc `MOI_LO` của engine; hai bên khớp nhau qua chính giá trị `id`.
+var LO_LIST = [
+  ['hieu-them', 'Không có gì gấp, chỉ muốn hiểu con hơn', 'Bạn sẽ nhận: một bản mô tả thiên hướng đủ rõ để nhận ra con trong đời thường, kèm việc nên cho làm quen.'],
+  ['chua-thich-gi', 'Con chưa thích gì rõ rệt, cái gì cũng nhàn nhạt', 'Bạn sẽ nhận: chỗ nên bày ra trước để con có cơ hội chạm đúng thứ hợp — và mốc nào thì thôi lo.'],
+  ['me-mot-thu', 'Con chỉ mê đúng một thứ, lo con lệch', 'Bạn sẽ nhận: cái con mê có phải chỗ mạnh thật không, và nên mở thêm hướng nào cho cân.'],
+  ['sap-chon', 'Sắp phải chọn môn / tổ hợp / trường', 'Bạn sẽ nhận: chất việc hợp với con và cách hỏi để con tự nói ra — không phải một cái tên ngành chốt sẵn.'],
+  ['khac-y-minh', 'Con thích hướng mà mình không muốn', 'Bạn sẽ nhận: phần nào trong ý con là chỗ mạnh có thật, và cách nói chuyện để không đẩy con đi xa hơn.'],
+  ['so-thua-kem', 'Sợ con không theo kịp bạn bè', 'Bạn sẽ nhận: con đang bị đo bằng thước của đứa khác ở chỗ nào, và thước nào mới là thước của con.']
+];
+(function () {
+  var s = document.getElementById('moiLo');
+  s.innerHTML = LO_LIST.map(function (x) {
+    return '<option value="' + x[0] + '">' + x[1] + '</option>';
+  }).join('');
+})();
+
+function onMoiLoChange() {
+  var v = document.getElementById('moiLo').value;
+  var row = LO_LIST.filter(function (x) { return x[0] === v; })[0];
+  document.getElementById('loHint').textContent = row ? row[2] : '';
+}
+
+TuviForm.render('formHost', { mode: 'compact', prefix: '', gioitinh: 'nam', showName: true });
+
+// 🔑 CỐ Ý KHÔNG gọi `Shell.prefillForm()`: lá số shell đang nhớ là lá số CỦA
+// NGƯỜI DÙNG, mà form này là của CON. Đổ vào là người ta bấm luôn rồi nhận bản
+// đọc về chính mình dưới nhãn "con" — sai im lặng, không có gì báo.
+
+onMoiLoChange();
+
+// Không có dòng này thì `_cfg.product` rỗng ⇒ paywall không tra được giá, hiện
+// hộp "chưa đọc được bảng giá" và tool KHÔNG chạy (fail-closed).
+TuviPaywall.init({ product: 'huong-nghiep-tre', slug: function () { return _currentSlug; } });
+
+function showError(msg) {
+  var e = document.getElementById('error-msg');
+  if (msg) { e.textContent = msg; e.classList.add('active'); } else { e.classList.remove('active'); }
+}
+
+function _birthOf(prefix) {
+  var f = TuviForm.getData(prefix);
+  if (!f.ngay || !f.thang || !f.nam) return null;
+  return {
+    day: f.ngay, month: f.thang, year: f.nam,
+    hourBranch: f.gioIdx, gender: f.gioitinh, isLunar: false,
+    name: (f.hoten || '').trim() || undefined
+  };
+}
+
+/** Query cho `action=cache-status` — đúng tên tham số route đọc. */
+function _cacheQuery(b, lo) {
+  return 'd=' + (b.day || 0) + '&m=' + (b.month || 0) + '&y=' + (b.year || 0) +
+    '&h=' + (b.hourBranch == null ? -1 : b.hourBranch) +
+    '&g=' + (b.gender === 'nu' ? 'nu' : 'nam') +
+    '&lunar=' + (b.isLunar ? '1' : '0') + '&lo=' + encodeURIComponent(lo);
+}
+
+// ── W1: bấm nút là CHẠY THẬT, miễn phí ─────────────────────────────────────
+// Tầng deterministic (kiểu người · thiên hướng đứng đầu · dấu hiệu nhận biết ·
+// chất người · cơ sở lá số) là tra bảng + một phép cosine — 0 lượt LLM, 0đ.
+var HN_KHOA = [
+  'Trả lời thẳng vào điều bạn đang lo',
+  'Nhìn ra con — con vận hành thế nào',
+  'Ba hướng đáng cho con thử, kèm lý do từng hướng',
+  'Hoạt động nên cho làm quen, chọn theo đúng lứa tuổi',
+  'Ba việc làm được trong tháng này · hai việc nên thôi',
+  'Mở lời với con thế nào · sang lứa sau thì đổi gì'
+];
+
+async function analyze() {
+  showError('');
+  var b = _birthOf('');
+  if (!b) { showError('Vui lòng nhập đầy đủ ngày tháng năm sinh của bé.'); return; }
+  var lo = document.getElementById('moiLo').value;
+  _last = b;
+  _currentSlug = TuviPaywall.generateToolSlug('huong-nghiep-tre-' + lo + '-' + b.day + b.month + b.year);
+
+  _openPanel();
+  _loadingCtl = AiLoadingSteps.mount('loadingSteps', HN_STEPS.slice(0, 2));
+  _loadingCtl.start();
+  var prev;
+  try {
+    var r = await fetch('/api/huong-nghiep-tre?preview=1', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ birth: b, name: b.name || '', moiLo: lo })
+    });
+    prev = await r.json();
+    if (!r.ok || !prev.success) throw new Error(prev.error || 'Lỗi ' + r.status);
+  } catch (e) {
+    _loadingCtl && _loadingCtl.stop();
+    _closePanel();
+    showError('Lỗi: ' + (e.message || 'Không thể kết nối. Vui lòng thử lại.'));
+    return;
+  }
+  _loadingCtl && _loadingCtl.finish();
+  document.getElementById('loading').style.display = 'none';
+  document.getElementById('card').style.display = 'block';
+  document.getElementById('btnEdit').style.display = '';
+  renderMeta(prev);
+  // D1 — bậc "đã tính thử" của phễu theo tool. Bắn ở ĐÂY chứ không lúc bấm nút:
+  // bấm rồi mà lá số hỏng thì không có gì để xem, tính vào phễu là thổi mẫu số.
+  try { if (window.Track) window.Track.event('preview_shown', { tool_id: 'huong-nghiep-tre' }); } catch (e) { /* đo hỏng không chặn gì */ }
+  if (window.SHELL_INTRO) Shell.dismissIntro(window.SHELL_INTRO.key);
+
+  var free = false;
+  try { free = await TuviPaywall.isFreeRerun('/api/huong-nghiep-tre', _cacheQuery(b, lo)); } catch (e) { free = false; }
+  if (free) {
+    TuviPaywall._banner('✓ Bạn đã xem bản này rồi — mở lại, không trừ Lượng');
+    await _doGenerate(true, lo);
+    return;
+  }
+  document.getElementById('lockBlock').style.display = 'block';
+  await TuviPaywall.lockPreview({
+    host: document.getElementById('lockHost'),
+    title: '⊙ Còn phần định hướng chưa mở',
+    items: HN_KHOA,
+    cta: 'Mở bản định hướng đầy đủ',
+    slug: function () { return _currentSlug; },
+    onUnlock: function () { return _doGenerate(false, lo); }
+  });
+}
+
+function _openPanel() {
+  document.getElementById('birthPanel').style.display = 'none';
+  document.getElementById('resPanel').style.display = 'block';
+  document.getElementById('loading').style.display = 'block';
+  document.getElementById('card').style.display = 'none';
+  ['huongDauBlock', 'chatBlock', 'proseTopBlock', 'loBlock', 'baHuongBlock',
+   'doBlock', 'noiBlock', 'mocBlock', 'endBlock', 'basisBlock', 'lockBlock']
+    .forEach(function (id) { document.getElementById(id).style.display = 'none'; });
+}
+
+function _closePanel() {
+  document.getElementById('loading').style.display = 'none';
+  document.getElementById('resPanel').style.display = 'none';
+  document.getElementById('birthPanel').style.display = 'block';
+  document.getElementById('btnEdit').style.display = 'none';
+  // Quay về form thì bản vừa xem không còn trên màn hình nữa. Shell tự gỡ nút
+  // khi vùng `data-ws-result` ẩn đi, nhưng gọi thẳng ở đây là lời khai dứt
+  // khoát: lượt này KHÔNG còn gì đáng chia sẻ.
+  if (window.Shell && Shell.setShareable) Shell.setShareable(null);
+}
+
+async function _doGenerate(freeRerun, lo) {
+  document.getElementById('lockBlock').style.display = 'none';
+  TuviPaywall._closeLock();
+  _loadingCtl = AiLoadingSteps.mount('loadingSteps', HN_STEPS.slice(2));
+  document.getElementById('loading').style.display = 'block';
+  _loadingCtl.start();
+
+  var token = (window.Auth && Auth.getSession && Auth.getSession()) ? Auth.getSession().access_token : '';
+  try {
+    var res = await fetch('/api/huong-nghiep-tre', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token },
+      body: JSON.stringify({ birth: _last, name: _last.name || '', moiLo: lo, slug: _currentSlug })
+    });
+    var data = await res.json();
+    // Đường miễn phí bị server từ chối (cache vừa hết / đoán nhầm) → quay lại
+    // paywall thay vì ném một lỗi khó hiểu.
+    if (res.status === 402 && freeRerun) {
+      _loadingCtl && _loadingCtl.stop();
+      document.getElementById('loading').style.display = 'none';
+      document.getElementById('lockBlock').style.display = 'block';
+      await TuviPaywall.requireCredits(_currentSlug, async function () { await _doGenerate(false, lo); });
+      return;
+    }
+    if (!res.ok || !data.success) throw new Error(data.error || 'Lỗi ' + res.status);
+    renderMeta(data);
+    renderProse(data);
+    _loadingCtl && _loadingCtl.finish();
+    document.getElementById('loading').style.display = 'none';
+    document.getElementById('card').style.display = 'block';
+    document.getElementById('btnEdit').style.display = '';
+    if (window.SHELL_INTRO) Shell.dismissIntro(window.SHELL_INTRO.key);
+    _loadHistory();
+
+    var ten = data.ten || 'con';
+    Shell.setContext({
+      birth: _last,
+      wrap: 'huong-nghiep-tre',
+      wrapMoiLo: lo,
+      label: 'Hướng nghiệp sớm cho con',
+      greeting: 'Đây là bản định hướng sớm cho **' + ten + '**. Bạn muốn hỏi thêm gì?',
+      chips: [
+        'Cuối tuần này tôi nên cho ' + ten + ' thử việc gì trước?',
+        'Vì sao lá số lại nghiêng về hướng này?',
+        ten + ' đang mê một thứ khác hẳn — có nên cho theo không?',
+        'Tôi nên hỏi ' + ten + ' câu gì để con tự nói ra?'
+      ]
+    });
+
+    // Chia sẻ CHỈ gắn ở đường đã mở khoá — bản chia sẻ mà rỗng phần chữ thì
+    // người mở link không hiểu đang xem gì.
+    var h0 = (data.huong && data.huong[0]) || null;
+    Shell.setShareable({
+      kind: 'text',
+      toolId: 'huong-nghiep-tre',
+      title: 'Hướng nghiệp sớm — ' + ten,
+      text: [
+        ten + ' — ' + (data.lop ? data.lop.ten + ' (' + data.lop.tuoi + ')' : ''),
+        h0 ? 'Thiên hướng nổi nhất: ' + h0.ten + ' — ' + h0.chat : '',
+        h0 && h0.hoatDong && h0.hoatDong.length ? 'Nên cho làm quen: ' + h0.hoatDong.slice(0, 2).join(' · ') : '',
+        h0 ? 'Người lớn nên: ' + h0.chaMeNen : '',
+        data.motCau ? '— ' + data.motCau : ''
+      ].filter(Boolean).join('\n')
+    });
+  } catch (e) {
+    // Giữ nguyên phần tính thử đang hiện — quẳng người ta về form trống là xoá
+    // luôn thứ họ vừa xem (và có thể vừa trả tiền cho phần sau).
+    _loadingCtl && _loadingCtl.stop();
+    document.getElementById('loading').style.display = 'none';
+    document.getElementById('lockBlock').style.display = 'block';
+    TuviPaywall._banner('Chưa mở được phần định hướng: ' + (e.message || 'lỗi kết nối') + '. Bạn thử lại giúp.');
+  }
+}
+
+// esc() dùng chung từ /laso-chart.js (đã load ở trên) — không khai lại.
+
+// ── HAI HÀM VẼ, TÁCH THEO ĐƯỜNG TIỀN chứ không theo bố cục ────────────────
+//   renderMeta  = thứ engine tra bảng ra, 0đ  → vẽ ngay ở lượt tính thử
+//   renderProse = thứ model viết, tốn tiền    → chỉ vẽ sau khi đã trả
+// Gộp một hàm là sớm muộn có một khối chữ lọt vào lượt miễn phí.
+function renderMeta(data) {
+  var ten = data.ten || 'Con';
+  document.getElementById('heroName').textContent = ten;
+  document.getElementById('heroRole').textContent =
+    (data.gioiTinh === 'nu' ? 'Bé gái' : 'Bé trai') +
+    (data.tuoi != null ? ' · ' + data.tuoi + ' tuổi (tuổi mụ)' : '');
+
+  var bd = [];
+  if (data.lop) bd.push('<span class="hn-badge">' + esc(data.lop.ten) + ' · ' + esc(data.lop.tuoi) + '</span>');
+  if (data.kieu) bd.push('<span class="hn-badge alt">Kiểu ' + esc(data.kieu.ten) + '</span>');
+  if (data.lai && data.kieuPhu) bd.push('<span class="hn-badge alt">pha ' + esc(data.kieuPhu.ten) + '</span>');
+  document.getElementById('heroBadges').innerHTML = bd.join('');
+  // Dòng LÁ SỐ phải hiện ngay trên trang, không chỉ trong bản chia sẻ: cha mẹ
+  // cần thấy bản đọc dựng trên lá số nào để đối chiếu (và để bắt được lúc mình
+  // gõ nhầm một trường). Dùng CHUNG `Shell.birthSummary` với bản chia sẻ.
+  var bSum = '';
+  try { bSum = (window.Shell && Shell.birthSummary && _last) ? Shell.birthSummary(_last) : ''; } catch (e) { bSum = ''; }
+  document.getElementById('heroBirth').textContent = bSum ? 'Lá số: ' + bSum : '';
+  document.getElementById('heroVai').textContent = (data.lop ? data.lop.vaiChaMe : '');
+
+  // Thiên hướng đứng đầu (miễn phí)
+  var hd = data.huongDau;
+  if (hd) {
+    document.getElementById('huongDau').innerHTML = _huongHtml(hd, false, false);
+    document.getElementById('huongDauBlock').style.display = 'block';
+  }
+  var cr = document.getElementById('chuaRoNet');
+  if (data.chuaRoNet) {
+    cr.innerHTML = '⚠️ <b>Lá số con chưa nghiêng hẳn về hướng nào.</b> Ở tuổi này đó là chuyện bình thường — ' +
+      'và lời khuyên đúng lúc này là <b>cho thử rộng</b> thay vì chốt sớm. Hướng dưới đây là hướng nghiêng nhất, ' +
+      'nhưng hãy đọc nó như một gợi ý để thử, không phải một kết luận.';
+    cr.style.display = 'block';
+  } else {
+    cr.style.display = 'none';
+  }
+
+  // Chất người (miễn phí)
+  var cn = data.chatNguoi || [];
+  if (cn.length) {
+    document.getElementById('chatNguoi').innerHTML = cn.map(function (c) {
+      return '<li><b>' + esc(c.ten) + '</b> — ' + esc(c.cao) + '</li>';
+    }).join('');
+    document.getElementById('chatBlock').style.display = 'block';
+  }
+  var kd = data.khongDoiHoi || [];
+  if (kd.length) {
+    document.getElementById('khongDoiHoi').innerHTML = kd.map(function (c) {
+      return '<li><b>' + esc(c.ten) + '</b> — ' + esc(c.thap) + '</li>';
+    }).join('');
+    document.getElementById('khongDoiHoiWrap').style.display = 'block';
+  } else {
+    document.getElementById('khongDoiHoiWrap').style.display = 'none';
+  }
+
+  // Cơ sở lá số (miễn phí) — bằng chứng DUY NHẤT người chưa trả tiền có để tin
+  // engine đọc đúng lá số của con mình.
+  var md = data.matDoc || [];
+  var li = md.map(function (m) {
+    return '<li><b>' + esc(m.nhan) + '</b> (cung ' + esc(m.cung) + '): ' +
+      esc(m.sao.join(', ') || 'không có chính tinh') +
+      (m.muon ? ' <i>— mượn xung chiếu</i>' : '') +
+      (m.cachCuc && m.cachCuc.length ? ' — ' + esc(m.cachCuc.join('; ')) : '') + '</li>';
+  });
+  if (data.changDangO) {
+    li.push('<li><b>Chặng đang ở</b>: ' + data.changDangO.tuoiStart + '–' + data.changDangO.tuoiEnd +
+      ' tuổi (' + data.changDangO.namStart + '–' + data.changDangO.namEnd + '), cung ' +
+      esc(data.changDangO.cung) + '</li>');
+  }
+  if (li.length) {
+    document.getElementById('basisList').innerHTML = li.join('');
+    document.getElementById('basisBlock').style.display = 'block';
+  }
+
+  if (data.moiLo && data.moiLo.label) {
+    document.getElementById('loTitle').textContent = data.moiLo.label;
+  }
+}
+
+/** Một thẻ thiên hướng. `full` = có hoạt động + việc nên/tránh (đã trả tiền). */
+function _huongHtml(h, full, showDiem) {
+  var s = '<div class="hn-h"><div class="hn-h-top"><div class="hn-h-ten">' + esc(h.ten) + '</div>' +
+    (showDiem ? '<div class="hn-h-diem">độ nghiêng ' + (h.diem || 0) + '</div>' : '') + '</div>' +
+    '<div class="hn-h-chat">' + esc(h.chat) + '</div>';
+  if (h.vi && h.vi.length) {
+    s += '<div class="hn-h-vi"><b>Vì:</b> ' + esc(h.vi.join(' · ')) + '</div>';
+  }
+  if (h.dauHieu && h.dauHieu.length) {
+    s += '<div class="hn-sub">Dấu hiệu ở nhà</div><div class="hn-chips">' +
+      h.dauHieu.map(function (d) { return '<span class="hn-chip">' + esc(d) + '</span>'; }).join('') + '</div>';
+  }
+  if (full) {
+    if (h.hoatDong && h.hoatDong.length) {
+      s += '<div class="hn-sub">Nên cho làm quen ở lứa này</div><ul class="hn-list">' +
+        h.hoatDong.map(function (v) { return '<li>' + esc(v) + '</li>'; }).join('') + '</ul>';
+    }
+    if (h.chaMeNen) s += '<div class="hn-sub">Người lớn nên</div><div class="hn-h-chat">' + esc(h.chaMeNen) + '</div>';
+    if (h.chaMeTranh) s += '<div class="hn-sub">Người lớn tránh</div><div class="hn-h-chat">' + esc(h.chaMeTranh) + '</div>';
+    if (h.deBiHieuNham) s += '<div class="hn-sub">Chỗ hay bị hiểu nhầm</div><div class="hn-h-chat">' + esc(h.deBiHieuNham) + '</div>';
+    if (h.chatViec) s += '<div class="hn-sub">Chất việc về sau</div><div class="hn-h-chat">' + esc(h.chatViec) + '</div>';
+    // Tên nghề CHỈ hiện khi server cho phép (từ 8 tuổi). Server đã trả mảng
+    // rỗng cho trẻ nhỏ — chỗ này chỉ là lớp thứ hai, không phải chốt chặn duy nhất.
+    if (h.ngheViDu && h.ngheViDu.length) {
+      s += '<div class="hn-sub">Nghề có chất đó — chỉ để hình dung</div><div class="hn-chips">' +
+        h.ngheViDu.map(function (n) { return '<span class="hn-chip">' + esc(n) + '</span>'; }).join('') + '</div>';
+    }
+  }
+  return s + '</div>';
+}
+
+function _mucHtml(list) {
+  return (list || []).map(function (m) {
+    return '<div class="hn-item"><div class="viec">' + esc(m.viec || '') + '</div>' +
+      (m.viSao ? '<div class="vsao">' + esc(m.viSao) + '</div>' : '') + '</div>';
+  }).join('');
+}
+
+function renderProse(data) {
+  var set = function (id, v, blockId) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    el.textContent = v || '';
+    el.style.display = v ? '' : 'none';
+    if (blockId && v) document.getElementById(blockId).style.display = 'block';
+  };
+
+  set('nhinRaCon', data.nhinRaCon, 'proseTopBlock');
+  set('viSaoHuongNay', data.viSaoHuongNay, 'proseTopBlock');
+  set('loLang', data.loLang, 'loBlock');
+  set('noiTheNao', data.noiTheNao, 'noiBlock');
+  set('mocKeTiep', data.mocKeTiep, 'mocBlock');
+  set('motCau', data.motCau, 'endBlock');
+
+  var hs = data.huong || [];
+  if (hs.length) {
+    document.getElementById('baHuong').innerHTML = hs.map(function (h, i) {
+      return _huongHtml(h, true, i === 0);
+    }).join('');
+    document.getElementById('baHuongBlock').style.display = 'block';
+    // Thiên hướng đứng đầu nay đã có bản ĐẦY ĐỦ ở khối dưới — giấu khối tính
+    // thử đi để không bày hai lần cùng một hướng trong một màn hình.
+    document.getElementById('huongDauBlock').style.display = 'none';
+  }
+
+  var bd = data.batDauTuDau || [];
+  var tl = data.tranhLam || [];
+  if (bd.length || tl.length) {
+    document.getElementById('batDauTuDau').innerHTML = _mucHtml(bd);
+    document.getElementById('tranhLam').innerHTML = _mucHtml(tl);
+    document.getElementById('doBlock').style.display = 'block';
+  }
+}
+
+async function _loadHistory() {
+  try {
+    var token = (window.Auth && Auth.getSession && Auth.getSession()) ? Auth.getSession().access_token : '';
+    if (!token) return;
+    var r = await fetch('/api/huong-nghiep-tre?action=history', { headers: { Authorization: 'Bearer ' + token } });
+    var d = await r.json();
+    if (!d.success || !d.items || !d.items.length) return;
+    document.getElementById('histList').innerHTML = d.items.map(function (it) {
+      return '<div class="hist-row"><span class="n">' + esc(it.ten || 'Không tên') +
+        (it.huong_ten ? ' · ' + esc(it.huong_ten) : '') + '</span>' +
+        '<span class="d">' + new Date(it.created_at).toLocaleDateString('vi-VN') + '</span></div>';
+    }).join('');
+    document.getElementById('histBlock').style.display = 'block';
+  } catch (e) { /* lịch sử hỏng thì thôi, không chặn gì */ }
+}
+_loadHistory();
+</script>
+</body>
+</html>

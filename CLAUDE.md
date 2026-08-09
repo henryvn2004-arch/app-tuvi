@@ -5,7 +5,1538 @@
 
 ---
 
-## 🕘 6 tool KHÔNG HỀ có lịch sử — và nhãn phiên suýt nói sai người (2026-08-07, PR sau)
+## 🧭 Tool MỚI: Hướng Nghiệp Sớm Cho Con (2026-08-09, PR này)
+
+Henry: *"Sau đó làm 1 tool mới cho trẻ em - Định hướng nghề nghiệp, cũng dựa
+trên nền tool này nhưng mà mang tính định hướng hơn và đối tượng xem là bố mẹ/
+ông bà, xem xong phải suggest cách họ định hướng, các hoạt động nên làm để trẻ
+làm quen và phát huy."* → `/app/huong-nghiep-tre`, **15 Lượng**, khuôn W1.
+
+### 🔑 CÂU HỎI CHẶN đo TRƯỚC khi viết một dòng nào
+CLAUDE.md tự dặn phải đo overlap với T2 "Dạy Con" trước khi dựng. Đo trên
+**2.496 lá số trẻ em** (sinh 2008–2020):
+
+| | |
+|---|---:|
+| T2 phân trẻ thành | **4 kiểu** |
+| 21 trục cắt cùng tệp đó ra | **359 bộ trục** |
+| Hai đứa **CÙNG một kiểu**, cosine vector | **0,54** |
+| Bộ trục phổ biến nhất trong một kiểu chiếm | 5–12% |
+
+Riêng kiểu "Hỗ trợ" ra **134 bộ khác nhau**. ⇒ 4 kiểu mới nói được khoảng một
+nửa về đứa trẻ; tầng 21 trục có nội dung thật, không phải đội tên khác.
+
+### Vì sao TOOL RIÊNG mà không gộp như Công Sở
+Công Sở gộp được vì tầng nhánh trả lời **CÙNG câu hỏi** (nghề nghiệp) — chi tiết
+hoá thứ đã bày. Ở đây khác: `day-con` hỏi *dạy kiểu nào thì vào*, tool này hỏi
+*cho con làm quen với gì*. Cùng đối tượng, khác câu hỏi — như Công Sở với Luận
+Giải cùng đọc một người trưởng thành. Hai tool dùng CHUNG `phanKieu`/`KIEU` nên
+không bao giờ nói khác nhau, và **`day-con` giữ riêng cung Phụ Mẫu** (mặt "con
+nhìn cha mẹ thế nào") còn tool này KHÔNG đọc cung đó — cắt để hai bên không
+chồng lên nhau.
+- 🔴 **`day-con.ts` còn ghi luật Henry ĐÃ BÃI BỎ** (*"KHÔNG trả bảng nghề — chốt
+  nghề cho một đứa 10 tuổi là thứ nguy hiểm nhất tool này làm được"*). Đã thay
+  bằng khối đính chính dẫn nguyên văn Henry. Luật cũ nhầm **ĐỊNH HƯỚNG** với
+  **CHỐT**.
+- Ô mối lo `chon-duong` của T2 hứa *"chất việc hợp với con"* mà engine T2 không
+  tính gì về chất việc — đã ghi chú thẳng tại chỗ là phần đó nằm ở tool này.
+
+### 🔄 ĐỔI TẦNG CHẤM: dựng THẲNG trên 5 trục · 8 chất của `#458`
+Henry: *"Ok làm theo đề xuất của mày đi"* — chốt phương án tôi đề nghị ở cuối
+vòng trước thay vì ship bản vá bằng lời khai.
+
+**Bệnh:** bản đầu chấm trên 21 trục riêng của `nghe-nghiep.ts`, không dính gì
+tới khung `day-con` bán ngay cạnh. Đo ra: bé có CHẤT #1 bên kia là *"Hiểu người
+& dẫn nhóm"* thì bản đó xếp #1 là *"Tỉ mỉ · làm cho đúng"* ở **65%** số ca.
+
+**Vá:** chấm thẳng trên chính 13 chiều `day-con` đo. Hai tool không thể lệch
+nhau về NGUYÊN TẮC nữa, chứ không phải nhờ một câu chú thích.
+
+| Đo trên 2.496 lá số | 21 trục | 13 chiều |
+|---|---:|---:|
+| Chất#1 → đúng hướng kỳ vọng ở **#1** | 38,5% | **61,7%** |
+| …lọt **TOP-3** (thứ phụ huynh thật sự đọc) | — | **91,2%** |
+| Ca nghịch tai `hiểu người` → `tỉ mỉ` | **65%** | **24,6%** |
+| …và `dẫn dắt` vẫn lọt top-3 cho nhóm đó | — | **92,6%** |
+
+- ✅ **Ranh giới Phụ Mẫu vẫn giữ** — kiểm TRƯỚC khi mượn vector: `assess` đọc
+  Mệnh · Thiên Di · Phúc Đức · Quan Lộc · Huynh Đệ · Nô Bộc, **không có Phụ
+  Mẫu**. Mượn nền của nó không phá được thế phân vai với `day-con`.
+- **Không còn 100% là ĐÚNG, không phải thiếu sót**: `day-con` đo NĂNG KHIẾU
+  (giỏi MÔN gì), tool này đo CHẤT VIỆC (hợp KIỂU LÀM VIỆC nào). Chung thước đo,
+  khác câu hỏi.
+- 🔑 **Toàn bộ mẹo TRỪ NỀN + "chỉ khai thành phần dương" của bản cũ BỊ GỠ** —
+  13 chiều đã z-score sẵn từng chiều nên nền phẳng từ gốc. Bớt được một tầng
+  mẹo là bớt một chỗ trôi.
+- 🪤 **NHƯNG lộ ra một bẫy MỚI cùng họ: 13 chiều KHÔNG độc lập** (cùng đọc một
+  bộ cung). Đo được `nhip ↔ van-dong` **+0,71** · `nhip ↔ thien-nhien` −0,55 ·
+  `nhay ↔ hieu-minh` +0,48. Hình nạp hai chiều tương quan mạnh CÙNG chiều thì
+  tự cộng điểm (đếm hai lần một tín hiệu); nạp NGƯỢC chiều thì tự triệt tiêu.
+  Lượt đo đầu dính cả hai: `van-dong` nạp nhip+van-dong ⇒ **27,6%**, `ben-bi`
+  kéo −nhay ngược hieu-minh ⇒ **4,4%**, `kham-pha` **2,4%**.
+  ⇒ **Luật: trong MỘT hình không nạp hai chiều |corr| > 0,45.** Sau khi tách:
+  cả 9 hướng sống **8,2–14,8%** (bản 21 trục 4,7–21,0), bộ-3 hay gặp nhất
+  **1/28** (trước 1/17), cặp hình giống nhau nhất 0,40.
+- 🪤 `dan-dat` ↔ `giao-thiep` lượt đầu cosine **0,86** — đúng bẫy `Kể chuyện`
+  0,77 lặp lại. Tách bằng trục `hoa`: dẫn dắt **giữ ý mình** (hoa thấp), giao
+  thiệp **thuận nhóm** (hoa cao). Hai hình cùng đọc người nhưng ngược cực.
+- **Ngưỡng 0,25 → 0,20** để `chuaRoNet` giữ **7,1%**, bám mức cũ 6,6%: đổi tầng
+  chấm thì KHÔNG được lặng lẽ đổi luôn tần suất tool nói "chưa rõ nét" — đó là
+  một câu người dùng đọc được, không phải hằng số nội bộ.
+- 🔴 **Bất biến tự-mâu-thuẫn nay BẤT KHẢ THI VỀ CẤU TRÚC, không nhờ bộ lọc**:
+  `khongDoiHoi` chỉ lấy từ CHẤT âm, mà trọng số chất luôn ≥ 0 ⇒ tích `val × w`
+  ≤ 0 khi val < 0 ⇒ chất thấp không bao giờ vượt nổi ngưỡng để lọt vào phần lý
+  do. Red-team gỡ chốt `|val| > 0.25` **vẫn 0 lỗi** — đúng như dự đoán; chốt đó
+  nay chỉ lọc chiều gần mức giữa (665 lượt trích dẫn yếu), không còn gánh phần
+  đúng/sai. Bất biến đáng canh vì thế là chốt GỐC: **0 hình khai chất âm**.
+- **Chất thấp có bảng chữ RIÊNG** (`CHAT_KHONG_DOI_HOI`, 8 câu tự viết), cố ý
+  KHÔNG mượn `motCau` của `KHIEU` — câu đó tả năng khiếu, ghép vào ngữ cảnh
+  "thấp" là thành lời chê ngay.
+- Lời khai trên trang + prompt rail viết lại: không còn nói *"hai trục khác
+  nhau"* (nay sai) mà nói **cùng một thước đo, khác câu hỏi**, và rail được dặn
+  NỐI hai bên lại thay vì phân trần.
+
+### 🗑️ Tầng chấm 21 trục — ĐÃ GỠ, giữ lại đây làm bài học
+Bản đầu chấm trên 21 trục của `nghe-nghiep.ts` và phải dựng hai mẹo để sống
+được: **TRỪ NỀN** (trục lá số trẻ em lệch nhau rất xa — tỉ mỉ TB +1,26 · hợp
+tác −0,53) và **chỉ khai thành phần DƯƠNG** (khai âm ở trục nền cao thì bị
+phạt oan; `Tưởng tượng` từng tụt còn **0,2%**). Cả hai nay **không còn cần** —
+13 chiều của `#458` đã z-score sẵn từng chiều.
+- 🔑 Bài học giữ lại: **mẹo bù trừ ở tầng chấm là dấu hiệu nền dữ liệu chưa
+  chuẩn hoá.** Chuẩn hoá đúng chỗ (phía dữ liệu) thì mẹo tự biến mất; càng
+  nhiều mẹo càng nhiều chỗ trôi.
+- 🪤 Và bẫy "hai hình nuốt nhau" thì **KHÔNG** biến mất theo: `Kể chuyện` ↔
+  `Giao thiệp` 0,77 ở bản 21 trục, `dan-dat` ↔ `giao-thiep` **0,86** ở bản 13
+  chiều. Đổi nền không cứu được chỗ này — phải tách bằng một chiều ngược cực.
+
+### 🧷 Bắt kèm lúc gộp `#465`: port cơ chế `_shape` cho cache
+`#465` phát hiện `portrait_cache` **khoá theo lá số, KHÔNG theo shape** — đổi
+cấu trúc payload xong thì dòng cũ vẫn trả nguyên trạng mãi mãi (bên `day-con`
+đã cắn thật: 4 khối im lặng biến mất, không lỗi nào bắn ra). Tool này có ĐÚNG
+thiết kế cache đó, và PR này vừa đổi cấu trúc payload ⇒ port ngay `SHAPE = 1` +
+`shapeStale()` + `overwrite` khi dựng lại.
+- Chưa cắn được ai vì tool còn `enabled=false`, nhưng 27 khối hoạt động **chưa
+  ai review** — sửa bảng đó là đổi payload, và lúc ấy mới cần thì đã muộn.
+- ⚠️ `_shape` **KHÔNG vào `lasoKey`**: đổi khoá là mồ côi cả cache lẫn
+  `userOwnsLaso` ⇒ người đã trả tiền bị tính lại. Giữ khoá thì lượt dựng lại
+  vẫn miễn phí đúng cho họ.
+
+### Ranh giới trẻ em nằm ở TẦNG DỮ LIỆU, không chỉ ở lời dặn
+- **Cờ `bayNghe`**: dưới 8 tuổi thì `ngheViDu` trả **mảng RỖNG** ở mọi hướng.
+  Bày danh sách nghề cho đứa 5 tuổi vừa vô nghĩa vừa mời cha mẹ chốt sớm. Trang
+  là lớp thứ HAI, không phải chốt chặn duy nhất.
+- Dùng chung `KHONG_DOC` — không đọc Tật Ách, Phu Thê (hôn nhân của một đứa
+  trẻ!), Tài Bạch, Tử Tức, Điền Trạch. Không điểm tổng, không xếp hạng.
+- 🔴 **Trục thấp đọc là "việc không đòi hỏi", không phải "con thiếu".** Với trẻ
+  em luật này gắt hơn người lớn: cha mẹ đọc một câu chê rồi tin thì câu đó theo
+  đứa bé nhiều năm. Nói ở cả tầng data, tầng prompt, và in thẳng lên trang.
+- **`chuaRoNet` là trạng thái CÓ THẬT, không phải đường lùi**: 6,6% lá số không
+  hướng nào vượt ngưỡng. Trang nói thẳng *"ở tuổi này chưa rõ nét là bình
+  thường, nên cho thử rộng"* — đó là lời khuyên ĐÚNG, và prompt bị cấm giấu nó
+  để bản đọc nghe chắc chắn hơn.
+
+### Đường tiền (khuôn W1)
+Miễn phí: thiên hướng đứng đầu + **dấu hiệu quan sát được ở nhà** (thứ cha mẹ
+dùng để đối chiếu "có đúng con mình không") + chất người + cơ sở lá số.
+Trả tiền: đủ ba hướng + hoạt động theo lứa tuổi + việc người lớn nên/tránh +
+chất việc + một lượt LLM.
+- `hoSoTinhThu()` / `hoSoDayDu()` là hàm RIÊNG — đường tiền cắt được bằng MỘT
+  dòng đọc ra được, có bài kiểm canh đúng dòng đó.
+- **Ba lớp tuổi** (3–7 · 8–12 · 13–18) × 9 hướng = 27 khối hoạt động. Chia ba
+  chứ không bốn: hoạt động cho đứa 5 và đứa 7 gần như một, còn 12 với 16 khác
+  hẳn — chia theo chỗ THẬT SỰ đổi.
+- ⚠️ **`namXem` PHẢI vào khoá cache**: tool đọc TUỔI để chọn lứa hoạt động, nên
+  cùng một lá số ở hai năm phải ra hai bản. Thiếu năm trong khoá là đứa 12 tuổi
+  sang năm vẫn nhận bộ hoạt động của lứa cũ.
+- `cache-status` **tự tính năm xem qua engine**, không nhận từ query — client tự
+  khai năm là mở đường tra một khoá khác với khoá lượt dựng sẽ dùng.
+- Rail chỉ biết ba thiên hướng SAU khi mua (`railDataDayDu`) — biết sớm thì
+  người ta hỏi rail thay vì mua. Có bài kiểm canh khối vỏ không nêu tên hướng.
+- **CỐ Ý không gọi `Shell.prefillForm()`**: lá số shell đang nhớ là của NGƯỜI
+  DÙNG, form này là của CON. Đổ vào là người ta bấm luôn rồi nhận bản đọc về
+  chính mình dưới nhãn "con" — sai im lặng, không có gì báo.
+
+### 🔍 Soi 27 khối hoạt động — 3 lỗi thật, và một lời khai của tao hẹp hơn tên gọi
+Phần này là thứ người TRẢ TIỀN đọc kỹ nhất mà không bất biến nào với tới: mọi
+bài kiểm khác nói về CẤU TRÚC (điểm giảm dần, đủ ba hướng, rail phẳng), không
+nói gì về CHỮ. Soi tay 108 hoạt động (9 hướng × 3 lứa × 4 ô) bằng phép đo.
+
+- 🔴 **`bayNghe` KHÔNG với tới chữ trong `hoatDong`** — nó chỉ làm rỗng mảng
+  `ngheViDu`. `giao-thiep/nho` vì thế ghi *"Trò chơi đổi vai: bán hàng, bác sĩ,
+  cô giáo"* và **đi thẳng ra trang cho đứa 5 tuổi**. Bản thân trò đóng vai là
+  hoạt động ĐÚNG cho lứa đó; cái sai là gọi tên nghề — trên một trang tên là
+  *hướng nghiệp cho con*, danh từ nghề đứng cạnh thiên hướng đọc thành lời gợi ý
+  chốt nghề. Sửa thành *"đổi vai có hai phía: người mua kẻ bán, người hỏi người
+  trả lời"* — giữ nguyên độ cụ thể, bỏ nhãn nghề.
+  🔑 **Và đây là chỗ tao phải đính chính chính mình:** câu verify *"trẻ nhỏ → 0
+  tên nghề lọt"* ĐÚNG trong phạm vi nó đo (các phần tử của `ngheViDu`) nhưng
+  **hẹp hơn hẳn cái tên gọi của nó**. Bài kiểm đặt tên theo điều muốn chứng
+  minh, không theo điều thực sự đo — loại sai lệch tự đánh lừa nguy hiểm nhất.
+- 🪤 **Bẫy "hai hình nuốt nhau" LỘ LẠI Ở TẦNG CHỮ**: `dan-dat/lon` và
+  `giao-thiep/giua` cùng ghi *"Bán một thứ có thật…"* (Jaccard **0,55**). Đúng
+  cặp đã phải tách ở TẦNG CHẤM (cosine 0,86) — **sửa trọng số không cứu được
+  chỗ này**. Ô đó còn lạc khỏi chính khối của nó (ba ô kia đều là *dẫn người*).
+  Thay bằng *"dẫn một nhóm qua một lần bất đồng thật — nơi nó phải chốt trong
+  khi vài người không đồng ý"*: đúng cực `hoa` thấp phân biệt dẫn dắt với giao
+  thiệp.
+- Ô thứ ba: hai khối mở đầu y hệt *"Học nghiêm túc một môn…"* (0,36) — đổi một bên.
+
+**Hai con số trả lời hai mối lo đang treo trong mục CÒN LẠI:**
+| | |
+|---|---:|
+| Chồng lấn giữa 3 lứa trong cùng một hướng (Jaccard) | **≤ 0,15** cả 9 hướng |
+| Hoạt động cần TIỀN / dịch vụ gần nhà | **11/108 = 10,2%** |
+⇒ Chia ba lứa **có nội dung thật**, không phải đội tên khác (mốc trước chỉ là
+lập luận "chia theo chỗ THẬT SỰ đổi", nay có số). Và lo "chưa phân theo vùng"
+nhẹ hơn tưởng: **90% hoạt động làm được không cần tiền**, không khối nào có quá
+nửa số ô cần chi.
+
+### 🧷 `scripts/check-hoat-dong-tre.mjs` (bộ dò thứ 10) — chặn tái phát
+Ba luật, **cả ba rút từ lỗi vừa bắt được thật**, không phải lo hão: lứa 3–7 cấm
+tên nghề · lứa 3–7 cấm ngôn ngữ thi thố · hai hướng khác nhau cấm gợi cùng một
+việc (Jaccard < 0,5). Cộng chốt đếm: đúng 27 khối, mỗi khối **≥ 4 ô**.
+- **Luật 2 chỉ khoá ĐÚNG lứa nhỏ, không cấm tiệt**: đo ra 9 hoạt động có chữ
+  thi/giải/cấp bậc và **cả 9 đều ở lứa 8–12 và 13–18**, 0 ở lứa 3–7. Đó là hình
+  dạng ĐÚNG (thi đấu có chỗ của nó với trẻ lớn) — chốt lại để lượt sửa sau không
+  lặng lẽ kéo nó xuống, chứ không phải để dọn dẹp.
+- 🪤 **Red-team lộ ngưỡng của chính tao sai**: đặt "khối quá mỏng" ở `< 3` thì
+  bỏ một ô (4→3) **vẫn xanh**. Ngưỡng phải là `< 4`. Bộ dò mà không red-team thì
+  con số trong nó chỉ là phỏng đoán.
+- **4/4 ca đỏ đúng · 2/2 đối chứng im** (thi thố ở lứa 13–18 hợp lệ → im; sửa
+  chữ vô hại → im), và diff sau red-team sạch đúng 3 dòng sửa thật.
+
+### ⚠️ Sửa 27 khối này về sau: khi nào phải bump `_shape`
+`_shape` gác **CẤU TRÚC payload**, không gác chữ. Đổi chữ hoạt động thì dòng
+cache cũ trả chữ CŨ (khó chịu, không vỡ); đổi/thêm/bớt KHOÁ thì trang ẩn khối
+im lặng (đúng lỗi `day-con` đã cắn). ⇒ **Sửa chữ: không bump. Đổi cấu trúc: bắt
+buộc bump.** Vòng này giữ `SHAPE = 1` vì tool còn `enabled=false`, chưa dòng
+cache nào tồn tại.
+
+### 🪤 Gộp #467: trang MỚI nằm lại phiên bản asset cũ
+#467 bump `shell.js?v=67` trên 35 trang có sẵn; trang mới của PR này không có
+trên main nên **auto-merge để nó ở `v=66`**, kèm `shell.css` lạc ở `v=17`. Không
+lỗi nào bắn ra — chỉ là một trang ăn bản shell cũ. 🔑 **Gộp base xong phải đếm
+lại phiên bản asset trên CẢ cây**, đừng tin "hết `<<<<<<<` là xong" (bài học
+`git checkout --ours` lặp lại ở dạng khác).
+
+### Verify
+`tsc` 0 · `lint` 0 lỗi (72 warning pre-existing) · `prettier` quét cả cây sạch ·
+**10/10 bộ dò sạch** (`prices`/`groups`/`nostore`/`share`/`keyframes`/
+**`hoatdong`**/`hexagrams`/`hao`/`motifs`/`terms`) · engine **185 pass** ·
+`node --check` 2 khối script.
+- **4.680 lá số × 8 bất biến = 259.208 assertion, 0 lỗi**: đủ 3 hướng · hoạt
+  động khớp ĐÚNG lứa tuổi · trẻ nhỏ 0 tên nghề · rail phẳng · deterministic ·
+  **0 ca bản đọc tự mâu thuẫn** (trục nêu làm lý do không nằm trong "việc không
+  đòi hỏi" — đúng lỗi đã vấp ở tầng nhánh nghề).
+- **26.362 assertion RIÊNG cho tầng chấm mới** trên 2.496 lá số: điểm giảm dần
+  và trong dải · 0 rò `undefined`/`NaN`/`[object` · deterministic · 0 ca tự mâu
+  thuẫn · tính thử **0 khoá trả tiền** · trẻ nhỏ 0 tên nghề · rail phẳng.
+- **Tần suất khối rỗng** (trang phải chịu được): `chatNguoi` rỗng **0,0%** ·
+  `khongDoiHoi` rỗng 2,0% · hướng không có lý do 2,9%. Trang đã có nhánh ẩn.
+- 🪤 **Red-team vòng này — 2 ca, và một ca CỐ Ý không đỏ:**
+  (a) nạp lại `nhip` vào `van-dong` (corr +0,71) → **13,9% vọt lên 19,1%**, dải
+  nới từ 8,2–14,8 ra 5,8–19,1 ⇒ luật chống chồng tín hiệu có thật, đo được.
+  (b) cho một hình khai **chất ÂM** → bộ dò bắt đúng dòng, exit 1.
+  (c) gỡ chốt `|val| > 0.25` → **VẪN 0 lỗi**, đúng như dự đoán: tự mâu thuẫn
+  nay bất khả thi về CẤU TRÚC (xem trên), chốt đó chỉ còn lọc chiều gần mức
+  giữa (665 lượt trích dẫn yếu). **Ca không đỏ này là kết quả, không phải bài
+  kiểm hỏng** — nhưng phải giải thích được vì sao, nếu không nó chỉ là một bộ
+  dò câm.
+- 🪤 **Bộ dựng harness thất bại IM LẶNG**: thêm `--paths` vào dòng lệnh thì tsc
+  từ chối (TS6064) → không emit → `|| true` nuốt → phép đo chạy trên bản JS
+  **CŨ** và ra 100% một hướng. Đúng bài học "mọi lượt thay bằng script phải
+  assert". Đã thêm assert bản dựng phải chứa `day-con-assess`.
+- **40/40 ca đọc thẳng mã nguồn**: `runPreview` không chứa một trong **10** ký
+  hiệu cấm · rẽ nhánh trước `withToolOutcome` · + ca ĐỐI CHỨNG đường trả tiền
+  PHẢI có `toolPaymentDenied` + `llmTextFull` + `hoSoDayDu` + ghi cache.
+- **19/19 ca trên ROUTE THẬT qua Next dev**: tính thử 200 không cần đăng nhập ·
+  payload thật **0 khoá trả tiền** · 0 cung cấm · `moiLo` rác rơi về danh sách
+  trắng · đường trả tiền không auth → 401.
+- **61/61 ca Playwright trên TRANG THẬT**: tính thử → 0 POST đường tiền, 0
+  `deduct`, quét toàn bộ chữ hiện ra **0 mẩu trả tiền lọt** · bấm mở → có
+  deduct + đủ ba hướng + phần miễn phí còn nguyên byte · **trẻ nhỏ → 0 tên nghề
+  lọt** · ĐỐI CHỨNG 402 → dựng lại tường, không quẳng về form · đọc hụt bảng giá
+  → **không trừ Lượng** (fail-closed) · XSS từ cả tên lẫn chuỗi server không
+  chạy · 390px không tràn · **khung shell đúng chuẩn** (xem bẫy ngay dưới).
+- 🪤 **Red-team lộ ra bài kiểm trang KHÔNG canh được rò rỉ SERVER**: bộ quét đọc
+  `innerText`, tức đo *người dùng thấy gì*, nên payload thừa không lọt màn hình
+  ⇒ 40/40 vẫn xanh khi cố ý cho preview trả bản đầy đủ. Red-team đúng tầng
+  (engine) thì bắt **18.720 lỗi đỏ** trên đúng 4 assertion. Đã biến chính tính
+  chất đó thành ca thật (CA8: server rò thì trang vẫn không vẽ).
+- 🪤 Hai ca đỏ trên route đều là **lỗi TEST**: (a) `motCau` cũng là tên trường
+  của `kieu` (câu tóm kiểu — MIỄN PHÍ) nên dò chuỗi thô báo đỏ oan, phải dò khoá
+  TOP-LEVEL; (b) token sai ra **500** thay vì 401 — nhưng `day-con` và
+  `nguoi-khac` (đang chạy prod) ra **y hệt 500** trong container này ⇒ hiện tượng
+  của môi trường (không có credential Supabase thật), không phải của tool mới.
+
+### 🔴 GỘP GIỮA CHỪNG: `#458` vừa cho Dạy Con một khung RẤT GIỐNG — đo rồi mới kết luận
+Trong lúc làm PR này, `#458` merge vào main và thêm cho `day-con` (tầng **MIỄN
+PHÍ**): 5 trục tính khí + **8 CHẤT năng khiếu** + **gợi ý hoạt động theo chất ×
+nhóm tuổi**. Nghe như đúng thứ tool này làm. Đo trên 792 lá số trẻ em:
+
+| | |
+|---|---:|
+| Đoán hướng#1 (tool này) từ chất#1 (Dạy Con) | **38,5%** |
+| Mốc so: hai bảng là MỘT | 100% |
+| Mốc so: độc lập hoàn toàn | ~11% |
+| Cụm chữ **hoạt động** trùng nhau | **0/1600 (0,0%)** |
+
+⇒ **Không phải bản sao.** Hai bảng đo hai trục khác nhau: `day-con` đo **NĂNG
+KHIẾU** (con giỏi MÔN gì — ngôn ngữ, con số, âm nhạc), tool này đo **CHẤT VIỆC**
+(con hợp KIỂU LÀM VIỆC nào — tỉ mỉ, dẫn dắt, khám phá).
+
+- 🪤 **Nhưng chỗ nguy hiểm không phải trùng lặp, mà là NGHE NHƯ NÓI NGƯỢC**: bé
+  có chất #1 *"Hiểu người & dẫn nhóm"* thì tool này xếp #1 là *"Tỉ mỉ · làm cho
+  đúng"* ở **65%** số ca. Về lý thì không mâu thuẫn (hai trục), nhưng một phụ
+  huynh trả tiền cho CẢ HAI tool 15 Lượng về CÙNG một đứa trẻ sẽ đọc thành hai
+  kết luận đá nhau — và mất tin vào cả hai.
+- ✅ Vá bằng lời khai, không bằng cách đổi thuật toán: trang nói thẳng tool này
+  đo *chất việc* còn Dạy Con đo *năng khiếu*, kèm link sang; **prompt rail có
+  luật cứng** — nếu người dùng nhắc kết quả bên kia thì phải giải thích là HAI
+  TRỤC, và **TUYỆT ĐỐI không nói bên nào sai**.
+- ✅ **ĐÃ LÀM trong chính PR này** (Henry: *"Ok làm theo đề xuất của mày đi"*):
+  dựng thiên hướng thẳng trên 13 chiều của `#458`. Xem mục "ĐỔI TẦNG CHẤM" ở
+  trên — con số trong bảng này (38,5% / 0,0% / 65%) là của bản 21 trục **đã bị
+  thay**, giữ lại để so.
+
+### 🪤 DỰNG TRANG TRÊN MỘT KHUNG KHÔNG TỒN TẠI — và test của tao không bắt được
+Bản đầu của trang dựng bằng `.sidebar` / `.work` / `.work-inner` — **ba lớp
+`shell.css` KHÔNG hề khai**. 35 trang shell đều dùng `.sb` / `.ws` /
+`.ws-top` / `.ws-body`; trang mới là trang DUY NHẤT lạc khung.
+- 🔴 **Playwright vẫn xanh 45/45** vì nó chỉ kiểm NỘI DUNG (chữ hiện đúng chưa,
+  có rò tầng trả tiền không) chứ không kiểm KHUNG. Ngay cả ca "390px không tràn
+  ngang" cũng xanh — không có lưới shell thì mọi thứ xếp dọc, càng không tràn.
+- Thứ bắt được là **`check:share`** (guard của PR #456, gộp vào giữa chừng): nó
+  đòi `.ws-actions` làm chỗ chèn nút Chia sẻ. Guard viết cho việc khác lại bắt
+  đúng lỗi này — vì nó neo vào **dấu hiệu THẬT của shell**, không neo vào chữ.
+- 🔑 **Quy ước rút ra: trang shell mới phải kiểm cả KHUNG, không chỉ kiểm chữ.**
+  Đã thêm CA9 (13 assertion): đúng `aside.sb` / `main.ws#ws` / `.ws-top` /
+  `.ws-actions` / `.ws-body` / rail · đúng MỘT mốc `data-ws-result` · **0 lớp
+  chết `.work`/`.work-inner`** · và nút Chia sẻ do SHELL tự bật khi có kết quả,
+  tự gỡ khi quay về form.
+
+### 🐞 Bắt kèm: 7 khoá rail in NGUYÊN KHOÁ KỸ THUẬT vào prompt
+`extractGenericContext` rơi về `GENERIC_LABELS[k] || k`, nên `laiKieu: true` ·
+`cungMệnh: Cự Môn` · `hopHayVa: …` đi thẳng vào prompt. Nợ CÓ SẴN — `day-con`
+phát đúng mấy khoá đó. Vá một chỗ là cả hai tool được; nay **0 khoá thiếu nhãn**
+trên cả hai (quét 336 lá số).
+
+### CÒN LẠI
+- ⚠️ **VIỆC TAY: chạy `_patches/migration-huong-nghiep-tre.sql` rồi bật SAU KHI
+  DEPLOY**, không được trước — `cong-cu.html` và `tuvi-paywall.js` đều lọc
+  `enabled=eq.true`, bật sớm là người thật bấm vào trang chưa tồn tại:
+  ```sql
+  update tool_pricing set enabled = true, updated_at = now()
+   where tool_id = 'huong-nghiep-tre';
+  ```
+- **`THIEN_HUONG` (9 hướng × 21 trục + toàn bộ phần chữ) là bảng TỰ ĐẶT**, cùng
+  dạng nợ với `KIEU_HOC`, `DOMAIN_NGANH`, `SAO_TRUC`. Cổ thư không có khái niệm
+  "thiên hướng của trẻ" bằng thang điểm. Sửa là sửa data thuần.
+- **27 khối hoạt động nay có MÁY canh, vẫn CHƯA CÓ NGƯỜI đọc.** `check:hoatdong`
+  chặn được ba lỗi đo ra được (tên nghề lứa nhỏ · thi thố lứa nhỏ · hai hướng
+  trùng việc) — nó **không** nói được hoạt động ấy có phải lời khuyên tốt cho
+  một đứa trẻ thật hay không. Đây vẫn là phần người trả tiền đọc kỹ nhất và là
+  phần duy nhất của tool chưa ai ngoài tao đọc qua.
+- **Chưa có trang standalone SEO.** *"định hướng nghề nghiệp cho con"* có cầu
+  thật, đáng làm sau.
+- Con số cần nhìn sau 1–2 tuần: cột *mở → tính thử → bấm mở* của
+  `huong-nghiep-tre` trong panel Phễu Theo Tool, đặt cạnh `day-con` (cùng 15
+  Lượng, cùng đối tượng) để biết câu hỏi nào bán tốt hơn.
+---
+
+## 🧪 CI đo BẢN CŨ chứ không đo PR — cả 3 workflow sang preview (2026-08-09, PR #463 · #466 · PR này)
+
+Henry: *"Vercel smoke test dùng để test gì thế? Sao giờ thiết kế lại skip test
+đó?"* → rồi *"Làm sao để tao mở SSO cho tất cả?"* → *"Ok làm nốt đi"* → *"Xong
+làm tiếp"*.
+
+### 🔴 Căn nguyên chung của CẢ BA workflow: đo NHẦM BẢN
+| | Trigger cũ | Thực tế đang đo |
+|---|---|---|
+| `smoke-prod.yml` | `deployment_status` nhưng **chặn preview** | không đo gì trên PR (check hiện **"skipped"**) |
+| `playwright.yml` | `push`/`pull_request` | **prod đang chạy**, tức bản PR chưa đụng tới |
+| `lighthouse.yml` | `pull_request` | **4 URL prod cứng** trong `lighthouserc.json` |
+
+- 🔑 **Skip TRÔNG GIỐNG PASS.** Đếm "7 check xanh" trên PR là sai — smoke nằm
+  trong đó ở trạng thái skip. Prod chỉ được kiểm SAU khi merge.
+- 🔑 **`push` bắn TRƯỚC khi bản deploy tồn tại** ⇒ E2E 16 spec (có đăng nhập)
+  đi đo bản cũ. Xanh hay đỏ đều không nói gì về thay đổi trong PR.
+- 🪤 **`lighthouse.yml` còn tệ hơn: chú thích trong file MÔ TẢ một hành vi
+  KHÔNG TỒN TẠI** — nó ghi *"trên PR có thể override sang Vercel preview URL"*
+  trong khi đường override duy nhất là `workflow_dispatch`. Đọc chú thích mà
+  tin là xong thì không bao giờ đi tìm.
+- Nay **cả ba** dùng chung một khuôn: chạy theo `deployment_status`, production
+  đo domain thật (giữ DNS + redirect apex→www + CDN trong phạm vi đo), mọi
+  deploy khác đo `target_url` của chính lượt đó. Nhờ vậy URL preview của nhánh
+  `dev` **hết phải chép cứng** trong `playwright.yml` — chuỗi đó sẽ mục mà không
+  ai hay.
+- **Danh sách trang của Lighthouse vẫn nằm DUY NHẤT ở `lighthouserc.json`**;
+  `scripts/lhci-preview-urls.mjs` đọc thẳng file đó rồi ghép sang host preview.
+  Chép danh sách sang workflow là hai bản trôi khỏi nhau rồi âm thầm đo thiếu
+  trang.
+
+### 🔓 Mở cửa SSO cho CI mà KHÔNG mở preview cho công chúng
+Dùng **Protection Bypass for Automation** (Vercel → Settings → Deployment
+Protection), secret để trong GitHub Actions tên `VERCEL_BYPASS_SECRET`.
+- **smoke** gửi kèm header `x-vercel-protection-bypass` + `x-vercel-set-bypass-cookie`.
+- **E2E dùng COOKIE, KHÔNG dùng header** — `tests/auth.setup.ts` gắn vé vào
+  QUERY ở đúng lượt điều hướng đầu, server trả `_vercel_jwt`, cookie đó nằm
+  trong `storageState` nên mọi test sau qua cửa. Lý do bắt buộc phải khác smoke:
+  xem bẫy số 4 bên dưới.
+- ⛔ **KHÔNG tắt Vercel Authentication.** Preview **dùng chung env với
+  production** (cùng `SUPABASE_SERVICE_KEY`, cùng key model, cùng key thanh
+  toán) và URL preview nằm ngay trên comment của PR ⇒ mở công khai là ai cũng
+  gọi được API ghi thẳng DB prod và đốt tiền model thật.
+- ⚠️ **Vì thế việc này CHỈ chữa "đo nhầm bản", KHÔNG chữa "cách ly dữ liệu"** —
+  E2E trên preview vẫn ghi vào đúng Supabase prod. Đừng nhầm hai thứ.
+- Thiếu secret thì config **bỏ header đi**, đường prod chạy y như cũ (domain
+  prod không bị gác) — nên hỏng secret không kéo sập lượt đo prod.
+
+### 🪤 Bốn cái bẫy, cả bốn chỉ lộ khi ĐO
+1. **`request.newContext()` KHÔNG thừa hưởng `use` của config.** Chỉ **FIXTURE**
+   `request` (tham số của test) mới mang `baseURL` + `extraHTTPHeaders`. Bản cũ
+   tự tạo context ở 4 ca API ⇒ trên preview mấy ca đó ăn 401 trong khi ca
+   `page.goto` vẫn xanh — kiểu đỏ rất khó lần. Đổi sang fixture cũng gỡ luôn 4
+   lượt `dispose()` tay.
+2. **Phép so neo vào HOST thì chết trên preview.** Ca paywall so URL redirect với
+   `tuviminhbao.com`, mà preview là `*.vercel.app` ⇒ đỏ oan. So theo **pathname**.
+3. 🔴 **Tao nói SAI một lần rồi tự đính chính bằng số liệu:** tao khẳng định
+   workflow chạy bằng `deployment_status` luôn lấy YAML từ **nhánh mặc định**,
+   nên PR không tự kiểm được chính nó. **Sai** — run sinh ra mang đúng tiêu đề
+   mới của nhánh PR, và số dòng trong log khớp spec mới. **GitHub dùng YAML +
+   code từ COMMIT CỦA DEPLOYMENT.** Nhờ vậy PR tự kiểm được chính nó.
+4. 🔴 **`extraHTTPHeaders` áp lên CẢ REQUEST KHÁC ORIGIN.** Đây là lỗi CI đỏ
+   thật, do chính tao gây ra khi bê cách của smoke sang E2E: gắn header lạ vào
+   một request cross-origin làm nó thành **preflight**, mà `fonts.gstatic.com`
+   không cho phép header đó ⇒ *"Request header field x-vercel-set-bypass-cookie
+   is not allowed by Access-Control-Allow-Headers"* ⇒ font hỏng ⇒ **26 ca
+   "không có JS errors nghiêm trọng" đỏ** (136 ca khác vẫn xanh, tức bypass
+   chạy đúng — chỉ CÁCH GẮN là sai).
+   - 🔑 **Luật: bộ test nào có soi lỗi console thì KHÔNG được dùng
+     `extraHTTPHeaders` để mang vé — phải dùng COOKIE.** Cookie chỉ gửi tới
+     đúng domain của nó, không đụng host lạ. Smoke giữ header được vì nó không
+     soi console; nếu sau này thêm assertion đó thì phải đổi luôn.
+
+### 🐞 Bắt kèm — 42% lượt smoke prod đỏ suốt 6 ngày là BÁO ĐỘNG GIẢ
+Lượt smoke đầu của PR #463 đỏ ca `luan-giai.html: paywall block`. Đo lại lịch
+sử: **31/73 lượt prod đỏ (42%)**, xen kẽ xanh/đỏ trên **cùng một bản code**, và
+sáng hôm đó **không có commit nào** giữa lượt xanh cuối (04:55) với lượt cron đỏ
+đầu (06:58) ⇒ ca test đua nhịp, không phải prod sập. Issue #342 bị nhồi comment
+vì chuyện này từ 29/07.
+- **Căn nguyên: `locator.isVisible()` là phép đo TỨC THỜI** — tham số `timeout`
+  của nó KHÔNG có tác dụng chờ. Bản cũ đo ngay sau `domcontentloaded`, trước khi
+  JS kịp dựng tường. Nhánh redirect đua y hệt vì `page.url()` cũng đọc một lần.
+- Vá bằng `expect.poll` chờ **một trong hai kết cục hợp lệ** (chuyển trang đi,
+  hoặc tường/CTA mua hiện ra).
+- 🔑 **Quy ước: muốn CHỜ thì dùng web-first assertion (`expect(...).toBeVisible`,
+  `expect.poll`). `isVisible()`/`isEnabled()`/`page.url()` là ẢNH CHỤP một khoảnh
+  khắc** — đặt chúng ngay sau `domcontentloaded` là tự viết ra một ca flaky.
+- 🔑 **Bộ dò kêu oan 42% thì người ta thôi đọc nó.** Vì thế issue `prod-down`
+  nay **chỉ mở cho lượt đo prod**; preview đỏ để check đỏ trên PR là đủ.
+
+### Verify
+`tsc` 0 lỗi · `lint` 0 lỗi (72 warning pre-existing) · `prettier` sạch.
+- **Đầu-cuối trên preview THẬT đang bật SSO**: đo đúng `target_url`, **7/7 xanh**
+  (còn bị chặn thì cả 7 ca đều 401), bước mở issue `prod-down` **skipped** đúng
+  thiết kế. Rồi **trên prod THẬT** sau merge: `PROD_URL=https://tuviminhbao.com`,
+  **7/7 xanh**.
+- **Header đi ra thật hay không** — server giả ghi lại header từng request:
+  smoke **19/19**. **ĐỐI CHỨNG không secret: 0/19**, mà bộ smoke **vẫn 7/7
+  xanh** ⇒ đường prod không đổi hành vi.
+- **Vé cookie của E2E** — dựng 2 server giả (app có SSO + host font khác origin
+  từ chối header lạ trong preflight, y như gstatic):
+
+  | | kết quả | lỗi console | host font |
+  |---|---|---|---|
+  | bản header | 🔴 đỏ | có | dính preflight/x-vercel |
+  | bản cookie | ✅ xanh | **0** | **0 request dính** |
+
+  Và chuỗi thật: query bootstrap → `_vercel_jwt` **có mặt trong `storageState`**
+  → test sau vào được **chỉ bằng cookie**. **ĐỐI CHỨNG bỏ cookie đi → ĐỎ (401)**.
+- 🪤 **Ca đối chứng đầu của tao ĐỖ GIẢ**: chạy `--project=chromium` vẫn kéo theo
+  `dependencies: ['setup']` nên nó **dựng lại cookie** rồi mới đo → "pass" vô
+  nghĩa. Muốn đối chứng thật thì phải bỏ hẳn nhánh setup.
+- **ĐỐI CHỨNG bản git HEAD** cho ca paywall, trên stub dựng đúng cuộc đua: HEAD
+  **đỏ cả hai** tình huống muộn, bản mới **xanh cả hai**, và **vẫn đỏ khi thật sự
+  không có tường** (chống đỗ giả).
+- **Logic chọn URL**: trích THẲNG khối shell từ workflow (không chép tay), chạy
+  đủ nhánh prod/`Production` hoa/preview/cron/dispatch — đúng cả.
+- 🪤 Một ca đỏ giữa chừng là **lỗi của stub**: server giả thiếu `charset=utf-8`
+  nên tiêu đề ra mojibake (`Tá»­ Vi`) và trượt `toHaveTitle`.
+
+### 🔑 VIỆC TAY (đã làm, ghi lại để khỏi đi tìm)
+Vercel → project **app-tuvi** → Settings → Deployment Protection → **Protection
+Bypass for Automation** → Add Secret; copy sang GitHub → Settings → Secrets →
+Actions, tên **`VERCEL_BYPASS_SECRET`**. Xoay secret là một cú bấm, không cần deploy.
+
+### CÒN LẠI
+- **Đừng đóng issue #342 vội** — mới có 1 lượt prod xanh trên bản đã vá, mà
+  trước đó nó xanh/đỏ xen kẽ. Đợi vài lượt nữa. Cơ chế đã tự lo: smoke prod đỏ
+  là workflow tự comment vào #342, nên **im lặng ở đó chính là tín hiệu xanh**.
+- **Deploy hỏng thì E2E/smoke KHÔNG chạy** (không còn `pull_request` để bắn).
+  Đổi lại check Vercel sẽ đỏ, nên không có đường nào lọt êm — nhưng nhớ tính
+  chất này khi đọc một PR thiếu check.
+- Phạm vi lịch sử tao soi được chỉ từ **04/08** trở lại (giới hạn phân trang
+  API); chưa xác minh mọi lượt đỏ trước đó cùng một nguyên nhân.
+- ⚠️ **Ngưỡng Lighthouse giờ chấm trên PREVIEW, chưa ai hiệu chỉnh lại.** 4 trang
+  đo đều là HTML tĩnh trong `public/` nên đi CDN như prod, nhưng lượt đầu của
+  một deployment mới thì edge chưa ấm. `numberOfRuns:3` đỡ được phần nào; nếu
+  thấy `categories:performance` (error, minScore 0,75) hay LCP 2500ms đỏ xen kẽ
+  thì đó là nhịp edge chứ chưa chắc là hồi quy — soi vài lượt rồi mới chỉnh
+  ngưỡng, đừng nới ngay.
+## 🔐 Rail đòi ĐĂNG NHẬP với người ĐANG đăng nhập — đồng hồ ví chốt quá sớm (2026-08-09, PR sau #465)
+
+Henry: *"tao thử cái tool chạy ok. Xong qua rail hỏi thì nó lại báo tao phải đăng
+nhập mới hỏi dc. Trong khi tao đang đăng nhập"*.
+
+### 🔴 Không phải lỗi xác thực. Là lỗi THỜI ĐIỂM ĐỌC.
+`loadRailStatus()` chỉ chạy **một lần**, trong `setContext`. Nó đọc `getToken()`
+ngay lúc đó — mà access token Supabase sống ~1h nên **mở lại tab là hết hạn**, và
+`auth.js` phải refresh qua cookie **BẤT ĐỒNG BỘ**. Trong quãng đó `getSession()`
+trả `null` ⇒ rail hỏi `rail-status` theo đường **khách vô danh** ⇒ chốt
+`_rc.anon=true`, và máy nào đã tiêu hết 3 câu dùng thử thì đồng hồ hiện **"Đã hết
+câu dùng thử · Đăng ký nhận thêm"** cho đúng một người đang đăng nhập. Không có
+gì gọi lại, nên nó **kẹt vĩnh viễn** tới khi tải lại trang.
+- 🔑 **Đường tự lành ĐÃ CÓ SẴN cho lịch sử, chỉ thiếu cho ví.** Vòng theo dõi
+  phiên ở cuối `shell.js` bắt đúng cạnh "token vừa xuất hiện" rồi gọi
+  `pushLocalToServer()` + `refreshHistoryUI()` — chú thích ngay tại đó đã mô tả
+  chính xác cái bẫy này. `loadRailStatus()` bị bỏ quên khỏi danh sách.
+- **Bằng chứng loại trừ, đo trên prod trước khi sửa:** `anon_rail_trial` /
+  `anon_rail_hits` lần cuối động **07/08** (không phải hôm nay) và **0 giao dịch
+  `chat`** trong 6 giờ ⇒ lượt của Henry **chưa từng chạm server**. Tức không phải
+  token hỏng, không phải hết Lượng — anh nhìn đồng hồ rồi dừng lại.
+
+### Vá ba lớp
+1. **Gọi lại `loadRailStatus()` ngay khi token xuất hiện** — cùng chỗ, cùng cạnh
+   với lịch sử.
+2. **`Auth.isRestoring()` (mới)** — `loadRailStatus` **không hỏi gì** khi chưa có
+   token *và* Auth đang khôi phục: chưa biết người này là ai thì đừng kết luận là
+   khách. Nhờ vậy hết cả **cái loé ~2 giây** hiện sai, và tiết kiệm một lượt gọi
+   (`["anon","auth"]` → `["auth"]`). ⚠️ `_refreshViaServer` có **3 đường ra** —
+   phải hạ cờ bằng `finally`, kẹt cờ là kẹt luôn đồng hồ.
+3. **Vòng theo dõi dừng NGAY khi bắt được token**, và nới trần 9 → **18 giây**:
+   lượt refresh phải đi qua cookie server có thể lâu hơn 9 giây, quá hạn là kẹt.
+   Khôi phục xong mà vẫn không có token ⇒ đúng là khách ⇒ mới hỏi ví.
+
+### Verify
+`tsc` 0 · `lint` 0 lỗi (72 warning pre-existing) · `prettier` sạch · 5 bộ dò sạch
+· `node --check` `auth.js` + `shell.js`.
+- **3 ca Playwright trên TRANG THẬT**, dựng lại đúng tình huống (phiên còn hạn
+  **refresh token**, access token **đã hết hạn**, lượt refresh chậm 1,5 giây, máy
+  mang `anon_id` đã tiêu hết lượt): bản mới **không loé chữ sai** rồi về **"Còn 24
+  câu hỏi"** · 🪤 **ĐỐI CHỨNG nạp đè `shell.js` bản `origin/main`: kẹt nguyên ở
+  "Đã hết câu dùng thử · Đăng ký nhận thêm"** ⇒ lỗi có thật · **ĐỐI CHỨNG khách
+  THẬT** (không phiên, không cookie bền) vẫn thấy **"Dùng thử: còn 2 câu"** —
+  bản vá không nuốt mất đồng hồ dùng thử.
+- **6 trang shell** boot sạch: có `Shell`+`Auth`, 0 lỗi JS, 0px tràn ngang.
+- 🪤 **Lỗi của BÀI KIỂM, suýt kết luận ngược**: catch-all `page.route(SUPA+'/**')`
+  đăng ký **SAU** route riêng nên nuốt luôn lượt refresh token ⇒ cả hai bản đều
+  "hỏng" và bản vá trông như không ăn. **Catch-all phải đứng TRƯỚC** — đúng bẫy
+  CLAUDE.md đã ghi ở track Duyên Nợ, vấp lại lần thứ hai.
+- Bump `shell.js?v=66→67` (35 trang). **Không bump `auth.js`** — asset `public/`
+  trả `max-age=0, must-revalidate` nên tới người dùng ngay (tiền lệ #361).
+
+### CÒN LẠI
+- **Chưa đo trên máy thật của Henry** — mới dựng lại tình huống bằng phiên giả.
+  Dấu hiệu đã sửa đúng: mở `/app/day-con` sau khi để tab qua đêm, đồng hồ rail
+  phải hiện *"Còn N câu hỏi"* chứ không phải lời mời đăng ký.
+- `rail-status` vẫn là lượt gọi RIÊNG, chưa gộp vào lượt nào sẵn có.
+
+---
+
+## 🐞 Dạy Con: khung mới KHÔNG hiện — vì `portrait_cache` không có phiên bản SHAPE (2026-08-09, PR sau #458)
+
+Henry gửi link chia sẻ + 4 lời: *"sắp xếp sao cho nó khoa học hơn"* · *"tự dưng
+có phần Bước 4, user tự hỏi mấy bước kia đâu… User ko care bước gì cả đâu"* ·
+*"ko cần giải thích dài dòng cách làm framework đằng sau"* · *"mà ko có chart gì
+ah? Metrics để đánh giá."*
+
+### 🔴 Ba lời đầu là chuyện trình bày. Lời thứ tư là LỖI THẬT, và nó giải thích cả lời thứ hai.
+Đo `portrait_cache` trên prod: **2/2 dòng `day-con` tạo 07–08/08**, tức TRƯỚC lượt
+deploy khung sáng 09/08, và **không dòng nào có `truc` · `khieu` · `goiYHoatDong`
+· `dinhHuong`**. Henry chạy lại đúng lá số đã chạy hôm trước ⇒ cache hit ⇒ trả
+payload cũ ⇒ 4 khối mới **im lặng ẩn hết**, chỉ khối "phương pháp giáo dục" sống
+sót vì nó đọc `data.hoc.cards` vốn đã có từ trước. **Đó chính xác là "tự dưng có
+phần Bước 4" và "ko có chart gì".** Không lỗi nào bắn ra.
+- 🔑 **Căn nguyên: khoá cache là LÁ SỐ, không phải SHAPE.** Đổi cấu trúc payload
+  xong thì mọi dòng cũ vẫn được trả nguyên trạng, **mãi mãi** — `putCachedPortrait`
+  còn `resolution=ignore-duplicates` nên bản mới không bao giờ đè lên được.
+- Vá bằng `SHAPE = 2` đóng dấu vào payload + `shapeStale()`: dòng thiếu dấu hoặc
+  dấu cũ ⇒ coi như **trượt cache** ⇒ dựng lại ⇒ **GHI ĐÈ** (`putCachedPortrait`
+  thêm cờ `overwrite`, mặc định `false` nên 3 tool kia không đổi hành vi).
+- ⚠️ **CỐ Ý KHÔNG nhét SHAPE vào `lasoKey`** dù đó là cách hiển nhiên: đổi khoá
+  là mồ côi cache **và** `userOwnsLaso` ⇒ người đã trả tiền bị tính lại (đúng bài
+  học khoá cặp Duyên Nợ). Giữ khoá nguyên nên `free` vẫn đúng — vế `free` phải
+  xét **`cachedRaw`** (bản thô) chứ không phải `cached` (đã lọc), có bộ dò canh.
+- Không ghi đè thì còn tệ hơn bug: mỗi lượt xem lại **đốt thêm một lượt model**
+  mà dòng hỏng vẫn nằm nguyên.
+- ⏭️ **3 tool kia (`nguoi-khac` · `nhan-mach` · 2 chân dung) vẫn còn nguyên cái
+  bẫy** — chưa gắn dấu SHAPE. Đổi payload của chúng mà quên là tái phát y hệt.
+
+### Trình bày — bỏ đúng thứ Henry chỉ
+- **Gỡ sạch 5 badge `BƯỚC n`.** Chỉ 5/17 khối có số nên đánh số đọc thành nửa vời
+  — người ta đi tìm mấy bước còn lại. Thay bằng **3 vạch chia nhóm** (`Đo được gì`
+  · `Nên làm gì` · `Bối cảnh`): nhãn tả **NỘI DUNG**, không tả trình tự, nên
+  thiếu một khối cũng không đọc ra là hụt. Vạch tự ẩn khi nhóm rỗng (có ca đối
+  chứng) — tiêu đề đứng trên khoảng trống còn khó hiểu hơn không có tiêu đề.
+- **Gỡ hẳn khối "Khung Này Là Gì"** (4 đoạn phương pháp luận, 1.721 ký tự) và
+  **rút mọi `fw-note` xuống một dòng**. Ranh giới đạo đức vẫn còn nguyên ở khối
+  caveat cuối trang — thứ bỏ đi là phần khoe cách dựng khung.
+- **Gộp "Phương Pháp Giáo Dục" + "Vào Con Bằng Cách Nào"** thành *Cách Dạy Con
+  Này*: hai khối cạnh nhau nói cùng một việc, đọc thành lặp.
+- **Dời "Điều Bạn Đang Lo"** xuống đầu nhóm *Nên làm gì* — nó trả lời đúng ô mối
+  lo cha mẹ vừa chọn, đứng lạc ở trên thì không ăn nhập với gì.
+- Bỏ nhãn `Con là người thế nào` in **hai lần trong cùng một thẻ**.
+
+### 🐞 Lỗi chỉ lộ khi CHỤP ẢNH RA NHÌN, không lộ khi đọc code
+`.tr-head` để `flex-wrap` + `margin-left:auto`: trục nào tên dài thì câu hỏi rớt
+xuống dòng hai và **kéo con số xuống theo** ⇒ năm con số không thẳng cột. Mà việc
+của người đọc ở đây đúng là **so năm trục với nhau**. Tách điểm ra cột riêng
+(`.tr-headmain` flex:1) — đo lại: 5 mép phải **723px, khớp tuyệt đối**.
+
+### Bản chia sẻ: từ một cục chữ thành khối có cấu trúc
+`/ket-qua` dựng **mỗi `block` thành một thẻ có tiêu đề** — trước đó `day-con` gửi
+`kind:'text'` nên tất cả dồn vào một đoạn `<br>` nối nhau và con số chìm nghỉm.
+Nay 4 block: *Chân dung* · *Năm trục tính khí* (5 dòng có điểm) · *Tám chất năng
+khiếu* (8 dòng xếp giảm dần, ★ đánh dấu chất vượt ngưỡng) · *Định hướng & cách
+dạy*. Vẫn giữ `text` làm đường lùi.
+- Bảng cột không căn được bằng chữ (font tỉ lệ) nên **thứ tự** gánh vai xếp hạng.
+
+### Verify
+`tsc` 0 · `lint` 0 lỗi (72 warning pre-existing) · `prettier` sạch · 7 bộ dò sạch
+· engine **185 pass** · `node --check` khối script nội tuyến.
+- **30.209 bất biến module** + **14.734 bất biến prompt**: vẫn xanh, 0 fail.
+- **11 bất biến ĐỌC THẲNG MÃ NGUỒN** chốt chặn cache, đã **red-team cả ba ca**:
+  `free` xét `cached` thay vì `cachedRaw` → đỏ · quên cờ ghi đè → đỏ · nhét SHAPE
+  vào khoá cache → đỏ.
+- 🪤 **Bộ dò ca thứ ba BÁO OAN XANH lượt đầu**: `lasoKey\([^)]*SHAPE` — `[^)]*`
+  dừng ở dấu `)` của `cacheExtra(...)` nên không bao giờ với tới phần sau. Phải
+  soi **CẢ DÒNG** dựng khoá.
+- **Playwright trên TRANG THẬT** qua Next dev, chạy CẢ đường tính thử lẫn đường
+  đã mở khoá bằng chính `_doGenerate`: 3 vạch nhóm hiện đúng · **0 chữ "BƯỚC"** ·
+  cột điểm 5 trục thẳng hàng · payload chia sẻ có **đủ 5 dòng trục + 8 dòng chất
+  kèm điểm** · ĐỐI CHỨNG ẩn hết khối của một nhóm → vạch nhóm biến mất · 390px
+  tràn ngang **0px** · 0 lỗi JS.
+- 🪤 Hai lỗi của BÀI KIỂM: bộ lọc `:not([style*="display: none"])` không khớp vì
+  inline style viết `display:none` **không có dấu cách** → phải đo bằng
+  `offsetParent`; và cwd của shell **còn nằm ở `tuvi-engine`** từ lệnh trước nên
+  `computeLaso` đọc hụt engine, cả bộ 30.209 ca tụt xuống 97 ca xanh vô nghĩa.
+
+### CÒN LẠI
+- **Chưa gọi LLM thật lượt nào** — phần chữ trong ảnh chụp là chữ giả bơm vào
+  đúng shape payload; khung và số liệu thì chạy engine thật.
+- Hai dòng cache cũ trên prod sẽ **tự dựng lại ở lượt mở tiếp theo** (miễn phí
+  cho người đã trả tiền), mỗi dòng tốn đúng một lượt model.
+- Lượt dựng lại vì shape cũ ghi thêm **một dòng lịch sử trùng** cho chính chủ —
+  vô hại, cố ý không vá để khỏi đụng nhánh dùng chung.
+
+---
+
+## 🧹 Vá nốt hai món nợ: rail cũ vô hình + `animation` trỏ vào keyframe ma (2026-08-09, PR sau #459)
+
+Henry: *"làm nốt luôn đi"* — hai món tao cố ý để lại ở PR trước.
+
+### 🔴 A. `/api/lasotuvi?action=chat` — đường rail CŨ chưa từng ghi một dòng usage
+PR trước vá đường `phan` (24 phần luận giải). Đường `action=chat` — dùng ở
+`profile.html` · `chatbot.js` · widget luận giải · `tu-binh` · `xem-tuoi` ·
+`xem-lam-an` · `tuvi-chat` — thì **vẫn trắng**, ở CẢ hai nhánh stream và
+non-stream. Đối chứng đo được trên `origin/main`: cả hai trả **200** mà ghi
+**0 dòng** `llm_usage`.
+- **Cộng dồn rồi ghi MỘT dòng cuối lượt** (`ChatUsageTally`), y như `runAgent`.
+  Ghi từng vòng thì một câu hỏi nở ra 2–4 dòng, cột "số lượt" ở panel Biên LN
+  thành vô nghĩa. Nhánh non-stream vốn đã cộng dồn sẵn (chỉ để trả về client),
+  nhánh **stream thì chưa cộng gì cả** — phải thêm ở cả 2 chỗ gọi.
+- 🔑 **Bucket là `'chat'`, KHÔNG phải `'laso'`.** `'laso'` là tool_id của Luận
+  Giải 24 phần (1.500 Lượng) — nhét lượt rail vào đó là bóp méo đúng con số vừa
+  vá xong ở PR trước. Lượt rail thu tiền qua `credit_transactions.type='chat'`
+  nên bucket chi phí phải khớp cái đó. Kịch bản phi-lá-số giữ tên tool (mirror
+  `scenario?.type` của `run.ts`).
+- **`callLLMTools` nay trả kèm `provider`/`model` thật sự đã chạy** — vòng lặp
+  tool có thể rơi sang provider backup GIỮA CHỪNG, chép tay tên model ở chỗ gọi
+  là ghi sai giá mà không có gì báo (đúng bẫy `generatePortraitImage`).
+  ⚠️ Lấy **hằng số cấu hình**, KHÔNG lấy `model` trong phản hồi Anthropic: bản
+  phản hồi trả id gắn hậu tố ngày (`claude-sonnet-4-6-20260501`), tra
+  `MODEL_PRICING` trượt khoá rồi **lặng lẽ rơi về giá mặc định** — đắt gấp 3 nếu
+  thực tế chạy Haiku. Có ca kiểm canh đúng chuyện này.
+- **Lượt HỎNG giữa chừng vẫn ghi** phần token đã đốt (chi phí thật); nhưng hỏng
+  NGAY vòng đầu thì **không đẻ dòng 0đ**. `flush()` của nhánh stream đặt NGOÀI
+  `try` — để trong là lượt hỏng mất sạch dấu chi phí.
+
+### 🔴 B. Gom `@keyframes spin` — ĐO XONG THÌ QUYẾT ĐỊNH KHÔNG GOM
+Backlog ghi "~26 bản chép tay, gom về một chỗ". Đo trước khi làm thì lộ ra gom
+là **sai hướng**:
+- **23/25 trang liên quan không nạp một file CSS ngoài nào** — toàn bộ style
+  inline, trang cố ý dựng tự chứa. Không có stylesheet chung để gom vào.
+- Nơi dùng chung duy nhất là **`nav.js`, tức JS** (còn `defer` ở vài trang).
+  Gom vào đó = đổi *"spinner chạy bằng CSS thuần"* thành *"spinner phải chờ JS
+  thực thi xong"* trên 22 trang ⇒ **hạ độ bền để đổi lấy vài chục dòng CSS**.
+  Cộng thêm: đụng `nav.js` là phải bump `?v=` trên 89 file, mà mấy lượt bump kiểu
+  đó đã đẻ ra drift version hai lần rồi.
+- 🔑 **Keyframe xoay là giá trị TẬN CÙNG** (`rotate(360deg)` — không bao giờ phải
+  sửa) nên hai bản **không có gì để trôi khỏi nhau**. Đây là một trong số ít
+  duplication lành tính. Quét cả repo: **0 file dùng `spin` mà quên khai** ⇒
+  duplication này hiện chưa hại ai.
+
+### 🧷 Thay bằng `scripts/check-keyframes.mjs` — bắt đúng thứ CÓ hại
+Cái hại thật là `animation:` trỏ tới keyframe **KHÔNG TỒN TẠI**: trình duyệt
+không báo gì, phần tử vẫn hiện, **chỉ là đứng im**. Luật: mỗi tên keyframe được
+dùng phải khai được TỚI ĐƯỢC từ chính file đó (trong file, hoặc trong
+stylesheet/script mà file đó nạp). File `.js`/`.css`/`.ts` chỉ tính CHÍNH NÓ —
+module export ra ngoài phải tự lo CSS của mình (bài học `orbHtml()`).
+
+### 🐞 Bộ dò bắt được lỗi THẬT ngay lượt chạy đầu
+`public/auth.js` dựng banner **"Chào mừng! Bạn đã nhận Lượng miễn phí"** — thứ
+ĐẦU TIÊN người vừa đăng ký nhìn thấy — bằng `animation:tpw-fade`. Keyframe đó
+nằm trong `tuvi-paywall.js` và chỉ được chèn **LƯỜI** khi có paywall dựng lên
+(`_css()`), mà **38/73 trang nạp `auth.js` còn không nạp paywall**, và đường
+đăng ký thì chẳng dựng paywall bao giờ. ⇒ banner **chưa bao giờ fade vào**.
+- Vá bằng cách cho `auth.js` **tự khai keyframe của nó** (`auth-fade`), không
+  mượn của file khác.
+- Đo trong trình duyệt trên trang KHÔNG nạp paywall: bản mới `animCount=1`,
+  `opacity` khởi điểm **0**; **ĐỐI CHỨNG `origin/main`: `animCount=0`,
+  `opacity=1`** ⇒ lỗi có thật, không phải lo hão.
+- **Không bump `auth.js?v=2`**: asset `public/` trả `max-age=0,
+  must-revalidate` nên revalidate mỗi lượt — cùng tiền lệ đã đo ở #361.
+
+### Verify
+`tsc` 0 · `lint` 0 lỗi (72 warning pre-existing) · `prettier` sạch · **9/9 bộ
+dò sạch** (`prices`/`groups`/`nostore`/`share`/`hexagrams`/`hao`/`motifs`/
+`terms`/**`keyframes`**) · engine **185 pass** · `node --check`.
+- **27 ca trên ROUTE THẬT** (`next dev` + chặn `fetch` bằng `NODE_OPTIONS
+  --import`, nên prompt/tool/vòng lặp đều chạy thật): 1 vòng → đúng 1 dòng ·
+  **3 vòng tool-use → VẪN đúng 1 dòng, token cộng dồn 600/60** · bucket `chat` ·
+  bucket `than-so-hoc` cho kịch bản phi-lá-số · model ghi sổ là khoá tra được
+  chứ không phải id có hậu tố ngày · có `duration_ms` · lượt hỏng giữa chừng vẫn
+  ghi · **ĐỐI CHỨNG hỏng vòng đầu → 0 dòng rác** · nhánh stream đủ cả 5 tính
+  chất trên · hợp đồng API cũ (`usage`/`toolsUsed`/`scenario`) không đổi.
+- 🪤 **ĐỐI CHỨNG `origin/main`: cả stream lẫn non-stream trả 200 mà 0 dòng usage.**
+- **10 ca trên CHÍNH bộ dò**, dựng lại đúng 4 lỗi + 3 đối chứng phải im: bắt lại
+  lỗi `auth.js` thật · trang gỡ mất keyframe của mình · module gỡ mất keyframe
+  của mình · dùng keyframe của file mình KHÔNG nạp · **im với chú thích nhắc tên
+  animation** · im với `none`/`cubic-bezier`/từ khoá · im khi keyframe tới qua
+  `<link>`. Kèm ca canh **không để lại file rác** sau các lượt sửa-rồi-khôi-phục.
+- **9 ca trên trình duyệt** cho banner (xem trên).
+- **153 ca hồi quy** của 3 bộ kiểm trước (`sweep` 76 · `pages` 60 · `eta` 17):
+  vẫn xanh.
+
+### 🪤 Bẫy đã vấp
+1. **Bộ dò kêu oan vào CHÍNH chú thích tao vừa viết** — dòng tài liệu nhắc
+   `animation:tpw-fade` bị đếm là chỗ dùng. Phải bỏ chú thích trước khi quét, và
+   **giữ nguyên số dòng** (thay khối chú thích bằng đúng ngần ấy `\n`) thì số
+   dòng báo lỗi mới còn trỏ đúng chỗ. 🔑 Chỉ cắt `//` khi nó ĐỨNG ĐẦU dòng — cắt
+   giữa dòng sẽ nuốt luôn `https://…` rồi ăn mất phần khai animation nằm sau nó.
+2. 🔴 **`fs.globSync` chỉ có từ Node 22, mà CI chạy Node 20** — bộ dò sẽ chết
+   ngay trong CI thay vì bắt lỗi, và chết theo kiểu trông như "script hỏng" chứ
+   không phải "có lỗi cần vá". Đổi sang duyệt cây bằng tay; đếm lại sau khi đổi
+   ra **đúng 98 lượt / 58 file** như trước ⇒ không mất phạm vi quét.
+3. **Ca đỏ của `verify-orb` là ĐỐI CHỨNG HẾT HẠN** (lần thứ hai gặp): nó khẳng
+   định `origin/main` *chưa* có `pacer`, mà PR #459 đã merge nên main có rồi.
+   Đối chứng neo vào `origin/main` vẫn hết hạn khi chính PR đó vào main.
+4. `setContent` cho origin `about:blank` → `auth.js` đọc `document.cookie` ném
+   `SecurityError`. Đo hành vi của script có đụng cookie/storage thì **phải phục
+   vụ qua http thật**, đừng dùng `setContent`.
+
+### CÒN LẠI
+- **Đường `phan` và đường `chat` nay đều ghi usage; `/api/v1/chat` vốn đã ghi.**
+  Hết đường LLM nào vô hình trong panel Biên LN.
+- Vẫn **chưa có bề mặt đọc `duration_ms`** — dữ liệu mới chảy từ lượt deploy
+  trước. Sau 1–2 tuần thì thêm cột p50/p75 vào panel Biên LN.
+- **20 trang STREAM vẫn chưa đo "thời gian tới token đầu tiên"** — con số quyết
+  định có cần orb ở đó hay không.
+- ~28 bản `@keyframes spin` **CỐ Ý giữ nguyên** (lý do ở trên). Bộ dò mới làm
+  việc giữ chúng thành an toàn thay vì canh bạc.
+---
+
+## 🧒 Dạy Con: khung "5 TRỤC · 8 CHẤT" — bản luận có xương sống (2026-08-09, PR này)
+
+Henry: *"cách luận giải và trình bày đang hơi lộn xộn ko theo 1 framework nào…
+tham khảo Big Five (lite), SDQ, Multiple Intelligences rồi tự lên 1 framework
+riêng… Có dc con số đánh giá, biểu đồ càng tốt."* Flow chốt: lá số → assessment
+đa chiều (gồm năng khiếu) → định hướng → phương pháp → hoạt động đề xuất.
+
+### 🔴 Chẩn đúng bệnh: không phải thiếu chữ, là thiếu KHUNG
+Bản cũ đưa cha mẹ một nhãn kiểu người + sáu thẻ chữ. Không đo được gì, không so
+được hai đứa trẻ, không nói được "mạnh chỗ nào" — nên phần chữ do model viết
+trôi tự do, mỗi lượt một dáng. Nay có khung CỐ ĐỊNH cho chữ bám vào, và **mỗi
+khoá JSON là một bậc**: đo → đọc → định hướng → phương pháp → hoạt động.
+
+### 🔑 MƯỢN HÌNH DẠNG, KHÔNG MƯỢN UY TÍN
+- **Nền: "goodness of fit" (Thomas & Chess)** — không có khí chất tốt/xấu, kết
+  quả nằm ở chỗ KHỚP giữa đứa trẻ và cách người lớn nuôi. Đây vốn đã là câu
+  tool tự nói ở phần ranh giới đạo đức; nay nó thành CẤU TRÚC chứ không còn là
+  lời dặn.
+- **5 trục ← hình dạng Big Five**: trục LIÊN TỤC, hai cực đều có giá trị. Một
+  đứa trẻ không "là" hướng nội — nó nằm đâu đó trên trục.
+- **8 chất ← hình dạng Multiple Intelligences**: nhiều miền song song thay vì
+  MỘT con số thông minh. Đây là phần trả lời "con có năng khiếu gì".
+- ⛔ **CỐ Ý KHÔNG mượn SDQ.** SDQ là bộ **sàng lọc LÂM SÀNG** (rối loạn cảm
+  xúc/hành vi/tăng động). Suy một bảng sàng lọc sức khoẻ tâm thần từ ngày sinh
+  là thứ nguy hiểm nhất tool này làm được, và đá thẳng vào luật sẵn có (không
+  đọc Tật Ách, không phán "khó dạy"). Trục 5 đo **NGƯỠNG CẢM NHẬN**, không đo
+  lo âu — prompt cấm hẳn chữ lo âu/trầm cảm/rối loạn/tăng động/"đi khám".
+- Trang + prompt CẤM nêu tên hay đối chiếu DISC/MBTI/Big Five/MI/SDQ/IQ. Gọi
+  đúng tên: **một khung đọc lá số do trang dựng**.
+
+### 🔴 Bài học nặng nhất: điểm thô KHÔNG so được giữa các miền
+Lượt đo đầu: `hieu-nguoi` **50,8% lá số nổi** (19 ngôi sao cùng đổ vào miền đó
+⇒ nó thành "lá số có sao tốt nào không"), `am-nhac` **1,6%**; trục `nhip` sd
+0,96 (60% ca rơi vào "cân" ⇒ trục không nói gì) còn `nep` lệch hẳn lên 5,66.
+🔑 **Căn nguyên: điểm thô phụ thuộc SỐ SAO tôi gán cho miền, không phụ thuộc
+tín hiệu.** Nhân một hệ số chung không chữa được — mỗi trục lệch một kiểu.
+- Vá bằng **chuẩn hoá theo từng miền** (z-score trên mốc đo được, bake sẵn vào
+  `TRUC_NORM`/`KHIEU_NORM`), + tỉa bảng sao (bỏ nhóm quý tinh chung khỏi
+  `hieu-nguoi`). **5 = mức GIỮA của phân bố**, mỗi 1,8 điểm = 1 độ lệch chuẩn.
+- Sau khi vá, đo lại **6.048 lá số**: cả 5 trục và 8 chất đều TB **5,00** · sd
+  **1,78–1,80** · chạm trần/sàn **<0,5%** · %nổi mỗi chất **19,6–24,4%**.
+- ⚠️ **Trang PHẢI nói đúng nghĩa con số**: "so với phần lớn lá số trẻ em",
+  KHÔNG phải "được 7 phần 10". Có luật riêng trong system prompt + rail wrapper.
+
+### Ba quyết định đáng nhớ
+1. **Ngưỡng nổi 6,5 giữ nguyên ca "KHÔNG chất nào nổi" (~14–17% lá số).** Hạ
+   ngưỡng cho lá số nào cũng có năng khiếu thì câu "con nổi ở X" hết nghĩa và
+   cha mẹ nào đọc cũng thấy đúng — dấu hiệu của bảng không nói gì. Ca đó trang
+   nói THẲNG kèm việc nên làm (cho thử rộng), có ca đối chứng canh.
+2. **~35% ca mỗi trục rơi vào "cân" ⇒ phải viết nội dung cho ca CÂN.** Không
+   viết thì một phần ba ô trên trang hiện ra trống và cha mẹ đọc thành "máy
+   không đọc được con tôi". Nằm giữa là tính chất có thật: con dùng được cả hai
+   kiểu, nên bối cảnh mới là thứ quyết định — chỗ người lớn có nhiều quyền nhất.
+3. **HAI TRỤC ĐỘC LẬP cho bậc hoạt động** (cùng mẹo bảng ngành của Công Sở):
+   **chọn GÌ** ← chất × nhóm tuổi · **tham gia KIỂU NÀO** ← kiểu người. Viết
+   8×4 + 4 khối thay vì 8×4×4 ô. Hai đứa cùng nổi chất vận động vẫn phải chọn
+   lớp khác nhau nếu một đứa cần thi đấu còn đứa kia cần nhóm nhỏ ổn định.
+
+### 📊 Biểu đồ — hai dạng, chọn theo VIỆC người đọc phải làm
+- **5 trục → thanh HAI CỰC** (việc: đọc cực tính) · **8 chất → cột XẾP GIẢM
+  DẦN** (việc: so độ lớn, tìm cái cao nhất).
+- **KHÔNG dùng radar** dù đó là lối vẽ quen của MI và dù Công Sở đã có radar:
+  câu cha mẹ hỏi là "con mạnh chỗ nào", tức thứ tự phải đọc được bằng mắt chứ
+  không phải so góc. Cột xếp hạng cũng tránh luôn bẫy nhãn-tràn-khung của radar.
+- Dựng bằng **DOM + CSS, không canvas** — nhãn tiếng Việt có dấu tự xuống dòng,
+  tự co ở 390px, đọc được bằng trình đọc màn hình.
+- 🔑 **CỐ Ý KHÔNG dùng thang hai màu nóng–lạnh cho trục hai cực** dù đó là lối
+  vẽ chuẩn cho dữ liệu phân cực: đỏ–xanh gắn sẵn nghĩa tốt–xấu, mà cả khung
+  dựng trên đúng câu "hai cực đều có giá trị". **Vị trí mang nghĩa, màu chỉ nói
+  đậm/nhạt.** Hai màu `#7A5F26` / `#9C937F` — đo được tương phản với nền trắng
+  ≥3:1 và tách nhau ΔE 16,9 kể cả với mắt loạn sắc.
+- **Vạch ngưỡng nằm TRONG từng thanh**, không phải một đường phủ cả khối: bản
+  đầu tính chiều cao bằng (số hàng × 22px) và **lệch đúng một hàng** — chỉ lộ
+  khi chụp ảnh ra nhìn, không lộ khi đọc code.
+
+### 🐞 Ba lỗi tự bắt, không phải Henry báo
+1. **Va chạm khoá `hoatDong`**: `meta()` trả bảng hoạt động, model cũng trả
+   khoá `hoatDong` là đoạn văn — mà `payload` spread `meta()` TRƯỚC. Trùng tên
+   là bảng bị đè bằng một đoạn văn và khối gợi ý **biến mất mà không lỗi nào
+   bắn ra**. Đổi tên trường bảng thành `goiYHoatDong`.
+2. **Nợ CÓ SẴN, xác nhận bằng đối chứng git HEAD**: `tieuHanCung`/`luuNienCung`
+   in thẳng tên cung vào prompt, và tiểu hạn rơi được vào **Tật Ách / Phu Thê /
+   Tài Bạch** — đúng mấy cung `KHONG_DOC` cấm đọc cho trẻ. Có ở HEAD dòng
+   123–124 y hệt bản mới ⇒ không phải hồi quy. Khung mới nâng mức rủi ro nên
+   thêm câu chặn: tên cung chỉ là **CHỖ ĐỨNG của năm**, không phải lời mời đọc
+   nội dung cung đó.
+3. **Cột điểm lẫn hai dạng** (`8,2` cạnh `5`) vì `r1(5.0)` ra `5`. Ép một chữ
+   số thập phân — cột số lẫn dạng là mắt phải dịch lại từng dòng.
+
+### 🪤 Hai lỗi của BÀI KIỂM (không phải của code)
+- Bộ dò "khoá thô lọt prompt" báo oan **992 ca** vì `s.includes('hoa')` khớp
+  vào chữ **"Khoa"** (Hoá Khoa, khoa giáp). Phải so theo **BIÊN TỪ**.
+- Bộ dò cung cấm so theo **từng DÒNG** trong khi câu chặn cố ý đứng riêng một
+  dòng → đỏ oan. Phải kiểm ở mức CẢ PROMPT.
+
+### Verify
+`tsc` 0 lỗi · `lint` 0 lỗi (72 warning pre-existing) · `prettier` sạch ·
+`check:prices` + `check:groups` + `check:nostore` sạch · engine **185 pass** ·
+`node --check` 2 khối script nội tuyến.
+- **30.209 bất biến trên MODULE THẬT, 1.584 lá số**: 5 trục luôn đủ và trong
+  dải · nhãn cực không bao giờ ngược điểm · ca cân LUÔN có nội dung · 8 chất
+  sắp giảm dần · `noiBat` ≤3 và luôn ≥ngưỡng · `chuaRo` khớp `coNoiBat` · gợi ý
+  hoạt động không nhánh nào rỗng · **`railData` PHẲNG 100%** (bẫy
+  `extractGenericContext`) · 0 rò `undefined`/`NaN`/`[object` · deterministic.
+- 🔴 **Bất biến ĐẠO ĐỨC chạy tự động**: `CUNG_DUOC_DOC ∩ KHONG_DOC = ∅` — khung
+  đọc đúng 6 cung (Mệnh · Thiên Di · Phúc Đức · Quan Lộc · Huynh Đệ · Nô Bộc).
+- **14.734 bất biến trên PROMPT THẬT, 640 lá số**: đủ 5 bậc · mọi trục/chất có
+  mặt kèm điểm · **0 khoá thô lọt** · ca chưa rõ chất thì prompt nói THẲNG ·
+  system prompt còn đủ 7 chốt chặn · rail wrapper mang luật đọc điểm.
+- **8 ca Playwright trên TRANG THẬT** `/app/day-con` qua Next dev, route preview
+  chạy THẬT: bấm nút → **0 lượt `action=deduct`**, POST duy nhất là `preview=1`
+  · chấm mỗi trục nằm ĐÚNG vị trí điểm · 8 cột xếp giảm dần và vạch ngưỡng
+  thẳng hàng ở 65% · hàng ★ luôn ≥65%, hàng thường luôn <65% · **ĐỐI CHỨNG**
+  không đọc được tuổi → không dựng khối hoạt động · **ĐỐI CHỨNG** không chất
+  nào nổi → nói thẳng, 0 hàng ★, 0 thẻ giả · mở khoá → 3 đoạn chữ rơi đúng bậc
+  và phần tính thử **còn nguyên byte** · 390/768/1440px không tràn ngang.
+- 🪤 **ĐÃ RED-TEAM cả ba bộ** (bộ dò chưa từng bắt được gì thì không chứng minh
+  được nó biết bắt): cho khung đọc cung Tật Ách → đỏ · bỏ sắp giảm dần → đỏ ·
+  hạ ngưỡng nổi về 0 → đỏ · rò khoá thô vào prompt → đỏ · bỏ câu chặn cung cấm
+  → đỏ · im lặng ở ca chưa rõ chất → đỏ · đảo thứ tự cột trên trang → đỏ.
+- **KHÔNG bump `?v=`**: chỉ sửa CSS/JS **nội tuyến trong chính file HTML**, mà
+  HTML trả `max-age=0, must-revalidate` nên tới người dùng ngay; không đụng
+  `shell.js` / `tuvi-paywall.js` / asset dùng chung nào.
+
+### CÒN LẠI
+- **Toàn bộ tầng khung là TRA BẢNG ⇒ nằm trong phần TÍNH THỬ MIỄN PHÍ (W1)**,
+  0 lượt LLM, 0đ. Tường vẫn chỉ đứng trên phần chữ. Con số cần nhìn sau 1–2
+  tuần: tỉ lệ **mở → tính thử → bấm mở** của `day-con` trong panel Phễu Theo
+  Tool có nhảy không.
+- **Nội dung 5 trục × 3 ca + 8 chất + 8×4 bảng hoạt động là tao tự viết**, chưa
+  ai review — cùng dạng nợ với 384 hào từ và 4 kiểu của Công Sở. Sửa là sửa
+  data thuần trong `TRUC` / `KHIEU` / `HOAT_DONG`, không đụng logic.
+- **Mốc chuẩn hoá đo trên LƯỚI lá số tổng hợp, không phải trẻ em thật.** Nó nói
+  "so với phân bố lá số", đúng như trang đang viết — đừng nâng cấp câu đó thành
+  "so với trẻ cùng lứa".
+- **Chưa gọi LLM thật một lượt nào** — không có key trong container. Verify
+  dừng ở tầng prompt (cấu trúc + chốt chặn) và tầng render.
+- `app-day-con.html` vẫn là **đảo SÁNG** (nền `#fff` chép cứng như mọi trang
+  tool anh em) nên biểu đồ cố ý dùng cùng bảng màu sáng đó. Dark mode cho nhóm
+  trang tool là việc riêng.
+- Danh sách hoạt động **chưa phân theo vùng** — câu lạc bộ ở tỉnh khác hẳn Hà
+  Nội/TP.HCM. Nếu thấy đáng thì thêm một ô chọn tỉnh rồi lọc, không đụng logic.
+---
+
+## 🖨️✦ Lưu PDF + orb mời hỏi — cùng đưa lên tầng SHELL (2026-08-09, PR này)
+
+Henry: *"làm cái hiệu ứng glowing (orb khói) xung quanh cái icon nút Hỏi trên
+shell để user trigger để hỏi. Với lại thêm 1 nút pdf để user lưu pdf nguyên cái
+shell-workspace (hiện giờ vài tool đã có nằm trong workspace mà tao nghĩ đây nên
+là 1 tính năng chung của workspace)"*. Anh nhận ra đúng cùng cái hình vừa vá ở
+PR chia sẻ, nên PR này đi thẳng lên tầng shell.
+
+### 🖨️ PDF: 3/33 tool có, và ba bản đã bắt đầu trôi khỏi nhau
+`luan-giai` · `bat-tu` · `xem-tuoi` mỗi tool tự chép một khối `@media print`
+**gần như trùng khít** — chỉ khác vài tên class riêng (`.lg-unlock` vs
+`.bt-unlock`) — cộng một thanh PDF riêng trong nội dung. 30 tool còn lại in ra
+**nguyên cả sidebar, rail, nút bấm**, và bị **cắt ở đúng chiều cao viewport** vì
+`.shell` là lưới 3 cột `height:100vh`.
+- Luật in nay nằm ở **`shell.css`**; nút do shell dựng trong `.ws-actions`, bám
+  đúng mốc `data-ws-result` đã có ⇒ **tool không phải khai thêm gì**, và nó theo
+  CÙNG vòng đời với nút Chia sẻ (hiện khi có kết quả, gỡ khi về form).
+- **Đầu trang in `.ws-print-head`**: khi in thì `.ws-top` bị ẩn nên bản in cũ
+  không nói được nó là kết quả gì của ai — kể cả 3 tool đã có PDF. Nay shell
+  dựng một khối chỉ hiện lúc in: tên tool + dòng lá số + tên miền, **lấy chung
+  `shareBirthLines`** với bản chia sẻ nên hai bản không nói khác nhau.
+- **`window.print()` chứ không dựng PDF bằng thư viện**: trình duyệt đã có sẵn
+  "Lưu thành PDF", giữ được chữ THẬT (tìm/copy được) và thêm 0 byte JS. Bản dựng
+  bằng canvas chỉ ra ảnh — nặng hơn mà đọc kém hơn.
+- **`pdf_download` là loại event RIÊNG**, cố ý không gộp vào `poster_download`:
+  poster là ảnh để ĐĂNG cho người khác xem, PDF là bản LƯU cho chính mình đọc
+  lại. Gộp một cột thì không đọc được cái nào thật sự có người dùng.
+- ⚠️ **Đổi hành vi nhỏ, có chủ ý:** 3 tool cũ chỉ hiện PDF SAU khi luận giải
+  xong; nay nút hiện ngay khi có kết quả. Nhất quán với nút Chia sẻ vốn đã hiện
+  ở đúng thời điểm đó trên chính 3 tool ấy.
+
+### ✦ Orb nút Hỏi: lời mời, không phải đồ trang trí
+- 🔑 **Đo trước khi làm**: nút `✦ Hỏi` mang class `mobile-only` ⇒ trên desktop
+  **không tồn tại** (rail hiện sẵn ở cột phải). Nên đây là lời mời cho **MOBILE**
+  — đúng chỗ rail nằm ngoài màn hình và người ta không biết là có nó.
+- **DÙNG LẠI orb của #455/#457** (`AiLoadingSteps.orbHtml`), nạp theo lối LƯỜI vì
+  module đó mới có ở 24/33 trang; thiếu thì nút giữ nguyên chữ cũ, không vỡ gì.
+  Chép CSS orb sang `shell.css` là dựng bản thứ hai để rồi trôi khỏi nhau.
+- 🔑 **CHỈ sáng khi có gì để hỏi (`ctx` đã set) VÀ chưa mở rail lần nào**; mở là
+  tắt hẳn, trả lại đúng chữ `✦ Hỏi`. Sáng vĩnh viễn thì người ta học cách bỏ
+  qua, và một animation chạy suốt trên mobile là ăn pin thật.
+- 🐞 **Bắt được khi đi kiểm đường dẫn**: tabbar mobile có nút "Trợ lý" mở rail
+  **thẳng**, không qua `Shell.openRail` ⇒ mở bằng đường đó thì orb vẫn nhấp nháy,
+  tức nài người ta làm đúng cái họ vừa làm. Nay tabbar gọi chính `Shell.openRail`.
+
+### Verify
+`typecheck` 0 · `lint` 0 lỗi (72 warning pre-existing) · `prettier` sạch ·
+`check:prices`/`nostore`/`groups`/`share` sạch · engine **185 pass** ·
+`node --check` + kiểm ngoặc `shell.css` cân.
+- **127 ca trên TRANG THẬT**: 33 trang đủ ba nhịp của nút PDF (còn form → không
+  nút · có kết quả → hiện · ẩn đi → gỡ).
+- **Luật in đo bằng `emulateMedia('print')`**: ẩn sidebar/rail/thanh tiêu đề/
+  chính hai nút toolbar · **hiện** đầu trang in · đầu trang in KHÔNG hiện trên
+  màn hình · bấm PDF gọi đúng **1** lượt `print()`.
+- **3 tool cũ sau khi gỡ bản chép tay**: vẫn in được · thanh PDF cũ đã gỡ hẳn ·
+  0 lỗi JS.
+- **Orb ở 390px**: chưa có ngữ cảnh → không mời · có ngữ cảnh → orb + quầng khói
+  hiện mà vẫn còn chữ "Hỏi" · mở rail → tắt và trả lại đúng `✦ Hỏi` · không tràn
+  ngang · 0 lỗi JS.
+- 🪤 **ĐỐI CHỨNG nạp đè `shell.js` bản `origin/main`**: không có nút PDF, không
+  có orb ⇒ bài kiểm đo đúng thứ đang đổi.
+- Bump `shell.js?v=65→66` · `shell.css?v=17→18` (35 trang).
+
+### CÒN LẠI
+- Orb chỉ nằm trên nút `✦ Hỏi`. Tab "Trợ lý" ở tabbar mobile **cố ý không gắn** —
+  hai chỗ cùng nhấp nháy một lúc là nhiễu gấp đôi cho cùng một lời mời.
+- **Chưa in thử ra giấy/PDF thật** — mới đo tới tầng CSS bằng `emulateMedia`.
+  Chỗ đáng soi sau deploy: tool có canvas (lá số, radar, bàn Kỳ Môn) in ra có
+  đúng tỉ lệ không, và bảng rộng có bị cắt mép phải không.
+- `@media print` master dùng `[data-print-skip]` cho trang muốn giấu thêm khối —
+  hiện **chưa trang nào dùng**, nó là lối thoát cho tool sau.
+
+---
+
+## ⏱️ ETA TỰ HIỆU CHỈNH + `llm_usage` cuối cùng cũng có THỜI LƯỢNG (2026-08-09, PR sau #457)
+
+Henry: *"Có nên estimate thời gian chạy của từng tool xong… show estimated time
+cho users?"* → *"làm tiếp theo suggest của mày luôn"*.
+
+### 🔴 Tiền đề hỏng: KHÔNG ĐO ĐƯỢC GÌ CẢ
+`events.llm_usage.meta` chỉ có `model` · `cost_vnd` · các loại token —
+**không có một trường thời lượng nào**. Con số "45–60 giây" duy nhất đang có là
+suy gián tiếp từ khoảng cách hai mốc log của **hai pha chạy song song**, mẹo chỉ
+dùng được cho đúng tool chân dung. Mọi tool còn lại: trắng.
+
+### 🔑 ETA tĩnh là một LỜI HỨA — và repo này đã thấy nó nói dối
+Đổi `gpt-image-1` → `gpt-image-2` làm thời gian vẽ **gấp đôi** (22s → 46s), mà
+con số trong tài liệu đứng yên, lại còn ghi theo `quality:high` trong khi thực
+tế chạy `medium`. ⇒ **Nếu hiện ETA thì phải suy từ SỐ ĐO, không được chép cứng.**
+
+### ✅ Cách giải: đo NGAY TRONG PHIÊN, không cần dữ liệu lịch sử
+`AiLoadingSteps.pacer()` — tool chạy nhiều phần tuần tự (luận giải 24, xem tuổi
+9) thì **xong vài phần là biết nhịp của chính phiên này**: máy này, mạng này,
+tải server lúc này. Miễn nhiễm với đổi model. Hiện `Phần 7 / 24 · còn khoảng 3
+phút`, và `expectSec` của `mountWait` **ăn luôn nhịp đo được** nên thanh tiến
+trình quay lại (trước đó `expectSec:0` đã bỏ thanh vì không có số).
+- ⚠️ **`minSamples = 2`, KHÔNG phải 1** — phần 1 nạp **10 tài liệu RAG** trong
+  khi các phần sau chỉ 7 (`matchCount: p===1?10:7`) nên chậm bất thường. Lấy
+  đúng mẫu đó nhân lên 23 phần là hứa sai ngay từ dòng đầu.
+- **TRUNG VỊ chứ không trung bình**: một lượt nghẽn mạng không được kéo lệch cả
+  dự đoán. (Ca kiểm: 3 lượt 0,2s + 1 lượt 1,5s → trung vị 0,20 còn trung bình
+  0,52.)
+- **Chỉ ghi nhịp ở nhánh THÀNH CÔNG** — một phần chết giữa chừng có thời lượng
+  thật nhưng không đại diện.
+- Chưa đủ mẫu → `remainText()` trả `''` ⇒ **im lặng, không hứa**.
+
+### ✅ Vá lỗ đo: `llm_usage` nay có `duration_ms`
+Đo **bên trong** `llmTextFull` và `generatePortraitImage` rồi trả kèm, thay vì
+bắt 10 chỗ gọi tự bấm giờ — chỗ nào quên thì quên im lặng. **18 chỗ ghi**, gồm
+cả rail (`run.ts` đo TRỌN lượt kể cả các vòng tool-use — đó mới là thời gian
+người dùng thật sự ngồi chờ).
+
+### 🔴 Và lộ ra: `/api/lasotuvi` CHƯA HỀ ghi `llm_usage`
+Tool **bán chạy nhất** (Luận Giải, 1.500 Lượng / 3 người) hoàn toàn **vô hình
+trong panel Biên Lợi Nhuận** từ trước tới nay. Nay `llmText` → `llmTextFull` +
+`logLlmUsage`.
+- ⚠️ Ghi `tool_id='laso'` = ĐÚNG `tool_pricing.tool_id`, không phải `'luan-giai'`
+  (events) hay `'use_laso'` (giao dịch) — ba hệ tên lệch nhau, xem `tool_canon()`.
+  Ghi theo id mà GIÁ treo vào thì bucket chi phí mới ghép được với doanh thu.
+
+### Verify
+`tsc` 0 · `lint` 0 lỗi (72 warning pre-existing) · `prettier` sạch ·
+`check:prices`/`groups`/`nostore` sạch · engine **185 pass**.
+- **17 ca trên `pacer` THẬT**: 0 và 1 mẫu đều im lặng · trung vị chịu được ngoại
+  lai · câu chữ giây/1 phút/N phút · hết phần và số âm đều im · `reset()` xoá
+  sạch · `end()` lẻ không đẻ mẫu rác · nối vào `mountWait` thì thanh quay lại.
+- **62 + 76 + 60 ca hồi quy** của ba bộ kiểm trước: vẫn xanh.
+- 🪤 **Đối chứng HẾT HẠN** — 4 ca `[v1]` mô tả diff của PR trước, mà PR đó đã vào
+  `origin/main` nên chúng đỏ oan. 🔑 **Đối chứng phải theo kịp diff HIỆN TẠI;
+  neo đúng `origin/main` vẫn chưa đủ nếu nội dung ca đã lỗi thời.**
+- 🪤 Lệnh script thay chuỗi 4 dấu cách **khớp lồng** vào chuỗi 6 dấu cách → chèn
+  `reset()` hai lần ở 2 chỗ. Vô hại (idempotent) nhưng phải đếm lại mới thấy.
+- Bump `ai-loading-steps.js?v=4→5` (24 trang).
+
+### CÒN LẠI
+- **Chưa có bề mặt đọc `duration_ms`** — dữ liệu bắt đầu chảy từ lượt deploy này.
+  Sau 1–2 tuần thì thêm cột "thời lượng p50/p75" vào panel Biên LN, và mở
+  `expectSec` thật cho các tool CHẠY MỘT PHẦN (chân dung, phong thuỷ…) — nhóm
+  nhiều phần đã tự lo bằng pacer.
+- **`/api/lasotuvi?action=chat`** (đường rail cũ, dùng ở profile/chatbot) vẫn
+  chưa ghi usage — nó đi qua `callLLMTools` trong vòng lặp tool, cần cộng dồn
+  riêng. Đường `phan` (đường bán tiền) đã xong.
+- **20 trang STREAM** vẫn chưa đo được "thời gian tới token đầu tiên" — đó mới là
+  con số quyết định có cần orb ở đó hay không.
+
+---
+
+## 🔗 Chia sẻ workspace: tính năng của SHELL, không phải của từng tool (2026-08-09, PR #456)
+
+Henry: *"Tool Dạy con theo lá số đang ko chia sẻ dc phần shell-workspace… Tính
+năng chia sẻ shell-workspace phải là tính năng master chung cho tất cả các tool
+chạy trên workspace, ko phụ thuộc vào tool nào chứ. Rà soát và design lại nếu
+cần."* Hai PR trước (#452, #453) mới **vá lẻ từng tool** — đúng triệu chứng, sai
+tầng. PR này sửa tầng.
+
+### 🔴 Căn nguyên: chia sẻ là OPT-IN, và opt-in thì có ngày quên
+Bản cũ bắt MỖI trang tool tự nhớ **bốn** nghĩa vụ: gọi `Shell.setShareable(…)`
+đúng lúc có kết quả · gọi `setShareable(null)` khi quay về form · tự chép
+`toolId` · và tự dựng một **bản văn bản THỨ HAI** (`_xxLines`) song song với DOM
+đang hiện. 32 tool × 4 = **128 chỗ để quên**, không có gì canh. Đã quên thật, và
+đo được:
+
+| Lỗi | Trang | Người dùng thấy gì |
+|---|---|---|
+| Không bao giờ gọi | `day-con` | **Không có nút Chia sẻ** từ lúc ra mắt tới khi Henry báo |
+| Không bao giờ gọi | 🔴 **`la-so`** (`app.html`) | **Tool ĐẦU BẢNG cũng chưa từng chia sẻ được** |
+| Gọi mà không bao giờ gỡ | `thanh-tuong-pro` · `phong-thuy` | Làm lượt mới → bấm Chia sẻ ra **kết quả LƯỢT TRƯỚC** |
+
+Hai lỗi dưới nặng hơn lỗi Henry báo: chúng không im lặng mà **nói sai**.
+
+🪤 **`la-so` lọt lưới đúng hai lần, cả hai vì ĐOÁN THEO TÊN:** file của nó là
+`app.html` (không gạch nối) nên lượt quét `app-*.html` đầu tiên của tao bỏ qua —
+và bộ dò tao vừa viết để chống chuyện đó cũng lọc y hệt, tức suýt phát hành một
+cái lưới có sẵn lỗ đúng chỗ cần vá. Nay bộ dò nhận diện trang shell bằng **dấu
+hiệu của shell** (nạp `shell.js` + khai `SHELL_ACTIVE`), không theo tên file.
+
+### 🔑 Cách vá — ĐẢO VAI, không phải thêm một lượt gọi nữa
+`shell.js` nay tự theo dõi **vùng kết quả** của khung giữa: hiện ra thì bật nút,
+biến mất thì gỡ nút **và vứt luôn payload của lượt trước**. Tool KHÔNG phải làm
+gì để có nút Chia sẻ.
+- **Giao ước DUY NHẤT của trang: một mốc `data-ws-result`** trên khối bao ngoài
+  cùng của phần kết quả. Đã khai đủ **32/32** trang tool.
+- **`setShareable` đổi vai: BẮT BUỘC → LÀM GIÀU.** Tool đưa gì (ảnh AI, khối
+  `blocks` có cấu trúc, tiêu đề đắt hơn) thì cái đó thắng bản shell tự suy. Cả
+  hai đường đi qua CHUNG `normalizeShare()` nên bản tự suy không bao giờ thiếu
+  khối lá số hay lệch shape.
+- **Lưới đỡ khi tool không đưa gì**: shell tự suy payload từ chính DOM đang hiện
+  — `toolId` từ `ACTIVE` (hết chép tay), tiêu đề từ `.ws-title b`, nội dung bằng
+  cách duyệt cây. Vì đọc thẳng thứ đang hiện nên **không có bản thứ hai để trôi
+  khỏi nhau** — đúng cái bẫy `_xxLines` đang bày sẵn.
+- **Bộ duyệt cây loại trừ có chủ đích**: điều khiển (nút/ô nhập/form/svg), tường
+  trả phí (`.tpw-*` — chia sẻ ra ngoài đúng lời mời trả tiền thì vô nghĩa), thẻ
+  intro, khối đang ẩn, và mọi thứ trang khai `data-share-skip`. Trần 4.000 ký tự.
+- **Ngưỡng 60 ký tự**: dưới mức đó khung mới chỉ có tiêu đề/spinner. Thà không có
+  nút còn hơn phát một link rỗng.
+
+### ⚠️ `setShareable(null)` nay là một CÂU KHẲNG ĐỊNH, không phải nút dọn dẹp
+Nghĩa mới: *"lượt này KHÔNG có gì đáng chia sẻ"* (fetch hỏng, khung đang hiện
+câu báo lỗi — vd `luc-nham` khi `!j`). Lời khai của tool mạnh hơn phép suy từ
+DOM nên nó **tắt cả lưới đỡ** tới lượt chạy sau. Chỉ để dọn nút khi quay về form
+thì **KHÔNG cần gọi** — shell thấy vùng kết quả ẩn đi là tự gỡ.
+- 🐞 **Lỗi tự bắt lúc test, không phải lúc đọc code**: bản đầu đặt cờ tắt tiếng
+  RỒI mới gọi `refreshWsShare()`, mà chính lượt đó thấy cạnh lên "vùng kết quả
+  vừa hiện = lượt chạy mới" nên **gỡ luôn cờ vừa đặt**. Tool báo lỗi trong khi
+  khung còn hiện thì shell vẫn đè lên lời khai của nó. Phải **chốt trạng thái
+  hiện/ẩn TRƯỚC, tắt tiếng SAU**.
+- 🐞 **Lỗi thứ hai, cùng họ "đoán theo tên"**: MutationObserver bám
+  `document.getElementById('ws')`, mà `app.html` dùng `<main class="ws">`
+  **không có id** ⇒ observer câm đúng trên tool Lá Số, nút không bao giờ hiện.
+  Nay lấy gốc theo `#ws` → `main.ws` → `<body>`. Chỉ lộ khi mở bằng trình duyệt.
+
+### 🧷 `scripts/check-shell-share.mjs` — chặn tool MỚI tái phát (CI lint)
+Đây mới là phần làm nó thành "master": phủ hôm nay không có nghĩa phủ tháng sau.
+Ba luật — có `.ws-actions` · **đúng MỘT** mốc `data-ws-result` · `toolId` chép
+tay (nếu còn) khớp `SHELL_ACTIVE`.
+- **Verify bộ dò bằng cách DỰNG LẠI ĐÚNG BA LỖI**: gỡ mốc khỏi `day-con` → bắt ·
+  thêm mốc thứ hai → bắt · đổi `toolId` thành `congso` → bắt. Bộ dò chưa từng
+  bắt được gì thì không chứng minh được nó biết bắt.
+- ⚠️ `app-xem-tuoi.html` gán `SHELL_ACTIVE` bằng **BIẾN** (một trang phục vụ 3
+  route) — vẫn phải kiểm, chỉ bỏ vế đối chiếu tên. Bỏ qua trang vì "không khớp
+  mẫu chuỗi" chính là kiểu im lặng bộ dò này sinh ra để chống.
+- Nhiều mốc thì shell lấy cái ĐẦU trong DOM → im lặng chọn nhầm, nên bắt luôn.
+
+### Verify
+`typecheck` 0 lỗi · `lint` 0 lỗi (72 warning pre-existing) · `prettier` sạch ·
+`check:prices`/`nostore`/`groups`/`share`/`hexagrams`/`hao`/`motifs` sạch ·
+engine **185 pass** · `node --check`.
+- **143 ca trên 33 TRANG THẬT + `shell.js` THẬT**: mỗi trang đủ ba nhịp — còn
+  form thì KHÔNG có nút · vùng kết quả hiện ra thì HIỆN nút · ẩn đi thì GỠ nút.
+- **8 ca chạy THẬT tool Lá Số đầu-cuối** (lập lá số bằng engine trong trình
+  duyệt): nút hiện, payload đúng `toolId='la-so'` và có nội dung thật, bấm "Sửa
+  thông tin" thì nút tự gỡ, 0 lỗi JS — kèm **ĐỐI CHỨNG bản cũ: 0 nút**.
+- **Ca lỗi day-con dựng lại nguyên trạng**: đè `Shell.setShareable` thành hàm
+  rỗng ("tool quên gọi") → shell vẫn đỡ được, payload mang **đúng `toolId`
+  'day-con'**, có nội dung thật, và **không lẫn chữ trên nút**.
+- **Ca payload lượt trước** trên `thanh-tuong-pro` + `phong-thuy`: đặt payload
+  rồi ẩn vùng kết quả → nút biến mất.
+- 🪤 **ĐỐI CHỨNG nạp đè `shell.js` bản git HEAD**: tool quên gọi → **không có
+  nút**; ẩn kết quả rồi → **nút VẪN CÒN**. Cả hai lỗi có thật, bài kiểm không đỗ
+  giả.
+- **13 ca vòng 2**: chạy THẬT `than-so-hoc` đầu-cuối (điền form → bấm tính → nút
+  hiện, payload đúng tool; bấm "Sửa" → nút tự gỡ; 0 lỗi JS) · **rò rỉ**: giữ nội
+  dung thật nhưng KHÔNG lọt tường trả phí / chữ trên nút / `data-share-skip` /
+  khối đang ẩn · 390px không tràn ngang.
+- Bump `shell.js?v=64→65` (35 trang). **Không đụng `shell.css`** — nút dùng lại
+  class `.btn` sẵn có.
+
+### CÒN LẠI
+- **32 tool vẫn còn bản `_xxLines` chép tay** — nay là đường LÀM GIÀU nên vẫn
+  thắng bản tự suy, và vẫn là hai bản có thể trôi khỏi nhau. CỐ Ý không gỡ trong
+  PR này: gỡ payload của 32 tool đang chạy để đổi lấy bản tự suy là canh bạc
+  trên đúng thứ vừa sửa. Gỡ dần từng tool khi có dịp đụng vào tool đó, và mỗi
+  lần gỡ phải nhìn bản chia sẻ thật.
+- Bản tự suy mới **chưa có ai tiêu thụ trên prod** (mọi tool đều đang đưa payload
+  riêng) — nó là lưới đỡ cho tool SAU. Chỗ đáng nhìn khi có tool mới: khoảng
+  cách giữa chữ trên trang và chữ trong link chia sẻ.
+- `data-ws-result` chỉ phủ trang shell. Trang standalone `/tools/*.html` không
+  nạp `shell.js` nên vẫn không có chia sẻ khung giữa — việc riêng.
+
+---
+
+## 📏 LUẬT CHỈ BÁO CHỜ + mở orb ra toàn site (2026-08-09, PR sau #455)
+
+Henry: *"orb cho ≥10 giây. Mấy tool luận giải chạy lâu, apply luôn. 58 tools thì
+nhiều chỗ > 10s mà nhỉ. Check lại cho kỹ rồi thay luôn"*.
+
+### Luật (chép trong `tools-shared/ai-loading-steps.js`, đọc trước khi thêm chỗ chờ mới)
+| Quãng chờ | Dùng |
+|---|---|
+| **≥10 giây, chờ MỘT CỤC** (LLM/sinh ảnh, màn hình đứng im) | **orb 62px** — `mountWait`, hoặc `mount` (orb bật sẵn) |
+| < 10 giây, hoặc nằm TRONG một nút/một dòng | spinner 14px `.ai-spin` |
+| Chữ CHẢY DẦN (SSE/stream) | **KHÔNG đụng** — dòng chữ đang chạy đã là chỉ báo tốt nhất |
+| Tải danh sách / điều hướng | skeleton hoặc không gì |
+
+### 🔴 ĐÍNH CHÍNH tiền đề "58 tool nhiều chỗ >10s"
+Đo thật: **44 trang** gọi endpoint LLM, nhưng **20 trong số đó STREAM** (chữ chảy
+dần) ⇒ không có quãng chờ trắng, chồng orb lên chỉ che nội dung. Số chỗ THẬT SỰ
+chờ một cục mà thiếu chỉ báo dài chỉ có **5**. Đừng đếm theo số tool.
+
+### Đã làm
+- **`mount()` bật orb MẶC ĐỊNH** → 19 trang tự đổi, 0 dòng sửa từng trang.
+- **`app-luan-giai` + `app-xem-tuoi`**: trước chỉ có **một dòng chữ TĨNH**
+  `"Đang luận giải…"` cho mỗi phần (24 và 9 phần) → nay `mountWait`.
+- **`luan-giai.html`**: đổi spinner 28px trong `.phan-loading` thành orb, **giữ
+  nguyên cơ chế bật/tắt bằng `.active`** — chỉ thay thứ nằm bên trong.
+- **`xem-tuoi` + `xem-lam-an`**: `TuviGrid.loadingHtml` nhận `opts.orb`. ⚠️ Hàm
+  này dùng ở **CẢ HAI bậc** — an sao (chạy tại máy, mili-giây) và luận giải AI.
+  Chỉ bật orb ở bậc sau; bật cả hai là orb loé rồi tắt.
+- ⛔ **KHÔNG đụng** rail chat (`.typing` 3 chấm) và spinner trong nút.
+
+### 🔑 `expectSec: 0` — KHÔNG ĐO ĐƯỢC thì KHÔNG HỨA
+`/api/lasotuvi` **không ghi `llm_usage`** (phát hiện khi đi đo — nghĩa là panel
+Biên LN đang thiếu hẳn tool luận giải, nợ riêng chưa vá) ⇒ không có số liệu thời
+lượng một phần. Nên thêm chế độ `expectSec:0`: **bỏ hẳn thanh tiến trình**, chỉ
+đếm giây, sau 45 giây thì trấn an. **Thanh chạy theo một con số bịa còn tệ hơn
+không có thanh — nó là một lời hứa, hứa hụt thì lần sau không ai tin nữa.**
+
+### 🐞 Vá cái bẫy do CHÍNH vòng trước đẻ ra
+Hàm tự-lành của `paint()` (`!el.contains(ref.note) → build()`) sẽ **dựng lại chỉ
+báo ĐÈ LÊN** nội dung nếu trang quên `stop()`. Ba chỗ đang dùng đều `stop()` đúng
+nên chưa cắn ai, nhưng sắp thêm 5 chỗ nữa. Nay đổi thành **TỰ DỪNG im lặng**.
+- 🔑 **Quên `stop()` chỉ được phép để lại một đồng hồ chạy ngầm vô hại, KHÔNG
+  được phép xoá mất kết quả của người dùng.** Ca đối chứng trên bản v1 xác nhận
+  lỗi có thật: nội dung bị wipe sau 2,5 giây.
+
+### Verify
+`tsc` 0 · `lint` 0 lỗi (72 warning pre-existing) · `prettier` sạch ·
+`check:prices`/`groups`/`nostore` sạch · engine **185 pass**.
+- **64 ca trên module thật**, gồm 🪤 **ĐỐI CHỨNG neo bản v1 đã merge** (không neo
+  bản tiền-orb — `HEAD` đã dịch): v1 mount() không orb · v1 vẫn hứa thời lượng ·
+  **v1 xoá mất kết quả khi quên stop()**.
+- **76 ca trên 12 TRANG THẬT** × 390px và 1280px: 12/12 nạp được module, 0 lỗi JS
+  · `luan-giai` orb đúng 46px và `.active` còn nguyên · **an sao KHÔNG orb, luận
+  giải CÓ orb** · `mount()` orb 54px không méo, không tràn ngang · **ghi kết quả
+  đè mà không stop → không bị vẽ đè**.
+- **60 ca hồi quy** trên 3 trang orb của vòng trước: vẫn xanh.
+- 🪤 **Ba ca đỏ, cả ba là lỗi TEST, và cả ba đều là bẫy CŨ lặp lại**:
+  (a) đo trên cây có tổ tiên `display:none` (`#result-section`) → 0×0 — lần thứ
+  hai vấp; (b) **đối chứng neo `HEAD`** nên sau khi stack thêm commit thì nó tự
+  so với chính mình — đúng thứ CLAUDE.md đã dặn "neo `origin/main`", vẫn vấp;
+  (c) lệnh thay chuỗi trong script vá bài kiểm **không khớp nên không thay gì**
+  mà vẫn in "✓" vì tao quên `assert`. 🔑 **Mọi lượt thay chuỗi bằng script phải
+  assert số lượt khớp — không thì nó thất bại IM LẶNG y như bug nó đi vá.**
+- Bump `ai-loading-steps.js?v=3→4` (24 trang) · `tuvi-grid.js?v=2→3` (3 trang).
+
+### CÒN LẠI
+- **20 trang STREAM cố ý không đụng.** Nếu sau này thấy quãng chờ tới token đầu
+  tiên lâu thì mới cân, và chỉ hiện orb tới lúc token đầu về.
+- **~26 bản `@keyframes spin` chép tay** vẫn nằm rải rác (blog, khao-luan,
+  topup, auth-callback…) — nợ DRY thật, nhưng phần lớn là chờ NGẮN nên đúng luật;
+  gom về một chỗ là refactor thuần, tách PR riêng.
+- **`/api/lasotuvi` không ghi `llm_usage`** ⇒ Biên LN thiếu tool luận giải, và
+  không đo được thời lượng để đặt ETA. Vá là mở được `expectSec` thật.
+
+---
+
+## 🧭 Tử Vi Công Sở: thêm TẦNG NHÁNH NGHỀ (2026-08-09, PR #454)
+
+Henry mở mục Tài chính, chốt B1 = *"số tôi hợp làm ngành nào?"*. Đi qua ba lần
+đổi hướng rồi mới ra: khảo sát repo → bỏ hướng "đọc tài chính một người" → bỏ
+hướng "8 trục từ cung" (*"ko thì cách đi hiện tại sẽ làm cho nó giống tool Tử vi
+công sở đấy"*) → và cuối cùng chính Henry chốt: **trùng thì gộp, làm thành nâng
+cấp Công Sở.**
+
+### 🔴 Đọc code xong mới thấy: Công Sở ĐÃ CÓ đúng kiến trúc mình định dựng
+`DOMAIN_NGANH` ← Quan Lộc (lĩnh vực) · `QUY_MO_THEO_BAC` ← bậc · `VAI_THEO_KIEU`
+← tứ tượng. Ba tầng, đang chạy. Chỗ thiếu là **NHÁNH**: Công Sở dừng ở
+`'Bất động sản · môi giới'` (một dòng chung chung) còn Henry đòi *"phát triển
+bds, môi giới, mua đi bán lại — phải cụ thể ra"*; và VAI chỉ có **4 giá trị** cho
+toàn bộ người dùng, quá thô để cắt nhánh. ⇒ Tầng 4, không phải tool thứ ba.
+
+### 🔑 Số quyết định thiết kế — khớp toàn danh mục thì HỎNG
+Khớp thẳng 21 trục trên cả 891 nghề: **76% danh mục không bao giờ được gợi**,
+top rơi vào nghề hình PHẲNG (lau rửa xe · phụ hồ · thợ là quần áo). Căn nguyên
+đo được: tính khí tách rất tốt nhóm làm-với-NGƯỜI (bán hàng 0,81 · cộng đồng
+0,80) và **gần như không tách** nhóm kỹ thuật/sản xuất (y tế chuyên môn 0,27 ·
+nông lâm 0,28 · xây dựng 0,32).
+⇒ **Đừng dùng tính khí chọn NHÓM. Dùng nó chọn NHÁNH trong nhóm.** Sau khi chốt
+lĩnh vực, dư địa còn 68–90% (quyen 90 · vo 87 · thuong 84 · van 81 · nghe 73 ·
+tu 71 · y 68). Nghịch lý biểu kiến: xây dựng *tâm nhóm mờ* (0,32) nhưng *bên
+trong trải rộng* (55%) — chỉ huy thi công và thợ trát cách nhau rất xa.
+
+### Hai luật cứng rút ra từ đo — đừng "tối ưu" ngược lại
+1. **KHÔNG z-score vector người.** Thử rồi: đa dạng tăng 122→169 mà chất lượng
+   sụp (bậc hiển đạt ra "trợ giảng", Thiên Phủ ra "người mẫu"). Z-score triệt
+   tiêu ĐỘ LỚN, mà độ lớn chính là tín hiệu BẬC.
+2. **KHÔNG gom thêm cung.** Thử 7 cung: đa dạng GIẢM (trùng 1/115 → 1/90). Cộng
+   nhiều nguồn thì vector tiến về trung bình.
+
+### Ba luật nội dung
+- **Nhánh khác nhau về CHẤT, không về QUY MÔ** — quy mô đã là tầng 2. Tách
+  "điều hành cấp cao" khỏi "quản lý vận hành" làm hai nhánh xếp cạnh nhau với
+  LÝ DO GIỐNG HỆT ⇒ đã gộp.
+- **Tên nhánh nói CÁCH LÀM, không nói lĩnh vực** — lĩnh vực là tầng 1. Tên trùng
+  chuỗi với `DOMAIN_NGANH` là người trả tiền mở ra thấy lại chữ vừa đọc free.
+  Có bộ dò chặn tái phát trong bài kiểm.
+- 🔴 **LUẬT DIỄN ĐẠT — vi phạm là xúc phạm người dùng:** trục THẤP chỉ được đọc
+  là *"nghề không đòi hỏi"*, TUYỆT ĐỐI không đọc là *"bạn thiếu"*. Dữ liệu chấm
+  hoạ sĩ ở trục đáng-tin-cậy **−3,6**, thợ máy ở chính-trực **−1,7**; in thẳng
+  là tool đang nói *"bạn ít đáng tin cậy"*. Nói ở CẢ tầng data lẫn tầng prompt.
+- **29% kho là nhánh `phoThong`** (không có chất người đặc thù) — không bao giờ
+  gợi bằng phép khớp, và KHÔNG hiện %. Nói "lá số bạn hợp nghề này" trong khi lá
+  số không nói gì về nó là kết luận rỗng đội lốt kết luận.
+
+### Đường tiền (Henry chốt phương án (a))
+Ba tầng cũ giữ **MIỄN PHÍ** (Công Sở vẫn là tool đầu phễu), tầng nhánh sau tường
+`lockPreview` — đúng khuôn W1.
+- 🔴 **GET không được mang tầng nhánh**: nó trả `Cache-Control: public,
+  s-maxage=86400`, một lần rò là CDN phát phần trả tiền cho MỌI người, không thu
+  hồi được. Đường tiền là **POST riêng** + `no-store` + auth + `toolPaymentDenied`.
+- `hoSoTinhThu()` / `railDataDayDu()` là hàm RIÊNG — đường tiền phải cắt được
+  bằng một dòng đọc ra được, có bài kiểm canh đúng dòng đó.
+- Rail chỉ biết nhánh SAU khi mua: biết sớm thì người ta hỏi rail thay vì mua.
+
+### Verify
+`tsc` 0 · `lint` 0 lỗi (72 warning pre-existing) · `prettier` sạch ·
+`check:nostore` + `check:prices` sạch.
+- **A/B với bản trước tích hợp, 3.264 lá số × 5 trạng thái: 0 lệch** (Công Sở
+  đang chạy prod — bất biến quan trọng nhất).
+- **2.880 lá số, 8 bất biến engine: 0 lỗi**; nhánh từng đứng #1 **25/29** (khớp
+  toàn danh mục chỉ được 14,5%); nhánh phổ thông **0 lượt lọt sai**.
+- **22/22 ca đọc thẳng mã nguồn + 480 lá số**: GET không auth/không thanh toán/
+  không rò dấu hiệu nhánh · POST có chốt thanh toán TRƯỚC `computeCongSo`.
+- **22/22 ca Playwright trên TRANG THẬT**: tính thử → 0 POST, 0 `action=deduct`,
+  quét toàn bộ chữ hiện ra thấy **0 việc của tầng nhánh lọt** · bấm mở → có
+  deduct + POST, phần tính thử còn nguyên byte · ĐỐI CHỨNG 402 → dựng lại tường,
+  không quẳng về form · 390px không tràn.
+- **108 lá số**: 0 khoá thiếu nhãn, 0 rò khoá kỹ thuật vào prompt.
+
+### 🪤 Bẫy đã vấp
+1. **Hai lỗi chỉ lộ khi ĐỌC OUTPUT, xanh trên mọi phép đo số**: (a) hai nhánh ra
+   lý do y hệt vì lý do nêu trục CHUNG của lĩnh vực thay vì trục PHÂN BIỆT nhánh;
+   (b) tích `v × (hình − nền)` dương khi **cả hai vế cùng ÂM** ⇒ trục người YẾU
+   lọt vào phần giải thích, bản đọc tự mâu thuẫn (*"không đòi: Thận trọng"* nằm
+   ngay trên *"vì: Thận trọng"*).
+2. **Thiếu `TuviPaywall.init` thì `lockPreview` FAIL-CLOSED** — không dựng tường,
+   phần trả tiền lặng lẽ không bao giờ mời được ai. Đọc code không thấy vì cả hai
+   phía đều đúng khi đọc riêng.
+3. **Stub `Auth` đặt trong `addInitScript` bị `auth.js` GHI ĐÈ** khi nạp sau →
+   modal đăng nhập hiện ra, lượt bấm không tới bước trừ Lượng. Phải đặt SAU khi
+   trang tải xong.
+4. **`engine vanilla` và `tuvi-engine/src/types.ts` khai `cungScores` KHÁC TÊN**
+   — vanilla có `{thienVan, canCo, mayMan, phuTro, binhYen, benVung, tong}`, types
+   khai `{tiemNang, benVung, anToan, quyNhan, minhBach, tuongHop}`, chỉ `benVung`
+   trùng. Đo phải theo BẢN ĐANG CHẠY. Và `anSaoLaSo` **không ném lỗi khi sai tên
+   khoá** (`gioIdx`, `gioitinh` thường) — nó lặng lẽ trả lá số rỗng.
+
+### CÒN LẠI
+- ⚠️ **VIỆC TAY: đổi `tool_pricing` SAU KHI DEPLOY**, không được trước — đúng bài
+  học "dữ liệu đi SAU giao diện" đã làm 58 công cụ rơi vào "Khác" 4 phút:
+  ```sql
+  update tool_pricing set label='Tử Vi Công Sở & Hướng Nghiệp',
+    credits=15, is_free=false, updated_at=now() where tool_id='cong-so';
+  ```
+  Giữ nguyên `tool_id` để URL/SEO không đổi. Henry sẽ rà lại pricing một lượt.
+- **Tầng nhánh 0 lượt LLM, 0đ** — lãi 100%, không cần cầu dao ngân sách nào.
+  Cố ý CHƯA thêm LLM: đo tỉ lệ mua trước rồi mới quyết thêm chi phí, đúng lối W1.
+  Nếu tỉ lệ mở thấp thì chỗ thêm là một lượt viết "đường đi từ đây".
+- **Tool định hướng nghề cho TRẺ EM** (Henry chốt làm sau). Trước khi dựng phải
+  **đo overlap với T2 "Dạy Con"** — nó sẽ vấp đúng cái bẫy vừa gỡ với Công Sở.
+- **Bảng `SAO_TRUC` (14 chính tinh → 21 trục) là quy chiếu TỰ ĐẶT**, cùng dạng
+  nợ với `KIEU_HOC` và `DOMAIN_NGANH`. Cổ thư tả tính chất sao bằng văn xuôi,
+  không bằng thang điểm. Sửa là sửa data thuần.
+- `hinh` mỗi nhánh lấy khởi điểm từ một CSDL nghề nghiệp công khai **CC BY 4.0**
+  — dùng để CHẤM, không để BÀY; danh mục việc là bảng Việt tự dựng. **Ghi công
+  đặt ở trang nguồn dữ liệu, KHÔNG nhắc trong bản đọc** (Henry: *"mấy cái test ở
+  trên để mình tham khảo thôi… ko cần mention tên của nó"*). ⏭️ Trang đó **chưa
+  làm** — phải có trước khi bật thu phí.
+- **Chưa có trang standalone SEO** cho phần hướng nghiệp.
+
+---
+
+## ✨ Orb chờ AI + `innerHTML` mỗi giây PHÁ animation (2026-08-09, PR #455)
+
+Henry gửi ảnh app golf: *"cái loading indicator đẹp quá… cục tròn trắng ở giữa
+xong xung quanh viền xanh như khói bay. Có library nào có sẵn ko?"*
+
+### Trả lời câu hỏi: không cần library
+Loại này hay được gọi *AI glow / aurora orb* (Apple Intelligence, Siri orb). Web
+có Magic UI (`BorderBeam`, `ShineBorder`), Aceternity `Glowing Effect`, `ldrs`;
+app thì phần lớn xài **Lottie**. Nhưng cấu tạo chỉ là **2 lớp**: một hình tròn
+đặc ở trên, phía sau một khối gradient bị `filter:blur()` cho xoay/phóng chậm.
+⇒ repo này là vanilla nên **CSS thuần, 0 dependency, 0 byte JS thêm**.
+
+### 🔴 KHÔNG bê nguyên thiết kế của app kia được — nền khác nhau
+Nền khung chờ ảnh là **kem `#EFEBE3`** (`.cdtk-imgph`), không phải video tối ⇒
+mặt cục **trắng** mất hút, chỉ trơ vành khói. Và xanh dương không có trong bảng
+màu site. Nên: mặt cục `--navy` · quầng `--gold` · dấu ✦ `--gold-on-navy`.
+- 🔑 **Cả ba token đều CỐ Ý không khai lại ở dark theme** (luật "token hai vai")
+  ⇒ orb ra y hệt hai theme, đúng vai một dấu thương hiệu — không phải đi cân lại
+  contrast cho từng theme. Cùng lối với ô `.spark` sẵn có của shell.
+
+### 🐞 Hai lỗi CÓ SẴN, cùng một căn nguyên: `paint()` gán lại `innerHTML` MỖI GIÂY
+1. **Mọi `@keyframes` bị reset về đầu mỗi tick.** Trước giờ không ai thấy vì
+   spinner cũ xoay `.8s` — ngắn hơn một nhịp đồng hồ nên reset trùng chu kỳ.
+   Cắm orb (xoay 2,7s) vào là quầng khói giật một nhịp mỗi giây.
+2. **`transition:width .9s` của thanh tiến trình CHƯA BAO GIỜ chạy** — element
+   mới không có width cũ để nội suy ⇒ thanh nhảy giật từng nấc thay vì trườn.
+- Vá: dựng khung **một lần**, mỗi giây chỉ đổi `textContent` + `width`.
+  `render()` của `mount()` cũng chỉ thay ruột hộp bước thay vì cả `el.innerHTML`.
+- 🔑 **Quy ước rút ra: chỗ nào có animation dài hơn nhịp cập nhật thì KHÔNG được
+  dựng lại DOM theo nhịp đó.** Lỗi này ẩn được 2 tháng chỉ vì animation cũ ngắn
+  hơn 1 giây.
+- 🐞 Lỗi thứ ba **do chính bài kiểm bắt**: `orbHtml()` export ra ngoài mà không
+  gọi `ensureStyle()` → ai dùng trên trang chưa mount gì nhận một ô vuông trần,
+  **không có gì báo lỗi**. Hàm export công khai phải tự lo CSS của nó.
+
+### Hợp đồng giữ nguyên
+Trần 96% · quá hẹn đổi lời · `stop()` dọn interval · nhãn qua `textContent`.
+Thêm `{orb:false}` lùi về spinner cũ, `{variant:'a'|'b'|'c'|'d'}` đổi kiểu quầng.
+- **Orb trong `mount()` MẶC ĐỊNH TẮT** — hàm đó chạy trên 19 trang, bật đại trà
+  là đổi giao diện 19 chỗ trong một lượt mà chưa ai nhìn qua. Bật một trang:
+  `mount(id, steps, {orb:true})`.
+
+### Verify
+`tsc` 0 · `lint` 0 lỗi (72 warning pre-existing) · `prettier` sạch ·
+`check:prices`/`check:groups`/`check:nostore` sạch · engine **185 pass**.
+- **53 ca trên MODULE THẬT**, gồm 🪤 **ĐỐI CHỨNG bản git HEAD**: bản cũ không có
+  orb và node thanh tiến trình **bị thay mới mỗi giây** ⇒ hai lỗi có thật.
+- **60 ca trên 3 TRANG THẬT** có gọi `mountWait` × **390px và 1280px**: orb đúng
+  62×62 (CSS trang không bóp méo), mặt cục giữ navy, quầng đang chạy, không tràn
+  khỏi khung chờ, trang không tràn ngang, 0 lỗi JS.
+- `prefers-reduced-motion` → đứng im nhưng **VẪN giữ quầng sáng**.
+- Nhãn chứa `<img onerror>` không chạy mà vẫn hiện nguyên văn · `variant`/`size`
+  rác rơi về mặc định, không chèn được thẻ.
+- 🪤 **Hai ca đỏ đầu đều là lỗi TEST**: (a) vòng gỡ ẩn viết
+  `n.style.display = n.style.display || ''` — gán lại chính giá trị cũ, no-op,
+  nên đo trên cây `display:none` ra **0×0**; (b) bộ đếm lỗi JS ăn cả
+  `Failed to load resource` của lượt mạng do chính mình chặn.
+- Bump `ai-loading-steps.js?v=2→3` — `git diff --numstat` xác nhận **19 file,
+  mỗi file đúng 1 dòng**.
+
+### CÒN LẠI
+- **Chưa nhìn trên máy thật.** Chỗ đáng soi là `filter:blur(13px)` trên điện
+  thoại tầm trung có mượt không; rớt khung hình thì đổi `variant:'b'` (không
+  blur lớn), sửa đúng một chữ.
+- Chỉ đụng `mountWait` (3 trang chờ ảnh). 16 trang dùng `mount` giữ nguyên.
+- Demo 4 biến thể (artifact, không commit vào repo):
+  `claude.ai/code/artifact/cb7a6a6a-3c96-4812-835b-89b158de2ee9`
+
+---
+
+## 🗺️ Sitemap: `lastmod` đang NÓI DỐI 647 URL mỗi ngày (2026-08-07, PR này)
+
+Henry: *"Bạn tao chuyên gia SEO nói là sitemap mà nhiều URLs quá thì chia nhỏ ra
+thành nhiều sitemap submit lên google sẽ crawl nhanh hơn."*
+
+### 🔴 ĐÍNH CHÍNH tiền đề: chia nhỏ KHÔNG làm Google crawl nhanh hơn
+Nguyên văn Mueller: *"Google's systems handle both small sitemap files and big
+sitemap files in the same way… there's **no technical advantage** by splitting
+them"*, và size/số file *"generally won't affect the crawling"*. Lợi ích DUY NHẤT
+là **GIÁM SÁT** — lọc báo cáo GSC theo từng sitemap để biết nhóm nào không được
+index. Mà site này **đã chia rồi** (3 file, `sitemap-ngay-tot.xml` vốn đã là
+sitemapindex 18 con) và tổng chỉ **38.147 URL**, còn xa trần 50.000/file.
+
+| Sitemap | URL nộp (GSC) | % |
+|---|---:|---:|
+| `sitemap-hubs.xml` (menh-kho) | **18.679** | 49,0 |
+| `sitemap.xml` | 10.986 | 28,8 |
+| `sitemap-ngay-tot.xml` | 8.482 | 22,2 |
+| Trang từng có impression | **665** | **1,7** |
+
+### 🔴 Lỗi THẬT — `lastmod` tự phá tín hiệu của chính mình
+`app/api/sitemap/route.ts` đóng dấu `new Date()` làm `lastmod` cho **70 trang
+tĩnh + 576 trang van-han, MỖI NGÀY**. Đo trên route thật: **647/655 URL mang ngày
+hôm nay**. `lastmod` là trường **DUY NHẤT** Google còn đọc (`changefreq`/
+`priority` bị bỏ qua) — và nó chỉ được đọc KHI ĐÚNG; đóng dấu hôm nay dạy crawler
+bỏ qua `lastmod` của **CẢ SITE**, kéo theo 8.478 trang `seo_pages` có
+`created_at` thật cũng mất tín hiệu theo. Mueller gọi đúng hành vi này là *"just
+lazy"*. `sitemap-hubs` và `sitemap-ngay-tot/*` thì **0 lastmod** hoàn toàn.
+
+### Cách vá — `lib/seo/lastmod.ts`, luật **KHÔNG BIẾT ⇒ KHÔNG PHÁT**
+Thiếu `lastmod` là **trung tính** (trường tuỳ chọn); `lastmod` sai là **nhiễu
+độc**. Nên: dòng DB → `updated_at ?? created_at` thật; trang tĩnh + menh-kho +
+van-han → **bỏ hẳn thẻ**; `ngay-tot` → `CONTENT_REV = 2026-08-04` (mốc engine sửa
+12 trực, đổi 26,8% số ngày — mốc có thật, ghi trong chính CLAUDE.md).
+- ⚠️ **Chỉ 2 bảng có `updated_at`** (`tu_dien`, `sach_library`). Hỏi cột không
+  tồn tại thì PostgREST trả 400 → lượt đó ra mảng rỗng → **mất im lặng cả một họ
+  URL** khỏi sitemap. Phải tách bằng cờ `hasUpdatedAt`.
+- Gỡ `changefreq`/`priority` khỏi cả 4 sitemap.
+
+### 🪤 Ba cái bẫy đã vấp
+1. **Suýt thay lời nói dối này bằng lời nói dối khác:** định lấy `git log` làm mốc
+   nội dung, nhưng **git trong container là bản SHALLOW** — commit cũ nhất
+   (2026-08-04) chỉ là mốc cắt của bản clone, không phải ngày sửa. **Kiểm
+   `.git/shallow` trước khi tin bất kỳ ngày commit nào.**
+2. **`git worktree` + symlink `node_modules` KHÔNG chạy được với Turbopack**
+   (*"Symlink points out of the filesystem root"*). Đường đi được: commit trước
+   rồi `git checkout HEAD~1 -- <file>` ngay trong cây đang chạy — Next dev tự
+   hot-reload, xong `checkout HEAD --` trả lại.
+3. 🔴 **Ca quan trọng nhất của bài kiểm ĐỖ GIẢ trên bản cũ.** Bộ parse đòi `<loc>`
+   liền `<lastmod>`, mà bản cũ chèn `changefreq`/`priority` vào giữa ⇒ map ra
+   RỖNG ⇒ *"0 URL đóng dấu hôm nay"* đúng một cách vô nghĩa. Sửa: tách theo khối
+   `<url>` + đo THẲNG trên chuỗi thô. **Assertion phải nhìn vào thứ ĐANG ĐỔI.**
+
+### Verify
+`tsc` 0 · `lint` 0 lỗi (72 warning pre-existing) · `prettier` sạch ·
+`check:prices`/`check:groups`/`check:nostore` sạch · engine **185 pass**.
+- **A/B danh sách trang tĩnh** (chỗ sửa tay, rủi ro hồi quy cao nhất): **70 = 70,
+  0 thiếu, 0 thừa, đúng thứ tự**.
+- **30 ca trên ROUTE THẬT** qua Next dev + stub PostgREST: 0 URL đóng dấu hôm nay
+  · `updated_at` thắng `created_at` · **ĐỐI CHỨNG dòng thiếu ngày → bỏ thẻ chứ
+  không rơi về hôm nay** · `seo_pages` category `van-han` vẫn bị loại · van-han
+  đủ 576 · hubs đúng **18.679** (khớp số GSC) · ngay-tot 2021 đúng 497 · 0
+  `changefreq`/`priority`.
+- 🪤 **ĐỐI CHỨNG bản cũ**: **647/655 URL đóng dấu hôm nay**, 14 ca đỏ ⇒ lỗi có
+  thật và bài kiểm bắt được.
+- **Không bump `?v=`** — chỉ sửa route server, không đụng asset client.
+
+### ✅ B — chia `sitemap.xml` thành sitemapindex 6 con (Henry: *"làm tiếp đi"*)
+`trang` (70) · `noi-dung` (khao-luan + nghien-cuu + tu-dien + tai-lieu + sach) ·
+`seo` (8.478) · `van-han` (576) · `la-so` (laso_public) · `la-so-pregen` (1.444).
+- **Chia theo thứ mình sẽ HÀNH ĐỘNG KHÁC NHAU khi chúng hỏng**, không phải chia
+  cho tròn số: trang tĩnh rớt index = sự cố · bài người viết rớt = thiếu link ·
+  trang SEO rớt = mỏng/trùng · `la-so-pregen` là nhóm đang bị rút, theo riêng để
+  biết khi nào xong.
+- **`laso_public` TÁCH khỏi `laso_pregen`** dù cùng sống ở `/la-so/*`: một bên
+  giữ index (người đã trả tiền), một bên đang deindex. Gộp thì báo cáo nhóm này
+  lúc nào cũng đỏ vì nhóm kia.
+- **KHÔNG nộp `sitemap-hubs`/`sitemap-ngay-tot` vào index** — chúng đã nộp thẳng
+  trong GSC; nộp cả hai đường là một URL đếm hai lần, đúng thứ chia nhóm sinh ra
+  để tránh.
+- Phần dùng chung gom vào `lib/seo/sitemap-source.ts` — 6 route mà mỗi cái chép
+  một bản `fetchAllSlugs` là đúng bẫy `parseLlmJson` đã trả giá.
+
+### ✅ C — `noindex, follow` cho các họ trang mỏng
+18.628 `menh-kho/[năm]/[ngày]` + `/la-so/*` dựng sẵn + `/la-so/*` tính tại chỗ.
+Quyết định + cách lật lại gom trong **`lib/seo/index-policy.ts`**.
+- 🔑 **Vì sao `noindex` chứ không phải rút khỏi sitemap:** bài học #358 —
+  **rút khỏi sitemap KHÔNG deindex**. Pregen bị rút từ hồi đó mà `/la-so/*` vẫn
+  ăn impression đều, vẫn hạng 1,4. Sitemap là LỜI MỜI, không phải LỆNH.
+- 🔑 **Và vì thế URL `noindex` CỐ Ý VẪN NẰM TRONG sitemap** dù Google khuyên
+  đừng: muốn Google gỡ một trang thì nó phải **crawl lại** để đọc thẻ, mà sitemap
+  là đường mời crawl nhanh nhất. Gỡ khỏi sitemap CÙNG LÚC đặt noindex là lặp lại
+  đúng sai lầm cũ. ⏭️ Gỡ SAU khi GSC báo đã hết index.
+- **GIỮ index, đừng đụng:** `laso_public` (người dùng đã TRẢ TIỀN rồi chia sẻ) ·
+  51 hub NĂM (đường duy nhất Google bò xuống day hub để đọc được thẻ noindex) ·
+  toàn bộ `/ngay-tot/*` (có cầu thật).
+- **`follow` chứ không `nofollow`**: đây là tầng điều hướng tới nội dung thật.
+
+### Verify B + C
+- **28 ca trên route thật**: sitemapindex đúng 6 con · 0 URL nằm ở hai nhóm ·
+  0 `changefreq`/`priority` · **A/B tập URL cũ (một cục) vs mới (6 con): 657 =
+  657, 0 mất, 0 thừa**.
+- **noindex**: day hub ✓ · pregen ✓ · ISR ✓ — kèm **4 ca ĐỐI CHỨNG phải KHÔNG
+  bị noindex**: 🔴 `laso_public` (đã trả tiền) · hub NĂM · `/van-han/*` · và
+  `laso_public` vẫn khai `index, follow`.
+- 🪤 **ĐỐI CHỨNG bản trước C**: đúng **3 ca noindex đỏ**, 5 ca đối chứng vẫn xanh
+  ở cả hai phía ⇒ bài kiểm đo đúng thứ đang đổi, không xanh vì lý do khác.
+- **lastmod của batch A còn nguyên sau khi tách**: 657 URL, **0 đóng dấu hôm
+  nay**, `updated_at` vẫn thắng `created_at`, dòng thiếu ngày vẫn bỏ thẻ.
+
+### CÒN LẠI
+- ⚠️ **Số trang index sẽ TỤT MẠNH sau deploy** — đó là fix chạy đúng, không phải
+  hỏng. Impression cũng tụt, nhưng phần tụt là impression **0 nhấp**.
+- ⏭️ **Việc theo dõi:** GSC → Pages → lọc theo `sitemap-la-so-pregen.xml`; khi
+  "Excluded by 'noindex'" phủ gần hết thì XOÁ file đó + gỡ khỏi sitemapindex.
+  Tương tự cho day hub trong `sitemap-hubs.xml`.
+- **Chưa đo được với dữ liệu THẬT** — preview Vercel khoá sau SSO nên toàn bộ
+  verify dừng ở stub PostgREST. Sau deploy mở `sitemap.xml` là thấy ngay.
+- **IndexNow không dùng được cho Google** (chỉ Bing/Yandex), và Google đã bỏ
+  endpoint ping sitemap từ 6/2023.
+
+---
+
+## 🕘 7 tool KHÔNG HỀ có lịch sử — và nhãn phiên suýt nói sai người (2026-08-07, PR sau)
 
 Henry: *"Mày kiểm tra lại tất cả các tool đều có mục Phiên gần đây này chưa?"*
 Đếm ra **26/34**. Nhưng con số đó chưa phải vấn đề thật.
@@ -51,7 +1582,7 @@ sinh ra để chống — và nó IM LẶNG, nhìn qua rất hợp lý.
 `typecheck` 0 · `lint` 0 lỗi (72 warning pre-existing) · `prettier` sạch ·
 `check:prices`/`check:groups`/`check:nostore` sạch · engine 185 pass ·
 `node --check`.
-- **81 ca trên 6 TRANG THẬT**: đúng 2 dòng · dòng chính là câu hỏi · gộp đúng
+- **85 ca trên 7 TRANG THẬT** (thêm ca canh nút Lịch sử trong rail): đúng 2 dòng · dòng chính là câu hỏi · gộp đúng
   "3 phiên" · nút `Tất cả (4)` · cao 129px · bấm dòng → đúng `?auto=1` + đúng id
   trong `sessionStorage` · **0 lượt trừ Lượng** · 0 lỗi JS.
 - **30 ca vòng tròn ĐẦY ĐỦ** (chạy tool → hỏi rail → phiên phải hiện lên khối):
@@ -69,8 +1600,26 @@ sinh ra để chống — và nó IM LẶNG, nhìn qua rất hợp lý.
   đè `app_birth` về giá trị seed → hai ca đối chứng đỏ oan. Phải seed một lần.
 - Bump `shell.js?v=65` (35 trang).
 
+### 🔁 Gộp `main` giữa chừng — và tool thứ BẢY lòi ra đúng lúc đó
+`main` đi trước **17 commit**, trong đó #462 thêm tool MỚI `huong-nghiep-tre`
+dựng trên khuôn `day-con` **CŨ** ⇒ nó thiếu y hệt. Tức lỗi tái phát ngay trong
+lượt gộp của chính PR đi sửa nó. Nay **7 tool**, không phải 6.
+- ⇒ Cắm **`scripts/check-shell-history.mjs`** vào CI lint (`check:history`):
+  mọi trang có `SHELL_ACTIVE` phải có CẢ `SHELL_HISTORY=true` LẪN `#shellRecent`.
+  Miễn trừ đúng 2 trang không phải công cụ, **kèm lý do ghi trong chính bộ dò**.
+  Đã red-team: gỡ cờ của một trang → bộ dò đỏ đúng trang đó.
+- 🔑 **Thiếu MỘT trong hai là hỏng im lặng**: có cờ mà quên chỗ mount → phiên vẫn
+  lưu nhưng không ai thấy; có chỗ mount mà quên cờ → khối vĩnh viễn rỗng
+  (`renderRecent` thoát sớm khi `!HIST_ON`).
+- 35 xung đột đều là dòng `shell.js?v=` (65 của tao vs 67 của main) → lấy bản
+  main rồi bump **68**. Một xung đột THẬT ở `app-day-con.html`: main viết lại
+  `SHELL_INTRO`; giữ bản mới của main rồi gắn lại `SHELL_HISTORY`.
+- **Đếm lại dấu hiệu CẢ HAI bên sau khi giải** (đúng bài học `--ours`): bên tao
+  `birthOwned`/`selfBirth`/`normBirth(o.birth)` còn đủ + 7 tool đủ cả hai cờ;
+  bên main tool mới có mặt, `shell.js` 36/36 file, `ai-loading-steps` v=5.
+
 ### CÒN LẠI
-- 6 tool này **không dựng lại được phần giữa** khi khôi phục (không có `autoRun`)
+- 7 tool này **không dựng lại được phần giữa** khi khôi phục (không có `autoRun`)
   — bấm một phiên thì hội thoại trở lại còn kết quả thì không. Cố ý: dựng lại là
   chạy lại tool trả phí. Muốn dựng lại thì phải đọc từ cache
   (`portrait_cache`/`user_charts`), là việc riêng.
@@ -1393,12 +2942,18 @@ Khác `nguoi-khac` với quan hệ `con-cai` ở CÂU HỎI: bên kia là *sốn
 Cả hai đọc lá số người **không có mặt**; T3 còn đọc vài người một lúc và người
 hỏi thường có quyền với họ.
 - **Lớp dữ liệu**: dùng CHUNG `KHONG_DOC` của `nguoi-khac.ts` (Tật Ách · Tài Bạch
-  · Phu Thê · Tử Tức · Điền Trạch). T2 còn **cố ý KHÔNG gọi bảng nghề nghiệp**
-  dù engine có sẵn — chốt nghề cho đứa 10 tuổi là thứ nguy hiểm nhất nó làm được.
-  T3 **không trả điểm tổng mỗi người** ⇒ không có gì để xếp hạng.
-- **Lớp prompt**: T2 cấm đoán đỗ/trượt, cấm chốt ngành, cấm so sánh anh em, cấm
-  "khó dạy". T3 cấm xếp hạng người, cấm khuyên sa thải, cấm ngôn ngữ chốt sale
-  kiểu thao túng.
+  · Phu Thê · Tử Tức · Điền Trạch). T3 **không trả điểm tổng mỗi người** ⇒ không
+  có gì để xếp hạng.
+- **Lớp prompt**: T2 cấm đoán đỗ/trượt, cấm so sánh anh em, cấm "khó dạy".
+  T3 cấm xếp hạng người, cấm khuyên sa thải, cấm ngôn ngữ chốt sale thao túng.
+- 🔴 **ĐÍNH CHÍNH 2026-08-09 — luật "T2 không được gợi nghề" ĐÃ BỎ.** Henry lật:
+  *"Luật đó claude.md đang viết sai. Định hướng nghề nghiệp thì định hướng để
+  tham khảo thôi. Nó giúp ích cho đứa trẻ. Mà bình thường gia đình cũng đã định
+  hướng cho nó rồi."* Lý do cũ ("chốt nghề cho đứa 10 tuổi là thứ nguy hiểm nhất
+  nó làm được") nhầm **ĐỊNH HƯỚNG** với **CHỐT**: gia đình vốn đã định hướng, và
+  một bản tham khảo có căn cứ thì tốt hơn một câu nói vu vơ trong bữa cơm.
+  ⇒ Tool định hướng nghề cho trẻ em là việc ĐƯỢC LÀM. Ranh giới còn giữ: nói
+  bằng *xu hướng và việc nên cho làm quen*, không nói bằng *nghề phải theo*.
 - 🪤 **Ca test suýt báo đỏ oan**: bản kiểm "prompt không nhắc cung cấm" bắt được
   `Tử Tức` — nhưng đó là cung Tử Tức trong lá số **CHA MẸ**, chỗ cổ pháp đọc con
   cái, và cha mẹ chính là người tự đưa lá số mình vào. `KHONG_DOC` cấm các cung
@@ -3103,6 +4658,26 @@ gỡ nào chắc chắn.
   và `unit-test` thì KHÔNG.
 - ⇒ Khi gặp ca này, chạy đủ bộ tại chỗ rồi **nói thẳng trên PR là CI vắng mặt**.
   Đừng để PR trông "xanh": xanh ở đây nghĩa là các check KHÔNG TỒN TẠI.
+
+**Thêm số liệu 2026-08-09 (PR #462), và nó ĐÍNH CHÍNH nốt cách gỡ còn lại:**
+cùng một PR, hai lượt push liền nhau ra hai kết quả khác nhau —
+| Lượt push | HEAD là gì | Kết quả |
+|---|---|---|
+| có gộp base, **HEAD CHÍNH LÀ commit merge** | merge | **đủ 7 check** |
+| có gộp base trong dải push, nhưng **HEAD là commit thường** đứng sau | thường | **chỉ `smoke` + Vercel** |
+⇒ *"Gộp base rồi push"* **KHÔNG đủ** — nghi là phải để **commit merge nằm ở
+đúng HEAD**. Chưa đủ mẫu để chốt thành luật (n=2), ghi lại để lượt sau đối
+chiếu thay vì thử mò lại từ đầu.
+- 🔑 **Trước khi tốn công kích lại CI, hỏi: CI còn thêm được gì cho ĐÚNG diff
+  này?** Lúc PR #462 gặp ca này, `playwright` và `lighthouse` còn trỏ **URL
+  prod** nên chúng đo sức khoẻ prod chứ không đo nhánh; phần thật sự phủ diff
+  chỉ còn `lint` · `typecheck` · `unit-test`, cả ba chạy tại chỗ được.
+- 🔴 **LẬP LUẬN TRÊN NAY ĐÃ HẾT HẠN — đừng chép lại.** #466 rồi #468 (gộp ngay
+  sau đó, trong cùng buổi) chuyển **cả E2E lẫn Lighthouse** sang đo **chính bản
+  preview vừa deploy**. Từ nay hai check đó vắng mặt là **mất phủ THẬT cho
+  nhánh**, không còn là "đo prod". Đây là lần thứ ba trong repo một ĐỐI CHỨNG
+  hết hạn vì chính hạ tầng nó neo vào đã đổi — xem lại mục *CI đo BẢN CŨ* ngay
+  dưới trước khi viện dẫn lập luận này.
 
 ### ⚠️ (ghi chép cũ) CI: workflow `pull_request` có lúc KHÔNG fire
 2 commit liên tiếp chỉ có Vercel + `smoke` chạy; lint/typecheck/test/lighthouse **không hề

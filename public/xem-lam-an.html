@@ -14,8 +14,8 @@
 <script src="/tuvi-ansao-engine.js"></script>
 <script src="/auth.js?v=2"></script>
 <script src="/tuvi-form.js?v=1"></script>
-<script src="/tuvi-grid.js?v=2"></script>
-<script src="/tuvi-paywall.js?v=17"></script>
+<script src="/tuvi-grid.js?v=3"></script>
+<script src="/tuvi-paywall.js?v=18"></script>
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
@@ -1611,7 +1611,7 @@ Viết 300-350 từ văn xuôi. Nhận định tổng quan, điểm mạnh, đi�
   const _lgEl = document.getElementById('luangiai-'+idx);
   if (_lgEl) _lgEl.innerHTML = TuviGrid.loadingHtml(
     (PHAN_LABELS[idx]||'') + ' — đang luận giải...', 'AI đang phân tích tương quan hợp tác...'
-  );
+  , { orb: true });
 
   try{
     console.log('[section'+idx+'] prompt len=', prompt.length, 'first50=', prompt.slice(0,50));
@@ -1863,6 +1863,7 @@ document.addEventListener('click',e=>{if(!e.target.closest('.nav-dropdown')){doc
 </script>
 <script src="/nav.js?v=22"></script>
 <script src="/footer.js"></script>
+<script src="/tools-shared/ai-loading-steps.js?v=5"></script>
 <script src="/chatbot.js"></script>
 <script>
   window._tuviChatConfig = {

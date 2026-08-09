@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"></noscript>
-<link rel="stylesheet" href="/shell.css?v=17">
+<link rel="stylesheet" href="/shell.css?v=18">
 <style>
 .dt-card{background:var(--white);border:1px solid var(--line);border-radius:14px;padding:20px 22px;box-shadow:var(--shadow);max-width:680px;margin-bottom:16px}
 .dt-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:4px}
@@ -156,7 +156,7 @@
         <button class="btn-go" id="analyzeBtn">Luận Giải Thanh Tướng — <span data-tvp-price="thanh-tuong-pro">…</span> Lượng</button>
       </div>
 
-      <div class="dt-card" id="resultsCard" style="display:none">
+      <div class="dt-card" id="resultsCard" data-ws-result style="display:none">
         <h2>Phân Tích Thanh Tướng Chuyên Sâu</h2>
         <p class="sub">AI · Ngũ Âm Cổ Pháp · Ma Y · Thần Tướng Toàn Biên · Thủy Kính Tập</p>
         <div class="dt-result" id="resultsPanel"></div>
@@ -170,9 +170,9 @@
 <script>window.SHELL_ACTIVE='thanh-tuong-pro';window.SHELL_HISTORY=true;
 window.SHELL_INTRO={key:'thanh-tuong-pro',title:'Thanh Tướng Pro',desc:'4 bài đo giọng nói chuyên sâu — <b>AI</b> phân tích Ngũ Âm theo Ma Y Thần Tướng, Thần Tướng Toàn Biên, Thủy Kính Tập.'};</script>
 <script src="/auth.js?v=2"></script>
-<script src="/tuvi-paywall.js?v=17"></script>
+<script src="/tuvi-paywall.js?v=18"></script>
   <script src="/nav.js?v=22" data-icons-only></script>
-<script src="/shell.js?v=65"></script>
+<script src="/shell.js?v=68"></script>
 <script>
 function initThanhTuongPro(){
   Shell.setContext({

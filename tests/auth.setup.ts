@@ -31,7 +31,19 @@ setup('authenticate', async ({ page }) => {
     user: res.user,
   };
 
-  await page.goto('/');
+  // Preview nằm sau Vercel Authentication. Lấy vé bằng QUERY ở đúng lượt điều
+  // hướng đầu tiên: server trả về cookie `_vercel_jwt`, cookie đó được lưu vào
+  // storageState ngay dưới đây nên MỌI test sau đều qua cửa.
+  //
+  // 🔑 CỐ Ý không dùng `extraHTTPHeaders`: nó áp lên cả request KHÁC ORIGIN
+  // (Google Fonts), biến chúng thành preflight rồi bị CORS chặn → font hỏng →
+  // các ca "không có JS errors" đỏ oan. Cookie thì không gắn gì vào host lạ.
+  const bypass = process.env.VERCEL_BYPASS_SECRET;
+  await page.goto(
+    bypass
+      ? `/?x-vercel-protection-bypass=${encodeURIComponent(bypass)}&x-vercel-set-bypass-cookie=true`
+      : '/'
+  );
   // auth.js uses 'tuvi_session' / 'tuvi_user' keys — NOT supabase SDK keys
   await page.evaluate(({ session, user }) => {
     localStorage.setItem('tuvi_session', JSON.stringify(session));

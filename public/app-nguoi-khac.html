@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"></noscript>
-<link rel="stylesheet" href="/shell.css?v=17">
+<link rel="stylesheet" href="/shell.css?v=18">
 <style>
 .form-card{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);max-width:860px}
 .form-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:3px}
@@ -124,7 +124,7 @@
         <div class="err" id="error-msg"></div>
       </div>
 
-      <div id="resPanel" style="display:none">
+      <div id="resPanel" data-ws-result style="display:none">
         <div class="res-block">
           <div class="res-block-header"><span class="res-block-title">Người Này Là Ai</span></div>
           <div class="res-block-body">
@@ -221,11 +221,11 @@
 window.SHELL_INTRO={key:'nguoi-khac',title:'Lá Số Người Khác',desc:'Đưa lá số của <b>sếp, đồng nghiệp, cấp dưới hay người thân</b> vào đây để biết họ <b>vận hành thế nào</b>, <b>nên nói gì</b>, <b>tránh nói gì</b> và <b>lúc nào nên đưa việc lớn tới</b>. Đọc theo cung Mệnh, Phúc Đức, Thiên Di, Quan Lộc, Nô Bộc.'};</script>
 <script src="/laso-chart.js?v=3"></script>
 <script src="/tuvi-form.js?v=1"></script>
-<script src="/tuvi-paywall.js?v=17"></script>
+<script src="/tuvi-paywall.js?v=18"></script>
 <script src="/auth.js?v=2"></script>
   <script src="/nav.js?v=22" data-icons-only></script>
-<script src="/shell.js?v=65"></script>
-<script src="/tools-shared/ai-loading-steps.js?v=2"></script>
+<script src="/shell.js?v=68"></script>
+<script src="/tools-shared/ai-loading-steps.js?v=5"></script>
 <script>
 
 var _currentSlug = '';
@@ -459,6 +459,23 @@ async function _doGenerate(freeRerun, qh) {
         'Việc gì thì đừng giao cho ' + ten + '?',
       ],
     });
+
+    // Chia sẻ CHỈ gắn ở đường đã mở khoá (sau renderProse) — bản chia sẻ rỗng
+    // phần chữ thì người mở link không hiểu đang xem gì.
+    // ⚠️ Đây là lá số NGƯỜI KHÁC, người đó không có mặt. Bản chia sẻ vì thế CỐ Ý
+    // chỉ mang kiểu người + cách ứng xử; phần cổ pháp nhạy cảm đã bị `KHONG_DOC`
+    // chặn từ engine (Tật Ách · Tài Bạch · Phu Thê · Tử Tức · Điền Trạch).
+    Shell.setShareable({
+      kind: 'text',
+      toolId: 'nguoi-khac',
+      title: 'Cẩm nang ứng xử — ' + ten,
+      text: [
+        ten + (data.quanHe && data.quanHe.label ? ' (' + data.quanHe.label + ')' : '') +
+          (data.kieu && data.kieu.ten ? ' nghiêng về kiểu ' + data.kieu.ten : ''),
+        data.kieu && data.kieu.motCau ? data.kieu.motCau : '',
+        data.motCau ? '— ' + data.motCau : '',
+      ].filter(Boolean).join('\n'),
+    });
   } catch (e) {
     // 🔑 KHÔNG đóng cả bảng như bản trước. Người dùng đang nhìn phần tính thử
     // (thứ họ vừa xem xong và có thể vừa trả tiền cho phần sau) — quẳng họ về
@@ -522,9 +539,21 @@ function renderMeta(data) {
       (data.daiVan.diem == null ? '' : ', ' + data.daiVan.diem + '/10') + '</li>');
   }
   if (data.vanNam) {
-    rows.push('<li><b>Vận năm ' + data.vanNam.nam + '</b> — ' +
-      (data.vanNam.diem == null ? 'chưa chấm' : data.vanNam.diem + '/10') +
-      (data.vanNam.huong ? ', đà ' + esc(data.vanNam.huong) : '') + '</li>');
+    // ⚠️ Đọc CẢ hai dạng payload: bản đã nằm trong `portrait_cache` từ trước
+    // mang `diem`/`huong` (điểm nội suy + nhãn "đà" — xem chú thích `VanNam`
+    // trong lib/engine/cong-so.ts), bản mới mang `khung`/`catSat`.
+    var v = data.vanNam, bit = [];
+    if (v.khung) {
+      bit.push('khung đại vận ' + v.khung.tuoiStart + '–' + v.khung.tuoiEnd + ' tuổi' +
+        (v.khung.diem == null ? '' : ': ' + v.khung.diem + '/10'));
+    } else if (v.diem != null) {
+      bit.push(v.diem + '/10');
+    }
+    if (v.tieuHanCung) bit.push('tiểu hạn cung ' + esc(v.tieuHanCung));
+    if (v.luuNienCung) bit.push('lưu niên cung ' + esc(v.luuNienCung));
+    if (v.catSat) bit.push('cát ' + v.catSat.cat + ' / sát ' + v.catSat.sat + ' — ' + esc(v.catSat.canCan));
+    else if (v.huong) bit.push('đà ' + esc(v.huong));
+    rows.push('<li><b>Vận năm ' + v.nam + '</b> — ' + (bit.join(' · ') || 'chưa chấm') + '</li>');
   }
   if (rows.length) {
     document.getElementById('basisList').innerHTML = rows.join('');
@@ -572,6 +601,8 @@ function showForm() {
   document.getElementById('resPanel').style.display = 'none';
   document.getElementById('birthPanel').style.display = 'block';
   document.getElementById('btnEdit').style.display = 'none';
+  // Quay về form thì gỡ nút Chia sẻ — bản vừa xem không còn trên màn hình nữa.
+  Shell.setShareable(null);
 }
 
 async function _loadHistory() {

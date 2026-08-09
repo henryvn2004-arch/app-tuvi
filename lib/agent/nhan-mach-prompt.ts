@@ -16,6 +16,7 @@
 // ============================================================
 
 import type { NhanMachProfile } from '@/lib/engine/nhan-mach';
+import { vanNamLine, LUAT_VAN_NAM } from '@/lib/engine/cong-so';
 
 export const NHAN_MACH_SYSTEM_PROMPT = `Bạn là một người xem tử vi lâu năm, đang giúp một người sắp xếp CÔNG VIỆC với một nhóm người quanh họ — đội của họ, hoặc danh sách khách hàng.
 
@@ -70,10 +71,7 @@ export function buildNhanMachPrompt(p: NhanMachProfile): string {
     );
     L.push(`   Điều người hỏi cần ở hạng người này: ${t.vai.nhuCau}`);
     if (t.vanNam) {
-      L.push(
-        `   Vận năm ${p.namXem}: ${t.vanNam.diem == null ? 'chưa chấm' : t.vanNam.diem + '/10'}` +
-          (t.vanNam.huong ? `, đà ${t.vanNam.huong}` : ''),
-      );
+      L.push(`   Vận năm ${vanNamLine(t.vanNam)}`);
     }
     if (t.voiBan) {
       L.push(
@@ -122,13 +120,15 @@ export function buildNhanMachPrompt(p: NhanMachProfile): string {
   L.push('— THỨ TỰ GỢI Ý TIẾP CẬN (theo VẬN NĂM của từng người, KHÔNG phải mức quan trọng) —');
   L.push(
     p.thuTuTiepCan
-      .map((t) => `${t.ten}${t.diem == null ? ' (chưa chấm)' : ` (${t.diem}/10${t.huong ? ', ' + t.huong : ''})`}`)
+      .map((t) => `${t.ten}${t.khungDiem == null ? ' (chưa chấm)' : ` (khung đại vận ${t.khungDiem}/10)`}`)
       .join(' → '),
   );
   L.push(
     'Đọc dòng này theo nghĩa: người đang ở năm thuận thì dễ mở chuyện mới hơn. ' +
-      'KHÔNG được đọc thành "người này đáng ưu tiên hơn người kia".',
+      'KHÔNG được đọc thành "người này đáng ưu tiên hơn người kia". ' +
+      'Con số trong ngoặc là điểm KHUNG ĐẠI VẬN chứa năm nay, KHÔNG phải điểm của năm.',
   );
+  L.push(LUAT_VAN_NAM);
   L.push('');
 
   L.push('— VIỆC CỦA BẠN —');

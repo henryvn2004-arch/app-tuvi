@@ -17,9 +17,18 @@
 // phán sai mà cha mẹ tin sẽ theo nó nhiều năm. Vì thế module:
 //   • dùng lại `KHONG_DOC` — không trả Tật Ách (bệnh), Phu Thê (hôn nhân của
 //     một đứa trẻ!), Tài Bạch, Tử Tức, Điền Trạch;
-//   • KHÔNG trả bảng nghề nghiệp (`resolveCareerBase`) dù engine có sẵn — chốt
-//     nghề cho một đứa 10 tuổi là thứ nguy hiểm nhất tool này có thể làm;
 //   • không xếp hạng, không có điểm tổng "đứa này được mấy phần".
+//
+// 🔴 ĐÍNH CHÍNH (2026-08-09): chỗ này TỪNG ghi luật "KHÔNG trả bảng nghề dù
+// engine có sẵn — chốt nghề cho một đứa 10 tuổi là thứ nguy hiểm nhất tool này
+// làm được". Henry đã lật: *"Định hướng nghề nghiệp thì định hướng để tham khảo
+// thôi. Nó giúp ích cho đứa trẻ. Mà bình thường gia đình cũng đã định hướng cho
+// nó rồi."* Luật cũ nhầm ĐỊNH HƯỚNG với CHỐT. Ranh giới còn giữ: nói bằng *xu
+// hướng và việc nên cho làm quen*, không nói bằng *nghề phải theo*.
+// ⇒ Phần hướng nghiệp nay là một tool RIÊNG (`huong-nghiep-tre.ts`), không gộp
+//   vào đây — đo được: 4 kiểu của tool này chỉ nói được khoảng một nửa (hai đứa
+//   cùng kiểu chỉ giống nhau cosine 0,54 trên 21 trục tính khí). Tool đó dùng
+//   CHUNG `phanKieu`/`KIEU` với đây nên hai bên không bao giờ nói khác nhau.
 // Tầng prompt cấm thêm một lần nữa (đỗ/trượt, so sánh anh em, "khó dạy").
 // ============================================================
 
@@ -36,8 +45,14 @@ import {
   starLabel,
   kieuCuaCung,
   namSinhTuLaSo,
+  resolveVanNam,
+  vanNamLine,
+  LUAT_VAN_NAM,
+  type VanNam,
 } from './cong-so';
 import { KHONG_DOC } from './nguoi-khac';
+import { assessChild, type Assessment } from './day-con-assess';
+import { goiYHoatDong, type GoiYHoatDong } from './day-con-hoat-dong';
 
 type Rec = Record<string, unknown>;
 
@@ -80,6 +95,8 @@ export const MOI_LO: Record<MoiLoId, MoiLoDef> = {
   'chon-duong': {
     id: 'chon-duong',
     label: 'Sắp phải chọn trường / chọn ngành',
+    // ⚠️ Mục này CHỈ đổi giọng bản luận; phần thiên hướng và hoạt động cụ thể
+    // nằm ở tool `huong-nghiep-tre`. Đừng hứa ở đây thứ engine này không tính.
     can: 'Chất việc hợp với con, và cách hỏi con để con tự nói ra — KHÔNG phải một cái tên ngành.',
   },
   'khong-noi-chuyen': {
@@ -271,17 +288,18 @@ export interface DayConProfile {
   than: { cung: string };
   matDoc: MatDocCon[];
   changHoc: ChangHoc[];
-  vanNam: { nam: number; diem: number | null; huong: string | null } | null;
+  vanNam: VanNam | null;
   voiChaMe: VoiChaMe | null;
+  /** Bậc 1–2 của khung: 5 trục tính khí + 8 chất năng khiếu. */
+  assess: Assessment;
+  /** Bậc cuối: hoạt động đề xuất. `null` khi không đọc được tuổi. */
+  hoatDong: GoiYHoatDong | null;
 }
 
-/** `tieuVanScores[].direction` của engine là chuỗi TIẾNG ANH — dịch tại đúng
- *  một chỗ, đúng như `cong-so.ts` và `nguoi-khac.ts` đã phải làm. */
-const HUONG_VI: Record<string, string> = {
-  up: 'đang lên',
-  down: 'đang xuống',
-  flat: 'đi ngang',
-};
+/* `VanNam` · `resolveVanNam` · `CAN_CAN` nay nằm ở `cong-so.ts` — dùng CHUNG
+   cho cả 4 tool. Trước đây mỗi tool một bản chép, và cả bốn bản cùng sai một
+   kiểu (lấy `mainScore` làm điểm của năm). */
+
 
 /** Nhãn chặng theo TUỔI thật, không theo thứ tự đại vận: mốc đại vận dịch theo
  *  CỤC (thuỷ nhị cục khởi tuổi 2, hoả lục cục khởi tuổi 6) nên lấy chỉ số cứng
@@ -358,15 +376,7 @@ export function computeDayCon(
       };
     });
 
-  const tvs = (ls.tieuVanScores as Rec[]) || [];
-  const tvNam = tvs.find((t) => t.nam === nam);
-  const vanNam = tvNam
-    ? {
-        nam,
-        diem: typeof tvNam.mainScore === 'number' ? (tvNam.mainScore as number) : null,
-        huong: HUONG_VI[String(tvNam.direction || '')] || null,
-      }
-    : null;
+  const vanNam = resolveVanNam(ls, nam);
 
   let voiChaMe: VoiChaMe | null = null;
   if (lsChaMe) {
@@ -387,9 +397,12 @@ export function computeDayCon(
     };
   }
 
+  const tuoi = typeof ls.tuoiXem === 'number' ? (ls.tuoiXem as number) : null;
+  const assess = assessChild(ls);
+
   return {
     namXem: nam,
-    tuoi: typeof ls.tuoiXem === 'number' ? (ls.tuoiXem as number) : null,
+    tuoi,
     namSinh,
     // 🪤 Giới tính KHÔNG nằm trong lá số engine trả về — phải truyền vào. Đọc
     // `ls.gioiTinh` là luôn ra 'nam', sai im lặng cho một nửa số trẻ.
@@ -404,6 +417,8 @@ export function computeDayCon(
     changHoc,
     vanNam,
     voiChaMe,
+    assess,
+    hoatDong: goiYHoatDong(assess.khieu, assess.noiBat, phan.kieu, tuoi),
   };
 }
 
@@ -443,6 +458,31 @@ export function railData(p: DayConProfile): Record<string, string | number | boo
   };
   if (p.tuoi != null) d.tuoiTre = p.tuoi;
   if (p.kieuPhu) d.kieuPhu = p.kieuPhu.ten;
+
+  // ⚠️ Dẹp thành CHUỖI, không nhét mảng/object — `extractGenericContext` bỏ im
+  // lặng mọi giá trị là object, và rail sẽ luận chay mà không ai biết.
+  d.trucTinhKhi = p.assess.truc
+    .map(
+      (t) =>
+        `${t.ten} ${t.diem}/10 — ` +
+        (t.nghieng === null ? 'nằm giữa hai cực' : `nghiêng ${t.cuc?.nhan} (${t.muc})`),
+    )
+    .join(' | ');
+  d.chatNoiBat = p.assess.noiBat.length
+    ? p.assess.noiBat.map((k) => `${k.ten} ${k.diem}/10`).join('; ')
+    : 'KHÔNG chất nào vượt ngưỡng — chưa đủ dấu hiệu để gọi là năng khiếu';
+  d.chatThapNhat = p.assess.canDo ? `${p.assess.canDo.ten} ${p.assess.canDo.diem}/10` : '—';
+  // Không có câu này thì rail đọc "7/10" thành "giỏi 7 phần 10" rồi nói chắc.
+  d.luatDocDiem =
+    'Điểm 5 = mức GIỮA của phân bố đo trên hàng nghìn lá số trẻ em, không phải "được 5 trên 10". ' +
+    'Trên 5 nghĩa là nghiêng về cực đó nhiều hơn phần lớn trẻ, KHÔNG nghĩa là giỏi hơn. ' +
+    'Hai cực của mọi trục đều có giá trị — cấm đọc một cực thành ưu điểm và cực kia thành nhược điểm.';
+  if (p.hoatDong) {
+    d.nhomTuoiHoatDong = p.hoatDong.bandLabel;
+    d.cachThamGiaNen = p.hoatDong.dinhDang.nen;
+    d.cachThamGiaTranh = p.hoatDong.dinhDang.tranh;
+    d.cachChoConBatDau = p.hoatDong.dinhDang.batDau;
+  }
   for (const m of p.matDoc) {
     d['cung' + m.cung.replace(/\s+/g, '')] =
       m.sao.join(', ') +
@@ -460,9 +500,12 @@ export function railData(p: DayConProfile): Record<string, string | number | boo
       .join(' | ');
   }
   if (p.vanNam) {
-    d.vanNamNay =
-      `${p.vanNam.nam}: ${p.vanNam.diem == null ? 'chưa chấm' : p.vanNam.diem + '/10'}` +
-      (p.vanNam.huong ? ` (${p.vanNam.huong})` : '');
+    // ⚠️ Payload rail phải PHẲNG — `extractGenericContext` bỏ IM LẶNG mọi giá
+    // trị là object, nên dẹp thành chuỗi qua `vanNamLine` — dùng CHUNG với
+    // prompt để hai chỗ không bao giờ nói khác nhau. `LUAT_VAN_NAM` chặn rail
+    // tự chấm một con số cho năm (cùng luật `execTraVanHan`).
+    d.vanNamNay = vanNamLine(p.vanNam);
+    d.luatVanNam = LUAT_VAN_NAM;
   }
   if (p.voiChaMe) {
     d.kieuChaMe = p.voiChaMe.kieuChaMe;

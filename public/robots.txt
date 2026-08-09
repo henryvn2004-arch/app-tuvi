@@ -30,10 +30,16 @@ User-agent: cohere-ai
 Allow: /
 
 # Sitemap
-# sitemap-pregen.xml ĐÃ RÚT: 587.328 URL /la-so/* sinh bằng thuật toán, đo trên
-# GSC 28 ngày ra 0 nhấp. Chúng vẫn được index và xếp hạng 1,4–3,5 nhưng chỉ khớp
-# truy vấn dạng ngày sinh chính xác — thứ gần như không ai gõ. Rút để dồn crawl
-# về ~35K trang có cầu thật. Chi tiết trong app/sitemap-pregen/route.ts.
+# sitemap.xml nay là SITEMAPINDEX trỏ 6 file con theo nhóm (trang · nội dung ·
+# seo · van-han · la-so · la-so-pregen). Chia nhóm KHÔNG làm Google crawl nhanh
+# hơn — nó để LỌC ĐƯỢC báo cáo GSC theo từng nhóm. Không khai các file con ở đây:
+# Google tự đọc chúng qua sitemapindex, khai cả hai đường là đếm hai lần.
+#
+# sitemap-pregen.xml ĐÃ RÚT từ #358, nhưng rút khỏi sitemap KHÔNG deindex —
+# /la-so/* vẫn ăn impression đều sau đó (162 impression, vị trí 1,41, 0 nhấp).
+# Nên nay các họ trang mỏng bị đánh `noindex` THẲNG TRÊN TRANG và CỐ Ý giữ lại
+# trong sitemap cho tới khi Google bò lại và đọc được thẻ đó.
+# Chi tiết + cách lật lại: lib/seo/index-policy.ts.
 Sitemap: https://www.tuviminhbao.com/sitemap.xml
 Sitemap: https://www.tuviminhbao.com/sitemap-hubs.xml
 Sitemap: https://www.tuviminhbao.com/sitemap-ngay-tot.xml

@@ -662,6 +662,13 @@ Nguyên tắc luận:
 - Trường "Bạn đang ở vị trí nào" là người dùng TỰ KHAI, không suy từ lá số. Bám lấy nó: lời khuyên cho một nhân viên và cho một người đã làm chủ khác hẳn nhau
 - 🔑 KHI HỎI VỀ NGÀNH NGHỀ: thứ cổ thư nói là **CHẤT VIỆC** (đối mặt hay bàn giấy, cầm người hay cầm nghề, đo bằng số hay đo bằng uy tín). Danh sách ngành hiện đại là QUY CHIẾU CỦA TRANG, không phải lời của sách — nói rõ chỗ này nếu người hỏi truy. Người ta đang làm ngành KHÔNG có trong danh sách thì đối chiếu chất việc, TUYỆT ĐỐI không phán "bạn đang làm sai nghề"
 - Ba trục ra gợi ý là ĐỘC LẬP, đừng trộn: lĩnh vực ← cung Quan Lộc · vai trò ← kiểu người (cung Mệnh) · quy mô ← bậc chức phận. Ai hỏi "vì sao ngành này" thì chỉ đúng trục đó ra
+
+🔴 LUẬT VỀ TẦNG NHÁNH — CÓ THÌ ĐỌC ĐÚNG, KHÔNG CÓ THÌ ĐỪNG BỊA:
+- Hồ sơ CÓ trường "NHÁNH nghề hợp nhất" nghĩa là người này đã mở tầng nhánh. Lúc đó bám đúng ba nhánh đã cho, KHÔNG tự thêm nhánh thứ tư
+- Hồ sơ KHÔNG có trường đó nghĩa là họ CHƯA mở. Vẫn trả lời được bằng lĩnh vực / vai / quy mô, nhưng TUYỆT ĐỐI KHÔNG tự nghĩ ra "nhánh cụ thể" rồi nói như thể lá số chỉ ra — dữ liệu đó không tồn tại trong lượt này. Ai hỏi sâu tới mức đó thì nói thẳng là phần nhánh nghề nằm ở mục riêng trên trang
+- 🔑 CON SỐ PHẦN TRĂM là độ KHỚP giữa chất người và chất việc, KHÔNG phải khả năng thành công, KHÔNG phải điểm số. Cấm đọc thành "bạn có 84% cơ hội thành công"
+- 🔑 TRỤC THẤP nghĩa là NGHỀ KHÔNG ĐÒI HỎI trục đó. TUYỆT ĐỐI không đọc thành "bạn thiếu", "bạn yếu ở chỗ này". Nghề sáng tác chấm thấp ở trục đáng-tin-cậy chỉ có nghĩa nghề đó không đo người bằng giờ giấc và quy trình — nói ngược lại là xúc phạm người đang đọc
+- Có cảnh báo "lệch bậc" thì phải nói ra: đó là HƯỚNG hợp với chất người, chưa phải chỗ đứng ngay bây giờ. Có cảnh báo "mờ nhạt" thì nói thẳng là chưa đủ tín hiệu, đừng chọn đại một nhánh rồi luận như thể chắc chắn
 - "Chức phận theo lối cổ" (kiểu "quan trấn phủ", "cự phú buôn vàng bạc") là NGÔN NGỮ NỘI BỘ để bạn hiểu chất việc — CẤM đọc thô cho người dùng ở phần trả lời chính. Diễn nó ra tiếng người hiện đại
 - Kết bằng VIỆC LÀM ĐƯỢC, không kết bằng lời mô tả tính cách. Người ta trả tiền cho câu "làm gì tiếp", không trả tiền cho câu "bạn là người thế này"
 - Chỉ luận từ dữ liệu đã cho. KHÔNG bịa thêm sao, cung, cách cục hay con số nào không có trong hồ sơ
@@ -1292,6 +1299,8 @@ const GENERIC_LABELS: Record<string, string> = {
   diemThapNhat: 'Ba mặt yếu nhất (thang 10, tương đối trong chính người này)',
   cachCucQuanLoc: 'Cách cục tại cung Quan Lộc',
   loTrinh40Nam: 'Bốn chặng 40 năm đi làm', vanNamNay: 'Vận năm nay',
+  luatVanNam: 'LUẬT đọc vận năm (bắt buộc theo)',
+  luatThuTuTiepCan: 'LUẬT đọc thứ tự tiếp cận (bắt buộc theo)',
   ghepDoi: 'Kiểu người ở ba cung nhân sự (Phụ Mẫu · Huynh Đệ · Nô Bộc)',
   kieuNenTimDeBu: 'Kiểu NÊN TÌM để bù khuyết cho mình',
   linhVucHop: 'LĨNH VỰC hợp (suy từ chức phận cung Quan Lộc)',
@@ -1305,6 +1314,40 @@ const GENERIC_LABELS: Record<string, string> = {
   trichDanCoThu: 'Trích dẫn Tân Biên làm căn cứ',
   sacThaiQuanLoc: 'Sắc thái từ phụ tinh và tứ hoá đóng tại cung Quan Lộc',
   luatDocSacThai: 'LUẬT đọc sắc thái phụ tinh (đọc sai chỗ này là ra mâu thuẫn)',
+  // Tầng NHÁNH — chỉ có trên lượt ĐÃ TRẢ TIỀN (lib/engine/nghe-nghiep.ts).
+  // ⚠️ `nhanhNghe` (NHÁNH) khác `nganhGoiY` (NGÀNH) — cố ý đặt tên xa nhau vì
+  // hai khoá lệch một ký tự là chắc chắn có ngày đọc nhầm.
+  nhanhNghe: 'NHÁNH nghề hợp nhất (kèm % khớp)',
+  nhanhChiTiet: 'Chất việc và việc cụ thể của từng nhánh',
+  lyDoTungNhanh: 'Vì sao lá số hợp từng nhánh (trục tính khí kéo lên)',
+  chatNguoiNoiBat: 'Chất người nổi bật đọc từ lá số',
+  ngheKhongDoiHoi: 'Thứ mà nghề hợp với người này thường KHÔNG đòi hỏi',
+  canhBaoLechBac: 'CẢNH BÁO lệch bậc (nếu có thì bắt buộc nói ra)',
+  canhBaoMoNhat: 'CẢNH BÁO lá số không chỉ ra nhánh nào nổi bật',
+  luatDocTrucThap: 'LUẬT đọc trục thấp (đọc sai chỗ này là xúc phạm người dùng)',
+  luatDocNhanh: 'LUẬT đọc nhánh và con số phần trăm (bắt buộc theo)',
+  // Hướng Nghiệp Sớm Cho Con — nguồn lib/engine/huong-nghiep-tre.ts.
+  // ⚠️ Khoá của lượt TÍNH THỬ và lượt ĐÃ MUA nằm chung bảng này, nhưng
+  // `railDataTinhThu` không bao giờ đặt mấy khoá của tầng trả tiền — chốt chặn
+  // nằm ở engine chứ không ở đây.
+  // (`kieuTre` · `tuoiTre` · `moiLoChaMe` · `dieuChaMeCan` · `kieuTuTuong` ·
+  //  `kieuMotCau` · `dongLucTre` · `laiKieu` · `luatDocTrucThap` DÙNG CHUNG với
+  //  khối Dạy Con bên dưới — cùng nghĩa, cố ý một nhãn duy nhất.)
+  lopTuoi: 'Lứa tuổi của đứa trẻ (quyết định bộ hoạt động)',
+  vaiChaMeLopNay: 'Việc của người lớn ở lứa tuổi này',
+  vieckhongDoiHoi: 'Thứ mà việc hợp với đứa trẻ này thường KHÔNG đòi hỏi',
+  canhBaoChuaRoNet: 'CẢNH BÁO lá số chưa nghiêng hẳn hướng nào (bắt buộc nói ra)',
+  changDangO: 'Chặng đại vận đứa trẻ đang ở',
+  baThienHuong: 'Ba thiên hướng nghiêng nhất',
+  lyDoTungHuong: 'Vì sao lá số nghiêng về từng hướng (trục tính khí kéo lên)',
+  hoatDongNenLam: 'Hoạt động nên cho làm quen, đã chọn theo đúng lứa tuổi',
+  chaMeNenLam: 'Việc người lớn NÊN làm',
+  chaMeTranhLam: 'Việc người lớn nên THÔI làm',
+  choHayBiHieuNham: 'Chỗ đứa trẻ này hay bị đọc nhầm',
+  chatViecVeSau: 'Chất việc hợp về sau (nói bằng tính chất, không bằng tên nghề)',
+  ngheCoChatDo: 'Nghề có chất đó — CHỈ để hình dung, không phải để chốt',
+  chuaBayNghe: 'LUẬT: cháu còn nhỏ, TUYỆT ĐỐI không nêu tên nghề',
+  luatDocHuong: 'LUẬT đọc thiên hướng (định hướng, không chốt)',
   // Sổ Nhân Mạch — nguồn `/api/nhan-mach` → lib/engine/nhan-mach.ts.
   soNguoiTrongSo: 'Số người trong sổ', danhSachNguoi: 'Từng người (vai · kiểu · vận năm)',
   phanBoKieu: 'Phân bố bốn kiểu trong nhóm', kieuCuaBan: 'Kiểu của chính người hỏi',
@@ -1315,6 +1358,19 @@ const GENERIC_LABELS: Record<string, string> = {
   thuTuTiepCan: 'Thứ tự gợi ý tiếp cận (theo VẬN NĂM từng người, KHÔNG phải mức quan trọng)',
   nguoiNayTrongLaSoBan: 'Từng người ứng với cung nào trong lá số người hỏi',
   // Dạy Con — nguồn `/api/day-con` → lib/engine/day-con.ts.
+  // 🐞 Bảy khoá dưới đây TRƯỚC KHÔNG có nhãn nên `extractGenericContext` rơi về
+  // `GENERIC_LABELS[k] || k`, tức in nguyên KHOÁ KỸ THUẬT vào prompt
+  // (`laiKieu: true`, `cungMệnh: Cự Môn`). Cả `day-con` lẫn `huong-nghiep-tre`
+  // đều phát mấy khoá này — dùng chung một nhãn nên vá một chỗ là cả hai được.
+  laiKieu: 'Lá số nằm SÁT RANH GIỚI hai kiểu (phải nói là pha, đừng ép nhãn)',
+  kieuPhu: 'Kiểu phụ (khi sát ranh giới)',
+  cungMệnh: 'Cung Mệnh — cốt cách',
+  cungQuanLộc: 'Cung Quan Lộc — đường học nghiệp',
+  cungPhúcĐức: 'Cung Phúc Đức — nền tâm tính',
+  cungPhụMẫu: 'Cung Phụ Mẫu — đứa trẻ nhìn cha mẹ thế nào',
+  cungThiênDi: 'Cung Thiên Di — ra khỏi nhà',
+  cungThan: 'Cung an Thân',
+  hopHayVa: 'Hai bên hợp hay dễ va (luật âm–dương tương bổ)',
   moiLoChaMe: 'Điều cha mẹ đang lo (NGƯỜI DÙNG TỰ KHAI)',
   dieuChaMeCan: 'Thứ cha mẹ thật sự cần nghe', kieuTre: 'Kiểu người của đứa trẻ',
   kieuTuTuong: 'Tứ tượng gốc của kiểu', kieuMotCau: 'Một câu tóm kiểu',

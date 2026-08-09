@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"></noscript>
-<link rel="stylesheet" href="/shell.css?v=17">
+<link rel="stylesheet" href="/shell.css?v=18">
 <style>
 .dt-card{background:var(--white);border:1px solid var(--line);border-radius:14px;padding:20px 22px;box-shadow:var(--shadow);max-width:640px}
 .dt-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:4px}
@@ -129,7 +129,7 @@
         <div class="dt-error" id="error-msg"></div>
       </div>
 
-      <div class="dt-card" id="resultCard" style="display:none;margin-top:16px">
+      <div class="dt-card" id="resultCard" data-ws-result style="display:none;margin-top:16px">
         <h2>Phân Tích Nhãn Tướng Học</h2>
         <p class="sub">AI · Ma Y Thần Tướng · Nhãn Pháp cổ pháp</p>
         <div id="aiResult" class="dt-result"></div>
@@ -146,9 +146,9 @@
 <script>window.SHELL_ACTIVE='nhan-tuong';window.SHELL_HISTORY=true;
 window.SHELL_INTRO={key:'nhan-tuong',title:'Nhãn Tướng AI',desc:'Tải hoặc chụp ảnh mặt — <b>AI</b> phân tích đôi mắt theo Nhãn Pháp cổ truyền: hình dạng, tròng mắt, ánh mắt, Tam Bạch Nhãn.'};</script>
 <script src="/auth.js?v=2"></script>
-<script src="/tuvi-paywall.js?v=17"></script>
+<script src="/tuvi-paywall.js?v=18"></script>
   <script src="/nav.js?v=22" data-icons-only></script>
-<script src="/shell.js?v=65"></script>
+<script src="/shell.js?v=68"></script>
 <script>
 function initNhanTuong(){
   Shell.setContext({

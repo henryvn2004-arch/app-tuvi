@@ -45,6 +45,36 @@ jobs:
       - name: Không có nhóm/đường dẫn công cụ chép cứng
         run: npm run check:groups
 
+      # Chặn tái phát tool trong Luận Đường KHÔNG chia sẻ được. Chia sẻ khung
+      # giữa từng là opt-in của từng tool nên `day-con` không có nút Chia sẻ
+      # suốt từ lúc ra mắt, còn `thanh-tuong-pro`/`phong-thuy` thì không bao giờ
+      # gỡ nút → bấm Chia sẻ sau lượt mới là phát ra kết quả của LƯỢT TRƯỚC.
+      - name: Mọi tool Luận Đường chia sẻ được
+        run: npm run check:share
+
+      # Chặn tái phát tool trong Luận Đường KHÔNG có lịch sử hội thoại. Trang
+      # tool mới hay chép từ khuôn của một trang cũ, mà khuôn đó có thể thiếu
+      # khối này — đã tái phát HAI lần theo đúng đường đó. Không có gì báo:
+      # trang vẫn chạy, chỉ là người dùng không có đường nào mở lại phiên cũ.
+      - name: Mọi tool Luận Đường có lịch sử hội thoại
+        run: npm run check:history
+
+      # Chặn `animation:` trỏ tới @keyframes KHÔNG TỒN TẠI — trình duyệt không
+      # báo gì cả, phần tử vẫn hiện, chỉ là đứng im. Bắt được ngay lượt chạy
+      # đầu: banner "Chào mừng! Bạn đã nhận Lượng miễn phí" của `auth.js` mượn
+      # keyframe khai LƯỜI trong `tuvi-paywall.js`, mà 38/73 trang nạp auth.js
+      # còn không nạp paywall ⇒ chưa bao giờ fade vào.
+      - name: animation không trỏ vào keyframe ma
+        run: npm run check:keyframes
+
+      # Canh 27 khối hoạt động của Hướng Nghiệp Trẻ — phần người TRẢ TIỀN đọc kỹ
+      # nhất và là phần duy nhất không kiểm được bằng bất biến cấu trúc. Ba luật
+      # đều rút từ lỗi bắt được thật khi soi tay bảng: tên nghề lọt khối lứa 3–7
+      # (cờ `bayNghe` chỉ làm rỗng `ngheViDu`, không với tới chữ trong hoatDong),
+      # ngôn ngữ thi thố ở lứa 3–7, và hai hướng khác nhau gợi cùng một việc.
+      - name: bảng hoạt động trẻ em giữ đúng luật
+        run: npm run check:hoatdong
+
       # Chặn tái phát bảng 64 quẻ sai mã hào: đã có lúc 49/64 quẻ mang mã của
       # quẻ khác (77% lượt gieo ra sai lời đoán) mà không gì báo, vì nhánh "tìm
       # quẻ gần nhất" nuốt hết. 64 chuỗi nhị phân thì mắt không soi được.

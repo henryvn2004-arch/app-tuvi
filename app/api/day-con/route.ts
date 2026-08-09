@@ -57,19 +57,46 @@ interface Muc {
 }
 interface HuongDan {
   conNguoi?: string;
+  chatNoi?: string;
+  dinhHuong?: string;
   vaoBangGi?: string;
   khoaLai?: string;
   nenLam?: Muc[];
   tranhLam?: Muc[];
+  hoatDong?: string;
   loLang?: string;
   changNay?: string;
   voiChaMe?: string;
   motCau?: string;
 }
 
+/**
+ * 🔴 PHIÊN BẢN CẤU TRÚC payload. BUMP mỗi khi thêm/đổi khoá mà TRANG BẮT BUỘC
+ * phải có để dựng đủ màn hình.
+ *
+ * Vì sao cần: `portrait_cache` khoá theo lá số, KHÔNG theo shape — nên đổi cấu
+ * trúc xong thì mọi dòng cũ vẫn được trả về nguyên trạng, mãi mãi. Đã cắn thật:
+ * khung "5 Trục · 8 Chất" lên prod, người đã chạy tool hôm trước mở lại thấy
+ * MỘT khối duy nhất còn sống (khối cũ) còn 4 khối mới im lặng biến mất, không
+ * lỗi nào bắn ra. Dấu ở đây làm dòng cũ bị coi như CHƯA CÓ ⇒ dựng lại rồi GHI
+ * ĐÈ.
+ *
+ * ⚠️ Cố ý KHÔNG nhét vào `lasoKey`: đổi khoá là mồ côi toàn bộ cache VÀ
+ * `userOwnsLaso` — người đã trả tiền bị tính lại. Khoá giữ nguyên nên lượt dựng
+ * lại vẫn miễn phí đúng cho họ.
+ */
+const SHAPE = 2;
+
+/** Payload cũ hơn cấu trúc hiện tại thì coi như trượt cache. */
+function shapeStale(payload: unknown): boolean {
+  const v = (payload as { _shape?: unknown } | null)?._shape;
+  return typeof v !== 'number' || v < SHAPE;
+}
+
 /** Phần deterministic trả kèm — client dựng được khung ngay cả khi phần chữ mỏng. */
 function meta(p: DayConProfile, ten: string) {
   return {
+    _shape: SHAPE,
     ten,
     moiLo: { id: p.moiLo.id, label: p.moiLo.label, can: p.moiLo.can },
     gioiTinh: p.gioiTinh,
@@ -92,6 +119,17 @@ function meta(p: DayConProfile, ten: string) {
     vanNam: p.vanNam,
     voiChaMeCoSo: p.voiChaMe,
     namXem: p.namXem,
+    // Khung "5 Trục · 8 Chất" — tra bảng thuần, 0 lượt LLM ⇒ thuộc phần TÍNH
+    // THỬ MIỄN PHÍ (W1). Tường chỉ đứng trên phần chữ do model viết.
+    truc: p.assess.truc,
+    khieu: p.assess.khieu,
+    khieuNoiBat: p.assess.noiBat.map((k) => k.id),
+    coNoiBat: p.assess.coNoiBat,
+    chatThapNhat: p.assess.canDo,
+    // 🪤 TÊN KHÁC khoá `hoatDong` mà model trả về. `payload` spread `meta()`
+    // TRƯỚC rồi mới gán các khoá chữ — trùng tên là bảng hoạt động bị đè bằng
+    // một đoạn văn, và trang mất hẳn khối gợi ý mà KHÔNG có lỗi nào bắn ra.
+    goiYHoatDong: p.hoatDong,
   };
 }
 
@@ -111,6 +149,7 @@ async function buildReport(
   userId: string,
   key: string,
   coLaSoChaMe: boolean,
+  stale = false,
 ) {
   const prompt = buildDayConPrompt(p, ten);
 
@@ -125,14 +164,16 @@ async function buildReport(
             : ''),
         json: true,
         jsonSchema: DAY_CON_SCHEMA,
-        maxTokens: 3200,
+        // 3.200 đủ cho 9 khoá; khung mới thêm `chatNoi`/`dinhHuong`/`hoatDong`
+        // nên nới lên — chạm trần là JSON cụt và cả lượt rơi vào nhánh thử lại.
+        maxTokens: 4400,
       });
       void logLlmUsage(TOOL_ID, r.model, {
         input_tokens: r.usage.input_tokens,
         output_tokens: r.usage.output_tokens,
         cache_creation_input_tokens: 0,
         cache_read_input_tokens: 0,
-      });
+      }, r.durationMs);
       return r;
     } catch (e) {
       console.error('[day-con] LLM lỗi:', (e as Error)?.message);
@@ -168,10 +209,15 @@ async function buildReport(
     success: true,
     ...meta(p, ten),
     conNguoi: clean(parsed.conNguoi),
+    chatNoi: clean(parsed.chatNoi),
+    dinhHuong: clean(parsed.dinhHuong),
     vaoBangGi: clean(parsed.vaoBangGi),
     khoaLai: clean(parsed.khoaLai),
     nenLam: normMuc(parsed.nenLam),
     tranhLam: normMuc(parsed.tranhLam),
+    // Không đọc được tuổi thì KHÔNG nhận phần này dù model có viết — nó sẽ là
+    // lời chung chung không dựa trên nhóm tuổi nào. Cùng lối với `voiChaMe`.
+    hoatDong: p.hoatDong ? clean(parsed.hoatDong) : '',
     loLang: clean(parsed.loLang),
     changNay: clean(parsed.changNay),
     // Không có lá số cha/mẹ thì KHÔNG nhận phần đó dù model có viết — nó sẽ là
@@ -189,7 +235,9 @@ async function buildReport(
   };
   insertHistoryRow(TOOL_ID, { ...row, user_id: userId, laso_key: key });
   void railFreeTurnsPerGen().then((n) => railFreeGrant(userId, n)).catch(() => {});
-  void putCachedPortrait(TOOL_ID, 'main', key, { payload, row }, userId);
+  // Ghi đè CHỈ ở nhánh dựng-lại-vì-shape-cũ. Không có vế này thì dòng hỏng nằm
+  // nguyên và mỗi lượt xem lại đốt thêm một lượt model.
+  void putCachedPortrait(TOOL_ID, 'main', key, { payload, row }, userId, stale);
   return ok(payload);
 }
 
@@ -232,11 +280,16 @@ async function runPost(request: NextRequest) {
   const birthParent = validBirth(body.birthParent) ? (body.birthParent as BirthParams) : null;
 
   const key = lasoKey(birth, cacheExtra(moiLo, birthParent));
-  const [cached, owns] = await Promise.all([
+  const [cachedRaw, owns] = await Promise.all([
     getCachedPortrait(TOOL_ID, 'main', key),
     userOwnsLaso(TOOL_ID, auth.user.id, key),
   ]);
-  const free = Boolean(cached) && owns;
+  // Dòng cache mang cấu trúc đã lỗi thời thì DỰNG LẠI (xem SHAPE ở trên) —
+  // nhưng vẫn tính là "đã có" cho `free`, vì người này đã trả tiền cho đúng lá
+  // số đó rồi; bắt trả lần nữa để lấy bản sửa lỗi của mình là sai.
+  const stale = Boolean(cachedRaw) && shapeStale(cachedRaw?.payload);
+  const cached = stale ? null : cachedRaw;
+  const free = Boolean(cachedRaw) && owns;
 
   if (!free) {
     // Chốt chặn thanh toán PHÍA SERVER — thiếu bước này thì gọi thẳng endpoint
@@ -266,7 +319,7 @@ async function runPost(request: NextRequest) {
   const gender = birth.gender === 'nu' ? ('nu' as const) : ('nam' as const);
   const profile = computeDayCon(r.ls, gender, moiLo, lsChaMe);
 
-  const res = await buildReport(profile, ten, auth.user.id, key, Boolean(lsChaMe));
+  const res = await buildReport(profile, ten, auth.user.id, key, Boolean(lsChaMe), stale);
   return refundIfSystemFailure(res, {
     toolId: TOOL_ID,
     userId: auth.user.id,

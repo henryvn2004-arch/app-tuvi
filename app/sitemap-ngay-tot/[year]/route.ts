@@ -5,6 +5,7 @@ export const revalidate = false;
 
 import { NextRequest, NextResponse } from 'next/server';
 import { ACTIVITY_LIST } from '../../../tuvi-engine/dist/ngay-tot/index.js';
+import { lastmodLine, revOf } from '@/lib/seo/lastmod';
 
 const BASE = 'https://www.tuviminhbao.com';
 const YEAR_FROM = 2020;
@@ -15,11 +16,13 @@ function daysInMonth(m: number, y: number): number {
   return new Date(y, m, 0).getDate();
 }
 
-function urlEntry(loc: string, priority = '0.6'): string {
+// `changefreq`/`priority` đã GỠ — Google bỏ qua cả hai. Xem lib/seo/lastmod.ts.
+// lastmod ở đây là MỐC ĐỔI ENGINE (`CONTENT_REV['ngay-tot']`), không phải ngày
+// hôm nay: nội dung mỗi trang là kết quả tra bảng ngày-tốt, nó chỉ đổi khi
+// engine đổi. Bump ở đó khi sửa luật chấm ngày.
+function urlEntry(loc: string, lastmod?: string | null): string {
   return `  <url>
-    <loc>${loc}</loc>
-    <changefreq>yearly</changefreq>
-    <priority>${priority}</priority>
+    <loc>${loc}</loc>${lastmodLine(lastmod)}
   </url>`;
 }
 
@@ -34,16 +37,17 @@ export async function GET(
   }
 
   const entries: string[] = [];
+  const rev = revOf('ngay-tot');
 
   // 12 month overview pages
   for (let m = 1; m <= 12; m++) {
-    entries.push(urlEntry(`${BASE}/ngay-tot/lich/${year}/thang-${m}`, '0.7'));
+    entries.push(urlEntry(`${BASE}/ngay-tot/lich/${year}/thang-${m}`, rev));
   }
 
   // 12 × 10 = 120 activity × month pages (the SEO long-tail targets)
   for (const act of ACTIVITY_LIST) {
     for (let m = 1; m <= 12; m++) {
-      entries.push(urlEntry(`${BASE}/ngay-tot/${act}/${year}/thang-${m}`, '0.8'));
+      entries.push(urlEntry(`${BASE}/ngay-tot/${act}/${year}/thang-${m}`, rev));
     }
   }
 
@@ -51,7 +55,7 @@ export async function GET(
   for (let m = 1; m <= 12; m++) {
     const dim = daysInMonth(m, year);
     for (let d = 1; d <= dim; d++) {
-      entries.push(urlEntry(`${BASE}/ngay-tot/ngay/${year}/${m}/${d}`, '0.5'));
+      entries.push(urlEntry(`${BASE}/ngay-tot/ngay/${year}/${m}/${d}`, rev));
     }
   }
 

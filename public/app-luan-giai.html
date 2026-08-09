@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"></noscript>
-<link rel="stylesheet" href="/shell.css?v=17">
+<link rel="stylesheet" href="/shell.css?v=18">
 <link rel="stylesheet" href="/laso-chart.css?v=3">
 <style>
 /* Center riêng của trang Luận giải */
@@ -99,16 +99,6 @@
 .lg-unlock{background:var(--white);border:1px solid var(--gold-soft);border-radius:11px;padding:18px 20px;margin-bottom:22px;text-align:center}
 .lg-unlock p{font-size:12.5px;color:var(--text-lt);margin-top:8px}
 .lg-progress{font-size:12.5px;color:var(--text-lt);margin-bottom:16px;padding:10px 0;border-bottom:1px solid var(--line)}
-.lg-pdf-bar{display:none;margin:24px 0;text-align:center}
-.lg-pdf-bar.visible{display:block}
-@media print{
-  .sb,.rail,.ws-top,#introHost,#shellRecent,.mobile-only,.jump,.lg-unlock,.lg-progress,.ask,.lg-pdf-bar,.tabbar{display:none!important}
-  .shell{display:block!important;height:auto!important}
-  .ws{overflow:visible!important}
-  .ws-body{padding:0!important}
-  .sec{page-break-inside:avoid;break-inside:avoid}
-  body{font-size:12pt}
-}
 </style>
 </head>
 <body>
@@ -139,7 +129,7 @@
         </div>
       </div>
 
-      <div id="lgPanel">
+      <div id="lgPanel" data-ws-result>
         <div class="scores" id="lgScores"></div>
         <span class="fold-toggle" id="lgFold" onclick="toggleMini()">▾ Ẩn lá số</span>
         <div class="chart-wrap" id="miniChart"></div>
@@ -150,7 +140,6 @@
         </div>
         <div class="lg-progress" id="lgProgress" style="display:none"></div>
         <div class="lg-body" id="lgBody"></div>
-        <div class="lg-pdf-bar" id="lgPdfBar"><button class="btn" onclick="window.print()">⬇ Tải PDF</button></div>
       </div>
     </div>
   </main>
@@ -166,9 +155,10 @@ window.SHELL_INTRO={key:'luan-giai',title:'Luận giải Tử Vi',desc:'Lập l�
 <script src="/tuvi-laso-format.js"></script>
 <script src="/tuvi-form.js?v=1"></script>
 <script src="/auth.js?v=2"></script>
-<script src="/tuvi-paywall.js?v=17"></script>
+<script src="/tuvi-paywall.js?v=18"></script>
   <script src="/nav.js?v=22" data-icons-only></script>
-<script src="/shell.js?v=65"></script>
+<script src="/shell.js?v=68"></script>
+<script src="/tools-shared/ai-loading-steps.js?v=5"></script>
 <script>
 // ── Form nhập (dùng chung TuviForm — có "Sinh ở ngoài Việt Nam?" + parity giờ
 // sinh lịch sử với standalone) ──
@@ -313,6 +303,9 @@ function toggleMini(){
 // ══════════════════════════════════════════════════════════════════════
 var _astrolabe=null, _hoTen='', _ngay=0, _thang=0, _nam=0, _gioitinh='nam', _namXem=0, _laSoText=null;
 var _pendingSlug=null, _currentPhan=0, _luanGiaiStore={};
+// ETA tự hiệu chỉnh: đo nhịp NGAY TRONG phiên này thay vì hứa theo một con
+// số chép cứng (số chép cứng nói dối vào đúng ngày đổi model).
+var _pace=(window.AiLoadingSteps&&AiLoadingSteps.pacer)?AiLoadingSteps.pacer():null;
 var SB_URL_LG='https://dciwkfdqhhddeymlisey.supabase.co';
 var SB_ANON_LG='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRjaXdrZmRxaGhkZGV5bWxpc2V5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyMzQ2MzksImV4cCI6MjA4ODgxMDYzOX0._3aXoe0hO-46J1gASUiNv__tWjSzLZFTL0M3-47L26I';
 TuviPaywall.init({product:'laso'});
@@ -437,7 +430,6 @@ function _renderCachedLuanGiai(store){
   }
   document.getElementById('lgUnlock').style.display='none';
   document.getElementById('lgProgress').style.display='none';
-  document.getElementById('lgPdfBar').classList.add('visible');
 }
 async function initLuanGiaiGate(ls){
   var conv=ls._conv||{};
@@ -445,7 +437,6 @@ async function initLuanGiaiGate(ls){
   _luanGiaiStore={};
   document.getElementById('lgUnlock').style.display='none';
   document.getElementById('lgProgress').style.display='none';
-  document.getElementById('lgPdfBar').classList.remove('visible');
   var cached=await _fetchCachedLuanGiai(_pendingSlug);
   if(cached)_renderCachedLuanGiai(cached);
   else document.getElementById('lgUnlock').style.display='block';
@@ -458,20 +449,41 @@ async function _startLuanGiaiAI(){
   document.getElementById('lgUnlock').style.display='none';
   document.getElementById('lgProgress').style.display='block';
   _currentPhan=0; _luanGiaiStore={};
+  _pace&&_pace.reset();
   await _loadNextPhanAI();
 }
 async function _loadNextPhanAI(){
   if(_currentPhan>=LuanGiaiCore.TONG_PHAN){
     document.getElementById('lgProgress').textContent='✓ Luận giải hoàn tất';
-    document.getElementById('lgPdfBar').classList.add('visible');
     _saveLuanGiaiResult();
     return;
   }
   _currentPhan++;
   var p=_currentPhan;
-  document.getElementById('lgProgress').textContent='Đang luận giải phần '+p+' / '+LuanGiaiCore.TONG_PHAN+'...';
+  // Còn LẠI tính từ phần này trở đi. Chưa đủ mẫu thì remainText trả '' —
+  // im lặng, không hứa.
+  var _eta=_pace?_pace.remainText(LuanGiaiCore.TONG_PHAN-p+1):'';
+  document.getElementById('lgProgress').textContent=
+    'Đang luận giải phần '+p+' / '+LuanGiaiCore.TONG_PHAN+(_eta?' · '+_eta:'...');
+  _pace&&_pace.begin();
   var box=document.getElementById('claude-content-'+p);
-  if(box){ box.style.display='block'; box.innerHTML='<div class="phan-empty">Đang luận giải…</div>'; }
+  // Chờ MỘT CỤC (không stream) và tốn hơn 10 giây ⇒ orb, theo luật ở đầu
+  // ai-loading-steps.js. Trước đây chỗ này chỉ có một dòng chữ TĨNH nên người
+  // dùng đọc thành "treo" rồi bấm lại — mà bấm lại là một lượt gọi model nữa.
+  // expectSec:0 = chưa đo được thời lượng một phần (route /api/lasotuvi không
+  // ghi llm_usage) ⇒ chỉ đếm giây, KHÔNG hứa bao giờ xong.
+  var w=null;
+  if(box){
+    box.style.display='block';
+    box.innerHTML='<div class="phan-empty">Đang luận giải…</div>';
+    if(window.AiLoadingSteps&&AiLoadingSteps.mountWait){
+      w=AiLoadingSteps.mountWait(box,{label:'Đang luận giải phần '+p+'…',
+        expectSec:(_pace&&_pace.perPartSec())||0,expectText:(_pace&&_pace.perPartText())||''});
+      w.start();
+    }
+  }
+  // PHẢI stop trước mọi lượt ghi đè `box`, nếu không đồng hồ chạy ngầm.
+  var doneWait=function(){ if(w){ w.stop(); w=null; } };
   // Cuộn tới đúng phần đang stream — không thì user tưởng trang đứng im (đã fix
   // theo phản hồi Henry). .sec đã có scroll-margin-top neo theo --ws-top-h (bù header + .jump sticky).
   var secEl=document.getElementById('sec-'+p);
@@ -486,12 +498,16 @@ async function _loadNextPhanAI(){
     var resp=await fetch('/api/lasotuvi',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({hoTen:_hoTen,ngay:_ngay,thang:_thang,nam:_nam,gioiTinh:_gioitinh,namXem:_namXem,laSoText:_laSoText,phan:p,docs:docs})});
     var data=await resp.json();
     if(data.error||!data.luanGiai){
+      doneWait();
       if(box)box.innerHTML='<div class="laso-error">Lỗi khi luận giải phần '+p+'. <button class="btn" onclick="window._lgRetryPhan()">↻ Thử lại</button></div>';
       return;
     }
     _luanGiaiStore[p]=data.luanGiai;
+    _pace&&_pace.end();   // chỉ ghi nhịp ở nhánh THÀNH CÔNG
+    doneWait();
     if(box)box.innerHTML=renderMarkdown(data.luanGiai);
   }catch(e){
+    doneWait();
     if(box)box.innerHTML='<div class="laso-error">Lỗi phần '+p+': '+esc(e.message)+' <button class="btn" onclick="window._lgRetryPhan()">↻ Thử lại</button></div>';
     return;
   }
@@ -529,7 +545,6 @@ function showForm(){
   document.getElementById('btnBatTu').style.display='none';
   document.getElementById('lgUnlock').style.display='none';
   document.getElementById('lgProgress').style.display='none';
-  document.getElementById('lgPdfBar').classList.remove('visible');
   Shell.setShareable(null);
 }
 // điền sẵn ngày sinh đã nhớ (nếu có); tự luận nếu đến qua ?auto=1 (từ nút Lá số).
