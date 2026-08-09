@@ -149,6 +149,80 @@ tín hiệu.** Nhân một hệ số chung không chữa được — mỗi tr�
   Nội/TP.HCM. Nếu thấy đáng thì thêm một ô chọn tỉnh rồi lọc, không đụng logic.
 ---
 
+## 🖨️✦ Lưu PDF + orb mời hỏi — cùng đưa lên tầng SHELL (2026-08-09, PR này)
+
+Henry: *"làm cái hiệu ứng glowing (orb khói) xung quanh cái icon nút Hỏi trên
+shell để user trigger để hỏi. Với lại thêm 1 nút pdf để user lưu pdf nguyên cái
+shell-workspace (hiện giờ vài tool đã có nằm trong workspace mà tao nghĩ đây nên
+là 1 tính năng chung của workspace)"*. Anh nhận ra đúng cùng cái hình vừa vá ở
+PR chia sẻ, nên PR này đi thẳng lên tầng shell.
+
+### 🖨️ PDF: 3/33 tool có, và ba bản đã bắt đầu trôi khỏi nhau
+`luan-giai` · `bat-tu` · `xem-tuoi` mỗi tool tự chép một khối `@media print`
+**gần như trùng khít** — chỉ khác vài tên class riêng (`.lg-unlock` vs
+`.bt-unlock`) — cộng một thanh PDF riêng trong nội dung. 30 tool còn lại in ra
+**nguyên cả sidebar, rail, nút bấm**, và bị **cắt ở đúng chiều cao viewport** vì
+`.shell` là lưới 3 cột `height:100vh`.
+- Luật in nay nằm ở **`shell.css`**; nút do shell dựng trong `.ws-actions`, bám
+  đúng mốc `data-ws-result` đã có ⇒ **tool không phải khai thêm gì**, và nó theo
+  CÙNG vòng đời với nút Chia sẻ (hiện khi có kết quả, gỡ khi về form).
+- **Đầu trang in `.ws-print-head`**: khi in thì `.ws-top` bị ẩn nên bản in cũ
+  không nói được nó là kết quả gì của ai — kể cả 3 tool đã có PDF. Nay shell
+  dựng một khối chỉ hiện lúc in: tên tool + dòng lá số + tên miền, **lấy chung
+  `shareBirthLines`** với bản chia sẻ nên hai bản không nói khác nhau.
+- **`window.print()` chứ không dựng PDF bằng thư viện**: trình duyệt đã có sẵn
+  "Lưu thành PDF", giữ được chữ THẬT (tìm/copy được) và thêm 0 byte JS. Bản dựng
+  bằng canvas chỉ ra ảnh — nặng hơn mà đọc kém hơn.
+- **`pdf_download` là loại event RIÊNG**, cố ý không gộp vào `poster_download`:
+  poster là ảnh để ĐĂNG cho người khác xem, PDF là bản LƯU cho chính mình đọc
+  lại. Gộp một cột thì không đọc được cái nào thật sự có người dùng.
+- ⚠️ **Đổi hành vi nhỏ, có chủ ý:** 3 tool cũ chỉ hiện PDF SAU khi luận giải
+  xong; nay nút hiện ngay khi có kết quả. Nhất quán với nút Chia sẻ vốn đã hiện
+  ở đúng thời điểm đó trên chính 3 tool ấy.
+
+### ✦ Orb nút Hỏi: lời mời, không phải đồ trang trí
+- 🔑 **Đo trước khi làm**: nút `✦ Hỏi` mang class `mobile-only` ⇒ trên desktop
+  **không tồn tại** (rail hiện sẵn ở cột phải). Nên đây là lời mời cho **MOBILE**
+  — đúng chỗ rail nằm ngoài màn hình và người ta không biết là có nó.
+- **DÙNG LẠI orb của #455/#457** (`AiLoadingSteps.orbHtml`), nạp theo lối LƯỜI vì
+  module đó mới có ở 24/33 trang; thiếu thì nút giữ nguyên chữ cũ, không vỡ gì.
+  Chép CSS orb sang `shell.css` là dựng bản thứ hai để rồi trôi khỏi nhau.
+- 🔑 **CHỈ sáng khi có gì để hỏi (`ctx` đã set) VÀ chưa mở rail lần nào**; mở là
+  tắt hẳn, trả lại đúng chữ `✦ Hỏi`. Sáng vĩnh viễn thì người ta học cách bỏ
+  qua, và một animation chạy suốt trên mobile là ăn pin thật.
+- 🐞 **Bắt được khi đi kiểm đường dẫn**: tabbar mobile có nút "Trợ lý" mở rail
+  **thẳng**, không qua `Shell.openRail` ⇒ mở bằng đường đó thì orb vẫn nhấp nháy,
+  tức nài người ta làm đúng cái họ vừa làm. Nay tabbar gọi chính `Shell.openRail`.
+
+### Verify
+`typecheck` 0 · `lint` 0 lỗi (72 warning pre-existing) · `prettier` sạch ·
+`check:prices`/`nostore`/`groups`/`share` sạch · engine **185 pass** ·
+`node --check` + kiểm ngoặc `shell.css` cân.
+- **127 ca trên TRANG THẬT**: 33 trang đủ ba nhịp của nút PDF (còn form → không
+  nút · có kết quả → hiện · ẩn đi → gỡ).
+- **Luật in đo bằng `emulateMedia('print')`**: ẩn sidebar/rail/thanh tiêu đề/
+  chính hai nút toolbar · **hiện** đầu trang in · đầu trang in KHÔNG hiện trên
+  màn hình · bấm PDF gọi đúng **1** lượt `print()`.
+- **3 tool cũ sau khi gỡ bản chép tay**: vẫn in được · thanh PDF cũ đã gỡ hẳn ·
+  0 lỗi JS.
+- **Orb ở 390px**: chưa có ngữ cảnh → không mời · có ngữ cảnh → orb + quầng khói
+  hiện mà vẫn còn chữ "Hỏi" · mở rail → tắt và trả lại đúng `✦ Hỏi` · không tràn
+  ngang · 0 lỗi JS.
+- 🪤 **ĐỐI CHỨNG nạp đè `shell.js` bản `origin/main`**: không có nút PDF, không
+  có orb ⇒ bài kiểm đo đúng thứ đang đổi.
+- Bump `shell.js?v=65→66` · `shell.css?v=17→18` (35 trang).
+
+### CÒN LẠI
+- Orb chỉ nằm trên nút `✦ Hỏi`. Tab "Trợ lý" ở tabbar mobile **cố ý không gắn** —
+  hai chỗ cùng nhấp nháy một lúc là nhiễu gấp đôi cho cùng một lời mời.
+- **Chưa in thử ra giấy/PDF thật** — mới đo tới tầng CSS bằng `emulateMedia`.
+  Chỗ đáng soi sau deploy: tool có canvas (lá số, radar, bàn Kỳ Môn) in ra có
+  đúng tỉ lệ không, và bảng rộng có bị cắt mép phải không.
+- `@media print` master dùng `[data-print-skip]` cho trang muốn giấu thêm khối —
+  hiện **chưa trang nào dùng**, nó là lối thoát cho tool sau.
+
+---
+
 ## ⏱️ ETA TỰ HIỆU CHỈNH + `llm_usage` cuối cùng cũng có THỜI LƯỢNG (2026-08-09, PR sau #457)
 
 Henry: *"Có nên estimate thời gian chạy của từng tool xong… show estimated time
@@ -222,7 +296,7 @@ trong panel Biên Lợi Nhuận** từ trước tới nay. Nay `llmText` → `ll
 
 ---
 
-## 🔗 Chia sẻ workspace: tính năng của SHELL, không phải của từng tool (2026-08-09, PR này)
+## 🔗 Chia sẻ workspace: tính năng của SHELL, không phải của từng tool (2026-08-09, PR #456)
 
 Henry: *"Tool Dạy con theo lá số đang ko chia sẻ dc phần shell-workspace… Tính
 năng chia sẻ shell-workspace phải là tính năng master chung cho tất cả các tool

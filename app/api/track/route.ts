@@ -29,6 +29,11 @@ const ALLOWED = new Set([
   // tải về không mang link bấm được nên không bao giờ sinh ra share_view/
   // cta_click tương ứng — nhét chung vào chỉ làm K tụt giả.
   'poster_download',
+  // Lưu PDF cả khung giữa (tính năng master của workspace). TÁCH khỏi
+  // 'poster_download' vì hai thứ khác hẳn nhau về ý định: poster là ảnh 9:16
+  // để ĐĂNG cho người khác xem, PDF là bản LƯU cho chính mình đọc lại. Gộp
+  // vào một cột thì không đọc được cái nào đang thật sự có người dùng.
+  'pdf_download',
   // W1 + D1 — hai bậc còn thiếu của phễu THEO TOOL:
   //   preview_shown = lượt tính thử miễn phí đã ra kết quả
   //   unlock_click  = bấm nút "Mở bản đầy đủ" trên tấm tường
