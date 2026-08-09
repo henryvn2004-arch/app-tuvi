@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"></noscript>
-<link rel="stylesheet" href="/shell.css?v=17">
+<link rel="stylesheet" href="/shell.css?v=18">
 <link rel="stylesheet" href="/laso-chart.css?v=3">
 <style>
 /* Center riêng của trang Luận giải */
@@ -99,16 +99,6 @@
 .lg-unlock{background:var(--white);border:1px solid var(--gold-soft);border-radius:11px;padding:18px 20px;margin-bottom:22px;text-align:center}
 .lg-unlock p{font-size:12.5px;color:var(--text-lt);margin-top:8px}
 .lg-progress{font-size:12.5px;color:var(--text-lt);margin-bottom:16px;padding:10px 0;border-bottom:1px solid var(--line)}
-.lg-pdf-bar{display:none;margin:24px 0;text-align:center}
-.lg-pdf-bar.visible{display:block}
-@media print{
-  .sb,.rail,.ws-top,#introHost,#shellRecent,.mobile-only,.jump,.lg-unlock,.lg-progress,.ask,.lg-pdf-bar,.tabbar{display:none!important}
-  .shell{display:block!important;height:auto!important}
-  .ws{overflow:visible!important}
-  .ws-body{padding:0!important}
-  .sec{page-break-inside:avoid;break-inside:avoid}
-  body{font-size:12pt}
-}
 </style>
 </head>
 <body>
@@ -150,7 +140,6 @@
         </div>
         <div class="lg-progress" id="lgProgress" style="display:none"></div>
         <div class="lg-body" id="lgBody"></div>
-        <div class="lg-pdf-bar" id="lgPdfBar"><button class="btn" onclick="window.print()">⬇ Tải PDF</button></div>
       </div>
     </div>
   </main>
@@ -168,7 +157,7 @@ window.SHELL_INTRO={key:'luan-giai',title:'Luận giải Tử Vi',desc:'Lập l�
 <script src="/auth.js?v=2"></script>
 <script src="/tuvi-paywall.js?v=18"></script>
   <script src="/nav.js?v=22" data-icons-only></script>
-<script src="/shell.js?v=65"></script>
+<script src="/shell.js?v=66"></script>
 <script src="/tools-shared/ai-loading-steps.js?v=5"></script>
 <script>
 // ── Form nhập (dùng chung TuviForm — có "Sinh ở ngoài Việt Nam?" + parity giờ
@@ -441,7 +430,6 @@ function _renderCachedLuanGiai(store){
   }
   document.getElementById('lgUnlock').style.display='none';
   document.getElementById('lgProgress').style.display='none';
-  document.getElementById('lgPdfBar').classList.add('visible');
 }
 async function initLuanGiaiGate(ls){
   var conv=ls._conv||{};
@@ -449,7 +437,6 @@ async function initLuanGiaiGate(ls){
   _luanGiaiStore={};
   document.getElementById('lgUnlock').style.display='none';
   document.getElementById('lgProgress').style.display='none';
-  document.getElementById('lgPdfBar').classList.remove('visible');
   var cached=await _fetchCachedLuanGiai(_pendingSlug);
   if(cached)_renderCachedLuanGiai(cached);
   else document.getElementById('lgUnlock').style.display='block';
@@ -468,7 +455,6 @@ async function _startLuanGiaiAI(){
 async function _loadNextPhanAI(){
   if(_currentPhan>=LuanGiaiCore.TONG_PHAN){
     document.getElementById('lgProgress').textContent='✓ Luận giải hoàn tất';
-    document.getElementById('lgPdfBar').classList.add('visible');
     _saveLuanGiaiResult();
     return;
   }
@@ -559,7 +545,6 @@ function showForm(){
   document.getElementById('btnBatTu').style.display='none';
   document.getElementById('lgUnlock').style.display='none';
   document.getElementById('lgProgress').style.display='none';
-  document.getElementById('lgPdfBar').classList.remove('visible');
   Shell.setShareable(null);
 }
 // điền sẵn ngày sinh đã nhớ (nếu có); tự luận nếu đến qua ?auto=1 (từ nút Lá số).

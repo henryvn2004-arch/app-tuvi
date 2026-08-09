@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"></noscript>
-<link rel="stylesheet" href="/shell.css?v=17">
+<link rel="stylesheet" href="/shell.css?v=18">
 <link rel="stylesheet" href="/laso-chart.css?v=3">
 <style>
 .form-card{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);max-width:720px}
@@ -81,16 +81,6 @@
 .xt-unlock{background:var(--white);border:1px solid var(--gold-soft);border-radius:11px;padding:18px 20px;margin-bottom:22px;text-align:center}
 .xt-unlock p{font-size:12.5px;color:var(--text-lt);margin-top:8px}
 .xt-progress{font-size:12.5px;color:var(--text-lt);margin-bottom:16px;padding:10px 0;border-bottom:1px solid var(--line)}
-.xt-pdf-bar{display:none;margin:24px 0;text-align:center}
-.xt-pdf-bar.visible{display:block}
-@media print{
-  .sb,.rail,.ws-top,#introHost,#shellRecent,.mobile-only,.jump,.xt-unlock,.xt-progress,.ask,.xt-pdf-bar,.tabbar{display:none!important}
-  .shell{display:block!important;height:auto!important}
-  .ws{overflow:visible!important}
-  .ws-body{padding:0!important}
-  .sec{page-break-inside:avoid;break-inside:avoid}
-  body{font-size:12pt}
-}
 </style>
 </head>
 <body>
@@ -136,7 +126,6 @@
         </div>
         <div class="xt-progress" id="xtProgress" style="display:none"></div>
         <div class="xt-body" id="xtBody"></div>
-        <div class="xt-pdf-bar" id="xtPdfBar"><button class="btn" onclick="window.print()">⬇ Tải PDF</button></div>
       </div>
     </div>
   </main>
@@ -165,7 +154,7 @@
 <script src="/auth.js?v=2"></script>
 <script src="/tuvi-paywall.js?v=18"></script>
   <script src="/nav.js?v=22" data-icons-only></script>
-<script src="/shell.js?v=65"></script>
+<script src="/shell.js?v=66"></script>
 <script src="/tools-shared/ai-loading-steps.js?v=5"></script>
 <script>
 // ── MODE: 1 trang phục vụ 3 route — /app/xem-tuoi (vợ chồng), /app/xem-lam-an
@@ -505,7 +494,6 @@ async function initXemTuoiGate(result,nameA,nameB){
   _xemTuoiStore={};
   document.getElementById('xtUnlock').style.display='block';
   document.getElementById('xtProgress').style.display='none';
-  document.getElementById('xtPdfBar').classList.remove('visible');
 }
 
 async function initiateXemTuoiChuyenSau(){
@@ -522,7 +510,6 @@ async function _startXemTuoiAI(){
 async function _loadNextPhanAI(){
   if(_currentPhan>=8){
     document.getElementById('xtProgress').textContent='✓ Luận giải hoàn tất';
-    document.getElementById('xtPdfBar').classList.add('visible');
     _saveXemTuoiResult();
     return;
   }
@@ -596,7 +583,6 @@ function showForm(){
   document.getElementById('btnEdit').style.display='none';
   document.getElementById('xtUnlock').style.display='none';
   document.getElementById('xtProgress').style.display='none';
-  document.getElementById('xtPdfBar').classList.remove('visible');
   Shell.setShareable(null);
 }
 function applyMode(){
