@@ -62,6 +62,28 @@ function cacheExtra(moiLo: string, namXem: number): string {
   return `lo:${moiLo}|nx:${namXem}`;
 }
 
+/**
+ * 🔴 PHIÊN BẢN CẤU TRÚC payload. BUMP mỗi khi thêm/đổi khoá mà TRANG BẮT BUỘC
+ * phải có để dựng đủ màn hình.
+ *
+ * Cùng cơ chế `day-con` vừa phải dựng ở #465, và tool này có ĐÚNG cái rủi ro
+ * đó: `portrait_cache` khoá theo lá số, KHÔNG theo shape — nên đổi cấu trúc
+ * xong thì mọi dòng cũ vẫn được trả về nguyên trạng, mãi mãi. Bên kia đã cắn
+ * thật: khung mới lên prod, người chạy hôm trước mở lại thấy 4 khối im lặng
+ * biến mất, không lỗi nào bắn ra.
+ *
+ * ⚠️ Cố ý KHÔNG nhét vào `lasoKey`: đổi khoá là mồ côi toàn bộ cache VÀ
+ * `userOwnsLaso` — người đã trả tiền bị tính lại. Khoá giữ nguyên nên lượt dựng
+ * lại vẫn miễn phí đúng cho họ.
+ */
+const SHAPE = 1;
+
+/** Payload cũ hơn cấu trúc hiện tại thì coi như trượt cache. */
+function shapeStale(payload: unknown): boolean {
+  const v = (payload as { _shape?: unknown } | null)?._shape;
+  return typeof v !== 'number' || v < SHAPE;
+}
+
 interface Muc {
   viec?: string;
   viSao?: string;
@@ -92,6 +114,8 @@ async function buildReport(
   ten: string,
   userId: string,
   key: string,
+  /** Dòng cache cũ mang SHAPE lỗi thời — lượt này phải GHI ĐÈ lên nó. */
+  stale = false,
 ) {
   const prompt = buildHuongNghiepTrePrompt(p, ten);
 
@@ -158,6 +182,7 @@ async function buildReport(
 
   const payload = {
     success: true,
+    _shape: SHAPE,
     ten,
     ...hoSoDayDu(p),
     nhinRaCon: clean(parsed.nhinRaCon),
@@ -180,7 +205,9 @@ async function buildReport(
   };
   insertHistoryRow(TOOL_ID, { ...row, user_id: userId, laso_key: key });
   void railFreeTurnsPerGen().then((n) => railFreeGrant(userId, n)).catch(() => {});
-  void putCachedPortrait(TOOL_ID, 'main', key, { payload, row }, userId);
+  // Ghi đè CHỈ ở nhánh dựng-lại-vì-shape-cũ. Không có vế này thì dòng hỏng nằm
+  // nguyên và mỗi lượt xem lại đốt thêm một lượt model.
+  void putCachedPortrait(TOOL_ID, 'main', key, { payload, row }, userId, stale);
   return ok(payload);
 }
 
@@ -226,11 +253,16 @@ async function runPost(request: NextRequest) {
   const profile = computeHuongNghiepTre(r.ls, gender, moiLo);
 
   const key = lasoKey(birth, cacheExtra(moiLo, profile.namXem));
-  const [cached, owns] = await Promise.all([
+  const [cachedRaw, owns] = await Promise.all([
     getCachedPortrait(TOOL_ID, 'main', key),
     userOwnsLaso(TOOL_ID, auth.user.id, key),
   ]);
-  const free = Boolean(cached) && owns;
+  // Dòng cache mang cấu trúc đã lỗi thời thì DỰNG LẠI (xem SHAPE ở trên) —
+  // nhưng vẫn tính là "đã có" cho `free`, vì người này đã trả tiền cho đúng lá
+  // số đó rồi; bắt trả lần nữa để lấy bản sửa lỗi của mình là sai.
+  const stale = Boolean(cachedRaw) && shapeStale(cachedRaw?.payload);
+  const cached = stale ? null : cachedRaw;
+  const free = Boolean(cachedRaw) && owns;
 
   if (!free) {
     // Chốt chặn thanh toán PHÍA SERVER — thiếu bước này thì gọi thẳng endpoint
@@ -248,7 +280,7 @@ async function runPost(request: NextRequest) {
     return ok({ ...cached.payload, cached: true, freeRerun: free });
   }
 
-  const res = await buildReport(profile, ten, auth.user.id, key);
+  const res = await buildReport(profile, ten, auth.user.id, key, stale);
   return refundIfSystemFailure(res, {
     toolId: TOOL_ID,
     userId: auth.user.id,
