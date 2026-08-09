@@ -322,13 +322,18 @@ phát đúng mấy khoá đó. Vá một chỗ là cả hai tool được; nay *
 trên cả hai (quét 336 lá số).
 
 ### CÒN LẠI
-- ⚠️ **VIỆC TAY: chạy `_patches/migration-huong-nghiep-tre.sql` rồi bật SAU KHI
-  DEPLOY**, không được trước — `cong-cu.html` và `tuvi-paywall.js` đều lọc
-  `enabled=eq.true`, bật sớm là người thật bấm vào trang chưa tồn tại:
-  ```sql
-  update tool_pricing set enabled = true, updated_at = now()
-   where tool_id = 'huong-nghiep-tre';
-  ```
+- ✅ **ĐÃ BẬT TRÊN PROD — hết việc tay.** Trình tự đã chạy đúng thứ tự bắt buộc:
+  merge (`3f2e1ca`) → **đợi production deploy READY** → verify prod phục vụ
+  `/app/huong-nghiep-tre` **200** (mốc đối chứng: ngay trước deploy nó còn
+  **404**) → migration (10 cột · RLS bật · 1 policy chủ-sở-hữu · dòng giá
+  `enabled=false`) → **rồi mới** `enabled=true`. Verify sau khi bật: 60 tool
+  đang bật, và nhóm `con-cai` ra *Xem Tuổi Sinh Con · Đặt Tên Con · Dạy Con Theo
+  Lá Số · Hướng Nghiệp Sớm Cho Con*; route thật trả **401** đúng cho lượt
+  `cache-status` chưa đăng nhập.
+  🔑 Migration **an toàn chạy trước deploy** (nó tạo dòng ở `enabled=false`, và
+  `on conflict do update` CỐ Ý không đụng cột `enabled` nên chạy lại không lật);
+  chỉ **câu bật** mới phải đợi. Tách được hai việc này là rút ngắn được cửa sổ
+  rủi ro.
 - **`THIEN_HUONG` (9 hướng × 21 trục + toàn bộ phần chữ) là bảng TỰ ĐẶT**, cùng
   dạng nợ với `KIEU_HOC`, `DOMAIN_NGANH`, `SAO_TRUC`. Cổ thư không có khái niệm
   "thiên hướng của trẻ" bằng thang điểm. Sửa là sửa data thuần.
