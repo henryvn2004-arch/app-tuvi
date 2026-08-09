@@ -214,7 +214,7 @@ async function handleStory(birth: BirthParams, userId: string, key: string, eraI
         output_tokens: llmRes.usage.output_tokens,
         cache_creation_input_tokens: 0,
         cache_read_input_tokens: 0,
-      });
+      }, llmRes.durationMs);
       return { raw: llmRes.text, model: llmRes.model };
     } catch (e) {
       console.error('[chan-dung-tien-kiep] LLM lỗi:', (e as Error)?.message);
@@ -311,7 +311,7 @@ async function handleImage(userId: string, birth: BirthParams, key: string, eraI
       output_tokens: llmRes.usage.output_tokens,
       cache_creation_input_tokens: 0,
       cache_read_input_tokens: 0,
-    });
+    }, llmRes.durationMs);
     const parsed = parseLlmJson(llmRes.text) as { imagePrompt?: string } | null;
     faceDescriptionEn = String(parsed?.imagePrompt || '').trim();
   } catch {
@@ -324,7 +324,7 @@ async function handleImage(userId: string, birth: BirthParams, key: string, eraI
   try {
     const imgRes = await generatePortraitImage({ prompt: finalPrompt, size: '1024x1536' });
     imageB64 = imgRes.b64;
-    void logImageUsage('chan-dung-tien-kiep', imgRes.model, imgRes.usage);
+    void logImageUsage('chan-dung-tien-kiep', imgRes.model, imgRes.usage, imgRes.durationMs);
   } catch (e) {
     return err('Lỗi sinh ảnh: ' + (e instanceof Error ? e.message : 'không rõ'), 500);
   }
