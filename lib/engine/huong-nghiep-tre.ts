@@ -190,6 +190,17 @@ export const LOP: Record<LopId, LopDef> = {
 export const TUOI_HET_LA_TRE = 26;
 
 /**
+ * Cách gọi khi lá số KHÔNG còn là trẻ em.
+ *
+ * Phần MIỄN PHÍ vẫn đọc được cho mọi lá số (chỉ đường trả tiền mới chặn), nên
+ * nếu để nguyên "con" thì một người 43 tuổi vẫn bị gọi là con ngay trong phần
+ * đầu tiên họ nhìn thấy — ĐÚNG chỗ Henry báo, chỉ khác một dòng. Chọn ngôi
+ * TRUNG TÍNH vì lúc đó không biết ai đang đọc: cha mẹ của một người trưởng
+ * thành, hay chính người đó tự tra lá số mình.
+ */
+export const XUNG_HO_NGUOI_LON = 'người này';
+
+/**
  * Lứa tuổi từ TUỔI MỤ trong lá số.
  *
  * 🔴 Trả `null` khi ≥26 — CỐ Ý không kẹp về lứa cuối như bản đầu. Kẹp là cách
@@ -1063,7 +1074,7 @@ export function computeHuongNghiepTre(
     phan,
     // Khung 5 trục · 8 chất dựng MỘT lần rồi dùng chung — đây là nền chấm, và
     // nó là CHÍNH khung `day-con` đang bán cạnh tool này (xem đầu file).
-    huong: xungHoHoa(chonThienHuong(assessChild(ls)), lop.xungHo),
+    huong: xungHoHoa(chonThienHuong(assessChild(ls)), laTreEm ? lop.xungHo : XUNG_HO_NGUOI_LON),
     matDoc,
     changDangO,
     // Chỉ lứa 3–7 mới cấm tên nghề. `lopId === null` (người lớn) rơi vào nhánh

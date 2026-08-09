@@ -526,7 +526,9 @@ function _banGiaoNguoiLon(data) {
 }
 
 function renderMeta(data) {
-  var ten = data.ten || 'Con';
+  // Bỏ trống ô tên thì tiêu đề rơi về một cách gọi — mà "Con" dán lên một lá số
+  // 43 tuổi thì vẫn đúng chỗ Henry báo, chỉ khác một dòng.
+  var ten = data.ten || (data.laTreEm === false ? 'Lá số này' : 'Con');
   document.getElementById('heroName').textContent = ten;
   document.getElementById('heroRole').textContent =
     _xungHoVai(data) +
