@@ -5,6 +5,38 @@
 
 ---
 
+## 🔴 `tsc --noEmit` XANH KHÔNG CHỨNG MINH `next build` CHẠY (2026-08-09, rà PR mở)
+
+Merge #388 (TypeScript `6.0.3 → 7.0.2` ở root) làm **7 lượt deploy production
+ERROR liên tiếp**. Site không sập — Vercel vẫn phục vụ bản READY cuối — nhưng
+mọi thay đổi sau đó **không lên prod** và không có gì kêu.
+
+```
+TypeScript 7.0.2 does not provide the compiler API required by Next.js.
+Enable experimental.useTypeScriptCli … or install TypeScript 6 instead.
+```
+
+TS7 là bản viết lại bằng **Go**; `next build` gọi **compiler API**, còn
+`tsc --noEmit` chỉ chạy **binary**. Hai đường khác nhau ⇒ **cả CI lẫn lượt verify
+tại chỗ của tao đều xanh** trong khi Vercel đỏ. Job `typecheck` không bao giờ bắt
+được loại lỗi này.
+
+- 🔑 **Luật: bump TypeScript thì phải chạy `npm run build`, không được dừng ở
+  `tsc --noEmit`.** Áp cho mọi thứ đụng tầng biên dịch của Next.
+- **Root về `^6.0.3`; `tuvi-engine` GIỮ `^7.0.2`** — engine build bằng `tsc`
+  thuần, không qua Next, đã verify build OK + 185 test pass + deploy READY.
+- Chốt `ignore: typescript >=7` cho **root** trong `.github/dependabot.yml` (kèm
+  lý do tại chỗ). Gỡ khi Next hỗ trợ TS7.
+- 🪤 **Build local hỏng vì THIẾU ENV, không phải vì mã** — `supabaseUrl is
+  required`. Muốn phân biệt "hỏng thật" với "thiếu env" thì bơm env giả: bản
+  đúng sẽ chạy tới tận *Generating static pages (63)* rồi mới chết ở DNS.
+- 🪤 Bài học kèm: **clone trong container là SHALLOW (54 commit)** nên
+  `git merge-base` trả rỗng và tao suýt đóng 3 PR với lý do *"không có merge
+  base"* — sai. `git fetch --unshallow` (1.654 commit) rồi hãy tin bất kỳ phép
+  đo nào về lịch sử.
+
+---
+
 ## 🔗 Luận Giải 24 phần bỏ qua data engine — MỐC SECTION HỎNG, bộ cắt CÂM (2026-08-09, PR này)
 
 Henry gửi một lá số thật: *"phần luận giải hầu như ko đề cập gì đến các phần ở
