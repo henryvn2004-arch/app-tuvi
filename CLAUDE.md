@@ -402,14 +402,48 @@ backtrack cho `.*?` giãn qua vài dấu `-->` để vế sau khớp, nên lư�
 tiên bắt nhầm từ vị trí 6900 thay vì 11278 rồi báo "đã đổi rồi". Neo thẳng vào
 thẻ `div`, đừng cố bắt chú thích đứng trước.
 
+### ✅ C1 — bày engine ra: lá chắn cho phản đối *"AI nó bịa thôi"* (cùng PR)
+
+Hai thứ, gắn ở **bản TÍNH THỬ** (đúng chỗ người ta chưa tin gì và đang cân xem có
+đáng trả tiền không; bản đã trả tiền thì phần chữ tự nó là bằng chứng):
+
+1. **"Đọc từ N dữ kiện"** — ĐẾM THẬT từ chính lá số vừa lập: số sao an trên 12
+   cung + số dòng cách cục + số chặng đại vận. Đo 480 lá số: dải **135–181**,
+   **39 giá trị khác nhau**. 🔑 Một con số TRÒN, GIỐNG HỆT cho mọi người chính
+   là dấu hiệu đầu tiên người ta nhận ra mình đang bị bịa — có ca test canh đúng
+   tính chất đó (`uniq.size > 5`).
+2. **Một câu cổ thư NGUYÊN VĂN, có nguồn** — lấy từ `MENH_ROLE` (bảng đã dẫn sẵn
+   Vương Đình Chi / Tân Biên kèm số mục cho đủ 14 chính tinh, **dùng chung** với
+   tool tiền kiếp chứ không chép bản thứ hai).
+
+🔑 **CỐ Ý trích ở cung MỆNH, không trích ở Quan Lộc.** `PAIR_OCCUPATION_TABLE`
+cũng có trích dẫn thật và còn dày hơn — nhưng nó nói về cung Quan Lộc, mà A1 vừa
+đưa cung đó ra sau tường. Trích ở đó là vừa bán vừa cho. Mệnh nằm trong 2 mặt
+free nên câu trích chỉ **chứng thực ngôi sao người ta ĐÃ THẤY**.
+
+🐞 **Bài kiểm của chính vòng này bắt được 32/480 câu cổ thư chạm chủ đề cấm** —
+nguyên văn Tân Biên 4.2.1 có *"tuổi thọ cũng gia tăng"*. Cổ thư nói về thọ mệnh
+là chuyện bình thường của cổ thư; cái sai là đem nó nói về một người KHÔNG CÓ
+MẶT. Nay câu trích đi qua **CHÍNH `locCachCuc`** — một bộ lọc cho cả cách cục lẫn
+trích dẫn, không dựng bộ thứ hai. Phủ còn **472/480 = 98,3%**; 8 lá số không có
+câu sạch thì **để trống**, tuyệt đối không bịa một câu rồi gán cho cổ thư.
+
+**Verify:** `tsc` 0 · `lint` 0 lỗi · `prettier` sạch · 5 bộ dò sạch · engine 185
+pass · **20 ca trên MODULE THẬT (480 lá số) + TRANG THẬT**: tổng khớp đúng ba
+thành phần · mọi câu trích **TRÙNG KHÍT nguyên văn bảng nguồn** (chống mọi kiểu
+tự chế) · sao được trích **có thật ở cung Mệnh của chính lá số đó** · 0 câu nêu
+tên cung cấm · 0 câu chạm chủ đề cấm · trang hiện đúng số và đúng nguồn · **chèn
+`<script>`/`onerror` qua câu trích không chạy mà vẫn hiện nguyên văn** · payload
+đã trả tiền không có `coSo` thì khối tự ẩn. Hồi quy 6 bộ kiểm cũ (199 ca) xanh.
+
 ### ⏭️ CÒN LẠI của kế hoạch (Henry đã duyệt khung, chưa code)
 - ⚠️ **B1 mới phủ người ĐÃ ĐĂNG NHẬP mà hết Lượng.** Ở 60 tài khoản / ~4 người
   ngày thì tệp đó rất mỏng — đừng kỳ vọng `referrals` nhảy ngay. Con số phải nhìn
   TRƯỚC là **`invite_shown`**: nó = 0 nghĩa là điều kiện không bao giờ thoả (phải
   nới, ví dụ hiện cả khi còn đủ Lượng), chứ không phải câu chữ dở.
 - ~~**B2**~~ → **ĐÃ LÀM**, xem mục riêng ở trên. ~~**B3**~~ → **ĐÃ LÀM**, xem mục riêng ở trên.
-- **C1** — bày engine ra (*"đọc từ N dữ kiện"* + 1 trích dẫn cổ thư thật): đây là
-  lá chắn cho phản đối số 1 *"AI nó bịa thôi"*, và nó bảo vệ luôn phần Barnum.
+- ~~**C1**~~ → **ĐÃ LÀM**, xem mục riêng ở trên. ⏭️ Mới gắn ở `nguoi-khac`; hai
+  tool cẩm nang kia (`day-con`/`nhan-mach`) dùng chung `coSoDoc` được, chưa cắm.
 - **C3** — gallery từ 36 `shared_results` (vốn đã public): social proof + trang
   SEO + bề mặt lan, cả ba trong một, 0đ.
 - **D** — chuỗi ngày cho "Vận hôm nay" (**variable reward CHỈ ở đây**, tuyệt đối

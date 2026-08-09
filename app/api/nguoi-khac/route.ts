@@ -28,6 +28,7 @@ import {
   khoiKhoa,
   viecChoQuanHe,
   MAT_DOC_PREVIEW,
+  coSoDoc,
   type NguoiKhacProfile,
 } from '@/lib/engine/nguoi-khac';
 import {
@@ -294,6 +295,10 @@ async function runPreview(request: NextRequest) {
     // Tên các khối chưa mở, sinh từ chính lá số này — tường khoá dựng từ đây
     // thay vì một mảng chữ chép cứng giống nhau cho mọi người.
     khoa: khoiKhoa(p),
+    // C1 — bày engine ra. CHỈ gắn ở đường TÍNH THỬ: đây đúng là chỗ người ta
+    // chưa tin gì cả và đang cân xem có đáng trả tiền không. Ở bản đã trả tiền
+    // thì phần chữ tự nó là bằng chứng, thêm vào chỉ là nhắc lại.
+    coSo: coSoDoc(r.ls, p),
     // Danh sách việc HỢP với quan hệ đang chọn, để trang dựng lại ô chọn khi
     // người dùng đổi quan hệ. Nguồn duy nhất là engine — trang chép bản thứ hai
     // thì hai bên trôi khỏi nhau.

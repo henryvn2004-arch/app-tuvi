@@ -22,6 +22,10 @@
 
 import type { Laso } from './laso';
 import { currentNamXem } from './namxem';
+// C1 — bảng trích dẫn cổ thư theo chính tinh cung Mệnh. DÙNG CHUNG với tool
+// tiền kiếp thay vì chép: hai bảng trích dẫn cùng 14 sao sẽ trôi khỏi nhau, và
+// lúc đó câu trích chỉ còn đúng ở một bên.
+import { MENH_ROLE } from './past-life';
 import {
   KIEU,
   type KieuDef,
@@ -529,6 +533,70 @@ export function computeNguoiKhac(
  * Vì thế `voiBan` CHỈ xuất hiện khi có lá số người hỏi — đúng điều kiện mà
  * `buildReport` dùng để quyết định có nhận mục đó hay không.
  */
+/**
+ * C1 — BÀY ENGINE RA. Lá chắn cho phản đối số 1: *"AI nó bịa thôi"*.
+ *
+ * Hai thứ, cả hai đều phải ĐÚNG chứ không phải câu quảng cáo:
+ *
+ * 1. **Số dữ kiện ĐẾM THẬT từ chính lá số này** — số sao an được + số dòng cách
+ *    cục + số chặng đại vận. Không viết cứng một con số tròn: con số tròn giống
+ *    hệt cho mọi người là dấu hiệu đầu tiên người ta nhận ra mình đang bị bịa.
+ *
+ * 2. **Một câu cổ thư NGUYÊN VĂN, có nguồn** — lấy từ `MENH_ROLE`, bảng đã dẫn
+ *    sẵn Vương Đình Chi / Tân Biên kèm số mục cho đủ 14 chính tinh.
+ *
+ * 🔑 **CỐ Ý trích ở cung MỆNH, không trích ở Quan Lộc.** Bảng
+ * `PAIR_OCCUPATION_TABLE` cũng có trích dẫn thật và còn dày hơn — nhưng nó nói
+ * về cung Quan Lộc, mà A1 vừa đưa cung đó ra sau tường. Trích ở đó là vừa bán
+ * vừa cho. Mệnh nằm trong 2 mặt free (`MAT_DOC_PREVIEW`) nên câu trích chỉ
+ * CHỨNG THỰC ngôi sao người ta ĐÃ THẤY, không hé thêm mặt nào.
+ *
+ * ⚠️ **KHÔNG BAO GIỜ tự viết một câu rồi gán cho cổ thư.** Trả `null` khi cung
+ * Mệnh vô chính diệu và mượn cũng không ra sao nào — thiếu một dòng còn hơn bịa
+ * một dòng, đúng luật đã ghi ở track Kỳ Môn.
+ */
+export interface CoSoDoc {
+  /** Số sao an được trên 12 cung. */
+  soSao: number;
+  /** Số dòng cách cục engine chấm ra. */
+  soCachCuc: number;
+  /** Số chặng đại vận. */
+  soDaiVan: number;
+  /** Tổng ba con số trên — "đọc từ N dữ kiện". */
+  tong: number;
+  trichDan: { sao: string; cau: string } | null;
+}
+
+export function coSoDoc(ls: Laso, p: NguoiKhacProfile): CoSoDoc {
+  const palaces = ((ls.palaces as Rec[]) || []);
+  let soSao = 0;
+  for (const c of palaces) soSao += (((c?.stars as unknown[]) || []).length);
+  const cc = (ls.cachCucTungCung as Record<string, string[]>) || {};
+  let soCachCuc = 0;
+  for (const k of Object.keys(cc)) soCachCuc += (cc[k] || []).length;
+  const soDaiVan = ((ls.daiVans as unknown[]) || []).length;
+
+  // Sao chủ cung Mệnh — lấy từ CHÍNH `matDoc` để không tra một đường thứ hai.
+  let trichDan: { sao: string; cau: string } | null = null;
+  const menh = p.matDoc.find((m) => m.cung === 'Mệnh');
+  for (const raw of menh?.sao || []) {
+    // `sao` là NHÃN ("Vũ Khúc (Miếu) [Hóa Khoa]") — cắt lấy tên sao trần.
+    const ten = String(raw).replace(/\s*[([].*$/, '').trim();
+    const r = MENH_ROLE[ten];
+    if (!r?.source) continue;
+    // 🔒 CÂU CỔ THƯ CŨNG PHẢI QUA `locCachCuc`. Bài kiểm của chính vòng này bắt
+    // được **32/480** câu trích chạm chủ đề cấm — nguyên văn Tân Biên 4.2.1 có
+    // *"tuổi thọ cũng gia tăng"*. Cổ thư nói về thọ mệnh là chuyện bình thường
+    // của cổ thư; cái sai là đem nó nói về một người KHÔNG CÓ MẶT. Dùng đúng
+    // một bộ lọc cho cả cách cục lẫn trích dẫn, đừng dựng bộ thứ hai.
+    if (!locCachCuc([r.source]).length) continue;
+    trichDan = { sao: ten, cau: r.source };
+    break;
+  }
+
+  return { soSao, soCachCuc, soDaiVan, tong: soSao + soCachCuc + soDaiVan, trichDan };
+}
+
 export function khoiKhoa(p: NguoiKhacProfile): { id: string; tieuDe: string }[] {
   const k: { id: string; tieuDe: string }[] = [];
 
