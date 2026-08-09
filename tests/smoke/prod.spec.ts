@@ -53,23 +53,33 @@ test.describe('Prod smoke @smoke', () => {
     expect(resp?.status(), 'luan-giai.html status').toBeLessThan(400);
     await page.waitForLoadState('domcontentloaded');
 
-    // Paywall overlay phải hiện HOẶC trang redirect sang la-so.html
-    const url = page.url();
-    if (!url.includes('luan-giai.html')) {
-      // Redirected — OK
-      expect(url).toMatch(/la-so|index|tuviminhbao\.com\/?$/);
-      return;
-    }
-
-    // Hoặc paywall modal hiện
-    const paywall = page
+    // Hai kết cục đều hợp lệ: trang tự chuyển đi, HOẶC tường/CTA mua hiện ra.
+    //
+    // ⚠️ PHẢI CHỜ, không đo một nhát. `locator.isVisible()` là phép đo TỨC THỜI —
+    // tham số `timeout` của nó không có tác dụng chờ. Bản cũ đo ngay sau
+    // `domcontentloaded`, tức trước khi JS kịp dựng tường, nên kết quả tuỳ nhịp
+    // mạng: đo trên 73 lượt prod thì 31 lượt đỏ (42%) trong khi code không đổi.
+    // Nhánh redirect cũng đua y hệt vì `page.url()` đọc một lần tại thời điểm đó.
+    const wall = page
       .locator('.tpw-overlay, .paywall, [class*="paywall"], [data-paywall]')
+      .or(page.getByText(/đăng nhập|mua|unlock|trả phí/i))
       .first();
-    const paywallVisible = await paywall.isVisible({ timeout: 5_000 }).catch(() => false);
-    const lockedContent = page.locator('text=/đăng nhập|mua|unlock|trả phí/i').first();
-    const lockedVisible = await lockedContent.isVisible({ timeout: 2_000 }).catch(() => false);
 
-    expect(paywallVisible || lockedVisible, 'paywall hoặc CTA mua phải hiện').toBe(true);
+    await expect
+      .poll(
+        async () =>
+          !page.url().includes('luan-giai.html') ||
+          (await wall.isVisible().catch(() => false)),
+        { message: 'phải chuyển trang đi hoặc dựng tường/CTA mua', timeout: 20_000 }
+      )
+      .toBe(true);
+
+    if (!page.url().includes('luan-giai.html')) {
+      // So theo PATHNAME, không so theo host: trên preview host là *.vercel.app
+      // nên phép so cũ (neo vào tuviminhbao.com) sẽ đỏ oan.
+      const path = new URL(page.url()).pathname;
+      expect(path, 'chuyển trang phải về la-so hoặc trang chủ').toMatch(/la-so|index|^\/$/);
+    }
   });
 
   test('paywall module (tuvi-paywall.js) load được', async ({ page, request }) => {
