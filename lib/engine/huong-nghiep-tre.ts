@@ -184,6 +184,12 @@ export const LOP: Record<LopId, LopDef> = {
 };
 
 /**
+ * Tuổi mụ từ đó trở lên thì đây không còn là câu hỏi "định hướng sớm cho con".
+ * Là ngưỡng THẬT mà `lopTuoi` dùng — không phải một con số chép lại để tả nó.
+ */
+export const TUOI_HET_LA_TRE = 26;
+
+/**
  * Lứa tuổi từ TUỔI MỤ trong lá số.
  *
  * 🔴 Trả `null` khi ≥26 — CỐ Ý không kẹp về lứa cuối như bản đầu. Kẹp là cách
@@ -195,12 +201,8 @@ export function lopTuoi(tuoi: number | null): LopId | null {
   if (tuoi <= 7) return 'nho';
   if (tuoi <= 12) return 'giua';
   if (tuoi <= 18) return 'lon';
-  if (tuoi <= 25) return 'vaodoi';
-  return null;
+  return tuoi < TUOI_HET_LA_TRE ? 'vaodoi' : null;
 }
-
-/** Tuổi mụ từ đó trở lên thì đây không còn là câu hỏi "định hướng sớm cho con". */
-export const TUOI_HET_LA_TRE = 26;
 
 // ── Điều cha mẹ đang lo ─────────────────────────────────────
 // Cùng cơ chế `<select>` đổi giọng của Công Sở và Dạy Con. Người ta mở tool vì
