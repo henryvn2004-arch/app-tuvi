@@ -342,8 +342,21 @@ trên cả hai (quét 336 lá số).
   trùng việc) — nó **không** nói được hoạt động ấy có phải lời khuyên tốt cho
   một đứa trẻ thật hay không. Đây vẫn là phần người trả tiền đọc kỹ nhất và là
   phần duy nhất của tool chưa ai ngoài tao đọc qua.
-- **Chưa có trang standalone SEO.** *"định hướng nghề nghiệp cho con"* có cầu
-  thật, đáng làm sau.
+- ✅ **Trang standalone SEO ĐÃ CÓ** — `/tools/huong-nghiep-tre.html`, nhắm
+  *"định hướng nghề nghiệp cho con"*. Theo đúng khuôn 4 trang cẩm nang: `tools.css`,
+  2 khối JSON-LD, **một `<h1>` duy nhất**, FAQ `<details>` hiện trên trang. Nộp
+  vào `sitemap-trang` (71 → 72 URL, 0 trùng, **0 `lastmod`** đúng luật *không
+  biết ⇒ không phát*), và `day-con` trỏ ngược sang nó để trang mới có ít nhất
+  MỘT link vào từ trang đã index — nợ ghi ở track SEO trước (*"4 trang mới chưa
+  có link vào từ trang đã index"*) lần này không lặp lại.
+  🪤 **Ngưỡng "tiêu đề ≤ 63 ký tự" tao từng ghi là ĐO SAI CHỖ**: tính cả hậu tố
+  `| Tử Vi Minh Bảo` thì **cả 4 trang anh em đều vượt** (62–69). Google cắt phần
+  sau dấu `|`; thứ phải ngắn là **phần phân biệt** đứng trước nó — đo lại thì
+  4 trang cũ 45–52 và trang mới 54, đều lành. Ngưỡng mà bắt oan 4/4 bản mẫu thì
+  ngưỡng sai, không phải bản mẫu sai.
+  🔑 **FAQ schema khớp NGUYÊN VĂN cả câu hỏi LẪN câu trả lời** (siết hơn 4 trang
+  cũ — chúng chỉ khớp phần hỏi, phần đáp trong schema viết dài hơn chữ hiện ra).
+  Đây đúng lỗi #361 đã trả giá: khai FAQ mà nội dung không nhìn thấy được.
 - Con số cần nhìn sau 1–2 tuần: cột *mở → tính thử → bấm mở* của
   `huong-nghiep-tre` trong panel Phễu Theo Tool, đặt cạnh `day-con` (cùng 15
   Lượng, cùng đối tượng) để biết câu hỏi nào bán tốt hơn.

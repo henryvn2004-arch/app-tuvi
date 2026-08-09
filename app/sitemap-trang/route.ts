@@ -57,6 +57,7 @@ const STATIC_PAGES = [
     '/tools/cong-so.html',
     '/tools/da-lieu-ai.html',
     '/tools/day-con.html',
+    '/tools/huong-nghiep-tre.html',
     '/tools/kieu-toc-ai.html',
     '/tools/ky-mon.html',
     '/tools/mai-hoa.html',
