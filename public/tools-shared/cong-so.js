@@ -521,6 +521,79 @@
     return '<div class="cs-row"><span>' + esc(k) + '</span><div>' + esc(v) + '</div></div>';
   }
 
+  // ── TẦNG NHÁNH (phần trả tiền) ─────────────────────────────
+  // Chỉ dựng được khi payload đến từ POST — lượt GET tính thử KHÔNG mang
+  // `hoSo.nhanh` (server gỡ bằng `hoSoTinhThu`). Nên hàm này tự trả '' nếu
+  // không có dữ liệu, thay vì dựng khung rỗng trông như hỏng.
+  function nhanhHTML(ho) {
+    var nh = ho && ho.nhanh;
+    if (!nh || !nh.goiY || !nh.goiY.length) return '';
+    var h = [];
+
+    h.push('<div class="cs-sec"><h3>Nhánh nghề hợp với bạn</h3>');
+    h.push(
+      '<p class="cs-note">Ba tầng ở trên nói bạn hợp <b>lĩnh vực</b> nào và ' +
+        'ở <b>quy mô</b> nào. Phần này nói <b>nhánh cụ thể</b> bên trong lĩnh vực đó — ' +
+        'cùng một ngành nhưng mỗi nhánh cần một chất người khác hẳn.</p>'
+    );
+
+    if (nh.moNhat) {
+      h.push(
+        '<div class="cs-warn">Lá số của bạn <b>không chỉ ra một nhánh nào nổi bật</b> ' +
+          'trong lĩnh vực này. Nói thẳng là chưa đủ tín hiệu để chốt — phần dưới chỉ là ' +
+          'hướng tham khảo, đừng đọc như một lời khẳng định.</div>'
+      );
+    }
+    if (nh.lechBac) {
+      h.push(
+        '<div class="cs-warn">Các nhánh dưới đây hợp với <b>chất người</b> của bạn nhưng ' +
+          '<b>chưa khớp bậc chức phận hiện tại</b>. Đọc chúng như HƯỚNG ĐI, không phải chỗ ' +
+          'đứng ngay bây giờ.</div>'
+      );
+    }
+
+    nh.goiY.forEach(function (g, i) {
+      h.push(
+        '<div class="cs-nhanh' + (g.phoThong ? ' cs-nhanh-pt' : '') + '">' +
+          '<div class="cs-nhanh-top">' +
+            '<span class="cs-nhanh-ten">' + (i + 1) + '. ' + esc(g.ten) + '</span>' +
+            // Nhánh phổ thông KHÔNG hiện % — con số ở đó vô nghĩa vì nghề không
+            // đòi một chất người đặc thù nào, bày ra là giả vờ có kết luận.
+            (g.phoThong ? '' : '<span class="cs-nhanh-diem">khớp ' + esc(String(g.diem)) + '%</span>') +
+          '</div>' +
+          '<div class="cs-nhanh-chat">' + esc(g.chat) + '</div>' +
+          (g.vi && g.vi.length
+            ? '<div class="cs-nhanh-vi"><b>Vì sao hợp:</b> ' + g.vi.map(esc).join(' · ') + '</div>'
+            : '') +
+          '<ul class="cs-nganh">' + g.viec.map(function (v) { return '<li>' + esc(v) + '</li>'; }).join('') + '</ul>' +
+          (g.hopBac ? '' : '<div class="cs-nhanh-bac">Nhánh này thường ở bậc khác với bậc chức phận lá số đang chỉ ra.</div>') +
+        '</div>'
+      );
+    });
+
+    if (nh.chatNguoi && nh.chatNguoi.length) {
+      h.push(
+        '<div class="cs-grid">' +
+          row('Chất người nổi bật', nh.chatNguoi.map(function (t) { return t.ten + ' — ' + t.cao; }).join(' · ')) +
+          // ⚠️ Nhãn PHẢI là "nghề không đòi hỏi", KHÔNG được viết thành "bạn
+          // thiếu". Đây là chỗ duy nhất trong tool có thể xúc phạm người dùng
+          // bằng một dòng nhãn, và không test nào bắt được.
+          (nh.neTranh && nh.neTranh.length
+            ? row('Nghề hợp với bạn thường KHÔNG đòi hỏi', nh.neTranh.map(function (t) { return t.ten + ' — ' + t.thap; }).join(' · '))
+            : '') +
+        '</div>'
+      );
+    }
+
+    h.push(
+      '<p class="cs-note">Con số phần trăm là độ <b>khớp giữa chất người và chất việc</b>, ' +
+        '<b>không phải</b> khả năng thành công. Danh sách nghề là quy chiếu của trang cho ' +
+        'bối cảnh Việt Nam; đang làm nghề không có trong danh sách thì đối chiếu theo ' +
+        '<b>chất việc</b>, đừng đọc thành “bạn đang làm sai nghề”.</p></div>'
+    );
+    return h.join('');
+  }
+
   // ── Gọi API ────────────────────────────────────────────────
   function lap(p) {
     var q = new URLSearchParams({
@@ -535,9 +608,40 @@
       .catch(function () { return null; });
   }
 
+  /**
+   * Mở TẦNG NHÁNH — đường TRẢ TIỀN. POST chứ không GET vì lượt này động tới ví.
+   * `slug` PHẢI bắt đầu bằng đúng `cong-so`: `hasRecentToolPayment` lọc
+   * `slug=like.<tool_id>*`, slug ngắn hơn thì lưới đỡ "đã trả tiền mà vẫn ăn
+   * 402" chết im lặng — đã trả giá một lần ở Duyên Nợ.
+   */
+  function moNhanh(p, slug, token) {
+    var head = { 'Content-Type': 'application/json' };
+    if (token) head.Authorization = 'Bearer ' + token;
+    return fetch('/api/cong-so', {
+      method: 'POST',
+      headers: head,
+      body: JSON.stringify({
+        d: p.ngay, m: p.thang, y: p.nam, gio: p.gio,
+        gt: p.gioiTinh === 'nu' ? 'nu' : 'nam',
+        am: p.amLich ? '1' : '0',
+        tt: p.trangThai || 'nhan-vien',
+        slug: slug,
+      }),
+    }).then(function (r) {
+      return r.json().then(function (j) {
+        // Trả cả status để trang phân biệt "chưa trả tiền" (402 → dựng lại
+        // tường) với lỗi thật (500 → báo lỗi). Nuốt hết thành null là người
+        // dùng vừa trả tiền xong lại thấy một câu lỗi chung chung.
+        return { ok: r.ok && j && j.ok, status: r.status, data: j };
+      });
+    });
+  }
+
   window.CongSoTool = {
     lap: lap,
+    moNhanh: moNhanh,
     bangHTML: bangHTML,
+    nhanhHTML: nhanhHTML,
     veToaDoCanvas: veToaDoCanvas,
     veRadarCanvas: veRadarCanvas,
     posterDraw: posterDraw,
