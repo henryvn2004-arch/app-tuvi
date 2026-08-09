@@ -121,6 +121,76 @@ Ba tầng cũ giữ **MIỄN PHÍ** (Công Sở vẫn là tool đầu phễu), t
 
 ---
 
+## ✨ Orb chờ AI + `innerHTML` mỗi giây PHÁ animation (2026-08-09, PR #455)
+
+Henry gửi ảnh app golf: *"cái loading indicator đẹp quá… cục tròn trắng ở giữa
+xong xung quanh viền xanh như khói bay. Có library nào có sẵn ko?"*
+
+### Trả lời câu hỏi: không cần library
+Loại này hay được gọi *AI glow / aurora orb* (Apple Intelligence, Siri orb). Web
+có Magic UI (`BorderBeam`, `ShineBorder`), Aceternity `Glowing Effect`, `ldrs`;
+app thì phần lớn xài **Lottie**. Nhưng cấu tạo chỉ là **2 lớp**: một hình tròn
+đặc ở trên, phía sau một khối gradient bị `filter:blur()` cho xoay/phóng chậm.
+⇒ repo này là vanilla nên **CSS thuần, 0 dependency, 0 byte JS thêm**.
+
+### 🔴 KHÔNG bê nguyên thiết kế của app kia được — nền khác nhau
+Nền khung chờ ảnh là **kem `#EFEBE3`** (`.cdtk-imgph`), không phải video tối ⇒
+mặt cục **trắng** mất hút, chỉ trơ vành khói. Và xanh dương không có trong bảng
+màu site. Nên: mặt cục `--navy` · quầng `--gold` · dấu ✦ `--gold-on-navy`.
+- 🔑 **Cả ba token đều CỐ Ý không khai lại ở dark theme** (luật "token hai vai")
+  ⇒ orb ra y hệt hai theme, đúng vai một dấu thương hiệu — không phải đi cân lại
+  contrast cho từng theme. Cùng lối với ô `.spark` sẵn có của shell.
+
+### 🐞 Hai lỗi CÓ SẴN, cùng một căn nguyên: `paint()` gán lại `innerHTML` MỖI GIÂY
+1. **Mọi `@keyframes` bị reset về đầu mỗi tick.** Trước giờ không ai thấy vì
+   spinner cũ xoay `.8s` — ngắn hơn một nhịp đồng hồ nên reset trùng chu kỳ.
+   Cắm orb (xoay 2,7s) vào là quầng khói giật một nhịp mỗi giây.
+2. **`transition:width .9s` của thanh tiến trình CHƯA BAO GIỜ chạy** — element
+   mới không có width cũ để nội suy ⇒ thanh nhảy giật từng nấc thay vì trườn.
+- Vá: dựng khung **một lần**, mỗi giây chỉ đổi `textContent` + `width`.
+  `render()` của `mount()` cũng chỉ thay ruột hộp bước thay vì cả `el.innerHTML`.
+- 🔑 **Quy ước rút ra: chỗ nào có animation dài hơn nhịp cập nhật thì KHÔNG được
+  dựng lại DOM theo nhịp đó.** Lỗi này ẩn được 2 tháng chỉ vì animation cũ ngắn
+  hơn 1 giây.
+- 🐞 Lỗi thứ ba **do chính bài kiểm bắt**: `orbHtml()` export ra ngoài mà không
+  gọi `ensureStyle()` → ai dùng trên trang chưa mount gì nhận một ô vuông trần,
+  **không có gì báo lỗi**. Hàm export công khai phải tự lo CSS của nó.
+
+### Hợp đồng giữ nguyên
+Trần 96% · quá hẹn đổi lời · `stop()` dọn interval · nhãn qua `textContent`.
+Thêm `{orb:false}` lùi về spinner cũ, `{variant:'a'|'b'|'c'|'d'}` đổi kiểu quầng.
+- **Orb trong `mount()` MẶC ĐỊNH TẮT** — hàm đó chạy trên 19 trang, bật đại trà
+  là đổi giao diện 19 chỗ trong một lượt mà chưa ai nhìn qua. Bật một trang:
+  `mount(id, steps, {orb:true})`.
+
+### Verify
+`tsc` 0 · `lint` 0 lỗi (72 warning pre-existing) · `prettier` sạch ·
+`check:prices`/`check:groups`/`check:nostore` sạch · engine **185 pass**.
+- **53 ca trên MODULE THẬT**, gồm 🪤 **ĐỐI CHỨNG bản git HEAD**: bản cũ không có
+  orb và node thanh tiến trình **bị thay mới mỗi giây** ⇒ hai lỗi có thật.
+- **60 ca trên 3 TRANG THẬT** có gọi `mountWait` × **390px và 1280px**: orb đúng
+  62×62 (CSS trang không bóp méo), mặt cục giữ navy, quầng đang chạy, không tràn
+  khỏi khung chờ, trang không tràn ngang, 0 lỗi JS.
+- `prefers-reduced-motion` → đứng im nhưng **VẪN giữ quầng sáng**.
+- Nhãn chứa `<img onerror>` không chạy mà vẫn hiện nguyên văn · `variant`/`size`
+  rác rơi về mặc định, không chèn được thẻ.
+- 🪤 **Hai ca đỏ đầu đều là lỗi TEST**: (a) vòng gỡ ẩn viết
+  `n.style.display = n.style.display || ''` — gán lại chính giá trị cũ, no-op,
+  nên đo trên cây `display:none` ra **0×0**; (b) bộ đếm lỗi JS ăn cả
+  `Failed to load resource` của lượt mạng do chính mình chặn.
+- Bump `ai-loading-steps.js?v=2→3` — `git diff --numstat` xác nhận **19 file,
+  mỗi file đúng 1 dòng**.
+
+### CÒN LẠI
+- **Chưa nhìn trên máy thật.** Chỗ đáng soi là `filter:blur(13px)` trên điện
+  thoại tầm trung có mượt không; rớt khung hình thì đổi `variant:'b'` (không
+  blur lớn), sửa đúng một chữ.
+- Chỉ đụng `mountWait` (3 trang chờ ảnh). 16 trang dùng `mount` giữ nguyên.
+- Demo 4 biến thể (artifact, không commit vào repo):
+  `claude.ai/code/artifact/cb7a6a6a-3c96-4812-835b-89b158de2ee9`
+
+---
+
 ## 🗺️ Sitemap: `lastmod` đang NÓI DỐI 647 URL mỗi ngày (2026-08-07, PR này)
 
 Henry: *"Bạn tao chuyên gia SEO nói là sitemap mà nhiều URLs quá thì chia nhỏ ra
