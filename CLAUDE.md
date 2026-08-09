@@ -14,13 +14,26 @@ Mỗi tool: lấy **payload THẬT** (chạy chính module `tools-shared/` hoặ
 server) → đưa qua **`buildChatContext` THẬT** → đếm giá trị nào tool tính ra mà
 **không hề xuất hiện** trong prompt rail.
 
-**Sạch (0 thất lạc): 12 tool** — `nap-am` · `kim-lau` · `than-so-hoc` ·
+**Sạch (0 thất lạc): 15 tool** — `nap-am` · `kim-lau` · `than-so-hoc` ·
 `bat-trach` · `hoang-dao` · `ngay-tot` · `luc-nham` · `ngu-hanh-ten` ·
-`kinh-dich` · `mai-hoa` · `sinh-con` · `cong-so`.
+`kinh-dich` · `mai-hoa` · `sinh-con` · `cong-so` · `chon-ngay-tot` ·
+`dat-ten-con` · `dat-ten-dn`.
 - 🪤 Lượt đo đầu tao báo `kim-lau` mất `rows[20]` + `hienTai{}` vì giả định nó
   đi qua `extractGenericContext` (hàm này bỏ IM LẶNG mọi object/array). **Sai** —
   nó có extractor riêng, đo đầu-cuối ra **51/51 lá tới model**. Giả định về
   đường đi của dữ liệu phải KIỂM, không suy từ tên hàm.
+- 🪤 **Lượt đầu tao ghi 3 tool cuối là "chưa dựng được payload — API khác" ⇒
+  cũng SAI, và sai theo kiểu tự bào chữa.** `chon-ngay-tot`/`dat-ten-con`/
+  `dat-ten-dn` không có API khác gì cả — tao truyền nhầm **TÊN KHOÁ** vào
+  `computeChonNgay`/`computeDatTen`/`computeDatTenDn` (chúng đọc `namSinh`/
+  `thangNum`/`namNum`, `ho`/`namCon`/`namBo`/`namMe`, `namChu`/`nganh`) nên
+  hàm trả `null`, và tao đọc `null` thành "không đo được". Truyền đúng shape
+  mà `Shell.setContext` của chính trang gửi lên thì đo được ngay: **19/19 lá
+  tới model, cả ba sạch**. Kiểm thêm tầng màn hình: trang chỉ vẽ đúng mấy thẻ
+  can chi trong payload, không có tầng engine nào bị bỏ lại.
+  🔑 **`null` từ hàm mình tự gọi là dấu hiệu MÌNH gọi sai, không phải dấu hiệu
+  đối tượng không đo được.** Ghi "chưa đo" vào phần CÒN LẠI nghe như một hạn
+  chế khách quan, trong khi thật ra là một lỗi harness chưa sửa.
 - `ky-mon` đủ (extractor duyệt `Object.entries` + xử riêng 3 mảng).
   `xem-tuoi`/`xem-lam-an`/`tuong-hop` nhận trọn lá số và **cố ý tóm tắt** —
   không đo bằng thước "mọi lá phải lọt".
@@ -91,8 +104,9 @@ Engine trả trường nào thì extractor phải đọc trường đó; khoá c
 - **Chưa gọi LLM thật** — đo tới tầng dữ liệu vào prompt, không tới tầng chữ.
 - `check:railfields` mới phủ **Bát Tự**. Tool khác đang sạch nhưng chưa có máy
   canh; mở rộng khi thêm engine mới có extractor hand-pick.
-- `chon-ngay-tot` · `dat-ten-con` · `dat-ten-dn` chưa dựng được payload trong
-  harness (API khác) → **chưa đo**, không phải đã sạch.
+- ~~`chon-ngay-tot`/`dat-ten-con`/`dat-ten-dn` chưa đo~~ → **ĐÃ ĐO, cả ba
+  sạch** (xem bẫy tên khoá ở trên). Lượt rà nay phủ **15/15 tool** dựng được
+  payload; không còn tool nào ở trạng thái "chưa biết".
 - `thanSat` `found:false` (vd *"Không Vong tại Thân, Dậu"*) cố ý không gửi —
   nếu thấy đáng thì mở, đây là quyết định nội dung chứ không phải bug.
 ---
