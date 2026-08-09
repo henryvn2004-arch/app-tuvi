@@ -5,26 +5,36 @@
 
 ---
 
-## 🧪 CI đo BẢN CŨ chứ không đo PR — smoke + E2E sang preview (2026-08-09, PR #463 + PR này)
+## 🧪 CI đo BẢN CŨ chứ không đo PR — cả 3 workflow sang preview (2026-08-09, PR #463 · #466 · PR này)
 
 Henry: *"Vercel smoke test dùng để test gì thế? Sao giờ thiết kế lại skip test
-đó?"* → rồi *"Làm sao để tao mở SSO cho tất cả?"* → *"Ok làm nốt đi"*.
+đó?"* → rồi *"Làm sao để tao mở SSO cho tất cả?"* → *"Ok làm nốt đi"* → *"Xong
+làm tiếp"*.
 
-### 🔴 Căn nguyên chung của cả hai workflow: đo NHẦM BẢN
+### 🔴 Căn nguyên chung của CẢ BA workflow: đo NHẦM BẢN
 | | Trigger cũ | Thực tế đang đo |
 |---|---|---|
 | `smoke-prod.yml` | `deployment_status` nhưng **chặn preview** | không đo gì trên PR (check hiện **"skipped"**) |
 | `playwright.yml` | `push`/`pull_request` | **prod đang chạy**, tức bản PR chưa đụng tới |
+| `lighthouse.yml` | `pull_request` | **4 URL prod cứng** trong `lighthouserc.json` |
 
 - 🔑 **Skip TRÔNG GIỐNG PASS.** Đếm "7 check xanh" trên PR là sai — smoke nằm
   trong đó ở trạng thái skip. Prod chỉ được kiểm SAU khi merge.
 - 🔑 **`push` bắn TRƯỚC khi bản deploy tồn tại** ⇒ E2E 16 spec (có đăng nhập)
   đi đo bản cũ. Xanh hay đỏ đều không nói gì về thay đổi trong PR.
-- Nay **cả hai** dùng chung một khuôn: chạy theo `deployment_status`, production
+- 🪤 **`lighthouse.yml` còn tệ hơn: chú thích trong file MÔ TẢ một hành vi
+  KHÔNG TỒN TẠI** — nó ghi *"trên PR có thể override sang Vercel preview URL"*
+  trong khi đường override duy nhất là `workflow_dispatch`. Đọc chú thích mà
+  tin là xong thì không bao giờ đi tìm.
+- Nay **cả ba** dùng chung một khuôn: chạy theo `deployment_status`, production
   đo domain thật (giữ DNS + redirect apex→www + CDN trong phạm vi đo), mọi
   deploy khác đo `target_url` của chính lượt đó. Nhờ vậy URL preview của nhánh
   `dev` **hết phải chép cứng** trong `playwright.yml` — chuỗi đó sẽ mục mà không
   ai hay.
+- **Danh sách trang của Lighthouse vẫn nằm DUY NHẤT ở `lighthouserc.json`**;
+  `scripts/lhci-preview-urls.mjs` đọc thẳng file đó rồi ghép sang host preview.
+  Chép danh sách sang workflow là hai bản trôi khỏi nhau rồi âm thầm đo thiếu
+  trang.
 
 ### 🔓 Mở cửa SSO cho CI mà KHÔNG mở preview cho công chúng
 Dùng **Protection Bypass for Automation** (Vercel → Settings → Deployment
@@ -129,6 +139,12 @@ Actions, tên **`VERCEL_BYPASS_SECRET`**. Xoay secret là một cú bấm, khôn
   chất này khi đọc một PR thiếu check.
 - Phạm vi lịch sử tao soi được chỉ từ **04/08** trở lại (giới hạn phân trang
   API); chưa xác minh mọi lượt đỏ trước đó cùng một nguyên nhân.
+- ⚠️ **Ngưỡng Lighthouse giờ chấm trên PREVIEW, chưa ai hiệu chỉnh lại.** 4 trang
+  đo đều là HTML tĩnh trong `public/` nên đi CDN như prod, nhưng lượt đầu của
+  một deployment mới thì edge chưa ấm. `numberOfRuns:3` đỡ được phần nào; nếu
+  thấy `categories:performance` (error, minScore 0,75) hay LCP 2500ms đỏ xen kẽ
+  thì đó là nhịp edge chứ chưa chắc là hồi quy — soi vài lượt rồi mới chỉnh
+  ngưỡng, đừng nới ngay.
 ## 🔐 Rail đòi ĐĂNG NHẬP với người ĐANG đăng nhập — đồng hồ ví chốt quá sớm (2026-08-09, PR sau #465)
 
 Henry: *"tao thử cái tool chạy ok. Xong qua rail hỏi thì nó lại báo tao phải đăng
