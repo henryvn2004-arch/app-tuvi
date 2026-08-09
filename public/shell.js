@@ -1205,7 +1205,7 @@
     var s = document.getElementById(id);
     if (!s) {
       s = document.createElement('script');
-      s.id = id; s.src = '/tools-shared/ai-loading-steps.js?v=4'; s.async = true;
+      s.id = id; s.src = '/tools-shared/ai-loading-steps.js?v=5'; s.async = true;
       (document.head || document.documentElement).appendChild(s);
     }
     s.addEventListener('load', function () {

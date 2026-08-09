@@ -158,7 +158,7 @@ window.SHELL_INTRO={key:'luan-giai',title:'Luận giải Tử Vi',desc:'Lập l�
 <script src="/tuvi-paywall.js?v=17"></script>
   <script src="/nav.js?v=22" data-icons-only></script>
 <script src="/shell.js?v=66"></script>
-<script src="/tools-shared/ai-loading-steps.js?v=4"></script>
+<script src="/tools-shared/ai-loading-steps.js?v=5"></script>
 <script>
 // ── Form nhập (dùng chung TuviForm — có "Sinh ở ngoài Việt Nam?" + parity giờ
 // sinh lịch sử với standalone) ──
@@ -303,6 +303,9 @@ function toggleMini(){
 // ══════════════════════════════════════════════════════════════════════
 var _astrolabe=null, _hoTen='', _ngay=0, _thang=0, _nam=0, _gioitinh='nam', _namXem=0, _laSoText=null;
 var _pendingSlug=null, _currentPhan=0, _luanGiaiStore={};
+// ETA tự hiệu chỉnh: đo nhịp NGAY TRONG phiên này thay vì hứa theo một con
+// số chép cứng (số chép cứng nói dối vào đúng ngày đổi model).
+var _pace=(window.AiLoadingSteps&&AiLoadingSteps.pacer)?AiLoadingSteps.pacer():null;
 var SB_URL_LG='https://dciwkfdqhhddeymlisey.supabase.co';
 var SB_ANON_LG='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRjaXdrZmRxaGhkZGV5bWxpc2V5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyMzQ2MzksImV4cCI6MjA4ODgxMDYzOX0._3aXoe0hO-46J1gASUiNv__tWjSzLZFTL0M3-47L26I';
 TuviPaywall.init({product:'laso'});
@@ -446,6 +449,7 @@ async function _startLuanGiaiAI(){
   document.getElementById('lgUnlock').style.display='none';
   document.getElementById('lgProgress').style.display='block';
   _currentPhan=0; _luanGiaiStore={};
+  _pace&&_pace.reset();
   await _loadNextPhanAI();
 }
 async function _loadNextPhanAI(){
@@ -456,7 +460,12 @@ async function _loadNextPhanAI(){
   }
   _currentPhan++;
   var p=_currentPhan;
-  document.getElementById('lgProgress').textContent='Đang luận giải phần '+p+' / '+LuanGiaiCore.TONG_PHAN+'...';
+  // Còn LẠI tính từ phần này trở đi. Chưa đủ mẫu thì remainText trả '' —
+  // im lặng, không hứa.
+  var _eta=_pace?_pace.remainText(LuanGiaiCore.TONG_PHAN-p+1):'';
+  document.getElementById('lgProgress').textContent=
+    'Đang luận giải phần '+p+' / '+LuanGiaiCore.TONG_PHAN+(_eta?' · '+_eta:'...');
+  _pace&&_pace.begin();
   var box=document.getElementById('claude-content-'+p);
   // Chờ MỘT CỤC (không stream) và tốn hơn 10 giây ⇒ orb, theo luật ở đầu
   // ai-loading-steps.js. Trước đây chỗ này chỉ có một dòng chữ TĨNH nên người
@@ -468,7 +477,8 @@ async function _loadNextPhanAI(){
     box.style.display='block';
     box.innerHTML='<div class="phan-empty">Đang luận giải…</div>';
     if(window.AiLoadingSteps&&AiLoadingSteps.mountWait){
-      w=AiLoadingSteps.mountWait(box,{label:'Đang luận giải phần '+p+'…',expectSec:0});
+      w=AiLoadingSteps.mountWait(box,{label:'Đang luận giải phần '+p+'…',
+        expectSec:(_pace&&_pace.perPartSec())||0,expectText:(_pace&&_pace.perPartText())||''});
       w.start();
     }
   }
@@ -493,6 +503,7 @@ async function _loadNextPhanAI(){
       return;
     }
     _luanGiaiStore[p]=data.luanGiai;
+    _pace&&_pace.end();   // chỉ ghi nhịp ở nhánh THÀNH CÔNG
     doneWait();
     if(box)box.innerHTML=renderMarkdown(data.luanGiai);
   }catch(e){

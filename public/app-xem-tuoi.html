@@ -155,7 +155,7 @@
 <script src="/tuvi-paywall.js?v=17"></script>
   <script src="/nav.js?v=22" data-icons-only></script>
 <script src="/shell.js?v=66"></script>
-<script src="/tools-shared/ai-loading-steps.js?v=4"></script>
+<script src="/tools-shared/ai-loading-steps.js?v=5"></script>
 <script>
 // ── MODE: 1 trang phục vụ 3 route — /app/xem-tuoi (vợ chồng), /app/xem-lam-an
 // (hợp tác làm ăn), /app/tuong-hop (hai người bất kỳ). Cùng bộ máy calcTuongHop;
@@ -402,6 +402,7 @@ function buildSlug(result,product){
 }
 
 var _pendingSlug=null, _currentPhan=-1, _xemTuoiStore={}, _compatResult=null, _compatNameA='', _compatNameB='';
+var _xtPace=(window.AiLoadingSteps&&AiLoadingSteps.pacer)?AiLoadingSteps.pacer():null;
 
 // Xây prompt cho 1 phần (idx 0=Tổng Quan, 1-8=từng chiều) — port nguyên từ
 // xem-tuoi.html:luanGiaiSection, dùng chung cho cả xem-tuoi/xem-lam-an.
@@ -503,6 +504,7 @@ async function _startXemTuoiAI(){
   document.getElementById('xtUnlock').style.display='none';
   document.getElementById('xtProgress').style.display='block';
   _currentPhan=-1; _xemTuoiStore={};
+  _xtPace&&_xtPace.reset();
   await _loadNextPhanAI();
 }
 async function _loadNextPhanAI(){
@@ -514,7 +516,11 @@ async function _loadNextPhanAI(){
   _currentPhan++;
   var idx=_currentPhan;
   var m=idx===0?null:_compatResult.items[idx-1];
-  document.getElementById('xtProgress').textContent='Đang luận giải phần '+(idx+1)+' / 9...';
+  // ETA tự hiệu chỉnh — đo nhịp ngay trong phiên, không hứa theo số chép cứng.
+  var _eta=_xtPace?_xtPace.remainText(9-idx):'';
+  document.getElementById('xtProgress').textContent=
+    'Đang luận giải phần '+(idx+1)+' / 9'+(_eta?' · '+_eta:'...');
+  _xtPace&&_xtPace.begin();
   var box=document.getElementById('claude-content-'+idx);
   // Chờ MỘT CỤC ≥10 giây ⇒ orb (luật ở đầu ai-loading-steps.js). expectSec:0 vì
   // chưa đo được thời lượng một phần — chỉ đếm giây, không hứa bao giờ xong.
@@ -523,7 +529,8 @@ async function _loadNextPhanAI(){
     box.style.display='block';
     box.innerHTML='<div class="phan-empty">Đang luận giải…</div>';
     if(window.AiLoadingSteps&&AiLoadingSteps.mountWait){
-      w=AiLoadingSteps.mountWait(box,{label:'Đang luận giải phần '+(idx+1)+'…',expectSec:0});
+      w=AiLoadingSteps.mountWait(box,{label:'Đang luận giải phần '+(idx+1)+'…',
+        expectSec:(_xtPace&&_xtPace.perPartSec())||0,expectText:(_xtPace&&_xtPace.perPartText())||''});
       w.start();
     }
   }
@@ -543,6 +550,7 @@ async function _loadNextPhanAI(){
     var data=await resp.json();
     var text=data.luanGiai||'';
     _xemTuoiStore[idx]=text;
+    _xtPace&&_xtPace.end();   // chỉ ghi nhịp ở nhánh THÀNH CÔNG
     doneWait();
     if(box)box.innerHTML=text.split('\n\n').filter(Boolean).map(function(p){return '<p>'+p+'</p>';}).join('');
   }catch(e){
