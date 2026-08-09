@@ -5,6 +5,128 @@
 
 ---
 
+## 🔗 Luận Giải 24 phần bỏ qua data engine — MỐC SECTION HỎNG, bộ cắt CÂM (2026-08-09, PR này)
+
+Henry gửi một lá số thật: *"phần luận giải hầu như ko đề cập gì đến các phần ở
+trên: SCORING ĐẠI VẬN — LUẬN ĐOÁN VẬN HẠN… Có vẻ dữ liệu data chạy từ tuvi-ansao
+engine hiện ra nhưng ko dc feed vào lúc luận giải"*.
+
+### 🔴 Căn nguyên: HAI bản `formatLaSoV2`, bộ cắt neo vào bản CŨ
+| Trang | Nguồn `laSoText` | Mốc khối đại vận |
+|---|---|---|
+| `/luan-giai.html` | `formatLaSoV2` **inline** trong file | `=== 9 ĐẠI VẬN ===` |
+| **`/app/luan-giai`** (Henry dùng) | `public/tuvi-laso-format.js` | `=== 9 ĐẠI VẬN (lịch trình THỜI GIAN — …) ===` |
+
+`trimLaSo()` dò `includes('=== 9 ĐẠI VẬN ===')` → trên trang shell trả **-1**.
+Mà `findIndex` trả -1 là giá trị HỢP LỆ ⇒ **không ném, không log**, hàm lặng lẽ
+`return text`. Đo trên lá số thật (22.396 ký tự):
+
+| phần | trước | sau |
+|---|---:|---:|
+| 1 · 2 | 100% | 49% |
+| 3–13 (từng cung) | 15% | 13% |
+| **14 · 15–23 · 24 (đại vận)** | **100% — không cắt gì** | **16%** |
+
+Phần 17 (ĐV3) lẽ ra 3,5K ký tự → thực nhận 22,4K, **pha loãng 6,3 lần**: model
+phải mò dòng `ĐV3:` giữa 236 dòng, trong đó **36 dòng [LUẬN ĐOÁN]/[CẢNH BÁO] của
+cả 9 đại vận** mà chỉ 4 dòng là của ĐV3. 🔑 **Data CÓ feed — feed nguyên cục.**
+
+### 🔴 Ba lỗi kéo theo, cùng một họ "neo vào thứ không còn tồn tại"
+1. **Xương sống system prompt trỏ vào khối ĐÃ BỊ XOÁ.** Bản shared cố ý gỡ
+   `=== ĐIỂM ĐÁNH GIÁ ===` (điểm 6 chiều/cung, ghi lý do tại chỗ) nhưng prompt
+   vẫn còn nguyên khối *"PHÁN QUYẾT BẮT BUỘC — NEO VÀO ĐIỂM SỐ… mở đầu bằng câu
+   phán quyết neo vào con số đó"* + phần 1/2/3–13 đều bắt bám `[Cung] Tổng .../10`.
+   ⇒ 13/24 phần bị lệnh bám vào con số **không có** → model luận chay hoặc **bịa
+   điểm**. Nay neo vào nhãn `Luận sao` + cách cục + độ sáng sao, và CẤM bịa
+   "điểm cung X/10" (chỉ ĐẠI VẬN mới có điểm/10 thật).
+2. **Panel màn hình và prompt ăn hai nguồn khác nhau.** `buildPreGenHtml()`
+   (`luan-giai-core.js`) vẽ thẳng từ `_astrolabe`, KHÔNG qua `laSoText`. Ba mục
+   người đọc THẤY mà model **chưa bao giờ nhận**: *Sao tam phương tứ chính* của
+   cung ĐV · *Bộ Mệnh → Bộ ĐV* · *Tuần/Triệt án ngữ*. Prompt lại bảo "xét tam
+   phương" ⇒ model tự suy lại từ khối 12 cung — đúng câu trong ảnh Henry gửi.
+3. **Cung ĐỨNG CUỐI nuốt đầu khối đại vận**: mốc hỏng → `cutEnd` chạy tới tận
+   cách cục, nhánh không tìm được mốc kết thúc lấy **mù 30 dòng**. Đo được:
+   `[Thiên Di]` dính. Nay lấy tới hết khối 12 CUNG thay vì đếm 30.
+
+### Cách vá — MỘT nguồn, và mốc là HỢP ĐỒNG
+- **`buildDaiVanLines(ls, i, opts)`** trong `tuvi-laso-format.js` là nguồn DUY
+  NHẤT dựng khối đại vận cho **cả ba** đường: luận giải 24 phần · `lasoTextFull`
+  (server) · **rail chat**. Thêm tam phương tứ chính / Tuần-Triệt / Bộ Mệnh→Bộ ĐV
+  / cách cục theo cung ĐV.
+- **`luan-giai.html` GỠ HẲN bản inline** (182 dòng) → nạp `/tuvi-laso-format.js`.
+  Phần riêng của trang (`[TỔ HỢP SAO]`, nguồn `cach_cuc_all.json` nạp async)
+  truyền vào qua **hook `combosForCung`**, không để module đọc global.
+- **Mốc phải đứng MỘT MÌNH**; ghi chú xuống dòng riêng. `MARKERS` export ra để
+  bộ dò đọc chính nó.
+- Bộ cắt đổi sang dò **TIỀN TỐ** + **`console.error` khi hụt mốc** — hết im lặng.
+- 🪤 **Lỗi do CHÍNH tao vừa viết, chỉ lộ khi đo:** `[CÁCH CỤC LIÊN QUAN]` lấy cả
+  cách cục TỔNG QUÁT (`cung===''`) → panel chỉ vẽ 1 đại vận nên không sao, nhưng
+  formatter in liền 9 đại vận ⇒ **lặp đúng 9 lần**, phình laSoText và pha loãng
+  chính thứ khối này sinh ra để chống. Bỏ; chúng vẫn tới model qua `ccBlock`.
+
+### 🔌 Rail: từ 0/5 lên 5/5 trường vận hạn
+`extractLasoContext` là bản thứ BA — danh sách 9 ĐV chỉ có `cung=/sao=/điểm=`.
+Nay gọi CHÍNH `buildDaiVanLines` qua `daiVanLines()` (`lib/engine/laso.ts`,
+**fail-soft**: engine nạp hụt → trả `[]`, rơi về bản gọn cũ; rail là đường nóng).
+
+| câu hỏi | cũ | mới | trường vận hạn |
+|---|---:|---:|---|
+| đại vận hiện tại | 4.664 | 14.822 | **0/5 → 5/5** |
+| "đại vận 5" (không nêu năm) | 4.664 | 14.822 | **0/5 → 5/5** |
+| theo năm | 6.501 | 17.661 | **0/5 → 5/5** |
+| **ĐỐI CHỨNG: hỏi bản chất cung** | 3.848 | 3.848 | **TRÙNG KHÍT** |
+
+- Ca đối chứng cuối là bất biến quan trọng nhất: luật *"TÁCH BẠCH CUNG vs ĐẠI
+  VẬN"* còn nguyên — hỏi bản chất một cung vẫn KHÔNG kèm đại vận, byte-identical.
+- Bản `compact` (rail liệt kê cả 9 ĐV) **bỏ `[VẬN HẠN LUẬN]`** — patterns thô
+  (*"[Thiên Việt] Sét đánh."*) và **panel cũng không in nó**; giữ lại chỉ tốn
+  ~2,2K ký tự context cho thứ người đọc không thấy.
+
+### 🧷 `scripts/check-laso-markers.mjs` (bộ dò thứ 12) — 6 luật
+Mốc nguyên vẹn · mốc đứng một mình · mọi chuỗi server đi dò phải khớp output ·
+mọi `=== X ===` prompt nhắc phải TỒN TẠI · khối ĐV còn đủ trường · **chỉ MỘT bản
+`formatLaSoV2` trong `public/`**.
+- 🪤 **Bản đầu quét thẳng mã nguồn → kêu oan 5 ca**: toán tử JS `phan === 14 ||
+  phan ===` ra một "mốc", dải `// =====` trong chú thích cũng vậy. Phải quét
+  **bên trong CHUỖI**. Bộ dò kêu oan là bộ dò bị tắt đi.
+- **Red-team 4/4 đỏ đúng** (nối ghi chú vào mốc · prompt trỏ khối đã chết · gỡ
+  tam phương · dựng bản formatLaSoV2 thứ hai), đối chứng khôi phục **xanh**, 0
+  file rác. Lượt chạy đầu bắt được **lỗi thật**: `=== ĐIỂM ĐÁNH GIÁ ===` còn sót
+  trong system prompt.
+
+### Verify
+`tsc` 0 · `lint` 0 lỗi (72 warning pre-existing) · `prettier` quét cả cây sạch ·
+**12/12 bộ dò sạch** · engine **185 pass** · `node --check` formatter + 8 khối
+script nội tuyến.
+- **505 assertion trên `trimLaSo` TRÍCH TỪ NGUỒN THẬT** (5 lá số × 24 phần):
+  phần 15–23 ra **đúng MỘT** khối ĐV và đúng cái đang luận · có Scoring · giữ
+  khối cách cục · phần 3–13 đúng cung, **0 lẫn khối đại vận**, 0 lẫn cung khác ·
+  phần 14/24 đủ 9 ĐV · phần 1–2 không lẫn đại vận.
+- 🪤 **ĐỐI CHỨNG `origin/main` bằng `git worktree`: 109/505 đỏ**, phần đại vận
+  **100% lá số** (không cắt gì) ⇒ lỗi có thật, bài kiểm bắt được.
+- **Playwright trên 2 TRANG THẬT**: `luan-giai.html` và `app-luan-giai.html` nay
+  dựng laSoText **TRÙNG KHÍT** (bỏ 3 dòng hook riêng của standalone) · đủ mốc +
+  trường mới · `buildDaiVanLines` có mặt · **0 lỗi JS**.
+- Harness đều **assert bản dựng mang code mới** trước khi đo (bài học "tsc từ
+  chối → `|| true` nuốt → đo trên bản CŨ").
+- Bump `tuvi-laso-format.js?v=2` (3 trang). **Không bump** trang HTML khác —
+  `max-age=0, must-revalidate` nên tới người dùng ngay.
+
+### CÒN LẠI
+- **Chưa gọi LLM thật lượt nào** — verify dừng ở tầng dữ liệu vào prompt (kích
+  thước, đúng khối, đủ trường) và tầng render. Chất lượng CHỮ sau khi vá phải
+  Henry chạy một lá số trên prod rồi đọc mới biết.
+- Rail tốn thêm ~10K ký tự context **cho câu hỏi vận hạn** (câu hỏi về cung
+  không đổi một byte). Đường `laso` đang route sang Gemini nên ~37đ/lượt; nếu đổi
+  về Anthropic thì cân lại — hạ bằng cách bỏ `[CÁCH CỤC LIÊN QUAN]` khỏi `compact`.
+- `luan-giai.html` **mất `=== ĐIỂM ĐÁNH GIÁ ===` + cột `Điểm:` từng cung** khi
+  gộp về bản shared. CỐ Ý — bản shared đã gỡ chúng có lý do ghi tại chỗ, và
+  prompt nay không còn trỏ vào nữa.
+- Bộ dò chỉ canh `public/`. Nếu sau này có nơi thứ hai dựng laSoText bằng TS
+  (server) thì phải mở rộng luật 6.
+
+---
+
 ## 🧭 Tool MỚI: Hướng Nghiệp Sớm Cho Con (2026-08-09, PR này)
 
 Henry: *"Sau đó làm 1 tool mới cho trẻ em - Định hướng nghề nghiệp, cũng dựa

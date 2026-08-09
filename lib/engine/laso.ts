@@ -71,6 +71,7 @@ let engineCache: {
   convertDuongToAm: (...a: unknown[]) => unknown;
   anSaoLaSo: (...a: unknown[]) => unknown;
   formatLaSoV2: (...a: unknown[]) => unknown;
+  buildDaiVanLines: (...a: unknown[]) => unknown;
 } | null = null;
 
 function loadEngine() {
@@ -85,7 +86,8 @@ function loadEngine() {
   engineCache = (new Function(
     'window',
     'globalThis',
-    code + '\n' + formatCode + '\nreturn{convertDuongToAm,anSaoLaSo,formatLaSoV2:window.formatLaSoV2};',
+    code + '\n' + formatCode +
+      '\nreturn{convertDuongToAm,anSaoLaSo,formatLaSoV2:window.formatLaSoV2,buildDaiVanLines:window.buildDaiVanLines};',
   ))(g, g) as typeof engineCache;
   return engineCache!;
 }
@@ -174,6 +176,30 @@ export function computeLaso(birth: BirthParams, namXem?: number): ComputeLasoRes
 export function formatLaSoV2(ls: Laso): string {
   const { formatLaSoV2: fn } = loadEngine();
   return String((fn as (o: unknown) => unknown)(ls) || '');
+}
+
+/**
+ * Khối text của MỘT đại vận (0-based) — CHÍNH hàm `buildDaiVanLines` mà
+ * `formatLaSoV2` dùng, không phải bản chép lại. Rail (`lib/agent/prompts.ts`)
+ * gọi cái này để nói cùng một thứ với trang luận giải.
+ *
+ * Trước đây rail tự dựng một dòng gọn `ĐVn: … sao=… điểm=…` → thiếu hẳn
+ * [LUẬN ĐOÁN]/[CẢNH BÁO]/[TAM PHƯƠNG TỨ CHÍNH]/Tuần-Triệt, nên hỏi rail về một
+ * giai đoạn thì nó luận chay theo tên chính tinh.
+ *
+ * FAIL-SOFT: engine nạp hụt → trả `[]`, chỗ gọi giữ nguyên bản gọn cũ. Rail là
+ * đường nóng, chết vì đọc file là đổi một bản luận nhạt lấy một lượt chat hỏng.
+ */
+export function daiVanLines(ls: Laso, index: number, opts?: { compact?: boolean }): string[] {
+  try {
+    const { buildDaiVanLines: fn } = loadEngine();
+    if (typeof fn !== 'function') return [];
+    const out = (fn as (a: unknown, b: number, c: unknown) => unknown)(ls, index, opts || {});
+    return Array.isArray(out) ? (out as string[]) : [];
+  } catch (e) {
+    console.error('[laso] daiVanLines lỗi — rail rơi về bản gọn:', e instanceof Error ? e.message : e);
+    return [];
+  }
 }
 
 // ── Format context lá số cho LLM (đầy đủ 12 cung) ───────────

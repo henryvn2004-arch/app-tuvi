@@ -13,7 +13,7 @@
 // ============================================================
 
 import { buildTools, TOOLS_INSTRUCTION } from "@/lib/agent/tools";
-import { LASO_AUTHORITY_RULE } from "@/lib/engine/laso";
+import { LASO_AUTHORITY_RULE, daiVanLines, type Laso } from "@/lib/engine/laso";
 import { currentNamXem } from "@/lib/engine/namxem";
 import { matchVanHanCombos, formatComboLines, type LayerCung } from "@/lib/agent/vanHanCombos";
 
@@ -913,15 +913,42 @@ export function extractLasoContext(lasoData: any, question: string, opts?: { ful
   // Đại vận CHỈ đưa vào khi câu hỏi thuộc về THỜI GIAN/vận hạn (relevant có
   // __daiVan__). Hỏi bản chất một cung → KHÔNG kèm đại vận, để luận cung sạch
   // (đại vận chỉ mượn cung đứng, không thuộc bản chất cung).
+  // Chỉ số 0-based của một đại vận trong `daiVans` — cần để lấy khối chi tiết
+  // từ CHÍNH hàm dựng của trang luận giải (không chép lại luật ở đây).
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const dvIndexOf = (dv: any): number =>
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    ((lasoData.daiVans as any[]) || []).findIndex((d: any) => d === dv || (d?.cungIdx === dv?.cungIdx && d?.tuoiStart === dv?.tuoiStart));
+
+  // Khối ĐẦY ĐỦ cho MỘT đại vận: scoring TT/ĐL/NH, tam phương tứ chính, Tuần/
+  // Triệt, cách cục liên quan, [LUẬN ĐOÁN]/[CẢNH BÁO]. Đây là phần rail trước
+  // đây KHÔNG hề có → hỏi "giai đoạn này thế nào" thì nó luận chay theo chính
+  // tinh, lệch hẳn với bản luận giải 24 phần nói về cùng đại vận đó.
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const dvDetail = (dv: any): string => {
+    const i = dvIndexOf(dv);
+    if (i < 0) return '';
+    const ls2 = lasoData as Laso;
+    const lines = daiVanLines(ls2, i);
+    return lines.length ? lines.join('\n') + '\n' : '';
+  };
+
   if ((full || relevant.has('__daiVan__')) && lasoData.daiVanHienTai) {
     const dv = lasoData.daiVanHienTai;
     const dvCung = palaces[dv.cungIdx] || {};
+    const detail = dvDetail(dv);
     ctx += '\nĐại Vận hiện tại: ' + (dv.diaChi||'') + ' (' + (dv.tuoiStart||'') + '–' + (dv.tuoiEnd||'') + ' tuổi)';
     if (dvCung.cungName) ctx += ' — Cung ' + dvCung.cungName;
-    const dvStars = (dvCung.tuChinhStars||dvCung.majorStars||[]).map(starName).filter(Boolean);
-    if (dvStars.length) ctx += ' — Sao (tứ chính): ' + dvStars.join(', ');
-    if (dv.scoring?.tong != null) ctx += ' — Điểm vận: ' + dv.scoring.tong + '/10 ' + (dv.scoring.flag||'');
-    ctx += '\n(Điểm vận trên là điểm theo THỜI GIAN của giai đoạn này — KHÔNG phải điểm cung; chỉ dùng khi luận vận hạn, không dùng để chấm bản chất cung.)\n';
+    ctx += '\n';
+    if (detail) {
+      ctx += detail;
+    } else {
+      // Đường lùi khi engine nạp hụt — giữ nguyên bản gọn cũ, không để trống.
+      const dvStars = (dvCung.tuChinhStars||dvCung.majorStars||[]).map(starName).filter(Boolean);
+      if (dvStars.length) ctx += 'Sao (tứ chính): ' + dvStars.join(', ') + '\n';
+      if (dv.scoring?.tong != null) ctx += 'Điểm vận: ' + dv.scoring.tong + '/10 ' + (dv.scoring.flag||'') + '\n';
+    }
+    ctx += '(Điểm vận trên là điểm theo THỜI GIAN của giai đoạn này — KHÔNG phải điểm cung; chỉ dùng khi luận vận hạn, không dùng để chấm bản chất cung.)\n';
     ctx += dvComboLines(dvCung);
   }
 
@@ -935,12 +962,17 @@ export function extractLasoContext(lasoData: any, question: string, opts?: { ful
     if (dvForYear) {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const dvP: any = palaces[dvForYear.cungIdx] || {};
-      const dvStars = ((dvP.tuChinhStars || dvP.majorStars || []) as string[]).map(starName).filter(Boolean);
       ctx += `\nNăm ${queriedYear} (tuổi âm ${ageInYear}): thuộc Đại Vận ${dvForYear.diaChi} (${dvForYear.tuoiStart}–${dvForYear.tuoiEnd} tuổi)`;
       if (dvP.cungName) ctx += ` — Cung ${dvP.cungName}`;
-      if (dvStars.length) ctx += ` — Sao: ${dvStars.join(', ')}`;
-      if (dvForYear.scoring?.tong != null) ctx += ` — Điểm: ${dvForYear.scoring.tong}/10`;
       ctx += '\n';
+      const detailY = dvDetail(dvForYear);
+      if (detailY) {
+        ctx += detailY;
+      } else {
+        const dvStars = ((dvP.tuChinhStars || dvP.majorStars || []) as string[]).map(starName).filter(Boolean);
+        if (dvStars.length) ctx += `Sao: ${dvStars.join(', ')}\n`;
+        if (dvForYear.scoring?.tong != null) ctx += `Điểm: ${dvForYear.scoring.tong}/10\n`;
+      }
       ctx += dvComboLines(dvP);
       ctx += `(Tiểu vận năm ${queriedYear} không có trong dữ liệu — chỉ luận từ đại vận)\n`;
     } else {
@@ -1010,6 +1042,12 @@ export function extractLasoContext(lasoData: any, question: string, opts?: { ful
     ctx += '\n=== ĐẠI VẬN (lịch trình THỜI GIAN — điểm dưới đây là điểm VẬN của giai đoạn 10 năm; CHỈ dùng khi luận năm/vận hạn. TUYỆT ĐỐI KHÔNG dùng điểm đại vận để chấm hay làm điểm yếu của một CUNG — đại vận chỉ MƯỢN cung làm chỗ đứng, không đổi bản chất cung) ===\n';
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     lasoData.daiVans.slice(0, 9).forEach((dv: any, i: number) => {
+      // Bản `compact` — CÙNG hàm với trang luận giải, chỉ bớt liệt kê sao phụ.
+      // Vẫn giữ [LUẬN ĐOÁN]/[CẢNH BÁO]/tam phương: hỏi "đại vận 5 của tôi thế
+      // nào" KHÔNG khớp mẫu năm nên chỉ chạm tới danh sách này — trước đây nó
+      // chỉ có cung+sao+điểm, model buộc phải luận chay.
+      const lines = daiVanLines(lasoData as Laso, i, { compact: true });
+      if (lines.length) { ctx += lines.join('\n') + '\n'; return; }
       const dvP = palaces[dv.cungIdx] || {};
       const stars = (dvP.tuChinhStars||dvP.majorStars||[]).map(starName).filter(Boolean);
       ctx += 'ĐV' + (i+1) + ': ' + (dv.diaChi||'') + ' (' + dv.tuoiStart + '–' + dv.tuoiEnd + 't) cung=' + (dvP.cungName||'?');
