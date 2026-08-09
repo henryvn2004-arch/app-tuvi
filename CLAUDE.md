@@ -344,6 +344,130 @@ trên cả hai (quét 336 lá số).
   Lượng, cùng đối tượng) để biết câu hỏi nào bán tốt hơn.
 ---
 
+## 🧪 CI đo BẢN CŨ chứ không đo PR — smoke + E2E sang preview (2026-08-09, PR #463 + PR này)
+
+Henry: *"Vercel smoke test dùng để test gì thế? Sao giờ thiết kế lại skip test
+đó?"* → rồi *"Làm sao để tao mở SSO cho tất cả?"* → *"Ok làm nốt đi"*.
+
+### 🔴 Căn nguyên chung của cả hai workflow: đo NHẦM BẢN
+| | Trigger cũ | Thực tế đang đo |
+|---|---|---|
+| `smoke-prod.yml` | `deployment_status` nhưng **chặn preview** | không đo gì trên PR (check hiện **"skipped"**) |
+| `playwright.yml` | `push`/`pull_request` | **prod đang chạy**, tức bản PR chưa đụng tới |
+
+- 🔑 **Skip TRÔNG GIỐNG PASS.** Đếm "7 check xanh" trên PR là sai — smoke nằm
+  trong đó ở trạng thái skip. Prod chỉ được kiểm SAU khi merge.
+- 🔑 **`push` bắn TRƯỚC khi bản deploy tồn tại** ⇒ E2E 16 spec (có đăng nhập)
+  đi đo bản cũ. Xanh hay đỏ đều không nói gì về thay đổi trong PR.
+- Nay **cả hai** dùng chung một khuôn: chạy theo `deployment_status`, production
+  đo domain thật (giữ DNS + redirect apex→www + CDN trong phạm vi đo), mọi
+  deploy khác đo `target_url` của chính lượt đó. Nhờ vậy URL preview của nhánh
+  `dev` **hết phải chép cứng** trong `playwright.yml` — chuỗi đó sẽ mục mà không
+  ai hay.
+
+### 🔓 Mở cửa SSO cho CI mà KHÔNG mở preview cho công chúng
+Dùng **Protection Bypass for Automation** (Vercel → Settings → Deployment
+Protection), secret để trong GitHub Actions tên `VERCEL_BYPASS_SECRET`.
+- **smoke** gửi kèm header `x-vercel-protection-bypass` + `x-vercel-set-bypass-cookie`.
+- **E2E dùng COOKIE, KHÔNG dùng header** — `tests/auth.setup.ts` gắn vé vào
+  QUERY ở đúng lượt điều hướng đầu, server trả `_vercel_jwt`, cookie đó nằm
+  trong `storageState` nên mọi test sau qua cửa. Lý do bắt buộc phải khác smoke:
+  xem bẫy số 4 bên dưới.
+- ⛔ **KHÔNG tắt Vercel Authentication.** Preview **dùng chung env với
+  production** (cùng `SUPABASE_SERVICE_KEY`, cùng key model, cùng key thanh
+  toán) và URL preview nằm ngay trên comment của PR ⇒ mở công khai là ai cũng
+  gọi được API ghi thẳng DB prod và đốt tiền model thật.
+- ⚠️ **Vì thế việc này CHỈ chữa "đo nhầm bản", KHÔNG chữa "cách ly dữ liệu"** —
+  E2E trên preview vẫn ghi vào đúng Supabase prod. Đừng nhầm hai thứ.
+- Thiếu secret thì config **bỏ header đi**, đường prod chạy y như cũ (domain
+  prod không bị gác) — nên hỏng secret không kéo sập lượt đo prod.
+
+### 🪤 Bốn cái bẫy, cả bốn chỉ lộ khi ĐO
+1. **`request.newContext()` KHÔNG thừa hưởng `use` của config.** Chỉ **FIXTURE**
+   `request` (tham số của test) mới mang `baseURL` + `extraHTTPHeaders`. Bản cũ
+   tự tạo context ở 4 ca API ⇒ trên preview mấy ca đó ăn 401 trong khi ca
+   `page.goto` vẫn xanh — kiểu đỏ rất khó lần. Đổi sang fixture cũng gỡ luôn 4
+   lượt `dispose()` tay.
+2. **Phép so neo vào HOST thì chết trên preview.** Ca paywall so URL redirect với
+   `tuviminhbao.com`, mà preview là `*.vercel.app` ⇒ đỏ oan. So theo **pathname**.
+3. 🔴 **Tao nói SAI một lần rồi tự đính chính bằng số liệu:** tao khẳng định
+   workflow chạy bằng `deployment_status` luôn lấy YAML từ **nhánh mặc định**,
+   nên PR không tự kiểm được chính nó. **Sai** — run sinh ra mang đúng tiêu đề
+   mới của nhánh PR, và số dòng trong log khớp spec mới. **GitHub dùng YAML +
+   code từ COMMIT CỦA DEPLOYMENT.** Nhờ vậy PR tự kiểm được chính nó.
+4. 🔴 **`extraHTTPHeaders` áp lên CẢ REQUEST KHÁC ORIGIN.** Đây là lỗi CI đỏ
+   thật, do chính tao gây ra khi bê cách của smoke sang E2E: gắn header lạ vào
+   một request cross-origin làm nó thành **preflight**, mà `fonts.gstatic.com`
+   không cho phép header đó ⇒ *"Request header field x-vercel-set-bypass-cookie
+   is not allowed by Access-Control-Allow-Headers"* ⇒ font hỏng ⇒ **26 ca
+   "không có JS errors nghiêm trọng" đỏ** (136 ca khác vẫn xanh, tức bypass
+   chạy đúng — chỉ CÁCH GẮN là sai).
+   - 🔑 **Luật: bộ test nào có soi lỗi console thì KHÔNG được dùng
+     `extraHTTPHeaders` để mang vé — phải dùng COOKIE.** Cookie chỉ gửi tới
+     đúng domain của nó, không đụng host lạ. Smoke giữ header được vì nó không
+     soi console; nếu sau này thêm assertion đó thì phải đổi luôn.
+
+### 🐞 Bắt kèm — 42% lượt smoke prod đỏ suốt 6 ngày là BÁO ĐỘNG GIẢ
+Lượt smoke đầu của PR #463 đỏ ca `luan-giai.html: paywall block`. Đo lại lịch
+sử: **31/73 lượt prod đỏ (42%)**, xen kẽ xanh/đỏ trên **cùng một bản code**, và
+sáng hôm đó **không có commit nào** giữa lượt xanh cuối (04:55) với lượt cron đỏ
+đầu (06:58) ⇒ ca test đua nhịp, không phải prod sập. Issue #342 bị nhồi comment
+vì chuyện này từ 29/07.
+- **Căn nguyên: `locator.isVisible()` là phép đo TỨC THỜI** — tham số `timeout`
+  của nó KHÔNG có tác dụng chờ. Bản cũ đo ngay sau `domcontentloaded`, trước khi
+  JS kịp dựng tường. Nhánh redirect đua y hệt vì `page.url()` cũng đọc một lần.
+- Vá bằng `expect.poll` chờ **một trong hai kết cục hợp lệ** (chuyển trang đi,
+  hoặc tường/CTA mua hiện ra).
+- 🔑 **Quy ước: muốn CHỜ thì dùng web-first assertion (`expect(...).toBeVisible`,
+  `expect.poll`). `isVisible()`/`isEnabled()`/`page.url()` là ẢNH CHỤP một khoảnh
+  khắc** — đặt chúng ngay sau `domcontentloaded` là tự viết ra một ca flaky.
+- 🔑 **Bộ dò kêu oan 42% thì người ta thôi đọc nó.** Vì thế issue `prod-down`
+  nay **chỉ mở cho lượt đo prod**; preview đỏ để check đỏ trên PR là đủ.
+
+### Verify
+`tsc` 0 lỗi · `lint` 0 lỗi (72 warning pre-existing) · `prettier` sạch.
+- **Đầu-cuối trên preview THẬT đang bật SSO**: đo đúng `target_url`, **7/7 xanh**
+  (còn bị chặn thì cả 7 ca đều 401), bước mở issue `prod-down` **skipped** đúng
+  thiết kế. Rồi **trên prod THẬT** sau merge: `PROD_URL=https://tuviminhbao.com`,
+  **7/7 xanh**.
+- **Header đi ra thật hay không** — server giả ghi lại header từng request:
+  smoke **19/19**. **ĐỐI CHỨNG không secret: 0/19**, mà bộ smoke **vẫn 7/7
+  xanh** ⇒ đường prod không đổi hành vi.
+- **Vé cookie của E2E** — dựng 2 server giả (app có SSO + host font khác origin
+  từ chối header lạ trong preflight, y như gstatic):
+
+  | | kết quả | lỗi console | host font |
+  |---|---|---|---|
+  | bản header | 🔴 đỏ | có | dính preflight/x-vercel |
+  | bản cookie | ✅ xanh | **0** | **0 request dính** |
+
+  Và chuỗi thật: query bootstrap → `_vercel_jwt` **có mặt trong `storageState`**
+  → test sau vào được **chỉ bằng cookie**. **ĐỐI CHỨNG bỏ cookie đi → ĐỎ (401)**.
+- 🪤 **Ca đối chứng đầu của tao ĐỖ GIẢ**: chạy `--project=chromium` vẫn kéo theo
+  `dependencies: ['setup']` nên nó **dựng lại cookie** rồi mới đo → "pass" vô
+  nghĩa. Muốn đối chứng thật thì phải bỏ hẳn nhánh setup.
+- **ĐỐI CHỨNG bản git HEAD** cho ca paywall, trên stub dựng đúng cuộc đua: HEAD
+  **đỏ cả hai** tình huống muộn, bản mới **xanh cả hai**, và **vẫn đỏ khi thật sự
+  không có tường** (chống đỗ giả).
+- **Logic chọn URL**: trích THẲNG khối shell từ workflow (không chép tay), chạy
+  đủ nhánh prod/`Production` hoa/preview/cron/dispatch — đúng cả.
+- 🪤 Một ca đỏ giữa chừng là **lỗi của stub**: server giả thiếu `charset=utf-8`
+  nên tiêu đề ra mojibake (`Tá»­ Vi`) và trượt `toHaveTitle`.
+
+### 🔑 VIỆC TAY (đã làm, ghi lại để khỏi đi tìm)
+Vercel → project **app-tuvi** → Settings → Deployment Protection → **Protection
+Bypass for Automation** → Add Secret; copy sang GitHub → Settings → Secrets →
+Actions, tên **`VERCEL_BYPASS_SECRET`**. Xoay secret là một cú bấm, không cần deploy.
+
+### CÒN LẠI
+- **Đừng đóng issue #342 vội** — mới có 1 lượt prod xanh trên bản đã vá, mà
+  trước đó nó xanh/đỏ xen kẽ. Đợi vài lượt nữa. Cơ chế đã tự lo: smoke prod đỏ
+  là workflow tự comment vào #342, nên **im lặng ở đó chính là tín hiệu xanh**.
+- **Deploy hỏng thì E2E/smoke KHÔNG chạy** (không còn `pull_request` để bắn).
+  Đổi lại check Vercel sẽ đỏ, nên không có đường nào lọt êm — nhưng nhớ tính
+  chất này khi đọc một PR thiếu check.
+- Phạm vi lịch sử tao soi được chỉ từ **04/08** trở lại (giới hạn phân trang
+  API); chưa xác minh mọi lượt đỏ trước đó cùng một nguyên nhân.
 ## 🔐 Rail đòi ĐĂNG NHẬP với người ĐANG đăng nhập — đồng hồ ví chốt quá sớm (2026-08-09, PR sau #465)
 
 Henry: *"tao thử cái tool chạy ok. Xong qua rail hỏi thì nó lại báo tao phải đăng
@@ -4437,11 +4561,14 @@ cùng một PR, hai lượt push liền nhau ra hai kết quả khác nhau —
 đúng HEAD**. Chưa đủ mẫu để chốt thành luật (n=2), ghi lại để lượt sau đối
 chiếu thay vì thử mò lại từ đầu.
 - 🔑 **Trước khi tốn công kích lại CI, hỏi: CI còn thêm được gì cho ĐÚNG diff
-  này?** Với PR #462: `playwright`/`lighthouse` của repo trỏ **URL PROD**
-  (hardcode trong `lighthouserc.json`, `BASE_URL` mặc định prod) nên chúng đo
-  sức khoẻ prod chứ không đo nhánh; phần thật sự phủ diff chỉ còn `lint` ·
-  `typecheck` · `unit-test`, mà cả ba chạy tại chỗ được. Lúc đó CI vắng là
-  chuyện đáng NÓI RA, không phải chuyện đáng churn PR để ép nó chạy.
+  này?** Lúc PR #462 gặp ca này, `lighthouse` còn trỏ **URL prod** (hardcode
+  trong `lighthouserc.json`) nên nó đo sức khoẻ prod chứ không đo nhánh; phần
+  thật sự phủ diff chỉ còn `lint` · `typecheck` · `unit-test`, cả ba chạy tại
+  chỗ được. Lúc đó CI vắng là chuyện đáng NÓI RA, không đáng churn PR để ép.
+  ⚠️ **Vế `playwright` của lập luận này ĐÃ HẾT HẠN**: #466 (gộp ngay sau đó)
+  chuyển E2E sang đo **chính bản preview vừa deploy**, nên từ nay E2E vắng mặt
+  là mất phủ THẬT cho nhánh, không còn là "đo prod". Đọc lại mục *CI đo BẢN CŨ*
+  ở dưới trước khi dùng lại lập luận này.
 
 ### ⚠️ (ghi chép cũ) CI: workflow `pull_request` có lúc KHÔNG fire
 2 commit liên tiếp chỉ có Vercel + `smoke` chạy; lint/typecheck/test/lighthouse **không hề
