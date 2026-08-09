@@ -29,11 +29,15 @@ const { QUE } = require(ROOT + 'public/tools-shared/kinh-dich.js');
 // Nạp file TS mà KHÔNG dùng compiler API của `typescript`.
 //
 // Vì sao: bản cũ gọi `ts.transpileModule` và chết trên CI với
-// "Cannot read properties of undefined (reading 'CommonJS')" — trên Node 20
-// (bản CI ghim) `typescript` 6.x trả về một object THIẾU `ModuleKind`, còn
-// Node 22 (máy dev) thì đủ. Đổi `import ts` → `require('typescript')` KHÔNG
-// cứu được: lượt CI sau vẫn đỏ y hệt. Đây là kiểu lỗi chỉ hiện ở CI, chạy
-// local mãi không tái hiện — và nó chặn MỌI PR trong repo.
+// "Cannot read properties of undefined (reading 'CommonJS')".
+// 🔑 Nguyên nhân THẬT: **TypeScript 7 là bản viết lại bằng Go, KHÔNG còn cung
+// cấp compiler API JS** (`ModuleKind`, `transpileModule`). Lúc đó `main` đang
+// mang TS 7 (PR #388) nên merge-ref của mọi PR `npm ci` ra TS 7 — trong khi
+// máy dev còn TS 6 theo lockfile của nhánh. `tsc` CLI vẫn chạy nên `typecheck`
+// và build engine vẫn xanh; chỉ script dùng API JS mới chết.
+// 🪤 Vòng chẩn đầu tao đổ cho Node 20 vs Node 22 — SAI, và `require` thay
+// `import` vì thế không cứu được gì. #476 đã ghim root về TS 6; bỏ hẳn compiler
+// API ở đây là để bộ dò không phụ thuộc vào cuộc giằng co TS 6/7 nữa.
 //
 // `que-motifs.ts` là DATA THUẦN: đúng một `export const`, không import, không
 // hàm, không `as const`. Nên bỏ hẳn compiler đi, chỉ đổi khai báo export thành

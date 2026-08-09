@@ -36,7 +36,7 @@
     "check:terms": "node scripts/check-terms.mjs"
   },
   "dependencies": {
-    "@supabase/supabase-js": "^2.110.8",
+    "@supabase/supabase-js": "^2.111.0",
     "@vercel/functions": "^3.7.6",
     "celestine": "^0.2.1",
     "mcp-handler": "^1.1.0",
@@ -51,8 +51,8 @@
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "@lhci/cli": "^0.15.1",
-    "@playwright/test": "^1.62.0",
-    "@types/node": "^25.9.1",
+    "@playwright/test": "^1.62.1",
+    "@types/node": "^26.1.2",
     "@types/react": "^19.2.18",
     "@types/react-dom": "^19.2.4",
     "eslint": "^10.8.0",
