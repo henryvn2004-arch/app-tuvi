@@ -45,6 +45,11 @@ import { computeNguoiKhac, resolveQuanHe } from '@/lib/engine/nguoi-khac';
 import { nguoiKhacRailWrapper } from '@/lib/agent/nguoi-khac-prompt';
 import { computeDayCon, resolveMoiLo } from '@/lib/engine/day-con';
 import { dayConRailWrapper } from '@/lib/agent/day-con-prompt';
+import {
+  computeHuongNghiepTre,
+  resolveMoiLo as resolveMoiLoTre,
+} from '@/lib/engine/huong-nghiep-tre';
+import { huongNghiepTreRailWrapper } from '@/lib/agent/huong-nghiep-tre-prompt';
 
 const ANTHROPIC_URL = 'https://api.anthropic.com/v1/messages';
 const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY!;
@@ -368,6 +373,19 @@ export async function runAgent(
         system += '\n\n' + dayConRailWrapper(p, String(req.birth.name || ''));
       } catch (e) {
         console.error('[runAgent] dayConRailWrapper lỗi:', (e as Error)?.message);
+      }
+    }
+
+    // Rail của tool Hướng Nghiệp Sớm. Cùng thế: `req.birth` là lá số ĐỨA TRẺ.
+    // ⚠️ Khối vỏ CỐ Ý không nêu ba thiên hướng — rail chỉ nhận chúng qua
+    // `railDataDayDu` SAU khi mua. Biết sớm thì người ta hỏi rail thay vì mua.
+    if (req.wrap === 'huong-nghiep-tre' && ctx.ls && req.birth) {
+      try {
+        const g = req.birth.gender === 'nu' ? ('nu' as const) : ('nam' as const);
+        const p = computeHuongNghiepTre(ctx.ls, g, resolveMoiLoTre(req.wrapMoiLo));
+        system += '\n\n' + huongNghiepTreRailWrapper(p, String(req.birth.name || ''));
+      } catch (e) {
+        console.error('[runAgent] huongNghiepTreRailWrapper lỗi:', (e as Error)?.message);
       }
     }
 

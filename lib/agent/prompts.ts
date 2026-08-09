@@ -1326,6 +1326,28 @@ const GENERIC_LABELS: Record<string, string> = {
   canhBaoMoNhat: 'CẢNH BÁO lá số không chỉ ra nhánh nào nổi bật',
   luatDocTrucThap: 'LUẬT đọc trục thấp (đọc sai chỗ này là xúc phạm người dùng)',
   luatDocNhanh: 'LUẬT đọc nhánh và con số phần trăm (bắt buộc theo)',
+  // Hướng Nghiệp Sớm Cho Con — nguồn lib/engine/huong-nghiep-tre.ts.
+  // ⚠️ Khoá của lượt TÍNH THỬ và lượt ĐÃ MUA nằm chung bảng này, nhưng
+  // `railDataTinhThu` không bao giờ đặt mấy khoá của tầng trả tiền — chốt chặn
+  // nằm ở engine chứ không ở đây.
+  // (`kieuTre` · `tuoiTre` · `moiLoChaMe` · `dieuChaMeCan` · `kieuTuTuong` ·
+  //  `kieuMotCau` · `dongLucTre` · `laiKieu` · `luatDocTrucThap` DÙNG CHUNG với
+  //  khối Dạy Con bên dưới — cùng nghĩa, cố ý một nhãn duy nhất.)
+  lopTuoi: 'Lứa tuổi của đứa trẻ (quyết định bộ hoạt động)',
+  vaiChaMeLopNay: 'Việc của người lớn ở lứa tuổi này',
+  vieckhongDoiHoi: 'Thứ mà việc hợp với đứa trẻ này thường KHÔNG đòi hỏi',
+  canhBaoChuaRoNet: 'CẢNH BÁO lá số chưa nghiêng hẳn hướng nào (bắt buộc nói ra)',
+  changDangO: 'Chặng đại vận đứa trẻ đang ở',
+  baThienHuong: 'Ba thiên hướng nghiêng nhất',
+  lyDoTungHuong: 'Vì sao lá số nghiêng về từng hướng (trục tính khí kéo lên)',
+  hoatDongNenLam: 'Hoạt động nên cho làm quen, đã chọn theo đúng lứa tuổi',
+  chaMeNenLam: 'Việc người lớn NÊN làm',
+  chaMeTranhLam: 'Việc người lớn nên THÔI làm',
+  choHayBiHieuNham: 'Chỗ đứa trẻ này hay bị đọc nhầm',
+  chatViecVeSau: 'Chất việc hợp về sau (nói bằng tính chất, không bằng tên nghề)',
+  ngheCoChatDo: 'Nghề có chất đó — CHỈ để hình dung, không phải để chốt',
+  chuaBayNghe: 'LUẬT: cháu còn nhỏ, TUYỆT ĐỐI không nêu tên nghề',
+  luatDocHuong: 'LUẬT đọc thiên hướng (định hướng, không chốt)',
   // Sổ Nhân Mạch — nguồn `/api/nhan-mach` → lib/engine/nhan-mach.ts.
   soNguoiTrongSo: 'Số người trong sổ', danhSachNguoi: 'Từng người (vai · kiểu · vận năm)',
   phanBoKieu: 'Phân bố bốn kiểu trong nhóm', kieuCuaBan: 'Kiểu của chính người hỏi',
@@ -1336,6 +1358,19 @@ const GENERIC_LABELS: Record<string, string> = {
   thuTuTiepCan: 'Thứ tự gợi ý tiếp cận (theo VẬN NĂM từng người, KHÔNG phải mức quan trọng)',
   nguoiNayTrongLaSoBan: 'Từng người ứng với cung nào trong lá số người hỏi',
   // Dạy Con — nguồn `/api/day-con` → lib/engine/day-con.ts.
+  // 🐞 Bảy khoá dưới đây TRƯỚC KHÔNG có nhãn nên `extractGenericContext` rơi về
+  // `GENERIC_LABELS[k] || k`, tức in nguyên KHOÁ KỸ THUẬT vào prompt
+  // (`laiKieu: true`, `cungMệnh: Cự Môn`). Cả `day-con` lẫn `huong-nghiep-tre`
+  // đều phát mấy khoá này — dùng chung một nhãn nên vá một chỗ là cả hai được.
+  laiKieu: 'Lá số nằm SÁT RANH GIỚI hai kiểu (phải nói là pha, đừng ép nhãn)',
+  kieuPhu: 'Kiểu phụ (khi sát ranh giới)',
+  cungMệnh: 'Cung Mệnh — cốt cách',
+  cungQuanLộc: 'Cung Quan Lộc — đường học nghiệp',
+  cungPhúcĐức: 'Cung Phúc Đức — nền tâm tính',
+  cungPhụMẫu: 'Cung Phụ Mẫu — đứa trẻ nhìn cha mẹ thế nào',
+  cungThiênDi: 'Cung Thiên Di — ra khỏi nhà',
+  cungThan: 'Cung an Thân',
+  hopHayVa: 'Hai bên hợp hay dễ va (luật âm–dương tương bổ)',
   moiLoChaMe: 'Điều cha mẹ đang lo (NGƯỜI DÙNG TỰ KHAI)',
   dieuChaMeCan: 'Thứ cha mẹ thật sự cần nghe', kieuTre: 'Kiểu người của đứa trẻ',
   kieuTuTuong: 'Tứ tượng gốc của kiểu', kieuMotCau: 'Một câu tóm kiểu',
