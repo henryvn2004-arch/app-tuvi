@@ -287,13 +287,92 @@ và đó là bằng chứng cái bẫy có thật. Nay cả hai đều resolve t
 - ⚠️ **Tỉ lệ mở sẽ đổi sau deploy** — free mỏng hơn hẳn. Con số phải nhìn là
   `preview_shown → unlock_click`; tụt thì nới lại `MAT_DOC_PREVIEW` (một dòng).
 
+### ✅ B2 — `/ket-qua` từng là NGÕ CỤT, nay chở giá trị cho NGƯỜI NHẬN (cùng PR)
+
+Đo prod trước khi viết: **38 link · 62 lượt mở · 1 cú bấm CTA · `referrals` = 0.**
+
+🔑 **Căn nguyên đọc ra từ chính câu chữ**: CTA đòi **ĐĂNG KÝ** trước khi giao bất
+cứ thứ gì — một bức tường dựng đúng đỉnh tò mò — trong khi lượt **TÍNH THỬ của W1
+vốn KHÔNG đòi đăng nhập**. Trang đang bán "đăng ký" trong khi thứ giao được ngay
+là "nhập ngày sinh, xem luôn". Nên B2 **không dựng gì mới**: chỉ nối hai thứ đã
+có sẵn — ô nhập ngày sinh tại chỗ → tool tự chạy lượt tính thử.
+
+#### 🔑 Nhắm đúng chỗ có người: 89% lượt mở là 2 tool CHÂN DUNG
+| tool | link | lượt mở |
+|---|---:|---:|
+| `chan-dung-vo-chong` | 18 | **38** |
+| `chan-dung-tien-kiep` | 11 | **17** |
+| 3 tool cẩm nang + còn lại | 9 | 7 |
+
+⇒ Ba tool bật ô nhập (`chan-dung-vo-chong` · `chan-dung-tien-kiep` · `luan-giai`)
+phủ **56/62 = 90%** lượt mở.
+- ⚠️ **CHỈ mở cho tool mà form CHÍNH là lá số của CHÍNH NGƯỜI XEM.** Ba tool cẩm
+  nang có form chính là lá số NGƯỜI KHÁC (sếp/con/đồng nghiệp) — đổ lá số người
+  xem vào đó là dựng hồ sơ về **nhầm người**, đúng bẫy đã ghi ở track T2/T3.
+  `duyen-no-tien-kiep` cần 2+ lá số nên một ô nhập không đủ. Bốn tool đó **giữ
+  nguyên** CTA cũ, có ca test canh.
+- **Quà đăng ký hạ xuống dòng phụ, KHÔNG bỏ** — nó là bậc SAU, không phải bậc đầu.
+
+#### Dùng lại nguyên cơ chế hand-off có sẵn, không đụng localStorage
+`Shell.prefillForm()` vốn đọc **query URL TRƯỚC** rồi mới tới localStorage, và
+`app-luan-giai.html` đã chạy đúng khuôn `prefillForm() + autoRun()` từ lâu. Nên:
+- `/ket-qua` chỉ dựng URL `?ngay=&thang=&nam=&gio=&gioitinh=&auto=1` + `ref` + UTM.
+- Hai trang chân dung thêm đúng khối `_pageInitB2` (18 dòng/trang) — **KHÔNG ghi
+  `app_birth`**: trang chia sẻ không nạp `shell.js`, viết thẳng vào khoá đó là dựng
+  người ghi thứ hai cho một khoá dùng chung, và query URL thì chạy cả ở ẩn danh.
+- 🪤 **`gio` là GIỜ ĐỒNG HỒ 0..23, không phải chỉ số địa chi.** Phải lấy **mốc
+  GIỮA** mỗi khung (`chi × 2`) — lấy mốc đầu khung là rơi sang chi liền trước
+  (`hourMinToGioIdx` cộng bù 60 phút). Có ca test đi–về trên TRANG THẬT ở 4 mốc.
+- **Chặn năm sinh TẠI CHỖ**: đá người ta sang trang khác rồi mới báo "thiếu năm"
+  là mất hẳn một bậc phễu.
+- `cta_click` mang `from:'share_form'` — tách khỏi `from:'share'` để biết đường
+  nào ra người thật. Gắn listener RIÊNG, không nằm trong khối đo (khối kia
+  `return` sớm khi thiếu `window.Track`, mà đo hỏng không được chặn người dùng).
+
+#### Verify
+`tsc` 0 · `lint` 0 lỗi (72 warning pre-existing) · `prettier` sạch · 5 bộ dò sạch
+· engine **185 pass** · `node --check` 4 khối script nội tuyến.
+- **44 ca Playwright trên TRANG THẬT** `/ket-qua` (Next dev + **stub PostgREST
+  chạy thật**) và **trang tool THẬT**: ô nhập chỉ hiện đúng tool chính chủ · 4
+  tool kia giữ nguyên CTA cũ · URL mang đủ lá số + `ref` + UTM + `auto=1` ·
+  **4 mốc giờ đi–về không lệch khung** (Tý/Sửu/Ngọ/Hợi) · **4 lượt POST preview,
+  0 lượt `deduct`** ⇒ tự chạy là TÍNH THỬ, không trừ Lượng, không đòi đăng nhập ·
+  thiếu năm / năm rác → chặn tại chỗ, không rời trang · 390px không tràn, ô nhập
+  font ≥16px (iOS tự phóng to nếu nhỏ hơn).
+- 🪤 **ĐỐI CHỨNG nằm trong CÙNG lượt chạy**: mục 2 đo 4 tool vẫn dựng đúng nút
+  đăng ký cũ, mục 1 đo tool mới không còn nút đó ⇒ A/B sống, không phải so với
+  ký ức.
+
+#### 🪤 Ba cái bẫy vòng này
+1. 🔑 **`page.route` của Playwright KHÔNG chặn được fetch phía SERVER.** `/ket-qua`
+   đọc Supabase ở server ⇒ stub trong trình duyệt vô hiệu, trang trả **404** và
+   dễ tưởng là lỗi code. Phải dựng **stub PostgREST thật** rồi khởi động dev với
+   `SUPABASE_URL` trỏ vào nó. (Và `id` chỉ nhận `[A-Za-z0-9]{6,16}` nên không nhét
+   thẳng `tool_id` có gạch nối vào — phải bảng tra mã ngắn.)
+2. **Backtick trong chú thích đóng template literal sớm — vấp HAI LẦN trong cùng
+   một file** (một ở khối CSS, một ở khối JS). Đã ghi cảnh báo tại cả hai chỗ.
+3. **`waitForSelector` mặc định đợi VISIBLE** — auto-run chạy xong là trang ẩn
+   form đi để hiện kết quả, nên phải `state:'attached'`. Đợi visible thì treo 30
+   giây rồi đỏ, trong khi đó CHÍNH LÀ dấu hiệu nó chạy đúng. Cùng họ bẫy "đo trên
+   cây `display:none`" đã vấp hai lần trước.
+
+#### CÒN LẠI
+- ⚠️ **Con số phải nhìn là `cta_click` với `from='share_form'`**, không phải
+  `referrals` — referral chỉ nhảy khi người nhận ĐĂNG KÝ, còn B2 cố ý bỏ bước đó
+  ra khỏi đường đầu. `share_form` = 0 nghĩa là ô nhập không ai dùng (câu chữ dở);
+  `share_form` cao mà `referrals` vẫn 0 nghĩa là chỗ nghẽn nằm ở bậc đăng ký.
+- **`duyen-no-tien-kiep` chưa có đường này** — cần 2+ lá số, một ô nhập không đủ.
+  Muốn mở thì phải dựng ô nhập đôi, việc riêng.
+- Ba tool cẩm nang vẫn là ngõ cụt trên `/ket-qua` — CỐ Ý (form chính là người
+  khác). Đường đúng cho chúng là mời nhập lá số NGƯỜI mà họ đang quan tâm, khác
+  hẳn về câu chữ, chưa làm.
+
 ### ⏭️ CÒN LẠI của kế hoạch (Henry đã duyệt khung, chưa code)
 - ⚠️ **B1 mới phủ người ĐÃ ĐĂNG NHẬP mà hết Lượng.** Ở 60 tài khoản / ~4 người
   ngày thì tệp đó rất mỏng — đừng kỳ vọng `referrals` nhảy ngay. Con số phải nhìn
   TRƯỚC là **`invite_shown`**: nó = 0 nghĩa là điều kiện không bao giờ thoả (phải
   nới, ví dụ hiện cả khi còn đủ Lượng), chứ không phải câu chữ dở.
-- **B2** — trang `/ket-qua` chở giá trị của NGƯỜI NHẬN (ô nhập ngày sinh ngay tại
-  đó, W1 vốn không đòi auth) thay vì là ngõ cụt. **B3** — Peak-End cho đoạn kết.
+- ~~**B2**~~ → **ĐÃ LÀM**, xem mục riêng ở trên. **B3** — Peak-End cho đoạn kết.
 - **C1** — bày engine ra (*"đọc từ N dữ kiện"* + 1 trích dẫn cổ thư thật): đây là
   lá chắn cho phản đối số 1 *"AI nó bịa thôi"*, và nó bảo vệ luôn phần Barnum.
 - **C3** — gallery từ 36 `shared_results` (vốn đã public): social proof + trang

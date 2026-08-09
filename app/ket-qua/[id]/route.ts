@@ -145,6 +145,43 @@ export async function GET(req: NextRequest, ctx: { params: Promise<{ id: string 
       ? `Đăng ký nhận ${offer.bonus} Lượng miễn phí để tự lập lá số và dùng công cụ này.`
       : 'Đăng ký để tự lập lá số và dùng công cụ này — miễn phí.';
 
+  // ── B2 — TRANG NÀY TỪNG LÀ NGÕ CỤT ─────────────────────────────────────────
+  //
+  // Đo prod: **62 lượt mở** link chia sẻ → **1 cú bấm** CTA → `referrals` = 0.
+  // Căn nguyên đọc ra từ chính câu chữ: CTA đòi ĐĂNG KÝ trước khi giao bất cứ
+  // thứ gì — một bức tường dựng đúng đỉnh tò mò — trong khi lượt TÍNH THỬ của
+  // W1 vốn KHÔNG đòi đăng nhập. Tức trang đang bán "đăng ký" trong khi thứ có
+  // thể giao ngay là "nhập ngày sinh, xem luôn".
+  //
+  // Nên đổi lời mời thành ô nhập ngày sinh ngay tại đây, rồi chuyển sang tool
+  // kèm `?…&auto=1` để nó tự chạy lượt tính thử. Quà đăng ký hạ xuống làm dòng
+  // phụ — nó là bậc SAU, không phải bậc đầu.
+  //
+  // ⚠️ CHỈ mở cho tool mà form CHÍNH là lá số của CHÍNH NGƯỜI XEM. Ba tool cẩm
+  // nang (`nguoi-khac`/`day-con`/`nhan-mach`) có form chính là lá số NGƯỜI KHÁC
+  // (sếp, con, đồng nghiệp) — đổ lá số người xem vào đó là dựng hồ sơ về nhầm
+  // người, đúng cái bẫy đã ghi ở track T2/T3. `duyen-no-tien-kiep` cần 2+ lá số
+  // nên một ô nhập không đủ. Ba tool dưới đây phủ **56/62 = 90%** lượt mở.
+  const TOOL_NHAN_LA_SO_CHINH_CHU = new Set([
+    'chan-dung-vo-chong',
+    'chan-dung-tien-kiep',
+    'luan-giai',
+  ]);
+  const coFormSinh = TOOL_NHAN_LA_SO_CHINH_CHU.has(row.tool_id);
+
+  // 🪤 Giờ gửi đi là GIỜ ĐỒNG HỒ 0..23, không phải chỉ số địa chi —
+  // `Shell._birthFromQuery` nhận `gio` rồi đặt `gioHour`, và `TuviForm` quy
+  // ngược bằng `hourMinToGioIdx`. Mốc GIỮA mỗi khung (chi × 2) là giá trị duy
+  // nhất đi-về không lệch; lấy mốc đầu khung là rơi sang chi liền trước.
+  const CHI_GIO = [
+    'Tý (23h–1h)', 'Sửu (1h–3h)', 'Dần (3h–5h)', 'Mão (5h–7h)',
+    'Thìn (7h–9h)', 'Tỵ (9h–11h)', 'Ngọ (11h–13h)', 'Mùi (13h–15h)',
+    'Thân (15h–17h)', 'Dậu (17h–19h)', 'Tuất (19h–21h)', 'Hợi (21h–23h)',
+  ];
+  const optGio = CHI_GIO.map((t, i) => `<option value="${i * 2}">${esc(t)}</option>`).join('');
+  const optNgay = Array.from({ length: 31 }, (_, i) => `<option value="${i + 1}">${i + 1}</option>`).join('');
+  const optThang = Array.from({ length: 12 }, (_, i) => `<option value="${i + 1}">${i + 1}</option>`).join('');
+
   // Render Y HỆT layout card (.blk) của workspace khi có blocks có cấu trúc —
   // mỗi block là 1 card riêng (header + ảnh/text), giống hệt .res-block trong
   // app-*.html. Fallback về ảnh/text phẳng cho các share cũ trước khi có blocks.
@@ -208,7 +245,16 @@ body{font-family:var(--sans);background:var(--paper2);color:var(--text);line-hei
 .cta-card b{font-family:var(--serif);font-size:16px;display:block;margin-bottom:5px}
 .cta-card p{font-size:13px;color:var(--text-mid);margin-bottom:13px}
 .cta-card .pill{display:inline-block;background:var(--gold-lt);color:var(--gold-soft);border:1px solid var(--gold-soft);border-radius:20px;font-size:11.5px;padding:2px 10px;margin-bottom:11px}
-.cta-btn{display:inline-block;background:var(--red);color:#fff;text-decoration:none;font-family:var(--serif);font-weight:600;font-size:15px;padding:11px 26px;border-radius:9px}
+.cta-btn{display:inline-block;background:var(--red);color:#fff;text-decoration:none;font-family:var(--serif);font-weight:600;font-size:15px;padding:11px 26px;border-radius:9px;border:0;cursor:pointer}
+/* B2 — ô nhập ngày sinh ngay trên trang chia sẻ. font-size 16px là BẮT BUỘC:
+   iOS Safari tự phóng to khi focus field nhỏ hơn rồi KHÔNG thu lại.
+   (Chú thích trong khối CSS này KHÔNG được dùng dấu backtick — cả khối nằm
+   trong template literal, một dấu là đóng chuỗi sớm. Đã trả giá ở paywall.) */
+.bf{margin-top:4px}
+.bf-row{display:flex;gap:7px;margin-bottom:8px}
+.bf select,.bf input{flex:1;min-width:0;font-size:16px;padding:9px 8px;border:1px solid var(--gold-soft);border-radius:8px;background:var(--white);color:var(--text);font-family:inherit}
+.bf-err{display:none;color:var(--red);font-size:12.5px;margin:-2px 0 8px}
+.bf-note{font-size:12px!important;color:var(--text-mid);margin:10px 0 0!important}
 .foot{text-align:center;padding:16px;font-size:11px;color:var(--text-lt)}
 .foot a{color:var(--gold-soft)}
 </style></head>
@@ -220,11 +266,31 @@ body{font-family:var(--sans);background:var(--paper2);color:var(--text);line-hei
   </div>
   <div class="body">${body}</div>
   <div class="cta">
-    <div class="cta-card">
+    <div class="cta-card">${
+      coFormSinh
+        ? `
+      <b>Xem bản của chính bạn</b>
+      <p>Nhập ngày sinh — xem ngay, <b>không cần đăng ký</b>.</p>
+      <div class="bf">
+        <div class="bf-row">
+          <select id="bfNgay" aria-label="Ngày sinh">${optNgay}</select>
+          <select id="bfThang" aria-label="Tháng sinh">${optThang}</select>
+          <input id="bfNam" type="number" inputmode="numeric" placeholder="Năm" min="1900" max="2100" aria-label="Năm sinh">
+        </div>
+        <div class="bf-row">
+          <select id="bfGio" aria-label="Giờ sinh">${optGio}</select>
+          <select id="bfGt" aria-label="Giới tính"><option value="nam">Nam</option><option value="nu">Nữ</option></select>
+        </div>
+        <div class="bf-err" id="bfErr"></div>
+        <button class="cta-btn" id="bfGo" type="button">Xem bản của tôi →</button>
+      </div>
+      <p class="bf-note">${esc(ctaDesc)}</p>`
+        : `
       <span class="pill">${esc(pillTxt)}</span>
       <b>Muốn xem kết quả của riêng bạn?</b>
       <p>${esc(ctaDesc)}</p>
-      <a class="cta-btn" id="ctaBtn" href="${SITE}${ctaRoute}">Thử ngay →</a>
+      <a class="cta-btn" id="ctaBtn" href="${SITE}${ctaRoute}">Thử ngay →</a>`
+    }
     </div>
   </div>
   <div class="foot">© 2026 Tử Vi Minh Bảo · <a href="${SITE}/app">tuviminhbao.com</a> — Lá số được lập bằng engine cổ pháp; phần luận giải do AI thực hiện trên chính dữ liệu đó.</div>
@@ -242,6 +308,39 @@ document.addEventListener('DOMContentLoaded', function () {
   var b = document.getElementById('ctaBtn');
   if (b) b.addEventListener('click', function () {
     window.Track.event('cta_click', { tool_id: t, slug: sid, meta: { from: 'share', with_ref: ${ref ? 'true' : 'false'} } });
+  });
+});
+
+// B2 — ô nhập ngày sinh. Gắn RIÊNG một listener, KHÔNG nằm trong khối đo ở trên:
+// khối kia return sớm khi thiếu window.Track, mà đo hỏng thì tuyệt đối không
+// được kéo theo đường đi tiếp của người dùng.
+// (KHÔNG dùng dấu backtick trong chú thích ở đây — cả khối nằm trong template
+//  literal, một dấu là đóng chuỗi sớm. Đây là lần thứ hai vấp trong cùng file.)
+document.addEventListener('DOMContentLoaded', function () {
+  var go = document.getElementById('bfGo');
+  if (!go) return;
+  var err = document.getElementById('bfErr');
+  function bao(m) { if (err) { err.textContent = m; err.style.display = m ? 'block' : 'none'; } }
+  go.addEventListener('click', function () {
+    bao('');
+    var nam = parseInt((document.getElementById('bfNam') || {}).value, 10);
+    // Chặn TẠI CHỖ thay vì để tool bên kia báo lỗi: đá người ta sang một trang
+    // khác rồi mới nói "thiếu năm sinh" là mất hẳn một bậc phễu.
+    if (!(nam >= 1900 && nam <= 2100)) { bao('Nhập năm sinh (1900–2100).'); return; }
+    var p = new URLSearchParams(${JSON.stringify(ctaParams.toString())});
+    p.set('ngay', document.getElementById('bfNgay').value);
+    p.set('thang', document.getElementById('bfThang').value);
+    p.set('nam', String(nam));
+    p.set('gio', document.getElementById('bfGio').value);
+    p.set('gioitinh', document.getElementById('bfGt').value);
+    p.set('auto', '1');
+    try {
+      if (window.Track && window.Track.event) {
+        window.Track.event('cta_click', { tool_id: ${JSON.stringify(row.tool_id)}, slug: ${JSON.stringify(id)},
+          meta: { from: 'share_form', with_ref: ${ref ? 'true' : 'false'} } });
+      }
+    } catch (e) { /* đo hỏng không chặn điều hướng */ }
+    location.href = ${JSON.stringify(`${SITE}/app/${row.tool_id}`)} + '?' + p.toString();
   });
 });
 </script>
