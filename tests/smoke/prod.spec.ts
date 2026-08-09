@@ -1,8 +1,14 @@
-import { test, expect, request } from '@playwright/test';
+import { test, expect } from '@playwright/test';
 
-// Smoke test trên prod URL — chạy sau deploy hoặc cron fallback mỗi 6h.
+// Smoke test trên URL đang chạy thật — sau deploy (prod + preview) hoặc cron fallback mỗi 6h.
 // Mục tiêu: phát hiện regression high-impact (homepage chết, paywall sập, sitemap hỏng).
 // KHÔNG verify nội dung sâu để tránh tốn Claude API / Supabase quota.
+//
+// ⚠️ Các ca gọi API dùng FIXTURE `request` (tham số của test), KHÔNG dùng
+// `request.newContext()` tự tạo: chỉ fixture mới thừa hưởng `use` của config,
+// tức baseURL VÀ `extraHTTPHeaders` mang secret bypass SSO. Context tự tạo thì
+// không có header đó → trên preview mấy ca này ăn 401 trong khi ca `page.goto`
+// vẫn xanh, một kiểu đỏ rất khó lần ra.
 
 test.describe('Prod smoke @smoke', () => {
   test('homepage render + meta tags chính', async ({ page }) => {
@@ -66,7 +72,7 @@ test.describe('Prod smoke @smoke', () => {
     expect(paywallVisible || lockedVisible, 'paywall hoặc CTA mua phải hiện').toBe(true);
   });
 
-  test('paywall module (tuvi-paywall.js) load được', async ({ page, baseURL }) => {
+  test('paywall module (tuvi-paywall.js) load được', async ({ page, request }) => {
     await page.goto('/luan-giai.html');
     await page.waitForLoadState('domcontentloaded');
 
@@ -80,15 +86,12 @@ test.describe('Prod smoke @smoke', () => {
     expect(hasPaywallScript, 'tuvi-paywall.js script tag tồn tại').toBe(true);
 
     // 200 OK trên asset
-    const api = await request.newContext({ baseURL });
-    const resp = await api.get('/tuvi-paywall.js');
+    const resp = await request.get('/tuvi-paywall.js');
     expect(resp.status(), 'tuvi-paywall.js 200').toBeLessThan(400);
-    await api.dispose();
   });
 
-  test('/sitemap.xml accessible + valid XML', async ({ baseURL }) => {
-    const api = await request.newContext({ baseURL });
-    const resp = await api.get('/sitemap.xml');
+  test('/sitemap.xml accessible + valid XML', async ({ request }) => {
+    const resp = await request.get('/sitemap.xml');
     expect(resp.status(), 'sitemap.xml status').toBe(200);
 
     const body = await resp.text();
@@ -98,36 +101,26 @@ test.describe('Prod smoke @smoke', () => {
 
     const ct = resp.headers()['content-type'] || '';
     expect(ct).toMatch(/xml/);
-
-    await api.dispose();
   });
 
-  test('3 SEO landing pages load 200', async ({ baseURL }) => {
-    const api = await request.newContext({ baseURL });
-
+  test('3 SEO landing pages load 200', async ({ request }) => {
     // Hardcoded popular SEO slugs — không đi qua DB để giữ smoke đơn giản
     const slugs = ['/menh-kho.html', '/kien-thuc-tuvi.html', '/blog.html'];
 
     for (const slug of slugs) {
-      const resp = await api.get(slug);
+      const resp = await request.get(slug);
       expect(resp.status(), `${slug} status`).toBeLessThan(400);
       const body = await resp.text();
       expect(body.length, `${slug} body length`).toBeGreaterThan(500);
     }
-
-    await api.dispose();
   });
 
-  test('robots.txt + llms.txt accessible', async ({ baseURL }) => {
-    const api = await request.newContext({ baseURL });
-
-    const robots = await api.get('/robots.txt');
+  test('robots.txt + llms.txt accessible', async ({ request }) => {
+    const robots = await request.get('/robots.txt');
     expect(robots.status(), 'robots.txt').toBe(200);
     expect(await robots.text()).toMatch(/User-agent|Sitemap/i);
 
-    const llms = await api.get('/llms.txt');
+    const llms = await request.get('/llms.txt');
     expect(llms.status(), 'llms.txt').toBe(200);
-
-    await api.dispose();
   });
 });
