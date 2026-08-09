@@ -1117,6 +1117,7 @@
     _wsResVisible = vis;
     autoShare = vis && !_shareMuted ? deriveShareable(host) : null;
     renderShareBtn();
+    renderPdfBtn(vis);
   }
   function watchWsResult() {
     // 🪤 Bám `#ws` là SAI: `app.html` (tool Lá Số, `/app/la-so`) dùng
@@ -1132,6 +1133,112 @@
     });
     _wsResObs.observe(ws, { subtree: true, childList: true, attributes: true, attributeFilter: ['style', 'class', 'hidden'] });
     refreshWsShare();
+  }
+
+  // ── LƯU PDF — cùng vòng đời với nút Chia sẻ ──────────────────────────
+  // Trước đây đúng 3/33 tool có nút PDF, mỗi tool tự dựng một thanh riêng
+  // trong nội dung + tự chép một khối @media print. Nay shell lo cả hai:
+  // luật in nằm ở `shell.css`, nút nằm ở đây, và nó bám đúng mốc
+  // `data-ws-result` sẵn có nên tool KHÔNG phải khai thêm gì.
+  //
+  // CỐ Ý dùng `window.print()` chứ không dựng PDF bằng thư viện: trình duyệt
+  // đã cho chọn "Lưu thành PDF" ngay trong hộp thoại in, giữ được chữ thật
+  // (chọn/tìm/copy được) và không thêm một byte JS nào. Bản dựng bằng canvas
+  // chỉ ra ảnh, nặng hơn mà đọc kém hơn.
+  function renderPdfBtn(visible) {
+    var host = document.querySelector('.ws-actions');
+    var btn = document.getElementById('wsPdfBtn');
+    if (!visible) { if (btn) btn.remove(); return; }
+    if (!host || btn) return;
+    btn = document.createElement('button');
+    btn.type = 'button'; btn.className = 'btn'; btn.id = 'wsPdfBtn';
+    btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" style="width:14px;height:14px;vertical-align:-2px;margin-right:4px"><path d="M12 3v11m0 0 4-4m-4 4-4-4"/><path d="M4 17v2.5A1.5 1.5 0 0 0 5.5 21h13a1.5 1.5 0 0 0 1.5-1.5V17"/></svg>Lưu PDF';
+    btn.addEventListener('click', printWorkspace);
+    host.appendChild(btn);
+  }
+  function printWorkspace() {
+    try { track('pdf_download', { tool_id: ACTIVE }); } catch (e) { /* ignore */ }
+    ensurePrintHead();
+    window.print();
+  }
+  // Bản in không có `.ws-top` (đã ẩn) nên tự nó không nói được đây là kết quả
+  // gì của ai. Dựng một khối CHỈ hiện lúc in, lấy đúng chữ đang có trên màn
+  // hình + dòng lá số của chính lượt này — cùng nguồn với bản chia sẻ, nên hai
+  // bản không nói khác nhau.
+  function ensurePrintHead() {
+    var host = wsResultHost();
+    if (!host) return;
+    var head = document.getElementById('wsPrintHead');
+    if (!head) {
+      head = document.createElement('div');
+      head.className = 'ws-print-head'; head.id = 'wsPrintHead';
+      host.insertBefore(head, host.firstChild);
+    }
+    var sub = shareBirthLines({ birth: (ctx && ctx.birth) || null });
+    head.innerHTML = '<b>' + esc(wsTitleText()) + '</b>' +
+      (sub ? '<span>' + esc(sub) + '</span>' : '') +
+      '<span>tuviminhbao.com</span>';
+  }
+
+  // ══════════════════════════════════════════════════════════════════════
+  // ORB TRÊN NÚT HỎI — lời mời, không phải đồ trang trí
+  // ══════════════════════════════════════════════════════════════════════
+  //
+  // Đo trước khi làm: nút `✦ Hỏi` mang class `mobile-only`, tức trên desktop
+  // KHÔNG tồn tại (rail vốn hiện sẵn ở cột phải). Nên đây là lời mời dành cho
+  // MOBILE — chỗ rail nằm ngoài màn hình và người ta không biết là có nó.
+  //
+  // Ba luật, và luật thứ hai mới là phần đáng giá:
+  //  1. Dùng LẠI orb của `ai-loading-steps.js` (#455/#457) — nó đã có 4 biến
+  //     thể, keyframes và nhánh `prefers-reduced-motion`. Chép lại CSS đó vào
+  //     `shell.css` là dựng bản thứ hai để rồi hai bản trôi khỏi nhau.
+  //  2. CHỈ sáng khi có gì để hỏi (`ctx` đã set = tool ra kết quả) VÀ người
+  //     dùng CHƯA mở rail lần nào trong phiên. Mở rồi là tắt hẳn. Sáng vĩnh
+  //     viễn thì thành nhiễu — người ta học cách bỏ qua nó — và một animation
+  //     chạy suốt trên mobile là ăn pin thật.
+  //  3. Nạp module theo lối LƯỜI: `ai-loading-steps.js` mới có ở 24/33 trang.
+  //     Thiếu nó thì nút giữ nguyên chữ `✦ Hỏi` như cũ, không vỡ gì.
+  var _railOpened = false, _orbOn = false;
+  function ensureOrbJs(cb) {
+    if (window.AiLoadingSteps && window.AiLoadingSteps.orbHtml) { cb(); return; }
+    var id = 'tvmb-orb-js';
+    var s = document.getElementById(id);
+    if (!s) {
+      s = document.createElement('script');
+      s.id = id; s.src = '/tools-shared/ai-loading-steps.js?v=4'; s.async = true;
+      (document.head || document.documentElement).appendChild(s);
+    }
+    s.addEventListener('load', function () {
+      if (window.AiLoadingSteps && window.AiLoadingSteps.orbHtml) cb();
+    });
+  }
+  function askBtnEl() {
+    var host = document.querySelector('.ws-actions');
+    if (!host) return null;
+    var bs = host.querySelectorAll('button');
+    for (var i = 0; i < bs.length; i++) {
+      var oc = bs[i].getAttribute('onclick') || '';
+      if (oc.indexOf('openRail') >= 0) return bs[i];
+    }
+    return null;
+  }
+  function syncAskOrb() {
+    var b = askBtnEl();
+    if (!b) return;
+    var want = !!ctx && !_railOpened;
+    if (want === _orbOn) return;
+    if (!want) { // tắt: trả lại đúng chữ cũ, không để lại dấu vết
+      b.innerHTML = '✦ Hỏi'; _orbOn = false; return;
+    }
+    ensureOrbJs(function () {
+      if (!ctx || _railOpened) return; // trạng thái đã đổi trong lúc chờ nạp
+      var el = askBtnEl(); if (!el) return;
+      el.innerHTML = window.AiLoadingSteps.orbHtml({ size: 18, variant: 'a' }) +
+        '<span style="margin-left:6px">Hỏi</span>';
+      el.style.display = 'inline-flex';
+      el.style.alignItems = 'center';
+      _orbOn = true;
+    });
   }
 
   function renderShareBtn() {
@@ -1621,6 +1728,9 @@
       greet(o);
       // Ngữ cảnh mới = phiên hỏi mới: đếm lại từ đầu và cho thẻ mời hiện lại.
       _askCount = 0; _upsellShown = false; _cungAsked = [];
+      // Vừa có thứ để hỏi → mời bằng orb trên nút Hỏi (mobile). Ngữ cảnh MỚI
+      // là một lượt mời mới, nên mở lại cả cờ "đã mở rail".
+      _railOpened = false; syncAskOrb();
       // Nạp ví để đồng hồ hiện "còn N câu" NGAY khi mở rail, chưa cần hỏi câu nào.
       loadRailStatus();
       // KHÔI PHỤC phiên đã lưu (đi qua sessionStorage khi bấm 1 mục lịch sử):
@@ -1649,7 +1759,12 @@
     ask: function (t) { ask(t); },
     openCmd: openCmd,
     toggleTheme: toggleTheme,
-    openRail: function () { var r = document.getElementById('shell-rail'); if (r) { r.classList.add('open'); syncBackdrop(); } },
+    // Mở rail = lời mời đã được nhận → tắt orb. Nếu không tắt thì nó nhấp nháy
+    // suốt cả lượt hỏi đáp, tức nài người ta làm đúng cái họ vừa làm.
+    openRail: function () {
+      var r = document.getElementById('shell-rail'); if (r) { r.classList.add('open'); syncBackdrop(); }
+      _railOpened = true; syncAskOrb();
+    },
     // Empty-state "Phiên gần đây": tool đặt <div id="shellRecent"></div> ở khối
     // nhập rồi gọi Shell.renderRecent() (hoặc shell tự gọi lúc boot). No-op nếu
     // tool chưa bật window.SHELL_HISTORY.
@@ -2050,8 +2165,10 @@
       '<button class="tab' + (isTool ? ' active' : '') + '" type="button" data-tab="tools">' + ti('grid') + 'Công cụ</button>' +
       '<a class="tab' + (isAcct ? ' active' : '') + '" href="/app/tai-khoan">' + ti('user') + 'Tài khoản</a>';
     document.body.appendChild(nav);
+    // Đi qua CHÍNH Shell.openRail (thay vì tự mở) để lời mời tắt được ở CẢ hai
+    // đường mở rail — mở bằng tab mà orb vẫn nhấp nháy thì nó nói sai.
     nav.querySelector('[data-tab="rail"]').addEventListener('click', function () {
-      var r = document.getElementById('shell-rail'); if (r) { r.classList.add('open'); syncBackdrop(); }
+      Shell.openRail();
     });
     nav.querySelector('[data-tab="tools"]').addEventListener('click', function () {
       var s = document.getElementById('shell-sidebar'); if (s) { s.classList.add('open'); syncBackdrop(); }

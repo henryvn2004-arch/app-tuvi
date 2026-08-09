@@ -346,3 +346,41 @@ body{font-family:var(--sans);background:var(--paper-2);color:var(--text);font-si
   .ws-body{padding-bottom:76px}
   body.drawer-open .tabbar{display:none}
 }
+
+/* ══════════════════════════════════════════════════════════════════════
+   IN / LƯU PDF — LUẬT CỦA SHELL, KHÔNG PHẢI CỦA TỪNG TOOL
+   ══════════════════════════════════════════════════════════════════════
+   Trước đây đúng 3 tool (luan-giai · bat-tu · xem-tuoi) tự chép một khối
+   @media print gần như trùng khít, khác nhau vài tên class riêng — tức đã
+   bắt đầu trôi khỏi nhau, và 30 tool còn lại thì in ra nguyên cả sidebar,
+   rail, nút bấm. Nay luật in nằm ở ĐÂY, mọi tool dùng chung.
+
+   Nguyên tắc: in ra thứ NGƯỜI ĐỌC cần, bỏ thứ chỉ có nghĩa khi ngồi trước
+   màn hình (điều hướng, nút, ô nhập, thanh tiến trình, tường trả phí).
+   Trang muốn giấu thêm khối nào thì khai `data-print-skip` — cùng lối với
+   `data-share-skip` của bản chia sẻ, không phải nhớ thêm khái niệm mới. */
+@media print {
+  .sb, .rail, .ws-top, .tabbar, .backdrop, #introHost, #shellRecent,
+  .mobile-only, .jump, .ask, .btn, button, input, select, textarea,
+  .tpw-lock-veil, .tpw-lock-blur, .tpw-wall, .tpw-prev,
+  [data-print-skip], [data-share-skip] { display: none !important; }
+
+  /* Bố cục 3 cột chỉ có nghĩa trên màn hình; in thì trải dọc, bỏ mọi khung
+     cuộn — nếu không, trang in CẮT ở đúng chiều cao viewport. */
+  .shell { display: block !important; height: auto !important; min-height: 0 !important; }
+  .ws { overflow: visible !important; height: auto !important; }
+  .ws-body { padding: 0 !important; }
+  html, body { background: #fff !important; }
+  body { font-size: 12pt; }
+
+  /* Đừng để một thẻ kết quả bị xẻ đôi qua hai trang giấy. */
+  .sec, .card, .res-block, .cs-sec { page-break-inside: avoid; break-inside: avoid; }
+
+  /* Đầu trang in: trên màn hình `.ws-top` mang tên tool, mà nó bị ẩn khi in
+     ⇒ bản in không có gì nói nó là cái gì của ai. Shell dựng khối này. */
+  .ws-print-head { display: block !important; margin: 0 0 14px; padding: 0 0 10px; border-bottom: 1px solid #ccc; }
+  .ws-print-head b { display: block; font-family: var(--serif); font-size: 16pt; }
+  .ws-print-head span { display: block; font-size: 10pt; color: #444; margin-top: 3px; }
+}
+/* Ngoài lúc in thì khối đầu trang in KHÔNG tồn tại trên màn hình. */
+.ws-print-head { display: none; }
