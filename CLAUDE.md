@@ -4427,6 +4427,22 @@ gỡ nào chắc chắn.
 - ⇒ Khi gặp ca này, chạy đủ bộ tại chỗ rồi **nói thẳng trên PR là CI vắng mặt**.
   Đừng để PR trông "xanh": xanh ở đây nghĩa là các check KHÔNG TỒN TẠI.
 
+**Thêm số liệu 2026-08-09 (PR #462), và nó ĐÍNH CHÍNH nốt cách gỡ còn lại:**
+cùng một PR, hai lượt push liền nhau ra hai kết quả khác nhau —
+| Lượt push | HEAD là gì | Kết quả |
+|---|---|---|
+| có gộp base, **HEAD CHÍNH LÀ commit merge** | merge | **đủ 7 check** |
+| có gộp base trong dải push, nhưng **HEAD là commit thường** đứng sau | thường | **chỉ `smoke` + Vercel** |
+⇒ *"Gộp base rồi push"* **KHÔNG đủ** — nghi là phải để **commit merge nằm ở
+đúng HEAD**. Chưa đủ mẫu để chốt thành luật (n=2), ghi lại để lượt sau đối
+chiếu thay vì thử mò lại từ đầu.
+- 🔑 **Trước khi tốn công kích lại CI, hỏi: CI còn thêm được gì cho ĐÚNG diff
+  này?** Với PR #462: `playwright`/`lighthouse` của repo trỏ **URL PROD**
+  (hardcode trong `lighthouserc.json`, `BASE_URL` mặc định prod) nên chúng đo
+  sức khoẻ prod chứ không đo nhánh; phần thật sự phủ diff chỉ còn `lint` ·
+  `typecheck` · `unit-test`, mà cả ba chạy tại chỗ được. Lúc đó CI vắng là
+  chuyện đáng NÓI RA, không phải chuyện đáng churn PR để ép nó chạy.
+
 ### ⚠️ (ghi chép cũ) CI: workflow `pull_request` có lúc KHÔNG fire
 2 commit liên tiếp chỉ có Vercel + `smoke` chạy; lint/typecheck/test/lighthouse **không hề
 được tạo run** (10 workflow đều `active`, không có path filter). `smoke` vẫn chạy vì nó
