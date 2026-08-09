@@ -41,12 +41,14 @@ function _serverStoreRt(token) {
 // Refresh phiên qua cookie HttpOnly (server đọc cookie, gọi Supabase, xoay token,
 // đặt lại cookie, trả session). Dùng khi localStorage + cookie JS đều mất (ITP xoá).
 async function _refreshViaServer() {
+  _restoring = true;
   try {
     const res = await fetch('/api/auth/session', { method: 'GET' });
     if (!res.ok) { updateNavUI(); return false; }
     const data = await res.json();
     if (data && data.access_token) { _applySession(data); return true; }
   } catch (e) { /* ignore */ }
+  finally { _restoring = false; }   // ⚠️ hàm có 3 đường ra — kẹt cờ là kẹt luôn đồng hồ ví
   updateNavUI();
   return false;
 }
@@ -54,6 +56,10 @@ async function _refreshViaServer() {
 // ── Auth state ──
 let _session = null;
 let _user    = null;
+// Đang khôi phục phiên (refresh token chạy BẤT ĐỒNG BỘ). Trong quãng này
+// `getSession()` trả null nhưng người dùng VẪN đang đăng nhập — nơi nào đọc
+// token để quyết định hiển thị gì thì phải chờ, không được kết luận là khách.
+let _restoring = false;
 
 // ── Init: restore session từ localStorage, fallback sang cookie (iOS ITP safe) ──
 (function initAuth() {
@@ -111,6 +117,7 @@ function _applySession(data) {
 
 // ── Refresh session silently ──
   async function _refreshSession(refreshToken) {
+    _restoring = true;
     try {
       const res = await fetch(SUPA_URL + '/auth/v1/token?grant_type=refresh_token', {
         method: 'POST',
@@ -127,6 +134,7 @@ function _applySession(data) {
       const data = await res.json();
       if (data.access_token) _applySession(data);
     } catch(e) { console.warn('[auth] refresh failed:', e); }
+    finally { _restoring = false; }
   }
 
 // ── Load credit balance for nav ──
@@ -149,6 +157,8 @@ async function _loadNavCredits() {
 // ── Public API ──
 window.Auth = {
   isLoggedIn:  () => !!_session,
+  // true = chưa biết, đừng vội coi là khách vãng lai (xem chú thích _restoring).
+  isRestoring: () => _restoring,
   getUser:     () => _user,
   getSession:  () => _session,
 
