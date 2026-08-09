@@ -52,6 +52,14 @@ jobs:
       - name: Mọi tool Luận Đường chia sẻ được
         run: npm run check:share
 
+      # Chặn `animation:` trỏ tới @keyframes KHÔNG TỒN TẠI — trình duyệt không
+      # báo gì cả, phần tử vẫn hiện, chỉ là đứng im. Bắt được ngay lượt chạy
+      # đầu: banner "Chào mừng! Bạn đã nhận Lượng miễn phí" của `auth.js` mượn
+      # keyframe khai LƯỜI trong `tuvi-paywall.js`, mà 38/73 trang nạp auth.js
+      # còn không nạp paywall ⇒ chưa bao giờ fade vào.
+      - name: animation không trỏ vào keyframe ma
+        run: npm run check:keyframes
+
       # Chặn tái phát bảng 64 quẻ sai mã hào: đã có lúc 49/64 quẻ mang mã của
       # quẻ khác (77% lượt gieo ra sai lời đoán) mà không gì báo, vì nhánh "tìm
       # quẻ gần nhất" nuốt hết. 64 chuỗi nhị phân thì mắt không soi được.

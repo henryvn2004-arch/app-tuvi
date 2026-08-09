@@ -488,6 +488,13 @@ async function anthropicCallTools(
  * Một lượt LLM có function-calling, TRẢ VỀ shape Anthropic
  * ({content, stop_reason, usage}) dù provider là Gemini. Provider chính đọc từ
  * config, tự fallback provider kia nếu lỗi.
+ *
+ * Kết quả gắn kèm `provider`/`model` THẬT SỰ đã chạy — vòng lặp tool có thể rơi
+ * sang provider backup giữa chừng, nên chỗ gọi mà chép tay tên model là ghi sai
+ * giá mà không có gì báo (đúng bẫy `generatePortraitImage` đã trả giá).
+ * Lấy hằng số cấu hình chứ KHÔNG lấy `model` trong phản hồi Anthropic: bản
+ * phản hồi trả id đã gắn hậu tố ngày, tra `MODEL_PRICING` trượt khoá rồi lặng
+ * lẽ rơi về giá mặc định (Sonnet) — đắt gấp 3 nếu thực tế chạy Haiku.
  */
 export async function callLLMTools(
   system: any,
@@ -500,8 +507,13 @@ export async function callLLMTools(
   let lastErr: unknown;
   for (const p of order) {
     try {
-      if (p === 'gemini') return await geminiCallTools(system, convo, tools, toolChoiceNone, maxTokens);
-      return await anthropicCallTools(system, convo, tools, toolChoiceNone, maxTokens);
+      const r =
+        p === 'gemini'
+          ? await geminiCallTools(system, convo, tools, toolChoiceNone, maxTokens)
+          : await anthropicCallTools(system, convo, tools, toolChoiceNone, maxTokens);
+      r.provider = p;
+      r.model = p === 'gemini' ? GEMINI_MODEL : ANTHROPIC_MODEL;
+      return r;
     } catch (e) {
       lastErr = e;
       console.error(`[callLLMTools] ${p} lỗi → thử backup:`, (e as Error).message);

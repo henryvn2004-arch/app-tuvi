@@ -117,6 +117,51 @@ function textOf(content: any[]): string {
   return (content || []).filter(b => b.type === 'text').map(b => b.text).join('\n').trim();
 }
 
+// ─── Cộng dồn chi phí một LƯỢT chat (kể cả các vòng tool-use) ──
+// Đường rail cũ này đi qua callLLMTools trong VÒNG LẶP, nên phải cộng dồn rồi
+// ghi MỘT dòng cuối lượt — y như runAgent (lib/agent/run.ts) làm cho /api/v1/chat.
+// Ghi từng vòng thì một câu hỏi của người dùng nở ra 2–4 dòng `llm_usage`, đếm
+// "số lượt" ở panel Biên LN thành vô nghĩa.
+class ChatUsageTally {
+  private readonly t0 = Date.now();
+  private model = '';
+  private readonly u = { input_tokens: 0, cache_creation_input_tokens: 0, cache_read_input_tokens: 0, output_tokens: 0 };
+  private rounds = 0;
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  add(data: any): void {
+    if (!data) return;
+    // Giữ model của vòng GẦN NHẤT: fallback provider có thể xảy ra giữa chừng.
+    if (data.model) this.model = data.model;
+    this.u.input_tokens += data.usage?.input_tokens || 0;
+    this.u.output_tokens += data.usage?.output_tokens || 0;
+    this.u.cache_creation_input_tokens += data.usage?.cache_creation_input_tokens || 0;
+    this.u.cache_read_input_tokens += data.usage?.cache_read_input_tokens || 0;
+    this.rounds += 1;
+  }
+
+  get plain() {
+    return { input_tokens: this.u.input_tokens, output_tokens: this.u.output_tokens, rounds: this.rounds };
+  }
+
+  /** Lượt hỏng trước khi gọi được provider nào → KHÔNG ghi dòng chi phí 0đ. */
+  flush(toolId: string): void {
+    if (!this.rounds || !this.model) return;
+    void logLlmUsage(toolId, this.model, this.u, Date.now() - this.t0);
+  }
+}
+
+// Bucket chi phí của lượt rail. CỐ Ý *không* dùng 'laso' cho lượt chat có lá số:
+// 'laso' là tool_id của Luận Giải 24 phần (1.500 Lượng) — trộn vào là bóp méo
+// đúng con số biên LN vừa vá. Lượt rail thu tiền qua `credit_transactions
+// .type='chat'`, nên bucket chi phí phải là 'chat' thì hai vế mới ghép được.
+// Kịch bản phi-lá-số giữ nguyên tên tool (mirror `scenario?.type` của run.ts).
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function chatUsageToolId(body: any, hasLaso: boolean): string {
+  const t = body?.toolType;
+  return hasLaso || !t || t === 'laso' ? 'chat' : String(t);
+}
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 async function handleChat(body: any): Promise<Response> {
   const { messages } = body;
@@ -133,16 +178,16 @@ async function handleChat(body: any): Promise<Response> {
   const MAX_ROUNDS = 3;
   const toolsUsed: string[] = [];
   let finalText = '';
-  const usage = { input_tokens: 0, output_tokens: 0, rounds: 0 };
+  const tally = new ChatUsageTally();
+  const hasLaso = !!(lasoDataForTools?.palaces?.length);
+  const usageToolId = chatUsageToolId(body, hasLaso);
 
   try {
     for (let round = 0; round <= MAX_ROUNDS; round++) {
       const lastRound = round === MAX_ROUNDS;
       const data = await callLLM(systemForCall, convo, tools, lastRound, maxTokens);
       const content = data.content || [];
-      usage.input_tokens += data.usage?.input_tokens || 0;
-      usage.output_tokens += data.usage?.output_tokens || 0;
-      usage.rounds += 1;
+      tally.add(data);
 
       if (data.stop_reason === 'tool_use' && !lastRound) {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -162,12 +207,19 @@ async function handleChat(body: any): Promise<Response> {
       break;
     }
   } catch (e: unknown) {
+    // Token của các vòng ĐÃ chạy là chi phí thật dù lượt hỏng — vẫn ghi sổ.
+    tally.flush(usageToolId);
     return err((e as Error).message);
   }
 
+  tally.flush(usageToolId);
   const toolType = body.toolType || 'laso';
-  const hasLaso  = !!(lasoDataForTools?.palaces?.length);
-  return ok({ answer: finalText || 'Xin lỗi, có lỗi xảy ra.', scenario: hasLaso ? 'laso' : toolType, toolsUsed, usage });
+  return ok({
+    answer: finalText || 'Xin lỗi, có lỗi xảy ra.',
+    scenario: hasLaso ? 'laso' : toolType,
+    toolsUsed,
+    usage: tally.plain,
+  });
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -191,6 +243,9 @@ async function handleChatStream(body: any): Promise<Response> {
     writer.write(enc.encode('data: ' + JSON.stringify(obj) + '\n\n'));
   }
 
+  const tally = new ChatUsageTally();
+  const usageToolId = chatUsageToolId(body, !!(lasoDataForTools?.palaces?.length));
+
   (async () => {
     const MAX_ROUNDS = 3;
     const toolsUsed: string[] = [];
@@ -205,6 +260,7 @@ async function handleChatStream(body: any): Promise<Response> {
           // như thường). Giữ đúng shape event {type:'text'} / {type:'error'}.
           try {
             const data = await callLLM(systemForCall, convo, tools, true, maxTokens);
+            tally.add(data);
             const text = textOf(data.content || []);
             if (text) send({ type: 'text', text });
           } catch (e: unknown) {
@@ -214,6 +270,7 @@ async function handleChatStream(body: any): Promise<Response> {
         }
 
         const data = await callLLM(systemForCall, convo, tools, false, maxTokens);
+        tally.add(data);
         const content = data.content || [];
 
         if (data.stop_reason === 'tool_use') {
@@ -240,6 +297,9 @@ async function handleChatStream(body: any): Promise<Response> {
       send({ type: 'error', message: (e as Error).message });
     }
 
+    // Ghi TRƯỚC khi đóng stream, và ở đường chung của cả nhánh lỗi lẫn nhánh
+    // thành công — đặt trong `try` là lượt hỏng giữa chừng mất hết dấu chi phí.
+    tally.flush(usageToolId);
     send({ type: 'done', toolsUsed });
     writer.close();
   })();

@@ -5,6 +5,122 @@
 
 ---
 
+## 🧹 Vá nốt hai món nợ: rail cũ vô hình + `animation` trỏ vào keyframe ma (2026-08-09, PR sau #459)
+
+Henry: *"làm nốt luôn đi"* — hai món tao cố ý để lại ở PR trước.
+
+### 🔴 A. `/api/lasotuvi?action=chat` — đường rail CŨ chưa từng ghi một dòng usage
+PR trước vá đường `phan` (24 phần luận giải). Đường `action=chat` — dùng ở
+`profile.html` · `chatbot.js` · widget luận giải · `tu-binh` · `xem-tuoi` ·
+`xem-lam-an` · `tuvi-chat` — thì **vẫn trắng**, ở CẢ hai nhánh stream và
+non-stream. Đối chứng đo được trên `origin/main`: cả hai trả **200** mà ghi
+**0 dòng** `llm_usage`.
+- **Cộng dồn rồi ghi MỘT dòng cuối lượt** (`ChatUsageTally`), y như `runAgent`.
+  Ghi từng vòng thì một câu hỏi nở ra 2–4 dòng, cột "số lượt" ở panel Biên LN
+  thành vô nghĩa. Nhánh non-stream vốn đã cộng dồn sẵn (chỉ để trả về client),
+  nhánh **stream thì chưa cộng gì cả** — phải thêm ở cả 2 chỗ gọi.
+- 🔑 **Bucket là `'chat'`, KHÔNG phải `'laso'`.** `'laso'` là tool_id của Luận
+  Giải 24 phần (1.500 Lượng) — nhét lượt rail vào đó là bóp méo đúng con số vừa
+  vá xong ở PR trước. Lượt rail thu tiền qua `credit_transactions.type='chat'`
+  nên bucket chi phí phải khớp cái đó. Kịch bản phi-lá-số giữ tên tool (mirror
+  `scenario?.type` của `run.ts`).
+- **`callLLMTools` nay trả kèm `provider`/`model` thật sự đã chạy** — vòng lặp
+  tool có thể rơi sang provider backup GIỮA CHỪNG, chép tay tên model ở chỗ gọi
+  là ghi sai giá mà không có gì báo (đúng bẫy `generatePortraitImage`).
+  ⚠️ Lấy **hằng số cấu hình**, KHÔNG lấy `model` trong phản hồi Anthropic: bản
+  phản hồi trả id gắn hậu tố ngày (`claude-sonnet-4-6-20260501`), tra
+  `MODEL_PRICING` trượt khoá rồi **lặng lẽ rơi về giá mặc định** — đắt gấp 3 nếu
+  thực tế chạy Haiku. Có ca kiểm canh đúng chuyện này.
+- **Lượt HỎNG giữa chừng vẫn ghi** phần token đã đốt (chi phí thật); nhưng hỏng
+  NGAY vòng đầu thì **không đẻ dòng 0đ**. `flush()` của nhánh stream đặt NGOÀI
+  `try` — để trong là lượt hỏng mất sạch dấu chi phí.
+
+### 🔴 B. Gom `@keyframes spin` — ĐO XONG THÌ QUYẾT ĐỊNH KHÔNG GOM
+Backlog ghi "~26 bản chép tay, gom về một chỗ". Đo trước khi làm thì lộ ra gom
+là **sai hướng**:
+- **23/25 trang liên quan không nạp một file CSS ngoài nào** — toàn bộ style
+  inline, trang cố ý dựng tự chứa. Không có stylesheet chung để gom vào.
+- Nơi dùng chung duy nhất là **`nav.js`, tức JS** (còn `defer` ở vài trang).
+  Gom vào đó = đổi *"spinner chạy bằng CSS thuần"* thành *"spinner phải chờ JS
+  thực thi xong"* trên 22 trang ⇒ **hạ độ bền để đổi lấy vài chục dòng CSS**.
+  Cộng thêm: đụng `nav.js` là phải bump `?v=` trên 89 file, mà mấy lượt bump kiểu
+  đó đã đẻ ra drift version hai lần rồi.
+- 🔑 **Keyframe xoay là giá trị TẬN CÙNG** (`rotate(360deg)` — không bao giờ phải
+  sửa) nên hai bản **không có gì để trôi khỏi nhau**. Đây là một trong số ít
+  duplication lành tính. Quét cả repo: **0 file dùng `spin` mà quên khai** ⇒
+  duplication này hiện chưa hại ai.
+
+### 🧷 Thay bằng `scripts/check-keyframes.mjs` — bắt đúng thứ CÓ hại
+Cái hại thật là `animation:` trỏ tới keyframe **KHÔNG TỒN TẠI**: trình duyệt
+không báo gì, phần tử vẫn hiện, **chỉ là đứng im**. Luật: mỗi tên keyframe được
+dùng phải khai được TỚI ĐƯỢC từ chính file đó (trong file, hoặc trong
+stylesheet/script mà file đó nạp). File `.js`/`.css`/`.ts` chỉ tính CHÍNH NÓ —
+module export ra ngoài phải tự lo CSS của mình (bài học `orbHtml()`).
+
+### 🐞 Bộ dò bắt được lỗi THẬT ngay lượt chạy đầu
+`public/auth.js` dựng banner **"Chào mừng! Bạn đã nhận Lượng miễn phí"** — thứ
+ĐẦU TIÊN người vừa đăng ký nhìn thấy — bằng `animation:tpw-fade`. Keyframe đó
+nằm trong `tuvi-paywall.js` và chỉ được chèn **LƯỜI** khi có paywall dựng lên
+(`_css()`), mà **38/73 trang nạp `auth.js` còn không nạp paywall**, và đường
+đăng ký thì chẳng dựng paywall bao giờ. ⇒ banner **chưa bao giờ fade vào**.
+- Vá bằng cách cho `auth.js` **tự khai keyframe của nó** (`auth-fade`), không
+  mượn của file khác.
+- Đo trong trình duyệt trên trang KHÔNG nạp paywall: bản mới `animCount=1`,
+  `opacity` khởi điểm **0**; **ĐỐI CHỨNG `origin/main`: `animCount=0`,
+  `opacity=1`** ⇒ lỗi có thật, không phải lo hão.
+- **Không bump `auth.js?v=2`**: asset `public/` trả `max-age=0,
+  must-revalidate` nên revalidate mỗi lượt — cùng tiền lệ đã đo ở #361.
+
+### Verify
+`tsc` 0 · `lint` 0 lỗi (72 warning pre-existing) · `prettier` sạch · **9/9 bộ
+dò sạch** (`prices`/`groups`/`nostore`/`share`/`hexagrams`/`hao`/`motifs`/
+`terms`/**`keyframes`**) · engine **185 pass** · `node --check`.
+- **27 ca trên ROUTE THẬT** (`next dev` + chặn `fetch` bằng `NODE_OPTIONS
+  --import`, nên prompt/tool/vòng lặp đều chạy thật): 1 vòng → đúng 1 dòng ·
+  **3 vòng tool-use → VẪN đúng 1 dòng, token cộng dồn 600/60** · bucket `chat` ·
+  bucket `than-so-hoc` cho kịch bản phi-lá-số · model ghi sổ là khoá tra được
+  chứ không phải id có hậu tố ngày · có `duration_ms` · lượt hỏng giữa chừng vẫn
+  ghi · **ĐỐI CHỨNG hỏng vòng đầu → 0 dòng rác** · nhánh stream đủ cả 5 tính
+  chất trên · hợp đồng API cũ (`usage`/`toolsUsed`/`scenario`) không đổi.
+- 🪤 **ĐỐI CHỨNG `origin/main`: cả stream lẫn non-stream trả 200 mà 0 dòng usage.**
+- **10 ca trên CHÍNH bộ dò**, dựng lại đúng 4 lỗi + 3 đối chứng phải im: bắt lại
+  lỗi `auth.js` thật · trang gỡ mất keyframe của mình · module gỡ mất keyframe
+  của mình · dùng keyframe của file mình KHÔNG nạp · **im với chú thích nhắc tên
+  animation** · im với `none`/`cubic-bezier`/từ khoá · im khi keyframe tới qua
+  `<link>`. Kèm ca canh **không để lại file rác** sau các lượt sửa-rồi-khôi-phục.
+- **9 ca trên trình duyệt** cho banner (xem trên).
+- **153 ca hồi quy** của 3 bộ kiểm trước (`sweep` 76 · `pages` 60 · `eta` 17):
+  vẫn xanh.
+
+### 🪤 Bẫy đã vấp
+1. **Bộ dò kêu oan vào CHÍNH chú thích tao vừa viết** — dòng tài liệu nhắc
+   `animation:tpw-fade` bị đếm là chỗ dùng. Phải bỏ chú thích trước khi quét, và
+   **giữ nguyên số dòng** (thay khối chú thích bằng đúng ngần ấy `\n`) thì số
+   dòng báo lỗi mới còn trỏ đúng chỗ. 🔑 Chỉ cắt `//` khi nó ĐỨNG ĐẦU dòng — cắt
+   giữa dòng sẽ nuốt luôn `https://…` rồi ăn mất phần khai animation nằm sau nó.
+2. 🔴 **`fs.globSync` chỉ có từ Node 22, mà CI chạy Node 20** — bộ dò sẽ chết
+   ngay trong CI thay vì bắt lỗi, và chết theo kiểu trông như "script hỏng" chứ
+   không phải "có lỗi cần vá". Đổi sang duyệt cây bằng tay; đếm lại sau khi đổi
+   ra **đúng 98 lượt / 58 file** như trước ⇒ không mất phạm vi quét.
+3. **Ca đỏ của `verify-orb` là ĐỐI CHỨNG HẾT HẠN** (lần thứ hai gặp): nó khẳng
+   định `origin/main` *chưa* có `pacer`, mà PR #459 đã merge nên main có rồi.
+   Đối chứng neo vào `origin/main` vẫn hết hạn khi chính PR đó vào main.
+4. `setContent` cho origin `about:blank` → `auth.js` đọc `document.cookie` ném
+   `SecurityError`. Đo hành vi của script có đụng cookie/storage thì **phải phục
+   vụ qua http thật**, đừng dùng `setContent`.
+
+### CÒN LẠI
+- **Đường `phan` và đường `chat` nay đều ghi usage; `/api/v1/chat` vốn đã ghi.**
+  Hết đường LLM nào vô hình trong panel Biên LN.
+- Vẫn **chưa có bề mặt đọc `duration_ms`** — dữ liệu mới chảy từ lượt deploy
+  trước. Sau 1–2 tuần thì thêm cột p50/p75 vào panel Biên LN.
+- **20 trang STREAM vẫn chưa đo "thời gian tới token đầu tiên"** — con số quyết
+  định có cần orb ở đó hay không.
+- ~28 bản `@keyframes spin` **CỐ Ý giữ nguyên** (lý do ở trên). Bộ dò mới làm
+  việc giữ chúng thành an toàn thay vì canh bạc.
+
+---
+
 ## ⏱️ ETA TỰ HIỆU CHỈNH + `llm_usage` cuối cùng cũng có THỜI LƯỢNG (2026-08-09, PR sau #457)
 
 Henry: *"Có nên estimate thời gian chạy của từng tool xong… show estimated time
