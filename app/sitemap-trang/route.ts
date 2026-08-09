@@ -15,6 +15,7 @@ const STATIC_PAGES = [
     '/tu-vi',                 // SEO pages index
     '/tu-dien',               // từ điển index
     '/about.html',
+    '/nguon-du-lieu.html', // ghi công nguồn dữ liệu (bắt buộc theo giấy phép CC BY)
     '/resources.html',
     '/blog.html',
     '/menh-kho.html',

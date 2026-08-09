@@ -48,6 +48,7 @@
 import type { Laso } from '@/lib/engine/laso';
 import { MENH_ROLE, resolveCareerBase, type CareerBase } from '@/lib/engine/past-life';
 import { currentNamXem } from '@/lib/engine/namxem';
+import { chonNhanh, type DomainId, type NhanhKetQua } from '@/lib/engine/nghe-nghiep';
 
 type Rec = Record<string, unknown>;
 interface StarObj {
@@ -731,8 +732,10 @@ export interface NganhGoiY {
   sacThai: string[];
 }
 
-function goiYNganh(ls: Laso, kieu: KieuId): NganhGoiY {
-  const cb = resolveCareerBase(ls);
+// `cb` truyền VÀO chứ không tự gọi lại `resolveCareerBase` — tầng nhánh cũng
+// cần đúng bản đọc chức phận đó. Gọi hai lần là mở đường cho hai bản trôi khỏi
+// nhau, đúng bẫy repo đã trả giá ở can chi ngày.
+function goiYNganh(cb: CareerBase, kieu: KieuId): NganhGoiY {
   const d = DOMAIN_NGANH[cb.domain];
   return {
     linhVuc: d.linhVuc,
@@ -822,6 +825,13 @@ export interface CongSoProfile {
   loiTrangThai: string;
   /** Gợi ngành nghề cụ thể — đọc chức phận cung Quan Lộc theo CẶP chính tinh. */
   nganh: NganhGoiY;
+  /**
+   * TẦNG 4 — nhánh cụ thể trong lĩnh vực (xem `lib/engine/nghe-nghiep.ts`).
+   * Tách hẳn khỏi `nganh` chứ không nhét vào trong: đây là phần TRẢ TIỀN, và
+   * đường tiền phải cắt được bằng một dòng chứ không phải bằng cách lọc field
+   * — đúng khuôn W1 đã dựng cho 3 tool cẩm nang.
+   */
+  nhanh: NhanhKetQua;
   quanLoc: { sao: string[]; muon: boolean; diem: number | null; cachCuc: string[] };
 }
 
@@ -836,6 +846,9 @@ export function computeCongSo(ls: Laso, trangThai: TrangThai = 'nhan-vien', namX
   // bịa ra một bộ điểm "năm nay" là dựng dữ liệu. Cùng lý do, `resolveVanNam`
   // KHÔNG trả điểm cho năm mà trả điểm của KHUNG đại vận.
   const vanNam = resolveVanNam(ls, nam);
+  // MỘT lượt đọc chức phận, dùng chung cho cả `nganh` (tầng 1–3) lẫn `nhanh`
+  // (tầng 4) — xem chú thích ở `goiYNganh`.
+  const careerBase = resolveCareerBase(ls);
 
   const radar: RadarItem[] = RADAR_CUNG.map((r) => {
     const p = palaceByName(ls, r.cung);
@@ -935,7 +948,8 @@ export function computeCongSo(ls: Laso, trangThai: TrangThai = 'nhan-vien', namX
     vanNam,
     doi,
     loiTrangThai: LOI_THEO_TRANG_THAI[trangThai][phan.kieu],
-    nganh: goiYNganh(ls, phan.kieu),
+    nganh: goiYNganh(careerBase, phan.kieu),
+    nhanh: chonNhanh(ls, careerBase.domain as DomainId, careerBase.tier),
     quanLoc: {
       sao: quanB.stars.map(starLabel),
       muon: quanB.muon,
@@ -976,6 +990,20 @@ function goiYGhep(cung: string, menh: KieuId, cua: KieuId | null, nenTim: KieuId
 /** ⚠️ `extractGenericContext` BỎ QUA im lặng mọi giá trị là object/mảng —
  * payload gửi rail bắt buộc phẳng, mọi danh sách phải dẹp thành chuỗi ngay tại
  * đây. Đã trả giá một lần ở thẻ Vận hôm nay. */
+/**
+ * Bản hồ sơ cho lượt TÍNH THỬ — y hệt bản đầy đủ nhưng KHÔNG có tầng nhánh.
+ *
+ * 🔑 Tách thành hàm riêng chứ không lọc tại chỗ trong route: `GET /api/cong-so`
+ * trả `Cache-Control: public, s-maxage=86400`, tức một lần rò là CDN phát lại
+ * phần trả tiền cho MỌI người và không có cách nào thu hồi. Đường tiền phải cắt
+ * được bằng một dòng đọc ra được, và có bài kiểm canh đúng dòng đó.
+ */
+export function hoSoTinhThu(p: CongSoProfile): Omit<CongSoProfile, 'nhanh'> {
+  const { nhanh: _bo, ...conLai } = p;
+  void _bo;
+  return conLai;
+}
+
 export function railData(p: CongSoProfile): Record<string, string | number | boolean> {
   const top = [...p.radar].sort((a, b) => b.diem - a.diem);
   return {
@@ -1014,5 +1042,40 @@ export function railData(p: CongSoProfile): Record<string, string | number | boo
     luatVanNam: LUAT_VAN_NAM,
     ghepDoi: p.doi.map((d) => `${d.vai} (cung ${d.cung}): kiểu ${d.kieuTen}`).join(' | '),
     kieuNenTimDeBu: KIEU[BU[p.phan.kieu]].ten,
+  };
+}
+
+/**
+ * Rail data KÈM tầng nhánh — chỉ dựng trên đường ĐÃ TRẢ TIỀN.
+ *
+ * Tách khỏi `railData` là cố ý: lượt tính thử đi qua GET có cache CDN công
+ * khai, nhét nhánh vào đó là phát không phần trả tiền. Và nếu rail biết nhánh
+ * ngay từ lượt free thì người ta hỏi rail thay vì mở tầng nhánh — tự tay phá
+ * đúng thứ mình vừa dựng để bán.
+ *
+ * ⚠️ Payload gửi rail phải PHẲNG — `extractGenericContext` bỏ IM LẶNG mọi giá
+ * trị là object.
+ */
+export function railDataDayDu(p: CongSoProfile): Record<string, string | number | boolean> {
+  const nh = p.nhanh;
+  return {
+    ...railData(p),
+    nhanhNghe: nh.goiY.map((g) => `${g.ten} (${g.diem}%)`).join(' · '),
+    nhanhChiTiet: nh.goiY
+      .map((g) => `${g.ten}: ${g.chat} Việc cụ thể: ${g.viec.join(', ')}.`)
+      .join(' | '),
+    lyDoTungNhanh: nh.goiY.map((g) => `${g.ten} ← ${g.vi.join(', ') || 'không trục nào nổi bật'}`).join(' | '),
+    chatNguoiNoiBat: nh.chatNguoi.map((t) => `${t.ten} (${t.cao})`).join(' · ') || 'không trục nào nổi trội',
+    ngheKhongDoiHoi: nh.neTranh.map((t) => `${t.ten} — ${t.thap}`).join(' | ') || '—',
+    canhBaoLechBac: nh.lechBac
+      ? 'MỌI nhánh gợi ý đều lệch bậc chức phận hiện tại — đây là HƯỚNG hợp với chất người, chưa phải chỗ đứng ngay bây giờ. Phải nói rõ chỗ này, đừng bày như thể họ vào được ngay.'
+      : 'Không',
+    canhBaoMoNhat: nh.moNhat
+      ? 'Lá số KHÔNG chỉ ra một nhánh nào nổi bật trong lĩnh vực này. Nói thẳng là chưa đủ tín hiệu, đừng chọn đại một nhánh rồi luận như thể chắc chắn.'
+      : 'Không',
+    luatDocTrucThap:
+      'Trục thấp nghĩa là NGHỀ KHÔNG ĐÒI HỎI trục đó, TUYỆT ĐỐI không đọc thành "người này thiếu". Ví dụ nghề sáng tác chấm thấp ở trục đáng-tin-cậy chỉ có nghĩa nghề đó không đo người bằng giờ giấc và quy trình.',
+    luatDocNhanh:
+      'Nhánh là CÁCH LÀM trong lĩnh vực, không phải một lĩnh vực khác. Phần trăm là độ KHỚP giữa chất người và chất việc, KHÔNG phải xác suất thành công — cấm đọc thành "80% khả năng thành công".',
   };
 }

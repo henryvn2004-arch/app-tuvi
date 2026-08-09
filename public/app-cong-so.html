@@ -80,6 +80,17 @@
 .cs-row>span{flex:0 0 178px;color:var(--text-lt);font-size:11.5px;text-transform:uppercase;letter-spacing:.04em}
 .cs-row>div{flex:1;min-width:0}
 @media(max-width:560px){.cs-row{flex-direction:column;gap:2px}.cs-row>span{flex:none}.cs-kieu{font-size:25px}}
+.cs-nhanh{border:1px solid var(--line);border-left:4px solid var(--gold-soft);border-radius:9px;padding:12px 14px;background:var(--paper);margin-bottom:11px}
+.cs-nhanh-top{display:flex;align-items:baseline;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.cs-nhanh-ten{font-family:var(--serif);font-size:16.5px;font-weight:700;line-height:1.35}
+.cs-nhanh-diem{font-size:11.5px;color:var(--gold-soft);font-weight:600;white-space:nowrap}
+.cs-nhanh-chat{font-size:13px;color:var(--text-lt);line-height:1.7;margin-top:5px}
+.cs-nhanh-vi{font-size:12.5px;line-height:1.7;margin-top:7px}
+.cs-nhanh-bac{font-size:11.5px;color:var(--text-lt);line-height:1.6;margin-top:8px;font-style:italic}
+/* Nhánh phổ thông: nghề KHÔNG đòi một chất người đặc thù nào. Cố ý làm nhạt và
+   bỏ hẳn phần trăm — bày một con số ở đó là giả vờ có kết luận. */
+.cs-nhanh-pt{border-left-color:var(--line-2);opacity:.85}
+.cs-warn{font-size:12.5px;line-height:1.7;background:var(--gold-lt);border:1px solid var(--gold-soft);border-radius:8px;padding:9px 12px;margin-bottom:11px}
 .disc{font-size:11.5px;color:var(--text-lt);line-height:1.75;margin-top:12px;padding:10px 12px;background:var(--paper);border-radius:7px}
 </style>
 </head>
@@ -120,7 +131,7 @@
         <div class="err" id="error-msg"></div>
       </div>
 
-      <div id="resPanel">
+      <div id="resPanel" data-ws-result>
         <div class="res-block">
           <div class="res-block-header">
             <span class="res-block-title" id="resTitle">—</span>
@@ -130,6 +141,11 @@
             <div class="cs-canvas-wrap"><canvas id="csToaDo"></canvas></div>
             <div class="err" id="taiErr"></div>
             <div id="ketQua"></div>
+            <!-- Tầng NHÁNH: `nhanhHost` giữ phần đã mở, `lockHost` giữ tường.
+                 Hai ô riêng vì tường phải biến mất mà phần miễn phí ở trên vẫn
+                 nguyên — đúng khuôn W1. -->
+            <div id="nhanhHost"></div>
+            <div id="lockHost"></div>
             <div class="disc">
               Bốn tên gọi <b>Khai sáng · Lãnh đạo · Hỗ trợ · Hợp tác</b> là nhãn hiện đại do trang đặt cho dễ đọc — cổ thư không gọi thế. Cách chia thì có nền cổ pháp: nó là <b>tứ tượng</b> (lão dương · thiếu âm · thiếu dương · lão âm) áp lên 14 chính tinh, rơi đúng vào các bộ sao kinh điển.<br>
               Đây là <b>một khung đọc lá số</b>, không phải trắc nghiệm tâm lý đã qua kiểm định. Không có nghiên cứu đối chứng nào đứng sau nó. Dùng để hiểu mình và gợi chuyện, đừng dùng để tuyển người hay xếp việc cho người khác.
@@ -146,12 +162,13 @@
 
 <script>window.SHELL_ACTIVE='cong-so';window.SHELL_HISTORY=true;
 window.SHELL_INTRO={key:'cong-so',title:'Tử Vi Công Sở',desc:'Đọc lá số bằng <b>ngôn ngữ công việc</b>: bạn thuộc kiểu người nào ở chỗ làm, mạnh yếu ở <b>mười hai mặt</b> của đời đi làm, <b>bốn chặng bốn mươi năm</b>, và nên ghép đội với ai. Miễn phí, không trừ Lượng.'};</script>
-<script src="/tools-shared/cong-so.js?v=2"></script>
+<script src="/tools-shared/cong-so.js?v=4"></script>
 <script src="/tuvi-form.js?v=1"></script>
+<script src="/tuvi-paywall.js?v=17"></script>
 <script src="/poster.js?v=4"></script>
 <script src="/auth.js?v=2"></script>
   <script src="/nav.js?v=22" data-icons-only></script>
-<script src="/shell.js?v=64"></script>
+<script src="/shell.js?v=65"></script>
 <script>
 var _ho=null,_birth=null;
 TuviForm.render('tuviFormHost', {mode:'compact', gioitinh:'nam'});
@@ -208,6 +225,69 @@ function doCongSo(){
       ].join('\n')
     });
     document.querySelectorAll('#resPanel [data-ask]').forEach(function(el){el.addEventListener('click',function(){Shell.ask(el.getAttribute('data-ask'));});});
+    dungTuong();
+  });
+}
+
+// ── TẦNG NHÁNH (trả phí) ────────────────────────────────────────
+// ⚠️ `init` là BẮT BUỘC: thiếu `product` thì `lockPreview` đọc hụt bảng giá và
+// FAIL-CLOSED — không dựng tường, phần trả tiền lặng lẽ không bao giờ mời được
+// ai. Đúng thiết kế của paywall (thà không dựng còn hơn dựng với giá bịa).
+TuviPaywall.init({product:'cong-so',slug:function(){return _slug;}});
+var _slug='';
+var NHANH_KHOA=[
+  'Ba nhánh nghề cụ thể bên trong lĩnh vực của bạn',
+  'Việc làm được ngay ở từng nhánh, theo bối cảnh Việt Nam',
+  'Vì sao lá số hợp nhánh đó — nêu đích danh chất người',
+  'Chất người nổi bật và thứ nghề hợp với bạn KHÔNG đòi hỏi'
+];
+
+function dungTuong(){
+  document.getElementById('nhanhHost').innerHTML='';
+  // ⚠️ slug PHẢI bắt đầu bằng ĐÚNG tool_id `cong-so`, được dài hơn, cấm ngắn
+  // hơn — `hasRecentToolPayment` lọc `slug=like.cong-so*`. Slug ngắn hơn thì
+  // lưới đỡ "đã trả tiền mà vẫn ăn 402" chết im lặng (bài học Duyên Nợ).
+  _slug=TuviPaywall.generateToolSlug('cong-so-'+_birth.ngay+_birth.thang+_birth.nam+'-'+_birth.gioIdx+_birth.gioitinh);
+  TuviPaywall.lockPreview({
+    host:document.getElementById('lockHost'),
+    title:'⊙ Còn phần nhánh nghề chưa mở',
+    items:NHANH_KHOA,
+    cta:'Mở phần nhánh nghề',
+    slug:function(){return _slug;},
+    onUnlock:moNhanh
+  });
+}
+
+function moNhanh(){
+  var host=document.getElementById('nhanhHost');
+  host.innerHTML='<div class="cs-note">Đang mở phần nhánh nghề…</div>';
+  var tt=document.getElementById('trangThai').value;
+  var tok=(window.Auth&&Auth.getSession&&Auth.getSession()||{}).access_token||'';
+  return CongSoTool.moNhanh(
+    {ngay:_birth.ngay,thang:_birth.thang,nam:_birth.nam,gio:_birth.gioIdx,gioiTinh:_birth.gioitinh,trangThai:tt},
+    _slug,tok
+  ).then(function(r){
+    if(!r.ok){
+      host.innerHTML='';
+      // 402 = chưa thanh toán → dựng LẠI tường thay vì báo lỗi khó hiểu.
+      // Lỗi thật thì nói thật, và KHÔNG quẳng người ta về form trống — họ đang
+      // nhìn phần tính thử và có thể vừa trả tiền cho phần sau.
+      if(r.status===402){dungTuong();return;}
+      _err((r.data&&r.data.error)||'Chưa mở được phần nhánh nghề — vui lòng thử lại.');
+      dungTuong();
+      return;
+    }
+    _ho=r.data.hoSo;
+    host.innerHTML=CongSoTool.nhanhHTML(_ho);
+    // Rail nay biết cả tầng nhánh — nhưng CHỈ sau khi đã trả tiền.
+    Shell.setContext({
+      birth:{day:_birth.ngay,month:_birth.thang,year:_birth.nam,hourBranch:_birth.gioIdx,gender:_birth.gioitinh,name:_birth.hoten||undefined},
+      scenario:{type:'cong-so',data:r.data.rail},
+      label:'Tử Vi Công Sở · '+(_birth.hoten||'Hồ sơ')+' · '+_ho.kieu.ten,
+      greeting:'Đã mở phần nhánh nghề. Nhánh hợp nhất với bạn là **'+
+        ((_ho.nhanh.goiY[0]||{}).ten||'—')+'**. Bạn muốn tôi đi sâu nhánh nào, hay hỏi về một ngành cụ thể?',
+      chips:['Tôi có hợp làm ngành X không?','Nhánh đầu tiên cụ thể phải bắt đầu từ đâu?','Tôi còn thiếu gì để vào nhánh đó?','Ba nhánh này khác nhau ở chỗ nào?','Nếu tôi đang làm nghề khác thì sao?']
+    });
   });
 }
 
