@@ -5,6 +5,106 @@
 
 ---
 
+## 🧪 CI đo BẢN CŨ chứ không đo PR — smoke + E2E sang preview (2026-08-09, PR #463 + PR này)
+
+Henry: *"Vercel smoke test dùng để test gì thế? Sao giờ thiết kế lại skip test
+đó?"* → rồi *"Làm sao để tao mở SSO cho tất cả?"* → *"Ok làm nốt đi"*.
+
+### 🔴 Căn nguyên chung của cả hai workflow: đo NHẦM BẢN
+| | Trigger cũ | Thực tế đang đo |
+|---|---|---|
+| `smoke-prod.yml` | `deployment_status` nhưng **chặn preview** | không đo gì trên PR (check hiện **"skipped"**) |
+| `playwright.yml` | `push`/`pull_request` | **prod đang chạy**, tức bản PR chưa đụng tới |
+
+- 🔑 **Skip TRÔNG GIỐNG PASS.** Đếm "7 check xanh" trên PR là sai — smoke nằm
+  trong đó ở trạng thái skip. Prod chỉ được kiểm SAU khi merge.
+- 🔑 **`push` bắn TRƯỚC khi bản deploy tồn tại** ⇒ E2E 16 spec (có đăng nhập)
+  đi đo bản cũ. Xanh hay đỏ đều không nói gì về thay đổi trong PR.
+- Nay **cả hai** dùng chung một khuôn: chạy theo `deployment_status`, production
+  đo domain thật (giữ DNS + redirect apex→www + CDN trong phạm vi đo), mọi
+  deploy khác đo `target_url` của chính lượt đó. Nhờ vậy URL preview của nhánh
+  `dev` **hết phải chép cứng** trong `playwright.yml` — chuỗi đó sẽ mục mà không
+  ai hay.
+
+### 🔓 Mở cửa SSO cho CI mà KHÔNG mở preview cho công chúng
+Dùng **Protection Bypass for Automation** (Vercel → Settings → Deployment
+Protection), secret để trong GitHub Actions tên `VERCEL_BYPASS_SECRET`; hai
+config Playwright gửi kèm `x-vercel-protection-bypass` + `x-vercel-set-bypass-cookie`.
+- ⛔ **KHÔNG tắt Vercel Authentication.** Preview **dùng chung env với
+  production** (cùng `SUPABASE_SERVICE_KEY`, cùng key model, cùng key thanh
+  toán) và URL preview nằm ngay trên comment của PR ⇒ mở công khai là ai cũng
+  gọi được API ghi thẳng DB prod và đốt tiền model thật.
+- ⚠️ **Vì thế việc này CHỈ chữa "đo nhầm bản", KHÔNG chữa "cách ly dữ liệu"** —
+  E2E trên preview vẫn ghi vào đúng Supabase prod. Đừng nhầm hai thứ.
+- Thiếu secret thì config **bỏ header đi**, đường prod chạy y như cũ (domain
+  prod không bị gác) — nên hỏng secret không kéo sập lượt đo prod.
+
+### 🪤 Ba cái bẫy, cả ba chỉ lộ khi ĐO
+1. **`request.newContext()` KHÔNG thừa hưởng `use` của config.** Chỉ **FIXTURE**
+   `request` (tham số của test) mới mang `baseURL` + `extraHTTPHeaders`. Bản cũ
+   tự tạo context ở 4 ca API ⇒ trên preview mấy ca đó ăn 401 trong khi ca
+   `page.goto` vẫn xanh — kiểu đỏ rất khó lần. Đổi sang fixture cũng gỡ luôn 4
+   lượt `dispose()` tay.
+2. **Phép so neo vào HOST thì chết trên preview.** Ca paywall so URL redirect với
+   `tuviminhbao.com`, mà preview là `*.vercel.app` ⇒ đỏ oan. So theo **pathname**.
+3. 🔴 **Tao nói SAI một lần rồi tự đính chính bằng số liệu:** tao khẳng định
+   workflow chạy bằng `deployment_status` luôn lấy YAML từ **nhánh mặc định**,
+   nên PR không tự kiểm được chính nó. **Sai** — run sinh ra mang đúng tiêu đề
+   mới của nhánh PR, và số dòng trong log khớp spec mới. **GitHub dùng YAML +
+   code từ COMMIT CỦA DEPLOYMENT.** Nhờ vậy PR tự kiểm được chính nó.
+
+### 🐞 Bắt kèm — 42% lượt smoke prod đỏ suốt 6 ngày là BÁO ĐỘNG GIẢ
+Lượt smoke đầu của PR #463 đỏ ca `luan-giai.html: paywall block`. Đo lại lịch
+sử: **31/73 lượt prod đỏ (42%)**, xen kẽ xanh/đỏ trên **cùng một bản code**, và
+sáng hôm đó **không có commit nào** giữa lượt xanh cuối (04:55) với lượt cron đỏ
+đầu (06:58) ⇒ ca test đua nhịp, không phải prod sập. Issue #342 bị nhồi comment
+vì chuyện này từ 29/07.
+- **Căn nguyên: `locator.isVisible()` là phép đo TỨC THỜI** — tham số `timeout`
+  của nó KHÔNG có tác dụng chờ. Bản cũ đo ngay sau `domcontentloaded`, trước khi
+  JS kịp dựng tường. Nhánh redirect đua y hệt vì `page.url()` cũng đọc một lần.
+- Vá bằng `expect.poll` chờ **một trong hai kết cục hợp lệ** (chuyển trang đi,
+  hoặc tường/CTA mua hiện ra).
+- 🔑 **Quy ước: muốn CHỜ thì dùng web-first assertion (`expect(...).toBeVisible`,
+  `expect.poll`). `isVisible()`/`isEnabled()`/`page.url()` là ẢNH CHỤP một khoảnh
+  khắc** — đặt chúng ngay sau `domcontentloaded` là tự viết ra một ca flaky.
+- 🔑 **Bộ dò kêu oan 42% thì người ta thôi đọc nó.** Vì thế issue `prod-down`
+  nay **chỉ mở cho lượt đo prod**; preview đỏ để check đỏ trên PR là đủ.
+
+### Verify
+`tsc` 0 lỗi · `lint` 0 lỗi (72 warning pre-existing) · `prettier` sạch.
+- **Đầu-cuối trên preview THẬT đang bật SSO**: đo đúng `target_url`, **7/7 xanh**
+  (còn bị chặn thì cả 7 ca đều 401), bước mở issue `prod-down` **skipped** đúng
+  thiết kế. Rồi **trên prod THẬT** sau merge: `PROD_URL=https://tuviminhbao.com`,
+  **7/7 xanh**.
+- **Header đi ra thật hay không** — server giả ghi lại header từng request:
+  smoke **19/19** · E2E **4/4** (gồm điều hướng trình duyệt, asset con, và ca
+  API). **ĐỐI CHỨNG không secret: 0/19 và 0/4**, mà bộ smoke **vẫn 7/7 xanh** ⇒
+  đường prod không đổi hành vi.
+- **ĐỐI CHỨNG bản git HEAD** cho ca paywall, trên stub dựng đúng cuộc đua: HEAD
+  **đỏ cả hai** tình huống muộn, bản mới **xanh cả hai**, và **vẫn đỏ khi thật sự
+  không có tường** (chống đỗ giả).
+- **Logic chọn URL**: trích THẲNG khối shell từ workflow (không chép tay), chạy
+  đủ nhánh prod/`Production` hoa/preview/cron/dispatch — đúng cả.
+- 🪤 Một ca đỏ giữa chừng là **lỗi của stub**: server giả thiếu `charset=utf-8`
+  nên tiêu đề ra mojibake (`Tá»­ Vi`) và trượt `toHaveTitle`.
+
+### 🔑 VIỆC TAY (đã làm, ghi lại để khỏi đi tìm)
+Vercel → project **app-tuvi** → Settings → Deployment Protection → **Protection
+Bypass for Automation** → Add Secret; copy sang GitHub → Settings → Secrets →
+Actions, tên **`VERCEL_BYPASS_SECRET`**. Xoay secret là một cú bấm, không cần deploy.
+
+### CÒN LẠI
+- **Đừng đóng issue #342 vội** — mới có 1 lượt prod xanh trên bản đã vá, mà
+  trước đó nó xanh/đỏ xen kẽ. Đợi vài lượt nữa. Cơ chế đã tự lo: smoke prod đỏ
+  là workflow tự comment vào #342, nên **im lặng ở đó chính là tín hiệu xanh**.
+- **Deploy hỏng thì E2E/smoke KHÔNG chạy** (không còn `pull_request` để bắn).
+  Đổi lại check Vercel sẽ đỏ, nên không có đường nào lọt êm — nhưng nhớ tính
+  chất này khi đọc một PR thiếu check.
+- Phạm vi lịch sử tao soi được chỉ từ **04/08** trở lại (giới hạn phân trang
+  API); chưa xác minh mọi lượt đỏ trước đó cùng một nguyên nhân.
+
+---
+
 ## 🐞 Dạy Con: khung mới KHÔNG hiện — vì `portrait_cache` không có phiên bản SHAPE (2026-08-09, PR sau #458)
 
 Henry gửi link chia sẻ + 4 lời: *"sắp xếp sao cho nó khoa học hơn"* · *"tự dưng
