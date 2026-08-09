@@ -42,6 +42,7 @@ export const HISTORY_TABLE = {
   'nguoi-khac': 'nguoi_khac_reports',
   'day-con': 'day_con_reports',
   'nhan-mach': 'nhan_mach_reports',
+  'huong-nghiep-tre': 'huong_nghiep_tre_reports',
 } as const;
 
 export type PortraitToolId = keyof typeof HISTORY_TABLE;
