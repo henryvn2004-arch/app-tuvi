@@ -28,6 +28,9 @@ const projectGlobals = {
   fbq: 'readonly',
   Sentry: 'readonly',
   lucide: 'readonly',
+  // public/tool-prices.js — nguồn danh mục + giá dùng chung, nạp động ở nhiều
+  // trang (shell.js và tuvi-paywall.js tự chèn thẻ script khi trang chưa có).
+  ToolPrices: 'readonly',
 };
 
 const sharedRules = {

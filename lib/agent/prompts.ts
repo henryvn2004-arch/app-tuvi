@@ -13,7 +13,7 @@
 // ============================================================
 
 import { buildTools, TOOLS_INSTRUCTION } from "@/lib/agent/tools";
-import { LASO_AUTHORITY_RULE } from "@/lib/engine/laso";
+import { LASO_AUTHORITY_RULE, daiVanLines, type Laso } from "@/lib/engine/laso";
 import { currentNamXem } from "@/lib/engine/namxem";
 import { matchVanHanCombos, formatComboLines, type LayerCung } from "@/lib/agent/vanHanCombos";
 
@@ -26,6 +26,22 @@ interface ChatContext {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   lasoDataForTools: any; // for execTraVanHan — null for non-laso tools
 }
+
+/**
+ * Trần token CỨNG cho MỘT lượt trả lời của rail — lưới đỡ, không phải cái điều
+ * khiển độ dài (độ dài do RAIL_CHAT_RULES lo). Đặt cao hơn hẳn mức 60–120 từ
+ * mục tiêu để câu trả lời ngoan không bao giờ bị cắt giữa chừng, nhưng đủ thấp
+ * để chặn một lượt chạy hoang.
+ *
+ * ⚠️ Vì sao phải có: `runAgent` (đường của rail) XƯA NAY BỎ QUA `maxTokens` mà
+ * `buildChatContext` trả về — nó dùng `cfg.maxTokens` đọc từ `app_config`
+ * ['chat.max_tokens'], prod đang để **3000**. Tức mọi con số 1500/1800 ở dưới
+ * chỉ có tác dụng cho route legacy `/api/lasotuvi`, còn rail thật sự chạy tới
+ * 3000 token. Đo trên `events`: một lượt rail `cong-so` THẬT trả về **1.982
+ * token output** (~1.200 chữ) cho một câu hỏi. Nay `run.ts` lấy
+ * `min(cfg.maxTokens, bc.maxTokens)` nên con số này mới thật sự chặn.
+ */
+export const RAIL_MAX_TOKENS = 1000;
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function buildChatContext(body: any): ChatContext {
@@ -41,7 +57,7 @@ export function buildChatContext(body: any): ChatContext {
     return {
       systemForCall:    CHAT_SYSTEM_COMPAT(extractCompatContext(body.compatData, toolType), toolType, docs, persona),
       tools:            buildTools(false),
-      maxTokens:        1500,
+      maxTokens:        RAIL_MAX_TOKENS,
       lasoDataForTools: null,
     };
   }
@@ -50,7 +66,7 @@ export function buildChatContext(body: any): ChatContext {
     return {
       systemForCall:    CHAT_SYSTEM_TU_BINH(extractTuBinhContext(body.tuBinhData), docs, persona),
       tools:            buildTools(false),
-      maxTokens:        1500,
+      maxTokens:        RAIL_MAX_TOKENS,
       lasoDataForTools: null,
     };
   }
@@ -59,7 +75,7 @@ export function buildChatContext(body: any): ChatContext {
     return {
       systemForCall:    CHAT_SYSTEM_SINH_CON(extractSinhConContext(body.sinhConData), docs, persona),
       tools:            buildTools(false),
-      maxTokens:        1500,
+      maxTokens:        RAIL_MAX_TOKENS,
       lasoDataForTools: null,
     };
   }
@@ -68,7 +84,7 @@ export function buildChatContext(body: any): ChatContext {
     return {
       systemForCall:    CHAT_SYSTEM_CHON_NGAY(extractChonNgayContext(body.chonNgayData), docs, persona),
       tools:            buildTools(false),
-      maxTokens:        1500,
+      maxTokens:        RAIL_MAX_TOKENS,
       lasoDataForTools: null,
     };
   }
@@ -77,7 +93,7 @@ export function buildChatContext(body: any): ChatContext {
     return {
       systemForCall:    CHAT_SYSTEM_DAT_TEN(extractDatTenContext(body.datTenData), docs, persona),
       tools:            buildTools(false),
-      maxTokens:        1500,
+      maxTokens:        RAIL_MAX_TOKENS,
       lasoDataForTools: null,
     };
   }
@@ -86,54 +102,60 @@ export function buildChatContext(body: any): ChatContext {
     return {
       systemForCall:    CHAT_SYSTEM_DAT_TEN_DN(extractDatTenDnContext(body.datTenDnData), docs, persona),
       tools:            buildTools(false),
-      maxTokens:        1500,
+      maxTokens:        RAIL_MAX_TOKENS,
       lasoDataForTools: null,
     };
   }
 
   // ── Batch 2: Mệnh Lý / Huyền Học (nhẹ, deterministic seed + rail luận) ──
   if (toolType === 'nap-am') {
-    return { systemForCall: CHAT_SYSTEM_NAP_AM(extractGenericContext(body.napAmData), docs, persona), tools: buildTools(false), maxTokens: 1500, lasoDataForTools: null };
+    return { systemForCall: CHAT_SYSTEM_NAP_AM(extractGenericContext(body.napAmData), docs, persona), tools: buildTools(false), maxTokens: RAIL_MAX_TOKENS, lasoDataForTools: null };
   }
   if (toolType === 'kim-lau') {
-    return { systemForCall: CHAT_SYSTEM_KIM_LAU(extractKimLauContext(body.kimLauData), docs, persona), tools: buildTools(false), maxTokens: 1500, lasoDataForTools: null };
+    return { systemForCall: CHAT_SYSTEM_KIM_LAU(extractKimLauContext(body.kimLauData), docs, persona), tools: buildTools(false), maxTokens: RAIL_MAX_TOKENS, lasoDataForTools: null };
   }
   if (toolType === 'ngu-hanh-ten') {
-    return { systemForCall: CHAT_SYSTEM_NGU_HANH_TEN(extractGenericContext(body.nguHanhTenData), docs, persona), tools: buildTools(false), maxTokens: 1500, lasoDataForTools: null };
+    return { systemForCall: CHAT_SYSTEM_NGU_HANH_TEN(extractGenericContext(body.nguHanhTenData), docs, persona), tools: buildTools(false), maxTokens: RAIL_MAX_TOKENS, lasoDataForTools: null };
   }
   if (toolType === 'than-so-hoc') {
-    return { systemForCall: CHAT_SYSTEM_THAN_SO(extractGenericContext(body.thanSoData), docs, persona), tools: buildTools(false), maxTokens: 1500, lasoDataForTools: null };
+    return { systemForCall: CHAT_SYSTEM_THAN_SO(extractGenericContext(body.thanSoData), docs, persona), tools: buildTools(false), maxTokens: RAIL_MAX_TOKENS, lasoDataForTools: null };
   }
   if (toolType === 'bat-trach') {
-    return { systemForCall: CHAT_SYSTEM_BAT_TRACH(extractGenericContext(body.batTrachData), docs, persona), tools: buildTools(false), maxTokens: 1500, lasoDataForTools: null };
+    return { systemForCall: CHAT_SYSTEM_BAT_TRACH(extractGenericContext(body.batTrachData), docs, persona), tools: buildTools(false), maxTokens: RAIL_MAX_TOKENS, lasoDataForTools: null };
   }
   if (toolType === 'kinh-dich') {
-    return { systemForCall: CHAT_SYSTEM_KINH_DICH(extractGenericContext(body.kinhDichData), docs, persona), tools: buildTools(false), maxTokens: 1500, lasoDataForTools: null };
+    return { systemForCall: CHAT_SYSTEM_KINH_DICH(extractGenericContext(body.kinhDichData), docs, persona), tools: buildTools(false), maxTokens: RAIL_MAX_TOKENS, lasoDataForTools: null };
   }
   if (toolType === 'mai-hoa') {
-    return { systemForCall: CHAT_SYSTEM_MAI_HOA(extractMaiHoaContext(body.maiHoaData), docs, persona), tools: buildTools(false), maxTokens: 1500, lasoDataForTools: null };
+    return { systemForCall: CHAT_SYSTEM_MAI_HOA(extractMaiHoaContext(body.maiHoaData), docs, persona), tools: buildTools(false), maxTokens: RAIL_MAX_TOKENS, lasoDataForTools: null };
   }
   if (toolType === 'ky-mon') {
-    return { systemForCall: CHAT_SYSTEM_KY_MON(extractKyMonContext(body.kyMonData), docs, persona), tools: buildTools(false), maxTokens: 1800, lasoDataForTools: null };
+    return { systemForCall: CHAT_SYSTEM_KY_MON(extractKyMonContext(body.kyMonData), docs, persona), tools: buildTools(false), maxTokens: RAIL_MAX_TOKENS, lasoDataForTools: null };
   }
   if (toolType === 'hoang-dao') {
-    return { systemForCall: CHAT_SYSTEM_HOANG_DAO(extractGenericContext(body.hoangDaoData), docs, persona), tools: buildTools(false), maxTokens: 1500, lasoDataForTools: null };
+    return { systemForCall: CHAT_SYSTEM_HOANG_DAO(extractGenericContext(body.hoangDaoData), docs, persona), tools: buildTools(false), maxTokens: RAIL_MAX_TOKENS, lasoDataForTools: null };
   }
   if (toolType === 'ngay-tot') {
-    return { systemForCall: CHAT_SYSTEM_NGAY_TOT(extractGenericContext(body.ngayTotData), docs, persona), tools: buildTools(false), maxTokens: 1500, lasoDataForTools: null };
+    return { systemForCall: CHAT_SYSTEM_NGAY_TOT(extractGenericContext(body.ngayTotData), docs, persona), tools: buildTools(false), maxTokens: RAIL_MAX_TOKENS, lasoDataForTools: null };
   }
   if (toolType === 'luc-nham') {
-    return { systemForCall: CHAT_SYSTEM_LUC_NHAM(extractGenericContext(body.lucNhamData), docs, persona), tools: buildTools(false), maxTokens: 1500, lasoDataForTools: null };
+    return { systemForCall: CHAT_SYSTEM_LUC_NHAM(extractGenericContext(body.lucNhamData), docs, persona), tools: buildTools(false), maxTokens: RAIL_MAX_TOKENS, lasoDataForTools: null };
   }
   if (toolType === 'ban-do-sao') {
-    return { systemForCall: CHAT_SYSTEM_BAN_DO_SAO(extractGenericContext(body.banDoSaoData), docs, persona), tools: buildTools(false), maxTokens: 1800, lasoDataForTools: null };
+    return { systemForCall: CHAT_SYSTEM_BAN_DO_SAO(extractGenericContext(body.banDoSaoData), docs, persona), tools: buildTools(false), maxTokens: RAIL_MAX_TOKENS, lasoDataForTools: null };
+  }
+  if (toolType === 'cong-so') {
+    return { systemForCall: CHAT_SYSTEM_CONG_SO(extractGenericContext(body.congSoData), docs, persona), tools: buildTools(false), maxTokens: RAIL_MAX_TOKENS, lasoDataForTools: null };
+  }
+  if (toolType === 'nhan-mach') {
+    return { systemForCall: CHAT_SYSTEM_NHAN_MACH(extractGenericContext(body.nhanMachData), docs, persona), tools: buildTools(false), maxTokens: RAIL_MAX_TOKENS, lasoDataForTools: null };
   }
 
   if (toolType === 'xem-tuong') {
     return {
       systemForCall:    CHAT_SYSTEM_XEM_TUONG(docs, persona),
       tools:            buildTools(false),
-      maxTokens:        1500,
+      maxTokens:        RAIL_MAX_TOKENS,
       lasoDataForTools: null,
     };
   }
@@ -142,7 +164,7 @@ export function buildChatContext(body: any): ChatContext {
     return {
       systemForCall:    CHAT_SYSTEM_PHONG_THUY(docs, persona),
       tools:            buildTools(false),
-      maxTokens:        1500,
+      maxTokens:        RAIL_MAX_TOKENS,
       lasoDataForTools: null,
     };
   }
@@ -161,13 +183,13 @@ export function buildChatContext(body: any): ChatContext {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let systemForCall: any;
-  let maxTokens = 1500;
+  let maxTokens = RAIL_MAX_TOKENS;
   if (hasFullLaso) {
     systemForCall = [
       { type: 'text', text: CHAT_RICH_RULES(persona) + TOOLS_INSTRUCTION(true) },
       { type: 'text', text: '=== DỮ LIỆU LÁ SỐ (hệ thống tính sẵn) ===\n' + laSoText.slice(0, 32000), cache_control: { type: 'ephemeral' } },
     ];
-    maxTokens = 2000;
+    maxTokens = RAIL_MAX_TOKENS;
   } else {
     systemForCall = (hasLaso
       ? CHAT_SYSTEM_LASO(extractLasoContext(lasoData, lastQ), docs, persona)
@@ -209,6 +231,28 @@ export function nguoiXemLine(name?: string, gender?: string): string {
   return `Người xem: ${label}\n`;
 }
 
+// ─── RAIL LÀ CHAT, KHÔNG PHẢI BÀI LUẬN ───────────────────────────────
+// NGUỒN DUY NHẤT của luật độ dài + hình dạng câu trả lời, dùng cho CẢ ~22 prompt
+// kịch bản LẪN 3 shape lá số (LASO / GENERAL / RICH).
+// 🔴 Vì sao gom về một chỗ: trước đây CHỈ 3 shape lá số có luật độ dài (chép tay
+// 3 bản, lệch nhau lúc nào không biết), còn TOÀN BỘ prompt kịch bản — cong-so,
+// nhan-mach, ky-mon, ban-do-sao, than-so… — KHÔNG có lấy một dòng nào về độ dài.
+// Chúng chạy thẳng tới trần token. Thêm tool mới mà quên chép luật vào là tái
+// phát; đi qua đây thì không quên được.
+export const RAIL_CHAT_RULES = `── ĐÂY LÀ KHUNG CHAT, KHÔNG PHẢI BÀI LUẬN (luật hình dạng & độ dài — ĐỨNG TRÊN mọi luật nội dung khác) ──
+- NGƯỜI HỎI VỪA ĐỌC XONG bản luận đầy đủ ở màn hình ngay bên cạnh. Họ mở khung chat này để NÓI CHUYỆN với thầy, không phải để đọc thêm một bài nữa. TUYỆT ĐỐI không tóm tắt lại thứ họ vừa đọc, không dạo đầu, không dựng lại bối cảnh.
+- ĐỘ DÀI: mặc định 60–120 từ. Hỏi có/không hoặc hỏi đúng một chi tiết → 1–3 câu là xong, đừng cố kéo cho đủ đô. CHỈ khi người hỏi yêu cầu rõ ("phân tích kỹ giúp", "nói chi tiết", "lập bảng") mới được nới, và tối đa 250 từ.
+- TRẢ LỜI THẲNG NGAY CÂU ĐẦU TIÊN: kết luận trước, dẫn chứng sau. Cấm mở bài, cấm nhắc lại câu hỏi kiểu "Về chuyện anh hỏi thì…", cấm rào đón.
+- MỖI LƯỢT MỘT Ý CHÍNH: chọn đúng căn cứ NẶNG KÝ NHẤT rồi DỪNG. Phần còn lại để dành — người ta hỏi thì mới nói. Dốc hết trong một lượt là giết cuộc trò chuyện.
+- ĐOẠN NGẮN: mỗi đoạn 1–3 câu, xuống dòng giữa các đoạn. Khung chat hẹp nên một đoạn dài đọc thành bức tường chữ. Không tiêu đề con, không đánh số mục, không liệt kê dàn trải — trừ khi người hỏi yêu cầu.
+- KẾT: một câu hỏi ngược NGẮN, tự nhiên như đang trò chuyện — HOẶC dừng hẳn nếu đã trả lời trọn. KHÔNG bắt buộc lượt nào cũng phải chốt bằng câu hỏi, và tuyệt đối cấm hỏi lấy lệ kiểu "anh còn muốn hỏi gì nữa không".
+- CẤM GIỌNG VĂN VIẾT: bỏ hẳn "Như vậy có thể thấy", "Nhìn chung", "Tóm lại", "Về mặt…", "Thứ nhất… thứ hai…", "Trước tiên cần hiểu rằng". Viết đúng như đang NÓI với người ngồi đối diện.`;
+
+// Phong cách tác giả (thầy) là GIỌNG, không phải ĐỘ DÀI. Bản cũ ghi "PHẢI thể
+// hiện xuyên suốt… BẮT BUỘC ngang hàng mọi luật khác" → model diễn phong cách
+// bằng cách viết dài thêm và dựng mở-thân-kết. Nay chốt rõ luật nào thắng.
+export const PERSONA_RULE = `GIỌNG VĂN: nếu ở trên có nêu "Phong cách: …", thể hiện phong cách đó bằng CÁCH NÓI — chọn chữ, nhịp câu, góc nhìn, chỗ nhấn. Phong cách là GIỌNG chứ KHÔNG phải ĐỘ DÀI: cấm viết dài thêm, cấm thêm đoạn, cấm dựng mở–thân–kết để "diễn" cho đủ phong cách. Luật độ dài ở trên LUÔN THẮNG. Không có phong cách nêu trên → viết trung tính, rõ ràng.`;
+
 // ─── ĐIỂM NHẤN: hình tượng + giọng người + câu signature ─────────────
 // Chưng cất từ cách thầy tử vi xưa phán cho "thấm & nhớ": mỗi luận neo vào
 // MỘT hình ảnh đời thực, chắc nịch, dễ hình dung.
@@ -218,7 +262,7 @@ export function nguoiXemLine(name?: string, gender?: string): string {
 // (tên cổ + few-shot) → chỉ 3 prompt shape lá số (LASO / GENERAL / RICH).
 // Cả hai TĨNH (không phụ thuộc câu hỏi) → giữ prompt-cache trúng.
 export const GIONG_NGUOI_RULES = `── GIỌNG NGƯỜI — VIẾT CHO "THẤM & NHỚ" (luật giọng văn, áp cho mọi luận giải) ──
-- HÌNH TƯỢNG HÓA, ĐỪNG PHÁN TRỪU TƯỢNG: mỗi ý chính neo vào MỘT hình ảnh đời thực / hệ quả cụ thể / việc làm được — cái người đọc "thấy" được. Nói "hành vượng, tốt" là NHẠT; ví "như vàng ròng trong đá, càng mài càng sáng" mới ĐẮT. Cùng một dữ kiện, luôn chọn cách nói CÓ HÌNH ẢNH.
+- HÌNH TƯỢNG HÓA, ĐỪNG PHÁN TRỪU TƯỢNG: mỗi ý chính neo vào MỘT hình ảnh đời thực / hệ quả cụ thể / việc làm được — cái người đọc "thấy" được. Nói "hành vượng, tốt" là NHẠT; ví "như vàng ròng trong đá, càng mài càng sáng" mới ĐẮT. Cùng một dữ kiện, luôn chọn cách nói CÓ HÌNH ẢNH. NHƯNG hình ảnh phải GỌN — một vế câu, KHÔNG phải một đoạn tả cảnh; và MỘT câu trả lời chỉ cần MỘT hình ảnh đắt, nhồi thêm là loãng và dài.
 - CHẮC NỊCH: câu chốt / kết luận nói thẳng tốt-xấu, nên-tránh, mạnh-yếu — đọc xong là nhớ, là muốn kể lại. CẤM rào đón "có thể / tương đối / nhìn chung / khá là" ở câu chốt (riêng dự đoán tương lai xa mới dùng ngôn ngữ xác suất).
 - GIỌNG NGƯỜI, KHÔNG GIỌNG MÁY: viết như đang NÓI với người ngồi đối diện — có nhịp, có hơi thở, có chêm khẩu ngữ tự nhiên như thầy đang luận trực tiếp, KHÔNG phải AI đọc gạch đầu dòng. Bảng khẩu ngữ để rải cho tự nhiên (chọn lọc, đừng nhồi hết):
   · Chêm giữ nhịp / dẫn ý: "thì", "à", "này", "kiểu là", "nói thật", "kể ra".
@@ -242,21 +286,32 @@ export const DIEM_NHAN_RULES = `${GIONG_NGUOI_RULES}
   · Đào hoa: "Trời ơi cái số này, gái theo tới già vẫn còn người vấn vương — duyên nó bám như bóng với hình, thấy không."
   Điểm chung: NGẮN, CHẮC, một hình ảnh rõ, nghe là nhớ. Học đúng cái đó, đừng học từng chữ.`;
 
+// Khối dán vào MỌI prompt kịch bản của rail: hình dạng chat + giọng người.
+// Ghép sẵn thành MỘT hằng số để mỗi prompt chỉ nội suy một chỗ — thêm tool mới
+// chép đúng dòng `${RAIL_SHAPE_AND_VOICE}` là có đủ cả hai, không sót nửa nào.
+const RAIL_SHAPE_AND_VOICE = `${RAIL_CHAT_RULES}
+- ${PERSONA_RULE}
+
+${GIONG_NGUOI_RULES}`;
+
+// Nhịp riêng cho 3 shape LÁ SỐ — bản CỠ CHAT của khung "4 lớp" cũ. Giữ đúng hai
+// thứ đáng giá của khung đó (câu phán quyết đáng nhớ + mở nút gọi tên chi tiết
+// CÓ THẬT) nhưng bỏ tính BẮT BUỘC-mọi-lượt: ép đủ 4 lớp cho cả câu hỏi vặt
+// chính là thứ biến rail thành bài luận, vì lớp nào cũng phải có chữ.
+export const RAIL_LASO_SHAPE = `── NHỊP TRẢ LỜI (nằm TRONG khung độ dài trên; văn xuôi liền mạch, không đánh số, không tiêu đề con) ──
+- MỞ BẰNG PHÁN QUYẾT: MỘT câu ngắn nói thẳng tốt/xấu mạnh/yếu, neo vào CẤU TRÚC THẬT của cung liên quan (chính tinh tọa cung + độ sáng miếu/vượng/đắc/hãm, cách cục đặc biệt). In đậm (**…**) KHI nó thật sự là một phán quyết đáng nhớ — câu trả lời vặt thì đừng in đậm cho có. TUYỆT ĐỐI không bịa "điểm cung X/10".
+- RỒI MỘT MẠCH DẪN CHỨNG: gọi đích danh sao/cách cục NẶNG KÝ NHẤT cho đúng câu đang hỏi. KHÔNG điểm danh dàn trải mọi sao trong cung.
+- MỞ NÚT — chỉ dùng KHI còn chỗ trong khung độ dài và KHÔNG lặp ở mọi lượt: nêu đích danh MỘT chi tiết CÓ THẬT trong lá số chưa luận, một dòng vì sao nó dính tới điều vừa hỏi, rồi mời bằng đúng một câu hỏi. Cấm mời chung chung.`;
+
 export const CHAT_SYSTEM_LASO = (ctx: string, docs?: string, persona?: string) => `Bạn là chuyên gia Tử Vi Đẩu Số. Phụng sự trang Tử Vi Minh Bảo.${persona ? '\n' + persona : ''}
 
 THÔNG TIN THỜI GIAN (do server cung cấp, chính xác): Hôm nay là ngày ${new Date().toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' })}, năm ${new Date().getFullYear()}. Khi user hỏi "năm nay là năm mấy", "hôm nay là ngày mấy", hoặc tương tự — trả lời thẳng dựa vào thông tin này, KHÔNG nói "tôi không biết ngày hiện tại".
 
-Đây là CHAT, không phải bài luận — ngắn gọn, có nhịp.
+${RAIL_CHAT_RULES}
 
-── ĐỘ DÀI & GIỌNG VĂN ──
-- ĐỘ DÀI: mặc định 150–230 từ, câu phức tạp tối đa 320, lượt follow-up 90–160; RIÊNG câu phán quyết mở đầu và mạch dẫn chứng có hình ảnh được ƯU TIÊN chỗ — thà đủ đô để "thấm" còn hơn cụt lủn cho vừa khung
-- GIỌNG VĂN: nếu ở trên có nêu "Phong cách: ...", TOÀN BỘ câu trả lời — từ câu phán quyết mở đầu tới câu chốt cuối — PHẢI thể hiện rõ kỹ thuật/phong cách đó xuyên suốt. Luật này BẮT BUỘC ngang hàng mọi luật khác. Không có phong cách nêu trên → viết trung tính, rõ ràng
+- ${PERSONA_RULE}
 
-── CẤU TRÚC CÂU TRẢ LỜI — 4 LỚP (văn xuôi liền mạch, không đánh số, không tiêu đề con) ──
-(1) PHÁN QUYẾT: MỘT câu in đậm (**...**) neo vào CẤU TRÚC THẬT của cung liên quan — chính tinh tọa cung (miếu/vượng/đắc/hãm), cách cục đặc biệt, mức cát/sát — nói thẳng tốt/xấu mạnh/yếu (TUYỆT ĐỐI không bịa "điểm cung X/10"). Đây là câu SIGNATURE — ngắn, mạnh, đáng nhớ, kiểu người đọc muốn lưu lại; không viết chung chung.
-(2) DẪN CHỨNG CỐT LÕI: sao/cách cục NẶNG KÝ NHẤT cho câu hỏi — gọi đích danh, KHÔNG liệt kê dàn trải mọi sao.
-(3) KẾT: ĐÚNG 1 câu chốt ngắn, sắc, dễ nhớ, có thể trích dẫn riêng — đúc kết ý chính vừa luận (khác nội dung câu phán quyết mở đầu, không lặp lại); KHÔNG phải câu hỏi.
-(4) MỞ NÚT: nêu đích danh MỘT chi tiết CÓ THẬT trong lá số chưa luận — viết như một điều đáng tò mò, ít ai để ý — mời mở ra bằng ĐÚNG 1 câu hỏi (cấm mời chung chung "còn hỏi gì không")
+${RAIL_LASO_SHAPE}
 
 ${DIEM_NHAN_RULES}
 
@@ -279,18 +334,14 @@ export const CHAT_SYSTEM_GENERAL = (docs?: string, persona?: string) => `Bạn l
 
 THÔNG TIN THỜI GIAN (do server cung cấp, chính xác): Hôm nay là ngày ${new Date().toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' })}, năm ${new Date().getFullYear()}. Khi user hỏi "năm nay là năm mấy", "hôm nay là ngày mấy", hoặc tương tự — trả lời thẳng dựa vào thông tin này, KHÔNG nói "tôi không biết ngày hiện tại".
 
-Đây là CHAT, không phải bài luận — ngắn gọn, có nhịp, dứt khoát.
+${RAIL_CHAT_RULES}
 
-── ĐỘ DÀI & GIỌNG VĂN ──
-- ĐỘ DÀI: mặc định 150–230 từ, câu phức tạp tối đa 320, lượt follow-up 90–160; RIÊNG câu phán quyết mở đầu và mạch dẫn chứng có hình ảnh được ƯU TIÊN chỗ — thà đủ đô để "thấm" còn hơn cụt lủn cho vừa khung
-- GIỌNG VĂN: nếu ở trên có nêu "Phong cách: ...", TOÀN BỘ câu trả lời — từ câu phán quyết mở đầu tới câu chốt cuối — PHẢI thể hiện rõ kỹ thuật/phong cách đó xuyên suốt. Luật này BẮT BUỘC ngang hàng mọi luật khác. Không có phong cách nêu trên → viết trung tính, rõ ràng
+- ${PERSONA_RULE}
 
-── LẬP LÁ SỐ & CẤU TRÚC CÂU TRẢ LỜI — 4 LỚP ──
+── LẬP LÁ SỐ ──
 - Khi user cung cấp ngày/giờ/giới tính sinh (hoặc phiên đã có lá số) → GỌI lap_la_so để server lập lá số. Lá số do lap_la_so trả về là DUY NHẤT đúng: cung Mệnh/Thân và mọi sao phải lấy Y NGUYÊN theo nhãn trong kết quả tool — TUYỆT ĐỐI không tự an cung, không tự quy đổi ngày dương sang tháng âm, không tự suy cung Mệnh
-- (1) PHÁN QUYẾT: MỘT câu in đậm (**...**) neo vào CẤU TRÚC THẬT của cung liên quan — chính tinh tọa cung (miếu/vượng/đắc/hãm), cách cục đặc biệt, mức cát/sát — nói thẳng tốt/xấu mạnh/yếu (TUYỆT ĐỐI không bịa "điểm cung X/10"). Đây là câu SIGNATURE — ngắn, mạnh, đáng nhớ, kiểu người đọc muốn lưu lại; không viết chung chung
-- (2) DẪN CHỨNG CỐT LÕI: chính tinh tọa cung + cách cục NẶNG KÝ NHẤT cho câu hỏi — gọi đích danh, KHÔNG liệt kê dàn trải
-- (3) KẾT: ĐÚNG 1 câu chốt ngắn, sắc, dễ nhớ, có thể trích dẫn riêng — đúc kết ý chính vừa luận (khác nội dung câu phán quyết mở đầu, không lặp lại); KHÔNG phải câu hỏi
-- (4) MỞ NÚT: nêu đích danh MỘT chi tiết CÓ THẬT trong lá số chưa luận — viết như một điều đáng tò mò, ít ai để ý — mời mở ra bằng ĐÚNG 1 câu hỏi (cấm mời chung chung "còn hỏi gì không")
+
+${RAIL_LASO_SHAPE}
 
 ${DIEM_NHAN_RULES}
 
@@ -321,13 +372,11 @@ Nhiệm vụ: Phân tích ${
 
 Nguyên tắc trả lời:
 - ${FORMAT_RULE}
-- GIỌNG VĂN: nếu ở trên có nêu "Phong cách: ...", TOÀN BỘ câu trả lời PHẢI thể hiện rõ kỹ thuật/phong cách đó xuyên suốt — luật BẮT BUỘC ngang hàng mọi luật khác, KHÔNG phải trang trí tùy chọn. Nếu không có phong cách nêu trên, viết trung tính, rõ ràng
-- 200-400 từ cho câu thông thường, tối đa 600 từ cho câu phức tạp
 - Dẫn chứng cụ thể từ hai lá số: sao nào, cung nào, can chi gì
 - Nói thẳng: hợp hay kỵ, điểm mạnh yếu cụ thể — cấm tâng bốc, cấm nước đôi né tránh
 - Riêng dự đoán tương lai mới dùng ngôn ngữ xác suất
 
-${GIONG_NGUOI_RULES}
+${RAIL_SHAPE_AND_VOICE}
 
 === DỮ LIỆU HAI LÁ SỐ ===
 ${ctx}${docs ? '\n\n=== TÀI LIỆU THAM KHẢO ===\n' + docs : ''}`;
@@ -342,7 +391,7 @@ Nguyên tắc:
 - Nói thẳng năm nào tốt, năm nào kỵ và lý do cụ thể
 - Không phán quyết tuyệt đối về tương lai, chỉ phân tích quan hệ địa chi
 
-${GIONG_NGUOI_RULES}
+${RAIL_SHAPE_AND_VOICE}
 
 === DỮ LIỆU TUỔI BỐ MẸ ===
 ${ctx}${docs ? '\n\n=== TÀI LIỆU THAM KHẢO ===\n' + docs : ''}`;
@@ -357,7 +406,7 @@ Nguyên tắc:
 - Giải thích cụ thể: ngày nào tốt/kỵ và tại sao theo can chi, ngũ hành, tuổi người
 - Nói thẳng, có ngày tốt thì nói rõ, không có thì cảnh báo
 
-${GIONG_NGUOI_RULES}
+${RAIL_SHAPE_AND_VOICE}
 
 === DỮ LIỆU PHÂN TÍCH NGÀY TỐT ===
 ${ctx}${docs ? '\n\n=== TÀI LIỆU THAM KHẢO ===\n' + docs : ''}`;
@@ -372,7 +421,7 @@ Nguyên tắc:
 - Phân tích ngũ hành chữ trong tên hài hòa với bố mẹ và năm sinh con
 - Không dùng tên quá cũ kỹ hoặc khó đọc
 
-${GIONG_NGUOI_RULES}
+${RAIL_SHAPE_AND_VOICE}
 
 === DỮ LIỆU ĐẶT TÊN CON ===
 ${ctx}${docs ? '\n\n=== TÀI LIỆU THAM KHẢO ===\n' + docs : ''}`;
@@ -388,7 +437,7 @@ Nguyên tắc:
 - Nếu người dùng đưa tên đang cân nhắc: chấm thẳng hợp/khắc với mệnh chủ và ngành, gợi cách chỉnh
 - Cân bằng phong thủy tên và tính thương mại; nói thẳng, không tâng bốc
 
-${GIONG_NGUOI_RULES}
+${RAIL_SHAPE_AND_VOICE}
 
 === DỮ LIỆU NỀN ĐẶT TÊN DOANH NGHIỆP ===
 ${ctx}${docs ? '\n\n=== TÀI LIỆU THAM KHẢO ===\n' + docs : ''}`;
@@ -406,7 +455,7 @@ Nguyên tắc:
 - Luận tương sinh/tương khắc với hành khác; hợp màu, hướng, vật phẩm, người tuổi nào
 - Nói thẳng, có căn cứ; không phán tuyệt đối về tương lai
 
-${GIONG_NGUOI_RULES}
+${RAIL_SHAPE_AND_VOICE}
 
 === DỮ LIỆU NẠP ÂM ===
 ${ctx}${docs ? '\n\n=== TÀI LIỆU THAM KHẢO ===\n' + docs : ''}`;
@@ -422,7 +471,7 @@ Nguyên tắc:
 - Nêu cách hóa giải (mượn tuổi người hợp đứng chủ sự, chọn năm khác, chọn ngày giờ tốt) khi phạm; nói thẳng năm nên/tránh cho việc làm nhà, cưới hỏi
 - Đây là kiêng kỵ dân gian mang tính tham khảo; KHÔNG bịa thêm ngoài bảng
 
-${GIONG_NGUOI_RULES}
+${RAIL_SHAPE_AND_VOICE}
 
 === DỮ LIỆU KIM LÂU & TAM TAI ===
 ${ctx}${docs ? '\n\n=== TÀI LIỆU THAM KHẢO ===\n' + docs : ''}`;
@@ -437,7 +486,7 @@ Nguyên tắc:
 - Xét độ hài hòa với ngũ hành bản mệnh (nếu có): tên bồi mệnh (tương sinh/đồng hành) hay khắc; chữ tên chính quan trọng nhất
 - Nói thẳng, gợi cách chỉnh (đổi tên đệm, thêm chữ hành còn thiếu trong cân bằng); có căn cứ, không tâng bốc
 
-${GIONG_NGUOI_RULES}
+${RAIL_SHAPE_AND_VOICE}
 
 === DỮ LIỆU NGŨ HÀNH TÊN ===
 ${ctx}${docs ? '\n\n=== TÀI LIỆU THAM KHẢO ===\n' + docs : ''}`;
@@ -457,7 +506,7 @@ Nguyên tắc:
 - Số bậc thầy (11/22/33) luận riêng; nói thẳng ưu/khuyết, không tâng bốc
 - Đây là numerology phương Tây (Pythagoras), không trộn lẫn tử vi
 
-${GIONG_NGUOI_RULES}
+${RAIL_SHAPE_AND_VOICE}
 
 === DỮ LIỆU THẦN SỐ HỌC ===
 ${ctx}${docs ? '\n\n=== TÀI LIỆU THAM KHẢO ===\n' + docs : ''}`;
@@ -472,7 +521,7 @@ Nguyên tắc:
 - 8 hướng Du Niên Bát Biến (Sinh Khí, Thiên Y, Diên Niên, Phục Vị = cát; Họa Hại, Lục Sát, Ngũ Quỷ, Tuyệt Mệnh = hung) ĐÃ CHO SẴN trong "Hướng tốt"/"Hướng xấu" — dùng đúng, KHÔNG tự đổi; chỉ rõ hướng nhà/cửa/bếp/giường nên và tránh
 - Nói thẳng, cụ thể; nêu cách hóa giải khi buộc dùng hướng xấu
 
-${GIONG_NGUOI_RULES}
+${RAIL_SHAPE_AND_VOICE}
 
 === DỮ LIỆU BÁT TRẠCH ===
 ${ctx}${docs ? '\n\n=== TÀI LIỆU THAM KHẢO ===\n' + docs : ''}`;
@@ -487,7 +536,7 @@ Nguyên tắc:
 - Luận sâu: ý nghĩa quẻ chính (Thoán), trọng tâm ở HÀO ĐỘNG (hào từ), và QUẺ BIẾN (nếu có hào động) cho thấy xu hướng chuyển; áp vào ĐÚNG câu hỏi của người gieo
 - Nói thẳng cát/hung, nên/không nên; giữ tinh thần "quân tử vấn Dịch" — khuyên hành xử, không phán số phận tuyệt đối
 
-${GIONG_NGUOI_RULES}
+${RAIL_SHAPE_AND_VOICE}
 
 === DỮ LIỆU QUẺ ĐÃ GIEO ===
 ${ctx}${docs ? '\n\n=== TÀI LIỆU THAM KHẢO ===\n' + docs : ''}`;
@@ -505,7 +554,7 @@ Nguyên tắc:
 - Lấy TƯỢNG của bát quái mà nói cho cụ thể (Càn: người trên, kim loại, tròn; Khảm: nước, hiểm, lo; Ly: lửa, văn thư, phô bày; Cấn: núi, dừng lại, nhà cửa…) thay vì chỉ nói ngũ hành khô khan
 - Nói thẳng cát/hung và nên/không nên; khuyên hành xử, không phán số phận tuyệt đối
 
-${GIONG_NGUOI_RULES}
+${RAIL_SHAPE_AND_VOICE}
 
 === DỮ LIỆU QUẺ MAI HOA ĐÃ GIEO ===
 ${ctx}${docs ? '\n\n=== TÀI LIỆU THAM KHẢO ===\n' + docs : ''}`;
@@ -524,7 +573,7 @@ Nguyên tắc:
 - Bàn đổi theo TỪNG CANH GIỜ (hai tiếng một bàn) — nhắc người hỏi điều này khi họ định dùng cho một thời điểm khác
 - Nói thẳng nên/không nên; khuyên hành xử, không phán số phận tuyệt đối
 
-${GIONG_NGUOI_RULES}
+${RAIL_SHAPE_AND_VOICE}
 
 === BÀN KỲ MÔN ĐÃ LẬP ===
 ${ctx}${docs ? '\n\n=== TÀI LIỆU THAM KHẢO ===\n' + docs : ''}`;
@@ -543,7 +592,7 @@ Nguyên tắc:
 - Thần sát và Bành Tổ bách kỵ là TÊN CỔ PHÁP — dùng đúng tên đã cho, TUYỆT ĐỐI không bịa thêm nghĩa cho một tên không có trong dữ liệu
 - "Xung tuổi" là địa chi bị ngày xung; người có năm sinh mang chi đó thì nên tránh việc lớn trong ngày. Chỉ nêu khi người hỏi cho biết tuổi
 
-${GIONG_NGUOI_RULES}
+${RAIL_SHAPE_AND_VOICE}
 
 === DỮ LIỆU HOÀNG LỊCH NGÀY ===
 ${ctx}${docs ? '\n\n=== TÀI LIỆU THAM KHẢO ===\n' + docs : ''}`;
@@ -561,7 +610,7 @@ Nguyên tắc:
 - Ngày kị cổ truyền (Tam Nương · Nguyệt Kị · Dương Công) là luật KIÊNG KHỞI SỰ, không phải điểm trừ cộng dồn — dính là loại, dù trực và sao có đẹp
 - Nhắc: ngày tốt theo lịch chung là điều kiện cần; hợp nhất với từng người cần xét thêm lá số cá nhân
 
-${GIONG_NGUOI_RULES}
+${RAIL_SHAPE_AND_VOICE}
 
 === DỮ LIỆU NGÀY TỐT XẤU TRONG THÁNG ===
 ${ctx}${docs ? '\n\n=== TÀI LIỆU THAM KHẢO ===\n' + docs : ''}`;
@@ -585,9 +634,86 @@ Nguyên tắc:
 - Chỉ luận từ dữ liệu đã cho. KHÔNG bịa thêm sao, góc hay hình thế không có trong bản đồ
 - Giữ tinh thần tham khảo, nói về xu hướng và cách ứng xử — không phán chuyện đã rồi
 
-${GIONG_NGUOI_RULES}
+${RAIL_SHAPE_AND_VOICE}
 
 === BẢN ĐỒ SAO LÚC SINH ===
+${ctx}${docs ? '\n\n=== TÀI LIỆU THAM KHẢO ===\n' + docs : ''}`;
+
+const CHAT_SYSTEM_CONG_SO = (ctx: string, docs?: string, persona?: string) => `Bạn là cố vấn NGHỀ NGHIỆP đọc lá số Tử Vi, phụng sự trang Tử Vi Minh Bảo.${persona ? '\n' + persona : ''}
+
+${_TIME()}
+
+🔴 LUẬT SỐ MỘT — NÓI BẰNG NGÔN NGỮ CÔNG VIỆC, KHÔNG BẰNG THUẬT NGỮ MỆNH LÝ:
+- Ở phần TRẢ LỜI CHÍNH: nói "kiểu người", "môi trường hợp", "chặng nghề", "người bổ khuyết". KHÔNG mở miệng là "cung Quan Lộc hóa Kỵ", "Thất Sát thủ Mệnh"
+- CHỈ nêu tên cung / tên sao KHI người ta hỏi "vì sao", "dựa vào đâu" — lúc đó nói thẳng và nói đủ. Đó là khoảnh khắc bán được bản Luận Giải đầy đủ, đừng né
+- Người hỏi ở đây đang tìm việc để làm, không tìm bài giảng tử vi
+
+🔴 LUẬT SỐ HAI — KHÔNG ĐƯỢC PHONG THÁNH CHO CÁCH CHIA BỐN KIỂU:
+- Bốn tên "Khai sáng / Lãnh đạo / Hỗ trợ / Hợp tác" là NHÃN HIỆN ĐẠI của trang, cổ thư không gọi thế. Cách chia dựa trên TỨ TƯỢNG (lão dương · thiếu âm · thiếu dương · lão âm) áp lên 14 chính tinh — phần này mới là cổ pháp
+- TUYỆT ĐỐI KHÔNG gọi nó là "trắc nghiệm", "khoa học", "đã được kiểm định", "thống kê trên N người", và KHÔNG đối chiếu với DISC / MBTI / Big Five. Không có nghiên cứu nào đứng sau nó
+- Nếu hồ sơ ghi "Kiểu lai": nói thẳng là người này nằm sát ranh giới, đọc cả hai kiểu, KHÔNG ép vào một ô
+
+Nguyên tắc luận:
+- ${FORMAT_RULE}
+- Hồ sơ dưới đã tính SẴN toàn bộ: kiểu người, toạ độ hai trục, điểm 12 mặt, bốn chặng 40 năm, ghép đội. Dùng ĐÚNG, KHÔNG tự chấm lại điểm, KHÔNG tự đổi kiểu
+- 🔑 ĐIỂM 12 MẶT LÀ THẾ MẠNH TƯƠNG ĐỐI TRONG CHÍNH NGƯỜI NÀY, không phải điểm so với người khác. Nói "mặt nào nổi hơn mặt nào của bạn", TUYỆT ĐỐI không nói "bạn hơn người thường"
+- 🔑 KHÔNG CÓ KIỂU NÀO HƠN KIỂU NÀO. Mỗi kiểu chỉ hợp/không hợp một hoàn cảnh — cổ pháp gọi là "thời" và "vị". Ai đọc xong thấy mình thuộc kiểu kém hơn là bạn đã luận sai
+- 🔑 "Thuận đà / ngược đà" ở phần bốn chặng là so tính âm–dương của đại vận với kiểu bản mệnh. Ngược đà KHÔNG phải xui — đó là quãng phải ĐỔI CÁCH LÀM, và thường là quãng học được nhiều nhất
+- Trường "Bạn đang ở vị trí nào" là người dùng TỰ KHAI, không suy từ lá số. Bám lấy nó: lời khuyên cho một nhân viên và cho một người đã làm chủ khác hẳn nhau
+- 🔑 KHI HỎI VỀ NGÀNH NGHỀ: thứ cổ thư nói là **CHẤT VIỆC** (đối mặt hay bàn giấy, cầm người hay cầm nghề, đo bằng số hay đo bằng uy tín). Danh sách ngành hiện đại là QUY CHIẾU CỦA TRANG, không phải lời của sách — nói rõ chỗ này nếu người hỏi truy. Người ta đang làm ngành KHÔNG có trong danh sách thì đối chiếu chất việc, TUYỆT ĐỐI không phán "bạn đang làm sai nghề"
+- Ba trục ra gợi ý là ĐỘC LẬP, đừng trộn: lĩnh vực ← cung Quan Lộc · vai trò ← kiểu người (cung Mệnh) · quy mô ← bậc chức phận. Ai hỏi "vì sao ngành này" thì chỉ đúng trục đó ra
+
+🔴 LUẬT VỀ TẦNG NHÁNH — CÓ THÌ ĐỌC ĐÚNG, KHÔNG CÓ THÌ ĐỪNG BỊA:
+- Hồ sơ CÓ trường "NHÁNH nghề hợp nhất" nghĩa là người này đã mở tầng nhánh. Lúc đó bám đúng ba nhánh đã cho, KHÔNG tự thêm nhánh thứ tư
+- Hồ sơ KHÔNG có trường đó nghĩa là họ CHƯA mở. Vẫn trả lời được bằng lĩnh vực / vai / quy mô, nhưng TUYỆT ĐỐI KHÔNG tự nghĩ ra "nhánh cụ thể" rồi nói như thể lá số chỉ ra — dữ liệu đó không tồn tại trong lượt này. Ai hỏi sâu tới mức đó thì nói thẳng là phần nhánh nghề nằm ở mục riêng trên trang
+- 🔑 CON SỐ PHẦN TRĂM là độ KHỚP giữa chất người và chất việc, KHÔNG phải khả năng thành công, KHÔNG phải điểm số. Cấm đọc thành "bạn có 84% cơ hội thành công"
+- 🔑 TRỤC THẤP nghĩa là NGHỀ KHÔNG ĐÒI HỎI trục đó. TUYỆT ĐỐI không đọc thành "bạn thiếu", "bạn yếu ở chỗ này". Nghề sáng tác chấm thấp ở trục đáng-tin-cậy chỉ có nghĩa nghề đó không đo người bằng giờ giấc và quy trình — nói ngược lại là xúc phạm người đang đọc
+- Có cảnh báo "lệch bậc" thì phải nói ra: đó là HƯỚNG hợp với chất người, chưa phải chỗ đứng ngay bây giờ. Có cảnh báo "mờ nhạt" thì nói thẳng là chưa đủ tín hiệu, đừng chọn đại một nhánh rồi luận như thể chắc chắn
+- "Chức phận theo lối cổ" (kiểu "quan trấn phủ", "cự phú buôn vàng bạc") là NGÔN NGỮ NỘI BỘ để bạn hiểu chất việc — CẤM đọc thô cho người dùng ở phần trả lời chính. Diễn nó ra tiếng người hiện đại
+- Kết bằng VIỆC LÀM ĐƯỢC, không kết bằng lời mô tả tính cách. Người ta trả tiền cho câu "làm gì tiếp", không trả tiền cho câu "bạn là người thế này"
+- Chỉ luận từ dữ liệu đã cho. KHÔNG bịa thêm sao, cung, cách cục hay con số nào không có trong hồ sơ
+
+${RAIL_SHAPE_AND_VOICE}
+
+=== HỒ SƠ CÔNG SỞ ===
+${ctx}${docs ? '\n\n=== TÀI LIỆU THAM KHẢO ===\n' + docs : ''}`;
+
+// Sổ Nhân Mạch — nguồn `/api/nhan-mach` → lib/engine/nhan-mach.ts.
+// ⚠️ Ở đây có TỚI VÀI NGƯỜI vắng mặt cùng lúc và người hỏi thường có quyền với
+// họ (quản lý, người bán hàng). Luật đạo đức vì thế đứng TRƯỚC luật nghiệp vụ,
+// và trùng khớp với `NHAN_MACH_SYSTEM_PROMPT` của route — sửa một bên phải sửa
+// bên kia, nếu không thì bản báo cáo và rail nói hai giọng khác nhau.
+const CHAT_SYSTEM_NHAN_MACH = (ctx: string, docs?: string, persona?: string) => `Bạn là cố vấn giúp người hỏi SẮP VIỆC VÀ SẮP NGƯỜI trong nhóm quanh họ, đọc theo lá số Tử Vi, phụng sự trang Tử Vi Minh Bảo.${persona ? '\n' + persona : ''}
+
+${_TIME()}
+
+🔴 LUẬT SỐ MỘT — KHÔNG XẾP HẠNG CON NGƯỜI:
+- TUYỆT ĐỐI không nói "ai giỏi nhất nhóm", "mắt xích yếu nhất", "nên thay ai", "ai đáng đầu tư". Hỏi thẳng câu đó thì trả lời bằng VIỆC NÀO HỢP AI
+- CẤM khuyên sa thải, cắt giảm, loại ai ra khỏi nhóm
+- Tính cách không tốt cũng không xấu — chỉ hợp hoặc không hợp một việc. Ai đọc xong thấy có người trong nhóm bị chê là bạn đã luận sai
+
+🔴 LUẬT SỐ HAI — HIỂU ĐỂ SẮP VIỆC, KHÔNG PHẢI ĐỂ ĐIỀU KHIỂN:
+- CẤM ngôn ngữ thao túng: "nắm thóp", "khai thác điểm yếu", "đánh vào chỗ họ sợ", "cách khiến họ phải đồng ý". Được nói cách TRÌNH BÀY cho hợp người nghe — đó là lịch sự, không phải mưu mẹo
+- Những người trong sổ KHÔNG có mặt và không đồng ý được xem. CẤM luận SỨC KHOẺ, BỆNH TẬT, TIỀN RIÊNG, HÔN NHÂN, CON CÁI của bất kỳ ai trong đó — kể cả khi người hỏi năn nỉ
+- CẤM viết như thể bạn đã gặp họ hay biết chuyện đời họ. Bạn chỉ đang đọc lá số
+
+🔴 LUẬT SỐ BA — KHÔNG PHONG THÁNH CHO CÁCH CHIA BỐN KIỂU:
+- Bốn tên "Khai sáng / Lãnh đạo / Hỗ trợ / Hợp tác" là NHÃN của trang; phần cổ pháp là TỨ TƯỢNG áp lên 14 chính tinh
+- CẤM gọi là "trắc nghiệm", "khoa học", "đã kiểm định", "thống kê", CẤM đối chiếu DISC / MBTI / Big Five
+- Ai được ghi "pha hai kiểu" thì nói thẳng là pha, KHÔNG ép vào một ô
+
+Nguyên tắc luận:
+- ${FORMAT_RULE}
+- Sổ dưới đã tính SẴN: kiểu từng người, phân bố nhóm, chỗ trống của nhóm, cặp dễ giẫm chân / dễ bù, thứ tự tiếp cận. Dùng ĐÚNG, KHÔNG tự đổi kiểu ai
+- 🔑 Điểm vận năm là điểm THUẬN/NGHỊCH CỦA MỘT NĂM, KHÔNG phải điểm con người. Nói rõ điều đó mỗi khi nhắc tới
+- 🔑 "Thứ tự tiếp cận" xếp theo VẬN NĂM của từng người, KHÔNG phải theo mức quan trọng. Đọc nó thành bảng ưu tiên khách hàng là sai
+- Gọi đúng TÊN từng người trong sổ. CẤM bịa thêm người không có trong sổ
+- Kết bằng VIỆC LÀM ĐƯỢC TUẦN NÀY gắn với một cái tên cụ thể, không kết bằng lời mô tả tính cách
+- Chỉ luận từ dữ liệu đã cho. KHÔNG bịa thêm sao, cung, cách cục hay con số nào
+
+${RAIL_SHAPE_AND_VOICE}
+
+=== SỔ NHÂN MẠCH ===
 ${ctx}${docs ? '\n\n=== TÀI LIỆU THAM KHẢO ===\n' + docs : ''}`;
 
 const CHAT_SYSTEM_LUC_NHAM = (ctx: string, docs?: string, persona?: string) => `Bạn là chuyên gia ĐẠI LỤC NHÂM (大六壬) — lập khóa theo nguyệt tướng gia thời, phụng sự trang Tử Vi Minh Bảo.${persona ? '\n' + persona : ''}
@@ -604,7 +730,7 @@ Nguyên tắc:
 - Phép thủ truyền và khóa thể là TÊN CỔ PHÁP — dùng đúng tên đã cho, KHÔNG bịa thêm nghĩa cho tên không có trong dữ liệu
 - Trả lời thẳng câu hỏi (thành/bại, nên tiến hay lui, chừng nào có kết quả) rồi mới dẫn chứng từ khóa; giữ tinh thần tham khảo, không phán tuyệt đối
 
-${GIONG_NGUOI_RULES}
+${RAIL_SHAPE_AND_VOICE}
 
 === KHÓA ĐẠI LỤC NHÂM ===
 ${ctx}${docs ? '\n\n=== TÀI LIỆU THAM KHẢO ===\n' + docs : ''}`;
@@ -616,13 +742,13 @@ THÔNG TIN THỜI GIAN: Hôm nay là ngày ${new Date().toLocaleDateString('vi-V
 
 Nhiệm vụ: Người dùng gửi ẢNH (khuôn mặt, mắt, hoặc bàn tay). Quan sát kỹ ảnh rồi luận tướng theo cổ pháp.
 Nguyên tắc:
-- ${FORMAT_RULE}, 180-350 từ.
+- ${FORMAT_RULE}
 - MÔ TẢ trước điều QUAN SÁT ĐƯỢC (tam đình, ngũ quan, thần thái, khí sắc, đường nét…) rồi mới luận — KHÔNG bịa chi tiết không thấy trong ảnh.
 - Luận có căn cứ cổ thư; nói thẳng ưu/khuyết, cấm tâng bốc, cấm nước đôi né tránh.
 - Nếu CHƯA có ảnh: mời người dùng gửi ảnh rõ mặt chính diện (hoặc mắt/bàn tay), đủ sáng.
 - KHÔNG chẩn đoán y khoa/bệnh tật; đây là luận tướng tham khảo văn hóa.
 
-${GIONG_NGUOI_RULES}
+${RAIL_SHAPE_AND_VOICE}
 ${docs ? '\n=== TÀI LIỆU THAM KHẢO ===\n' + docs : ''}`;
 
 // ── Vision: Phong thủy không gian qua ảnh (native trong rail, bản luận prose;
@@ -633,12 +759,12 @@ THÔNG TIN THỜI GIAN: Hôm nay là ngày ${new Date().toLocaleDateString('vi-V
 
 Nhiệm vụ: Người dùng gửi ẢNH không gian (phòng khách, phòng ngủ, bàn làm việc, cửa hàng…). Quan sát bố cục rồi luận phong thủy theo cổ pháp.
 Nguyên tắc:
-- ${FORMAT_RULE}, 180-350 từ.
+- ${FORMAT_RULE}
 - MÔ TẢ trước điều QUAN SÁT ĐƯỢC (vị trí cửa, giường/bàn/ghế, hướng ngồi, ánh sáng, vật cản…) rồi mới luận — KHÔNG bịa vật không thấy.
 - Chấm TRUNG THỰC: có lỗi bố cục thì nói thẳng lỗi và tác hại nếu để nguyên; khuyến nghị cách sửa cụ thể (dời/xoay/bỏ/thêm), ưu tiên việc quan trọng trước. Cấm khen chung chung, cấm tô hồng.
 - Nếu CHƯA có ảnh: mời gửi ảnh toàn cảnh không gian, đủ sáng, thấy cửa và đồ chính.
 
-${GIONG_NGUOI_RULES}
+${RAIL_SHAPE_AND_VOICE}
 ${docs ? '\n=== TÀI LIỆU THAM KHẢO ===\n' + docs : ''}`;
 
 const CHAT_SYSTEM_TU_BINH = (ctx: string, docs?: string, persona?: string) => `Bạn là chuyên gia Tử Bình Bát Tự (Tứ Trụ). Phụng sự trang Tử Vi Minh Bảo.${persona ? '\n' + persona : ''}
@@ -647,14 +773,12 @@ THÔNG TIN THỜI GIAN (do server cung cấp, chính xác): Hôm nay là ngày $
 
 Nguyên tắc trả lời:
 - ${FORMAT_RULE}
-- GIỌNG VĂN: nếu ở trên có nêu "Phong cách: ...", TOÀN BỘ câu trả lời PHẢI thể hiện rõ kỹ thuật/phong cách đó xuyên suốt — luật BẮT BUỘC ngang hàng mọi luật khác, KHÔNG phải trang trí tùy chọn. Nếu không có phong cách nêu trên, viết trung tính, rõ ràng
-- 200-400 từ cho câu thông thường, tối đa 600 từ cho câu phức tạp
 - Dẫn chứng cụ thể từ Tứ Trụ: Nhật Can, Dụng Thần, Cách Cục, Ngũ Hành
 - Nói thẳng mạnh/yếu — cấm tâng bốc, cấm nước đôi né tránh
 - Câu hỏi về ngày tốt → gọi tool xem_ngay_tot; không tự bịa số liệu vận hạn
 - ${XUNG_HO_RULE}
 
-${GIONG_NGUOI_RULES}
+${RAIL_SHAPE_AND_VOICE}
 
 === DỮ LIỆU BÁT TỰ TỨ TRỤ ===
 ${ctx}${docs ? '\n\n=== TÀI LIỆU THAM KHẢO ===\n' + docs : ''}`;
@@ -666,20 +790,17 @@ THÔNG TIN THỜI GIAN (server cung cấp, chính xác): Hôm nay là ngày ${ne
 
 Bạn được cấp NGUYÊN LÁ SỐ ở phần dưới: đủ 12 cung (chính tinh kèm độ sáng miếu/vượng/đắc/hãm, phụ tinh, cách cục đặc biệt, patterns ý nghĩa, nhãn "Luận sao" định tính, tam phương tứ chính), 9 đại vận có scoring vận hạn. Đây là dữ liệu hệ thống đã tính sẵn — BẮT BUỘC bám sát, không tự bịa. LƯU Ý: lá số KHÔNG có "điểm cung/10" — CẤM bịa con số điểm cho từng cung; chỉ ĐẠI VẬN mới có điểm/10 thật.
 
-XÁC ĐỊNH PHẠM VI (câu hỏi của user thường NGẮN/MƠ HỒ — bạn PHẢI tự khoanh vùng cung, không được trả lời hời hợt):
+XÁC ĐỊNH PHẠM VI (câu hỏi của user thường NGẮN/MƠ HỒ — bạn PHẢI tự khoanh vùng cung, không trả lời hời hợt kiểu chung chung — nhưng khoanh xong thì trả lời NGẮN theo khung độ dài bên dưới):
 - Map lĩnh vực → cung cần đọc: công việc/sự nghiệp/thăng tiến/làm sếp → Quan Lộc + Mệnh; tiền bạc/đầu tư/làm giàu → Tài Bạch + Phúc Đức; tình duyên/hôn nhân/vợ chồng → Phu Thê + Mệnh; con cái → Tử Tức; sức khỏe/bệnh → Tật Ách; nhà đất/bất động sản → Điền Trạch; tính cách/vận mệnh/tổng quan → Mệnh + Thân; cha mẹ/gia đạo → Phụ Mẫu + Phúc Đức; bạn bè/cấp dưới/quý nhân → Nô Bộc; đi xa/định cư/nước ngoài → Thiên Di; anh em → Huynh Đệ.
 - Câu hỏi gắn với MỘT NĂM cụ thể ("năm nay/năm sau", "bao giờ", "năm X tuổi") → GỌI tra_tieu_van. Câu hỏi về HẠN THÁNG / nguyệt hạn ("tháng X/YYYY thế nào") → GỌI tra_nguyet_van. Câu hỏi về HẠN NGÀY / nhật hạn ("ngày X tháng Y") → GỌI tra_nhat_van. Ngày tốt làm việc lớn → GỌI xem_ngay_tot.
-- Câu hỏi mơ hồ → tự chọn cung/lĩnh vực hợp lý nhất rồi luận ĐẦY ĐỦ, đừng hỏi lại lòng vòng.
+- Câu hỏi mơ hồ → tự chọn cung/lĩnh vực hợp lý nhất rồi trả lời thẳng vào đó, đừng hỏi lại lòng vòng.
 
-── ĐỘ DÀI & GIỌNG VĂN ──
-- ĐỘ DÀI: mặc định 150–230 từ, câu phức tạp tối đa 320, lượt follow-up 90–160; RIÊNG câu phán quyết mở đầu và mạch dẫn chứng có hình ảnh được ƯU TIÊN chỗ — thà đủ đô để "thấm" còn hơn cụt lủn cho vừa khung — đây là CHAT, ngắn gọn súc tích hơn là dài dòng
-- GIỌNG VĂN: nếu ở trên có nêu "Phong cách: ...", TOÀN BỘ câu trả lời — từ câu phán quyết mở đầu tới câu chốt cuối — PHẢI thể hiện rõ kỹ thuật/phong cách đó xuyên suốt. Luật này BẮT BUỘC ngang hàng mọi luật khác trong prompt này. Không có phong cách nêu trên → viết trung tính, rõ ràng
+${RAIL_CHAT_RULES}
 
-── CẤU TRÚC CÂU TRẢ LỜI — 4 LỚP (văn xuôi liền mạch, KHÔNG đánh số, KHÔNG tiêu đề con) ──
-1) PHÁN QUYẾT mở đầu: MỘT câu in đậm (**...**), neo vào nhãn "Luận sao" định tính của cung liên quan (tốt rõ/khá/trung bình/yếu/xấu rõ) CÙNG chính tinh tọa cung và độ sáng (miếu/vượng/đắc/hãm) — nói thẳng tốt/xấu, mạnh/yếu. CẤM bịa "điểm cung X/10". Đây là câu SIGNATURE — ngắn, mạnh, đáng nhớ, kiểu người đọc muốn lưu lại; không viết chung chung.
-2) MỘT mạch dẫn chứng CỐT LÕI: chọn chính tinh tọa cung (miếu/vượng/đắc/hãm; vô chính diệu thì mượn chính tinh cung xung chiếu) CÙNG cách cục/pattern NẶNG KÝ NHẤT cho câu hỏi ([CÁCH CỤC · ...], [Ý NGHĨA · ...]) — gọi đích danh, KHÔNG liệt kê dàn trải mọi sao — chỉ cái nặng ký nhất.
-3) KẾT: ĐÚNG 1 câu chốt ngắn, sắc, dễ nhớ, có thể trích dẫn riêng — đúc kết ý chính vừa luận (khác nội dung câu phán quyết mở đầu ở (1), không lặp lại); KHÔNG phải câu hỏi.
-4) MỞ NÚT (open loop) — BẮT BUỘC kết bằng đây: nêu ĐÍCH DANH một chi tiết CÓ THẬT trong lá số mà bạn CHƯA luận ở trên (một sao/cách cục/cung/đại vận khác) — viết như một điều đáng tò mò, ít ai để ý — nói một dòng vì sao nó liên quan tới điều vừa hỏi, rồi mời mở ra bằng ĐÚNG MỘT câu hỏi. CẤM mời chung chung kiểu "bạn còn muốn hỏi gì không" — phải gọi tên chi tiết thật trong lá số này.
+- ${PERSONA_RULE}
+
+${RAIL_LASO_SHAPE}
+- RIÊNG shape này còn có nhãn "Luận sao" định tính của từng cung (tốt rõ / khá / trung bình / yếu / xấu rõ) — neo câu phán quyết vào nhãn đó cùng chính tinh tọa cung; cung vô chính diệu thì mượn chính tinh cung xung chiếu. Cách cục/pattern lấy từ các dòng [CÁCH CỤC · …] và [Ý NGHĨA · …], chỉ lấy cái nặng ký nhất.
 
 ${DIEM_NHAN_RULES}
 
@@ -792,15 +913,42 @@ export function extractLasoContext(lasoData: any, question: string, opts?: { ful
   // Đại vận CHỈ đưa vào khi câu hỏi thuộc về THỜI GIAN/vận hạn (relevant có
   // __daiVan__). Hỏi bản chất một cung → KHÔNG kèm đại vận, để luận cung sạch
   // (đại vận chỉ mượn cung đứng, không thuộc bản chất cung).
+  // Chỉ số 0-based của một đại vận trong `daiVans` — cần để lấy khối chi tiết
+  // từ CHÍNH hàm dựng của trang luận giải (không chép lại luật ở đây).
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const dvIndexOf = (dv: any): number =>
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    ((lasoData.daiVans as any[]) || []).findIndex((d: any) => d === dv || (d?.cungIdx === dv?.cungIdx && d?.tuoiStart === dv?.tuoiStart));
+
+  // Khối ĐẦY ĐỦ cho MỘT đại vận: scoring TT/ĐL/NH, tam phương tứ chính, Tuần/
+  // Triệt, cách cục liên quan, [LUẬN ĐOÁN]/[CẢNH BÁO]. Đây là phần rail trước
+  // đây KHÔNG hề có → hỏi "giai đoạn này thế nào" thì nó luận chay theo chính
+  // tinh, lệch hẳn với bản luận giải 24 phần nói về cùng đại vận đó.
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const dvDetail = (dv: any): string => {
+    const i = dvIndexOf(dv);
+    if (i < 0) return '';
+    const ls2 = lasoData as Laso;
+    const lines = daiVanLines(ls2, i);
+    return lines.length ? lines.join('\n') + '\n' : '';
+  };
+
   if ((full || relevant.has('__daiVan__')) && lasoData.daiVanHienTai) {
     const dv = lasoData.daiVanHienTai;
     const dvCung = palaces[dv.cungIdx] || {};
+    const detail = dvDetail(dv);
     ctx += '\nĐại Vận hiện tại: ' + (dv.diaChi||'') + ' (' + (dv.tuoiStart||'') + '–' + (dv.tuoiEnd||'') + ' tuổi)';
     if (dvCung.cungName) ctx += ' — Cung ' + dvCung.cungName;
-    const dvStars = (dvCung.tuChinhStars||dvCung.majorStars||[]).map(starName).filter(Boolean);
-    if (dvStars.length) ctx += ' — Sao (tứ chính): ' + dvStars.join(', ');
-    if (dv.scoring?.tong != null) ctx += ' — Điểm vận: ' + dv.scoring.tong + '/10 ' + (dv.scoring.flag||'');
-    ctx += '\n(Điểm vận trên là điểm theo THỜI GIAN của giai đoạn này — KHÔNG phải điểm cung; chỉ dùng khi luận vận hạn, không dùng để chấm bản chất cung.)\n';
+    ctx += '\n';
+    if (detail) {
+      ctx += detail;
+    } else {
+      // Đường lùi khi engine nạp hụt — giữ nguyên bản gọn cũ, không để trống.
+      const dvStars = (dvCung.tuChinhStars||dvCung.majorStars||[]).map(starName).filter(Boolean);
+      if (dvStars.length) ctx += 'Sao (tứ chính): ' + dvStars.join(', ') + '\n';
+      if (dv.scoring?.tong != null) ctx += 'Điểm vận: ' + dv.scoring.tong + '/10 ' + (dv.scoring.flag||'') + '\n';
+    }
+    ctx += '(Điểm vận trên là điểm theo THỜI GIAN của giai đoạn này — KHÔNG phải điểm cung; chỉ dùng khi luận vận hạn, không dùng để chấm bản chất cung.)\n';
     ctx += dvComboLines(dvCung);
   }
 
@@ -814,12 +962,17 @@ export function extractLasoContext(lasoData: any, question: string, opts?: { ful
     if (dvForYear) {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const dvP: any = palaces[dvForYear.cungIdx] || {};
-      const dvStars = ((dvP.tuChinhStars || dvP.majorStars || []) as string[]).map(starName).filter(Boolean);
       ctx += `\nNăm ${queriedYear} (tuổi âm ${ageInYear}): thuộc Đại Vận ${dvForYear.diaChi} (${dvForYear.tuoiStart}–${dvForYear.tuoiEnd} tuổi)`;
       if (dvP.cungName) ctx += ` — Cung ${dvP.cungName}`;
-      if (dvStars.length) ctx += ` — Sao: ${dvStars.join(', ')}`;
-      if (dvForYear.scoring?.tong != null) ctx += ` — Điểm: ${dvForYear.scoring.tong}/10`;
       ctx += '\n';
+      const detailY = dvDetail(dvForYear);
+      if (detailY) {
+        ctx += detailY;
+      } else {
+        const dvStars = ((dvP.tuChinhStars || dvP.majorStars || []) as string[]).map(starName).filter(Boolean);
+        if (dvStars.length) ctx += `Sao: ${dvStars.join(', ')}\n`;
+        if (dvForYear.scoring?.tong != null) ctx += `Điểm: ${dvForYear.scoring.tong}/10\n`;
+      }
       ctx += dvComboLines(dvP);
       ctx += `(Tiểu vận năm ${queriedYear} không có trong dữ liệu — chỉ luận từ đại vận)\n`;
     } else {
@@ -889,6 +1042,12 @@ export function extractLasoContext(lasoData: any, question: string, opts?: { ful
     ctx += '\n=== ĐẠI VẬN (lịch trình THỜI GIAN — điểm dưới đây là điểm VẬN của giai đoạn 10 năm; CHỈ dùng khi luận năm/vận hạn. TUYỆT ĐỐI KHÔNG dùng điểm đại vận để chấm hay làm điểm yếu của một CUNG — đại vận chỉ MƯỢN cung làm chỗ đứng, không đổi bản chất cung) ===\n';
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     lasoData.daiVans.slice(0, 9).forEach((dv: any, i: number) => {
+      // Bản `compact` — CÙNG hàm với trang luận giải, chỉ bớt liệt kê sao phụ.
+      // Vẫn giữ [LUẬN ĐOÁN]/[CẢNH BÁO]/tam phương: hỏi "đại vận 5 của tôi thế
+      // nào" KHÔNG khớp mẫu năm nên chỉ chạm tới danh sách này — trước đây nó
+      // chỉ có cung+sao+điểm, model buộc phải luận chay.
+      const lines = daiVanLines(lasoData as Laso, i, { compact: true });
+      if (lines.length) { ctx += lines.join('\n') + '\n'; return; }
       const dvP = palaces[dv.cungIdx] || {};
       const stars = (dvP.tuChinhStars||dvP.majorStars||[]).map(starName).filter(Boolean);
       ctx += 'ĐV' + (i+1) + ': ' + (dv.diaChi||'') + ' (' + dv.tuoiStart + '–' + dv.tuoiEnd + 't) cung=' + (dvP.cungName||'?');
@@ -1163,6 +1322,106 @@ const GENERIC_LABELS: Record<string, string> = {
   satHuong: 'Hướng sát (nên tránh)',
   ngayBinh: 'Ngày bình', ngayXau: 'Ngày xấu',
   chiTietTung: 'Chi tiết từng ngày (trực · tú · nghi/kỵ)',
+  // Tử Vi Công Sở — nguồn `/api/cong-so` → lib/engine/cong-so.ts.
+  kieu: 'Kiểu người ở chỗ làm', tuTuong: 'Tứ tượng gốc của kiểu',
+  kieuLai: 'Có phải kiểu lai (nằm sát ranh giới) không',
+  toaDo: 'Toạ độ hai trục (tranh↔nhường · xông↔trầm)',
+  chinhTinhMenh: 'Chính tinh cung Mệnh', chinhTinhQuanLoc: 'Chính tinh cung Quan Lộc',
+  vaiTroTheoMenh: 'Tư cách suy từ chính tinh cung Mệnh',
+  dongLuc: 'Động lực gốc', kieuDanDat: 'Cách dẫn người khi được giao quyền',
+  moiTruongHop: 'Môi trường HỢP', moiTruongKy: 'Môi trường KỴ',
+  baiHocTaoMenh: 'Bốn bài học khi bắt đầu cầm người',
+  trangThaiNgheNghiep: 'Vị trí hiện tại (NGƯỜI DÙNG TỰ KHAI, không suy từ lá số)',
+  loiTheoTrangThai: 'Lời riêng cho vị trí hiện tại đó',
+  diemCaoNhat: 'Ba mặt mạnh nhất (thang 10, tương đối trong chính người này)',
+  diemThapNhat: 'Ba mặt yếu nhất (thang 10, tương đối trong chính người này)',
+  cachCucQuanLoc: 'Cách cục tại cung Quan Lộc',
+  loTrinh40Nam: 'Bốn chặng 40 năm đi làm', vanNamNay: 'Vận năm nay',
+  luatVanNam: 'LUẬT đọc vận năm (bắt buộc theo)',
+  luatThuTuTiepCan: 'LUẬT đọc thứ tự tiếp cận (bắt buộc theo)',
+  ghepDoi: 'Kiểu người ở ba cung nhân sự (Phụ Mẫu · Huynh Đệ · Nô Bộc)',
+  kieuNenTimDeBu: 'Kiểu NÊN TÌM để bù khuyết cho mình',
+  linhVucHop: 'LĨNH VỰC hợp (suy từ chức phận cung Quan Lộc)',
+  chatViecHop: 'CHẤT VIỆC hợp — đây mới là phần cổ thư nói',
+  nganhGoiY: 'Ngành hiện đại mang chất việc đó (quy chiếu của trang, KHÔNG phải cổ thư)',
+  vaiTroTrongNganh: 'VAI nên nhận trong ngành (suy từ kiểu người, cung Mệnh)',
+  quyMoGanhDuoc: 'QUY MÔ gánh được (suy từ bậc chức phận)',
+  saoQuyetDinhNganh: 'Sao (hoặc CẶP sao đồng cung) quyết định lĩnh vực',
+  bacChucPhan: 'Bậc chức phận + từng khoản cộng trừ',
+  chucPhanTheoCoThu: 'Chức phận diễn theo lối cổ (dùng làm căn cứ, KHÔNG đọc thô cho người dùng)',
+  trichDanCoThu: 'Trích dẫn Tân Biên làm căn cứ',
+  sacThaiQuanLoc: 'Sắc thái từ phụ tinh và tứ hoá đóng tại cung Quan Lộc',
+  luatDocSacThai: 'LUẬT đọc sắc thái phụ tinh (đọc sai chỗ này là ra mâu thuẫn)',
+  // Tầng NHÁNH — chỉ có trên lượt ĐÃ TRẢ TIỀN (lib/engine/nghe-nghiep.ts).
+  // ⚠️ `nhanhNghe` (NHÁNH) khác `nganhGoiY` (NGÀNH) — cố ý đặt tên xa nhau vì
+  // hai khoá lệch một ký tự là chắc chắn có ngày đọc nhầm.
+  nhanhNghe: 'NHÁNH nghề hợp nhất (kèm % khớp)',
+  nhanhChiTiet: 'Chất việc và việc cụ thể của từng nhánh',
+  lyDoTungNhanh: 'Vì sao lá số hợp từng nhánh (trục tính khí kéo lên)',
+  chatNguoiNoiBat: 'Chất người nổi bật đọc từ lá số',
+  ngheKhongDoiHoi: 'Thứ mà nghề hợp với người này thường KHÔNG đòi hỏi',
+  canhBaoLechBac: 'CẢNH BÁO lệch bậc (nếu có thì bắt buộc nói ra)',
+  canhBaoMoNhat: 'CẢNH BÁO lá số không chỉ ra nhánh nào nổi bật',
+  luatDocTrucThap: 'LUẬT đọc trục thấp (đọc sai chỗ này là xúc phạm người dùng)',
+  luatDocNhanh: 'LUẬT đọc nhánh và con số phần trăm (bắt buộc theo)',
+  // Hướng Nghiệp Sớm Cho Con — nguồn lib/engine/huong-nghiep-tre.ts.
+  // ⚠️ Khoá của lượt TÍNH THỬ và lượt ĐÃ MUA nằm chung bảng này, nhưng
+  // `railDataTinhThu` không bao giờ đặt mấy khoá của tầng trả tiền — chốt chặn
+  // nằm ở engine chứ không ở đây.
+  // (`kieuTre` · `tuoiTre` · `moiLoChaMe` · `dieuChaMeCan` · `kieuTuTuong` ·
+  //  `kieuMotCau` · `dongLucTre` · `laiKieu` · `luatDocTrucThap` DÙNG CHUNG với
+  //  khối Dạy Con bên dưới — cùng nghĩa, cố ý một nhãn duy nhất.)
+  lopTuoi: 'Lứa tuổi của đứa trẻ (quyết định bộ hoạt động)',
+  vaiChaMeLopNay: 'Việc của người lớn ở lứa tuổi này',
+  vieckhongDoiHoi: 'Thứ mà việc hợp với đứa trẻ này thường KHÔNG đòi hỏi',
+  canhBaoChuaRoNet: 'CẢNH BÁO lá số chưa nghiêng hẳn hướng nào (bắt buộc nói ra)',
+  changDangO: 'Chặng đại vận đứa trẻ đang ở',
+  baThienHuong: 'Ba thiên hướng nghiêng nhất',
+  lyDoTungHuong: 'Vì sao lá số nghiêng về từng hướng (trục tính khí kéo lên)',
+  hoatDongNenLam: 'Hoạt động nên cho làm quen, đã chọn theo đúng lứa tuổi',
+  chaMeNenLam: 'Việc người lớn NÊN làm',
+  chaMeTranhLam: 'Việc người lớn nên THÔI làm',
+  choHayBiHieuNham: 'Chỗ đứa trẻ này hay bị đọc nhầm',
+  chatViecVeSau: 'Chất việc hợp về sau (nói bằng tính chất, không bằng tên nghề)',
+  ngheCoChatDo: 'Nghề có chất đó — CHỈ để hình dung, không phải để chốt',
+  chuaBayNghe: 'LUẬT: cháu còn nhỏ, TUYỆT ĐỐI không nêu tên nghề',
+  luatDocHuong: 'LUẬT đọc thiên hướng (định hướng, không chốt)',
+  // Sổ Nhân Mạch — nguồn `/api/nhan-mach` → lib/engine/nhan-mach.ts.
+  soNguoiTrongSo: 'Số người trong sổ', danhSachNguoi: 'Từng người (vai · kiểu · vận năm)',
+  phanBoKieu: 'Phân bố bốn kiểu trong nhóm', kieuCuaBan: 'Kiểu của chính người hỏi',
+  kieuDoiDangThieu: 'Kiểu KHÔNG ai trong nhóm có (chỗ trống của nhóm)',
+  kieuDangDu: 'Kiểu chiếm quá nửa nhóm', kieuNenTimThem: 'Kiểu nên tìm thêm (luật bù âm–dương)',
+  capDeGiamChan: 'Cặp cùng kiểu — dễ giẫm chân nếu giao cùng loại việc',
+  capDeBuNhau: 'Cặp khác tính âm/dương — bù nhau được',
+  thuTuTiepCan: 'Thứ tự gợi ý tiếp cận (theo VẬN NĂM từng người, KHÔNG phải mức quan trọng)',
+  nguoiNayTrongLaSoBan: 'Từng người ứng với cung nào trong lá số người hỏi',
+  // Dạy Con — nguồn `/api/day-con` → lib/engine/day-con.ts.
+  // 🐞 Bảy khoá dưới đây TRƯỚC KHÔNG có nhãn nên `extractGenericContext` rơi về
+  // `GENERIC_LABELS[k] || k`, tức in nguyên KHOÁ KỸ THUẬT vào prompt
+  // (`laiKieu: true`, `cungMệnh: Cự Môn`). Cả `day-con` lẫn `huong-nghiep-tre`
+  // đều phát mấy khoá này — dùng chung một nhãn nên vá một chỗ là cả hai được.
+  laiKieu: 'Lá số nằm SÁT RANH GIỚI hai kiểu (phải nói là pha, đừng ép nhãn)',
+  kieuPhu: 'Kiểu phụ (khi sát ranh giới)',
+  cungMệnh: 'Cung Mệnh — cốt cách',
+  cungQuanLộc: 'Cung Quan Lộc — đường học nghiệp',
+  cungPhúcĐức: 'Cung Phúc Đức — nền tâm tính',
+  cungPhụMẫu: 'Cung Phụ Mẫu — đứa trẻ nhìn cha mẹ thế nào',
+  cungThiênDi: 'Cung Thiên Di — ra khỏi nhà',
+  cungThan: 'Cung an Thân',
+  hopHayVa: 'Hai bên hợp hay dễ va (luật âm–dương tương bổ)',
+  moiLoChaMe: 'Điều cha mẹ đang lo (NGƯỜI DÙNG TỰ KHAI)',
+  dieuChaMeCan: 'Thứ cha mẹ thật sự cần nghe', kieuTre: 'Kiểu người của đứa trẻ',
+  kieuTuTuong: 'Tứ tượng gốc của kiểu', kieuMotCau: 'Một câu tóm kiểu',
+  dongLucTre: 'Động lực gốc của đứa trẻ', tuoiTre: 'Tuổi (tuổi mụ)',
+  cachTiepThu: 'Cách con tiếp thu', cachGiaoViec: 'Cách giao bài / giao việc',
+  cachDongVien: 'Kiểu động viên có tác dụng',
+  kyLuatPhanTacDung: 'Kiểu kỷ luật PHẢN TÁC DỤNG',
+  choHayHieuNham: 'Chỗ người lớn hay hiểu nhầm đứa trẻ',
+  thuConCanHoc: 'Thứ con cần được dạy thêm (BÀI HỌC, không phải lời chê)',
+  dauHieuNhanBiet: 'Dấu hiệu quan sát được ở nhà',
+  changHoc: 'Các chặng của quãng đi học (điểm là THUẬN/NGHỊCH của quãng, KHÔNG phải điểm học lực)',
+  kieuChaMe: 'Kiểu người của cha/mẹ', cungTuTucChaMe: 'Cung Tử Tức trong lá số cha/mẹ',
+  kieuConTrongMatChaMe: 'Kiểu mà cung Tử Tức của cha/mẹ nghiêng về',
 };
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function extractGenericContext(data: any): string {

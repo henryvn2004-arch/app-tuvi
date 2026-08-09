@@ -111,7 +111,9 @@ const telegramIO: ChannelIO = {
   msgLimit: MSG_LIMIT,
   maxImages: MAX_TG_IMAGES,
   typing: (chatId) => tgSendChatAction(chatId, 'typing'),
-  sendText: tgSendMessage,
+  sendText: async (chatId, text) => {
+    await tgSendMessage(chatId, text);
+  },
   sendProgress: tgSendMessageReturnId,
   editText: (chatId, id, text) => tgEditMessage(chatId, Number(id), text),
   fetchImage: tgFetchImage,

@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lá Số Người Khác — Tử Vi Minh Bảo</title>
+<meta name="description" content="Nhập lá số sếp, đồng nghiệp, cấp dưới hay người thân — nhận bản cẩm nang ứng xử: họ vận hành thế nào, nên nói gì, tránh nói gì, lúc nào nên đưa việc lớn tới.">
+<link rel="icon" type="image/webp" href="/seal.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"></noscript>
+<link rel="stylesheet" href="/shell.css?v=18">
+<style>
+.form-card{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);max-width:860px}
+.form-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:3px}
+.form-card p.sub{font-size:12.5px;color:var(--text-lt);margin-bottom:14px}
+.frow{display:flex;gap:11px;flex-wrap:wrap;align-items:flex-end;margin-bottom:12px}
+.fg{display:flex;flex-direction:column;gap:5px}
+.fg label{font-size:10.5px;font-weight:600;color:var(--text-lt);letter-spacing:.04em;text-transform:uppercase}
+.fg input,.fg select{border:1px solid var(--line-2);border-radius:7px;padding:8px 10px;font-size:13.5px;font-family:inherit;color:var(--text);background:var(--paper);outline:none}
+.fg input:focus,.fg select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(20,85,164,.12)}
+.btn-go{background:var(--red);color:#fff;border:none;border-radius:8px;padding:10px 22px;font-size:14px;font-weight:600;cursor:pointer;font-family:var(--serif)}
+.btn-go:disabled{opacity:.6;cursor:not-allowed}
+.err{color:var(--tx-red);font-size:13px;margin-top:8px;display:none}
+.err.active{display:block}
+.res-block{border:1px solid #E8E8E8;border-radius:10px;margin-bottom:16px;background:#fff;overflow:hidden;max-width:880px}
+.res-block-header{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;background:#F5F4F0;border-bottom:1px solid #E8E8E8}
+.res-block-title{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#061A2E}
+.res-block-body{padding:18px;color:#2a2118}
+#loading{display:none;text-align:center;padding:30px 10px;color:var(--text-lt)}
+.nk-qh{max-width:420px}
+.nk-self{margin-top:14px;font-size:12.5px}
+.nk-self summary{cursor:pointer;color:#7A5F26;font-weight:600}
+.nk-self .inner{margin-top:10px;border:1px solid var(--line-2);border-radius:10px;padding:12px 13px;background:var(--paper)}
+.nk-self p.hint{font-size:11.5px;color:var(--text-lt);margin-bottom:9px}
+.nk-hero{text-align:center;padding:2px 6px 14px}
+.nk-name{font-family:var(--serif);font-size:22px;line-height:1.4;color:#061A2E;font-weight:700}
+.nk-role{font-size:12.5px;color:var(--text-lt);margin-top:3px}
+.nk-badges{display:flex;gap:7px;flex-wrap:wrap;justify-content:center;margin-top:10px}
+.nk-badge{display:inline-block;padding:5px 13px;border-radius:999px;background:#F3EAD6;color:#7A5F26;font-size:12px;font-weight:700}
+.nk-badge.alt{background:#EFEBE3;color:#5a5145;font-weight:600}
+.nk-birth{margin-top:9px;font-size:11.5px;color:var(--text-lt)}
+.nk-para{font-size:13.5px;line-height:1.88;color:#2a2118;margin:0 0 12px}
+.nk-para:last-child{margin-bottom:0}
+.nk-sub{font-size:10px;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;color:#7A5F26;margin:16px 0 7px}
+.nk-sub:first-child{margin-top:0}
+.nk-chips{display:flex;gap:7px;flex-wrap:wrap;margin-top:4px}
+.nk-chip{font-size:11.5px;padding:4px 10px;border-radius:999px;background:#FBF8F1;border:1px solid #EADFC8;color:#5a5145}
+/* Hai cột NÊN / TRÁNH — đặt cạnh nhau vì người ta đọc so sánh, không đọc nối
+   tiếp. Xuống một cột ở máy hẹp. */
+.nk-two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:760px){.nk-two{grid-template-columns:1fr}}
+.nk-col h4{font-family:var(--serif);font-size:14px;font-weight:700;margin-bottom:9px}
+.nk-col.yes h4{color:#1E6B3C}
+.nk-col.no h4{color:#A8342A}
+.nk-item{border-left:2px solid #E0D6C0;padding:0 0 12px 13px;position:relative}
+.nk-col.yes .nk-item{border-left-color:#BFD9C7}
+.nk-col.no .nk-item{border-left-color:#E7C4BF}
+.nk-item:last-child{padding-bottom:0}
+.nk-item .viec{font-size:13px;line-height:1.7;color:#2a2118}
+.nk-item .vidu{font-size:12.5px;line-height:1.7;color:#5a5145;font-style:italic;margin-top:4px}
+.nk-motcau{margin-top:16px;padding:14px 16px;background:#FBF8F1;border:1px solid #EADFC8;border-radius:10px;font-family:var(--serif);font-size:15px;line-height:1.75;color:#061A2E;font-weight:700}
+.nk-basis-list{margin:0 0 0 18px;color:#5a5145;line-height:1.9;font-size:12.8px}
+.nk-basis-list li{margin-bottom:3px}
+.nk-basis-list b{color:#2a2118}
+#histList{display:flex;flex-direction:column;gap:6px;margin-top:4px;font-size:12.5px;color:#5a5145}
+</style>
+</head>
+<body>
+
+<div class="shell">
+  <aside class="sb" id="shell-sidebar"></aside>
+
+  <main class="ws" id="ws">
+    <div class="ws-top">
+      <button class="btn mobile-only" onclick="document.getElementById('shell-sidebar').classList.toggle('open');window.shellSyncBackdrop&&shellSyncBackdrop()" aria-label="Menu">☰</button>
+      <div class="ws-title"><b>Lá Số Người Khác</b><span>Cẩm nang ứng xử với đúng một người</span></div>
+      <div class="ws-actions">
+        <button class="btn" id="btnEdit" onclick="showForm()" style="display:none">Xem Người Khác</button>
+        <button class="btn mobile-only" onclick="Shell.openRail()">✦ Hỏi</button>
+      </div>
+    </div>
+    <div class="ws-body">
+      <div id="introHost"></div>
+      <div id="shellRecent"></div>
+      <div class="form-card" id="birthPanel">
+        <h2>Ngày sinh của người bạn muốn hiểu</h2>
+        <p class="sub">Không phải để xem đời họ sướng khổ — mà để biết nói chuyện và làm việc với họ thế nào cho êm.</p>
+
+        <div class="frow nk-qh">
+          <div class="fg" style="flex:1">
+            <label for="quanHe">Người này là</label>
+            <select id="quanHe" onchange="onQuanHeChange()">
+              <option value="sep">Sếp / cấp trên</option>
+              <option value="dong-nghiep">Đồng nghiệp ngang hàng</option>
+              <option value="cap-duoi">Cấp dưới / người mình quản</option>
+              <option value="doi-tac">Đối tác / khách hàng</option>
+              <option value="cha-me">Cha mẹ / người lớn trong nhà</option>
+              <option value="con-cai">Con cái</option>
+              <option value="ban-doi">Vợ / chồng / người yêu</option>
+              <option value="ban-be">Bạn bè</option>
+            </select>
+          </div>
+        </div>
+        <p class="sub" id="qhHint" style="margin-top:-4px"></p>
+
+        <!-- data-uc-noseed: ô này là lá số NGƯỜI KHÁC. Sổ lá số (user-charts.js)
+             vẫn cho BẤM chọn vào đây, nhưng KHÔNG được tự mồi lá số của chính
+             người dùng — mồi vào rồi họ bấm luôn là ra cẩm nang ứng xử với
+             chính mình. -->
+        <div id="formHost" data-uc-noseed></div>
+
+        <details class="nk-self" id="selfWrap">
+          <summary id="selfSummary">Đối chiếu thêm với lá số của bạn (không bắt buộc)</summary>
+          <div class="inner">
+            <p class="hint">Có lá số của bạn thì bản luận có thêm mục <b>“Người này với bạn”</b> — chỗ hai bên dễ va và chỗ bù được cho nhau. Bỏ trống cũng xem được đầy đủ phần còn lại.</p>
+            <div id="formHostSelf"></div>
+          </div>
+        </details>
+
+        <div class="frow" style="margin-bottom:0;margin-top:14px">
+          <button class="btn-go" id="btnGo" onclick="analyze()">Xem Cẩm Nang Ứng Xử — <span data-tvp-price="nguoi-khac">…</span> Lượng →</button>
+        </div>
+        <div class="err" id="error-msg"></div>
+      </div>
+
+      <div id="resPanel" data-ws-result style="display:none">
+        <div class="res-block">
+          <div class="res-block-header"><span class="res-block-title">Người Này Là Ai</span></div>
+          <div class="res-block-body">
+            <div id="loading"><div id="loadingSteps"></div></div>
+            <div id="card" style="display:none">
+              <div class="nk-hero">
+                <div class="nk-name" id="nkName"></div>
+                <div class="nk-role" id="nkRole"></div>
+                <div class="nk-badges" id="nkBadges"></div>
+                <div class="nk-birth" id="birthLine" style="display:none"></div>
+              </div>
+              <div class="nk-sub">Câu hỏi chạy ngầm trong đầu họ</div>
+              <div class="nk-chips" id="cauHoiChips"></div>
+              <div id="proseTop" style="display:none">
+                <div class="nk-sub">Con người này vận hành thế nào</div>
+                <p class="nk-para" id="tinhKhi"></p>
+                <div class="nk-sub">Điều họ coi trọng</div>
+                <p class="nk-para" id="coiTrong"></p>
+                <div class="nk-sub">Điều làm họ khó chịu</div>
+                <p class="nk-para" id="chamNoc"></p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="res-block" id="sayBlock" style="display:none">
+          <div class="res-block-header"><span class="res-block-title">Nói Thế Nào</span></div>
+          <div class="res-block-body">
+            <div class="nk-two">
+              <div class="nk-col yes"><h4>Nên</h4><div id="nenNoi"></div></div>
+              <div class="nk-col no"><h4>Tránh</h4><div id="tranhNoi"></div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="res-block" id="timeBlock" style="display:none">
+          <div class="res-block-header"><span class="res-block-title">Lúc Này Họ Đang Ở Đâu</span></div>
+          <div class="res-block-body"><p class="nk-para" id="thoiDiem"></p></div>
+        </div>
+
+        <div class="res-block" id="withBlock" style="display:none">
+          <div class="res-block-header"><span class="res-block-title">Người Này Với Bạn</span></div>
+          <div class="res-block-body">
+            <p class="nk-para" id="voiBan"></p>
+            <div class="nk-chips" id="voiBanChips"></div>
+          </div>
+        </div>
+
+        <div class="res-block" id="endBlock" style="display:none">
+          <div class="res-block-body">
+            <div class="nk-motcau" id="motCau"></div>
+          </div>
+        </div>
+
+        <!-- Cơ sở trong lá số — trước đây nằm nép trong <details> ở cuối, sau
+             phần chữ. W1 đổi vai của nó: đây LÀ phần tính thử miễn phí, tức là
+             bằng chứng duy nhất người chưa trả tiền có để đánh giá tool. Bày
+             mở, đặt trước tường. -->
+        <div class="res-block" id="basisBlock" style="display:none">
+          <div class="res-block-header"><span class="res-block-title">Cơ Sở Trong Lá Số</span></div>
+          <div class="res-block-body">
+            <ul class="nk-basis-list" id="basisList"></ul>
+          </div>
+        </div>
+
+        <!-- W1 — tường "đã tính thử". Phần trên đã chạy THẬT và miễn phí; tấm
+             khoá này chỉ đứng trên phần chữ. `data-tvp-lock` để lượt từ chối
+             (thiếu Lượng) của paywall cũng rơi đúng vào đây thay vì nhảy lên
+             cạnh nút chạy tool ở màn hình trước. -->
+        <div class="res-block" id="lockBlock" style="display:none">
+          <div class="res-block-header"><span class="res-block-title">Phần Luận Chưa Mở</span></div>
+          <div class="res-block-body" id="lockHost" data-tvp-lock style="padding-top:6px"></div>
+        </div>
+
+        <div class="res-block" style="background:#FBF3DE;border-color:#e8d9b0">
+          <div class="res-block-body" style="font-size:12.5px;line-height:1.68;color:#5a5145">
+            💡 Bản cẩm nang này phác hoạ từ các dữ liệu trong lá số Tử Vi, kết hợp kinh nghiệm nghiên cứu của tiền nhân để lại. Mang tính tham khảo.<br><br>
+            ⚖️ Đây là khung <b>hiểu để sống chung</b>, không phải để điều khiển ai. Người được xem không có mặt ở đây, nên bản luận cố ý <b>không đọc sức khoẻ, tiền bạc riêng hay chuyện hôn nhân</b> của họ. Tính cách không tốt cũng không xấu — chỉ hợp hoặc không hợp bối cảnh.
+          </div>
+        </div>
+
+        <div class="res-block" id="histBlock" style="display:none">
+          <div class="res-block-header"><span class="res-block-title">Đã Xem Trước Đó</span></div>
+          <div class="res-block-body"><div id="histList"></div></div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <aside class="rail" id="shell-rail"></aside>
+</div>
+
+<script>window.SHELL_ACTIVE='nguoi-khac';window.SHELL_HISTORY=true;
+window.SHELL_INTRO={key:'nguoi-khac',title:'Lá Số Người Khác',desc:'Đưa lá số của <b>sếp, đồng nghiệp, cấp dưới hay người thân</b> vào đây để biết họ <b>vận hành thế nào</b>, <b>nên nói gì</b>, <b>tránh nói gì</b> và <b>lúc nào nên đưa việc lớn tới</b>. Đọc theo cung Mệnh, Phúc Đức, Thiên Di, Quan Lộc, Nô Bộc.'};</script>
+<script src="/laso-chart.js?v=3"></script>
+<script src="/tuvi-form.js?v=1"></script>
+<script src="/tuvi-paywall.js?v=18"></script>
+<script src="/auth.js?v=2"></script>
+  <script src="/nav.js?v=22" data-icons-only></script>
+<script src="/shell.js?v=68"></script>
+<script src="/tools-shared/ai-loading-steps.js?v=5"></script>
+<script>
+
+var _currentSlug = '';
+var _last = null;
+var _lastSelf = null;
+var _lastData = null;
+var NK_STEPS = [
+  { label: 'Lập lá số & phân kiểu người', ms: 1300 },
+  { label: 'Đọc Mệnh · Phúc Đức · Thiên Di · Quan Lộc · Nô Bộc', ms: 2200 },
+  { label: 'Viết cẩm nang ứng xử', ms: 0 },
+];
+var _loadingCtl = null;
+
+var QH_HINT = {
+  'sep': 'Bạn sẽ nhận: trình bày thế nào để được duyệt, và lúc nào thì đừng trình bày.',
+  'dong-nghiep': 'Bạn sẽ nhận: chia việc thế nào cho khỏi giẫm chân, tránh gì để khỏi mất lòng.',
+  'cap-duoi': 'Bạn sẽ nhận: giao việc kiểu nào thì họ chạy, nhắc kiểu nào thì họ nghe.',
+  'doi-tac': 'Bạn sẽ nhận: họ quyết bằng cái gì, và điều gì làm họ chùn lại.',
+  'cha-me': 'Bạn sẽ nhận: nói thế nào để không thành cãi nhau về cùng một chuyện cũ.',
+  'con-cai': 'Bạn sẽ nhận: đứa trẻ này cần được thúc hay cần được để yên.',
+  'ban-doi': 'Bạn sẽ nhận: chỗ nào là khác biệt tính cách chứ không phải hết thương.',
+  'ban-be': 'Bạn sẽ nhận: trông cậy được ở việc gì, và đừng trông cậy ở việc gì.',
+};
+
+function onQuanHeChange() {
+  var v = document.getElementById('quanHe').value;
+  document.getElementById('qhHint').textContent = QH_HINT[v] || '';
+}
+
+// Form NGƯỜI ĐƯỢC XEM dùng prefix mặc định; form của chính người dùng dùng
+// prefix 'self' — hai bản độc lập nhờ `prefix` của TuviForm, không chép tay.
+TuviForm.render('formHost', { mode: 'compact', prefix: '', gioitinh: 'nam', showName: true });
+TuviForm.render('formHostSelf', { mode: 'compact', prefix: 'self', gioitinh: 'nam', showName: false });
+
+// 🔑 Lá số shell đang nhớ là lá số CỦA NGƯỜI DÙNG → điền vào form 'self', KHÔNG
+// điền vào form chính. Đây là tool DUY NHẤT mà form chính là của người khác;
+// gọi `Shell.prefillForm()` như các tool anh em sẽ đổ lá số của chính họ vào ô
+// "người cần xem" rồi người ta bấm luôn — ra bản cẩm nang ứng xử với chính mình.
+try {
+  var _remembered = window.Shell && Shell.getRememberedBirth ? Shell.getRememberedBirth() : null;
+  if (_remembered) {
+    TuviForm.setData(_remembered, 'self');
+    var s = (window.Shell && Shell.birthSummary) ? Shell.birthSummary(_remembered) : '';
+    if (s) document.getElementById('selfSummary').textContent = 'Đối chiếu với lá số của bạn: ' + s;
+  }
+} catch (e) { /* không có shell / chưa nhớ gì — bỏ qua, phần này không bắt buộc */ }
+
+onQuanHeChange();
+
+// Không có dòng này thì `_cfg.product` rỗng ⇒ paywall không tra được giá, hiện
+// hộp "chưa đọc được bảng giá" và tool KHÔNG chạy. Test trang bắt đúng chỗ này.
+TuviPaywall.init({ product: 'nguoi-khac', slug: function () { return _currentSlug; } });
+
+function showError(msg) {
+  var e = document.getElementById('error-msg');
+  if (msg) { e.textContent = msg; e.classList.add('active'); } else { e.classList.remove('active'); }
+}
+
+function _birthOf(prefix) {
+  var f = TuviForm.getData(prefix);
+  if (!f.ngay || !f.thang || !f.nam) return null;
+  return {
+    day: f.ngay, month: f.thang, year: f.nam,
+    hourBranch: f.gioIdx, gender: f.gioitinh, isLunar: false,
+    name: (f.hoten || '').trim() || undefined,
+  };
+}
+
+/** Query cho `action=cache-status` — đúng tên tham số route đọc. */
+function _cacheQuery(b, self, qh) {
+  var q = 'd=' + (b.day || 0) + '&m=' + (b.month || 0) + '&y=' + (b.year || 0) +
+    '&h=' + (b.hourBranch == null ? -1 : b.hourBranch) +
+    '&g=' + (b.gender === 'nu' ? 'nu' : 'nam') +
+    '&lunar=' + (b.isLunar ? '1' : '0') + '&qh=' + encodeURIComponent(qh);
+  if (self) {
+    q += '&sd=' + (self.day || 0) + '&sm=' + (self.month || 0) + '&sy=' + (self.year || 0) +
+      '&sh=' + (self.hourBranch == null ? -1 : self.hourBranch) +
+      '&sg=' + (self.gender === 'nu' ? 'nu' : 'nam') +
+      '&slunar=' + (self.isLunar ? '1' : '0');
+  }
+  return q;
+}
+
+// ── W1: bấm nút là CHẠY THẬT, miễn phí ─────────────────────────────────────
+//
+// Trước đây bấm nút là gặp paywall ngay — tức phải trả tiền mới biết tool có
+// đúng không. Nay: chạy tầng deterministic (0 lượt LLM, 0đ), bày kiểu người +
+// 5 mặt đọc + đại vận + vận năm, rồi mới dựng tường trên đúng phần chữ.
+var NK_KHOA = [
+  'Con người này vận hành thế nào',
+  'Điều họ coi trọng · điều làm họ khó chịu',
+  'Nên nói gì — 3 việc kèm câu nói thật',
+  'Tránh nói gì — 3 việc kèm câu nói thật',
+  'Lúc nào nên đưa việc lớn tới',
+  'Một câu chốt',
+];
+
+async function analyze() {
+  showError('');
+  var b = _birthOf('');
+  if (!b) { showError('Vui lòng nhập đầy đủ ngày tháng năm sinh của người cần xem.'); return; }
+  var qh = document.getElementById('quanHe').value;
+  var self = _birthOf('self');
+  _last = b; _lastSelf = self;
+  _currentSlug = TuviPaywall.generateToolSlug('nguoi-khac-' + qh + '-' + b.day + b.month + b.year);
+
+  _openPanel();
+  _loadingCtl = AiLoadingSteps.mount('loadingSteps', NK_STEPS.slice(0, 2));
+  _loadingCtl.start();
+  var prev;
+  try {
+    var r = await fetch('/api/nguoi-khac?preview=1', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        birth: b, birthSelf: self || undefined, name: b.name || '', quanHe: qh,
+      }),
+    });
+    prev = await r.json();
+    if (!r.ok || !prev.success) throw new Error(prev.error || 'Lỗi ' + r.status);
+  } catch (e) {
+    _loadingCtl && _loadingCtl.stop();
+    _closePanel();
+    showError('Lỗi: ' + (e.message || 'Không thể kết nối. Vui lòng thử lại.'));
+    return;
+  }
+  _loadingCtl && _loadingCtl.finish();
+  document.getElementById('loading').style.display = 'none';
+  document.getElementById('card').style.display = 'block';
+  document.getElementById('btnEdit').style.display = '';
+  renderMeta(prev);
+  // D1 — bậc "đã tính thử" của phễu theo tool. Bắn ở ĐÂY chứ không ở lúc bấm
+  // nút: bấm rồi mà lá số hỏng thì không có gì để xem, tính vào phễu là thổi
+  // mẫu số lên rồi tỉ lệ mở nhìn tệ hơn thực tế.
+  try { if (window.Track) window.Track.event('preview_shown', { tool_id: 'nguoi-khac' }); } catch (e) { /* đo hỏng không chặn gì */ }
+  if (window.SHELL_INTRO) Shell.dismissIntro(window.SHELL_INTRO.key);
+
+  // Đã trả tiền cho đúng lá số này từ trước → mở thẳng, không dựng tường.
+  var free = false;
+  try { free = await TuviPaywall.isFreeRerun('/api/nguoi-khac', _cacheQuery(b, self, qh)); } catch (e) { free = false; }
+  if (free) {
+    TuviPaywall._banner('✓ Bạn đã xem bản này rồi — mở lại, không trừ Lượng');
+    await _doGenerate(true, qh);
+    return;
+  }
+  document.getElementById('lockBlock').style.display = 'block';
+  await TuviPaywall.lockPreview({
+    host: document.getElementById('lockHost'),
+    title: '⊙ Còn phần luận chưa mở',
+    items: NK_KHOA,
+    cta: 'Mở bản cẩm nang đầy đủ',
+    slug: function () { return _currentSlug; },
+    onUnlock: function () { return _doGenerate(false, qh); },
+  });
+}
+
+function _openPanel() {
+  document.getElementById('birthPanel').style.display = 'none';
+  document.getElementById('resPanel').style.display = 'block';
+  document.getElementById('loading').style.display = 'block';
+  document.getElementById('card').style.display = 'none';
+  ['sayBlock', 'timeBlock', 'withBlock', 'endBlock', 'basisBlock', 'lockBlock'].forEach(function (id) {
+    document.getElementById(id).style.display = 'none';
+  });
+  document.getElementById('proseTop').style.display = 'none';
+}
+
+function _closePanel() {
+  document.getElementById('loading').style.display = 'none';
+  document.getElementById('resPanel').style.display = 'none';
+  document.getElementById('birthPanel').style.display = 'block';
+}
+
+async function _doGenerate(freeRerun, qh) {
+  document.getElementById('lockBlock').style.display = 'none';
+  TuviPaywall._closeLock();
+  _loadingCtl = AiLoadingSteps.mount('loadingSteps', NK_STEPS.slice(2));
+  document.getElementById('loading').style.display = 'block';
+  _loadingCtl.start();
+
+  var token = window.Auth?.getSession()?.access_token || '';
+  try {
+    var res = await fetch('/api/nguoi-khac', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token },
+      body: JSON.stringify({
+        birth: _last,
+        birthSelf: _lastSelf || undefined,
+        name: _last.name || '',
+        quanHe: qh,
+        slug: _currentSlug,
+      }),
+    });
+    var data = await res.json();
+    // Đường miễn phí bị server từ chối (cache vừa hết / đoán nhầm) → quay lại
+    // paywall thay vì ném một lỗi khó hiểu.
+    if (res.status === 402 && freeRerun) {
+      _loadingCtl && _loadingCtl.stop();
+      document.getElementById('loading').style.display = 'none';
+      document.getElementById('lockBlock').style.display = 'block';
+      await TuviPaywall.requireCredits(_currentSlug, async function () { await _doGenerate(false, qh); });
+      return;
+    }
+    if (!res.ok || !data.success) throw new Error(data.error || 'Lỗi ' + res.status);
+    _lastData = data;
+    renderMeta(data);
+    renderProse(data);
+    _loadingCtl && _loadingCtl.finish();
+    document.getElementById('loading').style.display = 'none';
+    document.getElementById('card').style.display = 'block';
+    document.getElementById('btnEdit').style.display = '';
+    if (window.SHELL_INTRO) Shell.dismissIntro(window.SHELL_INTRO.key);
+    _loadHistory();
+
+    // Rail nạp lá số CỦA NGƯỜI ĐƯỢC XEM (để hỏi sâu về họ) + lá số của chính
+    // người dùng qua `wrapBirthB` nếu có. Lớp vỏ phía server có luật ĐÈ lên
+    // luật xưng hô — nếu không, rail sẽ gọi người đang chat theo giới tính của
+    // người trong lá số.
+    var ten = data.ten || (data.quanHe || {}).label || 'người này';
+    Shell.setContext({
+      birth: _last,
+      wrap: 'nguoi-khac',
+      wrapQuanHe: qh,
+      wrapBirthB: _lastSelf || undefined,
+      label: 'Lá số người khác',
+      greeting: 'Đây là bản cẩm nang ứng xử với **' + ten + '**. Bạn muốn hỏi thêm tình huống nào?',
+      chips: [
+        'Sắp phải trao đổi một việc khó với ' + ten + ', nên mở lời thế nào?',
+        'Vì sao lá số lại luận ra tính cách này?',
+        'Hai bên dễ va nhau ở chỗ nào?',
+        'Việc gì thì đừng giao cho ' + ten + '?',
+      ],
+    });
+
+    // Chia sẻ CHỈ gắn ở đường đã mở khoá (sau renderProse) — bản chia sẻ rỗng
+    // phần chữ thì người mở link không hiểu đang xem gì.
+    // ⚠️ Đây là lá số NGƯỜI KHÁC, người đó không có mặt. Bản chia sẻ vì thế CỐ Ý
+    // chỉ mang kiểu người + cách ứng xử; phần cổ pháp nhạy cảm đã bị `KHONG_DOC`
+    // chặn từ engine (Tật Ách · Tài Bạch · Phu Thê · Tử Tức · Điền Trạch).
+    Shell.setShareable({
+      kind: 'text',
+      toolId: 'nguoi-khac',
+      title: 'Cẩm nang ứng xử — ' + ten,
+      text: [
+        ten + (data.quanHe && data.quanHe.label ? ' (' + data.quanHe.label + ')' : '') +
+          (data.kieu && data.kieu.ten ? ' nghiêng về kiểu ' + data.kieu.ten : ''),
+        data.kieu && data.kieu.motCau ? data.kieu.motCau : '',
+        data.motCau ? '— ' + data.motCau : '',
+      ].filter(Boolean).join('\n'),
+    });
+  } catch (e) {
+    // 🔑 KHÔNG đóng cả bảng như bản trước. Người dùng đang nhìn phần tính thử
+    // (thứ họ vừa xem xong và có thể vừa trả tiền cho phần sau) — quẳng họ về
+    // form trống là xoá luôn cái đó. Giữ nguyên màn hình, dựng lại tường.
+    _loadingCtl && _loadingCtl.stop();
+    document.getElementById('loading').style.display = 'none';
+    document.getElementById('lockBlock').style.display = 'block';
+    TuviPaywall._banner('Chưa mở được phần luận: ' + (e.message || 'lỗi kết nối') + '. Bạn thử lại giúp.');
+  }
+}
+
+// esc() dùng chung từ /laso-chart.js (đã load ở trên) — không khai lại.
+
+function _mucHtml(list) {
+  return (list || []).map(function (m) {
+    return '<div class="nk-item"><div class="viec">' + esc(m.viec || '') + '</div>' +
+      (m.vidu ? '<div class="vidu">' + esc(m.vidu) + '</div>' : '') + '</div>';
+  }).join('');
+}
+
+// W1 — hai hàm vẽ, tách theo ĐƯỜNG TIỀN chứ không theo bố cục:
+//   renderMeta  = thứ engine tra bảng ra, 0đ  → vẽ ngay ở lượt tính thử
+//   renderProse = thứ model viết, tốn tiền    → chỉ vẽ sau khi đã trả
+// Gộp lại một hàm như bản trước là sớm muộn có một khối chữ lọt vào lượt miễn
+// phí mà không ai để ý.
+function renderMeta(data) {
+  var qh = data.quanHe || {};
+  var kieu = data.kieu || {};
+  document.getElementById('nkName').textContent = data.ten || qh.label || 'Người này';
+  document.getElementById('nkRole').textContent = qh.label || '';
+
+  var badges = [];
+  if (kieu.ten) badges.push('<span class="nk-badge">' + esc(kieu.ten) + '</span>');
+  if (data.lai && data.kieuPhu) {
+    badges.push('<span class="nk-badge alt">pha thêm ' + esc(data.kieuPhu.ten) + '</span>');
+  }
+  if (kieu.motCau) badges.push('<span class="nk-badge alt">' + esc(kieu.motCau) + '</span>');
+  document.getElementById('nkBadges').innerHTML = badges.join('');
+
+  var bl = document.getElementById('birthLine');
+  var bs = (window.Shell && Shell.birthSummary) ? Shell.birthSummary : null;
+  var line = bs ? bs(_last) : '';
+  if (line) { bl.textContent = 'Lá số: ' + line; bl.style.display = 'block'; }
+  else { bl.style.display = 'none'; }
+
+  document.getElementById('cauHoiChips').innerHTML = (kieu.cauHoi || []).map(function (c) {
+    return '<span class="nk-chip">' + esc(c) + '</span>';
+  }).join('');
+
+  var rows = [];
+  (data.matDoc || []).forEach(function (m) {
+    rows.push('<li><b>' + esc(m.nhan) + '</b> — cung ' + esc(m.cung) +
+      (m.muon ? ' (mượn xung chiếu)' : '') + ': ' +
+      esc((m.sao || []).join(', ') || 'không có chính tinh') +
+      ((m.cachCuc || []).length ? ' · ' + esc(m.cachCuc.join('; ')) : '') + '</li>');
+  });
+  if (data.than && data.than.cung) rows.push('<li><b>Cung an Thân</b> — ' + esc(data.than.cung) + '</li>');
+  if (data.daiVan) {
+    rows.push('<li><b>Đại vận đang chạy</b> — ' + data.daiVan.tuoiStart + '–' + data.daiVan.tuoiEnd +
+      ' tuổi, cung ' + esc(data.daiVan.cung) +
+      (data.daiVan.diem == null ? '' : ', ' + data.daiVan.diem + '/10') + '</li>');
+  }
+  if (data.vanNam) {
+    // ⚠️ Đọc CẢ hai dạng payload: bản đã nằm trong `portrait_cache` từ trước
+    // mang `diem`/`huong` (điểm nội suy + nhãn "đà" — xem chú thích `VanNam`
+    // trong lib/engine/cong-so.ts), bản mới mang `khung`/`catSat`.
+    var v = data.vanNam, bit = [];
+    if (v.khung) {
+      bit.push('khung đại vận ' + v.khung.tuoiStart + '–' + v.khung.tuoiEnd + ' tuổi' +
+        (v.khung.diem == null ? '' : ': ' + v.khung.diem + '/10'));
+    } else if (v.diem != null) {
+      bit.push(v.diem + '/10');
+    }
+    if (v.tieuHanCung) bit.push('tiểu hạn cung ' + esc(v.tieuHanCung));
+    if (v.luuNienCung) bit.push('lưu niên cung ' + esc(v.luuNienCung));
+    if (v.catSat) bit.push('cát ' + v.catSat.cat + ' / sát ' + v.catSat.sat + ' — ' + esc(v.catSat.canCan));
+    else if (v.huong) bit.push('đà ' + esc(v.huong));
+    rows.push('<li><b>Vận năm ' + v.nam + '</b> — ' + (bit.join(' · ') || 'chưa chấm') + '</li>');
+  }
+  if (rows.length) {
+    document.getElementById('basisList').innerHTML = rows.join('');
+    document.getElementById('basisBlock').style.display = 'block';
+  }
+}
+
+function renderProse(data) {
+  document.getElementById('tinhKhi').textContent = data.tinhKhi || '';
+  document.getElementById('coiTrong').textContent = data.coiTrong || '';
+  document.getElementById('chamNoc').textContent = data.chamNoc || '';
+  document.getElementById('proseTop').style.display = 'block';
+
+  var nen = _mucHtml(data.nenNoi), tranh = _mucHtml(data.tranhNoi);
+  if (nen || tranh) {
+    document.getElementById('nenNoi').innerHTML = nen;
+    document.getElementById('tranhNoi').innerHTML = tranh;
+    document.getElementById('sayBlock').style.display = 'block';
+  }
+
+  if (data.thoiDiem) {
+    document.getElementById('thoiDiem').textContent = data.thoiDiem;
+    document.getElementById('timeBlock').style.display = 'block';
+  }
+
+  // Khối "với bạn" CHỈ hiện khi có lá số người dùng. Không có thì ẩn hẳn —
+  // lấp bằng câu chung chung là hứa một thứ không dựa trên dữ kiện nào.
+  var vb = data.voiBanCoSo;
+  if (data.voiBan && vb) {
+    document.getElementById('voiBan').textContent = data.voiBan;
+    var chips = ['Cung ' + vb.cung + ' trong lá số của bạn' + (vb.muon ? ' (mượn xung chiếu)' : '')];
+    if (vb.sao && vb.sao.length) chips.push(vb.sao.join(', '));
+    chips.push(vb.cungTinh ? 'Cùng tính âm/dương — dễ va' : 'Khác tính âm/dương — dễ bù');
+    document.getElementById('voiBanChips').innerHTML = chips.map(function (c) {
+      return '<span class="nk-chip">' + esc(c) + '</span>';
+    }).join('');
+    document.getElementById('withBlock').style.display = 'block';
+  }
+
+  if (data.motCau) document.getElementById('motCau').textContent = data.motCau;
+  document.getElementById('endBlock').style.display = 'block';
+}
+
+function showForm() {
+  document.getElementById('resPanel').style.display = 'none';
+  document.getElementById('birthPanel').style.display = 'block';
+  document.getElementById('btnEdit').style.display = 'none';
+  // Quay về form thì gỡ nút Chia sẻ — bản vừa xem không còn trên màn hình nữa.
+  Shell.setShareable(null);
+}
+
+async function _loadHistory() {
+  try {
+    var token = window.Auth?.getSession()?.access_token || '';
+    if (!token) return;
+    var r = await fetch('/api/nguoi-khac?action=history', { headers: { Authorization: 'Bearer ' + token } });
+    var d = await r.json();
+    if (!d.success || !(d.items || []).length) return;
+    document.getElementById('histList').innerHTML = d.items.map(function (it) {
+      return '<div>· ' + esc(it.ten || 'Không đặt tên') + ' — ' + esc(it.quan_he_label || '') +
+        (it.kieu_ten ? ' · ' + esc(it.kieu_ten) : '') + '</div>';
+    }).join('');
+    document.getElementById('histBlock').style.display = 'block';
+  } catch (e) { /* lịch sử hỏng không phải lý do làm hỏng kết quả vừa xem */ }
+}
+</script>
+</body>
+</html>

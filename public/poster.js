@@ -126,6 +126,19 @@
     ctx.drawImage(img, x + (w - dw) / 2, y + (h - dh) * anchorY, dw, dh);
   }
 
+  // `contain` — lọt TRỌN vào khung, phần dư để lộ nền navy.
+  //
+  // Dùng cho ảnh KHỔ NGANG. `cover` phủ đầy khung dọc 9:16 bằng cách phóng theo
+  // chiều cao, nên một bức 3:2 bị cắt mất ~200px MỖI BÊN — với bức có hai nhân
+  // vật đứng cạnh nhau thì đó đúng là hai gương mặt. Thà chừa dải navy còn hơn
+  // cắt mất chủ thể.
+  function drawContain(ctx, img, x, y, w, h, anchorY) {
+    var s = Math.min(w / img.width, h / img.height);
+    var dw = img.width * s,
+      dh = img.height * s;
+    ctx.drawImage(img, x + (w - dw) / 2, y + (h - dh) * anchorY, dw, dh);
+  }
+
   // ── chọn "1 câu đắt nhất" ────────────────────────────────────────────────
   // CỐ Ý KHÔNG gọi LLM: thêm một lượt model cho mỗi lần bấm Tải Ảnh là chi phí
   // thật, trong khi thứ cần chỉ là một câu đọc lọt tai. Luật: lấy câu TRỌN VẸN
@@ -907,10 +920,21 @@
     });
   }
 
-  // Chế độ ẢNH: nạp bức ảnh rồi phủ `cover` vào khung.
+  // Chế độ ẢNH: nạp bức ảnh rồi phủ vào khung.
+  //
+  // `opts.imageFit` mặc định là `cover` — GIỮ NGUYÊN hành vi cũ, đừng đổi mặc
+  // định: hai tool chân dung một người có ca đối chứng dựng PNG md5 trùng khít
+  // với bản trước, đổi mặc định là phá ngay ca đó.
   function buildFromImage(opts, imgSrc, cors) {
     return loadImage(imgSrc, cors).then(function (img) {
       return toBlob(opts, function (ctx, box) {
+        if (opts.imageFit === 'contain') {
+          // Neo hơi cao hơn giữa (0.38): dải navy phía dưới nối liền vào dải
+          // chuyển màu rồi xuống khối chữ, nhìn ra một mảng chứ không phải hai
+          // vạch trống kẹp trên dưới.
+          drawContain(ctx, img, box.x, box.y, box.w, box.h, 0.38);
+          return;
+        }
         // Neo mép TRÊN (0): nhân vật đội mũ quan/mũ giáp, cắt từ giữa là cụt mũ —
         // thứ nhìn ra ngay là hỏng. Phần dư cắt hết ở dưới, nơi chỉ có thân/nền.
         drawCover(ctx, img, box.x, box.y, box.w, box.h, 0);

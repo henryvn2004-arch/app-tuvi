@@ -2,6 +2,29 @@
 // Vercel cron: 0 0 * * * (00:00 UTC = 07:00 VN) → gọi Supabase Edge Function
 // send-daily-push (web-push, bảng push_subscriptions).
 //
+// Đây là kênh nhắc DUY NHẤT đang tới được người thật (kênh FCM
+// `/api/cron/daily-push` có 0 token vì app native chưa phát hành).
+//
+// ============================================================
+// 🔴 VÁ 07/08 — tin nhắc lặp lại NGUYÊN VĂN mỗi sáng
+//
+// Edge function tự dựng chữ từ một bảng CHÉP TAY 24 dòng tra theo CAN CHI NĂM
+// SINH. Tức mỗi người nhận đúng MỘT câu, y hệt nhau, mỗi ngày, mãi mãi — và
+// câu đó không nói gì về NGÀY HÔM NAY. Đo trên prod: người đăng ký từ 12/06 đã
+// nhận cùng một câu ~56 lần.
+//
+// Nay route này DỰNG NỘI DUNG (qua `lib/push/daily-message.ts`, cùng nguồn với
+// thẻ "Vận hôm nay") rồi giao cho edge function CHỈ đi phát. Lý do chia vai như
+// vậy: engine ngày-tốt là TypeScript trong repo, edge function là Deno tách
+// biệt — chép engine sang đó là dựng bản thứ hai rồi hai bên trôi khỏi nhau,
+// đúng cái bẫy đã trả giá ở can chi ngày. Còn phần KÝ VAPID + mã hoá payload
+// thì ngược lại: gói `web-push` đã chạy tốt bên Deno, tự cài lại bằng
+// crypto thô trong Node là ~150 dòng ECDH dễ sai thầm lặng.
+//
+// Tương thích HAI CHIỀU (không có thứ tự deploy nào làm hỏng):
+//   • edge bản CŨ nhận body mới → bỏ qua, vẫn gửi như trước.
+//   • edge bản MỚI không nhận được body → tự lùi về một câu chung an toàn.
+//
 // ============================================================
 // 🐞 VÁ 30/07 — route này CHẠY MỖI LẦN BUILD và AI GỌI CŨNG ĐƯỢC
 //
@@ -37,6 +60,7 @@ export const maxDuration = 30;
 
 import { NextRequest, NextResponse } from 'next/server';
 import { withCronLog } from '@/lib/cron/log';
+import { buildDailyPushMessage } from '@/lib/push/daily-message';
 
 const EDGE_URL    = `${process.env.SUPABASE_URL}/functions/v1/send-daily-push`;
 const CRON_SECRET = process.env.CRON_SECRET ?? '';
@@ -52,6 +76,7 @@ async function handle(request: NextRequest) {
   if (!CRON_SECRET || auth !== 'Bearer ' + CRON_SECRET) {
     return NextResponse.json({ ok: false, error: 'Unauthorized' }, { status: 401 });
   }
+  const msg = buildDailyPushMessage();
   try {
     const res = await fetch(EDGE_URL, {
       method: 'POST',
@@ -59,10 +84,11 @@ async function handle(request: NextRequest) {
         'Content-Type': 'application/json',
         'x-cron-secret': CRON_SECRET,
       },
+      body: JSON.stringify(msg),
       cache: 'no-store',
     });
     const data = await res.json();
-    return NextResponse.json({ ok: true, ...data });
+    return NextResponse.json({ ok: true, day: msg.canChi, ...data });
   } catch (e) {
     return NextResponse.json({ ok: false, error: String(e) }, { status: 500 });
   }

@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"></noscript>
-<link rel="stylesheet" href="/shell.css?v=16">
+<link rel="stylesheet" href="/shell.css?v=18">
 <style>
 .home-body{max-width:920px}
 .hero{background:linear-gradient(135deg,var(--navy),#0d2a49);border-radius:16px;padding:26px 28px;margin-bottom:24px;color:#fff;position:relative;overflow:hidden}
@@ -33,7 +33,7 @@
 .today-card .glow{position:absolute;right:-34px;top:-46px;width:190px;height:190px;background:radial-gradient(circle,rgba(201,168,76,.22),transparent 70%);pointer-events:none}
 .today-eyebrow{font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);font-weight:700;margin-bottom:6px}
 .today-date{font-family:var(--serif);font-size:20px;font-weight:600;line-height:1.25;max-width:calc(100% - 92px)}
-.today-date .cc{color:var(--gold-lt)}
+.today-date .cc{color:var(--gold-on-navy)}
 .today-hanh{position:absolute;top:20px;right:22px;font-size:11px;font-weight:700;color:#2a1e05;background:linear-gradient(135deg,var(--gold-soft),var(--gold));border-radius:20px;padding:4px 12px;white-space:nowrap}
 /* Nhãn tốt/bình/xấu của ngày — màu là tín hiệu ĐỌC LƯỚT, đừng đổi thành vàng
    hết: cả điểm của thẻ là nhìn 1 giây biết hôm nay có nên khởi sự không. */
@@ -42,17 +42,17 @@
 .today-sub{font-size:12.5px;color:rgba(255,255,255,.72);margin:5px 0 13px;line-height:1.5;max-width:540px}
 .today-meta{display:flex;flex-wrap:wrap;gap:5px;margin:0 0 13px}
 .tm-item{font-size:11.5px;color:rgba(255,255,255,.74);background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:6px;padding:3px 9px;white-space:nowrap}
-.tm-item b{color:var(--gold-lt);font-weight:600}
+.tm-item b{color:var(--gold-on-navy);font-weight:600}
 .today-warn{display:flex;gap:8px;align-items:flex-start;font-size:12px;line-height:1.5;color:#ffd9cf;background:rgba(192,86,63,.18);border:1px solid rgba(192,86,63,.42);border-radius:9px;padding:8px 11px;margin-bottom:13px}
 .today-me{background:rgba(201,168,76,.1);border:1px solid rgba(201,168,76,.28);border-radius:10px;padding:11px 13px;margin-bottom:14px}
 .today-me .tme-h{font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--gold);font-weight:700;margin-bottom:5px}
 .today-me .tme-b{font-size:12.5px;color:rgba(255,255,255,.88);line-height:1.55}
-.today-me .tme-b b{color:var(--gold-lt);font-weight:600}
+.today-me .tme-b b{color:var(--gold-on-navy);font-weight:600}
 /* Dòng "lá số đang dùng" + nút Đổi — trước đây thẻ luận vận riêng mà KHÔNG nói
    nó đang dựa trên lá số nào, nên lá số sai thì không có đường nào sửa. */
 .tme-src{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:9px;padding-top:9px;border-top:1px solid rgba(201,168,76,.22);font-size:11.5px;color:rgba(255,255,255,.55)}
 .tme-src b{color:rgba(255,255,255,.8);font-weight:600}
-.tme-edit{background:none;border:1px solid rgba(201,168,76,.45);color:var(--gold-lt);border-radius:20px;padding:2px 11px;font-size:11px;font-weight:600;cursor:pointer;font-family:inherit}
+.tme-edit{background:none;border:1px solid rgba(201,168,76,.45);color:var(--gold-on-navy);border-radius:20px;padding:2px 11px;font-size:11px;font-weight:600;cursor:pointer;font-family:inherit}
 .tme-edit:hover{background:rgba(201,168,76,.16)}
 .tme-cta{margin-top:10px;background:linear-gradient(135deg,var(--gold-soft),var(--gold));color:#2a1e05;border:none;border-radius:8px;padding:8px 16px;font-size:12.5px;font-weight:700;cursor:pointer;font-family:inherit}
 /* Form nhập lá số ngay trong thẻ. CỐ Ý không đá người dùng sang trang khác:
@@ -75,7 +75,7 @@
 .today-hours{margin-bottom:15px}
 .th-label{font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:8px;font-weight:600}
 .th-chips{display:flex;flex-wrap:wrap;gap:6px}
-.th-chip{font-size:12px;background:rgba(201,168,76,.14);border:1px solid rgba(201,168,76,.3);color:var(--gold-lt);border-radius:20px;padding:5px 11px;white-space:nowrap}
+.th-chip{font-size:12px;background:rgba(201,168,76,.14);border:1px solid rgba(201,168,76,.3);color:var(--gold-on-navy);border-radius:20px;padding:5px 11px;white-space:nowrap}
 .th-chip i{font-style:normal;color:rgba(255,255,255,.6);font-size:11px}
 .tdo-list{display:flex;flex-direction:column;gap:5px}
 .tdo-list span{font-size:12.5px;color:rgba(255,255,255,.85);line-height:1.45}
@@ -95,13 +95,42 @@
 .tw-cell.v-tot .tw-dot{background:#4c9a6a}
 .tw-cell.v-xau .tw-dot{background:#c0563f}
 .tw-x{font-size:9px;color:#e08b76;margin-top:3px;line-height:1}
-.today-back{background:none;border:none;color:var(--gold-lt);font-size:12px;font-family:inherit;cursor:pointer;padding:0;margin-bottom:9px;display:none}
+.today-back{background:none;border:none;color:var(--gold-on-navy);font-size:12px;font-family:inherit;cursor:pointer;padding:0;margin-bottom:9px;display:none}
 .today-back:hover{text-decoration:underline}
 .today-cta{display:flex;gap:9px;flex-wrap:wrap}
 .today-ask{flex:1;min-width:190px;background:var(--red);color:#fff;border:none;border-radius:10px;padding:12px 16px;font-size:13.5px;font-weight:600;font-family:var(--serif);cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:8px}
 .today-ask:hover{filter:brightness(1.08)}
 .today-share{background:rgba(255,255,255,.08);color:#fff;border:1px solid rgba(255,255,255,.18);border-radius:10px;padding:12px 16px;font-size:13.5px;font-weight:600;font-family:inherit;cursor:pointer;display:inline-flex;align-items:center;gap:7px;white-space:nowrap}
 .today-share:hover{background:rgba(255,255,255,.14)}
+/* ── NHIỆM VỤ MỞ KHOÁ LƯỢNG (M3) ───────────────────────────────────────────
+   CỐ Ý để nền SÁNG, ngược hẳn thẻ Vận hôm nay (navy): hai khối nằm sát nhau,
+   cùng tông là đọc thành một khối dài và mắt trượt qua. */
+.task-card{background:#fff;border:1px solid var(--gold-soft);border-radius:14px;padding:16px 18px;margin-bottom:22px}
+.tsk-top{display:flex;align-items:baseline;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:4px}
+.tsk-h{font-family:var(--serif);font-size:15.5px;font-weight:600;color:var(--heading)}
+.tsk-count{font-size:11.5px;font-weight:700;color:var(--gold-soft);white-space:nowrap}
+.tsk-sub{font-size:12.5px;color:var(--text-mid);line-height:1.5;margin-bottom:12px}
+.tsk-sub b{color:var(--heading)}
+.tsk-got{font-size:12.5px;font-weight:600;color:#2f7a4d;background:#e8f7ee;border:1px solid #a9dcbd;border-radius:8px;padding:8px 11px;margin-bottom:12px;line-height:1.45}
+.tsk-list{display:flex;flex-direction:column;gap:9px}
+.tsk-row{display:flex;align-items:flex-start;gap:11px;padding:10px 12px;border:1px solid var(--border-lt);border-radius:10px}
+.tsk-row.done{border-color:#cfe8da;background:#f6fbf8}
+.tsk-tick{flex:0 0 auto;width:19px;height:19px;border-radius:50%;border:2px solid var(--border-lt);margin-top:1px}
+.tsk-row.done .tsk-tick{border-color:#2f7a4d;background:#2f7a4d;position:relative}
+.tsk-row.done .tsk-tick::after{content:"✓";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;font-weight:700;line-height:1}
+.tsk-body{flex:1;min-width:0}
+.tsk-t{font-size:13.5px;font-weight:600;color:var(--heading);line-height:1.35}
+.tsk-row.done .tsk-t{color:var(--text-mid)}
+.tsk-d{font-size:12px;color:var(--text-mid);line-height:1.5;margin-top:3px}
+.tsk-pay{flex:0 0 auto;display:flex;flex-direction:column;align-items:flex-end;gap:6px}
+.tsk-amt{font-size:11.5px;font-weight:700;color:var(--gold-soft);white-space:nowrap}
+.tsk-row.done .tsk-amt{color:#2f7a4d}
+.tsk-go{background:linear-gradient(135deg,var(--gold-soft),var(--gold));color:#2a1e05;border:none;border-radius:8px;padding:6px 13px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap}
+.tsk-go:hover{filter:brightness(1.06)}
+@media(max-width:520px){
+  .tsk-row{flex-wrap:wrap}
+  .tsk-pay{flex-direction:row;align-items:center;width:100%;justify-content:space-between;margin-left:30px}
+}
 </style>
 </head>
 <body>
@@ -150,6 +179,10 @@
             <button class="today-share" id="todayPoster" type="button">⤓ Ảnh</button>
           </div>
         </div>
+        <!-- M3 — nhiệm vụ onboarding. Dựng hoàn toàn bằng JS và CHỈ khi đã đăng
+             nhập + còn việc chưa làm; khách vãng lai không bao giờ thấy khối
+             này (họ chưa có ví để mà cộng vào). -->
+        <div class="task-card" id="taskCard" style="display:none"></div>
         <div id="homeCards"></div>
       </div>
     </div>
@@ -161,11 +194,11 @@
 <script>window.SHELL_ACTIVE='home';</script>
 <script src="/tools-shared/hoang-dao.js?v=2"></script>
 <script src="/tuvi-form.js?v=1"></script>
-<script src="/poster.js?v=4" defer></script>
-<script src="/tool-prices.js?v=2"></script>
+<script src="/poster.js?v=5" defer></script>
+<script src="/tool-prices.js?v=4"></script>
 <script src="/auth.js?v=2"></script>
   <script src="/nav.js?v=22" data-icons-only></script>
-<script src="/shell.js?v=56"></script>
+<script src="/shell.js?v=68"></script>
 <script>
 function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 var IC={
@@ -189,85 +222,67 @@ var IC={
   hand:'<path d="M8 13V5a1.5 1.5 0 0 1 3 0v6M11 11V3.5a1.5 1.5 0 0 1 3 0V11m0-4.5a1.5 1.5 0 0 1 3 0V12m0 .5V10a1.5 1.5 0 0 1 3 0v5.5c0 3.6-2 6.5-6 6.5h-1.5c-2.6 0-3.6-.9-5.2-3.4L5 15c-.7-1.1.5-2.4 1.7-1.7L8 14"/>',
   mic:'<rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v4"/>',
   image:'<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.8"/><path d="m21 15-5-5-9 9"/>',
-  temple:'<path d="m12 3 8 5H4z"/><path d="M3 8h18"/><path d="M6 8v9M18 8v9"/><path d="M10 17v-5h4v5"/><path d="M3 21h18"/>'
+  temple:'<path d="m12 3 8 5H4z"/><path d="M3 8h18"/><path d="M6 8v9M18 8v9"/><path d="M10 17v-5h4v5"/><path d="M3 21h18"/>',
+  briefcase:'<rect x="2.5" y="7" width="19" height="13" rx="2"/><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/><path d="M2.5 12.5h19"/>'
 };
-/* `p` = tool_id trong `tool_pricing` — NGUỒN GIÁ DUY NHẤT (admin sửa, không
-   cần deploy). Phần lớn trùng slug URL, chỉ 5 cái lệch: luan-giai→laso,
-   bat-tu→tu-binh, sinh-con→xem-tuoi-sinh-con, chon-ngay→chon-ngay-tot,
-   dat-ten→dat-ten-con — đây chính là id mà `TuviPaywall.init` dùng để trừ
-   Lượng, nên chỗ hiện giá và chỗ trừ ăn cùng một khoá.
+/* ── DANH MỤC CÔNG CỤ — dựng TỪ DỮ LIỆU, không còn mảng chép tay ──────────
+   Trước đây chỗ này là mảng `GROUPS` 34 dòng xếp theo BỘ MÔN, trong khi
+   `/cong-cu` xếp theo NHU CẦU với 58 công cụ — cùng một sản phẩm nói hai kiểu
+   với cùng một người, và thêm công cụ mới là phải sửa tay cả hai.
+
+   Nay: nhóm lấy từ bảng `tool_groups`, công cụ lấy từ `tool_pricing`, đường dẫn
+   lấy từ cột `app_path`. Công cụ CHƯA có trang trong Luận Đường thì `app_path`
+   NULL ⇒ không hiện ở đây (đúng thiết kế, không phải sót) nhưng vẫn hiện ở
+   `/cong-cu` qua `page_path`.
 
    ⚠️ KHÔNG chép số giá vào đây. Chưa đọc được thì thẻ hiện "…" — xem
    public/tool-prices.js. */
-var GROUPS=[
-  { g:'Tử Vi', items:[
-    { i:'grid', t:'Luận giải Tử Vi', d:'Lập lá số 12 cung rồi luận sâu cách cục, đại vận, tứ hóa', h:'/app/luan-giai', p:'laso' },
-    { i:'heart', t:'Xem tuổi vợ chồng', d:'So hòa hợp hai lá số theo 8 chiều', h:'/app/xem-tuoi', p:'xem-tuoi' },
-    { i:'handshake', t:'Xem tuổi làm ăn', d:'So hợp hai người khi bắt tay hợp tác', h:'/app/xem-lam-an', p:'xem-lam-an' },
-    { i:'users', t:'Tương hợp tuổi', d:'So hợp hai người bất kỳ: bạn, người thân, đối tác', h:'/app/tuong-hop', p:'tuong-hop' },
-    { i:'baby', t:'Xem tuổi sinh con', d:'Năm sinh con hợp tuổi bố mẹ theo địa chi', h:'/app/sinh-con', p:'xem-tuoi-sinh-con' },
-    { i:'image', t:'Chân dung vợ chồng', d:'AI vẽ chân dung người phối ngẫu suy từ cung Phu Thê', h:'/app/chan-dung-vo-chong', p:'chan-dung-vo-chong' },
-    { i:'temple', t:'Chân dung tiền kiếp', d:'Lá số của bạn nếu sinh vào thời xưa — chân dung + một đời người qua 9 đại vận', h:'/app/chan-dung-tien-kiep', p:'chan-dung-tien-kiep' },
-  ]},
-  { g:'Tử Bình', items:[
-    { i:'rows', t:'Lá số Bát Tự', d:'Tứ trụ Tử Bình: nhật can, dụng thần, cách cục', h:'/app/bat-tu', p:'tu-binh' },
-  ]},
-  { g:'Xem Tướng', items:[
-    { i:'face', t:'Diện Tướng AI', d:'Phân tích khuôn mặt qua ảnh theo Ma Y Thần Tướng', h:'/app/dien-tuong', p:'dien-tuong' },
-    { i:'eye', t:'Nhãn Tướng AI', d:'Phân tích đôi mắt qua ảnh theo Nhãn Pháp cổ truyền', h:'/app/nhan-tuong', p:'nhan-tuong' },
-    { i:'hand', t:'Thủ Tướng AI', d:'Phân tích lòng bàn tay qua ảnh theo cổ pháp Đông Tây', h:'/app/thu-tuong', p:'thu-tuong' },
-    { i:'mic', t:'Thanh Tướng AI', d:'Ghi âm giọng nói, phân tích theo Ngũ Âm cổ pháp', h:'/app/thanh-tuong', p:'thanh-tuong' },
-    { i:'mic', t:'Thanh Tướng Pro', d:'4 bài đo giọng chuyên sâu, 12 chỉ số âm học', h:'/app/thanh-tuong-pro', p:'thanh-tuong-pro' },
-  ]},
-  { g:'Phong Thủy', items:[
-    { i:'compass', t:'Phong Thủy Nội Thất', d:'Chụp ảnh phòng — AI chấm điểm Bát Trạch trước/sau, đề xuất bố trí', h:'/app/phong-thuy', p:'phong-thuy' },
-    { i:'home', t:'Hướng Bát Trạch', d:'Cung phi & hướng nhà, bếp, giường hợp mệnh', h:'/app/bat-trach', p:'bat-trach' },
-  ]},
-  { g:'Chọn Ngày / Lịch', items:[
-    { i:'cal', t:'Chọn ngày tốt', d:'Ngày giờ hợp tuổi cho việc trọng đại', h:'/app/chon-ngay', p:'chon-ngay-tot' },
-    { i:'cal', t:'Kim Lâu & Tam Tai', d:'Tuổi làm nhà, cưới hỏi có phạm không', h:'/app/kim-lau', p:'kim-lau' },
-    { i:'cal', t:'Ngày tốt trong tháng', d:'Lịch ngày tốt/xấu cả tháng theo âm lịch', h:'/app/ngay-tot', p:'ngay-tot' },
-    { i:'clock', t:'Giờ hoàng đạo', d:'12 giờ tốt/xấu trong ngày theo can chi', h:'/app/hoang-dao', p:'hoang-dao' },
-  ]},
-  { g:'Đặt Tên', items:[
-    { i:'tag', t:'Đặt tên con', d:'Tên hợp mệnh theo can chi & ngũ hành', h:'/app/dat-ten', p:'dat-ten-con' },
-    { i:'tag', t:'Đặt tên doanh nghiệp', d:'Tên công ty, thương hiệu hợp mệnh chủ & ngành', h:'/app/dat-ten-dn', p:'dat-ten-dn' },
-    { i:'leaf', t:'Ngũ hành tên', d:'Tên có hợp mệnh nạp âm không, bồi hay khắc', h:'/app/ngu-hanh-ten', p:'ngu-hanh-ten' },
-  ]},
-  { g:'Mệnh Lý', items:[
-    { i:'leaf', t:'Nạp âm ngũ hành', d:'Hành bản mệnh theo năm sinh, hợp màu, hướng, tuổi', h:'/app/nap-am', p:'nap-am' },
-  ]},
-  { g:'Huyền Học', items:[
-    { i:'yinyang', t:'Kinh Dịch — Gieo quẻ', d:'Chu Dịch 64 quẻ, quẻ chính, hào động, quẻ biến', h:'/app/kinh-dich', p:'kinh-dich' },
-    { i:'flower', t:'Mai Hoa Dịch Số', d:'Gieo bằng số hoặc giờ — Thể, Dụng, ba chặng chính hỗ biến', h:'/app/mai-hoa', p:'mai-hoa' },
-    { i:'grid', t:'Kỳ Môn Độn Giáp', d:'Bàn 9 cung theo giờ — bát môn, cửu tinh, hướng nên đi', h:'/app/ky-mon', p:'ky-mon' },
-    { i:'star', t:'Bản đồ sao lúc sinh', d:'Chiêm tinh Tây — cung Mọc, 12 nhà, góc chiếu; tải bánh xe về chia sẻ', h:'/app/ban-do-sao', p:'ban-do-sao' },
-    { i:'yinyang', t:'Lục Nhâm Giản', d:'12 thần tướng theo giờ/ngày, cát hung', h:'/app/luc-nham', p:'luc-nham' },
-    { i:'hash', t:'Thần số học', d:'Số chủ đạo theo ngày sinh, tính cách, sự nghiệp', h:'/app/than-so-hoc', p:'than-so-hoc' },
-  ]},
-];
 function svg(n){ return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">'+(IC[n]||IC.grid)+'</svg>'; }
-/* prices = bảng đọc từ `tool_pricing`, hoặc null khi đọc hỏng → rơi về `it.c`. */
-function renderHomeCards(prices){
-  document.getElementById('homeCards').innerHTML=GROUPS.map(function(grp){
-    var cards=grp.items.map(function(it){
-      var cost=(prices && it.p && prices[it.p]!=null) ? prices[it.p] : null;
-      return '<a class="tcard'+(it.ext?' ext':'')+'" href="'+it.h+'"'+(it.ext?' target="_blank" rel="noopener"':'')+'>'+
-        '<div class="ic">'+svg(it.i)+'</div>'+
-        '<div class="tx"><b>'+esc(it.t)+'</b><span>'+esc(it.d)+'</span></div>'+
+/* Dựng thẻ từ danh mục đã đọc. `d` = kết quả ToolPrices.load(), hoặc bản
+   navFallback (danh mục đọc được lần gần nhất, KHÔNG kèm giá) khi mạng hỏng —
+   dashboard trống thì người dùng mất đường vào mọi công cụ. */
+function renderHomeCards(d){
+  var host=document.getElementById('homeCards');
+  if(!host) return;
+  var groups=(d && d.groups)||[];
+  var rows=(d && d.rows)||[];
+  var prices=(d && d.tools)||null;
+  /* Chỉ công cụ CÓ trang trong Luận Đường mới lên dashboard. */
+  var inApp=rows.filter(function(r){ return r && r.app_path; });
+  if(!groups.length || !inApp.length){
+    host.innerHTML='<div class="grp-title">Đang tải danh mục…</div>';
+    return;
+  }
+  var seen={}, html='';
+  function block(title, items){
+    if(!items.length) return '';
+    var cards=items.map(function(it){
+      var cost=(prices && prices[it.tool_id]!=null) ? prices[it.tool_id] : null;
+      return '<a class="tcard" href="'+esc(it.app_path)+'">'+
+        '<div class="ic">'+(window.iconHtml?window.iconHtml(it.icon):svg('grid'))+'</div>'+
+        '<div class="tx"><b>'+esc(it.label)+'</b><span>'+esc(it.question||it.description||'')+'</span></div>'+
         (cost==null?'<span class="cost">…</span>'
           :cost>0?'<span class="cost">'+cost+' Lượng</span>'
           :'<span class="cost free">Miễn Phí</span>')+
         '</a>';
     }).join('');
-    return '<div class="grp-title">'+esc(grp.g)+'</div><div class="cards">'+cards+'</div>';
-  }).join('');
+    return '<div class="grp-title">'+esc(title)+'</div><div class="cards">'+cards+'</div>';
+  }
+  groups.forEach(function(g){
+    var items=inApp.filter(function(r){
+      return window.ToolPrices && ToolPrices.groupsOf(r, groups).indexOf(g.key)>=0;
+    });
+    items.forEach(function(r){ seen[r.tool_id]=1; });
+    html+=block(g.title, items);
+  });
+  /* Công cụ không rơi vào nhóm nào vẫn phải NHÌN THẤY — tàng hình thì không ai
+     phát hiện ra là đã gán sai nhóm. */
+  html+=block('Khác', inApp.filter(function(r){ return !seen[r.tool_id]; }));
+  host.innerHTML=html;
+  if(window.mountIcons) window.mountIcons(host);
 }
-/* Vẽ khung ngay (giá hiện "…"), điền số khi đọc được bảng giá. Cache
-   sessionStorage của ToolPrices làm bước "…" chỉ xuất hiện ở lượt tải ĐẦU của
-   phiên, không phải mỗi lần vào trang. */
-renderHomeCards(null);
-if(window.ToolPrices) ToolPrices.load().then(function(d){ if(d) renderHomeCards(d.tools); });
+renderHomeCards(window.ToolPrices ? ToolPrices.navFallback() : null);
+if(window.ToolPrices) ToolPrices.load().then(function(d){ if(d) renderHomeCards(d); });
 </script>
 
 <script>
@@ -306,6 +321,11 @@ if(window.ToolPrices) ToolPrices.load().then(function(d){ if(d) renderHomeCards(
   // không dùng lại được chuỗi có thẻ <b>; dựng song song ngay lúc render để hai
   // bên không bao giờ nói khác nhau.
   var _meText='';
+  // Can chi năm sinh của người xem, do ENGINE trả về (`caNhan.canChiNam`) chứ
+  // không suy lại ở client — quy đổi năm → can chi là cổ pháp, có bản thứ hai ở
+  // đây là có ngày hai bản trôi khỏi nhau. Nhiệm vụ "bật thông báo" cần nó để
+  // lời mời nêu đúng tuổi.
+  var _canChiNam='';
 
   function iso(t){ return t.y+'-'+('0'+t.mo).slice(-2)+'-'+('0'+t.d).slice(-2); }
 
@@ -325,6 +345,26 @@ if(window.ToolPrices) ToolPrices.load().then(function(d){ if(d) renderHomeCards(
   var card=el('todayCard'); if(!card) return;
   _today=vnToday();
 
+  // Bậc cuối của phễu nhắc: có người BẬT rồi có người MỞ không. Đọc `from=push`
+  // chứ không đọc `utm_source`: UTM chỉ ghi first-touch, nên người đã ghé site
+  // từ trước — đúng nhóm duy nhất nhận được thông báo — sẽ không bao giờ hiện
+  // ở bảng nguồn. Hai thứ khác nhau, cả hai đều nằm trong link.
+  //
+  // 🪤 PHẢI xếp hàng chờ: `shell.js` nạp `track.js` KHÔNG ĐỒNG BỘ, nên lúc hàm
+  // này chạy thì `window.Track` chưa tồn tại. Bản đầu gọi thẳng → ReferenceError
+  // rơi vào catch và event im lặng biến mất; test bắt được vì `push_optin_shown`
+  // (bắn 6 giây sau) thì có mà `push_open` thì không.
+  if(/[?&]from=push\b/.test(location.search)) emitWhenReady('push_open');
+  function emitWhenReady(type){
+    var n=0;
+    (function tick(){
+      try{
+        if(window.Track&&window.Track.event){ window.Track.event(type,{tool_id:'van-ngay'}); return; }
+      }catch(e){}
+      if(++n<50) setTimeout(tick,100);
+    })();
+  }
+
   // birth nhớ trong localStorage theo shape của TuviForm (ngay/thang/nam); rail
   // VÀ api chỉ hiểu shape contract (day/month/year) → PHẢI đổi, đừng truyền thẳng.
   try{ _birth=(Shell.getRememberedBirth&&Shell.birthToApi)?Shell.birthToApi(Shell.getRememberedBirth()):null; }catch(e){}
@@ -336,6 +376,12 @@ if(window.ToolPrices) ToolPrices.load().then(function(d){ if(d) renderHomeCards(
     .catch(function(){ fallback(_today,_birth,_hasBirth); });
 
   el('todayBack').onclick=function(){ goDay(_today); };
+
+  /* Nhiệm vụ (M3) — chạy SONG SONG với lượt lấy vận ngày, không nối đuôi: thẻ
+     Vận hôm nay là nội dung chính của màn hình này và không được chờ một lượt
+     mạng khác. Hoãn 1,2 giây để `Auth` kịp khôi phục phiên — hỏi token quá sớm
+     thì người đã đăng nhập lại bị coi là khách. */
+  setTimeout(syncTasks,1200);
   }
 
   /* Chuyển thẻ sang một ngày khác trong dải. Vẫn MIỄN PHÍ, vẫn deterministic —
@@ -466,6 +512,41 @@ if(window.ToolPrices) ToolPrices.load().then(function(d){ if(d) renderHomeCards(
     renderWeek(td);
     card.style.display='';
     wire(v,td,birth,hasBirth,hours);
+    try{ _canChiNam=(v&&v.caNhan&&v.caNhan.canChiNam)||_canChiNam; }catch(e){}
+    maybeAskPush(v,isToday,birth);
+  }
+
+  /* ── Mời bật nhắc hằng ngày ─────────────────────────────────────────────
+     Hỏi SAU khi thẻ đã dựng xong, KHÔNG phải lúc vào trang. Xin quyền trước
+     khi người ta thấy mình được gì là cách chắc nhất bị bấm "Chặn" — mà
+     "Chặn" trên trình duyệt là VĨNH VIỄN, không có đường hỏi lại.
+
+     Ba điều kiện, mỗi cái bịt một kiểu hỏi sai chỗ:
+       • `isToday` — đang xem ngày khác thì lời mời "mỗi sáng" lệch ngữ cảnh.
+       • có `caNhan` — người đã lưu lá số. Chỉ họ mới nhận được phần đáng giá
+         nhất của tin nhắc (ngày nào xung chính tuổi mình); mời người chưa có
+         lá số là hứa một thứ nhạt hơn hẳn.
+       • trễ 6 giây — đủ để đọc xong thẻ. Bật lên ngay khi thẻ vừa hiện thì
+         hộp thoại che đúng thứ vừa thuyết phục họ.
+
+     Nạp `pwa-push.js` ĐÚNG LÚC CẦN (không nhét vào <head>): trang này là màn
+     hình đầu của /app, mỗi file thêm vào đường tải là một nhịp chậm cho mọi
+     người, kể cả người sẽ không bao giờ thấy lời mời. */
+  var _pushAsked=false;
+  function maybeAskPush(v,isToday,birth){
+    if(_pushAsked||!isToday||!v||!v.caNhan) return;
+    _pushAsked=true;
+    var nam=(birth&&+birth.year)||0;
+    setTimeout(function(){
+      function go(){
+        if(!window.askPushPermission) return;
+        try{ window.askPushPermission(nam, (v.caNhan&&v.caNhan.canChiNam)||''); }catch(e){}
+      }
+      if(window.askPushPermission) return go();
+      var s=document.createElement('script');
+      s.src='/pwa-push.js?v=2'; s.onload=go; s.onerror=function(){};
+      document.head.appendChild(s);
+    },6000);
   }
 
   /* ── Nhập / đổi lá số NGAY TRONG THẺ ────────────────────────────────────
@@ -512,6 +593,10 @@ if(window.ToolPrices) ToolPrices.load().then(function(d){ if(d) renderHomeCards(
           if(v&&v.ok){ if(v.tuan)_week=v.tuan; render(v,_today,_birth,_hasBirth); }
           else { host.innerHTML=''; btn.style.display=''; }
           try{ window.Track&&Track.event('tool_run',{tool_id:'van-ngay',meta:{from:'today_card_birth'}}); }catch(e){}
+          // Vừa lưu lá số → nhiệm vụ `luu_la_so` xong. `Shell.rememberBirth`
+          // ghi lên sổ tài khoản theo lối BẮN-VÀ-QUÊN nên phải chờ một nhịp,
+          // không thì server hỏi `user_charts` trước khi dòng kịp vào.
+          setTimeout(function(){ _tskLast=0; syncTasks(); },1800);
         }).catch(function(){
           el('tmeSave').disabled=false; el('tmeSave').textContent='Xem vận riêng của tôi →';
           el('tmeErr').textContent='Không lập được, thử lại sau.';
@@ -646,6 +731,112 @@ if(window.ToolPrices) ToolPrices.load().then(function(d){ if(d) renderHomeCards(
       });
     };
   }
+  /* ══ M3 — NHIỆM VỤ MỞ KHOÁ LƯỢNG ═══════════════════════════════════════════
+     Đo prod 07/08: 48 người đã nhận 25 Lượng quà đăng ký, đổi lại có 3 liên kết
+     kênh chat · 2 lượt bật thông báo · 2 dòng sổ lá số của ĐÚNG một người · 0
+     lượt mời bạn. Phát tiền mà không hỏi lại gì thì không nhận lại gì.
+
+     🔑 Quà đăng ký 25 Lượng GIỮ NGUYÊN, nhiệm vụ là phần CỘNG THÊM. Cắt 25 ra
+     chia nhỏ thì người mới cầm 5 Lượng và không chạy nổi tool nào (rẻ nhất 5,
+     phần lớn 15–30) — đó là siết đúng đầu phễu vốn đã hỏng.
+
+     Server tự kiểm và tự cộng (lib/onboarding/tasks.ts). Trang này chỉ VẼ và
+     dẫn người ta tới đúng chỗ làm — không tự quyết ai xong việc gì. */
+  var _tskBusy=false, _tskLast=0, _tskGot=0, _tskDefs=[];
+
+  function tskToken(){
+    try{ var s=window.Auth&&Auth.getSession&&Auth.getSession(); return s?s.access_token:''; }catch(e){ return ''; }
+  }
+
+  function syncTasks(){
+    var tk=tskToken();
+    // Chưa đăng nhập → im lặng tuyệt đối. Họ chưa có ví để mà cộng vào, và mời
+    // làm nhiệm vụ trước khi có tài khoản là dựng thêm một bức tường.
+    if(!tk||_tskBusy) return;
+    _tskBusy=true; _tskLast=Date.now();
+    fetch('/api/payment?action=onboarding-sync',{method:'POST',headers:{Authorization:'Bearer '+tk}})
+      .then(function(r){ return r.ok?r.json():null; })
+      .then(function(d){ if(d&&d.tasks) renderTasks(d); })
+      .catch(function(){ /* hỏng thì thẻ không hiện — không chặn gì của trang */ })
+      .then(function(){ _tskBusy=false; });
+  }
+
+  function renderTasks(d){
+    var host=el('taskCard'); if(!host) return;
+    // Xong cả ba → biến mất hẳn. Giữ lại một thẻ toàn dấu tích là chiếm chỗ
+    // vĩnh viễn trên màn hình đầu để khoe một việc đã cũ.
+    if(d.allDone){ host.style.display='none'; return; }
+
+    var done=0; for(var i=0;i<d.tasks.length;i++) if(d.tasks[i].done) done++;
+    _tskGot+=(+d.granted||0);
+
+    var h='<div class="tsk-top"><div class="tsk-h">Mở khoá thêm Lượng</div>'
+      + '<div class="tsk-count">'+done+'/'+d.tasks.length+' · còn +'+(+d.pending||0)+' Lượng</div></div>'
+      // Nói THẲNG con số và quy ra thứ mua được. Hứa lửng lơ kiểu "làm nhiệm vụ
+      // để nhận thưởng" là mất niềm tin ngay lần đầu.
+      + '<div class="tsk-sub">Làm nốt là được cộng thẳng vào ví — <b>+'+(+d.pending||0)
+      + ' Lượng</b>, đủ thêm một lượt luận.</div>';
+
+    if(_tskGot>0) h+='<div class="tsk-got">✓ Vừa cộng <b>+'+_tskGot+' Lượng</b> vào ví bạn.</div>';
+
+    // 🪤 `esc()` của trang chỉ thoát `& < >`, KHÔNG thoát dấu nháy — nên tuyệt
+    // đối không nhét chuỗi từ server vào GIÁ TRỊ THUỘC TÍNH ở đây. Gắn nút theo
+    // CHỈ SỐ (số do chính mình sinh ra, không cần thoát gì) rồi tra ngược trong
+    // `_tskDefs`. An toàn kể cả khi sau này nhãn nhiệm vụ sửa được từ Admin.
+    _tskDefs=d.tasks;
+    h+='<div class="tsk-list">';
+    for(var j=0;j<d.tasks.length;j++){
+      var t=d.tasks[j];
+      h+='<div class="tsk-row'+(t.done?' done':'')+'"><div class="tsk-tick"></div>'
+       + '<div class="tsk-body"><div class="tsk-t">'+esc(t.title)+'</div>'
+       + (t.done?'':'<div class="tsk-d">'+esc(t.desc)+'</div>')+'</div>'
+       + '<div class="tsk-pay"><div class="tsk-amt">'+(t.done?'+':'')+(+t.credits||0)+' Lượng</div>'
+       + (t.done?'':'<button class="tsk-go" type="button" data-i="'+j+'">'+esc(t.cta)+'</button>')
+       + '</div></div>';
+    }
+    h+='</div>';
+    host.innerHTML=h;
+    host.style.display='';
+
+    var btns=host.querySelectorAll('.tsk-go');
+    for(var k=0;k<btns.length;k++) btns[k].onclick=tskGo;
+  }
+
+  function tskGo(){
+    var t=_tskDefs[+this.getAttribute('data-i')]; if(!t) return;
+    var key=t.key, href=t.href||'';
+    // `href` rỗng = việc làm được NGAY TẠI TRANG NÀY. Đá người ta sang trang
+    // khác để làm đúng việc đang có sẵn ở đây là tự thêm một chỗ rơi.
+    if(href){ try{ location.href=href; }catch(e){} return; }
+    if(key==='luu_la_so'){
+      var b=el('tmeEdit');
+      if(b){ try{ b.scrollIntoView({behavior:'smooth',block:'center'}); }catch(e){} b.click(); }
+      return;
+    }
+    if(key==='bat_thong_bao'){
+      var nam=(_birth&&+_birth.year)||0, cc=_canChiNam;
+      // `askPushPermission` tự bỏ qua khi vừa hỏi 3 ngày trước / đã bị chặn vĩnh
+      // viễn / iOS tab thường. Ở đây là NGƯỜI DÙNG CHỦ ĐỘNG bấm, nên báo lại một
+      // câu khi nó im — im lặng sau một cú bấm đọc thành nút hỏng.
+      function ask(){
+        try{ window.askPushPermission(nam,cc); }catch(e){}
+        setTimeout(function(){ syncTasks(); },2500);
+      }
+      if(window.askPushPermission) return ask();
+      var s=document.createElement('script');
+      s.src='/pwa-push.js?v=2'; s.onload=ask; s.onerror=function(){};
+      document.head.appendChild(s);
+    }
+  }
+
+  /* Quay lại tab thì đồng bộ lại — đây mới là ca thường gặp nhất: bấm "Liên
+     kết" → sang profile → nối Telegram → quay về. Không có bước này thì nhiệm
+     vụ vẫn hiện là chưa làm cho tới lần tải trang sau. Chặn 20 giây để đổi tab
+     qua lại không thành một tràng gọi API. */
+  document.addEventListener('visibilitychange',function(){
+    if(document.visibilityState==='visible'&&Date.now()-_tskLast>20000) syncTasks();
+  });
+
   // Chạy SAU khi shell.boot() render rail (boot hoãn tới DOMContentLoaded).
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',run); else run();
 })();

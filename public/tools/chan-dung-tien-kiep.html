@@ -114,7 +114,7 @@
           </div>
           <div class="cdtk-top">
             <div class="cdtk-imgwrap">
-              <div class="cdtk-imgph" id="imgPlaceholder">Đang vẽ chân dung…<br>(khoảng 30–60 giây)</div>
+              <div class="cdtk-imgph" id="imgPlaceholder">Đang vẽ chân dung…<br>(khoảng 45–60 giây)</div>
               <img id="resultImg" alt="Chân dung tiền kiếp" style="display:none">
               <div id="imgLoadStatus" style="display:none;margin-top:8px;font-size:12.5px;color:var(--text-lt);text-align:center"></div>
               <div class="cdtk-actions" id="imgActions" style="display:none">
@@ -167,8 +167,9 @@
 </footer>
 
 <script src="/tuvi-form.js"></script>
-<script src="/tuvi-paywall.js?v=11"></script>
-<script src="/tools-shared/ai-loading-steps.js?v=1"></script>
+<script src="/tuvi-paywall.js?v=18"></script>
+<script src="/tools-shared/ai-loading-steps.js?v=5"></script>
+<script src="/tools-shared/portrait-recover.js?v=1"></script>
 <script>
 
 let _currentSlug = '';
@@ -180,6 +181,7 @@ const CDTK_STEPS = [
   { label: 'Viết câu chuyện cuộc đời', ms: 0 },
 ];
 let _loadingCtl = null;
+let _imgWait = null;      // đồng hồ chờ trong khung ảnh — PHẢI stop ở mọi nhánh thoát
 let _imgRetryTimer = null;
 
 const ROLE_BADGE = {
@@ -255,6 +257,12 @@ async function _doGenerate(d, freeRerun) {
   document.getElementById('resultImg').style.display = 'none';
   document.getElementById('imgPlaceholder').style.display = 'flex';
   document.getElementById('result-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  // Pha ảnh chạy tiếp ~50 giây SAU khi truyện đã hiện và bảng bước đã tắt.
+  // Bọc `if` phòng bản ai-loading-steps.js cũ còn trong cache trình duyệt.
+  _imgWait = AiLoadingSteps.mountWait
+    ? AiLoadingSteps.mountWait('imgPlaceholder', { label: 'Đang vẽ chân dung…' })
+    : null;
+  _imgWait && _imgWait.start();
   _loadingCtl = AiLoadingSteps.mount('loadingSteps', CDTK_STEPS);
   _loadingCtl.start();
 
@@ -275,6 +283,12 @@ async function _doGenerate(d, freeRerun) {
   // trắng suốt thời gian sinh ảnh.
   const storyP = call('story');
   const imageP = call('image');
+  // Gắn handler NGAY: `imageP` chỉ được `await` sau khi truyện xong, nên nếu pha
+  // ảnh hỏng TRƯỚC (mất mạng, request bị cắt) thì trong quãng chờ đó nó là một
+  // rejection không ai bắt → trình duyệt bắn `unhandledrejection`, lọt vào bộ
+  // thu lỗi như một sự cố thật. Bản `.catch` này chỉ dập tiếng ồn; `await
+  // imageP` bên dưới VẪN ném và vẫn được nhánh phục hồi xử lý.
+  imageP.catch(function () {});
 
   try {
     const res = await storyP;
@@ -297,6 +311,7 @@ async function _doGenerate(d, freeRerun) {
     document.getElementById('card').style.display = 'block';
   } catch (e) {
     _loadingCtl && _loadingCtl.stop();
+    _imgWait && _imgWait.stop();   // truyện hỏng → ẩn cả khung ảnh, đừng để đồng hồ chạy ngầm
     document.getElementById('loading').style.display = 'none';
     document.getElementById('result-section').classList.remove('active');
     showError('Lỗi: ' + (e.message || 'Không thể kết nối. Vui lòng thử lại.'));
@@ -304,14 +319,34 @@ async function _doGenerate(d, freeRerun) {
     return;
   }
 
+  var _ires = null;   // giữ Response để phân biệt "mất kết nối" với "server trả lỗi đàng hoàng"
   try {
-    const res = await imageP;
-    const data = await res.json();
-    if (!res.ok || !data.success) throw new Error(data.error || 'Lỗi ' + res.status);
+    _ires = await imageP;
+    var data = await _ires.json();
+    if (!_ires.ok || !data.success) throw new Error(data.error || 'Lỗi ' + _ires.status);
+    _imgWait && _imgWait.stop();
     _resultImgUrl = data.imageUrl;
     setResultImage(data.imageUrl);
     _loadHistory();
   } catch (e) {
+    // Server trả lỗi ĐÀNG HOÀNG là câu trả lời dứt khoát — chỉ thử lại khi mất
+    // kết nối / gateway bỏ cuộc, tức hàm trên server có thể vẫn đang vẽ.
+    if (PortraitRecover.nenThuLai(_ires)) {
+      if (_imgWait) _imgWait.note('Mất kết nối lúc tải tranh — đang thử lấy lại…');
+      const rd = await PortraitRecover.wait({
+        endpoint: '/api/chan-dung-tien-kiep',
+        query: PortraitRecover.birthQuery(_lastBirth),
+        body: { birth: _lastBirth, phase: 'image', slug: _currentSlug },
+      });
+      _imgWait && _imgWait.stop();
+      if (rd && rd.imageUrl) {
+        _resultImgUrl = rd.imageUrl;
+        setResultImage(rd.imageUrl);
+        _loadHistory();
+        return;
+      }
+    }
+    _imgWait && _imgWait.stop();
     document.getElementById('imgPlaceholder').textContent = 'Không vẽ được chân dung lần này. Phần câu chuyện phía dưới vẫn đầy đủ.';
   }
 }
@@ -400,7 +435,7 @@ function _ensurePoster() {
     let s = document.getElementById('_poster_js');
     if (!s) {
       s = document.createElement('script');
-      s.id = '_poster_js'; s.src = '/poster.js?v=4';
+      s.id = '_poster_js'; s.src = '/poster.js?v=5';
       document.head.appendChild(s);
     }
     s.addEventListener('load', () => resolve());

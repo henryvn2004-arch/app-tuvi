@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sổ Nhân Mạch — Tử Vi Minh Bảo</title>
+<meta name="description" content="Đưa cả đội hoặc danh sách khách vào một chỗ: nhóm này thiếu kiểu người nào, ai với ai dễ giẫm chân, tuần này nên gặp ai trước.">
+<link rel="icon" type="image/webp" href="/seal.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"></noscript>
+<link rel="stylesheet" href="/shell.css?v=18">
+<style>
+.form-card{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);max-width:880px}
+.form-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:3px}
+.form-card p.sub{font-size:12.5px;color:var(--text-lt);margin-bottom:14px}
+.frow{display:flex;gap:11px;flex-wrap:wrap;align-items:flex-end;margin-bottom:12px}
+.fg{display:flex;flex-direction:column;gap:5px}
+.fg label{font-size:10.5px;font-weight:600;color:var(--text-lt);letter-spacing:.04em;text-transform:uppercase}
+.fg input,.fg select{border:1px solid var(--line-2);border-radius:7px;padding:8px 10px;font-size:13.5px;font-family:inherit;color:var(--text);background:var(--paper);outline:none}
+.fg input:focus,.fg select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(20,85,164,.12)}
+.btn-go{background:var(--red);color:#fff;border:none;border-radius:8px;padding:10px 22px;font-size:14px;font-weight:600;cursor:pointer;font-family:var(--serif)}
+.btn-go:disabled{opacity:.6;cursor:not-allowed}
+.err{color:var(--tx-red);font-size:13px;margin-top:8px;display:none}
+.err.active{display:block}
+.res-block{border:1px solid #E8E8E8;border-radius:10px;margin-bottom:16px;background:#fff;overflow:hidden;max-width:900px}
+.res-block-header{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;background:#F5F4F0;border-bottom:1px solid #E8E8E8}
+.res-block-title{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#061A2E}
+.res-block-body{padding:18px;color:#2a2118}
+#loading{display:none;text-align:center;padding:30px 10px;color:var(--text-lt)}
+/* Sổ */
+.nm-list{display:flex;flex-direction:column;gap:8px;margin-bottom:12px}
+.nm-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;border:1px solid var(--line-2);border-radius:9px;padding:9px 11px;background:var(--paper)}
+.nm-row.on{border-color:#C9A84C;background:#FBF8F1}
+.nm-row input[type=checkbox]{width:17px;height:17px;flex:none;cursor:pointer}
+.nm-who{flex:1;min-width:150px;font-size:13.5px;color:#2a2118}
+.nm-who .b{font-weight:600}
+.nm-who .s{display:block;font-size:11.5px;color:var(--text-lt);margin-top:1px}
+.nm-row select{border:1px solid var(--line-2);border-radius:7px;padding:6px 9px;font-size:12.5px;font-family:inherit;background:var(--white);color:var(--text)}
+.nm-row .del{border:none;background:none;color:var(--text-lt);font-size:15px;cursor:pointer;padding:0 3px}
+.nm-row .del:hover{color:var(--tx-red)}
+.nm-empty{font-size:13px;color:var(--text-lt);line-height:1.75;padding:14px;border:1px dashed var(--line-2);border-radius:9px;background:var(--paper)}
+.nm-add{margin-top:6px;font-size:12.5px}
+.nm-add summary{cursor:pointer;color:#7A5F26;font-weight:600}
+.nm-add .inner{margin-top:10px;border:1px solid var(--line-2);border-radius:10px;padding:12px 13px;background:var(--paper)}
+.nm-count{font-size:12px;color:var(--text-lt);margin-top:2px}
+/* Kết quả */
+.nm-para{font-size:13.5px;line-height:1.88;color:#2a2118;margin:0 0 12px}
+.nm-para:last-child{margin-bottom:0}
+.nm-sub{font-size:10px;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;color:#7A5F26;margin:16px 0 7px}
+.nm-chips{display:flex;gap:7px;flex-wrap:wrap;margin-top:4px}
+.nm-chip{font-size:11.5px;padding:4px 10px;border-radius:999px;background:#FBF8F1;border:1px solid #EADFC8;color:#5a5145}
+.nm-bar{display:flex;gap:3px;margin:10px 0 4px;border-radius:6px;overflow:hidden;height:26px}
+.nm-seg{display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;min-width:26px}
+.nm-legend{display:flex;gap:12px;flex-wrap:wrap;font-size:11.5px;color:#5a5145;margin-top:7px}
+.nm-legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+.nm-person{border-left:2px solid #E0D6C0;padding:0 0 14px 13px}
+.nm-person:last-child{padding-bottom:0}
+.nm-person .h{font-family:var(--serif);font-size:14.5px;font-weight:700;color:#061A2E}
+.nm-person .r{font-size:11.5px;color:var(--text-lt);margin-bottom:5px}
+.nm-person .w{font-size:13px;line-height:1.72;color:#2a2118}
+.nm-person .q{font-size:12.5px;line-height:1.7;color:#5a5145;font-style:italic;margin-top:4px}
+.nm-cap{border:1px solid #EFE7D6;border-radius:9px;padding:11px 12px;background:#FDFBF6;margin-bottom:9px}
+.nm-cap b{font-family:var(--serif);color:#061A2E}
+.nm-cap p{font-size:12.8px;line-height:1.72;color:#2a2118;margin:4px 0 0}
+.nm-cap .tag{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:2px 7px;border-radius:999px;margin-left:7px;vertical-align:1px}
+.nm-cap .tag.va{background:#FDF0EE;color:#A8342A}
+.nm-cap .tag.bu{background:#EDF5EF;color:#1E6B3C}
+.nm-todo{border-left:2px solid #BFD9C7;padding:0 0 11px 13px;font-size:13px;line-height:1.72}
+.nm-todo:last-child{padding-bottom:0}
+.nm-motcau{margin-top:16px;padding:14px 16px;background:#FBF8F1;border:1px solid #EADFC8;border-radius:10px;font-family:var(--serif);font-size:15px;line-height:1.75;color:#061A2E;font-weight:700}
+.nm-order{font-size:13px;line-height:1.8;color:#2a2118}
+#histList{display:flex;flex-direction:column;gap:6px;margin-top:4px;font-size:12.5px;color:#5a5145}
+</style>
+</head>
+<body>
+
+<div class="shell">
+  <aside class="sb" id="shell-sidebar"></aside>
+
+  <main class="ws" id="ws">
+    <div class="ws-top">
+      <button class="btn mobile-only" onclick="document.getElementById('shell-sidebar').classList.toggle('open');window.shellSyncBackdrop&&shellSyncBackdrop()" aria-label="Menu">☰</button>
+      <div class="ws-title"><b>Sổ Nhân Mạch</b><span>Đọc cả nhóm cùng lúc, không phải từng người</span></div>
+      <div class="ws-actions">
+        <button class="btn" id="btnEdit" onclick="showForm()" style="display:none">Chọn Lại</button>
+        <button class="btn mobile-only" onclick="Shell.openRail()">✦ Hỏi</button>
+      </div>
+    </div>
+    <div class="ws-body">
+      <div id="introHost"></div>
+      <div id="shellRecent"></div>
+      <div class="form-card" id="birthPanel">
+        <h2>Chọn người trong sổ</h2>
+        <p class="sub">Chọn từ <b>2 đến 8</b> người, gán vai cho từng người. Sổ lá số dùng chung với các công cụ khác — thêm một lần, dùng mãi.</p>
+
+        <div class="nm-list" id="soList"></div>
+        <div class="nm-count" id="soCount"></div>
+
+        <details class="nm-add" id="addWrap">
+          <summary>＋ Thêm người vào sổ</summary>
+          <div class="inner">
+            <div class="frow">
+              <div class="fg" style="flex:1;min-width:180px">
+                <label for="addTen">Gọi là</label>
+                <input id="addTen" type="text" placeholder="Sếp Hùng, chị Lan, khách A…" maxlength="40">
+              </div>
+            </div>
+            <div id="addPersonBox"></div>
+            <div class="frow" style="margin-bottom:0;margin-top:10px">
+              <button class="btn" id="btnAdd" onclick="addPerson()">Lưu vào sổ</button>
+            </div>
+            <div class="err" id="add-err"></div>
+          </div>
+        </details>
+
+        <details class="nm-add" id="selfWrap" style="margin-top:10px">
+          <summary id="selfSummary">Thêm lá số của chính bạn (không bắt buộc)</summary>
+          <div class="inner">
+            <p class="sub" style="margin-bottom:9px">Có lá số của bạn thì bản đọc có thêm mục <b>“Bạn đứng ở đâu trong nhóm”</b> — bạn dễ va với ai, bù được cho ai.</p>
+            <div id="selfBox"></div>
+          </div>
+        </details>
+
+        <div class="frow" style="margin-bottom:0;margin-top:14px">
+          <button class="btn-go" id="btnGo" onclick="analyze()">Đọc Cả Sổ — <span data-tvp-price="nhan-mach">…</span> Lượng →</button>
+        </div>
+        <div class="err" id="error-msg"></div>
+      </div>
+
+      <div id="resPanel" data-ws-result style="display:none">
+        <div class="res-block">
+          <div class="res-block-header"><span class="res-block-title">Nhóm Này Hình Gì</span></div>
+          <div class="res-block-body">
+            <div id="loading"><div id="loadingSteps"></div></div>
+            <div id="card" style="display:none">
+              <p class="nm-para" id="tongQuan" style="display:none"></p>
+              <div class="nm-bar" id="phanBoBar"></div>
+              <div class="nm-legend" id="phanBoLegend"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="res-block" id="gapBlock" style="display:none">
+          <div class="res-block-header"><span class="res-block-title">Chỗ Trống Của Nhóm</span></div>
+          <div class="res-block-body">
+            <div class="nm-chips" id="gapChips"></div>
+            <p class="nm-para" id="loHong" style="display:none;margin-top:12px"></p>
+          </div>
+        </div>
+
+        <div class="res-block" id="peopleBlock" style="display:none">
+          <div class="res-block-header"><span class="res-block-title">Từng Người</span></div>
+          <div class="res-block-body"><div id="tungNguoi"></div></div>
+        </div>
+
+        <div class="res-block" id="capCoSoBlock" style="display:none">
+          <div class="res-block-header"><span class="res-block-title">Các Cặp Trong Nhóm</span></div>
+          <div class="res-block-body"><div id="capCoSo"></div></div>
+        </div>
+
+        <div class="res-block" id="capBlock" style="display:none">
+          <div class="res-block-header"><span class="res-block-title">Cặp Cần Để Ý</span></div>
+          <div class="res-block-body"><div id="capChuY"></div></div>
+        </div>
+
+        <div class="res-block" id="orderBlock" style="display:none">
+          <div class="res-block-header"><span class="res-block-title">Thứ Tự Gợi Ý Tiếp Cận</span></div>
+          <div class="res-block-body">
+            <div class="nm-order" id="thuTu"></div>
+            <p style="font-size:11.5px;color:#7a705f;line-height:1.7;margin-top:9px">Xếp theo <b>vận năm của từng người</b> — người đang ở năm thuận thì dễ mở chuyện mới hơn. Đây <b>không phải</b> bảng xếp hạng mức quan trọng.</p>
+          </div>
+        </div>
+
+        <div class="res-block" id="todoBlock" style="display:none">
+          <div class="res-block-header"><span class="res-block-title">Làm Gì Tuần Này</span></div>
+          <div class="res-block-body"><div id="tuanNay"></div></div>
+        </div>
+
+        <div class="res-block" id="withBlock" style="display:none">
+          <div class="res-block-header"><span class="res-block-title">Bạn Đứng Ở Đâu Trong Nhóm</span></div>
+          <div class="res-block-body"><p class="nm-para" id="voiBan"></p></div>
+        </div>
+
+        <div class="res-block" id="endBlock" style="display:none">
+          <div class="res-block-body"><div class="nm-motcau" id="motCau"></div></div>
+        </div>
+
+        <!-- W1 — tường "đã tính thử": phần trên đã chạy THẬT và miễn phí. -->
+        <div class="res-block" id="lockBlock" style="display:none">
+          <div class="res-block-header"><span class="res-block-title">Phần Luận Chưa Mở</span></div>
+          <div class="res-block-body" id="lockHost" data-tvp-lock style="padding-top:6px"></div>
+        </div>
+
+        <div class="res-block" style="background:#FBF3DE;border-color:#e8d9b0">
+          <div class="res-block-body" style="font-size:12.5px;line-height:1.68;color:#5a5145">
+            💡 Bản đọc này phác hoạ từ các dữ liệu trong lá số Tử Vi, kết hợp kinh nghiệm nghiên cứu của tiền nhân để lại. Mang tính tham khảo.<br><br>
+            ⚖️ Đây là khung <b>sắp việc cho hợp người</b>, không phải bảng chấm điểm nhân sự. Những người trong sổ không có mặt ở đây, nên bản luận cố ý <b>không xếp hạng ai, không đọc sức khoẻ, tiền bạc riêng hay chuyện gia đình</b> của họ, và <b>không khuyên thay người</b>. Tính cách không tốt cũng không xấu — chỉ hợp hoặc không hợp một việc.
+          </div>
+        </div>
+
+        <div class="res-block" id="histBlock" style="display:none">
+          <div class="res-block-header"><span class="res-block-title">Đã Đọc Trước Đó</span></div>
+          <div class="res-block-body"><div id="histList"></div></div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <aside class="rail" id="shell-rail"></aside>
+</div>
+
+<script>window.SHELL_ACTIVE='nhan-mach';window.SHELL_HISTORY=true;
+window.SHELL_INTRO={key:'nhan-mach',title:'Sổ Nhân Mạch',desc:'Đưa <b>cả đội</b> hoặc <b>danh sách khách</b> vào một chỗ để biết <b>nhóm thiếu kiểu người nào</b>, <b>ai với ai dễ giẫm chân</b>, và <b>tuần này nên gặp ai trước</b>. Khác công cụ Lá Số Người Khác ở chỗ nó đọc cả nhóm cùng lúc.'};</script>
+<script src="/laso-chart.js?v=3"></script>
+<script src="/tuvi-form.js?v=1"></script>
+<script src="/tuvi-paywall.js?v=18"></script>
+<script src="/auth.js?v=2"></script>
+  <script src="/nav.js?v=22" data-icons-only></script>
+<script src="/shell.js?v=68"></script>
+<script src="/user-charts.js?v=2"></script>
+<script src="/tools-shared/ai-loading-steps.js?v=5"></script>
+<script>
+
+var _currentSlug = '';
+var _so = [];        // mục trong sổ (từ /api/charts)
+var _chon = {};      // id → vai đang chọn
+var _lastSelf = null;
+var _lastPayload = null;
+var NM_STEPS = [
+  { label: 'Lập lá số từng người', ms: 1400 },
+  { label: 'Phân kiểu & dò chỗ trống của nhóm', ms: 2000 },
+  { label: 'Viết bản đọc cả sổ', ms: 0 },
+];
+var _loadingCtl = null;
+
+var VAI = [
+  ['sep', 'Sếp / cấp trên'],
+  ['dong-nghiep', 'Đồng nghiệp'],
+  ['cap-duoi', 'Cấp dưới'],
+  ['doi-tac', 'Đối tác / khách'],
+  ['ban-be', 'Bạn bè'],
+  ['cha-me', 'Cha mẹ'],
+  ['con-cai', 'Con cái'],
+  ['ban-doi', 'Bạn đời'],
+];
+var KIEU_MAU = {
+  'khai-sang': '#A8342A', 'lanh-dao': '#7A5F26', 'ho-tro': '#1455A4', 'hop-tac': '#1E6B3C',
+};
+
+// 🔑 Hai ô nhập CỐ Ý không đặt id chứa "formHost": `user-charts.js` dò form theo
+// mẫu đó rồi tự gắn thanh chip sổ lên trên. Trang này TỰ quản sổ (danh sách có
+// ô chọn + vai), nên để nó gắn thêm một thanh nữa là hai bộ điều khiển cho cùng
+// một dữ liệu.
+TuviForm.render('addPersonBox', { mode: 'compact', prefix: 'add', gioitinh: 'nam', showName: false });
+TuviForm.render('selfBox', { mode: 'compact', prefix: 'self', gioitinh: 'nam', showName: false });
+
+try {
+  var _remembered = window.Shell && Shell.getRememberedBirth ? Shell.getRememberedBirth() : null;
+  if (_remembered) {
+    TuviForm.setData(_remembered, 'self');
+    var s = (window.Shell && Shell.birthSummary) ? Shell.birthSummary(_remembered) : '';
+    if (s) document.getElementById('selfSummary').textContent = 'Lá số của bạn: ' + s;
+  }
+} catch (e) { /* không có shell / chưa nhớ gì — phần này không bắt buộc */ }
+
+// Không có dòng này thì `_cfg.product` rỗng ⇒ paywall không tra được giá và tool
+// KHÔNG chạy.
+TuviPaywall.init({ product: 'nhan-mach', slug: function () { return _currentSlug; } });
+
+function showError(msg) {
+  var e = document.getElementById('error-msg');
+  if (msg) { e.textContent = msg; e.classList.add('active'); } else { e.classList.remove('active'); }
+}
+
+function _birthOf(prefix) {
+  var f = TuviForm.getData(prefix);
+  if (!f.ngay || !f.thang || !f.nam) return null;
+  return {
+    day: f.ngay, month: f.thang, year: f.nam,
+    hourBranch: f.gioIdx, gender: f.gioitinh, isLunar: false,
+    name: (f.hoten || '').trim() || undefined,
+  };
+}
+
+function _shortOf(b) {
+  if (!b) return '';
+  return (b.gioitinh === 'nu' ? 'Nữ' : 'Nam') + ' · ' + (b.ngay || '?') + '/' + (b.thang || '?') + '/' + (b.nam || '?');
+}
+
+// ── Sổ ─────────────────────────────────────────────────────────────────────
+async function loadSo() {
+  var host = document.getElementById('soList');
+  if (!window.UserCharts) { host.innerHTML = ''; return; }
+  try {
+    _so = await UserCharts.list();
+  } catch (e) { _so = []; }
+  if (!_so.length) {
+    host.innerHTML = '<div class="nm-empty">Sổ đang trống. Bấm <b>＋ Thêm người vào sổ</b> bên dưới để thêm ít nhất 2 người — sếp, đồng nghiệp, cấp dưới hay khách hàng. Cần đăng nhập để sổ lưu theo tài khoản.</div>';
+    renderCount();
+    return;
+  }
+  host.innerHTML = _so.map(function (it) {
+    var id = String(it.id);
+    var b = it.birth || {};
+    var ten = it.label || b.hoten || _shortOf(b);
+    var sel = _chon[id];
+    return '<div class="nm-row' + (sel ? ' on' : '') + '" data-id="' + esc(id) + '">' +
+      '<input type="checkbox" ' + (sel ? 'checked' : '') + ' onchange="toggleNguoi(\'' + esc(id) + '\',this.checked)">' +
+      '<span class="nm-who"><span class="b">' + esc(ten) + '</span><span class="s">' + esc(_shortOf(b)) + '</span></span>' +
+      '<select onchange="setVai(\'' + esc(id) + '\',this.value)">' +
+      VAI.map(function (v) {
+        return '<option value="' + v[0] + '"' + (sel === v[0] ? ' selected' : '') + '>' + v[1] + '</option>';
+      }).join('') + '</select>' +
+      '<button class="del" title="Xoá khỏi sổ" onclick="delNguoi(\'' + esc(id) + '\')">✕</button>' +
+      '</div>';
+  }).join('');
+  renderCount();
+}
+
+function renderCount() {
+  var n = Object.keys(_chon).length;
+  document.getElementById('soCount').textContent =
+    n === 0 ? 'Chưa chọn ai.' : 'Đang chọn ' + n + ' người' + (n < 2 ? ' — cần ít nhất 2.' : (n > 8 ? ' — tối đa 8.' : '.'));
+}
+
+function toggleNguoi(id, on) {
+  if (on) {
+    if (Object.keys(_chon).length >= 8) {
+      showError('Mỗi lượt đọc tối đa 8 người — nhiều hơn thì bản đọc thành danh bạ.');
+      loadSo();
+      return;
+    }
+    // Vai mặc định lấy đúng ô đang hiện trên hàng đó, không đoán.
+    var row = document.querySelector('.nm-row[data-id="' + id + '"]');
+    var sl = row && row.querySelector('select');
+    _chon[id] = (sl && sl.value) || 'dong-nghiep';
+  } else {
+    delete _chon[id];
+  }
+  showError('');
+  var row2 = document.querySelector('.nm-row[data-id="' + id + '"]');
+  if (row2) row2.classList.toggle('on', !!_chon[id]);
+  renderCount();
+}
+
+function setVai(id, v) {
+  if (_chon[id]) _chon[id] = v;
+}
+
+async function delNguoi(id) {
+  if (!window.confirm('Xoá lá số này khỏi sổ?')) return;
+  delete _chon[id];
+  await UserCharts.remove(id);
+  await loadSo();
+}
+
+async function addPerson() {
+  var e = document.getElementById('add-err');
+  e.classList.remove('active');
+  var b = _birthOf('add');
+  if (!b) { e.textContent = 'Nhập đủ ngày tháng năm sinh.'; e.classList.add('active'); return; }
+  var ten = (document.getElementById('addTen').value || '').trim();
+  if (!ten) { e.textContent = 'Đặt tên gọi để còn phân biệt trong sổ.'; e.classList.add('active'); return; }
+  if (!window.UserCharts) { e.textContent = 'Cần đăng nhập để lưu vào sổ.'; e.classList.add('active'); return; }
+  var btn = document.getElementById('btnAdd');
+  btn.disabled = true;
+  try {
+    // `UserCharts.save` nhận birth theo shape của TuviForm (ngay/thang/nam), khác
+    // shape gửi API (day/month/year) — lấy thẳng từ form thay vì đổi ngược lại.
+    var raw = TuviForm.getData('add');
+    raw.hoten = ten;
+    var saved = await UserCharts.save(raw, ten);
+    if (!saved) throw new Error('Chưa lưu được — kiểm tra đăng nhập.');
+    document.getElementById('addTen').value = '';
+    await loadSo();
+  } catch (err) {
+    e.textContent = err.message || 'Chưa lưu được.';
+    e.classList.add('active');
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+// ── Chạy ───────────────────────────────────────────────────────────────────
+function _toBirth(b) {
+  return {
+    day: Number(b.ngay), month: Number(b.thang), year: Number(b.nam),
+    hourBranch: b.gioIdx == null ? -1 : Number(b.gioIdx),
+    gender: b.gioitinh === 'nu' ? 'nu' : 'nam',
+    isLunar: false,
+  };
+}
+
+// ── W1: bấm nút là CHẠY THẬT, miễn phí ─────────────────────────────────────
+// Tầng deterministic (kiểu từng người · phân bố nhóm · lỗ hổng · các cặp · thứ
+// tự tiếp cận) là tra bảng — 0 lượt LLM, 0đ. Tường chỉ đứng trên phần chữ.
+var NM_KHOA = [
+  'Nhóm này hình gì — mạnh chiều nào, hụt chiều nào',
+  'Từng người: giao việc kiểu nào thì họ chạy, nói câu gì',
+  'Cặp nào nên tách, cặp nào nên ghép, ở việc gì',
+  'Ai đang phải gánh phần nhóm còn thiếu',
+  'Ba việc làm được tuần này',
+];
+
+async function analyze() {
+  showError('');
+  var ids = Object.keys(_chon);
+  if (ids.length < 2) { showError('Chọn ít nhất 2 người trong sổ để đọc được cả nhóm.'); return; }
+  if (ids.length > 8) { showError('Mỗi lượt đọc tối đa 8 người.'); return; }
+
+  var byId = {};
+  _so.forEach(function (it) { byId[String(it.id)] = it; });
+  var nguoi = [];
+  for (var i = 0; i < ids.length; i++) {
+    var it = byId[ids[i]];
+    if (!it || !it.birth) continue;
+    nguoi.push({
+      ten: it.label || it.birth.hoten || _shortOf(it.birth),
+      vai: _chon[ids[i]],
+      birth: _toBirth(it.birth),
+    });
+  }
+  if (nguoi.length < 2) { showError('Có người trong sổ thiếu ngày sinh — chọn lại giúp.'); return; }
+
+  _lastSelf = _birthOf('self');
+  _lastPayload = { nguoi: nguoi, birthSelf: _lastSelf || undefined };
+
+  _currentSlug = TuviPaywall.generateToolSlug('nhan-mach-' + nguoi.length + '-' + ids.join('').slice(0, 24));
+
+  _openPanel();
+  _loadingCtl = AiLoadingSteps.mount('loadingSteps', NM_STEPS.slice(0, 2));
+  _loadingCtl.start();
+  var prev;
+  try {
+    var r = await fetch('/api/nhan-mach?preview=1', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(_lastPayload),
+    });
+    prev = await r.json();
+    if (!r.ok || !prev.success) throw new Error(prev.error || 'Lỗi ' + r.status);
+  } catch (e) {
+    _loadingCtl && _loadingCtl.stop();
+    _closePanel();
+    showError('Lỗi: ' + (e.message || 'Không thể kết nối. Vui lòng thử lại.'));
+    return;
+  }
+  _loadingCtl && _loadingCtl.finish();
+  document.getElementById('loading').style.display = 'none';
+  document.getElementById('card').style.display = 'block';
+  document.getElementById('btnEdit').style.display = '';
+  renderMeta(prev);
+  // D1 — bậc "đã tính thử" của phễu theo tool. Bắn ở ĐÂY chứ không ở lúc bấm
+  // nút: bấm rồi mà lá số hỏng thì không có gì để xem, tính vào phễu là thổi
+  // mẫu số lên rồi tỉ lệ mở nhìn tệ hơn thực tế.
+  try { if (window.Track) window.Track.event('preview_shown', { tool_id: 'nhan-mach' }); } catch (e) { /* đo hỏng không chặn gì */ }
+  if (window.SHELL_INTRO) Shell.dismissIntro(window.SHELL_INTRO.key);
+
+  document.getElementById('lockBlock').style.display = 'block';
+  await TuviPaywall.lockPreview({
+    host: document.getElementById('lockHost'),
+    title: '⊙ Còn phần luận chưa mở',
+    items: NM_KHOA,
+    cta: 'Mở bản đọc đầy đủ',
+    slug: function () { return _currentSlug; },
+    onUnlock: function () { return _doGenerate(); },
+  });
+}
+
+function _openPanel() {
+  document.getElementById('birthPanel').style.display = 'none';
+  document.getElementById('resPanel').style.display = 'block';
+  document.getElementById('loading').style.display = 'block';
+  document.getElementById('card').style.display = 'none';
+  ['gapBlock', 'peopleBlock', 'capCoSoBlock', 'capBlock', 'orderBlock', 'todoBlock',
+   'withBlock', 'endBlock', 'lockBlock'].forEach(function (id) {
+    document.getElementById(id).style.display = 'none';
+  });
+  document.getElementById('tongQuan').style.display = 'none';
+  document.getElementById('loHong').style.display = 'none';
+}
+
+function _closePanel() {
+  document.getElementById('loading').style.display = 'none';
+  document.getElementById('resPanel').style.display = 'none';
+  document.getElementById('birthPanel').style.display = 'block';
+}
+
+async function _doGenerate() {
+  document.getElementById('lockBlock').style.display = 'none';
+  TuviPaywall._closeLock();
+  _loadingCtl = AiLoadingSteps.mount('loadingSteps', NM_STEPS.slice(2));
+  document.getElementById('loading').style.display = 'block';
+  _loadingCtl.start();
+
+  var token = window.Auth?.getSession()?.access_token || '';
+  try {
+    var res = await fetch('/api/nhan-mach', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token },
+      body: JSON.stringify(Object.assign({}, _lastPayload, { slug: _currentSlug })),
+    });
+    var data = await res.json();
+    if (!res.ok || !data.success) throw new Error(data.error || 'Lỗi ' + res.status);
+    renderMeta(data);
+    renderProse(data);
+    _loadingCtl && _loadingCtl.finish();
+    document.getElementById('loading').style.display = 'none';
+    document.getElementById('card').style.display = 'block';
+    document.getElementById('btnEdit').style.display = '';
+    if (window.SHELL_INTRO) Shell.dismissIntro(window.SHELL_INTRO.key);
+    _loadHistory();
+
+    // Rail đi đường SCENARIO (không phải birth): nhóm này có nhiều lá số nên
+    // không có một `birth` nào đại diện được. Dữ liệu gửi rail là bản PHẲNG do
+    // chính route trả về.
+    Shell.setContext({
+      scenario: { type: 'nhan-mach', data: data.rail || {} },
+      label: 'Sổ nhân mạch',
+      greeting: 'Đây là bản đọc **' + data.soNguoi + ' người** trong sổ của bạn. Muốn hỏi sâu về ai?',
+      chips: [
+        'Việc sắp tới nên giao cho ai trong nhóm này?',
+        'Vì sao hai người đó dễ giẫm chân nhau?',
+        'Nhóm đang thiếu chất gì, ai đang phải gánh?',
+        'Tuần này nên gặp ai trước và mở lời thế nào?',
+      ],
+    });
+
+    // Chia sẻ CHỈ gắn ở đường đã mở khoá (sau renderProse).
+    // ⚠️ Sổ này chứa lá số của TỚI 8 người vắng mặt. Bản chia sẻ vì thế CỐ Ý chỉ
+    // mang phần ĐỘI (phân bố kiểu, chỗ trống, cặp dễ giẫm chân) và KHÔNG nêu tên
+    // ai kèm nhận xét cá nhân — engine vốn đã không chấm điểm tổng từng người,
+    // bản chia sẻ không được là đường vòng để dựng lại một bảng xếp hạng.
+    Shell.setShareable({
+      kind: 'text',
+      toolId: 'nhan-mach',
+      title: 'Sổ nhân mạch — đọc nhóm ' + data.soNguoi + ' người',
+      text: [
+        'Nhóm ' + data.soNguoi + ' người.',
+        (data.phanBo || []).filter(function (b) { return b.soNguoi; })
+          .map(function (b) { return b.ten + ': ' + b.soNguoi; }).join(' · '),
+        (data.thieuKieu || []).length
+          ? 'Đội đang thiếu kiểu: ' + data.thieuKieu.map(function (k) { return k.ten; }).join(', ')
+          : 'Đội có đủ bốn kiểu.',
+        data.nenTimThem ? 'Nên tìm thêm kiểu: ' + data.nenTimThem.ten : '',
+      ].filter(Boolean).join('\n'),
+    });
+  } catch (e) {
+    // Giữ nguyên phần tính thử đang hiện — quẳng người ta về form trống là xoá
+    // luôn thứ họ vừa xem (và có thể vừa trả tiền cho phần sau).
+    _loadingCtl && _loadingCtl.stop();
+    document.getElementById('loading').style.display = 'none';
+    document.getElementById('lockBlock').style.display = 'block';
+    TuviPaywall._banner('Chưa mở được phần luận: ' + (e.message || 'lỗi kết nối') + '. Bạn thử lại giúp.');
+  }
+}
+
+// esc() dùng chung từ /laso-chart.js — không khai lại.
+
+// W1 — hai hàm vẽ, tách theo ĐƯỜNG TIỀN chứ không theo bố cục:
+//   renderMeta  = thứ engine tra bảng ra, 0đ  → vẽ ngay ở lượt tính thử
+//   renderProse = thứ model viết, tốn tiền    → chỉ vẽ sau khi đã trả
+function renderMeta(data) {
+  var pb = (data.phanBo || []).filter(function (x) { return x.soNguoi > 0; });
+  var tong = pb.reduce(function (a, x) { return a + x.soNguoi; }, 0) || 1;
+  document.getElementById('phanBoBar').innerHTML = pb.map(function (x) {
+    return '<span class="nm-seg" style="flex:' + x.soNguoi + ';background:' + (KIEU_MAU[x.kieu] || '#888') + '">' + x.soNguoi + '</span>';
+  }).join('');
+  document.getElementById('phanBoLegend').innerHTML = pb.map(function (x) {
+    return '<span><i style="background:' + (KIEU_MAU[x.kieu] || '#888') + '"></i>' + esc(x.ten) + ' · ' +
+      Math.round(x.soNguoi * 100 / tong) + '%</span>';
+  }).join('');
+
+  if ((data.thieuKieu || []).length || data.duaKieu || data.nenTimThem) {
+    var chips = (data.thieuKieu || []).map(function (k) {
+      return '<span class="nm-chip">Không ai kiểu ' + esc(k.ten) + '</span>';
+    });
+    if (data.duaKieu) chips.push('<span class="nm-chip">Quá nửa nhóm là kiểu ' + esc(data.duaKieu.ten) + '</span>');
+    if (data.nenTimThem) chips.push('<span class="nm-chip">Nên tìm thêm: ' + esc(data.nenTimThem.ten) + '</span>');
+    document.getElementById('gapChips').innerHTML = chips.join('');
+    document.getElementById('gapBlock').style.display = 'block';
+  }
+
+  // Lượt tính thử bày vai + kiểu của từng người (tra bảng). Phần "giao việc
+  // kiểu nào · nói câu gì" là chữ model viết → `renderProse` điền vào sau.
+  var ppl = (data.thanhVien || []).map(function (t) {
+    return '<div class="nm-person" data-ten="' + esc(t.ten) + '"><div class="h">' + esc(t.ten) + '</div>' +
+      '<div class="r">' + esc((t.vai || {}).label || '') +
+      ((t.kieu || {}).ten ? ' · kiểu ' + esc(t.kieu.ten) : '') +
+      (t.lai && t.kieuPhu ? ' (pha ' + esc(t.kieuPhu.ten) + ')' : '') +
+      // ⚠️ Payload CŨ trong cache mang `diem` (điểm nội suy); bản mới mang
+      // `khung` = điểm ĐẠI VẬN thật. Nêu rõ là khung, đừng để đọc thành điểm năm.
+      (t.vanNam && t.vanNam.khung && t.vanNam.khung.diem != null
+        ? ' · khung đại vận ' + t.vanNam.khung.diem + '/10'
+        : (t.vanNam && t.vanNam.diem != null ? ' · vận năm ' + t.vanNam.diem + '/10' : '')) + '</div>' +
+      '<div class="w"></div><div class="q"></div></div>';
+  }).join('');
+  if (ppl) {
+    document.getElementById('tungNguoi').innerHTML = ppl;
+    document.getElementById('peopleBlock').style.display = 'block';
+  }
+
+  // Các cặp — engine tra ra, không phải model viết. Đây là phần chứng minh
+  // tool đúng nên bày ngay ở lượt miễn phí.
+  var coSo = (data.cap || []).map(function (c) {
+    var va = c.loai === 'giam-chan';
+    return '<div class="nm-cap"><b>' + esc(c.a) + ' ↔ ' + esc(c.b) + '</b>' +
+      '<span class="tag ' + (va ? 'va' : 'bu') + '">' + (va ? 'dễ giẫm chân' : 'bù nhau') + '</span>' +
+      '<p>' + esc(c.vi) + '</p></div>';
+  }).join('');
+  if (coSo) {
+    document.getElementById('capCoSo').innerHTML = coSo;
+    document.getElementById('capCoSoBlock').style.display = 'block';
+  }
+
+  var tt = (data.thuTuTiepCan || []);
+  if (tt.length) {
+    document.getElementById('thuTu').innerHTML = tt.map(function (t, i) {
+      // Bản mới: `khungDiem` (điểm đại vận thật) + `canCan` (cát−sát của năm).
+      // Bản CŨ trong cache: `diem`/`huong` — vẫn phải đọc được.
+      if (t.khungDiem != null || t.canCan != null) {
+        var d = [];
+        if (t.khungDiem != null) d.push('khung đại vận ' + t.khungDiem + '/10');
+        if (t.canCan != null) d.push('cát−sát ' + (t.canCan > 0 ? '+' : '') + t.canCan);
+        return (i + 1) + '. <b>' + esc(t.ten) + '</b> — ' + d.join(' · ');
+      }
+      return (i + 1) + '. <b>' + esc(t.ten) + '</b>' +
+        (t.diem == null ? ' — chưa chấm vận năm' : ' — vận năm ' + t.diem + '/10' + (t.huong ? ' (' + esc(t.huong) + ')' : ''));
+    }).join('<br>');
+    document.getElementById('orderBlock').style.display = 'block';
+  }
+
+}
+
+function renderProse(data) {
+  var tq = document.getElementById('tongQuan');
+  tq.textContent = data.tongQuan || '';
+  tq.style.display = 'block';
+
+  if (data.loHong) {
+    var lh = document.getElementById('loHong');
+    lh.textContent = data.loHong;
+    lh.style.display = 'block';
+  }
+
+  // Điền phần chữ vào ĐÚNG thẻ người đã dựng ở lượt tính thử — dựng lại cả
+  // danh sách thì thứ tự trôi theo thứ tự model trả về, mà nó không cam kết gì.
+  (data.tungNguoi || []).forEach(function (m) {
+    var el = document.querySelector('.nm-person[data-ten="' + (m.ten || '').replace(/"/g, '\\"') + '"]');
+    if (!el) return;
+    el.querySelector('.w').textContent = m.cachLamViec || '';
+    el.querySelector('.q').textContent = m.noiSao || '';
+  });
+
+  var caps = (data.capChuY || []).map(function (c) {
+    return '<div class="nm-cap"><b>' + esc(c.cap) + '</b><p>' + esc(c.viec) + '</p></div>';
+  }).join('');
+  if (caps) {
+    document.getElementById('capChuY').innerHTML = caps;
+    document.getElementById('capBlock').style.display = 'block';
+  }
+
+  var todo = (data.tuanNay || []).map(function (c) {
+    return '<div class="nm-todo">' + esc(c.viec) + '</div>';
+  }).join('');
+  if (todo) {
+    document.getElementById('tuanNay').innerHTML = todo;
+    document.getElementById('todoBlock').style.display = 'block';
+  }
+
+  // Khối "bạn đứng ở đâu" CHỈ hiện khi có lá số người dùng — không có thì ẩn
+  // hẳn, lấp bằng câu chung chung là hứa thứ không dựa trên dữ kiện nào.
+  if (data.voiBan && data.ban) {
+    document.getElementById('voiBan').textContent = data.voiBan;
+    document.getElementById('withBlock').style.display = 'block';
+  }
+
+  if (data.motCau) document.getElementById('motCau').textContent = data.motCau;
+  document.getElementById('endBlock').style.display = 'block';
+}
+
+function showForm() {
+  document.getElementById('resPanel').style.display = 'none';
+  document.getElementById('birthPanel').style.display = 'block';
+  document.getElementById('btnEdit').style.display = 'none';
+  // Quay về form thì gỡ nút Chia sẻ — bản vừa xem không còn trên màn hình nữa.
+  Shell.setShareable(null);
+}
+
+async function _loadHistory() {
+  try {
+    var token = window.Auth?.getSession()?.access_token || '';
+    if (!token) return;
+    var r = await fetch('/api/nhan-mach?action=history', { headers: { Authorization: 'Bearer ' + token } });
+    var d = await r.json();
+    if (!d.success || !(d.items || []).length) return;
+    document.getElementById('histList').innerHTML = d.items.map(function (it) {
+      return '<div>· ' + (it.so_nguoi || 0) + ' người — ' + esc(it.ten_nguoi || '') + '</div>';
+    }).join('');
+    document.getElementById('histBlock').style.display = 'block';
+  } catch (e) { /* lịch sử hỏng không phải lý do làm hỏng kết quả vừa đọc */ }
+}
+
+loadSo();
+</script>
+</body>
+</html>

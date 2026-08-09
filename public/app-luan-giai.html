@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"></noscript>
-<link rel="stylesheet" href="/shell.css?v=16">
+<link rel="stylesheet" href="/shell.css?v=18">
 <link rel="stylesheet" href="/laso-chart.css?v=3">
 <style>
 /* Center riêng của trang Luận giải */
@@ -36,7 +36,7 @@
 .sc .lb{font-size:11px;color:var(--text-lt);text-transform:uppercase;letter-spacing:.04em}
 .sc .vl{font-family:var(--serif);font-size:24px;font-weight:600;margin-top:2px;display:flex;align-items:baseline;gap:3px}
 .sc .vl small{font-size:12px;color:var(--text-lt);font-family:var(--sans)}
-.sc.good .vl{color:var(--green)}.sc.warn .vl{color:var(--gold-soft)}.sc.pri .vl{color:var(--red)}
+.sc.good .vl{color:var(--tx-green)}.sc.warn .vl{color:var(--gold-soft)}.sc.pri .vl{color:var(--tx-red)}
 .pbar{height:5px;border-radius:5px;background:var(--paper-2);margin-top:7px;overflow:hidden}
 .pbar i{display:block;height:100%;border-radius:5px}
 /* sections */
@@ -54,14 +54,14 @@
 .cung-row:last-child{border-bottom:none}
 .cung-row .nm{font-family:var(--serif);font-size:14px;width:96px;flex:0 0 auto}
 .cung-row .stars{font-size:12px;color:var(--text-lt);flex:1;min-width:0}
-.cung-row .stars b{color:var(--red);font-weight:600}
+.cung-row .stars b{color:var(--tx-red);font-weight:600}
 .cung-row .mb{width:74px;flex:0 0 auto}
 .cung-row .num{width:34px;text-align:right;font-family:var(--serif);font-weight:600;font-size:14px;font-variant-numeric:tabular-nums}
 .ask{margin-top:11px;display:inline-flex;align-items:center;gap:7px;font-size:12.5px;color:var(--gold-soft);border:1px dashed var(--gold-soft);border-radius:8px;padding:7px 12px;cursor:pointer;background:var(--gold-lt);font-family:inherit}
 .hoa-list{display:flex;flex-direction:column;gap:8px}
 .hoa-item{display:flex;align-items:center;gap:10px;font-size:13px}
 .hoa-badge{font-family:var(--serif);font-weight:700;font-size:12px;padding:2px 9px;border-radius:6px;flex:0 0 auto;width:74px;text-align:center}
-.fold-toggle{font-size:12.5px;color:var(--blue);cursor:pointer;margin-bottom:14px;display:inline-block}
+.fold-toggle{font-size:12.5px;color:var(--tx-blue);cursor:pointer;margin-bottom:14px;display:inline-block}
 #miniChart{display:block;margin-bottom:20px}
 /* ── Khối deterministic 24 phần (port từ luan-giai.html buildPreGenHtml) ── */
 .pregen-block{background:#F5F5F5;border:1px solid #e0e0e0;border-radius:8px;padding:12px 16px;margin:12px 0}
@@ -90,25 +90,15 @@
 .claude-content p:last-child{margin-bottom:0}
 .claude-content strong{color:var(--text)}
 .claude-content em{color:var(--gold-soft);font-style:italic}
-.claude-content h3{font-family:var(--serif);font-size:14.5px;font-weight:600;color:var(--navy);margin:14px 0 8px}
+.claude-content h3{font-family:var(--serif);font-size:14.5px;font-weight:600;color:var(--heading);margin:14px 0 8px}
 .claude-content .md-table-wrap{overflow-x:auto;margin:12px 0}
 .claude-content .md-table{width:100%;border-collapse:collapse;font-size:12.5px}
 .claude-content .md-table th{background:var(--navy);color:#fff;padding:8px 10px;text-align:left;font-size:10px;text-transform:uppercase;letter-spacing:.05em}
 .claude-content .md-table td{padding:7px 10px;border-bottom:1px solid var(--line)}
-.laso-error{font-size:12.5px;color:var(--red);padding:8px 0}
+.laso-error{font-size:12.5px;color:var(--tx-red);padding:8px 0}
 .lg-unlock{background:var(--white);border:1px solid var(--gold-soft);border-radius:11px;padding:18px 20px;margin-bottom:22px;text-align:center}
 .lg-unlock p{font-size:12.5px;color:var(--text-lt);margin-top:8px}
 .lg-progress{font-size:12.5px;color:var(--text-lt);margin-bottom:16px;padding:10px 0;border-bottom:1px solid var(--line)}
-.lg-pdf-bar{display:none;margin:24px 0;text-align:center}
-.lg-pdf-bar.visible{display:block}
-@media print{
-  .sb,.rail,.ws-top,#introHost,#shellRecent,.mobile-only,.jump,.lg-unlock,.lg-progress,.ask,.lg-pdf-bar,.tabbar{display:none!important}
-  .shell{display:block!important;height:auto!important}
-  .ws{overflow:visible!important}
-  .ws-body{padding:0!important}
-  .sec{page-break-inside:avoid;break-inside:avoid}
-  body{font-size:12pt}
-}
 </style>
 </head>
 <body>
@@ -139,7 +129,7 @@
         </div>
       </div>
 
-      <div id="lgPanel">
+      <div id="lgPanel" data-ws-result>
         <div class="scores" id="lgScores"></div>
         <span class="fold-toggle" id="lgFold" onclick="toggleMini()">▾ Ẩn lá số</span>
         <div class="chart-wrap" id="miniChart"></div>
@@ -150,7 +140,6 @@
         </div>
         <div class="lg-progress" id="lgProgress" style="display:none"></div>
         <div class="lg-body" id="lgBody"></div>
-        <div class="lg-pdf-bar" id="lgPdfBar"><button class="btn" onclick="window.print()">⬇ Tải PDF</button></div>
       </div>
     </div>
   </main>
@@ -163,12 +152,13 @@ window.SHELL_INTRO={key:'luan-giai',title:'Luận giải Tử Vi',desc:'Lập l�
 <script src="/tuvi-ansao-engine.js"></script>
 <script src="/laso-chart.js?v=3"></script>
 <script src="/luan-giai-core.js?v=2"></script>
-<script src="/tuvi-laso-format.js"></script>
+<script src="/tuvi-laso-format.js?v=2"></script>
 <script src="/tuvi-form.js?v=1"></script>
 <script src="/auth.js?v=2"></script>
-<script src="/tuvi-paywall.js?v=11"></script>
+<script src="/tuvi-paywall.js?v=18"></script>
   <script src="/nav.js?v=22" data-icons-only></script>
-<script src="/shell.js?v=56"></script>
+<script src="/shell.js?v=68"></script>
+<script src="/tools-shared/ai-loading-steps.js?v=5"></script>
 <script>
 // ── Form nhập (dùng chung TuviForm — có "Sinh ở ngoài Việt Nam?" + parity giờ
 // sinh lịch sử với standalone) ──
@@ -246,7 +236,7 @@ function renderLuan(ls,fd,namxem){
   // score cards
   document.getElementById('lgScores').innerHTML=
     card('Tổng quan lá số',overall) + card('Đại vận '+(dvHT?dvHT.tuoiStart+'–'+dvHT.tuoiEnd+'t':''),dvTong) +
-    '<div class="sc"><div class="lb">Cách cục</div><div class="vl" style="font-size:19px;color:var(--navy)">'+((ls.cachCuc&&ls.cachCuc.length)||0)+'</div><div class="pbar"><i style="width:100%;background:var(--gold-soft)"></i></div></div>';
+    '<div class="sc"><div class="lb">Cách cục</div><div class="vl" style="font-size:19px;color:var(--heading)">'+((ls.cachCuc&&ls.cachCuc.length)||0)+'</div><div class="pbar"><i style="width:100%;background:var(--gold-soft)"></i></div></div>';
 
   function card(lb,t){ var col=t!=null?scoreColor(t):'var(--text-lt)'; return '<div class="sc"><div class="lb">'+esc(lb)+'</div><div class="vl" style="color:'+col+'">'+(t!=null?t:'—')+'<small>/10</small></div><div class="pbar"><i style="width:'+(t!=null?t*10:0)+'%;background:'+col+'"></i></div></div>'; }
 
@@ -313,6 +303,9 @@ function toggleMini(){
 // ══════════════════════════════════════════════════════════════════════
 var _astrolabe=null, _hoTen='', _ngay=0, _thang=0, _nam=0, _gioitinh='nam', _namXem=0, _laSoText=null;
 var _pendingSlug=null, _currentPhan=0, _luanGiaiStore={};
+// ETA tự hiệu chỉnh: đo nhịp NGAY TRONG phiên này thay vì hứa theo một con
+// số chép cứng (số chép cứng nói dối vào đúng ngày đổi model).
+var _pace=(window.AiLoadingSteps&&AiLoadingSteps.pacer)?AiLoadingSteps.pacer():null;
 var SB_URL_LG='https://dciwkfdqhhddeymlisey.supabase.co';
 var SB_ANON_LG='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRjaXdrZmRxaGhkZGV5bWxpc2V5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyMzQ2MzksImV4cCI6MjA4ODgxMDYzOX0._3aXoe0hO-46J1gASUiNv__tWjSzLZFTL0M3-47L26I';
 TuviPaywall.init({product:'laso'});
@@ -437,7 +430,6 @@ function _renderCachedLuanGiai(store){
   }
   document.getElementById('lgUnlock').style.display='none';
   document.getElementById('lgProgress').style.display='none';
-  document.getElementById('lgPdfBar').classList.add('visible');
 }
 async function initLuanGiaiGate(ls){
   var conv=ls._conv||{};
@@ -445,7 +437,6 @@ async function initLuanGiaiGate(ls){
   _luanGiaiStore={};
   document.getElementById('lgUnlock').style.display='none';
   document.getElementById('lgProgress').style.display='none';
-  document.getElementById('lgPdfBar').classList.remove('visible');
   var cached=await _fetchCachedLuanGiai(_pendingSlug);
   if(cached)_renderCachedLuanGiai(cached);
   else document.getElementById('lgUnlock').style.display='block';
@@ -458,20 +449,41 @@ async function _startLuanGiaiAI(){
   document.getElementById('lgUnlock').style.display='none';
   document.getElementById('lgProgress').style.display='block';
   _currentPhan=0; _luanGiaiStore={};
+  _pace&&_pace.reset();
   await _loadNextPhanAI();
 }
 async function _loadNextPhanAI(){
   if(_currentPhan>=LuanGiaiCore.TONG_PHAN){
     document.getElementById('lgProgress').textContent='✓ Luận giải hoàn tất';
-    document.getElementById('lgPdfBar').classList.add('visible');
     _saveLuanGiaiResult();
     return;
   }
   _currentPhan++;
   var p=_currentPhan;
-  document.getElementById('lgProgress').textContent='Đang luận giải phần '+p+' / '+LuanGiaiCore.TONG_PHAN+'...';
+  // Còn LẠI tính từ phần này trở đi. Chưa đủ mẫu thì remainText trả '' —
+  // im lặng, không hứa.
+  var _eta=_pace?_pace.remainText(LuanGiaiCore.TONG_PHAN-p+1):'';
+  document.getElementById('lgProgress').textContent=
+    'Đang luận giải phần '+p+' / '+LuanGiaiCore.TONG_PHAN+(_eta?' · '+_eta:'...');
+  _pace&&_pace.begin();
   var box=document.getElementById('claude-content-'+p);
-  if(box){ box.style.display='block'; box.innerHTML='<div class="phan-empty">Đang luận giải…</div>'; }
+  // Chờ MỘT CỤC (không stream) và tốn hơn 10 giây ⇒ orb, theo luật ở đầu
+  // ai-loading-steps.js. Trước đây chỗ này chỉ có một dòng chữ TĨNH nên người
+  // dùng đọc thành "treo" rồi bấm lại — mà bấm lại là một lượt gọi model nữa.
+  // expectSec:0 = chưa đo được thời lượng một phần (route /api/lasotuvi không
+  // ghi llm_usage) ⇒ chỉ đếm giây, KHÔNG hứa bao giờ xong.
+  var w=null;
+  if(box){
+    box.style.display='block';
+    box.innerHTML='<div class="phan-empty">Đang luận giải…</div>';
+    if(window.AiLoadingSteps&&AiLoadingSteps.mountWait){
+      w=AiLoadingSteps.mountWait(box,{label:'Đang luận giải phần '+p+'…',
+        expectSec:(_pace&&_pace.perPartSec())||0,expectText:(_pace&&_pace.perPartText())||''});
+      w.start();
+    }
+  }
+  // PHẢI stop trước mọi lượt ghi đè `box`, nếu không đồng hồ chạy ngầm.
+  var doneWait=function(){ if(w){ w.stop(); w=null; } };
   // Cuộn tới đúng phần đang stream — không thì user tưởng trang đứng im (đã fix
   // theo phản hồi Henry). .sec đã có scroll-margin-top neo theo --ws-top-h (bù header + .jump sticky).
   var secEl=document.getElementById('sec-'+p);
@@ -486,12 +498,16 @@ async function _loadNextPhanAI(){
     var resp=await fetch('/api/lasotuvi',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({hoTen:_hoTen,ngay:_ngay,thang:_thang,nam:_nam,gioiTinh:_gioitinh,namXem:_namXem,laSoText:_laSoText,phan:p,docs:docs})});
     var data=await resp.json();
     if(data.error||!data.luanGiai){
+      doneWait();
       if(box)box.innerHTML='<div class="laso-error">Lỗi khi luận giải phần '+p+'. <button class="btn" onclick="window._lgRetryPhan()">↻ Thử lại</button></div>';
       return;
     }
     _luanGiaiStore[p]=data.luanGiai;
+    _pace&&_pace.end();   // chỉ ghi nhịp ở nhánh THÀNH CÔNG
+    doneWait();
     if(box)box.innerHTML=renderMarkdown(data.luanGiai);
   }catch(e){
+    doneWait();
     if(box)box.innerHTML='<div class="laso-error">Lỗi phần '+p+': '+esc(e.message)+' <button class="btn" onclick="window._lgRetryPhan()">↻ Thử lại</button></div>';
     return;
   }
@@ -529,7 +545,6 @@ function showForm(){
   document.getElementById('btnBatTu').style.display='none';
   document.getElementById('lgUnlock').style.display='none';
   document.getElementById('lgProgress').style.display='none';
-  document.getElementById('lgPdfBar').classList.remove('visible');
   Shell.setShareable(null);
 }
 // điền sẵn ngày sinh đã nhớ (nếu có); tự luận nếu đến qua ?auto=1 (từ nút Lá số).

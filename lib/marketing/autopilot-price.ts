@@ -40,7 +40,7 @@ interface ToolPricingRow {
 async function getToolPricing(toolId: string): Promise<ToolPricingRow | null> {
   const res = await fetch(
     `${SUPABASE_URL}/rest/v1/tool_pricing?tool_id=eq.${encodeURIComponent(toolId)}&select=tool_id,credits&limit=1`,
-    { headers: SB_HEADERS },
+    { cache: 'no-store', headers: SB_HEADERS },
   );
   if (!res.ok) return null;
   const rows: ToolPricingRow[] = await res.json();

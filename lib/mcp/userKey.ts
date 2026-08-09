@@ -31,7 +31,7 @@ export async function getUserKey(userId: string): Promise<string | null> {
   try {
     const res = await fetch(
       `${SUPABASE_URL}/rest/v1/mcp_keys?user_id=eq.${encodeURIComponent(userId)}&active=eq.true&select=key&order=created_at.desc&limit=1`,
-      { headers: SB_HEADERS },
+      { cache: 'no-store', headers: SB_HEADERS },
     );
     if (!res.ok) return null;
     const rows = (await res.json()) as { key: string }[];

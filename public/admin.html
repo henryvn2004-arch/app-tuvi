@@ -521,6 +521,16 @@
 
         <div class="panel">
           <div class="panel-header">
+            <div class="panel-title"><svg class="pt-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/></svg>Phễu Theo Tool</div>
+            <span style="font-size:.72rem;color:var(--text-lt)">Tool nào có người xem mà không ai mua</span>
+          </div>
+          <div class="panel-body" id="mkt-toolfunnel">
+            <div class="loading"><span class="spin"></span>Đang tải...</div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
             <div class="panel-title"><svg class="pt-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>Vòng Lặp Viral</div>
             <span style="font-size:.72rem;color:var(--text-lt)">K-factor = lượt giới thiệu ăn được ÷ số người đã tạo kết quả</span>
           </div>
@@ -3469,7 +3479,7 @@ async function loadMarketing() {
     if (nRev) nRev.textContent = 'giao dịch cũ chưa lưu VNĐ → suy theo ' + rateTxt + '/Lượng';
     const nSrc = document.getElementById('mkt-src-note');
     if (nSrc) nSrc.textContent = 'Quy đổi doanh thu: 1 Lượng ≈ ' + rateTxt;
-    renderMktFunnel(d.funnel || {});
+    renderMktFunnel(d.funnel || {}, d.trafficQuality || null);
     renderMktGa4(d.ga4 || null);
     renderMktSources(d.sources || []);
     renderMktAcq(d.acquisition || []);
@@ -3482,11 +3492,73 @@ async function loadMarketing() {
     ['mkt-ga4','mkt-sources','mkt-acq','mkt-campaigns','mkt-paths','mkt-referrers','mkt-cohorts','mkt-revenue'].forEach(id => { const el = document.getElementById(id); if (el) el.innerHTML = ''; });
   }
   loadViral(fromEl.value, toEl.value);
+  loadToolFunnel(fromEl.value, toEl.value);
   loadAutopilotLog();
   loadMediaQueue();
   loadSeeding();
   utmRenderSaved();
   _mktLoadedKey = fromEl.value + '|' + toEl.value;
+}
+
+// D1 — PHỄU THEO TOOL. Trả lời "tool nào có người xem mà không ai mua".
+// Gọi RIÊNG khỏi admin-marketing (8 RPC + GA4), cùng tiền lệ với loadViral.
+async function loadToolFunnel(from, to) {
+  const host = document.getElementById('mkt-toolfunnel');
+  if (!host) return;
+  try {
+    const d = await apiGet('admin-tool-funnel', `&from=${from}&to=${to}`);
+    if (d.error) throw new Error(d.error);
+    renderToolFunnel(host, d.rows || [], d.lac || []);
+  } catch (e) {
+    host.innerHTML = `<div class="empty">Lỗi: ${escHtmlLocal(e.message)}</div>`;
+  }
+}
+
+function renderToolFunnel(host, rows, lac) {
+  if (!rows.length) {
+    host.innerHTML = '<div class="empty">Chưa có lượt mở tool nào trong khoảng này.</div>';
+    return;
+  }
+  const pct = (a, b) => (b > 0 ? Math.round((a * 100) / b) + '%' : '—');
+  // Cảnh báo CHỈ khi có đủ mẫu: một tool 1 người mở 0 người mua chưa nói lên gì,
+  // gắn cờ đỏ cho nó là dạy người đọc bỏ qua cờ đỏ.
+  const NGUONG = 3;
+  const body = rows.map(r => {
+    const free = Number(r.gia) === 0;
+    const kho = !free && Number(r.mo) >= NGUONG && Number(r.mua) === 0;
+    // Có tính thử (W1) → cột "thử → bấm mở" mới có nghĩa; tool chưa có W1 thì
+    // để gạch ngang chứ KHÔNG hiện 0% (0% đọc thành "ai cũng bỏ đi").
+    const coThu = Number(r.thu) > 0;
+    return `<tr${kho ? ' style="background:rgba(192,57,43,.06)"' : ''}>
+      <td><b>${escHtmlLocal(r.nhan || r.tool_id)}</b>${kho ? ' <span class="badge badge-red">chưa ai mua</span>' : ''}
+        <div style="font-size:.7rem;color:var(--text-lt)">${escHtmlLocal(r.tool_id)} · ${free ? 'miễn phí' : r.gia + ' Lượng'}</div></td>
+      <td style="text-align:right">${r.mo}</td>
+      <td style="text-align:right">${r.chay}<div style="font-size:.68rem;color:var(--text-lt)">${pct(r.chay, r.mo)}</div></td>
+      <td style="text-align:right">${coThu ? r.thu : '—'}</td>
+      <td style="text-align:right">${coThu ? r.bam_mo + '<div style="font-size:.68rem;color:var(--text-lt)">' + pct(r.bam_mo, r.thu) + '</div>' : '—'}</td>
+      <td style="text-align:right">${free ? '—' : r.mua + '<div style="font-size:.68rem;color:var(--text-lt)">' + pct(r.mua, r.mo) + '</div>'}</td>
+      <td style="text-align:right">${free ? '—' : Number(r.luong).toLocaleString('vi-VN')}</td>
+    </tr>`;
+  }).join('');
+
+  const lacHtml = lac.length
+    ? `<div style="margin-top:12px;font-size:.72rem;color:var(--text-lt);line-height:1.7">
+         <b>Id không có trong bảng giá:</b> ${lac.map(x => escHtmlLocal(x.tool_id) + ' (' + x.nguon + ', ' + x.so_luot + ')').join(' · ')}<br>
+         Trang không bán gì thì bỏ qua; còn lại là <b>tên lệch giữa ba hệ</b> — thêm một dòng vào <code>tool_canon()</code>.
+       </div>`
+    : '';
+
+  host.innerHTML = `<div class="table-wrap"><table class="tbl">
+      <thead><tr>
+        <th>Tool</th><th style="text-align:right">Mở</th><th style="text-align:right">Chạy</th>
+        <th style="text-align:right">Tính thử</th><th style="text-align:right">Bấm mở</th>
+        <th style="text-align:right">Mua</th><th style="text-align:right">Lượng</th>
+      </tr></thead><tbody>${body}</tbody></table></div>
+    <div style="margin-top:10px;font-size:.72rem;color:var(--text-lt);line-height:1.7">
+      Mọi cột đếm <b>người</b> (đã đăng nhập tính theo tài khoản, chưa thì theo trình duyệt) — trừ cột Lượng.
+      Cột <b>Tính thử</b> / <b>Bấm mở</b> chỉ có ở tool đã làm W1; tool khác để gạch ngang chứ không phải 0.
+      Dòng tô đỏ = tool trả phí có <b>≥${NGUONG} người mở mà chưa ai mua</b>.
+    </div>${lacHtml}`;
 }
 
 // V2.4 (track Viral Loop) — phễu vòng lặp giới thiệu. Gọi RIÊNG khỏi
@@ -3989,7 +4061,7 @@ function renderMktGa4(g) {
   </div>`;
 }
 
-function renderMktFunnel(f) {
+function renderMktFunnel(f, tq) {
   // Bậc funnel chính (thang theo visitors) + conv% so với bậc trước.
   const svgIc = (p) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px;vertical-align:-2px;margin-right:.3rem;opacity:.75">${p}</svg>`;
   const steps = [
@@ -4027,7 +4099,48 @@ function renderMktFunnel(f) {
   </div>`;
   const overall = (f.visitors > 0) ? ((f.paid || 0) / f.visitors * 100).toFixed(2) + '%' : '—';
   document.getElementById('mkt-funnel').innerHTML = rows + secondary +
-    `<div style="margin-top:.75rem;font-size:.72rem;color:var(--text-lt)">Chuyển đổi tổng visit → paid: <strong style="color:var(--text)">${overall}</strong></div>`;
+    `<div style="margin-top:.75rem;font-size:.72rem;color:var(--text-lt)">Chuyển đổi tổng visit → paid: <strong style="color:var(--text)">${overall}</strong></div>`
+    + renderTrafficQuality(tq, f.paid || 0);
+}
+
+// Dải chất lượng lưu lượng, đứng dưới phễu. Đọc từ RPC `traffic_quality` — CÙNG
+// nguồn mà CMO digest Telegram đang luận, cố ý không tự đếm lại ở đây.
+//
+// Vì sao cần: bậc "Khách ghé" đếm THÔ. Đo prod 05/08/2026 trên 30 ngày:
+// 1.005 danh tính, trong đó **871 vào đúng một lượt rồi biến mất** (0 user_id,
+// 0 đăng ký, 0 nạp tiền) và chỉ 83 có tương tác thật. Lấy 1.005 làm mẫu số rồi
+// đọc ra "chuyển đổi 0,10%" là một kết luận sai về sản phẩm dựa trên phép chia sai.
+//
+// ⚠️ Số nội bộ, KHÔNG phải tập con của thanh "Khách ghé" ở trên khi thanh đó
+// đang hiển thị GA4 — vì thế nó đứng thành dải riêng có nhãn nguồn, không nhét
+// chung dòng.
+function renderTrafficQuality(tq, paid) {
+  if (!tq || tq.total == null) return '';
+  const eng = tq.engaged || 0, drive = tq.drive_by || 0, brow = tq.browsed || 0, bot = tq.known_bot || 0;
+  const tot = tq.total || 0;
+  const pct = (n) => tot > 0 ? Math.round((n / tot) * 100) : 0;
+  const seg = (n, color, label) => n <= 0 ? '' :
+    `<div style="width:${pct(n)}%;background:${color}" title="${label}: ${n.toLocaleString()} (${pct(n)}%)"></div>`;
+  // Mẫu số ĐÃ LỌC. Đây là con số nên đọc, và nói rõ nó đã lọc.
+  const convEng = eng > 0 ? ((paid || 0) / eng * 100).toFixed(2) + '%' : null;
+  const ua = tq.ua_coverage || {};
+  // with_ua = 0 nghĩa là CHƯA đo được User-Agent, không phải "không có bot".
+  const botNote = (ua.with_ua === 0)
+    ? ' · <span style="color:var(--gold)">chưa thu được User-Agent nào — bot = 0 ở đây là “chưa đo”, không phải “không có”</span>'
+    : '';
+  return `<div style="margin-top:.9rem;padding-top:.8rem;border-top:1px solid var(--border-lt)">
+    <div class="stat-label" style="margin-bottom:.35rem" title="RPC traffic_quality — cùng nguồn với CMO digest gửi Telegram">Chất lượng lưu lượng (đo nội bộ, ${tot.toLocaleString()} danh tính)</div>
+    <div style="display:flex;height:10px;border-radius:5px;overflow:hidden;background:var(--border-lt)">
+      ${seg(eng, 'var(--green)', 'Tương tác thật')}${seg(brow, 'var(--blue)', 'Xem vài trang')}${seg(drive, 'var(--text-lt)', 'Ghé 1 lượt rồi đi')}${seg(bot, 'var(--red)', 'Bot theo User-Agent')}
+    </div>
+    <div style="margin-top:.45rem;font-size:.7rem;color:var(--text-lt);line-height:1.55">
+      <strong style="color:var(--green)">${eng.toLocaleString()}</strong> tương tác thật
+      · <strong style="color:var(--text-mid)">${brow.toLocaleString()}</strong> xem vài trang
+      · <strong style="color:var(--text-mid)">${drive.toLocaleString()}</strong> ghé 1 lượt rồi đi
+      · <strong style="color:var(--text-mid)">${bot.toLocaleString()}</strong> bot${botNote}
+      ${convEng ? `<br>Chuyển đổi trên mẫu số ĐÃ LỌC (paid ÷ tương tác thật): <strong style="color:var(--text)">${convEng}</strong>` : ''}
+    </div>
+  </div>`;
 }
 
 function renderMktSources(rows) {
@@ -4244,6 +4357,16 @@ function mktExportCSV() {
   rows.push(['visitors', 'signups', 'activated', 'topup_intent', 'paid', 'returned']);
   rows.push([f.visitors || 0, f.signups || 0, f.activated || 0, f.topup_intent || 0, f.paid || 0, f.returned || 0]);
   rows.push([]);
+  // Khối RIÊNG chứ không thêm cột vào bảng funnel: `visitors` ở trên là số đang
+  // hiện trên thanh (GA4 khi có), còn đây là phân loại NỘI BỘ — nhét chung hàng
+  // là mời người đọc cộng trừ hai nguồn khác nhau.
+  const tq = _mktData.trafficQuality;
+  if (tq && tq.total != null) {
+    rows.push(['# Chất lượng lưu lượng (nội bộ, RPC traffic_quality)']);
+    rows.push(['total', 'engaged', 'browsed', 'drive_by', 'known_bot']);
+    rows.push([tq.total || 0, tq.engaged || 0, tq.browsed || 0, tq.drive_by || 0, tq.known_bot || 0]);
+    rows.push([]);
+  }
   rows.push(['# Sources']);
   rows.push(['source', 'signups', 'paid', 'conv_pct', 'revenue_credits', 'revenue_vnd', 'ltv_vnd']);
   (_mktData.sources || []).forEach(r => {

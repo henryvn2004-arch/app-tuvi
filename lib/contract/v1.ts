@@ -111,6 +111,8 @@ export type ScenarioType =
   | 'hoang-dao'
   | 'ngay-tot'
   | 'ban-do-sao'
+  | 'cong-so'
+  | 'nhan-mach'
   | 'luc-nham';
 
 export interface ScenarioInput {
@@ -152,7 +154,45 @@ export interface ChatRequestV1 {
    * tự tính lại từ birth (computePastLife deterministic) — vừa an toàn, vừa
    * chắc chắn trùng nhân vật đang hiện trên màn hình.
    */
-  wrap?: 'past-life';
+  wrap?: 'past-life' | 'past-life-bond' | 'nguoi-khac' | 'day-con' | 'huong-nghiep-tre';
+  /**
+   * Quan hệ với người trong lá số — chỉ dùng với `wrap: 'nguoi-khac'`.
+   *
+   * Vẫn là ENUM: server chạy qua `resolveQuanHe` (danh sách trắng 8 giá trị),
+   * chuỗi lạ rơi về mặc định. Không có đường nào cho client đẩy prose vào
+   * system, đúng như chú thích của `wrap` ở trên.
+   */
+  wrapQuanHe?: string;
+  /**
+   * Điều cha mẹ đang lo — chỉ dùng với `wrap: 'day-con'`.
+   *
+   * Cũng là ENUM (`resolveMoiLo`, danh sách trắng 6 giá trị). Cố ý KHÔNG gộp
+   * vào `wrapQuanHe`: hai trường hai danh sách trắng khác nhau, gộp lại là sớm
+   * muộn có giá trị của bên này lọt qua cửa của bên kia.
+   */
+  wrapMoiLo?: string;
+  /**
+   * Lá số của NGƯỜI THỨ HAI — chỉ dùng với `wrap: 'past-life-bond'`.
+   *
+   * Vì sao phải có: mối duyên (và nền văn minh chung của cả hai) suy từ QUAN HỆ
+   * giữa hai lá số. Thiếu lá số này thì rail chỉ tính được nhân vật một người,
+   * mà nền văn minh của bản một người do `pickEraForLaso` bốc riêng — tức rail
+   * sẽ kể một thế giới KHÁC với thế giới đang hiện trên màn hình. Người dùng
+   * nhìn ra ngay, và đó là loại mâu thuẫn phá sạch lòng tin vào cả tool.
+   *
+   * Vẫn chỉ là DỮ LIỆU LÁ SỐ (ngày/tháng/năm/giờ/giới), không phải prose — cửa
+   * prompt-injection vẫn đóng như chú thích của `wrap` ở trên.
+   */
+  wrapBirthB?: BirthParams;
+  /**
+   * Lá số của NHỮNG NGƯỜI CÒN LẠI — chỉ dùng với `wrap: 'past-life-bond'` khi
+   * lượt đó có từ 3 người trở lên. `wrapBirthB` vẫn chạy như cũ cho lượt 2
+   * người, nên bản client cũ còn trong cache trình duyệt không gãy.
+   *
+   * Cũng chỉ là DỮ LIỆU LÁ SỐ, không phải prose — cửa prompt-injection vẫn đóng.
+   * Server tự chặn ở `MAX_BOND_MEMBERS`, không tin số lượng client gửi lên.
+   */
+  wrapBirths?: BirthParams[];
   client: ClientInfo;
 }
 
@@ -275,15 +315,37 @@ export function validateChatRequest(body: unknown):
     return { ok: false, error: 'Thiếu client.platform / client.version' };
   }
 
-  if (b.wrap != null && b.wrap !== 'past-life') {
+  // 🪤 Thêm giá trị `wrap` mới thì PHẢI thêm cả ở đây, không chỉ ở kiểu union
+  // phía trên — kiểu chỉ chặn lúc biên dịch, còn cửa thật là hàm này. Đã vấp
+  // một lần: hai tool vision thiếu trong danh sách và rail của chúng ăn 400.
+  if (
+    b.wrap != null &&
+    b.wrap !== 'past-life' &&
+    b.wrap !== 'past-life-bond' &&
+    b.wrap !== 'nguoi-khac' &&
+    b.wrap !== 'day-con' &&
+    b.wrap !== 'huong-nghiep-tre'
+  ) {
     return { ok: false, error: 'wrap không hợp lệ' };
+  }
+  if (b.wrapQuanHe != null && typeof b.wrapQuanHe !== 'string') {
+    return { ok: false, error: 'wrapQuanHe không hợp lệ' };
+  }
+  if (b.wrapMoiLo != null && typeof b.wrapMoiLo !== 'string') {
+    return { ok: false, error: 'wrapMoiLo không hợp lệ' };
+  }
+  if (b.wrapBirthB != null && typeof b.wrapBirthB !== 'object') {
+    return { ok: false, error: 'wrapBirthB không hợp lệ' };
+  }
+  if (b.wrapBirths != null && !Array.isArray(b.wrapBirths)) {
+    return { ok: false, error: 'wrapBirths không hợp lệ' };
   }
 
   if (b.scenario != null) {
     const s = b.scenario as Record<string, unknown>;
     // NGUỒN DUY NHẤT phải khớp ScenarioType union trên — xưa thiếu xem-tuong/
     // phong-thuy nên rail 2 tool vision bị chặn 400. Giữ đủ mọi type ở đây.
-    const types: ScenarioType[] = ['xem-tuoi', 'xem-lam-an', 'tuong-hop', 'tu-binh', 'xem-tuoi-sinh-con', 'chon-ngay-tot', 'dat-ten-con', 'dat-ten-dn', 'xem-tuong', 'phong-thuy', 'nap-am', 'kim-lau', 'ngu-hanh-ten', 'than-so-hoc', 'bat-trach', 'kinh-dich', 'mai-hoa', 'ky-mon', 'hoang-dao', 'ngay-tot', 'luc-nham', 'ban-do-sao'];
+    const types: ScenarioType[] = ['xem-tuoi', 'xem-lam-an', 'tuong-hop', 'tu-binh', 'xem-tuoi-sinh-con', 'chon-ngay-tot', 'dat-ten-con', 'dat-ten-dn', 'xem-tuong', 'phong-thuy', 'nap-am', 'kim-lau', 'ngu-hanh-ten', 'than-so-hoc', 'bat-trach', 'kinh-dich', 'mai-hoa', 'ky-mon', 'hoang-dao', 'ngay-tot', 'luc-nham', 'ban-do-sao', 'cong-so', 'nhan-mach'];
     if (!types.includes(s.type as ScenarioType)) {
       return { ok: false, error: 'scenario.type không hợp lệ' };
     }

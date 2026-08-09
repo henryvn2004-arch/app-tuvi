@@ -1,8 +1,12 @@
 name: Lighthouse CI
 
 on:
-  pull_request:
-    branches: [main]
+  # Chạy SAU khi Vercel deploy xong, KHÔNG phải lúc mở PR.
+  #
+  # 🔑 Trigger cũ (`pull_request`) bắn khi bản deploy chưa tồn tại, nên Lighthouse
+  # luôn rơi về 4 URL prod cứng trong lighthouserc.json — tức đo BẢN ĐANG CHẠY
+  # chứ không đo PR. Cùng lỗi đã vá cho smoke (#463) và E2E (#466).
+  deployment_status:
   workflow_dispatch:
     inputs:
       lhci_url_override:
@@ -15,9 +19,13 @@ permissions:
 
 jobs:
   lighthouse:
-    # Skip trên Dependabot PR — Lighthouse chạy lên prod, không relevant cho dep bump
-    # và Dependabot không có quyền dùng secrets nếu cần.
-    if: github.actor != 'dependabot[bot]'
+    # Skip trên nhánh Dependabot — không relevant cho dep bump, và Dependabot
+    # không có quyền dùng secrets. Với deployment_status thì `github.actor` là
+    # bên tạo deployment chứ không còn là dependabot, nên nhận diện qua REF.
+    if: >
+      github.event_name != 'deployment_status' ||
+      (github.event.deployment_status.state == 'success' &&
+       !startsWith(github.event.deployment.ref, 'dependabot/'))
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
@@ -30,28 +38,54 @@ jobs:
 
       - run: npm ci
 
-      # Lighthouse mặc định chạy lên URL khai báo trong lighthouserc.json.
-      # Trên PR, có thể override sang Vercel preview URL nếu Vercel deployment
-      # status đã có. Fallback: chạy trên prod URLs.
+      # Production (và cron/dispatch không có payload) → để RỖNG, `lhci` dùng
+      # nguyên 4 URL prod khai trong lighthouserc.json. Preview → giữ đúng 4
+      # ĐƯỜNG DẪN đó nhưng ghép sang host vừa deploy.
+      #
+      # 🔑 Danh sách đường dẫn đọc THẲNG từ lighthouserc.json, không chép tay
+      # sang đây — chép là hai bản sẽ trôi khỏi nhau.
+      # 🔑 Vé qua SSO gắn vào QUERY, KHÔNG dùng `extraHeaders` của Lighthouse:
+      # header lạ áp lên cả request khác origin sẽ bị CORS chặn (đã trả giá ở
+      # #466 với fonts.gstatic.com) và làm hỏng chính con số đang đo.
       - name: Determine target URLs
         id: targets
+        env:
+          INPUT_URLS: ${{ github.event.inputs.lhci_url_override }}
+          ENVIRONMENT: ${{ github.event.deployment.environment }}
+          TARGET_URL: ${{ github.event.deployment_status.target_url }}
+          BYPASS: ${{ secrets.VERCEL_BYPASS_SECRET }}
         run: |
-          if [ -n "${{ github.event.inputs.lhci_url_override }}" ]; then
-            echo "urls=${{ github.event.inputs.lhci_url_override }}" >> $GITHUB_OUTPUT
+          if [ -n "$INPUT_URLS" ]; then
+            echo "urls=$(echo "$INPUT_URLS" | tr ',' ' ')" >> "$GITHUB_OUTPUT"
+            echo "Lighthouse target: override"
+          elif [ "$ENVIRONMENT" = "production" ] || [ "$ENVIRONMENT" = "Production" ] || [ -z "$TARGET_URL" ]; then
+            echo "urls=" >> "$GITHUB_OUTPUT"
+            echo "Lighthouse target: prod (theo lighthouserc.json)"
           else
-            echo "urls=" >> $GITHUB_OUTPUT
+            echo "urls=$(node scripts/lhci-preview-urls.mjs)" >> "$GITHUB_OUTPUT"
+            echo "Lighthouse target: preview"
           fi
 
       - name: Run Lighthouse CI
         env:
           LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
+        # Mỗi URL một cờ riêng — `--collect.url="a,b"` không tách thành nhiều URL,
+        # nó sẽ đo đúng một địa chỉ có dấu phẩy rồi hỏng im lặng.
         run: |
-          if [ -n "${{ steps.targets.outputs.urls }}" ]; then
-            npx lhci autorun --collect.url="${{ steps.targets.outputs.urls }}"
+          URLS='${{ steps.targets.outputs.urls }}'
+          if [ -n "$URLS" ]; then
+            ARGS=""
+            for u in $URLS; do ARGS="$ARGS --collect.url=$u"; done
+            npx lhci autorun $ARGS
           else
             npx lhci autorun
           fi
 
+      # 🔑 `include-hidden-files` BẮT BUỘC ở đây: `.lighthouseci/` bắt đầu bằng
+      # dấu chấm, mà upload-artifact loại file ẩn theo mặc định ⇒ từ trước tới
+      # nay bước này luôn kết thúc bằng "No files were found" và artifact báo
+      # cáo Lighthouse RỖNG, dù lhci vẫn ghi đủ file vào đó. Hai artifact kia
+      # (`playwright-report*`) không ẩn nên không dính.
       - name: Upload report
         if: always()
         uses: actions/upload-artifact@v7
@@ -59,3 +93,4 @@ jobs:
           name: lighthouse-report-${{ github.run_id }}
           path: .lighthouseci/
           retention-days: 14
+          include-hidden-files: true

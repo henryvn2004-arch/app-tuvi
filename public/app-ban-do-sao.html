@@ -6,7 +6,10 @@
 <title>Bản Đồ Sao Lúc Sinh — Tử Vi Minh Bảo</title>
 <meta name="description" content="Lập bản đồ sao lúc sinh theo chiêm tinh phương Tây — cung Mọc, 12 nhà, vị trí 10 hành tinh và các góc chiếu. Tải bánh xe bản đồ về để chia sẻ.">
 <link rel="icon" type="image/webp" href="/seal.webp">
-<link rel="stylesheet" href="/shell.css?v=16">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"></noscript>
+<link rel="stylesheet" href="/shell.css?v=18">
 <style>
 .form-card{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);max-width:680px}
 .form-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:3px}
@@ -18,7 +21,7 @@
 .fg select{width:auto;min-width:150px}
 .fg input:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(20,85,164,.12)}
 .btn-go{background:var(--red);color:#fff;border:none;border-radius:8px;padding:10px 22px;font-size:14px;font-weight:600;cursor:pointer;font-family:var(--serif)}
-.err{color:var(--red);font-size:13px;margin-top:8px;display:none}.err.active{display:block}
+.err{color:var(--tx-red);font-size:13px;margin-top:8px;display:none}.err.active{display:block}
 #resPanel{display:none;max-width:820px}
 .res-block{background:#fff;border:1px solid var(--border-lt);border-radius:10px;overflow:hidden;box-shadow:var(--shadow)}
 .res-block-header{background:var(--navy);padding:12px 16px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
@@ -68,7 +71,7 @@
         <div class="err" id="error-msg"></div>
       </div>
 
-      <div id="resPanel">
+      <div id="resPanel" data-ws-result>
         <div class="res-block">
           <div class="res-block-header">
             <span class="res-block-title" id="resTitle">—</span>
@@ -92,10 +95,10 @@
 <script>window.SHELL_ACTIVE='ban-do-sao';window.SHELL_HISTORY=true;
 window.SHELL_INTRO={key:'ban-do-sao',title:'Bản Đồ Sao Lúc Sinh',desc:'Lập <b>bản đồ sao</b> theo chiêm tinh phương Tây — cung Mọc, 12 nhà, vị trí 10 hành tinh và các góc chiếu. Tải <b>bánh xe bản đồ</b> về để chia sẻ, rồi hỏi <b>trợ lý AI</b> đọc giúp.'};</script>
 <script src="/tools-shared/ban-do-sao.js?v=1"></script>
-<script src="/poster.js?v=4"></script>
+<script src="/poster.js?v=5"></script>
 <script src="/auth.js?v=2"></script>
   <script src="/nav.js?v=22" data-icons-only></script>
-<script src="/shell.js?v=56"></script>
+<script src="/shell.js?v=68"></script>
 <script>
 // Vài nơi sinh phổ biến để đỡ phải tra toạ độ. CỐ Ý vẫn cho sửa tay vĩ/kinh độ:
 // người sinh ở tỉnh lẻ mà bị ép chọn Hà Nội thì cung Mọc lệch mà không ai biết.

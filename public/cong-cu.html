@@ -5,13 +5,13 @@
 <script src="https://js.sentry-cdn.com/f884fb7e9d257df10ecb6dbe562141cb.min.js" crossorigin="anonymous" defer></script>
 <link rel="icon" type="image/webp" href="/seal.webp">
 <link rel="apple-touch-icon" href="/seal.webp">
-<meta name="description" content="Cổng tử vi · tử bình · tướng số · phong thủy bằng AI theo cổ pháp. 47 công cụ — luận giải lá số, xem tướng, phong thủy, đặt tên, chọn ngày tốt, bói bài. Tri Mệnh Lý — Thuận Thế Hành.">
+<meta name="description" content="Cổng tử vi · tử bình · tướng số · phong thủy bằng AI theo cổ pháp. 53 công cụ — luận giải lá số, xem tướng, phong thủy, đặt tên, chọn ngày tốt, bói bài. Tri Mệnh Lý — Thuận Thế Hành.">
 <meta name="keywords" content="tử vi, tử bình, tướng số, phong thủy, xem tuổi, đặt tên con, ngày tốt, tarot, kinh dịch, ai">
 <link rel="manifest" href="/manifest.json">
 <link rel="canonical" href="https://www.tuviminhbao.com/cong-cu">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>47 Công Cụ Mệnh Lý — Tử Vi Minh Bảo</title>
-<meta property="og:title" content="47 Công Cụ Mệnh Lý — Tử Vi Minh Bảo">
+<title>53 Công Cụ Mệnh Lý — Tử Vi Minh Bảo</title>
+<meta property="og:title" content="53 Công Cụ Mệnh Lý — Tử Vi Minh Bảo">
 <meta property="og:description" content="Tử vi · Tử Bình · Tướng số · Phong thủy AI theo cổ pháp. Luận giải cá nhân hóa bằng trí tuệ nhân tạo.">
 <meta property="og:image" content="https://www.tuviminhbao.com/seal.webp">
 <meta property="og:url" content="https://www.tuviminhbao.com/cong-cu">
@@ -20,7 +20,7 @@
 <meta property="og:locale" content="vi_VN">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Tử Vi Minh Bảo — Cổng Mệnh Lý AI">
-<meta name="twitter:description" content="47 công cụ tử vi · tử bình · tướng số · phong thủy bằng AI theo cổ pháp.">
+<meta name="twitter:description" content="53 công cụ tử vi · tử bình · tướng số · phong thủy bằng AI theo cổ pháp.">
 <meta name="twitter:image" content="https://www.tuviminhbao.com/seal.webp">
 
 <!-- Fonts: Noto Serif (Vietnamese subset, auto via Google Fonts) -->
@@ -47,7 +47,7 @@
   "alternateName": "紫微明寶",
   "url": "https://www.tuviminhbao.com",
   "logo": { "@type": "ImageObject", "url": "https://www.tuviminhbao.com/seal.webp" },
-  "description": "Cổng mệnh lý AI tổng hợp 47 công cụ — tử vi, tử bình, tướng số, phong thủy theo cổ pháp",
+  "description": "Cổng mệnh lý AI tổng hợp 53 công cụ — tử vi, tử bình, tướng số, phong thủy theo cổ pháp",
   "areaServed": ["VN", "US", "AU", "CA"]
 }
 </script>
@@ -196,6 +196,67 @@ a { color: var(--blue); text-decoration: none; }
 .hero-cta:hover { transform: translateY(-1px); box-shadow: 0 6px 22px rgba(201,168,76,0.4); }
 .hero-cta .hc-spark { font-size: 16px; }
 .hero-cta .hc-tag { font-size: 10px; letter-spacing: .12em; text-transform: uppercase; background: rgba(6,26,46,0.14); padding: 2px 7px; border-radius: 20px; font-family: Arial, sans-serif; }
+
+/* ── CHUYỂN LỐI XEM (nhu cầu ↔ bộ môn) ─────────────────────── */
+/* Hai lối xem CÙNG một bộ dữ liệu, khác cách xếp. Mặc định là "theo nhu cầu"
+   vì người mới không biết mình cần bộ môn nào; lối "theo bộ môn" giữ lại cho
+   người đã học tử vi — bỏ hẳn là mất nhóm đó. */
+.view-switch {
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+  margin-bottom: 22px;
+}
+.view-seg {
+  display: inline-flex; background: var(--bg-soft);
+  border: 1px solid var(--border-lt); border-radius: 8px; padding: 3px;
+}
+.view-seg button {
+  background: none; border: none; cursor: pointer;
+  padding: 8px 16px; border-radius: 6px;
+  font-family: 'Noto Serif', Georgia, serif; font-size: 14px;
+  color: var(--text-mid); transition: all .15s; white-space: nowrap;
+}
+.view-seg button:hover { color: var(--navy); }
+.view-seg button.on {
+  background: #fff; color: var(--navy); font-weight: 700;
+  box-shadow: 0 1px 3px rgba(6,26,46,0.12);
+}
+.view-hint { font-size: 12.5px; color: var(--text-lt); }
+
+/* ── NHÓM NHU CẦU ──────────────────────────────────────────── */
+.need-block { margin-bottom: 38px; scroll-margin-top: 80px; }
+.need-head {
+  display: flex; align-items: center; gap: 10px;
+  padding-bottom: 8px; margin-bottom: 14px;
+  border-bottom: 1px solid var(--border-lt);
+}
+.need-head .nh-ic {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 30px; height: 30px; flex-shrink: 0;
+  border-radius: 7px; background: var(--gold-lt); color: var(--gold);
+}
+.need-head .nh-ic svg { width: 17px; height: 17px; }
+.need-title {
+  font-family: 'Noto Serif', Georgia, serif; font-size: 19px;
+  color: var(--navy); font-weight: 700;
+}
+.need-sub { font-size: 12.5px; color: var(--text-lt); margin-left: auto; text-align: right; }
+/* Máy hẹp: để nguyên thì tiêu đề và dòng phụ chen nhau thành hai cột hẹp, cả
+   hai cùng xuống dòng. Cho dòng phụ tụt hẳn xuống dưới. */
+@media (max-width: 600px) {
+  .need-head { flex-wrap: wrap; }
+  .need-sub { margin-left: 0; width: 100%; text-align: left; }
+}
+
+/* Ở lối xem theo nhu cầu, thẻ lấy CÂU HỎI làm tiêu đề và đẩy tên bộ môn xuống
+   dòng phụ — tên môn vẫn phải còn, người biết nghề cần nó để tin. */
+.tool-q {
+  font-family: 'Noto Serif', Georgia, serif; font-size: 16px;
+  color: var(--navy); font-weight: 700; line-height: 1.45;
+}
+.tool-src {
+  font-size: 11px; color: var(--text-lt);
+  letter-spacing: .06em; text-transform: uppercase;
+}
 
 /* ── TAB NAV (sticky) ──────────────────────────────────────── */
 .tab-nav-wrap {
@@ -480,13 +541,21 @@ a { color: var(--blue); text-decoration: none; }
 <section class="section" style="padding-bottom:8px">
   <div class="page">
     <div class="section-eyebrow">Công Cụ Chuyên Sâu</div>
-    <h2 class="section-title">47 Công Cụ Mệnh Lý — Dùng Riêng Lẻ</h2>
+    <h2 class="section-title" id="toolsHeading">53 Công Cụ Mệnh Lý — Dùng Riêng Lẻ</h2>
     <p class="section-desc">Trợ lý ở <a href="/app" style="color:var(--gold-bright);font-weight:600">Luận Đường</a> đã gọi được hầu hết những công cụ này khi bạn hỏi. Hoặc chọn trực tiếp từng công cụ: luận giải lá số, tử bình, xem tướng, phong thủy, đặt tên, chọn ngày, bói bài…</p>
+
+    <div class="view-switch">
+      <div class="view-seg" id="viewSeg">
+        <button type="button" data-view="nhu-cau" class="on">Tôi đang lo chuyện gì</button>
+        <button type="button" data-view="bo-mon">Theo bộ môn</button>
+      </div>
+      <span class="view-hint" id="viewHint">Không cần biết bộ môn nào — chọn đúng việc bạn đang bận tâm.</span>
+    </div>
   </div>
 </section>
 
-<!-- ─── TAB NAVIGATION (sticky) ──────────────────────────── -->
-<div class="tab-nav-wrap">
+<!-- ─── TAB NAVIGATION (sticky) — chỉ hiện ở lối xem theo bộ môn ─── -->
+<div class="tab-nav-wrap" id="tabNavWrap" style="display:none">
   <div class="page">
     <div class="tab-nav" id="tabNav">
       <button class="tab-btn active" data-tab="tu-vi">Tử Vi</button>
@@ -513,8 +582,8 @@ a { color: var(--blue); text-decoration: none; }
 
 <!-- ─── SCRIPTS ──────────────────────────────────────────── -->
 <script src="/auth.js?v=2"></script>
-<script src="/tool-prices.js?v=2"></script>
-<script src="/tuvi-paywall.js?v=11"></script>
+<script src="/tool-prices.js?v=4"></script>
+<script src="/tuvi-paywall.js?v=18"></script>
 <script src="/nav.js?v=22"></script>
 <script src="/referral.js?v=1"></script>
 <script src="/footer.js"></script>
@@ -523,60 +592,13 @@ a { color: var(--blue); text-decoration: none; }
 // ─────────────────────────────────────────────────────────────
 // Tool URL mapping (tool_id → page path)
 // ─────────────────────────────────────────────────────────────
-const TOOL_URLS = {
-  // Luận Giải
-  'laso':              '/luan-giai.html',
-  'tu-binh':           '/tu-binh.html',
-  'xem-tuoi':          '/xem-tuoi.html',
-  'xem-lam-an':        '/xem-lam-an.html',
-  'xem-tuoi-sinh-con': '/tools/xem-tuoi-sinh-con.html',
-  'chan-dung-vo-chong': '/tools/chan-dung-vo-chong.html',
-  'chan-dung-tien-kiep': '/tools/chan-dung-tien-kiep.html',
-  // Phong Thủy
-  'phong-thuy':           '/tools/phong-thuy.html',
-  'ban-lam-viec':         '/tools/ban-lam-viec.html',
-  'cua-hang-phong-thuy':  '/tools/cua-hang-phong-thuy.html',
-  'phong-thuy-render':    '/tools/phong-thuy-render.html',
-  // Xem Tướng
-  'dien-tuong':       '/tools/tuong-mat-ai.html',
-  'nhan-tuong':       '/tools/nhan-tuong-ai.html',
-  'thu-tuong':        '/tools/thu-tuong-ai.html',
-  'thanh-tuong':      '/tools/thanh-tuong-ai.html',
-  'thanh-tuong-pro':  '/tools/thanh-tuong-pro.html',
-  'khi-sac':          '/tools/khi-sac-ai.html',
-  // Đặt Tên & Ngày
-  'dat-ten-con':      '/tools/dat-ten-con.html',
-  'dat-ten-dn':       '/tools/dat-ten-doanh-nghiep.html',
-  'chon-ngay-tot':    '/tools/chon-ngay-tot.html',
-  // Phong Cách AI
-  'da-lieu-ai':            '/tools/da-lieu-ai.html',
-  'kieu-toc-phan-tich':    '/tools/kieu-toc-ai.html',
-  'kieu-toc-tryon':        '/tools/kieu-toc-ai.html',
-  'mau-sac-hop-menh':      '/tools/mau-sac-hop-menh.html',
-  'personal-color':        '/tools/personal-color.html',
-  'personal-color-tryon':  '/tools/personal-color.html',
-  'trang-diem-phan-tich':  '/tools/trang-diem-ai.html',
-  'trang-diem-tryon':      '/tools/trang-diem-ai.html',
-  'trang-phuc-tryon':      '/tools/trang-phuc-tryon.html',
-  'trang-phuc-theo-ngay':  '/tools/trang-phuc-theo-ngay.html',
-  // Free — Tử Vi
-  'an-sao': '/tools/an-sao.html', 'sao-nam': '/tools/sao-nam.html',
-  'cach-cuc': '/tools/cach-cuc.html', 'dai-van': '/tools/dai-van.html',
-  'van-thang': '/tools/van-thang.html',
-  // Free — Mệnh Lý
-  'bat-trach': '/tools/bat-trach.html', 'nap-am': '/tools/nap-am.html',
-  'tuong-hop': '/tools/tuong-hop.html', 'kim-lau': '/kim-lau',
-  'ngu-hanh-ten': '/tools/ngu-hanh-ten.html', 'tu-tru': '/tools/tu-tru.html',
-  // Free — Lịch Số
-  'hoang-dao': '/tools/hoang-dao.html', 'ngay-tot': '/tools/ngay-tot.html',
-  'luc-nham': '/tools/luc-nham.html', 'han-nam': '/tools/han-nam.html',
-  // Free — Bói Bài + Huyền Học
-  'tarot': '/tools/tarot.html', 'oracle': '/tools/oracle.html',
-  'boi-bai-tay': '/tools/boi-bai-tay.html',
-  'kinh-dich': '/tools/kinh-dich.html', 'mai-hoa': '/tools/mai-hoa.html',
-  'ky-mon': '/tools/ky-mon.html', 'ban-do-sao': '/app/ban-do-sao',
-  'than-so-hoc': '/tools/than-so-hoc.html',
-};
+// Đường dẫn công cụ nay là DỮ LIỆU (`tool_pricing.page_path` / `app_path`).
+// Bản chép tay cũ ở đây còn ẩn luôn công cụ nào thiếu trong map, nên thêm công
+// cụ trong Admin xong nó vẫn không hiện ở đâu cho tới khi có người sửa file.
+function toolUrl(t) {
+  return (window.ToolPrices && window.ToolPrices.pagePath(t)) || '';
+}
+
 
 // Tab grouping — MIRRORS the top nav (nav.js) so panel & menu stay consistent.
 // DB category (tool_pricing.category) → tab. Unknown categories fall back to 'cong-cu'.
@@ -604,6 +626,21 @@ function tabOf(t) {
   return TOOL_TAB_OVERRIDE[t.tool_id] || CATEGORY_TO_TAB[t.category] || 'cong-cu';
 }
 
+// ─────────────────────────────────────────────────────────────
+// NHÓM NHU CẦU — nguồn chuẩn nằm ở BẢNG `tool_groups`, không phải file này
+// ─────────────────────────────────────────────────────────────
+// Trước đây danh sách nhóm là một mảng chép tay ngay tại đây, còn `/app` giữ
+// một mảng KHÁC xếp theo bộ môn — cùng một sản phẩm nói hai kiểu với cùng một
+// người. Nay cả ba bề mặt (`/cong-cu`, dashboard `/app`, sidebar Luận Đường)
+// đọc chung `ToolPrices.groups()` + `ToolPrices.groupsOf()`.
+//
+// Công cụ chưa khai `need_tags` KHÔNG biến mất: `groupsOf` suy nhóm từ
+// `category`, và nếu category cũng lạ thì nó rơi vào "Khác" ở cuối trang — cố
+// ý để nhìn thấy được, vì một công cụ tàng hình thì không ai biết là gán sai.
+function groupsOf(t) {
+  return window.ToolPrices ? window.ToolPrices.groupsOf(t) : [];
+}
+
 // Featured tool IDs — gold border for visual hierarchy (no commercial badge)
 const FEATURED = new Set(['laso', 'tu-binh', 'xem-tuoi', 'phong-thuy']);
 
@@ -614,6 +651,10 @@ const SUPABASE_URL  = 'https://dciwkfdqhhddeymlisey.supabase.co';
 const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRjaXdrZmRxaGhkZGV5bWxpc2V5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyMzQ2MzksImV4cCI6MjA4ODgxMDYzOX0._3aXoe0hO-46J1gASUiNv__tWjSzLZFTL0M3-47L26I';
 
 let _tools = null;
+// Lối xem hiện tại: 'nhu-cau' (mặc định) | 'bo-mon'. Mặc định là nhu cầu vì
+// người mới không biết mình cần bộ môn nào — đó chính là chỗ tắc của một trang
+// có 53 công cụ. Lối bộ môn giữ nguyên cho người đã học tử vi.
+let _view = 'nhu-cau';
 // đ cho 1 Lượng khi hiện giá công cụ — suy từ gói phổ biến (gói thứ hai theo
 // sort_order). `null` = chưa biết → GIẤU cột quy đổi thay vì nhân với một hằng
 // số: bản trước để 2.500đ (đơn giá bảng giá cũ) nên báo đắt gấp gần 3 lần.
@@ -636,16 +677,76 @@ async function loadTools() {
     _tools = window.ToolPrices ? window.ToolPrices.rows() : [];
     if (!_tools?.length) { document.getElementById('tabContent').innerHTML = '<div class="tools-loading">Không có dữ liệu.</div>'; return; }
 
+    // Dòng KHÔNG có đường dẫn thì không dựng thẻ. Trước đây chúng vẫn ra một thẻ
+    // trỏ `href="#"` — bấm vào không đi đâu cả; `rail-message` (đơn giá mỗi tin
+    // nhắn của rail, không phải công cụ có trang) đang nằm đúng dạng đó trong tab
+    // "Công Cụ". Cảnh báo ra console để công cụ MỚI thiếu URL thì lộ ngay, chứ
+    // không im lặng biến mất.
+    const missing = _tools.filter(t => !toolUrl(t)).map(t => t.tool_id);
+    if (missing.length) console.warn('[cong-cu] thiếu page_path/app_path, đã ẩn:', missing.join(', '));
+    _tools = _tools.filter(t => toolUrl(t));
+
+    // Số công cụ trong tiêu đề đọc TỪ DỮ LIỆU. Số viết cứng trong HTML chỉ để
+    // crawler và lượt tải đầu có cái mà đọc — nó đã kịp lệch một lần (ghi 47
+    // trong khi bảng có 53) vì bật/tắt tool là việc làm dưới Admin, không ai
+    // nhớ quay lại sửa trang.
+    const heading = document.getElementById('toolsHeading');
+    if (heading) heading.textContent = _tools.length + ' Công Cụ Mệnh Lý — Dùng Riêng Lẻ';
+
     // Update free count badge
     const freeCount = _tools.filter(t => t.is_free).length;
     document.getElementById('freeCount').textContent = freeCount;
 
-    renderActiveTab();
+    renderCurrentView();
   } catch(e) {
     console.error('[loadTools]', e);
     document.getElementById('tabContent').innerHTML = '<div class="tools-loading"><span data-icon="alert-triangle" style="display:inline-flex;width:14px;height:14px;vertical-align:middle"></span> Không tải được. Vui lòng F5 thử lại.</div>';
     if (window.mountIcons) window.mountIcons(document.getElementById('tabContent'));
   }
+}
+
+function renderCurrentView() {
+  if (!_tools) return;
+  if (_view === 'nhu-cau') renderNeedView();
+  else renderActiveTab();
+}
+
+// Lối xem theo NHU CẦU — mọi nhóm hiện cùng lúc, cuộn dọc, không tab.
+// CỐ Ý không giấu nhóm sau tab: người chưa biết mình cần gì thì phải NHÌN THẤY
+// các lựa chọn, tab lại bắt họ đoán trước khi được xem.
+function renderNeedView() {
+  const seen = new Set();
+  let html = '';
+
+  (window.ToolPrices ? window.ToolPrices.groups() : []).forEach(g => {
+    const items = _tools.filter(t => groupsOf(t).includes(g.key));
+    if (!items.length) return;
+    items.forEach(t => seen.add(t.tool_id));
+    html += needBlockHtml(g, items);
+  });
+
+  const rest = _tools.filter(t => !seen.has(t.tool_id));
+  if (rest.length) {
+    html += needBlockHtml(
+      { key: 'khac', icon: 'layout-grid', title: 'Khác', subtitle: 'Chưa xếp vào nhóm nào' },
+      rest
+    );
+  }
+
+  const host = document.getElementById('tabContent');
+  host.innerHTML = html || '<div class="tools-loading">Không có công cụ nào.</div>';
+  if (window.mountIcons) window.mountIcons(host);
+}
+
+function needBlockHtml(g, items) {
+  return '<div class="need-block" id="need-' + g.key + '">' +
+    '<div class="need-head">' +
+      '<span class="nh-ic" data-icon="' + esc(g.icon || 'layout-grid') + '"></span>' +
+      '<span class="need-title">' + esc(g.title) + '</span>' +
+      '<span class="need-sub">' + esc(g.subtitle || '') + ' · ' + items.length + ' công cụ</span>' +
+    '</div>' +
+    '<div class="tools-grid">' + items.map(t => toolCardHtml(t, true)).join('') + '</div>' +
+  '</div>';
 }
 
 function renderActiveTab() {
@@ -673,11 +774,14 @@ function renderToolGrid(tools, isFreeTab) {
       subGroups[t.category].push(t);
     });
     Object.entries(subGroups).forEach(([cat, items]) => {
-      html += '<div style="margin-top:24px;font-family:\'Noto Serif\',serif;font-size:14px;color:var(--gold);letter-spacing:.15em;text-transform:uppercase;margin-bottom:12px;padding-bottom:6px;border-bottom:1px solid var(--border-lt)">' + cat + ' · ' + items.length + ' công cụ</div>';
-      html += '<div class="tools-grid">' + items.map(toolCardHtml).join('') + '</div>';
+      html += '<div style="margin-top:24px;font-family:\'Noto Serif\',serif;font-size:14px;color:var(--gold);letter-spacing:.15em;text-transform:uppercase;margin-bottom:12px;padding-bottom:6px;border-bottom:1px solid var(--border-lt)">' + esc(cat) + ' · ' + items.length + ' công cụ</div>';
+      html += '<div class="tools-grid">' + items.map(t => toolCardHtml(t, false)).join('') + '</div>';
     });
   } else {
-    html = '<div class="tools-grid">' + tools.map(toolCardHtml).join('') + '</div>';
+    // ⚠️ KHÔNG viết `tools.map(toolCardHtml)`: map truyền (item, INDEX, mảng) nên
+    // index trở thành cờ `byNeed` — thẻ đầu (index 0) đúng, mọi thẻ sau lại dựng
+    // theo lối nhu cầu. Lỗi kiểu này không ném gì, chỉ hiện sai từ thẻ thứ hai.
+    html = '<div class="tools-grid">' + tools.map(t => toolCardHtml(t, false)).join('') + '</div>';
   }
   document.getElementById('tabContent').innerHTML = html;
 }
@@ -697,8 +801,11 @@ function toolIcon(raw) {
   return raw || ''; // nav.js chưa nạp được: đưa nguyên liệu thô, không dựng gì thêm
 }
 
-function toolCardHtml(t) {
-  const url = TOOL_URLS[t.tool_id] || '#';
+// `byNeed` = đang ở lối xem theo nhu cầu ⇒ CÂU HỎI làm tiêu đề, tên bộ môn tụt
+// xuống dòng phụ. Ở lối xem theo bộ môn thì ngược lại (tên môn là thứ người ta
+// đang tìm). Cùng một bộ dữ liệu, chỉ đổi thứ đặt lên trước.
+function toolCardHtml(t, byNeed) {
+  const url = toolUrl(t) || '#';
   const featured = FEATURED.has(t.tool_id) ? ' featured' : '';
   const priceHtml = t.is_free
     ? '<span class="tool-price-free">Miễn Phí</span>'
@@ -706,14 +813,27 @@ function toolCardHtml(t) {
         '<div class="tool-price-credits">' + t.credits + ' Lượng</div>' +
         (_vndPerCredit ? '<div class="tool-price-vnd">' + formatVnd(Math.ceil((t.credits * _vndPerCredit) / 1000) * 1000) + '</div>' : '') +
       '</div>';
+  // Chưa gán `question` thì lùi về nhãn cũ — thiếu dữ liệu không được làm mất thẻ.
+  const head = byNeed && t.question
+    ? '<div class="tool-q">' + esc(t.question) + '</div>' +
+      '<div class="tool-src">' + esc(t.label) + '</div>'
+    : '<div class="tool-name">' + esc(t.label) + '</div>' +
+      '<div class="tool-desc">' + esc(t.description || '') + '</div>';
   return '<a href="' + url + '" class="tool-card' + featured + '">' +
     '<div class="tool-icon">' + toolIcon(t.icon) + '</div>' +
-    '<div class="tool-name">' + t.label + '</div>' +
-    '<div class="tool-desc">' + (t.description || '') + '</div>' +
+    head +
     '<div class="tool-footer">' + priceHtml +
       '<div class="tool-cta">Mở →</div>' +
     '</div>' +
   '</a>';
+}
+
+// Nhãn/mô tả/câu hỏi đều do admin gõ tay dưới DB ⇒ đổ thẳng vào innerHTML là mở
+// đường chèn thẻ bằng chính quyền của người đang xem trang.
+function esc(s) {
+  return String(s == null ? '' : s)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
 }
 
 function formatVnd(vnd) {
@@ -725,9 +845,39 @@ function formatVnd(vnd) {
 // ─────────────────────────────────────────────────────────────
 // Tab switching
 // ─────────────────────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────
+// Chuyển lối xem
+// ─────────────────────────────────────────────────────────────
+const VIEW_HINTS = {
+  'nhu-cau': 'Không cần biết bộ môn nào — chọn đúng việc bạn đang bận tâm.',
+  'bo-mon': 'Xếp theo môn: Tử Vi, Tử Bình, Xem Tướng, Phong Thuỷ…',
+};
+
+function setView(view, opts) {
+  _view = view === 'bo-mon' ? 'bo-mon' : 'nhu-cau';
+  document.querySelectorAll('#viewSeg button').forEach(b => {
+    b.classList.toggle('on', b.dataset.view === _view);
+  });
+  // Thanh tab chỉ có nghĩa ở lối xem theo bộ môn; để nó dính trên đầu khi đang
+  // xem theo nhu cầu là chiếm chỗ cho một thứ không bấm được.
+  document.getElementById('tabNavWrap').style.display = _view === 'bo-mon' ? '' : 'none';
+  document.getElementById('viewHint').textContent = VIEW_HINTS[_view];
+  renderCurrentView();
+  if (!opts || !opts.silent) {
+    history.replaceState(null, '', _view === 'bo-mon' ? '#bo-mon' : location.pathname);
+  }
+}
+
+document.getElementById('viewSeg').addEventListener('click', (e) => {
+  const btn = e.target.closest('button[data-view]');
+  if (!btn || btn.dataset.view === _view) return;
+  setView(btn.dataset.view);
+});
+
 function switchToTab(tabId) {
   const target = document.querySelector('[data-tab="' + tabId + '"]');
   if (!target) return;
+  if (_view !== 'bo-mon') setView('bo-mon', { silent: true });
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
   target.classList.add('active');
   renderActiveTab();
@@ -757,13 +907,20 @@ document.getElementById('freeAllLink')?.addEventListener('click', (e) => {
   switchToTab('mien-phi');
 });
 
-// Restore tab from URL hash on load
-function restoreTabFromHash() {
+// Khôi phục lối xem + tab từ hash. Link cũ dạng `#tu-vi` (đã chia sẻ, đã nằm
+// trong lịch sử duyệt, và nav.js đang trỏ tới) PHẢI vẫn mở đúng tab đó ⇒ hash
+// là một TAB_ID thì tự bật luôn lối xem theo bộ môn.
+function restoreViewFromHash() {
   const hash = window.location.hash.replace('#', '');
   if (hash && TAB_IDS.has(hash)) {
     document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
     const target = document.querySelector('[data-tab="' + hash + '"]');
     if (target) target.classList.add('active');
+    setView('bo-mon', { silent: true });
+  } else if (hash === 'bo-mon') {
+    setView('bo-mon', { silent: true });
+  } else {
+    setView('nhu-cau', { silent: true });
   }
 }
 
@@ -780,7 +937,7 @@ if (typeof TuviPaywall !== 'undefined') {
 // ─────────────────────────────────────────────────────────────
 // Init
 // ─────────────────────────────────────────────────────────────
-restoreTabFromHash();
+restoreViewFromHash();
 loadTools();
 </script>
 

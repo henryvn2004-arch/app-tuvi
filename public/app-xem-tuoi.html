@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"></noscript>
-<link rel="stylesheet" href="/shell.css?v=16">
+<link rel="stylesheet" href="/shell.css?v=18">
 <link rel="stylesheet" href="/laso-chart.css?v=3">
 <style>
 .form-card{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);max-width:720px}
@@ -56,14 +56,14 @@
 .fac-bar i{display:block;height:100%;border-radius:5px}
 .fac-ab{display:flex;gap:8px;font-size:11.5px;color:var(--text-lt)}
 .fac-ab span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.fac-ab .pa{color:var(--red)}.fac-ab .pb{color:var(--blue)}
+.fac-ab .pa{color:var(--tx-red)}.fac-ab .pb{color:var(--tx-blue)}
 .who-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px}
 .who-card{flex:1;min-width:180px;background:var(--white);border:1px solid var(--line);border-radius:10px;padding:11px 13px;box-shadow:var(--shadow)}
 .who-card .nm{font-family:var(--serif);font-size:14px;font-weight:600;display:flex;align-items:center;gap:7px}
 .who-card .meta{font-size:12px;color:var(--text-lt);margin-top:4px;line-height:1.6}
 .who-card .meta b{color:var(--text-mid)}
 .ask{margin-top:12px;display:inline-flex;align-items:center;gap:7px;font-size:12.5px;color:var(--gold-soft);border:1px dashed var(--gold-soft);border-radius:8px;padding:7px 12px;cursor:pointer;background:var(--gold-lt);font-family:inherit}
-.laso-error{color:var(--red);padding:14px;border:1px solid var(--red);border-radius:10px;background:var(--white)}
+.laso-error{color:var(--tx-red);padding:14px;border:1px solid var(--red);border-radius:10px;background:var(--white)}
 .laso-pair{display:flex;flex-direction:column;gap:20px}
 .laso-one{min-width:0}
 .laso-cap{font-family:var(--serif);font-weight:700;font-size:14px;margin-bottom:8px;display:flex;align-items:center;gap:7px}
@@ -81,16 +81,6 @@
 .xt-unlock{background:var(--white);border:1px solid var(--gold-soft);border-radius:11px;padding:18px 20px;margin-bottom:22px;text-align:center}
 .xt-unlock p{font-size:12.5px;color:var(--text-lt);margin-top:8px}
 .xt-progress{font-size:12.5px;color:var(--text-lt);margin-bottom:16px;padding:10px 0;border-bottom:1px solid var(--line)}
-.xt-pdf-bar{display:none;margin:24px 0;text-align:center}
-.xt-pdf-bar.visible{display:block}
-@media print{
-  .sb,.rail,.ws-top,#introHost,#shellRecent,.mobile-only,.jump,.xt-unlock,.xt-progress,.ask,.xt-pdf-bar,.tabbar{display:none!important}
-  .shell{display:block!important;height:auto!important}
-  .ws{overflow:visible!important}
-  .ws-body{padding:0!important}
-  .sec{page-break-inside:avoid;break-inside:avoid}
-  body{font-size:12pt}
-}
 </style>
 </head>
 <body>
@@ -126,7 +116,7 @@
         <button class="btn-go" id="btnGo" onclick="doCompat()">So tuổi →</button>
       </div>
 
-      <div id="xtPanel">
+      <div id="xtPanel" data-ws-result>
         <div class="verdict" id="xtVerdict"></div>
         <div class="who-row" id="xtWho"></div>
         <div class="jump" id="xtJump"></div>
@@ -136,7 +126,6 @@
         </div>
         <div class="xt-progress" id="xtProgress" style="display:none"></div>
         <div class="xt-body" id="xtBody"></div>
-        <div class="xt-pdf-bar" id="xtPdfBar"><button class="btn" onclick="window.print()">⬇ Tải PDF</button></div>
       </div>
     </div>
   </main>
@@ -163,9 +152,10 @@
 <script src="/tuong-hop.js?v=1"></script>
 <script src="/tuvi-form.js?v=1"></script>
 <script src="/auth.js?v=2"></script>
-<script src="/tuvi-paywall.js?v=11"></script>
+<script src="/tuvi-paywall.js?v=18"></script>
   <script src="/nav.js?v=22" data-icons-only></script>
-<script src="/shell.js?v=56"></script>
+<script src="/shell.js?v=68"></script>
+<script src="/tools-shared/ai-loading-steps.js?v=5"></script>
 <script>
 // ── MODE: 1 trang phục vụ 3 route — /app/xem-tuoi (vợ chồng), /app/xem-lam-an
 // (hợp tác làm ăn), /app/tuong-hop (hai người bất kỳ). Cùng bộ máy calcTuongHop;
@@ -412,6 +402,7 @@ function buildSlug(result,product){
 }
 
 var _pendingSlug=null, _currentPhan=-1, _xemTuoiStore={}, _compatResult=null, _compatNameA='', _compatNameB='';
+var _xtPace=(window.AiLoadingSteps&&AiLoadingSteps.pacer)?AiLoadingSteps.pacer():null;
 
 // Xây prompt cho 1 phần (idx 0=Tổng Quan, 1-8=từng chiều) — port nguyên từ
 // xem-tuoi.html:luanGiaiSection, dùng chung cho cả xem-tuoi/xem-lam-an.
@@ -503,7 +494,6 @@ async function initXemTuoiGate(result,nameA,nameB){
   _xemTuoiStore={};
   document.getElementById('xtUnlock').style.display='block';
   document.getElementById('xtProgress').style.display='none';
-  document.getElementById('xtPdfBar').classList.remove('visible');
 }
 
 async function initiateXemTuoiChuyenSau(){
@@ -514,21 +504,38 @@ async function _startXemTuoiAI(){
   document.getElementById('xtUnlock').style.display='none';
   document.getElementById('xtProgress').style.display='block';
   _currentPhan=-1; _xemTuoiStore={};
+  _xtPace&&_xtPace.reset();
   await _loadNextPhanAI();
 }
 async function _loadNextPhanAI(){
   if(_currentPhan>=8){
     document.getElementById('xtProgress').textContent='✓ Luận giải hoàn tất';
-    document.getElementById('xtPdfBar').classList.add('visible');
     _saveXemTuoiResult();
     return;
   }
   _currentPhan++;
   var idx=_currentPhan;
   var m=idx===0?null:_compatResult.items[idx-1];
-  document.getElementById('xtProgress').textContent='Đang luận giải phần '+(idx+1)+' / 9...';
+  // ETA tự hiệu chỉnh — đo nhịp ngay trong phiên, không hứa theo số chép cứng.
+  var _eta=_xtPace?_xtPace.remainText(9-idx):'';
+  document.getElementById('xtProgress').textContent=
+    'Đang luận giải phần '+(idx+1)+' / 9'+(_eta?' · '+_eta:'...');
+  _xtPace&&_xtPace.begin();
   var box=document.getElementById('claude-content-'+idx);
-  if(box){ box.style.display='block'; box.innerHTML='<div class="phan-empty">Đang luận giải…</div>'; }
+  // Chờ MỘT CỤC ≥10 giây ⇒ orb (luật ở đầu ai-loading-steps.js). expectSec:0 vì
+  // chưa đo được thời lượng một phần — chỉ đếm giây, không hứa bao giờ xong.
+  var w=null;
+  if(box){
+    box.style.display='block';
+    box.innerHTML='<div class="phan-empty">Đang luận giải…</div>';
+    if(window.AiLoadingSteps&&AiLoadingSteps.mountWait){
+      w=AiLoadingSteps.mountWait(box,{label:'Đang luận giải phần '+(idx+1)+'…',
+        expectSec:(_xtPace&&_xtPace.perPartSec())||0,expectText:(_xtPace&&_xtPace.perPartText())||''});
+      w.start();
+    }
+  }
+  // PHẢI stop trước mọi lượt ghi đè `box`.
+  var doneWait=function(){ if(w){ w.stop(); w=null; } };
   var secEl=document.getElementById('sec-'+idx);
   if(secEl)secEl.scrollIntoView({behavior:'smooth',block:'start'});
   try{
@@ -543,8 +550,11 @@ async function _loadNextPhanAI(){
     var data=await resp.json();
     var text=data.luanGiai||'';
     _xemTuoiStore[idx]=text;
+    _xtPace&&_xtPace.end();   // chỉ ghi nhịp ở nhánh THÀNH CÔNG
+    doneWait();
     if(box)box.innerHTML=text.split('\n\n').filter(Boolean).map(function(p){return '<p>'+p+'</p>';}).join('');
   }catch(e){
+    doneWait();
     if(box)box.innerHTML='<div class="laso-error">Lỗi khi luận giải phần '+(idx+1)+': '+esc(e.message)+' <button class="btn" onclick="window._xtRetryPhan()">↻ Thử lại</button></div>';
     return;
   }
@@ -573,7 +583,6 @@ function showForm(){
   document.getElementById('btnEdit').style.display='none';
   document.getElementById('xtUnlock').style.display='none';
   document.getElementById('xtProgress').style.display='none';
-  document.getElementById('xtPdfBar').classList.remove('visible');
   Shell.setShareable(null);
 }
 function applyMode(){

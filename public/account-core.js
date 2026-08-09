@@ -109,6 +109,19 @@ function setupTabs() {
       if (btn.dataset.tab === 'ketnoi') loadKetnoi();
     });
   });
+  // Mở thẳng một tab qua địa chỉ: `/profile.html#ketnoi`. Trước đây tab chỉ đổi
+  // được bằng cú bấm, nên MỌI liên kết từ nơi khác đều đổ người ta xuống tab
+  // Lịch Sử rồi để họ tự đi tìm — thẻ nhiệm vụ M3 trỏ tới đây là gặp đúng chỗ
+  // đó. Chỉ nhận đúng tên tab đã khai (không phải chuỗi tự do từ URL).
+  openTabFromHash();
+  window.addEventListener('hashchange', openTabFromHash);
+}
+
+function openTabFromHash() {
+  const key = String(location.hash || '').replace(/^#/, '').trim();
+  if (!key) return;
+  const btn = document.querySelector('.tab-btn[data-tab="' + CSS.escape(key) + '"]');
+  if (btn) btn.click();
 }
 
 // ── LOAD HISTORY ──

@@ -41,9 +41,23 @@ test.describe('Homepage', () => {
 });
 
 test.describe('Trang Công cụ (/cong-cu)', () => {
-  test('tabs catalog render', async ({ page }) => {
+  test('catalog render', async ({ page }) => {
     await page.goto('/cong-cu');
     await page.waitForLoadState('networkidle');
+    // Thứ phải luôn có, bất kể lối xem nào đang bật: lưới công cụ.
+    await expect(page.locator('.tool-card').first()).toBeVisible();
+  });
+
+  test('thanh tab bộ môn bấm tới được', async ({ page }) => {
+    await page.goto('/cong-cu');
+    await page.waitForLoadState('networkidle');
+    // ⚠️ Bộ E2E này chạy thẳng vào PROD (xem playwright.yml), nên spec phải đúng
+    // với CẢ bản đang chạy lẫn bản trong PR — nếu không thì hoặc CI đỏ oan trước
+    // khi merge, hoặc xanh giả rồi vỡ ngay sau khi deploy.
+    // Bản mới mặc định mở lối "theo nhu cầu" và giấu thanh tab sau nút chuyển;
+    // bản cũ không có nút đó và tab hiện sẵn.
+    const seg = page.locator('#viewSeg button[data-view="bo-mon"]');
+    if (await seg.count()) await seg.click();
     await expect(page.locator('.tab-btn').first()).toBeVisible();
   });
 });

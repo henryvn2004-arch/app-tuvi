@@ -19,7 +19,7 @@ const OPENAI_KEY    = process.env.OPENAI_API_KEY!;
 const ARTICLES_PER_RUN = 1;
 
 async function sbFetch(path: string, opts: RequestInit = {}) {
-  const res = await fetch(`${SUPABASE_URL}/rest/v1${path}`, {
+  const res = await fetch(`${SUPABASE_URL}/rest/v1${path}`, { cache: 'no-store',
     ...opts,
     headers: { 'Content-Type':'application/json', 'apikey':SUPABASE_KEY, 'Authorization':`Bearer ${SUPABASE_KEY}`, ...(opts.headers as Record<string,string>||{}) },
   });
@@ -136,7 +136,7 @@ Trả về JSON thuần (KHÔNG backtick):
     output_tokens: r.usage.output_tokens,
     cache_creation_input_tokens: 0,
     cache_read_input_tokens: 0,
-  });
+  }, r.durationMs);
   const article = parseLlmJson(r.text) as KhaoLuanArticle | null;
   if (!article) {
     console.warn(

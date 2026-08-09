@@ -17,7 +17,7 @@ const ARTICLES_PER_RUN = 1;
 
 // ── Supabase helper ────────────────────────────────────────────────────────────
 async function sbFetch(path: string, opts: RequestInit = {}) {
-  const res = await fetch(`${SUPABASE_URL}/rest/v1${path}`, {
+  const res = await fetch(`${SUPABASE_URL}/rest/v1${path}`, { cache: 'no-store',
     ...opts,
     headers: {
       'Content-Type': 'application/json',
@@ -154,7 +154,7 @@ async function callLlm(
     output_tokens: r.usage.output_tokens,
     cache_creation_input_tokens: 0,
     cache_read_input_tokens: 0,
-  });
+  }, r.durationMs);
   return r.text.trim();
 }
 

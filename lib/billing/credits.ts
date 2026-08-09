@@ -44,6 +44,7 @@ export async function getUserFromToken(token: string): Promise<AuthUser | null> 
   try {
     const res = await fetch(`${SUPABASE_URL}/auth/v1/user`, {
       headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${token}` },
+      cache: 'no-store',
     });
     if (!res.ok) return null;
     const u = (await res.json()) as { id?: string; email?: string };
@@ -59,7 +60,7 @@ export async function getBalance(userId: string): Promise<number> {
   try {
     const res = await fetch(
       `${SUPABASE_URL}/rest/v1/user_credits?user_id=eq.${encodeURIComponent(userId)}&select=balance&limit=1`,
-      { headers: SB_HEADERS },
+      { headers: SB_HEADERS, cache: 'no-store' },
     );
     if (!res.ok) return 0;
     const rows = (await res.json()) as { balance?: number }[];
@@ -132,6 +133,12 @@ export async function logTransaction(p: {
  * một lượt mua (vd Chân Dung Tiền Kiếp chạy song song 2 pha story+image) vẫn
  * qua được, không cần cơ chế "tiêu thụ một lần" phức tạp.
  */
+// ⚠️ `cache:'no-store'` ở ba lượt GET dưới KHÔNG phải phòng xa: Next bọc `fetch`
+// toàn cục và nhớ kết quả kể cả trong route `force-dynamic` (đã trả giá ở
+// `/ket-qua/[id]` và ở đường giám sát cron). Riêng chỗ này còn có đường tự đầu
+// độc: `handleDeduct` gọi CHÍNH `hasSlugAccess` với ĐÚNG URL đó ngay TRƯỚC khi
+// ghi giao dịch — kết quả rỗng bị nhớ lại, rồi route tool hỏi cùng URL và nhận
+// lại bản rỗng ⇒ user vừa trả tiền xong vẫn ăn 402.
 export async function hasSlugAccess(userId: string, slug: string): Promise<boolean> {
   if (!SUPABASE_URL || !SUPABASE_KEY || !userId || !slug) return false;
   try {
@@ -139,7 +146,7 @@ export async function hasSlugAccess(userId: string, slug: string): Promise<boole
       `${SUPABASE_URL}/rest/v1/credit_transactions` +
         `?user_id=eq.${encodeURIComponent(userId)}` +
         `&slug=eq.${encodeURIComponent(slug)}&amount=lt.0&limit=1&select=id`,
-      { headers: SB_HEADERS },
+      { headers: SB_HEADERS, cache: 'no-store' },
     );
     if (!res.ok) return false;
     return ((await res.json()) as unknown[]).length > 0;
@@ -168,7 +175,7 @@ async function hasRecentToolPayment(
         `?user_id=eq.${encodeURIComponent(userId)}` +
         `&slug=like.${encodeURIComponent(toolId + '*')}` +
         `&amount=lt.0&created_at=gte.${encodeURIComponent(since)}&limit=1&select=id`,
-      { headers: SB_HEADERS },
+      { headers: SB_HEADERS, cache: 'no-store' },
     );
     if (!res.ok) return false;
     return ((await res.json()) as unknown[]).length > 0;

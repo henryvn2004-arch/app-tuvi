@@ -38,6 +38,11 @@ const SB_HEADERS = {
 export const HISTORY_TABLE = {
   'chan-dung-vo-chong': 'spouse_portraits',
   'chan-dung-tien-kiep': 'past_life_portraits',
+  'duyen-no-tien-kiep': 'past_life_bonds',
+  'nguoi-khac': 'nguoi_khac_reports',
+  'day-con': 'day_con_reports',
+  'nhan-mach': 'nhan_mach_reports',
+  'huong-nghiep-tre': 'huong_nghiep_tre_reports',
 } as const;
 
 export type PortraitToolId = keyof typeof HISTORY_TABLE;
@@ -141,6 +146,11 @@ export async function getCachedPortrait(
  * hai người cùng lá số bấm cùng lúc thì bản về đích trước thắng, bản sau bị bỏ
  * qua chứ KHÔNG ghi đè — nếu ghi đè thì người đầu tiên xem lại sẽ thấy kết quả
  * đã đổi.
+ *
+ * ⚠️ `overwrite` CHỈ dùng cho một việc: dòng cũ mang SHAPE payload đã lỗi thời
+ * (tool đổi cấu trúc trả về) nên vừa được dựng lại. Không có nó thì lượt ghi bị
+ * bỏ qua im lặng ⇒ mỗi lượt xem lại đốt thêm một lượt model mà dòng hỏng vẫn
+ * nằm nguyên. KHÔNG dùng để "làm mới" nội dung — xem luật một-lá-số-một-kết-quả.
  */
 export async function putCachedPortrait(
   toolId: PortraitToolId,
@@ -148,12 +158,16 @@ export async function putCachedPortrait(
   key: string,
   entry: CachedPortrait,
   userId: string,
+  overwrite = false,
 ): Promise<void> {
   if (!ready() || !key) return;
   try {
     await fetch(`${SUPABASE_URL}/rest/v1/portrait_cache`, {
       method: 'POST',
-      headers: { ...SB_HEADERS, Prefer: 'return=minimal,resolution=ignore-duplicates' },
+      headers: {
+        ...SB_HEADERS,
+        Prefer: `return=minimal,resolution=${overwrite ? 'merge' : 'ignore'}-duplicates`,
+      },
       body: JSON.stringify({
         tool_id: toolId,
         phase,

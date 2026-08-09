@@ -96,7 +96,7 @@ export async function inCooldown(actionType: AutopilotActionType, target: string
   try {
     const res = await fetch(
       `${SUPABASE_URL}/rest/v1/autopilot_actions?action_type=eq.${actionType}&target=eq.${encodeURIComponent(target)}&mode=eq.live&ts=gte.${since}&select=id&limit=1`,
-      { headers: SB_HEADERS },
+      { cache: 'no-store', headers: SB_HEADERS },
     );
     if (!res.ok) return false;
     const rows: unknown[] = await res.json();
@@ -113,7 +113,7 @@ export async function notifyUserBestChannel(userId: string, text: string): Promi
   try {
     const linkRes = await fetch(
       `${SUPABASE_URL}/rest/v1/chat_links?platform=eq.telegram&user_id=eq.${userId}&select=external_id&limit=1`,
-      { headers: SB_HEADERS },
+      { cache: 'no-store', headers: SB_HEADERS },
     );
     const linkRows: { external_id: string }[] = linkRes.ok ? await linkRes.json() : [];
     if (linkRows.length) {
@@ -126,7 +126,7 @@ export async function notifyUserBestChannel(userId: string, text: string): Promi
   try {
     const FIREBASE_SA = process.env.FIREBASE_SERVICE_ACCOUNT || '';
     if (!FIREBASE_SA) return 'none';
-    const tokRes = await fetch(`${SUPABASE_URL}/rest/v1/push_tokens?user_id=eq.${userId}&enabled=eq.true&select=token`, {
+    const tokRes = await fetch(`${SUPABASE_URL}/rest/v1/push_tokens?user_id=eq.${userId}&enabled=eq.true&select=token`, { cache: 'no-store',
       headers: SB_HEADERS,
     });
     const tokRows: { token: string }[] = tokRes.ok ? await tokRes.json() : [];

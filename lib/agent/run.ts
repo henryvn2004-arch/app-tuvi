@@ -23,7 +23,7 @@ import { computeLaso, renderLasoCard } from '@/lib/engine/laso';
 import { computeTuBinh } from '@/lib/engine/tubinh';
 import { computeSinhCon, computeChonNgay, computeDatTen, computeDatTenDn } from '@/lib/engine/diachi';
 // Template prompt + context formatter dùng CHUNG với /api/lasotuvi (một bộ não).
-import { CHAT_SYSTEM_LASO, CHAT_SYSTEM_GENERAL, extractLasoContext, buildChatContext, focusHint, nguoiXemLine } from '@/lib/agent/prompts';
+import { CHAT_SYSTEM_LASO, CHAT_SYSTEM_GENERAL, extractLasoContext, buildChatContext, focusHint, nguoiXemLine, RAIL_MAX_TOKENS } from '@/lib/agent/prompts';
 import { TOOLS_INSTRUCTION } from '@/lib/agent/tools';
 import { type ChatConfig } from '@/lib/config/appConfig';
 import {
@@ -39,6 +39,17 @@ import {
 import { logLlmUsage, type LlmUsage } from '@/lib/agent/usage';
 import { computePastLife } from '@/lib/engine/past-life';
 import { pastLifeRailWrapper } from '@/lib/agent/past-life-story';
+import { computeGroupBond, groupPairAsBond } from '@/lib/engine/past-life-bond';
+import { bondRailWrapper, groupRailWrapper, MAX_BOND_MEMBERS } from '@/lib/agent/past-life-bond-story';
+import { computeNguoiKhac, resolveQuanHe } from '@/lib/engine/nguoi-khac';
+import { nguoiKhacRailWrapper } from '@/lib/agent/nguoi-khac-prompt';
+import { computeDayCon, resolveMoiLo } from '@/lib/engine/day-con';
+import { dayConRailWrapper } from '@/lib/agent/day-con-prompt';
+import {
+  computeHuongNghiepTre,
+  resolveMoiLo as resolveMoiLoTre,
+} from '@/lib/engine/huong-nghiep-tre';
+import { huongNghiepTreRailWrapper } from '@/lib/agent/huong-nghiep-tre-prompt';
 
 const ANTHROPIC_URL = 'https://api.anthropic.com/v1/messages';
 const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY!;
@@ -130,10 +141,19 @@ type ProviderOutcome = { ok: true; result: AgentResult } | { ok: false; midStrea
 // ── Agent loop ──────────────────────────────────────────────
 export async function runAgent(
   req: ChatRequestV1,
-  cfg: ChatConfig,
+  cfgIn: ChatConfig,
   send: (s: string) => void,
   profiles: ProfilePort | null = null,
 ): Promise<AgentResult> {
+  // Trần token của MỘT lượt rail. 🔴 Trước đây runAgent dùng THẲNG cfg.maxTokens
+  // (app_config['chat.max_tokens'], prod = 3000) và BỎ QUA con số mà
+  // buildChatContext trả về — nên mọi trần per-prompt chỉ có tác dụng cho route
+  // legacy /api/lasotuvi, còn rail thật sự chạy tới 3000. Đo trên `events`: một
+  // lượt rail `cong-so` THẬT trả về 1.982 token output cho một câu hỏi. Nay lấy
+  // min(cfg, per-prompt) → con số per-prompt mới thật sự chặn, và admin vẫn
+  // siết thêm được bằng cách HẠ chat.max_tokens (không nâng ngược lên được —
+  // độ dài rail là quyết định sản phẩm, nằm ở code).
+  let railMaxTokens = RAIL_MAX_TOKENS;
   // Seed ctx với birth đang xem (req.birth) → "lưu lá số này tên X" chạy được cả
   // khi lượt này không gọi lại lap_la_so. profiles bật 3 tool sổ (kênh chat).
   const ctx = newToolContext(null, { profiles, birth: req.birth ?? null });
@@ -206,10 +226,15 @@ export async function runAgent(
     }
     const bc = buildChatContext(scenarioToBody(scn, req.messages as ChatMessage[]));
     system = bc.systemForCall;
+    railMaxTokens = Math.min(railMaxTokens, bc.maxTokens);
     // Bát Tự 1 người: đẩy "Người xem" (tên+giới tính từ birth) vào system → xưng
     // hô đúng (luật XƯNG_HO_RULE trong CHAT_SYSTEM_TU_BINH). Các scenario 2 người
     // (xem-tuoi/tương-hợp) đã có tên đôi bên trong context nên bỏ qua.
-    if (req.birth && scenario.type === 'tu-binh') {
+    // Tử Vi Công Sở cũng là scenario 1 NGƯỜI và trang gửi kèm birth → cùng cần
+    // dòng "Người xem" để rail xưng hô đúng. Dữ liệu hồ sơ thì KHÔNG tính lại ở
+    // đây: trang đã lấy `railData` từ CHÍNH `/api/cong-so` (cùng một hàm
+    // `computeCongSo`), nên rail và ô giữa vốn đã không thể lệch nhau.
+    if (req.birth && (scenario.type === 'tu-binh' || scenario.type === 'cong-so')) {
       const nx = nguoiXemLine(req.birth.name, req.birth.gender);
       if (nx) system += '\n\n' + nx;
     }
@@ -245,8 +270,8 @@ export async function runAgent(
       ? `Phong cách: Bạn đang thể hiện phong cách của ${req.authorName} — ${req.authorStyle}`
       : '';
     const toneParts = [
-      cfg.systemPrompt
-        ? `TÔNG/PHONG CÁCH (tùy chỉnh — CHỈ đổi giọng văn, KHÔNG đổi hình dạng/độ dài/luật luận bên dưới):\n${cfg.systemPrompt}`
+      cfgIn.systemPrompt
+        ? `TÔNG/PHONG CÁCH (tùy chỉnh — CHỈ đổi giọng văn, KHÔNG đổi hình dạng/độ dài/luật luận bên dưới):\n${cfgIn.systemPrompt}`
         : '',
       authorPersona,
     ].filter(Boolean);
@@ -273,8 +298,103 @@ export async function runAgent(
       }
     }
 
+    // Rail của tool Duyên Nợ Tiền Kiếp — cần CẢ HAI lá số, xem `wrapBirthB`.
+    // Gọi với chính người xem là A: engine đã verify đảo A/B ra kết quả y hệt
+    // (950 cặp) và nền văn minh chung độc lập thứ tự, nên nhân vật + mối duyên
+    // ở đây trùng đúng bản trang vừa hiện. `selfIsA = true` để lớp vỏ biết bên
+    // nào là người đang hỏi — nó có luật cứng cấm luận sâu về người còn lại.
+    // Lượt NHÓM (3–5 người) gửi `wrapBirths`; lượt 2 người vẫn gửi `wrapBirthB`
+    // như cũ, nên bản client còn trong cache trình duyệt không gãy.
+    const bondOthers: BirthParams[] =
+      req.wrap === 'past-life-bond'
+        ? Array.isArray(req.wrapBirths) && req.wrapBirths.length
+          ? req.wrapBirths.slice(0, MAX_BOND_MEMBERS - 1)
+          : req.wrapBirthB
+            ? [req.wrapBirthB]
+            : []
+        : [];
+    if (req.wrap === 'past-life-bond' && ctx.ls && req.birth && bondOthers.length) {
+      try {
+        const gOf = (b: BirthParams) => (b.gender === 'nu' ? ('nu' as const) : ('nam' as const));
+        // Người xem LUÔN là phần tử đầu — engine đã verify đảo thứ tự ra kết quả
+        // y hệt và nền văn minh chung độc lập thứ tự, nên nhân vật + mối duyên ở
+        // đây trùng đúng bản trang vừa hiện, mà lớp vỏ vẫn biết ai đang hỏi.
+        const members = [{ ls: ctx.ls, gender: gOf(req.birth) }];
+        for (const b of bondOthers) {
+          const r = computeLaso(b);
+          if (r.ok && r.ls) members.push({ ls: r.ls, gender: gOf(b) });
+        }
+        if (members.length >= 2) {
+          const group = computeGroupBond(members);
+          system +=
+            '\n\n' +
+            (members.length === 2
+              ? bondRailWrapper(groupPairAsBond(group, group.spine), true)
+              : groupRailWrapper(group, 0));
+        }
+      } catch (e) {
+        console.error('[runAgent] bondRailWrapper lỗi:', (e as Error)?.message);
+      }
+    }
+
+    // Rail của tool Lá Số Người Khác. Ở đây `req.birth` là lá số NGƯỜI KHÁC,
+    // không phải người đang chat — nên lớp vỏ có một luật ĐÈ LÊN `XUNG_HO_RULE`
+    // (dòng "Người xem" do `nguoiXemLine` sinh sẽ mang tên/giới của người trong
+    // lá số; không đè thì rail xưng hô với người chat theo giới của người kia).
+    // `wrapBirthB` là lá số CỦA NGƯỜI CHAT, tuỳ chọn — có thì mở thêm phần
+    // "người này với bạn", không có thì phần đó rỗng.
+    if (req.wrap === 'nguoi-khac' && ctx.ls && req.birth) {
+      try {
+        const g = req.birth.gender === 'nu' ? ('nu' as const) : ('nam' as const);
+        let lsBan = null;
+        if (req.wrapBirthB) {
+          const rB = computeLaso(req.wrapBirthB);
+          if (rB.ok && rB.ls) lsBan = rB.ls;
+        }
+        const p = computeNguoiKhac(ctx.ls, g, resolveQuanHe(req.wrapQuanHe), lsBan);
+        system += '\n\n' + nguoiKhacRailWrapper(p, String(req.birth.name || ''));
+      } catch (e) {
+        console.error('[runAgent] nguoiKhacRailWrapper lỗi:', (e as Error)?.message);
+      }
+    }
+
+    // Rail của tool Dạy Con. Cùng thế với `nguoi-khac`: `req.birth` là lá số
+    // ĐỨA TRẺ chứ không phải người đang chat, nên lớp vỏ cũng phải đè
+    // `XUNG_HO_RULE`. `wrapBirthB` là lá số CHA/MẸ (tuỳ chọn).
+    if (req.wrap === 'day-con' && ctx.ls && req.birth) {
+      try {
+        const g = req.birth.gender === 'nu' ? ('nu' as const) : ('nam' as const);
+        let lsChaMe = null;
+        if (req.wrapBirthB) {
+          const rB = computeLaso(req.wrapBirthB);
+          if (rB.ok && rB.ls) lsChaMe = rB.ls;
+        }
+        const p = computeDayCon(ctx.ls, g, resolveMoiLo(req.wrapMoiLo), lsChaMe);
+        system += '\n\n' + dayConRailWrapper(p, String(req.birth.name || ''));
+      } catch (e) {
+        console.error('[runAgent] dayConRailWrapper lỗi:', (e as Error)?.message);
+      }
+    }
+
+    // Rail của tool Hướng Nghiệp Sớm. Cùng thế: `req.birth` là lá số ĐỨA TRẺ.
+    // ⚠️ Khối vỏ CỐ Ý không nêu ba thiên hướng — rail chỉ nhận chúng qua
+    // `railDataDayDu` SAU khi mua. Biết sớm thì người ta hỏi rail thay vì mua.
+    if (req.wrap === 'huong-nghiep-tre' && ctx.ls && req.birth) {
+      try {
+        const g = req.birth.gender === 'nu' ? ('nu' as const) : ('nam' as const);
+        const p = computeHuongNghiepTre(ctx.ls, g, resolveMoiLoTre(req.wrapMoiLo));
+        system += '\n\n' + huongNghiepTreRailWrapper(p, String(req.birth.name || ''));
+      } catch (e) {
+        console.error('[runAgent] huongNghiepTreRailWrapper lỗi:', (e as Error)?.message);
+      }
+    }
+
     tools = buildToolDefs(!!profiles);
   }
+
+  // Chốt cfg cho cả lượt: trần token là min(DB, per-prompt). Clone chứ không
+  // sửa tại chỗ — cfgIn có thể dùng chung giữa các request.
+  const cfg: ChatConfig = { ...cfgIn, maxTokens: Math.min(cfgIn.maxTokens, railMaxTokens) };
 
   // Có ảnh trong bất kỳ tin user nào → bật hướng dẫn luận ảnh (vision).
   const hasImages = (req.messages as ChatMessage[]).some(
@@ -447,6 +567,9 @@ export async function runAgent(
   // tool thì bắt tool_use ngay trong stream, chạy tool rồi lặp; nếu trả text
   // thẳng thì chính stream đó LÀ câu trả lời (bỏ hẳn call thứ 2).
   const totalUsage: LlmUsage = { input_tokens: 0, cache_creation_input_tokens: 0, cache_read_input_tokens: 0, output_tokens: 0 };
+  // Đo TRỌN lượt (gồm mọi vòng tool-use), vì đó mới là thời gian người
+  // dùng thật sự ngồi chờ — không phải thời gian của một lượt gọi model.
+  const _turnT0 = Date.now();
   // Mốc để biết loop Anthropic đã LÀM GÌ chưa: nếu nó chết mà chưa chạy tool
   // nào và chưa stream chữ nào thì fallback sang Gemini vẫn SẠCH.
   const toolsBeforeAnthropic = toolsUsed.length;
@@ -528,7 +651,7 @@ export async function runAgent(
   // Tag cost theo scenario.type nếu có (khớp tool_pricing), ngược lại 'chat' —
   // CHÍNH type mà /api/v1/chat + gate.ts ghi vào credit_transactions cho MỌI
   // lượt rail (kể cả có lá số) → bucket cost khớp thẳng bucket doanh thu thật.
-  void logLlmUsage(scenario?.type || 'chat', cfg.model, totalUsage);
+  void logLlmUsage(scenario?.type || 'chat', cfg.model, totalUsage, Date.now() - _turnT0);
   return {
     toolsUsed,
     birth: ctx.birth ?? capturedBirth,
@@ -794,6 +917,8 @@ const SCENARIO_FIELD: Record<string, string> = {
   'ngay-tot': 'ngayTotData',
   'luc-nham': 'lucNhamData',
   'ban-do-sao': 'banDoSaoData',
+  'cong-so': 'congSoData',
+  'nhan-mach': 'nhanMachData',
 };
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function scenarioToBody(scenario: ScenarioInput, messages: ChatMessage[]): any {

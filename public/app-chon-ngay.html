@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"></noscript>
-<link rel="stylesheet" href="/shell.css?v=16">
+<link rel="stylesheet" href="/shell.css?v=18">
 <style>
 .form-card{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);max-width:600px}
 .form-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:3px}
@@ -31,13 +31,13 @@
 .note{background:var(--gold-lt);border:1px solid var(--gold-soft);border-radius:10px;padding:12px 15px;font-size:13px;color:var(--text-mid);line-height:1.65;margin-bottom:6px}
 .note b{color:var(--text)}
 .ask{margin-top:12px;display:inline-flex;align-items:center;gap:7px;font-size:12.5px;color:var(--gold-soft);border:1px dashed var(--gold-soft);border-radius:8px;padding:7px 12px;cursor:pointer;background:var(--gold-lt);font-family:inherit}
-.laso-error{color:var(--red);padding:14px;border:1px solid var(--red);border-radius:10px;background:var(--white)}
+.laso-error{color:var(--tx-red);padding:14px;border:1px solid var(--red);border-radius:10px;background:var(--white)}
 /* ── Chọn ngày chuyên sâu bằng AI (paid, port từ tools/chon-ngay-tot.html — gate+SSE, không PDF) ── */
 .dt-unlock{background:var(--white);border:1px solid var(--gold-soft);border-radius:11px;padding:18px 20px;margin-top:16px;text-align:center}
 .dt-unlock p{font-size:12.5px;color:var(--text-lt);margin-top:8px}
 .dt-result{margin-top:18px}
-.dt-result h2{font-family:var(--serif);font-size:17px;font-weight:600;margin:18px 0 10px;color:var(--navy)}
-.dt-result h3{font-family:var(--serif);font-size:14.5px;font-weight:600;margin:14px 0 8px;color:var(--navy)}
+.dt-result h2{font-family:var(--serif);font-size:17px;font-weight:600;margin:18px 0 10px;color:var(--heading)}
+.dt-result h3{font-family:var(--serif);font-size:14.5px;font-weight:600;margin:14px 0 8px;color:var(--heading)}
 .dt-result p{color:var(--text-mid);line-height:1.75;margin-bottom:12px;font-size:13.5px}
 .dt-result strong{color:var(--text)}
 .dt-result em{color:var(--gold-soft);font-style:italic}
@@ -89,7 +89,7 @@
         </div>
       </div>
 
-      <div id="resPanel">
+      <div id="resPanel" data-ws-result>
         <div class="res-head" id="resHead"></div>
         <div class="cc-row" id="ccRow"></div>
         <div class="note" id="resNote"></div>
@@ -110,9 +110,9 @@
 window.SHELL_INTRO={key:'chon-ngay',title:'Chọn ngày giờ tốt',desc:'Lấy can chi tuổi người chủ sự + tháng/năm dự định, rồi hỏi <b>trợ lý AI</b> ngày đẹp, giờ hoàng đạo và ngày cần tránh cho việc trọng đại.'};</script>
 <script src="/can-chi.js?v=1"></script>
 <script src="/auth.js?v=2"></script>
-<script src="/tuvi-paywall.js?v=11"></script>
+<script src="/tuvi-paywall.js?v=18"></script>
   <script src="/nav.js?v=22" data-icons-only></script>
-<script src="/shell.js?v=56"></script>
+<script src="/shell.js?v=68"></script>
 <script>
 function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 (function(){ var t=document.getElementById('inpThang'); for(var i=1;i<=12;i++)t.innerHTML+='<option value="'+i+'">Tháng '+i+'</option>'; var now=new Date(); t.value=String(now.getMonth()+1); document.getElementById('inpNam').value=now.getFullYear(); })();

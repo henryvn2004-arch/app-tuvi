@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"></noscript>
-<link rel="stylesheet" href="/shell.css?v=16">
+<link rel="stylesheet" href="/shell.css?v=18">
 <style>
 .form-card{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);max-width:600px}
 .form-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:3px}
@@ -21,7 +21,7 @@
 .fg input:focus,.fg select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(20,85,164,.12)}
 .btn-go{background:var(--red);color:#fff;border:none;border-radius:8px;padding:10px 22px;font-size:14px;font-weight:600;cursor:pointer;font-family:var(--serif)}
 .btn-go:disabled{opacity:.6;cursor:not-allowed}
-.err{color:var(--red);font-size:13px;margin-top:8px;display:none}
+.err{color:var(--tx-red);font-size:13px;margin-top:8px;display:none}
 .err.active{display:block}
 #resPanel{display:none;max-width:760px}
 /* Ô giữa "tài liệu" nền sáng cố định, khớp bản standalone /tools/bat-trach.html */
@@ -91,7 +91,7 @@
         <div class="err" id="error-msg"></div>
       </div>
 
-      <div id="resPanel">
+      <div id="resPanel" data-ws-result>
         <div class="bt-grid">
           <div class="res-block" style="margin-bottom:0">
             <div class="res-block-header"><span class="res-block-title" id="resTitle">—</span></div>
@@ -121,7 +121,7 @@ window.SHELL_INTRO={key:'bat-trach',title:'Hướng Bát Trạch',desc:'Tra <b>4
 <script src="/tools-shared/bat-trach.js?v=1"></script>
 <script src="/auth.js?v=2"></script>
   <script src="/nav.js?v=22" data-icons-only></script>
-<script src="/shell.js?v=56"></script>
+<script src="/shell.js?v=68"></script>
 <script>
 // Ô giữa dùng CHUNG module /tools-shared/bat-trach.js với trang standalone.
 function calculate(){

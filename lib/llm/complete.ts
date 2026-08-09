@@ -221,6 +221,10 @@ export interface LlmTextFullResult {
   provider: 'gemini' | 'anthropic';
   model: string;
   usage: { input_tokens: number; output_tokens: number };
+  /** Thời lượng THẬT của lượt gọi (ms), tính cả lượt fallback provider nếu có.
+   * Đo tại đây để mọi route chỉ việc chuyển tiếp — bắt 10 chỗ gọi tự bấm giờ
+   * thì sớm muộn có chỗ quên, mà chỗ quên đó im lặng. */
+  durationMs: number;
 }
 
 /**
@@ -231,11 +235,18 @@ export interface LlmTextFullResult {
 export async function llmTextFull(o: LlmTextOpts): Promise<LlmTextFullResult> {
   const maxTokens = o.maxTokens ?? 2000;
   const order = await providerOrder();
+  const t0 = Date.now();
   let lastErr: unknown;
   for (const p of order) {
     try {
       const r = p === 'gemini' ? await geminiText(o, maxTokens) : await anthropicText(o, maxTokens);
-      return { text: r.text, usage: r.usage, provider: p as 'gemini' | 'anthropic', model: p === 'gemini' ? GEMINI_MODEL : ANTHROPIC_MODEL };
+      return {
+        text: r.text,
+        usage: r.usage,
+        provider: p as 'gemini' | 'anthropic',
+        model: p === 'gemini' ? GEMINI_MODEL : ANTHROPIC_MODEL,
+        durationMs: Date.now() - t0,
+      };
     } catch (e) {
       lastErr = e;
       console.error(`[llmText] ${p} lỗi → thử backup:`, (e as Error).message);
@@ -477,6 +488,13 @@ async function anthropicCallTools(
  * Một lượt LLM có function-calling, TRẢ VỀ shape Anthropic
  * ({content, stop_reason, usage}) dù provider là Gemini. Provider chính đọc từ
  * config, tự fallback provider kia nếu lỗi.
+ *
+ * Kết quả gắn kèm `provider`/`model` THẬT SỰ đã chạy — vòng lặp tool có thể rơi
+ * sang provider backup giữa chừng, nên chỗ gọi mà chép tay tên model là ghi sai
+ * giá mà không có gì báo (đúng bẫy `generatePortraitImage` đã trả giá).
+ * Lấy hằng số cấu hình chứ KHÔNG lấy `model` trong phản hồi Anthropic: bản
+ * phản hồi trả id đã gắn hậu tố ngày, tra `MODEL_PRICING` trượt khoá rồi lặng
+ * lẽ rơi về giá mặc định (Sonnet) — đắt gấp 3 nếu thực tế chạy Haiku.
  */
 export async function callLLMTools(
   system: any,
@@ -489,8 +507,13 @@ export async function callLLMTools(
   let lastErr: unknown;
   for (const p of order) {
     try {
-      if (p === 'gemini') return await geminiCallTools(system, convo, tools, toolChoiceNone, maxTokens);
-      return await anthropicCallTools(system, convo, tools, toolChoiceNone, maxTokens);
+      const r =
+        p === 'gemini'
+          ? await geminiCallTools(system, convo, tools, toolChoiceNone, maxTokens)
+          : await anthropicCallTools(system, convo, tools, toolChoiceNone, maxTokens);
+      r.provider = p;
+      r.model = p === 'gemini' ? GEMINI_MODEL : ANTHROPIC_MODEL;
+      return r;
     } catch (e) {
       lastErr = e;
       console.error(`[callLLMTools] ${p} lỗi → thử backup:`, (e as Error).message);

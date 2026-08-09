@@ -158,8 +158,9 @@
 </footer>
 
 <script src="/tuvi-form.js"></script>
-<script src="/tuvi-paywall.js?v=11"></script>
-<script src="/tools-shared/ai-loading-steps.js?v=1"></script>
+<script src="/tuvi-paywall.js?v=18"></script>
+<script src="/tools-shared/ai-loading-steps.js?v=5"></script>
+<script src="/tools-shared/portrait-recover.js?v=1"></script>
 <script>
 let _currentSlug = '';
 let _resultImgUrl = '';
@@ -168,7 +169,7 @@ const CDVC_STEPS = [
   { label: 'Lập lá số & xác định cung Phu Thê', ms: 900 },
   { label: 'Luận giải cung Phu Thê', ms: 4500 },
   { label: 'Phác thảo mô tả & ước lượng tuổi bạn đời', ms: 3200 },
-  { label: 'AI đang vẽ chân dung', ms: 0 },
+  { label: 'AI đang vẽ chân dung (thường 45–60 giây)', ms: 0 },
 ];
 let _loadingCtl = null;
 let _imgRetryTimer = null;
@@ -238,17 +239,32 @@ async function _doGenerate(d, freeRerun) {
 
   try {
     const token = window.Auth?.getSession()?.access_token || '';
-    const res = await fetch('/api/chan-dung-vo-chong', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token },
-      body: JSON.stringify({
-        birth: { day: d.ngay, month: d.thang, year: d.nam, hourBranch: d.gioIdx, gender: d.gioitinh, isLunar: false },
+    // Tool này chạy MỘT pha nên mất kết nối là mất trắng cả lượt — trong khi
+    // hàm trên server vẫn vẽ tới cùng rồi ghi cache. Bắt riêng lỗi TRUYỀN TẢI
+    // để phân biệt với "server trả lỗi đàng hoàng" (402/500 là câu trả lời dứt
+    // khoát, thử lại chỉ tổ bắt người dùng chờ thêm 90 giây vô ích).
+    const birth = { day: d.ngay, month: d.thang, year: d.nam, hourBranch: d.gioIdx, gender: d.gioitinh, isLunar: false };
+    let res = null, data = null;
+    try {
+      res = await fetch('/api/chan-dung-vo-chong', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token },
         // slug = mã lượt mua; server đối chiếu lại với credit_transactions để tự
         // xác minh đã thanh toán, không tin riêng phía client (S0 track COO).
-        slug: _currentSlug,
-      }),
-    });
-    const data = await res.json();
+        body: JSON.stringify({ birth: birth, slug: _currentSlug }),
+      });
+      data = await res.json();
+    } catch (netErr) { res = null; }
+
+    if (PortraitRecover.nenThuLai(res)) {
+      const rd = await PortraitRecover.wait({
+        endpoint: '/api/chan-dung-vo-chong',
+        query: PortraitRecover.birthQuery(birth),
+        body: { birth: birth, slug: _currentSlug },
+      });
+      if (rd) { data = rd; res = { ok: true, status: 200 }; }
+    }
+    if (!res) throw new Error('Không thể kết nối. Vui lòng thử lại.');
     // Đi đường miễn phí mà server vẫn đòi tiền (bản cache vừa bị xoá giữa hai
     // lần hỏi) → quay lại đường trả phí thay vì ném một lỗi khó hiểu.
     if (res.status === 402 && freeRerun) {
@@ -332,7 +348,7 @@ function _ensurePoster() {
     let s = document.getElementById('_poster_js');
     if (!s) {
       s = document.createElement('script');
-      s.id = '_poster_js'; s.src = '/poster.js?v=4';
+      s.id = '_poster_js'; s.src = '/poster.js?v=5';
       document.head.appendChild(s);
     }
     s.addEventListener('load', () => resolve());
