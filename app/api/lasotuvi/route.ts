@@ -33,13 +33,20 @@ CHỐNG TÂNG BỐC — TUYỆT ĐỐI (đây là điểm sống còn):
 - Người đọc chán nhất kiểu "cái gì cũng tốt, cũng hay, đọc xong không biết tốt hay xấu". Phải nói thẳng.
 - Mỗi cung/phần đều có mặt mạnh VÀ mặt yếu. Đã nêu điểm mạnh thì BẮT BUỘC nêu điểm yếu cụ thể, ngang sức — cấm điểm yếu lấy lệ kiểu "đôi khi hơi nóng tính".
 - Cấm câu nước đôi né phán quyết ("có thể tốt cũng có thể không", "tùy cách sống mỗi người"). Dữ liệu chấm sao thì nói thẳng vậy.
-- Điểm thấp (<5), hoặc có sát/bại tinh mạnh, hung cách → phải cảnh báo rõ, không bọc đường. Thà mất lòng còn hơn vô dụng.
-- Mỗi nhận định tốt phải kèm BẰNG CHỨNG (sao nào, cách cục nào, điểm bao nhiêu). Hạn chế tính từ khen sáo rỗng (tuyệt vời, xuất chúng, rực rỡ).
+- Nhãn "Luận sao" xấu (Yếu/Xấu rõ), hoặc có sát/bại tinh mạnh, hung cách → phải cảnh báo rõ, không bọc đường. Thà mất lòng còn hơn vô dụng.
+- Mỗi nhận định tốt phải kèm BẰNG CHỨNG (sao nào, độ sáng nào, cách cục nào). Hạn chế tính từ khen sáo rỗng (tuyệt vời, xuất chúng, rực rỡ).
 
-PHÁN QUYẾT BẮT BUỘC — NEO VÀO ĐIỂM SỐ:
-- Lá số có khối "=== ĐIỂM ĐÁNH GIÁ ===" với điểm 0–10 từng cung do hệ thống tính sẵn. Đây là xương sống.
-- MỞ ĐẦU mỗi phần bằng MỘT câu phán quyết in đậm (**...**) neo vào con số đó. Ví dụ: "**Cung này thuộc loại khá — 6.4/10: mạnh về quý nhân nhưng nền tài chính bấp bênh.**"
-- Phần thân giải thích VÌ SAO ra con số đó (sao gì, cách cục gì kéo lên/kéo xuống). KHÔNG được mâu thuẫn với điểm: cung 4/10 thì cấm viết như cung tốt.
+PHÁN QUYẾT BẮT BUỘC — NEO VÀO DỮ LIỆU ENGINE:
+- ⚠️ Lá số KHÔNG có "điểm/10" cho từng CUNG. TUYỆT ĐỐI KHÔNG bịa ra con số kiểu "cung này 6.4/10".
+  Tầng DUY NHẤT có điểm/10 thật là ĐẠI VẬN (dòng "Scoring: … Tổng=X" trong === 9 ĐẠI VẬN ===).
+- Với CUNG: neo phán quyết vào nhãn "Luận sao: <Tốt rõ|Khá|Trung bình|Yếu|Xấu rõ>" của chính dòng
+  [Tên cung], cộng loại cách cục ([CÁCH CỤC · QUY_CUC/PHU_CUC/HUNG_CUC…]) và độ sáng chính tinh
+  (Miếu/Vượng/Đắc/Bình hòa/Hãm).
+- MỞ ĐẦU mỗi phần bằng MỘT câu phán quyết in đậm (**...**). Ví dụ cung: "**Cung này thuộc loại khá —
+  Thiên Đồng đắc địa cho nền tảng vững, nhưng Đà La cùng cung khiến tiến trình luôn chậm một nhịp.**"
+  Ví dụ đại vận: "**Giai đoạn này nghịch — 4.4/10: …**" (chép đúng số engine, không tự tính lại).
+- Phần thân giải thích VÌ SAO ra phán quyết đó (sao gì, cách cục gì kéo lên/kéo xuống). KHÔNG được mâu
+  thuẫn với dữ liệu: nhãn "Yếu" thì cấm viết như cung tốt; đại vận 4/10 thì cấm viết như giai đoạn đẹp.
 - Phân biệt rõ: ĐÁNH GIÁ CẤU TRÚC lá số (mạnh/yếu) là chắc chắn — nói dứt khoát; chỉ DỰ ĐOÁN kết quả tương lai mới dùng ngôn ngữ xác suất. Đừng lấy "khiêm tốn về tương lai" làm cớ né đánh giá cấu trúc.
 
 NGUYÊN TẮC LUẬN GIẢI CỔ PHÁP:
@@ -73,7 +80,7 @@ CÁC LƯU Ý KHI LUẬN GIẢI:
 - Vận hạn: Cuộc đời chia theo giai đoạn 10 năm. Quan trọng là lúc nào lên — lúc nào xuống.
 
 QUY TẮC CHUNG CHO MỌI PHẦN LUẬN GIẢI:
-- Gọi ĐÍCH DANH cách cục đặc biệt trong [CÁCH CỤC] và khối === CÁCH CỤC & NHẬN ĐỊNH === (vd Sát Phá Tham, Quân thần khánh hội, Cự Nhật...), nói rõ nó là CÁT hay HUNG và kéo lá số lên hay xuống. Tuyệt đối không lờ đi cách cục mà dữ liệu đã nêu — đó là phần người đọc đã thấy trên màn hình, luận giải phải khớp.
+- Gọi ĐÍCH DANH cách cục đặc biệt trong [CÁCH CỤC] và khối === CÁCH CỤC & NHẬN ĐỊNH (toàn bộ lá số) === (vd Sát Phá Tham, Quân thần khánh hội, Cự Nhật...), nói rõ nó là CÁT hay HUNG và kéo lá số lên hay xuống. Tuyệt đối không lờ đi cách cục mà dữ liệu đã nêu — đó là phần người đọc đã thấy trên màn hình, luận giải phải khớp.
 - Không liệt kê lại tên sao, không mô tả lại dữ liệu thô.
 - Nếu cung vô chính diệu thì nói rõ phải mượn cung xung chiếu để luận.
 - Quan hệ với Mệnh là ưu tiên: cung đang xét hỗ trợ hay khắc bản mệnh?
@@ -319,9 +326,23 @@ function buildPrompt(phan: number, laSoText: string, docs?: string): string {
   function trimLaSo(text: string, phan: number): string {
     if (!text) return text;
     const lines = text.split('\n');
-    const dvIdx   = lines.findIndex(l => l.includes('=== 9 ĐẠI VẬN ==='));
-    const ccIdx   = lines.findIndex(l => l.includes('=== CÁCH CỤC & NHẬN ĐỊNH'));
-    const cungIdx = lines.findIndex(l => l.includes('=== 12 CUNG ==='));
+    // Dò theo TIỀN TỐ, không đòi khớp cả dòng: mốc từng bị nối thêm ghi chú
+    // (" (lịch trình THỜI GIAN…)") làm `includes('=== 9 ĐẠI VẬN ===')` trả -1,
+    // bộ cắt câm và cả lá số 22K ký tự đi thẳng vào prompt phần 14–24.
+    const findMark = (m: string) => lines.findIndex(l => l.trimStart().startsWith(m));
+    const dvIdx   = findMark('=== 9 ĐẠI VẬN');
+    const ccIdx   = findMark('=== CÁCH CỤC & NHẬN ĐỊNH');
+    const cungIdx = findMark('=== 12 CUNG');
+    // KHÔNG im lặng khi hụt mốc: `findIndex` trả -1 là giá trị hợp lệ nên lỗi
+    // này không ném, không log, chỉ làm bản luận nhạt đi — mất 2 tháng mới lộ.
+    if (dvIdx < 0 || ccIdx < 0 || cungIdx < 0) {
+      console.error(
+        `[lasotuvi] laSoText THIẾU MỐC SECTION (phần ${phan}): ` +
+        `daiVan=${dvIdx} cachCuc=${ccIdx} cung=${cungIdx}. ` +
+        `Bộ cắt sẽ trả nguyên lá số → prompt bị pha loãng. ` +
+        `Kiểm public/tuvi-laso-format.js (MARKERS) + scripts/check-laso-markers.mjs.`,
+      );
+    }
     const headerLines = cungIdx > 0 ? lines.slice(0, cungIdx) : lines.slice(0, 8);
     // Khối cách cục đặc biệt (Sát Phá Tham, Quân thần khánh hội...) nằm cuối lá số —
     // luôn đính kèm vào MỌI phần để AI không lờ đi cách cục mà phần JS đã hiển thị.
@@ -340,7 +361,10 @@ function buildPrompt(phan: number, laSoText: string, docs?: string): string {
       const startI = cungLines.findIndex(l => l.startsWith(`[${CUNG_NAME}]`));
       if (startI >= 0) {
         const endI = cungLines.findIndex((l, i) => i > startI && l.startsWith('[') && !l.startsWith('[CÁCH') && !l.startsWith('[Ý') && !l.startsWith('[LUẬN'));
-        const block = endI > 0 ? cungLines.slice(startI, endI) : cungLines.slice(startI, startI + 30);
+        // Cung ĐỨNG CUỐI không có mốc kết thúc → lấy tới hết khối 12 CUNG, KHÔNG
+        // lấy mù 30 dòng: hồi mốc đại vận hỏng, `cungLines` chạy tới tận cách cục
+        // nên 30 dòng đó nuốt luôn đầu khối đại vận (đo được: cung Thiên Di dính).
+        const block = endI > 0 ? cungLines.slice(startI, endI) : cungLines.slice(startI);
         return result.concat(block).join('\n') + ccBlock;
       }
       return lines.slice(0, cutEnd).join('\n') + ccBlock;
@@ -376,7 +400,8 @@ function buildPrompt(phan: number, laSoText: string, docs?: string): string {
 
 PHẦN 1 — TỔNG QUAN LÁ SỐ (220-280 từ)
 Viết văn xuôi liền mạch, không dùng bullet, không đề cập đại vận trong phần này.
-MỞ ĐẦU bằng câu phán quyết in đậm neo vào "Tổng quan toàn lá số: X/10" — lá số này thuộc hạng nào (mạnh/khá/trung bình/yếu), mạnh nhất ở đâu, yếu nhất ở đâu.
+MỞ ĐẦU bằng câu phán quyết in đậm: lá số này thuộc hạng nào (mạnh/khá/trung bình/yếu), mạnh nhất ở đâu, yếu nhất ở đâu — neo vào nhãn "Luận sao: …" của 12 cung + khối === CÁCH CỤC & NHẬN ĐỊNH (toàn bộ lá số) ===.
+CẤM bịa "điểm lá số X/10" hay "điểm cung X/10" — lá số KHÔNG có điểm tổng; chỉ ĐẠI VẬN mới có điểm/10 thật.
 
 Cấu trúc gợi ý (không cần tiêu đề con):
 ① Bản mệnh & cục: Can chi năm sinh, nạp âm, cục — ý nghĩa thực tế với con người này là gì? Mệnh có thuận lý hay nghịch lý với cục?
@@ -391,7 +416,8 @@ Lưu ý: Dựa trên [CÁCH CỤC] và [Ý NGHĨA] đã có — diễn giải, k
 PHẦN 2 — CUNG MỆNH (220-280 từ)
 ${CUNG_DESC['Mệnh']}
 
-MỞ ĐẦU bằng câu phán quyết in đậm neo vào dòng điểm cung Mệnh trong === ĐIỂM ĐÁNH GIÁ === (tốt/khá/trung bình/yếu + lý do một dòng).
+MỞ ĐẦU bằng câu phán quyết in đậm neo vào nhãn "Luận sao: …" của dòng [Mệnh] + cách cục + độ sáng chính tinh (tốt/khá/trung bình/yếu + lý do một dòng).
+CẤM bịa "điểm cung X/10" — lá số KHÔNG có điểm cho từng cung, chỉ ĐẠI VẬN mới có điểm/10 thật.
 Viết văn xuôi súc tích, đi thẳng vào tính cách và số phận:
 ① Chính tinh tại Mệnh: Bản chất cốt lõi — người này là kiểu người gì? Miếu/Hãm ảnh hưởng thế nào?
 ② Cách cục Mệnh: Dựa trên [CÁCH CỤC] và [Ý NGHĨA] — đây là điểm sống còn của lá số, diễn giải thật rõ tác động thực tế.
@@ -408,7 +434,8 @@ Xét thêm cung Thiên Di (xung chiếu Mệnh) — ảnh hưởng gì đến t�
 PHẦN ${phan} — CUNG ${cung.toUpperCase()} (120-160 từ)
 ${cungDesc}
 
-MỞ ĐẦU bằng câu phán quyết in đậm neo vào dòng "[${cung}] Tổng .../10" trong === ĐIỂM ĐÁNH GIÁ === (tốt/khá/trung bình/yếu + lý do ngắn). Cấm né tránh.
+MỞ ĐẦU bằng câu phán quyết in đậm neo vào nhãn "Luận sao: …" của dòng [${cung}] + cách cục + độ sáng chính tinh (tốt/khá/trung bình/yếu + lý do ngắn). Cấm né tránh.
+CẤM bịa "điểm cung X/10" — lá số KHÔNG có điểm cho từng cung, chỉ ĐẠI VẬN mới có điểm/10 thật.
 Viết 2-3 đoạn văn xuôi súc tích. Cấu trúc:
 ① Nhận định chính: Dựa trên [CÁCH CỤC] và [Ý NGHĨA] — đây là phần quan trọng nhất, diễn giải thật rõ.
 ② Tam phương: Xét sao ở cung tam hợp có hỗ trợ hay phá cách không?
@@ -421,9 +448,9 @@ Không liệt kê lại tên sao, không mô tả lại dữ liệu thô. Nếu 
 
 PHẦN 14 — TỔNG QUAN CÁC ĐẠI VẬN
 
-Dựa vào phần === 9 ĐẠI VẬN ===, tính điểm scoring cho TẤT CẢ 9 đại vận:
-- TT (Thiên Thời) 0-5 | ĐL (Địa Lợi) 0-1 | NH (Nhân Hòa) 0-4
-- Công thức: Tổng = NH + (NH/4)×ĐL + (NH/4)×TT (max 10)
+ĐỌC phần === 9 ĐẠI VẬN ===. Mỗi ĐV đã có sẵn dòng "Scoring: TT=… ĐL=… NH=… Tổng=…"
+do engine tính — CHÉP ĐÚNG con số đó, TUYỆT ĐỐI KHÔNG tự tính lại và không làm tròn khác.
+(TT = Thiên Thời 0–5 · ĐL = Địa Lợi 0–1 · NH = Nhân Hòa 0–4 · Tổng 0–10.)
 
 Bảng tổng hợp ĐV1 đến ĐV9:
 | ĐV | Tuổi | Cung | TT | ĐL | NH | Tổng | Flag |
@@ -440,13 +467,28 @@ Nhận xét tổng (120-160 từ): Giai đoạn đẹp nhất, khó khăn nhất
     return ctx + `
 
 PHẦN ${phan} — ĐẠI VẬN ${dvNum} (120-160 từ)
-Tìm dòng "ĐV${dvNum}:" trong === 9 ĐẠI VẬN ===.
+Khối "ĐV${dvNum}:" trong === 9 ĐẠI VẬN === là dữ liệu DUY NHẤT được dùng cho phần này —
+mọi dòng của nó đều đã hiện trên màn hình người đọc, nên bỏ sót là họ thấy ngay.
 
-MỞ ĐẦU bằng câu phán quyết in đậm neo vào dòng "Scoring: ... Tổng=X" của đại vận này — giai đoạn này thuận hay nghịch, X/10. Nếu Tổng thấp phải nói thẳng là giai đoạn khó.
+⚠️ BẮT BUỘC BÁM DỮ LIỆU (đây là lỗi hay gặp nhất — luận chay theo tên chính tinh
+rồi lờ đi phần engine đã chấm):
+- Mọi mục "[LUẬN ĐOÁN - TỐT/TRUNG/XẤU]" và "[CẢNH BÁO]" của ĐV${dvNum} PHẢI được
+  phản ánh. Nêu cả mặt thuận lẫn mặt nghịch — có "[LUẬN ĐOÁN - TỐT]" mà chỉ viết
+  toàn điều xấu (hoặc ngược lại) là SAI.
+- "[CẢNH BÁO]" là mức nặng nhất → phải nói thẳng, không được nuốt.
+- Tam phương tứ chính: ĐỌC "[TAM PHƯƠNG TỨ CHÍNH · CÁT/SÁT/BẠI]" đã liệt kê sẵn —
+  KHÔNG tự suy lại tam hợp từ khối 12 cung.
+- Có "[TUẦN/TRIỆT án ngữ]" thì phải nói (giảm xấu, nhưng cũng giảm tốt).
+- "[CÁCH CỤC LIÊN QUAN]" và "Bộ Mệnh → Bộ ĐV" nếu có thì dùng, đừng bỏ.
+- CẤM bịa sao/luận đoán không có trong khối này.
+
+MỞ ĐẦU bằng câu phán quyết in đậm neo vào dòng "Scoring: … Tổng=X" của ĐV${dvNum} —
+giai đoạn này thuận hay nghịch, X/10 (chép đúng số, không tự tính lại). Tổng thấp
+phải nói thẳng là giai đoạn khó.
 Viết văn xuôi, 2-3 đoạn:
-① Tính chất vận: Điểm scoring nói lên điều gì về giai đoạn này?
-② Nhận định chính: Dựa trên [LUẬN ĐOÁN] và [CẢNH BÁO] — diễn giải thực tế, không liệt kê lại.
-③ Tam phương: Sao ở cung tam hợp của cung đại vận có hỗ trợ hay phá không?
+① Tính chất vận: Tổng + TT/ĐL/NH nói lên điều gì về giai đoạn này?
+② Nhận định chính: diễn giải "[LUẬN ĐOÁN]"/"[CẢNH BÁO]" thành chuyện đời thực — không liệt kê lại nguyên văn.
+③ Tam phương tứ chính + Tuần/Triệt: cát tinh đỡ được gì, sát/bại tinh phá chỗ nào?
 ④ Kết luận thực tế: 1-2 câu tác động cụ thể + gợi ý nhẹ nếu cần.`;
   }
 
