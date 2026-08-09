@@ -444,10 +444,38 @@ tên cung cấm · 0 câu chạm chủ đề cấm · trang hiện đúng số v
 - ~~**B2**~~ → **ĐÃ LÀM**, xem mục riêng ở trên. ~~**B3**~~ → **ĐÃ LÀM**, xem mục riêng ở trên.
 - ~~**C1**~~ → **ĐÃ LÀM**, xem mục riêng ở trên. ⏭️ Mới gắn ở `nguoi-khac`; hai
   tool cẩm nang kia (`day-con`/`nhan-mach`) dùng chung `coSoDoc` được, chưa cắm.
-- **C3** — gallery từ 36 `shared_results` (vốn đã public): social proof + trang
-  SEO + bề mặt lan, cả ba trong một, 0đ.
-- **D** — chuỗi ngày cho "Vận hôm nay" (**variable reward CHỈ ở đây**, tuyệt đối
-  không ở bản luận: cùng lá số phải ra cùng kết quả — bất biến của `portrait_cache`).
+- 🔴 **C3 — DỪNG, chờ Henry chốt cơ chế đồng ý.** Kế hoạch tao viết *"gallery từ
+  36 `shared_results` (**vốn đã public**)"* — **câu đó SAI**. Bấm "Chia sẻ" tạo
+  link **KHÔNG NIÊM YẾT** để gửi người quen; đó không phải sự đồng ý được xếp vào
+  một trang duyệt được và Google index được. Đo: **15/38 dòng chứa ngày sinh đầy
+  đủ**, **38/38 tiêu đề mang tên người**, và **cả 38 đều của MỘT chủ** (bản test
+  của Henry) ⇒ gallery ra mắt còn là social proof dựng từ dữ liệu của chính chủ.
+  Ba đường an toàn: **opt-in** (ô tick lúc chia sẻ) · **ẩn danh** (bỏ tên + ngày
+  sinh) · **Henry tự chọn dòng**. Chưa chốt thì chưa code.
+- 🔴 **D (chuỗi ngày) — ĐO RA LÀ SAI THỜI ĐIỂM, chưa làm.** Chuỗi ngày là bộ
+  KHUẾCH ĐẠI việc quay lại; đo 45 ngày thì việc quay lại gần như không tồn tại:
+
+  | | |
+  |---|---:|
+  | Người có hoạt động | 1.311 |
+  | **Chỉ ghé đúng 1 ngày** | **1.297 = 98,9%** |
+  | Ghé ≥ 2 ngày | 14 |
+  | Ghé ≥ 7 ngày | 2 |
+  | TB số ngày/người | **1,04** |
+
+  Gắn vào thì 98,9% người thấy *"chuỗi 1 ngày"* mãi mãi — không khuếch đại gì, chỉ
+  nhắc người ta rằng họ chưa từng quay lại. Và thẻ "Vận hôm nay" **đã có sẵn dải 7
+  ngày** kèm can chi + tốt/xấu từng ngày, tức "mỗi ngày một khác" vốn đã bày ra.
+  - 🔑 **Chỗ nghẽn thật của việc quay lại là KÊNH NHẮC, không phải động lực.**
+    Đo: `tool_open` **383 lượt / 56 người**, nhưng `push_optin_shown` chỉ **5
+    lượt / 5 người** và `push_optin_result` = **0** — lời mời bật thông báo hiện
+    ra 5 lần trong toàn bộ lịch sử và **chưa ai từng trả lời**. Cổng hiện lời mời
+    (chỉ người ĐÃ có lá số · sau 6 giây · 3 ngày một lần) quá chặt.
+  - ⚠️ **Nới cổng đó là quyết định của Henry, không tự làm**: bấm "Chặn" trên
+    trình duyệt là **VĨNH VIỄN**, không có đường hỏi lại. Nới sai một lần là mất
+    hẳn tệp người nhận, chứ không phải mất một lượt hiển thị.
+  - ⇒ Làm D **sau khi** có tệp người quay lại. Trước đó, con số đáng dồn sức là
+    *lượt ghé DUY NHẤT đó có chuyển đổi không* — đúng thứ A1/B2/B3/C1 vừa làm.
 - ⛔ **KHÔNG làm**: đồng hồ đếm ngược giả · số người dùng thổi phồng · gate "chia
   sẻ mới cho đọc tiếp". Nói dối một lần là mất sạch tài sản C1, mà C1 mới là thứ
   giữ được giá.
