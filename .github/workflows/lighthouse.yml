@@ -81,6 +81,11 @@ jobs:
             npx lhci autorun
           fi
 
+      # 🔑 `include-hidden-files` BẮT BUỘC ở đây: `.lighthouseci/` bắt đầu bằng
+      # dấu chấm, mà upload-artifact loại file ẩn theo mặc định ⇒ từ trước tới
+      # nay bước này luôn kết thúc bằng "No files were found" và artifact báo
+      # cáo Lighthouse RỖNG, dù lhci vẫn ghi đủ file vào đó. Hai artifact kia
+      # (`playwright-report*`) không ẩn nên không dính.
       - name: Upload report
         if: always()
         uses: actions/upload-artifact@v7
@@ -88,3 +93,4 @@ jobs:
           name: lighthouse-report-${{ github.run_id }}
           path: .lighthouseci/
           retention-days: 14
+          include-hidden-files: true

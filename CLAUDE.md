@@ -478,6 +478,13 @@ Actions, tên **`VERCEL_BYPASS_SECRET`**. Xoay secret là một cú bấm, khôn
   chất này khi đọc một PR thiếu check.
 - Phạm vi lịch sử tao soi được chỉ từ **04/08** trở lại (giới hạn phân trang
   API); chưa xác minh mọi lượt đỏ trước đó cùng một nguyên nhân.
+- 🐞 **Artifact báo cáo Lighthouse RỖNG lâu nay** — `.lighthouseci/` bắt đầu
+  bằng dấu chấm, mà `upload-artifact` **loại file ẩn theo mặc định** ⇒ bước
+  upload luôn kết thúc bằng *"No files were found"* dù `lhci` ghi đủ file.
+  Chạy `lhci collect` tại chỗ xác nhận nó ra `lhr-*.html` + `lhr-*.json`. Vá
+  bằng `include-hidden-files: true`. Hai artifact kia (`playwright-report*`)
+  không ẩn nên không dính — **đường dẫn artifact bắt đầu bằng dấu chấm thì phải
+  khai cờ này, không thì mất im lặng.**
 - ⚠️ **Ngưỡng Lighthouse giờ chấm trên PREVIEW, chưa ai hiệu chỉnh lại.** 4 trang
   đo đều là HTML tĩnh trong `public/` nên đi CDN như prod, nhưng lượt đầu của
   một deployment mới thì edge chưa ấm. `numberOfRuns:3` đỡ được phần nào; nếu
