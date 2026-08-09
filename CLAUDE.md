@@ -5,6 +5,120 @@
 
 ---
 
+## 🔗 Chia sẻ workspace: tính năng của SHELL, không phải của từng tool (2026-08-09, PR này)
+
+Henry: *"Tool Dạy con theo lá số đang ko chia sẻ dc phần shell-workspace… Tính
+năng chia sẻ shell-workspace phải là tính năng master chung cho tất cả các tool
+chạy trên workspace, ko phụ thuộc vào tool nào chứ. Rà soát và design lại nếu
+cần."* Hai PR trước (#452, #453) mới **vá lẻ từng tool** — đúng triệu chứng, sai
+tầng. PR này sửa tầng.
+
+### 🔴 Căn nguyên: chia sẻ là OPT-IN, và opt-in thì có ngày quên
+Bản cũ bắt MỖI trang tool tự nhớ **bốn** nghĩa vụ: gọi `Shell.setShareable(…)`
+đúng lúc có kết quả · gọi `setShareable(null)` khi quay về form · tự chép
+`toolId` · và tự dựng một **bản văn bản THỨ HAI** (`_xxLines`) song song với DOM
+đang hiện. 32 tool × 4 = **128 chỗ để quên**, không có gì canh. Đã quên thật, và
+đo được:
+
+| Lỗi | Trang | Người dùng thấy gì |
+|---|---|---|
+| Không bao giờ gọi | `day-con` | **Không có nút Chia sẻ** từ lúc ra mắt tới khi Henry báo |
+| Không bao giờ gọi | 🔴 **`la-so`** (`app.html`) | **Tool ĐẦU BẢNG cũng chưa từng chia sẻ được** |
+| Gọi mà không bao giờ gỡ | `thanh-tuong-pro` · `phong-thuy` | Làm lượt mới → bấm Chia sẻ ra **kết quả LƯỢT TRƯỚC** |
+
+Hai lỗi dưới nặng hơn lỗi Henry báo: chúng không im lặng mà **nói sai**.
+
+🪤 **`la-so` lọt lưới đúng hai lần, cả hai vì ĐOÁN THEO TÊN:** file của nó là
+`app.html` (không gạch nối) nên lượt quét `app-*.html` đầu tiên của tao bỏ qua —
+và bộ dò tao vừa viết để chống chuyện đó cũng lọc y hệt, tức suýt phát hành một
+cái lưới có sẵn lỗ đúng chỗ cần vá. Nay bộ dò nhận diện trang shell bằng **dấu
+hiệu của shell** (nạp `shell.js` + khai `SHELL_ACTIVE`), không theo tên file.
+
+### 🔑 Cách vá — ĐẢO VAI, không phải thêm một lượt gọi nữa
+`shell.js` nay tự theo dõi **vùng kết quả** của khung giữa: hiện ra thì bật nút,
+biến mất thì gỡ nút **và vứt luôn payload của lượt trước**. Tool KHÔNG phải làm
+gì để có nút Chia sẻ.
+- **Giao ước DUY NHẤT của trang: một mốc `data-ws-result`** trên khối bao ngoài
+  cùng của phần kết quả. Đã khai đủ **32/32** trang tool.
+- **`setShareable` đổi vai: BẮT BUỘC → LÀM GIÀU.** Tool đưa gì (ảnh AI, khối
+  `blocks` có cấu trúc, tiêu đề đắt hơn) thì cái đó thắng bản shell tự suy. Cả
+  hai đường đi qua CHUNG `normalizeShare()` nên bản tự suy không bao giờ thiếu
+  khối lá số hay lệch shape.
+- **Lưới đỡ khi tool không đưa gì**: shell tự suy payload từ chính DOM đang hiện
+  — `toolId` từ `ACTIVE` (hết chép tay), tiêu đề từ `.ws-title b`, nội dung bằng
+  cách duyệt cây. Vì đọc thẳng thứ đang hiện nên **không có bản thứ hai để trôi
+  khỏi nhau** — đúng cái bẫy `_xxLines` đang bày sẵn.
+- **Bộ duyệt cây loại trừ có chủ đích**: điều khiển (nút/ô nhập/form/svg), tường
+  trả phí (`.tpw-*` — chia sẻ ra ngoài đúng lời mời trả tiền thì vô nghĩa), thẻ
+  intro, khối đang ẩn, và mọi thứ trang khai `data-share-skip`. Trần 4.000 ký tự.
+- **Ngưỡng 60 ký tự**: dưới mức đó khung mới chỉ có tiêu đề/spinner. Thà không có
+  nút còn hơn phát một link rỗng.
+
+### ⚠️ `setShareable(null)` nay là một CÂU KHẲNG ĐỊNH, không phải nút dọn dẹp
+Nghĩa mới: *"lượt này KHÔNG có gì đáng chia sẻ"* (fetch hỏng, khung đang hiện
+câu báo lỗi — vd `luc-nham` khi `!j`). Lời khai của tool mạnh hơn phép suy từ
+DOM nên nó **tắt cả lưới đỡ** tới lượt chạy sau. Chỉ để dọn nút khi quay về form
+thì **KHÔNG cần gọi** — shell thấy vùng kết quả ẩn đi là tự gỡ.
+- 🐞 **Lỗi tự bắt lúc test, không phải lúc đọc code**: bản đầu đặt cờ tắt tiếng
+  RỒI mới gọi `refreshWsShare()`, mà chính lượt đó thấy cạnh lên "vùng kết quả
+  vừa hiện = lượt chạy mới" nên **gỡ luôn cờ vừa đặt**. Tool báo lỗi trong khi
+  khung còn hiện thì shell vẫn đè lên lời khai của nó. Phải **chốt trạng thái
+  hiện/ẩn TRƯỚC, tắt tiếng SAU**.
+- 🐞 **Lỗi thứ hai, cùng họ "đoán theo tên"**: MutationObserver bám
+  `document.getElementById('ws')`, mà `app.html` dùng `<main class="ws">`
+  **không có id** ⇒ observer câm đúng trên tool Lá Số, nút không bao giờ hiện.
+  Nay lấy gốc theo `#ws` → `main.ws` → `<body>`. Chỉ lộ khi mở bằng trình duyệt.
+
+### 🧷 `scripts/check-shell-share.mjs` — chặn tool MỚI tái phát (CI lint)
+Đây mới là phần làm nó thành "master": phủ hôm nay không có nghĩa phủ tháng sau.
+Ba luật — có `.ws-actions` · **đúng MỘT** mốc `data-ws-result` · `toolId` chép
+tay (nếu còn) khớp `SHELL_ACTIVE`.
+- **Verify bộ dò bằng cách DỰNG LẠI ĐÚNG BA LỖI**: gỡ mốc khỏi `day-con` → bắt ·
+  thêm mốc thứ hai → bắt · đổi `toolId` thành `congso` → bắt. Bộ dò chưa từng
+  bắt được gì thì không chứng minh được nó biết bắt.
+- ⚠️ `app-xem-tuoi.html` gán `SHELL_ACTIVE` bằng **BIẾN** (một trang phục vụ 3
+  route) — vẫn phải kiểm, chỉ bỏ vế đối chiếu tên. Bỏ qua trang vì "không khớp
+  mẫu chuỗi" chính là kiểu im lặng bộ dò này sinh ra để chống.
+- Nhiều mốc thì shell lấy cái ĐẦU trong DOM → im lặng chọn nhầm, nên bắt luôn.
+
+### Verify
+`typecheck` 0 lỗi · `lint` 0 lỗi (72 warning pre-existing) · `prettier` sạch ·
+`check:prices`/`nostore`/`groups`/`share`/`hexagrams`/`hao`/`motifs` sạch ·
+engine **185 pass** · `node --check`.
+- **143 ca trên 33 TRANG THẬT + `shell.js` THẬT**: mỗi trang đủ ba nhịp — còn
+  form thì KHÔNG có nút · vùng kết quả hiện ra thì HIỆN nút · ẩn đi thì GỠ nút.
+- **8 ca chạy THẬT tool Lá Số đầu-cuối** (lập lá số bằng engine trong trình
+  duyệt): nút hiện, payload đúng `toolId='la-so'` và có nội dung thật, bấm "Sửa
+  thông tin" thì nút tự gỡ, 0 lỗi JS — kèm **ĐỐI CHỨNG bản cũ: 0 nút**.
+- **Ca lỗi day-con dựng lại nguyên trạng**: đè `Shell.setShareable` thành hàm
+  rỗng ("tool quên gọi") → shell vẫn đỡ được, payload mang **đúng `toolId`
+  'day-con'**, có nội dung thật, và **không lẫn chữ trên nút**.
+- **Ca payload lượt trước** trên `thanh-tuong-pro` + `phong-thuy`: đặt payload
+  rồi ẩn vùng kết quả → nút biến mất.
+- 🪤 **ĐỐI CHỨNG nạp đè `shell.js` bản git HEAD**: tool quên gọi → **không có
+  nút**; ẩn kết quả rồi → **nút VẪN CÒN**. Cả hai lỗi có thật, bài kiểm không đỗ
+  giả.
+- **13 ca vòng 2**: chạy THẬT `than-so-hoc` đầu-cuối (điền form → bấm tính → nút
+  hiện, payload đúng tool; bấm "Sửa" → nút tự gỡ; 0 lỗi JS) · **rò rỉ**: giữ nội
+  dung thật nhưng KHÔNG lọt tường trả phí / chữ trên nút / `data-share-skip` /
+  khối đang ẩn · 390px không tràn ngang.
+- Bump `shell.js?v=64→65` (35 trang). **Không đụng `shell.css`** — nút dùng lại
+  class `.btn` sẵn có.
+
+### CÒN LẠI
+- **32 tool vẫn còn bản `_xxLines` chép tay** — nay là đường LÀM GIÀU nên vẫn
+  thắng bản tự suy, và vẫn là hai bản có thể trôi khỏi nhau. CỐ Ý không gỡ trong
+  PR này: gỡ payload của 32 tool đang chạy để đổi lấy bản tự suy là canh bạc
+  trên đúng thứ vừa sửa. Gỡ dần từng tool khi có dịp đụng vào tool đó, và mỗi
+  lần gỡ phải nhìn bản chia sẻ thật.
+- Bản tự suy mới **chưa có ai tiêu thụ trên prod** (mọi tool đều đang đưa payload
+  riêng) — nó là lưới đỡ cho tool SAU. Chỗ đáng nhìn khi có tool mới: khoảng
+  cách giữa chữ trên trang và chữ trong link chia sẻ.
+- `data-ws-result` chỉ phủ trang shell. Trang standalone `/tools/*.html` không
+  nạp `shell.js` nên vẫn không có chia sẻ khung giữa — việc riêng.
+
+---
+
 ## 🗺️ Sitemap: `lastmod` đang NÓI DỐI 647 URL mỗi ngày (2026-08-07, PR này)
 
 Henry: *"Bạn tao chuyên gia SEO nói là sitemap mà nhiều URLs quá thì chia nhỏ ra

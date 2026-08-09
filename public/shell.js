@@ -979,16 +979,165 @@
     return birthSummaryLine(o.birth || (ctx && ctx.birth) || null);
   }
 
-  // Tool gọi Shell.setShareable({kind:'image'|'text', title, imageUrl?, text?})
-  // ngay sau khi có kết quả → nút "Chia sẻ" tự hiện trong .ws-actions (nếu
-  // trang có toolbar đó), không cần tool tự vẽ nút/markup riêng. Khác
-  // shareSession (chia sẻ transcript rail): cái này chia sẻ ĐÚNG kết quả
-  // (ảnh AI hoặc trích văn bản) ra permalink /ket-qua/<id> có OG:image thật.
-  var shareable = null;
+  // ══════════════════════════════════════════════════════════════════════
+  // CHIA SẺ WORKSPACE — VIỆC CỦA SHELL, KHÔNG PHẢI CỦA TỪNG TOOL
+  // ══════════════════════════════════════════════════════════════════════
+  //
+  // Bản cũ bắt MỖI tool tự nhớ bốn việc: gọi `setShareable` đúng lúc có kết
+  // quả · gọi `setShareable(null)` khi quay về form · tự chép `toolId` ·
+  // và tự dựng một bản văn bản THỨ HAI song song với DOM đang hiện. 32 tool
+  // × 4 nghĩa vụ = 128 chỗ để quên, không có gì canh. Và đã quên thật:
+  //   · `day-con` KHÔNG có nút Chia sẻ từ lúc ra mắt tới khi Henry báo;
+  //   · `thanh-tuong-pro` và `phong-thuy` không bao giờ gỡ nút → bấm Chia sẻ
+  //     sau khi đổi ảnh là phát ra kết quả của LƯỢT TRƯỚC.
+  //
+  // 🔑 Nay đảo vai: shell theo dõi VÙNG KẾT QUẢ của workspace và tự bật/tắt
+  // nút. Tool KHÔNG phải làm gì để có nút Chia sẻ. `setShareable` vẫn còn
+  // nhưng đổi nghĩa — từ BẮT BUỘC thành LÀM GIÀU (ảnh AI, khối `blocks` có
+  // cấu trúc, tiêu đề đắt hơn): tool đưa gì thì cái đó thắng bản shell tự suy.
+  //
+  // Giao ước DUY NHẤT của trang: đánh dấu vùng kết quả bằng `data-ws-result`.
+  // Có đường lùi theo hai id đã thành lệ (`#resPanel` · `#resultCard`) nên
+  // phần lớn trang chạy được mà không cần sửa; `scripts/check-shell-share.mjs`
+  // chặn trang shell mới quên khai (chạy trong CI lint).
+  var shareable = null; // payload TOOL đưa — làm giàu, được ưu tiên
+  var autoShare = null; // payload SHELL tự suy từ DOM — lưới đỡ
+  var _wsResVisible = false, _wsResObs = null, _wsResTimer = null;
+  // Tool gọi thẳng `setShareable(null)` là một CÂU KHẲNG ĐỊNH ("lượt này không
+  // có gì để chia sẻ" — vd fetch hỏng, khung kết quả đang hiện đúng câu báo
+  // lỗi). Lời khai đó mạnh hơn phép suy từ DOM của shell, nên phải tắt hẳn
+  // lưới đỡ tới lượt chạy SAU (khung kết quả ẩn rồi hiện lại).
+  var _shareMuted = false;
+
+  function currentShare() { return shareable || autoShare; }
+
+  // Vùng kết quả của workspace. `null` = trang chưa khai → shell KHÔNG tự
+  // động gì cả, hành vi y hệt bản cũ (không hồi quy cho trang lạ).
+  function wsResultHost() {
+    return document.querySelector('[data-ws-result]')
+      || document.getElementById('resPanel')
+      || document.getElementById('resultCard');
+  }
+  // `offsetParent` null là ẩn KỂ CẢ khi cha ẩn — đúng thứ cần, vì mọi tool
+  // đều ẩn/hiện bằng `display` trên chính khối cha. Kèm getClientRects cho
+  // trường hợp position:fixed (offsetParent cũng null nhưng vẫn đang hiện).
+  function shownEl(el) {
+    return !!(el && (el.offsetWidth || el.offsetHeight || el.getClientRects().length));
+  }
+
+  // Những gì KHÔNG được rơi vào bản chia sẻ tự suy: điều khiển (nút/ô nhập),
+  // tường trả phí (chia sẻ ra ngoài đúng lời mời trả tiền thì vô nghĩa), thẻ
+  // giới thiệu, và mọi khối trang tự khai là riêng tư bằng `data-share-skip`.
+  var SHARE_SKIP_SEL = 'script,style,noscript,button,input,textarea,select,option,svg,form,canvas,' +
+    '.ws-actions,.intro-card,.tpw-lock-veil,.tpw-lock-blur,.tpw-wall,.tpw-prev,[data-share-skip],[aria-hidden="true"]';
+  var SHARE_BLOCK_TAG = /^(P|DIV|SECTION|ARTICLE|HEADER|FOOTER|LI|TR|H1|H2|H3|H4|H5|H6|BLOCKQUOTE|PRE|TABLE|UL|OL|DL|DT|DD|BR|HR)$/;
+  var SHARE_TEXT_CAP = 4000;
+
+  function domShareText(host) {
+    var buf = [], line = [], chars = 0;
+    var flush = function () { if (line.length) { buf.push(line.join(' ')); line = []; } };
+    var walk = function (el, depth) {
+      if (depth > 24 || chars > SHARE_TEXT_CAP) return;
+      var kids = el.childNodes;
+      for (var i = 0; i < kids.length; i++) {
+        if (chars > SHARE_TEXT_CAP) return;
+        var n = kids[i];
+        if (n.nodeType === 3) {
+          var t = String(n.nodeValue).replace(/\s+/g, ' ').trim();
+          if (t) { line.push(t); chars += t.length + 1; }
+          continue;
+        }
+        if (n.nodeType !== 1) continue;
+        try { if (n.matches && n.matches(SHARE_SKIP_SEL)) continue; } catch (e) { /* ignore */ }
+        if (!shownEl(n)) continue;
+        var isBlock = SHARE_BLOCK_TAG.test(n.tagName);
+        if (isBlock) flush();
+        walk(n, depth + 1);
+        if (isBlock) flush();
+      }
+    };
+    walk(host, 0);
+    flush();
+    return buf.join('\n').replace(/\n{3,}/g, '\n\n').trim().slice(0, SHARE_TEXT_CAP);
+  }
+
+  // Tiêu đề mặc định lấy từ CHÍNH thanh tiêu đề workspace — thứ người dùng
+  // đang nhìn — thay vì bắt mỗi tool chép lại tên mình một lần nữa.
+  function wsTitleText() {
+    var b = document.querySelector('.ws-title b');
+    var t = b ? String(b.textContent || '').trim() : '';
+    return t || 'Kết quả Luận Đường';
+  }
+
+  // Chuẩn hoá payload — MỘT phép duy nhất cho cả hai đường (tool đưa / shell
+  // tự suy), nên bản tự suy không bao giờ thiếu khối lá số hay lệch shape.
+  function normalizeShare(o) {
+    var kind = o.kind === 'image' ? 'image' : 'text';
+    var blocks = Array.isArray(o.blocks) ? o.blocks.slice() : null;
+    var text = o.text || null;
+    // Lá số của CHÍNH lượt này: tool truyền thẳng (o.birth) hoặc lấy từ ngữ
+    // cảnh tool đã set. CỐ Ý không đụng birthSnapshot()/localStorage — lá số
+    // còn sót từ tool khác sẽ gắn nhầm chủ nhân cho bản chia sẻ.
+    var bLine = shareBirthLines(o);
+    if (bLine) {
+      if (blocks) blocks.unshift({ header: 'Lá số dùng để luận', text: bLine });
+      else if (kind === 'text') text = bLine + '\n\n' + (text || '');
+      else blocks = [{ header: 'Lá số dùng để luận', text: bLine },
+        { header: null, image: o.imageUrl || null, text: text }];
+    }
+    return {
+      kind: kind,
+      toolId: o.toolId || ACTIVE || 'app',
+      title: String(o.title || 'Kết quả Luận Đường').slice(0, 160),
+      imageUrl: o.imageUrl || null,
+      text: text,
+      blocks: blocks,
+    };
+  }
+
+  function deriveShareable(host) {
+    var text = domShareText(host);
+    // Ngưỡng: dưới mức này thì khung mới có mỗi tiêu đề/spinner, chia sẻ ra là
+    // một trang trống. Thà không có nút còn hơn phát một link rỗng.
+    if (text.length < 60) return null;
+    return normalizeShare({ kind: 'text', title: wsTitleText(), text: text });
+  }
+
+  // Chạy lại mỗi khi khung giữa đổi. Ba việc, theo đúng thứ tự:
+  //   1. kết quả vừa BIẾN MẤT (hiện → ẩn) ⇒ vứt luôn payload tool đã đưa, nó
+  //      thuộc về lượt trước — đây là chỗ vá lỗi "chia sẻ nhầm kết quả cũ";
+  //   2. đang hiện ⇒ tự suy một payload dự phòng từ DOM;
+  //   3. vẽ lại nút.
+  function refreshWsShare() {
+    var host = wsResultHost();
+    if (!host) { renderShareBtn(); return; } // trang chưa khai vùng kết quả → giữ lối cũ
+    var vis = shownEl(host);
+    if (_wsResVisible && !vis) shareable = null; // kết quả biến mất → payload lượt trước hết hiệu lực
+    if (!_wsResVisible && vis) _shareMuted = false; // lượt chạy mới → mở lại lưới đỡ
+    _wsResVisible = vis;
+    autoShare = vis && !_shareMuted ? deriveShareable(host) : null;
+    renderShareBtn();
+  }
+  function watchWsResult() {
+    // 🪤 Bám `#ws` là SAI: `app.html` (tool Lá Số, `/app/la-so`) dùng
+    // `<main class="ws">` KHÔNG có id — observer câm đúng trên tool đầu bảng
+    // mà không có gì báo. Lấy gốc theo nhiều đường, cuối cùng là <body>.
+    var ws = document.getElementById('ws') || document.querySelector('main.ws') || document.body;
+    if (!ws || _wsResObs || typeof MutationObserver === 'undefined') { refreshWsShare(); return; }
+    // Gộp nhịp: tool render kết quả bằng hàng trăm lượt đổi DOM liên tiếp;
+    // đo lại sau mỗi lượt vừa tốn vừa bắt được trạng thái dựng dở.
+    _wsResObs = new MutationObserver(function () {
+      clearTimeout(_wsResTimer);
+      _wsResTimer = setTimeout(refreshWsShare, 220);
+    });
+    _wsResObs.observe(ws, { subtree: true, childList: true, attributes: true, attributeFilter: ['style', 'class', 'hidden'] });
+    refreshWsShare();
+  }
+
   function renderShareBtn() {
     var host = document.querySelector('.ws-actions');
     var btn = document.getElementById('wsShareBtn');
-    if (!shareable) { if (btn) btn.remove(); return; }
+    if (!currentShare()) { if (btn) btn.remove(); return; }
     if (!host) return; // trang chưa có toolbar .ws-actions → bỏ qua, không vỡ gì
     loadRefCode(); // lúc boot có thể chưa đăng nhập; thử lại khi sắp có nút Chia sẻ
     if (!btn) {
@@ -1000,9 +1149,9 @@
     }
   }
   function shareWorkspace() {
-    if (!shareable) return;
+    if (!currentShare()) return;
     var btn = document.getElementById('wsShareBtn'); if (btn) btn.disabled = true;
-    var s = shareable;
+    var s = currentShare();
     var reEnable = function () { if (btn) btn.disabled = false; };
     // Gửi kèm token: server ghi shared_results.owner_user_id → panel Vòng Lặp
     // Viral đếm được SỐ NGƯỜI chia sẻ (mẫu số của K-factor), không chỉ số link.
@@ -1592,39 +1741,30 @@
     },
     // Gọi khi trang đã chạy (có kết quả): nhớ đã xem + ẩn intro.
     dismissIntro: function (key) { this.markIntroSeen(key); var h = document.getElementById('introHost'); if (h) h.innerHTML = ''; },
-    // Chia sẻ kết quả khung giữa (workspace) — dùng chung cho mọi tool. Gọi
-    // ngay sau khi có kết quả: Shell.setShareable({kind:'image'|'text', title,
-    // imageUrl?, text?, blocks?}). blocks (tùy chọn) = mảng {header?,image?,text?}
-    // để trang /ket-qua render lại y hệt layout card (.res-block) của workspace
-    // thay vì chỉ ảnh+text phẳng — dùng khi kết quả có nhiều "thẻ" như workspace
-    // (vd Cung Phu Thê / Chân Dung / Luận Giải). Gọi Shell.setShareable(null) để
-    // ẩn nút (vd tool quay lại form nhập để làm mới kết quả).
+    // Chia sẻ kết quả khung giữa (workspace).
+    //
+    // ⚠️ KHÔNG BẮT BUỘC nữa. Shell tự bật nút Chia sẻ cho mọi tool có khai
+    // vùng kết quả (`data-ws-result`, hoặc id đã thành lệ `#resPanel` /
+    // `#resultCard`) và tự gỡ khi vùng đó biến mất. Hàm này là chỗ LÀM GIÀU:
+    // gọi khi muốn bản chia sẻ đẹp hơn bản shell tự suy từ DOM —
+    // {kind:'image'|'text', title, imageUrl?, text?, blocks?}. `blocks` (tùy
+    // chọn) = mảng {header?,image?,text?} để trang /ket-qua render lại y hệt
+    // layout card (.res-block) của workspace thay vì ảnh+text phẳng (vd Cung
+    // Phu Thê / Chân Dung / Luận Giải).
+    //
+    // `setShareable(null)` nay là một CÂU KHẲNG ĐỊNH — "lượt này KHÔNG có gì
+    // đáng chia sẻ" (fetch hỏng, khung đang hiện câu báo lỗi) — nên nó tắt cả
+    // lưới đỡ tự suy tới lượt chạy sau. Chỉ để dọn nút khi quay về form thì
+    // KHÔNG cần gọi: shell thấy vùng kết quả ẩn đi là tự gỡ.
     /** Một dòng tóm tắt lá số — trang tự render để hiện trên màn hình, dùng
      *  CHUNG chuỗi với bản chèn vào link chia sẻ (không lệch nhau). */
     birthSummary: function (b) { return birthSummaryLine(b); },
     setShareable: function (o) {
-      if (!o) { shareable = null; renderShareBtn(); return; }
-      var kind = o.kind === 'image' ? 'image' : 'text';
-      var blocks = Array.isArray(o.blocks) ? o.blocks.slice() : null;
-      var text = o.text || null;
-      // Lá số của CHÍNH lượt này: tool truyền thẳng (o.birth) hoặc lấy từ ngữ
-      // cảnh tool đã set. CỐ Ý không đụng birthSnapshot()/localStorage — lá số
-      // còn sót từ tool khác sẽ gắn nhầm chủ nhân cho bản chia sẻ.
-      var bLine = shareBirthLines(o);
-      if (bLine) {
-        if (blocks) blocks.unshift({ header: 'Lá số dùng để luận', text: bLine });
-        else if (kind === 'text') text = bLine + '\n\n' + (text || '');
-        else blocks = [{ header: 'Lá số dùng để luận', text: bLine },
-          { header: null, image: o.imageUrl || null, text: text }];
-      }
-      shareable = {
-        kind: kind,
-        toolId: o.toolId || ACTIVE || 'app',
-        title: String(o.title || 'Kết quả Luận Đường').slice(0, 160),
-        imageUrl: o.imageUrl || null,
-        text: text,
-        blocks: blocks,
-      };
+      // Chốt trạng thái hiện/ẩn TRƯỚC rồi mới tắt tiếng: gọi ngược lại thì cạnh
+      // lên "lượt chạy mới" của chính lượt này gỡ luôn cờ vừa đặt (tool báo lỗi
+      // khi khung kết quả đang hiện → shell vẫn tự đỡ đè lên lời khai của tool).
+      if (!o) { shareable = null; refreshWsShare(); _shareMuted = true; autoShare = null; renderShareBtn(); return; }
+      shareable = normalizeShare(o); _shareMuted = false;
       renderShareBtn();
     },
   };
@@ -1994,6 +2134,9 @@
     // Empty-state intro (hướng B): trang khai window.SHELL_INTRO={key,title,desc}
     // + có #introHost → shell tự hiện cho người mới, ẩn sau lần dùng đầu.
     if (window.SHELL_INTRO && window.SHELL_INTRO.key) Shell.introOnce(window.SHELL_INTRO.key, window.SHELL_INTRO);
+    // Nút Chia sẻ của khung giữa: shell tự theo dõi vùng kết quả, tool không
+    // phải khai báo gì. Xem khối "CHIA SẺ WORKSPACE" ở trên.
+    watchWsResult();
     renderRecentAll();
     // Deep-link khôi phục từ hub Tài khoản: /app/<tool>?restore=<id> → khôi phục
     // đúng phiên (reload về ?auto=1 sạch trong restoreSession).
