@@ -1543,6 +1543,98 @@ Quyết định + cách lật lại gom trong **`lib/seo/index-policy.ts`**.
 
 ---
 
+## 🕘 7 tool KHÔNG HỀ có lịch sử — và nhãn phiên suýt nói sai người (2026-08-07, PR sau)
+
+Henry: *"Mày kiểm tra lại tất cả các tool đều có mục Phiên gần đây này chưa?"*
+Đếm ra **26/34**. Nhưng con số đó chưa phải vấn đề thật.
+
+### 🔴 Không phải thiếu MỘT khối markup — 6 tool không có LỊCH SỬ nào cả
+`#shellRecent` chỉ chạy khi `window.SHELL_HISTORY` bật. Chéo hai cột thì cắt
+sạch: 26 tool có **cả hai**, 8 trang còn lại **không có cái nào** — tức 6 tool
+(2 trang kia là `app-home`/`app-tai-khoan`, không phải tool) vừa mất khối "Phiên
+gần đây" vừa mất **nút Lịch sử trong rail**. Người dùng không có đường nào mở
+lại phiên cũ.
+- 6 tool: `chan-dung-tien-kiep` · `chan-dung-vo-chong` · `day-con` ·
+  `duyen-no-tien-kiep` · `nguoi-khac` · `nhan-mach` — đúng các tool MỚI NHẤT,
+  chép từ khuôn không có khối đó. **Cùng bệnh với 2 trang thiếu `<link>` Noto
+  Serif ở track Công Sở: thêm trang shell mới thì phải chép ĐỦ khuôn.**
+
+### 🔑 Kiểm đường tiền TRƯỚC khi bật — và nó an toàn
+`restoreSession` reload `?auto=1`, tool tự chạy lại center. Với tool trả phí thì
+đó là đường trừ tiền. Nhưng cả 6 đều **`autoRun` 0 lượt** ⇒ không tool nào tự
+chạy lại; `restorePendingFallback` là lưới đỡ, chỉ replay hội thoại rồi khoá ô
+nhập. Tiền lệ đã chạy thật: `app-phong-thuy` có 7 chỗ paywall + history +
+`autoRun` 0. Có ca test canh **0 lượt `action=deduct`** khi bấm khôi phục.
+
+### 🔴 Bật xong mới lộ lỗi NẶNG HƠN: nhãn phiên dán bằng lá số CỦA NGƯỜI KHÁC
+`curMeta.restore.birth` lấy từ `birthSnapshot()` = `localStorage['app_birth']`
+**TOÀN CỤC**. Mà `day-con`/`nguoi-khac`/`nhan-mach` đọc lá số của CON/SẾP/ĐỘI và
+**cố ý KHÔNG gọi `rememberBirth`** (đúng thiết kế: không được đè lá số của chính
+người dùng). ⇒ phiên `day-con` sẽ mang dòng phụ *"Henry · 3/6/1998"* trong khi
+nó nói về **bé Mai sinh 2015**. Đúng loại nhãn nói sai mà vòng "Phiên gần đây"
+sinh ra để chống — và nó IM LẶNG, nhìn qua rất hợp lý.
+
+**Vá 3 điểm trong `shell.js`:**
+1. `restore.birth = normBirth(o.birth) || birthSnapshot()` — lấy lá số TOOL VỪA
+   DÙNG trước, chỉ rơi về toàn cục khi tool không đưa (tool ảnh).
+2. Cờ `birthOwned`, chỉ bật khi tool gọi `rememberBirth` = khai *"lá số này là
+   của chính người dùng"*; ghi vào phiên thành `restore.selfBirth`.
+3. `restoreSession` chỉ đồng bộ `app_birth` khi `selfBirth !== false`. Không có
+   bước này thì mở lại một phiên `day-con` là **lá số con chiếm chỗ lá số của
+   người dùng**, kéo theo cả thẻ "Vận hôm nay" ở trang chủ.
+- ⚠️ **`!== false` chứ không phải `=== true`**: phiên CŨ không có cờ →
+  `undefined` → giữ nguyên hành vi trước đây. Có ca test riêng canh chỗ này.
+
+### Verify
+`typecheck` 0 · `lint` 0 lỗi (72 warning pre-existing) · `prettier` sạch ·
+`check:prices`/`check:groups`/`check:nostore` sạch · engine 185 pass ·
+`node --check`.
+- **85 ca trên 7 TRANG THẬT** (thêm ca canh nút Lịch sử trong rail): đúng 2 dòng · dòng chính là câu hỏi · gộp đúng
+  "3 phiên" · nút `Tất cả (4)` · cao 129px · bấm dòng → đúng `?auto=1` + đúng id
+  trong `sessionStorage` · **0 lượt trừ Lượng** · 0 lỗi JS.
+- **30 ca vòng tròn ĐẦY ĐỦ** (chạy tool → hỏi rail → phiên phải hiện lên khối):
+  cả 6 tool lưu đúng 1 phiên và khối tự hiện.
+- **10 ca quyền sở hữu lá số**: `day-con` ra dòng phụ *"Bé Mai · 9/5/2015"*,
+  **không lọt 1998**, `selfBirth=false`, khôi phục xong `app_birth` **vẫn là
+  1998** · ĐỐI CHỨNG `luan-giai` (có `rememberBirth`) `selfBirth=true` và khôi
+  phục **VẪN đồng bộ** `app_birth` như cũ · ĐỐI CHỨNG phiên CŨ không cờ vẫn đồng bộ.
+- 🪤 **ĐỐI CHỨNG nạp bản `origin/main`**: `#shellRecent` không có, `SHELL_HISTORY`
+  tắt, **nút lịch sử trong rail cũng không có** ⇒ lỗi có thật.
+- 🪤 Hai ca đỏ đầu là **lỗi TEST**: (a) `birthSnapshot()` đọc `app_birth` chứ
+  không đọc `o.birth` nên `setContext` giả của tao không có lá số — chính chỗ đó
+  dẫn tới phát hiện lỗi thật ở trên; (b) `addInitScript` của Playwright chạy lại
+  ở **MỌI lượt điều hướng**, nên sau khi `restoreSession` reload `?auto=1` nó ghi
+  đè `app_birth` về giá trị seed → hai ca đối chứng đỏ oan. Phải seed một lần.
+- Bump `shell.js?v=65` (35 trang).
+
+### 🔁 Gộp `main` giữa chừng — và tool thứ BẢY lòi ra đúng lúc đó
+`main` đi trước **17 commit**, trong đó #462 thêm tool MỚI `huong-nghiep-tre`
+dựng trên khuôn `day-con` **CŨ** ⇒ nó thiếu y hệt. Tức lỗi tái phát ngay trong
+lượt gộp của chính PR đi sửa nó. Nay **7 tool**, không phải 6.
+- ⇒ Cắm **`scripts/check-shell-history.mjs`** vào CI lint (`check:history`):
+  mọi trang có `SHELL_ACTIVE` phải có CẢ `SHELL_HISTORY=true` LẪN `#shellRecent`.
+  Miễn trừ đúng 2 trang không phải công cụ, **kèm lý do ghi trong chính bộ dò**.
+  Đã red-team: gỡ cờ của một trang → bộ dò đỏ đúng trang đó.
+- 🔑 **Thiếu MỘT trong hai là hỏng im lặng**: có cờ mà quên chỗ mount → phiên vẫn
+  lưu nhưng không ai thấy; có chỗ mount mà quên cờ → khối vĩnh viễn rỗng
+  (`renderRecent` thoát sớm khi `!HIST_ON`).
+- 35 xung đột đều là dòng `shell.js?v=` (65 của tao vs 67 của main) → lấy bản
+  main rồi bump **68**. Một xung đột THẬT ở `app-day-con.html`: main viết lại
+  `SHELL_INTRO`; giữ bản mới của main rồi gắn lại `SHELL_HISTORY`.
+- **Đếm lại dấu hiệu CẢ HAI bên sau khi giải** (đúng bài học `--ours`): bên tao
+  `birthOwned`/`selfBirth`/`normBirth(o.birth)` còn đủ + 7 tool đủ cả hai cờ;
+  bên main tool mới có mặt, `shell.js` 36/36 file, `ai-loading-steps` v=5.
+
+### CÒN LẠI
+- 7 tool này **không dựng lại được phần giữa** khi khôi phục (không có `autoRun`)
+  — bấm một phiên thì hội thoại trở lại còn kết quả thì không. Cố ý: dựng lại là
+  chạy lại tool trả phí. Muốn dựng lại thì phải đọc từ cache
+  (`portrait_cache`/`user_charts`), là việc riêng.
+- `nhan-mach` lấy lá số từ SỔ (2–8 người) nên `restore.birth` chỉ giữ người đầu
+  ⇒ dòng phụ nói một người trong khi phiên bàn cả đội. Không sai, nhưng hụt.
+
+---
+
 ## 🌓 Dark mode cho trang Tài khoản — gỡ nốt cái đảo sáng (2026-08-07, PR sau)
 
 Henry: *"Ok làm tiếp đi"* mục "Trang Tài khoản ghim sáng" tao để lại ở vòng trên.

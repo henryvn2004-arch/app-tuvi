@@ -52,6 +52,13 @@ jobs:
       - name: Mọi tool Luận Đường chia sẻ được
         run: npm run check:share
 
+      # Chặn tái phát tool trong Luận Đường KHÔNG có lịch sử hội thoại. Trang
+      # tool mới hay chép từ khuôn của một trang cũ, mà khuôn đó có thể thiếu
+      # khối này — đã tái phát HAI lần theo đúng đường đó. Không có gì báo:
+      # trang vẫn chạy, chỉ là người dùng không có đường nào mở lại phiên cũ.
+      - name: Mọi tool Luận Đường có lịch sử hội thoại
+        run: npm run check:history
+
       # Chặn `animation:` trỏ tới @keyframes KHÔNG TỒN TẠI — trình duyệt không
       # báo gì cả, phần tử vẫn hiện, chỉ là đứng im. Bắt được ngay lượt chạy
       # đầu: banner "Chào mừng! Bạn đã nhận Lượng miễn phí" của `auth.js` mượn

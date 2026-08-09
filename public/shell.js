@@ -357,6 +357,9 @@
   var HIST_CAP = 40;
   var newId = function () { return (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : ('s' + Date.now() + Math.random().toString(36).slice(2, 8)); };
   var curMeta = null; // {restore,title,createdAt} của thread đang mở
+  // Tool gọi rememberBirth = khai 'lá số này là CỦA CHÍNH người dùng'. Tool
+  // đọc lá số NGƯỜI KHÁC (con, sếp, cả đội) cố ý KHÔNG gọi — xem (3) bên dưới.
+  var birthOwned = false;
   var ctxCalls = 0;   // số lần tool đã gọi setContext (0 = trang chưa dựng được gì)
   // Tool đã gộp: đọc kèm phiên lịch sử của tool cũ (la-so đã gộp vào luan-giai).
   var HIST_ALIAS = { 'luan-giai': ['la-so'] };
@@ -557,7 +560,11 @@
       } catch (e) { /* ignore */ }
       // Ghi lại đã CHUẨN HOÁ: phiên cũ lưu birth shape {dd,mm,yyyy} — để nguyên
       // thì prefillForm/TuviForm.setData không nhận ra field nào (xem normBirth).
-      if (sess.restore && sess.restore.birth) {
+      // Chỉ đồng bộ app_birth khi phiên đó là lá số CỦA CHÍNH người dùng.
+      // selfBirth === false ⇒ tool đọc lá số người khác; ghi đè là lá số con/sếp
+      // chiếm chỗ lá số của họ, kéo theo cả thẻ 'Vận hôm nay' ở trang chủ.
+      // Phiên CŨ không có cờ này (undefined) ⇒ giữ nguyên hành vi trước đây.
+      if (sess.restore && sess.restore.birth && sess.restore.selfBirth !== false) {
         try { localStorage.setItem('app_birth', JSON.stringify(normBirth(sess.restore.birth))); } catch (e) { /* ignore */ }
       }
       // Reload về ?auto=1 SẠCH (bỏ mọi query cũ như ?restore) → tránh lặp khi
@@ -1724,7 +1731,11 @@
       sessionId = newId();
       // Meta cho thread mới: restore payload đủ để dựng lại center (mặc định =
       // snapshot birth đã nhớ + scenario), title lấy từ label.
-      curMeta = { restore: Object.assign({ birth: birthSnapshot(), scenario: o.scenario || null, form: snapshotForm() }, o.restore || {}), title: o.title || o.label || 'Phiên', createdAt: Date.now() };
+      // birth của phiên lấy từ lá số TOOL VỪA DÙNG trước, chỉ rơi về app_birth
+      // khi tool không đưa (tool ảnh). Đọc thẳng app_birth là tool xem lá số
+      // NGƯỜI KHÁC (day-con · nguoi-khac · nhan-mach) dán nhãn phiên bằng lá số
+      // của chính người dùng — nhãn nói SAI người mà không có gì báo.
+      curMeta = { restore: Object.assign({ birth: normBirth(o.birth) || birthSnapshot(), selfBirth: birthOwned, scenario: o.scenario || null, form: snapshotForm() }, o.restore || {}), title: o.title || o.label || 'Phiên', createdAt: Date.now() };
       var c = document.getElementById('railCtx'), t = document.getElementById('railCtxTxt');
       if (o.label) { c.style.display = ''; t.innerHTML = 'Đang gắn: <b>' + esc(o.label) + '</b>'; }
       var ta = document.getElementById('railInput');
@@ -1800,6 +1811,7 @@
     // BẮN-VÀ-QUÊN nằm sau: không await, không chặn, hỏng thì thôi. Đảo thứ tự
     // hai việc này là biến một hàm đồng bộ thành phụ thuộc mạng.
     rememberBirth: function (fd) {
+      birthOwned = true;
       try { localStorage.setItem('app_birth', JSON.stringify(fd)); } catch (e) { /* ignore */ }
       try { if (window.UserCharts) window.UserCharts.save(fd, ''); } catch (e) { /* ignore */ }
     },
