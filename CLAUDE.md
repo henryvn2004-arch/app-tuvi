@@ -367,12 +367,47 @@ phủ **56/62 = 90%** lượt mở.
   khác). Đường đúng cho chúng là mời nhập lá số NGƯỜI mà họ đang quan tâm, khác
   hẳn về câu chữ, chưa làm.
 
+### ✅ B3 — Peak-End: bản đọc từng KẾT bằng một lời rào (cùng PR)
+
+Đo trên TRANG THẬT trước khi sửa (chặn POST, trả payload đầy đủ để nhìn đúng thứ
+người trả tiền nhìn). Thứ tự khối sau khi mở khoá:
+
+| # | khối | cao |
+|---|---|---:|
+| 4 | câu chốt `motCau` — **KHÔNG tiêu đề** | 110px |
+| 5 | Cơ Sở Trong Lá Số — bảng tra kỹ thuật | **301px** |
+| 6 | **tờ miễn trừ trách nhiệm** ← thứ CUỐI CÙNG đọc được | 122px |
+
+🔑 Người ta nhớ **ĐỈNH** và nhớ **ĐOẠN KẾT**. Câu chốt là thứ cả bản luận dồn về —
+vậy mà nó là một `div` không tiêu đề, bị 423px chữ kỹ thuật + pháp lý đè lên sau
+lưng. Kết một món hàng bằng *"mang tính tham khảo"* là vứt đi đúng chỗ đáng nhớ nhất.
+
+**Vá:** câu chốt có tiêu đề riêng (**"Nếu Chỉ Nhớ Một Câu"**) và chuyển xuống
+**SAU** khối cơ sở ⇒ bản đọc kết bằng câu dùng được, không kết bằng bảng tra.
+Áp cho cả 3 tool cẩm nang (`nhan-mach` vốn đã đứng cuối, chỉ thêm tiêu đề).
+- ⚠️ **KHÔNG giấu tờ miễn trừ đi để "kết cho đẹp".** Nó ở lại làm cước chú —
+  kết đẹp bằng cách gỡ lời rào là không trung thực, và có ca test canh đúng điều
+  đó (`ethicsNote` phải còn trong danh sách khối đang hiện).
+- **Lượt TÍNH THỬ không đổi một pixel**: `endBlock` vẫn ẩn, nên thứ tự hiện ra
+  vẫn là `basisBlock → lockBlock`, tường vẫn là thứ cuối. Có ca hồi quy canh.
+
+**Verify:** `tsc` 0 · `lint` 0 lỗi · `prettier` sạch · 5 bộ dò sạch · engine 185
+pass · `node --check` 6 khối nội tuyến · **12 ca Playwright trên TRANG THẬT**:
+bảng tra đứng trước câu chốt · khối NỘI DUNG cuối là câu chốt · tiêu đề đúng ·
+tờ miễn trừ VẪN còn · lượt tính thử không lộ câu chốt và tường vẫn cuối · 390px
+không tràn. Hồi quy 5 bộ kiểm cũ (166 ca) vẫn xanh.
+
+🪤 **Regex `<!--.*?-->` với cờ `re.S` NUỐT XUYÊN nhiều chú thích** — engine
+backtrack cho `.*?` giãn qua vài dấu `-->` để vế sau khớp, nên lượt cắt khối đầu
+tiên bắt nhầm từ vị trí 6900 thay vì 11278 rồi báo "đã đổi rồi". Neo thẳng vào
+thẻ `div`, đừng cố bắt chú thích đứng trước.
+
 ### ⏭️ CÒN LẠI của kế hoạch (Henry đã duyệt khung, chưa code)
 - ⚠️ **B1 mới phủ người ĐÃ ĐĂNG NHẬP mà hết Lượng.** Ở 60 tài khoản / ~4 người
   ngày thì tệp đó rất mỏng — đừng kỳ vọng `referrals` nhảy ngay. Con số phải nhìn
   TRƯỚC là **`invite_shown`**: nó = 0 nghĩa là điều kiện không bao giờ thoả (phải
   nới, ví dụ hiện cả khi còn đủ Lượng), chứ không phải câu chữ dở.
-- ~~**B2**~~ → **ĐÃ LÀM**, xem mục riêng ở trên. **B3** — Peak-End cho đoạn kết.
+- ~~**B2**~~ → **ĐÃ LÀM**, xem mục riêng ở trên. ~~**B3**~~ → **ĐÃ LÀM**, xem mục riêng ở trên.
 - **C1** — bày engine ra (*"đọc từ N dữ kiện"* + 1 trích dẫn cổ thư thật): đây là
   lá chắn cho phản đối số 1 *"AI nó bịa thôi"*, và nó bảo vệ luôn phần Barnum.
 - **C3** — gallery từ 36 `shared_results` (vốn đã public): social proof + trang

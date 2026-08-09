@@ -58,7 +58,7 @@
 .dc-item:last-child{padding-bottom:0}
 .dc-item .viec{font-size:13px;line-height:1.7;color:#2a2118}
 .dc-item .vidu{font-size:12.5px;line-height:1.7;color:#5a5145;font-style:italic;margin-top:4px}
-.dc-motcau{margin-top:16px;padding:14px 16px;background:#FBF8F1;border:1px solid #EADFC8;border-radius:10px;font-family:var(--serif);font-size:15px;line-height:1.75;color:#061A2E;font-weight:700}
+.dc-motcau{margin-top:0;padding:14px 16px;background:#FBF8F1;border:1px solid #EADFC8;border-radius:10px;font-family:var(--serif);font-size:15px;line-height:1.75;color:#061A2E;font-weight:700}
 .dc-basis-list{margin:0 0 0 18px;color:#5a5145;line-height:1.9;font-size:12.8px}
 .dc-basis-list li{margin-bottom:3px}
 .dc-basis-list b{color:#2a2118}
@@ -201,16 +201,23 @@
           </div>
         </div>
 
-        <div class="res-block" id="endBlock" style="display:none">
-          <div class="res-block-body">
-            <div class="dc-motcau" id="motCau"></div>
-          </div>
-        </div>
-
         <div class="res-block" id="basisBlock" style="display:none">
           <div class="res-block-header"><span class="res-block-title">Cơ Sở Trong Lá Số</span></div>
           <div class="res-block-body">
             <ul class="dc-basis-list" id="basisList"></ul>
+          </div>
+        </div>
+
+        <!-- B3 — PEAK-END. Đo trên trang thật (bản trước): câu chốt là một div
+             KHÔNG tiêu đề, 110px, đứng TRƯỚC bảng kỹ thuật 301px, và thứ CUỐI
+             CÙNG người trả tiền đọc là tờ miễn trừ trách nhiệm. Người ta nhớ
+             ĐỈNH và nhớ ĐOẠN KẾT — kết bằng một lời rào là vứt đi đúng chỗ đáng
+             nhớ nhất. Nay câu chốt có tiêu đề riêng và đứng SAU phần cơ sở, để
+             bản đọc kết bằng câu dùng được chứ không kết bằng bảng tra. -->
+        <div class="res-block" id="endBlock" style="display:none">
+          <div class="res-block-header"><span class="res-block-title">Nếu Chỉ Nhớ Một Câu</span></div>
+          <div class="res-block-body">
+            <div class="dc-motcau" id="motCau"></div>
           </div>
         </div>
 
