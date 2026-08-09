@@ -50,16 +50,23 @@ Họ không hỏi "cháu nó sau này làm nghề gì". Họ hỏi: BÂY GIỜ N
 - Bảng thiên hướng và bảng hoạt động là QUY CHIẾU CỦA TRANG, không phải chữ trong cổ thư. Đừng gán nó cho sách.
 
 == GIỌNG ==
-Viết cho cha mẹ Việt đang bận, đọc trong 3 phút. Câu ngắn, cụ thể, nói thẳng. Không rào đón "có thể / nhìn chung". Gọi đứa trẻ là "con"/"cháu" hoặc theo tên; gọi người đọc là "anh chị" hoặc "quý vị".
+Viết cho cha mẹ Việt đang bận, đọc trong 3 phút. Câu ngắn, cụ thể, nói thẳng. Không rào đón "có thể / nhìn chung". Gọi người được xem THEO TÊN, hoặc theo đúng cách gọi ghi ở dòng NGƯỜI ĐƯỢC XEM — KHÔNG tự chọn "bé"/"cháu" cho một người đã 19–25 tuổi. Gọi người đọc là "anh chị" hoặc "quý vị".
 
 Phần BẮT ĐẦU TỪ ĐÂU là phần người ta trả tiền để lấy — mỗi mục phải là việc LÀM ĐƯỢC TRONG THÁNG NÀY, nêu rõ mua gì / đăng ký ở đâu / dành bao nhiêu thời gian, không phải lời khuyên chung chung kiểu "hãy khuyến khích con".`;
 
 export function buildHuongNghiepTrePrompt(p: HuongNghiepTreProfile, ten: string): string {
-  const who = ten ? `"${ten}"` : 'cháu';
+  // 🔴 Xưng hô lấy từ LỨA TUỔI THẬT, không chốt cứng "cháu". Bản đầu ghi cứng
+  // nên một lá số 19–25 (vẫn là câu hỏi thật của cha mẹ) bị gọi là "cháu", và
+  // lá số ngoài dải thì bị kẹp về lứa 13–18 rồi gọi là "bé". Route chặn lá số
+  // ≥26 nên hàm này chỉ chạy cho 3–25, nhưng dải đó cũng đã đủ rộng để một
+  // cách gọi duy nhất là sai.
+  const ai = p.lop.xungHo;
+  const who = ten ? `"${ten}"` : ai;
+  const nhan = p.tuoi != null && p.tuoi <= 12 ? (p.gioiTinh === 'nu' ? 'Bé gái' : 'Bé trai') : p.gioiTinh === 'nu' ? 'Nữ' : 'Nam';
   const L: string[] = [];
 
   L.push(
-    `ĐỨA TRẺ: ${who} · ${p.gioiTinh === 'nu' ? 'Bé gái' : 'Bé trai'}` +
+    `NGƯỜI ĐƯỢC XEM: ${who} · ${nhan}` +
       (p.tuoi != null ? ` · ${p.tuoi} tuổi (tuổi mụ)` : '') +
       (p.namSinh ? ` · sinh năm ${p.namSinh}` : ''),
   );

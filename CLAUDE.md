@@ -219,6 +219,40 @@ lỗi nào bắn ra — chỉ là một trang ăn bản shell cũ. 🔑 **Gộp 
 lại phiên bản asset trên CẢ cây**, đừng tin "hết `<<<<<<<` là xong" (bài học
 `git checkout --ours` lặp lại ở dạng khác).
 
+### 🔴 SAU KHI BẬT PROD: lá số 43 tuổi vẫn được gọi là "bé trai"
+Henry: *"Mày phải factor in tuổi thật của lá số nữa. Tao vừa test thử lá số sinh
+lúc 1h45 sáng ngày 9 tháng 5 năm 1984. Tức là đã 43 tuổi rồi. Mà nó luận giải
+vẫn gọi là cháu/bé trai, nghe nó kỳ kỳ."*
+
+**Căn nguyên: `lopTuoi()` KẸP mọi tuổi > 12 về lứa 13–18** thay vì nhận ra lá số
+không phải trẻ em. Kẹp là cách hỏng IM LẶNG — không lỗi nào bắn ra, lá số cứ đi
+trọn đường như một đứa trẻ. Cộng thêm: chữ **"cháu" nằm CỨNG ở CẢ BA TẦNG**
+(bảng `CHAT_KHONG_DOI_HOI` của engine · prompt rail · `Bé trai/Bé gái` trên
+trang), nên không có đường nào đổi theo tuổi.
+
+🔑 **Hai ca ngoài dải KHÁC NHAU, không được gộp làm một:**
+| Tuổi mụ | Xử lý | Vì sao |
+|---|---|---|
+| **19–25** | lứa MỚI `vaodoi` | Vẫn là câu hỏi THẬT của cha mẹ (*"con vừa ra trường"*). Giữ tool, đổi xưng hô, đổi hoạt động sang việc đi làm thật |
+| **≥26** | `laTreEm=false`, **KHÔNG bán** | Không còn là "định hướng sớm cho con". Đổi mấy đại từ rồi bán tiếp một bản viết cho trẻ con là bán nhầm hàng |
+
+- **Chốt chặn đặt TRƯỚC `toolPaymentDenied`** ⇒ lá số người lớn **không mất
+  Lượng**. Đặt sau là thu tiền rồi mới từ chối — có bài kiểm canh đúng thứ tự
+  hai lệnh đó trong mã nguồn.
+- **Tính thử vẫn chạy cho MỌI tuổi**: tầng thiên hướng đọc từ 13 chiều, độc lập
+  tuổi, nên nó có nghĩa ở mọi lứa. Thứ bị cắt là phần CHỮ viết cho cha mẹ.
+- ⛔ **CỐ Ý KHÔNG dựng tầng người lớn đầy đủ** — `cong-so` chính là *Tử Vi Công
+  Sở & Hướng Nghiệp*, cũng 15 Lượng, cũng trả lời hướng nghiệp cho người trưởng
+  thành. Dựng thêm ở đây là hai tool 15 Lượng cùng một câu hỏi, đúng cái bẫy
+  track này vừa tốn một PR để gỡ. Nên ≥26 thì **bàn giao sang Công Sở**.
+- `lop` vẫn có giá trị khi `laTreEm=false` (giữ hình dạng payload) nhưng trang
+  **ẩn nhãn lứa và dòng vai cha mẹ** — không thì lại hiện *"Tuổi vào đời ·
+  19–25"* cho lá số 43 tuổi, đúng loại vô lý vừa đi sửa chỉ đổi chỗ.
+- Bảng hoạt động **27 → 36 khối** (thêm 9 khối lứa 19–25, 36 hoạt động mới),
+  `check:hoatdong` cập nhật theo và vẫn 0 cặp trùng giữa các hướng.
+- 🪤 **Red-team kẹp tuổi trở lại → lá số 43 tuổi lại `laTreEm=true`** ⇒ lỗi tái
+  hiện được, bất biến không đỗ giả.
+
 ### Verify
 `tsc` 0 · `lint` 0 lỗi (72 warning pre-existing) · `prettier` quét cả cây sạch ·
 **10/10 bộ dò sạch** (`prices`/`groups`/`nostore`/`share`/`keyframes`/

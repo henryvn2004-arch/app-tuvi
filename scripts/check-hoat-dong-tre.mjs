@@ -1,13 +1,13 @@
 #!/usr/bin/env node
 /**
- * check-hoat-dong-tre — canh 27 khối hoạt động của `huong-nghiep-tre`.
+ * check-hoat-dong-tre — canh 36 khối hoạt động của `huong-nghiep-tre`.
  *
  * VÌ SAO CÓ BỘ DÒ NÀY:
- * 27 khối hoạt động (9 thiên hướng × 3 lứa tuổi) là phần người TRẢ TIỀN đọc kỹ
+ * 36 khối hoạt động (9 thiên hướng × 4 lứa tuổi) là phần người TRẢ TIỀN đọc kỹ
  * nhất, và là phần DUY NHẤT của tool không có gì kiểm được bằng số — mọi bất
  * biến khác (điểm giảm dần, đủ ba hướng, rail phẳng) đều nói về CẤU TRÚC, không
  * nói gì về CHỮ. Chúng cũng là phần chắc chắn còn bị sửa: chính CLAUDE.md ghi
- * "27 khối hoạt động chưa ai review".
+ * "27 khối hoạt động chưa ai review" (nay 36 sau khi thêm lứa 19–25).
  *
  * Ba luật dưới đây đều rút ra từ lỗi ĐÃ BẮT ĐƯỢC THẬT khi soi tay bảng này một
  * lượt, không phải lo hão:
@@ -47,8 +47,8 @@ const SRC = join(ROOT, 'lib/engine/huong-nghiep-tre.ts');
 const raw = readFileSync(SRC, 'utf8');
 
 /* --- bóc 27 khối: hướng × lứa → danh sách chuỗi ------------------------- */
-const LOPS = ['nho', 'giua', 'lon'];
-const TEN_LOP = { nho: '3–7', giua: '8–12', lon: '13–18' };
+const LOPS = ['nho', 'giua', 'lon', 'vaodoi'];
+const TEN_LOP = { nho: '3–7', giua: '8–12', lon: '13–18', vaodoi: '19–25' };
 const khoi = []; // {huong, lop, items:[{text, line}]}
 
 const lines = raw.split('\n');
@@ -75,7 +75,7 @@ for (let i = 0; i < lines.length; i++) {
   }
   if (!trongHoatDong) continue;
 
-  const mLop = l.match(/^ {6}(nho|giua|lon): \[$/);
+  const mLop = l.match(/^ {6}(nho|giua|lon|vaodoi): \[$/);
   if (mLop) {
     lopHienTai = mLop[1];
     khoi.push({ huong: huongHienTai, lop: lopHienTai, items: [] });
@@ -89,9 +89,9 @@ for (let i = 0; i < lines.length; i++) {
 
 const problems = [];
 
-if (khoi.length !== 27) {
+if (khoi.length !== 36) {
   problems.push(
-    `bóc ra ${khoi.length} khối, chờ 27 (9 hướng × 3 lứa). Bố cục file đổi ⇒ bộ dò không còn đọc đúng, PHẢI sửa bộ dò chứ đừng bỏ qua.`
+    `bóc ra ${khoi.length} khối, chờ 36 (9 hướng × 4 lứa). Bố cục file đổi ⇒ bộ dò không còn đọc đúng, PHẢI sửa bộ dò chứ đừng bỏ qua.`
   );
 }
 for (const k of khoi) {
