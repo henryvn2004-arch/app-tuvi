@@ -17,6 +17,17 @@ updates:
       minor-and-patch:
         update-types: ['minor', 'patch']
         # Group all non-major bumps thành 1 PR/tuần để khỏi spam
+    ignore:
+      # TypeScript 7 (bản viết lại bằng Go) KHÔNG cung cấp compiler API mà
+      # `next build` cần: "TypeScript 7.0.2 does not provide the compiler API
+      # required by Next.js". Đã merge #388 rồi phải revert — 7 lượt deploy
+      # production ERROR liên tiếp.
+      # ⚠️ `tsc --noEmit` (job `typecheck` của CI) VẪN XANH với TS7 vì nó chạy
+      # binary, không đi qua API. Nên CI không bao giờ bắt được cái này; chỉ
+      # Vercel bắt. Đừng tin typecheck xanh là đủ để bump TypeScript.
+      # Gỡ chốt này khi Next hỗ trợ TS7 (hoặc khi bật experimental.useTypeScriptCli).
+      - dependency-name: 'typescript'
+        versions: ['>=7']
 
   - package-ecosystem: 'npm'
     directory: '/tuvi-engine'
