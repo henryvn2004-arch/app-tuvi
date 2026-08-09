@@ -322,13 +322,18 @@ phát đúng mấy khoá đó. Vá một chỗ là cả hai tool được; nay *
 trên cả hai (quét 336 lá số).
 
 ### CÒN LẠI
-- ⚠️ **VIỆC TAY: chạy `_patches/migration-huong-nghiep-tre.sql` rồi bật SAU KHI
-  DEPLOY**, không được trước — `cong-cu.html` và `tuvi-paywall.js` đều lọc
-  `enabled=eq.true`, bật sớm là người thật bấm vào trang chưa tồn tại:
-  ```sql
-  update tool_pricing set enabled = true, updated_at = now()
-   where tool_id = 'huong-nghiep-tre';
-  ```
+- ✅ **ĐÃ BẬT TRÊN PROD — hết việc tay.** Trình tự đã chạy đúng thứ tự bắt buộc:
+  merge (`3f2e1ca`) → **đợi production deploy READY** → verify prod phục vụ
+  `/app/huong-nghiep-tre` **200** (mốc đối chứng: ngay trước deploy nó còn
+  **404**) → migration (10 cột · RLS bật · 1 policy chủ-sở-hữu · dòng giá
+  `enabled=false`) → **rồi mới** `enabled=true`. Verify sau khi bật: 60 tool
+  đang bật, và nhóm `con-cai` ra *Xem Tuổi Sinh Con · Đặt Tên Con · Dạy Con Theo
+  Lá Số · Hướng Nghiệp Sớm Cho Con*; route thật trả **401** đúng cho lượt
+  `cache-status` chưa đăng nhập.
+  🔑 Migration **an toàn chạy trước deploy** (nó tạo dòng ở `enabled=false`, và
+  `on conflict do update` CỐ Ý không đụng cột `enabled` nên chạy lại không lật);
+  chỉ **câu bật** mới phải đợi. Tách được hai việc này là rút ngắn được cửa sổ
+  rủi ro.
 - **`THIEN_HUONG` (9 hướng × 21 trục + toàn bộ phần chữ) là bảng TỰ ĐẶT**, cùng
   dạng nợ với `KIEU_HOC`, `DOMAIN_NGANH`, `SAO_TRUC`. Cổ thư không có khái niệm
   "thiên hướng của trẻ" bằng thang điểm. Sửa là sửa data thuần.
@@ -4672,9 +4677,23 @@ cùng một PR, hai lượt push liền nhau ra hai kết quả khác nhau —
 |---|---|---|
 | có gộp base, **HEAD CHÍNH LÀ commit merge** | merge | **đủ 7 check** |
 | có gộp base trong dải push, nhưng **HEAD là commit thường** đứng sau | thường | **chỉ `smoke` + Vercel** |
-⇒ *"Gộp base rồi push"* **KHÔNG đủ** — nghi là phải để **commit merge nằm ở
-đúng HEAD**. Chưa đủ mẫu để chốt thành luật (n=2), ghi lại để lượt sau đối
-chiếu thay vì thử mò lại từ đầu.
+⇒ *"Gộp base rồi push"* **KHÔNG đủ**.
+
+🪤 **Nhưng giả thuyết "phải là commit merge" LẬP TỨC BỊ PHẢN CHỨNG** ngay trong
+cùng buổi: PR **#471** dựng nhánh lại từ main rồi đúng **một commit thường** làm
+HEAD — không có commit merge nào — mà vẫn **đủ 7 check**. Khác biệt thật nằm ở
+LOẠI EVENT, không nằm ở hình dạng commit:
+
+| Event | Quan sát được |
+|---|---|
+| `opened` (PR mới) | chưa thấy lượt nào hụt |
+| `synchronize` (push vào PR đang mở) | **thỉnh thoảng GitHub không tạo run** |
+
+⇒ Gặp ca hụt trên PR đang mở thì đường chắc nhất là **mở một PR MỚI** (nhánh
+reset trên main + commit lại), chứ không phải cố nặn ra commit merge. Vẫn chưa
+đủ mẫu để chốt, nhưng nay có một ca ngược chiều — đừng chép lại suy đoán cũ như
+thể nó đã được xác nhận. 🔑 Đây là bài học lặp: **ghi giả thuyết thì phải ghi cả
+ca phản chứng, nếu không nó tự lên đời thành luật.**
 - 🔑 **Trước khi tốn công kích lại CI, hỏi: CI còn thêm được gì cho ĐÚNG diff
   này?** Lúc PR #462 gặp ca này, `playwright` và `lighthouse` còn trỏ **URL
   prod** nên chúng đo sức khoẻ prod chứ không đo nhánh; phần thật sự phủ diff
