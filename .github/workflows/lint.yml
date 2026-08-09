@@ -60,6 +60,14 @@ jobs:
       - name: animation không trỏ vào keyframe ma
         run: npm run check:keyframes
 
+      # Canh 27 khối hoạt động của Hướng Nghiệp Trẻ — phần người TRẢ TIỀN đọc kỹ
+      # nhất và là phần duy nhất không kiểm được bằng bất biến cấu trúc. Ba luật
+      # đều rút từ lỗi bắt được thật khi soi tay bảng: tên nghề lọt khối lứa 3–7
+      # (cờ `bayNghe` chỉ làm rỗng `ngheViDu`, không với tới chữ trong hoatDong),
+      # ngôn ngữ thi thố ở lứa 3–7, và hai hướng khác nhau gợi cùng một việc.
+      - name: bảng hoạt động trẻ em giữ đúng luật
+        run: npm run check:hoatdong
+
       # Chặn tái phát bảng 64 quẻ sai mã hào: đã có lúc 49/64 quẻ mang mã của
       # quẻ khác (77% lượt gieo ra sai lời đoán) mà không gì báo, vì nhánh "tìm
       # quẻ gần nhất" nuốt hết. 64 chuỗi nhị phân thì mắt không soi được.

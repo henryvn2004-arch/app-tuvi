@@ -156,10 +156,74 @@ chất việc + một lượt LLM.
   DÙNG, form này là của CON. Đổ vào là người ta bấm luôn rồi nhận bản đọc về
   chính mình dưới nhãn "con" — sai im lặng, không có gì báo.
 
+### 🔍 Soi 27 khối hoạt động — 3 lỗi thật, và một lời khai của tao hẹp hơn tên gọi
+Phần này là thứ người TRẢ TIỀN đọc kỹ nhất mà không bất biến nào với tới: mọi
+bài kiểm khác nói về CẤU TRÚC (điểm giảm dần, đủ ba hướng, rail phẳng), không
+nói gì về CHỮ. Soi tay 108 hoạt động (9 hướng × 3 lứa × 4 ô) bằng phép đo.
+
+- 🔴 **`bayNghe` KHÔNG với tới chữ trong `hoatDong`** — nó chỉ làm rỗng mảng
+  `ngheViDu`. `giao-thiep/nho` vì thế ghi *"Trò chơi đổi vai: bán hàng, bác sĩ,
+  cô giáo"* và **đi thẳng ra trang cho đứa 5 tuổi**. Bản thân trò đóng vai là
+  hoạt động ĐÚNG cho lứa đó; cái sai là gọi tên nghề — trên một trang tên là
+  *hướng nghiệp cho con*, danh từ nghề đứng cạnh thiên hướng đọc thành lời gợi ý
+  chốt nghề. Sửa thành *"đổi vai có hai phía: người mua kẻ bán, người hỏi người
+  trả lời"* — giữ nguyên độ cụ thể, bỏ nhãn nghề.
+  🔑 **Và đây là chỗ tao phải đính chính chính mình:** câu verify *"trẻ nhỏ → 0
+  tên nghề lọt"* ĐÚNG trong phạm vi nó đo (các phần tử của `ngheViDu`) nhưng
+  **hẹp hơn hẳn cái tên gọi của nó**. Bài kiểm đặt tên theo điều muốn chứng
+  minh, không theo điều thực sự đo — loại sai lệch tự đánh lừa nguy hiểm nhất.
+- 🪤 **Bẫy "hai hình nuốt nhau" LỘ LẠI Ở TẦNG CHỮ**: `dan-dat/lon` và
+  `giao-thiep/giua` cùng ghi *"Bán một thứ có thật…"* (Jaccard **0,55**). Đúng
+  cặp đã phải tách ở TẦNG CHẤM (cosine 0,86) — **sửa trọng số không cứu được
+  chỗ này**. Ô đó còn lạc khỏi chính khối của nó (ba ô kia đều là *dẫn người*).
+  Thay bằng *"dẫn một nhóm qua một lần bất đồng thật — nơi nó phải chốt trong
+  khi vài người không đồng ý"*: đúng cực `hoa` thấp phân biệt dẫn dắt với giao
+  thiệp.
+- Ô thứ ba: hai khối mở đầu y hệt *"Học nghiêm túc một môn…"* (0,36) — đổi một bên.
+
+**Hai con số trả lời hai mối lo đang treo trong mục CÒN LẠI:**
+| | |
+|---|---:|
+| Chồng lấn giữa 3 lứa trong cùng một hướng (Jaccard) | **≤ 0,15** cả 9 hướng |
+| Hoạt động cần TIỀN / dịch vụ gần nhà | **11/108 = 10,2%** |
+⇒ Chia ba lứa **có nội dung thật**, không phải đội tên khác (mốc trước chỉ là
+lập luận "chia theo chỗ THẬT SỰ đổi", nay có số). Và lo "chưa phân theo vùng"
+nhẹ hơn tưởng: **90% hoạt động làm được không cần tiền**, không khối nào có quá
+nửa số ô cần chi.
+
+### 🧷 `scripts/check-hoat-dong-tre.mjs` (bộ dò thứ 10) — chặn tái phát
+Ba luật, **cả ba rút từ lỗi vừa bắt được thật**, không phải lo hão: lứa 3–7 cấm
+tên nghề · lứa 3–7 cấm ngôn ngữ thi thố · hai hướng khác nhau cấm gợi cùng một
+việc (Jaccard < 0,5). Cộng chốt đếm: đúng 27 khối, mỗi khối **≥ 4 ô**.
+- **Luật 2 chỉ khoá ĐÚNG lứa nhỏ, không cấm tiệt**: đo ra 9 hoạt động có chữ
+  thi/giải/cấp bậc và **cả 9 đều ở lứa 8–12 và 13–18**, 0 ở lứa 3–7. Đó là hình
+  dạng ĐÚNG (thi đấu có chỗ của nó với trẻ lớn) — chốt lại để lượt sửa sau không
+  lặng lẽ kéo nó xuống, chứ không phải để dọn dẹp.
+- 🪤 **Red-team lộ ngưỡng của chính tao sai**: đặt "khối quá mỏng" ở `< 3` thì
+  bỏ một ô (4→3) **vẫn xanh**. Ngưỡng phải là `< 4`. Bộ dò mà không red-team thì
+  con số trong nó chỉ là phỏng đoán.
+- **4/4 ca đỏ đúng · 2/2 đối chứng im** (thi thố ở lứa 13–18 hợp lệ → im; sửa
+  chữ vô hại → im), và diff sau red-team sạch đúng 3 dòng sửa thật.
+
+### ⚠️ Sửa 27 khối này về sau: khi nào phải bump `_shape`
+`_shape` gác **CẤU TRÚC payload**, không gác chữ. Đổi chữ hoạt động thì dòng
+cache cũ trả chữ CŨ (khó chịu, không vỡ); đổi/thêm/bớt KHOÁ thì trang ẩn khối
+im lặng (đúng lỗi `day-con` đã cắn). ⇒ **Sửa chữ: không bump. Đổi cấu trúc: bắt
+buộc bump.** Vòng này giữ `SHAPE = 1` vì tool còn `enabled=false`, chưa dòng
+cache nào tồn tại.
+
+### 🪤 Gộp #467: trang MỚI nằm lại phiên bản asset cũ
+#467 bump `shell.js?v=67` trên 35 trang có sẵn; trang mới của PR này không có
+trên main nên **auto-merge để nó ở `v=66`**, kèm `shell.css` lạc ở `v=17`. Không
+lỗi nào bắn ra — chỉ là một trang ăn bản shell cũ. 🔑 **Gộp base xong phải đếm
+lại phiên bản asset trên CẢ cây**, đừng tin "hết `<<<<<<<` là xong" (bài học
+`git checkout --ours` lặp lại ở dạng khác).
+
 ### Verify
 `tsc` 0 · `lint` 0 lỗi (72 warning pre-existing) · `prettier` quét cả cây sạch ·
-**9/9 bộ dò sạch** (`prices`/`groups`/`nostore`/`share`/`keyframes`/`hexagrams`/
-`hao`/`motifs`/`terms`) · engine **185 pass** · `node --check` 2 khối script.
+**10/10 bộ dò sạch** (`prices`/`groups`/`nostore`/`share`/`keyframes`/
+**`hoatdong`**/`hexagrams`/`hao`/`motifs`/`terms`) · engine **185 pass** ·
+`node --check` 2 khối script.
 - **4.680 lá số × 8 bất biến = 259.208 assertion, 0 lỗi**: đủ 3 hướng · hoạt
   động khớp ĐÚNG lứa tuổi · trẻ nhỏ 0 tên nghề · rail phẳng · deterministic ·
   **0 ca bản đọc tự mâu thuẫn** (trục nêu làm lý do không nằm trong "việc không
@@ -268,7 +332,11 @@ trên cả hai (quét 336 lá số).
 - **`THIEN_HUONG` (9 hướng × 21 trục + toàn bộ phần chữ) là bảng TỰ ĐẶT**, cùng
   dạng nợ với `KIEU_HOC`, `DOMAIN_NGANH`, `SAO_TRUC`. Cổ thư không có khái niệm
   "thiên hướng của trẻ" bằng thang điểm. Sửa là sửa data thuần.
-- **27 khối hoạt động chưa ai review** — đây là phần người trả tiền đọc kỹ nhất.
+- **27 khối hoạt động nay có MÁY canh, vẫn CHƯA CÓ NGƯỜI đọc.** `check:hoatdong`
+  chặn được ba lỗi đo ra được (tên nghề lứa nhỏ · thi thố lứa nhỏ · hai hướng
+  trùng việc) — nó **không** nói được hoạt động ấy có phải lời khuyên tốt cho
+  một đứa trẻ thật hay không. Đây vẫn là phần người trả tiền đọc kỹ nhất và là
+  phần duy nhất của tool chưa ai ngoài tao đọc qua.
 - **Chưa có trang standalone SEO.** *"định hướng nghề nghiệp cho con"* có cầu
   thật, đáng làm sau.
 - Con số cần nhìn sau 1–2 tuần: cột *mở → tính thử → bấm mở* của

@@ -336,7 +336,7 @@ export const THIEN_HUONG: Record<HuongId, HuongDef> = {
       lon: [
         'Chủ nhiệm câu lạc bộ, trưởng ban tổ chức sự kiện trường',
         'Một dự án cộng đồng nhỏ do chính nó khởi xướng và tự đi gọi người',
-        'Bán một thứ có thật — làm ra, bán, chịu lãi lỗ',
+        'Dẫn một nhóm qua một lần bất đồng thật — nơi nó phải chốt trong khi vài người không đồng ý',
         'Cho ngồi cùng một buổi họp của người lớn để nhìn cách người ta ra quyết định',
       ],
     },
@@ -384,7 +384,7 @@ export const THIEN_HUONG: Record<HuongId, HuongDef> = {
       ],
       lon: [
         'Làm một tác phẩm có người ngoài xem: một kênh, một tập truyện, một buổi diễn',
-        'Học nghiêm túc một môn nghệ thuật, kể cả phần kỹ thuật khô khan',
+        'Theo một môn nghệ thuật tới tận phần kỹ thuật khô khan, không dừng ở chỗ còn vui',
         'Cuộc thi sáng tác, trại hè sáng tác',
         'Gặp một người sống được bằng nghề sáng tạo để nghe cả phần khó của nghề',
       ],
@@ -562,7 +562,7 @@ export const THIEN_HUONG: Record<HuongId, HuongDef> = {
     hoatDong: {
       nho: [
         'Cho gặp nhiều người: chợ, họ hàng, sân chơi — chỗ nó nạp năng lượng',
-        'Trò chơi đổi vai: bán hàng, bác sĩ, cô giáo',
+        'Trò chơi đổi vai có hai phía: người mua kẻ bán, người hỏi người trả lời',
         'Cho tự gọi món, tự hỏi đường, tự trả tiền',
         'Đặt luật rõ về nói thật — chỗ này phải dạy sớm',
       ],
