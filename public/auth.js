@@ -459,12 +459,28 @@ function showAuthError(msg) {
 }
 
 // ── Free credits welcome banner ──
+// Keyframe khai NGAY TẠI ĐÂY, không mượn của file khác. Bản cũ dùng
+// `animation:tpw-fade` — keyframe đó nằm trong `tuvi-paywall.js` và chỉ được
+// chèn LƯỜI khi có paywall dựng lên (`_css()`), mà 38/73 trang nạp auth.js
+// còn không nạp paywall, và đường đăng ký thì chẳng dựng paywall bao giờ.
+// ⇒ banner chào mừng người dùng MỚI chưa từng fade vào. Không có gì báo:
+// animation trỏ tới keyframe không tồn tại thì phần tử vẫn hiện, chỉ đứng im.
+// `scripts/check-keyframes.mjs` canh đúng chuyện này.
+function _ensureAuthFadeCss() {
+  if (document.getElementById('auth-fade-css')) return;
+  const s = document.createElement('style');
+  s.id = 'auth-fade-css';
+  s.textContent = '@keyframes auth-fade{from{opacity:0}to{opacity:1}}';
+  document.head.appendChild(s);
+}
+
 function _showFreeCreditsWelcome() {
+  _ensureAuthFadeCss();
   const old = document.getElementById('free-credits-banner');
   if (old) old.remove();
   const b = document.createElement('div');
   b.id = 'free-credits-banner';
-  b.style.cssText = 'position:fixed;top:70px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#1E6B3C,#155d32);color:#fff;padding:14px 28px;border-radius:10px;font-size:14px;font-weight:600;z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,.25);text-align:center;white-space:nowrap;animation:tpw-fade .3s ease';
+  b.style.cssText = 'position:fixed;top:70px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#1E6B3C,#155d32);color:#fff;padding:14px 28px;border-radius:10px;font-size:14px;font-weight:600;z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,.25);text-align:center;white-space:nowrap;animation:auth-fade .3s ease';
   b.innerHTML = '<span class="ic-inline" data-icon="gift" data-icon-emoji="🎉" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">🎉</span> Chào mừng! Bạn đã nhận <strong>Lượng miễn phí</strong> — thử ngay Xem Tướng (5 Lượng/lần)';
   if (window.mountIcons) window.mountIcons(b);
   document.body.appendChild(b);
