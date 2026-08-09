@@ -5,6 +5,122 @@
 
 ---
 
+## 🧭 Tử Vi Công Sở: thêm TẦNG NHÁNH NGHỀ (2026-08-09, PR #454)
+
+Henry mở mục Tài chính, chốt B1 = *"số tôi hợp làm ngành nào?"*. Đi qua ba lần
+đổi hướng rồi mới ra: khảo sát repo → bỏ hướng "đọc tài chính một người" → bỏ
+hướng "8 trục từ cung" (*"ko thì cách đi hiện tại sẽ làm cho nó giống tool Tử vi
+công sở đấy"*) → và cuối cùng chính Henry chốt: **trùng thì gộp, làm thành nâng
+cấp Công Sở.**
+
+### 🔴 Đọc code xong mới thấy: Công Sở ĐÃ CÓ đúng kiến trúc mình định dựng
+`DOMAIN_NGANH` ← Quan Lộc (lĩnh vực) · `QUY_MO_THEO_BAC` ← bậc · `VAI_THEO_KIEU`
+← tứ tượng. Ba tầng, đang chạy. Chỗ thiếu là **NHÁNH**: Công Sở dừng ở
+`'Bất động sản · môi giới'` (một dòng chung chung) còn Henry đòi *"phát triển
+bds, môi giới, mua đi bán lại — phải cụ thể ra"*; và VAI chỉ có **4 giá trị** cho
+toàn bộ người dùng, quá thô để cắt nhánh. ⇒ Tầng 4, không phải tool thứ ba.
+
+### 🔑 Số quyết định thiết kế — khớp toàn danh mục thì HỎNG
+Khớp thẳng 21 trục trên cả 891 nghề: **76% danh mục không bao giờ được gợi**,
+top rơi vào nghề hình PHẲNG (lau rửa xe · phụ hồ · thợ là quần áo). Căn nguyên
+đo được: tính khí tách rất tốt nhóm làm-với-NGƯỜI (bán hàng 0,81 · cộng đồng
+0,80) và **gần như không tách** nhóm kỹ thuật/sản xuất (y tế chuyên môn 0,27 ·
+nông lâm 0,28 · xây dựng 0,32).
+⇒ **Đừng dùng tính khí chọn NHÓM. Dùng nó chọn NHÁNH trong nhóm.** Sau khi chốt
+lĩnh vực, dư địa còn 68–90% (quyen 90 · vo 87 · thuong 84 · van 81 · nghe 73 ·
+tu 71 · y 68). Nghịch lý biểu kiến: xây dựng *tâm nhóm mờ* (0,32) nhưng *bên
+trong trải rộng* (55%) — chỉ huy thi công và thợ trát cách nhau rất xa.
+
+### Hai luật cứng rút ra từ đo — đừng "tối ưu" ngược lại
+1. **KHÔNG z-score vector người.** Thử rồi: đa dạng tăng 122→169 mà chất lượng
+   sụp (bậc hiển đạt ra "trợ giảng", Thiên Phủ ra "người mẫu"). Z-score triệt
+   tiêu ĐỘ LỚN, mà độ lớn chính là tín hiệu BẬC.
+2. **KHÔNG gom thêm cung.** Thử 7 cung: đa dạng GIẢM (trùng 1/115 → 1/90). Cộng
+   nhiều nguồn thì vector tiến về trung bình.
+
+### Ba luật nội dung
+- **Nhánh khác nhau về CHẤT, không về QUY MÔ** — quy mô đã là tầng 2. Tách
+  "điều hành cấp cao" khỏi "quản lý vận hành" làm hai nhánh xếp cạnh nhau với
+  LÝ DO GIỐNG HỆT ⇒ đã gộp.
+- **Tên nhánh nói CÁCH LÀM, không nói lĩnh vực** — lĩnh vực là tầng 1. Tên trùng
+  chuỗi với `DOMAIN_NGANH` là người trả tiền mở ra thấy lại chữ vừa đọc free.
+  Có bộ dò chặn tái phát trong bài kiểm.
+- 🔴 **LUẬT DIỄN ĐẠT — vi phạm là xúc phạm người dùng:** trục THẤP chỉ được đọc
+  là *"nghề không đòi hỏi"*, TUYỆT ĐỐI không đọc là *"bạn thiếu"*. Dữ liệu chấm
+  hoạ sĩ ở trục đáng-tin-cậy **−3,6**, thợ máy ở chính-trực **−1,7**; in thẳng
+  là tool đang nói *"bạn ít đáng tin cậy"*. Nói ở CẢ tầng data lẫn tầng prompt.
+- **29% kho là nhánh `phoThong`** (không có chất người đặc thù) — không bao giờ
+  gợi bằng phép khớp, và KHÔNG hiện %. Nói "lá số bạn hợp nghề này" trong khi lá
+  số không nói gì về nó là kết luận rỗng đội lốt kết luận.
+
+### Đường tiền (Henry chốt phương án (a))
+Ba tầng cũ giữ **MIỄN PHÍ** (Công Sở vẫn là tool đầu phễu), tầng nhánh sau tường
+`lockPreview` — đúng khuôn W1.
+- 🔴 **GET không được mang tầng nhánh**: nó trả `Cache-Control: public,
+  s-maxage=86400`, một lần rò là CDN phát phần trả tiền cho MỌI người, không thu
+  hồi được. Đường tiền là **POST riêng** + `no-store` + auth + `toolPaymentDenied`.
+- `hoSoTinhThu()` / `railDataDayDu()` là hàm RIÊNG — đường tiền phải cắt được
+  bằng một dòng đọc ra được, có bài kiểm canh đúng dòng đó.
+- Rail chỉ biết nhánh SAU khi mua: biết sớm thì người ta hỏi rail thay vì mua.
+
+### Verify
+`tsc` 0 · `lint` 0 lỗi (72 warning pre-existing) · `prettier` sạch ·
+`check:nostore` + `check:prices` sạch.
+- **A/B với bản trước tích hợp, 3.264 lá số × 5 trạng thái: 0 lệch** (Công Sở
+  đang chạy prod — bất biến quan trọng nhất).
+- **2.880 lá số, 8 bất biến engine: 0 lỗi**; nhánh từng đứng #1 **25/29** (khớp
+  toàn danh mục chỉ được 14,5%); nhánh phổ thông **0 lượt lọt sai**.
+- **22/22 ca đọc thẳng mã nguồn + 480 lá số**: GET không auth/không thanh toán/
+  không rò dấu hiệu nhánh · POST có chốt thanh toán TRƯỚC `computeCongSo`.
+- **22/22 ca Playwright trên TRANG THẬT**: tính thử → 0 POST, 0 `action=deduct`,
+  quét toàn bộ chữ hiện ra thấy **0 việc của tầng nhánh lọt** · bấm mở → có
+  deduct + POST, phần tính thử còn nguyên byte · ĐỐI CHỨNG 402 → dựng lại tường,
+  không quẳng về form · 390px không tràn.
+- **108 lá số**: 0 khoá thiếu nhãn, 0 rò khoá kỹ thuật vào prompt.
+
+### 🪤 Bẫy đã vấp
+1. **Hai lỗi chỉ lộ khi ĐỌC OUTPUT, xanh trên mọi phép đo số**: (a) hai nhánh ra
+   lý do y hệt vì lý do nêu trục CHUNG của lĩnh vực thay vì trục PHÂN BIỆT nhánh;
+   (b) tích `v × (hình − nền)` dương khi **cả hai vế cùng ÂM** ⇒ trục người YẾU
+   lọt vào phần giải thích, bản đọc tự mâu thuẫn (*"không đòi: Thận trọng"* nằm
+   ngay trên *"vì: Thận trọng"*).
+2. **Thiếu `TuviPaywall.init` thì `lockPreview` FAIL-CLOSED** — không dựng tường,
+   phần trả tiền lặng lẽ không bao giờ mời được ai. Đọc code không thấy vì cả hai
+   phía đều đúng khi đọc riêng.
+3. **Stub `Auth` đặt trong `addInitScript` bị `auth.js` GHI ĐÈ** khi nạp sau →
+   modal đăng nhập hiện ra, lượt bấm không tới bước trừ Lượng. Phải đặt SAU khi
+   trang tải xong.
+4. **`engine vanilla` và `tuvi-engine/src/types.ts` khai `cungScores` KHÁC TÊN**
+   — vanilla có `{thienVan, canCo, mayMan, phuTro, binhYen, benVung, tong}`, types
+   khai `{tiemNang, benVung, anToan, quyNhan, minhBach, tuongHop}`, chỉ `benVung`
+   trùng. Đo phải theo BẢN ĐANG CHẠY. Và `anSaoLaSo` **không ném lỗi khi sai tên
+   khoá** (`gioIdx`, `gioitinh` thường) — nó lặng lẽ trả lá số rỗng.
+
+### CÒN LẠI
+- ⚠️ **VIỆC TAY: đổi `tool_pricing` SAU KHI DEPLOY**, không được trước — đúng bài
+  học "dữ liệu đi SAU giao diện" đã làm 58 công cụ rơi vào "Khác" 4 phút:
+  ```sql
+  update tool_pricing set label='Tử Vi Công Sở & Hướng Nghiệp',
+    credits=15, is_free=false, updated_at=now() where tool_id='cong-so';
+  ```
+  Giữ nguyên `tool_id` để URL/SEO không đổi. Henry sẽ rà lại pricing một lượt.
+- **Tầng nhánh 0 lượt LLM, 0đ** — lãi 100%, không cần cầu dao ngân sách nào.
+  Cố ý CHƯA thêm LLM: đo tỉ lệ mua trước rồi mới quyết thêm chi phí, đúng lối W1.
+  Nếu tỉ lệ mở thấp thì chỗ thêm là một lượt viết "đường đi từ đây".
+- **Tool định hướng nghề cho TRẺ EM** (Henry chốt làm sau). Trước khi dựng phải
+  **đo overlap với T2 "Dạy Con"** — nó sẽ vấp đúng cái bẫy vừa gỡ với Công Sở.
+- **Bảng `SAO_TRUC` (14 chính tinh → 21 trục) là quy chiếu TỰ ĐẶT**, cùng dạng
+  nợ với `KIEU_HOC` và `DOMAIN_NGANH`. Cổ thư tả tính chất sao bằng văn xuôi,
+  không bằng thang điểm. Sửa là sửa data thuần.
+- `hinh` mỗi nhánh lấy khởi điểm từ một CSDL nghề nghiệp công khai **CC BY 4.0**
+  — dùng để CHẤM, không để BÀY; danh mục việc là bảng Việt tự dựng. **Ghi công
+  đặt ở trang nguồn dữ liệu, KHÔNG nhắc trong bản đọc** (Henry: *"mấy cái test ở
+  trên để mình tham khảo thôi… ko cần mention tên của nó"*). ⏭️ Trang đó **chưa
+  làm** — phải có trước khi bật thu phí.
+- **Chưa có trang standalone SEO** cho phần hướng nghiệp.
+
+---
+
 ## 🗺️ Sitemap: `lastmod` đang NÓI DỐI 647 URL mỗi ngày (2026-08-07, PR này)
 
 Henry: *"Bạn tao chuyên gia SEO nói là sitemap mà nhiều URLs quá thì chia nhỏ ra
@@ -1442,12 +1558,18 @@ Khác `nguoi-khac` với quan hệ `con-cai` ở CÂU HỎI: bên kia là *sốn
 Cả hai đọc lá số người **không có mặt**; T3 còn đọc vài người một lúc và người
 hỏi thường có quyền với họ.
 - **Lớp dữ liệu**: dùng CHUNG `KHONG_DOC` của `nguoi-khac.ts` (Tật Ách · Tài Bạch
-  · Phu Thê · Tử Tức · Điền Trạch). T2 còn **cố ý KHÔNG gọi bảng nghề nghiệp**
-  dù engine có sẵn — chốt nghề cho đứa 10 tuổi là thứ nguy hiểm nhất nó làm được.
-  T3 **không trả điểm tổng mỗi người** ⇒ không có gì để xếp hạng.
-- **Lớp prompt**: T2 cấm đoán đỗ/trượt, cấm chốt ngành, cấm so sánh anh em, cấm
-  "khó dạy". T3 cấm xếp hạng người, cấm khuyên sa thải, cấm ngôn ngữ chốt sale
-  kiểu thao túng.
+  · Phu Thê · Tử Tức · Điền Trạch). T3 **không trả điểm tổng mỗi người** ⇒ không
+  có gì để xếp hạng.
+- **Lớp prompt**: T2 cấm đoán đỗ/trượt, cấm so sánh anh em, cấm "khó dạy".
+  T3 cấm xếp hạng người, cấm khuyên sa thải, cấm ngôn ngữ chốt sale thao túng.
+- 🔴 **ĐÍNH CHÍNH 2026-08-09 — luật "T2 không được gợi nghề" ĐÃ BỎ.** Henry lật:
+  *"Luật đó claude.md đang viết sai. Định hướng nghề nghiệp thì định hướng để
+  tham khảo thôi. Nó giúp ích cho đứa trẻ. Mà bình thường gia đình cũng đã định
+  hướng cho nó rồi."* Lý do cũ ("chốt nghề cho đứa 10 tuổi là thứ nguy hiểm nhất
+  nó làm được") nhầm **ĐỊNH HƯỚNG** với **CHỐT**: gia đình vốn đã định hướng, và
+  một bản tham khảo có căn cứ thì tốt hơn một câu nói vu vơ trong bữa cơm.
+  ⇒ Tool định hướng nghề cho trẻ em là việc ĐƯỢC LÀM. Ranh giới còn giữ: nói
+  bằng *xu hướng và việc nên cho làm quen*, không nói bằng *nghề phải theo*.
 - 🪤 **Ca test suýt báo đỏ oan**: bản kiểm "prompt không nhắc cung cấm" bắt được
   `Tử Tức` — nhưng đó là cung Tử Tức trong lá số **CHA MẸ**, chỗ cổ pháp đọc con
   cái, và cha mẹ chính là người tự đưa lá số mình vào. `KHONG_DOC` cấm các cung
