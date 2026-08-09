@@ -39,6 +39,7 @@
 .hn-badge{display:inline-block;padding:5px 13px;border-radius:999px;background:#F3EAD6;color:#7A5F26;font-size:12px;font-weight:700}
 .hn-badge.alt{background:#EFEBE3;color:#5a5145;font-weight:600}
 .hn-birth{margin-top:9px;font-size:11.5px;color:var(--text-lt)}
+.hn-vai{margin-top:11px;font-size:12.5px;line-height:1.7;color:#5a5145;background:#FBF8F1;border:1px solid #EADFC8;border-radius:9px;padding:10px 13px;text-align:left}
 .hn-para{font-size:13.5px;line-height:1.88;color:#2a2118;margin:0 0 12px}
 .hn-para:last-child{margin-bottom:0}
 .hn-sub{font-size:10px;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;color:#7A5F26;margin:16px 0 7px}
@@ -133,6 +134,7 @@
                 <div class="hn-role" id="heroRole"></div>
                 <div class="hn-badges" id="heroBadges"></div>
                 <div class="hn-birth" id="heroBirth"></div>
+                <div class="hn-vai" id="heroVai"></div>
               </div>
             </div>
           </div>
@@ -499,8 +501,13 @@ function renderMeta(data) {
   if (data.kieu) bd.push('<span class="hn-badge alt">Kiểu ' + esc(data.kieu.ten) + '</span>');
   if (data.lai && data.kieuPhu) bd.push('<span class="hn-badge alt">pha ' + esc(data.kieuPhu.ten) + '</span>');
   document.getElementById('heroBadges').innerHTML = bd.join('');
-  document.getElementById('heroBirth').textContent =
-    (data.lop ? data.lop.vaiChaMe : '');
+  // Dòng LÁ SỐ phải hiện ngay trên trang, không chỉ trong bản chia sẻ: cha mẹ
+  // cần thấy bản đọc dựng trên lá số nào để đối chiếu (và để bắt được lúc mình
+  // gõ nhầm một trường). Dùng CHUNG `Shell.birthSummary` với bản chia sẻ.
+  var bSum = '';
+  try { bSum = (window.Shell && Shell.birthSummary && _last) ? Shell.birthSummary(_last) : ''; } catch (e) { bSum = ''; }
+  document.getElementById('heroBirth').textContent = bSum ? 'Lá số: ' + bSum : '';
+  document.getElementById('heroVai').textContent = (data.lop ? data.lop.vaiChaMe : '');
 
   // Thiên hướng đứng đầu (miễn phí)
   var hd = data.huongDau;
