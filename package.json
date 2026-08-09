@@ -15,6 +15,7 @@
     "check:prices": "node scripts/check-no-hardcoded-prices.mjs",
     "check:nostore": "node scripts/check-supabase-no-store.mjs",
     "check:groups": "node scripts/check-no-hardcoded-groups.mjs",
+    "check:viec": "node scripts/check-viec-sync.mjs",
     "check:hexagrams": "node scripts/check-hexagram-table.mjs",
     "check:hao": "node scripts/check-hao-data.mjs",
     "lint:fix": "eslint . --fix",

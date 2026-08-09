@@ -5,6 +5,146 @@
 
 ---
 
+## 🧠 Hiệu ứng tâm lý — A3 + A2 + A4 cho Lá Số Người Khác (2026-08-09, PR này)
+
+Henry đưa danh sách hiệu ứng tâm lý (Zeigarnik · Barnum · Scarcity · Loss
+Aversion · Peak-End · Social Proof…), yêu cầu lên kế hoạch tổng thể rồi mới làm.
+Kèm một nhận xét sản phẩm rất cụ thể: *"preview đang reveal nhiều quá, rồi click
+luận giải paid thì nội dung cũng ko có gì khác với preview"*.
+
+### 🔴 Nhận xét đó ĐÚNG, và nó là lỗi CẤU TRÚC chứ không phải lỗi prompt
+Đọc thẳng code: `buildNguoiKhacPrompt` nhận **gần đúng cùng một object** với
+`meta()` mà bản tính thử trả về (lệch đúng 2 trường: `kieuDan`, `vaiTro`). Model
+**không được cấp thêm một dữ kiện nào** ⇒ về mặt cấu trúc nó chỉ có thể diễn đạt
+lại thứ người ta vừa đọc miễn phí. **Sửa prompt bao nhiêu vòng cũng không ra
+thông tin mới.**
+- Đo trên bản `git HEAD`: **80/80 prompt GIỐNG HỆT nhau** dù đổi ngữ cảnh.
+
+### 🔑 Nguyên tắc chốt cả kế hoạch: MIỄN PHÍ = DANH TÍNH · TRẢ TIỀN = QUYẾT ĐỊNH
+Mượn 16Personalities: họ phát KHÔNG cả tên loại + chân dung dài (phần **để
+khoe**), bán phần **để dùng** (nghề nào, yêu ai, sửa gì). ⇒ Hướng đi **không
+phải cắt bớt preview** mà **chĩa lại nó**: free sướng hơn/dễ khoe hơn nhưng
+không dùng được vào việc gì; paid khô hơn nhưng **quyết được một việc cụ thể**.
+Cắt bớt preview mà giữ nguyên bản chất thì chỉ làm phần free tệ đi, phần paid
+vẫn không đáng tiền.
+
+### Số nền lúc lên kế hoạch (đo, không ước)
+60 tài khoản · **3 người từng trả tiền** · 9,42tr doanh thu · **`referrals` = 0**
+· 36 link chia sẻ nhưng `share` event chỉ **2 người** · `preview_shown` **7 lượt
+/ 2 người**. ⇒ Tối ưu tỉ lệ chuyển đổi trên ~4 người/ngày có nhân đôi cũng chỉ
+ra thêm ~3 người trả tiền. **Thứ duy nhất nhân lên được ở quy mô này là vòng
+lan** — nên kế hoạch xếp theo *thứ gì cộng dồn*, không theo hiệu ứng nào nghe hay.
+
+### ✅ Đã làm trong PR này (A3 → A2 → A4, đúng thứ tự "chỉ thêm trước, lấy đi sau")
+- **A3 — ô "Bạn đang cần làm gì với người này"** (`VIEC_CAN_LAM`, 10 mục). Đây là
+  **dữ kiện DUY NHẤT của cả tool không suy được từ lá số** ⇒ đầu vào khác thì đầu
+  ra khác THẬT. Thêm khối `keHoach` vào payload + prompt, đứng **đầu** phần chữ.
+  - ⚠️ **DANH SÁCH PHẲNG + cờ `hop`, KHÔNG ma trận 8 quan hệ × 10 việc** — cùng
+    bài học "BA TRỤC ĐỘC LẬP" của track Công Sở.
+  - ⚠️ **`viec` PHẢI vào khoá cache VÀ vào slug**: hai việc là hai món hàng. Bỏ
+    ra ngoài khoá thì người chọn "thương lượng lương" nhận lại bản đã dựng cho
+    "báo tin xấu" — sai im lặng, và họ vừa trả tiền cho nó.
+  - **Việc không hợp quan hệ tự rơi về `hieu-them`** (người dùng đổi quan hệ sau
+    khi đã chọn việc là ra "giao việc cho SẾP" — tổ hợp vô nghĩa đi thẳng vào prompt).
+- **A2 — tường khoá nêu ĐÍCH DANH**, sinh từ chính lá số vừa tính (`khoiKhoa`),
+  thay mảng `NK_KHOA` chép cứng 6 dòng chung chung giống nhau cho mọi người.
+  - 🔑 **LUẬT CỨNG: mỗi tiêu đề PHẢI ứng với một trường CÓ THẬT trong payload trả
+    tiền** (`id` chính là tên trường). Bịa tiêu đề nghe hay mà bản đầy đủ không có
+    nội dung đó là **hứa hụt** — có test canh, chạy trên 288 lá số × 8 quan hệ × 10 việc.
+  - 🪤 **Suýt hứa thứ không có**: bản kế hoạch đầu tao định bày *"3 tháng trong
+    năm họ dễ gật đầu nhất"* — engine chỉ có vận năm, **không có granularity
+    tháng**. Bỏ. Đây đúng là cái bẫy A2 sinh ra để tránh.
+- **A4 — vá lỗ payload**: `runPreview` **không đòi đăng nhập**, mà vẫn gửi trọn
+  `dongLuc`/`datChat`/`manh`/`yeu`/`moiTruongHop`/`moiTruongKy` — giao diện KHÔNG
+  vẽ chúng ở đâu cả, nên mở devtools là có sẵn bản mô tả tính cách đầy đủ, 0đ.
+  Cắt ở **tầng payload**, đừng trông vào việc giao diện "quên" vẽ. Đường trả tiền
+  giữ nguyên cả gói (đổi hình dạng payload đã nằm trong `portrait_cache` không
+  đáng để dọn vài trường thừa).
+
+### 🐞 Bắt kèm — RÒ CUNG CẤM, có sẵn, trên CẢ BA tool đọc lá số người vắng mặt
+Không nằm trong đề bài. `buildNguoiKhacPrompt` có chú thích ghi rõ *"CỐ Ý KHÔNG
+nêu TÊN CUNG mà đại vận/tiểu hạn đang đóng… đưa tên cung vào đây là mở lại đúng
+cánh cửa `KHONG_DOC` qua ngõ sau"* — **nhưng hàm nó gọi (`vanNamLine`) in ra
+đúng tên cung đó**. Đo trên `git HEAD`: **55/144 (38%)** prompt lọt.
+- Vá tại nguồn bằng cờ `vanNamLine(v, {anCung:true})` + `LUAT_VAN_NAM_AN_CUNG`,
+  **mặc định giữ nguyên hành vi cũ** ⇒ Công Sở (đọc lá số CHÍNH CHỦ, người ta tự
+  đưa lá số mình vào) không đổi một ký tự. Có ca đối chứng.
+- 🔑 **Vá prompt là mới khoá một nửa.** `railData` của cùng tool vẫn rò qua hai
+  khoá khác: `vanNamNay` và **`daiVanDangChay`** (`60/144 = 42%`). Rail đọc payload
+  đó, không đọc prompt.
+- **Cả BA tool cùng dùng `KHONG_DOC`** (`nguoi-khac` · `day-con` · `nhan-mach`)
+  vì cả ba đọc lá số người không có mặt ⇒ vá cả ba, **6/6 lượt gọi**. Để lại một
+  chỗ là lần sau đi tìm lại từ đầu (đúng tiền lệ vụ font thiếu ở 2 trang).
+
+### `npm run check:viec` — bộ dò MỚI trong CI lint
+`public/app-nguoi-khac.html` **buộc phải giữ bản sao** của `VIEC_CAN_LAM` (ô chọn
+dựng TRƯỚC mọi lượt gọi API; bắt đợi một vòng mạng là thêm chỗ rơi ngay đầu phễu).
+Trôi khỏi bản engine thì **hỏng IM LẶNG trên ĐƯỜNG TIỀN**: `resolveViec` không
+nhận ra id lạ → rơi về `hieu-them` → người dùng trả tiền cho đúng bản chung chung
+vừa đọc miễn phí, **không có gì trên màn hình nói cho họ biết**. Kiểm 3 luật:
+cùng tập id · cùng nhãn · cùng cờ `hop`.
+- 🪤 **Đã red-team đủ 3 luật** (đổi nhãn · đổi `hop` · đổi id) → đỏ đúng cả ba,
+  khôi phục xanh lại. Bộ dò chưa từng bắt được gì thì không chứng minh được nó biết bắt.
+
+### Verify
+`tsc` 0 · `lint` 0 lỗi (72 warning pre-existing) · `prettier` sạch ·
+`check:prices`/`groups`/`nostore`/**`viec`** sạch · engine **185 pass** ·
+`node --check` 2 khối script nội tuyến.
+- **17 bất biến trên MODULE THẬT, 288 lá số**: mọi id tường khoá đều là trường
+  payload thật · `voiBan` chỉ hứa khi có lá số người hỏi · `hieu-them` không hứa
+  `keHoach` · việc lệch quan hệ rơi đúng mặc định · **prompt KHÁC nhau 80/80 khi
+  đổi việc** · 0 rò cung cấm trên **11.520** tổ hợp · 0 rò `undefined`/`NaN` ·
+  tất định · `railData` phẳng.
+- **23 ca Playwright trên TRANG THẬT** `/app/nguoi-khac` qua Next dev: ô chọn dựng
+  ngay không đợi mạng · lọc đúng theo quan hệ (SẾP không có "giao việc", CON không
+  có "thương lượng lương") · giữ lựa chọn khi đổi quan hệ nếu còn hợp · **đúng 1
+  lượt POST và là `preview=1`, 0 lượt `deduct`** · tường nêu đích danh + số liệu
+  thật · 5 khối chữ trả tiền chưa lộ · 0 lỗi JS · 390px không tràn.
+- **Ca biên trên ROUTE THẬT**: `hieu-them` → 7 khối · có lá số người hỏi → 9 khối
+  kèm đúng tên cung của BẠN · "giao việc cho SẾP" → rơi về `hieu-them` · `viec`
+  là `<script>` → không vỡ · **POST đường trả tiền không token → 401** (chốt thanh
+  toán còn nguyên).
+- 🪤 **ĐỐI CHỨNG `git HEAD`**: 80/80 prompt giống hệt · không có `khoiKhoa` ·
+  tường khoá 6 dòng chung chung **0 số liệu** · 38% rò cung cấm ⇒ lỗi có thật,
+  bài kiểm không đỗ giả.
+
+### 🪤 Bốn cái bẫy đã vấp
+1. **Bài kiểm suýt ĐỖ GIẢ**: `computeLaso` giải đường dẫn engine vanilla **theo
+   cwd** → chạy từ scratchpad ra **0/288 lá số**, mà mọi mục vẫn báo "0 fail".
+   Chỉ lộ vì có in `Lá số lập được: 0/288`. **Luôn in cỡ mẫu ra.**
+2. `tsc -p` với `paths` trỏ về repo **emit `.js` lẫn vào `lib/`** (đúng cảnh báo
+   TS5011 đã ghi) — `outDir` phải ngoài cây repo, **`rootDir` phải là gốc repo**,
+   và phải `git status` lại sau khi chạy.
+3. **`page.route` với pattern riêng KHÔNG khớp lượt gọi tới host Supabase** (đo:
+   stub 0 lần trúng, cả glob lẫn regex). Phải dùng catch-all `'**/*'` rồi tự lọc.
+   Kèm `serviceWorkers:'block'` — SW do `nav.js` đăng ký đi mạng ngoài tầm route.
+4. **`lockPreview` fail-CLOSED khi đọc hụt bảng giá** (cố ý). Dev không có env
+   Supabase ⇒ không stub giá thì tường **không bao giờ dựng** và bài kiểm đo nhầm
+   đường lùi. IDs form là `ngay`/`thang`/`nam` + **`tvf-gio`** (không đồng nhất).
+
+### ⏭️ CÒN LẠI của kế hoạch (Henry đã duyệt khung, chưa code)
+- **A1 — cắt dữ liệu engine của preview** (2/5 mặt đọc, bỏ đại vận/tiểu hạn).
+  CỐ Ý để sau: A3 chỉ THÊM nên đo được ngay, A1 LẤY ĐI nên đi sau khi đã có thứ bù.
+- **B1 (mạnh nhất còn lại) — mời 1 người để mở ngay một khối đang khoá** của
+  chính bản này. Hiện thưởng 15 Lượng < mọi giá tool (20–100) nên phần thưởng vừa
+  trừu tượng vừa không đủ ⇒ `referrals` = 0 là phải.
+- **B2** — trang `/ket-qua` chở giá trị của NGƯỜI NHẬN (ô nhập ngày sinh ngay tại
+  đó, W1 vốn không đòi auth) thay vì là ngõ cụt. **B3** — Peak-End cho đoạn kết.
+- **C1** — bày engine ra (*"đọc từ N dữ kiện"* + 1 trích dẫn cổ thư thật): đây là
+  lá chắn cho phản đối số 1 *"AI nó bịa thôi"*, và nó bảo vệ luôn phần Barnum.
+- **C3** — gallery từ 36 `shared_results` (vốn đã public): social proof + trang
+  SEO + bề mặt lan, cả ba trong một, 0đ.
+- **D** — chuỗi ngày cho "Vận hôm nay" (**variable reward CHỈ ở đây**, tuyệt đối
+  không ở bản luận: cùng lá số phải ra cùng kết quả — bất biến của `portrait_cache`).
+- ⛔ **KHÔNG làm**: đồng hồ đếm ngược giả · số người dùng thổi phồng · gate "chia
+  sẻ mới cho đọc tiếp". Nói dối một lần là mất sạch tài sản C1, mà C1 mới là thứ
+  giữ được giá.
+- ⚠️ **Ở ~4 người/ngày thì A/B KHÔNG BAO GIỜ đủ mẫu.** Quyết bằng lập luận cấu
+  trúc + xem 5 người thật; chỉ đọc số ở hai chỗ có thể nhảy khỏi 0: **`referrals`**
+  và **`share` từ người không phải Henry**.
+
+---
+
 ## 🗺️ Sitemap: `lastmod` đang NÓI DỐI 647 URL mỗi ngày (2026-08-07, PR này)
 
 Henry: *"Bạn tao chuyên gia SEO nói là sitemap mà nhiều URLs quá thì chia nhỏ ra

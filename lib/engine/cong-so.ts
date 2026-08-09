@@ -561,14 +561,29 @@ export function resolveVanNam(ls: Laso, nam: number): VanNam | null {
 
 /** Một dòng chữ mô tả vận năm — dùng chung cho payload rail (phải PHẲNG) và
  *  cho prompt, để hai chỗ không bao giờ nói khác nhau. */
-export function vanNamLine(v: VanNam | null): string {
+/**
+ * `anCung` = KHÔNG nêu tên cung tiểu hạn / lưu niên.
+ *
+ * 🔒 Dùng cho tool đọc lá số NGƯỜI KHÁC. Cung hạn rất hay rơi đúng vào Tật Ách
+ * / Tài Bạch / Điền Trạch — tức những cung `KHONG_DOC` đã chặn ở tầng dữ liệu
+ * vì người được xem KHÔNG có mặt để đồng ý. Nêu tên chúng ở dòng vận năm là mở
+ * lại đúng cánh cửa đó qua ngõ sau: model có tên cung là luận được về bệnh tật,
+ * tiền riêng, nhà cửa của họ. Đo trên `git HEAD`: **23/48 lá số (~48%)** lọt
+ * theo đường này.
+ *
+ * Mặc định GIỮ NGUYÊN hành vi cũ — tool đọc lá số của CHÍNH người hỏi (Công Sở,
+ * Dạy Con) vẫn nêu tên cung, ở đó người ta tự đưa lá số mình vào nên không có
+ * ranh giới nào bị vượt.
+ */
+export function vanNamLine(v: VanNam | null, opts?: { anCung?: boolean }): string {
   if (!v) return '—';
+  const an = opts?.anCung === true;
   const bit = [
     v.khung
       ? `khung đại vận ${v.khung.tuoiStart}–${v.khung.tuoiEnd} tuổi ${v.khung.diem == null ? 'chưa chấm' : v.khung.diem + '/10'}`
       : '',
-    v.tieuHanCung ? `tiểu hạn cung ${v.tieuHanCung}` : '',
-    v.luuNienCung ? `lưu niên cung ${v.luuNienCung}` : '',
+    !an && v.tieuHanCung ? `tiểu hạn cung ${v.tieuHanCung}` : '',
+    !an && v.luuNienCung ? `lưu niên cung ${v.luuNienCung}` : '',
     v.catSat ? `cát ${v.catSat.cat}/sát ${v.catSat.sat} — ${v.catSat.canCan}` : '',
   ].filter(Boolean);
   return bit.length ? `${v.nam}: ${bit.join('; ')}` : '—';
@@ -580,6 +595,13 @@ export const LUAT_VAN_NAM =
   'Riêng NĂM thì KHÔNG có điểm — đừng gán "điểm/10" cho năm. Điểm trên là của KHUNG đại vận, ' +
   'nó chỉ nới hay bó BIÊN ĐỘ (khung cao thì cái tốt của năm bung rõ, cái khó nhẹ bớt; khung thấp thì ngược lại). ' +
   'Tốt/xấu của năm đọc ở cung tiểu hạn + lưu niên và cán cân cát/sát.';
+
+/** Bản đi kèm `vanNamLine(v,{anCung:true})` — không trỏ model về cung đã bị giấu. */
+export const LUAT_VAN_NAM_AN_CUNG =
+  'Riêng NĂM thì KHÔNG có điểm — đừng gán "điểm/10" cho năm. Điểm trên là của KHUNG đại vận, ' +
+  'nó chỉ nới hay bó BIÊN ĐỘ (khung cao thì cái tốt của năm bung rõ, cái khó nhẹ bớt; khung thấp thì ngược lại). ' +
+  'Tốt/xấu của năm đọc ở cán cân cát/sát. Cung tiểu hạn và lưu niên CỐ Ý không đưa cho bạn — ' +
+  'đừng đoán tên chúng, và đừng luận sức khoẻ/tiền riêng/nhà cửa của người này.';
 
 export const BU: Record<KieuId, KieuId> = {
   'khai-sang': 'hop-tac',

@@ -21,7 +21,14 @@ import { llmTextFull } from '@/lib/llm/complete';
 import { logLlmUsage, logLlmParseFail } from '@/lib/agent/usage';
 import { railFreeGrant, railFreeTurnsPerGen } from '@/lib/billing/viral-budget';
 import { computeLaso, type Laso } from '@/lib/engine/laso';
-import { computeNguoiKhac, resolveQuanHe, type NguoiKhacProfile } from '@/lib/engine/nguoi-khac';
+import {
+  computeNguoiKhac,
+  resolveQuanHe,
+  resolveViec,
+  khoiKhoa,
+  viecChoQuanHe,
+  type NguoiKhacProfile,
+} from '@/lib/engine/nguoi-khac';
 import {
   NGUOI_KHAC_SYSTEM_PROMPT,
   NGUOI_KHAC_SCHEMA,
@@ -59,8 +66,12 @@ function validBirth(b: unknown): b is BirthParams {
  * còn phục vụ CHÍNH chủ xem lại; điều đó chấp nhận được vì đó đúng là ca đáng
  * tiền (không gian lá số ~260K tổ hợp nên trùng chéo vốn đã hiếm).
  */
-function cacheExtra(quanHe: string, birthSelf?: BirthParams | null): string {
-  return `qh:${quanHe}|self:${birthSelf ? lasoKey(birthSelf) : '-'}`;
+function cacheExtra(quanHe: string, birthSelf?: BirthParams | null, viec?: string): string {
+  // ⚠️ `viec` PHẢI nằm trong khoá: nó đổi hẳn một khối của bản luận (`keHoach`)
+  // và đổi giọng phần còn lại. Bỏ ra ngoài thì người chọn "thương lượng lương"
+  // nhận lại đúng bản đã dựng cho "báo tin xấu" — sai IM LẶNG, và tệ hơn là họ
+  // vừa trả tiền cho nó. Cùng lối `moiLo` của tool Dạy Con.
+  return `qh:${quanHe}|self:${birthSelf ? lasoKey(birthSelf) : '-'}|viec:${viec || 'hieu-them'}`;
 }
 
 interface Muc {
@@ -68,6 +79,7 @@ interface Muc {
   vidu?: string;
 }
 interface CamNang {
+  keHoach?: string;
   tinhKhi?: string;
   chamNoc?: string;
   coiTrong?: string;
@@ -78,24 +90,44 @@ interface CamNang {
   motCau?: string;
 }
 
-/** Phần deterministic trả kèm — client dựng được khung ngay cả khi phần chữ mỏng. */
-function meta(p: NguoiKhacProfile, ten: string) {
+/**
+ * Phần deterministic trả kèm — client dựng được khung ngay cả khi phần chữ mỏng.
+ *
+ * `full=false` (đường TÍNH THỬ) cắt bớt phần MÔ TẢ TÍNH CÁCH của kiểu người
+ * (`dongLuc` · `datChat` · `manh` · `yeu` · `moiTruongHop` · `moiTruongKy`).
+ *
+ * 🔑 VÌ SAO: giao diện KHÔNG vẽ mấy trường đó ra ở bất kỳ đâu (đã kiểm cả
+ * `renderMeta` lẫn `renderProse`), mà rail thì tự tính lại ở server qua
+ * `wrap:'nguoi-khac'` — tức chúng chưa từng được dùng ở client. Nhưng lượt tính
+ * thử KHÔNG đòi đăng nhập, nên trước đây mở devtools là có sẵn bản mô tả tính
+ * cách đầy đủ mà không trả một đồng nào. Cắt ở tầng payload, đừng trông vào
+ * việc giao diện "quên" vẽ.
+ *
+ * Đường trả tiền GIỮ NGUYÊN cả gói — cắt luôn ở đó là đổi hình dạng payload đã
+ * nằm trong `portrait_cache`, thứ không đáng đánh đổi để dọn vài trường thừa.
+ */
+function meta(p: NguoiKhacProfile, ten: string, full = true) {
   return {
     ten,
     quanHe: { id: p.quanHe.id, label: p.quanHe.label, cungCuaBan: p.quanHe.cungCuaBan },
+    viec: { id: p.viec.id, label: p.viec.label },
     gioiTinh: p.gioiTinh,
     kieu: {
       id: p.kieu.id,
       ten: p.kieu.ten,
       tuTuong: p.kieu.tuTuong,
       motCau: p.kieu.motCau,
-      dongLuc: p.kieu.dongLuc,
-      datChat: p.kieu.datChat,
       cauHoi: p.kieu.cauHoi,
-      manh: p.kieu.manh,
-      yeu: p.kieu.yeu,
-      moiTruongHop: p.kieu.moiTruongHop,
-      moiTruongKy: p.kieu.moiTruongKy,
+      ...(full
+        ? {
+            dongLuc: p.kieu.dongLuc,
+            datChat: p.kieu.datChat,
+            manh: p.kieu.manh,
+            yeu: p.kieu.yeu,
+            moiTruongHop: p.kieu.moiTruongHop,
+            moiTruongKy: p.kieu.moiTruongKy,
+          }
+        : {}),
     },
     kieuPhu: p.kieuPhu ? { id: p.kieuPhu.id, ten: p.kieuPhu.ten, motCau: p.kieuPhu.motCau } : null,
     lai: p.phan.lai,
@@ -181,6 +213,9 @@ async function buildReport(
   const payload = {
     success: true,
     ...meta(p, ten),
+    // Người hỏi không nêu việc cụ thể thì KHÔNG nhận mục này dù model có viết —
+    // cùng luật với `voiBan`: không có dữ kiện thì đó là lời chung chung.
+    keHoach: p.viec.id === 'hieu-them' ? '' : clean(parsed.keHoach),
     tinhKhi: clean(parsed.tinhKhi),
     chamNoc: clean(parsed.chamNoc),
     coiTrong: clean(parsed.coiTrong),
@@ -235,11 +270,19 @@ async function runPreview(request: NextRequest) {
     if (rb.ok && rb.ls) lsBan = rb.ls;
   }
   const gender = birth.gender === 'nu' ? ('nu' as const) : ('nam' as const);
-  const p = computeNguoiKhac(r.ls, gender, resolveQuanHe(String(body.quanHe || '')), lsBan);
+  const quanHe = resolveQuanHe(String(body.quanHe || ''));
+  const p = computeNguoiKhac(r.ls, gender, quanHe, lsBan, undefined, resolveViec(String(body.viec || '')));
   return ok({
     success: true,
     preview: true,
-    ...meta(p, String(body.name || '').trim().slice(0, 60)),
+    ...meta(p, String(body.name || '').trim().slice(0, 60), false),
+    // Tên các khối chưa mở, sinh từ chính lá số này — tường khoá dựng từ đây
+    // thay vì một mảng chữ chép cứng giống nhau cho mọi người.
+    khoa: khoiKhoa(p),
+    // Danh sách việc HỢP với quan hệ đang chọn, để trang dựng lại ô chọn khi
+    // người dùng đổi quan hệ. Nguồn duy nhất là engine — trang chép bản thứ hai
+    // thì hai bên trôi khỏi nhau.
+    viecChon: viecChoQuanHe(quanHe).map((v) => ({ id: v.id, label: v.label })),
   });
 }
 
@@ -252,10 +295,11 @@ async function runPost(request: NextRequest) {
   if (!validBirth(birth)) return err('Thiếu thông tin ngày sinh của người cần xem.', 400);
 
   const quanHe = resolveQuanHe(String(body.quanHe || ''));
+  const viec = resolveViec(String(body.viec || ''));
   const ten = String(body.name || '').trim().slice(0, 60);
   const birthSelf = validBirth(body.birthSelf) ? (body.birthSelf as BirthParams) : null;
 
-  const key = lasoKey(birth, cacheExtra(quanHe, birthSelf));
+  const key = lasoKey(birth, cacheExtra(quanHe, birthSelf, viec));
   const [cached, owns] = await Promise.all([
     getCachedPortrait(TOOL_ID, 'main', key),
     userOwnsLaso(TOOL_ID, auth.user.id, key),
@@ -289,7 +333,7 @@ async function runPost(request: NextRequest) {
   }
 
   const gender = birth.gender === 'nu' ? ('nu' as const) : ('nam' as const);
-  const profile = computeNguoiKhac(r.ls, gender, quanHe, lsBan);
+  const profile = computeNguoiKhac(r.ls, gender, quanHe, lsBan, undefined, viec);
 
   const res = await buildReport(profile, ten, auth.user.id, key, Boolean(lsBan));
   return refundIfSystemFailure(res, {
@@ -334,7 +378,10 @@ async function handleCacheStatus(request: NextRequest, sp: URLSearchParams) {
         isLunar: sp.get('slunar') === '1',
       }
     : null;
-  const key = lasoKey(birth, cacheExtra(resolveQuanHe(sp.get('qh')), self));
+  // `viec` phải có mặt ở đây y như lúc dựng khoá bên `runPost` — thiếu nó thì
+  // câu hỏi "lượt xem lại này có miễn phí không" tra nhầm dòng cache, và trang
+  // mở thẳng bản của một việc KHÁC mà không trừ Lượng.
+  const key = lasoKey(birth, cacheExtra(resolveQuanHe(sp.get('qh')), self, resolveViec(sp.get('viec'))));
   const [cached, owns] = await Promise.all([
     getCachedPortrait(TOOL_ID, 'main', key),
     userOwnsLaso(TOOL_ID, auth.user.id, key),

@@ -34,7 +34,7 @@ import {
   kieuCuaCung,
   resolveVanNam,
   vanNamLine,
-  LUAT_VAN_NAM,
+  LUAT_VAN_NAM_AN_CUNG,
   type VanNam,
 } from './cong-so';
 
@@ -120,6 +120,115 @@ export const QUAN_HE: Record<QuanHeId, QuanHeDef> = {
 
 export const QUAN_HE_IDS = Object.keys(QUAN_HE) as QuanHeId[];
 
+// ── Việc đang cần làm ───────────────────────────────────────
+//
+// 🔑 VÌ SAO CÓ Ô NÀY. Trước đây bản trả tiền nhận ĐÚNG cùng một hồ sơ với bản
+// tính thử (đã kiểm: `buildNguoiKhacPrompt` và `meta()` đọc gần trùng khít một
+// object) ⇒ model không có thêm một dữ kiện nào để nói, nên nó chỉ có thể diễn
+// đạt lại thứ người ta vừa đọc miễn phí. Đó là lỗi CẤU TRÚC, sửa prompt bao
+// nhiêu vòng cũng không ra thông tin mới. Ô này là dữ kiện MỚI do chính người
+// hỏi cấp ⇒ đầu vào khác thì đầu ra khác thật.
+//
+// ⚠️ MỘT DANH SÁCH PHẲNG + CỜ `hop`, KHÔNG PHẢI MA TRẬN 8 quan hệ × N việc.
+// Cùng bài học "BA TRỤC ĐỘC LẬP, KHÔNG VIẾT MA TRẬN" của track Công Sở: viết
+// 8×10 = 80 ô thì mỗi lần thêm một quan hệ phải viết thêm 10 ô, và không ai
+// soát nổi. Ở đây mỗi việc tự khai nó hợp với những quan hệ nào.
+
+export type ViecId =
+  | 'nho-viec'
+  | 'thuong-luong'
+  | 'bao-tin-xau'
+  | 'tu-choi'
+  | 'bat-dong'
+  | 'giao-viec'
+  | 'ru-hop-tac'
+  | 'gan-lai'
+  | 'lan-dau'
+  | 'hieu-them';
+
+export interface ViecDef {
+  id: ViecId;
+  label: string;
+  /** Điều người hỏi thật sự cần nghe khi chọn mục này. */
+  can: string;
+  /** Quan hệ nào thì việc này có nghĩa. Rỗng = hợp mọi quan hệ. */
+  hop: QuanHeId[];
+}
+
+export const VIEC_CAN_LAM: Record<ViecId, ViecDef> = {
+  'nho-viec': {
+    id: 'nho-viec',
+    label: 'Sắp nhờ họ một việc / trình một đề xuất',
+    can: 'Trình bày theo thứ tự nào thì lọt, và chỗ nào trong cách trình bày sẽ làm họ chững lại.',
+    hop: ['sep', 'dong-nghiep', 'doi-tac', 'cha-me', 'ban-doi', 'ban-be'],
+  },
+  'thuong-luong': {
+    id: 'thuong-luong',
+    label: 'Sắp thương lượng quyền lợi (lương, chia phần)',
+    can: 'Người này quyết bằng cái gì, và mở lời bằng con số trước hay bằng lý lẽ trước.',
+    hop: ['sep', 'dong-nghiep', 'doi-tac'],
+  },
+  'bao-tin-xau': {
+    id: 'bao-tin-xau',
+    label: 'Sắp phải báo một tin họ không muốn nghe',
+    can: 'Nói thẳng hay nói vòng, nói riêng hay nói chung — và câu mở đầu nào khiến họ nghe hết.',
+    hop: [],
+  },
+  'tu-choi': {
+    id: 'tu-choi',
+    label: 'Phải từ chối họ mà không muốn mất quan hệ',
+    can: 'Từ chối kiểu nào thì người này coi là sòng phẳng, kiểu nào thì coi là bị coi thường.',
+    hop: [],
+  },
+  'bat-dong': {
+    id: 'bat-dong',
+    label: 'Đang có bất đồng chưa gỡ được',
+    can: 'Phần nào là khác biệt tính khí (không gỡ được, phải né) và phần nào là cách nói (sửa được ngay).',
+    hop: [],
+  },
+  'giao-viec': {
+    id: 'giao-viec',
+    label: 'Cần giao việc / nhắc việc cho họ',
+    can: 'Giao kiểu nào thì họ chạy, nhắc kiểu nào thì họ nghe mà không thấy bị soi.',
+    hop: ['dong-nghiep', 'cap-duoi', 'doi-tac', 'con-cai'],
+  },
+  'ru-hop-tac': {
+    id: 'ru-hop-tac',
+    label: 'Muốn rủ họ làm chung một việc lớn',
+    can: 'Người này bị thuyết phục bởi cái gì, và chỗ nào trong việc chung sẽ khiến họ rút.',
+    hop: ['dong-nghiep', 'cap-duoi', 'doi-tac', 'ban-be', 'ban-doi'],
+  },
+  'gan-lai': {
+    id: 'gan-lai',
+    label: 'Muốn gần lại sau một thời gian xa cách',
+    can: 'Cửa nào còn mở: chuyện gì họ còn chịu nghe, và cách mở lời nào làm họ đóng lại ngay.',
+    hop: ['cha-me', 'con-cai', 'ban-doi', 'ban-be', 'dong-nghiep'],
+  },
+  'lan-dau': {
+    id: 'lan-dau',
+    label: 'Sắp gặp / làm việc lần đầu, chưa biết gì về họ',
+    can: 'Ba điều nên biết trước khi mở miệng, và một điều tuyệt đối đừng làm ở lần gặp đầu.',
+    hop: [],
+  },
+  'hieu-them': {
+    id: 'hieu-them',
+    label: 'Không có gì gấp, chỉ muốn hiểu người này hơn',
+    can: 'Một bản mô tả con người này, đủ để nhận ra họ trong đời thường.',
+    hop: [],
+  },
+};
+
+export const VIEC_IDS = Object.keys(VIEC_CAN_LAM) as ViecId[];
+
+export function resolveViec(v?: string | null): ViecId {
+  return VIEC_IDS.includes(v as ViecId) ? (v as ViecId) : 'hieu-them';
+}
+
+/** Việc nào bày ra cho quan hệ này. `hop` rỗng = hợp mọi quan hệ. */
+export function viecChoQuanHe(q: QuanHeId): ViecDef[] {
+  return VIEC_IDS.map((id) => VIEC_CAN_LAM[id]).filter((v) => v.hop.length === 0 || v.hop.includes(q));
+}
+
 export function resolveQuanHe(v?: string | null): QuanHeId {
   return QUAN_HE_IDS.includes(v as QuanHeId) ? (v as QuanHeId) : 'sep';
 }
@@ -171,6 +280,8 @@ export interface VoiBan {
 export interface NguoiKhacProfile {
   namXem: number;
   quanHe: QuanHeDef;
+  /** Việc người hỏi đang cần làm với người này — dữ kiện do CHÍNH họ cấp. */
+  viec: ViecDef;
   gioiTinh: 'nam' | 'nu';
   kieu: KieuDef;
   kieuPhu: KieuDef | null;
@@ -217,9 +328,15 @@ export function computeNguoiKhac(
   quanHeId: QuanHeId,
   lsBan?: Laso | null,
   namXem?: number,
+  viecId?: ViecId,
 ): NguoiKhacProfile {
   const nam = namXem ?? (typeof ls.namXem === 'number' ? (ls.namXem as number) : currentNamXem());
   const quanHe = QUAN_HE[quanHeId];
+  // Việc không hợp với quan hệ đang chọn thì rơi về 'hieu-them' — người dùng
+  // đổi quan hệ sau khi đã chọn việc là ra tổ hợp vô nghĩa ("giao việc cho
+  // sếp"), mà tổ hợp đó đi thẳng vào prompt.
+  const viecRaw = VIEC_CAN_LAM[resolveViec(viecId)];
+  const viec = viecRaw.hop.length === 0 || viecRaw.hop.includes(quanHeId) ? viecRaw : VIEC_CAN_LAM['hieu-them'];
   const phan = phanKieu(ls);
   const scores = (ls.cungScores as Record<string, Rec>) || {};
   const cachCucTung = (ls.cachCucTungCung as Record<string, string[]>) || {};
@@ -274,6 +391,7 @@ export function computeNguoiKhac(
   return {
     namXem: nam,
     quanHe,
+    viec,
     // 🪤 Giới tính KHÔNG nằm trong lá số engine trả về (đã kiểm) — phải truyền
     // vào. Đọc `ls.gioiTinh` là luôn ra 'nam', sai im lặng cho một nửa người xem.
     gioiTinh,
@@ -289,6 +407,49 @@ export function computeNguoiKhac(
 }
 
 /**
+ * Tên các khối CHƯA MỞ, sinh từ dữ liệu thật của chính lá số này.
+ *
+ * 🔑 VÌ SAO KHÔNG ĐỂ TRANG CHÉP TAY. Trước đây `app-nguoi-khac.html` giữ một
+ * mảng `NK_KHOA` viết cứng 6 dòng chung chung ("Con người này vận hành thế
+ * nào") — nói y hệt nhau cho mọi lá số, nên không mở được vòng tò mò nào. Nêu
+ * đích danh thứ đang khoá thì mới có cái để muốn biết.
+ *
+ * ⚠️ LUẬT CỨNG, ĐỌC TRƯỚC KHI THÊM DÒNG: mỗi mục ở đây PHẢI ứng với một trường
+ * CÓ THẬT trong payload đường trả tiền (`id` chính là tên trường). Bịa một tiêu
+ * đề nghe hay mà bản đầy đủ không có nội dung đó là **hứa hụt** — thứ repo tự
+ * dặn tránh, và là cách nhanh nhất mất niềm tin ngay ở lượt trả tiền đầu tiên.
+ * Có test canh đúng chỗ này: mọi `id` phải nằm trong payload thật.
+ *
+ * Vì thế `voiBan` CHỈ xuất hiện khi có lá số người hỏi — đúng điều kiện mà
+ * `buildReport` dùng để quyết định có nhận mục đó hay không.
+ */
+export function khoiKhoa(p: NguoiKhacProfile): { id: string; tieuDe: string }[] {
+  const k: { id: string; tieuDe: string }[] = [];
+
+  // Khối của A3 đứng ĐẦU: nó là thứ DUY NHẤT đổi theo việc người hỏi đang cần
+  // làm, tức thứ bản tính thử không thể có kể cả về nguyên tắc.
+  if (p.viec.id !== 'hieu-them') {
+    k.push({ id: 'keHoach', tieuDe: `Cách đi cho việc: ${p.viec.label.replace(/^Sắp |^Phải |^Cần |^Muốn /, '')}` });
+  }
+  k.push({ id: 'tinhKhi', tieuDe: `Người kiểu ${p.kieu.ten} này vận hành thế nào trong đời thật` });
+  k.push({ id: 'coiTrong', tieuDe: 'Họ coi trọng cái gì — và sợ mất cái gì' });
+  k.push({ id: 'chamNoc', tieuDe: 'Điều làm người này khó chịu nhất' });
+  k.push({ id: 'nenNoi', tieuDe: 'Ba việc nên nói, kèm câu nói thật để dùng luôn' });
+  k.push({ id: 'tranhNoi', tieuDe: 'Ba câu tuyệt đối đừng nói với người này' });
+  k.push({
+    id: 'thoiDiem',
+    tieuDe: p.daiVan
+      ? `Lúc nào nên đưa việc lớn tới — theo đại vận ${p.daiVan.tuoiStart}–${p.daiVan.tuoiEnd} tuổi họ đang chạy`
+      : 'Lúc nào nên đưa việc lớn tới',
+  });
+  if (p.voiBan) {
+    k.push({ id: 'voiBan', tieuDe: `Chỗ bạn và người này va nhau — đọc ở cung ${p.voiBan.cung} của bạn` });
+  }
+  k.push({ id: 'motCau', tieuDe: 'Một câu chốt để nhớ về người này' });
+  return k;
+}
+
+/**
  * Dữ liệu PHẲNG gửi rail.
  *
  * ⚠️ `extractGenericContext` bỏ IM LẶNG mọi giá trị là object — nhét mảng hay
@@ -299,6 +460,8 @@ export function railData(p: NguoiKhacProfile): Record<string, string | number | 
   const d: Record<string, string | number | boolean> = {
     quanHe: p.quanHe.label,
     nhuCauNguoiXem: p.quanHe.nhuCau,
+    viecDangCanLam: p.viec.label,
+    dieuNguoiHoiCanNghe: p.viec.can,
     kieuNguoi: p.kieu.ten,
     kieuTuTuong: p.kieu.tuTuong,
     kieuMotCau: p.kieu.motCau,
@@ -323,13 +486,20 @@ export function railData(p: NguoiKhacProfile): Record<string, string | number | 
   }
   if (p.vanNam) {
     // Dùng CHUNG `vanNamLine` với prompt để hai chỗ không nói khác nhau; kèm
-    // `LUAT_VAN_NAM` chặn rail tự chấm điểm cho năm (luật `execTraVanHan`).
-    d.vanNamNay = vanNamLine(p.vanNam);
-    d.luatVanNam = LUAT_VAN_NAM;
+    // luật chặn rail tự chấm điểm cho năm (luật `execTraVanHan`).
+    // 🔒 `anCung` — người được xem KHÔNG có mặt. Không có cờ này thì rail nhận
+    // "tiểu hạn cung Tật Ách" rồi luận bệnh tật của họ, đúng cửa mà `KHONG_DOC`
+    // đã chặn ở tầng dữ liệu. Vá prompt mà quên rail là chỉ khoá một nửa.
+    d.vanNamNay = vanNamLine(p.vanNam, { anCung: true });
+    d.luatVanNam = LUAT_VAN_NAM_AN_CUNG;
   }
   if (p.daiVan) {
+    // 🔒 KHÔNG nêu tên cung đại vận — cùng lý do `anCung` ở trên, và cùng quyết
+    // định mà `buildNguoiKhacPrompt` đã ghi rõ. Cung đại vận rơi vào Tật Ách /
+    // Điền Trạch ở **60/144 lá số** (đã đo), tức 42% số lượt rail có sẵn cửa để
+    // luận bệnh tật / nhà cửa của một người không có mặt.
     d.daiVanDangChay =
-      `${p.daiVan.tuoiStart}–${p.daiVan.tuoiEnd} tuổi, cung ${p.daiVan.cung}` +
+      `${p.daiVan.tuoiStart}–${p.daiVan.tuoiEnd} tuổi` +
       (p.daiVan.diem == null ? '' : `, ${p.daiVan.diem}/10`);
   }
   if (p.voiBan) {

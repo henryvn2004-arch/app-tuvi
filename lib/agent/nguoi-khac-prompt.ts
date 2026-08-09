@@ -16,7 +16,7 @@
 // ============================================================
 
 import type { NguoiKhacProfile } from '@/lib/engine/nguoi-khac';
-import { vanNamLine, LUAT_VAN_NAM } from '@/lib/engine/cong-so';
+import { vanNamLine, LUAT_VAN_NAM_AN_CUNG } from '@/lib/engine/cong-so';
 
 export const NGUOI_KHAC_SYSTEM_PROMPT = `Bạn là một người xem tử vi lâu năm, đang viết một BẢN CẨM NANG ỨNG XỬ cho người đến hỏi.
 
@@ -56,6 +56,8 @@ export function buildNguoiKhacPrompt(p: NguoiKhacProfile, ten: string): string {
   L.push(`NGƯỜI ĐƯỢC XEM: ${who} · ${p.gioiTinh === 'nu' ? 'Nữ' : 'Nam'}`);
   L.push(`QUAN HỆ VỚI NGƯỜI HỎI: ${p.quanHe.label}`);
   L.push(`ĐIỀU NGƯỜI HỎI THẬT SỰ CẦN: ${p.quanHe.nhuCau}`);
+  L.push(`VIỆC NGƯỜI HỎI ĐANG CẦN LÀM: ${p.viec.label}`);
+  L.push(`THỨ HỌ CẦN NGHE CHO ĐÚNG VIỆC ĐÓ: ${p.viec.can}`);
   L.push('');
 
   L.push('— KIỂU NGƯỜI (suy từ chính tinh cung Mệnh và cung Quan Lộc) —');
@@ -106,8 +108,12 @@ export function buildNguoiKhacPrompt(p: NguoiKhacProfile, ten: string): string {
     L.push('Không đọc được đại vận đang chạy — ĐỪNG bịa, bỏ qua phần thời điểm hoặc nói theo vận năm.');
   }
   if (p.vanNam) {
-    L.push(`Vận năm ${vanNamLine(p.vanNam)}`);
-    L.push(LUAT_VAN_NAM);
+    // 🐞 `anCung` BẮT BUỘC ở đây. Trước đây dòng này gọi `vanNamLine` trơn nên
+    // in ra "tiểu hạn cung Tật Ách" / "lưu niên cung Tài Bạch" — tức chính cái
+    // ngõ sau mà chú thích ngay phía trên đã cảnh báo, và nó mở thật: đo trên
+    // `git HEAD` là **23/48 lá số (~48%)** lọt tên cung cấm vào prompt.
+    L.push(`Vận năm ${vanNamLine(p.vanNam, { anCung: true })}`);
+    L.push(LUAT_VAN_NAM_AN_CUNG);
   }
   L.push('');
 
@@ -130,9 +136,30 @@ export function buildNguoiKhacPrompt(p: NguoiKhacProfile, ten: string): string {
     L.push('');
   }
 
+  // 🔑 Khối `keHoach` là thứ DUY NHẤT trong cả bản luận không suy được từ lá số
+  // — nó cần dữ kiện do chính người hỏi cấp. Trước khi có ô "việc cần làm",
+  // prompt này nhận đúng cùng một hồ sơ với bản tính thử miễn phí, nên bản trả
+  // tiền về mặt cấu trúc chỉ có thể diễn đạt lại thứ người ta đã đọc.
+  if (p.viec.id !== 'hieu-them') {
+    L.push('— VIỆC NGƯỜI HỎI ĐANG VƯỚNG (phần đáng tiền nhất, viết kỹ nhất) —');
+    L.push(
+      `Người hỏi không đọc chơi. Họ đang phải: "${p.viec.label}". ` +
+        `Mục "keHoach" phải trả lời ĐÚNG việc đó cho ĐÚNG người này — bám kiểu người, động lực gốc, ` +
+        `chỗ dễ hụt và giai đoạn vận đã nêu ở trên. CẤM viết lời khuyên giao tiếp chung chung ` +
+        `("hãy chân thành", "nên lắng nghe") — thứ đó đúng với mọi người nên không đáng tiền. ` +
+        `Phải nêu được: mở lời thế nào, thứ tự trình bày ra sao, chỗ nào là bẫy với riêng người này.`,
+    );
+    L.push('');
+  }
+
   L.push('— VIỆC CỦA BẠN —');
   L.push(`Viết bản cẩm nang ứng xử với ${who} trong vai trò "${p.quanHe.label}", trả về ĐÚNG một object JSON:`);
   L.push(`{
+  ${
+    p.viec.id !== 'hieu-them'
+      ? `"keHoach":   "4–6 câu: cách đi cụ thể cho việc \\"${p.viec.label}\\" với RIÊNG người này. Mở lời ra sao, trình bày theo thứ tự nào, tránh bẫy nào. Phải khác hẳn một lời khuyên chung — đọc xong là làm được ngay.",`
+      : `"keHoach":   "",`
+  }
   "tinhKhi":   "3–4 câu tả con người này vận hành thế nào. Ngôi thứ ba. Cụ thể tới mức người quen họ đọc là gật đầu.",
   "chamNoc":   "2–3 câu: điều gì làm người này khó chịu, và vì sao — theo đúng động lực gốc ở trên. Mô tả, KHÔNG phải chỉ dẫn cách chọc.",
   "coiTrong":  "2–3 câu: họ coi trọng cái gì, và sợ mất cái gì. Đây là chỗ quyết định mọi cách nói chuyện bên dưới.",
@@ -143,6 +170,9 @@ export function buildNguoiKhacPrompt(p: NguoiKhacProfile, ten: string): string {
   "motCau":    "MỘT câu chốt đáng nhớ, đọc xong kể lại được cho người khác nghe."
 }`);
   L.push('`nenNoi` và `tranhNoi` mỗi mảng ĐÚNG 3 mục.');
+  if (p.viec.id === 'hieu-them') {
+    L.push('Người hỏi KHÔNG nêu việc cụ thể nào → trả `keHoach` là chuỗi RỖNG. Đừng viết chung chung cho có.');
+  }
   L.push('Không thêm khoá nào khác. Không viết chữ nào ngoài JSON.');
 
   return L.join('\n');
@@ -151,6 +181,10 @@ export function buildNguoiKhacPrompt(p: NguoiKhacProfile, ten: string): string {
 export const NGUOI_KHAC_SCHEMA = {
   type: 'OBJECT',
   properties: {
+    // Cố ý KHÔNG nằm trong `required` — cùng lối `voiBan`: có ca hợp lệ mà mục
+    // này phải rỗng (người hỏi chọn "chỉ muốn hiểu thêm"), ép required thì model
+    // buộc phải bịa ra một kế hoạch cho một việc không tồn tại.
+    keHoach: { type: 'STRING' },
     tinhKhi: { type: 'STRING' },
     chamNoc: { type: 'STRING' },
     coiTrong: { type: 'STRING' },
@@ -176,6 +210,7 @@ export const NGUOI_KHAC_SCHEMA = {
   },
   required: ['tinhKhi', 'chamNoc', 'coiTrong', 'nenNoi', 'tranhNoi', 'thoiDiem', 'motCau'],
   propertyOrdering: [
+    'keHoach',
     'tinhKhi',
     'chamNoc',
     'coiTrong',
@@ -214,7 +249,8 @@ Lá số ở trên KHÔNG phải của người đang chat. Đó là lá số c�
 - Khung DUY NHẤT: hiểu để sống chung, KHÔNG phải hiểu để điều khiển. CẤM ngôn ngữ thao túng ("nắm thóp", "khai thác điểm yếu", "cách khiến họ phải nghe").
 - CẤM luận SỨC KHOẺ, BỆNH TẬT, TIỀN RIÊNG, HÔN NHÂN của người này${p.quanHe.id === 'ban-doi' ? ' (riêng chuyện hai người với nhau thì được, ở mức cách cư xử)' : ''}. Người đó không có mặt để đồng ý.
 - CẤM phán giá trị ("người này tệ/khó ưa"). Tính cách chỉ hợp hoặc không hợp bối cảnh.
-- Kiểu người theo khung này: ${p.kieu.ten} — ${p.kieu.motCau}${p.phan.lai && p.kieuPhu ? ` (SÁT RANH GIỚI với kiểu ${p.kieuPhu.ten}, phải nói rõ là pha, đừng ép nhãn)` : ''}.
+- Kiểu người theo khung này: ${p.kieu.ten} — ${p.kieu.motCau}${p.phan.lai && p.kieuPhu ? ` (SÁT RANH GIỚI với kiểu ${p.kieuPhu.ten}, phải nói rõ là pha, đừng ép nhãn)` : ''}.${p.viec.id === 'hieu-them' ? '' : `
+- Việc người chat đang vướng: ${p.viec.label}. Câu hỏi mơ hồ thì kéo về đúng việc đó, đừng luận lan man.`}
 - CẤM gọi đây là trắc nghiệm/khoa học/đã kiểm định, CẤM đối chiếu DISC/MBTI.
 === HẾT KHỐI NGƯỜI KHÁC ===`;
 }

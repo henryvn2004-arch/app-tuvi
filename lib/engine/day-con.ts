@@ -38,7 +38,7 @@ import {
   namSinhTuLaSo,
   resolveVanNam,
   vanNamLine,
-  LUAT_VAN_NAM,
+  LUAT_VAN_NAM_AN_CUNG,
   type VanNam,
 } from './cong-so';
 import { KHONG_DOC } from './nguoi-khac';
@@ -455,10 +455,13 @@ export function railData(p: DayConProfile): Record<string, string | number | boo
   if (p.vanNam) {
     // ⚠️ Payload rail phải PHẲNG — `extractGenericContext` bỏ IM LẶNG mọi giá
     // trị là object, nên dẹp thành chuỗi qua `vanNamLine` — dùng CHUNG với
-    // prompt để hai chỗ không bao giờ nói khác nhau. `LUAT_VAN_NAM` chặn rail
+    // prompt để hai chỗ không bao giờ nói khác nhau. Luật kèm theo chặn rail
     // tự chấm một con số cho năm (cùng luật `execTraVanHan`).
-    d.vanNamNay = vanNamLine(p.vanNam);
-    d.luatVanNam = LUAT_VAN_NAM;
+    // 🔒 `anCung` — đứa trẻ KHÔNG có mặt để đồng ý. Tên cung tiểu hạn/lưu niên
+    // hay rơi đúng vào Tật Ách / Điền Trạch, tức cửa mà `KHONG_DOC` đã chặn ở
+    // tầng dữ liệu; đưa tên cung sang rail là mở lại nó qua ngõ sau.
+    d.vanNamNay = vanNamLine(p.vanNam, { anCung: true });
+    d.luatVanNam = LUAT_VAN_NAM_AN_CUNG;
   }
   if (p.voiChaMe) {
     d.kieuChaMe = p.voiChaMe.kieuChaMe;
