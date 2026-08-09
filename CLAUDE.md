@@ -109,12 +109,12 @@ chất việc + một lượt LLM.
 - **19/19 ca trên ROUTE THẬT qua Next dev**: tính thử 200 không cần đăng nhập ·
   payload thật **0 khoá trả tiền** · 0 cung cấm · `moiLo` rác rơi về danh sách
   trắng · đường trả tiền không auth → 401.
-- **45/45 ca Playwright trên TRANG THẬT**: tính thử → 0 POST đường tiền, 0
+- **58/58 ca Playwright trên TRANG THẬT**: tính thử → 0 POST đường tiền, 0
   `deduct`, quét toàn bộ chữ hiện ra **0 mẩu trả tiền lọt** · bấm mở → có
   deduct + đủ ba hướng + phần miễn phí còn nguyên byte · **trẻ nhỏ → 0 tên nghề
   lọt** · ĐỐI CHỨNG 402 → dựng lại tường, không quẳng về form · đọc hụt bảng giá
   → **không trừ Lượng** (fail-closed) · XSS từ cả tên lẫn chuỗi server không
-  chạy · 390px không tràn.
+  chạy · 390px không tràn · **khung shell đúng chuẩn** (xem bẫy ngay dưới).
 - 🪤 **Red-team lộ ra bài kiểm trang KHÔNG canh được rò rỉ SERVER**: bộ quét đọc
   `innerText`, tức đo *người dùng thấy gì*, nên payload thừa không lọt màn hình
   ⇒ 40/40 vẫn xanh khi cố ý cho preview trả bản đầy đủ. Red-team đúng tầng
@@ -125,6 +125,22 @@ chất việc + một lượt LLM.
   TOP-LEVEL; (b) token sai ra **500** thay vì 401 — nhưng `day-con` và
   `nguoi-khac` (đang chạy prod) ra **y hệt 500** trong container này ⇒ hiện tượng
   của môi trường (không có credential Supabase thật), không phải của tool mới.
+
+### 🪤 DỰNG TRANG TRÊN MỘT KHUNG KHÔNG TỒN TẠI — và test của tao không bắt được
+Bản đầu của trang dựng bằng `.sidebar` / `.work` / `.work-inner` — **ba lớp
+`shell.css` KHÔNG hề khai**. 35 trang shell đều dùng `.sb` / `.ws` /
+`.ws-top` / `.ws-body`; trang mới là trang DUY NHẤT lạc khung.
+- 🔴 **Playwright vẫn xanh 45/45** vì nó chỉ kiểm NỘI DUNG (chữ hiện đúng chưa,
+  có rò tầng trả tiền không) chứ không kiểm KHUNG. Ngay cả ca "390px không tràn
+  ngang" cũng xanh — không có lưới shell thì mọi thứ xếp dọc, càng không tràn.
+- Thứ bắt được là **`check:share`** (guard của PR #456, gộp vào giữa chừng): nó
+  đòi `.ws-actions` làm chỗ chèn nút Chia sẻ. Guard viết cho việc khác lại bắt
+  đúng lỗi này — vì nó neo vào **dấu hiệu THẬT của shell**, không neo vào chữ.
+- 🔑 **Quy ước rút ra: trang shell mới phải kiểm cả KHUNG, không chỉ kiểm chữ.**
+  Đã thêm CA9 (13 assertion): đúng `aside.sb` / `main.ws#ws` / `.ws-top` /
+  `.ws-actions` / `.ws-body` / rail · đúng MỘT mốc `data-ws-result` · **0 lớp
+  chết `.work`/`.work-inner`** · và nút Chia sẻ do SHELL tự bật khi có kết quả,
+  tự gỡ khi quay về form.
 
 ### 🐞 Bắt kèm: 7 khoá rail in NGUYÊN KHOÁ KỸ THUẬT vào prompt
 `extractGenericContext` rơi về `GENERIC_LABELS[k] || k`, nên `laiKieu: true` ·
@@ -149,6 +165,193 @@ trên cả hai (quét 336 lá số).
 - Con số cần nhìn sau 1–2 tuần: cột *mở → tính thử → bấm mở* của
   `huong-nghiep-tre` trong panel Phễu Theo Tool, đặt cạnh `day-con` (cùng 15
   Lượng, cùng đối tượng) để biết câu hỏi nào bán tốt hơn.
+
+---
+
+## ⏱️ ETA TỰ HIỆU CHỈNH + `llm_usage` cuối cùng cũng có THỜI LƯỢNG (2026-08-09, PR sau #457)
+
+Henry: *"Có nên estimate thời gian chạy của từng tool xong… show estimated time
+cho users?"* → *"làm tiếp theo suggest của mày luôn"*.
+
+### 🔴 Tiền đề hỏng: KHÔNG ĐO ĐƯỢC GÌ CẢ
+`events.llm_usage.meta` chỉ có `model` · `cost_vnd` · các loại token —
+**không có một trường thời lượng nào**. Con số "45–60 giây" duy nhất đang có là
+suy gián tiếp từ khoảng cách hai mốc log của **hai pha chạy song song**, mẹo chỉ
+dùng được cho đúng tool chân dung. Mọi tool còn lại: trắng.
+
+### 🔑 ETA tĩnh là một LỜI HỨA — và repo này đã thấy nó nói dối
+Đổi `gpt-image-1` → `gpt-image-2` làm thời gian vẽ **gấp đôi** (22s → 46s), mà
+con số trong tài liệu đứng yên, lại còn ghi theo `quality:high` trong khi thực
+tế chạy `medium`. ⇒ **Nếu hiện ETA thì phải suy từ SỐ ĐO, không được chép cứng.**
+
+### ✅ Cách giải: đo NGAY TRONG PHIÊN, không cần dữ liệu lịch sử
+`AiLoadingSteps.pacer()` — tool chạy nhiều phần tuần tự (luận giải 24, xem tuổi
+9) thì **xong vài phần là biết nhịp của chính phiên này**: máy này, mạng này,
+tải server lúc này. Miễn nhiễm với đổi model. Hiện `Phần 7 / 24 · còn khoảng 3
+phút`, và `expectSec` của `mountWait` **ăn luôn nhịp đo được** nên thanh tiến
+trình quay lại (trước đó `expectSec:0` đã bỏ thanh vì không có số).
+- ⚠️ **`minSamples = 2`, KHÔNG phải 1** — phần 1 nạp **10 tài liệu RAG** trong
+  khi các phần sau chỉ 7 (`matchCount: p===1?10:7`) nên chậm bất thường. Lấy
+  đúng mẫu đó nhân lên 23 phần là hứa sai ngay từ dòng đầu.
+- **TRUNG VỊ chứ không trung bình**: một lượt nghẽn mạng không được kéo lệch cả
+  dự đoán. (Ca kiểm: 3 lượt 0,2s + 1 lượt 1,5s → trung vị 0,20 còn trung bình
+  0,52.)
+- **Chỉ ghi nhịp ở nhánh THÀNH CÔNG** — một phần chết giữa chừng có thời lượng
+  thật nhưng không đại diện.
+- Chưa đủ mẫu → `remainText()` trả `''` ⇒ **im lặng, không hứa**.
+
+### ✅ Vá lỗ đo: `llm_usage` nay có `duration_ms`
+Đo **bên trong** `llmTextFull` và `generatePortraitImage` rồi trả kèm, thay vì
+bắt 10 chỗ gọi tự bấm giờ — chỗ nào quên thì quên im lặng. **18 chỗ ghi**, gồm
+cả rail (`run.ts` đo TRỌN lượt kể cả các vòng tool-use — đó mới là thời gian
+người dùng thật sự ngồi chờ).
+
+### 🔴 Và lộ ra: `/api/lasotuvi` CHƯA HỀ ghi `llm_usage`
+Tool **bán chạy nhất** (Luận Giải, 1.500 Lượng / 3 người) hoàn toàn **vô hình
+trong panel Biên Lợi Nhuận** từ trước tới nay. Nay `llmText` → `llmTextFull` +
+`logLlmUsage`.
+- ⚠️ Ghi `tool_id='laso'` = ĐÚNG `tool_pricing.tool_id`, không phải `'luan-giai'`
+  (events) hay `'use_laso'` (giao dịch) — ba hệ tên lệch nhau, xem `tool_canon()`.
+  Ghi theo id mà GIÁ treo vào thì bucket chi phí mới ghép được với doanh thu.
+
+### Verify
+`tsc` 0 · `lint` 0 lỗi (72 warning pre-existing) · `prettier` sạch ·
+`check:prices`/`groups`/`nostore` sạch · engine **185 pass**.
+- **17 ca trên `pacer` THẬT**: 0 và 1 mẫu đều im lặng · trung vị chịu được ngoại
+  lai · câu chữ giây/1 phút/N phút · hết phần và số âm đều im · `reset()` xoá
+  sạch · `end()` lẻ không đẻ mẫu rác · nối vào `mountWait` thì thanh quay lại.
+- **62 + 76 + 60 ca hồi quy** của ba bộ kiểm trước: vẫn xanh.
+- 🪤 **Đối chứng HẾT HẠN** — 4 ca `[v1]` mô tả diff của PR trước, mà PR đó đã vào
+  `origin/main` nên chúng đỏ oan. 🔑 **Đối chứng phải theo kịp diff HIỆN TẠI;
+  neo đúng `origin/main` vẫn chưa đủ nếu nội dung ca đã lỗi thời.**
+- 🪤 Lệnh script thay chuỗi 4 dấu cách **khớp lồng** vào chuỗi 6 dấu cách → chèn
+  `reset()` hai lần ở 2 chỗ. Vô hại (idempotent) nhưng phải đếm lại mới thấy.
+- Bump `ai-loading-steps.js?v=4→5` (24 trang).
+
+### CÒN LẠI
+- **Chưa có bề mặt đọc `duration_ms`** — dữ liệu bắt đầu chảy từ lượt deploy này.
+  Sau 1–2 tuần thì thêm cột "thời lượng p50/p75" vào panel Biên LN, và mở
+  `expectSec` thật cho các tool CHẠY MỘT PHẦN (chân dung, phong thuỷ…) — nhóm
+  nhiều phần đã tự lo bằng pacer.
+- **`/api/lasotuvi?action=chat`** (đường rail cũ, dùng ở profile/chatbot) vẫn
+  chưa ghi usage — nó đi qua `callLLMTools` trong vòng lặp tool, cần cộng dồn
+  riêng. Đường `phan` (đường bán tiền) đã xong.
+- **20 trang STREAM** vẫn chưa đo được "thời gian tới token đầu tiên" — đó mới là
+  con số quyết định có cần orb ở đó hay không.
+
+---
+
+## 🔗 Chia sẻ workspace: tính năng của SHELL, không phải của từng tool (2026-08-09, PR này)
+
+Henry: *"Tool Dạy con theo lá số đang ko chia sẻ dc phần shell-workspace… Tính
+năng chia sẻ shell-workspace phải là tính năng master chung cho tất cả các tool
+chạy trên workspace, ko phụ thuộc vào tool nào chứ. Rà soát và design lại nếu
+cần."* Hai PR trước (#452, #453) mới **vá lẻ từng tool** — đúng triệu chứng, sai
+tầng. PR này sửa tầng.
+
+### 🔴 Căn nguyên: chia sẻ là OPT-IN, và opt-in thì có ngày quên
+Bản cũ bắt MỖI trang tool tự nhớ **bốn** nghĩa vụ: gọi `Shell.setShareable(…)`
+đúng lúc có kết quả · gọi `setShareable(null)` khi quay về form · tự chép
+`toolId` · và tự dựng một **bản văn bản THỨ HAI** (`_xxLines`) song song với DOM
+đang hiện. 32 tool × 4 = **128 chỗ để quên**, không có gì canh. Đã quên thật, và
+đo được:
+
+| Lỗi | Trang | Người dùng thấy gì |
+|---|---|---|
+| Không bao giờ gọi | `day-con` | **Không có nút Chia sẻ** từ lúc ra mắt tới khi Henry báo |
+| Không bao giờ gọi | 🔴 **`la-so`** (`app.html`) | **Tool ĐẦU BẢNG cũng chưa từng chia sẻ được** |
+| Gọi mà không bao giờ gỡ | `thanh-tuong-pro` · `phong-thuy` | Làm lượt mới → bấm Chia sẻ ra **kết quả LƯỢT TRƯỚC** |
+
+Hai lỗi dưới nặng hơn lỗi Henry báo: chúng không im lặng mà **nói sai**.
+
+🪤 **`la-so` lọt lưới đúng hai lần, cả hai vì ĐOÁN THEO TÊN:** file của nó là
+`app.html` (không gạch nối) nên lượt quét `app-*.html` đầu tiên của tao bỏ qua —
+và bộ dò tao vừa viết để chống chuyện đó cũng lọc y hệt, tức suýt phát hành một
+cái lưới có sẵn lỗ đúng chỗ cần vá. Nay bộ dò nhận diện trang shell bằng **dấu
+hiệu của shell** (nạp `shell.js` + khai `SHELL_ACTIVE`), không theo tên file.
+
+### 🔑 Cách vá — ĐẢO VAI, không phải thêm một lượt gọi nữa
+`shell.js` nay tự theo dõi **vùng kết quả** của khung giữa: hiện ra thì bật nút,
+biến mất thì gỡ nút **và vứt luôn payload của lượt trước**. Tool KHÔNG phải làm
+gì để có nút Chia sẻ.
+- **Giao ước DUY NHẤT của trang: một mốc `data-ws-result`** trên khối bao ngoài
+  cùng của phần kết quả. Đã khai đủ **32/32** trang tool.
+- **`setShareable` đổi vai: BẮT BUỘC → LÀM GIÀU.** Tool đưa gì (ảnh AI, khối
+  `blocks` có cấu trúc, tiêu đề đắt hơn) thì cái đó thắng bản shell tự suy. Cả
+  hai đường đi qua CHUNG `normalizeShare()` nên bản tự suy không bao giờ thiếu
+  khối lá số hay lệch shape.
+- **Lưới đỡ khi tool không đưa gì**: shell tự suy payload từ chính DOM đang hiện
+  — `toolId` từ `ACTIVE` (hết chép tay), tiêu đề từ `.ws-title b`, nội dung bằng
+  cách duyệt cây. Vì đọc thẳng thứ đang hiện nên **không có bản thứ hai để trôi
+  khỏi nhau** — đúng cái bẫy `_xxLines` đang bày sẵn.
+- **Bộ duyệt cây loại trừ có chủ đích**: điều khiển (nút/ô nhập/form/svg), tường
+  trả phí (`.tpw-*` — chia sẻ ra ngoài đúng lời mời trả tiền thì vô nghĩa), thẻ
+  intro, khối đang ẩn, và mọi thứ trang khai `data-share-skip`. Trần 4.000 ký tự.
+- **Ngưỡng 60 ký tự**: dưới mức đó khung mới chỉ có tiêu đề/spinner. Thà không có
+  nút còn hơn phát một link rỗng.
+
+### ⚠️ `setShareable(null)` nay là một CÂU KHẲNG ĐỊNH, không phải nút dọn dẹp
+Nghĩa mới: *"lượt này KHÔNG có gì đáng chia sẻ"* (fetch hỏng, khung đang hiện
+câu báo lỗi — vd `luc-nham` khi `!j`). Lời khai của tool mạnh hơn phép suy từ
+DOM nên nó **tắt cả lưới đỡ** tới lượt chạy sau. Chỉ để dọn nút khi quay về form
+thì **KHÔNG cần gọi** — shell thấy vùng kết quả ẩn đi là tự gỡ.
+- 🐞 **Lỗi tự bắt lúc test, không phải lúc đọc code**: bản đầu đặt cờ tắt tiếng
+  RỒI mới gọi `refreshWsShare()`, mà chính lượt đó thấy cạnh lên "vùng kết quả
+  vừa hiện = lượt chạy mới" nên **gỡ luôn cờ vừa đặt**. Tool báo lỗi trong khi
+  khung còn hiện thì shell vẫn đè lên lời khai của nó. Phải **chốt trạng thái
+  hiện/ẩn TRƯỚC, tắt tiếng SAU**.
+- 🐞 **Lỗi thứ hai, cùng họ "đoán theo tên"**: MutationObserver bám
+  `document.getElementById('ws')`, mà `app.html` dùng `<main class="ws">`
+  **không có id** ⇒ observer câm đúng trên tool Lá Số, nút không bao giờ hiện.
+  Nay lấy gốc theo `#ws` → `main.ws` → `<body>`. Chỉ lộ khi mở bằng trình duyệt.
+
+### 🧷 `scripts/check-shell-share.mjs` — chặn tool MỚI tái phát (CI lint)
+Đây mới là phần làm nó thành "master": phủ hôm nay không có nghĩa phủ tháng sau.
+Ba luật — có `.ws-actions` · **đúng MỘT** mốc `data-ws-result` · `toolId` chép
+tay (nếu còn) khớp `SHELL_ACTIVE`.
+- **Verify bộ dò bằng cách DỰNG LẠI ĐÚNG BA LỖI**: gỡ mốc khỏi `day-con` → bắt ·
+  thêm mốc thứ hai → bắt · đổi `toolId` thành `congso` → bắt. Bộ dò chưa từng
+  bắt được gì thì không chứng minh được nó biết bắt.
+- ⚠️ `app-xem-tuoi.html` gán `SHELL_ACTIVE` bằng **BIẾN** (một trang phục vụ 3
+  route) — vẫn phải kiểm, chỉ bỏ vế đối chiếu tên. Bỏ qua trang vì "không khớp
+  mẫu chuỗi" chính là kiểu im lặng bộ dò này sinh ra để chống.
+- Nhiều mốc thì shell lấy cái ĐẦU trong DOM → im lặng chọn nhầm, nên bắt luôn.
+
+### Verify
+`typecheck` 0 lỗi · `lint` 0 lỗi (72 warning pre-existing) · `prettier` sạch ·
+`check:prices`/`nostore`/`groups`/`share`/`hexagrams`/`hao`/`motifs` sạch ·
+engine **185 pass** · `node --check`.
+- **143 ca trên 33 TRANG THẬT + `shell.js` THẬT**: mỗi trang đủ ba nhịp — còn
+  form thì KHÔNG có nút · vùng kết quả hiện ra thì HIỆN nút · ẩn đi thì GỠ nút.
+- **8 ca chạy THẬT tool Lá Số đầu-cuối** (lập lá số bằng engine trong trình
+  duyệt): nút hiện, payload đúng `toolId='la-so'` và có nội dung thật, bấm "Sửa
+  thông tin" thì nút tự gỡ, 0 lỗi JS — kèm **ĐỐI CHỨNG bản cũ: 0 nút**.
+- **Ca lỗi day-con dựng lại nguyên trạng**: đè `Shell.setShareable` thành hàm
+  rỗng ("tool quên gọi") → shell vẫn đỡ được, payload mang **đúng `toolId`
+  'day-con'**, có nội dung thật, và **không lẫn chữ trên nút**.
+- **Ca payload lượt trước** trên `thanh-tuong-pro` + `phong-thuy`: đặt payload
+  rồi ẩn vùng kết quả → nút biến mất.
+- 🪤 **ĐỐI CHỨNG nạp đè `shell.js` bản git HEAD**: tool quên gọi → **không có
+  nút**; ẩn kết quả rồi → **nút VẪN CÒN**. Cả hai lỗi có thật, bài kiểm không đỗ
+  giả.
+- **13 ca vòng 2**: chạy THẬT `than-so-hoc` đầu-cuối (điền form → bấm tính → nút
+  hiện, payload đúng tool; bấm "Sửa" → nút tự gỡ; 0 lỗi JS) · **rò rỉ**: giữ nội
+  dung thật nhưng KHÔNG lọt tường trả phí / chữ trên nút / `data-share-skip` /
+  khối đang ẩn · 390px không tràn ngang.
+- Bump `shell.js?v=64→65` (35 trang). **Không đụng `shell.css`** — nút dùng lại
+  class `.btn` sẵn có.
+
+### CÒN LẠI
+- **32 tool vẫn còn bản `_xxLines` chép tay** — nay là đường LÀM GIÀU nên vẫn
+  thắng bản tự suy, và vẫn là hai bản có thể trôi khỏi nhau. CỐ Ý không gỡ trong
+  PR này: gỡ payload của 32 tool đang chạy để đổi lấy bản tự suy là canh bạc
+  trên đúng thứ vừa sửa. Gỡ dần từng tool khi có dịp đụng vào tool đó, và mỗi
+  lần gỡ phải nhìn bản chia sẻ thật.
+- Bản tự suy mới **chưa có ai tiêu thụ trên prod** (mọi tool đều đang đưa payload
+  riêng) — nó là lưới đỡ cho tool SAU. Chỗ đáng nhìn khi có tool mới: khoảng
+  cách giữa chữ trên trang và chữ trong link chia sẻ.
+- `data-ws-result` chỉ phủ trang shell. Trang standalone `/tools/*.html` không
+  nạp `shell.js` nên vẫn không có chia sẻ khung giữa — việc riêng.
 
 ---
 

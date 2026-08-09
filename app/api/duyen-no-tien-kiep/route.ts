@@ -239,7 +239,7 @@ async function handleStory(grp: BondGroup, userId: string) {
         output_tokens: llmRes.usage.output_tokens,
         cache_creation_input_tokens: 0,
         cache_read_input_tokens: 0,
-      });
+      }, llmRes.durationMs);
       return { raw: llmRes.text, model: llmRes.model };
     } catch (e) {
       console.error('[duyen-no-tien-kiep] LLM lỗi:', (e as Error)?.message);
@@ -342,7 +342,7 @@ async function handleImage(grp: BondGroup, userId: string) {
       output_tokens: llmRes.usage.output_tokens,
       cache_creation_input_tokens: 0,
       cache_read_input_tokens: 0,
-    });
+    }, llmRes.durationMs);
     const parsed = parseLlmJson(llmRes.text) as
       | { faceA?: string; faceB?: string; faces?: unknown[] }
       | null;
@@ -371,7 +371,7 @@ async function handleImage(grp: BondGroup, userId: string) {
     const imgRes = await generatePortraitImage({ prompt: finalPrompt, size: '1536x1024' });
     imageB64 = imgRes.b64;
     imgModel = imgRes.model;
-    void logImageUsage(TOOL_ID, imgRes.model, imgRes.usage);
+    void logImageUsage(TOOL_ID, imgRes.model, imgRes.usage, imgRes.durationMs);
   } catch (e) {
     return err('Lỗi sinh ảnh: ' + (e instanceof Error ? e.message : 'không rõ'), 500);
   }

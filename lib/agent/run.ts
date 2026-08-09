@@ -567,6 +567,9 @@ export async function runAgent(
   // tool thì bắt tool_use ngay trong stream, chạy tool rồi lặp; nếu trả text
   // thẳng thì chính stream đó LÀ câu trả lời (bỏ hẳn call thứ 2).
   const totalUsage: LlmUsage = { input_tokens: 0, cache_creation_input_tokens: 0, cache_read_input_tokens: 0, output_tokens: 0 };
+  // Đo TRỌN lượt (gồm mọi vòng tool-use), vì đó mới là thời gian người
+  // dùng thật sự ngồi chờ — không phải thời gian của một lượt gọi model.
+  const _turnT0 = Date.now();
   // Mốc để biết loop Anthropic đã LÀM GÌ chưa: nếu nó chết mà chưa chạy tool
   // nào và chưa stream chữ nào thì fallback sang Gemini vẫn SẠCH.
   const toolsBeforeAnthropic = toolsUsed.length;
@@ -648,7 +651,7 @@ export async function runAgent(
   // Tag cost theo scenario.type nếu có (khớp tool_pricing), ngược lại 'chat' —
   // CHÍNH type mà /api/v1/chat + gate.ts ghi vào credit_transactions cho MỌI
   // lượt rail (kể cả có lá số) → bucket cost khớp thẳng bucket doanh thu thật.
-  void logLlmUsage(scenario?.type || 'chat', cfg.model, totalUsage);
+  void logLlmUsage(scenario?.type || 'chat', cfg.model, totalUsage, Date.now() - _turnT0);
   return {
     toolsUsed,
     birth: ctx.birth ?? capturedBirth,

@@ -45,6 +45,13 @@ jobs:
       - name: Không có nhóm/đường dẫn công cụ chép cứng
         run: npm run check:groups
 
+      # Chặn tái phát tool trong Luận Đường KHÔNG chia sẻ được. Chia sẻ khung
+      # giữa từng là opt-in của từng tool nên `day-con` không có nút Chia sẻ
+      # suốt từ lúc ra mắt, còn `thanh-tuong-pro`/`phong-thuy` thì không bao giờ
+      # gỡ nút → bấm Chia sẻ sau lượt mới là phát ra kết quả của LƯỢT TRƯỚC.
+      - name: Mọi tool Luận Đường chia sẻ được
+        run: npm run check:share
+
       # Chặn tái phát bảng 64 quẻ sai mã hào: đã có lúc 49/64 quẻ mang mã của
       # quẻ khác (77% lượt gieo ra sai lời đoán) mà không gì báo, vì nhánh "tìm
       # quẻ gần nhất" nuốt hết. 64 chuỗi nhị phân thì mắt không soi được.

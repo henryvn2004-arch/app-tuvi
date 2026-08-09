@@ -1005,6 +1005,8 @@ select.form-input { cursor: pointer; }
   let _hoTen = null, _ngay = null, _thang = null, _nam = null;
   let _gioitinh = null, _namXem = null, _astrolabe = null;
   let _currentPhan = 0;
+  // Bộ đo nhịp cho ETA tự hiệu chỉnh (xem AiLoadingSteps.pacer).
+  const _lgPace = (window.AiLoadingSteps && AiLoadingSteps.pacer) ? AiLoadingSteps.pacer() : null;
   let _pendingSlug = null;  // slug tạm trước khi save
 
   // Chuẩn hóa slug — strip dấu tiếng Việt, chỉ giữ ASCII (dùng nhất quán mọi chỗ)
@@ -1402,6 +1404,7 @@ select.form-input { cursor: pointer; }
       _gioitinh = gioitinh; _namXem = namXem; _astrolabe = ls;
       window._lasoResult = ls;  // feed chatbot
       _currentPhan = 0;
+      _lgPace && _lgPace.reset();
 
       document.getElementById('result-body').innerHTML = '';
       document.getElementById('progress-fill').style.width = '60%';
@@ -1896,6 +1899,7 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
 
     // Load Claude lần lượt từng phần
     _currentPhan = 0;
+    _lgPace && _lgPace.reset();
     await loadNextPhanUnlocked();
   }
 
@@ -2052,7 +2056,13 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
     phanLoading.classList.add('active');
     const _hints=['Đang đọc vị trí các sao...','Đang xét tam phương tứ chính...','Đang phân tích cách cục...','Đang luận đoán ý nghĩa...'];
     phanLoadingText.textContent = _hints[_currentPhan % _hints.length] + ' — ' + PHAN_LABELS[_currentPhan];
-    document.getElementById('phan-progress').textContent = `Phần ${_currentPhan} / ${TONG_PHAN}`;
+    // ETA tự hiệu chỉnh: đo nhịp NGAY TRONG phiên này. Chưa đủ mẫu thì
+    // remainText trả '' — im lặng, không hứa. (Phần 1 nạp nhiều tài liệu RAG
+    // hơn nên chậm bất thường, pacer đã yêu cầu tối thiểu 2 mẫu.)
+    const _lgEta = _lgPace ? _lgPace.remainText(TONG_PHAN - _currentPhan + 1) : '';
+    document.getElementById('phan-progress').textContent =
+      `Phần ${_currentPhan} / ${TONG_PHAN}` + (_lgEta ? ` · ${_lgEta}` : '');
+    _lgPace && _lgPace.begin();
     loader.classList.add('active');
     loader.classList.add('active');
     updateMucLuc(_currentPhan, 'loading');
@@ -2911,6 +2921,7 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
         document.getElementById('result-sidebar').classList.add('visible');
       }
 
+      _lgPace && _lgPace.end();   // chỉ ghi nhịp ở nhánh THÀNH CÔNG
       phanLoading.classList.remove('active');
       document.getElementById('result-actions').style.display = 'flex';
       if (_currentPhan < TONG_PHAN) {
@@ -4065,6 +4076,7 @@ TuviPaywall.init({
       _laSoText = formatLaSoV2(ls, conv);
       ls._laSoText = _laSoText;  // để ô chat (chatbot.js) gửi full text → luận sâu = chat đứng riêng
       _currentPhan = 0;
+      _lgPace && _lgPace.reset();
 
       // Clear result + render
       document.getElementById('result-body').innerHTML = '';
@@ -4188,7 +4200,7 @@ TuviPaywall.init({
 </div>
 
 <script src="/nav.js?v=22"></script>
-<script src="/tools-shared/ai-loading-steps.js?v=4"></script>
+<script src="/tools-shared/ai-loading-steps.js?v=5"></script>
 <script>
 /* Chờ luận giải 24 phần là quãng chờ MỘT CỤC ≥10 giây ⇒ orb, thay spinner 28px
    (luật ở đầu tools-shared/ai-loading-steps.js). Giữ nguyên cơ chế bật/tắt

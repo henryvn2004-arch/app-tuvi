@@ -92,7 +92,12 @@ function calcImageCostVnd(model: string, u: ImageUsage): number {
 /** Log chi phí sinh ảnh (gpt-image-*) — cùng bảng/event_type với logLlmUsage
  * nên gộp chung vào bucket tool_id trên dashboard_margin "by_tool" (không cần
  * RPC/panel riêng). Best-effort, không throw. */
-export async function logImageUsage(toolId: string, model: string, usage: ImageUsage): Promise<void> {
+export async function logImageUsage(
+  toolId: string,
+  model: string,
+  usage: ImageUsage,
+  durationMs?: number,
+): Promise<void> {
   if (!SUPABASE_URL || !SUPABASE_KEY) return;
   if (!usage.text_tokens && !usage.image_output_tokens) return;
   try {
@@ -107,7 +112,12 @@ export async function logImageUsage(toolId: string, model: string, usage: ImageU
       body: JSON.stringify({
         event_type: 'llm_usage',
         tool_id: toolId,
-        meta: { model, ...usage, cost_vnd: calcImageCostVnd(model, usage) },
+        meta: {
+          model,
+          ...usage,
+          cost_vnd: calcImageCostVnd(model, usage),
+          ...(durationMs != null ? { duration_ms: Math.round(durationMs) } : {}),
+        },
       }),
     });
   } catch {
@@ -149,7 +159,17 @@ export async function logLlmParseFail(
   }
 }
 
-export async function logLlmUsage(toolId: string, model: string, usage: LlmUsage): Promise<void> {
+/** `durationMs` — thời lượng THẬT của lượt gọi. Trước đây `llm_usage` chỉ có
+ * token và tiền, KHÔNG có trường thời lượng nào, nên không tool nào biết mình
+ * chạy bao lâu; con số "45–60 giây" duy nhất đang có là suy gián tiếp từ khoảng
+ * cách hai mốc log của hai pha chạy song song — mẹo chỉ dùng được cho đúng tool
+ * đó. Có trường này thì mới đặt ETA bằng SỐ ĐO thay vì bằng phỏng đoán. */
+export async function logLlmUsage(
+  toolId: string,
+  model: string,
+  usage: LlmUsage,
+  durationMs?: number,
+): Promise<void> {
   if (!SUPABASE_URL || !SUPABASE_KEY) return;
   if (!usage.input_tokens && !usage.output_tokens) return; // không có gì để ghi
   try {
@@ -164,7 +184,12 @@ export async function logLlmUsage(toolId: string, model: string, usage: LlmUsage
       body: JSON.stringify({
         event_type: 'llm_usage',
         tool_id: toolId,
-        meta: { model, ...usage, cost_vnd: calcCostVnd(model, usage) },
+        meta: {
+          model,
+          ...usage,
+          cost_vnd: calcCostVnd(model, usage),
+          ...(durationMs != null ? { duration_ms: Math.round(durationMs) } : {}),
+        },
       }),
     });
   } catch {

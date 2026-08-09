@@ -108,12 +108,19 @@ async function buildReport(
         jsonSchema: HUONG_NGHIEP_TRE_SCHEMA,
         maxTokens: 3200,
       });
-      void logLlmUsage(TOOL_ID, r.model, {
-        input_tokens: r.usage.input_tokens,
-        output_tokens: r.usage.output_tokens,
-        cache_creation_input_tokens: 0,
-        cache_read_input_tokens: 0,
-      });
+      void logLlmUsage(
+        TOOL_ID,
+        r.model,
+        {
+          input_tokens: r.usage.input_tokens,
+          output_tokens: r.usage.output_tokens,
+          cache_creation_input_tokens: 0,
+          cache_read_input_tokens: 0,
+        },
+        // Thiếu tham số này là tool vô hình trong cột thời lượng của panel Biên
+        // Lợi Nhuận — `llmTextFull` đã đo sẵn, chỉ việc chuyển tiếp.
+        r.durationMs,
+      );
       return r;
     } catch (e) {
       console.error('[huong-nghiep-tre] LLM lỗi:', (e as Error)?.message);

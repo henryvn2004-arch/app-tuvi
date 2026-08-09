@@ -83,10 +83,21 @@
 </head>
 <body>
 <div class="shell">
-  <aside class="sidebar" id="shell-sidebar"></aside>
+  <aside class="sb" id="shell-sidebar"></aside>
 
-  <main class="work" id="shell-work">
-    <div class="work-inner">
+  <main class="ws" id="ws">
+    <div class="ws-top">
+      <button class="btn mobile-only" onclick="document.getElementById('shell-sidebar').classList.toggle('open');window.shellSyncBackdrop&&shellSyncBackdrop()" aria-label="Menu">☰</button>
+      <div class="ws-title"><b>Hướng Nghiệp Sớm Cho Con</b><span>Nên cho con làm quen với thứ gì từ bây giờ</span></div>
+      <!-- `.ws-actions` là chỗ shell CHÈN nút Chia sẻ vào. Thiếu nó thì shell
+           không có nơi đặt nút và trang lặng lẽ mất tính năng — `check:share`
+           canh đúng chỗ này. -->
+      <div class="ws-actions">
+        <button class="btn" id="btnEdit" onclick="_closePanel()" style="display:none">Xem Bé Khác</button>
+        <button class="btn mobile-only" onclick="Shell.openRail()">✦ Hỏi</button>
+      </div>
+    </div>
+    <div class="ws-body">
       <div id="introHost"></div>
 
       <div id="birthPanel">
@@ -106,16 +117,15 @@
         </div>
       </div>
 
-      <div id="resPanel" style="display:none">
+      <!-- `data-ws-result` là giao ước DUY NHẤT với shell: nó tự theo dõi khối
+           này để bật/gỡ nút Chia sẻ và vứt payload lượt trước. Quên khai thì
+           trang lặng lẽ mất nút — có `check:share` canh. -->
+      <div id="resPanel" data-ws-result style="display:none">
         <div id="loading">
           <div id="loadingSteps"></div>
         </div>
 
         <div id="card" style="display:none">
-          <div style="margin-bottom:14px">
-            <button class="btn-go" id="btnEdit" onclick="_closePanel()" style="display:none;background:transparent;color:var(--text-mid);border:1px solid var(--line-2);padding:7px 15px;font-size:12.5px">← Đổi lá số</button>
-          </div>
-
           <div class="res-block">
             <div class="res-block-body">
               <div class="hn-hero">
@@ -239,7 +249,7 @@ window.SHELL_INTRO={key:'huong-nghiep-tre',title:'Hướng Nghiệp Sớm Cho Co
 <script src="/auth.js?v=2"></script>
   <script src="/nav.js?v=22" data-icons-only></script>
 <script src="/shell.js?v=64"></script>
-<script src="/tools-shared/ai-loading-steps.js?v=4"></script>
+<script src="/tools-shared/ai-loading-steps.js?v=5"></script>
 <script>
 
 var _currentSlug = '';
@@ -390,6 +400,11 @@ function _closePanel() {
   document.getElementById('loading').style.display = 'none';
   document.getElementById('resPanel').style.display = 'none';
   document.getElementById('birthPanel').style.display = 'block';
+  document.getElementById('btnEdit').style.display = 'none';
+  // Quay về form thì bản vừa xem không còn trên màn hình nữa. Shell tự gỡ nút
+  // khi vùng `data-ws-result` ẩn đi, nhưng gọi thẳng ở đây là lời khai dứt
+  // khoát: lượt này KHÔNG còn gì đáng chia sẻ.
+  if (window.Shell && Shell.setShareable) Shell.setShareable(null);
 }
 
 async function _doGenerate(freeRerun, lo) {
