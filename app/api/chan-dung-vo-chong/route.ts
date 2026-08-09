@@ -146,7 +146,7 @@ async function handleGenerate(request: NextRequest, body: Record<string, unknown
       output_tokens: llmRes.usage.output_tokens,
       cache_creation_input_tokens: 0,
       cache_read_input_tokens: 0,
-    });
+    }, llmRes.durationMs);
   } catch {
     /* best-effort — không chặn vẽ ảnh nếu luận giải lỗi */
   }
@@ -249,7 +249,7 @@ async function handleGenerate(request: NextRequest, body: Record<string, unknown
       output_tokens: llmRes.usage.output_tokens,
       cache_creation_input_tokens: 0,
       cache_read_input_tokens: 0,
-    });
+    }, llmRes.durationMs);
   } catch {
     return err('Lỗi AI mô tả chân dung. Vui lòng thử lại.', 500);
   }
@@ -419,7 +419,7 @@ async function handleGenerate(request: NextRequest, body: Record<string, unknown
   try {
     const imgRes = await generatePortraitImage({ prompt: finalPrompt, size: '1024x1536' });
     imageB64 = imgRes.b64;
-    void logImageUsage('chan-dung-vo-chong', imgRes.model, imgRes.usage);
+    void logImageUsage('chan-dung-vo-chong', imgRes.model, imgRes.usage, imgRes.durationMs);
   } catch (e) {
     return err('Lỗi sinh ảnh: ' + (e instanceof Error ? e.message : 'không rõ'), 500);
   }
