@@ -3,6 +3,18 @@
 Cặp song sinh của `coo-daily-routine-prompt.md`: một bản lo **vận hành** (07:00),
 bản này lo **tăng trưởng** (08:10).
 
+## Vì sao thay bản cũ
+
+Routine CMO cũ chạy tốt, nhưng **prompt của nó không sửa được, vĩnh viễn** —
+`update_trigger` từ chối vì nó bind vào phiên không thuộc phiên gọi. Đã đụng
+tường này một lần: muốn thêm bước đọc GA4 vào prompt mà không được, cuối cùng
+phải đi đường vòng là sửa *cron* để ghi GA4 vào DB.
+
+Nặng hơn: bản cũ ra đời **trước** track COO nên không có bước **kiểm `ts` còn
+tươi**. Cron `cmo-digest` chết một sáng thì nó đọc dòng mới nhất — của hôm qua —
+rồi trình bày như số hôm nay, im lặng. **Một báo cáo đọc số cũ trông y hệt một
+báo cáo khoẻ**, không phân biệt được bằng mắt.
+
 Cấu hình routine (MCP `claude-code-remote` → `create_trigger`):
 
 | Trường | Giá trị |
@@ -26,6 +38,17 @@ khác hẳn COO (chạy 07:00, trước `ops-digest` 07:30, nên phải cấm đ
 Vercel, không có trong container. Cron đọc GA4 rồi ghi vào `events`; routine đọc
 lại. Đừng đi tìm `scripts/ga4.mjs` — nó cần credential mà phiên này không có.
 
+### 🪤 Lịch của routine TỰ TRÔI — bẫy này đã sập một lần
+Sáng **07/08 routine bắn lúc 06:51 VN** thay vì 08:10 (sớm 1h19), tức **trước
+cả lượt `cmo-digest` 08:00**. Luật cũ ("digest cũ hơn 2 tiếng ⇒ cron chết") khớp
+điều kiện và suýt phát một cái 🔴 hoàn toàn oan — trong khi `cron_runs` cho thấy
+`cmo-digest` chạy `ok` 5/5 lượt gần nhất, đúng giờ.
+
+**Bài học: luật ">2 tiếng" ngầm giả định routine luôn chạy SAU cron.** Giả định
+đó do lịch bảo đảm, mà lịch thì trôi được. Nên luật nay phải **xem đồng hồ
+trước** (xem nhánh ⏰ trong prompt) — bộ dò đổ lỗi nhầm chỗ còn tệ hơn bộ dò im,
+vì nó cử người đi sửa thứ không hỏng.
+
 ## 📌 Baseline đo thật lúc lập (2026-08-05, cửa sổ 7 ngày)
 
 | Khối | Số | Ghi chú |
@@ -41,6 +64,16 @@ Neo baseline là để routine **không kêu y hệt nhau mỗi sáng** về nh�
 kết luận xong. Bộ dò kêu nhầm mỗi ngày thì chẳng mấy chốc bị ngó lơ — hỏng đúng
 như khi nó im lặng.
 
+## Mốc 612 — vì sao nằm trong prompt
+
+`gsc.pagesWithImpressions.count` là con số Henry chốt làm **mốc quyết định hướng
+SEO** (#361): đo được **612** cuối tháng 7, hẹn đọc lại sau 2–4 tuần. Bật lên rõ
+⇒ mô hình gen trang chạy được; giậm chân ⇒ nút thắt là **thẩm quyền tên miền**,
+không phải số lượng trang, và **đừng viết thêm trang**.
+
+Một cái mốc hẹn "đọc lại sau vài tuần" thì rất dễ quên. Nhét vào báo cáo hằng
+ngày là cách rẻ nhất để nó tự nhắc. (Đo ngày 05/08: **645**.)
+
 ---
 
 ## Prompt (chép nguyên khối dưới đây)
@@ -53,7 +86,9 @@ Nguồn dữ liệu DUY NHẤT: Supabase MCP, project `dciwkfdqhhddeymlisey`. Ch
 ⚠️ GA4: key GA4 chỉ có trên Vercel, KHÔNG có trong phiên này. Đừng chạy `scripts/ga4.mjs`, đừng gọi API Google. Số GA4 lấy từ `meta.ga4` của truy vấn 1 — đó là snapshot do cron ghi sẵn.
 
 === TRUY VẤN 1 — Digest sáng nay (cron đã dựng sẵn, KHÔNG dựng lại) ===
-select ts, meta->'ga4' as ga4, meta->>'text' as digest_text
+select now() at time zone 'Asia/Ho_Chi_Minh' as gio_vn,
+       ts at time zone 'Asia/Ho_Chi_Minh' as digest_gio_vn,
+       meta->'ga4' as ga4, meta->>'text' as digest_text
 from events where event_type='cmo_digest' order by ts desc limit 1;
 
 === TRUY VẤN 2 — Phễu · Tiền · Nguồn (7 ngày, kèm 7 ngày liền trước để so) ===
@@ -95,6 +130,8 @@ Bản tóm tắt LLM trong `digest_text` (truy vấn 1) chỉ để ĐỐI CHI�
 Cuối cùng, nếu có mục 🔴/🟡: nêu đúng MỘT việc cần làm tiếp, cụ thể, kèm bảng/hàm cần soi. Không khuyến nghị marketing chung chung kiểu "tăng cường nội dung", "đẩy mạnh SEO" — không có số đỡ thì đừng nói.
 Nếu tất cả xanh: kết thúc luôn, không thêm gì.
 
-Nếu truy vấn 1 trả dòng có `ts` cũ hơn 2 tiếng: cron `cmo-digest` sáng nay đã KHÔNG chạy → báo 🔴 mục đó, và tự dựng báo cáo từ truy vấn 2+3 (bỏ phần GA4, nói rõ là không có GA4 hôm nay).
+⏰ DIGEST CŨ — XEM ĐỒNG HỒ TRƯỚC KHI ĐỔ CHO CRON. `gio_vn` ở truy vấn 1 là giờ VN thật lúc chạy. Cron `cmo-digest` ghi dòng của nó lúc **08:00 VN**, nên:
+   • `gio_vn` **trước 08:05** → routine đã bắn SỚM hơn lịch 08:10 của chính nó, digest hôm nay CHƯA tới giờ. Đây là lệch lịch của ROUTINE, KHÔNG phải cron chết. Báo 🟡 kèm giờ thật, vẫn dựng báo cáo từ truy vấn 2+3, dùng GA4 của dòng cũ nhưng **dán nhãn rõ là số của HÔM QUA**.
+   • `gio_vn` **sau 08:05** mà `digest_gio_vn` vẫn cũ hơn 2 tiếng → lúc đó mới nghi cron. Nhưng phải soi sổ trước khi kết luận: `select job_key, started_at, status, note from cron_runs where job_key='cmo-digest' order by started_at desc limit 5;` — thấy `status='ok'` liên tiếp thì cron vẫn chạy, hỏng nằm ở chỗ khác, ĐỪNG báo 🔴 sai địa chỉ. Chỉ khi sổ thiếu lượt hôm nay hoặc `status='error'` mới báo 🔴, rồi dựng báo cáo từ truy vấn 2+3 (bỏ phần GA4, nói rõ là không có GA4 hôm nay).
 Nếu một truy vấn lỗi: nói THẲNG là không đọc được phần đó (đừng bỏ qua im lặng — mù mà tưởng khoẻ chính là lỗi mà hệ giám sát này sinh ra để tránh).
 ```

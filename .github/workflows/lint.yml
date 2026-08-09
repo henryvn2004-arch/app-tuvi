@@ -102,6 +102,13 @@ jobs:
       - name: Bảng mô-típ tranh 64 quẻ đầy đủ
         run: npm run check:motifs
 
+      # Hợp đồng laSoText ↔ bộ cắt/prompt luận giải. Đổi một mốc section (hay chỉ
+      # nối ghi chú vào sau nó) làm `findIndex` trả -1 → bộ cắt CÂM, cả lá số 22K
+      # ký tự đi thẳng vào prompt, model tự mò và bỏ qua phần engine đã chấm.
+      # KHÔNG ném lỗi, KHÔNG log, bài đọc vẫn trôi chảy → lỗi sống 2 tháng.
+      - name: Hợp đồng mốc laSoText (bộ cắt luận giải)
+        run: npm run check:laso
+
   typecheck:
     runs-on: ubuntu-latest
     timeout-minutes: 10
