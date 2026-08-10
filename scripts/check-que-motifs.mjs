@@ -26,42 +26,28 @@ const ROOT = new URL('..', import.meta.url).pathname;
 
 const { QUE } = require(ROOT + 'public/tools-shared/kinh-dich.js');
 
-// Nạp file TS mà KHÔNG dùng compiler API của `typescript`.
+// Nạp file TS mà KHÔNG cần trình biên dịch: `que-motifs.ts` là một BẢNG DỮ LIỆU
+// thuần — đúng một khai báo `export const QUE_MOTIFS: … = { … };` và không có
+// dòng logic nào. Nên chỉ cần cắt phần vế phải của dấu `=` rồi cho JS tự đọc.
 //
-// Vì sao: bản cũ gọi `ts.transpileModule` và chết trên CI với
-// "Cannot read properties of undefined (reading 'CommonJS')".
-// 🔑 Nguyên nhân THẬT: **TypeScript 7 là bản viết lại bằng Go, KHÔNG còn cung
-// cấp compiler API JS** (`ModuleKind`, `transpileModule`). Lúc đó `main` đang
-// mang TS 7 (PR #388) nên merge-ref của mọi PR `npm ci` ra TS 7 — trong khi
-// máy dev còn TS 6 theo lockfile của nhánh. `tsc` CLI vẫn chạy nên `typecheck`
-// và build engine vẫn xanh; chỉ script dùng API JS mới chết.
-// 🪤 Vòng chẩn đầu tao đổ cho Node 20 vs Node 22 — SAI, và `require` thay
-// `import` vì thế không cứu được gì. #476 đã ghim root về TS 6; bỏ hẳn compiler
-// API ở đây là để bộ dò không phụ thuộc vào cuộc giằng co TS 6/7 nữa.
-//
-// `que-motifs.ts` là DATA THUẦN: đúng một `export const`, không import, không
-// hàm, không `as const`. Nên bỏ hẳn compiler đi, chỉ đổi khai báo export thành
-// gán CJS. Rẻ hơn và không còn phụ thuộc cách đóng gói của TypeScript.
-// ⚠️ Phép thay phải ASSERT là đã ăn — thay hụt mà im lặng thì bộ dò tự tắt.
+// 🔑 VÌ SAO KHÔNG DÙNG `ts.transpileModule` NHƯ TRƯỚC: gói `typescript@7` là bản
+// port native — nó CHỈ còn xuất `version`/`versionMajorMinor`, toàn bộ API biên
+// dịch trong JS (`transpileModule`, `ModuleKind`, `ScriptTarget`) đã biến mất.
+// Lượt bump 6→7 làm bộ dò này chết ngay lượt chạy đầu và kéo đỏ cả `main`; sửa
+// bằng cách bỏ hẳn phụ thuộc thì bump sau không đụng được tới nữa. Việc dịch TS
+// thật (file có logic) thì gọi `tsc` CLI — xem `gen-que-images.mjs`.
 const src = readFileSync(ROOT + 'lib/media/que-motifs.ts', 'utf8');
-const DECL = /export\s+const\s+QUE_MOTIFS\s*:\s*Record<number,\s*string\[\]>\s*=/;
-if (!DECL.test(src)) {
+const dau = src.match(/export const QUE_MOTIFS\b[^=]*=/);
+// Không khớp thì DỪNG HẲN, đừng đọc ra bảng rỗng rồi báo xanh: bộ dò câm nguy
+// hiểm hơn bộ dò đỏ (bài học "mọi lượt thay chuỗi bằng script phải assert").
+if (!dau) {
   console.error(
-    '✗ check-que-motifs: không tìm thấy khai báo `export const QUE_MOTIFS: Record<number, string[]> =`\n' +
-      '  trong lib/media/que-motifs.ts. File đổi cấu trúc → sửa lại phép nạp ở đây.'
+    '❌ check-que-motifs: không tìm thấy khai báo `export const QUE_MOTIFS … =` trong\n' +
+      '   lib/media/que-motifs.ts. Bố cục file đổi ⇒ PHẢI sửa bộ dò, đừng bỏ qua.'
   );
   process.exit(1);
 }
-const mod = { exports: {} };
-new Function('module', 'exports', src.replace(DECL, 'module.exports.QUE_MOTIFS ='))(
-  mod,
-  mod.exports
-);
-const { QUE_MOTIFS } = mod.exports;
-if (!QUE_MOTIFS || typeof QUE_MOTIFS !== 'object') {
-  console.error('✗ check-que-motifs: nạp được file nhưng QUE_MOTIFS rỗng — phép nạp hỏng.');
-  process.exit(1);
-}
+const QUE_MOTIFS = new Function('return ' + src.slice(dau.index + dau[0].length))();
 
 let bad = 0;
 const fail = (m) => {

@@ -120,9 +120,19 @@ function vector13(a: Assessment): Vec {
 }
 
 // ── Lứa tuổi ────────────────────────────────────────────────
-// Ba lớp, không phải bốn: hoạt động cho đứa 5 tuổi và đứa 7 tuổi gần như một,
-// còn 12 với 16 thì khác hẳn. Chia theo chỗ THẬT SỰ đổi.
-export type LopId = 'nho' | 'giua' | 'lon';
+// Chia theo chỗ THẬT SỰ đổi: hoạt động cho đứa 5 và đứa 7 tuổi gần như một,
+// còn 12 với 16 thì khác hẳn.
+//
+// 🔴 Lứa `vaodoi` (19–25) thêm sau khi Henry test một lá số 43 tuổi và bản đọc
+// vẫn gọi là "bé trai". Căn nguyên: `lopTuoi` KẸP mọi tuổi > 12 về lứa 13–18,
+// nên lá số người lớn đi trọn đường như một đứa trẻ mà không gì báo. Hai chỗ
+// phải tách ra, và chúng KHÁC NHAU:
+//   · 19–25 vẫn là câu hỏi THẬT của cha mẹ ("con vừa ra trường, nên đi hướng
+//     nào") — giữ tool, chỉ đổi xưng hô và đổi hoạt động cho hợp tuổi.
+//   · ≥26 thì KHÔNG còn là "định hướng sớm cho con". Ở đó tool phải nói thẳng
+//     ra thay vì đổi mấy đại từ rồi bán tiếp một bản đọc viết cho trẻ con —
+//     xem `lopTuoi()` trả `null` và cờ `laTreEm` bên dưới.
+export type LopId = 'nho' | 'giua' | 'lon' | 'vaodoi';
 
 export interface LopDef {
   id: LopId;
@@ -130,6 +140,12 @@ export interface LopDef {
   tuoi: string;
   /** Việc của người lớn trong lớp tuổi này — một câu, đọc là hiểu phải làm gì. */
   vaiChaMe: string;
+  /**
+   * Cách gọi người được xem, theo đúng tuổi. Trước đây "cháu" nằm CỨNG ở cả ba
+   * tầng (data · prompt · trang) nên không đổi theo tuổi được — đó chính là chỗ
+   * đẻ ra "bé trai 43 tuổi".
+   */
+  xungHo: string;
 }
 
 export const LOP: Record<LopId, LopDef> = {
@@ -139,6 +155,7 @@ export const LOP: Record<LopId, LopDef> = {
     tuoi: '3–7 tuổi',
     vaiChaMe:
       'Mở rộng chứ đừng chọn hộ. Việc của người lớn lúc này là bày ra đủ thứ để con chạm vào, rồi quan sát xem con dừng lại ở đâu lâu nhất.',
+    xungHo: 'cháu',
   },
   giua: {
     id: 'giua',
@@ -146,6 +163,7 @@ export const LOP: Record<LopId, LopDef> = {
     tuoi: '8–12 tuổi',
     vaiChaMe:
       'Cho con làm ra một thứ trọn vẹn. Ở tuổi này cái quý không phải là học được gì mà là lần đầu biết cảm giác theo một việc tới lúc xong.',
+    xungHo: 'con',
   },
   lon: {
     id: 'lon',
@@ -153,15 +171,48 @@ export const LOP: Record<LopId, LopDef> = {
     tuoi: '13–18 tuổi',
     vaiChaMe:
       'Cho con gặp nghề thật và người thật, kể cả phần khó. Chọn hướng dựa trên một buổi nhìn tận mắt vẫn chắc hơn dựa trên mười lời khuyên.',
+    xungHo: 'con',
+  },
+  vaodoi: {
+    id: 'vaodoi',
+    ten: 'Tuổi vào đời',
+    tuoi: '19–25 tuổi',
+    vaiChaMe:
+      'Thôi chọn hộ, chuyển sang làm người để hỏi ý. Ở tuổi này con đã tự quyết được rồi — thứ cha mẹ còn giúp được là mở quan hệ và nói thật về cái giá của từng đường.',
+    xungHo: 'con',
   },
 };
 
-/** Lứa tuổi từ TUỔI MỤ trong lá số. Ngoài 3–18 thì kẹp về hai đầu. */
-export function lopTuoi(tuoi: number | null): LopId {
+/**
+ * Tuổi mụ từ đó trở lên thì đây không còn là câu hỏi "định hướng sớm cho con".
+ * Là ngưỡng THẬT mà `lopTuoi` dùng — không phải một con số chép lại để tả nó.
+ */
+export const TUOI_HET_LA_TRE = 26;
+
+/**
+ * Cách gọi khi lá số KHÔNG còn là trẻ em.
+ *
+ * Phần MIỄN PHÍ vẫn đọc được cho mọi lá số (chỉ đường trả tiền mới chặn), nên
+ * nếu để nguyên "con" thì một người 43 tuổi vẫn bị gọi là con ngay trong phần
+ * đầu tiên họ nhìn thấy — ĐÚNG chỗ Henry báo, chỉ khác một dòng. Chọn ngôi
+ * TRUNG TÍNH vì lúc đó không biết ai đang đọc: cha mẹ của một người trưởng
+ * thành, hay chính người đó tự tra lá số mình.
+ */
+export const XUNG_HO_NGUOI_LON = 'người này';
+
+/**
+ * Lứa tuổi từ TUỔI MỤ trong lá số.
+ *
+ * 🔴 Trả `null` khi ≥26 — CỐ Ý không kẹp về lứa cuối như bản đầu. Kẹp là cách
+ * hỏng IM LẶNG: lá số 43 tuổi rơi vào lứa 13–18 rồi được gọi là "bé trai", và
+ * không có gì trong hệ thống báo sai. Người gọi PHẢI xử lý `null`.
+ */
+export function lopTuoi(tuoi: number | null): LopId | null {
   if (tuoi == null) return 'giua';
   if (tuoi <= 7) return 'nho';
   if (tuoi <= 12) return 'giua';
-  return 'lon';
+  if (tuoi <= 18) return 'lon';
+  return tuoi < TUOI_HET_LA_TRE ? 'vaodoi' : null;
 }
 
 // ── Điều cha mẹ đang lo ─────────────────────────────────────
@@ -291,6 +342,12 @@ export const THIEN_HUONG: Record<HuongId, HuongDef> = {
         'Xin theo một người quen làm kỹ thuật trọn một buổi để nhìn nghề thật',
         'Học sửa chữa thật: điện dân dụng, xe máy, máy tính',
       ],
+      vaodoi: [
+        'Nhận một việc chưa ai trong nhóm làm được, và được phép thử sai vài lượt trước khi ra kết quả',
+        'Đi làm ở chỗ còn đang dựng, nơi quy trình chưa có sẵn để làm theo',
+        'Tự dựng một thứ chạy được rồi đưa cho người lạ dùng thử',
+        'Học một mảng kỹ thuật mới hẳn, đủ sâu để sửa được khi nó hỏng',
+      ],
     },
     chaMeNen:
       'Cho hỏng. Vài trăm nghìn tiền đồ để tháo là khoản rẻ nhất cha mẹ đứa này bỏ ra được — thứ nó học từ một cái quạt hỏng nhiều hơn từ mười lời giảng.',
@@ -338,6 +395,12 @@ export const THIEN_HUONG: Record<HuongId, HuongDef> = {
         'Một dự án cộng đồng nhỏ do chính nó khởi xướng và tự đi gọi người',
         'Dẫn một nhóm qua một lần bất đồng thật — nơi nó phải chốt trong khi vài người không đồng ý',
         'Cho ngồi cùng một buổi họp của người lớn để nhìn cách người ta ra quyết định',
+      ],
+      vaodoi: [
+        'Nhận trách nhiệm về kết quả của một nhóm nhỏ, kể cả khi chưa có chức danh',
+        'Đứng ra chốt một việc mà các bên đang lệch nhau, rồi chịu phần hậu quả',
+        'Chủ trì một dự án có hạn chót thật và có người phụ thuộc vào mình',
+        'Tập nói lời từ chối, và tập bỏ một ý tưởng của chính mình khi số liệu nói ngược',
       ],
     },
     chaMeNen:
@@ -388,6 +451,12 @@ export const THIEN_HUONG: Record<HuongId, HuongDef> = {
         'Cuộc thi sáng tác, trại hè sáng tác',
         'Gặp một người sống được bằng nghề sáng tạo để nghe cả phần khó của nghề',
       ],
+      vaodoi: [
+        'Nhận việc có người trả tiền cho tác phẩm, để thấy chỗ nào là thoả mãn mình chỗ nào là phục vụ người khác',
+        'Xây một hồ sơ tác phẩm đủ dày để người lạ đánh giá được, không phải vài thứ tâm đắc',
+        'Vào một môi trường có người giỏi hơn hẳn và chịu được việc bị chê',
+        'Nắm phần công nghiệp của nghề sáng tạo: bản quyền, hạn chót, làm việc với khách',
+      ],
     },
     chaMeNen:
       'Cho một chỗ và một khoảng thời gian được làm thứ không ra kết quả gì. Phần lớn cái nó làm sẽ bỏ đi — đó là con đường duy nhất tới cái thứ mười.',
@@ -436,6 +505,12 @@ export const THIEN_HUONG: Record<HuongId, HuongDef> = {
         'Nói chuyện với người đang làm nghề y, tâm lý, công tác xã hội',
         'Học cách nói ra khi mình mệt — kỹ năng này phải dạy, nó không tự có',
       ],
+      vaodoi: [
+        'Làm một công việc có người thật trông vào mình mỗi ngày',
+        'Tập đặt giới hạn — nhận ra lúc nào là giúp và lúc nào là gánh hộ',
+        'Theo một chuyên môn có chứng chỉ hành nghề nếu định đi đường dài',
+        'Vào một tổ chức làm việc cộng đồng có quy mô, không chỉ giúp lẻ',
+      ],
     },
     chaMeNen:
       'Gọi tên việc nó làm. Đứa này làm rất nhiều thứ không ai thấy; nếu suốt tuổi thơ không ai gọi tên thì nó lớn lên tin rằng phần tốt nhất của mình là chuyện đương nhiên.',
@@ -483,6 +558,12 @@ export const THIEN_HUONG: Record<HuongId, HuongDef> = {
         'Học một quy trình thật: phòng thí nghiệm, xưởng, bếp chuyên nghiệp',
         'Tập một việc CỐ Ý không có đáp án đúng — để quen dần với chuyện mơ hồ',
       ],
+      vaodoi: [
+        'Nhận một việc mà sai sót đo được và có hậu quả thật',
+        'Theo một hệ chuẩn có kiểm định: kế toán, kiểm định chất lượng, an toàn lao động',
+        'Dựng lại quy trình cho một chỗ đang làm lộn xộn, rồi đo xem có bớt lỗi không',
+        'Chịu một lần bị người khó tính soi ngược lại toàn bộ việc mình đã làm',
+      ],
     },
     chaMeNen:
       'Báo trước khi đổi kế hoạch. Với đứa này, biết trước là điều kiện để làm tốt chứ không phải sự cầu kỳ.',
@@ -529,6 +610,12 @@ export const THIEN_HUONG: Record<HuongId, HuongDef> = {
         'Học nghề thật ở xưởng, hoặc theo một người thợ giỏi',
         'Dự án dài hạn do nó tự đặt mục tiêu và tự theo',
         'Tập việc phải trình bày trước người khác — chỗ yếu nhất của nó',
+      ],
+      vaodoi: [
+        'Theo một nghề có bậc tay nghề rõ ràng và đi cho hết vài bậc đầu',
+        'Tìm một người thầy trong nghề, chịu làm phần việc nhàm ở giai đoạn đầu',
+        'Đặt một mốc ba năm cho một môn, rồi đo lại bằng sản phẩm chứ không bằng cảm giác',
+        'Bù phần lý thuyết cho cái nghề mình đang làm bằng tay',
       ],
     },
     chaMeNen:
@@ -578,6 +665,12 @@ export const THIEN_HUONG: Record<HuongId, HuongDef> = {
         'Tổ chức gây quỹ — vừa nói vừa chịu trách nhiệm với con số',
         'Học phần khô của nghề: hợp đồng, số liệu, quy định — chỗ nó hay bỏ qua',
       ],
+      vaodoi: [
+        'Làm một việc có khách thật và có chỉ tiêu đo được',
+        'Đi thương lượng một hợp đồng nhỏ từ đầu tới lúc ký',
+        'Dựng một mạng quan hệ nghề có đi có lại, không phải một danh bạ',
+        'Chịu một quãng bị từ chối liên tục mà không đổi nghề ngay',
+      ],
     },
     chaMeNen:
       'Cho sân khấu, và cho việc có con số. Đứa này giỏi phần người; thứ nó thiếu là phần sổ sách, mà học sớm thì sau này đi rất xa.',
@@ -625,6 +718,12 @@ export const THIEN_HUONG: Record<HuongId, HuongDef> = {
         'Đọc sách chuyên ngành sớm, không cần đợi chương trình',
         'Tập làm việc nhóm và tập nói ra — hai chỗ hụt của kiểu này',
       ],
+      vaodoi: [
+        'Nhận một câu hỏi chưa ai trả lời được, rồi đi tìm số liệu để trả lời',
+        'Nắm một công cụ phân tích tới mức dùng được trong việc thật',
+        'Trình bày kết luận trước người phản biện và giữ được lập luận',
+        'Chọn chỗ làm coi trọng bằng chứng hơn thâm niên',
+      ],
     },
     chaMeNen:
       'Cho khoảng lặng. Đứa này nghĩ xong mới nói, nên im lặng không có nghĩa là nó không biết — giục một câu là mất luôn câu trả lời.',
@@ -670,6 +769,12 @@ export const THIEN_HUONG: Record<HuongId, HuongDef> = {
         'Nhìn thử nghề có hiện trường: kỹ thuật, cứu hộ, quân đội, thể thao',
         'Việc làm thêm cần sức và cần nhịp — hợp hơn nhiều so với ngồi bàn',
         'Tập một việc phải ngồi lâu, ngắn thôi nhưng đều — để có đường lùi',
+      ],
+      vaodoi: [
+        'Chuyển từ tập sang một vai có trách nhiệm: huấn luyện, tổ chức giải, quản sân bãi',
+        'Nhận một công việc đòi thể lực và nhịp độ cao, xem mình chịu tới đâu',
+        'Nắm phần chuyên môn quanh vận động: dinh dưỡng, hồi phục, phòng chấn thương',
+        'Đặt một mục tiêu thể chất dài hạn và theo tới cùng dù không còn ai chấm điểm',
       ],
     },
     chaMeNen:
@@ -725,15 +830,17 @@ const NGUONG = 0.2;
  * tôi viết riêng, cố ý KHÔNG mượn `motCau` của `KHIEU` (câu đó tả năng khiếu,
  * ghép vào ngữ cảnh "thấp" là thành lời chê ngay).
  */
+// `{ai}` được thay bằng `LOP[...].xungHo` ở chỗ dựng — trước đây chỗ này ghi
+// cứng "cháu", tức bảng dữ liệu tự khoá tool vào đúng một lứa tuổi.
 const CHAT_KHONG_DOI_HOI: Record<KhieuId, string> = {
-  'ngon-ngu': 'Việc hợp với cháu không đòi hỏi phải nói nhiều hay diễn đạt trước đám đông',
-  'suy-luan': 'Việc hợp với cháu không đòi hỏi phải ngồi lần ra quy luật hay tính toán dài',
-  'hinh-khoi': 'Việc hợp với cháu không đòi hỏi con mắt hình khối hay thẩm mỹ',
-  'van-dong': 'Việc hợp với cháu không đòi hỏi phải khéo tay hay vận động nhiều',
-  'am-nhac': 'Việc hợp với cháu không đòi hỏi tai nhạc hay cảm nhịp',
-  'hieu-nguoi': 'Việc hợp với cháu không đòi hỏi phải đọc ý người khác hay giữ nhịp một nhóm',
-  'hieu-minh': 'Việc hợp với cháu không đòi hỏi phải tự học một mình trong thời gian dài',
-  'thien-nhien': 'Việc hợp với cháu không đòi hỏi chăm sóc cây cối, con vật hay người đang cần',
+  'ngon-ngu': 'Việc hợp với {ai} không đòi hỏi phải nói nhiều hay diễn đạt trước đám đông',
+  'suy-luan': 'Việc hợp với {ai} không đòi hỏi phải ngồi lần ra quy luật hay tính toán dài',
+  'hinh-khoi': 'Việc hợp với {ai} không đòi hỏi con mắt hình khối hay thẩm mỹ',
+  'van-dong': 'Việc hợp với {ai} không đòi hỏi phải khéo tay hay vận động nhiều',
+  'am-nhac': 'Việc hợp với {ai} không đòi hỏi tai nhạc hay cảm nhịp',
+  'hieu-nguoi': 'Việc hợp với {ai} không đòi hỏi phải đọc ý người khác hay giữ nhịp một nhóm',
+  'hieu-minh': 'Việc hợp với {ai} không đòi hỏi phải tự học một mình trong thời gian dài',
+  'thien-nhien': 'Việc hợp với {ai} không đòi hỏi chăm sóc cây cối, con vật hay người đang cần',
 };
 
 export interface HuongGoiY {
@@ -868,12 +975,27 @@ export interface ChangDangO {
   sao: string[];
 }
 
+/** Thay chỗ giữ `{ai}` trong bảng chữ bằng cách gọi đúng tuổi. */
+function xungHoHoa(k: HuongTreKetQua, ai: string): HuongTreKetQua {
+  return {
+    ...k,
+    khongDoiHoi: k.khongDoiHoi.map((c) => ({ ...c, thap: c.thap.replace(/\{ai\}/g, ai) })),
+  };
+}
+
 export interface HuongNghiepTreProfile {
   namXem: number;
   tuoi: number | null;
   namSinh: number | null;
   gioiTinh: 'nam' | 'nu';
   moiLo: MoiLoDef;
+  /**
+   * 🔴 `false` khi tuổi mụ ≥ 26. Lúc đó `lop` chỉ là chỗ đứng kỹ thuật để
+   * payload giữ nguyên hình dạng — KHÔNG được đọc nó như lứa tuổi thật, và
+   * KHÔNG được bán bản đọc viết cho trẻ con. Route chặn đường trả tiền, trang
+   * đổi sang lời bàn giao sang Tử Vi Công Sở.
+   */
+  laTreEm: boolean;
   lop: LopDef;
   kieu: KieuDef;
   kieuPhu: KieuDef | null;
@@ -901,7 +1023,12 @@ export function computeHuongNghiepTre(
   const cachCucTung = (ls.cachCucTungCung as Record<string, string[]>) || {};
   const tuoi = typeof ls.tuoiXem === 'number' ? (ls.tuoiXem as number) : null;
   const namSinh = namSinhTuLaSo(ls, nam);
-  const lop = lopTuoi(tuoi);
+  const lopId = lopTuoi(tuoi);
+  // Tuổi mụ ≥ 26 ⇒ không còn là trẻ. Vẫn dựng payload (tầng thiên hướng đọc
+  // từ 13 chiều, độc lập tuổi, nên nó có nghĩa ở mọi tuổi) nhưng gắn cờ để
+  // route và trang xử lý — thay vì lặng lẽ kẹp về lứa 13–18 như bản đầu.
+  const laTreEm = lopId !== null;
+  const lop = LOP[lopId ?? 'vaodoi'];
 
   const matDoc: MatDocTre[] = MAT_DOC.map((m) => {
     const b = majorsOrBorrow(ls, palaceByName(ls, m.cung));
@@ -940,16 +1067,20 @@ export function computeHuongNghiepTre(
     // `ls.gioiTinh` là luôn ra 'nam', sai im lặng cho một nửa số trẻ.
     gioiTinh,
     moiLo: MOI_LO[moiLoId],
-    lop: LOP[lop],
+    laTreEm,
+    lop,
     kieu: KIEU[phan.kieu],
     kieuPhu: phan.kieuPhu ? KIEU[phan.kieuPhu] : null,
     phan,
     // Khung 5 trục · 8 chất dựng MỘT lần rồi dùng chung — đây là nền chấm, và
     // nó là CHÍNH khung `day-con` đang bán cạnh tool này (xem đầu file).
-    huong: chonThienHuong(assessChild(ls)),
+    huong: xungHoHoa(chonThienHuong(assessChild(ls)), laTreEm ? lop.xungHo : XUNG_HO_NGUOI_LON),
     matDoc,
     changDangO,
-    bayNghe: lop !== 'nho',
+    // Chỉ lứa 3–7 mới cấm tên nghề. `lopId === null` (người lớn) rơi vào nhánh
+    // `true` là đúng — người trưởng thành thì tên nghề không còn là chuyện phải
+    // giấu.
+    bayNghe: lopId !== 'nho',
   };
 }
 
@@ -980,6 +1111,8 @@ export function hoSoTinhThu(p: HuongNghiepTreProfile) {
   return {
     namXem: p.namXem,
     tuoi: p.tuoi,
+    // Trang phải biết để đổi xưng hô và thay tường trả tiền bằng lời bàn giao.
+    laTreEm: p.laTreEm,
     namSinh: p.namSinh,
     gioiTinh: p.gioiTinh,
     moiLo: p.moiLo,

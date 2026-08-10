@@ -379,6 +379,7 @@ async function analyze() {
     await _doGenerate(true, lo);
     return;
   }
+  if (prev.laTreEm === false) { _banGiaoNguoiLon(prev); return; }
   document.getElementById('lockBlock').style.display = 'block';
   await TuviPaywall.lockPreview({
     host: document.getElementById('lockHost'),
@@ -491,15 +492,54 @@ async function _doGenerate(freeRerun, lo) {
 //   renderMeta  = thứ engine tra bảng ra, 0đ  → vẽ ngay ở lượt tính thử
 //   renderProse = thứ model viết, tốn tiền    → chỉ vẽ sau khi đã trả
 // Gộp một hàm là sớm muộn có một khối chữ lọt vào lượt miễn phí.
+/**
+ * Gọi đúng theo TUỔI THẬT. Trước đây chỗ này mặc định "Bé trai/Bé gái" nên một
+ * lá số 43 tuổi vẫn được gọi là bé — Henry bắt được khi test. Lỗi gốc nằm ở
+ * engine (kẹp tuổi về lứa 13–18), đây là lớp thứ hai.
+ */
+function _xungHoVai(data) {
+  var nu = data.gioiTinh === 'nu';
+  var t = data.tuoi;
+  if (t == null) return nu ? 'Nữ' : 'Nam';
+  if (t <= 12) return nu ? 'Bé gái' : 'Bé trai';
+  if (t <= 18) return nu ? 'Nữ' : 'Nam';
+  return nu ? 'Nữ' : 'Nam';
+}
+
+/**
+ * Lá số đã trưởng thành: KHÔNG dựng tường trả tiền. Phần chữ trả tiền viết cho
+ * cha mẹ đọc về con — bán nó cho một lá số 43 tuổi là bán nhầm hàng, chứ không
+ * phải chỉ sai vài đại từ. Server cũng chặn (422) nên đây là lớp thứ hai.
+ */
+function _banGiaoNguoiLon(data) {
+  var host = document.getElementById('lockHost');
+  host.innerHTML =
+    '<div class="hn-warn" style="margin-bottom:0">' +
+    '<b>Lá số này đã ' + (data.tuoi != null ? esc(String(data.tuoi)) + ' tuổi' : 'trưởng thành') +
+    '</b> — đây không còn là câu hỏi <i>định hướng sớm cho con</i>, nên phần định hướng viết cho ' +
+    'cha mẹ đọc về con <b>không mở ở đây</b> và <b>không trừ Lượng</b>.<br><br>' +
+    'Phần thiên hướng phía trên vẫn đọc được và vẫn miễn phí — nó đọc từ lá số nên đúng ở mọi ' +
+    'tuổi. Muốn đọc hướng nghiệp cho người trưởng thành (lĩnh vực, vai trò, quy mô, nhánh nghề) ' +
+    'thì dùng <a href="/app/cong-so">Tử Vi Công Sở &amp; Hướng Nghiệp</a>.' +
+    '</div>';
+  document.getElementById('lockBlock').style.display = 'block';
+}
+
 function renderMeta(data) {
-  var ten = data.ten || 'Con';
+  // Bỏ trống ô tên thì tiêu đề rơi về một cách gọi — mà "Con" dán lên một lá số
+  // 43 tuổi thì vẫn đúng chỗ Henry báo, chỉ khác một dòng.
+  var ten = data.ten || (data.laTreEm === false ? 'Lá số này' : 'Con');
   document.getElementById('heroName').textContent = ten;
   document.getElementById('heroRole').textContent =
-    (data.gioiTinh === 'nu' ? 'Bé gái' : 'Bé trai') +
+    _xungHoVai(data) +
     (data.tuoi != null ? ' · ' + data.tuoi + ' tuổi (tuổi mụ)' : '');
 
   var bd = [];
-  if (data.lop) bd.push('<span class="hn-badge">' + esc(data.lop.ten) + ' · ' + esc(data.lop.tuoi) + '</span>');
+  // ⚠️ `lop` chỉ là chỗ đứng KỸ THUẬT khi laTreEm=false (payload giữ nguyên
+  // hình dạng). Bày nó ra là hiện "Tuổi vào đời · 19–25" cho một lá số 43
+  // tuổi — đúng loại vô lý vừa đi sửa, chỉ đổi chỗ.
+  if (data.lop && data.laTreEm !== false)
+    bd.push('<span class="hn-badge">' + esc(data.lop.ten) + ' · ' + esc(data.lop.tuoi) + '</span>');
   if (data.kieu) bd.push('<span class="hn-badge alt">Kiểu ' + esc(data.kieu.ten) + '</span>');
   if (data.lai && data.kieuPhu) bd.push('<span class="hn-badge alt">pha ' + esc(data.kieuPhu.ten) + '</span>');
   document.getElementById('heroBadges').innerHTML = bd.join('');
@@ -509,7 +549,8 @@ function renderMeta(data) {
   var bSum = '';
   try { bSum = (window.Shell && Shell.birthSummary && _last) ? Shell.birthSummary(_last) : ''; } catch (e) { bSum = ''; }
   document.getElementById('heroBirth').textContent = bSum ? 'Lá số: ' + bSum : '';
-  document.getElementById('heroVai').textContent = (data.lop ? data.lop.vaiChaMe : '');
+  document.getElementById('heroVai').textContent =
+    data.lop && data.laTreEm !== false ? data.lop.vaiChaMe : '';
 
   // Thiên hướng đứng đầu (miễn phí)
   var hd = data.huongDau;

@@ -252,6 +252,20 @@ async function runPost(request: NextRequest) {
   const gender = birth.gender === 'nu' ? ('nu' as const) : ('nam' as const);
   const profile = computeHuongNghiepTre(r.ls, gender, moiLo);
 
+  // 🔴 CHẶN TRƯỚC KHI CHẠM VÍ. Tool này viết cho cha mẹ đọc về CON, nên lá số
+  // đã trưởng thành thì bản đọc trả tiền sai từ gốc — không phải sai vài đại từ
+  // mà sai cả đối tượng, cả giọng, cả bảng hoạt động. Bản đầu kẹp tuổi về lứa
+  // 13–18 rồi bán tiếp: lá số 43 tuổi nhận một bản gọi mình là "bé trai".
+  // Từ chối ở ĐÂY (trước `toolPaymentDenied`) nên người dùng KHÔNG mất Lượng.
+  if (!profile.laTreEm) {
+    return err(
+      `Lá số này đã ${profile.tuoi} tuổi — đây không còn là câu hỏi định hướng sớm cho con. ` +
+        'Phần thiên hướng ở trên vẫn đọc được và miễn phí. Muốn đọc hướng nghiệp cho người ' +
+        'trưởng thành thì dùng Tử Vi Công Sở & Hướng Nghiệp.',
+      422,
+    );
+  }
+
   const key = lasoKey(birth, cacheExtra(moiLo, profile.namXem));
   const [cachedRaw, owns] = await Promise.all([
     getCachedPortrait(TOOL_ID, 'main', key),
