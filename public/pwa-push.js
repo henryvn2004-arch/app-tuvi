@@ -1,5 +1,16 @@
 // pwa-push.js — bật thông báo "Vận hôm nay" (Web Push).
-// Expose: window.askPushPermission(namSinh, canChi)
+// Expose: window.askPushPermission(namSinh, canChi)   ← đường TỰ MỜI (im lặng được)
+//         window.enablePushNow(namSinh, canChi)       ← đường NGƯỜI DÙNG BẤM
+//
+// 🔑 HAI ĐƯỜNG KHÁC NHAU, ĐỪNG GỘP. Đường tự mời được phép im lặng bỏ qua (vừa
+// hỏi 30 ngày trước, đã bị chặn, iOS tab thường) — im ở đó là lịch sự. Đường
+// người dùng CHỦ ĐỘNG bấm thì im lặng đọc thành NÚT HỎNG, nên nó:
+//   • BỎ QUA hạn 30 ngày (họ đang tự đòi, không phải mình chào mời);
+//   • TRẢ VỀ trạng thái để chỗ gọi nói lại một câu — trước đây hàm trả
+//     `undefined` ở mọi nhánh nên chỗ gọi không có cách nào phân biệt;
+//   • gọi `Notification.requestPermission()` NGAY trong cú bấm, TRƯỚC mọi
+//     `await`. Safari đòi lượt xin quyền phải nằm trong cử chỉ người dùng, mà
+//     `await swReady()` (tới 8 giây) đã tiêu mất cử chỉ đó.
 //
 // ⚠️ THAM SỐ THỨ NHẤT LÀ NĂM SINH, KHÔNG PHẢI TUỔI. Tên cột dưới DB là `tuoi`
 // nhưng giá trị đang lưu là năm sinh (2 dòng trên prod: 1998 / 1984, kèm can chi
@@ -70,6 +81,87 @@
     return fetch('/api/push-subscribe', { method: 'POST', headers: headers, body: JSON.stringify(body) });
   }
 
+  // iOS: Apple CHỈ cho Web Push khi trang đã "Thêm vào Màn hình chính" (16.4+).
+  // Trong tab Safari thường, `Notification` thậm chí KHÔNG TỒN TẠI — nên phải
+  // phân biệt "máy này không hỗ trợ" với "máy này hỗ trợ nhưng còn thiếu một
+  // bước": hai ca đó cần hai câu hướng dẫn khác hẳn nhau.
+  function isIOS() {
+    try {
+      var ua = navigator.userAgent || '';
+      if (/iPad|iPhone|iPod/.test(ua)) return true;
+      // iPadOS ≥13 khai mình là Mac; phân biệt bằng cảm ứng.
+      return navigator.platform === 'MacIntel' && (navigator.maxTouchPoints || 0) > 1;
+    } catch (e) { return false; }
+  }
+
+  function isStandalone() {
+    try {
+      if (navigator.standalone === true) return true;
+      return !!(window.matchMedia && window.matchMedia('(display-mode: standalone)').matches);
+    } catch (e) { return false; }
+  }
+
+  async function subscribeAndSave(reg, namSinh, canChi) {
+    var sub = await reg.pushManager.subscribe({
+      userVisibleOnly: true,
+      applicationServerKey: b64ToUint8(VAPID_PUBLIC),
+    });
+    await saveToServer(sub, namSinh, canChi);
+    lset(SYNCED_KEY, String(Date.now()));
+    return sub;
+  }
+
+  /**
+   * Đường NGƯỜI DÙNG CHỦ ĐỘNG BẤM. Luôn trả một trong các trạng thái:
+   *   granted · already · denied · dismissed · ios-need-install · unsupported · error
+   * Chỗ gọi BẮT BUỘC nói lại một câu cho mọi trạng thái — xem khối chú thích đầu file.
+   */
+  window.enablePushNow = async function (namSinh, canChi) {
+    if (!('serviceWorker' in navigator) || !('PushManager' in window)) {
+      return isIOS() && !isStandalone() ? 'ios-need-install' : 'unsupported';
+    }
+    if (typeof Notification === 'undefined') {
+      return isIOS() && !isStandalone() ? 'ios-need-install' : 'unsupported';
+    }
+    if (Notification.permission === 'denied') return 'denied';
+
+    // Xin quyền TRƯỚC mọi await (giữ cử chỉ người dùng cho Safari). Đã cấp rồi
+    // thì lượt gọi này không hiện hộp thoại nào — nó trả 'granted' ngay.
+    var perm = Notification.permission;
+    var prompted = perm !== 'granted';
+    if (prompted) {
+      try { perm = await Notification.requestPermission(); } catch (e) { return 'error'; }
+      lset(ASKED_KEY, String(Date.now()));
+      track('push_optin_result', { result: perm === 'granted' ? 'granted' : perm, src: 'task' });
+      if (perm === 'denied') return 'denied';
+      if (perm !== 'granted') return 'dismissed';
+    }
+
+    var reg = await swReady();
+    if (!reg || !reg.pushManager) return 'error';
+
+    try {
+      var existing = await reg.pushManager.getSubscription();
+      if (existing) {
+        // ⚠️ ĐỒNG BỘ ÉP, BỎ QUA hạn 24 giờ của `SYNCED_KEY`. Máy có thể đã đăng
+        // ký từ trước lúc đăng nhập ⇒ dòng dưới DB `user_id` NULL (cả 2 dòng
+        // trên prod đều thế) ⇒ phép kiểm nhiệm vụ tra theo `user_id` KHÔNG BAO
+        // GIỜ thấy. Không ép ở đây thì người đã bật thật vẫn mãi chưa xong việc.
+        await saveToServer(existing, namSinh, canChi);
+        lset(SYNCED_KEY, String(Date.now()));
+        return 'already';
+      }
+      await subscribeAndSave(reg, namSinh, canChi);
+      // Đã cấp quyền từ trước nên không có hộp thoại nào → khối trên chưa ghi
+      // gì. Vẫn phải ghi: đây là lượt đăng ký THẬT vừa phát sinh.
+      if (!prompted) track('push_optin_result', { result: 'granted', src: 'task-pregranted' });
+      return 'granted';
+    } catch (e) {
+      track('push_optin_result', { result: 'error', src: 'task' });
+      return 'error';
+    }
+  };
+
   function showOptIn(canChi, onAccept, onDismiss) {
     if (document.getElementById('push-optin')) return false;
     var label = canChi ? 'Nhắc vận mỗi sáng cho tuổi ' + canChi : 'Nhắc vận hôm nay mỗi sáng';
@@ -135,12 +227,7 @@
       try {
         var perm = await Notification.requestPermission();
         if (perm === 'granted') {
-          var sub = await reg.pushManager.subscribe({
-            userVisibleOnly: true,
-            applicationServerKey: b64ToUint8(VAPID_PUBLIC),
-          });
-          await saveToServer(sub, namSinh, canChi);
-          lset(SYNCED_KEY, String(Date.now()));
+          await subscribeAndSave(reg, namSinh, canChi);
           res = 'granted';
         } else {
           res = perm; // 'denied' | 'default' (đóng hộp thoại của trình duyệt)

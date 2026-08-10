@@ -6,6 +6,21 @@
 <title>Luận Đường — Tử Vi Minh Bảo</title>
 <meta name="description" content="Luận Đường — không gian mệnh lý AI: lá số Tử Vi, Bát Tự, xem tuổi, đặt tên, chọn ngày — chọn một công cụ để bắt đầu và hỏi trợ lý theo ngữ cảnh.">
 <link rel="icon" type="image/webp" href="/seal.webp">
+<!-- 🔴 BẮT BUỘC cho đường bật thông báo trên iPhone, không phải tag trang trí.
+     Apple chỉ mở Web Push cho trang đã "Thêm vào Màn hình chính" và chạy ở chế
+     độ standalone — mà chế độ đó do manifest (`display:standalone`) hoặc thẻ
+     apple dưới đây quyết định. Trang /app trước giờ KHÔNG có cả hai: `nav.js`
+     có chèn manifest, nhưng nó nằm ở CUỐI file trong khi các trang /app nạp
+     nav.js ở chế độ `data-icons-only` — chế độ này `return` sớm hơn hẳn. Nên
+     thêm vào Màn hình chính từ đây chỉ ra một bookmark mở lại Safari, và lời
+     hướng dẫn bật thông báo là một ngõ cụt.
+     ⚠️ Trang /app KHÁC vẫn chưa có (gắn qua nav.js sẽ phải bump `?v=` trên 89
+     file) — đây là trang DUY NHẤT mời cài nên phủ đúng chỗ cần trước. -->
+<link rel="manifest" href="/manifest.json">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Tử Vi MB">
+<link rel="apple-touch-icon" href="/seal.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"></noscript>
@@ -122,6 +137,12 @@
 .tsk-t{font-size:13.5px;font-weight:600;color:var(--heading);line-height:1.35}
 .tsk-row.done .tsk-t{color:var(--text-mid)}
 .tsk-d{font-size:12px;color:var(--text-mid);line-height:1.5;margin-top:3px}
+/* Câu trả lời sau khi bấm nút nhiệm vụ. Nằm TRONG hàng chứ không phải toast:
+   hướng dẫn iOS dài ba bước, người ta cần đọc lại được trong lúc thao tác. */
+.tsk-note{font-size:12px;line-height:1.55;margin-top:7px;padding:8px 10px;border-radius:8px}
+.tsk-note.ok{color:#2f7a4d;background:#e8f7ee;border:1px solid #a9dcbd}
+.tsk-note.err{color:#8a4b2a;background:#fdf1e7;border:1px solid #e8c9ae}
+.tsk-note.wait{color:var(--text-mid);background:var(--paper-2);border:1px solid var(--border-lt)}
 .tsk-pay{flex:0 0 auto;display:flex;flex-direction:column;align-items:flex-end;gap:6px}
 .tsk-amt{font-size:11.5px;font-weight:700;color:var(--gold-soft);white-space:nowrap}
 .tsk-row.done .tsk-amt{color:#2f7a4d}
@@ -544,7 +565,7 @@ if(window.ToolPrices) ToolPrices.load().then(function(d){ if(d) renderHomeCards(
       }
       if(window.askPushPermission) return go();
       var s=document.createElement('script');
-      s.src='/pwa-push.js?v=2'; s.onload=go; s.onerror=function(){};
+      s.src='/pwa-push.js?v=3'; s.onload=go; s.onerror=function(){};
       document.head.appendChild(s);
     },6000);
   }
@@ -787,7 +808,7 @@ if(window.ToolPrices) ToolPrices.load().then(function(d){ if(d) renderHomeCards(
     h+='<div class="tsk-list">';
     for(var j=0;j<d.tasks.length;j++){
       var t=d.tasks[j];
-      h+='<div class="tsk-row'+(t.done?' done':'')+'"><div class="tsk-tick"></div>'
+      h+='<div class="tsk-row'+(t.done?' done':'')+'" data-row="'+j+'"><div class="tsk-tick"></div>'
        + '<div class="tsk-body"><div class="tsk-t">'+esc(t.title)+'</div>'
        + (t.done?'':'<div class="tsk-d">'+esc(t.desc)+'</div>')+'</div>'
        + '<div class="tsk-pay"><div class="tsk-amt">'+(t.done?'+':'')+(+t.credits||0)+' Lượng</div>'
@@ -815,18 +836,58 @@ if(window.ToolPrices) ToolPrices.load().then(function(d){ if(d) renderHomeCards(
     }
     if(key==='bat_thong_bao'){
       var nam=(_birth&&+_birth.year)||0, cc=_canChiNam;
-      // `askPushPermission` tự bỏ qua khi vừa hỏi 3 ngày trước / đã bị chặn vĩnh
-      // viễn / iOS tab thường. Ở đây là NGƯỜI DÙNG CHỦ ĐỘNG bấm, nên báo lại một
-      // câu khi nó im — im lặng sau một cú bấm đọc thành nút hỏng.
+      // 🔴 Bản trước gọi `askPushPermission` — hàm của ĐƯỜNG TỰ MỜI, trả
+      // `undefined` ở mọi nhánh và im lặng bỏ qua khi iOS tab thường / vừa hỏi
+      // trong 30 ngày / đã bị chặn. Chú thích tại chỗ ghi "nên báo lại một câu
+      // khi nó im" nhưng KHÔNG có dòng nào làm việc đó ⇒ trên iPhone bấm nút
+      // không ra gì, không lỗi, không dấu vết. Nay gọi `enablePushNow` (trả
+      // trạng thái) và bắt buộc nói lại một câu cho MỌI ngả.
       function ask(){
-        try{ window.askPushPermission(nam,cc); }catch(e){}
-        setTimeout(function(){ syncTasks(); },2500);
+        if(!window.enablePushNow) return tskNote(this_i,'err','Chưa nạp được phần thông báo. Tải lại trang rồi thử lại giúp tôi.');
+        tskNote(this_i,'wait','Đang bật…');
+        window.enablePushNow(nam,cc).then(function(st){
+          tskNote(this_i,PUSH_NOTE[st]?PUSH_NOTE[st][0]:'err',(PUSH_NOTE[st]||PUSH_NOTE.error)[1]);
+          if(st==='granted'||st==='already') setTimeout(function(){ syncTasks(); },1200);
+        }).catch(function(){ tskNote(this_i,'err',PUSH_NOTE.error[1]); });
       }
-      if(window.askPushPermission) return ask();
+      var this_i=+this.getAttribute('data-i');
+      if(window.enablePushNow) return ask();
       var s=document.createElement('script');
-      s.src='/pwa-push.js?v=2'; s.onload=ask; s.onerror=function(){};
+      s.src='/pwa-push.js?v=3'; s.onload=ask;
+      s.onerror=function(){ tskNote(this_i,'err','Không tải được phần thông báo. Thử lại sau giúp tôi.'); };
       document.head.appendChild(s);
     }
+  }
+
+  /* Câu trả lời cho từng ngả của `enablePushNow`. Viết ở đây chứ không nhét vào
+     pwa-push.js: đó là module KỸ THUẬT (đăng ký/huỷ đăng ký), còn đây là chữ
+     người dùng đọc — trộn vào nhau thì sau này sửa câu chữ phải đụng module. */
+  var PUSH_NOTE={
+    granted:['ok','Đã bật. Mai 7h sáng sẽ có tin đầu tiên.'],
+    already:['ok','Máy này đã bật từ trước — vừa gắn vào tài khoản của bạn.'],
+    denied:['err','Trình duyệt đang CHẶN thông báo của trang này. Mở phần cài đặt trang (biểu tượng bên trái thanh địa chỉ) → bật lại Thông báo, rồi bấm lại nút này.'],
+    dismissed:['err','Bạn chưa chọn gì ở hộp xin quyền. Bấm lại rồi chọn "Cho phép" giúp tôi.'],
+    // Ca của Henry. Đây KHÔNG phải lỗi của trang: Apple chỉ mở Web Push cho
+    // trang đã thêm vào Màn hình chính (iOS 16.4+), tab Safari thường thì
+    // `Notification` còn không tồn tại. Nói thẳng ra cùng đúng ba bước bấm.
+    // ⚠️ Câu này phải khớp `start_url` của manifest (`/?utm_source=pwa`) — mở
+    // biểu tượng vừa thêm là về TRANG CHỦ, không về thẳng Luận Đường. Bỏ bước
+    // "vào Luận Đường" là dẫn người ta tới một trang không có nút này.
+    'ios-need-install':['err','iPhone/iPad chỉ cho bật thông báo khi trang đã nằm ở Màn hình chính. Bấm nút Chia sẻ ở thanh dưới Safari → "Thêm vào MH chính" → mở biểu tượng vừa thêm → vào Luận Đường → bấm lại nút này.'],
+    unsupported:['err','Trình duyệt này không hỗ trợ thông báo. Thử bằng Chrome trên Android hoặc máy tính.'],
+    error:['err','Chưa bật được. Thử lại sau ít phút giúp tôi.']
+  };
+
+  /* Dán câu trả lời vào ĐÚNG hàng nhiệm vụ vừa bấm — không dùng alert (chặn cả
+     trang) cũng không dùng toast (trôi mất trong khi câu hướng dẫn iOS dài 3
+     bước, người ta cần đọc lại được trong lúc thao tác). */
+  function tskNote(i,kind,msg){
+    var host=el('taskCard'); if(!host) return;
+    var row=host.querySelector('.tsk-row[data-row="'+i+'"]'); if(!row) return;
+    var n=row.querySelector('.tsk-note');
+    if(!n){ n=document.createElement('div'); n.className='tsk-note'; (row.querySelector('.tsk-body')||row).appendChild(n); }
+    n.className='tsk-note '+kind;
+    n.textContent=msg;
   }
 
   /* Quay lại tab thì đồng bộ lại — đây mới là ca thường gặp nhất: bấm "Liên
