@@ -61,10 +61,18 @@ export const DANG_TRUYEN: Record<string, { ten: string; nghia: string }> = {
   回环: { ten: 'Hồi hoàn', nghia: 'ba truyền quay vòng, việc lặp lại chỗ cũ' },
 };
 
-/** 37 khóa thể + 12 dạng "X phát dụng". */
+/**
+ * 40 khóa thể + 12 dạng "X phát dụng".
+ *
+ * ⚠️ Phải phủ TRỌN danh sách khóa thể tam truyền nguồn khai (13 quái/khóa) và
+ * trọn bộ pháp thủ truyền cửu tông môn. `check:terms` đối chiếu tự động —
+ * xem mục `tuvung-luc-nham`. Đừng thêm bằng cách chạy vài lá số rồi thấy đủ:
+ * `铸印卦` từng lọt qua 4.392 khóa mẫu mà không lá nào sinh ra nó.
+ */
 export const KHOA_THE: Record<string, string> = {
   元首: 'Nguyên Thủ', 重审: 'Trùng Thẩm', 比用: 'Tỷ Dụng', 涉害: 'Thiệp Hại',
   别责: 'Biệt Trách', 八专: 'Bát Chuyên', 伏吟: 'Phục Ngâm', 反吟: 'Phản Ngâm',
+  遥克: 'Dao Khắc', 昴星: 'Mão Tinh',
   返吟比用: 'Phản Ngâm Tỷ Dụng', 返吟重审: 'Phản Ngâm Trùng Thẩm',
   返吟元首: 'Phản Ngâm Nguyên Thủ', 返吟涉害: 'Phản Ngâm Thiệp Hại',
   遥克比用: 'Dao Khắc Tỷ Dụng', 遥克涉害: 'Dao Khắc Thiệp Hại',
@@ -72,7 +80,7 @@ export const KHOA_THE: Record<string, string> = {
   自任: 'Tự Nhiệm', 自信: 'Tự Tín', 无依: 'Vô Y', 无禄卦: 'Vô Lộc',
   蒿矢: 'Cao Thỉ', 弹射: 'Đạn Xạ', 虎视: 'Hổ Thị', 冬蛇掩目: 'Đông Xà Yểm Mục',
   三交卦: 'Tam Giao', 玄胎卦: 'Huyền Thai', 励德卦: 'Lệ Đức', 龙德课: 'Long Đức',
-  斫轮卦: 'Chước Luân', 高盖乘轩卦: 'Cao Cái Thừa Hiên',
+  斫轮卦: 'Chước Luân', 高盖乘轩卦: 'Cao Cái Thừa Hiên', 铸印卦: 'Chú Ấn',
   曲直卦: 'Khúc Trực', 炎上卦: 'Viêm Thượng', 稼穑卦: 'Giá Sắc',
   从革卦: 'Tòng Cách', 润下卦: 'Nhuận Hạ',
   传不逢空: 'Truyền không gặp Không', 空亡入传: 'Không Vong nhập truyền',
