@@ -5,6 +5,79 @@
 
 ---
 
+
+---
+
+## 🔘 "Ko thấy nút Sửa ở đâu?" — NÚT CÓ, LỜI CHỈ ĐƯỜNG MỚI LÀ THỨ HỎNG (2026-08-10, PR sau #490)
+
+Henry chụp màn hình `/app/ngu-hanh-ten` trên iPhone: *"nó báo 'Bấm Sửa ở góc trên
+rồi chọn mệnh' mà ko thấy nút Sửa ở đâu? Tool bị lỗi ah?"*
+
+### 🔴 Không phải lỗi tool — nút Sửa NẰM NGAY TRONG ẢNH anh chụp
+`#btnEdit` hiện đúng sau khi tra (`app-ngu-hanh-ten.html:99`, `display=''` ở lượt
+`calculate`), là ô thứ HAI trong thanh, giữa "Chia sẻ" và "✦ Hỏi". Anh nhìn thẳng
+vào nó mà không nhận ra.
+- 🔑 **Vì sao không nhận ra: thanh đó là chrome của SHELL, không đọc như một phần
+  của tool.** Người dùng phân vùng màn hình theo VAI TRÒ THỊ GIÁC — thanh trên
+  cùng nằm cạnh ☰ và "Lưu PDF" nên đọc thành thanh của trang, còn khối chấm điểm
+  ở giữa mới là "tool". Câu chỉ đường bắc cầu giữa hai vùng đó, mà cây cầu ấy chỉ
+  có trong đầu người viết.
+- Chữ *"góc trên"* còn sai thêm một nhịp: nút không ở GÓC nào cả, nó là ô thứ hai
+  trong hàng bốn ô.
+
+### 🔑 Nhưng lỗi thật sâu hơn một câu chữ — tôi vá TRIỆU CHỨNG ở vòng trước
+Vòng #490 tôi đã bắt được đúng lớp lỗi này (*"shell ẩn form sau khi tra ⇒ câu
+'chọn mệnh ở ô bên trên' trỏ vào ô người dùng KHÔNG còn nhìn thấy"*) rồi **sửa
+bằng cách đổi câu chỉ đường theo bề mặt**, còn ghi hẳn ca đối chứng khẳng định ô
+đó thật sự bị ẩn. Vá đúng chỗ đau nhưng **sai TẦNG**: chỗ cần sửa không phải lời
+chỉ đường, mà là **nhu cầu phải chỉ đường**.
+
+Kể cả khi tìm ra nút, đường đi vẫn là **4 bước cho một lựa chọn 5 giá trị**:
+cuộn ngược lên → bấm Sửa (**mất luôn kết quả đang đọc**, `showForm` ẩn `resPanel`)
+→ chọn trong ô dán nhãn **"(tùy chọn)"** → bấm Tra lại. Trang tự nói ô đó không
+bắt buộc rồi lại chặn ở dưới vì thiếu nó.
+
+### Đã làm — chọn mệnh NGAY TRONG khối chấm điểm
+5 nút `Mộc · Hỏa · Thổ · Kim · Thủy` dựng thẳng trong trạng thái trống. Bấm là
+chấm liền: không rời trang, không mở lại form, không mất phần đã đọc.
+- Cùng luật với **M3** (*"mỗi lần chuyển trang ở đáy phễu là một lần rơi"*) và với
+  ô nhập lá số nhúng thẳng trong thẻ *Vận hôm nay* (#418) — chỗ đó cũng **cố ý
+  không đá sang trang khác**.
+- **Bắt cú bấm theo ỦY QUYỀN** trên `#scoreResult`: khối này bị dựng lại mỗi lượt
+  render (`applyManual` đổi số nét cũng dựng lại), gắn thẳng vào từng nút thì
+  lượt sau mất bộ bắt.
+- **Đồng bộ ngược vào `#menhInput`** — mệnh vẫn phải có MỘT nguồn: bấm Sửa sau đó
+  phải thấy đúng lựa chọn, và mọi chỗ đọc mệnh (`render`, `railData`, chia sẻ)
+  không được rẽ thành hai đường.
+- **`syncShell(menh)` tách khỏi `calculate()`**: chọn mệnh tại chỗ là một lượt ĐỔI
+  DỮ LIỆU THẬT ⇒ rail + bản chia sẻ phải dựng lại. Thiếu bước này thì chip
+  *"Vì sao tên tôi được điểm này?"* mời người ta hỏi một con số **rail chưa hề
+  nhận** — đúng lớp lỗi đã tốn cả một PR để rà (track "rail thất lạc trường").
+- `HANH_LIST` xếp theo **thứ tự tương sinh**, khớp ĐÚNG thứ tự ô `<select>` trên
+  cả hai trang — hai chỗ xếp khác nhau thì người dùng phải đọc lại từ đầu.
+- Link *"Tra mệnh theo năm sinh →"* GIỮ, nhưng tụt xuống sau, dưới câu *"Không
+  biết mệnh của mình?"* — nó là lối cho người thật sự không biết, không phải bước
+  bắt buộc của mọi người.
+
+### Verify
+`tsc` 0 · `lint` 0 lỗi / **73 warning = đúng mốc nền** · `prettier` quét cả cây
+sạch · **16/16 bộ dò**.
+- **39 ca trên 2 TRANG THẬT ở 390px** (đúng khổ máy Henry): trạng thái trống
+  **KHÔNG còn chữ "Bấm Sửa"/"ô bên trên"** · đủ 5 nút đúng thứ tự · nút cao ≥36px
+  bấm được bằng ngón tay · bấm → **KHÔNG rời trang**, ra ngay 94/100 · thẻ từng
+  chữ và cân bằng ngũ hành **còn nguyên** (không bị dựng lại mất) · `<select>`
+  đồng bộ ngược · bấm Sửa ra thấy đúng mệnh vừa chọn · 0 lỗi JS · 0px tràn ngang.
+- **Rail: 1 → 2 lượt `setContext`** sau khi chọn mệnh tại chỗ; lượt sau mang đúng
+  `menh`/`diem`/`hanhNenBoi`/`chuGoiY`, **vẫn PHẲNG 100%** (bẫy
+  `extractGenericContext` bỏ im lặng mọi object), và bản chia sẻ có dòng chấm điểm.
+- **62/62 ca của vòng #490 chạy lại: 0 hồi quy.**
+
+### CÒN LẠI
+- Ô mệnh trong form vẫn dán nhãn **"(tùy chọn)"** trong khi thiếu nó là không chấm
+  được. Đúng về mặt kỹ thuật (tra ngũ hành từng chữ vẫn chạy) nhưng đọc thì mâu
+  thuẫn với khối bên dưới — cố ý chưa đụng vì sửa nhãn là đụng cả hình dạng form.
+- Bump `ngu-hanh-ten.js?v=2→3` (2 trang). Không đụng `nap-am.js`.
+
 ## 🔌 `mcp-handler` 1 → 2: gỡ đúng cái workaround của chính mình (2026-08-10, PR này)
 
 #389 treo đỏ từ 03/08 (`typecheck` + `next-build`). Đây là bump MAJOR đụng bề

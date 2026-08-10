@@ -70,6 +70,10 @@
 .nh-link:hover{background:var(--bg-soft)}
 .nh-caveat{font-size:12px;color:var(--text-lt);line-height:1.65;margin-top:14px;padding-top:12px;border-top:1px solid var(--border-lt)}
 .nh-score-empty-p{font-size:13.5px;color:var(--text);line-height:1.7;margin-bottom:11px}
+.nh-menh-pick{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:13px}
+.nh-menh-btn{font-family:inherit;font-size:14.5px;font-weight:600;color:var(--navy);background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:9px 15px;cursor:pointer;min-width:62px}
+.nh-menh-btn:hover{background:var(--bg-soft);border-color:var(--gold)}
+.nh-score-empty-sub{font-size:12.5px;color:var(--text-lt);margin-bottom:6px}
 </style>
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Ngũ hành của tên tính như thế nào?","acceptedAnswer":{"@type":"Answer","text":"Dựa trên chữ Hán-Việt của tên, mỗi chữ có hành riêng xác định qua bộ thủ (radical) trong Hán tự. Tổng ngũ hành tên cần tương sinh với hành của năm sinh để hỗ trợ vận mệnh."}},{"@type":"Question","name":"Tại sao tên lại ảnh hưởng đến vận mệnh?","acceptedAnswer":{"@type":"Answer","text":"Theo lý luận danh học, tên được gọi hàng ngày tạo ra rung động năng lượng liên tục tác động đến người mang tên. Tên có ngũ hành bổ sung những gì thiếu trong mệnh được cho là hỗ trợ sự phát triển."}},{"@type":"Question","name":"Đổi tên có thay đổi được vận mệnh không?","acceptedAnswer":{"@type":"Answer","text":"Đổi tên là cách điều chỉnh năng lượng theo danh học, nhưng không phải yếu tố duy nhất. Bản mệnh (Tứ Trụ) mới là nền tảng; tên đóng vai trò bổ trợ và có thể gia tăng hoặc giảm bớt một số yếu tố vận khí."}}]}
@@ -177,7 +181,7 @@
   <div class="footer-bottom"><span>© 2026 tuviminhbao.com</span><img src="/seal.webp" alt=""></div>
 </footer>
 
-<script src="/tools-shared/ngu-hanh-ten.js?v=2"></script>
+<script src="/tools-shared/ngu-hanh-ten.js?v=3"></script>
 <script>
 // Logic + render DÙNG CHUNG module /tools-shared/ngu-hanh-ten.js với shell /app/ngu-hanh-ten.
 let _syls = [];
@@ -233,6 +237,16 @@ function renderBalance(menh) {
   // công) đổi _syls nên điểm phải đổi theo, không để lại con số của bộ chữ CŨ.
   document.getElementById('scoreResult').innerHTML = NguHanhTenTool.scoreHTML(_syls, menh, { shell: false });
 }
+
+// Chọn mệnh NGAY trong khối chấm điểm. Bắt theo ủy quyền vì khối này bị dựng
+// lại mỗi lượt render — gắn thẳng vào từng nút thì lượt sau mất bộ bắt.
+document.getElementById('scoreResult').addEventListener('click', function (e) {
+  const b = e.target.closest('[data-nh-menh]');
+  if (!b) return;
+  const menh = b.getAttribute('data-nh-menh');
+  document.getElementById('menhInput').value = menh;
+  renderBalance(menh);
+});
 </script>
 <section class="kb-section">
   <div class="page">
