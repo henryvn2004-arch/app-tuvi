@@ -1148,6 +1148,54 @@
       host.insertBefore(btn, host.firstChild);
     }
   }
+  // ── C3 — BÁO CHO NGƯỜI CHIA SẺ BIẾT, VÀ CHO HỌ ĐƯỜNG ẨN ─────────────────
+  //
+  // Henry chốt **auto opt-in**: mọi bản chia sẻ mặc định có mặt trong Thư viện
+  // chung `/thu-vien`. Auto opt-in mà KHÔNG NÓI mới là phần không đỡ được —
+  // nên dòng này BẮT BUỘC hiện mỗi lần tạo link.
+  //
+  // ⚠️ Đặt ở đây chứ KHÔNG đặt trong modal chia sẻ: trên máy cảm ứng
+  // `shareLink` đi thẳng `navigator.share` và **modal không bao giờ mở**, tức
+  // nút ẩn đặt trong đó là không với tới phần lớn người dùng.
+  //
+  // Chỉ dựng khi ĐÃ ĐĂNG NHẬP: endpoint PATCH đối chiếu `owner_user_id`, link
+  // tạo lúc ẩn danh không ai sửa được nên hứa một nút bấm không ăn là hứa hụt.
+  function galleryNotice(shareId) {
+    try {
+      var host = document.querySelector('.ws-actions');
+      if (!host || !getToken() || !shareId) return;
+      var old = document.getElementById('shGalNote'); if (old) old.remove();
+      var box = document.createElement('div');
+      box.id = 'shGalNote';
+      box.className = 'sh-gal-note';
+      box.innerHTML = '<span>Đã tạo link · bản này cũng hiện trong ' +
+        '<a href="/thu-vien" target="_blank" rel="noopener">Thư viện chung</a></span>' +
+        '<button type="button">Ẩn đi</button>';
+      host.parentNode.insertBefore(box, host.nextSibling);
+      var btn = box.querySelector('button');
+      btn.addEventListener('click', function () {
+        btn.disabled = true; btn.textContent = 'Đang ẩn…';
+        fetch('/api/share-result', {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + getToken() },
+          body: JSON.stringify({ id: shareId, galleryOptOut: true }),
+        })
+          .then(function (r) { return r.json(); })
+          .then(function (j) {
+            if (j && j.gallery_opt_out) {
+              box.innerHTML = '<span>✓ Đã ẩn khỏi Thư viện chung. Link vẫn dùng được như thường.</span>';
+            } else { btn.disabled = false; btn.textContent = 'Thử lại'; }
+          })
+          .catch(function () { btn.disabled = false; btn.textContent = 'Thử lại'; });
+      });
+      // 🪤 KHÔNG tự dọn theo hẹn giờ. Bản đầu xoá sau 30 giây, nhưng trên
+      // desktop `openShareModal` phủ kín trang NGAY SAU đó — ai ngồi trong modal
+      // quá 30 giây thì dòng báo đã biến mất trước khi họ nhìn thấy nó, tức
+      // auto opt-in lại thành im lặng. Để nó ở lại tới khi người dùng tự xử lý
+      // hoặc tạo link mới (lượt sau `old.remove()` ở trên dọn giúp).
+    } catch (e) { /* lời báo hỏng KHÔNG được chặn lượt chia sẻ */ }
+  }
+
   function shareWorkspace() {
     if (!currentShare()) return;
     var btn = document.getElementById('wsShareBtn'); if (btn) btn.disabled = true;
@@ -1174,6 +1222,7 @@
         // Zalo…) BỎ LUÔN url đi kèm, người nhận chỉ thấy ảnh, không bấm vào đâu
         // được. Ảnh vẫn hiện đẹp nhờ OG:image khi link được unfurl.
         shareLink(url, { title: s.title + ' — Tử Vi Minh Bảo', text: shareTxt, url: url }, modalOpts, onMedium);
+        galleryNotice(j.id);
       })
       .catch(function () { reEnable(); alert('Lỗi mạng khi tạo link chia sẻ.'); });
   }

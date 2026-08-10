@@ -293,7 +293,8 @@ body{font-family:var(--sans);background:var(--paper2);color:var(--text);line-hei
     }
     </div>
   </div>
-  <div class="foot">© 2026 Tử Vi Minh Bảo · <a href="${SITE}/app">tuviminhbao.com</a> — Lá số được lập bằng engine cổ pháp; phần luận giải do AI thực hiện trên chính dữ liệu đó.</div>
+  <div class="foot"><a href="${SITE}/thu-vien">Xem thêm bản luận khác →</a><br>
+    © 2026 Tử Vi Minh Bảo · <a href="${SITE}/app">tuviminhbao.com</a> — Lá số được lập bằng engine cổ pháp; phần luận giải do AI thực hiện trên chính dữ liệu đó.</div>
 </div>
 ${GA4_TRACK_SNIPPET}
 <script>

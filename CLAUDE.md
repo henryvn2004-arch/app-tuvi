@@ -444,14 +444,54 @@ tên cung cấm · 0 câu chạm chủ đề cấm · trang hiện đúng số v
 - ~~**B2**~~ → **ĐÃ LÀM**, xem mục riêng ở trên. ~~**B3**~~ → **ĐÃ LÀM**, xem mục riêng ở trên.
 - ~~**C1**~~ → **ĐÃ LÀM**, xem mục riêng ở trên. ⏭️ Mới gắn ở `nguoi-khac`; hai
   tool cẩm nang kia (`day-con`/`nhan-mach`) dùng chung `coSoDoc` được, chưa cắm.
-- 🔴 **C3 — DỪNG, chờ Henry chốt cơ chế đồng ý.** Kế hoạch tao viết *"gallery từ
-  36 `shared_results` (**vốn đã public**)"* — **câu đó SAI**. Bấm "Chia sẻ" tạo
-  link **KHÔNG NIÊM YẾT** để gửi người quen; đó không phải sự đồng ý được xếp vào
-  một trang duyệt được và Google index được. Đo: **15/38 dòng chứa ngày sinh đầy
-  đủ**, **38/38 tiêu đề mang tên người**, và **cả 38 đều của MỘT chủ** (bản test
-  của Henry) ⇒ gallery ra mắt còn là social proof dựng từ dữ liệu của chính chủ.
-  Ba đường an toàn: **opt-in** (ô tick lúc chia sẻ) · **ẩn danh** (bỏ tên + ngày
-  sinh) · **Henry tự chọn dòng**. Chưa chốt thì chưa code.
+### ✅ C3 — Thư viện chung, AUTO OPT-IN (cùng PR, Henry chốt)
+
+Tao nêu lo ngại; Henry chốt: *"share chứa ngày sinh đầy đủ ok, đó mới chính là lý
+do user muốn share. Auto opt in trừ khi user muốn opt out."* Anh đúng ở chỗ quan
+trọng nhất — **ngày sinh TRÊN TRANG CHIA SẺ chính là nội dung**, tao chưa bao giờ
+đề nghị bỏ nó ở đó; câu hỏi chỉ là việc LIỆT KÊ vào một trang duyệt được.
+
+- **`gallery_opt_out boolean default false`** — đặt tên theo HÀNH ĐỘNG của người
+  dùng, không theo trạng thái hiển thị. `listed=true` thì một dòng cũ chưa
+  backfill sẽ mặc định BIẾN MẤT; `gallery_opt_out=false` thì mặc định đúng ý đã
+  chốt. ✅ đã chạy prod (39 dòng, 0 ẩn).
+- **`/thu-vien`** — lưới thẻ, ảnh thật hoặc nền chữ, link mang UTM để đo được
+  thư viện có kéo ai không. Đọc hụt DB → trang vẫn dựng, chỉ rỗng (KHÔNG 500).
+- 🔴 **`noindex, follow` — quyết định TÁCH BIỆT với việc liệt kê.** Liệt kê trong
+  site là thứ Henry duyệt; đẩy tên người thật vào Google là chuyện khác và khó
+  lùi hơn nhiều. Và chính `/ket-qua/[id]` — thứ trang này trỏ tới — **đã
+  `noindex` từ trước**, nên một hub index được mà trỏ toàn trang noindex thì phần
+  vào Google chỉ còn là danh sách tên người. Đổi là **một dòng `ROBOTS`**.
+- **`PATCH /api/share-result`** — đường opt-out, đối chiếu `owner_user_id`. Nhân
+  tiện mở luôn `revoked`: cột đó có từ đầu, `/ket-qua` đã đọc để trả 404, nhưng
+  **chưa một dòng code nào ghi vào** — tức người dùng chưa từng có cách gỡ một
+  link đã lỡ chia sẻ. Chỉ cho GỠ, không cho bật lại.
+- **Dòng báo `galleryNotice` đặt ở TRANG, không đặt trong modal chia sẻ**: trên
+  máy cảm ứng `shareLink` đi thẳng `navigator.share` và **modal không bao giờ
+  mở**, tức nút ẩn đặt trong đó là không với tới phần lớn người dùng.
+- **Chỉ dựng khi ĐÃ đăng nhập** — `PATCH` đối chiếu chủ sở hữu, link tạo lúc ẩn
+  danh không ai sửa được nên hứa một nút bấm không ăn là hứa hụt.
+
+🪤 **Bản đầu tự xoá dòng báo sau 30 giây — test bắt được là SAI.** Trên desktop
+`openShareModal` phủ kín trang ngay sau đó; ai ngồi trong modal quá 30 giây thì
+lời báo đã biến mất trước khi họ nhìn thấy. **Auto opt-in mà không nói mới là
+phần không đỡ được**, nên bỏ hẳn hẹn giờ.
+
+**Verify:** `tsc` 0 · `lint` 0 lỗi · `prettier` sạch · 5 bộ dò sạch · engine 185
+pass · `node --check` · **27 ca Playwright trên ROUTE THẬT** (Next dev + stub
+PostgREST): lưới đúng số thẻ · `noindex, follow` · thẻ ảnh vs nền chữ · **tiêu đề
+chứa `<img onerror>` không chạy mà vẫn hiện nguyên văn** · link + CTA mang UTM ·
+nhãn tool không phải id thô · trang nói rõ người tạo tự ẩn được · **5 chốt chặn
+quyền PATCH** (không token → 401 · id rác → 400 · rỗng → 400 · token rác → 401 ·
+`revoked:false` → 400) · dòng báo hiện đúng chữ và bấm Ẩn gọi đúng PATCH · **ĐỐI
+CHỨNG chưa đăng nhập → im lặng** · 390px không tràn. Hồi quy 7 bộ kiểm cũ xanh.
+Bump `shell.js?v=66` + `shell.css?v=18` (35 trang, `git diff --numstat` xác nhận
+đúng 2 dòng/file).
+
+**CÒN LẠI:** 39 dòng hiện có đều của MỘT chủ (bản test) nên bật hồi tố không chạm
+người dùng thật nào — nhưng thư viện ra mắt sẽ toàn bản test, **đừng đọc nó như
+social proof cho tới khi có người ngoài chia sẻ**.
+
 - 🔴 **D (chuỗi ngày) — ĐO RA LÀ SAI THỜI ĐIỂM, chưa làm.** Chuỗi ngày là bộ
   KHUẾCH ĐẠI việc quay lại; đo 45 ngày thì việc quay lại gần như không tồn tại:
 
