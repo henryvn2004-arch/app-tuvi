@@ -87,6 +87,13 @@ interface HuongDan {
  */
 const SHAPE = 2;
 
+/**
+ * Vân tay CẤU TRÚC hồ sơ engine (`computeDayCon`) — nguồn của `meta()` ở dưới.
+ * `npm run check:cacheshape` canh khớp: đổi/thêm/bớt khoá ⇒ đỏ và in vân tay
+ * mới, buộc bump `SHAPE` CÙNG LÚC. Chính bump 1→2 ở #465 là do quên mà ra.
+ */
+const SHAPE_FINGERPRINT = '4ec3392fed42';
+
 /** Payload cũ hơn cấu trúc hiện tại thì coi như trượt cache. */
 function shapeStale(payload: unknown): boolean {
   const v = (payload as { _shape?: unknown } | null)?._shape;

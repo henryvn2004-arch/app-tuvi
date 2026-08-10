@@ -5,7 +5,78 @@
 
 ---
 
-## 🀄 QUÉT MẪU chỉ chứng minh được thứ mẫu CHẠM TỚI (2026-08-10, PR này)
+## 💾 "Chạy lại vẫn ra lá số cũ" — TÔI QUÊN BUMP `SHAPE` ở #475 (2026-08-10, PR này)
+
+Henry: *"Tao chạy lại nó còn cache nên vẫn hiện ra lá số cũ đó. Có cách nào clear
+cache ko?"*
+
+### 🔴 Không phải hỏi vặt — đo ra đúng một dòng cache hỏng, và lỗi là của tôi
+Chốt tuổi của #475 nằm **TRƯỚC** lượt đọc cache nên lá số 43 tuổi không thể lấy
+phải bản cũ qua đường trả tiền; SW thì network-first cho HTML. Nên đi soi thẳng
+DB, và ra ngay:
+
+| `portrait_cache` (huong-nghiep-tre) | |
+|---|---|
+| `tuoi` | **43** |
+| `lop` | **`lon`** ← đúng cái KẸP TUỔI mà #475 đi vá |
+| `laTreEm` | **không tồn tại** (ghi trước lượt vá) |
+| `_shape` | **1** ⇒ `shapeStale()` coi là còn mới ⇒ **không dựng lại** |
+
+🔑 **#475 CÓ đổi cấu trúc payload** (thêm `laTreEm`, thêm `xungHo` từng lứa,
+thêm hẳn lứa `vaodoi` + 9 khối hoạt động) — mà luật ghi ngay trong khối chú
+thích trên `SHAPE` nói rõ *"Đổi chữ: không bump. **Đổi cấu trúc: bắt buộc
+bump**"*. Tôi đọc khối đó rồi vẫn quên. Đây là lần thứ HAI của cùng lớp lỗi
+(`day-con` #465 đã cắn y hệt: 4 khối im lặng biến mất trên prod).
+
+### Đã làm
+- **`SHAPE` 1 → 2** + ghi lịch sử bump ngay tại chỗ.
+- **Xoá dòng cache hỏng trên prod.** ⚠️ Chỉ xoá ở `portrait_cache`; **quyền sở
+  hữu nằm ở bảng `huong_nghiep_tre_reports`, KHÔNG đụng** ⇒ người đã trả tiền
+  không bị tính lại. Verify sau khi xoá: cache 0 dòng, quyền sở hữu còn 1.
+- **Câu lệnh xoá cache một lá số** (khi cần bản thật sự mới):
+  ```sql
+  delete from portrait_cache where tool_id = '<tool>' and laso_key = '<khoá>';
+  ```
+
+### 🧷 `scripts/check-cache-shape.mjs` (bộ dò thứ 14) — lời dặn KHÔNG đủ
+Lớp lỗi này hỏng IM LẶNG và đã cắn hai lần **dù chú thích cảnh báo nằm ngay trên
+dòng phải sửa**. ⇒ phải có máy canh: băm danh sách KHOÁ (2 tầng) của payload
+engine rồi so với `SHAPE_FINGERPRINT` khai cạnh `SHAPE`. Đổi cấu trúc ⇒ băm đổi
+⇒ đỏ kèm vân tay mới, buộc bump `SHAPE` CÙNG LÚC.
+- **Băm theo KHOÁ, cố ý không băm giá trị**: sửa CHỮ thì không phải bump (dòng
+  cache cũ trả chữ cũ — khó chịu, không vỡ), chỉ đổi/thêm/bớt KHOÁ mới vỡ.
+- 🪤 **Ca quyết định — đặt lại engine bản TRƯỚC #475 thì bộ dò ĐỎ ĐÚNG**
+  (52 khoá vs 54, vân tay `ed25a825f494` vs `5242585a3d68`) ⇒ nó bắt được chính
+  lỗi vừa xảy ra, không phải một cái lưới cho có.
+- Red-team thêm 2 ca (engine thêm khoá · gỡ khai vân tay) đỏ đúng, đối chứng
+  khôi phục xanh, 0 file rác.
+- ⚠️ **Phạm vi: tầng ENGINE**, không phủ chỗ route tự ghép thêm khoá. Cả hai lần
+  cắn thật đều là đổi ở engine nên nó phủ đúng chỗ đau — nhưng đừng đọc rộng hơn.
+
+### 🪤 Ba bẫy harness đã vấp khi dựng bộ dò (đều là lỗi của TÔI)
+1. **Alias `@/` không tồn tại ngoài bản dựng Next** — phải đổi sang đường dẫn
+   tương đối theo ĐỘ SÂU từng file.
+2. **Đổi alias phải chạy TRƯỚC bước thêm đuôi `.js`** — đảo thứ tự thì đường dẫn
+   vừa sinh ra không có đuôi, node ném `ERR_MODULE_NOT_FOUND`, và thông điệp trỏ
+   vào *engine* chứ không trỏ vào *harness*.
+3. **`.json` bị nối nhầm `.js`**, rồi khi sửa xong lại cần `with { type: 'json' }`
+   (tsc không phát ra import attribute).
+
+### Verify
+`tsc` 0 · `lint` 73 warning = đúng mốc nền `main` · `prettier` sạch ·
+**14/14 bộ dò** · engine **185 pass** · `node --check`.
+
+### CÒN LẠI
+- **2 tool chân dung + `duyen-no` + `nguoi-khac` + `nhan-mach` KHÔNG có `SHAPE`**
+  — chúng vẫn mang nguyên cái bẫy: đổi payload là dòng cache cũ trả nguyên trạng
+  mãi mãi. Chưa dựng vì payload chúng chưa đổi lần nào; đụng vào thì phải cắm
+  `SHAPE` + vân tay TRƯỚC khi sửa.
+- Bộ dò chốt lá số mẫu CỐ ĐỊNH (2015, giờ Sửu, nam). Đổi lá số mẫu là đổi vân
+  tay — đừng sửa nó chỉ vì thấy đỏ.
+
+---
+
+## 🀄 QUÉT MẪU chỉ chứng minh được thứ mẫu CHẠM TỚI (2026-08-10, PR trước)
 
 Job `next-build` vừa dựng xong khiến tôi mở PR Dependabot **#479** ra xem — nó
 đang **đỏ `lint`**, và lần theo thì lộ ra một họ lỗi rộng hơn hẳn lượt bump.

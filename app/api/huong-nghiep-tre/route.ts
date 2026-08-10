@@ -76,7 +76,21 @@ function cacheExtra(moiLo: string, namXem: number): string {
  * `userOwnsLaso` — người đã trả tiền bị tính lại. Khoá giữ nguyên nên lượt dựng
  * lại vẫn miễn phí đúng cho họ.
  */
-const SHAPE = 1;
+const SHAPE = 2;
+/* Lịch sử bump:
+   1 → 2 (lượt vá tuổi thật, #475): thêm khoá `laTreEm` mà trang đọc để ẩn nhãn
+   lứa, thêm `xungHo` cho từng lứa, thêm hẳn lứa `vaodoi` (19–25) kèm 9 khối
+   hoạt động mới. 🐞 Lượt đó QUÊN bump — đúng thứ khối chú thích ngay trên dặn
+   phải làm — nên dòng cache ghi trước bản vá vẫn được trả nguyên trạng: đo
+   được trên prod một dòng `tuoi=43` mang `lop:"lon"` (kẹp tuổi cũ) và KHÔNG có
+   `laTreEm`. Quên bump là hỏng IM LẶNG, giống hệt ca `day-con` ở #465. */
+
+/**
+ * Vân tay CẤU TRÚC của `hoSoDayDu(p)` — `npm run check:cacheshape` canh khớp.
+ * Đổi/thêm/bớt khoá ⇒ bộ dò đỏ và in vân tay mới, buộc bump `SHAPE` CÙNG LÚC.
+ * (Lời dặn ở khối trên đã có sẵn từ đầu mà tôi vẫn quên — nên phải có máy canh.)
+ */
+const SHAPE_FINGERPRINT = '5242585a3d68';
 
 /** Payload cũ hơn cấu trúc hiện tại thì coi như trượt cache. */
 function shapeStale(payload: unknown): boolean {
