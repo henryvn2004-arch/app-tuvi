@@ -41,6 +41,10 @@ const ALLOWED = new Set([
   // không ai mua", mà đó đúng là câu D1 đặt ra. `topup_start` KHÔNG thay được:
   // đo trên prod 552/553 lượt của nó đến từ chính trang nạp, không mang tool.
   'preview_shown', 'unlock_click',
+  // Vòng hiệu chuẩn tool Xác Định Giờ Sinh: người dùng TỰ KHAI giờ sinh đúng để
+  // đối chiếu với kết quả máy đoán. Đây là nguồn ground truth DUY NHẤT của tool
+  // đó — không có nó thì độ chính xác mãi chỉ là con số mô phỏng.
+  'gio_sinh_doi_chieu',
   // R1a — phễu của kênh nhắc hằng ngày: thấy lời mời → bật/từ chối → mở từ
   // thông báo. Ba bậc phải TÁCH nhau vì mỗi bậc hỏng theo một kiểu khác hẳn:
   // không ai thấy lời mời (đặt sai chỗ) · thấy mà không bật (câu chữ) · bật mà

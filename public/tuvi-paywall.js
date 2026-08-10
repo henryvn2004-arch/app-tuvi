@@ -45,6 +45,7 @@ const TuviPaywall = (() => {
     'nguoi-khac': { title: 'Lá Số Người Khác' },
     'day-con': { title: 'Dạy Con Theo Lá Số' },
     'huong-nghiep-tre': { title: 'Hướng Nghiệp Sớm Cho Con' },
+    'gio-sinh': { title: 'Xác Định Giờ Sinh' },
     'nhan-mach': { title: 'Sổ Nhân Mạch' },
   };
 
@@ -74,6 +75,7 @@ const TuviPaywall = (() => {
     'nguoi-khac': 'use_nguoi_khac',
     'day-con': 'use_day_con',
     'huong-nghiep-tre': 'use_huong_nghiep_tre',
+    'gio-sinh': 'use_gio_sinh',
     'nhan-mach': 'use_nhan_mach',
   };
 

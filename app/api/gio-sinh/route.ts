@@ -13,7 +13,7 @@
 //
 // ── VÌ SAO KHẢO SÁT NHIỀU LƯỢT MÀ CHỈ THU TIỀN MỘT LẦN ───────
 // `toolPaymentDenied` là phép KIỂM chứ không phải phép THU: client trả một lần
-// qua `action=deduct` với slug `gio-sinh-<khoá lá số>`, rồi mọi lượt hỏi sau
+// qua `action=deduct` với một slug MANG NGÀY SINH, rồi mọi lượt hỏi sau
 // đều qua cửa bằng `hasSlugAccess` trên CÙNG slug đó. Không có trạng thái phiên
 // nào ở server — client gửi lại trọn bộ câu đã trả lời mỗi lượt.
 
@@ -25,7 +25,6 @@ import { ok, err, options, parseBody } from '@/lib/cors';
 import { toolPaymentDenied } from '@/lib/billing/credits';
 import { withToolOutcome } from '@/lib/ops/tool-outcome';
 import { authUserFromRequest } from '@/lib/api/tool-helpers';
-import { lasoKey } from '@/lib/portraits/cache';
 import type { BirthParams } from '@/lib/contract/v1';
 import {
   buildHypotheses,
@@ -86,7 +85,15 @@ export async function POST(req: NextRequest) {
     if ('error' in auth) return err(auth.error, auth.status);
     const user = auth.user;
 
-    const slug = `${TOOL_ID}-${lasoKey({ ...birth, hourBranch: 0 })}`;
+    /**
+     * ⚠️ Slug do CLIENT sinh (đúng quy ước các tool khác) nhưng PHẢI bắt đầu
+     * bằng ĐÚNG `tool_id`. `hasRecentToolPayment` lọc `slug=like.<tool_id>*`,
+     * nên slug ngắn hơn hoặc lệch tiền tố là lưới an toàn thanh toán CHẾT âm
+     * thầm — đúng lỗi đã làm tool Duyên Nợ trừ tiền hai lần.
+     * Slug mang ngày sinh nên đổi ngày sinh là một lượt trả tiền mới.
+     */
+    const slug = String((body as { slug?: unknown })?.slug || '');
+    if (!slug.startsWith(TOOL_ID)) return err('Slug không hợp lệ.', 400);
     const denied = await toolPaymentDenied(TOOL_ID, user.id, slug);
     if (denied) return err(denied, 402);
 
