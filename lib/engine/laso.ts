@@ -159,6 +159,15 @@ export function computeLaso(birth: BirthParams, namXem?: number): ComputeLasoRes
       namXem: view,
     });
     if (!ls) return { ok: false, error: 'Engine không trả về lá số.' };
+    // `anSaoLaSo` KHÔNG re-expose `chiNam` ở cấp 1 (nó chỉ dùng nội bộ để an
+    // sao). Client vá tay đúng chỗ này — `app-xem-tuoi.html` có dòng
+    // `ls.chiNam = conv.chiNam` kèm chú thích y hệt — còn server thì chưa, nên
+    // bản server thiếu địa chi năm.
+    // 🔑 Hậu quả đo được: `chiRelation(chiNamA, chiNamB)` của `tuong-hop.js`
+    // nhận HAI CHUỖI RỖNG → `dc1 === dc2` → trả "Cùng chi" 8/10 cho MỌI cặp.
+    // Gắn lại ở đây để server và trình duyệt cùng một lá số; thêm trường là
+    // thay đổi CỘNG THÊM, không đụng consumer nào đang chạy.
+    if (!ls.chiNam) ls.chiNam = chiNam;
     return { ok: true, ls };
   } catch (e) {
     return { ok: false, error: e instanceof Error ? e.message : 'Lỗi engine' };

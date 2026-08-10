@@ -193,6 +193,39 @@ export const NGUOI_KHAC_SCHEMA = {
  * Cùng lối `pastLifeRailWrapper`: CHỈ THÊM, không sửa/bớt phần lá số vốn có —
  * rail vẫn giữ nguyên toàn bộ khả năng luận lá số, chỉ đổi GÓC NHÌN.
  */
+/**
+ * Chi tiết KIỂU NGƯỜI cho rail.
+ *
+ * Vì sao cần: bản TRẢ TIỀN dựng đoạn văn từ chính mấy trường này (xem
+ * `buildNguoiKhacPrompt` — `Động lực gốc`, `Đạt chất`, `Hợp/Kỵ môi trường`).
+ * Người dùng ĐỌC đoạn đó rồi hỏi rail *"vì sao anh ấy kỵ môi trường kia?"* —
+ * trước đây rail chỉ có nhãn kiểu + một câu, nên phải luận chay. Đúng họ lỗi
+ * `thapThan` của Bát Tự: engine tính, người dùng đọc, model mù.
+ *
+ * Bảng KIỂU là quy chiếu TỰ ĐẶT của trang, model không suy lại được từ lá số —
+ * nên không gửi là mất hẳn, khác với mấy cung vốn có sẵn trong lá số.
+ */
+function kieuBlock(k: {
+  dongLuc?: string;
+  datChat?: string;
+  kieuDan?: string;
+  moiTruongHop?: string;
+  moiTruongKy?: string;
+  manh?: string;
+  yeu?: string;
+}): string {
+  const row = (nhan: string, v?: string) => (v ? `  ${nhan}: ${v}\n` : '');
+  const s =
+    row('Động lực gốc', k.dongLuc) +
+    row('Nhận ra ngay ở chỗ làm', k.datChat) +
+    row('Khi có quyền thì dẫn người kiểu', k.kieuDan) +
+    row('Hợp môi trường', k.moiTruongHop) +
+    row('Kỵ môi trường', k.moiTruongKy) +
+    row('Mạnh', k.manh) +
+    row('Chỗ hay vấp', k.yeu);
+  return s ? `--- CHI TIẾT KIỂU NGƯỜI (dùng đúng mấy dòng này, đừng tự nghĩ thêm) ---\n${s}` : '';
+}
+
 export function nguoiKhacRailWrapper(p: NguoiKhacProfile, tenRaw: string): string {
   // Tên do người dùng gõ → chỉ đi vào system sau khi bóc hết ký tự có thể dùng
   // để bẻ prompt (xuống dòng, ngoặc nhọn, backtick) và cắt ngắn. Cùng lối phòng
@@ -215,6 +248,7 @@ Lá số ở trên KHÔNG phải của người đang chat. Đó là lá số c�
 - CẤM luận SỨC KHOẺ, BỆNH TẬT, TIỀN RIÊNG, HÔN NHÂN của người này${p.quanHe.id === 'ban-doi' ? ' (riêng chuyện hai người với nhau thì được, ở mức cách cư xử)' : ''}. Người đó không có mặt để đồng ý.
 - CẤM phán giá trị ("người này tệ/khó ưa"). Tính cách chỉ hợp hoặc không hợp bối cảnh.
 - Kiểu người theo khung này: ${p.kieu.ten} — ${p.kieu.motCau}${p.phan.lai && p.kieuPhu ? ` (SÁT RANH GIỚI với kiểu ${p.kieuPhu.ten}, phải nói rõ là pha, đừng ép nhãn)` : ''}.
+${kieuBlock(p.kieu)}
 - CẤM gọi đây là trắc nghiệm/khoa học/đã kiểm định, CẤM đối chiếu DISC/MBTI.
 === HẾT KHỐI NGƯỜI KHÁC ===`;
 }

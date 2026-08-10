@@ -15,6 +15,7 @@
 import { buildTools, TOOLS_INSTRUCTION } from "@/lib/agent/tools";
 import { LASO_AUTHORITY_RULE, daiVanLines, type Laso } from "@/lib/engine/laso";
 import { currentNamXem } from "@/lib/engine/namxem";
+import { tuongHopScores } from "@/lib/engine/tuong-hop";
 import { matchVanHanCombos, formatComboLines, type LayerCung } from "@/lib/agent/vanHanCombos";
 
 interface ChatContext {
@@ -1098,7 +1099,39 @@ function extractCompatContext(compatData: any, toolType: string): string {
     return ctx;
   }
   const { lsA, lsB, nameA, nameB } = compatData;
-  return fmtLs(lsA, nameA || 'Người A') + '\n' + fmtLs(lsB, nameB || 'Người B');
+  const nA = nameA || 'Người A';
+  const nB = nameB || 'Người B';
+  let out = fmtLs(lsA, nA) + '\n' + fmtLs(lsB, nB);
+
+  // BẢNG ĐIỂM 8 CHIỀU — thứ trang vẽ to nhất và là thứ người dùng hỏi về.
+  // Trước đây rail KHÔNG nhận một dòng nào của bảng này (0/8 tiêu chí, không
+  // có tổng), trong khi câu chào của chính rail lại nói "hoà hợp X/100".
+  // Tính lại ở server từ CHÍNH `public/tuong-hop.js` nên không lệch với màn hình.
+  const th = tuongHopScores(lsA, lsB, nA, nB);
+  if (th) {
+    out += `\nBẢNG ĐIỂM TƯƠNG HỢP (engine tính — CHÉP đúng, KHÔNG tự chấm lại):\n`;
+    out += `  TỔNG HOÀ HỢP: ${th.total}/100\n`;
+    // Sắp theo TRỌNG SỐ giảm dần: model cần biết tiêu chí nào kéo tổng điểm,
+    // chứ không phải tiêu chí nào tình cờ đứng trước trong mảng.
+    [...th.items]
+      .sort((x, y) => (y.w || 0) - (x.w || 0))
+      .forEach((it) => {
+        out += `  ${it.label}: ${it.score}/10 (trọng số ${Math.round((it.w || 0) * 100)}%)`;
+        if (it.detail) out += ` — ${it.detail}`;
+        // `a`/`b` mang emoji đèn giao thông cho phần vẽ; bỏ đi để prompt sạch,
+        // giữ lại phần chữ vì đó là chỗ nêu can chi / sao / cung của từng người.
+        const strip = (s?: string) => (s || '').replace(/[🟢🟡🔴✓✗⚠]/g, '').trim();
+        const a = strip(it.a);
+        const b = strip(it.b);
+        if (a || b) out += `\n      ${nA}: ${a || '?'} | ${nB}: ${b || '?'}`;
+        out += '\n';
+      });
+    out +=
+      `  ⚠️ Điểm trên là của ENGINE. Khi luận phải BÁM đúng con số này — ` +
+      `tiêu chí trọng số cao mà điểm thấp mới là chỗ đáng nói, đừng dàn đều 8 mục. ` +
+      `TUYỆT ĐỐI không tự chấm lại hay nêu một con số khác.\n`;
+  }
+  return out;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
