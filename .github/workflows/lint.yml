@@ -59,6 +59,22 @@ jobs:
       - name: Mọi tool Luận Đường có lịch sử hội thoại
         run: npm run check:history
 
+      # Chặn trang shell MỚI chép thiếu khuôn khởi động. Cùng đường tái phát với
+      # check:history nhưng thiếu thứ khác: `app-cong-so` từng thiếu thẻ font
+      # Noto Serif (chữ lặng lẽ rơi về Georgia), `app-gio-sinh` từng thiếu
+      # `auth.js` (người ĐANG ĐĂNG NHẬP bị bắt đăng nhập lại — chặn thẳng đường
+      # trả tiền). `nav.js` ở chế độ data-icons-only return sớm nên KHÔNG chèn
+      # `auth.js` hộ; trang shell phải tự khai.
+      - name: Trang shell nạp đủ khung khởi động
+        run: npm run check:shellboot
+
+      # Chặn gõ nhầm tên hàm trên `window.Auth`. Gõ nhầm KHÔNG ném lỗi — nó trả
+      # undefined và hỏng IM LẶNG. Đã trả giá: `app-gio-sinh` gọi
+      # `Auth.getToken()` (không tồn tại; API thật là `getSession()`) nên header
+      # Authorization rỗng → server 401 SAU KHI client đã trừ Lượng.
+      - name: Lời gọi Auth.* khớp API thật
+        run: npm run check:authapi
+
       # Chặn `animation:` trỏ tới @keyframes KHÔNG TỒN TẠI — trình duyệt không
       # báo gì cả, phần tử vẫn hiện, chỉ là đứng im. Bắt được ngay lượt chạy
       # đầu: banner "Chào mừng! Bạn đã nhận Lượng miễn phí" của `auth.js` mượn
@@ -114,6 +130,14 @@ jobs:
       # cột app-bat-tu.html vẽ dưới mỗi trụ) chưa bao giờ tới model.
       - name: Engine ↔ rail còn khớp trường (Bát Tự)
         run: npm run check:railfields
+
+      # `portrait_cache` khoá theo LÁ SỐ chứ không theo shape: đổi cấu trúc
+      # payload mà quên bump `SHAPE` thì dòng cache cũ được trả nguyên trạng
+      # MÃI MÃI và trang ẩn khối im lặng. Đã cắn HAI lần (#465 `day-con`,
+      # #475 `huong-nghiep-tre` — đo được trên prod một dòng `tuoi=43` vẫn
+      # mang lứa của bản kẹp tuổi cũ). Lời dặn trong mã không đủ; cần máy canh.
+      - name: Vân tay cấu trúc payload ↔ SHAPE cache
+        run: npm run check:cacheshape
 
   typecheck:
     runs-on: ubuntu-latest

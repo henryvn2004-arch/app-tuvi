@@ -23,10 +23,8 @@ import type { BirthParams } from '@/lib/contract/v1';
 import { withToolOutcome } from '@/lib/ops/tool-outcome';
 import { authUserFromRequest, parseLlmJson } from '@/lib/api/tool-helpers';
 import {
+  cacheFor,
   lasoKey,
-  getCachedPortrait,
-  putCachedPortrait,
-  touchCache,
   insertHistoryRow,
   userOwnsLaso,
 } from '@/lib/portraits/cache';
@@ -87,16 +85,19 @@ interface HuongDan {
  */
 const SHAPE = 2;
 
-/** Payload cũ hơn cấu trúc hiện tại thì coi như trượt cache. */
-function shapeStale(payload: unknown): boolean {
-  const v = (payload as { _shape?: unknown } | null)?._shape;
-  return typeof v !== 'number' || v < SHAPE;
-}
+/**
+ * Vân tay CẤU TRÚC hồ sơ engine (`computeDayCon`) — nguồn của `meta()` ở dưới.
+ * `npm run check:cacheshape` canh khớp: đổi/thêm/bớt khoá ⇒ đỏ và in vân tay
+ * mới, buộc bump `SHAPE` CÙNG LÚC. Chính bump 1→2 ở #465 là do quên mà ra.
+ */
+const SHAPE_FINGERPRINT = '4ec3392fed42';
+
+/** Cửa DUY NHẤT vào cache của tool này; `shape` khai một lần tại đây. */
+const CACHE = cacheFor(TOOL_ID, SHAPE);
 
 /** Phần deterministic trả kèm — client dựng được khung ngay cả khi phần chữ mỏng. */
 function meta(p: DayConProfile, ten: string) {
   return {
-    _shape: SHAPE,
     ten,
     moiLo: { id: p.moiLo.id, label: p.moiLo.label, can: p.moiLo.can },
     gioiTinh: p.gioiTinh,
@@ -149,7 +150,6 @@ async function buildReport(
   userId: string,
   key: string,
   coLaSoChaMe: boolean,
-  stale = false,
 ) {
   const prompt = buildDayConPrompt(p, ten);
 
@@ -237,7 +237,7 @@ async function buildReport(
   void railFreeTurnsPerGen().then((n) => railFreeGrant(userId, n)).catch(() => {});
   // Ghi đè CHỈ ở nhánh dựng-lại-vì-shape-cũ. Không có vế này thì dòng hỏng nằm
   // nguyên và mỗi lượt xem lại đốt thêm một lượt model.
-  void putCachedPortrait(TOOL_ID, 'main', key, { payload, row }, userId, stale);
+  CACHE.put('main', key, { payload, row }, userId);
   return ok(payload);
 }
 
@@ -280,16 +280,14 @@ async function runPost(request: NextRequest) {
   const birthParent = validBirth(body.birthParent) ? (body.birthParent as BirthParams) : null;
 
   const key = lasoKey(birth, cacheExtra(moiLo, birthParent));
-  const [cachedRaw, owns] = await Promise.all([
-    getCachedPortrait(TOOL_ID, 'main', key),
+  const [{ cached, stale }, owns] = await Promise.all([
+    CACHE.get('main', key),
     userOwnsLaso(TOOL_ID, auth.user.id, key),
   ]);
-  // Dòng cache mang cấu trúc đã lỗi thời thì DỰNG LẠI (xem SHAPE ở trên) —
+  // Dòng cũ đã bị `CACHE.get` trả về `cached: null` nên tự khắc DỰNG LẠI —
   // nhưng vẫn tính là "đã có" cho `free`, vì người này đã trả tiền cho đúng lá
   // số đó rồi; bắt trả lần nữa để lấy bản sửa lỗi của mình là sai.
-  const stale = Boolean(cachedRaw) && shapeStale(cachedRaw?.payload);
-  const cached = stale ? null : cachedRaw;
-  const free = Boolean(cachedRaw) && owns;
+  const free = Boolean(cached || stale) && owns;
 
   if (!free) {
     // Chốt chặn thanh toán PHÍA SERVER — thiếu bước này thì gọi thẳng endpoint
@@ -299,7 +297,7 @@ async function runPost(request: NextRequest) {
   }
 
   if (cached) {
-    touchCache(TOOL_ID, 'main', key);
+    CACHE.touch('main', key);
     if (!owns && cached.row) {
       insertHistoryRow(TOOL_ID, { ...cached.row, user_id: auth.user.id, laso_key: key });
       void railFreeTurnsPerGen().then((n) => railFreeGrant(auth.user.id, n)).catch(() => {});
@@ -319,7 +317,7 @@ async function runPost(request: NextRequest) {
   const gender = birth.gender === 'nu' ? ('nu' as const) : ('nam' as const);
   const profile = computeDayCon(r.ls, gender, moiLo, lsChaMe);
 
-  const res = await buildReport(profile, ten, auth.user.id, key, Boolean(lsChaMe), stale);
+  const res = await buildReport(profile, ten, auth.user.id, key, Boolean(lsChaMe));
   return refundIfSystemFailure(res, {
     toolId: TOOL_ID,
     userId: auth.user.id,
@@ -363,11 +361,13 @@ async function handleCacheStatus(request: NextRequest, sp: URLSearchParams) {
       }
     : null;
   const key = lasoKey(birth, cacheExtra(resolveMoiLo(sp.get('lo')), parent));
-  const [cached, owns] = await Promise.all([
-    getCachedPortrait(TOOL_ID, 'main', key),
+  const [{ cached, stale }, owns] = await Promise.all([
+    CACHE.get('main', key),
     userOwnsLaso(TOOL_ID, auth.user.id, key),
   ]);
-  return ok({ success: true, cached: Boolean(cached), free: Boolean(cached) && owns });
+  // `cached` = có dòng DÙNG ĐƯỢC (dòng cũ đã bị lọc). `free` = đã trả tiền cho
+  // lá số này, kể cả khi dòng cũ và sắp phải dựng lại.
+  return ok({ success: true, cached: Boolean(cached), free: Boolean(cached || stale) && owns });
 }
 
 export async function OPTIONS() {

@@ -5,7 +5,267 @@
 
 ---
 
-## 🀄 QUÉT MẪU chỉ chứng minh được thứ mẫu CHẠM TỚI (2026-08-10, PR này)
+## 🧹 "2 tool mỏng quá" — CẦU CÓ THẬT, mình dựng SAI HÌNH DẠNG (2026-08-10, PR này)
+
+Henry: *"Ngũ hành nạp âm với Ngũ hành tên, nó mỏng quá, xem xong chả biết làm
+gì… nếu ko tìm dc gì thì consider switch off… rà soát lại còn tool nào mỏng
+quá ko thì switch off bớt, giờ nhiều tools quá."*
+
+### 🔴 Trả lời câu hỏi chính: đối thủ CÓ làm cả hai, và họ làm khác cách mình
+- **Nạp âm:** cầu rất lớn nhưng **KHÔNG ai làm nó thành "tool" có ô nhập**.
+  lichngaytot có bài *"Xem Mệnh Theo Năm Sinh"* phủ trọn **1930–2067**;
+  `menh.com.vn` lấy nguyên MỘT TÊN MIỀN; amlich.net/lichamduong.net là bảng
+  tra 60 hoa giáp. Thứ họ bán không phải con chữ *"Lộ Bàng Thổ"* mà là **ỨNG
+  DỤNG**: hợp màu · hợp hướng · hợp tuổi cưới/làm ăn · số may mắn · chọn ngày.
+- **Ngũ hành tên:** thị trường thật tên là **"chấm điểm tên"** — tudienten.com
+  có *"Chấm điểm tên toàn diện"*, cộng tracuuthansohoc, kiddihub, và có cả bài
+  *"TOP 5 trang chấm điểm tên"* (nhiều tới mức phải xếp hạng). Họ trả **ĐIỂM
+  SỐ + tên gợi ý thay thế**. Bản mình: ngũ hành từng chữ + thanh cân bằng + 1
+  câu sinh/khắc — **0 điểm, 0 gợi ý, 0 lối đi tiếp**.
+
+### 🔑 Chỗ đau nhất: CẢ HAI HỨA HỤT NGAY TRONG META DESCRIPTION CỦA CHÍNH NÓ
+| Tool | Trang tự hứa | Thực tế trả ra |
+|---|---|---|
+| `nap-am` | *"ứng dụng trong phong thủy, đặt tên, chọn màu"* | 4 ô Can · Chi · Can Chi · Nạp Âm |
+| `ngu-hanh-ten` | *"gợi ý chỉnh sửa nếu cần"* | không có gợi ý nào |
+⇒ *"Xem xong chả biết làm gì"* không phải cảm giác — **trang nói trước là sẽ
+chỉ cho biết làm gì rồi không chỉ**. Nên **KHÔNG tắt**: cầu còn lớn hơn phần
+lớn tool đang bật, vấn đề là thiếu ĐOẠN CUỐI chứ không phải thiếu chỗ đứng.
+
+### Đã làm — cả hai sửa trong MODULE DÙNG CHUNG (0 lượt LLM, 0đ, tra bảng thuần)
+- **`nap-am.js` + `ungDung()`/`ungDungHTML()`** — khối *"Hành X dùng vào việc
+  gì"*: màu hợp/kỵ · phương vị · tuổi hợp-kỵ · số Hà Đồ · chất liệu, kèm 4 lối
+  đi tiếp sang `bat-trach` · `tuong-hop` · `kim-lau` · `mau-sac-hop-menh` —
+  **site đã có sẵn đúng mấy tool mà người tra nạp âm muốn dùng tiếp**, nạp âm
+  đúng vai CỬA VÀO.
+  - 🔑 **Câu chặn bắt buộc: phương vị ngũ hành ≠ HƯỚNG NHÀ.** Hướng nhà xét
+    theo cung phi bát trạch. Không nói rõ là tool này mâu thuẫn thẳng với
+    `bat-trach` ngay bên cạnh — hai tool cùng site nói ngược nhau.
+  - Quan hệ ngũ hành khai theo **VAI** (`DUOC_SINH`/`SINH_RA`/`BI_KHAC`/
+    `KHAC_LAI`) chứ không phải một bảng `SINH` đọc hai nghĩa — đúng lớp lỗi đã
+    làm hai dòng `sinh` bị hoán vị ở track Duyên Nợ.
+- **`ngu-hanh-ten.js` + `score()`/`scoreHTML()`** — điểm 0–100 gồm 4 phần: chữ
+  tên chính ↔ mệnh (40) · cân bằng ngũ hành (25) · có chữ bồi mệnh (20) ·
+  không có chữ khắc mệnh (15); verdict 5 mức; hành nên bổ / nên tránh; **8 chữ
+  gợi ý**; rồi dẫn sang **Đặt Tên Con (20 Lượng)** — biến bản free thành đầu
+  phễu của tool trả tiền thay vì ngõ cụt.
+  - ⚠️ **CHƯA chọn mệnh → trả `null`, KHÔNG chấm.** Ba trên bốn phần không
+    tính được; chấm đại là bịa đúng thứ người ta mang đi khoe. Trạng thái đó
+    nói thẳng + link sang `nap-am` để lấy mệnh (nối hai tool lại với nhau).
+  - 🔑 **`GOI_Y` là danh sách CHỌN TAY, cố ý không quét cả DB**: bảng có 848 âm
+    tiết gồm cả `bạo` `cãi` `cấm` `cọp` — quét máy là gợi ý chúng làm tên.
+    Mỗi chữ đã đối chiếu ngược qua `netToHanh(DB[x].n)`.
+  - 🔴 **LUẬT DIỄN ĐẠT in thẳng lên trang**: đây là tên người ta ĐÃ MANG, phần
+    lớn do cha mẹ đặt. Điểm thấp **không được đọc thành "tên xấu"** và không
+    được giục ai đổi tên; phần này chỉ có nghĩa khi đang CHỌN tên mới. Cùng họ
+    với luật *"trục thấp = việc không đòi hỏi, không phải bạn thiếu"*.
+  - **Thang điểm là quy ước TỰ ĐẶT**, khai rõ trên trang — cổ thư nói quan hệ
+    sinh–khắc, không cho con số trên thang 100. Cùng dạng nợ `KIEU_HOC`.
+
+### 🐞 Lỗi thật bắt được khi ĐO trên trình duyệt, không phải khi đọc code
+Trang **shell ẨN form sau khi tra**, nên câu *"chọn mệnh ở ô bên trên"* trỏ vào
+một ô người dùng **không còn nhìn thấy** — đúng loại hứa hụt vòng này đi sửa.
+Nay câu chỉ đường khác nhau theo bề mặt (`shell` → *"Bấm Sửa ở góc trên"*), có
+ca ĐỐI CHỨNG khẳng định ô đó THẬT SỰ bị ẩn.
+
+### 🧹 Rà tool mỏng — 2 cái Henry nêu KHÔNG phải mỏng nhất
+Tắt **6 tool trùng lặp nặng hơn** (`_patches/migration-tat-tool-trung.sql`,
+✅ ĐÃ CHẠY prod — **61 → 54 công cụ**, 18 miễn phí):
+`sao-nam` · `cach-cuc` · `dai-van` · `van-thang` **cùng hỏi một bộ ngày sinh,
+cùng gọi `anSaoLaSo` lập lá số ĐẦY ĐỦ, mỗi trang chỉ hiện một mảnh** ·
+`han-nam` bảng tra thuần trùng hai cái trên · `tu-tru` là bản free mỏng của
+`tu-binh` (50 Lượng).
+- ⚠️ **`an-sao` CỐ Ý GIỮ** — nó là cửa lá số miễn phí DUY NHẤT còn trong danh
+  mục. 🪤 Phát hiện kèm: **`/app/la-so` đã gộp vào `luan-giai` và KHÔNG còn
+  dòng nào trong `tool_pricing`** ⇒ nó đang là **trang mồ côi**, route còn
+  sống nhưng không hiện ở sidebar lẫn `/cong-cu`.
+- **"Switch off" = `enabled=false`, KHÔNG xoá**: trang vẫn trên đĩa, vẫn mở
+  được bằng URL, vẫn trong sitemap — chỉ thôi hiện ở 3 bề mặt danh mục. Bề mặt
+  SEO giữ nguyên, chỉ dọn chỗ chật. Lùi lại bằng một câu SQL.
+
+### Số liệu — và giới hạn của nó, đọc trước khi viện dẫn
+- GSC 28 ngày cả site: **15 click / 788 hiển thị**; **0 trang `/tools/*` lọt
+  top pages** (duy nhất `/tools/hoang-dao.html` có 2 người từ GA4).
+  ⇒ Tắt tool hôm nay gần như **không mất traffic**; cái mất là tiềm năng sau.
+- 🔴 **Lượt dùng KHÔNG đủ mẫu để quyết**: cả 61 tool cộng lại chưa tới 200 lượt
+  mở, mọi tool ≤2 người từng chạy, gần như toàn bản test. Quyết định dựa vào
+  TRÙNG LẶP và CHIỀU SÂU, **không** dựa vào lượt dùng — đừng đọc bảng usage
+  thành *"tool này không ai cần"*.
+
+### Verify
+`tsc` 0 · `lint` 0 lỗi / **73 warning = đúng mốc nền** · `prettier` quét cả cây
+sạch · **16/16 bộ dò** · engine **185 pass** · `node --check`.
+- **Phân bố điểm trên lưới 11.200 ca** (8 họ × 8 đệm × 35 tên × 5 mệnh): TB
+  **68,5** · dải **20–100** · 5 mức verdict trải **8,2–27,3%** — không mức nào
+  nuốt đa số. Thang mà ai cũng 90 thì vô nghĩa, nên đây là phép đo bắt buộc.
+- **61/61 ca trên 4 TRANG THẬT** (shell + standalone của cả hai tool): chiều
+  sinh/khắc đúng cổ pháp (`Hỏa sinh Thổ`, `Mộc khắc Thổ`, **0 ca đảo chiều**) ·
+  có câu chặn phương-vị-≠-hướng-nhà · 4 lối đi tiếp trỏ đúng `/app/*` hay
+  `/tools/*` theo bề mặt · chưa có mệnh → **không hiện điểm nào** · có mệnh →
+  94/100 khớp module · **ĐỐI CHỨNG đổi mệnh sang Mộc → điểm đổi 51**, không
+  phải số chết · 8 chữ gợi ý **0 chữ vô duyên** · 390px không tràn · 0 lỗi JS.
+
+### CÒN LẠI
+- **Chưa rà 3 nhóm bị chẻ nhỏ**: 10 tool Làm Đẹp AI (khác hẳn domain mệnh lý,
+  cả 10 đều 0 lượt mở) · 6 tool Xem Tướng · 4 tool Phong Thủy. Chúng **không
+  mỏng** — đây là câu hỏi ĐỊNH VỊ, cố ý tách khỏi đợt dọn này.
+- `/app/la-so` mồ côi (xem trên) — hoặc thêm dòng `tool_pricing`, hoặc bỏ hẳn
+  route. Để nguyên thì nó là một trang sống mà không ai tới được từ trong site.
+- Bảng gợi ý tên và các bảng ứng dụng ngũ hành **là data tự viết, chưa ai
+  review** — cùng dạng nợ với 384 hào từ. Sửa là sửa data thuần.
+
+---
+
+## 💾 "Chạy lại vẫn ra lá số cũ" — TÔI QUÊN BUMP `SHAPE` ở #475 (2026-08-10, PR trước)
+
+Henry: *"Tao chạy lại nó còn cache nên vẫn hiện ra lá số cũ đó. Có cách nào clear
+cache ko?"*
+
+### 🔴 Không phải hỏi vặt — đo ra đúng một dòng cache hỏng, và lỗi là của tôi
+Chốt tuổi của #475 nằm **TRƯỚC** lượt đọc cache nên lá số 43 tuổi không thể lấy
+phải bản cũ qua đường trả tiền; SW thì network-first cho HTML. Nên đi soi thẳng
+DB, và ra ngay:
+
+| `portrait_cache` (huong-nghiep-tre) | |
+|---|---|
+| `tuoi` | **43** |
+| `lop` | **`lon`** ← đúng cái KẸP TUỔI mà #475 đi vá |
+| `laTreEm` | **không tồn tại** (ghi trước lượt vá) |
+| `_shape` | **1** ⇒ `shapeStale()` coi là còn mới ⇒ **không dựng lại** |
+
+🔑 **#475 CÓ đổi cấu trúc payload** (thêm `laTreEm`, thêm `xungHo` từng lứa,
+thêm hẳn lứa `vaodoi` + 9 khối hoạt động) — mà luật ghi ngay trong khối chú
+thích trên `SHAPE` nói rõ *"Đổi chữ: không bump. **Đổi cấu trúc: bắt buộc
+bump**"*. Tôi đọc khối đó rồi vẫn quên. Đây là lần thứ HAI của cùng lớp lỗi
+(`day-con` #465 đã cắn y hệt: 4 khối im lặng biến mất trên prod).
+
+### Đã làm
+- **`SHAPE` 1 → 2** + ghi lịch sử bump ngay tại chỗ.
+- **Xoá dòng cache hỏng trên prod.** ⚠️ Chỉ xoá ở `portrait_cache`; **quyền sở
+  hữu nằm ở bảng `huong_nghiep_tre_reports`, KHÔNG đụng** ⇒ người đã trả tiền
+  không bị tính lại. Verify sau khi xoá: cache 0 dòng, quyền sở hữu còn 1.
+- **Câu lệnh xoá cache một lá số** (khi cần bản thật sự mới):
+  ```sql
+  delete from portrait_cache where tool_id = '<tool>' and laso_key = '<khoá>';
+  ```
+
+### 🧷 `scripts/check-cache-shape.mjs` (bộ dò thứ 14) — lời dặn KHÔNG đủ
+Lớp lỗi này hỏng IM LẶNG và đã cắn hai lần **dù chú thích cảnh báo nằm ngay trên
+dòng phải sửa**. ⇒ phải có máy canh: băm danh sách KHOÁ (2 tầng) của payload
+engine rồi so với `SHAPE_FINGERPRINT` khai cạnh `SHAPE`. Đổi cấu trúc ⇒ băm đổi
+⇒ đỏ kèm vân tay mới, buộc bump `SHAPE` CÙNG LÚC.
+- **Băm theo KHOÁ, cố ý không băm giá trị**: sửa CHỮ thì không phải bump (dòng
+  cache cũ trả chữ cũ — khó chịu, không vỡ), chỉ đổi/thêm/bớt KHOÁ mới vỡ.
+- 🪤 **Ca quyết định — đặt lại engine bản TRƯỚC #475 thì bộ dò ĐỎ ĐÚNG**
+  (52 khoá vs 54, vân tay `ed25a825f494` vs `5242585a3d68`) ⇒ nó bắt được chính
+  lỗi vừa xảy ra, không phải một cái lưới cho có.
+- Red-team thêm 2 ca (engine thêm khoá · gỡ khai vân tay) đỏ đúng, đối chứng
+  khôi phục xanh, 0 file rác.
+- ⚠️ **Phạm vi: tầng ENGINE**, không phủ chỗ route tự ghép thêm khoá. Cả hai lần
+  cắn thật đều là đổi ở engine nên nó phủ đúng chỗ đau — nhưng đừng đọc rộng hơn.
+
+### 🪤 Ba bẫy harness đã vấp khi dựng bộ dò (đều là lỗi của TÔI)
+1. **Alias `@/` không tồn tại ngoài bản dựng Next** — phải đổi sang đường dẫn
+   tương đối theo ĐỘ SÂU từng file.
+2. **Đổi alias phải chạy TRƯỚC bước thêm đuôi `.js`** — đảo thứ tự thì đường dẫn
+   vừa sinh ra không có đuôi, node ném `ERR_MODULE_NOT_FOUND`, và thông điệp trỏ
+   vào *engine* chứ không trỏ vào *harness*.
+3. **`.json` bị nối nhầm `.js`**, rồi khi sửa xong lại cần `with { type: 'json' }`
+   (tsc không phát ra import attribute).
+
+### Verify
+`tsc` 0 · `lint` 73 warning = đúng mốc nền `main` · `prettier` sạch ·
+**14/14 bộ dò** · engine **185 pass** · `node --check`.
+
+### ✅ Vòng sau — phủ nốt 5 tool CHƯA có `SHAPE` (Henry: *"phải làm sao tiếp?"*)
+Đo trước khi chọn hướng: **11 dòng cache / 2 lượt hit** trên cả 5 tool, toàn bản
+test. ⇒ cache **chưa gánh gì**, nên cắm sẵn `SHAPE` cho cả 5 là đụng đường trả
+tiền của 5 tool đang bán để đổi lấy một lợi ích **chưa tới hạn**.
+
+Chọn cách rẻ hơn mà chặn đúng chỗ: **bộ dò chốt vân tay cho CẢ 7 tool**, tool
+chưa có cơ chế thì báo *"cắm `SHAPE` TRƯỚC khi đổi payload"* kèm đủ 3 bước
+(`shapeStale` · cờ `overwrite` · ⛔ không nhét vào `lasoKey`). Tức là ép đúng
+**thời điểm duy nhất còn kịp**, thay vì trông vào trí nhớ hay vào một dòng ghi
+trong CÒN LẠI.
+
+| tool | khoá | vân tay | SHAPE |
+|---|---:|---|---|
+| `huong-nghiep-tre` | 54 | `5242585a3d68` | 2 |
+| `day-con` | 72 | `4ec3392fed42` | 2 |
+| `nguoi-khac` | 71 | `5ca3e50e1109` | chưa có |
+| `chan-dung-tien-kiep` | 59 | `f256a213cbd1` | chưa có |
+| `duyen-no-tien-kiep` | 44 | `7e1e42a5757a` | chưa có |
+| `chan-dung-vo-chong` | 36 | `8cfee3e40522` | chưa có |
+| `nhan-mach` | 26 | `cc7d29bafb5f` | chưa có |
+
+- **Vân tay ổn định 3/3 lượt** — băm theo KHOÁ nên giá trị ngẫu nhiên
+  (`pickMarriageAgeAnchor`…) không làm bộ dò flaky.
+- Red-team nhánh mới: đổi payload `nhan-mach` → đỏ đúng, và in ra **câu hướng
+  dẫn của nhánh "chưa có SHAPE"** chứ không phải câu bump.
+
+### ✅ Vòng cuối — `shape` thành LỖI BIÊN DỊCH (Henry: *"Ok. Đồng ý. Làm đi"*)
+Bộ dò chỉ chặn được lúc CI chạy. Nay đổi chỗ chốt: **`cacheFor(toolId, shape)`
+là cửa DUY NHẤT vào `portrait_cache`**, `shape` là tham số BẮT BUỘC, và 4 hàm
+cũ (`getCachedPortrait` · `putCachedPortrait` · `touchCache` ·
+`lookupPortraitCache`) **bị gỡ khỏi export** ⇒ không còn đường vòng.
+
+**Ba quyết định đáng nhớ:**
+1. 🔑 **`get` trả `cached: null` cho dòng CŨ.** Hai kiểu hỏng không ngang nhau:
+   phục vụ dòng cũ = trang ẩn khối im lặng, người dùng đọc bản thiếu; còn dựng
+   lại mà quên ghi đè = tốn thêm một lượt model, nội dung VẪN ĐÚNG. Nên cái
+   nguy hiểm bị chặn ở tầng thư viện; route bỏ qua `stale` thì chỉ phí tiền.
+2. **`put` TỰ quyết ghi đè** (đọc dòng cũ rồi mới ghi) thay vì nhận cờ
+   `overwrite`. Cờ đó phải luồn qua chữ ký `buildReport`/`handleStory`/
+   `handleImage` ở 7 tool = 7 chỗ để quên. Đổi lại đúng một lượt SELECT, đứng
+   sau một lượt gen vốn ~1.100đ.
+3. **Dòng không có `_shape` đọc là 1**, không coi là hỏng: payload của chúng
+   CHÍNH LÀ phiên bản 1. Coi là hỏng thì lượt bật cơ chế đốt lại sạch cache
+   đang đúng để đổi lấy con số 0.
+
+`_shape` nay do thư viện đóng dấu — gỡ được 2 bản `shapeStale()` chép tay và 2
+chỗ `_shape: SHAPE` gán tay.
+
+### Verify vòng cuối
+`tsc` 0 · `lint` 73 = mốc nền · `prettier` sạch · **14/14 bộ dò** · engine
+**185 pass** · **`next build` 63/63 trang** (stub PostgREST).
+- **13/13 bất biến trên MODULE THẬT** (stub `fetch`, đọc thẳng header `Prefer`):
+  chưa có dòng → `ignore-duplicates` + tự đóng dấu shape · dòng còn mới → **KHÔNG
+  ghi đè** (giữ luật một-lá-số-một-kết-quả) · dòng cũ → **không phục vụ** +
+  `merge-duplicates` + đóng dấu shape mới · dòng thiếu `_shape` → shape 1 dùng
+  được / shape 2 dựng lại · **`lookup.free` VẪN true khi dòng cũ** (không thu
+  tiền lần hai của chính người đã trả).
+- **Chứng minh "không thể quên"**: `cacheFor('day-con')` → `TS2554: Expected 2
+  arguments, but got 1`; `import { getCachedPortrait }` → `TS2724`.
+- 🪤 **Bẫy `tsc` KHÔNG bắt được, tự soi ra**: 5 nhánh `cache-status` dùng kết
+  quả `get` như boolean — object mới LUÔN truthy ⇒ chúng trả `cached: true` cho
+  MỌI lá số và `requireCreditsCached()` phía client sẽ bỏ luôn bước trả tiền.
+  Kiểu hồi quy tệ nhất có thể (phát không hàng), mà trình biên dịch im. ⇒ đổi
+  kiểu trả về là phải RÀ TỪNG chỗ dùng, đừng dừng ở "tsc 0 lỗi".
+
+### 🪤 Ba bẫy script khi di trú (đều là lỗi của TÔI)
+1. `re.sub(r"^(import \{\n)", ..., count=1)` chèn `cacheFor` vào import **đầu
+   tiên của file** chứ không phải import của cache — mỗi file một chỗ khác nhau.
+2. Sửa lại bằng `re.search(r"import \{\n((?:.*\n)*?)\} from '…cache';")` thì
+   lazy-match **nhảy qua nhiều khối import** và gộp chúng làm một. ⇒ với nhiều
+   khối cùng dạng thì phải **bám DÒNG**: tìm dòng đóng rồi lùi về dòng mở.
+3. Khối `SHAPE` chèn theo vị trí vân tay nên rơi **trước `const TOOL_ID`** →
+   `TS2448`. Phải neo vào chính dòng khai `TOOL_ID`.
+🔑 Cả ba đều rẻ vì đã commit sạch trước đó: `git checkout HEAD -- <7 route>` trả
+lại nguyên trạng mà không mất bản vá đang dở ở `cache.ts`.
+
+### CÒN LẠI
+- Bộ dò chốt lá số mẫu CỐ ĐỊNH. Đổi lá số mẫu là đổi vân tay — đừng sửa nó chỉ
+  vì thấy đỏ.
+- Phủ **tầng engine**, không phủ chỗ route tự ghép thêm khoá.
+- 5 tool vừa cắm đang ở **`SHAPE = 1`** và 11 dòng cache cũ của chúng **không bị
+  dựng lại** (thiếu `_shape` ⇒ đọc là 1). Đúng ý đồ; lượt đổi payload đầu tiên
+  mới bump lên 2.
+- `put` nay tốn thêm một lượt SELECT mỗi lần ghi. Không đo được ảnh hưởng vì
+  cache gần rỗng — nếu sau này ghi nhiều thì đó là chỗ đầu tiên nên nhìn.
+
+---
+
+## 🀄 QUÉT MẪU chỉ chứng minh được thứ mẫu CHẠM TỚI (2026-08-10, PR trước)
 
 Job `next-build` vừa dựng xong khiến tôi mở PR Dependabot **#479** ra xem — nó
 đang **đỏ `lint`**, và lần theo thì lộ ra một họ lỗi rộng hơn hẳn lượt bump.
