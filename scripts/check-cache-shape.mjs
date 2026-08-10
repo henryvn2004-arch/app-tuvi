@@ -45,10 +45,12 @@ const LON_N = { day: 3, month: 6, year: 1998, hourBranch: 1, gender: 'nam', isLu
 const LON_U = { day: 22, month: 12, year: 1990, hourBranch: 7, gender: 'nu', isLunar: false };
 
 /**
- * `coShape: false` = tool CHƯA cắm cơ chế `SHAPE`. Vẫn chốt vân tay: đổi payload
- * ⇒ đỏ, và câu hướng dẫn bảo cắm cơ chế TRƯỚC khi đổi — đó đúng là thời điểm
- * duy nhất còn kịp. Cắm sẵn `SHAPE` cho cả 5 tool ngay bây giờ thì phải đụng
- * đường trả tiền của chúng để đổi lấy một lợi ích chưa tới hạn.
+ * CẢ 7 tool nay đều khai `SHAPE`: `cacheFor(toolId, shape)` là cửa DUY NHẤT vào
+ * `portrait_cache` và `shape` là tham số BẮT BUỘC, nên không tool nào dùng được
+ * cache mà chưa khai — quên là lỗi biên dịch, không phải lỗi im lặng.
+ *
+ * Nhánh "chưa có SHAPE" giữ lại cho tool tương lai lỡ truyền thẳng
+ * `cacheFor(TOOL_ID, 1)` mà không đặt hằng số riêng để bump.
  */
 const TOOLS = [
   {
@@ -70,14 +72,14 @@ const TOOLS = [
     id: 'nguoi-khac',
     route: 'app/api/nguoi-khac/route.ts',
     mod: 'lib/engine/nguoi-khac.js',
-    coShape: false,
+    coShape: true,
     goi: `m.computeNguoiKhac(ls(${JSON.stringify(LON_N)}), 'nam', 'sep', null, 2026)`,
   },
   {
     id: 'nhan-mach',
     route: 'app/api/nhan-mach/route.ts',
     mod: 'lib/engine/nhan-mach.js',
-    coShape: false,
+    coShape: true,
     goi:
       `m.computeNhanMach([` +
       `{ten:'A',vai:'sep',ls:ls(${JSON.stringify(LON_N)}),gioiTinh:'nam'},` +
@@ -88,21 +90,21 @@ const TOOLS = [
     id: 'duyen-no-tien-kiep',
     route: 'app/api/duyen-no-tien-kiep/route.ts',
     mod: 'lib/engine/past-life-bond.js',
-    coShape: false,
+    coShape: true,
     goi: `m.computePastLifeBond(ls(${JSON.stringify(LON_N)}), 'nam', ls(${JSON.stringify(LON_U)}), 'nu')`,
   },
   {
     id: 'chan-dung-tien-kiep',
     route: 'app/api/chan-dung-tien-kiep/route.ts',
     mod: 'lib/engine/past-life.js',
-    coShape: false,
+    coShape: true,
     goi: `m.computePastLife(ls(${JSON.stringify(LON_N)}), 'nam')`,
   },
   {
     id: 'chan-dung-vo-chong',
     route: 'app/api/chan-dung-vo-chong/route.ts',
     mod: 'lib/engine/portrait.js',
-    coShape: false,
+    coShape: true,
     goi: `m.computeSpouseMorphology(ls(${JSON.stringify(LON_N)}), 'nam')`,
   },
 ];
