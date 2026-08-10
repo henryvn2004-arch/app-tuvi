@@ -5,6 +5,64 @@
 
 ---
 
+## 🀄 Lục Nhâm CŨNG liệt kê được từ vựng — và lộ 3 chỗ rò (2026-08-10, PR này)
+
+Henry: *"check xanh hết thì merge đi, xong làm tiếp"*. #479 bump **`mingyu-core`
+lên 0.1.25** (không phải 0.1.24 như lượt A/B ở #481) nên đo lại trước khi gộp.
+
+### Bản bump thì SẠCH, nhưng đi đo lại thì lộ nợ CÓ SẴN
+`check:terms` xanh trên 0.1.25, quét rộng thêm **4.392 khóa Lục Nhâm + 4.392 bàn
+Kỳ Môn: 0 chữ Hán lọt** ⇒ bộ tách ghép của #481 gánh được bản mới.
+- 🔑 **Nhưng CÒN LẠI ghi "Lục Nhâm chưa có đường liệt kê từ vựng" là SAI** — nó
+  có, chỉ là nằm ở đường nội bộ: `dist/…/liuren/helpers/transmission.js` khai
+  `REGISTERED_GUA_TI_RULES` (13 khóa thể tam truyền) và **export CON SỐ**
+  `REGISTERED_LIUREN_GUA_TI_COUNT`; `lessons.js` khai 10 pháp cửu tông môn.
+  Tôi kết luận "không có" mà chưa mở gói ra đọc — đúng lớp lỗi *"tra RAG trước
+  khi nói là thiếu nguồn"* đã ghi ở track danh xưng.
+
+### 🔴 Ba chỗ rò, cả ba lọt qua 4.392 khóa mẫu
+| Chuỗi | Giao diện hiện | Vì sao mẫu không bắt |
+|---|---|---|
+| `铸印卦` | **"铸 Ấn 卦"** | khóa thể hiếm, không lá nào trong lưới sinh ra |
+| `遥克` đứng một mình | "遥 克" | bảng chỉ có dạng GHÉP `遥克比用`/`遥克涉害` |
+| `昴星` đứng một mình | "昴 Tinh" | như trên |
+
+Đúng lớp lỗi `九丑` → *"Cửu 丑"* của #481, và lặp lại đúng bài học: **nới lưới
+mẫu không cứu được, phải đọc chính danh sách của nguồn.**
+
+### 🧷 Mục `tuvung-luc-nham` — chốt bằng CON SỐ NGUỒN KHAI
+Nguồn không export danh sách tên, chỉ export số lượng ⇒ rút tên từ khối luật
+rồi **đối chiếu số rút được với `REGISTERED_LIUREN_GUA_TI_COUNT`**. Bố cục đổi ⇒
+hai số lệch ⇒ đỏ kèm hướng dẫn, thay vì lặng lẽ kiểm một danh sách cụt.
+- 🪤 **Bộ dò bản đầu KÊU OAN**: tôi suy tên pháp bằng cách chắp đuôi `法` vào mọi
+  khóa thể ⇒ đẻ ra `蒿矢法`/`递传法`, những thứ nguồn không hề sinh (`蒿矢` là
+  biến thể CỦA `遥克法`). Phải rút thẳng 10 tên `X法` từ `lessons.js`. **Kêu oan
+  là con đường ngắn nhất tới chỗ bị tắt đi.**
+- ✅ **Kỳ Môn thì lành THEO CẤU TRÚC, không cần mục riêng**: tag của nó là chuỗi
+  GHÉP (`星伏吟`, `符使同宫`, `三奇游六仪`) nhưng đọc theo TỪNG CHỮ nên ghép kiểu
+  gì cũng ra (*Tinh Phục Ngâm*, *Phù Sứ Đồng Cung*). Rủi ro còn lại chỉ là một
+  CHỮ mới — lượt quét 4.392 bàn phủ đúng chỗ đó. Đừng thêm mục cho có.
+
+### Verify
+`tsc` 0 · `lint` **73 warning = đúng mốc nền** · `prettier` sạch · **14/14 bộ
+dò** · engine **185 pass** · quét rộng 4.392 + 4.392 trên 0.1.25 sạch.
+- **5/5 ca red-team đỏ đúng** (gỡ `铸印卦` · gỡ `遥克`+`昴星` · nguồn đổi tên khối
+  luật → nhánh ngưỡng · nguồn đổi CÁCH KHAI tên → **nhánh lệch số**, in đúng
+  *"rút được 12 nhưng nguồn khai 13"* · gỡ một pháp khỏi bảng đọc), đối chứng
+  khôi phục **xanh**, 0 file rác.
+- 🪤 **Ca 5 lượt đầu ĐỖ GIẢ vì assert của TÔI sai**: đếm chuỗi `昴星法` trong khi
+  khoá bảng là `昴星` ⇒ `grep -c` trả 0 trước và sau, "0" trông như đột biến đã
+  ăn. Đúng bài học *"mọi lượt thay bằng script phải assert số lượt khớp"* — mà
+  assert phải nhắm đúng chuỗi CÓ THẬT, không thì chính nó đỗ giả.
+
+### CÒN LẠI
+- Mục mới phủ **khóa thể + pháp**. Thần sát Lục Nhâm (`THAN_SAT`) vẫn chỉ quét
+  mẫu — chưa tìm được đường liệt kê cho nhóm đó.
+- Danh sách 20 nhãn khóa thể đứng một mình là **tập ĐÓNG của cổ pháp** khai
+  thẳng trong bộ dò; nó không nở theo lượt bump nên không cần chốt số.
+
+---
+
 ## 🧷 Máy canh cho nhóm `wrap` — và nó lòi ra 13 trường + 1 lỗi #475 sót (2026-08-10, PR này)
 
 Henry: *"ok làm tiếp đi"* — mục CÒN LẠI tao tự nêu ở lượt trước: *"`check:railfields`
@@ -437,10 +495,11 @@ dò** · engine **185 pass**.
    phục bằng `cp` — đừng dùng `git checkout` khi file đang mang việc dở.
 
 ### CÒN LẠI
-- Kỳ Môn và Lục Nhâm **chưa có đường liệt kê từ vựng** như Bát Tự/Hoàng Lịch nên
-  vẫn chỉ quét mẫu. Chúng sạch trên 4.392 mẫu mỗi tool, nhưng đó CHÍNH LÀ mức
-  bảo đảm mà Bát Tự từng có trước khi lộ 10 tên. Tìm được bảng nguồn thì nên mở.
-- **#479 vẫn cần chạy lại CI** — nó đỏ trên merge-ref cũ; bản vá này ở `main`.
+- ~~Kỳ Môn và Lục Nhâm chưa có đường liệt kê từ vựng~~ → **ĐÍNH CHÍNH: Lục Nhâm
+  CÓ**, và mở ra thì bắt được 3 chỗ rò (xem mục đầu file). Kỳ Môn thì lành theo
+  cấu trúc (phiên từng chữ) nên quét mẫu là đúng mức cần cho nó.
+- ~~**#479 cần chạy lại CI**~~ → đã gộp base, CI xanh, và bản bump nay lên
+  **0.1.25** đã đo lại (xem mục đầu file).
 
 ---
 
