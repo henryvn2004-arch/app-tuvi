@@ -46,28 +46,34 @@ import { authUserFromRequest, parseLlmJson } from '@/lib/api/tool-helpers';
 import { withToolOutcome } from '@/lib/ops/tool-outcome';
 import { normalizeBondGroup, type BondGroup } from '@/lib/portraits/bond-key';
 import {
-  putCachedPortrait,
-  touchCache,
+  cacheFor,
   insertHistoryRow,
-  getCachedPortrait,
   userOwnsLaso,
   type PortraitPhase,
 } from '@/lib/portraits/cache';
 
-/**
- * 🔴 Tool này CHƯA cắm cơ chế `SHAPE` — `portrait_cache` khoá theo LÁ SỐ nên
- * đổi cấu trúc payload là dòng cache cũ được trả nguyên trạng MÃI MÃI, trang ẩn
- * khối im lặng. Đã cắn thật hai lần ở tool khác (#465 `day-con`, #475
- * `huong-nghiep-tre`).
- *
- * Vân tay dưới đây do `npm run check:cacheshape` canh: đổi payload ⇒ CI đỏ kèm
- * hướng dẫn cắm cơ chế. Chưa cắm sẵn vì payload tool này chưa đổi lần nào, mà
- * cắm là phải đụng đường trả tiền — nhưng ĐỤNG VÀO PAYLOAD THÌ PHẢI CẮM TRƯỚC.
- */
-const SHAPE_FINGERPRINT = '7e1e42a5757a';
 
 
 const TOOL_ID = 'duyen-no-tien-kiep';
+
+/**
+ * 🔴 PHIÊN BẢN CẤU TRÚC payload. BUMP mỗi khi thêm/đổi/bớt khoá mà TRANG cần để
+ * dựng đủ màn hình. Đổi CHỮ thì không bump (dòng cache cũ trả chữ cũ — khó
+ * chịu, không vỡ); đổi KHOÁ mà quên bump thì trang ẩn khối IM LẶNG.
+ *
+ * Mở màn ở 1: payload hiện tại CHÍNH LÀ phiên bản 1, và dòng cache ghi trước
+ * lượt cắm cơ chế (không có `_shape`) được đọc là 1 nên KHÔNG bị dựng lại oan.
+ *
+ * ⚠️ Cố ý KHÔNG nhét vào `lasoKey`: đổi khoá là mồ côi cả cache LẪN
+ * `userOwnsLaso` ⇒ người đã trả tiền bị tính lại.
+ */
+const SHAPE = 1;
+
+/** Vân tay CẤU TRÚC — `npm run check:cacheshape` canh khớp với `SHAPE` ở trên. */
+const SHAPE_FINGERPRINT = '7e1e42a5757a';
+
+/** Cửa DUY NHẤT vào cache của tool này; `shape` khai một lần tại đây. */
+const CACHE = cacheFor(TOOL_ID, SHAPE);
 
 const SUPABASE_URL = process.env.SUPABASE_URL!;
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY!;
@@ -304,7 +310,7 @@ async function handleStory(grp: BondGroup, userId: string) {
     grp,
   );
   // Pha `story` KHÔNG có dòng lịch sử riêng (chỉ pha `image` ghi) → `row: null`.
-  void putCachedPortrait(TOOL_ID, 'story', grp.key, { payload, row: null }, userId);
+  CACHE.put('story', grp.key, { payload, row: null }, userId);
   return ok(payload);
 }
 
@@ -426,7 +432,7 @@ async function handleImage(grp: BondGroup, userId: string) {
   void railFreeTurnsPerGen().then((k) => railFreeGrant(userId, k)).catch(() => {});
 
   const payload = withLaso({ success: true, imageUrl, ...bondMeta(group) }, grp);
-  void putCachedPortrait(TOOL_ID, 'image', grp.key, { payload, row: historyRow }, userId);
+  CACHE.put('image', grp.key, { payload, row: historyRow }, userId);
   return ok(payload);
 }
 
@@ -473,12 +479,15 @@ async function handleCacheStatus(request: NextRequest, sp: URLSearchParams) {
 
   const { key } = pairFromQuery(sp);
   const [story, image, owns] = await Promise.all([
-    getCachedPortrait(TOOL_ID, 'story', key),
-    getCachedPortrait(TOOL_ID, 'image', key),
+    CACHE.get('story', key),
+    CACHE.get('image', key),
     userOwnsLaso(TOOL_ID, auth.user.id, key),
   ]);
-  const cached = Boolean(story) && Boolean(image);
-  return ok({ success: true, cached, free: cached && owns });
+  // ⚠️ `story`/`image` là OBJECT `{cached, stale}` — đọc thẳng chúng như boolean
+  // thì lúc nào cũng "có cache" và client bỏ luôn bước trả tiền.
+  const cached = Boolean(story.cached) && Boolean(image.cached);
+  const coDong = (story.cached || story.stale) && (image.cached || image.stale);
+  return ok({ success: true, cached, free: Boolean(coDong) && owns });
 }
 
 // ── Routes ──────────────────────────────────────────────────────────────
@@ -521,11 +530,13 @@ async function runPost(request: NextRequest) {
   // Tra cache RIÊNG từng pha — hai pha chạy song song, lượt gốc có thể hỏng
   // giữa chừng và chỉ một pha kịp vào cache; coi cả hai là một khối thì nửa còn
   // thiếu được phát miễn phí.
-  const [cached, owns] = await Promise.all([
-    getCachedPortrait(TOOL_ID, phase, pair.key),
+  const [{ cached, stale }, owns] = await Promise.all([
+    CACHE.get(phase, pair.key),
     userOwnsLaso(TOOL_ID, auth.user.id, pair.key),
   ]);
-  const free = Boolean(cached) && owns;
+  // `free` xét cả dòng CŨ: đã trả tiền cho đúng cặp lá số đó rồi. `cached` thì
+  // `CACHE.get` đã lọc — dòng cũ không bao giờ được phục vụ.
+  const free = Boolean(cached || stale) && owns;
 
   if (!free) {
     // Chốt chặn thanh toán PHÍA SERVER — không có bước này thì gọi thẳng
@@ -535,7 +546,7 @@ async function runPost(request: NextRequest) {
   }
 
   if (cached) {
-    touchCache(TOOL_ID, phase, pair.key);
+    CACHE.touch(phase, pair.key);
     if (phase === 'image' && !owns && cached.row) {
       insertHistoryRow(TOOL_ID, { ...cached.row, user_id: auth.user.id, laso_key: pair.key });
       void railFreeTurnsPerGen().then((n) => railFreeGrant(auth.user.id, n)).catch(() => {});

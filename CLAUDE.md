@@ -92,17 +92,65 @@ trong CÒN LẠI.
 - Red-team nhánh mới: đổi payload `nhan-mach` → đỏ đúng, và in ra **câu hướng
   dẫn của nhánh "chưa có SHAPE"** chứ không phải câu bump.
 
+### ✅ Vòng cuối — `shape` thành LỖI BIÊN DỊCH (Henry: *"Ok. Đồng ý. Làm đi"*)
+Bộ dò chỉ chặn được lúc CI chạy. Nay đổi chỗ chốt: **`cacheFor(toolId, shape)`
+là cửa DUY NHẤT vào `portrait_cache`**, `shape` là tham số BẮT BUỘC, và 4 hàm
+cũ (`getCachedPortrait` · `putCachedPortrait` · `touchCache` ·
+`lookupPortraitCache`) **bị gỡ khỏi export** ⇒ không còn đường vòng.
+
+**Ba quyết định đáng nhớ:**
+1. 🔑 **`get` trả `cached: null` cho dòng CŨ.** Hai kiểu hỏng không ngang nhau:
+   phục vụ dòng cũ = trang ẩn khối im lặng, người dùng đọc bản thiếu; còn dựng
+   lại mà quên ghi đè = tốn thêm một lượt model, nội dung VẪN ĐÚNG. Nên cái
+   nguy hiểm bị chặn ở tầng thư viện; route bỏ qua `stale` thì chỉ phí tiền.
+2. **`put` TỰ quyết ghi đè** (đọc dòng cũ rồi mới ghi) thay vì nhận cờ
+   `overwrite`. Cờ đó phải luồn qua chữ ký `buildReport`/`handleStory`/
+   `handleImage` ở 7 tool = 7 chỗ để quên. Đổi lại đúng một lượt SELECT, đứng
+   sau một lượt gen vốn ~1.100đ.
+3. **Dòng không có `_shape` đọc là 1**, không coi là hỏng: payload của chúng
+   CHÍNH LÀ phiên bản 1. Coi là hỏng thì lượt bật cơ chế đốt lại sạch cache
+   đang đúng để đổi lấy con số 0.
+
+`_shape` nay do thư viện đóng dấu — gỡ được 2 bản `shapeStale()` chép tay và 2
+chỗ `_shape: SHAPE` gán tay.
+
+### Verify vòng cuối
+`tsc` 0 · `lint` 73 = mốc nền · `prettier` sạch · **14/14 bộ dò** · engine
+**185 pass** · **`next build` 63/63 trang** (stub PostgREST).
+- **13/13 bất biến trên MODULE THẬT** (stub `fetch`, đọc thẳng header `Prefer`):
+  chưa có dòng → `ignore-duplicates` + tự đóng dấu shape · dòng còn mới → **KHÔNG
+  ghi đè** (giữ luật một-lá-số-một-kết-quả) · dòng cũ → **không phục vụ** +
+  `merge-duplicates` + đóng dấu shape mới · dòng thiếu `_shape` → shape 1 dùng
+  được / shape 2 dựng lại · **`lookup.free` VẪN true khi dòng cũ** (không thu
+  tiền lần hai của chính người đã trả).
+- **Chứng minh "không thể quên"**: `cacheFor('day-con')` → `TS2554: Expected 2
+  arguments, but got 1`; `import { getCachedPortrait }` → `TS2724`.
+- 🪤 **Bẫy `tsc` KHÔNG bắt được, tự soi ra**: 5 nhánh `cache-status` dùng kết
+  quả `get` như boolean — object mới LUÔN truthy ⇒ chúng trả `cached: true` cho
+  MỌI lá số và `requireCreditsCached()` phía client sẽ bỏ luôn bước trả tiền.
+  Kiểu hồi quy tệ nhất có thể (phát không hàng), mà trình biên dịch im. ⇒ đổi
+  kiểu trả về là phải RÀ TỪNG chỗ dùng, đừng dừng ở "tsc 0 lỗi".
+
+### 🪤 Ba bẫy script khi di trú (đều là lỗi của TÔI)
+1. `re.sub(r"^(import \{\n)", ..., count=1)` chèn `cacheFor` vào import **đầu
+   tiên của file** chứ không phải import của cache — mỗi file một chỗ khác nhau.
+2. Sửa lại bằng `re.search(r"import \{\n((?:.*\n)*?)\} from '…cache';")` thì
+   lazy-match **nhảy qua nhiều khối import** và gộp chúng làm một. ⇒ với nhiều
+   khối cùng dạng thì phải **bám DÒNG**: tìm dòng đóng rồi lùi về dòng mở.
+3. Khối `SHAPE` chèn theo vị trí vân tay nên rơi **trước `const TOOL_ID`** →
+   `TS2448`. Phải neo vào chính dòng khai `TOOL_ID`.
+🔑 Cả ba đều rẻ vì đã commit sạch trước đó: `git checkout HEAD -- <7 route>` trả
+lại nguyên trạng mà không mất bản vá đang dở ở `cache.ts`.
+
 ### CÒN LẠI
-- **Vẫn chưa cắm `SHAPE` cho 5 tool đó** — CỐ Ý, xem số đo ở trên. Nay có máy
-  ép nên không còn là nợ im lặng.
-- ⏭️ **Bước mạnh hơn, CHƯA làm, cần Henry chốt:** đưa `shape` thành **tham số
-  BẮT BUỘC** của `getCachedPortrait`/`putCachedPortrait` (hoặc một `cacheFor
-  (toolId, shape)`), để không tool nào *dùng được* cache mà chưa khai shape —
-  biến "nhớ mà cắm" thành lỗi biên dịch. Đổi lại phải sửa đường trả tiền của cả
-  7 tool. Cửa sổ rẻ nhất là BÂY GIỜ (cache gần rỗng); càng có lưu lượng càng đắt.
 - Bộ dò chốt lá số mẫu CỐ ĐỊNH. Đổi lá số mẫu là đổi vân tay — đừng sửa nó chỉ
   vì thấy đỏ.
 - Phủ **tầng engine**, không phủ chỗ route tự ghép thêm khoá.
+- 5 tool vừa cắm đang ở **`SHAPE = 1`** và 11 dòng cache cũ của chúng **không bị
+  dựng lại** (thiếu `_shape` ⇒ đọc là 1). Đúng ý đồ; lượt đổi payload đầu tiên
+  mới bump lên 2.
+- `put` nay tốn thêm một lượt SELECT mỗi lần ghi. Không đo được ảnh hưởng vì
+  cache gần rỗng — nếu sau này ghi nhiều thì đó là chỗ đầu tiên nên nhìn.
 
 ---
 

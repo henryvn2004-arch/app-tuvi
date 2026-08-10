@@ -111,12 +111,40 @@ export interface CachedPortrait {
   row: Record<string, unknown> | null;
 }
 
+/**
+ * Kết quả đọc cache.
+ *
+ * 🔑 `cached` LÀ NULL KHI DÒNG ĐÃ CŨ — cố ý, và đây là chỗ quan trọng nhất của
+ * cả thiết kế. Hai kiểu hỏng KHÔNG ngang nhau:
+ *   · phục vụ dòng cũ ⇒ trang ẩn khối im lặng, người dùng đọc bản thiếu, KHÔNG
+ *     lỗi nào bắn ra (đã cắn thật ở #465 và #475);
+ *   · dựng lại mà quên `overwrite` ⇒ tốn thêm một lượt model, nội dung vẫn ĐÚNG.
+ * Nên cái nguy hiểm bị chặn ở tầng thư viện, còn cái nhẹ hơn mới để route lo:
+ * route bỏ qua `stale` thì chỉ phí tiền, không bao giờ hiện sai.
+ */
+export interface CacheRead {
+  cached: CachedPortrait | null;
+  /** Dòng cũ hơn `shape` đang khai — có tồn tại, nhưng KHÔNG dùng được. */
+  stale: boolean;
+}
+
 function ready(): boolean {
   return Boolean(SUPABASE_URL && SUPABASE_KEY);
 }
 
+/**
+ * Dòng ghi TRƯỚC khi tool cắm cơ chế shape thì không có `_shape`. Payload của
+ * chúng chính là cấu trúc phiên bản 1 ⇒ đọc là 1, KHÔNG coi là hỏng. Coi chúng
+ * là hỏng thì lượt bật cơ chế sẽ đốt lại toàn bộ cache đang đúng — với 2 tool
+ * ảnh là ~1.100đ mỗi dòng, đổi lấy đúng con số 0.
+ */
+function docShape(payload: Record<string, unknown> | undefined | null): number {
+  const v = (payload as { _shape?: unknown } | null | undefined)?._shape;
+  return typeof v === 'number' ? v : 1;
+}
+
 /** Bản cache của (tool, pha, lá số) — `null` nếu chưa có hoặc tra hỏng. */
-export async function getCachedPortrait(
+async function docCache(
   toolId: PortraitToolId,
   phase: PortraitPhase,
   key: string,
@@ -152,13 +180,14 @@ export async function getCachedPortrait(
  * bỏ qua im lặng ⇒ mỗi lượt xem lại đốt thêm một lượt model mà dòng hỏng vẫn
  * nằm nguyên. KHÔNG dùng để "làm mới" nội dung — xem luật một-lá-số-một-kết-quả.
  */
-export async function putCachedPortrait(
+async function ghiCache(
   toolId: PortraitToolId,
   phase: PortraitPhase,
   key: string,
   entry: CachedPortrait,
   userId: string,
-  overwrite = false,
+  shape: number,
+  overwrite: boolean,
 ): Promise<void> {
   if (!ready() || !key) return;
   try {
@@ -172,7 +201,9 @@ export async function putCachedPortrait(
         tool_id: toolId,
         phase,
         laso_key: key,
-        payload: entry,
+        // Đóng dấu shape TẠI ĐÂY, không để route tự nhớ: chỉ cần một route quên
+        // là dòng nó ghi ra không bao giờ bị coi là cũ.
+        payload: { ...entry, payload: { ...entry.payload, _shape: shape } },
         created_by: userId || null,
       }),
     });
@@ -182,7 +213,7 @@ export async function putCachedPortrait(
 }
 
 /** Đếm lượt trúng cache (atomic, qua RPC) — chỗ duy nhất đo được cache có tiết kiệm thật không. */
-export function touchCache(toolId: PortraitToolId, phase: PortraitPhase, key: string): void {
+function chamCache(toolId: PortraitToolId, phase: PortraitPhase, key: string): void {
   if (!ready() || !key) return;
   void fetch(`${SUPABASE_URL}/rest/v1/rpc/portrait_cache_touch`, {
     method: 'POST',
@@ -238,24 +269,86 @@ export function insertHistoryRow(toolId: PortraitToolId, row: Record<string, unk
  * cache" là mở đường gen thật miễn phí: ai từng vẽ một lá số sẽ vẽ lại được
  * vô hạn ở mọi pha còn thiếu cache.
  */
-export interface CacheLookup {
+export interface CacheLookup extends CacheRead {
   key: string;
-  cached: CachedPortrait | null;
   owns: boolean;
   free: boolean;
 }
 
-export async function lookupPortraitCache(
-  toolId: PortraitToolId,
-  phase: PortraitPhase,
-  userId: string,
-  birth: BirthParams,
-  extra?: string,
-): Promise<CacheLookup> {
-  const key = lasoKey(birth, extra);
-  const [cached, owns] = await Promise.all([
-    getCachedPortrait(toolId, phase, key),
-    userOwnsLaso(toolId, userId, key),
-  ]);
-  return { key, cached, owns, free: Boolean(cached) && owns };
+/**
+ * 🔑 CỬA DUY NHẤT vào `portrait_cache` — và `shape` là THAM SỐ BẮT BUỘC.
+ *
+ * VÌ SAO PHẢI LÀ CHỮ KÝ HÀM chứ không phải một lời dặn: `portrait_cache` khoá
+ * theo LÁ SỐ, không theo shape. Đổi cấu trúc payload mà quên đóng dấu phiên bản
+ * thì dòng cache cũ được trả nguyên trạng MÃI MÃI và trang ẩn khối im lặng —
+ * không lỗi nào bắn ra. Lời dặn đã nằm sẵn trong mã mà vẫn bị quên **hai lần**
+ * (#465 `day-con`, #475 `huong-nghiep-tre`, đo được trên prod một dòng `tuoi=43`
+ * còn mang lứa của bản kẹp tuổi cũ). Nay không khai `shape` thì **không lấy được
+ * cái tay cầm** ⇒ `tsc` từ chối biên dịch, hết cửa quên.
+ *
+ * Dùng: khai MỘT lần ở đầu route
+ *   const SHAPE = 1;
+ *   const CACHE = cacheFor(TOOL_ID, SHAPE);
+ *
+ * ⚠️ `shape` CỐ Ý không đi vào `lasoKey`: đổi khoá là mồ côi cả cache LẪN
+ * `userOwnsLaso` ⇒ người đã trả tiền bị tính lại. Giữ khoá thì lượt dựng lại
+ * vẫn miễn phí đúng cho họ.
+ */
+export function cacheFor(toolId: PortraitToolId, shape: number) {
+  return {
+    /** Bản cache của một pha. Dòng cũ ⇒ `cached: null` + `stale: true`. */
+    async get(phase: PortraitPhase, key: string): Promise<CacheRead> {
+      const c = await docCache(toolId, phase, key);
+      if (!c) return { cached: null, stale: false };
+      const stale = docShape(c.payload) < shape;
+      return { cached: stale ? null : c, stale };
+    },
+
+    /**
+     * Tra cache + quyền sở hữu trong một lượt, và chốt luôn `free`.
+     *
+     * ⚠️ `free` xét trên dòng THÔ (`c`), không xét `cached`: người này đã trả
+     * tiền cho đúng lá số đó rồi, bắt trả lần nữa chỉ vì cấu trúc payload đổi
+     * là sai. Dùng nhầm `cached` ở đây là thu tiền lần hai của chính họ.
+     */
+    async lookup(
+      phase: PortraitPhase,
+      userId: string,
+      birth: BirthParams,
+      extra?: string,
+    ): Promise<CacheLookup> {
+      const key = lasoKey(birth, extra);
+      const [c, owns] = await Promise.all([
+        docCache(toolId, phase, key),
+        userOwnsLaso(toolId, userId, key),
+      ]);
+      const stale = Boolean(c) && docShape(c!.payload) < shape;
+      return { key, cached: stale ? null : c, stale, owns, free: Boolean(c) && owns };
+    },
+
+    /**
+     * Ghi bản gốc. `_shape` do chính hàm này đóng dấu, và nó TỰ quyết có ghi đè
+     * hay không — chỗ gọi không phải biết gì về shape.
+     *
+     * 🔑 VÌ SAO TỰ QUYẾT chứ không nhận cờ `overwrite`: cờ đó phải luồn qua chữ
+     * ký của `buildReport`/`handleStory`/`handleImage` ở 7 tool, tức 7 chỗ để
+     * quên — mà quên thì lượt ghi bị bỏ qua IM LẶNG và mỗi lượt xem lại đốt
+     * thêm một lượt model trong khi dòng hỏng vẫn nằm nguyên. Đổi lại chỉ tốn
+     * một lượt SELECT, đứng sau một lượt gen vốn tốn ~1.100đ.
+     *
+     * Ba nhánh: chưa có dòng ⇒ chèn · dòng còn mới ⇒ BỎ QUA (luật một-lá-số-
+     * một-kết-quả: bản về đích trước thắng) · dòng cũ hơn `shape` ⇒ ghi đè.
+     */
+    put(phase: PortraitPhase, key: string, entry: CachedPortrait, userId: string): void {
+      void (async () => {
+        const cu = await docCache(toolId, phase, key);
+        const cuKy = Boolean(cu) && docShape(cu!.payload) < shape;
+        await ghiCache(toolId, phase, key, entry, userId, shape, cuKy);
+      })();
+    },
+
+    touch(phase: PortraitPhase, key: string): void {
+      chamCache(toolId, phase, key);
+    },
+  };
 }

@@ -27,30 +27,35 @@ import type { BirthParams } from '@/lib/contract/v1';
 import { authUserFromRequest, parseLlmJson } from '@/lib/api/tool-helpers';
 import { withToolOutcome } from '@/lib/ops/tool-outcome';
 import {
-  lookupPortraitCache,
-  putCachedPortrait,
-  touchCache,
+  cacheFor,
   insertHistoryRow,
   lasoKey,
-  getCachedPortrait,
   userOwnsLaso,
   birthFromQuery,
 } from '@/lib/portraits/cache';
 
-/**
- * 🔴 Tool này CHƯA cắm cơ chế `SHAPE` — `portrait_cache` khoá theo LÁ SỐ nên
- * đổi cấu trúc payload là dòng cache cũ được trả nguyên trạng MÃI MÃI, trang ẩn
- * khối im lặng. Đã cắn thật hai lần ở tool khác (#465 `day-con`, #475
- * `huong-nghiep-tre`).
- *
- * Vân tay dưới đây do `npm run check:cacheshape` canh: đổi payload ⇒ CI đỏ kèm
- * hướng dẫn cắm cơ chế. Chưa cắm sẵn vì payload tool này chưa đổi lần nào, mà
- * cắm là phải đụng đường trả tiền — nhưng ĐỤNG VÀO PAYLOAD THÌ PHẢI CẮM TRƯỚC.
- */
-const SHAPE_FINGERPRINT = '8cfee3e40522';
 
 
 const TOOL_ID = 'chan-dung-vo-chong';
+
+/**
+ * 🔴 PHIÊN BẢN CẤU TRÚC payload. BUMP mỗi khi thêm/đổi/bớt khoá mà TRANG cần để
+ * dựng đủ màn hình. Đổi CHỮ thì không bump (dòng cache cũ trả chữ cũ — khó
+ * chịu, không vỡ); đổi KHOÁ mà quên bump thì trang ẩn khối IM LẶNG.
+ *
+ * Mở màn ở 1: payload hiện tại CHÍNH LÀ phiên bản 1, và dòng cache ghi trước
+ * lượt cắm cơ chế (không có `_shape`) được đọc là 1 nên KHÔNG bị dựng lại oan.
+ *
+ * ⚠️ Cố ý KHÔNG nhét vào `lasoKey`: đổi khoá là mồ côi cả cache LẪN
+ * `userOwnsLaso` ⇒ người đã trả tiền bị tính lại.
+ */
+const SHAPE = 1;
+
+/** Vân tay CẤU TRÚC — `npm run check:cacheshape` canh khớp với `SHAPE` ở trên. */
+const SHAPE_FINGERPRINT = '8cfee3e40522';
+
+/** Cửa DUY NHẤT vào cache của tool này; `shape` khai một lần tại đây. */
+const CACHE = cacheFor(TOOL_ID, SHAPE);
 
 const SUPABASE_URL = process.env.SUPABASE_URL!;
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY!;
@@ -109,7 +114,7 @@ async function handleGenerate(request: NextRequest, body: Record<string, unknown
   // ── Cache theo lá số (xem lib/portraits/cache.ts) ─────────────────────
   // Tra TRƯỚC cả chốt thanh toán, vì kết quả tra quyết định luôn có phải trả
   // tiền hay không: người đã từng trả cho đúng lá số này thì xem lại miễn phí.
-  const look = await lookupPortraitCache(TOOL_ID, 'main', auth.user.id, birth);
+  const look = await CACHE.lookup('main', auth.user.id, birth);
 
   if (!look.free) {
     // Chốt chặn thanh toán PHÍA SERVER (S0 track COO) — xem chú thích cùng loại
@@ -119,7 +124,7 @@ async function handleGenerate(request: NextRequest, body: Record<string, unknown
   }
 
   if (look.cached) {
-    touchCache(TOOL_ID, 'main', look.key);
+    CACHE.touch('main', look.key);
     // Người mới (vừa trả đủ tiền) cần dòng lịch sử của RIÊNG họ: để thấy trong
     // mục Lịch sử, và để lần sau được nhận diện là đã trả cho lá số này.
     if (!look.owns && look.cached.row) {
@@ -484,7 +489,7 @@ async function handleGenerate(request: NextRequest, body: Record<string, unknown
     spouseAge,
     phuThe,
   };
-  void putCachedPortrait(TOOL_ID, 'main', look.key, { payload, row: historyRow }, auth.user.id);
+  CACHE.put('main', look.key, { payload, row: historyRow }, auth.user.id);
   return ok(payload);
 }
 
@@ -512,11 +517,13 @@ async function handleCacheStatus(request: NextRequest, sp: URLSearchParams) {
   if ('error' in auth) return err(auth.error, auth.status);
 
   const key = lasoKey(birthFromQuery(sp));
-  const [cached, owns] = await Promise.all([
-    getCachedPortrait(TOOL_ID, 'main', key),
+  const [{ cached, stale }, owns] = await Promise.all([
+    CACHE.get('main', key),
     userOwnsLaso(TOOL_ID, auth.user.id, key),
   ]);
-  return ok({ success: true, cached: Boolean(cached), free: Boolean(cached) && owns });
+  // `cached` = có dòng DÙNG ĐƯỢC (dòng cũ đã bị lọc). `free` = đã trả tiền cho
+  // lá số này, kể cả khi dòng cũ và sắp phải dựng lại.
+  return ok({ success: true, cached: Boolean(cached), free: Boolean(cached || stale) && owns });
 }
 
 // ── Routes ────────────────────────────────────────────────────────────
