@@ -343,6 +343,51 @@ export function dayConRailWrapper(p: DayConProfile, tenRaw: string): string {
     .trim()
     .slice(0, 40);
   const who = ten ? `"${ten}"` : 'đứa trẻ này';
+
+  // ── DỮ KIỆN ĐO ĐƯỢC — 5 trục + 8 chất ────────────────────────
+  // Đây chính là hai biểu đồ trang vẽ. Trước đây rail KHÔNG nhận một con số
+  // nào của chúng, trong khi luật ngay dưới lại nói "ĐIỂM TRÊN THANG 0–10
+  // trong dữ kiện" — tức prompt neo vào một khối chưa bao giờ được gửi (đúng
+  // lỗi `=== ĐIỂM ĐÁNH GIÁ ===` đã phải vá ở luận giải 24 phần). Cha mẹ nhìn
+  // thấy "Hướng năng lượng 5,5" rồi hỏi rail nghĩa là gì → rail luận chay.
+  // Chi tiết KIỂU — bản trả tiền dựng đoạn văn từ `kieu.dongLuc`
+  // (`buildDayConPrompt`), người đọc thấy rồi hỏi lại thì rail phải có. Bảng
+  // KIỂU là quy chiếu tự đặt của trang, model KHÔNG suy lại được từ lá số.
+  const k = p.kieu as unknown as Record<string, string | undefined>;
+  const krow = (nhan: string, v?: string) => (v ? `  ${nhan}: ${v}\n` : '');
+  const kieuChiTiet =
+    krow('Động lực gốc', k.dongLuc) +
+    krow('Nhận ra ngay ở nhà', k.datChat) +
+    krow('Hợp môi trường', k.moiTruongHop) +
+    krow('Kỵ môi trường', k.moiTruongKy) +
+    krow('Mạnh', k.manh) +
+    krow('Chỗ hay vấp', k.yeu);
+
+  const a = p.assess;
+  let doDuoc = kieuChiTiet
+    ? `--- CHI TIẾT KIỂU NGƯỜI (dùng đúng mấy dòng này, đừng tự nghĩ thêm) ---\n${kieuChiTiet}`
+    : '';
+  if (a) {
+    doDuoc += '\n--- ĐO ĐƯỢC (engine chấm — CHÉP đúng, KHÔNG tự chấm lại) ---\n';
+    if (Array.isArray(a.truc) && a.truc.length) {
+      doDuoc += 'NĂM TRỤC TÍNH KHÍ (5 = mức giữa của phân bố, hai cực đều có giá trị):\n';
+      a.truc.forEach((t) => {
+        const cuc = t.nghieng === 'cao' ? t.nhanCao : t.nghieng === 'thap' ? t.nhanThap : 'nằm giữa — dùng được cả hai kiểu';
+        doDuoc += `  ${t.ten}: ${t.diem}/10 → ${cuc}\n`;
+      });
+    }
+    if (Array.isArray(a.khieu) && a.khieu.length) {
+      doDuoc += 'TÁM CHẤT NĂNG KHIẾU (đã sắp giảm dần; ★ = vượt ngưỡng, đáng cho THỬ):\n';
+      a.khieu.forEach((k) => {
+        doDuoc += `  ${k.noiBat ? '★' : ' '} ${k.ten}: ${k.diem}/10\n`;
+      });
+      doDuoc += a.coNoiBat
+        ? `  → Chất nổi: ${a.noiBat.map((k) => k.ten).join(', ')}.\n`
+        : '  → KHÔNG chất nào vượt ngưỡng. Nói THẲNG điều đó (ở tuổi này chưa rõ nét là bình thường, nên cho thử rộng), TUYỆT ĐỐI không bịa ra một chất nổi.\n';
+    }
+    doDuoc += '--- HẾT PHẦN ĐO ĐƯỢC ---\n';
+  }
+
   return `
 
 === ĐANG XEM LÁ SỐ CỦA MỘT ĐỨA TRẺ — ĐỌC KỸ, KHỐI NÀY ĐÈ LÊN MỌI LUẬT Ở TRÊN ===
@@ -360,5 +405,5 @@ Lá số ở trên KHÔNG phải của người đang chat. Đó là lá số CO
 - Trục "Độ nhạy cảm xúc" đo NGƯỠNG CẢM NHẬN, không phải chỉ báo tâm lý: cấm nhắc lo âu, trầm cảm, rối loạn, tăng động, tự kỷ, cấm khuyên đi khám hay đi test.
 - "Chất nổi" = đáng cho THỬ, không phải tài năng đã xác nhận. Không có chất nào nổi thì nói thẳng, đừng bịa.
 - CẤM gọi đây là trắc nghiệm/khoa học/đã kiểm định, CẤM nêu tên hay đối chiếu DISC/MBTI/Big Five/MI/SDQ/IQ.
-=== HẾT KHỐI DẠY CON ===`;
+${doDuoc}=== HẾT KHỐI DẠY CON ===`;
 }

@@ -109,6 +109,12 @@ jobs:
       - name: Hợp đồng mốc laSoText (bộ cắt luận giải)
         run: npm run check:laso
 
+      # Engine thêm trường mới mà extractor gửi rail không đọc → dữ liệu vẫn
+      # tính, trang vẫn hiện, rail thì mù. Đã cắn thật: `thapThan` (Thập Thần —
+      # cột app-bat-tu.html vẽ dưới mỗi trụ) chưa bao giờ tới model.
+      - name: Engine ↔ rail còn khớp trường (Bát Tự)
+        run: npm run check:railfields
+
   typecheck:
     runs-on: ubuntu-latest
     timeout-minutes: 10

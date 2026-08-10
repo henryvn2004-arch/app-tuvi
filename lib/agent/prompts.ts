@@ -15,6 +15,7 @@
 import { buildTools, TOOLS_INSTRUCTION } from "@/lib/agent/tools";
 import { LASO_AUTHORITY_RULE, daiVanLines, type Laso } from "@/lib/engine/laso";
 import { currentNamXem } from "@/lib/engine/namxem";
+import { tuongHopScores } from "@/lib/engine/tuong-hop";
 import { matchVanHanCombos, formatComboLines, type LayerCung } from "@/lib/agent/vanHanCombos";
 
 interface ChatContext {
@@ -1098,7 +1099,39 @@ function extractCompatContext(compatData: any, toolType: string): string {
     return ctx;
   }
   const { lsA, lsB, nameA, nameB } = compatData;
-  return fmtLs(lsA, nameA || 'Người A') + '\n' + fmtLs(lsB, nameB || 'Người B');
+  const nA = nameA || 'Người A';
+  const nB = nameB || 'Người B';
+  let out = fmtLs(lsA, nA) + '\n' + fmtLs(lsB, nB);
+
+  // BẢNG ĐIỂM 8 CHIỀU — thứ trang vẽ to nhất và là thứ người dùng hỏi về.
+  // Trước đây rail KHÔNG nhận một dòng nào của bảng này (0/8 tiêu chí, không
+  // có tổng), trong khi câu chào của chính rail lại nói "hoà hợp X/100".
+  // Tính lại ở server từ CHÍNH `public/tuong-hop.js` nên không lệch với màn hình.
+  const th = tuongHopScores(lsA, lsB, nA, nB);
+  if (th) {
+    out += `\nBẢNG ĐIỂM TƯƠNG HỢP (engine tính — CHÉP đúng, KHÔNG tự chấm lại):\n`;
+    out += `  TỔNG HOÀ HỢP: ${th.total}/100\n`;
+    // Sắp theo TRỌNG SỐ giảm dần: model cần biết tiêu chí nào kéo tổng điểm,
+    // chứ không phải tiêu chí nào tình cờ đứng trước trong mảng.
+    [...th.items]
+      .sort((x, y) => (y.w || 0) - (x.w || 0))
+      .forEach((it) => {
+        out += `  ${it.label}: ${it.score}/10 (trọng số ${Math.round((it.w || 0) * 100)}%)`;
+        if (it.detail) out += ` — ${it.detail}`;
+        // `a`/`b` mang emoji đèn giao thông cho phần vẽ; bỏ đi để prompt sạch,
+        // giữ lại phần chữ vì đó là chỗ nêu can chi / sao / cung của từng người.
+        const strip = (s?: string) => (s || '').replace(/[🟢🟡🔴✓✗⚠]/g, '').trim();
+        const a = strip(it.a);
+        const b = strip(it.b);
+        if (a || b) out += `\n      ${nA}: ${a || '?'} | ${nB}: ${b || '?'}`;
+        out += '\n';
+      });
+    out +=
+      `  ⚠️ Điểm trên là của ENGINE. Khi luận phải BÁM đúng con số này — ` +
+      `tiêu chí trọng số cao mà điểm thấp mới là chỗ đáng nói, đừng dàn đều 8 mục. ` +
+      `TUYỆT ĐỐI không tự chấm lại hay nêu một con số khác.\n`;
+  }
+  return out;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -1106,25 +1139,41 @@ function extractTuBinhContext(tuBinhData: any): string {
   if (!tuBinhData) return '';
   let ctx = '';
 
-  // Tứ Trụ — engine trả MẢNG 4 trụ [{ten,can,chi,napAm,tangCan:[{can,weight}]}]
+  // Tứ Trụ — engine trả MẢNG 4 trụ [{ten,can,chi,napAm,tangCan:[{can,weight}]}].
+  // THẬP THẦN đi kèm ngay tại đây: `thapThan` là bảng {trụ:{thienCan,tangCan}}
+  // và chính là cột mà `app-bat-tu.html` vẽ dưới mỗi can (dòng 300/310) — trước
+  // đây rail KHÔNG hề nhận, nên hỏi "Thất Sát ở trụ tháng nghĩa là gì" thì nó
+  // phải luận chay. Đúng họ lỗi luận-giải: engine tính, trang hiện, model mù.
   if (Array.isArray(tuBinhData.tuTru) && tuBinhData.tuTru.length) {
-    ctx += 'Tứ Trụ:\n';
+    const tt = tuBinhData.thapThan || {};
+    ctx += 'Tứ Trụ (kèm Thập Thần):\n';
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     tuBinhData.tuTru.forEach((t: any) => {
+      const tr = tt[t.ten] || {};
       ctx += '  ' + (t.ten || '') + ': ' + (t.can || '') + ' ' + (t.chi || '') + (t.napAm ? ' (' + t.napAm + ')' : '');
+      if (tr.thienCan) ctx += ' — thiên can là ' + tr.thienCan;
       if (Array.isArray(t.tangCan) && t.tangCan.length) {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        ctx += ' — Tàng can: ' + t.tangCan.map((tc: any) => tc.can).filter(Boolean).join(', ');
+        ctx += ' — Tàng can: ' + t.tangCan
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          .map((tc: any) => (tc.can ? tc.can + (tr.tangCan?.[tc.can] ? ' (' + tr.tangCan[tc.can] + ')' : '') : ''))
+          .filter(Boolean).join(', ');
       }
       ctx += '\n';
     });
   }
   if (tuBinhData.nhatCan) {
-    ctx += 'Nhật Can: ' + tuBinhData.nhatCan + (tuBinhData.nhatCanHanh ? ' (' + tuBinhData.nhatCanHanh + ')' : '') + ' — tức bản thân đương số\n';
+    ctx += 'Nhật Can: ' + tuBinhData.nhatCan + (tuBinhData.nhatCanHanh ? ' (' + tuBinhData.nhatCanHanh + ')' : '') +
+      (tuBinhData.nhatCanAmDuong ? ', ' + tuBinhData.nhatCanAmDuong : '') +
+      (tuBinhData.nhatChi ? ', toạ chi ' + tuBinhData.nhatChi : '') + ' — tức bản thân đương số\n';
   }
   if (tuBinhData.cuongNhuoc) {
     const cn = tuBinhData.cuongNhuoc;
     ctx += 'Cường nhược nhật can: ' + (cn.label || '') + (cn.score != null ? ' (' + cn.score + '/10)' : '') + '\n';
+    // Lý do ra điểm — trang có hiện, và đây là phần giải thích được "vì sao
+    // thân nhược/vượng", tức thứ người dùng hỏi lại nhiều nhất.
+    if (cn.dacLenh != null) ctx += '  Đắc lệnh: ' + (cn.dacLenh ? 'có' : 'không') + (cn.lenhScore != null ? ' (' + cn.lenhScore + ')' : '') + '\n';
+    if (Array.isArray(cn.dacDiaDetails) && cn.dacDiaDetails.length) ctx += '  Đắc địa: ' + cn.dacDiaDetails.join(', ') + '\n';
+    if (Array.isArray(cn.dacTheDetails) && cn.dacTheDetails.length) ctx += '  Đắc thế: ' + cn.dacTheDetails.join(', ') + '\n';
   }
   if (tuBinhData.dungThan) {
     const dt = tuBinhData.dungThan;
@@ -1136,7 +1185,7 @@ function extractTuBinhContext(tuBinhData: any): string {
   }
   if (tuBinhData.cachCuc) {
     const cc = tuBinhData.cachCuc;
-    ctx += 'Cách cục: ' + (cc.primary || cc.name || '') + (cc.thanhPhaCach ? ' (' + cc.thanhPhaCach + ')' : '') + (cc.note ? ' — ' + cc.note : '') + '\n';
+    ctx += 'Cách cục: ' + (cc.primary || cc.name || '') + (cc.type ? ' [' + cc.type + ']' : '') + (cc.thanhPhaCach ? ' (' + cc.thanhPhaCach + ')' : '') + (cc.note ? ' — ' + cc.note : '') + '\n';
   }
   if (tuBinhData.nguHanh?.weighted) {
     const w = tuBinhData.nguHanh.weighted;
@@ -1165,32 +1214,103 @@ function extractTuBinhContext(tuBinhData: any): string {
     const dv = tuBinhData.daiVanKeTiep;
     ctx += 'Đại vận kế tiếp: ' + (dv.can || '') + (dv.chi || '') + ' (' + (dv.tuoiStart ?? '?') + '–' + (dv.tuoiEnd ?? '?') + 't)' + (dv.thapThanCan ? ' — ' + dv.thapThanCan : '') + (dv.score != null ? ', điểm ' + dv.score + '/10' : '') + '\n';
   }
+  // Lưu niên — "năm nay của tôi thế nào" là câu rail bị hỏi nhiều nhất, nên
+  // đưa đủ quan hệ với tứ trụ + yếu tố ra điểm, không chỉ can chi + điểm.
   if (tuBinhData.luuNien) {
     const ln = tuBinhData.luuNien;
-    ctx += 'Lưu niên ' + (ln.nam || '') + ': ' + (ln.can || '') + (ln.chi || '') + (ln.thapThanCan ? ' — ' + ln.thapThanCan : '') + (ln.score != null ? ', điểm ' + ln.score + '/10' : '') + '\n';
+    ctx += 'Lưu niên ' + (ln.nam || '') + ': ' + (ln.can || '') + (ln.chi || '') +
+      (ln.napAm ? ' (' + ln.napAm + ')' : '') +
+      (ln.thapThanCan ? ' — ' + ln.thapThanCan : '') +
+      (ln.score != null ? ', điểm ' + ln.score + '/10 ' + (ln.label || '') : '') + '\n';
+    const REL: Record<string, string> = {
+      xungVoi: 'xung với', haiVoi: 'hại với', hinhVoi: 'hình với',
+      hopVoi: 'hợp với', canHopVoi: 'can hợp với', canKhacVoi: 'can khắc với',
+    };
+    if (ln.relations && typeof ln.relations === 'object') {
+      for (const [k, nhan] of Object.entries(REL)) {
+        const arr = ln.relations[k];
+        if (Array.isArray(arr) && arr.length) ctx += '  ' + nhan + ' trụ: ' + arr.join(', ') + '\n';
+      }
+    }
+    if (Array.isArray(ln.factors) && ln.factors.length) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      ctx += '  Yếu tố ra điểm: ' + ln.factors.slice(0, 6).map((f: any) => f.text).filter(Boolean).join('; ') + '\n';
+    }
+  }
+
+  // TOÀN BỘ 9 đại vận — trước đây rail chỉ biết chặng HIỆN TẠI và chặng KẾ
+  // TIẾP, nên hỏi "chặng 40–50 tuổi của tôi thế nào" là nó không có gì để bám.
+  // Trang thì vẽ đủ cả dải kèm điểm + thập thần.
+  if (Array.isArray(tuBinhData.daiVans) && tuBinhData.daiVans.length) {
+    ctx += '\nLộ trình đại vận (' +
+      (tuBinhData.tuoiKhoiVan != null ? 'khởi vận ' + tuBinhData.tuoiKhoiVan + ' tuổi, ' : '') +
+      (tuBinhData.daiVanThuan ? 'vận THUẬN' : 'vận NGHỊCH') + '):\n';
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    tuBinhData.daiVans.forEach((dv: any) => {
+      ctx += '  ' + (dv.can || '') + (dv.chi || '') +
+        ' (' + (dv.tuoiStart ?? '?') + '–' + (dv.tuoiEnd ?? '?') + 't' +
+        (dv.namStart ? ', ' + dv.namStart + '–' + dv.namEnd : '') + ')' +
+        (dv.napAm ? ' ' + dv.napAm : '') +
+        (dv.thapThanCan ? ' — can ' + dv.thapThanCan : '') +
+        (dv.thapThanChi ? ', chi ' + dv.thapThanChi : '') +
+        (dv.score != null ? ' · điểm ' + dv.score + '/10 ' + (dv.label || '') : '') + '\n';
+      // Lý do ra điểm — 2 yếu tố nặng nhất mỗi chặng. Không lấy hết (9 chặng ×
+      // ~4 yếu tố là một bức tường chữ); chặng ĐANG CHẠY vẫn có đủ 6 ở khối trên.
+      if (Array.isArray(dv.factors) && dv.factors.length) {
+        const top = [...dv.factors]
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          .sort((a: any, b: any) => Math.abs(b.delta ?? 0) - Math.abs(a.delta ?? 0))
+          .slice(0, 2)
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          .map((f: any) => f.text).filter(Boolean);
+        if (top.length) ctx += '    (' + top.join('; ') + ')\n';
+      }
+    });
   }
 
   // Hợp/xung/hình/hại
+  // Hợp/xung/hình/hại — nêu ĐÍCH DANH cặp nào, ở trụ nào. Bản cũ chỉ đếm
+  // ("Tam hợp 1, Lục hại 2"), tức model biết CÓ mà không biết LÀ GÌ → không
+  // luận được, trong khi trang có hiện đủ.
   if (tuBinhData.hinhXungHaiHop) {
     const h = tuBinhData.hinhXungHaiHop;
-    const s: string[] = [];
-    if (h.tamHop?.length) s.push('Tam hợp ' + h.tamHop.length);
-    if (h.lucHop?.length) s.push('Lục hợp ' + h.lucHop.length);
-    if (h.lucXung?.length) s.push('Lục xung ' + h.lucXung.length);
-    if (h.tamHinh?.length) s.push('Tam hình ' + h.tamHinh.length);
-    if (h.lucHai?.length) s.push('Lục hại ' + h.lucHai.length);
-    if (h.canHop?.length) s.push('Can hợp ' + h.canHop.length);
-    if (s.length) ctx += 'Hợp/xung/hình/hại: ' + s.join(', ') + '\n';
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const one = (x: any): string => {
+      if (!x || typeof x !== 'object') return String(x ?? '');
+      if (Array.isArray(x.chis)) {
+        return x.chis.join('–') +
+          (x.hanh ? ' hoá ' + x.hanh : '') + (x.type ? ' (' + x.type + ')' : '') +
+          (x.full === false ? ' [bán hợp]' : '') +
+          (Array.isArray(x.positions) && x.positions.length ? ' ở ' + x.positions.join('/') : '');
+      }
+      // dạng cặp {cungA,chiA,cungB,chiB} hoặc {cungA,canA,cungB,canB}
+      const a = x.chiA || x.canA || '', b = x.chiB || x.canB || '';
+      return (a && b ? a + '–' + b : '') + (x.cungA && x.cungB ? ' (' + x.cungA + '/' + x.cungB + ')' : '') + (x.hanh ? ' hoá ' + x.hanh : '');
+    };
+    const NHAN: Record<string, string> = {
+      tamHop: 'Tam hợp', lucHop: 'Lục hợp', lucXung: 'Lục xung',
+      tamHinh: 'Tam hình', tuHinh: 'Tứ hình', lucHai: 'Lục hại', canHop: 'Can hợp',
+    };
+    const lines: string[] = [];
+    for (const [k, nhan] of Object.entries(NHAN)) {
+      const arr = h[k];
+      if (Array.isArray(arr) && arr.length) lines.push('  ' + nhan + ': ' + arr.map(one).filter(Boolean).join(' | '));
+    }
+    if (lines.length) ctx += 'Hợp/xung/hình/hại giữa các trụ:\n' + lines.join('\n') + '\n';
   }
 
-  // Thần sát đã phát hiện (chỉ liệt kê sao .found = true)
+  // Thần sát đã phát hiện (chỉ liệt kê sao .found = true) — KÈM ghi chú giải
+  // thích vì sao có, thứ trang hiện và model cần để luận thay vì chỉ đọc tên.
   if (tuBinhData.thanSat && typeof tuBinhData.thanSat === 'object') {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const found = (Object.entries(tuBinhData.thanSat) as [string, any][])
-      .filter(([, v]) => v && v.found)
-      .map(([k]) => k);
-    if (found.length) ctx += 'Thần sát hiện diện: ' + found.join(', ') + '\n';
+    const found = (Object.entries(tuBinhData.thanSat) as [string, any][]).filter(([, v]) => v && v.found);
+    if (found.length) {
+      ctx += 'Thần sát hiện diện:\n';
+      for (const [k, v] of found) ctx += '  ' + k + (v.note ? ' — ' + v.note : '') + '\n';
+    }
   }
+
+  if (tuBinhData.truongPhai) ctx += 'Trường phái luận: ' + tuBinhData.truongPhai + '\n';
 
   return ctx;
 }

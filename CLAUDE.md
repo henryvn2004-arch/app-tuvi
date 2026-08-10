@@ -5,6 +5,203 @@
 
 ---
 
+## 🔁 "Đã check hết chưa?" — CHƯA, và 4 tool nữa dính (2026-08-10, PR này)
+
+Henry: *"mày check mấy tool liên quan đến tử vi như xem tuổi vợ chồng, xem làm
+ăn, tử vi công sở, đinh hướng nghề nghiệp,... này nọ hết rồi đúng ko? đều ko bị
+lỗi này?"*
+
+### 🔴 Câu trả lời là CHƯA — và lượt rà trước của tao đọc lướt nghe như "đã phủ hết"
+Lượt rà chỉ phủ nhóm đẩy dữ liệu qua **`scenario`**. Trong bốn thứ Henry nêu chỉ
+`cong-so` nằm trong đó. Nhóm CÒN LẠI đi đường khác hẳn — **`wrap` + lá số đầy
+đủ** (`past-life` · `past-life-bond` · `nguoi-khac` · `day-con` ·
+`huong-nghiep-tre`) — tao chưa đụng tới lần nào.
+- 🔑 **Bài học phương pháp:** với `xem-tuoi` tao viết *"extractor CỐ Ý tóm tắt lá
+  số → không đo bằng thước này"*. Vế đó ĐÚNG cho **lá số thô** (hàng nghìn lá,
+  tóm tắt là phải) nhưng tao lấy nó làm cớ để **không đo gì cả**, trong khi câu
+  hỏi đúng là *"tầng PHÂN TÍCH engine tính ra có tới model không"*. Đó chính là
+  câu đã bắt được `tu-binh`. **Lý do hợp lệ để thu hẹp THƯỚC ĐO không phải lý do
+  để bỏ luôn phép đo.**
+
+### 🔴 Ba lỗi đo được, cùng họ `thapThan`
+1. **`xem-tuoi`/`xem-lam-an`/`tuong-hop`** — trang vẽ bảng **8 tiêu chí** (Xét
+   Tuổi · Ngũ Hành · Tư Tưởng · Tính Cách · Quan Hệ · Con Cái · Tài Chính · Vận
+   Hành) kèm điểm hai bên và **TỔNG /100**. Rail: **0/8 tên tiêu chí, không có
+   tổng**. Lố nhất — **câu chào của chính rail nói *"hoà hợp 54,6/100"***, một
+   con số nó không hề có trong context.
+2. **`day-con`** — 5 trục + 8 chất (đúng hai biểu đồ trang vẽ) không tới rail,
+   **trong khi luật trong vỏ lại nói *"ĐIỂM TRÊN THANG 0–10 trong dữ kiện"*** ⇒
+   prompt neo vào khối chưa bao giờ được gửi. Đúng lỗi `=== ĐIỂM ĐÁNH GIÁ ===`.
+3. **`huong-nghiep-tre`** — `railDataDayDu`/`railDataTinhThu` là **CODE CHẾT**,
+   0 file import (route chỉ dùng `hoSoTinhThu`/`hoSoDayDu`). Mà `run.ts` ghi chú
+   *"rail chỉ nhận chúng qua `railDataDayDu` SAU khi mua"* — **mô tả một cơ chế
+   chưa bao giờ được đấu dây**; rail không biết ba thiên hướng ở BẤT KỲ trạng
+   thái nào. Trong khi chip trang mời sẵn *"Vì sao lá số lại nghiêng về hướng
+   này?"*. Henry chốt **cho rail biết luôn**.
+4. **`nguoi-khac` + `day-con`** — bản **TRẢ TIỀN** dựng đoạn văn từ
+   `kieu.dongLuc`/`datChat`/`kieuDan`/`moiTruongHop`/`moiTruongKy`; người dùng
+   ĐỌC rồi hỏi lại thì rail chỉ có nhãn kiểu + một câu. Bảng KIỂU là quy chiếu
+   TỰ ĐẶT — model **không suy lại được từ lá số**, khác mấy cung vốn có sẵn.
+   🔑 Tiêu chí đúng để quyết "có phải gửi không" là **người dùng có ĐỌC được nó
+   không** (trên trang HOẶC trong bản văn trả tiền), không phải "trang có vẽ nó
+   thành ô không".
+
+### 🪤 Lỗ parity server/client suýt do CHÍNH bản vá của tao kích hoạt
+`anSaoLaSo` **không re-expose `chiNam`** ở cấp 1. Client vá tay
+(`ls.chiNam = conv.chiNam`, có chú thích tại chỗ), `computeLaso` thì KHÔNG.
+Lỗ này **nằm im** vì chưa gì ở server đọc `chiNam` — nhưng cầu nối tương hợp mới
+sẽ gọi `chiRelation('','')` ⇒ `dc1 === dc2` ⇒ **"Cùng chi" 8/10 cho MỌI cặp**.
+Đối chứng 4/4 cặp đều sai (57,6 thay vì 54,6 · 8/10 "Cùng chi" thay vì "Tam
+Hình ⚠" 3/10).
+- ⚠️ **TRANG CHƯA BAO GIỜ SAI** — đừng ghi thành "tool đang báo sai cho người
+  dùng". Đây là lỗi tao suýt tự tạo ra, bắt được vì **nhìn output thật** thấy
+  `Mậu Dần` vs `Giáp Tý` mà ghi "Cùng chi" và ngoặc rỗng.
+- 🔑 Vá ở GỐC (`computeLaso` gắn lại `chiNam`) chứ không vá trong cầu nối: để
+  nguyên thì người sau vấp đúng cái hố đó. Thêm trường là thay đổi CỘNG THÊM —
+  có ca đối chứng **12 ca context rail lá số TRÙNG KHÍT** trước/sau.
+
+### Cách vá
+- **`lib/engine/tuong-hop.ts`** — cầu nối server nạp CHÍNH `public/tuong-hop.js`
+  (khuôn `kim-lau.ts`/`laso.ts`), **không chép công thức**. Tính ở SERVER chứ
+  không bắt client gửi kèm: bản JS cũ còn trong cache trình duyệt vẫn chỉ gửi 4
+  khoá, mà đường đó phải đúng ngay cho họ. Fail-soft → rơi về bản tóm tắt cũ.
+- Bảng điểm **sắp theo TRỌNG SỐ giảm dần**, không theo thứ tự mảng: model cần
+  biết tiêu chí nào KÉO tổng điểm, không phải cái nào tình cờ đứng trước.
+
+### Verify
+`tsc` 0 · `lint` 0 lỗi (72 warning pre-existing) · `prettier` sạch · **13/13 bộ
+dò** · engine **185 pass**.
+- **Parity bảng điểm SERVER vs TRÌNH DUYỆT: 4/4 cặp trùng khít** (dựng lá số
+  kiểu client bằng chính `anSaoLaSo` + vá `chiNam` tay, so từng tiêu chí + tổng).
+- **ĐỐI CHỨNG gỡ `chiNam`: 4/4 cặp báo sai "Cùng chi 8/10"** ⇒ lỗ có thật.
+- **12 ca context rail lá số TRÙNG KHÍT** sau khi thêm `chiNam`.
+- Phủ sau khi vá: **8/8 tiêu chí + tổng** · **5/5 trục và 8/8 chất kèm điểm** ·
+  **3/3 thiên hướng kèm CƠ SỞ trong lá số** (đúng thứ trả lời cái chip) ·
+  **7/7 trường KIỂU** mà bản trả tiền dùng.
+
+### CÒN LẠI
+- **Chưa gọi LLM thật** — vẫn dừng ở tầng dữ liệu vào prompt.
+- ✅ **`nhan-mach` ĐÃ ĐO — gần đủ, vá một chỗ:** railData phẳng, có tên/kiểu
+  từng người, phân bố 4 kiểu, kiểu THIẾU, thứ tự tiếp cận. Thiếu **lý do từng
+  cặp** (`cap[].vi`) — rail chỉ nhận `"A ↔ B"` trơ trong khi trang hiện cả câu
+  giải thích. Đã thêm.
+- ✅ **`ban-do-sao` ĐÃ ĐO — sạch by construction:** `railData` mọi giá trị là
+  CHUỖI (phẳng tuyệt đối, miễn nhiễm bẫy `extractGenericContext`), phủ trục ·
+  sao chính kèm nghĩa · sao phụ · giao điểm · góc chiếu · hình thế · cân bằng ·
+  đầu nhà. Cắt duy nhất là `gocChieu.slice(0, 12)` — có chủ ý.
+- **Chưa đo: 2 tool chân dung · `duyen-no`** (đường `wrap` kể chuyện, khác hình
+  dạng hẳn — vỏ ở đó là giọng kể chứ không phải bảng dữ liệu).
+- `check:railfields` vẫn chỉ phủ **Bát Tự**. Nhóm `wrap` chưa có máy canh — mà
+  đây đúng là nhóm vừa lộ ra 3 lỗi.
+
+---
+
+## 🀄 Rà tool khác cùng họ lỗi → Bát Tự: rail KHÔNG hề nhận Thập Thần (2026-08-09, PR này)
+
+Henry: *"xem lại lỗi này có bị tương tự cho các tool tử vi khác trong shell ko"*.
+
+### Cách rà — đo, không đọc mắt
+Mỗi tool: lấy **payload THẬT** (chạy chính module `tools-shared/` hoặc engine
+server) → đưa qua **`buildChatContext` THẬT** → đếm giá trị nào tool tính ra mà
+**không hề xuất hiện** trong prompt rail.
+
+**Sạch (0 thất lạc): 15 tool** — `nap-am` · `kim-lau` · `than-so-hoc` ·
+`bat-trach` · `hoang-dao` · `ngay-tot` · `luc-nham` · `ngu-hanh-ten` ·
+`kinh-dich` · `mai-hoa` · `sinh-con` · `cong-so` · `chon-ngay-tot` ·
+`dat-ten-con` · `dat-ten-dn`.
+- 🪤 Lượt đo đầu tao báo `kim-lau` mất `rows[20]` + `hienTai{}` vì giả định nó
+  đi qua `extractGenericContext` (hàm này bỏ IM LẶNG mọi object/array). **Sai** —
+  nó có extractor riêng, đo đầu-cuối ra **51/51 lá tới model**. Giả định về
+  đường đi của dữ liệu phải KIỂM, không suy từ tên hàm.
+- 🪤 **Lượt đầu tao ghi 3 tool cuối là "chưa dựng được payload — API khác" ⇒
+  cũng SAI, và sai theo kiểu tự bào chữa.** `chon-ngay-tot`/`dat-ten-con`/
+  `dat-ten-dn` không có API khác gì cả — tao truyền nhầm **TÊN KHOÁ** vào
+  `computeChonNgay`/`computeDatTen`/`computeDatTenDn` (chúng đọc `namSinh`/
+  `thangNum`/`namNum`, `ho`/`namCon`/`namBo`/`namMe`, `namChu`/`nganh`) nên
+  hàm trả `null`, và tao đọc `null` thành "không đo được". Truyền đúng shape
+  mà `Shell.setContext` của chính trang gửi lên thì đo được ngay: **19/19 lá
+  tới model, cả ba sạch**. Kiểm thêm tầng màn hình: trang chỉ vẽ đúng mấy thẻ
+  can chi trong payload, không có tầng engine nào bị bỏ lại.
+  🔑 **`null` từ hàm mình tự gọi là dấu hiệu MÌNH gọi sai, không phải dấu hiệu
+  đối tượng không đo được.** Ghi "chưa đo" vào phần CÒN LẠI nghe như một hạn
+  chế khách quan, trong khi thật ra là một lỗi harness chưa sửa.
+- `ky-mon` đủ (extractor duyệt `Object.entries` + xử riêng 3 mảng).
+  `xem-tuoi`/`xem-lam-an`/`tuong-hop` nhận trọn lá số và **cố ý tóm tắt** —
+  không đo bằng thước "mọi lá phải lọt".
+
+### 🔴 `tu-binh` — đúng cùng một bệnh
+**`computeTuBinh` trả 25 khoá, `extractTuBinhContext` đọc 12.** Đo được
+**113/151 giá trị chữ không tới model**. Nặng nhất: **`thapThan`** — Thập Thần,
+cột `app-bat-tu.html` vẽ dưới mỗi trụ (dòng 300 · 310 · 426). Người dùng nhìn
+thấy *"Thất Sát trụ tháng"*, hỏi rail nghĩa là gì → rail **không có dữ liệu**,
+buộc phải luận chay theo can chi.
+- Kèm theo: `daiVans` (cả dải 9 chặng — rail chỉ biết chặng HIỆN TẠI và KẾ
+  TIẾP) · `cuongNhuoc.dacDiaDetails`/`dacTheDetails` (lý do ra điểm thân
+  vượng/nhược) · `cachCuc.type` · `luuNien.relations`/`factors`/`napAm` ·
+  ghi chú từng thần sát · `nhatChi`/`nhatCanAmDuong`/`tuoiKhoiVan`/`daiVanThuan`.
+- 🔑 `hinhXungHaiHop` trước chỉ in **SỐ ĐẾM** (*"Tam hợp 1, Lục hại 2"*) — model
+  biết CÓ mà không biết LÀ GÌ, không luận được. Nay nêu đích danh cặp nào ở trụ nào.
+- CLAUDE.md từng ghi *"rail /app/bat-tu chưa nhận tầng phân tích bát tự mới"* —
+  phép đo cho thấy **rộng hơn lời ghi đó**: ngay `thapThan` mà CHÍNH engine của
+  rail tự tính ra cũng không được chuyển tiếp.
+
+**Sau khi vá: 113 → 37 giá trị, cả 37 là cắt CÓ CHỦ Ý** (yếu tố ra điểm của 9
+đại vận cắt còn 2 nặng nhất/chặng; `thanSat` `found:false` không liệt kê).
+
+| | cũ | mới |
+|---|---:|---:|
+| context rail bát tự | 6.724 | 9.027 ký tự |
+| mục vận-hạn có mặt | **0/7** | **7/7** |
+
+### 🧷 `scripts/check-rail-fields.mjs` (bộ dò thứ 13)
+Engine trả trường nào thì extractor phải đọc trường đó; khoá cố ý bỏ phải khai
+`SKIP` **kèm lý do**. Chạy engine vanilla thật, **không cần tsc**.
+- 🪤 **Red-team lộ bộ dò BỎ LỌT đúng con bug nó sinh ra để bắt, HAI lần:**
+  (a) `body.includes('.thapThan')` được thoả bởi `.thapThanCan` → phải dò theo
+  **BIÊN TỪ**; (b) sửa xong vẫn xanh oan vì **chú thích của chính tao** nhắc
+  `` `thapThan` `` → phải **CẮT CHÚ THÍCH trước khi quét**. 🔑 Xanh oan nguy hiểm
+  hơn đỏ oan: đỏ oan thì người ta đi tìm, xanh oan thì không ai biết.
+- 🪤 Và hai lượt red-team đầu **"đỗ giả" vì đột biến KHÔNG ăn** (regex trong
+  script vá không khớp). Phải **assert đột biến đã ăn** rồi mới đọc kết quả —
+  đúng bài học "mọi lượt thay bằng script phải assert".
+- 3/3 ca đỏ đúng (gỡ `thapThan` · engine thêm trường mới · `SKIP` khai thừa),
+  đối chứng khôi phục xanh, 0 file rác.
+
+### Verify
+`tsc` 0 · `lint` 0 lỗi (72 warning pre-existing) · `prettier` cả cây sạch ·
+**13/13 bộ dò sạch**.
+- 🪤 **ĐỐI CHỨNG `origin/main` bằng `git worktree`**: mục vận-hạn **0/7 → 7/7**
+  trên 2 lá số ⇒ lỗi có thật, phép đo bắt được.
+- Diff gói gọn trong **đúng một hàm** (`extractTuBinhContext`) — các tool khác
+  không đổi một byte context.
+
+### 🪤 Bắt kèm: `check:motifs` chết trên CI — và tao chẩn SAI hai vòng
+`scripts/check-que-motifs.mjs` gọi `ts.transpileModule` → CI đỏ
+*"Cannot read properties of undefined (reading 'CommonJS')"*, chặn MỌI PR.
+- Vòng 1 tao đổ cho **Node 20 vs Node 22** và đổi `import ts` → `require` →
+  **vẫn đỏ y hệt**. Vòng 2 mới đọc kỹ: thứ thiếu là `ts.ModuleKind`, không phải
+  `ts`.
+- 🔑 **Nguyên nhân THẬT: TypeScript 7 là bản viết lại bằng Go, không còn compiler
+  API JS.** `main` lúc đó mang TS 7 (#388) nên **merge-ref** của mọi PR `npm ci`
+  ra TS 7, trong khi máy dev còn TS 6 theo lockfile của NHÁNH — vì thế local mãi
+  không tái hiện. `tsc` CLI vẫn chạy nên `typecheck` và build engine vẫn xanh.
+- 🔑 Bài học: **CI chạy trên merge-ref, không phải trên nhánh** — lockfile hiệu
+  dụng là bản đã trộn với base. "Local xanh, CI đỏ" thì nghi chỗ đó trước.
+- Vá: bỏ hẳn compiler API. `que-motifs.ts` là data thuần (một `export const`,
+  không import/hàm/`as const`) → chỉ đổi khai báo thành gán CJS rồi eval, có
+  assert hai lớp. #476 cũng đã ghim root về TS 6.
+
+### CÒN LẠI
+- **Chưa gọi LLM thật** — đo tới tầng dữ liệu vào prompt, không tới tầng chữ.
+- `check:railfields` mới phủ **Bát Tự**. Tool khác đang sạch nhưng chưa có máy
+  canh; mở rộng khi thêm engine mới có extractor hand-pick.
+- ~~`chon-ngay-tot`/`dat-ten-con`/`dat-ten-dn` chưa đo~~ → **ĐÃ ĐO, cả ba
+  sạch** (xem bẫy tên khoá ở trên). Lượt rà nay phủ **15/15 tool** dựng được
+  payload; không còn tool nào ở trạng thái "chưa biết".
+- `thanSat` `found:false` (vd *"Không Vong tại Thân, Dậu"*) cố ý không gửi —
+  nếu thấy đáng thì mở, đây là quyết định nội dung chứ không phải bug.
+---
+
 ## 🔴 `tsc --noEmit` XANH KHÔNG CHỨNG MINH `next build` CHẠY (2026-08-09, rà PR mở)
 
 Merge #388 (TypeScript `6.0.3 → 7.0.2` ở root) làm **7 lượt deploy production

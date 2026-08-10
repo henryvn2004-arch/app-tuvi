@@ -233,9 +233,64 @@ export const HUONG_NGHIEP_TRE_SCHEMA = {
  * Khối đóng vai nối vào system của rail.
  *
  * Cùng lối `dayConRailWrapper`: CHỈ THÊM, không sửa/bớt phần lá số vốn có.
- * ⚠️ Khối này KHÔNG nêu ba thiên hướng — rail chỉ biết chúng SAU khi mua
- * (`railDataDayDu`). Biết sớm thì người ta hỏi rail thay vì mua.
+ *
+ * 🔴 ĐÍNH CHÍNH (Henry chốt: "cho rail biết luôn"). Chú thích cũ ở đây ghi
+ * *"khối này KHÔNG nêu ba thiên hướng — rail chỉ biết chúng SAU khi mua
+ * (`railDataDayDu`)"*. Hai chỗ sai:
+ *  1. `railDataDayDu`/`railDataTinhThu` của tool này là **CODE CHẾT** — không
+ *     file nào import (route chỉ dùng `hoSoTinhThu`/`hoSoDayDu`). Tức cơ chế
+ *     mà chú thích mô tả **chưa bao giờ được đấu dây**: rail không biết ba
+ *     thiên hướng ở BẤT KỲ trạng thái nào, mua hay chưa mua.
+ *  2. Trong khi đó chip trên trang mời sẵn *"Vì sao lá số lại nghiêng về hướng
+ *     này?"* — mời đúng câu rail không có dữ liệu để trả lời.
+ * Nay khối này nêu thẳng ba thiên hướng kèm điểm. Cùng họ lỗi với luận giải 24
+ * phần: engine tính, trang hiện, model mù — chỉ khác là ở đây còn có một lời
+ * chú thích tự tin mô tả một đường dẫn không tồn tại.
  */
+/**
+ * Ba thiên hướng + chất người + việc-không-đòi-hỏi, dạng chữ cho rail.
+ *
+ * ⚠️ `khongDoiHoi` PHẢI đọc là "việc không đòi hỏi mặt đó", TUYỆT ĐỐI không
+ * đọc thành "cháu thiếu/kém" — luật này đã có ở tầng trang và tầng data, nhắc
+ * lại ở đây vì nay rail mới thật sự nhìn thấy mấy dòng đó.
+ */
+function huongBlock(p: HuongNghiepTreProfile): string {
+  const h = p.huong;
+  if (!h) return '';
+  // ⚠️ Xưng hô lấy từ LỨA TUỔI THẬT (`p.lop.xungHo`), KHÔNG ghi cứng "cháu" —
+  // #475 vừa vá đúng chuyện đó (lá số 19–25 bị gọi "bé trai"). Khối này thêm
+  // sau nên phải theo, nếu không là dựng lại lỗi vừa vá ở ngay bên cạnh.
+  const ai = p.lop?.xungHo || 'cháu';
+  let s = '\n--- THIÊN HƯỚNG ĐO ĐƯỢC (engine chấm — CHÉP đúng, KHÔNG tự chấm lại) ---\n';
+  if (h.chuaRoNet) {
+    s +=
+      'CHƯA hướng nào rõ nét. Nói THẲNG điều đó và khuyên cho thử rộng — ' +
+      'ở tuổi này chưa rõ nét là BÌNH THƯỜNG. TUYỆT ĐỐI không bịa ra một hướng nghe cho chắc chắn.\n';
+  }
+  if (Array.isArray(h.goiY) && h.goiY.length) {
+    s += 'Ba hướng nổi nhất (điểm là VỊ TRÍ so với phân bố lá số trẻ em, không phải "được mấy phần trăm"):\n';
+    h.goiY.forEach((g, i) => {
+      s += `  ${i + 1}. ${g.ten} — ${g.diem}\n`;
+      if (g.chat) s += `     chất việc: ${g.chat}\n`;
+      if (Array.isArray(g.dauHieu) && g.dauHieu.length)
+        s += `     dấu hiệu quan sát được ở nhà: ${g.dauHieu.slice(0, 3).join(' · ')}\n`;
+      // `vi` = cơ sở trong lá số. Đây là thứ trả lời chip "Vì sao lá số lại
+      // nghiêng về hướng này?" — chính câu trang mời hỏi mà rail từng không đáp nổi.
+      if (Array.isArray(g.vi) && g.vi.length) s += `     cơ sở trong lá số: ${g.vi.slice(0, 2).join(' · ')}\n`;
+    });
+  }
+  // `chatNguoi`/`khongDoiHoi` là MẢNG OBJECT (`{ten, cao}` / `{ten, thap}`),
+  // không phải mảng chuỗi — `join` thẳng sẽ ra `[object Object]`.
+  if (Array.isArray(h.chatNguoi) && h.chatNguoi.length)
+    s += `Chất người: ${h.chatNguoi.map((c) => `${c.ten} (${c.cao})`).join(' · ')}\n`;
+  if (Array.isArray(h.khongDoiHoi) && h.khongDoiHoi.length)
+    s +=
+      `Việc KHÔNG đòi hỏi ở ${ai}: ${h.khongDoiHoi.map((c) => `${c.ten} — ${c.thap}`).join(' · ')}\n` +
+      `  ⚠️ Đọc là "việc không đòi hỏi mặt đó", CẤM đọc thành "${ai} thiếu/kém".\n`;
+  s += '--- HẾT PHẦN THIÊN HƯỚNG ---\n';
+  return s;
+}
+
 export function huongNghiepTreRailWrapper(p: HuongNghiepTreProfile, tenRaw: string): string {
   // Tên do người dùng gõ → bóc ký tự bẻ prompt rồi mới đưa vào system.
   const ten = String(tenRaw || '')
@@ -261,5 +316,5 @@ Lá số ở trên KHÔNG phải của người đang chat. Đó là lá số CO
 - Lứa tuổi: ${p.lop.ten} (${p.lop.tuoi}). ${p.bayNghe ? 'Được nhắc tên nghề để hình dung chất việc, không quá 2–3 cái tên.' : '⛔ Cháu còn nhỏ — TUYỆT ĐỐI không nêu tên nghề nào, chỉ nói chất việc và hoạt động nên cho làm quen.'}
 - Điều người lớn đang lo: ${p.moiLo.label}. Ưu tiên trả lời quanh đúng chuyện đó.
 - CẤM gọi đây là trắc nghiệm/khoa học/đã kiểm định, CẤM đối chiếu DISC/MBTI/Holland.
-=== HẾT KHỐI HƯỚNG NGHIỆP TRẺ ===`;
+${huongBlock(p)}=== HẾT KHỐI HƯỚNG NGHIỆP TRẺ ===`;
 }
