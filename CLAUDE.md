@@ -373,6 +373,123 @@ lỗi nào bắn ra — chỉ là một trang ăn bản shell cũ. 🔑 **Gộp 
 lại phiên bản asset trên CẢ cây**, đừng tin "hết `<<<<<<<` là xong" (bài học
 `git checkout --ours` lặp lại ở dạng khác).
 
+### 🔴 SAU KHI BẬT PROD: lá số 43 tuổi vẫn được gọi là "bé trai"
+Henry: *"Mày phải factor in tuổi thật của lá số nữa. Tao vừa test thử lá số sinh
+lúc 1h45 sáng ngày 9 tháng 5 năm 1984. Tức là đã 43 tuổi rồi. Mà nó luận giải
+vẫn gọi là cháu/bé trai, nghe nó kỳ kỳ."*
+
+**Căn nguyên: `lopTuoi()` KẸP mọi tuổi > 12 về lứa 13–18** thay vì nhận ra lá số
+không phải trẻ em. Kẹp là cách hỏng IM LẶNG — không lỗi nào bắn ra, lá số cứ đi
+trọn đường như một đứa trẻ. Cộng thêm: chữ **"cháu" nằm CỨNG ở CẢ BA TẦNG**
+(bảng `CHAT_KHONG_DOI_HOI` của engine · prompt rail · `Bé trai/Bé gái` trên
+trang), nên không có đường nào đổi theo tuổi.
+
+🔑 **Hai ca ngoài dải KHÁC NHAU, không được gộp làm một:**
+| Tuổi mụ | Xử lý | Vì sao |
+|---|---|---|
+| **19–25** | lứa MỚI `vaodoi` | Vẫn là câu hỏi THẬT của cha mẹ (*"con vừa ra trường"*). Giữ tool, đổi xưng hô, đổi hoạt động sang việc đi làm thật |
+| **≥26** | `laTreEm=false`, **KHÔNG bán** | Không còn là "định hướng sớm cho con". Đổi mấy đại từ rồi bán tiếp một bản viết cho trẻ con là bán nhầm hàng |
+
+- **Chốt chặn đặt TRƯỚC `toolPaymentDenied`** ⇒ lá số người lớn **không mất
+  Lượng**. Đặt sau là thu tiền rồi mới từ chối — có bài kiểm canh đúng thứ tự
+  hai lệnh đó trong mã nguồn.
+- **Tính thử vẫn chạy cho MỌI tuổi**: tầng thiên hướng đọc từ 13 chiều, độc lập
+  tuổi, nên nó có nghĩa ở mọi lứa. Thứ bị cắt là phần CHỮ viết cho cha mẹ.
+- ⛔ **CỐ Ý KHÔNG dựng tầng người lớn đầy đủ** — `cong-so` chính là *Tử Vi Công
+  Sở & Hướng Nghiệp*, cũng 15 Lượng, cũng trả lời hướng nghiệp cho người trưởng
+  thành. Dựng thêm ở đây là hai tool 15 Lượng cùng một câu hỏi, đúng cái bẫy
+  track này vừa tốn một PR để gỡ. Nên ≥26 thì **bàn giao sang Công Sở**.
+- `lop` vẫn có giá trị khi `laTreEm=false` (giữ hình dạng payload) nhưng trang
+  **ẩn nhãn lứa và dòng vai cha mẹ** — không thì lại hiện *"Tuổi vào đời ·
+  19–25"* cho lá số 43 tuổi, đúng loại vô lý vừa đi sửa chỉ đổi chỗ.
+- Bảng hoạt động **27 → 36 khối** (thêm 9 khối lứa 19–25, 36 hoạt động mới),
+  `check:hoatdong` cập nhật theo và vẫn 0 cặp trùng giữa các hướng.
+- 🪤 **Red-team kẹp tuổi trở lại → lá số 43 tuổi lại `laTreEm=true`** ⇒ lỗi tái
+  hiện được, bất biến không đỗ giả.
+
+### 🔴 Vòng sau: phần MIỄN PHÍ vẫn gọi người 43 tuổi là "con"
+Vòng trên mới chặn đường TRẢ TIỀN và sửa nhãn. Nhưng tầng miễn phí đọc được cho
+**mọi** lá số, nên câu *"Việc hợp với **con** không đòi hỏi…"* vẫn dán lên lá số
+43 tuổi — **đúng chỗ Henry báo, chỉ khác một dòng**. Thêm `XUNG_HO_NGUOI_LON =
+'người này'`, ngôi **TRUNG TÍNH** vì lúc đó không biết ai đang đọc: cha mẹ của
+một người trưởng thành, hay chính người đó tự tra lá số mình. Trang cũng hết rơi
+về tiêu đề `"Con"` khi bỏ trống ô tên.
+- 🔑 **Bài học: chặn đường bán KHÔNG bằng chặn đường ĐỌC.** Vá một tính năng
+  theo tuổi thì phải đi hết mọi bề mặt CHỮ, không chỉ bề mặt có tường.
+- Đo lại: **2.352 lá số × 13.869 assertion, 0 lỗi** — `laTreEm` khớp ngưỡng 26 ·
+  0 rò `{ai}` · cờ đi đúng qua `hoSoTinhThu` · **ô xưng hô đúng ở cả hai dải**
+  (người này 2.476 · con 1.627 · cháu 358) · khối hoạt động ≥4 ô · lứa 3–7 sạch
+  tên nghề. Lá số Henry báo: `tuoi=43 · laTreEm=false · "người này"`.
+- 🪤 **Phép đo đầu BẮT OAN 511 ca**: regex `\bcon\b` khớp vào **"con vật"**,
+  **"con mắt"**. Phải đo **đúng Ô XƯNG HÔ** (`^Việc hợp với (.+?) không đòi hỏi`),
+  không dò chuỗi thô — đúng lớp lỗi CLAUDE.md đã ghi ở track brand-voice.
+- 🪤 **Và một bẫy cũ vấp lại**: lượt gọi `computeLaso` đầu dùng sai khoá
+  (`ngay/thang/nam` thay vì `day/month/year`) nên nhận lá số RỖNG và ra
+  `tuoi=null` — suýt kết luận là bug của code. Hàm **không ném lỗi** ở đường đó,
+  và field trả về là **`ls`** chứ không phải `laso`.
+- **15 ca trên TRANG THẬT** (serve `public/`, stub route preview): người lớn →
+  bàn giao nêu đúng "43 tuổi" + nói **không trừ Lượng** + link sang `/app/cong-so`
+  · **0 lượt `action=deduct`** · quét toàn bộ chữ hiện ra **0 mẩu "Bé trai"/
+  "cháu" lọt** · xưng "người này" · ẩn nhãn lứa · **ĐỐI CHỨNG trẻ em: 0 bàn giao,
+  vẫn "cháu", vẫn hiện nhãn 3–7 và "Bé trai"** · 0 lỗi JS.
+  🪤 Ba ca đỏ đầu là **lỗi TEST**: bộ chọn nút bắt nhầm nút khác (nút thật là
+  `#btnGo`), và **stub thiếu `success:true`** nên `analyze()` rơi vào nhánh báo
+  lỗi — đúng bài học "stub thiếu trường thì bài kiểm đo nhầm đường lùi", phải
+  lấy shape THẲNG từ route.
+
+---
+
+## 🧱 TypeScript 7 GỠ HẲN API BIÊN DỊCH — bump là vỡ bản dựng prod (2026-08-09)
+
+Lượt Dependabot bump **typescript 6.0.3 → 7.0.2** (#388, `0ef5edd`) làm **lint đỏ
+7 lượt liên tiếp trên `main`** VÀ **7 lượt deploy production ERROR**. Phiên khác
+vá căn nguyên trước (#476 `efc26ff` — trả root về `^6.0.3` + luật Dependabot
+`ignore` chặn bump major).
+
+### 🔑 Đây là ĐỨT GÃY CẤU TRÚC, không phải quirk phiên bản
+`typescript@7` là bản **port native**: `exports['.']` trỏ vào `lib/version.cjs`
+và **chỉ còn `version` + `versionMajorMinor`**. Toàn bộ API biên dịch trong JS
+(`transpileModule` · `ModuleKind` · `ScriptTarget`) **không còn tồn tại**. Đo
+trực tiếp: `Object.keys(require('typescript')).length === 2`.
+
+| Đường | TS 7 |
+|---|---|
+| `tsc` CLI (`npm run typecheck`, engine build) | ✅ vẫn chạy — binary, không qua API |
+| `next build` | 🔴 *"TypeScript 7.0.2 does not provide the compiler API required by Next.js"* |
+| script gọi `ts.transpileModule` | 🔴 `TypeError: Cannot read properties of undefined` |
+
+### 🔴 CI KHÔNG PHỦ `next build` — bài học nặng nhất của lượt này
+Job tên **`build`** trong danh sách check là **`build-android.yml`**, không phải
+`next build`. `lint`/`typecheck` gọi `tsc` **CLI** nên vẫn xanh. ⇒ **Vercel là
+nơi DUY NHẤT chạy `next build`.** Đếm "7 check xanh" trên PR **không** chứng minh
+bản dựng prod còn sống — đúng họ với bài học *"skip trông giống pass"*.
+
+### Gia cố kèm (PR sau #476)
+Hai script còn dựa vào API đã bị gỡ, nay không dựa nữa nên **lượt bump sau không
+đụng được tới chúng**, dù chốt Dependabot có được gỡ hay không:
+- **`scripts/check-que-motifs.mjs`** — bỏ hẳn phụ thuộc TypeScript. `que-motifs.ts`
+  là **bảng dữ liệu thuần** (đúng một khai báo, 0 dòng logic) nên chỉ cần cắt vế
+  phải dấu `=` rồi để JS tự đọc. Không khớp mẫu thì **DỪNG HẲN** kèm lời nhắc sửa
+  bộ dò — đọc ra bảng rỗng rồi báo xanh còn tệ hơn đỏ.
+- **`scripts/gen-que-images.mjs`** — gọi **`tsc` CLI** (file này có LOGIC thật,
+  không cắt chuỗi được). ⚠️ Bắt buộc `--ignoreConfig`: nêu tên file trên dòng lệnh
+  trong khi cwd có `tsconfig.json` thì tsc báo **TS5112** rồi bỏ cuộc. Đo trên cả
+  TS 6 lẫn TS 7 — cả hai emit đúng. Script này đáng gia cố nhất vì nó chỉ chạy khi
+  vẽ lại 64 bức tranh, tức hỏng thì lộ ra đúng lúc tệ nhất.
+
+### Verify
+`npm ci` theo ĐÚNG lockfile ⇒ máy đo chạy chính **TS 7.0.2 như CI**, xác nhận
+`ts.transpileModule === undefined` tận gốc · **A/B trên cùng bản TS 7: bộ dò bản
+CŨ đỏ, bản MỚI xanh** · red-team bộ dò 2 ca (đổi tên khai báo → đỏ đúng câu hướng
+dẫn; bớt một mô-típ của quẻ 1 → đỏ *"phải đúng 6 mô-típ, đang có 5"*), khôi phục
+sạch 0 file rác · `--dry-run` của script vẽ in đủ prompt, **0 lượt gọi API** ·
+14/14 bộ dò + `typecheck` + `next build` qua được bước TypeScript.
+
+### CÒN LẠI
+- **Chưa có gì trong CI phủ `next build`.** Đáng thêm một job dựng thật (có thể
+  bỏ qua env bằng stub) — nếu không thì lần sau vẫn phải chờ Vercel mới biết.
+- `tuvi-engine` **CỐ Ý giữ TS 7** (#384): nó dựng bằng `tsc` CLI nên không dính.
+
 ### Verify
 `tsc` 0 · `lint` 0 lỗi (72 warning pre-existing) · `prettier` quét cả cây sạch ·
 **10/10 bộ dò sạch** (`prices`/`groups`/`nostore`/`share`/`keyframes`/
