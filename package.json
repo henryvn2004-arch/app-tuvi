@@ -17,6 +17,7 @@
     "check:groups": "node scripts/check-no-hardcoded-groups.mjs",
     "check:share": "node scripts/check-shell-share.mjs",
     "check:history": "node scripts/check-shell-history.mjs",
+    "check:shellboot": "node scripts/check-shell-boot.mjs",
     "check:keyframes": "node scripts/check-keyframes.mjs",
     "check:hoatdong": "node scripts/check-hoat-dong-tre.mjs",
     "check:hexagrams": "node scripts/check-hexagram-table.mjs",

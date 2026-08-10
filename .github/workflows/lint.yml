@@ -59,6 +59,15 @@ jobs:
       - name: Mọi tool Luận Đường có lịch sử hội thoại
         run: npm run check:history
 
+      # Chặn trang shell MỚI chép thiếu khuôn khởi động. Cùng đường tái phát với
+      # check:history nhưng thiếu thứ khác: `app-cong-so` từng thiếu thẻ font
+      # Noto Serif (chữ lặng lẽ rơi về Georgia), `app-gio-sinh` từng thiếu
+      # `auth.js` (người ĐANG ĐĂNG NHẬP bị bắt đăng nhập lại — chặn thẳng đường
+      # trả tiền). `nav.js` ở chế độ data-icons-only return sớm nên KHÔNG chèn
+      # `auth.js` hộ; trang shell phải tự khai.
+      - name: Trang shell nạp đủ khung khởi động
+        run: npm run check:shellboot
+
       # Chặn `animation:` trỏ tới @keyframes KHÔNG TỒN TẠI — trình duyệt không
       # báo gì cả, phần tử vẫn hiện, chỉ là đứng im. Bắt được ngay lượt chạy
       # đầu: banner "Chào mừng! Bạn đã nhận Lượng miễn phí" của `auth.js` mượn
