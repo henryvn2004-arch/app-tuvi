@@ -5,6 +5,97 @@
 
 ---
 
+## 🔁 "Đã check hết chưa?" — CHƯA, và 4 tool nữa dính (2026-08-10, PR này)
+
+Henry: *"mày check mấy tool liên quan đến tử vi như xem tuổi vợ chồng, xem làm
+ăn, tử vi công sở, đinh hướng nghề nghiệp,... này nọ hết rồi đúng ko? đều ko bị
+lỗi này?"*
+
+### 🔴 Câu trả lời là CHƯA — và lượt rà trước của tao đọc lướt nghe như "đã phủ hết"
+Lượt rà chỉ phủ nhóm đẩy dữ liệu qua **`scenario`**. Trong bốn thứ Henry nêu chỉ
+`cong-so` nằm trong đó. Nhóm CÒN LẠI đi đường khác hẳn — **`wrap` + lá số đầy
+đủ** (`past-life` · `past-life-bond` · `nguoi-khac` · `day-con` ·
+`huong-nghiep-tre`) — tao chưa đụng tới lần nào.
+- 🔑 **Bài học phương pháp:** với `xem-tuoi` tao viết *"extractor CỐ Ý tóm tắt lá
+  số → không đo bằng thước này"*. Vế đó ĐÚNG cho **lá số thô** (hàng nghìn lá,
+  tóm tắt là phải) nhưng tao lấy nó làm cớ để **không đo gì cả**, trong khi câu
+  hỏi đúng là *"tầng PHÂN TÍCH engine tính ra có tới model không"*. Đó chính là
+  câu đã bắt được `tu-binh`. **Lý do hợp lệ để thu hẹp THƯỚC ĐO không phải lý do
+  để bỏ luôn phép đo.**
+
+### 🔴 Ba lỗi đo được, cùng họ `thapThan`
+1. **`xem-tuoi`/`xem-lam-an`/`tuong-hop`** — trang vẽ bảng **8 tiêu chí** (Xét
+   Tuổi · Ngũ Hành · Tư Tưởng · Tính Cách · Quan Hệ · Con Cái · Tài Chính · Vận
+   Hành) kèm điểm hai bên và **TỔNG /100**. Rail: **0/8 tên tiêu chí, không có
+   tổng**. Lố nhất — **câu chào của chính rail nói *"hoà hợp 54,6/100"***, một
+   con số nó không hề có trong context.
+2. **`day-con`** — 5 trục + 8 chất (đúng hai biểu đồ trang vẽ) không tới rail,
+   **trong khi luật trong vỏ lại nói *"ĐIỂM TRÊN THANG 0–10 trong dữ kiện"*** ⇒
+   prompt neo vào khối chưa bao giờ được gửi. Đúng lỗi `=== ĐIỂM ĐÁNH GIÁ ===`.
+3. **`huong-nghiep-tre`** — `railDataDayDu`/`railDataTinhThu` là **CODE CHẾT**,
+   0 file import (route chỉ dùng `hoSoTinhThu`/`hoSoDayDu`). Mà `run.ts` ghi chú
+   *"rail chỉ nhận chúng qua `railDataDayDu` SAU khi mua"* — **mô tả một cơ chế
+   chưa bao giờ được đấu dây**; rail không biết ba thiên hướng ở BẤT KỲ trạng
+   thái nào. Trong khi chip trang mời sẵn *"Vì sao lá số lại nghiêng về hướng
+   này?"*. Henry chốt **cho rail biết luôn**.
+4. **`nguoi-khac` + `day-con`** — bản **TRẢ TIỀN** dựng đoạn văn từ
+   `kieu.dongLuc`/`datChat`/`kieuDan`/`moiTruongHop`/`moiTruongKy`; người dùng
+   ĐỌC rồi hỏi lại thì rail chỉ có nhãn kiểu + một câu. Bảng KIỂU là quy chiếu
+   TỰ ĐẶT — model **không suy lại được từ lá số**, khác mấy cung vốn có sẵn.
+   🔑 Tiêu chí đúng để quyết "có phải gửi không" là **người dùng có ĐỌC được nó
+   không** (trên trang HOẶC trong bản văn trả tiền), không phải "trang có vẽ nó
+   thành ô không".
+
+### 🪤 Lỗ parity server/client suýt do CHÍNH bản vá của tao kích hoạt
+`anSaoLaSo` **không re-expose `chiNam`** ở cấp 1. Client vá tay
+(`ls.chiNam = conv.chiNam`, có chú thích tại chỗ), `computeLaso` thì KHÔNG.
+Lỗ này **nằm im** vì chưa gì ở server đọc `chiNam` — nhưng cầu nối tương hợp mới
+sẽ gọi `chiRelation('','')` ⇒ `dc1 === dc2` ⇒ **"Cùng chi" 8/10 cho MỌI cặp**.
+Đối chứng 4/4 cặp đều sai (57,6 thay vì 54,6 · 8/10 "Cùng chi" thay vì "Tam
+Hình ⚠" 3/10).
+- ⚠️ **TRANG CHƯA BAO GIỜ SAI** — đừng ghi thành "tool đang báo sai cho người
+  dùng". Đây là lỗi tao suýt tự tạo ra, bắt được vì **nhìn output thật** thấy
+  `Mậu Dần` vs `Giáp Tý` mà ghi "Cùng chi" và ngoặc rỗng.
+- 🔑 Vá ở GỐC (`computeLaso` gắn lại `chiNam`) chứ không vá trong cầu nối: để
+  nguyên thì người sau vấp đúng cái hố đó. Thêm trường là thay đổi CỘNG THÊM —
+  có ca đối chứng **12 ca context rail lá số TRÙNG KHÍT** trước/sau.
+
+### Cách vá
+- **`lib/engine/tuong-hop.ts`** — cầu nối server nạp CHÍNH `public/tuong-hop.js`
+  (khuôn `kim-lau.ts`/`laso.ts`), **không chép công thức**. Tính ở SERVER chứ
+  không bắt client gửi kèm: bản JS cũ còn trong cache trình duyệt vẫn chỉ gửi 4
+  khoá, mà đường đó phải đúng ngay cho họ. Fail-soft → rơi về bản tóm tắt cũ.
+- Bảng điểm **sắp theo TRỌNG SỐ giảm dần**, không theo thứ tự mảng: model cần
+  biết tiêu chí nào KÉO tổng điểm, không phải cái nào tình cờ đứng trước.
+
+### Verify
+`tsc` 0 · `lint` 0 lỗi (72 warning pre-existing) · `prettier` sạch · **13/13 bộ
+dò** · engine **185 pass**.
+- **Parity bảng điểm SERVER vs TRÌNH DUYỆT: 4/4 cặp trùng khít** (dựng lá số
+  kiểu client bằng chính `anSaoLaSo` + vá `chiNam` tay, so từng tiêu chí + tổng).
+- **ĐỐI CHỨNG gỡ `chiNam`: 4/4 cặp báo sai "Cùng chi 8/10"** ⇒ lỗ có thật.
+- **12 ca context rail lá số TRÙNG KHÍT** sau khi thêm `chiNam`.
+- Phủ sau khi vá: **8/8 tiêu chí + tổng** · **5/5 trục và 8/8 chất kèm điểm** ·
+  **3/3 thiên hướng kèm CƠ SỞ trong lá số** (đúng thứ trả lời cái chip) ·
+  **7/7 trường KIỂU** mà bản trả tiền dùng.
+
+### CÒN LẠI
+- **Chưa gọi LLM thật** — vẫn dừng ở tầng dữ liệu vào prompt.
+- ✅ **`nhan-mach` ĐÃ ĐO — gần đủ, vá một chỗ:** railData phẳng, có tên/kiểu
+  từng người, phân bố 4 kiểu, kiểu THIẾU, thứ tự tiếp cận. Thiếu **lý do từng
+  cặp** (`cap[].vi`) — rail chỉ nhận `"A ↔ B"` trơ trong khi trang hiện cả câu
+  giải thích. Đã thêm.
+- ✅ **`ban-do-sao` ĐÃ ĐO — sạch by construction:** `railData` mọi giá trị là
+  CHUỖI (phẳng tuyệt đối, miễn nhiễm bẫy `extractGenericContext`), phủ trục ·
+  sao chính kèm nghĩa · sao phụ · giao điểm · góc chiếu · hình thế · cân bằng ·
+  đầu nhà. Cắt duy nhất là `gocChieu.slice(0, 12)` — có chủ ý.
+- **Chưa đo: 2 tool chân dung · `duyen-no`** (đường `wrap` kể chuyện, khác hình
+  dạng hẳn — vỏ ở đó là giọng kể chứ không phải bảng dữ liệu).
+- `check:railfields` vẫn chỉ phủ **Bát Tự**. Nhóm `wrap` chưa có máy canh — mà
+  đây đúng là nhóm vừa lộ ra 3 lỗi.
+
+---
+
 ## 🀄 Rà tool khác cùng họ lỗi → Bát Tự: rail KHÔNG hề nhận Thập Thần (2026-08-09, PR này)
 
 Henry: *"xem lại lỗi này có bị tương tự cho các tool tử vi khác trong shell ko"*.

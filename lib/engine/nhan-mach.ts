@@ -323,8 +323,13 @@ export function railData(p: NhanMachProfile): Record<string, string | number | b
   if (p.nenTimThem) d.kieuNenTimThem = `${p.nenTimThem.ten} — ${p.nenTimThem.motCau}`;
   const giam = p.cap.filter((c) => c.loai === 'giam-chan');
   const bu = p.cap.filter((c) => c.loai === 'bu-nhau');
-  if (giam.length) d.capDeGiamChan = giam.map((c) => `${c.a} ↔ ${c.b}`).join(' | ');
-  if (bu.length) d.capDeBuNhau = bu.slice(0, 6).map((c) => `${c.a} ↔ ${c.b}`).join(' | ');
+  // Kèm LÝ DO từng cặp (`vi`) — trang có hiện, mà trước đây rail chỉ nhận
+  // "A ↔ B" trơ. Hỏi "vì sao hai người này bù nhau" thì nó phải luận chay dù
+  // engine đã tính sẵn câu trả lời. Cùng họ lỗi `thapThan` của Bát Tự.
+  const capLine = (c: { a: string; b: string; vi?: string }) =>
+    `${c.a} ↔ ${c.b}${c.vi ? ` — ${c.vi}` : ''}`;
+  if (giam.length) d.capDeGiamChan = giam.map(capLine).join(' | ');
+  if (bu.length) d.capDeBuNhau = bu.slice(0, 6).map(capLine).join(' | ');
   // Nêu rõ con số là của KHUNG đại vận, không phải điểm của năm — nếu không,
   // rail đọc "Minh (8.7/10)" thành "vận năm nay của Minh 8,7 điểm".
   d.thuTuTiepCan = p.thuTuTiepCan
