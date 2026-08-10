@@ -21,7 +21,7 @@
 
 import { XUNG_HO_RULE } from '@/lib/agent/prompts';
 import { formatCharacterForLLM } from '@/lib/engine/past-life';
-import type { PastLifeBond, BondKind, GroupBond } from '@/lib/engine/past-life-bond';
+import type { PastLifeBond, BondKind, GroupBond, BondSignal } from '@/lib/engine/past-life-bond';
 import { formatBondForLLM } from '@/lib/engine/past-life-bond';
 import { formatMorphologyForLLM, type PalaceMorphology } from '@/lib/engine/portrait';
 import { PORTRAIT_STYLE_EN } from '@/lib/agent/past-life-story';
@@ -518,6 +518,38 @@ function buildFinalFigureImagePrompt(spec: FigureSpec): string {
 // nhân vật, phản ứng tự nhiên là hỏi tiếp về họ. Khác một chỗ QUAN TRỌNG: rail
 // chỉ nạp được lá số của MỘT người (người đang đăng nhập), nên tuyệt đối không
 // được để model luận sâu về người thứ hai như thể có lá số của họ trong tay.
+/**
+ * Dấu hiệu cổ pháp dẫn tới loại duyên — thứ trang hiện thẳng dưới nhãn
+ * "cơ sở trong hai lá số".
+ *
+ * 🔑 Rail KHÔNG có đường nào suy lại được mấy dòng này: chúng bắc qua HAI lá
+ * số (địa chi cung Mệnh, ngũ hành nạp âm, chính tinh cung Mệnh của cả đôi),
+ * mà system chỉ nạp được lá số của người đang ngồi trước máy. Không gửi ⇒ hỏi
+ * "vì sao lại là oan gia?" là model buộc phải bịa — đúng trên câu hỏi mà chính
+ * trang mời người ta đặt.
+ */
+function signalBlock(signals: BondSignal[] | null | undefined): string {
+  if (!Array.isArray(signals) || !signals.length) return '';
+  return (
+    '\nCƠ SỞ TRONG HAI LÁ SỐ (engine tra — CHÉP đúng, KHÔNG tự suy lại):\n' +
+    signals.map((s) => `  • ${s.label}: ${s.detail}\n`).join('')
+  );
+}
+
+/**
+ * Chiều "ai cho ai" của các duyên lệch (ân nhân / thầy trò).
+ *
+ * ⚠️ Đây là chỗ đã trả giá một lần: `hanhRelation` từng bị đọc ngược khiến
+ * truyện và bức tranh dựng NGƯỢC VAI (người được cứu thành người ra tay). Vỏ
+ * rail mà không nói rõ chiều thì model tự đoán, và nó đoán sai được y hệt.
+ */
+function giverLine(giver: 'a' | 'b' | null, nameA: string, nameB: string): string {
+  if (!giver) return '  Duyên NGANG HÀNG — không bên nào là bên "cho". Đừng dựng ra vai ân nhân.\n';
+  const cho = giver === 'a' ? nameA : nameB;
+  const nhan = giver === 'a' ? nameB : nameA;
+  return `  Bên CHO là ${cho}, bên NHẬN là ${nhan}. TUYỆT ĐỐI không đảo hai vai này.\n`;
+}
+
 export function bondRailWrapper(bond: PastLifeBond, selfIsA: boolean): string {
   const me = selfIsA ? bond.a : bond.b;
   const other = selfIsA ? bond.b : bond.a;
@@ -527,8 +559,8 @@ Người xem vừa đọc xong bản phác hoạ "duyên nợ tiền kiếp" d�
 - Nhân vật của CHÍNH người xem (lá số đang có ở trên): ${me.characterName} — ${me.occupation.title}
 - Nhân vật của người kia: ${other.characterName} — ${other.occupation.title}
 - Mối duyên đã chốt: ${bond.type.label}. ${bond.type.gist}
-- Bối cảnh: ${bond.era.label}${bond.era.ageLabel ? ' — ' + bond.era.ageLabel : ''}
-
+${giverLine(bond.giver, bond.a.characterName, bond.b.characterName)}- Bối cảnh: ${bond.era.label}${bond.era.ageLabel ? ' — ' + bond.era.ageLabel : ''}
+${signalBlock(bond.signals)}
 CÁCH TRẢ LỜI:
 - Hỏi về ${me.characterName} hoặc về mối duyên → luận đúng như luận cho người xem, nhưng ĐẶT LỜI vào đời nhân vật. Bám ĐÚNG dữ liệu lá số ở trên; vỏ bọc chỉ đổi cách nói, không đổi kết luận.
 - Giữ đúng bối cảnh đã chốt. Không để vật hiện đại lọt vào.
@@ -565,7 +597,18 @@ Người xem vừa đọc xong bản phác hoạ "duyên nợ tiền kiếp" d�
 - Bối cảnh: ${group.era.label}${group.era.ageLabel ? ' — ' + group.era.ageLabel : ''}
 - Mối duyên trung tâm của nhóm: ${nameOf(group.spine.i)} — ${nameOf(group.spine.j)}: ${group.spine.type.label}
 - Mối duyên của người xem với từng người:
-${mine.map((p) => `  • ${nameOf(p.i)} — ${nameOf(p.j)}: ${p.type.label}. ${p.type.gist}`).join('\n')}
+${mine
+  .map(
+    (p) =>
+      `  • ${nameOf(p.i)} — ${nameOf(p.j)}: ${p.type.label}. ${p.type.gist}\n` +
+      // Chiều cho/nhận + cơ sở CHỈ in cho cặp DÍNH tới người xem. Nhóm 5 người
+      // có 10 cặp × 3 dấu hiệu — in hết là ~1,5K ký tự context cho phần lớn là
+      // duyên giữa hai người khác, mà giới hạn cứng ngay dưới lại cấm luận sâu
+      // về họ. Gửi thứ model bị cấm dùng là vừa tốn vừa mời nó phá luật.
+      `  ${giverLine(p.giver === 'i' ? 'a' : p.giver === 'j' ? 'b' : null, nameOf(p.i), nameOf(p.j)).trimStart()}` +
+      (p.signals || []).map((s) => `    – ${s.label}: ${s.detail}\n`).join('')
+  )
+  .join('')}
 ${rest.length ? '- Mối duyên giữa những người còn lại với nhau:\n' + rest.map((p) => `  • ${nameOf(p.i)} — ${nameOf(p.j)}: ${p.type.label}`).join('\n') : ''}
 
 CÁCH TRẢ LỜI:

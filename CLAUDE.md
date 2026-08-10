@@ -5,6 +5,106 @@
 
 ---
 
+## 🧷 Máy canh cho nhóm `wrap` — và nó lòi ra 13 trường + 1 lỗi #475 sót (2026-08-10, PR này)
+
+Henry: *"ok làm tiếp đi"* — mục CÒN LẠI tao tự nêu ở lượt trước: *"`check:railfields`
+mới phủ Bát Tự. Nhóm `wrap` chưa có máy canh — mà đây đúng là nhóm vừa lộ 3 lỗi."*
+
+### 🔑 Vì sao phải là bộ dò RIÊNG, không nới bộ cũ
+Hai nhóm đi hai đường khác hẳn: nhóm `scenario` → `SCENARIO_FIELD` → `extract*Context`;
+nhóm `wrap` → **lá số ĐẦY ĐỦ + một hàm `*RailWrapper`**. Bộ dò cũ neo vào
+`extractTuBinhContext` nên không có cách nào với sang. Đó chính là lý do lượt rà
+đầu **sót đúng nhóm này**, rồi lượt sau nó lòi ra 3 lỗi.
+
+**`scripts/check-rail-wrap.mjs` (bộ dò thứ 16)** — engine khai trường nào ở hồ sơ
+thì wrapper phải ĐỌC, hoặc khai `skip` **kèm lý do**, và lý do chỉ được thuộc hai
+loại kiểm được bằng mắt: *(a)* đã có trong khối lá số đầy đủ (model tự suy lại
+được) · *(b)* cờ nội bộ / tham số đầu vào. Chạy trên MÃ NGUỒN, không cần tsc.
+
+### 🔴 Chạy lượt đầu: 13 trường thiếu ở 4/6 vỏ
+| tool | trường không tới rail |
+|---|---|
+| `day-con` | `hoc` (6 thẻ CÁCH DẠY — tầng **miễn phí**) · `matDoc` · `changHoc` · `voiChaMe` · `hoatDong` |
+| `nguoi-khac` | `matDoc` · `voiBan` |
+| `huong-nghiep-tre` | `matDoc` · `laTreEm` · `changDangO` |
+| `past-life-bond` | `signals` · `giver` |
+
+- 🔑 **Tiêu chí quyết gửi/bỏ**: người dùng có ĐỌC được nó không, **và** model có
+  suy lại được từ lá số không. Nên `sao`/`cachCuc`/`diem` của `matDoc` thì BỎ (lá
+  số đã có, gửi nữa là nhân đôi ~1.200 ký tự), còn `nhan`/`y` thì GỬI — chúng nói
+  *tool này đọc cung đó để trả lời câu hỏi gì*, không có trong lá số.
+- **`voiBan`/`voiChaMe`/`signals` là loại KHÔNG có đường suy lại**: chúng bắc qua
+  lá số THỨ HAI, mà rail chỉ nạp được một. Hỏi *"vì sao lại là oan gia?"* trước
+  đây là model buộc phải bịa — đúng trên câu hỏi trang mời người ta đặt.
+- **`giver`** (bên CHO trong duyên ân nhân/thầy trò) không gửi thì model tự đoán
+  chiều, và nó đoán sai được y hệt lỗi `hanhRelation` đã dựng NGƯỢC VAI một lần.
+- `matDocBlock` gom về **`lib/agent/rail-blocks.ts`** — ba tool cùng hình dạng,
+  chép ba bản là ba bản trôi khỏi nhau.
+
+### 🔴 Và một lỗ #475 còn sót: vỏ rail gọi lá số 43 tuổi là "một đứa trẻ"
+`huongNghiepTreRailWrapper` mở đầu bằng *"ĐANG XEM LÁ SỐ CỦA MỘT ĐỨA TRẺ"*, gọi
+"cháu", in *"Lứa tuổi: Tuổi vào đời"*, cấm đoán đỗ/trượt — cho một người 43 tuổi.
+Nặng hơn: khối `huongBlock` tao vừa thêm ở PR trước đọc `p.lop.xungHo`, mà khi
+`laTreEm=false` thì `lop` chỉ là **chỗ đứng kỹ thuật** và `xungHo` vẫn trả `"con"`
+⇒ vỏ rail **tự nói ngược lại chính dữ liệu nó đang in ra** (engine đã thay đúng
+`XUNG_HO_NGUOI_LON` vào các chuỗi bên trong `huong`).
+- 🔑 **Bài học lặp lần thứ hai, y nguyên: chặn đường BÁN không bằng chặn đường
+  ĐỌC.** #475 vá trang + chặn thu tiền; bề mặt CHỮ thứ ba (vỏ rail) thì không ai
+  đi tới.
+- ⚠️ **Không thổi phồng: đây là lỗ TIỀM ẨN, không phải đang cắn người dùng.**
+  Trang chặn đường trả tiền trước khi `setContext({wrap})` chạy, và `SHAPE=2` của
+  #475 đã làm mọi dòng cache người-lớn cũ thành stale ⇒ nhánh `free` cũng không
+  tới. Vá vì bản thân vỏ SAI và vì `wrap` là ENUM client gửi được — cùng lối "vá
+  ở GỐC chứ không vá ở cầu nối" của `chiNam`.
+- Ca `laTreEm=false` nay có vỏ RIÊNG: cấm mọi từ trẻ con, vẫn gửi tầng thiên
+  hướng (đọc từ 13 chiều, độc lập tuổi ⇒ vẫn đúng), và bàn giao sang
+  `/app/cong-so`.
+
+### ⚠️ PHẠM VI THẬT của bộ dò — ghi để khỏi tin quá tay
+Soi **cấp 1** của hồ sơ + các kiểu lồng khai TAY trong `deep`. Trường mới nằm
+trong một kiểu lồng CHƯA khai thì **không bắt được** — đúng chỗ `nhan-mach` từng
+lọt (`cap[].vi`). Cố ý không tự duyệt sâu mọi kiểu lồng: phần lớn là cấu trúc nội
+bộ, quét hết là kêu oan hàng loạt, mà **bộ dò kêu oan là bộ dò bị tắt đi**.
+`deep` hiện khoá `BondSignal` · `VoiBan` · `KieuHoc` · `VoiChaMe` · **`GroupPair`**
+— cái cuối bắt đúng lỗ mà cấp 1 báo xanh (`GroupBond` sạch, nhưng `GroupPair` mang
+`signals`/`giver` y hệt bản 2 người vừa thiếu).
+- 🪤 Bộ dò gom **thân wrapper + thân mọi helper CÙNG FILE mà nó gọi** (đệ quy).
+  Bắt buộc: `huongBlock`/`kieuChiTiet` nằm ngoài hàm export. Nhưng CỐ Ý **không
+  quét cả file** — `past-life-story.ts` còn chứa `formatCharacterForLLM` (dựng
+  prompt TRUYỆN); tính nhầm nó là "rail đã biết" thì lại xanh oan.
+
+### Verify
+`tsc` 0 · `lint` **0 lỗi / 73 warning = ĐÚNG baseline `origin/main`** (đo lại trên
+worktree main, không phỏng đoán) · `prettier` sạch · **16/16 bộ dò** · engine
+**185 pass**.
+- **672 lượt dựng vỏ rail trên 96 lá số**: 0 rò `[object Object]`/`undefined`/`NaN`
+  · deterministic · **bất biến đạo đức: 36/36 lá số người lớn KHÔNG dính khung trẻ
+  con, 60/60 lá số trẻ em vẫn giữ đúng khung**.
+- 🪤 **ĐỐI CHỨNG `origin/main` bằng `git worktree`: 25 bất biến đỏ**, trong đó
+  **36/36 lá số người lớn nhận khung "MỘT ĐỨA TRẺ"** và ô xưng hô ra `"con"` thay
+  vì `"người này"` ⇒ lỗ có thật, phép đo bắt được.
+- **Red-team bộ dò 5 ca + 2 đối chứng**: gỡ `signals` khỏi wrapper → đỏ · engine
+  thêm trường mới → đỏ · `skip` khai thừa → đỏ · bỏ một trường của KIỂU LỒNG →
+  đỏ · **sửa chữ vô hại → vẫn xanh** · khôi phục → xanh · 0 file rác.
+- 🪤 **Ca red-team đầu "đỗ giả" vì đột biến KHÔNG ăn** (perl nội suy `${...}` trong
+  template literal). Chốt assert-đột-biến-đã-ăn bắt đúng chỗ đó thay vì in một
+  dấu ✓ vô nghĩa — đúng bài học "mọi lượt thay bằng script phải assert".
+- 🪤 Và **hai lần vấp lại bẫy TÊN KHOÁ** (`chua-biet-thich-gi`, `khong-chiu-hoc`
+  không có trong `MoiLoId`) → hàm trả `undefined`. Lần này nhận ra ngay là lỗi
+  harness chứ không ghi thành "không đo được".
+
+### Context tốn thêm (đường `wrap` vốn đã kèm ~14K ký tự lá số)
+`day-con` 4,7K → **6,2K** · `nguoi-khac` 2,2K → **3,1K** · `bond` 1,7K → **2,1K** ·
+`hn-tre` 4,2K → **4,7K**. Đổi lại là mấy khối người dùng ĐANG MỞ trên màn hình.
+
+### CÒN LẠI
+- **Chưa gọi LLM thật** — vẫn dừng ở tầng dữ liệu vào prompt.
+- **Cấp 2 chưa có máy canh** (xem PHẠM VI). Kiểu lồng mới phải tự nhớ khai `deep`.
+- **Chưa đo: 2 tool chân dung · `duyen-no`** ở tầng *nội dung* — PR này mới khoá
+  phần TRƯỜNG của `past-life`/`past-life-bond`, chưa đọc chất lượng chữ.
+
+---
+
 ## 🧹 "2 tool mỏng quá" — CẦU CÓ THẬT, mình dựng SAI HÌNH DẠNG (2026-08-10, PR này)
 
 Henry: *"Ngũ hành nạp âm với Ngũ hành tên, nó mỏng quá, xem xong chả biết làm
