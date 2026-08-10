@@ -180,6 +180,43 @@ quet('bat-tu', [[3,6,1998,1],[17,11,1975,7],[28,2,2004,11]].map(([d,m,y,g]) => {
 const { lapBanDo, railData: bdRail } = await import('./lib/tayphuong/natal.js');
 quet('ban-do-sao', [[3,6,1998,1,30],[22,12,1980,18,5]].map(([d,m,y,h,mi]) => { const b = lapBanDo({ngay:d,thang:m,nam:y,gio:h,phut:mi,vido:21.03,kinhdo:105.83,muiGio:7}); return [b, bdRail(b)]; }));
 
+/* ─── PHỦ TRỌN TỪ VỰNG, không phải phủ mẫu ────────────────────────────────
+   Quét mẫu ở trên chỉ chứng minh được thứ mà mẫu CHẠM TỚI. Đo thật: lưới cũ
+   (3 lá số) bỏ lọt 4 tên; nới lên 352 lá số vẫn bỏ lọt thêm 10 tên nữa —
+   chúng hiếm tới mức không lá nào trong lưới sinh ra. Nên với nguồn nào
+   LIỆT KÊ ĐƯỢC danh sách tên, phải đối chiếu trọn danh sách đó. */
+const HANR = /[\\u3400-\\u4dbf\\u4e00-\\u9fff]/;
+const goc = (o, ra = new Set()) => {
+  if (typeof o === 'string') { if (HANR.test(o)) ra.add(o); return ra; }
+  if (Array.isArray(o)) { o.forEach(v => goc(v, ra)); return ra; }
+  if (o && typeof o === 'object') Object.entries(o).forEach(([k, v]) => { if (HANR.test(k)) ra.add(k); goc(v, ra); });
+  return ra;
+};
+// ⚠️ Bọc try/catch để nguồn dời/đổi bố cục thì rơi về \`n: 0\` — chốt ngưỡng ở
+// phía dưới mới in được câu hướng dẫn. Không bọc thì lượt chạy chết bằng một
+// bãi ERR_MODULE_NOT_FOUND, đọc xong vẫn không biết phải sửa gì.
+try {
+  const { docThanSat: bzDoc } = await import('./lib/bazi/terms.js');
+  // Nạp bằng đường dẫn TUYỆT ĐỐI: bảng này không nằm trong \`exports\` của
+  // \`mingyu-core\` nên gọi theo tên gói sẽ bị chặn.
+  const bzData = await import(${JSON.stringify(
+    'file://' + join(process.cwd(), 'node_modules/mingyu-core/dist/bazi/baziShenShaData.js')
+  )});
+  const bzTen = goc(bzData.shenShaTypes);
+  out['tuvung-bat-tu'] = { n: bzTen.size, sot: [...bzTen].filter(s => HANR.test(bzDoc(s).ten)) };
+} catch (e) {
+  out['tuvung-bat-tu'] = { n: 0, sot: [], loi: String(e && e.message || e) };
+}
+
+try {
+  const { docThanSat: hlDoc } = await import('./lib/almanac/terms.js');
+  const { listHuangliShenshaNames } = await import('mingyu-core/shensha');
+  const hlTen = listHuangliShenshaNames();
+  out['tuvung-hoang-lich'] = { n: hlTen.length, sot: hlTen.filter(s => HANR.test(hlDoc(s).ten)) };
+} catch (e) {
+  out['tuvung-hoang-lich'] = { n: 0, sot: [], loi: String(e && e.message || e) };
+}
+
 console.log('__KQ__' + JSON.stringify(out));
 `;
   writeFileSync(join(build, 'check.mjs'), kich);
@@ -191,6 +228,9 @@ console.log('__KQ__' + JSON.stringify(out));
 
   console.log('Quét chữ chưa dịch trong payload của các tool:\n');
   for (const [ten, r] of Object.entries(kq)) {
+    // Hai mục `tuvung-*` không phải payload — chúng đối chiếu TRỌN danh sách
+    // tên của nguồn, xử riêng ở dưới.
+    if (ten.startsWith('tuvung-')) continue;
     bao(r.han.length === 0, `${ten.padEnd(12)} — chữ Hán lọt: ${r.han.join('') || 'không'}`);
 
     // 🐞 Loại lỗi THỨ HAI, khác hẳn chữ chưa dịch: giá trị hỏng bị NỘI SUY vào
@@ -216,6 +256,32 @@ console.log('__KQ__' + JSON.stringify(out));
         `${ten.padEnd(12)} — thuật ngữ Anh của celestine còn sót: ${sot.join(', ') || 'không'}`
       );
     }
+  }
+
+  console.log('\nĐối chiếu TRỌN danh sách tên của nguồn:\n');
+  for (const [ten, nguong] of [
+    ['tuvung-bat-tu', 150],
+    ['tuvung-hoang-lich', 120],
+  ]) {
+    const r = kq[ten];
+    // Đọc ra danh sách RỖNG rồi báo xanh còn tệ hơn báo đỏ — cùng chốt đã dựng
+    // trong `check-que-motifs.mjs`. Bảng thần sát Bát Tự lấy qua đường dist nội
+    // bộ của `mingyu-core` (không có trong `exports`) nên lượt bump có thể dời
+    // nó; ngưỡng dưới đây làm chuông báo thay vì để bộ dò câm.
+    if (!r || r.n < nguong) {
+      console.error(
+        `❌ ${ten} — chỉ đọc được ${r ? r.n : 0} tên (chờ ≥ ${nguong}).\n` +
+          (r?.loi ? `   Lỗi khi đọc nguồn: ${r.loi}\n` : '') +
+          '   Nguồn đã đổi bố cục ⇒ PHẢI sửa bộ dò. Đừng bỏ qua: đọc hụt danh ' +
+          'sách thì mục này xanh mà không kiểm gì cả.'
+      );
+      loi++;
+      continue;
+    }
+    bao(
+      r.sot.length === 0,
+      `${ten.padEnd(18)} — ${r.n} tên, còn chữ Hán: ${r.sot.join(', ') || 'không'}`
+    );
   }
 } finally {
   rmSync(out, { recursive: true, force: true });
