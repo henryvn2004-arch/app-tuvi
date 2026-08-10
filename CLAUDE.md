@@ -442,8 +442,8 @@ tên cung cấm · 0 câu chạm chủ đề cấm · trang hiện đúng số v
   TRƯỚC là **`invite_shown`**: nó = 0 nghĩa là điều kiện không bao giờ thoả (phải
   nới, ví dụ hiện cả khi còn đủ Lượng), chứ không phải câu chữ dở.
 - ~~**B2**~~ → **ĐÃ LÀM**, xem mục riêng ở trên. ~~**B3**~~ → **ĐÃ LÀM**, xem mục riêng ở trên.
-- ~~**C1**~~ → **ĐÃ LÀM**, xem mục riêng ở trên. ⏭️ Mới gắn ở `nguoi-khac`; hai
-  tool cẩm nang kia (`day-con`/`nhan-mach`) dùng chung `coSoDoc` được, chưa cắm.
+- ~~**C1**~~ → **ĐÃ LÀM**, và nay **đã phủ đủ 3 tool cẩm nang** — xem mục riêng
+  ở trên và mục "C1 lan sang…" ngay dưới.
 ### ✅ C3 — Thư viện chung, AUTO OPT-IN (cùng PR, Henry chốt)
 
 Tao nêu lo ngại; Henry chốt: *"share chứa ngày sinh đầy đủ ok, đó mới chính là lý
@@ -491,6 +491,53 @@ Bump `shell.js?v=66` + `shell.css?v=18` (35 trang, `git diff --numstat` xác nh�
 **CÒN LẠI:** 39 dòng hiện có đều của MỘT chủ (bản test) nên bật hồi tố không chạm
 người dùng thật nào — nhưng thư viện ra mắt sẽ toàn bản test, **đừng đọc nó như
 social proof cho tới khi có người ngoài chia sẻ**.
+
+### ✅ C1 lan sang `day-con` + `nhan-mach` · ĐƯỜNG VÀO thư viện (cùng PR)
+
+Hai mục CÒN LẠI của vòng trước, đều không cần Henry quyết thêm.
+
+**C1 — `day-con` dùng CHUNG `coSoDoc`, không viết bản thứ hai.** Tách
+`coSoDoc` thành `demDuKien(ls)` + `trichDanMenh(saoLabels)` rồi ghép lại, và hàm
+ghép nhận **kiểu theo cấu trúc** (`{ matDoc: { cung, sao }[] }`) nên hồ sơ của
+`day-con` truyền thẳng vào được. Câu trích đi qua CHÍNH `locCachCuc` ⇒ bản đọc về
+một ĐỨA TRẺ không bao giờ dẫn cổ thư nói chuyện thọ mệnh/hôn nhân — đúng lỗ hổng
+A1 vừa vá, chứ không mở lại nó qua ngõ trích dẫn.
+
+🔑 **`nhan-mach` CHỈ ĐẾM, TUYỆT ĐỐI không trích** (`coSoNhom`, cộng dồn
+`demDuKien` của mọi thành viên). `trichDanMenh` trích ở cung Mệnh của MỘT người;
+tool này đọc cả nhóm nên **không có "cung Mệnh của ai"** để trích — bốc đại một
+thành viên rồi trích cho họ là gán một câu cổ thư cho **nhầm người**, đúng loại
+sai C1 sinh ra để tránh. Trang cũng không có khối "Cơ Sở Trong Lá Số" riêng nên
+dòng dữ kiện đứng ngay dưới thanh phân bố — thứ nó đang chứng thực.
+
+**Đường vào `/thu-vien`** — trước đó chỉ tới được từ **chân trang `/ket-qua`**,
+tức chỉ ai đã mở một link chia sẻ mới thấy: gần như không ai tìm ra. Nay thêm ở
+**nav** (mục "Khám phá", bề mặt duy nhất phủ toàn site) + **một ô mời trên trang
+chủ** dưới dải tra cứu, link mang UTM để đo được thư viện có kéo ai không.
+- Bump `nav.js?v=23` (135 file / 193 lượt) — **gộp luôn drift có sẵn**: đang lẫn
+  lộn `v=19` · `v=20` · `v=22`, tức một phần trang đã chạy nav cũ từ trước.
+
+**Verify:** `tsc` 0 · `lint` 0 lỗi (72 warning pre-existing) · `prettier` sạch ·
+5 bộ dò sạch · engine **185 pass** · `node --check` (tách `ld+json` ra
+`JSON.parse`, đúng bài học "sai công cụ" đã ghi).
+- **40 ca trên MODULE THẬT (288 lá số TRẺ EM) + TRANG THẬT**: đếm là ĐẾM THẬT
+  (dải 141–180, **35 giá trị khác nhau** — con số tròn giống hệt mọi người mới là
+  dấu hiệu bịa) · trích dẫn phủ 98,6% và sao được trích **có thật ở cung Mệnh của
+  chính lá số đó** · **0 câu chạm chủ đề cấm, 0 câu nêu cung cấm** · tổng nhóm
+  bằng ĐÚNG tổng từng lá số cộng lại · nhóm **không có trường `trichDan`** · chèn
+  `<script>`/`onerror` qua câu trích không chạy mà vẫn hiện nguyên văn · payload
+  đã trả tiền không có `coSo` thì khối tự ẩn · nav có mục thư viện và **dựng được
+  `<svg>`** (nhánh dự phòng in emoji thô nên "trông có icon" không chứng minh gì)
+  · link trang chủ mang UTM · 390px không tràn.
+- 🪤 **Red-team đủ hai luật**: gỡ mục nav → đỏ 3 ca; bẻ `coSoNhom` cho nó chỉ đếm
+  người đầu → đỏ đúng 2 ca cộng-dồn. Khôi phục xanh lại.
+- **Hồi quy 8 bộ kiểm cũ (198 ca) xanh.**
+
+🪤 **Hai cái bẫy cũ lặp lại y nguyên:** (a) chạy bài kiểm module **từ scratchpad**
+→ `computeLaso` giải đường dẫn engine theo cwd → **0/288**, lộ ra chỉ vì có in cỡ
+mẫu; (b) ca `t-c3` đỏ hoá ra là **lỗi môi trường test**: dev server thiếu
+`SUPABASE_ANON_KEY` nên client xác thực ném ngay tại chỗ → **500 thay vì 401**,
+tức bài kiểm đang đo nhầm đường lỗi chứ không đo chốt chặn quyền.
 
 - 🔴 **D (chuỗi ngày) — ĐO RA LÀ SAI THỜI ĐIỂM, chưa làm.** Chuỗi ngày là bộ
   KHUẾCH ĐẠI việc quay lại; đo 45 ngày thì việc quay lại gần như không tồn tại:

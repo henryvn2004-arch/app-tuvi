@@ -42,7 +42,14 @@ import {
   LUAT_VAN_NAM_AN_CUNG,
   type VanNam,
 } from './cong-so';
-import { QUAN_HE, type QuanHeDef, type QuanHeId, resolveQuanHe, KHONG_DOC } from './nguoi-khac';
+import {
+  QUAN_HE,
+  type QuanHeDef,
+  type QuanHeId,
+  resolveQuanHe,
+  KHONG_DOC,
+  demDuKien,
+} from './nguoi-khac';
 
 type Rec = Record<string, unknown>;
 
@@ -292,6 +299,36 @@ export const VAI_UU_TIEN: QuanHeId[] = [
   'con-cai',
   'ban-doi',
 ];
+
+/**
+ * C1 — "đọc từ N dữ kiện" cho CẢ NHÓM: cộng dồn phép đếm của từng lá số.
+ *
+ * ⚠️ **KHÔNG có câu cổ thư ở đây, và đó là cố ý.** `trichDanMenh` trích ở cung
+ * Mệnh của MỘT người; tool này đọc cả nhóm nên không có "cung Mệnh của ai" để
+ * trích. Bốc đại một thành viên rồi trích cho họ là gán một câu cổ thư cho nhầm
+ * người — đúng loại sai mà C1 sinh ra để tránh.
+ *
+ * Đếm dùng CHUNG `demDuKien` của `nguoi-khac` thay vì chép phép đếm thứ hai:
+ * hai bản thì sớm muộn cũng ra hai con số cho cùng một lá số.
+ */
+export function coSoNhom(list: readonly { ls: Laso }[]): {
+  soNguoi: number;
+  soSao: number;
+  soCachCuc: number;
+  soDaiVan: number;
+  tong: number;
+} {
+  let soSao = 0;
+  let soCachCuc = 0;
+  let soDaiVan = 0;
+  for (const n of list) {
+    const d = demDuKien(n.ls);
+    soSao += d.soSao;
+    soCachCuc += d.soCachCuc;
+    soDaiVan += d.soDaiVan;
+  }
+  return { soNguoi: list.length, soSao, soCachCuc, soDaiVan, tong: soSao + soCachCuc + soDaiVan };
+}
 
 /**
  * Dữ liệu PHẲNG gửi rail.

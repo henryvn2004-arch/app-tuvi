@@ -59,6 +59,10 @@
 .dc-item .viec{font-size:13px;line-height:1.7;color:#2a2118}
 .dc-item .vidu{font-size:12.5px;line-height:1.7;color:#5a5145;font-style:italic;margin-top:4px}
 .dc-motcau{margin-top:0;padding:14px 16px;background:#FBF8F1;border:1px solid #EADFC8;border-radius:10px;font-family:var(--serif);font-size:15px;line-height:1.75;color:#061A2E;font-weight:700}
+.dc-coso{font-size:12.3px;line-height:1.75;color:#5a5145;margin:0 0 11px;padding-bottom:10px;border-bottom:1px dashed #E8DFC8}
+.dc-coso b{color:#2a2118}
+.dc-quote{margin-top:8px;padding:9px 12px;background:#FBF8F1;border-left:3px solid #C9AE6A;border-radius:0 8px 8px 0;font-size:12.4px;line-height:1.72;color:#4a4034}
+.dc-quote .src{display:block;margin-top:4px;font-size:11px;color:#7A5F26;font-weight:600}
 .dc-basis-list{margin:0 0 0 18px;color:#5a5145;line-height:1.9;font-size:12.8px}
 .dc-basis-list li{margin-bottom:3px}
 .dc-basis-list b{color:#2a2118}
@@ -204,6 +208,7 @@
         <div class="res-block" id="basisBlock" style="display:none">
           <div class="res-block-header"><span class="res-block-title">Cơ Sở Trong Lá Số</span></div>
           <div class="res-block-body">
+            <div class="dc-coso" id="coSoDoc" style="display:none"></div>
             <ul class="dc-basis-list" id="basisList"></ul>
           </div>
         </div>
@@ -251,7 +256,7 @@ window.SHELL_INTRO={key:'day-con',title:'Dạy Con Theo Lá Số',desc:'Đưa l�
 <script src="/tuvi-form.js?v=1"></script>
 <script src="/tuvi-paywall.js?v=18"></script>
 <script src="/auth.js?v=2"></script>
-  <script src="/nav.js?v=22" data-icons-only></script>
+  <script src="/nav.js?v=23" data-icons-only></script>
 <script src="/shell.js?v=66"></script>
 <script src="/tools-shared/ai-loading-steps.js?v=4"></script>
 <script>
@@ -620,6 +625,25 @@ function renderMeta(data) {
     else if (v.huong) bit.push('đà ' + esc(v.huong));
     rows.push('<li><b>Vận năm ' + v.nam + '</b> — ' + (bit.join(' · ') || 'chưa chấm') + '</li>');
   }
+  // C1 — bày engine ra. Chỉ có ở payload TÍNH THỬ; bản đã trả tiền không gửi
+  // `coSo` nên khối này tự ẩn, không phải canh thêm điều kiện nào.
+  var cs = data.coSo, csEl = document.getElementById('coSoDoc');
+  if (cs && cs.tong > 0) {
+    var h = 'Bản này đọc từ <b>' + cs.tong + ' dữ kiện</b> lập ra từ chính ngày giờ sinh bạn nhập — ' +
+      cs.soSao + ' sao an trên 12 cung, ' + cs.soCachCuc + ' cách cục, ' + cs.soDaiVan + ' chặng đại vận. ' +
+      'Không có bước nào đoán mò: đổi một chi tiết trong ngày sinh là cả bảng trên đổi theo.';
+    // ⚠️ Câu trích là NGUYÊN VĂN cổ thư kèm nguồn — `esc()` cả cụm, tuyệt đối
+    // không nội suy vào HTML thô.
+    if (cs.trichDan) {
+      h += '<div class="dc-quote">' + esc(cs.trichDan.cau) +
+        '<span class="src">— sách dẫn về sao ' + esc(cs.trichDan.sao) + ' tại cung Mệnh</span></div>';
+    }
+    csEl.innerHTML = h;
+    csEl.style.display = 'block';
+  } else {
+    csEl.style.display = 'none';
+  }
+
   if (rows.length) {
     document.getElementById('basisList').innerHTML = rows.join('');
     document.getElementById('basisBlock').style.display = 'block';

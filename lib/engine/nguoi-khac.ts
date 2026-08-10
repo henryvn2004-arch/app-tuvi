@@ -567,19 +567,27 @@ export interface CoSoDoc {
   trichDan: { sao: string; cau: string } | null;
 }
 
-export function coSoDoc(ls: Laso, p: NguoiKhacProfile): CoSoDoc {
+/** Đếm dữ kiện engine đọc được từ MỘT lá số. Tách riêng để nhóm (Sổ Nhân Mạch)
+ *  cộng dồn được nhiều lá số mà không phải chép lại phép đếm. */
+export function demDuKien(ls: Laso): { soSao: number; soCachCuc: number; soDaiVan: number } {
   const palaces = ((ls.palaces as Rec[]) || []);
   let soSao = 0;
   for (const c of palaces) soSao += (((c?.stars as unknown[]) || []).length);
   const cc = (ls.cachCucTungCung as Record<string, string[]>) || {};
   let soCachCuc = 0;
   for (const k of Object.keys(cc)) soCachCuc += (cc[k] || []).length;
-  const soDaiVan = ((ls.daiVans as unknown[]) || []).length;
+  return { soSao, soCachCuc, soDaiVan: ((ls.daiVans as unknown[]) || []).length };
+}
 
-  // Sao chủ cung Mệnh — lấy từ CHÍNH `matDoc` để không tra một đường thứ hai.
-  let trichDan: { sao: string; cau: string } | null = null;
-  const menh = p.matDoc.find((m) => m.cung === 'Mệnh');
-  for (const raw of menh?.sao || []) {
+/**
+ * Câu cổ thư cho chính tinh cung Mệnh, nhận NHÃN sao ("Vũ Khúc (Miếu) [Hóa Khoa]").
+ *
+ * ⚠️ Dùng CHUNG cho mọi tool đọc lá số người vắng mặt. `nhan-mach` KHÔNG gọi hàm
+ * này: tool đó đọc cả NHÓM, không có "cung Mệnh của ai" để trích, và bốc đại
+ * một thành viên rồi trích cho họ là gán một câu cổ thư cho nhầm người.
+ */
+export function trichDanMenh(saoLabels: readonly string[]): { sao: string; cau: string } | null {
+  for (const raw of saoLabels || []) {
     // `sao` là NHÃN ("Vũ Khúc (Miếu) [Hóa Khoa]") — cắt lấy tên sao trần.
     const ten = String(raw).replace(/\s*[([].*$/, '').trim();
     const r = MENH_ROLE[ten];
@@ -590,11 +598,19 @@ export function coSoDoc(ls: Laso, p: NguoiKhacProfile): CoSoDoc {
     // của cổ thư; cái sai là đem nó nói về một người KHÔNG CÓ MẶT. Dùng đúng
     // một bộ lọc cho cả cách cục lẫn trích dẫn, đừng dựng bộ thứ hai.
     if (!locCachCuc([r.source]).length) continue;
-    trichDan = { sao: ten, cau: r.source };
-    break;
+    return { sao: ten, cau: r.source };
   }
+  return null;
+}
 
-  return { soSao, soCachCuc, soDaiVan, tong: soSao + soCachCuc + soDaiVan, trichDan };
+export function coSoDoc(ls: Laso, p: { matDoc: { cung: string; sao: string[] }[] }): CoSoDoc {
+  const d = demDuKien(ls);
+  const menh = p.matDoc.find((m) => m.cung === 'Mệnh');
+  return {
+    ...d,
+    tong: d.soSao + d.soCachCuc + d.soDaiVan,
+    trichDan: trichDanMenh(menh?.sao || []),
+  };
 }
 
 export function khoiKhoa(p: NguoiKhacProfile): { id: string; tieuDe: string }[] {

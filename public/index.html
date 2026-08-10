@@ -228,6 +228,8 @@ a { color: var(--blue); text-decoration: none; }
 .seo-strip-head span { font-size: 13px; color: var(--text-lt); }
 .seo-cols { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
 @media (max-width: 768px) { .seo-cols { grid-template-columns: 1fr; } }
+.seo-gallery { display: block; margin-top: 18px; padding: 13px 16px; border: 1px solid var(--gold-bright); border-radius: 10px; background: var(--gold-lt); color: var(--text-mid); font-size: 13.5px; line-height: 1.7; text-decoration: none; }
+.seo-gallery b { color: var(--navy); font-family: 'Noto Serif', Georgia, serif; }
 .seo-col { background: #fff; border: 1px solid var(--border-lt); border-radius: 11px; padding: 15px 17px; }
 .seo-col-t { display: flex; align-items: center; justify-content: space-between; margin-bottom: 11px; gap: 8px; }
 .seo-col-t b { font-family: 'Noto Serif', Georgia, serif; font-size: 15px; color: var(--navy); }
@@ -531,6 +533,12 @@ a { color: var(--blue); text-decoration: none; }
         <a class="seo-all" href="/cong-cu#mien-phi">Xem tất cả công cụ →</a>
       </div>
     </div>
+    <!-- C3 — đường vào thư viện. Đặt ngay dưới dải tra cứu vì cùng một ý định:
+         xem thử trước khi tự nhập lá số. Câu chữ nói rõ đây là bản do NGƯỜI
+         DÙNG tự chia sẻ, không phải mẫu dựng sẵn — hứa đúng thứ giao được. -->
+    <a class="seo-gallery" href="/thu-vien?utm_source=home&amp;utm_medium=internal">
+      <b>Thư Viện Luận Đường</b> — xem những bản luận người dùng đã tự chia sẻ, trước khi tự lập lá số của bạn →
+    </a>
   </div>
 </section>
 
@@ -538,7 +546,7 @@ a { color: var(--blue); text-decoration: none; }
 <script src="/track.js?v=3"></script>
 <script src="/auth.js?v=2"></script>
 <script src="/tuvi-paywall.js?v=18"></script>
-<script src="/nav.js?v=22"></script>
+<script src="/nav.js?v=23"></script>
 <script src="/referral.js?v=1"></script>
 <script src="/footer.js"></script>
 
