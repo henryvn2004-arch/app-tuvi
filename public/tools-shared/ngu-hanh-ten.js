@@ -268,6 +268,9 @@ const H_COLOR = {Mộc:'#1E6B3C',Hỏa:'#C0392B',Thổ:'#9A7B3A',Kim:'#5a6a72',T
 const SINH = {Mộc:'Hỏa',Hỏa:'Thổ',Thổ:'Kim',Kim:'Thủy',Thủy:'Mộc'};
 const SINH_REV = {Hỏa:'Mộc',Thổ:'Hỏa',Kim:'Thổ',Thủy:'Kim',Mộc:'Thủy'};
 const KHAC = {Mộc:'Thổ',Thổ:'Thủy',Thủy:'Hỏa',Hỏa:'Kim',Kim:'Mộc'};
+// Thứ tự tương sinh Mộc→Hỏa→Thổ→Kim→Thủy, khớp ĐÚNG thứ tự ô <select> mệnh
+// trên cả hai trang — hai chỗ xếp khác nhau thì người dùng phải đọc lại từ đầu.
+const HANH_LIST = ['Mộc', 'Hỏa', 'Thổ', 'Kim', 'Thủy'];
 
 function netToHanh(n) {
   const d = n % 10 || 10;
@@ -542,16 +545,24 @@ function netToHanh(n) {
     const datTen = shell ? '/app/dat-ten' : '/tools/dat-ten-con.html';
     const s = score(syls, menh);
     if (!s) {
-      // Chưa chọn mệnh → nói thẳng là chưa chấm được, kèm đường đi lấy mệnh.
-      // 🪤 Câu chỉ đường phải khác nhau giữa hai bề mặt: trang shell ẨN form
-      // sau khi tra, nên "chọn mệnh ở ô bên trên" là trỏ vào một ô người dùng
-      // KHÔNG còn nhìn thấy — đúng loại hứa hụt mà vòng này đi sửa.
-      const cachChon = shell
-        ? 'Bấm <strong>Sửa</strong> ở góc trên rồi chọn mệnh'
-        : 'Chọn mệnh ở ô bên trên rồi tra lại';
+      // Chưa chọn mệnh → CHỌN NGAY TẠI ĐÂY, không chỉ đường đi đâu cả.
+      // 🪤 Bản trước ghi "Bấm Sửa ở góc trên rồi chọn mệnh" — Henry nhìn thẳng
+      // vào nút Sửa mà không nhận ra, vì thanh đó là chrome của SHELL chứ không
+      // đọc như một phần của tool. Và kể cả tìm ra thì vẫn là 4 bước (cuộn lên
+      // → bấm Sửa, MẤT kết quả đang xem → chọn trong ô ghi "tùy chọn" → tra
+      // lại) cho một lựa chọn 5 giá trị.
+      // 🔑 Bài học: sửa CÂU CHỈ ĐƯỜNG là vá triệu chứng. Chỗ đúng để sửa là bỏ
+      // hẳn quãng đường — người dùng đang ở ngay khối cần mệnh, thì cho họ chọn
+      // ngay ở đó. Cùng luật với M3 ("mỗi lần chuyển trang ở đáy phễu là một
+      // lần rơi") và với ô nhập lá số ngay trong thẻ Vận hôm nay.
+      const nut = HANH_LIST.map(
+        (h) => `<button type="button" class="nh-menh-btn" data-nh-menh="${h}">${h}</button>`
+      ).join('');
       return `<div class="nh-score nh-score-empty">
       <div class="nh-score-head">Chấm điểm tên</div>
-      <p class="nh-score-empty-p">Chưa chấm được vì chưa biết <strong>mệnh cục</strong> của người mang tên. ${cachChon} — hoặc tra mệnh từ năm sinh trước.</p>
+      <p class="nh-score-empty-p">Chưa chấm được vì chưa biết <strong>mệnh cục</strong> của người mang tên. Chọn ngay tại đây:</p>
+      <div class="nh-menh-pick">${nut}</div>
+      <p class="nh-score-empty-sub">Không biết mệnh của mình?</p>
       <a class="nh-link" href="${napAm}">Tra mệnh theo năm sinh →</a>
     </div>`;
     }
