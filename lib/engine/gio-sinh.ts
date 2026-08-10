@@ -427,13 +427,40 @@ export function posteriorOf(bank: SurveyQuestion[], answers: SurveyAnswer[]): nu
  * 83,3%/8 câu. Vừa chính xác hơn vừa hỏi có nửa số câu — mà mỗi câu bỏ bớt là
  * một chỗ người ta thoát ra giữa chừng.
  */
+/**
+ * 🔴 SÀN SỐ CÂU — chốt chặn CHỐNG TỰ TIN OAN, không phải để câu giờ.
+ *
+ * Ngưỡng 0,9 một mình cho dừng ở ĐÚNG 2 câu trong 66% số ca (đo tuổi 43). Ở ca
+ * người trả lời nhớ tốt thì không sao. Nhưng `temper()` hạ tự tin dựa trên ĐỘ
+ * KHỚP, mà **với 2 câu thì mâu thuẫn CHƯA THỂ xuất hiện** — hai câu sai nhưng
+ * tình cờ cùng hướng vẫn cho khớp 100%. Nên máy in ra ~94% bất kể đúng sai:
+ *
+ *   độ tin người trả lời │ dừng 2 câu │ top-1 THẬT │ máy IN RA
+ *   ─────────────────────┼────────────┼────────────┼──────────
+ *            80%         │   66% ca   │    93%     │   94%  ✓
+ *            45%         │   28% ca   │    77%     │   94%  ✗
+ *            30%         │   20% ca   │  **40%**   │ **94%** ✗✗
+ *
+ * Sai 54 điểm trên một tool ĐANG BÁN, mà con số đó chính là thứ người ta trả
+ * tiền để đọc. Đặt sàn 4 câu (đủ chỗ cho mâu thuẫn lộ ra) thì hết hẳn:
+ *
+ *   80% → top-1 **99%** (in 96%) · 45% → 75% (in 71%) · 30% → 47% (in 48%)
+ *
+ * ⚠️ Đổi lại TB 2,8 → 4,2 câu. Đó là giá ĐÁNG trả: top-1 ở ca thuận còn TĂNG
+ * 93→99%, và ca nghịch thôi nói dối. Đừng "tối ưu" bằng cách hạ sàn về 2.
+ * 🔑 An toàn: ngân hàng luôn dựng được 10–12 câu (đo 300 lá số tuổi 43 và 28)
+ * nên sàn 4 không bao giờ vượt quá số câu có; hết câu thì `best` trả null.
+ */
+const SAN_CAU_HOI = 4;
+
 export function nextQuestion(
   bank: SurveyQuestion[],
   answers: SurveyAnswer[],
-  opts: { budget?: number; nguong?: number } = {},
+  opts: { budget?: number; nguong?: number; san?: number } = {},
 ): SurveyQuestion | null {
   const budget = opts.budget ?? 8;
   const nguong = opts.nguong ?? 0.9;
+  const san = opts.san ?? SAN_CAU_HOI;
   const asked = new Set(answers.map((a) => a.id));
 
   // Buổi sinh luôn đứng đầu — rẻ nhất, chắc nhất, cắt 12 → 6.
@@ -441,7 +468,8 @@ export function nextQuestion(
   if (answers.length >= budget) return null;
 
   const post = posteriorOf(bank, answers);
-  if (Math.max(...post) >= nguong) return null;
+  // Chỉ được dừng theo NGƯỠNG khi đã đủ sàn — xem khối chú thích trên.
+  if (answers.length >= san && Math.max(...post) >= nguong) return null;
 
   /**
    * 🔑 GIỮ CHỖ CỨNG cho tầng ĐỜI SỐNG (đại vận + mốc đổi vận).
