@@ -5,7 +5,118 @@
 
 ---
 
-## 💾 "Chạy lại vẫn ra lá số cũ" — TÔI QUÊN BUMP `SHAPE` ở #475 (2026-08-10, PR này)
+## 🧹 "2 tool mỏng quá" — CẦU CÓ THẬT, mình dựng SAI HÌNH DẠNG (2026-08-10, PR này)
+
+Henry: *"Ngũ hành nạp âm với Ngũ hành tên, nó mỏng quá, xem xong chả biết làm
+gì… nếu ko tìm dc gì thì consider switch off… rà soát lại còn tool nào mỏng
+quá ko thì switch off bớt, giờ nhiều tools quá."*
+
+### 🔴 Trả lời câu hỏi chính: đối thủ CÓ làm cả hai, và họ làm khác cách mình
+- **Nạp âm:** cầu rất lớn nhưng **KHÔNG ai làm nó thành "tool" có ô nhập**.
+  lichngaytot có bài *"Xem Mệnh Theo Năm Sinh"* phủ trọn **1930–2067**;
+  `menh.com.vn` lấy nguyên MỘT TÊN MIỀN; amlich.net/lichamduong.net là bảng
+  tra 60 hoa giáp. Thứ họ bán không phải con chữ *"Lộ Bàng Thổ"* mà là **ỨNG
+  DỤNG**: hợp màu · hợp hướng · hợp tuổi cưới/làm ăn · số may mắn · chọn ngày.
+- **Ngũ hành tên:** thị trường thật tên là **"chấm điểm tên"** — tudienten.com
+  có *"Chấm điểm tên toàn diện"*, cộng tracuuthansohoc, kiddihub, và có cả bài
+  *"TOP 5 trang chấm điểm tên"* (nhiều tới mức phải xếp hạng). Họ trả **ĐIỂM
+  SỐ + tên gợi ý thay thế**. Bản mình: ngũ hành từng chữ + thanh cân bằng + 1
+  câu sinh/khắc — **0 điểm, 0 gợi ý, 0 lối đi tiếp**.
+
+### 🔑 Chỗ đau nhất: CẢ HAI HỨA HỤT NGAY TRONG META DESCRIPTION CỦA CHÍNH NÓ
+| Tool | Trang tự hứa | Thực tế trả ra |
+|---|---|---|
+| `nap-am` | *"ứng dụng trong phong thủy, đặt tên, chọn màu"* | 4 ô Can · Chi · Can Chi · Nạp Âm |
+| `ngu-hanh-ten` | *"gợi ý chỉnh sửa nếu cần"* | không có gợi ý nào |
+⇒ *"Xem xong chả biết làm gì"* không phải cảm giác — **trang nói trước là sẽ
+chỉ cho biết làm gì rồi không chỉ**. Nên **KHÔNG tắt**: cầu còn lớn hơn phần
+lớn tool đang bật, vấn đề là thiếu ĐOẠN CUỐI chứ không phải thiếu chỗ đứng.
+
+### Đã làm — cả hai sửa trong MODULE DÙNG CHUNG (0 lượt LLM, 0đ, tra bảng thuần)
+- **`nap-am.js` + `ungDung()`/`ungDungHTML()`** — khối *"Hành X dùng vào việc
+  gì"*: màu hợp/kỵ · phương vị · tuổi hợp-kỵ · số Hà Đồ · chất liệu, kèm 4 lối
+  đi tiếp sang `bat-trach` · `tuong-hop` · `kim-lau` · `mau-sac-hop-menh` —
+  **site đã có sẵn đúng mấy tool mà người tra nạp âm muốn dùng tiếp**, nạp âm
+  đúng vai CỬA VÀO.
+  - 🔑 **Câu chặn bắt buộc: phương vị ngũ hành ≠ HƯỚNG NHÀ.** Hướng nhà xét
+    theo cung phi bát trạch. Không nói rõ là tool này mâu thuẫn thẳng với
+    `bat-trach` ngay bên cạnh — hai tool cùng site nói ngược nhau.
+  - Quan hệ ngũ hành khai theo **VAI** (`DUOC_SINH`/`SINH_RA`/`BI_KHAC`/
+    `KHAC_LAI`) chứ không phải một bảng `SINH` đọc hai nghĩa — đúng lớp lỗi đã
+    làm hai dòng `sinh` bị hoán vị ở track Duyên Nợ.
+- **`ngu-hanh-ten.js` + `score()`/`scoreHTML()`** — điểm 0–100 gồm 4 phần: chữ
+  tên chính ↔ mệnh (40) · cân bằng ngũ hành (25) · có chữ bồi mệnh (20) ·
+  không có chữ khắc mệnh (15); verdict 5 mức; hành nên bổ / nên tránh; **8 chữ
+  gợi ý**; rồi dẫn sang **Đặt Tên Con (20 Lượng)** — biến bản free thành đầu
+  phễu của tool trả tiền thay vì ngõ cụt.
+  - ⚠️ **CHƯA chọn mệnh → trả `null`, KHÔNG chấm.** Ba trên bốn phần không
+    tính được; chấm đại là bịa đúng thứ người ta mang đi khoe. Trạng thái đó
+    nói thẳng + link sang `nap-am` để lấy mệnh (nối hai tool lại với nhau).
+  - 🔑 **`GOI_Y` là danh sách CHỌN TAY, cố ý không quét cả DB**: bảng có 848 âm
+    tiết gồm cả `bạo` `cãi` `cấm` `cọp` — quét máy là gợi ý chúng làm tên.
+    Mỗi chữ đã đối chiếu ngược qua `netToHanh(DB[x].n)`.
+  - 🔴 **LUẬT DIỄN ĐẠT in thẳng lên trang**: đây là tên người ta ĐÃ MANG, phần
+    lớn do cha mẹ đặt. Điểm thấp **không được đọc thành "tên xấu"** và không
+    được giục ai đổi tên; phần này chỉ có nghĩa khi đang CHỌN tên mới. Cùng họ
+    với luật *"trục thấp = việc không đòi hỏi, không phải bạn thiếu"*.
+  - **Thang điểm là quy ước TỰ ĐẶT**, khai rõ trên trang — cổ thư nói quan hệ
+    sinh–khắc, không cho con số trên thang 100. Cùng dạng nợ `KIEU_HOC`.
+
+### 🐞 Lỗi thật bắt được khi ĐO trên trình duyệt, không phải khi đọc code
+Trang **shell ẨN form sau khi tra**, nên câu *"chọn mệnh ở ô bên trên"* trỏ vào
+một ô người dùng **không còn nhìn thấy** — đúng loại hứa hụt vòng này đi sửa.
+Nay câu chỉ đường khác nhau theo bề mặt (`shell` → *"Bấm Sửa ở góc trên"*), có
+ca ĐỐI CHỨNG khẳng định ô đó THẬT SỰ bị ẩn.
+
+### 🧹 Rà tool mỏng — 2 cái Henry nêu KHÔNG phải mỏng nhất
+Tắt **6 tool trùng lặp nặng hơn** (`_patches/migration-tat-tool-trung.sql`,
+✅ ĐÃ CHẠY prod — **61 → 54 công cụ**, 18 miễn phí):
+`sao-nam` · `cach-cuc` · `dai-van` · `van-thang` **cùng hỏi một bộ ngày sinh,
+cùng gọi `anSaoLaSo` lập lá số ĐẦY ĐỦ, mỗi trang chỉ hiện một mảnh** ·
+`han-nam` bảng tra thuần trùng hai cái trên · `tu-tru` là bản free mỏng của
+`tu-binh` (50 Lượng).
+- ⚠️ **`an-sao` CỐ Ý GIỮ** — nó là cửa lá số miễn phí DUY NHẤT còn trong danh
+  mục. 🪤 Phát hiện kèm: **`/app/la-so` đã gộp vào `luan-giai` và KHÔNG còn
+  dòng nào trong `tool_pricing`** ⇒ nó đang là **trang mồ côi**, route còn
+  sống nhưng không hiện ở sidebar lẫn `/cong-cu`.
+- **"Switch off" = `enabled=false`, KHÔNG xoá**: trang vẫn trên đĩa, vẫn mở
+  được bằng URL, vẫn trong sitemap — chỉ thôi hiện ở 3 bề mặt danh mục. Bề mặt
+  SEO giữ nguyên, chỉ dọn chỗ chật. Lùi lại bằng một câu SQL.
+
+### Số liệu — và giới hạn của nó, đọc trước khi viện dẫn
+- GSC 28 ngày cả site: **15 click / 788 hiển thị**; **0 trang `/tools/*` lọt
+  top pages** (duy nhất `/tools/hoang-dao.html` có 2 người từ GA4).
+  ⇒ Tắt tool hôm nay gần như **không mất traffic**; cái mất là tiềm năng sau.
+- 🔴 **Lượt dùng KHÔNG đủ mẫu để quyết**: cả 61 tool cộng lại chưa tới 200 lượt
+  mở, mọi tool ≤2 người từng chạy, gần như toàn bản test. Quyết định dựa vào
+  TRÙNG LẶP và CHIỀU SÂU, **không** dựa vào lượt dùng — đừng đọc bảng usage
+  thành *"tool này không ai cần"*.
+
+### Verify
+`tsc` 0 · `lint` 0 lỗi / **73 warning = đúng mốc nền** · `prettier` quét cả cây
+sạch · **16/16 bộ dò** · engine **185 pass** · `node --check`.
+- **Phân bố điểm trên lưới 11.200 ca** (8 họ × 8 đệm × 35 tên × 5 mệnh): TB
+  **68,5** · dải **20–100** · 5 mức verdict trải **8,2–27,3%** — không mức nào
+  nuốt đa số. Thang mà ai cũng 90 thì vô nghĩa, nên đây là phép đo bắt buộc.
+- **61/61 ca trên 4 TRANG THẬT** (shell + standalone của cả hai tool): chiều
+  sinh/khắc đúng cổ pháp (`Hỏa sinh Thổ`, `Mộc khắc Thổ`, **0 ca đảo chiều**) ·
+  có câu chặn phương-vị-≠-hướng-nhà · 4 lối đi tiếp trỏ đúng `/app/*` hay
+  `/tools/*` theo bề mặt · chưa có mệnh → **không hiện điểm nào** · có mệnh →
+  94/100 khớp module · **ĐỐI CHỨNG đổi mệnh sang Mộc → điểm đổi 51**, không
+  phải số chết · 8 chữ gợi ý **0 chữ vô duyên** · 390px không tràn · 0 lỗi JS.
+
+### CÒN LẠI
+- **Chưa rà 3 nhóm bị chẻ nhỏ**: 10 tool Làm Đẹp AI (khác hẳn domain mệnh lý,
+  cả 10 đều 0 lượt mở) · 6 tool Xem Tướng · 4 tool Phong Thủy. Chúng **không
+  mỏng** — đây là câu hỏi ĐỊNH VỊ, cố ý tách khỏi đợt dọn này.
+- `/app/la-so` mồ côi (xem trên) — hoặc thêm dòng `tool_pricing`, hoặc bỏ hẳn
+  route. Để nguyên thì nó là một trang sống mà không ai tới được từ trong site.
+- Bảng gợi ý tên và các bảng ứng dụng ngũ hành **là data tự viết, chưa ai
+  review** — cùng dạng nợ với 384 hào từ. Sửa là sửa data thuần.
+
+---
+
+## 💾 "Chạy lại vẫn ra lá số cũ" — TÔI QUÊN BUMP `SHAPE` ở #475 (2026-08-10, PR trước)
 
 Henry: *"Tao chạy lại nó còn cache nên vẫn hiện ra lá số cũ đó. Có cách nào clear
 cache ko?"*
