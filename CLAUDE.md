@@ -427,6 +427,15 @@ về tiêu đề `"Con"` khi bỏ trống ô tên.
   (`ngay/thang/nam` thay vì `day/month/year`) nên nhận lá số RỖNG và ra
   `tuoi=null` — suýt kết luận là bug của code. Hàm **không ném lỗi** ở đường đó,
   và field trả về là **`ls`** chứ không phải `laso`.
+- **15 ca trên TRANG THẬT** (serve `public/`, stub route preview): người lớn →
+  bàn giao nêu đúng "43 tuổi" + nói **không trừ Lượng** + link sang `/app/cong-so`
+  · **0 lượt `action=deduct`** · quét toàn bộ chữ hiện ra **0 mẩu "Bé trai"/
+  "cháu" lọt** · xưng "người này" · ẩn nhãn lứa · **ĐỐI CHỨNG trẻ em: 0 bàn giao,
+  vẫn "cháu", vẫn hiện nhãn 3–7 và "Bé trai"** · 0 lỗi JS.
+  🪤 Ba ca đỏ đầu là **lỗi TEST**: bộ chọn nút bắt nhầm nút khác (nút thật là
+  `#btnGo`), và **stub thiếu `success:true`** nên `analyze()` rơi vào nhánh báo
+  lỗi — đúng bài học "stub thiếu trường thì bài kiểm đo nhầm đường lùi", phải
+  lấy shape THẲNG từ route.
 
 ---
 
