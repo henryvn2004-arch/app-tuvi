@@ -5,7 +5,65 @@
 
 ---
 
-## 🀄 Lục Nhâm CŨNG liệt kê được từ vựng — và lộ 3 chỗ rò (2026-08-10, PR này)
+## 🔌 `mcp-handler` 1 → 2: gỡ đúng cái workaround của chính mình (2026-08-10, PR này)
+
+#389 treo đỏ từ 03/08 (`typecheck` + `next-build`). Đây là bump MAJOR đụng bề
+mặt **MCP đang chạy thật** — đúng lớp đã làm 7 lượt deploy prod ERROR ở #388,
+nên không merge suông mà di trú kèm A/B.
+
+### Hai chỗ vỡ, và cái thứ hai là TIN VUI
+```
+server.tool(name, desc, ZodRawShape, cb)   → gỡ, thay bằng registerTool
+createMcpHandler(init, opts, config)       → còn 1–2 tham số
+```
+- `registerTool(name, {description, inputSchema}, cb)` — ⚠️ `inputSchema` phải là
+  **SCHEMA CHUẨN** (Zod object), không phải `ZodRawShape` như `tool()` cũ nhận.
+  Bọc `z.object(t.schema)` là đủ; repo đã ở Zod v4 nên không phải đụng gì thêm.
+- 🔑 **Tham số thứ ba biến mất vì v2 KHÔNG cần nó nữa**: handler nay là hàm web
+  chuẩn *"serves every request it receives — routing belongs to the host
+  framework"*. Tức cả cái workaround `streamableHttpEndpoint = pathname` mà chú
+  thích đầu file mô tả (dựng handler theo request để khớp `/mcp/<key>`) là thứ
+  v2 xoá bỏ. **Vẫn dựng theo request, nhưng vì lý do KHÁC HẲN**: `key` nằm trong
+  path và closure của tool phải bắt đúng key của lượt đó. Sửa chú thích theo,
+  không thì người sau đọc thấy một lý do đã chết.
+
+### A/B trên BỀ MẶT THẬT, không đọc code đoán
+Dựng `next dev` hai lượt (v1 rồi v2), gọi HTTP thật `initialize` → `tools/list`
+→ `tools/call`, so nguyên khối JSON:
+
+| | kết quả |
+|---|---|
+| `serverInfo` · `instructions` · `protocolVersion` · 5 tên tool · mô tả · **JSON Schema từng tool** | **trùng khít** |
+| lệch DUY NHẤT | `$schema` draft-07 → **2020-12** (dialect Zod v4 phát ra) |
+
+Nhánh lỗi thì **ngang hoặc tốt hơn**:
+
+| | v1 | v2 |
+|---|---|---|
+| args sai | `isError:true`, message là bãi JSON issue thô | `isError:true`, message đọc được: *"ngay_duong: Invalid input: expected string"* |
+| tool lạc | bọc thành tool result `isError:true` | JSON-RPC error **-32602** (đúng spec hơn) |
+
+### Verify
+`tsc` 0 · `lint` 73 = mốc nền · `prettier` sạch · **`next build` exit 0, 64/64
+trang** (đúng hai check #389 đang đỏ).
+
+### 🪤 Bắt kèm: Next 16.3 TỰ GHI VÀO `CLAUDE.md`
+`next dev` của bản vừa bump (#479) chèn khối `nextjs-agent-rules` vào cuối
+`CLAUDE.md` và đổi `next-env.d.ts` sang `.next/dev/types/`. Không commit thì
+**mọi lượt `npm run dev` để lại cây bẩn**. Commit kèm ở đây vì nó là hệ quả của
+lượt bump tôi vừa merge, không phải của phần MCP. Muốn tắt: `agentRules: false`
+trong `next.config`.
+
+### CÒN LẠI
+- **Chưa gọi được với KEY THẬT** — container không có credential Supabase, nên
+  nhánh `quota` → `logUsage` → `t.run` chưa chạy thật. Phần đó KHÔNG bị lượt di
+  trú đụng tới (chỉ đổi cách đăng ký tool), nhưng đừng đọc rộng hơn thế.
+- `$schema` đổi dialect: client MCP thật đều đọc `properties` chứ không chốt
+  theo `$schema`, nhưng đây là chỗ duy nhất đáng nhìn nếu có client kén.
+
+---
+
+## 🀄 Lục Nhâm CŨNG liệt kê được từ vựng — và lộ 3 chỗ rò (2026-08-10, PR trước)
 
 Henry: *"check xanh hết thì merge đi, xong làm tiếp"*. #479 bump **`mingyu-core`
 lên 0.1.25** (không phải 0.1.24 như lượt A/B ở #481) nên đo lại trước khi gộp.
@@ -8224,3 +8282,13 @@ cd tuvi-engine && npm ci && cd ..
 npx playwright install chromium
 ```
 ESLint dùng flat config (`eslint.config.js`) nên VS Code cần extension version mới (ESLint v3+).
+
+<!-- BEGIN:nextjs-agent-rules -->
+
+# This is NOT the Next.js you know
+
+This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
+
+This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
+
+<!-- END:nextjs-agent-rules -->

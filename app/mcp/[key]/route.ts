@@ -3,15 +3,18 @@
 // MCP endpoint (Streamable HTTP) — remote MCP server chạy trong Next.js.
 // URL: https://tuviminhbao.com/mcp/<key>  (key nhúng trong path).
 //
-// mcp-handler v1.1.0 khớp endpoint bằng SO KHỚP CHÍNH XÁC url.pathname ===
-// streamableHttpEndpoint. Vì key động, ta dựng handler THEO REQUEST với
-// streamableHttpEndpoint = đúng pathname (/mcp/<key>). disableSse: không
-// dùng transport SSE cũ (spec: chỉ Streamable HTTP).
+// mcp-handler v2 trả về một hàm web chuẩn `(Request) => Response` PHỤC VỤ MỌI
+// request nó nhận — định tuyến là việc của Next. Nên bản v1 phải dựng handler
+// theo request chỉ để khai `streamableHttpEndpoint` khớp `/mcp/<key>` thì nay
+// KHÔNG cần nữa; vẫn dựng theo request, nhưng vì lý do khác hẳn: `key` nằm
+// trong path và closure của tool phải bắt được đúng key của lượt đó.
+// (`disableSse` cũng biến mất theo — v2 không tự mở endpoint SSE nào.)
 //
 // Cả 3 tool: validate key → hết quota/sai key trả message tiếng Việt →
 // log usage → chạy. Không tool nào để LLM server sinh nội dung.
 // ============================================================
 
+import { z } from 'zod';
 import { createMcpHandler } from 'mcp-handler';
 import { validateKey, HUONG_DAN_LAY_KEY } from '@/lib/mcp/auth';
 import { logUsage } from '@/lib/mcp/usage';
@@ -53,41 +56,42 @@ function jsonResult(data: unknown) {
   return { content: [{ type: 'text' as const, text: AUTHORITY_NOTE + JSON.stringify(data, null, 2) }] };
 }
 
-function buildHandler(key: string, pathname: string) {
+function buildHandler(key: string) {
   return createMcpHandler(
     (server) => {
       for (const t of TOOLS) {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        server.tool(t.name, t.description, t.schema as any, async (args: any) => {
-          const v = await validateKey(key);
-          if (!v.ok || !v.info) return textResult(v.error || HUONG_DAN_LAY_KEY);
-          if (t.quota) {
-            const blocked = await t.quota(args, v.info, key);
-            if (blocked) return textResult(blocked);
-          }
-          await logUsage(key, t.name, args);
-          const data = await t.run(args, v.info);
-          return jsonResult(data);
-        });
+        // ⚠️ v2 đòi `inputSchema` là SCHEMA CHUẨN (Zod object), không phải
+        // `ZodRawShape` như `server.tool()` cũ nhận — bọc `z.object()` là đủ,
+        // và JSON Schema phát ra ở `tools/list` giữ nguyên (có ca A/B canh).
+        server.registerTool(
+          t.name,
+          { description: t.description, inputSchema: z.object(t.schema) },
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          async (args: any) => {
+            const v = await validateKey(key);
+            if (!v.ok || !v.info) return textResult(v.error || HUONG_DAN_LAY_KEY);
+            if (t.quota) {
+              const blocked = await t.quota(args, v.info, key);
+              if (blocked) return textResult(blocked);
+            }
+            await logUsage(key, t.name, args);
+            const data = await t.run(args, v.info);
+            return jsonResult(data);
+          },
+        );
       }
     },
     {
       serverInfo: { name: 'tuviminhbao', version: '1.0.0' },
       instructions: INSTRUCTIONS,
-    },
-    {
-      streamableHttpEndpoint: pathname, // khớp chính xác /mcp/<key>
-      disableSse: true,
       verboseLogs: false,
-      maxDuration: 60,
     },
   );
 }
 
 async function handle(req: Request, params: { key: string } | Promise<{ key: string }>) {
   const { key } = await params;
-  const pathname = new URL(req.url).pathname;
-  const handler = buildHandler(key, pathname);
+  const handler = buildHandler(key);
   return handler(req);
 }
 
