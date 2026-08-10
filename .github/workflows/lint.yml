@@ -115,6 +115,14 @@ jobs:
       - name: Engine ↔ rail còn khớp trường (Bát Tự)
         run: npm run check:railfields
 
+      # `portrait_cache` khoá theo LÁ SỐ chứ không theo shape: đổi cấu trúc
+      # payload mà quên bump `SHAPE` thì dòng cache cũ được trả nguyên trạng
+      # MÃI MÃI và trang ẩn khối im lặng. Đã cắn HAI lần (#465 `day-con`,
+      # #475 `huong-nghiep-tre` — đo được trên prod một dòng `tuoi=43` vẫn
+      # mang lứa của bản kẹp tuổi cũ). Lời dặn trong mã không đủ; cần máy canh.
+      - name: Vân tay cấu trúc payload ↔ SHAPE cache
+        run: npm run check:cacheshape
+
   typecheck:
     runs-on: ubuntu-latest
     timeout-minutes: 10
