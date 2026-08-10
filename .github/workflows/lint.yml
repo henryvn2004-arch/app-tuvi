@@ -124,6 +124,13 @@ jobs:
       - name: Engine ↔ rail còn khớp trường (Bát Tự)
         run: npm run check:railfields
 
+      # Anh em của bước trên, cho nhóm `wrap` (lá số đầy đủ + vỏ đóng vai).
+      # Nhóm này đi đường KHÁC hẳn nên bộ dò kia không với tới — và chính nó
+      # lòi ra 3 lỗi ở lượt rà thứ hai (5 trục/8 chất không tới rail ·
+      # `railDataDayDu` là code chết · bảng KIỂU bản trả tiền dùng thì rail mù).
+      - name: Engine ↔ rail còn khớp trường (nhóm wrap)
+        run: npm run check:railwrap
+
       # `portrait_cache` khoá theo LÁ SỐ chứ không theo shape: đổi cấu trúc
       # payload mà quên bump `SHAPE` thì dòng cache cũ được trả nguyên trạng
       # MÃI MÃI và trang ẩn khối im lặng. Đã cắn HAI lần (#465 `day-con`,

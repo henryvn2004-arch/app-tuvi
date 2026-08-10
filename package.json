@@ -23,6 +23,7 @@
     "check:hexagrams": "node scripts/check-hexagram-table.mjs",
     "check:laso": "node scripts/check-laso-markers.mjs",
     "check:railfields": "node scripts/check-rail-fields.mjs",
+    "check:railwrap": "node scripts/check-rail-wrap.mjs",
     "check:cacheshape": "node scripts/check-cache-shape.mjs",
     "check:hao": "node scripts/check-hao-data.mjs",
     "lint:fix": "eslint . --fix",

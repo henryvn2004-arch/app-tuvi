@@ -20,7 +20,8 @@
 // ============================================================
 
 import type { HuongNghiepTreProfile } from '@/lib/engine/huong-nghiep-tre';
-import { THIEN_HUONG } from '@/lib/engine/huong-nghiep-tre';
+import { THIEN_HUONG, XUNG_HO_NGUOI_LON } from '@/lib/engine/huong-nghiep-tre';
+import { matDocBlock } from '@/lib/agent/rail-blocks';
 
 export const HUONG_NGHIEP_TRE_SYSTEM_PROMPT = `Bạn là một người xem tử vi lâu năm, đang ngồi nói chuyện với CHA MẸ hoặc ÔNG BÀ của một đứa trẻ.
 
@@ -257,10 +258,16 @@ export const HUONG_NGHIEP_TRE_SCHEMA = {
 function huongBlock(p: HuongNghiepTreProfile): string {
   const h = p.huong;
   if (!h) return '';
-  // ⚠️ Xưng hô lấy từ LỨA TUỔI THẬT (`p.lop.xungHo`), KHÔNG ghi cứng "cháu" —
-  // #475 vừa vá đúng chuyện đó (lá số 19–25 bị gọi "bé trai"). Khối này thêm
-  // sau nên phải theo, nếu không là dựng lại lỗi vừa vá ở ngay bên cạnh.
-  const ai = p.lop?.xungHo || 'cháu';
+  // ⚠️ Xưng hô lấy từ LỨA TUỔI THẬT, KHÔNG ghi cứng "cháu" — #475 vừa vá đúng
+  // chuyện đó (lá số 19–25 bị gọi "bé trai"). Khối này thêm sau nên phải theo.
+  //
+  // 🔴 VÀ PHẢI XÉT `laTreEm` TRƯỚC: khi tuổi mụ ≥ 26 thì `lop` chỉ là CHỖ ĐỨNG
+  // kỹ thuật để payload giữ hình dạng — `lop.xungHo` lúc đó vẫn trả "con" cho
+  // một lá số 43 tuổi. Engine đã tự thay xưng hô đúng vào các chuỗi bên trong
+  // `huong` (`xungHoHoa(..., laTreEm ? lop.xungHo : XUNG_HO_NGUOI_LON)`), nên
+  // đọc thẳng `lop.xungHo` ở đây là khối này tự nói ngược lại chính dữ liệu nó
+  // đang in ra — đúng lỗi #475, chỉ dịch sang một bề mặt khác.
+  const ai = p.laTreEm ? p.lop?.xungHo || 'cháu' : XUNG_HO_NGUOI_LON;
   let s = '\n--- THIÊN HƯỚNG ĐO ĐƯỢC (engine chấm — CHÉP đúng, KHÔNG tự chấm lại) ---\n';
   if (h.chuaRoNet) {
     s +=
@@ -298,7 +305,30 @@ export function huongNghiepTreRailWrapper(p: HuongNghiepTreProfile, tenRaw: stri
     .replace(/\s+/g, ' ')
     .trim()
     .slice(0, 40);
-  const who = ten ? `"${ten}"` : 'cháu';
+  const who = ten ? `"${ten}"` : p.laTreEm ? 'cháu' : XUNG_HO_NGUOI_LON;
+
+  // ── Lá số KHÔNG phải trẻ em (tuổi mụ ≥ 26) ───────────────────
+  // #475 đã chặn đường BÁN và sửa nhãn trên trang cho ca này, nhưng vỏ rail
+  // thì chưa — nó vẫn mở đầu bằng "ĐANG XEM LÁ SỐ CỦA MỘT ĐỨA TRẺ", vẫn gọi
+  // "cháu", vẫn cấm đoán đỗ/trượt cho một người 43 tuổi. Đúng lời Henry báo,
+  // chỉ khác bề mặt. 🔑 Bài học lặp: **chặn đường BÁN không bằng chặn đường
+  // ĐỌC** — vá một tính năng theo tuổi thì phải đi hết MỌI bề mặt chữ.
+  // Tầng thiên hướng vẫn có nghĩa (đọc từ 13 chiều, độc lập tuổi) nên vẫn gửi;
+  // thứ bị cắt là phần khung viết cho cha mẹ của một đứa trẻ.
+  if (!p.laTreEm) {
+    return `
+
+=== ĐANG XEM LÁ SỐ MỘT NGƯỜI ĐÃ TRƯỞNG THÀNH — ĐỌC KỸ, KHỐI NÀY ĐÈ LÊN MỌI LUẬT Ở TRÊN ===
+Lá số ở trên chạy qua tool "Hướng nghiệp sớm cho con", NHƯNG chủ lá số đã ${p.tuoi ? `${p.tuoi} tuổi` : 'quá tuổi trẻ em'} — KHÔNG còn là trẻ em.
+
+- 🔴 TUYỆT ĐỐI KHÔNG gọi đây là trẻ con: cấm "cháu", "con", "bé", "bé trai", "bé gái", cấm nói với người chat như nói với phụ huynh. Gọi chủ lá số là "${ten || XUNG_HO_NGUOI_LON}", gọi người đang chat là "quý vị".
+- Cấm nhắc lứa tuổi/hoạt động dành cho trẻ, cấm đoán ĐỖ/TRƯỢT, cấm khuyên "người lớn nên đồng hành thế nào".
+- Phần đo được ở dưới vẫn ĐÚNG (đọc từ 13 chiều của lá số, độc lập tuổi) — cứ dùng, chỉ đổi cách nói cho một người trưởng thành đang tự tra.
+- Ai hỏi sâu về hướng nghiệp cho người lớn thì chỉ sang **Tử Vi Công Sở & Hướng Nghiệp** (/app/cong-so) — tool đó viết cho người đã đi làm. Nói thẳng là bản này không tính tiền cho lá số ngoài tuổi trẻ em.
+- CẤM gọi đây là trắc nghiệm/khoa học/đã kiểm định, CẤM đối chiếu DISC/MBTI/Holland.
+${huongBlock(p)}${matDocBlock(p.matDoc, 'CÁC MẶT TOOL NÀY ĐỌC (đúng mấy cung này, đúng vai này)')}=== HẾT KHỐI HƯỚNG NGHIỆP ===`;
+  }
+
   return `
 
 === ĐANG XEM LÁ SỐ CỦA MỘT ĐỨA TRẺ — ĐỌC KỸ, KHỐI NÀY ĐÈ LÊN MỌI LUẬT Ở TRÊN ===
@@ -316,5 +346,5 @@ Lá số ở trên KHÔNG phải của người đang chat. Đó là lá số CO
 - Lứa tuổi: ${p.lop.ten} (${p.lop.tuoi}). ${p.bayNghe ? 'Được nhắc tên nghề để hình dung chất việc, không quá 2–3 cái tên.' : '⛔ Cháu còn nhỏ — TUYỆT ĐỐI không nêu tên nghề nào, chỉ nói chất việc và hoạt động nên cho làm quen.'}
 - Điều người lớn đang lo: ${p.moiLo.label}. Ưu tiên trả lời quanh đúng chuyện đó.
 - CẤM gọi đây là trắc nghiệm/khoa học/đã kiểm định, CẤM đối chiếu DISC/MBTI/Holland.
-${huongBlock(p)}=== HẾT KHỐI HƯỚNG NGHIỆP TRẺ ===`;
+${huongBlock(p)}${matDocBlock(p.matDoc, 'CÁC MẶT TOOL NÀY ĐỌC (đúng mấy cung này, đúng vai này)')}=== HẾT KHỐI HƯỚNG NGHIỆP TRẺ ===`;
 }

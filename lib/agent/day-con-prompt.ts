@@ -17,6 +17,7 @@
 // ============================================================
 
 import type { DayConProfile } from '@/lib/engine/day-con';
+import { matDocBlock } from '@/lib/agent/rail-blocks';
 
 export const DAY_CON_SYSTEM_PROMPT = `Bạn là một người xem tử vi lâu năm, đang ngồi nói chuyện với CHA MẸ của một đứa trẻ.
 
@@ -386,6 +387,71 @@ export function dayConRailWrapper(p: DayConProfile, tenRaw: string): string {
         : '  → KHÔNG chất nào vượt ngưỡng. Nói THẲNG điều đó (ở tuổi này chưa rõ nét là bình thường, nên cho thử rộng), TUYỆT ĐỐI không bịa ra một chất nổi.\n';
     }
     doDuoc += '--- HẾT PHẦN ĐO ĐƯỢC ---\n';
+  }
+
+  // ── Bảng CÁCH DẠY (`p.hoc`) ──────────────────────────────────
+  // 6 thẻ này nằm ở tầng MIỄN PHÍ, tức cha mẹ nào mở trang cũng đọc được, rồi
+  // hỏi lại đúng chúng ("vì sao cắt lời con lại phản tác dụng?"). Bảng tự đặt
+  // của trang ⇒ model không có đường suy lại từ lá số.
+  const h = p.hoc;
+  if (h) {
+    doDuoc += '\n--- CÁCH DẠY ĐỨA NÀY (bảng của trang — dùng đúng, đừng tự nghĩ thêm) ---\n';
+    doDuoc += krow('Tiếp thu cái mới', h.tiepThu);
+    doDuoc += krow('Giao việc kiểu nào thì chịu làm', h.giaoViec);
+    doDuoc += krow('Động viên kiểu nào có tác dụng', h.dongVien);
+    doDuoc += krow('Kỷ luật PHẢN TÁC DỤNG', h.kyLuatHong);
+    doDuoc += krow('Chỗ người lớn hay đọc nhầm', h.hieuNham);
+    doDuoc += krow('Thứ con cần học thêm (nói như BÀI HỌC, không phải lời chê)', h.canHoc);
+    if (Array.isArray(h.dauHieu) && h.dauHieu.length)
+      doDuoc += `  Dấu hiệu quan sát được ở nhà: ${h.dauHieu.join(' · ')}\n`;
+  }
+
+  doDuoc += matDocBlock(p.matDoc, 'CÁC MẶT TOOL NÀY ĐỌC (đúng mấy cung này, đúng vai này)');
+
+  // Chặng đi học: đại vận thì lá số đã có, nhưng NHÃN ("quãng tiểu học —
+  // hình thành nếp") là cách tool này gióng đại vận vào việc HỌC. Đó mới là
+  // thứ cha mẹ đọc trên trang.
+  if (Array.isArray(p.changHoc) && p.changHoc.length) {
+    doDuoc += '--- CHẶNG ĐI HỌC (gióng đại vận vào việc học) ---\n';
+    p.changHoc.forEach((c) => {
+      doDuoc +=
+        `  ${c.tuoiStart}–${c.tuoiEnd} tuổi (${c.namStart}–${c.namEnd}) · cung ${c.cung}` +
+        `${c.diem != null ? ` · ${c.diem}/10` : ''} — ${c.nhan}${c.dangChay ? '  ← ĐANG Ở ĐÂY' : ''}\n`;
+    });
+  }
+
+  // Mặt "với cha mẹ": bắc qua lá số THỨ HAI (của cha/mẹ) — rail chỉ nạp được
+  // lá số đứa trẻ nên không có đường nào suy lại. Trang hiện hẳn khối này.
+  const vc = p.voiChaMe;
+  if (vc) {
+    doDuoc += '--- ĐỐI CHIẾU VỚI LÁ SỐ CHA/MẸ (họ có đưa lá số của mình) ---\n';
+    doDuoc +=
+      `  Cung ${vc.cung} trong lá số CHA/MẸ — cổ pháp đọc con cái ở đây` +
+      `${vc.muon ? ' (vô chính diệu — mượn xung chiếu)' : ''}` +
+      `${vc.sao && vc.sao.length ? `: ${vc.sao.join(', ')}` : ''}\n`;
+    if (vc.kieuTen) doDuoc += `  Cung đó mô tả một đứa trẻ kiểu: ${vc.kieuTen}\n`;
+    if (vc.kieuChaMe) doDuoc += `  Kiểu của chính cha/mẹ: ${vc.kieuChaMe}\n`;
+    doDuoc += vc.cungTinh
+      ? '  Hai kiểu CÙNG tính âm/dương → phản ứng giống nhau nên dễ va nhau.\n'
+      : '  Hai kiểu KHÁC tính âm/dương → dễ bù cho nhau hơn là va nhau.\n';
+  }
+
+  // Hoạt động đề xuất — tầng TRẢ TIỀN, cha mẹ đọc kỹ nhất. Cắt còn phần dùng
+  // được (một gợi ý CLB + một việc làm ở nhà mỗi chất): gửi trọn bảng là
+  // ~1.600 ký tự context cho thứ họ đang mở sẵn trên màn hình.
+  const hd = p.hoatDong;
+  if (hd) {
+    doDuoc += `--- HOẠT ĐỘNG ĐỀ XUẤT (${hd.bandLabel}) ---\n`;
+    (hd.theoChat || []).forEach((c) => {
+      doDuoc += `  ${c.ten} (${c.diem}/10)`;
+      if (c.clb && c.clb[0]) doDuoc += ` · lớp/CLB: ${c.clb[0]}`;
+      if (c.nha && c.nha[0]) doDuoc += ` · ở nhà: ${c.nha[0]}`;
+      doDuoc += '\n';
+    });
+    if (hd.dinhDang) {
+      if (hd.dinhDang.nen) doDuoc += `  Định dạng NÊN: ${hd.dinhDang.nen}\n`;
+      if (hd.dinhDang.tranh) doDuoc += `  Định dạng TRÁNH: ${hd.dinhDang.tranh}\n`;
+    }
   }
 
   return `
