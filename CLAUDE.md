@@ -5,6 +5,85 @@
 
 ---
 
+## 🀄 QUÉT MẪU chỉ chứng minh được thứ mẫu CHẠM TỚI (2026-08-10, PR này)
+
+Job `next-build` vừa dựng xong khiến tôi mở PR Dependabot **#479** ra xem — nó
+đang **đỏ `lint`**, và lần theo thì lộ ra một họ lỗi rộng hơn hẳn lượt bump.
+
+### 🔴 Lỗi do bump: `mingyu-core` 0.1.23 → 0.1.24 đẻ khóa thể GHÉP mới
+`main` xanh, `#479` đỏ ⇒ lỗi của chính lượt bump, tái hiện tại chỗ bằng
+`npm i mingyu-core@0.1.24 --no-save`. Bản mới sinh `伏吟重审` — `docKhoaThe`
+chỉ tra bảng ĐÚNG-NGUYÊN-CHUỖI rồi rơi về phiên âm từng chữ, mà `审` không có
+trong bảng ⇒ giao diện Lục Nhâm ra ***"Phục Ngâm Trùng 审"***.
+- 🔑 **Đây là lần thứ TƯ của cùng một họ lỗi trong track `mingyu-core`**, và
+  `docPhap` NGAY DƯỚI nó đã phải vá đúng như vậy (tách ghép tổng quát) từ lượt
+  `遥克比用`/`遥克涉害` — chỉ `docKhoaThe` bị bỏ quên. Vá cùng cách: thử mọi chỗ
+  cắt thành hai khóa thể đã biết ⇒ `伏吟` + `重审` = "Phục Ngâm Trùng Thẩm", và
+  lượt bump SAU có đẻ dạng ghép nào cũng đã có đường đọc.
+
+### 🔴 Lỗi CÓ SẴN trên prod, nặng hơn: `phienAm` không nhìn thấy CAN/CHI
+Quét rộng 4.392 khóa Lục Nhâm + 4.392 bàn Kỳ Môn + 352 lá Bát Tự thì lộ **4
+chuỗi nữa lọt chữ Hán** — và đo lại trên **0.1.23** ra Y HỆT ⇒ **không phải hồi
+quy của lượt bump, là nợ đang rò ra tool Bát Tự trên prod**.
+- Căn nguyên: `丑` nằm trong `CHI_HAN`, không nằm trong `HAN_VIET`, mà `phienAm`
+  chỉ tra `HAN_VIET` ⇒ `九丑` ra *"Cửu 丑"*. **Chú thích của `canChiViet` ngay
+  dưới đã tả đúng cái bẫy này** (*"địa chi KHÔNG nằm trong bảng chữ dựng từ tên
+  cách cục"*) — nó được vá cho `canChiViet` mà không vá cho `phienAm`.
+- ⚠️ `HAN_VIET` phải đứng TRƯỚC trong chuỗi rơi: `辰` là chữ DUY NHẤT hai bảng
+  đọc khác nhau (`HAN_VIET` "Thần" của 时辰/星辰 vs địa chi "Thìn"). Đảo thứ tự
+  là lặng lẽ viết lại mọi chỗ đang đọc "Thần" — đây phải là thay đổi CỘNG THÊM.
+
+### 🔑 Bài học chính: bỏ hẳn lối QUÉT MẪU cho thứ liệt kê được
+| Lưới | Bỏ lọt |
+|---|---:|
+| 3 lá số (lưới cũ của bộ dò) | 4 tên |
+| **352 lá số** | **vẫn 10 tên nữa** |
+| **Trọn từ vựng của nguồn (199 tên)** | **0** |
+
+10 tên kia (`悬针杀` · `曲脚杀` · `聋哑字` · `阙字`…) hiếm tới mức 352 lá số
+KHÔNG lá nào sinh ra. ⇒ Nới lưới không cứu được; phải **đọc chính danh sách của
+nguồn**. `mingyu-core` cho cả hai đường: `listHuangliShenshaNames()` (công khai,
+151 tên — Hoàng Lịch vốn đã phủ trọn) và bảng nội bộ `baziShenShaData` (199 tên).
+- ⚠️ Bảng Bát Tự **không nằm trong `exports`** ⇒ phải nạp bằng **đường dẫn tuyệt
+  đối** (gọi theo tên gói ăn `ERR_PACKAGE_PATH_NOT_EXPORTED`), và vì là đường
+  nội bộ nên lượt bump có thể dời nó ⇒ có **ngưỡng số tên** làm chuông báo.
+- Tổng cộng thêm **18 chữ** vào `lib/hanviet.ts` (4 do quét rộng + 14 do phủ trọn).
+
+### 🧷 `check:terms` nay phủ TRỌN, không phủ mẫu
+Thêm 2 mục `tuvung-bat-tu` (199) · `tuvung-hoang-lich` (151). Chạy **2,6s**
+(trước 1,7s) — rẻ vì không phải lập lá số nào.
+- 🪤 **Red-team lộ chốt của chính tôi CÂM**: ca "nguồn dời bảng" chết bằng một
+  bãi `ERR_MODULE_NOT_FOUND` nên chốt ngưỡng KHÔNG BAO GIỜ chạy tới. Phải bọc
+  `try/catch` cho rơi về `n: 0` thì câu hướng dẫn mới bắn được. **Chốt chặn mà
+  chết trước khi tới lượt nó thì không phải chốt chặn.**
+- **4/4 ca đỏ đúng** (gỡ 1 chữ mới · gỡ bộ tách ghép → bắt lại `审` · nguồn dời
+  đường dẫn · nguồn đổi tên trường), đối chứng khôi phục **xanh**, 0 file rác.
+
+### Verify
+`tsc` 0 · `lint` **73 warning = ĐÚNG mốc nền của `main`** (con số 72 ghi ở các
+mục dưới đã cũ, đo lại bằng cách stash bản vá) · `prettier` sạch · **13/13 bộ
+dò** · engine **185 pass**.
+- **A/B toàn payload, 9.148 dòng, trên CẢ HAI bản mingyu**: `0.1.24` → 8 dạng
+  chuỗi đổi, `0.1.23` → 4 dạng; **cả hai đều 100% đúng một hướng (có Hán →
+  hết Hán), 0 chuỗi đang đúng bị đổi.** Vá `审` nằm chờ tới khi #479 vào.
+- Hai bản dựng đối chứng đều **assert mang/không mang bản vá** trước khi đo.
+
+### 🪤 Bẫy quy trình đã vấp (cả hai đều là lỗi của TÔI, không phải của mã)
+1. 🔴 **`grep "A \|\| B"` là ĐỖ GIẢ** — `\|` trong BRE là toán tử HOẶC nên mẫu
+   khớp gần như mọi thứ, và assertion "bản cũ chưa có vá" báo sai. Dò chuỗi có
+   `||` thì **phải `grep -F`**. Đúng lớp "xanh oan nguy hơn đỏ oan".
+2. **`git checkout <file>` để gỡ mũi đột biến red-team đã xoá luôn phần vá chưa
+   commit** trong cùng file đó. Sao lưu ra scratchpad trước khi đột biến, khôi
+   phục bằng `cp` — đừng dùng `git checkout` khi file đang mang việc dở.
+
+### CÒN LẠI
+- Kỳ Môn và Lục Nhâm **chưa có đường liệt kê từ vựng** như Bát Tự/Hoàng Lịch nên
+  vẫn chỉ quét mẫu. Chúng sạch trên 4.392 mẫu mỗi tool, nhưng đó CHÍNH LÀ mức
+  bảo đảm mà Bát Tự từng có trước khi lộ 10 tên. Tìm được bảng nguồn thì nên mở.
+- **#479 vẫn cần chạy lại CI** — nó đỏ trên merge-ref cũ; bản vá này ở `main`.
+
+---
+
 ## 🔁 "Đã check hết chưa?" — CHƯA, và 4 tool nữa dính (2026-08-10, PR này)
 
 Henry: *"mày check mấy tool liên quan đến tử vi như xem tuổi vợ chồng, xem làm

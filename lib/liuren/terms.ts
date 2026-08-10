@@ -119,13 +119,32 @@ export function docQuanHe(raw: string): string {
   return phienAm(s);
 }
 
-/** Khóa thể: tra bảng, riêng dạng `X发用` thì ghép từ tên thiên tướng. */
+/**
+ * Khóa thể: tra bảng, riêng dạng `X发用` thì ghép từ tên thiên tướng.
+ *
+ * 🐞 `mingyu-core` 0.1.24 sinh khóa thể GHÉP mới `伏吟重审` mà bảng không có ⇒
+ * rơi về phiên âm từng chữ và lọt nguyên chữ `审` ra giao diện (*"Phục Ngâm
+ * Trùng 审"*). Đây là lần thứ TƯ của cùng một họ lỗi trong track `mingyu-core`,
+ * và `docPhap` ngay dưới đã phải vá đúng như vậy — chỉ `docKhoaThe` bị bỏ quên.
+ * ⇒ Tách GHÉP TỔNG QUÁT: thử mọi chỗ cắt thành hai khóa thể đã biết. Nhờ vậy
+ * `伏吟重审` đọc thành *"Phục Ngâm Trùng Thẩm"*, và lượt bump SAU có đẻ thêm
+ * dạng ghép nào thì cũng đã có đường đọc.
+ *
+ * ⚠️ Bảng vẫn giữ mấy dạng ghép khai sẵn (`返吟重审`, `遥克涉害`…): tra đúng
+ * nguyên chuỗi chạy TRƯỚC nên chúng vẫn thắng, và `返吟` không phải khóa đứng
+ * một mình (bảng có `反吟`, khác chữ) nên bộ tách không thay chúng được.
+ */
 export function docKhoaThe(raw: string): string {
   const s = String(raw || '');
   if (KHOA_THE[s]) return KHOA_THE[s];
   if (s.endsWith('发用')) {
     const g = THIEN_TUONG[s.slice(0, -2)];
     return (g ? g.ten : phienAm(s.slice(0, -2))) + ' phát dụng';
+  }
+  for (let i = 1; i < s.length; i++) {
+    const a = KHOA_THE[s.slice(0, i)];
+    const b = KHOA_THE[s.slice(i)];
+    if (a && b) return `${a} ${b}`;
   }
   return phienAm(s);
 }
