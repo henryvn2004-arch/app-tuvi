@@ -68,6 +68,13 @@ jobs:
       - name: Trang shell nạp đủ khung khởi động
         run: npm run check:shellboot
 
+      # Chặn gõ nhầm tên hàm trên `window.Auth`. Gõ nhầm KHÔNG ném lỗi — nó trả
+      # undefined và hỏng IM LẶNG. Đã trả giá: `app-gio-sinh` gọi
+      # `Auth.getToken()` (không tồn tại; API thật là `getSession()`) nên header
+      # Authorization rỗng → server 401 SAU KHI client đã trừ Lượng.
+      - name: Lời gọi Auth.* khớp API thật
+        run: npm run check:authapi
+
       # Chặn `animation:` trỏ tới @keyframes KHÔNG TỒN TẠI — trình duyệt không
       # báo gì cả, phần tử vẫn hiện, chỉ là đứng im. Bắt được ngay lượt chạy
       # đầu: banner "Chào mừng! Bạn đã nhận Lượng miễn phí" của `auth.js` mượn

@@ -270,7 +270,10 @@ function buildLock(){
 
 // ── Bước 2: KHẢO SÁT (trả tiền) ─────────────────────────────
 async function post(){
-  const tok=(window.Auth&&Auth.getToken&&Auth.getToken())||'';
+  // ⚠️ `Auth.getToken` KHÔNG TỒN TẠI — API thật là `getSession()`. Viết nhầm tên
+  // thì `tok` rỗng, không có header Authorization, server trả 401 SAU KHI client
+  // đã trừ Lượng. `check:authapi` canh mọi lời gọi `Auth.*` khớp API thật.
+  const tok=(window.Auth&&Auth.getSession&&Auth.getSession()&&Auth.getSession().access_token)||'';
   const r=await fetch('/api/gio-sinh',{method:'POST',
     headers:Object.assign({'Content-Type':'application/json'},tok?{Authorization:'Bearer '+tok}:{}),
     body:JSON.stringify({birth:_birth,answers:_answers,slug:_slug})});
