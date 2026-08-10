@@ -485,9 +485,31 @@ dẫn; bớt một mô-típ của quẻ 1 → đỏ *"phải đúng 6 mô-típ, 
 sạch 0 file rác · `--dry-run` của script vẽ in đủ prompt, **0 lượt gọi API** ·
 14/14 bộ dò + `typecheck` + `next build` qua được bước TypeScript.
 
+### ✅ Đã lấp lỗ: workflow `next-build.yml` (PR sau)
+Henry: *"mày xem rồi fix lại đi"*. Nay CI **có** chạy `next build` thật.
+- **Job tên `next-build`, CỐ Ý không phải `build`** — hai check cùng tên `build`
+  là tái lập chính sự nhầm lẫn vừa trả giá.
+- **`scripts/stub-postgrest.mjs`** — máy chủ giả trả **rỗng** cho mọi lượt đọc;
+  `SUPABASE_URL` trỏ vào đó. Không có nó thì build chết ở `getaddrinfo` và mã
+  thoát nói về HẠ TẦNG chứ không nói về MÃ. Với stub: đi trọn **63/63 trang**,
+  exit 0. ⚠️ Nó KHÔNG phải bộ kiểm nội dung — càng làm nó giống Supabase thật
+  càng dễ nuốt một lỗi thật.
+  🪤 `.single()` gửi `Accept: vnd.pgrst.object+json` và chờ MỘT object ⇒ stub
+  phải trả **406** (đúng thứ PostgREST trả khi không khớp dòng nào), trả mảng là
+  phía gọi vỡ vì shape lạ — bẫy đã vấp một lần ở track Duyên Nợ.
+- ⛔ **CẤM thêm `if: github.actor != 'dependabot[bot]'`** như playwright/
+  lighthouse. Hai cái đó bỏ qua Dependabot vì cần SECRET; job này không dùng
+  secret nào, và **lượt bump nó sinh ra để chặn (#388) CHÍNH LÀ một PR
+  Dependabot**. Bỏ qua Dependabot ở đây là gỡ đúng cái chốt vừa dựng.
+- Bước `if: failure()` in thẳng câu chẩn đoán khi vỡ ở tầng TypeScript — lượt
+  sau khỏi phải đi chẩn lại từ đầu (lỗi này đã tốn 7 lượt deploy để nhận ra).
+- **Red-team: cài lại `typescript@7.0.2` rồi chạy đúng chuỗi lệnh của CI → build
+  exit ≠ 0 và log chứa đúng câu *"does not provide the compiler API"*** ⇒ job này
+  bắt được #388. Khôi phục về TS 6 → exit 0, 63/63 trang, cây làm việc sạch.
+
 ### CÒN LẠI
-- **Chưa có gì trong CI phủ `next build`.** Đáng thêm một job dựng thật (có thể
-  bỏ qua env bằng stub) — nếu không thì lần sau vẫn phải chờ Vercel mới biết.
+- Stub chỉ trả rỗng nên trang prerender ra **trống** — job này chứng minh **bản
+  dựng còn sống**, KHÔNG chứng minh trang hiện đúng chữ. Đừng đọc nó rộng hơn thế.
 - `tuvi-engine` **CỐ Ý giữ TS 7** (#384): nó dựng bằng `tsc` CLI nên không dính.
 
 ### Verify
