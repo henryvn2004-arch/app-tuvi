@@ -37,6 +37,19 @@ import {
   birthFromQuery,
 } from '@/lib/portraits/cache';
 
+/**
+ * 🔴 Tool này CHƯA cắm cơ chế `SHAPE` — `portrait_cache` khoá theo LÁ SỐ nên
+ * đổi cấu trúc payload là dòng cache cũ được trả nguyên trạng MÃI MÃI, trang ẩn
+ * khối im lặng. Đã cắn thật hai lần ở tool khác (#465 `day-con`, #475
+ * `huong-nghiep-tre`).
+ *
+ * Vân tay dưới đây do `npm run check:cacheshape` canh: đổi payload ⇒ CI đỏ kèm
+ * hướng dẫn cắm cơ chế. Chưa cắm sẵn vì payload tool này chưa đổi lần nào, mà
+ * cắm là phải đụng đường trả tiền — nhưng ĐỤNG VÀO PAYLOAD THÌ PHẢI CẮM TRƯỚC.
+ */
+const SHAPE_FINGERPRINT = '8cfee3e40522';
+
+
 const TOOL_ID = 'chan-dung-vo-chong';
 
 const SUPABASE_URL = process.env.SUPABASE_URL!;

@@ -66,13 +66,43 @@ engine rồi so với `SHAPE_FINGERPRINT` khai cạnh `SHAPE`. Đổi cấu trú
 `tsc` 0 · `lint` 73 warning = đúng mốc nền `main` · `prettier` sạch ·
 **14/14 bộ dò** · engine **185 pass** · `node --check`.
 
+### ✅ Vòng sau — phủ nốt 5 tool CHƯA có `SHAPE` (Henry: *"phải làm sao tiếp?"*)
+Đo trước khi chọn hướng: **11 dòng cache / 2 lượt hit** trên cả 5 tool, toàn bản
+test. ⇒ cache **chưa gánh gì**, nên cắm sẵn `SHAPE` cho cả 5 là đụng đường trả
+tiền của 5 tool đang bán để đổi lấy một lợi ích **chưa tới hạn**.
+
+Chọn cách rẻ hơn mà chặn đúng chỗ: **bộ dò chốt vân tay cho CẢ 7 tool**, tool
+chưa có cơ chế thì báo *"cắm `SHAPE` TRƯỚC khi đổi payload"* kèm đủ 3 bước
+(`shapeStale` · cờ `overwrite` · ⛔ không nhét vào `lasoKey`). Tức là ép đúng
+**thời điểm duy nhất còn kịp**, thay vì trông vào trí nhớ hay vào một dòng ghi
+trong CÒN LẠI.
+
+| tool | khoá | vân tay | SHAPE |
+|---|---:|---|---|
+| `huong-nghiep-tre` | 54 | `5242585a3d68` | 2 |
+| `day-con` | 72 | `4ec3392fed42` | 2 |
+| `nguoi-khac` | 71 | `5ca3e50e1109` | chưa có |
+| `chan-dung-tien-kiep` | 59 | `f256a213cbd1` | chưa có |
+| `duyen-no-tien-kiep` | 44 | `7e1e42a5757a` | chưa có |
+| `chan-dung-vo-chong` | 36 | `8cfee3e40522` | chưa có |
+| `nhan-mach` | 26 | `cc7d29bafb5f` | chưa có |
+
+- **Vân tay ổn định 3/3 lượt** — băm theo KHOÁ nên giá trị ngẫu nhiên
+  (`pickMarriageAgeAnchor`…) không làm bộ dò flaky.
+- Red-team nhánh mới: đổi payload `nhan-mach` → đỏ đúng, và in ra **câu hướng
+  dẫn của nhánh "chưa có SHAPE"** chứ không phải câu bump.
+
 ### CÒN LẠI
-- **2 tool chân dung + `duyen-no` + `nguoi-khac` + `nhan-mach` KHÔNG có `SHAPE`**
-  — chúng vẫn mang nguyên cái bẫy: đổi payload là dòng cache cũ trả nguyên trạng
-  mãi mãi. Chưa dựng vì payload chúng chưa đổi lần nào; đụng vào thì phải cắm
-  `SHAPE` + vân tay TRƯỚC khi sửa.
-- Bộ dò chốt lá số mẫu CỐ ĐỊNH (2015, giờ Sửu, nam). Đổi lá số mẫu là đổi vân
-  tay — đừng sửa nó chỉ vì thấy đỏ.
+- **Vẫn chưa cắm `SHAPE` cho 5 tool đó** — CỐ Ý, xem số đo ở trên. Nay có máy
+  ép nên không còn là nợ im lặng.
+- ⏭️ **Bước mạnh hơn, CHƯA làm, cần Henry chốt:** đưa `shape` thành **tham số
+  BẮT BUỘC** của `getCachedPortrait`/`putCachedPortrait` (hoặc một `cacheFor
+  (toolId, shape)`), để không tool nào *dùng được* cache mà chưa khai shape —
+  biến "nhớ mà cắm" thành lỗi biên dịch. Đổi lại phải sửa đường trả tiền của cả
+  7 tool. Cửa sổ rẻ nhất là BÂY GIỜ (cache gần rỗng); càng có lưu lượng càng đắt.
+- Bộ dò chốt lá số mẫu CỐ ĐỊNH. Đổi lá số mẫu là đổi vân tay — đừng sửa nó chỉ
+  vì thấy đỏ.
+- Phủ **tầng engine**, không phủ chỗ route tự ghép thêm khoá.
 
 ---
 

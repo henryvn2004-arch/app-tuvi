@@ -35,25 +35,75 @@ if (!existsSync(join(ROOT, 'tuvi-engine/dist/lunar/convert.js'))) {
   process.exit(1);
 }
 
-/** Lá số mẫu CỐ ĐỊNH cho từng tool — phải là TRẺ EM để đi trọn đường trả tiền. */
+/**
+ * Lá số mẫu CỐ ĐỊNH. Đổi lá số mẫu là đổi vân tay — đừng sửa chỉ vì thấy đỏ.
+ *   `TRE`   trẻ em (2 tool viết cho cha mẹ đọc về con)
+ *   `LON_N` / `LON_U` người trưởng thành, nam / nữ
+ */
+const TRE = { day: 9, month: 5, year: 2015, hourBranch: 1, gender: 'nam', isLunar: false };
+const LON_N = { day: 3, month: 6, year: 1998, hourBranch: 1, gender: 'nam', isLunar: false };
+const LON_U = { day: 22, month: 12, year: 1990, hourBranch: 7, gender: 'nu', isLunar: false };
+
+/**
+ * `coShape: false` = tool CHƯA cắm cơ chế `SHAPE`. Vẫn chốt vân tay: đổi payload
+ * ⇒ đỏ, và câu hướng dẫn bảo cắm cơ chế TRƯỚC khi đổi — đó đúng là thời điểm
+ * duy nhất còn kịp. Cắm sẵn `SHAPE` cho cả 5 tool ngay bây giờ thì phải đụng
+ * đường trả tiền của chúng để đổi lấy một lợi ích chưa tới hạn.
+ */
 const TOOLS = [
   {
     id: 'huong-nghiep-tre',
     route: 'app/api/huong-nghiep-tre/route.ts',
     mod: 'lib/engine/huong-nghiep-tre.js',
-    build: 'computeHuongNghiepTre',
-    full: 'hoSoDayDu',
-    birth: { day: 9, month: 5, year: 2015, hourBranch: 1, gender: 'nam', isLunar: false },
-    moiLo: 'chon-duong',
+    coShape: true,
+    goi: `m.hoSoDayDu(m.computeHuongNghiepTre(ls(${JSON.stringify(TRE)}), 'nam', 'chon-duong'))`,
   },
   {
     id: 'day-con',
     route: 'app/api/day-con/route.ts',
     mod: 'lib/engine/day-con.js',
-    build: 'computeDayCon',
-    full: null, // route tự dựng payload; băm trên chính profile engine trả
-    birth: { day: 9, month: 5, year: 2015, hourBranch: 1, gender: 'nam', isLunar: false },
-    moiLo: 'chon-duong',
+    coShape: true,
+    // Route tự ghép payload từ `meta()`; băm trên hồ sơ engine — nguồn của nó.
+    goi: `m.computeDayCon(ls(${JSON.stringify(TRE)}), 'nam', 'chon-duong')`,
+  },
+  {
+    id: 'nguoi-khac',
+    route: 'app/api/nguoi-khac/route.ts',
+    mod: 'lib/engine/nguoi-khac.js',
+    coShape: false,
+    goi: `m.computeNguoiKhac(ls(${JSON.stringify(LON_N)}), 'nam', 'sep', null, 2026)`,
+  },
+  {
+    id: 'nhan-mach',
+    route: 'app/api/nhan-mach/route.ts',
+    mod: 'lib/engine/nhan-mach.js',
+    coShape: false,
+    goi:
+      `m.computeNhanMach([` +
+      `{ten:'A',vai:'sep',ls:ls(${JSON.stringify(LON_N)}),gioiTinh:'nam'},` +
+      `{ten:'B',vai:'dong-nghiep',ls:ls(${JSON.stringify(LON_U)}),gioiTinh:'nu'}` +
+      `], null, 2026)`,
+  },
+  {
+    id: 'duyen-no-tien-kiep',
+    route: 'app/api/duyen-no-tien-kiep/route.ts',
+    mod: 'lib/engine/past-life-bond.js',
+    coShape: false,
+    goi: `m.computePastLifeBond(ls(${JSON.stringify(LON_N)}), 'nam', ls(${JSON.stringify(LON_U)}), 'nu')`,
+  },
+  {
+    id: 'chan-dung-tien-kiep',
+    route: 'app/api/chan-dung-tien-kiep/route.ts',
+    mod: 'lib/engine/past-life.js',
+    coShape: false,
+    goi: `m.computePastLife(ls(${JSON.stringify(LON_N)}), 'nam')`,
+  },
+  {
+    id: 'chan-dung-vo-chong',
+    route: 'app/api/chan-dung-vo-chong/route.ts',
+    mod: 'lib/engine/portrait.js',
+    coShape: false,
+    goi: `m.computeSpouseMorphology(ls(${JSON.stringify(LON_N)}), 'nam')`,
   },
 ];
 
@@ -122,14 +172,16 @@ try {
   const kich = `
 const out = {};
 const { computeLaso } = await import('./lib/engine/laso.js');
+const ls = (b) => {
+  const r = computeLaso(b);
+  if (!r.ok || !r.ls) throw new Error('không lập được lá số mẫu: ' + JSON.stringify(b));
+  return r.ls;
+};
 ${TOOLS.map(
   (t) => `
 {
   const m = await import('./${t.mod}');
-  const r = computeLaso(${JSON.stringify(t.birth)});
-  if (!r.ok || !r.ls) throw new Error('${t.id}: không lập được lá số mẫu');
-  const p = m.${t.build}(r.ls, '${t.birth.gender}', ${JSON.stringify(t.moiLo)});
-  out['${t.id}'] = ${t.full ? `m.${t.full}(p)` : 'p'};
+  out[${JSON.stringify(t.id)}] = ${t.goi};
 }`
 ).join('\n')}
 console.log('__KQ__' + JSON.stringify(out));
@@ -159,29 +211,45 @@ console.log('__KQ__' + JSON.stringify(out));
     const src = readFileSync(join(ROOT, t.route), 'utf8');
     const m = /SHAPE_FINGERPRINT\s*=\s*'([0-9a-f]{12})'/.exec(src);
     const s = /const SHAPE = (\d+)/.exec(src);
-    if (!m || !s) {
+
+    if (!m) {
       console.error(
-        `❌ ${t.id} — không tìm thấy \`const SHAPE\` và/hoặc \`SHAPE_FINGERPRINT\` trong ${t.route}.\n` +
-          "   Khai cạnh SHAPE:  const SHAPE_FINGERPRINT = '" +
-          van +
-          "';"
+        `❌ ${t.id} — thiếu \`SHAPE_FINGERPRINT\` trong ${t.route}.\n` +
+          `   Khai:  const SHAPE_FINGERPRINT = '${van}';`
       );
       loi++;
       continue;
     }
+    if (t.coShape && !s) {
+      console.error(`❌ ${t.id} — có khai vân tay mà mất \`const SHAPE\` trong ${t.route}.`);
+      loi++;
+      continue;
+    }
+
     if (m[1] !== van) {
+      // Hai lối thoát KHÁC HẲN nhau — nói đúng việc phải làm, đừng nói chung chung.
       console.error(
         `❌ ${t.id} — CẤU TRÚC payload đã đổi (${ks.length} khoá).\n` +
           `   vân tay khai: ${m[1]}   ·   thực tế: ${van}\n` +
-          `   ⇒ BUMP \`SHAPE\` (đang ${s[1]} → ${Number(s[1]) + 1}) rồi cập nhật\n` +
-          `      SHAPE_FINGERPRINT = '${van}'  trong ${t.route}.\n` +
-          '   Không bump là dòng cache cũ trả cấu trúc cũ VĨNH VIỄN, trang ẩn\n' +
-          '   khối im lặng — đúng lỗi đã cắn ở #465 và #475.'
+          (t.coShape
+            ? `   ⇒ BUMP \`SHAPE\` (đang ${s[1]} → ${Number(s[1]) + 1}) rồi cập nhật\n` +
+              `      SHAPE_FINGERPRINT = '${van}'  trong ${t.route}.`
+            : `   ⚠️ Tool này CHƯA CÓ cơ chế \`SHAPE\` ⇒ dòng cache cũ sẽ trả cấu trúc\n` +
+              `      CŨ vĩnh viễn. Phải cắm cơ chế TRƯỚC khi đổi payload:\n` +
+              `        · \`const SHAPE = 1\` + \`shapeStale()\` (chép từ app/api/day-con/route.ts)\n` +
+              `        · truyền cờ \`overwrite\` cho \`putCachedPortrait\` khi dựng lại\n` +
+              `        · ⛔ TUYỆT ĐỐI không nhét SHAPE vào \`lasoKey\` — đổi khoá là mồ côi\n` +
+              `          cả cache lẫn \`userOwnsLaso\`, người đã trả tiền bị tính lại\n` +
+              `      rồi mới cập nhật SHAPE_FINGERPRINT = '${van}'.`) +
+          '\n   Bỏ qua là hỏng IM LẶNG — trang ẩn khối, không lỗi nào bắn ra (#465, #475).'
       );
       loi++;
       continue;
     }
-    console.log(`  ✅ ${t.id.padEnd(18)} — SHAPE ${s[1]}, ${ks.length} khoá, vân tay ${van}`);
+    console.log(
+      `  ✅ ${t.id.padEnd(20)} — ${t.coShape ? `SHAPE ${s[1]}` : 'chưa có SHAPE'}` +
+        `, ${ks.length} khoá, vân tay ${van}`
+    );
   }
 } finally {
   rmSync(out, { recursive: true, force: true });
