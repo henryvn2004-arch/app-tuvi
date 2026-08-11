@@ -50,7 +50,7 @@ const CORS = {
 };
 const H = { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY, 'Content-Type': 'application/json' };
 
-async function getAccessToken(): Promise<string> {
+async function getAccessToken(): Promise<{ token: string; scope: string }> {
   // Thiếu env thì nói THẲNG tên biến còn thiếu. Không có bước này, Google trả
   // `invalid_client` và người đọc log lại đi tìm nhầm sang phía refresh token —
   // đúng cái vòng đã tốn một lượt chẩn hồi 16/07. Tiền tố `missing_env` là mã
@@ -76,7 +76,11 @@ async function getAccessToken(): Promise<string> {
   });
   const d = await r.json();
   if (!d.access_token) throw new Error('Cannot get access token: ' + JSON.stringify(d));
-  return d.access_token;
+  // Trả kèm SCOPE ĐÃ ĐƯỢC CẤP. Màn consent của Google có ô tick cho từng quyền;
+  // bỏ tick một ô thì token vẫn sống nhưng thiếu scope, và `channels.list` trả
+  // 200 với danh sách RỖNG — nhìn y hệt ca "tài khoản không có kênh nào". Không
+  // in scope ra thì hai ca đó không phân biệt được, và người sửa phải đoán.
+  return { token: d.access_token, scope: String(d.scope || '(Google không trả scope)') };
 }
 
 /**
@@ -89,7 +93,7 @@ async function getAccessToken(): Promise<string> {
  * `channels.list` tốn 1 đơn vị quota, so với 1.600 cho một lượt upload — rẻ tới
  * mức không đáng cân nhắc bỏ qua.
  */
-async function assertChannel(accessToken: string): Promise<void> {
+async function assertChannel(accessToken: string, grantedScope: string): Promise<void> {
   const r = await fetch(
     'https://www.googleapis.com/youtube/v3/channels?part=snippet&mine=true',
     { headers: { 'Authorization': 'Bearer ' + accessToken } }
@@ -100,7 +104,28 @@ async function assertChannel(accessToken: string): Promise<void> {
   const d = await r.json();
   const ch = d?.items?.[0];
   if (!ch?.id) {
-    throw new Error('channel_mismatch: token không gắn với kênh YouTube nào — cấp lại quyền và CHỌN kênh.');
+    // Danh sách RỖNG có ĐÚNG HAI nguyên nhân, và chúng cần hai cách sửa khác
+    // hẳn nhau — nên phải nêu bằng chứng để phân biệt, đừng bắt người đọc đoán:
+    //   (a) thiếu scope `…/auth/youtube` (bỏ tick một ô ở màn consent)
+    //   (b) tài khoản/kênh vừa chọn KHÔNG có kênh YouTube nào
+    // Cẩn thận khi dò: `…/auth/youtube.upload` CHỨA `…/auth/youtube` nên phải
+    // xét ranh giới (dấu cách hoặc cuối chuỗi), không thì scope hẹp cũng đọc
+    // thành scope đủ và bản chẩn đoán chỉ sai đường.
+    const scopes = grantedScope.split(/\s+/).filter(Boolean);
+    const coScope = scopes.includes('https://www.googleapis.com/auth/youtube');
+    const biet = scopes.length > 0;
+    throw new Error(
+      'channel_mismatch: token không thấy kênh YouTube nào (channels.list trả rỗng). ' +
+      'Scope đã cấp: [' + grantedScope + ']. ' +
+      (!biet
+        ? 'Không đọc được scope nên chưa loại trừ được nguyên nhân — thử cấp lại quyền, ' +
+          'TICK HẾT ô quyền, và chọn đúng kênh thương hiệu.'
+        : coScope
+          ? 'Scope ĐỦ ⇒ tài khoản vừa chọn không sở hữu kênh YouTube nào. Cấp lại quyền và ở màn ' +
+            '"Choose a channel" chọn đúng kênh thương hiệu (Brand Account), đừng chọn tài khoản trống.'
+          : 'THIẾU scope ".../auth/youtube" ⇒ lúc cấp quyền có ô tick bị bỏ. Cấp lại và ' +
+            'TICK HẾT các ô quyền trên màn consent của Google.')
+    );
   }
   const id    = String(ch.id);
   const title = String(ch.snippet?.title ?? '?');
@@ -159,10 +184,10 @@ Deno.serve(async (req: Request) => {
   await updateYT(id, { yt_status: 'uploading' });
 
   try {
-    const accessToken = await getAccessToken();
+    const { token: accessToken, scope: grantedScope } = await getAccessToken();
     // Chốt kênh TRƯỚC khi tải file về: sai kênh thì không việc gì phải kéo cả
     // một video MP4 qua mạng để rồi vứt đi.
-    await assertChannel(accessToken);
+    await assertChannel(accessToken, grantedScope);
 
     const fileResp = await fetch(fileUrl);
     if (!fileResp.ok) throw new Error('Cannot download file: ' + fileResp.status);
