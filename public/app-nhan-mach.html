@@ -106,7 +106,10 @@
                 <input id="addTen" type="text" placeholder="Sếp Hùng, chị Lan, khách A…" maxlength="40">
               </div>
             </div>
-            <div id="addPersonBox"></div>
+            <!-- data-uc-skip: trang này TỰ quản sổ lá số (ô chọn + vai + xoá,
+                 xem renderSo()). Để user-charts.js gắn thêm thanh của nó nữa là
+                 hai bộ điều khiển cho cùng một dữ liệu. -->
+            <div id="addPersonBox" data-uc-skip></div>
             <div class="frow" style="margin-bottom:0;margin-top:10px">
               <button class="btn" id="btnAdd" onclick="addPerson()">Lưu vào sổ</button>
             </div>
@@ -118,7 +121,7 @@
           <summary id="selfSummary">Thêm lá số của chính bạn (không bắt buộc)</summary>
           <div class="inner">
             <p class="sub" style="margin-bottom:9px">Có lá số của bạn thì bản đọc có thêm mục <b>“Bạn đứng ở đâu trong nhóm”</b> — bạn dễ va với ai, bù được cho ai.</p>
-            <div id="selfBox"></div>
+            <div id="selfBox" data-uc-skip></div>
           </div>
         </details>
 
@@ -213,7 +216,7 @@
 <script>window.SHELL_ACTIVE='nhan-mach';window.SHELL_HISTORY=true;
 window.SHELL_INTRO={key:'nhan-mach',title:'Sổ Nhân Mạch',desc:'Đưa <b>cả đội</b> hoặc <b>danh sách khách</b> vào một chỗ để biết <b>nhóm thiếu kiểu người nào</b>, <b>ai với ai dễ giẫm chân</b>, và <b>tuần này nên gặp ai trước</b>. Khác công cụ Lá Số Người Khác ở chỗ nó đọc cả nhóm cùng lúc.'};</script>
 <script src="/laso-chart.js?v=3"></script>
-<script src="/tuvi-form.js?v=1"></script>
+<script src="/tuvi-form.js?v=2"></script>
 <script src="/tuvi-paywall.js?v=18"></script>
 <script src="/auth.js?v=2"></script>
   <script src="/nav.js?v=22" data-icons-only></script>

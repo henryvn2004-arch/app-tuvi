@@ -167,7 +167,7 @@
     var el = document.getElementById('tvmb-charts-js');
     if (el) { el.addEventListener('load', go); return; }
     var s = document.createElement('script');
-    s.id = 'tvmb-charts-js'; s.src = '/user-charts.js?v=2'; s.async = true;
+    s.id = 'tvmb-charts-js'; s.src = '/user-charts.js?v=3'; s.async = true;
     s.addEventListener('load', go);
     (document.head || document.documentElement).appendChild(s);
   }

@@ -326,6 +326,17 @@ window.TuviForm = (() => {
     const container = document.getElementById(containerId);
     if (container) {
       container.innerHTML = html;
+      // 🔑 Form TỰ KHAI mình là form lá số, kèm prefix. `user-charts.js` dò theo
+      // dấu này để gắn thanh "Sổ lá số".
+      //
+      // Trước đây nó dò theo TÊN id (`/formhost/i`) — mà tên là thứ mỗi trang tự
+      // đặt, nên `app-xem-tuoi` (id `a-fields`/`b-fields`) dùng đúng khuôn
+      // TuviForm mà vẫn KHÔNG có sổ, và không có gì báo. Chú thích của chính bộ
+      // dò cũ đã lo đúng chuyện đó ("trang nào quên là trang đó âm thầm không có
+      // sổ") rồi lại dò theo tên — tức tái tạo đúng cái hố nó muốn tránh.
+      //
+      // Đặt SAU `innerHTML`: dấu chỉ xuất hiện khi các field đã tồn tại thật.
+      container.setAttribute('data-tvf-form', prefix);
       const btn = document.getElementById(pid('tvf-submit-btn', prefix));
       if (btn && onSubmit) btn.addEventListener('click', onSubmit);
       _updaters[prefix] = () => updateGioAmDisplay(prefix);
@@ -367,7 +378,13 @@ window.TuviForm = (() => {
       s('tvf-gio',  d.gioHour);
       s('tvf-phut', d.gioPhut ?? 0);
     } else if (d.gioIdx !== undefined) {
-      s('tvf-gio',  (d.gioIdx * 2 + 1) % 24);
+      // 🐞 Bản cũ dùng `gioIdx*2 + 1` → LỆCH ĐÚNG MỘT CHI, im lặng: địa chi k phủ
+      // khung giờ [2k−1, 2k+1) (Tý = 23–01, Sửu = 01–03), nên giờ đại diện là
+      // 2k, không phải 2k+1. Với k=0 nó điền 01:00 → hourMinToGioIdx trả 1 = Sửu.
+      // Nhánh này lâu nay KHÔNG có ai đi vào (mọi nơi gọi setData đều truyền
+      // gioHour) nên lỗi nằm im — `xem-tuoi.html` khi phải tự quy đổi cũng viết
+      // `gioA*2`, tức đúng công thức này.
+      s('tvf-gio',  (d.gioIdx * 2) % 24);
       s('tvf-phut', 0);
     }
     updateGioAmDisplay(prefix);

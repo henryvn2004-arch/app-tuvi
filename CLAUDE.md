@@ -5,6 +5,108 @@
 
 ---
 
+## 🕰️ Xác Định Giờ Sinh VỨT ĐI dữ kiện nó vừa bán — và sổ lá số dò form theo TÊN (2026-08-11, PR này)
+
+Henry hỏi ba câu về Sổ lá số: trần bao nhiêu · tool giờ sinh có bước lưu + đi
+tiếp không · có phải master data cho mọi form không. Trả lời: **30** ·
+**KHÔNG** · **chưa**. Hai vế sau là lỗi, vá luôn.
+
+### 🔴 A. Tool giờ sinh sinh ra ĐÚNG MỘT dữ kiện rồi vứt nó đi
+Cả tool tồn tại để chốt **giờ sinh**. `renderResult` vẽ bảng xếp hạng xong là
+hết: 0 lượt `rememberBirth`, 0 lượt `UserCharts.save`, 0 đường sang Luận Giải.
+Người dùng trả Lượng, đọc ra *"giờ Sửu 62%"*, rồi tự nhớ và **gõ lại tay** ở
+mọi tool khác. Thêm khối *Chốt giờ và dùng tiếp*: chọn giờ → **Lưu vào sổ** +
+**Luận giải lá số này →**.
+- **Chọn được giờ #2, không khoá cứng giờ đầu bảng.** Chính trang này có mục
+  *"Vì sao không phải một con số chắc nịch"* — ép lấy giờ #1 là nói chắc hơn
+  thứ máy biết. Ai đã soát bằng chứng rồi chọn khác thì phải theo họ.
+- ⛔ **Link sang Luận Giải KHÔNG gắn `?auto=1`**: `app-luan-giai.html:554` thấy
+  cờ đó là **tự chạy `doLuan()`** = lượt TRỪ LƯỢNG. Điền sẵn form rồi để người
+  ta tự bấm. Có ca kiểm canh đúng chuỗi này.
+- 🔴 **Âm lịch: CHẶN bàn giao, không ghi bừa.** Form có ô `gs-lich`, mà cả repo
+  **không có một hàm âm→dương nào** (chỉ có chiều ngược: `solarToLunar`/
+  `convertDuongToAm`; `computeLaso` khi `isLunar` an THẲNG, không đổi lại) và
+  `TuviForm` thì thuần dương lịch. Ghi ngày âm vào sổ như thể là ngày dương ⇒
+  tool đích lập một lá số KHÁC mà **không có gì báo**. Nên ẩn nút + nói thẳng
+  lý do. `_birthChot()` trả `null` ở nhánh này — chốt ở tầng dữ liệu, không chỉ
+  ở tầng ẩn nút.
+- **Nói thật khi ghi hỏng**: `Shell.rememberBirth` ghi sổ kiểu bắn-và-quên nên
+  không biết kết quả. Có thêm MỘT lượt `UserCharts.save` **await** chỉ để lấy
+  trạng thái — cùng `chart_key` + upsert `merge-duplicates` ⇒ hai lượt vẫn ra
+  **đúng một dòng** (đã đo: 2 POST, 1 khoá). Báo *"đã lưu"* trong khi hỏng đúng
+  là kiểu nói dối im lặng repo này đã trả giá nhiều lần.
+- `gioHour = gioIdx*2` (giờ giữa khung: Tý=0h, Sửu=2h) — xem mục C.
+
+### 🔴 B. Sổ lá số dò form theo TÊN id ⇒ trang đặt tên khác là im lặng không có sổ
+`findForms()` chỉ nhận element có id khớp `/formhost/i`. **`app-xem-tuoi`
+(phục vụ cả `xem-tuoi`/`xem-lam-an`/`tuong-hop`) dùng ĐÚNG khuôn `TuviForm`
+nhưng đặt id `a-fields`/`b-fields` ⇒ trượt bộ dò ⇒ chưa bao giờ có sổ.**
+🔑 Chú thích của chính bộ dò cũ đã lo đúng chuyện đó (*"trang nào quên là trang
+đó âm thầm không có sổ"*) rồi vẫn **dò theo tên** — tức tái tạo đúng cái hố nó
+muốn tránh. Chỗ sửa không phải thêm một cái tên nữa, mà là **đổi nguồn tri
+thức**: `TuviForm.render()` nay tự đóng dấu `data-tvf-form="<prefix>"` lên
+container. Form tự khai, không ai phải đoán, và **mọi trang TuviForm sau này tự
+có sổ**.
+- Giữ nguyên đường `/formhost/i` cho form dựng TAY không qua TuviForm.
+- **Lọc lồng nhau**: `app-home` có `#tmeFormHost` bọc ngoài `#tmeFields` (chỗ
+  TuviForm render) ⇒ hai đường dò trúng hai phần tử của CÙNG một form. Bỏ cái
+  nằm trong, giữ cái ngoài → chỗ đặt thanh sổ không đổi so với trước.
+- **`data-uc-skip`** (mới) cho `app-nhan-mach`: trang đó **tự quản sổ** (ô chọn
+  + vai + xoá). Không có cờ này là hai bộ điều khiển cho cùng một dữ liệu —
+  red-team xác nhận gỡ cờ ra thì mọc đúng 2 thanh thừa.
+- ⚠️ **`app-gio-sinh` CỐ Ý vẫn không có thanh sổ**: field của nó dựng tay
+  (`gs-ngay`/`gs-gt`), không phải TuviForm — `TuviForm.getData('gs')` sẽ đọc
+  hụt giới tính (`gs-gioitinh` không tồn tại) và trả về `nam` mặc định. Đường
+  bàn giao của trang đó là khối chốt giờ ở mục A.
+
+### 🐞 C. Bắt kèm: `TuviForm.setData` lệch ĐÚNG MỘT CHI ở nhánh `gioIdx`
+`(gioIdx*2 + 1)` — địa chi k phủ khung `[2k−1, 2k+1)` (Tý = 23–01) nên giờ đại
+diện là **2k**, không phải 2k+1. `setData(gioIdx:0)` điền 01:00 → đọc lại ra
+**Sửu**. Nhánh này lâu nay không ai đi vào (mọi caller truyền `gioHour`) nên
+lỗi nằm im; chú thích của `_birthFromQuery` trong `shell.js` còn ghi rõ là cố ý
+**"tránh nhánh gioIdx của nó"**, và `xem-tuoi.html` khi phải tự quy đổi thì
+viết `gioA*2` — tức đúng công thức. Vá vì tính năng mới ở mục A đi thẳng vào
+nhánh đó.
+
+### Verify
+`tsc` 0 · `lint` **0 lỗi / 73 warning = đúng mốc nền** · `prettier` quét cả cây
+sạch · **17/17 bộ dò** · engine **185 pass** · `node --check` + kiểm mọi khối
+script nội tuyến.
+- **30/30 ca trên TRANG THẬT**: 6 trang shell ra đúng số thanh sổ · bấm chip ở ô
+  người THỨ HAI điền đúng prefix và **không đụng ô thứ nhất** · chốt giờ ghi
+  đúng `gioIdx`/`gioHour` vào `app_birth` · đổi sang giờ #2 thì theo người dùng ·
+  điều hướng **không có `auto=1`** · âm lịch → **0 lượt POST**, `app_birth` vẫn
+  trống · khách chưa đăng nhập vẫn nhớ trên máy và được nói thật · server 500 →
+  **không báo "đã lưu"** · 390px tràn ngang 0px.
+- **Quét 37 trang shell, đối chứng `origin/main`**: đúng **1 trang MỚI có sổ**
+  (`app-xem-tuoi` 0 → 2), **0 trang mất sổ**, 0 thanh nhân đôi.
+- 🪤 **ĐỐI CHỨNG off-by-one: bản `origin/main` sai 12/12 chi**, bản mới khứ hồi
+  đúng 12/12.
+- **Red-team 3/3 đỏ đúng**: gỡ `data-tvf-form` → xem-tuoi mất sổ lại · gỡ
+  `data-uc-skip` → nhan-mach mọc 2 thanh thừa · gỡ bộ lọc lồng nhau → form lồng
+  form ra 2 thanh.
+- 🪤 **Ba bẫy harness đã vấp** (đều là lỗi của TÔI, không phải của mã): (a) stub
+  `Auth` bằng `addInitScript` bị `auth.js` GHI ĐÈ — bài học đã ghi ở track Công
+  Sở, vấp lại; phải chặn hẳn `auth.js` bằng `page.route`; (b) `waitUntil:
+  'networkidle'` treo vĩnh viễn vì container chặn Google Fonts; (c) ca "ô thứ
+  nhất không bị đụng" đỏ oan — `_maybeSeedForm` **cố ý** mồi form ĐẦU TIÊN, nên
+  phải seed sổ HAI mục mới tách bạch được "tự mồi" với "lượt bấm".
+
+### CÒN LẠI
+- **Trần sổ 30 mục** (`MAX_CHARTS`, `app/api/charts/route.ts`). Vượt thì xoá mục
+  cũ nhất theo `last_used_at`, KHÔNG từ chối lưu.
+- **7 trang standalone `/tools/*.html` có `TuviForm` vẫn không có sổ** — chúng
+  không nạp `shell.js` (đường nạp duy nhất của `user-charts.js`). Nay chỉ cần
+  thêm thẻ script là có, vì bộ dò hết phụ thuộc tên id.
+- **`app-home` vẫn chưa có sổ**: `#tmeFormHost` rỗng lúc boot (form chỉ dựng khi
+  bấm Sửa) mà `mount()` có cờ `_mounted` chạy một lần. Nợ CÓ SẴN, không phải do
+  PR này; vá là gọi lại `mount()` sau khi dựng form.
+- **`app-xem-tuoi` nay tự mồi lá số vào ô người THỨ NHẤT** (luật `_maybeSeedForm`
+  sẵn có). Cùng hành vi `app-duyen-no-tien-kiep` vốn đã làm tay; ô vẫn sửa được.
+- `ban-do-sao` · `than-so-hoc` · `chon-ngay` dựng field tay nên vẫn ngoài sổ.
+
+---
+
 
 ---
 
