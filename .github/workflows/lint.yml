@@ -153,6 +153,13 @@ jobs:
       - name: Truy vấn công khai phải lọc trạng thái xuất bản
         run: npm run check:publish
 
+      # Sổ job ↔ vercel.json ↔ file route. Lớp lỗi này tái phát BA LẦN (sổ cũ
+      # trong admin.html khai 5/9 job ⇒ CMO Digest chết 14 ngày; rồi bảng
+      # CRON_TRIGGERS cũng 5 mục ⇒ nút Chạy ngay chết; rồi 11/20 ⇒ "Unknown
+      # job"). Cả ba đều hỏng IM LẶNG cho tới khi có người bấm hoặc đi tìm.
+      - name: Sổ job khớp lịch cron và route thật
+        run: npm run check:jobs
+
   typecheck:
     runs-on: ubuntu-latest
     timeout-minutes: 10

@@ -16,7 +16,7 @@ import { freeGenGate, FREE_GEN_CAP_MESSAGE, railFreeRemaining } from '@/lib/bill
 import { anonTrialStatus } from '@/lib/billing/anon-trial';
 import { syncOnboardingTasks } from '@/lib/onboarding/tasks';
 import { getConfigValue } from '@/lib/config/appConfig';
-import { CRON_RUNS_LIMIT, evaluateJobs, fetchPgcronRuns, syncJobFirstSeen } from '@/lib/ops/jobs';
+import { CRON_RUNS_LIMIT, JOBS, evaluateJobs, fetchPgcronRuns, syncJobFirstSeen } from '@/lib/ops/jobs';
 import { checkEnv } from '@/lib/ops/preflight';
 import { logCronRun } from '@/lib/cron/log';
 import { tgSendMessage } from '@/lib/channels/telegram';
@@ -671,22 +671,20 @@ async function handleCheckBank(sp: URLSearchParams): Promise<Response> {
 // chỉ đọc/ghi qua service key ở đây. Job Vercel tự log qua withCronLog;
 // edge (auto-pipeline) log tay trong trigger.
 const CRON_SECRET = process.env.CRON_SECRET || '';
-// Phải khớp với sổ job ở lib/ops/jobs.ts. Bảng này TRƯỚC ĐÂY cũng chỉ có 5
-// mục như sổ cũ trong admin.html, nên nút "Chạy ngay" của 5 job mới thêm không
-// hoạt động — cùng một kiểu trôi lệch giữa hai danh sách chép tay.
-const CRON_TRIGGERS: Record<string, { path?: string; edge?: string }> = {
-  'cron-khao-luan':    { path: '/api/cron-khao-luan' },
-  'cron-master-write': { path: '/api/cron-master-write' },
-  'cron-push':         { path: '/api/cron-push' },
-  'cron-daily-push':   { path: '/api/cron/daily-push' },
-  'auto-pipeline':     { edge: 'auto-pipeline' },
-  'ops-digest':        { path: '/api/cron/ops-digest' },
-  'cmo-digest':        { path: '/api/cron/cmo-digest' },
-  'anomaly-alerts':    { path: '/api/cron/anomaly-alerts' },
-  'autopilot-price':   { path: '/api/cron/autopilot-price' },
-  'autopilot-promo':   { path: '/api/cron/autopilot-promo' },
-  'autopilot-nudge':   { path: '/api/cron/autopilot-nudge' },
-};
+// 🔑 SUY TỪ SỔ JOB, không chép tay nữa.
+//
+// Bản trước là một bảng riêng ở đây, và chú thích của chính nó đã ghi: *"Bảng
+// này TRƯỚC ĐÂY cũng chỉ có 5 mục như sổ cũ trong admin.html, nên nút Chạy ngay
+// của 5 job mới thêm không hoạt động — cùng một kiểu trôi lệch giữa hai danh
+// sách chép tay."* Tức lỗi đã xảy ra một lần, được vá bằng cách CHÉP TAY lại
+// cho khớp — rồi trôi tiếp: tới 11/08 sổ khai 20 job có nút, bảng này biết 11,
+// nên `yt-drain`/`media-build`/`content-metrics`… bấm ra "Unknown job".
+//
+// Vá bằng cách chép tay lần thứ ba là hẹn lần trôi thứ ba. Đường dẫn nay nằm
+// TRONG sổ (`JobSpec.path`/`edge`), map này chỉ là phép chiếu.
+const CRON_TRIGGERS: Record<string, { path?: string; edge?: string }> = Object.fromEntries(
+  JOBS.filter((j) => j.path || j.edge).map((j) => [j.key, { path: j.path, edge: j.edge }]),
+);
 
 async function handleAdminCronRuns(request: NextRequest): Promise<Response> {
   const token = (request.headers.get('Authorization') || '').replace('Bearer ', '').trim();
