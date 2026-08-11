@@ -1326,6 +1326,7 @@ export async function GET(request: NextRequest) {
   if (action === 'signup-bonus') return handleSignupBonus();
   if (action === 'admin-viral') return handleAdminViral(request, searchParams);
   if (action === 'admin-tool-funnel') return handleAdminToolFunnel(request, searchParams);
+  if (action === 'admin-content-catalog') return handleAdminContentCatalog(request, searchParams);
   if (action === 'admin-content-pack') return handleAdminContentPack(request, searchParams);
   if (action === 'admin-media-queue') return handleAdminMediaQueue(request, searchParams);
   if (action === 'admin-seeding') return handleAdminSeeding(request);
@@ -1573,6 +1574,48 @@ async function handleAdminViral(request: NextRequest, sp: URLSearchParams): Prom
     });
     if (!res.ok) throw new Error(`viral_loop_funnel: ${await res.text()}`);
     return ok({ viral: await res.json(), from: from.toISOString(), to: to.toISOString() });
+  } catch (e: unknown) { return err((e as Error).message); }
+}
+
+// ── GET: admin-content-catalog (Kho Nội Dung) ────────────────────
+// Gom 6 bảng nội dung (khảo luận · nghiên cứu · video hỏi-đáp · từ điển · tài
+// liệu · sách) về MỘT bảng đọc, kèm cột "đã ra kênh nào".
+//
+// CHỈ ĐỌC — không có đường ghi ngược về 6 bảng nguồn. Sửa nội dung vẫn ở trang
+// Sản Xuất của từng pipeline; kho này để NHÌN, và để thấy phần lớn kho chưa
+// từng ra khỏi website.
+//
+// Action RIÊNG (không nhét vào `admin-marketing`) theo đúng tiền lệ
+// `admin-viral`/`admin-tool-funnel`: chỗ đó đã gánh 8 RPC + một lượt GA4.
+async function handleAdminContentCatalog(request: NextRequest, sp: URLSearchParams): Promise<Response> {
+  const token = (request.headers.get('Authorization') || '').replace('Bearer ', '').trim();
+  const admin = await verifyAdmin(token);
+  if (!admin) return err('Unauthorized', 403);
+
+  const limit = Math.min(Math.max(Number(sp.get('limit') || 50) || 50, 1), 200);
+  const offset = Math.max(Number(sp.get('offset') || 0) || 0, 0);
+
+  const rpc = async (fn: string, body: unknown) => {
+    const r = await fetch(`${SUPABASE_URL}/rest/v1/rpc/${fn}`, {
+      method: 'POST', headers: SB_HEADERS, body: JSON.stringify(body), cache: 'no-store',
+    });
+    if (!r.ok) throw new Error(`${fn}: ${await r.text()}`);
+    return r.json();
+  };
+
+  try {
+    const [stats, list] = await Promise.all([
+      rpc('content_catalog_stats', {}),
+      rpc('content_catalog_list', {
+        p_kind: sp.get('kind') || null,
+        p_channel: sp.get('channel') || null,
+        p_status: sp.get('status') || null,
+        p_q: sp.get('q') || null,
+        p_limit: limit,
+        p_offset: offset,
+      }),
+    ]);
+    return ok({ stats, list, limit, offset });
   } catch (e: unknown) { return err((e as Error).message); }
 }
 

@@ -5,6 +5,102 @@
 
 ---
 
+## 📚 Kho Nội Dung: 1.140 tác phẩm, **15 từng ra khỏi website** (2026-08-11, PR này)
+
+Henry hỏi ba câu: kho content nằm ở đâu · làm sao biết cái nào đã đăng kênh nào,
+được bao nhiêu like/view/sub · có nên tách mục "Nội dung" khỏi "Marketing".
+
+### 🔴 Câu về like/view/sub: **KHÔNG đo được ở đâu cả, và chưa từng đo**
+Grep toàn repo: **0 dòng gọi YouTube Analytics · Meta Insights · TikTok API**.
+Thứ duy nhất có là GSC (SEO) và `shared_results.view_count` (link chia sẻ nội
+bộ). Tức 15 video YouTube đang live cũng **chưa bao giờ biết được bao nhiêu
+view**. ⇒ Đây KHÔNG phải việc sắp xếp lại menu — thiếu hẳn một tầng dữ liệu.
+Sắp menu mà không có tầng đó thì mục mới vẫn trống. Ghi rõ trên chính trang Kho
+để không ai đọc bảng đó rộng hơn thứ nó đo.
+
+### 🔑 Kho là VIEW, không phải bảng `content_items`
+Bảng vật lý cần backfill + trigger/cron đồng bộ với 6 bảng nguồn ⇒ **hai nguồn
+sự thật**, đúng lớp lỗi repo đã trả giá nhiều lần (giá Lượng chép hai nơi,
+`formatLaSoV2` hai bản, hash hai bản). Phạm vi Henry chốt là **chỉ đọc** ⇒ VIEW
+luôn đúng theo định nghĩa, 0 dòng đồng bộ. Khi nào cần metadata RIÊNG cho tác
+phẩm (nhãn biên tập, lịch sản xuất) mới cần bảng thật.
+- **`content_catalog`** = tác phẩm gốc (6 nguồn) · **`content_distribution`** =
+  đã ra kênh nào. Khớp đúng mô hình Henry mô tả: 1 nguồn → nhiều lát cắt
+  (`media_assets`) → nhiều kênh (`media_posts`). Hai bảng đó **giữ nguyên**, chỉ
+  được đọc ngược qua `source_type`/`source_id`.
+- ⛔ **CỐ Ý bỏ `seo_pages` (8.958 dòng)**: trang sinh tự động theo lá số, không
+  phải tác phẩm biên tập. Đưa vào là 8.958 nuốt sạch 1.140 và kho hết đọc được.
+- **Điều kiện vào `content_distribution` là CÓ URL thật**, không phải chuỗi
+  status: status là thứ code ghi ra, URL là bằng chứng nó đã ra ngoài đời.
+- 🔐 View trong PG15+ chạy quyền OWNER (bỏ qua RLS) và EXECUTE cho PUBLIC là
+  dựng sẵn của Postgres ⇒ revoke tường minh ngay trong migration. Verify ACL:
+  chỉ `postgres` + `service_role`.
+
+### 📊 Số đo (đã chạy prod)
+| | |
+|---|---:|
+| Tổng tác phẩm | **1.140** |
+| Đã từng ra khỏi website | **15 (1,3%)** |
+| Đang kẹt hàng đợi | **30** (facebook, thiếu `FB_PAGE_ID` từ 02/08) |
+| Nằm kho chưa đi đâu | **1.125** |
+
+Theo loại: nghiên cứu 347 · khảo luận 344 · sách 168 · video hỏi-đáp 142 (15 đã
+lên) · từ điển 132 · tài liệu 7.
+
+### Sắp xếp lại admin
+Mục cũ *"Marketing & Nội Dung"* gánh 9 nav, **6 là việc nội dung**. Nay:
+- **Marketing** = chỉ đo TIỀN & NGƯỜI (Funnel · Giữ Chân & Doanh Thu · SEO).
+- **Nội Dung** = Kho · Sản Xuất · Phân Phối · Kênh & Kết Nối.
+- **"Sản Xuất" KHÔNG phải page mới** — là MỘT nav mở nhóm 4 trang đã có qua
+  thanh tab (khuôn `mkt-filterbar` sẵn có). Giữ nguyên 4 khối DOM + 4 loader cũ
+  ⇒ 0 rủi ro hồi quy, sidebar vẫn gọn.
+
+### 🐞 Hai lỗi bắt được khi ĐO, không phải khi đọc code
+1. **Vào tab YouTube Studio là mất sạch dấu vị trí**: `showView()` của module đó
+   ghi đè `topbar-title` VÀ **xoá `active` khỏi MỌI `.nav-item`**. Nợ CÓ SẴN
+   (nav "YouTube Studio" cũ chưa bao giờ sáng, chỉ là nó đứng một mình nên không
+   ai để ý). Vá bằng cách đặt khối tô sáng **SAU** lượt gọi loader.
+2. **Link tiêu đề ăn màu mặc định trình duyệt `#0000EE`** → dark mode đo được
+   **1,8:1**, gần như không đọc nổi. Thẻ `<a>` trần trong admin phải khai màu.
+
+### Verify
+`tsc` 0 · `lint` **0 lỗi / 73 warning = đúng mốc nền** · `prettier` quét cả cây
+sạch · **17/17 bộ dò** · 4/4 khối script nội tuyến `node --check`.
+- **39/39 ca trên TRANG THẬT** (`public/admin.html`, stub `/api/*`, lái giao
+  diện bằng chính `enterApp`/`goTo` — không mock hàm nào của trang): sidebar
+  tách đúng 2 mục · 4 nav sản xuất cũ đã gỡ · 4 tab mở đúng page + đúng tiêu đề
+  + nav vẫn sáng · rời nhóm thì thanh tab ẩn · 5 ô số khớp RPC thật · nhãn loại
+  **không lộ khoá thô** · tiêu đề mang `<img onerror>` **không chạy** mà vẫn
+  hiện nguyên văn · `href="javascript:"` từ DB bị chặn · 3 bộ lọc thật sự đi tới
+  server · 390px không tràn · 0 lỗi JS.
+- 🪤 **ĐỐI CHỨNG `origin/main` bằng `git worktree`**: tràn ngang 390px ở
+  `nghiencuu` **21px** và `seo` **25px** là **nợ có sẵn** (`repeat(4,1fr)`), và
+  chữ `.stat.green` chìm **2,6:1 ở dark y hệt** ⇒ không phải hồi quy của PR này.
+  Nhưng trang MỚI thì không chép lại lỗi đó (`auto-fit` + màu chữ khai rõ).
+- 🪤 **Ba bẫy harness đã vấp** (đều là lỗi của TÔI): (a) chạy spec từ scratchpad
+  → `playwright` không resolve, phải chạy từ gốc repo; (b) tự vẽ lại DOM để bỏ
+  qua màn đăng nhập thay vì gọi chính `enterApp`; (c) role `superadmin` không
+  tồn tại — `applyAdminPermissions` chỉ nhận **`owner`**, nên cả mục đang đo bị
+  ẩn và bài kiểm treo 30 giây ở một selector "không hiện".
+
+### CÒN LẠI
+- **Chưa có một số liệu nền tảng nào** (view/like/subscriber). Bước 2 đã chốt
+  hướng: cron kéo YouTube Analytics (dùng luôn OAuth đang có) + Meta Insights,
+  ghi vào một bảng `content_metrics` theo ngày. ⚠️ Chặn bởi **2 việc tay**:
+  publish OAuth app trong Google Cloud (đang ở Testing ⇒ refresh token chết sau
+  7 ngày, 86 video lỗi `invalid_grant`) và đặt `FB_PAGE_ID` + xin
+  `pages_manage_posts` (30 bài đang kẹt).
+- **Nợ MÀU của admin.css**, cố ý không trộn vào PR này: `--green`/`--blue`
+  không khai lại trong khối `[data-theme="dark"]` nên mọi `.badge-green`/
+  `.stat.green` chìm ở dark. Đụng vào là đụng mọi trang admin.
+- Tràn ngang 390px ở `nghiencuu`/`seo` (nợ có sẵn) chưa vá.
+- Kho **chỉ đọc** — sửa nội dung vẫn ở trang Sản Xuất của từng pipeline. Muốn
+  sửa ngược thì phải viết đường ghi về 6 bảng, chưa làm.
+- TikTok/Zalo chưa có kênh thật; bộ lọc kênh đã có sẵn giá trị, cắm adapter vào
+  là tự hiện.
+
+---
+
 ## 🕰️ Xác Định Giờ Sinh VỨT ĐI dữ kiện nó vừa bán — và sổ lá số dò form theo TÊN (2026-08-11, PR này)
 
 Henry hỏi ba câu về Sổ lá số: trần bao nhiêu · tool giờ sinh có bước lưu + đi
