@@ -576,7 +576,10 @@ export function formatPublishReport(r: PublishResult): string {
   }
   if (r.failed.length) {
     lines.push(`❌ Lỗi ${r.failed.length} bài:`);
-    for (const it of r.failed) lines.push(`  • [${it.channel}] ${it.title} — ${(it.error || '').slice(0, 200)}`);
+    // 400 chứ không phải 200: lỗi Graph mở đầu bằng một câu dẫn dài dòng rồi
+    // MỚI tới phần đáng đọc (mốc hết hạn, mã lỗi). Cắt ở 200 là cụt đúng chỗ
+    // cần nhìn — đã xảy ra thật với "Session has expired on Tuesday, 11-Aug…".
+    for (const it of r.failed) lines.push(`  • [${it.channel}] ${it.title} — ${(it.error || '').slice(0, 400)}`);
   }
   if (r.stoppedReason) lines.push(`⏸️ ${r.stoppedReason}`);
   if (r.stuck) lines.push(`⚠️ ${r.stuck} bài kẹt trạng thái "đang đăng" (dấu vết lượt bị giết ngang).`);
@@ -587,13 +590,48 @@ export function formatPublishReport(r: PublishResult): string {
   // vài hôm rồi tắc y như cũ. Mỗi kênh một cửa riêng, nên hướng dẫn cũng phải
   // theo kênh chứ không thể chỉ nói về Facebook.
   for (const ch of r.blockedChannels) {
-    const fix = CHANNEL_SETUP[ch];
+    const msgs = r.failed.filter((f) => f.channel === ch).map((f) => (f.error || '').toLowerCase());
+    const fix = channelFix(ch, msgs);
     if (fix) lines.push(`\n🔑 ${ch}: ${fix}`);
   }
   return lines.join('\n');
 }
 
-/** Việc tay cần làm khi một kênh báo lỗi auth/quyền. */
+/**
+ * Hướng dẫn theo ĐÚNG loại lỗi, không phải một câu chung cho cả kênh.
+ *
+ * Vì sao phải tách: hàng đợi Facebook kẹt từ 02/08 qua HAI nguyên nhân nối
+ * tiếp nhau (thiếu env → token hết hạn) mà bản tin nói y một câu "xin thêm
+ * quyền `pages_manage_posts`" cho cả hai. Câu đó đúng cho ca đầu và lạc đề
+ * cho ca sau, nên người đọc đi sửa nhầm chỗ rồi tưởng đã xong. 33 bài, 0 bài
+ * từng đăng được — đúng cái giá của một lời khuyên chung chung.
+ */
+function channelFix(ch: string, msgs: string[]): string {
+  const hit = (p: string) => msgs.some((m) => m.includes(p));
+  if (ch === 'facebook' && (hit('session has expired') || hit('has expired'))) return FB_TOKEN_EXPIRED;
+  return CHANNEL_SETUP[ch] || '';
+}
+
+/**
+ * ⚠️ Token Page LẤY TỪ TOKEN USER NGẮN HẠN thì chết theo nó — đó là chuyện vừa
+ * xảy ra. Chỉ token Page suy ra từ token USER DÀI HẠN mới không có hạn, nên
+ * hướng dẫn phải nêu đủ cả chuỗi đổi token, và phải nêu bước KIỂM (`debug_token`
+ * → `expires_at: 0`): thiếu bước đó thì không phân biệt được token vĩnh viễn với
+ * một token ngắn hạn nữa, và lần sau lại tắc y hệt mà không ai biết trước.
+ */
+const FB_TOKEN_EXPIRED =
+  'TOKEN HẾT HẠN (lỗi 190) — không phải thiếu quyền, đừng đi xin lại quyền. ' +
+  'Token vừa dùng là loại NGẮN HẠN nên chết theo phiên. Muốn token Page KHÔNG hết hạn: ' +
+  '(1) Graph API Explorer lấy user token có `pages_manage_posts` + `pages_read_engagement`; ' +
+  '(2) đổi sang user token dài hạn: `GET /oauth/access_token?grant_type=fb_exchange_token' +
+  '&client_id=<app-id>&client_secret=<app-secret>&fb_exchange_token=<token ngắn hạn>`; ' +
+  '(3) dùng token dài hạn đó gọi `GET /me/accounts` — `access_token` của Page trả về là loại VĨNH VIỄN; ' +
+  '(4) KIỂM ở `/debug_token`, phải thấy `expires_at: 0` (Never) mới đúng; ' +
+  '(5) đặt FB_PAGE_ACCESS_TOKEN trên Vercel rồi Redeploy. ' +
+  '⛔ Bước (2) cần ĐỌC App Secret — chỉ copy, TUYỆT ĐỐI không bấm Reset: ' +
+  'MESSENGER_APP_SECRET và WHATSAPP_APP_SECRET đang dùng chính giá trị đó, reset là chết webhook cả hai kênh.';
+
+/** Việc tay cần làm khi một kênh báo lỗi auth/quyền (ca chung). */
 const CHANNEL_SETUP: Record<string, string> = {
   facebook:
     'page token phải có `pages_manage_posts` (app Meta của repo dựng cho Messenger với ' +
