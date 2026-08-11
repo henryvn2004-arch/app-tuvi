@@ -5,6 +5,99 @@
 
 ---
 
+## ✏️ Kho hết CHỈ ĐỌC: sửa bài + trạng thái xuất bản (2026-08-11, cùng PR)
+
+Henry hỏi *"mục Nội dung này có phải CMS ko? so với CMS thì thiếu gì?"* → đo ra
+**không phải CMS**, rồi chốt làm hai món đáng làm nhất: **(a) sửa bài trong Kho**
++ **(b) cột trạng thái xuất bản**.
+
+### 🔴 Thực trạng đo được trước khi sửa
+| Trang | Làm được gì |
+|---|---|
+| Kho | 100% chỉ đọc |
+| Content Board | chỉ xem, 1 nút tải lại |
+| Khảo Luận / Nghiên Cứu | chỉ **nộp CHỦ ĐỀ** cho cron — **không sửa được bài** |
+| YouTube Studio | chỗ DUY NHẤT sửa/lưu thật |
+
+Và **691 bài** (`khao_luan` 344 + `master_articles` 347) không có cột trạng
+thái, không `updated_at`, không biết ai sửa, không phiên bản ⇒ LLM viết xong là
+**bài lên thẳng web**, không gỡ xuống được từ admin.
+
+### 🔑 Mặc định `'published'`, KHÔNG phải `'draft'`
+691 bài hiện có phải giữ nguyên trên web sau lượt deploy. Đặt mặc định `draft`
+là toàn bộ nội dung biến mất trong một nhịp — đúng loại hỏng im lặng cả track
+này đi vá. Ba trạng thái: `published` · `hidden` (người gỡ) · `draft` (máy vừa
+viết, chờ duyệt).
+- **Cờ `content.require_review` mặc định TẮT** — cron vẫn insert thẳng
+  `published` như cũ. Bật lên thì mỗi ngày phải có người bấm duyệt, không duyệt
+  thì trang đứng im; đó là quyết định VẬN HÀNH nên nó nằm ở `app_config` (đổi
+  bằng một câu SQL) chứ không phải hằng số trong mã (đổi phải deploy).
+- `initialPublishStatus()` **FAIL-OPEN**: đọc hụt config → `published`. Cầu dao
+  này gác QUY TRÌNH chứ không gác an toàn; Supabase chớp một nhịp mà làm bài mới
+  im lặng biến mất khỏi web thì tệ hơn hẳn lỡ đăng thẳng một bài.
+
+### 🔑 Cột trạng thái chỉ có nghĩa nếu MỌI bề mặt công khai lọc theo nó
+Đo được **12 chỗ đọc** hai bảng này rải khắp `app/` + `lib/`: trang bài · danh
+sách · bài liên quan · trang tác giả · gợi ý trong `/la-so/*` · sitemap · dựng
+bài social · seeding. Quên MỘT chỗ thì bài đã gỡ vẫn hiện ra ngoài — hỏng im
+lặng, chỉ lộ khi có người tình cờ mở đúng URL đó.
+- Hằng dùng chung `PUBLISHED_ONLY` (`lib/content/publish-filter.ts`), KHÔNG chép
+  chuỗi 12 chỗ.
+- ⚠️ `fetchAllSlugs` của sitemap nhận `table` là **BIẾN** (6 route con dùng
+  chung) nên phải tra `PUBLISH_GATED_TABLES` chứ không nối cứng — hỏi cột không
+  tồn tại là PostgREST trả 400 và **mất im lặng cả một họ URL**, đúng cái bẫy
+  `hasUpdatedAt` đã ghi sẵn trong chính file đó.
+- **`scripts/check-publish-filter.mjs` (bộ dò thứ 18)** cắm vào CI lint. Miễn
+  trừ khai kèm LÝ DO, không phải allowlist câm — đáng nhớ nhất là
+  `topic-topup.ts`: nó đọc tiêu đề đã có để **chống trùng chủ đề**, nên bài đã
+  gỡ VẪN phải tính là "đã viết rồi", lọc ra là máy viết lại đúng bài vừa gỡ.
+
+### 🔴 Chỗ nguy hiểm nhất của (a): `table` do CLIENT gửi
+Ghép thẳng vào đường dẫn PostgREST là phiên admin ghi được vào BẤT KỲ bảng nào
+(`user_credits`, `admin_users`…). Nên có **allowlist cứng** cho cả tên BẢNG lẫn
+tên CỘT; không nhận bừa khoá từ body.
+- ⛔ `van_dap` **cố ý không nằm trong allowlist**: nó đã có trang soạn riêng
+  (YouTube Studio) với kịch bản/TTS/mix. Dựng bộ sửa thứ hai cho cùng dữ liệu là
+  hai bản trôi khỏi nhau. Kho hiện nhãn "— Studio" thay cho nút Sửa.
+
+### Verify
+`tsc` 0 · `lint` 0 lỗi / 73 warning · `prettier` sạch · **18/18 bộ dò** · engine
+**185 pass**.
+- **17/17 ca trên TRANG THẬT**: cột trạng thái đúng · video không có nút Sửa ·
+  nạp thân bài từ server · **giữ nguyên dấu nháy + backtick** · thẻ `<script>`
+  trong bài **không chạy** · gửi đúng bảng/id/trạng thái/thân bài · lọc theo
+  trạng thái đi tới server · 0 lỗi JS.
+- **18 ca trên ROUTE THẬT** qua Next dev: chặn `user_credits` · `admin_users` ·
+  `van_dap` · tên rỗng · chuỗi chèn SQL — **tất cả 400 và 0 lượt ghi DB**; cột
+  ngoài danh sách trắng bị bỏ; trạng thái lạ bị chặn; **ĐỐI CHỨNG bảng hợp lệ →
+  200, ghi đúng `khao_luan`, kèm `updated_by`**.
+- **4/4 ca auth riêng**: không header / header rỗng / token sai → **403**;
+  ĐỐI CHỨNG token đúng → 200.
+- **Red-team bộ dò**: gỡ bộ lọc ở một chỗ → đỏ đúng dòng đó; khôi phục → xanh.
+
+### 🪤 Bốn bẫy harness đã vấp (đều là lỗi của TÔI)
+1. **Bộ dò kêu oan 16 chỗ** ở lượt đầu: nó dò chuỗi `publish_status` trong khi
+   code dùng hằng `PUBLISHED_ONLY`, và nhánh "bảng là biến" bắt luôn `${table}?`
+   của `lib/metrics/collect.ts` vô can. **Bộ dò kêu oan là bộ dò bị tắt đi.**
+2. **Script sửa hàng loạt dừng giữa chừng** để lại cây nửa vời (8/10 file đã
+   ghi). Phải KIỂM hết mẫu TRƯỚC rồi mới ghi — không thì phải revert rồi làm lại.
+3. **Sửa nhầm bảng**: `rows.map((r, i)` áp vào bảng System Config vì số dòng đã
+   dịch sau các sửa đổi trước. Chỉ lộ vì trang ném `i is not defined`.
+4. 🔴 **`pkill -f "next dev"` khớp CHÍNH dòng lệnh của nó** → tự giết mình
+   (exit 144). Và **stub `/auth/v1/user` trả user cho MỌI token** làm ca "không
+   auth" ĐỖ GIẢ ra 200 — suýt đọc thành lỗ hổng. Stub auth phải phân biệt theo
+   token, nếu không thì mọi ca "chặn" đều xanh vì lý do sai.
+
+### CÒN LẠI
+- **Không có lịch sử phiên bản / hoàn tác.** Sửa hỏng là mất. Cố ý bỏ — nội dung
+  ở đây do MÁY sinh, không phải người ngồi soạn qua nhiều vòng.
+- **Không có media library, lịch xuất bản, phân quyền biên tập.** Cùng lý do.
+- `tu_dien` · `tai_lieu` · `sach_library` sửa được nhưng **không có trạng thái**
+  (không có cột) — chúng không do cron LLM sinh nên chưa cần.
+- Bật chờ duyệt: `update app_config set value='true'::jsonb where key='content.require_review';`
+
+---
+
 ## 📚 Kho Nội Dung: 1.140 tác phẩm, **15 từng ra khỏi website** (2026-08-11, PR này)
 
 Henry hỏi ba câu: kho content nằm ở đâu · làm sao biết cái nào đã đăng kênh nào,

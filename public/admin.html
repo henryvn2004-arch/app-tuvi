@@ -1400,6 +1400,11 @@
                 <option value="queued">Đang xếp hàng</option>
                 <option value="unpublished">Chưa ra kênh</option>
               </select>
+              <select class="search-input" id="wh-pub" style="width:150px" onchange="whGo(0)">
+                <option value="">Mọi bài</option>
+                <option value="draft">Chờ duyệt</option>
+                <option value="hidden">Đã gỡ</option>
+              </select>
               <select class="search-input" id="wh-channel" style="width:140px" onchange="whGo(0)">
                 <option value="">Mọi kênh</option>
                 <option value="youtube">YouTube</option>
@@ -2318,6 +2323,23 @@ const WH_KIND_LABEL = {
 };
 const WH_PAGE = 50;
 let _whOffset = 0;
+let _whRows = [];
+
+const WH_STATUS = {
+  published: { label: 'đang đăng', cls: 'badge-green' },
+  draft:     { label: 'chờ duyệt', cls: 'badge-warn' },
+  hidden:    { label: 'đã gỡ',     cls: 'badge-error' },
+};
+
+/** Trường sửa được của từng bảng — PHẢI khớp allowlist `EDITABLE` ở server.
+ *  Server mới là chốt chặn thật; bảng này chỉ để dựng form đúng ô. */
+const WH_FIELDS = {
+  khao_luan:       [['title', 'Tiêu đề'], ['excerpt', 'Tóm tắt'], ['category', 'Chuyên mục'], ['content', 'Nội dung']],
+  master_articles: [['title', 'Tiêu đề'], ['excerpt', 'Tóm tắt'], ['category', 'Chuyên mục'], ['content', 'Nội dung']],
+  tai_lieu:        [['title', 'Tiêu đề'], ['excerpt', 'Tóm tắt'], ['category', 'Chuyên mục'], ['content', 'Nội dung']],
+  tu_dien:         [['ten', 'Tên'], ['seo_title', 'Tiêu đề SEO'], ['seo_desc', 'Mô tả SEO'], ['content', 'Nội dung']],
+  sach_library:    [['title', 'Tiêu đề'], ['author', 'Tác giả'], ['excerpt', 'Tóm tắt'], ['content', 'Nội dung']],
+};
 
 function whParams(offset) {
   const g = id => (document.getElementById(id)?.value || '').trim();
@@ -2325,6 +2347,7 @@ function whParams(offset) {
     `&kind=${encodeURIComponent(g('wh-kind'))}` +
     `&status=${encodeURIComponent(g('wh-status'))}` +
     `&channel=${encodeURIComponent(g('wh-channel'))}` +
+    `&pub=${encodeURIComponent(g('wh-pub'))}` +
     `&sort=${encodeURIComponent(g('wh-sort'))}` +
     `&q=${encodeURIComponent(g('wh-q'))}`;
 }
@@ -2386,6 +2409,103 @@ function renderWhMetrics(m) {
 
 function whGo(offset) { _whOffset = Math.max(0, offset || 0); loadWarehouse(); }
 
+/**
+ * Trình sửa bài — dựng bằng JS, không có markup sẵn trong trang.
+ *
+ * Nội dung nạp từ SERVER chứ không lấy từ dòng đang hiện: bảng kho chỉ có tiêu
+ * đề, còn thân bài mới là thứ người ta vào đây để sửa.
+ */
+async function whEdit(i) {
+  const r = _whRows[i];
+  if (!r || !r.editable) return;
+  const fields = WH_FIELDS[r.source_table];
+  if (!fields) { toast('Loại này chưa sửa được từ Kho'); return; }
+
+  const back = document.createElement('div');
+  back.className = 'modal-back';
+  back.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:2000;display:flex;align-items:center;justify-content:center;padding:16px';
+  back.innerHTML = `<div style="background:var(--surface);border-radius:12px;max-width:760px;width:100%;max-height:90vh;overflow:auto;padding:20px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.8rem">
+        <strong style="font-family:'Noto Serif',serif;font-size:1.05rem;color:var(--text)">Sửa nội dung</strong>
+        <button class="btn btn-ghost btn-sm" data-x>✕</button>
+      </div>
+      <div style="font-size:.72rem;color:var(--text-lt);margin-bottom:.9rem" data-meta></div>
+      <div data-form><div class="loading"><span class="spin"></span>Đang tải bài…</div></div>
+    </div>`;
+  back.addEventListener('click', e => { if (e.target === back || e.target.hasAttribute('data-x')) back.remove(); });
+  document.body.appendChild(back);
+
+  let row;
+  try {
+    row = await apiGet('admin-content-one', `&table=${encodeURIComponent(r.source_table)}&id=${encodeURIComponent(r.source_id)}`);
+  } catch (e) {
+    back.querySelector('[data-form]').innerHTML = `<div class="empty">Lỗi: ${escHtmlLocal(e.message)}</div>`;
+    return;
+  }
+  if (row && row.error) {
+    back.querySelector('[data-form]').innerHTML = `<div class="empty">Lỗi: ${escHtmlLocal(row.error)}</div>`;
+    return;
+  }
+  const data = (row && row.row) || {};
+  const canStatus = r.source_table === 'khao_luan' || r.source_table === 'master_articles';
+
+  back.querySelector('[data-meta]').textContent =
+    `${WH_KIND_LABEL[r.kind] || r.kind} · ${r.url || ''}` +
+    (data.updated_at ? ` · sửa lần cuối ${new Date(data.updated_at).toLocaleString('vi-VN')}${data.updated_by ? ' bởi ' + data.updated_by : ''}` : '');
+
+  back.querySelector('[data-form]').innerHTML =
+    fields.map(([k, label]) => {
+      const big = k === 'content';
+      return `<div style="margin-bottom:.8rem">
+        <div style="font-size:.74rem;color:var(--text-mid);margin-bottom:.25rem">${label}</div>
+        ${big
+          ? `<textarea class="search-input" data-f="${k}" style="width:100%;min-height:280px;font-family:ui-monospace,monospace;line-height:1.55"></textarea>`
+          : `<input class="search-input" data-f="${k}" style="width:100%">`}
+      </div>`;
+    }).join('') +
+    (canStatus ? `<div style="margin-bottom:.9rem">
+        <div style="font-size:.74rem;color:var(--text-mid);margin-bottom:.25rem">Trạng thái</div>
+        <select class="search-input" data-f="publish_status" style="width:220px">
+          <option value="published">Đang đăng (hiện trên web)</option>
+          <option value="draft">Chờ duyệt (ẩn khỏi web)</option>
+          <option value="hidden">Đã gỡ (ẩn khỏi web)</option>
+        </select>
+      </div>` : '')  +
+    `<div style="display:flex;gap:8px;justify-content:flex-end">
+        <button class="btn btn-ghost btn-sm" data-x>Huỷ</button>
+        <button class="btn btn-primary btn-sm" data-save>Lưu</button>
+     </div>`;
+
+  // Đổ giá trị bằng `.value` chứ KHÔNG nhét vào HTML: nội dung bài chứa đủ thứ
+  // dấu nháy và thẻ, ghép chuỗi là vỡ form (hoặc tệ hơn).
+  for (const [k] of fields) {
+    const el = back.querySelector(`[data-f="${k}"]`);
+    if (el) el.value = data[k] == null ? '' : String(data[k]);
+  }
+  if (canStatus) back.querySelector('[data-f="publish_status"]').value = data.publish_status || 'published';
+
+  back.querySelector('[data-save]').addEventListener('click', async ev => {
+    const btn = ev.currentTarget;
+    btn.disabled = true; btn.textContent = 'Đang lưu…';
+    const payload = { table: r.source_table, id: r.source_id };
+    for (const [k] of fields) {
+      const el = back.querySelector(`[data-f="${k}"]`);
+      if (el) payload[k] = el.value;
+    }
+    if (canStatus) payload.publish_status = back.querySelector('[data-f="publish_status"]').value;
+    try {
+      const res = await apiPost('admin-content-edit', payload);
+      if (res && res.error) throw new Error(res.error);
+      toast('Đã lưu');
+      back.remove();
+      loadWarehouse();
+    } catch (e) {
+      btn.disabled = false; btn.textContent = 'Lưu';
+      toast('Lỗi: ' + e.message);
+    }
+  });
+}
+
 async function loadWarehouse() {
   const tbl = document.getElementById('wh-table');
   tbl.innerHTML = `<tbody><tr><td class="empty"><span class="spin"></span> Đang tải…</td></tr></tbody>`;
@@ -2440,10 +2560,12 @@ async function loadWarehouse() {
 
   renderWhMetrics(data && data.metrics);
 
+  _whRows = rows;
+
   tbl.innerHTML = `
-    <thead><tr><th>Tiêu đề</th><th>Loại</th><th>Kênh</th>
-      <th style="text-align:right">Xem</th><th style="text-align:right">Ngày tạo</th></tr></thead>
-    <tbody>${rows.length ? rows.map(r => {
+    <thead><tr><th>Tiêu đề</th><th>Loại</th><th>Trạng thái</th><th>Kênh</th>
+      <th style="text-align:right">Xem</th><th style="text-align:right">Ngày tạo</th><th></th></tr></thead>
+    <tbody>${rows.length ? rows.map((r, i) => {
       const chans = (r.channels || []).map(c => {
         const cls = c.status === 'live' ? 'badge-green' : (c.status === 'error' ? 'badge-error' : 'badge-warn');
         const label = escHtmlLocal(c.channel) + (c.status === 'live' ? '' : ` · ${escHtmlLocal(c.status)}`);
@@ -2455,16 +2577,21 @@ async function loadWarehouse() {
       }).join(' ') || '<span class="badge">chưa đăng</span>';
       const url = /^(https?:\/\/|\/)/i.test(r.url || '') ? r.url : '';
       const title = escHtmlLocal(r.title || '(không tiêu đề)');
+      const st = WH_STATUS[r.publish_status] || WH_STATUS.published;
       // Khai màu chữ tường minh: thẻ <a> trần ăn màu link mặc định của trình
       // duyệt (#0000EE) — trên nền tối đo được 1,8:1, gần như không đọc nổi.
       return `<tr>
         <td>${url ? `<a href="${escHtmlLocal(url)}" target="_blank" rel="noopener" style="color:var(--text);text-decoration:underline">${title}</a>` : title}</td>
         <td><span class="badge">${escHtmlLocal(WH_KIND_LABEL[r.kind] || r.kind)}</span></td>
+        <td><span class="badge ${st.cls}">${st.label}</span></td>
         <td>${chans}</td>
         <td style="text-align:right;white-space:nowrap">${r.views === null || r.views === undefined ? '<span style="color:var(--text-lt)">—</span>' : Number(r.views).toLocaleString('vi-VN')}</td>
         <td style="text-align:right;white-space:nowrap">${r.created_at ? new Date(r.created_at).toLocaleDateString('vi-VN') : '—'}</td>
+        <td style="text-align:right;white-space:nowrap">${r.editable
+          ? `<button class="btn btn-ghost btn-sm" onclick="whEdit(${i})">Sửa</button>`
+          : `<span style="font-size:.7rem;color:var(--text-lt)" title="Video có trang soạn riêng ở mục Sản Xuất">— Studio</span>`}</td>
       </tr>`;
-    }).join('') : '<tr><td class="empty" colspan="5">Không có bản nào khớp bộ lọc</td></tr>'}</tbody>`;
+    }).join('') : '<tr><td class="empty" colspan="7">Không có bản nào khớp bộ lọc</td></tr>'}</tbody>`;
 
   const shown = Number(list.total || 0);
   const from = shown ? _whOffset + 1 : 0;

@@ -36,6 +36,7 @@ import { llmText } from '@/lib/llm/complete';
 import { brandCheck, type BrandProfile } from '@/lib/content/brand-check';
 import { getConfigValue } from '@/lib/config/appConfig';
 import { pickQuote, assetUrl } from '@/lib/media/build';
+import { PUBLISHED_ONLY } from '../content/publish-filter';
 
 const SUPABASE_URL = process.env.SUPABASE_URL || '';
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY || '';
@@ -242,7 +243,7 @@ export async function buildSeedingDrafts(opts: { limit?: number } = {}): Promise
   for (const spec of SOURCES) {
     pool.set(
       spec.type,
-      await sbGet<ArticleRow>(`${spec.table}?select=id,slug,title,excerpt,content&order=created_at.desc&limit=120`),
+      await sbGet<ArticleRow>(`${spec.table}?select=id,slug,title,excerpt,content&${PUBLISHED_ONLY}&order=created_at.desc&limit=120`),
     );
   }
 

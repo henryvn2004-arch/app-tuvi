@@ -11,6 +11,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 import { NOINDEX_FOLLOW } from '@/lib/seo/index-policy';
+import { PUBLISHED_ONLY } from '@/lib/content/publish-filter';
 
 // ⚠️ Module-level: must run before any request so that if loadEngine() sets
 // globalThis.window = globalThis, Next.js URL parsing (getLocationOrigin)
@@ -1198,7 +1199,7 @@ async function fetchRelatedArticles(cungMenh: string, chinhTinh: string): Promis
   for (const kw of keywords) {
     try {
       const r = await fetch(
-        `${SB_URL}/rest/v1/master_articles?tags=cs.%7B"${encodeURIComponent(kw)}"%7D&select=slug,title,excerpt&order=created_at.desc&limit=4`,
+        `${SB_URL}/rest/v1/master_articles?tags=cs.%7B"${encodeURIComponent(kw)}"%7D&select=slug,title,excerpt&${PUBLISHED_ONLY}&order=created_at.desc&limit=4`,
         { headers: h }
       );
       if (r.ok) {
@@ -1210,7 +1211,7 @@ async function fetchRelatedArticles(cungMenh: string, chinhTinh: string): Promis
   // Fallback: latest 4 articles
   try {
     const r = await fetch(
-      `${SB_URL}/rest/v1/master_articles?select=slug,title,excerpt&order=created_at.desc&limit=4`,
+      `${SB_URL}/rest/v1/master_articles?select=slug,title,excerpt&${PUBLISHED_ONLY}&order=created_at.desc&limit=4`,
       { headers: h }
     );
     if (r.ok) return (await r.json() as ArticleStub[]) || [];

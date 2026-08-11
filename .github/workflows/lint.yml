@@ -146,6 +146,13 @@ jobs:
       - name: Vân tay cấu trúc payload ↔ SHAPE cache
         run: npm run check:cacheshape
 
+      # `khao_luan`/`master_articles` nay có `publish_status`, nhưng cột đó chỉ
+      # có nghĩa nếu MỌI bề mặt công khai lọc theo nó — đo được 12 chỗ đọc rải
+      # khắp app/ và lib/. Quên một chỗ thì bài đã gỡ xuống vẫn hiện ra ngoài,
+      # hỏng im lặng và chỉ lộ khi có người tình cờ mở đúng URL đó.
+      - name: Truy vấn công khai phải lọc trạng thái xuất bản
+        run: npm run check:publish
+
   typecheck:
     runs-on: ubuntu-latest
     timeout-minutes: 10
