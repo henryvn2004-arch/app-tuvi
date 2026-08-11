@@ -83,25 +83,61 @@ window.UserCharts = (function () {
   }
 
   // ── Dò form trên trang ───────────────────────────────────────────────────
-  // CỐ Ý dò động thay vì liệt kê id từng trang: 7 trang đang dùng 4 id host
-  // khác nhau (`tuviFormHost`, `tmeFormHost`, `formHostA`, `formHostB`), và
-  // trang mới sẽ đặt id mới. Liệt kê tay thì trang nào quên là trang đó âm thầm
-  // không có sổ — mà không có gì báo.
+  // HAI đường, cố ý theo thứ tự này:
+  //
+  //  1. `[data-tvf-form]` — CHÍNH TuviForm đóng dấu lúc render (xem tuvi-form.js).
+  //     Đây là đường chuẩn: form tự khai, không phải mình đi đoán.
+  //  2. `/formhost/i` — khuôn CŨ theo TÊN id, giữ cho form dựng TAY không qua
+  //     TuviForm và cho trang nào đặt tên đúng khuôn.
+  //
+  // 🔑 Vì sao phải thêm đường 1: bản cũ CHỈ có đường 2, mà tên id là thứ mỗi
+  // trang tự đặt. `app-xem-tuoi` dùng đúng khuôn TuviForm nhưng đặt id
+  // `a-fields`/`b-fields` ⇒ trượt bộ dò ⇒ không có sổ, và KHÔNG có gì báo —
+  // đúng loại hỏng im lặng mà chú thích cũ ở đây đã lo trước rồi vẫn vấp.
+  //
+  // `data-uc-skip` = trang tự quản sổ, đừng gắn thêm (xem `app-nhan-mach`).
   function findForms() {
-    var out = [];
+    var cand = [];
+    function add(host, prefix) {
+      if (!host) return;
+      try { if (host.closest('[data-uc-skip]')) return; } catch (e) { /* ignore */ }
+      for (var k = 0; k < cand.length; k++) if (cand[k].host === host) return;
+      cand.push({ host: host, prefix: prefix });
+    }
+
+    var tvf = document.querySelectorAll('[data-tvf-form]');
+    for (var i = 0; i < tvf.length; i++) add(tvf[i], tvf[i].getAttribute('data-tvf-form') || '');
+
     var all = document.querySelectorAll('[id]');
-    for (var i = 0; i < all.length; i++) {
-      var el = all[i];
+    for (var j = 0; j < all.length; j++) {
+      var el = all[j];
       if (!/formhost/i.test(el.id)) continue;
       // Prefix suy từ chính field bên trong: TuviForm đặt id `<prefix>-ngay`
       // (xem pid() trong tuvi-form.js). Không có field ngày ⇒ chưa render xong
       // hoặc không phải form lá số → bỏ qua.
       var day = el.querySelector('[id$="ngay"]');
       if (!day) continue;
-      var prefix = day.id === 'ngay' ? '' : day.id.replace(/-?ngay$/, '');
-      out.push({ host: el, prefix: prefix });
+      add(el, day.id === 'ngay' ? '' : day.id.replace(/-?ngay$/, ''));
     }
-    return out;
+
+    // Xếp theo thứ tự TÀI LIỆU — `_maybeSeedForm` chỉ mồi form ĐẦU TIÊN, nên
+    // thứ tự ở đây quyết định ô nào được điền sẵn.
+    cand.sort(function (a, b) {
+      var r = a.host.compareDocumentPosition(b.host);
+      if (r & 4 /* FOLLOWING */) return -1;
+      if (r & 2 /* PRECEDING */) return 1;
+      return 0;
+    });
+
+    // Bỏ mục nằm LỒNG trong một mục khác cùng prefix — giữ cái NGOÀI để chỗ đặt
+    // thanh sổ không đổi so với trước. Ca thật: `app-home` có `#tmeFormHost`
+    // bọc ngoài `#tmeFields` (chỗ TuviForm render), hai đường dò trúng hai phần
+    // tử khác nhau của CÙNG một form ⇒ không lọc là mọc hai thanh chồng nhau.
+    return cand.filter(function (a) {
+      return !cand.some(function (b) {
+        return b !== a && b.prefix === a.prefix && b.host.contains(a.host);
+      });
+    });
   }
 
   function formIsEmpty(prefix) {
