@@ -1,6 +1,7 @@
 // app/nghien-cuu/route.ts — Listing page for master-written research articles
 export const revalidate = 3600;
 import { NextRequest, NextResponse } from 'next/server';
+import { PUBLISHED_ONLY } from '@/lib/content/publish-filter';
 
 const SB_URL = process.env.SUPABASE_URL!;
 const SB_KEY = process.env.SUPABASE_SERVICE_KEY!;
@@ -159,7 +160,7 @@ export async function GET(request: NextRequest) {
   try {
     const [articlesRes, mastersRes] = await Promise.all([
       fetch(
-        `${SB_URL}/rest/v1/master_articles?${articleFilter}&order=created_at.desc&limit=${PAGE_SIZE}&offset=${offset}`,
+        `${SB_URL}/rest/v1/master_articles?${articleFilter}&${PUBLISHED_ONLY}&order=created_at.desc&limit=${PAGE_SIZE}&offset=${offset}`,
         { headers: { ...sbHeaders, 'Prefer': 'count=exact', 'Range': `${offset}-${offset + PAGE_SIZE - 1}` } }
       ),
       fetch(`${SB_URL}/rest/v1/master_profiles?select=id,display_name&order=article_count.desc`, { headers: sbHeaders }),

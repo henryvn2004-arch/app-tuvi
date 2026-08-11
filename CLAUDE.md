@@ -5,6 +5,274 @@
 
 ---
 
+## ✏️ Kho hết CHỈ ĐỌC: sửa bài + trạng thái xuất bản (2026-08-11, cùng PR)
+
+Henry hỏi *"mục Nội dung này có phải CMS ko? so với CMS thì thiếu gì?"* → đo ra
+**không phải CMS**, rồi chốt làm hai món đáng làm nhất: **(a) sửa bài trong Kho**
++ **(b) cột trạng thái xuất bản**.
+
+### 🔴 Thực trạng đo được trước khi sửa
+| Trang | Làm được gì |
+|---|---|
+| Kho | 100% chỉ đọc |
+| Content Board | chỉ xem, 1 nút tải lại |
+| Khảo Luận / Nghiên Cứu | chỉ **nộp CHỦ ĐỀ** cho cron — **không sửa được bài** |
+| YouTube Studio | chỗ DUY NHẤT sửa/lưu thật |
+
+Và **691 bài** (`khao_luan` 344 + `master_articles` 347) không có cột trạng
+thái, không `updated_at`, không biết ai sửa, không phiên bản ⇒ LLM viết xong là
+**bài lên thẳng web**, không gỡ xuống được từ admin.
+
+### 🔑 Mặc định `'published'`, KHÔNG phải `'draft'`
+691 bài hiện có phải giữ nguyên trên web sau lượt deploy. Đặt mặc định `draft`
+là toàn bộ nội dung biến mất trong một nhịp — đúng loại hỏng im lặng cả track
+này đi vá. Ba trạng thái: `published` · `hidden` (người gỡ) · `draft` (máy vừa
+viết, chờ duyệt).
+- **Cờ `content.require_review` mặc định TẮT** — cron vẫn insert thẳng
+  `published` như cũ. Bật lên thì mỗi ngày phải có người bấm duyệt, không duyệt
+  thì trang đứng im; đó là quyết định VẬN HÀNH nên nó nằm ở `app_config` (đổi
+  bằng một câu SQL) chứ không phải hằng số trong mã (đổi phải deploy).
+- `initialPublishStatus()` **FAIL-OPEN**: đọc hụt config → `published`. Cầu dao
+  này gác QUY TRÌNH chứ không gác an toàn; Supabase chớp một nhịp mà làm bài mới
+  im lặng biến mất khỏi web thì tệ hơn hẳn lỡ đăng thẳng một bài.
+
+### 🔑 Cột trạng thái chỉ có nghĩa nếu MỌI bề mặt công khai lọc theo nó
+Đo được **12 chỗ đọc** hai bảng này rải khắp `app/` + `lib/`: trang bài · danh
+sách · bài liên quan · trang tác giả · gợi ý trong `/la-so/*` · sitemap · dựng
+bài social · seeding. Quên MỘT chỗ thì bài đã gỡ vẫn hiện ra ngoài — hỏng im
+lặng, chỉ lộ khi có người tình cờ mở đúng URL đó.
+- Hằng dùng chung `PUBLISHED_ONLY` (`lib/content/publish-filter.ts`), KHÔNG chép
+  chuỗi 12 chỗ.
+- ⚠️ `fetchAllSlugs` của sitemap nhận `table` là **BIẾN** (6 route con dùng
+  chung) nên phải tra `PUBLISH_GATED_TABLES` chứ không nối cứng — hỏi cột không
+  tồn tại là PostgREST trả 400 và **mất im lặng cả một họ URL**, đúng cái bẫy
+  `hasUpdatedAt` đã ghi sẵn trong chính file đó.
+- **`scripts/check-publish-filter.mjs` (bộ dò thứ 18)** cắm vào CI lint. Miễn
+  trừ khai kèm LÝ DO, không phải allowlist câm — đáng nhớ nhất là
+  `topic-topup.ts`: nó đọc tiêu đề đã có để **chống trùng chủ đề**, nên bài đã
+  gỡ VẪN phải tính là "đã viết rồi", lọc ra là máy viết lại đúng bài vừa gỡ.
+
+### 🔴 Chỗ nguy hiểm nhất của (a): `table` do CLIENT gửi
+Ghép thẳng vào đường dẫn PostgREST là phiên admin ghi được vào BẤT KỲ bảng nào
+(`user_credits`, `admin_users`…). Nên có **allowlist cứng** cho cả tên BẢNG lẫn
+tên CỘT; không nhận bừa khoá từ body.
+- ⛔ `van_dap` **cố ý không nằm trong allowlist**: nó đã có trang soạn riêng
+  (YouTube Studio) với kịch bản/TTS/mix. Dựng bộ sửa thứ hai cho cùng dữ liệu là
+  hai bản trôi khỏi nhau. Kho hiện nhãn "— Studio" thay cho nút Sửa.
+
+### Verify
+`tsc` 0 · `lint` 0 lỗi / 73 warning · `prettier` sạch · **18/18 bộ dò** · engine
+**185 pass**.
+- **17/17 ca trên TRANG THẬT**: cột trạng thái đúng · video không có nút Sửa ·
+  nạp thân bài từ server · **giữ nguyên dấu nháy + backtick** · thẻ `<script>`
+  trong bài **không chạy** · gửi đúng bảng/id/trạng thái/thân bài · lọc theo
+  trạng thái đi tới server · 0 lỗi JS.
+- **18 ca trên ROUTE THẬT** qua Next dev: chặn `user_credits` · `admin_users` ·
+  `van_dap` · tên rỗng · chuỗi chèn SQL — **tất cả 400 và 0 lượt ghi DB**; cột
+  ngoài danh sách trắng bị bỏ; trạng thái lạ bị chặn; **ĐỐI CHỨNG bảng hợp lệ →
+  200, ghi đúng `khao_luan`, kèm `updated_by`**.
+- **4/4 ca auth riêng**: không header / header rỗng / token sai → **403**;
+  ĐỐI CHỨNG token đúng → 200.
+- **Red-team bộ dò**: gỡ bộ lọc ở một chỗ → đỏ đúng dòng đó; khôi phục → xanh.
+
+### 🪤 Bốn bẫy harness đã vấp (đều là lỗi của TÔI)
+1. **Bộ dò kêu oan 16 chỗ** ở lượt đầu: nó dò chuỗi `publish_status` trong khi
+   code dùng hằng `PUBLISHED_ONLY`, và nhánh "bảng là biến" bắt luôn `${table}?`
+   của `lib/metrics/collect.ts` vô can. **Bộ dò kêu oan là bộ dò bị tắt đi.**
+2. **Script sửa hàng loạt dừng giữa chừng** để lại cây nửa vời (8/10 file đã
+   ghi). Phải KIỂM hết mẫu TRƯỚC rồi mới ghi — không thì phải revert rồi làm lại.
+3. **Sửa nhầm bảng**: `rows.map((r, i)` áp vào bảng System Config vì số dòng đã
+   dịch sau các sửa đổi trước. Chỉ lộ vì trang ném `i is not defined`.
+4. 🔴 **`pkill -f "next dev"` khớp CHÍNH dòng lệnh của nó** → tự giết mình
+   (exit 144). Và **stub `/auth/v1/user` trả user cho MỌI token** làm ca "không
+   auth" ĐỖ GIẢ ra 200 — suýt đọc thành lỗ hổng. Stub auth phải phân biệt theo
+   token, nếu không thì mọi ca "chặn" đều xanh vì lý do sai.
+
+### CÒN LẠI
+- **Không có lịch sử phiên bản / hoàn tác.** Sửa hỏng là mất. Cố ý bỏ — nội dung
+  ở đây do MÁY sinh, không phải người ngồi soạn qua nhiều vòng.
+- **Không có media library, lịch xuất bản, phân quyền biên tập.** Cùng lý do.
+- `tu_dien` · `tai_lieu` · `sach_library` sửa được nhưng **không có trạng thái**
+  (không có cột) — chúng không do cron LLM sinh nên chưa cần.
+- Bật chờ duyệt: `update app_config set value='true'::jsonb where key='content.require_review';`
+
+---
+
+## 📚 Kho Nội Dung: 1.140 tác phẩm, **15 từng ra khỏi website** (2026-08-11, PR này)
+
+Henry hỏi ba câu: kho content nằm ở đâu · làm sao biết cái nào đã đăng kênh nào,
+được bao nhiêu like/view/sub · có nên tách mục "Nội dung" khỏi "Marketing".
+
+### 🔴 Câu về like/view/sub: **KHÔNG đo được ở đâu cả, và chưa từng đo**
+Grep toàn repo: **0 dòng gọi YouTube Analytics · Meta Insights · TikTok API**.
+Thứ duy nhất có là GSC (SEO) và `shared_results.view_count` (link chia sẻ nội
+bộ). Tức 15 video YouTube đang live cũng **chưa bao giờ biết được bao nhiêu
+view**. ⇒ Đây KHÔNG phải việc sắp xếp lại menu — thiếu hẳn một tầng dữ liệu.
+Sắp menu mà không có tầng đó thì mục mới vẫn trống. Ghi rõ trên chính trang Kho
+để không ai đọc bảng đó rộng hơn thứ nó đo.
+
+### 🔑 Kho là VIEW, không phải bảng `content_items`
+Bảng vật lý cần backfill + trigger/cron đồng bộ với 6 bảng nguồn ⇒ **hai nguồn
+sự thật**, đúng lớp lỗi repo đã trả giá nhiều lần (giá Lượng chép hai nơi,
+`formatLaSoV2` hai bản, hash hai bản). Phạm vi Henry chốt là **chỉ đọc** ⇒ VIEW
+luôn đúng theo định nghĩa, 0 dòng đồng bộ. Khi nào cần metadata RIÊNG cho tác
+phẩm (nhãn biên tập, lịch sản xuất) mới cần bảng thật.
+- **`content_catalog`** = tác phẩm gốc (6 nguồn) · **`content_distribution`** =
+  đã ra kênh nào. Khớp đúng mô hình Henry mô tả: 1 nguồn → nhiều lát cắt
+  (`media_assets`) → nhiều kênh (`media_posts`). Hai bảng đó **giữ nguyên**, chỉ
+  được đọc ngược qua `source_type`/`source_id`.
+- ⛔ **CỐ Ý bỏ `seo_pages` (8.958 dòng)**: trang sinh tự động theo lá số, không
+  phải tác phẩm biên tập. Đưa vào là 8.958 nuốt sạch 1.140 và kho hết đọc được.
+- **Điều kiện vào `content_distribution` là CÓ URL thật**, không phải chuỗi
+  status: status là thứ code ghi ra, URL là bằng chứng nó đã ra ngoài đời.
+- 🔐 View trong PG15+ chạy quyền OWNER (bỏ qua RLS) và EXECUTE cho PUBLIC là
+  dựng sẵn của Postgres ⇒ revoke tường minh ngay trong migration. Verify ACL:
+  chỉ `postgres` + `service_role`.
+
+### 📊 Số đo (đã chạy prod)
+| | |
+|---|---:|
+| Tổng tác phẩm | **1.140** |
+| Đã từng ra khỏi website | **15 (1,3%)** |
+| Đang kẹt hàng đợi | **30** (facebook, thiếu `FB_PAGE_ID` từ 02/08) |
+| Nằm kho chưa đi đâu | **1.125** |
+
+Theo loại: nghiên cứu 347 · khảo luận 344 · sách 168 · video hỏi-đáp 142 (15 đã
+lên) · từ điển 132 · tài liệu 7.
+
+### Sắp xếp lại admin
+Mục cũ *"Marketing & Nội Dung"* gánh 9 nav, **6 là việc nội dung**. Nay:
+- **Marketing** = chỉ đo TIỀN & NGƯỜI (Funnel · Giữ Chân & Doanh Thu · SEO).
+- **Nội Dung** = Kho · Sản Xuất · Phân Phối · Kênh & Kết Nối.
+- **"Sản Xuất" KHÔNG phải page mới** — là MỘT nav mở nhóm 4 trang đã có qua
+  thanh tab (khuôn `mkt-filterbar` sẵn có). Giữ nguyên 4 khối DOM + 4 loader cũ
+  ⇒ 0 rủi ro hồi quy, sidebar vẫn gọn.
+
+### 🐞 Hai lỗi bắt được khi ĐO, không phải khi đọc code
+1. **Vào tab YouTube Studio là mất sạch dấu vị trí**: `showView()` của module đó
+   ghi đè `topbar-title` VÀ **xoá `active` khỏi MỌI `.nav-item`**. Nợ CÓ SẴN
+   (nav "YouTube Studio" cũ chưa bao giờ sáng, chỉ là nó đứng một mình nên không
+   ai để ý). Vá bằng cách đặt khối tô sáng **SAU** lượt gọi loader.
+2. **Link tiêu đề ăn màu mặc định trình duyệt `#0000EE`** → dark mode đo được
+   **1,8:1**, gần như không đọc nổi. Thẻ `<a>` trần trong admin phải khai màu.
+
+### Verify
+`tsc` 0 · `lint` **0 lỗi / 73 warning = đúng mốc nền** · `prettier` quét cả cây
+sạch · **17/17 bộ dò** · 4/4 khối script nội tuyến `node --check`.
+- **39/39 ca trên TRANG THẬT** (`public/admin.html`, stub `/api/*`, lái giao
+  diện bằng chính `enterApp`/`goTo` — không mock hàm nào của trang): sidebar
+  tách đúng 2 mục · 4 nav sản xuất cũ đã gỡ · 4 tab mở đúng page + đúng tiêu đề
+  + nav vẫn sáng · rời nhóm thì thanh tab ẩn · 5 ô số khớp RPC thật · nhãn loại
+  **không lộ khoá thô** · tiêu đề mang `<img onerror>` **không chạy** mà vẫn
+  hiện nguyên văn · `href="javascript:"` từ DB bị chặn · 3 bộ lọc thật sự đi tới
+  server · 390px không tràn · 0 lỗi JS.
+- 🪤 **ĐỐI CHỨNG `origin/main` bằng `git worktree`**: tràn ngang 390px ở
+  `nghiencuu` **21px** và `seo` **25px** là **nợ có sẵn** (`repeat(4,1fr)`), và
+  chữ `.stat.green` chìm **2,6:1 ở dark y hệt** ⇒ không phải hồi quy của PR này.
+  Nhưng trang MỚI thì không chép lại lỗi đó (`auto-fit` + màu chữ khai rõ).
+- 🪤 **Ba bẫy harness đã vấp** (đều là lỗi của TÔI): (a) chạy spec từ scratchpad
+  → `playwright` không resolve, phải chạy từ gốc repo; (b) tự vẽ lại DOM để bỏ
+  qua màn đăng nhập thay vì gọi chính `enterApp`; (c) role `superadmin` không
+  tồn tại — `applyAdminPermissions` chỉ nhận **`owner`**, nên cả mục đang đo bị
+  ẩn và bài kiểm treo 30 giây ở một selector "không hiện".
+
+### CÒN LẠI
+- ✅ **Tầng số liệu ĐÃ DỰNG** — xem mục ngay dưới. Chỉ còn 1 việc tay.
+- **Nợ MÀU của admin.css**, cố ý không trộn vào PR này: `--green`/`--blue`
+  không khai lại trong khối `[data-theme="dark"]` nên mọi `.badge-green`/
+  `.stat.green` chìm ở dark. Đụng vào là đụng mọi trang admin.
+- Tràn ngang 390px ở `nghiencuu`/`seo` (nợ có sẵn) chưa vá.
+- Kho **chỉ đọc** — sửa nội dung vẫn ở trang Sản Xuất của từng pipeline. Muốn
+  sửa ngược thì phải viết đường ghi về 6 bảng, chưa làm.
+- TikTok/Zalo chưa có kênh thật; bộ lọc kênh đã có sẵn giá trị, cắm adapter vào
+  là tự hiện.
+
+---
+
+## 📊 Số liệu nền tảng: YouTube đi bằng API KEY, KHÔNG dùng OAuth (2026-08-11, cùng PR)
+
+Bước 2 của track Kho. Trước mục này site **chưa từng đo** một số liệu nào từ bên
+ngoài — 15 video đang live mà không biết được bao nhiêu view.
+
+### 🔑 Quyết định quan trọng nhất: KHÔNG buộc số liệu vào OAuth đang có
+Đường upload (`youtube-upload` edge function) chạy refresh token, mà app còn ở
+chế độ **Testing** trong Google Cloud ⇒ token chết sau 7 ngày (86 video đang
+`invalid_grant` vì đúng chuyện đó). Buộc số liệu vào cùng cái token ấy là **số
+liệu chết theo, và bước 2 bị chặn bởi cùng một việc tay đang chặn bước trước**.
+- `videos.list?part=statistics` + `channels.list?part=statistics` cho nội dung
+  CÔNG KHAI **chỉ cần API key** — không hết hạn, không cần publish app, không
+  cần scope mới. ⇒ việc tay rút từ *"publish OAuth app"* xuống *"tạo một API
+  key"* (2 phút).
+- ⚠️ Đánh đổi có ý thức: API key chỉ cho số CÔNG KHAI (view/like/comment/
+  subscriber). Watch-time · retention · nguồn traffic thì buộc phải YouTube
+  Analytics API + OAuth. **Đừng đọc bảng rộng hơn thế** — trang đã ghi rõ.
+- `channelId` lấy từ `snippet` của chính video vừa đọc, **không khai thêm env**
+  (một env nữa là một chỗ nữa để quên).
+
+### 🔑 Số là TÍCH LUỸ, không phải theo ngày
+Nền tảng trả tổng từ lúc đăng. Lưu **snapshot mỗi ngày**, muốn "hôm nay thêm
+bao nhiêu" thì lấy hiệu hai ngày. Khoá chính `(channel, external_id, stat_date)`
+⇒ chạy lại trong ngày là upsert đè, không đẻ dòng trùng — để DB từ chối, đừng
+để mã ứng dụng nhớ hộ.
+
+### Ba chốt chép thẳng từ `yt-drain`/`publish.ts`
+1. **Lỗi CHẶN dừng đúng KÊNH đó, kênh khác chạy tiếp.** 84 dòng `yt_error`
+   giống hệt nhau là hậu quả của việc cứ thử mãi một cái cửa đã khoá.
+2. Ngân sách thời gian, dừng giữa hai lượt.
+3. Báo cáo nêu **thẳng nguyên nhân gốc + việc phải làm**. Telegram **chỉ bắn khi
+   có kênh đóng cửa** — ngày nào cũng gửi "đã kéo 15/15" thì hôm có chuyện thật
+   cũng bị lướt qua.
+- **Facebook cố ý dùng `fields=likes.summary(true)…` chứ không dùng `/insights`**:
+  insights đòi thêm `read_insights` trong khi app còn chưa xin xong
+  `pages_manage_posts`. Đổi lại: có tương tác, chưa có reach/impressions.
+- Kênh chưa có bộ đọc (tiktok…) thì **bỏ qua CÓ BÁO** (`skipped`) — im lặng bỏ
+  qua là đúng kiểu hỏng mà không ai biết.
+
+### Verify
+`tsc` 0 · `lint` 0 lỗi / 73 warning · `prettier` sạch · **17/17 bộ dò**.
+- **23/23 bất biến trên MODULE THẬT** (tsc build + chặn `fetch`, không mock hàm
+  nào của module; có assert bản dựng mang code mới): đọc đúng viewCount/
+  subscriber · giữ trỏ ngược `source_table/source_id` · `stat_date` giờ VN ·
+  upsert `merge-duplicates` · **thiếu key → 0 lượt gọi YouTube mà Facebook VẪN
+  chạy** · **403 → thử ĐÚNG 1 lượt** rồi dừng, không hỏi tiếp subscriber · FB
+  token hỏng không kéo theo YouTube · **ĐỐI CHỨNG lỗi RIÊNG một bài thì không
+  chặn cả kênh** · kho rỗng → 0 lượt gọi ra ngoài và report im lặng.
+- **5/5 ca trên ROUTE THẬT** qua Next dev: không auth/sai secret → 401, đúng
+  secret → 200 đúng shape.
+- **45/45 ca trên TRANG THẬT**, chạy **cả hai nhánh**: có số liệu → hiện view/
+  subscriber/bảng xem-nhiều-nhất + cột Xem + sắp theo view gửi `sort=views`;
+  **ĐỐI CHỨNG chưa kéo lượt nào → nói THẲNG "chưa đo" kèm đúng env cần đặt, và
+  KHÔNG hiện con số 0 giả** (bảng 0 view sẽ đọc thành "nội dung không ai xem",
+  trong khi sự thật là chưa từng đo).
+- 🪤 **Hai bẫy đã vấp**: (a) `tsc` nêu file trên dòng lệnh trong khi cwd có
+  `tsconfig.json` → **TS5112**, phải `--ignoreConfig` (bài học đã ghi ở track
+  TypeScript 7, vấp lại); (b) `next dev` **tự ghi lại `next-env.d.ts`** sang
+  `.next/dev/types/` — tác dụng phụ của lượt test, đã revert chứ không commit.
+- 🐞 **tsc bắt được một lỗi thật của tôi**: `{ ok: result.ok, ...result }` —
+  spread đứng sau thì `ok` viết tay bị ghi đè im lặng (TS2783).
+
+### 🔑 VIỆC TAY HENRY (1 việc, ~2 phút — chưa làm thì panel vẫn trống)
+**Tạo YouTube API key**: Google Cloud Console → APIs & Services → Library → bật
+**YouTube Data API v3** → Credentials → **Create credentials → API key** → đặt
+`YOUTUBE_API_KEY` trên Vercel → Redeploy. **KHÔNG cần publish OAuth app** cho
+việc này. Sáng hôm sau 12:30 VN là có số của 15 video + subscriber kênh.
+- Facebook dùng chung `FB_PAGE_ACCESS_TOKEN` với đường đăng bài — đặt env đó là
+  cả hai việc cùng chạy, không phải xin thêm quyền nào.
+
+### CÒN LẠI
+- **Chưa gọi API thật lượt nào** — container không có key, verify dừng ở tầng
+  stub. Chỗ đáng nhìn sau lượt cron đầu: `content_metrics` có 15 dòng không.
+- **Chưa có bộ đọc cho TikTok · Instagram · Threads · Telegram** (cắm thêm vào
+  `FETCHERS` là xong, nhưng chưa kênh nào có bài live để đo).
+- **Không có watch-time / retention / nguồn traffic** — cần Analytics API +
+  OAuth, tức phải publish app. Chỉ làm nếu thật sự cần mấy chiều đó.
+- 🔓 **Nợ bảo mật CÓ SẴN, chưa xử**: `youtube-auth` và `youtube-upload` **hardcode
+  `YOUTUBE_CLIENT_ID` + `YOUTUBE_CLIENT_SECRET` ngay trong source** làm giá trị
+  mặc định. Nên rotate rồi chuyển hẳn sang env — cùng tiền lệ đã phải rotate
+  service_role key Supabase.
+
+---
+
 ## 🕰️ Xác Định Giờ Sinh VỨT ĐI dữ kiện nó vừa bán — và sổ lá số dò form theo TÊN (2026-08-11, PR này)
 
 Henry hỏi ba câu về Sổ lá số: trần bao nhiêu · tool giờ sinh có bước lưu + đi

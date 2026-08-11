@@ -37,7 +37,8 @@
     "test:smoke:ui": "playwright test --config=playwright.smoke.config.ts --ui",
     "lhci": "lhci autorun",
     "check:motifs": "node scripts/check-que-motifs.mjs",
-    "check:terms": "node scripts/check-terms.mjs"
+    "check:terms": "node scripts/check-terms.mjs",
+    "check:publish": "node scripts/check-publish-filter.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.112.2",

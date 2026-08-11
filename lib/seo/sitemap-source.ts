@@ -12,6 +12,7 @@
 
 import { NextResponse } from 'next/server';
 import { lastmodLine } from './lastmod';
+import { PUBLISHED_ONLY, PUBLISH_GATED_TABLES } from '../content/publish-filter';
 
 export const BASE_URL = 'https://www.tuviminhbao.com';
 
@@ -27,8 +28,16 @@ export function rowLastmod(r: SlugRow): string | undefined {
   return r.updated_at || r.created_at;
 }
 
+/** Bảng nào có `publish_status` thì sitemap chỉ được nộp bài ĐANG ĐĂNG.
+ *  `table` ở đây là BIẾN (6 route con dùng chung), nên phải tra danh sách chứ
+ *  không nối cứng chuỗi lọc — hỏi cột không tồn tại là PostgREST trả 400 và
+ *  MẤT IM LẶNG cả một họ URL, đúng cái bẫy `hasUpdatedAt` đã ghi ở trên. */
+function gate(table: string): string {
+  return (PUBLISH_GATED_TABLES as readonly string[]).includes(table) ? `&${PUBLISHED_ONLY}` : '';
+}
+
 async function countRows(table: string): Promise<number> {
-  const res = await fetch(`${SUPABASE_URL}/rest/v1/${table}?select=id&limit=1`, {
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/${table}?select=id&limit=1${gate(table)}`, {
     headers: {
       apikey: SUPABASE_KEY,
       Authorization: `Bearer ${SUPABASE_KEY}`,
@@ -51,7 +60,7 @@ export async function fetchAllSlugs(table: string, hasUpdatedAt = false): Promis
   const results = await Promise.all(
     offsets.map((offset) =>
       fetch(
-        `${SUPABASE_URL}/rest/v1/${table}?select=${cols}&order=id.asc&limit=${pageSize}&offset=${offset}`,
+        `${SUPABASE_URL}/rest/v1/${table}?select=${cols}${gate(table)}&order=id.asc&limit=${pageSize}&offset=${offset}`,
         {
           headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` },
           cache: 'no-store',

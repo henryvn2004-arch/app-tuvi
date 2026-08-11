@@ -1326,6 +1326,8 @@ export async function GET(request: NextRequest) {
   if (action === 'signup-bonus') return handleSignupBonus();
   if (action === 'admin-viral') return handleAdminViral(request, searchParams);
   if (action === 'admin-tool-funnel') return handleAdminToolFunnel(request, searchParams);
+  if (action === 'admin-content-catalog') return handleAdminContentCatalog(request, searchParams);
+  if (action === 'admin-content-one') return handleAdminContentOne(request, searchParams);
   if (action === 'admin-content-pack') return handleAdminContentPack(request, searchParams);
   if (action === 'admin-media-queue') return handleAdminMediaQueue(request, searchParams);
   if (action === 'admin-seeding') return handleAdminSeeding(request);
@@ -1573,6 +1575,144 @@ async function handleAdminViral(request: NextRequest, sp: URLSearchParams): Prom
     });
     if (!res.ok) throw new Error(`viral_loop_funnel: ${await res.text()}`);
     return ok({ viral: await res.json(), from: from.toISOString(), to: to.toISOString() });
+  } catch (e: unknown) { return err((e as Error).message); }
+}
+
+// ── GET: admin-content-catalog (Kho Nội Dung) ────────────────────
+// Gom 6 bảng nội dung (khảo luận · nghiên cứu · video hỏi-đáp · từ điển · tài
+// liệu · sách) về MỘT bảng đọc, kèm cột "đã ra kênh nào".
+//
+// CHỈ ĐỌC — không có đường ghi ngược về 6 bảng nguồn. Sửa nội dung vẫn ở trang
+// Sản Xuất của từng pipeline; kho này để NHÌN, và để thấy phần lớn kho chưa
+// từng ra khỏi website.
+//
+// Action RIÊNG (không nhét vào `admin-marketing`) theo đúng tiền lệ
+// `admin-viral`/`admin-tool-funnel`: chỗ đó đã gánh 8 RPC + một lượt GA4.
+async function handleAdminContentCatalog(request: NextRequest, sp: URLSearchParams): Promise<Response> {
+  const token = (request.headers.get('Authorization') || '').replace('Bearer ', '').trim();
+  const admin = await verifyAdmin(token);
+  if (!admin) return err('Unauthorized', 403);
+
+  const limit = Math.min(Math.max(Number(sp.get('limit') || 50) || 50, 1), 200);
+  const offset = Math.max(Number(sp.get('offset') || 0) || 0, 0);
+
+  const rpc = async (fn: string, body: unknown) => {
+    const r = await fetch(`${SUPABASE_URL}/rest/v1/rpc/${fn}`, {
+      method: 'POST', headers: SB_HEADERS, body: JSON.stringify(body), cache: 'no-store',
+    });
+    if (!r.ok) throw new Error(`${fn}: ${await r.text()}`);
+    return r.json();
+  };
+
+  try {
+    const [stats, list, metrics] = await Promise.all([
+      rpc('content_catalog_stats', {}),
+      rpc('content_catalog_list', {
+        p_kind: sp.get('kind') || null,
+        p_channel: sp.get('channel') || null,
+        p_status: sp.get('status') || null,
+        p_q: sp.get('q') || null,
+        p_limit: limit,
+        p_offset: offset,
+        p_sort: sp.get('sort') || null,
+        p_pub: sp.get('pub') || null,
+      }),
+      rpc('content_metrics_overview', { p_days: 30 }),
+    ]);
+    return ok({ stats, list, metrics, limit, offset });
+  } catch (e: unknown) { return err((e as Error).message); }
+}
+
+// ── POST: admin-content-edit / admin-content-status ──────────────
+// Sửa nội dung + gỡ xuống / đăng lại, ngay trong Kho.
+//
+// 🔴 CHỖ NGUY HIỂM NHẤT của tính năng này: `table` do CLIENT gửi. Ghép thẳng
+// vào đường dẫn PostgREST là mở cửa cho phiên admin ghi vào BẤT KỲ bảng nào
+// (`user_credits`, `admin_users`…). Nên có ALLOWLIST cứng ở dưới, và cả tên
+// CỘT cũng phải nằm trong danh sách trắng — không nhận bừa khoá từ body.
+const EDITABLE: Record<string, { pk: string; cols: string[]; status?: boolean }> = {
+  khao_luan:       { pk: 'id', cols: ['title', 'excerpt', 'category', 'content'], status: true },
+  master_articles: { pk: 'id', cols: ['title', 'excerpt', 'category', 'content'], status: true },
+  tai_lieu:        { pk: 'id', cols: ['title', 'excerpt', 'category', 'content'] },
+  tu_dien:         { pk: 'id', cols: ['ten', 'seo_title', 'seo_desc', 'content'] },
+  sach_library:    { pk: 'id', cols: ['title', 'author', 'excerpt', 'content'] },
+  // ⛔ `van_dap` CỐ Ý không có ở đây: nó đã có trang soạn riêng (YouTube
+  // Studio) với kịch bản/TTS/mix. Dựng bộ sửa thứ hai cho cùng dữ liệu là hai
+  // bản trôi khỏi nhau.
+};
+const PUBLISH_STATES = ['published', 'draft', 'hidden'];
+
+/** Nạp NGUYÊN một bài để sửa. Kho chỉ có tiêu đề; thân bài mới là thứ người ta
+ *  vào đây để sửa, mà kéo `content` cho cả 50 dòng danh sách thì phí. */
+async function handleAdminContentOne(request: NextRequest, sp: URLSearchParams): Promise<Response> {
+  const token = (request.headers.get('Authorization') || '').replace('Bearer ', '').trim();
+  const admin = await verifyAdmin(token);
+  if (!admin) return err('Unauthorized', 403);
+
+  const table = sp.get('table') || '';
+  const id = sp.get('id') || '';
+  const spec = EDITABLE[table];
+  if (!spec) return err(`Không đọc được bảng "${table}" từ Kho`, 400);
+  if (!id) return err('Thiếu id', 400);
+
+  const cols = [spec.pk, ...spec.cols, ...(spec.status ? ['publish_status', 'updated_at', 'updated_by'] : [])];
+  try {
+    const r = await fetch(
+      `${SUPABASE_URL}/rest/v1/${table}?${encodeURIComponent(spec.pk)}=eq.${encodeURIComponent(id)}` +
+        `&select=${cols.join(',')}&limit=1`,
+      { headers: SB_HEADERS, cache: 'no-store' },
+    );
+    if (!r.ok) throw new Error(await r.text());
+    const rows = (await r.json()) as unknown[];
+    if (!rows.length) return err('Không tìm thấy bản ghi', 404);
+    return ok({ row: rows[0] });
+  } catch (e: unknown) { return err((e as Error).message); }
+}
+
+async function handleAdminContentEdit(request: NextRequest, body: Record<string, unknown>): Promise<Response> {
+  const token = (request.headers.get('Authorization') || '').replace('Bearer ', '').trim();
+  const admin = await verifyAdmin(token);
+  if (!admin) return err('Unauthorized', 403);
+
+  const table = String(body.table || '');
+  const id = String(body.id || '');
+  const spec = EDITABLE[table];
+  if (!spec) return err(`Không sửa được bảng "${table}" từ Kho`, 400);
+  if (!id) return err('Thiếu id', 400);
+
+  const patch: Record<string, unknown> = {};
+  for (const c of spec.cols) {
+    if (body[c] !== undefined) patch[c] = body[c] === null ? null : String(body[c]);
+  }
+  if (body.publish_status !== undefined) {
+    if (!spec.status) return err(`Bảng "${table}" không có trạng thái xuất bản`, 400);
+    const st = String(body.publish_status);
+    if (!PUBLISH_STATES.includes(st)) return err('Trạng thái không hợp lệ', 400);
+    patch.publish_status = st;
+  }
+  if (!Object.keys(patch).length) return err('Không có gì để sửa', 400);
+
+  // Chỉ hai bảng đó có `updated_at`/`updated_by` — hỏi cột không tồn tại là
+  // PostgREST trả 400 và lượt sửa hỏng nguyên.
+  if (spec.status) {
+    patch.updated_at = new Date().toISOString();
+    patch.updated_by = admin.email || 'admin';
+  }
+
+  try {
+    const r = await fetch(
+      `${SUPABASE_URL}/rest/v1/${table}?${encodeURIComponent(spec.pk)}=eq.${encodeURIComponent(id)}`,
+      {
+        method: 'PATCH',
+        headers: { ...SB_HEADERS, Prefer: 'return=representation' },
+        body: JSON.stringify(patch),
+        cache: 'no-store',
+      },
+    );
+    if (!r.ok) throw new Error(await r.text());
+    const rows = (await r.json()) as unknown[];
+    if (!rows.length) return err('Không tìm thấy bản ghi', 404);
+    return ok({ updated: Object.keys(patch), row: rows[0] });
   } catch (e: unknown) { return err((e as Error).message); }
 }
 
@@ -2208,6 +2348,7 @@ export async function POST(request: NextRequest) {
   if (action === 'admin-channel-broadcast') return handleAdminChannelBroadcast(request, body);
   if (action === 'admin-nudge-user') return handleAdminNudgeUser(request, body);
   if (action === 'admin-media-decide') return handleAdminMediaDecide(request, body);
+  if (action === 'admin-content-edit') return handleAdminContentEdit(request, body);
   if (action === 'admin-seeding-group') return handleAdminSeedingGroup(request, body);
   if (action === 'admin-seeding-draft') return handleAdminSeedingDraft(request, body);
   if (action === 'admin-khao-luan-topics') return handleAdminKhaoLuanTopics(request, body);

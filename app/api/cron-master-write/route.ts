@@ -9,6 +9,7 @@ import { parseLlmJson } from '@/lib/llm/json';
 import { withCronLog } from '@/lib/cron/log';
 import { brandCheck } from '@/lib/content/brand-check';
 import { BRAND_FORMAT_RULES } from '@/lib/content/brand-rules';
+import { initialPublishStatus } from '@/lib/content/publish-filter';
 
 const SUPABASE_URL  = process.env.SUPABASE_URL!;
 const SUPABASE_KEY  = process.env.SUPABASE_SERVICE_KEY!;
@@ -444,6 +445,7 @@ async function handle(request: NextRequest) {
           storyboard: storyboard,
           word_count: wordCount,
           created_at: new Date().toISOString(),
+          publish_status: await initialPublishStatus(),
         }),
       });
 

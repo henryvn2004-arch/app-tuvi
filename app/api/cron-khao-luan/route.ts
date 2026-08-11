@@ -12,6 +12,7 @@ import { parseLlmJson } from '@/lib/llm/json';
 import { withCronLog } from '@/lib/cron/log';
 import { brandCheck } from '@/lib/content/brand-check';
 import { BRAND_FORMAT_RULES } from '@/lib/content/brand-rules';
+import { initialPublishStatus } from '@/lib/content/publish-filter';
 
 const SUPABASE_URL  = process.env.SUPABASE_URL!;
 const SUPABASE_KEY  = process.env.SUPABASE_SERVICE_KEY!;
@@ -180,8 +181,10 @@ async function handle(request: NextRequest) {
       article.slug = slug;
 
       // ── BRAND-CHECK GATE — bước QC cuối cùng còn chặn được ──────────────────
-      // `khao_luan` không có cột publish_status: POST xong là bài LÊN THẲNG
-      // trang. Nên gate phải đứng ĐÚNG ở đây, ngay trước sbFetch bên dưới.
+      // `khao_luan` nay CÓ `publish_status`, nhưng mặc định vẫn là 'published'
+      // (xem `initialPublishStatus`) ⇒ POST xong bài vẫn LÊN THẲNG trang trừ
+      // khi bật `content.require_review`. Nên gate vẫn phải đứng ĐÚNG ở đây,
+      // ngay trước sbFetch bên dưới — đừng trông vào bước duyệt tay.
       // Gate tự autofix phần máy móc và trả về `gate.content` đã sửa; ở mode
       // 'warn' (mặc định) nó không chặn, chỉ ghi `content_qc_log`.
       const gate = await brandCheck({
@@ -207,7 +210,7 @@ async function handle(request: NextRequest) {
 
       const saved = await sbFetch('/khao_luan', {
         method:'POST', headers:{'Prefer':'resolution=ignore-duplicates'},
-        body:JSON.stringify({slug:article.slug, title:article.title, excerpt:article.excerpt, category:article.category, tags:article.tags, featured:article.featured||false, content:article.content, master_id:masterId, created_at:new Date().toISOString()}),
+        body:JSON.stringify({slug:article.slug, title:article.title, excerpt:article.excerpt, category:article.category, tags:article.tags, featured:article.featured||false, content:article.content, master_id:masterId, created_at:new Date().toISOString(), publish_status: await initialPublishStatus()}),
       });
       if (saved.ok) { results.saved++; await updateStatus(t.id, 'done'); }
       else { results.errors.push(`DB: ${JSON.stringify(saved.body).slice(0,80)}`); await updateStatus(t.id, 'error'); }

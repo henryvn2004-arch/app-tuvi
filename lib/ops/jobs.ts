@@ -147,6 +147,12 @@ export const JOBS: JobSpec[] = [
   { key: 'seeding-build', label: 'Soạn bài seeding group', source: 'vercel', everyMinutes: D,
     schedule: '08:30 VN hằng ngày', sink: 'seeding_drafts', trigger: true,
     since: '2026-08-03' },
+  // Tầng dữ liệu còn thiếu của trang Kho: trước job này site không đo được một
+  // số liệu nào từ nền tảng. `since` = ngày merge — job chưa từng chạy nên
+  // `cron_runs` trống, thiếu mốc này là bộ dò kêu ngay "CHƯA HỀ chạy".
+  { key: 'content-metrics', label: 'Kéo số liệu nội dung', source: 'vercel', everyMinutes: D,
+    schedule: '12:30 VN hằng ngày', sink: 'content_metrics + channel_stats', trigger: true,
+    since: '2026-08-11' },
 ];
 
 export interface CronRun {
