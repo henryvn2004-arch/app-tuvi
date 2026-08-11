@@ -301,31 +301,50 @@ a { color: var(--blue); text-decoration: none; }
    đó và ô chat là HAI lời mời cùng dẫn về một đích, xếp dọc nhau trên điện thoại
    và cách nhau bởi dòng chữ Hán, nên người dùng phải chọn giữa hai thứ giống hệt
    nhau. Nay ô chat là lối chính, nút này là lối cho ai muốn tự đi.
-   Nền nổi rõ trên navy (bản đầu để rgba(255,255,255,.05) nên gần như tàng hình),
-   hover thì sáng hẳn + nhấc nhẹ. */
+
+   🔴 NỀN VÀNG ĐẶC, không phải vàng trong suốt. Hai bản trước dùng
+   `rgba(201,168,76,.20)` chồng lên nền navy — trộn ra rgb(92,104,86), tức một
+   màu ô-liu xỉn chứ KHÔNG phải vàng, nên nút gần như chìm vào hero. Phủ mờ một
+   màu sáng lên nền tối thì nó tối theo nền; muốn nổi thì phải phủ ĐẶC.
+
+   Chữ vì thế đổi sang NAVY (trắng trên vàng chỉ được ~2:1, không đọc nổi ngoài
+   nắng). Đo được: tiêu đề 6,7:1 · dòng phụ 5,1:1 — cả hai qua AA. */
 .hero-open {
-  display: flex; align-items: center; gap: 11px; width: 100%; text-align: left;
-  margin-top: 14px; padding: 12px 14px; border-radius: 13px; cursor: pointer;
-  font: inherit; color: inherit;
-  background: linear-gradient(135deg, rgba(201,168,76,0.20), rgba(201,168,76,0.09));
-  border: 1px solid rgba(201,168,76,0.52);
-  box-shadow: 0 2px 12px rgba(0,0,0,0.18);
-  transition: background .2s, border-color .2s, box-shadow .2s, transform .2s;
+  display: flex; align-items: center; gap: 12px; width: 100%; text-align: left;
+  margin-top: 16px; padding: 13px 16px; border-radius: 13px; cursor: pointer;
+  font: inherit;
+  background: linear-gradient(135deg, #EBD08C 0%, #C9A84C 100%);
+  border: 1px solid #F0DEA8;
+  animation: ho-pulse 2.8s ease-in-out infinite;
+  transition: background .2s, transform .2s;
+}
+/* Quầng sáng THỞ, cố ý không phải chớp tắt: nhịp 2,8s cùng họ với orb (3,6s),
+   đọc ra là "đang sống, mời bấm". Chớp cứng thì đọc ra là quảng cáo và người
+   ta học cách nhìn lơ nó đi.
+   ⚠️ Chỉ animate `box-shadow` — nó KHÔNG chiếm chỗ trong bố cục nên không đội
+   CLS (trang chủ đang 0.0711 trên ngưỡng 0.1, đừng để tụt lại). */
+@keyframes ho-pulse {
+  0%, 100% { box-shadow: 0 3px 14px rgba(0,0,0,.28), 0 0 0 0 rgba(201,168,76,.40); }
+  50%      { box-shadow: 0 3px 14px rgba(0,0,0,.28), 0 0 28px 7px rgba(232,206,126,.58); }
 }
 .hero-open:hover, .hero-open:focus-visible {
-  background: linear-gradient(135deg, rgba(232,206,126,0.34), rgba(201,168,76,0.18));
-  border-color: var(--gold-bright);
-  box-shadow: 0 4px 20px rgba(201,168,76,0.30);
+  background: linear-gradient(135deg, #F6E3AE 0%, #DCBB5C 100%);
+  animation-duration: 1.4s;
   transform: translateY(-1px); outline: none;
 }
-.hero-open .ho-t { font-family: 'Noto Serif', Georgia, serif; font-size: 15px; color: #fff; display: block; }
-.hero-open .ho-s { font-size: 11.5px; color: rgba(249,244,235,0.72); display: block; margin-top: 2px; }
+.hero-open .ho-t { font-family: 'Noto Serif', Georgia, serif; font-size: 15.5px; font-weight: 600; color: #061A2E; display: block; }
+/* 0.78 chứ không phải 0.68: ở mức 0.68 thì dòng này rơi xuống 4,17:1 trên ĐẦU
+   TỐI của gradient (#C9A84C) — dưới AA. Đo phải lấy đầu tối, vì chữ ở đây là
+   chữ tối; đo mỗi đầu sáng là tự cho mình điểm cao. */
+.hero-open .ho-s { font-size: 11.5px; color: rgba(6,26,46,0.78); display: block; margin-top: 2px; }
 /* Khổ CỐ ĐỊNH, khai trước cả khi orb được JS chèn vào. Thiếu hai dòng này thì ô
    rộng 0 lúc tải rồi nhảy lên 34px khi module orb nạp xong — đẩy chữ trong nút
    sang phải và đội CLS của trang chủ lên 0.12 (ngưỡng Lighthouse là 0.1). */
 .hero-open .ho-orb { flex-shrink: 0; display: flex; width: 34px; height: 34px; }
 @media (prefers-reduced-motion: reduce) {
-  .hero-open { transition: none; }
+  /* Tắt nhịp thở nhưng GIỮ quầng sáng ở mức đậm nhất — người tắt hiệu ứng vẫn
+     phải thấy nút này nổi, chỉ là nó đứng yên. */
+  .hero-open { animation: none; transition: none; box-shadow: 0 3px 14px rgba(0,0,0,.28), 0 0 22px 4px rgba(232,206,126,.5); }
   .hero-open:hover { transform: none; }
 }
 .hero-skills {
