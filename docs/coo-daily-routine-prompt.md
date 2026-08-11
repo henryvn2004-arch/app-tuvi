@@ -66,5 +66,26 @@ Rồi 4 khối 🩺 TOOL · ⏰ JOB · 💰 TIỀN · 🔒 BẢO MẬT, mỗi kh
 Mục nào bình thường thì MỘT dòng gọn là đủ — vẫn phải nêu, vì đây là bản điểm danh: im lặng phải có nghĩa. Không tô vẽ, không khuyến nghị chung chung.
 Cuối cùng, nếu có mục 🔴/🟡: nêu đúng việc cần làm tiếp, kèm bảng/hàm cần soi. Nếu tất cả xanh: kết thúc luôn, không thêm gì.
 
-Nếu một truy vấn lỗi: nói THẲNG là không đọc được phần đó (đừng bỏ qua im lặng — mù mà tưởng khoẻ chính là lỗi mà hệ giám sát này sinh ra để tránh).
+Nếu một truy vấn lỗi: nói THẲNG là không đọc được phần đó (đừng bỏ qua im lặng — mù mà tưởng khoẻ chính là lỗi mà hệ giám sát này sinh ra để tránh). Nếu phiên này KHÔNG có Supabase MCP thì báo đúng một câu "không truy cập được nguồn dữ liệu, chưa kiểm tra được gì" rồi dừng — tuyệt đối không đoán trạng thái hệ thống từ trí nhớ.
 ```
+
+## 🪤 Vì sao phải có nhánh "không có Supabase MCP"
+
+Routine này **tạo phiên mới mỗi lượt**, mà tham số `connectors` thì org từ chối
+⇒ không có cách nào bảo đảm phiên đó được cấp Supabase MCP. Thiếu nhánh này,
+lượt chạy mất MCP sẽ rơi vào chỗ tệ nhất: model **luận trạng thái hệ thống từ
+trí nhớ** rồi phát ra một bản báo cáo trông y hệt bản thật.
+
+Cùng một họ với luật "bảng rỗng ≠ mọi tool đều khoẻ" ở khối 🩺: bộ giám sát nói
+sai còn nguy hơn bộ giám sát im, vì cái im thì người ta còn nghi.
+
+## ✅ Luật của COO miễn nhiễm với "lịch trôi"
+
+`cmo-daily-routine-prompt.md` ghi lại một bẫy đã sập thật: sáng 07/08 routine CMO
+bắn lúc 06:51 thay vì 08:10, tức **trước** cron nó phụ thuộc, và suýt phát một
+cảnh báo oan.
+
+COO **không dính** vì luật ở đây là *luôn tính LIVE, cấm đọc event `ops_digest`*
+— trôi sớm hay muộn thì kết quả vẫn đúng. Nhạy với trôi là những prompt phải ĐỌC
+sản phẩm của một cron khác; COO cố ý không đọc gì cả. Giữ tính chất này khi sửa
+prompt: đừng "tối ưu" bằng cách cho nó đọc `ops_digest` cho nhanh.
