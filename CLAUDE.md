@@ -84,12 +84,7 @@ sạch · **17/17 bộ dò** · 4/4 khối script nội tuyến `node --check`.
   ẩn và bài kiểm treo 30 giây ở một selector "không hiện".
 
 ### CÒN LẠI
-- **Chưa có một số liệu nền tảng nào** (view/like/subscriber). Bước 2 đã chốt
-  hướng: cron kéo YouTube Analytics (dùng luôn OAuth đang có) + Meta Insights,
-  ghi vào một bảng `content_metrics` theo ngày. ⚠️ Chặn bởi **2 việc tay**:
-  publish OAuth app trong Google Cloud (đang ở Testing ⇒ refresh token chết sau
-  7 ngày, 86 video lỗi `invalid_grant`) và đặt `FB_PAGE_ID` + xin
-  `pages_manage_posts` (30 bài đang kẹt).
+- ✅ **Tầng số liệu ĐÃ DỰNG** — xem mục ngay dưới. Chỉ còn 1 việc tay.
 - **Nợ MÀU của admin.css**, cố ý không trộn vào PR này: `--green`/`--blue`
   không khai lại trong khối `[data-theme="dark"]` nên mọi `.badge-green`/
   `.stat.green` chìm ở dark. Đụng vào là đụng mọi trang admin.
@@ -98,6 +93,90 @@ sạch · **17/17 bộ dò** · 4/4 khối script nội tuyến `node --check`.
   sửa ngược thì phải viết đường ghi về 6 bảng, chưa làm.
 - TikTok/Zalo chưa có kênh thật; bộ lọc kênh đã có sẵn giá trị, cắm adapter vào
   là tự hiện.
+
+---
+
+## 📊 Số liệu nền tảng: YouTube đi bằng API KEY, KHÔNG dùng OAuth (2026-08-11, cùng PR)
+
+Bước 2 của track Kho. Trước mục này site **chưa từng đo** một số liệu nào từ bên
+ngoài — 15 video đang live mà không biết được bao nhiêu view.
+
+### 🔑 Quyết định quan trọng nhất: KHÔNG buộc số liệu vào OAuth đang có
+Đường upload (`youtube-upload` edge function) chạy refresh token, mà app còn ở
+chế độ **Testing** trong Google Cloud ⇒ token chết sau 7 ngày (86 video đang
+`invalid_grant` vì đúng chuyện đó). Buộc số liệu vào cùng cái token ấy là **số
+liệu chết theo, và bước 2 bị chặn bởi cùng một việc tay đang chặn bước trước**.
+- `videos.list?part=statistics` + `channels.list?part=statistics` cho nội dung
+  CÔNG KHAI **chỉ cần API key** — không hết hạn, không cần publish app, không
+  cần scope mới. ⇒ việc tay rút từ *"publish OAuth app"* xuống *"tạo một API
+  key"* (2 phút).
+- ⚠️ Đánh đổi có ý thức: API key chỉ cho số CÔNG KHAI (view/like/comment/
+  subscriber). Watch-time · retention · nguồn traffic thì buộc phải YouTube
+  Analytics API + OAuth. **Đừng đọc bảng rộng hơn thế** — trang đã ghi rõ.
+- `channelId` lấy từ `snippet` của chính video vừa đọc, **không khai thêm env**
+  (một env nữa là một chỗ nữa để quên).
+
+### 🔑 Số là TÍCH LUỸ, không phải theo ngày
+Nền tảng trả tổng từ lúc đăng. Lưu **snapshot mỗi ngày**, muốn "hôm nay thêm
+bao nhiêu" thì lấy hiệu hai ngày. Khoá chính `(channel, external_id, stat_date)`
+⇒ chạy lại trong ngày là upsert đè, không đẻ dòng trùng — để DB từ chối, đừng
+để mã ứng dụng nhớ hộ.
+
+### Ba chốt chép thẳng từ `yt-drain`/`publish.ts`
+1. **Lỗi CHẶN dừng đúng KÊNH đó, kênh khác chạy tiếp.** 84 dòng `yt_error`
+   giống hệt nhau là hậu quả của việc cứ thử mãi một cái cửa đã khoá.
+2. Ngân sách thời gian, dừng giữa hai lượt.
+3. Báo cáo nêu **thẳng nguyên nhân gốc + việc phải làm**. Telegram **chỉ bắn khi
+   có kênh đóng cửa** — ngày nào cũng gửi "đã kéo 15/15" thì hôm có chuyện thật
+   cũng bị lướt qua.
+- **Facebook cố ý dùng `fields=likes.summary(true)…` chứ không dùng `/insights`**:
+  insights đòi thêm `read_insights` trong khi app còn chưa xin xong
+  `pages_manage_posts`. Đổi lại: có tương tác, chưa có reach/impressions.
+- Kênh chưa có bộ đọc (tiktok…) thì **bỏ qua CÓ BÁO** (`skipped`) — im lặng bỏ
+  qua là đúng kiểu hỏng mà không ai biết.
+
+### Verify
+`tsc` 0 · `lint` 0 lỗi / 73 warning · `prettier` sạch · **17/17 bộ dò**.
+- **23/23 bất biến trên MODULE THẬT** (tsc build + chặn `fetch`, không mock hàm
+  nào của module; có assert bản dựng mang code mới): đọc đúng viewCount/
+  subscriber · giữ trỏ ngược `source_table/source_id` · `stat_date` giờ VN ·
+  upsert `merge-duplicates` · **thiếu key → 0 lượt gọi YouTube mà Facebook VẪN
+  chạy** · **403 → thử ĐÚNG 1 lượt** rồi dừng, không hỏi tiếp subscriber · FB
+  token hỏng không kéo theo YouTube · **ĐỐI CHỨNG lỗi RIÊNG một bài thì không
+  chặn cả kênh** · kho rỗng → 0 lượt gọi ra ngoài và report im lặng.
+- **5/5 ca trên ROUTE THẬT** qua Next dev: không auth/sai secret → 401, đúng
+  secret → 200 đúng shape.
+- **45/45 ca trên TRANG THẬT**, chạy **cả hai nhánh**: có số liệu → hiện view/
+  subscriber/bảng xem-nhiều-nhất + cột Xem + sắp theo view gửi `sort=views`;
+  **ĐỐI CHỨNG chưa kéo lượt nào → nói THẲNG "chưa đo" kèm đúng env cần đặt, và
+  KHÔNG hiện con số 0 giả** (bảng 0 view sẽ đọc thành "nội dung không ai xem",
+  trong khi sự thật là chưa từng đo).
+- 🪤 **Hai bẫy đã vấp**: (a) `tsc` nêu file trên dòng lệnh trong khi cwd có
+  `tsconfig.json` → **TS5112**, phải `--ignoreConfig` (bài học đã ghi ở track
+  TypeScript 7, vấp lại); (b) `next dev` **tự ghi lại `next-env.d.ts`** sang
+  `.next/dev/types/` — tác dụng phụ của lượt test, đã revert chứ không commit.
+- 🐞 **tsc bắt được một lỗi thật của tôi**: `{ ok: result.ok, ...result }` —
+  spread đứng sau thì `ok` viết tay bị ghi đè im lặng (TS2783).
+
+### 🔑 VIỆC TAY HENRY (1 việc, ~2 phút — chưa làm thì panel vẫn trống)
+**Tạo YouTube API key**: Google Cloud Console → APIs & Services → Library → bật
+**YouTube Data API v3** → Credentials → **Create credentials → API key** → đặt
+`YOUTUBE_API_KEY` trên Vercel → Redeploy. **KHÔNG cần publish OAuth app** cho
+việc này. Sáng hôm sau 12:30 VN là có số của 15 video + subscriber kênh.
+- Facebook dùng chung `FB_PAGE_ACCESS_TOKEN` với đường đăng bài — đặt env đó là
+  cả hai việc cùng chạy, không phải xin thêm quyền nào.
+
+### CÒN LẠI
+- **Chưa gọi API thật lượt nào** — container không có key, verify dừng ở tầng
+  stub. Chỗ đáng nhìn sau lượt cron đầu: `content_metrics` có 15 dòng không.
+- **Chưa có bộ đọc cho TikTok · Instagram · Threads · Telegram** (cắm thêm vào
+  `FETCHERS` là xong, nhưng chưa kênh nào có bài live để đo).
+- **Không có watch-time / retention / nguồn traffic** — cần Analytics API +
+  OAuth, tức phải publish app. Chỉ làm nếu thật sự cần mấy chiều đó.
+- 🔓 **Nợ bảo mật CÓ SẴN, chưa xử**: `youtube-auth` và `youtube-upload` **hardcode
+  `YOUTUBE_CLIENT_ID` + `YOUTUBE_CLIENT_SECRET` ngay trong source** làm giá trị
+  mặc định. Nên rotate rồi chuyển hẳn sang env — cùng tiền lệ đã phải rotate
+  service_role key Supabase.
 
 ---
 

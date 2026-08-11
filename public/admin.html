@@ -1374,6 +1374,14 @@
 
         <div class="panel">
           <div class="panel-header">
+            <div class="panel-title"><svg class="pt-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><polyline points="7 14 11 9 15 12 21 5"/></svg>Hiệu Suất Kênh</div>
+            <div class="panel-actions" style="font-size:.72rem;color:var(--text-lt)" id="wh-met-when"></div>
+          </div>
+          <div class="panel-body" id="wh-metrics"><div class="empty">Đang tải…</div></div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
             <div class="panel-title"><svg class="pt-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>Danh Sách</div>
             <div class="panel-actions" style="display:flex;gap:8px;flex-wrap:wrap">
               <input class="search-input" id="wh-q" placeholder="Tìm tiêu đề…" style="width:190px" onkeydown="if(event.key==='Enter'){whGo(0)}">
@@ -1401,6 +1409,10 @@
                 <option value="telegram">Telegram</option>
                 <option value="tiktok">TikTok</option>
                 <option value="fb-group">FB Group</option>
+              </select>
+              <select class="search-input" id="wh-sort" style="width:150px" onchange="whGo(0)">
+                <option value="">Mới nhất trước</option>
+                <option value="views">Nhiều view nhất</option>
               </select>
               <button class="btn btn-primary btn-sm" onclick="whGo(0)">↻</button>
             </div>
@@ -2313,7 +2325,63 @@ function whParams(offset) {
     `&kind=${encodeURIComponent(g('wh-kind'))}` +
     `&status=${encodeURIComponent(g('wh-status'))}` +
     `&channel=${encodeURIComponent(g('wh-channel'))}` +
+    `&sort=${encodeURIComponent(g('wh-sort'))}` +
     `&q=${encodeURIComponent(g('wh-q'))}`;
+}
+
+/**
+ * Hiệu suất kênh. Chưa kéo lượt nào thì nói THẲNG là chưa có số + chỉ đúng
+ * việc phải làm — hiện một bảng 0 view sẽ đọc thành "nội dung không ai xem",
+ * mà sự thật là mình chưa từng đo.
+ */
+function renderWhMetrics(m) {
+  const host = document.getElementById('wh-metrics');
+  const when = document.getElementById('wh-met-when');
+  if (!m || !m.has_data) {
+    when.textContent = '';
+    host.innerHTML = `<div class="empty" style="text-align:left;line-height:1.7">
+      <strong>Chưa kéo được số liệu nào từ nền tảng.</strong><br>
+      Cron <code>content-metrics</code> chạy 12:30 VN hằng ngày, nhưng cần
+      <code>YOUTUBE_API_KEY</code> trên Vercel mới đọc được view/like/subscriber
+      của YouTube (KHÔNG cần publish OAuth app cho việc này).<br>
+      Facebook cần <code>FB_PAGE_ACCESS_TOKEN</code> — cùng token đang cần cho đường đăng bài.
+    </div>`;
+    return;
+  }
+  when.textContent = m.last_run ? 'Đo lần cuối: ' + new Date(m.last_run).toLocaleString('vi-VN') : '';
+  const nf = n => (n === null || n === undefined) ? '—' : Number(n).toLocaleString('vi-VN');
+  const chans = (m.by_channel || []).map(c => `<tr>
+      <td>${escHtmlLocal(c.channel)}</td>
+      <td style="text-align:right">${nf(c.items)}</td>
+      <td style="text-align:right"><strong>${nf(c.views)}</strong></td>
+      <td style="text-align:right">${nf(c.likes)}</td>
+      <td style="text-align:right">${nf(c.comments)}</td>
+      <td style="text-align:right">${nf(c.followers)}</td>
+    </tr>`).join('');
+  const top = (m.top || []).map((t, i) => {
+    const url = /^https?:\/\//i.test(t.url || '') ? t.url : '';
+    const title = escHtmlLocal(t.title || t.external_id || '—');
+    return `<tr>
+      <td style="color:var(--text-lt)">${i + 1}</td>
+      <td>${url ? `<a href="${escHtmlLocal(url)}" target="_blank" rel="noopener" style="color:var(--text);text-decoration:underline">${title}</a>` : title}</td>
+      <td>${escHtmlLocal(t.channel)}</td>
+      <td style="text-align:right"><strong>${nf(t.views)}</strong></td>
+      <td style="text-align:right">${nf(t.likes)}</td>
+    </tr>`;
+  }).join('');
+  host.innerHTML = `
+    <table><thead><tr><th>Kênh</th><th style="text-align:right">Bài đo được</th>
+      <th style="text-align:right">Lượt xem</th><th style="text-align:right">Thích</th>
+      <th style="text-align:right">Bình luận</th><th style="text-align:right">Theo dõi</th></tr></thead>
+      <tbody>${chans || '<tr><td class="empty">—</td></tr>'}</tbody></table>
+    <div style="font-size:.72rem;color:var(--text-lt);margin:.5rem 0 1rem">
+      Số là <strong>tích luỹ từ lúc đăng</strong>, không phải theo ngày.
+      Nguồn: số công khai của nền tảng — chưa có watch-time / retention / nguồn traffic.
+    </div>
+    ${top ? `<div class="td-title" style="margin-bottom:.4rem">Xem nhiều nhất</div>
+      <table><thead><tr><th></th><th>Tác phẩm</th><th>Kênh</th>
+        <th style="text-align:right">Lượt xem</th><th style="text-align:right">Thích</th></tr></thead>
+        <tbody>${top}</tbody></table>` : ''}`;
 }
 
 function whGo(offset) { _whOffset = Math.max(0, offset || 0); loadWarehouse(); }
@@ -2370,8 +2438,11 @@ async function loadWarehouse() {
     </tr>`).join('')}</tbody></table>`
     : '<div class="empty">Chưa bản nào ra khỏi website</div>';
 
+  renderWhMetrics(data && data.metrics);
+
   tbl.innerHTML = `
-    <thead><tr><th>Tiêu đề</th><th>Loại</th><th>Kênh</th><th style="text-align:right">Ngày tạo</th></tr></thead>
+    <thead><tr><th>Tiêu đề</th><th>Loại</th><th>Kênh</th>
+      <th style="text-align:right">Xem</th><th style="text-align:right">Ngày tạo</th></tr></thead>
     <tbody>${rows.length ? rows.map(r => {
       const chans = (r.channels || []).map(c => {
         const cls = c.status === 'live' ? 'badge-green' : (c.status === 'error' ? 'badge-error' : 'badge-warn');
@@ -2390,9 +2461,10 @@ async function loadWarehouse() {
         <td>${url ? `<a href="${escHtmlLocal(url)}" target="_blank" rel="noopener" style="color:var(--text);text-decoration:underline">${title}</a>` : title}</td>
         <td><span class="badge">${escHtmlLocal(WH_KIND_LABEL[r.kind] || r.kind)}</span></td>
         <td>${chans}</td>
+        <td style="text-align:right;white-space:nowrap">${r.views === null || r.views === undefined ? '<span style="color:var(--text-lt)">—</span>' : Number(r.views).toLocaleString('vi-VN')}</td>
         <td style="text-align:right;white-space:nowrap">${r.created_at ? new Date(r.created_at).toLocaleDateString('vi-VN') : '—'}</td>
       </tr>`;
-    }).join('') : '<tr><td class="empty">Không có bản nào khớp bộ lọc</td></tr>'}</tbody>`;
+    }).join('') : '<tr><td class="empty" colspan="5">Không có bản nào khớp bộ lọc</td></tr>'}</tbody>`;
 
   const shown = Number(list.total || 0);
   const from = shown ? _whOffset + 1 : 0;

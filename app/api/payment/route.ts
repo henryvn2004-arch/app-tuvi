@@ -1604,7 +1604,7 @@ async function handleAdminContentCatalog(request: NextRequest, sp: URLSearchPara
   };
 
   try {
-    const [stats, list] = await Promise.all([
+    const [stats, list, metrics] = await Promise.all([
       rpc('content_catalog_stats', {}),
       rpc('content_catalog_list', {
         p_kind: sp.get('kind') || null,
@@ -1613,9 +1613,11 @@ async function handleAdminContentCatalog(request: NextRequest, sp: URLSearchPara
         p_q: sp.get('q') || null,
         p_limit: limit,
         p_offset: offset,
+        p_sort: sp.get('sort') || null,
       }),
+      rpc('content_metrics_overview', { p_days: 30 }),
     ]);
-    return ok({ stats, list, limit, offset });
+    return ok({ stats, list, metrics, limit, offset });
   } catch (e: unknown) { return err((e as Error).message); }
 }
 
