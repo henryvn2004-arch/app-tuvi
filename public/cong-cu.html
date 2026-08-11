@@ -61,22 +61,15 @@
   "applicationCategory": "LifestyleApplication",
   "operatingSystem": "Web",
   "inLanguage": "vi",
-  "description": "Xem lá số Tử Vi Đẩu Số online miễn phí theo cổ pháp — an sao chính xác, phân tích 12 cung, 9 đại vận, tiểu vận từng năm, cách cục đặc biệt. Luận giải AI chuyên sâu 24 phần bằng tiếng Việt.",
+  "description": "Xem lá số Tử Vi Đẩu Số online theo cổ pháp — an sao chính xác, phân tích 12 cung, 9 đại vận, tiểu vận từng năm, cách cục đặc biệt. Luận giải AI chuyên sâu 24 phần bằng tiếng Việt.",
   "featureList": [
     "An sao Tử Vi Đẩu Số theo cổ pháp",
     "Phân tích 12 cung, chính tinh, phụ tinh",
     "9 đại vận và tiểu vận từng năm",
     "Cách cục đặc biệt từ 200+ database",
     "Luận giải AI 24 phần chuyên sâu",
-    "Xem vận hạn theo năm (namXem)",
-    "Miễn phí xem lá số cơ bản"
+    "Xem vận hạn theo năm (namXem)"
   ],
-  "offers": {
-    "@type": "Offer",
-    "price": "0",
-    "priceCurrency": "VND",
-    "description": "Xem lá số miễn phí, mở khóa luận giải AI với phí"
-  },
   "audience": {
     "@type": "Audience",
     "geographicArea": "Vietnam",
@@ -566,7 +559,10 @@ a { color: var(--blue); text-decoration: none; }
       <button class="tab-btn" data-tab="chon-ngay">Chọn Ngày</button>
       <button class="tab-btn" data-tab="dat-ten">Đặt Tên</button>
       <button class="tab-btn" data-tab="cong-cu">Công Cụ</button>
-      <button class="tab-btn" data-tab="mien-phi">Miễn Phí <span class="tab-count" id="freeCount">28</span></button>
+      <!-- Số để trống tới khi đọc xong `tool_pricing` (loadTools điền vào). Trước
+           đây chép cứng "28" nên trang chớp một con số sai rồi mới sửa — cùng luật
+           với `check:prices`: chưa đọc được thì để "…", KHÔNG đoán. -->
+      <button class="tab-btn" data-tab="mien-phi">Miễn Phí <span class="tab-count" id="freeCount">…</span></button>
     </div>
   </div>
 </div>
