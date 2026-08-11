@@ -5,6 +5,65 @@
 
 ---
 
+## ▶️ "Chạy ngay" trả *Unknown job* — cùng một lỗi, lần thứ BA (2026-08-11, PR này)
+
+Henry bấm *Chạy ngay* cho `media-build` và `yt-drain` → **`Lỗi: Unknown job`**.
+
+### 🔴 Không phải job hỏng — nút bấm chưa bao giờ nối được tới chúng
+Panel dựng nút theo cờ `trigger` trong **sổ job** (`lib/ops/jobs.ts`, 20 job),
+còn server định tuyến bằng **một bảng chép tay khác** (`CRON_TRIGGERS` trong
+`app/api/payment/route.ts`, **11 job**). ⇒ 9 job hiện nút mà bấm ra lỗi:
+`health-check` · `content-pack` · `prune-anon-trial` · `keyword-suggest` ·
+`topic-topup` · `yt-drain` · `media-build` · `seeding-build` · `content-metrics`.
+
+### 🔑 Lớp lỗi này ĐÃ tái phát ba lần, và chú thích của chính nó tả đúng nó
+| Lần | Hai danh sách nào lệch | Hậu quả |
+|---|---|---|
+| 1 | sổ trong `admin.html` (5) vs `vercel.json` (9) | **CMO Digest chết 14 ngày** — nó chưa bao giờ có mặt trên trang giám sát để mà nhìn |
+| 2 | `CRON_TRIGGERS` (5) vs sổ | nút *Chạy ngay* của 5 job mới chết |
+| 3 | `CRON_TRIGGERS` (11) vs sổ (20) | **lần này** |
+
+Lần 2 vá bằng cách **chép tay cho khớp**, và để lại nguyên văn chú thích *"cùng
+một kiểu trôi lệch giữa hai danh sách chép tay"* ngay trên bảng đó. Tức người
+viết nhận ra đúng lớp lỗi rồi vẫn vá bằng chính cơ chế đẻ ra nó. 🔑 **Vá một
+danh sách chép tay bằng cách chép tay lại là hẹn lần trôi kế tiếp** — chỗ sửa
+phải là *bỏ bản sao đi*, không phải *đồng bộ bản sao*.
+
+### Cách vá
+- **Đường dẫn dời vào SỔ** (`JobSpec.path` / `edge`); `CRON_TRIGGERS` nay là
+  **phép chiếu** `Object.fromEntries(JOBS.filter(...))`, không còn danh sách thứ hai.
+- **`trigger` thành trường SUY RA** (`Boolean(path || edge)`) thay vì cờ khai
+  tay: khai cờ mà quên đường dẫn thì mọc ra một nút chết, đúng ca vừa xảy ra.
+- ⚠️ `SITE_URL` **cắm cứng vào prod** — nút này luôn gọi endpoint prod dù đang
+  chạy ở đâu. Đó là chủ ý (panel quản trị prod), nhưng phải biết trước khi test.
+
+### 🧷 `scripts/check-cron-jobs.mjs` (bộ dò thứ 18)
+Canh **ba chiều** sổ ↔ `vercel.json` ↔ file route thật trên đĩa — cả ba đều
+hỏng IM LẶNG. Đọc mảng `JOBS` bằng cách cắt khối rồi `new Function`, **không
+cần tsc**; không khớp mẫu thì DỪNG HẲN kèm lời nhắc sửa bộ dò (đọc ra danh sách
+rỗng rồi báo xanh còn tệ hơn đỏ — bài học `check:motifs`).
+- **Luật 4 bắt đúng lỗi GỐC của track S4**: cron chạy thật mà vắng mặt trong sổ
+  thì không cảnh báo nào chạm tới nó.
+
+### Verify
+`tsc` 0 · `lint` **0 lỗi / 73 warning = đúng mốc nền** · `prettier` quét cả cây
+sạch · **18/18 bộ dò**.
+- **31 ca trên ROUTE THẬT** qua Next dev (stub Supabase, `CRON_SECRET` **cố ý
+  sai**): **9/9 job hỏng nay định tuyến đúng** — tới endpoint prod và nhận 401,
+  tức đi đúng địa chỉ mà **không job nào bị chạy** · **ĐỐI CHỨNG 11/11 job cũ
+  không hồi quy** (kể cả nhánh edge `auto-pipeline` → 200) · job bịa và chuỗi
+  rỗng **vẫn 400 `Unknown job`** · token sai / không token → **403**.
+- **Red-team bộ dò 3/3 đỏ đúng** (gỡ job khỏi `vercel.json` · gỡ job khỏi sổ ·
+  sai một ký tự trong `path`), đối chứng khôi phục xanh, 0 file rác.
+- 🪤 **Stub auth phân biệt theo TOKEN** — bài học đã ghi: stub trả user cho MỌI
+  token thì ca "không auth" ĐỖ GIẢ ra 200.
+
+### CÒN LẠI
+- `next dev` lại tự ghi `next-env.d.ts` — đã revert, không commit.
+- Sổ vẫn phải gõ tay khi thêm cron mới; bộ dò chỉ **bắt lúc CI**, không tự điền.
+
+---
+
 ## ✏️ Kho hết CHỈ ĐỌC: sửa bài + trạng thái xuất bản (2026-08-11, cùng PR)
 
 Henry hỏi *"mục Nội dung này có phải CMS ko? so với CMS thì thiếu gì?"* → đo ra
