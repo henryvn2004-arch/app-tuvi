@@ -82,17 +82,88 @@ trị viết cứng. Phải chọn một, và chọn gỡ.
 - Edge function deploy **v12 ACTIVE**, `verify_jwt:false` giữ nguyên, đọc ngược
   bản đang chạy khớp nguyên văn file repo.
 
-### CÒN LẠI (việc tay Henry)
-1. **Gỡ 3 video** khỏi kênh cá nhân: `vBLfaGpCxYE` · `J8HVAK8-HuE` · `y25CEmQcnOo`.
-2. **Cấp lại refresh token, chọn ĐÚNG kênh**: `myaccount.google.com/permissions`
-   → gỡ quyền app → mở `tuviminhbao.com/youtube-auth.html` → ở bước *"Choose a
-   channel"* chọn **Tử Vi Minh Bảo** → lưu vào Supabase Secrets.
-   (Trang đó đã có `prompt=consent` nên màn chọn kênh luôn hiện.)
-3. **Đặt `YOUTUBE_CHANNEL_ID`** — chạy `yt-drain` một lượt, lỗi sẽ in ra id kênh
-   token đang trỏ tới; đúng thì dán id đó vào env.
-- ⚠️ Chưa làm bước 3 thì **đường upload đứng im** — đó là chủ ý.
+### ✅ ĐÃ THÔNG — chốt chặn chạy đúng trên prod (cùng ngày)
+`YOUTUBE_CHANNEL_ID=UCyEf6daQ6taa4sFtFeTpCUA` đã đặt, token đã cấp lại đúng kênh
+**Tử Vi Minh Bảo**. Lượt 15:22 ngày 11/08 đăng **3 video** lên đúng kênh
+(`rk00ZKUanrs` · `g8psr3UOC2g` · `3vqYMR9oRJ8`); lượt 15:20 ngay trước đó còn
+`failed=1` vì chưa khai env ⇒ **cầu dao fail-closed đo được là có tác dụng thật**,
+không phải một chốt cho có. Kho còn **80** video, nhỏ giọt 3 bài/sáng ≈ 27 ngày.
+- 🔑 **Chỗ Henry tắc lâu nhất KHÔNG phải kỹ thuật mà là DANH TÍNH**: màn Google
+  hiện email `…@pages.plusgoogle.com` — đó là định danh tổng hợp của một **Brand
+  Account**, KHÔNG đăng nhập được, luôn do một tài khoản cá nhân quản. Tra ở
+  `myaccount.google.com/brandaccounts`. Không biết điều này thì lượt cấp token
+  nào cũng chọn nhầm sang kênh cá nhân.
+- 🪤 `channels.list` trả **200 với `items` rỗng** ở CẢ hai ca — thiếu scope, và
+  tài khoản không có kênh — nên bản chẩn đoán phải in **scope Google đã cấp**
+  mới tách được. ⚠️ Dò scope phải so theo **BIÊN TỪ**: `.../auth/youtube.upload`
+  *chứa* `.../auth/youtube`, dùng `includes` là scope hẹp đọc thành đủ.
+
+### 🔴 CÒN LẠI (việc tay Henry)
+1. **PUBLISH APP — hạn 7 ngày, gấp nhất.** App còn **Testing** ⇒ refresh token
+   vừa cấp chết sau 7 ngày (đúng thứ đã giết kho hai lần: 22/04 và 16/07, 80
+   dòng `error` kia toàn cùng một `invalid_grant`). Không làm thì ~18/08 tắc
+   lại khi mới xả được ~21/83 bài. Google Cloud → **Google Auth Platform →
+   Audience → PUBLISH APP** (UI mới; KHÔNG còn nằm ở "OAuth consent screen").
+   - Scope YouTube là *sensitive* nên app sẽ ở **"In production — unverified"**:
+     màn đăng nhập hiện *"Google hasn't verified this app"* → **Advanced → Go to
+     … (unsafe)**. Chỉ mình Henry dùng ⇒ **không cần nộp verification**.
+   - ⚠️ **Publish KHÔNG gỡ đồng hồ của token cũ** — token hiện tại cấp lúc còn
+     Testing nên vẫn mang hạn 7 ngày. Publish xong **phải cấp lại một lượt nữa**.
+2. **Gỡ 3 video** khỏi kênh cá nhân: `vBLfaGpCxYE` · `J8HVAK8-HuE` · `y25CEmQcnOo`.
 - 15 video cũ (tháng 4) chưa xác minh được nằm ở kênh nào — container chặn
   youtube.com. Henry tự soi.
+
+### 🪤 Bẫy hạ tầng bắt được lúc gộp: check GitHub treo `in_progress` VĨNH VIỄN
+Job `lighthouse` của #504 báo `in_progress` suốt 30 phút. Đọc `get_workflow_job`
+thì **cả 15 bước đều `success`**, gồm cả `Complete job` lúc 15:10 — vỏ job không
+bao giờ được chốt lại. Lỗi phía GitHub, không phải job hỏng.
+- 🔑 **Đừng đợi vô hạn theo `check_runs`.** Nghi treo thì soi TỪNG BƯỚC qua
+  `get_workflow_job`; mọi bước xanh + `Complete job` xanh là đã xong thật.
+
+---
+
+## 📘 Facebook: 33 bài, **0 bài từng đăng được** — lời khuyên chung chung (2026-08-11, PR sau)
+
+Rà nốt đường phân phối sau khi thông YouTube thì lộ ra `media_posts` **chỉ có
+trạng thái `queued`**: 33 bài, kẹt từ **02/08**, chưa post nào lên nổi. Không
+phải "chạy rồi hỏng" — là **chưa bao giờ chạy**.
+
+### 🔴 Một câu khuyên cho HAI nguyên nhân khác hẳn nhau
+Hàng đợi đi qua hai cửa đóng nối tiếp: thiếu `FB_PAGE_ID`, rồi **token hết hạn**
+(`Session has expired on Tuesday, 11-Aug-26 03:00`). `CHANNEL_SETUP` nói y một
+câu cho cả hai — *"Meta App → Permissions xin thêm quyền `pages_manage_posts`"*.
+Đúng cho ca đầu, **lạc đề cho ca sau** ⇒ người đọc đi sửa nhầm chỗ rồi tưởng xong.
+- 🔑 **Và cái nguy hơn nằm ở chỗ vá được rồi vẫn tắc lại:** token vừa dùng là
+  loại **NGẮN HẠN**, chết theo phiên. Chỉ token Page suy ra từ **user token DÀI
+  HẠN** mới vô hạn. Nên hướng dẫn phải nêu đủ chuỗi `fb_exchange_token` →
+  `/me/accounts`, **và bước KIỂM `debug_token` → `expires_at: 0`** — thiếu bước
+  kiểm thì không phân biệt được token vĩnh viễn với một token ngắn hạn nữa.
+- ⛔ **Cảnh báo phải đi kèm**: bước đổi token cần **ĐỌC** App Secret — chỉ copy,
+  **KHÔNG bấm Reset**. `MESSENGER_APP_SECRET`/`WHATSAPP_APP_SECRET` đang dùng
+  chính giá trị đó, reset là chết webhook cả hai kênh đang chạy.
+- `channelFix(ch, msgs)` chọn hướng dẫn theo **LOẠI lỗi**, không theo tên kênh.
+- Cắt lỗi **200 → 400** ký tự: lỗi Graph mở đầu bằng câu dẫn dài rồi mới tới mốc
+  hết hạn ⇒ 200 cắt cụt đúng chỗ cần nhìn. **Cùng lỗi vừa vá ở `yt-drain` trong
+  chính ngày hôm đó** — nó là một lớp, không phải hai ca lẻ.
+
+### Verify
+`tsc` 0 · `lint` 0 lỗi / 73 warning = mốc nền · `prettier` sạch · **18/18 bộ dò**.
+- **18 ca trên MODULE THẬT**, dựng bằng **nguyên văn** lỗi Graph đang nằm trong
+  `media_posts` (không bịa chuỗi), gồm **4 ca ĐỐI CHỨNG**: thiếu quyền vẫn giữ
+  lời khuyên cũ · kênh khác không bị rò hướng dẫn Facebook · lỗi riêng một bài
+  thì KHÔNG bày hướng dẫn token · không có gì thì im hẳn.
+- 🪤 **ĐỐI CHỨNG bản `HEAD`: trượt 8 ca**, mà 4 ca đối chứng **vẫn xanh ở cả hai
+  bên** ⇒ bài kiểm đo đúng thứ đang đổi, không xanh vì lý do khác.
+
+### CÒN LẠI
+- **Việc tay Henry:** cấp token Page vĩnh viễn theo đúng 5 bước bản tin in ra.
+- ⚠️ **`social.channels` mới có `["facebook"]`** trong khi **adapter Telegram đã
+  sẵn và `TELEGRAM_BOT_TOKEN` đã nằm trên Vercel** ⇒ 33 bài đang kẹt sau đúng một
+  cái token chết dù có kênh khác chạy được ngay. Bật là một câu SQL, nhưng đó là
+  nội dung ra trang CÔNG KHAI nên **cố ý không tự bật** — cần Henry chốt, và cần
+  thêm bot làm admin channel + đặt `TELEGRAM_CHANNEL_ID`.
+- **Chưa gọi Graph API thật lượt nào** — container chặn host ngoài, verify dừng ở
+  tầng bản tin. Đừng đọc rộng hơn thế.
 
 ---
 
