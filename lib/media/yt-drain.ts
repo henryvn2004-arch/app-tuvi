@@ -53,6 +53,15 @@ const DEFAULT_DAILY = 3;
 const BLOCKING_PATTERNS = [
   'invalid_grant', // refresh token hết hạn/bị thu hồi — 84/86 bài đang mắc ở đây
   'cannot get access token',
+  // Token trỏ SAI KÊNH (edge `youtube-upload` v4 tự chốt trước khi đăng). Đây là
+  // lỗi của CÁI TOKEN chứ không phải của bài, nên thử bài kế tiếp chỉ tổ đăng
+  // nhầm thêm — 11/08 đã có 3 video công khai lên nhầm kênh cá nhân trước khi
+  // chốt này tồn tại. Tiền tố `channel_mismatch` do edge function phát ra; đổi
+  // bên đó thì phải đổi cả ở đây.
+  'channel_mismatch',
+  // Thiếu env của edge function (`youtube-upload` v4 gỡ giá trị viết cứng nên
+  // CLIENT_ID/SECRET nay bắt buộc). Cửa chưa mở thì bài nào cũng như bài nào.
+  'missing_env',
   'uploadlimitexceeded', // ngưỡng chống spam của YouTube (đã dính 2 lần)
   'quotaexceeded',
   'dailylimitexceeded',

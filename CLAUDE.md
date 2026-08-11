@@ -5,7 +5,82 @@
 
 ---
 
-## ▶️ "Chạy ngay" trả *Unknown job* — cùng một lỗi, lần thứ BA (2026-08-11, PR này)
+## 📺 3 video CÔNG KHAI lên NHẦM KÊNH — và không dòng code nào sai (2026-08-11, PR này)
+
+Henry bấm *Chạy ngay* cho `yt-drain` → chạy được (token mới đã sống) → **nhưng
+video lên kênh CÁ NHÂN `henryvn2004` chứ không phải `@tuviminhbao`**.
+
+### 🔴 Căn nguyên: KHÔNG có chỗ nào chọn kênh, và đúng ra là không thể có
+`videos.insert` của YouTube Data API đăng vào **kênh mà REFRESH TOKEN gắn với** —
+không có tham số chọn kênh (`onBehalfOfContentOwner` là dành cho CMS đối tác).
+Mà một tài khoản Google có NHIỀU kênh (kênh cá nhân + các Brand Account), và màn
+consent của Google có bước *"Choose a channel"*. Chọn nhầm ở đó là mọi video sau
+đó đi nhầm chỗ. ⇒ **Không sửa được bằng code, chỉ chặn được.**
+
+### 🔑 Đây là hỏng IM LẶNG kiểu tệ nhất, và nó TỰ NHÂN LÊN
+Không lỗi nào bắn ra · `yt_status='live'` · dòng DB đẹp · `privacyStatus:'public'`.
+Chỉ có video nằm sai kênh, công khai, dưới tên một NGƯỜI thay vì một thương hiệu.
+Và 83 video còn trong kho sẽ theo nhau đi nhầm **3 bài mỗi sáng** mà không ai hay.
+
+### Cách chặn — `youtube-upload` v4, `assertChannel()`
+Gọi `channels.list?mine=true` **trước khi tải file về**, so id với env
+`YOUTUBE_CHANNEL_ID`; lệch thì ném lỗi mang tiền tố **`channel_mismatch`**.
+- **FAIL-CLOSED**: chưa khai env ⇒ KHÔNG đăng. Ngược hẳn mấy cầu dao fail-open
+  khác trong repo, và ngược có lý do: bên kia chặn oan người ĐÃ TRẢ TIỀN là tệ
+  nhất; ở đây **ĐĂNG NHẦM** mới là tệ nhất — đăng rồi thì phải đi gỡ tay, và
+  trong lúc chưa gỡ thì nó đã công khai.
+- Nhánh "chưa khai env" **in ra luôn id kênh mà token đang trỏ tới** kèm câu
+  *"nếu đúng thì đặt YOUTUBE_CHANNEL_ID=<id>"* — tự nó là hướng dẫn, khỏi phải
+  đi tra id ở đâu khác.
+- `channels.list` tốn **1** đơn vị quota so với **1.600** cho một lượt upload.
+- `yt-drain` thêm `'channel_mismatch'` vào `BLOCKING_PATTERNS` ⇒ dừng CẢ lượt.
+  Đây là lỗi của CÁI TOKEN chứ không phải của bài — thử bài kế tiếp chỉ tổ đăng
+  nhầm thêm.
+- 🧷 **Nguồn edge function nay nằm trong repo** (`_patches/edge-youtube-upload.deno.ts`).
+  Trước v4 nó CHỈ có trên dashboard Supabase — đúng bệnh đã vá một lần với
+  `send-daily-push`. Deploy xong **đọc ngược bản đang chạy** để chốt khớp.
+
+### 🔓 Bắt kèm: GỠ LUÔN client id/secret viết cứng (nợ ghi sổ từ 01/08)
+Không phải chủ đích ban đầu — **GitHub push protection CHẶN commit** mang chuỗi
+client id/secret của Google, nên không thể vừa đưa nguồn vào repo vừa giữ giá
+trị viết cứng. Phải chọn một, và chọn gỡ.
+- 🔑 **Đây là lúc rẻ nhất để gỡ**: chốt kênh phía trên vốn đã làm đường upload
+  đứng im, nên bắt buộc thêm hai env KHÔNG làm hỏng thêm thứ gì đang chạy. Ba
+  tháng trước gỡ là gãy pipeline; hôm nay gỡ là miễn phí.
+- Thiếu env → ném `missing_env` **nêu đích danh tên biến còn thiếu** (cũng vào
+  `BLOCKING_PATTERNS`). Không có bước này thì Google trả `invalid_client` và
+  người đọc log lại đi tìm nhầm sang phía refresh token.
+- ⚠️ **`youtube-auth` VẪN còn viết cứng** — cố ý chưa đụng: đó là hàm Henry phải
+  dùng để cấp lại token, hỏng nó là mất luôn đường sửa. Gỡ sau khi kênh đã đúng.
+- ⚠️ Thứ tự khi ROTATE (đừng đảo): đặt env bằng giá trị HIỆN TẠI → deploy →
+  mới đổi secret ở Google rồi cập nhật env.
+
+### Verify
+`tsc` 0 · `lint` 0 lỗi / 73 warning · `prettier` sạch · **18/18 bộ dò**.
+- **13 ca trên MODULE THẬT** `yt-drain` (chỉ đổi 1 dòng import alias, `diff` xác
+  nhận logic nguyên byte): sai kênh → thử ĐÚNG 1 bài rồi dừng, **0 video đăng**,
+  báo cáo mang nguyên văn lý do · **ĐỐI CHỨNG** lỗi riêng một bài (`Cannot
+  download file: 404`) → vẫn chạy đủ 3 · **ĐỐI CHỨNG** `invalid_grant` vẫn chặn
+  như cũ · nhánh chưa-khai-env cũng chặn · `missing_env` chặn và nêu đúng tên
+  biến.
+- Edge function deploy **v12 ACTIVE**, `verify_jwt:false` giữ nguyên, đọc ngược
+  bản đang chạy khớp nguyên văn file repo.
+
+### CÒN LẠI (việc tay Henry)
+1. **Gỡ 3 video** khỏi kênh cá nhân: `vBLfaGpCxYE` · `J8HVAK8-HuE` · `y25CEmQcnOo`.
+2. **Cấp lại refresh token, chọn ĐÚNG kênh**: `myaccount.google.com/permissions`
+   → gỡ quyền app → mở `tuviminhbao.com/youtube-auth.html` → ở bước *"Choose a
+   channel"* chọn **Tử Vi Minh Bảo** → lưu vào Supabase Secrets.
+   (Trang đó đã có `prompt=consent` nên màn chọn kênh luôn hiện.)
+3. **Đặt `YOUTUBE_CHANNEL_ID`** — chạy `yt-drain` một lượt, lỗi sẽ in ra id kênh
+   token đang trỏ tới; đúng thì dán id đó vào env.
+- ⚠️ Chưa làm bước 3 thì **đường upload đứng im** — đó là chủ ý.
+- 15 video cũ (tháng 4) chưa xác minh được nằm ở kênh nào — container chặn
+  youtube.com. Henry tự soi.
+
+---
+
+## ▶️ "Chạy ngay" trả *Unknown job* — cùng một lỗi, lần thứ BA (2026-08-11, PR trước)
 
 Henry bấm *Chạy ngay* cho `media-build` và `yt-drain` → **`Lỗi: Unknown job`**.
 
