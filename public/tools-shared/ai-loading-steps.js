@@ -82,6 +82,19 @@
       '.ai-orb-c .ai-orb-halo i:nth-child(1){background:var(--gold,#C9A84C);top:2%;left:4%;animation:ai-orb-f1 4.1s ease-in-out infinite}' +
       '.ai-orb-c .ai-orb-halo i:nth-child(2){background:var(--gold-soft,#9A7B3A);bottom:0;right:2%;animation:ai-orb-f2 3.4s ease-in-out infinite}' +
       '.ai-orb-c .ai-orb-halo i:nth-child(3){background:#F2DFA8;top:24%;right:20%;animation:ai-orb-f3 4.8s ease-in-out infinite}' +
+      // INVITE — LỜI MỜI, không phải lượt chờ. Cùng một cục sáng nhưng CHUYỂN
+      // ĐỘNG khác hẳn: thở chậm 3,6s và KHÔNG xoay. Đây là chỗ tách vai, theo
+      // đúng lối "token hai vai" của --navy/--gold: giữ chung HÌNH (để nó là một
+      // dấu thương hiệu), tách NGHĨA bằng nhịp. Quầng xoay = "máy đang chạy,
+      // đừng đụng"; quầng thở đứng yên = "đang đợi BẠN". Dùng chung một hình cho
+      // hai nghĩa mà không tách nhịp thì người ta học nghĩa từ lần gặp đầu rồi
+      // bấm vào cái orb đang chờ LLM.
+      // Nở nhanh lên khi rê chuột/focus — phản ứng là thứ phân biệt "bấm được"
+      // với "đồ trang trí"; trang gắn class .ai-orb-live lên phần tử bao ngoài.
+      '.ai-orb-invite .ai-orb-halo{inset:-17%;animation:ai-orb-breathe 3.6s ease-in-out infinite}' +
+      '.ai-orb-invite .ai-orb-halo i{display:block;width:100%;height:100%;border-radius:50%;opacity:.8;filter:blur(14px);background:radial-gradient(circle at 50% 50%,#F2DFA8 0%,var(--gold,#C9A84C) 45%,var(--gold-soft,#9A7B3A) 100%)}' +
+      '.ai-orb-live:hover .ai-orb-invite .ai-orb-halo,.ai-orb-live:focus-visible .ai-orb-invite .ai-orb-halo{animation-duration:1.5s}' +
+      '.ai-orb-live:hover .ai-orb-invite .ai-orb-halo i,.ai-orb-live:focus-visible .ai-orb-invite .ai-orb-halo i{opacity:1;filter:blur(11px)}' +
       // D — vệt sáng quét vành
       '.ai-orb-d .ai-orb-halo{inset:-8%;background:conic-gradient(from 0deg,transparent 0 62%,#F2DFA8 80%,var(--gold,#C9A84C) 90%,transparent 100%);-webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 7px),#000 calc(100% - 6px));mask:radial-gradient(farthest-side,transparent calc(100% - 7px),#000 calc(100% - 6px));animation:ai-orb-spin 1.5s linear infinite}' +
       '.ai-orb-d .ai-orb-soft{position:absolute;inset:-11%;border-radius:50%;box-shadow:0 0 22px 3px var(--gold,#C9A84C);opacity:.3}' +
@@ -109,7 +122,9 @@
   //   AiLoadingSteps.orbHtml({ size: 62, variant: 'a' })
   //
   // variant: 'a' khói xoay (mặc định) · 'b' nhịp thở · 'c' ba cụm khói ·
-  //          'd' vệt quét vành. Đổi biến thể = đổi đúng một chữ.
+  //          'd' vệt quét vành · 'invite' LỜI MỜI (thở chậm, không xoay — dùng
+  //          cho nút/avatar bấm được, KHÔNG dùng cho lượt chờ; xem khối CSS).
+  // Đổi biến thể = đổi đúng một chữ.
   // Không nhận dữ liệu người dùng nên an toàn khi nối chuỗi; `size` ép về số.
   // ============================================================
   var ORB_MARK =
@@ -124,9 +139,13 @@
     opts = opts || {};
     var size = Number(opts.size) || 62;
     var v = String(opts.variant || 'a').toLowerCase();
-    if (['a', 'b', 'c', 'd'].indexOf(v) < 0) v = 'a';
+    if (['a', 'b', 'c', 'd', 'invite'].indexOf(v) < 0) v = 'a';
     var inner =
-      v === 'a' ? '<i></i>' : v === 'c' ? '<i></i><i></i><i></i>' : '';
+      v === 'a' || v === 'invite'
+        ? '<i></i>'
+        : v === 'c'
+          ? '<i></i><i></i><i></i>'
+          : '';
     return (
       '<div class="ai-orb ai-orb-' + v + '" style="width:' + size + 'px;height:' + size + 'px">' +
       (v === 'd' ? '<div class="ai-orb-soft"></div>' : '') +
