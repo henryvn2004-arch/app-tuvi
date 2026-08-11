@@ -172,7 +172,7 @@ h1 em{font-style:italic;color:var(--gold)}
 
   <div class="cta-box">
     <p>Muốn nhập ngày sinh khác và nhận luận giải AI chuyên sâu 24 phần?</p>
-    <a class="cta-btn" href="/luan-giai.html">Xem Lá Số Miễn Phí →</a>
+    <a class="cta-btn" href="/luan-giai.html">Xem Lá Số →</a>
   </div>
 
   <p class="note">* Lá số hiển thị vận hạn năm ${NAM_XEM}. Để xem năm khác, dùng công cụ luận giải trực tiếp.</p>

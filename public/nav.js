@@ -349,10 +349,14 @@
     + '<span class="nav-link' + (anyActive(KP_PATHS)?' active':'') + '" id="nav-dd-kp-toggle" role="button" tabindex="0">Khám phá ' + CHEV + '</span>'
     + '<div class="nav-dd-menu" id="nav-dd-kp-menu">'
     + ddSection('Công cụ')
-    + ddItem('/cong-cu',                'layout-grid', 'Tất cả 47 công cụ')
+    // ⚠️ KHÔNG chép số lượng công cụ hay chữ "miễn phí" vào đây: nav.js nạp trên
+    // ~89 trang nên một con số cũ sẽ nói dối ở khắp nơi (bản trước ghi "47" trong
+    // khi `tool_pricing` đang có 55 tool bật). Giá và trạng thái free chỉ nêu ở
+    // trang tool / tool trong shell, nơi đọc thẳng `tool_pricing`.
+    + ddItem('/cong-cu',                'layout-grid', 'Tất cả công cụ')
     + ddItem('/tools/tuong-mat-ai.html','smile',       'Xem tướng qua ảnh')
     + ddItem('/tools/phong-thuy.html',  'compass',     'Phong thủy qua ảnh')
-    + ddSection('Tra cứu miễn phí')
+    + ddSection('Tra cứu')
     + ddItem('/menh-kho.html', 'gem',           'Mệnh Khố — 438K lá số')
     + ddItem('/ngay-tot',      'calendar-days', 'Ngày Tốt — Lịch vạn niên')
     + '</div></div>';

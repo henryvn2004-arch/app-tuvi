@@ -290,7 +290,7 @@ body{font-family:Arial,sans-serif;background:var(--bg-soft);color:var(--text);mi
     </div>
     <div class="faq-item">
       <div class="faq-q">Quà Lượng chào mừng khi đăng ký dùng được gì?</div>
-      <div class="faq-a" id="faqWelcome">Dùng được cho các công cụ luận giải bằng AI và trò chuyện với Trợ lý Luận Đường. Các công cụ tra cứu cổ pháp thì miễn phí hoàn toàn, không cần Lượng.</div>
+      <div class="faq-a" id="faqWelcome">Dùng được cho các công cụ luận giải bằng AI và trò chuyện với Trợ lý Luận Đường. Mức phí của từng công cụ hiển thị ngay trên trang công cụ đó.</div>
     </div>
     <div class="faq-item">
       <div class="faq-q">Lượng có dùng chung tài khoản được không?</div>
@@ -458,9 +458,11 @@ async function loadStatus() {
       + '</div>';
     mount(slot);
     if (bonus) {
+      // Không hứa cứng "tra cứu miễn phí hoàn toàn" ở đây — giá từng công cụ đọc
+      // từ `tool_pricing` và chỉ nêu ở trang công cụ, nên đổi giá là tự đúng.
       document.getElementById('faqWelcome').textContent = bonus
         + ' Lượng, dùng được cho các công cụ luận giải bằng AI và trò chuyện với Trợ lý Luận Đường. '
-        + 'Các công cụ tra cứu cổ pháp thì miễn phí hoàn toàn, không cần Lượng.';
+        + 'Mức phí của từng công cụ hiển thị ngay trên trang công cụ đó.';
     }
     return;
   }
@@ -544,8 +546,11 @@ async function loadToolPricing() {
 
     if (freeCount > 0) {
       document.getElementById('freeNoteText').innerHTML =
-        '<strong>' + freeCount + ' công cụ tra cứu cổ pháp miễn phí</strong> (an sao, tứ trụ, hoàng đạo, kinh dịch, tarot…) — '
-        + 'không tốn Lượng. Chỉ các công cụ luận giải bằng AI mới tính phí.';
+        // `freeCount` đọc từ `tool_pricing` nên số tự đúng. Danh sách ví dụ thì
+        // chép tay ⇒ chỉ nêu tool CHẮC CHẮN còn bật (bản cũ nhắc "tứ trụ" — tool
+        // đó đã `enabled=false` từ đợt dọn tool trùng lặp).
+        '<strong>' + freeCount + ' công cụ tra cứu cổ pháp không tốn Lượng</strong> (an sao, nạp âm, hoàng đạo, kinh dịch, tarot…). '
+        + 'Chỉ các công cụ luận giải bằng AI mới tính phí.';
       const fn = document.getElementById('freeNote');
       fn.style.display = 'flex';
       mount(fn);

@@ -1513,7 +1513,7 @@
           '<div class="stm-d">' + esc(thay) + ' còn nhiều điều muốn nói về lá số này. ' +
             (câu ? 'Đăng ký (miễn phí) là được tặng <b>' + bonus + ' Lượng</b> — đủ hỏi thêm <b>' + câu + ' câu</b> nữa.'
                  : 'Đăng ký miễn phí để được tặng Lượng và hỏi tiếp.') +
-            ' Lá số vẫn xem miễn phí, không mất gì.</div>' +
+            ' Lá số đang xem vẫn giữ nguyên.</div>' +
           '<button class="stm-btn" type="button" data-act="do-signup">Đăng ký miễn phí →</button>' +
           '<button class="stm-later" type="button">Để sau</button>' +
         '</div>';

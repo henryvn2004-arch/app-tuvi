@@ -359,10 +359,13 @@ function parseIsrSlug(slug: string): IsrParams | null {
 // một form TRỐNG và phải gõ lại đúng cái ngày sinh vừa xem. Đo 7 ngày (28/07):
 // 35 khách đọc trang nội dung SEO, đúng 1 người đi tiếp sang tool.
 //
-// Nay đẩy thẳng dữ liệu qua query sang `/app/luan-giai` (Luận Đường — bản 24 phần
-// vẫn xem miễn phí, chỉ phần AI chuyên sâu mới tính Lượng); `Shell.prefillForm`
+// Nay đẩy thẳng dữ liệu qua query sang `/app/luan-giai` (Luận Đường); `Shell.prefillForm`
 // đọc query rồi `?auto=1` tự chạy (public/shell.js). `gio` là giờ DƯƠNG 0–23 lấy
 // từ GIO_HOURS — khớp field gioHour của TuviForm.setData, KHÔNG dùng nhánh gioIdx.
+// ⚠️ Nhãn của MỌI nút dùng hàm này TUYỆT ĐỐI không được hứa "miễn phí": nó trỏ
+// sang Luận Giải — một tool TRẢ PHÍ — và nằm trên ~438K trang SEO, nên một lời
+// hứa sai sẽ lặp lại ở khắp nơi và không rút lại được. Giá chỉ nêu ở trang tool
+// / tool trong shell, nơi đọc thẳng `tool_pricing` nên đổi giá là tự đúng.
 function appLuanGiaiHref(p: IsrParams | null): string {
   if (!p) return '/app/luan-giai';
   const q = new URLSearchParams({
@@ -1394,7 +1397,7 @@ a.sao-link:hover{opacity:1;border-bottom-style:solid}
       <div class="cta-box">
         <h3>Luận Giải AI — 24 Phần</h3>
         <p>Phân tích chuyên sâu tính cách, sự nghiệp, tình duyên, vận hạn năm ${namXem} — ngày giờ sinh đã điền sẵn, không phải nhập lại.</p>
-        <a class="cta-btn" href="${appLuanGiaiHref(params)}">Xem Luận Giải Miễn Phí →</a>
+        <a class="cta-btn" href="${appLuanGiaiHref(params)}">Xem Luận Giải AI →</a>
       </div>
 
       <div id="share-bar-isr"></div>

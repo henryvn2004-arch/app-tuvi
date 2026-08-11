@@ -491,7 +491,12 @@ function _showFreeCreditsWelcome() {
   const b = document.createElement('div');
   b.id = 'free-credits-banner';
   b.style.cssText = 'position:fixed;top:70px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#1E6B3C,#155d32);color:#fff;padding:14px 28px;border-radius:10px;font-size:14px;font-weight:600;z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,.25);text-align:center;white-space:nowrap;animation:auth-fade .3s ease';
-  b.innerHTML = '<span class="ic-inline" data-icon="gift" data-icon-emoji="🎉" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">🎉</span> Chào mừng! Bạn đã nhận <strong>Lượng miễn phí</strong> — thử ngay Xem Tướng (5 Lượng/lần)';
+  // ⚠️ KHÔNG nêu tên tool kèm GIÁ ở đây. Bản cũ ghi "Xem Tướng (5 Lượng/lần)" —
+  // sai hai lần: `tool_pricing` không có tool nào tên "Xem Tướng" (gần nhất là
+  // `dien-tuong`), và giá thật của nó là 8 chứ không phải 5. Đây là banner ĐẦU
+  // TIÊN người vừa đăng ký nhìn thấy, nên nói sai giá ở đây là mất tin ngay lượt
+  // đầu. Giá chỉ được nêu ở trang tool / tool trong shell (nơi đọc `tool_pricing`).
+  b.innerHTML = '<span class="ic-inline" data-icon="gift" data-icon-emoji="🎉" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">🎉</span> Chào mừng! Bạn đã nhận <strong>Lượng</strong> — mở Luận Đường để dùng thử';
   if (window.mountIcons) window.mountIcons(b);
   document.body.appendChild(b);
   setTimeout(() => { b.style.transition = 'opacity .6s'; b.style.opacity = '0'; }, 5000);
