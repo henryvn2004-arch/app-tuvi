@@ -40,6 +40,22 @@ Gọi `channels.list?mine=true` **trước khi tải file về**, so id với en
   Trước v4 nó CHỈ có trên dashboard Supabase — đúng bệnh đã vá một lần với
   `send-daily-push`. Deploy xong **đọc ngược bản đang chạy** để chốt khớp.
 
+### 🧭 Vá luôn chỗ ĐẺ RA lỗi: trang cấp token
+Chốt kênh chặn được hậu quả, nhưng chỗ chọn nhầm là màn OAuth — nên
+`public/youtube-auth.html` nay: cảnh báo ĐỎ **đứng trên nút bấm** (nói trước
+khi bấm, không phải sau) · `prompt` thêm **`select_account`** ép Google hỏi lại
+thay vì lặng lẽ dùng lựa chọn đã nhớ · hướng dẫn liệt kê đủ **4 biến** env chứ
+không chỉ `YOUTUBE_REFRESH_TOKEN` · chỉ luôn cách tra `YOUTUBE_CHANNEL_ID`
+(chạy `yt-drain` một lượt, lỗi in ra id).
+- **12/12 ca trên TRANG THẬT** qua trình duyệt: cảnh báo hiện đủ ba ý · đủ 4
+  tên biến · `prompt=consent select_account` · `access_type=offline` (mất là
+  không có refresh token) · còn đủ scope upload · 0 lỗi JS.
+- 🪤 Ca `.steps` đỏ lượt đầu là **lỗi của bài kiểm**: đọc sau cú bấm, lúc trang
+  đã điều hướng đi. Đọc DOM thì phải đọc trước hành động làm rời trang.
+- 🪤 Và vấp lại bẫy cũ: chạy spec từ scratchpad → `playwright` không resolve,
+  phải chạy từ gốc repo.
+- Không bump `?v=` — HTML trong `public/` trả `max-age=0, must-revalidate`.
+
 ### 🔓 Bắt kèm: GỠ LUÔN client id/secret viết cứng (nợ ghi sổ từ 01/08)
 Không phải chủ đích ban đầu — **GitHub push protection CHẶN commit** mang chuỗi
 client id/secret của Google, nên không thể vừa đưa nguồn vào repo vừa giữ giá

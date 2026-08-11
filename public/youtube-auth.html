@@ -20,12 +20,30 @@ p { color:rgba(255,255,255,0.55); font-size:13px; margin-bottom:24px; line-heigh
 .steps { background:rgba(154,123,58,0.08); border:1px solid rgba(154,123,58,0.2); border-radius:6px; padding:14px; margin-top:20px; font-size:12px; color:rgba(255,255,255,0.55); text-align:left; line-height:2; }
 .steps strong { color:#9A7B3A; }
 code { background:rgba(0,0,0,0.4); padding:2px 6px; border-radius:3px; }
+/* Cảnh báo chọn kênh — xem chú thích ở khối HTML bên dưới. */
+.warn { background:rgba(204,0,0,0.12); border:1px solid rgba(255,107,107,0.45); border-radius:6px; padding:14px; margin-bottom:20px; font-size:13px; color:#ffd9d9; text-align:left; line-height:1.7; }
+.warn b { color:#ff6b6b; }
 </style>
 </head>
 <body>
 <div class="box">
   <h1>🎬 YouTube Authorization</h1>
   <p>Authorize 1 lần để lấy Refresh Token.<br>Token này dùng mãi để auto-upload YouTube.</p>
+
+  <!--
+    Cảnh báo này KHÔNG phải trang trí. 11/08 một lượt cấp token chọn nhầm kênh
+    ⇒ 3 video lên CÔNG KHAI ở kênh cá nhân thay vì kênh thương hiệu, và không
+    có gì báo (YouTube API đăng vào kênh mà token gắn với, không có tham số
+    chọn kênh). Màn "Choose a channel" của Google là chỗ DUY NHẤT quyết định
+    chuyện đó, nên nó phải được nói trước khi bấm chứ không phải sau.
+  -->
+  <div class="warn">
+    ⚠️ <b>Ở màn “Choose a channel” phải chọn đúng kênh thương hiệu</b>, không phải
+    kênh cá nhân. Token gắn với kênh nào thì mọi video sau này lên kênh đó —
+    chọn nhầm là video đăng công khai sai chỗ mà không có lỗi nào báo.<br>
+    Không thấy màn chọn kênh? Google đang nhớ lựa chọn cũ: vào
+    <code>myaccount.google.com/permissions</code> gỡ quyền của app rồi quay lại đây.
+  </div>
 
   <button class="btn" onclick="startAuth()" id="btn-auth">🔗 Authorize với Google</button>
 
@@ -41,7 +59,12 @@ code { background:rgba(0,0,0,0.4); padding:2px 6px; border-radius:3px; }
     <strong>Sau khi có token:</strong><br>
     1. Copy token ở trên<br>
     2. Vào <strong>Supabase → Settings → Edge Functions → Secrets</strong><br>
-    3. Thêm: <code>YOUTUBE_REFRESH_TOKEN = [token]</code>
+    3. Thêm: <code>YOUTUBE_REFRESH_TOKEN = [token]</code><br>
+    4. Kiểm cả 3 biến kia đã có chưa — thiếu là không đăng được:<br>
+    &nbsp;&nbsp;<code>YOUTUBE_CLIENT_ID</code> · <code>YOUTUBE_CLIENT_SECRET</code> ·
+    <code>YOUTUBE_CHANNEL_ID</code><br>
+    5. Chưa biết <code>YOUTUBE_CHANNEL_ID</code>? Chạy job <strong>yt-drain</strong>
+    một lượt — lỗi sẽ in ra id kênh mà token đang trỏ tới.
   </div>
 </div>
 
@@ -53,7 +76,9 @@ const EDGE        = 'https://dciwkfdqhhddeymlisey.supabase.co/functions/v1/youtu
 function startAuth() {
   const p = new URLSearchParams({
     client_id: CLIENT_ID, redirect_uri: REDIRECT,
-    response_type: 'code', access_type: 'offline', prompt: 'consent',
+    // `select_account` ép Google hỏi lại tài khoản/kênh thay vì lặng lẽ dùng
+    // lựa chọn đã nhớ — chính chỗ đã làm 3 video lên nhầm kênh cá nhân.
+    response_type: 'code', access_type: 'offline', prompt: 'consent select_account',
     scope: 'https://www.googleapis.com/auth/youtube.upload https://www.googleapis.com/auth/youtube'
   });
   location.href = 'https://accounts.google.com/o/oauth2/v2/auth?' + p;
