@@ -28,6 +28,7 @@
 
 import { llmText } from '@/lib/llm/complete';
 import { getSearchConsoleSnapshot } from '@/lib/analytics/search-console';
+import { parseLlmJson } from '@/lib/llm/json';
 
 const SUPABASE_URL = process.env.SUPABASE_URL!;
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY!;
@@ -560,19 +561,22 @@ Trả tối đa ${target['nghien-cuu']} tiêu đề [nghien-cuu] và ${target['k
   const raw = await llmText({
     system,
     prompt: `Danh sách cụm từ khoá:\n${list}`,
-    maxTokens: 4000,
+    // Lên tới 56 tiêu đề (35+21) trong một lượt JSON — nới trần để đề phòng
+    // cắt cụt, nhưng nguyên nhân THẬT của lỗi "LLM không trả được tiêu đề nào"
+    // là `JSON.parse` trần trụi bên dưới (đã vá), không phải trần token.
+    maxTokens: 6000,
     json: true,
     temperature: 0.4,
   });
 
-  try {
-    const parsed = JSON.parse(raw) as { topics?: ShapedTopic[] };
-    return (parsed.topics || []).filter(
-      t => t?.topic && (t.surface === 'nghien-cuu' || t.surface === 'khao-luan'),
-    );
-  } catch {
-    return [];
-  }
+  // `parseLlmJson` (lift từ chan-dung-tien-kiep, NGUỒN DUY NHẤT trong repo) bóc
+  // được JSON dù model chèn câu dẫn/ghi chú/fence quanh nó. `JSON.parse` trần
+  // trụi trước đây hỏng cả lượt vì đúng những thứ đó — lịch sử `topic_queue`
+  // ghi nhận tỉ lệ lỗi 15–35%/tháng ở đúng loại lỗi này trên chỗ khác của repo.
+  const parsed = parseLlmJson(raw) as { topics?: ShapedTopic[] } | null;
+  return (parsed?.topics || []).filter(
+    t => t?.topic && (t.surface === 'nghien-cuu' || t.surface === 'khao-luan'),
+  );
 }
 
 // ── Gán thầy cho bài /nghien-cuu ──────────────────────────────────────────────
