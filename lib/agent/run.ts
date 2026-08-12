@@ -37,6 +37,7 @@ import {
   toGeminiContents,
 } from '@/lib/agent/providers/gemini';
 import { logLlmUsage, type LlmUsage } from '@/lib/agent/usage';
+import { buildCompanionLayer } from '@/lib/agent/companion';
 import { computePastLife } from '@/lib/engine/past-life';
 import { pastLifeRailWrapper } from '@/lib/agent/past-life-story';
 import { computeGroupBond, groupPairAsBond } from '@/lib/engine/past-life-bond';
@@ -440,6 +441,16 @@ export async function runAgent(
 
   // Áp luật bám hội thoại + sinh gợi ý câu hỏi tiếp cho MỌI nhánh prompt.
   system = system + '\n\n' + CHAT_FOLLOWUP_RULE + '\n\n' + CHAT_SUGGEST_RULES;
+
+  // TẦNG 1 (lib/agent/companion.ts) — dán CUỐI CÙNG, sau cả shape lá số lẫn
+  // CHAT_SUGGEST_RULES, vì nó GHI ĐÈ cả hai khi người dùng đang tâm sự. Đây là
+  // điểm ráp chung của CẢ nhánh scenario (dòng ~228) lẫn nhánh lá số (~280) →
+  // chèn một chỗ là phủ trọn ~25 tool, không sót nhánh nào.
+  // ⚠️ Chỉ áp cho RAIL. Route legacy /api/lasotuvi (widget luận-giải 24 mục,
+  // profile.html, chatbot.js) gọi thẳng buildChatContext nên KHÔNG dính — cố ý:
+  // ở đó người ta đang đọc bản luận, không phải đang trò chuyện.
+  const companionLayer = buildCompanionLayer(cfg.companion);
+  if (companionLayer) system = system + '\n\n' + companionLayer;
   let suggestions: string[] = [];
 
   send(sse.status({ text: hasImages ? 'Đang xem ảnh...' : 'Đang suy xét...' }));
