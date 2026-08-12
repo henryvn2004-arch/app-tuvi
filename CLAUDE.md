@@ -5,6 +5,113 @@
 
 ---
 
+## 🫂 Rail thành "Trò chuyện với Thầy" — 4 tầng, và vòng vá NHỊP HỘI THOẠI (2026-08-12, #507 + PR này)
+
+Henry: kinh tế khó → người ta stress, mà VN gần như không có kênh tâm lý nên họ
+đi chùa. Muốn rail thành chỗ trò chuyện HẰNG NGÀY: nhớ chuyện của họ, ghép với
+lá số + tâm lý/tôn giáo, **chủ động hỏi thăm** — *"act như 1 therapist ah"*.
+
+### 🔑 Rail là MỘT khung dùng chung cho ~25 tool — nên phải PHÂN TẦNG
+Henry chốt 3 tầng: (1) cách hành xử chung · (2) hồ sơ người dùng · (3) data tool
+đang mở (đổi theo tool). Không mở tool nào thì vẫn có tầng 1+2.
+- 🔑 **Điểm ráp DUY NHẤT**: `run.ts` sau `CHAT_SUGGEST_RULES` — chỗ đó nằm SAU
+  cả nhánh `scenario` lẫn nhánh lá số và phủ CẢ BA đường provider (Gemini prose ·
+  Gemini tools · Anthropic). Chèn một chỗ là phủ trọn ~25 prompt, không sót nhánh.
+- ⚠️ **Tầng 1 phải đứng CUỐI, không phải đầu.** Nó GHI ĐÈ `RAIL_LASO_SHAPE`
+  ("MỞ BẰNG PHÁN QUYẾT… In đậm") và `GIONG_NGUOI_RULES` ("trời ơi", "ôi", "á") —
+  hai luật dựng cho một lượt luận ĐÁNG NHỚ, đúng cho tra cứu, **hỏng hẳn với người
+  vừa gõ "em mất việc hai tháng rồi"**. Đảo thứ tự là model theo luật cũ.
+  Đánh đổi có ý thức: đứng sau ⇒ mất prompt-cache dùng chung (vốn đã vỡ theo lá số).
+- ⛔ **KHÔNG lọc từ khoá phía server** để bật khối nguy cấp: tiếng Việt có "mệt
+  muốn chết", "chết cười" ⇒ dò chuỗi thô kêu oan liên tục, đúng lớp lỗi `\bcon\b`
+  khớp "con vật". Luôn gửi cả khối (~200 token) thay vì tin vào một regex chắc sai.
+
+### Bốn bước đã làm (#507)
+1. **`lib/agent/companion.ts`** — tầng 1. Nhận diện chế độ tra-cứu/tâm-sự · ở chế
+   độ tâm sự thì bỏ phán quyết + bỏ khẩu ngữ + rút còn 40–90 từ · **khối NGUY CẤP
+   LUÔN áp kể cả khi tắt công tắc** · cấm sáo rỗng/chẩn đoán bệnh/hứa thay tương lai.
+   - 🔑 **Henry chốt KHÔNG né vận xấu**: *"vận xấu thì nói xấu… mày né tránh thì lại
+     làm họ khổ hơn"*. Nên luật là nói thẳng, **bắt buộc kèm MỐC + VIỆC LÀM ĐƯỢC** —
+     một câu vận xấu không mốc, không việc làm được thì chỉ là một bản án.
+   - **Tôn giáo: MẶC ĐỊNH không viện đạo nào**, chỉ viện đúng đạo họ tự nhắc trước.
+   - ⛔ Chỉ cắm **115**. Cố ý KHÔNG cắm cứng đường dây tâm lý nào — số sai còn tệ hơn
+     không có số, mà không xác minh được từ container. Henry: *"app này có phải đường
+     dây cấp cứu đâu"* ⇒ bỏ hẳn việc tay thêm số.
+2. **`lib/memory/store.ts` + bảng `user_memory`** — tầng 2, Thầy TỰ rút ra (kiểu
+   ChatGPT/Claude) + tab **"Thầy Nhớ"** ở profile cho người dùng tự sửa.
+   - Trần 40 mục × 200 ký tự; chống trùng bằng **unique index** `(user_id,
+     lower(btrim(noi_dung)))` — để DB từ chối, đừng để mã ứng dụng nhớ hộ; HTTP
+     **409 đọc là THÀNH CÔNG**.
+   - 🔐 Ba tầng chốt danh tính: RLS chủ-sở-hữu · mọi hàm LUÔN lọc `user_id` · route
+     lấy user từ **Authorization token**, KHÔNG BAO GIỜ nhận `userId` từ body.
+   - Prompt dặn: **đừng đọc thuộc lòng hồ sơ ra**, và tin điều VỪA NGHE hơn hồ sơ cũ.
+3. **Bề mặt** — nút đổi thành *"✦ Trò chuyện với Thầy"*, lời chào đổi theo số ngày
+   vắng + mối lo gần nhất. Thầy chủ động hỏi thăm NGAY TRONG CHAT (Henry chốt: không
+   phải push).
+4. **`lib/tools/suggest-tool.ts`** — gợi ý công cụ *khéo*. Henry: *"chỉ khi nào thấy
+   đúng nhu cầu mới suggest… **đừng ghi giá ra**"* ⇒ query `tool_pricing` **cố ý
+   KHÔNG select cột `credits`**, và tool def nói thẳng "mặc định là KHÔNG gọi",
+   "TUYỆT ĐỐI KHÔNG gọi khi người ta đang buồn/bế tắc". Đi ké **event `done`** thay
+   vì thêm loại SSE mới — thêm loại mới là gãy adapter bot.
+
+### 🔴 Vòng sau (PR này) — Henry đo prod: rail BÁM LÁ SỐ, không hỏi lại
+Gõ *"kinh tế dạo này khó khăn quá, tìm việc khó"* → rail lôi lá số ra giải thích,
+0 câu hỏi ngược. **Tầng 1 đổi được HÌNH DẠNG nhưng không gỡ NGHĨA VỤ**:
+
+| Chỗ | Luật còn nguyên hiệu lực |
+|---|---|
+| `prompts.ts:320` | *"Dẫn chứng sao tinh, cung vị, can chi cụ thể"* — + ~14K ký tự lá số trong system |
+| `prompts.ts:246` | *"TRẢ LỜI THẲNG NGAY CÂU ĐẦU… Cấm mở bài"* ⇒ lượt chỉ-hỏi-lại đọc thành lười |
+| `prompts.ts:247` | *"MỖI LƯỢT MỘT Ý CHÍNH"* ⇒ nói một ý cho xong |
+
+- 🔑 **Và nhận diện chế độ neo vào CHỮ CẢM XÚC** nên câu kể hoàn cảnh KHÔ KHAN rơi
+  thẳng vào nhánh tra cứu. Đổi trục: **hỏi về LÁ SỐ hay kể về ĐỜI**, nêu đích danh
+  câu Henry gõ làm ví dụ TÂM SỰ. Không rõ ⇒ **nghiêng về tâm sự rồi hỏi lại** — hỏi
+  nhầm một câu thì họ nói rõ thêm, luận nhầm cả bài thì họ thôi không kể nữa.
+- **Khối "lá số là NỀN"** huỷ ĐÍCH DANH luật dẫn chứng cho riêng chế độ này; mặc định
+  không nhắc tên sao/cung, chỉ mở khi họ hỏi thẳng và mở gọn một câu.
+- **Khối "nhịp hỏi–đáp"**: *MỘT CÂU HỎI ĐÚNG CHỖ CÓ GIÁ TRỊ HƠN MỘT BẢN LUẬN ĐÚNG*;
+  một lượt chỉ ghi nhận + một câu hỏi là lượt **TỐT**; đúng MỘT câu mỗi lượt, bám
+  chi tiết vừa nghe; **đừng vội gom kết luận**.
+- 🔑 Cả ba huỷ luật bằng cách **trích nguyên văn luật đó** ⇒ THỨ TỰ là điều kiện sống
+  còn, và đó chính là thứ bộ kiểm phải đo.
+
+### Verify
+`tsc` 0 · `lint` 0 lỗi / **77 warning = mốc nền** · `prettier` cả cây sạch ·
+**19/19 bộ dò** · engine 185 pass.
+- **41/41 bất biến trên MODULE THẬT** (biên dịch `run.ts`, chặn `fetch`, bắt đúng
+  chuỗi `system` gửi lên provider — không mock hàm nào), chạy CẢ nhánh scenario lẫn
+  nhánh lá số. Ba phép so THỨ TỰ **neo vào nguyên văn luật bị huỷ**.
+- 🪤 **Red-team**: đảo thứ tự ghép tầng 1 lên ĐẦU system → **6/6 ca thứ tự đỏ đúng**,
+  khôi phục xanh, 0 file rác.
+
+### 🪤 Bẫy đã vấp (đều là lỗi của TÔI)
+1. 🔴 **Fixture dùng khoá `hour` trong khi engine đọc `hourBranch`** ⇒ `computeLaso`
+   trả lỗi ⇒ nhánh birth rơi sang `CHAT_SYSTEM_GENERAL`, tức **chưa hề đo đúng prompt
+   Henry đang dùng**. Bắt được nhờ chốt *"luật CÓ THẬT trong prompt"*: `indexOf` trả
+   **−1** làm phép so `nen > cite` **ĐỖ GIẢ**. 🔑 **Phép so vị trí phải kèm assert cái
+   mốc CÓ TỒN TẠI** — không thì nó luôn xanh.
+2. `computeLaso` đọc `public/` theo `process.cwd()` ⇒ harness phải chạy từ GỐC repo.
+3. **`tsc` KHÔNG viết lại alias `@/` khi emit** → phải hook `Module._resolveFilename`
+   trong harness thay vì sửa file (giữ mã chạy đúng nguyên byte bản repo).
+4. **Stub sai shape**: bọc `/api/van-ngay` thành `{ok,data}` trong khi route trả field
+   ở TOP LEVEL → trang rơi vào `fallback()` mà bộ kiểm **vẫn 7/8 xanh** — đo nhầm
+   đường lùi. Bài học cũ, vấp lại.
+
+### CÒN LẠI
+- 🔴 **Chưa gọi LLM thật lượt nào** trong CẢ 5 bước — verify dừng ở tầng *chữ VÀO
+  prompt* và tầng render. Chất lượng hội thoại chỉ prod mới trả lời được.
+- **Đường Gemini PROSE không chạy tool** ⇒ ~20 kịch bản tra cứu ĐỌC được hồ sơ nhưng
+  **không GHI được** và không gợi ý được công cụ. Chỉ nhánh có tool mới đủ.
+- **Kênh bot (Telegram/Messenger/WhatsApp) chưa truyền `userId`** ⇒ chưa có tầng 2.
+- ⚠️ **`chat.cost = 5` chặn người mới ở ~5 lượt/đời** — nghịch hẳn ý "trò chuyện hằng
+  ngày". Chưa đo được giá thật mỗi lượt: **313 dòng `llm_usage` đều `tool_id` NULL**.
+- Tắt cả tầng 1: `update app_config set value='{"enabled":false}'::jsonb where
+  key='chat.companion';` — khối NGUY CẤP vẫn giữ, và cơ chế MERGE theo khoá nên
+  không xoá mất danh sách số.
+
+---
+
 ## 📺 3 video CÔNG KHAI lên NHẦM KÊNH — và không dòng code nào sai (2026-08-11, PR này)
 
 Henry bấm *Chạy ngay* cho `yt-drain` → chạy được (token mới đã sống) → **nhưng
