@@ -253,7 +253,7 @@ window.SHELL_INTRO={key:'huong-nghiep-tre',title:'Hướng Nghiệp Sớm Cho Co
 <script src="/auth.js?v=2"></script>
   <script src="/nav.js?v=22" data-icons-only></script>
 <script src="/shell.js?v=70"></script>
-<script src="/tools-shared/ai-loading-steps.js?v=6"></script>
+<script src="/tools-shared/ai-loading-steps.js?v=7"></script>
 <script>
 
 var _currentSlug = '';
@@ -347,6 +347,8 @@ async function analyze() {
   _openPanel();
   _loadingCtl = AiLoadingSteps.mount('loadingSteps', HN_STEPS.slice(0, 2));
   _loadingCtl.start();
+  // Cuộn lên ngay để thấy có gì vừa chạy, không đứng im.
+  AiLoadingSteps.scrollToResult('loading');
   var prev;
   try {
     var r = await fetch('/api/huong-nghiep-tre?preview=1', {
@@ -418,6 +420,8 @@ async function _doGenerate(freeRerun, lo) {
   _loadingCtl = AiLoadingSteps.mount('loadingSteps', HN_STEPS.slice(2));
   document.getElementById('loading').style.display = 'block';
   _loadingCtl.start();
+  // Mở khóa xong nằm sâu dưới phần preview — cuộn lại lên chỗ đang chạy.
+  AiLoadingSteps.scrollToResult('loading');
 
   var token = (window.Auth && Auth.getSession && Auth.getSession()) ? Auth.getSession().access_token : '';
   try {

@@ -158,7 +158,7 @@ window.SHELL_INTRO={key:'luan-giai',title:'Luận giải Tử Vi',desc:'Lập l�
 <script src="/tuvi-paywall.js?v=18"></script>
   <script src="/nav.js?v=22" data-icons-only></script>
 <script src="/shell.js?v=70"></script>
-<script src="/tools-shared/ai-loading-steps.js?v=6"></script>
+<script src="/tools-shared/ai-loading-steps.js?v=7"></script>
 <script>
 // ── Form nhập (dùng chung TuviForm — có "Sinh ở ngoài Việt Nam?" + parity giờ
 // sinh lịch sử với standalone) ──
@@ -192,6 +192,9 @@ function doLuan(){
     document.getElementById('lgPanel').style.display='block';
     document.getElementById('btnEdit').style.display='';
     document.getElementById('btnBatTu').style.display='';
+    // Form dài hơn màn hình (nhất là mobile) thì lúc bấm nút, khung kết quả
+    // vừa hiện ra nằm ngoài khung nhìn — cuộn lên để thấy ngay có gì vừa chạy.
+    if(window.AiLoadingSteps)AiLoadingSteps.scrollToResult('lgPanel');
     Shell.rememberBirth(Object.assign({}, fdIn, {namxem:namxem}));
     if(window.SHELL_INTRO)Shell.dismissIntro(window.SHELL_INTRO.key);
     Shell.setContext({
@@ -217,6 +220,7 @@ function doLuan(){
     document.getElementById('lgBody').innerHTML='<div class="laso-error">Lỗi khi luận giải: '+esc(e.message)+'</div>';
     document.getElementById('birthPanel').style.display='none';
     document.getElementById('lgPanel').style.display='block';
+    if(window.AiLoadingSteps)AiLoadingSteps.scrollToResult('lgPanel');
     if(window.console)console.error(e);
   }finally{
     btn.disabled=false;btn.textContent='Luận giải →';

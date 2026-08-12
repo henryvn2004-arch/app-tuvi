@@ -267,6 +267,11 @@
       el.addEventListener('click', function () { el.parentElement.classList.toggle('closed'); });
     });
     host.querySelector('[data-act="cmd"]').addEventListener('click', openCmd);
+    // Khối avatar/tên vừa bị dựng lại TRẮNG ("Khách"/"Đăng nhập →") — nếu danh
+    // mục tải xong SAU lượt paintAuth() đầu (đua nhau, tuỳ tốc độ mạng) thì tên
+    // thật + số dư vừa sơn xong bị đè mất, không có gì sơn lại. Gọi ngay tại
+    // đây để đúng bất kể ai chạy trước.
+    paintAuth();
   }
 
   // ── RENDER RAIL ──
@@ -1212,7 +1217,7 @@
     var s = document.getElementById(id);
     if (!s) {
       s = document.createElement('script');
-      s.id = id; s.src = '/tools-shared/ai-loading-steps.js?v=6'; s.async = true;
+      s.id = id; s.src = '/tools-shared/ai-loading-steps.js?v=7'; s.async = true;
       (document.head || document.documentElement).appendChild(s);
     }
     s.addEventListener('load', function () {
@@ -1453,6 +1458,7 @@
         _rc.vndPerCredit = d.vndPerCredit || 1000;
         _rc.loaded = true;
         renderRailMeter();
+        paintSidebarBalance();
       })
       .catch(function () { /* đồng hồ chỉ là trợ giúp — hỏng thì im lặng, không chặn hỏi */ });
   }
@@ -1545,6 +1551,7 @@
     if (typeof pw.freeTurns === 'number') _rc.freeTurns = pw.freeTurns;
     if (_rc.price != null && _rc.balance != null) _rc.loaded = true;
     renderRailMeter();
+    paintSidebarBalance();
   }
 
   function creditVnd(c) {
@@ -2187,15 +2194,34 @@
     document.body.classList.toggle('drawer-open', open);
   }
   window.shellSyncBackdrop = syncBackdrop;
+  // Số dư Lượng ngay dưới tên trong sidebar — trước đây chỗ đó chỉ có "Xem hồ
+  // sơ →" tĩnh, người dùng không biết còn bao nhiêu Lượng tới khi bí giữa
+  // chừng một tool. Đọc thẳng `_rc.balance` — cái rail ĐÃ tự nạp cho đồng hồ
+  // "Còn N câu hỏi" (loadRailStatus) — nên KHÔNG thêm lượt mạng riêng.
+  // Tự bảo vệ (không cần người gọi kiểm trước): khách vô danh hoặc chưa biết
+  // số dư thì giữ nguyên chữ cũ, không bịa số.
+  function paintSidebarBalance() {
+    try {
+      var s = window.Auth && Auth.getSession && Auth.getSession();
+      if (!(s && s.user)) return; // khách vô danh — giữ "Đăng nhập →"
+      var known = _rc.balance != null && !_rc.anon;
+      var txt = known ? _rc.balance.toLocaleString('vi-VN') : null;
+      var sub = document.getElementById('sbSub');
+      if (sub) sub.textContent = txt != null ? (txt + ' Lượng · Nạp thêm →') : 'Xem hồ sơ →';
+      var pill = document.getElementById('sbBalance');
+      if (pill) pill.textContent = txt != null ? txt : '—';
+    } catch (e) { /* ignore */ }
+  }
+
   function paintAuth() {
     try {
       var s = window.Auth && Auth.getSession && Auth.getSession();
       if (s && s.user) {
         var nm = (s.user.email || 'Bạn').split('@')[0];
         var e1 = document.getElementById('sbName'); if (e1) e1.textContent = nm;
-        var e2 = document.getElementById('sbSub'); if (e2) e2.textContent = 'Xem hồ sơ →';
         var e3 = document.getElementById('sbAva'); if (e3) e3.textContent = (nm[0] || '?').toUpperCase();
       }
+      paintSidebarBalance();
     } catch (e) { /* ignore */ }
   }
 
@@ -2284,6 +2310,28 @@
     } catch (e) { /* ignore */ }
   }
 
+  // `window.refreshNavCredits` là tín hiệu "số dư vừa đổi" dùng chung cả site
+  // (auth.js gọi sau đăng nhập, tuvi-paywall.js gọi sau khi trừ Lượng). Nối
+  // vào bằng ACCESSOR, không gán đè — thứ tự nạp script giữa auth.js/
+  // tuvi-paywall.js/shell.js không cố định theo từng trang, gán đè thì bên
+  // nạp trước mất hẳn hook mà không có gì báo (đúng mẹo `_hookBalanceRefresh`
+  // của tuvi-paywall.js, viết lại ở đây để không phụ thuộc file đó có mặt).
+  (function hookBalanceRefresh() {
+    var inner = window.refreshNavCredits;
+    try {
+      Object.defineProperty(window, 'refreshNavCredits', {
+        configurable: true,
+        get: function () {
+          return function () {
+            try { if (typeof inner === 'function') inner.apply(this, arguments); } catch (e) { /* ignore */ }
+            loadRailStatus(); // đọc lại ví thật, tự vẽ lại sidebar bên trong
+          };
+        },
+        set: function (fn) { inner = fn; },
+      });
+    } catch (e) { /* trình duyệt chặn defineProperty → sidebar vẫn tự đúng ở lượt tải trang sau */ }
+  })();
+
   // ── BOOT ──
   function boot() {
     // Marketing: nạp track.js (page_view tự bắn) + đánh dấu mở tool trong shell.
@@ -2321,6 +2369,12 @@
     // Theo dõi phiên đăng nhập tới khi SẴN SÀNG (Auth có thể refresh token async
     // qua cookie): cập nhật avatar/tên + nạp lại lịch sử NGAY khi token xuất hiện.
     var tries = 0, hadTok = !!getToken(), wasRestoring = false;
+    // Đã đăng nhập SẴN lúc boot (không phải vừa mới xuất hiện) ⇒ nhánh
+    // `tok && !hadTok` bên dưới sẽ KHÔNG BAO GIỜ đúng cho người này — nó chỉ
+    // bắt lúc token VỪA XUẤT HIỆN. Không gọi riêng ở đây thì số dư sidebar chỉ
+    // có sau khi họ mở một tool (chỗ DUY NHẤT khác gọi `loadRailStatus` là
+    // trong `setContext`), tức mở app lên vẫn thấy "Xem hồ sơ →" trống trơn.
+    if (hadTok) loadRailStatus();
     var t = setInterval(function () {
       paintAuth();
       var tok = !!getToken();

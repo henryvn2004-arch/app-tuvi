@@ -200,6 +200,10 @@ function doCongSo(){
     document.getElementById('birthPanel').style.display='none';
     document.getElementById('resPanel').style.display='block';
     document.getElementById('btnEdit').style.display='';
+    // Tool free chạy gần như tức thì (không cần orb/loading — luật đã ghi ở
+    // ai-loading-steps.js) nhưng nếu form nằm dưới cuối màn hình thì kết quả
+    // vẫn hiện NGOÀI khung nhìn. Cuộn lên để thấy nó vừa dựng xong.
+    document.getElementById('resPanel').scrollIntoView({behavior:'smooth',block:'start'});
     ve();
     Shell.rememberBirth(fd);
     if(window.SHELL_INTRO)Shell.dismissIntro(window.SHELL_INTRO.key);

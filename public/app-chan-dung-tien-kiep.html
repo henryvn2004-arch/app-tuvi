@@ -176,7 +176,7 @@ window.SHELL_INTRO={key:'chan-dung-tien-kiep',title:'Chân Dung Tiền Kiếp',d
 <script src="/auth.js?v=2"></script>
   <script src="/nav.js?v=22" data-icons-only></script>
 <script src="/shell.js?v=70"></script>
-<script src="/tools-shared/ai-loading-steps.js?v=6"></script>
+<script src="/tools-shared/ai-loading-steps.js?v=7"></script>
 <script src="/tools-shared/portrait-recover.js?v=1"></script>
 <script>
 
@@ -266,6 +266,7 @@ async function analyze() {
   _openPanel();
   _loadingCtl = AiLoadingSteps.mount('loadingSteps', CDTK_STEPS.slice(0, 2));
   _loadingCtl.start();
+  if (AiLoadingSteps.scrollToResult) AiLoadingSteps.scrollToResult('loading');
   var prev;
   try {
     var r = await fetch('/api/chan-dung-tien-kiep?preview=1', {
@@ -352,6 +353,7 @@ async function _doGenerate(freeRerun) {
   // là nói dối về việc máy đang làm gì.
   _loadingCtl = AiLoadingSteps.mount('loadingSteps', CDTK_STEPS.slice(2));
   _loadingCtl.start();
+  if (AiLoadingSteps.scrollToResult) AiLoadingSteps.scrollToResult('loading');
 
   var token = window.Auth?.getSession()?.access_token || '';
   var birth = _lastBirth;
