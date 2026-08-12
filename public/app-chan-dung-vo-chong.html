@@ -158,7 +158,7 @@ window.SHELL_INTRO={key:'chan-dung-vo-chong',title:'Chân Dung Vợ Chồng',des
 <script src="/auth.js?v=2"></script>
   <script src="/nav.js?v=22" data-icons-only></script>
 <script src="/shell.js?v=70"></script>
-<script src="/tools-shared/ai-loading-steps.js?v=6"></script>
+<script src="/tools-shared/ai-loading-steps.js?v=7"></script>
 <script src="/tools-shared/portrait-recover.js?v=1"></script>
 <script>
 var _currentSlug = '';
@@ -240,6 +240,7 @@ async function analyze() {
   _openPanel();
   _loadingCtl = AiLoadingSteps.mount('loadingSteps', CDVC_STEPS.slice(0, 1));
   _loadingCtl.start();
+  if (AiLoadingSteps.scrollToResult) AiLoadingSteps.scrollToResult('loading');
   var prev;
   try {
     var r = await fetch('/api/chan-dung-vo-chong?preview=1', {
@@ -309,6 +310,7 @@ async function _doGenerate(freeRerun) {
   document.getElementById('loading').style.display = 'block';
   _loadingCtl = AiLoadingSteps.mount('loadingSteps', CDVC_STEPS.slice(1));
   _loadingCtl.start();
+  if (AiLoadingSteps.scrollToResult) AiLoadingSteps.scrollToResult('loading');
 
   try {
     var token = window.Auth?.getSession()?.access_token || '';

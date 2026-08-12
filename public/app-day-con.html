@@ -62,6 +62,9 @@
 .dc-basis-list{margin:0 0 0 18px;color:#5a5145;line-height:1.9;font-size:12.8px}
 .dc-basis-list li{margin-bottom:3px}
 .dc-basis-list b{color:#2a2118}
+.dc-basis-more{margin-top:8px;font-size:12.5px}
+.dc-basis-more summary{cursor:pointer;color:#7A5F26;font-weight:600}
+.dc-basis-more ul{margin:8px 0 0 18px;color:#5a5145;line-height:1.9;font-size:12.8px}
 .dc-how{display:grid;grid-template-columns:1fr 1fr;gap:13px}
 @media(max-width:760px){.dc-how{grid-template-columns:1fr}}
 .dc-howcard{border:1px solid #EFE7D6;border-radius:9px;padding:12px 13px;background:#FDFBF6}
@@ -340,6 +343,7 @@
           <div class="res-block-header"><span class="res-block-title">Cơ Sở Trong Lá Số</span></div>
           <div class="res-block-body">
             <ul class="dc-basis-list" id="basisList"></ul>
+            <details class="dc-basis-more" id="basisMore" style="display:none"></details>
           </div>
         </div>
 
@@ -375,7 +379,7 @@ window.SHELL_INTRO={key:'day-con',title:'Dạy Con Theo Lá Số',desc:'Đưa l�
 <script src="/auth.js?v=2"></script>
   <script src="/nav.js?v=22" data-icons-only></script>
 <script src="/shell.js?v=70"></script>
-<script src="/tools-shared/ai-loading-steps.js?v=6"></script>
+<script src="/tools-shared/ai-loading-steps.js?v=7"></script>
 <script>
 
 var _currentSlug = '';
@@ -482,6 +486,9 @@ async function analyze() {
   _openPanel();
   _loadingCtl = AiLoadingSteps.mount('loadingSteps', DC_STEPS.slice(0, 2));
   _loadingCtl.start();
+  // Form dài (thêm lá số cha/mẹ) thì bấm nút xong khung loading nằm ngoài
+  // khung nhìn — cuộn lên ngay để thấy có gì vừa chạy, không đứng im.
+  AiLoadingSteps.scrollToResult('loading');
   var prev;
   try {
     var r = await fetch('/api/day-con?preview=1', {
@@ -556,6 +563,8 @@ async function _doGenerate(freeRerun, lo) {
   _loadingCtl = AiLoadingSteps.mount('loadingSteps', DC_STEPS.slice(2));
   document.getElementById('loading').style.display = 'block';
   _loadingCtl.start();
+  // Mở khóa xong nằm sâu dưới phần preview — cuộn lại lên chỗ đang chạy.
+  AiLoadingSteps.scrollToResult('loading');
 
   var token = window.Auth?.getSession()?.access_token || '';
   try {
@@ -745,7 +754,12 @@ function renderKhieu(data) {
   var noi = ks.filter(function (k) { return k.noiBat; });
   var host = document.getElementById('khieuCards');
   if (noi.length) {
-    host.innerHTML = noi.map(function (k) {
+    // Biểu đồ ở trên đã hiện ĐỦ 8 chất kèm điểm — đó là bằng chứng máy đọc
+    // đúng lá số. Thẻ chi tiết (câu chốt + dấu hiệu + bẫy + hỏi nhà trường) là
+    // phần khiến bản free đọc xong thấy đủ luôn; chỉ mở hết cho 2 chất nổi
+    // nhất, còn lại chỉ nêu tên — đọc xong vẫn còn lý do bấm Mở khóa.
+    var KH_VISIBLE = 2;
+    host.innerHTML = noi.slice(0, KH_VISIBLE).map(function (k) {
       return '<div class="kh-card"><h5>' + esc(k.ten) + '<span class="s">' + n1(k.diem) + '/10</span></h5>' +
         '<p>' + esc(k.motCau) + '</p>' +
         '<div class="dc-chips">' + (k.dauHieu || []).map(function (d) {
@@ -755,6 +769,12 @@ function renderKhieu(data) {
         '<p style="margin-bottom:0"><b>Hỏi nhà trường:</b> ' + esc(k.oLop) + '</p>' +
         '</div>';
     }).join('');
+    var khRest = noi.length - KH_VISIBLE;
+    if (khRest > 0) {
+      host.innerHTML += '<p class="fw-note">+ <b>' + khRest + ' chất nữa</b> cũng nổi (' +
+        esc(noi.slice(KH_VISIBLE).map(function (k) { return k.ten; }).join(', ')) +
+        ') — xem điểm ở biểu đồ trên, mở bản đầy đủ để đọc chi tiết từng chất.</p>';
+    }
   } else {
     // Ca có thật (~1/7 lá số). Nói thẳng — lấp bằng ba chất cao nhất rồi gọi là
     // năng khiếu thì lá số nào cũng có năng khiếu, tức bảng không nói gì.
@@ -776,14 +796,14 @@ function renderHoatDong(h) {
     'Nhóm tuổi: <b>' + esc(h.bandLabel) + '</b>' +
     (h.chuaRo ? ' · chưa chất nào nổi hẳn nên đây là <b>ba chất đáng thử trước</b>' : '');
 
+  // Danh sách CÂU LẠC BỘ/HOẠT ĐỘNG CỤ THỂ là thứ đọc xong là dùng được ngay,
+  // đúng chỗ khiến bản free thấy đủ. Free chỉ nêu SỐ LƯỢNG đã tính — mở khóa
+  // mới thấy tên hoạt động thật.
   document.getElementById('hdList').innerHTML = ds.map(function (c) {
+    var nClb = (c.clb || []).length, nNha = (c.nha || []).length;
     return '<div class="kh-card"><h5>' + esc(c.ten) + '<span class="s">' + n1(c.diem) + '/10</span></h5>' +
-      '<div class="hd-grid">' +
-        '<div class="hd-box"><h6>Đăng ký / ra khỏi nhà</h6><ul>' +
-          (c.clb || []).map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('') + '</ul></div>' +
-        '<div class="hd-box"><h6>Chơi được ngay ở nhà</h6><ul>' +
-          (c.nha || []).map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('') + '</ul></div>' +
-      '</div>' +
+      '<p>Đã chọn sẵn <b>' + nClb + ' hoạt động để đăng ký/ra khỏi nhà</b> và <b>' + nNha +
+      ' cách chơi ngay ở nhà</b> hợp chất này — mở bản đầy đủ để xem tên cụ thể.</p>' +
       '<div class="hd-ask"><b>Hỏi nhà trường:</b> ' + esc(c.oLop) + '</div>' +
       '</div>';
   }).join('');
@@ -904,8 +924,20 @@ function renderMeta(data) {
     else if (v.huong) bit.push('đà ' + esc(v.huong));
     rows.push('<li><b>Vận năm ' + v.nam + '</b> — ' + (bit.join(' · ') || 'chưa chấm') + '</li>');
   }
+  // Bày đủ ĐỂ CHỨNG MINH máy đọc đúng lá số — không bày HẾT để đọc xong là no.
+  // 2 mục đầu đứng mở sẵn làm bằng chứng; phần còn lại gói trong <details>
+  // đóng — vẫn một cú bấm là thấy, chỉ đổi thứ ĐẬP VÀO MẮT đầu tiên.
   if (rows.length) {
-    document.getElementById('basisList').innerHTML = rows.join('');
+    var BASIS_VISIBLE = 2;
+    document.getElementById('basisList').innerHTML = rows.slice(0, BASIS_VISIBLE).join('');
+    var basisRest = rows.slice(BASIS_VISIBLE);
+    var basisMoreHost = document.getElementById('basisMore');
+    if (basisRest.length) {
+      basisMoreHost.innerHTML = '<summary>Xem thêm ' + basisRest.length + ' mục trong lá số</summary><ul class="dc-basis-list">' + basisRest.join('') + '</ul>';
+      basisMoreHost.style.display = '';
+    } else {
+      basisMoreHost.style.display = 'none';
+    }
     document.getElementById('basisBlock').style.display = 'block';
   }
   _syncSections();

@@ -422,5 +422,37 @@
     };
   }
 
-  window.AiLoadingSteps = { mount: mount, mountWait: mountWait, orbHtml: orbHtml, pacer: pacer };
+  // ============================================================
+  // scrollToResult — cuộn khung workspace tới khung kết quả/đang chờ NGAY sau
+  // khi bấm chạy. TÁCH KHỎI mount()/mountWait(): nhiều trang phải hiện panel
+  // (đổi display:none→block) TRƯỚC rồi mới biết cuộn tới đâu — nhét cuộn vào
+  // bên trong bộ đếm bước thì hàm đó phải biết luôn cấu trúc panel của từng
+  // trang, mỗi trang một kiểu khác nhau.
+  //
+  // Lỗi đang vá: bấm "chạy"/"luận giải" mà không cuộn ⇒ nếu form dài hơn màn
+  // hình (nhất là mobile), người dùng đang đứng ở nút bấm cuối form, panel kết
+  // quả/orb hiện ra NGOÀI khung nhìn, màn hình trông như đứng im suốt vài giây
+  // đầu — không biết có đang chạy hay không.
+  //
+  //   AiLoadingSteps.scrollToResult('resPanel')
+  //   AiLoadingSteps.scrollToResult(el, { delay: 30 })
+  //
+  // Gọi ngay sau dòng hiện panel, KHÔNG đợi kết quả xong — mục đích là cho
+  // thấy "đã có gì đó đang chạy", không phải cuộn tới kết quả CUỐI cùng.
+  // ============================================================
+  function scrollToResult(containerOrId, opts) {
+    var el = typeof containerOrId === 'string' ? document.getElementById(containerOrId) : containerOrId;
+    if (!el) return;
+    opts = opts || {};
+    var run = function () {
+      try { el.scrollIntoView({ behavior: 'smooth', block: 'start' }); } catch (e) { /* ignore */ }
+    };
+    // Mặc định cuộn NGAY — trình duyệt buộc phải tính lại layout khi đọc vị
+    // trí để cuộn nên panel vừa display:block trong CÙNG tick vẫn đo đúng.
+    // `delay` chỉ cần khi trang còn việc khác (vd render nội dung) phải xong
+    // trước đã.
+    if (opts.delay) setTimeout(run, opts.delay); else run();
+  }
+
+  window.AiLoadingSteps = { mount: mount, mountWait: mountWait, orbHtml: orbHtml, pacer: pacer, scrollToResult: scrollToResult };
 })();
