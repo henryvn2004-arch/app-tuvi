@@ -19,6 +19,7 @@ import {
   type BirthParams,
 } from '@/lib/contract/v1';
 import { buildToolDefs, executeTool, newToolContext, buildBirthFromInput, type ProfilePort } from '@/lib/tools/registry';
+import { type ToolSuggestion } from '@/lib/tools/suggest-tool';
 import { computeLaso, renderLasoCard } from '@/lib/engine/laso';
 import { computeTuBinh } from '@/lib/engine/tubinh';
 import { computeSinhCon, computeChonNgay, computeDatTen, computeDatTenDn } from '@/lib/engine/diachi';
@@ -133,6 +134,9 @@ export interface AgentResult {
   lasoCard: string | null;
   // Gợi ý câu hỏi tiếp theo do LLM sinh (bám câu trả lời) → chip động ở rail.
   suggestions: string[];
+  // Thẻ "công cụ này giúp được" (bước 4). null ở hầu hết lượt — model được dặn
+  // mặc định là IM. Kênh bot bỏ qua field này (chỉ web dựng thẻ bấm được).
+  toolSuggest?: ToolSuggestion | null;
 }
 
 /** Kết cục một lượt thử provider. `midStream` = đã stream chữ/chạy tool rồi mới
@@ -171,7 +175,12 @@ export async function runAgent(
         forget: (idPrefix: string) => forgetFact(userId, idPrefix),
       }
     : null;
-  const ctx = newToolContext(null, { profiles, birth: req.birth ?? null, memory: memoryPort });
+  const ctx = newToolContext(null, {
+    profiles, birth: req.birth ?? null, memory: memoryPort,
+    // Tool ĐANG mở — để không gợi ý lại chính nó. Lấy từ scenario.type; nhánh
+    // lá số không có scenario nên là 'laso'.
+    activeTool: req.scenario?.type || 'laso',
+  });
   const toolsUsed: string[] = [];
   // Birth đã biết (req.birth truyền sẵn) hoặc do agent lập qua tool lap_la_so
   // trong lượt này → trả về để adapter (Telegram) lưu theo phiên, đỡ hỏi lại.
@@ -499,6 +508,7 @@ export async function runAgent(
         subjectSwitched: ctx.subjectSwitched,
         lasoCard: null,
         suggestions,
+        toolSuggest: ctx.toolSuggestion,
       };
     } catch (e) {
       console.error('[runAgent] Gemini lỗi → fallback Sonnet:', (e as Error)?.message);
@@ -563,6 +573,7 @@ export async function runAgent(
           subjectSwitched: ctx.subjectSwitched,
           lasoCard,
           suggestions,
+          toolSuggest: ctx.toolSuggestion,
         },
       };
     } catch (e) {
@@ -592,6 +603,7 @@ export async function runAgent(
         subjectSwitched: ctx.subjectSwitched,
         lasoCard: justBuilt && ctx.ls ? renderLasoCard(ctx.ls, ctx.birth) : null,
         suggestions,
+        toolSuggest: ctx.toolSuggestion,
       };
     }
     // Hỏng sạch → rơi xuống loop Anthropic bên dưới.
@@ -644,6 +656,7 @@ export async function runAgent(
             subjectSwitched: ctx.subjectSwitched,
             lasoCard: null,
             suggestions,
+            toolSuggest: ctx.toolSuggestion,
           };
         } catch (e) {
           console.error('[runAgent] Fallback Gemini cũng lỗi:', (e as Error)?.message);
@@ -697,6 +710,7 @@ export async function runAgent(
     subjectSwitched: ctx.subjectSwitched,
     lasoCard,
     suggestions,
+    toolSuggest: ctx.toolSuggestion,
   };
 }
 

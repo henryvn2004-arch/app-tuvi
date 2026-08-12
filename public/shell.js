@@ -1744,7 +1744,7 @@
       var att = document.getElementById('railAttach'); if (att) att.disabled = false;
       greet(o);
       // Ngữ cảnh mới = phiên hỏi mới: đếm lại từ đầu và cho thẻ mời hiện lại.
-      _askCount = 0; _upsellShown = false; _cungAsked = [];
+      _askCount = 0; _upsellShown = false; _cungAsked = []; _suggestShown = false; pendingSuggest = null;
       // Vừa có thứ để hỏi → mời bằng orb trên nút Hỏi (mobile). Ngữ cảnh MỚI
       // là một lượt mời mới, nên mở lại cả cờ "đã mở rail".
       _railOpened = false; syncAskOrb();
@@ -1943,7 +1943,7 @@
       ctxChips = ctxChipsOrig.slice(); greet({ greeting: 'Bắt đầu hội thoại mới. Bạn muốn hỏi gì về lá số này?' });
       // Hội thoại mới → đếm lại câu, và cho thẻ mời có cơ hội hiện lại (một lần
       // mỗi hội thoại, không phải một lần mỗi phiên trình duyệt).
-      _askCount = 0; _upsellShown = false; _cungAsked = [];
+      _askCount = 0; _upsellShown = false; _cungAsked = []; _suggestShown = false; pendingSuggest = null;
       renderRailMeter();
     }
   }
@@ -2062,6 +2062,7 @@
           else if (ev.name === 'done' && ev.data) {
             if (ev.data.suggestions && ev.data.suggestions.length) ctxChips = ev.data.suggestions.slice(0, 4);
             applyPaywallInfo(ev.data.paywall);
+            if (ev.data.toolSuggest) pendingSuggest = ev.data.toolSuggest;
           }
         }
       }
@@ -2072,6 +2073,7 @@
       // Thẻ mời SAU khi câu trả lời đã hiện xong — chèn trước lúc đó thì nó đứng
       // chen giữa lúc người ta đang đọc, thành quảng cáo cắt ngang.
       maybeShowUpsell();
+      if (pendingSuggest) { showToolSuggest(pendingSuggest); pendingSuggest = null; }
       // Đến từ link chia sẻ + đã hỏi thật lần đầu → ghi nhận 1 lượt chuyển đổi.
       if (_fromshareId && !_convFired) { _convFired = true; trackConvert(_fromshareId); }
     } catch (e) {
@@ -2081,6 +2083,41 @@
     } finally {
       streaming = false; setSend(true); renderSuggs(); chat.scrollTop = chat.scrollHeight;
     }
+  }
+
+  // ── THẺ GỢI Ý CÔNG CỤ (bước 4) ──
+  // Server chỉ ĐỀ NGHỊ; chỗ giữ luật "tối đa MỘT lần mỗi cuộc trò chuyện" nằm
+  // ở đây, vì client mới là bên có trạng thái phiên. Model được dặn tự kiềm chế
+  // trong mô tả tool, nhưng dặn không phải là chặn — nó quên là mỗi lượt một
+  // thẻ, và một khung chat đầy thẻ mời thì đọc thành quảng cáo.
+  var pendingSuggest = null;   // thẻ của lượt này, dựng sau khi chữ hiện xong
+  var _suggestShown = false;   // đã hiện thẻ trong cuộc trò chuyện này chưa
+
+  function showToolSuggest(s) {
+    if (_suggestShown || !s || !s.path || !s.label) return;
+    // Chốt lại ở client: không bao giờ dẫn ra ngoài site, không nhận
+    // javascript:. `path` do DANH MỤC cấp chứ không do model, nhưng đây là thứ
+    // đi thẳng vào href nên vẫn kiểm.
+    if (String(s.path).charAt(0) !== '/' || String(s.path).indexOf('//') === 0) return;
+    _suggestShown = true;
+    var chat = document.getElementById('chat');
+    if (!chat) return;
+    var d = document.createElement('div');
+    d.className = 'tool-suggest';
+    // ⛔ KHÔNG hiện giá — xem lib/tools/suggest-tool.ts. Thẻ chỉ nói CÔNG CỤ
+    // NÀO và GIÚP ĐƯỢC GÌ; người chat thường xuyên vốn đã có Lượng, dán giá
+    // vào đúng lúc họ đang cần giúp là biến chỉ đường thành chào hàng.
+    d.innerHTML =
+      '<div class="ts-b"><div class="ts-t">' + esc(s.label) + '</div>' +
+      '<div class="ts-d">' + esc(s.lyDo || '') + '</div></div>' +
+      '<a class="ts-go" href="' + esc(s.path) + '">Mở</a>';
+    chat.appendChild(d);
+    chat.scrollTop = chat.scrollHeight;
+    try { track('cta_click', { tool_id: s.toolId, slug: 'rail_suggest_shown' }); } catch (e) { /* ignore */ }
+    var go = d.querySelector('.ts-go');
+    if (go) go.addEventListener('click', function () {
+      try { track('cta_click', { tool_id: s.toolId, slug: 'rail_suggest_open' }); } catch (e) { /* ignore */ }
+    });
   }
 
   // ── COMMAND PALETTE ──

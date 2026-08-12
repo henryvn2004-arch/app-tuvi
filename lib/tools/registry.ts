@@ -14,6 +14,7 @@
 import { computeLaso, formatLasoContext, lasoSummary, clockToBranch, type Laso } from '@/lib/engine/laso';
 import { buildTools, execLasoTool, toolLabel } from '@/lib/agent/tools';
 import type { BirthParams } from '@/lib/contract/v1';
+import { SUGGEST_TOOL_DEF, resolveToolSuggestion, type ToolSuggestion } from '@/lib/tools/suggest-tool';
 
 type Rec = Record<string, unknown>;
 
@@ -52,6 +53,11 @@ export interface ToolContext {
   // Cửa ghi hồ sơ người dùng (TẦNG 2). null = lượt anon / kênh chưa nối danh
   // tính → 2 tool ghi_nho/quen_di không được đăng ký.
   memory: MemoryPort | null;
+  // Tool người dùng ĐANG mở — để không gợi ý lại chính nó.
+  activeTool: string | null;
+  // Thẻ gợi ý công cụ model vừa chọn trong lượt này (tối đa 1). runAgent đọc
+  // rồi gắn vào event `done`.
+  toolSuggestion: ToolSuggestion | null;
   // Tên lá số vừa mở/lưu trong lượt (để kênh hiển thị/ghi nhớ).
   activeProfile: string | null;
   // mo_la_so mở một lá số KHÁC → đổi chủ thể → kênh reset thread hội thoại.
@@ -60,13 +66,20 @@ export interface ToolContext {
 
 export function newToolContext(
   seedLs: Laso | null = null,
-  opts?: { profiles?: ProfilePort | null; birth?: BirthParams | null; memory?: MemoryPort | null },
+  opts?: {
+    profiles?: ProfilePort | null;
+    birth?: BirthParams | null;
+    memory?: MemoryPort | null;
+    activeTool?: string | null;
+  },
 ): ToolContext {
   return {
     ls: seedLs,
     birth: opts?.birth ?? null,
     profiles: opts?.profiles ?? null,
     memory: opts?.memory ?? null,
+    activeTool: opts?.activeTool ?? null,
+    toolSuggestion: null,
     activeProfile: null,
     subjectSwitched: false,
   };
@@ -158,6 +171,7 @@ export function buildToolDefs(hasProfiles = false, hasMemory = false): any[] {
   return [
     ...profileTools,
     ...memoryTools,
+    SUGGEST_TOOL_DEF,
     {
       name: 'lap_la_so',
       description:
@@ -223,6 +237,7 @@ export async function executeTool(name: string, input: Rec, ctx: ToolContext): P
   if (name === 'liet_ke_la_so') return execLietKeLaSo(ctx);
   if (name === 'ghi_nho') return execGhiNho(input, ctx);
   if (name === 'quen_di') return execQuenDi(input, ctx);
+  if (name === 'goi_y_cong_cu') return execGoiYCongCu(input, ctx);
   if (name === 'tra_cuu_tri_thuc') {
     return { content: await execTraCuu(input), label: 'Đang tra cứu sách cổ...' };
   }
@@ -403,6 +418,29 @@ async function execQuenDi(input: Rec, ctx: ToolContext): Promise<ToolRunResult> 
   return {
     content: ok ? 'Đã xoá khỏi hồ sơ.' : 'Không tìm thấy mục đó trong hồ sơ.',
     label: 'Đang lắng nghe',
+  };
+}
+
+// ── Gợi ý công cụ (bước 4) ──────────────────────────────────
+// Giữ ĐÚNG MỘT thẻ mỗi lượt: model gọi hai lần thì lần sau bị bỏ. Trần "một
+// lần mỗi cuộc trò chuyện" thì client giữ (nó mới là bên có trạng thái phiên).
+async function execGoiYCongCu(input: Rec, ctx: ToolContext): Promise<ToolRunResult> {
+  if (ctx.toolSuggestion) {
+    return { content: 'Đã gợi ý một công cụ trong lượt này rồi. Đừng gợi ý thêm.', label: 'Đang tra danh mục' };
+  }
+  const s = await resolveToolSuggestion(input?.tool_id, input?.ly_do, ctx.activeTool);
+  if (!s) {
+    // Nói rõ là ĐÃ BỎ để model không tưởng thẻ đã hiện rồi viết "bạn bấm vào
+    // thẻ bên dưới nhé" — câu đó trỏ vào một thứ không tồn tại.
+    return {
+      content: 'Không tìm thấy công cụ đó (mã sai, đang tắt, hoặc chính là công cụ đang mở). KHÔNG có thẻ nào hiện ra — đừng nhắc tới nó trong câu trả lời.',
+      label: 'Đang tra danh mục',
+    };
+  }
+  ctx.toolSuggestion = s;
+  return {
+    content: `Đã hiện thẻ "${s.label}" cho người dùng. Đừng nhắc lại trong lời văn, đừng nói giá, cứ trả lời tiếp tự nhiên.`,
+    label: 'Đang tra danh mục',
   };
 }
 
