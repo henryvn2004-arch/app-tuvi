@@ -1816,6 +1816,30 @@
       try { if (window.UserCharts) window.UserCharts.save(fd, ''); } catch (e) { /* ignore */ }
     },
     getRememberedBirth: function () { return birthSnapshot(); },
+    // Lần GẦN NHẤT người này trò chuyện với thầy (mọi tool), tính bằng mili-giây
+    // — 0 nếu chưa lần nào. Để trang dựng câu chào hỏi thăm ("mấy hôm nay con
+    // thế nào") mà không phải gọi mạng lượt nào.
+    // ⚠️ Đọc localStorage nên chỉ đúng TRÊN MÁY NÀY: đổi máy hoặc xoá cache thì
+    // về 0 và câu chào rơi về bản "lần đầu". Chấp nhận được — nó chỉ chọn CÂU
+    // CHỮ, còn hồ sơ thật thì nằm ở server (tầng 2). Cố ý không hỏi server:
+    // một lượt mạng nữa lúc mở trang chỉ để chọn lời chào là không đáng.
+    // Khoá `app_hist_v1_*` là của CHÍNH shell.js — trang tự đọc là dựng bản
+    // kiến thức thứ hai rồi trôi lệch lúc nào không biết.
+    lastChatAt: function () {
+      var newest = 0;
+      try {
+        for (var i = 0; i < localStorage.length; i++) {
+          var k = localStorage.key(i);
+          if (!k || k.indexOf('app_hist_v1_') !== 0) continue;
+          var arr = JSON.parse(localStorage.getItem(k) || '[]') || [];
+          for (var j = 0; j < arr.length; j++) {
+            var t = Number(arr[j] && arr[j].createdAt) || 0;
+            if (t > newest) newest = t;
+          }
+        }
+      } catch (e) { /* quota / JSON hỏng → coi như chưa từng trò chuyện */ }
+      return newest;
+    },
     // Gắn UTM + mã giới thiệu vào một URL bất kỳ (dùng cho mã QR in trong ảnh
     // tải về — ảnh không mang link bấm được nên QR là đường đo duy nhất).
     viralUrl: function (url, toolId, opts) { return withViralParams(url, toolId, opts); },

@@ -195,7 +195,7 @@
             <div class="tw-row" id="todayWeekRow"></div>
           </div>
           <div class="today-cta">
-            <button class="today-ask" id="todayAsk" type="button">✦ Hỏi thầy vận hôm nay</button>
+            <button class="today-ask" id="todayAsk" type="button">✦ Trò chuyện với Thầy</button>
             <button class="today-share" id="todayShare" type="button">⇪ Chia sẻ</button>
             <button class="today-share" id="todayPoster" type="button">⤓ Ảnh</button>
           </div>
@@ -219,7 +219,7 @@
 <script src="/tool-prices.js?v=4"></script>
 <script src="/auth.js?v=2"></script>
   <script src="/nav.js?v=22" data-icons-only></script>
-<script src="/shell.js?v=68"></script>
+<script src="/shell.js?v=69"></script>
 <script>
 function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 var IC={
@@ -642,18 +642,78 @@ if(window.ToolPrices) ToolPrices.load().then(function(d){ if(d) renderHomeCards(
     wire({ngay:{canChi:r.data.canChiNgay,canHanh:r.data.canHanh},_flat:r.data},td,birth,hasBirth,hours);
   }
 
+  /* ── Câu chào HỎI THĂM ───────────────────────────────────────────────────
+     Thầy nói trước, và nói như người quen chứ không như một cái máy tra cứu.
+     Dựng bằng TRA BẢNG + tối đa MỘT mẩu hồ sơ — CỐ Ý không gọi LLM: trả tiền
+     cho một câu mà quá nửa số người chưa đọc đã gõ tiếp là phí.
+     Chỉ nhắc lại chuyện cũ khi ĐÃ XA ÍT NHẤT MỘT NGÀY — hỏi lại "chuyện đó đỡ
+     chưa" ngay trong cùng buổi thì thành lải nhải. Và chỉ nhắc nhóm `moi_lo`:
+     đó là thứ người ta thật sự mong có người hỏi tới, khác hẳn "nhà có hai con
+     nhỏ" (biết thì hay, mà lôi ra chào thì kỳ).                             */
+  function daysAway(){
+    try{
+      var last=(window.Shell&&Shell.lastChatAt)?Shell.lastChatAt():0;
+      if(!last) return -1;                                   // chưa lần nào
+      return Math.floor((Date.now()-last)/86400000);
+    }catch(e){ return -1; }
+  }
+
+  // Lấy MỘT mối lo trong hồ sơ. Có hạn giờ 1,5s và luôn gọi cb đúng một lần —
+  // hồ sơ chậm thì rơi về câu chào chung, không để rail treo không lời nào.
+  function fetchWorry(cb){
+    var tk=null;
+    try{ tk=(window.Auth&&Auth.getSession&&Auth.getSession()||{}).access_token||null; }catch(e){}
+    if(!tk){ cb(null); return; }
+    var done=false;
+    var fin=function(x){ if(done)return; done=true; cb(x); };
+    setTimeout(function(){ fin(null); },1500);
+    fetch('/api/payment?action=my-memory',{headers:{Authorization:'Bearer '+tk}})
+      .then(function(r){ return r.ok?r.json():null; })
+      .then(function(j){
+        var it=((j&&j.items)||[]).filter(function(x){ return x&&x.loai==='moi_lo'&&x.noi_dung; })[0];
+        fin(it?String(it.noi_dung):null);
+      })
+      .catch(function(){ fin(null); });
+  }
+
+  function greetingFor(cc,nm,away,worry){
+    var xung=nm?(', '+nm):'';
+    if(away<0) return 'Chào con'+xung+'. Thầy ở đây — con muốn kể gì cũng được: chuyện đi làm, chuyện trong nhà, '
+      + 'hay chỉ là hôm nay thấy mệt. Mà nếu muốn xem vận ngày **'+cc+'** hôm nay thì thầy soi luôn.';
+    if(away>=1&&worry) return 'Mấy hôm nay con thế nào'+xung+'? Lần trước con có nhắc chuyện **'+worry+'** — '
+      + 'chuyện đó tới đâu rồi con?';
+    if(away>=3) return 'Lâu rồi con chưa ghé'+xung+'. Dạo này ổn cả chứ? Có gì muốn kể với thầy không?';
+    if(away>=1) return 'Con lại ghé rồi'+xung+'. Hôm nay thế nào — có chuyện gì trong lòng không?';
+    return 'Thầy đây'+xung+'. Con còn muốn hỏi gì nữa không, hay có chuyện gì muốn kể?';
+  }
+
+  // Chips = câu người dùng BẤM ĐỂ GỬI. Trộn hai đường: mở lòng và tra cứu.
+  // Trước đây cả 4 đều là câu tra vận, nên khung chat chỉ đọc thành một cái
+  // máy bói — người đang muốn nói chuyện không thấy chỗ nào để bắt đầu.
+  var CHIPS_TAM_SU=['Dạo này con thấy mệt mỏi quá','Con đang bế tắc chuyện công việc',
+                    'Vận hôm nay của con thế nào?','Thời gian tới có gì đáng lưu ý không?'];
+
   /* ── Mồi rail + nút ────────────────────────────────────────────────────── */
   function wire(v,td,birth,hasBirth,hours){
     var cc=v.ngay.canChi;
     try{
       if(hasBirth){
         var nm=(birth.name||'').trim();
-        Shell.setContext({
-          birth:birth,
-          label:'Vận hôm nay'+(nm?' · '+nm:''),
-          greeting:'Hôm nay là ngày **'+cc+'**'+(nm?', '+nm:'')+'. Con muốn thầy soi vận hôm nay — công việc, tài lộc hay tình duyên?',
-          chips:['Hôm nay vận tôi thế nào?','Việc nên làm hôm nay?','Giờ nào tốt cho tôi hôm nay?','Tháng này của tôi ra sao?']
-        });
+        var away=daysAway();
+        // Mồi NGAY bằng câu chào chung để rail dùng được liền, rồi NÂNG CẤP khi
+        // hồ sơ về (nếu có mối lo). setContext lượt sau dựng lại thread — vô hại
+        // vì người dùng chưa gõ gì trong ~1,5s đầu.
+        var prime=function(worry){
+          Shell.setContext({
+            birth:birth,
+            label:'Trò chuyện với Thầy'+(nm?' · '+nm:''),
+            placeholder:'Kể cho thầy nghe…',
+            greeting:greetingFor(cc,nm,away,worry),
+            chips:CHIPS_TAM_SU
+          });
+        };
+        prime(null);
+        if(away>=1) fetchWorry(function(w){ if(w) prime(w); });
       } else {
         // ⚠️ `extractGenericContext` BỎ QUA mọi giá trị là object → payload phải
         // PHẲNG, nếu không rail nhận được đúng mấy dòng rồi luận chay.
@@ -681,7 +741,17 @@ if(window.ToolPrices) ToolPrices.load().then(function(d){ if(d) renderHomeCards(
 
     var ask=el('todayAsk');
     ask.onclick=function(){
-      try{ Shell.ask(hasBirth?'Hôm nay vận của tôi thế nào? Nên làm gì, kiêng gì?':'Hôm nay là ngày gì, tôi nên làm gì và tránh gì?'); }catch(e){}
+      // 🔑 CHỈ MỞ rail, KHÔNG tự gửi câu hỏi. Trước đây nút này bắn thẳng
+      // "Hôm nay vận của tôi thế nào?" — tức trả lời hộ người ta câu "muốn nói
+      // gì", và đóng khung mọi cuộc trò chuyện thành một lượt tra vận. Nay thầy
+      // chào trước, người dùng chọn: bấm chip, hay tự kể chuyện của mình.
+      // Người chưa có lá số vẫn giữ đường cũ — rail của họ là kịch bản
+      // `hoang-dao` (không có hồ sơ, không có lá số), mở ra mà im lặng thì
+      // không có gì để bắt chuyện.
+      try{
+        if(hasBirth){ Shell.openRail(); var ta=document.getElementById('railInput'); if(ta) ta.focus(); }
+        else Shell.ask('Hôm nay là ngày gì, tôi nên làm gì và tránh gì?');
+      }catch(e){}
     };
 
     // Chia sẻ vận (vòng khám phá): điện thoại mở share sheet native; desktop chép link.
