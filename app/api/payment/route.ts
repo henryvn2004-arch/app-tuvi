@@ -26,6 +26,10 @@ import { getAdminUser } from '@/lib/admin/auth';
 import { generateContentSuggestions } from '@/lib/marketing/content-suggestions';
 import { generateContentPackText } from '@/lib/marketing/content-pack';
 import { SUPPORTED_CHANNELS } from '@/lib/media/publish';
+import {
+  listMemory, rememberFact, forgetFact, editFact,
+  MEMORY_KIND_LABELS, MAX_MEMORY_ITEMS, MAX_MEMORY_LEN,
+} from '@/lib/memory/store';
 
 const PAYPAL_BASE = process.env.PAYPAL_MODE === 'live'
   ? 'https://api-m.paypal.com'
@@ -1320,6 +1324,7 @@ export async function GET(request: NextRequest) {
   if (action === 'admin-mcp') return handleAdminMcp(request);
   if (action === 'admin-env-status') return handleAdminEnvStatus(request);
   if (action === 'my-referral') return handleMyReferral(request, searchParams);
+  if (action === 'my-memory')   return handleMyMemory(request);
   if (action === 'rail-status') return handleRailStatus(request, searchParams);
   if (action === 'signup-bonus') return handleSignupBonus();
   if (action === 'admin-viral') return handleAdminViral(request, searchParams);
@@ -2171,6 +2176,46 @@ async function handleRailStatus(request: NextRequest, sp: URLSearchParams): Prom
   }
 }
 
+// ── Hồ sơ "Thầy nhớ gì về con" (TẦNG 2) ──────────────────────────
+// Bốn action của CHÍNH CHỦ. Mọi lượt đều giải userId TỪ TOKEN rồi mới đụng DB
+// — không nhận userId trong body, vì đó là đường một người sửa hồ sơ người
+// khác. Tầng store cũng luôn kèm user_id trong bộ lọc (đai an toàn thứ hai).
+async function memoryUser(request: NextRequest): Promise<{ id: string } | null> {
+  const t = (request.headers.get('Authorization') || '').replace('Bearer ', '').trim();
+  if (!t) return null;
+  const u = await getUserFromToken(t);
+  return u ? { id: u.id } : null;
+}
+
+async function handleMyMemory(request: NextRequest): Promise<Response> {
+  const u = await memoryUser(request);
+  if (!u) return err('Invalid token', 401);
+  const items = await listMemory(u.id);
+  return ok({ items, kinds: MEMORY_KIND_LABELS, max: MAX_MEMORY_ITEMS, maxLen: MAX_MEMORY_LEN });
+}
+
+async function handleMemoryEdit(request: NextRequest, body: Record<string, unknown>): Promise<Response> {
+  const u = await memoryUser(request);
+  if (!u) return err('Invalid token', 401);
+  const done = await editFact(u.id, String(body?.id || ''), body?.noi_dung, body?.loai);
+  return done ? ok({ ok: true }) : err('Không sửa được mục này.', 400);
+}
+
+async function handleMemoryDelete(request: NextRequest, body: Record<string, unknown>): Promise<Response> {
+  const u = await memoryUser(request);
+  if (!u) return err('Invalid token', 401);
+  const done = await forgetFact(u.id, String(body?.id || ''));
+  return done ? ok({ ok: true }) : err('Không tìm thấy mục này.', 404);
+}
+
+async function handleMemoryAdd(request: NextRequest, body: Record<string, unknown>): Promise<Response> {
+  const u = await memoryUser(request);
+  if (!u) return err('Invalid token', 401);
+  // nguồn 'nguoi' — chính chủ tự khai thì không được lẫn với thứ máy đoán ra.
+  const r = await rememberFact(u.id, body?.loai, body?.noi_dung, 'nguoi');
+  return r.ok ? ok({ ok: true }) : err('Không thêm được (nội dung quá ngắn?).', 400);
+}
+
 async function handleMyReferral(request: NextRequest, sp: URLSearchParams): Promise<Response> {
   const userToken = (request.headers.get('Authorization') || '').replace('Bearer ', '').trim();
   if (!userToken) return err('Missing Authorization token', 401);
@@ -2357,5 +2402,8 @@ export async function POST(request: NextRequest) {
   if (action === 'create-bank')       return handleCreateBank(body);
   if (action === 'referral-register') return handleReferralRegister(request, body);
   if (action === 'onboarding-sync')   return handleOnboardingSync(request);
+  if (action === 'memory-edit')       return handleMemoryEdit(request, body);
+  if (action === 'memory-delete')     return handleMemoryDelete(request, body);
+  if (action === 'memory-add')        return handleMemoryAdd(request, body);
   return err('Invalid action.', 400);
 }

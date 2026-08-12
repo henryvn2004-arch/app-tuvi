@@ -107,6 +107,7 @@ function setupTabs() {
       document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
       if (btn.dataset.tab === 'credits') loadCredits();
       if (btn.dataset.tab === 'ketnoi') loadKetnoi();
+      if (btn.dataset.tab === 'thaynho') loadMemory();
     });
   });
   // Mở thẳng một tab qua địa chỉ: `/profile.html#ketnoi`. Trước đây tab chỉ đổi
@@ -955,6 +956,110 @@ document.querySelectorAll('.modal-overlay').forEach(m => m.addEventListener('cli
 
 // ── UTILS ──
 function escHtml(s) { return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
+
+// ── THẦY NHỚ (hồ sơ tầng 2) ──
+// Nội dung ở đây do MODEL sinh ra, nên mọi lượt vẽ đều phải thoát HTML. Nút
+// bấm gắn theo CHỈ SỐ (số do chính mình sinh ra) chứ KHÔNG nội suy nội dung
+// vào thuộc tính onclick — dấu nháy trong chuỗi là vỡ thẻ, bài học đã ghi.
+let _memItems = [];
+let _memKinds = {};
+let _memMax = 40;
+
+async function loadMemory() {
+  const box = document.getElementById('memList');
+  if (!box) return;
+  if (!_pToken) { box.innerHTML = '<div class="mem-empty">Đăng nhập để xem hồ sơ.</div>'; return; }
+  box.innerHTML = '<div class="mem-empty">Đang tải…</div>';
+  try {
+    const r = await fetch('/api/payment?action=my-memory', { headers: { Authorization: 'Bearer ' + _pToken } });
+    const j = await r.json();
+    if (!r.ok) throw new Error(j && j.error);
+    _memItems = (j.items || []);
+    _memKinds = j.kinds || {};
+    _memMax = j.max || 40;
+    const sel = document.getElementById('memAddKind');
+    if (sel && !sel.options.length) {
+      sel.innerHTML = Object.keys(_memKinds)
+        .map(k => '<option value="' + escHtml(k) + '">' + escHtml(_memKinds[k]) + '</option>').join('');
+    }
+    memRender();
+  } catch (e) {
+    box.innerHTML = '<div class="mem-empty">Không đọc được hồ sơ. Thử tải lại trang.</div>';
+  }
+}
+
+function memRender() {
+  const box = document.getElementById('memList');
+  if (!box) return;
+  if (!_memItems.length) {
+    box.innerHTML = '<div class="mem-empty">Thầy chưa ghi lại điều gì về bạn.<br>'
+      + 'Cứ trò chuyện vài lần, Thầy sẽ tự nhớ những điều đáng nhớ.</div>';
+    return;
+  }
+  box.innerHTML = _memItems.map(function (it, i) {
+    return '<div class="mem-item">'
+      + '<div class="mem-body">'
+      +   '<div class="mem-kind">' + escHtml(_memKinds[it.loai] || 'Khác') + '</div>'
+      +   '<div class="mem-text" id="memTxt' + i + '">' + escHtml(it.noi_dung) + '</div>'
+      +   '<div class="mem-src">' + (it.nguon === 'nguoi' ? 'Bạn tự thêm' : 'Thầy tự ghi') + '</div>'
+      + '</div>'
+      + '<div class="mem-act">'
+      +   '<button class="mem-btn" onclick="memStartEdit(' + i + ')">Sửa</button>'
+      +   '<button class="mem-btn danger" onclick="memDelete(' + i + ')">Xoá</button>'
+      + '</div></div>';
+  }).join('') + '<div class="mem-src" style="margin-top:.5rem">Giữ tối đa ' + _memMax
+    + ' mục — quá thì Thầy tự bỏ mục cũ nhất.</div>';
+}
+
+function memStartEdit(i) {
+  const cell = document.getElementById('memTxt' + i);
+  if (!cell || !_memItems[i]) return;
+  const cur = _memItems[i].noi_dung;
+  cell.innerHTML = '<input class="mem-edit" id="memInp' + i + '" maxlength="200">'
+    + '<div style="margin-top:.4rem;display:flex;gap:.35rem">'
+    + '<button class="mem-btn" onclick="memSave(' + i + ')">Lưu</button>'
+    + '<button class="mem-btn" onclick="memRender()">Huỷ</button></div>';
+  const inp = document.getElementById('memInp' + i);
+  if (inp) { inp.value = cur; inp.focus(); }   // gán qua .value, không nội suy vào HTML
+}
+
+async function memSave(i) {
+  const inp = document.getElementById('memInp' + i);
+  if (!inp || !_memItems[i]) return;
+  const val = inp.value.trim();
+  if (!val) return;
+  await memPost('memory-edit', { id: _memItems[i].id, noi_dung: val, loai: _memItems[i].loai });
+}
+
+async function memDelete(i) {
+  if (!_memItems[i]) return;
+  if (!confirm('Xoá điều này khỏi hồ sơ? Thầy sẽ quên hẳn.')) return;
+  await memPost('memory-delete', { id: _memItems[i].id });
+}
+
+async function memAdd() {
+  const inp = document.getElementById('memAddText');
+  const sel = document.getElementById('memAddKind');
+  if (!inp) return;
+  const val = inp.value.trim();
+  if (val.length < 3) { alert('Viết dài hơn một chút nhé.'); return; }
+  const done = await memPost('memory-add', { noi_dung: val, loai: sel ? sel.value : 'khac' });
+  if (done) inp.value = '';
+}
+
+async function memPost(action, body) {
+  try {
+    const r = await fetch('/api/payment?action=' + action, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + _pToken },
+      body: JSON.stringify(body),
+    });
+    const j = await r.json().catch(() => ({}));
+    if (!r.ok) { alert((j && j.error) || 'Không thực hiện được.'); return false; }
+    await loadMemory();
+    return true;
+  } catch (e) { alert('Lỗi mạng.'); return false; }
+}
 
 // ── Handle #credits anchor ──
 if (window.location.hash === '#credits') {

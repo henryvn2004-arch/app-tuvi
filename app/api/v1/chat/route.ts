@@ -142,12 +142,24 @@ export async function POST(request: NextRequest) {
     }
   }
 
+  // ── Danh tính cho TẦNG 2 (hồ sơ "Thầy nhớ gì về con") ─────────
+  // 🔴 TÁCH KHỎI NHÁNH TÍNH PHÍ. `chargeUserId` chỉ được gán bên trong
+  // `if (!paywallDisabled() && cost > 0)`, nên hạ chat.cost về 0 (hoặc bật
+  // PAYWALL_DISABLED) là trí nhớ IM LẶNG chết theo — một cần gạt giá tự dưng
+  // tắt mất một tính năng chẳng liên quan. Giải lại ở đây khi nhánh kia bỏ qua.
+  // Vẫn LUÔN từ token đã xác thực; khách chưa đăng nhập → null (không hồ sơ).
+  let memoryUserId: string | null = chargeUserId;
+  if (!memoryUserId) {
+    const t = extractToken(request);
+    if (t) memoryUserId = (await getUserFromToken(t))?.id ?? null;
+  }
+
   const encoder = new TextEncoder();
   const stream = new ReadableStream({
     async start(controller) {
       const send = (chunk: string) => controller.enqueue(encoder.encode(chunk));
       try {
-        const { toolsUsed, suggestions } = await runAgent(req, cfg, send);
+        const { toolsUsed, suggestions } = await runAgent(req, cfg, send, null, memoryUserId);
 
         // ── Trừ Lượng sau khi trả lời thành công ──────────────────
         let paywall: DoneEvent['paywall'] = { blocked: false };
