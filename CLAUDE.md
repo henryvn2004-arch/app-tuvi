@@ -5436,6 +5436,26 @@ ca phản chứng, nếu không nó tự lên đời thành luật.**
   hết hạn vì chính hạ tầng nó neo vào đã đổi — xem lại mục *CI đo BẢN CŨ* ngay
   dưới trước khi viện dẫn lập luận này.
 
+**Ca thứ ba, PR #506 (2026-08-12) — và nó SẮC NÉT hơn hai ca trước:** lượt push
+`synchronize` chỉ hụt **một NHÓM** workflow, không hụt tất cả.
+
+| Kích bằng | Chạy? |
+|---|---|
+| `deployment_status` — `smoke` · `test` (E2E) · `lighthouse` | ✅ đủ |
+| `pull_request` — `lint` · `typecheck` · `unit-test` · `next-build` | 🔴 **0 run được tạo** |
+
+⇒ Đây KHÔNG phải "Actions hết quota" hay "repo hỏng" — cùng lúc đó nhóm kia
+chạy bình thường trên chính commit ấy. Xác nhận bằng `list_workflow_runs` lọc
+theo nhánh: run mới nhất của `lint.yml` **và** `unit-test.yml` đều còn dừng ở
+commit TRƯỚC. Đừng đọc "PR có 4 check xanh" thành đã kiểm — đếm ĐỦ 8.
+- 🔴 **Close/reopen HỤT lần thứ hai** (lần đầu ở #410). `pull_request` không
+  khai `types:` nên mặc định có cả `reopened`, tức lẽ ra phải kích được — nhưng
+  không. Xoá hẳn cách gỡ này khỏi đầu; đừng thử lại rồi lại mất một lượt.
+- 🔑 **Việc đáng làm thay vì đấu với GitHub: tự chạy đúng thứ CI còn phủ.** Ở
+  #506 đó là `next build` — thứ duy nhất chưa chạy tại chỗ, và CLAUDE.md đã có
+  sẵn công thức (stub PostgREST + 3 env giả, xem mục *TypeScript 7*). Chạy ra
+  **64/64 trang, exit 0** trong ~2 phút. Nhanh hơn và CHẮC hơn mọi lượt cố nặn
+  cho GitHub phát event.
 ### ⚠️ (ghi chép cũ) CI: workflow `pull_request` có lúc KHÔNG fire
 2 commit liên tiếp chỉ có Vercel + `smoke` chạy; lint/typecheck/test/lighthouse **không hề
 được tạo run** (10 workflow đều `active`, không có path filter). `smoke` vẫn chạy vì nó
