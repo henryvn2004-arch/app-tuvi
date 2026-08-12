@@ -58,7 +58,14 @@ import { computeLaso, type Laso } from '@/lib/engine/laso';
 import { currentNamXem } from '@/lib/engine/namxem';
 import type { BirthParams } from '@/lib/contract/v1';
 import { MENH_ROLE } from '@/lib/engine/past-life';
-import { TAT_ACH_DAU_HIEU, TAT_ACH_VCD, netCua } from '@/lib/engine/data/gio-sinh-dauhieu';
+import {
+  TAT_ACH_DAU_HIEU,
+  TAT_ACH_VCD,
+  netCua,
+  MENH_TRE_EM,
+  PHUC_DUC_TRE_EM,
+  PHU_MAU_TRE_EM,
+} from '@/lib/engine/data/gio-sinh-dauhieu';
 
 // ── Hằng số miền ─────────────────────────────────────────────
 export const CHI_GIO = ['Tý', 'Sửu', 'Dần', 'Mão', 'Thìn', 'Tỵ', 'Ngọ', 'Mùi', 'Thân', 'Dậu', 'Tuất', 'Hợi'] as const;
@@ -103,6 +110,61 @@ const BUOI_GOM: { label: string; hours: number[] }[] = [
  * mỗi ngày sinh gom nhóm khác nhau, cung tách mạnh nhất mỗi ngày một khác.
  */
 const CUNG_HOI = ['Tật Ách', 'Phúc Đức', 'Quan Lộc', 'Tài Bạch', 'Huynh Đệ', 'Phụ Mẫu', 'Mệnh'] as const;
+
+/**
+ * 🔴 TUỔI TỐI THIỂU ĐỂ MỘT CÂU CÓ DỮ LIỆU MÀ TRẢ LỜI.
+ *
+ * Bản đầu hỏi CÙNG MỘT BỘ cho mọi tuổi. Đo lại trên chính engine (25 ngày sinh
+ * mỗi lứa) thì lộ ra một đứa **8 tuổi** vẫn bị hỏi đủ, 100% số ca:
+ *   • *"Về công việc, đường nào giống anh/chị nhất?"*
+ *   • *"Về tiền bạc, mô tả nào đúng nhất?"*
+ *   • *"Nhìn lại cả đời, khoảng bao nhiêu tuổi thì cuộc sống ĐỔI HƯỚNG rõ nhất?"*
+ *     — kèm đáp án *"Khoảng 25 tuổi"* cho một đứa lớp 3.
+ * Và ngược lại: **0 câu đại vận** cho tới 23 tuổi (`decades` mở ở 16, cần đi qua
+ * 7 năm) ⇒ chỗ giữ CỨNG cho tầng đời sống bị câu mốc-đổi-vận vô nghĩa chiếm.
+ *
+ * 🔑 Vì sao KHÔNG chữa bằng cách đổi CHỮ: nhãn đáp án của Quan Lộc / Tài Bạch
+ * nằm ở `CUNG_NET` và viết bằng từ vựng ĐI LÀM (*"làm chỗ ổn định, ít nhảy
+ * việc"*, *"tiền vào ra nhanh, dính giao tế"*). Đổi tiêu đề mà giữ nguyên 28
+ * nhãn đó thì câu hỏi vẫn không trả lời được — phải GÁC HẲN.
+ *
+ * ⚠️ Mức thiệt hại đo được là ở LÒNG TIN chứ không ở độ chính xác: trẻ 9 tuổi
+ * top-1 **90,8%** so với 43 tuổi 85,8% (thuật toán thích ứng né được câu vô
+ * nghĩa, và Bayes gặp câu đoán bừa thì làm PHẲNG chứ không kéo lệch). Nhưng
+ * 1,2/4,6 câu là nhiễu, và một phụ huynh trả 50 Lượng bị hỏi con 8 tuổi *"về
+ * tiền bạc"* thì mất tin ngay tại chỗ. Đừng đọc mục này thành "vá để tăng
+ * điểm" — vá để tool biết nó đang nói chuyện với ai.
+ */
+const TUOI_CO_DU_LIEU: Record<string, number> = {
+  // Cả hai nhãn đều tả một QUÁ TRÌNH đã diễn ra vài năm ("ít nhảy việc", "có
+  // tích luỹ", "tiền vào ra nhanh"), không tả tình trạng tức thời — nên mốc là
+  // "đã đi làm được một quãng", không phải "đã từng đi làm".
+  'Quan Lộc': 22,
+  'Tài Bạch': 22,
+};
+/**
+ * Dưới mức này thì người trả lời gần như chắc chắn là CHA MẸ → xưng "cháu".
+ *
+ * 🔑 TÁCH BẠCH hai thứ dễ lẫn: **gác câu hỏi** đi theo tuổi của ĐƯƠNG SỐ (dữ
+ * liệu đó có tồn tại không) — chắc chắn; còn **xưng hô** đi theo người ĐANG
+ * GÕ — thứ tool không biết, chỉ suy từ tuổi. Nên mốc này đặt THẤP: gọi một
+ * người lớn là "cháu" thì xúc phạm, còn xưng "anh/chị" với phụ huynh đang hỏi
+ * hộ con thì chỉ hơi lệch. Sai rẻ hơn về phía nào thì nghiêng về phía đó.
+ *
+ * ⛔ CỐ Ý KHÔNG thêm ô chọn "xem cho mình / cho con" dù đó là cách hết phải
+ * đoán: ngân hàng câu hỏi phải dựng lại Y HỆT ở lượt sau (client gửi `answers`
+ * kèm `id`, server dựng lại bank rồi tra) — mà nó là HÀM THUẦN của ngày sinh
+ * thì luôn tái lập được. Thêm một cờ do client giữ là thêm một thứ có thể lệch
+ * giữa hai lượt gọi, và lúc lệch thì `id` trỏ vào câu không còn tồn tại: hỏng
+ * IM LẶNG, không lỗi nào bắn ra. Muốn thêm ô đó thì phải cho nó vào KHOÁ dựng
+ * bank và có bài kiểm canh round-trip.
+ *
+ * ⚠️ Mốc nào cũng có ca sát biên: tuổi ở đây là TUỔI MỤ theo năm ÂM, nên hai
+ * đứa sinh cách nhau vài ngày quanh Tết có thể rơi hai bên. Không tránh được.
+ */
+const TUOI_TRE_EM = 13;
+/** Mốc đổi vận đời người: cần đã đi qua ít nhất một khúc trưởng thành. */
+const TUOI_MOC_VAN = 25;
 
 /**
  * ε = tỉ lệ người trả lời LỆCH khỏi thứ lá số nói.
@@ -254,6 +316,17 @@ function tho(v: number | null): string {
   return v >= 6.5 ? '+' : v <= 4.5 ? '-' : '0';
 }
 
+/**
+ * Nhãn RIÊNG cho quãng đầu đời — cố ý không dùng chung `NHAN_DV`. Chữ ở đó
+ * ("mở ra được, có bước tiến rõ") nói về sự nghiệp người lớn; dán lên một đứa
+ * 6 tuổi thì phụ huynh không biết chọn theo cái gì.
+ */
+const NHAN_DV_SOM: Record<string, string> = {
+  '+': 'Dễ — ăn ngủ ổn, ít ốm vặt, nhà cửa lúc đó cũng êm',
+  '0': 'Bình thường — lúc này lúc kia, không có gì đáng kể',
+  '-': 'Vất vả — hay ốm, khó ăn khó ngủ, hoặc nhà có biến động lớn',
+};
+
 const NHAN_DV: Record<string, string> = {
   '+': 'Nhìn lại thấy thuận — mở ra được, có bước tiến rõ',
   '0': 'Bình thường — không bứt lên mà cũng không đổ vỡ gì',
@@ -277,20 +350,25 @@ function gomTheoGiaTri(vals: string[]): Map<string, number[]> {
  */
 export function buildQuestionBank(set: HypothesisSet): SurveyQuestion[] {
   const { hyps, charts, tuoi } = set;
+  const treEm = tuoi < TUOI_TRE_EM;
   const qs: SurveyQuestion[] = [];
 
   // 1) BUỔI SINH — luôn có, luôn hỏi trước.
   qs.push({
     id: 'buoi',
     kind: 'buoi',
-    title: 'Người nhà có nói anh/chị sinh vào khoảng nào trong ngày không?',
+    title: treEm
+      ? 'Cháu sinh vào khoảng nào trong ngày?'
+      : 'Người nhà có nói anh/chị sinh vào khoảng nào trong ngày không?',
     hint: 'Không cần chính xác giờ — chỉ cần buổi. Nếu hoàn toàn không biết, chọn "Không rõ" ở dưới.',
     options: BUOI_GOM.map((b, i) => ({ value: 'b' + i, label: b.label, hours: b.hours })),
   });
 
   // 2) MỐC ĐỔI VẬN — cắt đúng 5 nhóm (5 cục), và là cứu cánh cho người còn trẻ
   //    (28 tuổi: đại vận đơn thuần 4,65 nhóm → kèm mốc lên 9,90).
-  {
+  //    ⚠️ Chỉ hỏi từ TUOI_MOC_VAN: chính công thức dưới lấy `Math.max(tuoi, 20)`,
+  //    tức với người trẻ nó bịa ra một mốc CHƯA XẢY RA rồi vẫn đem đi hỏi.
+  if (tuoi >= TUOI_MOC_VAN) {
     const vals = hyps.map((h) => {
       // mốc đổi vận TRƯỞNG THÀNH gần nhất mà người này đã đi qua
       let m = h.dvStart;
@@ -307,6 +385,35 @@ export function buildQuestionBank(set: HypothesisSet): SurveyQuestion[] {
         options: [...g.entries()]
           .sort((a, b) => Number(a[0]) - Number(b[0]))
           .map(([v, hours]) => ({ value: v, label: `Khoảng ${v} tuổi`, hours })),
+      });
+    }
+  }
+
+  // 2b) NHỮNG NĂM ĐẦU ĐỜI — tầng đời sống DUY NHẤT mà người còn trẻ có.
+  //
+  // 🔑 Chỗ giữ CỨNG trong `nextQuestion` dành cho `daivan`/`mocvan` tồn tại vì
+  // câu đời sống hỏi VIỆC ĐÃ XẢY RA nên ít trôi hơn câu tự nhận xét. Với người
+  // dưới 23 tuổi thì cả hai loại đó đều rỗng ⇒ chỗ giữ cứng thành vô nghĩa, mà
+  // đó đúng là lứa cần nó nhất (đại vận chưa tách được mấy). Câu này lấp vào.
+  //
+  // ⚠️ KHÔNG áp cửa "đã đi qua 7 năm" như các thập niên khác: luật đó có vì một
+  // người không nhìn lại nổi quãng mình đang sống dở. Cha mẹ nhìn lại mấy năm
+  // đầu của con thì không vướng chuyện đó — họ quan sát trọn vẹn từ đầu.
+  if (tuoi >= 4 && tuoi < 23) {
+    const den = Math.min(10, tuoi);
+    const vals = charts.map((ls) => tho(diemKhoangTuoi(ls, 1, den)));
+    const g = gomTheoGiaTri(vals);
+    if (g.size > 1) {
+      qs.push({
+        id: 'dvsom',
+        kind: 'daivan',
+        title: treEm
+          ? `Mấy năm đầu đời của cháu (tới khoảng ${den} tuổi), nuôi có dễ không?`
+          : `Những năm đầu đời của anh/chị (tới khoảng ${den} tuổi), người nhà kể lại thế nào?`,
+        hint: 'Nói về giai đoạn đó nói chung: sức khoẻ, ăn ngủ, và không khí gia đình lúc ấy.',
+        options: [...g.entries()]
+          .sort((x, y) => ['+', '0', '-'].indexOf(x[0]) - ['+', '0', '-'].indexOf(y[0]))
+          .map(([v, hours]) => ({ value: v, label: NHAN_DV_SOM[v] ?? v, hours })),
       });
     }
   }
@@ -333,13 +440,14 @@ export function buildQuestionBank(set: HypothesisSet): SurveyQuestion[] {
 
   // 4) SÁU CUNG (+ Mệnh) — đáp án dựng từ dấu hiệu quan sát được.
   for (const cung of CUNG_HOI) {
+    if (tuoi < (TUOI_CO_DU_LIEU[cung] ?? 0)) continue;
     const vals = charts.map((ls) => majorsOf(ls, cung).join('+') || 'VCD');
     const g = gomTheoGiaTri(vals);
     if (g.size < 2) continue;
     const opts: SurveyOption[] = [];
     for (const [key, hours] of g.entries()) {
       const stars = key === 'VCD' ? [] : key.split('+');
-      const label = nhanCung(cung, stars);
+      const label = nhanCung(cung, stars, treEm);
       if (label) opts.push({ value: key, label, hours });
     }
     if (opts.length < 2) continue;
@@ -347,28 +455,51 @@ export function buildQuestionBank(set: HypothesisSet): SurveyQuestion[] {
       id: 'c:' + cung,
       kind: 'cung',
       cung,
-      title: tieuDeCung(cung),
-      hint: hintCung(cung),
+      title: tieuDeCung(cung, treEm),
+      hint: hintCung(cung, treEm),
       options: opts,
     });
   }
   return qs;
 }
 
-function nhanCung(cung: string, stars: string[]): string {
+function nhanCung(cung: string, stars: string[], treEm = false): string {
   if (cung === 'Tật Ách') {
+    // Bảng này vốn đã tả dấu hiệu THÂN THỂ ("hồi nhỏ hay mụn nhọt") nên dùng
+    // được cho cả hai lứa — cố ý không tách bản trẻ em.
     if (!stars.length) return TAT_ACH_VCD.dau;
     const v = stars.map((s) => TAT_ACH_DAU_HIEU[s]?.dau).filter(Boolean);
     return v.join(' · ');
   }
   if (cung === 'Mệnh') {
-    if (!stars.length) return 'Khó tự nhận ra một nét nổi trội — tuỳ hoàn cảnh mà đổi';
-    return stars.map((s) => MENH_ROLE[s]?.role).filter(Boolean).join(' · ');
+    if (!stars.length)
+      return treEm
+        ? 'Chưa thấy nét nào nổi trội rõ — tuỳ lúc, tuỳ chỗ mà khác'
+        : 'Khó tự nhận ra một nét nổi trội — tuỳ hoàn cảnh mà đổi';
+    const bang = treEm ? MENH_TRE_EM : null;
+    return stars
+      .map((s) => (bang ? bang[s] : MENH_ROLE[s]?.role))
+      .filter(Boolean)
+      .join(' · ');
+  }
+  if (treEm && (cung === 'Phúc Đức' || cung === 'Phụ Mẫu')) {
+    const bang = cung === 'Phúc Đức' ? PHUC_DUC_TRE_EM : PHU_MAU_TRE_EM;
+    if (!stars.length) return cung === 'Phúc Đức' ? 'Không có nếp nào nổi trội rõ' : 'Không có nét nào nổi trội rõ';
+    return stars.map((s) => bang[s]).filter(Boolean).join(' · ');
   }
   return netCua(cung, stars) || (stars.length ? '' : 'Không có nét nào nổi trội rõ');
 }
 
-function tieuDeCung(cung: string): string {
+function tieuDeCung(cung: string, treEm = false): string {
+  if (treEm) {
+    switch (cung) {
+      case 'Tật Ách': return 'Về sức khoẻ và dấu vết trên người cháu, mô tả nào đúng nhất?';
+      case 'Mệnh': return 'Người ngoài (ông bà, cô giáo) hay nhận xét cháu là đứa thế nào?';
+      case 'Phúc Đức': return 'Về nếp ăn ngủ và tính khí nền của cháu, điều nào giống nhất?';
+      case 'Huynh Đệ': return 'Về anh chị em của cháu, điều nào đúng nhất?';
+      case 'Phụ Mẫu': return 'Về cha mẹ cháu và không khí trong nhà, điều nào đúng nhất?';
+    }
+  }
   switch (cung) {
     case 'Tật Ách': return 'Về sức khoẻ và dấu vết trên người, mô tả nào đúng với anh/chị nhất?';
     case 'Mệnh': return 'Người quen lâu năm hay nhận xét anh/chị là người thế nào?';
@@ -380,7 +511,22 @@ function tieuDeCung(cung: string): string {
     default: return `Về cung ${cung}, điều nào đúng nhất?`;
   }
 }
-function hintCung(cung: string): string | undefined {
+function hintCung(cung: string, treEm = false): string | undefined {
+  if (treEm) {
+    if (cung === 'Tật Ách')
+      return 'Chọn cái đã theo cháu TỪ NHỎ, không phải đợt ốm gần đây.';
+    if (cung === 'Mệnh')
+      return 'Lấy lời người ngoài nói về cháu — thường đúng hơn cảm nhận của bố mẹ.';
+    if (cung === 'Huynh Đệ')
+      return 'Cháu là con một thì tính anh chị em họ hoặc bạn chơi thân nhất.';
+    // 🔑 Cung Phụ Mẫu trong lá số của ĐỨA TRẺ nói về CHÍNH người đang trả lời.
+    // Không nhắc thì phụ huynh dễ chọn cái nghe hay thay vì cái đúng.
+    if (cung === 'Phụ Mẫu')
+      return 'Cung này nói về chính bố mẹ cháu — tức về anh/chị. Chọn thật, đừng chọn cái nghe hay.';
+    if (cung === 'Phúc Đức')
+      return 'Nếp nền từ bé, không phải mấy tuần gần đây.';
+    return undefined;
+  }
   if (cung === 'Tật Ách')
     return 'Chọn theo cái đã theo anh/chị NHIỀU NĂM, không phải bệnh mới bị gần đây.';
   if (cung === 'Mệnh')
@@ -603,7 +749,7 @@ export function scoreHours(
     tatCa: ranked,
     doKhop: Math.round(khop * 100) / 100,
     mucTinCay,
-    loiKhuyen: loiKhuyenCua(mucTinCay, shortlist),
+    loiKhuyen: loiKhuyenCua(mucTinCay, shortlist, set.tuoi < TUOI_TRE_EM),
     soCauDaHoi: answers.filter((a) => a.value !== '?').length,
   };
 }
@@ -611,13 +757,27 @@ export function scoreHours(
 function shortLabel(q: SurveyQuestion, o: SurveyOption): string {
   const t = o.label.length > 52 ? o.label.slice(0, 50) + '…' : o.label;
   if (q.kind === 'cung' && q.cung) return `${q.cung}: ${t}`;
+  // 🪤 `dvsom` PHẢI có nhãn riêng: bộ cắt dưới dò `" tuổi"` ĐẦU TIÊN, mà tiêu đề
+  // câu này là "…(tới khoảng 10 tuổi), nuôi có dễ không?" ⇒ cắt ngay giữa ngoặc
+  // và in ra `"Mấy năm đầu đời của cháu (tới khoảng 10 tuổi"` — ngoặc mở không
+  // đóng, nằm ngay trong danh sách BẰNG CHỨNG của bản trả tiền.
+  if (q.id === 'dvsom') return `Những năm đầu đời: ${t}`;
   if (q.kind === 'daivan') return `${q.title.replace(/^Giai đoạn /, '').replace(/ tuổi.*$/, ' tuổi')}: ${t}`;
   if (q.kind === 'mocvan') return `Mốc đổi hướng: ${t}`;
   return `Buổi sinh: ${t}`;
 }
 
-function loiKhuyenCua(muc: GioSinhResult['mucTinCay'], sl: RankedHour[]): string {
+function loiKhuyenCua(muc: GioSinhResult['mucTinCay'], sl: RankedHour[], treEm = false): string {
   const ten = sl.map((s) => `giờ ${s.chi} (${s.khung})`).join(' hoặc ');
+  if (treEm) {
+    // Cách ĐỐI CHỨNG khác hẳn người lớn: đứa trẻ chưa có vận hạn 5 năm để đọc,
+    // nên chỗ soát lại là những gì cha mẹ quan sát được hằng ngày.
+    if (muc === 'cao')
+      return `Câu trả lời dồn khá rõ về ${ten}. Nên lấy giờ đứng đầu để lập lá số cho cháu, giữ giờ thứ hai làm đối chứng khi thấy bản luận có chỗ không giống.`;
+    if (muc === 'vừa')
+      return `Kết quả nghiêng về ${ten} nhưng chưa tách hẳn. Cách chắc nhất: lập lá số cho CẢ HAI giờ rồi đọc phần tính nết và sức khoẻ — giờ nào tả đúng đứa trẻ anh/chị đang nuôi thì lấy giờ đó.`;
+    return `Bộ trả lời chưa đủ để chốt — không giờ nào giải thích được phần lớn câu trả lời. Với trẻ nhỏ điều này khá thường: số câu đối chiếu được ít hơn người lớn (chưa có chuyện nghề nghiệp, tiền bạc hay các chặng đời để soi). Đáng làm nhất lúc này là hỏi lại nhà hộ sinh hoặc người có mặt hôm sinh về BUỔI trong ngày — một câu đó cắt được nửa số khả năng. ${ten} là hai hướng đáng thử trước.`;
+  }
   if (muc === 'cao')
     return `Câu trả lời của anh/chị dồn khá rõ về ${ten}. Nên lấy giờ đứng đầu để lập lá số, và giữ giờ thứ hai làm đối chứng khi thấy bản luận có chỗ lệch.`;
   if (muc === 'vừa')
