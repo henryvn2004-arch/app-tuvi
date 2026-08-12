@@ -19,6 +19,7 @@ import {
   type BirthParams,
 } from '@/lib/contract/v1';
 import { buildToolDefs, executeTool, newToolContext, buildBirthFromInput, type ProfilePort } from '@/lib/tools/registry';
+import { type ToolSuggestion } from '@/lib/tools/suggest-tool';
 import { computeLaso, renderLasoCard } from '@/lib/engine/laso';
 import { computeTuBinh } from '@/lib/engine/tubinh';
 import { computeSinhCon, computeChonNgay, computeDatTen, computeDatTenDn } from '@/lib/engine/diachi';
@@ -37,6 +38,8 @@ import {
   toGeminiContents,
 } from '@/lib/agent/providers/gemini';
 import { logLlmUsage, type LlmUsage } from '@/lib/agent/usage';
+import { buildCompanionLayer } from '@/lib/agent/companion';
+import { listMemory, rememberFact, forgetFact, formatMemoryForPrompt } from '@/lib/memory/store';
 import { computePastLife } from '@/lib/engine/past-life';
 import { pastLifeRailWrapper } from '@/lib/agent/past-life-story';
 import { computeGroupBond, groupPairAsBond } from '@/lib/engine/past-life-bond';
@@ -131,6 +134,9 @@ export interface AgentResult {
   lasoCard: string | null;
   // Gợi ý câu hỏi tiếp theo do LLM sinh (bám câu trả lời) → chip động ở rail.
   suggestions: string[];
+  // Thẻ "công cụ này giúp được" (bước 4). null ở hầu hết lượt — model được dặn
+  // mặc định là IM. Kênh bot bỏ qua field này (chỉ web dựng thẻ bấm được).
+  toolSuggest?: ToolSuggestion | null;
 }
 
 /** Kết cục một lượt thử provider. `midStream` = đã stream chữ/chạy tool rồi mới
@@ -144,6 +150,10 @@ export async function runAgent(
   cfgIn: ChatConfig,
   send: (s: string) => void,
   profiles: ProfilePort | null = null,
+  // TẦNG 2 — danh tính do SERVER giải, KHÔNG bao giờ lấy từ `req`: client tự
+  // khai userId là ghi/đọc được hồ sơ người khác. null = khách chưa đăng nhập
+  // → không đọc, không ghi hồ sơ (và `client.anon_id` KHÔNG phải danh tính).
+  userId: string | null = null,
 ): Promise<AgentResult> {
   // Trần token của MỘT lượt rail. 🔴 Trước đây runAgent dùng THẲNG cfg.maxTokens
   // (app_config['chat.max_tokens'], prod = 3000) và BỎ QUA con số mà
@@ -156,7 +166,21 @@ export async function runAgent(
   let railMaxTokens = RAIL_MAX_TOKENS;
   // Seed ctx với birth đang xem (req.birth) → "lưu lá số này tên X" chạy được cả
   // khi lượt này không gọi lại lap_la_so. profiles bật 3 tool sổ (kênh chat).
-  const ctx = newToolContext(null, { profiles, birth: req.birth ?? null });
+  // Port hồ sơ đã BIND SẴN userId → tool chỉ truyền nội dung, không truyền
+  // danh tính. Đây là chỗ chặn "model bịa id của người khác".
+  const memoryPort = userId
+    ? {
+        remember: (loai: string, noiDung: string) =>
+          rememberFact(userId, loai, noiDung).then((r) => r.ok),
+        forget: (idPrefix: string) => forgetFact(userId, idPrefix),
+      }
+    : null;
+  const ctx = newToolContext(null, {
+    profiles, birth: req.birth ?? null, memory: memoryPort,
+    // Tool ĐANG mở — để không gợi ý lại chính nó. Lấy từ scenario.type; nhánh
+    // lá số không có scenario nên là 'laso'.
+    activeTool: req.scenario?.type || 'laso',
+  });
   const toolsUsed: string[] = [];
   // Birth đã biết (req.birth truyền sẵn) hoặc do agent lập qua tool lap_la_so
   // trong lượt này → trả về để adapter (Telegram) lưu theo phiên, đỡ hỏi lại.
@@ -389,7 +413,7 @@ export async function runAgent(
       }
     }
 
-    tools = buildToolDefs(!!profiles);
+    tools = buildToolDefs(!!profiles, !!memoryPort);
   }
 
   // Chốt cfg cho cả lượt: trần token là min(DB, per-prompt). Clone chứ không
@@ -440,6 +464,29 @@ export async function runAgent(
 
   // Áp luật bám hội thoại + sinh gợi ý câu hỏi tiếp cho MỌI nhánh prompt.
   system = system + '\n\n' + CHAT_FOLLOWUP_RULE + '\n\n' + CHAT_SUGGEST_RULES;
+
+  // TẦNG 1 (lib/agent/companion.ts) — dán CUỐI CÙNG, sau cả shape lá số lẫn
+  // CHAT_SUGGEST_RULES, vì nó GHI ĐÈ cả hai khi người dùng đang tâm sự. Đây là
+  // điểm ráp chung của CẢ nhánh scenario (dòng ~228) lẫn nhánh lá số (~280) →
+  // chèn một chỗ là phủ trọn ~25 tool, không sót nhánh nào.
+  // ⚠️ Chỉ áp cho RAIL. Route legacy /api/lasotuvi (widget luận-giải 24 mục,
+  // profile.html, chatbot.js) gọi thẳng buildChatContext nên KHÔNG dính — cố ý:
+  // ở đó người ta đang đọc bản luận, không phải đang trò chuyện.
+  const companionLayer = buildCompanionLayer(cfg.companion);
+  if (companionLayer) system = system + '\n\n' + companionLayer;
+
+  // TẦNG 2 — hồ sơ người dùng. Đặt SAU tầng 1 vì đây là DỮ LIỆU, còn tầng 1 là
+  // LUẬT: luật đứng trước, dữ liệu đứng cuối (cùng lối "=== DỮ LIỆU LÁ SỐ ==="
+  // ở đuôi CHAT_SYSTEM_LASO). Đọc hụt → '' và rail chạy y như chưa có hồ sơ:
+  // mất trí nhớ một lượt còn hơn chặn cả câu trả lời.
+  if (userId) {
+    try {
+      const memBlock = formatMemoryForPrompt(await listMemory(userId));
+      if (memBlock) system = system + '\n\n' + memBlock;
+    } catch (e) {
+      console.error('[runAgent] đọc hồ sơ lỗi:', (e as Error)?.message);
+    }
+  }
   let suggestions: string[] = [];
 
   send(sse.status({ text: hasImages ? 'Đang xem ảnh...' : 'Đang suy xét...' }));
@@ -461,6 +508,7 @@ export async function runAgent(
         subjectSwitched: ctx.subjectSwitched,
         lasoCard: null,
         suggestions,
+        toolSuggest: ctx.toolSuggestion,
       };
     } catch (e) {
       console.error('[runAgent] Gemini lỗi → fallback Sonnet:', (e as Error)?.message);
@@ -525,6 +573,7 @@ export async function runAgent(
           subjectSwitched: ctx.subjectSwitched,
           lasoCard,
           suggestions,
+          toolSuggest: ctx.toolSuggestion,
         },
       };
     } catch (e) {
@@ -554,6 +603,7 @@ export async function runAgent(
         subjectSwitched: ctx.subjectSwitched,
         lasoCard: justBuilt && ctx.ls ? renderLasoCard(ctx.ls, ctx.birth) : null,
         suggestions,
+        toolSuggest: ctx.toolSuggestion,
       };
     }
     // Hỏng sạch → rơi xuống loop Anthropic bên dưới.
@@ -606,6 +656,7 @@ export async function runAgent(
             subjectSwitched: ctx.subjectSwitched,
             lasoCard: null,
             suggestions,
+            toolSuggest: ctx.toolSuggestion,
           };
         } catch (e) {
           console.error('[runAgent] Fallback Gemini cũng lỗi:', (e as Error)?.message);
@@ -659,6 +710,7 @@ export async function runAgent(
     subjectSwitched: ctx.subjectSwitched,
     lasoCard,
     suggestions,
+    toolSuggest: ctx.toolSuggestion,
   };
 }
 

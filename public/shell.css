@@ -302,6 +302,19 @@ body{font-family:var(--sans);background:var(--paper-2);color:var(--text);font-si
 .rail-upsell .ru-btn:hover{background:var(--navy-mid,#0D3B5E)}
 .rail-upsell .ru-price{font-size:11.5px;color:var(--text-lt)}
 
+/* Thẻ gợi ý công cụ trong lúc trò chuyện (bước 4). CỐ Ý nhẹ hơn .rail-upsell:
+   nền giấy + viền mảnh thay vì khối vàng — đây là lời CHỈ ĐƯỜNG, không phải
+   lời mời mua, và nó xuất hiện đúng lúc người ta đang cần giúp. Không có ô
+   giá nào ở đây, xem lib/tools/suggest-tool.ts. */
+.tool-suggest{display:flex;align-items:center;gap:11px;margin:10px 0 4px;padding:11px 13px;
+  background:var(--paper-2,#fbf9f5);border:1px solid var(--line,#e6e2d8);border-radius:11px;animation:shFade .2s ease}
+.tool-suggest .ts-b{flex:1;min-width:0}
+.tool-suggest .ts-t{font-family:var(--serif);font-size:13.5px;font-weight:600;color:var(--heading);line-height:1.4}
+.tool-suggest .ts-d{font-size:12.5px;color:var(--text-mid);line-height:1.55;margin-top:2px}
+.tool-suggest .ts-go{flex-shrink:0;background:var(--navy);color:var(--gold-bright,#c9a84c);text-decoration:none;
+  font-family:var(--serif);font-weight:600;font-size:12.5px;padding:7px 14px;border-radius:8px;white-space:nowrap}
+.tool-suggest .ts-go:hover{background:var(--navy-mid,#0D3B5E)}
+
 /* ── RESPONSIVE (max-width:900px) — PHẢI để CUỐI file: các rule .rail/.sb đặt
    sau media query (vd .rail{position:relative} cho panel lịch sử) sẽ override
    mobile nếu media đứng trước → giữ khối này ở cuối để mobile thắng. ── */
