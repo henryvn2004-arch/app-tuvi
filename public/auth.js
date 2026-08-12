@@ -60,6 +60,55 @@ let _user    = null;
 // `getSession()` trả null nhưng người dùng VẪN đang đăng nhập — nơi nào đọc
 // token để quyết định hiển thị gì thì phải chờ, không được kết luận là khách.
 let _restoring = false;
+// Lượt refresh ĐANG BAY. Bắt buộc gộp về một promise: Supabase XOAY refresh
+// token mỗi lần đổi, nên hai lượt refresh chạy song song thì lượt sau cầm token
+// đã bị thu hồi → `invalid_grant` → mất phiên của người đang đăng nhập. Mà ~30
+// chỗ trong site cùng đọc token nên chạy song song là chuyện thường.
+let _refreshInFlight = null;
+// Hẹn giờ tự xoay token. Giữ id để không bao giờ chồng hai lịch lên nhau.
+let _refreshTimer = null;
+
+// Access token Supabase sống ~1 giờ. Coi là "sắp hết" khi còn dưới 60 giây —
+// đủ để một request đang bay không chết giữa đường.
+const TOKEN_MARGIN_SEC = 60;
+
+function _tokenFresh(s, marginSec) {
+  return !!(s && s.access_token && s.expires_at &&
+    s.expires_at - Date.now() / 1000 > (marginSec == null ? TOKEN_MARGIN_SEC : marginSec));
+}
+
+// ── Hẹn giờ xoay token TRƯỚC khi hết hạn ──────────────────────────────
+// 🔑 Phải gọi từ MỌI đường tạo phiên (đăng nhập, đăng ký, OAuth, khôi phục lúc
+// tải trang), không chỉ từ `_applySession`. Trước đây chỉ `_applySession` hẹn
+// giờ — mà hàm đó chỉ chạy SAU một lượt refresh, nên phiên vừa đăng nhập và
+// phiên khôi phục từ localStorage KHÔNG BAO GIỜ được hẹn: mở tab quá một tiếng
+// là token chết lặng, mọi API trả 401 trong khi nav vẫn hiện "đang đăng nhập".
+function _scheduleRefresh(data) {
+  if (_refreshTimer) { clearTimeout(_refreshTimer); _refreshTimer = null; }
+  if (!data || !data.refresh_token || !data.expires_at) return;
+  // Hẹn sớm 5 phút; token đã sát hạn thì xoay ngay ở nhịp sau.
+  const msLeft = Math.max(0, (data.expires_at - Date.now() / 1000 - 300) * 1000);
+  // ⚠️ setTimeout KHÔNG đáng tin một mình: tab chạy nền bị bóp nhịp, máy ngủ thì
+  // treo hẳn. Đây là lớp CHỦ ĐỘNG; lớp chắc chắn là `getFreshToken()` kiểm ngay
+  // trước lúc dùng, cộng lượt kiểm khi tab sáng lại ở cuối file.
+  _refreshTimer = setTimeout(() => { _refreshTimer = null; _ensureFreshToken(); }, msLeft);
+}
+
+// ── Bảo đảm có access token còn hạn, gộp mọi lượt gọi song song ───────
+// Trả về token dùng được, hoặc null nếu thật sự không còn phiên.
+async function _ensureFreshToken(force) {
+  // ⚠️ `force` KHÔNG được xoá `_session`: refresh_token nằm trong đó, xoá là tự
+  // cắt đường xoay và tụt xuống nhánh cookie.
+  if (!force && _tokenFresh(_session)) return _session.access_token;
+  if (!_refreshInFlight) {
+    const rt = (_session && _session.refresh_token) || _getCookie('tuvi_rt');
+    _refreshInFlight = (rt ? _refreshSession(rt) : _refreshViaServer())
+      .catch(() => {})
+      .then(() => { _refreshInFlight = null; });
+  }
+  await _refreshInFlight;
+  return _tokenFresh(_session, 0) ? _session.access_token : null;
+}
 
 // ── Init: restore session từ localStorage, fallback sang cookie (iOS ITP safe) ──
 (function initAuth() {
@@ -71,6 +120,9 @@ let _restoring = false;
         // Session còn hạn
         _session = s;
         _user = JSON.parse(localStorage.getItem(USER_KEY) || 'null');
+        // 🔑 Và PHẢI hẹn giờ xoay: phiên khôi phục từ localStorage trước đây
+        // không được hẹn, nên tab mở lâu là token hết hạn lặng lẽ.
+        _scheduleRefresh(s);
       } else {
         // Hết hạn — ưu tiên refresh_token từ localStorage, fallback cookie JS,
         // cuối cùng cookie server bền (HttpOnly, sống sót ITP khi mọi thứ JS bị xoá).
@@ -110,9 +162,7 @@ function _applySession(data) {
     _serverStoreRt(data.refresh_token);             // lớp bền HttpOnly (né ITP)
   }
   updateNavUI();
-  // Auto-refresh 5 min before next expiry
-  const msLeft = (data.expires_at - Date.now() / 1000 - 300) * 1000;
-  if (msLeft > 0) setTimeout(() => _refreshSession(data.refresh_token), msLeft);
+  _scheduleRefresh(data);
 }
 
 // ── Refresh session silently ──
@@ -161,6 +211,18 @@ window.Auth = {
   isRestoring: () => _restoring,
   getUser:     () => _user,
   getSession:  () => _session,
+
+  // ── Cách ĐÚNG để lấy Bearer token trước một lượt gọi API ────────────
+  // `getSession().access_token` là ẢNH CHỤP: nó trả token kể cả khi token ĐÃ
+  // HẾT HẠN, và server sẽ 401 trong khi người dùng vẫn đang đăng nhập. Hàm này
+  // kiểm hạn trước, tự xoay nếu cần, gộp mọi lượt gọi song song vào một lượt
+  // refresh. Trả null khi thật sự hết phiên.
+  getFreshToken: () => _ensureFreshToken(),
+
+  // Ép xoay token ngay (dùng khi server vừa trả 401 dù mình tưởng còn phiên —
+  // vd đồng hồ máy lệch nên token trông còn hạn mà server đã coi là hết).
+  // Trả token mới, hoặc null nếu phiên hết thật.
+  refresh: () => _ensureFreshToken(true),
 
   // Require login — show modal if not logged in, then run callback
   require: function(callback) {
@@ -244,6 +306,9 @@ function saveSession(data) {
     _serverStoreRt(data.refresh_token);             // lớp bền HttpOnly (né ITP)
   }
   updateNavUI();
+  // 🔑 Đăng nhập/đăng ký cũng phải hẹn giờ xoay token — thiếu dòng này thì phiên
+  // vừa tạo chết sau ~1 giờ mà không có gì gia hạn (lỗi rail đòi đăng nhập lại).
+  _scheduleRefresh(data);
   if (data.access_token) sendSignupSignal(data.access_token);
   // Marketing: gắn user_id + snapshot attribution (first-touch) lên tài khoản.
   // track.js đọc token vừa lưu trong localStorage; server phân biệt signup mới.
@@ -513,3 +578,16 @@ window.switchTab      = switchTab;
 window.submitAuth     = submitAuth;
 window.signInGoogle   = signInGoogle;
 window.signInFacebook = signInFacebook;
+
+// ── Tab sáng lại → soát hạn token ─────────────────────────────────────
+// Hẹn giờ ở trên là lớp chủ động, nhưng trình duyệt bóp nhịp timer ở tab chạy
+// nền và treo hẳn khi máy ngủ — đúng ca hay gặp nhất: để tab qua đêm rồi sáng
+// mở ra bấm một cái là ăn 401. Soát ở đây để token được xoay TRƯỚC cú bấm đầu.
+if (typeof document !== 'undefined') {
+  document.addEventListener('visibilitychange', function () {
+    if (document.visibilityState !== 'visible') return;
+    if (!_session) return;                 // khách vãng lai: không có gì để xoay
+    if (_tokenFresh(_session, 300)) return; // còn >5 phút thì để hẹn giờ lo
+    _ensureFreshToken();
+  });
+}

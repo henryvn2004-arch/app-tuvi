@@ -177,12 +177,15 @@
   var _refCode = null, _refCodeBusy = false;
   function loadRefCode() {
     if (_refCode || _refCodeBusy) return;
-    var tk = getToken(); if (!tk) return;
+    if (!getToken()) return;
     _refCodeBusy = true;
-    fetch('/api/payment?action=my-referral', { headers: { 'Authorization': 'Bearer ' + tk } })
+    freshToken().then(function (tk) {
+      if (!tk) { _refCodeBusy = false; return; }
+      return fetch('/api/payment?action=my-referral', { headers: { 'Authorization': 'Bearer ' + tk } })
       .then(function (r) { return r.json(); })
       .then(function (j) { _refCodeBusy = false; if (j && j.code) _refCode = j.code; })
       .catch(function () { _refCodeBusy = false; });
+    }).catch(function () { _refCodeBusy = false; });
   }
 
   // Gắn mã giới thiệu + UTM vào link chia sẻ. utm_campaign = tool_id để panel
@@ -436,11 +439,14 @@
   }
   // ── Đồng bộ server (best-effort, KHÔNG bao giờ ném lỗi vào tool) ──
   function histSrvUpsert(rec) {
-    var tk = getToken(); if (!tk) return;
+    if (!getToken()) return;
     try {
-      fetch('/api/tuvi-chats', { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + tk },
+      freshToken().then(function (tk) {
+      if (!tk) return;
+      return fetch('/api/tuvi-chats', { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + tk },
         body: JSON.stringify({ id: rec.id, label: rec.title || 'Phiên', type: 'app-' + rec.toolId, laso_data: rec.restore || null,
           messages: rec.messages || [], last_msg: rec.lastMsg || '', updated_at: new Date(rec.updatedAt).toISOString() }) }).catch(function () {});
+      }).catch(function () {});
     } catch (e) { /* ignore */ }
   }
   function histSrvDelete(id) {
@@ -448,9 +454,11 @@
     try { fetch('/api/tuvi-chats?id=' + encodeURIComponent(id), { method: 'DELETE', headers: { 'Authorization': 'Bearer ' + tk } }).catch(function () {}); } catch (e) { /* ignore */ }
   }
   function histSrvList(tool, cb) {
-    var tk = getToken(); if (!tk) { cb(null); return; }
+    if (!getToken()) { cb(null); return; }
     try {
-      fetch('/api/tuvi-chats', { headers: { 'Authorization': 'Bearer ' + tk } })
+      freshToken().then(function (tk) {
+      if (!tk) { cb(null); return; }
+      return fetch('/api/tuvi-chats', { headers: { 'Authorization': 'Bearer ' + tk } })
         .then(function (r) { return r.ok ? r.json() : null; })
         .then(function (j) {
           if (!j || !j.chats) { cb(null); return; }
@@ -462,6 +470,7 @@
           });
           cb(out);
         }).catch(function () { cb(null); });
+      }).catch(function () { cb(null); });
     } catch (e) { cb(null); }
   }
   function histMerge(local, server) {
@@ -1424,13 +1433,15 @@
     return _rc.freeTurns + Math.floor(_rc.balance / _rc.price);
   }
 
-  function loadRailStatus() {
-    var token = getToken();
+  async function loadRailStatus() {
+    // Token phải còn HẠN, không chỉ tồn tại: gửi token hết hạn thì server đọc
+    // thành khách vô danh và đồng hồ hiện "Đã hết câu dùng thử · Đăng ký nhận
+    // thêm" cho đúng một người đang đăng nhập — cùng lớp lỗi với rail đòi đăng
+    // nhập, chỉ khác bề mặt.
+    var token = await freshToken();
     // Chưa có token NHƯNG Auth đang khôi phục phiên ⇒ CHƯA BIẾT người này là ai.
-    // Hỏi ví lúc này là nhận về trạng thái khách vô danh, và với máy đã tiêu hết
-    // câu dùng thử thì đồng hồ hiện "Đã hết câu dùng thử · Đăng ký nhận thêm"
-    // cho đúng một người đang đăng nhập. Thà im lặng vài giây — vòng theo dõi
-    // phiên ở cuối file sẽ gọi lại ngay khi biết chắc.
+    // Hỏi ví lúc này là nhận về trạng thái khách vô danh. Thà im lặng vài giây —
+    // vòng theo dõi phiên ở cuối file sẽ gọi lại ngay khi biết chắc.
     if (!token && window.Auth && Auth.isRestoring && Auth.isRestoring()) return;
     var url = token
       ? '/api/payment?action=rail-status'
@@ -1677,6 +1688,16 @@
     return out.join('');
   }
   function getToken() { try { var s = window.Auth && Auth.getSession && Auth.getSession(); return s ? s.access_token : null; } catch (e) { return null; } }
+  // Token cho lượt gọi API: kiểm hạn + tự xoay TRƯỚC khi gửi. `getToken()` là ảnh
+  // chụp, nó trả cả token đã hết hạn → server 401 → rail đòi đăng nhập với đúng
+  // người đang đăng nhập. Bản cũ của auth.js chưa có `getFreshToken` (còn trong
+  // cache trình duyệt) thì rơi về ảnh chụp như trước, không vỡ.
+  async function freshToken() {
+    try {
+      if (window.Auth && Auth.getFreshToken) return await Auth.getFreshToken();
+    } catch (e) { /* ignore */ }
+    return getToken();
+  }
   function setSend(on) { var s = document.getElementById('railSend'), i = document.getElementById('railInput'), a = document.getElementById('railAttach'); if (s) s.disabled = !on; if (a) a.disabled = !on; if (i) { i.disabled = !on; if (on) i.focus(); } }
 
   function parseSSE(block) {
@@ -1989,7 +2010,7 @@
     var acc = '';
     try {
       var headers = { 'Content-Type': 'application/json' };
-      var token = getToken(); if (token) headers['Authorization'] = 'Bearer ' + token;
+      var token = await freshToken(); if (token) headers['Authorization'] = 'Bearer ' + token;
       // anon_id đi kèm để server đếm lượt DÙNG THỬ khi chưa đăng nhập. Người đã
       // đăng nhập vẫn gửi (vô hại — server bỏ qua vì có token).
       var body = { session_id: sessionId, stream: true, messages: messages.slice(-12), client: { platform: 'web', version: '1.0.0', anon_id: anonId() } };
@@ -2003,6 +2024,19 @@
         if (body.scenario) { body.scenario = Object.assign({}, body.scenario, { authorName: _author.name, authorStyle: _author.style }); }
       }
       var res = await fetch('/api/v1/chat', { method: 'POST', headers: headers, body: JSON.stringify(body) });
+      // ── 401 dù VỪA gửi token → ép xoay MỘT lần rồi thử lại ─────────────
+      // Còn đúng một khe hở sau khi đã kiểm hạn ở trên: đồng hồ máy lệch, hoặc
+      // phiên bị thu hồi phía server. Thử lại một lượt rẻ hơn nhiều so với việc
+      // quẳng tường đăng nhập vào mặt người đang đăng nhập. CHỈ thử khi lượt
+      // đầu CÓ token — không có token thì đây là khách thật, 401 là đúng.
+      if (res.status === 401 && token && window.Auth && Auth.refresh) {
+        var token2 = null;
+        try { token2 = await Auth.refresh(); } catch (e) { /* ignore */ }
+        if (token2 && token2 !== token) {
+          headers['Authorization'] = 'Bearer ' + token2;
+          res = await fetch('/api/v1/chat', { method: 'POST', headers: headers, body: JSON.stringify(body) });
+        }
+      }
       if (res.status === 401) {
         // Hết phần DÙNG THỬ (khách vô danh đã hỏi hết số câu được cấp) → tường
         // ĐĂNG KÝ, không phải hộp đăng nhập trơ. Người này chưa có tài khoản nên

@@ -10,7 +10,16 @@ const SUPABASE_URL  = 'https://dciwkfdqhhddeymlisey.supabase.co';
 const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRjaXdrZmRxaGhkZGV5bWxpc2V5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyMzQ2MzksImV4cCI6MjA4ODgxMDYzOX0._3aXoe0hO-46J1gASUiNv__tWjSzLZFTL0M3-47L26I';
 
 let _pUser = null;
-let _pToken = null;
+// 🔑 KHÔNG chụp token vào biến rồi dùng cả phiên trang: access token Supabase
+// sống ~1 giờ, mà trang Tài khoản hay bị để mở rất lâu → mọi lượt gọi sau đó
+// ăn 401 với đúng người đang đăng nhập. Đọc SỐNG mỗi lần dùng; auth.js lo
+// phần xoay token (hẹn giờ + soát lúc tab sáng lại).
+async function _tok() {
+  try {
+    if (window.Auth?.getFreshToken) return (await window.Auth.getFreshToken()) || null;
+    return window.Auth?.getSession()?.access_token || null; // đường lùi: auth.js bản cũ còn trong cache
+  } catch (e) { return null; }
+}
 let _pHistoryData = null;
 let _pChatState = { slug: null, product: 'laso', messages: [], lasoContext: null };
 
@@ -30,7 +39,6 @@ async function initProfile() {
   }
 
   _pUser  = window.Auth.getUser();
-  _pToken = window.Auth.getSession()?.access_token || null;
 
   renderProfileHeader();
   document.getElementById('dashboard').style.display = 'block';
@@ -128,7 +136,7 @@ function openTabFromHash() {
 // ── LOAD HISTORY ──
 async function loadHistory() {
   const resp = await fetch('/api/history?action=list', {
-    headers: { Authorization: `Bearer ${_pToken}` }
+    headers: { Authorization: `Bearer ${await _tok()}` }
   });
   if (!resp.ok) { console.error('history load failed'); return; }
   _pHistoryData = await resp.json();
@@ -314,10 +322,10 @@ function _mcpShow(state) { // 'checking' | 'nokey' | 'ready'
   r.style.display = state === 'ready' ? 'block' : 'none';
 }
 async function loadMcpKey() {
-  if (!_pToken) return;
+  if (!(await _tok())) return;
   _mcpShow('checking');
   try {
-    const res = await fetch('/api/mcp/key', { headers: { Authorization: `Bearer ${_pToken}` } });
+    const res = await fetch('/api/mcp/key', { headers: { Authorization: `Bearer ${await _tok()}` } });
     const d = res.ok ? await res.json() : {};
     if (d && d.url) { document.getElementById('mcpUrl').value = d.url; _mcpShow('ready'); }
     else _mcpShow('nokey');
@@ -327,7 +335,7 @@ async function genMcpKey() {
   const btn = document.getElementById('btnMcpGen');
   btn.disabled = true; btn.textContent = 'Đang tạo…';
   try {
-    const res = await fetch('/api/mcp/key', { method: 'POST', headers: { Authorization: `Bearer ${_pToken}` } });
+    const res = await fetch('/api/mcp/key', { method: 'POST', headers: { Authorization: `Bearer ${await _tok()}` } });
     const d = await res.json();
     if (d && d.url) { document.getElementById('mcpUrl').value = d.url; _mcpShow('ready'); }
     else alert('Không tạo được key, thử lại sau nhé.');
@@ -346,8 +354,8 @@ async function revokeMcpKey() {
   if (!confirm('Thu hồi key hiện tại? Kết nối AI đang dùng key cũ sẽ ngừng — bạn sẽ có key mới ngay sau đó.')) return;
   _mcpShow('checking');
   try {
-    await fetch('/api/mcp/key', { method: 'DELETE', headers: { Authorization: `Bearer ${_pToken}` } });
-    await fetch('/api/mcp/key', { method: 'POST', headers: { Authorization: `Bearer ${_pToken}` } });
+    await fetch('/api/mcp/key', { method: 'DELETE', headers: { Authorization: `Bearer ${await _tok()}` } });
+    await fetch('/api/mcp/key', { method: 'POST', headers: { Authorization: `Bearer ${await _tok()}` } });
   } catch {}
   loadMcpKey();
 }
@@ -363,7 +371,7 @@ async function loadTelegramLink() {
   if (!statusEl) return;
   try {
     const res = await fetch('/api/channels/telegram/link', {
-      headers: { Authorization: `Bearer ${_pToken}` }
+      headers: { Authorization: `Bearer ${await _tok()}` }
     });
     const d = res.ok ? await res.json() : { linked: false };
     if (d.linked) {
@@ -386,7 +394,7 @@ document.getElementById('btnTgLink').onclick = async () => {
   try {
     const res = await fetch('/api/channels/telegram/link', {
       method: 'POST',
-      headers: { Authorization: `Bearer ${_pToken}` }
+      headers: { Authorization: `Bearer ${await _tok()}` }
     });
     const d = await res.json();
     if (d.url) {
@@ -409,7 +417,7 @@ document.getElementById('btnTgUnlink').onclick = async () => {
   try {
     await fetch('/api/channels/telegram/link', {
       method: 'DELETE',
-      headers: { Authorization: `Bearer ${_pToken}` }
+      headers: { Authorization: `Bearer ${await _tok()}` }
     });
   } catch {}
   loadTelegramLink();
@@ -423,7 +431,7 @@ async function loadWhatsappLink() {
   if (!statusEl) return;
   try {
     const res = await fetch('/api/channels/whatsapp/link', {
-      headers: { Authorization: `Bearer ${_pToken}` }
+      headers: { Authorization: `Bearer ${await _tok()}` }
     });
     const d = res.ok ? await res.json() : { linked: false };
     if (d.linked) {
@@ -446,7 +454,7 @@ document.getElementById('btnWaLink').onclick = async () => {
   try {
     const res = await fetch('/api/channels/whatsapp/link', {
       method: 'POST',
-      headers: { Authorization: `Bearer ${_pToken}` }
+      headers: { Authorization: `Bearer ${await _tok()}` }
     });
     const d = await res.json();
     if (d.url) {
@@ -469,7 +477,7 @@ document.getElementById('btnWaUnlink').onclick = async () => {
   try {
     await fetch('/api/channels/whatsapp/link', {
       method: 'DELETE',
-      headers: { Authorization: `Bearer ${_pToken}` }
+      headers: { Authorization: `Bearer ${await _tok()}` }
     });
   } catch {}
   loadWhatsappLink();
@@ -483,7 +491,7 @@ async function loadMessengerLink() {
   if (!statusEl) return;
   try {
     const res = await fetch('/api/channels/messenger/link', {
-      headers: { Authorization: `Bearer ${_pToken}` }
+      headers: { Authorization: `Bearer ${await _tok()}` }
     });
     const d = res.ok ? await res.json() : { linked: false };
     if (d.linked) {
@@ -506,7 +514,7 @@ document.getElementById('btnMsgrLink').onclick = async () => {
   try {
     const res = await fetch('/api/channels/messenger/link', {
       method: 'POST',
-      headers: { Authorization: `Bearer ${_pToken}` }
+      headers: { Authorization: `Bearer ${await _tok()}` }
     });
     const d = await res.json();
     if (d.url) {
@@ -530,7 +538,7 @@ document.getElementById('btnMsgrUnlink').onclick = async () => {
   try {
     await fetch('/api/channels/messenger/link', {
       method: 'DELETE',
-      headers: { Authorization: `Bearer ${_pToken}` }
+      headers: { Authorization: `Bearer ${await _tok()}` }
     });
   } catch {}
   loadMessengerLink();
@@ -551,10 +559,10 @@ function loadKetnoi() {
 // dùng. Trần đếm theo CỬA SỔ 30 NGÀY, khớp process_referral_signup.
 async function loadReferralPanel() {
   const sec = document.getElementById('refSection');
-  if (!sec || !_pToken) return;
+  if (!sec || !(await _tok())) return;
   let d;
   try {
-    const r = await fetch('/api/payment?action=my-referral', { headers: { Authorization: 'Bearer ' + _pToken } });
+    const r = await fetch('/api/payment?action=my-referral', { headers: { Authorization: 'Bearer ' + (await _tok()) } });
     d = await r.json();
   } catch (e) { return; }
   if (!d || !d.code) return;
@@ -591,7 +599,7 @@ async function loadReferralPanel() {
 }
 
 async function loadCredits() {
-  if (!_pUser || !_pToken) return;
+  if (!_pUser || !(await _tok())) return;
   // Balance
   await loadHeaderBalance();
   loadReferralPanel();
@@ -602,7 +610,7 @@ async function loadCredits() {
     const res = await fetch(
       SUPABASE_URL + '/rest/v1/credit_transactions?user_id=eq.' + encodeURIComponent(_pUser.id) +
       '&order=created_at.desc&limit=30&select=*',
-      { headers: { apikey: SUPABASE_ANON, Authorization: 'Bearer ' + _pToken } }
+      { headers: { apikey: SUPABASE_ANON, Authorization: 'Bearer ' + (await _tok()) } }
     );
     const txns = res.ok ? await res.json() : [];
     renderTransactions(txns);
@@ -734,7 +742,7 @@ async function openLuanModal(slug, name) {
   openModal('luanModal');
 
   const resp = await fetch(`/api/history?action=laso&slug=${encodeURIComponent(slug)}`, {
-    headers: { Authorization: `Bearer ${_pToken}` }
+    headers: { Authorization: `Bearer ${await _tok()}` }
   });
   const data = await resp.json();
   if (!data || !data.luan_giai) {
@@ -772,7 +780,7 @@ async function openXemTuoiModal(id, personA, personB) {
   openModal('luanModal');
 
   const resp = await fetch(`/api/history?action=xem_tuoi&id=${id}`, {
-    headers: { Authorization: `Bearer ${_pToken}` }
+    headers: { Authorization: `Bearer ${await _tok()}` }
   });
   const data = await resp.json();
   if (!data || !data.result_json) {
@@ -817,7 +825,7 @@ async function openChatModal(slug, name, product) {
 
   // Load existing chat history
   const resp = await fetch(`/api/history?action=chat&slug=${encodeURIComponent(slug)}`, {
-    headers: { Authorization: `Bearer ${_pToken}` }
+    headers: { Authorization: `Bearer ${await _tok()}` }
   });
   const data = await resp.json();
   _pChatState.messages = data.messages || [];
@@ -891,7 +899,7 @@ async function sendChat() {
     // Save to DB
     await fetch('/api/history?action=save_chat', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${_pToken}` },
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${await _tok()}` },
       body: JSON.stringify({
         slug: _pChatState.slug,
         product: _pChatState.product,
@@ -912,7 +920,7 @@ async function saveDisplayName() {
   try {
     const resp = await fetch(`${SUPABASE_URL}/auth/v1/user`, {
       method: 'PUT',
-      headers: { apikey: SUPABASE_ANON, Authorization: `Bearer ${_pToken}`, 'Content-Type':'application/json' },
+      headers: { apikey: SUPABASE_ANON, Authorization: `Bearer ${await _tok()}`, 'Content-Type':'application/json' },
       body: JSON.stringify({ data: { display_name: name } })
     });
     if (resp.ok) {
@@ -935,7 +943,7 @@ async function changePassword() {
   try {
     const resp = await fetch(`${SUPABASE_URL}/auth/v1/user`, {
       method: 'PUT',
-      headers: { apikey: SUPABASE_ANON, Authorization: `Bearer ${_pToken}`, 'Content-Type':'application/json' },
+      headers: { apikey: SUPABASE_ANON, Authorization: `Bearer ${await _tok()}`, 'Content-Type':'application/json' },
       body: JSON.stringify({ password: pwd })
     });
     if (resp.ok) {
@@ -968,10 +976,10 @@ let _memMax = 40;
 async function loadMemory() {
   const box = document.getElementById('memList');
   if (!box) return;
-  if (!_pToken) { box.innerHTML = '<div class="mem-empty">Đăng nhập để xem hồ sơ.</div>'; return; }
+  if (!(await _tok())) { box.innerHTML = '<div class="mem-empty">Đăng nhập để xem hồ sơ.</div>'; return; }
   box.innerHTML = '<div class="mem-empty">Đang tải…</div>';
   try {
-    const r = await fetch('/api/payment?action=my-memory', { headers: { Authorization: 'Bearer ' + _pToken } });
+    const r = await fetch('/api/payment?action=my-memory', { headers: { Authorization: 'Bearer ' + (await _tok()) } });
     const j = await r.json();
     if (!r.ok) throw new Error(j && j.error);
     _memItems = (j.items || []);
@@ -1051,7 +1059,7 @@ async function memPost(action, body) {
   try {
     const r = await fetch('/api/payment?action=' + action, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + _pToken },
+      headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + (await _tok()) },
       body: JSON.stringify(body),
     });
     const j = await r.json().catch(() => ({}));
