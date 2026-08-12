@@ -220,9 +220,9 @@ window.SHELL_INTRO={key:'nhan-mach',title:'Sổ Nhân Mạch',desc:'Đưa <b>c�
 <script src="/tuvi-paywall.js?v=19"></script>
 <script src="/auth.js?v=2"></script>
   <script src="/nav.js?v=22" data-icons-only></script>
-<script src="/shell.js?v=71"></script>
+<script src="/shell.js?v=72"></script>
 <script src="/user-charts.js?v=2"></script>
-<script src="/tools-shared/ai-loading-steps.js?v=6"></script>
+<script src="/tools-shared/ai-loading-steps.js?v=7"></script>
 <script>
 
 var _currentSlug = '';
@@ -434,6 +434,9 @@ async function analyze() {
   _openPanel();
   _loadingCtl = AiLoadingSteps.mount('loadingSteps', NM_STEPS.slice(0, 2));
   _loadingCtl.start();
+  // Sổ 2-8 người thì form dễ dài hơn màn hình — cuộn lên ngay để thấy có gì
+  // vừa chạy, không đứng im.
+  AiLoadingSteps.scrollToResult('loading');
   var prev;
   try {
     var r = await fetch('/api/nhan-mach?preview=1', {
@@ -496,6 +499,8 @@ async function _doGenerate() {
   _loadingCtl = AiLoadingSteps.mount('loadingSteps', NM_STEPS.slice(2));
   document.getElementById('loading').style.display = 'block';
   _loadingCtl.start();
+  // Mở khóa xong nằm sâu dưới phần preview — cuộn lại lên chỗ đang chạy.
+  AiLoadingSteps.scrollToResult('loading');
 
   var token = window.Auth?.getSession()?.access_token || '';
   try {

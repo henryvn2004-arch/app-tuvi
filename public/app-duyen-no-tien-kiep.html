@@ -190,8 +190,8 @@ window.SHELL_INTRO={key:'duyen-no-tien-kiep',title:'Duyên Nợ Tiền Kiếp',d
 <script src="/tuvi-paywall.js?v=19"></script>
 <script src="/auth.js?v=2"></script>
   <script src="/nav.js?v=22" data-icons-only></script>
-<script src="/shell.js?v=71"></script>
-<script src="/tools-shared/ai-loading-steps.js?v=6"></script>
+<script src="/shell.js?v=72"></script>
+<script src="/tools-shared/ai-loading-steps.js?v=7"></script>
 <script src="/tools-shared/portrait-recover.js?v=2"></script>
 <script>
 
@@ -421,6 +421,9 @@ async function _doGenerate(freeRerun) {
   _imgWait && _imgWait.start();
   _loadingCtl = AiLoadingSteps.mount('loadingSteps', DN_STEPS);
   _loadingCtl.start();
+  // Sổ tới 5 người thì form rất dễ dài hơn màn hình — cuộn lên ngay để thấy có
+  // gì vừa chạy, không đứng im.
+  if (AiLoadingSteps.scrollToResult) AiLoadingSteps.scrollToResult('loading');
 
   var token = window.Auth?.getSession()?.access_token || '';
   var call = function (phase) {

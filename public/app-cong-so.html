@@ -168,7 +168,7 @@ window.SHELL_INTRO={key:'cong-so',title:'Tử Vi Công Sở',desc:'Đọc lá s�
 <script src="/poster.js?v=4"></script>
 <script src="/auth.js?v=2"></script>
   <script src="/nav.js?v=22" data-icons-only></script>
-<script src="/shell.js?v=71"></script>
+<script src="/shell.js?v=72"></script>
 <script>
 var _ho=null,_birth=null;
 TuviForm.render('tuviFormHost', {mode:'compact', gioitinh:'nam'});
@@ -200,6 +200,10 @@ function doCongSo(){
     document.getElementById('birthPanel').style.display='none';
     document.getElementById('resPanel').style.display='block';
     document.getElementById('btnEdit').style.display='';
+    // Tool free chạy gần như tức thì (không cần orb/loading — luật đã ghi ở
+    // ai-loading-steps.js) nhưng nếu form nằm dưới cuối màn hình thì kết quả
+    // vẫn hiện NGOÀI khung nhìn. Cuộn lên để thấy nó vừa dựng xong.
+    document.getElementById('resPanel').scrollIntoView({behavior:'smooth',block:'start'});
     ve();
     Shell.rememberBirth(fd);
     if(window.SHELL_INTRO)Shell.dismissIntro(window.SHELL_INTRO.key);
