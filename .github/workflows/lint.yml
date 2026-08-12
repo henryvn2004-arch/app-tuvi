@@ -75,6 +75,13 @@ jobs:
       - name: Lời gọi Auth.* khớp API thật
         run: npm run check:authapi
 
+      # Chặn tái phát lỗi "đòi đăng nhập với người ĐANG đăng nhập": access token
+      # Supabase sống ~1 giờ, `getSession().access_token` là ẢNH CHỤP nên nó trả
+      # cả token đã hết hạn → server 401. Đã trả giá trên prod (rail Kỳ Môn), và
+      # ở paywall thì tệ hơn: 401 đọc thành "chưa trả tiền" → tính tiền lần hai.
+      - name: Đường tiền/đường hỏi dùng token còn hạn
+        run: npm run check:token
+
       # Chặn `animation:` trỏ tới @keyframes KHÔNG TỒN TẠI — trình duyệt không
       # báo gì cả, phần tử vẫn hiện, chỉ là đứng im. Bắt được ngay lượt chạy
       # đầu: banner "Chào mừng! Bạn đã nhận Lượng miễn phí" của `auth.js` mượn

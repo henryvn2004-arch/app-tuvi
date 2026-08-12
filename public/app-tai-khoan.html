@@ -674,7 +674,7 @@ window.iconHtml=window.iconHtml||function(k){return (window.ICONS&&window.ICONS[
 </script>
 <script src="/auth.js?v=2"></script>
   <script src="/nav.js?v=22" data-icons-only></script>
-<script src="/shell.js?v=70"></script>
+<script src="/shell.js?v=71"></script>
 <script>
 // HỘI THOẠI (shell history) cho tab Lịch Sử của hub Tài khoản: gộp mọi công cụ
 // từ localStorage (app_hist_v1_*) + server (/api/tuvi-chats type app-*). Bấm 1
@@ -707,9 +707,16 @@ window.ACCOUNT_SHELL_CHAT = function () {
   var loc = local();
   render(loc);
   try {
-    var ses = window.Auth && Auth.getSession && Auth.getSession();
-    var tok = ses && ses.access_token;
-    if (tok) {
+    // Token phải còn HẠN: `getSession()` là ảnh chụp, trả cả token đã hết hạn
+    // (sống ~1 giờ) → danh sách hội thoại đám mây lặng lẽ trống với đúng người
+    // đang đăng nhập. `getFreshToken` tự xoay; bản auth.js cũ trong cache thì
+    // rơi về ảnh chụp như trước.
+    Promise.resolve(
+      window.Auth && Auth.getFreshToken
+        ? Auth.getFreshToken()
+        : (window.Auth && Auth.getSession && Auth.getSession() || {}).access_token
+    ).then(function (tok) {
+      if (!tok) return;
       fetch('/api/tuvi-chats', { headers: { Authorization: 'Bearer ' + tok } })
         .then(function (r) { return r.ok ? r.json() : null; })
         .then(function (j) {
@@ -717,11 +724,11 @@ window.ACCOUNT_SHELL_CHAT = function () {
           var srv = j.chats.filter(function (c) { return (c.type || '').indexOf('app-') === 0; }).map(function (c) { return { id: c.id, tool: (c.type || '').slice(4), title: c.label, updatedAt: +new Date(c.updated_at), lastMsg: c.last_msg }; });
           render(loc.concat(srv));
         }).catch(function () { /* ignore */ });
-    }
+    }).catch(function () { /* ignore */ });
   } catch (e) { /* ignore */ }
 };
 </script>
-<script src="/account-core.js?v=2"></script>
+<script src="/account-core.js?v=3"></script>
 <script>
 // Mở đúng tab theo hash (#credits / #ketnoi / #account / #lichsu) khi vào từ sidebar.
 (function(){function openHash(){var h=(location.hash||'').replace('#','');if(h){var b=document.querySelector('[data-tab="'+h+'"]');if(b)b.click();}}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){setTimeout(openHash,300);});else setTimeout(openHash,300);})();

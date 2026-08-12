@@ -52,11 +52,20 @@
     var endpoint = opts.endpoint;
     var every = opts.everyMs || 5000;
     var max = opts.maxMs || 90000;
-    var token = (window.Auth && Auth.getSession && Auth.getSession()?.access_token) || '';
     var het = Date.now() + max;
 
     while (Date.now() < het) {
       await new Promise(function (r) { setTimeout(r, every); });
+      // 🔑 Lấy token TRONG vòng lặp, không chụp một lần bên ngoài: vòng này chạy
+      // tới 90 giây và đang đi cứu một kết quả người dùng ĐÃ TRẢ TIỀN. Token hết
+      // hạn giữa chừng thì mọi lượt hỏi sau đều 401, `continue` mãi rồi trả null
+      // — mất trắng bản đã mua mà không lỗi nào bắn ra.
+      var token = '';
+      try {
+        token = (window.Auth && Auth.getFreshToken)
+          ? ((await Auth.getFreshToken()) || '')
+          : ((window.Auth && Auth.getSession && Auth.getSession()?.access_token) || '');
+      } catch (e) { /* ignore */ }
       try {
         var st = await fetch(endpoint + '?action=cache-status&' + opts.query, {
           headers: { Authorization: 'Bearer ' + token },

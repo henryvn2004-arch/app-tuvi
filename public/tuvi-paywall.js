@@ -495,9 +495,8 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
       return;
     }
 
-    const session = window.Auth.getSession();
     const userId  = window.Auth.getUser()?.id || '';
-    const token   = session?.access_token || '';
+    const token   = await _freshToken();
 
     if (!token) {
       alert('Phiên đăng nhập hết hạn. Vui lòng đăng nhập lại.');
@@ -583,15 +582,38 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
   // Tách phần "gửi query" ra khỏi phần "dựng query" vì tool nhận HAI lá số
   // (Duyên Nợ Tiền Kiếp) không mô tả được bằng một object `birth`.
   //
+  // ── Token cho mọi lượt gọi có TIỀN ────────────────────────────────────
+  // `getSession().access_token` là ẢNH CHỤP: nó trả cả token ĐÃ HẾT HẠN (access
+  // token Supabase sống ~1 giờ) nên server 401 với đúng người đang đăng nhập —
+  // ở file này 401 nghĩa là trừ tiền hụt, hoặc tệ hơn là tính tiền lần hai.
+  // `Auth.getFreshToken()` kiểm hạn và tự xoay trước khi gửi.
+  // Rơi về ảnh chụp nếu trình duyệt còn cache bản auth.js cũ (chưa có hàm này).
+  async function _freshToken() {
+    try {
+      if (window.Auth?.getFreshToken) return (await window.Auth.getFreshToken()) || '';
+    } catch (e) { /* ignore */ }
+    return window.Auth?.getSession()?.access_token || '';
+  }
+
   // FAIL-CLOSED ở mọi nhánh: mạng lỗi / chưa đăng nhập / server trả lạ → coi
   // như PHẢI TRẢ. Đoán nhầm thành "đã trả" là phát không hàng.
   async function _isFreeRerunQ(endpoint, query) {
     try {
-      const token = window.Auth?.getSession()?.access_token || '';
+      let token = await _freshToken();
       if (!token || !query) return false;
-      const r = await fetch(endpoint + '?action=cache-status&' + query, {
-        headers: { Authorization: 'Bearer ' + token },
-      });
+      const url = endpoint + '?action=cache-status&' + query;
+      let r = await fetch(url, { headers: { Authorization: 'Bearer ' + token } });
+      // 🔴 401 ở ĐÂY là ca đắt nhất của cả file: fail-closed đọc thành "chưa
+      // trả" nên người đã mua bị TÍNH TIỀN LẦN HAI cho đúng thứ họ đang xem
+      // lại. Token hết hạn không phải câu trả lời "chưa trả" — xoay rồi hỏi lại
+      // một lượt trước khi chịu thua.
+      if (r.status === 401 && window.Auth?.refresh) {
+        const t2 = await window.Auth.refresh().catch(() => null);
+        if (t2 && t2 !== token) {
+          token = t2;
+          r = await fetch(url, { headers: { Authorization: 'Bearer ' + token } });
+        }
+      }
       if (!r.ok) return false;
       const d = await r.json();
       return !!(d && d.free);
@@ -694,7 +716,7 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
     _css();
     if (!window.Auth?.isLoggedIn()) return { ok: false, reason: 'login' };
     const userId = window.Auth.getUser()?.id || '';
-    const token  = window.Auth.getSession()?.access_token || '';
+    const token  = await _freshToken();
     if (!token) return { ok: false, reason: 'login' };
     const balance = await _balanceFor(userId);
     if (balance < cost) { _insufficient(cost, balance); return { ok: false, reason: 'insufficient', balance }; }
@@ -708,7 +730,7 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
     const cost = opts.cost != null ? opts.cost : await _priceOf(product);
     if (cost == null) return { ok: false, reason: 'price_unknown' };
     if (!window.Auth?.isLoggedIn()) return { ok: false, reason: 'login' };
-    const token = window.Auth.getSession()?.access_token || '';
+    const token = await _freshToken();
     if (!token) return { ok: false, reason: 'login' };
     try {
       const res = await fetch('/api/payment?action=deduct', {
