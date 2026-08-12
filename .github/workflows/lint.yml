@@ -75,14 +75,6 @@ jobs:
       - name: Lời gọi Auth.* khớp API thật
         run: npm run check:authapi
 
-      # Chặn bộ khảo sát "Xác Định Giờ Sinh" hỏi trẻ em thứ chỉ người lớn mới
-      # có dữ liệu mà trả lời — đo được: một đứa 8 tuổi bị hỏi "về công việc",
-      # "về tiền bạc" và "khoảng bao nhiêu tuổi thì cuộc sống ĐỔI HƯỚNG" ở 100%
-      # số ca. Lỗi IM LẶNG với người sửa mã (tsc xanh, trang vẫn chạy), chỉ phụ
-      # huynh đang trả 50 Lượng mới thấy.
-      - name: Khảo sát Giờ Sinh khớp tuổi
-        run: npm run check:giosinh
-
       # Chặn `animation:` trỏ tới @keyframes KHÔNG TỒN TẠI — trình duyệt không
       # báo gì cả, phần tử vẫn hiện, chỉ là đứng im. Bắt được ngay lượt chạy
       # đầu: banner "Chào mừng! Bạn đã nhận Lượng miễn phí" của `auth.js` mượn
@@ -146,6 +138,16 @@ jobs:
       # mang lứa của bản kẹp tuổi cũ). Lời dặn trong mã không đủ; cần máy canh.
       - name: Vân tay cấu trúc payload ↔ SHAPE cache
         run: npm run check:cacheshape
+
+      # Chặn bộ khảo sát "Xác Định Giờ Sinh" hỏi trẻ em thứ chỉ người lớn mới
+      # có dữ liệu mà trả lời — đo được: một đứa 8 tuổi bị hỏi "về công việc",
+      # "về tiền bạc" và "khoảng bao nhiêu tuổi thì cuộc sống ĐỔI HƯỚNG" ở 100%
+      # số ca. Lỗi IM LẶNG với người sửa mã (tsc xanh, trang vẫn chạy), chỉ phụ
+      # huynh đang trả 50 Lượng mới thấy.
+      # ⚠️ PHẢI đứng SAU bước "Build engine" ở trên — bộ dò gọi engine THẬT nên
+      # cần `tuvi-engine/dist`. Đặt trước là đỏ ngay lượt CI đầu (đã vấp).
+      - name: Khảo sát Giờ Sinh khớp tuổi
+        run: npm run check:giosinh
 
   typecheck:
     runs-on: ubuntu-latest
