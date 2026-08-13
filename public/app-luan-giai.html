@@ -151,7 +151,8 @@
 window.SHELL_INTRO={key:'luan-giai',title:'Luận giải Tử Vi',desc:'Lập lá số 12 cung theo cổ pháp, chấm điểm đại vận, tứ hóa - neo phán quyết vào con số, không phán chung chung. Mỗi phần có nút <b>✦ Hỏi trợ lý</b> để đào sâu.'};</script>
 <script src="/tuvi-ansao-engine.js"></script>
 <script src="/laso-chart.js?v=3"></script>
-<script src="/luan-giai-core.js?v=2"></script>
+<script src="/luan-giai-core.js?v=3"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
 <script src="/tuvi-laso-format.js?v=2"></script>
 <script src="/tuvi-form.js?v=2"></script>
 <script src="/auth.js?v=2"></script>
@@ -257,6 +258,9 @@ function renderLuan(ls,fd,namxem){
   // Khối pre-gen mang span [data-icon-emoji]; nav.js ở chế độ chỉ-icon chỉ quét
   // lúc nạp trang, nên phần chèn sau đó phải gọi lại — không thì in emoji thô.
   if(window.mountIcons) window.mountIcons(document.getElementById('lgBody'));
+  // Canvas #chart-daivan-overview (phần 14) chỉ vào DOM đúng dòng trên — vẽ
+  // spline chart SAU đó, đúng khuôn BatTuCore.renderInlineDaiVanLineChart.
+  try{ LuanGiaiCore.renderInlineDaiVanLineChart(ls); }catch(e){ if(window.console)console.warn(e); }
 
   // jump nav 24 mục
   document.getElementById('lgJump').innerHTML=LABELS.slice(1).map(function(l,i){return '<a data-i="'+i+'"'+(i===0?' class="on"':'')+'>'+esc(l)+'</a>'}).join('');
