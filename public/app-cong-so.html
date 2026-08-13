@@ -164,7 +164,7 @@
 window.SHELL_INTRO={key:'cong-so',title:'Tử Vi Công Sở',desc:'Đọc lá số bằng <b>ngôn ngữ công việc</b>: bạn thuộc kiểu người nào ở chỗ làm, mạnh yếu ở <b>mười hai mặt</b> của đời đi làm, <b>bốn chặng bốn mươi năm</b>, và nên ghép đội với ai. Miễn phí, không trừ Lượng.'};</script>
 <script src="/tools-shared/cong-so.js?v=4"></script>
 <script src="/tuvi-form.js?v=2"></script>
-<script src="/tuvi-paywall.js?v=19"></script>
+<script src="/tuvi-paywall.js?v=20"></script>
 <script src="/poster.js?v=4"></script>
 <script src="/auth.js?v=2"></script>
   <script src="/nav.js?v=22" data-icons-only></script>
@@ -246,17 +246,29 @@ var NHANH_KHOA=[
   'Chất người nổi bật và thứ nghề hợp với bạn KHÔNG đòi hỏi'
 ];
 
+// Đã đăng nhập → KHÔNG dựng tường xem trước nữa: một nút bấm gate (trừ Lượng)
+// rồi mở thẳng — đúng luồng #512 đã áp cho 6 tool kia. Chưa đăng nhập → giữ
+// tấm khoá mờ làm CTA đăng ký (visitor chưa có ví để mà trừ).
 function dungTuong(){
   document.getElementById('nhanhHost').innerHTML='';
   // ⚠️ slug PHẢI bắt đầu bằng ĐÚNG tool_id `cong-so`, được dài hơn, cấm ngắn
   // hơn — `hasRecentToolPayment` lọc `slug=like.cong-so*`. Slug ngắn hơn thì
   // lưới đỡ "đã trả tiền mà vẫn ăn 402" chết im lặng (bài học Duyên Nợ).
   _slug=TuviPaywall.generateToolSlug('cong-so-'+_birth.ngay+_birth.thang+_birth.nam+'-'+_birth.gioIdx+_birth.gioitinh);
+  const host=document.getElementById('lockHost');
+  if(window.Auth&&Auth.isLoggedIn&&Auth.isLoggedIn()){
+    host.innerHTML='<button class="btn-go" id="btnNhanh">Mở phần nhánh nghề — <span data-tvp-price="cong-so">…</span> Lượng →</button>';
+    TuviPaywall.fillPriceSlots(host);
+    document.getElementById('btnNhanh').addEventListener('click',function(){
+      TuviPaywall.requireCredits(_slug,moNhanh);
+    });
+    return;
+  }
   TuviPaywall.lockPreview({
-    host:document.getElementById('lockHost'),
+    host:host,
     title:'⊙ Còn phần nhánh nghề chưa mở',
     items:NHANH_KHOA,
-    cta:'Mở phần nhánh nghề',
+    cta:'Đăng ký để mở phần nhánh nghề',
     slug:function(){return _slug;},
     onUnlock:moNhanh
   });

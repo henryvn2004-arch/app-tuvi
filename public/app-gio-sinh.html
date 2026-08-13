@@ -189,7 +189,7 @@
 <script>window.SHELL_ACTIVE='gio-sinh';window.SHELL_HISTORY=true;
 window.SHELL_INTRO={key:'gio-sinh',title:'Xác Định Giờ Sinh',desc:'Không nhớ giờ sinh thì gần như không dùng được tool tử vi nào. Ở đây máy lập <b>cả 12 lá số khả nghi</b> cho ngày sinh của anh/chị, rồi hỏi vài câu về <b>sức khoẻ</b> và <b>các giai đoạn đã sống qua</b> để thu hẹp lại. Kết quả là <b>2–3 giờ khả năng cao nhất kèm bằng chứng</b> — không phải một con số chắc nịch.'};</script>
 
-<script src="/tuvi-paywall.js?v=19"></script>
+<script src="/tuvi-paywall.js?v=20"></script>
 <!-- ⚠️ BẮT BUỘC. `nav.js` ở chế độ `data-icons-only` RETURN SỚM nên KHÔNG chèn
      `auth.js` — trang shell phải tự khai. Thiếu nó thì `window.Auth` không tồn
      tại, paywall coi người ĐANG ĐĂNG NHẬP là khách và bắt đăng nhập lại.
@@ -272,16 +272,28 @@ function renderFree(j){
   buildLock();
 }
 
+// Đã đăng nhập → KHÔNG dựng tường xem trước nữa: một nút bấm gate (trừ Lượng,
+// hoặc 0 nếu tool free) rồi chạy thẳng — đúng luồng #512 đã áp cho 6 tool kia.
+// Chưa đăng nhập → giữ tấm khoá mờ làm CTA: đây là cách chuyển VISITOR thành
+// tài khoản mới, không phải cách xin thêm Lượng của một tài khoản đã có.
 function buildLock(){
   const host=document.getElementById('lockHost');
   if(!window.TuviPaywall||!TuviPaywall.lockPreview){
     host.innerHTML='<p class="note">Chưa đọc được bảng giá — tải lại trang giúp tôi.</p>';return;
   }
+  if(_daDangNhap()){
+    host.innerHTML='<button class="btn-go" id="btnKhaoSat">Bắt đầu khảo sát thu hẹp — <span data-tvp-price="'+TOOL_ID+'">…</span> Lượng →</button>';
+    TuviPaywall.fillPriceSlots(host);
+    document.getElementById('btnKhaoSat').addEventListener('click',function(){
+      TuviPaywall.requireCredits(_slug,function(){return runSurvey();});
+    });
+    return;
+  }
   TuviPaywall.lockPreview({
     host:host,
     title:'⊙ Còn phần khảo sát thu hẹp chưa mở',
     items:['Bộ câu hỏi dựng riêng theo ngày sinh','Xếp hạng 12 giờ theo khả năng','Bằng chứng khớp/lệch từng câu','Mức tin cậy và lời khuyên chốt giờ'],
-    cta:'Mở phần khảo sát',
+    cta:'Đăng ký để mở phần khảo sát',
     slug:function(){return _slug;},
     onUnlock:function(){return runSurvey();},
   });
