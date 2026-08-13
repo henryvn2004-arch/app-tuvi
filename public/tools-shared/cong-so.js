@@ -601,7 +601,13 @@
     }
 
     h.push(
-      '<p class="cs-note">Con số phần trăm là độ <b>khớp giữa chất người và chất việc</b>, ' +
+      // "tvmb-src-note" + data-share-skip: đánh dấu để shell.js không tự chèn
+      // chồng thêm một khối nguồn thứ hai (xem `maybeAppendSrcNote` trong
+      // shell.js), và loại khối này khỏi bản chia sẻ tự suy.
+      '<p class="cs-note tvmb-src-note" data-share-skip>📚 <b>Nguồn:</b> Theo <i>Tử Vi Đẩu Số Tân Biên</i> ' +
+        '(Vân Đằng Thái Thứ Lang) và <i>Trung Châu Phái — Lục Thập Tinh Hệ</i> (Vương Đình Chi). ' +
+        'Bốn kiểu người và cách gợi ngành là phương pháp riêng do <b>đội ngũ chuyên gia Tử Vi Minh Bảo</b> xây dựng.<br><br>' +
+        'Con số phần trăm là độ <b>khớp giữa chất người và chất việc</b>, ' +
         '<b>không phải</b> khả năng thành công. Danh sách nghề là quy chiếu của trang cho ' +
         'bối cảnh Việt Nam; đang làm nghề không có trong danh sách thì đối chiếu theo ' +
         '<b>chất việc</b>, đừng đọc thành “bạn đang làm sai nghề”. ' +

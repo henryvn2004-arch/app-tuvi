@@ -1156,6 +1156,22 @@
     autoShare = vis && !_shareMuted ? deriveShareable(host) : null;
     renderShareBtn();
     renderPdfBtn(vis);
+    maybeAppendSrcNote(host);
+  }
+
+  // Ghi nguồn/cổ pháp cuối kết quả — bám ĐÚNG cơ chế phát hiện "vùng kết quả"
+  // vừa dùng cho Chia sẻ/PDF (`wsResultHost` + ngưỡng `currentShare()`), nên
+  // KHÔNG tool nào phải tự khai gì thêm để có dòng này. Tool nào đã tự chèn
+  // một khối `.tvmb-src-note` riêng (vd. bat-tu gọi thẳng `noteHtml()`, hoặc
+  // day-con viết tay vào caveat tĩnh) thì bỏ qua — không chèn chồng lần hai.
+  function maybeAppendSrcNote(host) {
+    if (!host || !currentShare()) return; // chưa có gì đáng kể để nói "nguồn" cho nó (cùng ngưỡng Chia sẻ)
+    if (host.querySelector('.tvmb-src-note')) return;
+    ensureToolSourcesJs(function () {
+      if (!host.isConnected || host.querySelector('.tvmb-src-note')) return; // đã chèn trong lúc đợi mạng, hoặc trang đã rời khỏi
+      if (!window.ToolSources.line(ACTIVE)) return; // tool chưa có trong sổ nguồn → im lặng
+      host.insertAdjacentHTML('beforeend', window.ToolSources.noteHtml(ACTIVE));
+    });
   }
   function watchWsResult() {
     // 🪤 Bám `#ws` là SAI: `app.html` (tool Lá Số, `/app/la-so`) dùng
