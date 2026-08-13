@@ -134,11 +134,6 @@
           <div class="res-block-header"><span class="res-block-title">Luận Giải Cung Phu Thê</span></div>
           <div class="res-block-body" id="luanGiaiText" style="font-size:13.5px;line-height:1.85;color:#2a2118"></div>
         </div>
-        <!-- W1b — tường đứng ở CUỐI: hai khối chữ + ảnh phía trên đang ẩn ở
-             lượt tính thử, mở xong tường biến mất và mọi thứ về đúng chỗ. -->
-        <div class="res-block" id="lockBlock" style="display:none">
-          <div class="res-block-body" id="lockHost" data-tvp-lock style="padding-top:6px"></div>
-        </div>
         <div class="res-block" id="histBlock" style="display:none">
           <div class="res-block-header"><span class="res-block-title">Đã Vẽ Trước Đó</span></div>
           <div class="res-block-body"><div id="histList"></div></div>
@@ -215,19 +210,8 @@ function showError(msg) {
 
 // ── W1b: bấm nút là CHẠY THẬT, miễn phí ────────────────────────────────────
 //
-// Trước đây bấm nút là gặp paywall ngay — tức phải trả 20 Lượng mới biết engine
-// có thật sự đọc lá số của mình hay không. Đo được trên prod (panel Phễu Theo
-// Tool): 10 người mở tool, 1 người bấm chạy. Rơi 90% TRƯỚC cả paywall.
-//
-// Nay: chạy tầng deterministic (0 lượt LLM, 0 lượt sinh ảnh, 0đ), bày cung Phu
-// Thê + bảng hình thể suy từ sao, rồi mới dựng tường trên đúng phần tốn tiền.
-var CDVC_KHOA = [
-  'Bức chân dung người phối ngẫu',
-  'Mô tả ngoại hình & phong thái, diễn giải theo từng sao',
-  'Hoàn cảnh gặp gỡ nhiều khả năng nhất',
-  'Luận giải cung Phu Thê đầy đủ',
-];
-
+// A — bấm nút có Lượng là CHẠY THẬT ngay; thiếu/không đủ Lượng thì
+// `requireCredits` tự bật popup (đăng nhập · nạp thêm).
 async function analyze() {
   showError('');
   var fdIn = TuviForm.getData();
@@ -237,36 +221,7 @@ async function analyze() {
   _lastBirth = { day: dd, month: mm, year: yyyy, hourBranch: gioAmIdx, gender: gender, isLunar: false };
   _currentSlug = TuviPaywall.generateToolSlug('chan-dung-vo-chong-' + dd + '-' + mm + '-' + yyyy);
 
-  _openPanel();
-  _loadingCtl = AiLoadingSteps.mount('loadingSteps', CDVC_STEPS.slice(0, 1));
-  _loadingCtl.start();
-  if (AiLoadingSteps.scrollToResult) AiLoadingSteps.scrollToResult('loading');
-  var prev;
-  try {
-    var r = await fetch('/api/chan-dung-vo-chong?preview=1', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ birth: _lastBirth }),
-    });
-    prev = await r.json();
-    if (!r.ok || !prev.success) throw new Error(prev.error || 'Lỗi ' + r.status);
-  } catch (e) {
-    _loadingCtl && _loadingCtl.stop();
-    _closePanel();
-    showError('Lỗi: ' + (e.message || 'Không thể kết nối. Vui lòng thử lại.'));
-    return;
-  }
-  _loadingCtl && _loadingCtl.finish();
-  document.getElementById('loading').style.display = 'none';
-  document.getElementById('btnEdit').style.display = '';
-  renderMeta(prev);
-  // D1 — bậc "đã tính thử" của phễu theo tool. Bắn ở ĐÂY chứ không ở lúc bấm
-  // nút: bấm rồi mà lá số hỏng thì không có gì để xem, tính vào phễu là thổi
-  // mẫu số lên rồi tỉ lệ mở nhìn tệ hơn thực tế.
-  try { if (window.Track) window.Track.event('preview_shown', { tool_id: 'chan-dung-vo-chong' }); } catch (e) { /* đo hỏng không chặn gì */ }
-  if (window.SHELL_INTRO) Shell.dismissIntro(window.SHELL_INTRO.key);
-
-  // Đã trả tiền cho đúng lá số này từ trước → mở thẳng, không dựng tường.
+  // Đã trả tiền cho đúng lá số này từ trước → mở thẳng, không trừ lại.
   var free = false;
   try {
     free = await TuviPaywall.isFreeRerun('/api/chan-dung-vo-chong', PortraitRecover.birthQuery(_lastBirth));
@@ -276,22 +231,14 @@ async function analyze() {
     await _doGenerate(true);
     return;
   }
-  document.getElementById('lockBlock').style.display = 'block';
-  await TuviPaywall.lockPreview({
-    host: document.getElementById('lockHost'),
-    title: '⊙ Còn bức chân dung và phần luận chưa mở',
-    items: CDVC_KHOA,
-    cta: 'Vẽ chân dung & mở bản đầy đủ',
-    slug: function () { return _currentSlug; },
-    onUnlock: function () { return _doGenerate(false); },
-  });
+  await TuviPaywall.requireCredits(_currentSlug, function () { return _doGenerate(false); });
 }
 
 function _openPanel() {
   document.getElementById('birthPanel').style.display = 'none';
   document.getElementById('resPanel').style.display = 'block';
   document.getElementById('loading').style.display = 'block';
-  ['phuTheBlock', 'morphBlock', 'portraitBlock', 'luanGiaiBlock', 'lockBlock'].forEach(function (id) {
+  ['phuTheBlock', 'morphBlock', 'portraitBlock', 'luanGiaiBlock'].forEach(function (id) {
     document.getElementById(id).style.display = 'none';
   });
   document.getElementById('card').style.display = 'none';
@@ -305,10 +252,8 @@ function _closePanel() {
 }
 
 async function _doGenerate(freeRerun) {
-  document.getElementById('lockBlock').style.display = 'none';
-  TuviPaywall._closeLock();
-  document.getElementById('loading').style.display = 'block';
-  _loadingCtl = AiLoadingSteps.mount('loadingSteps', CDVC_STEPS.slice(1));
+  _openPanel();
+  _loadingCtl = AiLoadingSteps.mount('loadingSteps', CDVC_STEPS);
   _loadingCtl.start();
   if (AiLoadingSteps.scrollToResult) AiLoadingSteps.scrollToResult('loading');
 
@@ -345,9 +290,8 @@ async function _doGenerate(freeRerun) {
     // lần hỏi) → quay lại đường trả phí thay vì ném một lỗi khó hiểu.
     if (res.status === 402 && freeRerun) {
       _loadingCtl && _loadingCtl.stop();
-      document.getElementById('loading').style.display = 'none';
-      document.getElementById('lockBlock').style.display = 'block';
-      await TuviPaywall.requireCredits(_currentSlug, async function () { await _doGenerate(false); });
+      _closePanel();
+      await TuviPaywall.requireCredits(_currentSlug, function () { return _doGenerate(false); });
       return;
     }
     if (!res.ok || !data.success) throw new Error(data.error || 'Lỗi ' + res.status);
@@ -402,13 +346,9 @@ async function _doGenerate(freeRerun) {
     // Xem xong mà hết Lượng → chỗ xin mời bạn (V2.3). Tự ẩn nếu còn đủ Lượng.
     _mountInviteCta();
   } catch (e) {
-    // 🔑 KHÔNG quẳng người ta về form trống như bản trước. Họ đang nhìn phần
-    // tính thử — thứ vừa xem xong và có thể vừa trả tiền cho phần sau — xoá đi
-    // là xoá luôn cái đó. Giữ nguyên màn hình, dựng lại tường, báo bằng banner.
     _loadingCtl && _loadingCtl.stop();
-    document.getElementById('loading').style.display = 'none';
-    document.getElementById('lockBlock').style.display = 'block';
-    TuviPaywall._banner('Chưa vẽ được lần này: ' + (e.message || 'lỗi kết nối') + '. Bạn thử lại giúp.');
+    _closePanel();
+    showError('Lỗi: ' + (e.message || 'Không thể kết nối. Vui lòng thử lại.'));
   }
 }
 
@@ -555,10 +495,6 @@ function showForm() {
   document.getElementById('resPanel').style.display = 'none';
   document.getElementById('birthPanel').style.display = 'block';
   document.getElementById('btnEdit').style.display = 'none';
-  // Gỡ tường của lượt trước: bấm "Vẽ Lại" mà để nó nằm lại thì lá số mới hiện
-  // ra kèm bức tường tính theo lá số cũ.
-  document.getElementById('lockBlock').style.display = 'none';
-  TuviPaywall._closeLock();
   Shell.setShareable(null);
 }
 

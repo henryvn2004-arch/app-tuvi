@@ -324,18 +324,6 @@ function _cacheQuery(b, lo) {
     '&lunar=' + (b.isLunar ? '1' : '0') + '&lo=' + encodeURIComponent(lo);
 }
 
-// ── W1: bấm nút là CHẠY THẬT, miễn phí ─────────────────────────────────────
-// Tầng deterministic (kiểu người · thiên hướng đứng đầu · dấu hiệu nhận biết ·
-// chất người · cơ sở lá số) là tra bảng + một phép cosine — 0 lượt LLM, 0đ.
-var HN_KHOA = [
-  'Trả lời thẳng vào điều bạn đang lo',
-  'Nhìn ra con — con vận hành thế nào',
-  'Ba hướng đáng cho con thử, kèm lý do từng hướng',
-  'Hoạt động nên cho làm quen, chọn theo đúng lứa tuổi',
-  'Ba việc làm được trong tháng này · hai việc nên thôi',
-  'Mở lời với con thế nào · sang lứa sau thì đổi gì'
-];
-
 async function analyze() {
   showError('');
   var b = _birthOf('');
@@ -344,8 +332,13 @@ async function analyze() {
   _last = b;
   _currentSlug = TuviPaywall.generateToolSlug('huong-nghiep-tre-' + lo + '-' + b.day + b.month + b.year);
 
+  // Vẫn cần một lượt XEM TRƯỚC (0đ, không đăng nhập) để biết `laTreEm` —
+  // chốt "người lớn không bán, không trừ Lượng" phải đứng TRƯỚC mọi lượt gate
+  // credit. Với trẻ em thì bản xem trước này KHÔNG được vẽ ra (đó chính là
+  // phần preview quá hào phóng cần bỏ) — chỉ đọc `laTreEm` rồi bỏ, gate xong
+  // mới vẽ bằng dữ liệu ĐẦY ĐỦ trong `_doGenerate`.
   _openPanel();
-  _loadingCtl = AiLoadingSteps.mount('loadingSteps', HN_STEPS.slice(0, 2));
+  _loadingCtl = AiLoadingSteps.mount('loadingSteps', HN_STEPS);
   _loadingCtl.start();
   // Cuộn lên ngay để thấy có gì vừa chạy, không đứng im.
   AiLoadingSteps.scrollToResult('loading');
@@ -364,16 +357,20 @@ async function analyze() {
     showError('Lỗi: ' + (e.message || 'Không thể kết nối. Vui lòng thử lại.'));
     return;
   }
-  _loadingCtl && _loadingCtl.finish();
-  document.getElementById('loading').style.display = 'none';
-  document.getElementById('card').style.display = 'block';
-  document.getElementById('btnEdit').style.display = '';
-  renderMeta(prev);
-  // D1 — bậc "đã tính thử" của phễu theo tool. Bắn ở ĐÂY chứ không lúc bấm nút:
-  // bấm rồi mà lá số hỏng thì không có gì để xem, tính vào phễu là thổi mẫu số.
-  try { if (window.Track) window.Track.event('preview_shown', { tool_id: 'huong-nghiep-tre' }); } catch (e) { /* đo hỏng không chặn gì */ }
-  if (window.SHELL_INTRO) Shell.dismissIntro(window.SHELL_INTRO.key);
 
+  if (prev.laTreEm === false) {
+    _loadingCtl && _loadingCtl.finish();
+    document.getElementById('loading').style.display = 'none';
+    document.getElementById('card').style.display = 'block';
+    document.getElementById('btnEdit').style.display = '';
+    renderMeta(prev);
+    if (window.SHELL_INTRO) Shell.dismissIntro(window.SHELL_INTRO.key);
+    _banGiaoNguoiLon(prev);
+    return;
+  }
+
+  // A — trẻ em: đã trả cho đúng lá số này → mở thẳng, không trừ lại. Đủ Lượng
+  // → chạy thẳng bản đầy đủ. Thiếu/không đủ → `requireCredits` tự bật popup.
   var free = false;
   try { free = await TuviPaywall.isFreeRerun('/api/huong-nghiep-tre', _cacheQuery(b, lo)); } catch (e) { free = false; }
   if (free) {
@@ -381,16 +378,9 @@ async function analyze() {
     await _doGenerate(true, lo);
     return;
   }
-  if (prev.laTreEm === false) { _banGiaoNguoiLon(prev); return; }
-  document.getElementById('lockBlock').style.display = 'block';
-  await TuviPaywall.lockPreview({
-    host: document.getElementById('lockHost'),
-    title: '⊙ Còn phần định hướng chưa mở',
-    items: HN_KHOA,
-    cta: 'Mở bản định hướng đầy đủ',
-    slug: function () { return _currentSlug; },
-    onUnlock: function () { return _doGenerate(false, lo); }
-  });
+  _loadingCtl && _loadingCtl.stop();
+  _closePanel();
+  await TuviPaywall.requireCredits(_currentSlug, function () { return _doGenerate(false, lo); });
 }
 
 function _openPanel() {
@@ -415,12 +405,10 @@ function _closePanel() {
 }
 
 async function _doGenerate(freeRerun, lo) {
-  document.getElementById('lockBlock').style.display = 'none';
-  TuviPaywall._closeLock();
-  _loadingCtl = AiLoadingSteps.mount('loadingSteps', HN_STEPS.slice(2));
-  document.getElementById('loading').style.display = 'block';
+  _openPanel();
+  _loadingCtl = AiLoadingSteps.mount('loadingSteps', HN_STEPS);
   _loadingCtl.start();
-  // Mở khóa xong nằm sâu dưới phần preview — cuộn lại lên chỗ đang chạy.
+  // Cuộn lên ngay để thấy có gì vừa chạy, không đứng im.
   AiLoadingSteps.scrollToResult('loading');
 
   var token = (window.Auth && Auth.getSession && Auth.getSession()) ? Auth.getSession().access_token : '';
@@ -435,9 +423,8 @@ async function _doGenerate(freeRerun, lo) {
     // paywall thay vì ném một lỗi khó hiểu.
     if (res.status === 402 && freeRerun) {
       _loadingCtl && _loadingCtl.stop();
-      document.getElementById('loading').style.display = 'none';
-      document.getElementById('lockBlock').style.display = 'block';
-      await TuviPaywall.requireCredits(_currentSlug, async function () { await _doGenerate(false, lo); });
+      _closePanel();
+      await TuviPaywall.requireCredits(_currentSlug, function () { return _doGenerate(false, lo); });
       return;
     }
     if (!res.ok || !data.success) throw new Error(data.error || 'Lỗi ' + res.status);
@@ -481,12 +468,9 @@ async function _doGenerate(freeRerun, lo) {
       ].filter(Boolean).join('\n')
     });
   } catch (e) {
-    // Giữ nguyên phần tính thử đang hiện — quẳng người ta về form trống là xoá
-    // luôn thứ họ vừa xem (và có thể vừa trả tiền cho phần sau).
     _loadingCtl && _loadingCtl.stop();
-    document.getElementById('loading').style.display = 'none';
-    document.getElementById('lockBlock').style.display = 'block';
-    TuviPaywall._banner('Chưa mở được phần định hướng: ' + (e.message || 'lỗi kết nối') + '. Bạn thử lại giúp.');
+    _closePanel();
+    showError('Lỗi: ' + (e.message || 'Không thể kết nối. Vui lòng thử lại.'));
   }
 }
 
