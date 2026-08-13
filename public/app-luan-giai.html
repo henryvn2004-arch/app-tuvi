@@ -259,6 +259,10 @@ function renderLuan(ls,fd,namxem){
   // Khối pre-gen mang span [data-icon-emoji]; nav.js ở chế độ chỉ-icon chỉ quét
   // lúc nạp trang, nên phần chèn sau đó phải gọi lại — không thì in emoji thô.
   if(window.mountIcons) window.mountIcons(document.getElementById('lgBody'));
+  // Ô giá `data-tvp-price` trong mỗi khoá-mini (sectionLockHtml) vừa được chèn
+  // — trang chỉ tự điền giá LÚC TẢI, mấy ô này sinh ra SAU đó nên phải gọi lại.
+  TuviPaywall.fillPriceSlots(document.getElementById('lgBody'));
+  TuviPaywall.wireSectionLocks(document.getElementById('lgBody'), initiateLuanGiaiChuyenSau);
   // Canvas #chart-daivan-overview (phần 14) chỉ vào DOM khi phần đó được render
   // (thru>=14, tức đã đăng nhập) — vẽ spline chart SAU đó, đúng khuôn
   // BatTuCore.renderInlineDaiVanLineChart. Khách chưa đăng nhập thì canvas
@@ -274,7 +278,23 @@ function _lgLoggedIn(){ return !!(window.Auth&&window.Auth.isLoggedIn&&window.Au
 function buildPhanSection(phan,label,ls){
   var pre=LuanGiaiCore.buildPreGenHtml(phan,ls);
   var body=pre||'<div class="phan-empty">Phần này luận theo tổng thể lá số — bấm nút dưới để trợ lý luận sâu.</div>';
-  return sec(phan,label,'','<div class="card">'+body+'<div class="claude-content" id="claude-content-'+phan+'" style="display:none"></div>'+ask('Luận sâu phần: '+label)+'</div>');
+  // Khoá-mini (ẨN mặc định) — mỗi phần trong 24 phần đều CÓ một đoạn luận
+  // riêng do AI viết, nhưng chỉ hiện khối này SAU khi biết chắc phần đó CHƯA
+  // mở (`_paintSecLocks`, gọi từ `_renderUnlockBlock`). Bấm vào là chạy đúng
+  // luồng mở bản đầy đủ — cùng luồng với nút "✦ Luận giải chuyên sâu…" ở đầu
+  // trang, chỉ khác chỗ đứng: banner đó cuộn qua là mất, khối này lặp lại ở
+  // MỌI phần nên luôn nằm trong tầm mắt.
+  var lock=TuviPaywall.sectionLockHtml({id:'sec-ai-lock-'+phan,product:'laso'});
+  return sec(phan,label,'','<div class="card">'+body+lock+'<div class="claude-content" id="claude-content-'+phan+'" style="display:none"></div>'+ask('Luận sâu phần: '+label)+'</div>');
+}
+// Bật/tắt ĐỒNG LOẠT khoá-mini cho các phần ĐANG NẰM TRONG DOM (1.._lgRenderedThru).
+// Gọi khi biết chắc trạng thái: `true` ngay khi `_renderUnlockBlock` xác nhận
+// CHƯA mở; `false` ngay khi bắt đầu sinh AI (đã trả tiền, không còn gì để mời).
+function _paintSecLocks(show){
+  for(var p=1;p<=_lgRenderedThru;p++){
+    var el=document.getElementById('sec-ai-lock-'+p);
+    if(el) el.style.display=show?'flex':'none';
+  }
 }
 function wirePhanAsk(root){
   root.querySelectorAll('[data-ask]').forEach(function(el){
@@ -508,6 +528,9 @@ async function initLuanGiaiGate(ls){
 function _renderUnlockBlock(){
   var host=document.getElementById('lgUnlock');
   host.style.display='block';
+  // Bấm được nay không chỉ ở banner đầu trang — mỗi phần ĐANG HIỆN (1.._lgRenderedThru)
+  // cũng bật khoá-mini của chính nó, để cuộn qua khỏi banner vẫn còn chỗ mở.
+  _paintSecLocks(true);
   if(_lgLoggedIn()){
     host.innerHTML='<button class="btn-go" id="btnUnlock" onclick="initiateLuanGiaiChuyenSau()">✦ Luận giải chuyên sâu bằng AI — <span data-tvp-price="laso">…</span> Lượng →</button>'+
       '<p>Viết riêng cho lá số này theo cổ pháp — 24 phần: cách cục, từng cung, đại vận và tiểu vận năm xem.</p>';
@@ -531,6 +554,10 @@ async function initiateLuanGiaiChuyenSau(){
 async function _startLuanGiaiAI(){
   document.getElementById('lgUnlock').style.display='none';
   document.getElementById('lgProgress').style.display='block';
+  // Đã trả tiền — tắt hết khoá-mini NGAY, kể cả những phần chưa tới lượt sinh
+  // chữ (sinh tuần tự từ phần 1). Để chúng sáng đèn "chưa mở" trong lúc đang
+  // luận là mời bấm lại một lượt mua đã xảy ra rồi.
+  _paintSecLocks(false);
   _currentPhan=0; _luanGiaiStore={};
   _pace&&_pace.reset();
   await _loadNextPhanAI();
