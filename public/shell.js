@@ -150,6 +150,23 @@
     (document.head || document.documentElement).appendChild(s);
   }
 
+  // ── GHI NGUỒN / CỔ PHÁP (tăng trust) ──
+  // Nạp /tool-sources.js sớm ở boot() (fire-and-forget) để lúc trang tự gọi
+  // ToolSources.noteHtml() sau khi tính xong đã sẵn sàng, không phải đợi
+  // mạng lần đầu. introOnce() gọi lại có callback để điền khối giới thiệu
+  // ngay cả khi script chưa kịp tải lúc render intro.
+  function ensureToolSourcesJs(cb) {
+    if (window.ToolSources) { cb(); return; }
+    var id = 'tvmb-tool-sources-js';
+    var s = document.getElementById(id);
+    if (!s) {
+      s = document.createElement('script');
+      s.id = id; s.src = '/tool-sources.js?v=1'; s.async = true;
+      (document.head || document.documentElement).appendChild(s);
+    }
+    s.addEventListener('load', function () { if (window.ToolSources) cb(); });
+  }
+
   // SỔ LÁ SỐ theo tài khoản (U4) — nạp ĐỘNG và CHỈ khi đã đăng nhập.
   //
   // Vì sao không đưa thẻ <script> vào 7 trang có form: thêm tay thì sẽ sót, mà
@@ -1919,10 +1936,17 @@
       if (this.introSeen(key)) { host.innerHTML = ''; return; }
       host.innerHTML = '<div class="intro-card"><button class="intro-x" type="button" aria-label="Ẩn giới thiệu">×</button>' +
         '<div class="intro-t"><span class="spark">✦</span> ' + esc(opts.title || '') + '</div>' +
-        '<div class="intro-d">' + (opts.desc || '') + '</div></div>';
+        '<div class="intro-d">' + (opts.desc || '') + '</div>' +
+        '<div id="introSrc"></div></div>';
       var self = this;
       var x = host.querySelector('.intro-x');
       if (x) x.addEventListener('click', function () { self.markIntroSeen(key); host.innerHTML = ''; });
+      // Dòng "Theo <cổ pháp> · phương pháp Tử Vi Minh Bảo" — nạp động, điền
+      // sau khi kịp tải; nếu khối intro đã bị đóng trước đó thì bỏ qua.
+      ensureToolSourcesJs(function () {
+        var slot = document.getElementById('introSrc');
+        if (slot) slot.innerHTML = window.ToolSources.introHtml(key);
+      });
     },
     // Gọi khi trang đã chạy (có kết quả): nhớ đã xem + ẩn intro.
     dismissIntro: function (key) { this.markIntroSeen(key); var h = document.getElementById('introHost'); if (h) h.innerHTML = ''; },
@@ -2373,6 +2397,8 @@
     // Viral: bắt ?ref= (người tới từ link chia sẻ) + nạp sẵn mã của chính mình.
     ensureReferralJs();
     loadRefCode();
+    // Ghi nguồn/cổ pháp: prefetch sớm, chưa cần dùng ngay (fire-and-forget).
+    ensureToolSourcesJs(function () { /* sẵn sàng cho lượt noteHtml() sau khi tool tính xong */ });
     // Sổ lá số — đặt SAU prefillForm của trang (trang gọi ở init của chính nó,
     // đồng bộ) nên không có lượt nào đá nhau: sổ chỉ điền khi form còn trống.
     ensureUserChartsJs();

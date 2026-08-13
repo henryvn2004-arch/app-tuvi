@@ -279,7 +279,7 @@ function renderBatTu(bt,namxem){
     var body=pre||'<div class="phan-empty">Phần này luận theo tổng thể tứ trụ — bấm nút dưới để trợ lý luận sâu.</div>';
     S.push(sec(phan,label,'','<div class="card">'+body+'<div class="claude-content" id="claude-content-'+phan+'" style="display:none"></div>'+ask('Luận sâu phần: '+label)+'</div>'));
   }
-  document.getElementById('btBody').innerHTML=S.join('');
+  document.getElementById('btBody').innerHTML=S.join('') + (window.ToolSources ? window.ToolSources.noteHtml('bat-tu') : '');
   // Khối pre-gen mang span [data-icon-emoji]; nav.js ở chế độ chỉ-icon chỉ quét
   // lúc nạp trang, nên phần chèn sau đó phải gọi lại — không thì in emoji thô.
   if(window.mountIcons) window.mountIcons(document.getElementById('btBody'));
