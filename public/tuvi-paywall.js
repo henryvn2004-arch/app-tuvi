@@ -385,8 +385,12 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
 
     let money;
     if (balance == null) {
-      money = 'Mở đầy đủ tốn <b>' + cost + ' Lượng</b> · ' +
-        '<a onclick="TuviPaywall._login()">đăng nhập</a> để xem số dư';
+      // Khách CHƯA đăng nhập: đây là lượt DUY NHẤT họ thấy phần có cấu trúc
+      // trước khi phải đăng ký — CTA nói thẳng cái họ nhận được (Lượng miễn
+      // phí), không chỉ nói "đăng nhập để xem số dư" (số dư của ai, họ chưa
+      // có tài khoản).
+      money = 'Đăng ký tài khoản để mở — được <b>tặng Lượng miễn phí</b>, dùng thử ngay. ' +
+        '<a onclick="TuviPaywall._login()">Đăng ký / đăng nhập</a>';
     } else if (balance < cost) {
       money = 'Bạn còn <b>' + balance + '</b> · cần <b>' + cost + '</b> — thiếu ' + (cost - balance) +
         ', <a href="/topup.html" onclick="' + _topupClick('preview', cost - balance) + '">nạp thêm →</a>';
