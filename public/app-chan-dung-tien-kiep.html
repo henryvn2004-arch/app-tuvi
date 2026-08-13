@@ -123,6 +123,11 @@
           </div>
         </div>
 
+        <!-- Khách chưa đăng nhập: khoá LUÔN cả phần "miễn phí" phía dưới (5
+             hồi + cơ sở lá số) — chỉ hero (danh xưng/tên/nền văn minh) là
+             phần đầu được xem. -->
+        <div id="cdtkLockHost" style="display:none;margin-bottom:16px"></div>
+
         <!-- W1b — CƠ SỞ TRONG LÁ SỐ, chỉ hiện ở lượt tính thử.
              Khối này từng bị gỡ khỏi bản trả tiền (Henry: thuật ngữ tử vi lẫn
              vào phần đọc chính khiến nó nghe như bản luận giải chứ không phải
@@ -228,12 +233,13 @@ function showError(msg) {
   if (msg) { e.textContent = msg; e.classList.add('active'); } else { e.classList.remove('active'); }
 }
 
-// ── W1b: bấm nút là CHẠY THẬT, miễn phí ────────────────────────────────────
-//
-// Trước đây bấm nút là gặp paywall ngay — tức phải trả 25 Lượng mới biết engine
-// A — bấm nút có Lượng là CHẠY THẬT ngay (cả truyện lẫn tranh trong cùng một
-// lượt); thiếu/không đủ Lượng thì `requireCredits` tự bật popup (đăng nhập ·
-// nạp thêm).
+function _cdtkLoggedIn() { return !!(window.Auth && window.Auth.isLoggedIn && window.Auth.isLoggedIn()); }
+
+// Đăng nhập rồi → bấm nút là CHẠY THẬT ngay (case 1, cả truyện lẫn tranh
+// trong cùng một lượt), thiếu/không đủ Lượng thì `requireCredits` tự bật
+// popup. Chưa đăng nhập (case 2) → chỉ dựng CHÍNH tầng đầu (danh xưng + tên
+// nhân vật + nền văn minh) — phần còn lại, kể cả khung 5 hồi và cơ sở lá số
+// vốn cũng 0đ, gộp vào CÙNG tấm khoá với phần AI viết/vẽ riêng.
 async function analyze() {
   showError('');
   var fdIn = TuviForm.getData();
@@ -246,6 +252,8 @@ async function analyze() {
   _lastBirth = { day: dd, month: mm, year: yyyy, hourBranch: gioAmIdx, gender: gender, isLunar: false,
     name: (fdIn.hoten || '').trim() || undefined };
   _currentSlug = TuviPaywall.generateToolSlug('chan-dung-tien-kiep-' + dd + '-' + mm + '-' + yyyy);
+
+  if (!_cdtkLoggedIn()) { return _runAnonPreview(); }
 
   // Đã trả tiền cho đúng lá số này từ trước → mở thẳng, không trừ lại.
   var free = false;
@@ -260,11 +268,56 @@ async function analyze() {
   await TuviPaywall.requireCredits(_currentSlug, function () { return _doGenerate(false); });
 }
 
+// Khách chưa đăng nhập: gọi tầng deterministic (0đ, không cần đăng nhập, và
+// KHÔNG sinh ảnh — route xem chú thích `runPreview`) rồi dựng CHỈ phần đầu.
+// Phần còn lại (khung 5 hồi, cơ sở lá số, và toàn bộ AI viết/vẽ riêng) đứng
+// sau tấm khoá.
+async function _runAnonPreview() {
+  _openPanel();
+  document.getElementById('loading').style.display = 'none';
+  try {
+    var res = await fetch('/api/chan-dung-tien-kiep?preview=1', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ birth: _lastBirth }),
+    });
+    var data = await res.json();
+    if (!res.ok || !data.success) throw new Error(data.error || 'Lỗi ' + res.status);
+    renderMetaHead(data);
+    document.getElementById('card').style.display = 'block';
+    document.getElementById('btnEdit').style.display = '';
+    if (window.SHELL_INTRO) Shell.dismissIntro(window.SHELL_INTRO.key);
+    _renderLockWall();
+  } catch (e) {
+    _closePanel();
+    showError('Lỗi: ' + (e.message || 'Không thể kết nối. Vui lòng thử lại.'));
+  }
+}
+
+function _renderLockWall() {
+  var host = document.getElementById('cdtkLockHost');
+  host.style.display = 'block';
+  host.innerHTML = '';
+  TuviPaywall.lockPreview({
+    host: host,
+    title: '⊙ Chân dung & câu chuyện chưa mở',
+    items: [
+      'Bức tranh chân dung — vẽ riêng theo lá số của bạn',
+      'Mô tả nhân vật + câu chuyện một đời người qua 5 hồi',
+      'Cơ sở trong lá số — chính tinh tại cung Mệnh, Quan Lộc',
+    ],
+    cta: 'Đăng ký để mở chân dung đầy đủ',
+    slug: function () { return _currentSlug; },
+    onUnlock: function () { return _doGenerate(false); },
+  });
+}
+
 function _openPanel() {
   document.getElementById('birthPanel').style.display = 'none';
   document.getElementById('resPanel').style.display = 'block';
   document.getElementById('loading').style.display = 'block';
   document.getElementById('card').style.display = 'none';
+  document.getElementById('cdtkLockHost').style.display = 'none';
   ['storyBlock', 'basisBlock', 'imgWrap', 'moTaBlock', 'eraLine', 'birthLine',
    'imgLoadStatus', 'imgActions', 'resultImg'].forEach(function (id) {
     document.getElementById(id).style.display = 'none';
@@ -414,11 +467,13 @@ function renderEraLine(data) {
 }
 
 // ── Tách render theo ĐƯỜNG TIỀN, không theo bố cục (W1b) ────────────────────
-//   renderMeta  = thứ engine tra bảng ra, 0đ  → vẽ ngay ở lượt tính thử
-//   renderProse = thứ model viết/vẽ, tốn tiền → chỉ vẽ sau khi đã trả
-// Gộp một hàm là sớm muộn có một khối chữ lọt vào lượt miễn phí mà không ai
-// để ý.
-function renderMeta(data) {
+//   renderMetaHead = phần đầu (danh xưng + tên nhân vật + nền văn minh + lá
+//                    số) — thứ khách CHƯA đăng ký cũng được xem
+//   renderMetaRest = khung 5 hồi (chỉ nhãn, chưa có chữ) + cơ sở lá số — dù
+//                    0đ, vẫn đứng SAU tấm khoá cho khách chưa đăng ký
+//   renderMeta     = cả hai, dùng cho đường đã đăng nhập/đã trả
+//   renderProse    = thứ model viết/vẽ, tốn tiền → chỉ vẽ sau khi đã trả
+function renderMetaHead(data) {
   document.getElementById('danhXung').textContent = data.danhXung || '';
   // Hero CỐ Ý chỉ còn: chức phận (to) + tên nhân vật & vế bí danh (nhỏ).
   // Phần "chính tinh nào tại cung nào" nằm ở khối "Cơ Sở Trong Lá Số" — Henry
@@ -436,7 +491,9 @@ function renderMeta(data) {
   var bs = (window.Shell && Shell.birthSummary) ? Shell.birthSummary(_lastBirth) : '';
   if (bs) { bl.textContent = 'Lá số: ' + bs; bl.style.display = 'block'; }
   else { bl.style.display = 'none'; }
+}
 
+function renderMetaRest(data) {
   // Khung 5 hồi: nhãn giai đoạn + vai trò kịch do ENGINE chốt. Ở lượt tính thử
   // chưa có `title`/`text` (LLM viết) nên hiện đúng khung, không bịa chữ thay.
   var acts = data.acts || [];
@@ -456,6 +513,8 @@ function renderMeta(data) {
   document.getElementById('storyBlock').style.display = 'block';
   renderBasis(data);
 }
+
+function renderMeta(data) { renderMetaHead(data); renderMetaRest(data); }
 
 function renderProse(data) {
   document.getElementById('moTaTitle').textContent =

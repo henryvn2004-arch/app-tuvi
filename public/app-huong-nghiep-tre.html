@@ -226,6 +226,12 @@
             <div class="res-block-body" id="lockHost" data-tvp-lock style="padding-top:6px"></div>
           </div>
 
+          <!-- Khách chưa đăng nhập: khoá LUÔN cả phần "miễn phí" phía trên
+               (thiên hướng / chất người / cơ sở) — chỉ hero là phần đầu được
+               xem. Tách riêng `lockHost` (dùng cho cảnh báo lá số người lớn +
+               softLock hết Lượng) để hai luồng không đá nhau. -->
+          <div id="hnLockHost" style="display:none;margin-bottom:16px"></div>
+
           <div class="res-block" style="background:#FBF3DE;border-color:#e8d9b0">
             <div class="res-block-body" style="font-size:12.5px;line-height:1.68;color:#5a5145">
               💡 Bản này phác hoạ từ các dữ liệu trong lá số Tử Vi, kết hợp kinh nghiệm nghiên cứu của tiền nhân để lại. Phần <b>thiên hướng và hoạt động</b> là quy chiếu của trang, không phải chữ trong cổ thư. Xem <a href="/nguon-du-lieu.html">nguồn dữ liệu</a>.<br><br>
@@ -324,6 +330,8 @@ function _cacheQuery(b, lo) {
     '&lunar=' + (b.isLunar ? '1' : '0') + '&lo=' + encodeURIComponent(lo);
 }
 
+function _hnLoggedIn() { return !!(window.Auth && window.Auth.isLoggedIn && window.Auth.isLoggedIn()); }
+
 async function analyze() {
   showError('');
   var b = _birthOf('');
@@ -332,11 +340,9 @@ async function analyze() {
   _last = b;
   _currentSlug = TuviPaywall.generateToolSlug('huong-nghiep-tre-' + lo + '-' + b.day + b.month + b.year);
 
-  // Vẫn cần một lượt XEM TRƯỚC (0đ, không đăng nhập) để biết `laTreEm` —
+  // Luôn cần một lượt XEM TRƯỚC (0đ, không đăng nhập) để biết `laTreEm` —
   // chốt "người lớn không bán, không trừ Lượng" phải đứng TRƯỚC mọi lượt gate
-  // credit. Với trẻ em thì bản xem trước này KHÔNG được vẽ ra (đó chính là
-  // phần preview quá hào phóng cần bỏ) — chỉ đọc `laTreEm` rồi bỏ, gate xong
-  // mới vẽ bằng dữ liệu ĐẦY ĐỦ trong `_doGenerate`.
+  // credit.
   _openPanel();
   _loadingCtl = AiLoadingSteps.mount('loadingSteps', HN_STEPS);
   _loadingCtl.start();
@@ -369,8 +375,22 @@ async function analyze() {
     return;
   }
 
-  // A — trẻ em: đã trả cho đúng lá số này → mở thẳng, không trừ lại. Đủ Lượng
-  // → chạy thẳng bản đầy đủ. Thiếu/không đủ → `requireCredits` tự bật popup.
+  // Trẻ em: đây là đường có bán. Đăng nhập rồi → bấm nút là CHẠY THẬT ngay
+  // (case 1), bỏ hẳn bản xem trước — chốt Lượng rồi mới vẽ ĐẦY ĐỦ trong
+  // `_doGenerate`. Chưa đăng nhập (case 2) → chỉ dựng CHÍNH tầng đầu (hero),
+  // phần còn lại (kể cả thiên hướng/chất người/cơ sở vốn cũng 0đ) gộp vào
+  // CÙNG tấm khoá với phần AI viết riêng.
+  if (!_hnLoggedIn()) {
+    _loadingCtl && _loadingCtl.stop();
+    document.getElementById('loading').style.display = 'none';
+    document.getElementById('card').style.display = 'block';
+    document.getElementById('btnEdit').style.display = '';
+    renderMetaHead(prev);
+    if (window.SHELL_INTRO) Shell.dismissIntro(window.SHELL_INTRO.key);
+    _renderLockWall(lo);
+    return;
+  }
+
   var free = false;
   try { free = await TuviPaywall.isFreeRerun('/api/huong-nghiep-tre', _cacheQuery(b, lo)); } catch (e) { free = false; }
   if (free) {
@@ -383,11 +403,31 @@ async function analyze() {
   await TuviPaywall.requireCredits(_currentSlug, function () { return _doGenerate(false, lo); });
 }
 
+function _renderLockWall(lo) {
+  var host = document.getElementById('hnLockHost');
+  host.style.display = 'block';
+  host.innerHTML = '';
+  TuviPaywall.lockPreview({
+    host: host,
+    title: '⊙ Bản định hướng đầy đủ chưa mở',
+    items: [
+      'Thiên hướng nổi nhất + chất người đọc ra từ lá số',
+      'Cơ sở trong lá số — cung Mệnh, Phúc Đức, Thiên Di…',
+      'Ba hướng đáng cho con thử, kèm hoạt động cụ thể theo lứa tuổi',
+      'Việc nên làm trong tháng này / nên thôi, và mở lời với con thế nào',
+    ],
+    cta: 'Đăng ký để mở bản định hướng đầy đủ',
+    slug: function () { return _currentSlug; },
+    onUnlock: function () { return _doGenerate(false, lo); },
+  });
+}
+
 function _openPanel() {
   document.getElementById('birthPanel').style.display = 'none';
   document.getElementById('resPanel').style.display = 'block';
   document.getElementById('loading').style.display = 'block';
   document.getElementById('card').style.display = 'none';
+  document.getElementById('hnLockHost').style.display = 'none';
   ['huongDauBlock', 'chatBlock', 'proseTopBlock', 'loBlock', 'baHuongBlock',
    'doBlock', 'noiBlock', 'mocBlock', 'endBlock', 'basisBlock', 'lockBlock']
     .forEach(function (id) { document.getElementById(id).style.display = 'none'; });
@@ -513,7 +553,13 @@ function _banGiaoNguoiLon(data) {
   document.getElementById('lockBlock').style.display = 'block';
 }
 
-function renderMeta(data) {
+// Tách theo ĐƯỜNG TIỀN: `renderMetaHead` là phần đầu (hero — tên, tuổi, kiểu,
+// dòng lá số) — thứ khách CHƯA đăng ký cũng được xem. `renderMetaRest` là mọi
+// khối deterministic còn lại (thiên hướng nổi nhất, chất người, cơ sở lá số)
+// — dù bản thân chúng cũng 0 lượt LLM, chúng vẫn đứng SAU tấm khoá cho khách
+// chưa đăng ký. `renderMeta` = cả hai, dùng cho đường đã đăng nhập/đã trả và
+// cho lá số người lớn (không bán, không gate).
+function renderMetaHead(data) {
   // Bỏ trống ô tên thì tiêu đề rơi về một cách gọi — mà "Con" dán lên một lá số
   // 43 tuổi thì vẫn đúng chỗ Henry báo, chỉ khác một dòng.
   var ten = data.ten || (data.laTreEm === false ? 'Lá số này' : 'Con');
@@ -539,7 +585,9 @@ function renderMeta(data) {
   document.getElementById('heroBirth').textContent = bSum ? 'Lá số: ' + bSum : '';
   document.getElementById('heroVai').textContent =
     data.lop && data.laTreEm !== false ? data.lop.vaiChaMe : '';
+}
 
+function renderMetaRest(data) {
   // Thiên hướng đứng đầu (miễn phí)
   var hd = data.huongDau;
   if (hd) {
@@ -597,6 +645,8 @@ function renderMeta(data) {
     document.getElementById('loTitle').textContent = data.moiLo.label;
   }
 }
+
+function renderMeta(data) { renderMetaHead(data); renderMetaRest(data); }
 
 /** Một thẻ thiên hướng. `full` = có hoạt động + việc nên/tránh (đã trả tiền). */
 function _huongHtml(h, full, showDiem) {
