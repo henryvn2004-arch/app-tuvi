@@ -134,10 +134,7 @@
         <span class="fold-toggle" id="lgFold" onclick="toggleMini()">▾ Ẩn lá số</span>
         <div class="chart-wrap" id="miniChart"></div>
         <div class="jump" id="lgJump"></div>
-        <div class="lg-unlock" id="lgUnlock" style="display:none">
-          <button class="btn-go" id="btnUnlock" onclick="initiateLuanGiaiChuyenSau()">✦ Luận giải chuyên sâu bằng AI — <span data-tvp-price="laso">…</span> Lượng →</button>
-          <p>Viết riêng cho lá số này theo cổ pháp — 24 phần: cách cục, từng cung, đại vận và tiểu vận năm xem.</p>
-        </div>
+        <div class="lg-unlock" id="lgUnlock" style="display:none"></div>
         <div class="lg-progress" id="lgProgress" style="display:none"></div>
         <div class="lg-body" id="lgBody"></div>
       </div>
@@ -246,27 +243,63 @@ function renderLuan(ls,fd,namxem){
   function card(lb,t){ var col=t!=null?scoreColor(t):'var(--text-lt)'; return '<div class="sc"><div class="lb">'+esc(lb)+'</div><div class="vl" style="color:'+col+'">'+(t!=null?t:'—')+'<small>/10</small></div><div class="pbar"><i style="width:'+(t!=null?t*10:0)+'%;background:'+col+'"></i></div></div>'; }
 
   // ── 24 phần — port deterministic (LuanGiaiCore.buildPreGenHtml) + nút hỏi rail mỗi phần ──
+  // Đăng nhập rồi → thấy đủ 24 phần tính-toán-sẵn (deterministic, 0đ) ngay khi
+  // lập lá số, chỉ phần AI VIẾT RIÊNG mới gate. Chưa đăng nhập → CHỈ phần 1 —
+  // phần 2–24 (dù vẫn miễn phí) gộp vào CÙNG tấm khoá với phần AI, đúng luật đã
+  // áp cho gio-sinh/cong-so: khoá là CTA đăng ký, phải che HẾT phần có cấu trúc
+  // chứ không chỉ che phần trả tiền.
   var LABELS=LuanGiaiCore.phanLabels(ls);
+  _lgLabels=LABELS;
+  var loggedIn=_lgLoggedIn();
+  var thru=loggedIn?LuanGiaiCore.TONG_PHAN:1;
   var S=[];
-  for(var phan=1; phan<=LuanGiaiCore.TONG_PHAN; phan++){
-    var label=LABELS[phan]||('Phần '+phan);
-    var pre=LuanGiaiCore.buildPreGenHtml(phan,ls);
-    var body=pre||'<div class="phan-empty">Phần này luận theo tổng thể lá số — bấm nút dưới để trợ lý luận sâu.</div>';
-    S.push(sec(phan,label,'','<div class="card">'+body+'<div class="claude-content" id="claude-content-'+phan+'" style="display:none"></div>'+ask('Luận sâu phần: '+label)+'</div>'));
-  }
+  for(var phan=1; phan<=thru; phan++) S.push(buildPhanSection(phan,LABELS[phan]||('Phần '+phan),ls));
   document.getElementById('lgBody').innerHTML=S.join('');
+  _lgRenderedThru=thru;
   // Khối pre-gen mang span [data-icon-emoji]; nav.js ở chế độ chỉ-icon chỉ quét
   // lúc nạp trang, nên phần chèn sau đó phải gọi lại — không thì in emoji thô.
   if(window.mountIcons) window.mountIcons(document.getElementById('lgBody'));
-  // Canvas #chart-daivan-overview (phần 14) chỉ vào DOM đúng dòng trên — vẽ
-  // spline chart SAU đó, đúng khuôn BatTuCore.renderInlineDaiVanLineChart.
+  // Canvas #chart-daivan-overview (phần 14) chỉ vào DOM khi phần đó được render
+  // (thru>=14, tức đã đăng nhập) — vẽ spline chart SAU đó, đúng khuôn
+  // BatTuCore.renderInlineDaiVanLineChart. Khách chưa đăng nhập thì canvas
+  // chưa tồn tại lúc này; `ensureAllPhanRendered` sẽ vẽ nó khi backfill sau.
   try{ LuanGiaiCore.renderInlineDaiVanLineChart(ls); }catch(e){ if(window.console)console.warn(e); }
 
-  // jump nav 24 mục
-  document.getElementById('lgJump').innerHTML=LABELS.slice(1).map(function(l,i){return '<a data-i="'+i+'"'+(i===0?' class="on"':'')+'>'+esc(l)+'</a>'}).join('');
-  bindJump();
-  document.querySelectorAll('#lgBody [data-ask]').forEach(function(el){ el.addEventListener('click',function(){ Shell.ask(el.getAttribute('data-ask')); }); });
+  renderJump(LABELS,thru);
+  wirePhanAsk(document.getElementById('lgBody'));
   return {overall:overall, dvTong:dvTong};
+}
+
+function _lgLoggedIn(){ return !!(window.Auth&&window.Auth.isLoggedIn&&window.Auth.isLoggedIn()); }
+function buildPhanSection(phan,label,ls){
+  var pre=LuanGiaiCore.buildPreGenHtml(phan,ls);
+  var body=pre||'<div class="phan-empty">Phần này luận theo tổng thể lá số — bấm nút dưới để trợ lý luận sâu.</div>';
+  return sec(phan,label,'','<div class="card">'+body+'<div class="claude-content" id="claude-content-'+phan+'" style="display:none"></div>'+ask('Luận sâu phần: '+label)+'</div>');
+}
+function wirePhanAsk(root){
+  root.querySelectorAll('[data-ask]').forEach(function(el){
+    if(el._lgWired)return; el._lgWired=true;
+    el.addEventListener('click',function(){ Shell.ask(el.getAttribute('data-ask')); });
+  });
+}
+function renderJump(LABELS,thru){
+  document.getElementById('lgJump').innerHTML=LABELS.slice(1,thru+1).map(function(l,i){return '<a data-i="'+i+'"'+(i===0?' class="on"':'')+'>'+esc(l)+'</a>'}).join('');
+  bindJump();
+}
+var _lgLabels=null, _lgRenderedThru=0;
+// Dựng nốt phần 2..24 — gọi lúc khách VỪA đăng nhập/đăng ký qua tấm khoá, vì
+// trước đó chỉ phần 1 tồn tại trong DOM. Idempotent, bỏ qua nếu đã đủ.
+function ensureAllPhanRendered(){
+  if(!_astrolabe||!_lgLabels||_lgRenderedThru>=LuanGiaiCore.TONG_PHAN) return;
+  var frag=[];
+  for(var phan=_lgRenderedThru+1; phan<=LuanGiaiCore.TONG_PHAN; phan++) frag.push(buildPhanSection(phan,_lgLabels[phan]||('Phần '+phan),_astrolabe));
+  document.getElementById('lgBody').insertAdjacentHTML('beforeend',frag.join(''));
+  if(window.mountIcons) window.mountIcons(document.getElementById('lgBody'));
+  wirePhanAsk(document.getElementById('lgBody'));
+  _lgRenderedThru=LuanGiaiCore.TONG_PHAN;
+  renderJump(_lgLabels,LuanGiaiCore.TONG_PHAN);
+  // Phần 14 (canvas #chart-daivan-overview) vừa mới vào DOM lần đầu — vẽ ngay.
+  try{ LuanGiaiCore.renderInlineDaiVanLineChart(_astrolabe); }catch(e){ if(window.console)console.warn(e); }
 }
 
 function sec(n,title,tag,inner){ return '<section class="sec" id="sec-'+n+'"><div class="sec-h"><div class="sec-n">'+n+'</div><h3>'+esc(title)+'</h3>'+(tag?'<span class="tag">'+esc(tag)+'</span>':'')+'</div>'+inner+'</section>'; }
@@ -418,9 +451,12 @@ function renderMarkdown(text){
   return out;
 }
 
-// Đọc thẳng laso_public (anon REST, giống check của luan-giai.html) — nếu
-// slug này đã luận giải rồi (bất kể tạo từ standalone hay shell) thì hiện
-// luôn, KHÔNG tính lại (khỏi tốn AI cost, giữ đúng bài cũ).
+// Đọc thẳng laso_public (anon REST key, đọc CÔNG KHAI được — bảng phục vụ link
+// chia sẻ) — CHỈ được gọi SAU khi đã xác nhận đúng người đang xem là người đã
+// TRẢ TIỀN cho ĐÚNG slug này (`/api/payment?action=check`, user-scoped qua
+// server). Bỏ bước đó thì bất kỳ ai gõ đúng ngày sinh của một lá số ĐÃ TỪNG có
+// người khác trả tiền luận giải sẽ đọc được trọn 24 phần AI miễn phí — slug là
+// hàm thuần của ngày sinh, không gắn với người dùng nào.
 async function _fetchCachedLuanGiai(slug){
   try{
     var r=await fetch(SB_URL_LG+'/rest/v1/laso_public?slug=eq.'+encodeURIComponent(slug)+'&select=slug,luan_giai&limit=1',{headers:{apikey:SB_ANON_LG}});
@@ -431,6 +467,7 @@ async function _fetchCachedLuanGiai(slug){
 }
 function _renderCachedLuanGiai(store){
   _luanGiaiStore=store;
+  ensureAllPhanRendered();
   for(var p=1;p<=LuanGiaiCore.TONG_PHAN;p++){
     var box=document.getElementById('claude-content-'+p);
     var text=store[p]||store[String(p)];
@@ -439,19 +476,57 @@ function _renderCachedLuanGiai(store){
   document.getElementById('lgUnlock').style.display='none';
   document.getElementById('lgProgress').style.display='none';
 }
+// Đã đăng nhập + ĐÚNG người này từng trả tiền cho ĐÚNG slug này → xem lại cache
+// miễn phí. Mọi ca còn lại (chưa đăng nhập, hoặc đăng nhập nhưng chưa từng trả
+// cho lá số này) đều phải qua tấm khoá — `_renderUnlockBlock` tự phân case 1/2.
 async function initLuanGiaiGate(ls){
   var conv=ls._conv||{};
   _pendingSlug=toSlugAscii([ls.canChiNam||'',String(_ngay).padStart(2,'0'),String(_thang).padStart(2,'0'),_nam,_gioitinh,'gio-'+(conv.gioChi||'unknown')].join('-'));
   _luanGiaiStore={};
   document.getElementById('lgUnlock').style.display='none';
   document.getElementById('lgProgress').style.display='none';
-  var cached=await _fetchCachedLuanGiai(_pendingSlug);
-  if(cached)_renderCachedLuanGiai(cached);
-  else document.getElementById('lgUnlock').style.display='block';
+  var hasAccess=false;
+  try{
+    var uid=_lgLoggedIn()?(window.Auth.getUser()&&window.Auth.getUser().id):null;
+    if(uid){
+      var rc=await fetch('/api/payment?action=check&slug='+encodeURIComponent(_pendingSlug)+'&userId='+encodeURIComponent(uid));
+      var rd=await rc.json();
+      hasAccess=!!(rd&&rd.hasAccess);
+    }
+  }catch(e){hasAccess=false;}
+  if(hasAccess){
+    var cached=await _fetchCachedLuanGiai(_pendingSlug);
+    if(cached){ _renderCachedLuanGiai(cached); return; }
+  }
+  _renderUnlockBlock();
+}
+
+// Đã đăng nhập → nút phẳng, gate credit rồi chạy thẳng (case 1, như 7 tool
+// kia). Chưa đăng nhập → tấm khoá `lockPreview` che LUÔN phần 2–24 (đã dựng
+// sẵn phần 1 ở `renderLuan`) cùng với phần AI viết riêng, CTA đăng ký nhận
+// Lượng miễn phí — đúng luật đã áp cho gio-sinh/cong-so.
+function _renderUnlockBlock(){
+  var host=document.getElementById('lgUnlock');
+  host.style.display='block';
+  if(_lgLoggedIn()){
+    host.innerHTML='<button class="btn-go" id="btnUnlock" onclick="initiateLuanGiaiChuyenSau()">✦ Luận giải chuyên sâu bằng AI — <span data-tvp-price="laso">…</span> Lượng →</button>'+
+      '<p>Viết riêng cho lá số này theo cổ pháp — 24 phần: cách cục, từng cung, đại vận và tiểu vận năm xem.</p>';
+    TuviPaywall.fillPriceSlots(host);
+    return;
+  }
+  host.innerHTML='';
+  TuviPaywall.lockPreview({
+    host:host,
+    title:'⊙ Bản luận đầy đủ chưa mở',
+    items:['23 phần còn lại — từng cung, đại vận và tiểu vận năm xem','Luận giải chuyên sâu viết riêng bằng AI theo cổ pháp'],
+    cta:'Đăng ký để mở bản luận đầy đủ',
+    slug:function(){return _pendingSlug;},
+    onUnlock:function(){ ensureAllPhanRendered(); return _startLuanGiaiAI(); },
+  });
 }
 
 async function initiateLuanGiaiChuyenSau(){
-  await TuviPaywall.requireCredits(_pendingSlug, async function(){ await _startLuanGiaiAI(); });
+  await TuviPaywall.requireCredits(_pendingSlug, async function(){ ensureAllPhanRendered(); await _startLuanGiaiAI(); });
 }
 async function _startLuanGiaiAI(){
   document.getElementById('lgUnlock').style.display='none';
