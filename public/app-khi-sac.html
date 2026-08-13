@@ -65,11 +65,11 @@
       <div class="ks-card" id="inputCard">
         <h2>Xem Khí Sắc</h2>
         <p class="sub">Ảnh mới trong 24h, ánh sáng tự nhiên, mặt mộc, thẳng, thấy rõ trán và toàn mặt.</p>
-        <div class="ks-privacy"><span>🔒</span><div>Ảnh chỉ gửi tới AI để phân tích, không lưu trên server. Chụp buổi sáng hoặc chiều, không makeup, không filter.</div></div>
+        <div class="ks-privacy"><span class="ic" data-icon="lock" style="font-size:16px"></span><div>Ảnh chỉ gửi tới AI để phân tích, không lưu trên server. Chụp buổi sáng hoặc chiều, không makeup, không filter.</div></div>
 
         <label class="upload-area" id="upload-area" for="file-input">
           <div id="upload-placeholder">
-            <span class="upload-icon">📷</span>
+            <span class="upload-icon ic" data-icon="camera" style="font-size:40px;display:block"></span>
             <div class="upload-text">Nhấn để chọn ảnh hoặc kéo thả vào đây</div>
             <div class="upload-hint">JPG, PNG — tối đa 10MB · Chụp trong 24h</div>
           </div>
@@ -81,7 +81,7 @@
         </label>
 
         <div style="text-align:center;margin-top:18px">
-          <button class="btn-analyze" id="analyze-btn" onclick="analyze()" disabled>🌅 Luận Khí Sắc — <span data-tvp-price="khi-sac">…</span> Lượng</button>
+          <button class="btn-analyze" id="analyze-btn" onclick="analyze()" disabled><span class="ic" data-icon="sunrise"></span> Luận Khí Sắc — <span data-tvp-price="khi-sac">…</span> Lượng</button>
         </div>
         <div class="ks-error" id="error-msg"></div>
       </div>

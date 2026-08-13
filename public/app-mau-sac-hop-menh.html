@@ -104,7 +104,7 @@
       <div id="shellRecent"></div>
 
       <div class="ms-card">
-        <h2>✨ Thông Tin Bản Mệnh</h2>
+        <h2><span class="ic" data-icon="sparkles"></span> Thông Tin Bản Mệnh</h2>
         <div class="pt-row">
           <div class="pt-fg"><label>Năm sinh dương lịch</label><input type="number" id="namSinh" placeholder="VD: 1990" min="1900" max="2025" oninput="onYearChange()"></div>
           <div class="pt-fg"><label>Giới tính</label>
@@ -126,7 +126,7 @@
       <div class="ms-card">
         <div class="cost-row"><span>Chi phí: <strong><span data-tvp-price="mau-sac-hop-menh">…</span> Lượng</strong></span></div>
         <div class="error-box" id="errorBox"></div>
-        <button class="btn-analyze" id="btnAnalyze" onclick="doAnalyze()">🎨 Xem Màu Sắc Hợp Mệnh — <span data-tvp-price="mau-sac-hop-menh">…</span> Lượng</button>
+        <button class="btn-analyze" id="btnAnalyze" onclick="doAnalyze()"><span class="ic" data-icon="palette"></span> Xem Màu Sắc Hợp Mệnh — <span data-tvp-price="mau-sac-hop-menh">…</span> Lượng</button>
       </div>
 
       <div class="ms-card loading-overlay" id="loadingOverlay">
@@ -137,7 +137,7 @@
 
         <div class="ms-card">
           <div class="menh-banner" id="menhBanner">
-            <div class="menh-icon" id="menhIcon">🌟</div>
+            <div class="menh-icon ic" id="menhIcon" data-icon="star"></div>
             <div class="menh-info">
               <div class="menh-title" id="menhTitle"></div>
               <div class="menh-sub" id="menhSub"></div>
@@ -147,7 +147,7 @@
         </div>
 
         <div class="ms-card">
-          <h2>🎨 Bảng Màu Theo Mệnh</h2>
+          <h2><span class="ic" data-icon="palette"></span> Bảng Màu Theo Mệnh</h2>
           <div class="palette-label">✓ Màu Chính — Tốt Nhất</div>
           <div class="palette-row" id="primaryPalette"></div>
           <div class="palette-label">◎ Màu Phụ — Chấp Nhận Được</div>
@@ -157,17 +157,17 @@
         </div>
 
         <div class="ms-card">
-          <h2>👗 Hướng Dẫn Trang Phục Chi Tiết</h2>
+          <h2><span class="ic" data-icon="shirt"></span> Hướng Dẫn Trang Phục Chi Tiết</h2>
           <div class="clothing-grid" id="clothingGrid"></div>
         </div>
 
         <div class="ms-card">
-          <h2>📅 Màu Theo Dịp</h2>
+          <h2><span class="ic" data-icon="calendar"></span> Màu Theo Dịp</h2>
           <div class="occasion-grid" id="occasionGrid"></div>
         </div>
 
         <div class="ms-card">
-          <h2>✨ Gợi Ý Phối Đồ Hoàn Chỉnh</h2>
+          <h2><span class="ic" data-icon="sparkles"></span> Gợi Ý Phối Đồ Hoàn Chỉnh</h2>
           <div class="combo-list" id="comboList"></div>
         </div>
 
@@ -177,12 +177,12 @@
         </div>
 
         <div class="ms-card" id="bonusCard" style="display:none">
-          <h2>💡 Mẹo Đặc Biệt Theo Bản Mệnh</h2>
+          <h2><span class="ic" data-icon="lightbulb"></span> Mẹo Đặc Biệt Theo Bản Mệnh</h2>
           <div class="bonus-tip" id="bonusTip"></div>
         </div>
 
         <div class="ms-card" id="tryonCard">
-          <h2>👗 Thử Trang Phục Theo Mệnh
+          <h2><span class="ic" data-icon="shirt"></span> Thử Trang Phục Theo Mệnh
             <span style="font-size:10px;background:var(--gold-lt);color:var(--tx-blue);padding:2px 8px;border-radius:10px;font-weight:600"><span data-tvp-price="trang-phuc-tryon">…</span> Lượng/lần</span>
           </h2>
 
@@ -193,7 +193,7 @@
               ondrop="event.preventDefault();document.getElementById('tryonUploadZone').classList.remove('drag');handleTryonDrop(event)">
               <input type="file" accept="image/*" onchange="onTryonFile(event)" id="tryonFileInput">
               <div id="tryonUploadPrompt">
-                <div style="font-size:36px;margin-bottom:8px">🧍</div>
+                <div class="ic" data-icon="user" style="font-size:36px;margin-bottom:8px;display:block"></div>
                 <div style="font-size:14px;font-weight:600;color:var(--heading);margin-bottom:4px">Tải ảnh của bạn lên</div>
                 <div style="font-size:12px;color:var(--text-lt)">Ảnh chụp thẳng người, đủ sáng · JPG/PNG</div>
               </div>
@@ -207,12 +207,12 @@
           <div id="tryonStep2" style="display:none;margin-top:14px">
             <div style="font-size:12px;font-weight:600;color:var(--text-mid);margin-bottom:8px">Chọn phong cách trang phục:</div>
             <div class="style-btns">
-              <button class="style-btn active" id="sbCongSo" onclick="setStyle('cong-so',this)">💼 Công Sở</button>
-              <button class="style-btn" id="sbCasual"  onclick="setStyle('casual',this)">👕 Casual</button>
-              <button class="style-btn" id="sbSangTrong" onclick="setStyle('sang-trong',this)">✨ Sang Trọng</button>
-              <button class="style-btn" id="sbDaoPho" onclick="setStyle('dao-pho',this)">🎒 Dạo Phố</button>
+              <button class="style-btn active" id="sbCongSo" onclick="setStyle('cong-so',this)"><span class="ic" data-icon="briefcase"></span> Công Sở</button>
+              <button class="style-btn" id="sbCasual"  onclick="setStyle('casual',this)"><span class="ic" data-icon="shirt"></span> Casual</button>
+              <button class="style-btn" id="sbSangTrong" onclick="setStyle('sang-trong',this)"><span class="ic" data-icon="sparkles"></span> Sang Trọng</button>
+              <button class="style-btn" id="sbDaoPho" onclick="setStyle('dao-pho',this)"><span class="ic" data-icon="compass"></span> Dạo Phố</button>
             </div>
-            <button class="btn-tryon" id="btnTryon" onclick="doTryon()">✨ Thử Trang Phục Ngay</button>
+            <button class="btn-tryon" id="btnTryon" onclick="doTryon()"><span class="ic" data-icon="sparkles"></span> Thử Trang Phục Ngay</button>
           </div>
 
           <div id="tryonLoading" style="display:none;text-align:center;padding:24px 0">
@@ -225,8 +225,8 @@
               <div class="ba-col"><div class="ba-label" id="tryonAfterLabel">Sau khi thử</div><img id="tryonAfter" class="ba-img" src="" alt="Sau"></div>
             </div>
             <div style="display:flex;gap:8px">
-              <button onclick="downloadTryonResult()" style="flex:1;padding:10px;background:var(--green);color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit">⬇ Tải Ảnh</button>
-              <button onclick="resetTryon()" class="btn-cancel" style="flex:1">🔄 Thử Lại</button>
+              <button onclick="downloadTryonResult()" style="flex:1;padding:10px;background:var(--green);color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit"><span class="ic" data-icon="chevron-down"></span> Tải Ảnh</button>
+              <button onclick="resetTryon()" class="btn-cancel" style="flex:1"><span class="ic" data-icon="rotate-cw"></span> Thử Lại</button>
             </div>
           </div>
 
@@ -249,7 +249,7 @@ window.SHELL_INTRO={key:'mau-sac-hop-menh',title:'Màu Sắc Hợp Mệnh',desc:
 <script src="/tuvi-paywall.js?v=20"></script>
   <script src="/nav.js?v=22" data-icons-only></script>
 <script src="/shell.js?v=72"></script>
-<script src="/tools-shared/ai-loading-steps.js?v=7"></script>
+<script src="/tools-shared/ai-loading-steps.js?v=8"></script>
 <script>
 function initMauSac(){
   Shell.setContext({
@@ -280,7 +280,7 @@ const COLOR_HEX={
   'Kem đậm':'#FAEBD7','Xám kim loại':'#A8A9AD','Tím':'#800080','Xanh tím':'#6A0DAD',
 };
 const NH_BG={Kim:'linear-gradient(135deg,#C0C0C0,#D4AF37)',Mộc:'linear-gradient(135deg,#2E8B57,#40E0D0)',Thủy:'linear-gradient(135deg,#000080,#1E90FF)',Hỏa:'linear-gradient(135deg,#CC0000,#FF6600)',Thổ:'linear-gradient(135deg,#C8973A,#8B6914)'};
-const NH_ICON={Kim:'⚙️',Mộc:'🌿',Thủy:'💧',Hỏa:'🔥',Thổ:'🌍'};
+const NH_ICON={Kim:'settings',Mộc:'leaf',Thủy:'droplet',Hỏa:'flame',Thổ:'globe'};
 
 const NAP_AM_MAP={};
 const base=[[1924,'Hỏa'],[1926,'Thổ'],[1928,'Mộc'],[1930,'Kim'],[1932,'Thủy'],[1934,'Hỏa'],[1936,'Thổ'],[1938,'Mộc'],[1940,'Kim'],[1942,'Thủy'],[1944,'Hỏa'],[1946,'Thổ'],[1948,'Mộc'],[1950,'Kim'],[1952,'Thủy'],[1954,'Hỏa'],[1956,'Thổ'],[1958,'Mộc'],[1960,'Kim'],[1962,'Thủy'],[1964,'Hỏa'],[1966,'Thổ'],[1968,'Mộc'],[1970,'Kim'],[1972,'Thủy'],[1974,'Hỏa'],[1976,'Thổ'],[1978,'Mộc'],[1980,'Kim'],[1982,'Thủy'],[1984,'Hỏa'],[1986,'Thổ'],[1988,'Mộc'],[1990,'Kim'],[1992,'Thủy'],[1994,'Hỏa'],[1996,'Thổ'],[1998,'Mộc'],[2000,'Kim'],[2002,'Thủy'],[2004,'Hỏa'],[2006,'Thổ'],[2008,'Mộc'],[2010,'Kim'],[2012,'Thủy'],[2014,'Hỏa'],[2016,'Thổ'],[2018,'Mộc'],[2020,'Kim'],[2022,'Thủy'],[2024,'Hỏa']];
@@ -376,7 +376,7 @@ function renderResults(data){
   const bg=NH_BG[napAmHanh]||'linear-gradient(135deg,#888,#aaa)';
   const banner=document.getElementById('menhBanner');
   banner.style.background=bg;banner.style.color='#fff';
-  document.getElementById('menhIcon').textContent=NH_ICON[napAmHanh]||'🌟';
+  document.getElementById('menhIcon').innerHTML=window.iconHtml?window.iconHtml(NH_ICON[napAmHanh]||'star'):'';
   document.getElementById('menhTitle').textContent=`Mệnh ${napAmHanh} · Quái ${s.guaNum} ${s.guaName}`;
   document.getElementById('menhSub').textContent=`Màu chủ: ${(colorData.primary||[]).slice(0,3).join(', ')}`;
   document.getElementById('menhSummary').textContent=s.summary||'';
@@ -388,34 +388,36 @@ function renderResults(data){
 
   const cl=s.clothing||{};
   const cats=[
-    {id:'topColors',icon:'👕',name:'Áo / Áo Khoác'},
-    {id:'bottomColors',icon:'👖',name:'Quần / Chân Váy'},
-    {id:'outerColors',icon:'🧥',name:'Áo Khoác Ngoài'},
-    {id:'shoeColors',icon:'👟',name:'Giày / Dép'},
-    {id:'bagColors',icon:'👜',name:'Túi / Ba Lô'},
-    {id:'accessoryColors',icon:'💍',name:'Phụ Kiện'},
+    {id:'topColors',icon:'shirt',name:'Áo / Áo Khoác'},
+    {id:'bottomColors',icon:'shirt',name:'Quần / Chân Váy'},
+    {id:'outerColors',icon:'shirt',name:'Áo Khoác Ngoài'},
+    {id:'shoeColors',icon:'package',name:'Giày / Dép'},
+    {id:'bagColors',icon:'wallet',name:'Túi / Ba Lô'},
+    {id:'accessoryColors',icon:'gem',name:'Phụ Kiện'},
   ];
   const cg=document.getElementById('clothingGrid');cg.innerHTML='';
   cats.forEach(cat=>{
     const colors=cl[cat.id]||[];
     if(!colors.length)return;
     cg.innerHTML+=`<div class="clothing-item">
-      <div class="clothing-header"><span class="clothing-icon">${cat.icon}</span><span class="clothing-cat">${cat.name}</span></div>
+      <div class="clothing-header"><span class="clothing-icon ic" data-icon="${cat.icon}"></span><span class="clothing-cat">${cat.name}</span></div>
       <div class="clothing-colors">${colors.map(c=>clothingTag(c)).join('')}</div>
       ${(cl.avoidColors||[]).length?`<div class="clothing-avoid">✗ Tránh: ${(cl.avoidColors||[]).slice(0,3).join(', ')}</div>`:''}
     </div>`;
   });
+  window.mountIcons && window.mountIcons(cg);
 
-  const occs={interview:{icon:'💼',name:'Phỏng Vấn'},date:{icon:'💕',name:'Hẹn Hò'},business:{icon:'🤝',name:'Gặp Đối Tác'},daily:{icon:'☀️',name:'Hàng Ngày'}};
+  const occs={interview:{icon:'briefcase',name:'Phỏng Vấn'},date:{icon:'heart',name:'Hẹn Hò'},business:{icon:'handshake',name:'Gặp Đối Tác'},daily:{icon:'sun',name:'Hàng Ngày'}};
   const og=document.getElementById('occasionGrid');og.innerHTML='';
   Object.entries(s.occasions||{}).forEach(([k,v])=>{
-    const oc=occs[k]||{icon:'📅',name:k};
+    const oc=occs[k]||{icon:'calendar',name:k};
     og.innerHTML+=`<div class="occasion-item">
-      <div class="occasion-header"><span class="occasion-icon">${oc.icon}</span><span class="occasion-name">${oc.name}</span></div>
+      <div class="occasion-header"><span class="occasion-icon ic" data-icon="${oc.icon}"></span><span class="occasion-name">${oc.name}</span></div>
       <div class="occasion-colors">${(v.colors||[]).map(c=>clothingTag(c)).join('')}</div>
       <div class="occasion-tip">${v.tip||''}</div>
     </div>`;
   });
+  window.mountIcons && window.mountIcons(og);
   if(!Object.keys(s.occasions||{}).length)og.innerHTML='<p style="color:var(--text-lt);font-size:12px;">Xem màu chính bên trên để áp dụng.</p>';
 
   const cl2=document.getElementById('comboList');cl2.innerHTML='';
@@ -426,11 +428,12 @@ function renderResults(data){
       <div class="combo-score-circle" style="background:${bg2};">${sc}</div>
       <div class="combo-body">
         <div class="combo-name">${combo.name||'Combo '+sc}</div>
-        <div class="combo-items">🎽 ${(combo.items||[]).join(' · ')}</div>
+        <div class="combo-items"><span class="ic" data-icon="shirt"></span> ${(combo.items||[]).join(' · ')}</div>
         <div class="combo-vibe">${combo.vibe||''}</div>
       </div>
     </div>`;
   });
+  window.mountIcons && window.mountIcons(cl2);
   if(!(s.colorCombos||[]).length)cl2.innerHTML='<p style="color:var(--text-lt);font-size:12px;">Phối màu dựa trên bảng màu phù hợp bên trên.</p>';
 
   document.getElementById('avoidExplain').textContent=s.avoidExplanation||'';

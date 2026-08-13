@@ -124,7 +124,7 @@
       <div id="shellRecent"></div>
 
       <div class="pc-card">
-        <h2>📸 Ảnh Khuôn Mặt</h2>
+        <h2><span class="ic" data-icon="camera"></span> Ảnh Khuôn Mặt</h2>
         <p class="sub">AI phân tích undertone và season type — gợi ý màu áo, tóc và phụ kiện làm sáng gương mặt nhất.</p>
 
         <div class="upload-zone" id="uploadZone"
@@ -133,7 +133,7 @@
           ondrop="event.preventDefault();this.classList.remove('drag');loadFile(event.dataTransfer.files[0])">
           <input type="file" accept="image/*" id="fileInput" onchange="loadFile(this.files[0])">
           <div id="uploadPrompt">
-            <div class="upload-icon">🎨</div>
+            <div class="upload-icon ic" data-icon="palette" style="font-size:36px;display:block"></div>
             <div class="upload-text">Chụp hoặc chọn ảnh khuôn mặt</div>
             <div class="upload-hint">Ánh sáng tự nhiên ban ngày · Không filter không makeup<br>Cần thấy rõ tông da, không bị overexposed</div>
           </div>
@@ -144,10 +144,10 @@
         </div>
 
         <div class="tips-row">
-          <span class="tip-badge">☀️ Ánh sáng tự nhiên tốt nhất</span>
-          <span class="tip-badge">🚫 Không filter màu</span>
-          <span class="tip-badge">💆 Mặt không trang điểm</span>
-          <span class="tip-badge">📸 Chụp gần, rõ da mặt</span>
+          <span class="tip-badge"><span class="ic" data-icon="sun"></span> Ánh sáng tự nhiên tốt nhất</span>
+          <span class="tip-badge"><span class="ic" data-icon="x-circle"></span> Không filter màu</span>
+          <span class="tip-badge"><span class="ic" data-icon="smile"></span> Mặt không trang điểm</span>
+          <span class="tip-badge"><span class="ic" data-icon="camera"></span> Chụp gần, rõ da mặt</span>
         </div>
 
         <div class="pt-row">
@@ -161,7 +161,7 @@
         </div>
 
         <button class="btn-analyze" id="btnAnalyze" onclick="analyze()" disabled>
-          🎨 Phân Tích Personal Color — <span data-tvp-price="personal-color">…</span> Lượng
+          <span class="ic" data-icon="palette"></span> Phân Tích Personal Color — <span data-tvp-price="personal-color">…</span> Lượng
         </button>
       </div>
 
@@ -173,7 +173,7 @@
 
         <div class="season-result" id="seasonResult">
           <div class="season-top">
-            <div class="season-icon" id="seasonIcon">🎨</div>
+            <div class="season-icon ic" id="seasonIcon" data-icon="palette"></div>
             <div class="season-info">
               <div class="season-type" id="seasonType">—</div>
               <div class="season-vn" id="seasonVn">—</div>
@@ -192,7 +192,7 @@
         </div>
 
         <div class="pc-card">
-          <h2>🎨 Bảng Màu Cá Nhân</h2>
+          <h2><span class="ic" data-icon="palette"></span> Bảng Màu Cá Nhân</h2>
           <div class="palette-label good">✓ Màu hợp — làm sáng, nổi bật gương mặt</div>
           <div class="swatches" id="swatchesGood"></div>
           <div class="palette-label bad" style="margin-top:14px">✗ Màu nên tránh — làm xỉn, tối da</div>
@@ -201,14 +201,14 @@
 
         <div class="rec-grid">
           <div class="pc-card rec-card" style="margin-bottom:0">
-            <div class="rec-icon">👔</div>
+            <div class="rec-icon ic" data-icon="shirt" style="display:block"></div>
             <div class="rec-title">Màu Áo Sơ Mi</div>
             <div class="rec-items" id="aoSoMiItems"></div>
             <div class="rec-avoid" id="aoSoMiAvoid"></div>
             <div class="rec-reason" id="aoSoMiReason"></div>
           </div>
           <div class="pc-card rec-card" style="margin-bottom:0">
-            <div class="rec-icon">💇</div>
+            <div class="rec-icon ic" data-icon="scissors" style="display:block"></div>
             <div class="rec-title">Màu Tóc</div>
             <div class="rec-items" id="mauTocItems"></div>
             <div class="rec-avoid" id="mauTocAvoid"></div>
@@ -217,20 +217,20 @@
         </div>
 
         <div class="pc-card">
-          <h2>💍 Kim Loại & Phụ Kiện</h2>
+          <h2><span class="ic" data-icon="gem"></span> Kim Loại & Phụ Kiện</h2>
           <div class="accessory-row">
             <div class="acc-item">
-              <div class="acc-icon">⌚</div>
+              <div class="acc-icon ic" data-icon="settings" style="display:block"></div>
               <div class="acc-label">Kim Loại</div>
               <div class="acc-val" id="accKimLoai">—</div>
             </div>
             <div class="acc-item">
-              <div class="acc-icon">👓</div>
+              <div class="acc-icon ic" data-icon="glasses" style="display:block"></div>
               <div class="acc-label">Gọng Kính</div>
               <div class="acc-val" id="accKinh">—</div>
             </div>
             <div class="acc-item" style="flex:2">
-              <div class="acc-icon">💬</div>
+              <div class="acc-icon ic" data-icon="message-circle" style="display:block"></div>
               <div class="acc-label">Lý Do</div>
               <div class="acc-val" style="font-size:12px;font-weight:400;color:var(--text-mid)" id="accLyDo">—</div>
             </div>
@@ -238,11 +238,11 @@
         </div>
 
         <div class="pc-card" id="outfitSection" style="display:none">
-          <h2>👔 Gợi Ý Trang Phục Theo Season</h2>
+          <h2><span class="ic" data-icon="shirt"></span> Gợi Ý Trang Phục Theo Season</h2>
           <div class="outfit-tabs">
-            <button class="outfit-tab active" onclick="showOutfit('hang_ngay',this)">🌿 Hàng Ngày</button>
-            <button class="outfit-tab" onclick="showOutfit('cong_so',this)">💼 Công Sở</button>
-            <button class="outfit-tab" onclick="showOutfit('su_kien',this)">✨ Sự Kiện</button>
+            <button class="outfit-tab active" onclick="showOutfit('hang_ngay',this)"><span class="ic" data-icon="leaf"></span> Hàng Ngày</button>
+            <button class="outfit-tab" onclick="showOutfit('cong_so',this)"><span class="ic" data-icon="briefcase"></span> Công Sở</button>
+            <button class="outfit-tab" onclick="showOutfit('su_kien',this)"><span class="ic" data-icon="sparkles"></span> Sự Kiện</button>
           </div>
           <div class="outfit-panel show" id="outfit-hang_ngay"></div>
           <div class="outfit-panel" id="outfit-cong_so"></div>
@@ -250,7 +250,7 @@
         </div>
 
         <div class="pc-card" id="tryonSection" style="display:none">
-          <h2>🪄 Thử Trang Phục
+          <h2><span class="ic" data-icon="sparkles"></span> Thử Trang Phục
             <span style="font-size:10px;background:var(--gold-lt);color:var(--tx-blue);padding:2px 8px;border-radius:10px;margin-left:4px"><span data-tvp-price="personal-color-tryon">…</span> Lượng/lần</span>
           </h2>
 
@@ -262,9 +262,9 @@
             <div>
               <div style="font-size:11px;font-weight:700;color:var(--text-lt);margin-bottom:6px">CHỌN STYLE</div>
               <div style="display:flex;flex-direction:column;gap:6px">
-                <button class="outfit-tab active" id="tryonTabCasual" style="border-radius:8px;justify-content:flex-start" onclick="setTryonType('casual',this)">🌿 Hàng ngày</button>
-                <button class="outfit-tab" id="tryonTabFormal" style="border-radius:8px;justify-content:flex-start" onclick="setTryonType('formal',this)">💼 Công sở</button>
-                <button class="outfit-tab" id="tryonTabEvening" style="border-radius:8px;justify-content:flex-start" onclick="setTryonType('evening',this)">✨ Sự kiện</button>
+                <button class="outfit-tab active" id="tryonTabCasual" style="border-radius:8px;justify-content:flex-start" onclick="setTryonType('casual',this)"><span class="ic" data-icon="leaf"></span> Hàng ngày</button>
+                <button class="outfit-tab" id="tryonTabFormal" style="border-radius:8px;justify-content:flex-start" onclick="setTryonType('formal',this)"><span class="ic" data-icon="briefcase"></span> Công sở</button>
+                <button class="outfit-tab" id="tryonTabEvening" style="border-radius:8px;justify-content:flex-start" onclick="setTryonType('evening',this)"><span class="ic" data-icon="sparkles"></span> Sự kiện</button>
               </div>
             </div>
             <div>
@@ -275,7 +275,7 @@
                 ondrop="event.preventDefault();this.classList.remove('drag');loadTryonFile(event.dataTransfer.files[0])">
                 <input type="file" accept="image/*" id="tryonInput" onchange="loadTryonFile(this.files[0])">
                 <div id="tryonPrompt" style="font-size:12px;color:var(--text-lt)">
-                  <div style="font-size:24px;margin-bottom:6px">🧍</div>
+                  <div class="ic" data-icon="user" style="font-size:24px;margin-bottom:6px;display:block"></div>
                   Chụp ảnh toàn thân
                 </div>
                 <img id="tryonPreviewImg" class="tryon-preview-img" src="" alt="" style="display:none">
@@ -284,7 +284,7 @@
             </div>
           </div>
 
-          <button class="btn-tryon" id="btnTryon" onclick="doTryon()" disabled>✨ Thử Trang Phục Ngay</button>
+          <button class="btn-tryon" id="btnTryon" onclick="doTryon()" disabled><span class="ic" data-icon="sparkles"></span> Thử Trang Phục Ngay</button>
 
           <div id="tryonLoading" style="display:none;text-align:center;padding:24px 0">
             <div id="tryonStepsHost"></div>
@@ -295,8 +295,8 @@
               <div><div class="ba-label" id="tryonAfterLabel">Sau khi thử</div><img id="tryonAfter" class="ba-img" src="" alt=""></div>
             </div>
             <div style="display:flex;gap:8px;margin-top:10px">
-              <button onclick="downloadTryon()" style="flex:1;padding:10px;background:var(--green);color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit">⬇ Tải Ảnh</button>
-              <button onclick="resetTryon()" class="btn-cancel" style="flex:1">🔄 Thử Lại</button>
+              <button onclick="downloadTryon()" style="flex:1;padding:10px;background:var(--green);color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit"><span class="ic" data-icon="chevron-down"></span> Tải Ảnh</button>
+              <button onclick="resetTryon()" class="btn-cancel" style="flex:1"><span class="ic" data-icon="rotate-cw"></span> Thử Lại</button>
             </div>
           </div>
         </div>
@@ -306,7 +306,7 @@
           <p id="tipFinal">—</p>
         </div>
         <div class="celeb-box">
-          ⭐ <strong>Celeb cùng tông màu:</strong> <span id="celebInspo">—</span>
+          <span class="ic" data-icon="star"></span> <strong>Celeb cùng tông màu:</strong> <span id="celebInspo">—</span>
         </div>
 
         <div style="text-align:center;padding:16px 0 4px">
@@ -325,7 +325,7 @@ window.SHELL_INTRO={key:'personal-color',title:'Personal Color AI',desc:'Chụp 
 <script src="/tuvi-paywall.js?v=20"></script>
   <script src="/nav.js?v=22" data-icons-only></script>
 <script src="/shell.js?v=72"></script>
-<script src="/tools-shared/ai-loading-steps.js?v=7"></script>
+<script src="/tools-shared/ai-loading-steps.js?v=8"></script>
 <script>
 function initPersonalColor(){
   Shell.setContext({
@@ -342,14 +342,14 @@ if (document.readyState === 'loading') document.addEventListener('DOMContentLoad
 // (EXIF fix) + gate Lượng 2 sản phẩm (personal-color + tryon).
 // ══════════════════════════════════════════════════════════════════════
 const SEASON_META = {
-  spring_warm:  { icon:'🌸', color:'linear-gradient(135deg,#7a3a10,#c86020)', name:'Spring Warm',   vn:'Xuân Ấm' },
-  spring_bright:{ icon:'✨', color:'linear-gradient(135deg,#1a3a7a,#c82060)', name:'Spring Bright', vn:'Xuân Sáng' },
-  summer_cool:  { icon:'🌊', color:'linear-gradient(135deg,#1a3a6a,#5a7aaa)', name:'Summer Cool',   vn:'Hạ Lạnh' },
-  summer_soft:  { icon:'🌸', color:'linear-gradient(135deg,#3a2a5a,#7a5a8a)', name:'Summer Soft',   vn:'Hạ Dịu' },
-  autumn_warm:  { icon:'🍂', color:'linear-gradient(135deg,#5a2a10,#9a5a20)', name:'Autumn Warm',   vn:'Thu Ấm' },
-  autumn_deep:  { icon:'🍁', color:'linear-gradient(135deg,#3a1a10,#6a2a18)', name:'Autumn Deep',   vn:'Thu Sâu' },
-  winter_cool:  { icon:'❄️', color:'linear-gradient(135deg,#0a1040,#2a2a6a)', name:'Winter Cool',   vn:'Đông Lạnh' },
-  winter_deep:  { icon:'🌑', color:'linear-gradient(135deg,#0a0a1a,#1a1a3a)', name:'Winter Deep',   vn:'Đông Sâu' },
+  spring_warm:  { icon:'flower', color:'linear-gradient(135deg,#7a3a10,#c86020)', name:'Spring Warm',   vn:'Xuân Ấm' },
+  spring_bright:{ icon:'sparkles', color:'linear-gradient(135deg,#1a3a7a,#c82060)', name:'Spring Bright', vn:'Xuân Sáng' },
+  summer_cool:  { icon:'waves', color:'linear-gradient(135deg,#1a3a6a,#5a7aaa)', name:'Summer Cool',   vn:'Hạ Lạnh' },
+  summer_soft:  { icon:'flower', color:'linear-gradient(135deg,#3a2a5a,#7a5a8a)', name:'Summer Soft',   vn:'Hạ Dịu' },
+  autumn_warm:  { icon:'leaf', color:'linear-gradient(135deg,#5a2a10,#9a5a20)', name:'Autumn Warm',   vn:'Thu Ấm' },
+  autumn_deep:  { icon:'leaf', color:'linear-gradient(135deg,#3a1a10,#6a2a18)', name:'Autumn Deep',   vn:'Thu Sâu' },
+  winter_cool:  { icon:'waves', color:'linear-gradient(135deg,#0a1040,#2a2a6a)', name:'Winter Cool',   vn:'Đông Lạnh' },
+  winter_deep:  { icon:'moon', color:'linear-gradient(135deg,#0a0a1a,#1a1a3a)', name:'Winter Deep',   vn:'Đông Sâu' },
 };
 const SEASON_DESC = {
   spring_warm:'Tông da vàng ấm, sáng, tươi — ánh peach/golden',
@@ -471,7 +471,7 @@ function renderResults(d) {
   const season = d.season || 'spring_warm';
   const meta = SEASON_META[season] || SEASON_META.spring_warm;
   document.getElementById('seasonResult').style.background = meta.color;
-  document.getElementById('seasonIcon').textContent = meta.icon;
+  document.getElementById('seasonIcon').innerHTML = window.iconHtml ? window.iconHtml(meta.icon) : '';
   document.getElementById('seasonType').textContent = meta.name;
   document.getElementById('seasonVn').textContent = d.season_vn || meta.vn;
   document.getElementById('seasonDesc').textContent = SEASON_DESC[season] || '';
@@ -560,11 +560,11 @@ function renderAvoidItems(id, items) {
 function renderOutfit(key, data) {
   const el = document.getElementById('outfit-' + key);
   if (!el || !data) return;
-  const icons = { ao:'👔', quan_vay:'👖', layer:'🧥', giay:'👟' };
+  const icons = { ao:'shirt', quan_vay:'shirt', layer:'shirt', giay:'package' };
   const labels = { ao:'Áo', quan_vay:'Quần / Váy', layer:'Layer ngoài', giay:'Giày' };
   const items = ['ao','quan_vay','layer','giay'].filter(k => data[k]).map(k => `
     <div class="outfit-item">
-      <div class="outfit-item-icon">${icons[k]}</div>
+      <div class="outfit-item-icon ic" data-icon="${icons[k]}"></div>
       <div class="outfit-item-cat">${labels[k]}</div>
       <div class="outfit-item-val">${data[k]}</div>
     </div>`).join('');
@@ -574,6 +574,7 @@ function renderOutfit(key, data) {
       <div class="outfit-items">${items}</div>
       ${data.ly_do ? `<div class="outfit-ly-do">✦ ${data.ly_do}</div>` : ''}
     </div>`;
+  window.mountIcons && window.mountIcons(el);
 }
 
 function showOutfit(key, btn) {

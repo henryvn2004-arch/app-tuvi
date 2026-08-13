@@ -239,6 +239,10 @@
         return '<div class="ai-step ' + r.state + '">' + icon + '<span>' + r.label + '</span></div>';
       })
       .join('');
+    // r.label có thể mang HTML icon (<span class="ic" data-icon="...">) —
+    // box được dựng lại MỚI mỗi lượt gọi nên mount lại ở đây luôn AN TOÀN,
+    // không có span nào đã có <svg> từ trước để mountIcons phải bỏ qua.
+    window.mountIcons && window.mountIcons(box);
   }
 
   // opts (tuỳ chọn): { orb: false, variant: 'a', orbSize: 54 }

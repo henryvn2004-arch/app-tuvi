@@ -96,7 +96,7 @@
       <div id="shellRecent"></div>
 
       <div class="tn-card">
-        <h2>📅 Thông Tin</h2>
+        <h2><span class="ic" data-icon="calendar"></span> Thông Tin</h2>
         <p class="sub">Nhập ngày đi sự kiện — AI tính can chi ngày, đối chiếu bản mệnh, gợi ý màu sắc + phong cách trang phục.</p>
 
         <div class="pt-row">
@@ -114,12 +114,12 @@
         <div class="pt-fg" style="margin-bottom:12px">
           <label>Mục đích (chọn 1)</label>
           <div class="purpose-pills" id="purposePills">
-            <div class="pill active" onclick="setPurpose(this,'ra ngoài thông thường')">🌿 Thường ngày</div>
-            <div class="pill" onclick="setPurpose(this,'phỏng vấn xin việc, cần tạo ấn tượng chuyên nghiệp')">💼 Phỏng vấn</div>
-            <div class="pill" onclick="setPurpose(this,'hẹn hò, gặp người yêu, cần thu hút và lãng mạn')">💕 Hẹn hò</div>
-            <div class="pill" onclick="setPurpose(this,'gặp đối tác kinh doanh, ký kết hợp đồng')">🤝 Kinh doanh</div>
-            <div class="pill" onclick="setPurpose(this,'sự kiện quan trọng, tiệc tùng, cần nổi bật')">✨ Sự kiện</div>
-            <div class="pill" onclick="setPurpose(this,'đi du lịch, thư giãn, cần thoải mái')">✈️ Du lịch</div>
+            <div class="pill active" onclick="setPurpose(this,'ra ngoài thông thường')"><span class="ic" data-icon="leaf"></span> Thường ngày</div>
+            <div class="pill" onclick="setPurpose(this,'phỏng vấn xin việc, cần tạo ấn tượng chuyên nghiệp')"><span class="ic" data-icon="briefcase"></span> Phỏng vấn</div>
+            <div class="pill" onclick="setPurpose(this,'hẹn hò, gặp người yêu, cần thu hút và lãng mạn')"><span class="ic" data-icon="heart"></span> Hẹn hò</div>
+            <div class="pill" onclick="setPurpose(this,'gặp đối tác kinh doanh, ký kết hợp đồng')"><span class="ic" data-icon="handshake"></span> Kinh doanh</div>
+            <div class="pill" onclick="setPurpose(this,'sự kiện quan trọng, tiệc tùng, cần nổi bật')"><span class="ic" data-icon="sparkles"></span> Sự kiện</div>
+            <div class="pill" onclick="setPurpose(this,'đi du lịch, thư giãn, cần thoải mái')"><span class="ic" data-icon="compass"></span> Du lịch</div>
           </div>
         </div>
 
@@ -130,7 +130,7 @@
         </div>
 
         <button class="btn-analyze" id="btnAnalyze" onclick="analyze()" disabled>
-          👘 Xem Trang Phục Hợp Ngày — <span data-tvp-price="trang-phuc-theo-ngay">…</span> Lượng
+          <span class="ic" data-icon="shirt"></span> Xem Trang Phục Hợp Ngày — <span data-tvp-price="trang-phuc-theo-ngay">…</span> Lượng
         </button>
       </div>
 
@@ -142,7 +142,7 @@
 
         <div class="rel-banner" id="relBanner">
           <div class="rel-top">
-            <div class="rel-icon" id="relIcon">☯️</div>
+            <div class="rel-icon ic" id="relIcon" data-icon="scale"></div>
             <div class="rel-info">
               <div class="rel-title" id="relTitle">—</div>
               <div class="rel-sub" id="relSub">—</div>
@@ -156,7 +156,7 @@
         </div>
 
         <div class="tn-card">
-          <h2>🎨 Màu Sắc Hợp Ngày</h2>
+          <h2><span class="ic" data-icon="palette"></span> Màu Sắc Hợp Ngày</h2>
           <div class="color-label">✓ Nên mặc</div>
           <div class="color-row" id="mainColors"></div>
           <div class="color-label">◎ Điểm nhấn</div>
@@ -168,7 +168,7 @@
         <div class="tn-card">
           <h2>✦ Phong Cách Gợi Ý</h2>
           <div class="style-card" id="styleCard">
-            <div class="style-emoji" id="styleEmoji">✨</div>
+            <div class="style-emoji ic" id="styleEmoji" data-icon="sparkles"></div>
             <div>
               <div class="style-name" id="styleName">—</div>
               <div class="style-desc" id="styleDesc">—</div>
@@ -178,7 +178,7 @@
         </div>
 
         <div class="tn-card">
-          <h2>👗 Gợi Ý Trang Phục Cụ Thể</h2>
+          <h2><span class="ic" data-icon="shirt"></span> Gợi Ý Trang Phục Cụ Thể</h2>
           <div class="outfit-grid" id="outfitGrid"></div>
         </div>
 
@@ -190,7 +190,7 @@
         </div>
 
         <div class="tn-card" id="tryonCard">
-          <h2>🪄 Thử Trang Phục AI
+          <h2><span class="ic" data-icon="sparkles"></span> Thử Trang Phục AI
             <span style="font-size:10px;background:var(--gold-lt);color:var(--tx-blue);padding:2px 8px;border-radius:10px;margin-left:4px"><span data-tvp-price="trang-phuc-tryon">…</span> Lượng/lần</span>
           </h2>
 
@@ -201,7 +201,7 @@
               ondrop="event.preventDefault();this.classList.remove('drag');loadTryonFile(event.dataTransfer.files[0])">
               <input type="file" accept="image/*" onchange="loadTryonFile(this.files[0])" id="tryonInput">
               <div id="tryonPrompt">
-                <div style="font-size:32px;margin-bottom:8px">🧍</div>
+                <div class="ic" data-icon="user" style="font-size:32px;margin-bottom:8px;display:block"></div>
                 <div style="font-size:13px;font-weight:600;color:var(--heading);margin-bottom:4px">Tải ảnh của bạn lên</div>
                 <div style="font-size:11px;color:var(--text-lt)">Ảnh chụp toàn thân hoặc nửa người · JPG/PNG</div>
               </div>
@@ -215,12 +215,12 @@
           <div id="tryonStep2" style="display:none;margin-top:12px">
             <div style="font-size:12px;font-weight:600;color:var(--text-mid);margin-bottom:8px">Phong cách:</div>
             <div class="style-btns">
-              <button class="style-btn active" onclick="setTryonStyle('cong-so',this)">💼 Công Sở</button>
-              <button class="style-btn" onclick="setTryonStyle('casual',this)">👕 Casual</button>
-              <button class="style-btn" onclick="setTryonStyle('sang-trong',this)">✨ Sang Trọng</button>
-              <button class="style-btn" onclick="setTryonStyle('dao-pho',this)">🎒 Dạo Phố</button>
+              <button class="style-btn active" onclick="setTryonStyle('cong-so',this)"><span class="ic" data-icon="briefcase"></span> Công Sở</button>
+              <button class="style-btn" onclick="setTryonStyle('casual',this)"><span class="ic" data-icon="shirt"></span> Casual</button>
+              <button class="style-btn" onclick="setTryonStyle('sang-trong',this)"><span class="ic" data-icon="sparkles"></span> Sang Trọng</button>
+              <button class="style-btn" onclick="setTryonStyle('dao-pho',this)"><span class="ic" data-icon="compass"></span> Dạo Phố</button>
             </div>
-            <button class="btn-tryon" id="btnTryon" onclick="doTryon()">✨ Thử Trang Phục Ngay</button>
+            <button class="btn-tryon" id="btnTryon" onclick="doTryon()"><span class="ic" data-icon="sparkles"></span> Thử Trang Phục Ngay</button>
           </div>
 
           <div id="tryonLoading" style="display:none;text-align:center;padding:24px 0">
@@ -233,8 +233,8 @@
               <div><div class="ba-label" id="tryonAfterLabel">Sau khi thử</div><img id="tryonAfter" class="ba-img" src="" alt="Sau"></div>
             </div>
             <div style="display:flex;gap:8px">
-              <button onclick="downloadTryon()" style="flex:1;padding:10px;background:var(--green);color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit">⬇ Tải Ảnh</button>
-              <button onclick="resetTryon()" class="btn-cancel" style="flex:1">🔄 Thử Lại</button>
+              <button onclick="downloadTryon()" style="flex:1;padding:10px;background:var(--green);color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit"><span class="ic" data-icon="chevron-down"></span> Tải Ảnh</button>
+              <button onclick="resetTryon()" class="btn-cancel" style="flex:1"><span class="ic" data-icon="rotate-cw"></span> Thử Lại</button>
             </div>
           </div>
         </div>
@@ -255,7 +255,7 @@ window.SHELL_INTRO={key:'trang-phuc-theo-ngay',title:'Trang Phục Theo Ngày',d
 <script src="/tuvi-paywall.js?v=20"></script>
   <script src="/nav.js?v=22" data-icons-only></script>
 <script src="/shell.js?v=72"></script>
-<script src="/tools-shared/ai-loading-steps.js?v=7"></script>
+<script src="/tools-shared/ai-loading-steps.js?v=8"></script>
 <script>
 function initTrangPhucNgay(){
   Shell.setContext({
@@ -310,25 +310,25 @@ function yearCanChi(y){ return `${_CAN[(y-4+400)%10]} ${_CHI[(y-4+480)%12]}`; }
 const _SINH={Kim:'Thủy',Thủy:'Mộc',Mộc:'Hỏa',Hỏa:'Thổ',Thổ:'Kim'};
 const _KHAC={Kim:'Mộc',Mộc:'Thổ',Thổ:'Thủy',Thủy:'Hỏa',Hỏa:'Kim'};
 function getRelation(menh,ngay){
-  if(menh===ngay)return{code:'binh_hoa',text:'Ngày đồng hành — bình ổn, thuận lợi',icon:'☯️',color:'linear-gradient(135deg,#1a3a2a,#2e5a42)'};
-  if(_SINH[ngay]===menh)return{code:'ngay_sinh_menh',text:'Ngày sinh Mệnh ✦ Cực kỳ thuận lợi',icon:'⭐',color:'linear-gradient(135deg,#1a2a10,#2e5010)'};
-  if(_SINH[menh]===ngay)return{code:'menh_sinh_ngay',text:'Mệnh sinh Ngày — hao tổn chút ít, vẫn tốt',icon:'🌙',color:'linear-gradient(135deg,#1a2a40,#0d3b5e)'};
-  if(_KHAC[ngay]===menh)return{code:'ngay_khac_menh',text:'Ngày khắc Mệnh ✦ Cần hóa giải bằng màu',icon:'⚠️',color:'linear-gradient(135deg,#3a1a10,#6b2510)'};
-  return{code:'menh_khac_ngay',text:'Mệnh khắc Ngày — ngày trung bình, cẩn thận',icon:'🔶',color:'linear-gradient(135deg,#3a2a10,#6b4510)'};
+  if(menh===ngay)return{code:'binh_hoa',text:'Ngày đồng hành — bình ổn, thuận lợi',icon:'scale',color:'linear-gradient(135deg,#1a3a2a,#2e5a42)'};
+  if(_SINH[ngay]===menh)return{code:'ngay_sinh_menh',text:'Ngày sinh Mệnh ✦ Cực kỳ thuận lợi',icon:'star',color:'linear-gradient(135deg,#1a2a10,#2e5010)'};
+  if(_SINH[menh]===ngay)return{code:'menh_sinh_ngay',text:'Mệnh sinh Ngày — hao tổn chút ít, vẫn tốt',icon:'moon',color:'linear-gradient(135deg,#1a2a40,#0d3b5e)'};
+  if(_KHAC[ngay]===menh)return{code:'ngay_khac_menh',text:'Ngày khắc Mệnh ✦ Cần hóa giải bằng màu',icon:'alert-triangle',color:'linear-gradient(135deg,#3a1a10,#6b2510)'};
+  return{code:'menh_khac_ngay',text:'Mệnh khắc Ngày — ngày trung bình, cẩn thận',icon:'info',color:'linear-gradient(135deg,#3a2a10,#6b4510)'};
 }
 
 const STYLE_META={
-  glass_skin:{emoji:'🪞',name:'Glass Skin Korea'},j_sheer:{emoji:'🍵',name:'J-Beauty Sheer'},
-  kdrama_glam:{emoji:'💄',name:'K-Drama Glam'},guochao:{emoji:'🏮',name:'Guochao Editorial'},
-  hoa_dan:{emoji:'🌺',name:'Hoa Đán Soft'},dark_muse:{emoji:'🌑',name:'Dark Muse'},
-  clean_casual:{emoji:'☁️',name:'Clean Casual'},warm_earth:{emoji:'🌿',name:'Warm Earth'},
+  glass_skin:{icon:'sparkles',name:'Glass Skin Korea'},j_sheer:{icon:'leaf',name:'J-Beauty Sheer'},
+  kdrama_glam:{icon:'star',name:'K-Drama Glam'},guochao:{icon:'crown',name:'Guochao Editorial'},
+  hoa_dan:{icon:'flower',name:'Hoa Đán Soft'},dark_muse:{icon:'moon',name:'Dark Muse'},
+  clean_casual:{icon:'shirt',name:'Clean Casual'},warm_earth:{icon:'sun',name:'Warm Earth'},
 };
 const OUTFIT_META=[
-  {key:'top',icon:'👕',cat:'Áo'},
-  {key:'bottom',icon:'👖',cat:'Quần / Váy'},
-  {key:'outer',icon:'🧥',cat:'Áo Khoác'},
-  {key:'shoes',icon:'👟',cat:'Giày'},
-  {key:'accessory',icon:'💍',cat:'Phụ Kiện'},
+  {key:'top',icon:'shirt',cat:'Áo'},
+  {key:'bottom',icon:'shirt',cat:'Quần / Váy'},
+  {key:'outer',icon:'shirt',cat:'Áo Khoác'},
+  {key:'shoes',icon:'package',cat:'Giày'},
+  {key:'accessory',icon:'gem',cat:'Phụ Kiện'},
 ];
 const COLOR_HEX={'Trắng':'#FFFFFF','Bạc':'#C0C0C0','Xám nhạt':'#D3D3D3','Vàng kim':'#D4AF37','Be':'#D4B896','Kem':'#FFF8DC','Xanh lá':'#2E8B57','Xanh ngọc':'#40E0D0','Xanh lam':'#87CEEB','Nâu gỗ':'#8B4513','Đen':'#111111','Navy':'#000080','Xanh dương':'#1E90FF','Xám đậm':'#696969','Đỏ':'#CC0000','Cam':'#FF6600','Hồng':'#FF69B4','Vàng':'#FFD700','Nâu':'#8B6914','Cam đất':'#CC7722','Xanh rêu':'#6B8E23','Tím':'#800080','Tím đỏ':'#800040','Hồng phấn':'#FFB6C1'};
 
@@ -421,7 +421,7 @@ function renderResults(d){
   const rel=getRelation(menhHanh,ngayHanh);
   const banner=document.getElementById('relBanner');
   banner.style.background=rel.color;
-  document.getElementById('relIcon').textContent=rel.icon;
+  document.getElementById('relIcon').innerHTML=window.iconHtml?window.iconHtml(rel.icon):'';
   document.getElementById('relTitle').textContent=`Mệnh ${menhHanh} · Ngày ${d.ngayCC||''}`;
   document.getElementById('relSub').textContent=`${d.menhFull||menhHanh} — ${rel.text}`;
   document.getElementById('relTagMain').textContent=ngayHanh;
@@ -431,8 +431,8 @@ function renderResults(d){
   renderColorRow('accentColors',d.accentColors||[],false);
   renderColorRow('avoidColors',d.avoidColors||[],true);
 
-  const sm=STYLE_META[d.asianStyle?.id]||{emoji:'✨',name:d.asianStyle?.id||''};
-  document.getElementById('styleEmoji').textContent=sm.emoji;
+  const sm=STYLE_META[d.asianStyle?.id]||{icon:'sparkles',name:d.asianStyle?.id||''};
+  document.getElementById('styleEmoji').innerHTML=window.iconHtml?window.iconHtml(sm.icon):'';
   document.getElementById('styleName').textContent=sm.name||d.asianStyle?.name||'';
   document.getElementById('styleDesc').textContent=d.asianStyle?.desc||'';
   document.getElementById('styleWhy').textContent='✦ '+d.asianStyle?.why||'';
@@ -441,8 +441,9 @@ function renderResults(d){
   const outfit=d.outfit||{};
   OUTFIT_META.forEach(({key,icon,cat})=>{
     if(!outfit[key])return;
-    og.innerHTML+=`<div class="outfit-item"><div class="outfit-icon">${icon}</div><div class="outfit-cat">${cat}</div><div class="outfit-desc">${outfit[key]}</div></div>`;
+    og.innerHTML+=`<div class="outfit-item"><div class="outfit-icon ic" data-icon="${icon}"></div><div class="outfit-cat">${cat}</div><div class="outfit-desc">${outfit[key]}</div></div>`;
   });
+  window.mountIcons && window.mountIcons(og);
 
   document.getElementById('tipText').textContent=d.tip||'';
 

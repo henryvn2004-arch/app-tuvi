@@ -209,7 +209,7 @@ function setSpread(n, btn) {
 
 function draw() {
   const btn = document.getElementById('drawBtn');
-  btn.disabled = true; btn.textContent = '🂠 Đang xáo bài...';
+  btn.disabled = true; btn.innerHTML = '<span class="ic" data-icon="spade"></span> Đang xáo bài...'; window.mountIcons && window.mountIcons(btn);
   setTimeout(() => {
     const used = new Set(); const picked = [];
     while (picked.length < _spread) {
@@ -218,7 +218,7 @@ function draw() {
     }
     _drawn = picked;
     renderResult();
-    btn.disabled = false; btn.textContent = '🂠 Xáo Bài & Rút Lại';
+    btn.disabled = false; btn.innerHTML = '<span class="ic" data-icon="spade"></span> Xáo Bài & Rút Lại'; window.mountIcons && window.mountIcons(btn);
   }, 600);
 }
 
@@ -267,24 +267,25 @@ function renderResult() {
         <div class="pcm-body">${r.gen}</div>
         <div class="pcm-topics">
           <div class="pcm-topic" style="border-color:${col}33;background:${col}08">
-            <div class="pcm-topic-label" style="color:${col}">❤ Tình Cảm</div>
+            <div class="pcm-topic-label" style="color:${col}"><span class="ic" data-icon="heart"></span> Tình Cảm</div>
             <div class="pcm-topic-text">${r.love}</div>
           </div>
           <div class="pcm-topic" style="border-color:#1E6B3C33;background:#1E6B3C08">
-            <div class="pcm-topic-label" style="color:#1E6B3C">💼 Sự Nghiệp</div>
+            <div class="pcm-topic-label" style="color:#1E6B3C"><span class="ic" data-icon="briefcase"></span> Sự Nghiệp</div>
             <div class="pcm-topic-text">${r.career}</div>
           </div>
           <div class="pcm-topic" style="border-color:#c9a84c33;background:#c9a84c08">
-            <div class="pcm-topic-label" style="color:#9A7B3A">💰 Tài Chính</div>
+            <div class="pcm-topic-label" style="color:#9A7B3A"><span class="ic" data-icon="dollar-sign"></span> Tài Chính</div>
             <div class="pcm-topic-text">${r.finance}</div>
           </div>
           <div class="pcm-topic" style="border-color:var(--line-2)">
-            <div class="pcm-topic-label" style="color:var(--text-lt)">🃏 Chất Bài</div>
+            <div class="pcm-topic-label" style="color:var(--text-lt)"><span class="ic" data-icon="wallet-cards"></span> Chất Bài</div>
             <div class="pcm-topic-text">${s.name === 'Cơ' ? 'Tình cảm, cảm xúc và các mối quan hệ' : s.name === 'Rô' ? 'Vật chất, tiền bạc và giá trị thực' : s.name === 'Bích' ? 'Thách thức, trí tuệ và xung đột' : 'Sự nghiệp, hành động và tăng trưởng'}</div>
           </div>
         </div>
       </div>`;
     }).join('');
+  window.mountIcons && window.mountIcons(document.getElementById('readingResult'));
 
   Shell.setShareable({ kind:'text', toolId:'boi-bai-tay', title:'Kết quả bói bài Tây của tôi', text: shareText() });
   setTimeout(() => document.getElementById('result-section').scrollIntoView({ behavior: 'smooth', block: 'start' }), 500);

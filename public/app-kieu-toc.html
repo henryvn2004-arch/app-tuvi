@@ -52,7 +52,6 @@
 .style-name{font-size:14px;font-weight:700;color:var(--heading);margin-bottom:3px}
 .style-sub{font-size:12px;color:var(--text-lt);margin-bottom:6px}
 .style-reason{font-size:12px;color:var(--text-mid);font-style:italic;line-height:1.5}
-.style-reason::before{content:'💡 '}
 .try-btn{background:var(--navy);color:var(--gold);border:none;border-radius:6px;padding:8px 14px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;flex-shrink:0;white-space:nowrap;align-self:center;transition:opacity .15s}
 .try-btn:hover{opacity:.85} .try-btn:disabled{opacity:.4;cursor:not-allowed}
 .tip-box{background:var(--gold-lt);border:1px solid var(--gold);border-radius:8px;padding:12px 14px;margin-top:16px;font-size:13px;color:var(--heading);line-height:1.6}
@@ -97,7 +96,7 @@
       <div id="shellRecent"></div>
 
       <div class="kt-card" id="inputSection">
-        <h2>📷 Tải Ảnh Lên</h2>
+        <h2><span class="ic" data-icon="camera"></span> Tải Ảnh Lên</h2>
         <p class="sub">AI phân tích hình khuôn mặt và gợi ý kiểu tóc + kính mắt phù hợp theo nhân tướng học.</p>
 
         <div style="margin-bottom:20px">
@@ -109,19 +108,19 @@
         </div>
 
         <div class="privacy-notice">
-          <span>🔒</span>
+          <span class="ic" data-icon="lock"></span>
           <div><strong>Quyền riêng tư:</strong> Ảnh chỉ gửi đến AI để phân tích, không lưu trên server của chúng tôi. Replicate xử lý và trả về ảnh kết quả, không lưu trữ lâu dài.</div>
         </div>
 
         <div class="input-tabs" style="margin-top:20px">
-          <button class="input-tab active" onclick="switchTab('upload',this)">📁 Tải Ảnh Lên</button>
-          <button class="input-tab" onclick="switchTab('camera',this)">📸 Chụp Ảnh</button>
+          <button class="input-tab active" onclick="switchTab('upload',this)"><span class="ic" data-icon="folder"></span> Tải Ảnh Lên</button>
+          <button class="input-tab" onclick="switchTab('camera',this)"><span class="ic" data-icon="camera"></span> Chụp Ảnh</button>
         </div>
 
         <div class="input-pane active" id="pane-upload">
           <div id="uploadArea" class="upload-area" ondragover="onDragOver(event)" ondragleave="onDragLeave(event)" ondrop="onDrop(event)">
             <input type="file" id="fileInput" accept="image/*" onchange="onFileSelect(event)">
-            <span class="upload-icon">🪮</span>
+            <span class="upload-icon ic" data-icon="scissors" style="font-size:48px;display:block"></span>
             <div class="upload-title">Kéo thả ảnh vào đây hoặc click để chọn</div>
             <div class="upload-sub">JPG, PNG, WebP — tối đa 5MB</div>
           </div>
@@ -145,10 +144,10 @@
               <canvas id="camCanvas" style="display:none"></canvas>
             </div>
             <div id="camBtns" style="display:none;gap:12px;justify-content:center;margin-top:12px">
-              <button onclick="capturePhoto()" style="padding:10px 24px;background:var(--navy);color:var(--gold);border:none;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit">📸 Chụp</button>
+              <button onclick="capturePhoto()" style="padding:10px 24px;background:var(--navy);color:var(--gold);border:none;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit"><span class="ic" data-icon="camera"></span> Chụp</button>
               <button onclick="stopCamera()" style="padding:10px 20px;background:transparent;border:1.5px solid var(--line-2);border-radius:8px;font-size:13px;cursor:pointer;font-family:inherit;color:var(--text-mid)">Huỷ</button>
             </div>
-            <button id="openCamBtn" class="camera-btn" onclick="openCamera()">📸 Mở Camera</button>
+            <button id="openCamBtn" class="camera-btn" onclick="openCamera()"><span class="ic" data-icon="camera"></span> Mở Camera</button>
           </div>
         </div>
 
@@ -162,7 +161,7 @@
         <div class="error-msg" id="error-msg"></div>
 
         <button id="analyzeBtn" onclick="analyze()" disabled class="btn-analyze" style="width:100%;margin-top:20px;padding:14px;background:var(--navy);color:var(--gold);border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;font-family:var(--serif);letter-spacing:.3px;transition:opacity .15s">
-          ✨ Phân Tích Khuôn Mặt &amp; Gợi Ý Phong Cách — <span data-tvp-price="kieu-toc-phan-tich">…</span> Lượng
+          <span class="ic" data-icon="sparkles"></span> Phân Tích Khuôn Mặt &amp; Gợi Ý Phong Cách — <span data-tvp-price="kieu-toc-phan-tich">…</span> Lượng
         </button>
         <div style="font-size:11px;color:var(--text-lt);text-align:center;margin-top:8px">Phân tích ~5s · Thử kiểu ~25s</div>
       </div>
@@ -173,7 +172,7 @@
         </div>
 
         <div id="faceShapeCard" class="face-shape-card" style="display:none">
-          <div class="shape-emoji" id="shapeEmoji">🥚</div>
+          <div class="shape-emoji ic" id="shapeEmoji" data-icon="user"></div>
           <div style="flex:1">
             <div style="display:flex;align-items:center;gap:8px;margin-bottom:2px">
               <div class="shape-label" style="margin:0">Hình dạng khuôn mặt</div>
@@ -181,33 +180,33 @@
             </div>
             <div class="shape-name" id="shapeName">—</div>
             <div class="shape-desc" id="shapeDesc">—</div>
-            <div id="tuongHocInsight" style="font-size:11px;color:rgba(255,255,255,.6);font-style:italic;margin-top:6px;line-height:1.5;display:none"></div>
+            <div id="tuongHocInsight" style="font-size:11px;color:rgba(255,255,255,.6);font-style:italic;margin-top:6px;line-height:1.5;display:none"><span class="ic" data-icon="book-open"></span> <span id="tuongHocInsightText"></span></div>
           </div>
         </div>
 
         <div class="kt-card" id="resultTabsWrap" data-ws-result style="display:none">
           <div style="display:flex;gap:0;border-bottom:2px solid var(--border-lt);margin-bottom:16px">
-            <button class="result-tab active" id="tab-hair" onclick="switchResultTab('hair',this)">✂️ Kiểu Tóc</button>
-            <button class="result-tab" id="tab-glasses" onclick="switchResultTab('glasses',this)">👓 Kính Mắt</button>
+            <button class="result-tab active" id="tab-hair" onclick="switchResultTab('hair',this)"><span class="ic" data-icon="scissors"></span> Kiểu Tóc</button>
+            <button class="result-tab" id="tab-glasses" onclick="switchResultTab('glasses',this)"><span class="ic" data-icon="glasses"></span> Kính Mắt</button>
           </div>
 
           <div id="pane-hair" class="result-pane active">
-            <div class="styles-title">✨ Tất cả kiểu tóc — ⭐ là phù hợp nhất theo tướng mặt của bạn</div>
+            <div class="styles-title"><span class="ic" data-icon="sparkles"></span> Tất cả kiểu tóc — <span class="ic" data-icon="star"></span> là phù hợp nhất theo tướng mặt của bạn</div>
             <div class="style-cards" id="styleCardsList"></div>
           </div>
 
           <div id="pane-glasses" class="result-pane" style="display:none">
-            <div class="styles-title">👓 Kiểu kính phù hợp theo cấu trúc khuôn mặt</div>
+            <div class="styles-title"><span class="ic" data-icon="glasses"></span> Kiểu kính phù hợp theo cấu trúc khuôn mặt</div>
             <div class="style-cards" id="glassesCardsList"></div>
           </div>
 
           <div class="tip-box" id="tipBox" style="display:none;margin-top:12px">
-            <strong>💬 Lời khuyên: </strong><span id="tipText"></span>
+            <strong><span class="ic" data-icon="message-circle"></span> Lời khuyên: </strong><span id="tipText"></span>
           </div>
         </div>
 
         <div class="kt-card tryon-section" id="tryonSection" style="display:none">
-          <div class="tryon-title" id="tryonTitle">Thử Trên Ảnh</div>
+          <div class="tryon-title" id="tryonTitle"><span class="ic" id="tryonTitleIcon"></span> <span id="tryonTitleText">Thử Trên Ảnh</span></div>
           <div class="tryon-loading" id="tryonLoading">
             <div id="tryonStepsHost"></div>
           </div>
@@ -223,15 +222,15 @@
               </div>
             </div>
             <div class="tryon-actions">
-              <button class="btn-download" onclick="downloadResult()">⬇ Tải Ảnh Kết Quả</button>
-              <button class="btn-retry" onclick="clearTryon()">🔄 Thử Kiểu Khác</button>
+              <button class="btn-download" onclick="downloadResult()"><span class="ic" data-icon="chevron-down"></span> Tải Ảnh Kết Quả</button>
+              <button class="btn-retry" onclick="clearTryon()"><span class="ic" data-icon="rotate-cw"></span> Thử Kiểu Khác</button>
             </div>
           </div>
           <div class="error-msg" id="tryon-error-msg"></div>
         </div>
 
         <div id="resetWrap" style="display:none;margin-top:12px;text-align:center">
-          <button onclick="resetAll()" class="btn-cancel">🔄 Phân tích ảnh khác</button>
+          <button onclick="resetAll()" class="btn-cancel"><span class="ic" data-icon="rotate-cw"></span> Phân tích ảnh khác</button>
         </div>
       </div>
     </div>
@@ -246,7 +245,7 @@ window.SHELL_INTRO={key:'kieu-toc-phan-tich',title:'Kiểu Tóc & Kính Mắt H�
 <script src="/tuvi-paywall.js?v=20"></script>
   <script src="/nav.js?v=22" data-icons-only></script>
 <script src="/shell.js?v=72"></script>
-<script src="/tools-shared/ai-loading-steps.js?v=7"></script>
+<script src="/tools-shared/ai-loading-steps.js?v=8"></script>
 <script>
 function initKieuToc(){
   Shell.setContext({
@@ -296,9 +295,9 @@ function _hairThumb(id, gender) {
       style="width:52px;height:64px;object-fit:cover;border-radius:7px;border:1px solid var(--border-lt);display:block;flex-shrink:0"
       loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"
       alt="${id}"/>
-    <div style="width:52px;height:64px;display:none;align-items:center;justify-content:center;background:var(--paper);border:1px solid var(--border-lt);border-radius:7px;font-size:22px">✂️</div>`;
+    <div class="ic" data-icon="scissors" style="width:52px;height:64px;display:none;align-items:center;justify-content:center;background:var(--paper);border:1px solid var(--border-lt);border-radius:7px;font-size:22px"></div>`;
   }
-  return `<div style="width:52px;height:64px;display:flex;align-items:center;justify-content:center;background:var(--paper);border:1px solid var(--border-lt);border-radius:7px;font-size:22px">✂️</div>`;
+  return `<div class="ic" data-icon="scissors" style="width:52px;height:64px;display:flex;align-items:center;justify-content:center;background:var(--paper);border:1px solid var(--border-lt);border-radius:7px;font-size:22px"></div>`;
 }
 
 const STYLE_META = {
@@ -335,18 +334,18 @@ const STYLE_META = {
 };
 
 const GLASSES_META = {
-  rectangle: { name: 'Gọng Chữ Nhật',   sub: 'Gọng mỏng hiện đại — phù hợp hầu hết khuôn mặt',  icon: '🔲' },
-  round:     { name: 'Gọng Tròn Retro',  sub: 'Phong cách Hàn/vintage — làm mềm khuôn mặt vuông',  icon: '⭕' },
-  oval:      { name: 'Gọng Oval',        sub: 'Nhẹ nhàng tinh tế — hài hòa với mọi khuôn mặt',     icon: '🫧' },
-  browline:  { name: 'Browline Bán Viền', sub: 'Nửa viền trên đậm — trí thức lịch lãm',             icon: '🕶' },
-  cat_eye:   { name: 'Cat Eye',          sub: 'Đuôi vát lên — nữ tính quyến rũ (phù hợp nữ nhiều)', icon: '😺' },
-  aviator:   { name: 'Aviator',          sub: 'Giọt nước cổ điển — unisex, mạnh mẽ tự tin',         icon: '✈️' },
+  rectangle: { name: 'Gọng Chữ Nhật',   sub: 'Gọng mỏng hiện đại — phù hợp hầu hết khuôn mặt',  icon: 'glasses' },
+  round:     { name: 'Gọng Tròn Retro',  sub: 'Phong cách Hàn/vintage — làm mềm khuôn mặt vuông',  icon: 'circle-dot' },
+  oval:      { name: 'Gọng Oval',        sub: 'Nhẹ nhàng tinh tế — hài hòa với mọi khuôn mặt',     icon: 'glasses' },
+  browline:  { name: 'Browline Bán Viền', sub: 'Nửa viền trên đậm — trí thức lịch lãm',             icon: 'glasses' },
+  cat_eye:   { name: 'Cat Eye',          sub: 'Đuôi vát lên — nữ tính quyến rũ (phù hợp nữ nhiều)', icon: 'glasses' },
+  aviator:   { name: 'Aviator',          sub: 'Giọt nước cổ điển — unisex, mạnh mẽ tự tin',         icon: 'glasses' },
 };
 
 const ALL_STYLES_NAM = ['undercut','pompadour','curtain','buzz','textured','two_block','side_part','slick_back','cushion_perm','layered_curl','perm_wave'];
 const ALL_STYLES_NU  = ['curtain_nu','wolf','bob','long_layers','pixie','side_waves','wispy','shag','lob','blunt_fringe','textured_wavy','pompadour_nu','undercut_nu','korean_perm','hime','jellyfish','butterfly','aline_bob','glass_hair','money_piece'];
 
-const SHAPE_EMOJI = { oval: '🥚', round: '⭕', square: '⬜', heart: '🫀', oblong: '📏' };
+const SHAPE_ICON = { oval: 'user', round: 'circle-dot', square: 'user', heart: 'heart', oblong: 'user' };
 
 let _imageData = null;
 let _mediaType = 'image/jpeg';
@@ -595,7 +594,8 @@ function renderAnalysis(data) {
   _analysisLoadingCtl && _analysisLoadingCtl.finish();
   document.getElementById('analysisLoading').style.display = 'none';
 
-  document.getElementById('shapeEmoji').textContent = SHAPE_EMOJI[data.faceShape] || '🫧';
+  const shapeIconKey = SHAPE_ICON[data.faceShape] || 'user';
+  document.getElementById('shapeEmoji').innerHTML = window.iconHtml ? window.iconHtml(shapeIconKey) : '';
   document.getElementById('shapeName').textContent = data.faceShapeVN || '—';
   document.getElementById('shapeDesc').textContent = data.desc || '';
   if (data.ageGroup) {
@@ -604,9 +604,8 @@ function renderAnalysis(data) {
     badge.style.display = 'inline';
   }
   if (data.tuongHocInsight) {
-    const el = document.getElementById('tuongHocInsight');
-    el.textContent = '📖 ' + data.tuongHocInsight;
-    el.style.display = 'block';
+    document.getElementById('tuongHocInsightText').textContent = data.tuongHocInsight;
+    document.getElementById('tuongHocInsight').style.display = 'block';
   }
   document.getElementById('faceShapeCard').style.display = 'flex';
 
@@ -626,8 +625,8 @@ function renderAnalysis(data) {
     const card = document.createElement('div');
     card.className = 'style-card'; card.id = 'sc_' + id;
     const rankBadge = rank
-      ? `<span class="style-rank" style="background:var(--gold-lt);color:var(--gold-soft)">⭐ #${rank}</span>`
-      : `<span class="style-rank">✂️</span>`;
+      ? `<span class="style-rank" style="background:var(--gold-lt);color:var(--gold-soft)"><span class="ic" data-icon="star"></span> #${rank}</span>`
+      : `<span class="style-rank"><span class="ic" data-icon="scissors"></span></span>`;
     card.innerHTML = `
       ${_hairThumb(id, _gender)}
       <div class="style-info" style="flex:1">
@@ -636,12 +635,13 @@ function renderAnalysis(data) {
           <div class="style-name">${meta.name}</div>
         </div>
         <div class="style-sub">${meta.sub}</div>
-        ${(data.hairReasons||data.reasons||{})[id] ? `<div class="style-reason">${(data.hairReasons||data.reasons)[id]}</div>` : ''}
+        ${(data.hairReasons||data.reasons||{})[id] ? `<div class="style-reason"><span class="ic" data-icon="lightbulb"></span> ${(data.hairReasons||data.reasons)[id]}</div>` : ''}
       </div>
       <button class="try-btn" onclick="selectStyle('${id}','hair')">Thử →</button>
     `;
     hairList.appendChild(card);
   });
+  window.mountIcons && window.mountIcons(hairList);
 
   const glassesList = document.getElementById('glassesCardsList');
   glassesList.innerHTML = '';
@@ -651,19 +651,20 @@ function renderAnalysis(data) {
     const card = document.createElement('div');
     card.className = 'style-card'; card.id = 'gc_' + id;
     card.innerHTML = `
-      <div class="glasses-icon">${meta.icon}</div>
+      <div class="glasses-icon ic" data-icon="${meta.icon}"></div>
       <div class="style-info" style="flex:1">
         <div style="display:flex;align-items:center;gap:6px;margin-bottom:3px">
           <span class="style-rank">#${i+1}</span>
           <div class="style-name">${meta.name}</div>
         </div>
         <div class="style-sub">${meta.sub}</div>
-        ${(data.glassesReasons||{})[id] ? `<div class="style-reason">${data.glassesReasons[id]}</div>` : ''}
+        ${(data.glassesReasons||{})[id] ? `<div class="style-reason"><span class="ic" data-icon="lightbulb"></span> ${data.glassesReasons[id]}</div>` : ''}
       </div>
       <button class="try-btn" onclick="selectStyle('${id}','glasses')">Thử →</button>
     `;
     glassesList.appendChild(card);
   });
+  window.mountIcons && window.mountIcons(glassesList);
 
   if (hairRanked.length || glassesRanked.length) {
     document.getElementById('resultTabsWrap').style.display = 'block';
@@ -708,8 +709,9 @@ async function _doTryOn(styleId, meta, type = 'hair') {
   clearTryonError();
   const tryonSec = document.getElementById('tryonSection');
   tryonSec.style.display = 'block';
-  const typeLabel = type === 'glasses' ? '👓' : '✂️';
-  document.getElementById('tryonTitle').textContent = `${typeLabel} Thử: ${meta?.name || styleId}`;
+  const typeIconKey = type === 'glasses' ? 'glasses' : 'scissors';
+  document.getElementById('tryonTitleIcon').innerHTML = window.iconHtml ? window.iconHtml(typeIconKey) : '';
+  document.getElementById('tryonTitleText').textContent = 'Thử: ' + (meta?.name || styleId);
   document.getElementById('tryonLoading').style.display = 'block';
   document.getElementById('tryonResult').style.display = 'none';
   tryonSec.scrollIntoView({ behavior: 'smooth', block: 'start' });
