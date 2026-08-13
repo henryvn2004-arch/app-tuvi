@@ -15,8 +15,18 @@
 import { buildTools, TOOLS_INSTRUCTION } from "@/lib/agent/tools";
 import { LASO_AUTHORITY_RULE, daiVanLines, type Laso } from "@/lib/engine/laso";
 import { currentNamXem } from "@/lib/engine/namxem";
+import { todayVN } from "@/lib/engine/van-ngay";
 import { tuongHopScores } from "@/lib/engine/tuong-hop";
 import { matchVanHanCombos, formatComboLines, type LayerCung } from "@/lib/agent/vanHanCombos";
+
+// "Hôm nay" gửi cho LLM PHẢI theo giờ VN, không theo giờ server (Vercel chạy
+// UTC) — nếu không, trong khung 00:00–06:59 giờ VN (=17:00–23:59 UTC hôm
+// trước), rail sẽ tưởng "hôm nay" là NGÀY HÔM TRƯỚC, kéo theo chọn sai cả
+// tháng/ngày khi gọi tra_tieu_van/tra_nguyet_van/tra_nhat_van.
+function todayVNStr(): string {
+  const t = todayVN();
+  return `${String(t.d).padStart(2, "0")}/${String(t.m).padStart(2, "0")}/${t.y}`;
+}
 
 interface ChatContext {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -306,7 +316,7 @@ export const RAIL_LASO_SHAPE = `── NHỊP TRẢ LỜI (nằm TRONG khung đ�
 
 export const CHAT_SYSTEM_LASO = (ctx: string, docs?: string, persona?: string) => `Bạn là chuyên gia Tử Vi Đẩu Số. Phụng sự trang Tử Vi Minh Bảo.${persona ? '\n' + persona : ''}
 
-THÔNG TIN THỜI GIAN (do server cung cấp, chính xác): Hôm nay là ngày ${new Date().toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' })}, năm ${new Date().getFullYear()}. Khi user hỏi "năm nay là năm mấy", "hôm nay là ngày mấy", hoặc tương tự — trả lời thẳng dựa vào thông tin này, KHÔNG nói "tôi không biết ngày hiện tại".
+THÔNG TIN THỜI GIAN (do server cung cấp, chính xác): Hôm nay là ngày ${todayVNStr()}, năm ${todayVN().y}. Khi user hỏi "năm nay là năm mấy", "hôm nay là ngày mấy", hoặc tương tự — trả lời thẳng dựa vào thông tin này, KHÔNG nói "tôi không biết ngày hiện tại".
 
 ${RAIL_CHAT_RULES}
 
@@ -333,7 +343,7 @@ ${ctx}${docs ? '\n\n=== TÀI LIỆU THAM KHẢO ===\n' + docs : ''}`;
 
 export const CHAT_SYSTEM_GENERAL = (docs?: string, persona?: string) => `Bạn là chuyên gia Tử Vi Đẩu Số. Phụng sự trang Tử Vi Minh Bảo.${persona ? '\n' + persona : ''}
 
-THÔNG TIN THỜI GIAN (do server cung cấp, chính xác): Hôm nay là ngày ${new Date().toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' })}, năm ${new Date().getFullYear()}. Khi user hỏi "năm nay là năm mấy", "hôm nay là ngày mấy", hoặc tương tự — trả lời thẳng dựa vào thông tin này, KHÔNG nói "tôi không biết ngày hiện tại".
+THÔNG TIN THỜI GIAN (do server cung cấp, chính xác): Hôm nay là ngày ${todayVNStr()}, năm ${todayVN().y}. Khi user hỏi "năm nay là năm mấy", "hôm nay là ngày mấy", hoặc tương tự — trả lời thẳng dựa vào thông tin này, KHÔNG nói "tôi không biết ngày hiện tại".
 
 ${RAIL_CHAT_RULES}
 
@@ -361,7 +371,7 @@ ${DIEM_NHAN_RULES}
 
 const CHAT_SYSTEM_COMPAT = (ctx: string, toolType: string, docs?: string, persona?: string) => `Bạn là chuyên gia phân tích tương hợp Tử Vi Đẩu Số. Phụng sự trang Tử Vi Minh Bảo.${persona ? '\n' + persona : ''}
 
-THÔNG TIN THỜI GIAN (do server cung cấp, chính xác): Hôm nay là ngày ${new Date().toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' })}, năm ${new Date().getFullYear()}.
+THÔNG TIN THỜI GIAN (do server cung cấp, chính xác): Hôm nay là ngày ${todayVNStr()}, năm ${todayVN().y}.
 
 Nhiệm vụ: Phân tích ${
   toolType === 'xem-lam-an'
@@ -384,7 +394,7 @@ ${ctx}${docs ? '\n\n=== TÀI LIỆU THAM KHẢO ===\n' + docs : ''}`;
 
 const CHAT_SYSTEM_SINH_CON = (ctx: string, docs?: string, persona?: string) => `Bạn là chuyên gia địa chi học, tư vấn tuổi sinh con theo cổ pháp Việt Nam.${persona ? '\n' + persona : ''}
 
-THÔNG TIN THỜI GIAN: Hôm nay là ngày ${new Date().toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' })}, năm ${new Date().getFullYear()}.
+THÔNG TIN THỜI GIAN: Hôm nay là ngày ${todayVNStr()}, năm ${todayVN().y}.
 
 Nguyên tắc:
 - ${FORMAT_RULE}
@@ -399,7 +409,7 @@ ${ctx}${docs ? '\n\n=== TÀI LIỆU THAM KHẢO ===\n' + docs : ''}`;
 
 const CHAT_SYSTEM_CHON_NGAY = (ctx: string, docs?: string, persona?: string) => `Bạn là chuyên gia chọn ngày tốt theo Tử Vi Đẩu Số và cổ pháp, phụng sự trang Tử Vi Minh Bảo.${persona ? '\n' + persona : ''}
 
-THÔNG TIN THỜI GIAN: Hôm nay là ngày ${new Date().toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' })}, năm ${new Date().getFullYear()}.
+THÔNG TIN THỜI GIAN: Hôm nay là ngày ${todayVNStr()}, năm ${todayVN().y}.
 
 Nguyên tắc:
 - ${FORMAT_RULE}
@@ -414,7 +424,7 @@ ${ctx}${docs ? '\n\n=== TÀI LIỆU THAM KHẢO ===\n' + docs : ''}`;
 
 const CHAT_SYSTEM_DAT_TEN = (ctx: string, docs?: string, persona?: string) => `Bạn là chuyên gia đặt tên theo ngũ hành và cổ học Việt Nam, phụng sự trang Tử Vi Minh Bảo.${persona ? '\n' + persona : ''}
 
-THÔNG TIN THỜI GIAN: Hôm nay là ngày ${new Date().toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' })}, năm ${new Date().getFullYear()}.
+THÔNG TIN THỜI GIAN: Hôm nay là ngày ${todayVNStr()}, năm ${todayVN().y}.
 
 Nguyên tắc:
 - ${FORMAT_RULE}
@@ -429,7 +439,7 @@ ${ctx}${docs ? '\n\n=== TÀI LIỆU THAM KHẢO ===\n' + docs : ''}`;
 
 const CHAT_SYSTEM_DAT_TEN_DN = (ctx: string, docs?: string, persona?: string) => `Bạn là chuyên gia đặt tên thương hiệu / doanh nghiệp theo ngũ hành và cổ học Việt Nam, phụng sự trang Tử Vi Minh Bảo.${persona ? '\n' + persona : ''}
 
-THÔNG TIN THỜI GIAN: Hôm nay là ngày ${new Date().toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' })}, năm ${new Date().getFullYear()}.
+THÔNG TIN THỜI GIAN: Hôm nay là ngày ${todayVNStr()}, năm ${todayVN().y}.
 
 Nguyên tắc:
 - ${FORMAT_RULE}
@@ -444,7 +454,7 @@ ${RAIL_SHAPE_AND_VOICE}
 ${ctx}${docs ? '\n\n=== TÀI LIỆU THAM KHẢO ===\n' + docs : ''}`;
 
 // ── Batch 2 prompts — Mệnh Lý / Huyền Học ──────────────────────
-const _TIME = () => `THÔNG TIN THỜI GIAN: Hôm nay là ngày ${new Date().toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' })}, năm ${new Date().getFullYear()}.`;
+const _TIME = () => `THÔNG TIN THỜI GIAN: Hôm nay là ngày ${todayVNStr()}, năm ${todayVN().y}.`;
 
 const CHAT_SYSTEM_NAP_AM = (ctx: string, docs?: string, persona?: string) => `Bạn là chuyên gia mệnh lý ngũ hành nạp âm theo cổ pháp, phụng sự trang Tử Vi Minh Bảo.${persona ? '\n' + persona : ''}
 
@@ -739,7 +749,7 @@ ${ctx}${docs ? '\n\n=== TÀI LIỆU THAM KHẢO ===\n' + docs : ''}`;
 // ── Vision: Xem tướng qua ảnh (native trong rail, thay vì API legacy) ──
 const CHAT_SYSTEM_XEM_TUONG = (docs?: string, persona?: string) => `Bạn là chuyên gia nhân tướng học (面相學) theo cổ pháp phương Đông — am hiểu Ma Y Thần Tướng (麻衣神相), Liễu Trang Thần Tướng (柳莊神相), Thủy Kính Tập (水鏡集). Văn phong trí thức Hà Nội xưa — điềm đạm, súc tích, sâu sắc. Phụng sự trang Tử Vi Minh Bảo.${persona ? '\n' + persona : ''}
 
-THÔNG TIN THỜI GIAN: Hôm nay là ngày ${new Date().toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' })}, năm ${new Date().getFullYear()}.
+THÔNG TIN THỜI GIAN: Hôm nay là ngày ${todayVNStr()}, năm ${todayVN().y}.
 
 Nhiệm vụ: Người dùng gửi ẢNH (khuôn mặt, mắt, hoặc bàn tay). Quan sát kỹ ảnh rồi luận tướng theo cổ pháp.
 Nguyên tắc:
@@ -756,7 +766,7 @@ ${docs ? '\n=== TÀI LIỆU THAM KHẢO ===\n' + docs : ''}`;
 // bản chấm điểm có cấu trúc vẫn ở tool legacy /cong-cu) ──
 const CHAT_SYSTEM_PHONG_THUY = (docs?: string, persona?: string) => `Bạn là thầy phong thủy theo cổ pháp — Bát Trạch Minh Kính (八宅明鏡) kết hợp Ngũ Hành. Văn phong trí thức Hà Nội xưa — điềm đạm, súc tích, sâu sắc. Phụng sự trang Tử Vi Minh Bảo.${persona ? '\n' + persona : ''}
 
-THÔNG TIN THỜI GIAN: Hôm nay là ngày ${new Date().toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' })}, năm ${new Date().getFullYear()}.
+THÔNG TIN THỜI GIAN: Hôm nay là ngày ${todayVNStr()}, năm ${todayVN().y}.
 
 Nhiệm vụ: Người dùng gửi ẢNH không gian (phòng khách, phòng ngủ, bàn làm việc, cửa hàng…). Quan sát bố cục rồi luận phong thủy theo cổ pháp.
 Nguyên tắc:
@@ -770,7 +780,7 @@ ${docs ? '\n=== TÀI LIỆU THAM KHẢO ===\n' + docs : ''}`;
 
 const CHAT_SYSTEM_TU_BINH = (ctx: string, docs?: string, persona?: string) => `Bạn là chuyên gia Tử Bình Bát Tự (Tứ Trụ). Phụng sự trang Tử Vi Minh Bảo.${persona ? '\n' + persona : ''}
 
-THÔNG TIN THỜI GIAN (do server cung cấp, chính xác): Hôm nay là ngày ${new Date().toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' })}, năm ${new Date().getFullYear()}.
+THÔNG TIN THỜI GIAN (do server cung cấp, chính xác): Hôm nay là ngày ${todayVNStr()}, năm ${todayVN().y}.
 
 Nguyên tắc trả lời:
 - ${FORMAT_RULE}
@@ -787,7 +797,7 @@ ${ctx}${docs ? '\n\n=== TÀI LIỆU THAM KHẢO ===\n' + docs : ''}`;
 // Prompt dày cho chat khi có NGUYÊN lá-số-text (giống luận giải) — chống thảo mai, neo điểm
 const CHAT_RICH_RULES = (persona?: string) => `Bạn là chuyên gia Tử Vi Đẩu Số. Phụng sự trang Tử Vi Minh Bảo.${persona ? '\n' + persona : ''}
 
-THÔNG TIN THỜI GIAN (server cung cấp, chính xác): Hôm nay là ngày ${new Date().toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' })}, năm ${new Date().getFullYear()}. Khi user hỏi "năm nay/hôm nay là năm/ngày mấy" — trả lời thẳng theo đây.
+THÔNG TIN THỜI GIAN (server cung cấp, chính xác): Hôm nay là ngày ${todayVNStr()}, năm ${todayVN().y}. Khi user hỏi "năm nay/hôm nay là năm/ngày mấy" — trả lời thẳng theo đây.
 
 Bạn được cấp NGUYÊN LÁ SỐ ở phần dưới: đủ 12 cung (chính tinh kèm độ sáng miếu/vượng/đắc/hãm, phụ tinh, cách cục đặc biệt, patterns ý nghĩa, nhãn "Luận sao" định tính, tam phương tứ chính), 9 đại vận có scoring vận hạn. Đây là dữ liệu hệ thống đã tính sẵn — BẮT BUỘC bám sát, không tự bịa. LƯU Ý: lá số KHÔNG có "điểm cung/10" — CẤM bịa con số điểm cho từng cung; chỉ ĐẠI VẬN mới có điểm/10 thật.
 
