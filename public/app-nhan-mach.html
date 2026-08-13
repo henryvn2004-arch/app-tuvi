@@ -189,12 +189,6 @@
           <div class="res-block-body"><div class="nm-motcau" id="motCau"></div></div>
         </div>
 
-        <!-- W1 — tường "đã tính thử": phần trên đã chạy THẬT và miễn phí. -->
-        <div class="res-block" id="lockBlock" style="display:none">
-          <div class="res-block-header"><span class="res-block-title">Phần Luận Chưa Mở</span></div>
-          <div class="res-block-body" id="lockHost" data-tvp-lock style="padding-top:6px"></div>
-        </div>
-
         <div class="res-block" style="background:#FBF3DE;border-color:#e8d9b0">
           <div class="res-block-body" style="font-size:12.5px;line-height:1.68;color:#5a5145">
             💡 Bản đọc này phác hoạ từ các dữ liệu trong lá số Tử Vi, kết hợp kinh nghiệm nghiên cứu của tiền nhân để lại. Mang tính tham khảo.<br><br>
@@ -395,17 +389,8 @@ function _toBirth(b) {
   };
 }
 
-// ── W1: bấm nút là CHẠY THẬT, miễn phí ─────────────────────────────────────
-// Tầng deterministic (kiểu từng người · phân bố nhóm · lỗ hổng · các cặp · thứ
-// tự tiếp cận) là tra bảng — 0 lượt LLM, 0đ. Tường chỉ đứng trên phần chữ.
-var NM_KHOA = [
-  'Nhóm này hình gì — mạnh chiều nào, hụt chiều nào',
-  'Từng người: giao việc kiểu nào thì họ chạy, nói câu gì',
-  'Cặp nào nên tách, cặp nào nên ghép, ở việc gì',
-  'Ai đang phải gánh phần nhóm còn thiếu',
-  'Ba việc làm được tuần này',
-];
-
+// A — bấm nút có Lượng là CHẠY THẬT ngay; thiếu/không đủ Lượng thì
+// `requireCredits` tự bật popup (đăng nhập · nạp thêm).
 async function analyze() {
   showError('');
   var ids = Object.keys(_chon);
@@ -431,47 +416,7 @@ async function analyze() {
 
   _currentSlug = TuviPaywall.generateToolSlug('nhan-mach-' + nguoi.length + '-' + ids.join('').slice(0, 24));
 
-  _openPanel();
-  _loadingCtl = AiLoadingSteps.mount('loadingSteps', NM_STEPS.slice(0, 2));
-  _loadingCtl.start();
-  // Sổ 2-8 người thì form dễ dài hơn màn hình — cuộn lên ngay để thấy có gì
-  // vừa chạy, không đứng im.
-  AiLoadingSteps.scrollToResult('loading');
-  var prev;
-  try {
-    var r = await fetch('/api/nhan-mach?preview=1', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(_lastPayload),
-    });
-    prev = await r.json();
-    if (!r.ok || !prev.success) throw new Error(prev.error || 'Lỗi ' + r.status);
-  } catch (e) {
-    _loadingCtl && _loadingCtl.stop();
-    _closePanel();
-    showError('Lỗi: ' + (e.message || 'Không thể kết nối. Vui lòng thử lại.'));
-    return;
-  }
-  _loadingCtl && _loadingCtl.finish();
-  document.getElementById('loading').style.display = 'none';
-  document.getElementById('card').style.display = 'block';
-  document.getElementById('btnEdit').style.display = '';
-  renderMeta(prev);
-  // D1 — bậc "đã tính thử" của phễu theo tool. Bắn ở ĐÂY chứ không ở lúc bấm
-  // nút: bấm rồi mà lá số hỏng thì không có gì để xem, tính vào phễu là thổi
-  // mẫu số lên rồi tỉ lệ mở nhìn tệ hơn thực tế.
-  try { if (window.Track) window.Track.event('preview_shown', { tool_id: 'nhan-mach' }); } catch (e) { /* đo hỏng không chặn gì */ }
-  if (window.SHELL_INTRO) Shell.dismissIntro(window.SHELL_INTRO.key);
-
-  document.getElementById('lockBlock').style.display = 'block';
-  await TuviPaywall.lockPreview({
-    host: document.getElementById('lockHost'),
-    title: '⊙ Còn phần luận chưa mở',
-    items: NM_KHOA,
-    cta: 'Mở bản đọc đầy đủ',
-    slug: function () { return _currentSlug; },
-    onUnlock: function () { return _doGenerate(); },
-  });
+  await TuviPaywall.requireCredits(_currentSlug, function () { return _doGenerate(); });
 }
 
 function _openPanel() {
@@ -480,7 +425,7 @@ function _openPanel() {
   document.getElementById('loading').style.display = 'block';
   document.getElementById('card').style.display = 'none';
   ['gapBlock', 'peopleBlock', 'capCoSoBlock', 'capBlock', 'orderBlock', 'todoBlock',
-   'withBlock', 'endBlock', 'lockBlock'].forEach(function (id) {
+   'withBlock', 'endBlock'].forEach(function (id) {
     document.getElementById(id).style.display = 'none';
   });
   document.getElementById('tongQuan').style.display = 'none';
@@ -494,12 +439,11 @@ function _closePanel() {
 }
 
 async function _doGenerate() {
-  document.getElementById('lockBlock').style.display = 'none';
-  TuviPaywall._closeLock();
-  _loadingCtl = AiLoadingSteps.mount('loadingSteps', NM_STEPS.slice(2));
-  document.getElementById('loading').style.display = 'block';
+  _openPanel();
+  _loadingCtl = AiLoadingSteps.mount('loadingSteps', NM_STEPS);
   _loadingCtl.start();
-  // Mở khóa xong nằm sâu dưới phần preview — cuộn lại lên chỗ đang chạy.
+  // Sổ 2-8 người thì form dễ dài hơn màn hình — cuộn lên ngay để thấy có gì
+  // vừa chạy, không đứng im.
   AiLoadingSteps.scrollToResult('loading');
 
   var token = window.Auth?.getSession()?.access_token || '';
@@ -555,12 +499,9 @@ async function _doGenerate() {
       ].filter(Boolean).join('\n'),
     });
   } catch (e) {
-    // Giữ nguyên phần tính thử đang hiện — quẳng người ta về form trống là xoá
-    // luôn thứ họ vừa xem (và có thể vừa trả tiền cho phần sau).
     _loadingCtl && _loadingCtl.stop();
-    document.getElementById('loading').style.display = 'none';
-    document.getElementById('lockBlock').style.display = 'block';
-    TuviPaywall._banner('Chưa mở được phần luận: ' + (e.message || 'lỗi kết nối') + '. Bạn thử lại giúp.');
+    _closePanel();
+    showError('Lỗi: ' + (e.message || 'Không thể kết nối. Vui lòng thử lại.'));
   }
 }
 

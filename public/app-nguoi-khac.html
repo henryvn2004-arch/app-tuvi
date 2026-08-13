@@ -194,15 +194,6 @@
           </div>
         </div>
 
-        <!-- W1 — tường "đã tính thử". Phần trên đã chạy THẬT và miễn phí; tấm
-             khoá này chỉ đứng trên phần chữ. `data-tvp-lock` để lượt từ chối
-             (thiếu Lượng) của paywall cũng rơi đúng vào đây thay vì nhảy lên
-             cạnh nút chạy tool ở màn hình trước. -->
-        <div class="res-block" id="lockBlock" style="display:none">
-          <div class="res-block-header"><span class="res-block-title">Phần Luận Chưa Mở</span></div>
-          <div class="res-block-body" id="lockHost" data-tvp-lock style="padding-top:6px"></div>
-        </div>
-
         <div class="res-block" style="background:#FBF3DE;border-color:#e8d9b0">
           <div class="res-block-body" style="font-size:12.5px;line-height:1.68;color:#5a5145">
             💡 Bản cẩm nang này phác hoạ từ các dữ liệu trong lá số Tử Vi, kết hợp kinh nghiệm nghiên cứu của tiền nhân để lại. Mang tính tham khảo.<br><br>
@@ -317,16 +308,8 @@ function _cacheQuery(b, self, qh) {
 //
 // Trước đây bấm nút là gặp paywall ngay — tức phải trả tiền mới biết tool có
 // đúng không. Nay: chạy tầng deterministic (0 lượt LLM, 0đ), bày kiểu người +
-// 5 mặt đọc + đại vận + vận năm, rồi mới dựng tường trên đúng phần chữ.
-var NK_KHOA = [
-  'Con người này vận hành thế nào',
-  'Điều họ coi trọng · điều làm họ khó chịu',
-  'Nên nói gì — 3 việc kèm câu nói thật',
-  'Tránh nói gì — 3 việc kèm câu nói thật',
-  'Lúc nào nên đưa việc lớn tới',
-  'Một câu chốt',
-];
-
+// A — bấm nút có Lượng là CHẠY THẬT ngay; thiếu/không đủ Lượng thì
+// `requireCredits` tự bật popup (đăng nhập · nạp thêm).
 async function analyze() {
   showError('');
   var b = _birthOf('');
@@ -336,41 +319,7 @@ async function analyze() {
   _last = b; _lastSelf = self;
   _currentSlug = TuviPaywall.generateToolSlug('nguoi-khac-' + qh + '-' + b.day + b.month + b.year);
 
-  _openPanel();
-  _loadingCtl = AiLoadingSteps.mount('loadingSteps', NK_STEPS.slice(0, 2));
-  _loadingCtl.start();
-  // Form dài (thêm lá số của bạn) thì bấm nút xong khung loading nằm ngoài
-  // khung nhìn — cuộn lên ngay để thấy có gì vừa chạy, không đứng im.
-  AiLoadingSteps.scrollToResult('loading');
-  var prev;
-  try {
-    var r = await fetch('/api/nguoi-khac?preview=1', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        birth: b, birthSelf: self || undefined, name: b.name || '', quanHe: qh,
-      }),
-    });
-    prev = await r.json();
-    if (!r.ok || !prev.success) throw new Error(prev.error || 'Lỗi ' + r.status);
-  } catch (e) {
-    _loadingCtl && _loadingCtl.stop();
-    _closePanel();
-    showError('Lỗi: ' + (e.message || 'Không thể kết nối. Vui lòng thử lại.'));
-    return;
-  }
-  _loadingCtl && _loadingCtl.finish();
-  document.getElementById('loading').style.display = 'none';
-  document.getElementById('card').style.display = 'block';
-  document.getElementById('btnEdit').style.display = '';
-  renderMeta(prev);
-  // D1 — bậc "đã tính thử" của phễu theo tool. Bắn ở ĐÂY chứ không ở lúc bấm
-  // nút: bấm rồi mà lá số hỏng thì không có gì để xem, tính vào phễu là thổi
-  // mẫu số lên rồi tỉ lệ mở nhìn tệ hơn thực tế.
-  try { if (window.Track) window.Track.event('preview_shown', { tool_id: 'nguoi-khac' }); } catch (e) { /* đo hỏng không chặn gì */ }
-  if (window.SHELL_INTRO) Shell.dismissIntro(window.SHELL_INTRO.key);
-
-  // Đã trả tiền cho đúng lá số này từ trước → mở thẳng, không dựng tường.
+  // Đã trả tiền cho đúng lá số này từ trước → mở thẳng, không trừ lại.
   var free = false;
   try { free = await TuviPaywall.isFreeRerun('/api/nguoi-khac', _cacheQuery(b, self, qh)); } catch (e) { free = false; }
   if (free) {
@@ -378,15 +327,7 @@ async function analyze() {
     await _doGenerate(true, qh);
     return;
   }
-  document.getElementById('lockBlock').style.display = 'block';
-  await TuviPaywall.lockPreview({
-    host: document.getElementById('lockHost'),
-    title: '⊙ Còn phần luận chưa mở',
-    items: NK_KHOA,
-    cta: 'Mở bản cẩm nang đầy đủ',
-    slug: function () { return _currentSlug; },
-    onUnlock: function () { return _doGenerate(false, qh); },
-  });
+  await TuviPaywall.requireCredits(_currentSlug, function () { return _doGenerate(false, qh); });
 }
 
 function _openPanel() {
@@ -394,7 +335,7 @@ function _openPanel() {
   document.getElementById('resPanel').style.display = 'block';
   document.getElementById('loading').style.display = 'block';
   document.getElementById('card').style.display = 'none';
-  ['sayBlock', 'timeBlock', 'withBlock', 'endBlock', 'basisBlock', 'lockBlock'].forEach(function (id) {
+  ['sayBlock', 'timeBlock', 'withBlock', 'endBlock', 'basisBlock'].forEach(function (id) {
     document.getElementById(id).style.display = 'none';
   });
   document.getElementById('proseTop').style.display = 'none';
@@ -407,12 +348,11 @@ function _closePanel() {
 }
 
 async function _doGenerate(freeRerun, qh) {
-  document.getElementById('lockBlock').style.display = 'none';
-  TuviPaywall._closeLock();
-  _loadingCtl = AiLoadingSteps.mount('loadingSteps', NK_STEPS.slice(2));
-  document.getElementById('loading').style.display = 'block';
+  _openPanel();
+  _loadingCtl = AiLoadingSteps.mount('loadingSteps', NK_STEPS);
   _loadingCtl.start();
-  // Mở khóa xong nằm sâu dưới phần preview — cuộn lại lên chỗ đang chạy.
+  // Form dài (thêm lá số của bạn) thì bấm nút xong khung loading nằm ngoài
+  // khung nhìn — cuộn lên ngay để thấy có gì vừa chạy, không đứng im.
   AiLoadingSteps.scrollToResult('loading');
 
   var token = window.Auth?.getSession()?.access_token || '';
@@ -433,9 +373,8 @@ async function _doGenerate(freeRerun, qh) {
     // paywall thay vì ném một lỗi khó hiểu.
     if (res.status === 402 && freeRerun) {
       _loadingCtl && _loadingCtl.stop();
-      document.getElementById('loading').style.display = 'none';
-      document.getElementById('lockBlock').style.display = 'block';
-      await TuviPaywall.requireCredits(_currentSlug, async function () { await _doGenerate(false, qh); });
+      _closePanel();
+      await TuviPaywall.requireCredits(_currentSlug, function () { return _doGenerate(false, qh); });
       return;
     }
     if (!res.ok || !data.success) throw new Error(data.error || 'Lỗi ' + res.status);
@@ -486,13 +425,9 @@ async function _doGenerate(freeRerun, qh) {
       ].filter(Boolean).join('\n'),
     });
   } catch (e) {
-    // 🔑 KHÔNG đóng cả bảng như bản trước. Người dùng đang nhìn phần tính thử
-    // (thứ họ vừa xem xong và có thể vừa trả tiền cho phần sau) — quẳng họ về
-    // form trống là xoá luôn cái đó. Giữ nguyên màn hình, dựng lại tường.
     _loadingCtl && _loadingCtl.stop();
-    document.getElementById('loading').style.display = 'none';
-    document.getElementById('lockBlock').style.display = 'block';
-    TuviPaywall._banner('Chưa mở được phần luận: ' + (e.message || 'lỗi kết nối') + '. Bạn thử lại giúp.');
+    _closePanel();
+    showError('Lỗi: ' + (e.message || 'Không thể kết nối. Vui lòng thử lại.'));
   }
 }
 
