@@ -151,7 +151,20 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
 .tpw-prev-list li{position:relative;padding-left:17px}
 .tpw-prev-list li::before{content:'⊙';position:absolute;left:0;color:#C9A84C;font-size:11px}
 .tpw-prev .tpw-btn{min-width:240px;padding-left:26px;padding-right:26px}
-@media(max-width:520px){.tpw-prev .tpw-btn{min-width:0;width:100%}}`;
+@media(max-width:520px){.tpw-prev .tpw-btn{min-width:0;width:100%}}
+/* ── Khoá NHỎ trong TỪNG PHẦN (tool nhiều mục: luận giải/bát tự/xem tuổi) ──
+   Khác lockPreview (một bức tường đứng MỘT chỗ, dễ bị cuộn qua khỏi màn
+   hình) — đây là một dòng gọn, lặp lại ở MỖI phần đang khoá, đứng cạnh đúng
+   khối chữ AI còn trống. Cùng ngôn ngữ "xác nhận" navy+vàng với .tpw-btn.ok,
+   cố ý KHÁC màu với .ask (viền vàng đứt, nền nhạt) của nút "Hỏi trợ lý" cạnh
+   nó — hai nút đứng sát nhau mà cùng màu thì không ai phân biệt được đâu là
+   miễn phí, đâu là trả tiền. */
+.tpw-seclock{display:none;align-items:center;gap:9px;margin-top:11px;padding:9px 13px;border-radius:8px;background:#061A2E;color:#F3E7C6;cursor:pointer;font-size:12.5px;line-height:1.4;transition:background .15s}
+.tpw-seclock:hover{background:#0D3B5E}
+.tpw-seclock-i{flex:0 0 auto;color:#C9A84C;font-size:13px}
+.tpw-seclock-t{flex:1;min-width:0}
+.tpw-seclock-p{flex:0 0 auto;font-weight:700;color:#C9A84C;white-space:nowrap}
+@media(max-width:480px){.tpw-seclock{flex-wrap:wrap}.tpw-seclock-p{width:100%;text-align:right}}`;
     document.head.appendChild(s);
   }
 
@@ -432,6 +445,56 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
       });
     }
     return true;
+  }
+
+  // ── Khoá theo TỪNG PHẦN — dùng cho tool nhiều mục (luận giải/bát tự/xem
+  // tuổi): mỗi phần free đã tính sẵn thường CÒN kèm một đoạn luận riêng do AI
+  // viết, nhưng đoạn đó nằm ẩn sau ĐÚNG MỘT banner mở khoá ở đầu trang. Cuộn
+  // qua khỏi banner là quên mất có phần trả tiền — người dùng chỉ còn thấy nút
+  // "Hỏi trợ lý" (rail, miễn phí) cạnh đó nên bấm nhầm sang đó.
+  //
+  // `sectionLockHtml` trả một khối NHỎ (một dòng, cỡ ngang nút `.ask` cạnh nó)
+  // để nhét vào MỖI phần đang khoá — không phải một bức tường như `lockPreview`.
+  // Mặc định `display:none`: trang tự biết lúc nào phần đó ĐÃ khoá (sau khi
+  // gọi API kiểm tra quyền truy cập) rồi mới bật hiện, tránh loé chữ "chưa mở"
+  // rồi biến mất ngay nếu hoá ra đã có cache.
+  function sectionLockHtml(o) {
+    o = o || {};
+    const id = o.id ? ' id="' + _esc(o.id) + '"' : '';
+    const label = o.label || 'AI luận sâu phần này';
+    const cta = o.cta || 'Mở bản đầy đủ';
+    const product = _esc(o.product || (_cfg && _cfg.product) || '');
+    return '<div class="tpw-seclock"' + id + ' data-tpw-seclock role="button" tabindex="0">' +
+      '<span class="tpw-seclock-i" aria-hidden="true">✦</span>' +
+      '<span class="tpw-seclock-t">' + _esc(label) + '</span>' +
+      '<span class="tpw-seclock-p">' + _esc(cta) +
+        (product ? ' · <span data-tvp-price="' + product + '">…</span> Lượng' : '') + ' →</span>' +
+    '</div>';
+  }
+
+  // Gắn ĐÚNG MỘT listener uỷ quyền cho mọi `[data-tpw-seclock]` trong `root`,
+  // kể cả phần chèn thêm SAU (ví dụ lúc mở khoá và render nốt các phần còn
+  // lại) — không phải tìm-và-gắn-tay từng khối mỗi lần `innerHTML` đổi.
+  // Gọi lại nhiều lần an toàn (trang có thể tính lại toàn bộ kết quả khi sửa
+  // ngày sinh) nhờ cờ `_tpwSecWired` neo vào chính `root`.
+  function wireSectionLocks(root, onUnlock) {
+    if (!root || root._tpwSecWired) return;
+    root._tpwSecWired = true;
+    const trigger = (e) => {
+      const box = e.target.closest('[data-tpw-seclock]');
+      if (!box || !root.contains(box)) return;
+      if (e.type === 'keydown' && e.key !== 'Enter' && e.key !== ' ') return;
+      if (e.type === 'keydown') e.preventDefault();
+      // Cùng bậc "bấm mở" của phễu theo tool như `lockPreview` — chỉ khác
+      // nguồn (`from:'section'`) để tách đếm được xem người ta bấm mở từ
+      // banner đầu trang hay từ chính trong lòng một phần.
+      try {
+        if (window.Track) window.Track.event('unlock_click', { tool_id: (_cfg && _cfg.product) || '', meta: { from: 'section' } });
+      } catch (err) { /* đo hỏng không được chặn lượt mua */ }
+      onUnlock();
+    };
+    root.addEventListener('click', trigger);
+    root.addEventListener('keydown', trigger);
   }
 
   // Chuỗi onclick dùng chung cho mọi nút nạp — trước đây chép tay ở 2 chỗ và
@@ -775,6 +838,7 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
     init, requireCredits, requireCreditsCached, requireCreditsCachedQuery,
     generateToolSlug, ensureCredits, deductSilent, getBalance, fillPriceSlots,
     mountCostHints, refreshCostHints, lockPreview, isFreeRerun,
+    sectionLockHtml, wireSectionLocks,
     _banner, _close, _closeLock, _login,
   };
 })();
