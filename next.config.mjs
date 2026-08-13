@@ -23,6 +23,8 @@ const nextConfig = {
       { source: '/app/thanh-tuong',     destination: '/app-thanh-tuong.html' },
       { source: '/app/thanh-tuong-pro', destination: '/app-thanh-tuong-pro.html' },
       { source: '/app/phong-thuy',      destination: '/app-phong-thuy.html'  },
+      { source: '/app/ban-lam-viec',    destination: '/app-ban-lam-viec.html' },
+      { source: '/app/cua-hang-phong-thuy', destination: '/app-cua-hang-phong-thuy.html' },
       { source: '/app/bat-trach',       destination: '/app-bat-trach.html'   },
       { source: '/app/nap-am',          destination: '/app-nap-am.html'      },
       { source: '/app/than-so-hoc',     destination: '/app-than-so-hoc.html' },
