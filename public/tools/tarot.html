@@ -641,5 +641,12 @@ function renderMeanings() {
 <script src="/testimonials.js"></script>
 <script src="/related-tools.js?v=2"></script>
 <script src="/nav.js?v=20" defer></script>
+<script src="/tool-sources.js?v=1"></script>
+<script>
+  if (window.ToolSources) {
+    ToolSources.mountIntroAfterH1('tarot');
+    ToolSources.watchResults('tarot', '#result-section');
+  }
+</script>
 </body>
 </html>

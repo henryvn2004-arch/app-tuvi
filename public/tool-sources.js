@@ -81,7 +81,29 @@
     'thanh-tuong-pro': [{ kind: 'co-phap', name: 'Ma Y Thần Tướng, Ngũ Âm tướng pháp' }],
     'thu-tuong': [{ kind: 'co-phap', name: 'Chỉ Tướng học phương Đông' }],
     // ── Phong thủy ──
-    'phong-thuy': [{ kind: 'co-phap', name: 'Bát Trạch Minh Kính' }, TVMB]
+    'phong-thuy': [{ kind: 'co-phap', name: 'Bát Trạch Minh Kính' }, TVMB],
+    'ban-lam-viec': [{ kind: 'co-phap', name: 'Bát Trạch Minh Kính' }, TVMB],
+    'cua-hang-phong-thuy': [{ kind: 'co-phap', name: 'Bát Trạch Minh Kính, Loan Đầu' }, TVMB],
+    'phong-thuy-render': [{ kind: 'co-phap', name: 'Bát Trạch Minh Kính' }, TVMB],
+
+    // ── Bói bài (trang standalone, không có trong shell) ──
+    'tarot': [{ kind: 'co-phap', name: 'Cấu trúc Tarot 78 lá (Major &amp; Minor Arcana)' }, TVMB],
+    'oracle': [{ kind: 'co-phap', name: 'Âm Dương, Ngũ Hành, Bát Quái' }, TVMB],
+    'boi-bai-tay': [{ kind: 'co-phap', name: 'Bói bài Tây truyền thống (bộ 52 lá)' }, TVMB],
+
+    // ── Phong Cách AI / Làm Đẹp (trang standalone) — lấy đúng tên hệ thống
+    // từ system prompt thật trong app/api/tuong-mat/route.js, KHÔNG suy diễn.
+    // Mỗi trang phân-tích + tryon dùng CHUNG một khối kết quả trên trang nên
+    // đăng ký theo id "phân tích" (đại diện chung cho cả trang).
+    'da-lieu-ai': [{ kind: 'co-phap', name: 'Đông Tây y kết hợp tướng học da mặt phương Đông' }],
+    'kieu-toc-phan-tich': [{ kind: 'co-phap', name: 'Nhân tướng học phương Đông (hình tướng Ngũ Hành)' }],
+    'trang-diem-phan-tich': [{ kind: 'co-phap', name: 'Nhân tướng học phương Đông, Nạp Âm Ngũ Hành' }],
+    'personal-color': [{ kind: 'co-phap', name: 'Personal Color (phân tích màu sắc cá nhân)' }],
+    'mau-sac-hop-menh': [{ kind: 'co-phap', name: 'Ngũ Hành Nạp Âm, Bát Trạch' }],
+    'trang-phuc-theo-ngay': [{ kind: 'co-phap', name: 'Ngũ Hành Nạp Âm, Bát Trạch' }],
+
+    // ── Xem tướng (trang standalone) ──
+    'khi-sac': [MA_LIEU_THUY]
   };
 
   // Gộp mọi entry 'co-phap' của MỘT tool thành MỘT câu ("Theo A, B và C."),
@@ -143,5 +165,53 @@
       '</div>';
   }
 
-  window.ToolSources = { REG: REG, line: line, introHtml: introHtml, noteHtml: noteHtml };
+  // ── Dành cho trang STANDALONE (public/tools/*.html) — không có shell.js,
+  // nên tự quan sát DOM lấy cảm hứng từ CHÍNH cơ chế `watchWsResult` của
+  // shell.js (bám selector kết quả, debounce MutationObserver, ngưỡng độ dài
+  // chữ) nhưng KHÔNG phụ thuộc `ACTIVE`/`wsResultHost` — mỗi trang tự gọi 1
+  // lần, truyền thẳng tool_id (khoá THẬT của `tool_pricing`, không có drift
+  // hệ tên như bên shell vì các trang này không có mặt trong shell).
+  //
+  // Trang phân-tích + tryon dùng CHUNG một khối kết quả (đã kiểm: kieu-toc-ai,
+  // personal-color, trang-diem-ai, trang-phuc-theo-ngay đều chỉ có 1 wrapper
+  // kết quả cho cả 2 tính năng) nên chỉ cần gọi 1 lần với id "phân tích".
+  function watchResults(id, selector) {
+    if (!line(id)) return; // tool chưa có trong sổ → im lặng
+    var host = document.querySelector(selector);
+    if (!host) return;
+    var appended = false, obs = null, timer = null;
+    function shownEl(el) { return !!(el && (el.offsetWidth || el.offsetHeight || el.getClientRects().length)); }
+    function attempt() {
+      if (appended || !shownEl(host)) return;
+      var text = (host.textContent || '').replace(/\s+/g, ' ').trim();
+      if (text.length < 60) return; // ngưỡng y hệt shell.js — khung mới có tiêu đề/spinner thì chưa nói
+      appended = true;
+      host.insertAdjacentHTML('beforeend', noteHtml(id));
+      if (obs) obs.disconnect();
+    }
+    if (typeof MutationObserver !== 'undefined') {
+      obs = new MutationObserver(function () { clearTimeout(timer); timer = setTimeout(attempt, 220); });
+      obs.observe(document.body, { subtree: true, childList: true, attributes: true, attributeFilter: ['style', 'class'] });
+    }
+    attempt();
+  }
+
+  // Dòng nguồn NGẮN ngay dưới <h1> — vị trí "phần giới thiệu" chung cho mọi
+  // trang standalone (khác shell, các trang này không có #introHost dùng
+  // chung). <h1> là mốc duy nhất ổn định trên MỌI trang (luật SEO sẵn có:
+  // mỗi trang đúng một <h1>).
+  function mountIntroAfterH1(id) {
+    var l = line(id);
+    if (!l) return;
+    var h1 = document.querySelector('h1');
+    if (!h1 || !h1.parentNode) return;
+    var el = document.createElement('div');
+    el.innerHTML = introHtml(id);
+    h1.parentNode.insertBefore(el.firstChild, h1.nextSibling);
+  }
+
+  window.ToolSources = {
+    REG: REG, line: line, introHtml: introHtml, noteHtml: noteHtml,
+    watchResults: watchResults, mountIntroAfterH1: mountIntroAfterH1
+  };
 })();

@@ -756,5 +756,12 @@ async function downloadTryon() {
   </div>
 </section>
 <script src="/nav.js?v=20" defer></script>
+<script src="/tool-sources.js?v=1"></script>
+<script>
+  if (window.ToolSources) {
+    ToolSources.mountIntroAfterH1('personal-color');
+    ToolSources.watchResults('personal-color', '#results');
+  }
+</script>
 </body>
 </html>
