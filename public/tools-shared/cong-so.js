@@ -338,12 +338,16 @@
   }
 
   // ── Render HTML kết quả ────────────────────────────────────
-  function bangHTML(ho) {
+  //
+  // Tách HEAD (kiểu người — tên + tư tưởng + một câu) khỏi BODY (mọi thứ còn
+  // lại: 6 thẻ · mạnh/yếu · ngành nghề · radar 12 mặt · lộ trình 4 chặng ·
+  // ghép đội · cơ sở). Khách CHƯA đăng ký chỉ được xem HEAD — đó là "phần đầu"
+  // đủ để thấy tool ĐÚNG là đang đọc lá số của họ, còn BODY gộp vào cùng tấm
+  // khoá với tầng nhánh trả tiền (`dungTuong` bên `app-cong-so.html`).
+  function headHTML(ho) {
     var mau = KIEU_MAU[ho.kieu.id];
     var k = ho.kieu;
-    var h = [];
-
-    h.push(
+    return (
       '<div class="cs-head" style="border-left:4px solid ' + mau + '">' +
         '<div class="cs-kieu" style="color:' + mau + '">' + esc(k.ten) + '</div>' +
         '<div class="cs-tt">' + esc(k.tuTuong) + ' · ' + esc(k.saoNhom.join(' · ')) + '</div>' +
@@ -355,6 +359,12 @@
           : '') +
         '</div>'
     );
+  }
+
+  function bodyHTML(ho) {
+    var mau = KIEU_MAU[ho.kieu.id];
+    var k = ho.kieu;
+    var h = [];
 
     h.push(
       '<div class="cs-grid">' +
@@ -514,6 +524,11 @@
     return h.join('');
   }
 
+  /** Bản gộp — dùng khi KHÔNG cần tách head/body (vd người đã đăng nhập). */
+  function bangHTML(ho) {
+    return headHTML(ho) + bodyHTML(ho);
+  }
+
   function card(t, body) {
     return '<div class="cs-card"><b>' + t + '</b><div>' + body + '</div></div>';
   }
@@ -644,6 +659,8 @@
   window.CongSoTool = {
     lap: lap,
     moNhanh: moNhanh,
+    headHTML: headHTML,
+    bodyHTML: bodyHTML,
     bangHTML: bangHTML,
     nhanhHTML: nhanhHTML,
     veToaDoCanvas: veToaDoCanvas,

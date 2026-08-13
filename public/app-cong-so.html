@@ -195,11 +195,16 @@ function doCongSo(){
     if(!j){_err('Chưa dựng được hồ sơ lúc này — vui lòng thử lại.');return;}
     _ho=j.hoSo;_birth=fd;
     var ten=fd.hoten||'Hồ sơ';
+    var loggedIn=window.Auth&&Auth.isLoggedIn&&Auth.isLoggedIn();
     document.getElementById('resTitle').textContent=ten+' · kiểu '+_ho.kieu.ten;
-    document.getElementById('ketQua').innerHTML=CongSoTool.bangHTML(_ho);
+    // Chưa đăng nhập → chỉ dựng HEAD (kiểu người). Phần còn lại (6 thẻ · radar
+    // 12 mặt · lộ trình · ghép đội · cơ sở) gộp vào tấm khoá cùng tầng nhánh —
+    // xem `dungTuong()`. Đã đăng nhập → dựng trọn, như cũ (tool free, 0 Lượng).
+    document.getElementById('ketQua').innerHTML = loggedIn ? CongSoTool.bangHTML(_ho) : CongSoTool.headHTML(_ho);
     document.getElementById('birthPanel').style.display='none';
     document.getElementById('resPanel').style.display='block';
     document.getElementById('btnEdit').style.display='';
+    document.getElementById('taiBtn').style.display=loggedIn?'':'none';
     // Tool free chạy gần như tức thì (không cần orb/loading — luật đã ghi ở
     // ai-loading-steps.js) nhưng nếu form nằm dưới cuối màn hình thì kết quả
     // vẫn hiện NGOÀI khung nhìn. Cuộn lên để thấy nó vừa dựng xong.
@@ -208,26 +213,41 @@ function doCongSo(){
     Shell.rememberBirth(fd);
     if(window.SHELL_INTRO)Shell.dismissIntro(window.SHELL_INTRO.key);
 
-    // ⚠️ payload rail phải PHẲNG — `extractGenericContext` bỏ IM LẶNG mọi giá
-    // trị là object. `j.rail` đã được server dẹp phẳng sẵn.
-    Shell.setContext({
-      birth:{day:fd.ngay,month:fd.thang,year:fd.nam,hourBranch:fd.gioIdx,gender:fd.gioitinh,name:fd.hoten||undefined},
-      scenario:{type:'cong-so',data:j.rail},
-      label:'Tử Vi Công Sở · '+ten+' · '+_ho.kieu.ten,
-      greeting:'Hồ sơ công sở đã dựng xong — bạn nghiêng về kiểu **'+_ho.kieu.ten+'** ('+_ho.kieu.tuTuong.split('(')[0].trim()+'). '+
-        'Mạnh nhất đang là **'+manhNhat()+'**. Bạn muốn tôi đi sâu phần nào?',
-      chips:['Trong mấy ngành đó tôi nên chọn ngành nào?','Tôi nên tránh môi trường nào?','Mười hai tháng tới nên làm gì?','Tôi hợp làm việc với kiểu người nào?','Chặng nghề tiếp theo của tôi ra sao?']
-    });
-    Shell.setShareable({
-      kind:'text',toolId:'cong-so',
-      title:'Tử Vi Công Sở — kiểu '+_ho.kieu.ten,
-      text:['Kiểu người ở chỗ làm: '+_ho.kieu.ten+' ('+_ho.kieu.tuTuong+')',
-        _ho.kieu.motCau,
-        'Mạnh nhất: '+manhNhat(),
-        'Chặng đang đi: '+(( _ho.loTrinh.filter(function(n){return n.dangChay;})[0]||{}).nac||'—'),
-        'Nên ghép đội với kiểu: '+((_ho.doi[0]||{}).kieuTen||'—')
-      ].join('\n')
-    });
+    if(loggedIn){
+      // ⚠️ payload rail phải PHẲNG — `extractGenericContext` bỏ IM LẶNG mọi giá
+      // trị là object. `j.rail` đã được server dẹp phẳng sẵn.
+      Shell.setContext({
+        birth:{day:fd.ngay,month:fd.thang,year:fd.nam,hourBranch:fd.gioIdx,gender:fd.gioitinh,name:fd.hoten||undefined},
+        scenario:{type:'cong-so',data:j.rail},
+        label:'Tử Vi Công Sở · '+ten+' · '+_ho.kieu.ten,
+        greeting:'Hồ sơ công sở đã dựng xong — bạn nghiêng về kiểu **'+_ho.kieu.ten+'** ('+_ho.kieu.tuTuong.split('(')[0].trim()+'). '+
+          'Mạnh nhất đang là **'+manhNhat()+'**. Bạn muốn tôi đi sâu phần nào?',
+        chips:['Trong mấy ngành đó tôi nên chọn ngành nào?','Tôi nên tránh môi trường nào?','Mười hai tháng tới nên làm gì?','Tôi hợp làm việc với kiểu người nào?','Chặng nghề tiếp theo của tôi ra sao?']
+      });
+      Shell.setShareable({
+        kind:'text',toolId:'cong-so',
+        title:'Tử Vi Công Sở — kiểu '+_ho.kieu.ten,
+        text:['Kiểu người ở chỗ làm: '+_ho.kieu.ten+' ('+_ho.kieu.tuTuong+')',
+          _ho.kieu.motCau,
+          'Mạnh nhất: '+manhNhat(),
+          'Chặng đang đi: '+(( _ho.loTrinh.filter(function(n){return n.dangChay;})[0]||{}).nac||'—'),
+          'Nên ghép đội với kiểu: '+((_ho.doi[0]||{}).kieuTen||'—')
+        ].join('\n')
+      });
+    }else{
+      // Chưa đăng nhập: rail/link chia sẻ KHÔNG được rò dữ liệu nằm sau tấm
+      // khoá (radar · lộ trình · ghép đội · nhánh) — cho rail biết trọn `j.rail`
+      // thì hỏi một câu là lộ hết, tấm khoá trên màn hình thành vô nghĩa.
+      Shell.setContext({
+        birth:{day:fd.ngay,month:fd.thang,year:fd.nam,hourBranch:fd.gioIdx,gender:fd.gioitinh,name:fd.hoten||undefined},
+        scenario:{type:'cong-so',data:{kieu:_ho.kieu.ten,tuTuong:_ho.kieu.tuTuong,motCau:_ho.kieu.motCau,daDangKy:false}},
+        label:'Tử Vi Công Sở · '+ten+' · '+_ho.kieu.ten,
+        greeting:'Bạn nghiêng về kiểu **'+_ho.kieu.ten+'** ('+_ho.kieu.tuTuong.split('(')[0].trim()+'). '+
+          'Đăng ký tài khoản (được tặng Lượng miễn phí) để xem đủ 12 mặt, lộ trình 4 chặng và ghép đội — tôi sẽ đi sâu được sau khi bạn mở phần đó.',
+        chips:['Kiểu người này là gì?','Vì sao lá số lại ra kiểu này?']
+      });
+      Shell.setShareable(null);
+    }
     document.querySelectorAll('#resPanel [data-ask]').forEach(function(el){el.addEventListener('click',function(){Shell.ask(el.getAttribute('data-ask'));});});
     dungTuong();
   });
@@ -239,16 +259,27 @@ function doCongSo(){
 // ai. Đúng thiết kế của paywall (thà không dựng còn hơn dựng với giá bịa).
 TuviPaywall.init({product:'cong-so',slug:function(){return _slug;}});
 var _slug='';
+// Danh sách hiện cho người ĐÃ ĐĂNG NHẬP nhưng chưa mở nhánh — họ đã thấy trọn
+// phần thân (radar/lộ trình/ghép đội), nên chỉ liệt kê đúng phần nhánh.
 var NHANH_KHOA=[
   'Ba nhánh nghề cụ thể bên trong lĩnh vực của bạn',
   'Việc làm được ngay ở từng nhánh, theo bối cảnh Việt Nam',
   'Vì sao lá số hợp nhánh đó — nêu đích danh chất người',
   'Chất người nổi bật và thứ nghề hợp với bạn KHÔNG đòi hỏi'
 ];
+// Danh sách cho khách CHƯA ĐĂNG KÝ — họ mới chỉ thấy HEAD (kiểu người), nên
+// tấm khoá phải liệt kê ĐỦ cả phần THÂN (vốn free) lẫn phần NHÁNH (trả phí).
+var HO_SO_KHOA_ANON=[
+  'Mười hai mặt của đời đi làm — điểm + lý do từng mặt',
+  'Bốn mươi năm đi làm, chia bốn chặng',
+  'Bạn hợp làm ngành gì — lĩnh vực · vai trò · quy mô',
+  'Ghép đội — ai đỡ được bạn'
+].concat(NHANH_KHOA);
 
 // Đã đăng nhập → KHÔNG dựng tường xem trước nữa: một nút bấm gate (trừ Lượng)
 // rồi mở thẳng — đúng luồng #512 đã áp cho 6 tool kia. Chưa đăng nhập → giữ
-// tấm khoá mờ làm CTA đăng ký (visitor chưa có ví để mà trừ).
+// tấm khoá mờ làm CTA đăng ký (visitor chưa có ví để mà trừ), và tấm khoá đó
+// che LUÔN cả phần thân vốn free — chỉ HEAD là còn hiện ngoài tường.
 function dungTuong(){
   document.getElementById('nhanhHost').innerHTML='';
   // ⚠️ slug PHẢI bắt đầu bằng ĐÚNG tool_id `cong-so`, được dài hơn, cấm ngắn
@@ -256,7 +287,8 @@ function dungTuong(){
   // lưới đỡ "đã trả tiền mà vẫn ăn 402" chết im lặng (bài học Duyên Nợ).
   _slug=TuviPaywall.generateToolSlug('cong-so-'+_birth.ngay+_birth.thang+_birth.nam+'-'+_birth.gioIdx+_birth.gioitinh);
   const host=document.getElementById('lockHost');
-  if(window.Auth&&Auth.isLoggedIn&&Auth.isLoggedIn()){
+  const loggedIn=window.Auth&&Auth.isLoggedIn&&Auth.isLoggedIn();
+  if(loggedIn){
     host.innerHTML='<button class="btn-go" id="btnNhanh">Mở phần nhánh nghề — <span data-tvp-price="cong-so">…</span> Lượng →</button>';
     TuviPaywall.fillPriceSlots(host);
     document.getElementById('btnNhanh').addEventListener('click',function(){
@@ -266,9 +298,9 @@ function dungTuong(){
   }
   TuviPaywall.lockPreview({
     host:host,
-    title:'⊙ Còn phần nhánh nghề chưa mở',
-    items:NHANH_KHOA,
-    cta:'Đăng ký để mở phần nhánh nghề',
+    title:'⊙ Hồ sơ đầy đủ chưa mở',
+    items:HO_SO_KHOA_ANON,
+    cta:'Đăng ký để mở hồ sơ đầy đủ',
     slug:function(){return _slug;},
     onUnlock:moNhanh
   });
@@ -294,6 +326,12 @@ function moNhanh(){
       return;
     }
     _ho=r.data.hoSo;
+    // Người đi từ nhánh CHƯA đăng ký chỉ mới thấy HEAD — dựng lại TRỌN
+    // `#ketQua` (đã đăng nhập từ đầu thì đây chỉ là ghi đè bằng đúng nội dung
+    // đang có, vô hại) rồi mới vẽ radar + hiện nút Tải ảnh.
+    document.getElementById('ketQua').innerHTML=CongSoTool.bangHTML(_ho);
+    document.getElementById('taiBtn').style.display='';
+    ve();
     host.innerHTML=CongSoTool.nhanhHTML(_ho);
     // Rail nay biết cả tầng nhánh — nhưng CHỈ sau khi đã trả tiền.
     Shell.setContext({
@@ -313,10 +351,14 @@ function manhNhat(){
   return t?t.nhan+' ('+t.diem+'/10)':'—';
 }
 
+// `#csRadar` chỉ tồn tại khi `bodyHTML` đã được dựng (đăng nhập, hoặc vừa mở
+// nhánh) — khách chưa đăng ký chỉ có HEAD nên canvas đó không có trong DOM.
+// Tự bỏ qua thay vì ném lỗi vào console.
 function ve(){
   if(!_ho)return;
   CongSoTool.veToaDoCanvas(document.getElementById('csToaDo'),_ho);
-  CongSoTool.veRadarCanvas(document.getElementById('csRadar'),_ho);
+  var rc=document.getElementById('csRadar');
+  if(rc)CongSoTool.veRadarCanvas(rc,_ho);
 }
 
 function taiAnh(){

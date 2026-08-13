@@ -231,7 +231,7 @@ function _reset(){
   document.getElementById('freeBlock').style.display='none';
   document.getElementById('surveyBlock').style.display='none';
   document.getElementById('resultBlock').style.display='none';
-  _answers=[];_lastResult=null;
+  _answers=[];_lastResult=null;_lastPreview=null;
 }
 
 // ── Bước 1: TÍNH THỬ (miễn phí, không đăng nhập) ────────────
@@ -259,29 +259,41 @@ async function start(){
   finally{btn.disabled=false;btn.textContent='Xem 12 giờ khả nghi';}
 }
 
+let _lastPreview=null;
+
 function renderFree(j){
+  _lastPreview=j;
   document.getElementById('freeLine').textContent =
     _birth.day+'/'+_birth.month+'/'+_birth.year+(_birth.isLunar?' (âm lịch)':' (dương lịch)')+' · '+(_birth.gender==='nam'?'Nam':'Nữ');
-  document.getElementById('grid12').innerHTML = j.ungVien.map(u=>
-    '<div class="cand"><b>Giờ '+esc(u.chi)+'</b> <span class="k">'+esc(u.khung)+'</span>'+
-    '<div class="s"><span class="k">Mệnh:</span> '+esc(u.menhStars.join(' + ')||'vô chính diệu')+
-    '<br><span class="k">Tật Ách:</span> '+esc(u.tatStars.join(' + ')||'vô chính diệu')+'</div></div>').join('');
   document.getElementById('surveyPitch').innerHTML =
     'Với ngày sinh này máy dựng được <b>'+esc(j.soCauHoi)+' câu hỏi</b> riêng — đáp án là các nhóm giờ có dấu hiệu khác nhau của <b>chính ngày này</b>, nên mỗi người một bộ câu khác nhau. Trả lời xong sẽ ra <b>2–3 giờ khả năng cao nhất kèm bằng chứng từng câu</b>.';
   document.getElementById('freeBlock').style.display='';
   buildLock();
 }
 
-// Đã đăng nhập → KHÔNG dựng tường xem trước nữa: một nút bấm gate (trừ Lượng,
-// hoặc 0 nếu tool free) rồi chạy thẳng — đúng luồng #512 đã áp cho 6 tool kia.
-// Chưa đăng nhập → giữ tấm khoá mờ làm CTA: đây là cách chuyển VISITOR thành
-// tài khoản mới, không phải cách xin thêm Lượng của một tài khoản đã có.
+function _renderGrid(j){
+  document.getElementById('grid12').innerHTML = j.ungVien.map(u=>
+    '<div class="cand"><b>Giờ '+esc(u.chi)+'</b> <span class="k">'+esc(u.khung)+'</span>'+
+    '<div class="s"><span class="k">Mệnh:</span> '+esc(u.menhStars.join(' + ')||'vô chính diệu')+
+    '<br><span class="k">Tật Ách:</span> '+esc(u.tatStars.join(' + ')||'vô chính diệu')+'</div></div>').join('');
+  document.getElementById('grid12').style.display='';
+}
+
+// Đã đăng nhập → KHÔNG dựng tường xem trước nữa MÀ CŨNG không còn giới hạn
+// "phần đầu": thấy đủ 12 lá số khả nghi, rồi một nút bấm gate (trừ Lượng) mở
+// thẳng khảo sát — đúng luồng #512 đã áp cho 6 tool kia.
+//
+// Chưa đăng nhập → CHỈ chừa phần đầu (câu giới thiệu). Lưới 12 lá số khả nghi
+// — dù bản thân nó vẫn tính MIỄN PHÍ — cũng gộp vào tấm khoá cùng phần khảo
+// sát: tấm khoá là CTA đăng ký, không phải chỗ xin thêm Lượng của người đã có
+// ví, nên phải che HẾT phần "có cấu trúc" chứ không chỉ che phần trả tiền.
 function buildLock(){
   const host=document.getElementById('lockHost');
   if(!window.TuviPaywall||!TuviPaywall.lockPreview){
     host.innerHTML='<p class="note">Chưa đọc được bảng giá — tải lại trang giúp tôi.</p>';return;
   }
   if(_daDangNhap()){
+    if(_lastPreview) _renderGrid(_lastPreview);
     host.innerHTML='<button class="btn-go" id="btnKhaoSat">Bắt đầu khảo sát thu hẹp — <span data-tvp-price="'+TOOL_ID+'">…</span> Lượng →</button>';
     TuviPaywall.fillPriceSlots(host);
     document.getElementById('btnKhaoSat').addEventListener('click',function(){
@@ -289,11 +301,13 @@ function buildLock(){
     });
     return;
   }
+  document.getElementById('grid12').innerHTML='';
+  document.getElementById('grid12').style.display='none';
   TuviPaywall.lockPreview({
     host:host,
-    title:'⊙ Còn phần khảo sát thu hẹp chưa mở',
-    items:['Bộ câu hỏi dựng riêng theo ngày sinh','Xếp hạng 12 giờ theo khả năng','Bằng chứng khớp/lệch từng câu','Mức tin cậy và lời khuyên chốt giờ'],
-    cta:'Đăng ký để mở phần khảo sát',
+    title:'⊙ Hồ sơ giờ sinh chưa mở',
+    items:['Đủ 12 lá số khả nghi (Mệnh + Tật Ách từng giờ)','Bộ câu hỏi dựng riêng theo ngày sinh','Xếp hạng 12 giờ theo khả năng','Bằng chứng khớp/lệch từng câu','Mức tin cậy và lời khuyên chốt giờ'],
+    cta:'Đăng ký để mở đủ 12 lá số + khảo sát',
     slug:function(){return _slug;},
     onUnlock:function(){return runSurvey();},
   });
