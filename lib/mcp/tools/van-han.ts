@@ -17,9 +17,8 @@
 import { z } from 'zod';
 import { computeLaso } from '@/lib/engine/laso';
 import { currentNamXem } from '@/lib/engine/namxem';
+import { resolveNguyetHanSegments, resolveNhatHanIdx } from '@/lib/engine/van-ngay';
 import { matchVanHanCombos, type LayerCung, type ComboHit } from '@/lib/agent/vanHanCombos';
-import { solarToLunar } from '../../../tuvi-engine/dist/lunar/convert.js';
-import { tinhNhatHan } from '../../../tuvi-engine/dist/van-han/index.js';
 import type { BirthParams } from '@/lib/contract/v1';
 import { loadMcpEngine } from '../engine';
 import { distinctVanHanYears } from '../usage';
@@ -69,7 +68,7 @@ function comboToBlock(h: ComboHit): Rec {
 export const vanHanTool: McpTool = {
   name: 'van_han',
   description:
-    'Tra vận hạn của một lá số cho một NĂM dương lịch (nam_xem), và tùy chọn cả một THÁNG (thêm tham số thang) hoặc một NGÀY cụ thể (thêm thang + ngay). Trả về: tuổi mụ, can chi năm xem, lưu Thái Tuế, lưu đại vận, tiểu hạn, lưu tứ hóa, đại vận hiện tại + điểm, blocks (tổ hợp sao chéo tầng); nếu có thang → thêm hạn tháng (nguyệt hạn); nếu có thang+ngay → thêm hạn ngày (nhật hạn). LUÔN dùng tool này khi người dùng hỏi về một năm/tháng/ngày cụ thể ("năm nay", "tháng 3/2027", "ngày 10/2/2027…") thay vì tự suy. Diễn giải dựa trên dữ liệu, không tự tính lại cung/sao/hóa.',
+    'Tra vận hạn của một lá số cho một NĂM dương lịch (nam_xem), và tùy chọn cả một THÁNG (thêm tham số thang) hoặc một NGÀY cụ thể (thêm thang + ngay). Trả về: tuổi mụ, can chi năm xem, lưu Thái Tuế, lưu đại vận, tiểu hạn, lưu tứ hóa, đại vận hiện tại + điểm, blocks (tổ hợp sao chéo tầng); nếu có thang → thêm hạn tháng (nguyet_han — LƯU Ý một tháng dương lịch thường bị 1 tháng âm khác cắt ngang ở giữa, khi đó trường trả về mảng "doan" gồm 2 đoạn hạn khác nhau kèm khoảng ngày dương + cờ "dang_dien_ra" cho đoạn đang áp dụng ngay lúc hỏi, PHẢI đọc đúng đoạn phù hợp thay vì gộp chung); nếu có thang+ngay → thêm hạn ngày (nhat_han, tính theo đúng ngày âm lịch của ngày đó). LUÔN dùng tool này khi người dùng hỏi về một năm/tháng/ngày cụ thể ("năm nay", "tháng 3/2027", "ngày 10/2/2027…") thay vì tự suy. Diễn giải dựa trên dữ liệu, không tự tính lại cung/sao/hóa.',
   schema,
 
   quota: async (args, info, key) => {
@@ -167,25 +166,48 @@ export const vanHanTool: McpTool = {
     ];
     const blocks = matchVanHanCombos(layers).map(comboToBlock);
 
-    // Hạn THÁNG (nguyệt hạn) + NGÀY (nhật hạn) — tùy chọn.
+    // Hạn THÁNG (nguyệt hạn) + NGÀY (nhật hạn) — tùy chọn. Một tháng dương lịch
+    // thường bị 1 tháng âm khác "cắt ngang" ở giữa (tháng âm ~29,5 ngày, không
+    // khớp ranh giới tháng dương) → nguyệt hạn có thể có 2 ĐOẠN khác nhau trong
+    // cùng một tháng dương (bug cũ: neo cứng ngày 1 để suy tháng âm, có thể
+    // chọn nhầm đoạn đã hết hạn). Nhật hạn LUÔN tính từ ĐÚNG ngày được hỏi qua
+    // `resolveNhatHanIdx` — KHÔNG suy từ đoạn nguyệt hạn — để không kế thừa sai
+    // số đó. Cả hai dùng CHUNG nguồn với rail chat: lib/engine/van-ngay.ts.
     let nguyet_han: Rec | undefined;
     let nhat_han: Rec | undefined;
     const thangNum = args.thang != null ? Number(args.thang) : null;
     const ngayNum = args.ngay != null ? Number(args.ngay) : null;
     if (thangNum && thangNum >= 1 && thangNum <= 12) {
-      const nvs = ((ls.nguyetVanScores as Rec[]) || []).find((e) => Number(e.nam) === nam);
-      const months = nvs?.months as number[] | undefined;
-      const thangAL = solarToLunar(1, thangNum, nam).month;
-      const nguyetHanIdx = Array.isArray(months) ? months[thangAL - 1] : undefined;
-      if (nguyetHanIdx != null) {
-        nguyet_han = { thang: thangNum, thang_al: thangAL, ...(cungInfo(palaces, nguyetHanIdx) || {}) };
-        if (ngayNum && ngayNum >= 1 && ngayNum <= 31) {
-          const ngayAL = solarToLunar(ngayNum, thangNum, nam).day;
-          const nhatHanIdx = tinhNhatHan(nguyetHanIdx, ngayAL);
-          nhat_han = { ngay: ngayNum, ngay_al: ngayAL, ...(cungInfo(palaces, nhatHanIdx) || {}) };
-        }
+      const segRs = resolveNguyetHanSegments(ls, thangNum, nam);
+      if (segRs.ok) {
+        nguyet_han = segRs.segments.length === 1
+          ? {
+              thang: thangNum,
+              thang_al: segRs.segments[0]!.thangAL,
+              ...(segRs.segments[0]!.isLeap ? { thang_al_nhuan: true } : {}),
+              ...(cungInfo(palaces, segRs.segments[0]!.nguyetHanIdx) || {}),
+            }
+          : {
+              thang: thangNum,
+              ghi_chu: 'Tháng dương lịch này cắt ngang 2 tháng âm lịch — mỗi đoạn ngày có một hạn tháng khác nhau, xem mảng "doan".',
+              doan: segRs.segments.map((s) => ({
+                tu_ngay: s.tuNgay,
+                den_ngay: s.denNgay,
+                thang_al: s.thangAL,
+                ...(s.isLeap ? { thang_al_nhuan: true } : {}),
+                ...(s.isCurrent ? { dang_dien_ra: true } : {}),
+                ...(cungInfo(palaces, s.nguyetHanIdx) || {}),
+              })),
+            };
       } else {
-        nguyet_han = { thang: thangNum, note: `Năm ${nam} ngoài phạm vi dữ liệu nguyệt hạn của lá số.` };
+        nguyet_han = { thang: thangNum, note: segRs.error };
+      }
+
+      if (ngayNum && ngayNum >= 1 && ngayNum <= 31) {
+        const dayRs = resolveNhatHanIdx(ls, ngayNum, thangNum, nam);
+        nhat_han = dayRs.ok
+          ? { ngay: ngayNum, ngay_al: dayRs.ngayAL, thang_al: dayRs.thangAL, ...(cungInfo(palaces, dayRs.nhatHanIdx) || {}) }
+          : { ngay: ngayNum, note: dayRs.error };
       }
     }
 
