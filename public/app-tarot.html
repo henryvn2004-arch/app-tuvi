@@ -96,9 +96,9 @@ gap:8px;width:fit-content;margin:24px auto}
         <h2>Chọn Kiểu Trải Bài</h2>
         <p class="sub">78 lá đầy đủ — 22 Major Arcana và 56 Minor Arcana, ý nghĩa xuôi và ngược bằng tiếng Việt.</p>
         <div class="spread-btns">
-          <button class="spread-btn active" onclick="setSpread(1,this)">✦ 1 Lá — Thông Điệp Hôm Nay</button>
-          <button class="spread-btn" onclick="setSpread(3,this)">⊹ 3 Lá — Quá Khứ · Hiện Tại · Tương Lai</button>
-          <button class="spread-btn" onclick="setSpread(10,this)">✺ Celtic Cross — 10 Lá</button>
+          <button class="spread-btn active" onclick="setSpread(1,this)"><span class="ic" data-icon="sparkles"></span> 1 Lá — Thông Điệp Hôm Nay</button>
+          <button class="spread-btn" onclick="setSpread(3,this)"><span class="ic" data-icon="sparkles"></span> 3 Lá — Quá Khứ · Hiện Tại · Tương Lai</button>
+          <button class="spread-btn" onclick="setSpread(10,this)"><span class="ic" data-icon="sparkles"></span> Celtic Cross — 10 Lá</button>
         </div>
         <div class="tr-q">
           <label>Câu hỏi (tuỳ chọn — nghĩ trong tâm hoặc ghi ra đây)</label>
@@ -462,6 +462,17 @@ const CARDS = [
  kw:['Thịnh vượng','Kinh doanh','Lãnh đạo','Ổn định']},
 ];
 
+// 78 sym là emoji màu (biểu tượng đại diện từng lá) — đổi sang icon SVG chuẩn
+// của site. renderCardSym duyệt từng codepoint nên tự đúng cho cả trường hợp
+// một lá gộp 2 emoji ('🔥🔥' — Hai Gậy) lẫn trường hợp 1 emoji thông thường.
+const SYM_ICON = {'🌟':'star','⚡':'zap','🌙':'moon','🌸':'flower','👑':'crown','⛪':'temple','❤️':'heart','🏆':'trophy','🦁':'dumbbell','🕯️':'lamp','☸️':'rotate-cw','⚖️':'scale','🙃':'rotate-cw','🌑':'moon','🌊':'waves','🔗':'link','⭐':'star','🌕':'moon','☀️':'sun','📯':'volume-2','🌍':'globe','🔥':'flame','🔥🔥':['flame','flame'],'⛵':'compass','🎉':'gift','⚔️':'zap','🏅':'award','🛡️':'shield-check','💨':'zap','🩹':'shield-check','😓':'hourglass','🌱':'leaf','💧':'droplet','💑':'heart-handshake','🥂':'gift','😑':'x-circle','😢':'droplet','🌷':'flower','🌈':'rainbow','🚶':'compass','😊':'smile','🏡':'home','🐟':'droplet','🔮':'sparkles','🙈':'x-circle','💔':'heart','😴':'moon','😈':'alert-triangle','🦊':'alert-triangle','🔒':'lock','😨':'alert-triangle','🌅':'sunrise','🔍':'search','👸':'crown','💰':'dollar-sign','🤹':'scale','🏗️':'settings','💎':'gem','🥶':'alert-triangle','🤲':'gift','🔨':'settings','🌿':'leaf','🏰':'landmark','📚':'book-open','🐂':'anchor','🌻':'flower','🏦':'landmark'};
+function renderCardSym(sym) {
+  var v = SYM_ICON[sym];
+  if (!v) return sym;
+  var keys = Array.isArray(v) ? v : [v];
+  return keys.map(function(k){ return '<span class="ic" data-icon="' + k + '"></span>'; }).join('');
+}
+
 const SPREADS = {
   1: [{pos:'Thông Điệp',desc:'Năng lượng và thông điệp chính cho câu hỏi của bạn'}],
   3: [
@@ -566,7 +577,8 @@ function flipCard(i) {
   const face = document.getElementById(`face-${i}`);
   if (!inner || !face) return;
   const col = SUIT_COLORS[c.type] || '#c9a84c';
-  face.innerHTML = `<div class="cf-num" style="color:${col}">${c.num}</div><div class="cf-symbol" style="color:${col}">${c.sym}</div><div class="cf-name">${c.name}</div><div class="cf-suit">${SUIT_VI[c.type]}</div>`;
+  face.innerHTML = `<div class="cf-num" style="color:${col}">${c.num}</div><div class="cf-symbol" style="color:${col}">${renderCardSym(c.sym)}</div><div class="cf-name">${c.name}</div><div class="cf-suit">${SUIT_VI[c.type]}</div>`;
+  window.mountIcons && window.mountIcons(face);
   if (c.reversed) {
     face.classList.add('is-reversed');
     inner.classList.add('reversed');
@@ -584,7 +596,7 @@ function renderMeanings() {
       const meaning = c.reversed ? c.rev : c.up;
       return `<div class="card-meaning" style="border-left-color:${col}">
         <div class="cm-header">
-          <div class="cm-symbol" style="color:${col}">${c.sym}</div>
+          <div class="cm-symbol" style="color:${col}">${renderCardSym(c.sym)}</div>
           <div class="cm-info">
             <div class="cm-name">${c.name} <span style="font-size:12px;color:var(--text-lt);font-weight:400">(${c.en})</span></div>
             <div class="cm-sub">${SUIT_VI[c.type]} · ${spread[i].pos}</div>
@@ -596,6 +608,7 @@ function renderMeanings() {
         <div class="cm-keywords">${c.kw.map(k => `<span class="cm-kw">${k}</span>`).join('')}</div>
       </div>`;
     }).join('')}`;
+  window.mountIcons && window.mountIcons(document.getElementById('readingResult'));
 }
 </script>
 </body>

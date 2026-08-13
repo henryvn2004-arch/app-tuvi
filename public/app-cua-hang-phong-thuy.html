@@ -158,7 +158,7 @@
         <p class="sub">Chụp ảnh toàn cảnh, bao gồm cửa và các vật dụng chính. Ảnh càng rõ nét, phân tích càng chính xác.</p>
         <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click()" ondragover="onDrag(event,1)" ondragleave="onDrag(event,0)" ondrop="onDrop(event)">
           <input type="file" id="fileInput" accept="image/*" onchange="onFile(event)">
-          <span class="upload-icon">🏪</span>
+          <span class="upload-icon ic" data-icon="store" style="font-size:36px;display:block"></span>
           <div style="font-size:13px;color:var(--text-mid);margin-bottom:4px">Kéo thả ảnh vào đây</div>
           <span class="upload-btn-lbl">Chọn Ảnh</span>
           <div style="font-size:11px;color:var(--text-lt);margin-top:8px">JPG, PNG, HEIC · Tối đa 20MB</div>
@@ -172,7 +172,7 @@
       <div class="pt-card">
         <div class="cost-row"><span>Chi phí: <strong><span data-tvp-price="cua-hang-phong-thuy">…</span> Lượng</strong></span></div>
         <div class="error-box" id="errorBox"></div>
-        <button class="btn-analyze" id="btnAnalyze" onclick="doAnalyze()">🏪 Phân Tích Ngay — <span data-tvp-price="cua-hang-phong-thuy">…</span> Lượng</button>
+        <button class="btn-analyze" id="btnAnalyze" onclick="doAnalyze()"><span class="ic" data-icon="store"></span> Phân Tích Ngay — <span data-tvp-price="cua-hang-phong-thuy">…</span> Lượng</button>
       </div>
 
       <div class="pt-card loading-overlay" id="loadingOverlay">
@@ -181,7 +181,7 @@
 
       <div id="results-section" data-ws-result>
         <div class="pt-card">
-          <h2>📊 Điểm Phong Thủy Trước &amp; Sau</h2>
+          <h2><span class="ic" data-icon="bar-chart-3"></span> Điểm Phong Thủy Trước &amp; Sau</h2>
           <div class="score-compare">
             <div class="score-before"><div class="score-label">Hiện Tại</div><div class="score-num" id="scoreBefore">—</div><div class="score-bar-wrap"><div class="score-bar" id="sbarB"></div></div></div>
             <div><div class="delta-num" id="scoreDelta">—</div><div class="delta-lbl">cải thiện</div></div>
@@ -191,7 +191,7 @@
         </div>
 
         <div class="pt-card">
-          <h2>📸 Ảnh &amp; Khu Vực/Vật Dụng Nhận Diện</h2>
+          <h2><span class="ic" data-icon="camera"></span> Ảnh &amp; Khu Vực/Vật Dụng Nhận Diện</h2>
           <div id="photoDisplay" style="border-radius:8px;overflow:hidden;border:1px solid var(--border-lt);margin-bottom:12px"></div>
           <div style="font-size:11px;color:var(--text-lt);font-weight:700;margin-bottom:5px">KHU VỰC/VẬT DỤNG NHẬN DIỆN</div>
           <div class="tag-list" id="tagList"></div>
@@ -199,33 +199,33 @@
         </div>
 
         <div class="pt-card" id="wealthCard" style="display:none">
-          <h2>💰 Mẹo Kích Hoạt Tài Lộc</h2>
+          <h2><span class="ic" data-icon="dollar-sign"></span> Mẹo Kích Hoạt Tài Lộc</h2>
           <div id="wealthContent" class="advice-text"></div>
         </div>
 
         <div class="pt-card">
-          <h2>🔧 Đề Xuất Điều Chỉnh</h2>
+          <h2><span class="ic" data-icon="settings"></span> Đề Xuất Điều Chỉnh</h2>
           <div class="rec-list" id="recList"></div>
         </div>
 
         <div class="pt-card">
-          <h2>🛒 Vật Phẩm Nên Thêm</h2>
+          <h2><span class="ic" data-icon="store"></span> Vật Phẩm Nên Thêm</h2>
           <div class="shop-grid" id="shopGrid"></div>
         </div>
 
         <div class="pt-card">
-          <h2>💬 Lời Khuyên Tổng Thể</h2>
+          <h2><span class="ic" data-icon="message-circle"></span> Lời Khuyên Tổng Thể</h2>
           <div class="advice-text" id="adviceText"></div>
         </div>
 
         <div class="pt-card" id="renderCard" style="display:none">
-          <h2>🏪 Render Không Gian Kinh Doanh Bằng AI
+          <h2><span class="ic" data-icon="store"></span> Render Không Gian Kinh Doanh Bằng AI
             <span style="font-size:10px;background:var(--gold-lt);color:var(--tx-blue);padding:2px 8px;border-radius:10px;font-weight:600"><span data-tvp-price="phong-thuy-render">…</span> Lượng</span>
           </h2>
           <p class="sub">AI render lại không gian kinh doanh theo màu ngũ hành bản mệnh và bố trí tối ưu thu hút tài lộc.</p>
 
           <div id="renderIdle">
-            <button class="render-btn" id="btnRender" onclick="doRoomRender()">✨ Render Không Gian Theo Phong Thủy</button>
+            <button class="render-btn" id="btnRender" onclick="doRoomRender()"><span class="ic" data-icon="sparkles"></span> Render Không Gian Theo Phong Thủy</button>
           </div>
 
           <div id="renderLoading" style="display:none;text-align:center;padding:20px 0">
@@ -238,8 +238,8 @@
               <div class="render-ba-col"><div class="render-ba-label">Sau phong thủy AI</div><img id="renderAfter" class="render-ba-img" src="" alt="Sau"></div>
             </div>
             <div style="display:flex;gap:8px">
-              <button onclick="downloadRender()" style="flex:1;padding:10px;background:var(--green);color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit">⬇ Tải Ảnh</button>
-              <button onclick="resetRender()" class="btn-cancel" style="flex:1">🔄 Render Lại</button>
+              <button onclick="downloadRender()" style="flex:1;padding:10px;background:var(--green);color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit"><span class="ic" data-icon="chevron-down"></span> Tải Ảnh</button>
+              <button onclick="resetRender()" class="btn-cancel" style="flex:1"><span class="ic" data-icon="rotate-cw"></span> Render Lại</button>
             </div>
           </div>
 
@@ -262,7 +262,7 @@ window.SHELL_INTRO={key:'cua-hang-phong-thuy',title:'Phong Thủy Cửa Hàng & 
 <script src="/tuvi-paywall.js?v=20"></script>
   <script src="/nav.js?v=22" data-icons-only></script>
 <script src="/shell.js?v=72"></script>
-<script src="/tools-shared/ai-loading-steps.js?v=7"></script>
+<script src="/tools-shared/ai-loading-steps.js?v=8"></script>
 <script>
 function initCuaHangPhongThuy(){
   Shell.setContext({
@@ -383,6 +383,7 @@ function renderResults(data){
   const tl=document.getElementById('tagList');tl.innerHTML='';
   const items=(detected.detectedFurniture||detected.detectedItems||[]);
   items.forEach(f=>{const t=document.createElement('div');t.className='tag';t.innerHTML=`${getIcon(f.id)} ${f.name} <span class="tag-pos">· ${DIR_VN[f.position||f.currentPosition]||f.position||f.currentPosition||''}</span>`;tl.appendChild(t);});
+  window.mountIcons && window.mountIcons(tl);
   document.getElementById('observations').textContent=detected.roomObservations||detected.observations||detected.spaceObservations||'';
 
   renderExtraResults(data);
@@ -394,15 +395,17 @@ function renderResults(data){
     const isMove=r.action==='move',isKeep=r.action==='keep';
     const mv=isKeep?`<span class="pos-keep">✓ Giữ nguyên</span>`:isMove?`<span class="pos-from">${DIR_VN[r.currentPosition]||r.currentPosition}</span> → <span class="pos-to">${DIR_VN[r.recommendedPosition]||r.recommendedPosition}</span>`:`<span style="color:var(--text-mid)">${r.action==='remove'?'Dọn bỏ':'Điều chỉnh'}</span>`;
     const pl={high:'⚠ Quan Trọng',medium:'→ Nên Làm',low:'◎ Tuỳ Ý'}[r.priority]||r.priority;
-    rl.innerHTML+=`<div class="rec-item priority-${r.priority||'medium'}"><div><span class="rec-badge">${pl}</span></div><div class="rec-body"><div class="rec-title">${getIcon(r.furnitureId||r.itemId)} ${r.furnitureName||r.itemName}</div><div class="rec-move">${mv}</div><div class="rec-reason">${r.reason||''}</div>${r.improvement?`<div class="rec-impr">↑ ~${r.improvement} điểm</div>`:''}${r.businessImpact?`<div style="font-size:10px;color:var(--tx-blue);margin-top:2px;">💼 ${r.businessImpact}</div>`:''}</div></div>`;
+    rl.innerHTML+=`<div class="rec-item priority-${r.priority||'medium'}"><div><span class="rec-badge">${pl}</span></div><div class="rec-body"><div class="rec-title">${getIcon(r.furnitureId||r.itemId)} ${r.furnitureName||r.itemName}</div><div class="rec-move">${mv}</div><div class="rec-reason">${r.reason||''}</div>${r.improvement?`<div class="rec-impr">↑ ~${r.improvement} điểm</div>`:''}${r.businessImpact?`<div style="font-size:10px;color:var(--tx-blue);margin-top:2px;"><span class="ic" data-icon="briefcase"></span> ${r.businessImpact}</div>`:''}</div></div>`;
   });
+  window.mountIcons && window.mountIcons(rl);
 
   const sg=document.getElementById('shopGrid');sg.innerHTML='';
   (analysis.shoppingList||[]).forEach(s=>{
     const uc=s.urgency==='nên có'?'urg-must':s.urgency==='tốt nếu có'?'urg-good':'urg-opt';
     const ul=s.urgency==='nên có'?'Nên Có':s.urgency==='tốt nếu có'?'Tốt Nếu Có':'Tuỳ Ý';
-    sg.innerHTML+=`<div class="shop-item"><div class="shop-hdr"><span class="shop-icon">${s.icon||'✨'}</span><span class="shop-name">${s.item}</span><span class="shop-urg ${uc}">${ul}</span></div><div class="shop-pos">📍 ${DIR_VN[s.position]||s.position||''}</div><div class="shop-reason">${s.reason||''}</div><div class="shop-price">💰 ${s.priceRange||''}</div></div>`;
+    sg.innerHTML+=`<div class="shop-item"><div class="shop-hdr"><span class="shop-icon ic">${window.iconHtml?window.iconHtml(s.icon):''}</span><span class="shop-name">${s.item}</span><span class="shop-urg ${uc}">${ul}</span></div><div class="shop-pos"><span class="ic" data-icon="pin"></span> ${DIR_VN[s.position]||s.position||''}</div><div class="shop-reason">${s.reason||''}</div><div class="shop-price"><span class="ic" data-icon="dollar-sign"></span> ${s.priceRange||''}</div></div>`;
   });
+  window.mountIcons && window.mountIcons(sg);
   if(!(analysis.shoppingList||[]).length)sg.innerHTML='<p style="color:var(--text-lt);font-size:12px;">Không có đề xuất thêm vật phẩm.</p>';
 
   document.getElementById('adviceText').textContent=analysis.generalAdvice||'';
@@ -426,7 +429,8 @@ function renderResults(data){
   });
 }
 
-function getIcon(id){return({bed:'🛏',desk:'🖥',sofa:'🛋',altar:'🏮',stove:'🔥',plant:'🌿',mirror:'🪞',door:'🚪',toilet:'🚿',water:'💧',wardrobe:'🚪',tv:'📺',monitor:'🖥',laptop:'💻',lamp:'💡',phone:'📱',notebook:'📒',keyboard:'⌨️',mouse:'🖱',clock:'🕐',speaker:'🔊',printer:'🖨',drawer:'🗄',cashier:'💰',entrance:'🚪',display:'🛍',storage:'📦',counter:'🪞',safe:'🔒',seating:'💺',sign:'🪧',light:'💡'})[id]||'📦';}
+const ITEM_ICON={bed:'home',desk:'briefcase',sofa:'home',altar:'temple',stove:'flame',plant:'leaf',mirror:'aperture',door:'door-open',toilet:'droplet',water:'droplet',wardrobe:'door-open',tv:'monitor',monitor:'monitor',laptop:'monitor',lamp:'lamp',phone:'monitor',notebook:'book-open',keyboard:'monitor',mouse:'monitor',clock:'clock',speaker:'volume-2',printer:'file-text',drawer:'package',cashier:'dollar-sign',entrance:'door-open',display:'store',storage:'package',counter:'store',safe:'lock',seating:'home',sign:'pin',light:'lightbulb'};
+function getIcon(id){return '<span class="ic" data-icon="'+(ITEM_ICON[id]||'package')+'"></span>';}
 function renderExtraResults(data){
   const a=data.analysis;
   if(a.wealthTips){document.getElementById('wealthCard').style.display='block';document.getElementById('wealthContent').textContent=a.wealthTips;}

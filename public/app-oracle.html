@@ -73,9 +73,9 @@
         <h2>Chọn Kiểu Rút Bài</h2>
         <p class="sub">40 lá theo nguyên lý phương Đông: Âm Dương, Ngũ Hành, Bát Quái, Thiên Can Địa Chi, Triết Lý Cuộc Đời.</p>
         <div class="spread-btns">
-          <button class="spread-btn active" onclick="setSpread(1,this)">✦ 1 Lá — Thông Điệp Hiện Tại</button>
-          <button class="spread-btn" onclick="setSpread(3,this)">⊹ 3 Lá — Nhân · Duyên · Quả</button>
-          <button class="spread-btn" onclick="setSpread(5,this)">✺ 5 Lá — Ngũ Hành Cuộc Đời</button>
+          <button class="spread-btn active" onclick="setSpread(1,this)"><span class="ic" data-icon="sparkles"></span> 1 Lá — Thông Điệp Hiện Tại</button>
+          <button class="spread-btn" onclick="setSpread(3,this)"><span class="ic" data-icon="sparkles"></span> 3 Lá — Nhân · Duyên · Quả</button>
+          <button class="spread-btn" onclick="setSpread(5,this)"><span class="ic" data-icon="sparkles"></span> 5 Lá — Ngũ Hành Cuộc Đời</button>
         </div>
         <div class="or-q">
           <label>Câu hỏi hoặc chủ đề muốn chiêm nghiệm (tùy chọn)</label>
@@ -286,6 +286,21 @@ const CARDS = [
  kw:['Tự nhận thức','Minh triết','Bản thân','Hiểu mình']},
 ];
 
+// Bát quái (☰☷☵☲☳☴☶☱) là ký hiệu Kinh Dịch, không phải emoji trang trí — giữ
+// nguyên dạng chữ (đơn sắc theo font, cùng lớp với ✦/★ đã được whitelist).
+// 32 biểu tượng còn lại là emoji màu, đổi sang icon SVG chuẩn của site.
+const SYM_ICON = {
+  '☯':'aperture','🌓':'moon','🌑':'moon','☀':'sun','🔄':'rotate-cw','⚖':'scale',
+  '🌊':'waves','🌀':'tornado','🌿':'leaf','🔥':'flame','🏔':'anchor','🪙':'gem',
+  '💧':'droplet','🌱':'leaf','⚡':'zap','🌲':'leaf','🐉':'crown','🌟':'star',
+  '🦊':'zap','🌾':'leaf','🌺':'flower','✨':'sparkles','🔁':'rotate-cw','🍃':'leaf',
+  '🛤':'compass','🙏':'heart','💫':'sparkles','🌸':'flower'
+};
+function renderCardSym(sym) {
+  var key = SYM_ICON[sym];
+  return key ? '<span class="ic" data-icon="' + key + '"></span>' : sym;
+}
+
 const CAT_COLORS = {'am-duong':'#c9a84c','ngu-hanh':'#1E6B3C','bat-quai':'#1455A4','can-chi':'#9A7B3A','cuoc-doi':'#C0392B'};
 const SPREAD_LABELS = {
   1: [{pos:'Thông Điệp',desc:'Điều vũ trụ muốn bạn biết lúc này'}],
@@ -333,7 +348,7 @@ function renderResult() {
         <div class="o-card-inner" id="oc-${i}">
           <div class="o-back"><div class="o-back-seal">紫微</div><div class="o-back-brand">Minh Triết<br>Phương Đông</div></div>
           <div class="o-face">
-            <div class="of-symbol">${c.sym}</div>
+            <div class="of-symbol">${renderCardSym(c.sym)}</div>
             <div class="of-name">${c.name}</div>
             <div class="of-sub">${c.catVI}</div>
           </div>
@@ -342,6 +357,7 @@ function renderResult() {
       <div class="slot-label">${spread[i].pos}</div>
     </div>`;
   }).join('');
+  window.mountIcons && window.mountIcons(document.getElementById('spreadArea'));
 
   setTimeout(() => _drawn.forEach((_, i) => {
     const el = document.getElementById(`oc-${i}`);
@@ -354,7 +370,7 @@ function renderResult() {
       const col = CAT_COLORS[c.cat];
       return `<div class="oracle-meaning" style="border-left:4px solid ${col}">
         <div class="om-header">
-          <div class="om-symbol">${c.sym}</div>
+          <div class="om-symbol">${renderCardSym(c.sym)}</div>
           <div>
             <div class="om-name">${c.name}</div>
             <div class="om-sub">${c.catVI} · ${spread[i].pos}</div>
@@ -362,10 +378,11 @@ function renderResult() {
         </div>
         <div style="font-size:12px;color:var(--text-lt);margin-bottom:10px;font-style:italic">${spread[i].desc}</div>
         <div class="om-body">${c.msg}</div>
-        <div class="om-guidance">💡 <strong>Hướng dẫn thực hành:</strong> ${c.guide}</div>
+        <div class="om-guidance"><span class="ic" data-icon="lightbulb"></span> <strong>Hướng dẫn thực hành:</strong> ${c.guide}</div>
         <div class="om-kw">${c.kw.map(k => `<span class="kw-tag">${k}</span>`).join('')}</div>
       </div>`;
     }).join('');
+  window.mountIcons && window.mountIcons(document.getElementById('readingResult'));
 
   Shell.setShareable({ kind:'text', toolId:'oracle', title:'Kết quả Oracle của tôi', text: shareText() });
   setTimeout(() => document.getElementById('result-section').scrollIntoView({ behavior: 'smooth', block: 'start' }), 600);
