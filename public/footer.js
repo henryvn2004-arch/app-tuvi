@@ -65,6 +65,7 @@
     '<a href="/about.html">Gi\u1edbi Thi\u1ec7u</a>',
     '<a href="/contact.html">Li\u00ean H\u1ec7</a>',
     '<a href="/faqs.html">FAQs</a>',
+    '<a href="/nguon-du-lieu.html">Ngu\u1ed3n D\u1eef Li\u1ec7u</a>',
     '<a href="/huong-dan-thanh-toan.html">H\u01b0\u1edbng D\u1eabn Thanh To\u00e1n</a>',
     '<a href="/chinh-sach-bao-mat.html">Ch\u00ednh S\u00e1ch B\u1ea3o M\u1eadt</a>',
     '<a href="/dieu-khoan-dich-vu.html">\u0110i\u1ec1u Kho\u1ea3n D\u1ecbch V\u1ee5</a>',
