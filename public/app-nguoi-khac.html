@@ -153,6 +153,8 @@
           </div>
         </div>
 
+        <div id="nkLockHost" style="display:none;margin-bottom:16px"></div>
+
         <div class="res-block" id="sayBlock" style="display:none">
           <div class="res-block-header"><span class="res-block-title">Nói Thế Nào</span></div>
           <div class="res-block-body">
@@ -304,12 +306,14 @@ function _cacheQuery(b, self, qh) {
   return q;
 }
 
-// ── W1: bấm nút là CHẠY THẬT, miễn phí ─────────────────────────────────────
-//
-// Trước đây bấm nút là gặp paywall ngay — tức phải trả tiền mới biết tool có
-// đúng không. Nay: chạy tầng deterministic (0 lượt LLM, 0đ), bày kiểu người +
-// A — bấm nút có Lượng là CHẠY THẬT ngay; thiếu/không đủ Lượng thì
-// `requireCredits` tự bật popup (đăng nhập · nạp thêm).
+function _nkLoggedIn() { return !!(window.Auth && window.Auth.isLoggedIn && window.Auth.isLoggedIn()); }
+
+// Đăng nhập rồi → bấm nút là CHẠY THẬT ngay (case 1): trừ Lượng (0đ nếu free)
+// rồi chạy trọn bản cẩm nang, không có màn xem trước nào chen giữa. Chưa đăng
+// nhập (case 2) → chỉ dựng CHÍNH tầng đầu (tên/kiểu người) — kể cả phần miễn
+// phí còn lại (cơ sở lá số) cũng gộp vào CÙNG tấm khoá với phần AI viết riêng,
+// CTA đăng ký nhận Lượng miễn phí. Đúng luật đã áp cho gio-sinh/cong-so/luận
+// giải: khoá là lời mời đăng ký, không phải chỉ khoá phần trả tiền.
 async function analyze() {
   showError('');
   var b = _birthOf('');
@@ -318,6 +322,8 @@ async function analyze() {
   var self = _birthOf('self');
   _last = b; _lastSelf = self;
   _currentSlug = TuviPaywall.generateToolSlug('nguoi-khac-' + qh + '-' + b.day + b.month + b.year);
+
+  if (!_nkLoggedIn()) { return _runAnonPreview(b, self, qh); }
 
   // Đã trả tiền cho đúng lá số này từ trước → mở thẳng, không trừ lại.
   var free = false;
@@ -330,11 +336,58 @@ async function analyze() {
   await TuviPaywall.requireCredits(_currentSlug, function () { return _doGenerate(false, qh); });
 }
 
+// Khách chưa đăng nhập: gọi thẳng tầng deterministic (0đ, không cần đăng nhập
+// — server route `?preview=1` không đòi auth) rồi dựng CHỈ phần đầu (tên +
+// kiểu người). Phần còn lại (cơ sở lá số + toàn bộ AI viết riêng) đứng sau
+// tấm khoá.
+async function _runAnonPreview(b, self, qh) {
+  _openPanel();
+  document.getElementById('loading').style.display = 'none';
+  try {
+    var res = await fetch('/api/nguoi-khac?preview=1', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ birth: b, birthSelf: self || undefined, name: b.name || '', quanHe: qh }),
+    });
+    var data = await res.json();
+    if (!res.ok || !data.success) throw new Error(data.error || 'Lỗi ' + res.status);
+    _lastData = data;
+    renderMetaHead(data);
+    document.getElementById('card').style.display = 'block';
+    document.getElementById('btnEdit').style.display = '';
+    if (window.SHELL_INTRO) Shell.dismissIntro(window.SHELL_INTRO.key);
+    _renderLockWall(qh);
+  } catch (e) {
+    _closePanel();
+    showError('Lỗi: ' + (e.message || 'Không thể kết nối. Vui lòng thử lại.'));
+  }
+}
+
+function _renderLockWall(qh) {
+  var host = document.getElementById('nkLockHost');
+  host.style.display = 'block';
+  host.innerHTML = '';
+  TuviPaywall.lockPreview({
+    host: host,
+    title: '⊙ Cẩm nang đầy đủ chưa mở',
+    items: [
+      'Cơ sở trong lá số — Mệnh, Phúc Đức, Thiên Di, Quan Lộc, Nô Bộc',
+      'Nói thế nào — điều nên nói và điều nên tránh',
+      'Lúc này họ đang ở đâu trong đại vận',
+      'Người này với bạn (khi có lá số của bạn)',
+    ],
+    cta: 'Đăng ký để mở cẩm nang đầy đủ',
+    slug: function () { return _currentSlug; },
+    onUnlock: function () { return _doGenerate(false, qh); },
+  });
+}
+
 function _openPanel() {
   document.getElementById('birthPanel').style.display = 'none';
   document.getElementById('resPanel').style.display = 'block';
   document.getElementById('loading').style.display = 'block';
   document.getElementById('card').style.display = 'none';
+  document.getElementById('nkLockHost').style.display = 'none';
   ['sayBlock', 'timeBlock', 'withBlock', 'endBlock', 'basisBlock'].forEach(function (id) {
     document.getElementById(id).style.display = 'none';
   });
@@ -445,7 +498,12 @@ function _mucHtml(list) {
 //   renderProse = thứ model viết, tốn tiền    → chỉ vẽ sau khi đã trả
 // Gộp lại một hàm như bản trước là sớm muộn có một khối chữ lọt vào lượt miễn
 // phí mà không ai để ý.
-function renderMeta(data) {
+// Tách theo ĐƯỜNG TIỀN: `renderMetaHead` là phần đầu (tên + kiểu người) — thứ
+// khách CHƯA đăng ký cũng được xem. `renderMetaBasis` là phần "Cơ sở trong lá
+// số" chi tiết — dù bản thân nó cũng deterministic/0đ, nó vẫn đứng SAU tấm
+// khoá cho khách chưa đăng ký (đúng luật: khoá che hết phần có cấu trúc, chỉ
+// chừa phần đầu). `renderMeta` = cả hai, dùng cho đường đã đăng nhập/đã trả.
+function renderMetaHead(data) {
   var qh = data.quanHe || {};
   var kieu = data.kieu || {};
   document.getElementById('nkName').textContent = data.ten || qh.label || 'Người này';
@@ -468,7 +526,9 @@ function renderMeta(data) {
   document.getElementById('cauHoiChips').innerHTML = (kieu.cauHoi || []).map(function (c) {
     return '<span class="nk-chip">' + esc(c) + '</span>';
   }).join('');
+}
 
+function renderMetaBasis(data) {
   var rows = [];
   (data.matDoc || []).forEach(function (m) {
     rows.push('<li><b>' + esc(m.nhan) + '</b> — cung ' + esc(m.cung) +
@@ -517,6 +577,8 @@ function renderMeta(data) {
     document.getElementById('basisBlock').style.display = 'block';
   }
 }
+
+function renderMeta(data) { renderMetaHead(data); renderMetaBasis(data); }
 
 function renderProse(data) {
   document.getElementById('tinhKhi').textContent = data.tinhKhi || '';

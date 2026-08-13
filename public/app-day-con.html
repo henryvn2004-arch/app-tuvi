@@ -244,6 +244,8 @@
           </div>
         </div>
 
+        <div id="dcLockHost" style="display:none;margin-bottom:16px"></div>
+
         <!-- ── ĐO ĐƯỢC GÌ ─────────────────────────────────────────────── -->
         <div class="dc-sec" id="secDo" style="display:none"><b>Đo được gì</b><i></i></div>
 
@@ -453,6 +455,14 @@ function _cacheQuery(b, self, lo) {
   return q;
 }
 
+function _dcLoggedIn() { return !!(window.Auth && window.Auth.isLoggedIn && window.Auth.isLoggedIn()); }
+
+// Đăng nhập rồi → bấm nút là CHẠY THẬT ngay (case 1), có Lượng (hoặc đã trả
+// cho đúng lá số này) thì chạy thẳng bản đầy đủ, không có màn "tính thử" nào
+// chen giữa. Chưa đăng nhập (case 2) → chỉ dựng CHÍNH tầng đầu (tên + kiểu
+// người) — phần còn lại, kể cả 5 trục/8 chất vốn cũng 0đ, gộp vào CÙNG tấm
+// khoá với phần AI viết riêng. Khoá là CTA đăng ký, không phải chỉ khoá phần
+// trả tiền — đúng luật đã áp cho gio-sinh/cong-so/luận giải.
 async function analyze() {
   showError('');
   var b = _birthOf('');
@@ -462,10 +472,8 @@ async function analyze() {
   _last = b; _lastSelf = self;
   _currentSlug = TuviPaywall.generateToolSlug('day-con-' + lo + '-' + b.day + b.month + b.year);
 
-  // A — có Lượng (hoặc đã trả cho đúng lá số này) thì chạy thẳng bản đầy đủ,
-  // không còn bước "tính thử" riêng nữa. Thiếu Lượng / chưa đăng nhập thì
-  // `requireCredits` tự bật popup (đăng nhập · nạp thêm) — KHÔNG chạy gì cả
-  // cho tới khi qua được cửa đó.
+  if (!_dcLoggedIn()) { return _runAnonPreview(b, self, lo); }
+
   var free = false;
   try { free = await TuviPaywall.isFreeRerun('/api/day-con', _cacheQuery(b, self, lo)); } catch (e) { free = false; }
   if (free) {
@@ -476,11 +484,57 @@ async function analyze() {
   await TuviPaywall.requireCredits(_currentSlug, function () { return _doGenerate(false, lo); });
 }
 
+// Khách chưa đăng nhập: gọi tầng deterministic (0đ, không cần đăng nhập) rồi
+// dựng CHỈ phần đầu (tên + kiểu người + dấu hiệu ở nhà). Phần còn lại — 5
+// trục, 8 chất, hoạt động, cách dạy, các chặng đi học, cơ sở lá số, và toàn bộ
+// AI viết riêng — đứng sau tấm khoá.
+async function _runAnonPreview(b, self, lo) {
+  _openPanel();
+  document.getElementById('loading').style.display = 'none';
+  try {
+    var res = await fetch('/api/day-con?preview=1', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ birth: b, birthParent: self || undefined, name: b.name || '', moiLo: lo }),
+    });
+    var data = await res.json();
+    if (!res.ok || !data.success) throw new Error(data.error || 'Lỗi ' + res.status);
+    renderMetaHead(data);
+    document.getElementById('card').style.display = 'block';
+    document.getElementById('btnEdit').style.display = '';
+    if (window.SHELL_INTRO) Shell.dismissIntro(window.SHELL_INTRO.key);
+    _renderLockWall(lo);
+  } catch (e) {
+    _closePanel();
+    showError('Lỗi: ' + (e.message || 'Không thể kết nối. Vui lòng thử lại.'));
+  }
+}
+
+function _renderLockWall(lo) {
+  var host = document.getElementById('dcLockHost');
+  host.style.display = 'block';
+  host.innerHTML = '';
+  TuviPaywall.lockPreview({
+    host: host,
+    title: '⊙ Bản hướng dẫn đầy đủ chưa mở',
+    items: [
+      'Năm trục tính khí + Tám chất năng khiếu (kèm điểm số)',
+      'Định hướng môi trường học + cách dạy hợp với con',
+      'Hoạt động nên cho con thử, kèm việc nên/tránh làm tối nay',
+      'Các chặng đi học + cơ sở trong lá số',
+    ],
+    cta: 'Đăng ký để mở bản hướng dẫn đầy đủ',
+    slug: function () { return _currentSlug; },
+    onUnlock: function () { return _doGenerate(false, lo); },
+  });
+}
+
 function _openPanel() {
   document.getElementById('birthPanel').style.display = 'none';
   document.getElementById('resPanel').style.display = 'block';
   document.getElementById('loading').style.display = 'block';
   document.getElementById('card').style.display = 'none';
+  document.getElementById('dcLockHost').style.display = 'none';
   ['secDo', 'secLam', 'secNen',
    'loBlock', 'trucBlock', 'khieuBlock', 'dhBlock', 'howCardsBlock',
    'doBlock', 'hdBlock', 'changBlock', 'withBlock', 'endBlock',
@@ -753,10 +807,13 @@ function renderHoatDong(h) {
   document.getElementById('hdBlock').style.display = 'block';
 }
 
-// W1 — hai hàm vẽ, tách theo ĐƯỜNG TIỀN chứ không theo bố cục:
-//   renderMeta  = thứ engine tra bảng ra, 0đ  → vẽ ngay ở lượt tính thử
-//   renderProse = thứ model viết, tốn tiền    → chỉ vẽ sau khi đã trả
-function renderMeta(data) {
+// Tách theo ĐƯỜNG TIỀN: `renderMetaHead` là phần đầu (tên + kiểu người + dấu
+// hiệu ở nhà) — thứ khách CHƯA đăng ký cũng được xem. `renderMetaRest` là mọi
+// khối deterministic còn lại (5 trục, 8 chất, hoạt động, cách dạy, chặng đi
+// học, cơ sở lá số) — dù bản thân chúng cũng 0 lượt LLM, chúng vẫn đứng SAU
+// tấm khoá cho khách chưa đăng ký (khoá che hết phần có cấu trúc, chỉ chừa
+// phần đầu). `renderMeta` = cả hai, dùng cho đường đã đăng nhập/đã trả.
+function renderMetaHead(data) {
   var kieu = data.kieu || {};
   var hoc = data.hoc || {};
   document.getElementById('dcName').textContent = data.ten || 'Con';
@@ -780,8 +837,11 @@ function renderMeta(data) {
   document.getElementById('dauHieuChips').innerHTML = (hoc.dauHieu || []).map(function (c) {
     return '<span class="dc-chip">' + esc(c) + '</span>';
   }).join('');
+}
 
-  // Ba bậc tra bảng của khung — 0 lượt LLM nên hiện NGAY ở lượt tính thử.
+function renderMetaRest(data) {
+  var hoc = data.hoc || {};
+  // Ba bậc tra bảng của khung — 0 lượt LLM.
   renderTruc(data.truc);
   renderKhieu(data);
   renderHoatDong(data.goiYHoatDong);
@@ -878,6 +938,8 @@ function renderMeta(data) {
   }
   _syncSections();
 }
+
+function renderMeta(data) { renderMetaHead(data); renderMetaRest(data); }
 
 /** Vạch chia nhóm chỉ hiện khi nhóm đó THẬT SỰ có khối nào đang hiện — một cái
  *  tiêu đề đứng trên khoảng trống còn khó hiểu hơn là không có tiêu đề. */
