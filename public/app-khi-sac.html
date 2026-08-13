@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Khí Sắc AI — Tử Vi Minh Bảo</title>
+<meta name="description" content="Chụp ảnh khuôn mặt — AI luận khí sắc theo Ma Y Thần Tướng: Ấn Đường, Ngũ Nhạc, dự báo vận khí 1–3 tháng tới.">
+<link rel="icon" type="image/webp" href="/seal.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"></noscript>
+<link rel="stylesheet" href="/shell.css?v=19">
+<style>
+.ks-card{background:var(--white);border:1px solid var(--line);border-radius:14px;padding:20px 22px;box-shadow:var(--shadow);max-width:640px}
+.ks-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:4px}
+.ks-card p.sub{font-size:12.5px;color:var(--text-lt);margin-bottom:14px}
+.ks-privacy{display:flex;align-items:flex-start;gap:10px;padding:11px 15px;background:var(--gold-lt);border-radius:8px;border-left:3px solid var(--blue);font-size:12px;color:var(--tx-blue);margin-bottom:16px}
+.upload-area{border:2px dashed var(--line-2);border-radius:12px;padding:32px 20px;text-align:center;cursor:pointer;transition:all .2s;background:var(--paper);display:block}
+.upload-area:hover,.upload-area.dragover{border-color:var(--gold);background:var(--gold-lt)}
+.upload-area.has-image{padding:16px;cursor:default}
+.upload-area input[type=file]{display:none}
+.upload-icon{font-size:40px;margin-bottom:10px;display:block}
+.upload-text{font-size:14.5px;font-weight:700;color:var(--heading);margin-bottom:5px}
+.upload-hint{font-size:12.5px;color:var(--text-lt)}
+.preview-img{max-width:100%;max-height:360px;display:block;margin:0 auto;border-radius:8px}
+.change-photo{margin-top:12px;background:none;border:1px solid var(--line);border-radius:4px;padding:6px 16px;font-size:12px;color:var(--text-mid);cursor:pointer;font-family:inherit}
+.btn-analyze{display:inline-flex;align-items:center;gap:8px;padding:11px 24px;background:var(--navy);color:#fff;border:none;border-radius:8px;font-size:13.5px;font-weight:600;cursor:pointer;font-family:inherit}
+.btn-analyze:disabled{opacity:.55;cursor:not-allowed}
+.ks-error{color:var(--tx-red);padding:10px 14px;border:1px solid var(--red);border-radius:8px;background:var(--white);margin-top:12px;display:none;font-size:13px}
+.ks-error.active{display:block}
+.results-section{display:none;margin-top:16px}
+.results-section.show{display:block}
+.results-loading{text-align:center;padding:36px 0;color:var(--text-mid)}
+.results-loading .big-spinner{width:38px;height:38px;border:3px solid var(--border-lt);border-top-color:var(--gold);border-radius:50%;margin:0 auto 16px;animation:kspin .9s linear infinite}
+@keyframes kspin{to{transform:rotate(360deg)}}
+.results-loading .loading-text{font-size:13.5px;color:var(--text-mid);line-height:1.7}
+.results-content{font-size:14px;line-height:1.85;color:var(--text)}
+.results-content h2{font-family:var(--serif);font-size:17px;font-weight:600;margin:18px 0 10px;color:var(--heading)}
+.results-content h3{font-family:var(--serif);font-size:14.5px;font-weight:600;margin:14px 0 8px;color:var(--heading)}
+.results-content p{margin-bottom:12px}
+.results-content strong{color:var(--text)}
+.results-content em{color:var(--gold-soft);font-style:italic}
+.results-content ul{margin:0 0 12px 18px}
+.results-content li{margin-bottom:4px}
+.results-content blockquote{border-left:3px solid var(--gold-soft);padding-left:12px;color:var(--text-lt);font-style:italic;margin:0 0 12px}
+</style>
+</head>
+<body>
+
+<div class="shell">
+  <aside class="sb" id="shell-sidebar"></aside>
+
+  <main class="ws" id="ws">
+    <div class="ws-top">
+      <button class="btn mobile-only" onclick="document.getElementById('shell-sidebar').classList.toggle('open');window.shellSyncBackdrop&&shellSyncBackdrop()" aria-label="Menu">☰</button>
+      <div class="ws-title"><b>Khí Sắc AI</b><span>Vận khí 1–3 tháng qua Ấn Đường và Ngũ Nhạc — <span data-tvp-price="khi-sac">…</span> Lượng</span></div>
+      <div class="ws-actions">
+        <button class="btn mobile-only" onclick="Shell.openRail()">✦ Hỏi</button>
+      </div>
+    </div>
+    <div class="ws-body">
+      <div id="introHost"></div>
+      <div id="shellRecent"></div>
+
+      <div class="ks-card" id="inputCard">
+        <h2>Xem Khí Sắc</h2>
+        <p class="sub">Ảnh mới trong 24h, ánh sáng tự nhiên, mặt mộc, thẳng, thấy rõ trán và toàn mặt.</p>
+        <div class="ks-privacy"><span>🔒</span><div>Ảnh chỉ gửi tới AI để phân tích, không lưu trên server. Chụp buổi sáng hoặc chiều, không makeup, không filter.</div></div>
+
+        <label class="upload-area" id="upload-area" for="file-input">
+          <div id="upload-placeholder">
+            <span class="upload-icon">📷</span>
+            <div class="upload-text">Nhấn để chọn ảnh hoặc kéo thả vào đây</div>
+            <div class="upload-hint">JPG, PNG — tối đa 10MB · Chụp trong 24h</div>
+          </div>
+          <div id="upload-preview" style="display:none">
+            <img class="preview-img" id="preview-img" alt="Ảnh chân dung">
+            <button type="button" class="change-photo" onclick="event.preventDefault(); resetTool(true);">Chọn ảnh khác</button>
+          </div>
+          <input type="file" id="file-input" accept="image/jpeg,image/png,image/jpg,image/webp">
+        </label>
+
+        <div style="text-align:center;margin-top:18px">
+          <button class="btn-analyze" id="analyze-btn" onclick="analyze()" disabled>🌅 Luận Khí Sắc — <span data-tvp-price="khi-sac">…</span> Lượng</button>
+        </div>
+        <div class="ks-error" id="error-msg"></div>
+      </div>
+
+      <div class="results-section" id="results-section">
+        <div class="ks-card" data-ws-result>
+          <h2>Khí Sắc Luận</h2>
+          <p class="sub">AI · Ma Y Thần Tướng cổ pháp</p>
+          <div id="results-loading" class="results-loading">
+            <div class="big-spinner"></div>
+            <div class="loading-text">Đang quan sát khí sắc từ ảnh của bạn — vui lòng chờ khoảng 30 giây...<br><span style="font-size:12px;color:var(--text-lt)">AI đang phân tích sắc trên Ấn Đường và 5 vùng Ngũ Nhạc.</span></div>
+          </div>
+          <article class="results-content" id="results-content" style="display:none"></article>
+          <div style="text-align:center;margin-top:8px" id="results-actions" style="display:none">
+            <button class="change-photo" onclick="resetTool(true)">Xem Ảnh Khác</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <aside class="rail" id="shell-rail"></aside>
+</div>
+
+<script>window.SHELL_ACTIVE='khi-sac';window.SHELL_HISTORY=true;
+window.SHELL_INTRO={key:'khi-sac',title:'Khí Sắc AI',desc:'Chụp ảnh khuôn mặt — <b>AI</b> luận khí sắc theo Ma Y Thần Tướng: Ấn Đường, Ngũ Nhạc, dự báo vận khí 1–3 tháng tới.'};</script>
+<script src="/auth.js?v=2"></script>
+<script src="/tuvi-paywall.js?v=20"></script>
+  <script src="/nav.js?v=22" data-icons-only></script>
+<script src="/shell.js?v=72"></script>
+<script>
+function initKhiSac(){
+  Shell.setContext({
+    label:'Khí Sắc AI',
+    placeholder:'Hỏi thầy về khí sắc…',
+    greeting:'Chào bạn. Tải ảnh khuôn mặt ở khung bên trái, tôi sẽ luận khí sắc theo Ma Y Thần Tướng. Sau khi có kết quả, cứ hỏi tôi thêm bất cứ điều gì.',
+    chips:['Ấn Đường là gì?','5 sắc Ngũ Hành nghĩa là gì?','Khí sắc khác Diện Tướng thế nào?']
+  });
+}
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initKhiSac); else initKhiSac();
+
+// ══════════════════════════════════════════════════════════════════════
+// Port từ public/tools/khi-sac-ai.html — giữ nguyên luồng nén ảnh + gate
+// Lượng (TuviPaywall) + SSE 'delta' stream tới /api/tuong-mat?action=khi-sac.
+// ══════════════════════════════════════════════════════════════════════
+let _imageData = null;
+let _mediaType = 'image/jpeg';
+let _previewDataUrl = null;
+let _currentSlug = null;
+
+function resetTool(clearFile) {
+  _imageData = null;
+  _previewDataUrl = null;
+  _mediaType = 'image/jpeg';
+  _currentSlug = null;
+  if (clearFile !== false) document.getElementById('file-input').value = '';
+  document.getElementById('upload-placeholder').style.display = 'block';
+  document.getElementById('upload-preview').style.display = 'none';
+  document.getElementById('upload-area').classList.remove('has-image');
+  document.getElementById('analyze-btn').disabled = true;
+  document.getElementById('error-msg').classList.remove('active');
+  document.getElementById('error-msg').textContent = '';
+  document.getElementById('results-section').classList.remove('show');
+  document.getElementById('results-loading').style.display = 'block';
+  document.getElementById('results-content').style.display = 'none';
+  document.getElementById('results-content').innerHTML = '';
+  document.getElementById('results-actions').style.display = 'none';
+  Shell.setShareable(null);
+}
+
+function compressImage(file, maxSize = 1400, quality = 0.88) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        let { width, height } = img;
+        if (width > height && width > maxSize) {
+          height = Math.round(height * maxSize / width);
+          width = maxSize;
+        } else if (height > maxSize) {
+          width = Math.round(width * maxSize / height);
+          height = maxSize;
+        }
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, width, height);
+        resolve(canvas.toDataURL('image/jpeg', quality));
+      };
+      img.onerror = () => reject(new Error('Không đọc được ảnh'));
+      img.src = e.target.result;
+    };
+    reader.onerror = () => reject(new Error('Không đọc được file'));
+    reader.readAsDataURL(file);
+  });
+}
+
+async function handleFile(file) {
+  if (!file) return;
+  if (!file.type.startsWith('image/')) {
+    alert('Vui lòng chọn file ảnh (JPG hoặc PNG).');
+    return;
+  }
+  if (file.size > 10 * 1024 * 1024) {
+    alert('Ảnh quá lớn (tối đa 10MB).');
+    return;
+  }
+  try {
+    resetTool(false);
+    const dataUrl = await compressImage(file);
+    _previewDataUrl = dataUrl;
+    _mediaType = 'image/jpeg';
+    _imageData = dataUrl.replace(/^data:image\/\w+;base64,/, '');
+
+    document.getElementById('preview-img').src = dataUrl;
+    document.getElementById('upload-placeholder').style.display = 'none';
+    document.getElementById('upload-preview').style.display = 'block';
+    document.getElementById('upload-area').classList.add('has-image');
+    document.getElementById('analyze-btn').disabled = false;
+  } catch (err) {
+    alert('Lỗi xử lý ảnh: ' + err.message);
+    resetTool(true);
+  }
+}
+
+async function analyze() {
+  if (!_imageData) return;
+  document.getElementById('error-msg').classList.remove('active');
+  document.getElementById('analyze-btn').disabled = true;
+  _currentSlug = TuviPaywall.generateToolSlug('khi-sac');
+  await TuviPaywall.requireCredits(_currentSlug, async () => {
+    await _doAnalyze();
+  });
+  document.getElementById('analyze-btn').disabled = false;
+}
+
+async function _doAnalyze() {
+  const rs = document.getElementById('results-section');
+  rs.classList.add('show');
+  document.getElementById('results-loading').style.display = 'block';
+  document.getElementById('results-content').style.display = 'none';
+  document.getElementById('results-content').innerHTML = '';
+  document.getElementById('results-actions').style.display = 'none';
+  rs.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+  try {
+    const res = await fetch('/api/tuong-mat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'khi-sac', image: _imageData, mediaType: _mediaType })
+    });
+    if (!res.ok) { const d = await res.json().catch(() => ({})); throw new Error(d.error || 'Lỗi ' + res.status); }
+
+    const reader = res.body.getReader();
+    const decoder = new TextDecoder();
+    let buf = '', full = '', firstChunk = true;
+    const contentEl = document.getElementById('results-content');
+    const loadingEl = document.getElementById('results-loading');
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      buf += decoder.decode(value, { stream: true });
+      const lines = buf.split('\n');
+      buf = lines.pop() || '';
+      for (const line of lines) {
+        if (!line.startsWith('data: ')) continue;
+        const raw = line.slice(6).trim();
+        if (raw === '[DONE]') break;
+        try {
+          const j = JSON.parse(raw);
+          if (j.err) throw new Error(j.err);
+          if (j.t) {
+            full += j.t;
+            if (firstChunk) { loadingEl.style.display = 'none'; contentEl.style.display = 'block'; firstChunk = false; }
+            contentEl.innerHTML = renderMarkdown(full);
+          }
+        } catch (e) { if (e.message && !e.message.includes('JSON')) throw e; }
+      }
+    }
+
+    if (!full) throw new Error('AI không trả về kết quả.');
+    contentEl.innerHTML = renderMarkdown(full);
+    document.getElementById('results-actions').style.display = 'block';
+    _saveKhiSacReading(full);
+    Shell.setShareable({ kind:'text', toolId:'khi-sac', title:'Khí Sắc của tôi', text:full });
+  } catch (e) {
+    document.getElementById('results-content').innerHTML = '';
+    document.getElementById('results-content').style.display = 'block';
+    document.getElementById('results-loading').style.display = 'none';
+    const err = document.getElementById('error-msg');
+    err.textContent = 'Lỗi: ' + (e.message || 'Không thể kết nối. Vui lòng thử lại.');
+    err.classList.add('active');
+  }
+}
+
+async function _saveKhiSacReading(resultText) {
+  try {
+    const token = window.Auth?.getSession()?.access_token;
+    if (!token || !resultText) return;
+    let thumbnail = null;
+    if (_imageData) {
+      const img = new Image();
+      await new Promise(resolve => { img.onload = resolve; img.src = 'data:' + _mediaType + ';base64,' + _imageData; });
+      const canvas = document.createElement('canvas');
+      const maxW = 200;
+      const scale = Math.min(1, maxW / img.width);
+      canvas.width = Math.round(img.width * scale);
+      canvas.height = Math.round(img.height * scale);
+      canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
+      thumbnail = canvas.toDataURL('image/jpeg', 0.7);
+    }
+    fetch('/api/history?action=save_tuong', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+      body: JSON.stringify({ tool: 'khi-sac', result_text: resultText, thumbnail }),
+    }).catch(() => {});
+  } catch(e) {}
+}
+
+function renderMarkdown(md) {
+  return md
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/^## (.+)$/gm,'<h2>$1</h2>')
+    .replace(/^### (.+)$/gm,'<h3>$1</h3>')
+    .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
+    .replace(/\*(.+?)\*/g,'<em>$1</em>')
+    .replace(/^> (.+)$/gm,'<blockquote>$1</blockquote>')
+    .replace(/^- (.+)$/gm,'<li>$1</li>')
+    .replace(/(<li>[^]*?<\/li>\n?)+/g,s=>'<ul>'+s+'</ul>')
+    .replace(/\n\n+/g,'</p><p>')
+    .replace(/^(?!<[hublp])(.+)$/gm,'<p>$1</p>')
+    .replace(/<p><\/p>/g,'')
+    .replace(/<p>(<[hul])/g,'$1')
+    .replace(/(<\/[hul][^>]*>)<\/p>/g,'$1');
+}
+
+TuviPaywall.init({ product: 'khi-sac', slug: () => _currentSlug, onUnlock: () => {} });
+
+document.addEventListener('DOMContentLoaded', () => {
+  const fileInput = document.getElementById('file-input');
+  const uploadArea = document.getElementById('upload-area');
+  fileInput.addEventListener('change', (e) => handleFile(e.target.files[0]));
+  uploadArea.addEventListener('dragover', (e) => { e.preventDefault(); uploadArea.classList.add('dragover'); });
+  uploadArea.addEventListener('dragleave', () => uploadArea.classList.remove('dragover'));
+  uploadArea.addEventListener('drop', (e) => {
+    e.preventDefault();
+    uploadArea.classList.remove('dragover');
+    const f = e.dataTransfer.files?.[0];
+    if (f) handleFile(f);
+  });
+});
+</script>
+</body>
+</html>
