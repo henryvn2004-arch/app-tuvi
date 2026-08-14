@@ -255,7 +255,7 @@
 window.SHELL_INTRO={key:'huong-nghiep-tre',title:'Hướng Nghiệp Sớm Cho Con',desc:'Đưa lá số của con vào đây để biết <b>con nghiêng về thiên hướng nào</b>, <b>nên cho con làm quen với việc gì ở đúng lứa tuổi này</b>, và <b>người lớn nên làm gì / nên thôi gì</b>. Đây là bản định hướng để tham khảo — không chốt nghề cho con.'};</script>
 <script src="/laso-chart.js?v=3"></script>
 <script src="/tuvi-form.js?v=2"></script>
-<script src="/tuvi-paywall.js?v=20"></script>
+<script src="/tuvi-paywall.js?v=21"></script>
 <script src="/auth.js?v=2"></script>
   <script src="/nav.js?v=22" data-icons-only></script>
 <script src="/shell.js?v=72"></script>
@@ -377,15 +377,17 @@ async function analyze() {
 
   // Trẻ em: đây là đường có bán. Đăng nhập rồi → bấm nút là CHẠY THẬT ngay
   // (case 1), bỏ hẳn bản xem trước — chốt Lượng rồi mới vẽ ĐẦY ĐỦ trong
-  // `_doGenerate`. Chưa đăng nhập (case 2) → chỉ dựng CHÍNH tầng đầu (hero),
-  // phần còn lại (kể cả thiên hướng/chất người/cơ sở vốn cũng 0đ) gộp vào
-  // CÙNG tấm khoá với phần AI viết riêng.
+  // `_doGenerate`. Chưa đăng nhập (case 2) → dựng tầng đầu (hero) MỞ + thiên
+  // hướng/chất người/cơ sở lá số (0đ, có sẵn trong payload preview) dựng THẬT
+  // nhưng LÀM MỜ — không ẩn hẳn khỏi DOM. Phần AI viết riêng vẫn sau tấm khoá.
   if (!_hnLoggedIn()) {
     _loadingCtl && _loadingCtl.stop();
     document.getElementById('loading').style.display = 'none';
     document.getElementById('card').style.display = 'block';
     document.getElementById('btnEdit').style.display = '';
     renderMetaHead(prev);
+    renderMetaRest(prev);
+    _hnLockRestBlocks(true);
     if (window.SHELL_INTRO) Shell.dismissIntro(window.SHELL_INTRO.key);
     _renderLockWall(lo);
     return;
@@ -403,6 +405,29 @@ async function analyze() {
   await TuviPaywall.requireCredits(_currentSlug, function () { return _doGenerate(false, lo); });
 }
 
+// Khối deterministic mà `renderMetaRest` quản (đã có sẵn trong payload
+// preview, 0đ) — khoá bằng cách làm mờ CHÍNH các khối này, không đụng khối chỉ
+// tồn tại sau khi có AI viết riêng (loBlock/doBlock/... không nằm trong danh
+// sách vì renderMetaRest không đụng tới chúng).
+var HN_REST_BLOCK_IDS = ['huongDauBlock', 'chatBlock', 'basisBlock'];
+function _hnLockRestBlocks(locked) {
+  HN_REST_BLOCK_IDS.forEach(function (id) {
+    var block = document.getElementById(id);
+    if (!block || block.style.display === 'none') return;
+    var body = block.querySelector('.res-block-body');
+    var oldBadge = block.querySelector('.tpw-lock-badge');
+    if (oldBadge) oldBadge.remove();
+    if (locked) {
+      body.classList.add('tpw-real-lock');
+      var titleEl = block.querySelector('.res-block-title');
+      if (titleEl) titleEl.insertAdjacentHTML('afterend', TuviPaywall.lockBadge('Khoá'));
+    } else {
+      body.classList.remove('tpw-real-lock');
+    }
+  });
+  if (window.mountIcons) window.mountIcons(document.getElementById('resPanel'));
+}
+
 function _renderLockWall(lo) {
   var host = document.getElementById('hnLockHost');
   host.style.display = 'block';
@@ -411,8 +436,6 @@ function _renderLockWall(lo) {
     host: host,
     title: '⊙ Bản định hướng đầy đủ chưa mở',
     items: [
-      'Thiên hướng nổi nhất + chất người đọc ra từ lá số',
-      'Cơ sở trong lá số — cung Mệnh, Phúc Đức, Thiên Di…',
       'Ba hướng đáng cho con thử, kèm hoạt động cụ thể theo lứa tuổi',
       'Việc nên làm trong tháng này / nên thôi, và mở lời với con thế nào',
     ],
@@ -470,6 +493,7 @@ async function _doGenerate(freeRerun, lo) {
     if (!res.ok || !data.success) throw new Error(data.error || 'Lỗi ' + res.status);
     renderMeta(data);
     renderProse(data);
+    _hnLockRestBlocks(false); // mở khoá nếu trước đó đã mờ ở lượt xem trước
     _loadingCtl && _loadingCtl.finish();
     document.getElementById('loading').style.display = 'none';
     document.getElementById('card').style.display = 'block';
@@ -554,11 +578,12 @@ function _banGiaoNguoiLon(data) {
 }
 
 // Tách theo ĐƯỜNG TIỀN: `renderMetaHead` là phần đầu (hero — tên, tuổi, kiểu,
-// dòng lá số) — thứ khách CHƯA đăng ký cũng được xem. `renderMetaRest` là mọi
-// khối deterministic còn lại (thiên hướng nổi nhất, chất người, cơ sở lá số)
-// — dù bản thân chúng cũng 0 lượt LLM, chúng vẫn đứng SAU tấm khoá cho khách
-// chưa đăng ký. `renderMeta` = cả hai, dùng cho đường đã đăng nhập/đã trả và
-// cho lá số người lớn (không bán, không gate).
+// dòng lá số) — thứ khách CHƯA đăng ký cũng được xem MỞ. `renderMetaRest` là
+// mọi khối deterministic còn lại (thiên hướng nổi nhất, chất người, cơ sở lá
+// số) — LUÔN dựng thật vào DOM; khách chưa đăng ký chỉ khác ở chỗ
+// `_hnLockRestBlocks(true)` làm mờ chúng SAU khi dựng (xem analyze()).
+// `renderMeta` = cả hai, dùng cho đường đã đăng nhập/đã trả và cho lá số
+// người lớn (không bán, không gate).
 function renderMetaHead(data) {
   // Bỏ trống ô tên thì tiêu đề rơi về một cách gọi — mà "Con" dán lên một lá số
   // 43 tuổi thì vẫn đúng chỗ Henry báo, chỉ khác một dòng.

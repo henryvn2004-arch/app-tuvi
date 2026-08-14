@@ -151,7 +151,16 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
 .tpw-prev-list li{position:relative;padding-left:17px}
 .tpw-prev-list li::before{content:'⊙';position:absolute;left:0;color:#C9A84C;font-size:11px}
 .tpw-prev .tpw-btn{min-width:240px;padding-left:26px;padding-right:26px}
-@media(max-width:520px){.tpw-prev .tpw-btn{min-width:0;width:100%}}`;
+@media(max-width:520px){.tpw-prev .tpw-btn{min-width:0;width:100%}}
+/* ── Khoá NỘI DUNG THẬT đã dựng (khác .tpw-lock-blur — cái đó là vạch giả
+   trang trí bên trong tấm khoá quảng cáo). Dùng khi trang đã tính xong phần
+   deterministic cho khách chưa đăng ký, muốn cho THẤY CÓ CẤU TRÚC (tiêu đề,
+   hình dạng nội dung) nhưng làm mờ chữ thật — không được phép hiện ra chữ
+   đọc được. KHÔNG dùng .tpw-real-lock cho phần chưa có gì để làm mờ (ảnh/
+   truyện AI chưa sinh) — lúc đó dùng lockPreview() như cũ. */
+.tpw-real-lock{filter:blur(5px);opacity:.65;user-select:none;pointer-events:none}
+.tpw-lock-badge{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;color:#9A7B3A;border:1px solid #9A7B3A;border-radius:20px;padding:2px 9px}
+.tpw-lock-badge .ic-inline{width:.9em;height:.9em}`;
     document.head.appendChild(s);
   }
 
@@ -771,10 +780,19 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
     setTimeout(() => { refreshCostHints().catch(() => {}); }, 1500);
   }
 
+  // Badge nhỏ "🔒 Khoá" gắn cạnh tiêu đề một khối đã dựng thật nhưng đang bị
+  // làm mờ bằng .tpw-real-lock — dùng chung để nhiều trang không tự vẽ mỗi
+  // nơi một kiểu. `mountIcons` (nav.js) phải chạy lại sau khi chèn (span
+  // data-icon chỉ tự dựng lúc nạp trang).
+  function lockBadge(text) {
+    _css();
+    return '<span class="tpw-lock-badge"><span class="ic-inline" data-icon="lock"></span>' + (text || 'Khoá') + '</span>';
+  }
+
   return {
     init, requireCredits, requireCreditsCached, requireCreditsCachedQuery,
     generateToolSlug, ensureCredits, deductSilent, getBalance, fillPriceSlots,
-    mountCostHints, refreshCostHints, lockPreview, isFreeRerun,
+    mountCostHints, refreshCostHints, lockPreview, isFreeRerun, lockBadge,
     _banner, _close, _closeLock, _login,
   };
 })();
