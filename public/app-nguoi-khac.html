@@ -218,7 +218,7 @@
 window.SHELL_INTRO={key:'nguoi-khac',title:'Lá Số Người Khác',desc:'Đưa lá số của <b>sếp, đồng nghiệp, cấp dưới hay người thân</b> vào đây để biết họ <b>vận hành thế nào</b>, <b>nên nói gì</b>, <b>tránh nói gì</b> và <b>lúc nào nên đưa việc lớn tới</b>. Đọc theo cung Mệnh, Phúc Đức, Thiên Di, Quan Lộc, Nô Bộc.'};</script>
 <script src="/laso-chart.js?v=3"></script>
 <script src="/tuvi-form.js?v=2"></script>
-<script src="/tuvi-paywall.js?v=20"></script>
+<script src="/tuvi-paywall.js?v=21"></script>
 <script src="/auth.js?v=2"></script>
   <script src="/nav.js?v=22" data-icons-only></script>
 <script src="/shell.js?v=72"></script>
@@ -310,10 +310,11 @@ function _nkLoggedIn() { return !!(window.Auth && window.Auth.isLoggedIn && wind
 
 // Đăng nhập rồi → bấm nút là CHẠY THẬT ngay (case 1): trừ Lượng (0đ nếu free)
 // rồi chạy trọn bản cẩm nang, không có màn xem trước nào chen giữa. Chưa đăng
-// nhập (case 2) → chỉ dựng CHÍNH tầng đầu (tên/kiểu người) — kể cả phần miễn
-// phí còn lại (cơ sở lá số) cũng gộp vào CÙNG tấm khoá với phần AI viết riêng,
-// CTA đăng ký nhận Lượng miễn phí. Đúng luật đã áp cho gio-sinh/cong-so/luận
-// giải: khoá là lời mời đăng ký, không phải chỉ khoá phần trả tiền.
+// nhập (case 2) → dựng tầng đầu (tên/kiểu người) MỞ + phần "Cơ sở lá số" dựng
+// THẬT nhưng LÀM MỜ (deterministic/0đ, không phải ẩn hẳn khỏi DOM); phần AI
+// viết riêng (Nói thế nào/Lúc này họ ở đâu/Người này với bạn) chưa có nội
+// dung nào để mờ nên vẫn đứng sau tấm khoá `lockPreview`, CTA đăng ký Lượng
+// miễn phí.
 async function analyze() {
   showError('');
   var b = _birthOf('');
@@ -337,9 +338,8 @@ async function analyze() {
 }
 
 // Khách chưa đăng nhập: gọi thẳng tầng deterministic (0đ, không cần đăng nhập
-// — server route `?preview=1` không đòi auth) rồi dựng CHỈ phần đầu (tên +
-// kiểu người). Phần còn lại (cơ sở lá số + toàn bộ AI viết riêng) đứng sau
-// tấm khoá.
+// — server route `?preview=1` không đòi auth), dựng phần đầu MỞ + cơ sở lá số
+// LÀM MỜ. Phần AI viết riêng đứng sau tấm khoá (không có gì để mờ, chưa sinh).
 async function _runAnonPreview(b, self, qh) {
   _openPanel();
   document.getElementById('loading').style.display = 'none';
@@ -353,6 +353,9 @@ async function _runAnonPreview(b, self, qh) {
     if (!res.ok || !data.success) throw new Error(data.error || 'Lỗi ' + res.status);
     _lastData = data;
     renderMetaHead(data);
+    // Cơ sở lá số đã deterministic/0đ trong payload preview → dựng THẬT (không
+    // để trống), chỉ làm mờ. Xem comment trên renderMetaBasis.
+    renderMetaBasis(data, true);
     document.getElementById('card').style.display = 'block';
     document.getElementById('btnEdit').style.display = '';
     if (window.SHELL_INTRO) Shell.dismissIntro(window.SHELL_INTRO.key);
@@ -371,7 +374,6 @@ function _renderLockWall(qh) {
     host: host,
     title: '⊙ Cẩm nang đầy đủ chưa mở',
     items: [
-      'Cơ sở trong lá số — Mệnh, Phúc Đức, Thiên Di, Quan Lộc, Nô Bộc',
       'Nói thế nào — điều nên nói và điều nên tránh',
       'Lúc này họ đang ở đâu trong đại vận',
       'Người này với bạn (khi có lá số của bạn)',
@@ -528,7 +530,10 @@ function renderMetaHead(data) {
   }).join('');
 }
 
-function renderMetaBasis(data) {
+// `locked` = khách chưa đăng ký → nội dung THẬT vẫn dựng vào DOM (deterministic,
+// 0đ, đã có sẵn trong payload preview) nhưng bọc trong .tpw-real-lock để CSS
+// làm mờ + badge 🔒 cạnh tiêu đề — không phải ẩn hẳn khối này như bản trước.
+function renderMetaBasis(data, locked) {
   var rows = [];
   (data.matDoc || []).forEach(function (m) {
     rows.push('<li><b>' + esc(m.nhan) + '</b> — cung ' + esc(m.cung) +
@@ -574,7 +579,19 @@ function renderMetaBasis(data) {
     } else {
       moreHost.style.display = 'none';
     }
-    document.getElementById('basisBlock').style.display = 'block';
+    var block = document.getElementById('basisBlock');
+    block.style.display = 'block';
+    var body = block.querySelector('.res-block-body');
+    var oldBadge = block.querySelector('.tpw-lock-badge');
+    if (oldBadge) oldBadge.remove();
+    if (locked) {
+      body.classList.add('tpw-real-lock');
+      var titleEl = block.querySelector('.res-block-title');
+      if (titleEl) titleEl.insertAdjacentHTML('afterend', TuviPaywall.lockBadge('Khoá'));
+      if (window.mountIcons) window.mountIcons(block);
+    } else {
+      body.classList.remove('tpw-real-lock');
+    }
   }
 }
 

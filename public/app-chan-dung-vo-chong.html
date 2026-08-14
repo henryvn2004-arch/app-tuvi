@@ -154,7 +154,7 @@
 window.SHELL_INTRO={key:'chan-dung-vo-chong',title:'Chân Dung Vợ Chồng',desc:'AI phân tích cung <b>Phu Thê</b> trong lá số rồi vẽ <b>chân dung</b> người bạn đời kèm mô tả tính cách, phong thái.'};</script>
 <script src="/laso-chart.js?v=3"></script>
 <script src="/tuvi-form.js?v=2"></script>
-<script src="/tuvi-paywall.js?v=20"></script>
+<script src="/tuvi-paywall.js?v=21"></script>
 <script src="/auth.js?v=2"></script>
   <script src="/nav.js?v=22" data-icons-only></script>
 <script src="/shell.js?v=72"></script>
@@ -216,9 +216,10 @@ function showError(msg) {
 function _cdvcLoggedIn() { return !!(window.Auth && window.Auth.isLoggedIn && window.Auth.isLoggedIn()); }
 
 // Đăng nhập rồi → bấm nút là CHẠY THẬT ngay (case 1); thiếu/không đủ Lượng
-// thì `requireCredits` tự bật popup. Chưa đăng nhập (case 2) → chỉ dựng
-// CHÍNH tầng đầu (cung Phu Thê trong lá số) — phần còn lại, kể cả bảng hình
-// thể vốn cũng 0đ, gộp vào CÙNG tấm khoá với ảnh + luận giải.
+// thì `requireCredits` tự bật popup. Chưa đăng nhập (case 2) → dựng cung Phu
+// Thê MỞ + bảng hình thể MỞ (deterministic, 0đ, đúng thiết kế sẵn có của
+// `renderMeta` — xem chú thích tại đó). Chỉ tranh + luận giải (AI viết/vẽ
+// riêng) đứng sau tấm khoá.
 async function analyze() {
   showError('');
   var fdIn = TuviForm.getData();
@@ -244,8 +245,9 @@ async function analyze() {
 }
 
 // Khách chưa đăng nhập: gọi tầng deterministic (0đ, không cần đăng nhập, KHÔNG
-// sinh ảnh) rồi dựng CHỈ phần đầu (cung Phu Thê). Bảng hình thể, ảnh và luận
-// giải đứng sau tấm khoá.
+// sinh ảnh) rồi dựng cung Phu Thê + bảng hình thể — cả hai `renderMeta` đã tự
+// biết vẽ khi có `data.morph` (đúng payload preview trả về). Ảnh + luận giải
+// đứng sau tấm khoá.
 async function _runAnonPreview() {
   _openPanel();
   document.getElementById('loading').style.display = 'none';
@@ -257,7 +259,7 @@ async function _runAnonPreview() {
     });
     var data = await res.json();
     if (!res.ok || !data.success) throw new Error(data.error || 'Lỗi ' + res.status);
-    renderPhuThe(data.phuThe);
+    renderMeta(data);
     document.getElementById('btnEdit').style.display = '';
     if (window.SHELL_INTRO) Shell.dismissIntro(window.SHELL_INTRO.key);
     _renderLockWall();
@@ -275,7 +277,6 @@ function _renderLockWall() {
     host: host,
     title: '⊙ Chân dung người phối ngẫu chưa mở',
     items: [
-      'Hình thể suy từ sao tại Phu Thê — khuôn mặt, mắt, mũi, vóc dáng',
       'Bức tranh chân dung — vẽ riêng theo lá số của bạn',
       'Luận giải cung Phu Thê + hoàn cảnh gặp gỡ',
     ],

@@ -171,7 +171,7 @@
 window.SHELL_INTRO={key:'chan-dung-tien-kiep',title:'Chân Dung Tiền Kiếp',desc:'Đặt <b>chính lá số của bạn</b> vào <b>một trong 5 nền văn minh Á Đông cổ</b> (Trung Hoa · Việt Nam · Nhật Bản · Hàn Quốc · Thái Lan, do chính lá số quyết định) — chức phận suy từ cung <b>Quan Lộc</b>, dung mạo từ cung <b>Mệnh</b>, cả một đời người kể qua <b>9 đại vận</b>.'};</script>
 <script src="/laso-chart.js?v=3"></script>
 <script src="/tuvi-form.js?v=2"></script>
-<script src="/tuvi-paywall.js?v=20"></script>
+<script src="/tuvi-paywall.js?v=21"></script>
 <script src="/auth.js?v=2"></script>
   <script src="/nav.js?v=22" data-icons-only></script>
 <script src="/shell.js?v=72"></script>
@@ -237,9 +237,10 @@ function _cdtkLoggedIn() { return !!(window.Auth && window.Auth.isLoggedIn && wi
 
 // Đăng nhập rồi → bấm nút là CHẠY THẬT ngay (case 1, cả truyện lẫn tranh
 // trong cùng một lượt), thiếu/không đủ Lượng thì `requireCredits` tự bật
-// popup. Chưa đăng nhập (case 2) → chỉ dựng CHÍNH tầng đầu (danh xưng + tên
-// nhân vật + nền văn minh) — phần còn lại, kể cả khung 5 hồi và cơ sở lá số
-// vốn cũng 0đ, gộp vào CÙNG tấm khoá với phần AI viết/vẽ riêng.
+// popup. Chưa đăng nhập (case 2) → dựng tầng đầu MỞ + khung 5 hồi/cơ sở lá số
+// (deterministic, 0đ) dựng THẬT — khung 5 hồi tự hiện đúng dạng "khoá" (chỉ có
+// stage/role, chưa có chữ) vì title/text vốn dĩ CHƯA TỒN TẠI ở lượt này, không
+// phải bị ẩn đi. Chỉ tranh + chữ từng hồi đứng sau tấm khoá.
 async function analyze() {
   showError('');
   var fdIn = TuviForm.getData();
@@ -269,9 +270,12 @@ async function analyze() {
 }
 
 // Khách chưa đăng nhập: gọi tầng deterministic (0đ, không cần đăng nhập, và
-// KHÔNG sinh ảnh — route xem chú thích `runPreview`) rồi dựng CHỈ phần đầu.
-// Phần còn lại (khung 5 hồi, cơ sở lá số, và toàn bộ AI viết/vẽ riêng) đứng
-// sau tấm khoá.
+// KHÔNG sinh ảnh — route xem chú thích `runPreview`) rồi dựng phần đầu MỞ +
+// `renderMetaRest` (khung 5 hồi — engine chốt stage/role, chưa có title/text
+// vì đó là LLM viết nên KHÔNG có gì để mờ, hiện đúng khung + ghi chú như
+// `renderMetaRest` đã tự làm sẵn — + cơ sở lá số, deterministic, hiện MỞ theo
+// đúng thiết kế cũ của `renderBasis`). Chỉ tranh + chữ từng hồi + kết luận
+// (toàn bộ AI viết/vẽ riêng) đứng sau tấm khoá.
 async function _runAnonPreview() {
   _openPanel();
   document.getElementById('loading').style.display = 'none';
@@ -284,6 +288,7 @@ async function _runAnonPreview() {
     var data = await res.json();
     if (!res.ok || !data.success) throw new Error(data.error || 'Lỗi ' + res.status);
     renderMetaHead(data);
+    renderMetaRest(data);
     document.getElementById('card').style.display = 'block';
     document.getElementById('btnEdit').style.display = '';
     if (window.SHELL_INTRO) Shell.dismissIntro(window.SHELL_INTRO.key);
@@ -303,8 +308,7 @@ function _renderLockWall() {
     title: '⊙ Chân dung & câu chuyện chưa mở',
     items: [
       'Bức tranh chân dung — vẽ riêng theo lá số của bạn',
-      'Mô tả nhân vật + câu chuyện một đời người qua 5 hồi',
-      'Cơ sở trong lá số — chính tinh tại cung Mệnh, Quan Lộc',
+      'Mô tả nhân vật + chữ viết cho từng hồi trong khung 5 hồi',
     ],
     cta: 'Đăng ký để mở chân dung đầy đủ',
     slug: function () { return _currentSlug; },
