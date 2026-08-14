@@ -2,23 +2,18 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<link rel="preload" href="/nav.js?v=20" as="script">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Oracle Phương Đông — Bói Toán Huyền Học Á Đông | Tử Vi Minh Bảo</title>
-<meta property="og:title" content="Oracle Phương Đông — Bói Toán Huyền Học Á Đông | Tử Vi Minh Bảo"/>
-<meta property="og:description" content="Rút thẻ Oracle theo huyền học phương Đông — nhận thông điệp và luận giải bằng AI cho tình duyên, sự nghiệp, quyết định quan trọng trong cuộc sống."/>
-<meta property="og:url" content="https://www.tuviminhbao.com/tools/oracle.html"/>
-<meta property="og:image" content="https://www.tuviminhbao.com/og-image.webp"/>
-<meta name="twitter:card" content="summary_large_image"/>
-<meta name="twitter:title" content="Oracle Phương Đông — Bói Toán Huyền Học Á Đông | Tử Vi Minh Bảo"/>
-<meta name="twitter:description" content="Rút thẻ Oracle theo huyền học phương Đông — nhận thông điệp và luận giải bằng AI cho tình duyên, sự nghiệp, quyết định quan trọng trong cuộc sống."/>
-<meta name="twitter:image" content="https://www.tuviminhbao.com/og-image.webp"/>
-<meta name="keywords" content="oracle phương đông, bói oracle, rút thẻ oracle, huyền học phương đông"/>
-<meta name="description" content="Rút thẻ Oracle theo huyền học phương Đông — nhận thông điệp và luận giải bằng AI cho tình duyên, sự nghiệp, quyết định quan trọng trong cuộc sống."/>
-<link rel="canonical" href="https://www.tuviminhbao.com/tools/oracle.html">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Oracle Phương Đông — Tử Vi Minh Bảo</title>
+<meta name="description" content="Rút thẻ Oracle 40 lá theo triết học phương Đông — Âm Dương, Ngũ Hành, Bát Quái, Thiên Can Địa Chi, ngay trong Luận Đường.">
 <link rel="icon" type="image/webp" href="/seal.webp">
-<link rel="stylesheet" href="/tools/tools.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"></noscript>
+<link rel="stylesheet" href="/shell.css?v=19">
 <style>
+.or-card{background:var(--white);border:1px solid var(--line);border-radius:14px;padding:20px 22px;box-shadow:var(--shadow);max-width:760px}
+.or-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:4px}
+.or-card p.sub{font-size:12.5px;color:var(--text-lt);margin-bottom:14px}
 .oracle-grid{display:flex;flex-wrap:wrap;gap:16px;justify-content:center;margin:24px 0}
 .o-card-scene{width:120px;height:200px;perspective:700px;cursor:pointer;flex-shrink:0}
 .o-card-inner{width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:transform .8s cubic-bezier(.4,0,.2,1)}
@@ -29,110 +24,100 @@
 .o-back-brand{font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#c9a84c;opacity:.8}
 .o-face{transform:rotateY(180deg);border:2px solid var(--border-lt);text-align:center}
 .o-face .of-symbol{font-size:48px;line-height:1;margin-bottom:8px}
-.o-face .of-name{font-size:12px;font-weight:700;color:var(--navy);line-height:1.3;margin-bottom:4px}
+.o-face .of-name{font-size:12px;font-weight:700;color:var(--heading);line-height:1.3;margin-bottom:4px}
 .o-face .of-sub{font-size:10px;color:var(--text-lt)}
-/* Category color bands */
 .cat-am-duong .o-face{background:linear-gradient(180deg,#fdfcf8 0%,#fff 100%);border-color:#c9a84c}
 .cat-ngu-hanh .o-face{background:linear-gradient(180deg,#f0fff4 0%,#fff 100%);border-color:#1E6B3C}
 .cat-bat-quai .o-face{background:linear-gradient(180deg,#f0f4ff 0%,#fff 100%);border-color:#1455A4}
 .cat-can-chi .o-face{background:linear-gradient(180deg,#fff8f0 0%,#fff 100%);border-color:#9A7B3A}
 .cat-cuoc-doi .o-face{background:linear-gradient(180deg,#fef0ef 0%,#fff 100%);border-color:#C0392B}
-/* Result */
 .oracle-meaning{padding:24px;border-radius:12px;margin-bottom:16px;border:1px solid var(--border-lt)}
 .om-header{display:flex;align-items:flex-start;gap:16px;margin-bottom:16px}
 .om-symbol{font-size:52px;line-height:1;flex-shrink:0}
-.om-meta{}
-.om-name{font-size:18px;font-weight:700;color:var(--navy)}
+.om-name{font-size:18px;font-weight:700;color:var(--heading)}
 .om-sub{font-size:12px;color:var(--text-lt);margin-top:2px}
-.om-pos{font-size:10px;font-weight:700;padding:2px 8px;border-radius:2px;display:inline-block;margin-top:6px;letter-spacing:1px}
 .om-body{font-size:14px;color:var(--text-mid);line-height:1.85;margin-bottom:12px}
-.om-guidance{font-size:13px;color:var(--text-mid);line-height:1.8;padding:12px 16px;background:var(--bg-soft);border-radius:6px;border-left:3px solid var(--gold);margin-bottom:12px}
+.om-guidance{font-size:13px;color:var(--text-mid);line-height:1.8;padding:12px 16px;background:var(--paper);border-radius:6px;border-left:3px solid var(--gold);margin-bottom:12px}
 .om-kw{display:flex;gap:6px;flex-wrap:wrap}
 .kw-tag{font-size:11px;padding:2px 8px;border-radius:2px;background:var(--gold-lt);border:1px solid #e8d9b0;color:#9A7B3A}
 .spread-btns{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:24px}
-.spread-btn{padding:10px 20px;background:var(--bg-soft);border:1px solid var(--border);border-radius:6px;cursor:pointer;font-size:13px;font-family:inherit;color:var(--text-mid);transition:all .15s}
+.spread-btn{padding:10px 20px;background:var(--paper);border:1px solid var(--line-2);border-radius:6px;cursor:pointer;font-size:13px;font-family:inherit;color:var(--text-mid);transition:all .15s}
 .spread-btn:hover,.spread-btn.active{background:#c9a84c22;border-color:#c9a84c;color:#9A7B3A;font-weight:600}
-.draw-btn{display:block;margin:0 auto;padding:14px 40px;background:var(--navy);color:#c9a84c;border:2px solid #c9a84c;font-size:15px;font-weight:700;border-radius:6px;cursor:pointer;font-family:'Noto Serif',Georgia,serif;letter-spacing:1px;transition:all .2s}
+.draw-btn{display:block;margin:0 auto;padding:14px 40px;background:var(--navy);color:#c9a84c;border:2px solid #c9a84c;font-size:15px;font-weight:700;border-radius:6px;cursor:pointer;font-family:var(--serif);letter-spacing:1px;transition:all .2s}
 .draw-btn:hover{background:#0D3B5E}
 .card-slot{display:flex;flex-direction:column;align-items:center;gap:8px}
 .slot-label{font-size:10px;font-weight:700;color:var(--text-lt);letter-spacing:1px;text-transform:uppercase;text-align:center;max-width:110px;line-height:1.4}
+.or-q{max-width:500px;margin:0 auto 24px}
+.or-q label{display:block;font-size:12.5px;color:var(--text-mid);margin-bottom:6px}
+.or-q input{width:100%;padding:10px 12px;border:1px solid var(--line-2);border-radius:8px;font-family:inherit;font-size:13.5px;background:var(--paper);color:var(--text)}
 </style>
-<script type="application/ld+json">
-{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Oracle Cards khác Tarot như thế nào?","acceptedAnswer":{"@type":"Answer","text":"Oracle Cards không có cấu trúc cố định như Tarot (78 lá). Mỗi bộ Oracle có chủ đề riêng, số lượng lá khác nhau và hệ thống ý nghĩa do tác giả tự định, linh hoạt và trực quan hơn."}},{"@type":"Question","name":"Người mới bắt đầu nên dùng Oracle hay Tarot?","acceptedAnswer":{"@type":"Answer","text":"Oracle thường dễ tiếp cận hơn vì không cần học hệ thống phức tạp. Tarot cung cấp nền tảng biểu tượng sâu hơn cho việc phát triển kỹ năng đọc bài lâu dài."}},{"@type":"Question","name":"Oracle có thể dùng để hỏi về tất cả mọi việc không?","acceptedAnswer":{"@type":"Answer","text":"Oracle phù hợp nhất cho câu hỏi về năng lượng, hướng đi và trạng thái nội tâm. Với câu hỏi thực tế cụ thể, các công cụ có hệ thống như Kinh Dịch hay Tứ Trụ phù hợp hơn."}}]}
-</script>
 </head>
 <body>
-<div id="nav-ph" style="height:60px;background:#061A2E"></div>
 
-<div class="hero-tool">
-  <div class="page">
-    <div class="eyebrow">Công Cụ Miễn Phí</div>
-    <h1>Oracle<br><em>Minh Triết Phương Đông</em></h1>
-    <p>Bộ bài Oracle 40 lá theo triết học phương Đông — Âm Dương, Ngũ Hành, Bát Quái, Thiên Can Địa Chi và các nguyên lý vũ trụ. Thông điệp sâu sắc, ngôn ngữ Tử Vi.</p>
-  </div>
-</div>
+<div class="shell">
+  <aside class="sb" id="shell-sidebar"></aside>
 
-<div class="page">
-  <div class="tool-intro">
-    <div class="xt-section">
-      <div class="xt-eyebrow">Oracle Phương Đông là gì?</div>
-      <div class="xt-grid-2">
-        <div>
-          <h2 class="xt-h2">40 Lá Minh Triết —<br>Ngôn Ngữ Của Vũ Trụ Phương Đông</h2>
-          <p class="xt-body">Khác với Tarot có nguồn gốc phương Tây, bộ Oracle này được thiết kế riêng theo các nguyên lý phương Đông: <strong>Âm Dương</strong> (cân bằng đối lập), <strong>Ngũ Hành</strong> (năm nguyên tố), <strong>Bát Quái</strong> (tám lực lượng), <strong>Thiên Can Địa Chi</strong> (thời gian và vận mệnh) và các nguyên lý của cuộc đời.</p>
-          <p class="xt-body">Mỗi lá bài chứa đựng một nguyên lý triết học sâu sắc và được dịch thành thông điệp thực tiễn cho cuộc sống hiện đại.</p>
-        </div>
-        <div class="xt-factors">
-          <div class="xt-factor-title">5 Nhóm Lá Bài</div>
-          <div class="xt-factor-item"><span style="font-size:16px">☯</span><span class="xt-factor-label">Âm Dương (8 lá)</span><span class="xt-factor-desc">Nguyên lý cân bằng và đối lập trong mọi sự vật</span></div>
-          <div class="xt-factor-item"><span style="font-size:16px"><span class="ic" data-icon="leaf"></span></span><span class="xt-factor-label">Ngũ Hành (10 lá)</span><span class="xt-factor-desc">Mộc · Hỏa · Thổ · Kim · Thủy và tương sinh khắc</span></div>
-          <div class="xt-factor-item"><span style="font-size:16px">☵</span><span class="xt-factor-label">Bát Quái (8 lá)</span><span class="xt-factor-desc">Tám lực lượng vũ trụ từ Kinh Dịch</span></div>
-          <div class="xt-factor-item"><span style="font-size:16px"><span class="ic" data-icon="tornado"></span></span><span class="xt-factor-label">Thiên Can & Địa Chi (8 lá)</span><span class="xt-factor-desc">Vận trình, thời gian và năng lượng chu kỳ</span></div>
-          <div class="xt-factor-item"><span style="font-size:16px"><span class="ic" data-icon="flower"></span></span><span class="xt-factor-label">Triết Lý Cuộc Đời (6 lá)</span><span class="xt-factor-desc">Nhân Quả, Vô Thường, Trung Đạo, Thuận Thế...</span></div>
-        </div>
+  <main class="ws" id="ws">
+    <div class="ws-top">
+      <button class="btn mobile-only" onclick="document.getElementById('shell-sidebar').classList.toggle('open');window.shellSyncBackdrop&&shellSyncBackdrop()" aria-label="Menu">☰</button>
+      <div class="ws-title"><b>Oracle Phương Đông</b><span>Rút thẻ minh triết Âm Dương · Ngũ Hành · Bát Quái — miễn phí</span></div>
+      <div class="ws-actions">
+        <button class="btn mobile-only" onclick="Shell.openRail()">✦ Hỏi</button>
       </div>
     </div>
-  </div>
+    <div class="ws-body">
+      <div id="introHost"></div>
+      <div id="shellRecent"></div>
 
-  <div class="form-section">
-    <div class="section-eyebrow">Chọn Kiểu Rút Bài</div>
-    <div class="spread-btns">
-      <button class="spread-btn active" onclick="setSpread(1,this)">✦ 1 Lá — Thông Điệp Hiện Tại</button>
-      <button class="spread-btn" onclick="setSpread(3,this)">⊹ 3 Lá — Nhân · Duyên · Quả</button>
-      <button class="spread-btn" onclick="setSpread(5,this)">✺ 5 Lá — Ngũ Hành Cuộc Đời</button>
-    </div>
-    <div class="form-group" style="max-width:500px;margin:0 auto 24px">
-      <label class="form-label">Câu hỏi hoặc chủ đề muốn chiêm nghiệm (tùy chọn)</label>
-      <input class="form-input" type="text" id="question" placeholder="VD: Tôi cần nhận ra điều gì trong giai đoạn này?" maxlength="120">
-    </div>
-    <div style="text-align:center">
-      <button class="draw-btn" id="drawBtn" onclick="draw()">✦ Định Tâm &amp; Rút Bài</button>
-    </div>
-  </div>
+      <div class="or-card" id="inputCard">
+        <h2>Chọn Kiểu Rút Bài</h2>
+        <p class="sub">40 lá theo nguyên lý phương Đông: Âm Dương, Ngũ Hành, Bát Quái, Thiên Can Địa Chi, Triết Lý Cuộc Đời.</p>
+        <div class="spread-btns">
+          <button class="spread-btn active" onclick="setSpread(1,this)"><span class="ic" data-icon="sparkles"></span> 1 Lá — Thông Điệp Hiện Tại</button>
+          <button class="spread-btn" onclick="setSpread(3,this)"><span class="ic" data-icon="sparkles"></span> 3 Lá — Nhân · Duyên · Quả</button>
+          <button class="spread-btn" onclick="setSpread(5,this)"><span class="ic" data-icon="sparkles"></span> 5 Lá — Ngũ Hành Cuộc Đời</button>
+        </div>
+        <div class="or-q">
+          <label>Câu hỏi hoặc chủ đề muốn chiêm nghiệm (tùy chọn)</label>
+          <input type="text" id="question" placeholder="VD: Tôi cần nhận ra điều gì trong giai đoạn này?" maxlength="120">
+        </div>
+        <div style="text-align:center">
+          <button class="draw-btn" id="drawBtn" onclick="draw()">✦ Định Tâm &amp; Rút Bài</button>
+        </div>
+      </div>
 
-  <div class="result-section" id="result-section">
-    <div id="questionDisplay" style="text-align:center;font-style:italic;color:var(--text-lt);font-size:13px;margin-bottom:20px"></div>
-    <div class="oracle-grid" id="spreadArea"></div>
-    <div id="readingResult" style="margin-top:24px"></div>
-  </div>
+      <div class="result-section" id="result-section" data-ws-result style="margin-top:16px">
+        <div id="questionDisplay" style="text-align:center;font-style:italic;color:var(--text-lt);font-size:13px;margin-bottom:20px"></div>
+        <div class="oracle-grid" id="spreadArea"></div>
+        <div id="readingResult" style="margin-top:24px"></div>
+      </div>
+    </div>
+  </main>
 
-  <div class="tool-cta">
-    <div class="tool-cta-eyebrow">Kết Hợp Oracle &amp; Tử Vi</div>
-    <div class="tool-cta-title">Thông Điệp Hôm Nay + Vận Trình Dài Hạn</div>
-    <div class="tool-cta-desc">Oracle cho thông điệp ngắn hạn và sự chiêm nghiệm. Lá số Tử Vi cho thấy vận trình dài hạn cá nhân — kết hợp hai công cụ để có bức tranh toàn diện.</div>
-    <a class="tool-cta-btn" href="/luan-giai.html">Xem Lá Số Tử Vi →</a>
-  </div>
+  <aside class="rail" id="shell-rail"></aside>
 </div>
 
-<footer class="site-footer">
-  <div class="footer-top"><div><div class="footer-brand"><img src="/seal.webp" alt=""><div class="footer-brand-text"><div class="name">Tử Vi Minh Bảo</div><div class="zh">紫微明寶</div></div></div><p class="footer-tagline">Tri mệnh lý – Thuận thế hành</p></div></div>
-  <div class="footer-bottom"><span>© 2026 tuviminhbao.com</span><img src="/seal.webp" alt=""></div>
-</footer>
-
+<script>window.SHELL_ACTIVE='oracle';window.SHELL_HISTORY=true;
+window.SHELL_INTRO={key:'oracle',title:'Oracle Phương Đông',desc:'Bộ bài Oracle 40 lá theo triết học phương Đông — Âm Dương, Ngũ Hành, Bát Quái, Thiên Can Địa Chi và các nguyên lý vũ trụ.'};</script>
+<script src="/auth.js?v=2"></script>
+<script src="/tuvi-paywall.js?v=20"></script>
+  <script src="/nav.js?v=22" data-icons-only></script>
+<script src="/shell.js?v=72"></script>
 <script>
-// ═══════════════════════════════════════════════════════════
-// 40 ORACLE CARDS — Minh Triết Phương Đông
-// ═══════════════════════════════════════════════════════════
+function initOracle(){
+  Shell.setContext({
+    label:'Oracle Phương Đông',
+    placeholder:'Hỏi thầy về thẻ vừa rút…',
+    greeting:'Chào bạn. Định tâm rồi rút thẻ ở khung bên trái — tôi ở đây nếu bạn muốn chiêm nghiệm sâu hơn về thông điệp vừa nhận.',
+    chips:['Oracle khác Tarot ở điểm nào?','Nên hỏi Oracle câu hỏi kiểu gì?','Ngũ Hành trong Oracle nghĩa là gì?']
+  });
+}
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initOracle); else initOracle();
+
+// ══════════════════════════════════════════════════════════════════════
+// Port NGUYÊN VĂN từ public/tools/oracle.html — 40 lá + logic rút bài
+// giữ nguyên, không gọi model, không paywall (miễn phí).
+// ══════════════════════════════════════════════════════════════════════
 const CARDS = [
 // ── ÂM DƯƠNG (8 lá) ─────────────────────────────────────────
 {id:0,sym:'☯',name:'Âm Dương',cat:'am-duong',catVI:'Âm Dương',
@@ -301,6 +286,21 @@ const CARDS = [
  kw:['Tự nhận thức','Minh triết','Bản thân','Hiểu mình']},
 ];
 
+// Bát quái (☰☷☵☲☳☴☶☱) là ký hiệu Kinh Dịch, không phải emoji trang trí — giữ
+// nguyên dạng chữ (đơn sắc theo font, cùng lớp với ✦/★ đã được whitelist).
+// 32 biểu tượng còn lại là emoji màu, đổi sang icon SVG chuẩn của site.
+const SYM_ICON = {
+  '☯':'aperture','🌓':'moon','🌑':'moon','☀':'sun','🔄':'rotate-cw','⚖':'scale',
+  '🌊':'waves','🌀':'tornado','🌿':'leaf','🔥':'flame','🏔':'anchor','🪙':'gem',
+  '💧':'droplet','🌱':'leaf','⚡':'zap','🌲':'leaf','🐉':'crown','🌟':'star',
+  '🦊':'zap','🌾':'leaf','🌺':'flower','✨':'sparkles','🔁':'rotate-cw','🍃':'leaf',
+  '🛤':'compass','🙏':'heart','💫':'sparkles','🌸':'flower'
+};
+function renderCardSym(sym) {
+  var key = SYM_ICON[sym];
+  return key ? '<span class="ic" data-icon="' + key + '"></span>' : sym;
+}
+
 const CAT_COLORS = {'am-duong':'#c9a84c','ngu-hanh':'#1E6B3C','bat-quai':'#1455A4','can-chi':'#9A7B3A','cuoc-doi':'#C0392B'};
 const SPREAD_LABELS = {
   1: [{pos:'Thông Điệp',desc:'Điều vũ trụ muốn bạn biết lúc này'}],
@@ -320,7 +320,6 @@ function setSpread(n, btn) {
   _spread = n;
   document.querySelectorAll('.spread-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
-  document.getElementById('result-section').classList.remove('active');
 }
 
 function draw() {
@@ -343,15 +342,13 @@ function renderResult() {
   document.getElementById('questionDisplay').textContent = q ? `"${q}"` : '';
   const spread = SPREAD_LABELS[_spread];
 
-  // Cards
   document.getElementById('spreadArea').innerHTML = _drawn.map((c, i) => {
-    const col = CAT_COLORS[c.cat];
     return `<div class="card-slot">
       <div class="o-card-scene cat-${c.cat}">
         <div class="o-card-inner" id="oc-${i}">
           <div class="o-back"><div class="o-back-seal">紫微</div><div class="o-back-brand">Minh Triết<br>Phương Đông</div></div>
           <div class="o-face">
-            <div class="of-symbol">${c.sym}</div>
+            <div class="of-symbol">${renderCardSym(c.sym)}</div>
             <div class="of-name">${c.name}</div>
             <div class="of-sub">${c.catVI}</div>
           </div>
@@ -360,60 +357,41 @@ function renderResult() {
       <div class="slot-label">${spread[i].pos}</div>
     </div>`;
   }).join('');
+  window.mountIcons && window.mountIcons(document.getElementById('spreadArea'));
 
-  // Flip
   setTimeout(() => _drawn.forEach((_, i) => {
     const el = document.getElementById(`oc-${i}`);
     if (el) setTimeout(() => el.classList.add('flipped'), i * 300);
   }), 200);
 
-  // Meanings
   document.getElementById('readingResult').innerHTML =
     `<div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text-lt);margin-bottom:16px">✦ Minh Triết Từng Lá</div>`+
     _drawn.map((c, i) => {
       const col = CAT_COLORS[c.cat];
       return `<div class="oracle-meaning" style="border-left:4px solid ${col}">
         <div class="om-header">
-          <div class="om-symbol">${c.sym}</div>
-          <div class="om-meta">
+          <div class="om-symbol">${renderCardSym(c.sym)}</div>
+          <div>
             <div class="om-name">${c.name}</div>
             <div class="om-sub">${c.catVI} · ${spread[i].pos}</div>
           </div>
         </div>
         <div style="font-size:12px;color:var(--text-lt);margin-bottom:10px;font-style:italic">${spread[i].desc}</div>
         <div class="om-body">${c.msg}</div>
-        <div class="om-guidance">💡 <strong>Hướng dẫn thực hành:</strong> ${c.guide}</div>
+        <div class="om-guidance"><span class="ic" data-icon="lightbulb"></span> <strong>Hướng dẫn thực hành:</strong> ${c.guide}</div>
         <div class="om-kw">${c.kw.map(k => `<span class="kw-tag">${k}</span>`).join('')}</div>
       </div>`;
     }).join('');
+  window.mountIcons && window.mountIcons(document.getElementById('readingResult'));
 
-  document.getElementById('result-section').classList.add('active');
+  Shell.setShareable({ kind:'text', toolId:'oracle', title:'Kết quả Oracle của tôi', text: shareText() });
   setTimeout(() => document.getElementById('result-section').scrollIntoView({ behavior: 'smooth', block: 'start' }), 600);
 }
-</script>
-<section class="kb-section">
-  <div class="page">
-    <div class="kb-inner">
-      <div class="kb-eyebrow">Kiến Thức Cổ Pháp</div>
-      <h2 class="kb-title">Oracle — Thẻ Bài Như Gương Chiếu Nội Tâm</h2>
-      <div class="kb-body">
-        <p>Oracle cards — thẻ bài Oracle — khác với Tarot ở chỗ không có cấu trúc cố định (78 lá, 4 bộ). Mỗi bộ Oracle được thiết kế theo chủ đề riêng và có thể có bất kỳ số lượng lá nào. Truyền thống phương Đông cũng có các hình thức tương tự: thẻ thăm trong đền chùa, quẻ xăm, lá số ngẫu nhiên — tất cả đều dựa trên nguyên lý để năng lượng hiện tại hướng dẫn sự lựa chọn ngẫu nhiên.</p>
-        <p>Huyền học phương Đông giải thích cơ chế này qua khái niệm <em>cảm ứng</em> — sự kết nối giữa tâm trạng, câu hỏi của người hỏi và kết quả rút ra. Không phải lá bài biết tương lai, mà là tâm trí người hỏi — khi được đặt trước biểu tượng và hình ảnh đúng lúc — có thể nhận ra những gì nó đã biết ở tầng sâu hơn.</p>
-        <p>Cách dùng oracle hiệu quả nhất: đặt một câu hỏi thực sự đang trăn trở (không phải câu hỏi kiểm tra), rút bài trong trạng thái bình tĩnh, và cho phép bản thân diễn giải tự do thay vì tra cứu cứng nhắc theo nghĩa gốc. Ý nghĩa tốt nhất là ý nghĩa cộng hưởng với tình huống của người hỏi lúc đó.</p>
-        <p class="kb-links">Xem thêm: <a href="/tools/tarot.html">Tarot 78 Lá</a>, <a href="/tools/kinh-dich.html">Kinh Dịch 64 Quẻ</a>, <a href="/tools/luc-nham.html">Lục Nhâm Giản</a></p>
-      </div>
-    </div>
-  </div>
-</section>
-<script src="/testimonials.js"></script>
-<script src="/related-tools.js?v=2"></script>
-<script src="/nav.js?v=20" defer></script>
-<script src="/tool-sources.js?v=1"></script>
-<script>
-  if (window.ToolSources) {
-    ToolSources.mountIntroAfterH1('oracle');
-    ToolSources.watchResults('oracle', '#result-section');
-  }
+
+function shareText() {
+  const spread = SPREAD_LABELS[_spread];
+  return _drawn.map((c,i) => `${spread[i].pos}: ${c.name}`).join('\n');
+}
 </script>
 </body>
 </html>

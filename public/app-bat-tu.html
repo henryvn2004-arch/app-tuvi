@@ -277,18 +277,36 @@ function renderBatTu(bt,namxem){
     var label=LABELS[phan]||('Phần '+phan);
     var pre=BatTuCore.buildPreGenForPhan(phan,bt);
     var body=pre||'<div class="phan-empty">Phần này luận theo tổng thể tứ trụ — bấm nút dưới để trợ lý luận sâu.</div>';
-    S.push(sec(phan,label,'','<div class="card">'+body+'<div class="claude-content" id="claude-content-'+phan+'" style="display:none"></div>'+ask('Luận sâu phần: '+label)+'</div>'));
+    // Khoá-mini (ẨN mặc định, xem chú thích ở _paintSecLocksBt) — mỗi phần
+    // trong 16 phần đều có một đoạn luận riêng do AI viết, nhưng banner mở
+    // khoá ở đầu trang cuộn qua là mất; khối này lặp lại ở MỌI phần.
+    var lock=TuviPaywall.sectionLockHtml({id:'sec-ai-lock-'+phan,product:'tu-binh'});
+    S.push(sec(phan,label,'','<div class="card">'+body+lock+'<div class="claude-content" id="claude-content-'+phan+'" style="display:none"></div>'+ask('Luận sâu phần: '+label)+'</div>'));
   }
-  document.getElementById('btBody').innerHTML=S.join('');
+  document.getElementById('btBody').innerHTML=S.join('') + (window.ToolSources ? window.ToolSources.noteHtml('bat-tu') : '');
   // Khối pre-gen mang span [data-icon-emoji]; nav.js ở chế độ chỉ-icon chỉ quét
   // lúc nạp trang, nên phần chèn sau đó phải gọi lại — không thì in emoji thô.
   if(window.mountIcons) window.mountIcons(document.getElementById('btBody'));
+  // Ô giá trong mỗi khoá-mini vừa chèn — trang chỉ tự điền giá LÚC TẢI, mấy ô
+  // này sinh ra SAU đó nên phải gọi lại; wireSectionLocks tự chặn gắn trùng.
+  TuviPaywall.fillPriceSlots(document.getElementById('btBody'));
+  TuviPaywall.wireSectionLocks(document.getElementById('btBody'), initiateBatTuChuyenSau);
   try{ BatTuCore.renderInlineDomainRadar(bt); BatTuCore.renderInlineDaiVanLineChart(bt); }catch(e){ if(window.console)console.warn(e); }
 
   var jl=[]; for(var _p=1;_p<=BatTuCore.TONG_PHAN;_p++)jl.push(LABELS[_p]);
   document.getElementById('btJump').innerHTML=jl.map(function(l,i){return '<a data-i="'+i+'"'+(i===0?' class="on"':'')+'>'+esc(l)+'</a>'}).join('');
   bindJump(BatTuCore.TONG_PHAN);
   document.querySelectorAll('#btBody [data-ask]').forEach(function(el){ el.addEventListener('click',function(){ Shell.ask(el.getAttribute('data-ask')); }); });
+}
+// Bật/tắt ĐỒNG LOẠT khoá-mini của cả 16 phần. `true` ngay khi biết chắc CHƯA
+// mở (initBatTuGate không tìm thấy cache); `false` ngay khi bắt đầu sinh AI
+// (đã trả tiền — để chúng sáng đèn "chưa mở" trong lúc đang luận là mời bấm
+// lại một lượt mua đã xảy ra rồi).
+function _paintSecLocksBt(show){
+  for(var p=1;p<=BatTuCore.TONG_PHAN;p++){
+    var el=document.getElementById('sec-ai-lock-'+p);
+    if(el) el.style.display=show?'flex':'none';
+  }
 }
 
 function renderTuTruTable(bt){
@@ -745,7 +763,7 @@ async function initBatTuGate(bt){
   document.getElementById('btProgress').style.display='none';
   var cached=await _fetchCachedLuanGiai(_pendingSlug);
   if(cached)_renderCachedLuanGiai(cached);
-  else document.getElementById('btUnlock').style.display='block';
+  else{ document.getElementById('btUnlock').style.display='block'; _paintSecLocksBt(true); }
 }
 
 async function initiateBatTuChuyenSau(){
@@ -754,6 +772,7 @@ async function initiateBatTuChuyenSau(){
 async function _startBatTuAI(){
   document.getElementById('btUnlock').style.display='none';
   document.getElementById('btProgress').style.display='block';
+  _paintSecLocksBt(false);
   _currentPhan=0; _luanGiaiStore={}; _ragCache={};
   await _loadNextPhanAI();
 }

@@ -621,5 +621,12 @@ window.addEventListener('DOMContentLoaded',()=>{
   </div>
 </section>
 <script src="/nav.js?v=20" defer></script>
+<script src="/tool-sources.js?v=1"></script>
+<script>
+  if (window.ToolSources) {
+    ToolSources.mountIntroAfterH1('trang-phuc-theo-ngay');
+    ToolSources.watchResults('trang-phuc-theo-ngay', '#results');
+  }
+</script>
 </body>
 </html>

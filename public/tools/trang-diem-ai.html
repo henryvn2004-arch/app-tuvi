@@ -717,5 +717,12 @@ window.addEventListener('load', () => {
   </div>
 </section>
 <script src="/nav.js?v=20" defer></script>
+<script src="/tool-sources.js?v=1"></script>
+<script>
+  if (window.ToolSources) {
+    ToolSources.mountIntroAfterH1('trang-diem-phan-tich');
+    ToolSources.watchResults('trang-diem-phan-tich', '#resultsSection');
+  }
+</script>
 </body>
 </html>

@@ -2,24 +2,18 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<link rel="preload" href="/nav.js?v=20" as="script">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Tarot 78 Lá — Rút Bài & Luận Giải Chuyên Sâu | Tử Vi Minh Bảo</title>
-<meta property="og:title" content="Tarot 78 Lá — Rút Bài & Luận Giải Chuyên Sâu | Tử Vi Minh Bảo"/>
-<meta property="og:description" content="Rút bài Tarot 78 lá, nhận luận giải chuyên sâu bằng AI theo từng vị trí trải bài. Hỏi về tình yêu, sự nghiệp, tài chính, quyết định cuộc đời."/>
-<meta property="og:url" content="https://www.tuviminhbao.com/tools/tarot.html"/>
-<meta property="og:image" content="https://www.tuviminhbao.com/og-image.webp"/>
-<meta name="twitter:card" content="summary_large_image"/>
-<meta name="twitter:title" content="Tarot 78 Lá — Rút Bài & Luận Giải Chuyên Sâu | Tử Vi Minh Bảo"/>
-<meta name="twitter:description" content="Rút bài Tarot 78 lá, nhận luận giải chuyên sâu bằng AI theo từng vị trí trải bài. Hỏi về tình yêu, sự nghiệp, tài chính, quyết định cuộc đời."/>
-<meta name="twitter:image" content="https://www.tuviminhbao.com/og-image.webp"/>
-<meta name="keywords" content="tarot online, rút bài tarot, bói tarot, tarot tình yêu, tarot sự nghiệp"/>
-<meta name="description" content="Rút bài Tarot 78 lá, nhận luận giải chuyên sâu bằng AI theo từng vị trí trải bài. Hỏi về tình yêu, sự nghiệp, tài chính, quyết định cuộc đời."/>
-<link rel="canonical" href="https://www.tuviminhbao.com/tools/tarot.html">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tarot 78 Lá — Tử Vi Minh Bảo</title>
+<meta name="description" content="Rút bài Tarot 78 lá ngay trong Luận Đường — trải 1, 3 hoặc Celtic Cross 10 lá, ý nghĩa xuôi/ngược bằng tiếng Việt.">
 <link rel="icon" type="image/webp" href="/seal.webp">
-<link rel="stylesheet" href="/tools/tools.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"></noscript>
+<link rel="stylesheet" href="/shell.css?v=19">
 <style>
-/* ── Card visuals ── */
+.tr-card{background:var(--white);border:1px solid var(--line);border-radius:14px;padding:20px 22px;box-shadow:var(--shadow);max-width:760px}
+.tr-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:4px}
+.tr-card p.sub{font-size:12.5px;color:var(--text-lt);margin-bottom:14px}
 .card-scene{width:90px;height:150px;perspective:600px;cursor:pointer;flex-shrink:0}
 .card-scene.lg{width:110px;height:180px}
 .card-inner{width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:transform .7s cubic-bezier(.4,0,.2,1)}
@@ -35,9 +29,7 @@
 .card-face .cf-suit{font-size:8px;color:#9A7B3A;margin-top:2px}
 .card-face.major .cf-symbol{font-size:42px}
 .card-face.major{background:linear-gradient(180deg,#fdf8f0 0%,#fff 100%);border-color:#c9a84c}
-/* Reversed overlay */
 .card-face.is-reversed::before{content:'↕ Ngược';position:absolute;top:4px;right:4px;font-size:7px;background:#f5c0bc;color:#C0392B;padding:1px 4px;border-radius:2px;font-weight:700}
-/* Spread layouts */
 .spread-1{display:flex;justify-content:center;gap:20px;flex-wrap:wrap;margin:24px 0}
 .spread-3{display:flex;justify-content:center;gap:20px;flex-wrap:wrap;margin:24px 0}
 .spread-celtic{display:grid;grid-template-areas:
@@ -49,120 +41,107 @@
   'c10 . . . .';
 gap:8px;width:fit-content;margin:24px auto}
 .cc1{grid-area:c1}.cc2{grid-area:c2;transform:rotate(90deg);transform-origin:center}.cc3{grid-area:c3}.cc4{grid-area:c4}.cc5{grid-area:c5}.cc6{grid-area:c6}.cc7{grid-area:c7}.cc8{grid-area:c8}.cc9{grid-area:c9}.cc10{grid-area:c10}
-/* Card slot with label */
 .card-slot{display:flex;flex-direction:column;align-items:center;gap:8px}
 .slot-label{font-size:10px;font-weight:700;color:var(--text-lt);letter-spacing:1px;text-transform:uppercase;text-align:center;max-width:90px;line-height:1.4}
-/* Result panel */
 .reading-result{margin-top:32px}
 .card-meaning{padding:20px 24px;border:1px solid var(--border-lt);border-radius:8px;margin-bottom:16px;border-left:4px solid var(--gold)}
 .cm-header{display:flex;align-items:center;gap:14px;margin-bottom:12px}
 .cm-symbol{font-size:36px;line-height:1}
-.cm-info{}
-.cm-name{font-size:15px;font-weight:700;color:var(--navy)}
+.cm-name{font-size:15px;font-weight:700;color:var(--heading)}
 .cm-sub{font-size:11px;color:var(--text-lt);margin-top:2px}
 .cm-pos{font-size:11px;font-weight:700;padding:2px 8px;border-radius:2px;margin-top:4px;display:inline-block}
 .pos-upright{background:#eaf4ed;color:#1E6B3C}
 .pos-reversed{background:#fef0ef;color:#C0392B}
 .cm-body{font-size:14px;color:var(--text-mid);line-height:1.8}
 .cm-keywords{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
-.cm-kw{font-size:11px;padding:2px 8px;border-radius:2px;background:var(--bg-soft);border:1px solid var(--border-lt);color:var(--text-mid)}
-/* Spread selector */
+.cm-kw{font-size:11px;padding:2px 8px;border-radius:2px;background:var(--paper);border:1px solid var(--border-lt);color:var(--text-mid)}
 .spread-btns{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:24px}
-.spread-btn{padding:10px 20px;background:var(--bg-soft);border:1px solid var(--border);border-radius:6px;cursor:pointer;font-size:13px;font-family:inherit;color:var(--text-mid);transition:all .15s}
+.spread-btn{padding:10px 20px;background:var(--paper);border:1px solid var(--line-2);border-radius:6px;cursor:pointer;font-size:13px;font-family:inherit;color:var(--text-mid);transition:all .15s}
 .spread-btn:hover{background:var(--gold-lt);border-color:var(--gold)}
 .spread-btn.active{background:#c9a84c22;border-color:#c9a84c;color:#9A7B3A;font-weight:600}
 .draw-btn{display:block;margin:0 auto;padding:14px 40px;background:var(--navy);color:#c9a84c;border:2px solid #c9a84c;font-size:15px;font-weight:700;border-radius:6px;cursor:pointer;font-family:inherit;letter-spacing:.5px;transition:all .2s}
 .draw-btn:hover{background:#0D3B5E}
 .draw-btn:disabled{opacity:.5;cursor:default}
-/* Shuffle animation */
 @keyframes shuffle{0%{transform:translateX(0) rotate(0)}25%{transform:translateX(-20px) rotate(-5deg)}50%{transform:translateX(20px) rotate(5deg)}75%{transform:translateX(-10px) rotate(-2deg)}100%{transform:translateX(0) rotate(0)}}
 .shuffling .card-scene{animation:shuffle .6s ease-in-out}
+.tr-error{color:var(--tx-red);padding:10px 14px;border:1px solid var(--red);border-radius:8px;background:var(--white);margin-top:12px;display:none;font-size:13px}
+.tr-error.active{display:block}
+.tr-q{max-width:500px;margin:0 auto 24px}
+.tr-q label{display:block;font-size:12.5px;color:var(--text-mid);margin-bottom:6px}
+.tr-q input{width:100%;padding:10px 12px;border:1px solid var(--line-2);border-radius:8px;font-family:inherit;font-size:13.5px;background:var(--paper);color:var(--text)}
 @media(max-width:600px){
   .spread-celtic{transform:scale(.75);transform-origin:top center}
   .card-slot{min-width:70px}
 }
 </style>
-<script type="application/ld+json">
-{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Tarot là gì?","acceptedAnswer":{"@type":"Answer","text":"Tarot là bộ bài gồm 78 lá (22 Major Arcana và 56 Minor Arcana), được dùng để chiêm nghiệm, phân tích tình huống và tìm kiếm hướng dẫn nội tâm từ tiềm thức."}},{"@type":"Question","name":"Tarot có đoán được tương lai chính xác không?","acceptedAnswer":{"@type":"Answer","text":"Tarot không dự đoán tương lai cố định mà phản chiếu năng lượng và xu hướng hiện tại. Kết quả phụ thuộc vào cách diễn giải và trực giác của người đọc bài."}},{"@type":"Question","name":"Người mới bắt đầu nên học Tarot theo thứ tự nào?","acceptedAnswer":{"@type":"Answer","text":"Bắt đầu với 22 lá Major Arcana để hiểu các nguyên mẫu lớn, sau đó học 4 bộ Minor Arcana (Wands, Cups, Swords, Pentacles), rồi luyện trải bài 3 lá trước khi dùng trải bài phức tạp hơn."}}]}
-</script>
 </head>
 <body>
-<div id="nav-ph" style="height:60px;background:#061A2E"></div>
 
-<div class="hero-tool">
-  <div class="page">
-    <div class="eyebrow">Công Cụ Miễn Phí</div>
-    <h1>Bói Bài <em>Tarot</em><br>78 Lá Đầy Đủ</h1>
-    <p>Rút 1 lá, trải 3 lá hoặc Celtic Cross 10 lá — ý nghĩa xuôi và ngược bằng tiếng Việt, đầy đủ 22 Major Arcana và 56 Minor Arcana.</p>
-  </div>
-</div>
+<div class="shell">
+  <aside class="sb" id="shell-sidebar"></aside>
 
-<div class="page">
-  <div class="tool-intro">
-    <div class="xt-section">
-      <div class="xt-eyebrow">Tarot là gì?</div>
-      <div class="xt-grid-2">
-        <div>
-          <h2 class="xt-h2">78 Lá Bài — Tấm Gương<br>Phản Chiếu Nội Tâm</h2>
-          <p class="xt-body">Tarot ra đời ở châu Âu từ thế kỷ 15, ban đầu là bộ bài chơi game, sau trở thành công cụ chiêm nghiệm và hướng dẫn nội tâm. 78 lá chia thành 22 lá <strong>Major Arcana</strong> (bí ẩn lớn — các nguyên mẫu cuộc đời) và 56 lá <strong>Minor Arcana</strong> (4 chất: Gậy, Cốc, Kiếm, Tiền).</p>
-          <p class="xt-body">Tarot không phán quyết số phận — Tarot phản chiếu năng lượng hiện tại và những khả năng phía trước. Lá bài xuất hiện phản ánh trạng thái tâm lý và hoàn cảnh của người hỏi tại thời điểm đó.</p>
-        </div>
-        <div class="xt-factors">
-          <div class="xt-factor-title">3 Kiểu Trải Bài</div>
-          <div class="xt-factor-item"><span class="xt-factor-num">①</span><span class="xt-factor-label">1 Lá</span><span class="xt-factor-desc">Thông điệp của ngày, câu trả lời ngắn cho 1 câu hỏi cụ thể</span></div>
-          <div class="xt-factor-item"><span class="xt-factor-num">②</span><span class="xt-factor-label">3 Lá</span><span class="xt-factor-desc">Quá Khứ · Hiện Tại · Tương Lai — cái nhìn tổng thể theo dòng thời gian</span></div>
-          <div class="xt-factor-item"><span class="xt-factor-num">③</span><span class="xt-factor-label">Celtic Cross</span><span class="xt-factor-desc">10 lá — trải bài sâu nhất, xét tình huống từ nhiều góc độ</span></div>
-          <div class="xt-note" style="margin-top:12px">
-            <span class="xt-note-icon"><span class="ic-inline" data-icon-emoji="💡" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">💡</span></span>
-            <div>Trước khi rút bài, hãy hít thở sâu, định tâm và nghĩ rõ câu hỏi muốn hỏi. Tarot cho kết quả sâu sắc nhất khi người hỏi có câu hỏi cụ thể trong tâm trí.</div>
-          </div>
-        </div>
+  <main class="ws" id="ws">
+    <div class="ws-top">
+      <button class="btn mobile-only" onclick="document.getElementById('shell-sidebar').classList.toggle('open');window.shellSyncBackdrop&&shellSyncBackdrop()" aria-label="Menu">☰</button>
+      <div class="ws-title"><b>Tarot 78 Lá</b><span>Rút bài, trải 1 / 3 / Celtic Cross — miễn phí</span></div>
+      <div class="ws-actions">
+        <button class="btn mobile-only" onclick="Shell.openRail()">✦ Hỏi</button>
       </div>
     </div>
-  </div>
+    <div class="ws-body">
+      <div id="introHost"></div>
+      <div id="shellRecent"></div>
 
-  <!-- TOOL -->
-  <div class="form-section">
-    <div class="section-eyebrow">Chọn Kiểu Trải Bài</div>
-    <div class="spread-btns">
-      <button class="spread-btn active" onclick="setSpread(1,this)">✦ 1 Lá — Thông Điệp Hôm Nay</button>
-      <button class="spread-btn" onclick="setSpread(3,this)">⊹ 3 Lá — Quá Khứ · Hiện Tại · Tương Lai</button>
-      <button class="spread-btn" onclick="setSpread(10,this)">✺ Celtic Cross — 10 Lá</button>
-    </div>
-    <div class="form-group" style="max-width:500px;margin:0 auto 24px">
-      <label class="form-label">Câu hỏi (tuỳ chọn — nghĩ trong tâm hoặc ghi ra đây)</label>
-      <input class="form-input" type="text" id="question" placeholder="VD: Tình trạng sự nghiệp của tôi hiện tại thế nào?" maxlength="120">
-    </div>
-    <div style="text-align:center">
-      <button class="draw-btn" id="drawBtn" onclick="draw()">✦ Xáo Bài &amp; Rút</button>
-    </div>
-    <div class="error-msg" id="error-msg"></div>
-  </div>
+      <div class="tr-card" id="inputCard">
+        <h2>Chọn Kiểu Trải Bài</h2>
+        <p class="sub">78 lá đầy đủ — 22 Major Arcana và 56 Minor Arcana, ý nghĩa xuôi và ngược bằng tiếng Việt.</p>
+        <div class="spread-btns">
+          <button class="spread-btn active" onclick="setSpread(1,this)"><span class="ic" data-icon="sparkles"></span> 1 Lá — Thông Điệp Hôm Nay</button>
+          <button class="spread-btn" onclick="setSpread(3,this)"><span class="ic" data-icon="sparkles"></span> 3 Lá — Quá Khứ · Hiện Tại · Tương Lai</button>
+          <button class="spread-btn" onclick="setSpread(10,this)"><span class="ic" data-icon="sparkles"></span> Celtic Cross — 10 Lá</button>
+        </div>
+        <div class="tr-q">
+          <label>Câu hỏi (tuỳ chọn — nghĩ trong tâm hoặc ghi ra đây)</label>
+          <input type="text" id="question" placeholder="VD: Tình trạng sự nghiệp của tôi hiện tại thế nào?" maxlength="120">
+        </div>
+        <div style="text-align:center">
+          <button class="draw-btn" id="drawBtn" onclick="draw()">✦ Xáo Bài &amp; Rút</button>
+        </div>
+        <div class="tr-error" id="error-msg"></div>
+      </div>
 
-  <!-- RESULT -->
-  <div class="result-section" id="result-section">
-    <div id="questionDisplay" style="text-align:center;font-style:italic;color:var(--text-lt);font-size:13px;margin-bottom:20px"></div>
-    <div id="spreadArea"></div>
-    <div class="reading-result" id="readingResult"></div>
-  </div>
+      <div class="result-section" id="result-section" data-ws-result style="margin-top:16px">
+        <div id="questionDisplay" style="text-align:center;font-style:italic;color:var(--text-lt);font-size:13px;margin-bottom:20px"></div>
+        <div id="spreadArea"></div>
+        <div class="reading-result" id="readingResult"></div>
+      </div>
+    </div>
+  </main>
 
-  <div class="tool-cta">
-    <div class="tool-cta-eyebrow">Kết Hợp Đông Tây</div>
-    <div class="tool-cta-title">Tarot + Tử Vi Đẩu Số</div>
-    <div class="tool-cta-desc">Tarot cho thấy năng lượng hiện tại và thông điệp ngắn hạn. Tử Vi Đẩu Số phân tích vận trình dài hạn theo lá số cá nhân — hai hệ thống bổ trợ nhau, không mâu thuẫn.</div>
-    <a class="tool-cta-btn" href="/luan-giai.html">Xem Lá Số Tử Vi →</a>
-  </div>
+  <aside class="rail" id="shell-rail"></aside>
 </div>
 
-<footer class="site-footer">
-  <div class="footer-top"><div><div class="footer-brand"><img src="/seal.webp" alt=""><div class="footer-brand-text"><div class="name">Tử Vi Minh Bảo</div><div class="zh">紫微明寶</div></div></div><p class="footer-tagline">Tri mệnh lý – Thuận thế hành</p></div></div>
-  <div class="footer-bottom"><span>© 2026 tuviminhbao.com</span><img src="/seal.webp" alt=""></div>
-</footer>
-
+<script>window.SHELL_ACTIVE='tarot';window.SHELL_HISTORY=true;
+window.SHELL_INTRO={key:'tarot',title:'Tarot 78 Lá',desc:'Rút 1 lá, trải 3 lá hoặc Celtic Cross 10 lá — ý nghĩa xuôi và ngược bằng tiếng Việt, đầy đủ 22 Major Arcana và 56 Minor Arcana.'};</script>
+<script src="/auth.js?v=2"></script>
+<script src="/tuvi-paywall.js?v=20"></script>
+  <script src="/nav.js?v=22" data-icons-only></script>
+<script src="/shell.js?v=72"></script>
 <script>
-// ═══════════════════════════════════════════════════════════
-// 78 TAROT CARDS — Major (0–21) + Minor (22–77)
-// ═══════════════════════════════════════════════════════════
+function initTarot(){
+  Shell.setContext({
+    label:'Tarot 78 Lá',
+    placeholder:'Hỏi thầy về lá bài vừa rút…',
+    greeting:'Chào bạn. Chọn kiểu trải bài rồi rút — tôi sẽ ở đây nếu bạn muốn hỏi thêm về ý nghĩa lá bài hay cách áp dụng vào tình huống của mình.',
+    chips:['Major Arcana khác Minor Arcana thế nào?','Lá bài ngược nghĩa là gì?','Nên hỏi Tarot câu hỏi kiểu gì?']
+  });
+}
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initTarot); else initTarot();
+
+// ══════════════════════════════════════════════════════════════════════
+// Port NGUYÊN VĂN từ public/tools/tarot.html — 78 lá + logic rút/trải bài
+// giữ nguyên, không gọi model, không paywall (miễn phí).
+// ══════════════════════════════════════════════════════════════════════
 const CARDS = [
 // ── MAJOR ARCANA (0–21) ─────────────────────────────────────
 {id:0,name:'Kẻ Khờ',en:'The Fool',type:'major',sym:'🌟',num:'0',
@@ -483,7 +462,17 @@ const CARDS = [
  kw:['Thịnh vượng','Kinh doanh','Lãnh đạo','Ổn định']},
 ];
 
-// ── Spread configs ──────────────────────────────────────────
+// 78 sym là emoji màu (biểu tượng đại diện từng lá) — đổi sang icon SVG chuẩn
+// của site. renderCardSym duyệt từng codepoint nên tự đúng cho cả trường hợp
+// một lá gộp 2 emoji ('🔥🔥' — Hai Gậy) lẫn trường hợp 1 emoji thông thường.
+const SYM_ICON = {'🌟':'star','⚡':'zap','🌙':'moon','🌸':'flower','👑':'crown','⛪':'temple','❤️':'heart','🏆':'trophy','🦁':'dumbbell','🕯️':'lamp','☸️':'rotate-cw','⚖️':'scale','🙃':'rotate-cw','🌑':'moon','🌊':'waves','🔗':'link','⭐':'star','🌕':'moon','☀️':'sun','📯':'volume-2','🌍':'globe','🔥':'flame','🔥🔥':['flame','flame'],'⛵':'compass','🎉':'gift','⚔️':'zap','🏅':'award','🛡️':'shield-check','💨':'zap','🩹':'shield-check','😓':'hourglass','🌱':'leaf','💧':'droplet','💑':'heart-handshake','🥂':'gift','😑':'x-circle','😢':'droplet','🌷':'flower','🌈':'rainbow','🚶':'compass','😊':'smile','🏡':'home','🐟':'droplet','🔮':'sparkles','🙈':'x-circle','💔':'heart','😴':'moon','😈':'alert-triangle','🦊':'alert-triangle','🔒':'lock','😨':'alert-triangle','🌅':'sunrise','🔍':'search','👸':'crown','💰':'dollar-sign','🤹':'scale','🏗️':'settings','💎':'gem','🥶':'alert-triangle','🤲':'gift','🔨':'settings','🌿':'leaf','🏰':'landmark','📚':'book-open','🐂':'anchor','🌻':'flower','🏦':'landmark'};
+function renderCardSym(sym) {
+  var v = SYM_ICON[sym];
+  if (!v) return sym;
+  var keys = Array.isArray(v) ? v : [v];
+  return keys.map(function(k){ return '<span class="ic" data-icon="' + k + '"></span>'; }).join('');
+}
+
 const SPREADS = {
   1: [{pos:'Thông Điệp',desc:'Năng lượng và thông điệp chính cho câu hỏi của bạn'}],
   3: [
@@ -515,7 +504,6 @@ function setSpread(n, btn) {
   _spread = n;
   document.querySelectorAll('.spread-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
-  document.getElementById('result-section').classList.remove('active');
 }
 
 function draw() {
@@ -523,10 +511,8 @@ function draw() {
   btn.disabled = true;
   btn.textContent = '✦ Đang xáo bài...';
   _drawn = [];
-  document.getElementById('result-section').classList.remove('active');
 
   setTimeout(() => {
-    // Pick random cards
     const count = _spread;
     const picked = [];
     const used = new Set();
@@ -534,7 +520,6 @@ function draw() {
       const idx = Math.floor(Math.random() * CARDS.length);
       if (!used.has(idx)) { used.add(idx); picked.push(CARDS[idx]); }
     }
-    // Randomly reversed (~35%)
     _drawn = picked.map(c => ({ ...c, reversed: Math.random() < 0.35 }));
 
     renderSpread();
@@ -550,26 +535,27 @@ function renderSpread() {
   const spread = SPREADS[_spread];
   const area = document.getElementById('spreadArea');
 
-  // Build card slots
   if (_spread === 1) {
     area.innerHTML = `<div class="spread-1">${_drawn.map((c,i) => cardSlotHTML(c, spread[i], i, 'lg')).join('')}</div>`;
   } else if (_spread === 3) {
     area.innerHTML = `<div class="spread-3">${_drawn.map((c,i) => cardSlotHTML(c, spread[i], i)).join('')}</div>`;
   } else {
-    // Celtic cross
     const classes = ['cc1','cc2','cc3','cc4','cc5','cc6','cc7','cc8','cc9','cc10'];
     area.innerHTML = `<div class="spread-celtic">${_drawn.map((c,i) => `<div class="card-slot ${classes[i]}">${cardBack(i)}<div class="slot-label">${spread[i].pos}</div></div>`).join('')}</div>`;
   }
 
-  // Animate flip after render
   setTimeout(() => {
     _drawn.forEach((c, i) => flipCard(i, c));
   }, 300);
 
-  // Render meanings
   renderMeanings();
-  document.getElementById('result-section').classList.add('active');
+  Shell.setShareable({ kind:'text', toolId:'tarot', title:'Kết quả Tarot của tôi', text: shareText() });
   setTimeout(() => document.getElementById('result-section').scrollIntoView({ behavior: 'smooth', block: 'start' }), 400);
+}
+
+function shareText() {
+  const spread = SPREADS[_spread];
+  return _drawn.map((c,i) => `${spread[i].pos}: ${c.name} (${c.reversed?'Ngược':'Xuôi'})`).join('\n');
 }
 
 function cardBack(i) {
@@ -591,7 +577,8 @@ function flipCard(i) {
   const face = document.getElementById(`face-${i}`);
   if (!inner || !face) return;
   const col = SUIT_COLORS[c.type] || '#c9a84c';
-  face.innerHTML = `<div class="cf-num" style="color:${col}">${c.num}</div><div class="cf-symbol" style="color:${col}">${c.sym}</div><div class="cf-name">${c.name}</div><div class="cf-suit">${SUIT_VI[c.type]}</div>`;
+  face.innerHTML = `<div class="cf-num" style="color:${col}">${c.num}</div><div class="cf-symbol" style="color:${col}">${renderCardSym(c.sym)}</div><div class="cf-name">${c.name}</div><div class="cf-suit">${SUIT_VI[c.type]}</div>`;
+  window.mountIcons && window.mountIcons(face);
   if (c.reversed) {
     face.classList.add('is-reversed');
     inner.classList.add('reversed');
@@ -609,7 +596,7 @@ function renderMeanings() {
       const meaning = c.reversed ? c.rev : c.up;
       return `<div class="card-meaning" style="border-left-color:${col}">
         <div class="cm-header">
-          <div class="cm-symbol" style="color:${col}">${c.sym}</div>
+          <div class="cm-symbol" style="color:${col}">${renderCardSym(c.sym)}</div>
           <div class="cm-info">
             <div class="cm-name">${c.name} <span style="font-size:12px;color:var(--text-lt);font-weight:400">(${c.en})</span></div>
             <div class="cm-sub">${SUIT_VI[c.type]} · ${spread[i].pos}</div>
@@ -621,32 +608,8 @@ function renderMeanings() {
         <div class="cm-keywords">${c.kw.map(k => `<span class="cm-kw">${k}</span>`).join('')}</div>
       </div>`;
     }).join('')}`;
+  window.mountIcons && window.mountIcons(document.getElementById('readingResult'));
 }
-</script>
-<section class="kb-section">
-  <div class="page">
-    <div class="kb-inner">
-      <div class="kb-eyebrow">Kiến Thức Cổ Pháp</div>
-      <h2 class="kb-title">Tarot — Bộ 78 Lá và Ngôn Ngữ Của Vô Thức</h2>
-      <div class="kb-body">
-        <p>Tarot xuất hiện ở Bắc Ý thế kỷ 15 ban đầu như bộ bài chơi trò, trước khi được giới huyền học châu Âu thế kỷ 18–19 tái diễn giải thành công cụ chiêm đoán và khám phá nội tâm. Bộ bài tiêu chuẩn gồm 78 lá, chia thành hai phần: 22 lá <strong>Bí Ẩn Lớn</strong> (Major Arcana) và 56 lá <strong>Bí Ẩn Nhỏ</strong> (Minor Arcana).</p>
-        <p>22 lá Major Arcana là hành trình của người hùng — từ Kẻ Ngốc (The Fool) khởi đầu hồn nhiên đến Thế Giới (The World) viên mãn và hoàn chỉnh. Mỗi lá là một nguyên mẫu phổ quát: Hoàng Đế là quyền uy và cấu trúc, Bánh Xe Số Phận là sự tuần hoàn của vận mệnh, Mặt Trăng là sự mơ hồ và vô thức sâu thẳm.</p>
-        <p>56 lá Minor Arcana phản ánh đời sống hàng ngày qua bốn bộ: <strong>Gậy</strong> (Lửa — hành động, đam mê), <strong>Cốc</strong> (Nước — cảm xúc, quan hệ), <strong>Kiếm</strong> (Gió — tư duy, xung đột), <strong>Tiền</strong> (Đất — vật chất, thực tế). Mỗi bộ có 14 lá từ Át đến 10, cộng bốn lá Hoàng Tộc.</p>
-        <p>Tarot hoạt động không phải bởi ma thuật hay tiên tri. Giá trị thực của nó nằm ở chỗ hình ảnh và biểu tượng kích hoạt những liên tưởng và chiều sâu suy nghĩ mà ta ít tiếp cận trong tư duy thường ngày. Đặt một câu hỏi cụ thể, nhìn vào lá bài, và để bản thân diễn giải — đó mới là cách Tarot thực sự hoạt động.</p>
-        <p class="kb-links">Xem thêm: <a href="/tools/oracle.html">Oracle Phương Đông</a>, <a href="/tools/kinh-dich.html">Kinh Dịch 64 Quẻ</a>, <a href="/tools/boi-bai-tay.html">Bói Bài Tây</a></p>
-      </div>
-    </div>
-  </div>
-</section>
-<script src="/testimonials.js"></script>
-<script src="/related-tools.js?v=2"></script>
-<script src="/nav.js?v=20" defer></script>
-<script src="/tool-sources.js?v=1"></script>
-<script>
-  if (window.ToolSources) {
-    ToolSources.mountIntroAfterH1('tarot');
-    ToolSources.watchResults('tarot', '#result-section');
-  }
 </script>
 </body>
 </html>
