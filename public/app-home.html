@@ -592,16 +592,15 @@ if(window.ToolPrices) ToolPrices.load().then(function(d){ if(d) renderHomeCards(
         +'<span class="tme-err" id="tmeErr"></span></div></div>';
       var prev=null;
       try{ prev=Shell.getRememberedBirth&&Shell.getRememberedBirth(); }catch(e){}
-      // Bỏ ô Họ và tên: đây là chỗ đổi lấy MỘT thông tin (ngày sinh) để mở khóa
-      // khối cá nhân — thêm trường là thêm cớ để bỏ ngang.
-      TuviForm.render('tmeFields',{mode:'compact',showName:false,gioitinh:(prev&&prev.gioitinh)||'nam'});
+      TuviForm.render('tmeFields',{mode:'compact',showName:true,gioitinh:(prev&&prev.gioitinh)||'nam'});
       if(prev) try{ TuviForm.setData(prev); TuviForm._update(''); }catch(e){}
       el('tmeCancel').onclick=function(){ host.innerHTML=''; btn.style.display=''; };
       el('tmeSave').onclick=function(){
         var fd=null; try{ fd=TuviForm.getData(); }catch(e){}
         if(!fd||!fd.ngay||!fd.thang||!fd.nam){ el('tmeErr').textContent='Thiếu ngày/tháng/năm sinh.'; return; }
-        // Giữ lại họ tên đã lưu từ tool khác — form này không hỏi tên, ghi đè
-        // trắng thì rail mất cách xưng hô đúng tên.
+        // Lưới đỡ: ô tên có sẵn (setData đã điền từ prev) nên bình thường fd.hoten
+        // đã đúng; giữ fallback này chỉ để phòng ô bị bỏ trống ngoài ý muốn —
+        // ghi đè trắng thì rail mất cách xưng hô đúng tên.
         if(prev&&prev.hoten&&!fd.hoten) fd.hoten=prev.hoten;
         try{ Shell.rememberBirth(fd); }catch(e){}
         try{ _birth=Shell.birthToApi(fd); }catch(e){ _birth=null; }
