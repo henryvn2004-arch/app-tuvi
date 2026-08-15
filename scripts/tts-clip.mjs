@@ -66,7 +66,16 @@ async function measure(path, bytes) {
  *   `file` là đường dẫn TƯƠNG ĐỐI so với `remotion/public/` — đúng thứ
  *   `staticFile()` của Remotion cần.
  */
-export async function ttsScene(text, { voice = '', speed = '0.9' } = {}) {
+/**
+ * Tốc độ đọc mặc định.
+ *
+ * ⚠️ 1.15 chứ KHÔNG phải 0.9 như pipeline vấn đáp. Hai loại nội dung khác hẳn
+ * nhau: video vấn đáp là nghe thủng thẳng vài phút, còn clip TikTok phải dồn —
+ * bản dựng đầu ở 0.9 nghe buồn ngủ, và trên TikTok buồn ngủ nghĩa là bị lướt.
+ */
+export const CLIP_SPEED = '1.15';
+
+export async function ttsScene(text, { voice = '', speed = CLIP_SPEED } = {}) {
   mkdirSync(AUDIO_DIR, { recursive: true });
   const key = hash(`${text}|${voice}|${speed}`);
   const rel = `audio/${key}.mp3`;

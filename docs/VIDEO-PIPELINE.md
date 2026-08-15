@@ -48,12 +48,25 @@ ScriptSpec → CỔNG 1 (máy, 0đ) → CỔNG 2 (7 người xem giả lập, ~3
 
 ## Số đo nền
 
+⚠️ **Chỉ đúng cho ĐOẠN DÀI.** Câu ngắn cỡ một cảnh clip dao động 11–18 ký tự/giây (khoảng
+lặng đầu/cuối cố định chiếm tỉ trọng lớn). Nên ước lượng chỉ dùng cho cổng 1; render thì
+đo **độ dài thật** của mp3.
+
 **Giọng Vbee đọc 13,59 ký tự/giây** (`s_sg_male_thientam`, `speed_rate 0.9`) — đo trên 11
 file thật, 13.034 ký tự / 958,52 giây, dải 12,77–14,12. Nhờ số này mà thời lượng clip tính
 được **trước khi tốn một lượt TTS nào**, nên cổng 1 chạy 0đ.
 
 ⚠️ Đổi giọng hoặc `speed_rate` thì **phải đo lại**: `content-length` của mp3 ÷ 16000 = số
 giây, chia cho `length(text)`.
+
+## Luật nhịp — rút từ bản dựng đầu bị chê buồn ngủ
+
+- Mỗi cảnh **MỘT ý, dưới ~4 giây**. Thà 6 cảnh ngắn hơn 3 cảnh dài.
+- Câu ngắn, cắt vụn. Đổi hình thường xuyên là thứ giữ ngón tay người xem lại.
+- Khoảng lặng giữa cảnh **0,12s** — cộng dồn qua 6 cảnh là gần 1 giây, quá đó thì chùng.
+- Câu kết nói về **điều người xem sắp biết về CHÍNH MÌNH**, không nói về thủ tục.
+  Dùng `buildCta(keyword)`: *"Tìm hiểu ngay <từ khoá> của chính bạn."* Bản đầu là
+  *"Tra thử miễn phí, không cần đăng ký"* — vừa yếu vừa trỏ sai chỗ.
 
 ## Hạn chế đã biết
 
@@ -62,8 +75,13 @@ giây, chia cho `length(text)`.
   mạng cho trình duyệt; ở đây thì phục vụ `public/` tại chỗ.
 - **Chromium của Playwright không dùng được cho Remotion** — đã gỡ chế độ headless cũ.
   Để trống `browserExecutable` cho Remotion tự lo (`REMOTION_CHROMIUM=auto`).
-- **Chưa có nhạc nền**: thả file vào `remotion/public/music/` rồi truyền `--music <tên>`.
-  Không có file thì clip vẫn render, chỉ không nhạc (fail-soft có chủ ý).
-- **Chưa nối giọng đọc**: cần `VBEE_TOKEN` + `VBEE_APP_ID` trong môi trường chạy.
+- **Nhạc nền tự sinh, KHÔNG thay được nhạc trending.** `node scripts/gen-music-bed.mjs --all`
+  ra 4 kiểu (`don-dap` · `cang-thang` · `sang-sua` · `tram-tinh`). Đã đi tìm nguồn thật
+  trước: kho nhạc miễn phí bị chặn ở tầng mạng, còn mp3 tìm được trên GitHub là **OST game
+  thương mại** nằm trong repo mã nguồn mở — mã mở không có nghĩa nhạc được cấp phép.
+  Nhạc trending trên TikTok còn có vai trò **đẩy phân phối** mà file tự sinh không thay
+  được; vẫn nên gắn nhạc trending trong app lúc đăng.
+- **Giọng đọc** qua edge function `tts-clip` (deploy riêng, KHÔNG đụng `tts` của pipeline
+  vấn đáp). Tốc độ đọc clip là **1.15**, khác 0.9 của vấn đáp: clip TikTok phải dồn.
 - **Cổng 2 chưa chạy lần nào**: cần khoá model. Ngưỡng 5/7 và 2/7 hiện là phỏng đoán ban
   đầu — phải đo phân bố trên vài chục kịch bản mẫu rồi mới chốt.

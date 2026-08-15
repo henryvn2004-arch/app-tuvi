@@ -43,7 +43,7 @@ const TOOL = val('--tool', '');
 const DRY = has('--dry-run');
 const STILL = has('--still');
 const NO_AUDIENCE = has('--no-audience');
-const MUSIC = val('--music', 'nen-tram.wav');
+const MUSIC = val('--music', '');
 const NO_VOICE = has('--no-voice');
 const FPS = 30;
 
@@ -122,9 +122,11 @@ if (DRY) {
 // Ước lượng theo số ký tự chỉ đủ cho cổng 1: đã đo và thấy tốc độ đọc câu ngắn
 // dao động 11–18 ký tự/giây, sai số 1–2 giây là đủ để hình lệch khỏi tiếng.
 const frames = (sec) => Math.max(1, Math.round(sec * FPS));
-// Khoảng lặng chèn thêm sau mỗi cảnh: giọng đọc dừng rồi mà hình đổi ngay thì
-// nghe cụt. 0,35s là mức vừa đủ để câu "rơi xuống" trước khi sang cảnh sau.
-const TAIL = 0.35;
+// Khoảng lặng chèn thêm sau mỗi cảnh.
+// ⚠️ 0,12s chứ không phải 0,35s: khoảng lặng là chỗ nhịp clip chùng xuống, và
+// cộng dồn qua 5–6 cảnh thì thành gần 2 giây chết. Đủ để câu không dính vào
+// nhau, không đủ để người xem kịp chán.
+const TAIL = 0.12;
 
 let voices = null;
 if (!NO_VOICE) {
@@ -169,7 +171,7 @@ const props = {
   })),
   cta: spec.cta,
   ctaDurationInFrames: voices
-    ? frames(voices[voices.length - 1].seconds + 1.0)
+    ? frames(voices[voices.length - 1].seconds + 0.9)
     : frames(estimateSpeechSeconds(spec.cta) + 1.2),
   ...(voices ? { ctaAudio: voices[voices.length - 1].file } : {}),
   ...(spec.music ? { music: spec.music } : {}),
