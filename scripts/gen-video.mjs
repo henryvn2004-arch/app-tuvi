@@ -46,6 +46,20 @@ const NO_AUDIENCE = has('--no-audience');
 const MUSIC = val('--music', '');
 const VOICE = val('--voice', ''); // ép một giọng cụ thể; bỏ trống = chọn theo tool
 const NO_VOICE = has('--no-voice');
+/**
+ * Coi giọng đọc là BẮT BUỘC: TTS hỏng thì dừng hẳn thay vì render bản không lời.
+ *
+ * 🔴 Vì sao phải có cờ này thay vì bỏ luôn fail-soft: hai lối dùng cần hai hành
+ * vi ngược nhau. Chạy TAY thì fail-soft đúng — mất khoá TTS vẫn duyệt được bố
+ * cục và nhịp. Chạy TỰ ĐỘNG hàng loạt thì fail-soft là cách hỏng tệ nhất: cả
+ * loạt clip không lời vẫn báo "thành công" rồi đi tiếp ra hàng đợi đăng.
+ *
+ * ⚠️ Và KHÔNG phát hiện được bằng cách soi file: clip không lời VẪN có track
+ * tiếng vì nhạc nền vẫn render. Đã thử thật — bản `--no-voice` cho ra mp4 có
+ * đủ `audio aac 2ch`. Nên chốt phải nằm ở ĐÂY, lúc biết TTS hỏng, chứ không
+ * nằm ở khâu soi file phía sau.
+ */
+const REQUIRE_VOICE = has('--require-voice');
 const FPS = 30;
 
 if (!TOOL) {
@@ -153,11 +167,21 @@ if (!NO_VOICE) {
       `   tổng ${tong.toFixed(1)}s giọng đọc (ước lượng trước đó: ${g1.metrics.totalSeconds}s)`
     );
   } catch (e) {
+    if (REQUIRE_VOICE) {
+      console.error(`\n❌ TTS hỏng: ${e.message}`);
+      console.error('   --require-voice đang bật ⇒ DỪNG, không render bản không lời.');
+      console.error('   Kiểm khoá/kết nối TTS rồi chạy lại.');
+      process.exit(1);
+    }
     console.warn(`   ⚠️ ${e.message}`);
     console.warn('   → render KHÔNG có giọng đọc; phụ đề vẫn chạy.');
     voices = null;
   }
 } else {
+  if (REQUIRE_VOICE) {
+    console.error('\n❌ --no-voice và --require-voice loại trừ nhau.');
+    process.exit(1);
+  }
   console.log('\n── GIỌNG ĐỌC · BỎ QUA (--no-voice) ──────────');
 }
 

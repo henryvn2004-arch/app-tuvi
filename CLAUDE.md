@@ -5,6 +5,66 @@
 
 ---
 
+## 🏭 Khâu dựng clip lên GitHub Actions — và một phép kiểm TÔI ĐẶT TÊN SAI (2026-08-15, PR này)
+
+Henry hỏi chạy pipeline ở đâu: session Claude Code, routine, hay dựng hẳn hạ
+tầng. Chốt **GitHub Actions**, sau khi loại từng cái bằng lý do cụ thể:
+
+| Chỗ | Vì sao không |
+|---|---|
+| Vercel cron | hàm trần **300 giây**, một clip render ~4 phút; và không có Chromium |
+| Session Claude Code | ephemeral, và container **KHÔNG cho Chromium ra Internet** (`curl` thì được) |
+| **Actions** ✅ | repo **đã** chạy Playwright + Chromium ở đây, có CPU, artifact tải về được |
+
+- **Logic ở `scripts/build-video-batch.mjs`, YAML chỉ gọi nó.** Cùng một lệnh
+  phải chạy được ở máy Henry lúc cần dựng gấp; YAML thì chỉ CI chạy được và
+  mỗi lần sửa phải push mới biết đúng sai.
+- Bốn tính chất chép từ `yt-drain`: tuần tự · hỏng một tool không kéo cả loạt ·
+  ngân sách thời gian dừng giữa hai tool · nối lại được.
+- ⚠️ **CỐ Ý chưa có `schedule`** — chạy hằng ngày chỉ có nghĩa khi đã đủ kịch
+  bản nhiều tool VÀ đã nối đường đăng bài. Bật lịch lúc mới có 1 kịch bản là
+  mỗi sáng dựng lại đúng một clip đã có.
+- **💰 Cache giọng đọc** là bước đáng giá nhất: TTS là khoản biến đổi DUY NHẤT
+  (nhạc · quay · render · cổng 1 đều 0đ; đo được **511 ký tự / 7 lượt** mỗi
+  clip). Tên mp3 chính là băm của (chữ+giọng+tốc độ) nên cache thư mục an toàn
+  tuyệt đối. Không có nó thì mỗi lượt 18 clip đốt lại **126 lượt TTS**.
+
+### 🔴 Phép kiểm tôi viết ra KHÔNG kiểm đúng thứ nó mang tên
+Tôi thêm bước soi mp4 và gọi nó là *"bắt clip câm"* — kiểm `hasAudio`. Đo thật
+thì bản `--no-voice` **VẪN có `audio aac 2ch 48000Hz`, 41,4s**: nhạc nền vẫn
+render nên track tiếng vẫn có. Tức phép kiểm luôn XANH kể cả khi mất sạch lời
+đọc — đúng loại xanh-oan nguy hiểm nhất, và nó đứng gác cho ca hỏng tệ nhất của
+khâu tự động (18 clip không lời vẫn "thành công" rồi ra hàng đợi đăng).
+- 🔑 Chốt phải nằm ở **lúc biết TTS hỏng**, không nằm ở khâu soi file phía sau.
+  Thêm `--require-voice` cho `gen-video.mjs`; batch LUÔN truyền cờ đó.
+- **Vì sao không bỏ luôn fail-soft:** hai lối dùng cần hai hành vi ngược nhau —
+  chạy TAY thì mất khoá TTS vẫn nên render để duyệt bố cục; chạy TỰ ĐỘNG thì
+  không. Cờ chọn hành vi, không phải đổi mặc định.
+- 🔑 Bài học đặt tên: **gọi phép kiểm theo điều nó THỰC SỰ đo, không theo điều
+  mình muốn nó đo.** Cùng lỗi đã ghi ở track `huong-nghiep-tre` (*"bài kiểm đặt
+  tên theo điều muốn chứng minh"*), vấp lại.
+
+### Verify
+`lint` 0 lỗi / 77 warning = mốc nền · `prettier` cả cây sạch · YAML parse được ·
+`node --check` cả hai script.
+- **3 ca trên `--require-voice`**: TTS hỏng (ép `SUPABASE_URL` sai) → **exit 1,
+  không render** · **ĐỐI CHỨNG** bỏ cờ đi thì fail-soft y như cũ · `--no-voice`
+  + `--require-voice` → từ chối vì loại trừ nhau.
+- **Chèn lệnh qua ô nhập workflow**: chạy chính đoạn shell đó với
+  `IN_TOOLS='a; touch /tmp/PWNED'` → chuỗi giữ nguyên làm MỘT tham số, không
+  tạo file. (Ô nhập đi qua `env:` chứ không nội suy `${{ }}` thẳng vào `run`.)
+
+### CÒN LẠI
+- **Chưa chạy thật một lượt trên Actions** — workflow mới, chỉ verify được YAML
+  + logic shell tại chỗ. Lượt bấm đầu tiên là phép thử thật.
+- **Chỉ 1/18 tool có đủ công thức quay + kịch bản.** Batch tự lọc theo giao của
+  hai danh sách nên không gãy, nhưng `--all` hiện chỉ ra một clip.
+- **Chưa nối đường đăng bài.** Clip mới nằm ở artifact; muốn YouTube tự đăng thì
+  phải đẩy lên Supabase Storage cho `yt-drain` lấy — cần `SUPABASE_SERVICE_KEY`
+  trong Actions, và đó là quyết định của Henry (key này đã phải rotate một lần).
+
+---
+
 ## 🎟️ Câu kết clip đọc TÊN MIỀN + MÃ, và bảng mã khuyến mãi (2026-08-15, PR này)
 
 Henry: *"phần closing… Mày lam no đọc luôn tên website tuviminhbao.com và thêm

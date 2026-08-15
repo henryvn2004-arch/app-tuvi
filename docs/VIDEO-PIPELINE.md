@@ -17,7 +17,59 @@ node scripts/gen-video.mjs --tool than-so-hoc              # đủ cả 2 cổng
 node scripts/gen-video.mjs --tool than-so-hoc --dry-run     # chỉ chạy cổng
 node scripts/gen-video.mjs --tool than-so-hoc --still --frame=300
 node scripts/gen-video.mjs --tool than-so-hoc --no-audience # bỏ cổng 2
+
+# 3. Dựng cả LOẠT (quay → cổng → giọng → render → soi file), một lệnh
+node scripts/build-video-batch.mjs --all
+node scripts/build-video-batch.mjs --tools than-so-hoc,kim-lau
+node scripts/build-video-batch.mjs --all --dry-run
 ```
+
+## Chạy trên GitHub Actions — `.github/workflows/video-build.yml`
+
+Vào tab **Actions → Video Build → Run workflow**. Ba ô: tool cần dựng (bỏ trống
+= tất cả) · dựng lại kể cả khi đã có file · trang để quay. Clip tải về ở mục
+**Artifacts** của lượt chạy đó.
+
+**Vì sao Actions chứ không phải chỗ khác** — đã loại từng cái:
+
+| Chỗ | Vì sao không |
+|---|---|
+| Vercel cron | hàm trần **300 giây**, một clip render ~4 phút; và không có Chromium để quay |
+| Session Claude Code | ephemeral, và container KHÔNG cho Chromium ra Internet (`curl` thì được) nên không quay được prod |
+| **GitHub Actions** ✅ | repo **đã** chạy Playwright + Chromium ở đây, có CPU, có lịch, artifact tải về được |
+
+Toàn bộ logic nằm ở `scripts/build-video-batch.mjs`, YAML chỉ gọi nó — cùng một
+lệnh phải chạy được ở máy khi cần dựng gấp một clip. YAML thì chỉ CI chạy được,
+sửa gì cũng phải push mới biết đúng sai.
+
+**Bốn tính chất chép từ `yt-drain`** (kho video đã trả giá cho cả bốn): tuần tự
+từng tool · hỏng một tool không kéo cả loạt · ngân sách thời gian dừng giữa hai
+tool · nối lại được (đã có mp4 thì bỏ qua).
+
+### 🔴 Chốt riêng của khâu này: soi lại file, coi clip CÂM là TRƯỢT
+
+`gen-video.mjs` cố ý **fail-soft** với giọng đọc — thiếu khoá TTS thì vẫn render,
+chỉ là clip câm. Chạy tay thì đó là lựa chọn đúng (vẫn duyệt được bố cục). Chạy
+tự động hàng loạt thì đó là cách hỏng tệ nhất: 18 clip câm vẫn báo "thành công"
+và vẫn đi tiếp ra hàng đợi đăng. Nên `build-video-batch.mjs` đọc lại mp4 và bắt
+buộc có **cả track hình lẫn track tiếng**, dài ≥8 giây.
+
+### Khoá (secret) — không khai thì vẫn chạy, chỉ kém đi
+
+| Secret | Thiếu thì sao |
+|---|---|
+| `GEMINI_API_KEY` **hoặc** `ANTHROPIC_API_KEY` | tự chạy `--no-audience` **và in cảnh báo** lên trang chạy — bỏ qua cổng 2 chứ không im lặng |
+| `SUPABASE_ANON_KEY` · `SUPABASE_URL` | dùng anon key công khai nằm sẵn trong mã client (không phải bí mật) |
+| `CLIP_TTS_SECRET` | chỉ cần nếu sau này siết hàm edge TTS |
+
+**💰 Cache giọng đọc** là bước đáng giá nhất: TTS là khoản chi phí **biến đổi duy
+nhất** (nhạc · quay · render · cổng 1 đều 0đ). Tên file mp3 chính là băm của
+(chữ + giọng + tốc độ) nên cache theo thư mục an toàn tuyệt đối — sửa một câu
+thì chỉ câu đó sinh lại. Không có nó thì mỗi lượt 18 clip đốt lại **126 lượt TTS**.
+
+⚠️ **CỐ Ý chưa có `schedule`.** Chạy tự động hằng ngày chỉ có nghĩa khi đã có đủ
+kịch bản cho nhiều tool VÀ đã nối được đường đăng bài. Bật lịch lúc mới có 1
+kịch bản là mỗi sáng dựng lại đúng một clip đã có.
 
 ## Bốn lớp
 
