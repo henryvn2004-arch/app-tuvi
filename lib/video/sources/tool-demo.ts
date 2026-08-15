@@ -35,6 +35,8 @@ export interface ToolDemoSource {
    * không quan tâm mình có công cụ gì, họ quan tâm điều gì đó về bản thân họ.
    */
   keyword: string;
+  /** Câu hỏi đóng clip, trả lời được bằng một từ. Đẻ comment. */
+  ctaQuestion: string;
   spec: Omit<ScriptSpec, 'sourceType' | 'sourceId'>;
 }
 
@@ -44,55 +46,64 @@ const SOURCES: ToolDemoSource[] = [
     label: 'Thần Số Học',
     recording: 'recordings/than-so-hoc.webm',
     keyword: 'Số Đường Đời',
+    // Câu hỏi đóng clip — phải trả lời được bằng MỘT TỪ ngay trong ô bình luận.
+    // Hỏi khó hay hỏi mở là không ai buồn gõ.
+    ctaQuestion: 'Bạn số mấy?',
     spec: {
       title: 'Demo Thần Số Học',
-      // Hook: ngắn, nói thẳng về người xem, gợi tò mò. Cố ý KHÔNG mở bằng tên
-      // công cụ — ở giây thứ nhất chưa ai quan tâm mình là ai.
-      hook: 'Ngày sinh của bạn giấu một con số.',
+      // STOP SCROLL — mở bằng một lời TRÁCH mà người xem hay nghe về mình, rồi
+      // lật nó lại. Không nhắc công cụ, không nhắc bộ môn.
+      hook: 'Bạn hay bị chê là khó tính? Có thể đó không phải tính xấu.',
       scenes: [
         {
-          text: 'Gõ ngày sinh. Gõ họ tên.',
+          // CURIOSITY — hé lộ có một cách phân loại, chưa nói bạn thuộc loại nào.
+          text: 'Ngày sinh của bạn rút lại thành một con số. Từ một đến chín.',
           visual: {
             kind: 'screen',
             recording: 'recordings/than-so-hoc.webm',
             startSec: 3,
-            label: 'Nhập ngày sinh và họ tên',
+            label: '',
           },
         },
         {
-          text: 'Cộng hết chữ số lại, rút về một số duy nhất.',
+          // RETENTION — nâng mức cược: con số này giải thích HÀNH VI của bạn.
+          text: 'Chín con số. Chín kiểu người. Và kiểu của bạn giải thích vì sao bạn hành xử như vậy.',
           visual: {
             kind: 'screen',
             recording: 'recordings/than-so-hoc.webm',
-            startSec: 6,
-            label: 'Bấm tính',
+            startSec: 7,
+            label: '',
           },
         },
         {
-          text: 'Đó là Số Đường Đời. Nó nói bạn hợp làm gì.',
+          // REVEAL — một ví dụ CỤ THỂ, đọc lên nghe như lời khen.
+          text: 'Ví dụ số bốn: kỷ luật, đáng tin, xây mọi thứ từng bước một.',
           visual: {
             kind: 'screen',
             recording: 'recordings/than-so-hoc.webm',
-            startSec: 9,
-            label: 'Kết quả',
+            startSec: 10,
+            label: '',
           },
         },
         {
-          text: 'Và vì sao có những chuyện cứ lặp lại trong đời bạn.',
+          // TWIST — lật mặt sau. Đây là chỗ tạo cảm giác "đúng mình".
+          text: 'Nhưng đổi lại: cứng nhắc. Mọi thứ đảo lộn một cái là bạn mất phương hướng.',
           visual: {
             kind: 'screen',
             recording: 'recordings/than-so-hoc.webm',
-            startSec: 11,
-            label: 'Số Định Mệnh',
+            startSec: 12,
+            label: '',
           },
         },
         {
-          text: 'Còn mười chỉ số nữa. Năm cá nhân. Chặng đời bạn đang đi.',
+          // PAYOFF — đóng lại đúng lời hứa ở hook, và đóng theo hướng bênh
+          // người xem. Đây là câu người ta muốn gửi cho bạn bè.
+          text: 'Người ngoài gọi đó là khó tính. Thật ra đó là cách bạn giữ mình an toàn.',
           visual: {
             kind: 'screen',
             recording: 'recordings/than-so-hoc.webm',
-            startSec: 13,
-            label: 'Biểu đồ ngày sinh',
+            startSec: 14,
+            label: '',
           },
         },
       ],
@@ -107,12 +118,19 @@ const SOURCES: ToolDemoSource[] = [
 /**
  * Câu kết dùng CHUNG cho mọi clip demo, chỉ thay từ khoá.
  *
- * Bản đầu là *"Tra thử miễn phí, không cần đăng ký."* — vừa yếu vừa sai: nói
- * về THỦ TỤC (miễn phí, khỏi đăng ký) trong khi thứ kéo người ta bấm là điều
- * họ sắp biết về CHÍNH MÌNH. Câu kết phải trỏ vào đó.
+ * Đi qua HAI lần sửa, ghi lại cả hai vì mỗi lần hỏng một kiểu:
+ *  1. *"Tra thử miễn phí, không cần đăng ký."* — nói về THỦ TỤC, trong khi thứ
+ *     kéo người ta bấm là điều họ sắp biết về CHÍNH MÌNH.
+ *  2. *"Tìm hiểu ngay <từ khoá> của chính bạn."* — đúng hướng nhưng vẫn chỉ
+ *     là một lời mời bấm. Nó không đẻ ra comment hay share, mà comment/share
+ *     mới là tín hiệu xếp hạng mạnh nhất.
+ *
+ * Bản hiện tại đóng bằng một CÂU HỎI trả lời được ngay trong ô bình luận —
+ * người xem không cần rời app vẫn tương tác được, và mỗi bình luận là một lần
+ * clip được đẩy đi xa hơn.
  */
-export function buildCta(keyword: string): string {
-  return `Tìm hiểu ngay ${keyword} của chính bạn.`;
+export function buildCta(keyword: string, question: string): string {
+  return `${question} Tra ${keyword} của bạn rồi comment bên dưới.`;
 }
 
 export function listToolDemoSources(): ToolDemoSource[] {
@@ -126,7 +144,7 @@ export function buildToolDemoSpec(toolId: string): ScriptSpec | null {
     sourceType: 'tool-demo',
     sourceId: src.toolId,
     ...src.spec,
-    cta: src.spec.cta || buildCta(src.keyword),
+    cta: src.spec.cta || buildCta(src.keyword, src.ctaQuestion),
   };
 }
 

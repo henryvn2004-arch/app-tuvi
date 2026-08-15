@@ -75,6 +75,35 @@ async function measure(path, bytes) {
  */
 export const CLIP_SPEED = '1.15';
 
+/**
+ * Các giọng Vbee ĐÃ THỬ CHẠY THẬT trên tài khoản này (không phải chép từ tài
+ * liệu — đã gọi từng mã và giữ lại mã nào trả về audio).
+ *
+ * ⚠️ Mã giọng KHÔNG phải muốn đặt gì cũng được: đã thử 8 mã, chỉ 4 mã dưới đây
+ * nhận. Thêm giọng mới thì phải gọi thử trước, đừng đoán theo quy luật đặt tên.
+ *
+ * Vì sao đổi giọng theo clip: 18 clip cùng một giọng nghe như một kênh đọc
+ * máy. Giọng khác nhau làm dòng video trên trang cá nhân đỡ đơn điệu, và mỗi
+ * giọng hợp một loại nội dung khác nhau.
+ */
+export const VOICES = [
+  { code: 's_sg_male_thientam_ytstable_vc', ten: 'nam Sài Gòn · trầm ấm' },
+  { code: 'hn_female_ngochuyen_full_48k-fhg', ten: 'nữ Hà Nội · rõ ràng' },
+  { code: 'sg_female_thaotrinh_full_48k-fhg', ten: 'nữ Sài Gòn · mềm' },
+  { code: 'hn_male_manhdung_news_48k-fhg', ten: 'nam Hà Nội · dứt khoát' },
+];
+
+/**
+ * Chọn giọng theo KHOÁ (thường là tool_id) chứ không bốc ngẫu nhiên mỗi lượt:
+ * cùng một clip dựng lại phải ra cùng giọng, nếu không thì mỗi lần render là
+ * một giọng khác và không so được hai bản với nhau.
+ */
+export function pickVoice(key) {
+  let h = 0;
+  for (const ch of String(key)) h = (h * 31 + ch.charCodeAt(0)) & 0x7fffffff;
+  return VOICES[h % VOICES.length];
+}
+
 export async function ttsScene(text, { voice = '', speed = CLIP_SPEED } = {}) {
   mkdirSync(AUDIO_DIR, { recursive: true });
   const key = hash(`${text}|${voice}|${speed}`);

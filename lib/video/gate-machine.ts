@@ -98,6 +98,32 @@ const HOOK_BANNED_OPENERS =
   /^\s*(xin chào|chào (các )?(bạn|mọi người)|hôm nay|trong (video|clip) này|kính chào|chào mừng|mình là|tôi là)/i;
 
 /**
+ * 🔴 NGÔN NGỮ HƯỚNG DẪN THAO TÁC — dấu hiệu chắc chắn nhất của một clip chìm.
+ *
+ * Đây là luật đắt nhất trong file, rút từ một bản dựng thật bị chê "boring":
+ * kịch bản khi đó là *"Gõ ngày sinh. Gõ họ tên. Cộng hết chữ số lại…"* — tức
+ * một video HƯỚNG DẪN SỬ DỤNG đội lốt clip giải trí. Không ai lướt TikTok để
+ * xem người khác điền form.
+ *
+ * Clip phải nói về ĐIỀU NGƯỜI XEM SẮP BIẾT VỀ CHÍNH MÌNH, còn công cụ chỉ là
+ * đường để họ tự tra. Thao tác nếu có thì để HÌNH kể, đừng để lời đọc kể.
+ */
+const HOW_TO_VERBS =
+  /\b(gõ|bấm|nhập|điền|chọn|kéo xuống|cuộn|ấn vào|nhấn|tải app|truy cập|đăng nhập)\b/i;
+
+/**
+ * Ngôn ngữ DANH TÍNH — thứ làm người xem thấy "đang nói đúng mình".
+ *
+ * Clip tử vi không có mấy chữ này gần như chắc chắn đang giảng giải kiến thức
+ * thay vì nói về người xem. Đo bằng cách đếm chứ không chỉ có/không: một câu
+ * "của bạn" duy nhất trong 20 giây là chưa đủ để tạo cảm giác đó.
+ */
+const IDENTITY_WORDS = /\b(bạn|mình|tôi|của bạn|bạn thuộc|vì sao bạn|tại sao bạn)\b/gi;
+
+/** Lời mời tương tác — thứ đẻ ra comment/share, tín hiệu xếp hạng mạnh nhất. */
+const INVITE_WORDS = /\b(comment|bình luận|gửi cho|tag|nhắn cho|bạn số mấy|bạn thuộc|thử xem)\b/i;
+
+/**
  * Chuỗi kỹ thuật không bao giờ được lọt ra hình/tiếng. Lớp lỗi này đã cắn
  * repo nhiều lần ở bề mặt khác (khoá thô vào prompt, chữ Hán ra giao diện,
  * `[object Object]` trong bản đọc) — với video thì nó nằm vĩnh viễn trong file
@@ -265,6 +291,66 @@ function checkLeaks(spec: ScriptSpec, issues: GateIssue[]) {
   }
 }
 
+/**
+ * Luật "clip phải nói về NGƯỜI XEM, không phải về công cụ".
+ *
+ * Toàn bộ nhóm luật này rút từ bộ nguyên tắc Henry chốt cho kênh:
+ *   STOP SCROLL → CURIOSITY → RETENTION → EMOTION → PAYOFF → SHARE
+ * và từ luật riêng cho nội dung tử vi: *đừng giảng giải, hãy trả lời "tôi là
+ * người thế nào / vì sao tôi lại vậy"*.
+ */
+function checkViralShape(spec: ScriptSpec, issues: GateIssue[]) {
+  const narration = [spec.hook, ...spec.scenes.map((s) => s.text), spec.cta].join(' \n ');
+
+  // 1. Hướng dẫn thao tác trong LỜI ĐỌC → clip thành video chỉ việc.
+  const firstHalf = [spec.hook, ...spec.scenes.slice(0, Math.ceil(spec.scenes.length / 2)).map((s) => s.text)];
+  for (const [i, t] of firstHalf.entries()) {
+    const m = t.match(HOW_TO_VERBS);
+    if (m) {
+      issues.push({
+        level: 'block',
+        code: 'viral.how-to-voice',
+        message: `${i === 0 ? 'Câu mở đầu' : `Cảnh ${i}`} nói thao tác ("${m[0]}") — clip thành video hướng dẫn dùng công cụ, không ai lướt TikTok để xem người khác điền form.`,
+        fix: 'Bỏ câu thao tác khỏi lời đọc. Để HÌNH kể việc bấm; lời đọc phải nói điều người xem sắp biết về CHÍNH MÌNH.',
+      });
+      break;
+    }
+  }
+
+  // 2. Ngôn ngữ danh tính — "đang nói đúng mình".
+  const idHits = (narration.match(IDENTITY_WORDS) ?? []).length;
+  const minId = Math.max(3, Math.ceil(spec.scenes.length * 0.8));
+  if (idHits < minId) {
+    issues.push({
+      level: 'block',
+      code: 'viral.no-identity',
+      message: `Chỉ ${idHits} lần nhắc tới người xem (cần ≥${minId}) — clip đang giảng giải kiến thức thay vì nói về họ.`,
+      fix: 'Viết lại theo hướng "bạn là người thế nào / vì sao bạn lại vậy", đừng mô tả bộ môn.',
+    });
+  }
+
+  // 3. Mời tương tác — comment/share là tín hiệu xếp hạng mạnh nhất.
+  if (!INVITE_WORDS.test(spec.cta) && !INVITE_WORDS.test(spec.scenes[spec.scenes.length - 1]?.text ?? '')) {
+    issues.push({
+      level: 'warn',
+      code: 'viral.no-invite',
+      message: 'Đoạn kết không mời tương tác — mất cơ hội đẻ comment/share.',
+      fix: 'Thêm một câu hỏi ngắn người xem trả lời được ngay ("Bạn số mấy?").',
+    });
+  }
+
+  // 4. Hook phải mở ra một khoảng trống tò mò, không phải một lời giới thiệu.
+  // Dò rất thô — chỉ bắt ca hook mô tả chính công cụ, thứ chắc chắn không hook.
+  if (/\b(công cụ|tính năng|website|trang web|ứng dụng|app này)\b/i.test(spec.hook)) {
+    issues.push({
+      level: 'block',
+      code: 'viral.hook-about-product',
+      message: 'Câu mở đầu nói về SẢN PHẨM. Ở giây thứ nhất chưa ai quan tâm mình có công cụ gì.',
+      fix: 'Mở bằng một điều bất thường về chính người xem.',
+    });
+  }
+}
+
 function checkSubtitleSafety(spec: ScriptSpec, issues: GateIssue[]) {
   // Phụ đề là bắt buộc với TikTok Việt (phần lớn xem không bật tiếng). Hợp đồng
   // ScriptSpec dùng CHÍNH `scene.text` làm phụ đề nên không thể thiếu — nhưng
@@ -288,6 +374,7 @@ export function runMachineGate(spec: ScriptSpec): MachineGateResult {
   checkPacing(spec, issues);
   checkCta(spec, issues);
   checkLeaks(spec, issues);
+  checkViralShape(spec, issues);
   checkSubtitleSafety(spec, issues);
 
   const totalSeconds = estimateTotalSeconds(spec);

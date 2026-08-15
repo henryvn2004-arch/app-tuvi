@@ -59,6 +59,34 @@ file thật, 13.034 ký tự / 958,52 giây, dải 12,77–14,12. Nhờ số nà
 ⚠️ Đổi giọng hoặc `speed_rate` thì **phải đo lại**: `content-length` của mp3 ÷ 16000 = số
 giây, chia cho `length(text)`.
 
+## 🔴 LUẬT NỘI DUNG — đọc trước khi viết bất kỳ kịch bản nào
+
+Công thức bắt buộc: **STOP SCROLL → CURIOSITY → RETENTION → EMOTION → PAYOFF → SHARE**
+
+**Sai lầm đã mắc và phải tránh: viết VIDEO HƯỚNG DẪN DÙNG TOOL.** Bản dựng thứ hai có
+lời đọc *"Gõ ngày sinh. Gõ họ tên. Cộng hết chữ số lại…"* — không ai lướt TikTok để xem
+người khác điền form. Cổng 1 nay chặn thẳng ngôn ngữ thao tác trong lời đọc
+(`viral.how-to-voice`); thao tác để HÌNH kể.
+
+Với nội dung tử vi: **đừng giảng giải bộ môn.** Biến nó thành công cụ trả lời
+*"Tôi là người thế nào?" · "Vì sao tôi lại vậy?" · "Chuyện gì sắp xảy ra với tôi?"*
+
+Dạng hook đã biết ăn:
+- *"Có 3 kiểu người càng yêu càng khổ…"*
+- *"Nếu bạn có đặc điểm này, rất có thể bạn thuộc nhóm…"*
+- *"Điều này giải thích tại sao bạn luôn…"*
+
+Đích cuối: người xem nghĩ **"đúng tao"** hoặc **"phải gửi cho đứa kia"**.
+
+Luật cổng 1 kiểm được:
+
+| Mã | Chặn gì |
+|---|---|
+| `viral.how-to-voice` | Lời đọc nửa đầu clip có động từ thao tác (gõ/bấm/nhập/chọn…) |
+| `viral.no-identity` | Quá ít lần nhắc người xem (*bạn/của bạn/vì sao bạn*) → đang giảng bài |
+| `viral.hook-about-product` | Hook nói về công cụ/website/app thay vì về người xem |
+| `viral.no-invite` | Đoạn kết không mời tương tác (`warn`) |
+
 ## Luật nhịp — rút từ bản dựng đầu bị chê buồn ngủ
 
 - Mỗi cảnh **MỘT ý, dưới ~4 giây**. Thà 6 cảnh ngắn hơn 3 cảnh dài.
@@ -81,6 +109,9 @@ giây, chia cho `length(text)`.
   thương mại** nằm trong repo mã nguồn mở — mã mở không có nghĩa nhạc được cấp phép.
   Nhạc trending trên TikTok còn có vai trò **đẩy phân phối** mà file tự sinh không thay
   được; vẫn nên gắn nhạc trending trong app lúc đăng.
+- **Giọng đọc đổi theo tool** — 4 giọng đã thử chạy thật (2 nam, 2 nữ; đã gọi thử 8 mã,
+  chỉ 4 mã nhận — đừng đoán mã theo quy luật đặt tên). Chọn theo hash của `tool_id` nên
+  cùng một clip dựng lại ra cùng giọng.
 - **Giọng đọc** qua edge function `tts-clip` (deploy riêng, KHÔNG đụng `tts` của pipeline
   vấn đáp). Tốc độ đọc clip là **1.15**, khác 0.9 của vấn đáp: clip TikTok phải dồn.
 - **Cổng 2 chưa chạy lần nào**: cần khoá model. Ngưỡng 5/7 và 2/7 hiện là phỏng đoán ban

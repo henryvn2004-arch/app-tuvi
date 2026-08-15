@@ -21,7 +21,7 @@ import { existsSync, mkdirSync, mkdtempSync, writeFileSync } from 'fs';
 import { tmpdir } from 'os';
 import { join } from 'path';
 import { createRequire } from 'module';
-import { ttsScene } from './tts-clip.mjs';
+import { ttsScene, pickVoice } from './tts-clip.mjs';
 
 const require = createRequire(import.meta.url);
 const ROOT = new URL('..', import.meta.url).pathname;
@@ -44,6 +44,7 @@ const DRY = has('--dry-run');
 const STILL = has('--still');
 const NO_AUDIENCE = has('--no-audience');
 const MUSIC = val('--music', '');
+const VOICE = val('--voice', ''); // ép một giọng cụ thể; bỏ trống = chọn theo tool
 const NO_VOICE = has('--no-voice');
 const FPS = 30;
 
@@ -132,10 +133,12 @@ let voices = null;
 if (!NO_VOICE) {
   console.log('\n── GIỌNG ĐỌC ────────────────────────────────');
   try {
+    const giong = VOICE ? { code: VOICE, ten: '(ép bằng --voice)' } : pickVoice(TOOL);
+    console.log(`   giọng: ${giong.ten} — ${giong.code}`);
     const parts = [spec.hook, ...spec.scenes.map((s) => s.text), spec.cta];
     voices = [];
     for (const t of parts) {
-      const v = await ttsScene(t);
+      const v = await ttsScene(t, { voice: giong.code });
       voices.push(v);
       console.log(
         `   ${v.cached ? '⏭ có sẵn' : '✓ sinh mới'}  ${v.seconds.toFixed(2)}s  "${t.slice(0, 42)}${t.length > 42 ? '…' : ''}"`
