@@ -145,11 +145,17 @@ export const PROMO_CREDITS = 100;
  * ta gõ lại được), `speech` là thứ gửi TTS. Vbee đọc `tuviminhbao.com` thành
  * một khối vô nghĩa và đọc `TUVIMINHBAO` viết hoa thành từng chữ cái — cả hai
  * đều làm hỏng đúng câu quan trọng nhất về mặt chuyển đổi.
+ *
+ * 🔴 BẢN ĐỌC PHẢI CÓ ĐỦ DẤU: bản đầu tôi viết `tu vi minh bảo` (chỉ mỗi "bảo"
+ * có dấu) và Vbee đọc ra đúng một khối phẳng "tuviminhbao" — tức KHÔNG chữa
+ * được gì so với việc gửi thẳng tên miền. Tiếng Việt không dấu thì bộ đọc
+ * không tách được thành từ. Phải là **`Tử Vi Minh Bảo`**, viết như tên riêng.
+ * Áp cho MỌI chuỗi `speech` sau này, không riêng câu kết.
  */
 export function buildCta(keyword: string, question: string): { text: string; speech: string } {
   return {
     text: `${question} Tra ${keyword} tại tuviminhbao.com — nhập mã ${PROMO_CODE} nhận ngay ${PROMO_CREDITS} lượng.`,
-    speech: `${question} Tra ${keyword} tại tu vi minh bảo chấm com. Nhập mã tu vi minh bảo, nhận ngay một trăm lượng.`,
+    speech: `${question} Tra ${keyword} tại Tử Vi Minh Bảo chấm com. Nhập mã Tử Vi Minh Bảo để nhận ngay ${PROMO_CREDITS} lượng.`,
   };
 }
 

@@ -18,7 +18,13 @@ vai đá nhau: phụ đề phải ghi đúng `tuviminhbao.com` + `TUVIMINHBAO` �
 gõ lại được, còn Vbee đọc tên miền thành một khối vô nghĩa và đọc mã viết HOA
 thành từng chữ cái — hỏng đúng câu quan trọng nhất về mặt chuyển đổi.
 - Thêm `Scene.speech` + `ScriptSpec.ctaSpeech` (bỏ trống ⇒ đọc luôn `text`).
-  Bản đọc: *"tra tại tu vi minh bảo chấm com. Nhập mã tu vi minh bảo…"*.
+  Bản đọc: *"Tra tại **Tử Vi Minh Bảo** chấm com. Nhập mã **Tử Vi Minh Bảo** để
+  nhận ngay 100 lượng."*
+- 🔴 **BẢN ĐỌC PHẢI CÓ ĐỦ DẤU.** Bản đầu tôi viết `tu vi minh bảo` (chỉ mỗi
+  "bảo" có dấu) → Vbee đọc ra đúng một khối phẳng *"tuviminhbao"*, tức KHÔNG
+  chữa được gì so với gửi thẳng tên miền; Henry nghe ra ngay. Tiếng Việt không
+  dấu thì bộ đọc không tách được thành từ. Viết như TÊN RIÊNG: `Tử Vi Minh Bảo`.
+  Áp cho MỌI chuỗi `speech` sau này, không riêng câu kết.
 - ⛔ **CHỈ dùng cho 3 lớp ca**: tên miền · mã viết HOA · chữ số. Ngoài đó để
   `text` gánh cả hai vai — hai bản chữ song song là đúng bẫy "chép hai nơi rồi
   trôi khỏi nhau" mà chính hợp đồng này sinh ra để tránh.
@@ -120,10 +126,11 @@ thành từng chữ cái — hỏng đúng câu quan trọng nhất về mặt c
    và bài kiểm đọc thành "lỗi JS của trang".
 
 ### CÒN LẠI
-- **Chưa nghe được bản đọc** — tôi chỉ đo được độ dài file (6,5s) và xác nhận
-  mp4 có track audio thật. Chỗ duy nhất phải nghe mới biết: Vbee đọc *"tu vi
-  minh bảo chấm com"* có ra tiếng tự nhiên không. Nghe thấy gượng thì sửa đúng
-  một chuỗi `speech` trong `buildCta`.
+- ⚠️ **Tôi KHÔNG nghe được audio** — chỉ đo được độ dài file và xác nhận mp4 có
+  track thật. Chính vì thế lỗi "đọc không dấu" ở trên lọt qua cả lượt verify:
+  bản hỏng và bản đúng có độ dài gần y nhau, mọi phép đo tôi chạy đều xanh.
+  ⇒ **Mỗi lần đổi chuỗi `speech` thì phải có người nghe lại**, đừng đọc một
+  lượt render thành công là "đã đúng".
 - **Mã mới ăn từ lúc DEPLOY** — bảng + RPC đã có trên prod, nhưng ô nhập và
   panel admin thì phải deploy xong mới thấy.
 - **17 clip còn lại chưa dựng** — `buildCta` dùng chung nên chúng tự có câu kết
