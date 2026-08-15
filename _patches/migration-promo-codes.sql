@@ -35,6 +35,13 @@ create table if not exists public.promo_codes (
   -- clip → đăng ký → gõ mã, tính bằng phút) mà vẫn chặn được ca "mọi tài
   -- khoản cũ cùng lúc đổi mã".
   new_account_days integer check (new_account_days is null or new_account_days > 0),
+  -- Bắt buộc đăng nhập bằng OAuth (Google/Facebook/…) mới đổi được mã.
+  -- 🔑 Đây là chốt chống lạm dụng CHÍNH, thay cho trần lượt. Lý do chọn nó:
+  -- đo trên 62 tài khoản thật thì 55 Google + 1 Facebook, chỉ 6 email và lượt
+  -- email gần nhất cách 3 tháng ⇒ chốt này gần như KHÔNG chặn người thật, mà
+  -- đẩy giá một tài khoản giả lên rất cao. Trần lượt thì ngược lại: nó chặn
+  -- đúng phần tăng trưởng thật mình đang muốn.
+  require_oauth   boolean not null default true,
   note            text,
   created_at      timestamptz not null default now(),
   updated_at      timestamptz not null default now()
@@ -94,6 +101,7 @@ declare
   v_row    public.promo_codes%rowtype;
   v_rows   integer := 0;
   v_created timestamptz;
+  v_has_oauth boolean;
 begin
   if p_user_id is null or v_code = '' then
     return query select false, 'invalid_input', 0, v_code; return;
@@ -118,6 +126,20 @@ begin
     -- Kiểm TRƯỚC bước chống-trùng: giá vô lý là lỗi cấu hình, phải kêu to chứ
     -- không được lặng lẽ đọc thành "đã dùng rồi".
     raise exception 'promo_code_redeem: credits ngoài khoảng cho phép (%)', v_row.credits;
+  end if;
+
+  if v_row.require_oauth then
+    -- Từ chối khi provider DUY NHẤT là 'email'. Dò theo cách này chứ không
+    -- allowlist ['google','facebook']: thêm Zalo/Apple sau này là tự chạy, và
+    -- tài khoản email đã liên kết thêm Google vẫn qua (có thật 1 dòng như vậy).
+    select exists (
+      select 1 from auth.users u,
+        lateral jsonb_array_elements_text(coalesce(u.raw_app_meta_data->'providers', '[]'::jsonb)) p
+       where u.id = p_user_id and p <> 'email'
+    ) into v_has_oauth;
+    if not coalesce(v_has_oauth, false) then
+      return query select false, 'need_oauth', 0, v_code; return;
+    end if;
   end if;
 
   if v_row.new_account_days is not null then
@@ -159,9 +181,12 @@ revoke all on function public.promo_code_redeem(uuid, text) from public, anon, a
 grant execute on function public.promo_code_redeem(uuid, text) to service_role;
 
 -- ── Mã của chiến dịch clip TikTok ─────────────────────────────────────────
--- `max_uses = 200`: 100 Lượng ≈ 4 lượt tool sinh ảnh ≈ 4.400đ chi phí model
--- THẬT (không phải 82.900đ giá bán lẻ) ⇒ 200 lượt ≈ 880.000đ. Đó là ngân sách
--- một thí nghiệm, không phải một chương trình mở. Nới bằng Admin, không deploy.
+-- ⚠️ `max_uses = null` CÓ CHỦ Ý: càng nhiều người đăng ký càng tốt, nên không
+-- đặt một con số chặn ngang tăng trưởng. Chống lạm dụng dựa vào `require_oauth`
+-- (xem chú thích ở cột đó) chứ không dựa vào trần.
+-- Con số để biết mình đang tiêu gì: 100 Lượng ≈ 4 lượt tool sinh ảnh ≈ 4.400đ
+-- chi phí model THẬT (không phải 82.900đ giá bán lẻ). Muốn phanh gấp thì đặt
+-- `max_uses` hoặc TẮT mã trong Admin — một cú bấm, không cần deploy.
 insert into public.promo_codes (code, credits, max_uses, new_account_days, note)
-values ('TUVIMINHBAO', 100, 200, 30, 'Mã đọc trong clip TikTok/Reels demo công cụ')
+values ('TUVIMINHBAO', 100, null, 30, 'Mã đọc trong clip TikTok/Reels demo công cụ')
 on conflict (code) do nothing;

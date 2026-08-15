@@ -669,13 +669,16 @@
           <div id="promocode-alert" style="padding:0 .9rem"></div>
           <div class="table-wrap">
             <table>
-              <thead><tr><th>Mã</th><th>Lượng</th><th>Đã dùng</th><th>Trần lượt</th><th>Chỉ TK mới (ngày)</th><th>Hết hạn</th><th>Bật</th><th>Ghi chú</th><th></th></tr></thead>
-              <tbody id="promocode-body"><tr><td colspan="9" class="loading"><span class="spin"></span>Đang tải...</td></tr></tbody>
+              <thead><tr><th>Mã</th><th>Lượng</th><th>Đã dùng</th><th>Trần lượt</th><th>Chỉ TK mới (ngày)</th><th>Bắt buộc OAuth</th><th>Hết hạn</th><th>Bật</th><th>Ghi chú</th><th></th></tr></thead>
+              <tbody id="promocode-body"><tr><td colspan="10" class="loading"><span class="spin"></span>Đang tải...</td></tr></tbody>
             </table>
           </div>
           <div class="panel-body" style="font-size:.72rem;color:var(--text-lt);line-height:1.7">
             <b>Trần lượt</b> để trống = không giới hạn — đây là cần gạt ngân sách chính, đặt số rồi mới yên tâm phát mã ra ngoài.
             <b>Chỉ TK mới</b> để trống = mọi tài khoản đổi được; đặt 30 nghĩa là chỉ tài khoản đăng ký trong 30 ngày gần đây.
+            <b>Bắt buộc OAuth</b> = chỉ tài khoản đăng nhập bằng Google/Facebook mới đổi được — đây là chốt chống lạm dụng CHÍNH.
+            Đo trên 62 tài khoản thật: 56 OAuth, 6 email (lượt cuối cách 3 tháng) ⇒ chốt này gần như không chặn người thật,
+            mà đẩy giá một tài khoản giả lên rất cao. Tắt nó là mở đường farm bằng email rác.
             Mỗi tài khoản đổi được <b>đúng một mã trọn đời</b> (khoá ở tầng DB, không phải ở mã ứng dụng).
             Số Lượng tối đa mỗi mã là <b>1.000</b> — chốt cứng trong RPC để một lần gõ thừa số 0 không phát cả gia tài.
             Mã đã có người đổi thì <b>không xoá được</b>, hãy TẮT nó.
@@ -5118,7 +5121,7 @@ let _promoCodes = [];
 
 async function loadPromoCodes() {
   const body = document.getElementById('promocode-body');
-  body.innerHTML = '<tr><td colspan="9" class="loading"><span class="spin"></span>Đang tải...</td></tr>';
+  body.innerHTML = '<tr><td colspan="10" class="loading"><span class="spin"></span>Đang tải...</td></tr>';
   try {
     const d = await apiGet('admin-promo-list');
     if (d.error) throw new Error(d.error);
@@ -5128,7 +5131,7 @@ async function loadPromoCodes() {
       note.textContent = `${_promoCodes.length} mã · đã phát ${Number(d.grantedCredits || 0).toLocaleString('vi-VN')} Lượng`;
     }
     if (!_promoCodes.length) {
-      body.innerHTML = '<tr><td colspan="9" class="empty">Chưa có mã nào. Bấm “+ Mã mới”.</td></tr>';
+      body.innerHTML = '<tr><td colspan="10" class="empty">Chưa có mã nào. Bấm “+ Mã mới”.</td></tr>';
       return;
     }
     body.innerHTML = _promoCodes.map(r => {
@@ -5144,6 +5147,7 @@ async function loadPromoCodes() {
         <td style="text-align:center;color:${full ? 'var(--red)' : 'var(--text-lt)'};font-weight:${full ? '700' : '400'}">${used}${full ? ' (hết)' : ''}</td>
         <td><input type="number" class="price-input" style="width:68px" id="pc-max-${id}" value="${cap == null ? '' : cap}" min="0" placeholder="∞"></td>
         <td><input type="number" class="price-input" style="width:68px" id="pc-days-${id}" value="${r.new_account_days == null ? '' : Number(r.new_account_days)}" min="1" placeholder="—"></td>
+        <td style="text-align:center"><input type="checkbox" id="pc-oauth-${id}" ${r.require_oauth !== false ? 'checked' : ''}></td>
         <td><input type="date" class="price-input" style="width:118px" id="pc-exp-${id}" value="${r.expires_at ? String(r.expires_at).slice(0, 10) : ''}"></td>
         <td style="text-align:center"><input type="checkbox" id="pc-en-${id}" ${r.enabled ? 'checked' : ''}></td>
         <td><input class="price-input" style="width:120px;text-align:left" id="pc-note-${id}" value="${escHtmlLocal(r.note || '')}"></td>
@@ -5154,7 +5158,7 @@ async function loadPromoCodes() {
       </tr>`;
     }).join('');
   } catch (e) {
-    body.innerHTML = `<tr><td colspan="9" class="empty">Lỗi: ${escHtmlLocal(e.message)}</td></tr>`;
+    body.innerHTML = `<tr><td colspan="10" class="empty">Lỗi: ${escHtmlLocal(e.message)}</td></tr>`;
   }
 }
 
@@ -5177,6 +5181,7 @@ async function savePromoCode(idEnc) {
       credits: parseInt(g('credits').value, 10),
       maxUses: g('max').value === '' ? null : parseInt(g('max').value, 10),
       newAccountDays: g('days').value === '' ? null : parseInt(g('days').value, 10),
+      requireOauth: g('oauth').checked,
       // Ô date cho NGÀY, quy về cuối ngày đó theo giờ VN — đặt hạn 20/08 mà mã
       // chết từ 00:00 UTC (07:00 VN) là cắt mất gần trọn ngày cuối.
       expiresAt: exp ? new Date(exp + 'T23:59:59+07:00').toISOString() : null,
@@ -5201,10 +5206,12 @@ async function promoCodeNew() {
     const d = await apiPost('admin-promo-code', {
       code,
       credits: parseInt(credits, 10),
-      // Mặc định AN TOÀN, không phải mặc định tiện: có trần lượt và chỉ tài
-      // khoản mới. Mã phát ra ngoài mà không có trần là một cái van mở.
-      maxUses: 100,
+      // Mặc định AN TOÀN, không phải mặc định tiện: chỉ tài khoản mới + bắt
+      // buộc OAuth. CỐ Ý không đặt trần lượt — trần chặn đúng phần tăng trưởng
+      // thật; chốt chống lạm dụng là OAuth (xem migration-promo-codes.sql).
+      maxUses: null,
       newAccountDays: 30,
+      requireOauth: true,
       enabled: true,
       note: '',
     });

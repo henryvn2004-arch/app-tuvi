@@ -2395,6 +2395,7 @@ const PROMO_REASONS: Record<string, string> = {
   exhausted: 'Mã đã hết lượt. Cảm ơn bạn đã quan tâm!',
   already_redeemed: 'Tài khoản của bạn đã dùng mã khuyến mãi rồi — mỗi tài khoản chỉ dùng được một lần.',
   account_too_old: 'Mã này chỉ dành cho tài khoản mới đăng ký.',
+  need_oauth: 'Mã này chỉ áp dụng cho tài khoản đăng nhập bằng Google hoặc Facebook.',
   invalid_input: 'Mã không hợp lệ.',
 };
 
@@ -2531,6 +2532,9 @@ async function handleAdminPromoCode(request: NextRequest, body: Record<string, u
     max_uses: body.maxUses === null || body.maxUses === '' ? null : Number(body.maxUses),
     new_account_days:
       body.newAccountDays === null || body.newAccountDays === '' ? null : Number(body.newAccountDays),
+    // Mặc định BẬT khi client không gửi — đây là chốt chống lạm dụng chính,
+    // không được lặng lẽ tắt chỉ vì thiếu một trường trong payload.
+    require_oauth: body.requireOauth !== false,
     expires_at: body.expiresAt ? String(body.expiresAt) : null,
     note: String(body.note || '').slice(0, 300) || null,
     updated_at: new Date().toISOString(),
