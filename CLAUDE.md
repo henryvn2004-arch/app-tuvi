@@ -65,6 +65,101 @@ khâu tự động (18 clip không lời vẫn "thành công" rồi ra hàng đ�
 
 ---
 
+## 🎬 18/18 công cụ miễn phí có kịch bản clip + công thức quay (2026-08-15, PR này)
+
+Henry: *"Bây giờ làm batch demo sản phẩm"* → chốt làm hạ tầng Actions trước
+(*"Làm (2) trước đi"*), nay tới lượt nội dung: **17 kịch bản còn lại**.
+
+### 🔑 Bỏ hẳn lối khai tay `startSec`
+`startSec` là mốc thời gian BÊN TRONG một file mà người viết kịch bản chưa nhìn
+thấy. 17 công cụ × 5 cảnh = **85 con số đoán mò**, và đoán sai thì hỏng IM LẶNG:
+`OffthreadVideo` vượt quá độ dài bản quay chỉ đứng ở khung cuối — không lỗi,
+không cảnh báo. Bỏ trống thì mọi cảnh chiếu lại giây 0 và clip thành ảnh tĩnh.
+- `gen-video.mjs` thêm `fillStartSec`: đo độ dài THẬT của bản quay rồi rải theo
+  tỉ lệ, **kẹp** để không cảnh nào chạy quá đuôi. In một dòng soi được bằng mắt:
+  `mốc hình (bản quay 16.9s): 0.0s → 3.5s → 6.9s → 10.0s → 13.4s`.
+- Cảnh có `startSec` khai tay thì GIỮ NGUYÊN (`than-so-hoc` đã hiệu chỉnh bằng
+  mắt trên bản quay thật) — đường tự rải cố ý không đè lên.
+
+### ⚠️ Bản quay phải DÀI HƠN lời đọc — đo mới thấy
+Lượt đầu `kim-lau` quay ra **12,1s** trong khi lời đọc **25,9s** ⇒ hình tua lại,
+nửa sau clip trông như ảnh tĩnh. Nới nhịp giữ trong `showResult` (helper dùng
+chung) → cả 15 bản quay nay **17–21s**; `kinh-dich` 31s vì phải gieo đủ sáu hào.
+- Khung hình CUỐI của bản quay phải là chỗ đọc được: cảnh cuối clip luôn bị kẹp
+  về đúng đoạn đuôi đó. Nên `showResult` cuộn ngược lên trước khi dừng.
+
+### 🪤 Ba bẫy đã vấp (đều là lỗi của TÔI, không phải của trang)
+1. 🔴 **`typeSlow` không xoá ô trước khi gõ.** `app-hoang-dao.html` điền sẵn
+   ngày hôm nay ⇒ gõ thêm "15" vào ô đã có "15" ra **1515**, `compute()` trả
+   `ok:false`, khối kết quả không bao giờ hiện, lượt quay chết ở
+   `waitForSelector` sau 30 giây mà **không nói được vì sao**. Phải `fill('')`.
+2. **`ngay`/`thang` của `TuviForm` là `<select>`** — bài học đã ghi trong file
+   này, nay tách hẳn helper `pick()` để không ai vấp lại.
+3. **Bẫy cwd, lần thứ ba**: chạy `node scripts/...` khi đang đứng ở `public/` →
+   `MODULE_NOT_FOUND` cho cả 9 công cụ một lượt.
+
+### 🧷 Ba công cụ KHÔNG quay được từ bản phục vụ tĩnh — hỏng TO thay vì lặng
+`localPath: null` ⇒ `record-tool-demo.mjs` dừng hẳn kèm lý do, thay vì lặng lẽ
+rơi về `/app/<tool>` rồi quay 20 giây trang 404 trắng (mà khâu soi file **không
+bắt được** — mp4 vẫn đủ hình đủ tiếng).
+- `ky-mon` cần `/api/qimen` · `ban-do-sao` cần `/api/natal` · `tuong-hop` nhận
+  diện chế độ theo ĐƯỜNG DẪN nên bản tĩnh rơi vào tool **trả phí** và dựng
+  tường thanh toán giữa clip.
+- 🪤 **Chốt chặn bản đầu ĐOÁN THEO TÊN MÁY** (`localhost` ⇒ bản tĩnh) nên nó
+  chặn oan đúng cái đường mà **chính thông báo lỗi của nó khuyên dùng**:
+  `next dev` cũng chạy ở `127.0.0.1` nhưng có đủ rewrite `/app/*` lẫn route
+  API. Đổi sang **thăm dò thật** — hỏi `recipe.path` có mở được không, mở được
+  thì dùng. Nhờ vậy cả ba đã quay được ngay ở đây qua `next dev`, và chốt vẫn
+  đỏ đúng 3/3 khi trỏ vào server tĩnh.
+
+### 🔁 TTS chớp một nhịp = mất trắng một clip — thêm thử lại
+Lượt dựng 2 clip đầu: `an-sao` TRƯỢT vì TTS hỏng giữa chừng, chạy lại ngay sau
+đó thì xong. `--require-voice` đã chặn ĐÚNG (thà trượt còn hơn ra clip câm),
+nhưng trong lượt 18 clip thì đó là một clip mất không vì lý do gì.
+- Thử lại **3 lượt, giãn dần, ngay trong `ttsScene`** — không phải ở tầng gọi:
+  chỗ đó biết chắc lỗi là của MỘT câu, và mấy câu đã sinh xong đều nằm trong
+  cache nên lượt sau không đọc lại. Thử lại cả clip là tốn thêm một lượt render.
+
+### 🪤 `viral.no-invite` KÊU OAN 11/17 — nới đúng chỗ nó đo hụt
+Bộ dò chỉ tra một bảng cụm cố định (`comment · bình luận · gửi cho…`) nên câu
+kết *"Bạn mệnh gì?"* — đúng là câu trả lời được ngay trong ô bình luận — vẫn bị
+báo là không mời tương tác. **Bộ dò kêu oan là bộ dò bị tắt đi.**
+- Nới bằng một tính chất ĐO ĐƯỢC (*câu hỏi ngắn nói thẳng với người xem*), KHÔNG
+  bằng cách thêm vài cụm nữa vào bảng — thêm cụm là hẹn lần kêu oan kế tiếp.
+- 🔑 **Red-team ngay sau khi nới** (nới xong mà không kiểm thì có thể vừa tắt bộ
+  dò đi): đổi một câu kết thành câu trần thuật → cảnh báo kêu lại; khôi phục →
+  im. Có assert đột biến ĐÃ ăn trước khi đọc kết quả.
+
+### ⚠️ `length.off-sweet-spot` phần lớn là SAI SỐ CỦA ƯỚC LƯỢNG, đừng cắt lời đọc
+Cả 18 kịch bản ước 31–37s (ngoài khoảng 18–32s). Nhưng hằng số 13,59 ký tự/giây
+đo trên đoạn DÀI, còn câu cỡ một cảnh thì nó **ước dư**: `than-so-hoc` ước 37,6s
+mà render ra **32,4s**; `kim-lau` ước 34,4s mà giọng đọc thật **25,9s**. Cắt bớt
+lời đọc để dập cảnh báo này là sửa theo một con số đã biết là lệch.
+
+### Verify
+`tsc` 0 · `lint` **0 lỗi / 77 warning = đúng mốc nền** · `prettier` cả cây sạch.
+- **Cổng 1 trên CẢ 18 kịch bản: 18/18 QUA**, 0 block. Còn `cta.too-long` (cố ý,
+  xem mục dưới) và `length.off-sweet-spot` (sai số ước lượng, xem trên).
+- **15/15 công cụ quay được tại chỗ đều quay THẬT** — `waitForSelector` trên
+  khối kết quả nên quay xong nghĩa là kết quả đã hiện, không phải trang trắng.
+  Phủ đủ ba hình dạng DOM: form dựng tay · `TuviForm` (select) · rút bài.
+- **`kim-lau` render đầu-cuối THẬT** (quay → cổng → giọng → mp4), soi khung hình
+  tĩnh xác nhận bố cục; batch 2 công cụ chạy qua đúng orchestrator.
+- **3 ca chốt `localPath: null`**: `ky-mon` · `ban-do-sao` · `tuong-hop` đều
+  **exit 1** kèm lý do khi trỏ vào bản phục vụ tĩnh.
+
+### CÒN LẠI
+- **3 công cụ chưa quay được ở đây** (cần prod/`next dev`) — Actions quay từ
+  prod nên tự có; ở container này thì trình duyệt không ra được Internet.
+- **Cổng 2 vẫn chưa chạy lượt nào** — cần `GEMINI_API_KEY`/`ANTHROPIC_API_KEY`.
+  18 kịch bản mới vì thế mới qua tầng MÁY, chưa ai đọc bằng con mắt người xem.
+- ⚠️ **Chưa ai NGHE 17 clip mới.** Tôi không nghe được audio; luật đã ghi ở track
+  trước vẫn áp: mỗi lượt đổi chữ là phải có người nghe lại.
+- Nội dung 18 kịch bản là **tôi tự viết**, chưa ai review — cùng dạng nợ với 384
+  hào từ. Sửa là sửa data thuần trong `BATCH`, không đụng logic.
+
+---
+
 ## 🎟️ Câu kết clip đọc TÊN MIỀN + MÃ, và bảng mã khuyến mãi (2026-08-15, PR này)
 
 Henry: *"phần closing… Mày lam no đọc luôn tên website tuviminhbao.com và thêm

@@ -187,6 +187,84 @@ if (!NO_VOICE) {
 
 const dur = (i, fallbackSec) => (voices ? frames(voices[i].seconds + TAIL) : frames(fallbackSec));
 
+/** Độ dài thật (giây) của một file quay màn hình. Đọc hụt → null, không ném. */
+async function probeSeconds(file) {
+  try {
+    const { parseMedia } = await import(
+      join(REMOTION, 'node_modules/@remotion/media-parser/dist/esm/index.mjs')
+    );
+    const { nodeReader } = await import(
+      join(REMOTION, 'node_modules/@remotion/media-parser/dist/esm/node.mjs')
+    );
+    const r = await parseMedia({
+      src: file,
+      reader: nodeReader,
+      fields: { durationInSeconds: true },
+      acknowledgeRemotionLicense: true,
+    });
+    return r.durationInSeconds ?? null;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Rải `startSec` cho các cảnh quay màn hình KHÔNG tự khai.
+ *
+ * 🔑 Vì sao cần: `startSec` là mốc thời gian bên trong một file mà người viết
+ * kịch bản CHƯA nhìn thấy lúc viết. Khai tay 17 công cụ × ~5 cảnh là 85 con số
+ * đoán mò, và đoán sai thì hỏng IM LẶNG — `OffthreadVideo` vượt quá độ dài
+ * file chỉ đứng hình ở khung cuối, không lỗi, không cảnh báo. Bỏ trống thì mọi
+ * cảnh cùng chiếu lại giây 0 và clip trông như một ảnh tĩnh.
+ *
+ * Cách rải: co giãn theo tỉ lệ để các cảnh quét HẾT chiều dài bản quay, rồi
+ * KẸP để không cảnh nào chạy quá đuôi file. Bản quay dài hơn tổng lời đọc thì
+ * thành lướt nhanh qua thao tác; ngắn hơn thì các cảnh cuối dồn về đoạn cuối.
+ *
+ * ⚠️ Cảnh có `startSec` khai tay thì GIỮ NGUYÊN — `than-so-hoc` đã hiệu chỉnh
+ * bằng mắt trên bản quay thật, không được đè lên.
+ */
+async function fillStartSec(scenes, sceneFrames) {
+  const idx = scenes
+    .map((sc, i) => ({ sc, i }))
+    .filter(({ sc }) => sc.visual.kind === 'screen' && sc.visual.startSec == null);
+  if (!idx.length) return;
+
+  const byFile = new Map();
+  for (const { sc } of idx) {
+    const rel = sc.visual.recording;
+    if (!byFile.has(rel)) byFile.set(rel, await probeSeconds(join(REMOTION, 'public', rel)));
+  }
+
+  const secs = sceneFrames.map((f) => f / FPS);
+  const total = secs.reduce((a, b) => a + b, 0) || 1;
+
+  for (const { sc, i } of idx) {
+    const R = byFile.get(sc.visual.recording);
+    if (!R || R <= 0) {
+      sc.visual.startSec = 0;
+      continue;
+    }
+    const before = secs.slice(0, i).reduce((a, b) => a + b, 0);
+    const raw = (before / total) * R;
+    // Kẹp để cảnh không chạy quá đuôi bản quay (chỗ hình đứng im).
+    sc.visual.startSec = Math.max(0, Math.min(raw, R - secs[i]));
+  }
+
+  // In ra để soi được bằng mắt: cảnh nào cũng dừng ở cùng một mốc nghĩa là bản
+  // quay quá ngắn so với lời đọc — clip sẽ trông như ảnh tĩnh ở đoạn cuối.
+  const R0 = byFile.get(idx[0].sc.visual.recording);
+  console.log(
+    `   mốc hình (bản quay ${R0 ? R0.toFixed(1) + 's' : '?'}): ` +
+      idx.map(({ sc }) => `${sc.visual.startSec.toFixed(1)}s`).join(' → ')
+  );
+}
+
+const sceneFrames = spec.scenes.map((sc, i) =>
+  sc.forceSeconds ? frames(sc.forceSeconds) : dur(i + 1, estimateSpeechSeconds(sc.text) + 0.4)
+);
+await fillStartSec(spec.scenes, sceneFrames);
+
 const props = {
   toolLabel: source.label,
   hook: spec.hook,
@@ -194,9 +272,7 @@ const props = {
   ...(voices ? { hookAudio: voices[0].file } : {}),
   scenes: spec.scenes.map((sc, i) => ({
     text: sc.text,
-    durationInFrames: sc.forceSeconds
-      ? frames(sc.forceSeconds)
-      : dur(i + 1, estimateSpeechSeconds(sc.text) + 0.4),
+    durationInFrames: sceneFrames[i],
     visual: sc.visual,
     ...(voices ? { audio: voices[i + 1].file } : {}),
   })),

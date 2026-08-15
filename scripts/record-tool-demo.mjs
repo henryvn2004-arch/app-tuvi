@@ -56,13 +56,45 @@ if (!recipe) {
 // Phục vụ `public/` tại chỗ thì không có rewrite `/app/<tool>` của Next — phải
 // dùng thẳng tên file. Nhận diện bằng chính địa chỉ máy cục bộ.
 const isLocal = /^https?:\/\/(localhost|127\.0\.0\.1)/.test(BASE);
-const PAGE_PATH = (isLocal && recipe.localPath) || recipe.path;
+
+/**
+ * Chọn đường dẫn bằng cách THĂM DÒ THẬT, không đoán theo tên máy.
+ *
+ * 🪤 Bản đầu suy từ host (`localhost` ⇒ bản phục vụ tĩnh) và nó chặn oan đúng
+ * cái đường mà chính thông báo lỗi của nó khuyên dùng: `next dev` cũng chạy ở
+ * `127.0.0.1` nhưng CÓ đủ rewrite `/app/*` lẫn route API. Thứ quyết định không
+ * phải tên máy mà là **đường dẫn thật có tồn tại không** — nên hỏi thẳng.
+ *
+ * 🔴 Và `localPath: null` vẫn phải hỏng TO khi không còn đường nào: mở
+ * `/app/<tool>` trên một server tĩnh chỉ trả 404 rồi quay ra 20 giây trang
+ * trắng — ca đó khâu soi file KHÔNG bắt được, vì mp4 vẫn đủ hình đủ tiếng.
+ */
+async function alive(path) {
+  try {
+    const r = await fetch(BASE + path, { method: 'GET', redirect: 'follow' });
+    return r.ok;
+  } catch {
+    return false;
+  }
+}
+
+let PAGE_PATH = recipe.path;
+if (isLocal && !(await alive(recipe.path))) {
+  if (!recipe.localPath) {
+    console.error(`❌ "${TOOL}": ${BASE}${recipe.path} không mở được, và công cụ này`);
+    console.error('   KHÔNG có đường thay thế ở bản phục vụ tĩnh (lý do khai trong');
+    console.error('   scripts/tool-recipes.mjs: cần route API, hoặc trang nhận diện');
+    console.error('   chế độ theo đường dẫn).');
+    console.error('   → quay từ prod, hoặc `npm run dev` rồi --base http://127.0.0.1:3000');
+    process.exit(1);
+  }
+  PAGE_PATH = recipe.localPath;
+}
 
 const outFile = join(OUT_DIR, `${TOOL}.webm`);
 
 if (DRY) {
   console.log(`[dry-run] sẽ mở : ${BASE}${PAGE_PATH}`);
-  console.log(`[dry-run] các bước: ${recipe.steps.length} bước`);
   console.log(`[dry-run] ghi ra : ${outFile}`);
   process.exit(0);
 }

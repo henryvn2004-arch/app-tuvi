@@ -1,6 +1,34 @@
 # Dựng video ngắn 9:16 — hạ tầng + cổng kiểm
 
-**Trạng thái:** hạ tầng CHẠY ĐƯỢC, pilot 1 clip đã render thật · **2026-08-15**
+**Trạng thái:** hạ tầng chạy được · **18/18 công cụ miễn phí đã có kịch bản +
+công thức quay**, cả 18 qua cổng 1 · **2026-08-15**
+
+## 18 công cụ trong lô
+
+Đúng bằng danh sách `tool_pricing where enabled and is_free` (tra lại DB trước
+khi tin con số này). Ba cái **KHÔNG quay được từ bản phục vụ tĩnh `public/`** —
+khai `localPath: null` để hỏng TO ngay thay vì quay ra clip sai:
+
+| Công cụ | Vì sao cần prod / `next dev` |
+|---|---|
+| `ky-mon` | cần `/api/qimen` (định cục theo tiết khí, chạy ở server) |
+| `ban-do-sao` | cần `/api/natal` (vị trí hành tinh) |
+| `tuong-hop` | nhận diện chế độ bằng ĐƯỜNG DẪN — mở `/app-xem-tuoi.html` rơi vào bản **trả phí**, dựng tường thanh toán giữa clip |
+
+15 cái còn lại quay được từ bản phục vụ tĩnh: `cd public && python3 -m
+http.server 8099` rồi `--base http://127.0.0.1:8099`.
+Ba cái trên thì chạy `next dev` (đã quay thật được ở đây theo đường này):
+
+```bash
+npx next dev -p 3111
+node scripts/record-tool-demo.mjs --tool ky-mon --base http://127.0.0.1:3111
+```
+
+🪤 **Chốt chặn THĂM DÒ THẬT, không đoán theo tên máy.** Bản đầu suy từ host
+(`localhost` ⇒ bản tĩnh) và nó chặn oan đúng cái đường mà chính thông báo lỗi
+của nó khuyên dùng — `next dev` cũng chạy ở `127.0.0.1` nhưng có đủ rewrite
+`/app/*` lẫn route API. Nay hỏi thẳng: `recipe.path` mở được thì dùng, không
+thì mới rơi về `localPath`, và `localPath: null` là dừng hẳn.
 
 ## Chạy
 
@@ -98,6 +126,23 @@ ScriptSpec → CỔNG 1 (máy, 0đ) → CỔNG 2 (7 người xem giả lập, ~3
 ⚠️ **Cổng chặn được clip chắc chắn chìm. Nó KHÔNG hứa clip sẽ nổi** — nhạc trending, giờ
 đăng, chủ đề đang hot đều nằm ngoài tầm đo. Đừng đọc một kết quả `pass` thành lời hứa.
 
+## `startSec` — mốc hình TỰ RẢI, đừng khai tay
+
+Cảnh `screen` không khai `startSec` thì `gen-video.mjs` tự rải: co giãn theo
+tỉ lệ để các cảnh quét hết chiều dài bản quay, rồi **kẹp** để không cảnh nào
+chạy quá đuôi file. In ra một dòng `mốc hình (bản quay 16.9s): 0.0s → 3.5s →
+6.9s → 10.0s → 13.4s` để soi được bằng mắt.
+
+🔑 **Vì sao không khai tay:** đó là mốc bên trong một file mà người viết kịch
+bản chưa nhìn thấy. 17 công cụ × 5 cảnh = 85 con số đoán mò, và đoán sai thì
+hỏng IM LẶNG — `OffthreadVideo` vượt quá độ dài chỉ đứng ở khung cuối, không
+lỗi nào bắn ra.
+
+⚠️ **Bản quay phải DÀI HƠN lời đọc.** Lượt đầu `kim-lau` quay ra **12,1s**
+trong khi lời đọc **25,9s** ⇒ hình phải tua lại, nửa sau clip trông như ảnh
+tĩnh. Đã nới nhịp giữ trong `showResult` → bản quay nay **17–21s** (riêng
+`kinh-dich` 31s vì phải gieo đủ sáu hào).
+
 ## Số đo nền
 
 ⚠️ **Chỉ đúng cho ĐOẠN DÀI.** Câu ngắn cỡ một cảnh clip dao động 11–18 ký tự/giây (khoảng
@@ -138,6 +183,29 @@ Luật cổng 1 kiểm được:
 | `viral.no-identity` | Quá ít lần nhắc người xem (*bạn/của bạn/vì sao bạn*) → đang giảng bài |
 | `viral.hook-about-product` | Hook nói về công cụ/website/app thay vì về người xem |
 | `viral.no-invite` | Đoạn kết không mời tương tác (`warn`) |
+
+### 🪤 `viral.no-invite` từng KÊU OAN 11/17 kịch bản
+
+Bản đầu chỉ dò một bảng cụm cố định (`comment · bình luận · gửi cho…`), nên
+câu kết *"Bạn mệnh gì?"* — đúng là câu người xem trả lời được ngay trong ô bình
+luận — vẫn bị báo là không mời tương tác. **Bộ dò kêu oan là bộ dò bị tắt đi.**
+
+Đã nới bằng một tính chất ĐO ĐƯỢC (*một câu hỏi ngắn nói thẳng với người xem*),
+không phải bằng cách thêm vài cụm nữa vào bảng. Red-team: đổi câu kết thành câu
+trần thuật → cảnh báo kêu lại; khôi phục → im.
+
+### ⚠️ `length.off-sweet-spot` phần lớn là SAI SỐ CỦA ƯỚC LƯỢNG
+
+Cả 18 kịch bản ước ra 31–37s, tức ngoài khoảng 18–32s. Nhưng ước lượng dùng
+hằng số đo trên đoạn DÀI, còn câu cỡ một cảnh clip thì nó **ước dư**:
+
+| Clip | Ước lượng | Giọng đọc THẬT | Clip render ra |
+|---|---:|---:|---:|
+| `than-so-hoc` | 37,6s | — | **32,4s** |
+| `kim-lau` | 34,4s | **25,9s** | — |
+
+⇒ Đừng cắt bớt lời đọc chỉ để dập cảnh báo này. Số đáng tin là độ dài mp3, và
+`gen-video.mjs` vốn đã dùng độ dài thật lúc render.
 
 ## Luật nhịp — rút từ bản dựng đầu bị chê buồn ngủ
 

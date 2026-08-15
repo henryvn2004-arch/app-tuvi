@@ -122,8 +122,20 @@ const HOW_TO_VERBS =
  */
 const IDENTITY_WORDS = /\b(bạn|mình|tôi|của bạn|bạn thuộc|vì sao bạn|tại sao bạn)\b/gi;
 
-/** Lời mời tương tác — thứ đẻ ra comment/share, tín hiệu xếp hạng mạnh nhất. */
-const INVITE_WORDS = /\b(comment|bình luận|gửi cho|tag|nhắn cho|bạn số mấy|bạn thuộc|thử xem)\b/i;
+/**
+ * Lời mời tương tác — thứ đẻ ra comment/share, tín hiệu xếp hạng mạnh nhất.
+ *
+ * 🪤 Bản đầu chỉ có danh sách cụm cố định (`comment · bình luận · gửi cho…`) và
+ * nó KÊU OAN 11/17 kịch bản: câu kết *"Bạn mệnh gì?"*, *"Bạn tuổi gì?"* đúng là
+ * câu người xem trả lời được ngay trong ô bình luận, chỉ là không trúng cụm nào
+ * trong bảng. Bộ dò kêu oan là bộ dò bị tắt đi — nên nới đúng chỗ nó đo hụt.
+ *
+ * ⚠️ Nới bằng một tính chất ĐO ĐƯỢC, không bằng cách thêm vài cụm nữa vào bảng:
+ * *một câu HỎI NGẮN nói thẳng với người xem*. Giới hạn 40 ký tự giữa "bạn" và
+ * dấu hỏi là để không nhận nhầm một đoạn văn dài tình cờ có cả hai thứ.
+ */
+const INVITE_WORDS =
+  /\b(comment|bình luận|gửi cho|tag|nhắn cho|bạn số mấy|bạn thuộc|thử xem)\b|\bbạn\b[^.!?]{0,40}\?/i;
 
 /**
  * Chuỗi kỹ thuật không bao giờ được lọt ra hình/tiếng. Lớp lỗi này đã cắn

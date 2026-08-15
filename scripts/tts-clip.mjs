@@ -116,22 +116,46 @@ export async function ttsScene(text, { voice = '', speed = CLIP_SPEED } = {}) {
     return { file: rel, seconds: await measure(abs, bytes), cached: true };
   }
 
-  const res = await fetch(FN_URL, {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${KEY}`,
-      'Content-Type': 'application/json',
-      ...(process.env.CLIP_TTS_SECRET ? { 'x-clip-secret': process.env.CLIP_TTS_SECRET } : {}),
-    },
-    body: JSON.stringify({ text, key, ...(voice ? { voice } : {}), speed }),
-  });
+  /**
+   * Thử lại 3 lượt, giãn dần.
+   *
+   * 🔑 Vì sao cần: đo thật trên một lượt dựng 2 clip — TTS chớp một nhịp ở
+   * clip đầu, `--require-voice` chặn đúng (thà trượt còn hơn ra clip câm), và
+   * mất trắng một clip; chạy lại ngay sau đó thì xong. Trong lượt 18 clip thì
+   * một nhịp chớp như thế là một clip mất mà không có lý do nào đáng.
+   *
+   * ⚠️ Thử lại ở ĐÂY chứ không ở tầng gọi: chỗ này biết chắc lỗi là của MỘT
+   * câu, và mấy câu đã sinh xong đều đã nằm trong cache nên lượt sau không đọc
+   * lại — thử lại cả clip thì tốn thêm một lượt render.
+   */
+  let lastErr = null;
+  for (let attempt = 1; attempt <= 3; attempt++) {
+    try {
+      const res = await fetch(FN_URL, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${KEY}`,
+          'Content-Type': 'application/json',
+          ...(process.env.CLIP_TTS_SECRET ? { 'x-clip-secret': process.env.CLIP_TTS_SECRET } : {}),
+        },
+        body: JSON.stringify({ text, key, ...(voice ? { voice } : {}), speed }),
+      });
 
-  const data = await res.json().catch(() => ({}));
-  if (!res.ok || !data.audio_url) {
-    throw new Error(`TTS hỏng (${res.status}): ${JSON.stringify(data).slice(0, 200)}`);
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok || !data.audio_url) {
+        throw new Error(`TTS hỏng (${res.status}): ${JSON.stringify(data).slice(0, 200)}`);
+      }
+
+      const bin = Buffer.from(await (await fetch(data.audio_url)).arrayBuffer());
+      writeFileSync(abs, bin);
+      return { file: rel, seconds: await measure(abs, bin.length), cached: false };
+    } catch (e) {
+      lastErr = e;
+      if (attempt < 3) {
+        console.warn(`   ⚠️ TTS lượt ${attempt} hỏng (${e.message.slice(0, 80)}) — thử lại…`);
+        await new Promise((r) => setTimeout(r, attempt * 1500));
+      }
+    }
   }
-
-  const bin = Buffer.from(await (await fetch(data.audio_url)).arrayBuffer());
-  writeFileSync(abs, bin);
-  return { file: rel, seconds: await measure(abs, bin.length), cached: false };
+  throw lastErr;
 }
