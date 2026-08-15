@@ -71,6 +71,16 @@ export type SceneVisual =
 export interface Scene {
   /** Lời đọc của cảnh này. Cũng CHÍNH LÀ phụ đề — một nguồn, không chép hai bản. */
   text: string;
+  /**
+   * Bản gửi cho TTS khi chữ VIẾT khác chữ ĐỌC. Bỏ trống ⇒ đọc luôn `text`.
+   *
+   * 🔑 Chỉ dùng cho đúng lớp ca này, đừng mở rộng thành "bản chữ thứ hai": tên
+   * miền (`tuviminhbao.com` phải đọc "tu vi minh bảo chấm com"), mã khuyến mãi
+   * viết HOA (đọc từng chữ cái là hỏng), con số (`100` → "một trăm"). Ngoài ba
+   * loại đó thì để `text` gánh cả hai vai — hai bản chữ song song là đúng cái
+   * bẫy "chép hai nơi rồi trôi khỏi nhau" mà hợp đồng này sinh ra để tránh.
+   */
+  speech?: string;
   visual: SceneVisual;
   /**
    * Thời lượng ép (giây). Bỏ trống thì suy từ độ dài `text` — đó là đường mặc
@@ -96,22 +106,39 @@ export interface ScriptSpec {
   scenes: Scene[];
   /** Lời mời hành động ở cuối. */
   cta: string;
+  /** Bản gửi TTS cho `cta` — xem `Scene.speech`. Đây là chỗ hay cần nhất (tên miền + mã). */
+  ctaSpeech?: string;
   /** Tên file nhạc nền trong `remotion/public/music/`. Bỏ trống = không nhạc. */
   music?: string;
   /** Hashtag gợi ý cho lúc đăng — KHÔNG hiện trên clip. */
   hashtags?: string[];
 }
 
-/** Tổng thời lượng ước tính của clip (giây), gồm cả hook và CTA. */
+/** Chữ THẬT SỰ gửi cho TTS của một cảnh. */
+export function spokenSceneText(s: Scene): string {
+  return s.speech?.trim() || s.text;
+}
+
+/** Chữ THẬT SỰ gửi cho TTS của câu kết. */
+export function spokenCta(spec: ScriptSpec): string {
+  return spec.ctaSpeech?.trim() || spec.cta;
+}
+
+/**
+ * Tổng thời lượng ước tính của clip (giây), gồm cả hook và CTA.
+ *
+ * Ước theo bản ĐỌC chứ không phải bản viết — chỗ hai bản lệch nhau nhiều nhất
+ * chính là câu kết ("tuviminhbao.com" 15 ký tự nhưng đọc thành 21).
+ */
 export function estimateTotalSeconds(spec: ScriptSpec): number {
   const scenes = spec.scenes.reduce(
-    (sum, s) => sum + (s.forceSeconds ?? estimateSpeechSeconds(s.text)),
+    (sum, s) => sum + (s.forceSeconds ?? estimateSpeechSeconds(spokenSceneText(s))),
     0
   );
-  return estimateSpeechSeconds(spec.hook) + scenes + estimateSpeechSeconds(spec.cta);
+  return estimateSpeechSeconds(spec.hook) + scenes + estimateSpeechSeconds(spokenCta(spec));
 }
 
 /** Toàn bộ lời đọc, theo đúng thứ tự xuất hiện. */
 export function fullNarration(spec: ScriptSpec): string[] {
-  return [spec.hook, ...spec.scenes.map((s) => s.text), spec.cta].filter((t) => t.trim());
+  return [spec.hook, ...spec.scenes.map(spokenSceneText), spokenCta(spec)].filter((t) => t.trim());
 }

@@ -115,22 +115,42 @@ const SOURCES: ToolDemoSource[] = [
   },
 ];
 
+/** Mã khuyến mãi in trên mọi clip — phải khớp `promo_codes.code` dưới DB. */
+export const PROMO_CODE = 'TUVIMINHBAO';
+/** Số Lượng mã đó tặng. Chỉ để HIỂN THỊ; con số thật do DB quyết. */
+export const PROMO_CREDITS = 100;
+
 /**
  * Câu kết dùng CHUNG cho mọi clip demo, chỉ thay từ khoá.
  *
- * Đi qua HAI lần sửa, ghi lại cả hai vì mỗi lần hỏng một kiểu:
+ * Đi qua BA lần sửa, ghi lại cả ba vì mỗi lần hỏng một kiểu:
  *  1. *"Tra thử miễn phí, không cần đăng ký."* — nói về THỦ TỤC, trong khi thứ
  *     kéo người ta bấm là điều họ sắp biết về CHÍNH MÌNH.
  *  2. *"Tìm hiểu ngay <từ khoá> của chính bạn."* — đúng hướng nhưng vẫn chỉ
  *     là một lời mời bấm. Nó không đẻ ra comment hay share, mà comment/share
  *     mới là tín hiệu xếp hạng mạnh nhất.
+ *  3. Bản có câu hỏi + comment nhưng KHÔNG nói tên miền: người xem thích clip
+ *     xong không biết gõ đâu để tra. Clip trôi khỏi feed là mất luôn đường về.
  *
- * Bản hiện tại đóng bằng một CÂU HỎI trả lời được ngay trong ô bình luận —
- * người xem không cần rời app vẫn tương tác được, và mỗi bình luận là một lần
- * clip được đẩy đi xa hơn.
+ * Bản hiện tại có đủ ba việc, xếp theo thứ tự rơi rụng: câu HỎI trước (trả lời
+ * được ngay trong ô bình luận, không phải rời app), rồi TÊN MIỀN, rồi MÃ.
+ *
+ * ⚠️ Câu này CỐ Ý vượt ngưỡng cảnh báo `cta.too-long` (6 giây) — nó phải chở
+ * bốn mẩu tin: câu hỏi · từ khoá · tên miền · mã kèm số Lượng. Ngưỡng 6s đặt
+ * hồi câu kết chỉ có một lời mời bấm. Giữ nguyên ngưỡng và để nó kêu, thay vì
+ * nới ngưỡng cho khỏi thấy cảnh báo — đó là quyết định sản phẩm có ý thức,
+ * không phải một lỗi cần giấu đi.
+ *
+ * 🔑 TRẢ VỀ HAI BẢN: `text` là phụ đề (phải viết đúng tên miền và mã để người
+ * ta gõ lại được), `speech` là thứ gửi TTS. Vbee đọc `tuviminhbao.com` thành
+ * một khối vô nghĩa và đọc `TUVIMINHBAO` viết hoa thành từng chữ cái — cả hai
+ * đều làm hỏng đúng câu quan trọng nhất về mặt chuyển đổi.
  */
-export function buildCta(keyword: string, question: string): string {
-  return `${question} Tra ${keyword} của bạn rồi comment bên dưới.`;
+export function buildCta(keyword: string, question: string): { text: string; speech: string } {
+  return {
+    text: `${question} Tra ${keyword} tại tuviminhbao.com — nhập mã ${PROMO_CODE} nhận ngay ${PROMO_CREDITS} lượng.`,
+    speech: `${question} Tra ${keyword} tại tu vi minh bảo chấm com. Nhập mã tu vi minh bảo, nhận ngay một trăm lượng.`,
+  };
 }
 
 export function listToolDemoSources(): ToolDemoSource[] {
@@ -140,11 +160,13 @@ export function listToolDemoSources(): ToolDemoSource[] {
 export function buildToolDemoSpec(toolId: string): ScriptSpec | null {
   const src = SOURCES.find((s) => s.toolId === toolId);
   if (!src) return null;
+  const cta = buildCta(src.keyword, src.ctaQuestion);
   return {
     sourceType: 'tool-demo',
     sourceId: src.toolId,
     ...src.spec,
-    cta: src.spec.cta || buildCta(src.keyword, src.ctaQuestion),
+    cta: src.spec.cta || cta.text,
+    ctaSpeech: src.spec.cta ? undefined : cta.speech,
   };
 }
 

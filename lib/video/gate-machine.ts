@@ -22,6 +22,8 @@ import {
   type ScriptSpec,
   estimateSpeechSeconds,
   estimateTotalSeconds,
+  spokenCta,
+  spokenSceneText,
 } from './script-spec';
 
 export interface GateIssue {
@@ -228,7 +230,7 @@ function checkPacing(spec: ScriptSpec, issues: GateIssue[]) {
   }
 
   spec.scenes.forEach((sc, i) => {
-    const secs = sc.forceSeconds ?? estimateSpeechSeconds(sc.text);
+    const secs = sc.forceSeconds ?? estimateSpeechSeconds(spokenSceneText(sc));
     if (secs > THRESHOLDS.sceneMaxSeconds) {
       issues.push({
         level: 'block',
@@ -266,17 +268,25 @@ function checkCta(spec: ScriptSpec, issues: GateIssue[]) {
     });
     return;
   }
-  if (estimateSpeechSeconds(cta) > 6) {
+  const secs = estimateSpeechSeconds(spokenCta(spec));
+  if (secs > 6) {
     issues.push({
       level: 'warn',
       code: 'cta.too-long',
-      message: 'Lời mời hành động dài — phần đuôi clip là chỗ người xem rơi nhiều nhất.',
+      message: `Lời mời hành động đọc mất ${secs.toFixed(1)}s — phần đuôi clip là chỗ người xem rơi nhiều nhất.`,
     });
   }
 }
 
 function checkLeaks(spec: ScriptSpec, issues: GateIssue[]) {
-  const all = [spec.hook, ...spec.scenes.map((s) => s.text), spec.cta].join(' \n ');
+  // Quét CẢ hai bản chữ: rò rỉ trong bản đọc thì không thấy trên phụ đề nhưng
+  // vẫn phát ra tiếng, và ngược lại. Bản nào cũng ra tới người xem.
+  const all = [
+    spec.hook,
+    ...spec.scenes.flatMap((s) => [s.text, s.speech ?? '']),
+    spec.cta,
+    spec.ctaSpeech ?? '',
+  ].join(' \n ');
   for (const re of LEAK_PATTERNS) {
     const m = all.match(re);
     if (m) {
@@ -378,8 +388,12 @@ export function runMachineGate(spec: ScriptSpec): MachineGateResult {
   checkSubtitleSafety(spec, issues);
 
   const totalSeconds = estimateTotalSeconds(spec);
-  const sceneSecs = spec.scenes.map((s) => s.forceSeconds ?? estimateSpeechSeconds(s.text));
-  const totalChars = [spec.hook, ...spec.scenes.map((s) => s.text), spec.cta].join(' ').length;
+  const sceneSecs = spec.scenes.map(
+    (s) => s.forceSeconds ?? estimateSpeechSeconds(spokenSceneText(s))
+  );
+  const totalChars = [spec.hook, ...spec.scenes.map(spokenSceneText), spokenCta(spec)].join(
+    ' '
+  ).length;
 
   return {
     pass: !issues.some((i) => i.level === 'block'),

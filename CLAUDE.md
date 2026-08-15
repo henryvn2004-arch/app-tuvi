@@ -5,6 +5,134 @@
 
 ---
 
+## 🎟️ Câu kết clip đọc TÊN MIỀN + MÃ, và bảng mã khuyến mãi (2026-08-15, PR này)
+
+Henry: *"phần closing… Mày lam no đọc luôn tên website tuviminhbao.com và thêm
+đoạn Nhập mã TUVIMINHBAO để nhận ngay 100 lượng. Xong mày bổ sung thêm vào flow
+signup thêm cái ô để user nhập mã lúc signup… Nhân tiện bổ sung tab quản lý mã
+trong page admin luôn"*.
+
+### 🔑 Chữ VIẾT ≠ chữ ĐỌC — phải tách hai bản
+`ScriptSpec.text` vốn gánh CẢ phụ đề LẪN lời gửi TTS. Với câu kết mới thì hai
+vai đá nhau: phụ đề phải ghi đúng `tuviminhbao.com` + `TUVIMINHBAO` để người ta
+gõ lại được, còn Vbee đọc tên miền thành một khối vô nghĩa và đọc mã viết HOA
+thành từng chữ cái — hỏng đúng câu quan trọng nhất về mặt chuyển đổi.
+- Thêm `Scene.speech` + `ScriptSpec.ctaSpeech` (bỏ trống ⇒ đọc luôn `text`).
+  Bản đọc: *"tra tại tu vi minh bảo chấm com. Nhập mã tu vi minh bảo…"*.
+- ⛔ **CHỈ dùng cho 3 lớp ca**: tên miền · mã viết HOA · chữ số. Ngoài đó để
+  `text` gánh cả hai vai — hai bản chữ song song là đúng bẫy "chép hai nơi rồi
+  trôi khỏi nhau" mà chính hợp đồng này sinh ra để tránh.
+- `estimateTotalSeconds` đổi sang ước theo bản ĐỌC; `checkLeaks` quét CẢ hai bản
+  (rò trong bản đọc thì không thấy trên phụ đề nhưng vẫn phát ra tiếng).
+- ⚠️ Câu kết CỐ Ý vượt ngưỡng cảnh báo `cta.too-long` (6s → thật 6,5s): nó chở
+  bốn mẩu tin (câu hỏi · từ khoá · tên miền · mã kèm số Lượng), trong khi ngưỡng
+  đặt hồi câu kết chỉ có một lời mời bấm. **Giữ ngưỡng và để nó kêu**, không nới
+  cho khỏi thấy cảnh báo. Clip thật: **32,58s**, video h264 1080×1920 + audio aac.
+
+### 🎟️ `promo_codes` + `promo_redemptions` + RPC `promo_code_redeem`
+Đường PHÁT TIỀN ⇒ mọi chốt chặn nằm ở **tầng DB**, không ở mã ứng dụng:
+| Chốt | Cách |
+|---|---|
+| Một tài khoản đổi ĐÚNG MỘT mã trọn đời | **KHOÁ CHÍNH** `promo_redemptions.user_id` |
+| Trần tổng lượt mỗi mã | `max_uses`, khoá dòng `for update` khi đọc |
+| Trần tuyệt đối mỗi lượt | `PROMO_MAX_CREDITS = 1000` ngay trong RPC |
+| Hạn dùng · chỉ tài khoản mới | `expires_at` · `new_account_days` |
+- ⚠️ **UNIQUE(user_id) chứ KHÔNG phải (user_id, code)**: cho một người gom nhiều
+  mã là nhân bề mặt lạm dụng theo số chiến dịch. Nới về sau thì dễ, siết lại sau
+  khi đã bị farm thì không.
+- **Thứ tự "ghi dấu TRƯỚC, cộng tiền SAU"** chép từ `onboarding_task_claim`: hai
+  chiều hỏng không đối xứng — cộng trước mà lỗi ⇒ cộng hai lần (phát không tiền,
+  không phát hiện được); ghi dấu trước mà lỗi ⇒ thiếu một lần, đối soát được.
+- Trần credits kiểm **TRƯỚC** bước chống-trùng: giá vô lý là lỗi cấu hình, phải
+  kêu to chứ không được lặng lẽ đọc thành "đã dùng rồi".
+- 🔐 `revoke ... from public, anon, authenticated` — EXECUTE cho PUBLIC là dựng
+  sẵn của Postgres, hàm SECURITY DEFINER mới nào cũng sinh ra hở. Verify: ACL chỉ
+  `postgres | service_role`, `set local role anon` → *permission denied*.
+- Seed `TUVIMINHBAO` = 100 Lượng · `max_uses=200` · `new_account_days=30`.
+  **200 lượt ≈ 880.000đ chi phí model THẬT** (100 Lượng ≈ 4 lượt tool ảnh ≈
+  4.400đ), không phải 82.900đ giá bán lẻ. Nới bằng Admin, không cần deploy.
+
+### Bề mặt
+- **`public/promo.js`** — NGUỒN DUY NHẤT (bắt `?promo=` · `info()` · `redeem()`).
+  `auth.js` **nạp LƯỜI** nó khi modal mở hoặc URL có `?promo=`: auth.js nằm trên
+  ~89 trang, thêm thẻ script vào từng file là 89 chỗ để quên — đúng lỗi
+  `referral.js` đã dính khi bị chép inline 2 bản.
+- **Ô mã trong modal đăng ký**, chỉ hiện ở tab Đăng ký. Ô này **KHÔNG tự đổi mã**
+  — nó CẤT mã vào sessionStorage (cả đường email lẫn OAuth, vì `signInGoogle` rời
+  trang), `promo.js` đổi sau khi có token thật.
+- **Ô đổi mã ở trang nạp Lượng** — đường về cho người ĐÃ CÓ tài khoản; thiếu nó
+  thì mã trên clip chỉ dùng được đúng lúc đăng ký, ai lỡ tay là mất hẳn đường.
+- **Số Lượng LẤY TỪ SERVER** (`promo-info`), không viết cứng "100" lên giao diện
+  — cùng luật `check:prices`. `promo-info` cố ý **không trả `used_count`/`max_uses`**
+  (ngân sách nội bộ).
+- **Panel "Mã Khuyến Mãi"** ở trang Gói Nạp & Pricing. Ba thứ KHÔNG cho sửa:
+  `used_count` (số đếm thật) · trần 1.000 · xoá mã đã có người đổi (FK chặn —
+  muốn dừng thì TẮT, để lại dấu vết). Mã mới mặc định AN TOÀN (trần 100 lượt +
+  chỉ TK mới ≤30 ngày), không phải mặc định tiện.
+
+### Verify
+`tsc` 0 · `lint` **0 lỗi / 77 warning = đúng mốc nền** · `prettier` cả cây sạch ·
+**20/20 bộ dò** · engine **185 pass**.
+- **RPC THẬT trên prod**, chạy trong transaction rồi rollback (verify sau đó
+  `promo_redemptions` 0 dòng · `used_count` 0 · 0 giao dịch): gõ chữ thường vẫn
+  ăn · **hai lượt liên tiếp chỉ +100 chứ không +200** · đúng 1 dòng giao dịch ·
+  mô tả giữ nguyên dấu tiếng Việt · `not_found`/`invalid_input`/`disabled`/
+  `expired`/`exhausted` đúng nhánh · trần credits **NÉM** chứ không im lặng ·
+  **ĐỐI CHỨNG tuổi tài khoản**: TK 146 ngày → `account_too_old`, TK 0 ngày → ok,
+  bỏ chốt tuổi → TK cũ qua được.
+- **19 ca trên ROUTE THẬT** qua Next dev + stub PostgREST: không auth → 401 ·
+  token người thường gọi admin → 403 · mã rỗng/60 ký tự → 400 · mã có `;`/2 ký
+  tự → 400 · credits 100000/âm/10.5 → 400 · **ĐỐI CHỨNG admin hợp lệ → 200**.
+- **24 ca trên TRANG THẬT**: ô mã ẩn/hiện đúng tab · gợi ý nêu **100 Lượng lấy
+  từ server** · mã hết hạn báo đỏ · **mã rác → IM LẶNG** (đang gõ dở thì không
+  doạ) · bấm Tạo tài khoản và bấm Google đều CẤT mã · `?promo=` được nhặt, **dọn
+  khỏi thanh địa chỉ nhưng GIỮ utm_*** · tự mở tab Đăng ký · đổi mã xong xoá ô,
+  mã hỏng thì GIỮ ô để sửa · chuỗi từ server **không chạy được HTML** · **ĐỐI
+  CHỨNG khách chưa đăng nhập → không hiện ô đổi mã**.
+- **34 ca trên `admin.html` THẬT** (light + dark): mã đã dùng **không có nút
+  Xoá**, ĐỐI CHỨNG mã chưa ai dùng thì CÓ · ghi chú `<img onerror>` không chạy ·
+  ô trống = ∞ · **payload lưu KHÔNG mang `used_count`** · hạn quy về **cuối ngày
+  giờ VN** (`23:59:59+07`) chứ không 00:00 UTC.
+
+### 🪤 Bẫy đã vấp (đều là lỗi của TÔI, không phải của mã)
+1. 🔴 **Deploy RPC lượt đầu gõ chữ KHÔNG DẤU** (`'Ma khuyen mai: '`) trong khi
+   file repo có dấu — mà chuỗi đó vào `credit_transactions.description`, người
+   dùng đọc được. **Đúng bệnh "bản đang chạy khác bản trong repo"** đã ghi ở
+   track `send-daily-push`. Đã `create or replace` lại bằng nguyên văn.
+2. **`where code = v_code` AMBIGUOUS** với cột `code` của `RETURNS TABLE` → phải
+   `where promo_codes.code = v_code`. File repo lúc đầu sai, đã sync theo bản
+   đang chạy.
+3. **`cd X && A & B`**: `cd` chỉ bind vào job nền đầu, `B` chạy ở cwd CŨ
+   (`tuvi-engine`) → Next dev báo *"Couldn't find any `pages` or `app`"*. Bẫy cwd
+   đã ghi, vấp lại.
+4. **`pkill -f "next dev -p 3111"` khớp CHÍNH dòng lệnh của nó** → tự giết (exit
+   144). Lần thứ hai.
+5. **Đọc sessionStorage SAU `signInGoogle()`** → *execution context destroyed*
+   (hàm đó gán `location.href`). Phải đọc trong CÙNG lượt `evaluate`. Bài học
+   "đọc DOM trước hành động làm rời trang", vấp lại.
+6. **`waitForSelector` mặc định chờ VISIBLE** — ô mã đúng ra phải ẩn ở tab Đăng
+   nhập, nên phải `state:'attached'`.
+7. 🔴 **Bảng admin đo trên trang CHƯA active**: `textContent`/`inputValue` đọc
+   được phần tử ẩn nên 10 assertion đầu VẪN XANH trong khi bảng không ai nhìn
+   thấy; chỉ `fill()` mới lộ. Phải vào bằng chính `enterApp('...','owner')` +
+   `goTo('pricing')`, đừng tự bật class.
+8. **Stub `Auth` thiếu `getUser`** (có thật ở `auth.js:212`) → `loadStatus()` ném
+   và bài kiểm đọc thành "lỗi JS của trang".
+
+### CÒN LẠI
+- **Chưa nghe được bản đọc** — tôi chỉ đo được độ dài file (6,5s) và xác nhận
+  mp4 có track audio thật. Chỗ duy nhất phải nghe mới biết: Vbee đọc *"tu vi
+  minh bảo chấm com"* có ra tiếng tự nhiên không. Nghe thấy gượng thì sửa đúng
+  một chuỗi `speech` trong `buildCta`.
+- **Mã mới ăn từ lúc DEPLOY** — bảng + RPC đã có trên prod, nhưng ô nhập và
+  panel admin thì phải deploy xong mới thấy.
+- **17 clip còn lại chưa dựng** — `buildCta` dùng chung nên chúng tự có câu kết
+  mới, chỉ cần thêm `keyword`/`ctaQuestion` vào `SOURCES`.
+- Cổng 2 (hội đồng người xem) **vẫn chưa chạy lượt nào** — cần `GEMINI_API_KEY`
+  hoặc `ANTHROPIC_API_KEY` trong môi trường dựng.
+
+---
+
 ## 🫂 Rail thành "Trò chuyện với Thầy" — 4 tầng, và vòng vá NHỊP HỘI THOẠI (2026-08-12, #507 + PR này)
 
 Henry: kinh tế khó → người ta stress, mà VN gần như không có kênh tâm lý nên họ

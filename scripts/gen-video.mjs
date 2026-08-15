@@ -80,7 +80,9 @@ execFileSync(
 
 const { buildToolDemoSpec, getToolDemoSource } = require(join(outDir, 'sources/tool-demo.js'));
 const { runMachineGate } = require(join(outDir, 'gate-machine.js'));
-const { estimateSpeechSeconds } = require(join(outDir, 'script-spec.js'));
+const { estimateSpeechSeconds, spokenCta, spokenSceneText } = require(
+  join(outDir, 'script-spec.js')
+);
 
 const spec = buildToolDemoSpec(TOOL);
 const source = getToolDemoSource(TOOL);
@@ -135,7 +137,9 @@ if (!NO_VOICE) {
   try {
     const giong = VOICE ? { code: VOICE, ten: '(ép bằng --voice)' } : pickVoice(TOOL);
     console.log(`   giọng: ${giong.ten} — ${giong.code}`);
-    const parts = [spec.hook, ...spec.scenes.map((s) => s.text), spec.cta];
+    // Gửi TTS bản ĐỌC (`speech`), không phải bản viết trên phụ đề. Hai bản chỉ
+    // khác nhau ở tên miền / mã / chữ số — xem `Scene.speech` trong script-spec.
+    const parts = [spec.hook, ...spec.scenes.map(spokenSceneText), spokenCta(spec)];
     voices = [];
     for (const t of parts) {
       const v = await ttsScene(t, { voice: giong.code });
@@ -172,10 +176,11 @@ const props = {
     visual: sc.visual,
     ...(voices ? { audio: voices[i + 1].file } : {}),
   })),
+  // Phụ đề dùng bản VIẾT — người xem phải gõ lại được tên miền và mã.
   cta: spec.cta,
   ctaDurationInFrames: voices
     ? frames(voices[voices.length - 1].seconds + 0.9)
-    : frames(estimateSpeechSeconds(spec.cta) + 1.2),
+    : frames(estimateSpeechSeconds(spokenCta(spec)) + 1.2),
   ...(voices ? { ctaAudio: voices[voices.length - 1].file } : {}),
   ...(spec.music ? { music: spec.music } : {}),
 };
