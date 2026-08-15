@@ -41,3 +41,9 @@ tsconfig.tsbuildinfo
 
 # Ảnh 64 quẻ sinh bằng scripts/gen-que-images.mjs — asset nặng, không commit
 .que-images/
+
+# Video pipeline — file nặng, KHÔNG commit (deliverable gửi thẳng, không phải nội dung repo)
+remotion/node_modules/
+remotion/out/
+remotion/public/recordings/
+remotion/.remotion/
