@@ -328,7 +328,7 @@ export const ToolDemo: React.FC<ToolDemoProps> = ({
       {/* Nhạc nền: âm lượng thấp hẳn dưới giọng đọc. Bỏ trống `music` thì
           KHÔNG dựng thẻ Audio nào — clip vẫn render bình thường, không vỡ.
           Chủ ý fail-soft: thiếu một file nhạc không được phép chặn cả clip. */}
-      {music ? <Audio src={staticFile(`music/${music}`)} volume={0.14} loop /> : null}
+      {music ? <Audio src={staticFile(`music/${music}`)} volume={0.3} loop /> : null}
 
       <Sequence durationInFrames={hookDurationInFrames} name="Hook">
         {hookAudio ? <Audio src={staticFile(hookAudio)} /> : null}

@@ -21,6 +21,7 @@ import { existsSync, mkdirSync, mkdtempSync, writeFileSync } from 'fs';
 import { tmpdir } from 'os';
 import { join } from 'path';
 import { createRequire } from 'module';
+import { ttsScene } from './tts-clip.mjs';
 
 const require = createRequire(import.meta.url);
 const ROOT = new URL('..', import.meta.url).pathname;
@@ -42,7 +43,8 @@ const TOOL = val('--tool', '');
 const DRY = has('--dry-run');
 const STILL = has('--still');
 const NO_AUDIENCE = has('--no-audience');
-const MUSIC = val('--music', '');
+const MUSIC = val('--music', 'nen-tram.wav');
+const NO_VOICE = has('--no-voice');
 const FPS = 30;
 
 if (!TOOL) {
@@ -115,22 +117,61 @@ if (DRY) {
   process.exit(0);
 }
 
-// ── Dựng props cho Remotion ───────────────────────────────────────────────
-// Thời lượng từng cảnh suy TỪ LỜI ĐỌC. Khi có giọng đọc thật thì thay bằng độ
-// dài file mp3 đo được — chính xác tuyệt đối thay vì ước lượng.
+// ── Giọng đọc ─────────────────────────────────────────────────────────────
+// Sinh TỪNG CẢNH một, rồi lấy ĐỘ DÀI THẬT của file mp3 làm thời lượng cảnh.
+// Ước lượng theo số ký tự chỉ đủ cho cổng 1: đã đo và thấy tốc độ đọc câu ngắn
+// dao động 11–18 ký tự/giây, sai số 1–2 giây là đủ để hình lệch khỏi tiếng.
 const frames = (sec) => Math.max(1, Math.round(sec * FPS));
+// Khoảng lặng chèn thêm sau mỗi cảnh: giọng đọc dừng rồi mà hình đổi ngay thì
+// nghe cụt. 0,35s là mức vừa đủ để câu "rơi xuống" trước khi sang cảnh sau.
+const TAIL = 0.35;
+
+let voices = null;
+if (!NO_VOICE) {
+  console.log('\n── GIỌNG ĐỌC ────────────────────────────────');
+  try {
+    const parts = [spec.hook, ...spec.scenes.map((s) => s.text), spec.cta];
+    voices = [];
+    for (const t of parts) {
+      const v = await ttsScene(t);
+      voices.push(v);
+      console.log(
+        `   ${v.cached ? '⏭ có sẵn' : '✓ sinh mới'}  ${v.seconds.toFixed(2)}s  "${t.slice(0, 42)}${t.length > 42 ? '…' : ''}"`
+      );
+    }
+    const tong = voices.reduce((a, v) => a + v.seconds, 0);
+    console.log(
+      `   tổng ${tong.toFixed(1)}s giọng đọc (ước lượng trước đó: ${g1.metrics.totalSeconds}s)`
+    );
+  } catch (e) {
+    console.warn(`   ⚠️ ${e.message}`);
+    console.warn('   → render KHÔNG có giọng đọc; phụ đề vẫn chạy.');
+    voices = null;
+  }
+} else {
+  console.log('\n── GIỌNG ĐỌC · BỎ QUA (--no-voice) ──────────');
+}
+
+const dur = (i, fallbackSec) => (voices ? frames(voices[i].seconds + TAIL) : frames(fallbackSec));
 
 const props = {
   toolLabel: source.label,
   hook: spec.hook,
-  hookDurationInFrames: frames(estimateSpeechSeconds(spec.hook) + 0.6),
-  scenes: spec.scenes.map((sc) => ({
+  hookDurationInFrames: dur(0, estimateSpeechSeconds(spec.hook) + 0.6),
+  ...(voices ? { hookAudio: voices[0].file } : {}),
+  scenes: spec.scenes.map((sc, i) => ({
     text: sc.text,
-    durationInFrames: frames(sc.forceSeconds ?? estimateSpeechSeconds(sc.text) + 0.4),
+    durationInFrames: sc.forceSeconds
+      ? frames(sc.forceSeconds)
+      : dur(i + 1, estimateSpeechSeconds(sc.text) + 0.4),
     visual: sc.visual,
+    ...(voices ? { audio: voices[i + 1].file } : {}),
   })),
   cta: spec.cta,
-  ctaDurationInFrames: frames(estimateSpeechSeconds(spec.cta) + 1.2),
+  ctaDurationInFrames: voices
+    ? frames(voices[voices.length - 1].seconds + 1.0)
+    : frames(estimateSpeechSeconds(spec.cta) + 1.2),
+  ...(voices ? { ctaAudio: voices[voices.length - 1].file } : {}),
   ...(spec.music ? { music: spec.music } : {}),
 };
 

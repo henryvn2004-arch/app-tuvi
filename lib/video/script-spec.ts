@@ -26,6 +26,22 @@
  * ⚠️ Đổi giọng hoặc đổi `speed_rate` thì PHẢI đo lại — số này gắn với đúng cấu
  * hình trên. Đo lại bằng: lấy `content-length` của mp3 ÷ (128000/8) ra số giây,
  * chia cho `length(text)`.
+ *
+ * 🔴 GIỚI HẠN ĐÃ ĐO, ĐỌC TRƯỚC KHI TIN CON SỐ NÀY:
+ * hằng số trên rút từ các đoạn DÀI (~1.000–1.600 ký tự) và chỉ đúng ở cỡ đó.
+ * Đo thêm trên câu NGẮN cỡ một cảnh clip thì tốc độ dao động rất mạnh:
+ *
+ *      34 ký tự → 2,98s (11,4 kt/s)      112 ký tự → 6,60s (17,0 kt/s)
+ *      40 ký tự → 2,67s (15,0 kt/s)      183 ký tự → 9,87s (18,6 kt/s)
+ *    1327 ký tự → 96,31s (13,8 kt/s)
+ *
+ * Khoảng lặng đầu/cuối cố định (~0,5s) chiếm tỉ trọng lớn ở câu ngắn, và nhịp
+ * ngắt câu của Vbee không tuyến tính theo độ dài. Thử hồi quy tuyến tính thì ra
+ * hệ số chặn ÂM — tức mô hình sai, không phải chỉ thiếu chính xác.
+ *
+ * ⇒ QUY ƯỚC: hàm này chỉ dùng cho CỔNG 1 (bắt clip quá dài / quá ngắn — sai số
+ * 1–2 giây không đổi kết luận) và cho bản xem trước khi chưa có giọng đọc.
+ * Lúc RENDER THẬT thì đo ĐỘ DÀI THẬT của file mp3, không dùng ước lượng.
  */
 export const TTS_CHARS_PER_SECOND = 13.59;
 
