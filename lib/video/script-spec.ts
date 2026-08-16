@@ -66,7 +66,16 @@ export type VideoSourceType =
 export type SceneVisual =
   | { kind: 'card'; heading?: string; body?: string; accent?: string }
   | { kind: 'screen'; recording: string; startSec?: number; label?: string }
-  | { kind: 'image'; src: string; caption?: string };
+  | { kind: 'image'; src: string; caption?: string; accent?: string }
+  /**
+   * Chữ lớn hiện dần theo từng từ, không có hình nào khác.
+   *
+   * Dành cho nội dung Layer 1 (*"bạn là kiểu người nào"*) — loại KHÔNG có màn
+   * hình nào để quay. `accent` là chuỗi con trong `text` được tô vàng; khai
+   * riêng chứ không nhúng ký hiệu vào `text`, vì chính `text` đó còn được gửi
+   * cho TTS và dùng làm phụ đề.
+   */
+  | { kind: 'typo'; accent?: string };
 
 export interface Scene {
   /** Lời đọc của cảnh này. Cũng CHÍNH LÀ phụ đề — một nguồn, không chép hai bản. */
