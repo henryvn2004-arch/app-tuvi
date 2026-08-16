@@ -121,6 +121,18 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const TTS_GAP_MS = Number(process.env.CLIP_TTS_GAP_MS || 500);
 const RETRIES = 4;
 
+/**
+ * Ngưỡng "ngắn tới mức không thể là giọng đọc của câu này".
+ *
+ * 🔑 Đo theo SỐ KÝ TỰ chứ không theo một hằng số: một câu 60 ký tự mà ra 0,3
+ * giây thì chắc chắn hỏng, còn một câu 8 ký tự ra 0,3 giây thì bình thường.
+ * 25 ký tự/giây là mức đọc nhanh gần ngưỡng vật lý của tiếng Việt (bản thật đo
+ * được 11–18), nên ngưỡng này rộng — nó chỉ bắt ca hỏng THẬT, không kêu oan.
+ */
+function quaNgan(seconds, text) {
+  return seconds < Math.max(0.3, text.trim().length / 25);
+}
+
 export async function ttsScene(text, { voice = '', speed = CLIP_SPEED } = {}) {
   mkdirSync(AUDIO_DIR, { recursive: true });
   const key = hash(`${text}|${voice}|${speed}`);
@@ -128,9 +140,18 @@ export async function ttsScene(text, { voice = '', speed = CLIP_SPEED } = {}) {
   const abs = join(AUDIO_DIR, `${key}.mp3`);
 
   if (existsSync(abs)) {
-    const { statSync } = await import('fs');
+    const { statSync, unlinkSync } = await import('fs');
     const bytes = statSync(abs).size;
-    return { file: rel, seconds: await measure(abs, bytes), cached: true };
+    const seconds = await measure(abs, bytes);
+    // ⚠️ PHẢI KIỂM CẢ NHÁNH CACHE. Một file hỏng lọt vào cache thì mọi lượt
+    // dựng SAU đều lấy nó ra dùng mà không hỏi lại nhà cung cấp — tức bug tự
+    // đóng băng chính nó, và chạy lại bao nhiêu lần cũng ra kết quả hỏng y hệt.
+    if (quaNgan(seconds, text)) {
+      console.warn(`   ⚠️ bỏ file giọng hỏng trong cache (${seconds.toFixed(2)}s) — sinh lại`);
+      unlinkSync(abs);
+    } else {
+      return { file: rel, seconds, cached: true };
+    }
   }
 
   /**
@@ -163,12 +184,39 @@ export async function ttsScene(text, { voice = '', speed = CLIP_SPEED } = {}) {
         throw new Error(`TTS hỏng (${res.status}): ${JSON.stringify(data).slice(0, 200)}`);
       }
 
-      const bin = Buffer.from(await (await fetch(data.audio_url)).arrayBuffer());
+      /**
+       * 🔴 LƯỢT TẢI FILE CŨNG PHẢI KIỂM — bản đầu tin nó vô điều kiện và đã
+       * trả giá: hàm edge trả 200 kèm `audio_url` đàng hoàng, nhưng lượt tải
+       * chính URL đó lại nhận về **một trang HTML báo lỗi** (nhà cung cấp chặn
+       * theo nhịp). 150 byte `<html><head>…` được ghi thẳng vào file `.mp3`,
+       * `parseMedia` đọc không ra nên rơi về phép chia kích thước và báo
+       * **0,01 giây** — rồi được CACHE lại, nên chạy lại vẫn hỏng y nguyên.
+       *
+       * Hậu quả nếu lọt: cảnh đó câm, và vì thời lượng cảnh tính từ độ dài mp3
+       * nên chữ chỉ loé qua vài khung hình. Không có lỗi nào bắn ra — đúng loại
+       * hỏng mà `--require-voice` sinh ra để chặn, chỉ khác là nó chặn ở tầng
+       * "có giọng hay không", còn ca này giọng CÓ mà rỗng ruột.
+       */
+      const dl = await fetch(data.audio_url);
+      if (!dl.ok) throw new Error(`tải giọng hỏng (${dl.status}) từ ${data.audio_url}`);
+      const bin = Buffer.from(await dl.arrayBuffer());
+      const head = bin.slice(0, 5).toString('latin1').toLowerCase();
+      if (bin.length < 2048 || head.startsWith('<html') || head.startsWith('<!doc')) {
+        throw new Error(
+          `giọng trả về không phải mp3 (${bin.length} byte, mở đầu "${head.trim()}")`
+        );
+      }
       writeFileSync(abs, bin);
+      const seconds = await measure(abs, bin.length);
+      if (quaNgan(seconds, text)) {
+        const { unlinkSync } = await import('fs');
+        unlinkSync(abs); // đừng để bản hỏng nằm lại cache cho lượt sau lấy ra
+        throw new Error(`giọng đọc quá ngắn (${seconds.toFixed(2)}s cho ${text.length} ký tự)`);
+      }
       // Nghỉ SAU MỖI LƯỢT SINH MỚI — xem `TTS_GAP_MS`. Không nghỉ ở nhánh
       // cache vì nhánh đó không chạm mạng.
       await sleep(TTS_GAP_MS);
-      return { file: rel, seconds: await measure(abs, bin.length), cached: false };
+      return { file: rel, seconds, cached: false };
     } catch (e) {
       lastErr = e;
       if (attempt < RETRIES) {
