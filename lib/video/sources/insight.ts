@@ -205,8 +205,23 @@ const SOURCES: InsightSource[] = [
         // (Cannon/Walker), còn "Sirois và Pychyl" đo trên *nữ Sài Gòn* của
         // `vi-sao-hay-hoan-lai`. Bản ghi trước đây gộp cả ba vào "giọng nữ Hà
         // Nội" là SAI.
+        //
+        // Giọng thứ ba đã đo (*nam Hà Nội*, của `bon-buoc-truoc-khi-roi-di`),
+        // lần này bằng phép THAY THẾ thay vì bỏ hẳn tên — thay "ông ấy" (6 ký
+        // tự) bằng "John Gottman" (12 ký tự):
+        //     65 kt 3,55s  vs  59 kt 3,13s   → +0,42s
+        //     44 kt 2,56s  vs  38 kt 2,22s   → +0,34s
+        // Ba kết cục phân biệt được rất rõ, nên phép đo này đủ kết luận:
+        //   · đọc thành âm  → khoảng +0,4s   ← ĐÚNG cái đo được
+        //   · đánh vần      → khoảng +4s
+        //   · nuốt luôn tên → khoảng −0,35s (mất luôn chữ "ông ấy")
+        // ⇒ Cả ba giọng đã đo đều ĐỌC tên Latin thành âm.
+        // 🔑 Lượt "có tên" của cặp A lấy TỪ CACHE, tức chính file mp3 đang nằm
+        // trong clip đã dựng — đo thẳng thứ đang phát, không phải một bản thế.
+        //
         // ⇒ Thêm tên riêng Latin vào một kịch bản chạy giọng CHƯA đo thì phải
-        // đo lại cho giọng đó, đừng suy từ bảng này.
+        // đo lại cho giọng đó, đừng suy từ bảng này. Giọng thứ tư (*nữ Sài
+        // Gòn* thì đã đo, còn *nam Sài Gòn* của `VOICES[0]`) vẫn chưa có số.
         {
           text: 'Vì cơ thể bạn chỉ có bốn nút khi thấy nguy.',
           visual: { kind: 'typo', accent: 'bốn nút' },
