@@ -109,6 +109,10 @@ function buildTimeline(spec: ScriptSpec): string {
       visual = `Quay màn hình thật của công cụ trên điện thoại${sc.visual.label ? ` — ${sc.visual.label}` : ''}.`;
     } else if (sc.visual.kind === 'image') {
       visual = `Ảnh: ${sc.visual.caption ?? sc.visual.src}`;
+    } else if (sc.visual.kind === 'typo') {
+      // Hội đồng người xem chấm theo thứ họ NHÌN THẤY — mô tả sai loại cảnh
+      // là họ chấm một clip khác với clip sắp render.
+      visual = 'Chữ lớn phủ giữa màn hình, sáng dần theo nhịp đọc, nền xanh đậm.';
     } else {
       visual = `Thẻ chữ: ${sc.visual.heading ?? ''} ${sc.visual.body ?? ''}`.trim();
     }
