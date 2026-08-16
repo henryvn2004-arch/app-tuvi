@@ -16,7 +16,11 @@ on:
   workflow_dispatch:
     inputs:
       tools:
-        description: 'Tool cần dựng (cách nhau bởi dấu phẩy). Bỏ trống = tất cả.'
+        description: 'Clip TOOL-DEMO cần dựng (phẩy ngăn cách). Bỏ trống + insight trống = tất cả.'
+        required: false
+        default: ''
+      insight:
+        description: 'Clip INSIGHT cần dựng (phẩy ngăn cách), vd: vi-sao-hay-hoan-lai'
         required: false
         default: ''
       force:
@@ -66,7 +70,12 @@ jobs:
         uses: actions/cache@v4
         with:
           path: remotion/public/audio
-          key: clip-tts-${{ hashFiles('lib/video/sources/tool-demo.ts') }}
+          # ⚠️ Băm CẢ HAI nguồn kịch bản. Thiếu `insight.ts` thì sửa lời đọc của
+          # một clip insight KHÔNG đổi khoá — cache cũ vẫn trúng, và vì tên mp3
+          # là băm của (chữ + giọng + tốc độ) nên câu mới vẫn sinh đúng. Không
+          # sai, nhưng khoá phải phản ánh đủ nguồn thì `restore-keys` mới rơi
+          # về đúng lớp khi có nhiều nhánh cùng chạy.
+          key: clip-tts-${{ hashFiles('lib/video/sources/tool-demo.ts', 'lib/video/sources/insight.ts') }}
           restore-keys: clip-tts-
 
       - name: Cài gói gốc
@@ -103,12 +112,18 @@ jobs:
           # tuỳ ý trong runner. Chỉ cộng tác viên mới bấm được workflow_dispatch
           # nên mức độ thấp, nhưng đây là lối viết đúng và không tốn gì.
           IN_TOOLS: ${{ inputs.tools }}
+          IN_INSIGHT: ${{ inputs.insight }}
           IN_FORCE: ${{ inputs.force }}
           IN_BASE: ${{ inputs.base }}
         run: |
           set -euo pipefail
           ARGS=()
-          if [ -n "$IN_TOOLS" ]; then ARGS+=(--tools "$IN_TOOLS"); else ARGS+=(--all); fi
+          if [ -n "$IN_TOOLS" ] || [ -n "$IN_INSIGHT" ]; then
+            [ -n "$IN_TOOLS" ] && ARGS+=(--tools "$IN_TOOLS")
+            [ -n "$IN_INSIGHT" ] && ARGS+=(--insight "$IN_INSIGHT")
+          else
+            ARGS+=(--all)
+          fi
           if [ "$IN_FORCE" = "true" ]; then ARGS+=(--force); fi
           if [ -z "${GEMINI_API_KEY:-}" ] && [ -z "${ANTHROPIC_API_KEY:-}" ]; then
             echo "::warning::Chưa khai GEMINI_API_KEY/ANTHROPIC_API_KEY — bỏ qua cổng 2 (hội đồng người xem). Clip chỉ qua cổng máy."

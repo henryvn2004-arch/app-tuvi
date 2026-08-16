@@ -4,8 +4,22 @@
  *
  *   node scripts/build-video-batch.mjs --all
  *   node scripts/build-video-batch.mjs --tools than-so-hoc,kim-lau
+ *   node scripts/build-video-batch.mjs --insight vi-sao-hay-hoan-lai
  *   node scripts/build-video-batch.mjs --all --dry-run      # chỉ in kế hoạch
  *   node scripts/build-video-batch.mjs --all --force        # quay + dựng lại
+ *
+ * 🔴 HAI LOẠI CLIP, HAI ĐƯỜNG DỰNG KHÁC HẲN — và bản đầu của script này CHỈ
+ * biết loại thứ nhất, tức bỏ sót đúng loại chiếm phần lớn kênh:
+ *
+ *   · `tool-demo` — quay màn hình prod bằng Playwright rồi lắp vào khung.
+ *     Nguồn: `lib/video/sources/tool-demo.ts` + công thức quay `tool-recipes.mjs`.
+ *   · `insight`  — KHÔNG quay gì cả; chữ chạy trên nền tranh.
+ *     Nguồn: `lib/video/sources/insight.ts`. Nội dung kiểu *"có ba kiểu người
+ *     khi bị tổn thương"* không có giao diện nào để quay.
+ *
+ * ⚠️ Vì thế `--all` phải phủ CẢ HAI. Một danh sách thiếu ở đây thì clip loại
+ * kia vĩnh viễn nằm ngoài khâu tự động mà không có gì báo — đúng lớp lỗi "hai
+ * danh sách chép tay rồi trôi khỏi nhau" repo này đã trả giá nhiều lần.
  *
  * Đây là thứ GitHub Actions gọi. Để logic ở script chứ không nhét vào YAML vì
  * cùng một lệnh phải chạy được ở máy Henry lúc cần dựng gấp một clip — YAML thì
@@ -58,24 +72,48 @@ const BUDGET_MIN = Number(val('--budget-min', '300'));
 const started = Date.now();
 const outOfTime = () => (Date.now() - started) / 60000 > BUDGET_MIN;
 
-/** Danh sách tool dựng được = có CẢ công thức quay LẪN kịch bản. */
-function resolveTools() {
-  const withScript = new Set(listScriptedTools());
-  const withRecipe = Object.keys(TOOL_RECIPES);
-  if (ALL) return withRecipe.filter((t) => withScript.has(t));
-  const asked = val('--tools', '')
-    .split(',')
-    .map((s) => s.trim())
-    .filter(Boolean);
-  return asked;
+/**
+ * Danh sách việc cần dựng, mỗi việc là `{ id, kind }`.
+ *
+ * `--all` = mọi clip tool-demo dựng được (có CẢ công thức quay LẪN kịch bản)
+ * CỘNG mọi clip insight. Hai cờ hẹp `--tools` / `--insight` dùng được cùng lúc.
+ */
+function resolveJobs() {
+  const jobs = [];
+  if (ALL) {
+    const withScript = new Set(listIds('tool-demo.ts', 'toolId'));
+    for (const t of Object.keys(TOOL_RECIPES)) {
+      if (withScript.has(t)) jobs.push({ id: t, kind: 'tool-demo' });
+    }
+    for (const i of listIds('insight.ts', 'id')) jobs.push({ id: i, kind: 'insight' });
+    return jobs;
+  }
+  for (const t of csv(val('--tools', ''))) jobs.push({ id: t, kind: 'tool-demo' });
+  for (const i of csv(val('--insight', ''))) jobs.push({ id: i, kind: 'insight' });
+  return jobs;
 }
 
-/** Đọc danh sách tool có kịch bản, không cần biên dịch cả cây TS. */
-function listScriptedTools() {
+const csv = (s) =>
+  String(s)
+    .split(',')
+    .map((x) => x.trim())
+    .filter(Boolean);
+
+/**
+ * Đọc danh sách id từ file nguồn TS mà KHÔNG biên dịch cả cây.
+ *
+ * ⚠️ `field` phải khớp CHÍNH XÁC hoa/thường và có ranh giới từ: `\bid:` KHÔNG
+ * trúng `toolId:`/`sourceId:` (chữ `I` hoa, và trước nó là ký tự chữ nên không
+ * có ranh giới). Bỏ `\b` đi là danh sách insight nuốt luôn mọi `toolId` — một
+ * lỗi im lặng, vì kết quả vẫn là một danh sách trông rất hợp lý.
+ */
+function listIds(file, field) {
+  const path = join(ROOT, 'lib/video/sources', file);
   const src = execFileSync('node', [
     '-e',
-    `const fs=require('fs');const s=fs.readFileSync(${JSON.stringify(join(ROOT, 'lib/video/sources/tool-demo.ts'))},'utf8');` +
-      `const m=[...s.matchAll(/toolId:\\s*'([a-z0-9-]+)'/g)].map(x=>x[1]);console.log(m.join(' '))`,
+    `const fs=require('fs');const s=fs.readFileSync(${JSON.stringify(path)},'utf8');` +
+      `const m=[...s.matchAll(/\\b${field}:\\s*'([a-z0-9-]+)'/g)].map(x=>x[1]);` +
+      `console.log([...new Set(m)].join(' '))`,
   ]).toString();
   return src.trim().split(/\s+/).filter(Boolean);
 }
@@ -116,23 +154,45 @@ function run(cmd, args) {
   execFileSync(cmd, args, { cwd: ROOT, stdio: 'inherit' });
 }
 
-const tools = resolveTools();
-if (!tools.length) {
-  console.error('Không có tool nào để dựng. Dùng --all hoặc --tools a,b,c.');
-  console.error('Tool dựng được = có CẢ công thức quay (scripts/tool-recipes.mjs)');
+const jobs = resolveJobs();
+if (!jobs.length) {
+  console.error('Không có clip nào để dựng. Dùng --all, --tools a,b,c hoặc --insight a,b,c.');
+  console.error('Clip tool-demo = có CẢ công thức quay (scripts/tool-recipes.mjs)');
   console.error('LẪN kịch bản (lib/video/sources/tool-demo.ts).');
+  console.error('Clip insight   = một id trong lib/video/sources/insight.ts.');
   process.exit(1);
 }
 
-console.log(`\n📹 Dựng ${tools.length} clip: ${tools.join(' · ')}`);
+// 🪤 Hai loại clip ghi chung `remotion/out/<id>.mp4`. Trùng id thì bản dựng sau
+// ĐÈ bản trước, `publish-clips.mjs` nộp đúng một file, và không có gì báo — chỉ
+// là một clip biến mất. Chặn ở đây thay vì trông vào việc người đặt tên nhớ ra.
+const seen = new Map();
+for (const j of jobs) {
+  const truoc = seen.get(j.id);
+  if (truoc && truoc !== j.kind) {
+    console.error(`\n❌ Trùng id "${j.id}" giữa ${truoc} và ${j.kind}.`);
+    console.error('   Hai loại clip ghi chung remotion/out/<id>.mp4 nên bản sau sẽ đè bản trước.');
+    console.error('   Đổi tên một trong hai (lib/video/sources/tool-demo.ts hoặc insight.ts).');
+    process.exit(1);
+  }
+  seen.set(j.id, j.kind);
+}
+
+const nDemo = jobs.filter((j) => j.kind === 'tool-demo').length;
+const nInsight = jobs.length - nDemo;
+console.log(`\n📹 Dựng ${jobs.length} clip: ${nDemo} tool-demo · ${nInsight} insight`);
+console.log(`   ${jobs.map((j) => j.id).join(' · ')}`);
 console.log(`   nguồn quay : ${BASE}`);
-console.log(`   cổng 2     : ${NO_AUDIENCE ? 'BỎ QUA' : 'bật'}`);
+// Cổng 2 CHỈ có trên đường tool-demo — xem chú thích ở nhánh dựng bên dưới.
+console.log(`   cổng 2     : ${NO_AUDIENCE ? 'BỎ QUA' : 'bật'} (chỉ áp cho tool-demo)`);
 console.log(`   ngân sách  : ${BUDGET_MIN} phút\n`);
 
 if (DRY) {
-  for (const t of tools) {
-    const mp4 = join(OUT_DIR, `${t}.mp4`);
-    console.log(`  ${t.padEnd(20)} ${existsSync(mp4) && !FORCE ? '⏭ đã có' : '→ sẽ dựng'}`);
+  for (const j of jobs) {
+    const mp4 = join(OUT_DIR, `${j.id}.mp4`);
+    console.log(
+      `  ${j.kind.padEnd(10)} ${j.id.padEnd(26)} ${existsSync(mp4) && !FORCE ? '⏭ đã có' : '→ sẽ dựng'}`
+    );
   }
   process.exit(0);
 }
@@ -140,7 +200,8 @@ if (DRY) {
 mkdirSync(OUT_DIR, { recursive: true });
 const results = [];
 
-for (const tool of tools) {
+for (const job of jobs) {
+  const tool = job.id;
   if (outOfTime()) {
     results.push({ tool, status: 'hoãn', note: 'hết ngân sách thời gian' });
     continue;
@@ -154,30 +215,42 @@ for (const tool of tools) {
 
   const t0 = Date.now();
   try {
-    console.log(`\n${'━'.repeat(60)}\n▶  ${tool}\n${'━'.repeat(60)}`);
+    console.log(`\n${'━'.repeat(60)}\n▶  ${tool}  [${job.kind}]\n${'━'.repeat(60)}`);
 
-    // 1. Quay màn hình (tự bỏ qua nếu đã có, trừ khi --force)
-    run('node', [
-      'scripts/record-tool-demo.mjs',
-      '--tool',
-      tool,
-      '--base',
-      BASE,
-      ...(FORCE ? ['--force'] : []),
-    ]);
-    if (!existsSync(join(REC_DIR, `${tool}.webm`))) {
-      throw new Error('quay xong nhưng không thấy file .webm');
+    if (job.kind === 'tool-demo') {
+      // 1. Quay màn hình (tự bỏ qua nếu đã có, trừ khi --force)
+      run('node', [
+        'scripts/record-tool-demo.mjs',
+        '--tool',
+        tool,
+        '--base',
+        BASE,
+        ...(FORCE ? ['--force'] : []),
+      ]);
+      if (!existsSync(join(REC_DIR, `${tool}.webm`))) {
+        throw new Error('quay xong nhưng không thấy file .webm');
+      }
+
+      // 2. Cổng kiểm → giọng đọc → render.
+      //    `--require-voice`: TTS hỏng thì DỪNG, không render bản không lời.
+      run('node', [
+        'scripts/gen-video.mjs',
+        '--tool',
+        tool,
+        '--require-voice',
+        ...(NO_AUDIENCE ? ['--no-audience'] : []),
+      ]);
+    } else {
+      // Clip insight: không quay gì, đi thẳng cổng 1 → giọng đọc → render.
+      //
+      // ⚠️ CỐ Ý KHÔNG truyền `--require-voice` và `--no-audience`:
+      //  · `gen-insight.mjs` LUÔN dừng khi TTS hỏng (không có nhánh fail-soft),
+      //    vì clip này thuần chữ + tiếng — một bản câm không còn gì để duyệt,
+      //    khác `gen-video` nơi vẫn xem được bố cục bản quay màn hình.
+      //  · Nó chưa có cổng 2. Truyền một cờ nó không đọc thì cờ bị bỏ qua IM
+      //    LẶNG, tạo cảm giác an toàn giả — đúng thứ nguy hiểm hơn là không có.
+      run('node', ['scripts/gen-insight.mjs', '--id', tool]);
     }
-
-    // 2. Cổng kiểm → giọng đọc → render.
-    //    `--require-voice`: TTS hỏng thì DỪNG, không render bản không lời.
-    run('node', [
-      'scripts/gen-video.mjs',
-      '--tool',
-      tool,
-      '--require-voice',
-      ...(NO_AUDIENCE ? ['--no-audience'] : []),
-    ]);
 
     // 3. Soi lại file. Bắt được: mất track hình, mất HẲN âm thanh, clip cụt.
     //    KHÔNG bắt được ca mất riêng lời đọc — xem chú thích đầu file.
@@ -187,14 +260,26 @@ for (const tool of tools) {
     if (info.seconds < 8)
       throw new Error(`clip chỉ ${info.seconds.toFixed(1)}s — quá ngắn, nghi hỏng`);
 
+    // 4. Trần dung lượng của bucket `clips` là 60MB. Clip insight có ảnh nền
+    //    (Ken Burns làm mọi khung hình khác nhau) nên nặng gấp ~3,5 lần clip
+    //    cùng độ dài không nền — đo thật: 88s ra 49,9MB ở CRF mặc định.
+    //    Cảnh báo SỚM ở đây, vì nếu để tới lúc nộp thì lỗi là một mã HTTP của
+    //    Storage, không nói gì về nguyên nhân.
+    const mb = info.bytes / 1e6;
+    if (mb > 55) {
+      console.warn(
+        `   ⚠️ ${mb.toFixed(1)}MB — sát trần 60MB của bucket. Hạ bằng --crf (26 ≈ giảm 72%).`
+      );
+    }
+
     results.push({
       tool,
       status: 'xong',
-      note: `${info.seconds.toFixed(1)}s · ${(info.bytes / 1e6).toFixed(1)}MB · ${((Date.now() - t0) / 1000).toFixed(0)}s dựng`,
+      note: `${info.seconds.toFixed(1)}s · ${mb.toFixed(1)}MB · ${((Date.now() - t0) / 1000).toFixed(0)}s dựng`,
     });
     console.log(`✓  ${tool} — ${info.seconds.toFixed(1)}s, có đủ hình và tiếng.`);
   } catch (e) {
-    // Hỏng một tool KHÔNG kéo cả loạt.
+    // Hỏng một clip KHÔNG kéo cả loạt.
     results.push({ tool, status: 'TRƯỢT', note: String(e.message).split('\n')[0].slice(0, 160) });
     console.error(`❌ ${tool} — ${e.message.split('\n')[0]}`);
   }
