@@ -65,6 +65,65 @@ khâu tự động (18 clip không lời vẫn "thành công" rồi ra hàng đ�
 
 ---
 
+## 📤 Đường clip ra kho — và KHÔNG đưa service key vào Actions (2026-08-15, PR này)
+
+Henry: *"Setup tiếp đi. Nhưng mà khoan hãy chạy gen clip nhé… tao muốn chỉnh sửa
+chiến lược làm nội dung chút xíu"*. Nên dựng ĐƯỜNG ỐNG, không dựng nội dung.
+
+### 🔴 ĐÍNH CHÍNH tiền đề của chính tôi: YouTube KHÔNG tắc
+Tôi định bỏ qua nhánh YouTube vì "token chết như đã ghi". Đo lại thì ngược:
+**3 video/ngày đang lên đều**, 22 video live từ 11/08, hôm nay vẫn chạy. 63 dòng
+`error` còn lại là **chữ lỗi CŨ** từ đợt hỏng tháng 7, và hàng đợi đang xả dần
+(~21 ngày nữa hết). ⇒ Clip mới phải có **LÀN RIÊNG**, chen vào hàng đó là clip
+nằm chờ ba tuần sau lưng 63 bài vấn đáp.
+
+### 🔐 Bỏ hẳn phương án đặt `SUPABASE_SERVICE_KEY` vào GitHub Actions
+Đó là khoá mở toang cả DB, đặt trong môi trường CI mà mọi workflow đều đọc được
+biến môi trường — và **khoá này đã phải xoay một lần vì lộ**. Thay bằng hàm edge
+**`clip-ingest`** giữ service key ở phía server; runner chỉ cầm
+`CLIP_INGEST_SECRET`, làm được đúng một việc là nộp clip, lộ thì tối đa là vài
+clip rác. ⇒ Quyết định treo bấy lâu (*"có nên đưa service key vào Actions không"*)
+nay **không cần trả lời nữa** — câu hỏi đã biến mất cùng thiết kế.
+
+### ⚠️ NỘP KHO ≠ XẾP HÀNG ĐĂNG — và đây là chốt chặn thật, không phải câu chữ
+`publishQueue` quét `media_posts` theo **TRẠNG THÁI**, KHÔNG lọc theo kênh: gặp
+`channel` chưa có adapter là đánh `error` cho cả lô ngay lượt cron kế tiếp. Nên
+`clip-ingest` chỉ ghi `media_assets`, **cố ý không tạo `media_posts`** — vừa
+đúng vì caption/kênh là quyết định nội dung Henry đang muốn sửa, vừa tránh tự
+tay làm hỏng hàng đợi.
+
+### 🪤 Body 4MB + nhánh TỪ CHỐI = treo 150 giây — và bản vá đầu của tôi VÔ DỤNG
+Đo: request bị từ chối mang body **100KB** → trả lời **0,7s**; cùng nhánh đó với
+**4MB** → **treo 150 giây rồi 504**. Tôi đoán là do hàm trả lời mà không đọc hết
+body, vá bằng `req.body.cancel()`, deploy lại, **đo lại: y nguyên**. Giả thuyết
+sai ⇒ **gỡ bản vá đi** thay vì để lại một đoạn mã kèm chú thích nói nó chữa được
+thứ nó không chữa.
+- Chốt đúng nằm ở **phía gửi**: hỏi `?ping=1` (body rỗng) soát khoá TRƯỚC rồi
+  mới nộp file. Đo lại: **150s treo → 0,7s kèm câu chỉ đúng chỗ phải sửa**.
+- Không có bước đó thì một secret sai = 18 clip × 150 giây, job hết giờ, và dòng
+  lỗi cuối cùng là một con số `504` chẳng chỉ vào đâu.
+
+### Verify
+`tsc` 0 · `lint` 0 lỗi / 77 warning = mốc nền · `prettier` cả cây sạch.
+- Bucket `clips` đã tạo (công khai, trần 60MB, **chỉ nhận `video/mp4`**), **0
+  policy cho anon/authenticated** — đọc qua URL công khai, ghi thì phải qua hàm.
+- Hàm `clip-ingest` **live v3**, `verify_jwt:false` (tự xác thực bằng header).
+  Đo trên bản đang chạy: không khoá → `missing_env` · khoá sai → cùng nhánh ·
+  `GET` → 405 · ping trả lời trong 0,7s.
+- Script: `--dry-run` liệt đúng 6 clip · thiếu secret → **bỏ qua CÓ BÁO, exit 0**
+  (không đánh hỏng lượt dựng) · khoá sai → **exit 1 trong 1 giây** kèm hướng dẫn.
+
+### CÒN LẠI
+- ⚠️ **Đường nộp THÀNH CÔNG chưa chạy được lượt nào** — tôi không đặt được
+  secret Supabase từ đây. Mới chứng minh được các nhánh TỪ CHỐI. Lượt nộp thật
+  đầu tiên là phép thử thật; chỗ đáng nhìn nếu hỏng là bước ghi Storage.
+- **Việc tay Henry:** đặt `CLIP_INGEST_SECRET` ở CẢ HAI nơi (Supabase → Edge
+  Functions → clip-ingest → Secrets; GitHub → Settings → Secrets → Actions).
+- **Chưa có adapter TikTok/Reels**, và Facebook thì 33 bài vẫn kẹt từ 02/08 vì
+  token hết hạn. Khâu xếp hàng đăng chờ Henry chốt chiến lược nội dung.
+
+---
+
 ## 🎬 18/18 công cụ miễn phí có kịch bản clip + công thức quay (2026-08-15, PR này)
 
 Henry: *"Bây giờ làm batch demo sản phẩm"* → chốt làm hạ tầng Actions trước

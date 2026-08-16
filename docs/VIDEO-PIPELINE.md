@@ -82,6 +82,67 @@ tự động hàng loạt thì đó là cách hỏng tệ nhất: 18 clip câm v
 và vẫn đi tiếp ra hàng đợi đăng. Nên `build-video-batch.mjs` đọc lại mp4 và bắt
 buộc có **cả track hình lẫn track tiếng**, dài ≥8 giây.
 
+## 📤 Nộp clip lên kho — `scripts/publish-clips.mjs`
+
+Clip render ở Actions chỉ nằm trong *artifact*, mà artifact **hết hạn sau 14
+ngày**. Bước này đẩy `remotion/out/*.mp4` lên Supabase Storage (bucket `clips`,
+công khai) rồi ghi một dòng `media_assets`.
+
+```bash
+node scripts/publish-clips.mjs --dry-run     # chỉ in kế hoạch
+node scripts/publish-clips.mjs               # nộp mọi clip trong out/
+node scripts/publish-clips.mjs --tools kim-lau
+```
+
+### 🔐 KHÔNG đặt `SUPABASE_SERVICE_KEY` vào GitHub Actions
+
+Đi qua hàm edge **`clip-ingest`** (`_patches/edge-clip-ingest.deno.ts`), hàm
+này giữ service key ở phía server. Runner chỉ cầm **`CLIP_INGEST_SECRET`** —
+làm được đúng một việc là nộp clip, xoay lại bằng một dòng, và nếu lộ thì thiệt
+hại tối đa là vài clip rác trong kho. Service key thì mở toang cả DB, và **đã
+phải xoay một lần vì lộ**.
+
+| Nơi đặt | Khoá |
+|---|---|
+| Supabase → Edge Functions → clip-ingest → Secrets | `CLIP_INGEST_SECRET` |
+| GitHub → Settings → Secrets → Actions | `CLIP_INGEST_SECRET` |
+
+Chưa khai thì bước nộp **tự bỏ qua CÓ BÁO** (không đánh hỏng cả lượt dựng) —
+clip vẫn tải về được ở mục Artifacts.
+
+### ⚠️ NỘP KHO ≠ XẾP HÀNG ĐĂNG
+
+Script này **cố ý không tạo dòng `media_posts`**. Hai lý do:
+
+1. Biến một clip thành bài đăng là quyết định NỘI DUNG (caption, hashtag, kênh
+   nào trước) — phải có người chốt.
+2. `publishQueue` quét theo **TRẠNG THÁI**, không lọc theo kênh. Chèn vào đó với
+   một `channel` chưa có adapter là nó đánh `error` cho cả lô ngay lượt cron kế
+   tiếp — tự tay làm hỏng hàng đợi của chính mình.
+
+### 🪤 Body lớn + nhánh TỪ CHỐI = treo 150 giây, không phải lỗi của bạn
+
+Đo trên hàm đã deploy: request bị từ chối mà mang body **100KB** trả lời trong
+**0,7s**; cùng nhánh đó với body **4MB** thì **treo 150 giây rồi 504**. Đã thử
+huỷ luồng body ngay trong hàm (`req.body.cancel()`) — **không ăn thua**, đây là
+hành vi của cổng Supabase chứ không sửa được từ bên trong.
+
+⇒ Chốt nằm ở phía gửi: script hỏi `?ping=1` (body rỗng) để **soát khoá trước**,
+rồi mới nộp file. Không có bước đó thì một secret sai trong Actions = 18 clip ×
+150 giây treo, job hết giờ, và dòng lỗi cuối cùng là một con số `504` chẳng chỉ
+vào đâu.
+
+## Đường ra kênh — trạng thái thật
+
+| Chặng | Trạng thái |
+|---|---|
+| Dựng clip (Actions) | ✅ chạy được |
+| Nộp kho (Storage + `media_assets`) | ✅ dựng xong, **chờ khai secret** |
+| Xếp hàng đăng (`media_posts`) | ⏸️ cố ý chưa làm — chờ chốt chiến lược nội dung |
+| YouTube | ✅ đường ĐANG CHẢY, nhưng cho `van_dap`: 3 video/ngày, còn 63 trong kho (~21 ngày). Clip cần **làn riêng**, đừng chen vào hàng đó |
+| Facebook | ⚠️ adapter có, nhưng 33 bài kẹt từ 02/08 vì token hết hạn |
+| TikTok · Reels | ❌ chưa có adapter |
+
 ### Khoá (secret) — không khai thì vẫn chạy, chỉ kém đi
 
 | Secret | Thiếu thì sao |
@@ -89,6 +150,7 @@ buộc có **cả track hình lẫn track tiếng**, dài ≥8 giây.
 | `GEMINI_API_KEY` **hoặc** `ANTHROPIC_API_KEY` | tự chạy `--no-audience` **và in cảnh báo** lên trang chạy — bỏ qua cổng 2 chứ không im lặng |
 | `SUPABASE_ANON_KEY` · `SUPABASE_URL` | dùng anon key công khai nằm sẵn trong mã client (không phải bí mật) |
 | `CLIP_TTS_SECRET` | chỉ cần nếu sau này siết hàm edge TTS |
+| `CLIP_INGEST_SECRET` | **bỏ qua bước nộp kho** kèm cảnh báo trên trang chạy — clip chỉ còn trong artifact, mất sau 14 ngày |
 
 **💰 Cache giọng đọc** là bước đáng giá nhất: TTS là khoản chi phí **biến đổi duy
 nhất** (nhạc · quay · render · cổng 1 đều 0đ). Tên file mp3 chính là băm của

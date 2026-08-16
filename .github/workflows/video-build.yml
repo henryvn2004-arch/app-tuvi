@@ -116,6 +116,20 @@ jobs:
           fi
           node scripts/build-video-batch.mjs "${ARGS[@]}" --base "$IN_BASE"
 
+      # 📤 Nộp clip lên kho (Storage + `media_assets`) để nó sống lâu hơn 14
+      # ngày artifact. Đi qua hàm edge `clip-ingest` nên runner chỉ cầm một
+      # khoá HẸP, KHÔNG cầm `SUPABASE_SERVICE_KEY` (khoá đó đã phải xoay một
+      # lần vì lộ) — xem `_patches/edge-clip-ingest.deno.ts`.
+      #
+      # `if: always()`: bước dựng trượt một tool vẫn còn mấy clip khác dùng
+      # được. Chưa khai secret thì script tự bỏ qua CÓ BÁO chứ không hỏng job.
+      - name: Nộp clip lên kho
+        if: always()
+        env:
+          CLIP_INGEST_SECRET: ${{ secrets.CLIP_INGEST_SECRET }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+        run: node scripts/publish-clips.mjs
+
       # Luôn tải lên, kể cả khi có tool trượt — mấy clip đã dựng xong vẫn dùng được.
       - name: Tải clip lên artifact
         if: always()
