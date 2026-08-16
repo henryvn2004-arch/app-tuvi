@@ -282,15 +282,54 @@ function _rememberAuthReturn() {
   try { if (!localStorage.getItem('auth_return_to')) localStorage.setItem('auth_return_to', window.location.pathname + window.location.search); } catch (e) {}
 }
 
+/**
+ * Nạp `/promo.js` theo lối LƯỜI.
+ *
+ * `auth.js` nằm trên ~89 trang, còn ô nhập mã chỉ có nghĩa ở đúng hai lúc:
+ * modal đăng ký mở ra, hoặc URL mang sẵn `?promo=`. Nạp ở đây thay vì thêm
+ * thẻ script vào 89 file — 89 chỗ để quên là 89 chỗ mã lặng lẽ không ăn, đúng
+ * lỗi `referral.js` đã dính khi bị chép inline 2 bản.
+ */
+function _ensurePromoJs() {
+  if (window.Promo || document.getElementById('tvmb-promo-js')) return;
+  const s = document.createElement('script');
+  s.id = 'tvmb-promo-js';
+  s.src = '/promo.js?v=1';
+  s.async = true;
+  (document.head || document.documentElement).appendChild(s);
+}
+try {
+  // Đáp trang bằng link mang mã → nạp ngay để `capture()` nhặt được trước khi
+  // người dùng điều hướng đi chỗ khác (nhặt xong nó dọn luôn khỏi thanh địa chỉ).
+  if (typeof location !== 'undefined' && /[?&]promo=/i.test(location.search)) _ensurePromoJs();
+} catch (e) { /* ignore */ }
+
+/**
+ * Cất mã khuyến mãi đang gõ vào sessionStorage TRƯỚC khi rời trang.
+ *
+ * Phải gọi ở CẢ đường email lẫn đường OAuth: đổi mã cần Authorization token,
+ * mà lúc bấm nút thì chưa có token nào. `promo.js` sẽ đổi ngay khi bắt được
+ * `SIGNED_IN`. Đường OAuth đi qua `/auth-callback.html` — cùng tab, cùng
+ * origin, nên sessionStorage sống qua được lượt chuyển trang đó.
+ */
+function _stashPromoCode() {
+  try {
+    const el = document.getElementById('auth-promo');
+    if (el && el.value.trim() && window.Promo) window.Promo.setPending(el.value);
+  } catch (e) { /* ignore */ }
+}
+
 // ── Sign In with Google OAuth ──
 async function signInGoogle() {
   _rememberAuthReturn();
+  _stashPromoCode();
   const redirectTo = encodeURIComponent(window.location.origin + '/auth-callback.html');
   window.location.href = `${SUPA_URL}/auth/v1/authorize?provider=google&redirect_to=${redirectTo}`;
 }
 
 async function signInFacebook() {
   _rememberAuthReturn();
+  _stashPromoCode();
   const redirectTo = encodeURIComponent(window.location.origin + '/auth-callback.html');
   window.location.href = `${SUPA_URL}/auth/v1/authorize?provider=facebook&redirect_to=${redirectTo}`;
 }
@@ -410,8 +449,10 @@ let _pendingCallback = null;
 
 function showAuthModal(callback) {
   _pendingCallback = callback;
+  _ensurePromoJs();
   if (document.getElementById('auth-modal')) {
     document.getElementById('auth-modal').style.display = 'flex';
+    _prefillPromo();
     return;
   }
 
@@ -454,6 +495,12 @@ function showAuthModal(callback) {
       <div id="auth-form">
         <input id="auth-email" type="email" placeholder="Email" style="width:100%;padding:10px 14px;border:1.5px solid #ddd;border-radius:8px;font-size:14px;font-family:inherit;margin-bottom:10px;outline:none;transition:border-color 0.15s" onfocus="this.style.borderColor='#061A2E'" onblur="this.style.borderColor='#ddd'">
         <input id="auth-password" type="password" placeholder="Mật khẩu (ít nhất 6 ký tự)" style="width:100%;padding:10px 14px;border:1.5px solid #ddd;border-radius:8px;font-size:14px;font-family:inherit;margin-bottom:10px;outline:none;transition:border-color 0.15s" onfocus="this.style.borderColor='#061A2E'" onblur="this.style.borderColor='#ddd'" onkeydown="if(event.key==='Enter')submitAuth()">
+        <!-- Ô mã khuyến mãi: CHỈ hiện ở tab Đăng ký (switchTab bật/tắt).
+             Ở tab Đăng nhập nó vô nghĩa và chỉ làm form dài thêm. -->
+        <div id="auth-promo-wrap" style="display:none;margin-bottom:10px">
+          <input id="auth-promo" type="text" placeholder="Mã khuyến mãi (nếu có)" autocapitalize="characters" autocomplete="off" spellcheck="false" style="width:100%;padding:10px 14px;border:1.5px dashed #c9a84c;border-radius:8px;font-size:14px;font-family:inherit;outline:none;text-transform:uppercase;transition:border-color 0.15s" onfocus="this.style.borderColor='#061A2E'" onblur="this.style.borderColor='#c9a84c'" oninput="_promoPeek()" onkeydown="if(event.key==='Enter')submitAuth()">
+          <div id="auth-promo-hint" style="font-size:11.5px;color:#1E6B3C;margin-top:5px;display:none"></div>
+        </div>
         <div id="auth-error" style="color:#C0392B;font-size:12px;margin-bottom:8px;display:none"></div>
         <button id="auth-submit" onclick="submitAuth()" style="width:100%;padding:11px;background:#061A2E;color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;transition:background 0.15s" onmouseover="this.style.background='#0D3B5E'" onmouseout="this.style.background='#061A2E'">Đăng nhập</button>
       </div>
@@ -464,6 +511,26 @@ function showAuthModal(callback) {
   document.body.appendChild(modal);
   modal.addEventListener('click', e => { if (e.target === modal) closeAuthModal(); });
   setTimeout(() => document.getElementById('auth-email')?.focus(), 100);
+  _prefillPromo();
+}
+
+/**
+ * Điền sẵn mã nếu người dùng đáp trang bằng link `?promo=…` — và MỞ THẲNG tab
+ * Đăng ký. Họ tới đây vì cái mã, bắt gõ lại là một bước rơi vô cớ.
+ * `promo.js` nạp bất đồng bộ nên thử lại một nhịp khi nó chưa kịp có mặt.
+ */
+function _prefillPromo(retry) {
+  if (!window.Promo) {
+    if (!retry) setTimeout(() => _prefillPromo(true), 400);
+    return;
+  }
+  const code = window.Promo.pendingCode();
+  if (!code) return;
+  const el = document.getElementById('auth-promo');
+  if (!el || el.value.trim()) return;   // đang gõ dở thì không đè lên
+  el.value = code;
+  if (_currentTab !== 'signup') switchTab('signup');
+  _promoPeek();
 }
 
 function closeAuthModal() {
@@ -487,7 +554,40 @@ function switchTab(tab) {
     si.style.cssText += ';color:#aaa;border-bottom:none';
     btn.textContent = 'Tạo tài khoản';
   }
+  const pw = document.getElementById('auth-promo-wrap');
+  if (pw) pw.style.display = tab === 'signup' ? 'block' : 'none';
   document.getElementById('auth-error').style.display = 'none';
+}
+
+// ── Mã khuyến mãi trong modal đăng ký ──
+// Người xem clip TikTok nghe "nhập mã TUVIMINHBAO" rồi gõ vào đây. Ô này KHÔNG
+// tự đổi mã — nó chỉ NHỚ mã lại; `promo.js` đổi sau khi phiên đăng nhập đã có
+// token thật (đổi mã cần Authorization, mà lúc bấm nút thì chưa có).
+let _promoPeekTimer = null;
+function _promoPeek() {
+  const el = document.getElementById('auth-promo');
+  const hint = document.getElementById('auth-promo-hint');
+  if (!el || !hint) return;
+  const code = el.value.toUpperCase().trim();
+  clearTimeout(_promoPeekTimer);
+  if (!window.Promo || !window.Promo.CODE_RE.test(code)) { hint.style.display = 'none'; return; }
+  // Chờ người ta gõ xong mới hỏi — gõ 11 ký tự mà bắn 11 lượt mạng là phí.
+  _promoPeekTimer = setTimeout(() => {
+    window.Promo.info(code).then((d) => {
+      // Số Lượng lấy TỪ SERVER, không viết cứng ở đây. Xem `promo.js#info`.
+      if (d && d.found && d.live) {
+        hint.textContent = `✓ Mã hợp lệ — tặng ${d.credits} Lượng khi tạo tài khoản.`;
+        hint.style.color = '#1E6B3C';
+      } else if (d && d.found) {
+        hint.textContent = 'Mã này đã hết hạn hoặc hết lượt.';
+        hint.style.color = '#C0392B';
+      } else {
+        hint.style.display = 'none';
+        return;
+      }
+      hint.style.display = 'block';
+    });
+  }, 450);
 }
 
 async function submitAuth() {
@@ -501,6 +601,10 @@ async function submitAuth() {
 
   btn.textContent = '...'; btn.disabled = true;
   errEl.style.display = 'none';
+
+  // Cất mã TRƯỚC khi gọi mạng: nếu đăng ký thành công thì `promo.js` bắt
+  // `SIGNED_IN` và đổi ngay; nếu hỏng thì mã vẫn còn đó cho lượt sau.
+  if (_currentTab === 'signup') _stashPromoCode();
 
   try {
     if (_currentTab === 'signin') {

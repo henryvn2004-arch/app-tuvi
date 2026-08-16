@@ -1307,6 +1307,8 @@ export async function GET(request: NextRequest) {
   if (action === 'balance')      return handleBalance(searchParams);
   if (action === 'check')        return handleCheck(searchParams);
   if (action === 'signup-bonus') return handleSignupBonus();
+  if (action === 'promo-info')   return handlePromoInfo(searchParams);
+  if (action === 'admin-promo-list') return handleAdminPromoList(request);
   if (action === 'admin-users')  return handleAdminUsers(request, searchParams);
   if (action === 'admin-users-list') return handleAdminUsersList(request);
   if (action === 'admin-login-attempts') return handleAdminLoginAttempts(request);
@@ -2376,10 +2378,189 @@ async function handleReferralRegister(request: NextRequest, body: Record<string,
   } catch (e: unknown) { return err((e as Error).message); }
 }
 
+// ── MÃ KHUYẾN MÃI ──────────────────────────────────────────────
+// Đường phát tiền, nên mọi chốt chặn nằm dưới DB (`promo_code_redeem`): trần
+// mỗi lượt, trần tổng lượt, hạn dùng, tuổi tài khoản, và chống-đổi-hai-lần
+// bằng KHOÁ CHÍNH. Tầng này chỉ làm hai việc: xác thực người gọi và dịch mã
+// lý do sang câu người đọc hiểu được.
+//
+// ⚠️ CỐ Ý không tự kiểm gì thêm ở đây. Kiểm ở hai tầng thì hai tầng sẽ trôi
+// khỏi nhau — đúng lớp lỗi đã trả giá nhiều lần trong repo này.
+
+/** Mã lý do từ RPC → câu cho người dùng. Không rò chi tiết cấu hình ra ngoài. */
+const PROMO_REASONS: Record<string, string> = {
+  not_found: 'Mã không đúng. Kiểm tra lại giúp bạn nhé.',
+  disabled: 'Mã này đã ngừng áp dụng.',
+  expired: 'Mã này đã hết hạn.',
+  exhausted: 'Mã đã hết lượt. Cảm ơn bạn đã quan tâm!',
+  already_redeemed: 'Tài khoản của bạn đã dùng mã khuyến mãi rồi — mỗi tài khoản chỉ dùng được một lần.',
+  account_too_old: 'Mã này chỉ dành cho tài khoản mới đăng ký.',
+  need_oauth: 'Mã này chỉ áp dụng cho tài khoản đăng nhập bằng Google hoặc Facebook.',
+  invalid_input: 'Mã không hợp lệ.',
+};
+
+/**
+ * Thông tin CÔNG KHAI của một mã: còn dùng được không, tặng bao nhiêu Lượng.
+ *
+ * Dùng để ô nhập mã nói được "mã này tặng 100 Lượng" TRƯỚC khi người ta bấm —
+ * và quan trọng hơn, để con số hiện ra luôn khớp DB. Viết cứng "100 Lượng"
+ * trên giao diện là đúng lớp lỗi `check:prices` sinh ra để chặn: một con số CŨ
+ * nguy hiểm hơn hẳn một ô đang tải, vì người ta TIN nó.
+ */
+async function handlePromoInfo(sp: URLSearchParams): Promise<Response> {
+  const code = (sp.get('code') || '').toUpperCase().trim();
+  if (!code || code.length > 40) return ok({ found: false });
+  try {
+    const res = await fetch(
+      `${SUPABASE_URL}/rest/v1/promo_codes?code=eq.${encodeURIComponent(code)}&select=code,credits,enabled,max_uses,used_count,expires_at&limit=1`,
+      { cache: 'no-store', headers: SB_HEADERS }
+    );
+    const rows = res.ok ? await res.json() : [];
+    const r = rows[0];
+    if (!r) return ok({ found: false });
+    const live =
+      r.enabled === true &&
+      (!r.expires_at || Date.parse(r.expires_at) > Date.now()) &&
+      (r.max_uses === null || r.used_count < r.max_uses);
+    // KHÔNG trả `used_count`/`max_uses` ra ngoài — đó là ngân sách nội bộ.
+    return ok({ found: true, code: r.code, credits: r.credits, live });
+  } catch { return ok({ found: false }); }
+}
+
+async function handleAdminPromoList(request: NextRequest): Promise<Response> {
+  const token = (request.headers.get('Authorization') || '').replace('Bearer ', '').trim();
+  const admin = await verifyAdmin(token);
+  if (!admin) return err('Unauthorized — admin only', 403);
+  try {
+    const [codesRes, redRes] = await Promise.all([
+      fetch(`${SUPABASE_URL}/rest/v1/promo_codes?select=*&order=created_at.desc`, {
+        cache: 'no-store', headers: SB_HEADERS,
+      }),
+      fetch(
+        `${SUPABASE_URL}/rest/v1/promo_redemptions?select=code,credits_granted,redeemed_at&order=redeemed_at.desc&limit=50`,
+        { cache: 'no-store', headers: SB_HEADERS }
+      ),
+    ]);
+    const codes = codesRes.ok ? await codesRes.json() : [];
+    const recent = redRes.ok ? await redRes.json() : [];
+    const granted = (codes as Array<{ credits: number; used_count: number }>).reduce(
+      (s, c) => s + (Number(c.credits) || 0) * (Number(c.used_count) || 0), 0
+    );
+    return ok({ codes, recent, grantedCredits: granted, maxCreditsPerCode: 1000 });
+  } catch (e: unknown) { return err((e as Error).message); }
+}
+
+async function handlePromoRedeem(request: NextRequest, body: Record<string, unknown>): Promise<Response> {
+  const token = (request.headers.get('Authorization') || '').replace('Bearer ', '').trim();
+  if (!token) return err('Missing Authorization token', 401);
+
+  // Chỉ chặn ca vô lý rõ ràng (rỗng / dài bất thường) để khỏi gửi rác xuống DB.
+  // KHÔNG kiểm độ dài cố định như referral (8 ký tự): mã khuyến mãi do người
+  // đặt tên, `TUVIMINHBAO` đã 11 ký tự.
+  const code = String(body.code || '').toUpperCase().trim();
+  if (!code || code.length > 40) return err('Mã không hợp lệ', 400);
+
+  try {
+    const user = await getUserFromToken(token);
+    if (!user) return err('Invalid token', 401);
+
+    const rows = (await rpcSafe('promo_code_redeem', { p_user_id: user.id, p_code: code })) as Array<{
+      ok: boolean; reason: string; credits: number; code: string;
+    }>;
+    // `rpcSafe` nuốt lỗi thành mảng rỗng. Ở đường phát tiền thì im lặng là tệ
+    // nhất: người dùng gõ đúng mã mà không có gì xảy ra. Nói thẳng là hỏng.
+    if (!rows.length) return err('Không đổi được mã lúc này, thử lại sau giúp bạn.', 503);
+
+    const r = rows[0];
+    if (!r.ok) {
+      return ok({
+        success: false,
+        reason: r.reason,
+        message: PROMO_REASONS[r.reason] || 'Không đổi được mã này.',
+        balance: await getBalance(user.id),
+      });
+    }
+
+    void logEvent({
+      event_type: 'promo_redeem',
+      user_id: user.id,
+      meta: { code: r.code, credits: r.credits },
+    });
+
+    return ok({
+      success: true,
+      code: r.code,
+      credits: r.credits,
+      balance: await getBalance(user.id),
+      message: `Đã cộng ${r.credits} Lượng vào tài khoản của bạn!`,
+    });
+  } catch (e: unknown) { return err((e as Error).message); }
+}
+
+/** Thêm/sửa một mã. Admin only. */
+async function handleAdminPromoCode(request: NextRequest, body: Record<string, unknown>): Promise<Response> {
+  const token = (request.headers.get('Authorization') || '').replace('Bearer ', '').trim();
+  const admin = await verifyAdmin(token);
+  if (!admin) return err('Unauthorized — admin only', 403);
+
+  const code = String(body.code || '').toUpperCase().trim();
+  if (!code || !/^[A-Z0-9_-]{3,40}$/.test(code)) {
+    return err('Mã chỉ gồm chữ HOA, số, gạch ngang/dưới; 3–40 ký tự', 400);
+  }
+  if (body.remove === true) {
+    // Xoá thì phải để FK của `promo_redemptions` (on delete restrict) chặn —
+    // mã đã có người đổi thì xoá là mất dấu vết một khoản đã phát.
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/promo_codes?code=eq.${encodeURIComponent(code)}`, {
+      method: 'DELETE', headers: SB_HEADERS,
+    });
+    if (!res.ok) {
+      return err('Không xoá được — nhiều khả năng mã đã có người đổi. Hãy TẮT mã thay vì xoá.', 400);
+    }
+    return ok({ success: true, removed: code });
+  }
+
+  const credits = Number(body.credits);
+  if (!Number.isInteger(credits) || credits < 0 || credits > 1000) {
+    // Cùng trần với `PROMO_MAX_CREDITS` trong RPC. Kiểm ở đây để admin nhận câu
+    // lỗi đọc được, thay vì một exception Postgres thô.
+    return err('Số Lượng phải là số nguyên 0–1000', 400);
+  }
+  const row: Record<string, unknown> = {
+    code,
+    credits,
+    enabled: body.enabled !== false,
+    max_uses: body.maxUses === null || body.maxUses === '' ? null : Number(body.maxUses),
+    new_account_days:
+      body.newAccountDays === null || body.newAccountDays === '' ? null : Number(body.newAccountDays),
+    // Mặc định BẬT khi client không gửi — đây là chốt chống lạm dụng chính,
+    // không được lặng lẽ tắt chỉ vì thiếu một trường trong payload.
+    require_oauth: body.requireOauth !== false,
+    expires_at: body.expiresAt ? String(body.expiresAt) : null,
+    note: String(body.note || '').slice(0, 300) || null,
+    updated_at: new Date().toISOString(),
+  };
+  if (row.max_uses !== null && !Number.isInteger(row.max_uses as number)) return err('Trần lượt không hợp lệ', 400);
+  if (row.new_account_days !== null && !Number.isInteger(row.new_account_days as number)) {
+    return err('Số ngày không hợp lệ', 400);
+  }
+
+  // ⚠️ KHÔNG đụng `used_count` — nó là số đếm THẬT, sửa tay là mất khả năng đối
+  // soát ngân sách đã phát.
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/promo_codes?on_conflict=code`, {
+    method: 'POST',
+    headers: { ...SB_HEADERS, Prefer: 'resolution=merge-duplicates,return=representation' },
+    body: JSON.stringify(row),
+  });
+  if (!res.ok) return err('Lưu hỏng: ' + (await res.text()).slice(0, 200), 400);
+  return ok({ success: true, code });
+}
+
 export async function POST(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const action = searchParams.get('action');
   const body   = await parseBody(request);
+  if (action === 'promo-redeem')      return handlePromoRedeem(request, body);
+  if (action === 'admin-promo-code')  return handleAdminPromoCode(request, body);
   if (action === 'topup')             return handleTopup(body);
   if (action === 'capture')           return handleCapture(body);
   if (action === 'deduct')            return handleDeduct(request, body);

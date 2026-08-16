@@ -5,6 +5,355 @@
 
 ---
 
+## 🏭 Khâu dựng clip lên GitHub Actions — và một phép kiểm TÔI ĐẶT TÊN SAI (2026-08-15, PR này)
+
+Henry hỏi chạy pipeline ở đâu: session Claude Code, routine, hay dựng hẳn hạ
+tầng. Chốt **GitHub Actions**, sau khi loại từng cái bằng lý do cụ thể:
+
+| Chỗ | Vì sao không |
+|---|---|
+| Vercel cron | hàm trần **300 giây**, một clip render ~4 phút; và không có Chromium |
+| Session Claude Code | ephemeral, và container **KHÔNG cho Chromium ra Internet** (`curl` thì được) |
+| **Actions** ✅ | repo **đã** chạy Playwright + Chromium ở đây, có CPU, artifact tải về được |
+
+- **Logic ở `scripts/build-video-batch.mjs`, YAML chỉ gọi nó.** Cùng một lệnh
+  phải chạy được ở máy Henry lúc cần dựng gấp; YAML thì chỉ CI chạy được và
+  mỗi lần sửa phải push mới biết đúng sai.
+- Bốn tính chất chép từ `yt-drain`: tuần tự · hỏng một tool không kéo cả loạt ·
+  ngân sách thời gian dừng giữa hai tool · nối lại được.
+- ⚠️ **CỐ Ý chưa có `schedule`** — chạy hằng ngày chỉ có nghĩa khi đã đủ kịch
+  bản nhiều tool VÀ đã nối đường đăng bài. Bật lịch lúc mới có 1 kịch bản là
+  mỗi sáng dựng lại đúng một clip đã có.
+- **💰 Cache giọng đọc** là bước đáng giá nhất: TTS là khoản biến đổi DUY NHẤT
+  (nhạc · quay · render · cổng 1 đều 0đ; đo được **511 ký tự / 7 lượt** mỗi
+  clip). Tên mp3 chính là băm của (chữ+giọng+tốc độ) nên cache thư mục an toàn
+  tuyệt đối. Không có nó thì mỗi lượt 18 clip đốt lại **126 lượt TTS**.
+
+### 🔴 Phép kiểm tôi viết ra KHÔNG kiểm đúng thứ nó mang tên
+Tôi thêm bước soi mp4 và gọi nó là *"bắt clip câm"* — kiểm `hasAudio`. Đo thật
+thì bản `--no-voice` **VẪN có `audio aac 2ch 48000Hz`, 41,4s**: nhạc nền vẫn
+render nên track tiếng vẫn có. Tức phép kiểm luôn XANH kể cả khi mất sạch lời
+đọc — đúng loại xanh-oan nguy hiểm nhất, và nó đứng gác cho ca hỏng tệ nhất của
+khâu tự động (18 clip không lời vẫn "thành công" rồi ra hàng đợi đăng).
+- 🔑 Chốt phải nằm ở **lúc biết TTS hỏng**, không nằm ở khâu soi file phía sau.
+  Thêm `--require-voice` cho `gen-video.mjs`; batch LUÔN truyền cờ đó.
+- **Vì sao không bỏ luôn fail-soft:** hai lối dùng cần hai hành vi ngược nhau —
+  chạy TAY thì mất khoá TTS vẫn nên render để duyệt bố cục; chạy TỰ ĐỘNG thì
+  không. Cờ chọn hành vi, không phải đổi mặc định.
+- 🔑 Bài học đặt tên: **gọi phép kiểm theo điều nó THỰC SỰ đo, không theo điều
+  mình muốn nó đo.** Cùng lỗi đã ghi ở track `huong-nghiep-tre` (*"bài kiểm đặt
+  tên theo điều muốn chứng minh"*), vấp lại.
+
+### Verify
+`lint` 0 lỗi / 77 warning = mốc nền · `prettier` cả cây sạch · YAML parse được ·
+`node --check` cả hai script.
+- **3 ca trên `--require-voice`**: TTS hỏng (ép `SUPABASE_URL` sai) → **exit 1,
+  không render** · **ĐỐI CHỨNG** bỏ cờ đi thì fail-soft y như cũ · `--no-voice`
+  + `--require-voice` → từ chối vì loại trừ nhau.
+- **Chèn lệnh qua ô nhập workflow**: chạy chính đoạn shell đó với
+  `IN_TOOLS='a; touch /tmp/PWNED'` → chuỗi giữ nguyên làm MỘT tham số, không
+  tạo file. (Ô nhập đi qua `env:` chứ không nội suy `${{ }}` thẳng vào `run`.)
+
+### CÒN LẠI
+- **Chưa chạy thật một lượt trên Actions** — workflow mới, chỉ verify được YAML
+  + logic shell tại chỗ. Lượt bấm đầu tiên là phép thử thật.
+- **Chỉ 1/18 tool có đủ công thức quay + kịch bản.** Batch tự lọc theo giao của
+  hai danh sách nên không gãy, nhưng `--all` hiện chỉ ra một clip.
+- **Chưa nối đường đăng bài.** Clip mới nằm ở artifact; muốn YouTube tự đăng thì
+  phải đẩy lên Supabase Storage cho `yt-drain` lấy — cần `SUPABASE_SERVICE_KEY`
+  trong Actions, và đó là quyết định của Henry (key này đã phải rotate một lần).
+
+---
+
+## 📤 Đường clip ra kho — và KHÔNG đưa service key vào Actions (2026-08-15, PR này)
+
+Henry: *"Setup tiếp đi. Nhưng mà khoan hãy chạy gen clip nhé… tao muốn chỉnh sửa
+chiến lược làm nội dung chút xíu"*. Nên dựng ĐƯỜNG ỐNG, không dựng nội dung.
+
+### 🔴 ĐÍNH CHÍNH tiền đề của chính tôi: YouTube KHÔNG tắc
+Tôi định bỏ qua nhánh YouTube vì "token chết như đã ghi". Đo lại thì ngược:
+**3 video/ngày đang lên đều**, 22 video live từ 11/08, hôm nay vẫn chạy. 63 dòng
+`error` còn lại là **chữ lỗi CŨ** từ đợt hỏng tháng 7, và hàng đợi đang xả dần
+(~21 ngày nữa hết). ⇒ Clip mới phải có **LÀN RIÊNG**, chen vào hàng đó là clip
+nằm chờ ba tuần sau lưng 63 bài vấn đáp.
+
+### 🔐 Bỏ hẳn phương án đặt `SUPABASE_SERVICE_KEY` vào GitHub Actions
+Đó là khoá mở toang cả DB, đặt trong môi trường CI mà mọi workflow đều đọc được
+biến môi trường — và **khoá này đã phải xoay một lần vì lộ**. Thay bằng hàm edge
+**`clip-ingest`** giữ service key ở phía server; runner chỉ cầm
+`CLIP_INGEST_SECRET`, làm được đúng một việc là nộp clip, lộ thì tối đa là vài
+clip rác. ⇒ Quyết định treo bấy lâu (*"có nên đưa service key vào Actions không"*)
+nay **không cần trả lời nữa** — câu hỏi đã biến mất cùng thiết kế.
+
+### ⚠️ NỘP KHO ≠ XẾP HÀNG ĐĂNG — và đây là chốt chặn thật, không phải câu chữ
+`publishQueue` quét `media_posts` theo **TRẠNG THÁI**, KHÔNG lọc theo kênh: gặp
+`channel` chưa có adapter là đánh `error` cho cả lô ngay lượt cron kế tiếp. Nên
+`clip-ingest` chỉ ghi `media_assets`, **cố ý không tạo `media_posts`** — vừa
+đúng vì caption/kênh là quyết định nội dung Henry đang muốn sửa, vừa tránh tự
+tay làm hỏng hàng đợi.
+
+### 🪤 Body 4MB + nhánh TỪ CHỐI = treo 150 giây — và bản vá đầu của tôi VÔ DỤNG
+Đo: request bị từ chối mang body **100KB** → trả lời **0,7s**; cùng nhánh đó với
+**4MB** → **treo 150 giây rồi 504**. Tôi đoán là do hàm trả lời mà không đọc hết
+body, vá bằng `req.body.cancel()`, deploy lại, **đo lại: y nguyên**. Giả thuyết
+sai ⇒ **gỡ bản vá đi** thay vì để lại một đoạn mã kèm chú thích nói nó chữa được
+thứ nó không chữa.
+- Chốt đúng nằm ở **phía gửi**: hỏi `?ping=1` (body rỗng) soát khoá TRƯỚC rồi
+  mới nộp file. Đo lại: **150s treo → 0,7s kèm câu chỉ đúng chỗ phải sửa**.
+- Không có bước đó thì một secret sai = 18 clip × 150 giây, job hết giờ, và dòng
+  lỗi cuối cùng là một con số `504` chẳng chỉ vào đâu.
+
+### Verify
+`tsc` 0 · `lint` 0 lỗi / 77 warning = mốc nền · `prettier` cả cây sạch.
+- Bucket `clips` đã tạo (công khai, trần 60MB, **chỉ nhận `video/mp4`**), **0
+  policy cho anon/authenticated** — đọc qua URL công khai, ghi thì phải qua hàm.
+- Hàm `clip-ingest` **live v3**, `verify_jwt:false` (tự xác thực bằng header).
+  Đo trên bản đang chạy: không khoá → `missing_env` · khoá sai → cùng nhánh ·
+  `GET` → 405 · ping trả lời trong 0,7s.
+- Script: `--dry-run` liệt đúng 6 clip · thiếu secret → **bỏ qua CÓ BÁO, exit 0**
+  (không đánh hỏng lượt dựng) · khoá sai → **exit 1 trong 1 giây** kèm hướng dẫn.
+
+### CÒN LẠI
+- ⚠️ **Đường nộp THÀNH CÔNG chưa chạy được lượt nào** — tôi không đặt được
+  secret Supabase từ đây. Mới chứng minh được các nhánh TỪ CHỐI. Lượt nộp thật
+  đầu tiên là phép thử thật; chỗ đáng nhìn nếu hỏng là bước ghi Storage.
+- **Việc tay Henry:** đặt `CLIP_INGEST_SECRET` ở CẢ HAI nơi (Supabase → Edge
+  Functions → clip-ingest → Secrets; GitHub → Settings → Secrets → Actions).
+- **Chưa có adapter TikTok/Reels**, và Facebook thì 33 bài vẫn kẹt từ 02/08 vì
+  token hết hạn. Khâu xếp hàng đăng chờ Henry chốt chiến lược nội dung.
+
+---
+
+## 🎬 18/18 công cụ miễn phí có kịch bản clip + công thức quay (2026-08-15, PR này)
+
+Henry: *"Bây giờ làm batch demo sản phẩm"* → chốt làm hạ tầng Actions trước
+(*"Làm (2) trước đi"*), nay tới lượt nội dung: **17 kịch bản còn lại**.
+
+### 🔑 Bỏ hẳn lối khai tay `startSec`
+`startSec` là mốc thời gian BÊN TRONG một file mà người viết kịch bản chưa nhìn
+thấy. 17 công cụ × 5 cảnh = **85 con số đoán mò**, và đoán sai thì hỏng IM LẶNG:
+`OffthreadVideo` vượt quá độ dài bản quay chỉ đứng ở khung cuối — không lỗi,
+không cảnh báo. Bỏ trống thì mọi cảnh chiếu lại giây 0 và clip thành ảnh tĩnh.
+- `gen-video.mjs` thêm `fillStartSec`: đo độ dài THẬT của bản quay rồi rải theo
+  tỉ lệ, **kẹp** để không cảnh nào chạy quá đuôi. In một dòng soi được bằng mắt:
+  `mốc hình (bản quay 16.9s): 0.0s → 3.5s → 6.9s → 10.0s → 13.4s`.
+- Cảnh có `startSec` khai tay thì GIỮ NGUYÊN (`than-so-hoc` đã hiệu chỉnh bằng
+  mắt trên bản quay thật) — đường tự rải cố ý không đè lên.
+
+### ⚠️ Bản quay phải DÀI HƠN lời đọc — đo mới thấy
+Lượt đầu `kim-lau` quay ra **12,1s** trong khi lời đọc **25,9s** ⇒ hình tua lại,
+nửa sau clip trông như ảnh tĩnh. Nới nhịp giữ trong `showResult` (helper dùng
+chung) → cả 15 bản quay nay **17–21s**; `kinh-dich` 31s vì phải gieo đủ sáu hào.
+- Khung hình CUỐI của bản quay phải là chỗ đọc được: cảnh cuối clip luôn bị kẹp
+  về đúng đoạn đuôi đó. Nên `showResult` cuộn ngược lên trước khi dừng.
+
+### 🪤 Ba bẫy đã vấp (đều là lỗi của TÔI, không phải của trang)
+1. 🔴 **`typeSlow` không xoá ô trước khi gõ.** `app-hoang-dao.html` điền sẵn
+   ngày hôm nay ⇒ gõ thêm "15" vào ô đã có "15" ra **1515**, `compute()` trả
+   `ok:false`, khối kết quả không bao giờ hiện, lượt quay chết ở
+   `waitForSelector` sau 30 giây mà **không nói được vì sao**. Phải `fill('')`.
+2. **`ngay`/`thang` của `TuviForm` là `<select>`** — bài học đã ghi trong file
+   này, nay tách hẳn helper `pick()` để không ai vấp lại.
+3. **Bẫy cwd, lần thứ ba**: chạy `node scripts/...` khi đang đứng ở `public/` →
+   `MODULE_NOT_FOUND` cho cả 9 công cụ một lượt.
+
+### 🧷 Ba công cụ KHÔNG quay được từ bản phục vụ tĩnh — hỏng TO thay vì lặng
+`localPath: null` ⇒ `record-tool-demo.mjs` dừng hẳn kèm lý do, thay vì lặng lẽ
+rơi về `/app/<tool>` rồi quay 20 giây trang 404 trắng (mà khâu soi file **không
+bắt được** — mp4 vẫn đủ hình đủ tiếng).
+- `ky-mon` cần `/api/qimen` · `ban-do-sao` cần `/api/natal` · `tuong-hop` nhận
+  diện chế độ theo ĐƯỜNG DẪN nên bản tĩnh rơi vào tool **trả phí** và dựng
+  tường thanh toán giữa clip.
+- 🪤 **Chốt chặn bản đầu ĐOÁN THEO TÊN MÁY** (`localhost` ⇒ bản tĩnh) nên nó
+  chặn oan đúng cái đường mà **chính thông báo lỗi của nó khuyên dùng**:
+  `next dev` cũng chạy ở `127.0.0.1` nhưng có đủ rewrite `/app/*` lẫn route
+  API. Đổi sang **thăm dò thật** — hỏi `recipe.path` có mở được không, mở được
+  thì dùng. Nhờ vậy cả ba đã quay được ngay ở đây qua `next dev`, và chốt vẫn
+  đỏ đúng 3/3 khi trỏ vào server tĩnh.
+
+### 🔁 TTS chớp một nhịp = mất trắng một clip — thêm thử lại
+Lượt dựng 2 clip đầu: `an-sao` TRƯỢT vì TTS hỏng giữa chừng, chạy lại ngay sau
+đó thì xong. `--require-voice` đã chặn ĐÚNG (thà trượt còn hơn ra clip câm),
+nhưng trong lượt 18 clip thì đó là một clip mất không vì lý do gì.
+- Thử lại **3 lượt, giãn dần, ngay trong `ttsScene`** — không phải ở tầng gọi:
+  chỗ đó biết chắc lỗi là của MỘT câu, và mấy câu đã sinh xong đều nằm trong
+  cache nên lượt sau không đọc lại. Thử lại cả clip là tốn thêm một lượt render.
+
+### 🪤 `viral.no-invite` KÊU OAN 11/17 — nới đúng chỗ nó đo hụt
+Bộ dò chỉ tra một bảng cụm cố định (`comment · bình luận · gửi cho…`) nên câu
+kết *"Bạn mệnh gì?"* — đúng là câu trả lời được ngay trong ô bình luận — vẫn bị
+báo là không mời tương tác. **Bộ dò kêu oan là bộ dò bị tắt đi.**
+- Nới bằng một tính chất ĐO ĐƯỢC (*câu hỏi ngắn nói thẳng với người xem*), KHÔNG
+  bằng cách thêm vài cụm nữa vào bảng — thêm cụm là hẹn lần kêu oan kế tiếp.
+- 🔑 **Red-team ngay sau khi nới** (nới xong mà không kiểm thì có thể vừa tắt bộ
+  dò đi): đổi một câu kết thành câu trần thuật → cảnh báo kêu lại; khôi phục →
+  im. Có assert đột biến ĐÃ ăn trước khi đọc kết quả.
+
+### ⚠️ `length.off-sweet-spot` phần lớn là SAI SỐ CỦA ƯỚC LƯỢNG, đừng cắt lời đọc
+Cả 18 kịch bản ước 31–37s (ngoài khoảng 18–32s). Nhưng hằng số 13,59 ký tự/giây
+đo trên đoạn DÀI, còn câu cỡ một cảnh thì nó **ước dư**: `than-so-hoc` ước 37,6s
+mà render ra **32,4s**; `kim-lau` ước 34,4s mà giọng đọc thật **25,9s**. Cắt bớt
+lời đọc để dập cảnh báo này là sửa theo một con số đã biết là lệch.
+
+### Verify
+`tsc` 0 · `lint` **0 lỗi / 77 warning = đúng mốc nền** · `prettier` cả cây sạch.
+- **Cổng 1 trên CẢ 18 kịch bản: 18/18 QUA**, 0 block. Còn `cta.too-long` (cố ý,
+  xem mục dưới) và `length.off-sweet-spot` (sai số ước lượng, xem trên).
+- **15/15 công cụ quay được tại chỗ đều quay THẬT** — `waitForSelector` trên
+  khối kết quả nên quay xong nghĩa là kết quả đã hiện, không phải trang trắng.
+  Phủ đủ ba hình dạng DOM: form dựng tay · `TuviForm` (select) · rút bài.
+- **`kim-lau` render đầu-cuối THẬT** (quay → cổng → giọng → mp4), soi khung hình
+  tĩnh xác nhận bố cục; batch 2 công cụ chạy qua đúng orchestrator.
+- **3 ca chốt `localPath: null`**: `ky-mon` · `ban-do-sao` · `tuong-hop` đều
+  **exit 1** kèm lý do khi trỏ vào bản phục vụ tĩnh.
+
+### CÒN LẠI
+- **3 công cụ chưa quay được ở đây** (cần prod/`next dev`) — Actions quay từ
+  prod nên tự có; ở container này thì trình duyệt không ra được Internet.
+- **Cổng 2 vẫn chưa chạy lượt nào** — cần `GEMINI_API_KEY`/`ANTHROPIC_API_KEY`.
+  18 kịch bản mới vì thế mới qua tầng MÁY, chưa ai đọc bằng con mắt người xem.
+- ⚠️ **Chưa ai NGHE 17 clip mới.** Tôi không nghe được audio; luật đã ghi ở track
+  trước vẫn áp: mỗi lượt đổi chữ là phải có người nghe lại.
+- Nội dung 18 kịch bản là **tôi tự viết**, chưa ai review — cùng dạng nợ với 384
+  hào từ. Sửa là sửa data thuần trong `BATCH`, không đụng logic.
+
+---
+
+## 🎟️ Câu kết clip đọc TÊN MIỀN + MÃ, và bảng mã khuyến mãi (2026-08-15, PR này)
+
+Henry: *"phần closing… Mày lam no đọc luôn tên website tuviminhbao.com và thêm
+đoạn Nhập mã TUVIMINHBAO để nhận ngay 100 lượng. Xong mày bổ sung thêm vào flow
+signup thêm cái ô để user nhập mã lúc signup… Nhân tiện bổ sung tab quản lý mã
+trong page admin luôn"*.
+
+### 🔑 Chữ VIẾT ≠ chữ ĐỌC — phải tách hai bản
+`ScriptSpec.text` vốn gánh CẢ phụ đề LẪN lời gửi TTS. Với câu kết mới thì hai
+vai đá nhau: phụ đề phải ghi đúng `tuviminhbao.com` + `TUVIMINHBAO` để người ta
+gõ lại được, còn Vbee đọc tên miền thành một khối vô nghĩa và đọc mã viết HOA
+thành từng chữ cái — hỏng đúng câu quan trọng nhất về mặt chuyển đổi.
+- Thêm `Scene.speech` + `ScriptSpec.ctaSpeech` (bỏ trống ⇒ đọc luôn `text`).
+  Bản đọc: *"Tra tại **Tử Vi Minh Bảo** chấm com. Nhập mã **Tử Vi Minh Bảo** để
+  nhận ngay 100 lượng."*
+- 🔴 **BẢN ĐỌC PHẢI CÓ ĐỦ DẤU.** Bản đầu tôi viết `tu vi minh bảo` (chỉ mỗi
+  "bảo" có dấu) → Vbee đọc ra đúng một khối phẳng *"tuviminhbao"*, tức KHÔNG
+  chữa được gì so với gửi thẳng tên miền; Henry nghe ra ngay. Tiếng Việt không
+  dấu thì bộ đọc không tách được thành từ. Viết như TÊN RIÊNG: `Tử Vi Minh Bảo`.
+  Áp cho MỌI chuỗi `speech` sau này, không riêng câu kết.
+- ⛔ **CHỈ dùng cho 3 lớp ca**: tên miền · mã viết HOA · chữ số. Ngoài đó để
+  `text` gánh cả hai vai — hai bản chữ song song là đúng bẫy "chép hai nơi rồi
+  trôi khỏi nhau" mà chính hợp đồng này sinh ra để tránh.
+- `estimateTotalSeconds` đổi sang ước theo bản ĐỌC; `checkLeaks` quét CẢ hai bản
+  (rò trong bản đọc thì không thấy trên phụ đề nhưng vẫn phát ra tiếng).
+- ⚠️ Câu kết CỐ Ý vượt ngưỡng cảnh báo `cta.too-long` (6s → thật 6,5s): nó chở
+  bốn mẩu tin (câu hỏi · từ khoá · tên miền · mã kèm số Lượng), trong khi ngưỡng
+  đặt hồi câu kết chỉ có một lời mời bấm. **Giữ ngưỡng và để nó kêu**, không nới
+  cho khỏi thấy cảnh báo. Clip thật: **32,58s**, video h264 1080×1920 + audio aac.
+
+### 🎟️ `promo_codes` + `promo_redemptions` + RPC `promo_code_redeem`
+Đường PHÁT TIỀN ⇒ mọi chốt chặn nằm ở **tầng DB**, không ở mã ứng dụng:
+| Chốt | Cách |
+|---|---|
+| Một tài khoản đổi ĐÚNG MỘT mã trọn đời | **KHOÁ CHÍNH** `promo_redemptions.user_id` |
+| Trần tổng lượt mỗi mã | `max_uses`, khoá dòng `for update` khi đọc |
+| Trần tuyệt đối mỗi lượt | `PROMO_MAX_CREDITS = 1000` ngay trong RPC |
+| Hạn dùng · chỉ tài khoản mới | `expires_at` · `new_account_days` |
+- ⚠️ **UNIQUE(user_id) chứ KHÔNG phải (user_id, code)**: cho một người gom nhiều
+  mã là nhân bề mặt lạm dụng theo số chiến dịch. Nới về sau thì dễ, siết lại sau
+  khi đã bị farm thì không.
+- **Thứ tự "ghi dấu TRƯỚC, cộng tiền SAU"** chép từ `onboarding_task_claim`: hai
+  chiều hỏng không đối xứng — cộng trước mà lỗi ⇒ cộng hai lần (phát không tiền,
+  không phát hiện được); ghi dấu trước mà lỗi ⇒ thiếu một lần, đối soát được.
+- Trần credits kiểm **TRƯỚC** bước chống-trùng: giá vô lý là lỗi cấu hình, phải
+  kêu to chứ không được lặng lẽ đọc thành "đã dùng rồi".
+- 🔐 `revoke ... from public, anon, authenticated` — EXECUTE cho PUBLIC là dựng
+  sẵn của Postgres, hàm SECURITY DEFINER mới nào cũng sinh ra hở. Verify: ACL chỉ
+  `postgres | service_role`, `set local role anon` → *permission denied*.
+- Seed `TUVIMINHBAO` = 100 Lượng · `max_uses=200` · `new_account_days=30`.
+  **200 lượt ≈ 880.000đ chi phí model THẬT** (100 Lượng ≈ 4 lượt tool ảnh ≈
+  4.400đ), không phải 82.900đ giá bán lẻ. Nới bằng Admin, không cần deploy.
+
+### Bề mặt
+- **`public/promo.js`** — NGUỒN DUY NHẤT (bắt `?promo=` · `info()` · `redeem()`).
+  `auth.js` **nạp LƯỜI** nó khi modal mở hoặc URL có `?promo=`: auth.js nằm trên
+  ~89 trang, thêm thẻ script vào từng file là 89 chỗ để quên — đúng lỗi
+  `referral.js` đã dính khi bị chép inline 2 bản.
+- **Ô mã trong modal đăng ký**, chỉ hiện ở tab Đăng ký. Ô này **KHÔNG tự đổi mã**
+  — nó CẤT mã vào sessionStorage (cả đường email lẫn OAuth, vì `signInGoogle` rời
+  trang), `promo.js` đổi sau khi có token thật.
+- **Ô đổi mã ở trang nạp Lượng** — đường về cho người ĐÃ CÓ tài khoản; thiếu nó
+  thì mã trên clip chỉ dùng được đúng lúc đăng ký, ai lỡ tay là mất hẳn đường.
+- **Số Lượng LẤY TỪ SERVER** (`promo-info`), không viết cứng "100" lên giao diện
+  — cùng luật `check:prices`. `promo-info` cố ý **không trả `used_count`/`max_uses`**
+  (ngân sách nội bộ).
+- **Panel "Mã Khuyến Mãi"** ở trang Gói Nạp & Pricing. Ba thứ KHÔNG cho sửa:
+  `used_count` (số đếm thật) · trần 1.000 · xoá mã đã có người đổi (FK chặn —
+  muốn dừng thì TẮT, để lại dấu vết). Mã mới mặc định AN TOÀN (trần 100 lượt +
+  chỉ TK mới ≤30 ngày), không phải mặc định tiện.
+
+### Verify
+`tsc` 0 · `lint` **0 lỗi / 77 warning = đúng mốc nền** · `prettier` cả cây sạch ·
+**20/20 bộ dò** · engine **185 pass**.
+- **RPC THẬT trên prod**, chạy trong transaction rồi rollback (verify sau đó
+  `promo_redemptions` 0 dòng · `used_count` 0 · 0 giao dịch): gõ chữ thường vẫn
+  ăn · **hai lượt liên tiếp chỉ +100 chứ không +200** · đúng 1 dòng giao dịch ·
+  mô tả giữ nguyên dấu tiếng Việt · `not_found`/`invalid_input`/`disabled`/
+  `expired`/`exhausted` đúng nhánh · trần credits **NÉM** chứ không im lặng ·
+  **ĐỐI CHỨNG tuổi tài khoản**: TK 146 ngày → `account_too_old`, TK 0 ngày → ok,
+  bỏ chốt tuổi → TK cũ qua được.
+- **19 ca trên ROUTE THẬT** qua Next dev + stub PostgREST: không auth → 401 ·
+  token người thường gọi admin → 403 · mã rỗng/60 ký tự → 400 · mã có `;`/2 ký
+  tự → 400 · credits 100000/âm/10.5 → 400 · **ĐỐI CHỨNG admin hợp lệ → 200**.
+- **24 ca trên TRANG THẬT**: ô mã ẩn/hiện đúng tab · gợi ý nêu **100 Lượng lấy
+  từ server** · mã hết hạn báo đỏ · **mã rác → IM LẶNG** (đang gõ dở thì không
+  doạ) · bấm Tạo tài khoản và bấm Google đều CẤT mã · `?promo=` được nhặt, **dọn
+  khỏi thanh địa chỉ nhưng GIỮ utm_*** · tự mở tab Đăng ký · đổi mã xong xoá ô,
+  mã hỏng thì GIỮ ô để sửa · chuỗi từ server **không chạy được HTML** · **ĐỐI
+  CHỨNG khách chưa đăng nhập → không hiện ô đổi mã**.
+- **34 ca trên `admin.html` THẬT** (light + dark): mã đã dùng **không có nút
+  Xoá**, ĐỐI CHỨNG mã chưa ai dùng thì CÓ · ghi chú `<img onerror>` không chạy ·
+  ô trống = ∞ · **payload lưu KHÔNG mang `used_count`** · hạn quy về **cuối ngày
+  giờ VN** (`23:59:59+07`) chứ không 00:00 UTC.
+
+### 🪤 Bẫy đã vấp (đều là lỗi của TÔI, không phải của mã)
+1. 🔴 **Deploy RPC lượt đầu gõ chữ KHÔNG DẤU** (`'Ma khuyen mai: '`) trong khi
+   file repo có dấu — mà chuỗi đó vào `credit_transactions.description`, người
+   dùng đọc được. **Đúng bệnh "bản đang chạy khác bản trong repo"** đã ghi ở
+   track `send-daily-push`. Đã `create or replace` lại bằng nguyên văn.
+2. **`where code = v_code` AMBIGUOUS** với cột `code` của `RETURNS TABLE` → phải
+   `where promo_codes.code = v_code`. File repo lúc đầu sai, đã sync theo bản
+   đang chạy.
+3. **`cd X && A & B`**: `cd` chỉ bind vào job nền đầu, `B` chạy ở cwd CŨ
+   (`tuvi-engine`) → Next dev báo *"Couldn't find any `pages` or `app`"*. Bẫy cwd
+   đã ghi, vấp lại.
+4. **`pkill -f "next dev -p 3111"` khớp CHÍNH dòng lệnh của nó** → tự giết (exit
+   144). Lần thứ hai.
+5. **Đọc sessionStorage SAU `signInGoogle()`** → *execution context destroyed*
+   (hàm đó gán `location.href`). Phải đọc trong CÙNG lượt `evaluate`. Bài học
+   "đọc DOM trước hành động làm rời trang", vấp lại.
+6. **`waitForSelector` mặc định chờ VISIBLE** — ô mã đúng ra phải ẩn ở tab Đăng
+   nhập, nên phải `state:'attached'`.
+7. 🔴 **Bảng admin đo trên trang CHƯA active**: `textContent`/`inputValue` đọc
+   được phần tử ẩn nên 10 assertion đầu VẪN XANH trong khi bảng không ai nhìn
+   thấy; chỉ `fill()` mới lộ. Phải vào bằng chính `enterApp('...','owner')` +
+   `goTo('pricing')`, đừng tự bật class.
+8. **Stub `Auth` thiếu `getUser`** (có thật ở `auth.js:212`) → `loadStatus()` ném
+   và bài kiểm đọc thành "lỗi JS của trang".
+
+### CÒN LẠI
+- ⚠️ **Tôi KHÔNG nghe được audio** — chỉ đo được độ dài file và xác nhận mp4 có
+  track thật. Chính vì thế lỗi "đọc không dấu" ở trên lọt qua cả lượt verify:
+  bản hỏng và bản đúng có độ dài gần y nhau, mọi phép đo tôi chạy đều xanh.
+  ⇒ **Mỗi lần đổi chuỗi `speech` thì phải có người nghe lại**, đừng đọc một
+  lượt render thành công là "đã đúng".
+- **Mã mới ăn từ lúc DEPLOY** — bảng + RPC đã có trên prod, nhưng ô nhập và
+  panel admin thì phải deploy xong mới thấy.
+- **17 clip còn lại chưa dựng** — `buildCta` dùng chung nên chúng tự có câu kết
+  mới, chỉ cần thêm `keyword`/`ctaQuestion` vào `SOURCES`.
+- Cổng 2 (hội đồng người xem) **vẫn chưa chạy lượt nào** — cần `GEMINI_API_KEY`
+  hoặc `ANTHROPIC_API_KEY` trong môi trường dựng.
+
+---
+
 ## 🫂 Rail thành "Trò chuyện với Thầy" — 4 tầng, và vòng vá NHỊP HỘI THOẠI (2026-08-12, #507 + PR này)
 
 Henry: kinh tế khó → người ta stress, mà VN gần như không có kênh tâm lý nên họ

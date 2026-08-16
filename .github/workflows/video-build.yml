@@ -1,0 +1,152 @@
+# Dựng clip dọc 9:16 cho TikTok/Reels/Shorts.
+#
+# 🔑 VÌ SAO Ở GITHUB ACTIONS chứ không phải Vercel cron hay session Claude Code:
+#   · Vercel: hàm trần 300 giây, mà một clip render mất ~4 phút — và ở đó không
+#     có Chromium để quay màn hình.
+#   · Session Claude Code: ephemeral, và container phát triển KHÔNG cho Chromium
+#     ra Internet (curl thì được) nên không quay được trang prod.
+#   · Actions: repo ĐÃ chạy Playwright + Chromium ở đây (playwright.yml), có CPU,
+#     có lịch, và artifact tải về được.
+#
+# Toàn bộ logic nằm ở `scripts/build-video-batch.mjs` chứ không nhét vào YAML —
+# cùng một lệnh phải chạy được ở máy Henry lúc cần dựng gấp một clip.
+name: Video Build
+
+on:
+  workflow_dispatch:
+    inputs:
+      tools:
+        description: 'Tool cần dựng (cách nhau bởi dấu phẩy). Bỏ trống = tất cả.'
+        required: false
+        default: ''
+      force:
+        description: 'Quay + dựng lại kể cả khi đã có file'
+        type: boolean
+        default: false
+      base:
+        description: 'Trang để quay màn hình'
+        required: false
+        default: 'https://www.tuviminhbao.com'
+
+# ⚠️ CỐ Ý CHƯA CÓ `schedule`. Chạy tự động hằng ngày chỉ có nghĩa khi đã có đủ
+# kịch bản cho nhiều tool VÀ đã nối được đường đăng bài. Bật lịch lúc mới có 1
+# kịch bản là mỗi sáng dựng lại đúng một clip đã có.
+
+# Một lượt dựng tại một thời điểm. Hai lượt cùng lúc sẽ ghi đè file của nhau
+# trong `remotion/out/`.
+concurrency:
+  group: video-build
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    # Render là việc nặng: 18 clip × ~5 phút. Trần mặc định 6 giờ vẫn đủ, nhưng
+    # khai rõ để lượt hỏng không treo hết quota.
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+          # Hai lockfile: gốc và `remotion/`. Khai cả hai, nếu không thì lượt
+          # `npm ci` trong remotion/ không bao giờ trúng cache.
+          cache-dependency-path: |
+            package-lock.json
+            remotion/package-lock.json
+
+      # 💰 Giọng đọc là khoản chi phí BIẾN ĐỔI DUY NHẤT của cả pipeline (mọi thứ
+      # còn lại — nhạc, quay, render, cổng 1 — đều 0đ). Tên file mp3 chính là
+      # BĂM của (chữ + giọng + tốc độ), nên cache theo thư mục là an toàn tuyệt
+      # đối: sửa một câu thì chỉ câu đó sinh lại, mục cũ nằm im vô hại.
+      # Không có bước này thì mỗi lượt dựng 18 clip đốt lại 126 lượt TTS.
+      - name: Cache giọng đọc
+        uses: actions/cache@v4
+        with:
+          path: remotion/public/audio
+          key: clip-tts-${{ hashFiles('lib/video/sources/tool-demo.ts') }}
+          restore-keys: clip-tts-
+
+      - name: Cài gói gốc
+        run: npm ci
+
+      # `remotion/` là sub-package riêng (cùng lối `tuvi-engine/`), có
+      # package-lock riêng nên cài tách.
+      - name: Cài gói remotion
+        run: npm ci
+        working-directory: remotion
+
+      # Playwright cần Chromium để QUAY. Remotion tự tải chrome-headless-shell
+      # riêng của nó lúc render — đừng trỏ Remotion vào Chromium này, bản
+      # Playwright đã gỡ chế độ headless cũ (xem remotion.config.ts).
+      - name: Cài Chromium cho Playwright
+        run: npx playwright install chromium --with-deps
+
+      - name: Sinh nhạc nền
+        run: node scripts/gen-music-bed.mjs --all
+
+      - name: Dựng clip
+        env:
+          # Khoá gọi hàm edge TTS. Không khai thì script dùng anon key công khai
+          # nằm sẵn trong mã client (không phải bí mật) — vẫn chạy được.
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          CLIP_TTS_SECRET: ${{ secrets.CLIP_TTS_SECRET }}
+          # Cổng 2 cần một trong hai khoá. Chưa khai thì bước dưới tự chạy
+          # `--no-audience` VÀ NÓI RÕ trong tóm tắt — không bỏ qua im lặng.
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          # ⚠️ Ô nhập của người dùng đi qua ENV, KHÔNG nội suy `${{ }}` thẳng vào
+          # thân `run`. Nội suy thẳng thì một tên tool có dấu `;` chạy được lệnh
+          # tuỳ ý trong runner. Chỉ cộng tác viên mới bấm được workflow_dispatch
+          # nên mức độ thấp, nhưng đây là lối viết đúng và không tốn gì.
+          IN_TOOLS: ${{ inputs.tools }}
+          IN_FORCE: ${{ inputs.force }}
+          IN_BASE: ${{ inputs.base }}
+        run: |
+          set -euo pipefail
+          ARGS=()
+          if [ -n "$IN_TOOLS" ]; then ARGS+=(--tools "$IN_TOOLS"); else ARGS+=(--all); fi
+          if [ "$IN_FORCE" = "true" ]; then ARGS+=(--force); fi
+          if [ -z "${GEMINI_API_KEY:-}" ] && [ -z "${ANTHROPIC_API_KEY:-}" ]; then
+            echo "::warning::Chưa khai GEMINI_API_KEY/ANTHROPIC_API_KEY — bỏ qua cổng 2 (hội đồng người xem). Clip chỉ qua cổng máy."
+            ARGS+=(--no-audience)
+          fi
+          node scripts/build-video-batch.mjs "${ARGS[@]}" --base "$IN_BASE"
+
+      # 📤 Nộp clip lên kho (Storage + `media_assets`) để nó sống lâu hơn 14
+      # ngày artifact. Đi qua hàm edge `clip-ingest` nên runner chỉ cầm một
+      # khoá HẸP, KHÔNG cầm `SUPABASE_SERVICE_KEY` (khoá đó đã phải xoay một
+      # lần vì lộ) — xem `_patches/edge-clip-ingest.deno.ts`.
+      #
+      # `if: always()`: bước dựng trượt một tool vẫn còn mấy clip khác dùng
+      # được. Chưa khai secret thì script tự bỏ qua CÓ BÁO chứ không hỏng job.
+      - name: Nộp clip lên kho
+        if: always()
+        env:
+          CLIP_INGEST_SECRET: ${{ secrets.CLIP_INGEST_SECRET }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+        run: node scripts/publish-clips.mjs
+
+      # Luôn tải lên, kể cả khi có tool trượt — mấy clip đã dựng xong vẫn dùng được.
+      - name: Tải clip lên artifact
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: clips
+          path: remotion/out/*.mp4
+          if-no-files-found: warn
+          retention-days: 14
+
+      # Clip quay màn hình giữ lại để lượt sau khỏi quay lại (và để soi khi một
+      # clip trông sai). Nén sẵn nên nhẹ.
+      - name: Tải bản quay màn hình lên artifact
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: recordings
+          path: remotion/public/recordings/*.webm
+          if-no-files-found: ignore
+          retention-days: 7

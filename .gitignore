@@ -41,3 +41,16 @@ tsconfig.tsbuildinfo
 
 # Ảnh 64 quẻ sinh bằng scripts/gen-que-images.mjs — asset nặng, không commit
 .que-images/
+
+# Video pipeline — file nặng, KHÔNG commit (deliverable gửi thẳng, không phải nội dung repo)
+remotion/node_modules/
+remotion/out/
+remotion/public/recordings/
+remotion/public/audio/
+# Nhạc nền: sinh lại được nguyên vẹn bằng `node scripts/gen-music-bed.mjs`
+# (seed cố định ⇒ ra đúng một file), nên commit 4MB WAV là thừa.
+remotion/public/music/*.wav
+remotion/.remotion/
+
+# Ảnh tải về từ Storage để render — sinh lại được, không commit.
+remotion/public/img-cache/
