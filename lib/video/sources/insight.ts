@@ -419,6 +419,317 @@ const SOURCES: InsightSource[] = [
     },
   },
 
+  // ── A4. PHÉP THỬ DẠNG THỨ BA — TRÌNH TỰ THEO THỜI GIAN ───────────────────
+  //
+  // 🔑 VÌ SAO CÓ KỊCH BẢN NÀY: hai bản trên mới chứng minh khung WHAT → WHY →
+  // FOR WHAT gánh được hai DẠNG — phân loại ("ba kiểu") và giải thích một hiện
+  // tượng ("vì sao"). Cả hai đều là ảnh chụp một trạng thái. Bản này thử dạng
+  // thứ ba: **một chuỗi có THỨ TỰ**, mỗi bước nặng hơn bước trước.
+  //
+  // Dạng trình tự đắt hơn hẳn về mặt giữ chân: người xem đang ở bước 2 sẽ ở lại
+  // để biết bước 3 và 4 là gì — thứ mà một danh sách ngang hàng không tạo ra
+  // được. Đổi lại nó KHÓ hơn: sai thứ tự thì cả clip mất tính thuyết phục, nên
+  // thứ tự phải lấy từ nguồn chứ không tự xếp cho xuôi tai.
+  //
+  // Nguồn (tra ra ngay, KHÔNG bịa):
+  //   · John Gottman & Robert Levenson, "Love Lab" (Seattle, từ thập niên
+  //     1970) — bốn kiểu giao tiếp báo trước đổ vỡ, đặt tên *Four Horsemen*:
+  //     criticism · contempt · defensiveness · stonewalling. Khinh thường
+  //     (contempt) là dấu hiệu MẠNH NHẤT.
+  //   · Gottman: cặp bền vẫn cãi nhau nhiều như cặp tan — khác ở "repair
+  //     attempts", tức có người hạ giọng giữa trận.
+  //   · Ca dao Việt: *"Chồng giận thì vợ bớt lời / Cơm sôi nhỏ lửa một đời
+  //     không khê"* — trùng khít với cơ chế repair ở trên.
+  //
+  // ⚠️ CỐ Ý KHÔNG NÊU CON SỐ ĐỘ CHÍNH XÁC (hay được dẫn là 90–94%). Con số đó
+  // bị phê bình về phương pháp (khớp hậu nghiệm chứ không dự báo tiến cứu —
+  // Heyman & Smith Slep 2001). Nói "xem mười lăm phút là đoán được" thì đúng
+  // với thứ nghiên cứu mô tả, còn đọc lên một tỉ lệ đang bị tranh cãi thì đúng
+  // là loại chi tiết người xem tra ra rồi quay lại bắt lỗi.
+  //
+  // Dẫn về `xem-tuoi` — mỗi clip mở một cánh cửa khác trong kho.
+  {
+    id: 'bon-buoc-truoc-khi-roi-di',
+    topLabel: 'Trước khi một người rời đi',
+    toolId: 'xem-tuoi',
+    spec: {
+      title: 'Bốn bước trước khi một người rời đi',
+      // Hook CỐ Ý KHÔNG dùng khuôn "tưởng… thật ra…" của hai bản trước — dùng
+      // ba lần là thành tật, và người xem lướt kênh sẽ nhận ra ngay. Ở đây
+      // dùng "Hoá ra", và quan trọng hơn: *"bốn bước, theo thứ tự"* báo trước
+      // đây là một chuỗi — chính lời hứa đó giữ người xem tới bước cuối.
+      hook: 'Không ai rời đi đột ngột. Hoá ra có bốn bước, theo thứ tự.',
+      scenes: [
+        // ── MỞ TÒ MÒ ──
+        {
+          text: 'Bạn nghĩ đổ vỡ bắt đầu từ một trận cãi lớn. Không phải vậy.',
+          visual: { kind: 'typo', accent: 'Không phải vậy.' },
+        },
+        {
+          // Câu cảm xúc: cái đau ở đây là mình từng thấy mình ĐÚNG.
+          text: 'Nó bắt đầu từ một câu rất nhỏ, mà lúc đó bạn thấy mình có lý.',
+          visual: { kind: 'typo', accent: 'bạn thấy mình có lý.' },
+        },
+        // ── WHAT: bốn bước, mỗi bước 2 cảnh (hành vi + chỗ bị hiểu nhầm) ──
+        {
+          text: 'Bước một: bạn thôi nói về việc. Bạn nói về con người.',
+          visual: { kind: 'typo', accent: 'Bạn nói về con người.' },
+        },
+        {
+          text: 'Không còn là anh quên đón con. Thành ra anh lúc nào cũng thế.',
+          visual: { kind: 'typo', accent: 'lúc nào cũng thế.' },
+        },
+        {
+          text: 'Bước hai nặng nhất: bạn bắt đầu thấy người kia kém hơn mình.',
+          visual: { kind: 'typo', accent: 'kém hơn mình.' },
+        },
+        {
+          text: 'Một cái đảo mắt. Một tiếng cười khẽ. Người kia nhận ra hết.',
+          visual: { kind: 'typo', accent: 'Người kia nhận ra hết.' },
+        },
+        {
+          text: 'Bước ba: họ thôi nghe bạn. Họ chỉ còn đỡ đòn.',
+          visual: { kind: 'typo', accent: 'chỉ còn đỡ đòn.' },
+        },
+        {
+          text: 'Bạn nói một câu, họ đáp bằng một câu bạn từng sai năm ngoái.',
+          visual: { kind: 'typo', accent: 'từng sai năm ngoái.' },
+        },
+        {
+          text: 'Bước bốn im nhất, và cũng là bước cuối: họ thôi đáp.',
+          visual: { kind: 'typo', accent: 'họ thôi đáp.' },
+        },
+        {
+          text: 'Vẫn ngồi đó, vẫn ăn cơm với bạn. Nhưng đã đi từ lâu rồi.',
+          visual: { kind: 'typo', accent: 'đã đi từ lâu rồi.' },
+        },
+        // ── INSIGHT ĐẨY LÊN SỚM, ngay sau khi người xem vừa soi thấy nhà mình ──
+        {
+          text: 'Người rời đi phần nhiều không hết thương bạn. Họ hết cách nói.',
+          visual: { kind: 'typo', accent: 'Họ hết cách nói.' },
+        },
+        // ── WHY: giọng nói chuyện, tên đặt SAU khi đã nói xong ý ──
+        {
+          text: 'Vì cãi nhau không giết một mối quan hệ. Cách cãi mới giết.',
+          visual: { kind: 'typo', accent: 'Cách cãi mới giết.' },
+        },
+        {
+          text: 'Từ thập niên bảy mươi, John Gottman quay hàng nghìn cặp cãi nhau.',
+          visual: { kind: 'typo', accent: 'John Gottman' },
+        },
+        {
+          text: 'Xem mười lăm phút, ông đoán được cặp nào rồi sẽ chia tay.',
+          visual: { kind: 'typo', accent: 'mười lăm phút,' },
+        },
+        {
+          text: 'Nặng nhất vẫn là bước hai. Ba bước kia còn là đang đánh nhau.',
+          visual: { kind: 'typo', accent: 'vẫn là bước hai.' },
+        },
+        {
+          text: 'Bước hai là bạn xếp hạng xong rồi, và người kia đứng thấp hơn.',
+          visual: { kind: 'typo', accent: 'xếp hạng xong rồi,' },
+        },
+        // ── FOR WHAT ──
+        {
+          text: 'Biết bốn bước, bạn thôi hỏi còn thương nhau không. Câu đó mơ hồ.',
+          visual: { kind: 'typo', accent: 'Câu đó mơ hồ.' },
+        },
+        {
+          text: 'Bạn hỏi câu đo được: tuần này nhà mình đang ở bước mấy?',
+          visual: { kind: 'typo', accent: 'đang ở bước mấy?' },
+        },
+        {
+          text: 'Trẻ con trong nhà cũng học cách cãi nhau từ đúng bốn bước này.',
+          visual: { kind: 'typo', accent: 'từ đúng bốn bước này.' },
+        },
+        // ── PAYOFF + TWIST ──
+        // Twist: ai cũng tin nhà êm là nhà ít cãi. Nghiên cứu nói ngược —
+        // thứ khác biệt là có người chịu hạ giọng giữa trận, không phải số trận.
+        {
+          text: 'Điều lạ nhất ông tìm ra: cặp bền vẫn cãi y như cặp sắp tan.',
+          visual: { kind: 'typo', accent: 'y như cặp sắp tan.' },
+        },
+        {
+          text: 'Khác ở chỗ giữa trận, có một người chịu hạ giọng trước.',
+          visual: { kind: 'typo', accent: 'chịu hạ giọng trước.' },
+        },
+        {
+          text: 'Ông bà mình dạy rồi: cơm sôi nhỏ lửa, một đời không khê.',
+          visual: { kind: 'typo', accent: 'cơm sôi nhỏ lửa,' },
+        },
+        {
+          text: 'Nên đừng đếm số trận cãi. Đếm xem nhà bạn còn ai chịu hạ lửa.',
+          visual: { kind: 'typo', accent: 'còn ai chịu hạ lửa.' },
+        },
+      ],
+      ...cta('Còn lá số nói gì về cách bạn cãi nhau?', { ten: 'Xem Tuổi Vợ Chồng' }),
+      music: 'cang-thang.wav',
+      // Ba bức xếp theo đúng mạch: Khuê (kw38 — hai bên nhìn nhau lệch, chia
+      // lìa) → Bĩ (kw12 — trời đất không giao, tắc hẳn, đúng bước im lặng) →
+      // Gia Nhân (kw37 — người trong nhà, rơi vào đoạn hạ lửa và câu kết).
+      backdrop: [QUE('43-kw38.png'), QUE('56-kw12.png'), QUE('53-kw37.png')],
+      hashtags: ['honnhan', 'tamly', 'giadinh', 'selfdiscovery'],
+    },
+  },
+
+  // ── A5. PHÉP THỬ DẠNG THỨ TƯ — ĐỐI CHIẾU HAI NGƯỜI ───────────────────────
+  //
+  // 🔑 Dạng thứ tư: **hai người CÙNG đầu vào, khác kết quả**. Câu hỏi "khác ở
+  // đâu" tự nó là một cái móc, và người xem lập tức tự xếp mình vào một trong
+  // hai bên — tức phần "nói đúng mình" xảy ra sớm hơn cả ba dạng trên.
+  //
+  // Miền cũng mới: TIỀN BẠC. Ba bản trước đi vào cảm xúc · công việc · hôn
+  // nhân; đây là miền có lượng tìm kiếm lớn nhất mà kênh chưa chạm.
+  //
+  // Nguồn (tra ra ngay, KHÔNG bịa):
+  //   · Brickman, Coates & Janoff-Bulman, *Lottery Winners and Accident
+  //     Victims: Is Happiness Relative?* (1978), Journal of Personality and
+  //     Social Psychology 36(8), 917–927. 22 người trúng số lớn KHÔNG hạnh
+  //     phúc hơn nhóm đối chứng, và — chỗ đắt nhất — họ thấy các niềm vui
+  //     hàng ngày NHẠT HẲN đi. Đây là gốc của khái niệm "mức thích nghi".
+  //   · Thành ngữ Việt: *"được voi đòi tiên"*.
+  //   · *Tri túc* (知足) — biết đủ; khái niệm chung của Đạo gia và nhà Phật.
+  //     CỐ Ý không gán chương/tác giả cụ thể: bản A3 đã dẫn Đạo Đức Kinh, dẫn
+  //     lại là thành tật, mà gán sai một chương thì tệ hơn không gán.
+  //
+  // 🔑 CHI TIẾT LÀM CẢ CLIP nằm ở chỗ "niềm vui hàng ngày nhạt đi" — không
+  // phải ở chỗ "trúng số không sướng hơn" (câu đó ai cũng nghe rồi). Nó nghịch
+  // với trực giác, tra ra được, và giải thích đúng cảm giác người xem đang có.
+  //
+  // Dẫn về `tu-binh`: Tử Bình là hệ đọc TÀI TINH và thân vượng/nhược — tức
+  // "giữ được của hay không", đúng câu hỏi của clip. Không dẫn về `laso` vì
+  // bản A2 đã dùng cửa đó.
+  {
+    id: 'hai-nguoi-cung-luong',
+    topLabel: 'Vì sao bạn không thấy đủ',
+    toolId: 'tu-binh',
+    spec: {
+      title: 'Hai người cùng lương, một người dư một người thiếu',
+      // Hook là một câu hỏi thật, không phải câu hỏi tu từ — và nó đặt ra một
+      // bài toán người xem muốn biết đáp án. Cũng là hook duy nhất trong bốn
+      // bản không mở bằng cách phủ định một niềm tin, nên đọc lên nghe khác hẳn.
+      hook: 'Hai người cùng lương. Một người dư, một người thiếu. Khác ở đâu?',
+      scenes: [
+        // ── MỞ TÒ MÒ ──
+        {
+          text: 'Bạn từng nghĩ chỉ cần thêm vài triệu nữa là mọi thứ sẽ ổn.',
+          visual: { kind: 'typo', accent: 'là mọi thứ sẽ ổn.' },
+        },
+        {
+          text: 'Rồi lương lên thật. Ba tháng sau, bạn vẫn thấy thiếu y như cũ.',
+          visual: { kind: 'typo', accent: 'thiếu y như cũ.' },
+        },
+        {
+          // Câu cảm xúc: nỗi xấu hổ khi than mà biết mình đã hơn nhiều người.
+          text: 'Và bạn không kể với ai, vì nghe như đang than khi đã đủ.',
+          visual: { kind: 'typo', accent: 'than khi đã đủ.' },
+        },
+        // ── WHAT: đối chiếu, rồi lật lại chính cách hiểu thông thường ──
+        {
+          text: 'Người thứ nhất lương lên là đổi xe. Bạn thấy quen chứ?',
+          visual: { kind: 'typo', accent: 'Bạn thấy quen chứ?' },
+        },
+        {
+          text: 'Người thứ hai chưa đổi gì. Nửa năm sau, họ có khoản bạn chưa có.',
+          visual: { kind: 'typo', accent: 'khoản bạn chưa có.' },
+        },
+        {
+          text: 'Bạn nghĩ người thứ hai kỷ luật hơn mình. Cũng không hẳn.',
+          visual: { kind: 'typo', accent: 'Cũng không hẳn.' },
+        },
+        {
+          text: 'Người thứ nhất tiêu không phải vì tham. Vì thấy mình xứng đáng.',
+          visual: { kind: 'typo', accent: 'thấy mình xứng đáng.' },
+        },
+        {
+          text: 'Cái áo hôm qua bạn còn thấy sang, hôm nay thành áo mặc ở nhà.',
+          visual: { kind: 'typo', accent: 'áo mặc ở nhà.' },
+        },
+        // ── INSIGHT ĐẨY LÊN SỚM ──
+        {
+          text: 'Cái ngưỡng đó chạy nhanh hơn lương của bạn. Luôn luôn nhanh hơn.',
+          visual: { kind: 'typo', accent: 'nhanh hơn lương của bạn.' },
+        },
+        // ── WHY ──
+        {
+          text: 'Năm một chín bảy tám, ba nhà tâm lý hỏi hai nhóm rất khác nhau.',
+          visual: { kind: 'typo', accent: 'hai nhóm rất khác nhau.' },
+        },
+        {
+          text: 'Một nhóm vừa trúng số lớn. Một nhóm vừa liệt sau tai nạn.',
+          visual: { kind: 'typo', accent: 'vừa liệt sau tai nạn.' },
+        },
+        {
+          text: 'Nhóm trúng số không vui hơn bạn với tôi là bao nhiêu.',
+          visual: { kind: 'typo', accent: 'không vui hơn bạn với tôi' },
+        },
+        {
+          text: 'Chỗ lạ ở đây: mấy niềm vui hàng ngày của họ nhạt hẳn đi.',
+          visual: { kind: 'typo', accent: 'nhạt hẳn đi.' },
+        },
+        {
+          text: 'Bữa sáng, một cuộc gặp, một bài hát quen. Nhạt hơn hồi chưa trúng.',
+          visual: { kind: 'typo', accent: 'Nhạt hơn hồi chưa trúng.' },
+        },
+        {
+          // ⚠️ "Gọi là" chứ KHÔNG phải "họ gọi đó là": khái niệm mức thích
+          // nghi (adaptation level) là khung của Helson 1964, nhóm Brickman
+          // ÁP DỤNG chứ không đặt tên. Gán nhầm công cho một nhóm tác giả là
+          // đúng loại chi tiết người xem tra ra rồi quay lại bắt lỗi.
+          text: 'Nghiên cứu đó của Brickman, Coates và Janoff-Bulman.',
+          visual: { kind: 'typo', accent: 'Brickman, Coates và Janoff-Bulman.' },
+        },
+        {
+          text: 'Cơ chế này gọi là mức thích nghi. Được gì bạn quen ngay thứ đó.',
+          visual: { kind: 'typo', accent: 'mức thích nghi.' },
+        },
+        {
+          text: 'Ông bà mình gọi ngắn hơn nhiều: được voi đòi tiên.',
+          visual: { kind: 'typo', accent: 'được voi đòi tiên.' },
+        },
+        // ── FOR WHAT ──
+        {
+          text: 'Biết vậy, bạn thôi hỏi bao nhiêu là đủ. Câu đó không có đáy.',
+          visual: { kind: 'typo', accent: 'không có đáy.' },
+        },
+        {
+          text: 'Bạn hỏi câu khác: tháng này mình giữ lại được mấy phần?',
+          visual: { kind: 'typo', accent: 'giữ lại được mấy phần?' },
+        },
+        {
+          text: 'Với con bạn cũng thế. Cho đều đặn thứ gì, thứ đó hết là thưởng.',
+          visual: { kind: 'typo', accent: 'hết là phần thưởng.' },
+        },
+        // ── PAYOFF + TWIST ──
+        // Twist: khoảng trống KHÔNG phải để dành dụm — nói thế thì nó chỉ là
+        // một lời khuyên tiết kiệm ai cũng nghe rồi. Nó để cái ngưỡng chưa kịp
+        // dời, tức đánh vào đúng cơ chế vừa giải thích ở phần WHY.
+        {
+          text: 'Cách gỡ không phải kiếm thêm. Cũng không phải nhịn cho khổ.',
+          visual: { kind: 'typo', accent: 'Cũng không phải nhịn' },
+        },
+        {
+          text: 'Là chừa một khoảng trống giữa lúc tiền về và lúc bạn tiêu nó.',
+          visual: { kind: 'typo', accent: 'một khoảng trống' },
+        },
+        {
+          text: 'Khoảng đó không để dành dụm. Là để cái ngưỡng chưa kịp dời lên.',
+          visual: { kind: 'typo', accent: 'chưa kịp dời lên.' },
+        },
+        {
+          text: 'Người xưa gọi là tri túc. Biết đủ, chứ không phải có đủ.',
+          visual: { kind: 'typo', accent: 'Biết đủ, chứ không phải có đủ.' },
+        },
+      ],
+      ...cta('Còn lá số nói gì về tiền của bạn?', { ten: 'Tử Bình Bát Tự' }),
+      music: 'don-dap.wav',
+      // Ích (kw42 — thêm vào) → Tổn (kw41 — hao đi) → Tiết (kw60 — biết dừng,
+      // rơi đúng đoạn payoff). Cặp Tổn/Ích là cặp quẻ kinh điển về được–mất.
+      backdrop: [QUE('49-kw42.png'), QUE('35-kw41.png'), QUE('19-kw60.png')],
+      hashtags: ['tienbac', 'tamly', 'tietkiem', 'selfdiscovery'],
+    },
+  },
+
   // ── A. Motion typography thuần — 0 asset, 0đ ────────────────────────────
   {
     id: 'ba-kieu-ton-thuong',
