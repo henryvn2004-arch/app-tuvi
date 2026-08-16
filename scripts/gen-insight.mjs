@@ -117,6 +117,25 @@ if (!g1.pass) {
 }
 
 if (DRY) {
+  // In TRỌN kịch bản để đọc bằng mắt trước khi đốt một lượt TTS + render.
+  // 🔑 Duyệt NỘI DUNG rẻ hơn duyệt VIDEO nhiều bậc: một vòng sửa chữ ở đây tốn
+  // 0đ và vài giây, còn dựng lại clip là 20 lượt TTS cộng mấy phút render.
+  const line = (n, t) => `   ${String(n).padStart(2)}. ${t}`;
+  console.log('\n══════════════════════════════════════════════');
+  console.log(`  ${spec.title}`);
+  console.log(`  nhãn đỉnh: ${source.topLabel}  ·  dẫn về: ${source.toolId}`);
+  console.log('══════════════════════════════════════════════');
+  console.log(`\n  HOOK  (${estimateSpeechSeconds(spec.hook).toFixed(1)}s)`);
+  console.log(`   ▸ ${spec.hook}`);
+  console.log(`\n  ${spec.scenes.length} CẢNH`);
+  spec.scenes.forEach((sc, i) => {
+    console.log(line(i + 1, sc.text));
+    if (sc.speech) console.log(`       ↳ đọc: ${sc.speech}`);
+  });
+  console.log(`\n  CÂU KẾT  (${estimateSpeechSeconds(spokenCta(spec)).toFixed(1)}s)`);
+  console.log(`   ▸ ${spec.cta}`);
+  if (spec.ctaSpeech) console.log(`   ↳ đọc: ${spec.ctaSpeech}`);
+  console.log(`\n  nhạc: ${spec.music ?? '—'}   ·   thẻ: ${(spec.hashtags ?? []).join(' ')}`);
   console.log('\n[dry-run] dừng trước khi render.');
   process.exit(0);
 }

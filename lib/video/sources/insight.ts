@@ -47,114 +47,171 @@ export interface InsightSource {
  * nghĩa và đọc mã viết HOA thành từng chữ cái; mà tiếng Việt KHÔNG dấu thì bộ
  * đọc không tách được thành từ (đã sai một lần với `tu vi minh bảo`). Viết như
  * TÊN RIÊNG: `Tử Vi Minh Bảo`.
+ *
+ * 🔑 `tool` — GỌI ĐÍCH DANH tên công cụ thay vì chỉ nêu tên miền. Người xem vừa
+ * nghe một điều mới về chính họ; câu kết phải nói thẳng vào ĐÂU để đi tiếp, nếu
+ * không thì họ về trang chủ rồi lạc giữa 54 công cụ. Tên phải khớp NGUYÊN VĂN
+ * `tool_pricing.label` — nói một cái tên không tìm thấy trên site còn tệ hơn
+ * không nói tên nào.
+ *
+ * ⚠️ Chỉ được gọi MỘT tên. Kể cả khi phần *for what* nêu ba hướng dùng, câu kết
+ * vẫn chỉ chỉ một đường — đó là chính điều `cta.missing` đã ghi trong phần `fix`.
  */
-function cta(question: string) {
+function cta(question: string, tool?: string) {
+  const noi = tool ? `Mở ${tool} trên tuviminhbao.com.` : `Tra tại tuviminhbao.com.`;
+  const noiDoc = tool
+    ? `Mở ${tool} trên Tử Vi Minh Bảo chấm com.`
+    : `Tra tại Tử Vi Minh Bảo chấm com.`;
   return {
-    cta: `${question} Tra tại tuviminhbao.com. Nhập mã TUVIMINHBAO để nhận ngay 100 lượng.`,
-    ctaSpeech: `${question} Tra tại Tử Vi Minh Bảo chấm com. Nhập mã Tử Vi Minh Bảo để nhận ngay một trăm lượng.`,
+    cta: `${question} ${noi} Nhập mã TUVIMINHBAO để nhận ngay 100 lượng.`,
+    ctaSpeech: `${question} ${noiDoc} Nhập mã Tử Vi Minh Bảo để nhận ngay một trăm lượng.`,
   };
 }
 
 const SOURCES: InsightSource[] = [
-  // ── A2. BẢN ĐẦY ĐỦ — đúng cấu trúc guideline, không cắt cho vừa 30 giây ──
+  // ── A2. BẢN ĐẦY ĐỦ — WHAT → WHY → FOR WHAT ──────────────────────────────
   //
-  // 🔑 VÌ SAO CÓ BẢN NÀY: bản 25 giây ở dưới chỉ vừa đủ HOOK rồi hết — người
-  // xem chưa học được gì nên nó đọc thành một mẩu quảng cáo. Giữ cả hai để so:
-  // cùng một chủ đề, khác hẳn ở chỗ có PAYOFF hay không.
+  // 🔑 VÌ SAO CÓ BẢN NÀY, và vì sao nó ĐÃ VIẾT LẠI MỘT LẦN:
   //
-  // Cấu trúc: HOOK → CURIOSITY (vì sao đáng nghe) → BUILD-UP (ba kiểu, mỗi
-  // kiểu kèm CƠ CHẾ chứ không chỉ mô tả) → INSIGHT (điểm chung — chỗ người xem
-  // thật sự học được) → PAYOFF (làm gì với nó) → CTA.
+  // Bản 25 giây ở dưới chỉ vừa đủ HOOK rồi hết — người xem chưa học được gì nên
+  // nó đọc thành một mẩu quảng cáo. Bản đầy đủ đầu tiên chữa được độ dài nhưng
+  // vẫn hụt đúng chỗ quan trọng nhất: nó **mô tả ba kiểu rồi mời đi tra**, tức
+  // trả lời WHAT mà bỏ trống WHY và FOR WHAT. Phần "vì sao" khi đó chỉ là ba
+  // câu cùng một khuôn *"đứa trẻ ngày xưa học được rằng…"* — nghe như văn kể,
+  // người xem không mang đi được gì; còn "biết rồi thì dùng vào việc gì" thì
+  // không có câu nào.
+  //
+  // Cấu trúc chốt (Henry duyệt):
+  //   HOOK → CURIOSITY → **WHAT** (ba kiểu, mỗi kiểu 2 cảnh: hành vi + chỗ
+  //   người ngoài hiểu nhầm) → **WHY** (cơ chế thật, kiến thức mang đi được)
+  //   → **FOR WHAT** (dùng vào ba việc có thật) → PAYOFF → CTA gọi ĐÍCH DANH
+  //   tên công cụ.
+  //
+  // 🔑 PHẦN WHY CỐ Ý KHÔNG BÁM TỬ VI. Đây là quyết định định vị, không phải
+  // thiếu sót: mặt tiền là CON NGƯỜI, cổ học chỉ là cơ chế phía sau. Một lời
+  // giải thích tra ngược được (bốn phản ứng của hệ thần kinh trước đe doạ —
+  // đánh · chạy · đứng hình · chiều theo) thì người xem kiểm chứng được ở chỗ
+  // khác, và chính vì thế nó làm site đáng tin hơn là tự khép kín trong bộ môn.
+  //
+  // 🔑 CHỖ NGƯỜI XEM HỌC ĐƯỢC CÁI MỚI nằm ở phản ứng THỨ TƯ. Ba cái đầu ai cũng
+  // nghe rồi; "chiều theo" thì hiếm người biết là một phản xạ có tên — mà nó
+  // đúng là kiểu phổ biến nhất trong gia đình Việt. Bỏ nó đi thì clip chỉ còn
+  // nhắc lại thứ người ta đã biết, và đó là clip bị lướt.
   //
   // ⚠️ Cần chạy với trần độ dài nới ra (`--max-seconds`), xem `GateOptions`.
+  //
+  // ⚠️ TRÁNH HẲN CHỮ `bấm` trong cả kịch bản, dù nói về "nút" thì đó là từ tự
+  // nhiên nhất. `bấm` nằm trong `HOW_TO_VERBS` và bị chặn ở NỬA ĐẦU số cảnh —
+  // viết "nút nào bật lên" / "đang ở nút nào" thì đúng ở mọi vị trí, không phải
+  // phụ thuộc vào việc sau này ai thêm bớt cảnh làm dịch mất ranh giới nửa đầu.
   {
     id: 'ba-kieu-ton-thuong-day-du',
     topLabel: 'Bạn là kiểu người nào',
-    toolId: 'luan-giai',
+    // Đúng `tool_pricing.tool_id` (KHÔNG phải `luan-giai` — đó là tên ở hệ
+    // `events`). Ba hệ tên tool trong repo này vốn đã lệch nhau một lần và
+    // suýt làm panel phễu đọc ra "24 người mở, 0 người mua".
+    toolId: 'laso',
     spec: {
       title: 'Ba kiểu người khi bị tổn thương (bản đầy đủ)',
-      hook: 'Có ba kiểu người khi bị tổn thương. Bạn không tự quyết được.',
+      hook: 'Có ba kiểu người khi bị tổn thương. Thật ra bạn không tự quyết.',
       scenes: [
         // ── CURIOSITY: vì sao chuyện này đáng nghe hết ──
         {
-          text: 'Cách bạn phản ứng lúc đau không phải tính cách. Đó là một thói quen sinh tồn.',
-          visual: { kind: 'typo', accent: 'thói quen sinh tồn.' },
+          text: 'Cách bạn phản ứng lúc đau không phải tính cách. Nó là một phản xạ.',
+          visual: { kind: 'typo', accent: 'một phản xạ.' },
         },
         {
-          text: 'Nó hình thành từ những năm bạn còn quá nhỏ để hiểu chuyện gì đang xảy ra.',
-          visual: { kind: 'typo', accent: 'quá nhỏ' },
+          text: 'Mà phản xạ thì có nguyên nhân. Biết nguyên nhân rồi, bạn nhìn khác hẳn.',
+          visual: { kind: 'typo', accent: 'có nguyên nhân.' },
         },
-        // ── BUILD-UP · kiểu 1 ──
+        // ── WHAT · kiểu 1 ──
         {
           text: 'Kiểu thứ nhất: rút lui. Bạn không cãi, không giải thích, chỉ lặng đi.',
           visual: { kind: 'typo', accent: 'rút lui.' },
         },
         {
-          text: 'Người ngoài tưởng bạn đã nguôi. Thật ra bạn vừa đóng lại một cánh cửa.',
-          visual: { kind: 'typo', accent: 'đóng lại một cánh cửa.' },
+          text: 'Người ngoài tưởng bạn đã nguôi. Thật ra bạn vừa đóng một cánh cửa.',
+          visual: { kind: 'typo', accent: 'đóng một cánh cửa.' },
         },
-        {
-          text: 'Đứa trẻ ngày xưa học được rằng nói ra cũng chẳng ai nghe. Nên thôi im.',
-          visual: { kind: 'typo', accent: 'chẳng ai nghe.' },
-        },
-        // ── BUILD-UP · kiểu 2 ──
+        // ── WHAT · kiểu 2 ──
         {
           text: 'Kiểu thứ hai: nói cho bằng hết. Bạn cần được nghe hơn là cần thắng.',
           visual: { kind: 'typo', accent: 'cần được nghe' },
         },
         {
-          text: 'Giọng bạn to dần lên, không phải vì giận, mà vì sợ bị bỏ qua lần nữa.',
+          text: 'Giọng bạn to dần, không phải vì giận, mà vì sợ bị bỏ qua lần nữa.',
           visual: { kind: 'typo', accent: 'sợ bị bỏ qua' },
         },
-        {
-          text: 'Đứa trẻ ngày xưa chỉ được để ý mỗi khi ồn ào. Nên nó không dám im.',
-          visual: { kind: 'typo', accent: 'không dám im.' },
-        },
-        // ── BUILD-UP · kiểu 3 ──
+        // ── WHAT · kiểu 3 ──
         {
           text: 'Kiểu thứ ba: quay vào trong. Bạn tự trách mình trước khi kịp giận ai.',
           visual: { kind: 'typo', accent: 'quay vào trong.' },
         },
         {
-          text: 'Bạn nhận phần sai về mình rất nhanh, vì như thế thì mọi thứ yên trở lại.',
+          text: 'Bạn nhận phần sai rất nhanh, vì như thế thì mọi thứ yên trở lại.',
           visual: { kind: 'typo', accent: 'yên trở lại.' },
         },
+        // ── WHY: cơ chế thật. Đây là phần bản trước bỏ trống ──
         {
-          text: 'Đứa trẻ ngày xưa thấy nhà hết căng mỗi lần nó nhận lỗi. Nên nó nhận mãi.',
-          visual: { kind: 'typo', accent: 'nhận mãi.' },
-        },
-        // ── INSIGHT: điểm chung — chỗ người xem thật sự học được ──
-        {
-          text: 'Cả ba kiểu đều đang làm cùng một việc: giữ cho mối quan hệ của bạn khỏi vỡ.',
-          visual: { kind: 'typo', accent: 'cùng một việc:' },
+          text: 'Ba kiểu này không phải ba tính cách. Chúng là ba nút của hệ thần kinh.',
+          visual: { kind: 'typo', accent: 'ba nút' },
         },
         {
-          text: 'Chúng chỉ khác nhau ở chỗ ai là người trả giá.',
-          visual: { kind: 'typo', accent: 'ai là người trả giá.' },
+          text: 'Gặp nguy, cơ thể bạn có bốn nút: đánh trả, bỏ chạy, đứng hình, chiều theo.',
+          visual: { kind: 'typo', accent: 'bốn nút:' },
         },
         {
-          text: 'Người rút lui mất dần kết nối. Người nói to mất sự bình yên.',
-          visual: { kind: 'typo', accent: 'mất dần kết nối.' },
+          // ⚠️ KHÔNG viết "nút người Việt hay dùng nhất" như bản nháp đầu: đó là
+          // một khẳng định thống kê về cả một dân tộc, mà không có số liệu nào
+          // đỡ. Nói chắc hơn thứ mình biết là lớp lỗi repo này đã trả giá nhiều
+          // lần — và trên video thì nó nằm vĩnh viễn trong file đã đăng.
+          text: 'Ba nút đầu ai cũng nghe rồi. Nút thứ tư thì ít người biết nó có tên.',
+          visual: { kind: 'typo', accent: 'Nút thứ tư' },
         },
         {
-          text: 'Còn người luôn nhận lỗi thì mất chính mình, từng chút một.',
-          visual: { kind: 'typo', accent: 'mất chính mình,' },
+          text: 'Chiều theo: nhận lỗi, làm hoà, để cơn giận của người kia hạ xuống.',
+          visual: { kind: 'typo', accent: 'Chiều theo:' },
         },
-        // ── PAYOFF: làm được gì với điều vừa biết ──
+        {
+          text: 'Nút nào bật lên là do nút nào từng có tác dụng, hồi bạn còn rất nhỏ.',
+          visual: { kind: 'typo', accent: 'từng có tác dụng,' },
+        },
+        {
+          text: 'Nhà hay cãi thì im là an toàn. Nhà bận rộn thì phải ồn mới được nghe.',
+          visual: { kind: 'typo', accent: 'im là an toàn.' },
+        },
+        {
+          text: 'Còn nhà lúc nào cũng căng, thì nhận lỗi là cách nhanh nhất để yên.',
+          visual: { kind: 'typo', accent: 'nhanh nhất để yên.' },
+        },
+        // ── FOR WHAT: biết rồi thì dùng vào việc gì ──
+        {
+          text: 'Biết nút của mình, bạn thôi tự trách vì đã phản ứng như thế.',
+          visual: { kind: 'typo', accent: 'thôi tự trách' },
+        },
+        {
+          text: 'Biết nút của người kia, bạn hết đọc im lặng thành lạnh nhạt.',
+          visual: { kind: 'typo', accent: 'thành lạnh nhạt.' },
+        },
+        {
+          text: 'Và biết nút của con: đứa trẻ hay nhận lỗi không phải là đứa ngoan.',
+          visual: { kind: 'typo', accent: 'không phải là đứa ngoan.' },
+        },
+        {
+          text: 'Nó đang ở nút thứ tư, để nhà mình yên. Nó học điều đó rất sớm.',
+          visual: { kind: 'typo', accent: 'nút thứ tư,' },
+        },
+        // ── PAYOFF ──
         {
           text: 'Điều bạn học được thì bạn học lại được. Không cần đổi tính nết.',
           visual: { kind: 'typo', accent: 'học lại được.' },
         },
         {
-          text: 'Chỉ cần nhận ra nó đang chạy, ngay lúc nó chạy.',
-          visual: { kind: 'typo', accent: 'ngay lúc nó chạy.' },
-        },
-        {
-          text: 'Lần tới khi đau, bạn thử dừng một nhịp: mình đang bảo vệ điều gì?',
-          visual: { kind: 'typo', accent: 'đang bảo vệ điều gì?' },
+          text: 'Lần tới khi đau, bạn thử dừng một nhịp: mình đang ở nút nào?',
+          visual: { kind: 'typo', accent: 'đang ở nút nào?' },
         },
       ],
-      ...cta('Bạn là kiểu nào?'),
+      ...cta('Bạn là kiểu nào?', 'Luận Giải Lá Số'),
       music: 'tram-tinh.wav',
       hashtags: ['tinhcach', 'tamly', 'chualanh', 'selfdiscovery'],
     },
