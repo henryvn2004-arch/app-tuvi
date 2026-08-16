@@ -186,8 +186,19 @@ const SOURCES: InsightSource[] = [
           visual: { kind: 'typo', accent: 'một ký ức.' },
         },
         // ── WHY: nói như người nói chuyện, không như người giảng bài ──
-        // Tên và mốc năm GIỮ NGUYÊN trên phụ đề để tra được, nhưng đặt SAU khi
-        // đã nói xong ý — nêu tên trước thì câu thành trích dẫn học thuật.
+        // Tên và mốc năm đặt SAU khi đã nói xong ý — nêu tên trước thì câu
+        // thành trích dẫn học thuật.
+        //
+        // 🔑 TÊN RIÊNG LATIN ĐI THẲNG VÀO BẢN ĐỌC, KHÔNG TÁCH `speech`. Bản
+        // trước tách ra vì SỢ Vbee đánh vần từng chữ cái — một phỏng đoán chưa
+        // hề kiểm chứng, và nó làm mất đúng phần authority mà cả đoạn WHY dựng
+        // lên: phụ đề có tên mà tai không nghe thấy gì.
+        // Đo thật (gửi hai chuỗi chỉ khác nhau ở chỗ có/không có tên, so độ dài
+        // mp3): "Walter Cannon" +1,07s · "Pete Walker" +1,41s · "Sirois và
+        // Pychyl" +0,65s. Đánh vần từng chữ thì phải mất 4–6 giây, nên con số
+        // này nói nó ĐỌC THÀNH ÂM. Bản phiên âm tiếng Việt cũng chỉ +1,04s,
+        // tức không hơn gì — thêm một bản chữ song song mà không được gì.
+        // ⚠️ Đo lại nếu đổi giọng: đây là số của giọng nữ Hà Nội.
         {
           text: 'Vì cơ thể bạn chỉ có bốn nút khi thấy nguy.',
           visual: { kind: 'typo', accent: 'bốn nút' },
@@ -198,12 +209,10 @@ const SOURCES: InsightSource[] = [
         },
         {
           text: 'Ba nút đầu y học gọi tên từ 1915, thời Walter Cannon.',
-          speech: 'Ba nút đầu y học gọi tên từ năm 1915.',
           visual: { kind: 'typo', accent: 'Walter Cannon.' },
         },
         {
           text: 'Nút thứ tư mãi 2013 mới có tên, do Pete Walker đặt.',
-          speech: 'Nút thứ tư mãi năm 2013 mới có tên.',
           visual: { kind: 'typo', accent: 'Nút thứ tư' },
         },
         {
@@ -351,7 +360,6 @@ const SOURCES: InsightSource[] = [
         },
         {
           text: 'Hai nhà tâm lý Sirois và Pychyl chỉ ra điều đó từ năm 2013.',
-          speech: 'Hai nhà tâm lý học đã chỉ ra điều đó từ năm 2013.',
           visual: { kind: 'typo', accent: 'Sirois và Pychyl' },
         },
         {
