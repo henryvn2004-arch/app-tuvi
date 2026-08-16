@@ -198,7 +198,15 @@ const SOURCES: InsightSource[] = [
         // Pychyl" +0,65s. Đánh vần từng chữ thì phải mất 4–6 giây, nên con số
         // này nói nó ĐỌC THÀNH ÂM. Bản phiên âm tiếng Việt cũng chỉ +1,04s,
         // tức không hơn gì — thêm một bản chữ song song mà không được gì.
-        // ⚠️ Đo lại nếu đổi giọng: đây là số của giọng nữ Hà Nội.
+        //
+        // ⚠️ SỐ TRÊN GẮN VỚI TỪNG CLIP, KHÔNG PHẢI VỚI CẢ KÊNH. `pickVoice`
+        // (`scripts/tts-clip.mjs`) chọn giọng theo BĂM của id clip, nên mỗi
+        // kịch bản một giọng khác nhau — chính bản này chạy giọng *nữ Hà Nội*
+        // (Cannon/Walker), còn "Sirois và Pychyl" đo trên *nữ Sài Gòn* của
+        // `vi-sao-hay-hoan-lai`. Bản ghi trước đây gộp cả ba vào "giọng nữ Hà
+        // Nội" là SAI.
+        // ⇒ Thêm tên riêng Latin vào một kịch bản chạy giọng CHƯA đo thì phải
+        // đo lại cho giọng đó, đừng suy từ bảng này.
         {
           text: 'Vì cơ thể bạn chỉ có bốn nút khi thấy nguy.',
           visual: { kind: 'typo', accent: 'bốn nút' },
