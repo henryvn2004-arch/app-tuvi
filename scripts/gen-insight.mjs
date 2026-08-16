@@ -50,6 +50,16 @@ const FPS = 30;
  * gì và clip đọc thành quảng cáo. Đây là quyết định vận hành nên để ở cờ.
  */
 const MAX_SECONDS = Number(val('--max-seconds', '240'));
+/**
+ * Mức nén h264 (thấp = đẹp + nặng). Bỏ trống = giữ mặc định của Remotion (18).
+ *
+ * 🔑 Vì sao thành cờ chứ không đổi mặc định: ảnh nền chi tiết đẩy dung lượng
+ * lên gấp ~3 lần bản chữ thuần (đo được: 12MB → 50MB cho một clip 100 giây),
+ * và mọi khung hình đều khác nhau vì Ken Burns chạy suốt. Bản ĐĂNG thì nặng
+ * không sao — nền tảng nào cũng nén lại; nhưng bản gửi đi DUYỆT thì có trần.
+ * Hai nhu cầu khác nhau nên để người chạy chọn, đừng hạ chất lượng mặc định.
+ */
+const CRF = val('--crf', '');
 /** Khoảng "đẹp" cho clip dạy — ngoài khoảng chỉ WARN, không chặn. */
 const SWEET = [45, 120];
 
@@ -268,6 +278,7 @@ execFileSync(
     outFile,
     `--props=${propsFile}`,
     ...(STILL ? [`--frame=${val('--frame', '40')}`] : []),
+    ...(!STILL && CRF ? [`--crf=${CRF}`] : []),
   ],
   {
     cwd: REMOTION,
