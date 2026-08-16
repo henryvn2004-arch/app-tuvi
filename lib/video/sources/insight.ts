@@ -57,27 +57,28 @@ export interface InsightSource {
  * nghĩa; mà tiếng Việt KHÔNG dấu thì bộ đọc không tách được thành từ (đã sai
  * một lần với `tu vi minh bảo`). Viết như TÊN RIÊNG: `Tử Vi Minh Bảo`.
  *
- * 🔑 `tool` — GỌI ĐÍCH DANH tên công cụ + NÓI RÕ DÙNG NÓ ĐỂ LÀM GÌ. Người xem
- * vừa nghe một điều mới về chính họ; câu kết phải nối thẳng vào phần *for what*
- * ngay trên nó, nếu không thì họ về trang chủ rồi lạc giữa 55 công cụ. Tên phải
- * khớp NGUYÊN VĂN `tool_pricing.label` — nói một cái tên không tìm thấy trên
- * site còn tệ hơn không nói tên nào.
+ * 🔑 `tool` — GỌI ĐÍCH DANH tên công cụ. Tên phải khớp NGUYÊN VĂN
+ * `tool_pricing.label` — nói một cái tên không tìm thấy trên site còn tệ hơn
+ * không nói tên nào.
+ *
+ * 🔑 HÌNH DẠNG LÀ CÂU HỎI, KHÔNG PHẢI LỜI SAI BẢO. Bản trước mở bằng *"Mở X để
+ * làm Y"* — đúng ngữ pháp nhưng là giọng ra lệnh, đặt ngay sau một đoạn vừa
+ * chạm vào chuyện riêng của người xem thì đọc thành chuyển kênh sang bán hàng.
+ * Câu hỏi thì nối liền mạch: cả clip đang là tự khám phá, câu kết chỉ mở thêm
+ * một cánh cửa nữa cùng hướng. Vai "dùng để làm gì" do CHÍNH câu hỏi gánh, nên
+ * bỏ luôn vế `de` — bớt một mệnh đề là bớt hai giây ở đúng chỗ người xem rơi.
  */
-function cta(question: string, tool?: { ten: string; tenDoc?: string; de: string }) {
+function cta(question: string, tool?: { ten: string; tenDoc?: string }) {
   // `tenDoc` — bản ĐỌC của tên công cụ, chỉ khai khi tên chứa ký tự bộ đọc xử
   // lý không chắc (`&` là ca đầu tiên: "Tử Vi Công Sở & Hướng Nghiệp"). Phụ đề
   // phải giữ NGUYÊN VĂN `tool_pricing.label` để người xem tìm đúng tên trên
   // site; đó là lý do không thể chỉ sửa một bản.
   const ten = tool?.ten ?? '';
   const tenDoc = tool?.tenDoc ?? ten;
-  const noi = tool ? `Mở ${ten} ${tool.de}, tại tuviminhbao.com.` : `Tra tại tuviminhbao.com.`;
+  const noi = tool ? `${ten}, tại tuviminhbao.com.` : `Tra tại tuviminhbao.com.`;
   const noiDoc = tool
-    ? `Mở ${tenDoc} ${tool.de}, tại Tử Vi Minh Bảo chấm com.`
+    ? `${tenDoc}, tại Tử Vi Minh Bảo chấm com.`
     : `Tra tại Tử Vi Minh Bảo chấm com.`;
-  // `question` để RỖNG được — dùng khi chính cảnh cuối đã là câu hỏi, hỏi thêm
-  // lần nữa ở câu kết là hỏi hai lần và đội thêm ~2 giây vào đúng đoạn người
-  // xem rơi nhiều nhất. Cổng vẫn tính là có mời tương tác vì `viral.no-invite`
-  // xét CẢ cảnh cuối lẫn câu kết.
   const ghep = (...v: string[]) => v.filter(Boolean).join(' ');
   return { cta: ghep(question, noi), ctaSpeech: ghep(question, noiDoc) };
 }
@@ -127,140 +128,131 @@ const SOURCES: InsightSource[] = [
     toolId: 'laso',
     spec: {
       title: 'Ba kiểu người khi bị tổn thương (bản đầy đủ)',
-      hook: 'Có ba kiểu người khi bị tổn thương. Thật ra bạn không tự quyết.',
+      // 🔑 HOOK ĐẬP THẲNG VÀO MỘT NIỀM TIN. Bản trước mở bằng "có ba kiểu
+      // người…" — đúng nhưng là một lời GIỚI THIỆU, người xem chưa mất gì nên
+      // chưa có lý do ở lại. Đổi "tính cách" (thứ họ tự hào hoặc cam chịu)
+      // thành "vết thương" là lấy đi một cách hiểu họ đang có, và chỗ trống đó
+      // mới là thứ giữ họ xem tiếp.
+      hook: 'Bạn tưởng đó là tính cách mình. Thật ra là vết thương.',
       scenes: [
-        // ── CURIOSITY: vì sao chuyện này đáng nghe hết ──
+        // ── MỞ TÒ MÒ: phải chạm cảm xúc, không chỉ nêu đề bài ──
         {
-          text: 'Cách bạn phản ứng lúc đau không phải tính cách. Nó là một phản xạ.',
-          visual: { kind: 'typo', accent: 'một phản xạ.' },
+          text: 'Có ba kiểu phản ứng khi bị đau. Bạn không tự quyết mình kiểu nào.',
+          visual: { kind: 'typo', accent: 'không tự quyết' },
         },
         {
-          text: 'Mà phản xạ thì có nguyên nhân. Biết nguyên nhân rồi, bạn nhìn khác hẳn.',
-          visual: { kind: 'typo', accent: 'có nguyên nhân.' },
+          // Câu này gánh phần CẢM XÚC của đoạn mở. Không có nó thì đoạn mở chỉ
+          // là thông tin, mà thông tin thì người xem lướt qua được.
+          text: 'Xong rồi bạn nằm đó, ghét chính mình vì đã phản ứng như thế.',
+          visual: { kind: 'typo', accent: 'ghét chính mình' },
         },
-        // ── WHAT · kiểu 1 ──
+        // ── WHAT: LEO THANG, không liệt kê. Mỗi kiểu khó thừa nhận hơn kiểu
+        // trước, nên người xem càng nghe càng thấy bị nói trúng. Ba kiểu ngang
+        // hàng thì đọc thành một danh sách, mà danh sách thì không có cao trào.
         {
-          text: 'Kiểu thứ nhất: rút lui. Bạn không cãi, không giải thích, chỉ lặng đi.',
-          visual: { kind: 'typo', accent: 'rút lui.' },
+          text: 'Kiểu thứ nhất: bạn im. Không cãi, không giải thích, chỉ lặng đi.',
+          visual: { kind: 'typo', accent: 'bạn im.' },
         },
         {
-          text: 'Người ngoài tưởng bạn đã nguôi. Thật ra bạn vừa đóng một cánh cửa.',
+          text: 'Người ta tưởng bạn đã nguôi. Thật ra bạn vừa đóng một cánh cửa.',
           visual: { kind: 'typo', accent: 'đóng một cánh cửa.' },
         },
-        // ── WHAT · kiểu 2 ──
         {
-          text: 'Kiểu thứ hai: nói cho bằng hết. Bạn cần được nghe hơn là cần thắng.',
-          visual: { kind: 'typo', accent: 'cần được nghe' },
+          text: 'Kiểu thứ hai nặng hơn: bạn nói cho bằng hết.',
+          visual: { kind: 'typo', accent: 'nặng hơn:' },
         },
         {
-          text: 'Giọng bạn to dần, không phải vì giận, mà vì sợ bị bỏ qua lần nữa.',
-          visual: { kind: 'typo', accent: 'sợ bị bỏ qua' },
-        },
-        // ── WHAT · kiểu 3 ──
-        {
-          text: 'Kiểu thứ ba: quay vào trong. Bạn tự trách mình trước khi kịp giận ai.',
-          visual: { kind: 'typo', accent: 'quay vào trong.' },
+          text: 'Giọng to dần, không phải vì giận, mà vì sợ lại bị bỏ qua.',
+          visual: { kind: 'typo', accent: 'sợ lại bị bỏ qua.' },
         },
         {
-          text: 'Bạn nhận phần sai rất nhanh, vì như thế thì mọi thứ yên trở lại.',
-          visual: { kind: 'typo', accent: 'yên trở lại.' },
-        },
-        // ── WHY: cơ chế thật, CÓ NGUỒN TRA ĐƯỢC ─────────────────────────────
-        //
-        // 🔴 LUẬT CỨNG CHO PHẦN NÀY: chỉ nêu tên/mốc nào KIỂM CHỨNG ĐƯỢC. Một
-        // cái tên bịa thì người xem search không ra, và mất tin ngay ở đúng chỗ
-        // clip đang xây uy tín — mà video đã đăng thì nằm đó vĩnh viễn, không
-        // sửa được như một dòng DB. Ba nguồn dưới đây đều tra ra ngay:
-        //   · Walter Cannon (1871–1945), sinh lý học Harvard — đặt tên phản xạ
-        //     "fight-or-flight" năm 1915, sách *Bodily Changes in Pain, Hunger,
-        //     Fear and Rage*.
-        //   · Pete Walker — nhà trị liệu, đặt tên phản xạ thứ tư "fawn" trong
-        //     *Complex PTSD: From Surviving to Thriving* (2013).
-        //   · *Luận Ngữ*, thiên Học Nhi: 禮之用，和為貴 — "Lễ chi dụng, hoà vi
-        //     quý", gốc của thành ngữ "dĩ hoà vi quý".
-        //
-        // ⚠️ KHÔNG nói "dĩ hoà vi quý CHÍNH LÀ phản xạ chiều theo". Luận Ngữ dạy
-        // giữ hoà khí như một ĐỨC, còn fawn là một phản xạ tổn thương — đánh
-        // đồng hai thứ là bóp méo cổ thư. Nói đúng: nền văn hoá dạy nhường nhịn
-        // thì cái nút ấy được củng cố sớm hơn và mạnh hơn.
-        {
-          text: 'Ba kiểu này không phải ba tính cách. Chúng là ba nút của hệ thần kinh.',
-          visual: { kind: 'typo', accent: 'ba nút' },
+          text: 'Kiểu thứ ba ít ai dám nhận: bạn quay vào trong.',
+          visual: { kind: 'typo', accent: 'ít ai dám nhận:' },
         },
         {
-          // `speech` bỏ tên riêng Latin: Vbee đọc chuỗi tiếng Anh rất dễ thành
-          // đánh vần từng chữ. Phụ đề GIỮ NGUYÊN tên — đó mới là chỗ người xem
-          // đọc và gõ lại vào ô tìm kiếm. Cùng lý do đã phải tách bản đọc cho
-          // tên miền và mã khuyến mãi.
-          text: 'Năm 1915, nhà sinh lý học Walter Cannon ở Harvard gọi tên hai nút đầu.',
-          speech: 'Năm 1915, một nhà sinh lý học người Mỹ gọi tên hai nút đầu.',
-          visual: { kind: 'typo', accent: 'Walter Cannon' },
+          text: 'Bạn nhận lỗi trước cả khi kịp giận. Vì như thế thì mọi thứ yên.',
+          visual: { kind: 'typo', accent: 'trước cả khi kịp giận.' },
+        },
+        // ── INSIGHT ĐẨY LÊN SỚM ──
+        // 🔑 Đây là cao trào, và nó CỐ Ý đứng ngay sau phần mô tả chứ không đợi
+        // tới cuối. Người xem vừa nhận ra mình ở một trong ba kiểu — đúng lúc
+        // đó mới là lúc câu này ăn. Để nó ở cuối là để cho người đã lướt đi rồi.
+        {
+          text: 'Nhưng cả ba đều không phản ứng với người trước mặt bạn.',
+          visual: { kind: 'typo', accent: 'không phản ứng' },
         },
         {
-          text: 'Đánh trả, hoặc bỏ chạy. Sau đó y học thêm nút thứ ba: đứng hình.',
-          visual: { kind: 'typo', accent: 'đứng hình.' },
+          text: 'Bạn đang phản ứng với một ký ức.',
+          visual: { kind: 'typo', accent: 'một ký ức.' },
+        },
+        // ── WHY: nói như người nói chuyện, không như người giảng bài ──
+        // Tên và mốc năm GIỮ NGUYÊN trên phụ đề để tra được, nhưng đặt SAU khi
+        // đã nói xong ý — nêu tên trước thì câu thành trích dẫn học thuật.
+        {
+          text: 'Vì cơ thể bạn chỉ có bốn nút khi thấy nguy.',
+          visual: { kind: 'typo', accent: 'bốn nút' },
         },
         {
-          text: 'Ba nút đó bạn nghe rồi. Nhưng còn một nút thứ tư, ít ai biết tên.',
-          visual: { kind: 'typo', accent: 'nút thứ tư,' },
+          text: 'Đánh trả. Bỏ chạy. Đứng hình. Và chiều theo.',
+          visual: { kind: 'typo', accent: 'Và chiều theo.' },
         },
         {
-          text: 'Mãi năm 2013, nhà trị liệu Pete Walker mới đặt tên: phản xạ chiều theo.',
-          speech: 'Mãi năm 2013, một nhà trị liệu người Mỹ mới đặt tên: phản xạ chiều theo.',
-          visual: { kind: 'typo', accent: 'chiều theo.' },
+          text: 'Ba nút đầu y học gọi tên từ 1915, thời Walter Cannon.',
+          speech: 'Ba nút đầu y học gọi tên từ năm 1915.',
+          visual: { kind: 'typo', accent: 'Walter Cannon.' },
         },
         {
-          text: 'Chiều theo: nhận lỗi, làm hoà, để cơn giận của người kia hạ xuống.',
-          visual: { kind: 'typo', accent: 'Chiều theo:' },
+          text: 'Nút thứ tư mãi 2013 mới có tên, do Pete Walker đặt.',
+          speech: 'Nút thứ tư mãi năm 2013 mới có tên.',
+          visual: { kind: 'typo', accent: 'Nút thứ tư' },
         },
         {
-          text: 'Phương Đông thì biết nút này từ lâu. Luận Ngữ đã dạy: dĩ hoà vi quý.',
+          text: 'Chiều theo là: nhận lỗi, làm hoà, cho cơn giận kia hạ xuống.',
+          visual: { kind: 'typo', accent: 'Chiều theo' },
+        },
+        {
+          text: 'Ông bà mình gọi khác: dĩ hoà vi quý. Luận Ngữ dạy vậy.',
           visual: { kind: 'typo', accent: 'dĩ hoà vi quý.' },
         },
         {
-          text: 'Lớn lên giữa lời dạy đó, nút chiều theo của bạn được củng cố rất sớm.',
-          visual: { kind: 'typo', accent: 'củng cố rất sớm.' },
+          text: 'Nút nào bật là do hồi bé, nút nào từng cứu được bạn.',
+          visual: { kind: 'typo', accent: 'từng cứu được bạn.' },
         },
         {
-          text: 'Nút nào bật lên là do nút nào từng có tác dụng, hồi bạn còn rất nhỏ.',
-          visual: { kind: 'typo', accent: 'từng có tác dụng,' },
-        },
-        {
-          text: 'Nhà hay cãi thì im là an toàn. Nhà bận rộn thì phải ồn mới được nghe.',
+          text: 'Nhà hay cãi thì im là an toàn. Nhà bận thì phải ồn mới được nghe.',
           visual: { kind: 'typo', accent: 'im là an toàn.' },
         },
-        // ── FOR WHAT: biết rồi thì dùng vào việc gì ──
+        // ── FOR WHAT ──
         {
-          text: 'Biết nút của mình, bạn thôi tự trách vì đã phản ứng như thế.',
-          visual: { kind: 'typo', accent: 'thôi tự trách' },
+          text: 'Biết nút của mình, bạn thôi ghét mình vì đã phản ứng như thế.',
+          visual: { kind: 'typo', accent: 'thôi ghét mình' },
         },
         {
-          text: 'Biết nút của người kia, bạn hết đọc im lặng thành lạnh nhạt.',
+          text: 'Biết nút người kia, bạn hết đọc im lặng thành lạnh nhạt.',
           visual: { kind: 'typo', accent: 'thành lạnh nhạt.' },
         },
         {
-          text: 'Và biết nút của con: đứa trẻ hay nhận lỗi không phải là đứa ngoan.',
-          visual: { kind: 'typo', accent: 'không phải là đứa ngoan.' },
+          text: 'Và biết nút của con: đứa hay nhận lỗi không phải đứa ngoan.',
+          visual: { kind: 'typo', accent: 'không phải đứa ngoan.' },
         },
         {
-          text: 'Nó đang ở nút thứ tư, để nhà mình yên. Nó học điều đó rất sớm.',
-          visual: { kind: 'typo', accent: 'nút thứ tư,' },
+          text: 'Nó đang ở nút thứ tư. Nó học điều đó sớm hơn bạn tưởng.',
+          visual: { kind: 'typo', accent: 'sớm hơn bạn tưởng.' },
         },
-        // ── PAYOFF + cầu nối sang câu kết ──
-        // Cảnh áp chót CỐ Ý nhắc lại đúng ba hướng dùng của phần *for what* để
-        // câu kết có chỗ neo. Không có nó thì tên công cụ ở câu kết rơi vào
-        // khoảng không: người xem vừa nghe xong một điều hay, rồi bị mời mua
-        // một thứ chưa nối vào điều vừa nghe.
+        // ── PAYOFF + TWIST ──
+        // Twist: không hứa sửa được tính nết (hứa thế là hứa hụt), mà đổi mục
+        // tiêu — chỉ cần NHÌN THẤY nó lúc đang chạy. Câu chốt vòng ngược về
+        // "đứa trẻ" ở phần WHY nên cả clip khép lại thành một vòng.
         {
-          text: 'Điều bạn học được thì bạn học lại được. Không cần đổi tính nết.',
-          visual: { kind: 'typo', accent: 'học lại được.' },
+          text: 'Bạn không sửa được nút. Nhưng nhận ra được lúc nó đang bật.',
+          visual: { kind: 'typo', accent: 'nhận ra được' },
         },
         {
-          text: 'Muốn biết nút của mình, của con, hay của người bạn hay va chạm?',
-          visual: { kind: 'typo', accent: 'của con,' },
+          text: 'Lần tới khi đau, hỏi một câu: mình đang bảo vệ đứa trẻ nào?',
+          visual: { kind: 'typo', accent: 'đứa trẻ nào?' },
         },
       ],
-      ...cta('', { ten: 'Luận Giải Lá Số', de: 'để soi chính mình' }),
+      ...cta('Còn lá số bạn nói gì về chuyện này?', { ten: 'Luận Giải Lá Số' }),
       music: 'tram-tinh.wav',
       // MỘT bức cho cả clip. Quẻ Khảm (kw29) — nước chồng nước, hiểm nối hiểm:
       // hợp đúng nội dung "cái vòng phòng vệ lặp lại". Chọn theo NGHĨA chứ
@@ -301,110 +293,113 @@ const SOURCES: InsightSource[] = [
     toolId: 'cong-so',
     spec: {
       title: 'Vì sao bạn hay hoãn lại',
-      hook: 'Bạn không lười. Trì hoãn thật ra không phải chuyện thời gian.',
+      // Hook đập vào đúng cái nhãn người ta tự dán cho mình. "Lười" là lời tự
+      // kết án phổ biến nhất về chuyện này; lấy nó đi rồi thay bằng "sợ" là
+      // vừa gây sốc vừa hé một nửa insight chính.
+      hook: 'Bạn tưởng mình lười. Thật ra bạn đang sợ một cảm giác.',
       scenes: [
-        // ── CURIOSITY ──
+        // ── MỞ TÒ MÒ: câu thứ hai gánh phần cảm xúc ──
         {
-          text: 'Bạn biết rõ việc phải làm. Vẫn mở điện thoại ra. Rồi thấy tệ.',
-          visual: { kind: 'typo', accent: 'Rồi thấy tệ.' },
+          text: 'Việc thì nằm đó. Bạn biết rõ. Vẫn mở điện thoại lên.',
+          visual: { kind: 'typo', accent: 'Bạn biết rõ.' },
         },
         {
-          text: 'Càng thấy tệ lại càng hoãn. Vòng đó quay tới sát hạn mới thôi.',
-          visual: { kind: 'typo', accent: 'càng hoãn.' },
+          text: 'Rồi tối đến, bạn ghét chính mình vì đã để cả ngày trôi.',
+          visual: { kind: 'typo', accent: 'ghét chính mình' },
         },
-        // ── WHAT: hiện tượng, tả bằng thứ ai cũng nhận ra ở mình ──
+        // ── WHAT: leo thang từ việc nhỏ tới chỗ đau nhất ──
         {
-          text: 'Bạn hoãn cái tin nhắn khó trả lời, mà dọn nhà thì làm ngay.',
+          text: 'Đầu tiên bạn hoãn cái tin nhắn khó trả lời.',
+          visual: { kind: 'typo', accent: 'khó trả lời.' },
+        },
+        {
+          text: 'Rồi hoãn luôn việc quan trọng nhất, mà dọn nhà thì làm ngay.',
           visual: { kind: 'typo', accent: 'dọn nhà thì làm ngay.' },
         },
         {
-          text: 'Bạn hoãn đúng việc quan trọng nhất, rồi làm xong sạch việc vặt.',
-          visual: { kind: 'typo', accent: 'việc vặt.' },
-        },
-        {
-          text: 'Càng gần hạn chót bạn càng chạy được. Nên bạn tưởng mình cần áp lực.',
+          text: 'Càng gần hạn chót bạn càng chạy được, nên bạn tưởng mình cần áp lực.',
           visual: { kind: 'typo', accent: 'cần áp lực.' },
         },
         {
-          text: 'Nhưng ngày thường thì việc đó vẫn nằm im, không nhúc nhích.',
-          visual: { kind: 'typo', accent: 'vẫn nằm im,' },
+          text: 'Nhưng ngày thường thì nó vẫn nằm im. Và bạn vẫn thấy tệ.',
+          visual: { kind: 'typo', accent: 'vẫn thấy tệ.' },
         },
-        // ── WHY: cốt lõi, có nguồn tra được ──
+        // ── INSIGHT ĐẨY LÊN SỚM ──
+        // 🔑 Câu này là cả cái clip. Bản trước để tận cảnh 11, tức sau khi đã
+        // giảng xong bốn cảnh cơ chế — người xem phải trả trước rồi mới được
+        // nhận. Nay nó đứng ngay sau phần mô tả, đúng lúc họ vừa thấy mình.
         {
-          text: 'Vì trì hoãn không phải lỗi quản lý thời gian. Nó là chuyện cảm xúc.',
-          visual: { kind: 'typo', accent: 'chuyện cảm xúc.' },
+          text: 'Vì bạn không hoãn cái việc. Bạn hoãn cái cảm giác đi kèm nó.',
+          visual: { kind: 'typo', accent: 'hoãn cái cảm giác' },
         },
+        // ── WHY: giọng nói chuyện. Tên nghiên cứu đặt SAU khi đã nói xong ý ──
         {
-          // Tên riêng Latin: phụ đề giữ nguyên để người xem gõ lại tra được,
-          // bản đọc nói vòng — cùng lý do đã áp cho Walter Cannon.
-          text: 'Năm 2013, hai nhà tâm lý Fuschia Sirois và Tim Pychyl chỉ ra điều đó.',
-          speech: 'Năm 2013, hai nhà tâm lý học đã chỉ ra điều đó.',
-          visual: { kind: 'typo', accent: 'Sirois và Tim Pychyl' },
-        },
-        {
-          text: 'Việc nào làm bạn thấy lo, thấy chán, hay sợ làm dở, thì não né việc đó.',
-          visual: { kind: 'typo', accent: 'não né việc đó.' },
+          text: 'Việc nào làm bạn thấy lo, thấy chán, hay sợ làm dở, thì não né.',
+          visual: { kind: 'typo', accent: 'thì não né.' },
         },
         {
-          text: 'Né xong bạn nhẹ người ngay. Đó là phần thưởng, nên não học rất nhanh.',
-          visual: { kind: 'typo', accent: 'phần thưởng,' },
+          text: 'Né xong bạn nhẹ ngay. Nhẹ là phần thưởng. Não học rất nhanh.',
+          visual: { kind: 'typo', accent: 'là phần thưởng.' },
         },
         {
-          text: 'Nên bạn không hoãn cái việc. Bạn đang hoãn cảm giác đi kèm nó.',
-          visual: { kind: 'typo', accent: 'hoãn cảm giác' },
+          text: 'Nên càng cầu toàn càng hay hoãn. Sợ làm dở thì thà chưa làm.',
+          visual: { kind: 'typo', accent: 'thà chưa làm.' },
         },
         {
-          text: 'Vì thế người càng cầu toàn càng hay hoãn. Sợ làm dở thì thà chưa làm.',
-          visual: { kind: 'typo', accent: 'càng hay hoãn.' },
+          text: 'Đây không phải chuyện quản lý thời gian. Là chuyện cảm xúc.',
+          visual: { kind: 'typo', accent: 'Là chuyện cảm xúc.' },
         },
         {
-          text: 'Cái vòng này người Việt gọi tên từ lâu: nước đến chân mới nhảy.',
+          text: 'Hai nhà tâm lý Sirois và Pychyl chỉ ra điều đó từ năm 2013.',
+          speech: 'Hai nhà tâm lý học đã chỉ ra điều đó từ năm 2013.',
+          visual: { kind: 'typo', accent: 'Sirois và Pychyl' },
+        },
+        {
+          text: 'Còn ông bà mình gọi gọn hơn: nước đến chân mới nhảy.',
           visual: { kind: 'typo', accent: 'nước đến chân mới nhảy.' },
         },
         // ── FOR WHAT ──
         {
-          text: 'Biết vậy rồi, bạn thôi tự mắng mình lười. Đó không phải tính lười.',
-          visual: { kind: 'typo', accent: 'thôi tự mắng mình lười.' },
+          text: 'Biết vậy rồi, bạn thôi mắng mình lười. Đó không phải lười.',
+          visual: { kind: 'typo', accent: 'thôi mắng mình lười.' },
         },
         {
-          text: 'Và thôi ép mình bằng kỷ luật. Kỷ luật không chữa được cảm xúc.',
-          visual: { kind: 'typo', accent: 'không chữa được cảm xúc.' },
+          text: 'Và thôi ép mình bằng kỷ luật. Kỷ luật không chữa được sợ.',
+          visual: { kind: 'typo', accent: 'không chữa được sợ.' },
         },
         {
-          text: 'Với con cũng vậy: đứa trẻ ngồi mãi không làm bài thường là đang sợ.',
-          visual: { kind: 'typo', accent: 'đang sợ.' },
+          text: 'Với con cũng thế: đứa ngồi mãi không làm bài là đứa đang sợ.',
+          visual: { kind: 'typo', accent: 'là đứa đang sợ.' },
         },
         {
-          text: 'Mắng nó lười chỉ làm cái sợ to thêm. Rồi nó hoãn lâu hơn nữa.',
-          visual: { kind: 'typo', accent: 'hoãn lâu hơn nữa.' },
+          text: 'Mắng nó lười chỉ làm cái sợ to thêm. Rồi nó hoãn lâu hơn.',
+          visual: { kind: 'typo', accent: 'hoãn lâu hơn.' },
         },
-        // ── PAYOFF ──
+        // ── PAYOFF + TWIST ──
+        // 🔑 "Hai phút" là mẹo ai cũng nghe rồi, nên tự nó KHÔNG phải payoff.
+        // Thứ mới nằm ở chỗ nói ĐÚNG nó dùng để làm gì: không phải để làm được
+        // việc, mà để hạ mức đe doạ xuống dưới ngưỡng não bật nút né. Thiếu câu
+        // đó thì đoạn kết chỉ là một lời khuyên cũ.
         {
-          text: 'Cách gỡ không nằm ở ý chí. Nó nằm ở chỗ hạ thấp bước đầu tiên.',
-          visual: { kind: 'typo', accent: 'hạ thấp bước đầu tiên.' },
+          text: 'Cách gỡ không nằm ở ý chí. Nằm ở chỗ hạ bước đầu xuống thật thấp.',
+          visual: { kind: 'typo', accent: 'hạ bước đầu' },
         },
         {
           text: 'Đạo Đức Kinh viết: đi ngàn dặm bắt đầu từ một bước chân.',
           visual: { kind: 'typo', accent: 'một bước chân.' },
         },
         {
-          text: 'Bạn thử làm hai phút thôi. Qua hai phút đó, cái sợ thường tự hạ.',
+          text: 'Nên bạn làm hai phút thôi.',
           visual: { kind: 'typo', accent: 'hai phút thôi.' },
         },
-        // ── CẦU NỐI sang câu kết ──
         {
-          // ⚠️ Câu hỏi phải để chữ "bạn" GẦN dấu hỏi. Bản đầu viết "Muốn biết
-          // bạn hay né loại việc nào, và hợp cách làm việc ra sao?" — cách nhau
-          // 49 ký tự nên `viral.no-invite` kêu đúng: một câu dài lê thê thì
-          // người xem không đọc ra là đang được hỏi, và cũng không trả lời.
-          text: 'Cách làm việc nào hợp bạn, và loại việc nào bạn hay né?',
-          visual: { kind: 'typo', accent: 'loại việc nào bạn hay né?' },
+          text: 'Hai phút đó không phải để làm xong. Là để lừa não rằng chưa có gì đáng sợ.',
+          visual: { kind: 'typo', accent: 'để lừa não' },
         },
       ],
-      ...cta('', {
+      ...cta('Còn lá số nói gì về cách bạn làm việc?', {
         ten: 'Tử Vi Công Sở & Hướng Nghiệp',
         tenDoc: 'Tử Vi Công Sở và Hướng Nghiệp',
-        de: 'để soi cách bạn làm việc',
       }),
       music: 'sang-sua.wav',
       // BA bức luân phiên, xếp theo đúng mạch nội dung chứ không theo thứ tự
