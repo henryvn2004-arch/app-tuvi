@@ -64,12 +64,18 @@ export interface InsightSource {
  * "hơn 50 công cụ cổ học" là phóng đại và ai đếm cũng bắt được — mất uy tín ở
  * đúng cái clip đang đi xây uy tín. Đếm lại trước khi nâng con số này.
  */
-function cta(question: string, tool?: { ten: string; de: string }) {
+function cta(question: string, tool?: { ten: string; tenDoc?: string; de: string }) {
+  // `tenDoc` — bản ĐỌC của tên công cụ, chỉ khai khi tên chứa ký tự bộ đọc xử
+  // lý không chắc (`&` là ca đầu tiên: "Tử Vi Công Sở & Hướng Nghiệp"). Phụ đề
+  // phải giữ NGUYÊN VĂN `tool_pricing.label` để người xem tìm đúng tên trên
+  // site; đó là lý do không thể chỉ sửa một bản.
+  const ten = tool?.ten ?? '';
+  const tenDoc = tool?.tenDoc ?? ten;
   const noi = tool
-    ? `Mở ${tool.ten} ${tool.de}, một trong hơn 40 công cụ cổ học tại tuviminhbao.com.`
+    ? `Mở ${ten} ${tool.de}, một trong hơn 40 công cụ cổ học tại tuviminhbao.com.`
     : `Tra tại tuviminhbao.com.`;
   const noiDoc = tool
-    ? `Mở ${tool.ten} ${tool.de}, một trong hơn 40 công cụ cổ học tại Tử Vi Minh Bảo chấm com.`
+    ? `Mở ${tenDoc} ${tool.de}, một trong hơn 40 công cụ cổ học tại Tử Vi Minh Bảo chấm com.`
     : `Tra tại Tử Vi Minh Bảo chấm com.`;
   // `question` để RỖNG được — dùng khi chính cảnh cuối đã là câu hỏi, hỏi thêm
   // lần nữa ở câu kết là hỏi hai lần và đội thêm ~2 giây vào đúng đoạn người
@@ -263,6 +269,147 @@ const SOURCES: InsightSource[] = [
       ...cta('', { ten: 'Luận Giải Lá Số', de: 'để soi chính mình' }),
       music: 'tram-tinh.wav',
       hashtags: ['tinhcach', 'tamly', 'chualanh', 'selfdiscovery'],
+    },
+  },
+
+  // ── A3. PHÉP THỬ CÔNG THỨC — chủ đề khác miền, dạng khác ─────────────────
+  //
+  // 🔑 VÌ SAO CÓ KỊCH BẢN NÀY: bản "ba kiểu tổn thương" chạy được không chứng
+  // minh được CÔNG THỨC chạy được — nó mới chứng minh một chủ đề chạy được.
+  // Kịch bản này cố ý khác hai chiều cùng lúc:
+  //   · khác MIỀN: chuyện làm việc, không phải chuyện quan hệ;
+  //   · khác DẠNG: giải thích MỘT hiện tượng, không phân loại "ba kiểu".
+  // Nếu khung WHAT → WHY → FOR WHAT gánh được cả hai thì nó mới là khuôn dùng
+  // lại được cho 30–50 ý tưởng mỗi tuần.
+  //
+  // 🔑 HOOK ĐẢO NGƯỢC NHẬN THỨC PHỔ THÔNG. Ai cũng tin trì hoãn là lười hoặc
+  // kém quản lý thời gian; khoa học nói ngược lại. Chỗ người xem học được cái
+  // mới nằm đúng ở chỗ đó — và đó cũng là chỗ đáng chia sẻ nhất.
+  //
+  // Nguồn (đều tra ra ngay, KHÔNG bịa):
+  //   · Fuschia Sirois & Timothy Pychyl, *Procrastination and the Priority of
+  //     Short-Term Mood Regulation* (2013), Social and Personality Psychology
+  //     Compass — trì hoãn là vấn đề điều tiết CẢM XÚC, không phải thời gian.
+  //   · *Đạo Đức Kinh*, chương 64: 千里之行，始於足下 — "Thiên lý chi hành,
+  //     thuỷ ư túc hạ" (đi ngàn dặm bắt đầu từ một bước chân). Khớp đúng cách
+  //     gỡ mà nghiên cứu chỉ ra: hạ ngưỡng bước đầu, không tăng ý chí.
+  //   · "Nước đến chân mới nhảy" — thành ngữ Việt.
+  //
+  // Dẫn về `cong-so` chứ không `laso`: mỗi clip nên mở một cánh cửa khác trong
+  // kho, và trì hoãn đúng là chuyện CÁCH LÀM VIỆC — thứ công cụ đó đọc.
+  {
+    id: 'vi-sao-hay-hoan-lai',
+    topLabel: 'Vì sao bạn hay hoãn',
+    toolId: 'cong-so',
+    spec: {
+      title: 'Vì sao bạn hay hoãn lại',
+      hook: 'Bạn không lười. Trì hoãn thật ra không phải chuyện thời gian.',
+      scenes: [
+        // ── CURIOSITY ──
+        {
+          text: 'Bạn biết rõ việc phải làm. Vẫn mở điện thoại ra. Rồi thấy tệ.',
+          visual: { kind: 'typo', accent: 'Rồi thấy tệ.' },
+        },
+        {
+          text: 'Càng thấy tệ lại càng hoãn. Vòng đó quay tới sát hạn mới thôi.',
+          visual: { kind: 'typo', accent: 'càng hoãn.' },
+        },
+        // ── WHAT: hiện tượng, tả bằng thứ ai cũng nhận ra ở mình ──
+        {
+          text: 'Bạn hoãn cái tin nhắn khó trả lời, mà dọn nhà thì làm ngay.',
+          visual: { kind: 'typo', accent: 'dọn nhà thì làm ngay.' },
+        },
+        {
+          text: 'Bạn hoãn đúng việc quan trọng nhất, rồi làm xong sạch việc vặt.',
+          visual: { kind: 'typo', accent: 'việc vặt.' },
+        },
+        {
+          text: 'Càng gần hạn chót bạn càng chạy được. Nên bạn tưởng mình cần áp lực.',
+          visual: { kind: 'typo', accent: 'cần áp lực.' },
+        },
+        {
+          text: 'Nhưng ngày thường thì việc đó vẫn nằm im, không nhúc nhích.',
+          visual: { kind: 'typo', accent: 'vẫn nằm im,' },
+        },
+        // ── WHY: cốt lõi, có nguồn tra được ──
+        {
+          text: 'Vì trì hoãn không phải lỗi quản lý thời gian. Nó là chuyện cảm xúc.',
+          visual: { kind: 'typo', accent: 'chuyện cảm xúc.' },
+        },
+        {
+          // Tên riêng Latin: phụ đề giữ nguyên để người xem gõ lại tra được,
+          // bản đọc nói vòng — cùng lý do đã áp cho Walter Cannon.
+          text: 'Năm 2013, hai nhà tâm lý Fuschia Sirois và Tim Pychyl chỉ ra điều đó.',
+          speech: 'Năm 2013, hai nhà tâm lý học đã chỉ ra điều đó.',
+          visual: { kind: 'typo', accent: 'Sirois và Tim Pychyl' },
+        },
+        {
+          text: 'Việc nào làm bạn thấy lo, thấy chán, hay sợ làm dở, thì não né việc đó.',
+          visual: { kind: 'typo', accent: 'não né việc đó.' },
+        },
+        {
+          text: 'Né xong bạn nhẹ người ngay. Đó là phần thưởng, nên não học rất nhanh.',
+          visual: { kind: 'typo', accent: 'phần thưởng,' },
+        },
+        {
+          text: 'Nên bạn không hoãn cái việc. Bạn đang hoãn cảm giác đi kèm nó.',
+          visual: { kind: 'typo', accent: 'hoãn cảm giác' },
+        },
+        {
+          text: 'Vì thế người càng cầu toàn càng hay hoãn. Sợ làm dở thì thà chưa làm.',
+          visual: { kind: 'typo', accent: 'càng hay hoãn.' },
+        },
+        {
+          text: 'Cái vòng này người Việt gọi tên từ lâu: nước đến chân mới nhảy.',
+          visual: { kind: 'typo', accent: 'nước đến chân mới nhảy.' },
+        },
+        // ── FOR WHAT ──
+        {
+          text: 'Biết vậy rồi, bạn thôi tự mắng mình lười. Đó không phải tính lười.',
+          visual: { kind: 'typo', accent: 'thôi tự mắng mình lười.' },
+        },
+        {
+          text: 'Và thôi ép mình bằng kỷ luật. Kỷ luật không chữa được cảm xúc.',
+          visual: { kind: 'typo', accent: 'không chữa được cảm xúc.' },
+        },
+        {
+          text: 'Với con cũng vậy: đứa trẻ ngồi mãi không làm bài thường là đang sợ.',
+          visual: { kind: 'typo', accent: 'đang sợ.' },
+        },
+        {
+          text: 'Mắng nó lười chỉ làm cái sợ to thêm. Rồi nó hoãn lâu hơn nữa.',
+          visual: { kind: 'typo', accent: 'hoãn lâu hơn nữa.' },
+        },
+        // ── PAYOFF ──
+        {
+          text: 'Cách gỡ không nằm ở ý chí. Nó nằm ở chỗ hạ thấp bước đầu tiên.',
+          visual: { kind: 'typo', accent: 'hạ thấp bước đầu tiên.' },
+        },
+        {
+          text: 'Đạo Đức Kinh viết: đi ngàn dặm bắt đầu từ một bước chân.',
+          visual: { kind: 'typo', accent: 'một bước chân.' },
+        },
+        {
+          text: 'Bạn thử làm hai phút thôi. Qua hai phút đó, cái sợ thường tự hạ.',
+          visual: { kind: 'typo', accent: 'hai phút thôi.' },
+        },
+        // ── CẦU NỐI sang câu kết ──
+        {
+          // ⚠️ Câu hỏi phải để chữ "bạn" GẦN dấu hỏi. Bản đầu viết "Muốn biết
+          // bạn hay né loại việc nào, và hợp cách làm việc ra sao?" — cách nhau
+          // 49 ký tự nên `viral.no-invite` kêu đúng: một câu dài lê thê thì
+          // người xem không đọc ra là đang được hỏi, và cũng không trả lời.
+          text: 'Cách làm việc nào hợp bạn, và loại việc nào bạn hay né?',
+          visual: { kind: 'typo', accent: 'loại việc nào bạn hay né?' },
+        },
+      ],
+      ...cta('', {
+        ten: 'Tử Vi Công Sở & Hướng Nghiệp',
+        tenDoc: 'Tử Vi Công Sở và Hướng Nghiệp',
+        de: 'để soi cách bạn làm việc',
+      }),
+      music: 'sang-sua.wav',
+      hashtags: ['trihoan', 'tamly', 'nangsuat', 'selfdiscovery'],
     },
   },
 
