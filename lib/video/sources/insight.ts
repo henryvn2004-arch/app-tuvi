@@ -37,32 +37,31 @@ export interface InsightSource {
 }
 
 /**
- * Câu kết dùng chung.
+ * Câu kết dùng chung — chỉ đúng MỘT lời mời, không chào hàng.
  *
- * Chở bốn mẩu tin: câu hỏi mời tương tác · nơi tra · tên miền · mã khuyến mãi.
- * ⚠️ Nó CỐ Ý vượt ngưỡng cảnh báo `cta.too-long` (6s) — ngưỡng đó đặt hồi câu
- * kết chỉ có một lời mời bấm. Giữ ngưỡng và để nó kêu, đừng nới cho khỏi thấy.
+ * 🔑 ĐÃ CẮT HAI LẦN, và cả hai lần đều theo một hướng: BỚT ĐI.
+ *   · bản 1: câu hỏi + nơi tra + tên miền + mã khuyến mãi (bốn mẩu tin, 12s);
+ *   · bản 2: bỏ câu hỏi vì cảnh cuối đã hỏi rồi;
+ *   · bản 3 (bản này): Henry cắt tiếp *"một trong hơn 50 công cụ cổ học"* và
+ *     *"Nhập mã TUVIMINHBAO nhận 100 lượng"* — **nghe giống bán hàng**.
+ *
+ * Đó là đánh đổi có ý thức: mất một chỗ quảng bá mã khuyến mãi và mất câu nói
+ * về bề rộng kho công cụ, đổi lấy một đoạn kết không làm người xem tụt cảm xúc
+ * ngay sau phần họ vừa thấy đúng về mình. Clip này bán bằng NỘI DUNG, không bán
+ * bằng lời chào hàng ở giây cuối.
+ *
+ * ⚠️ Đừng nhét mã/khuyến mãi trở lại vì "để đo chuyển đổi". Muốn đo thì đo bằng
+ * `utm` ở phần mô tả và bằng cột phễu theo tool, đừng đo bằng cách đọc mã lên.
  *
  * 🔴 BẢN ĐỌC PHẢI CÓ ĐỦ DẤU. Vbee đọc `tuviminhbao.com` thành một khối vô
- * nghĩa và đọc mã viết HOA thành từng chữ cái; mà tiếng Việt KHÔNG dấu thì bộ
- * đọc không tách được thành từ (đã sai một lần với `tu vi minh bảo`). Viết như
- * TÊN RIÊNG: `Tử Vi Minh Bảo`.
+ * nghĩa; mà tiếng Việt KHÔNG dấu thì bộ đọc không tách được thành từ (đã sai
+ * một lần với `tu vi minh bảo`). Viết như TÊN RIÊNG: `Tử Vi Minh Bảo`.
  *
  * 🔑 `tool` — GỌI ĐÍCH DANH tên công cụ + NÓI RÕ DÙNG NÓ ĐỂ LÀM GÌ. Người xem
  * vừa nghe một điều mới về chính họ; câu kết phải nối thẳng vào phần *for what*
  * ngay trên nó, nếu không thì họ về trang chủ rồi lạc giữa 55 công cụ. Tên phải
  * khớp NGUYÊN VĂN `tool_pricing.label` — nói một cái tên không tìm thấy trên
  * site còn tệ hơn không nói tên nào.
- *
- * ⚠️ Chỉ gọi MỘT tên công cụ, kể cả khi phần *for what* nêu ba hướng dùng —
- * `cta.missing` đã ghi luật đó trong phần `fix`. Bề rộng thì để câu "kho công
- * cụ" gánh.
- *
- * 🔴 CON SỐ 40 LÀ SỐ ĐO, KHÔNG PHẢI SỐ CHO KÊU. Đếm trên `tool_pricing` ngày
- * 16/08: **55 công cụ đang bật**, nhưng trong đó 10 cái thuộc nhóm *Phong Cách
- * AI* (làm đẹp, không phải cổ học) và 1 dòng `chat` ⇒ **cổ học đúng 44**. Viết
- * "hơn 50 công cụ cổ học" là phóng đại và ai đếm cũng bắt được — mất uy tín ở
- * đúng cái clip đang đi xây uy tín. Đếm lại trước khi nâng con số này.
  */
 function cta(question: string, tool?: { ten: string; tenDoc?: string; de: string }) {
   // `tenDoc` — bản ĐỌC của tên công cụ, chỉ khai khi tên chứa ký tự bộ đọc xử
@@ -71,21 +70,16 @@ function cta(question: string, tool?: { ten: string; tenDoc?: string; de: string
   // site; đó là lý do không thể chỉ sửa một bản.
   const ten = tool?.ten ?? '';
   const tenDoc = tool?.tenDoc ?? ten;
-  const noi = tool
-    ? `Mở ${ten} ${tool.de}, một trong hơn 50 công cụ cổ học tại tuviminhbao.com.`
-    : `Tra tại tuviminhbao.com.`;
+  const noi = tool ? `Mở ${ten} ${tool.de}, tại tuviminhbao.com.` : `Tra tại tuviminhbao.com.`;
   const noiDoc = tool
-    ? `Mở ${tenDoc} ${tool.de}, một trong hơn 50 công cụ cổ học tại Tử Vi Minh Bảo chấm com.`
+    ? `Mở ${tenDoc} ${tool.de}, tại Tử Vi Minh Bảo chấm com.`
     : `Tra tại Tử Vi Minh Bảo chấm com.`;
   // `question` để RỖNG được — dùng khi chính cảnh cuối đã là câu hỏi, hỏi thêm
   // lần nữa ở câu kết là hỏi hai lần và đội thêm ~2 giây vào đúng đoạn người
   // xem rơi nhiều nhất. Cổng vẫn tính là có mời tương tác vì `viral.no-invite`
   // xét CẢ cảnh cuối lẫn câu kết.
   const ghep = (...v: string[]) => v.filter(Boolean).join(' ');
-  return {
-    cta: ghep(question, noi, 'Nhập mã TUVIMINHBAO nhận 100 lượng.'),
-    ctaSpeech: ghep(question, noiDoc, 'Nhập mã Tử Vi Minh Bảo nhận một trăm lượng.'),
-  };
+  return { cta: ghep(question, noi), ctaSpeech: ghep(question, noiDoc) };
 }
 
 const SOURCES: InsightSource[] = [
