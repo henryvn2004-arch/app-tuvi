@@ -104,6 +104,23 @@ export function pickVoice(key) {
   return VOICES[h % VOICES.length];
 }
 
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+/**
+ * Nghỉ giữa hai lượt gọi TTS, và số lượt thử lại.
+ *
+ * 🔴 ĐO ĐƯỢC, KHÔNG PHẢI PHÒNG XA: clip demo công cụ chỉ tốn 7 lượt TTS nên
+ * chưa bao giờ đụng trần. Clip dài đầu tiên (18 cảnh = 20 lượt) sinh trót lọt
+ * 11 câu liên tiếp rồi hỏng ở câu 12, và cả 3 lượt thử lại đều hỏng tiếp với
+ * cùng một lỗi — nhà cung cấp trả HTML thay vì JSON (`<!DOCTYPE …`), dấu hiệu
+ * kinh điển của trang lỗi ở tầng cổng chứ không phải lỗi nội dung.
+ *
+ * Backoff cũ 1,5s→3s quá ngắn cho trần tính theo PHÚT. Hai thay đổi đi cùng
+ * nhau: giãn nhịp để đỡ chạm trần ngay từ đầu, và chờ lâu hơn khi đã chạm.
+ */
+const TTS_GAP_MS = Number(process.env.CLIP_TTS_GAP_MS || 500);
+const RETRIES = 4;
+
 export async function ttsScene(text, { voice = '', speed = CLIP_SPEED } = {}) {
   mkdirSync(AUDIO_DIR, { recursive: true });
   const key = hash(`${text}|${voice}|${speed}`);
@@ -129,7 +146,7 @@ export async function ttsScene(text, { voice = '', speed = CLIP_SPEED } = {}) {
    * lại — thử lại cả clip thì tốn thêm một lượt render.
    */
   let lastErr = null;
-  for (let attempt = 1; attempt <= 3; attempt++) {
+  for (let attempt = 1; attempt <= RETRIES; attempt++) {
     try {
       const res = await fetch(FN_URL, {
         method: 'POST',
@@ -148,12 +165,15 @@ export async function ttsScene(text, { voice = '', speed = CLIP_SPEED } = {}) {
 
       const bin = Buffer.from(await (await fetch(data.audio_url)).arrayBuffer());
       writeFileSync(abs, bin);
+      // Nghỉ SAU MỖI LƯỢT SINH MỚI — xem `TTS_GAP_MS`. Không nghỉ ở nhánh
+      // cache vì nhánh đó không chạm mạng.
+      await sleep(TTS_GAP_MS);
       return { file: rel, seconds: await measure(abs, bin.length), cached: false };
     } catch (e) {
       lastErr = e;
-      if (attempt < 3) {
+      if (attempt < RETRIES) {
         console.warn(`   ⚠️ TTS lượt ${attempt} hỏng (${e.message.slice(0, 80)}) — thử lại…`);
-        await new Promise((r) => setTimeout(r, attempt * 1500));
+        await sleep(attempt * 4000);
       }
     }
   }

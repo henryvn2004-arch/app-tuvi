@@ -56,6 +56,110 @@ function cta(question: string) {
 }
 
 const SOURCES: InsightSource[] = [
+  // ── A2. BẢN ĐẦY ĐỦ — đúng cấu trúc guideline, không cắt cho vừa 30 giây ──
+  //
+  // 🔑 VÌ SAO CÓ BẢN NÀY: bản 25 giây ở dưới chỉ vừa đủ HOOK rồi hết — người
+  // xem chưa học được gì nên nó đọc thành một mẩu quảng cáo. Giữ cả hai để so:
+  // cùng một chủ đề, khác hẳn ở chỗ có PAYOFF hay không.
+  //
+  // Cấu trúc: HOOK → CURIOSITY (vì sao đáng nghe) → BUILD-UP (ba kiểu, mỗi
+  // kiểu kèm CƠ CHẾ chứ không chỉ mô tả) → INSIGHT (điểm chung — chỗ người xem
+  // thật sự học được) → PAYOFF (làm gì với nó) → CTA.
+  //
+  // ⚠️ Cần chạy với trần độ dài nới ra (`--max-seconds`), xem `GateOptions`.
+  {
+    id: 'ba-kieu-ton-thuong-day-du',
+    topLabel: 'Bạn là kiểu người nào',
+    toolId: 'luan-giai',
+    spec: {
+      title: 'Ba kiểu người khi bị tổn thương (bản đầy đủ)',
+      hook: 'Có ba kiểu người khi bị tổn thương. Bạn không tự quyết được.',
+      scenes: [
+        // ── CURIOSITY: vì sao chuyện này đáng nghe hết ──
+        {
+          text: 'Cách bạn phản ứng lúc đau không phải tính cách. Đó là một thói quen sinh tồn.',
+          visual: { kind: 'typo', accent: 'thói quen sinh tồn.' },
+        },
+        {
+          text: 'Nó hình thành từ những năm bạn còn quá nhỏ để hiểu chuyện gì đang xảy ra.',
+          visual: { kind: 'typo', accent: 'quá nhỏ' },
+        },
+        // ── BUILD-UP · kiểu 1 ──
+        {
+          text: 'Kiểu thứ nhất: rút lui. Bạn không cãi, không giải thích, chỉ lặng đi.',
+          visual: { kind: 'typo', accent: 'rút lui.' },
+        },
+        {
+          text: 'Người ngoài tưởng bạn đã nguôi. Thật ra bạn vừa đóng lại một cánh cửa.',
+          visual: { kind: 'typo', accent: 'đóng lại một cánh cửa.' },
+        },
+        {
+          text: 'Đứa trẻ ngày xưa học được rằng nói ra cũng chẳng ai nghe. Nên thôi im.',
+          visual: { kind: 'typo', accent: 'chẳng ai nghe.' },
+        },
+        // ── BUILD-UP · kiểu 2 ──
+        {
+          text: 'Kiểu thứ hai: nói cho bằng hết. Bạn cần được nghe hơn là cần thắng.',
+          visual: { kind: 'typo', accent: 'cần được nghe' },
+        },
+        {
+          text: 'Giọng bạn to dần lên, không phải vì giận, mà vì sợ bị bỏ qua lần nữa.',
+          visual: { kind: 'typo', accent: 'sợ bị bỏ qua' },
+        },
+        {
+          text: 'Đứa trẻ ngày xưa chỉ được để ý mỗi khi ồn ào. Nên nó không dám im.',
+          visual: { kind: 'typo', accent: 'không dám im.' },
+        },
+        // ── BUILD-UP · kiểu 3 ──
+        {
+          text: 'Kiểu thứ ba: quay vào trong. Bạn tự trách mình trước khi kịp giận ai.',
+          visual: { kind: 'typo', accent: 'quay vào trong.' },
+        },
+        {
+          text: 'Bạn nhận phần sai về mình rất nhanh, vì như thế thì mọi thứ yên trở lại.',
+          visual: { kind: 'typo', accent: 'yên trở lại.' },
+        },
+        {
+          text: 'Đứa trẻ ngày xưa thấy nhà hết căng mỗi lần nó nhận lỗi. Nên nó nhận mãi.',
+          visual: { kind: 'typo', accent: 'nhận mãi.' },
+        },
+        // ── INSIGHT: điểm chung — chỗ người xem thật sự học được ──
+        {
+          text: 'Cả ba kiểu đều đang làm cùng một việc: giữ cho mối quan hệ của bạn khỏi vỡ.',
+          visual: { kind: 'typo', accent: 'cùng một việc:' },
+        },
+        {
+          text: 'Chúng chỉ khác nhau ở chỗ ai là người trả giá.',
+          visual: { kind: 'typo', accent: 'ai là người trả giá.' },
+        },
+        {
+          text: 'Người rút lui mất dần kết nối. Người nói to mất sự bình yên.',
+          visual: { kind: 'typo', accent: 'mất dần kết nối.' },
+        },
+        {
+          text: 'Còn người luôn nhận lỗi thì mất chính mình, từng chút một.',
+          visual: { kind: 'typo', accent: 'mất chính mình,' },
+        },
+        // ── PAYOFF: làm được gì với điều vừa biết ──
+        {
+          text: 'Điều bạn học được thì bạn học lại được. Không cần đổi tính nết.',
+          visual: { kind: 'typo', accent: 'học lại được.' },
+        },
+        {
+          text: 'Chỉ cần nhận ra nó đang chạy, ngay lúc nó chạy.',
+          visual: { kind: 'typo', accent: 'ngay lúc nó chạy.' },
+        },
+        {
+          text: 'Lần tới khi đau, bạn thử dừng một nhịp: mình đang bảo vệ điều gì?',
+          visual: { kind: 'typo', accent: 'đang bảo vệ điều gì?' },
+        },
+      ],
+      ...cta('Bạn là kiểu nào?'),
+      music: 'tram-tinh.wav',
+      hashtags: ['tinhcach', 'tamly', 'chualanh', 'selfdiscovery'],
+    },
+  },
+
   // ── A. Motion typography thuần — 0 asset, 0đ ────────────────────────────
   {
     id: 'ba-kieu-ton-thuong',

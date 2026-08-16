@@ -42,6 +42,16 @@ const DRY = has('--dry-run');
 const NO_VOICE = has('--no-voice');
 const VOICE = val('--voice', '');
 const FPS = 30;
+/**
+ * Trần độ dài cho clip insight — mặc định 240s, tức THỰC TẾ KHÔNG CHẶN.
+ *
+ * Trần 45s của cổng đặt cho clip DEMO CÔNG CỤ, ở đó dài hơn là thừa. Clip dạy
+ * một điều gì đó thì 25–30 giây mới hook xong đã hết: người xem không học được
+ * gì và clip đọc thành quảng cáo. Đây là quyết định vận hành nên để ở cờ.
+ */
+const MAX_SECONDS = Number(val('--max-seconds', '240'));
+/** Khoảng "đẹp" cho clip dạy — ngoài khoảng chỉ WARN, không chặn. */
+const SWEET = [45, 120];
 
 // ── Nạp module TS bằng cách biên dịch tại chỗ ─────────────────────────────
 // Cùng lối `gen-video.mjs`: gọi `tsc` CLI, KHÔNG dùng API biên dịch trong JS
@@ -96,7 +106,7 @@ if (!spec || !source) {
 
 // ── Cổng 1 ────────────────────────────────────────────────────────────────
 console.log('\n── CỔNG 1 · máy ─────────────────────────────');
-const g1 = runMachineGate(spec);
+const g1 = runMachineGate(spec, { maxSeconds: MAX_SECONDS, sweetSpot: SWEET });
 console.log(
   `   ${g1.pass ? '✅ QUA' : '❌ TRƯỢT'}  ·  ${g1.metrics.totalSeconds}s · ${g1.metrics.sceneCount} cảnh · hook ${g1.metrics.hookSeconds}s`
 );

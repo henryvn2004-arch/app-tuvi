@@ -69,6 +69,29 @@ export const THRESHOLDS = {
   minScenes: 3,
 } as const;
 
+interface PacingLimits {
+  maxSeconds: number;
+  sweetSpot: readonly [number, number];
+}
+
+/**
+ * Nới trần độ dài cho một lượt chạy.
+ *
+ * 🔑 VÌ SAO LÀ THAM SỐ chứ không phải sửa thẳng `THRESHOLDS`: 45 giây đúng cho
+ * clip DEMO CÔNG CỤ — ở đó người xem chỉ cần thấy công cụ chạy, dài hơn là
+ * thừa. Nhưng clip dạy một điều gì đó ("ba kiểu người khi bị tổn thương") thì
+ * 25–30 giây mới đủ hook xong đã hết, người xem không học được gì và clip đọc
+ * thành quảng cáo. Hai loại nội dung cần hai trần khác nhau.
+ *
+ * ⚠️ Nới trần KHÔNG phải nới chuẩn. Mọi luật còn lại (hook ≤5s, cảnh ≤8s,
+ * ngôn ngữ danh tính, cấm giọng hướng dẫn) giữ nguyên — chỉ riêng câu hỏi
+ * "clip được phép dài bao nhiêu" là quyết định vận hành, nên nó ra ngoài.
+ */
+export interface GateOptions {
+  maxSeconds?: number;
+  sweetSpot?: readonly [number, number];
+}
+
 /**
  * Năm dạng mở đầu đã biết là giữ được người xem. Kịch bản không thuộc dạng nào
  * thì gần như chắc chắn là một câu mô tả phẳng ("Đây là công cụ xem tuổi") —
@@ -204,14 +227,14 @@ function checkHook(spec: ScriptSpec, issues: GateIssue[]): number {
   return secs;
 }
 
-function checkPacing(spec: ScriptSpec, issues: GateIssue[]) {
+function checkPacing(spec: ScriptSpec, issues: GateIssue[], limits: PacingLimits) {
   const total = estimateTotalSeconds(spec);
 
-  if (total > THRESHOLDS.totalMaxSeconds) {
+  if (total > limits.maxSeconds) {
     issues.push({
       level: 'block',
       code: 'length.too-long',
-      message: `Clip dài ${total.toFixed(0)}s (trần ${THRESHOLDS.totalMaxSeconds}s) — tỉ lệ xem hết tụt mạnh sau mốc này.`,
+      message: `Clip dài ${total.toFixed(0)}s (trần ${limits.maxSeconds}s) — tỉ lệ xem hết tụt mạnh sau mốc này.`,
       fix: `Cắt bớt ~${Math.ceil((total - 28) * 13.59)} ký tự lời đọc, bỏ cảnh ít giá trị nhất.`,
     });
   }
@@ -223,7 +246,7 @@ function checkPacing(spec: ScriptSpec, issues: GateIssue[]) {
       fix: 'Thêm một cảnh nêu thông tin cụ thể dùng được.',
     });
   }
-  const [lo, hi] = THRESHOLDS.totalSweetSpot;
+  const [lo, hi] = limits.sweetSpot;
   if (total >= THRESHOLDS.totalMinSeconds && (total < lo || total > hi)) {
     issues.push({
       level: 'warn',
@@ -389,11 +412,15 @@ function checkSubtitleSafety(spec: ScriptSpec, issues: GateIssue[]) {
 }
 
 /** Chạy toàn bộ luật tầng máy. Không gọi mạng, không tốn tiền. */
-export function runMachineGate(spec: ScriptSpec): MachineGateResult {
+export function runMachineGate(spec: ScriptSpec, opts: GateOptions = {}): MachineGateResult {
   const issues: GateIssue[] = [];
+  const limits: PacingLimits = {
+    maxSeconds: opts.maxSeconds ?? THRESHOLDS.totalMaxSeconds,
+    sweetSpot: opts.sweetSpot ?? THRESHOLDS.totalSweetSpot,
+  };
 
   const hookSeconds = checkHook(spec, issues);
-  checkPacing(spec, issues);
+  checkPacing(spec, issues, limits);
   checkCta(spec, issues);
   checkLeaks(spec, issues);
   checkViralShape(spec, issues);
