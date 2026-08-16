@@ -48,23 +48,37 @@ export interface InsightSource {
  * đọc không tách được thành từ (đã sai một lần với `tu vi minh bảo`). Viết như
  * TÊN RIÊNG: `Tử Vi Minh Bảo`.
  *
- * 🔑 `tool` — GỌI ĐÍCH DANH tên công cụ thay vì chỉ nêu tên miền. Người xem vừa
- * nghe một điều mới về chính họ; câu kết phải nói thẳng vào ĐÂU để đi tiếp, nếu
- * không thì họ về trang chủ rồi lạc giữa 54 công cụ. Tên phải khớp NGUYÊN VĂN
- * `tool_pricing.label` — nói một cái tên không tìm thấy trên site còn tệ hơn
- * không nói tên nào.
+ * 🔑 `tool` — GỌI ĐÍCH DANH tên công cụ + NÓI RÕ DÙNG NÓ ĐỂ LÀM GÌ. Người xem
+ * vừa nghe một điều mới về chính họ; câu kết phải nối thẳng vào phần *for what*
+ * ngay trên nó, nếu không thì họ về trang chủ rồi lạc giữa 55 công cụ. Tên phải
+ * khớp NGUYÊN VĂN `tool_pricing.label` — nói một cái tên không tìm thấy trên
+ * site còn tệ hơn không nói tên nào.
  *
- * ⚠️ Chỉ được gọi MỘT tên. Kể cả khi phần *for what* nêu ba hướng dùng, câu kết
- * vẫn chỉ chỉ một đường — đó là chính điều `cta.missing` đã ghi trong phần `fix`.
+ * ⚠️ Chỉ gọi MỘT tên công cụ, kể cả khi phần *for what* nêu ba hướng dùng —
+ * `cta.missing` đã ghi luật đó trong phần `fix`. Bề rộng thì để câu "kho công
+ * cụ" gánh.
+ *
+ * 🔴 CON SỐ 40 LÀ SỐ ĐO, KHÔNG PHẢI SỐ CHO KÊU. Đếm trên `tool_pricing` ngày
+ * 16/08: **55 công cụ đang bật**, nhưng trong đó 10 cái thuộc nhóm *Phong Cách
+ * AI* (làm đẹp, không phải cổ học) và 1 dòng `chat` ⇒ **cổ học đúng 44**. Viết
+ * "hơn 50 công cụ cổ học" là phóng đại và ai đếm cũng bắt được — mất uy tín ở
+ * đúng cái clip đang đi xây uy tín. Đếm lại trước khi nâng con số này.
  */
-function cta(question: string, tool?: string) {
-  const noi = tool ? `Mở ${tool} trên tuviminhbao.com.` : `Tra tại tuviminhbao.com.`;
+function cta(question: string, tool?: { ten: string; de: string }) {
+  const noi = tool
+    ? `Mở ${tool.ten} ${tool.de}, một trong hơn 40 công cụ cổ học tại tuviminhbao.com.`
+    : `Tra tại tuviminhbao.com.`;
   const noiDoc = tool
-    ? `Mở ${tool} trên Tử Vi Minh Bảo chấm com.`
+    ? `Mở ${tool.ten} ${tool.de}, một trong hơn 40 công cụ cổ học tại Tử Vi Minh Bảo chấm com.`
     : `Tra tại Tử Vi Minh Bảo chấm com.`;
+  // `question` để RỖNG được — dùng khi chính cảnh cuối đã là câu hỏi, hỏi thêm
+  // lần nữa ở câu kết là hỏi hai lần và đội thêm ~2 giây vào đúng đoạn người
+  // xem rơi nhiều nhất. Cổng vẫn tính là có mời tương tác vì `viral.no-invite`
+  // xét CẢ cảnh cuối lẫn câu kết.
+  const ghep = (...v: string[]) => v.filter(Boolean).join(' ');
   return {
-    cta: `${question} ${noi} Nhập mã TUVIMINHBAO để nhận ngay 100 lượng.`,
-    ctaSpeech: `${question} ${noiDoc} Nhập mã Tử Vi Minh Bảo để nhận ngay một trăm lượng.`,
+    cta: ghep(question, noi, 'Nhập mã TUVIMINHBAO nhận 100 lượng.'),
+    ctaSpeech: ghep(question, noiDoc, 'Nhập mã Tử Vi Minh Bảo nhận một trăm lượng.'),
   };
 }
 
@@ -151,26 +165,61 @@ const SOURCES: InsightSource[] = [
           text: 'Bạn nhận phần sai rất nhanh, vì như thế thì mọi thứ yên trở lại.',
           visual: { kind: 'typo', accent: 'yên trở lại.' },
         },
-        // ── WHY: cơ chế thật. Đây là phần bản trước bỏ trống ──
+        // ── WHY: cơ chế thật, CÓ NGUỒN TRA ĐƯỢC ─────────────────────────────
+        //
+        // 🔴 LUẬT CỨNG CHO PHẦN NÀY: chỉ nêu tên/mốc nào KIỂM CHỨNG ĐƯỢC. Một
+        // cái tên bịa thì người xem search không ra, và mất tin ngay ở đúng chỗ
+        // clip đang xây uy tín — mà video đã đăng thì nằm đó vĩnh viễn, không
+        // sửa được như một dòng DB. Ba nguồn dưới đây đều tra ra ngay:
+        //   · Walter Cannon (1871–1945), sinh lý học Harvard — đặt tên phản xạ
+        //     "fight-or-flight" năm 1915, sách *Bodily Changes in Pain, Hunger,
+        //     Fear and Rage*.
+        //   · Pete Walker — nhà trị liệu, đặt tên phản xạ thứ tư "fawn" trong
+        //     *Complex PTSD: From Surviving to Thriving* (2013).
+        //   · *Luận Ngữ*, thiên Học Nhi: 禮之用，和為貴 — "Lễ chi dụng, hoà vi
+        //     quý", gốc của thành ngữ "dĩ hoà vi quý".
+        //
+        // ⚠️ KHÔNG nói "dĩ hoà vi quý CHÍNH LÀ phản xạ chiều theo". Luận Ngữ dạy
+        // giữ hoà khí như một ĐỨC, còn fawn là một phản xạ tổn thương — đánh
+        // đồng hai thứ là bóp méo cổ thư. Nói đúng: nền văn hoá dạy nhường nhịn
+        // thì cái nút ấy được củng cố sớm hơn và mạnh hơn.
         {
           text: 'Ba kiểu này không phải ba tính cách. Chúng là ba nút của hệ thần kinh.',
           visual: { kind: 'typo', accent: 'ba nút' },
         },
         {
-          text: 'Gặp nguy, cơ thể bạn có bốn nút: đánh trả, bỏ chạy, đứng hình, chiều theo.',
-          visual: { kind: 'typo', accent: 'bốn nút:' },
+          // `speech` bỏ tên riêng Latin: Vbee đọc chuỗi tiếng Anh rất dễ thành
+          // đánh vần từng chữ. Phụ đề GIỮ NGUYÊN tên — đó mới là chỗ người xem
+          // đọc và gõ lại vào ô tìm kiếm. Cùng lý do đã phải tách bản đọc cho
+          // tên miền và mã khuyến mãi.
+          text: 'Năm 1915, nhà sinh lý học Walter Cannon ở Harvard gọi tên hai nút đầu.',
+          speech: 'Năm 1915, một nhà sinh lý học người Mỹ gọi tên hai nút đầu.',
+          visual: { kind: 'typo', accent: 'Walter Cannon' },
         },
         {
-          // ⚠️ KHÔNG viết "nút người Việt hay dùng nhất" như bản nháp đầu: đó là
-          // một khẳng định thống kê về cả một dân tộc, mà không có số liệu nào
-          // đỡ. Nói chắc hơn thứ mình biết là lớp lỗi repo này đã trả giá nhiều
-          // lần — và trên video thì nó nằm vĩnh viễn trong file đã đăng.
-          text: 'Ba nút đầu ai cũng nghe rồi. Nút thứ tư thì ít người biết nó có tên.',
-          visual: { kind: 'typo', accent: 'Nút thứ tư' },
+          text: 'Đánh trả, hoặc bỏ chạy. Sau đó y học thêm nút thứ ba: đứng hình.',
+          visual: { kind: 'typo', accent: 'đứng hình.' },
+        },
+        {
+          text: 'Ba nút đó bạn nghe rồi. Nhưng còn một nút thứ tư, ít ai biết tên.',
+          visual: { kind: 'typo', accent: 'nút thứ tư,' },
+        },
+        {
+          text: 'Mãi năm 2013, nhà trị liệu Pete Walker mới đặt tên: phản xạ chiều theo.',
+          speech: 'Mãi năm 2013, một nhà trị liệu người Mỹ mới đặt tên: phản xạ chiều theo.',
+          visual: { kind: 'typo', accent: 'chiều theo.' },
         },
         {
           text: 'Chiều theo: nhận lỗi, làm hoà, để cơn giận của người kia hạ xuống.',
           visual: { kind: 'typo', accent: 'Chiều theo:' },
+        },
+        {
+          text: 'Phương Đông thì biết nút này từ lâu. Luận Ngữ đã dạy: dĩ hoà vi quý.',
+          visual: { kind: 'typo', accent: 'dĩ hoà vi quý.' },
+        },
+        {
+          text: 'Lớn lên giữa lời dạy đó, nút chiều theo của bạn được củng cố rất sớm.',
+          visual: { kind: 'typo', accent: 'củng cố rất sớm.' },
         },
         {
           text: 'Nút nào bật lên là do nút nào từng có tác dụng, hồi bạn còn rất nhỏ.',
@@ -179,10 +228,6 @@ const SOURCES: InsightSource[] = [
         {
           text: 'Nhà hay cãi thì im là an toàn. Nhà bận rộn thì phải ồn mới được nghe.',
           visual: { kind: 'typo', accent: 'im là an toàn.' },
-        },
-        {
-          text: 'Còn nhà lúc nào cũng căng, thì nhận lỗi là cách nhanh nhất để yên.',
-          visual: { kind: 'typo', accent: 'nhanh nhất để yên.' },
         },
         // ── FOR WHAT: biết rồi thì dùng vào việc gì ──
         {
@@ -201,17 +246,21 @@ const SOURCES: InsightSource[] = [
           text: 'Nó đang ở nút thứ tư, để nhà mình yên. Nó học điều đó rất sớm.',
           visual: { kind: 'typo', accent: 'nút thứ tư,' },
         },
-        // ── PAYOFF ──
+        // ── PAYOFF + cầu nối sang câu kết ──
+        // Cảnh áp chót CỐ Ý nhắc lại đúng ba hướng dùng của phần *for what* để
+        // câu kết có chỗ neo. Không có nó thì tên công cụ ở câu kết rơi vào
+        // khoảng không: người xem vừa nghe xong một điều hay, rồi bị mời mua
+        // một thứ chưa nối vào điều vừa nghe.
         {
           text: 'Điều bạn học được thì bạn học lại được. Không cần đổi tính nết.',
           visual: { kind: 'typo', accent: 'học lại được.' },
         },
         {
-          text: 'Lần tới khi đau, bạn thử dừng một nhịp: mình đang ở nút nào?',
-          visual: { kind: 'typo', accent: 'đang ở nút nào?' },
+          text: 'Muốn biết nút của mình, của con, hay của người bạn hay va chạm?',
+          visual: { kind: 'typo', accent: 'của con,' },
         },
       ],
-      ...cta('Bạn là kiểu nào?', 'Luận Giải Lá Số'),
+      ...cta('', { ten: 'Luận Giải Lá Số', de: 'để soi chính mình' }),
       music: 'tram-tinh.wav',
       hashtags: ['tinhcach', 'tamly', 'chualanh', 'selfdiscovery'],
     },
