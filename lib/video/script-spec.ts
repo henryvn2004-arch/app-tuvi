@@ -119,6 +119,15 @@ export interface ScriptSpec {
   ctaSpeech?: string;
   /** Tên file nhạc nền trong `remotion/public/music/`. Bỏ trống = không nhạc. */
   music?: string;
+  /**
+   * Ảnh NỀN cho cả clip (URL hoặc đường dẫn trong `remotion/public/`), luân
+   * phiên đều theo thời lượng. Bỏ trống = nền navy như cũ.
+   *
+   * 🔑 Khác `scene.visual.kind = 'image'` vốn gắn ảnh vào MỘT cảnh. Kịch bản
+   * Layer 1 có 20+ cảnh mà không có 20 bức hợp cảnh; ảnh đổi mỗi 3 giây thì
+   * mắt chạy theo ảnh chứ không đọc chữ — mà chữ mới là nội dung.
+   */
+  backdrop?: string[];
   /** Hashtag gợi ý cho lúc đăng — KHÔNG hiện trên clip. */
   hashtags?: string[];
 }

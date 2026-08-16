@@ -72,10 +72,10 @@ function cta(question: string, tool?: { ten: string; tenDoc?: string; de: string
   const ten = tool?.ten ?? '';
   const tenDoc = tool?.tenDoc ?? ten;
   const noi = tool
-    ? `Mở ${ten} ${tool.de}, một trong hơn 40 công cụ cổ học tại tuviminhbao.com.`
+    ? `Mở ${ten} ${tool.de}, một trong hơn 50 công cụ cổ học tại tuviminhbao.com.`
     : `Tra tại tuviminhbao.com.`;
   const noiDoc = tool
-    ? `Mở ${tenDoc} ${tool.de}, một trong hơn 40 công cụ cổ học tại Tử Vi Minh Bảo chấm com.`
+    ? `Mở ${tenDoc} ${tool.de}, một trong hơn 50 công cụ cổ học tại Tử Vi Minh Bảo chấm com.`
     : `Tra tại Tử Vi Minh Bảo chấm com.`;
   // `question` để RỖNG được — dùng khi chính cảnh cuối đã là câu hỏi, hỏi thêm
   // lần nữa ở câu kết là hỏi hai lần và đội thêm ~2 giây vào đúng đoạn người
@@ -268,6 +268,10 @@ const SOURCES: InsightSource[] = [
       ],
       ...cta('', { ten: 'Luận Giải Lá Số', de: 'để soi chính mình' }),
       music: 'tram-tinh.wav',
+      // MỘT bức cho cả clip. Quẻ Khảm (kw29) — nước chồng nước, hiểm nối hiểm:
+      // hợp đúng nội dung "cái vòng phòng vệ lặp lại". Chọn theo NGHĨA chứ
+      // không lấy bừa một bức cho có tranh.
+      backdrop: [QUE('18-kw29.png')],
       hashtags: ['tinhcach', 'tamly', 'chualanh', 'selfdiscovery'],
     },
   },
@@ -409,6 +413,11 @@ const SOURCES: InsightSource[] = [
         de: 'để soi cách bạn làm việc',
       }),
       music: 'sang-sua.wav',
+      // BA bức luân phiên, xếp theo đúng mạch nội dung chứ không theo thứ tự
+      // tình cờ: Truân (kw03, khởi đầu rối như tơ vò) → Khốn (kw47, gắng mà
+      // không thoát) → Càn (kw01, tiến, hành động). Ảnh cuối rơi vào đoạn
+      // PAYOFF + câu kết — chỗ nội dung chuyển từ bế tắc sang bước đi được.
+      backdrop: [QUE('17-kw03.png'), QUE('26-kw47.png'), QUE('63-kw01.png')],
       hashtags: ['trihoan', 'tamly', 'nangsuat', 'selfdiscovery'],
     },
   },

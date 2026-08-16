@@ -52,6 +52,15 @@ export type InsightProps = {
   /** Nhãn nhỏ trên đỉnh — chủ đề, KHÔNG phải tên công cụ. */
   topLabel: string;
   music?: string;
+  /**
+   * Ảnh NỀN cho cả clip (0 · 1 · nhiều bức, luân phiên đều theo thời lượng).
+   *
+   * 🔑 Khác hẳn `visual.kind = 'photo'` vốn là ảnh CỦA MỘT CẢNH. Nội dung Layer
+   * 1 có 20+ cảnh nhưng không có 20 bức ảnh hợp cảnh, và ảnh đổi mỗi 3 giây thì
+   * mắt chạy theo ảnh chứ không đọc chữ. Ảnh nền thì ngược lại: giữ chữ làm
+   * chính, ảnh chỉ bỏ cái nền phẳng đi.
+   */
+  backdrop?: string[];
 };
 
 // ── Nền ───────────────────────────────────────────────────────────────────
@@ -84,6 +93,88 @@ const Backdrop: React.FC = () => {
           marginTop: -750,
           borderRadius: '50%',
           background: `radial-gradient(circle, ${BRAND.gold}22 0%, transparent 62%)`,
+        }}
+      />
+    </AbsoluteFill>
+  );
+};
+
+/** Số khung hình chuyển giữa hai ảnh nền. */
+const XFADE = 26;
+
+/**
+ * Ảnh nền phủ toàn khung + lớp phủ để chữ còn đọc được.
+ *
+ * 🔴 PHẢI ĐẶT NGOÀI MỌI `Sequence`. `useCurrentFrame()` bên trong một Sequence
+ * trả về khung hình CỤC BỘ của sequence đó — đặt ở trong thì Ken Burns nhảy về
+ * đầu mỗi lần đổi cảnh, tức 21 lần giật trong một clip. Đặt ngoài thì nó đọc
+ * khung hình của cả clip và trôi liền một mạch.
+ *
+ * 🔑 LỚP PHỦ LÀ BẮT BUỘC, không phải để cho đẹp. Tranh nền sáng và nhiều chi
+ * tiết; chữ trắng đặt thẳng lên là mất chữ ở đúng những khung có mảng sáng. Phủ
+ * navy đậm rồi mới đặt chữ ⇒ độ đọc không phụ thuộc vào việc bức tranh kia sáng
+ * hay tối, nên đổi ảnh khác không phải cân lại.
+ */
+const PhotoBackdrop: React.FC<{ images: string[] }> = ({ images }) => {
+  const frame = useCurrentFrame();
+  const { durationInFrames } = useVideoConfig();
+  const seg = durationInFrames / Math.max(1, images.length);
+  // Ken Burns chạy suốt cả clip, KHÔNG reset theo từng ảnh: một chuyển động
+  // chậm liền mạch đọc là "máy quay đang trôi", còn nhiều đoạn zoom ngắn nối
+  // nhau đọc là trình chiếu ảnh.
+  const scale = interpolate(frame, [0, Math.max(1, durationInFrames)], [1.05, 1.18], {
+    extrapolateRight: 'clamp',
+  });
+
+  return (
+    <AbsoluteFill style={{ background: BRAND.navy }}>
+      {images.map((src, i) => {
+        const start = i * seg;
+        const end = start + seg;
+        // Ảnh đầu hiện sẵn từ khung 0 (không fade vào từ nền trống); ảnh cuối
+        // giữ tới hết. Chỉ các mối nối ở giữa mới chuyển.
+        const opacity = interpolate(
+          frame,
+          [start - XFADE, start, end - XFADE, end],
+          [i === 0 ? 1 : 0, 1, 1, i === images.length - 1 ? 1 : 0],
+          { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' }
+        );
+        if (opacity <= 0) return null;
+        return (
+          <AbsoluteFill key={src} style={{ opacity }}>
+            <Img
+              src={staticFile(src)}
+              style={{
+                width: '100%',
+                height: '100%',
+                objectFit: 'cover',
+                transform: `scale(${scale})`,
+              }}
+            />
+          </AbsoluteFill>
+        );
+      })}
+      {/*
+       * Phủ navy + tối dần hai đầu: giữ tông thương hiệu và ép tương phản chữ.
+       *
+       * 0,64 là con số soi bằng MẮT trên khung hình thật, không phải đoán. Ở
+       * 0,74 chữ rất rõ nhưng tranh chìm gần hết — tức trả tiền cho một bức
+       * tranh rồi giấu nó đi. Hạ tới khi tranh đọc được mà chữ chưa suy.
+       */}
+      <AbsoluteFill style={{ background: BRAND.navy, opacity: 0.64 }} />
+      <AbsoluteFill
+        style={{
+          background: `linear-gradient(180deg, ${BRAND.navy} 0%, transparent 26%, transparent 72%, ${BRAND.navy} 100%)`,
+        }}
+      />
+      {/*
+       * Dải tối bám riêng vùng CHỮ (giữa khung). Nhờ nó mà lớp phủ toàn khung
+       * không phải gánh cả hai việc: tranh giữ được chi tiết ở trên/dưới, còn
+       * chỗ đặt chữ vẫn đủ tối để đọc trên bất kỳ bức nào.
+       */}
+      <AbsoluteFill
+        style={{
+          background: `linear-gradient(180deg, transparent 28%, ${BRAND.navy}b0 44%, ${BRAND.navy}b0 62%, transparent 78%)`,
         }}
       />
     </AbsoluteFill>
@@ -214,9 +305,9 @@ const WordKaraoke: React.FC<{
 
 // ── Hook ──────────────────────────────────────────────────────────────────
 
-const Hook: React.FC<{ text: string; label: string }> = ({ text, label }) => (
+const Hook: React.FC<{ text: string; label: string; noBg?: boolean }> = ({ text, label, noBg }) => (
   <AbsoluteFill>
-    <Backdrop />
+    {noBg ? null : <Backdrop />}
     <TopBar label={label} />
     <AbsoluteFill style={{ justifyContent: 'center', alignItems: 'center', padding: '0 78px' }}>
       {/* ⚠️ Hook KHÔNG reveal từng từ: ba giây đầu quyết định người ta lướt hay
@@ -260,13 +351,14 @@ const HookText: React.FC<{ text: string }> = ({ text }) => {
 
 // ── Cảnh chữ ──────────────────────────────────────────────────────────────
 
-const TypoScene: React.FC<{ text: string; accent?: string; label: string }> = ({
+const TypoScene: React.FC<{ text: string; accent?: string; label: string; noBg?: boolean }> = ({
   text,
   accent,
   label,
+  noBg,
 }) => (
   <AbsoluteFill>
-    <Backdrop />
+    {noBg ? null : <Backdrop />}
     <TopBar label={label} />
     <AbsoluteFill style={{ justifyContent: 'center', alignItems: 'center', padding: '0 88px' }}>
       <WordKaraoke text={text} accent={accent} baseSize={86} />
@@ -289,7 +381,8 @@ const PhotoScene: React.FC<{
   text: string;
   accent?: string;
   label: string;
-}> = ({ src, text, accent, label }) => {
+  noBg?: boolean;
+}> = ({ src, text, accent, label, noBg }) => {
   const frame = useCurrentFrame();
   const { durationInFrames } = useVideoConfig();
   const p = interpolate(frame, [0, Math.max(1, durationInFrames)], [0, 1], {
@@ -299,7 +392,7 @@ const PhotoScene: React.FC<{
 
   return (
     <AbsoluteFill>
-      <Backdrop />
+      {noBg ? null : <Backdrop />}
       <AbsoluteFill style={{ justifyContent: 'flex-start', alignItems: 'center', paddingTop: 186 }}>
         <div
           style={{
@@ -355,14 +448,14 @@ const PhotoScene: React.FC<{
 
 // ── Kết ───────────────────────────────────────────────────────────────────
 
-const Outro: React.FC<{ text: string }> = ({ text }) => {
+const Outro: React.FC<{ text: string; noBg?: boolean }> = ({ text, noBg }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
   const s = spring({ frame, fps, config: { damping: 200 }, durationInFrames: 16 });
 
   return (
     <AbsoluteFill>
-      <Backdrop />
+      {noBg ? null : <Backdrop />}
       <AbsoluteFill style={{ justifyContent: 'center', alignItems: 'center', padding: '0 88px' }}>
         <Img src={staticFile('seal.webp')} style={{ width: 156, opacity: s, marginBottom: 38 }} />
         <div
@@ -407,6 +500,7 @@ export const InsightClip: React.FC<InsightProps> = ({
   ctaAudio,
   topLabel,
   music,
+  backdrop,
 }) => {
   const { durationInFrames } = useVideoConfig();
 
@@ -418,13 +512,19 @@ export const InsightClip: React.FC<InsightProps> = ({
     return acc + sc.durationInFrames;
   }, hookDurationInFrames);
 
+  // Có ảnh nền ⇒ ảnh vẽ MỘT lần ở ngoài, và mọi cảnh thôi vẽ nền riêng của nó.
+  // Thiếu vế thứ hai thì nền navy của từng cảnh phủ kín ảnh và cả clip trông y
+  // hệt bản không có ảnh — hỏng theo kiểu KHÔNG có lỗi nào bắn ra.
+  const hasBg = Boolean(backdrop && backdrop.length);
+
   return (
     <AbsoluteFill style={{ backgroundColor: BRAND.navy }}>
       {music ? <Audio src={staticFile(`music/${music}`)} volume={0.3} loop /> : null}
+      {hasBg ? <PhotoBackdrop images={backdrop as string[]} /> : null}
 
       <Sequence durationInFrames={hookDurationInFrames} name="Hook">
         {hookAudio ? <Audio src={staticFile(hookAudio)} /> : null}
-        <Hook text={hook} label={topLabel} />
+        <Hook text={hook} label={topLabel} noBg={hasBg} />
       </Sequence>
 
       {scenes.map((sc, i) => (
@@ -441,9 +541,10 @@ export const InsightClip: React.FC<InsightProps> = ({
               text={sc.text}
               accent={sc.visual.accent}
               label={topLabel}
+              noBg={hasBg}
             />
           ) : (
-            <TypoScene text={sc.text} accent={sc.visual.accent} label={topLabel} />
+            <TypoScene text={sc.text} accent={sc.visual.accent} label={topLabel} noBg={hasBg} />
           )}
         </Sequence>
       ))}
@@ -454,7 +555,7 @@ export const InsightClip: React.FC<InsightProps> = ({
         name="Kết"
       >
         {ctaAudio ? <Audio src={staticFile(ctaAudio)} /> : null}
-        <Outro text={cta} />
+        <Outro text={cta} noBg={hasBg} />
       </Sequence>
     </AbsoluteFill>
   );

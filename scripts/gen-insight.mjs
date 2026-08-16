@@ -184,30 +184,39 @@ const dur = (i, fallbackSec) => (voices ? frames(voices[i].seconds + TAIL) : fra
  * Tên file là BĂM của URL ⇒ chạy lại không tải lại, và hai kịch bản dùng chung
  * một bức thì dùng chung một file.
  */
-async function localizeImages(scenes) {
+async function localizeOne(url, dir) {
+  if (!/^https?:/.test(url)) return url; // đã là đường dẫn trong public/
+  const ext = (url.match(/\.(png|jpe?g|webp)(?:\?|$)/i)?.[1] ?? 'png').toLowerCase();
+  const name = `${createHash('sha1').update(url).digest('hex').slice(0, 12)}.${ext}`;
+  const abs = join(dir, name);
+  if (!existsSync(abs)) {
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(`tải ảnh hỏng (${res.status}): ${url}`);
+    writeFileSync(abs, Buffer.from(await res.arrayBuffer()));
+    console.log(`   ✓ tải  ${name}  ←  ${url.split('/').pop()}`);
+  } else {
+    console.log(`   ⏭ có sẵn ${name}`);
+  }
+  return `img-cache/${name}`;
+}
+
+async function localizeImages(spec) {
   const dir = join(REMOTION, 'public/img-cache');
-  const hits = scenes.filter((s) => s.visual.kind === 'image' && /^https?:/.test(s.visual.src));
-  if (!hits.length) return;
+  const scenesWithImg = spec.scenes.filter(
+    (s) => s.visual.kind === 'image' && /^https?:/.test(s.visual.src)
+  );
+  const bgRemote = (spec.backdrop ?? []).filter((u) => /^https?:/.test(u));
+  if (!scenesWithImg.length && !bgRemote.length) return;
+
   mkdirSync(dir, { recursive: true });
   console.log('\n── ẢNH ──────────────────────────────────────');
-  for (const sc of hits) {
-    const url = sc.visual.src;
-    const ext = (url.match(/\.(png|jpe?g|webp)(?:\?|$)/i)?.[1] ?? 'png').toLowerCase();
-    const name = `${createHash('sha1').update(url).digest('hex').slice(0, 12)}.${ext}`;
-    const abs = join(dir, name);
-    if (!existsSync(abs)) {
-      const res = await fetch(url);
-      if (!res.ok) throw new Error(`tải ảnh hỏng (${res.status}): ${url}`);
-      writeFileSync(abs, Buffer.from(await res.arrayBuffer()));
-      console.log(`   ✓ tải  ${name}  ←  ${url.split('/').pop()}`);
-    } else {
-      console.log(`   ⏭ có sẵn ${name}`);
-    }
-    sc.visual.src = `img-cache/${name}`;
+  for (const sc of scenesWithImg) sc.visual.src = await localizeOne(sc.visual.src, dir);
+  if (spec.backdrop) {
+    spec.backdrop = await Promise.all(spec.backdrop.map((u) => localizeOne(u, dir)));
   }
 }
 
-await localizeImages(spec.scenes);
+await localizeImages(spec);
 
 // Hợp đồng `ScriptSpec` dùng `image` cho ảnh; template `InsightClip` gọi cảnh
 // đó là `photo` (nó còn Ken Burns + lớp tối để chữ đọc được trên mọi bức).
@@ -237,6 +246,7 @@ const props = {
     : frames(estimateSpeechSeconds(spokenCta(spec)) + 1.2),
   ...(voices ? { ctaAudio: voices[voices.length - 1].file } : {}),
   ...(spec.music ? { music: spec.music } : {}),
+  ...(spec.backdrop?.length ? { backdrop: spec.backdrop } : {}),
 };
 
 const propsFile = join(outDir, 'props.json');
