@@ -5,6 +5,132 @@
 
 ---
 
+## 🖼️ Hội đồng CHẤM HÌNH mà KHÔNG NHÌN THẤY HÌNH — và kho ảnh thật (2026-08-17, PR #539 + đang làm)
+
+Henry: *"hội đồng phán xét về CHỮ thì ok, chứ còn phán xét về HÌNH, mà nó lại ko
+nhìn thấy hình, thì hơi ko ổn… khoan hãy code nhé, phải tìm ra nguyên nhân gốc"*.
+
+### 🔴 Căn nguyên: với HÌNH, cổng 2 đang đo CHÍNH ĐẦU VÀO CỦA NÓ
+`buildTimeline()` (`lib/video/gate-audience.ts`) là thứ DUY NHẤT hội đồng nhận.
+Ô `NHÌN THẤY` của nó là **hằng số viết tay**: cảnh `typo` nào cũng ra đúng một
+câu *"Chữ lớn phủ giữa màn hình, sáng dần theo nhịp đọc, nền xanh đậm."*
+⇒ **kênh hình có phương sai BẰNG KHÔNG.** Một cái cân trả về cùng một số bất kể
+đặt gì lên thì không phải đang cân.
+- Nhưng than phiền lại KHÁC nhau giữa các clip ⇒ phần khác nhau đó **không thể**
+  đến từ hình. Nó đến từ CHỮ cộng nhiễu `temperature: 0.7`.
+- **Luật 5 của SYSTEM ép nêu đích danh một chi tiết** (*"Cấm nói chung chung"*).
+  Model quyết trước rồi đi tìm thứ cụ thể để đổ lỗi; kênh hình là chi tiết LUÔN
+  có mặt và LUÔN chê được ⇒ thành con dê tế thần mặc định. Chính cái luật viết
+  ra để chống nói chung chung lại **sản xuất** ra lời chê chung chung.
+- 🔑 Cơ sở phán quyết về hình là một **ĐỊNH KIẾN CHỦNG LOẠI** rút từ text huấn
+  luyện (*"chữ trên nền phẳng = nội dung làm ẩu"*), không phải quan sát. Nói một
+  lần thì đúng; phát lại 18 lần như 18 quan sát độc lập thì thành nhiễu đội lốt
+  đồng thuận. Clip typography làm KỸ và làm ẨU nhận cùng một định kiến.
+- ⚠️ **Bản vá đầu của tôi SAI, đã rút lại**: sửa cho mô tả đúng hơn KHÔNG đóng
+  được vòng — mô tả hay thì điểm lên, mô tả nhạt thì điểm xuống, tức điểm bám
+  theo VĂN CỦA TÔI. Đó là gương, không phải thước.
+- 🔑 **Bài học đặt ở tầng phương pháp**: đầu file đã chốt đúng *"đừng hỏi clip có
+  viral không, hỏi họ sẽ lướt ở đâu"* — nhưng kỷ luật đó áp cho CÂU HỎI mà không
+  áp cho BẰNG CHỨNG. Câu hỏi hay vẫn vô nghĩa với phần clip model không hề nhận.
+
+### ✅ Vì sao ảnh thật LÀM CHO phán quyết có nghĩa (Henry đề xuất, đúng)
+Ảnh thật, mỗi tấm kèm mô tả riêng ⇒ hội đồng chuyển từ *tra định kiến* sang
+**SO HAI VĂN BẢN NÓ ĐỀU NHẬN ĐƯỢC** (lời đọc ↔ mô tả ảnh). Phép so thì phân biệt
+được và kiểm sai/đúng được.
+- ⛔ **Vẫn KHÔNG chấm được ĐẸP/THU HÚT** — cái đó vẫn là định kiến. Đừng hứa.
+- 🔑 **Điều kiện sống còn: mô tả ảnh KHÔNG do tôi viết** (metadata nhà cung cấp
+  hoặc một lượt vision đọc chính pixel, sinh MỘT LẦN lúc nhập kho). Và luật cứng:
+  **caption chỉ TẢ, CẤM KHEN** — *"người phụ nữ ngồi quay lưng bên cửa sổ, tông
+  lạnh"* được; *"bức ảnh xúc động, bố cục đẹp"* cấm. Khen là dựng lại cái gương.
+
+### 📐 Format ĐÃ CHỐT: **LAI** (Henry chọn)
+`backdrop` = ảnh KHÍ QUYỂN cho cả clip, phân theo **TÔNG** · thêm 1–2 cảnh
+`visual.kind='image'` CHỦ THỂ đúng nhịp chốt, phân theo **CHỦ ĐỀ**. Cả hai cơ chế
+**đã có sẵn** trong `ScriptSpec`, không viết mới.
+- Kho A (khí quyển) ~8 tông × 12 ảnh — **dùng chung toàn kênh** (ảnh sương mù hợp
+  cả clip tình cảm lẫn công việc: nó tả tâm trạng, không tả nội dung).
+- Kho B (chủ thể) ~10 chủ đề × 10 ảnh. Tổng ~200 ảnh, tải MỘT lượt.
+- ⛔ **KHÔNG ảnh mỗi cảnh** — chú thích `backdrop` đã bác từ trước: *"ảnh đổi mỗi
+  3 giây thì mắt chạy theo ảnh chứ không đọc chữ"*.
+
+### 🔑 Tải TRƯỚC là ràng buộc CẤU TRÚC, không phải chuyện rẻ/đắt
+Vòng lặp cần **cần gạt đổi ảnh**: hội đồng chê *"ảnh không hợp"* thì phải THAY
+ẢNH, không phải viết lại chữ. Ảnh lấy đúng-lúc-cần thì **không có gì để thay
+sang**. ⇒ kho phải tồn tại TRƯỚC lượt dựng. Cộng thêm: hotlink là render gãy khi
+nhà cung cấp rate-limit/gỡ ảnh, và render lại sau 6 tháng phải ra đúng clip đó.
+- Chọn ảnh **theo băm của clip**, không random (tiền lệ `pickEraForLaso`).
+- Chống lặp: một ảnh không tái xuất trong ~10 clip gần nhất. Trùng vài ảnh cùng
+  tông thì TỐT (nhận diện kênh); trùng nguyên bộ thì đọc thành lười.
+- Bổ kho **theo NGƯỠNG, không theo lịch tuần**.
+
+### 🧷 Nguồn: **Pixabay** chính · Pexels dự phòng · ⛔ Unsplash LOẠI
+Unsplash **bắt buộc ghi công** ⇒ phải in tên tác giả lên khung 9:16 vốn đã chật
+chữ. Dù không bắt buộc vẫn **lưu đủ provenance** (tác giả · URL · id · license) —
+tiền lệ CSDL nghề nghiệp CC BY 4.0.
+- ⚠️ **Chưa đọc được điều khoản hiện hành** lúc viết mục này (3 host còn bị chặn).
+  Phải đọc tận nơi TRƯỚC lượt gọi API đầu tiên, đừng viết code theo trí nhớ.
+- ⚠️ **Tôi đã vượt quá phận sự một lần**: lấy điều khoản HẸP (cấm bôi nhọ người
+  trong ảnh) thổi thành luật chung rồi tự phán về nội dung của Henry. Anh bác
+  đúng. Ranh giới thật: chỉ cắn khi ảnh + chữ đọc thành **khẳng định VỀ CHÍNH
+  NGƯỜI TRONG ẢNH**. Ảnh minh hoạ cho luận điểm chung thì không. Vẫn **ưu tiên
+  ảnh không rõ mặt** — vì bố cục và tông thương hiệu, không phải vì lo hộ.
+
+### 🌐 Mạng: allowlist của environment, KHÔNG phải mạng hỏng
+`curl: (56) CONNECT tunnel failed, response 403` = **chính sách egress từ chối**.
+Phân biệt: `403 CONNECT` là chưa chạm tới server; `400/403/404` thường là đã tới
+nơi. Henry sửa được ở cấu hình **environment** (cùng chỗ đặt biến môi trường).
+- ⚠️ **Đổi allowlist/biến môi trường chỉ ăn ở PHIÊN MỚI** — container khởi động
+  trước đó không thấy. Đã vấp: mở allowlist xong phải đo lại mới thấy thông.
+- 🔴 **`.env` nằm trong `.gitignore` ⇒ KHÔNG BAO GIỜ tới container cloud.** Sửa
+  `.env` ở máy Henry là nó ở lại máy Henry. Đường duy nhất: đặt biến ở cấu hình
+  environment (chỗ `OPENAI_API_KEY` đang nằm), dán giá trị THÔ — không `;`,
+  không dấu nháy, không xuống dòng. Cùng bài học đã ghi ở track GA4.
+- ⛔ **Đừng để Henry dán key vào chat** — chat lưu lại, đúng lý do đã phải xoay
+  service key một lần.
+- 🔐 Nhập kho ghi Storage cần `SUPABASE_SERVICE_KEY` ⇒ **KHÔNG chạy ở Actions**.
+  Nhập kho là việc CHẠY MỘT LẦN; Actions sau đó chỉ đọc URL công khai.
+
+### ✅ PR #539 — bỏ lớp phủ toàn khung (Henry: *"có khi ko cần lớp phủ"*)
+Chú thích cũ gọi lớp phủ navy toàn khung là *"BẮT BUỘC"* — **nói quá**. Thứ bắt
+buộc là **tương phản CHỮ**; phủ cả khung là cách thô nhất, nó chữa chữ bằng cách
+hy sinh ảnh. Nay `0,64 → 0,20`, tương phản do **`TextPlate`** ôm riêng khối chữ.
+- **GIỮ gradient tối hai đầu**, có lý do: nhãn ở mép trên, TikTok phủ caption +
+  thanh điều hướng lên ~250px mép dưới.
+- 🪤 **Cơ chế Henry đề nghị ĐÃ CÓ SẴN mà tôi trích thiếu**: `PhotoBackdrop` vốn
+  có 3 lớp, lớp thứ ba là dải tối bám RIÊNG vùng chữ. Đọc trọn khối code trước
+  khi trích một chú thích làm luận cứ.
+- ⚠️ Plate ổn định **chỉ vì** `WordKaraoke` dựng SẴN mọi từ từ khung 0 rồi đổi
+  `opacity`. Đổi sang thật sự thêm từ dần thì plate giật theo từng từ.
+- 🔑 Mở ra một tiêu chí ĐO ĐƯỢC: **"ảnh có chỗ đặt chữ không"** (vùng giữa đủ tối,
+  đủ phẳng) thành **điều kiện tuyển ảnh** ở cổng 1 — 0đ, không cần hội đồng đoán.
+  64 tranh quẻ thì mình không chọn được; ảnh stock thì mình CHỌN.
+- Verify: `tsc` 0 · `prettier` sạch · render thật 91,63s 1080×1920 h264+aac.
+
+### 🔢 ĐÍNH CHÍNH con số của chính tôi
+**Chỉ có 6 kịch bản insight**, không phải 18. 18 là số clip **demo công cụ**
+(`screen`, có bản quay màn hình thật). 24 clip khảo sát = 18 demo + 6 insight.
+⇒ Than phiền *"chỉ có chữ trên nền xanh"* nhắm vào **6 clip insight**.
+6 mẫu là quá mỏng để rút cây phân loại — lấy TÔNG từ tập đóng, CHỦ ĐỀ từ miền
+nội dung site.
+
+### CÒN LẠI
+- 🔴 **Chưa chạy được lượt nhập kho nào** — thiếu `PIXABAY_API_KEY` trong
+  environment. **Việc đầu tiên của phiên sau**: gọi MỘT lượt Pixabay thật, in
+  cấu trúc phản hồi (`largeImageURL` nằm trên `pixabay.com/get/` hay
+  `cdn.pixabay.com`? tên trường tag/metadata?) RỒI MỚI viết script. Viết trước
+  rồi đoán hình dạng phản hồi là đặt cược nhầm chỗ.
+- **Hai bug đã xác nhận trong `buildTimeline`, chưa vá**: `backdrop` không hề
+  được nhắc (4 clip bị chấm như không có nền) · 5 cảnh `image` in **URL thô**
+  thay vì mô tả (`Ảnh: ${sc.visual.src}`). `accent` và quầng sáng cũng vắng mặt.
+- **Vòng lặp chưa có cần gạt thứ hai**: cần mã lỗi `visual.mismatch` + hành động
+  ĐỔI ẢNH. `rewriteSpec` hiện chỉ viết lại chữ ⇒ chê hình mà sửa chữ là tái lập
+  đúng lỗi vừa mổ.
+- **Đừng hứa việc này cứu 17 clip trượt** — phần lớn trượt vì CHỮ.
+- `0,20` mới soi trên MỘT bức; phải soi lại trên bức SÁNG NHẤT trong kho.
+- Chưa đụng `PhotoScene` (cảnh ảnh riêng, có dải tối riêng, cơ chế khác).
+
+---
+
 ## 🏭 Khâu dựng clip lên GitHub Actions — và một phép kiểm TÔI ĐẶT TÊN SAI (2026-08-15, PR này)
 
 Henry hỏi chạy pipeline ở đâu: session Claude Code, routine, hay dựng hẳn hạ
