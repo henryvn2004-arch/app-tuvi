@@ -155,31 +155,63 @@ const PhotoBackdrop: React.FC<{ images: string[] }> = ({ images }) => {
         );
       })}
       {/*
-       * Phủ navy + tối dần hai đầu: giữ tông thương hiệu và ép tương phản chữ.
+       * 🔑 KHÔNG còn phủ navy toàn khung.
        *
-       * 0,64 là con số soi bằng MẮT trên khung hình thật, không phải đoán. Ở
-       * 0,74 chữ rất rõ nhưng tranh chìm gần hết — tức trả tiền cho một bức
-       * tranh rồi giấu nó đi. Hạ tới khi tranh đọc được mà chữ chưa suy.
+       * Bản trước phủ 0,64 lên cả khung để ép tương phản chữ — tức trả tiền cho
+       * một bức ảnh rồi giấu nó đi. Nay tương phản do NỀN RIÊNG CỦA CHỮ
+       * (`TextPlate`) lo, nên lớp này chỉ còn giữ TÔNG thương hiệu: đủ để bức
+       * ảnh ngả về navy chứ không đủ để nó chìm.
+       *
+       * ⚠️ Đổi 0,20 thì phải soi lại bằng mắt trên ảnh SÁNG NHẤT trong kho —
+       * plate lo phần chữ, còn số này lo phần nhìn.
        */}
-      <AbsoluteFill style={{ background: BRAND.navy, opacity: 0.64 }} />
-      <AbsoluteFill
-        style={{
-          background: `linear-gradient(180deg, ${BRAND.navy} 0%, transparent 26%, transparent 72%, ${BRAND.navy} 100%)`,
-        }}
-      />
+      <AbsoluteFill style={{ background: BRAND.navy, opacity: 0.2 }} />
       {/*
-       * Dải tối bám riêng vùng CHỮ (giữa khung). Nhờ nó mà lớp phủ toàn khung
-       * không phải gánh cả hai việc: tranh giữ được chi tiết ở trên/dưới, còn
-       * chỗ đặt chữ vẫn đủ tối để đọc trên bất kỳ bức nào.
+       * Tối dần hai đầu — GIỮ, và không phải để cho đẹp: nhãn TopBar nằm ở mép
+       * trên, còn TikTok phủ caption + thanh điều hướng lên ~250px mép dưới.
+       * Hai vùng đó phải tối bất kể bức ảnh bên dưới là gì.
        */}
       <AbsoluteFill
         style={{
-          background: `linear-gradient(180deg, transparent 28%, ${BRAND.navy}b0 44%, ${BRAND.navy}b0 62%, transparent 78%)`,
+          background: `linear-gradient(180deg, ${BRAND.navy} 0%, transparent 22%, transparent 74%, ${BRAND.navy} 100%)`,
         }}
       />
     </AbsoluteFill>
   );
 };
+
+/**
+ * Nền riêng cho khối chữ, thay cho lớp phủ toàn khung.
+ *
+ * 🔑 Vì sao đổi: phủ cả khung là cách THÔ để lấy tương phản — nó giải quyết
+ * chữ bằng cách hy sinh ảnh. Nền bám riêng khối chữ giải quyết đúng chỗ cần:
+ * ảnh giữ nguyên ở mọi chỗ KHÔNG có chữ.
+ *
+ * ⚠️ Hộp phải ổn định suốt cảnh. `WordKaraoke` dựng SẴN mọi từ ngay từ khung 0
+ * (chỉ đổi `opacity` theo nhịp đọc) nên chiều cao không nhảy — nếu sau này đổi
+ * sang thật sự thêm từ dần thì plate sẽ giật theo, lúc đó phải đo hộp theo bản
+ * chữ ĐẦY ĐỦ chứ không theo phần đang hiện.
+ *
+ * `blur` phía sau giữ được vệt màu và bố cục của ảnh (mắt vẫn thấy có ảnh ở
+ * dưới) trong khi chi tiết nhiễu thì tan đi — đó mới là thứ ăn mất chữ.
+ */
+const TextPlate: React.FC<{ on?: boolean; children: React.ReactNode }> = ({ on, children }) =>
+  on ? (
+    <div
+      style={{
+        padding: '44px 52px',
+        borderRadius: 34,
+        background: `${BRAND.navy}D9`,
+        backdropFilter: 'blur(18px)',
+        border: `1px solid ${BRAND.gold}33`,
+        boxShadow: '0 26px 80px rgba(0,0,0,.42)',
+      }}
+    >
+      {children}
+    </div>
+  ) : (
+    <>{children}</>
+  );
 
 const TopBar: React.FC<{ label: string }> = ({ label }) => (
   <div
@@ -312,7 +344,9 @@ const Hook: React.FC<{ text: string; label: string; noBg?: boolean }> = ({ text,
     <AbsoluteFill style={{ justifyContent: 'center', alignItems: 'center', padding: '0 78px' }}>
       {/* ⚠️ Hook KHÔNG reveal từng từ: ba giây đầu quyết định người ta lướt hay
           ở lại, và chữ chạy dần nghĩa là giây đầu tiên chưa đọc được gì. */}
-      <HookText text={text} />
+      <TextPlate on={noBg}>
+        <HookText text={text} />
+      </TextPlate>
     </AbsoluteFill>
   </AbsoluteFill>
 );
@@ -361,7 +395,9 @@ const TypoScene: React.FC<{ text: string; accent?: string; label: string; noBg?:
     {noBg ? null : <Backdrop />}
     <TopBar label={label} />
     <AbsoluteFill style={{ justifyContent: 'center', alignItems: 'center', padding: '0 88px' }}>
-      <WordKaraoke text={text} accent={accent} baseSize={86} />
+      <TextPlate on={noBg}>
+        <WordKaraoke text={text} accent={accent} baseSize={86} />
+      </TextPlate>
     </AbsoluteFill>
   </AbsoluteFill>
 );
@@ -457,32 +493,36 @@ const Outro: React.FC<{ text: string; noBg?: boolean }> = ({ text, noBg }) => {
     <AbsoluteFill>
       {noBg ? null : <Backdrop />}
       <AbsoluteFill style={{ justifyContent: 'center', alignItems: 'center', padding: '0 88px' }}>
-        <Img src={staticFile('seal.webp')} style={{ width: 156, opacity: s, marginBottom: 38 }} />
-        <div
-          style={{
-            fontFamily: FONT.serif,
-            fontSize: fitSize(text.length, 62),
-            lineHeight: 1.32,
-            fontWeight: 700,
-            color: BRAND.textOnNavy,
-            textAlign: 'center',
-            opacity: s,
-          }}
-        >
-          {text}
-        </div>
-        <div
-          style={{
-            marginTop: 38,
-            fontFamily: FONT.sans,
-            fontSize: 40,
-            letterSpacing: '0.06em',
-            color: BRAND.gold,
-            opacity: s,
-          }}
-        >
-          tuviminhbao.com
-        </div>
+        <TextPlate on={noBg}>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <Img src={staticFile('seal.webp')} style={{ width: 156, opacity: s, marginBottom: 38 }} />
+            <div
+              style={{
+                fontFamily: FONT.serif,
+                fontSize: fitSize(text.length, 62),
+                lineHeight: 1.32,
+                fontWeight: 700,
+                color: BRAND.textOnNavy,
+                textAlign: 'center',
+                opacity: s,
+              }}
+            >
+              {text}
+            </div>
+            <div
+              style={{
+                marginTop: 38,
+                fontFamily: FONT.sans,
+                fontSize: 40,
+                letterSpacing: '0.06em',
+                color: BRAND.gold,
+                opacity: s,
+              }}
+            >
+              tuviminhbao.com
+            </div>
+          </div>
+        </TextPlate>
       </AbsoluteFill>
     </AbsoluteFill>
   );
