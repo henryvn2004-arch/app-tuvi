@@ -1,10 +1,11 @@
 #!/usr/bin/env node
 /**
  * Dựng một clip LAYER 1 (insight, không quay màn hình):
- * kịch bản → cổng 1 → giọng đọc → Remotion render.
+ * kịch bản → cổng 1 → cổng 2 → giọng đọc → Remotion render.
  *
  *   node scripts/gen-insight.mjs --id ba-kieu-ton-thuong
  *   node scripts/gen-insight.mjs --id ba-the-be-tac --still
+ *   node scripts/gen-insight.mjs --id ba-the-be-tac --no-audience
  *   node scripts/gen-insight.mjs --list
  *
  * ⚠️ BẢN THỬ NGHIỆM, cố ý tách khỏi `gen-video.mjs`. Hai script hiện trùng
@@ -16,13 +17,11 @@
  */
 import { execFileSync } from 'child_process';
 import { createHash } from 'crypto';
-import { existsSync, mkdirSync, mkdtempSync, writeFileSync } from 'fs';
-import { tmpdir } from 'os';
+import { existsSync, mkdirSync, writeFileSync } from 'fs';
 import { join } from 'path';
-import { createRequire } from 'module';
 import { ttsScene, pickVoice } from './tts-clip.mjs';
+import { compileVideoLib, chayCong2 } from './video-lib.mjs';
 
-const require = createRequire(import.meta.url);
 const ROOT = new URL('..', import.meta.url).pathname;
 const REMOTION = join(ROOT, 'remotion');
 
@@ -40,6 +39,14 @@ const LIST = has('--list');
 const STILL = has('--still');
 const DRY = has('--dry-run');
 const NO_VOICE = has('--no-voice');
+/**
+ * Bỏ cổng 2 (hội đồng người xem) — không gọi LLM.
+ *
+ * ⚠️ Clip insight là loại CẦN cổng 2 nhất: nó không có bản quay màn hình làm
+ * bằng chứng, toàn bộ giá trị nằm ở chữ. Cờ này để chạy thử tại chỗ khi chưa
+ * có khoá model, KHÔNG phải để bỏ qua cho tiện lúc dựng thật.
+ */
+const NO_AUDIENCE = has('--no-audience');
 const VOICE = val('--voice', '');
 const FPS = 30;
 /**
@@ -64,37 +71,14 @@ const CRF = val('--crf', '');
 const SWEET = [45, 120];
 
 // ── Nạp module TS bằng cách biên dịch tại chỗ ─────────────────────────────
-// Cùng lối `gen-video.mjs`: gọi `tsc` CLI, KHÔNG dùng API biên dịch trong JS
-// (TypeScript 7 là bản port native, API đó đã biến mất). `--ignoreConfig` là
-// bắt buộc — nêu tên file trên dòng lệnh khi cwd có tsconfig.json thì tsc báo
-// TS5112 rồi bỏ cuộc.
-const outDir = mkdtempSync(join(tmpdir(), 'insight-'));
-execFileSync(
-  join(ROOT, 'node_modules/.bin/tsc'),
-  [
-    '--ignoreConfig',
-    '--module',
-    'commonjs',
-    '--target',
-    'es2022',
-    '--skipLibCheck',
-    '--esModuleInterop',
-    '--outDir',
-    outDir,
-    join(ROOT, 'lib/video/script-spec.ts'),
-    join(ROOT, 'lib/video/gate-machine.ts'),
-    join(ROOT, 'lib/video/sources/insight.ts'),
-  ],
-  { stdio: 'inherit' }
-);
+// Dùng CHUNG `scripts/video-lib.mjs` với `gen-video.mjs` — xem chú thích ở đó
+// về việc phải hook alias `@/` sau khi biên dịch.
+const { outDir, load } = compileVideoLib(['lib/video/sources/insight.ts']);
 
-const { buildInsightSpec, getInsightSource, listInsightIds } = require(
-  join(outDir, 'sources/insight.js')
-);
-const { runMachineGate } = require(join(outDir, 'gate-machine.js'));
-const { estimateSpeechSeconds, spokenCta, spokenSceneText } = require(
-  join(outDir, 'script-spec.js')
-);
+const { buildInsightSpec, getInsightSource, listInsightIds } = load('video/sources/insight.js');
+const { runMachineGate } = load('video/gate-machine.js');
+const { runViralLoop } = load('video/viral-loop.js');
+const { estimateSpeechSeconds, spokenCta, spokenSceneText } = load('video/script-spec.js');
 
 if (LIST) {
   console.log('\nKịch bản insight có sẵn:');
@@ -107,16 +91,22 @@ if (!ID) {
   process.exit(1);
 }
 
-const spec = buildInsightSpec(ID);
+let spec = buildInsightSpec(ID);
 const source = getInsightSource(ID);
 if (!spec || !source) {
   console.error(`❌ Chưa có kịch bản "${ID}" trong lib/video/sources/insight.ts`);
   process.exit(1);
 }
 
+// Ngưỡng cổng 1 của clip insight KHÁC hẳn clip demo tool (80–92s so với 18–32s)
+// nên phải đi kèm mọi lượt chấm — kể cả lượt chấm lại BÊN TRONG vòng lặp cổng 2.
+// Thiếu nó thì vòng lặp chấm clip này bằng thước của loại khác rồi bắt viết lại
+// một lỗi không có thật, mỗi vòng đốt hai lượt LLM.
+const GATE = { maxSeconds: MAX_SECONDS, sweetSpot: SWEET };
+
 // ── Cổng 1 ────────────────────────────────────────────────────────────────
 console.log('\n── CỔNG 1 · máy ─────────────────────────────');
-const g1 = runMachineGate(spec, { maxSeconds: MAX_SECONDS, sweetSpot: SWEET });
+const g1 = runMachineGate(spec, GATE);
 console.log(
   `   ${g1.pass ? '✅ QUA' : '❌ TRƯỢT'}  ·  ${g1.metrics.totalSeconds}s · ${g1.metrics.sceneCount} cảnh · hook ${g1.metrics.hookSeconds}s`
 );
@@ -124,6 +114,16 @@ for (const i of g1.issues) console.log(`   [${i.level}] ${i.code}: ${i.message}`
 if (!g1.pass) {
   console.error('\n❌ Dừng: kịch bản không qua cổng 1.');
   process.exit(1);
+}
+
+// ── Cổng 2 ────────────────────────────────────────────────────────────────
+// Đứng TRƯỚC khâu giọng đọc: cổng có thể viết lại lời, mà TTS là khoản chi phí
+// biến đổi duy nhất — sinh tiếng trước rồi mới chấm là trả tiền đọc cho câu
+// sắp bị bỏ đi. Clip insight dài gấp ba clip demo nên khoản đó cũng gấp ba.
+{
+  const kq = await chayCong2(runViralLoop, spec, { skip: NO_AUDIENCE, gate: GATE });
+  if (!kq.pass) process.exit(1);
+  spec = kq.spec;
 }
 
 if (DRY) {

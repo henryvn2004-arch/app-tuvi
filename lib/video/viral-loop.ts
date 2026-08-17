@@ -16,7 +16,12 @@
 import { llmTextFull } from '@/lib/llm/complete';
 import { parseLlmJson } from '@/lib/api/tool-helpers';
 import { type ScriptSpec, estimateTotalSeconds } from './script-spec';
-import { runMachineGate, type GateIssue, type MachineGateResult } from './gate-machine';
+import {
+  runMachineGate,
+  type GateIssue,
+  type GateOptions,
+  type MachineGateResult,
+} from './gate-machine';
 import { runAudienceGate, type AudienceGateResult } from './gate-audience';
 
 export interface LoopRound {
@@ -46,30 +51,44 @@ Bạn nhận một kịch bản KHÔNG ĐẠT kèm danh sách lỗi cụ thể. 
 
 LUẬT:
 1. Giữ nguyên \`sourceType\`, \`sourceId\`, số lượng cảnh và phần \`visual\` của
-   từng cảnh. Bạn CHỈ được sửa chữ: \`hook\`, \`scenes[].text\`, \`cta\`.
+   từng cảnh. Bạn CHỈ được sửa chữ: \`hook\` và \`scenes[].text\`.
    (Phần \`visual\` gắn với clip quay màn hình đã có — đổi nó là kịch bản nói
    một đằng, hình chiếu một nẻo.)
-2. Giọng: người Việt nói chuyện tự nhiên, KHÔNG sáo rỗng, KHÔNG "các bạn thân
+2. CÂU KẾT và mọi cảnh đánh dấu [KHOÁ] là BẤT BIẾN — không sửa, không trả về.
+   Chúng mang tên miền / mã khuyến mãi và có BẢN ĐỌC riêng gửi cho máy đọc;
+   sửa chữ mà bản đọc giữ nguyên thì phụ đề một đằng, tiếng một nẻo — hỏng IM
+   LẶNG, không lỗi nào bắn ra.
+3. Giọng: người Việt nói chuyện tự nhiên, KHÔNG sáo rỗng, KHÔNG "các bạn thân
    mến", KHÔNG hô hào. Xưng "bạn" với người xem.
-3. TUYỆT ĐỐI KHÔNG hứa chắc chắn về tương lai ("chắc chắn sẽ giàu", "nhất định
+4. TUYỆT ĐỐI KHÔNG hứa chắc chắn về tương lai ("chắc chắn sẽ giàu", "nhất định
    gặp may"). Nói về xu hướng, gợi ý, điều đáng lưu tâm.
-4. Tránh giọng mê tín cực đoan (định mệnh không đổi được, không xem là gặp hoạ)
+5. Tránh giọng mê tín cực đoan (định mệnh không đổi được, không xem là gặp hoạ)
    — vừa sai với tinh thần trang, vừa dễ bị nền tảng hạn chế phân phối.
-5. Mỗi ký tự đều tốn thời gian đọc: khoảng 13,6 ký tự = 1 giây. Cần cắt ngắn
+6. Mỗi ký tự đều tốn thời gian đọc: khoảng 13,6 ký tự = 1 giây. Cần cắt ngắn
    thì cắt CHỮ, đừng cắt ý.
 
-Trả về ĐÚNG JSON: {"hook": "...", "scenes": ["...", "..."], "cta": "..."}
-với \`scenes\` là mảng lời đọc theo đúng thứ tự cảnh cũ, đúng số lượng.`;
+Trả về ĐÚNG JSON: {"hook": "...", "scenes": ["...", "..."]}
+với \`scenes\` là mảng lời đọc theo đúng thứ tự cảnh cũ, đúng số lượng — cảnh
+[KHOÁ] thì chép nguyên văn vào đúng vị trí của nó.`;
 
 const REWRITE_SCHEMA = {
   type: 'object',
   properties: {
     hook: { type: 'string' },
     scenes: { type: 'array', items: { type: 'string' } },
-    cta: { type: 'string' },
   },
-  required: ['hook', 'scenes', 'cta'],
+  required: ['hook', 'scenes'],
 };
+
+/**
+ * Cảnh có BẢN ĐỌC riêng (`speech`) thì KHÔNG cho viết lại.
+ *
+ * 🔑 `speech` chỉ tồn tại cho đúng ba lớp chuỗi — tên miền, mã viết HOA, chữ số
+ * — tức những chuỗi mà chữ VIẾT và chữ ĐỌC cố ý khác nhau. Để model sửa chữ
+ * viết trong khi bản đọc nằm im là tạo ra đúng loại lệch không ai nhìn ra: clip
+ * render thành công, phụ đề đúng, tiếng nói một câu khác.
+ */
+const khoa = (s: ScriptSpec['scenes'][number]) => Boolean(s.speech?.trim());
 
 async function rewriteSpec(spec: ScriptSpec, issues: GateIssue[], hint: string): Promise<ScriptSpec | null> {
   const loi = issues
@@ -82,8 +101,10 @@ async function rewriteSpec(spec: ScriptSpec, issues: GateIssue[], hint: string):
     prompt:
       `KỊCH BẢN HIỆN TẠI (dài ${estimateTotalSeconds(spec).toFixed(1)}s):\n` +
       `hook: "${spec.hook}"\n` +
-      spec.scenes.map((s, i) => `cảnh ${i + 1}: "${s.text}"`).join('\n') +
-      `\ncta: "${spec.cta}"\n\n` +
+      spec.scenes
+        .map((s, i) => `cảnh ${i + 1}${khoa(s) ? ' [KHOÁ]' : ''}: "${s.text}"`)
+        .join('\n') +
+      `\nCÂU KẾT (bất biến, không sửa): "${spec.cta}"\n\n` +
       `LỖI PHẢI SỬA:\n${loi}\n` +
       (hint ? `\nCHỈ DẪN TỪ HỘI ĐỒNG NGƯỜI XEM:\n${hint}\n` : '') +
       `\nViết lại, giữ đúng ${spec.scenes.length} cảnh.`,
@@ -93,18 +114,20 @@ async function rewriteSpec(spec: ScriptSpec, issues: GateIssue[], hint: string):
     temperature: 0.8,
   });
 
-  const p = parseLlmJson(res.text) as { hook?: string; scenes?: string[]; cta?: string } | null;
-  if (!p?.hook || !Array.isArray(p.scenes) || !p.cta) return null;
+  const p = parseLlmJson(res.text) as { hook?: string; scenes?: string[] } | null;
+  if (!p?.hook || !Array.isArray(p.scenes)) return null;
 
   // Sai số cảnh ⇒ BỎ bản viết lại. Ghép bừa sẽ làm lời đọc lệch khỏi hình đang
   // chiếu — kiểu hỏng im lặng, không lỗi nào bắn ra, chỉ có clip vô nghĩa.
   if (p.scenes.length !== spec.scenes.length) return null;
 
+  // Câu kết và cảnh [KHOÁ] giữ nguyên — ÉP ở đây chứ không chỉ dặn trong prompt.
+  // Dặn là mong model nghe lời; ép là điều kiện luôn đúng. Với thứ hỏng im lặng
+  // thì phải chốt ở chỗ không phụ thuộc model.
   return {
     ...spec,
     hook: p.hook,
-    cta: p.cta,
-    scenes: spec.scenes.map((sc, i) => ({ ...sc, text: p.scenes![i] })),
+    scenes: spec.scenes.map((sc, i) => (khoa(sc) ? sc : { ...sc, text: p.scenes![i] })),
   };
 }
 
@@ -113,17 +136,23 @@ async function rewriteSpec(spec: ScriptSpec, issues: GateIssue[], hint: string):
  *
  * @param opts.skipAudience bỏ cổng 2 (không gọi LLM) — dùng khi chạy thử tại
  *   chỗ hoặc khi chưa có khoá model. Cổng 1 vẫn chạy đủ.
+ * @param opts.gate ngưỡng cho cổng 1. ⚠️ BẮT BUỘC truyền đúng ngưỡng mà phía
+ *   gọi đang dùng: clip insight chạy 80–92s với `maxSeconds: 240` /
+ *   `sweetSpot: [45, 120]`, còn mặc định của cổng là khung 18–32s của clip
+ *   demo tool. Bỏ trống thì vòng lặp chấm clip insight bằng thước của loại
+ *   khác rồi bắt viết lại một lỗi không có thật — và mỗi vòng như vậy đốt hai
+ *   lượt LLM.
  */
 export async function runViralLoop(
   input: ScriptSpec,
-  opts: { skipAudience?: boolean; maxRounds?: number } = {}
+  opts: { skipAudience?: boolean; maxRounds?: number; gate?: GateOptions } = {}
 ): Promise<LoopResult> {
   const maxRounds = opts.maxRounds ?? MAX_ROUNDS;
   const rounds: LoopRound[] = [];
   let spec = input;
 
   for (let round = 1; round <= maxRounds; round++) {
-    const machine = runMachineGate(spec);
+    const machine = runMachineGate(spec, opts.gate);
 
     // Cổng 1 trượt ⇒ chưa tốn lượt LLM nào cho cổng 2.
     if (!machine.pass) {
