@@ -213,6 +213,17 @@ export async function runAudienceGate(spec: ScriptSpec): Promise<AudienceGateRes
   // Fail-CLOSED có chủ đích: cổng này gác đầu ra công khai, đoán bừa theo hướng
   // dễ dãi là đúng thứ nó sinh ra để chặn.
   if (viewers.length < VIEWER_PERSONAS.length) {
+    // Chặn thì đúng, nhưng chặn mà IM thì lần sau vẫn phải đi chẩn lại từ đầu.
+    // Lượt khảo sát 24 kịch bản có đúng một clip rơi vào đây (`xem-tuoi-sinh-con`,
+    // 0/7 ý kiến) và không có gì để lần: mất mạng? model trả rỗng? bị cắt vì
+    // chạm `maxTokens`? Ba nguyên nhân đó cần ba cách sửa khác hẳn nhau.
+    console.error(
+      `[gate-audience] hội đồng trả ${viewers.length}/${VIEWER_PERSONAS.length} ý kiến ` +
+        `(provider=${res.provider}, model=${res.model}, ${res.durationMs}ms). ` +
+        `Bản thô ${res.text.length} ký tự, ` +
+        `mở đầu: ${JSON.stringify(res.text.slice(0, 200))}, ` +
+        `đuôi: ${JSON.stringify(res.text.slice(-120))}`
+    );
     issues.push({
       level: 'block',
       code: 'audience.incomplete',
