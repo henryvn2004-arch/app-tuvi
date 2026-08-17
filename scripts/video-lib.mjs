@@ -94,7 +94,7 @@ export function compileVideoLib(extra = []) {
  *
  * @param {(spec: object, opts: object) => Promise<object>} runViralLoop
  * @param {object} spec
- * @param {{ skip?: boolean, gate?: object }} opts
+ * @param {{ skip?: boolean, gate?: object, maxRounds?: number }} opts
  */
 export async function chayCong2(runViralLoop, spec, opts = {}) {
   if (opts.skip) {
@@ -130,7 +130,15 @@ export async function chayCong2(runViralLoop, spec, opts = {}) {
   }
 
   if (!kq.pass) {
-    console.error('\n❌ Dừng: kịch bản không qua cổng 2 sau khi đã thử viết lại.');
+    // ⚠️ Nói ĐÚNG số vòng đã chạy, đừng nói "đã thử viết lại" cho oai. Lượt
+    // chạy thật đầu tiên dừng sau 1/3 vòng vì bản viết lại bị từ chối, mà câu
+    // báo cũ khiến người đọc tưởng đã thử đủ ba lần.
+    console.error(`\n❌ Dừng: kịch bản không qua cổng 2 sau ${kq.rounds.length} vòng.`);
+    if (opts.maxRounds && kq.rounds.length < opts.maxRounds) {
+      console.error(
+        `   (dừng sớm — trần là ${opts.maxRounds} vòng. Bản viết lại bị từ chối; lý do in ở dòng [viral-loop] phía trên.)`
+      );
+    }
     for (const i of kq.remainingIssues) console.error(`   [${i.level}] ${i.code}: ${i.message}`);
     console.error('   Sửa kịch bản trong lib/video/sources/ rồi chạy lại.');
     return { pass: false, spec: kq.spec };

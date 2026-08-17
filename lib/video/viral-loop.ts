@@ -114,12 +114,29 @@ async function rewriteSpec(spec: ScriptSpec, issues: GateIssue[], hint: string):
     temperature: 0.8,
   });
 
+  // 🔑 Mọi đường trả `null` đều phải NÓI RA. Lượt chạy thật đầu tiên trên
+  // Actions dừng sau đúng 1 vòng trong khi trần là 3, và không dòng nào cho
+  // biết vì sao — người đọc log chỉ thấy câu "đã thử viết lại" mà không biết
+  // bản viết lại có tồn tại hay không. Bỏ clip thì được, bỏ mà im thì không.
   const p = parseLlmJson(res.text) as { hook?: string; scenes?: string[] } | null;
-  if (!p?.hook || !Array.isArray(p.scenes)) return null;
+  if (!p?.hook || !Array.isArray(p.scenes)) {
+    console.error(
+      `[viral-loop] bỏ bản viết lại: không bóc được JSON hợp lệ ` +
+        `(hook=${p?.hook ? 'có' : 'thiếu'}, scenes=${Array.isArray(p?.scenes) ? 'có' : 'thiếu'}). ` +
+        `Bản thô ${res.text.length} ký tự, mở đầu: ${JSON.stringify(res.text.slice(0, 160))}`
+    );
+    return null;
+  }
 
   // Sai số cảnh ⇒ BỎ bản viết lại. Ghép bừa sẽ làm lời đọc lệch khỏi hình đang
   // chiếu — kiểu hỏng im lặng, không lỗi nào bắn ra, chỉ có clip vô nghĩa.
-  if (p.scenes.length !== spec.scenes.length) return null;
+  if (p.scenes.length !== spec.scenes.length) {
+    console.error(
+      `[viral-loop] bỏ bản viết lại: model trả ${p.scenes.length} cảnh, ` +
+        `kịch bản có ${spec.scenes.length}. Ghép lệch thì lời đọc trôi khỏi hình.`
+    );
+    return null;
+  }
 
   // Câu kết và cảnh [KHOÁ] giữ nguyên — ÉP ở đây chứ không chỉ dặn trong prompt.
   // Dặn là mong model nghe lời; ép là điều kiện luôn đúng. Với thứ hỏng im lặng

@@ -77,7 +77,7 @@ const { outDir, load } = compileVideoLib(['lib/video/sources/insight.ts']);
 
 const { buildInsightSpec, getInsightSource, listInsightIds } = load('video/sources/insight.js');
 const { runMachineGate } = load('video/gate-machine.js');
-const { runViralLoop } = load('video/viral-loop.js');
+const { runViralLoop, MAX_ROUNDS } = load('video/viral-loop.js');
 const { estimateSpeechSeconds, spokenCta, spokenSceneText } = load('video/script-spec.js');
 
 if (LIST) {
@@ -121,7 +121,11 @@ if (!g1.pass) {
 // biến đổi duy nhất — sinh tiếng trước rồi mới chấm là trả tiền đọc cho câu
 // sắp bị bỏ đi. Clip insight dài gấp ba clip demo nên khoản đó cũng gấp ba.
 {
-  const kq = await chayCong2(runViralLoop, spec, { skip: NO_AUDIENCE, gate: GATE });
+  const kq = await chayCong2(runViralLoop, spec, {
+    skip: NO_AUDIENCE,
+    gate: GATE,
+    maxRounds: MAX_ROUNDS,
+  });
   if (!kq.pass) process.exit(1);
   spec = kq.spec;
 }

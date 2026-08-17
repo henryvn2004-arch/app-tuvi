@@ -7,6 +7,7 @@
  *   node scripts/build-video-batch.mjs --insight vi-sao-hay-hoan-lai
  *   node scripts/build-video-batch.mjs --all --dry-run      # chỉ in kế hoạch
  *   node scripts/build-video-batch.mjs --all --force        # quay + dựng lại
+ *   node scripts/build-video-batch.mjs --all --gate-only    # CHỈ chạy 2 cổng
  *
  * 🔴 HAI LOẠI CLIP, HAI ĐƯỜNG DỰNG KHÁC HẲN — và bản đầu của script này CHỈ
  * biết loại thứ nhất, tức bỏ sót đúng loại chiếm phần lớn kênh:
@@ -66,6 +67,15 @@ const DRY = has('--dry-run');
 const FORCE = has('--force');
 const BASE = val('--base', 'https://www.tuviminhbao.com');
 const NO_AUDIENCE = has('--no-audience');
+/**
+ * Chỉ chạy hai CỔNG rồi dừng — không quay, không TTS, không render, không nộp.
+ *
+ * 🔑 Vì sao đáng có: cổng 2 là thứ chặn nội dung, mà hiệu chỉnh một cái cổng
+ * bằng ĐÚNG MỘT mẫu là đoán. Chế độ này khảo sát cả 24 kịch bản với chi phí
+ * chỉ 1–2 lượt LLM mỗi cái (0đ TTS, 0 phút render, 0 lượt Chromium) → có bảng
+ * "cái nào qua, cái nào trượt vì gì" để quyết bằng số thay vì cảm giác.
+ */
+const GATE_ONLY = has('--gate-only');
 /** Ngân sách phút. Job Actions trần 6 giờ; dừng sớm để còn kịp báo cáo. */
 const BUDGET_MIN = Number(val('--budget-min', '300'));
 /** Mức nén cho clip insight — xem lý do tại chỗ gọi `gen-insight.mjs`. */
@@ -186,6 +196,7 @@ console.log(`\n📹 Dựng ${jobs.length} clip: ${nDemo} tool-demo · ${nInsight
 console.log(`   ${jobs.map((j) => j.id).join(' · ')}`);
 console.log(`   nguồn quay : ${BASE}`);
 console.log(`   cổng 2     : ${NO_AUDIENCE ? 'BỎ QUA' : 'bật'}`);
+if (GATE_ONLY) console.log('   chế độ     : KHẢO SÁT CỔNG — không quay, không TTS, không render');
 console.log(`   ngân sách  : ${BUDGET_MIN} phút\n`);
 
 if (DRY) {
@@ -208,7 +219,9 @@ for (const job of jobs) {
     continue;
   }
   const mp4 = join(OUT_DIR, `${tool}.mp4`);
-  if (existsSync(mp4) && !FORCE) {
+  // Chế độ khảo sát cổng: mp4 đã có KHÔNG có nghĩa là kịch bản đã qua cổng —
+  // phần lớn mp4 hiện có dựng từ trước khi cổng 2 được nối. Nên đừng bỏ qua.
+  if (existsSync(mp4) && !FORCE && !GATE_ONLY) {
     results.push({ tool, status: 'bỏ qua', note: 'đã có mp4' });
     console.log(`⏭  ${tool} — đã có, bỏ qua.`);
     continue;
@@ -219,16 +232,19 @@ for (const job of jobs) {
     console.log(`\n${'━'.repeat(60)}\n▶  ${tool}  [${job.kind}]\n${'━'.repeat(60)}`);
 
     if (job.kind === 'tool-demo') {
-      // 1. Quay màn hình (tự bỏ qua nếu đã có, trừ khi --force)
-      run('node', [
-        'scripts/record-tool-demo.mjs',
-        '--tool',
-        tool,
-        '--base',
-        BASE,
-        ...(FORCE ? ['--force'] : []),
-      ]);
-      if (!existsSync(join(REC_DIR, `${tool}.webm`))) {
+      // 1. Quay màn hình (tự bỏ qua nếu đã có, trừ khi --force).
+      //    Khảo sát cổng thì KHÔNG quay: cổng chấm KỊCH BẢN, không chấm bản
+      //    quay — quay 18 lượt để rồi vứt là mất ~10 phút cho không việc gì.
+      if (!GATE_ONLY)
+        run('node', [
+          'scripts/record-tool-demo.mjs',
+          '--tool',
+          tool,
+          '--base',
+          BASE,
+          ...(FORCE ? ['--force'] : []),
+        ]);
+      if (!GATE_ONLY && !existsSync(join(REC_DIR, `${tool}.webm`))) {
         throw new Error('quay xong nhưng không thấy file .webm');
       }
 
@@ -240,6 +256,7 @@ for (const job of jobs) {
         tool,
         '--require-voice',
         ...(NO_AUDIENCE ? ['--no-audience'] : []),
+        ...(GATE_ONLY ? ['--dry-run'] : []),
       ]);
     } else {
       // Clip insight: không quay gì, đi thẳng cổng 1 → cổng 2 → giọng → render.
@@ -265,7 +282,15 @@ for (const job of jobs) {
         '--crf',
         CRF,
         ...(NO_AUDIENCE ? ['--no-audience'] : []),
+        ...(GATE_ONLY ? ['--dry-run'] : []),
       ]);
+    }
+
+    // Khảo sát cổng dừng ở đây — chưa có mp4 nào để soi.
+    if (GATE_ONLY) {
+      results.push({ tool, status: 'xong', note: 'qua cả hai cổng' });
+      console.log(`✅ ${tool} — qua cả hai cổng.`);
+      continue;
     }
 
     // 3. Soi lại file. Bắt được: mất track hình, mất HẲN âm thanh, clip cụt.
