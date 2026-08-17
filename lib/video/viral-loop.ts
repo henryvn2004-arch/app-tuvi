@@ -25,6 +25,7 @@ import {
 } from './script-spec';
 import {
   THRESHOLDS,
+  minIdentityHits,
   runMachineGate,
   type GateIssue,
   type GateOptions,
@@ -134,8 +135,18 @@ const khoa = (s: ScriptSpec['scenes'][number]) => Boolean(s.speech?.trim());
  * model không sửa được nó — giao nguyên trần thì nó cắt đủ theo trần mà tổng
  * vẫn vượt.
  */
+/**
+ * 🔑 BIÊN AN TOÀN 8%. Model đếm ký tự sai vài đơn vị là chuyện bình thường, và
+ * ở đây "vài đơn vị" quyết định đỗ/trượt: lượt khảo sát có `ngu-hanh-ten` nhận
+ * gợi ý hook **69 ký tự** trên trần 67 → cổng 1 báo *"đọc mất 5,1s (trần 5s)"*
+ * → mất trắng vòng cuối vì 2 ký tự. Giao trần đúng bằng ngưỡng là bắt model
+ * phải đếm chính xác tuyệt đối; giao thấp hơn một chút thì nó lệch vẫn còn nằm
+ * trong ngưỡng.
+ */
+const BIEN_AN_TOAN = 0.92;
+
 function nganSachKyTu(spec: ScriptSpec, gate?: GateOptions) {
-  const kyTu = (giay: number) => Math.floor(giay * TTS_CHARS_PER_SECOND);
+  const kyTu = (giay: number) => Math.floor(giay * TTS_CHARS_PER_SECOND * BIEN_AN_TOAN);
   const giayKhoa =
     estimateSpeechSeconds(spokenCta(spec)) +
     spec.scenes
@@ -178,6 +189,11 @@ async function rewriteSpec(
       (ns.conLai >= 100
         ? `· tổng hook + toàn bộ cảnh sửa được: tối đa ${ns.conLai} ký tự (đã trừ phần [KHOÁ])\n`
         : '') +
+      // Ngưỡng này máy biết trước, nên phải nói TRƯỚC. Không nói thì model viết
+      // một bản gọn gàng rồi chết vì thiếu chữ "bạn" — đúng ca `kim-lau` và
+      // `bon-buoc-truoc-khi-roi-di` trượt ở vòng cuối trong lượt khảo sát.
+      `· toàn bộ lời đọc phải nhắc tới người xem ("bạn", "của bạn"…) ít nhất ` +
+      `${minIdentityHits(spec.scenes.length)} lần — clip phải nói VỀ HỌ, không giảng bài.\n` +
       `\nLỖI PHẢI SỬA:\n${loi}\n` +
       (hint ? `\nCHỈ DẪN TỪ HỘI ĐỒNG NGƯỜI XEM:\n${hint}\n` : '') +
       `\nTrả về hook mới, và CHỈ những cảnh bạn sửa (kèm số cảnh).`,
@@ -247,6 +263,67 @@ async function rewriteSpec(
   };
 }
 
+/** Số lần sửa THÊM tại chỗ khi bản viết lại chưa lọt cổng 1. */
+const THU_LAI_CONG_1 = 2;
+
+/**
+ * Viết lại RỒI TỰ SOI bằng cổng 1 trước khi giao lại cho vòng lặp.
+ *
+ * 🔑 Lỗi thứ ba đo được ở lượt khảo sát, và là lỗi tốn tiền nhất: một bản viết
+ * lại trượt cổng 1 sẽ ĐỐT MẤT NGUYÊN MỘT VÒNG. Cụ thể `ngay-tot` · `luc-nham` ·
+ * `ky-mon` · `an-sao` · `tarot` · `kinh-dich` · `xem-tuoi-sinh-con` đều đi đúng
+ * hình này:
+ *
+ *      vòng 1: hội đồng chấm → trượt
+ *      vòng 2: cổng 1 trượt — hook.too-long      ← không hỏi hội đồng lần nào
+ *      vòng 3: cổng 1 trượt — hook.too-long      ← cũng vậy
+ *
+ * Ba vòng mà chỉ được MỘT lượt chấm thật. Trong khi cổng 1 là phép trừ, chạy
+ * dưới một giây và 0đ — không có lý gì để nó ăn một vòng của cổng đắt tiền.
+ *
+ * Nên: sửa xong thì tự chấm ngay tại chỗ, chưa lọt thì sửa tiếp (tối đa
+ * `THU_LAI_CONG_1` lần) với ĐÚNG số đo vừa đo được. Vòng của vòng lặp từ nay
+ * chỉ tiêu vào cổng 2.
+ *
+ * ⚠️ Bỏ `hint` của hội đồng ở các lần sửa sau là CỐ Ý: bản đầu đã ngấm lời
+ * khuyên đó rồi, việc còn lại thuần là cắt cho vừa trần. Giữ nguyên lời khuyên
+ * là mời model viết dài lại đúng chỗ vừa bị cắt.
+ */
+async function vietLaiChoQuaCong1(
+  spec: ScriptSpec,
+  issues: GateIssue[],
+  hint: string,
+  gate?: GateOptions
+): Promise<ScriptSpec | null> {
+  let hienTai = spec;
+  let loi = issues;
+  let goiY = hint;
+  let banCuoi: ScriptSpec | null = null;
+
+  for (let lan = 0; lan <= THU_LAI_CONG_1; lan++) {
+    const next = await rewriteSpec(hienTai, loi, goiY, gate);
+    // Không viết lại được nữa ⇒ trả bản gần nhất còn dùng được (có thể là null
+    // ở lần đầu). Vòng lặp bên ngoài tự quyết định dừng hay chấm tiếp.
+    if (!next) return banCuoi;
+    banCuoi = next;
+
+    const soi = runMachineGate(next, gate);
+    if (soi.pass) return next;
+
+    const ma = [...new Set(soi.issues.filter((i) => i.level === 'block').map((i) => i.code))];
+    console.error(
+      `[viral-loop] bản viết lại lần ${lan + 1} còn trượt cổng 1 (${ma.join(', ')}) — ` +
+        (lan < THU_LAI_CONG_1
+          ? 'sửa tiếp TẠI CHỖ, không tiêu một vòng của hội đồng.'
+          : 'hết lượt sửa tại chỗ, giao nguyên trạng cho vòng sau.')
+    );
+    hienTai = next;
+    loi = soi.issues;
+    goiY = '';
+  }
+  return banCuoi;
+}
+
 /**
  * Chạy vòng lặp kiểm–sửa.
  *
@@ -275,7 +352,7 @@ export async function runViralLoop(
       const hint = '';
       rounds.push({ round, machine, audience: null, rewriteHint: hint });
       if (round === maxRounds) break;
-      const next = await rewriteSpec(spec, machine.issues, hint, opts.gate);
+      const next = await vietLaiChoQuaCong1(spec, machine.issues, hint, opts.gate);
       if (!next) break;
       spec = next;
       continue;
@@ -286,7 +363,18 @@ export async function runViralLoop(
       return { pass: true, spec, rounds, remainingIssues: machine.issues.filter((i) => i.level === 'warn') };
     }
 
-    const audience = await runAudienceGate(spec);
+    // 🔑 Giao ngân sách ký tự CHO CẢ HỘI ĐỒNG, không chỉ cho người viết lại.
+    // Lỗi nặng nhất của lượt khảo sát nằm đúng ở đây: hội đồng đề nghị những
+    // câu mở đầu 70–100 ký tự (*"Bản đồ sao: Hơn cả cung hoàng đạo, khám phá
+    // con người thật của bạn qua Mặt Trăng, Cung Mọc và 12 nhà!"*), người viết
+    // lại nghe theo đúng nguyên văn, rồi cổng 1 giết vì `hook.too-long`. Hai
+    // cổng cùng một hệ thống mà ra lệnh ngược nhau — 22/24 clip dính ít nhất
+    // một vòng vì chuyện này.
+    const nsCong2 = nganSachKyTu(spec, opts.gate);
+    const audience = await runAudienceGate(spec, {
+      hookMaxChars: nsCong2.hook,
+      sceneMaxChars: nsCong2.canh,
+    });
     rounds.push({ round, machine, audience, rewriteHint: audience.pass ? '' : audience.goiYSua });
 
     if (audience.pass) {
@@ -299,7 +387,7 @@ export async function runViralLoop(
     }
 
     if (round === maxRounds) break;
-    const next = await rewriteSpec(spec, audience.issues, audience.goiYSua, opts.gate);
+    const next = await vietLaiChoQuaCong1(spec, audience.issues, audience.goiYSua, opts.gate);
     if (!next) break;
     spec = next;
   }
