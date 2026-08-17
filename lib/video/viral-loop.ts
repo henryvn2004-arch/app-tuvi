@@ -15,8 +15,16 @@
 
 import { llmTextFull } from '@/lib/llm/complete';
 import { parseLlmJson } from '@/lib/api/tool-helpers';
-import { type ScriptSpec, estimateTotalSeconds } from './script-spec';
 import {
+  type ScriptSpec,
+  TTS_CHARS_PER_SECOND,
+  estimateSpeechSeconds,
+  estimateTotalSeconds,
+  spokenCta,
+  spokenSceneText,
+} from './script-spec';
+import {
+  THRESHOLDS,
   runMachineGate,
   type GateIssue,
   type GateOptions,
@@ -50,32 +58,54 @@ Bạn nhận một kịch bản KHÔNG ĐẠT kèm danh sách lỗi cụ thể. 
 ĐÚNG những lỗi đó, giữ nguyên mọi thứ khác.
 
 LUẬT:
-1. Giữ nguyên \`sourceType\`, \`sourceId\`, số lượng cảnh và phần \`visual\` của
-   từng cảnh. Bạn CHỈ được sửa chữ: \`hook\` và \`scenes[].text\`.
-   (Phần \`visual\` gắn với clip quay màn hình đã có — đổi nó là kịch bản nói
-   một đằng, hình chiếu một nẻo.)
-2. CÂU KẾT và mọi cảnh đánh dấu [KHOÁ] là BẤT BIẾN — không sửa, không trả về.
-   Chúng mang tên miền / mã khuyến mãi và có BẢN ĐỌC riêng gửi cho máy đọc;
-   sửa chữ mà bản đọc giữ nguyên thì phụ đề một đằng, tiếng một nẻo — hỏng IM
-   LẶNG, không lỗi nào bắn ra.
+1. Bạn CHỈ được sửa CHỮ: câu mở đầu, và lời đọc của những cảnh KHÔNG đánh dấu
+   [KHOÁ]. Không đổi số cảnh, không đổi thứ tự, không đụng phần hình.
+   (Hình gắn với clip quay màn hình đã có — đổi nó là kịch bản nói một đằng,
+   hình chiếu một nẻo.)
+2. CÂU KẾT và cảnh [KHOÁ] KHÔNG CÓ CHỖ trong phần trả về. Chúng mang tên miền /
+   mã khuyến mãi và có BẢN ĐỌC riêng gửi cho máy đọc; sửa chữ mà bản đọc giữ
+   nguyên thì phụ đề một đằng, tiếng một nẻo — hỏng IM LẶNG, không lỗi nào bắn ra.
 3. Giọng: người Việt nói chuyện tự nhiên, KHÔNG sáo rỗng, KHÔNG "các bạn thân
    mến", KHÔNG hô hào. Xưng "bạn" với người xem.
 4. TUYỆT ĐỐI KHÔNG hứa chắc chắn về tương lai ("chắc chắn sẽ giàu", "nhất định
    gặp may"). Nói về xu hướng, gợi ý, điều đáng lưu tâm.
 5. Tránh giọng mê tín cực đoan (định mệnh không đổi được, không xem là gặp hoạ)
    — vừa sai với tinh thần trang, vừa dễ bị nền tảng hạn chế phân phối.
-6. Mỗi ký tự đều tốn thời gian đọc: khoảng 13,6 ký tự = 1 giây. Cần cắt ngắn
-   thì cắt CHỮ, đừng cắt ý.
+6. NGÂN SÁCH KÝ TỰ là ràng buộc CỨNG, không phải lời khuyên. Vượt ngân sách là
+   kịch bản trượt lại đúng cái cổng vừa trượt. Cần ngắn thì cắt CHỮ, đừng cắt Ý.
 
-Trả về ĐÚNG JSON: {"hook": "...", "scenes": ["...", "..."]}
-với \`scenes\` là mảng lời đọc theo đúng thứ tự cảnh cũ, đúng số lượng — cảnh
-[KHOÁ] thì chép nguyên văn vào đúng vị trí của nó.`;
+Trả về ĐÚNG JSON: {"hook": "...", "scenes": [{"so": 3, "text": "..."}]}
+· \`so\` là SỐ CẢNH ghi trong kịch bản bên dưới (cảnh 1, cảnh 2…).
+· CHỈ liệt kê những cảnh bạn THỰC SỰ sửa. Cảnh không nhắc tới thì giữ nguyên.
+· Không đưa cảnh [KHOÁ] và không đưa câu kết vào mảng này.`;
 
+/**
+ * 🔑 Trả về theo SỐ CẢNH chứ không theo VỊ TRÍ trong mảng — và đây là bản vá
+ * của một lỗi đo được trên lượt khảo sát 24 kịch bản đầu tiên.
+ *
+ * Hợp đồng cũ là một mảng phẳng "đúng thứ tự, đúng số lượng". Model nhìn bảng
+ * kịch bản thấy hook + N cảnh + câu kết, rồi trả về **N+1** phần tử — nó tính
+ * câu kết là một cảnh, vì trong clip render ra thì đúng là vậy. Sai số cảnh ⇒
+ * bỏ nguyên bản viết lại ⇒ **20/24 clip mất trắng lượt sửa**, và vòng lặp 3
+ * vòng chưa từng chạy quá vòng 1.
+ *
+ * Đánh số thì con số KHÔNG THỂ lệch: câu kết và cảnh [KHOÁ] không có ô để điền,
+ * mục thừa bị bỏ RIÊNG nó thay vì kéo cả bản viết lại đi theo, và mục thiếu thì
+ * cảnh đó giữ nguyên chữ cũ. Cùng lối "chốt ở chỗ không phụ thuộc model" đã
+ * dùng cho phần ép giữ câu kết bên dưới.
+ */
 const REWRITE_SCHEMA = {
   type: 'object',
   properties: {
     hook: { type: 'string' },
-    scenes: { type: 'array', items: { type: 'string' } },
+    scenes: {
+      type: 'array',
+      items: {
+        type: 'object',
+        properties: { so: { type: 'number' }, text: { type: 'string' } },
+        required: ['so', 'text'],
+      },
+    },
   },
   required: ['hook', 'scenes'],
 };
@@ -90,11 +120,45 @@ const REWRITE_SCHEMA = {
  */
 const khoa = (s: ScriptSpec['scenes'][number]) => Boolean(s.speech?.trim());
 
-async function rewriteSpec(spec: ScriptSpec, issues: GateIssue[], hint: string): Promise<ScriptSpec | null> {
+/**
+ * Ngân sách KÝ TỰ giao cho model, suy từ CHÍNH ngưỡng mà cổng 1 sẽ chấm.
+ *
+ * 🔑 Lỗi thứ hai đo được ở lượt khảo sát: 4/4 clip có bản viết lại được nhận đều
+ * trượt lại cổng 1 ngay vòng sau — `hook.too-long` 8,2s trên trần 5s,
+ * `length.too-long` 57s trên trần 45s. Prompt cũ chỉ nói "13,6 ký tự = 1 giây"
+ * mà KHÔNG bao giờ nói trần là bao nhiêu, nên model viết cho hay rồi vượt.
+ * Giao bằng KÝ TỰ vì đó là thứ model điều khiển trực tiếp; giao bằng giây là
+ * bắt nó tự quy đổi rồi tự sai.
+ *
+ * ⚠️ Trừ phần [KHOÁ] ra khỏi tổng trước khi giao. Câu kết đọc mất 6–9 giây và
+ * model không sửa được nó — giao nguyên trần thì nó cắt đủ theo trần mà tổng
+ * vẫn vượt.
+ */
+function nganSachKyTu(spec: ScriptSpec, gate?: GateOptions) {
+  const kyTu = (giay: number) => Math.floor(giay * TTS_CHARS_PER_SECOND);
+  const giayKhoa =
+    estimateSpeechSeconds(spokenCta(spec)) +
+    spec.scenes
+      .filter(khoa)
+      .reduce((t, sc) => t + (sc.forceSeconds ?? estimateSpeechSeconds(spokenSceneText(sc))), 0);
+  return {
+    hook: kyTu(THRESHOLDS.hookMaxSeconds),
+    canh: kyTu(THRESHOLDS.sceneMaxSeconds),
+    conLai: Math.max(0, kyTu((gate?.maxSeconds ?? THRESHOLDS.totalMaxSeconds) - giayKhoa)),
+  };
+}
+
+async function rewriteSpec(
+  spec: ScriptSpec,
+  issues: GateIssue[],
+  hint: string,
+  gate?: GateOptions
+): Promise<ScriptSpec | null> {
   const loi = issues
     .filter((i) => i.level === 'block')
     .map((i, n) => `${n + 1}. [${i.code}] ${i.message}${i.fix ? `\n   → CÁCH SỬA: ${i.fix}` : ''}`)
     .join('\n');
+  const ns = nganSachKyTu(spec, gate);
 
   const res = await llmTextFull({
     system: REWRITE_SYSTEM,
@@ -102,12 +166,21 @@ async function rewriteSpec(spec: ScriptSpec, issues: GateIssue[], hint: string):
       `KỊCH BẢN HIỆN TẠI (dài ${estimateTotalSeconds(spec).toFixed(1)}s):\n` +
       `hook: "${spec.hook}"\n` +
       spec.scenes
-        .map((s, i) => `cảnh ${i + 1}${khoa(s) ? ' [KHOÁ]' : ''}: "${s.text}"`)
+        .map(
+          (s, i) =>
+            `cảnh ${i + 1}${khoa(s) ? ' [KHOÁ — không sửa, không trả về]' : ''}: "${s.text}"`
+        )
         .join('\n') +
-      `\nCÂU KẾT (bất biến, không sửa): "${spec.cta}"\n\n` +
-      `LỖI PHẢI SỬA:\n${loi}\n` +
+      `\ncâu kết [KHOÁ — không sửa, không trả về]: "${spec.cta}"\n\n` +
+      `NGÂN SÁCH KÝ TỰ (${TTS_CHARS_PER_SECOND} ký tự đọc mất 1 giây):\n` +
+      `· hook: tối đa ${ns.hook} ký tự\n` +
+      `· mỗi cảnh: tối đa ${ns.canh} ký tự\n` +
+      (ns.conLai >= 100
+        ? `· tổng hook + toàn bộ cảnh sửa được: tối đa ${ns.conLai} ký tự (đã trừ phần [KHOÁ])\n`
+        : '') +
+      `\nLỖI PHẢI SỬA:\n${loi}\n` +
       (hint ? `\nCHỈ DẪN TỪ HỘI ĐỒNG NGƯỜI XEM:\n${hint}\n` : '') +
-      `\nViết lại, giữ đúng ${spec.scenes.length} cảnh.`,
+      `\nTrả về hook mới, và CHỈ những cảnh bạn sửa (kèm số cảnh).`,
     json: true,
     jsonSchema: REWRITE_SCHEMA,
     maxTokens: 1600,
@@ -118,7 +191,9 @@ async function rewriteSpec(spec: ScriptSpec, issues: GateIssue[], hint: string):
   // Actions dừng sau đúng 1 vòng trong khi trần là 3, và không dòng nào cho
   // biết vì sao — người đọc log chỉ thấy câu "đã thử viết lại" mà không biết
   // bản viết lại có tồn tại hay không. Bỏ clip thì được, bỏ mà im thì không.
-  const p = parseLlmJson(res.text) as { hook?: string; scenes?: string[] } | null;
+  const p = parseLlmJson(res.text) as
+    | { hook?: string; scenes?: Array<{ so?: number; text?: string }> }
+    | null;
   if (!p?.hook || !Array.isArray(p.scenes)) {
     console.error(
       `[viral-loop] bỏ bản viết lại: không bóc được JSON hợp lệ ` +
@@ -128,23 +203,47 @@ async function rewriteSpec(spec: ScriptSpec, issues: GateIssue[], hint: string):
     return null;
   }
 
-  // Sai số cảnh ⇒ BỎ bản viết lại. Ghép bừa sẽ làm lời đọc lệch khỏi hình đang
-  // chiếu — kiểu hỏng im lặng, không lỗi nào bắn ra, chỉ có clip vô nghĩa.
-  if (p.scenes.length !== spec.scenes.length) {
+  // Ghép theo SỐ CẢNH. Mục hỏng bị bỏ RIÊNG nó — không kéo cả bản viết lại đi
+  // theo như hợp đồng mảng phẳng cũ. Cảnh không được nhắc tới thì giữ chữ cũ:
+  // đó là một kịch bản hợp lệ (nửa cũ nửa mới), và cổng 1 vẫn chấm lại từ đầu.
+  const moi = new Map<number, string>();
+  const boQua: string[] = [];
+  for (const muc of p.scenes) {
+    const i = Number(muc?.so) - 1;
+    const chu = typeof muc?.text === 'string' ? muc.text.trim() : '';
+    if (!Number.isInteger(i) || i < 0 || i >= spec.scenes.length) {
+      boQua.push(`số cảnh ${JSON.stringify(muc?.so)} ngoài phạm vi 1–${spec.scenes.length}`);
+    } else if (khoa(spec.scenes[i])) {
+      // Ép ở tầng mã chứ không chỉ dặn trong prompt. Dặn là mong model nghe lời;
+      // ép là điều kiện luôn đúng — và đây đúng là chỗ hỏng IM LẶNG (phụ đề đổi
+      // mà bản đọc gửi máy đọc thì không).
+      boQua.push(`cảnh ${i + 1} [KHOÁ]`);
+    } else if (!chu) {
+      boQua.push(`cảnh ${i + 1} rỗng`);
+    } else {
+      moi.set(i, chu);
+    }
+  }
+  if (boQua.length) {
     console.error(
-      `[viral-loop] bỏ bản viết lại: model trả ${p.scenes.length} cảnh, ` +
-        `kịch bản có ${spec.scenes.length}. Ghép lệch thì lời đọc trôi khỏi hình.`
+      `[viral-loop] bỏ ${boQua.length} mục không hợp lệ trong bản viết lại: ${boQua.join(' · ')}`
+    );
+  }
+
+  // Bản viết lại không đổi gì ⇒ vòng sau chấm lại y hệt rồi trượt y hệt. Dừng
+  // sớm còn hơn đốt thêm hai lượt model để nhận lại đúng câu trả lời cũ.
+  if (moi.size === 0 && p.hook.trim() === spec.hook.trim()) {
+    console.error(
+      '[viral-loop] bỏ bản viết lại: hook không đổi và không cảnh nào được sửa — ' +
+        'vòng sau sẽ ra kết quả y hệt.'
     );
     return null;
   }
 
-  // Câu kết và cảnh [KHOÁ] giữ nguyên — ÉP ở đây chứ không chỉ dặn trong prompt.
-  // Dặn là mong model nghe lời; ép là điều kiện luôn đúng. Với thứ hỏng im lặng
-  // thì phải chốt ở chỗ không phụ thuộc model.
   return {
     ...spec,
-    hook: p.hook,
-    scenes: spec.scenes.map((sc, i) => (khoa(sc) ? sc : { ...sc, text: p.scenes![i] })),
+    hook: p.hook.trim() || spec.hook,
+    scenes: spec.scenes.map((sc, i) => (moi.has(i) ? { ...sc, text: moi.get(i)! } : sc)),
   };
 }
 
@@ -176,7 +275,7 @@ export async function runViralLoop(
       const hint = '';
       rounds.push({ round, machine, audience: null, rewriteHint: hint });
       if (round === maxRounds) break;
-      const next = await rewriteSpec(spec, machine.issues, hint);
+      const next = await rewriteSpec(spec, machine.issues, hint, opts.gate);
       if (!next) break;
       spec = next;
       continue;
@@ -200,7 +299,7 @@ export async function runViralLoop(
     }
 
     if (round === maxRounds) break;
-    const next = await rewriteSpec(spec, audience.issues, audience.goiYSua);
+    const next = await rewriteSpec(spec, audience.issues, audience.goiYSua, opts.gate);
     if (!next) break;
     spec = next;
   }
