@@ -68,6 +68,8 @@ const BASE = val('--base', 'https://www.tuviminhbao.com');
 const NO_AUDIENCE = has('--no-audience');
 /** Ngân sách phút. Job Actions trần 6 giờ; dừng sớm để còn kịp báo cáo. */
 const BUDGET_MIN = Number(val('--budget-min', '300'));
+/** Mức nén cho clip insight — xem lý do tại chỗ gọi `gen-insight.mjs`. */
+const CRF = val('--crf', '26');
 
 const started = Date.now();
 const outOfTime = () => (Date.now() - started) / 60000 > BUDGET_MIN;
@@ -249,7 +251,16 @@ for (const job of jobs) {
       //    khác `gen-video` nơi vẫn xem được bố cục bản quay màn hình.
       //  · Nó chưa có cổng 2. Truyền một cờ nó không đọc thì cờ bị bỏ qua IM
       //    LẶNG, tạo cảm giác an toàn giả — đúng thứ nguy hiểm hơn là không có.
-      run('node', ['scripts/gen-insight.mjs', '--id', tool]);
+      //
+      // 💾 `--crf`: BẮT BUỘC ở đường tự động, không phải chỉnh cho nhẹ máy.
+      // Đo thật: ở CRF mặc định (18) clip insight ra ~1,19 MB/giây, tức chạm
+      // trần 60MB của bucket `clips` ở khoảng GIÂY THỨ 50 — mà mọi kịch bản
+      // insight hiện có đều 80–92 giây. Để mặc định thì batch dựng xong rồi
+      // `clip-ingest` từ chối sạch, và lỗi hiện ra chỉ là một mã HTTP.
+      // CRF 26 đo được 0,15 MB/giây (91,6s → 13,7MB) — thừa chỗ.
+      // 🔑 Và đây KHÔNG phải hạ chất lượng lén: cả bốn clip Henry đã xem và
+      // duyệt đều render ở đúng CRF này.
+      run('node', ['scripts/gen-insight.mjs', '--id', tool, '--crf', CRF]);
     }
 
     // 3. Soi lại file. Bắt được: mất track hình, mất HẲN âm thanh, clip cụt.
