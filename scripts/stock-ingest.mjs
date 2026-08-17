@@ -94,15 +94,37 @@ const API_GAP_MS = 700;
 /** Nghỉ giữa hai lượt tải ảnh (ms). */
 const DL_GAP_MS = 350;
 /**
- * Trần độ sáng trung bình (0–255) của dải giữa khung để chữ còn đọc được.
+ * ══════════════════════════════════════════════════════════════════════
+ * BA NGƯỠNG ẢNH — "cinematic moody", đo được, KHÔNG phải cảm giác
+ * ══════════════════════════════════════════════════════════════════════
+ * 🔴 CẢ BA ĐỀU HIỆU CHỈNH TRÊN 84 ẢNH THẬT của lượt nhập trước, không đoán.
+ * Phân bố đo được lúc chốt (min · p25 · trung vị · p75 · max):
+ *     độ sáng   9 · 74 · 96 · 118 · 164
+ *     bão hoà   0 · 14 · 25 ·  44 ·  97
+ *     độ rối  2,3 · 10 · 14 ·  19 ·  33
  *
- * 🔴 SỐ NÀY ĐO RA, KHÔNG PHẢI ĐOÁN — xem `--report` để thấy phân bố thật của
- * kho. Đặt ở 165: trên mức đó thì nền sáng ngang chữ trắng, `TextPlate` phải
- * gánh toàn bộ tương phản và bức ảnh mất hết vai trò.
+ * ⚠️ Bộ ngưỡng này chỉ cho **26%** kho CŨ đi qua, và làm 3/14 nhóm rỗng hẳn.
+ * Đó KHÔNG phải lỗi ngưỡng — kho cũ tuyển theo tiêu chí "chữ đọc được", còn
+ * đây là tiêu chí "moody". Hai việc khác nhau ⇒ phải NHẬP LẠI, không lọc lại.
  */
-const BRIGHT_MAX = 165;
+/** Đủ tối. Trần cũ 165 chỉ hỏi "chữ đọc được"; moody thì phải thấp hơn hẳn. */
+const BRIGHT_MAX = 95;
+/** Chặn "màu tươi". Bức ghế + lá đỏ bị chê ở lượt duyệt đo ra sat ~96. */
+const SAT_MAX = 40;
+/** Chặn "background rối" — nền phẳng mới có chỗ đặt chữ. */
+const DETAIL_MAX = 18;
+/**
+ * Sàn tương phản: "có chiều sâu — shadow, contrast".
+ *
+ * Đặt THẤP (20) có chủ đích. Ảnh sương mù / tường trơn có `sd` nhỏ mà lại là
+ * nền lý tưởng cho chữ; siết cao ở đây là vứt đúng nhóm ảnh tốt nhất để đổi
+ * lấy một con số nghe kêu. Ngưỡng này chỉ loại bức PHẲNG LÌ như ảnh nền trống.
+ */
+const SD_MIN = 20;
 /** Dải giữa khung nơi khối chữ ngồi — khớp bố cục `InsightClip`. */
 const TEXT_BAND = [0.3, 0.7];
+/** Trần ứng viên SOI ẢNH mỗi nhóm — giữ lượt tải ở mức có chọn lọc. */
+const SCREEN_CAP = 40;
 
 // ============================================================
 // HAI CỔNG LỌC NỘI DUNG — cả hai đều rút từ ẢNH THẬT lượt chạy đầu
@@ -149,6 +171,18 @@ const DENY_TAGS = [
   'protest',
   'riot',
   'police',
+  // ── LẠC VĂN HOÁ, không phải vấn đề đạo đức nhưng cùng cách xử: CHẶN ──
+  // Kênh nói tử vi cho người Việt. Lượt chạy vừa rồi lọt một bức **Halloween
+  // jack o'lantern** vào tông "bí ẩn" (nó thật sự tối, thật sự có đèn lồng,
+  // qua sạch mọi ngưỡng), và lượt trước lọt "christmas hats". Ảnh lễ hội
+  // phương Tây đặt dưới một câu về vận mệnh thì đọc thành lạc kênh.
+  'halloween',
+  'pumpkin',
+  'jack o lantern',
+  'christmas',
+  'santa',
+  'easter',
+  'thanksgiving',
 ];
 
 /**
@@ -171,6 +205,139 @@ function tagSet(tags) {
   );
 }
 
+/**
+ * 🌏 CHÂU Á — ưu tiên CAO NHẤT, và cố ý là ĐIỂM CỘNG chứ không phải cổng chặn.
+ *
+ * Lý do sản phẩm: app viết cho người Việt, ảnh châu Á gần với người xem hơn
+ * hẳn — một hành lang gỗ Nhật hay con hẻm Hà Nội "đúng chỗ mình sống" theo
+ * cách một quán cà phê Bắc Âu không bao giờ đạt được.
+ *
+ * ⚠️ Vì sao KHÔNG chặn cứng: rất nhiều ảnh moody tốt **không được gắn thẻ quốc
+ * gia nào cả** (một bóng người trong sương thì tác giả gắn `fog, silhouette`
+ * chứ không gắn `asia`). Chặn cứng theo thẻ là vứt phần lớn kho để đổi lấy
+ * một con số "100% châu Á" mà thực chất chỉ đo THÓI QUEN GẮN THẺ của tác giả,
+ * không đo nội dung bức ảnh. Nên: cộng điểm nặng, xếp hạng, lấy phần đầu.
+ */
+const ASIA_TAGS = [
+  'asia',
+  'asian',
+  'vietnam',
+  'vietnamese',
+  'hanoi',
+  'saigon',
+  'japan',
+  'japanese',
+  'tokyo',
+  'kyoto',
+  'okinawa',
+  'korea',
+  'korean',
+  'seoul',
+  'china',
+  'chinese',
+  'beijing',
+  'shanghai',
+  'hongkong',
+  'thailand',
+  'thai',
+  'bangkok',
+  'taiwan',
+  'indonesia',
+  'bali',
+  'temple',
+  'pagoda',
+  'shrine',
+  'lantern',
+  'kimono',
+  'bamboo',
+  'rice field',
+  'paddy',
+  'monk',
+  'buddha',
+  'buddhist',
+];
+
+/**
+ * 🎬 THẺ PHONG CÁCH — điểm cộng theo đúng thứ tự ưu tiên đã chốt:
+ * cinematic moody (chính) · retro vintage (phụ) · huyền bí (điểm nhấn).
+ */
+const STYLE_TAGS = {
+  moody: [
+    'moody',
+    'cinematic',
+    'dark',
+    'darkness',
+    'night',
+    'shadow',
+    'shadows',
+    'silhouette',
+    'fog',
+    'mist',
+    'rain',
+    'lonely',
+    'alone',
+    'solitude',
+    'melancholy',
+    'dramatic',
+    'noir',
+    'dusk',
+    'twilight',
+    'low light',
+  ],
+  retro: ['vintage', 'retro', 'film', 'analog', 'grain', 'old photo', 'nostalgia', 'antique'],
+  mystic: [
+    'mystical',
+    'mystery',
+    'mysterious',
+    'spiritual',
+    'ritual',
+    'incense',
+    'smoke',
+    'candle',
+  ],
+};
+
+/**
+ * Chấm điểm để XẾP HẠNG ứng viên đã qua mọi cổng chặn.
+ *
+ * 🔑 Điểm này KHÔNG phải "ảnh đẹp bao nhiêu" — nó là *mức khớp với brief đã
+ * chốt*. Máy không chấm được đẹp, và cũng không chấm được "trông có giống ảnh
+ * stock rẻ tiền không". Đừng đọc con số này rộng hơn thế.
+ */
+function scoreCandidate(hit, m) {
+  const tags = tagSet(hit.tags);
+  const words = new Set([...tags].flatMap((t) => t.split(/[\s-]+/)));
+  const hasAny = (list) => list.some((t) => (t.includes(' ') ? tags.has(t) : words.has(t)));
+  const countAny = (list) =>
+    list.filter((t) => (t.includes(' ') ? tags.has(t) : words.has(t))).length;
+
+  let s = 0;
+  const why = [];
+  if (hasAny(ASIA_TAGS)) {
+    s += 45;
+    why.push('châu Á');
+  }
+  const nMoody = countAny(STYLE_TAGS.moody);
+  if (nMoody) {
+    s += Math.min(nMoody, 3) * 10;
+    why.push(`moody×${nMoody}`);
+  }
+  if (hasAny(STYLE_TAGS.retro)) {
+    s += 12;
+    why.push('retro');
+  }
+  if (hasAny(STYLE_TAGS.mystic)) {
+    s += 8;
+    why.push('huyền bí');
+  }
+  // Càng tối / càng ít màu / càng phẳng thì càng đúng brief. Chuẩn hoá về
+  // 0–20 mỗi chiều để không chiều nào một mình lấn hết điểm thẻ.
+  s += (1 - m.mean / BRIGHT_MAX) * 20;
+  s += (1 - m.sat / SAT_MAX) * 20;
+  s += (1 - m.detail / DETAIL_MAX) * 15;
+  return { score: Math.round(s), why };
+}
+
 // ============================================================
 // TAXONOMY
 // ============================================================
@@ -186,113 +353,124 @@ function tagSet(tags) {
  * `q` là tiếng Anh vì kho Pixabay gắn thẻ bằng tiếng Anh.
  */
 const TONES = [
-  {
-    id: 'tinh-lang',
-    vi: 'Tĩnh lặng — mặt nước phẳng, phòng trống, sáng sớm',
-    queries: ['calm lake morning mist', 'still water reflection dawn'],
-    must: ['lake', 'water', 'mist', 'fog', 'morning', 'dawn', 'reflection', 'calm', 'sea', 'river'],
-  },
+  // ⚠️ LUẬT `must`: CHỈ từ CHỦ ĐỀ, TUYỆT ĐỐI không nhét từ phong cách
+  // (`dark` · `night` · `shadow` · `moody`). Lượt trước trộn vào thì ảnh chỉ
+  // cần TỐI là qua cổng liên quan — `chia-xa` nhận về một cái LY RƯỢU RỖNG,
+  // `ghe-trong` nhận về ảnh sa mạc. Phong cách đã có `scoreCandidate` lo;
+  // `must` mà gánh cả hai vai thì hỏng đúng vai chính của nó.
+  //
+  // 🌏 Truy vấn thứ BA của mỗi nhóm luôn nhắm thẳng châu Á. Lượt trước chỉ
+  // dựa vào điểm cộng nên kho ra 25% châu Á — điểm không cứu được khi CHÍNH
+  // rổ ứng viên đã thiếu; phải sửa ở truy vấn, không sửa ở trọng số.
   {
     id: 'co-don',
-    vi: 'Cô đơn — một bóng người giữa khoảng rộng',
-    // ⚠️ "lonely person" kéo về chân dung người vô gia cư (xem DENY_TAGS).
-    // Đổi sang SILHOUETTE/bóng lưng: đúng tông hơn, và không nhận diện được ai.
-    queries: ['silhouette walking alone landscape', 'lone tree empty field fog'],
-    must: [
-      'silhouette',
-      'alone',
-      'lonely',
-      'solitude',
-      'lone',
-      'empty',
-      'field',
-      'landscape',
-      'fog',
+    vi: 'Cô đơn — một bóng người trong khoảng tối',
+    queries: [
+      'lone silhouette rain street night',
+      'asian woman silhouette window night',
+      'vietnam street alone night person',
     ],
-  },
-  {
-    id: 'mo-mit',
-    vi: 'Mờ mịt — sương, mưa trên kính, không thấy đường',
-    queries: ['fog forest path', 'rain drops window glass'],
-    must: ['fog', 'mist', 'haze', 'rain', 'drops', 'forest', 'path', 'trail', 'foggy'],
-  },
-  {
-    id: 'be-tac',
-    vi: 'Bế tắc — tường, cửa đóng, ngõ hẹp',
-    queries: ['narrow alley wall', 'closed old wooden door'],
-    must: ['alley', 'wall', 'door', 'narrow', 'lane', 'street', 'gate', 'stone', 'brick'],
-  },
-  {
-    id: 'chia-xa',
-    vi: 'Chia xa — đường vắng, ghế trống, sân ga',
-    // ⚠️ "empty road horizon" chỉ có 124 kết quả rồi trôi sang ảnh thành phố
-    // lạc đề. Bám vào VẬT chứng của sự vắng: ghế trống, đường ray, lối đi.
-    queries: ['empty bench park autumn', 'railway track vanishing distance'],
-    must: [
-      'bench',
-      'empty',
-      'railway',
-      'rail',
-      'track',
-      'road',
-      'path',
-      'station',
-      'autumn',
-      'alone',
-    ],
-  },
-  {
-    id: 'nang-am',
-    vi: 'Nắng ấm — nắng xuyên cửa sổ, bình minh',
-    queries: ['sunlight through curtain window', 'golden sunrise field warm light'],
-    must: [
-      'sunlight',
-      'sunrise',
-      'sunset',
-      'light',
-      'window',
-      'curtain',
-      'golden',
-      'sun',
-      'morning',
-      'warm',
-    ],
+    must: ['silhouette', 'alone', 'lonely', 'solitude', 'lone', 'person', 'woman', 'man', 'figure'],
   },
   {
     id: 'suy-tu',
-    vi: 'Suy tư — bàn tay, tách trà, ngồi bên cửa sổ',
-    // ⚠️ "hands holding tea cup" trả về hạt cà phê rang + ảnh đôi lứa.
-    // `must` chặn phần lạc; truy vấn nhấn vào tư thế ngồi một mình.
-    queries: ['person sitting alone by window', 'hands holding warm cup tea'],
+    vi: 'Suy tư — ngồi một mình, nhìn ra ngoài',
+    queries: [
+      'person by window night thinking',
+      'asian man sitting alone dark room',
+      'vietnamese woman portrait pensive',
+    ],
     must: [
       'window',
       'sitting',
       'thinking',
       'alone',
-      'tea',
-      'cup',
-      'hands',
-      'book',
-      'reading',
-      'quiet',
+      'portrait',
+      'pensive',
+      'woman',
+      'man',
+      'person',
     ],
   },
   {
-    id: 'chuyen-mua',
-    vi: 'Chuyển mùa — lá rụng, hoàng hôn, giao mùa',
-    queries: ['autumn leaves falling', 'dusk sky clouds evening'],
-    must: [
-      'autumn',
-      'leaves',
-      'foliage',
-      'fall',
-      'dusk',
-      'evening',
-      'clouds',
-      'sky',
-      'twilight',
-      'season',
+    id: 'mo-mit',
+    // Ở nhóm này sương/mưa CHÍNH LÀ chủ đề, nên chúng được ở trong `must`.
+    vi: 'Mờ mịt — sương, mưa trên kính, không thấy đường',
+    queries: [
+      'foggy forest dark',
+      'rain drops window night city',
+      'asia mountain fog mist morning',
+      'vietnam sapa fog mountain',
     ],
+    must: ['fog', 'mist', 'haze', 'rain', 'drops', 'foggy', 'cloud', 'smoke'],
+  },
+  {
+    id: 'be-tac',
+    vi: 'Bế tắc — hẻm hẹp, cửa đóng, tường',
+    queries: ['narrow alley night', 'old wooden door temple', 'hanoi old quarter narrow alley'],
+    must: ['alley', 'wall', 'door', 'narrow', 'lane', 'gate', 'corridor', 'stairs', 'staircase'],
+  },
+  {
+    id: 'chia-xa',
+    vi: 'Chia xa — sân ga đêm, đường vắng',
+    queries: [
+      'empty train station night silhouette',
+      'railway track vanishing fog',
+      'asia train station night platform',
+    ],
+    must: [
+      'station',
+      'railway',
+      'rail',
+      'train',
+      'platform',
+      'track',
+      'road',
+      'street',
+      'departure',
+    ],
+  },
+  {
+    id: 'bi-an',
+    // Điểm nhấn "mystical" — CỐ Ý tả bằng khói/đèn/đền chứ không bằng đạo cụ
+    // bói toán: bài tarot hay quả cầu pha lê là hình sáo, và sai bộ môn.
+    vi: 'Bí ẩn — khói hương, đèn lồng, đền trong tối',
+    queries: [
+      'incense smoke temple',
+      'asian lantern night mysterious',
+      'vietnam pagoda incense ritual',
+    ],
+    must: [
+      'incense',
+      'smoke',
+      'temple',
+      'lantern',
+      'shrine',
+      'pagoda',
+      'ritual',
+      'candle',
+      'buddha',
+    ],
+  },
+  {
+    id: 'hoai-niem',
+    vi: 'Hoài niệm — ảnh phim cũ, ám vàng, hạt nhiễu',
+    queries: [
+      'vintage film grain portrait',
+      'retro asian street 90s film',
+      'old vietnam photo vintage',
+    ],
+    must: ['vintage', 'retro', 'film', 'analog', 'grain', 'nostalgia', 'antique', 'old photo'],
+  },
+  {
+    id: 'tinh-lang',
+    vi: 'Tĩnh lặng — mặt nước, đền vắng, sương sớm',
+    queries: [
+      'still dark water reflection night',
+      'asian temple morning mist quiet',
+      'japan garden zen quiet water',
+    ],
+    must: ['temple', 'water', 'lake', 'reflection', 'pond', 'garden', 'zen', 'shrine', 'river'],
   },
 ];
 
@@ -308,38 +486,56 @@ const SUBJECTS = [
   {
     id: 'ban-tay',
     vi: 'Bàn tay — nắm, buông, chìa ra',
-    queries: ['two hands reaching each other', 'open empty hand palm'],
+    queries: [
+      'hands reaching dark low light',
+      'asian hands holding shadow',
+      'vietnam hands elderly',
+    ],
     must: ['hand', 'hands', 'palm', 'finger', 'fingers', 'holding', 'touch'],
   },
   {
     id: 'con-duong',
-    vi: 'Con đường — ngã rẽ, lối đi',
-    queries: ['fork in the road path', 'winding road through forest'],
-    must: ['road', 'path', 'trail', 'way', 'street', 'lane', 'crossroads', 'forest'],
+    vi: 'Con đường — ngã rẽ, lối đi trong tối',
+    queries: ['dark road night fog', 'empty path night moody', 'vietnam street night motorbike'],
+    must: ['road', 'path', 'trail', 'way', 'street', 'lane', 'highway', 'footpath'],
   },
   {
     id: 'cua-so',
-    vi: 'Cửa sổ — nhìn ra ngoài',
-    queries: ['looking out window rain', 'old window frame light'],
-    must: ['window', 'glass', 'curtain', 'frame', 'rain', 'looking'],
+    vi: 'Cửa sổ — nhìn ra ngoài, mưa đêm',
+    // ⚠️ `must` bỏ hẳn từ phong cách nên ảnh CỬA SỔ MÁY BAY hết lọt (lượt
+    // trước vào 2 bức chỉ vì khớp `window` + đủ tối).
+    queries: [
+      'looking out window rain night',
+      'asian window shadow dark room',
+      'wooden window old asia',
+    ],
+    must: ['window', 'curtain', 'windowsill', 'blinds', 'shutter'],
   },
   {
     id: 'ngon-den',
     vi: 'Ngọn đèn — sáng nhỏ trong tối',
-    queries: ['candle light in dark room', 'single lantern night'],
-    must: ['candle', 'lantern', 'lamp', 'light', 'flame', 'dark', 'night', 'darkness'],
+    queries: ['candle flame dark background', 'asian lantern night dark', 'vietnam lantern hoi an'],
+    must: ['candle', 'lantern', 'lamp', 'flame', 'candlelight', 'wick', 'light bulb'],
   },
   {
     id: 'mat-nuoc',
-    vi: 'Mặt nước — phản chiếu, gợn sóng',
-    queries: ['water reflection ripple surface', 'still lake surface texture'],
-    must: ['water', 'reflection', 'ripple', 'lake', 'surface', 'wave', 'river', 'sea'],
+    vi: 'Mặt nước — phản chiếu đêm',
+    queries: [
+      'dark water reflection night',
+      'lake at night moonlight reflection',
+      'asia river night reflection',
+    ],
+    must: ['water', 'reflection', 'lake', 'river', 'sea', 'ocean', 'pond', 'wave', 'ripple'],
   },
   {
     id: 'ghe-trong',
     vi: 'Ghế trống — chỗ của người đã đi',
-    queries: ['empty chair in room', 'two empty chairs facing'],
-    must: ['chair', 'chairs', 'seat', 'bench', 'empty', 'furniture'],
+    queries: [
+      'empty chair dark room shadow',
+      'lonely bench night low light',
+      'empty wooden bench asia',
+    ],
+    must: ['chair', 'chairs', 'seat', 'bench', 'stool', 'armchair', 'furniture'],
   },
 ];
 
@@ -382,13 +578,13 @@ function findFfmpeg() {
 }
 
 /**
- * Đọc PNG xám 8-bit không xen dòng về mảng pixel.
+ * Đọc PNG 8-bit không xen dòng (xám hoặc RGB) về mảng pixel.
  *
  * Tự giải mã thay vì thêm một gói phụ thuộc: `zlib` có sẵn trong Node, và ảnh
- * ở đây do CHÍNH ffmpeg vừa sinh ra nên hình dạng biết trước (gray8, không
- * interlace). Gặp hình dạng khác thì NÉM chứ không đoán bừa.
+ * ở đây do CHÍNH ffmpeg vừa sinh ra nên hình dạng biết trước. Gặp hình dạng
+ * khác thì NÉM chứ không đoán bừa.
  */
-function decodeGrayPng(buf) {
+function decodePng(buf) {
   if (buf.readUInt32BE(0) !== 0x89504e47) throw new Error('không phải PNG');
   let o = 8;
   let w = 0;
@@ -411,19 +607,24 @@ function decodeGrayPng(buf) {
     } else if (typ === 'IEND') break;
     o += 12 + len;
   }
-  if (depth !== 8 || colorType !== 0 || interlace !== 0) {
+  if (depth !== 8 || (colorType !== 0 && colorType !== 2) || interlace !== 0) {
     throw new Error(`PNG lạ (depth=${depth} colorType=${colorType} interlace=${interlace})`);
   }
+  // Số byte một điểm ảnh — cũng CHÍNH LÀ khoảng lùi của tham chiếu `a` trong
+  // bộ lọc PNG. Nhầm chỗ này thì ảnh RGB giải ra vẫn "có hình" nhưng lệch màu
+  // dần theo hàng, tức hỏng IM LẶNG.
+  const bpp = colorType === 2 ? 3 : 1;
+  const stride = w * bpp;
   const raw = inflateSync(Buffer.concat(idat));
-  const px = Buffer.alloc(w * h);
+  const px = Buffer.alloc(stride * h);
   let pos = 0;
   for (let y = 0; y < h; y++) {
     const ft = raw[pos++];
-    for (let x = 0; x < w; x++) {
+    for (let x = 0; x < stride; x++) {
       const cur = raw[pos + x];
-      const a = x > 0 ? px[y * w + x - 1] : 0;
-      const b = y > 0 ? px[(y - 1) * w + x] : 0;
-      const c = x > 0 && y > 0 ? px[(y - 1) * w + x - 1] : 0;
+      const a = x >= bpp ? px[y * stride + x - bpp] : 0;
+      const b = y > 0 ? px[(y - 1) * stride + x] : 0;
+      const c = x >= bpp && y > 0 ? px[(y - 1) * stride + x - bpp] : 0;
       let v;
       switch (ft) {
         case 0:
@@ -449,20 +650,32 @@ function decodeGrayPng(buf) {
         default:
           throw new Error(`filter PNG lạ: ${ft}`);
       }
-      px[y * w + x] = v & 255;
+      px[y * stride + x] = v & 255;
     }
-    pos += w;
+    pos += stride;
   }
-  return { w, h, px };
+  return { w, h, px, bpp };
 }
 
 /**
- * Độ sáng trung bình + độ lệch chuẩn của DẢI GIỮA KHUNG.
+ * Bốn số đo của một bức ảnh. Trả `null` khi không có ffmpeg — và chỗ gọi phải
+ * NÓI RA điều đó chứ không lặng lẽ coi mọi ảnh là đạt: một phép kiểm câm còn
+ * tệ hơn không có phép kiểm.
  *
- * Trả `null` khi không có ffmpeg — và chỗ gọi phải NÓI RA điều đó chứ không
- * lặng lẽ coi mọi ảnh là đạt. Một phép kiểm câm còn tệ hơn không có phép kiểm.
+ * ┌──────────┬────────────────────────────┬──────────────────────────────────┐
+ * │ `mean`   │ độ sáng DẢI GIỮA (0–255)   │ "low light / dark tone"          │
+ * │ `sd`     │ độ lệch chuẩn dải giữa     │ "có chiều sâu — shadow, contrast"│
+ * │ `sat`    │ bão hoà màu CẢ KHUNG       │ "loại ảnh màu tươi"              │
+ * │ `detail` │ độ rối dải giữa            │ "ít chi tiết để overlay text"    │
+ * └──────────┴────────────────────────────┴──────────────────────────────────┘
+ *
+ * 🔑 `sat` đo CẢ KHUNG còn `detail` đo DẢI GIỮA — cố ý khác nhau: màu tươi ở
+ * bất kỳ đâu cũng phá tông clip, còn chi tiết rối thì chỉ hại đúng chỗ chữ ngồi.
+ *
+ * ⚠️ Bốn số này đo THUỘC TÍNH VẬT LÝ của ảnh. Chúng KHÔNG đo được "cảm xúc",
+ * "cinematic", hay "trông có giống ảnh stock rẻ tiền không" — xem `--report`.
  */
-function measureBrightness(ffmpeg, jpgPath, tmpPng) {
+function measureImage(ffmpeg, jpgPath, tmpPng) {
   execFileSync(
     ffmpeg,
     [
@@ -476,7 +689,7 @@ function measureBrightness(ffmpeg, jpgPath, tmpPng) {
       '-i',
       `file:${jpgPath}`,
       '-vf',
-      'scale=64:114,format=gray',
+      'scale=64:114,format=rgb24',
       '-frames:v',
       '1',
       '-f',
@@ -488,14 +701,56 @@ function measureBrightness(ffmpeg, jpgPath, tmpPng) {
     ],
     { stdio: ['ignore', 'ignore', 'pipe'] }
   );
-  const { w, h, px } = decodeGrayPng(readFileSync(tmpPng));
+  const { w, h, px, bpp } = decodePng(readFileSync(tmpPng));
+  const lum = (x, y) => {
+    const i = y * w * bpp + x * bpp;
+    if (bpp === 1) return px[i];
+    // Rec.601 — cùng công thức ffmpeg dùng cho `format=gray`, nên số đo giữ
+    // nguyên nghĩa so với các lượt nhập trước đã chạy trên bản xám.
+    return 0.299 * px[i] + 0.587 * px[i + 1] + 0.114 * px[i + 2];
+  };
+
   const y0 = Math.round(h * TEXT_BAND[0]);
   const y1 = Math.round(h * TEXT_BAND[1]);
+
   const vals = [];
-  for (let y = y0; y < y1; y++) for (let x = 0; x < w; x++) vals.push(px[y * w + x]);
+  for (let y = y0; y < y1; y++) for (let x = 0; x < w; x++) vals.push(lum(x, y));
   const mean = vals.reduce((a, v) => a + v, 0) / vals.length;
   const sd = Math.sqrt(vals.reduce((a, v) => a + (v - mean) ** 2, 0) / vals.length);
-  return { mean: Number(mean.toFixed(1)), sd: Number(sd.toFixed(1)) };
+
+  // Bão hoà = (max − min) của ba kênh, trung bình CẢ KHUNG. Ảnh đơn sắc/tông
+  // trầm ra số thấp; ảnh lá đỏ trên cỏ xanh ra số cao.
+  let sat = 0;
+  if (bpp === 3) {
+    let s = 0;
+    for (let i = 0; i < w * h; i++) {
+      const r = px[i * 3];
+      const g = px[i * 3 + 1];
+      const b = px[i * 3 + 2];
+      s += Math.max(r, g, b) - Math.min(r, g, b);
+    }
+    sat = s / (w * h);
+  }
+
+  // Độ rối = chênh lệch độ sáng trung bình giữa hai điểm KỀ NHAU trong dải
+  // giữa. Nền phẳng (sương, tường, mặt nước) ra số thấp; tán lá, đám đông,
+  // hoa văn ra số cao. Đây chính là "background rối" đo được.
+  let d = 0;
+  let n = 0;
+  for (let y = y0; y < y1; y++) {
+    for (let x = 1; x < w; x++) {
+      d += Math.abs(lum(x, y) - lum(x - 1, y));
+      n++;
+    }
+  }
+  const detail = n ? d / n : 0;
+
+  return {
+    mean: Number(mean.toFixed(1)),
+    sd: Number(sd.toFixed(1)),
+    sat: Number(sat.toFixed(1)),
+    detail: Number(detail.toFixed(1)),
+  };
 }
 
 /**
@@ -679,16 +934,28 @@ for (const [bucketName, items] of groups) {
     console.log(`   cần thêm ${need} (đang có ${have})`);
 
     const dir = join(STAGE, bucketName, item.id);
+    mkdirSync(dir, { recursive: true });
+    /** Số ảnh lấy được cho RIÊNG nhóm này — phải đặt lại ở mỗi vòng. */
     let got = 0;
-    // Duyệt tối đa 2 trang mỗi truy vấn: siết độ sáng làm tỉ lệ đạt tụt hẳn ở
-    // vài chủ đề (ảnh "ghế trống" trên kho stock phần lớn là ảnh nội thất nền
-    // sáng), một trang 50 ứng viên không đủ để lấp.
+
+    // ── PHA 1: GOM ứng viên theo metadata (chưa tải ảnh nào) ──────────────
+    //
+    // 🔴 HẠN NGẠCH THEO TỪNG TRUY VẤN, không phải một rổ chung. Bản đầu dùng
+    // rổ chung nên truy vấn ĐẦU lấp đầy `SCREEN_CAP` trước, và truy vấn thứ
+    // ba — cái nhắm thẳng châu Á — KHÔNG BAO GIỜ được ngó tới. Đo ra kho chỉ
+    // 25% châu Á rồi tôi suýt đi chỉnh trọng số điểm, trong khi lỗi nằm ở chỗ
+    // ứng viên châu Á chưa từng vào rổ. Chia hạn ngạch là sửa đúng tầng.
+    const seenHere = new Set();
+    const cands = [];
+    const perQuery = Math.ceil(SCREEN_CAP / item.queries.length);
     const plan = item.queries.flatMap((q) => [
       { q, page: 1 },
       { q, page: 2 },
     ]);
+    const takenPerQuery = new Map();
     for (const { q, page } of plan) {
-      if (got >= need) break;
+      if (cands.length >= SCREEN_CAP) break;
+      if ((takenPerQuery.get(q) ?? 0) >= perQuery) continue;
       let hits;
       try {
         // CỐ Ý không truyền `category`: lượt đầu dùng nó thì `chia-xa` chỉ còn
@@ -697,108 +964,127 @@ for (const [bucketName, items] of groups) {
         const json = await pixabaySearch({ q, page: String(page) });
         hits = json.hits || [];
         if (!hits.length) continue;
-        console.log(
-          `   "${q}" tr.${page} → ${json.totalHits} kết quả duyệt được, lấy ${hits.length} ứng viên`
-        );
       } catch (e) {
         console.error(`   🔴 truy vấn hỏng: ${e.message}`);
         break;
       }
       for (const hit of hits) {
-        if (got >= need) break;
-        const uid = `pixabay:${hit.id}`;
-        if (known.has(uid)) continue;
+        if (cands.length >= SCREEN_CAP) break;
+        if ((takenPerQuery.get(q) ?? 0) >= perQuery) break;
+        if (known.has(`pixabay:${hit.id}`) || seenHere.has(hit.id)) continue;
         const why = passesMetadata(hit, item);
         if (why) {
           rejected.push({ id: hit.id, why });
           continue;
         }
-        known.add(uid);
+        seenHere.add(hit.id);
+        takenPerQuery.set(q, (takenPerQuery.get(q) ?? 0) + 1);
+        cands.push(hit);
+      }
+    }
+    console.log(`   gom ${cands.length} ứng viên qua cổng thẻ`);
+    if (DRY) {
+      for (const hit of cands.slice(0, need)) {
+        console.log(`   [dry] ${hit.id}  ←  ${captionFromTags(hit.tags).slice(0, 56)}`);
+        dryCount++;
+      }
+      continue;
+    }
 
-        const file = `${bucketName}/${item.id}/${hit.id}.jpg`;
-        const abs = join(STAGE, bucketName, item.id, `${hit.id}.jpg`);
-        if (DRY) {
-          console.log(`   [dry] ${file}  ←  ${captionFromTags(hit.tags).slice(0, 60)}`);
-          dryCount++;
-          got++;
-          continue;
-        }
-        mkdirSync(dir, { recursive: true });
+    // ── PHA 2: SOI ẢNH trên bản xem trước 6KB, loại theo NGƯỠNG ────────────
+    const scored = [];
+    for (const hit of cands) {
+      if (!ffmpeg || !hit.previewURL) {
+        // Không đo được thì KHÔNG âm thầm cho qua — nói ra rồi bỏ, vì cả bộ
+        // tiêu chí "moody" nằm ở đây. Cho qua mù là tự tắt cái cổng này đi.
+        rejected.push({ id: hit.id, why: 'không đo được ảnh (thiếu ffmpeg/preview)' });
+        continue;
+      }
+      let m = null;
+      try {
+        await sleep(DL_GAP_MS);
+        const pr = await fetch(hit.previewURL);
+        if (!pr.ok) throw new Error(`preview HTTP ${pr.status}`);
+        const ptmp = join(dir, `.probe-${hit.id}.jpg`);
+        writeFileSync(ptmp, Buffer.from(await pr.arrayBuffer()));
+        m = measureImage(ffmpeg, ptmp, join(dir, `.probe-${hit.id}.png`));
+        rmSync(ptmp, { force: true });
+        rmSync(join(dir, `.probe-${hit.id}.png`), { force: true });
+      } catch (e) {
+        rejected.push({ id: hit.id, why: `soi ảnh hỏng: ${e.message}` });
+        continue;
+      }
+      const fail =
+        (m.mean > BRIGHT_MAX && `quá sáng L=${m.mean}`) ||
+        (m.sat > SAT_MAX && `màu quá tươi sat=${m.sat}`) ||
+        (m.detail > DETAIL_MAX && `nền rối=${m.detail}`) ||
+        (m.sd < SD_MIN && `phẳng lì sd=${m.sd}`);
+      if (fail) {
+        rejected.push({ id: hit.id, why: fail });
+        screened++;
+        continue;
+      }
+      scored.push({ hit, m, ...scoreCandidate(hit, m) });
+    }
+
+    // ── PHA 3: XẾP HẠNG rồi lấy phần đầu — đây mới là chỗ "CHỌN" ──────────
+    // Sắp giảm dần theo điểm; hoà thì bức TỐI hơn thắng (đúng brief moody).
+    scored.sort((a, b) => b.score - a.score || a.m.mean - b.m.mean);
+    const winners = scored.slice(0, need);
+    const nAsia = scored.filter((s) => s.why.includes('châu Á')).length;
+    console.log(
+      `   qua ngưỡng ${scored.length}/${cands.length} · châu Á ${nAsia} · lấy ${winners.length}`
+    );
+
+    for (const w of winners) {
+      const hit = w.hit;
+      const file = `${bucketName}/${item.id}/${hit.id}.jpg`;
+      const abs = join(dir, `${hit.id}.jpg`);
+      try {
+        await sleep(DL_GAP_MS);
+        const r = await fetch(hit.largeImageURL);
+        if (!r.ok) throw new Error(`HTTP ${r.status}`);
+        writeFileSync(abs, Buffer.from(await r.arrayBuffer()));
+        // Đo lại trên chính bản lớn để manifest ghi SỐ THẬT của file trong kho,
+        // không phải số suy từ bản xem trước.
+        let m = w.m;
         try {
-          // ── SOI TRÊN BẢN XEM TRƯỚC, TẢI BẢN LỚN SAU ──────────────────
-          // `previewURL` chỉ 5–8KB mà đo ra ĐÚNG độ sáng của bản lớn: so 8
-          // cặp preview↔large, sai lệch tuyệt đối trung bình **0,19** trên
-          // thang 0–255. Nhờ vậy loại được bức quá sáng khi mới tốn ~6KB
-          // thay vì ~180KB — vừa lọc được kỹ hơn, vừa đúng tinh thần điều
-          // khoản "không tải ồ ạt".
-          let brightness = null;
-          if (ffmpeg && hit.previewURL) {
-            await sleep(DL_GAP_MS);
-            const pr = await fetch(hit.previewURL);
-            if (pr.ok) {
-              const ptmp = join(dir, `.probe-${hit.id}.jpg`);
-              writeFileSync(ptmp, Buffer.from(await pr.arrayBuffer()));
-              try {
-                brightness = measureBrightness(ffmpeg, ptmp, join(dir, `.probe-${hit.id}.png`));
-              } catch (e) {
-                console.warn(`   ⚠️ không đo được độ sáng ${hit.id}: ${e.message}`);
-              }
-              rmSync(ptmp, { force: true });
-              rmSync(join(dir, `.probe-${hit.id}.png`), { force: true });
-            }
-          }
-          if (brightness && brightness.mean > BRIGHT_MAX) {
-            rejected.push({ id: hit.id, why: `quá sáng (L=${brightness.mean} > ${BRIGHT_MAX})` });
-            screened++;
-            continue;
-          }
-
-          await sleep(DL_GAP_MS);
-          const r = await fetch(hit.largeImageURL);
-          if (!r.ok) throw new Error(`HTTP ${r.status}`);
-          const buf = Buffer.from(await r.arrayBuffer());
-          writeFileSync(abs, buf);
-
-          // Đo lại trên chính bản lớn để manifest ghi SỐ THẬT của file đang
-          // nằm trong kho, không phải số suy từ bản xem trước.
-          if (ffmpeg) {
-            try {
-              brightness = measureBrightness(ffmpeg, abs, join(dir, `.${hit.id}.png`));
-              rmSync(join(dir, `.${hit.id}.png`), { force: true });
-            } catch (e) {
-              console.warn(`   ⚠️ không đo được độ sáng ${hit.id}: ${e.message}`);
-            }
-          }
-          const textSafe = brightness ? brightness.mean <= BRIGHT_MAX : null;
-
-          added.push({
-            id: `${item.id}-${hit.id}`,
-            bucket: bucketName,
-            key: item.id,
-            file,
-            caption: captionFromTags(hit.tags),
-            width: hit.webformatWidth
-              ? Math.round((hit.imageWidth / hit.imageHeight) * 1280)
-              : null,
-            height: 1280,
-            brightness,
-            textSafe,
-            provider: 'pixabay',
-            providerId: hit.id,
-            pageURL: hit.pageURL,
-            author: hit.user,
-            authorURL: hit.userURL,
-            license: 'Pixabay Content License',
-            fetchedAt: new Date().toISOString().slice(0, 10),
-          });
-          got++;
-          const flag = textSafe === false ? ' ⚠️ SÁNG' : '';
-          console.log(
-            `   ✓ ${hit.id}  ${brightness ? `L=${brightness.mean}` : 'chưa đo'}${flag}  ${captionFromTags(hit.tags).slice(0, 52)}`
-          );
-        } catch (e) {
-          console.error(`   🔴 tải hỏng ${hit.id}: ${e.message}`);
+          m = measureImage(ffmpeg, abs, join(dir, `.${hit.id}.png`));
+          rmSync(join(dir, `.${hit.id}.png`), { force: true });
+        } catch {
+          /* giữ số đo của bản xem trước — đã chứng minh lệch ~0,2 */
         }
+        known.add(`pixabay:${hit.id}`);
+        added.push({
+          id: `${item.id}-${hit.id}`,
+          bucket: bucketName,
+          key: item.id,
+          file,
+          caption: captionFromTags(hit.tags),
+          width: Math.round((hit.imageWidth / hit.imageHeight) * 1280),
+          height: 1280,
+          brightness: { mean: m.mean, sd: m.sd },
+          sat: m.sat,
+          detail: m.detail,
+          score: w.score,
+          matched: w.why,
+          textSafe: m.mean <= BRIGHT_MAX,
+          provider: 'pixabay',
+          providerId: hit.id,
+          pageURL: hit.pageURL,
+          author: hit.user,
+          authorURL: hit.userURL,
+          license: 'Pixabay Content License',
+          fetchedAt: new Date().toISOString().slice(0, 10),
+        });
+        got++;
+        console.log(
+          `   ✓ ${String(hit.id).padEnd(9)} điểm ${String(w.score).padStart(3)} ` +
+            `L=${String(m.mean).padStart(5)} sat=${String(m.sat).padStart(5)} rối=${String(m.detail).padStart(4)}` +
+            `  [${w.why.join(' ')}]  ${captionFromTags(hit.tags).slice(0, 38)}`
+        );
+      } catch (e) {
+        console.error(`   🔴 tải hỏng ${hit.id}: ${e.message}`);
       }
     }
     if (got < need) console.log(`   ⚠️ chỉ lấy được ${got}/${need} — nới truy vấn hoặc hạ --per`);

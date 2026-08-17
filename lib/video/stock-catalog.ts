@@ -37,6 +37,17 @@ export interface StockImage {
   /** Tag của nhà cung cấp, đã khử trùng lặp. KHÔNG phải chữ mình viết. */
   caption: string;
   brightness?: { mean: number; sd: number } | null;
+  /** Bão hoà màu cả khung — cao là "màu tươi", trái brief moody. */
+  sat?: number;
+  /** Độ rối dải giữa khung — cao là nền lộn xộn, chữ khó đọc. */
+  detail?: number;
+  /**
+   * Mức KHỚP BRIEF (châu Á · moody · retro · huyền bí + ba số đo ảnh).
+   * ⚠️ KHÔNG phải "ảnh đẹp bao nhiêu" — máy không chấm được đẹp.
+   */
+  score?: number;
+  /** Tiêu chí brief mà bức này khớp, để đọc được vì sao nó được chọn. */
+  matched?: string[];
   /** Dải giữa khung đủ tối để đặt chữ lên không. */
   textSafe?: boolean | null;
   provider: string;
