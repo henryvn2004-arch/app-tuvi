@@ -113,23 +113,231 @@ hy sinh ảnh. Nay `0,64 → 0,20`, tương phản do **`TextPlate`** ôm riêng
 6 mẫu là quá mỏng để rút cây phân loại — lấy TÔNG từ tập đóng, CHỦ ĐỀ từ miền
 nội dung site.
 
+---
+
+## 🧺 Kho ảnh THẬT + vá `buildTimeline`: hội đồng cuối cùng cũng nhìn thấy hình (2026-08-17, PR này)
+
+Henry đặt `PIXABAY_API_KEY` xong. Theo đúng lệnh tự đặt ở mục trên: **gọi API
+thật + đọc điều khoản TRƯỚC, viết script SAU**. Cả hai bước đều đổi quyết định.
+
+### 🔐 Điều khoản đọc tận nơi — "tải về trước" là BẮT BUỘC, không phải tối ưu
+Nguyên văn `pixabay.com/api/docs/`: *"permanent hotlinking of images (using
+Pixabay URLs in your app) is **not allowed**. If you intend to use the images,
+please **download them to your server first**."* ⇒ Lập luận cũ của mục trên
+(*"tải trước là ràng buộc CẤU TRÚC"*) đúng, nhưng **lý do mạnh hơn hẳn nó tưởng**:
+đây là điều kiện dùng, không phải chuyện bền vững kỹ thuật.
+- Cộng thêm: `webformatURL` **hết hạn sau 24 giờ** ⇒ dán URL Pixabay vào
+  `ScriptSpec` vừa vi phạm vừa chết sau một ngày.
+- *"requests must be cached for 24 hours"* ⇒ script cache phản hồi xuống đĩa.
+  *"Systematic mass downloads are not allowed"* ⇒ trần cứng `MAX_REQUESTS=60`,
+  chạy tuần tự, có nghỉ, **cố ý không có `schedule`**.
+- **Ghi công KHÔNG bắt buộc** ở đây: tài liệu chỉ "kindly request" nêu nguồn
+  *khi hiển thị KẾT QUẢ TÌM KIẾM* — clip không phải kết quả tìm kiếm. Vẫn lưu đủ
+  provenance trong manifest. (Vẫn loại Unsplash: bên đó ghi công là bắt buộc.)
+
+### 📐 Hình dạng phản hồi — trả lời đúng câu hỏi mục trên treo lại
+| Câu hỏi | Đo được |
+|---|---|
+| `largeImageURL` nằm ở host nào | **`pixabay.com/get/`** (không phải `cdn.`), chuỗi băm dài |
+| Trường mô tả | **KHÔNG có caption**. Chỉ `tags` — chuỗi phẩy, **lặp rất nặng** (`sunset, sunset, sunset…`) |
+| Trường lọc chưa biết | **`isAiGenerated` · `isLowQuality` · `isGRated` · `noAiTraining`** — dùng làm cổng lọc |
+- 🔴 **Trần độ phân giải 1280px**: khoá này KHÔNG có full API access (`fullHDURL`
+  / `imageURL` vắng mặt). Ảnh dọc về **853×1280** cho khung **1080×1920** ⇒ phóng
+  **1,5×**. Chấp nhận được vì nền nằm dưới lớp phủ + `TextPlate`, nhưng **đây là
+  giới hạn thật, đừng quảng cáo là ảnh gốc**.
+
+### 🔴 Hai lỗi nội dung mà LỌC KỸ THUẬT KHÔNG bắt được — cả hai lộ ở lượt chạy thật
+1. **Truy vấn "lonely person walking alone" trả về 4 bức chân dung NGƯỜI VÔ GIA
+   CƯ** (`homeless, poverty, poor`), và cả 4 **qua sạch mọi phép lọc** (đủ tối,
+   đủ dọc, không phải AI, G-rated). Ghép dưới câu *"bạn thuộc kiểu tổn thương
+   nào"* thì ảnh + chữ đọc thành **khẳng định VỀ CHÍNH NGƯỜI TRONG ẢNH** — đúng
+   ranh giới mục trên đã chốt. ⇒ `DENY_TAGS`, **cổng CHẶN không có ngưỡng**.
+2. **Pixabay xếp theo ĐỘ PHỔ BIẾN, không theo ĐỘ KHỚP** — hết ảnh hợp đề tài là
+   nó lặng lẽ trôi sang ảnh đẹp-mà-lạc-đề: `chia-xa` → *cinema, valencia,
+   movies*; `nang-am` → một con **MÈO**; `suy-tu` → **hạt cà phê rang**.
+   ⇒ mỗi tông khai `must[]`, ảnh phải mang ≥1 tag thuộc chủ đề.
+- 🪤 Khớp theo **TỪ**, không phải chuỗi con — nếu không thì `war` ăn vào **warm**,
+  `poor` ăn vào **poorly**, `grave` ăn vào **gravel**. Đúng lớp lỗi `\bcon\b`
+  khớp "con vật" đã ghi. Red-team 4/4 ca biên đều KHÔNG chặn oan.
+- ⚠️ **Cổng liên quan nâng sàn, KHÔNG thay được mắt người**: con mèo VẪN qua vì
+  nó thật sự có tag `window, curtain`. Đừng đọc "84/84 đạt" thành "84 bức đẹp".
+
+### 🖼️ Đo độ sáng — và soi trên bản 6KB thay vì bản 180KB
+Tiêu chí *"ảnh có chỗ đặt chữ không"* mục trên nêu ra nay **chạy thật**: giải mã
+ảnh về xám 64px, lấy dải giữa khung (nơi `TextPlate` ngồi), tính độ sáng.
+- **Không thêm một gói phụ thuộc nào**: ffmpeg (bản đi kèm Playwright) giải JPEG
+  → PNG xám, rồi `zlib` có sẵn của Node giải PNG. 🪤 Bản ffmpeg đó **thiếu muxer
+  `rawvideo` và protocol `pipe:`** — phải đi đường `image2pipe` + `file:` + xuất
+  PNG. Mất 4 lượt thử mới ra, ghi lại để khỏi dò lại.
+- 🔑 **Soi trên `previewURL` (5–8KB) rồi mới tải bản lớn**: so 8 cặp
+  preview↔large, **sai lệch tuyệt đối trung bình 0,19** trên thang 0–255 — tức
+  bằng nhau. Nhờ vậy loại bức quá sáng khi mới tốn ~6KB thay vì ~180KB: lọc kỹ
+  hơn **và** đúng tinh thần "không tải ồ ạt". Trước khi soi trước: 73/84 đạt;
+  sau: **84/84**, và `ghe-trong` từ 2/6 lên 6/6.
+- ⚠️ `BRIGHT_MAX=165` gắn với lớp phủ `0,20` + `TextPlate` HIỆN NAY. Đổi hai thứ
+  đó thì **đo lại**, đừng chỉnh theo cảm giác.
+
+### 🔴 Vá `buildTimeline` — và A/B chứng minh căn nguyên mục trên chẩn ĐÚNG
+`lib/video/stock-catalog.ts` (mới) tra mô tả; `gate-audience.ts` nay nêu nền,
+nêu `accent`, và **hết in URL thô**. Đo trên kịch bản THẬT, chặn `llmTextFull`
+để bắt đúng chuỗi gửi lên model, đối chứng bằng `git worktree` ở bản trước vá:
+
+| Clip | | Trước | Sau |
+|---|---|---:|---:|
+| `bon-buoc-truoc-khi-roi-di` | dòng "NHÌN THẤY" **khác nhau** | **3**/25 | **25**/25 |
+| | nhắc `backdrop` | **0** | 1 |
+| `ba-the-be-tac` | **URL thô** lọt vào prompt | **5** | **0** |
+
+⇒ *"kênh hình có phương sai bằng không"* không phải suy luận: **25 cảnh chỉ ra 3
+mô tả**, và bảng thời gian còn nói clip có **"nền xanh đậm"** trong khi clip có
+3 bức tranh nền. Hội đồng bị bảo là clip chỉ có chữ trên nền phẳng, rồi than
+đúng câu đó.
+- 🔑 Nhánh không tra được mô tả trả **"CHƯA CÓ MÔ TẢ — đừng phán đoán gì"**, cố
+  ý KHÔNG trả URL: model không đọc URL thành hình, nó chỉ bịa. Nói "không biết"
+  thì hội đồng biết mình thiếu dữ kiện; đưa URL thì nó tưởng mình có.
+
+### Verify
+`tsc` 0 · `lint` **0 lỗi / 77 warning = đúng mốc nền** · `prettier` cả cây sạch ·
+`node --check` cả hai script.
+- **Kho thật: 84 ảnh / 14 nhóm, 14/14 nhóm đạt 6/6 đặt-chữ-được**, độ sáng
+  8,1–163,2 (trần 165), **14 lượt gọi API** (trần 60), 60 ứng viên bị loại.
+  Manifest: 84/84 đủ provenance · 0 trùng id · **0 ảnh dính `DENY_TAGS`**.
+- **Chạy lại = no-op cho cả 14 nhóm** (idempotent), nhờ cache 24h + bỏ qua id đã có.
+- **5/5 nhánh `describeImage`** đúng: đường dẫn kho · URL Storage · tranh quẻ ·
+  không biết · caption có sẵn. `stockByKey` chỉ trả ảnh `textSafe`.
+- **`stock-upload.mjs` 4 nhánh TỪ CHỐI** đúng mã thoát: thiếu khoá → 1 · thiếu
+  file trên đĩa → 1 (soát TRƯỚC khi đẩy byte nào) · `--dry-run` → 0, không gọi
+  mạng · đã có `url` → 0.
+
 ### CÒN LẠI
-- 🔴 **Chưa chạy được lượt nhập kho nào** — thiếu `PIXABAY_API_KEY` trong
-  environment. **Việc đầu tiên của phiên sau**: gọi MỘT lượt Pixabay thật, in
-  cấu trúc phản hồi (`largeImageURL` nằm trên `pixabay.com/get/` hay
-  `cdn.pixabay.com`? tên trường tag/metadata?) RỒI MỚI viết script. Viết trước
-  rồi đoán hình dạng phản hồi là đặt cược nhầm chỗ.
-- **Hai bug đã xác nhận trong `buildTimeline`, chưa vá**: `backdrop` không hề
-  được nhắc (4 clip bị chấm như không có nền) · 5 cảnh `image` in **URL thô**
-  thay vì mô tả (`Ảnh: ${sc.visual.src}`). `accent` và quầng sáng cũng vắng mặt.
-- **Vòng lặp chưa có cần gạt thứ hai**: cần mã lỗi `visual.mismatch` + hành động
-  ĐỔI ẢNH. `rewriteSpec` hiện chỉ viết lại chữ ⇒ chê hình mà sửa chữ là tái lập
-  đúng lỗi vừa mổ.
+- 🔴 **Kho CHƯA nối vào clip nào** — `stock-upload.mjs` cần `SUPABASE_SERVICE_KEY`,
+  không có trong container này, nên **đường đẩy THÀNH CÔNG chưa chạy lượt nào**
+  (mới chứng minh các nhánh từ chối). Việc tay Henry: tạo bucket `stock` (công
+  khai) rồi chạy `node scripts/stock-upload.mjs` ở máy có khoá. Xong bước đó thì
+  manifest có `url` và kịch bản mới trỏ được vào kho.
+- **Ảnh nằm NGOÀI git** (`remotion/public/stock/`, 28MB, đã vào `.gitignore`) —
+  đúng lối tranh quẻ. Thứ commit là manifest 60KB, đủ để dựng lại kho.
+- **Vòng lặp vẫn chưa có cần gạt thứ hai**: cần mã lỗi `visual.mismatch` + hành
+  động ĐỔI ẢNH. `rewriteSpec` hiện chỉ viết lại chữ ⇒ chê hình mà sửa chữ là tái
+  lập đúng lỗi vừa mổ. **Đây là việc tiếp theo đáng làm nhất** — kho có rồi thì
+  cần gạt mới có chỗ để gạt sang.
+- **6 kịch bản insight vẫn dùng tranh quẻ làm nền**, chưa bức nào đổi sang ảnh
+  stock. Đổi là sửa data thuần trong `insight.ts`, không đụng logic.
+- ⚠️ **Chưa ai NHÌN 84 bức bằng mắt.** Máy chỉ gác được ba thứ: đạo đức (tag),
+  liên quan (tag), chỗ đặt chữ (pixel). Nó **không** gác được đẹp/hợp gu.
+- **Chưa render thử một clip nào với ảnh stock** — chưa có `url` thì chưa render
+  được. Chỗ đáng nhìn đầu tiên: bức sáng nhất kho (`ngon-den/4222263`, L=163,2)
+  trên lớp phủ `0,20`.
+- **Kho B (chủ thể) yếu hơn kho A**: "ghế trống"/"mặt nước" trên kho stock phần
+  lớn là ảnh nội thất và ảnh giọt nước macro. Qua cổng nhưng nhạt.
 - **Đừng hứa việc này cứu 17 clip trượt** — phần lớn trượt vì CHỮ.
 - `0,20` mới soi trên MỘT bức; phải soi lại trên bức SÁNG NHẤT trong kho.
 - Chưa đụng `PhotoScene` (cảnh ảnh riêng, có dải tối riêng, cơ chế khác).
 
 ---
+
+## 🎞️ Tuyển lại kho theo BRIEF + một-ảnh-một-clip (2026-08-17, cùng PR)
+
+Henry xem bản render đầu (ghế trống + lá đỏ, sáng) rồi ra brief: **ưu tiên châu
+Á** (app cho người Việt) · cinematic moody 70% / retro 20% / huyền bí điểm nhấn ·
+tối, tương phản cao, tối giản, chừa chỗ đặt chữ · loại sáng-vui-nhiều-màu, nền
+lộn xộn. Vòng sau chốt thêm: **có người thì phải là người châu Á**, thêm nhóm
+*tối giản* + *thiên nhiên u tối*, **mỗi clip MỘT ảnh**, blur nhẹ nền, nhạc lặng.
+
+### 🔑 Chỗ hỏng là RỔ ỨNG VIÊN, không phải trọng số điểm
+Lượt tuyển theo brief đầu ra **25% châu Á** dù đã cộng +45 điểm cho thẻ châu Á.
+Tôi suýt đi chỉnh trọng số. Căn nguyên thật: `SCREEN_CAP=40` bị **truy vấn ĐẦU
+TIÊN lấp đầy**, mà truy vấn nhắm châu Á là truy vấn thứ BA ⇒ nó không bao giờ
+được hỏi tới. ⇒ **hạn ngạch theo TỪNG truy vấn** (`perQuery = ceil(CAP/n)`).
+Sau đó: **41%**. 🔑 Điểm không cứu được khi rổ đã thiếu — sửa ở chỗ GOM, đừng
+sửa ở chỗ CHẤM.
+
+### 👤 Cổng NGƯỜI — chặn cứng, nhưng miễn cho ảnh KHÔNG thấy mặt
+Luật: có thẻ người (`woman · man · portrait · face…`) ⇒ **bắt buộc** có dấu hiệu
+châu Á, không thì loại.
+- 🔑 **Miễn trừ `silhouette · shadow · backlit · hands`**: mục đích của cổng là
+  "đừng để người xem thấy một gương mặt lạc kênh" — bóng ngược sáng thì **không
+  có gương mặt nào để lạc**, mà đó lại đúng là hình moody đắt nhất của brief.
+  Chặn nó là tự tay vứt thứ mình đang đi tìm.
+- 🔑 **Tách `ASIA_STRONG` khỏi `ASIA_TAGS`**: `bamboo` · `lantern` · `rice field`
+  nói về BỐI CẢNH, không nói ai đứng trong khung — một người mẫu Bắc Âu cạnh bụi
+  tre vẫn ra `bamboo`. Chúng chỉ được cộng điểm, KHÔNG được làm bằng chứng.
+- ⚠️ **Cổng này đọc THẺ, không nhìn ảnh** ⇒ loại oan ảnh người châu Á mà tác giả
+  không gắn thẻ quốc gia. Chấp nhận: loại oan chỉ làm rổ nhỏ đi, còn lọt một
+  gương mặt lạc thì hỏng đúng bức người xem nhìn suốt 40 giây.
+- Soi kho CŨ bằng cổng mới: **16/84 (19%) bị loại**, gồm 2 bức **quân phục/lính**
+  trong `hoai-niem` — cổng bắt được miễn phí một lỗi lạc kênh chưa ai nêu.
+
+### 🔴 Bức "lọt cổng" hoá ra là PHÉP ĐO CỦA TÔI SAI — và nó lộ một lỗi thật
+Audit báo 2 bức lọt. Mở thẻ THÔ ra thì cổng **chạy đúng**: bức `4851939` có
+`silhouette` ở vị trí **13**, tức được miễn hợp lệ. Tôi đo trên `caption` đã bị
+`captionFromTags` **cắt ở 12 thẻ**.
+- 🔑 Nhưng chính chỗ đó là lỗi THẬT: **caption là thứ hội đồng đọc**, mà mức 12
+  chặt ngay trước `silhouette, alone, sad` — đúng ba từ nói về cảm xúc bức ảnh.
+  Nâng lên **16** (vá lại 42/94 caption từ API cache, 0 byte tải lại).
+- ⚠️ 16 là một LỰA CHỌN, không phải phép đo: nới nữa thì nuốt thẻ máy sinh
+  (`gray thinking`). Thà thừa thẻ nhiễu còn hơn thiếu thẻ mang nghĩa — việc của
+  caption là để SO với lời đọc, không phải để đọc cho xuôi.
+- 🔑 Bài học lặp: **đo trên bản đã cắt gọn thì đang đo bản cắt, không đo thứ
+  cần đo.** Cùng lớp với `grep "A \|\| B"` đỗ giả đã ghi.
+
+### 📐 MỘT ảnh cho MỘT clip (Henry: *"chuyển sang ảnh khác nó ko ăn nhập"*)
+Bản trước rải 3 bức cùng tông và cho chuyển tiếp. Nhìn bản render thật thì mỗi
+lần chuyển là một lần mắt phải làm lại việc *"đây là cảnh gì"*, trong khi thứ
+đang chạy là CHỮ. Một bức đứng yên dưới Ken Burns trôi chậm đọc là **một khung
+hình đang thở**; ba bức nối nhau đọc là **trình chiếu ảnh**.
+- 🔑 **Bốc trong TOP-5 chứ không lấy hạng nhất**: lấy thẳng bức điểm cao nhất thì
+  **mọi clip cùng tông ra cùng một bức** — với 6 kịch bản insight là chuyện xảy
+  ra ngay. Bốc theo băm trong nhóm đầu bảng giữ được cả điểm cao lẫn khác biệt.
+- ⚠️ **`score` là mức KHỚP BRIEF, KHÔNG phải "gây cảm xúc mạnh".** Máy không đo
+  được cảm xúc. Henry dặn *"ưu tiên ảnh nào tạo emotion nhiều"* — thứ làm được
+  là xếp theo brief rồi nói thẳng hai cái đó không phải một.
+
+### 🎬 Ba mục còn lại của brief — hai cái ĐÃ CÓ SẴN, đừng làm lại
+Đo trên mã trước khi sửa:
+| | Thực trạng |
+|---|---|
+| Chữ trắng / vàng nhạt | ✅ `#F9F4EB` + `#C9A84C`, không phải đụng |
+| Ken Burns chậm | ✅ `scale 1,05→1,18` chạy suốt clip, cố ý không reset mỗi ảnh |
+| **Blur nhẹ nền** | ❌ `blur(18px)` chỉ là `backdropFilter` của `TextPlate` |
+| **Nhạc piano/ambient/sad** | ❌ 4/6 clip dùng bed có TRỐNG 92–104 nhịp/phút |
+- **Blur `6px`** cho ảnh nền — đẩy ảnh ra sau mặt phẳng chữ. ⚠️ Cân với `scale`
+  khởi điểm 1,05: blur lấy mẫu ra ngoài mép ~3σ ≈ 18px, còn 1,05 trên khung 1080
+  dư 27px mỗi bên. Hạ scale về 1,0 hoặc nâng blur quá ~9px là **hở mép trong
+  suốt ở viền khung**.
+- **Hai HỌ nhạc, cố ý không gộp**: có trống (`don-dap`·`cang-thang`·`sang-sua`)
+  cho clip DEMO công cụ — chú thích cũ ghi đúng một quan sát thật *"nhạc trôi
+  lững lờ làm người xem buồn ngủ"*, nhưng nó đo trên clip QUAY MÀN HÌNH, nơi
+  không có gì để cảm nên nhịp phải gánh phần giữ chân. Không trống (`tram-tinh`
+  + 2 bed mới `u-hoai` 52bpm · `lang-le` 46bpm) cho clip INSIGHT: cú đập 104
+  nhịp/phút dưới câu *"bạn thuộc kiểu tổn thương nào"* thì nhạc và lời **đá
+  nhau**. 6 clip insight nay chia đều 3 bed, không clip cạnh nhau nào trùng.
+- ⚠️ Vẫn là **nền tổng hợp** (sin + hài bậc 2/3), nghe gần chuông/pad hơn dây
+  đàn. **Đừng quảng cáo là piano.**
+
+### Verify
+`tsc` 0 · `lint` **0 lỗi / 77 warning = đúng mốc nền** · `prettier` cả cây sạch.
+- **Kho mới: 94 ảnh / 16 nhóm · 11 lượt API** (trần 60) · 1.341 ứng viên bị loại.
+  Trung vị: sáng **51,5** · màu **18,6** · rối **10,2**. 0 trùng id · 94/94 đủ
+  provenance · **0 dính `DENY_TAGS`**.
+- **Cổng NGƯỜI trên thẻ THÔ: 13 bức có mặt người → 13/13 châu Á, 0 lọt.** (81 bức
+  còn lại là vật/cảnh/bóng — không có gương mặt nào để lạc.)
+- **Red-team cổng 15/15 ca** gồm 4 ca phải LOẠI (`woman, portrait, dark` ·
+  `bamboo, woman` · `lantern, girl` · `eyes`) và 4 ca phải NHẬN (`silhouette` ·
+  `shadow` · `hands` · `monk/temple`).
+- Thẻ châu Á toàn kho **41%** (trước 25%). Nhóm cao nhất: `bi-an` 6/6 ·
+  `ngon-den` 6/6 · `co-don` 5/6 · `tinh-lang` 5/6.
+
+### CÒN LẠI
+- ⚠️ **`mo-mit` và `hoai-niem` chỉ lấy được 5/6, và `mo-mit` · `chia-xa` ·
+  `cua-so` · `ghe-trong` có 0 ảnh châu Á.** Sương/ray tàu/ghế hiếm khi được gắn
+  thẻ quốc gia — đây là giới hạn của việc đọc thẻ, không phải lỗi truy vấn.
+- ⚠️ **Vẫn chưa ai NHÌN 94 bức bằng mắt.** Máy gác được: đạo đức · lạc kênh ·
+  liên quan · chỗ đặt chữ · tối/ít màu/ít rối · người-phải-châu-Á. Nó **không**
+  gác được đẹp, "trông có giống ảnh stock rẻ tiền không", và **cảm xúc**.
+- Blur 6px mới soi trên MỘT bản render; chưa soi trên bức sáng nhất kho.
+- Hai bed nhạc mới chưa ai NGHE — luật cũ vẫn áp: mỗi lượt đổi âm thanh phải có
+  người nghe lại.
 
 ## 🏭 Khâu dựng clip lên GitHub Actions — và một phép kiểm TÔI ĐẶT TÊN SAI (2026-08-15, PR này)
 
