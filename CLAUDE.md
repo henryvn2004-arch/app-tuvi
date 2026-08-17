@@ -5,6 +5,125 @@
 
 ---
 
+## ✍️ 75% PROMPT LÀ LUẬT GIỌNG — arc 5 lớp THAY 3 bản bố cục chồng nhau (2026-08-17, PR #541)
+
+Henry: *"cách luận giải, chat… chỉnh sửa để nó hook users hơn"* kèm 5 bước (mở
+hook · 2–3 hành vi cụ thể · twist · giải thích đời thường · gợi ý hành động
+nhỏ), rồi lo đúng chỗ: *"nhiều thứ chèn vào prompt thì đâm ra nó loãng, nên nó
+lại bỏ qua"*.
+
+### 🗺️ Bản đồ prompt — BA HỌ tách biệt, đo trước khi sửa
+| Họ | Ở đâu | Hình dạng |
+|---|---|---|
+| **1. Rail (chat)** | `buildChatContext()` (`prompts.ts`) rẽ theo `toolType` → **24 `CHAT_SYSTEM_*` + `CHAT_RICH_RULES`** | prose, có khối luật dùng chung |
+| **2. Bản luận MỘT LƯỢT trả tiền** | 7 file riêng (`day-con-prompt`, `nguoi-khac-prompt`, `nhan-mach-prompt`, `huong-nghiep-tre-prompt`, `phu-the-luan-giai`, `past-life-story`, `past-life-bond-story`) | **JSON schema CỨNG** — `day-con` 12 field, `propertyOrdering` = thứ tự đọc trên trang |
+| **3. Luận giải 24 phần** | `SYSTEM_PROMPT` + `buildPrompt(phan…)` inline trong `app/api/lasotuvi/route.ts`; `/api/tubinh` có bản song song | 24 prompt, ngân sách từ riêng mỗi phần |
+- 🔴 **Họ 2 và 3 KHÔNG import một khối giọng nào** (4/7 file họ 2 không import gì
+  từ `prompts.ts`, 3 file còn lại chỉ lấy `XUNG_HO_RULE`) ⇒ chỗ người ta TRẢ
+  TIỀN để đọc lại đứng ngoài toàn bộ luật "viết cho thấm & nhớ".
+- ⚠️ **Hai bản chép tay đứng ngoài mọi luật**: `app/api/xem-tuoi/route.ts:15,28`
+  có `CHAT_SYSTEM_LASO`/`GENERAL` RIÊNG; `app/api/phong-thuy` có 5–6 system
+  inline. Sửa `prompts.ts` mà quên hai chỗ này thì style không ăn ở đó.
+
+### 🔴 Căn nguyên: bội thực luật giọng, KHÔNG phải thiếu luật giọng
+| | |
+|---|---:|
+| Luật giọng+hình dạng / tổng luật, 25 prompt | **75%** (154.624 / 52.755 ký tự) |
+| `RAIL_SHAPE_AND_VOICE` một mình / prompt nhẹ nhất | **94%** |
+| `CHAT_SYSTEM_LASO`: chỉ thị về giọng+hình dạng | **33/43 = 77%** (chỉ ~10 nói về tử vi) |
+| Lượt tranh quyền ưu tiên trong CÙNG một prompt | **12** (2× "ĐỨNG TRÊN", 1× "LUÔN THẮNG", 8× "TUYỆT ĐỐI", 6× "CẤM") |
+
+3 shape lá số gánh **BA bản mô tả bố cục chồng nhau** — `RAIL_CHAT_RULES`
+("kết luận trước") · `RAIL_LASO_SHAPE` ("nhịp 3 lớp") · `DIEM_NHAN_RULES`
+("hình tượng cách cục") — mỗi bản tự nhận đứng trên mọi luật khác.
+🔑 **Cơ chế sinh ra nó là CỘNG DỒN**: thấy model viết chưa ưng thì thêm một
+khối, khối cũ vẫn nằm đó. **Càng thêm luật thì luật càng mất tác dụng** — thêm
+khối thứ tư là làm nặng đúng chỗ đang loãng. ⇒ khối mới phải **THAY, không cộng**.
+
+### ✅ `LUAN_ARC` + `MAU_ARC` — nguồn DUY NHẤT về hình dạng cho 3 shape lá số
+- **`LUAN_ARC`** — ngân sách **120–180 từ** (Henry chốt nới từ 60–120) + nhịp 5
+  lớp ①MỞ ②HÀNH VI ③TWIST ④VÌ SAO ⑤CHỐT + khối **`🔴 CẤM THUẬT NGỮ`** đứng RIÊNG.
+  Nuốt luôn `PLAIN_LANGUAGE_RULE` (1.375 → nén trong ④).
+- **`MAU_ARC`** — 3 mẫu viết đủ arc + **`── PHÉP DỊCH ──`** (cặp ✅/❌ có kèm dữ
+  kiện nguồn). Thay **1.263 ký tự luật khẩu ngữ** đã cắt (Henry chốt "cắt mạnh
+  còn 200"). 🔑 **Giọng học bằng VÍ DỤ rẻ và ăn hơn học bằng LUẬT** — thấy giọng
+  nhạt thì THÊM MỘT MẪU, đừng viết lại bảng khẩu ngữ.
+- Gỡ hẳn `RAIL_LASO_SHAPE` + `DIEM_NHAN_RULES`. `RAIL_CHAT_RULES`/
+  `GIONG_NGUOI_RULES` **vẫn sống** — chúng phục vụ **22 prompt kịch bản** qua
+  `RAIL_SHAPE_AND_VOICE`, **CỐ Ý chưa đụng** (đo một nhóm trước khi nhân ra).
+
+| | trước | sau |
+|---|---:|---:|
+| Giọng+shape, 3 shape lá số | 8.304 | **3.691** (−56%) |
+| `CHAT_SYSTEM_LASO` (luật thuần) | 11.286 | **6.959** (−38%) |
+| `CHAT_SYSTEM_GENERAL` | 11.264 | **7.246** |
+| `CHAT_RICH_RULES` | 13.412 | **9.388** |
+
+### 🔴 A/B THẬT lộ ra lớp ④ KHÔNG ăn — và vá đúng hai chỗ
+`scripts/demo-luan.mjs` (đã có sẵn, nay thêm nhánh OpenAI làm đường lùi) chạy
+before/after trên lá số thật. Bản arc ĐẦU TIÊN: bố cục đổi rõ, **nhưng 2/2 lượt
+vẫn mở câu bằng tên sao** (*"Thiên Đồng hãm địa tại Quan Lộc khiến…"*). Chẩn:
+1. Luật cấm jargon bị **CHÔN giữa lớp ④ dài 540 ký tự** → là mệnh đề phụ, trôi.
+2. `MAU_ARC` dạy GIỌNG mà **không dạy PHÉP DỊCH** — 3 mẫu đều 0 tên sao nhưng
+   không gắn dữ kiện nguồn, model nhìn context toàn tên sao thì bí, đọc tên ra.
+⇒ Tách `🔴 CẤM THUẬT NGỮ` ra khối riêng (kèm phép thử kiểm được: *mỗi câu phải
+ĐỨNG VỮNG khi xoá hết tên riêng*), và thêm `PHÉP DỊCH` 2 cặp ✅/❌.
+Đo lại: **lượt 1 còn 1 vi phạm nhẹ (tên CUNG), lượt 2–3 sạch hoàn toàn.**
+- ⚠️ Mẫu 3 lượt là NHỎ, và model chạy là **gpt-4o chứ không phải
+  `gemini-2.5-flash` của prod** (container chưa có key Gemini). Đừng đọc rộng hơn.
+
+### 🧷 `scripts/check-prompt-budget.mjs` (bộ dò thứ 19, cắm CI lint)
+Hai luật: **trần ký tự** phần luật từng shape · **mỗi shape chỉ MỘT nguồn bố cục**.
+- 🪤 **Nó bắt được CHÍNH lượt vá lớp ④** (7.153/7.000) ⇒ phải cắt bù trong
+  `MAU_ARC` thay vì nới trần. Đó đúng là việc nó sinh ra để làm.
+- Red-team **4/4 đỏ đúng** (phình · hai nguồn bố cục · không nguồn nào · prompt
+  đổi tên → DỪNG HẲN thay vì báo xanh), đối chứng khôi phục xanh, 0 file rác.
+- 🔑 **Nới trần là một QUYẾT ĐỊNH phải ghi lý do**, không phải thao tác dọn đường.
+
+### 🪤 Bẫy đã vấp
+1. **`companion.ts` trích NGUYÊN VĂN tên luật ở 5 chỗ** ("BỎ câu phán quyết mở
+   đầu", "mở nút", "Luật 'trả lời thẳng…' KHÔNG áp dụng"). Đổi arc mà quên sửa
+   là neo vào thứ không còn tồn tại ⇒ chế độ tâm sự mất quyền ghi đè đúng lúc
+   cần nhất. Đã sửa cả 5.
+2. **Bẫy cwd lần thứ tư**: `cd tuvi-engine && …` giữ lại cwd → `npm run lint`
+   chạy ở engine, báo "Did you mean npm link".
+3. **`TS5112`** (nêu file trên dòng lệnh khi có tsconfig) và **`TS6064`**
+   (`--paths` chỉ được khai trong tsconfig) — cả hai đã ghi trước, vấp lại.
+4. **Key `.env` KHÔNG tới container**: `.env` trong `.gitignore`, và biến môi
+   trường chỉ ăn ở **PHIÊN MỚI**. Đúng bài học đã ghi ở track kho ảnh.
+
+### Verify
+`tsc` 0 · `lint` **0 lỗi / 77 warning = đúng mốc nền** (đo đối chứng bằng
+`git stash`, cả hai bên 77) · `prettier` cả cây sạch · **19/19 bộ dò** · engine
+**185 pass** · CI 4/4 job xanh.
+- **A/B với `git HEAD`: 22/22 prompt kịch bản TRÙNG KHÍT** (bất biến quan trọng
+  nhất — 22 tool đang chạy prod không đổi một byte).
+- **28/28 bất biến trên MODULE THẬT** (biên dịch `prompts.ts` + hook
+  `Module._resolveFilename` cho alias `@/`, lá số thật qua `computeLaso`, đọc
+  chuỗi `system` mà `buildChatContext` TRẢ VỀ): đủ 5 lớp + `CẤM THUẬT NGỮ` +
+  `PHÉP DỊCH` + ngân sách mới · đã gỡ sạch `MỞ NÚT`/`KỶ LUẬT KHẨU NGỮ`/`MẪU VĂN
+  PHONG`/`60–120 từ` · arc đứng **TRƯỚC** khối dữ liệu · **ĐỐI CHỨNG** 3 prompt
+  kịch bản không dính arc mới mà vẫn giữ luật cũ.
+
+### CÒN LẠI
+- 🔴 **Chưa chạy bằng `gemini-2.5-flash` (model prod)** — cần `GEMINI_API_KEY`
+  đặt ở **cấu hình environment** (chỗ `OPENAI_API_KEY` nằm) rồi mở **phiên mới**,
+  chạy `node scripts/demo-luan.mjs`. Đây là việc TIẾP THEO đáng làm nhất.
+- **22 prompt kịch bản chưa đụng** — nhân ra sau khi Gemini xác nhận arc ăn.
+- **Họ 2 (bản luận trả tiền) và họ 3 (24 phần) chưa đụng.** Họ 2 phải ánh xạ arc
+  vào FIELD của schema, và ⚠️ **đổi/thêm field = đổi payload ⇒ BẮT BUỘC bump
+  `SHAPE`** trong `cacheFor(toolId, shape)`, không thì `portrait_cache` trả bản
+  cũ và khối mới im lặng không hiện (đã cắn 2 lần). Họ 3: hook chỉ ở phần 1,
+  twist cuối mỗi cung, hành động gom về phần 24 — đừng rải đủ 5 lớp × 24 phần.
+- **`CHAT_SUGGEST_RULES`** (`run.ts`, dùng chung 25 tool) còn ví dụ chip gợi ý
+  bằng jargon *"Cung Quan Lộc ra sao?"* — sửa ở đợt nhân ra.
+- `xem-tuoi` + `phong-thuy` (bản chép tay/inline) vẫn đứng ngoài.
+- ⚠️ **`playwright`/`lighthouse`/`smoke` VẮNG MẶT trên PR #541** (chạy theo
+  `deployment_status`, Vercel chưa gắn status). 4 check xanh ≠ đủ 7 — đếm trước
+  khi kết luận.
+
+---
+
 ## 🖼️ Hội đồng CHẤM HÌNH mà KHÔNG NHÌN THẤY HÌNH — và kho ảnh thật (2026-08-17, PR #539 + đang làm)
 
 Henry: *"hội đồng phán xét về CHỮ thì ok, chứ còn phán xét về HÌNH, mà nó lại ko
