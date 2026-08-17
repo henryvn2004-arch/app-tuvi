@@ -134,10 +134,14 @@ const now = new Date().toLocaleDateString('vi-VN', {
   month: '2-digit',
   year: 'numeric',
 });
-function extractDiemNhan() {
+// Đọc THẲNG khối thật trong lib/agent/prompts.ts để bản "after" không lệch với
+// prod. Trước đây đọc `DIEM_NHAN_RULES`; khối đó đã bị thay bằng `LUAN_ARC` +
+// `MAU_ARC` (arc 5 lớp) — xem chú thích tại chỗ khai `LUAN_ARC`.
+function extractBlock(name) {
   const src = readFileSync('lib/agent/prompts.ts', 'utf8');
-  const m = src.match(/export const DIEM_NHAN_RULES = `([\s\S]*?)`;/);
-  return m ? m[1] : '(không đọc được DIEM_NHAN_RULES)';
+  const m = src.match(new RegExp('export const ' + name + ' = `([\\s\\S]*?)`;'));
+  if (!m) throw new Error(`Không đọc được ${name} trong lib/agent/prompts.ts — khối đã đổi tên?`);
+  return m[1];
 }
 const SHAPE = (lenLine) => `Bạn là chuyên gia Tử Vi Đẩu Số. Phụng sự trang Tử Vi Minh Bảo.
 
@@ -156,14 +160,20 @@ THÔNG TIN THỜI GIAN: Hôm nay ${now}. Đây là CHAT, không phải bài lu�
 - Dẫn chứng sao/cung/can chi cụ thể từ lá số dưới; xét tam phương tứ chính, không đoán đơn sao. Không bịa "điểm cung/10".
 - Xưng hô: người xem NAM → gọi "anh".`;
 
+// BEFORE = khung "4 lớp" cũ (phán quyết → dẫn chứng → kết → mở nút).
 const OLD_SYSTEM = (ctx) =>
   SHAPE('ĐỘ DÀI: mặc định 130–200 từ, phức tạp tối đa 280.') + '\n\n=== DỮ LIỆU LÁ SỐ ===\n' + ctx;
+// AFTER = arc 5 lớp THẬT đang chạy (mở → hành vi → twist → vì sao → chốt).
+// Cố ý KHÔNG ghép `SHAPE` vào: arc là NGUỒN DUY NHẤT về hình dạng, dán thêm
+// khung 4 lớp cũ lên trên là dựng lại đúng cảnh hai bố cục chồng nhau mà bản
+// mới sinh ra để gỡ.
 const NEW_SYSTEM = (ctx) =>
-  SHAPE(
-    'ĐỘ DÀI: mặc định 150–230 từ, phức tạp tối đa 320; câu phán quyết & mạch hình ảnh được ưu tiên chỗ.'
-  ) +
+  `Bạn là chuyên gia Tử Vi Đẩu Số. Phụng sự trang Tử Vi Minh Bảo.\n\n` +
+  `THÔNG TIN THỜI GIAN: Hôm nay ${now}.\n\n` +
+  extractBlock('LUAN_ARC') +
   '\n\n' +
-  extractDiemNhan() +
+  extractBlock('MAU_ARC') +
+  '\n\n- Xưng hô: người xem NAM → gọi "anh".' +
   '\n\n=== DỮ LIỆU LÁ SỐ ===\n' +
   ctx;
 

@@ -40,7 +40,8 @@
     "check:terms": "node scripts/check-terms.mjs",
     "check:publish": "node scripts/check-publish-filter.mjs",
     "check:jobs": "node scripts/check-cron-jobs.mjs",
-    "check:token": "node scripts/check-token-freshness.mjs"
+    "check:token": "node scripts/check-token-freshness.mjs",
+    "check:prompt": "node scripts/check-prompt-budget.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.112.2",
