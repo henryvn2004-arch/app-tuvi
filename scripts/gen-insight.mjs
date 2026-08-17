@@ -164,7 +164,26 @@ if (!NO_VOICE) {
   const parts = [spec.hook, ...spec.scenes.map(spokenSceneText), spokenCta(spec)];
   voices = [];
   for (const t of parts) {
-    const v = await ttsScene(t, { voice: giong.code });
+    let v;
+    try {
+      v = await ttsScene(t, { voice: giong.code });
+    } catch (e) {
+      // 🔑 LUÔN DỪNG, cố ý KHÔNG có cờ `--require-voice` như `gen-video.mjs`.
+      //
+      // Bên đó fail-soft có lý do: clip demo vẫn còn bản quay màn hình để
+      // duyệt bố cục, mất lời đọc thì khó chịu chứ chưa vô dụng. Clip insight
+      // thì thuần CHỮ + TIẾNG — một bản câm không còn gì để xem, mà nó vẫn
+      // render ra một mp4 "thành công" rồi đi thẳng vào hàng đợi đăng.
+      //
+      // Trước đây chỗ này không bắt lỗi nên vẫn dừng, nhưng dừng bằng một
+      // stack trace thô — người mở log Actions không biết phải sửa gì.
+      console.error(`\n❌ TTS hỏng ở câu: "${t.slice(0, 60)}${t.length > 60 ? '…' : ''}"`);
+      console.error(`   ${e.message}`);
+      console.error('   Clip insight thuần chữ + tiếng ⇒ DỪNG, không render bản câm.');
+      console.error('   Kiểm CLIP_TTS_SECRET / SUPABASE_URL rồi chạy lại — câu đã sinh');
+      console.error('   xong nằm trong cache nên lượt sau không đọc lại từ đầu.');
+      process.exit(1);
+    }
     voices.push(v);
     console.log(
       `   ${v.cached ? '⏭ có sẵn' : '✓ sinh mới'}  ${v.seconds.toFixed(2)}s  "${t.slice(0, 40)}${t.length > 40 ? '…' : ''}"`

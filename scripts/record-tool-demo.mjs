@@ -121,8 +121,21 @@ mkdirSync(tmpDir, { recursive: true });
 // `public/` tại chỗ rồi quay (xem `--base`).
 const PROXY = isLocal ? '' : process.env.HTTPS_PROXY || process.env.HTTP_PROXY || '';
 
+// 🪤 Đường dẫn Chromium KHÁC NHAU theo môi trường, và viết cứng thì hỏng ở nơi
+// còn lại. Đã vấp thật: lượt chạy đầu trên GitHub Actions TRƯỢT 18/18 vì
+// `/opt/pw-browsers/chromium` chỉ tồn tại trong container phát triển này.
+//   · container này: bố cục PHẲNG, Playwright KHÔNG tự dò ra (nó tìm
+//     `<dir>/chromium-<rev>/chrome-linux/chrome`) ⇒ phải trỏ tường minh.
+//   · runner / máy Henry: `npx playwright install chromium` đặt đúng bố cục
+//     chuẩn ⇒ để TRỐNG thì Playwright tự tìm; trỏ tay là trỏ vào chỗ trống.
+// ⇒ Dò xem có mới trỏ, không có thì im lặng nhường Playwright — cả hai nơi
+// cùng chạy được mà không cần cờ riêng cho CI.
+const CHROME = process.env.PW_CHROMIUM || '/opt/pw-browsers/chromium';
+const chromePath = existsSync(CHROME) ? CHROME : undefined;
+if (!chromePath) console.log('   chromium  : để Playwright tự tìm');
+
 const browser = await chromium.launch({
-  executablePath: '/opt/pw-browsers/chromium',
+  ...(chromePath ? { executablePath: chromePath } : {}),
   headless: !HEADED,
   args: ['--no-sandbox', '--disable-dev-shm-usage'],
   ...(PROXY ? { proxy: { server: PROXY } } : {}),
