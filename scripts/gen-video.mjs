@@ -73,7 +73,7 @@ const { outDir, load } = compileVideoLib(['lib/video/sources/tool-demo.ts']);
 
 const { buildToolDemoSpec, getToolDemoSource } = load('video/sources/tool-demo.js');
 const { runMachineGate } = load('video/gate-machine.js');
-const { runViralLoop } = load('video/viral-loop.js');
+const { runViralLoop, MAX_ROUNDS } = load('video/viral-loop.js');
 const { estimateSpeechSeconds, spokenCta, spokenSceneText } = load('video/script-spec.js');
 
 let spec = buildToolDemoSpec(TOOL);
@@ -101,7 +101,7 @@ if (!g1.pass) {
 // TTS là khoản chi phí biến đổi duy nhất của cả pipeline. Sinh tiếng trước rồi
 // mới chấm là trả tiền đọc cho câu sắp bị bỏ đi.
 {
-  const kq = await chayCong2(runViralLoop, spec, { skip: NO_AUDIENCE });
+  const kq = await chayCong2(runViralLoop, spec, { skip: NO_AUDIENCE, maxRounds: MAX_ROUNDS });
   if (!kq.pass) process.exit(1);
   spec = kq.spec;
 }

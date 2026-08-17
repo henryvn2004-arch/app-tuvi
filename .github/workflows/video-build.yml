@@ -23,6 +23,10 @@ on:
         description: 'Clip INSIGHT cần dựng (phẩy ngăn cách), vd: vi-sao-hay-hoan-lai'
         required: false
         default: ''
+      gate_only:
+        description: 'KHẢO SÁT: chỉ chạy 2 cổng rồi dừng (không quay/TTS/render)'
+        type: boolean
+        default: false
       force:
         description: 'Quay + dựng lại kể cả khi đã có file'
         type: boolean
@@ -114,6 +118,7 @@ jobs:
           IN_TOOLS: ${{ inputs.tools }}
           IN_INSIGHT: ${{ inputs.insight }}
           IN_FORCE: ${{ inputs.force }}
+          IN_GATE_ONLY: ${{ inputs.gate_only }}
           IN_BASE: ${{ inputs.base }}
         run: |
           set -euo pipefail
@@ -125,6 +130,7 @@ jobs:
             ARGS+=(--all)
           fi
           if [ "$IN_FORCE" = "true" ]; then ARGS+=(--force); fi
+          if [ "$IN_GATE_ONLY" = "true" ]; then ARGS+=(--gate-only); fi
           if [ -z "${GEMINI_API_KEY:-}" ] && [ -z "${ANTHROPIC_API_KEY:-}" ]; then
             echo "::warning::Chưa khai GEMINI_API_KEY/ANTHROPIC_API_KEY — bỏ qua cổng 2 (hội đồng người xem). Clip chỉ qua cổng máy."
             ARGS+=(--no-audience)
