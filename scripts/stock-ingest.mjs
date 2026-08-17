@@ -206,19 +206,18 @@ function tagSet(tags) {
 }
 
 /**
- * 🌏 CHÂU Á — ưu tiên CAO NHẤT, và cố ý là ĐIỂM CỘNG chứ không phải cổng chặn.
+ * 🌏 CHÂU Á — dấu hiệu MẠNH: quốc gia, dân tộc, văn hoá đặc thù.
  *
- * Lý do sản phẩm: app viết cho người Việt, ảnh châu Á gần với người xem hơn
- * hẳn — một hành lang gỗ Nhật hay con hẻm Hà Nội "đúng chỗ mình sống" theo
- * cách một quán cà phê Bắc Âu không bao giờ đạt được.
- *
- * ⚠️ Vì sao KHÔNG chặn cứng: rất nhiều ảnh moody tốt **không được gắn thẻ quốc
- * gia nào cả** (một bóng người trong sương thì tác giả gắn `fog, silhouette`
- * chứ không gắn `asia`). Chặn cứng theo thẻ là vứt phần lớn kho để đổi lấy
- * một con số "100% châu Á" mà thực chất chỉ đo THÓI QUEN GẮN THẺ của tác giả,
- * không đo nội dung bức ảnh. Nên: cộng điểm nặng, xếp hạng, lấy phần đầu.
+ * Tách riêng khỏi `ASIA_TAGS` (bên dưới) vì hai danh sách phục vụ hai việc
+ * KHÁC HẲN nhau, trộn vào là hỏng cả hai:
+ *   · danh sách này là **cổng CHẶN** cho ảnh có người (xem `PERSON_TAGS`)
+ *   · `ASIA_TAGS` là **điểm cộng** khi xếp hạng
+ * `bamboo` / `lantern` / `rice field` cố ý KHÔNG nằm ở đây: chúng nói về BỐI
+ * CẢNH chứ không nói ai đang đứng trong khung. Một người mẫu Bắc Âu chụp cạnh
+ * bụi tre vẫn ra `bamboo` — lấy nó làm bằng chứng "người này châu Á" là tự
+ * lừa mình.
  */
-const ASIA_TAGS = [
+const ASIA_STRONG = [
   'asia',
   'asian',
   'vietnam',
@@ -244,17 +243,98 @@ const ASIA_TAGS = [
   'taiwan',
   'indonesia',
   'bali',
+  'india',
+  'indian',
+  'nepal',
+  'myanmar',
+  'cambodia',
+  'laos',
   'temple',
   'pagoda',
   'shrine',
-  'lantern',
   'kimono',
-  'bamboo',
-  'rice field',
-  'paddy',
   'monk',
   'buddha',
   'buddhist',
+  'hanbok',
+  'ao dai',
+];
+
+/**
+ * 🌏 CHÂU Á — danh sách RỘNG dùng để CỘNG ĐIỂM khi xếp hạng.
+ *
+ * Lý do sản phẩm: app viết cho người Việt, ảnh châu Á gần với người xem hơn
+ * hẳn — một hành lang gỗ Nhật hay con hẻm Hà Nội "đúng chỗ mình sống" theo
+ * cách một quán cà phê Bắc Âu không bao giờ đạt được.
+ *
+ * ⚠️ Với ảnh KHÔNG có người thì đây vẫn chỉ là điểm cộng, không chặn: rất
+ * nhiều ảnh moody tốt **không được gắn thẻ quốc gia nào cả** (một dải sương
+ * trên núi thì tác giả gắn `fog, mountain` chứ không gắn `asia`). Chặn cứng cả
+ * kho theo thẻ là vứt phần lớn ứng viên để đổi lấy con số "100% châu Á" mà
+ * thực chất chỉ đo THÓI QUEN GẮN THẺ, không đo nội dung bức ảnh.
+ */
+const ASIA_TAGS = [...ASIA_STRONG, 'lantern', 'bamboo', 'rice field', 'paddy', 'incense'];
+
+/**
+ * 👤 CỔNG NGƯỜI — ảnh có NGƯỜI NHÌN RÕ MẶT thì bắt buộc phải mang dấu hiệu
+ * châu Á, không thì loại.
+ *
+ * 🔑 Vì sao chỗ này CHẶN CỨNG trong khi ảnh phong cảnh chỉ cộng điểm: hai kiểu
+ * hỏng không đối xứng. Một khung núi sương "không rõ ở đâu" thì người xem
+ * không đọc ra điều gì lạc; một GƯƠNG MẶT rõ ràng không phải người Việt đặt
+ * dưới câu nói về vận mệnh thì lộ ngay là ảnh mua sẵn, và đó đúng thứ brief
+ * gọi là "generic stock look".
+ *
+ * ⚠️ NHƯNG PHẢI BIẾT NÓ ĐO GÌ: cổng này đọc THẺ, không nhìn ảnh. Nó sẽ loại
+ * oan những bức người châu Á thật mà tác giả không gắn thẻ quốc gia. Chấp nhận
+ * đánh đổi đó vì loại oan chỉ làm rổ ứng viên nhỏ đi, còn lọt một gương mặt
+ * lạc thì hỏng đúng bức người xem nhìn suốt 40 giây.
+ */
+const PERSON_TAGS = [
+  'woman',
+  'women',
+  'man',
+  'men',
+  'girl',
+  'boy',
+  'people',
+  'person',
+  'portrait',
+  'face',
+  'model',
+  'child',
+  'children',
+  'kid',
+  'lady',
+  'female',
+  'male',
+  'human',
+  'adult',
+  'teenager',
+  'couple',
+  'smile',
+  'eyes',
+];
+
+/**
+ * 👤 …TRỪ KHI không thấy mặt.
+ *
+ * Mục đích của cổng trên là "đừng để người xem thấy một gương mặt lạc kênh".
+ * Một BÓNG ĐEN ngược sáng thì không có gương mặt nào để lạc — mà bóng ngược
+ * sáng lại chính là hình moody đắt nhất của brief. Chặn nó là tự tay vứt đúng
+ * thứ mình đang đi tìm.
+ */
+const FACELESS_TAGS = [
+  'silhouette',
+  'silhouettes',
+  'shadow',
+  'shadows',
+  'backlit',
+  'back',
+  'anonymous',
+  'faceless',
+  'hand',
+  'hands',
 ];
 
 /**
@@ -412,22 +492,36 @@ const TONES = [
   },
   {
     id: 'chia-xa',
-    vi: 'Chia xa — sân ga đêm, đường vắng',
+    // 🔴 ĐÃ TUYỂN LẠI MỘT LẦN, và lý do đáng nhớ: bản đầu để `must` toàn PHẦN
+    // CỨNG đường sắt (`station · railway · rail · train · platform · track`)
+    // nên nó gom về đúng thứ nó hỏi — **toa hàng và đường ray**. Điểm cao nhất
+    // cả nhóm chỉ 36 (so với 100+ ở `bi-an`), 0 bức châu Á, và bức đứng đầu là
+    // một toa container. Đúng tag, sai nghĩa: "chia xa" là một CẢM GIÁC, không
+    // phải một phương tiện. ⇒ đưa NGƯỜI vào cả truy vấn lẫn `must`; sân ga chỉ
+    // còn là bối cảnh, không còn là chủ thể.
+    vi: 'Chia xa — bóng người rời đi, sân ga đêm',
     queries: [
-      'empty train station night silhouette',
-      'railway track vanishing fog',
-      'asia train station night platform',
+      'silhouette walking away alone night',
+      'asian woman waiting train station night',
+      'person leaving station rain night',
     ],
     must: [
-      'station',
-      'railway',
-      'rail',
-      'train',
-      'platform',
-      'track',
-      'road',
-      'street',
+      'silhouette',
+      'walking',
+      'walk',
+      'waiting',
+      'wait',
       'departure',
+      'goodbye',
+      'farewell',
+      'leaving',
+      'alone',
+      'person',
+      'woman',
+      'man',
+      'station',
+      'platform',
+      'railway',
     ],
   },
   {
@@ -471,6 +565,72 @@ const TONES = [
       'japan garden zen quiet water',
     ],
     must: ['temple', 'water', 'lake', 'reflection', 'pond', 'garden', 'zen', 'shrine', 'river'],
+  },
+  {
+    id: 'toi-gian',
+    // 🔑 Nhóm này giải đúng bài toán KHÓ NHẤT của khung 9:16: chỗ đặt chữ.
+    // Hình tối giản có sẵn mảng trống lớn, `detail` thấp tự nhiên — tức nó
+    // qua cổng "ảnh có chỗ đặt chữ không" mà không cần may mắn. Cũng là nhóm
+    // DUY NHẤT không phụ thuộc người/địa danh nên không bao giờ lạc kênh.
+    vi: 'Tối giản · ẩn dụ — hình khối, khoảng trống, siêu thực',
+    queries: [
+      'minimal dark abstract shape',
+      'surreal conceptual dark minimal',
+      'minimalist japanese dark wall',
+    ],
+    must: [
+      'minimal',
+      'minimalism',
+      'minimalist',
+      'abstract',
+      'surreal',
+      'concept',
+      'conceptual',
+      'symbol',
+      'symbolic',
+      'geometry',
+      'geometric',
+      'shape',
+      'simple',
+      'texture',
+      'wall',
+    ],
+  },
+  {
+    id: 'thien-nhien-toi',
+    // ⚠️ Tách khỏi `mo-mit` dù cả hai đều có sương: `mo-mit` là MẶT SƯƠNG che
+    // tầm nhìn (mưa trên kính, sương mù dày), còn nhóm này là CẢNH LỚN dữ dội
+    // — bão, rừng đêm, núi trong mây. Gộp thì `must` phải nới rộng tới mức
+    // mọi ảnh thiên nhiên đều lọt, đúng cái bẫy cổng liên quan sinh ra để chặn.
+    vi: 'Thiên nhiên u tối — bão, rừng đêm, núi trong mây',
+    queries: [
+      'dark stormy sky landscape',
+      'dark forest night moody',
+      'asia mountain night dark clouds',
+    ],
+    must: [
+      'storm',
+      'stormy',
+      'thunder',
+      'lightning',
+      'cloud',
+      'clouds',
+      'forest',
+      'woods',
+      'tree',
+      'trees',
+      'mountain',
+      'mountains',
+      'landscape',
+      'nature',
+      'sky',
+      'sea',
+      'ocean',
+      'wave',
+      'waves',
+      'desert',
+      'field',
+    ],
   },
 ];
 
@@ -763,6 +923,22 @@ function measureImage(ffmpeg, jpgPath, tmpPng) {
  * Tag Pixabay lặp rất nặng ("sunset, sunset, sunset, mountains, mountains…"),
  * nên phải khử trùng lặp. Tag thuần TẢ nên luật "cấm khen" tự thoả.
  */
+/**
+ * Số thẻ tối đa giữ lại làm mô tả.
+ *
+ * 🔴 Từng để 12 và nó CẮT MẤT PHẦN CÓ NGHĨA NHẤT. Ca bắt được thật: bức
+ * `4851939` có thẻ thô `… person, light, winter, people, forest, thinking,
+ * **silhouette, alone, sad**, nature, gray thinking, …` — ba từ 13·14·15 là ba
+ * từ nói đúng cảm xúc của bức ảnh, và mức 12 chặt ngay trước chúng. Hội đồng
+ * vì thế đọc được "man, trees, dark" rồi phải tự đoán phần còn lại.
+ *
+ * ⚠️ 16 là MỘT LỰA CHỌN, không phải một phép đo: nới nữa thì bắt đầu nuốt thẻ
+ * máy sinh của Pixabay (`gray thinking` · `gray alone`) — nhiễu vô hại nhưng
+ * vô nghĩa. Thà thừa vài thẻ nhiễu còn hơn thiếu thẻ mang nghĩa, vì việc của
+ * caption là để SO với lời đọc chứ không phải để đọc cho xuôi.
+ */
+const CAPTION_MAX_TAGS = 16;
+
 function captionFromTags(tags) {
   const seen = new Set();
   const out = [];
@@ -771,7 +947,7 @@ function captionFromTags(tags) {
     if (!t || seen.has(t)) continue;
     seen.add(t);
     out.push(t);
-    if (out.length >= 12) break;
+    if (out.length >= CAPTION_MAX_TAGS) break;
   }
   return out.join(', ');
 }
@@ -848,6 +1024,14 @@ function passesMetadata(hit, item) {
   const words = new Set([...tags].flatMap((t) => t.split(/[\s-]+/)));
   const hitDeny = DENY_TAGS.find((d) => (d.includes(' ') ? tags.has(d) : words.has(d)));
   if (hitDeny) return `cổng đạo đức: tag "${hitDeny}"`;
+
+  // 👤 Có người nhìn rõ mặt ⇒ phải mang dấu hiệu châu Á. Bóng ngược sáng /
+  // bàn tay thì miễn (không có gương mặt nào để lạc). Xem khối chú thích ở
+  // `PERSON_TAGS` để biết cổng này ĐO GÌ và loại oan cái gì.
+  const has = (list) => list.some((t) => (t.includes(' ') ? tags.has(t) : words.has(t)));
+  if (has(PERSON_TAGS) && !has(FACELESS_TAGS) && !has(ASIA_STRONG)) {
+    return 'có người nhưng không có dấu hiệu châu Á';
+  }
 
   if (item.must?.length) {
     const ok = item.must.some((m) => words.has(m) || tags.has(m));

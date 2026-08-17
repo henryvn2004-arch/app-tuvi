@@ -149,6 +149,16 @@ const PhotoBackdrop: React.FC<{ images: string[] }> = ({ images }) => {
                 height: '100%',
                 objectFit: 'cover',
                 transform: `scale(${scale})`,
+                /*
+                 * Mờ NHẸ — đẩy ảnh ra sau mặt phẳng chữ, đúng lối chiều sâu
+                 * trường ảnh: mắt bám vào thứ nét, mà thứ nét ở đây là CHỮ.
+                 *
+                 * ⚠️ 6px là mức đã cân với `scale` khởi điểm 1,05: blur lấy
+                 * mẫu ra ngoài mép phần tử ~3σ ≈ 18px, còn 1,05 trên khung
+                 * 1080 cho dư 27px mỗi bên. Hạ `scale` xuống 1,0 hoặc nâng
+                 * blur quá ~9px là hở mép trong suốt ở viền khung.
+                 */
+                filter: 'blur(6px)',
               }}
             />
           </AbsoluteFill>

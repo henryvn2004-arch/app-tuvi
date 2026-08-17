@@ -110,7 +110,29 @@ function stableHash(s: string): number {
 }
 
 /**
- * Chọn `n` ảnh nền cho một clip, theo TÔNG.
+ * Số ảnh đầu bảng được đưa vào rổ bốc. Xem `stockBackdrop`.
+ */
+const TOP_K = 5;
+
+/**
+ * Chọn ẢNH NỀN cho một clip, theo TÔNG. **Trả về ĐÚNG MỘT bức.**
+ *
+ * 🔑 VÌ SAO MỘT: bản trước rải 3 bức và cho chúng chuyển tiếp giữa clip. Đo
+ * bằng mắt trên bản render thật thì ba bức cùng một tông vẫn **không ăn nhập
+ * với nhau** — mỗi lần chuyển là một lần mắt phải làm lại việc "đây là cảnh
+ * gì", trong khi thứ đang chạy là CHỮ. Một bức đứng yên dưới lớp Ken Burns
+ * trôi chậm đọc là *một khung hình đang thở*; ba bức nối nhau đọc là *trình
+ * chiếu ảnh*. Vẫn trả `string[]` vì `ScriptSpec.backdrop` là mảng — đổi kiểu
+ * là đụng cả `InsightClip`, không đáng.
+ *
+ * 🔑 VÌ SAO BỐC TRONG TOP-5 chứ không lấy hạng nhất:
+ * Lấy thẳng bức điểm cao nhất thì **mọi clip cùng tông ra cùng một bức** — với
+ * 6 kịch bản insight là chuyện sẽ xảy ra ngay. Bốc trong nhóm đầu bảng giữ
+ * được cả hai: điểm vẫn cao, mà hai clip khác nhau vẫn khác ảnh.
+ *
+ * ⚠️ `score` là mức KHỚP BRIEF (châu Á · moody · tối · ít màu · ít rối),
+ * **không phải "gây cảm xúc mạnh"**. Máy không đo được cảm xúc. Đừng đọc thứ
+ * tự này rộng hơn thế — nó chỉ nói bức nào bám brief hơn.
  *
  * 🔑 Chọn theo BĂM của `seed` (thường là id clip), **không random** — tiền lệ
  * `pickEraForLaso`. Render lại sau sáu tháng phải ra đúng clip đó; random thì
@@ -122,16 +144,12 @@ function stableHash(s: string): number {
  * `stock-upload.mjs` thì đừng ghim tông vào kịch bản dựng tự động**, mới chỉ
  * dùng để xem thử tại chỗ.
  */
-export function stockBackdrop(tone: string, n: number, seed: string): string[] {
+export function stockBackdrop(tone: string, seed: string): string[] {
   const pool = stockByKey('tone', tone);
   if (!pool.length) return [];
-  const start = stableHash(seed) % pool.length;
-  const out: string[] = [];
-  for (let i = 0; i < Math.min(n, pool.length); i++) {
-    const img = pool[(start + i) % pool.length];
-    out.push(img.url || `stock/${img.file}`);
-  }
-  return out;
+  const top = [...pool].sort((a, b) => (b.score ?? 0) - (a.score ?? 0)).slice(0, TOP_K);
+  const img = top[stableHash(seed) % top.length];
+  return [img.url || `stock/${img.file}`];
 }
 
 export const STOCK_COUNT = IMAGES.length;

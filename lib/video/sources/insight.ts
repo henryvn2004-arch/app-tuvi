@@ -432,7 +432,7 @@ const SOURCES: InsightSource[] = [
         ten: 'Tử Vi Công Sở & Hướng Nghiệp',
         tenDoc: 'Tử Vi Công Sở và Hướng Nghiệp',
       }),
-      music: 'sang-sua.wav',
+      music: 'u-hoai.wav',
       // BA bức luân phiên, xếp theo đúng mạch nội dung chứ không theo thứ tự
       // tình cờ: Truân (kw03, khởi đầu rối như tơ vò) → Khốn (kw47, gắng mà
       // không thoát) → Càn (kw01, tiến, hành động). Ảnh cuối rơi vào đoạn
@@ -586,14 +586,14 @@ const SOURCES: InsightSource[] = [
         },
       ],
       ...cta('Còn lá số nói gì về cách bạn cãi nhau?', { ten: 'Xem Tuổi Vợ Chồng' }),
-      music: 'cang-thang.wav',
+      music: 'lang-le.wav',
       // Ba bức xếp theo đúng mạch: Khuê (kw38 — hai bên nhìn nhau lệch, chia
       // lìa) → Bĩ (kw12 — trời đất không giao, tắc hẳn, đúng bước im lặng) →
       // Gia Nhân (kw37 — người trong nhà, rơi vào đoạn hạ lửa và câu kết).
       //
-      // 🧪 ĐÃ RENDER THỬ với ảnh stock và bố cục chạy tốt (ghế trống + lá đỏ,
-      // tông `chia-xa`). Đổi sang bằng ĐÚNG một dòng:
-      //     backdrop: stockBackdrop('chia-xa', 3, 'bon-buoc-truoc-khi-roi-di'),
+      // 🧪 ĐÃ RENDER THỬ với ảnh stock và bố cục chạy tốt. Đổi sang bằng ĐÚNG
+      // một dòng — và nay chỉ còn MỘT bức cho cả clip, không rải ba nữa:
+      //     backdrop: stockBackdrop('chia-xa', 'bon-buoc-truoc-khi-roi-di'),
       // ⛔ NHƯNG CHƯA ĐỔI, và lý do không phải thẩm mỹ: kho ảnh chưa đẩy lên
       // Storage nên `stockBackdrop` còn trả đường dẫn trong `remotion/public/
       // stock/` — thư mục NGOÀI git. Ghim vào đây thì lượt dựng trên Actions
@@ -755,7 +755,7 @@ const SOURCES: InsightSource[] = [
         },
       ],
       ...cta('Còn lá số nói gì về tiền của bạn?', { ten: 'Tử Bình Bát Tự' }),
-      music: 'don-dap.wav',
+      music: 'u-hoai.wav',
       // Ích (kw42 — thêm vào) → Tổn (kw41 — hao đi) → Tiết (kw60 — biết dừng,
       // rơi đúng đoạn payoff). Cặp Tổn/Ích là cặp quẻ kinh điển về được–mất.
       backdrop: [QUE('49-kw42.png'), QUE('35-kw41.png'), QUE('19-kw60.png')],
@@ -830,7 +830,7 @@ const SOURCES: InsightSource[] = [
         },
       ],
       ...cta('Bạn đang ở tình thế nào?'),
-      music: 'cang-thang.wav',
+      music: 'lang-le.wav',
       hashtags: ['kinhdich', 'bettac', 'coHoc', 'tuvi'],
     },
   },

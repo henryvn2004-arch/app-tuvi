@@ -236,6 +236,109 @@ mô tả**, và bảng thời gian còn nói clip có **"nền xanh đậm"** tr
 
 ---
 
+## 🎞️ Tuyển lại kho theo BRIEF + một-ảnh-một-clip (2026-08-17, cùng PR)
+
+Henry xem bản render đầu (ghế trống + lá đỏ, sáng) rồi ra brief: **ưu tiên châu
+Á** (app cho người Việt) · cinematic moody 70% / retro 20% / huyền bí điểm nhấn ·
+tối, tương phản cao, tối giản, chừa chỗ đặt chữ · loại sáng-vui-nhiều-màu, nền
+lộn xộn. Vòng sau chốt thêm: **có người thì phải là người châu Á**, thêm nhóm
+*tối giản* + *thiên nhiên u tối*, **mỗi clip MỘT ảnh**, blur nhẹ nền, nhạc lặng.
+
+### 🔑 Chỗ hỏng là RỔ ỨNG VIÊN, không phải trọng số điểm
+Lượt tuyển theo brief đầu ra **25% châu Á** dù đã cộng +45 điểm cho thẻ châu Á.
+Tôi suýt đi chỉnh trọng số. Căn nguyên thật: `SCREEN_CAP=40` bị **truy vấn ĐẦU
+TIÊN lấp đầy**, mà truy vấn nhắm châu Á là truy vấn thứ BA ⇒ nó không bao giờ
+được hỏi tới. ⇒ **hạn ngạch theo TỪNG truy vấn** (`perQuery = ceil(CAP/n)`).
+Sau đó: **41%**. 🔑 Điểm không cứu được khi rổ đã thiếu — sửa ở chỗ GOM, đừng
+sửa ở chỗ CHẤM.
+
+### 👤 Cổng NGƯỜI — chặn cứng, nhưng miễn cho ảnh KHÔNG thấy mặt
+Luật: có thẻ người (`woman · man · portrait · face…`) ⇒ **bắt buộc** có dấu hiệu
+châu Á, không thì loại.
+- 🔑 **Miễn trừ `silhouette · shadow · backlit · hands`**: mục đích của cổng là
+  "đừng để người xem thấy một gương mặt lạc kênh" — bóng ngược sáng thì **không
+  có gương mặt nào để lạc**, mà đó lại đúng là hình moody đắt nhất của brief.
+  Chặn nó là tự tay vứt thứ mình đang đi tìm.
+- 🔑 **Tách `ASIA_STRONG` khỏi `ASIA_TAGS`**: `bamboo` · `lantern` · `rice field`
+  nói về BỐI CẢNH, không nói ai đứng trong khung — một người mẫu Bắc Âu cạnh bụi
+  tre vẫn ra `bamboo`. Chúng chỉ được cộng điểm, KHÔNG được làm bằng chứng.
+- ⚠️ **Cổng này đọc THẺ, không nhìn ảnh** ⇒ loại oan ảnh người châu Á mà tác giả
+  không gắn thẻ quốc gia. Chấp nhận: loại oan chỉ làm rổ nhỏ đi, còn lọt một
+  gương mặt lạc thì hỏng đúng bức người xem nhìn suốt 40 giây.
+- Soi kho CŨ bằng cổng mới: **16/84 (19%) bị loại**, gồm 2 bức **quân phục/lính**
+  trong `hoai-niem` — cổng bắt được miễn phí một lỗi lạc kênh chưa ai nêu.
+
+### 🔴 Bức "lọt cổng" hoá ra là PHÉP ĐO CỦA TÔI SAI — và nó lộ một lỗi thật
+Audit báo 2 bức lọt. Mở thẻ THÔ ra thì cổng **chạy đúng**: bức `4851939` có
+`silhouette` ở vị trí **13**, tức được miễn hợp lệ. Tôi đo trên `caption` đã bị
+`captionFromTags` **cắt ở 12 thẻ**.
+- 🔑 Nhưng chính chỗ đó là lỗi THẬT: **caption là thứ hội đồng đọc**, mà mức 12
+  chặt ngay trước `silhouette, alone, sad` — đúng ba từ nói về cảm xúc bức ảnh.
+  Nâng lên **16** (vá lại 42/94 caption từ API cache, 0 byte tải lại).
+- ⚠️ 16 là một LỰA CHỌN, không phải phép đo: nới nữa thì nuốt thẻ máy sinh
+  (`gray thinking`). Thà thừa thẻ nhiễu còn hơn thiếu thẻ mang nghĩa — việc của
+  caption là để SO với lời đọc, không phải để đọc cho xuôi.
+- 🔑 Bài học lặp: **đo trên bản đã cắt gọn thì đang đo bản cắt, không đo thứ
+  cần đo.** Cùng lớp với `grep "A \|\| B"` đỗ giả đã ghi.
+
+### 📐 MỘT ảnh cho MỘT clip (Henry: *"chuyển sang ảnh khác nó ko ăn nhập"*)
+Bản trước rải 3 bức cùng tông và cho chuyển tiếp. Nhìn bản render thật thì mỗi
+lần chuyển là một lần mắt phải làm lại việc *"đây là cảnh gì"*, trong khi thứ
+đang chạy là CHỮ. Một bức đứng yên dưới Ken Burns trôi chậm đọc là **một khung
+hình đang thở**; ba bức nối nhau đọc là **trình chiếu ảnh**.
+- 🔑 **Bốc trong TOP-5 chứ không lấy hạng nhất**: lấy thẳng bức điểm cao nhất thì
+  **mọi clip cùng tông ra cùng một bức** — với 6 kịch bản insight là chuyện xảy
+  ra ngay. Bốc theo băm trong nhóm đầu bảng giữ được cả điểm cao lẫn khác biệt.
+- ⚠️ **`score` là mức KHỚP BRIEF, KHÔNG phải "gây cảm xúc mạnh".** Máy không đo
+  được cảm xúc. Henry dặn *"ưu tiên ảnh nào tạo emotion nhiều"* — thứ làm được
+  là xếp theo brief rồi nói thẳng hai cái đó không phải một.
+
+### 🎬 Ba mục còn lại của brief — hai cái ĐÃ CÓ SẴN, đừng làm lại
+Đo trên mã trước khi sửa:
+| | Thực trạng |
+|---|---|
+| Chữ trắng / vàng nhạt | ✅ `#F9F4EB` + `#C9A84C`, không phải đụng |
+| Ken Burns chậm | ✅ `scale 1,05→1,18` chạy suốt clip, cố ý không reset mỗi ảnh |
+| **Blur nhẹ nền** | ❌ `blur(18px)` chỉ là `backdropFilter` của `TextPlate` |
+| **Nhạc piano/ambient/sad** | ❌ 4/6 clip dùng bed có TRỐNG 92–104 nhịp/phút |
+- **Blur `6px`** cho ảnh nền — đẩy ảnh ra sau mặt phẳng chữ. ⚠️ Cân với `scale`
+  khởi điểm 1,05: blur lấy mẫu ra ngoài mép ~3σ ≈ 18px, còn 1,05 trên khung 1080
+  dư 27px mỗi bên. Hạ scale về 1,0 hoặc nâng blur quá ~9px là **hở mép trong
+  suốt ở viền khung**.
+- **Hai HỌ nhạc, cố ý không gộp**: có trống (`don-dap`·`cang-thang`·`sang-sua`)
+  cho clip DEMO công cụ — chú thích cũ ghi đúng một quan sát thật *"nhạc trôi
+  lững lờ làm người xem buồn ngủ"*, nhưng nó đo trên clip QUAY MÀN HÌNH, nơi
+  không có gì để cảm nên nhịp phải gánh phần giữ chân. Không trống (`tram-tinh`
+  + 2 bed mới `u-hoai` 52bpm · `lang-le` 46bpm) cho clip INSIGHT: cú đập 104
+  nhịp/phút dưới câu *"bạn thuộc kiểu tổn thương nào"* thì nhạc và lời **đá
+  nhau**. 6 clip insight nay chia đều 3 bed, không clip cạnh nhau nào trùng.
+- ⚠️ Vẫn là **nền tổng hợp** (sin + hài bậc 2/3), nghe gần chuông/pad hơn dây
+  đàn. **Đừng quảng cáo là piano.**
+
+### Verify
+`tsc` 0 · `lint` **0 lỗi / 77 warning = đúng mốc nền** · `prettier` cả cây sạch.
+- **Kho mới: 94 ảnh / 16 nhóm · 11 lượt API** (trần 60) · 1.341 ứng viên bị loại.
+  Trung vị: sáng **51,5** · màu **18,6** · rối **10,2**. 0 trùng id · 94/94 đủ
+  provenance · **0 dính `DENY_TAGS`**.
+- **Cổng NGƯỜI trên thẻ THÔ: 13 bức có mặt người → 13/13 châu Á, 0 lọt.** (81 bức
+  còn lại là vật/cảnh/bóng — không có gương mặt nào để lạc.)
+- **Red-team cổng 15/15 ca** gồm 4 ca phải LOẠI (`woman, portrait, dark` ·
+  `bamboo, woman` · `lantern, girl` · `eyes`) và 4 ca phải NHẬN (`silhouette` ·
+  `shadow` · `hands` · `monk/temple`).
+- Thẻ châu Á toàn kho **41%** (trước 25%). Nhóm cao nhất: `bi-an` 6/6 ·
+  `ngon-den` 6/6 · `co-don` 5/6 · `tinh-lang` 5/6.
+
+### CÒN LẠI
+- ⚠️ **`mo-mit` và `hoai-niem` chỉ lấy được 5/6, và `mo-mit` · `chia-xa` ·
+  `cua-so` · `ghe-trong` có 0 ảnh châu Á.** Sương/ray tàu/ghế hiếm khi được gắn
+  thẻ quốc gia — đây là giới hạn của việc đọc thẻ, không phải lỗi truy vấn.
+- ⚠️ **Vẫn chưa ai NHÌN 94 bức bằng mắt.** Máy gác được: đạo đức · lạc kênh ·
+  liên quan · chỗ đặt chữ · tối/ít màu/ít rối · người-phải-châu-Á. Nó **không**
+  gác được đẹp, "trông có giống ảnh stock rẻ tiền không", và **cảm xúc**.
+- Blur 6px mới soi trên MỘT bản render; chưa soi trên bức sáng nhất kho.
+- Hai bed nhạc mới chưa ai NGHE — luật cũ vẫn áp: mỗi lượt đổi âm thanh phải có
+  người nghe lại.
+
 ## 🏭 Khâu dựng clip lên GitHub Actions — và một phép kiểm TÔI ĐẶT TÊN SAI (2026-08-15, PR này)
 
 Henry hỏi chạy pipeline ở đâu: session Claude Code, routine, hay dựng hẳn hạ

@@ -45,17 +45,35 @@ const NOTE = { C: 130.81, D: 146.83, E: 164.81, F: 174.61, G: 196.0, A: 220.0 };
 const PENTA = [1, 9 / 8, 5 / 4, 3 / 2, 5 / 3];
 
 /**
- * Bốn kiểu, khác nhau ở NHỊP chứ không chỉ ở tốc độ.
+ * Các kiểu, khác nhau ở NHỊP chứ không chỉ ở tốc độ.
  *
- * `don-dap` là kiểu mặc định cho clip demo: clip ngắn trên TikTok cần cảm giác
- * bị thúc, nhạc trôi lững lờ làm người xem thấy buồn ngủ và lướt đi — đã thấy
- * thật ở bản dựng đầu.
+ * 🔑 HAI HỌ, CỐ Ý KHÔNG GỘP — vì hai loại clip đòi hai thứ ngược nhau:
+ *
+ *  · **CÓ TRỐNG** (`don-dap` · `cang-thang` · `sang-sua`) — cho clip DEMO công
+ *    cụ. Chú thích cũ ở đây ghi đúng một quan sát thật: *"clip ngắn trên TikTok
+ *    cần cảm giác bị thúc, nhạc trôi lững lờ làm người xem thấy buồn ngủ và
+ *    lướt đi — đã thấy thật ở bản dựng đầu"*. Quan sát đó GIỮ NGUYÊN giá trị,
+ *    nhưng nó đo trên clip quay màn hình: ở đó không có gì để cảm, chỉ có thao
+ *    tác, nên nhịp phải gánh phần giữ chân.
+ *
+ *  · **KHÔNG TRỐNG** (`tram-tinh` · `u-hoai` · `lang-le`) — cho clip INSIGHT.
+ *    Ở đó nội dung là một câu chạm vào chuyện riêng của người xem, đặt trên
+ *    ảnh tối. Cú đập 92–104 nhịp/phút dưới câu *"bạn thuộc kiểu tổn thương
+ *    nào"* thì nhạc và lời **đá nhau**, và thứ mất đi chính là cái người ta ở
+ *    lại vì nó. Giữ chân ở đây do CHỮ gánh, không do nhịp.
+ *
+ * ⚠️ Đây vẫn là **nền tổng hợp**, không phải piano thật: sóng sin cộng hài
+ * bậc 2/3 nghe gần chuông/pad hơn dây đàn. Đừng quảng cáo là piano.
  */
 const STYLES = {
   'don-dap': { bpm: 104, key: 'D', kick: true, hat: true, arp: 0.5, pad: 0.5, drive: 1.5 },
   'cang-thang': { bpm: 92, key: 'C', kick: true, hat: true, arp: 1, pad: 0.7, drive: 1.35 },
   'sang-sua': { bpm: 96, key: 'G', kick: true, hat: false, arp: 0.5, pad: 0.6, drive: 1.3 },
   'tram-tinh': { bpm: 58, key: 'D', kick: false, hat: false, arp: 4, pad: 1, drive: 1.25 },
+  // Ba kiểu lặng khác GỐC và khác THƯA để 6 clip insight không nghe y hệt
+  // nhau; cùng họ không trống nên đặt cạnh nhau vẫn ra một kênh.
+  'u-hoai': { bpm: 52, key: 'A', kick: false, hat: false, arp: 6, pad: 1.1, drive: 1.2 },
+  'lang-le': { bpm: 46, key: 'C', kick: false, hat: false, arp: 8, pad: 1.15, drive: 1.15 },
 };
 
 /** Sóng có hài — sin thuần nghe quá "điện tử", thêm hài bậc 2/3 cho ấm. */
