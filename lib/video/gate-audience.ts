@@ -57,11 +57,25 @@ export interface ViewerVerdict {
   muonLuu: boolean;
   muonGuiChoAiDo: boolean;
   binhLuan: string | null;
+  /**
+   * Thuật toán có ĐẨY clip này tới người đó không — tức chủ đề có nằm trong
+   * vùng quan tâm của họ không. Xem chú thích ở `AUDIENCE_THRESHOLDS`.
+   */
+  trongTepMucTieu?: boolean;
+}
+
+/** Trần ký tự cổng 1 sẽ chấm — hội đồng phải viết gợi ý NẰM TRONG mức này. */
+export interface AudienceBudget {
+  hookMaxChars: number;
+  sceneMaxChars: number;
 }
 
 export interface AudienceGateResult {
   pass: boolean;
-  /** Tỉ lệ persona xem hết — DỰ BÁO mô phỏng, không phải số đo thật. */
+  /** Số người nằm trong tệp chủ đề — mẫu số THẬT của phép chấm giữ chân. */
+  soTrongTep: number;
+  soXemHetTrongTep: number;
+  /** Tỉ lệ persona xem hết trên CẢ BẢY — giữ lại để đối chiếu, không dùng để chấm. */
   tiLeXemHetDuBao: number;
   tiLeMuonLuu: number;
   tiLeMuonChiaSe: number;
@@ -75,13 +89,55 @@ export interface AudienceGateResult {
   meta: { provider: string; model: string; durationMs: number };
 }
 
-/** Ngưỡng qua cổng. Xem chú thích cuối file về việc hiệu chỉnh. */
+/**
+ * Ngưỡng qua cổng — tính trên TỆP MỤC TIÊU, không trên cả bảy người.
+ *
+ * 🔴 ĐÂY LÀ BẢN VÁ CỦA MỘT NGƯỠNG BẤT KHẢ THI, đo trên lượt khảo sát 24 kịch bản.
+ *
+ * Ngưỡng cũ là `5/7 xem hết`. Nhưng ba chân dung `cuoi-28` (sắp cưới) ·
+ * `kd-42` (chọn ngày khai trương) · `me-33` (dạy con) có mối quan tâm LOẠI TRỪ
+ * NHAU — một clip 30 giây không thể vừa nói chuyện cưới xin vừa nói chuyện khai
+ * trương vừa nói chuyện dạy con. Đọc lý do bỏ trong log thì thấy rõ: cả ba đều
+ * bỏ vì *"nội dung không liên quan đến điều tôi đang tìm"*, không phải vì clip
+ * dở. Cộng thêm `luot-vo-dinh` vốn cố ý khó giữ ⇒ trần thực tế của một clip chủ
+ * đề hẹp là **4/7**, tức ngưỡng 5/7 KHÔNG THỂ ĐẠT dù hook có hay tới đâu.
+ *
+ * Bằng chứng ngược: đúng hai clip qua được cổng trong lượt đó là `nap-am` (mệnh
+ * nạp âm — ai cũng có) và `vi-sao-hay-hoan-lai` (thói trì hoãn — ai cũng dính).
+ * Cả hai đều là chủ đề PHỔ QUÁT. Tức cổng đang đo ĐỘ RỘNG CHỦ ĐỀ chứ không đo
+ * chất lượng clip — mà độ rộng chủ đề là việc của thuật toán phân phối, không
+ * phải thứ viết lại hook sửa được.
+ *
+ * ⚠️ Đây là sửa PHÉP ĐO, không phải hạ chuẩn — đúng lối đã dùng cho
+ * `viral.no-invite` khi nó kêu oan 11/17 (*"nới bằng một tính chất ĐO ĐƯỢC"*).
+ * Chấm lại toàn bộ 24 kịch bản của lượt khảo sát bằng luật mới thì **đúng MỘT
+ * clip đổi kết luận** (`tuong-hop`: 4/7 thô → 4/5 trong tệp → qua); 21 clip
+ * trượt vẫn trượt. Nó không biến cổng thành thủ tục trang trí.
+ *
+ * 🔑 Hai chốt giữ cho luật này không tự tắt đi:
+ *   · `luot-vo-dinh` LUÔN tính là trong tệp — ép ở tầng mã, không hỏi model.
+ *     Đó là phép thử hook nguội duy nhất; miễn cho nó là bỏ luôn cái cổng.
+ *   · Tệp mục tiêu dưới `minTrongTep` ⇒ báo `audience.too-narrow` chứ không cho
+ *     qua. Chủ đề hẹp tới mức không ai chấm được là một kết luận CÓ THẬT.
+ */
 export const AUDIENCE_THRESHOLDS = {
-  /** Số persona (trên 7) phải xem hết. */
-  minXemHet: 5,
-  /** Số persona phải muốn lưu HOẶC gửi cho ai đó. */
+  /** Tỉ lệ người TRONG TỆP phải xem hết. 0,7 × 7 = 5 — giữ đúng mức cũ khi cả bảy đều trong tệp. */
+  tiLeXemHetTrongTep: 0.7,
+  /** Sàn tuyệt đối: dưới ngần này người xem hết thì tỉ lệ đẹp cũng vô nghĩa. */
+  minXemHetTuyetDoi: 3,
+  /** Tệp mục tiêu nhỏ hơn mức này thì mẫu quá mỏng để kết luận. */
+  minTrongTep: 4,
+  /** Số người (trong tệp) phải muốn lưu HOẶC gửi cho ai đó. */
   minLuuHoacChiaSe: 2,
 } as const;
+
+/** Số người trong tệp phải xem hết, suy từ cỡ tệp. */
+export function soXemHetCanCo(soTrongTep: number): number {
+  return Math.max(
+    AUDIENCE_THRESHOLDS.minXemHetTuyetDoi,
+    Math.ceil(soTrongTep * AUDIENCE_THRESHOLDS.tiLeXemHetTrongTep)
+  );
+}
 
 /**
  * Dựng bảng thời gian có mốc giây để model biết "giây thứ mấy" là chỗ nào.
@@ -152,6 +208,18 @@ LUẬT BẮT BUỘC:
    nói chung chung kiểu "nội dung chưa hấp dẫn".
 6. goiYSua phải là một chỉ dẫn CỤ THỂ, viết lại được ngay — nêu rõ sửa câu nào,
    sửa thành đại ý gì. Cấm lời khuyên chung chung như "làm hook hấp dẫn hơn".
+7. trongTepMucTieu — TÁCH BẠCH hai chuyện khác hẳn nhau:
+   · Người này bỏ đi vì clip DỞ (mở đầu nhạt, khó hiểu, không tin, lê thê)
+     → trongTepMucTieu = true. Đây là lỗi của clip.
+   · Người này bỏ đi vì CHỦ ĐỀ không thuộc mối quan tâm của họ (đang tìm chuyện
+     cưới xin mà clip nói chuyện khai trương) → trongTepMucTieu = false. Thuật
+     toán sẽ không đẩy clip này tới họ, nên đây KHÔNG phải lỗi của clip.
+   Xem hết clip ⇒ luôn true. Chân dung "luot-vo-dinh" ⇒ LUÔN true, không có
+   ngoại lệ: người đó là phép thử "clip có giữ được người dưng không".
+8. 🔴 goiYSua PHẢI NẰM TRONG NGÂN SÁCH KÝ TỰ ghi ở cuối phần đề bài. Câu bạn đề
+   nghị sẽ được đưa thẳng cho người viết lại dùng gần như nguyên văn, rồi bị một
+   bộ đếm máy chấm lại. Đề nghị một câu mở đầu dài hơn trần là bạn vừa ra lệnh
+   cho họ trượt — và cả lượt sửa đó mất trắng. Cần hay thì cắt CHỮ, đừng cắt Ý.
 
 Trả về ĐÚNG JSON theo schema, không thêm lời dẫn.`;
 
@@ -169,8 +237,9 @@ const SCHEMA = {
           muonLuu: { type: 'boolean' },
           muonGuiChoAiDo: { type: 'boolean' },
           binhLuan: { type: 'string', nullable: true },
+          trongTepMucTieu: { type: 'boolean' },
         },
-        required: ['id', 'lyDo', 'muonLuu', 'muonGuiChoAiDo'],
+        required: ['id', 'lyDo', 'muonLuu', 'muonGuiChoAiDo', 'trongTepMucTieu'],
       },
     },
     giayRoiRungNang: { type: 'number', nullable: true },
@@ -179,7 +248,10 @@ const SCHEMA = {
   required: ['viewers', 'goiYSua'],
 };
 
-export async function runAudienceGate(spec: ScriptSpec): Promise<AudienceGateResult> {
+export async function runAudienceGate(
+  spec: ScriptSpec,
+  budget?: AudienceBudget
+): Promise<AudienceGateResult> {
   const timeline = buildTimeline(spec);
   const personas = VIEWER_PERSONAS.map((p) => `- ${p.id}: ${p.desc}`).join('\n');
 
@@ -189,11 +261,19 @@ export async function runAudienceGate(spec: ScriptSpec): Promise<AudienceGateRes
       `BẢY NGƯỜI XEM:\n${personas}\n\n` +
       `CLIP (dọc 9:16, xem trên điện thoại):\n\n${timeline}\n\n` +
       `Với mỗi người trong bảy người trên, trả lời: họ lướt đi ở giây thứ mấy ` +
-      `(boQuaOGiay, để null nếu xem hết), vì sao (lyDo), có muốn lưu lại không ` +
+      `(boQuaOGiay, để null nếu xem hết), vì sao (lyDo), chủ đề có thuộc mối ` +
+      `quan tâm của họ không (trongTepMucTieu), có muốn lưu lại không ` +
       `(muonLuu), có muốn gửi cho ai đó không (muonGuiChoAiDo), và họ sẽ bình ` +
       `luận gì nếu có (binhLuan, null nếu không bình luận gì).\n\n` +
       `Sau đó cho biết giây nào bị nhiều người bỏ đi nhất (giayRoiRungNang) và ` +
-      `một chỉ dẫn sửa cụ thể (goiYSua).`,
+      `một chỉ dẫn sửa cụ thể (goiYSua).` +
+      (budget
+        ? `\n\n🔴 NGÂN SÁCH KÝ TỰ — goiYSua PHẢI tôn trọng, đây là trần máy sẽ chấm:\n` +
+          `· câu mở đầu bạn đề nghị: TỐI ĐA ${budget.hookMaxChars} ký tự\n` +
+          `· mỗi câu trong cảnh bạn đề nghị: TỐI ĐA ${budget.sceneMaxChars} ký tự\n` +
+          `Đề nghị dài hơn mức này thì lượt sửa mất trắng, và clip trượt đúng chỗ ` +
+          `bạn vừa bảo họ sửa.`
+        : ''),
     json: true,
     jsonSchema: SCHEMA,
     maxTokens: 2600,
@@ -232,15 +312,41 @@ export async function runAudienceGate(spec: ScriptSpec): Promise<AudienceGateRes
     });
   }
 
+  const daXemHet = (v: ViewerVerdict) => v.boQuaOGiay === null || v.boQuaOGiay === undefined;
+
+  // Trong tệp = model nói có, HOẶC xem hết, HOẶC là người lướt vô định (ép ở
+  // tầng mã — xem chú thích `AUDIENCE_THRESHOLDS`). Thiếu trường thì coi như
+  // TRONG tệp: đoán theo hướng NGHIÊM khắc, model quên khai không được thành
+  // đường lách.
+  const trongTep = viewers.filter(
+    (v) => v.id === 'luot-vo-dinh' || daXemHet(v) || v.trongTepMucTieu !== false
+  );
+  const ngoaiTep = viewers.filter((v) => !trongTep.includes(v));
+
   const n = viewers.length || 1;
-  const xemHet = viewers.filter((v) => v.boQuaOGiay === null || v.boQuaOGiay === undefined).length;
+  const xemHet = viewers.filter(daXemHet).length;
   const luu = viewers.filter((v) => v.muonLuu).length;
   const chiaSe = viewers.filter((v) => v.muonGuiChoAiDo).length;
-  const luuHoacChiaSe = viewers.filter((v) => v.muonLuu || v.muonGuiChoAiDo).length;
+
+  const xemHetTrongTep = trongTep.filter(daXemHet).length;
+  const luuHoacChiaSe = trongTep.filter((v) => v.muonLuu || v.muonGuiChoAiDo).length;
+  const can = soXemHetCanCo(trongTep.length);
 
   if (viewers.length === VIEWER_PERSONAS.length) {
-    if (xemHet < AUDIENCE_THRESHOLDS.minXemHet) {
-      const som = viewers
+    if (trongTep.length < AUDIENCE_THRESHOLDS.minTrongTep) {
+      // KHÔNG cho qua. Chủ đề hẹp tới mức chỉ còn vài người chấm được là một
+      // kết luận có thật, và là thứ phải sửa ở NGUỒN kịch bản chứ không phải ở
+      // câu mở đầu — nên nói thẳng thay vì để nó lẫn vào lỗi giữ chân.
+      issues.push({
+        level: 'block',
+        code: 'audience.too-narrow',
+        message:
+          `Chỉ ${trongTep.length}/${VIEWER_PERSONAS.length} người nằm trong tệp chủ đề ` +
+          `(cần ≥${AUDIENCE_THRESHOLDS.minTrongTep}) — clip nói với một nhóm quá hẹp để đo được.`,
+        fix: 'Mở rộng góc tiếp cận: bắt đầu từ một câu hỏi ai cũng tự hỏi, rồi mới thu về chủ đề riêng.',
+      });
+    } else if (xemHetTrongTep < can) {
+      const som = trongTep
         .filter((v) => typeof v.boQuaOGiay === 'number')
         .sort((a, b) => (a.boQuaOGiay ?? 0) - (b.boQuaOGiay ?? 0))
         .slice(0, 3)
@@ -249,15 +355,23 @@ export async function runAudienceGate(spec: ScriptSpec): Promise<AudienceGateRes
       issues.push({
         level: 'block',
         code: 'audience.low-completion',
-        message: `Chỉ ${xemHet}/${VIEWER_PERSONAS.length} người xem hết (cần ${AUDIENCE_THRESHOLDS.minXemHet}). Bỏ sớm nhất: ${som}`,
+        message:
+          `Chỉ ${xemHetTrongTep}/${trongTep.length} người TRONG TỆP xem hết (cần ${can})` +
+          (ngoaiTep.length
+            ? ` — đã trừ ${ngoaiTep.length} người ngoài tệp chủ đề (${ngoaiTep.map((v) => v.id).join(', ')})`
+            : '') +
+          `. Bỏ sớm nhất: ${som}`,
         fix: parsed?.goiYSua || 'Viết lại câu mở đầu và cắt phần giữa.',
       });
     }
-    if (luuHoacChiaSe < AUDIENCE_THRESHOLDS.minLuuHoacChiaSe) {
+    if (
+      trongTep.length >= AUDIENCE_THRESHOLDS.minTrongTep &&
+      luuHoacChiaSe < AUDIENCE_THRESHOLDS.minLuuHoacChiaSe
+    ) {
       issues.push({
         level: 'block',
         code: 'audience.no-save-share',
-        message: `Chỉ ${luuHoacChiaSe}/${VIEWER_PERSONAS.length} người muốn lưu hoặc gửi cho ai đó — clip thiếu lý do để lan đi.`,
+        message: `Chỉ ${luuHoacChiaSe}/${trongTep.length} người trong tệp muốn lưu hoặc gửi cho ai đó — clip thiếu lý do để lan đi.`,
         fix: 'Thêm một thông tin cụ thể đáng lưu lại, hoặc một điểm khiến người xem nghĩ tới một người quen cụ thể.',
       });
     }
@@ -274,6 +388,8 @@ export async function runAudienceGate(spec: ScriptSpec): Promise<AudienceGateRes
 
   return {
     pass: !issues.some((i) => i.level === 'block'),
+    soTrongTep: trongTep.length,
+    soXemHetTrongTep: xemHetTrongTep,
     tiLeXemHetDuBao: Number((xemHet / n).toFixed(2)),
     tiLeMuonLuu: Number((luu / n).toFixed(2)),
     tiLeMuonChiaSe: Number((chiaSe / n).toFixed(2)),
@@ -286,9 +402,16 @@ export async function runAudienceGate(spec: ScriptSpec): Promise<AudienceGateRes
 }
 
 // ── Về việc hiệu chỉnh ngưỡng ─────────────────────────────────────────────
-// `minXemHet = 5/7` và `minLuuHoacChiaSe = 2/7` hiện là PHỎNG ĐOÁN BAN ĐẦU,
-// chưa đo phân bố. Trước khi tin vào chúng phải chạy cổng trên vài chục kịch
-// bản mẫu (cả tốt lẫn cố ý dở) rồi xem phân bố: nếu gần như cái nào cũng qua
-// thì ngưỡng vô nghĩa, nếu cái nào cũng trượt thì nó chỉ là một cái cổng bị
-// tắt. Đây đúng cách đã làm với thang điểm Ngũ Hành Tên (đo trên lưới 11.200
-// ca trước khi chốt mức).
+// ĐÃ ĐO MỘT LƯỢT (24 kịch bản, khảo sát `gate_only` trên Actions). Phân bố tỉ lệ
+// xem hết THÔ khi đó: 0% ×9 · 14% ×4 · 29% ×4 · 43% ×4 · 57% ×1 · 71% ×1 · 86% ×1
+// ⇒ ngưỡng cũ 5/7 (71%) chỉ có 2/24 clip với tới. Đọc lý do bỏ thì thấy phần lớn
+// là *"chủ đề không liên quan tới tôi"* — tức cổng đang đo độ rộng chủ đề, không
+// đo chất lượng clip. Đó là lý do có `trongTepMucTieu`.
+//
+// ⚠️ Phân bố trên đo lúc VÒNG VIẾT LẠI CÒN HỎNG (model luôn trả thừa 1 cảnh nên
+// gần như mọi bản sửa bị vứt). Nó nói đúng về ngưỡng, nhưng ĐỪNG dùng nó làm mốc
+// so cho lượt sau — lượt sau vòng lặp chạy thật, phân bố sẽ dịch.
+//
+// Việc còn phải làm: sau vài lượt chạy thật, đếm lại xem `audience.too-narrow`
+// có kêu oan không. Nếu nó bắt cả những clip chủ đề bình thường thì lỗi nằm ở
+// chỗ model phân loại `trongTepMucTieu` quá tay, không phải ở ngưỡng 4.

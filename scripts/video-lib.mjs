@@ -121,8 +121,12 @@ export async function chayCong2(runViralLoop, spec, opts = {}) {
       console.log(`   vòng ${r.round}: cổng 1 trượt — ${block.map((i) => i.code).join(', ')}`);
       continue;
     }
+    // In CẢ HAI mẫu số: phần chấm điểm là `trong tệp`, còn `/7` giữ lại để đối
+    // chiếu — nhìn hai số cạnh nhau là biết ngay clip trượt vì DỞ hay vì CHỦ ĐỀ
+    // hẹp, hai chuyện cần hai cách sửa khác hẳn nhau.
     console.log(
-      `   vòng ${r.round}: ${a.pass ? '✅ QUA' : '❌ TRƯỢT'}  ·  xem hết ${Math.round(a.tiLeXemHetDuBao * 100)}% · lưu ${Math.round(a.tiLeMuonLuu * 100)}% · gửi ${Math.round(a.tiLeMuonChiaSe * 100)}%` +
+      `   vòng ${r.round}: ${a.pass ? '✅ QUA' : '❌ TRƯỢT'}  ·  xem hết ${a.soXemHetTrongTep}/${a.soTrongTep} trong tệp` +
+        ` (thô ${Math.round(a.tiLeXemHetDuBao * 100)}%) · lưu ${Math.round(a.tiLeMuonLuu * 100)}% · gửi ${Math.round(a.tiLeMuonChiaSe * 100)}%` +
         (a.giayRoiRungNang != null ? ` · rơi nặng ở ${a.giayRoiRungNang}s` : '')
     );
     for (const i of a.issues) console.log(`      [${i.level}] ${i.code}: ${i.message}`);

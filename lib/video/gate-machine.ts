@@ -133,8 +133,18 @@ const HOOK_BANNED_OPENERS =
  * Clip phải nói về ĐIỀU NGƯỜI XEM SẮP BIẾT VỀ CHÍNH MÌNH, còn công cụ chỉ là
  * đường để họ tự tra. Thao tác nếu có thì để HÌNH kể, đừng để lời đọc kể.
  */
+/*
+ * 🪤 `chọn` phải loại trừ mấy cụm DANH TỪ chứa nó. Lượt khảo sát 24 kịch bản
+ * bắt được clip `kinh-dich` trượt hai vòng liền vì hook *"Bạn có đang mắc kẹt
+ * trong một lựa chọn quan trọng?"* — "lựa chọn" ở đây là DANH TỪ (một quyết
+ * định), không phải lời sai người xem đi bấm cái gì. Đúng lớp lỗi `\bcon\b`
+ * khớp "con vật" đã ghi hai lần trong CLAUDE.md, nay là lần thứ ba.
+ *
+ * ⚠️ Nới bằng cách loại trừ ĐÍCH DANH ba cụm danh từ, KHÔNG bằng cách bỏ `chọn`
+ * ra khỏi bảng: "chọn ngày rồi bấm xem" vẫn phải bị chặn.
+ */
 const HOW_TO_VERBS =
-  /\b(gõ|bấm|nhập|điền|chọn|kéo xuống|cuộn|ấn vào|nhấn|tải app|truy cập|đăng nhập)\b/i;
+  /\b(gõ|bấm|nhập|điền|(?<!lựa )chọn(?! lựa| lọc)|kéo xuống|cuộn|ấn vào|nhấn|tải app|truy cập|đăng nhập)\b/i;
 
 /**
  * Ngôn ngữ DANH TÍNH — thứ làm người xem thấy "đang nói đúng mình".
@@ -144,6 +154,18 @@ const HOW_TO_VERBS =
  * "của bạn" duy nhất trong 20 giây là chưa đủ để tạo cảm giác đó.
  */
 const IDENTITY_WORDS = /\b(bạn|mình|tôi|của bạn|bạn thuộc|vì sao bạn|tại sao bạn)\b/gi;
+
+/**
+ * Số lần tối thiểu phải nhắc tới người xem, suy từ số cảnh.
+ *
+ * 🔑 Export ra vì vòng viết lại cần biết con số này TRƯỚC khi viết, không phải
+ * sau khi trượt. Lượt khảo sát có `kim-lau` và `bon-buoc-truoc-khi-roi-di` trượt
+ * `viral.no-identity` ở đúng vòng cuối — model không có cách nào biết ngưỡng nếu
+ * không ai nói, nên nó viết một bản gọn gàng rồi chết vì thiếu chữ "bạn".
+ */
+export function minIdentityHits(sceneCount: number): number {
+  return Math.max(3, Math.ceil(sceneCount * 0.8));
+}
 
 /**
  * Lời mời tương tác — thứ đẻ ra comment/share, tín hiệu xếp hạng mạnh nhất.
@@ -364,7 +386,7 @@ function checkViralShape(spec: ScriptSpec, issues: GateIssue[]) {
 
   // 2. Ngôn ngữ danh tính — "đang nói đúng mình".
   const idHits = (narration.match(IDENTITY_WORDS) ?? []).length;
-  const minId = Math.max(3, Math.ceil(spec.scenes.length * 0.8));
+  const minId = minIdentityHits(spec.scenes.length);
   if (idHits < minId) {
     issues.push({
       level: 'block',
