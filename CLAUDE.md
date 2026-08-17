@@ -113,18 +113,123 @@ hy sinh ảnh. Nay `0,64 → 0,20`, tương phản do **`TextPlate`** ôm riêng
 6 mẫu là quá mỏng để rút cây phân loại — lấy TÔNG từ tập đóng, CHỦ ĐỀ từ miền
 nội dung site.
 
+---
+
+## 🧺 Kho ảnh THẬT + vá `buildTimeline`: hội đồng cuối cùng cũng nhìn thấy hình (2026-08-17, PR này)
+
+Henry đặt `PIXABAY_API_KEY` xong. Theo đúng lệnh tự đặt ở mục trên: **gọi API
+thật + đọc điều khoản TRƯỚC, viết script SAU**. Cả hai bước đều đổi quyết định.
+
+### 🔐 Điều khoản đọc tận nơi — "tải về trước" là BẮT BUỘC, không phải tối ưu
+Nguyên văn `pixabay.com/api/docs/`: *"permanent hotlinking of images (using
+Pixabay URLs in your app) is **not allowed**. If you intend to use the images,
+please **download them to your server first**."* ⇒ Lập luận cũ của mục trên
+(*"tải trước là ràng buộc CẤU TRÚC"*) đúng, nhưng **lý do mạnh hơn hẳn nó tưởng**:
+đây là điều kiện dùng, không phải chuyện bền vững kỹ thuật.
+- Cộng thêm: `webformatURL` **hết hạn sau 24 giờ** ⇒ dán URL Pixabay vào
+  `ScriptSpec` vừa vi phạm vừa chết sau một ngày.
+- *"requests must be cached for 24 hours"* ⇒ script cache phản hồi xuống đĩa.
+  *"Systematic mass downloads are not allowed"* ⇒ trần cứng `MAX_REQUESTS=60`,
+  chạy tuần tự, có nghỉ, **cố ý không có `schedule`**.
+- **Ghi công KHÔNG bắt buộc** ở đây: tài liệu chỉ "kindly request" nêu nguồn
+  *khi hiển thị KẾT QUẢ TÌM KIẾM* — clip không phải kết quả tìm kiếm. Vẫn lưu đủ
+  provenance trong manifest. (Vẫn loại Unsplash: bên đó ghi công là bắt buộc.)
+
+### 📐 Hình dạng phản hồi — trả lời đúng câu hỏi mục trên treo lại
+| Câu hỏi | Đo được |
+|---|---|
+| `largeImageURL` nằm ở host nào | **`pixabay.com/get/`** (không phải `cdn.`), chuỗi băm dài |
+| Trường mô tả | **KHÔNG có caption**. Chỉ `tags` — chuỗi phẩy, **lặp rất nặng** (`sunset, sunset, sunset…`) |
+| Trường lọc chưa biết | **`isAiGenerated` · `isLowQuality` · `isGRated` · `noAiTraining`** — dùng làm cổng lọc |
+- 🔴 **Trần độ phân giải 1280px**: khoá này KHÔNG có full API access (`fullHDURL`
+  / `imageURL` vắng mặt). Ảnh dọc về **853×1280** cho khung **1080×1920** ⇒ phóng
+  **1,5×**. Chấp nhận được vì nền nằm dưới lớp phủ + `TextPlate`, nhưng **đây là
+  giới hạn thật, đừng quảng cáo là ảnh gốc**.
+
+### 🔴 Hai lỗi nội dung mà LỌC KỸ THUẬT KHÔNG bắt được — cả hai lộ ở lượt chạy thật
+1. **Truy vấn "lonely person walking alone" trả về 4 bức chân dung NGƯỜI VÔ GIA
+   CƯ** (`homeless, poverty, poor`), và cả 4 **qua sạch mọi phép lọc** (đủ tối,
+   đủ dọc, không phải AI, G-rated). Ghép dưới câu *"bạn thuộc kiểu tổn thương
+   nào"* thì ảnh + chữ đọc thành **khẳng định VỀ CHÍNH NGƯỜI TRONG ẢNH** — đúng
+   ranh giới mục trên đã chốt. ⇒ `DENY_TAGS`, **cổng CHẶN không có ngưỡng**.
+2. **Pixabay xếp theo ĐỘ PHỔ BIẾN, không theo ĐỘ KHỚP** — hết ảnh hợp đề tài là
+   nó lặng lẽ trôi sang ảnh đẹp-mà-lạc-đề: `chia-xa` → *cinema, valencia,
+   movies*; `nang-am` → một con **MÈO**; `suy-tu` → **hạt cà phê rang**.
+   ⇒ mỗi tông khai `must[]`, ảnh phải mang ≥1 tag thuộc chủ đề.
+- 🪤 Khớp theo **TỪ**, không phải chuỗi con — nếu không thì `war` ăn vào **warm**,
+  `poor` ăn vào **poorly**, `grave` ăn vào **gravel**. Đúng lớp lỗi `\bcon\b`
+  khớp "con vật" đã ghi. Red-team 4/4 ca biên đều KHÔNG chặn oan.
+- ⚠️ **Cổng liên quan nâng sàn, KHÔNG thay được mắt người**: con mèo VẪN qua vì
+  nó thật sự có tag `window, curtain`. Đừng đọc "84/84 đạt" thành "84 bức đẹp".
+
+### 🖼️ Đo độ sáng — và soi trên bản 6KB thay vì bản 180KB
+Tiêu chí *"ảnh có chỗ đặt chữ không"* mục trên nêu ra nay **chạy thật**: giải mã
+ảnh về xám 64px, lấy dải giữa khung (nơi `TextPlate` ngồi), tính độ sáng.
+- **Không thêm một gói phụ thuộc nào**: ffmpeg (bản đi kèm Playwright) giải JPEG
+  → PNG xám, rồi `zlib` có sẵn của Node giải PNG. 🪤 Bản ffmpeg đó **thiếu muxer
+  `rawvideo` và protocol `pipe:`** — phải đi đường `image2pipe` + `file:` + xuất
+  PNG. Mất 4 lượt thử mới ra, ghi lại để khỏi dò lại.
+- 🔑 **Soi trên `previewURL` (5–8KB) rồi mới tải bản lớn**: so 8 cặp
+  preview↔large, **sai lệch tuyệt đối trung bình 0,19** trên thang 0–255 — tức
+  bằng nhau. Nhờ vậy loại bức quá sáng khi mới tốn ~6KB thay vì ~180KB: lọc kỹ
+  hơn **và** đúng tinh thần "không tải ồ ạt". Trước khi soi trước: 73/84 đạt;
+  sau: **84/84**, và `ghe-trong` từ 2/6 lên 6/6.
+- ⚠️ `BRIGHT_MAX=165` gắn với lớp phủ `0,20` + `TextPlate` HIỆN NAY. Đổi hai thứ
+  đó thì **đo lại**, đừng chỉnh theo cảm giác.
+
+### 🔴 Vá `buildTimeline` — và A/B chứng minh căn nguyên mục trên chẩn ĐÚNG
+`lib/video/stock-catalog.ts` (mới) tra mô tả; `gate-audience.ts` nay nêu nền,
+nêu `accent`, và **hết in URL thô**. Đo trên kịch bản THẬT, chặn `llmTextFull`
+để bắt đúng chuỗi gửi lên model, đối chứng bằng `git worktree` ở bản trước vá:
+
+| Clip | | Trước | Sau |
+|---|---|---:|---:|
+| `bon-buoc-truoc-khi-roi-di` | dòng "NHÌN THẤY" **khác nhau** | **3**/25 | **25**/25 |
+| | nhắc `backdrop` | **0** | 1 |
+| `ba-the-be-tac` | **URL thô** lọt vào prompt | **5** | **0** |
+
+⇒ *"kênh hình có phương sai bằng không"* không phải suy luận: **25 cảnh chỉ ra 3
+mô tả**, và bảng thời gian còn nói clip có **"nền xanh đậm"** trong khi clip có
+3 bức tranh nền. Hội đồng bị bảo là clip chỉ có chữ trên nền phẳng, rồi than
+đúng câu đó.
+- 🔑 Nhánh không tra được mô tả trả **"CHƯA CÓ MÔ TẢ — đừng phán đoán gì"**, cố
+  ý KHÔNG trả URL: model không đọc URL thành hình, nó chỉ bịa. Nói "không biết"
+  thì hội đồng biết mình thiếu dữ kiện; đưa URL thì nó tưởng mình có.
+
+### Verify
+`tsc` 0 · `lint` **0 lỗi / 77 warning = đúng mốc nền** · `prettier` cả cây sạch ·
+`node --check` cả hai script.
+- **Kho thật: 84 ảnh / 14 nhóm, 14/14 nhóm đạt 6/6 đặt-chữ-được**, độ sáng
+  8,1–163,2 (trần 165), **14 lượt gọi API** (trần 60), 60 ứng viên bị loại.
+  Manifest: 84/84 đủ provenance · 0 trùng id · **0 ảnh dính `DENY_TAGS`**.
+- **Chạy lại = no-op cho cả 14 nhóm** (idempotent), nhờ cache 24h + bỏ qua id đã có.
+- **5/5 nhánh `describeImage`** đúng: đường dẫn kho · URL Storage · tranh quẻ ·
+  không biết · caption có sẵn. `stockByKey` chỉ trả ảnh `textSafe`.
+- **`stock-upload.mjs` 4 nhánh TỪ CHỐI** đúng mã thoát: thiếu khoá → 1 · thiếu
+  file trên đĩa → 1 (soát TRƯỚC khi đẩy byte nào) · `--dry-run` → 0, không gọi
+  mạng · đã có `url` → 0.
+
 ### CÒN LẠI
-- 🔴 **Chưa chạy được lượt nhập kho nào** — thiếu `PIXABAY_API_KEY` trong
-  environment. **Việc đầu tiên của phiên sau**: gọi MỘT lượt Pixabay thật, in
-  cấu trúc phản hồi (`largeImageURL` nằm trên `pixabay.com/get/` hay
-  `cdn.pixabay.com`? tên trường tag/metadata?) RỒI MỚI viết script. Viết trước
-  rồi đoán hình dạng phản hồi là đặt cược nhầm chỗ.
-- **Hai bug đã xác nhận trong `buildTimeline`, chưa vá**: `backdrop` không hề
-  được nhắc (4 clip bị chấm như không có nền) · 5 cảnh `image` in **URL thô**
-  thay vì mô tả (`Ảnh: ${sc.visual.src}`). `accent` và quầng sáng cũng vắng mặt.
-- **Vòng lặp chưa có cần gạt thứ hai**: cần mã lỗi `visual.mismatch` + hành động
-  ĐỔI ẢNH. `rewriteSpec` hiện chỉ viết lại chữ ⇒ chê hình mà sửa chữ là tái lập
-  đúng lỗi vừa mổ.
+- 🔴 **Kho CHƯA nối vào clip nào** — `stock-upload.mjs` cần `SUPABASE_SERVICE_KEY`,
+  không có trong container này, nên **đường đẩy THÀNH CÔNG chưa chạy lượt nào**
+  (mới chứng minh các nhánh từ chối). Việc tay Henry: tạo bucket `stock` (công
+  khai) rồi chạy `node scripts/stock-upload.mjs` ở máy có khoá. Xong bước đó thì
+  manifest có `url` và kịch bản mới trỏ được vào kho.
+- **Ảnh nằm NGOÀI git** (`remotion/public/stock/`, 28MB, đã vào `.gitignore`) —
+  đúng lối tranh quẻ. Thứ commit là manifest 60KB, đủ để dựng lại kho.
+- **Vòng lặp vẫn chưa có cần gạt thứ hai**: cần mã lỗi `visual.mismatch` + hành
+  động ĐỔI ẢNH. `rewriteSpec` hiện chỉ viết lại chữ ⇒ chê hình mà sửa chữ là tái
+  lập đúng lỗi vừa mổ. **Đây là việc tiếp theo đáng làm nhất** — kho có rồi thì
+  cần gạt mới có chỗ để gạt sang.
+- **6 kịch bản insight vẫn dùng tranh quẻ làm nền**, chưa bức nào đổi sang ảnh
+  stock. Đổi là sửa data thuần trong `insight.ts`, không đụng logic.
+- ⚠️ **Chưa ai NHÌN 84 bức bằng mắt.** Máy chỉ gác được ba thứ: đạo đức (tag),
+  liên quan (tag), chỗ đặt chữ (pixel). Nó **không** gác được đẹp/hợp gu.
+- **Chưa render thử một clip nào với ảnh stock** — chưa có `url` thì chưa render
+  được. Chỗ đáng nhìn đầu tiên: bức sáng nhất kho (`ngon-den/4222263`, L=163,2)
+  trên lớp phủ `0,20`.
+- **Kho B (chủ thể) yếu hơn kho A**: "ghế trống"/"mặt nước" trên kho stock phần
+  lớn là ảnh nội thất và ảnh giọt nước macro. Qua cổng nhưng nhạt.
 - **Đừng hứa việc này cứu 17 clip trượt** — phần lớn trượt vì CHỮ.
 - `0,20` mới soi trên MỘT bức; phải soi lại trên bức SÁNG NHẤT trong kho.
 - Chưa đụng `PhotoScene` (cảnh ảnh riêng, có dải tối riêng, cơ chế khác).

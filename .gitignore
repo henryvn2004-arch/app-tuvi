@@ -54,3 +54,9 @@ remotion/.remotion/
 
 # Ảnh tải về từ Storage để render — sinh lại được, không commit.
 remotion/public/img-cache/
+
+# Kho ảnh nền tải từ Pixabay (~28MB cho 84 bức). KHÔNG commit — thứ commit là
+# `lib/video/stock-manifest.json`, đủ để dựng lại kho bằng
+# `node scripts/stock-ingest.mjs`. Cùng lối với tranh quẻ: file ảnh nằm ở
+# Supabase Storage, repo chỉ giữ địa chỉ + provenance.
+remotion/public/stock/

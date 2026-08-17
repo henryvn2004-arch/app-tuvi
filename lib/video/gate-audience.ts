@@ -28,6 +28,7 @@
 import { llmTextFull } from '@/lib/llm/complete';
 import { parseLlmJson } from '@/lib/api/tool-helpers';
 import { type ScriptSpec, estimateSpeechSeconds } from './script-spec';
+import { describeImage } from './stock-catalog';
 import type { GateIssue } from './gate-machine';
 
 /**
@@ -147,6 +148,35 @@ function buildTimeline(spec: ScriptSpec): string {
   const lines: string[] = [];
   let t = 0;
 
+  /**
+   * NỀN CLIP — trước đây KHÔNG hề được nhắc trong bảng thời gian.
+   *
+   * 🔴 Đây là bug nặng nhất của cổng 2, không phải chuyện thiếu chi tiết: 4/6
+   * kịch bản insight có `backdrop`, tức hội đồng đã chấm chúng NHƯ THỂ clip
+   * chỉ có chữ trên nền phẳng — rồi than đúng câu đó. Lời than "chỉ có chữ
+   * trên nền xanh" phần lớn là do bảng thời gian nói vậy, không phải do clip.
+   */
+  const bg = spec.backdrop ?? [];
+  const bgDesc = bg.map((src) => describeImage(src));
+  const hasBg = bg.length > 0;
+  if (hasBg) {
+    lines.push(
+      `NỀN CHẠY SUỐT CLIP — ${bg.length} bức ảnh chụp thật, luân phiên chậm, ` +
+        `có hiệu ứng phóng nhẹ (Ken Burns), phủ một lớp tối mỏng cho chữ đọc được:\n` +
+        bgDesc.map((d, i) => `   ${i + 1}. ${d}`).join('\n')
+    );
+  }
+
+  /** Nền của MỘT cảnh chữ — phụ thuộc clip có ảnh nền hay không. */
+  const typoBase = hasBg
+    ? 'Chữ lớn giữa màn hình, sáng dần theo nhịp đọc, đặt trên một khối nền mờ ' +
+      'viền vàng nổi trên bức ảnh nền đang chạy.'
+    : 'Chữ lớn phủ giữa màn hình, sáng dần theo nhịp đọc, nền xanh đậm phẳng.';
+
+  /** `accent` = cụm chữ được tô VÀNG. Trước đây không bao giờ tới hội đồng. */
+  const withAccent = (base: string, accent?: string) =>
+    accent ? `${base} Cụm "${accent}" tô vàng nổi bật.` : base;
+
   const push = (label: string, text: string, visual: string) => {
     const d = estimateSpeechSeconds(text);
     lines.push(
@@ -157,20 +187,32 @@ function buildTimeline(spec: ScriptSpec): string {
     t += d;
   };
 
-  push('MỞ ĐẦU', spec.hook, 'Chữ lớn hiện ngay giữa màn hình trên nền xanh đậm.');
+  push(
+    'MỞ ĐẦU',
+    spec.hook,
+    hasBg
+      ? `Chữ lớn hiện ngay, trên khối nền mờ đặt giữa bức ảnh nền (${bgDesc[0]}).`
+      : 'Chữ lớn hiện ngay giữa màn hình trên nền xanh đậm.'
+  );
 
   spec.scenes.forEach((sc, i) => {
     let visual: string;
     if (sc.visual.kind === 'screen') {
       visual = `Quay màn hình thật của công cụ trên điện thoại${sc.visual.label ? ` — ${sc.visual.label}` : ''}.`;
     } else if (sc.visual.kind === 'image') {
-      visual = `Ảnh: ${sc.visual.caption ?? sc.visual.src}`;
+      visual = withAccent(
+        `Ảnh chụp chiếm cả khung, phóng chậm: ${describeImage(sc.visual.src, sc.visual.caption)}.`,
+        sc.visual.accent
+      );
     } else if (sc.visual.kind === 'typo') {
       // Hội đồng người xem chấm theo thứ họ NHÌN THẤY — mô tả sai loại cảnh
       // là họ chấm một clip khác với clip sắp render.
-      visual = 'Chữ lớn phủ giữa màn hình, sáng dần theo nhịp đọc, nền xanh đậm.';
+      visual = withAccent(typoBase, sc.visual.accent);
     } else {
-      visual = `Thẻ chữ: ${sc.visual.heading ?? ''} ${sc.visual.body ?? ''}`.trim();
+      visual = withAccent(
+        `Thẻ chữ: ${sc.visual.heading ?? ''} ${sc.visual.body ?? ''}`.trim(),
+        sc.visual.accent
+      );
     }
     const d = sc.forceSeconds ?? estimateSpeechSeconds(sc.text);
     lines.push(
@@ -181,9 +223,18 @@ function buildTimeline(spec: ScriptSpec): string {
     t += d;
   });
 
-  push('KẾT', spec.cta, 'Thẻ chữ kèm logo và tên miền.');
+  push(
+    'KẾT',
+    spec.cta,
+    hasBg
+      ? 'Thẻ chữ kèm logo và tên miền, vẫn trên bức ảnh nền.'
+      : 'Thẻ chữ kèm logo và tên miền.'
+  );
 
-  lines.push(`\n(Toàn clip dài ${t.toFixed(1)} giây. Có phụ đề chạy suốt. ${spec.music ? 'Có nhạc nền nhẹ dưới giọng đọc.' : 'KHÔNG có nhạc nền.'})`);
+  lines.push(
+    `\n(Toàn clip dài ${t.toFixed(1)} giây. Có phụ đề chạy suốt. ` +
+      `${spec.music ? 'Có nhạc nền nhẹ dưới giọng đọc.' : 'KHÔNG có nhạc nền.'})`
+  );
   return lines.join('\n\n');
 }
 
