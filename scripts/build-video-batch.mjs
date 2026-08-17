@@ -185,8 +185,7 @@ const nInsight = jobs.length - nDemo;
 console.log(`\n📹 Dựng ${jobs.length} clip: ${nDemo} tool-demo · ${nInsight} insight`);
 console.log(`   ${jobs.map((j) => j.id).join(' · ')}`);
 console.log(`   nguồn quay : ${BASE}`);
-// Cổng 2 CHỈ có trên đường tool-demo — xem chú thích ở nhánh dựng bên dưới.
-console.log(`   cổng 2     : ${NO_AUDIENCE ? 'BỎ QUA' : 'bật'} (chỉ áp cho tool-demo)`);
+console.log(`   cổng 2     : ${NO_AUDIENCE ? 'BỎ QUA' : 'bật'}`);
 console.log(`   ngân sách  : ${BUDGET_MIN} phút\n`);
 
 if (DRY) {
@@ -243,14 +242,13 @@ for (const job of jobs) {
         ...(NO_AUDIENCE ? ['--no-audience'] : []),
       ]);
     } else {
-      // Clip insight: không quay gì, đi thẳng cổng 1 → giọng đọc → render.
+      // Clip insight: không quay gì, đi thẳng cổng 1 → cổng 2 → giọng → render.
       //
-      // ⚠️ CỐ Ý KHÔNG truyền `--require-voice` và `--no-audience`:
-      //  · `gen-insight.mjs` LUÔN dừng khi TTS hỏng (không có nhánh fail-soft),
-      //    vì clip này thuần chữ + tiếng — một bản câm không còn gì để duyệt,
-      //    khác `gen-video` nơi vẫn xem được bố cục bản quay màn hình.
-      //  · Nó chưa có cổng 2. Truyền một cờ nó không đọc thì cờ bị bỏ qua IM
-      //    LẶNG, tạo cảm giác an toàn giả — đúng thứ nguy hiểm hơn là không có.
+      // ⚠️ CỐ Ý KHÔNG truyền `--require-voice`: `gen-insight.mjs` LUÔN dừng khi
+      // TTS hỏng (không có nhánh fail-soft), vì clip này thuần chữ + tiếng —
+      // một bản câm không còn gì để duyệt, khác `gen-video` nơi vẫn xem được bố
+      // cục bản quay màn hình. Truyền một cờ script không đọc thì nó bị bỏ qua
+      // IM LẶNG, tạo cảm giác an toàn giả.
       //
       // 💾 `--crf`: BẮT BUỘC ở đường tự động, không phải chỉnh cho nhẹ máy.
       // Đo thật: ở CRF mặc định (18) clip insight ra ~1,19 MB/giây, tức chạm
@@ -260,7 +258,14 @@ for (const job of jobs) {
       // CRF 26 đo được 0,15 MB/giây (91,6s → 13,7MB) — thừa chỗ.
       // 🔑 Và đây KHÔNG phải hạ chất lượng lén: cả bốn clip Henry đã xem và
       // duyệt đều render ở đúng CRF này.
-      run('node', ['scripts/gen-insight.mjs', '--id', tool, '--crf', CRF]);
+      run('node', [
+        'scripts/gen-insight.mjs',
+        '--id',
+        tool,
+        '--crf',
+        CRF,
+        ...(NO_AUDIENCE ? ['--no-audience'] : []),
+      ]);
     }
 
     // 3. Soi lại file. Bắt được: mất track hình, mất HẲN âm thanh, clip cụt.

@@ -17,13 +17,11 @@
  * và nhịp vẫn duyệt được bằng mắt.
  */
 import { execFileSync } from 'child_process';
-import { existsSync, mkdirSync, mkdtempSync, writeFileSync } from 'fs';
-import { tmpdir } from 'os';
+import { existsSync, mkdirSync, writeFileSync } from 'fs';
 import { join } from 'path';
-import { createRequire } from 'module';
 import { ttsScene, pickVoice } from './tts-clip.mjs';
+import { compileVideoLib, chayCong2 } from './video-lib.mjs';
 
-const require = createRequire(import.meta.url);
 const ROOT = new URL('..', import.meta.url).pathname;
 const REMOTION = join(ROOT, 'remotion');
 
@@ -68,37 +66,17 @@ if (!TOOL) {
 }
 
 // ── Nạp module TS bằng cách biên dịch tại chỗ ─────────────────────────────
-// Cùng lối `scripts/gen-que-images.mjs`: gọi `tsc` CLI chứ không dùng API biên
-// dịch trong JS (TypeScript 7 là bản port native, API đó đã biến mất).
-// `--ignoreConfig` là BẮT BUỘC — nêu tên file trên dòng lệnh trong khi cwd có
-// `tsconfig.json` thì tsc báo TS5112 rồi bỏ cuộc.
-const outDir = mkdtempSync(join(tmpdir(), 'video-'));
-execFileSync(
-  join(ROOT, 'node_modules/.bin/tsc'),
-  [
-    '--ignoreConfig',
-    '--module',
-    'commonjs',
-    '--target',
-    'es2022',
-    '--skipLibCheck',
-    '--esModuleInterop',
-    '--outDir',
-    outDir,
-    join(ROOT, 'lib/video/script-spec.ts'),
-    join(ROOT, 'lib/video/gate-machine.ts'),
-    join(ROOT, 'lib/video/sources/tool-demo.ts'),
-  ],
-  { stdio: 'inherit' }
-);
+// Phần biên dịch + hook alias `@/` nằm ở `scripts/video-lib.mjs` để hai script
+// dựng clip (tool-demo và insight) dùng CHUNG một bản — hai khối tsc chép tay
+// là hai bản sẽ trôi khỏi nhau, đúng lớp lỗi repo này đã trả giá nhiều lần.
+const { outDir, load } = compileVideoLib(['lib/video/sources/tool-demo.ts']);
 
-const { buildToolDemoSpec, getToolDemoSource } = require(join(outDir, 'sources/tool-demo.js'));
-const { runMachineGate } = require(join(outDir, 'gate-machine.js'));
-const { estimateSpeechSeconds, spokenCta, spokenSceneText } = require(
-  join(outDir, 'script-spec.js')
-);
+const { buildToolDemoSpec, getToolDemoSource } = load('video/sources/tool-demo.js');
+const { runMachineGate } = load('video/gate-machine.js');
+const { runViralLoop } = load('video/viral-loop.js');
+const { estimateSpeechSeconds, spokenCta, spokenSceneText } = load('video/script-spec.js');
 
-const spec = buildToolDemoSpec(TOOL);
+let spec = buildToolDemoSpec(TOOL);
 const source = getToolDemoSource(TOOL);
 if (!spec || !source) {
   console.error(`❌ Chưa có kịch bản cho "${TOOL}" trong lib/video/sources/tool-demo.ts`);
@@ -119,14 +97,13 @@ if (!g1.pass) {
 }
 
 // ── Cổng 2 ────────────────────────────────────────────────────────────────
-if (NO_AUDIENCE) {
-  console.log('\n── CỔNG 2 · BỎ QUA (--no-audience) ──────────');
-  console.log('   ⚠️ Clip chưa qua hội đồng người xem — chỉ dùng để duyệt bố cục.');
-} else {
-  console.log('\n── CỔNG 2 · hội đồng người xem ──────────────');
-  console.log('   ⚠️ CHƯA NỐI: cần khoá model (GEMINI_API_KEY hoặc ANTHROPIC_API_KEY)');
-  console.log('   trong môi trường chạy. Dùng --no-audience để bỏ qua có chủ đích.');
-  process.exit(1);
+// ⚠️ Đứng TRƯỚC khâu giọng đọc là có chủ đích: cổng có thể VIẾT LẠI lời, mà
+// TTS là khoản chi phí biến đổi duy nhất của cả pipeline. Sinh tiếng trước rồi
+// mới chấm là trả tiền đọc cho câu sắp bị bỏ đi.
+{
+  const kq = await chayCong2(runViralLoop, spec, { skip: NO_AUDIENCE });
+  if (!kq.pass) process.exit(1);
+  spec = kq.spec;
 }
 
 if (DRY) {

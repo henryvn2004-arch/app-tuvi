@@ -129,7 +129,12 @@ jobs:
             echo "::warning::Chưa khai GEMINI_API_KEY/ANTHROPIC_API_KEY — bỏ qua cổng 2 (hội đồng người xem). Clip chỉ qua cổng máy."
             ARGS+=(--no-audience)
           fi
-          node scripts/build-video-batch.mjs "${ARGS[@]}" --base "$IN_BASE"
+          # ⚠️ Ngân sách phải THẤP HƠN `timeout-minutes` của job. Mặc định của
+          # script là 300 phút, tức lớn hơn trần 180 của job ⇒ nó không bao giờ
+          # kịp dừng êm: GitHub giết job trước, mất luôn bảng tổng kết và lý do
+          # từng clip. 150 chừa ~30 phút cho cài gói + nộp kho + tải artifact.
+          # Bật cổng 2 làm mỗi clip lâu thêm, nên khoảng chừa này càng đáng giá.
+          node scripts/build-video-batch.mjs "${ARGS[@]}" --base "$IN_BASE" --budget-min 150
 
       # 📤 Nộp clip lên kho (Storage + `media_assets`) để nó sống lâu hơn 14
       # ngày artifact. Đi qua hàm edge `clip-ingest` nên runner chỉ cầm một
