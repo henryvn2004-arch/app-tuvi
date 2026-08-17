@@ -91,4 +91,36 @@ export function stockByKey(bucket: string, key: string): StockImage[] {
   return IMAGES.filter((i) => i.bucket === bucket && i.key === key && i.textSafe !== false);
 }
 
+/** Băm chuỗi ổn định — cùng clip thì đời nào cũng ra cùng bộ ảnh. */
+function stableHash(s: string): number {
+  let h = 5381;
+  for (let i = 0; i < s.length; i++) h = ((h << 5) + h + s.charCodeAt(i)) >>> 0;
+  return h;
+}
+
+/**
+ * Chọn `n` ảnh nền cho một clip, theo TÔNG.
+ *
+ * 🔑 Chọn theo BĂM của `seed` (thường là id clip), **không random** — tiền lệ
+ * `pickEraForLaso`. Render lại sau sáu tháng phải ra đúng clip đó; random thì
+ * mỗi lượt dựng một clip khác, và không ai đối chiếu được với bản đã duyệt.
+ *
+ * ⚠️ Trả `url` (Storage) nếu đã đẩy kho, KHÔNG thì trả đường dẫn trong
+ * `remotion/public/`. Nhánh thứ hai chỉ chạy được ở MÁY ĐÃ NHẬP KHO — thư mục
+ * đó nằm ngoài git nên trên Actions sẽ không có. Tức: **chưa chạy
+ * `stock-upload.mjs` thì đừng ghim tông vào kịch bản dựng tự động**, mới chỉ
+ * dùng để xem thử tại chỗ.
+ */
+export function stockBackdrop(tone: string, n: number, seed: string): string[] {
+  const pool = stockByKey('tone', tone);
+  if (!pool.length) return [];
+  const start = stableHash(seed) % pool.length;
+  const out: string[] = [];
+  for (let i = 0; i < Math.min(n, pool.length); i++) {
+    const img = pool[(start + i) % pool.length];
+    out.push(img.url || `stock/${img.file}`);
+  }
+  return out;
+}
+
 export const STOCK_COUNT = IMAGES.length;

@@ -590,6 +590,16 @@ const SOURCES: InsightSource[] = [
       // Ba bức xếp theo đúng mạch: Khuê (kw38 — hai bên nhìn nhau lệch, chia
       // lìa) → Bĩ (kw12 — trời đất không giao, tắc hẳn, đúng bước im lặng) →
       // Gia Nhân (kw37 — người trong nhà, rơi vào đoạn hạ lửa và câu kết).
+      //
+      // 🧪 ĐÃ RENDER THỬ với ảnh stock và bố cục chạy tốt (ghế trống + lá đỏ,
+      // tông `chia-xa`). Đổi sang bằng ĐÚNG một dòng:
+      //     backdrop: stockBackdrop('chia-xa', 3, 'bon-buoc-truoc-khi-roi-di'),
+      // ⛔ NHƯNG CHƯA ĐỔI, và lý do không phải thẩm mỹ: kho ảnh chưa đẩy lên
+      // Storage nên `stockBackdrop` còn trả đường dẫn trong `remotion/public/
+      // stock/` — thư mục NGOÀI git. Ghim vào đây thì lượt dựng trên Actions
+      // (checkout sạch, không có thư mục đó) gãy ngay. Chạy
+      // `scripts/stock-upload.mjs` xong thì manifest có `url` và dòng trên
+      // chạy được ở mọi nơi.
       backdrop: [QUE('43-kw38.png'), QUE('56-kw12.png'), QUE('53-kw37.png')],
       hashtags: ['honnhan', 'tamly', 'giadinh', 'selfdiscovery'],
     },
