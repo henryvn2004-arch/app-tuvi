@@ -604,6 +604,33 @@ xác nhận `CLIP_INGEST_SECRET` có ở bước *Dựng clip* và `schedule` v�
 - 🪤 Bẫy cũ vấp lại: `playwright` không resolve khi chạy spec từ scratchpad —
   phải chạy trong cây repo.
 
+### ✅ ĐÃ DEPLOY — và hai rủi ro ngầm chỉ lộ khi đi ĐO SCHEMA
+Hàm edge `clip-ingest` lên **v8, ACTIVE, `verify_jwt:false`**, **đọc ngược bản
+đang chạy** khớp nguyên văn file repo (nếp cố định sau bốn lần *"bản chạy khác
+bản repo"*). Đo trên bản THẬT: `GET` → **405** · sai khoá ở `?job=1` → **401** ·
+không khoá ở `?job=1` → **401** ⇒ chốt khoá đứng **TRƯỚC** nhánh job, không ai
+ghi được `cron_runs` mà không có secret.
+- 🔑 **Hai thứ nhịp tim ngầm dựa vào, và cả hai chỉ biết đúng/sai khi TRA SCHEMA
+  chứ không khi đọc code:** (a) cột `source` có ràng buộc CHECK nào không — nếu
+  nó khoá vào tập cũ `('vercel','edge','pgcron')` thì mọi lượt INSERT trả **502
+  im lặng** và panel vĩnh viễn trống; đo được: `cron_runs` chỉ có **PRIMARY KEY**,
+  không CHECK ⇒ `'actions'` được nhận. (b) `started_at` có `default now()` không
+  — không có thì `duration_ms` không bao giờ tính được; đo được: **có**.
+  `duration_ms` là `integer`, lượt 150 phút = 9 triệu ms, thừa sức.
+- **Diễn lại ĐÚNG hai lượt ghi của hàm edge bằng SQL** (transaction rồi `RAISE`
+  để rollback): `source` giữ **`actions`** chứ không rơi về default `vercel` ·
+  `started_at` tự điền · `duration_ms` có giá trị sau khi chốt · `note` giữ
+  nguyên dấu tiếng Việt. **Verify sau rollback: 0 dòng `actions`, 0 dòng
+  `video-build` còn sót**, prod không đổi một byte.
+- ⚠️ `duration_ms` ra **0** trong phép đo trên là **artefact của Postgres**
+  (`now()` đóng băng trong một transaction), KHÔNG phải lỗi hàm: hàm edge tính
+  `Date.now() - t0` ở JS qua **HAI request HTTP tách rời** nên nó đo thời gian
+  thật. Đừng đọc con số 0 đó thành hỏng.
+- ⏭️ **Lượt ghi THÀNH CÔNG đầu tiên chưa chạy** — cần `CLIP_INGEST_SECRET`, chỉ
+  có trên runner. Phép thử thật là lượt dựng T2 tới; chỗ đáng nhìn nếu hỏng là
+  dòng `cron_runs` có `source='actions'` xuất hiện lúc job bắt đầu (không phải
+  lúc kết thúc).
+
 ### 🪤 Bẫy đã vấp
 - **`import()` một script CLI là CHẠY nó.** Lượt kiểm cú pháp cuối vô ý gọi
   `import('scripts/stock-video.mjs')` → script bắt đầu gọi API Pixabay thật.
