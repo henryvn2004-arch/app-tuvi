@@ -281,6 +281,33 @@ cổng 2 đúng **3/18** ⇒ lượt `--all` hằng tuần luôn có ~16 clip "t
   đọc nhầm thành cổng chặn) · ép `record-tool-demo.mjs` thoát 20 (đã kiểm nó
   thật sự thoát 20) → **vẫn TRƯỢT + exit 1**. Khôi phục sạch, 0 file rác.
 
+### 📈 Lịch TUẦN đẻ ra hai khoản hao — đã ĐO, và CỐ Ý chưa vá
+Runner là bản clone SẠCH nên `out/` rỗng mọi lượt ⇒ lượt `--all` hằng tuần
+**dựng lại từ đầu 5 clip insight đã giao**, dù kịch bản không đổi một chữ.
+
+| khoản hao | mỗi tuần | sau một năm |
+|---|---:|---:|
+| ngân sách dựng (150 phút) | **~41 phút** | — |
+| file mới trong bucket `clips` | **53,4MB** | **~2,8GB** |
+
+`clip-ingest` đặt tên file kèm DẤU THỜI GIAN nên mỗi lượt nộp là một file MỚI;
+dòng `media_assets` thì `merge-duplicates` nên **sổ không nhân đôi**, chỉ trỏ
+sang file mới nhất. File tuần trước thành mồ côi — không hỏng gì, chỉ nằm đó.
+
+- ⛔ **KHÔNG vá bằng "đã có trong kho thì bỏ qua"** — đúng lý do đã ghi ở mục
+  xoay vòng: đổi kịch bản xong lượt sau vẫn bỏ qua rồi nộp lại clip CŨ.
+- ⛔ **Và cũng KHÔNG vá bằng vân tay KỊCH BẢN**, dù nghe đúng hơn: vân tay đó
+  không đổi khi sửa phần DỰNG (CRF, bố cục, nền) ⇒ clip đứng yên với hình cũ
+  mà không gì báo. Đây đúng lớp lỗi `SHAPE` của `portrait_cache` đã cắn **hai
+  lần**. ⇒ **dựng lại mỗi tuần là hành vi AN TOÀN**, khoản 41 phút là giá của
+  việc kho luôn khớp mã đang chạy.
+- ⛔ **Chưa dựng cơ chế xoá file cũ.** Bounded retention (giữ 3 bản mới nhất)
+  chặn được đà phình, nhưng nó thêm một đường XOÁ vào đúng chỗ `media_posts`
+  đang trỏ tới — đổi rủi ro mất clip đã giao lấy **~3% quota mỗi năm**. Không
+  đáng, và con số sẽ đổi ngay khi Henry chốt số phận nhóm tool-demo.
+- 🔑 Ghi lại để **khỏi đi khám phá lại**: cả hai khoản là HỆ QUẢ ĐÃ BIẾT của
+  lịch tuần, không phải triệu chứng hỏng.
+
 ### 🪤 Bẫy đã vấp
 - **`import()` một script CLI là CHẠY nó.** Lượt kiểm cú pháp cuối vô ý gọi
   `import('scripts/stock-video.mjs')` → script bắt đầu gọi API Pixabay thật.
