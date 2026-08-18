@@ -63,6 +63,54 @@ chính workflow. Chỉ `stock-video/` là thiếu.
 - Parse lại thứ tự bước workflow (khôi phục kho đứng TRƯỚC dựng clip) — không
   đọc diff bằng mắt, đúng bài học `schedule` đặt nhầm cấp.
 
+### 🔴 VÒNG SAU — kho thông rồi thì lộ tiếp hai lỗi, và chúng khác BẢN CHẤT
+Lượt kế (32125541824): kho nền tải **7/7 · 80,6MB · 9 giây**, hết 404. Rồi:
+
+**1. Hạ tầng — TTS sinh 19 câu rồi bị chặn, và cả 19 file BỊ VỨT ĐI.**
+Nhà cung cấp trả HTML thay vì JSON (`<!DOCTYPE`) — chữ ký trang lỗi tầng CỔNG,
+không phải lỗi của câu. Job trượt ⇒ `actions/cache` **KHÔNG lưu** (nó chỉ lưu
+khi job thành công) ⇒ lượt sau sinh lại từ đầu, tốn lại đúng ngần ấy tiền, rồi
+chạm trần ở đúng chỗ cũ.
+- 🔑 **Cái hỏng KHÔNG phải cái trần, mà là vòng lặp không tiến thêm được câu
+  nào.** Vá bằng `cache/restore` + `cache/save` kèm **`if: always()`**, khoá gắn
+  `run_id` (lưu trùng khoá là cảnh báo rồi bỏ qua, tức mất phần vừa làm thêm).
+  Áp cho cả cache kho nền. Từ đây hỏng dần thành xong dần.
+- Backoff nay phân biệt HAI loại hỏng: lỗi cổng chờ **30/75/150s**, lỗi thường
+  giữ 4/8/12/16s. Bốn lượt thử lại cũ gói trong ~2,5 phút nên đều rơi vào cùng
+  cửa sổ đang bị chặn.
+- ⚠️ **CHƯA biết trần đó tính theo PHÚT hay theo tổng lượt của tài khoản.** Chờ
+  lâu chỉ cứu được ca thứ nhất; lưới đỡ thật cho ca thứ hai là cái cache trên.
+  Đã ghi rõ trong mã thay vì để người sau tưởng đã chẩn xong.
+- Mốc so: lần trước hỏng ở câu **11**, nay câu **19** ⇒ nới `TTS_GAP_MS` có ăn,
+  nhưng không dời được cái trần.
+
+**2. Nội dung — `ba-kieu-ton-thuong` trượt cổng 2** (`audience.too-narrow`,
+3/7 người trong tệp). Cùng lớp `ba-the-be-tac`, không vá bằng mã được.
+
+### 🐞 Và một lỗi thật lộ ra khi ĐỌC LOG: ô `fix` trỏ vào cần gạt KHÔNG ăn
+`ba-kieu-ton-thuong` trượt `scene.too-long` **cả ba vòng** viết lại — model làm
+đúng lời khuyên mà vẫn trượt:
+
+| | |
+|---|---|
+| đo | `estimateSpeechSeconds(spokenSceneText(sc))` — **thuần độ dài CHỮ** |
+| fix cũ | *"Tách cảnh N làm hai, hoặc **đổi hình giữa chừng**."* |
+
+Đổi hình không đổi một ký tự nào; tách cảnh thì tổng chữ vẫn nguyên.
+- 🔑 **Cùng họ `hook.too-long`, chỉ ngược chiều**: lần đó hỏng vì **HAI** con số,
+  lần này hỏng vì **KHÔNG** con số nào. Luật rút ra: *ô `fix` phải nêu đúng đại
+  lượng mà phép đo đọc*, và số phải lấy từ `budgetChars` dùng chung.
+- Cảnh khai cứng `forceSeconds` đi **nhánh riêng** — ở đó chữ không phải cần
+  gạt, con số mới là.
+- **Bắt kèm**: `hook.missing` ghi cứng *"dưới 60 ký tự"* trong khi
+  `hook.too-long` suy ra **62** — bẫy hai-trần vừa gỡ đã tự dựng lại chỗ khác.
+- Rà nốt **14 mã lỗi CHẶN** còn lại: các ô `fix` khác đều trỏ đúng cần gạt.
+- **Bất biến chốt**: số trong ô `fix` khớp số khối ngân sách đưa model (cảnh
+  **100** · hook **62**), đo trên cổng THẬT đã biên dịch.
+- 🪤 **Lượt đo đầu của tôi BÁO SAI** ("hai trần, cảnh 62") vì regex tham lam vắt
+  từ ô `fix` của hook sang ô của cảnh khi nối chuỗi. Đo theo TỪNG mã lỗi mới
+  đúng. **Nối các ô lại rồi dò một lượt là tự đẻ ra kết luận sai.**
+
 ### 🪤 Bẫy đã vấp
 - **`import()` một script CLI là CHẠY nó.** Lượt kiểm cú pháp cuối vô ý gọi
   `import('scripts/stock-video.mjs')` → script bắt đầu gọi API Pixabay thật.
