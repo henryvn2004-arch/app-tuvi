@@ -48,6 +48,7 @@ import { execFileSync } from 'child_process';
 import { existsSync, mkdirSync, statSync, appendFileSync } from 'fs';
 import { join } from 'path';
 import { TOOL_RECIPES } from './tool-recipes.mjs';
+import { EXIT_GATE } from './video-lib.mjs';
 
 const ROOT = new URL('..', import.meta.url).pathname;
 const OUT_DIR = join(ROOT, 'remotion/out');
@@ -237,7 +238,17 @@ async function inspect(file) {
 }
 
 function run(cmd, args) {
-  execFileSync(cmd, args, { cwd: ROOT, stdio: 'inherit' });
+  try {
+    execFileSync(cmd, args, { cwd: ROOT, stdio: 'inherit' });
+  } catch (e) {
+    // Giữ lại MÃ THOÁT và TÊN SCRIPT. Phía dưới phân biệt "cổng chặn" với
+    // "hỏng" bằng đúng hai thứ đó, và cần CẢ HAI: một lượt dựng gọi hai script
+    // khác nhau, nên chỉ nhìn mã thoát là ngày nào đó `record-tool-demo.mjs`
+    // dùng lại con số ấy cho việc khác thì lỗi thật đọc thành "cổng chặn".
+    e.exitCode = e.status;
+    e.script = args[0];
+    throw e;
+  }
 }
 
 /**
@@ -449,20 +460,35 @@ for (const job of jobs) {
     console.log(`✓  ${tool} — ${info.seconds.toFixed(1)}s, có đủ hình và tiếng.`);
   } catch (e) {
     // Hỏng một clip KHÔNG kéo cả loạt.
-    results.push({ tool, status: 'TRƯỢT', note: String(e.message).split('\n')[0].slice(0, 160) });
-    console.error(`❌ ${tool} — ${e.message.split('\n')[0]}`);
+    //
+    // 🔑 VÀ "cổng chặn" KHÔNG PHẢI "hỏng". Kịch bản bị cổng nội dung từ chối là
+    // cổng đang làm đúng việc — đo trên kho hiện có: clip demo công cụ qua cổng
+    // 2 đúng 3/18. Đếm chúng vào cột trượt thì lượt dựng hằng tuần đỏ vĩnh
+    // viễn, và cái đèn đỏ đó hết nói được điều gì về hôm pipeline hỏng thật.
+    const boiCong =
+      e.exitCode === EXIT_GATE && /gen-(video|insight)\.mjs$/.test(String(e.script ?? ''));
+    const note = String(e.message).split('\n')[0].slice(0, 160);
+    if (boiCong) {
+      results.push({ tool, status: 'cổng chặn', note: 'kịch bản chưa qua cổng nội dung' });
+      console.log(`🚧 ${tool} — cổng nội dung từ chối. Lý do in ở phần cổng phía trên.`);
+    } else {
+      results.push({ tool, status: 'TRƯỢT', note });
+      console.error(`❌ ${tool} — ${note}`);
+    }
   }
 }
 
 // ── Báo cáo ───────────────────────────────────────────────────────────────
 const done = results.filter((r) => r.status === 'xong');
 const failed = results.filter((r) => r.status === 'TRƯỢT');
+const boiCong = results.filter((r) => r.status === 'cổng chặn');
 
 console.log(`\n${'═'.repeat(60)}`);
-for (const r of results) console.log(`  ${r.status.padEnd(8)} ${r.tool.padEnd(20)} ${r.note}`);
+for (const r of results) console.log(`  ${r.status.padEnd(10)} ${r.tool.padEnd(20)} ${r.note}`);
 console.log(`${'═'.repeat(60)}`);
 console.log(
-  `  ${done.length} xong · ${failed.length} trượt · ${results.length - done.length - failed.length} bỏ qua/hoãn\n`
+  `  ${done.length} xong · ${failed.length} trượt · ${boiCong.length} cổng chặn · ` +
+    `${results.length - done.length - failed.length - boiCong.length} bỏ qua/hoãn\n`
 );
 
 // Tóm tắt cho trang chạy của GitHub — người mở Actions đọc được ngay mà không
@@ -472,8 +498,17 @@ if (process.env.GITHUB_STEP_SUMMARY) {
   appendFileSync(
     process.env.GITHUB_STEP_SUMMARY,
     `## 📹 Dựng clip\n\n` +
-      `${done.length} xong · ${failed.length} trượt\n\n` +
+      `${done.length} xong · ${failed.length} trượt` +
+      (boiCong.length ? ` · ${boiCong.length} cổng chặn` : '') +
+      `\n\n` +
       `| Tool | Kết quả | Ghi chú |\n|---|---|---|\n${rows}\n` +
+      // Nói RÕ vì sao lượt chạy vẫn xanh khi có clip bị chặn. Không nói thì
+      // người đọc thấy "0 trượt" rồi tưởng cả danh sách đã dựng xong.
+      (boiCong.length
+        ? `\n> 🚧 **${boiCong.length} clip bị CỔNG NỘI DUNG từ chối** (${boiCong.map((r) => `\`${r.tool}\``).join(', ')}). ` +
+          `Đây KHÔNG tính là lượt chạy hỏng — cổng đang làm đúng việc, kịch bản chưa đủ hay thì không dựng. ` +
+          `Sửa kịch bản trong \`lib/video/sources/\`; lý do từng clip nằm ở phần cổng trong log.\n`
+        : '') +
       // Nêu điểm xoay: "hoãn" ở cuối bảng là ĐÚNG THIẾT KẾ (hết ngân sách), và
       // tuần sau chúng đứng đầu. Không nói ra thì đọc thành pipeline hỏng dở.
       (XOAY_WHY
@@ -487,5 +522,7 @@ if (process.env.GITHUB_STEP_SUMMARY) {
   );
 }
 
-// Trượt thì hỏng to. Bỏ qua/hoãn thì không — đó là hành vi đúng.
+// Trượt thì hỏng to. Bỏ qua/hoãn/cổng-chặn thì không — cả ba là hành vi ĐÚNG,
+// và chúng xảy ra gần như mỗi tuần. Nhét chúng vào mã thoát khác 0 là biến đèn
+// đỏ của lượt chạy thành thứ tuần nào cũng sáng, tức là tắt nó đi.
 process.exit(failed.length ? 1 : 0);

@@ -247,6 +247,40 @@ ngược ra được nữa**.
 - 🔑 Đây là lần thứ TƯ của bệnh *"bản chạy khác bản repo"* — nay có nếp cố định:
   sửa file trong `_patches/` → deploy → **đọc ngược rồi mới báo xong**.
 
+### 🚧 Lượt dựng hằng tuần SẼ ĐỎ VĨNH VIỄN — vì cổng làm đúng việc
+Cùng lớp với *"bộ dò kêu oan là bộ dò bị tắt đi"*, nhưng ở chiều ngược: đây là
+cái đèn đỏ **luôn sáng**, và một đèn tuần nào cũng sáng thì hôm hỏng thật không
+ai phân biệt được.
+
+Căn nguyên: `build-video-batch` kết bằng `process.exit(failed.length ? 1 : 0)`,
+mà **kịch bản bị CỔNG NỘI DUNG từ chối cũng đếm vào `failed`**. Đo trên chính
+kho hiện có: `ba-the-be-tac` trượt cổng 2 mọi lượt, và clip demo công cụ qua
+cổng 2 đúng **3/18** ⇒ lượt `--all` hằng tuần luôn có ~16 clip "trượt".
+
+| | nghĩa | mã thoát |
+|---|---|---|
+| cổng chặn | cổng ĐANG LÀM ĐÚNG VIỆC — kịch bản chưa đủ hay | **20** (`EXIT_GATE`) |
+| hỏng | TTS chết · render vỡ · mạng đứt · **thiếu khoá model** | 1 |
+
+- 🔑 **Chỗ suýt vá sai:** cho `!kq.pass` thoát thẳng 20 là **nhánh THIẾU KHOÁ
+  MODEL cũng thành "cổng chặn"** — tức báo *kịch bản dở* trong khi hội đồng
+  chưa hề chấm, và job xanh trong lúc cổng 2 không chạy lượt nào. `chayCong2`
+  vì thế trả thêm `reason: 'gate' | 'config'`; phía gọi chọn mã theo nó.
+- **Phân loại xét CẢ mã thoát LẪN tên script** (`gen-video|gen-insight`), không
+  chỉ mã: một lượt dựng gọi hai script, và neo vào mỗi con số là ngày nào đó
+  `record-tool-demo.mjs` dùng lại 20 cho việc khác thì lỗi thật đọc thành cổng
+  chặn. Có ca đối chứng canh đúng điều đó.
+- ⚠️ **20 chứ không phải 2/3**: Node dành riêng dải 1–12 cho lỗi nội bộ của nó
+  (3 = *Internal JavaScript Parse Error*).
+- **Vẫn phải KÊU TO, chỉ là không đỏ**: bảng tóm tắt liệt kê đích danh clip bị
+  chặn kèm câu giải thích vì sao lượt chạy xanh. Im lặng bỏ qua thì đọc "0
+  trượt" thành "đã dựng xong cả danh sách".
+- Red-team **4 ca, có assert đột biến ĐÃ ăn trước khi đọc kết quả**: hook dài
+  quá trần → cổng 1 chặn, **exit 0** · **ĐỐI CHỨNG bản cũ cùng đột biến →
+  exit 1** ⇒ lỗi có thật · gỡ khoá model → **vẫn TRƯỢT + exit 1** (không bị
+  đọc nhầm thành cổng chặn) · ép `record-tool-demo.mjs` thoát 20 (đã kiểm nó
+  thật sự thoát 20) → **vẫn TRƯỢT + exit 1**. Khôi phục sạch, 0 file rác.
+
 ### 🪤 Bẫy đã vấp
 - **`import()` một script CLI là CHẠY nó.** Lượt kiểm cú pháp cuối vô ý gọi
   `import('scripts/stock-video.mjs')` → script bắt đầu gọi API Pixabay thật.

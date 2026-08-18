@@ -20,7 +20,7 @@ import { createHash } from 'crypto';
 import { existsSync, mkdirSync, writeFileSync } from 'fs';
 import { join } from 'path';
 import { ttsScene, pickVoice } from './tts-clip.mjs';
-import { compileVideoLib, chayCong2 } from './video-lib.mjs';
+import { compileVideoLib, chayCong2, EXIT_GATE } from './video-lib.mjs';
 
 const ROOT = new URL('..', import.meta.url).pathname;
 const REMOTION = join(ROOT, 'remotion');
@@ -132,7 +132,7 @@ console.log(
 for (const i of g1.issues) console.log(`   [${i.level}] ${i.code}: ${i.message}`);
 if (!g1.pass) {
   console.error('\n❌ Dừng: kịch bản không qua cổng 1.');
-  process.exit(1);
+  process.exit(EXIT_GATE);
 }
 
 // ── Cổng 2 ────────────────────────────────────────────────────────────────
@@ -145,7 +145,9 @@ if (!g1.pass) {
     gate: GATE,
     maxRounds: MAX_ROUNDS,
   });
-  if (!kq.pass) process.exit(1);
+  // Thiếu khoá model thì hội đồng CHƯA HỀ CHẤM — đó là hỏng cấu hình (mã 1),
+  // không phải "kịch bản dở". Xem `EXIT_GATE` trong video-lib.mjs.
+  if (!kq.pass) process.exit(kq.reason === 'gate' ? EXIT_GATE : 1);
   spec = kq.spec;
 }
 

@@ -26,6 +26,26 @@ import { fileURLToPath } from 'node:url';
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const require_ = createRequire(import.meta.url);
 
+/**
+ * Mã thoát riêng cho "CỔNG NỘI DUNG TỪ CHỐI KỊCH BẢN".
+ *
+ * 🔑 VÌ SAO PHẢI TÁCH KHỎI MÃ 1: hai chuyện này khác hẳn nhau về nghĩa.
+ *   · cổng chặn  = cổng ĐANG LÀM ĐÚNG VIỆC. Kịch bản chưa đủ hay, không dựng.
+ *     Đây là kết quả THƯỜNG XUYÊN và dự đoán được (đo trên chính kho hiện có:
+ *     clip demo công cụ qua cổng 2 đúng 3/18).
+ *   · mã 1       = HỎNG. TTS chết, render vỡ, mạng đứt, thiếu khoá model.
+ *
+ * Gộp hai thứ vào một mã thì lượt dựng hằng tuần ĐỎ VĨNH VIỄN — không phải vì
+ * có gì hỏng mà vì mấy kịch bản yếu vẫn nằm trong danh sách. Mà một cảnh báo
+ * tuần nào cũng kêu là một cảnh báo đã bị tắt: đúng hôm pipeline hỏng thật thì
+ * không ai phân biệt được với mọi hôm khác.
+ *
+ * ⚠️ 20 chứ không phải 2/3/…: Node dành riêng dải 1–12 cho lỗi nội bộ của nó
+ * (3 = "Internal JavaScript Parse Error", 9 = "Invalid Argument"…). Chọn trong
+ * dải đó là mở đường cho một lỗi thật của Node đọc thành "cổng chặn".
+ */
+export const EXIT_GATE = 20;
+
 /** Điểm vào luôn cần, bất kể loại clip. */
 const CORE = ['lib/video/script-spec.ts', 'lib/video/gate-machine.ts', 'lib/video/viral-loop.ts'];
 
@@ -88,9 +108,15 @@ export function compileVideoLib(extra = []) {
 /**
  * Chạy cổng 2 (hội đồng người xem) và in kết quả.
  *
- * Trả về `{ pass, spec }` — `spec` có thể là BẢN ĐÃ VIẾT LẠI, nên phía gọi
- * PHẢI dùng giá trị trả về cho các bước sau (giọng đọc, render). Dùng lại bản
- * cũ thì vòng lặp chạy cho vui: clip vẫn mang đúng câu chữ vừa bị chấm trượt.
+ * Trả về `{ pass, spec, reason }` — `spec` có thể là BẢN ĐÃ VIẾT LẠI, nên phía
+ * gọi PHẢI dùng giá trị trả về cho các bước sau (giọng đọc, render). Dùng lại
+ * bản cũ thì vòng lặp chạy cho vui: clip vẫn mang đúng câu chữ vừa bị chấm trượt.
+ *
+ * ⚠️ `reason` phân biệt HAI ca trượt khác hẳn nhau, và phía gọi phải dùng nó để
+ * chọn mã thoát (xem `EXIT_GATE`):
+ *   · `'gate'`   — hội đồng chấm trượt. Cổng làm đúng việc.
+ *   · `'config'` — THIẾU KHOÁ MODEL. Hội đồng chưa hề chạy. Coi đây là "cổng
+ *     chặn" là báo cáo sai: nó nói kịch bản dở trong khi thật ra máy chưa chấm.
  *
  * @param {(spec: object, opts: object) => Promise<object>} runViralLoop
  * @param {object} spec
@@ -107,7 +133,7 @@ export async function chayCong2(runViralLoop, spec, opts = {}) {
     console.error('\n── CỔNG 2 · hội đồng người xem ──────────────');
     console.error('   ❌ Thiếu GEMINI_API_KEY và ANTHROPIC_API_KEY trong môi trường chạy.');
     console.error('   Đặt một trong hai, hoặc --no-audience để bỏ qua CÓ CHỦ ĐÍCH.');
-    return { pass: false, spec };
+    return { pass: false, spec, reason: 'config' };
   }
 
   console.log('\n── CỔNG 2 · hội đồng người xem ──────────────');
@@ -145,7 +171,7 @@ export async function chayCong2(runViralLoop, spec, opts = {}) {
     }
     for (const i of kq.remainingIssues) console.error(`   [${i.level}] ${i.code}: ${i.message}`);
     console.error('   Sửa kịch bản trong lib/video/sources/ rồi chạy lại.');
-    return { pass: false, spec: kq.spec };
+    return { pass: false, spec: kq.spec, reason: 'gate' };
   }
 
   // Chỉ báo khi THỰC SỰ có sửa — im lặng đổi chữ rồi render là kiểu thay đổi
