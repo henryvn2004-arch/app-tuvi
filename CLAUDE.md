@@ -208,6 +208,12 @@ trong trọn một giây, và cổng cũ chấm nó là "đủ động".
 - 🪤 **Bẫy đo lại vấp ngay trong lượt này**: đổi đoạn nền rồi đo *trong khi render
   chưa xong* → ra y hệt số cũ, suýt kết luận "đổi đoạn không ăn thua". Phải chốt
   mtime của mp4 TRƯỚC khi đo.
+- ⚠️ **Đoạn 4K làm render CHẬM GẤP 3**: nền 1080p render ~4 phút, nền 3840×2160
+  mất **hơn 12 phút** cho cùng một clip 32 giây — `OffthreadVideo` giải mã lại
+  từng khung ở độ phân giải gốc rồi mới thu về 1080×1920. Kho đang có **3/7 đoạn
+  là 4K**, nên lượt dựng 18 clip sẽ đắt hơn hẳn dự tính. Chỗ vá đúng là **thu
+  nhỏ về 1080 ngay lúc NHẬP KHO** (ffmpeg đi kèm Remotion làm được, một lượt duy
+  nhất) — chưa làm, ghi lại để khỏi đi chẩn lại từ đầu.
 
 ### 🐞 Kèm: con KHỈ lọt tông "suy tư" — và cổng đầu tiên của tôi quá rộng
 `must[]` của `suy-tu` có từ **TƯ THẾ** (`sitting`) mà con vật nào cũng mang ⇒
