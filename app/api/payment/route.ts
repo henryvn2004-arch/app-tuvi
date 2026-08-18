@@ -1539,14 +1539,23 @@ async function handleAdminMarketing(request: NextRequest, sp: URLSearchParams): 
           return null;
         }),
       ]);
-    // GA4 sessions THẬT thay 'visitors' nội bộ (page_view) khi đã cấu hình env —
-    // nội bộ chỉ thấy traffic chạm track.js, thiếu organic/ads/social GA4 đo được.
-    // `internalVisitors` giữ lại số nội bộ để panel GA4 so hai bên (chênh lệch
-    // chính là phần track.js đo hụt).
+    // Bậc 'visitors' của phễu = NGƯỜI THẬT (`visitors_human`, đã trừ đội máy —
+    // xem _patches/migration-bot-filter.sql). Cùng một định nghĩa "máy" với
+    // `traffic_quality` ngay trên: cả hai đi qua `bot_anon_ids()`, không có bản
+    // luật thứ hai.
+    //
+    // 🔴 CỐ Ý KHÔNG lấy GA4 sessions làm bậc này nữa (trước đây có). GA4 đo ở
+    // phía Google nên KHÔNG lọc được bot lẫn CI Playwright, và không có bản
+    // `_human` nào để đối chiếu. Đo ngày 17/08/2026: GA4 báo 1.831 phiên trong
+    // khi người thật là 98 ⇒ mọi tỉ lệ chuyển đổi chia cho nó đều bị bóp nhỏ
+    // ~19 lần, tức panel càng nhiều traffic rác thì càng báo là mình càng kém.
+    // GA4 KHÔNG mất đi: nó vẫn nguyên trong panel "GA4 vs Nội Bộ" — đó mới là
+    // chỗ để so hai nguồn, và chính chênh lệch đó là thứ cần nhìn.
     const internalVisitors = funnel.visitors;
-    if (ga4?.sessions != null) {
-      funnel.visitors = ga4.sessions;
-      funnel.visitorsSource = 'ga4';
+    funnel.visitors_raw = internalVisitors; // số thô, để badge nói rõ đã trừ bao nhiêu
+    if (funnel.visitors_human != null) {
+      funnel.visitors = funnel.visitors_human;
+      funnel.visitorsSource = 'human';
     } else {
       funnel.visitorsSource = 'internal';
     }
@@ -2360,7 +2369,14 @@ async function handleReferralRegister(request: NextRequest, body: Record<string,
       const first = Array.isArray(r) ? (r[0] as Record<string, unknown> | undefined) : null;
       rewarded = first?.rewarded === true;
       creditsGranted = Number(first?.credits_granted) || 0;
-    } catch { /* best-effort */ }
+    } catch (e) {
+      // Best-effort: thưởng hỏng KHÔNG được chặn lượt đăng ký. Nhưng phải KÊU —
+      // `catch {}` rỗng ở đây đã giấu một hàm chết hẳn (42702 ambiguous column)
+      // suốt 6 ngày: referral vẫn ghi sổ, tiền thì không bao giờ tới tay ai, và
+      // không có dòng log nào để lần ra. Im lặng ở đường phát tiền là kiểu hỏng
+      // tệ nhất — nó trông y hệt lúc chạy đúng.
+      console.error('[referral-register] process_referral_signup thất bại:', e);
+    }
 
     // Mắt xích cuối của vòng lặp viral (V2.4): mã ĐÃ ăn. tool_id = tool của link
     // chia sẻ đưa người này tới → panel Vòng Lặp Viral tính được K-factor TỪNG
