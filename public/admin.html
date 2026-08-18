@@ -2911,20 +2911,29 @@ function fmtPctChange(cur, prev, label) {
 function renderDashEngagement(eng) {
   const host = document.getElementById('dash-engagement');
   const days = eng.days || [];
-  const mau = eng.mau || 0;
-  const stickiness = mau > 0 ? ((eng.dau_today || 0) / mau) * 100 : 0;
+  // NGƯỜI THẬT (đã trừ đội máy) là con số chính. Bản thô chỉ còn nằm ở tooltip.
+  // Lý do: số thô nhảy theo lưu lượng bot chứ không theo người — ngày 18/08 nó
+  // báo WAU 477 vs 758 ("giảm 37%") trong khi người thật là 87 vs 88, đi ngang.
+  const pick = (h, raw) => (eng[h] != null ? eng[h] : (eng[raw] || 0));
+  const dauT = pick('dau_today_human', 'dau_today');
+  const dauY = pick('dau_yesterday_human', 'dau_yesterday');
+  const wau = pick('wau_human', 'wau'), wauP = pick('wau_prev_human', 'wau_prev');
+  const mau = pick('mau_human', 'mau'), mauP = pick('mau_prev_human', 'mau_prev');
+  const rawTip = (h, raw) => (eng[h] != null && eng[raw] != null && eng[raw] !== eng[h])
+    ? ` title="Đã trừ máy. Số thô còn lẫn bot: ${(eng[raw] || 0).toLocaleString()}"` : '';
+  const stickiness = mau > 0 ? (dauT / mau) * 100 : 0;
   host.innerHTML = `
     <div class="eng-tiles">
-      <div class="eng-tile"><div class="v tabular">${(eng.dau_today || 0).toLocaleString()}</div><div class="l">DAU hôm nay</div>${fmtPctChange(eng.dau_today || 0, eng.dau_yesterday || 0, 'so hôm qua')}</div>
-      <div class="eng-tile"><div class="v tabular">${(eng.wau || 0).toLocaleString()}</div><div class="l">WAU (7 ngày)</div>${fmtPctChange(eng.wau || 0, eng.wau_prev || 0, 'so 7N trước')}</div>
-      <div class="eng-tile"><div class="v tabular">${(eng.mau || 0).toLocaleString()}</div><div class="l">MAU (30 ngày)</div>${fmtPctChange(eng.mau || 0, eng.mau_prev || 0, 'so 30N trước')}</div>
+      <div class="eng-tile"${rawTip('dau_today_human', 'dau_today')}><div class="v tabular">${dauT.toLocaleString()}</div><div class="l">DAU hôm nay</div>${fmtPctChange(dauT, dauY, 'so hôm qua')}</div>
+      <div class="eng-tile"${rawTip('wau_human', 'wau')}><div class="v tabular">${wau.toLocaleString()}</div><div class="l">WAU (7 ngày)</div>${fmtPctChange(wau, wauP, 'so 7N trước')}</div>
+      <div class="eng-tile"${rawTip('mau_human', 'mau')}><div class="v tabular">${mau.toLocaleString()}</div><div class="l">MAU (30 ngày)</div>${fmtPctChange(mau, mauP, 'so 30N trước')}</div>
       <div class="eng-tile"><div class="v tabular">${stickiness.toFixed(1).replace('.', ',')}%</div><div class="l">Stickiness (DAU/MAU)</div><div class="d" style="color:var(--text-lt)">trung bình ngành ~13%</div></div>
     </div>
     <div class="chart-wrap">
       <svg id="dashDauChart" viewBox="0 0 900 160" style="width:100%;height:160px;overflow:visible" preserveAspectRatio="none"></svg>
       <div class="chart-tip" id="dashDauTip"></div>
     </div>
-    <div class="panel-sub" style="margin-top:6px;font-size:.68rem;color:var(--text-lt)">Người dùng hoạt động mỗi ngày (page_view/tool_run/chat...)${days.length ? ` · ${fmtDate(days[0].day)} – ${fmtDate(days[days.length - 1].day)} (${days.length} ngày)` : ''} · di chuột để xem chi tiết</div>
+    <div class="panel-sub" style="margin-top:6px;font-size:.68rem;color:var(--text-lt)">Người dùng hoạt động mỗi ngày, <strong>đã lọc máy</strong> (bot tự khai + đội máy nhận qua hành vi)${days.length ? ` · ${fmtDate(days[0].day)} – ${fmtDate(days[days.length - 1].day)} (${days.length} ngày)` : ''} · di chuột để xem số thô</div>
   `;
   initDashChart(days);
 }
@@ -2933,7 +2942,8 @@ function initDashChart(days) {
   const svg = document.getElementById('dashDauChart');
   const tip = document.getElementById('dashDauTip');
   if (!svg || !days.length) return;
-  const vals = days.map((d) => d.dau);
+  // Vẽ NGƯỜI THẬT. Bản thô vẫn còn trong `d.dau` cho tooltip đối chiếu.
+  const vals = days.map((d) => (d.dau_human != null ? d.dau_human : d.dau));
   const W = 900, H = 160, PAD = 4;
   const max = Math.max(1, ...vals), min = Math.min(...vals);
   const range = Math.max(1, max - min);
@@ -2998,7 +3008,9 @@ function initDashChart(days) {
     dot.setAttribute('cx', x); dot.setAttribute('cy', y); dot.setAttribute('opacity', 1);
     tip.style.left = (x / W) * rect.width + 'px';
     tip.style.top = (y / H) * rect.height + 'px';
-    tip.innerHTML = `<strong>${vals[idx]}</strong> DAU · ${fmtDate(days[idx].day)}`;
+    const rawDau = days[idx].dau;
+    const botPart = (rawDau != null && rawDau > vals[idx]) ? ` <span style="opacity:.6">(thô ${rawDau}, −${rawDau - vals[idx]} máy)</span>` : '';
+    tip.innerHTML = `<strong>${vals[idx]}</strong> người thật${botPart} · ${fmtDate(days[idx].day)}`;
     tip.style.opacity = 1;
   });
   hitArea.addEventListener('mouseleave', () => {
@@ -4071,9 +4083,12 @@ function renderMktFunnel(f) {
     { k: 'paid',      label: 'Trả tiền (paid)',      icon: svgIc('<rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/>') },
   ];
   const max = Math.max(1, f.visitors || 0);
-  const ga4Badge = f.visitorsSource === 'ga4'
-    ? `<span class="badge badge-green" style="margin-left:.4rem;vertical-align:1px" title="Số phiên (sessions) thật từ GA4 Data API">GA4</span>`
-    : `<span style="font-size:.62rem;margin-left:.4rem;vertical-align:1px;color:var(--text-lt)" title="Chưa nối GA4 (thiếu env GA4_PROPERTY_ID/GA4_SERVICE_ACCOUNT_JSON) — số suy từ page_view nội bộ, chỉ thấy traffic đã chạm track.js">nội bộ</span>`;
+  // Bậc "Khách ghé" là NGƯỜI THẬT (đã trừ đội máy). Badge nêu luôn số bị trừ —
+  // giấu nó đi thì người đọc tưởng site tụt traffic, mà thật ra là bớt rác.
+  const botCut = (f.visitors_bot || 0);
+  const ga4Badge = f.visitorsSource === 'human'
+    ? `<span class="badge badge-green" style="margin-left:.4rem;vertical-align:1px" title="Đã trừ ${botCut.toLocaleString()} khách là MÁY (bot tự khai + đội máy phát hiện qua hành vi). Số thô còn lẫn máy là ${(f.visitors_raw || 0).toLocaleString()}.">người thật${botCut ? ` · −${botCut.toLocaleString()} máy` : ''}</span>`
+    : `<span style="font-size:.62rem;margin-left:.4rem;vertical-align:1px;color:var(--text-lt)" title="Chưa lọc được máy — số suy từ page_view nội bộ thô">nội bộ</span>`;
   let prev = null;
   const rows = steps.map(s => {
     const v = f[s.k] || 0;

@@ -1514,14 +1514,21 @@ async function handleAdminMarketing(request: NextRequest, sp: URLSearchParams): 
       callCohorts(),
       getGa4Breakdown(from.toISOString().slice(0, 10), to.toISOString().slice(0, 10)),
     ]);
-    // GA4 sessions THẬT thay 'visitors' nội bộ (page_view) khi đã cấu hình env —
-    // nội bộ chỉ thấy traffic chạm track.js, thiếu organic/ads/social GA4 đo được.
-    // `internalVisitors` giữ lại số nội bộ để panel GA4 so hai bên (chênh lệch
-    // chính là phần track.js đo hụt).
+    // Bậc 'visitors' của phễu = NGƯỜI THẬT (`visitors_human`, đã trừ đội máy —
+    // xem _patches/migration-bot-filter.sql).
+    //
+    // 🔴 CỐ Ý KHÔNG lấy GA4 sessions làm bậc này nữa (trước đây có). GA4 đo ở
+    // phía Google nên KHÔNG lọc được bot lẫn CI Playwright, và không có bản
+    // `_human` nào để đối chiếu. Đo ngày 17/08/2026: GA4 báo 1.831 phiên trong
+    // khi người thật là 98 ⇒ mọi tỉ lệ chuyển đổi chia cho nó đều bị bóp nhỏ
+    // ~19 lần, tức panel càng nhiều traffic rác thì càng báo là mình càng kém.
+    // GA4 KHÔNG mất đi: nó vẫn nguyên trong panel "GA4 vs Nội Bộ" — đó mới là
+    // chỗ để so hai nguồn, và chính chênh lệch đó là thứ cần nhìn.
     const internalVisitors = funnel.visitors;
-    if (ga4?.sessions != null) {
-      funnel.visitors = ga4.sessions;
-      funnel.visitorsSource = 'ga4';
+    funnel.visitors_raw = internalVisitors; // số thô, để badge nói rõ đã trừ bao nhiêu
+    if (funnel.visitors_human != null) {
+      funnel.visitors = funnel.visitors_human;
+      funnel.visitorsSource = 'human';
     } else {
       funnel.visitorsSource = 'internal';
     }
