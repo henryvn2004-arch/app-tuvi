@@ -5,6 +5,117 @@
 
 ---
 
+## 🏭 RÁP PIPELINE ĐĂNG CLIP — và cổng 2 KHÔNG chặn như tôi tưởng (2026-08-18, PR #543)
+
+Henry: *"bây giờ mày ráp flow vào thành cái pipeline auto chạy đi, xong tao sẽ
+đưa mày account tiktok, instagram, còn facebook với youtube thì có rồi"*.
+
+### 🔴 Đo prod trước: hạ tầng gần đủ, nhưng KHÔNG đường nào đang chảy
+| | trạng thái lúc bắt đầu |
+|---|---|
+| `media_assets` | 54 dòng, **toàn ẢNH `quote_4x5`, 0 clip video** |
+| `media_posts` | 54 bài facebook, **TẤT CẢ `queued`, 0 bài live** |
+| YouTube `van_dap` | 47 live *(mới nhất 23/05)* · 48 pending · 54 error |
+
+**Bốn chỗ đứt, cả bốn đo được:** `publish.ts` chỉ đăng ẢNH (`/photos`,
+`media_type:'IMAGE'`) · `clip-ingest` CỐ Ý không tạo `media_posts` · 0 dòng
+TikTok trong cả repo · `video-build.yml` cố ý chưa có `schedule`.
+
+### ✅ Đã nối cả bốn
+- **Đường đăng VIDEO cho 5 kênh.** Mỗi adapter tự rẽ theo **ĐUÔI FILE**
+  (`isVideoAsset`) — đuôi là sự thật vật lý về file, còn `variant` chỉ là quy
+  ước do người nộp tự khai, và `QueueRow` vốn không select `variant`.
+  - Facebook `/videos` với `file_url`. ⚖️ **CỐ Ý không dùng `/video_reels`** dù
+    clip đúng khổ 9:16 và Reels reach tốt hơn: endpoint đó bắt buộc **ba bước**
+    upload resumable (tải mp4 về runner rồi đẩy từng khúc) = ba chỗ hỏng thay
+    vì một. Đo được reach quá thấp thì mới đáng dựng.
+  - Instagram `media_type: 'REELS'` — **không phải lựa chọn**: Graph API không
+    còn nhận video dạng bài thường.
+  - `waitContainer` nay nhận số vòng: ảnh giữ 8 (~24s), **video nới 20 (~100s)**
+    vì Instagram xử lý một Reel mất 30–90 giây.
+- **TikTok** — Content Posting API `PULL_FROM_URL`. 🪤 Bẫy đã né: TikTok trả
+  `error.code = 'ok'` khi **THÀNH CÔNG**, kiểm sự tồn tại của `error` là đọc
+  lượt thành công thành hỏng. Và **không bịa `external_url`** — TikTok chỉ trả
+  `publish_id`, lưu một URL mở ra 404 còn tệ hơn để trống.
+  - 🔴 **Token TikTok hết hạn sau 24 GIỜ** (khác Facebook token Page vĩnh viễn)
+    ⇒ adapter dùng được cho lượt thử tay, **chạy tự động hằng ngày thì phải bổ
+    sung khâu làm mới bằng `refresh_token` TRƯỚC**. Chưa làm.
+- **`clip-ingest` → `media_posts`, sau một cái VAN mặc định ĐÓNG.**
+  🔑 KHÔNG dùng chung `social.autopost_enabled`: cờ đó đang BẬT cho đường ẢNH,
+  mà ảnh có **brand-check** gác. Clip thì không — dùng chung cờ nghĩa là clip
+  chưa ai xem tự lên trang công khai. ⇒ `social.clip_autopost`, mặc định
+  **false** (đã seed prod).
+  - Caption/thẻ/khổ đi qua **SIDECAR `<id>.meta.json`** do chính `gen-insight`
+    ghi sau lượt render — KHÔNG để khâu nộp đọc lại `insight.ts`, vì cổng 2 có
+    thể VIẾT LẠI kịch bản và bản nguồn khi đó nói khác clip đã dựng.
+  - CỐ Ý không chép `SUPPORTED_CHANNELS` sang Deno; kênh lấy từ `social.channels`.
+- **Lịch dựng: TUẦN**, 08:00 VN thứ Hai. Không phải ngày — `build-video-batch`
+  bỏ qua clip đã có file nên hằng ngày là 6 ngày no-op. ⚠️ Nhịp **ĐĂNG** thì độc
+  lập và vốn đã hằng ngày (`media-build` 09:30 VN gọi `publishQueue`).
+
+### 🔴 ĐÍNH CHÍNH của chính tôi: cổng 2 KHÔNG chặn pipeline
+Tôi đã nói với Henry *"cổng 2 chặn nên phải `--no-audience`"*. **Sai** — đo cả 6:
+
+| kịch bản | cổng 2 |
+|---|---|
+| `vi-sao-hay-hoan-lai` | ✅ vòng 1 — 5/5 xem hết · lưu 71% · gửi 57% |
+| `hai-nguoi-cung-luong` | ✅ vòng 1 — 6/6 · 71% · 71% |
+| `ba-kieu-ton-thuong` | ✅ vòng 1 — 3/4 |
+| `bon-buoc-truoc-khi-roi-di` | ✅ vòng 1 — 3/4 |
+| `ba-kieu-ton-thuong-day-du` | ✅ **vòng 2** — 0/3 → **7/7 · 86% · 86%** |
+| `ba-the-be-tac` | ❌ trượt 3 vòng |
+
+**5/6 QUA.** Và dòng áp chót là bằng chứng vòng lặp viết lại nay **HỘI TỤ**.
+
+### 🔴 Vì sao trước đó vòng lặp không bao giờ hội tụ — HAI TRẦN cho MỘT ràng buộc
+Đo `ba-the-be-tac`: cả 3 vòng đều trượt lại cổng 1 vì `hook.too-long`. Căn nguyên:
+- ô `fix` của `gate-machine` nói *"rút xuống dưới **67** ký tự"* (nhân `13.59` thô)
+- khối NGÂN SÁCH của `viral-loop` nói *"tối đa **62**"* (có biên an toàn 8%)
+- **cả hai cùng vào MỘT prompt** ⇒ model theo con số lớn hơn rồi trượt.
+
+Và `13.59` ở `gate-machine` là **bản chép tay thứ ba** của `TTS_CHARS_PER_SECOND`.
+- Vá bằng nguồn duy nhất **`budgetChars(seconds)`** trong `script-spec.ts`.
+- **Đo lại sau khi vá: `hook.too-long` BIẾN MẤT hoàn toàn**, vòng lặp chạy đủ 3
+  vòng hội đồng thay vì mất trắng vòng 3 ở cổng 1.
+- 🔑 Bài học lặp lần thứ ba trong CÙNG một ngày (sau `CLIP_SPEED`↔`13.59` và
+  `SUPPORTED_CHANNELS`): **một con số nói với model ở hai chỗ thì sớm muộn hai
+  chỗ nói hai giá trị, và model theo cái dễ hơn.**
+
+### 🪤 Bẫy đã vấp
+- 🔴 **`schedule` đặt sai chỗ thành khoá CẤP 1** thay vì dưới `on:` — YAML vẫn
+  hợp lệ, workflow vẫn chạy tay được, **GitHub bỏ qua lịch hoàn toàn**. Chỉ lộ
+  vì **parse YAML thật** (`on` chỉ có `workflow_dispatch`) thay vì tin
+  `grep -c schedule`. Sửa YAML tay thì phải parse lại, đừng đọc diff bằng mắt.
+- **`pkill -f` tự giết (exit 144) — LẦN THỨ BA VÀ THỨ TƯ trong một buổi.** Cách
+  tránh: `pkill -f 'gen-insight[.]mjs'` — ngoặc vuông làm chuỗi lệnh hết khớp.
+- **Test nạp module trước khi set env**: `SUPABASE_URL`/`KEY` là hằng
+  **module-level** trong `appConfig.ts`, đọc lúc NẠP. Set env sau `require` là
+  module nạp với URL rỗng rồi mọi lượt đọc config rơi về DEFAULTS — bộ kiểm ra
+  **0/14** trông như code hỏng.
+- **Đính chính giữa chừng**: `media_posts` KHÔNG có UNIQUE trong `pg_constraint`
+  — nhưng nó **CÓ**, dưới dạng unique **INDEX** (`media_posts_asset_channel_uniq`).
+  Hỏi nhầm bảng hệ thống thì kết luận sai; `pg_indexes` mới là chỗ đúng.
+
+### Verify
+`tsc` 0 · `lint` 0 lỗi / 77 warning = mốc nền · `prettier` cả cây sạch ·
+**20/20 trên MODULE THẬT** (biên dịch `publish.ts`, chặn ở tầng `fetch` để bắt
+đúng chuỗi bay lên nhà cung cấp) gồm **5 ca ĐỐI CHỨNG** chứng minh đường ẢNH
+không hồi quy ở cả 5 kênh · sidecar sinh đúng từ lượt render thật · YAML parse
+lại xác nhận `schedule` nằm đúng dưới `on:`.
+
+### CÒN LẠI
+- 🔴 **`ba-the-be-tac` là kịch bản DUY NHẤT trượt**, và hội đồng chê nhất quán
+  qua 6 lượt chấm: *"quẻ Kinh Dịch quá khô khan/học thuật/trừu tượng"*, *"không
+  có ví dụ cụ thể để thấy liên quan đến bản thân"*. Đây là lời chê ĐÚNG TẦNG —
+  sửa là sửa nội dung kịch bản, không phải sửa cổng.
+- **Token TikTok 24h** — phải dựng khâu làm mới trước khi chạy tự động.
+- **Van `social.clip_autopost` đang ĐÓNG.** Bật:
+  `update app_config set value='true'::jsonb where key='social.clip_autopost';`
+- Việc tay: token Page Facebook (54 bài ảnh kẹt từ 02/08) · publish YouTube app ·
+  verify miền URL cho TikTok · account Instagram Business.
+
+---
+
 ## 🎬 GỠ nhân vật, thay bằng NỀN VIDEO — nhân vật sai VAI chứ không chỉ xấu (2026-08-18, cùng PR #543)
 
 Henry xem bản render: *"Mèn. Tao thấy cái amination nó vừa xấu vừa chả liên quan
