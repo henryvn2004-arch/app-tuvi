@@ -345,4 +345,35 @@ execFileSync(
   }
 );
 
+/*
+ * ── SIDECAR cho khâu nộp kho ───────────────────────────────────────────────
+ *
+ * `publish-clips.mjs` chỉ cầm mỗi file mp4 — nó không biết caption, thẻ, hay
+ * khổ giao ra. Ghi cạnh clip một file JSON để nó đọc.
+ *
+ * 🔑 VÌ SAO SIDECAR chứ không để khâu nộp tự đọc lại `insight.ts`: cổng 2 có
+ * thể VIẾT LẠI kịch bản (`rewriteSpec`) trước khi render, nên `spec` ở đây là
+ * bản THẬT SỰ đã dựng thành clip, còn file nguồn là bản trước khi viết lại.
+ * Đọc lại nguồn là caption nói một đằng, clip nói một nẻo.
+ */
+if (!STILL) {
+  const s = Number(SCALE);
+  writeFileSync(
+    join(REMOTION, 'out', `${ID}.meta.json`),
+    JSON.stringify(
+      {
+        id: ID,
+        // Câu kết là dòng người xem đọc được — đúng thứ nên làm caption.
+        caption: spec.cta,
+        hashtags: spec.hashtags ?? [],
+        width: Math.round(1080 * s),
+        height: Math.round(1920 * s),
+        builtAt: new Date().toISOString(),
+      },
+      null,
+      2
+    )
+  );
+}
+
 console.log(`\n✓ Xong: ${outFile}`);

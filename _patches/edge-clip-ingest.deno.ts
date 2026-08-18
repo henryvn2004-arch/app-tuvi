@@ -110,13 +110,18 @@ Deno.serve(async (req) => {
   // `media_assets` có UNIQUE (source_type, source_id, variant) ⇒ nộp lại cùng
   // một công cụ thì CẬP NHẬT dòng cũ, trỏ sang file mới. Sổ luôn chỉ vào bản
   // mới nhất, còn file cũ vẫn nằm trong kho để đối chiếu.
+  // Khổ do NGƯỜI NỘP khai — clip nay giao ra 720×1280 (xem `--scale` trong
+  // `gen-insight.mjs`), viết cứng 1080×1920 là sổ nói sai về chính file trong kho.
+  const width = Number(form.get('width')) || 1080;
+  const height = Number(form.get('height')) || 1920;
+
   const row = {
     source_type: 'tool-demo',
     source_id: toolId,
     variant,
     url,
-    width: 1080,
-    height: 1920,
+    width,
+    height,
     meta: { ...meta, path, bytes: file.size, ingested_at: new Date().toISOString() },
   };
 
@@ -135,5 +140,70 @@ Deno.serve(async (req) => {
   if (!ins.ok) return json({ error: `media_assets: ${await ins.text()}` }, 502);
 
   const saved = (await ins.json())[0] ?? {};
-  return json({ success: true, asset_id: saved.id, url, path });
+
+  /*
+   * ── XẾP HÀNG ĐĂNG — SAU MỘT CÁI VAN, mặc định ĐÓNG ───────────────────────
+   *
+   * 🔴 VÌ SAO PHẢI CÓ VAN RIÊNG chứ không dùng luôn `social.autopost_enabled`:
+   * cờ đó đang BẬT trên prod cho đường ẢNH (bài trích từ `khao_luan`, có
+   * brand-check gác trước khi vào kho). Clip video thì KHÔNG đi qua brand-check
+   * — nó qua cổng 1 + hội đồng cổng 2, mà cổng 2 hiện đang chặn nên lượt dựng
+   * phải `--no-audience`. Dùng chung cờ nghĩa là clip CHƯA ai xem tự lên trang
+   * công khai ngay lượt cron kế tiếp.
+   * ⇒ `social.clip_autopost` mặc định **false**: đường nối xong, van do người mở.
+   *
+   * 🔑 Và CỐ Ý không giữ danh sách kênh ở đây. Chép `SUPPORTED_CHANNELS` sang
+   * Deno là dựng bản thứ hai rồi trôi khỏi nhau — đúng lớp lỗi repo đã trả giá
+   * nhiều lần. Kênh lấy TRỌN từ `social.channels`; kênh nào chưa có adapter thì
+   * `publishQueue` báo lỗi và panel admin đã có sẵn cảnh báo cho đúng ca đó.
+   */
+  const queued: string[] = [];
+  if (saved.id) {
+    const cfg = await fetch(
+      `${SB_URL}/rest/v1/app_config?key=in.("social.clip_autopost","social.channels")&select=key,value`,
+      { headers: H }
+    )
+      .then((r) => (r.ok ? r.json() : []))
+      .catch(() => []);
+    const byKey: Record<string, unknown> = {};
+    for (const r of cfg as { key: string; value: unknown }[]) byKey[r.key] = r.value;
+
+    if (byKey['social.clip_autopost'] === true) {
+      const channels = Array.isArray(byKey['social.channels'])
+        ? (byKey['social.channels'] as string[])
+        : [];
+      const caption = String(form.get('caption') ?? '').slice(0, 5000);
+      const hashtags = String(form.get('hashtags') ?? '')
+        .split(',')
+        .map((s) => s.trim())
+        .filter(Boolean)
+        .slice(0, 12);
+      const linkUrl = String(form.get('link') ?? '') || null;
+
+      for (const ch of channels) {
+        // UNIQUE (asset_id, channel) ⇒ nộp lại cùng clip KHÔNG đẻ dòng trùng,
+        // và `ignore-duplicates` giữ nguyên dòng cũ (kể cả dòng đã `live`) —
+        // đè lên là đăng lại một bài đã lên trang.
+        const q = await fetch(`${SB_URL}/rest/v1/media_posts?on_conflict=asset_id,channel`, {
+          method: 'POST',
+          headers: {
+            ...H,
+            'Content-Type': 'application/json',
+            Prefer: 'resolution=ignore-duplicates,return=minimal',
+          },
+          body: JSON.stringify({
+            asset_id: saved.id,
+            channel: ch,
+            caption,
+            hashtags,
+            link_url: linkUrl,
+            status: 'queued',
+          }),
+        });
+        if (q.ok) queued.push(ch);
+      }
+    }
+  }
+
+  return json({ success: true, asset_id: saved.id, url, path, queued });
 });
