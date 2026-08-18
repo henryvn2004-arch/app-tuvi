@@ -43,11 +43,43 @@
  * 1–2 giây không đổi kết luận) và cho bản xem trước khi chưa có giọng đọc.
  * Lúc RENDER THẬT thì đo ĐỘ DÀI THẬT của file mp3, không dùng ước lượng.
  */
+/*
+ * ⚠️ SỐ NÀY GẮN VỚI `CLIP_SPEED` trong `scripts/tts-clip.mjs` (hiện `1.15`).
+ *
+ * 13,59 đo được ở ĐÚNG tốc độ đó. Hai hằng số nằm ở hai file, KHÔNG có ràng
+ * buộc nào nối chúng — nên đổi `CLIP_SPEED` mà quên chỗ này thì cổng 1 lặng lẽ
+ * ước sai: đọc nhanh hơn mà vẫn tính theo tốc độ cũ ⇒ mọi clip bị chấm là "quá
+ * dài" và `rewriteSpec` đi cắt lời đọc cho một vấn đề không tồn tại.
+ *
+ * ⇒ Đổi tốc độ đọc thì PHẢI đo lại số này (chia theo tỉ lệ là ĐỦ GẦN: speed
+ * 1,15 → 1,30 thì 13,59 × 1,30/1,15 ≈ 15,4) và sửa CẢ HAI trong cùng một lượt.
+ */
 export const TTS_CHARS_PER_SECOND = 13.59;
 
 /** Ước lượng thời lượng đọc (giây) của một đoạn text, TRƯỚC khi gọi TTS. */
 export function estimateSpeechSeconds(text: string): number {
   return text.trim().length / TTS_CHARS_PER_SECOND;
+}
+
+/**
+ * Biên an toàn khi GIAO ngân sách ký tự cho model viết lại.
+ *
+ * Giao trần đúng bằng ngưỡng là bắt model đếm chính xác tuyệt đối — nó lệch vài
+ * ký tự là trượt cổng 1 và mất trắng một vòng hội đồng. Giao thấp hơn một chút
+ * thì lệch vẫn còn nằm trong ngưỡng.
+ */
+export const CHAR_BUDGET_MARGIN = 0.92;
+
+/**
+ * Số ký tự tối đa GIAO CHO MODEL cho một quãng đọc.
+ *
+ * 🔑 NGUỒN DUY NHẤT — mọi chỗ nói với model "tối đa N ký tự" phải gọi hàm này.
+ * Trước đây `gate-machine.ts` tự nhân `13.59` (ra 67) còn `viral-loop.ts` nhân
+ * thêm biên an toàn (ra 62), rồi cả hai con số cùng vào MỘT prompt — model nhận
+ * hai trần khác nhau cho cùng một ràng buộc, theo cái lớn hơn, rồi trượt.
+ */
+export function budgetChars(seconds: number): number {
+  return Math.floor(seconds * TTS_CHARS_PER_SECOND * CHAR_BUDGET_MARGIN);
 }
 
 /** Loại nguồn — mỗi loại có một adapter riêng dựng ra ScriptSpec. */
@@ -75,7 +107,55 @@ export type SceneVisual =
    * riêng chứ không nhúng ký hiệu vào `text`, vì chính `text` đó còn được gửi
    * cho TTS và dùng làm phụ đề.
    */
-  | { kind: 'typo'; accent?: string };
+  | { kind: 'typo'; accent?: string }
+  /**
+   * Chữ lớn + NHÂN VẬT SIGNATURE của kênh, trên nền đen.
+   *
+   * 🔑 `pose` là tên trong một TỪ VỰNG ĐÓNG (`POSES` của `remotion/src/
+   * Character.tsx`), không phải mô tả tự do. Hai hệ quả cố ý:
+   *   · Chọn hình cho một cảnh là phép TRA BẢNG deterministic, 0đ — không gọi
+   *     API, không tải ảnh, không cần kho.
+   *   · Khi cổng 2 chấm *"hình có hợp nội dung không"*, nó so lời đọc với một
+   *     cái tên cố định dùng lại ở mọi clip, chứ không phải một câu mô tả tôi
+   *     viết mới cho từng bức — tức bớt được phần "chấm chính văn của mình".
+   */
+  | {
+      kind: 'figure';
+      pose: string;
+      accent?: string;
+      /**
+       * Ký hiệu của cảnh — tên trong TỪ VỰNG ĐÓNG `GLYPHS` (`remotion/src/
+       * Glyphs.tsx`). Cùng lý do với `pose`: tra bảng deterministic, 0đ.
+       *
+       * 🔑 MỘT ký hiệu cho một cảnh, và nó nằm ở ĐÚNG MỘT chỗ (`glyphAt`) —
+       * brief chốt "1 scene = 1 icon". Khai riêng chỗ đặt thay vì có cả trường
+       * `prop` lẫn `icon` nghĩa là **không có cách nào khai cả hai cùng lúc**,
+       * tức không thể lỡ tay dựng một khung có hai ký hiệu tranh nhau.
+       */
+      glyph?: string;
+      /** `tay` = nhân vật cầm (mặc định) · `tren` = icon nổi phía trên chữ. */
+      glyphAt?: 'tay' | 'tren';
+    }
+  /**
+   * HAI nhân vật trong một khung — cho câu nói về một MỐI QUAN HỆ.
+   *
+   * 🔑 Vì sao là một `kind` riêng chứ không phải `figure` có thêm người thứ
+   * hai: bố cục khác hẳn (hai người + đồ đạc + khoảng cách giữa họ), và quan
+   * trọng hơn — cổng 2 phải mô tả được "trong khung có mấy người". Nhét vào
+   * `figure` thì số người thành một trường tuỳ chọn dễ quên, mà quên thì hội
+   * đồng lại đọc ra một khung khác với khung sắp render.
+   */
+  | {
+      kind: 'duo';
+      /** Tư thế người bên trái / bên phải — cùng từ vựng `POSES`. */
+      poseL: string;
+      poseR: string;
+      /** Đồ đạc: `ban-an` · `ghe-bang`. Bỏ trống = không có gì. */
+      set?: string;
+      /** `gan` (mặc định) · `xa` — khoảng cách MANG NGHĨA, không phải pixel. */
+      gap?: 'gan' | 'xa';
+      accent?: string;
+    };
 
 export interface Scene {
   /** Lời đọc của cảnh này. Cũng CHÍNH LÀ phụ đề — một nguồn, không chép hai bản. */
@@ -128,6 +208,35 @@ export interface ScriptSpec {
    * mắt chạy theo ảnh chứ không đọc chữ — mà chữ mới là nội dung.
    */
   backdrop?: string[];
+  /**
+   * ĐOẠN PHIM nền cho cả clip — đường dẫn trong `remotion/public/`, lấy từ kho
+   * `scripts/stock-video.mjs` dựng.
+   *
+   * 🔑 Thắng `backdrop` khi khai cả hai: một clip chỉ có MỘT nền. Chọn theo
+   * TÔNG (cô đơn · suy tư · mờ mịt…), KHÔNG theo từng cảnh — nền đổi giữa
+   * chừng thì mắt lại chạy theo nền.
+   *
+   * ⚠️ Nền video là để BỎ CÁI NỀN PHẲNG ĐI, không phải để minh hoạ lời đọc.
+   * Đừng đi tìm đoạn phim "đúng ý câu này" — đó là đường dẫn thẳng tới cái bẫy
+   * nhân vật vừa phải gỡ: hình tranh mắt với chữ.
+   */
+  backdropVideo?: string;
+  /** Tốc độ phát nền (mặc định 0,5). Cần gạt chỉnh mức "nền có nổi quá không". */
+  backdropRate?: number;
+  /** Độ dài đoạn phim nền (giây) — chỉ cần khi nó NGẮN hơn clip, để lặp cho liền. */
+  backdropSeconds?: number;
+  /**
+   * Tư thế nhân vật cho câu MỞ ĐẦU và câu KẾT — hai chỗ không nằm trong
+   * `scenes` nên không tự khai `visual` được.
+   *
+   * Khai một trong hai ⇒ clip chạy nền ĐEN + nhân vật signature, thay cho nền
+   * navy/ảnh. Bỏ trống cả hai ⇒ giữ nguyên hình dạng cũ.
+   */
+  hookPose?: string;
+  ctaPose?: string;
+  /** Đạo cụ nhân vật cầm ở hook / câu kết. */
+  hookGlyph?: string;
+  ctaGlyph?: string;
   /** Hashtag gợi ý cho lúc đăng — KHÔNG hiện trên clip. */
   hashtags?: string[];
 }

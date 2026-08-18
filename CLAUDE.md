@@ -5,6 +5,1270 @@
 
 ---
 
+## 🧱 Lượt render THẬT đầu tiên TRƯỢT — kho nền nằm ngoài git (2026-08-18, cùng PR #543)
+
+Bấm lượt `video-build` **không phải `--dry-run`** đầu tiên. Trượt cả 2 clip,
+và lỗi đúng ở mắt xích thứ ba của chuỗi:
+
+```
+404 http://localhost:3000/public/stock-video/tone/thien-nhien-toi/203449.mp4
+```
+
+🔑 **Đây là bằng chứng cho chính bài học vừa ghi ở mục dưới** (*"đã nối" ≠ "đã
+chảy"*). Kho video 97MB nằm NGOÀI git — đúng lối tranh quẻ và kho ảnh, thứ
+commit là manifest — nên bản clone sạch của runner **không có một byte nào**.
+Ở máy phát triển kho có sẵn nên không lộ; chỉ lượt chạy thật mới lộ.
+
+### 🔑 Chọn đường TẢI THẲNG TỪ CDN, không qua Supabase Storage
+| Đường | Chặn ở đâu |
+|---|---|
+| Đẩy kho lên Storage rồi runner tải | Cần `SUPABASE_SERVICE_KEY` để ĐẨY — cả track cố ý không đưa khoá đó vào Actions (xem `clip-ingest`). Bucket `stock` còn **chưa tồn tại**, và container này không có khoá để tự tạo |
+| Commit 97MB mp4 vào git | Ngược hẳn `.gitignore` đang có, và git không phải chỗ chứa nhị phân |
+| Nhập lại kho từ API Pixabay mỗi lượt | Cần `PIXABAY_API_KEY` làm secret + tải lại mỗi lượt + **không tất định** (cổng có thể tuyển đoạn khác) |
+| ✅ **Pin URL CDN vào manifest** | URL Pixabay là **đường dẫn cố định** (`cdn.pixabay.com/video/<ngày>/<id>-<mã>_<khổ>.mp4`), **không có chữ ký hết hạn** như `webformatURL` của ảnh ⇒ tải bằng **HTTP trần, 0 secret** |
+
+`scripts/restore-stock.mjs` + cache Actions băm theo manifest. Khôi phục từ kho
+RỖNG: **7/7 trong 4,9 giây**; chạy lại là no-op.
+- ⚖️ Vẫn TẢI VỀ chứ không hotlink lúc render, dù điều khoản Pixabay **cho phép**
+  nhúng video trực tiếp — lý do là tất định (render lại sau 6 tháng phải ra đúng
+  clip đó), không phải lý do luật.
+- ⚠️ **ĐỐI CHỨNG BẮT BUỘC trước khi pin**: manifest vốn đo trên bản **ffmpeg thu
+  nhỏ tại máy**, còn runner sẽ nhận bản 1920 **của chính Pixabay** — hai file
+  khác nhau. Đo lại độ động trên cả 7: lệch tối đa **0,03** (`mean`) và **0,10**
+  (`spread`), cả 7 vẫn qua `MOTION_MIN`/`MOTION_SPREAD_MIN`. Đổi nguồn file
+  KHÔNG đổi nghĩa phép đo. **Đổi `variant` thì phải đo lại, đừng sửa mò.**
+
+### 🐞 Bắt kèm hai lỗi cùng họ, cả hai hỏng IM LẶNG
+1. **`backdropSeconds` khai THỪA độ dài thật** (15 vs **14,51** · 20 vs
+   **19,64**). `VideoBackdrop` tính `covers = floor(seconds*fps/rate)` rồi bọc
+   `<Loop>` đúng ngần ấy khung ⇒ khai thừa nửa giây là **mỗi vòng lặp đứng ở
+   khung cuối nửa giây** — đúng bẫy *"OffthreadVideo đứng khung cuối"* đã ghi.
+   Clip vẫn ra, chỉ giật, nên không phép đo nào chạm tới.
+2. **Căn nguyên: manifest chép số nguyên ĐÃ LÀM TRÒN của nhà cung cấp.** Vá ở
+   nguồn — `videoDurationSec()` (`stock-lib.mjs`) + lượt nhập kho nay ĐO trên
+   chính file, thay vì để lại con số sai sẵn đó cho lượt sau copy. 🔑 **Sửa số
+   trong data mà không sửa chỗ ĐẺ RA số là hẹn ngày nó quay lại.**
+
+### ✅ Thứ KHÔNG phải vá (đã kiểm để loại trừ)
+Tranh quẻ đi qua **URL Storage công khai** (`portraits/que-phuc-hy/*.png`, đo
+HTTP 200) ⇒ runner tải được. Nhạc nền do `gen-music-bed.mjs` sinh lại trong
+chính workflow. Chỉ `stock-video/` là thiếu.
+
+### Verify
+`tsc` 0 · `lint` 0 lỗi / 77 warning = mốc nền · `prettier` cả cây sạch ·
+`node --check` 3 script.
+- Khôi phục từ kho **RỖNG** 7/7 · chạy lại no-op · đo lại độ động sau khôi phục
+  **7/7 khớp và qua cổng**.
+- **Render thật đầu-cuối một clip**: ra `720×1280 · 32,15s · h264+aac · 3,8MB`.
+- Parse lại thứ tự bước workflow (khôi phục kho đứng TRƯỚC dựng clip) — không
+  đọc diff bằng mắt, đúng bài học `schedule` đặt nhầm cấp.
+
+### 🔴 VÒNG SAU — kho thông rồi thì lộ tiếp hai lỗi, và chúng khác BẢN CHẤT
+Lượt kế (32125541824): kho nền tải **7/7 · 80,6MB · 9 giây**, hết 404. Rồi:
+
+**1. Hạ tầng — TTS sinh 19 câu rồi bị chặn, và cả 19 file BỊ VỨT ĐI.**
+Nhà cung cấp trả HTML thay vì JSON (`<!DOCTYPE`) — chữ ký trang lỗi tầng CỔNG,
+không phải lỗi của câu. Job trượt ⇒ `actions/cache` **KHÔNG lưu** (nó chỉ lưu
+khi job thành công) ⇒ lượt sau sinh lại từ đầu, tốn lại đúng ngần ấy tiền, rồi
+chạm trần ở đúng chỗ cũ.
+- 🔑 **Cái hỏng KHÔNG phải cái trần, mà là vòng lặp không tiến thêm được câu
+  nào.** Vá bằng `cache/restore` + `cache/save` kèm **`if: always()`**, khoá gắn
+  `run_id` (lưu trùng khoá là cảnh báo rồi bỏ qua, tức mất phần vừa làm thêm).
+  Áp cho cả cache kho nền. Từ đây hỏng dần thành xong dần.
+- Backoff nay phân biệt HAI loại hỏng: lỗi cổng chờ **30/75/150s**, lỗi thường
+  giữ 4/8/12/16s. Bốn lượt thử lại cũ gói trong ~2,5 phút nên đều rơi vào cùng
+  cửa sổ đang bị chặn.
+- ⚠️ **CHƯA biết trần đó tính theo PHÚT hay theo tổng lượt của tài khoản.** Chờ
+  lâu chỉ cứu được ca thứ nhất; lưới đỡ thật cho ca thứ hai là cái cache trên.
+  Đã ghi rõ trong mã thay vì để người sau tưởng đã chẩn xong.
+- Mốc so: lần trước hỏng ở câu **11**, nay câu **19** ⇒ nới `TTS_GAP_MS` có ăn,
+  nhưng không dời được cái trần.
+
+**2. Nội dung — `ba-kieu-ton-thuong` trượt cổng 2** (`audience.too-narrow`,
+3/7 người trong tệp). Cùng lớp `ba-the-be-tac`, không vá bằng mã được.
+
+### 🐞 Và một lỗi thật lộ ra khi ĐỌC LOG: ô `fix` trỏ vào cần gạt KHÔNG ăn
+`ba-kieu-ton-thuong` trượt `scene.too-long` **cả ba vòng** viết lại — model làm
+đúng lời khuyên mà vẫn trượt:
+
+| | |
+|---|---|
+| đo | `estimateSpeechSeconds(spokenSceneText(sc))` — **thuần độ dài CHỮ** |
+| fix cũ | *"Tách cảnh N làm hai, hoặc **đổi hình giữa chừng**."* |
+
+Đổi hình không đổi một ký tự nào; tách cảnh thì tổng chữ vẫn nguyên.
+- 🔑 **Cùng họ `hook.too-long`, chỉ ngược chiều**: lần đó hỏng vì **HAI** con số,
+  lần này hỏng vì **KHÔNG** con số nào. Luật rút ra: *ô `fix` phải nêu đúng đại
+  lượng mà phép đo đọc*, và số phải lấy từ `budgetChars` dùng chung.
+- Cảnh khai cứng `forceSeconds` đi **nhánh riêng** — ở đó chữ không phải cần
+  gạt, con số mới là.
+- **Bắt kèm**: `hook.missing` ghi cứng *"dưới 60 ký tự"* trong khi
+  `hook.too-long` suy ra **62** — bẫy hai-trần vừa gỡ đã tự dựng lại chỗ khác.
+- Rà nốt **14 mã lỗi CHẶN** còn lại: các ô `fix` khác đều trỏ đúng cần gạt.
+- **Bất biến chốt**: số trong ô `fix` khớp số khối ngân sách đưa model (cảnh
+  **100** · hook **62**), đo trên cổng THẬT đã biên dịch.
+- 🪤 **Lượt đo đầu của tôi BÁO SAI** ("hai trần, cảnh 62") vì regex tham lam vắt
+  từ ô `fix` của hook sang ô của cảnh khi nối chuỗi. Đo theo TỪNG mã lỗi mới
+  đúng. **Nối các ô lại rồi dò một lượt là tự đẻ ra kết luận sai.**
+
+### ✅ ĐÍNH CHÍNH của chính tôi: đường ống ĐÃ GIAO — lượt `32127605911`
+Mục dưới ghi *"pipeline CHƯA từng chạy thật lượt nào"* và *"đường ống chưa giao
+một byte nào"*. Nay đã sai. Đo trên **KHO + BẢNG**, không đọc nhãn "success":
+
+| | trước | sau |
+|---|---:|---:|
+| file trong bucket `clips` | **0** | **1** |
+| dòng video trong `media_assets` | **0** | **1** |
+| dòng `media_posts` | 0 | **0** ✅ đúng — van `social.clip_autopost` đang ĐÓNG |
+
+Tải chính URL công khai về đo lại: **HTTP 200 · 14.773.367 byte · 79,74s ·
+720×1280 · h264 + aac**. Cột `width/height` ghi **720×1280** chứng minh
+`clip-ingest` v6+ đã ăn, không phải v1 cắm cứng 1080×1920.
+- 🔑 **Vì sao phải đo cả ba chỗ**: bucket nói *file có tới nơi không*, bảng nói
+  *sổ có ghi không*, `media_posts` nói *van có rò không*. Chỉ nhìn nhãn job
+  "success" thì cả ba câu đó đều chưa được trả lời.
+
+### 🔴 Nhưng lịch TUẦN thì KHÔNG BAO GIỜ dựng nổi 6 clip insight — 12/24 chết
+Lượt vừa giao ra là **một clip CHỈ ĐỊNH**, không phải `--all`. Đo `--all`: **24
+clip**, và render đo được **~6,5× thời lượng thật** (79,7s → **515s**) ⇒ ngân
+sách 150 phút chỉ với tới quãng đầu danh sách.
+
+Cộng thêm một tính chất **tưởng đã có mà không có**: đầu `build-video-batch.mjs`
+ghi *"NỐI LẠI ĐƯỢC — đã có mp4 thì bỏ qua"*. Đúng khi chạy tay, **sai trên
+Actions**: phép bỏ qua là `existsSync(remotion/out/<id>.mp4)`, mà runner là bản
+clone SẠCH ⇒ `out/` **rỗng ở mọi lượt**. Thứ tự lại cố định ⇒ tuần nào cũng dựng
+lại từ `than-so-hoc` rồi bị cắt đúng chỗ cũ.
+
+| mô phỏng 52 tuần, ngân sách với tới 12/24 clip | bản CŨ | sau khi vá |
+|---|---:|---:|
+| clip **KHÔNG BAO GIỜ được dựng** | **12** | **0** |
+| clip insight dựng được | **0/6** | **6/6, mỗi tuần** |
+| tuần để phủ trọn 24 clip | không bao giờ | **13** |
+
+🔑 **Và 12 clip chết đó gồm TRỌN BỘ insight** — kể cả `vi-sao-hay-hoan-lai` vừa
+giao ra hôm nay. Tức nhóm DUY NHẤT qua cổng 2 đều đặn nằm trọn trong phần
+không với tới.
+
+**Vá hai lớp, cả hai đo được:**
+1. **Xoay theo tuần ISO** cho `--all` — mỗi tuần một điểm bắt đầu khác.
+   ⛔ **CỐ Ý không lưu `out/` vào cache để giải**: cache mp4 thì sửa kịch bản
+   xong lượt sau vẫn bỏ qua vì *"đã có"* rồi **nộp lại clip CŨ** — đổi một lỗi
+   im lặng lấy một lỗi im lặng khác, mà cái sau còn tệ hơn (giao ra nội dung sai).
+2. **`insight` đi TRƯỚC, trọn bộ.** Thứ tự cũ đặt nhóm tỉ lệ qua cổng THẤP NHẤT
+   lên đầu — 18 tool-demo (**17%**) trước, 6 insight (**67%**) sau. 6 clip
+   insight chỉ ~50 phút nên luôn lọt ngân sách 150.
+- ⚠️ Đây là quyết định **XẾP LỊCH, không phải NỘI DUNG**. Câu hỏi treo (bỏ hẳn
+  clip tool-demo, hay cho cổng 2 thành cảnh báo riêng cho loại đó) vẫn nguyên.
+- Xoay mà im lặng thì đọc log ra "danh sách bị xáo trộn vì lỗi" ⇒ in điểm xoay
+  ở cả log lẫn tóm tắt, kèm câu giải thích `hoãn` ở cuối bảng là ĐÚNG thiết kế.
+- `--start <id>` ghim tay khi cần; id lạ → **exit 1** kèm lý do.
+- 🪤 **Phép đo `exit=0` đầu tiên của tôi SAI**: `$?` sau một pipe bắt mã thoát
+  của `tail`, không phải của `node`. Đo lại không qua pipe → đúng **exit 1**.
+
+### 🛑 `ba-the-be-tac`: viết lại KHÔNG cứu được — chặn ở HÌNH, không ở CHỮ
+Lượt `32129885534` giao ra **4/5 clip insight** (cộng `vi-sao-hay-hoan-lai` hôm
+trước là **5/6**). Riêng `ba-the-be-tac` trượt cổng 2 cả 3 vòng, lần thứ ba.
+
+Đọc lời chê thì nó tách thành **ba chỗ hụt riêng biệt**, và bản cũ hụt cả ba:
+| persona | chê gì | vá bằng |
+|---|---|---|
+| `sv-22` | *"mấy cái quẻ này lạ quá, KHÔNG BIẾT LÀ GÌ"* | thêm cảnh mở giải thích quẻ là gì |
+| `tin-45` | *"chỉ nêu vấn đề và tên quẻ, KHÔNG có lời khuyên"* | mỗi tình thế kèm một việc làm được |
+| `vp-35` | *"không giải thích TẠI SAO nó liên quan"* | như trên, đặt trước mọi tên quẻ |
+
+Viết lại xong, đo trên cổng THẬT: **0/4 → 1/4 → 0/5**. Tức **phẳng**, và mẫu số
+còn đổi giữa hai lượt (4 rồi 5 người trong tệp) — đúng phương sai đã ghi.
+- ✅ Phần chữ CÓ ăn, đo được: `vp-35` từ bỏ ở **7–11s** lên bỏ ở **15s**. Nhưng
+  đó là một persona trong một vòng — **đừng đọc rộng hơn thế**.
+- 🔴 **Chỗ thật sự chặn là HÌNH.** `luot-vo-dinh` bỏ ở **3s** trong MỌI vòng của
+  CẢ BA bản kịch bản, và lý do luôn là hình: *"chữ to nhưng không có hình ảnh
+  hay hiệu ứng gì"* · *"các hình vẽ quẻ tông màu trầm, không tạo cảm giác hứng
+  thú"*. **Viết lại chữ không chạm được vào đó.**
+- ⚠️ Và lời chê đó **KHÔNG phải artefact của `buildTimeline`** — đã đi kiểm:
+  `describeImage` tả tranh quẻ đúng, nhánh cảnh `image` tả đúng ô 944×944. Hook
+  clip này thì thật sự không có nền lẫn tranh, chỉ chữ trên navy. Hội đồng chê
+  đúng thứ sắp render.
+- 🪤 **Bản viết lại ĐẦU của tôi tự gây một hồi quy**: bỏ mất dạng CÂU HỎI của
+  hook → cổng 1 kêu `hook.no-pattern`. Hook cũ vốn đã đúng dạng; tôi sửa nội
+  dung rồi vô tình gỡ luôn cái đang đúng. **Sửa một thuộc tính thì phải liệt kê
+  các thuộc tính KHÁC mà chỗ đó đang giữ.**
+- **GIỮ bản viết lại** dù không qua cổng: nó vá ba lỗi có thật độc lập với cổng
+  (không giải thích quẻ · chỉ chẩn không khuyên · tiêu đề "Ba" mà hook "Bốn"),
+  và kết quả cổng thì phẳng chứ không tệ đi.
+- 🛑 **DỪNG mài kịch bản này.** Ba bản, ~9 vòng chấm, cùng một persona bỏ ở cùng
+  một giây vì cùng một lý do. Đây là kết luận về ĐỊNH DẠNG — *tranh vẽ tay tông
+  trầm, tĩnh, không hợp luồng lướt* — chứ không phải một câu chữ chưa đủ hay.
+  Đường đi tiếp là quyết định của Henry: đổi hẳn định dạng clip này (nền động
+  cho cảnh `typo`, bỏ tranh quẻ làm hình chính), hay bỏ clip này.
+
+### 🔴 VAN MỞ RA CŨNG KHÔNG CÓ CLIP NÀO ĐI — hàng đợi ĐỨNG YÊN VĨNH VIỄN
+Đo `media_posts` trước khi khuyên Henry mở van `social.clip_autopost`:
+
+| | |
+|---|---:|
+| bài đang xếp hàng (đều là facebook) | **54** |
+| bài MỚI vào mỗi ngày (`social.build_daily`) | **3** |
+| trần ĐĂNG mỗi ngày (`social.publish_daily`) | **3** |
+| thứ tự `publishQueue` | `created_at.asc` — **CŨ TRƯỚC** |
+
+🔑 **VÀO 3 = RA 3 ⇒ tồn 54 bài KHÔNG BAO GIỜ vơi.** Không phải "xả 18 ngày rồi
+hết" — nó đứng nguyên ở 54 mãi mãi. Mà thứ tự là cũ-trước, nên một clip xếp
+hàng hôm nay nằm sau 54 bài ảnh **vĩnh viễn**: mở van ra thì **không clip nào
+đi**, và nhìn từ ngoài y hệt lúc đường clip hỏng.
+- ⚠️ Đây là chỗ dễ đọc nhầm nhất của cả track: mở van → im lặng → kết luận
+  "pipeline clip hỏng", trong khi mã chạy đúng và clip đang xếp hàng ngoan ngoãn.
+- **Thứ tự bắt buộc**: vá token Page Facebook **TRƯỚC** (54 bài kẹt từ 02/08 vì
+  `code 190 — session is invalid`), rồi nới trần đăng, **rồi mới** mở van clip.
+  Nới trần là một câu SQL, không cần deploy:
+  `update app_config set value='5'::jsonb where key='social.publish_daily';`
+  (5 ra − 3 vào = vơi 2/ngày ⇒ ~27 ngày sạch tồn.)
+- ⛔ **CỐ Ý không tự cho clip chen hàng.** Sửa thứ tự `created_at.asc` là đổi
+  hành vi một đường đang chạy prod để ưu tiên loại nội dung mình vừa làm — đó là
+  quyết định NỘI DUNG (đăng gì trước trên trang công khai), không phải kỹ thuật.
+- 🪤 **Phép đo đầu của tôi nói "3,38 bài/ngày, hàng đợi phình mãi"** — sai, đó là
+  trung bình cả bảng nên bị lượt seed 02/08 kéo lệch. Đếm THEO NGÀY thì đều đặn
+  đúng 3. Kết luận đúng không phải *"phình"* mà là *"đứng yên"*, và cái sau khó
+  thấy hơn hẳn: một hàng đợi phình lên thì có người để ý, một hàng đợi đứng yên
+  ở đúng con số cũ thì không.
+
+### 🐞 Bắt kèm: sổ ghi SAI LOẠI clip — `clip-ingest` đóng cứng `'tool-demo'`
+Clip insight đầu tiên vào `media_assets` dưới nhãn `source_type='tool-demo'`.
+Chưa va vào gì (đường ảnh dùng `khao_luan`, hai bucket rời nhau) — nhưng hai
+loại này qua **cổng 2 rất khác nhau: insight 4/6 (67%) · demo công cụ 3/18
+(17%)**, mà đó đúng là ranh giới Henry phải quyết. Sổ không phân biệt được thì
+mọi phép đo theo loại đều sai, và lúc 18 clip demo đổ vào thì **không tách
+ngược ra được nữa**.
+- Vá ở BÊN DỰNG: `gen-insight.mjs` ghi `sourceType` vào sidecar →
+  `publish-clips.mjs` chuyển tiếp → hàm edge nhận. **Giữ mặc định `tool-demo`**
+  để clip demo công cụ (chưa khai trường này) không đổi hành vi; `SLUG` gác vì
+  giá trị này đi vào UNIQUE key.
+- Deploy **v7**, **đọc ngược bản đang chạy**: cả 14 dòng thêm khớp nguyên văn,
+  dòng cũ `source_type: 'tool-demo'` đã biến mất. Dòng sổ ghi sai cũng vá xong.
+- 🔑 Đây là lần thứ TƯ của bệnh *"bản chạy khác bản repo"* — nay có nếp cố định:
+  sửa file trong `_patches/` → deploy → **đọc ngược rồi mới báo xong**.
+
+### 🚧 Lượt dựng hằng tuần SẼ ĐỎ VĨNH VIỄN — vì cổng làm đúng việc
+Cùng lớp với *"bộ dò kêu oan là bộ dò bị tắt đi"*, nhưng ở chiều ngược: đây là
+cái đèn đỏ **luôn sáng**, và một đèn tuần nào cũng sáng thì hôm hỏng thật không
+ai phân biệt được.
+
+Căn nguyên: `build-video-batch` kết bằng `process.exit(failed.length ? 1 : 0)`,
+mà **kịch bản bị CỔNG NỘI DUNG từ chối cũng đếm vào `failed`**. Đo trên chính
+kho hiện có: `ba-the-be-tac` trượt cổng 2 mọi lượt, và clip demo công cụ qua
+cổng 2 đúng **3/18** ⇒ lượt `--all` hằng tuần luôn có ~16 clip "trượt".
+
+| | nghĩa | mã thoát |
+|---|---|---|
+| cổng chặn | cổng ĐANG LÀM ĐÚNG VIỆC — kịch bản chưa đủ hay | **20** (`EXIT_GATE`) |
+| hỏng | TTS chết · render vỡ · mạng đứt · **thiếu khoá model** | 1 |
+
+- 🔑 **Chỗ suýt vá sai:** cho `!kq.pass` thoát thẳng 20 là **nhánh THIẾU KHOÁ
+  MODEL cũng thành "cổng chặn"** — tức báo *kịch bản dở* trong khi hội đồng
+  chưa hề chấm, và job xanh trong lúc cổng 2 không chạy lượt nào. `chayCong2`
+  vì thế trả thêm `reason: 'gate' | 'config'`; phía gọi chọn mã theo nó.
+- **Phân loại xét CẢ mã thoát LẪN tên script** (`gen-video|gen-insight`), không
+  chỉ mã: một lượt dựng gọi hai script, và neo vào mỗi con số là ngày nào đó
+  `record-tool-demo.mjs` dùng lại 20 cho việc khác thì lỗi thật đọc thành cổng
+  chặn. Có ca đối chứng canh đúng điều đó.
+- ⚠️ **20 chứ không phải 2/3**: Node dành riêng dải 1–12 cho lỗi nội bộ của nó
+  (3 = *Internal JavaScript Parse Error*).
+- **Vẫn phải KÊU TO, chỉ là không đỏ**: bảng tóm tắt liệt kê đích danh clip bị
+  chặn kèm câu giải thích vì sao lượt chạy xanh. Im lặng bỏ qua thì đọc "0
+  trượt" thành "đã dựng xong cả danh sách".
+- Red-team **4 ca, có assert đột biến ĐÃ ăn trước khi đọc kết quả**: hook dài
+  quá trần → cổng 1 chặn, **exit 0** · **ĐỐI CHỨNG bản cũ cùng đột biến →
+  exit 1** ⇒ lỗi có thật · gỡ khoá model → **vẫn TRƯỢT + exit 1** (không bị
+  đọc nhầm thành cổng chặn) · ép `record-tool-demo.mjs` thoát 20 (đã kiểm nó
+  thật sự thoát 20) → **vẫn TRƯỢT + exit 1**. Khôi phục sạch, 0 file rác.
+
+### 📈 Lịch TUẦN đẻ ra hai khoản hao — đã ĐO, và CỐ Ý chưa vá
+Runner là bản clone SẠCH nên `out/` rỗng mọi lượt ⇒ lượt `--all` hằng tuần
+**dựng lại từ đầu 5 clip insight đã giao**, dù kịch bản không đổi một chữ.
+
+| khoản hao | mỗi tuần | sau một năm |
+|---|---:|---:|
+| ngân sách dựng (150 phút) | **~41 phút** | — |
+| file mới trong bucket `clips` | **53,4MB** | **~2,8GB** |
+
+`clip-ingest` đặt tên file kèm DẤU THỜI GIAN nên mỗi lượt nộp là một file MỚI;
+dòng `media_assets` thì `merge-duplicates` nên **sổ không nhân đôi**, chỉ trỏ
+sang file mới nhất. File tuần trước thành mồ côi — không hỏng gì, chỉ nằm đó.
+
+- ⛔ **KHÔNG vá bằng "đã có trong kho thì bỏ qua"** — đúng lý do đã ghi ở mục
+  xoay vòng: đổi kịch bản xong lượt sau vẫn bỏ qua rồi nộp lại clip CŨ.
+- ⛔ **Và cũng KHÔNG vá bằng vân tay KỊCH BẢN**, dù nghe đúng hơn: vân tay đó
+  không đổi khi sửa phần DỰNG (CRF, bố cục, nền) ⇒ clip đứng yên với hình cũ
+  mà không gì báo. Đây đúng lớp lỗi `SHAPE` của `portrait_cache` đã cắn **hai
+  lần**. ⇒ **dựng lại mỗi tuần là hành vi AN TOÀN**, khoản 41 phút là giá của
+  việc kho luôn khớp mã đang chạy.
+- ⛔ **Chưa dựng cơ chế xoá file cũ.** Bounded retention (giữ 3 bản mới nhất)
+  chặn được đà phình, nhưng nó thêm một đường XOÁ vào đúng chỗ `media_posts`
+  đang trỏ tới — đổi rủi ro mất clip đã giao lấy **~3% quota mỗi năm**. Không
+  đáng, và con số sẽ đổi ngay khi Henry chốt số phận nhóm tool-demo.
+- 🔑 Ghi lại để **khỏi đi khám phá lại**: cả hai khoản là HỆ QUẢ ĐÃ BIẾT của
+  lịch tuần, không phải triệu chứng hỏng.
+
+### 🖼️ LUẬT MỚI: chê HÌNH thì ĐỔI ĐỊNH DẠNG — vòng lặp không có tay sửa hình
+Henry chốt hai việc cùng lúc: *"ok, đổi định dạng thôi, gắn nó thành rule luôn,
+ko qua dc thì đổi định dạng"* và *"cho cổng 2 thành cảnh báo, vẫn cho qua, clip
+demo mà, bản chất nó đã khó viral"*.
+
+**Căn nguyên là một BẤT KHẢ THI VỀ CẤU TRÚC, không phải kịch bản dở.**
+`rewriteSpec` ghi thẳng trong luật 1 của nó: *"không đụng phần hình"*. Nên đưa
+cho nó một lời chê về HÌNH là ra lệnh cho một cái máy làm việc nó **không có tay
+để làm** — nó viết lại lời, cổng chấm lại, người xem bỏ ở đúng giây cũ vì đúng
+lý do cũ. Đo trên `ba-the-be-tac`: 3 bản × ~9 vòng, kết quả PHẲNG (0/4 → 1/4 →
+0/5), `luot-vo-dinh` bỏ ở **3s trong MỌI vòng của CẢ BA bản**.
+- 🔑 **Cùng họ `hook.too-long` (hỏng vì HAI con số) và `scene.too-long` (hỏng vì
+  KHÔNG con số nào), lần thứ BA: ô `fix` phải nêu đúng CẦN GẠT mà người sửa có
+  trong tay.** Ở đây cần gạt không nằm trong chữ — nên phải nói ra điều đó thay
+  vì im lặng đẩy sang người viết lại.
+- **Mã `visual.format`** (`gate-audience.ts`): trong số người TRONG TỆP bỏ đi, ≥2
+  người VÀ quá nửa bỏ vì HÌNH ⇒ chặn, và ô `fix` nói *"ĐỔI ĐỊNH DẠNG, đừng sửa
+  chữ"*. `viral-loop` thấy mã này thì **DỪNG NGAY**, không tiêu thêm vòng nào.
+- 🔑 **Tín hiệu lấy bằng cách HỎI THẲNG MODEL** (`boViHinh` trong schema), KHÔNG
+  dò chuỗi trong `lyDo`. Dò chữ tiếng Việt trên văn tự do là đúng lớp lỗi đã trả
+  giá ba lần (`\bcon\b`↔"con vật" · `quan`↔"tổng quan" · `Tuần`↔"tuần này"), mà
+  model thì đã đọc bảng thời gian rồi ⇒ thêm một trường boolean là **0 lượt gọi
+  thêm, 0đ**.
+- ⚠️ **2 người chứ không phải 1**: một người chê hình là GU cá nhân. Và phải
+  **quá nửa** số người bỏ đi — vài người chê hình trong khi đa số chê chữ thì
+  cần gạt đúng vẫn là chữ. Có 2 ca đối chứng canh đúng hai ngưỡng này.
+
+### 🎬 `ba-the-be-tac` đổi định dạng — và luật cũ VẪN đúng, chỉ đổi vế còn lại
+5 cảnh `image` (tranh quẻ) → **5 cảnh `typo` + nền video** (`toi-gian/57545`,
+đoạn duy nhất trong kho chưa clip nào dùng). Gỡ luôn helper `QUE()` (hết nơi dùng).
+- 🔑 **Đây là đảo ngược quyết định *"cố ý không cắm `backdropVideo`"*, và lý do
+  đảo là hai quyết định trả lời HAI câu hỏi khác nhau.** Quyết định cũ đúng
+  trong khung *"giữ tranh quẻ"*: tranh chiếm ô 944×944 nên nền chỉ ló ở dải viền
+  mỏng, đo ra độ động trung vị **1** mà file phình **6MB → 40MB**. Nhưng câu hỏi
+  THẬT là *"có nên giữ tranh quẻ không"* — và câu trả lời đo được là KHÔNG:
+  chính bức tranh là thứ đẩy người xem đi.
+- **Luật *"nền video chỉ đáng khi cảnh là `typo`"* GIỮ NGUYÊN.** Bản này không
+  phá nó; nó đổi vế còn lại — bỏ cảnh `image` đi để về đúng hình dạng 4 clip
+  insight kia đang chạy được.
+- ⚠️ Nội dung Kinh Dịch **không mất**: tên ba quẻ vẫn nằm trong lời đọc và phụ
+  đề. Thứ bỏ đi là bức tranh TĨNH, không phải kiến thức.
+- `backdropSeconds: 16` — **đo thật 16,02s**, làm tròn XUỐNG (khai thừa là mỗi
+  vòng `<Loop>` đứng ở khung cuối chừng ấy).
+
+**✅ ĐO TRÊN BẢN GIAO RA** (render thật, không tin số của cổng tuyển):
+
+| độ động (trung vị, xám 64×114) | bản CŨ tranh quẻ | bản MỚI typo+nền | `rung-toi` (clip đang chạy được) |
+|---|---:|---:|---:|
+| cả khung | **1** | **5** | 4 |
+| dải TRÊN | 0 | **2** | 3 |
+| dải giữa | 1 | 6 | 9 |
+| dải dưới | 6 | 7 | 2 |
+
+- 🔑 Chỗ đắt nhất vẫn là **dải TRÊN: 0 → 2**. Bản cũ có mảng trên đứng im hoàn
+  toàn nên mắt đọc ra ảnh tĩnh; bản mới không dải nào chết.
+- File: **7,05MB · 720×1280 · 40,04s · h264+aac** — so với **40MB** của lượt thử
+  "tranh quẻ + nền video" trước đây. Bỏ tranh khỏi khung thì h264 hết phải tốn
+  bit cho dải viền động.
+- ⚠️ Dải GIỮA không dùng để kết luận về nền (`WordKaraoke` chạy chữ ở đúng vùng
+  đó nên số ấy lẫn chuyển động của chữ).
+- 🪤 **Bộ đo của tôi hỏng lượt đầu** và in ra `❌ Dải trên đứng im` — `decodePng`
+  trả `{w,h,px,bpp}` chứ không phải mảng phẳng, nên mọi phép tính ra `undefined`
+  rồi rơi vào nhánh kết luận xấu. Suýt đọc một lỗi của BÀI KIỂM thành một kết
+  luận về clip. **Bộ đo trả `undefined` phải DỪNG HẲN, đừng để nó rơi vào nhánh
+  so sánh** — `undefined >= 2` là `false`, tức luôn ra "hỏng".
+
+### 🚦 Cổng 2 thành CẢNH BÁO cho clip demo công cụ — KHÔNG phải nới cổng
+`gen-video.mjs` truyền `chiCanhBao: true`; `gen-insight.mjs` **giữ nguyên chế độ
+CHẶN**. Hội đồng vẫn chấm, vẫn in đủ, vẫn đếm được — thứ đổi là HỆ QUẢ.
+- **Vì sao đúng**: nhóm này qua cổng 2 đúng **3/18 (17%)** so với insight 4/6
+  (67%), và lời chê nhất quán *"chỉ quay màn hình công cụ"* · *"không có cơ sở
+  khoa học"*. Persona hoài nghi `vp-35` đòi bằng chứng khoa học — với clip demo
+  công cụ tử vi thì đó là ngưỡng **không bao giờ đạt được**, tức một cái chặn
+  vĩnh viễn chứ không phải một phép đo.
+- ⚠️ **Phân biệt với "nới cổng cho khỏi thấy cảnh báo"** (thứ repo tự dặn tránh):
+  ở đây cổng KHÔNG bị hạ ngưỡng và KHÔNG bị tắt — nó vẫn chấm và vẫn kêu to.
+  Bỏ hẳn phép chấm mới là sai: con số 3/18 chỉ có nghĩa nếu còn đo tiếp được.
+- 🔑 **Chạy đúng MỘT vòng, không viết lại**: vòng viết lại tồn tại để ĐI QUA
+  cổng; cổng không chặn thì không có gì để đi qua, và ba vòng rồi bỏ kết quả là
+  đốt sáu lượt LLM cho một con số mình không hành động theo.
+- Trích `inKetQuaVong()` dùng chung cho cả hai chế độ — hai bản in chép tay là
+  hai bản trôi khỏi nhau, và ở đây còn tệ hơn: đọc log không so được.
+
+**⚠️ HỆ QUẢ NGÂN SÁCH — cho qua nghĩa là RENDER, và render mới là khoản đắt.**
+Trước đây cổng 2 chặn 15/18 clip demo ⇒ chúng **không bao giờ tới khâu render**.
+Nay cả 18 đều dựng. Ước theo mốc đã đo (~6,5× thời lượng thật):
+
+| | trước | sau |
+|---|---:|---:|
+| clip demo thật sự render | 3 | **18** |
+| ngân sách render mỗi tuần | ~61 phút | **~110 phút** |
+| trần ngân sách lượt `--all` | 150 phút | 150 phút |
+
+- Vẫn lọt, nhưng **sát hơn hẳn**. Cơ chế xoay vòng theo tuần ISO vẫn gánh phần
+  tràn (clip không tới lượt tuần này thì tuần sau), nên không mất clip nào —
+  chỉ là thứ tự giao ra giãn ra.
+- Đổi lại **tiết kiệm LLM**: chế độ cảnh báo chạy 1 vòng thay vì 3 ⇒ mỗi clip
+  demo bớt ~4 lượt model.
+- 🔑 Con số cần nhìn ở lượt `--all` đầu tiên sau khi merge: có clip nào bị
+  **hoãn vì hết giờ** không. Có thì cân nhắc hạ số clip demo mỗi tuần thay vì
+  nới trần — nới trần là đổi một cái đèn đỏ lấy một hoá đơn.
+
+### 📦 KHO CHỨA: YouTube KHÔNG thay được Supabase — chặn CỨNG, không lách được
+Henry hỏi: *"cứ upload thẳng lên youtube, xong tìm đường chuyển từ youtube qua
+facebook reels, instagram, tiktok"*. Đo rồi trả lời: **không đi được**.
+- **Cả 4 adapter đều đòi URL FILE TRỰC TIẾP** (đọc `lib/media/publish.ts`):
+  Facebook `/videos` → `file_url` · Instagram REELS → `video_url` · Threads →
+  `video_url` · TikTok → `source_info.source: 'PULL_FROM_URL', video_url`.
+  YouTube Data API **không có endpoint nào trả file** — đó là chủ đích của họ,
+  không phải thiếu sót. TikTok còn đòi **miền chứa file phải xác minh sở hữu**,
+  mà CDN YouTube thì không bao giờ verify được.
+  ⇒ **YouTube là ĐÍCH ĐẾN, không phải KHO.**
+- **Và số đo cho thấy lo sai chỗ.** Bucket đo được: `van-dap-media` **438,9MB /
+  517 file** · `portraits` **406,6MB / 129 file** · `clips` **50,9MB / 5 file** ·
+  còn lại 8,1MB. **Tổng ~904MB** — clips chỉ **5,6%**. Đổi kho clip sang YouTube
+  là phá đường đăng chéo để tiết kiệm 5,6%.
+- ⚠️ **Nhưng đà tăng thì clips nhanh nhất**: 53,4MB/tuần (lịch tuần dựng lại)
+  so với `van-dap-media` ~22MB/tuần. Chỗ vá đúng là **xoá file MỒ CÔI** — file
+  trong bucket mà KHÔNG dòng `media_assets`/`media_posts` nào trỏ tới. Đó là
+  định nghĩa "không ai dùng", không phải canh bạc như bounded-retention theo số
+  lượng. **CHƯA LÀM — đường XOÁ cần Henry chốt.** Hôm nay chạy sẽ là no-op
+  (5 file / 5 dòng, 0 mồ côi); mồ côi bắt đầu có từ lượt dựng tuần sau.
+- 🔑 Ghi lại để khỏi đi khám phá lại: đừng đo "Supabase có phình không" bằng
+  bucket `clips`. Hai bucket kia lớn gấp 8–9 lần.
+
+### 🪤 Bẫy đã vấp
+- **`import()` một script CLI là CHẠY nó.** Lượt kiểm cú pháp cuối vô ý gọi
+  `import('scripts/stock-video.mjs')` → script bắt đầu gọi API Pixabay thật.
+  Dừng kịp, đã verify manifest vẫn 7 đoạn và không file rác. **Kiểm cú pháp thì
+  dùng `node --check`, đừng dùng `import`.**
+- **`ffprobe` không đi kèm bản ffmpeg của Remotion** — đọc độ dài phải parse
+  dòng `Duration:` trong **stderr** của `ffmpeg -i` (lệnh đó luôn thoát khác 0
+  vì không có output; đó là đường đọc, không phải lỗi).
+- 🔴 **Đếm file mới bằng `created_at` là ĐẾM HỤT.** Storage upload dùng
+  `x-upsert: 'true'` ⇒ ghi đè GIỮ NGUYÊN `created_at`. Tôi đọc ra "0 file mới
+  hôm nay" rồi suýt kết luận là TTS chưa ghi được gì; đo lại theo **`updated_at`**
+  mới thấy đúng.
+- 🪤 **HAI chẩn đoán liên tiếp của tôi về bức tường TTS đều SAI, và số liệu bác
+  cả hai**: (a) *"trần theo phút"* — bác bởi lượt `32126527840` chết ngay câu
+  ĐẦU TIÊN sau đó 14 phút; (b) *"cạn hạn mức tích luỹ"* — bác bởi 4 file vẫn
+  ghi được lúc 10:38. Nhà cung cấp chặn **ngắt quãng và tự khỏi**. 🔑 Bài học:
+  *đoán nguyên nhân của bên thứ ba khi chưa đọc được nguyên văn lỗi của họ là
+  đoán mò* — và đó chính là lý do phải vá `tts-clip` v4 để giữ lại status + body
+  thật thay vì nuốt thành `Unexpected token '<'`.
+
+---
+
+## 🔁 Vòng lặp trả bản CUỐI chứ không phải bản TỐT NHẤT · token TikTok · và pipeline CHƯA CHẠY THẬT lượt nào (2026-08-18, cùng PR #543)
+
+Vòng tiếp của track pipeline. Ba việc, và **cái thứ ba là thứ tôi tưởng đã xong**.
+
+### 🔴 A. `runViralLoop` trả bản CUỐI — trái chính tài liệu của nó
+`LoopResult` ghi *"bản đã qua cổng, hoặc bản **TỐT NHẤT** nếu hết vòng"*, còn
+code thì `spec = next` mỗi vòng rồi trả bản cuối. Đo trên `ba-the-be-tac`:
+
+| vòng | xem hết |
+|---|---|
+| 1 (bản tôi viết tay) | **3/4** |
+| 2 (model viết lại) | **0/4** |
+| 3 (dựng trên bản hỏng) | trượt luôn cổng 1 |
+
+Ba vòng đi LÙI, và thứ giao ra là bản tệ nhất trong ba.
+- 🔑 **Viết lại KHÔNG đơn điệu.** Model có thể làm tệ đi, nên vòng lặp phải là
+  *"thử rồi giữ cái tốt hơn"*, không phải *"cứ thay bằng cái mới nhất"*. Điểm
+  xếp theo thứ tự người xem quan tâm: xem hết → muốn lưu → muốn gửi. Vòng trượt
+  cổng 1 (chưa tới hội đồng) tính 0 — chưa có bằng chứng nào nói nó tốt hơn.
+- ⚠️ **Vá kèm một chỗ nói-sai cùng họ**: `remainingIssues` lấy của vòng CUỐI
+  trong khi `spec` nay là vòng TỐT NHẤT ⇒ in ra lý do của một kịch bản KHÁC với
+  kịch bản vừa giao. Cùng lớp *"đo một đằng, báo một nẻo"*. Nay lấy của đúng
+  vòng đẻ ra bản được chọn.
+
+### 🔴 B. Token TikTok — KHÔNG bắt chước YouTube được
+| Nền tảng | Token | Cách giữ |
+|---|---|---|
+| Facebook Page | **vĩnh viễn** | để yên trong env |
+| YouTube | access 1h, **refresh CỐ ĐỊNH** | env, dùng mãi |
+| **TikTok** | access **24h**, refresh **XOAY mỗi lượt** | phải GHI ĐƯỢC lúc chạy |
+
+TikTok trả `refresh_token` MỚI mỗi lượt làm mới và vô hiệu hoá cái cũ ⇒ để
+trong env là **hỏng sau đúng một lượt**. Cặp token vì thế nằm ở
+`app_config['tiktok.token']`.
+- ⚠️ **Chuỗi đứt là đứt hẳn**, không tự lành ⇒ thứ tự bắt buộc **GHI TRƯỚC,
+  DÙNG SAU**: ghi hỏng thì trả LỖI chứ tuyệt đối không dùng token đang cầm.
+- 🔑 **Khoá chống làm mới SONG SONG là bắt buộc, không phải phòng xa**: một lượt
+  `publishQueue` đăng nhiều clip, mỗi clip tự làm mới thì refresh token bị xoay
+  N lần và N−1 lượt tự giết nhau. Đo được: gỡ khoá → 3 lượt song song thành 3
+  lượt oauth + 3 lượt ghi.
+- Lỗi token vào nhóm CHẶN qua **tiền tố dùng chung `Cửa chưa mở`** ⇒ dừng cả
+  kênh thay vì đánh hỏng từng bài (bài học 84 dòng `yt_error` giống hệt nhau).
+  `channelFix` tách **BA cửa TikTok khác hẳn nhau** — miền chưa verify · chuỗi
+  đứt · token chết; nhầm cửa là đi sửa nhầm chỗ y hệt ca Facebook.
+- `docs/TIKTOK-TOKEN.md` — 5 bước cấp lần đầu + bảng đọc lỗi.
+
+### 🔴 C. ĐÍNH CHÍNH NẶNG NHẤT: pipeline CHƯA từng chạy thật lượt nào
+Tôi đã báo *"đã ráp xong"*. Đo lại prod thì:
+
+| | thực tế |
+|---|---|
+| Lượt Actions của `video-build` | **5, cả 5 TRƯỢT** |
+| …và cả 5 đều là | **`--dry-run` (khảo sát), 0 lượt render** |
+| Bucket `clips` | **0 file** |
+| `media_assets` video | **0 dòng** |
+
+⇒ *"ráp xong"* mới đúng ở tầng MÃ. Đường ống chưa giao một byte nào.
+- 🔑 **Bài học: "đã nối" ≠ "đã chảy".** Chuỗi có 6 mắt mà chỉ chạy tới mắt thứ 2
+  thì bốn mắt sau vẫn là giả thuyết. Phải soi **kho + bảng**, đừng đọc code.
+- ✅ **HẾT HẠN — số trong bảng này là của lúc đo, nay đã khác.** Lượt
+  `32127605911` giao ra thật: bucket `clips` **1 file**, `media_assets` **1
+  dòng video** 720×1280. Xem mục đầu file. Bài học ở trên thì vẫn nguyên giá trị.
+
+### 🔴 D. `clip-ingest` đang chạy vẫn là **v1** — lần thứ BA của cùng bệnh
+Đọc bản trên Supabase: chưa có khối xếp hàng `media_posts`, còn cắm cứng
+`width: 1080`. Sửa đổi trong repo **chưa bao giờ deploy**. Đã trả giá hai lần
+trước (`send-daily-push`, `youtube-upload`).
+- Và chú thích đầu file **NÓI NGƯỢC code bên dưới** (*"HÀM NÀY KHÔNG XẾP HÀNG
+  ĐĂNG"* trong khi 60 dòng cuối làm đúng việc đó). Chú thích sai còn tệ hơn
+  không có — người sau đọc rồi tin.
+- Deploy v6, đọc ngược chốt khớp.
+
+### 📊 Số đo đáng nhìn nhất: cổng 2 chấm HAI LOẠI clip rất khác nhau
+| loại | qua cổng 2 |
+|---|---|
+| insight | **4/6 (67%)** |
+| tool-demo | **3/18 (17%)** |
+
+Lời chê của hội đồng với tool-demo nhất quán: *"chỉ quay màn hình công cụ"* ·
+*"không có cơ sở khoa học"*. Persona hoài nghi `vp-35` đòi bằng chứng khoa học —
+với một clip demo công cụ tử vi thì đó là ngưỡng **không bao giờ đạt được**, nên
+nó thành một cái chặn vĩnh viễn chứ không phải một phép đo.
+- ⚠️ **CHƯA sửa, và cố ý chưa sửa.** Nới cổng cho khỏi thấy cảnh báo là đúng thứ
+  repo tự dặn tránh; còn kết luận "hội đồng sai" thì tôi chưa đủ bằng chứng.
+  Đây là quyết định NỘI DUNG cần Henry chốt: bỏ hẳn clip tool-demo, hay cho cổng
+  2 thành cảnh báo (không chặn) riêng cho loại đó.
+
+### Verify
+`tsc` 0 · `lint` 0 lỗi / 77 warning = mốc nền · `prettier` cả cây sạch ·
+**20/20 bộ dò**.
+- **5 bất biến vòng lặp** trên module thật (hội đồng + người viết lại là stub
+  tất định): điểm GIẢM DẦN 3→0→1 thì trả bản vòng 1, `remainingIssues` mang lỗi
+  vòng 1 chứ không phải vòng 3, và **ĐỐI CHỨNG** điểm TĂNG dần thì trả bản cuối.
+- **36 bất biến token TikTok** trên module thật (chặn tầng `fetch`): env thủ
+  công → 0 lượt mạng · DB còn hạn → 0 lượt làm mới · sắp hết hạn → gửi đúng
+  `grant_type`/refresh cũ/client key+secret, **lưu refresh token MỚI đã xoay**,
+  và **thứ tự oauth → ghi → trả** · ghi hỏng → KHÔNG trả token · `invalid_grant`
+  → chỉ đúng việc phải làm · **3 lượt song song → CHỈ 1 lượt làm mới**.
+- **Red-team 4 ca, có assert đột biến ĐÃ ăn trước khi đọc kết quả**: gỡ
+  `bestSpec` → đỏ · gỡ `bestRound` → đỏ · gỡ chốt ghi-trước → đỏ · gỡ khoá song
+  song → đỏ. Khôi phục xanh lại, 0 file rác.
+- 🪤 **Một lượt red-team ĐỖ GIẢ vì đột biến không ăn** (`perl` không khớp mẫu),
+  `grep -c` ra 0 mà tôi suýt đọc kết quả xanh đó là kết luận. Bài học đã ghi,
+  vấp lại: **assert đột biến đã ăn RỒI mới đọc kết quả.**
+
+### 🪤 Bẫy đã vấp
+- 🔴 **`tsc` emit `.js` lẫn vào `lib/`** (11 file) khi dựng harness — `outDir`
+  ngoài repo vẫn chưa đủ, phải khai **`rootDir`** đúng, và `git status` lại sau
+  mỗi lượt chạy. Bài học đã ghi ở track engine, vấp lại.
+- **TS5112** khi nêu file trên dòng lệnh lúc cwd có `tsconfig.json`; `--ignoreConfig`
+  chữa được lỗi đó nhưng **mất luôn `paths`** ⇒ `@/` không phân giải. Đường
+  đúng: một `tsconfig` riêng có `rootDir` + `paths`.
+- **`open.tiktokapis.com` bị egress chặn** (`403 CONNECT` = chưa chạm server,
+  KHÁC hẳn lỗi endpoint) ⇒ verify token dừng ở tầng stub, tên trường trong phản
+  hồi thật chưa chứng minh được. Ghi rõ trong doc thay vì để người sau tưởng đã kiểm.
+
+---
+
+## 🏭 RÁP PIPELINE ĐĂNG CLIP — và cổng 2 KHÔNG chặn như tôi tưởng (2026-08-18, PR #543)
+
+Henry: *"bây giờ mày ráp flow vào thành cái pipeline auto chạy đi, xong tao sẽ
+đưa mày account tiktok, instagram, còn facebook với youtube thì có rồi"*.
+
+### 🔴 Đo prod trước: hạ tầng gần đủ, nhưng KHÔNG đường nào đang chảy
+| | trạng thái lúc bắt đầu |
+|---|---|
+| `media_assets` | 54 dòng, **toàn ẢNH `quote_4x5`, 0 clip video** |
+| `media_posts` | 54 bài facebook, **TẤT CẢ `queued`, 0 bài live** |
+| YouTube `van_dap` | 47 live *(mới nhất 23/05)* · 48 pending · 54 error |
+
+**Bốn chỗ đứt, cả bốn đo được:** `publish.ts` chỉ đăng ẢNH (`/photos`,
+`media_type:'IMAGE'`) · `clip-ingest` CỐ Ý không tạo `media_posts` · 0 dòng
+TikTok trong cả repo · `video-build.yml` cố ý chưa có `schedule`.
+
+### ✅ Đã nối cả bốn
+- **Đường đăng VIDEO cho 5 kênh.** Mỗi adapter tự rẽ theo **ĐUÔI FILE**
+  (`isVideoAsset`) — đuôi là sự thật vật lý về file, còn `variant` chỉ là quy
+  ước do người nộp tự khai, và `QueueRow` vốn không select `variant`.
+  - Facebook `/videos` với `file_url`. ⚖️ **CỐ Ý không dùng `/video_reels`** dù
+    clip đúng khổ 9:16 và Reels reach tốt hơn: endpoint đó bắt buộc **ba bước**
+    upload resumable (tải mp4 về runner rồi đẩy từng khúc) = ba chỗ hỏng thay
+    vì một. Đo được reach quá thấp thì mới đáng dựng.
+  - Instagram `media_type: 'REELS'` — **không phải lựa chọn**: Graph API không
+    còn nhận video dạng bài thường.
+  - `waitContainer` nay nhận số vòng: ảnh giữ 8 (~24s), **video nới 20 (~100s)**
+    vì Instagram xử lý một Reel mất 30–90 giây.
+- **TikTok** — Content Posting API `PULL_FROM_URL`. 🪤 Bẫy đã né: TikTok trả
+  `error.code = 'ok'` khi **THÀNH CÔNG**, kiểm sự tồn tại của `error` là đọc
+  lượt thành công thành hỏng. Và **không bịa `external_url`** — TikTok chỉ trả
+  `publish_id`, lưu một URL mở ra 404 còn tệ hơn để trống.
+  - 🔴 **Token TikTok hết hạn sau 24 GIỜ** (khác Facebook token Page vĩnh viễn)
+    ⇒ adapter dùng được cho lượt thử tay, **chạy tự động hằng ngày thì phải bổ
+    sung khâu làm mới bằng `refresh_token` TRƯỚC**. Chưa làm.
+- **`clip-ingest` → `media_posts`, sau một cái VAN mặc định ĐÓNG.**
+  🔑 KHÔNG dùng chung `social.autopost_enabled`: cờ đó đang BẬT cho đường ẢNH,
+  mà ảnh có **brand-check** gác. Clip thì không — dùng chung cờ nghĩa là clip
+  chưa ai xem tự lên trang công khai. ⇒ `social.clip_autopost`, mặc định
+  **false** (đã seed prod).
+  - Caption/thẻ/khổ đi qua **SIDECAR `<id>.meta.json`** do chính `gen-insight`
+    ghi sau lượt render — KHÔNG để khâu nộp đọc lại `insight.ts`, vì cổng 2 có
+    thể VIẾT LẠI kịch bản và bản nguồn khi đó nói khác clip đã dựng.
+  - CỐ Ý không chép `SUPPORTED_CHANNELS` sang Deno; kênh lấy từ `social.channels`.
+- **Lịch dựng: TUẦN**, 08:00 VN thứ Hai. Không phải ngày — `build-video-batch`
+  bỏ qua clip đã có file nên hằng ngày là 6 ngày no-op. ⚠️ Nhịp **ĐĂNG** thì độc
+  lập và vốn đã hằng ngày (`media-build` 09:30 VN gọi `publishQueue`).
+
+### 🔴 ĐÍNH CHÍNH của chính tôi: cổng 2 KHÔNG chặn pipeline
+Tôi đã nói với Henry *"cổng 2 chặn nên phải `--no-audience`"*. **Sai** — đo cả 6:
+
+| kịch bản | cổng 2 |
+|---|---|
+| `vi-sao-hay-hoan-lai` | ✅ vòng 1 — 5/5 xem hết · lưu 71% · gửi 57% |
+| `hai-nguoi-cung-luong` | ✅ vòng 1 — 6/6 · 71% · 71% |
+| `ba-kieu-ton-thuong` | ✅ vòng 1 — 3/4 |
+| `bon-buoc-truoc-khi-roi-di` | ✅ vòng 1 — 3/4 |
+| `ba-kieu-ton-thuong-day-du` | ✅ **vòng 2** — 0/3 → **7/7 · 86% · 86%** |
+| `ba-the-be-tac` | ❌ trượt 3 vòng |
+
+**5/6 QUA.** Và dòng áp chót là bằng chứng vòng lặp viết lại nay **HỘI TỤ**.
+
+### 🔴 Vì sao trước đó vòng lặp không bao giờ hội tụ — HAI TRẦN cho MỘT ràng buộc
+Đo `ba-the-be-tac`: cả 3 vòng đều trượt lại cổng 1 vì `hook.too-long`. Căn nguyên:
+- ô `fix` của `gate-machine` nói *"rút xuống dưới **67** ký tự"* (nhân `13.59` thô)
+- khối NGÂN SÁCH của `viral-loop` nói *"tối đa **62**"* (có biên an toàn 8%)
+- **cả hai cùng vào MỘT prompt** ⇒ model theo con số lớn hơn rồi trượt.
+
+Và `13.59` ở `gate-machine` là **bản chép tay thứ ba** của `TTS_CHARS_PER_SECOND`.
+- Vá bằng nguồn duy nhất **`budgetChars(seconds)`** trong `script-spec.ts`.
+- **Đo lại sau khi vá: `hook.too-long` BIẾN MẤT hoàn toàn**, vòng lặp chạy đủ 3
+  vòng hội đồng thay vì mất trắng vòng 3 ở cổng 1.
+- 🔑 Bài học lặp lần thứ ba trong CÙNG một ngày (sau `CLIP_SPEED`↔`13.59` và
+  `SUPPORTED_CHANNELS`): **một con số nói với model ở hai chỗ thì sớm muộn hai
+  chỗ nói hai giá trị, và model theo cái dễ hơn.**
+
+### 🪤 Bẫy đã vấp
+- 🔴 **`schedule` đặt sai chỗ thành khoá CẤP 1** thay vì dưới `on:` — YAML vẫn
+  hợp lệ, workflow vẫn chạy tay được, **GitHub bỏ qua lịch hoàn toàn**. Chỉ lộ
+  vì **parse YAML thật** (`on` chỉ có `workflow_dispatch`) thay vì tin
+  `grep -c schedule`. Sửa YAML tay thì phải parse lại, đừng đọc diff bằng mắt.
+- **`pkill -f` tự giết (exit 144) — LẦN THỨ BA VÀ THỨ TƯ trong một buổi.** Cách
+  tránh: `pkill -f 'gen-insight[.]mjs'` — ngoặc vuông làm chuỗi lệnh hết khớp.
+- **Test nạp module trước khi set env**: `SUPABASE_URL`/`KEY` là hằng
+  **module-level** trong `appConfig.ts`, đọc lúc NẠP. Set env sau `require` là
+  module nạp với URL rỗng rồi mọi lượt đọc config rơi về DEFAULTS — bộ kiểm ra
+  **0/14** trông như code hỏng.
+- **Đính chính giữa chừng**: `media_posts` KHÔNG có UNIQUE trong `pg_constraint`
+  — nhưng nó **CÓ**, dưới dạng unique **INDEX** (`media_posts_asset_channel_uniq`).
+  Hỏi nhầm bảng hệ thống thì kết luận sai; `pg_indexes` mới là chỗ đúng.
+
+### Verify
+`tsc` 0 · `lint` 0 lỗi / 77 warning = mốc nền · `prettier` cả cây sạch ·
+**20/20 trên MODULE THẬT** (biên dịch `publish.ts`, chặn ở tầng `fetch` để bắt
+đúng chuỗi bay lên nhà cung cấp) gồm **5 ca ĐỐI CHỨNG** chứng minh đường ẢNH
+không hồi quy ở cả 5 kênh · sidecar sinh đúng từ lượt render thật · YAML parse
+lại xác nhận `schedule` nằm đúng dưới `on:`.
+
+### CÒN LẠI
+- 🔴 **`ba-the-be-tac` là kịch bản DUY NHẤT trượt**, và hội đồng chê nhất quán
+  qua 6 lượt chấm: *"quẻ Kinh Dịch quá khô khan/học thuật/trừu tượng"*, *"không
+  có ví dụ cụ thể để thấy liên quan đến bản thân"*. Đây là lời chê ĐÚNG TẦNG —
+  sửa là sửa nội dung kịch bản, không phải sửa cổng.
+- **Token TikTok 24h** — phải dựng khâu làm mới trước khi chạy tự động.
+- **Van `social.clip_autopost` đang ĐÓNG.** Bật:
+  `update app_config set value='true'::jsonb where key='social.clip_autopost';`
+- Việc tay: token Page Facebook (54 bài ảnh kẹt từ 02/08) · publish YouTube app ·
+  verify miền URL cho TikTok · account Instagram Business.
+
+---
+
+## 🎬 GỠ nhân vật, thay bằng NỀN VIDEO — nhân vật sai VAI chứ không chỉ xấu (2026-08-18, cùng PR #543)
+
+Henry xem bản render: *"Mèn. Tao thấy cái amination nó vừa xấu vừa chả liên quan
+gì đến nội dung script. Cho vào càng thêm confused. Mày xem có tool nào có sẵn
+hay repo nào trên github cho phép tạo amination theo script có sẵn ko?"*
+
+### 🔴 Hai lỗi tách bạch, và lỗi thứ hai là lỗi CẤU TRÚC
+1. **"chả liên quan"** — đúng theo nghĩa đen: tư thế do TÔI gõ tay trong
+   `insight.ts`, không có cơ chế nào nối nó với lời đọc. Lượt trước tôi trả lời
+   *"giữ từ vựng đóng rồi cho LLM chọn"* nhưng **chưa bao giờ dựng phần LLM
+   chọn** — nên nó vẫn là phỏng đoán của tôi. Nói một hướng rồi không đi là tự
+   để lại một lời hứa hụt.
+2. **"càng thêm confused"** — clip này có **CHỮ CHẠY + GIỌNG ĐỌC**. Nhân vật cử
+   động là một **CHỦ THỂ**, mà chủ thể thì tranh mắt với chữ. Chính CLAUDE.md đã
+   đo đúng điều đó ở lượt chọn ảnh (*"ảnh đổi mỗi 3 giây thì mắt chạy theo ảnh
+   chứ không đọc chữ"*) — nhân vật cử động còn mạnh hơn một bức ảnh đổi.
+   ⇒ **Kể cả một nhân vật ĐẸP cũng làm format này tệ đi.** Đây mới là câu trả
+   lời, không phải "vẽ lại cho khéo hơn".
+
+### 🔎 Khảo sát tool/repo — ba nhóm, không nhóm nào dùng được
+| Nhóm | Đại diện | Chặn ở đâu |
+|---|---|---|
+| Ráp clip từ script | `short-video-maker` (MIT, **chạy bằng chính Remotion**) | Chính là kiến trúc mình đang có (stock + TTS + phụ đề), nhưng **chỉ tiếng Anh** (Kokoro). Không có gì để mang về |
+| Script → phim hoạt hình | `Toonflow` | **AGPL-3.0** (chạy rời như app desktop thì không lây), và bên trong vẫn gọi API video TRẢ TIỀN — nó là vỏ, không phải máy miễn phí |
+| Chữ → cử động nhân vật | `Animato` (MIT) · `text-to-motion`/MDM | Cần mô hình 3D ĐÃ GẮN XƯƠNG (mình không có) + `bpy`/GPU, đầu ra 3D ⇒ phải dựng đường render thứ hai |
+
+🔑 **Điều đáng giá nhất của lượt khảo sát**: lướt cả topic
+`youtube-shorts-generator` — **KHÔNG repo nào vẽ nhân vật**, tất cả đi stock
+footage. Đó không phải vì họ lười, đó là hình dạng ĐÚNG cho clip có chữ dẫn dắt.
+- Đường DUY NHẤT thật sự cho "animation bám script" là **model sinh video**
+  (Veo 3.1 Lite ~$0,03/giây ⇒ clip 40s ≈ **31.000đ**, có reference-to-video giữ
+  nhân vật nhất quán). Nhưng **tối đa 8 giây/lượt** ⇒ clip 40s = 5 cú cắt, và
+  vẫn dính đúng vấn đề tranh mắt ở trên.
+
+### ✅ Đã làm — nền VIDEO, và nó đi NGƯỢC hẳn nhân vật
+Nền video cố tình **không có chủ thể, không kể chuyện**. Ba lớp ép nó ở đúng vai:
+`playbackRate` · `blur` · lớp phủ navy 0,20 + tối dần hai đầu (**dùng lại** của
+`PhotoBackdrop`, không dựng bản thứ hai). ⚠️ Hai số đầu **đã phải chỉnh lại sau
+khi đo** (0,5 → **1,0** và 6px → **3px**) — xem mục *"độ động GIAO RA"* dưới đây.
+- **`scripts/stock-lib.mjs` (mới)** — tách TỪ VỰNG + CỔNG LỌC + PHÉP ĐO ra dùng
+  chung. Kho ảnh và kho video phải gác CÙNG bộ luật (đạo đức · người-phải-châu-Á
+  · liên quan theo `must[]`); chép hai bản là hẹn ngày một kho hở mà kho kia vẫn
+  báo xanh. `stock-ingest.mjs` 1.300 → 523 dòng, **đối chứng `--list` trùng khít
+  byte-for-byte**.
+- **`scripts/stock-video.mjs` (mới)** — `pixabay.com/api/videos/`, cùng khoá.
+  ⚖️ Điều khoản đọc tận nơi, video KHÁC ảnh đúng một điểm: *"Videos **may be
+  embedded directly** in your applications"* — video ĐƯỢC phép hotlink. Vẫn tải
+  về, nhưng vì lý do KHÁC luật (render lại sau 6 tháng phải ra đúng clip đó).
+- **`backdropVideo` + `backdropRate` + `backdropSeconds`** trong `ScriptSpec` →
+  `VideoBackdrop` trong `InsightClip`.
+
+### 🪤 Bốn cái bẫy, cả bốn chỉ lộ khi CHẠY THẬT
+1. 🔴 **`fetch` của Node KHÔNG tự đi qua proxy, `curl` thì có.** `curl` tới được
+   Pixabay (400 = thiếu khoá, tức ĐÃ CHẠM SERVER) còn `fetch` ăn **403 của
+   proxy**. Phân biệt được hai mã đó thì mới khỏi đi sửa nhầm sang phía khoá API.
+   Vá bằng `ensureProxyEnv()` — tự chạy lại chính mình một lần kèm
+   `NODE_USE_ENV_PROXY=1` (cờ đọc lúc KHỞI ĐỘNG nên gán trong mã là quá muộn).
+2. **ffmpeg đi kèm Playwright chỉ có 3 demuxer, KHÔNG có mp4/h264** ⇒ không đo
+   được khung hình video tại máy này. Đo trên **thumbnail** — đúng mẹo "soi bản
+   nhỏ trước" đã chứng minh ở kho ảnh (lệch trung bình 0,19).
+3. 🔴 **PHÉP ĐO RỘNG HƠN THỨ ĐƯỢC RENDER.** `measureImage` ép cả khung về 64×114
+   (đúng cho kho ảnh vì ảnh ngang vốn bị loại), nhưng video ngang thì
+   `objectFit: cover` **CẮT GIỮA về 9:16 và vứt hai mép**. Đoạn 11722 đo ra
+   L=36,3 mà khung hình thật có một **quầng đèn vàng lớn chiếm nửa khung** — chỉ
+   lộ khi chụp khung ra nhìn. Thêm `fit: 'crop916'`; đo lại thì chính đoạn đó bị
+   LOẠI. Cùng lớp với *"đo trên bản đã cắt gọn thì đang đo bản cắt"*, chỉ ngược
+   chiều.
+4. **Port thiếu cổng**: kho ảnh chặn cứng cả `sat`/`detail`/`sd`, tôi mới port
+   mỗi độ sáng ⇒ lọt ngay một đoạn hoàng hôn `sat=64,6` (`sunset, karate`) —
+   đúng thứ brief gọi là "sáng-vui-nhiều-màu". Port nốt cả bốn.
+
+### 🔴 Và hội đồng lại CHÊ ĐÚNG THỨ VỪA SỬA
+Lượt chạy đầu cổng 2 chặn với lý do *"chỉ chữ trên nền xanh đơn điệu, không có
+hình ảnh"* — trong khi clip CÓ nền mưa. Vì `buildTimeline` chưa biết
+`backdropVideo`. **Đây là lần thứ hai của cùng một lỗi**: thêm một loại hình mới
+mà quên dạy bảng thời gian thì hội đồng bị bảo là clip chỉ có chữ, rồi than đúng
+câu đó. ⇒ `describeVideo()` trong `stock-catalog.ts` (mô tả = TAG CỦA NHÀ CUNG
+CẤP, không phải chữ tôi viết) + ba nhánh trong `buildTimeline`.
+- 🔑 **Luật rút ra: thêm một `visual.kind` hay một loại nền mới thì PHẢI sửa
+  `gate-audience.ts` trong CÙNG lượt.** Không thì cổng 2 chấm một clip khác với
+  clip máy render.
+
+### 🐞 Bắt kèm: tên miền in HAI LẦN ở khung kết (bản navy)
+`buildCta` đã chở sẵn `tuviminhbao.com` trong câu kết, `Outro` in thêm một dòng
+nữa. Lỗi đã vá cho `OutroFigure` nhưng **cố ý chưa đụng bản navy** vì lúc đó nó
+là khung kết của 5 clip đang chạy — nay clip insight quay lại đúng đường này nên
+lộ lại. Vá bằng cùng một chốt `includes('tuviminhbao.com')`.
+
+### Verify
+`tsc` root 0 · `tsc` remotion 0 · `prettier` cả cây sạch · `lint` **0 lỗi / 77
+warning = đúng mốc nền** (đo bằng `git stash` rồi so từng dòng) · **20/20 bộ dò**.
+- **13/13 ca red-team cổng lọc dùng chung**: 5 ca phải LOẠI (mặt người không dấu
+  hiệu châu Á · `bamboo`/`lantern` chỉ là bối cảnh · đạo đức · lạc văn hoá · lạc
+  đề) và 8 ca phải NHẬN (`silhouette`/`shadow`/`hands` miễn cổng người · người
+  châu Á · và ba ca biên `war`∌`warm`, `poor`∌`poori`, `grave`∌`gravel`).
+- **Đối chứng refactor**: `stock-ingest --list --bucket all` trùng khít byte-for-byte.
+- **Chốt hội đồng ĐÃ NHÌN THẤY nền**: chặn ở tầng `fetch` để bắt đúng chuỗi bay
+  lên nhà cung cấp — prompt nay mang *"NỀN CHẠY SUỐT CLIP — một ĐOẠN PHIM quay
+  thật, phát chậm 0.5×…"* kèm tag thật, và **hết câu "nền xanh đậm phẳng"**.
+- Soi **4 khung hình thật** (hook · giữa · cảnh cuối · khung kết) — đây là phép
+  kiểm duy nhất bắt được cả lỗi đo-sai-vùng-cắt lẫn lỗi in trùng tên miền.
+
+### 🔴 VÒNG SAU — "trong clip tao ko thấy video chi thấy hình tĩnh"
+Henry xem bản render đầu và nói đúng. Đo bằng pixel trên ba khung (40 · 300 ·
+700): vùng nền chỉ lệch **5–9 trên thang 255 (2–3,5%)**, mà phần lớn là Ken
+Burns chứ không phải đoạn phim.
+
+🔴 **Căn nguyên là tôi tự tuyên bố không đo được rồi thôi không đo.** Tôi ghi
+*"ffmpeg đi kèm Playwright chỉ có 3 demuxer, không mở được mp4 ⇒ máy không gác
+được độ động"* — đúng về bản Playwright, nhưng **`@remotion/compositor-*` mang
+theo một bản ffmpeg ĐẦY ĐỦ (42 demuxer, h264/hevc/vp9) và nó nằm sẵn trong
+repo**. Công cụ có sẵn mà tôi kết luận là không có.
+- 🔑 **Bài học: trước khi ghi "không làm được", rà hết công cụ ĐÃ CÓ TRONG
+  REPO.** Một dòng "không gác được" trong tài liệu là một cái cổng bị tắt vĩnh
+  viễn — và đúng cái cổng đó là cổng quan trọng nhất của kho video.
+
+**Và nó không phải xui — hai cổng KÉO NGƯỢC NHAU:** cổng độ sáng đẩy về phía
+đoạn tối+phẳng, mà đoạn tối+phẳng thì thường chẳng có gì chuyển động. Thiếu cổng
+độ động là cổng độ sáng tự chọn ra đoạn tĩnh.
+
+| đo được (Δ/giây, thang 0–255, tốc độ gốc) | |
+|---|---:|
+| giọt nước bám kính *(đoạn đã dùng)* | **1,99** |
+| mây trôi | 14,6 |
+| phố có người qua lại | 20,4 |
+
+- **`measureMotion()`** (`stock-lib.mjs`) — trung vị |Δ| của ba cặp khung cách
+  nhau 1 giây, đo trên ĐÚNG vùng cắt 9:16. `MOTION_MIN = 6` · `MOTION_MAX = 45`.
+- **Đối chứng bắt buộc khi đổi ffmpeg**: `measureImage` trên cùng file ra **số
+  đo TRÙNG KHÍT** giữa bản Playwright và bản Remotion ⇒ kho ảnh không đổi nghĩa.
+- ⚠️ **Cả một LỚP tông không có video**: mưa trên kính / sương đo ra 0,87–3,14
+  ⇒ tông `mo-mit` ra **0 đoạn**. Tập tông viết cho ẢNH TĨNH, không phải tông nào
+  cũng dịch được sang video. Đừng ép cho đủ.
+
+### 🔴 CỔNG ĐO MỘT ĐẰNG, NGƯỜI XEM NHẬN MỘT NẺO — 11,8 giao ra còn 1
+Thay đoạn động (11,77/giây) rồi render lại, **vẫn phải đo trên chính file mp4**
+thay vì tin con số của cổng. Kết quả (hai khung cách nhau 1 giây, xám 64×114):
+
+| dải khung | trung vị | trung bình |
+|---|---:|---:|
+| trên (trời + cầu) | **0** | 0,24 |
+| giữa (sau khối chữ) | 1 | 4,28 |
+| dưới (mặt nước) | **6** | 10,50 |
+| **cả khung** | **1** | 5,2 |
+
+⇒ Cổng nhập kho đo **11,8**, thứ giao ra chỉ còn **1**. Ba tầng ăn mất, và cả ba
+đều là lựa chọn của chính tôi:
+1. **`playbackRate` 0,5 chia đôi độ động** — đúng theo nghĩa đen. Ý đồ *"gần như
+   trôi tại chỗ"* **đã vượt quá**: trôi tại chỗ thật thì mắt đọc ra là ảnh tĩnh,
+   tức đúng lời Henry.
+2. **`blur(6px)` xoá phần chi tiết nhỏ** — mà chi tiết nhỏ CHÍNH LÀ thứ chuyển
+   động (ánh sáng lăn tăn trên mặt nước). Blur ở đây đang xoá đúng thứ vừa tốn
+   một cổng lọc để tuyển.
+3. **Chuyển động không trải đều khung**: hai phần ba trên (trời + cầu) đứng im
+   hoàn toàn. Cổng đo TRUNG VỊ trên cả khung 9:16 của đoạn NGUỒN nên nó vẫn
+   thấy 11,8, còn người xem thì chỉ thấy một dải dưới nhúc nhích.
+
+- **Vá**: `rate` 0,5 → **1,0** · `blur` 6px → **3px**. Tương phản chữ vốn do
+  `TextPlate` (blur 18px riêng) gánh, không phải do làm mờ nền — nên hạ blur nền
+  không đụng tới chỗ đọc chữ. Lề an toàn vẫn dư: `scale` khởi điểm 1,06 cho 32px
+  mỗi bên, blur 3px lấy mẫu ra ~9px.
+- 🔑 **Bài học đặt ở tầng phương pháp: con số của CỔNG TUYỂN không phải con số
+  NGƯỜI XEM NHẬN.** Cổng đo đoạn NGUỒN ở tốc độ gốc, chưa qua `rate`/`blur`/lớp
+  phủ/Ken Burns. Muốn biết clip trông có động không thì **đo trên chính mp4 đã
+  render** — cùng lớp với bài học *"đo trên bản đã cắt gọn thì đang đo bản cắt"*,
+  và cùng lớp với *"log của bên gửi không chứng minh được bên nhận hiện ra"*.
+- 🪤 Và tôi đã **báo nhầm một con số** trước khi kịp đo lại: nói *"nền đổi
+  6,31/giây"* trong khi đó là số của RIÊNG dải mặt nước; số của cả khung là **1**.
+  Đo một dải rồi phát biểu như thể đo cả khung — phải nêu rõ đo Ở ĐÂU.
+
+### 🔴 Và `rate`/`blur` KHÔNG phải cần gạt — cổng đo bằng TRUNG BÌNH mới là lỗi
+Sửa `rate` 0,5→1 và `blur` 6→3 rồi **đo lại: gần như không đổi** (trung vị vẫn 1,
+trung bình 5,2 → 5,3). Tức hai cần gạt đó không phải chỗ hỏng. Chỗ hỏng nằm ở
+`measureMotion`: nó tính **TRUNG BÌNH** |Δ| toàn khung, mà trung bình thì **một
+dải nhỏ động mạnh gánh được cả khung đứng im**.
+
+Đo lại 12 đoạn, đặt trung bình cạnh **trung vị**:
+
+| đoạn | TB (cổng cũ) | trung vị |
+|---|---:|---:|
+| đồng lúa mì | 9,49 | **0,0** |
+| cầu đêm + mặt nước *(đoạn tôi vừa định gửi)* | 11,77 | **0,9** |
+| hồ Pleiku | 7,06 | 1,2 |
+| sân ga | 6,14 | 2,3 |
+| cổng vòm | 12,15 | 3,8 |
+| rừng đêm sao | 11,30 | 5,6 |
+| rừng tối | 22,61 | 7,7 |
+| mây vần | 14,61 | 11,0 |
+| đèn lắc trong gió | 38,54 | 32,8 |
+
+**Trung bình 9,49 mà trung vị 0,0** — quá nửa khung KHÔNG đổi một đơn vị nào
+trong trọn một giây, và cổng cũ chấm nó là "đủ động".
+- 🔑 **Hai con số trả lời hai câu khác nhau, phải hỏi CẢ HAI**: trung bình → *có
+  chuyển động không*; trung vị → *chuyển động có TRẢI RA không, hay dồn một dải*.
+  **Mắt người đọc ra "video" theo câu thứ hai.**
+- `measureMotion` nay trả `{mean, spread}`, lấy mẫu GIỮA của ba lượt cho TỪNG chỉ
+  số riêng (một đoạn động đều ở giữa mà đứng im hai đầu thì gộp là sai).
+  **`MOTION_SPREAD_MIN = 5`** — cắt đúng chỗ dữ liệu tự tách (3,8 ↔ 5,6).
+- Soi lại kho bằng cổng mới: **giữ 7 / gỡ 5**. Kho mỏng đi thật, nhưng kho 12
+  đoạn mà 5 đoạn là ảnh tĩnh thì con số 12 chỉ là con số.
+- 🪤 **Bẫy đo lại vấp ngay trong lượt này**: đổi đoạn nền rồi đo *trong khi render
+  chưa xong* → ra y hệt số cũ, suýt kết luận "đổi đoạn không ăn thua". Phải chốt
+  mtime của mp4 TRƯỚC khi đo.
+
+### ✅ ĐO TRÊN BẢN GIAO RA — cổng mới đứng vững, dải chết biến mất
+Đo lại trên chính mp4 đã render (không tin số của cổng), cùng phép đo cũ:
+
+| dải | cầu đêm *(cổng TB, đã gỡ)* | rừng tối *(cổng trung vị)* |
+|---|---:|---:|
+| trên | **0** | **3** |
+| giữa *(có chữ chạy — không thuần nền)* | 1 | 9 |
+| dưới | 6 | 2 |
+| **cả khung** | **1** | **4** |
+
+🔑 Chỗ đắt nhất **không phải** con số cả khung mà là **dải TRÊN: 0 → 3**. Bản cũ
+có hai phần ba khung đứng im hoàn toàn nên mắt đọc ra ảnh tĩnh dù cổng chấm 11,8;
+bản mới **không dải nào chết**. Đúng thứ `MOTION_SPREAD_MIN` sinh ra để gác.
+- ⚠️ **Dải GIỮA không dùng để kết luận về nền** — `WordKaraoke` chạy chữ ở đúng
+  vùng đó nên số ấy lẫn chuyển động của chữ. So được vì hai clip cùng khuôn, cùng
+  nhịp chữ, chỉ khác đoạn nền; nhưng đừng trích nó ra một mình.
+
+### 🔴 NỀN VIDEO CHỈ ĐÁNG KHI CẢNH LÀ `typo` — và tôi đã cắm nhầm một chỗ
+Render `ba-the-be-tac` xong, đo giao ra: **trung vị 1 · TB 3,03** — bằng đúng
+clip đã bị loại, trong khi đoạn nguồn (`toi-gian/57545`) đo **trung vị 9,31**.
+Loại trừ lần lượt: `backdropSeconds` khai ĐÚNG độ dài thật cả 6 đoạn (bẫy
+"`OffthreadVideo` đứng khung cuối" — không phải); `backdropRate` cả hai clip đều
+mặc định 1 (không phải). **Chỉ khi CHỤP KHUNG RA NHÌN mới thấy**: clip này hiện
+một **tranh quẻ tĩnh** chiếm gần trọn khung, nền video chỉ ló ở dải viền mỏng.
+
+| kịch bản | loại cảnh | nền video |
+|---|---|---|
+| 5 kịch bản kia | **100% `typo`** | đúng chỗ — nền CHÍNH LÀ hình |
+| `ba-the-be-tac` | **100% `image`** (tranh quẻ) | chỉ là viền ⇒ **đã gỡ** |
+
+- 🔑 **Luật: nền video chỉ đáng khi cảnh là `typo`.** Cảnh `image`/`figure`/`duo`
+  đã có chủ thể chiếm khung thì nền video là **chi phí thuần** — file phình
+  **6MB → 40MB** (h264 tốn bit cho dải viền động) và render lâu hơn, đổi lấy thứ
+  người xem gần như không thấy.
+- ⚠️ Và tranh quẻ ở clip này là **NỘI DUNG** (kịch bản dựng quanh 3 quẻ Kinh
+  Dịch), không phải trang trí — đừng gỡ tranh để nhét nền vào.
+- 🐞 **Bắt kèm, cùng lớp "mô tả sai loại cảnh"**: `buildTimeline` mô tả MỌI cảnh
+  `image` là *"Ảnh chụp chiếm cả khung"*, trong khi `PhotoScene` đặt nó thành ô
+  vuông **944×944** bo góc ở nửa trên khung 1080×1920 (~87% ngang, ~49% dọc) —
+  sai cả **bố cục** lẫn **loại hình** (tranh vẽ tay, không phải ảnh chụp). Hội
+  đồng vì thế chấm một bố cục khác hẳn bố cục sắp render. Đã sửa; `describeImage`
+  vốn đã phân biệt tranh quẻ, câu bao ngoài chỉ được tả CHỖ ĐẶT.
+
+### 📏 ĐỘ DÀI đi theo LỜI ĐỌC · giao ra 720×1280 (2026-08-18, cùng PR)
+Henry: *"Độ dài phụ thuộc vào gì? Vào script ah? Hay tốc độ đọc của TTS?…
+Ko giới hạn"* · *"Dung lượng thấp thôi. Nhẹ 720x1280 cũng dc. Thường user xem
+trên mobile mah"*. Anh đoán đúng chỗ:
+
+| chế độ | độ dài mỗi cảnh |
+|---|---|
+| có TTS | **độ dài THẬT của mp3** + 0,12s |
+| `--no-voice` | ước `số ký tự / 13,59` + 0,4s |
+
+- Cần gạt tốc độ đọc **đã có sẵn**: `CLIP_SPEED = '1.15'` (`scripts/tts-clip.mjs`).
+- ⚠️ **Bản `--no-voice` DÀI HƠN bản thật 15–25%** — hằng số 13,59 ước dư (đã đo:
+  `than-so-hoc` ước 37,6s → thật 32,4s). Đừng đọc độ dài của bản không giọng
+  thành độ dài clip.
+- 🔴 **Lỗi tìm ra khi đi tra: `TTS_CHARS_PER_SECOND` (13,59) và `CLIP_SPEED`
+  (1,15) nằm HAI FILE, KHÔNG có ràng buộc nào nối.** Đổi tốc độ đọc mà quên bên
+  kia thì cổng 1 lặng lẽ ước sai — đọc nhanh hơn nhưng vẫn tính theo tốc độ cũ ⇒
+  mọi clip bị chấm "quá dài" rồi `rewriteSpec` **đi cắt lời đọc cho một vấn đề
+  không tồn tại**. Đã ghi chú thích trỏ vào nhau ở cả hai chỗ kèm công thức quy
+  đổi. (Chưa dựng bộ dò — hai hằng số, chú thích hai chiều là đủ mức.)
+
+**Khổ giao ra 720×1280 bằng `--scale`, KHÔNG đổi `VIDEO`:**
+- Mọi toạ độ trong `InsightClip.tsx` là số **TUYỆT ĐỐI** (ảnh 944×944, chữ ở
+  `top: 1176`) ⇒ đổi `VIDEO` trong `brand.ts` là bố cục **tràn khung**.
+  `--scale` thu nhỏ lúc RASTER nên toạ độ logic không đổi một chữ.
+- **2/3** vì nó cho số CHẴN ở cả hai chiều (1080→720, 1920→1280) — scale lẻ ra
+  chiều lẻ thì h264 từ chối.
+- 🔑 **Nhưng thủ phạm chính của file 64–80MB là CRF, không phải độ phân giải**:
+  Remotion mặc định **CRF 18** = gần như không nén. Đặt **23**.
+- 🪤 **`pkill -f` khớp CHÍNH dòng lệnh của nó → tự giết (exit 144), lần thứ BA.**
+  Cách tránh: `pkill -f 'gen-insight[.]mjs'` — dấu ngoặc vuông làm chuỗi lệnh
+  không còn khớp literal.
+
+### ⚡ "Nhanh gọn hiệu quả nhất" — và hai thứ tôi đề nghị đều KHÔNG phải chỗ chặn
+Henry: *"mày tự chọn đi. Tao chỉ muốn ra dc video chạy một cách nhanh gọn hiệu
+quả nhất"* giữa (A) cắm Pexels làm nguồn thứ hai và (B) cho LLM chọn tông.
+**Đo trước khi chọn thì cả hai đều không đáng làm lúc này:**
+- (A) chỉ có **6 kịch bản insight**, mà kho đã có **7 đoạn / 6 tông** ⇒ đủ dùng.
+  Và tông rỗng nặng nhất (`mo-mit`: sương, mưa trên kính) rỗng vì **bản chất nó
+  không có chuyển động** — thêm nguồn cũng không cứu được.
+- (B) chọn tông bằng tay cho 6 kịch bản là **6 dòng**. Dựng đường LLM chọn tông
+  trong khi chỉ có 6 tông có hàng là làm một cần gạt không có chỗ để gạt.
+
+**Hai chỗ chặn THẬT, đo được:**
+1. 🔴 **Nền 4K làm render chậm gấp 3** — 1080p ~4 phút, 3840×2160 **hơn 12 phút**
+   cho cùng clip 32 giây: `OffthreadVideo` giải mã lại từng khung ở độ phân giải
+   gốc rồi mới thu về 1080×1920, mà nền còn bị `blur` + lớp phủ nên **độ phân
+   giải dư đó không lên hình**. ⇒ thu nhỏ về 1920 **ngay lúc NHẬP KHO**, và thu
+   nhỏ luôn 3 đoạn đang có (kho 168MB → 93MB).
+   **Đối chứng bắt buộc**: đo lại độ động trước/sau — `14,61→14,56` ·
+   `22,61→22,58` · `9,42→9,31` ⇒ phép đo không đổi nghĩa.
+2. **5/6 kịch bản vẫn nền tranh quẻ**, và `ba-the-be-tac` thì **không có nền
+   nào** — đúng clip hội đồng cổng 2 chê *"chỉ chữ trên nền xanh đơn điệu"*. ⇒
+   cắm nền video cho cả 5, mỗi clip một đoạn KHÁC nhau, ghép theo NGHĨA (mây vần
+   u ám · đèn lắc trong gió cho *trì hoãn vì sợ* · hai bàn tay trên phố cho *bốn
+   bước trước khi rời đi* · phố đông người cho *hai người cùng lương* · hình khối
+   siêu thực cho *ba thế bế tắc*). Lý do ghép ghi ngay tại chỗ trong `insight.ts`.
+- 🔑 **Bài học chọn việc: câu hỏi Henry đặt là câu hỏi CỦA TÔI đưa ra.** Anh chỉ
+  nói mục tiêu ("ra được video, nhanh gọn"). Chọn một trong hai phương án tôi tự
+  nghĩ ra mà không đo lại là để cái khung của mình quyết thay cho số đo.
+
+### 🐞 Kèm: con KHỈ lọt tông "suy tư" — và cổng đầu tiên của tôi quá rộng
+`must[]` của `suy-tu` có từ **TƯ THẾ** (`sitting`) mà con vật nào cũng mang ⇒
+lọt một đoạn `baboons, apes, cub`. Cùng lớp với con MÈO đã lọt `nang-am` ở kho
+ảnh, chỉ khác là qua bằng tư thế chứ không phải bối cảnh.
+- Vá ở CƠ CHẾ: gỡ từ tư thế khỏi `must` — **`must` chỉ được chứa từ nói về CHỦ
+  THỂ hoặc BỐI CẢNH**.
+- 🪤 Lưới đỡ thứ hai (deny con vật) bản đầu tôi làm **quá rộng** (`animal` ·
+  `wildlife` · `bird`): đo lại trên 94 bức đang có thì nó **loại oan 2 bức đúng
+  chủ đề** — một con QUẠ trong tông *thiên nhiên u tối*, và một hình **BÓNG BÀN
+  TAY** trong tông *bàn tay* (thẻ có chữ `animal` vì là bóng hình con vật). Thu
+  hẹp còn mấy loài đọc thành "con vật là nhân vật chính": **0 loại oan**, và nó
+  bắt được **1 bức lạc kênh có sẵn trong kho ảnh** — một macro mắt **ẾCH** nằm
+  trong tông *tĩnh lặng*. Bức đó vẫn còn trong manifest (kho đã commit, không tự
+  sửa); lượt nhập sau sẽ không lấy loại đó nữa.
+- 🪤 **Và cổng "khớp ít nhất MỘT tiêu chí brief" (`MIN_MATCHED`) mới là cổng
+  đúng tầng**: ba đoạn đáng ngờ nhất của lượt nhập đủ 10 tông đều có
+  `matched: []` — thằn lằn săn mồi · rừng chung chung · **trẻ con chạy trong
+  hẻm** dưới tông "bế tắc". Chặn theo *lạc brief* thì chặn được cả loại tôi chưa
+  nghĩ ra, thay vì đuổi mãi theo tên con vật.
+- 🪤 Lượt vá danh sách con vật đầu tiên tôi **sửa nhầm file** (`stock-video.mjs`
+  thay vì `stock-lib.mjs`) và lượt thay đó **không có `assert` nên hỏng im
+  lặng** — chỉ lộ vì red-team chạy lại thấy thằn lằn vẫn qua. Đúng bài học đã
+  ghi: *mọi lượt thay bằng script phải assert số lượt khớp*.
+- 🪤 Và phép audit của tôi ban đầu báo thêm 3 ca "lạc đề" — **artefact**: manifest
+  chỉ lưu caption đã CẮT ở 16 thẻ, còn lúc nhập kho cổng đọc thẻ THÔ. Đúng bài
+  học *"đo trên bản đã cắt gọn thì đang đo bản cắt"*, vấp lại ngay trong lượt đi
+  sửa một lỗi đo khác.
+
+### CÒN LẠI
+- ⚠️ **Máy vẫn KHÔNG gác được "đoạn phim này có ăn nhập với lời đọc không"** —
+  nó chỉ gác được ĐẸP-hay-không ở mức thô và độ động. Vẫn phải xem bằng mắt.
+- **Kho mới chỉ 3 đoạn / 2 tông.** Muốn đủ 16 tông thì chạy
+  `node scripts/stock-video.mjs --bucket tone --per 2`.
+- **5 kịch bản insight còn lại vẫn nền tranh quẻ** — đổi là sửa data thuần.
+- **Cổng 2 vẫn chưa có `visual.mismatch`**, `rewriteSpec` vẫn chỉ viết lại CHỮ.
+- `Character.tsx` / `Glyphs.tsx` **CỐ Ý giữ nguyên** — chúng vẫn đúng cho loại
+  clip KHÔNG có chữ dẫn dắt. Đừng xoá, cũng đừng bật lại mà không soi bằng mắt.
+- ⚠️ **Việc tay Henry — XOAY KHOÁ**: một lệnh kiểm tra của tôi đã in NGUYÊN GIÁ
+  TRỊ `PIXABAY_API_KEY` và `GEMINI_API_KEY` ra log phiên. Xoay cả hai.
+- 🔴 **`PIXABAY_API_KEY` trong environment đang HỎNG**: 89 ký tự, có dấu cách —
+  khoá Pixabay bị dán dính luôn `GEMINI_API_KEY=...` thành một dòng. Script đã tự
+  cắt ở khoảng trắng đầu, nhưng lúc xoay khoá thì đặt lại cho đúng, mỗi biến một
+  dòng (đúng luật đã ghi: *"dán giá trị THÔ — không `;`, không dấu nháy, không
+  xuống dòng"*).
+
+---
+
+## 🏃 Nhịp ĐO ĐƯỢC là quá chậm · 14 tư thế · cảnh HAI người (2026-08-18, cùng PR #543)
+
+Henry: *"nhân vật chuyển động chậm quá, có thể thêm hình, đa dạng hơn"* ·
+*"thiếu hình nhiều người (>= 2 người)"* · *"chuyển động… đang ko giống người
+lắm, mày nghiên cứu xem có bộ nào free… mang nó về dùng cho nhanh"*.
+
+### 🔍 Nghiên cứu bộ ngoài — kết luận: KHÔNG mang về. Lý do là CẤU TRÚC.
+| Nguồn | Chặn ở đâu |
+|---|---|
+| **Rive Community** | **CC BY — bắt buộc ghi công**, đúng bức tường đã loại Unsplash (phải in tên tác giả lên khung 9:16 vốn chật chữ) |
+| **LottieFiles** | Egress proxy CHẶN `lottiefiles.com` ⇒ **không đọc được điều khoản, và tôi không đoán**. `@remotion/lottie` thì có thật và chạy được — nhưng xem lý do cấu trúc dưới đây |
+| **CC0 modular vector characters** (itch.io/OpenGameArt) | Sprite game, PNG, phong cách pixel/game — không phải mascot phẳng của kênh |
+| **Quaternius Universal Animation** | 3D |
+
+🔑 **Lý do quyết định KHÔNG phụ thuộc vào giấy phép**: mọi chợ asset đều là
+**nhân vật CỦA NGƯỜI KHÁC**, mỗi tệp một tác giả. Lấy "ngồi buồn" của tác giả A
+ghép "chạy" của tác giả B ra HAI nhân vật khác nhau — đúng con số đã đo ở lượt
+khảo sát vector Pixabay (**9 tác giả trong 50 kết quả**). Mà cả điểm của nhân
+vật signature là MỘT nhân vật xuất hiện ở mọi clip để người xem nhận ra kênh.
+Tìm kỹ hơn không sửa được, vì đó là tính chất của cái chợ chứ không phải của
+lượt tìm.
+- Trường hợp duy nhất dùng được: một tác giả xuất bản TRỌN bộ, miễn phí, sửa
+  màu được — hiếm, và đánh cược thương hiệu vào một gói asset có thể biến mất.
+- ⇒ Thứ đáng lấy từ ngành hoạt hình là **NHỊP**, không phải asset.
+
+### 🔴 Và nhịp thì đo được là SAI — đây mới là câu trả lời cho "không giống người"
+Quy toàn bộ nhịp cũ (rad/s) ra Hz rồi so với mốc người thật:
+
+| | cũ | người thật | |
+|---|---:|---|---|
+| vẫy tay | **0,83 Hz** | 2–3 Hz | chậm **~2,6×** |
+| tay giảng | **0,21 Hz** | ~1 Hz | chậm **~4,4×** |
+| tay quét | **0,20 Hz** | ~0,5 Hz | chậm **~2,5×** |
+| bước đi | 95 bước/phút | 100–120 | hơi chậm |
+| thở | 17 nhịp/phút | 12–18 | **ĐÚNG** |
+
+Cộng thêm hai lỗi hình dạng, và chúng mới là phần "rô-bốt":
+1. **Mọi nhịp là `Math.sin` đối xứng** — đi và về cùng tốc độ. Cử động người
+   **bật ra nhanh, thu về chậm**. ⇒ thêm `beat()` (28% chu kỳ bật ra, 72% về)
+   dùng cho MỌI cử động có chủ đích; `osc()` chỉ giữ cho thứ vốn đối xứng thật
+   (thở, đung đưa, bước chân).
+2. **Lò xo chuyển tư thế đặt `damping: 200`** = tắt dần tới hạn = **không có độ
+   vọt quá đà**. Đúng cho chữ và khối giao diện, sai hẳn cho cơ thể. ⇒
+   `SPRING_POSE = {damping: 13, mass: 0.55, stiffness: 110}`.
+3. Thêm **overlapping action**: đoạn NGỌN của chi tới đích trễ 3 khung so với
+   đoạn gốc (`blendLate`). Ở người cẳng tay LUÔN tới sau cánh tay trên; hai
+   đoạn khớp nhau tuyệt đối chính là cái mắt đọc ra "máy".
+
+🔑 Nhịp nay khai bằng **Hz** chứ không phải rad/s — đọc phát biết nhanh chậm,
+và so được thẳng với mốc người thật. Đơn vị sai là lý do lỗi này sống lâu.
+
+### 🧍 9 → 14 tư thế
+Thêm `ngoi-buon` · `ngoi-an` · `chay` · `voi-tay` · `dang-tay` · `che-mat` ·
+`ngoai-lai`. Ba chỗ hỏng chỉ lộ trên bảng đối chiếu:
+- **`che-mat` không che được gì** — thứ tự vẽ mặc định là tay TRƯỚC, đầu ĐÈ LÊN
+  (đúng cho mọi tư thế khác), nên hai bàn tay nấp SAU đầu và hai mắt vẫn nhìn
+  thẳng. Thêm cờ `armsFront`.
+- **`chay` ngả 17° đọc thành "sắp ngã sấp"** → 13°. Sải chân mới là thứ kể chạy.
+- **Ngồi dạng chân kiểu ếch.** Đây là giới hạn THẬT của hình chiếu thẳng mặt:
+  đùi lẽ ra hướng về phía người xem và bị rút ngắn, hình phẳng không tả được.
+  Giảm bớt bằng ống chân chụm vào (gối 164, bàn chân 134), và **hai tư thế ngồi
+  chỉ nên dùng KÈM `set`**.
+- ⚠️ `crouch` của tư thế ngồi **giải ngược từ ràng buộc "bàn chân chạm đất"**
+  (92 = 266 − 174), không phải số chọn cho vừa mắt. Đổi góc đùi là phải tính lại.
+
+### 👥 Cảnh HAI người — `kind: 'duo'`
+Rất nhiều câu đắt nhất của kênh có hai người trong đó (*"vẫn ngồi ăn cơm với
+bạn, nhưng tâm trí đã rời xa"* — ví dụ của Henry). Vẽ một nhân vật đơn độc dưới
+câu đó là **hình nói ngược lời**.
+- `poseL` · `poseR` · `set` (`ban-an` · `ghe-bang`) · `gap` (`gan` · `xa`).
+- 🔑 `gap` là **từ vựng ĐÓNG hai giá trị**, không phải số pixel: nó mang NGHĨA
+  (gần nhau / cách biệt) nên cổng 2 mô tả được. Cho khai số thì mỗi kịch bản
+  một con số, không so được giữa các clip.
+- 🔑 Hai người **lệch pha nửa nhịp** (`timeSec + 1.4`). Cùng pha thì đọc ra là
+  một hình bị nhân đôi, không phải hai người.
+- ⚠️ Mọi kích thước đồ đạc **giải ngược từ chiều cao ngồi**: mặt bàn ở 78,7%
+  chiều cao hộp, muốn nó rơi giữa hông (184) và vai (407) ⇒ hộp cao 318 ⇒ rộng
+  911. Đổi `DUO_H` hay đổi tư thế ngồi là phải tính lại, không chỉnh mò.
+- 🪤 **Bát vẽ CHÌM dưới mặt bàn** ở bản đầu: trong SVG y tăng XUỐNG, nên "đặt
+  lên bàn" là TRỪ đi. Render ra chỉ còn hai vạch vàng ló lên.
+- 🪤 **`DUO_H` phải LỚN HƠN cảnh một người** (980 vs 820): ngồi hạ thân người
+  ~92 đơn vị nên cùng `height` thì cảnh hai người trông thấp và bé, hở một mảng
+  đen ~500px giữa chữ và nhân vật. Chữ cũng phải hạ theo (top 386 thay vì 292).
+
+### 📌 Trả lời câu "để Remotion tự code chuyển động theo ngữ cảnh script"
+**Thêm một tư thế KHÔNG đắt** — nó là 8 con số. Chỗ đắt là **biết nó trông có
+đúng không**, mà điều đó chỉ render ra rồi NHÌN mới biết (bằng chứng: 3/7 tư thế
+mới sai ngay lượt đầu, không lỗi nào tsc bắt được). Một model sinh góc chi thì
+không nhìn được thứ nó vừa sinh ⇒ sẽ đẻ ra tư thế gãy mà không gì chặn.
+- ⇒ Đường đúng là **giữ TỪ VỰNG ĐÓNG rồi cho LLM CHỌN trong đó**, và mở rộng
+  từ vựng khi thiếu. Mỗi mục chỉ phải soi bằng mắt MỘT lần, dùng được mãi.
+- Và còn một lý do nữa: cổng 2 cần mô tả ỔN ĐỊNH để so giữa các clip. Cho model
+  tự viết mô tả cử động cho từng cảnh là quay lại đúng cái gương mà mục 🖼️ đã mổ.
+
+### Verify
+`tsc` root 0 · `tsc` remotion 0 · `prettier` cả cây sạch · `lint` **0 lỗi / 77
+warning = mốc nền** · **20/20 bộ dò** · engine **185 pass**.
+- Bảng đối chiếu 14 tư thế + 20 đạo cụ render và soi bằng mắt; cảnh hai người
+  soi riêng ở khung 300.
+
+### CÒN LẠI
+- **Hai tư thế ngồi trông vẫn hơi dạng chân** khi KHÔNG có `set`. Giới hạn hình
+  chiếu, không phải số sai — muốn hết hẳn thì phải có tư thế vẽ theo lối nhìn
+  nghiêng, tức một bộ khung thứ hai.
+- **Chưa có tư thế hai người TƯƠNG TÁC** (ôm, quay lưng vào nhau, một người bỏ
+  đi). `duo` hiện chỉ đặt hai tư thế đơn cạnh nhau.
+- Cổng 2 vẫn chưa có `visual.mismatch`, `rewriteSpec` vẫn chỉ viết lại CHỮ.
+
+---
+
+## 🕺 Nhân vật BIẾT CỬ ĐỘNG + 20 đạo cụ — và 4 lỗi chỉ lộ khi SOI KHUNG HÌNH (2026-08-18, PR #543)
+
+Henry: *"nhân vật chưa đạt, nhìn boring lắm, chắc phải làm motion luôn"* · *"màu
+nhấn thì chọn màu theme của site đi: vàng hoặc đỏ"* · *"đạo cụ: làm luôn, có thể
+làm nhiều hơn"*.
+
+### 🔴 Căn nguyên "boring": chọn vẽ bằng code CHÍNH LÀ để có chuyển động, mà không dùng
+Bản đầu chỉ có **tư thế TĨNH + nhún thở 6px + mờ dần lúc vào**. Tức nhân vật vẫn
+là một BỨC HÌNH, chỉ khác là bức hình có nhấp nháy — trong khi lý do số một để
+loại ba đường vector/AI và chọn vẽ bằng SVG là *"nó chuyển động được"*. Đúng chỗ
+đắt nhất bị bỏ phí.
+
+**Bốn tầng, xếp theo mức đóng góp đo bằng mắt:**
+1. **CHUYỂN TƯ THẾ** (`fromPose` + `blend`) — sang cảnh mới thì nhân vật *đi từ*
+   tư thế cũ *sang* tư thế mới trong nửa giây. Tầng DUY NHẤT ảnh nhập không làm
+   được, và là thứ biến minh hoạ thành kể chuyện.
+2. **NHỊP RIÊNG TỪNG TƯ THẾ** (`MOTIONS`) — `chao` vẫy tay thật · `hanh-dong` hai
+   chân sải luân phiên + tay đánh ngược pha · `quay-lung` vừa bước vừa **nhỏ dần
+   16%** (rời khỏi khung, không phải quay lưng đứng yên) · `cui-dau` thở dài.
+3. **CHỚP MẮT** — gương mặt chỉ có hai chấm thì đây là tín hiệu sống rẻ nhất.
+4. **THỞ** — giữ, nhưng nay là nền chứ không phải toàn bộ.
+
+- ⚠️ **Ràng buộc cứng: mọi chuyển động là hàm THUẦN của `timeSec`.** Remotion
+  render khung hình KHÔNG theo thứ tự ⇒ `Math.random()` là nhấp nháy loạn. Chớp
+  mắt vì thế suy từ `(t + 1.1) % 3.6 < 0.13`.
+- 🔑 **Tư thế nào có nhịp thì dáng NỀN phải là dáng NGHỈ.** `hanh-dong` bản trước
+  khai sẵn một bước sải RỒI cộng thêm dao động ⇒ chân dang quá rộng suốt cảnh,
+  trông vướng (đúng chỗ Henry nhận xét). Nay dáng nền đứng thẳng, bước sải HOÀN
+  TOÀN do `MOTIONS` sinh.
+
+### 🎨 Màu nhấn — bỏ bảng neon của brief, lấy vàng thương hiệu
+Brief đề nghị hồng/tím/xanh ngọc; Henry chốt màu theme site. Đo tương phản trên
+nền đen `#0A0A0F`: **vàng `#C9A84C` = 8,6:1** (dư sức cho nét mảnh) ·
+**đỏ `#C0392B` = 3,9:1** ⇒ đỏ CHỈ được làm **mảng ĐẶC lớn** (ngọn lửa đèn lồng,
+trái tim), không bao giờ làm nét mảnh hay chữ. Gỡ luôn `CHAR.pink/violet/mint`
+— màu thương hiệu chết nằm trong file là bẫy cho người sau.
+
+### 🧰 20 đạo cụ = MỘT bộ cho HAI chỗ
+`remotion/src/Glyphs.tsx`. Brief tách "đạo cụ" (cầm trên tay) khỏi "icon" (đứng
+riêng), nhưng vẽ hai bộ thì cùng một khái niệm có hai nét khác nhau trong cùng
+một clip — đúng lớp lỗi "hai danh sách chép tay rồi trôi khỏi nhau". Ở đây chỉ
+khác **CHỖ ĐẶT**, không khác hình.
+- 🔑 Kịch bản khai **một trường `glyph` + một trường `glyphAt`**, KHÔNG phải hai
+  trường `prop`/`icon`. Nhờ vậy *không có cách nào* khai hai ký hiệu cùng lúc ⇒
+  luật "1 scene = 1 icon" của brief được ép bằng KIỂU DỮ LIỆU, không bằng lời dặn.
+- Chọn theo MIỀN NỘI DUNG chứ không theo "icon nào hay gặp": `la-so` (12 cung,
+  giữa để trống — đúng bố cục thật), `dong-xu` lỗ vuông, `la-ban`, `den-long`,
+  `canh-cua` (câu *"đóng một cánh cửa"* xuất hiện nguyên văn trong kịch bản)…
+
+### 🔴 BỐN lỗi chỉ lộ khi soi KHUNG HÌNH THẬT — không lỗi nào đọc code thấy được
+1. **Câu MỞ ĐẦU bị chạy chữ dần** — hồi quy do CHÍNH lượt thêm nhân vật gây ra.
+   `Hook` bản navy dùng chữ tĩnh và có chú thích ghi rõ lý do (*"ba giây đầu
+   quyết định… chữ chạy dần nghĩa là giây đầu tiên chưa đọc được gì"*), nhưng
+   khai `hookPose` thì hook đi qua `FigureScene` → `WordKaraoke`, tức chạy chữ
+   dần đúng ở chỗ cấm chạy. Đo được: giây 1,3 hơn nửa câu mở đầu còn mờ.
+2. **Bóng đen 55% trên nền đen đọc thành CÁI HỐ**, không thành bóng đổ. Nền tối
+   thì thứ đặt nhân vật xuống mặt đất phải là ÁNH SÁNG hắt (trắng 7%), không
+   phải mảng tối. Bóng cũ đúng trên nền navy — đổi sân khấu mà quên đổi nó.
+3. **Nhân vật cao 470px chứ không phải 620px.** `height` là chiều cao KHUNG NHÌN,
+   mà khung có lề rộng chừa chỗ tay giơ + đạo cụ ⇒ thân người chỉ chiếm ~76%.
+   Trên khung 1920 thành một chấm nhỏ dưới đáy. Nâng lên **820**.
+4. **Tên miền in HAI LẦN ở khung kết** — `buildCta` đã chở sẵn `tuviminhbao.com`
+   trong câu kết, `OutroFigure` in thêm một dòng nữa. ⚠️ Bản nền navy `Outro`
+   **cũng đang dính y hệt**, cố ý chưa đụng vì đó là khung kết của 5 clip khác.
+
+### 🪤 Ba bẫy hình học (đều là lỗi của TÔI)
+1. **`cui-dau` không hề cúi.** `crouch` hạ CẢ người nên hình dạng không đổi;
+   `headTilt` xoay một hình TRÒN nên gần như vô hình (chỉ dịch hai chấm mắt).
+   Phải thêm `headDx`/`headDy` — đầu **thụt xuống giữa hai vai + đổ ra trước**
+   mới đọc ra là gục.
+2. **`suy-nghi` gập sâu thì mất luôn nếp gập.** Thử `a2 = 185` để kéo tay vào
+   cằm ⇒ cẳng tay nằm CHỒNG LÊN cánh tay trên, hai mảng trắng dày trùng nhau,
+   bảng đối chiếu đọc ra thành *"một cánh tay duỗi thẳng chỉ sang ngang"*. Và
+   chạm cằm là BẤT KHẢ về hình học: vai ở x=80, cằm cách 65 đơn vị, tay dài 184.
+3. **Vấp lại bẫy do chính mình ghi**: truyền `--browser-executable=/opt/pw-
+   browsers/chromium` trong khi `remotion.config.ts` có nguyên một khối chú
+   thích *"đã thử và HỎNG… đừng tối ưu bằng cách trỏ lại vào Chromium của
+   Playwright"*. Đọc chú thích rồi vẫn làm đúng thứ nó cấm.
+
+### 🔴 Cổng 2 có PHƯƠNG SAI RẤT LỚN — một lượt chấm KHÔNG phải một phép đo
+Cùng một kịch bản, không đổi một chữ nào:
+
+| Lượt | Trong tệp | Kết quả |
+|---|---|---|
+| Phiên trước | **5/5** xem hết · gửi 43% | ✅ QUA vòng 1 |
+| Phiên này | **3/7** trong tệp · gửi 14% | ❌ TRƯỢT cả 3 vòng |
+
+⇒ Câu *"hội đồng đã duyệt"* ở phiên trước là **một mẫu**, không phải một kết
+luận. Đừng đọc một lượt PASS thành "kịch bản đạt".
+- 🔑 Nhưng cơ chế thì chạy ĐÚNG: có persona bỏ ở 2s kèm lý do *"hình ảnh nhân
+  vật chỉ vẫy tay không đủ hấp dẫn"* — tức kênh HÌNH nay thật sự vào phán quyết
+  và bị phản đối bằng một lời chê ĐỔI ĐƯỢC (đổi tư thế), khác hẳn lời chê chung
+  chung của bản hằng số viết tay.
+- Ba vòng viết lại đều trượt lại **cổng 1** (`hook.too-long`, `scene.too-long`)
+  ⇒ `rewriteSpec` viết dài ra rồi tự vấp trần độ dài. Vòng lặp chưa hội tụ.
+
+### Verify
+`tsc` root 0 · `tsc` remotion 0 · `prettier` quét cả cây sạch · `lint` **0 lỗi /
+77 warning = đúng mốc nền** · **20/20 bộ dò** · engine **185 pass**.
+- **Soi bằng mắt trên khung hình THẬT** ở 4 mốc (hook · `cui-dau` + icon cánh
+  cửa · `loi-khuyen` cầm trái tim · kết cầm lá số) — đây là phép kiểm duy nhất
+  bắt được cả 4 lỗi ở trên, không phép đo tự động nào chạm tới.
+- Bảng đối chiếu `CharacterSheet` render 9 tư thế **đóng băng tại mốc giây chọn
+  tay** (`FREEZE`): không có bảng này thì `hanh-dong`/`quay-lung` rơi vào lúc
+  `sin = 0`, hai chân chụm lại, và bảng báo là "trùng dáng đứng yên".
+
+### CÒN LẠI
+- ⚠️ **Bảng tĩnh KHÔNG thay được việc xem clip** — từ khi có nhịp riêng, phần
+  lớn giá trị nằm ở CHUYỂN ĐỘNG mà một khung hình không chứa nổi.
+- **Clip test chưa có giọng đọc** (thiếu `CLIP_TTS_SECRET` trong container này),
+  mới có nhạc nền. Nhịp chữ ↔ nhịp nói chưa ai kiểm.
+- **Cổng 2 vẫn chưa có mã lỗi `visual.mismatch`** và `rewriteSpec` vẫn chỉ viết
+  lại CHỮ ⇒ hội đồng chê hình thì máy đi sửa chữ. Nay đã có 9 tư thế × 20 đạo cụ
+  để gạt sang — cần gạt thì có chỗ gạt rồi, còn thiếu đúng cái cần.
+- **5 kịch bản insight còn lại chưa đổi sang nhân vật** (vẫn nền navy / tranh
+  quẻ). Đổi là sửa data thuần trong `insight.ts`, không đụng logic.
+- `Outro` bản navy vẫn in trùng tên miền (xem lỗi 4).
+
+---
+
 ## ✍️ ARC RA TỚI BẢN LUẬN GIẢI — `arcDoc` KHÁC `LUAN_ARC`, đừng dùng lẫn (2026-08-18, PR sau)
 
 Henry: *"fix này phải dc apply cho các tool luôn… rà soát lại prompt của từng tool"*.

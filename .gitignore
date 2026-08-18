@@ -60,3 +60,8 @@ remotion/public/img-cache/
 # `node scripts/stock-ingest.mjs`. Cùng lối với tranh quẻ: file ảnh nằm ở
 # Supabase Storage, repo chỉ giữ địa chỉ + provenance.
 remotion/public/stock/
+
+# Kho VIDEO nền — cùng lý do, nhưng nặng hơn hẳn (mỗi đoạn 8–30MB). Thứ commit
+# là `lib/video/stock-video-manifest.json`; dựng lại bằng
+# `node scripts/stock-video.mjs --bucket tone`.
+remotion/public/stock-video/

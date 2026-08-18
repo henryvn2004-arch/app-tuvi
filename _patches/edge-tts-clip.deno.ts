@@ -93,9 +93,44 @@ Deno.serve(async (req: Request) => {
       }),
     });
 
-    const data = await r.json();
+    // 🔴 ĐỌC THÀNH CHỮ TRƯỚC, PHÂN TÍCH SAU — đừng gọi thẳng `r.json()`.
+    //
+    // Bản cũ làm `const data = await r.json()`. Khi Vbee trả một TRANG HTML
+    // (`<!DOCTYPE …`) thay vì JSON — chuyện có thật, xem dưới — lượt phân tích
+    // đó NÉM, rơi vào `catch` cuối hàm, và cả mã trạng thái lẫn nội dung trang
+    // lỗi bị thay bằng đúng một câu: *"Unexpected token '<' … is not valid
+    // JSON"*, kèm 500. Tức lỗi của NHÀ CUNG CẤP bị đóng gói thành thứ trông
+    // như lỗi lập trình của mình, và bằng chứng duy nhất để chẩn thì mất sạch.
+    //
+    // Đo được trên GitHub Actions: lượt 10:13 sinh trót lọt 19 câu rồi chết,
+    // lượt 10:24 (14 phút sau) chết ngay câu ĐẦU TIÊN — nhưng không lượt nào
+    // đọc được Vbee thật sự nói gì, nên không phân biệt nổi hết hạn mức · token
+    // chết · sự cố phía họ. Ba nguyên nhân đó cần ba việc làm khác hẳn nhau.
+    //
+    // 🔑 Cùng lớp bài học "log của bên gửi không chứng minh được bên nhận hiện
+    // ra": chỗ nào bọc lỗi của bên ngoài thì phải GIỮ nguyên văn của họ.
+    const raw = await r.text();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    let data: any;
+    try {
+      data = JSON.parse(raw);
+    } catch {
+      return new Response(
+        JSON.stringify({
+          error: 'vbee_not_json',
+          status: r.status,
+          // Cắt ngắn: đủ để đọc ra trang lỗi nói gì, không đủ để nhét cả trang
+          // HTML vào log.
+          body: raw.slice(0, 400),
+        }),
+        { status: 502, headers: J }
+      );
+    }
     if (!r.ok || data.status !== 1) {
-      return new Response(JSON.stringify({ error: 'vbee_error', detail: data }), { status: 502, headers: J });
+      return new Response(JSON.stringify({ error: 'vbee_error', status: r.status, detail: data }), {
+        status: 502,
+        headers: J,
+      });
     }
 
     const audioUrl: string | undefined = data.result?.audio_link ?? data.result?.audio_url;

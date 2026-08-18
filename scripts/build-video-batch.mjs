@@ -48,6 +48,7 @@ import { execFileSync } from 'child_process';
 import { existsSync, mkdirSync, statSync, appendFileSync } from 'fs';
 import { join } from 'path';
 import { TOOL_RECIPES } from './tool-recipes.mjs';
+import { EXIT_GATE } from './video-lib.mjs';
 
 const ROOT = new URL('..', import.meta.url).pathname;
 const OUT_DIR = join(ROOT, 'remotion/out');
@@ -78,6 +79,30 @@ const NO_AUDIENCE = has('--no-audience');
 const GATE_ONLY = has('--gate-only');
 /** Ngân sách phút. Job Actions trần 6 giờ; dừng sớm để còn kịp báo cáo. */
 const BUDGET_MIN = Number(val('--budget-min', '300'));
+/**
+ * Điểm bắt đầu trong danh sách `--all`. Bỏ trống ⇒ XOAY THEO TUẦN.
+ *
+ * 🔴 VÌ SAO PHẢI XOAY — tính chất "NỐI LẠI ĐƯỢC" ở đầu file ĐÚNG khi chạy tay,
+ * SAI khi chạy trên Actions, và cái sai đó ẩn kỹ:
+ *   · phép bỏ qua là `existsSync(remotion/out/<id>.mp4)`
+ *   · runner là bản clone SẠCH ⇒ `out/` RỖNG ở **mọi** lượt
+ *   ⇒ mỗi tuần lại dựng lại từ `than-so-hoc`, và ngân sách cắt đúng cái đuôi ấy.
+ *
+ * Hậu quả đo được: 24 clip, ngân sách 150 phút, render ~6,5× thời lượng thật
+ * (`vi-sao-hay-hoan-lai` 79,7s → **515s**) ⇒ lượt tuần chỉ với tới quãng đầu
+ * danh sách. Phần đầu bị dựng lại HÀNG TUẦN dù đã nằm trong `media_assets`,
+ * còn **phần đuôi KHÔNG BAO GIỜ được dựng** — không lỗi nào bắn ra, chỉ là vài
+ * clip vĩnh viễn không tồn tại.
+ *
+ * ⇒ Xoay điểm bắt đầu theo SỐ TUẦN ISO: mỗi tuần một quãng khác, vài tuần thì
+ * phủ trọn. CỐ Ý không lưu `out/` vào cache để giải: cache mp4 thì sửa kịch bản
+ * xong lượt sau vẫn bỏ qua vì "đã có" rồi nộp lại clip CŨ — đổi một lỗi im lặng
+ * lấy một lỗi im lặng khác, mà cái sau còn tệ hơn (giao ra nội dung sai).
+ *
+ * Chỉ áp cho `--all`. `--tools`/`--insight` là người chỉ đích danh, xoay thứ tự
+ * của họ là làm điều họ không bảo.
+ */
+const START = val('--start', '');
 /** Mức nén cho clip insight — xem lý do tại chỗ gọi `gen-insight.mjs`. */
 const CRF = val('--crf', '26');
 
@@ -100,8 +125,58 @@ function resolveJobs() {
     for (const i of listIds('insight.ts', 'id')) jobs.push({ id: i, kind: 'insight' });
     return jobs;
   }
-  for (const t of csv(val('--tools', ''))) jobs.push({ id: t, kind: 'tool-demo' });
-  for (const i of csv(val('--insight', ''))) jobs.push({ id: i, kind: 'insight' });
+  /*
+   * 🔑 KIỂM ID TRƯỚC KHI NHẬN. `--all` dựng danh sách TỪ NGUỒN nên tự đúng;
+   * hai cờ hẹp thì nhận thẳng chuỗi người gõ — mà đó chính là hai ô NHẬP TỰ DO
+   * của `workflow_dispatch`. Gõ sai một chữ thì bản cũ vẫn nhận, chạy tới tận
+   * khâu render mới hỏng, rồi bảng tóm tắt ghi `TRƯỢT` — đọc thành *pipeline
+   * hỏng* chứ không phải *gõ sai một chữ*.
+   *
+   * Hỏng phải nêu ĐÚNG thứ người đọc cần: id nào lạ, và có những id nào.
+   * (Cờ `--start` đã kiểm sẵn theo lối này; hai cờ cũ thì chưa — nay khớp lại.)
+   */
+  const idTool = new Set(listIds('tool-demo.ts', 'toolId'));
+  const idInsight = new Set(listIds('insight.ts', 'id'));
+  const la = [];
+
+  for (const t of csv(val('--tools', ''))) {
+    // Dựng được clip tool-demo cần CẢ HAI: công thức quay VÀ kịch bản. Thiếu
+    // cái nào thì nói rõ thiếu cái nào — hai thứ sửa ở hai file khác nhau.
+    const coRecipe = Object.prototype.hasOwnProperty.call(TOOL_RECIPES, t);
+    const coScript = idTool.has(t);
+    if (!coRecipe || !coScript) {
+      la.push(
+        `  · --tools "${t}" — ${
+          !coRecipe && !coScript
+            ? 'không có công thức quay LẪN kịch bản'
+            : !coRecipe
+              ? 'thiếu công thức quay (scripts/tool-recipes.mjs)'
+              : 'thiếu kịch bản (lib/video/sources/tool-demo.ts)'
+        }`
+      );
+      continue;
+    }
+    jobs.push({ id: t, kind: 'tool-demo' });
+  }
+
+  for (const i of csv(val('--insight', ''))) {
+    if (!idInsight.has(i)) {
+      la.push(`  · --insight "${i}" — không có trong lib/video/sources/insight.ts`);
+      continue;
+    }
+    jobs.push({ id: i, kind: 'insight' });
+  }
+
+  if (la.length) {
+    console.error(`\n❌ ${la.length} id không dựng được:\n${la.join('\n')}`);
+    const dungDuoc = [...idTool].filter((t) =>
+      Object.prototype.hasOwnProperty.call(TOOL_RECIPES, t)
+    );
+    console.error(`\n  tool-demo dựng được : ${dungDuoc.join(' · ') || '(không có)'}`);
+    console.error(`  insight dựng được   : ${[...idInsight].join(' · ') || '(không có)'}`);
+    process.exit(1);
+  }
+
   return jobs;
 }
 
@@ -163,10 +238,71 @@ async function inspect(file) {
 }
 
 function run(cmd, args) {
-  execFileSync(cmd, args, { cwd: ROOT, stdio: 'inherit' });
+  try {
+    execFileSync(cmd, args, { cwd: ROOT, stdio: 'inherit' });
+  } catch (e) {
+    // Giữ lại MÃ THOÁT và TÊN SCRIPT. Phía dưới phân biệt "cổng chặn" với
+    // "hỏng" bằng đúng hai thứ đó, và cần CẢ HAI: một lượt dựng gọi hai script
+    // khác nhau, nên chỉ nhìn mã thoát là ngày nào đó `record-tool-demo.mjs`
+    // dùng lại con số ấy cho việc khác thì lỗi thật đọc thành "cổng chặn".
+    e.exitCode = e.status;
+    e.script = args[0];
+    throw e;
+  }
 }
 
-const jobs = resolveJobs();
+/**
+ * Số tuần ISO — mốc xoay. Dùng ISO chứ không phải `ngày/7` vì nó tăng đúng một
+ * đơn vị mỗi thứ Hai, mà lịch dựng chạy sáng thứ Hai.
+ */
+function isoWeek(d = new Date()) {
+  const t = new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate()));
+  // Dời về thứ Năm cùng tuần: tuần 1 theo ISO là tuần chứa thứ Năm đầu tiên.
+  t.setUTCDate(t.getUTCDate() + 4 - (t.getUTCDay() || 7));
+  const dauNam = new Date(Date.UTC(t.getUTCFullYear(), 0, 1));
+  return Math.ceil(((t - dauNam) / 86400000 + 1) / 7);
+}
+
+/**
+ * Xoay danh sách để cái đuôi cũng có lượt, và ĐẨY `insight` LÊN ĐẦU.
+ *
+ * 🔑 Thứ tự cũ đặt nhóm tỉ lệ qua cổng THẤP NHẤT lên đầu — 18 tool-demo trước,
+ * 6 insight sau. Mà số đo nói ngược: **insight qua cổng 2 là 4/6 (67%), demo
+ * công cụ 3/18 (17%)**. Ngân sách vì thế tiêu gần hết vào nhóm phần lớn bị
+ * chặn, còn nhóm giao được thì không tới lượt.
+ *
+ * ⇒ `insight` đi TRƯỚC, TRỌN BỘ (chỉ 6 cái, ~50 phút, luôn lọt ngân sách 150).
+ * `tool-demo` xoay theo tuần trong phần ngân sách còn lại.
+ *
+ * ⚠️ Đây là quyết định XẾP LỊCH, không phải quyết định NỘI DUNG. Câu hỏi còn
+ * treo — bỏ hẳn clip tool-demo hay cho cổng 2 thành cảnh báo riêng cho loại đó
+ * — vẫn nguyên, chỉ là không còn đốt ngân sách trước khi tới được nhóm kia.
+ */
+function xoay(all) {
+  if (!ALL || all.length < 2) return { list: all, offset: 0, why: '' };
+
+  const insight = all.filter((j) => j.kind === 'insight');
+  const demo = all.filter((j) => j.kind !== 'insight');
+
+  if (START) {
+    const i = all.findIndex((j) => j.id === START);
+    if (i < 0) {
+      console.error(`\n❌ --start "${START}" không có trong danh sách.`);
+      process.exit(1);
+    }
+    return { list: [...all.slice(i), ...all.slice(0, i)], offset: i, why: '--start' };
+  }
+
+  const w = isoWeek();
+  const i = demo.length ? w % demo.length : 0;
+  return {
+    list: [...insight, ...demo.slice(i), ...demo.slice(0, i)],
+    offset: i,
+    why: `tuần ISO ${w}, insight đi trước`,
+  };
+}
+
+const { list: jobs, offset: XOAY_OFFSET, why: XOAY_WHY } = xoay(resolveJobs());
 if (!jobs.length) {
   console.error('Không có clip nào để dựng. Dùng --all, --tools a,b,c hoặc --insight a,b,c.');
   console.error('Clip tool-demo = có CẢ công thức quay (scripts/tool-recipes.mjs)');
@@ -197,7 +333,10 @@ console.log(`   ${jobs.map((j) => j.id).join(' · ')}`);
 console.log(`   nguồn quay : ${BASE}`);
 console.log(`   cổng 2     : ${NO_AUDIENCE ? 'BỎ QUA' : 'bật'}`);
 if (GATE_ONLY) console.log('   chế độ     : KHẢO SÁT CỔNG — không quay, không TTS, không render');
-console.log(`   ngân sách  : ${BUDGET_MIN} phút\n`);
+console.log(`   ngân sách  : ${BUDGET_MIN} phút`);
+// Xoay mà im lặng thì người đọc log tưởng danh sách bị xáo trộn vì lỗi.
+if (XOAY_WHY) console.log(`   thứ tự     : xoay từ "${jobs[0].id}" (+${XOAY_OFFSET}, ${XOAY_WHY})`);
+console.log('');
 
 if (DRY) {
   for (const j of jobs) {
@@ -321,20 +460,35 @@ for (const job of jobs) {
     console.log(`✓  ${tool} — ${info.seconds.toFixed(1)}s, có đủ hình và tiếng.`);
   } catch (e) {
     // Hỏng một clip KHÔNG kéo cả loạt.
-    results.push({ tool, status: 'TRƯỢT', note: String(e.message).split('\n')[0].slice(0, 160) });
-    console.error(`❌ ${tool} — ${e.message.split('\n')[0]}`);
+    //
+    // 🔑 VÀ "cổng chặn" KHÔNG PHẢI "hỏng". Kịch bản bị cổng nội dung từ chối là
+    // cổng đang làm đúng việc — đo trên kho hiện có: clip demo công cụ qua cổng
+    // 2 đúng 3/18. Đếm chúng vào cột trượt thì lượt dựng hằng tuần đỏ vĩnh
+    // viễn, và cái đèn đỏ đó hết nói được điều gì về hôm pipeline hỏng thật.
+    const boiCong =
+      e.exitCode === EXIT_GATE && /gen-(video|insight)\.mjs$/.test(String(e.script ?? ''));
+    const note = String(e.message).split('\n')[0].slice(0, 160);
+    if (boiCong) {
+      results.push({ tool, status: 'cổng chặn', note: 'kịch bản chưa qua cổng nội dung' });
+      console.log(`🚧 ${tool} — cổng nội dung từ chối. Lý do in ở phần cổng phía trên.`);
+    } else {
+      results.push({ tool, status: 'TRƯỢT', note });
+      console.error(`❌ ${tool} — ${note}`);
+    }
   }
 }
 
 // ── Báo cáo ───────────────────────────────────────────────────────────────
 const done = results.filter((r) => r.status === 'xong');
 const failed = results.filter((r) => r.status === 'TRƯỢT');
+const boiCong = results.filter((r) => r.status === 'cổng chặn');
 
 console.log(`\n${'═'.repeat(60)}`);
-for (const r of results) console.log(`  ${r.status.padEnd(8)} ${r.tool.padEnd(20)} ${r.note}`);
+for (const r of results) console.log(`  ${r.status.padEnd(10)} ${r.tool.padEnd(20)} ${r.note}`);
 console.log(`${'═'.repeat(60)}`);
 console.log(
-  `  ${done.length} xong · ${failed.length} trượt · ${results.length - done.length - failed.length} bỏ qua/hoãn\n`
+  `  ${done.length} xong · ${failed.length} trượt · ${boiCong.length} cổng chặn · ` +
+    `${results.length - done.length - failed.length - boiCong.length} bỏ qua/hoãn\n`
 );
 
 // Tóm tắt cho trang chạy của GitHub — người mở Actions đọc được ngay mà không
@@ -344,13 +498,31 @@ if (process.env.GITHUB_STEP_SUMMARY) {
   appendFileSync(
     process.env.GITHUB_STEP_SUMMARY,
     `## 📹 Dựng clip\n\n` +
-      `${done.length} xong · ${failed.length} trượt\n\n` +
+      `${done.length} xong · ${failed.length} trượt` +
+      (boiCong.length ? ` · ${boiCong.length} cổng chặn` : '') +
+      `\n\n` +
       `| Tool | Kết quả | Ghi chú |\n|---|---|---|\n${rows}\n` +
+      // Nói RÕ vì sao lượt chạy vẫn xanh khi có clip bị chặn. Không nói thì
+      // người đọc thấy "0 trượt" rồi tưởng cả danh sách đã dựng xong.
+      (boiCong.length
+        ? `\n> 🚧 **${boiCong.length} clip bị CỔNG NỘI DUNG từ chối** (${boiCong.map((r) => `\`${r.tool}\``).join(', ')}). ` +
+          `Đây KHÔNG tính là lượt chạy hỏng — cổng đang làm đúng việc, kịch bản chưa đủ hay thì không dựng. ` +
+          `Sửa kịch bản trong \`lib/video/sources/\`; lý do từng clip nằm ở phần cổng trong log.\n`
+        : '') +
+      // Nêu điểm xoay: "hoãn" ở cuối bảng là ĐÚNG THIẾT KẾ (hết ngân sách), và
+      // tuần sau chúng đứng đầu. Không nói ra thì đọc thành pipeline hỏng dở.
+      (XOAY_WHY
+        ? `\n> 🔄 Thứ tự **xoay từ \`${jobs[0].id}\`** (+${XOAY_OFFSET}, ${XOAY_WHY}). ` +
+          `Clip \`hoãn\` vì hết ngân sách sẽ đứng ĐẦU danh sách ở lượt sau — ` +
+          `\`remotion/out/\` rỗng trên mọi runner nên không xoay là phần đuôi không bao giờ được dựng.\n`
+        : '') +
       (NO_AUDIENCE
         ? `\n> ⚠️ Cổng 2 (hội đồng người xem) **bị bỏ qua** — chưa khai khoá model. Clip mới qua cổng máy.\n`
         : '')
   );
 }
 
-// Trượt thì hỏng to. Bỏ qua/hoãn thì không — đó là hành vi đúng.
+// Trượt thì hỏng to. Bỏ qua/hoãn/cổng-chặn thì không — cả ba là hành vi ĐÚNG,
+// và chúng xảy ra gần như mỗi tuần. Nhét chúng vào mã thoát khác 0 là biến đèn
+// đỏ của lượt chạy thành thứ tuần nào cũng sáng, tức là tắt nó đi.
 process.exit(failed.length ? 1 : 0);

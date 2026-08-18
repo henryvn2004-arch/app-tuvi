@@ -18,6 +18,7 @@ import { parseLlmJson } from '@/lib/api/tool-helpers';
 import {
   type ScriptSpec,
   TTS_CHARS_PER_SECOND,
+  budgetChars,
   estimateSpeechSeconds,
   estimateTotalSeconds,
   spokenCta,
@@ -135,18 +136,15 @@ const khoa = (s: ScriptSpec['scenes'][number]) => Boolean(s.speech?.trim());
  * model không sửa được nó — giao nguyên trần thì nó cắt đủ theo trần mà tổng
  * vẫn vượt.
  */
-/**
- * 🔑 BIÊN AN TOÀN 8%. Model đếm ký tự sai vài đơn vị là chuyện bình thường, và
- * ở đây "vài đơn vị" quyết định đỗ/trượt: lượt khảo sát có `ngu-hanh-ten` nhận
- * gợi ý hook **69 ký tự** trên trần 67 → cổng 1 báo *"đọc mất 5,1s (trần 5s)"*
- * → mất trắng vòng cuối vì 2 ký tự. Giao trần đúng bằng ngưỡng là bắt model
- * phải đếm chính xác tuyệt đối; giao thấp hơn một chút thì nó lệch vẫn còn nằm
- * trong ngưỡng.
+/*
+ * 🔑 Biên an toàn 8% nay nằm trong `budgetChars` (`script-spec.ts`) — DÙNG CHUNG
+ * với `gate-machine.ts`. Trước đây mỗi bên tự nhân một kiểu: ô `fix` của cổng 1
+ * nói "rút xuống dưới 67 ký tự" còn khối NGÂN SÁCH ở dưới nói "tối đa 62", và
+ * cả hai cùng vào MỘT prompt. Model nhận hai trần cho một ràng buộc thì nó theo
+ * cái lớn hơn — đúng chuỗi làm `ba-the-be-tac` trượt cả 3 vòng vì `hook.too-long`.
  */
-const BIEN_AN_TOAN = 0.92;
-
 function nganSachKyTu(spec: ScriptSpec, gate?: GateOptions) {
-  const kyTu = (giay: number) => Math.floor(giay * TTS_CHARS_PER_SECOND * BIEN_AN_TOAN);
+  const kyTu = budgetChars;
   const giayKhoa =
     estimateSpeechSeconds(spokenCta(spec)) +
     spec.scenes
@@ -344,6 +342,30 @@ export async function runViralLoop(
   const rounds: LoopRound[] = [];
   let spec = input;
 
+  /*
+   * ── GIỮ BẢN TỐT NHẤT ──────────────────────────────────────────────────────
+   *
+   * 🔴 Bản trước trả về `spec` = bản CUỐI CÙNG, trong khi chính interface ghi
+   * "bản đã qua cổng, hoặc bản TỐT NHẤT nếu hết vòng" — tài liệu nói một đằng,
+   * code làm một nẻo.
+   *
+   * Đo được trên `ba-the-be-tac`: vòng 1 **3/4 xem hết**, vòng 2 model viết lại
+   * làm hỏng còn **0/4**, vòng 3 lấy bản hỏng đó làm nền rồi trượt luôn cổng 1.
+   * Ba vòng đi LÙI, và thứ giao ra là bản tệ nhất trong ba.
+   *
+   * 🔑 Viết lại KHÔNG đơn điệu — model có thể làm tệ đi. Vòng lặp vì thế phải
+   * là "thử rồi giữ cái tốt hơn", không phải "cứ thay bằng cái mới nhất".
+   *
+   * Điểm xếp theo thứ tự người xem thật sự quan tâm: xem hết → muốn lưu → muốn
+   * gửi. Vòng trượt cổng 1 (chưa tới hội đồng) tính 0 — chưa có bằng chứng nào
+   * nói nó tốt hơn.
+   */
+  let bestSpec = input;
+  let bestScore = -1;
+  let bestRound: LoopRound | null = null;
+  const diem = (a: AudienceGateResult | null) =>
+    a ? a.soXemHetTrongTep * 1000 + a.tiLeMuonLuu * 10 + a.tiLeMuonChiaSe : 0;
+
   for (let round = 1; round <= maxRounds; round++) {
     const machine = runMachineGate(spec, opts.gate);
 
@@ -375,7 +397,21 @@ export async function runViralLoop(
       hookMaxChars: nsCong2.hook,
       sceneMaxChars: nsCong2.canh,
     });
-    rounds.push({ round, machine, audience, rewriteHint: audience.pass ? '' : audience.goiYSua });
+    const thisRound: LoopRound = {
+      round,
+      machine,
+      audience,
+      rewriteHint: audience.pass ? '' : audience.goiYSua,
+    };
+    rounds.push(thisRound);
+
+    // Chốt bản tốt nhất NGAY SAU khi chấm, trước khi vòng sau ghi đè `spec`.
+    const d = diem(audience);
+    if (d > bestScore) {
+      bestScore = d;
+      bestSpec = spec;
+      bestRound = thisRound;
+    }
 
     if (audience.pass) {
       return {
@@ -386,19 +422,51 @@ export async function runViralLoop(
       };
     }
 
+    /*
+     * ── DỪNG NGAY khi lời chê là về HÌNH ────────────────────────────────────
+     *
+     * 🔑 `rewriteSpec` CHỈ sửa CHỮ — luật 1 của nó ghi thẳng "không đụng phần
+     * hình". Đưa cho nó một lỗi về phần nhìn là ra lệnh cho một cái máy làm
+     * việc nó không có tay để làm: nó sẽ viết lại lời, cổng chấm lại, và người
+     * xem bỏ đi ở đúng giây cũ vì đúng lý do cũ.
+     *
+     * Đo trên `ba-the-be-tac`: ba bản × ~9 vòng, kết quả PHẲNG (0/4 → 1/4 →
+     * 0/5). Mỗi vòng thừa đốt hai lượt LLM (hội đồng + người viết lại) để nhận
+     * lại nguyên văn lời chê cũ.
+     *
+     * ⇒ Thấy `visual.format` thì dừng và NÓI ĐÚNG việc phải làm. Đây là kết
+     * luận về ĐỊNH DẠNG, và định dạng là quyết định của người, không phải thứ
+     * vòng lặp này có cần gạt để chỉnh.
+     */
+    if (audience.issues.some((i) => i.code === 'visual.format' && i.level === 'block')) {
+      console.error(
+        '[viral-loop] DỪNG SỚM: lời chê nằm ở PHẦN NHÌN, không phải ở lời. ' +
+          'Vòng viết lại chỉ sửa được CHỮ nên chạy tiếp là đốt lượt model để nhận lại ' +
+          'đúng lời chê này. Đổi ĐỊNH DẠNG cảnh rồi chạy lại.'
+      );
+      break;
+    }
+
     if (round === maxRounds) break;
     const next = await vietLaiChoQuaCong1(spec, audience.issues, audience.goiYSua, opts.gate);
     if (!next) break;
     spec = next;
   }
 
-  const last = rounds[rounds.length - 1];
+  // ⚠️ Lỗi còn lại phải MÔ TẢ ĐÚNG BẢN GIAO RA. Lấy của vòng cuối trong khi
+  // giao bản vòng 1 là in ra lý do của một kịch bản khác — đúng lớp lỗi "đo
+  // một đằng, báo một nẻo" đã ghi trong CLAUDE.md. Chưa vòng nào tới được hội
+  // đồng thì mới rơi về vòng cuối (lúc đó bestSpec = bản gốc, và lỗi cổng 1
+  // của vòng cuối là thứ gần nhất nói được vì sao không đi tiếp).
+  const nguon = bestRound ?? rounds[rounds.length - 1];
   return {
     pass: false,
-    spec,
+    // Hết vòng mà chưa qua ⇒ giao bản TỐT NHẤT đã chấm, không phải bản cuối.
+    spec: bestSpec,
     rounds,
-    remainingIssues: [...(last?.machine.issues ?? []), ...(last?.audience?.issues ?? [])].filter(
-      (i) => i.level === 'block'
-    ),
+    remainingIssues: [
+      ...(nguon?.machine.issues ?? []),
+      ...(nguon?.audience?.issues ?? []),
+    ].filter((i) => i.level === 'block'),
   };
 }

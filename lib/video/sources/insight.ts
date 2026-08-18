@@ -24,9 +24,6 @@
 import type { ScriptSpec } from '../script-spec';
 
 /** Kho ảnh công khai — 64 bức tranh quẻ đã sinh sẵn, dùng lại 0đ. */
-const QUE = (file: string) =>
-  `https://dciwkfdqhhddeymlisey.supabase.co/storage/v1/object/public/portraits/que-phuc-hy/${file}`;
-
 export interface InsightSource {
   id: string;
   /** Nhãn nhỏ trên đỉnh clip — CHỦ ĐỀ, không phải tên công cụ. */
@@ -289,7 +286,14 @@ const SOURCES: InsightSource[] = [
       // MỘT bức cho cả clip. Quẻ Khảm (kw29) — nước chồng nước, hiểm nối hiểm:
       // hợp đúng nội dung "cái vòng phòng vệ lặp lại". Chọn theo NGHĨA chứ
       // không lấy bừa một bức cho có tranh.
-      backdrop: [QUE('18-kw29.png')],
+      // mây vần, tông u ám — hợp câu 'tưởng là tính cách, thật ra là vết thương'.
+      backdropVideo: 'stock-video/tone/suy-tu/117690.mp4',
+      // ⚠️ LÀM TRÒN XUỐNG, không lấy số nguyên của nhà cung cấp: `VideoBackdrop`
+      // tính `covers = floor(seconds*fps/rate)` rồi bọc `<Loop>` đúng ngần ấy
+      // khung. Khai THỪA dù chỉ nửa giây là mỗi vòng lặp đứng ở khung cuối chừng
+      // ấy — đúng bẫy "OffthreadVideo đứng khung cuối". Đo thật: 14,51s (Pixabay
+      // khai tròn 15).
+      backdropSeconds: 14,
       hashtags: ['tinhcach', 'tamly', 'chualanh', 'selfdiscovery'],
     },
   },
@@ -437,7 +441,10 @@ const SOURCES: InsightSource[] = [
       // tình cờ: Truân (kw03, khởi đầu rối như tơ vò) → Khốn (kw47, gắng mà
       // không thoát) → Càn (kw01, tiến, hành động). Ảnh cuối rơi vào đoạn
       // PAYOFF + câu kết — chỗ nội dung chuyển từ bế tắc sang bước đi được.
-      backdrop: [QUE('17-kw03.png'), QUE('26-kw47.png'), QUE('63-kw01.png')],
+      // ngọn đèn lắc trong gió — bồn chồn, đúng cảm giác trì hoãn vì sợ.
+      backdropVideo: 'stock-video/tone/bi-an/102.mp4',
+      // Làm tròn XUỐNG — xem chú thích ở `vi-sao-hay-hoan-lai`. Đo thật: 19,64s.
+      backdropSeconds: 19,
       hashtags: ['trihoan', 'tamly', 'nangsuat', 'selfdiscovery'],
     },
   },
@@ -600,7 +607,9 @@ const SOURCES: InsightSource[] = [
       // (checkout sạch, không có thư mục đó) gãy ngay. Chạy
       // `scripts/stock-upload.mjs` xong thì manifest có `url` và dòng trên
       // chạy được ở mọi nơi.
-      backdrop: [QUE('43-kw38.png'), QUE('56-kw12.png'), QUE('53-kw37.png')],
+      // hai bàn tay trên phố — đúng chủ đề bốn bước trước khi rời đi.
+      backdropVideo: 'stock-video/tone/chia-xa/152798.mp4',
+      backdropSeconds: 27,
       hashtags: ['honnhan', 'tamly', 'giadinh', 'selfdiscovery'],
     },
   },
@@ -758,7 +767,9 @@ const SOURCES: InsightSource[] = [
       music: 'u-hoai.wav',
       // Ích (kw42 — thêm vào) → Tổn (kw41 — hao đi) → Tiết (kw60 — biết dừng,
       // rơi đúng đoạn payoff). Cặp Tổn/Ích là cặp quẻ kinh điển về được–mất.
-      backdrop: [QUE('49-kw42.png'), QUE('35-kw41.png'), QUE('19-kw60.png')],
+      // phố đông người qua lại — đúng bối cảnh hai người cùng lương.
+      backdropVideo: 'stock-video/tone/co-don/1643.mp4',
+      backdropSeconds: 14,
       hashtags: ['tienbac', 'tamly', 'tietkiem', 'selfdiscovery'],
     },
   },
@@ -794,6 +805,37 @@ const SOURCES: InsightSource[] = [
         },
       ],
       ...cta('Bạn là kiểu nào?'),
+      /*
+       * 🔴 ĐÃ GỠ NHÂN VẬT SIGNATURE khỏi kịch bản này (18/08/2026).
+       *
+       * Henry xem bản render: *"vừa xấu vừa chả liên quan gì đến nội dung
+       * script. Cho vào càng thêm confused."* Hai lỗi tách bạch, và lỗi thứ
+       * hai mới là lỗi cấu trúc:
+       *   · tư thế do TÔI gõ tay ở chính chỗ này — không có cơ chế nào nối nó
+       *     với lời đọc, nên nó lệch là đương nhiên;
+       *   · clip này có CHỮ CHẠY + GIỌNG ĐỌC, mà nhân vật cử động là một CHỦ
+       *     THỂ ⇒ nó tranh mắt với chữ. Chính CLAUDE.md đã đo: *"ảnh đổi mỗi
+       *     3 giây thì mắt chạy theo ảnh chứ không đọc chữ"*.
+       *
+       * ⚠️ `Character.tsx` / `Glyphs.tsx` CỐ Ý giữ nguyên trên đĩa — chúng vẫn
+       * đúng cho loại clip KHÔNG có chữ dẫn dắt. Đừng xoá, cũng đừng bật lại ở
+       * đây mà không đo lại bằng mắt trước.
+       */
+      /*
+       * Cầu đêm, đèn thành phố phản chiếu mặt nước.
+       *
+       * ⚠️ Đoạn TRƯỚC ở đây là mưa trên cửa kính — tối hơn (L=18,6) nhưng đo ra
+       * **1,99/giây**, tức đứng im, và Henry xem clip nói ngay *"ko thấy video
+       * chi thấy hình tĩnh"*. Đoạn này L=41,4 (vẫn dưới trần 95) nhưng động
+       * **11,77** — gấp 6 lần. Chọn theo ĐỘ ĐỘNG trước, độ tối sau: nền không
+       * nhúc nhích thì cả lý do đổi từ ảnh sang video biến mất.
+       *
+       * 27s ⇒ ở tốc độ 1× phủ 810 khung, NGẮN hơn clip (963 khung) nên
+       * `VideoBackdrop` tự bọc `<Loop>` — vì thế `backdropSeconds` là BẮT BUỘC
+       * ở đây, bỏ trống là đoạn phim đứng ở khung cuối suốt phần còn lại.
+       */
+      backdropVideo: 'stock-video/tone/thien-nhien-toi/203449.mp4',
+      backdropSeconds: 15,
       music: 'tram-tinh.wav',
       hashtags: ['tinhcach', 'tamly', 'selfdiscovery', 'tuvi'],
     },
@@ -806,30 +848,89 @@ const SOURCES: InsightSource[] = [
     toolId: 'kinh-dich',
     spec: {
       title: 'Ba tình thế bế tắc trong Kinh Dịch',
-      hook: 'Người xưa vẽ ba tình thế bế tắc.',
+      /*
+       * ✍️ VIẾT LẠI THEO LỜI CHÊ ĐO ĐƯỢC — không phải sửa cho khác đi.
+       *
+       * Bản trước trượt cổng 2 **cả 3 vòng, 0/4 người xem hết**, và lời chê
+       * lặp gần như nguyên văn qua từng vòng, từ ba persona khác nhau:
+       *   · `sv-22`   — *"mấy cái quẻ này lạ quá, KHÔNG BIẾT LÀ GÌ"*
+       *   · `vp-35`   — *"không giải thích rõ quẻ là gì, TẠI SAO nó liên quan"*
+       *   · `tin-45`  — *"chỉ nêu vấn đề và tên quẻ, KHÔNG có lời khuyên cụ thể"*
+       *
+       * Ba lời đó chỉ vào ba chỗ hụt tách bạch, và bản cũ hụt cả ba:
+       *   1. chưa bao giờ nói **quẻ là cái gì** → thêm hẳn một cảnh mở giải thích
+       *   2. chỉ CHẨN mà không KHUYÊN → mỗi tình thế nay kèm một việc làm được
+       *   3. **bốn** tên lạ trong 30 giây là quá tải → cắt còn **ba**, đúng
+       *      luôn với tiêu đề và với id `ba-the-be-tac` (bản cũ tự mâu thuẫn:
+       *      tiêu đề "Ba", hook "Bốn kiểu")
+       *
+       * ⚠️ Nhưng ba lời trên chỉ là phần CHỮ, và sửa chữ KHÔNG cứu được clip
+       * này: sau ba bản viết lại, kết quả PHẲNG (0/4 → 1/4 → 0/5). Chỗ thật sự
+       * chặn là HÌNH — xem khối `backdropVideo` cuối kịch bản, nơi ghi lại lượt
+       * đổi định dạng và số đo dẫn tới nó.
+       */
+      /*
+       * 🪤 Bản viết lại ĐẦU của tôi bỏ mất dạng CÂU HỎI và cổng 1 kêu ngay
+       * `hook.no-pattern` — hook cũ *"bạn đang ở kiểu nào?"* vốn đã đúng dạng,
+       * tôi sửa nội dung rồi vô tình gỡ luôn cái đang đúng. Nay giữ CẢ HAI:
+       * câu hỏi (dạng giữ chân) + lời hứa mới (người xưa đã đặt tên cho nó).
+       */
+      hook: 'Bạn đang bế tắc kiểu gì? Người xưa đã đặt tên cho nó.',
       scenes: [
         {
-          text: 'Truân: bạn mới bắt đầu, và mọi thứ còn rối như tơ vò.',
-          visual: { kind: 'image', src: QUE('17-kw03.png'), accent: 'Truân:' },
+          // Cảnh mở TRẢ LỜI thẳng câu "quẻ là gì" — thứ hai persona hỏi mà bản
+          // cũ không có. Đặt trước mọi tên quẻ, nếu không thì tên đầu tiên đã
+          // rơi vào chỗ trống.
+          text: 'Kinh Dịch có 64 quẻ. Mỗi quẻ là tên gọi cho một tình thế người ta hay mắc.',
+          visual: { kind: 'typo', accent: 'một tình thế' },
         },
         {
-          text: 'Kiển: đường trước mặt nghẽn, mà quay lại thì không cam.',
-          visual: { kind: 'image', src: QUE('20-kw39.png'), accent: 'Kiển:' },
+          text: 'Mới bắt đầu mà rối như tơ vò. Quẻ Truân. Người xưa khuyên: đừng gỡ một mình.',
+          visual: { kind: 'typo', accent: 'đừng gỡ một mình' },
         },
         {
-          text: 'Khốn: bạn vẫn gắng, nhưng nói ra thì không ai hiểu.',
-          visual: { kind: 'image', src: QUE('26-kw47.png'), accent: 'Khốn:' },
+          text: 'Đi tiếp thì nghẽn, quay lại không cam. Quẻ Kiển. Lời khuyên: đổi đường, đừng đâm thẳng.',
+          visual: { kind: 'typo', accent: 'đổi đường' },
         },
         {
-          text: 'Khảm: hết lớp này tới lớp khác, tới mức bạn quen dần.',
-          visual: { kind: 'image', src: QUE('18-kw29.png'), accent: 'Khảm:' },
+          text: 'Bạn vẫn gắng, nói ra không ai hiểu. Quẻ Khốn. Cổ nhân bảo: bớt lời, làm cho họ thấy.',
+          visual: { kind: 'typo', accent: 'làm cho họ thấy' },
         },
         {
-          text: 'Cổ nhân không gọi đó là số phận của bạn. Chỉ là một giai đoạn.',
-          visual: { kind: 'image', src: QUE('63-kw01.png'), accent: 'một giai đoạn.' },
+          text: 'Cổ nhân không gọi đó là số phận. Quẻ khó nhất cũng có lối ra.',
+          visual: { kind: 'typo', accent: 'cũng có lối ra' },
         },
       ],
       ...cta('Bạn đang ở tình thế nào?'),
+      /*
+       * ── ĐỔI ĐỊNH DẠNG: bỏ tranh quẻ, chuyển sang chữ trên nền động ─────────
+       *
+       * 🔴 ĐÂY LÀ ĐẢO NGƯỢC quyết định cũ ("cố ý không cắm `backdropVideo`"), và
+       * lý do đảo nằm ở chỗ hai quyết định trả lời HAI câu hỏi khác nhau:
+       *   · Quyết định CŨ đúng trong khung "giữ tranh quẻ": tranh chiếm ô
+       *     944×944 (~87% bề ngang) nên nền video chỉ ló ra ở dải viền mỏng —
+       *     đo trên bản render thật ra độ động trung vị **1**, bằng đúng clip đã
+       *     bị loại, mà file phình **6MB → 40MB**. Nền video khi đó là chi phí thuần.
+       *   · Nhưng câu hỏi THẬT là "có nên giữ tranh quẻ không". Và câu trả lời
+       *     đo được là KHÔNG: `luot-vo-dinh` bỏ ở **3s trong MỌI vòng của CẢ BA
+       *     bản kịch bản**, lý do luôn là hình — *"các hình vẽ quẻ tông màu trầm,
+       *     không tạo cảm giác hứng thú"*. Chính bức tranh là thứ đẩy người xem đi.
+       *
+       * 🔑 Luật cũ VẪN ĐÚNG và vẫn giữ nguyên: *nền video chỉ đáng khi cảnh là
+       * `typo`*. Bản này không phá luật đó — nó đổi vế còn lại: **bỏ cảnh
+       * `image` đi** để về đúng hình dạng mà 4 clip insight kia đang chạy được.
+       *
+       * ⚠️ Nội dung Kinh Dịch KHÔNG mất: tên ba quẻ (Truân · Kiển · Khốn) vẫn
+       * nằm trong lời đọc và phụ đề. Thứ bỏ đi là bức tranh TĨNH, không phải
+       * kiến thức.
+       */
+      // Tông `toi-gian` — đoạn duy nhất trong kho chưa clip nào dùng, nên không
+      // trùng nền với clip đứng cạnh. Caption nhà cung cấp: *mystical, fantasy,
+      // surreal* — hợp đúng chỗ "người xưa đã đặt tên cho nó".
+      backdropVideo: 'stock-video/tone/toi-gian/57545.mp4',
+      // ⚠️ ĐO THẬT trên chính file: 16,02s. Khai 16 là làm tròn XUỐNG — khai
+      // thừa dù nửa giây là mỗi vòng `<Loop>` đứng ở khung cuối chừng ấy.
+      backdropSeconds: 16,
       music: 'lang-le.wav',
       hashtags: ['kinhdich', 'bettac', 'coHoc', 'tuvi'],
     },
