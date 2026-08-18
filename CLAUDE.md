@@ -122,6 +122,75 @@ Hai luật: **trần ký tự** phần luật từng shape · **mỗi shape ch�
   `deployment_status`, Vercel chưa gắn status). 4 check xanh ≠ đủ 7 — đếm trước
   khi kết luận.
 
+### 📏 Đo bằng GEMINI THẬT — arc ăn ở GIỌNG, không ăn ở ĐỘ DÀI (PR #542)
+Chạy được `scripts/demo-luan.mjs` bằng `gemini-2.5-flash` (model prod).
+
+| | trước arc | sau arc |
+|---|---:|---:|
+| Tên sao lọt ra màn hình / lượt | **11,0** | **0,0** |
+| Có twist (lật góc nhìn) | 0/3 | **3/3** |
+| Câu phán quyết in đậm | 2/3 | **3/3** |
+| Khẩu ngữ / lượt | 6,0 | **8,7** |
+| **Độ dài (mục tiêu 120–180 từ)** | 214 | **211** |
+
+🔑 **Arc đổi được GIỌNG và BỐ CỤC, không đổi được ĐỘ DÀI.** Nhánh "hỏi có/không
+→ 1–3 câu" còn ra **203 từ**, tức dài hơn cả câu hỏi rộng — luật ngân sách viết
+ra nhưng model không theo.
+- 🪤 **Script đo trước đó CHƯA BAO GIỜ đọc được bằng Gemini**: `gemini-2.5-flash`
+  bật *thinking* mặc định và token suy nghĩ **ăn chung `maxOutputTokens`**
+  (`thoughtsTokenCount 1003/1200` → `finishReason: MAX_TOKENS`) ⇒ **cả hai nhánh
+  BEFORE/AFTER đều cụt giữa câu**. Prod khai `thinkingBudget: 0`, script thì
+  không. Hỏng im lặng kiểu tệ nhất — bản cụt vẫn là văn xuôi hợp lệ, nhìn qua
+  tưởng *"model viết cụt"*.
+- 🪤 Bộ dò jargon **kêu oan vì tên sao "Tuần"** khớp vào "tuần này"/"tuần tới" —
+  đúng lớp lỗi `\bcon\b` khớp "con vật". Phải dò dạng đủ *"Tuần án ngữ"*.
+
+### 🔢 `max_tokens` KHÔNG ép được ngân sách từ — và trần suýt không với tới rail
+`RAIL_MAX_TOKENS = 1000` ≈ **800 từ** trong khi `LUAN_ARC` hứa trần 300 ⇒ trần cũ
+chưa bao giờ gác gì. Nay 3 shape lá số dùng **`LASO_MAX_TOKENS = 900`**, suy từ
+đo chứ không suy từ ngân sách prompt hứa: token/từ tiếng Việt **1,25** (dày thuật
+ngữ **1,32**), bản dài nhất model TỰ viết ra khi thả rộng là **797 token / 580 từ**.
+- 🪤 **Ba lần siết đều CẮT GIỮA CÂU**: trần 380 → **2/4** lượt "hỏi sâu" bị cắt ·
+  660 → **1/8** · 800 → có lượt dùng **797/800**. Câu *"liệt kê từng sao"* **không
+  có trần tự nhiên** — mọi trần đều sẽ chạm, kể cả 1000 đang chạy.
+- 🔑 **Kết luận: `max_tokens` là lưới đỡ chặn lượt chạy hoang, KHÔNG phải cái kéo
+  độ dài.** Model không nhìn thấy trần nên trần không dạy được nó viết ngắn. Muốn
+  kéo trung bình xuống thì sửa `LUAN_ARC`, đừng hạ con số này.
+- 🔴 **Và trần đó suýt KHÔNG với tới đường rail THẬT**: nhánh birth của `runAgent`
+  **không đi qua `buildChatContext`** (nó tự ráp `CHAT_SYSTEM_LASO`/`GENERAL`) nên
+  `railMaxTokens` nằm nguyên ở 1000. Đặt trần trong `prompts.ts` chỉ ăn ở nhánh
+  scenario + route legacy `/api/lasotuvi`. Đã vá thêm một dòng trong `run.ts`.
+- 🔑 **Bài kiểm đầu XANH OAN vì đo NHẦM TẦNG**: 21 bất biến đo giá trị
+  `buildChatContext` TRẢ VỀ, mà đường rail không đọc giá trị đó. Cùng lớp lỗi
+  *"bài kiểm đặt tên theo điều muốn chứng minh"*. ⇒ **Đo con số ĐI RA DÂY**
+  (chặn `fetch`, đọc `max_tokens` trong request thật), đừng đo hàm trả về gì.
+
+### 🔵 Thuật ngữ: HẠN CHẾ thay vì CẤM (Henry chốt)
+*"rule chỉ nên hạn chế sử dụng thôi… khi users muốn hỏi sâu, thì đôi khi phải mang
+jargon ra giải thích"*. Luật cũ cấm gần tuyệt đối (*"tối đa MỘT lần trong cả
+lượt"*, *"Ngoại lệ DUY NHẤT"*) — chặn đúng lúc thuật ngữ có giá trị nhất.
+- **GIỮ đúng luật gánh chất lượng**: *mỗi câu phải ĐỨNG VỮNG khi xoá hết tên riêng
+  đi*. Đó mới là thứ chặn lối viết đọc tên sao thay cho nghĩa; phần còn lại chỉ là
+  hàng rào phẳng. Gỡ luôn mâu thuẫn còn sót trong `MAU_ARC` (*"KHÔNG một tên sao nào"*).
+- Đo lại trên Gemini: hỏi thường **1,0–3,0** tên riêng/lượt · hỏi sâu **7,5–15,0**
+  ⇒ luật nay giãn theo ĐỘ SÂU thay vì chặn phẳng.
+- ⚠️ **Hai việc kéo NGƯỢC nhau**: cho gọi tên sao thì câu dài thêm. Nên trần phải
+  **nới** chứ không siết — không thể vừa ép ngắn vừa mở thuật ngữ.
+
+### 🗺️ ĐÚNG tool nào đã đổi (để test prod)
+3 shape lá số phủ **đường `birth`**, tức **10 mặt trang** + 3 kênh bot + route
+legacy: `/app/la-so` · `/app/luan-giai` · `/app/gio-sinh` · `/app/day-con` ·
+`/app/nguoi-khac` · `/app/huong-nghiep-tre` · `/app/chan-dung-tien-kiep` ·
+`/app/chan-dung-vo-chong` · `/app/duyen-no-tien-kiep` · `/app` (Trò chuyện với Thầy).
+- ⚠️ **Chỉ KHUNG CHAT bên phải đổi.** Bản luận chính giữa trang (họ 2 — JSON
+  schema trả tiền; họ 3 — 24 phần) **KHÔNG đụng**. Test nhầm ô giữa thì không
+  thấy gì đổi.
+- **24 `toolType` kịch bản (22 prompt, 3 cái dùng chung `CHAT_SYSTEM_COMPAT`)
+  chưa đụng**: xem-tuoi · xem-lam-an · tuong-hop · tu-binh · xem-tuoi-sinh-con ·
+  chon-ngay-tot · dat-ten-con · dat-ten-dn · nap-am · kim-lau · ngu-hanh-ten ·
+  than-so-hoc · bat-trach · kinh-dich · mai-hoa · ky-mon · hoang-dao · ngay-tot ·
+  luc-nham · ban-do-sao · cong-so · nhan-mach · xem-tuong · phong-thuy.
+
 ---
 
 ## 🖼️ Hội đồng CHẤM HÌNH mà KHÔNG NHÌN THẤY HÌNH — và kho ảnh thật (2026-08-17, PR #539 + đang làm)
