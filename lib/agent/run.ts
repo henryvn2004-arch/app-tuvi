@@ -24,7 +24,7 @@ import { computeLaso, renderLasoCard } from '@/lib/engine/laso';
 import { computeTuBinh } from '@/lib/engine/tubinh';
 import { computeSinhCon, computeChonNgay, computeDatTen, computeDatTenDn } from '@/lib/engine/diachi';
 // Template prompt + context formatter dùng CHUNG với /api/lasotuvi (một bộ não).
-import { CHAT_SYSTEM_LASO, CHAT_SYSTEM_GENERAL, extractLasoContext, buildChatContext, focusHint, nguoiXemLine, RAIL_MAX_TOKENS } from '@/lib/agent/prompts';
+import { CHAT_SYSTEM_LASO, CHAT_SYSTEM_GENERAL, extractLasoContext, buildChatContext, focusHint, nguoiXemLine, RAIL_MAX_TOKENS, LASO_MAX_TOKENS } from '@/lib/agent/prompts';
 import { TOOLS_INSTRUCTION } from '@/lib/agent/tools';
 import { type ChatConfig } from '@/lib/config/appConfig';
 import {
@@ -267,6 +267,14 @@ export async function runAgent(
     // ── LÁ SỐ / GENERAL (Sprint 1.1): seed từ birth, prompt thương hiệu +
     // công cụ đầy đủ (lap_la_so, vận hạn, RAG). Dùng CHUNG extractLasoContext
     // với /api/lasotuvi → marker khớp prompt giàu.
+    //
+    // 🔴 Trần riêng cho 3 shape LÁ SỐ. Nhánh này KHÔNG đi qua
+    // `buildChatContext` (nó tự ráp `CHAT_SYSTEM_LASO`/`GENERAL` ngay bên
+    // dưới) nên con số per-prompt mà hàm đó trả về KHÔNG với tới đây — đặt
+    // trần ở `prompts.ts` thôi là đường rail THẬT vẫn chạy ở mức cũ, còn bài
+    // kiểm trên `buildChatContext` thì vẫn báo xanh. Đây đúng là đường mà
+    // shell rail + 3 kênh bot đang dùng, tức chỗ cần trần nhất.
+    railMaxTokens = Math.min(railMaxTokens, LASO_MAX_TOKENS);
     let lasoCtx = '';
     if (req.birth) {
       const res = computeLaso(req.birth);
