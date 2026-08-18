@@ -5,6 +5,123 @@
 
 ---
 
+## 💸 Đường trả thưởng giới thiệu CHẾT TỪ LÚC VIẾT RA — `catch {}` giấu 6 ngày (2026-08-18)
+
+Báo cáo CMO thấy `referrals` có 1 dòng mà `signup_rewarded_at` NULL đã 6 ngày.
+Tưởng lỗi chớp nhoáng, gọi tay `process_referral_signup(...)` thì **hàm ném lỗi
+ngay**:
+```
+42702: column reference "referrer_user_id" is ambiguous — line 20
+```
+`RETURNS TABLE(rewarded, referrer_user_id, credits_granted)` khai OUT param
+**trùng tên** cột `referrals.referrer_user_id` trong câu đếm trần 30 ngày.
+⇒ **Mọi lượt gọi đều chết. Đường thưởng chưa bao giờ trả được cho ai.**
+
+- 🔴 **Lần thứ HAI cùng lớp lỗi** — `promo_code_redeem` đã phải vá y hệt
+  (`where promo_codes.code = v_code`). Luật: **hàm `RETURNS TABLE` thì MỌI cột
+  trong thân phải ghi kèm tên bảng**, đừng trông vào việc tên không đụng nhau.
+- 🔑 **Thứ giấu nó là `} catch { /* best-effort */ }` RỖNG** ở
+  `app/api/payment/route.ts`. `rpc()` CÓ ném kèm nguyên văn body lỗi — chuỗi
+  `42702` đã bay ra thật rồi bị nuốt trọn, không một dòng log. Best-effort là
+  ĐÚNG (thưởng hỏng không được chặn lượt đăng ký) nhưng **im lặng thì sai**: dòng
+  referral vẫn ghi sổ, tiền không tới tay ai, và nhìn từ ngoài y hệt lúc chạy
+  đúng. Nay có `console.error`.
+- **Bộ dò tái phát** (chạy được ngay, không cần file):
+  ```sql
+  with fn as (select p.proname, unnest(p.proargnames[array_length(p.proargnames,1)
+      - (select count(*) from unnest(p.proargmodes) m where m='t') + 1 :
+      array_length(p.proargnames,1)]) as out_name, p.prosrc
+    from pg_proc p join pg_namespace n on n.oid=p.pronamespace
+    where n.nspname='public' and p.proargmodes is not null and 't'=any(p.proargmodes))
+  select proname, out_name from fn
+   where out_name is not null and prosrc ~* ('(where|and|on)\s+'||out_name||'\s*=');
+  ```
+  ⚠️ **Red-team nó trước khi tin kết quả rỗng**: đo được nó quét **97 OUT param /
+  20 hàm** và regex khớp đúng chuỗi hỏng ⇒ rỗng là xanh THẬT. Bộ dò trả rỗng vì
+  chính nó hỏng thì tệ hơn không có.
+- **Verify sau khi vá** (đường tiền phải soi đủ 4 chiều): số dư 6.151 → **6.166**
+  (+15) · dấu `signup_rewarded_at` đã đặt · **đúng 1** dòng giao dịch, giữ nguyên
+  dấu tiếng Việt · **chạy lại lần 2 → `rewarded=f`, số dư KHÔNG đổi** (chống trả
+  hai lần).
+### 👻 Vòng sau — "THƯỞNG MA": `UPDATE user_credits` trần ở CẢ HAI tầng referral
+`UPDATE user_credits SET balance = balance + n WHERE user_id = …` **không soát số
+dòng**. Thiếu dòng ví ⇒ ăn 0 dòng, nhưng hàm **vẫn chạy tiếp** ghi
+`credit_transactions` + đánh dấu đã thưởng ⇒ **sổ nói đã trả, ví không tăng, không
+ai biết**.
+- 🔴 **Không phải lo hão**: đo được **9 tài khoản THẬT** (tạo 21/03–23/04, trước
+  khi có trigger quà đăng ký) đang KHÔNG có dòng `user_credits`.
+- **Vá = UPSERT + chốt số dòng**, không phải chỉ chốt: upsert thì người nhận có
+  tiền THẬT kể cả khi thiếu dòng; chốt `GET DIAGNOSTICS … <> 1` thì DỪNG HẲN để
+  referral còn `pending` mà thử lại, thay vì ghi sổ khống.
+- ⚠️ **CỐ Ý không `coalesce(credits_to_*, 0)`**: NULL là lỗi cấu hình, để nó ném
+  ràng buộc NOT NULL còn hơn lặng lẽ trả 0 Lượng rồi đánh dấu đã thưởng.
+- **Quét MỌI hàm ghi `user_credits`** mới ra chỗ thứ hai — `process_referral_reward`
+  (tầng 2, 30 mỗi bên) dính y hệt và **nặng hơn vì cộng cho HAI người**. Thân hàm
+  đó **trước đây không có trong repo** (tạo ad-hoc, repo chỉ nhắc tên ở lượt
+  revoke) → nay chép trọn vào `_patches/migration-referral-reward-upsert.sql`.
+- 🪤 **`deduct_credits` bị bộ dò gắn cờ đỏ nhưng ĐỌC RA THÌ AN TOÀN**: nó có
+  `RETURNING … IF NOT FOUND THEN RAISE EXCEPTION 'insufficient_balance'` nên thiếu
+  dòng ví là ném lỗi, không cho dùng chùa. **Bộ dò dò theo mẫu chuỗi thì phải đọc
+  code mới kết luận** — báo đỏ oan một hàm đang đúng cũng là một kiểu sai.
+- **Verify (rollback sạch, prod không đổi một byte)** — tầng 1: thiếu dòng → tự
+  tạo, balance 15, 1 giao dịch · có dòng → 15→30 cộng dồn · `ROW_COUNT`=1 ở cả hai
+  nhánh. Tầng 2: **cả hai bên thiếu dòng** → tạo đủ 2 dòng 30/30, 2 giao dịch,
+  `status=rewarded` · có dòng → 30→60 hai bên.
+- 🪤 **Red-team chính cái chốt** (chốt chưa từng đỏ thì chưa chứng minh được nó
+  biết đỏ): ép một thao tác ăn 0 dòng → chốt ném đúng nguyên văn kèm `rows=0`.
+- ⚠️ Còn lại, chưa đụng: `add_credits`/`deduct_credits` **thiếu `SET search_path`**
+  (hàm SECURITY DEFINER để trống là hở đường tiêm) — hai hàm referral đã có.
+- 🪤 **Suýt báo một check ĐỎ OAN**: `tsc` kêu `verboseLogs` không tồn tại ở
+  `app/mcp/[key]/route.ts`. Không phải lỗi mã — `node_modules` trong container
+  còn **`mcp-handler` 1.1.0** trong khi lock đã **2.1.0**. `npm ci` xong là sạch.
+  Cùng họ "đo trên bản CŨ" — **`npm ci` trước khi tin bất kỳ lượt typecheck nào**.
+- 🪤 Và vấp lại **bẫy cwd lần thứ NĂM**: `cd tuvi-engine && … && npx tsc` chạy
+  tsc ở engine chứ không ở gốc.
+
+---
+
+## 🤖 ĐỌC SỐ TRAFFIC: luôn dùng bản `_human` (2026-08-18, PR #544)
+
+**83% con số "visitors" của mọi báo cáo là MÁY.** Một đội bot 1.326 `anon_id`
+dùng chung MỘT chuỗi UA (`Chrome/136.0.0.0` trên Mac), mỗi anon đúng 1
+`page_view` vào `/`, 0 referrer, 0 tương tác, 0 đăng nhập, chạy từ 29/07. Nó
+không tự khai `bot` nên cột `events.is_bot` (lọc theo UA) không bắt được.
+
+| | thô | **người thật** |
+|---|---:|---:|
+| visitors 7 ngày | 587 | **98** |
+| WAU · tuần trước | 477 · 758 | **87 · 88** |
+| tỉ lệ tương tác | 5% | **33%** |
+
+🔴 **LUẬT**: `marketing_funnel` → dùng **`visitors_human`**, KHÔNG dùng
+`visitors`. `dashboard_engagement` → dùng **`wau_human`/`dau_*_human`**.
+`traffic_quality` → mẫu số đúng là **`human`**, tuyệt đối không chia cho
+`total`. Số thô vẫn được trả về, để SO chứ không để báo cáo.
+
+🪤 **Bẫy đã sập ngay ngày làm**: số thô báo WAU 477 vs 758 ⇒ cả CMO digest lẫn
+báo cáo đều kêu *"giảm 19–38%, lần đầu đi xuống"*. Người thật **87 vs 88 —
+ĐI NGANG**. Toàn bộ mức giảm là con bot phập phù. **Trước khi báo bất kỳ mức
+tăng/giảm nào của traffic, phải xem bản `_human`.**
+
+- Luật nhận đội máy (`bot_ua_fleets()`, `_patches/migration-bot-filter.sql`):
+  một chuỗi UA phải thoả **ĐỦ 5** — ≥8 anon · <1,1 event/anon · chưa từng
+  tương tác · chưa từng có referrer · chưa từng đăng nhập. Mọi UA của người
+  thật đều trượt ít nhất HAI. Cửa sổ nhận **30 ngày**.
+- ⚠️ **Thiếu UA thì KHÔNG đoán bừa** — dữ liệu trước khi có cột `ua` đều trống
+  UA mà là người thật (6,69 event/anon, 1.623 lượt tương tác).
+- **KHÔNG đụng tầng ghi**: `/api/track` vẫn ghi đủ mọi lượt kể cả bot. Lọc ở
+  tầng ĐỌC ⇒ sửa luật xong chạy lại là ra số mới. Đây là chủ ý, đừng "tối ưu"
+  thành chặn/vứt.
+- 🔴 **GA4 KHÔNG lọc được** (đo ở phía Google, không có `sessions_human`).
+  Đừng bao giờ lấy `ga4.sessions` làm số khách — 17/08 nó báo 1.831 phiên khi
+  người thật là 98. Chỉ dùng GA4 cho landing page/kênh.
+- ⚠️ **Prompt routine CMO là snapshot CŨ, không sửa được** (`update_trigger`
+  từ chối). `docs/cmo-daily-routine-prompt.md` đã cập nhật nhưng routine đang
+  chạy thì KHÔNG. Nên mục này nằm ở CLAUDE.md — đây là đường duy nhất luật tới
+  được lượt báo cáo sáng.
+
+---
+
 ## 🩺 "sức khoẻ" gõ lối CŨ thì TRƯỢT bộ dò chủ đề — 3 bản chép tay cùng dính (2026-08-18, PR sau)
 
 Henry: *"vá đi"*. Bắt được lúc trả lời câu hỏi *"rút gọn token có tạo room cho
