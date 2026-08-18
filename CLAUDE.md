@@ -175,6 +175,40 @@ thay vì tin con số của cổng. Kết quả (hai khung cách nhau 1 giây, x
   6,31/giây"* trong khi đó là số của RIÊNG dải mặt nước; số của cả khung là **1**.
   Đo một dải rồi phát biểu như thể đo cả khung — phải nêu rõ đo Ở ĐÂU.
 
+### 🔴 Và `rate`/`blur` KHÔNG phải cần gạt — cổng đo bằng TRUNG BÌNH mới là lỗi
+Sửa `rate` 0,5→1 và `blur` 6→3 rồi **đo lại: gần như không đổi** (trung vị vẫn 1,
+trung bình 5,2 → 5,3). Tức hai cần gạt đó không phải chỗ hỏng. Chỗ hỏng nằm ở
+`measureMotion`: nó tính **TRUNG BÌNH** |Δ| toàn khung, mà trung bình thì **một
+dải nhỏ động mạnh gánh được cả khung đứng im**.
+
+Đo lại 12 đoạn, đặt trung bình cạnh **trung vị**:
+
+| đoạn | TB (cổng cũ) | trung vị |
+|---|---:|---:|
+| đồng lúa mì | 9,49 | **0,0** |
+| cầu đêm + mặt nước *(đoạn tôi vừa định gửi)* | 11,77 | **0,9** |
+| hồ Pleiku | 7,06 | 1,2 |
+| sân ga | 6,14 | 2,3 |
+| cổng vòm | 12,15 | 3,8 |
+| rừng đêm sao | 11,30 | 5,6 |
+| rừng tối | 22,61 | 7,7 |
+| mây vần | 14,61 | 11,0 |
+| đèn lắc trong gió | 38,54 | 32,8 |
+
+**Trung bình 9,49 mà trung vị 0,0** — quá nửa khung KHÔNG đổi một đơn vị nào
+trong trọn một giây, và cổng cũ chấm nó là "đủ động".
+- 🔑 **Hai con số trả lời hai câu khác nhau, phải hỏi CẢ HAI**: trung bình → *có
+  chuyển động không*; trung vị → *chuyển động có TRẢI RA không, hay dồn một dải*.
+  **Mắt người đọc ra "video" theo câu thứ hai.**
+- `measureMotion` nay trả `{mean, spread}`, lấy mẫu GIỮA của ba lượt cho TỪNG chỉ
+  số riêng (một đoạn động đều ở giữa mà đứng im hai đầu thì gộp là sai).
+  **`MOTION_SPREAD_MIN = 5`** — cắt đúng chỗ dữ liệu tự tách (3,8 ↔ 5,6).
+- Soi lại kho bằng cổng mới: **giữ 7 / gỡ 5**. Kho mỏng đi thật, nhưng kho 12
+  đoạn mà 5 đoạn là ảnh tĩnh thì con số 12 chỉ là con số.
+- 🪤 **Bẫy đo lại vấp ngay trong lượt này**: đổi đoạn nền rồi đo *trong khi render
+  chưa xong* → ra y hệt số cũ, suýt kết luận "đổi đoạn không ăn thua". Phải chốt
+  mtime của mp4 TRƯỚC khi đo.
+
 ### 🐞 Kèm: con KHỈ lọt tông "suy tư" — và cổng đầu tiên của tôi quá rộng
 `must[]` của `suy-tu` có từ **TƯ THẾ** (`sitting`) mà con vật nào cũng mang ⇒
 lọt một đoạn `baboons, apes, cub`. Cùng lớp với con MÈO đã lọt `nang-am` ở kho
