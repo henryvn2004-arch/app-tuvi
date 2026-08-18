@@ -106,39 +106,13 @@ export function compileVideoLib(extra = []) {
 }
 
 /**
- * Chạy cổng 2 (hội đồng người xem) và in kết quả.
+ * In kết quả từng vòng của vòng lặp.
  *
- * Trả về `{ pass, spec, reason }` — `spec` có thể là BẢN ĐÃ VIẾT LẠI, nên phía
- * gọi PHẢI dùng giá trị trả về cho các bước sau (giọng đọc, render). Dùng lại
- * bản cũ thì vòng lặp chạy cho vui: clip vẫn mang đúng câu chữ vừa bị chấm trượt.
- *
- * ⚠️ `reason` phân biệt HAI ca trượt khác hẳn nhau, và phía gọi phải dùng nó để
- * chọn mã thoát (xem `EXIT_GATE`):
- *   · `'gate'`   — hội đồng chấm trượt. Cổng làm đúng việc.
- *   · `'config'` — THIẾU KHOÁ MODEL. Hội đồng chưa hề chạy. Coi đây là "cổng
- *     chặn" là báo cáo sai: nó nói kịch bản dở trong khi thật ra máy chưa chấm.
- *
- * @param {(spec: object, opts: object) => Promise<object>} runViralLoop
- * @param {object} spec
- * @param {{ skip?: boolean, gate?: object, maxRounds?: number }} opts
+ * Tách ra vì HAI nhánh cùng cần in y hệt (chế độ chặn và chế độ cảnh báo). Chép
+ * hai bản là hai bản sẽ trôi khỏi nhau — đúng lớp lỗi repo này đã trả giá nhiều
+ * lần, và ở đây nó còn tệ hơn: hai chế độ in khác nhau thì đọc log không so được.
  */
-export async function chayCong2(runViralLoop, spec, opts = {}) {
-  if (opts.skip) {
-    console.log('\n── CỔNG 2 · BỎ QUA (--no-audience) ──────────');
-    console.log('   ⚠️ Clip chưa qua hội đồng người xem — chỉ dùng để duyệt bố cục.');
-    return { pass: true, spec };
-  }
-
-  if (!process.env.GEMINI_API_KEY && !process.env.ANTHROPIC_API_KEY) {
-    console.error('\n── CỔNG 2 · hội đồng người xem ──────────────');
-    console.error('   ❌ Thiếu GEMINI_API_KEY và ANTHROPIC_API_KEY trong môi trường chạy.');
-    console.error('   Đặt một trong hai, hoặc --no-audience để bỏ qua CÓ CHỦ ĐÍCH.');
-    return { pass: false, spec, reason: 'config' };
-  }
-
-  console.log('\n── CỔNG 2 · hội đồng người xem ──────────────');
-  const kq = await runViralLoop(spec, { skipAudience: false, gate: opts.gate });
-
+function inKetQuaVong(kq) {
   for (const r of kq.rounds) {
     const a = r.audience;
     if (!a) {
@@ -158,6 +132,78 @@ export async function chayCong2(runViralLoop, spec, opts = {}) {
     for (const i of a.issues) console.log(`      [${i.level}] ${i.code}: ${i.message}`);
     if (r.rewriteHint) console.log(`      → viết lại theo: ${r.rewriteHint}`);
   }
+}
+
+/**
+ * Chạy cổng 2 (hội đồng người xem) và in kết quả.
+ *
+ * Trả về `{ pass, spec, reason }` — `spec` có thể là BẢN ĐÃ VIẾT LẠI, nên phía
+ * gọi PHẢI dùng giá trị trả về cho các bước sau (giọng đọc, render). Dùng lại
+ * bản cũ thì vòng lặp chạy cho vui: clip vẫn mang đúng câu chữ vừa bị chấm trượt.
+ *
+ * ⚠️ `reason` phân biệt HAI ca trượt khác hẳn nhau, và phía gọi phải dùng nó để
+ * chọn mã thoát (xem `EXIT_GATE`):
+ *   · `'gate'`   — hội đồng chấm trượt. Cổng làm đúng việc.
+ *   · `'config'` — THIẾU KHOÁ MODEL. Hội đồng chưa hề chạy. Coi đây là "cổng
+ *     chặn" là báo cáo sai: nó nói kịch bản dở trong khi thật ra máy chưa chấm.
+ *
+ * @param {(spec: object, opts: object) => Promise<object>} runViralLoop
+ * @param {object} spec
+ * @param {{ skip?: boolean, gate?: object, maxRounds?: number, chiCanhBao?: boolean }} opts
+ *   `chiCanhBao` — hội đồng VẪN CHẤM nhưng KHÔNG CHẶN. Xem chú thích dưới.
+ */
+export async function chayCong2(runViralLoop, spec, opts = {}) {
+  if (opts.skip) {
+    console.log('\n── CỔNG 2 · BỎ QUA (--no-audience) ──────────');
+    console.log('   ⚠️ Clip chưa qua hội đồng người xem — chỉ dùng để duyệt bố cục.');
+    return { pass: true, spec };
+  }
+
+  /*
+   * ── CHẾ ĐỘ CẢNH BÁO ───────────────────────────────────────────────────────
+   *
+   * Hội đồng vẫn chấm và vẫn in đủ, nhưng kết quả KHÔNG chặn lượt dựng.
+   *
+   * 🔑 Vì sao chỉ chạy MỘT vòng, không viết lại: vòng viết lại tồn tại để ĐI QUA
+   * cổng. Cổng không chặn thì không có gì để đi qua — ba vòng rồi bỏ kết quả là
+   * đốt sáu lượt LLM cho một con số mình không hành động theo.
+   *
+   * Và với clip demo công cụ thì viết lại vốn KHÔNG phải cần gạt: lời chê đo
+   * được nhất quán là *"chỉ quay màn hình công cụ"* · *"không có cơ sở khoa
+   * học"* — chê CÁI CLIP LÀ GÌ, không chê câu chữ. Cùng lớp với `visual.format`.
+   *
+   * ⚠️ VẪN CHẤM chứ không bỏ hẳn: bỏ đi là mất luôn phép đo. Con số 3/18 chỉ có
+   * nghĩa nếu còn tiếp tục đo được — im lặng cho qua thì lần sau không ai biết
+   * nhóm này đang khá lên hay tệ đi.
+   */
+  if (opts.chiCanhBao) {
+    if (!process.env.GEMINI_API_KEY && !process.env.ANTHROPIC_API_KEY) {
+      console.log('\n── CỔNG 2 · CẢNH BÁO · bỏ qua (thiếu khoá model) ──');
+      console.log('   Không chặn — clip demo công cụ vẫn dựng.');
+      return { pass: true, spec };
+    }
+    console.log('\n── CỔNG 2 · CHẾ ĐỘ CẢNH BÁO (không chặn) ────');
+    const kq = await runViralLoop(spec, { skipAudience: false, gate: opts.gate, maxRounds: 1 });
+    inKetQuaVong(kq);
+    if (!kq.pass) {
+      console.log('\n⚠️  HỘI ĐỒNG CHẤM TRƯỢT — nhưng KHÔNG chặn (clip demo công cụ).');
+      for (const i of kq.remainingIssues) console.log(`   [${i.level}] ${i.code}: ${i.message}`);
+      console.log('   Vẫn dựng tiếp. Xem CLAUDE.md, mục cổng 2 với nhóm demo công cụ.');
+    }
+    // Giữ NGUYÊN spec gốc: chế độ này không chạy vòng viết lại nào.
+    return { pass: true, spec, canhBao: !kq.pass };
+  }
+
+  if (!process.env.GEMINI_API_KEY && !process.env.ANTHROPIC_API_KEY) {
+    console.error('\n── CỔNG 2 · hội đồng người xem ──────────────');
+    console.error('   ❌ Thiếu GEMINI_API_KEY và ANTHROPIC_API_KEY trong môi trường chạy.');
+    console.error('   Đặt một trong hai, hoặc --no-audience để bỏ qua CÓ CHỦ ĐÍCH.');
+    return { pass: false, spec, reason: 'config' };
+  }
+
+  console.log('\n── CỔNG 2 · hội đồng người xem ──────────────');
+  const kq = await runViralLoop(spec, { skipAudience: false, gate: opts.gate });
+  inKetQuaVong(kq);
 
   if (!kq.pass) {
     // ⚠️ Nói ĐÚNG số vòng đã chạy, đừng nói "đã thử viết lại" cho oai. Lượt

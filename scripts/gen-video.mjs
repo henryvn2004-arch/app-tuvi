@@ -101,7 +101,28 @@ if (!g1.pass) {
 // TTS là khoản chi phí biến đổi duy nhất của cả pipeline. Sinh tiếng trước rồi
 // mới chấm là trả tiền đọc cho câu sắp bị bỏ đi.
 {
-  const kq = await chayCong2(runViralLoop, spec, { skip: NO_AUDIENCE, maxRounds: MAX_ROUNDS });
+  /*
+   * 🔑 CLIP DEMO CÔNG CỤ: cổng 2 CHẤM nhưng KHÔNG CHẶN — Henry chốt.
+   *
+   * Số đo dẫn tới quyết định: nhóm này qua cổng 2 đúng **3/18 (17%)**, trong khi
+   * clip insight là 4/6 (67%). Đọc lời chê thì thấy nó nhất quán và KHÔNG phải
+   * lời chê về câu chữ: *"chỉ quay màn hình công cụ"* · *"không có cơ sở khoa
+   * học"*. Persona hoài nghi `vp-35` đòi bằng chứng khoa học — với một clip demo
+   * công cụ tử vi thì đó là ngưỡng KHÔNG BAO GIỜ ĐẠT ĐƯỢC, nên nó thành cái chặn
+   * vĩnh viễn chứ không phải một phép đo.
+   *
+   * ⚠️ Đây KHÔNG phải nới cổng cho khỏi thấy cảnh báo — thứ repo tự dặn tránh.
+   * Cổng vẫn chạy, vẫn in đủ, vẫn đếm được. Thứ đổi là HỆ QUẢ: một clip demo bị
+   * chê không đáng làm hỏng cả lượt dựng, vì bản thân loại clip này đã khó viral
+   * và giá trị của nó là bày CÔNG CỤ chứ không phải giữ chân người lướt.
+   *
+   * 🔴 KHÔNG áp cho clip insight (`gen-insight.mjs`) — ở đó cổng 2 vẫn CHẶN.
+   */
+  const kq = await chayCong2(runViralLoop, spec, {
+    skip: NO_AUDIENCE,
+    maxRounds: MAX_ROUNDS,
+    chiCanhBao: true,
+  });
   // Thiếu khoá model thì hội đồng CHƯA HỀ CHẤM — đó là hỏng cấu hình (mã 1),
   // không phải "kịch bản dở". Xem `EXIT_GATE` trong video-lib.mjs.
   if (!kq.pass) process.exit(kq.reason === 'gate' ? EXIT_GATE : 1);

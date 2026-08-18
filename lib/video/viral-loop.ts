@@ -422,6 +422,31 @@ export async function runViralLoop(
       };
     }
 
+    /*
+     * ── DỪNG NGAY khi lời chê là về HÌNH ────────────────────────────────────
+     *
+     * 🔑 `rewriteSpec` CHỈ sửa CHỮ — luật 1 của nó ghi thẳng "không đụng phần
+     * hình". Đưa cho nó một lỗi về phần nhìn là ra lệnh cho một cái máy làm
+     * việc nó không có tay để làm: nó sẽ viết lại lời, cổng chấm lại, và người
+     * xem bỏ đi ở đúng giây cũ vì đúng lý do cũ.
+     *
+     * Đo trên `ba-the-be-tac`: ba bản × ~9 vòng, kết quả PHẲNG (0/4 → 1/4 →
+     * 0/5). Mỗi vòng thừa đốt hai lượt LLM (hội đồng + người viết lại) để nhận
+     * lại nguyên văn lời chê cũ.
+     *
+     * ⇒ Thấy `visual.format` thì dừng và NÓI ĐÚNG việc phải làm. Đây là kết
+     * luận về ĐỊNH DẠNG, và định dạng là quyết định của người, không phải thứ
+     * vòng lặp này có cần gạt để chỉnh.
+     */
+    if (audience.issues.some((i) => i.code === 'visual.format' && i.level === 'block')) {
+      console.error(
+        '[viral-loop] DỪNG SỚM: lời chê nằm ở PHẦN NHÌN, không phải ở lời. ' +
+          'Vòng viết lại chỉ sửa được CHỮ nên chạy tiếp là đốt lượt model để nhận lại ' +
+          'đúng lời chê này. Đổi ĐỊNH DẠNG cảnh rồi chạy lại.'
+      );
+      break;
+    }
+
     if (round === maxRounds) break;
     const next = await vietLaiChoQuaCong1(spec, audience.issues, audience.goiYSua, opts.gate);
     if (!next) break;

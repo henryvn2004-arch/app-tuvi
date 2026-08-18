@@ -24,9 +24,6 @@
 import type { ScriptSpec } from '../script-spec';
 
 /** Kho ảnh công khai — 64 bức tranh quẻ đã sinh sẵn, dùng lại 0đ. */
-const QUE = (file: string) =>
-  `https://dciwkfdqhhddeymlisey.supabase.co/storage/v1/object/public/portraits/que-phuc-hy/${file}`;
-
 export interface InsightSource {
   id: string;
   /** Nhãn nhỏ trên đỉnh clip — CHỦ ĐỀ, không phải tên công cụ. */
@@ -867,10 +864,10 @@ const SOURCES: InsightSource[] = [
        *      luôn với tiêu đề và với id `ba-the-be-tac` (bản cũ tự mâu thuẫn:
        *      tiêu đề "Ba", hook "Bốn kiểu")
        *
-       * ⚠️ Lời chê của `luot-vo-dinh` (*"chữ to trên nền đơn giản"*, bỏ ở 2–3s)
-       * là lời chê về HÌNH và nó ĐÚNG — hook clip này không có nền lẫn tranh,
-       * chỉ chữ trên navy. Viết lại chữ KHÔNG chữa được nó. Xem ghi chú
-       * `backdropVideo` bên dưới: chỗ đó là đánh đổi đã đo, chưa có đường gỡ rẻ.
+       * ⚠️ Nhưng ba lời trên chỉ là phần CHỮ, và sửa chữ KHÔNG cứu được clip
+       * này: sau ba bản viết lại, kết quả PHẲNG (0/4 → 1/4 → 0/5). Chỗ thật sự
+       * chặn là HÌNH — xem khối `backdropVideo` cuối kịch bản, nơi ghi lại lượt
+       * đổi định dạng và số đo dẫn tới nó.
        */
       /*
        * 🪤 Bản viết lại ĐẦU của tôi bỏ mất dạng CÂU HỎI và cổng 1 kêu ngay
@@ -885,45 +882,55 @@ const SOURCES: InsightSource[] = [
           // cũ không có. Đặt trước mọi tên quẻ, nếu không thì tên đầu tiên đã
           // rơi vào chỗ trống.
           text: 'Kinh Dịch có 64 quẻ. Mỗi quẻ là tên gọi cho một tình thế người ta hay mắc.',
-          visual: { kind: 'image', src: QUE('63-kw01.png'), accent: 'một tình thế' },
+          visual: { kind: 'typo', accent: 'một tình thế' },
         },
         {
           text: 'Mới bắt đầu mà rối như tơ vò. Quẻ Truân. Người xưa khuyên: đừng gỡ một mình.',
-          visual: { kind: 'image', src: QUE('17-kw03.png'), accent: 'đừng gỡ một mình' },
+          visual: { kind: 'typo', accent: 'đừng gỡ một mình' },
         },
         {
           text: 'Đi tiếp thì nghẽn, quay lại không cam. Quẻ Kiển. Lời khuyên: đổi đường, đừng đâm thẳng.',
-          visual: { kind: 'image', src: QUE('20-kw39.png'), accent: 'đổi đường' },
+          visual: { kind: 'typo', accent: 'đổi đường' },
         },
         {
           text: 'Bạn vẫn gắng, nói ra không ai hiểu. Quẻ Khốn. Cổ nhân bảo: bớt lời, làm cho họ thấy.',
-          visual: { kind: 'image', src: QUE('26-kw47.png'), accent: 'làm cho họ thấy' },
+          visual: { kind: 'typo', accent: 'làm cho họ thấy' },
         },
         {
-          // Đóng trên tranh quẻ KHẢM — quẻ hiểm nhất trong bốn quẻ bản cũ nêu.
-          // Đặt câu "cũng có lối ra" lên đúng bức khó nhất thì câu đó nặng hơn.
           text: 'Cổ nhân không gọi đó là số phận. Quẻ khó nhất cũng có lối ra.',
-          visual: { kind: 'image', src: QUE('18-kw29.png'), accent: 'cũng có lối ra' },
+          visual: { kind: 'typo', accent: 'cũng có lối ra' },
         },
       ],
       ...cta('Bạn đang ở tình thế nào?'),
       /*
-       * ⛔ CỐ Ý KHÔNG cắm `backdropVideo` — đã thử và ĐO ra là sai hướng.
+       * ── ĐỔI ĐỊNH DẠNG: bỏ tranh quẻ, chuyển sang chữ trên nền động ─────────
        *
-       * Đây là kịch bản DUY NHẤT mà cả 5 cảnh đều dùng `visual.kind='image'`
-       * (tranh quẻ Kinh Dịch): tranh là NỘI DUNG chứ không phải trang trí, và
-       * `PhotoScene` đặt nó thành ô 944×944 chiếm ~87% bề ngang. Nền video vì
-       * thế chỉ ló ra ở một dải viền mỏng.
+       * 🔴 ĐÂY LÀ ĐẢO NGƯỢC quyết định cũ ("cố ý không cắm `backdropVideo`"), và
+       * lý do đảo nằm ở chỗ hai quyết định trả lời HAI câu hỏi khác nhau:
+       *   · Quyết định CŨ đúng trong khung "giữ tranh quẻ": tranh chiếm ô
+       *     944×944 (~87% bề ngang) nên nền video chỉ ló ra ở dải viền mỏng —
+       *     đo trên bản render thật ra độ động trung vị **1**, bằng đúng clip đã
+       *     bị loại, mà file phình **6MB → 40MB**. Nền video khi đó là chi phí thuần.
+       *   · Nhưng câu hỏi THẬT là "có nên giữ tranh quẻ không". Và câu trả lời
+       *     đo được là KHÔNG: `luot-vo-dinh` bỏ ở **3s trong MỌI vòng của CẢ BA
+       *     bản kịch bản**, lý do luôn là hình — *"các hình vẽ quẻ tông màu trầm,
+       *     không tạo cảm giác hứng thú"*. Chính bức tranh là thứ đẩy người xem đi.
        *
-       * Đo trên bản đã render KÈM nền video: độ động giao ra trung vị **1** —
-       * bằng đúng clip đã bị loại — trong khi đoạn nguồn đo 9,31. Không phải
-       * nền dở, mà là nền gần như không lên hình. Đổi lại file phình
-       * **6MB → 40MB** (h264 tốn bit cho dải viền động) và render lâu hơn.
+       * 🔑 Luật cũ VẪN ĐÚNG và vẫn giữ nguyên: *nền video chỉ đáng khi cảnh là
+       * `typo`*. Bản này không phá luật đó — nó đổi vế còn lại: **bỏ cảnh
+       * `image` đi** để về đúng hình dạng mà 4 clip insight kia đang chạy được.
        *
-       * 🔑 Luật rút ra: nền video chỉ đáng khi cảnh là `typo` — tức nền CHÍNH
-       * LÀ hình. Cảnh `image`/`figure` đã có chủ thể chiếm khung thì nền video
-       * là chi phí thuần.
+       * ⚠️ Nội dung Kinh Dịch KHÔNG mất: tên ba quẻ (Truân · Kiển · Khốn) vẫn
+       * nằm trong lời đọc và phụ đề. Thứ bỏ đi là bức tranh TĨNH, không phải
+       * kiến thức.
        */
+      // Tông `toi-gian` — đoạn duy nhất trong kho chưa clip nào dùng, nên không
+      // trùng nền với clip đứng cạnh. Caption nhà cung cấp: *mystical, fantasy,
+      // surreal* — hợp đúng chỗ "người xưa đã đặt tên cho nó".
+      backdropVideo: 'stock-video/tone/toi-gian/57545.mp4',
+      // ⚠️ ĐO THẬT trên chính file: 16,02s. Khai 16 là làm tròn XUỐNG — khai
+      // thừa dù nửa giây là mỗi vòng `<Loop>` đứng ở khung cuối chừng ấy.
+      backdropSeconds: 16,
       music: 'lang-le.wav',
       hashtags: ['kinhdich', 'bettac', 'coHoc', 'tuvi'],
     },

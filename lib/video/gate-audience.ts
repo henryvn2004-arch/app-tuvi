@@ -63,6 +63,17 @@ export interface ViewerVerdict {
    * vùng quan tâm của họ không. Xem chú thích ở `AUDIENCE_THRESHOLDS`.
    */
   trongTepMucTieu?: boolean;
+  /**
+   * Người này bỏ đi vì HÌNH (nền phẳng, tranh tĩnh, không có gì động, màu tẻ)
+   * chứ không phải vì CHỮ. Chỉ có nghĩa khi họ thật sự bỏ đi.
+   *
+   * 🔑 VÌ SAO PHẢI HỎI THẲNG MODEL thay vì dò chữ trong `lyDo`: dò chuỗi tiếng
+   * Việt trên văn tự do là đúng lớp lỗi repo này đã trả giá ba lần (`\bcon\b`
+   * khớp "con vật", `quan` khớp "tổng quan", `Tuần` khớp "tuần này"). Model đã
+   * đọc bảng thời gian rồi — thêm một trường boolean vào schema là **0 lượt gọi
+   * thêm, 0đ**, mà lại đo đúng thứ cần đo.
+   */
+  boViHinh?: boolean;
 }
 
 /** Trần ký tự cổng 1 sẽ chấm — hội đồng phải viết gợi ý NẰM TRONG mức này. */
@@ -130,6 +141,15 @@ export const AUDIENCE_THRESHOLDS = {
   minTrongTep: 4,
   /** Số người (trong tệp) phải muốn lưu HOẶC gửi cho ai đó. */
   minLuuHoacChiaSe: 2,
+  /**
+   * Số người tối thiểu phải bỏ đi VÌ HÌNH thì mới gọi là lỗi ĐỊNH DẠNG.
+   *
+   * ⚠️ 2 chứ không phải 1: một người chê hình là GU cá nhân, hai người trở lên
+   * cùng chỉ vào phần nhìn thì đó là tính chất của clip. Cộng thêm điều kiện
+   * "chiếm quá nửa số người bỏ đi" — vài người chê hình trong khi đa số chê chữ
+   * thì cần gạt đúng vẫn là chữ.
+   */
+  minBoViHinh: 2,
 } as const;
 
 /** Số người trong tệp phải xem hết, suy từ cỡ tệp. */
@@ -431,6 +451,16 @@ LUẬT BẮT BUỘC:
    nghị sẽ được đưa thẳng cho người viết lại dùng gần như nguyên văn, rồi bị một
    bộ đếm máy chấm lại. Đề nghị một câu mở đầu dài hơn trần là bạn vừa ra lệnh
    cho họ trượt — và cả lượt sửa đó mất trắng. Cần hay thì cắt CHỮ, đừng cắt Ý.
+9. boViHinh — người này bỏ đi vì HÌNH hay vì CHỮ? Chỉ khai khi họ THẬT SỰ bỏ đi
+   (xem hết ⇒ false).
+   · true  — thứ đẩy họ đi nằm ở PHẦN NHÌN: nền phẳng đơn điệu, hình tĩnh không
+     nhúc nhích, tranh/ảnh tông trầm buồn tẻ, chỉ có chữ chạy, không có gì cho
+     mắt bám vào.
+   · false — thứ đẩy họ đi nằm ở PHẦN NGHE/ĐỌC: câu mở nhạt, khó hiểu, lê thê,
+     không tin, không liên quan tới họ.
+   Cả hai cùng dở thì chọn cái NẶNG HƠN, đừng khai true cho có.
+   ⚠️ Trường này quyết định người ta đi sửa CHỮ hay đi đổi ĐỊNH DẠNG — hai việc
+   tốn công khác hẳn nhau. Khai sai là đẩy họ sửa nhầm chỗ suốt nhiều vòng.
 
 Trả về ĐÚNG JSON theo schema, không thêm lời dẫn.`;
 
@@ -449,8 +479,9 @@ const SCHEMA = {
           muonGuiChoAiDo: { type: 'boolean' },
           binhLuan: { type: 'string', nullable: true },
           trongTepMucTieu: { type: 'boolean' },
+          boViHinh: { type: 'boolean' },
         },
-        required: ['id', 'lyDo', 'muonLuu', 'muonGuiChoAiDo', 'trongTepMucTieu'],
+        required: ['id', 'lyDo', 'muonLuu', 'muonGuiChoAiDo', 'trongTepMucTieu', 'boViHinh'],
       },
     },
     giayRoiRungNang: { type: 'number', nullable: true },
@@ -474,8 +505,9 @@ export async function runAudienceGate(
       `Với mỗi người trong bảy người trên, trả lời: họ lướt đi ở giây thứ mấy ` +
       `(boQuaOGiay, để null nếu xem hết), vì sao (lyDo), chủ đề có thuộc mối ` +
       `quan tâm của họ không (trongTepMucTieu), có muốn lưu lại không ` +
-      `(muonLuu), có muốn gửi cho ai đó không (muonGuiChoAiDo), và họ sẽ bình ` +
-      `luận gì nếu có (binhLuan, null nếu không bình luận gì).\n\n` +
+      `(muonLuu), có muốn gửi cho ai đó không (muonGuiChoAiDo), họ sẽ bình ` +
+      `luận gì nếu có (binhLuan, null nếu không bình luận gì), và nếu bỏ đi thì ` +
+      `thứ đẩy họ đi là HÌNH hay CHỮ (boViHinh — xem luật 9).\n\n` +
       `Sau đó cho biết giây nào bị nhiều người bỏ đi nhất (giayRoiRungNang) và ` +
       `một chỉ dẫn sửa cụ thể (goiYSua).` +
       (budget
@@ -586,6 +618,61 @@ export async function runAudienceGate(
         fix: 'Thêm một thông tin cụ thể đáng lưu lại, hoặc một điểm khiến người xem nghĩ tới một người quen cụ thể.',
       });
     }
+    /*
+     * ── LỖI ĐỊNH DẠNG: người ta bỏ đi vì HÌNH, không phải vì CHỮ ─────────────
+     *
+     * 🔴 ĐÂY LÀ BẢN VÁ CỦA MỘT VÒNG LẶP KHÔNG THỂ HỘI TỤ, đo trên `ba-the-be-tac`:
+     * ba bản kịch bản, ~9 vòng chấm, `luot-vo-dinh` bỏ ở ĐÚNG 3s trong MỌI vòng
+     * của CẢ BA bản, lý do luôn là hình (*"chữ to nhưng không có hình ảnh hay
+     * hiệu ứng gì"* · *"các hình vẽ quẻ tông màu trầm, không tạo cảm giác hứng
+     * thú"*). Kết quả ba lần viết lại: 0/4 → 1/4 → 0/5, tức PHẲNG.
+     *
+     * 🔑 Căn nguyên là một BẤT KHẢ THI VỀ CẤU TRÚC, không phải kịch bản dở:
+     * `rewriteSpec` CHỈ sửa được CHỮ (luật 1 của nó ghi thẳng "không đụng phần
+     * hình"). Lời chê về HÌNH đưa cho nó là ra lệnh cho một cái máy làm việc nó
+     * không có tay để làm — mỗi vòng đốt hai lượt LLM để nhận lại đúng lời chê cũ.
+     *
+     * Cùng họ với `hook.too-long` (hỏng vì HAI con số) và `scene.too-long` (hỏng
+     * vì KHÔNG con số nào): **ô `fix` phải nêu đúng CẦN GẠT mà người sửa có
+     * trong tay.** Ở đây cần gạt không nằm trong chữ, nên phải nói ra điều đó.
+     */
+    const boDiTrongTep = trongTep.filter((v) => !daXemHet(v));
+    const boViHinh = boDiTrongTep.filter((v) => v.boViHinh === true);
+    /*
+     * 🪤 CHỈ XÉT KHI CLIP ĐANG TRƯỢT VÌ GIỮ CHÂN — và đây là bản vá một lỗi tôi
+     * tự gây ra trong chính lượt này, bắt được bằng cách soi ngưỡng chứ không
+     * phải bằng test (test của tôi chỉ dựng ca đang trượt nên nó xanh oan).
+     *
+     * Bản đầu kiểm độc lập ⇒ một clip **5/7 xem hết** (QUA ngưỡng) mà đúng 2
+     * người bỏ và cả 2 chê hình sẽ bị chặn: 2 ≥ 2 và 2×2 ≥ 2. Tức clip đang
+     * chạy tốt bỗng bị chặn vì gu của hai người — hồi quy thẳng trên 4 clip
+     * insight đang giao được.
+     *
+     * 🔑 `visual.format` là chẩn đoán "VÌ SAO trượt", không phải một phép chấm
+     * độc lập. Clip giữ chân đủ thì vài lời chê hình là GU, không phải lỗi định
+     * dạng — và đổi định dạng của một clip đang qua cổng là canh bạc không ai xin.
+     */
+    if (
+      xemHetTrongTep < can &&
+      boViHinh.length >= AUDIENCE_THRESHOLDS.minBoViHinh &&
+      boViHinh.length * 2 >= boDiTrongTep.length
+    ) {
+      issues.push({
+        level: 'block',
+        code: 'visual.format',
+        message:
+          `${boViHinh.length}/${boDiTrongTep.length} người bỏ đi vì PHẦN NHÌN, không phải vì lời: ` +
+          boViHinh.map((v) => `${v.id} (${v.lyDo})`).join(' · '),
+        // Ô `fix` này CỐ Ý không phải một chỉ dẫn viết lại — vòng lặp đọc mã
+        // `visual.format` là DỪNG, chứ không đưa cho người viết lại (xem
+        // `viral-loop.ts`). Chữ ở đây viết cho NGƯỜI đọc log.
+        fix:
+          'ĐỔI ĐỊNH DẠNG, đừng sửa chữ — viết lại lời không chạm được vào lỗi này. ' +
+          'Cảnh `image`/`figure` đang chiếm khung thì chuyển sang `typo` + `backdropVideo` ' +
+          '(nền động), hoặc đổi sang một loại hình khác hẳn.',
+      });
+    }
+
     // Người lướt vô định bỏ rất sớm là dấu hiệu clip chỉ phục vụ được tệp sẵn có.
     const voDinh = viewers.find((v) => v.id === 'luot-vo-dinh');
     if (voDinh && typeof voDinh.boQuaOGiay === 'number' && voDinh.boQuaOGiay <= 3) {

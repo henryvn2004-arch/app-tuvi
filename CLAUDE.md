@@ -308,6 +308,131 @@ sang file mới nhất. File tuần trước thành mồ côi — không hỏng 
 - 🔑 Ghi lại để **khỏi đi khám phá lại**: cả hai khoản là HỆ QUẢ ĐÃ BIẾT của
   lịch tuần, không phải triệu chứng hỏng.
 
+### 🖼️ LUẬT MỚI: chê HÌNH thì ĐỔI ĐỊNH DẠNG — vòng lặp không có tay sửa hình
+Henry chốt hai việc cùng lúc: *"ok, đổi định dạng thôi, gắn nó thành rule luôn,
+ko qua dc thì đổi định dạng"* và *"cho cổng 2 thành cảnh báo, vẫn cho qua, clip
+demo mà, bản chất nó đã khó viral"*.
+
+**Căn nguyên là một BẤT KHẢ THI VỀ CẤU TRÚC, không phải kịch bản dở.**
+`rewriteSpec` ghi thẳng trong luật 1 của nó: *"không đụng phần hình"*. Nên đưa
+cho nó một lời chê về HÌNH là ra lệnh cho một cái máy làm việc nó **không có tay
+để làm** — nó viết lại lời, cổng chấm lại, người xem bỏ ở đúng giây cũ vì đúng
+lý do cũ. Đo trên `ba-the-be-tac`: 3 bản × ~9 vòng, kết quả PHẲNG (0/4 → 1/4 →
+0/5), `luot-vo-dinh` bỏ ở **3s trong MỌI vòng của CẢ BA bản**.
+- 🔑 **Cùng họ `hook.too-long` (hỏng vì HAI con số) và `scene.too-long` (hỏng vì
+  KHÔNG con số nào), lần thứ BA: ô `fix` phải nêu đúng CẦN GẠT mà người sửa có
+  trong tay.** Ở đây cần gạt không nằm trong chữ — nên phải nói ra điều đó thay
+  vì im lặng đẩy sang người viết lại.
+- **Mã `visual.format`** (`gate-audience.ts`): trong số người TRONG TỆP bỏ đi, ≥2
+  người VÀ quá nửa bỏ vì HÌNH ⇒ chặn, và ô `fix` nói *"ĐỔI ĐỊNH DẠNG, đừng sửa
+  chữ"*. `viral-loop` thấy mã này thì **DỪNG NGAY**, không tiêu thêm vòng nào.
+- 🔑 **Tín hiệu lấy bằng cách HỎI THẲNG MODEL** (`boViHinh` trong schema), KHÔNG
+  dò chuỗi trong `lyDo`. Dò chữ tiếng Việt trên văn tự do là đúng lớp lỗi đã trả
+  giá ba lần (`\bcon\b`↔"con vật" · `quan`↔"tổng quan" · `Tuần`↔"tuần này"), mà
+  model thì đã đọc bảng thời gian rồi ⇒ thêm một trường boolean là **0 lượt gọi
+  thêm, 0đ**.
+- ⚠️ **2 người chứ không phải 1**: một người chê hình là GU cá nhân. Và phải
+  **quá nửa** số người bỏ đi — vài người chê hình trong khi đa số chê chữ thì
+  cần gạt đúng vẫn là chữ. Có 2 ca đối chứng canh đúng hai ngưỡng này.
+
+### 🎬 `ba-the-be-tac` đổi định dạng — và luật cũ VẪN đúng, chỉ đổi vế còn lại
+5 cảnh `image` (tranh quẻ) → **5 cảnh `typo` + nền video** (`toi-gian/57545`,
+đoạn duy nhất trong kho chưa clip nào dùng). Gỡ luôn helper `QUE()` (hết nơi dùng).
+- 🔑 **Đây là đảo ngược quyết định *"cố ý không cắm `backdropVideo`"*, và lý do
+  đảo là hai quyết định trả lời HAI câu hỏi khác nhau.** Quyết định cũ đúng
+  trong khung *"giữ tranh quẻ"*: tranh chiếm ô 944×944 nên nền chỉ ló ở dải viền
+  mỏng, đo ra độ động trung vị **1** mà file phình **6MB → 40MB**. Nhưng câu hỏi
+  THẬT là *"có nên giữ tranh quẻ không"* — và câu trả lời đo được là KHÔNG:
+  chính bức tranh là thứ đẩy người xem đi.
+- **Luật *"nền video chỉ đáng khi cảnh là `typo`"* GIỮ NGUYÊN.** Bản này không
+  phá nó; nó đổi vế còn lại — bỏ cảnh `image` đi để về đúng hình dạng 4 clip
+  insight kia đang chạy được.
+- ⚠️ Nội dung Kinh Dịch **không mất**: tên ba quẻ vẫn nằm trong lời đọc và phụ
+  đề. Thứ bỏ đi là bức tranh TĨNH, không phải kiến thức.
+- `backdropSeconds: 16` — **đo thật 16,02s**, làm tròn XUỐNG (khai thừa là mỗi
+  vòng `<Loop>` đứng ở khung cuối chừng ấy).
+
+**✅ ĐO TRÊN BẢN GIAO RA** (render thật, không tin số của cổng tuyển):
+
+| độ động (trung vị, xám 64×114) | bản CŨ tranh quẻ | bản MỚI typo+nền | `rung-toi` (clip đang chạy được) |
+|---|---:|---:|---:|
+| cả khung | **1** | **5** | 4 |
+| dải TRÊN | 0 | **2** | 3 |
+| dải giữa | 1 | 6 | 9 |
+| dải dưới | 6 | 7 | 2 |
+
+- 🔑 Chỗ đắt nhất vẫn là **dải TRÊN: 0 → 2**. Bản cũ có mảng trên đứng im hoàn
+  toàn nên mắt đọc ra ảnh tĩnh; bản mới không dải nào chết.
+- File: **7,05MB · 720×1280 · 40,04s · h264+aac** — so với **40MB** của lượt thử
+  "tranh quẻ + nền video" trước đây. Bỏ tranh khỏi khung thì h264 hết phải tốn
+  bit cho dải viền động.
+- ⚠️ Dải GIỮA không dùng để kết luận về nền (`WordKaraoke` chạy chữ ở đúng vùng
+  đó nên số ấy lẫn chuyển động của chữ).
+- 🪤 **Bộ đo của tôi hỏng lượt đầu** và in ra `❌ Dải trên đứng im` — `decodePng`
+  trả `{w,h,px,bpp}` chứ không phải mảng phẳng, nên mọi phép tính ra `undefined`
+  rồi rơi vào nhánh kết luận xấu. Suýt đọc một lỗi của BÀI KIỂM thành một kết
+  luận về clip. **Bộ đo trả `undefined` phải DỪNG HẲN, đừng để nó rơi vào nhánh
+  so sánh** — `undefined >= 2` là `false`, tức luôn ra "hỏng".
+
+### 🚦 Cổng 2 thành CẢNH BÁO cho clip demo công cụ — KHÔNG phải nới cổng
+`gen-video.mjs` truyền `chiCanhBao: true`; `gen-insight.mjs` **giữ nguyên chế độ
+CHẶN**. Hội đồng vẫn chấm, vẫn in đủ, vẫn đếm được — thứ đổi là HỆ QUẢ.
+- **Vì sao đúng**: nhóm này qua cổng 2 đúng **3/18 (17%)** so với insight 4/6
+  (67%), và lời chê nhất quán *"chỉ quay màn hình công cụ"* · *"không có cơ sở
+  khoa học"*. Persona hoài nghi `vp-35` đòi bằng chứng khoa học — với clip demo
+  công cụ tử vi thì đó là ngưỡng **không bao giờ đạt được**, tức một cái chặn
+  vĩnh viễn chứ không phải một phép đo.
+- ⚠️ **Phân biệt với "nới cổng cho khỏi thấy cảnh báo"** (thứ repo tự dặn tránh):
+  ở đây cổng KHÔNG bị hạ ngưỡng và KHÔNG bị tắt — nó vẫn chấm và vẫn kêu to.
+  Bỏ hẳn phép chấm mới là sai: con số 3/18 chỉ có nghĩa nếu còn đo tiếp được.
+- 🔑 **Chạy đúng MỘT vòng, không viết lại**: vòng viết lại tồn tại để ĐI QUA
+  cổng; cổng không chặn thì không có gì để đi qua, và ba vòng rồi bỏ kết quả là
+  đốt sáu lượt LLM cho một con số mình không hành động theo.
+- Trích `inKetQuaVong()` dùng chung cho cả hai chế độ — hai bản in chép tay là
+  hai bản trôi khỏi nhau, và ở đây còn tệ hơn: đọc log không so được.
+
+**⚠️ HỆ QUẢ NGÂN SÁCH — cho qua nghĩa là RENDER, và render mới là khoản đắt.**
+Trước đây cổng 2 chặn 15/18 clip demo ⇒ chúng **không bao giờ tới khâu render**.
+Nay cả 18 đều dựng. Ước theo mốc đã đo (~6,5× thời lượng thật):
+
+| | trước | sau |
+|---|---:|---:|
+| clip demo thật sự render | 3 | **18** |
+| ngân sách render mỗi tuần | ~61 phút | **~110 phút** |
+| trần ngân sách lượt `--all` | 150 phút | 150 phút |
+
+- Vẫn lọt, nhưng **sát hơn hẳn**. Cơ chế xoay vòng theo tuần ISO vẫn gánh phần
+  tràn (clip không tới lượt tuần này thì tuần sau), nên không mất clip nào —
+  chỉ là thứ tự giao ra giãn ra.
+- Đổi lại **tiết kiệm LLM**: chế độ cảnh báo chạy 1 vòng thay vì 3 ⇒ mỗi clip
+  demo bớt ~4 lượt model.
+- 🔑 Con số cần nhìn ở lượt `--all` đầu tiên sau khi merge: có clip nào bị
+  **hoãn vì hết giờ** không. Có thì cân nhắc hạ số clip demo mỗi tuần thay vì
+  nới trần — nới trần là đổi một cái đèn đỏ lấy một hoá đơn.
+
+### 📦 KHO CHỨA: YouTube KHÔNG thay được Supabase — chặn CỨNG, không lách được
+Henry hỏi: *"cứ upload thẳng lên youtube, xong tìm đường chuyển từ youtube qua
+facebook reels, instagram, tiktok"*. Đo rồi trả lời: **không đi được**.
+- **Cả 4 adapter đều đòi URL FILE TRỰC TIẾP** (đọc `lib/media/publish.ts`):
+  Facebook `/videos` → `file_url` · Instagram REELS → `video_url` · Threads →
+  `video_url` · TikTok → `source_info.source: 'PULL_FROM_URL', video_url`.
+  YouTube Data API **không có endpoint nào trả file** — đó là chủ đích của họ,
+  không phải thiếu sót. TikTok còn đòi **miền chứa file phải xác minh sở hữu**,
+  mà CDN YouTube thì không bao giờ verify được.
+  ⇒ **YouTube là ĐÍCH ĐẾN, không phải KHO.**
+- **Và số đo cho thấy lo sai chỗ.** Bucket đo được: `van-dap-media` **438,9MB /
+  517 file** · `portraits` **406,6MB / 129 file** · `clips` **50,9MB / 5 file** ·
+  còn lại 8,1MB. **Tổng ~904MB** — clips chỉ **5,6%**. Đổi kho clip sang YouTube
+  là phá đường đăng chéo để tiết kiệm 5,6%.
+- ⚠️ **Nhưng đà tăng thì clips nhanh nhất**: 53,4MB/tuần (lịch tuần dựng lại)
+  so với `van-dap-media` ~22MB/tuần. Chỗ vá đúng là **xoá file MỒ CÔI** — file
+  trong bucket mà KHÔNG dòng `media_assets`/`media_posts` nào trỏ tới. Đó là
+  định nghĩa "không ai dùng", không phải canh bạc như bounded-retention theo số
+  lượng. **CHƯA LÀM — đường XOÁ cần Henry chốt.** Hôm nay chạy sẽ là no-op
+  (5 file / 5 dòng, 0 mồ côi); mồ côi bắt đầu có từ lượt dựng tuần sau.
+- 🔑 Ghi lại để khỏi đi khám phá lại: đừng đo "Supabase có phình không" bằng
+  bucket `clips`. Hai bucket kia lớn gấp 8–9 lần.
+
 ### 🪤 Bẫy đã vấp
 - **`import()` một script CLI là CHẠY nó.** Lượt kiểm cú pháp cuối vô ý gọi
   `import('scripts/stock-video.mjs')` → script bắt đầu gọi API Pixabay thật.
