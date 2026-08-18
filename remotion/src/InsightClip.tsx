@@ -29,7 +29,8 @@ import {
   useVideoConfig,
 } from 'remotion';
 import { BRAND, FONT } from './brand';
-import { CHAR, Character, POSES, type PoseName } from './Character';
+import { CHAR, Character, isPose, type PoseName } from './Character';
+import { Glyph, isGlyph } from './Glyphs';
 
 export type InsightScene = {
   text: string;
@@ -39,7 +40,15 @@ export type InsightScene = {
   visual:
     | { kind: 'typo'; accent?: string }
     | { kind: 'photo'; src: string; accent?: string; caption?: string }
-    | { kind: 'figure'; pose: string; accent?: string };
+    | {
+        kind: 'figure';
+        pose: string;
+        accent?: string;
+        /** Ký hiệu của cảnh — xem `glyphAt` để biết nó nằm ở đâu. */
+        glyph?: string;
+        /** `tay` = nhân vật cầm (mặc định) · `tren` = icon nổi phía trên chữ. */
+        glyphAt?: 'tay' | 'tren';
+      };
 };
 
 // `type` chứ không `interface` — Remotion đòi props thoả `Record<string, unknown>`.
@@ -69,6 +78,9 @@ export type InsightProps = {
    */
   hookPose?: string;
   ctaPose?: string;
+  /** Đạo cụ nhân vật cầm ở hook / câu kết. */
+  hookGlyph?: string;
+  ctaGlyph?: string;
 };
 
 // ── Nền ───────────────────────────────────────────────────────────────────
@@ -421,6 +433,40 @@ const TypoScene: React.FC<{ text: string; accent?: string; label: string; noBg?:
 );
 
 /**
+ * Icon của cảnh — nổi phía trên khối chữ.
+ *
+ * Chuyển động lấy ĐÚNG bản brief: `translateY 20px → 0` + phóng nhẹ + hiện dần.
+ * Cố ý KHÔNG thêm xoay hay nảy: brief chốt "animation nhẹ, không flashy", và
+ * icon nhảy múa thì mắt rời khỏi chữ — mà chữ mới là nội dung.
+ */
+const SceneIcon: React.FC<{ name: string }> = ({ name }) => {
+  const frame = useCurrentFrame();
+  const { fps } = useVideoConfig();
+  const s = spring({ frame, fps, config: { damping: 200 }, durationInFrames: 16 });
+  if (!isGlyph(name)) return null;
+  return (
+    <div
+      style={{
+        position: 'absolute',
+        top: 168,
+        left: 0,
+        right: 0,
+        display: 'flex',
+        justifyContent: 'center',
+        opacity: s,
+        transform: `translateY(${interpolate(s, [0, 1], [20, 0])}px) scale(${interpolate(
+          s,
+          [0, 1],
+          [0.86, 1]
+        )})`,
+      }}
+    >
+      <Glyph name={name} size={116} />
+    </div>
+  );
+};
+
+/**
  * Cảnh có NHÂN VẬT SIGNATURE — chữ ở trên, nhân vật đứng dưới, nền đen.
  *
  * 🔑 Vì sao nhân vật ở DƯỚI chứ không nằm sau chữ: chồng lên nhau là quay lại
@@ -430,43 +476,81 @@ const TypoScene: React.FC<{ text: string; accent?: string; label: string; noBg?:
  *
  * ⚠️ Chừa 250px mép dưới: TikTok phủ caption + thanh điều hướng lên vùng đó.
  * Đặt chân nhân vật thấp hơn là mất chân.
+ *
+ * 🔑 `fromPose` là thứ làm nhân vật SỐNG: có nó thì sang cảnh mới nhân vật
+ * *chuyển* tư thế trong nửa giây, không có thì nó nháy một cái sang dáng khác.
+ * Và chỉ cảnh XUẤT HIỆN ĐẦU mới có hiệu ứng vào (`entry`) — cảnh sau thì nhân
+ * vật đã đứng sẵn ở đó rồi, cho nó mờ vào lại mỗi cảnh là phá mất cảm giác
+ * "đang có mặt suốt clip" và biến nó về lại một cái hình được dán vào.
  */
 const FigureScene: React.FC<{
   text: string;
   accent?: string;
   label: string;
   pose: string;
-}> = ({ text, accent, label, pose }) => {
+  fromPose?: string;
+  entry?: boolean;
+  glyph?: string;
+  glyphAt?: 'tay' | 'tren';
+  /**
+   * Chữ hiện SÁNG HẲN ngay, không chạy dần theo nhịp đọc. Bật cho câu MỞ ĐẦU.
+   *
+   * 🔴 Đây là một hồi quy do chính lượt thêm nhân vật gây ra, chỉ lộ khi soi
+   * khung hình thật: `Hook` bản navy dùng chữ tĩnh và có chú thích ghi rõ lý do
+   * — *"ba giây đầu quyết định người ta lướt hay ở lại, chữ chạy dần nghĩa là
+   * giây đầu tiên chưa đọc được gì"*. Nhưng khi khai `hookPose`, hook đi qua
+   * `FigureScene` → `WordKaraoke`, tức chạy chữ dần đúng ở chỗ cấm chạy. Đo
+   * được: ở giây 1,3 hơn nửa câu mở đầu vẫn còn mờ.
+   */
+  plainText?: boolean;
+}> = ({ text, accent, label, pose, fromPose, entry, glyph, glyphAt = 'tay', plainText }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
-  const enter = spring({ frame, fps, config: { damping: 200 }, durationInFrames: 14 });
-  /*
-   * Nhịp thở — nhún lên xuống rất chậm, biên độ 6px.
-   *
-   * Đây là thứ ảnh nhập KHÔNG làm được, và là lý do chính chọn vẽ bằng code:
-   * một nhân vật đứng chết trân 6 giây đọc là ảnh dán vào, còn nhân vật thở
-   * thì đọc là đang có mặt. Biên độ cố ý nhỏ — thấy được mà không gây chú ý.
-   */
-  const breathe = Math.sin((frame / fps) * Math.PI * 0.55) * 6;
-  const poseName = (pose in POSES ? pose : 'chao') as PoseName;
+  // Vào bằng phóng to 0,8 → 1 + hiện dần, đúng bản brief.
+  const enter = entry
+    ? spring({ frame, fps, config: { damping: 200 }, durationInFrames: 18 })
+    : 1;
+  // Chuyển tư thế: nhanh hơn hiệu ứng vào — nửa giây là nhịp một cử động thật.
+  const blend = spring({ frame, fps, config: { damping: 200 }, durationInFrames: 15 });
+
+  const poseName: PoseName = isPose(pose) ? pose : 'chao';
+  const prev: PoseName | undefined = isPose(fromPose) ? fromPose : undefined;
+  const showIcon = glyphAt === 'tren' && glyph;
 
   return (
     <AbsoluteFill>
       <TopBar label={label} />
+      {showIcon ? <SceneIcon name={glyph} /> : null}
       <div
         style={{
           position: 'absolute',
-          top: 300,
+          top: showIcon ? 322 : 292,
           left: 0,
           right: 0,
-          height: 620,
+          height: showIcon ? 500 : 530,
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
           padding: '0 84px',
         }}
       >
-        <WordKaraoke text={text} accent={accent} baseSize={78} />
+        {plainText ? (
+          <div
+            style={{
+              fontFamily: FONT.serif,
+              fontSize: fitSize(text.length, 92),
+              lineHeight: 1.2,
+              fontWeight: 700,
+              color: BRAND.textOnNavy,
+              textAlign: 'center',
+              transform: `scale(${interpolate(enter, [0, 1], [0.94, 1])})`,
+            }}
+          >
+            {text}
+          </div>
+        ) : (
+          <WordKaraoke text={text} accent={accent} baseSize={78} />
+        )}
       </div>
       <div
         style={{
@@ -476,11 +560,26 @@ const FigureScene: React.FC<{
           right: 0,
           display: 'flex',
           justifyContent: 'center',
-          opacity: enter,
-          transform: `translateY(${(1 - enter) * 44 + breathe}px)`,
+          transformOrigin: 'center bottom',
+          opacity: entry ? enter : 1,
+          transform: entry ? `scale(${interpolate(enter, [0, 1], [0.8, 1])})` : undefined,
         }}
       >
-        <Character pose={poseName} height={620} />
+        {/*
+         * ⚠️ 820 chứ không phải 620: khung nhìn của nhân vật có lề rộng ở trên
+         * dưới (chỗ cho tay giơ + đạo cụ), nên phần THÂN NGƯỜI chỉ chiếm ~76%
+         * chiều cao khai ở đây. Để 620 thì người cao có 470px trên khung 1920 —
+         * soi khung hình thật thì thành một chấm nhỏ dưới đáy, và hở một mảng
+         * trống lớn giữa chữ với nhân vật.
+         */}
+        <Character
+          pose={poseName}
+          fromPose={prev}
+          blend={blend}
+          timeSec={frame / fps}
+          height={820}
+          prop={glyphAt === 'tay' ? glyph : undefined}
+        />
       </div>
     </AbsoluteFill>
   );
@@ -621,15 +720,19 @@ const Outro: React.FC<{ text: string; noBg?: boolean }> = ({ text, noBg }) => {
  * của khung hình này. Bày cả hai là hai dấu tranh nhau, và triện thì người xem
  * TikTok không đọc được ở cỡ đó. Tên miền thì GIỮ — đó mới là thứ gõ lại được.
  */
-const OutroFigure: React.FC<{ text: string; pose: string; label: string }> = ({
-  text,
-  pose,
-  label,
-}) => {
+const OutroFigure: React.FC<{
+  text: string;
+  pose: string;
+  label: string;
+  fromPose?: string;
+  glyph?: string;
+}> = ({ text, pose, label, fromPose, glyph }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
   const s = spring({ frame, fps, config: { damping: 200 }, durationInFrames: 16 });
-  const poseName = (pose in POSES ? pose : 'hanh-dong') as PoseName;
+  const blend = spring({ frame, fps, config: { damping: 200 }, durationInFrames: 15 });
+  const poseName: PoseName = isPose(pose) ? pose : 'hanh-dong';
+  const prev: PoseName | undefined = isPose(fromPose) ? fromPose : undefined;
 
   return (
     <AbsoluteFill>
@@ -637,10 +740,10 @@ const OutroFigure: React.FC<{ text: string; pose: string; label: string }> = ({
       <div
         style={{
           position: 'absolute',
-          top: 300,
+          top: 292,
           left: 0,
           right: 0,
-          height: 620,
+          height: 530,
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
@@ -661,17 +764,28 @@ const OutroFigure: React.FC<{ text: string; pose: string; label: string }> = ({
         >
           {text}
         </div>
-        <div
-          style={{
-            marginTop: 40,
-            fontFamily: FONT.sans,
-            fontSize: 42,
-            letterSpacing: '0.06em',
-            color: CHAR.gold,
-          }}
-        >
-          tuviminhbao.com
-        </div>
+        {/*
+         * Dòng tên miền CHỈ hiện khi câu kết chưa tự nêu.
+         *
+         * 🐞 Bắt được khi soi khung hình cuối: `buildCta` đã chở sẵn
+         * "tuviminhbao.com" trong câu kết, nên in thêm một dòng nữa là tên miền
+         * xuất hiện HAI LẦN chồng nhau trong một khung. (Bản nền navy `Outro`
+         * cũng đang dính y hệt — cố ý chưa đụng ở PR này vì nó là khung kết của
+         * 5 clip khác đang chạy.)
+         */}
+        {text.toLowerCase().includes('tuviminhbao.com') ? null : (
+          <div
+            style={{
+              marginTop: 40,
+              fontFamily: FONT.sans,
+              fontSize: 42,
+              letterSpacing: '0.06em',
+              color: CHAR.accent,
+            }}
+          >
+            tuviminhbao.com
+          </div>
+        )}
       </div>
       <div
         style={{
@@ -681,11 +795,16 @@ const OutroFigure: React.FC<{ text: string; pose: string; label: string }> = ({
           right: 0,
           display: 'flex',
           justifyContent: 'center',
-          opacity: s,
-          transform: `translateY(${(1 - s) * 44}px)`,
         }}
       >
-        <Character pose={poseName} height={620} />
+        <Character
+          pose={poseName}
+          fromPose={prev}
+          blend={blend}
+          timeSec={frame / fps}
+          height={820}
+          prop={glyph}
+        />
       </div>
     </AbsoluteFill>
   );
@@ -704,6 +823,8 @@ export const InsightClip: React.FC<InsightProps> = ({
   backdrop,
   hookPose,
   ctaPose,
+  hookGlyph,
+  ctaGlyph,
 }) => {
   const { durationInFrames } = useVideoConfig();
 
@@ -730,6 +851,27 @@ export const InsightClip: React.FC<InsightProps> = ({
   );
   const bg = hasFigure ? CHAR.ink : BRAND.navy;
 
+  /*
+   * Tư thế của beat NGAY TRƯỚC mỗi cảnh nhân vật — để nó *chuyển* tư thế thay
+   * vì nhảy cóc. `undefined` nghĩa là beat trước KHÔNG có nhân vật (cảnh chữ
+   * thuần), tức lần này nhân vật mới bước vào khung ⇒ cảnh đó cần hiệu ứng vào.
+   *
+   * Tính TRƯỚC khi dựng JSX, cùng lý do với `offsets`: cộng dồn trong `.map()`
+   * thì thứ tự chạy phụ thuộc chi tiết render của React.
+   */
+  const prevPose: (string | undefined)[] = [];
+  let running: string | undefined = hookPose;
+  scenes.forEach((sc) => {
+    if (sc.visual.kind === 'figure') {
+      prevPose.push(running);
+      running = sc.visual.pose;
+    } else {
+      prevPose.push(undefined);
+      running = undefined;
+    }
+  });
+  const ctaPrevPose = running;
+
   return (
     <AbsoluteFill style={{ backgroundColor: bg }}>
       {music ? <Audio src={staticFile(`music/${music}`)} volume={0.3} loop /> : null}
@@ -738,7 +880,14 @@ export const InsightClip: React.FC<InsightProps> = ({
       <Sequence durationInFrames={hookDurationInFrames} name="Hook">
         {hookAudio ? <Audio src={staticFile(hookAudio)} /> : null}
         {hookPose ? (
-          <FigureScene text={hook} label={topLabel} pose={hookPose} />
+          <FigureScene
+            text={hook}
+            label={topLabel}
+            pose={hookPose}
+            entry
+            plainText
+            glyph={hookGlyph}
+          />
         ) : (
           <Hook text={hook} label={topLabel} noBg={hasBg} />
         )}
@@ -766,6 +915,10 @@ export const InsightClip: React.FC<InsightProps> = ({
               accent={sc.visual.accent}
               label={topLabel}
               pose={sc.visual.pose}
+              fromPose={prevPose[i]}
+              entry={!prevPose[i]}
+              glyph={sc.visual.glyph}
+              glyphAt={sc.visual.glyphAt}
             />
           ) : (
             <TypoScene
@@ -785,7 +938,13 @@ export const InsightClip: React.FC<InsightProps> = ({
       >
         {ctaAudio ? <Audio src={staticFile(ctaAudio)} /> : null}
         {ctaPose ? (
-          <OutroFigure text={cta} pose={ctaPose} label={topLabel} />
+          <OutroFigure
+            text={cta}
+            pose={ctaPose}
+            label={topLabel}
+            fromPose={ctaPrevPose}
+            glyph={ctaGlyph}
+          />
         ) : (
           <Outro text={cta} noBg={hasBg} />
         )}

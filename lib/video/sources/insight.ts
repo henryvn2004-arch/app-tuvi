@@ -780,15 +780,36 @@ const SOURCES: InsightSource[] = [
         },
         {
           text: 'Người ngoài tưởng bạn ổn. Thật ra bạn vừa đóng một cánh cửa.',
-          visual: { kind: 'figure', pose: 'cui-dau', accent: 'đóng một cánh cửa.' },
+          // Ký hiệu bắt ĐÚNG hình ảnh câu đang đọc, không phải minh hoạ chung
+          // chung. Đặt `tren` vì cánh cửa là thứ NGƯỜI KHÁC không thấy — nó
+          // đứng riêng chứ không nằm trong tay nhân vật đang cúi đầu.
+          visual: {
+            kind: 'figure',
+            pose: 'cui-dau',
+            accent: 'đóng một cánh cửa.',
+            glyph: 'canh-cua',
+            glyphAt: 'tren',
+          },
         },
         {
           text: 'Kiểu thứ hai nói cho bằng hết. Bạn cần được nghe, không cần thắng.',
-          visual: { kind: 'figure', pose: 'loi-khuyen', accent: 'được nghe,' },
+          visual: {
+            kind: 'figure',
+            pose: 'loi-khuyen',
+            accent: 'được nghe,',
+            glyph: 'trai-tim',
+            glyphAt: 'tay',
+          },
         },
         {
           text: 'Kiểu thứ ba quay vào trong, tự trách mình trước khi kịp giận ai.',
-          visual: { kind: 'figure', pose: 'suy-nghi', accent: 'tự trách mình' },
+          visual: {
+            kind: 'figure',
+            pose: 'suy-nghi',
+            accent: 'tự trách mình',
+            glyph: 'guong',
+            glyphAt: 'tren',
+          },
         },
         {
           text: 'Không kiểu nào sai. Bạn chỉ học cách tự vệ từ rất sớm.',
@@ -798,6 +819,9 @@ const SOURCES: InsightSource[] = [
       ...cta('Bạn là kiểu nào?'),
       hookPose: 'chao',
       ctaPose: 'hieu-ra',
+      // Lá số giơ cao đúng lúc tên miền hiện ra — vật của thương hiệu, không
+      // phải một icon trang trí.
+      ctaGlyph: 'la-so',
       music: 'tram-tinh.wav',
       hashtags: ['tinhcach', 'tamly', 'selfdiscovery', 'tuvi'],
     },

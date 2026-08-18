@@ -87,7 +87,23 @@ export type SceneVisual =
    *     cái tên cố định dùng lại ở mọi clip, chứ không phải một câu mô tả tôi
    *     viết mới cho từng bức — tức bớt được phần "chấm chính văn của mình".
    */
-  | { kind: 'figure'; pose: string; accent?: string };
+  | {
+      kind: 'figure';
+      pose: string;
+      accent?: string;
+      /**
+       * Ký hiệu của cảnh — tên trong TỪ VỰNG ĐÓNG `GLYPHS` (`remotion/src/
+       * Glyphs.tsx`). Cùng lý do với `pose`: tra bảng deterministic, 0đ.
+       *
+       * 🔑 MỘT ký hiệu cho một cảnh, và nó nằm ở ĐÚNG MỘT chỗ (`glyphAt`) —
+       * brief chốt "1 scene = 1 icon". Khai riêng chỗ đặt thay vì có cả trường
+       * `prop` lẫn `icon` nghĩa là **không có cách nào khai cả hai cùng lúc**,
+       * tức không thể lỡ tay dựng một khung có hai ký hiệu tranh nhau.
+       */
+      glyph?: string;
+      /** `tay` = nhân vật cầm (mặc định) · `tren` = icon nổi phía trên chữ. */
+      glyphAt?: 'tay' | 'tren';
+    };
 
 export interface Scene {
   /** Lời đọc của cảnh này. Cũng CHÍNH LÀ phụ đề — một nguồn, không chép hai bản. */
@@ -149,6 +165,9 @@ export interface ScriptSpec {
    */
   hookPose?: string;
   ctaPose?: string;
+  /** Đạo cụ nhân vật cầm ở hook / câu kết. */
+  hookGlyph?: string;
+  ctaGlyph?: string;
   /** Hashtag gợi ý cho lúc đăng — KHÔNG hiện trên clip. */
   hashtags?: string[];
 }

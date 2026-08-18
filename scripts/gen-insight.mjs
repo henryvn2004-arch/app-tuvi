@@ -258,7 +258,7 @@ const toVisual = (v) =>
   v.kind === 'image'
     ? { kind: 'photo', src: v.src, accent: v.accent }
     : v.kind === 'figure'
-      ? { kind: 'figure', pose: v.pose, accent: v.accent }
+      ? { kind: 'figure', pose: v.pose, accent: v.accent, glyph: v.glyph, glyphAt: v.glyphAt }
       : { kind: 'typo', accent: v.accent };
 
 const props = {
@@ -284,6 +284,8 @@ const props = {
   ...(spec.backdrop?.length ? { backdrop: spec.backdrop } : {}),
   ...(spec.hookPose ? { hookPose: spec.hookPose } : {}),
   ...(spec.ctaPose ? { ctaPose: spec.ctaPose } : {}),
+  ...(spec.hookGlyph ? { hookGlyph: spec.hookGlyph } : {}),
+  ...(spec.ctaGlyph ? { ctaGlyph: spec.ctaGlyph } : {}),
 };
 
 const propsFile = join(outDir, 'props.json');

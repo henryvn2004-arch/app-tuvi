@@ -5,6 +5,126 @@
 
 ---
 
+## 🕺 Nhân vật BIẾT CỬ ĐỘNG + 20 đạo cụ — và 4 lỗi chỉ lộ khi SOI KHUNG HÌNH (2026-08-18, PR #543)
+
+Henry: *"nhân vật chưa đạt, nhìn boring lắm, chắc phải làm motion luôn"* · *"màu
+nhấn thì chọn màu theme của site đi: vàng hoặc đỏ"* · *"đạo cụ: làm luôn, có thể
+làm nhiều hơn"*.
+
+### 🔴 Căn nguyên "boring": chọn vẽ bằng code CHÍNH LÀ để có chuyển động, mà không dùng
+Bản đầu chỉ có **tư thế TĨNH + nhún thở 6px + mờ dần lúc vào**. Tức nhân vật vẫn
+là một BỨC HÌNH, chỉ khác là bức hình có nhấp nháy — trong khi lý do số một để
+loại ba đường vector/AI và chọn vẽ bằng SVG là *"nó chuyển động được"*. Đúng chỗ
+đắt nhất bị bỏ phí.
+
+**Bốn tầng, xếp theo mức đóng góp đo bằng mắt:**
+1. **CHUYỂN TƯ THẾ** (`fromPose` + `blend`) — sang cảnh mới thì nhân vật *đi từ*
+   tư thế cũ *sang* tư thế mới trong nửa giây. Tầng DUY NHẤT ảnh nhập không làm
+   được, và là thứ biến minh hoạ thành kể chuyện.
+2. **NHỊP RIÊNG TỪNG TƯ THẾ** (`MOTIONS`) — `chao` vẫy tay thật · `hanh-dong` hai
+   chân sải luân phiên + tay đánh ngược pha · `quay-lung` vừa bước vừa **nhỏ dần
+   16%** (rời khỏi khung, không phải quay lưng đứng yên) · `cui-dau` thở dài.
+3. **CHỚP MẮT** — gương mặt chỉ có hai chấm thì đây là tín hiệu sống rẻ nhất.
+4. **THỞ** — giữ, nhưng nay là nền chứ không phải toàn bộ.
+
+- ⚠️ **Ràng buộc cứng: mọi chuyển động là hàm THUẦN của `timeSec`.** Remotion
+  render khung hình KHÔNG theo thứ tự ⇒ `Math.random()` là nhấp nháy loạn. Chớp
+  mắt vì thế suy từ `(t + 1.1) % 3.6 < 0.13`.
+- 🔑 **Tư thế nào có nhịp thì dáng NỀN phải là dáng NGHỈ.** `hanh-dong` bản trước
+  khai sẵn một bước sải RỒI cộng thêm dao động ⇒ chân dang quá rộng suốt cảnh,
+  trông vướng (đúng chỗ Henry nhận xét). Nay dáng nền đứng thẳng, bước sải HOÀN
+  TOÀN do `MOTIONS` sinh.
+
+### 🎨 Màu nhấn — bỏ bảng neon của brief, lấy vàng thương hiệu
+Brief đề nghị hồng/tím/xanh ngọc; Henry chốt màu theme site. Đo tương phản trên
+nền đen `#0A0A0F`: **vàng `#C9A84C` = 8,6:1** (dư sức cho nét mảnh) ·
+**đỏ `#C0392B` = 3,9:1** ⇒ đỏ CHỈ được làm **mảng ĐẶC lớn** (ngọn lửa đèn lồng,
+trái tim), không bao giờ làm nét mảnh hay chữ. Gỡ luôn `CHAR.pink/violet/mint`
+— màu thương hiệu chết nằm trong file là bẫy cho người sau.
+
+### 🧰 20 đạo cụ = MỘT bộ cho HAI chỗ
+`remotion/src/Glyphs.tsx`. Brief tách "đạo cụ" (cầm trên tay) khỏi "icon" (đứng
+riêng), nhưng vẽ hai bộ thì cùng một khái niệm có hai nét khác nhau trong cùng
+một clip — đúng lớp lỗi "hai danh sách chép tay rồi trôi khỏi nhau". Ở đây chỉ
+khác **CHỖ ĐẶT**, không khác hình.
+- 🔑 Kịch bản khai **một trường `glyph` + một trường `glyphAt`**, KHÔNG phải hai
+  trường `prop`/`icon`. Nhờ vậy *không có cách nào* khai hai ký hiệu cùng lúc ⇒
+  luật "1 scene = 1 icon" của brief được ép bằng KIỂU DỮ LIỆU, không bằng lời dặn.
+- Chọn theo MIỀN NỘI DUNG chứ không theo "icon nào hay gặp": `la-so` (12 cung,
+  giữa để trống — đúng bố cục thật), `dong-xu` lỗ vuông, `la-ban`, `den-long`,
+  `canh-cua` (câu *"đóng một cánh cửa"* xuất hiện nguyên văn trong kịch bản)…
+
+### 🔴 BỐN lỗi chỉ lộ khi soi KHUNG HÌNH THẬT — không lỗi nào đọc code thấy được
+1. **Câu MỞ ĐẦU bị chạy chữ dần** — hồi quy do CHÍNH lượt thêm nhân vật gây ra.
+   `Hook` bản navy dùng chữ tĩnh và có chú thích ghi rõ lý do (*"ba giây đầu
+   quyết định… chữ chạy dần nghĩa là giây đầu tiên chưa đọc được gì"*), nhưng
+   khai `hookPose` thì hook đi qua `FigureScene` → `WordKaraoke`, tức chạy chữ
+   dần đúng ở chỗ cấm chạy. Đo được: giây 1,3 hơn nửa câu mở đầu còn mờ.
+2. **Bóng đen 55% trên nền đen đọc thành CÁI HỐ**, không thành bóng đổ. Nền tối
+   thì thứ đặt nhân vật xuống mặt đất phải là ÁNH SÁNG hắt (trắng 7%), không
+   phải mảng tối. Bóng cũ đúng trên nền navy — đổi sân khấu mà quên đổi nó.
+3. **Nhân vật cao 470px chứ không phải 620px.** `height` là chiều cao KHUNG NHÌN,
+   mà khung có lề rộng chừa chỗ tay giơ + đạo cụ ⇒ thân người chỉ chiếm ~76%.
+   Trên khung 1920 thành một chấm nhỏ dưới đáy. Nâng lên **820**.
+4. **Tên miền in HAI LẦN ở khung kết** — `buildCta` đã chở sẵn `tuviminhbao.com`
+   trong câu kết, `OutroFigure` in thêm một dòng nữa. ⚠️ Bản nền navy `Outro`
+   **cũng đang dính y hệt**, cố ý chưa đụng vì đó là khung kết của 5 clip khác.
+
+### 🪤 Ba bẫy hình học (đều là lỗi của TÔI)
+1. **`cui-dau` không hề cúi.** `crouch` hạ CẢ người nên hình dạng không đổi;
+   `headTilt` xoay một hình TRÒN nên gần như vô hình (chỉ dịch hai chấm mắt).
+   Phải thêm `headDx`/`headDy` — đầu **thụt xuống giữa hai vai + đổ ra trước**
+   mới đọc ra là gục.
+2. **`suy-nghi` gập sâu thì mất luôn nếp gập.** Thử `a2 = 185` để kéo tay vào
+   cằm ⇒ cẳng tay nằm CHỒNG LÊN cánh tay trên, hai mảng trắng dày trùng nhau,
+   bảng đối chiếu đọc ra thành *"một cánh tay duỗi thẳng chỉ sang ngang"*. Và
+   chạm cằm là BẤT KHẢ về hình học: vai ở x=80, cằm cách 65 đơn vị, tay dài 184.
+3. **Vấp lại bẫy do chính mình ghi**: truyền `--browser-executable=/opt/pw-
+   browsers/chromium` trong khi `remotion.config.ts` có nguyên một khối chú
+   thích *"đã thử và HỎNG… đừng tối ưu bằng cách trỏ lại vào Chromium của
+   Playwright"*. Đọc chú thích rồi vẫn làm đúng thứ nó cấm.
+
+### 🔴 Cổng 2 có PHƯƠNG SAI RẤT LỚN — một lượt chấm KHÔNG phải một phép đo
+Cùng một kịch bản, không đổi một chữ nào:
+
+| Lượt | Trong tệp | Kết quả |
+|---|---|---|
+| Phiên trước | **5/5** xem hết · gửi 43% | ✅ QUA vòng 1 |
+| Phiên này | **3/7** trong tệp · gửi 14% | ❌ TRƯỢT cả 3 vòng |
+
+⇒ Câu *"hội đồng đã duyệt"* ở phiên trước là **một mẫu**, không phải một kết
+luận. Đừng đọc một lượt PASS thành "kịch bản đạt".
+- 🔑 Nhưng cơ chế thì chạy ĐÚNG: có persona bỏ ở 2s kèm lý do *"hình ảnh nhân
+  vật chỉ vẫy tay không đủ hấp dẫn"* — tức kênh HÌNH nay thật sự vào phán quyết
+  và bị phản đối bằng một lời chê ĐỔI ĐƯỢC (đổi tư thế), khác hẳn lời chê chung
+  chung của bản hằng số viết tay.
+- Ba vòng viết lại đều trượt lại **cổng 1** (`hook.too-long`, `scene.too-long`)
+  ⇒ `rewriteSpec` viết dài ra rồi tự vấp trần độ dài. Vòng lặp chưa hội tụ.
+
+### Verify
+`tsc` root 0 · `tsc` remotion 0 · `prettier` quét cả cây sạch · `lint` **0 lỗi /
+77 warning = đúng mốc nền** · **20/20 bộ dò** · engine **185 pass**.
+- **Soi bằng mắt trên khung hình THẬT** ở 4 mốc (hook · `cui-dau` + icon cánh
+  cửa · `loi-khuyen` cầm trái tim · kết cầm lá số) — đây là phép kiểm duy nhất
+  bắt được cả 4 lỗi ở trên, không phép đo tự động nào chạm tới.
+- Bảng đối chiếu `CharacterSheet` render 9 tư thế **đóng băng tại mốc giây chọn
+  tay** (`FREEZE`): không có bảng này thì `hanh-dong`/`quay-lung` rơi vào lúc
+  `sin = 0`, hai chân chụm lại, và bảng báo là "trùng dáng đứng yên".
+
+### CÒN LẠI
+- ⚠️ **Bảng tĩnh KHÔNG thay được việc xem clip** — từ khi có nhịp riêng, phần
+  lớn giá trị nằm ở CHUYỂN ĐỘNG mà một khung hình không chứa nổi.
+- **Clip test chưa có giọng đọc** (thiếu `CLIP_TTS_SECRET` trong container này),
+  mới có nhạc nền. Nhịp chữ ↔ nhịp nói chưa ai kiểm.
+- **Cổng 2 vẫn chưa có mã lỗi `visual.mismatch`** và `rewriteSpec` vẫn chỉ viết
+  lại CHỮ ⇒ hội đồng chê hình thì máy đi sửa chữ. Nay đã có 9 tư thế × 20 đạo cụ
+  để gạt sang — cần gạt thì có chỗ gạt rồi, còn thiếu đúng cái cần.
+- **5 kịch bản insight còn lại chưa đổi sang nhân vật** (vẫn nền navy / tranh
+  quẻ). Đổi là sửa data thuần trong `insight.ts`, không đụng logic.
+- `Outro` bản navy vẫn in trùng tên miền (xem lỗi 4).
+
+---
+
 ## 🖼️ Hội đồng CHẤM HÌNH mà KHÔNG NHÌN THẤY HÌNH — và kho ảnh thật (2026-08-17, PR #539 + đang làm)
 
 Henry: *"hội đồng phán xét về CHỮ thì ok, chứ còn phán xét về HÌNH, mà nó lại ko

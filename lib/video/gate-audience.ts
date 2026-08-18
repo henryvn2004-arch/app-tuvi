@@ -153,17 +153,62 @@ export function soXemHetCanCo(soTrongTep: number): number {
  * "nhân vật đứng rất biểu cảm" là dựng lại đúng cái gương: model chấm cao vì
  * câu văn của tôi hay, không phải vì hình hợp nội dung.
  */
+/**
+ * Mô tả tư thế — và nay là mô tả CỬ ĐỘNG, không phải dáng đứng.
+ *
+ * 🔑 Phải sửa cùng lúc với lượt thêm chuyển động vào `Character.tsx`: hội đồng
+ * chấm theo đúng dòng này, nên nếu nó vẫn tả một dáng ĐỨNG YÊN trong khi clip
+ * đã có nhân vật vẫy tay/bước đi thì hội đồng lại đang chấm một clip khác với
+ * clip sắp render — đúng lớp lỗi mà cả track này sinh ra để vá.
+ */
 const POSE_MO_TA: Record<string, string> = {
-  chao: 'đứng thẳng, một tay giơ cao vẫy chào',
-  'suy-nghi': 'một tay chống cằm, đầu hơi nghiêng',
-  'hieu-ra': 'một tay giơ thẳng lên quá đỉnh đầu, ngón trỏ chỉ lên',
-  'phan-tich': 'chồm người về trước, một tay đưa thẳng ra phía trước',
-  'loi-khuyen': 'một tay mở ngang ra phía trước, lòng bàn tay ngửa',
-  'tinh-tam': 'hai tay chắp trước ngực, mắt nhắm',
-  'hanh-dong': 'sải một bước dài về phía trước, hai tay đánh so le',
-  'quay-lung': 'quay lưng lại phía người xem, hai tay buông xuôi',
-  'cui-dau': 'đầu cúi xuống, vai xuôi, người chùng thấp',
+  chao: 'đứng thẳng, giơ một tay lên VẪY chào (tay vẫy qua lại liên tục)',
+  'suy-nghi': 'chống cằm, đầu đưa qua lại chậm, ngón tay gõ nhẹ vào cằm',
+  'hieu-ra': 'bật nảy lên một nhịp rồi giơ thẳng tay quá đỉnh đầu, ngón trỏ chỉ lên',
+  'phan-tich': 'chồm người về trước, tay đưa vật ra trước và quét chậm qua lại như đang soi',
+  'loi-khuyen': 'mở một tay ra trước, lòng bàn tay ngửa, tay nâng lên hạ xuống theo nhịp nói',
+  'tinh-tam': 'hai tay chắp trước ngực, mắt nhắm, lồng ngực phồng xẹp theo nhịp thở sâu',
+  'hanh-dong': 'ĐANG BƯỚC ĐI thật — hai chân sải luân phiên, hai tay đánh so le, thân nhún theo bước',
+  'quay-lung': 'quay lưng lại và BƯỚC ĐI XA DẦN, hình nhỏ lại như đang rời khỏi khung',
+  'cui-dau': 'đầu cúi, vai xuôi, người chùng xuống rồi nhấc lên chậm như đang thở dài',
 };
+
+/**
+ * Mô tả ký hiệu (đạo cụ / icon). Cùng luật với `POSE_MO_TA`: **CHỈ TẢ, CẤM
+ * KHEN** — "một chiếc kính lúp" được, "biểu tượng tinh tế" thì cấm. Khen là
+ * dựng lại đúng cái gương mà mục 🖼️ trong CLAUDE.md đã mổ.
+ */
+const GLYPH_MO_TA: Record<string, string> = {
+  'la-so': 'một lá số tử vi 12 cung (khung vuông chia ô, giữa để trống)',
+  'dong-xu': 'một đồng xu cổ tròn có lỗ vuông ở giữa',
+  'la-ban': 'một chiếc la bàn, kim chỉ hình thoi',
+  'den-long': 'một chiếc đèn lồng có ngọn lửa đỏ bên trong',
+  'ngoi-sao': 'một ngôi sao năm cánh viền vàng',
+  'mat-trang': 'một vầng trăng khuyết',
+  'kinh-lup': 'một chiếc kính lúp',
+  sach: 'một quyển sách đang mở',
+  'bong-den': 'một bóng đèn đang toả tia sáng',
+  'dau-hoi': 'một dấu hỏi lớn',
+  guong: 'một chiếc gương soi có cán',
+  'dong-ho': 'một chiếc đồng hồ tròn có kim',
+  'ban-do': 'một tấm bản đồ gấp',
+  'mui-ten': 'một mũi tên chỉ về phía trước',
+  tui: 'một chiếc túi xách có quai',
+  'canh-cua': 'một cánh cửa đóng, có tay nắm',
+  'chia-khoa': 'một chiếc chìa khoá',
+  'trai-tim': 'một trái tim đặc màu đỏ',
+  'chiec-o': 'một chiếc ô đang mở',
+  but: 'một cây bút lông',
+};
+
+/** Ghép mô tả ký hiệu vào câu tả cảnh, theo đúng chỗ nó được đặt. */
+function glyphPhrase(glyph?: string, at?: 'tay' | 'tren'): string {
+  if (!glyph) return '';
+  const d = GLYPH_MO_TA[glyph] ?? `một ký hiệu "${glyph}"`;
+  return at === 'tren'
+    ? ` Phía trên khối chữ có ${d} hiện lên.`
+    : ` Nhân vật cầm ${d} trên tay.`;
+}
 
 /**
  * Dựng bảng thời gian có mốc giây để model biết "giây thứ mấy" là chỗ nào.
@@ -192,11 +237,22 @@ function buildTimeline(spec: ScriptSpec): string {
     );
   }
 
-  /** Nền của MỘT cảnh chữ — phụ thuộc clip có ảnh nền hay không. */
+  /*
+   * Clip ở CHẾ ĐỘ NHÂN VẬT: nền đen tuyền, không ảnh. Suy đúng như
+   * `InsightClip.tsx` suy, chứ không thêm một cờ khai tay — hai nơi tự suy
+   * theo hai luật khác nhau là hội đồng tả một clip, máy render một clip khác.
+   */
+  const hasFigure = Boolean(
+    spec.hookPose || spec.ctaPose || spec.scenes.some((sc) => sc.visual.kind === 'figure')
+  );
+
+  /** Nền của MỘT cảnh chữ — phụ thuộc clip có ảnh nền / có nhân vật hay không. */
   const typoBase = hasBg
     ? 'Chữ lớn giữa màn hình, sáng dần theo nhịp đọc, đặt trên một khối nền mờ ' +
       'viền vàng nổi trên bức ảnh nền đang chạy.'
-    : 'Chữ lớn phủ giữa màn hình, sáng dần theo nhịp đọc, nền xanh đậm phẳng.';
+    : hasFigure
+      ? 'Chữ lớn giữa màn hình trên nền ĐEN tuyền, sáng dần theo nhịp đọc.'
+      : 'Chữ lớn phủ giữa màn hình, sáng dần theo nhịp đọc, nền xanh đậm phẳng.';
 
   /** `accent` = cụm chữ được tô VÀNG. Trước đây không bao giờ tới hội đồng. */
   const withAccent = (base: string, accent?: string) =>
@@ -215,9 +271,14 @@ function buildTimeline(spec: ScriptSpec): string {
   push(
     'MỞ ĐẦU',
     spec.hook,
-    hasBg
-      ? `Chữ lớn hiện ngay, trên khối nền mờ đặt giữa bức ảnh nền (${bgDesc[0]}).`
-      : 'Chữ lớn hiện ngay giữa màn hình trên nền xanh đậm.'
+    spec.hookPose
+      ? `Nền ĐEN. Chữ lớn hiện ngay ở nửa trên. Nửa dưới: nhân vật hoạt hoạ tối ` +
+          `giản của kênh (người trắng, không có miệng, hai chấm mắt) phóng to dần ` +
+          `bước vào khung — ${POSE_MO_TA[spec.hookPose] ?? `tư thế "${spec.hookPose}"`}.` +
+          glyphPhrase(spec.hookGlyph)
+      : hasBg
+        ? `Chữ lớn hiện ngay, trên khối nền mờ đặt giữa bức ảnh nền (${bgDesc[0]}).`
+        : 'Chữ lớn hiện ngay giữa màn hình trên nền xanh đậm.'
   );
 
   spec.scenes.forEach((sc, i) => {
@@ -245,7 +306,9 @@ function buildTimeline(spec: ScriptSpec): string {
        */
       visual = withAccent(
         `Nền đen, chữ lớn ở nửa trên. Nửa dưới: nhân vật hoạt hoạ tối giản của kênh — ` +
-          `${POSE_MO_TA[sc.visual.pose] ?? `tư thế "${sc.visual.pose}"`}.`,
+          `${POSE_MO_TA[sc.visual.pose] ?? `tư thế "${sc.visual.pose}"`}. ` +
+          `Nhân vật CHUYỂN từ tư thế cảnh trước sang tư thế này trong nửa giây đầu.` +
+          glyphPhrase(sc.visual.glyph, sc.visual.glyphAt),
         sc.visual.accent
       );
     } else {
@@ -266,9 +329,13 @@ function buildTimeline(spec: ScriptSpec): string {
   push(
     'KẾT',
     spec.cta,
-    hasBg
-      ? 'Thẻ chữ kèm logo và tên miền, vẫn trên bức ảnh nền.'
-      : 'Thẻ chữ kèm logo và tên miền.'
+    spec.ctaPose
+      ? `Nền ĐEN. Câu kết + tên miền tuviminhbao.com ở nửa trên. Nửa dưới: nhân ` +
+          `vật — ${POSE_MO_TA[spec.ctaPose] ?? `tư thế "${spec.ctaPose}"`}.` +
+          glyphPhrase(spec.ctaGlyph)
+      : hasBg
+        ? 'Thẻ chữ kèm logo và tên miền, vẫn trên bức ảnh nền.'
+        : 'Thẻ chữ kèm logo và tên miền.'
   );
 
   lines.push(

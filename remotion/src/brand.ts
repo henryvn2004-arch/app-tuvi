@@ -9,6 +9,7 @@
 //
 // Nguồn gốc từng giá trị:
 //   --navy #061A2E · --gold #C9A84C · --gold-lt #F9F4EB  ← public/shell.css:17-18
+//   --red  #C0392B                                       ← public/shell.css
 //   khổ 1080×1920, seal + tên miền ở chân trang          ← public/poster.js
 // ============================================================
 
@@ -17,6 +18,12 @@ export const BRAND = {
   navy2: '#0A2540',
   gold: '#C9A84C',
   goldLt: '#F9F4EB',
+  /**
+   * Đỏ thương hiệu. ⚠️ CHỈ dùng làm MẢNG ĐẶC lớn trên nền đen — đo được
+   * **3,9:1**, đủ cho một hình đặc nhưng KHÔNG đủ cho nét mảnh hay chữ. Vàng
+   * (**8,6:1**) mới là màu nhấn mặc định.
+   */
+  red: '#C0392B',
   paper: '#FFFFFF',
   textOnNavy: '#F9F4EB',
   textMuted: '#9FB0C0',
