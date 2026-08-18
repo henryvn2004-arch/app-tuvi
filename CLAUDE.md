@@ -5,6 +5,48 @@
 
 ---
 
+## 🤖 ĐỌC SỐ TRAFFIC: luôn dùng bản `_human` (2026-08-18, PR #544)
+
+**83% con số "visitors" của mọi báo cáo là MÁY.** Một đội bot 1.326 `anon_id`
+dùng chung MỘT chuỗi UA (`Chrome/136.0.0.0` trên Mac), mỗi anon đúng 1
+`page_view` vào `/`, 0 referrer, 0 tương tác, 0 đăng nhập, chạy từ 29/07. Nó
+không tự khai `bot` nên cột `events.is_bot` (lọc theo UA) không bắt được.
+
+| | thô | **người thật** |
+|---|---:|---:|
+| visitors 7 ngày | 587 | **98** |
+| WAU · tuần trước | 477 · 758 | **87 · 88** |
+| tỉ lệ tương tác | 5% | **33%** |
+
+🔴 **LUẬT**: `marketing_funnel` → dùng **`visitors_human`**, KHÔNG dùng
+`visitors`. `dashboard_engagement` → dùng **`wau_human`/`dau_*_human`**.
+`traffic_quality` → mẫu số đúng là **`human`**, tuyệt đối không chia cho
+`total`. Số thô vẫn được trả về, để SO chứ không để báo cáo.
+
+🪤 **Bẫy đã sập ngay ngày làm**: số thô báo WAU 477 vs 758 ⇒ cả CMO digest lẫn
+báo cáo đều kêu *"giảm 19–38%, lần đầu đi xuống"*. Người thật **87 vs 88 —
+ĐI NGANG**. Toàn bộ mức giảm là con bot phập phù. **Trước khi báo bất kỳ mức
+tăng/giảm nào của traffic, phải xem bản `_human`.**
+
+- Luật nhận đội máy (`bot_ua_fleets()`, `_patches/migration-bot-filter.sql`):
+  một chuỗi UA phải thoả **ĐỦ 5** — ≥8 anon · <1,1 event/anon · chưa từng
+  tương tác · chưa từng có referrer · chưa từng đăng nhập. Mọi UA của người
+  thật đều trượt ít nhất HAI. Cửa sổ nhận **30 ngày**.
+- ⚠️ **Thiếu UA thì KHÔNG đoán bừa** — dữ liệu trước khi có cột `ua` đều trống
+  UA mà là người thật (6,69 event/anon, 1.623 lượt tương tác).
+- **KHÔNG đụng tầng ghi**: `/api/track` vẫn ghi đủ mọi lượt kể cả bot. Lọc ở
+  tầng ĐỌC ⇒ sửa luật xong chạy lại là ra số mới. Đây là chủ ý, đừng "tối ưu"
+  thành chặn/vứt.
+- 🔴 **GA4 KHÔNG lọc được** (đo ở phía Google, không có `sessions_human`).
+  Đừng bao giờ lấy `ga4.sessions` làm số khách — 17/08 nó báo 1.831 phiên khi
+  người thật là 98. Chỉ dùng GA4 cho landing page/kênh.
+- ⚠️ **Prompt routine CMO là snapshot CŨ, không sửa được** (`update_trigger`
+  từ chối). `docs/cmo-daily-routine-prompt.md` đã cập nhật nhưng routine đang
+  chạy thì KHÔNG. Nên mục này nằm ở CLAUDE.md — đây là đường duy nhất luật tới
+  được lượt báo cáo sáng.
+
+---
+
 ## ✍️ 75% PROMPT LÀ LUẬT GIỌNG — arc 5 lớp THAY 3 bản bố cục chồng nhau (2026-08-17, PR #541)
 
 Henry: *"cách luận giải, chat… chỉnh sửa để nó hook users hơn"* kèm 5 bước (mở
