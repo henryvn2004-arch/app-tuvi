@@ -5,6 +5,124 @@
 
 ---
 
+## 🪝 VIRAL CORE cho 2 cron viết bài SEO — và nó ĐÃ CÓ SẴN trong repo (2026-08-18, PR này)
+
+Henry: *"giọng văn style viết bài xuyên suốt các content của site phải tuân theo
+viral core… chỗ nào cần fix, fix thế nào, conflicts?"* kèm 5 bước (mở đánh thẳng
+nội tâm · 2–3 hành vi cụ thể · twist · giải thích đời thường · chốt hành động).
+
+### 🔑 Phát hiện đầu tiên: viral core = `arcCore` đã dựng ở #541, đừng viết bản hai
+| Henry viết | Đã có trong `arcCore` |
+|---|---|
+| 1. Mở đánh thẳng vấn đề nội tâm | ① MỞ — "chốt thẳng, cấm rào đón, cấm mở bài" |
+| 2. 2–3 hành vi rất cụ thể | ② HÀNH VI — *"hay nhận việc rồi ôm một mình"* |
+| 3. Insight đảo góc nhìn | ③ TWIST |
+| 4. Giải thích đời thường | ④ VÌ SAO |
+| 5. Chốt hành động nhỏ | ⑤ CHỐT |
+| Hạn thuật ngữ · không chung chung · giọng emotional | 🔵 THUẬT NGỮ · CẤM câu chung chung · GIỌNG + `MAU_ARC` |
+⇒ `lib/content/viral-core.ts` **CHỈ truyền tham số vào `arcCore`**, không chép
+nhịp ra. Thêm **5 slot** (`boiCanh` · `nganSach` · `hanViet` · `uuTienHanhVi` ·
+`chot`); hai bản chat truyền chuỗi cũ qua ba hằng `CHAT_*` nên **byte-identical**.
+
+### 🗺️ Bản đồ bề mặt — và chỗ "kệ nó" có giá KHÁC NHAU
+| Bề mặt | Cũ | Bài mới/ngày | PR này |
+|---|---:|---:|---|
+| `khao_luan` | 344 | 3 | ✅ nhận TRỌN 5 lớp |
+| `master_articles` | 347 | 5 | ✅ nhận 3 lớp (②③⑤) |
+| **`seo_pages`** | **8.958** | **0** | ⏭️ PR sau — xem dưới |
+| `van_dap` | 149 | ~1 | ❌ edge ngoài repo |
+| `/la-so/*`, `/menh-kho/*` | 438K | — | ⛔ **đã `noindex`**, bỏ qua |
+- 🔑 **Henry chốt "bài cũ kệ nó"** — đúng cho 2 cron chữ vì 8 bài/ngày tự làm
+  loãng (~3 tháng là bài mới ngang bài cũ). Nhưng `seo_pages` **0 bài mới/ngày**
+  ⇒ "kệ nó" ở đó nghĩa là **không bao giờ**, mà nó là khối indexed lớn nhất
+  (gấp 13 lần hai cron cộng lại). Nó là TEMPLATE (`scripts/tuvi-compat/variants.mjs`
+  + `compose-*.mjs`), **không phải prompt** — sửa là viết lại ~30 bank câu rồi
+  chạy lại `rewrite-tuvi-compat.mjs`. Deterministic, 0 lượt LLM, 0đ.
+
+### 🔴 Đòn bẩy thật KHÔNG nằm ở thân bài
+GSC 28 ngày: **665 trang có hiển thị, 18 nhấp (~0,05%)**. Tuyệt đại đa số người
+ta CHƯA HỀ đọc thân bài — họ bỏ qua ngay ở trang kết quả. ⇒ `HOOK_RULES` (title
+≤60 ký tự chạm một nỗi lo · cấm mở "Bàn về…/Luận về…" · excerpt đứng được một
+mình) dùng CHUNG cả hai cron. Trước đây `title`/`excerpt` sinh ra **không có một
+luật nào**.
+
+### ⚔️ Hai xung đột ĐỐI ĐẦU, và cách Henry chốt
+1. **Ngôi 3 vs "thấy đúng mình"** — `BRAND-VOICE §2.1` ghi ❌*"Bạn nên…"*, và gate
+   có răng: `RE_BAN` cấm cứng chữ "bạn". Henry: *"cho phép bình thường, viral nói
+   về NỘI DUNG thôi, ko chi tiết đến mức cấm"* ⇒ `readerAddress: 'free'` — **nới,
+   không đảo**: không ép ngôi nào. **GIỮ `mixed-address`** (trộn hai lối trong một
+   bài vẫn là lỗi thật) và **GIỮ `allowSelfRef`** — nới đúng chỗ cản, không nới bừa.
+2. **Hán-Việt cổ vs ngôn ngữ đời thường** — `§2.2` gọi nó là "chữ ký thương hiệu"
+   và gate ĐÒI *"1–3 thành ngữ, 0 là SAI"*. Henry: *"chỉ cho phép ở lớp 4"* ⇒
+   0–2 lần, **cấm ở 1–2 câu mở**, lời thoại nhân vật không tính.
+3. **`master_articles` giữ nguyên** persona thầy người Hoa + bối cảnh Trung/Đài/HK
+   (Henry chốt) ⇒ nó chỉ nhận **3/5 lớp**; ① vẫn là *mở in medias res*. Dán trọn
+   arc lên đó là hai mô tả bố cục chồng nhau — đúng bệnh #541 đi gỡ. `VIRAL_KE_CHUYEN`
+   **trỏ NGƯỢC về luật 7 sẵn có** thay vì viết luật kết thứ hai (lối `arcDoc`).
+
+### 🔴 Sửa TS mà quên DB thì cả PR vô tác dụng ở tầng gate
+`app_config['content.brand_check']` **GHI ĐÈ** `DEFAULT_CONFIG` trong TS. Prod
+đang giữ `'none'`/`'quy-vi'` ⇒ prompt dạy một đằng, gate chấm một nẻo, và mỗi bài
+trượt còn tốn thêm một lượt LLM **viết lại kéo ngược về giọng cũ**. Đã chạy
+`_patches/migration-brand-check-viral.sql` (✅ prod: cả hai `free`, `mode` vẫn
+`warn`, dải 1200–1600 và `allowSelfRef=false` còn nguyên). `repair()` cũng phải
+sửa theo — để nguyên là vòng viết lại tự tay phá thứ prompt vừa dạy.
+
+### 🧷 `check:prompt` ĐỌC HỤT 550 KÝ TỰ — và hai phép đo mâu thuẫn mới lộ ra
+Bộ dò chỉ resolve được đối số là **chuỗi literal**; slot mới lấy giá trị từ hằng
+(`boiCanh: CHAT_BOICANH`) nên nó đọc ra RỖNG → báo 6.426/6.713/8.855 trong khi
+A/B trên module thật nói **trùng khít**. Sàn 60% không bắt được (92% > 60%).
+🔑 **Hai phép đo mâu thuẫn thì một cái sai — đừng chọn cái tiện hơn.** Module thật
+là chuỗi THẬT gửi lên LLM ⇒ bộ dò sai. Thêm `grabStringConsts` + nhánh tra hằng,
+**không tra được thì DỪNG HẲN** (đọc rỗng rồi báo xanh còn tệ hơn báo đỏ).
+Đo lại: **6.976 / 7.263 / 9.405 — khớp tuyệt đối `origin/main`**, đó mới là bằng
+chứng phép mở rộng chuẩn.
+- 🪤 Chú thích JSDoc phải nằm NGOÀI nhóm tham số của hàm dựng: regex bộ dò cấm
+  dấu nháy ngược ở đó, một dòng `` `boiCanh` `` trong JSDoc làm nó đọc hụt.
+
+### Verify
+`tsc` 0 · `lint` **0 lỗi / 77 warning = đúng mốc nền** · `prettier` cả cây sạch ·
+**21/21 bộ dò** · engine **185 pass**.
+- **A/B trên MODULE THẬT** (biên dịch cả hai bản + hook `Module._resolveFilename`
+  cho alias `@/`): **26 toolType qua `buildChatContext` TRÙNG KHÍT**, 8 hằng arc
+  (`LUAN_ARC` · `LUAN_ARC_CHUNG` · 2 `MAU_ARC` · 4 `DOC_ARC_*`) trùng khít, kèm
+  **ĐỐI CHỨNG** bản mới CÓ `arcCore` / bản base KHÔNG — nếu không thì mọi phép so
+  xanh vì lý do sai.
+- **45 ca trên gate + viral-core THẬT**: arc SEO đủ 5 lớp · không mang bối cảnh
+  chat · không mang ngân sách 120–180 từ · khớp dải 1.200–1.600 của gate ·
+  `'free'` hết bắt "bạn"/"anh chị" · **ĐỐI CHỨNG `origin/main` VẪN bắt** (lỗi có
+  thật) · profile `'none'` vẫn cấm (không xoá luật của bề mặt khác) · trộn hai lối
+  vẫn chặn · tự xưng "tôi" vẫn bắt · bắt 3/3 mở bài giáo trình · **4/4 ĐỐI CHỨNG
+  không kêu oan** (kể cả câu mở in medias res có lời thoại).
+- **Red-team bộ dò 2/2 đỏ đúng** (đổi tên hằng · gỡ bước bóc hằng), khôi phục
+  xanh, 0 file rác.
+- 🪤 Hai ca đỏ đầu là **lỗi của BÀI KIỂM**, cả hai là bẫy CLAUDE.md đã ghi: (a) câu
+  mẫu chứa "mình" — luật đó severity `warn` và CỐ Ý giữ, phải đo theo severity;
+  (b) dò chuỗi cũ trên file THÔ nên bắt vào **chú thích vừa viết giải thích vì sao
+  đã gỡ** — phải cắt chú thích trước khi dò.
+- 🪤 **Bẫy cwd lần thứ BẢY**: `cd tuvi-engine && npm test` giữ lại cwd, 4 lượt
+  `npm run check:*` sau đó chạy ở engine. Tệ hơn: `echo "exit=$?"` sau `| tail -3`
+  đo exit của **`tail`**, không phải của npm ⇒ 4 bộ dò báo `exit=0` trong khi thật
+  ra chúng **exit=1 vì tôi gõ sai tên script**. 🔑 **Có ống dẫn thì `$?` không còn
+  là mã thoát của lệnh mình quan tâm** — hứng ra biến rồi mới đo.
+
+### CÒN LẠI
+- 🔴 **CHƯA gọi LLM thật lượt nào** — verify dừng ở tầng CHỮ VÀO PROMPT. Bài đầu
+  tiên mang giọng mới ra lúc **cron chạy kế tiếp** (khao-luan 03/11/15h UTC,
+  master-write 02/06/10/16/20h UTC). Chỗ đáng đọc trước: một bài `khao_luan` mới,
+  xem câu mở có còn "Trong tử vi…" không.
+- 🔴 **`brand_voice_docs` trên DB vẫn là bản CŨ.** `docs/BRAND-VOICE.md` đã sửa
+  (§1.5 mới · §2.1 · §2.2 · §3) nhưng **tầng LLM của gate đọc từ bảng, không đọc
+  file** ⇒ nó vẫn chấm theo luật cũ tới khi chạy `node scripts/load-brand-voice.mjs`
+  ở máy có `OPENAI_API_KEY` (container này không có). **Việc tay Henry.**
+- **`seo_pages` (7.080 trang tương hợp) là PR sau** — viết lại bank câu
+  `variants.mjs`. ⚠️ Đụng `updated_at` của 8.958 dòng = `lastmod` toàn site nhảy
+  một lượt, phải rải theo lô.
+- Gate vẫn `mode: 'warn'` — bật `'block'` là quyết định riêng, đọc `content_qc_log`
+  vài ngày trước đã.
+- Luật *hành vi > tính cách* mới chỉ vào bề mặt SEO (`uuTienHanhVi`), **chưa vào
+  rail chat** — cố ý, vì đưa vào là phá bất biến byte-identical. Đo trên bài SEO
+  trước rồi mới cân nhắc nhân ra.
 ## 🧱 Lượt render THẬT đầu tiên TRƯỢT — kho nền nằm ngoài git (2026-08-18, cùng PR #543)
 
 Bấm lượt `video-build` **không phải `--dry-run`** đầu tiên. Trượt cả 2 clip,

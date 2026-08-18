@@ -70,8 +70,18 @@ interface ProfileRules {
   minLen: number;
   maxLen: number;
   lengthUnit: 'chars' | 'words';
-  /** 'none' = không được gọi người đọc (ngôi 3); 'quy-vi' = gọi "quý vị" */
-  readerAddress: 'none' | 'quy-vi';
+  /**
+   * 'none'   = không được gọi người đọc (ngôi 3)
+   * 'quy-vi' = gọi "quý vị", cấm "bạn"
+   * 'free'   = KHÔNG ép ngôi nào — chỉ còn cấm TRỘN hai lối trong một bài.
+   *
+   * 🔵 Vì sao có 'free' (Henry chốt 2026-08-18): viral core là luật về NỘI DUNG
+   * (mở bằng gì, hành vi, câu lật, chốt), không phải luật về đại từ. Hai luật
+   * `reader-address` cũ lại cấm THẲNG việc nói với người đọc — mà "khiến người
+   * đọc thấy đúng mình" thì thường phải gọi họ. Nới đúng chỗ cản, không nới bừa:
+   * `allowSelfRef` GIỮ NGUYÊN vì viral core không đòi tự xưng "tôi".
+   */
+  readerAddress: 'none' | 'quy-vi' | 'free';
   /** cho phép tự xưng "tôi" không (tùy bút persona thì có) */
   allowSelfRef: boolean;
   requireBold: boolean;
@@ -103,7 +113,7 @@ const DEFAULT_CONFIG: BrandCheckConfig = {
       minLen: 1200,
       maxLen: 1600,
       lengthUnit: 'chars',
-      readerAddress: 'none',
+      readerAddress: 'free',
       allowSelfRef: false,
       requireBold: true,
       banEmoji: true,
@@ -114,7 +124,7 @@ const DEFAULT_CONFIG: BrandCheckConfig = {
       minLen: 900,
       maxLen: 1800,
       lengthUnit: 'words',
-      readerAddress: 'quy-vi',
+      readerAddress: 'free',
       allowSelfRef: true,
       requireBold: true,
       banEmoji: true,
@@ -346,6 +356,27 @@ function snippet(s: string, term: string, span = 40): string {
   return '…' + s.slice(Math.max(0, i - span), i + term.length + span).replace(/\s+/g, ' ') + '…';
 }
 
+/**
+ * Mở bài kiểu GIÁO TRÌNH — luật viral core: câu đầu phải đánh thẳng vào việc của
+ * người đọc, không được đi giới thiệu bộ môn.
+ *
+ * Danh sách CỐ Ý HẸP và chỉ soi ~250 ký tự đầu. Bắt rộng hơn ("Trong ", "Theo ")
+ * sẽ đá vào chính luật mở-in-medias-res của `cron-master-write`, nơi câu đầu rất
+ * hay là một cảnh hoặc một câu thoại — mà một bộ dò kêu oan là một bộ dò sắp bị
+ * tắt đi (bài học `check:motifs`, `check:railfields`).
+ */
+const RE_MO_BAI_GIAO_TRINH =
+  /(Tử Vi Đẩu Số là|Tử Vi là một|là một hệ thống|là một bộ môn|Trong tử vi|Trong Tử Vi|Trong hành trình|Từ xa xưa|Từ ngàn xưa|Tự cổ chí kim|Theo quan niệm)/u;
+
+/** Bỏ dòng tiêu đề markdown để soi đúng CÂU MỞ của thân bài. */
+function moBai(content: string): string {
+  return content
+    .split('\n')
+    .filter((l) => !/^\s*#{1,6}\s/.test(l) && l.trim())
+    .join(' ')
+    .slice(0, 250);
+}
+
 export function checkAuto(content: string, rules: ProfileRules): BrandViolation[] {
   const v: BrandViolation[] = [];
   const add = (rule: string, detail: string, severity: 'block' | 'warn' = 'block') =>
@@ -385,18 +416,24 @@ export function checkAuto(content: string, rules: ProfileRules): BrandViolation[
   const toi = firstMatch(RE_TOI, content);
   const anhChi = firstMatch(RE_ANH_CHI, content);
 
-  if (ban) add('reader-address', `Gọi người đọc là "bạn" — ${snippet(content, ban)}`);
+  // 'free' → hết cấm gọi người đọc. Giữ nguyên hai nhánh cũ cho profile nào còn
+  // khai 'none'/'quy-vi', để nới ở đây không xoá mất luật của bề mặt khác.
+  if (ban && rules.readerAddress !== 'free')
+    add('reader-address', `Gọi người đọc là "bạn" — ${snippet(content, ban)}`);
   // "mình" chỉ WARN, không chặn — cố ý. Soi 6 mẩu thật trong corpus lọt bộ lọc
   // này thì CẢ 6 đều là "mình" phản thân hợp lệ ("thu mình lại", "một mình phá
   // vây", "lập lá số cho mình"), không mẩu nào gọi người đọc. Regex không tách
   // được hai nghĩa đó; chặn cứng chỉ đẻ ra báo động giả rồi làm cả gate mất
   // tin. Để warn cho Henry đọc log, ai đó nhìn ra mẫu thật thì siết sau.
   if (minh) add('reader-address', `Dùng "mình" — kiểm xem có phải đang gọi người đọc: ${snippet(content, minh)}`, 'warn');
-  if (anhChi) add('reader-address', `Dùng "anh/chị" làm đại từ gọi người đọc`);
+  if (anhChi && rules.readerAddress !== 'free')
+    add('reader-address', `Dùng "anh/chị" làm đại từ gọi người đọc`);
 
   if (rules.readerAddress === 'none' && quyVi)
     add('reader-address', 'Bài khảo luận không gọi người đọc — bỏ "quý vị", dùng ngôi 3 (đương số, người ta)', 'warn');
 
+  // GIỮ kể cả ở 'free': cho phép chọn lối nào cũng được KHÔNG có nghĩa là được
+  // đổi lối giữa bài. Đây là lỗi đọc ra ngay, không liên quan viral core.
   if (ban && quyVi) add('mixed-address', 'Trộn hai cách gọi "bạn" và "quý vị" trong cùng một bài');
 
   if (!rules.allowSelfRef && toi) add('self-reference', `Bài khảo luận không tự xưng — ${snippet(content, toi)}`);
@@ -408,6 +445,16 @@ export function checkAuto(content: string, rules: ProfileRules): BrandViolation[
     add('length', `Độ dài ${len} ${unit}, ngoài dải ${rules.minLen}–${rules.maxLen}`);
 
   if (rules.requireBold && !content.includes('**')) add('no-bold', 'Không có chỗ nào **đậm**');
+
+  // ── Viral core ──
+  // severity 'block' là CỐ Ý dù gate đang chạy mode='warn': ở warn nó chỉ ghi sổ,
+  // và chính cái sổ đó là thứ để đọc trước khi quyết có bật 'block' hay không.
+  const moBaiXau = firstMatch(RE_MO_BAI_GIAO_TRINH, moBai(content));
+  if (moBaiXau)
+    add(
+      'mo-bai-giao-trinh',
+      `Mở bài đi giới thiệu bộ môn thay vì chạm vào việc của người đọc: "${moBaiXau}"`,
+    );
 
   return v;
 }
@@ -442,10 +489,15 @@ ${content.slice(0, 8000)}
 
 Chỉ kiểm ĐÚNG 7 mục sau (mục khác đã có máy kiểm bằng regex, bỏ qua):
 1. nuoc-di: có nước đi "vấn đề đương đại × lăng kính cổ pháp" không?
-2. thanh-ngu: có 1–3 thành ngữ Hán-Việt không? (0 hoặc >3 đều sai)
+2. thanh-ngu: thành ngữ / chữ Hán-Việt cổ — 0–2 lần là ĐẠT, >2 là sai. Và nếu có,
+   nó CHỈ được nằm ở phần GIẢI THÍCH: xuất hiện trong 1–2 câu MỞ ĐẦU là sai (mở bài
+   bằng chữ cổ làm mất người đọc trước khi họ kịp thấy mình trong bài). Lời thoại của
+   nhân vật KHÔNG tính là vi phạm.
 3. vi-du: có ví dụ cụ thể kèm chi tiết (tên/tuổi/nghề/số) không? Ví dụ chung chung là sai.
 4. gioi-tinh: giới tính có nhất quán không? Có mặc định "nam" khi chưa biết giới không?
-5. ket-chu-dong: kết bằng thế chủ động hay bằng định mệnh buông xuôi?
+5. ket-chu-dong: kết có nêu ÍT NHẤT MỘT việc người đọc làm được không? Kết bằng định
+   mệnh buông xuôi, hoặc bằng lời khuyên chung chung ("nên cân nhắc kỹ", "cần giữ bình
+   tĩnh") đều là sai.
 6. bia-dan: có bịa trích dẫn cổ thư (gán tên sách/tác giả cụ thể) không?
 7. sao-that: mọi tên sao nhắc tới có THẬT trong Tử Vi Đẩu Số không?
 
@@ -486,10 +538,11 @@ async function repair(content: string, violations: BrandViolation[], profile: Br
   const list = violations.map((v, i) => `${i + 1}. [${v.rule}] ${v.detail}`).join('\n');
   const surfaceRule =
     profile === 'khao-luan'
-      ? `- Viết ngôi thứ BA. KHÔNG gọi người đọc ("bạn", "quý vị", "anh/chị"), KHÔNG tự xưng ("tôi").
-  Chủ ngữ dùng: đương số, người ta, ta, người trí, cha mẹ.`
+      ? `- KHÔNG tự xưng "tôi" (đây là bài ghi chép, không phải tùy bút ký tên).
+  - Cách gọi người đọc: giữ NGUYÊN lối bài đang dùng, chỉ sửa nếu bài TRỘN hai lối
+    ("bạn" lẫn "quý vị") — lúc đó chọn một lối và thống nhất cả bài.`
       : `- Giữ ngôi thứ NHẤT ("tôi") và chữ ký cuối bài — đó là đúng định dạng tùy bút này.
-  Chỉ đổi cách gọi người đọc thành "quý vị", tuyệt đối không dùng "bạn".`;
+  - Cách gọi người đọc: giữ NGUYÊN lối bài đang dùng, chỉ sửa nếu bài TRỘN hai lối.`;
 
   const prompt = `Sửa bài viết dưới đây cho hết các lỗi được liệt kê. Giữ NGUYÊN ý, nguyên mạch
 lập luận, nguyên ví dụ — chỉ sửa đúng chỗ sai.

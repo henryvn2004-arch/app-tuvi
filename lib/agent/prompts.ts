@@ -329,7 +329,21 @@ export function nguoiXemLine(name?: string, gender?: string): string {
  *                  gọi đúng thứ người đọc sẽ gặp
  *   · `hoiSau`   — ví dụ câu hỏi SÂU, tức lúc ĐƯỢC phép gọi tên và nói đủ
  */
-const arcCore = (o: {
+/**
+ * 🔵 NĂM SLOT `boiCanh` · `nganSach` · `hanViet` · `uuTienHanhVi` · `chot` sinh ra
+ * để tầng CONTENT (2 cron viết bài SEO, xem `lib/content/viral-core.ts`) dùng lại
+ * ĐÚNG lõi này thay vì chép ra bản thứ hai — chép là hai bản trôi khỏi nhau, đúng
+ * bẫy formatLaSoV2/parseLlmJson repo đã trả giá.
+ *
+ * 🔴 BẤT BIẾN: `LUAN_ARC` và `LUAN_ARC_CHUNG` phải TRÙNG KHÍT TỪNG BYTE với bản
+ * trước lượt thêm slot — 3 shape lá số + 24 prompt kịch bản đang chạy prod và đã
+ * test thật. Vì thế `hanViet`/`uuTienHanhVi` truyền chuỗi RỖNG cho hai bản đó, còn
+ * `boiCanh`/`nganSach`/`chot` nhận đúng chuỗi cũ qua ba hằng `CHAT_*`.
+ *
+ * ⚠️ Chú thích phải nằm NGOÀI nhóm tham số: `scripts/check-prompt-budget.mjs` bóc
+ * hàm dựng bằng regex cấm dấu nháy ngược trong nhóm đó.
+ */
+export const arcCore = (o: {
   canCu: string;
   duoi: string;
   ngoaiLeBang: string;
@@ -338,15 +352,20 @@ const arcCore = (o: {
   hoiSau: string;
   camBia: string;
   xungHo: string;
+  boiCanh: string;
+  nganSach: string;
+  hanViet: string;
+  uuTienHanhVi: string;
+  chot: string;
 }) => `── CÁCH VIẾT (nguồn DUY NHẤT về hình dạng & độ dài — thay mọi mô tả bố cục khác) ──
-- BỐI CẢNH: người hỏi VỪA đọc xong bản luận đầy đủ ở màn hình bên cạnh — họ mở khung này để NÓI CHUYỆN, không phải đọc thêm một bài. Cấm tóm tắt lại thứ họ vừa đọc.
-- NGÂN SÁCH: mặc định 120–180 từ; hỏi có/không hoặc hỏi một chi tiết → 1–3 câu, đừng kéo cho đủ đô; họ yêu cầu rõ ("phân tích kỹ", "lập bảng") mới nới, tối đa 300 từ. Đoạn 1–3 câu, xuống dòng giữa các đoạn; không tiêu đề con, không đánh số mục, không gạch đầu dòng${o.ngoaiLeBang}.
+- BỐI CẢNH: ${o.boiCanh}
+- NGÂN SÁCH: ${o.nganSach}${o.ngoaiLeBang}.
 - NHỊP 5 LỚP — viết LIỀN MẠCH, TUYỆT ĐỐI không in số lớp hay tên lớp ra màn hình. Đủ chỗ thì chạy đủ; câu hỏi vặt chỉ cần ① và ⑤:
   ① MỞ (1–2 câu) — chốt thẳng vào đúng điều họ hỏi, sắc, đọc là muốn đọc tiếp. In đậm (**…**) khi câu đó thật đáng nhớ. Cấm nhắc lại câu hỏi, cấm rào đón, cấm mở bài.
-  ② HÀNH VI (2–3 việc) — việc RẤT cụ thể ngoài đời để họ tự soi ra mình: "hay nhận việc rồi ôm một mình", "cãi xong là im ba ngày". Chật chỗ thì lấy MỘT cái đắt nhất. Viết thành câu, không liệt kê.
+  ② HÀNH VI (2–3 việc) — việc RẤT cụ thể ngoài đời để họ tự soi ra mình: "hay nhận việc rồi ôm một mình", "cãi xong là im ba ngày". Chật chỗ thì lấy MỘT cái đắt nhất. Viết thành câu, không liệt kê.${o.uuTienHanhVi}
   ③ TWIST (1 câu) — lật góc nhìn: cái họ tưởng là điểm yếu hoá ra là chỗ mạnh, hoặc ngược lại. PHẢI rút từ dữ liệu thật bên dưới, không phải nói ngược cho kêu.
-  ④ VÌ SAO (ngắn) — nói NGHĨA và HỆ QUẢ đời thường (tiền bạc, công việc, tình cảm, sức khoẻ, gia đình). Căn cứ suy luận vẫn BẮT BUỘC là ${o.canCu} — đó là để KHÔNG bịa, KHÔNG phải để đọc tên ra.${o.duoi}
-  ⑤ CHỐT — MỘT trong hai: một việc làm được ngay tuần này, HOẶC một câu hỏi ngược ngắn bám đúng chi tiết vừa nói. Chọn một, không cả hai, và không hỏi lấy lệ.
+  ④ VÌ SAO (ngắn) — nói NGHĨA và HỆ QUẢ đời thường (tiền bạc, công việc, tình cảm, sức khoẻ, gia đình). Căn cứ suy luận vẫn BẮT BUỘC là ${o.canCu} — đó là để KHÔNG bịa, KHÔNG phải để đọc tên ra.${o.duoi}${o.hanViet}
+  ⑤ CHỐT — ${o.chot}
 🔵 THUẬT NGỮ — HẠN CHẾ, KHÔNG CẤM. Mặc định viết bằng lời thường; tên riêng phải ĐÁNG chỗ nó chiếm:
 - Đừng MỞ ĐẦU câu bằng ${o.tenRieng} khi họ chưa tỏ ý muốn học — phần lớn người hỏi ${o.khongRanh}, nghe tên riêng ở đầu câu là trôi mất.
 - Mỗi câu phải ĐỨNG VỮNG khi xoá hết tên riêng đi: tên riêng là phần THÊM để kiểm chứng, không phải phần gánh nghĩa. Gọi tên thì giải nghĩa ngay.
@@ -355,8 +374,25 @@ const arcCore = (o: {
 - GIỌNG: viết như đang NÓI với người ngồi đối diện — chêm khẩu ngữ tự nhiên (thì, à, này, nhé, đấy, cơ, chứ, đúng không), mỗi đoạn 1–2 cái, không đặt trong câu chốt. Persona nêu ở đầu chỉ đổi GIỌNG, không đổi độ dài — ngân sách luôn thắng.${o.xungHo}
 - Khối "KHI NGƯỜI TA CẦN NGƯỜI NGHE" ở CUỐI prompt (nếu có) GHI ĐÈ toàn bộ nhịp này.`;
 
+// Bối cảnh + ngân sách của HAI bản CHAT. Tách thành hằng vì cả `LUAN_ARC` lẫn
+// `LUAN_ARC_CHUNG` dùng y hệt chuỗi này — chép đôi là mầm trôi lệch. Phần NGOẠI
+// LỆ BẢNG vẫn nối sau qua `o.ngoaiLeBang` ngay trong `arcCore`, đúng vị trí cũ,
+// nên chuỗi dựng ra không đổi một byte.
+const CHAT_BOICANH =
+  'người hỏi VỪA đọc xong bản luận đầy đủ ở màn hình bên cạnh — họ mở khung này để NÓI CHUYỆN, không phải đọc thêm một bài. Cấm tóm tắt lại thứ họ vừa đọc.';
+const CHAT_NGANSACH =
+  'mặc định 120–180 từ; hỏi có/không hoặc hỏi một chi tiết → 1–3 câu, đừng kéo cho đủ đô; họ yêu cầu rõ ("phân tích kỹ", "lập bảng") mới nới, tối đa 300 từ. Đoạn 1–3 câu, xuống dòng giữa các đoạn; không tiêu đề con, không đánh số mục, không gạch đầu dòng';
+
+const CHAT_CHOT =
+  'MỘT trong hai: một việc làm được ngay tuần này, HOẶC một câu hỏi ngược ngắn bám đúng chi tiết vừa nói. Chọn một, không cả hai, và không hỏi lấy lệ.';
+
 // Bản cho 3 shape LÁ SỐ.
 export const LUAN_ARC = arcCore({
+  boiCanh: CHAT_BOICANH,
+  nganSach: CHAT_NGANSACH,
+  hanViet: '',
+  uuTienHanhVi: '',
+  chot: CHAT_CHOT,
   canCu: 'cấu trúc thật bên dưới (chính tinh tọa cung + độ sáng + cách cục, xét tam phương tứ chính)',
   duoi: ' Không bịa "điểm cung X/10".',
   ngoaiLeBang: '',
@@ -374,6 +410,11 @@ export const LUAN_ARC = arcCore({
 // nêu được cụ thể như lá số (22 bộ môn, 22 cấu trúc dữ liệu khác nhau) nên trỏ
 // thẳng vào khối dữ liệu bên dưới.
 export const LUAN_ARC_CHUNG = arcCore({
+  boiCanh: CHAT_BOICANH,
+  nganSach: CHAT_NGANSACH,
+  hanViet: '',
+  uuTienHanhVi: '',
+  chot: CHAT_CHOT,
   canCu: 'dữ kiện CÓ THẬT trong khối dữ liệu bên dưới (con số, tên, quan hệ mà công cụ đã tính ra)',
   duoi: '',
   ngoaiLeBang:

@@ -12,6 +12,7 @@ import { parseLlmJson } from '@/lib/llm/json';
 import { withCronLog } from '@/lib/cron/log';
 import { brandCheck } from '@/lib/content/brand-check';
 import { BRAND_FORMAT_RULES } from '@/lib/content/brand-rules';
+import { ARC_SEO_VAN_DAP, HOOK_RULES } from '@/lib/content/viral-core';
 import { initialPublishStatus } from '@/lib/content/publish-filter';
 
 const SUPABASE_URL  = process.env.SUPABASE_URL!;
@@ -113,14 +114,26 @@ interface KhaoLuanArticle {
 
 async function writeArticle(topic: string, ctx: string): Promise<KhaoLuanArticle> {
   const ctxBlock = ctx || '(Dùng kiến thức Tử Vi Đẩu Số tổng quát)';
-  const prompt = `Đóng vai nhà nghiên cứu Tử Vi, văn phong nho nhã, điềm đạm, súc tích.
+  // 🔴 Prompt cũ chỉ có SÁU DÒNG, và dòng duy nhất nói về giọng là "văn phong nho
+  // nhã, điềm đạm, súc tích" — tức bề mặt SEO lớn nhất đang chạy KHÔNG có một luật
+  // nào về mở bài, hành vi cụ thể, câu lật hay chốt hành động. `ARC_SEO_VAN_DAP`
+  // thay hẳn dòng đó (xem `lib/content/viral-core.ts`).
+  //
+  // ⚠️ Ba câu cũ "Trả lời trực tiếp, ≤300 từ, không dùng bullet. Có 1 ví dụ thực
+  // tế." đã GỠ, không phải bỏ sót: arc đã tự khai ngân sách + cấm gạch đầu dòng,
+  // và lớp ② (hành vi cụ thể) mạnh hơn hẳn "có 1 ví dụ". Để cả hai là dựng hai
+  // nguồn bố cục trong cùng một prompt — đúng bệnh #541 đi gỡ.
+  const prompt = `Bạn là chuyên gia Tử Vi, nhưng VIẾT như một content creator tâm lý học: người đọc phải thấy "đúng mình", nhận được một góc nhìn mới, và hiểu được mà không cần biết một thuật ngữ nào.
 Câu hỏi: ${topic}
 Tài liệu (BẮT BUỘC bám sát, không bịa ngoài tài liệu):\n${ctxBlock}
-Trả lời trực tiếp, ≤300 từ, không dùng bullet. Có 1 ví dụ thực tế.
+
+${ARC_SEO_VAN_DAP}
+
+${HOOK_RULES}
 
 ${BRAND_FORMAT_RULES}
 Trả về JSON thuần (KHÔNG backtick):
-{"title":"Tiêu đề có từ khóa","slug":"slug-ascii","excerpt":"Tóm tắt dưới 155 ký tự","category":"CHỌN 1 TRONG: hon-nhan|gia-dinh|tai-chinh|cong-viec|tinh-cach|van-han|dien-san|quan-he|benh-tat|con-cai","tags":["tag1","tag2"],"featured":false,"content":"markdown ≤300 từ"}`;
+{"title":"Tiêu đề ≤60 ký tự theo luật ở trên","slug":"slug-ascii","excerpt":"Tóm tắt ≤155 ký tự theo luật ở trên","category":"CHỌN 1 TRONG: hon-nhan|gia-dinh|tai-chinh|cong-viec|tinh-cach|van-han|dien-san|quan-he|benh-tat|con-cai","tags":["tag1","tag2"],"featured":false,"content":"markdown 1.200–1.600 ký tự"}`;
 
   // Bản cũ tự tay bóc fence rồi `JSON.parse` trần — chính việc phải viết
   // `.replace(/^```json/…)` là bằng chứng model CÓ bọc backtick trong thực tế,
