@@ -177,6 +177,106 @@ lượt"*, *"Ngoại lệ DUY NHẤT"*) — chặn đúng lúc thuật ngữ có
 - ⚠️ **Hai việc kéo NGƯỢC nhau**: cho gọi tên sao thì câu dài thêm. Nên trần phải
   **nới** chứ không siết — không thể vừa ép ngắn vừa mở thuật ngữ.
 
+### 🔁 NHÂN ARC RA 22 PROMPT KỊCH BẢN + 2 trang standalone (2026-08-18, PR sau)
+Henry test prod xong: *"ok rồi đó. Mày apply fix cho các chỗ còn lại đi"*, kèm câu
+hỏi đúng chỗ: *"fix này cho cả tool trên shell và standalone luôn đúng ko?"*.
+
+### 🔴 Trả lời: KHÔNG — và chỗ hụt nằm ở standalone
+| Bề mặt | Gọi gì | Trước PR này |
+|---|---|---|
+| 10 tool shell đường lá số | `/api/v1/chat` | ✅ đã có arc |
+| `luan-giai.html` standalone | `/api/lasotuvi?action=chat` → dùng chung `buildChatContext` | ✅ đã có |
+| **`xem-tuoi.html` + `xem-lam-an.html`** | `/api/xem-tuoi?action=chat` — **bản chép tay** | ❌ đứng ngoài |
+| **47 trang `/tools/*.html`** | **0 file gọi chat** | — không có gì để áp |
+- 🔑 `/tools/*.html` không có khung chat NÀO (đo: 0/47 file gọi `api/v1/chat`,
+  `action=chat`). Đừng đi tìm cách áp arc vào đó — không có bề mặt để áp.
+- Bản chép tay `/api/xem-tuoi` còn nguyên luật ngược hẳn arc: *"120-250 từ"* và
+  *"Dẫn chứng sao tinh, cung vị, can chi cụ thể"* — tức BẮT mở câu bằng jargon.
+  Nay nội suy thẳng `LUAN_ARC` + `MAU_ARC`. ⚠️ **Bộ trích context CỐ Ý giữ bản
+  riêng**: nó đọc thêm shape tương hợp (`_lsA`, `_partnerLaso`) mà bản chung
+  không có — gỡ nốt là một lượt refactor khác, rủi ro hơn hẳn phần luật.
+
+### 🧩 `arcCore` — MỘT lõi, hai họ prompt
+Không chép arc ra làm hai bản (chép là hai bản trôi khỏi nhau — bẫy
+`formatLaSoV2`/`parseLlmJson` đã trả giá). Lõi nhận **7 slot** cho đúng phần
+khác nhau giữa bộ môn: `canCu` · `duoi` · `ngoaiLeBang` · `tenRieng` ·
+`khongRanh` · `hoiSau` · `camBia` · `xungHo`. `LUAN_ARC` (lá số) và
+`LUAN_ARC_CHUNG` (22 kịch bản) là hai lượt gọi. `mauArc` tương tự cho few-shot.
+- **Gỡ hẳn 4 khối chết**: `RAIL_CHAT_RULES` · `PERSONA_RULE` ·
+  `PLAIN_LANGUAGE_RULE` · `GIONG_NGUOI_RULES` (nay 0 nơi dùng).
+- 🪤 **Refactor của TÔI làm trôi 4 chỗ trong bản lá số** — mà lá số đã test prod:
+  đảo vế câu lớp ④, đổi *"KHÔNG biết tử vi"* → *"KHÔNG rành bộ môn này"*, và
+  **bỏ mất danh sách chống bịa `(sao, cách cục, can chi, con số)`**. Ba trong
+  bốn chỗ làm YẾU prompt. ⇒ **Bất biến bắt buộc: 3 shape lá số phải TRÙNG KHÍT
+  từng byte.** Tách thêm slot cho tới khi A/B ra 0 lệch.
+
+### 🔴 Hai hồi quy chỉ lộ khi ĐỌC OUTPUT, không lộ khi đo kích thước
+1. **24 tool TỰ HỨA trả bảng** (`NGOẠI LỆ — … bảng Markdown` trong khối Nguyên
+   tắc của từng tool) mà arc lại cấm phẳng *"không gạch đầu dòng"*. Hai luật
+   ngược nhau trong CÙNG một prompt — đúng bệnh #541 đi chữa. ⇒ slot
+   `ngoaiLeBang`, trỏ ngược về chính NGOẠI LỆ đó. Lá số **không** hứa bảng ở đâu
+   nên vẫn cấm phẳng (và giữ byte-identical).
+2. **23/24 prompt kịch bản KHÔNG có luật xưng hô nào.** Trước đây model soi
+   gương theo lời người dùng; mẫu few-shot dùng "anh"/"chị" kéo nó đi ĐOÁN GIỚI
+   TÍNH — đo thật: hỏi bằng *"em"* mà đáp bằng *"anh"*. Gọi một phụ nữ là "anh"
+   tệ hơn hẳn hành vi cũ. ⇒ slot `xungHo` dạy soi gương + cấm suy giới từ mẫu.
+   Đo lại 6 lượt × 3 tool: **0 lượt đoán giới sai**.
+
+### 🧷 Bộ dò `check:prompt` ĐÃ MÙ MỘT LẦN NGAY TRONG LƯỢT NÀY
+Arc chuyển sang hàm dựng ⇒ bộ dò chỉ bóc template literal nên `LUAN_ARC` resolve
+ra RỖNG: nó báo **2.675/7.000 và VẪN XANH**. Vá xong đo lại ra **đúng
+6.976/7.263/9.405** — khớp tuyệt đối con số trước refactor, đó mới là bằng chứng
+phép mở rộng chuẩn.
+- 🪤 Ba bẫy regex phải sửa: (a) không nhảy qua thân template ⇒ quét lại BÊN
+  TRONG; (b) nhóm tham số lười ⇒ `const authorName = (…)` nuốt xuyên vài nghìn
+  ký tự tới `) => \`` của khai báo tận sau, ăn gọn `arcCore`; (c) lời gọi kết
+  bằng `});` chứ không phải `);` ⇒ lời gọi đầu nuốt args của lời gọi sau.
+- **Thêm SÀN 60% trần**: bộ dò đọc hụt thì ĐỎ, không được báo xanh trên chuỗi
+  gần rỗng. Đây là luật sinh ra từ chính lần mù vừa rồi.
+- **Thêm luật 3**: 22 prompt kịch bản mỗi cái đúng MỘT nguồn bố cục (trước chỉ
+  canh 3 shape lá số). Red-team **4/4 đỏ đúng** (đổi tên hàm dựng → DỪNG HẲN ·
+  dán hai nguồn · mất nguồn · phình 900 ký tự), đối chứng khôi phục xanh.
+- 🪤 Hai ca red-team đầu **báo XANH oan vì đột biến KHÔNG ăn** (tên hằng là
+  `const` chứ không `export const`). Bài học lặp: **assert đột biến đã ăn rồi
+  mới đọc kết quả.**
+
+### 📏 Đo bằng Gemini thật trên tool kịch bản
+| `nap-am` — *"Mệnh em thế nào, hợp làm gì?"* | trước | sau |
+|---|---:|---:|
+| số từ | 88,5 | 142,0 |
+| bị cắt giữa câu | 0 | 0 |
+Bản TRƯỚC mở bằng *"nạp âm Thành Đầu Thổ, tức là…"* rồi liệt kê nghề chung
+chung. Bản SAU mở bằng *"Mệnh anh thuộc kiểu đất thành đầu tường, vững chãi mà
+kín đáo"* → hành vi cụ thể → câu lật → việc làm được tuần này.
+- ⚠️ Có **một lượt** model chép nguyên cụm ví dụ của lớp ② (*"hay nhận việc rồi
+  ôm một mình"*) khi câu hỏi gần trùng mẫu #3. Đo rộng 12 lượt × 4 tool: **0/12
+  ở CẢ hai bên** ⇒ không phải lỗi hệ thống, nhưng là mục đáng theo dõi; thấy
+  nhiều thì đổi ví dụ ở lớp ② chứ đừng nới luật.
+- 🪤 **Bẫy cwd lần thứ NĂM**: `cd tuvi-engine && npm test` giữ lại cwd → lượt
+  chụp prompt kế tiếp đọc hụt `public/tuong-hop.js`, ra "lá số KHÔNG trùng khít"
+  và 3 giá trị Δ khác nhau. Suýt đọc thành hồi quy thật. Chạy lại từ gốc repo
+  thì sạch. **Trước khi tin một phép đo bỗng dưng đỏ, kiểm cwd.**
+
+### Verify
+`tsc` 0 · `lint` **0 lỗi / 77 warning = đúng mốc nền** · `prettier` cả cây sạch ·
+**18/18 bộ dò** · engine **185 pass**.
+- **A/B 26 prompt trên MODULE THẬT**: 3 shape lá số **TRÙNG KHÍT từng byte**
+  (bất biến quan trọng nhất — đã test prod) · 24 kịch bản đổi **đúng −1049 ký
+  tự, con số ĐỒNG NHẤT** ⇒ đúng một khối bị thay, không chỗ nào lệch riêng ·
+  trần token kịch bản giữ nguyên 1000 · arc + luật xưng hô + ngoại lệ bảng có
+  mặt ở cả 24 · luật cũ gỡ sạch.
+- **11/11 bất biến trên route `/api/xem-tuoi`** (cắt chú thích trước khi dò —
+  chú thích vừa viết có nhắc nguyên văn luật cũ, dò trên file thô là bắt vào
+  chính lời giải thích của mình).
+
+### CÒN LẠI
+- **Họ 2 (bản luận trả tiền, JSON schema) và họ 3 (24 phần) VẪN chưa đụng** —
+  đây là phần người ta TRẢ TIỀN để đọc. Họ 2 phải ánh xạ arc vào FIELD của
+  schema, và ⚠️ **đổi/thêm field = đổi payload ⇒ BẮT BUỘC bump `SHAPE`**.
+- `/api/phong-thuy` có 5–6 system inline phục vụ 5 tool (cả shell lẫn
+  standalone) — **chưa đụng**, chúng trả JSON có cấu trúc chứ không phải chat.
+- `extractLasoContext` vẫn còn **hai bản** (chung + riêng của `/api/xem-tuoi`).
+
 ### 🗺️ ĐÚNG tool nào đã đổi (để test prod)
 3 shape lá số phủ **đường `birth`**, tức **10 mặt trang** + 3 kênh bot + route
 legacy: `/app/la-so` · `/app/luan-giai` · `/app/gio-sinh` · `/app/day-con` ·

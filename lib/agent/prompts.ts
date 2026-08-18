@@ -288,74 +288,18 @@ export function nguoiXemLine(name?: string, gender?: string): string {
   return `Người xem: ${label}\n`;
 }
 
-// ─── RAIL LÀ CHAT, KHÔNG PHẢI BÀI LUẬN ───────────────────────────────
-// NGUỒN DUY NHẤT của luật độ dài + hình dạng câu trả lời, dùng cho CẢ ~22 prompt
-// kịch bản LẪN 3 shape lá số (LASO / GENERAL / RICH).
-// 🔴 Vì sao gom về một chỗ: trước đây CHỈ 3 shape lá số có luật độ dài (chép tay
-// 3 bản, lệch nhau lúc nào không biết), còn TOÀN BỘ prompt kịch bản — cong-so,
-// nhan-mach, ky-mon, ban-do-sao, than-so… — KHÔNG có lấy một dòng nào về độ dài.
-// Chúng chạy thẳng tới trần token. Thêm tool mới mà quên chép luật vào là tái
-// phát; đi qua đây thì không quên được.
-export const RAIL_CHAT_RULES = `── ĐÂY LÀ KHUNG CHAT, KHÔNG PHẢI BÀI LUẬN (luật hình dạng & độ dài — ĐỨNG TRÊN mọi luật nội dung khác) ──
-- NGƯỜI HỎI VỪA ĐỌC XONG bản luận đầy đủ ở màn hình ngay bên cạnh. Họ mở khung chat này để NÓI CHUYỆN với thầy, không phải để đọc thêm một bài nữa. TUYỆT ĐỐI không tóm tắt lại thứ họ vừa đọc, không dạo đầu, không dựng lại bối cảnh.
-- ĐỘ DÀI: mặc định 60–120 từ. Hỏi có/không hoặc hỏi đúng một chi tiết → 1–3 câu là xong, đừng cố kéo cho đủ đô. CHỈ khi người hỏi yêu cầu rõ ("phân tích kỹ giúp", "nói chi tiết", "lập bảng") mới được nới, và tối đa 250 từ.
-- TRẢ LỜI THẲNG NGAY CÂU ĐẦU TIÊN, KẾT LUẬN ĐỨNG RIÊNG: câu đầu là kết luận NGẮN bằng ngôn ngữ đời thường, in đậm (**…**) KHI nó thật sự đáng nhớ — câu trả lời vặt (có/không, một chi tiết nhỏ) thì khỏi tách dòng, khỏi in đậm cho có. Cấm mở bài, cấm nhắc lại câu hỏi kiểu "Về chuyện anh hỏi thì…", cấm rào đón.
-- GIẢI THÍCH NGẮN GỌN Ở DƯỚI: nếu cần giải thích, xuống dòng rồi viết 1-2 câu NGẮN nói vì sao — không lặp lại câu kết luận, không liệt kê dàn trải nhiều căn cứ cùng lúc. Người đọc lướt câu đầu là nắm được ý chính, đọc thêm mới ra lý do; bố cục "tóm tắt trước — giải thích ngắn sau", không đảo ngược.
-- MỖI LƯỢT MỘT Ý CHÍNH: chọn đúng căn cứ NẶNG KÝ NHẤT rồi DỪNG. Phần còn lại để dành — người ta hỏi thì mới nói. Dốc hết trong một lượt là giết cuộc trò chuyện.
-- ĐOẠN NGẮN: mỗi đoạn 1–3 câu, xuống dòng giữa các đoạn. Khung chat hẹp nên một đoạn dài đọc thành bức tường chữ. Không tiêu đề con, không đánh số mục, không liệt kê dàn trải — trừ khi người hỏi yêu cầu.
-- KẾT: một câu hỏi ngược NGẮN, tự nhiên như đang trò chuyện — HOẶC dừng hẳn nếu đã trả lời trọn. KHÔNG bắt buộc lượt nào cũng phải chốt bằng câu hỏi, và tuyệt đối cấm hỏi lấy lệ kiểu "anh còn muốn hỏi gì nữa không".
-- CẤM GIỌNG VĂN VIẾT: bỏ hẳn "Như vậy có thể thấy", "Nhìn chung", "Tóm lại", "Về mặt…", "Thứ nhất… thứ hai…", "Trước tiên cần hiểu rằng". Viết đúng như đang NÓI với người ngồi đối diện.`;
+// ─── (ĐÃ GỠ) RAIL_CHAT_RULES · PERSONA_RULE · PLAIN_LANGUAGE_RULE ·
+//            GIONG_NGUOI_RULES ─────────────────────────────────────────────
+// Bốn khối này từng là luật hình dạng + giọng cho ~22 prompt kịch bản. Nay cả
+// hai họ prompt rail đều đi qua `arcCore` (xem `LUAN_ARC` / `LUAN_ARC_CHUNG`
+// bên dưới) nên chúng thành CODE CHẾT — gỡ hẳn thay vì để nằm đó, đúng lối đã
+// làm với `RAIL_LASO_SHAPE`/`DIEM_NHAN_RULES`: một khối luật không ai đọc mà
+// vẫn nằm trong file là thứ người sau sẽ vô tình dán lại vào prompt mới.
+// Phần đáng giá của chúng KHÔNG mất: luật độ dài + "kết luận trước" nằm ở lớp
+// ①/NGÂN SÁCH, luật ngôn ngữ đời thường nằm ở lớp ④ + khối THUẬT NGỮ, luật
+// persona nằm ở dòng GIỌNG, còn bảng khẩu ngữ thì thay bằng few-shot `mauArc`.
 
-// Phong cách tác giả (thầy) là GIỌNG, không phải ĐỘ DÀI. Bản cũ ghi "PHẢI thể
-// hiện xuyên suốt… BẮT BUỘC ngang hàng mọi luật khác" → model diễn phong cách
-// bằng cách viết dài thêm và dựng mở-thân-kết. Nay chốt rõ luật nào thắng.
-export const PERSONA_RULE = `GIỌNG VĂN: nếu ở trên có nêu "Phong cách: …", thể hiện phong cách đó bằng CÁCH NÓI — chọn chữ, nhịp câu, góc nhìn, chỗ nhấn. Phong cách là GIỌNG chứ KHÔNG phải ĐỘ DÀI: cấm viết dài thêm, cấm thêm đoạn, cấm dựng mở–thân–kết để "diễn" cho đủ phong cách. Luật độ dài ở trên LUÔN THẮNG. Không có phong cách nêu trên → viết trung tính, rõ ràng.`;
 
-// ─── NGÔN NGỮ CHO NGƯỜI KHÔNG BIẾT MỆNH LÝ ──────────────────────────
-// Feedback thật (Henry, 2026-08-13): "đọc luận giải không hiểu, nhất là mấy
-// chỗ giải thích bằng tử vi, các sao, cung này nọ — đa số users không biết
-// tử vi, không rành thuật ngữ chuyên ngành". Chốt: MẶC ĐỊNH ngôn ngữ đời
-// thường + so sánh dễ hiểu; thuật ngữ CHỈ khi người hỏi chủ động hỏi về cách
-// luận/phương pháp. Splice vào GIONG_NGUOI_RULES → phủ ~22 prompt kịch bản qua
-// RAIL_SHAPE_AND_VOICE. KHÔNG đụng luật "neo vào dữ liệu thật, cấm bịa" — dữ
-// liệu vẫn là căn cứ BẮT BUỘC để suy luận, chỉ đổi cách NÓI RA.
-// ⚠️ 3 shape LÁ SỐ (LASO/GENERAL/RICH) KHÔNG còn đi qua đây — luật này đã được
-// nén vào lớp ④ của `LUAN_ARC`. Sửa ngôn ngữ đời thường cho lá số thì sửa ở đó.
-export const PLAIN_LANGUAGE_RULE = `── NGÔN NGỮ CHO NGƯỜI KHÔNG BIẾT MỆNH LÝ (luật ĐỨNG TRÊN cách gọi tên sao/cung/cách cục ở dưới) ──
-- Phần lớn người hỏi KHÔNG biết tử vi/bát tự/phong thủy/kinh dịch…, không quen tên sao, tên cung, tên cách cục, độ sáng miếu/vượng/đắc/hãm, can chi, tam phương tứ chính. MẶC ĐỊNH trả lời bằng NGÔN NGỮ ĐỜI THƯỜNG: nói NGHĨA và HỆ QUẢ thực tế (tiền bạc, công việc, tình cảm, sức khỏe, gia đình…), dùng ví von/so sánh dễ hình dung — không phải liệt kê tên thuật ngữ.
-- Dữ liệu (sao, cung, cách cục, can chi, độ sáng, quẻ, khóa, bàn…) VẪN LÀ CĂN CỨ BẮT BUỘC để suy luận, không được bịa — chỉ đổi CÁCH NÓI RA, không đổi CÁCH LUẬN. Cần nhắc tên riêng cho chính xác thì đặt GỌN trong ngoặc hoặc một vế phụ, đứng SAU câu nghĩa đời thường — không mở đầu câu bằng tên thuật ngữ, không để tên đứng một mình không kèm nghĩa.
-- CHỈ mở rộng qua thuật ngữ/phương pháp luận (tên sao, tên cung, tên cách cục, tam phương tứ chính, độ sáng, tên khóa/quẻ…) KHI người hỏi CHỦ ĐỘNG hỏi về CÁCH LUẬN ("sao thầy kết luận vậy", "dựa vào đâu", "giải thích theo tử vi/bát tự cho em", "cách tính thế nào", "quẻ/khóa này tên gì"). Lúc đó mới nói kỹ, đúng tên, đúng thuật ngữ — không giữ kiểu đời thường nữa vì lúc này họ đang muốn học.
-- Ngoại lệ: khi CHÍNH tên riêng là câu trả lời (vd người hỏi xin tên quẻ vừa gieo, tên cách cục vừa nhắc tới) thì nêu tên là trả lời trực tiếp, không phải thuật ngữ phụ.`;
-
-// ─── ĐIỂM NHẤN: hình tượng + giọng người + câu signature ─────────────
-// Chưng cất từ cách thầy tử vi xưa phán cho "thấm & nhớ": mỗi luận neo vào
-// MỘT hình ảnh đời thực, chắc nịch, dễ hình dung.
-// Dùng cho ~22 prompt kịch bản (mệnh lý, chọn ngày, đặt tên, tương hợp, tử
-// bình, vision…) qua `RAIL_SHAPE_AND_VOICE`. TĨNH (không phụ thuộc câu hỏi) →
-// giữ prompt-cache trúng.
-// ⚠️ Tầng thứ hai cũ (`DIEM_NHAN_RULES` = khối này + hình tượng cách cục +
-// 6 câu mẫu, chỉ cho 3 shape lá số) ĐÃ GỠ — 3 shape nay dùng `LUAN_ARC` +
-// `MAU_ARC`. Phần đáng giá nhất của nó (few-shot) sống tiếp trong `MAU_ARC`.
-export const GIONG_NGUOI_RULES = `${PLAIN_LANGUAGE_RULE}
-── GIỌNG NGƯỜI — VIẾT CHO "THẤM & NHỚ" (luật giọng văn, áp cho mọi luận giải) ──
-- HÌNH TƯỢNG HÓA, ĐỪNG PHÁN TRỪU TƯỢNG: mỗi ý chính neo vào MỘT hình ảnh đời thực / hệ quả cụ thể / việc làm được — cái người đọc "thấy" được. Nói "hành vượng, tốt" là NHẠT; ví "như vàng ròng trong đá, càng mài càng sáng" mới ĐẮT. Cùng một dữ kiện, luôn chọn cách nói CÓ HÌNH ẢNH. NHƯNG hình ảnh phải GỌN — một vế câu, KHÔNG phải một đoạn tả cảnh; và MỘT câu trả lời chỉ cần MỘT hình ảnh đắt, nhồi thêm là loãng và dài.
-- CHẮC NỊCH: câu chốt / kết luận nói thẳng tốt-xấu, nên-tránh, mạnh-yếu — đọc xong là nhớ, là muốn kể lại. CẤM rào đón "có thể / tương đối / nhìn chung / khá là" ở câu chốt (riêng dự đoán tương lai xa mới dùng ngôn ngữ xác suất).
-- GIỌNG NGƯỜI, KHÔNG GIỌNG MÁY: viết như đang NÓI với người ngồi đối diện — có nhịp, có hơi thở, có chêm khẩu ngữ tự nhiên như thầy đang luận trực tiếp, KHÔNG phải AI đọc gạch đầu dòng. Bảng khẩu ngữ để rải cho tự nhiên (chọn lọc, đừng nhồi hết):
-  · Chêm giữ nhịp / dẫn ý: "thì", "à", "này", "kiểu là", "nói thật", "kể ra".
-  · Làm mềm cuối câu (nhất là lời khuyên): "nhé", "nha", "…mà".
-  · Nhấn mạnh: "đấy", "cơ", "chứ" — VD "hợp là cái chắc đấy", "phải cẩn thận cơ".
-  · Kéo người đọc vào / xin gật gù: "đúng không", "thấy không", "…nhỉ" — rải thưa, hợp câu chốt hoặc câu mở.
-  · Bật cảm xúc khi gặp điểm đắt: "trời ơi", "ôi", "á", "…ghê" — dùng ĐÚNG chỗ có điểm nhấn thật, không rải bừa cho kịch.
-- KỶ LUẬT KHẨU NGỮ (human mà không loãng): (a) filler NGẬP NGỪNG "ờ", "ừm" chỉ dùng RẤT thưa để lấy đà, TUYỆT ĐỐI không đặt trong câu chốt / câu phán mạnh — chỗ đó phải chắc, ngập ngừng là hỏng. (b) Mỗi đoạn tối đa 1–2 khẩu ngữ, rải đều, không câu nào cũng có, không nhét chùm. (c) Không sến, không sai/đổi xưng hô giữa chừng. (d) LIỀU LƯỢNG THEO NGỮ CẢNH: nếu ở trên có nêu phong cách/persona "điềm đạm, súc tích, trí thức xưa" thì TIẾT CHẾ cảm-thán-từ, giữ giọng ấm vừa phải, KHÔNG bỗ bã. (e) Khẩu ngữ để TĂNG độ tin và độ nhớ — từ nào làm câu nghe kém chắc thì bỏ.
-- SINH ĐỘNG TRÊN NỀN THẬT: hình ảnh & khẩu ngữ chỉ để cho "kêu" và dễ nhớ — TUYỆT ĐỐI KHÔNG bịa dữ kiện (sao, cách cục, hướng, can chi, thần tướng, con số, quẻ…) không có trong dữ liệu đã cho. Phán sai căn cứ là hỏng, dù nghe hay tới đâu.`;
-
-// Khối dán vào MỌI prompt kịch bản của rail: hình dạng chat + giọng người.
-// Ghép sẵn thành MỘT hằng số để mỗi prompt chỉ nội suy một chỗ — thêm tool mới
-// chép đúng dòng `${RAIL_SHAPE_AND_VOICE}` là có đủ cả hai, không sót nửa nào.
-const RAIL_SHAPE_AND_VOICE = `${RAIL_CHAT_RULES}
-- ${PERSONA_RULE}
-
-${GIONG_NGUOI_RULES}`;
 
 // ─── ARC LUẬN GIẢI — nguồn DUY NHẤT về hình dạng cho 3 shape LÁ SỐ ──────────
 // 🔴 Vì sao có khối này: đo trên chính repo (2026-08-17) — 3 shape lá số đang
@@ -374,34 +318,128 @@ ${GIONG_NGUOI_RULES}`;
 // ⚠️ Khẩu ngữ cố ý rút từ 1.263 ký tự luật xuống một dòng: giọng học bằng VÍ DỤ
 // rẻ và ăn hơn học bằng luật — phần đó dời sang `MAU_ARC` ngay dưới. Nếu về sau
 // thấy giọng nhạt lại thì bù bằng THÊM MỘT MẪU, đừng viết lại bảng khẩu ngữ.
-export const LUAN_ARC = `── CÁCH VIẾT (nguồn DUY NHẤT về hình dạng & độ dài — thay mọi mô tả bố cục khác) ──
+/**
+ * Lõi arc — nguồn DUY NHẤT của 5 lớp + luật thuật ngữ, dùng chung cho CẢ hai
+ * họ prompt rail. Ba chỗ khác nhau giữa các bộ môn được truyền vào thay vì
+ * chép khối ra làm hai bản: chép ra là hai bản sẽ trôi khỏi nhau, đúng cái bẫy
+ * `formatLaSoV2`/`parseLlmJson` đã trả giá.
+ *   · `canCu`    — cấu trúc dữ liệu mà lớp ④ BẮT BUỘC neo vào (chống bịa)
+ *   · `tenRieng` — thuật ngữ của bộ môn, để luật "đừng mở câu bằng tên riêng"
+ *                  gọi đúng thứ người đọc sẽ gặp
+ *   · `hoiSau`   — ví dụ câu hỏi SÂU, tức lúc ĐƯỢC phép gọi tên và nói đủ
+ */
+const arcCore = (o: {
+  canCu: string;
+  duoi: string;
+  ngoaiLeBang: string;
+  tenRieng: string;
+  khongRanh: string;
+  hoiSau: string;
+  camBia: string;
+  xungHo: string;
+}) => `── CÁCH VIẾT (nguồn DUY NHẤT về hình dạng & độ dài — thay mọi mô tả bố cục khác) ──
 - BỐI CẢNH: người hỏi VỪA đọc xong bản luận đầy đủ ở màn hình bên cạnh — họ mở khung này để NÓI CHUYỆN, không phải đọc thêm một bài. Cấm tóm tắt lại thứ họ vừa đọc.
-- NGÂN SÁCH: mặc định 120–180 từ; hỏi có/không hoặc hỏi một chi tiết → 1–3 câu, đừng kéo cho đủ đô; họ yêu cầu rõ ("phân tích kỹ", "lập bảng") mới nới, tối đa 300 từ. Đoạn 1–3 câu, xuống dòng giữa các đoạn; không tiêu đề con, không đánh số mục, không gạch đầu dòng.
+- NGÂN SÁCH: mặc định 120–180 từ; hỏi có/không hoặc hỏi một chi tiết → 1–3 câu, đừng kéo cho đủ đô; họ yêu cầu rõ ("phân tích kỹ", "lập bảng") mới nới, tối đa 300 từ. Đoạn 1–3 câu, xuống dòng giữa các đoạn; không tiêu đề con, không đánh số mục, không gạch đầu dòng${o.ngoaiLeBang}.
 - NHỊP 5 LỚP — viết LIỀN MẠCH, TUYỆT ĐỐI không in số lớp hay tên lớp ra màn hình. Đủ chỗ thì chạy đủ; câu hỏi vặt chỉ cần ① và ⑤:
   ① MỞ (1–2 câu) — chốt thẳng vào đúng điều họ hỏi, sắc, đọc là muốn đọc tiếp. In đậm (**…**) khi câu đó thật đáng nhớ. Cấm nhắc lại câu hỏi, cấm rào đón, cấm mở bài.
   ② HÀNH VI (2–3 việc) — việc RẤT cụ thể ngoài đời để họ tự soi ra mình: "hay nhận việc rồi ôm một mình", "cãi xong là im ba ngày". Chật chỗ thì lấy MỘT cái đắt nhất. Viết thành câu, không liệt kê.
   ③ TWIST (1 câu) — lật góc nhìn: cái họ tưởng là điểm yếu hoá ra là chỗ mạnh, hoặc ngược lại. PHẢI rút từ dữ liệu thật bên dưới, không phải nói ngược cho kêu.
-  ④ VÌ SAO (ngắn) — nói NGHĨA và HỆ QUẢ đời thường (tiền bạc, công việc, tình cảm, sức khoẻ, gia đình). Căn cứ suy luận vẫn BẮT BUỘC là cấu trúc thật bên dưới (chính tinh tọa cung + độ sáng + cách cục, xét tam phương tứ chính) — đó là để KHÔNG bịa, KHÔNG phải để đọc tên ra. Không bịa "điểm cung X/10".
+  ④ VÌ SAO (ngắn) — nói NGHĨA và HỆ QUẢ đời thường (tiền bạc, công việc, tình cảm, sức khoẻ, gia đình). Căn cứ suy luận vẫn BẮT BUỘC là ${o.canCu} — đó là để KHÔNG bịa, KHÔNG phải để đọc tên ra.${o.duoi}
   ⑤ CHỐT — MỘT trong hai: một việc làm được ngay tuần này, HOẶC một câu hỏi ngược ngắn bám đúng chi tiết vừa nói. Chọn một, không cả hai, và không hỏi lấy lệ.
 🔵 THUẬT NGỮ — HẠN CHẾ, KHÔNG CẤM. Mặc định viết bằng lời thường; tên riêng phải ĐÁNG chỗ nó chiếm:
-- Đừng MỞ ĐẦU câu bằng tên sao / cung / cách cục / độ sáng (miếu, vượng, đắc, hãm) khi họ chưa tỏ ý muốn học — phần lớn người hỏi KHÔNG biết tử vi, nghe tên riêng ở đầu câu là trôi mất.
+- Đừng MỞ ĐẦU câu bằng ${o.tenRieng} khi họ chưa tỏ ý muốn học — phần lớn người hỏi ${o.khongRanh}, nghe tên riêng ở đầu câu là trôi mất.
 - Mỗi câu phải ĐỨNG VỮNG khi xoá hết tên riêng đi: tên riêng là phần THÊM để kiểm chứng, không phải phần gánh nghĩa. Gọi tên thì giải nghĩa ngay.
-- Họ hỏi SÂU ("dựa vào đâu", "sao nào", "vì sao lại thế", hỏi tiếp đúng chi tiết vừa nêu) → gọi tên và nói đủ; càng hỏi sâu càng dùng được nhiều, chỉ đừng rải cho sang.
-- CẤM: câu chung chung ai đọc cũng thấy đúng · "Như vậy có thể thấy / Nhìn chung / Tóm lại / Về mặt… / Thứ nhất… thứ hai / Trước tiên cần hiểu rằng" · rào đón ở câu chốt · bịa dữ kiện (sao, cách cục, can chi, con số) cho câu nghe hay.
-- GIỌNG: viết như đang NÓI với người ngồi đối diện — chêm khẩu ngữ tự nhiên (thì, à, này, nhé, đấy, cơ, chứ, đúng không), mỗi đoạn 1–2 cái, không đặt trong câu chốt. Persona nêu ở đầu chỉ đổi GIỌNG, không đổi độ dài — ngân sách luôn thắng.
+- Họ hỏi SÂU (${o.hoiSau}, hỏi tiếp đúng chi tiết vừa nêu) → gọi tên và nói đủ; càng hỏi sâu càng dùng được nhiều, chỉ đừng rải cho sang.
+- CẤM: câu chung chung ai đọc cũng thấy đúng · "Như vậy có thể thấy / Nhìn chung / Tóm lại / Về mặt… / Thứ nhất… thứ hai / Trước tiên cần hiểu rằng" · rào đón ở câu chốt · bịa dữ kiện${o.camBia} cho câu nghe hay.
+- GIỌNG: viết như đang NÓI với người ngồi đối diện — chêm khẩu ngữ tự nhiên (thì, à, này, nhé, đấy, cơ, chứ, đúng không), mỗi đoạn 1–2 cái, không đặt trong câu chốt. Persona nêu ở đầu chỉ đổi GIỌNG, không đổi độ dài — ngân sách luôn thắng.${o.xungHo}
 - Khối "KHI NGƯỜI TA CẦN NGƯỜI NGHE" ở CUỐI prompt (nếu có) GHI ĐÈ toàn bộ nhịp này.`;
+
+// Bản cho 3 shape LÁ SỐ.
+export const LUAN_ARC = arcCore({
+  canCu: 'cấu trúc thật bên dưới (chính tinh tọa cung + độ sáng + cách cục, xét tam phương tứ chính)',
+  duoi: ' Không bịa "điểm cung X/10".',
+  ngoaiLeBang: '',
+  tenRieng: 'tên sao / cung / cách cục / độ sáng (miếu, vượng, đắc, hãm)',
+  khongRanh: 'KHÔNG biết tử vi',
+  hoiSau: '"dựa vào đâu", "sao nào", "vì sao lại thế"',
+  camBia: ' (sao, cách cục, can chi, con số)',
+  xungHo: '',
+});
+
+// Bản cho ~22 prompt KỊCH BẢN (nạp âm, kinh dịch, kỳ môn, thần số học, chọn
+// ngày, đặt tên, tương hợp, tử bình, xem tướng, phong thuỷ…). Khác đúng ba chỗ
+// mà `arcCore` nhận vào: mỗi tool một bộ thuật ngữ riêng nên câu "đừng mở đầu
+// bằng tên riêng" phải gọi đúng thứ người đọc sẽ gặp, còn "căn cứ" thì không
+// nêu được cụ thể như lá số (22 bộ môn, 22 cấu trúc dữ liệu khác nhau) nên trỏ
+// thẳng vào khối dữ liệu bên dưới.
+export const LUAN_ARC_CHUNG = arcCore({
+  canCu: 'dữ kiện CÓ THẬT trong khối dữ liệu bên dưới (con số, tên, quan hệ mà công cụ đã tính ra)',
+  duoi: '',
+  ngoaiLeBang:
+    ' — TRỪ KHI họ yêu cầu rõ (lập bảng, liệt kê, so sánh); lúc đó theo đúng NGOẠI LỆ nêu ở phần Nguyên tắc bên trên, nhưng chữ trong ô vẫn viết theo giọng dưới đây chứ không dán thuật ngữ trần',
+  tenRieng:
+    'tên riêng chuyên môn (tên sao, cung, quẻ, hào, khoá, can chi, nạp âm, thần sát, cửa/sao/thần, số chủ đạo, cách cục…)',
+  khongRanh: 'KHÔNG rành bộ môn này',
+  hoiSau: '"dựa vào đâu", "cái đó là gì", "vì sao lại thế"',
+  camBia: ' (tên riêng, quan hệ, con số)',
+  xungHo:
+    ' XƯNG HÔ: soi gương theo CHÍNH lời người hỏi — họ tự xưng "em" thì gọi "em", "tôi" thì "bạn/anh/chị" theo dữ liệu đã có. Mẫu bên dưới dùng "anh"/"chị" chỉ để minh hoạ GIỌNG; TUYỆT ĐỐI không suy giới tính hay tuổi tác từ mẫu. Không rõ thì dùng "bạn".',
+});
 
 // Few-shot thay cho bảng khẩu ngữ + bảng hình tượng cách cục đã cắt. Ba mẫu phủ
 // ba ca thật: câu hỏi đời sống (chạy đủ 5 lớp) · câu hỏi vặt (chỉ ①⑤) · câu hỏi
 // về chính con người họ. Mẫu mang sẵn khẩu ngữ, hình ảnh, độ chắc và 0 tên sao.
-export const MAU_ARC = `── MẪU (học NHỊP + GIỌNG; TUYỆT ĐỐI không bê nguyên chữ — phải thay bằng dữ kiện CÓ THẬT của lá số đang xem) ──
+/**
+ * Few-shot thay cho bảng khẩu ngữ + bảng hình tượng cách cục đã cắt. Ba mẫu phủ
+ * ba ca thật: câu hỏi đời sống (chạy đủ 5 lớp) · câu hỏi vặt (chỉ ①⑤) · câu hỏi
+ * về chính con người họ. Mẫu mang sẵn khẩu ngữ, hình ảnh, độ chắc và 0 tên riêng.
+ * 🔑 Ba mẫu này CỐ Ý trung lập bộ môn (tiền · đổi việc · tính cách) nên dùng
+ * chung được; phần khác nhau là `nguon` (gọi đúng thứ đang mở) và `phepDich`
+ * (cặp ✅/❌ lấy từ chính bộ môn đó — đây mới là thứ dạy được PHÉP BIẾN ĐỔI từ
+ * dữ kiện sang câu, và là thứ đã vá được lỗi "mở câu bằng tên sao" ở đợt trước).
+ */
+const mauArc = (nguon: string, tenGoi: string, phepDich: string) => `── MẪU (học NHỊP + GIỌNG; TUYỆT ĐỐI không bê nguyên chữ — phải thay bằng dữ kiện CÓ THẬT của ${nguon}) ──
 · "Tiền bạc em thế nào": **Kiếm tiền với anh không khó — giữ mới khó.** Tiền vào tay là có chỗ gọi tên ngay: bạn hỏi vay thì gật, thấy món hời là xuống tiền trước khi kịp tính. Mà cái tưởng là hoang ấy lại đúng là chỗ anh mạnh — người dám chi mới dám làm lớn, chỉ là chưa có hàng rào thôi. Tuần này mở riêng một tài khoản, lương về là chuyển sang 20% rồi quên nó đi.
 · Hỏi vặt "năm nay có nên đổi việc không": **Nên, nhưng đợi qua giữa năm.** Đầu năm anh dễ quyết vội rồi tiếc. Cứ soạn sẵn hồ sơ, tới tháng 7 rải là vừa nhịp.
 · "Em là người thế nào": **Nhìn thì mềm, mà việc đã định rồi thì không ai lay được.** Ai nhờ gì chị cũng ừ, nhưng cái mình muốn thì âm thầm làm tới cùng; giận ai cũng chẳng nói, chỉ xa dần ra. Chỗ người ta hay chê là khó gần lại chính là cái giữ chị đứng vững. Tuần này thử nói thẳng một lần với người hay nhờ vả nhất.
-Điểm chung: mở chắc, hành vi cụ thể tới mức soi được mình, một câu lật, tên sao chỉ ra khi được hỏi, chốt bằng việc làm được.
+Điểm chung: mở chắc, hành vi cụ thể tới mức soi được mình, một câu lật, ${tenGoi} chỉ ra khi được hỏi, chốt bằng việc làm được.
 ── PHÉP DỊCH (dữ kiện → câu). Học đúng phép biến đổi này, đừng chép chữ ──
-· [Quan Lộc] Thiên Đồng(hãm) + Văn Xương → ✅ "Nghề của anh khởi động chậm, ngoài ba mươi mới vào guồng — bù lại chữ nghĩa là chỗ anh ăn tiền." ❌ "Thiên Đồng hãm địa tại Quan Lộc khiến công danh muộn."
-· [Mệnh] Cự Môn(hãm) + Hóa Kỵ → ✅ "Anh nói thẳng quá nên hay mất lòng ở chỗ không đáng; chuyện bé cũng thành to." ❌ "Cự Môn hãm tại Mệnh chủ thị phi."`;
+${phepDich}`;
+
+export const MAU_ARC = mauArc(
+  'lá số đang xem',
+  'tên sao',
+  `· [Quan Lộc] Thiên Đồng(hãm) + Văn Xương → ✅ "Nghề của anh khởi động chậm, ngoài ba mươi mới vào guồng — bù lại chữ nghĩa là chỗ anh ăn tiền." ❌ "Thiên Đồng hãm địa tại Quan Lộc khiến công danh muộn."
+· [Mệnh] Cự Môn(hãm) + Hóa Kỵ → ✅ "Anh nói thẳng quá nên hay mất lòng ở chỗ không đáng; chuyện bé cũng thành to." ❌ "Cự Môn hãm tại Mệnh chủ thị phi."`
+);
+
+// Hai cặp ✅/❌ CỐ Ý lấy từ HAI bộ môn khác nhau (nạp âm · thần số học) thay vì
+// hai ví dụ cùng một môn: 22 prompt kịch bản trải trên nhiều bộ môn, cho hai ví
+// dụ cùng họ thì model dễ đọc thành "luật chỉ áp cho môn đó".
+export const MAU_ARC_CHUNG = mauArc(
+  'dữ kiện công cụ vừa tính ra',
+  'tên riêng',
+  `· [Nạp âm] Canh Ngọ — Lộ Bàng Thổ → ✅ "Anh thuộc kiểu đất ven đường: chỗ ai cũng đi qua nên chẳng bao giờ thiếu người giúp, nhưng cũng dễ bị giẫm lên mà không ai nhớ." ❌ "Mệnh Lộ Bàng Thổ, nạp âm Canh Ngọ, thuộc hành Thổ."
+· [Thần số học] số chủ đạo 8 → ✅ "Chị hợp việc cầm tiền cầm người, giao gì cũng xong — kẹt ở chỗ ôm hết vào rồi tự mệt một mình." ❌ "Số chủ đạo 8 chủ về quyền lực, tài chính và tham vọng."`
+);
+
+// Khối dán vào MỌI prompt kịch bản của rail (~22 prompt / 24 toolType).
+// Ghép sẵn thành MỘT hằng số để mỗi prompt chỉ nội suy một chỗ — thêm tool mới
+// chép đúng dòng `${RAIL_SHAPE_AND_VOICE}` là có đủ cả hai, không sót nửa nào.
+//
+// 🔴 Nay là ARC, không còn `RAIL_CHAT_RULES` + `PERSONA_RULE` + `GIONG_NGUOI_RULES`.
+// Đo bằng Gemini thật trên 3 shape lá số (PR #542) rồi Henry test prod xác nhận:
+// tên riêng lọt ra màn hình **11,0 → 0,0** mỗi lượt · có câu lật góc nhìn
+// **0/3 → 3/3** · câu phán quyết in đậm **2/3 → 3/3**. THAY chứ không CỘNG —
+// dán arc lên trên bộ luật cũ là dựng lại đúng cảnh "ba bản bố cục chồng nhau"
+// mà #541 vừa gỡ, và bộ luật càng dày thì model càng chọn bừa một bản.
+//
+// ⚠️ `PERSONA_RULE` bỏ ở đây là CỐ Ý, không phải sót: nguyên văn nó (phong cách
+// là GIỌNG chứ không phải ĐỘ DÀI, luật độ dài luôn thắng) đã nằm gọn trong dòng
+// GIỌNG của arc. Giữ cả hai là hai bản nói cùng một luật.
+const RAIL_SHAPE_AND_VOICE = `${LUAN_ARC_CHUNG}
+
+${MAU_ARC_CHUNG}`;
 
 export const CHAT_SYSTEM_LASO = (ctx: string, docs?: string, persona?: string) => `Bạn là chuyên gia Tử Vi Đẩu Số. Phụng sự trang Tử Vi Minh Bảo.${persona ? '\n' + persona : ''}
 

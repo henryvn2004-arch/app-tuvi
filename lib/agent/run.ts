@@ -929,10 +929,17 @@ const CHAT_FOLLOWUP_RULE =
   'đó là ĐỒNG Ý / yêu cầu nói tiếp về CHÍNH câu hỏi hay đề nghị mà CHÍNH BẠN vừa nêu ở lượt trả lời TRƯỚC. ' +
   'Hãy luận TIẾP đúng chủ đề đó ngay, TUYỆT ĐỐI không hỏi lại "bạn muốn xem gì", không luận lại từ đầu, không đổi chủ đề.';
 
+// ⚠️ VÍ DỤ Ở ĐÂY LÀ THỨ MODEL BẮT CHƯỚC — nên nó phải theo cùng luật thuật ngữ
+// với `arcCore`. Bản cũ nêu "Cung Quan Lộc ra sao?": chip gợi ý là thứ ĐẦU TIÊN
+// người dùng nhìn thấy sau câu trả lời, mà phần lớn họ không rành bộ môn — mời
+// bằng jargon là mời vào chỗ họ không hiểu. Ba ví dụ mới cố ý viết bằng lời
+// thường và hỏi về ĐỜI, khớp với arc vừa nhân ra cho cả 25 tool.
 const CHAT_SUGGEST_RULES =
   'CUỐI CÙNG, sau khi luận xong, xuống dòng và ghi ĐÚNG một dòng bắt đầu bằng "SUGGEST: " ' +
   'gồm 3 câu hỏi ngắn (mỗi câu ≤ 12 từ) mà người dùng có thể muốn hỏi TIẾP, bám sát nội dung vừa luận, ' +
-  'ngăn cách bằng " | ". Ví dụ: SUGGEST: Cung Quan Lộc ra sao? | Năm sau công việc thế nào? | Có nên đổi nghề? ' +
+  'ngăn cách bằng " | ". Viết bằng LỜI THƯỜNG như người dùng sẽ tự gõ — không mở đầu bằng tên riêng ' +
+  'chuyên môn (tên sao, cung, quẻ, can chi…), trừ khi họ vừa hỏi thẳng về đúng thứ đó. ' +
+  'Ví dụ: SUGGEST: Công việc năm sau thế nào? | Có nên đổi nghề không? | Tiền bạc thì sao? ' +
   'Dòng này KHÔNG phải nội dung luận (hệ thống tách ra làm nút gợi ý, không hiển thị). Không ghi gì sau 3 câu đó.';
 
 // ── Thời gian thực (múi giờ VN) tiêm vào prompt ──────────────
