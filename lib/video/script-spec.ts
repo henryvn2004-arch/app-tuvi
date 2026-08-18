@@ -43,6 +43,17 @@
  * 1–2 giây không đổi kết luận) và cho bản xem trước khi chưa có giọng đọc.
  * Lúc RENDER THẬT thì đo ĐỘ DÀI THẬT của file mp3, không dùng ước lượng.
  */
+/*
+ * ⚠️ SỐ NÀY GẮN VỚI `CLIP_SPEED` trong `scripts/tts-clip.mjs` (hiện `1.15`).
+ *
+ * 13,59 đo được ở ĐÚNG tốc độ đó. Hai hằng số nằm ở hai file, KHÔNG có ràng
+ * buộc nào nối chúng — nên đổi `CLIP_SPEED` mà quên chỗ này thì cổng 1 lặng lẽ
+ * ước sai: đọc nhanh hơn mà vẫn tính theo tốc độ cũ ⇒ mọi clip bị chấm là "quá
+ * dài" và `rewriteSpec` đi cắt lời đọc cho một vấn đề không tồn tại.
+ *
+ * ⇒ Đổi tốc độ đọc thì PHẢI đo lại số này (chia theo tỉ lệ là ĐỦ GẦN: speed
+ * 1,15 → 1,30 thì 13,59 × 1,30/1,15 ≈ 15,4) và sửa CẢ HAI trong cùng một lượt.
+ */
 export const TTS_CHARS_PER_SECOND = 13.59;
 
 /** Ước lượng thời lượng đọc (giây) của một đoạn text, TRƯỚC khi gọi TTS. */

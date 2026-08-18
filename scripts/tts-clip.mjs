@@ -72,6 +72,11 @@ async function measure(path, bytes) {
  * ⚠️ 1.15 chứ KHÔNG phải 0.9 như pipeline vấn đáp. Hai loại nội dung khác hẳn
  * nhau: video vấn đáp là nghe thủng thẳng vài phút, còn clip TikTok phải dồn —
  * bản dựng đầu ở 0.9 nghe buồn ngủ, và trên TikTok buồn ngủ nghĩa là bị lướt.
+ *
+ * 🔗 SỐ NÀY GẮN VỚI `TTS_CHARS_PER_SECOND` (`lib/video/script-spec.ts`, hiện
+ * 13,59) — hằng số đó đo được ở ĐÚNG tốc độ 1.15. Đổi ở đây mà quên bên kia
+ * thì cổng 1 lặng lẽ ước sai và đi cắt lời đọc cho một vấn đề không có thật.
+ * Sửa thì sửa CẢ HAI trong cùng một lượt.
  */
 export const CLIP_SPEED = '1.15';
 

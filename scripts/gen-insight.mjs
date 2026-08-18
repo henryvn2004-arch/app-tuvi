@@ -66,7 +66,26 @@ const MAX_SECONDS = Number(val('--max-seconds', '240'));
  * không sao — nền tảng nào cũng nén lại; nhưng bản gửi đi DUYỆT thì có trần.
  * Hai nhu cầu khác nhau nên để người chạy chọn, đừng hạ chất lượng mặc định.
  */
-const CRF = val('--crf', '');
+/*
+ * ── KHỔ GIAO RA: 720×1280, KHÔNG phải 1080×1920 ───────────────────────────
+ *
+ * Khung DỰNG vẫn là 1080×1920 (`VIDEO` trong `remotion/src/brand.ts`) — mọi
+ * toạ độ trong `InsightClip.tsx` là số TUYỆT ĐỐI (ảnh 944×944, chữ ở top 1176),
+ * đổi `VIDEO` là bố cục tràn khung. `--scale` của Remotion thu nhỏ lúc RASTER
+ * nên toạ độ logic không đổi một chữ.
+ *
+ * 2/3 chọn vì nó cho ra số chẵn ở CẢ HAI chiều (1080→720, 1920→1280) — scale
+ * lẻ ra chiều lẻ thì h264 từ chối.
+ *
+ * Đổi lại: ít pixel hơn 2,25 lần ⇒ render nhanh hơn và file nhẹ hơn, mà khổ
+ * này vốn là khổ chuẩn của TikTok/Reels. Muốn bản 1080 thì `--scale 1`.
+ */
+const SCALE = val('--scale', String(2 / 3));
+/*
+ * Remotion mặc định CRF 18 (gần như không nén) — đó là lý do clip 2 phút ra
+ * 64–80MB. 23 là mức "nhìn không ra khác" của h264, giảm file ~2–3 lần.
+ */
+const CRF = val('--crf', '23');
 /** Khoảng "đẹp" cho clip dạy — ngoài khoảng chỉ WARN, không chặn. */
 const SWEET = [45, 120];
 
@@ -301,6 +320,10 @@ const outFile = join(REMOTION, 'out', `${ID}.${STILL ? 'png' : 'mp4'}`);
 
 console.log(`\n── RENDER ───────────────────────────────────`);
 console.log(`   ${STILL ? 'khung hình tĩnh' : 'video'} → ${outFile}`);
+if (!STILL) {
+  const s = Number(SCALE);
+  console.log(`   khổ: ${Math.round(1080 * s)}×${Math.round(1920 * s)}  ·  CRF ${CRF}`);
+}
 
 execFileSync(
   'npx',
@@ -313,6 +336,7 @@ execFileSync(
     `--props=${propsFile}`,
     ...(STILL ? [`--frame=${val('--frame', '40')}`] : []),
     ...(!STILL && CRF ? [`--crf=${CRF}`] : []),
+    ...(SCALE && SCALE !== '1' ? [`--scale=${SCALE}`] : []),
   ],
   {
     cwd: REMOTION,
