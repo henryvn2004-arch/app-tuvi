@@ -165,6 +165,36 @@ không với tới.
 - 🪤 **Phép đo `exit=0` đầu tiên của tôi SAI**: `$?` sau một pipe bắt mã thoát
   của `tail`, không phải của `node`. Đo lại không qua pipe → đúng **exit 1**.
 
+### 🔴 VAN MỞ RA CŨNG KHÔNG CÓ CLIP NÀO ĐI — hàng đợi ĐỨNG YÊN VĨNH VIỄN
+Đo `media_posts` trước khi khuyên Henry mở van `social.clip_autopost`:
+
+| | |
+|---|---:|
+| bài đang xếp hàng (đều là facebook) | **54** |
+| bài MỚI vào mỗi ngày (`social.build_daily`) | **3** |
+| trần ĐĂNG mỗi ngày (`social.publish_daily`) | **3** |
+| thứ tự `publishQueue` | `created_at.asc` — **CŨ TRƯỚC** |
+
+🔑 **VÀO 3 = RA 3 ⇒ tồn 54 bài KHÔNG BAO GIỜ vơi.** Không phải "xả 18 ngày rồi
+hết" — nó đứng nguyên ở 54 mãi mãi. Mà thứ tự là cũ-trước, nên một clip xếp
+hàng hôm nay nằm sau 54 bài ảnh **vĩnh viễn**: mở van ra thì **không clip nào
+đi**, và nhìn từ ngoài y hệt lúc đường clip hỏng.
+- ⚠️ Đây là chỗ dễ đọc nhầm nhất của cả track: mở van → im lặng → kết luận
+  "pipeline clip hỏng", trong khi mã chạy đúng và clip đang xếp hàng ngoan ngoãn.
+- **Thứ tự bắt buộc**: vá token Page Facebook **TRƯỚC** (54 bài kẹt từ 02/08 vì
+  `code 190 — session is invalid`), rồi nới trần đăng, **rồi mới** mở van clip.
+  Nới trần là một câu SQL, không cần deploy:
+  `update app_config set value='5'::jsonb where key='social.publish_daily';`
+  (5 ra − 3 vào = vơi 2/ngày ⇒ ~27 ngày sạch tồn.)
+- ⛔ **CỐ Ý không tự cho clip chen hàng.** Sửa thứ tự `created_at.asc` là đổi
+  hành vi một đường đang chạy prod để ưu tiên loại nội dung mình vừa làm — đó là
+  quyết định NỘI DUNG (đăng gì trước trên trang công khai), không phải kỹ thuật.
+- 🪤 **Phép đo đầu của tôi nói "3,38 bài/ngày, hàng đợi phình mãi"** — sai, đó là
+  trung bình cả bảng nên bị lượt seed 02/08 kéo lệch. Đếm THEO NGÀY thì đều đặn
+  đúng 3. Kết luận đúng không phải *"phình"* mà là *"đứng yên"*, và cái sau khó
+  thấy hơn hẳn: một hàng đợi phình lên thì có người để ý, một hàng đợi đứng yên
+  ở đúng con số cũ thì không.
+
 ### 🐞 Bắt kèm: sổ ghi SAI LOẠI clip — `clip-ingest` đóng cứng `'tool-demo'`
 Clip insight đầu tiên vào `media_assets` dưới nhãn `source_type='tool-demo'`.
 Chưa va vào gì (đường ảnh dùng `khao_luan`, hai bucket rời nhau) — nhưng hai
