@@ -1008,13 +1008,20 @@ export function measureMotion(ffmpeg, mp4Path, durationSec, tmpDir) {
   };
   const lum = (px, i, bpp) =>
     bpp === 1 ? px[i] : 0.299 * px[i] + 0.587 * px[i + 1] + 0.114 * px[i + 2];
+  // Trả CẢ HAI: trung bình trả lời "có động không", trung vị trả lời "động có
+  // TRẢI RA không". Một dải nhỏ động mạnh kéo được trung bình lên trong khi
+  // quá nửa khung đứng im — xem bảng số đo ở `scripts/stock-video.mjs`.
   const delta = (a, b) => {
-    let s = 0;
     const n = a.w * a.h;
+    const d = new Float64Array(n);
+    let s = 0;
     for (let k = 0; k < n; k++) {
-      s += Math.abs(lum(a.px, k * a.bpp, a.bpp) - lum(b.px, k * b.bpp, b.bpp));
+      const v = Math.abs(lum(a.px, k * a.bpp, a.bpp) - lum(b.px, k * b.bpp, b.bpp));
+      d[k] = v;
+      s += v;
     }
-    return s / n;
+    d.sort();
+    return { mean: s / n, spread: d[n >> 1] };
   };
 
   const A = join(tmpDir, '.mo-a.png');
@@ -1029,6 +1036,12 @@ export function measureMotion(ffmpeg, mp4Path, durationSec, tmpDir) {
     rmSync(A, { force: true });
     rmSync(B, { force: true });
   }
-  ds.sort((x, y) => x - y);
-  return Math.round(ds[1] * 100) / 100;
+  // Lấy mẫu GIỮA của ba lượt, cho từng chỉ số RIÊNG — một đoạn có thể động đều
+  // ở giữa mà đứng im ở đầu/cuối, gộp hai chỉ số theo cùng một lượt là để lượt
+  // ồn ào nhất quyết định cả hai.
+  const mid = (key) => {
+    const v = ds.map((d) => d[key]).sort((x, y) => x - y);
+    return Math.round(v[1] * 100) / 100;
+  };
+  return { mean: mid('mean'), spread: mid('spread') };
 }

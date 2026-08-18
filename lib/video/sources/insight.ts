@@ -823,8 +823,8 @@ const SOURCES: InsightSource[] = [
        * `VideoBackdrop` tự bọc `<Loop>` — vì thế `backdropSeconds` là BẮT BUỘC
        * ở đây, bỏ trống là đoạn phim đứng ở khung cuối suốt phần còn lại.
        */
-      backdropVideo: 'stock-video/tone/tinh-lang/3138.mp4',
-      backdropSeconds: 27,
+      backdropVideo: 'stock-video/tone/thien-nhien-toi/203449.mp4',
+      backdropSeconds: 15,
       music: 'tram-tinh.wav',
       hashtags: ['tinhcach', 'tamly', 'selfdiscovery', 'tuvi'],
     },

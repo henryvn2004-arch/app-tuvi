@@ -29,7 +29,8 @@
       "author": "Coverr-Free-Footage",
       "authorURL": "https://pixabay.com/users/1281706/",
       "license": "Pixabay Content License",
-      "fetchedAt": "2026-08-18"
+      "fetchedAt": "2026-08-18",
+      "motionSpread": 12.64
     },
     {
       "id": "suy-tu-117690",
@@ -57,35 +58,8 @@
       "author": "Kaffeesüchtig",
       "authorURL": "https://pixabay.com/users/19168820/",
       "license": "Pixabay Content License",
-      "fetchedAt": "2026-08-18"
-    },
-    {
-      "id": "be-tac-124170",
-      "bucket": "tone",
-      "key": "be-tac",
-      "file": "tone/be-tac/124170.mp4",
-      "caption": "gate, door, tunnel, view, old, ancient, vista, walk, passage, architecture, tower, fortress, castle, park, trees, city",
-      "width": 3840,
-      "height": 2160,
-      "duration": 22,
-      "bytes": 46170582,
-      "brightness": {
-        "mean": 77,
-        "sd": 77.8
-      },
-      "motion": 12.15,
-      "sat": 26.5,
-      "detail": 12.6,
-      "score": 30,
-      "matched": ["22s"],
-      "textSafe": true,
-      "provider": "pixabay",
-      "providerId": 124170,
-      "pageURL": "https://pixabay.com/videos/id-124170/",
-      "author": "ChristianBodhi",
-      "authorURL": "https://pixabay.com/users/9869182/",
-      "license": "Pixabay Content License",
-      "fetchedAt": "2026-08-18"
+      "fetchedAt": "2026-08-18",
+      "motionSpread": 10.99
     },
     {
       "id": "chia-xa-152798",
@@ -113,63 +87,8 @@
       "author": "ghasoub",
       "authorURL": "https://pixabay.com/users/2782812/",
       "license": "Pixabay Content License",
-      "fetchedAt": "2026-08-18"
-    },
-    {
-      "id": "chia-xa-120547",
-      "bucket": "tone",
-      "key": "chia-xa",
-      "file": "tone/chia-xa/120547.mp4",
-      "caption": "station, freight depot, traffic, train, railroad, freight train, regional train, highway, drone, aerial view, mannheim",
-      "width": 1920,
-      "height": 1080,
-      "duration": 65,
-      "bytes": 47040697,
-      "brightness": {
-        "mean": 68.9,
-        "sd": 40
-      },
-      "motion": 6.14,
-      "sat": 19.7,
-      "detail": 8.8,
-      "score": 38,
-      "matched": ["65s"],
-      "textSafe": true,
-      "provider": "pixabay",
-      "providerId": 120547,
-      "pageURL": "https://pixabay.com/videos/id-120547/",
-      "author": "VP68",
-      "authorURL": "https://pixabay.com/users/9230205/",
-      "license": "Pixabay Content License",
-      "fetchedAt": "2026-08-18"
-    },
-    {
-      "id": "bi-an-231659",
-      "bucket": "tone",
-      "key": "bi-an",
-      "file": "tone/bi-an/231659.mp4",
-      "caption": "lake, forest, highlands, hill, pleiku, gialai, tea, country, tan son, scenery, pagoda, travel, vietnam, ancient",
-      "width": 2160,
-      "height": 3840,
-      "duration": 17,
-      "bytes": 36290942,
-      "brightness": {
-        "mean": 90.2,
-        "sd": 53.3
-      },
-      "motion": 7.06,
-      "sat": 9.5,
-      "detail": 4.2,
-      "score": 98,
-      "matched": ["châu Á", "dọc"],
-      "textSafe": true,
-      "provider": "pixabay",
-      "providerId": 231659,
-      "pageURL": "https://pixabay.com/videos/id-231659/",
-      "author": "ductammedia",
-      "authorURL": "https://pixabay.com/users/44255900/",
-      "license": "Pixabay Content License",
-      "fetchedAt": "2026-08-18"
+      "fetchedAt": "2026-08-18",
+      "motionSpread": 30.44
     },
     {
       "id": "bi-an-102",
@@ -197,63 +116,8 @@
       "author": "Coverr-Free-Footage",
       "authorURL": "https://pixabay.com/users/1281706/",
       "license": "Pixabay Content License",
-      "fetchedAt": "2026-08-18"
-    },
-    {
-      "id": "hoai-niem-128126",
-      "bucket": "tone",
-      "key": "hoai-niem",
-      "file": "tone/hoai-niem/128126.mp4",
-      "caption": "wheat, grain, bread grain, food",
-      "width": 2560,
-      "height": 1440,
-      "duration": 40,
-      "bytes": 21112470,
-      "brightness": {
-        "mean": 24.3,
-        "sd": 49.8
-      },
-      "motion": 9.49,
-      "sat": 9.6,
-      "detail": 8.1,
-      "score": 65,
-      "matched": ["retro", "40s"],
-      "textSafe": true,
-      "provider": "pixabay",
-      "providerId": 128126,
-      "pageURL": "https://pixabay.com/videos/id-128126/",
-      "author": "adege",
-      "authorURL": "https://pixabay.com/users/4994132/",
-      "license": "Pixabay Content License",
-      "fetchedAt": "2026-08-18"
-    },
-    {
-      "id": "tinh-lang-3138",
-      "bucket": "tone",
-      "key": "tinh-lang",
-      "file": "tone/tinh-lang/3138.mp4",
-      "caption": "bridge, night, city, lights, water, reflection, ripples, river, skyline, cityscape, urban",
-      "width": 1920,
-      "height": 1080,
-      "duration": 27,
-      "bytes": 15244717,
-      "brightness": {
-        "mean": 41.4,
-        "sd": 46.2
-      },
-      "motion": 11.77,
-      "sat": 17.4,
-      "detail": 10.8,
-      "score": 54,
-      "matched": ["moody×1", "27s"],
-      "textSafe": true,
-      "provider": "pixabay",
-      "providerId": 3138,
-      "pageURL": "https://pixabay.com/videos/id-3138/",
-      "author": "Life-Of-Vids",
-      "authorURL": "https://pixabay.com/users/1282862/",
-      "license": "Pixabay Content License",
-      "fetchedAt": "2026-08-18"
+      "fetchedAt": "2026-08-18",
+      "motionSpread": 32.84
     },
     {
       "id": "toi-gian-57545",
@@ -281,7 +145,8 @@
       "author": "19293352",
       "authorURL": "https://pixabay.com/users/19293352/",
       "license": "Pixabay Content License",
-      "fetchedAt": "2026-08-18"
+      "fetchedAt": "2026-08-18",
+      "motionSpread": 9.42
     },
     {
       "id": "thien-nhien-toi-203449",
@@ -309,7 +174,8 @@
       "author": "JoshuaWoroniecki",
       "authorURL": "https://pixabay.com/users/12734309/",
       "license": "Pixabay Content License",
-      "fetchedAt": "2026-08-18"
+      "fetchedAt": "2026-08-18",
+      "motionSpread": 7.66
     },
     {
       "id": "thien-nhien-toi-90998",
@@ -337,7 +203,8 @@
       "author": "domukuk",
       "authorURL": "https://pixabay.com/users/23648560/",
       "license": "Pixabay Content License",
-      "fetchedAt": "2026-08-18"
+      "fetchedAt": "2026-08-18",
+      "motionSpread": 5.56
     }
   ],
   "generatedAt": "2026-08-18"

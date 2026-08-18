@@ -127,9 +127,38 @@ const SCREEN_CAP = 24;
  * ⚠️ `MOTION_MIN` hiệu chỉnh trên ba mẫu đó — ít, nên đây là NGƯỠNG KHỞI ĐIỂM
  * chứ không phải một phép đo chắc. `MOTION_MAX` thì lỏng hẳn, chỉ để chặn đoạn
  * rung giật / cắt cảnh liên tục; phần "nền rối" đã có `DETAIL_MAX` lo.
+ *
+ * 🔴 VÒNG SAU — MỘT NGƯỠNG TRUNG BÌNH LÀ CHƯA ĐỦ, VÀ ĐÂY LÀ BẰNG CHỨNG.
+ * Cổng trên đo TRUNG BÌNH |Δ| toàn khung. Trung bình thì **một dải nhỏ động
+ * mạnh gánh được cả khung đứng im** — đúng thứ vừa để lọt. Đo lại 12 đoạn
+ * đang có, đặt trung bình cạnh TRUNG VỊ:
+ *
+ *     đoạn                       TB (cổng cũ)   trung vị
+ *     cầu đêm + mặt nước             11,77          0,9   ← lọt, mà là ảnh tĩnh
+ *     đồng lúa mì                     9,49          0,0   ← LỌT, KHÔNG MỘT ĐIỂM ẢNH NÀO ĐỔI
+ *     hồ Pleiku                       7,06          1,2
+ *     sân ga                          6,14          2,3
+ *     cổng vòm                       12,15          3,8
+ *     rừng đêm sao                   11,30          5,6
+ *     rừng tối                       22,61          7,7
+ *     siêu thực                      14,23          9,4
+ *     mây vần                        14,61         11,0
+ *     phố Ấn Độ                      20,42         12,6
+ *     đèn lắc trong gió              38,54         32,8
+ *     đôi bàn tay trên phố           42,55         30,4
+ *
+ * ⇒ Trung bình 9,49 mà trung vị **0,0**: quá nửa khung hình KHÔNG đổi một đơn
+ * vị nào trong trọn một giây. Cổng cũ chấm nó là "đủ động".
+ *
+ * 🔑 Hai con số trả lời hai câu khác nhau, phải hỏi CẢ HAI:
+ *     TRUNG BÌNH → "có chuyển động không?"
+ *     TRUNG VỊ   → "chuyển động có TRẢI RA KHÔNG, hay dồn vào một dải?"
+ * Mắt người đọc ra "video" theo câu thứ hai. `MOTION_SPREAD_MIN = 5` cắt đúng
+ * chỗ dữ liệu tự tách (3,8 ↔ 5,6), không phải số chọn cho vừa.
  */
 const MOTION_MIN = 6;
 const MOTION_MAX = 45;
+const MOTION_SPREAD_MIN = 5;
 
 /**
  * Phải khớp ÍT NHẤT MỘT tiêu chí brief (châu Á · moody · retro · huyền bí · dọc
@@ -429,20 +458,24 @@ for (const [bucketName, items] of groups) {
         if (buf.length < 10240) throw new Error(`tệp chỉ ${buf.length} byte`);
         writeFileSync(abs, buf);
 
-        const motion = measureMotion(ffmpeg, abs, w.hit.duration, dir);
-        if (motion < MOTION_MIN || motion > MOTION_MAX) {
+        const mo = measureMotion(ffmpeg, abs, w.hit.duration, dir);
+        const motion = mo.mean;
+        const spread = mo.spread;
+        // Ba nhánh TỪ CHỐI, và nhánh thứ ba là nhánh mới: động đủ mạnh nhưng
+        // dồn vào một dải ⇒ phần lớn khung hình vẫn đứng im ⇒ mắt đọc ra ảnh
+        // tĩnh. Xem bảng số đo ở khối chú thích `MOTION_SPREAD_MIN`.
+        const badMotion =
+          motion < MOTION_MIN
+            ? `gần như đứng im (TB ${motion}/giây)`
+            : motion > MOTION_MAX
+              ? `động quá (TB ${motion}/giây)`
+              : spread < MOTION_SPREAD_MIN
+                ? `động dồn một dải — quá nửa khung đứng im (trung vị ${spread}, TB ${motion})`
+                : null;
+        if (badMotion) {
           rmSync(abs, { force: true });
-          rejected.push({
-            id: w.hit.id,
-            why:
-              motion < MOTION_MIN
-                ? `gần như đứng im (${motion}/giây)`
-                : `động quá (${motion}/giây)`,
-          });
-          console.log(
-            `   ↷ bỏ ${String(w.hit.id).padEnd(9)} độ động ${motion}/giây ` +
-              `(cần ${MOTION_MIN}–${MOTION_MAX})`
-          );
+          rejected.push({ id: w.hit.id, why: badMotion });
+          console.log(`   ↷ bỏ ${String(w.hit.id).padEnd(9)} ${badMotion}`);
           continue;
         }
 
@@ -460,6 +493,7 @@ for (const [bucketName, items] of groups) {
           bytes: buf.length,
           brightness: { mean: w.m.mean, sd: w.m.sd },
           motion,
+          motionSpread: spread,
           sat: w.m.sat,
           detail: w.m.detail,
           score: w.score,
@@ -476,7 +510,7 @@ for (const [bucketName, items] of groups) {
         console.log(
           `   ✓ ${String(w.hit.id).padEnd(9)} điểm ${String(w.score).padStart(3)} ` +
             `${w.r.width}x${w.r.height} ${w.hit.duration}s ` +
-            `${(buf.length / 1048576).toFixed(1)}MB L=${w.m.mean} động=${motion} [${w.why.join(' ')}]  ` +
+            `${(buf.length / 1048576).toFixed(1)}MB L=${w.m.mean} động=${motion}/${spread} [${w.why.join(' ')}]  ` +
             captionFromTags(w.hit.tags).slice(0, 34)
         );
       } catch (e) {
