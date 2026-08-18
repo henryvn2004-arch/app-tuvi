@@ -49,6 +49,7 @@ import { existsSync, mkdirSync, statSync, appendFileSync } from 'fs';
 import { join } from 'path';
 import { TOOL_RECIPES } from './tool-recipes.mjs';
 import { EXIT_GATE } from './video-lib.mjs';
+import { jobStart, jobEnd } from './job-heartbeat.mjs';
 
 const ROOT = new URL('..', import.meta.url).pathname;
 const OUT_DIR = join(ROOT, 'remotion/out');
@@ -349,6 +350,15 @@ if (DRY) {
 }
 
 mkdirSync(OUT_DIR, { recursive: true });
+
+/*
+ * Mở NHỊP TIM cho panel Cron & Jobs.
+ *
+ * 🔑 Đặt SAU nhánh `--dry-run` (thoát ở trên): lượt khảo sát không phải một lượt
+ * chạy thật, ghi nó vào sổ là làm bẩn đúng cái bảng dùng để biết job có chạy hay
+ * không — cùng lý do `withCronLog` bỏ qua lượt build-time.
+ */
+const runId = await jobStart('video-build', `${jobs.length} clip trong danh sách`);
 const results = [];
 
 for (const job of jobs) {
@@ -521,6 +531,18 @@ if (process.env.GITHUB_STEP_SUMMARY) {
         : '')
   );
 }
+
+// Chốt nhịp tim TRƯỚC khi thoát.
+//
+// ⚠️ `status` ở đây phải nói CÙNG MỘT NGÔN NGỮ với mã thoát, nếu không panel và
+// đèn CI nói ngược nhau: cổng-chặn/hoãn KHÔNG phải hỏng (xem chú thích dưới),
+// nên chúng vào `ok` chứ không vào `error`.
+await jobEnd(
+  runId,
+  failed.length ? 'error' : 'ok',
+  `${done.length} xong · ${failed.length} trượt · ${boiCong.length} cổng chặn · ` +
+    `${results.length - done.length - failed.length - boiCong.length} bỏ qua/hoãn`
+);
 
 // Trượt thì hỏng to. Bỏ qua/hoãn/cổng-chặn thì không — cả ba là hành vi ĐÚNG,
 // và chúng xảy ra gần như mỗi tuần. Nhét chúng vào mã thoát khác 0 là biến đèn

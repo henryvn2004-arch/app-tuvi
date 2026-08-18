@@ -1,5 +1,10 @@
-// clip-ingest v3 — nhận một clip 9:16 từ GitHub Actions, cất vào Storage, ghi
-// một dòng vào `media_assets`, và (SAU MỘT CÁI VAN) xếp hàng đăng.
+// clip-ingest v4 — CỬA HẸP cho GitHub Actions ghi vào DB. Hai việc:
+//   · nộp một clip 9:16 → Storage + `media_assets` + (sau một CÁI VAN) `media_posts`
+//   · `?job=1` → ghi nhịp tim lượt dựng vào `cron_runs` (panel Cron & Jobs)
+//
+// v3 → v4: thêm nhánh `?job=1`. Lượt dựng chạy trên Actions nên không đi qua
+// `withCronLog` ⇒ trước đây nó VẮNG MẶT hoàn toàn trên trang giám sát, muốn
+// xem phải mở tab Actions. Xem khối chú thích tại chỗ.
 //
 // v2 → v3: `source_type` do người nộp khai (mặc định giữ `tool-demo`) — bản
 // trước đóng cứng nên clip insight vào sổ dưới nhãn của loại khác.
@@ -79,7 +84,85 @@ Deno.serve(async (req) => {
   if (!SB_URL || !SB_KEY) return json({ error: 'missing_env: SUPABASE_URL/SERVICE_ROLE_KEY' }, 500);
 
   // Soát khoá mà không kèm file — xem chú thích ngay trên.
-  if (new URL(req.url).searchParams.get('ping')) return json({ ok: true });
+  const qs = new URL(req.url).searchParams;
+  if (qs.get('ping')) return json({ ok: true });
+
+  /*
+   * ── NHỊP TIM CỦA LƯỢT DỰNG (`?job=1`) ─────────────────────────────────────
+   *
+   * 🔑 VÌ SAO NẰM TRONG HÀM NÀY chứ không phải một hàm riêng: đây CÙNG MỘT bài
+   * toán với việc nộp clip — runner cần ghi vào DB mà KHÔNG được cầm
+   * `SUPABASE_SERVICE_KEY`. Dựng hàm thứ hai là thêm một secret nữa phải phát,
+   * xoay và nhớ, để giải đúng bài toán đã giải. Hàm này vì thế là "cửa hẹp cho
+   * runner ghi vào DB", không chỉ là "cửa nộp clip".
+   *
+   * 🔴 VÀ VÌ SAO CẦN: lượt dựng clip chạy trên GitHub Actions nên KHÔNG đi qua
+   * `withCronLog` ⇒ không có dòng nào trong `cron_runs` ⇒ panel Cron & Jobs
+   * không bao giờ thấy nó. Đúng lớp lỗi đã đẻ ra cả track S4: job chạy thật mà
+   * vắng mặt trên trang giám sát thì chết bao lâu cũng không ai biết.
+   *
+   * HAI BƯỚC, cố ý: mở lượt (`running`) rồi chốt lượt. Lượt dựng chạy tới 150
+   * phút và bị giết giữa chừng là ca RẤT dễ xảy ra (hết ngân sách, runner bị
+   * thu hồi) — lúc đó bước chốt không bao giờ tới, dòng `running` nằm treo, và
+   * bộ dò `stuck` bắt được trong 90 phút. Ghi một dòng duy nhất lúc xong thì ca
+   * đó KHÔNG để lại dấu vết nào, và job TUẦN phải đợi cả tuần mới bị kêu.
+   */
+  if (qs.get('job')) {
+    let b: Record<string, unknown> = {};
+    try {
+      b = await req.json();
+    } catch {
+      return json({ error: 'cần JSON' }, 400);
+    }
+    const runId = Number(b.runId) || 0;
+    const jobKey = String(b.jobKey ?? '');
+    // `jobKey` chỉ bắt buộc khi MỞ lượt. Lúc chốt thì `runId` đã trỏ đúng dòng,
+    // đòi thêm jobKey là bắt phía gọi mang theo một giá trị không dùng tới —
+    // và chỗ nào phải mang một giá trị vô nghĩa thì chỗ đó sẽ bịa ra một giá trị.
+    if (!runId && !SLUG.test(jobKey)) return json({ error: 'jobKey không hợp lệ' }, 400);
+
+    const status = String(b.status ?? 'running');
+    if (!['running', 'ok', 'error', 'skip'].includes(status)) {
+      return json({ error: 'status không hợp lệ' }, 400);
+    }
+    // Cắt ghi chú: cột `note` đi thẳng lên panel, một bãi log dán vào đó làm
+    // bảng vỡ bố cục mà chẳng ai đọc hết.
+    const note = b.note == null ? null : String(b.note).slice(0, 500);
+
+    if (!runId) {
+      const ins = await fetch(`${SB_URL}/rest/v1/cron_runs`, {
+        method: 'POST',
+        headers: { ...H, 'Content-Type': 'application/json', Prefer: 'return=representation' },
+        body: JSON.stringify([{ job_key: jobKey, source: 'actions', status, note }]),
+      });
+      if (!ins.ok) return json({ error: `cron_runs: ${await ins.text()}` }, 502);
+      const rows = (await ins.json()) as Array<{ id: number; started_at: string }>;
+      return json({ ok: true, runId: rows[0]?.id ?? null, startedAt: rows[0]?.started_at ?? null });
+    }
+
+    // Chốt lượt. `duration_ms` tính từ `started_at` ĐÃ LƯU chứ không nhận từ
+    // runner: đồng hồ của runner là thứ mình không kiểm được, mà cột này đi
+    // thẳng vào phép đo "job chạy bao lâu".
+    const cur = await fetch(
+      `${SB_URL}/rest/v1/cron_runs?id=eq.${runId}&select=started_at`,
+      { headers: H }
+    );
+    const curRows = cur.ok ? ((await cur.json()) as Array<{ started_at: string }>) : [];
+    const t0 = curRows[0]?.started_at ? Date.parse(curRows[0].started_at) : 0;
+
+    const patch = await fetch(`${SB_URL}/rest/v1/cron_runs?id=eq.${runId}`, {
+      method: 'PATCH',
+      headers: { ...H, 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        status,
+        note,
+        finished_at: new Date().toISOString(),
+        ...(t0 ? { duration_ms: Date.now() - t0 } : {}),
+      }),
+    });
+    if (!patch.ok) return json({ error: `cron_runs: ${await patch.text()}` }, 502);
+    return json({ ok: true, runId });
+  }
 
   let form: FormData;
   try {

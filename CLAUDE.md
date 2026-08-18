@@ -551,6 +551,59 @@ facebook reels, instagram, tiktok"*. Đo rồi trả lời: **không đi đượ
 - 🔑 Ghi lại để khỏi đi khám phá lại: đừng đo "Supabase có phình không" bằng
   bucket `clips`. Hai bucket kia lớn gấp 8–9 lần.
 
+### 👁️ Lượt DỰNG clip nay hiện ở panel Cron & Jobs — mắt xích cuối còn vô hình
+Henry: *"Mà tao monitor ở trong admin page ah?"* → đo ra một chỗ hụt: panel chỉ
+thấy clip **TỪ LÚC nó đã vào kho**. Khâu DỰNG chạy trên GitHub Actions nên không
+đi qua `withCronLog` ⇒ 0 dòng trong `cron_runs` ⇒ nhìn vào panel thì *"khâu dựng
+chết"* và *"tuần này không clip nào qua cổng"* trông y hệt nhau.
+- 🔑 Đúng lỗi gốc đã đẻ ra cả cuốn sổ `lib/ops/jobs.ts`: **job chạy thật mà vắng
+  mặt trên trang giám sát thì chết bao lâu cũng không ai biết** (CMO Digest từng
+  chết 14 ngày vì thế).
+- **Ghi nhịp tim qua hàm edge `clip-ingest?job=1`** (v4), KHÔNG dựng hàm mới:
+  cùng một bài toán đã giải — runner phải ghi DB mà CỐ Ý không cầm
+  `SUPABASE_SERVICE_KEY`. Hàm này nay là *"cửa hẹp cho runner ghi vào DB"*, không
+  chỉ *"cửa nộp clip"*; chú thích đầu file đã sửa theo (chú thích nói ngược code
+  còn tệ hơn không có).
+- **HAI BƯỚC — mở lượt `running` rồi chốt.** Lượt dựng chạy tới 150 phút, bị
+  runner thu hồi giữa chừng là ca RẤT dễ xảy ra; lúc đó bước chốt không tới, dòng
+  `running` nằm treo và bộ dò `stuck` bắt trong **90 phút**. Ghi một dòng duy nhất
+  lúc xong thì ca đó **không để lại dấu vết nào**, mà job TUẦN phải đợi cả tuần
+  mới bị kêu quá hạn.
+- `duration_ms` tính từ `started_at` ĐÃ LƯU, không nhận từ runner — đồng hồ của
+  runner là thứ mình không kiểm được, mà cột đó đi thẳng vào phép đo.
+- 🔑 **`source: 'actions'` KHÔNG khai `path`** ⇒ panel không hiện nút *"Chạy
+  ngay"* (admin không kích được workflow GitHub), thay bằng link **↗ Mở Actions**.
+  Hiện nút rồi báo lỗi là tái lập đúng bẫy *9 nút bấm ra "Unknown job"*.
+- **Luật 6** trong `check:jobs`: `source='actions'` phải khai `workflow`, và file
+  đó phải CÓ THẬT trong `.github/workflows/` — cùng tinh thần luật 2 (route thật).
+- ⚠️ **FAIL-SOFT tuyệt đối** ở `scripts/job-heartbeat.mjs`: không ghi được nhịp
+  tim thì KHÔNG được làm hỏng lượt dựng. Đây là lớp GIÁM SÁT; để nó chặn lượt
+  dựng là đổi một điểm mù lấy một lượt hỏng.
+- URL hàm edge dựng Y HỆT `publish-clips.mjs` (cùng hàm, cùng secret) — hai chỗ
+  ghép URL hai kiểu thì lệch nghĩa là nhịp tim im lặng không ghi trong khi clip
+  vẫn nộp bình thường, đúng loại điểm mù khối này sinh ra để chống.
+
+### Verify
+`tsc` 0 · `lint` 0 lỗi / 77 warning = mốc nền · `prettier` cả cây sạch ·
+`check:jobs` 21 job khớp · 4 khối script admin `node --check` OK · YAML parse lại
+xác nhận `CLIP_INGEST_SECRET` có ở bước *Dựng clip* và `schedule` vẫn dưới `on:`.
+- **13 ca trên `job-heartbeat.mjs` THẬT** (server HTTP thật, không mock fetch):
+  thiếu env → **0 lượt mạng** · mở lượt gửi đúng đường `/functions/v1/clip-ingest?job=1`
+  + đúng secret + `status=running` và **KHÔNG gửi runId** (đó là cách server biết
+  là INSERT) · chốt lượt gửi runId và **không bịa jobKey** · **server chết → KHÔNG
+  ném**, trả `null`.
+- **17 ca trên MÃ NGUỒN THẬT của hàm edge** (chỉ thay 2 global `Deno`/`fetch`):
+  INSERT đúng `cron_runs` với `source='actions'` · chốt lượt đọc `started_at` rồi
+  PATCH đúng dòng, `duration_ms` đo được 5.000ms · **sai khoá → 401 và 0 lượt ghi
+  DB** · `jobKey` rác → 400, 0 lượt ghi · `status` ngoài tập → 400 · note 2000 ký
+  tự cắt còn 500 · **2 ca ĐỐI CHỨNG đường nộp clip cũ không hồi quy** (không có
+  `?job` → vẫn đòi multipart; `?ping` vẫn 200).
+- **8 ca Playwright trên CHÍNH `admin.html`** (gọi `loadCron()` thật): badge
+  `actions`, link trỏ đúng file workflow, **KHÔNG có nút Chạy ngay**, + **ĐỐI
+  CHỨNG** job Vercel vẫn có nút và không có link Actions.
+- 🪤 Bẫy cũ vấp lại: `playwright` không resolve khi chạy spec từ scratchpad —
+  phải chạy trong cây repo.
+
 ### 🪤 Bẫy đã vấp
 - **`import()` một script CLI là CHẠY nó.** Lượt kiểm cú pháp cuối vô ý gọi
   `import('scripts/stock-video.mjs')` → script bắt đầu gọi API Pixabay thật.

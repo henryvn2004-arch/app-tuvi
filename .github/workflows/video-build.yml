@@ -163,6 +163,11 @@ jobs:
           # `--no-audience` VÀ NÓI RÕ trong tóm tắt — không bỏ qua im lặng.
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          # NHỊP TIM cho panel Cron & Jobs — cùng khoá đã dùng để nộp clip, hàm
+          # edge `clip-ingest?job=1` ghi hộ vào `cron_runs` (runner cố ý không
+          # cầm service key). Chưa khai thì lượt dựng vẫn chạy y như cũ, chỉ là
+          # panel không thấy nó: `scripts/job-heartbeat.mjs` fail-soft tuyệt đối.
+          CLIP_INGEST_SECRET: ${{ secrets.CLIP_INGEST_SECRET }}
           # ⚠️ Ô nhập của người dùng đi qua ENV, KHÔNG nội suy `${{ }}` thẳng vào
           # thân `run`. Nội suy thẳng thì một tên tool có dấu `;` chạy được lệnh
           # tuỳ ý trong runner. Chỉ cộng tác viên mới bấm được workflow_dispatch
