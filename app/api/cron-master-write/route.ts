@@ -9,6 +9,7 @@ import { parseLlmJson } from '@/lib/llm/json';
 import { withCronLog } from '@/lib/cron/log';
 import { brandCheck } from '@/lib/content/brand-check';
 import { BRAND_FORMAT_RULES } from '@/lib/content/brand-rules';
+import { VIRAL_KE_CHUYEN, HOOK_RULES } from '@/lib/content/viral-core';
 import { initialPublishStatus } from '@/lib/content/publish-filter';
 
 const SUPABASE_URL  = process.env.SUPABASE_URL!;
@@ -273,6 +274,8 @@ KỸ THUẬT KỂ CHUYỆN — TUÂN THỦ NGHIÊM:
 7. KẾT NHỎ, CÁ NHÂN
    Không kết luận lớn lao. Một quan sát nhỏ, thật, từ góc nhìn của bạn. Ký tên *${master.display_name}*.
 
+${VIRAL_KE_CHUYEN}
+
 FORMAT: 1200-1500 từ, markdown (## cho mục chính, **bold** cho điểm nhấn, > cho câu chiêm nghiệm đáng nhớ)
 KHÔNG đề cập AI, không học thuật cứng nhắc, không câu mở theo kiểu "Trong hành trình..."
 
@@ -300,8 +303,10 @@ async function extractMetadata(topic: string, content: string): Promise<Omit<Mas
   const prompt = `Chủ đề: "${topic}"
 Mở bài: ${preview}
 
+${HOOK_RULES}
+
 Tạo metadata JSON một dòng duy nhất (KHÔNG backtick, KHÔNG xuống dòng trong JSON):
-{"title":"tiêu đề hấp dẫn 50-75 ký tự","slug":"slug-ascii","excerpt":"tóm tắt gợi cảm xúc dưới 155 ký tự","category":"chiem-nghiem hoặc luan-la-so hoặc hoc-thuat","tags":["tag1","tag2","tag3"]}`;
+{"title":"tiêu đề ≤60 ký tự theo luật ở trên","slug":"slug-ascii","excerpt":"tóm tắt ≤155 ký tự theo luật ở trên","category":"chiem-nghiem hoặc luan-la-so hoặc hoc-thuat","tags":["tag1","tag2","tag3"]}`;
 
   // 250 token cho title + slug + excerpt 155 ký tự + 3 tag bằng tiếng Việt là
   // rất sát — nới lên 500. Chỗ này ĐÃ có nhánh dự phòng ở caller nên hỏng không

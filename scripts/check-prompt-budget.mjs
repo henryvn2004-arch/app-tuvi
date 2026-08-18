@@ -79,6 +79,21 @@ function grabBlocks(src) {
   return out;
 }
 
+// ── Bóc hằng chuỗi THƯỜNG `const NAME = '...'` ────────────────────────────
+// 🔴 Vì sao phải có: `grabBlocks` chỉ bóc template literal (backtick). Khi arc
+// nhận thêm slot lấy giá trị từ hằng ngoài (`boiCanh: CHAT_BOICANH`), bộ dò
+// resolve slot đó ra RỖNG và báo hụt 550 ký tự trên cả ba shape — trong khi
+// A/B trên module thật cho thấy prompt KHÔNG đổi một byte. Đo hụt thì trần
+// ngân sách mất tác dụng đúng lúc cần nhất: nó sẽ báo còn dư chỗ trong khi
+// prompt đã sát trần.
+function grabStringConsts(src, raw) {
+  const re = /(?:export\s+)?const\s+([A-Z_][A-Z0-9_]*)\s*=\s*\n?\s*(['"])((?:[^\\]|\\.)*?)\2\s*;/g;
+  let m;
+  while ((m = re.exec(src))) {
+    if (raw[m[1]] === undefined) raw[m[1]] = m[3];
+  }
+}
+
 // ── Mở rộng hằng dựng bằng LỜI GỌI HÀM: `const NAME = fn({...})` / `fn(a, b)` ──
 // 🔴 Vì sao phải có: khi arc chuyển từ template literal sang HÀM `arcCore(...)`
 // (để 2 họ prompt dùng chung một lõi), bộ dò cũ không bóc được → `LUAN_ARC`
@@ -105,6 +120,18 @@ function expandFactories(src, raw) {
     const vals = {};
     const strs = [...argsRaw.matchAll(/(?:^|[\s,{])([a-zA-Z]+):\s*\n?\s*(['"`])([\s\S]*?)\2\s*,/g)];
     if (strs.length) for (const g of strs) vals['o.' + g[1]] = g[3];
+    // Đối số dạng `khoa: TEN_HANG,` — tra sang bảng hằng. Không tra được thì
+    // DỪNG HẲN: đọc ra rỗng rồi báo xanh còn tệ hơn báo đỏ (bài học check:motifs).
+    for (const g of argsRaw.matchAll(/(?:^|[\s,{])([a-zA-Z]+):\s*([A-Z_][A-Z0-9_]*)\s*,/g)) {
+      if (raw[g[2]] === undefined) {
+        console.error(
+          `✗ \`${name}\` truyền \`${g[1]}: ${g[2]}\` nhưng không bóc được hằng \`${g[2]}\`.\n` +
+            `  Sửa bộ dò cho khớp — đừng để nó đo ra chuỗi rỗng rồi báo xanh.`
+        );
+        process.exit(1);
+      }
+      vals['o.' + g[1]] = raw[g[2]];
+    }
     const pos = [...argsRaw.matchAll(/(?:^|,)\s*(['"`])([\s\S]*?)\1\s*(?=,|$)/g)].map((g) => g[2]);
     raw[name] = body.replace(/\$\{([^{}]+)\}/g, (full, expr) => {
       const e = expr.trim();
@@ -150,6 +177,7 @@ function directRefs(body) {
 const src = readFileSync(FILE, 'utf8');
 const raw = grabBlocks(src);
 grabParams(src, raw);
+grabStringConsts(src, raw);
 expandFactories(src, raw);
 const errors = [];
 
