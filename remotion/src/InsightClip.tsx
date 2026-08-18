@@ -104,8 +104,9 @@ export type InsightProps = {
    */
   backdropVideo?: string;
   /**
-   * Tốc độ phát nền. Mặc định 0,5 — xem khối chú thích của `VideoBackdrop`.
-   * Đây là CẦN GẠT chính để chỉnh mức "nền có tranh mắt không".
+   * Tốc độ phát nền. Mặc định **1,0** — xem bảng số đo ở `VideoBackdrop`.
+   * Đây là CẦN GẠT chính để chỉnh mức "nền có tranh mắt không"; hạ xuống là
+   * hạ ĐỘ ĐỘNG GIAO RA theo đúng tỉ lệ, nên hạ thì phải đo lại.
    */
   backdropRate?: number;
   /** Độ dài đoạn phim nền (giây) — chỉ cần khi nó NGẮN hơn clip, để bọc `Loop`. */
@@ -256,20 +257,39 @@ const PhotoBackdrop: React.FC<{ images: string[] }> = ({ images }) => {
  * giải đúng vế thứ hai bằng cách đi ngược hẳn: nó cố tình KHÔNG có chủ thể,
  * KHÔNG kể chuyện, chỉ làm cái nền thôi hết đứng im. Ba lớp ép nó ở đúng vai:
  *
- *   1. `playbackRate` chậm — mưa rơi, sương trôi, ánh đèn lắc nhẹ. Đây là thứ
- *      thay cho phép đo độ động mà máy này KHÔNG làm được (ffmpeg đi kèm
- *      Playwright không có demuxer mp4 — xem `scripts/stock-video.mjs`).
- *   2. `blur(6px)` — y hệt `PhotoBackdrop`, đẩy nền ra sau mặt phẳng chữ.
+ *   1. `playbackRate` — mưa rơi, sương trôi, ánh đèn lắc nhẹ.
+ *   2. `blur` — y hệt `PhotoBackdrop`, đẩy nền ra sau mặt phẳng chữ.
  *   3. Lớp phủ navy 0,20 + tối dần hai đầu — DÙNG LẠI nguyên, không dựng bản
  *      thứ hai. Đổi ở đây mà quên bên kia là hai nền hai tông.
+ *
+ * 🔴 HAI SỐ DƯỚI ĐÂY LÀ SỐ ĐO, KHÔNG PHẢI SỐ CHỌN CHO VỪA MẮT. Bản đầu để
+ * `rate 0,5` + `blur(6px)` theo đúng ý "gần như trôi tại chỗ" — và ý đó
+ * ĐÃ VƯỢT QUÁ: đo trên khung hình THẬT (hai khung cách nhau 1 giây, xám
+ * 64×114) thì nền đổi **trung vị 1/255 trên cả khung**, tức mắt đọc ra là
+ * ảnh tĩnh. Tách theo dải mới thấy vì sao:
+ *
+ *   | dải khung             | trung vị | trung bình |
+ *   |-----------------------|---------:|-----------:|
+ *   | trên (trời + cầu)     |        0 |       0,24 |
+ *   | giữa (sau khối chữ)   |        1 |       4,28 |
+ *   | dưới (mặt nước)       |        6 |      10,50 |
+ *
+ * ⇒ Chuyển động THẬT chỉ nằm ở một dải, mà cổng nhập kho
+ * (`scripts/stock-video.mjs`) đo TRUNG VỊ trên cả khung 9:16 của đoạn NGUỒN
+ * ở tốc độ gốc — nên nó đo 11,8 trong khi thứ giao ra chỉ còn 1. Hai chỗ đo
+ * hai thứ khác nhau. `rate` chia đôi độ động, `blur` xoá nốt phần chi tiết
+ * nhỏ; cộng lại là mất ~90%.
+ *
+ * ⚠️ Vì thế **đừng hạ hai số này lại** mà không đo lại trên khung hình thật.
+ * Và cũng đừng đọc con số của cổng nhập kho thành "đoạn này trông động cỡ
+ * đó" — nó là ĐIỀU KIỆN TUYỂN, không phải thứ người xem nhận được.
  *
  * ⚠️ `muted` là BẮT BUỘC: clip đã có giọng đọc + nhạc nền, tiếng gốc của đoạn
  * stock chen vào là ba nguồn âm cùng lúc.
  *
  * 🪤 `OffthreadVideo` KHÔNG có prop `loop` (tsc bắt được ngay). Muốn lặp thì
  * bọc `<Loop>` — và phải biết đoạn phim dài bao nhiêu, nên `seconds` do kịch
- * bản khai. Bỏ trống ⇒ không bọc, đúng cho đoạn đủ dài (ở tốc độ 0,5 thì 20
- * giây nguồn đã phủ 40 giây clip).
+ * bản khai. Bỏ trống ⇒ không bọc, đúng cho đoạn đủ dài.
  */
 const VideoBackdrop: React.FC<{ src: string; rate: number; seconds?: number }> = ({
   src,
@@ -294,7 +314,10 @@ const VideoBackdrop: React.FC<{ src: string; rate: number; seconds?: number }> =
         height: '100%',
         objectFit: 'cover',
         transform: `scale(${scale})`,
-        filter: 'blur(6px)',
+        // 3px chứ không phải 6px như ảnh tĩnh: ảnh tĩnh chỉ cần đẩy ra sau mặt
+        // phẳng chữ, còn ở đây blur ăn mất chính thứ mình vừa tốn công tuyển.
+        // Tương phản chữ do `TextPlate` (blur 18px riêng) gánh, không phải nền.
+        filter: 'blur(3px)',
       }}
     />
   );
@@ -1126,7 +1149,7 @@ export const InsightClip: React.FC<InsightProps> = ({
       {hasVideoBg && !hasFigure ? (
         <VideoBackdrop
           src={backdropVideo as string}
-          rate={backdropRate ?? 0.5}
+          rate={backdropRate ?? 1}
           seconds={backdropSeconds}
         />
       ) : null}

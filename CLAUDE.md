@@ -41,8 +41,9 @@ footage. Đó không phải vì họ lười, đó là hình dạng ĐÚNG cho c
 
 ### ✅ Đã làm — nền VIDEO, và nó đi NGƯỢC hẳn nhân vật
 Nền video cố tình **không có chủ thể, không kể chuyện**. Ba lớp ép nó ở đúng vai:
-`playbackRate` 0,5 · `blur(6px)` · lớp phủ navy 0,20 + tối dần hai đầu (**dùng
-lại** của `PhotoBackdrop`, không dựng bản thứ hai).
+`playbackRate` · `blur` · lớp phủ navy 0,20 + tối dần hai đầu (**dùng lại** của
+`PhotoBackdrop`, không dựng bản thứ hai). ⚠️ Hai số đầu **đã phải chỉnh lại sau
+khi đo** (0,5 → **1,0** và 6px → **3px**) — xem mục *"độ động GIAO RA"* dưới đây.
 - **`scripts/stock-lib.mjs` (mới)** — tách TỪ VỰNG + CỔNG LỌC + PHÉP ĐO ra dùng
   chung. Kho ảnh và kho video phải gác CÙNG bộ luật (đạo đức · người-phải-châu-Á
   · liên quan theo `must[]`); chép hai bản là hẹn ngày một kho hở mà kho kia vẫn
@@ -137,6 +138,42 @@ repo**. Công cụ có sẵn mà tôi kết luận là không có.
 - ⚠️ **Cả một LỚP tông không có video**: mưa trên kính / sương đo ra 0,87–3,14
   ⇒ tông `mo-mit` ra **0 đoạn**. Tập tông viết cho ẢNH TĨNH, không phải tông nào
   cũng dịch được sang video. Đừng ép cho đủ.
+
+### 🔴 CỔNG ĐO MỘT ĐẰNG, NGƯỜI XEM NHẬN MỘT NẺO — 11,8 giao ra còn 1
+Thay đoạn động (11,77/giây) rồi render lại, **vẫn phải đo trên chính file mp4**
+thay vì tin con số của cổng. Kết quả (hai khung cách nhau 1 giây, xám 64×114):
+
+| dải khung | trung vị | trung bình |
+|---|---:|---:|
+| trên (trời + cầu) | **0** | 0,24 |
+| giữa (sau khối chữ) | 1 | 4,28 |
+| dưới (mặt nước) | **6** | 10,50 |
+| **cả khung** | **1** | 5,2 |
+
+⇒ Cổng nhập kho đo **11,8**, thứ giao ra chỉ còn **1**. Ba tầng ăn mất, và cả ba
+đều là lựa chọn của chính tôi:
+1. **`playbackRate` 0,5 chia đôi độ động** — đúng theo nghĩa đen. Ý đồ *"gần như
+   trôi tại chỗ"* **đã vượt quá**: trôi tại chỗ thật thì mắt đọc ra là ảnh tĩnh,
+   tức đúng lời Henry.
+2. **`blur(6px)` xoá phần chi tiết nhỏ** — mà chi tiết nhỏ CHÍNH LÀ thứ chuyển
+   động (ánh sáng lăn tăn trên mặt nước). Blur ở đây đang xoá đúng thứ vừa tốn
+   một cổng lọc để tuyển.
+3. **Chuyển động không trải đều khung**: hai phần ba trên (trời + cầu) đứng im
+   hoàn toàn. Cổng đo TRUNG VỊ trên cả khung 9:16 của đoạn NGUỒN nên nó vẫn
+   thấy 11,8, còn người xem thì chỉ thấy một dải dưới nhúc nhích.
+
+- **Vá**: `rate` 0,5 → **1,0** · `blur` 6px → **3px**. Tương phản chữ vốn do
+  `TextPlate` (blur 18px riêng) gánh, không phải do làm mờ nền — nên hạ blur nền
+  không đụng tới chỗ đọc chữ. Lề an toàn vẫn dư: `scale` khởi điểm 1,06 cho 32px
+  mỗi bên, blur 3px lấy mẫu ra ~9px.
+- 🔑 **Bài học đặt ở tầng phương pháp: con số của CỔNG TUYỂN không phải con số
+  NGƯỜI XEM NHẬN.** Cổng đo đoạn NGUỒN ở tốc độ gốc, chưa qua `rate`/`blur`/lớp
+  phủ/Ken Burns. Muốn biết clip trông có động không thì **đo trên chính mp4 đã
+  render** — cùng lớp với bài học *"đo trên bản đã cắt gọn thì đang đo bản cắt"*,
+  và cùng lớp với *"log của bên gửi không chứng minh được bên nhận hiện ra"*.
+- 🪤 Và tôi đã **báo nhầm một con số** trước khi kịp đo lại: nói *"nền đổi
+  6,31/giây"* trong khi đó là số của RIÊNG dải mặt nước; số của cả khung là **1**.
+  Đo một dải rồi phát biểu như thể đo cả khung — phải nêu rõ đo Ở ĐÂU.
 
 ### 🐞 Kèm: con KHỈ lọt tông "suy tư" — và cổng đầu tiên của tôi quá rộng
 `must[]` của `suy-tu` có từ **TƯ THẾ** (`sitting`) mà con vật nào cũng mang ⇒

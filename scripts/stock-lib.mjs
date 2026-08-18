@@ -975,8 +975,12 @@ export function passesTags(tags, item) {
  * Mốc đo được lúc chốt: giọt nước bám kính **1,99** · mây trôi **14,6** · phố
  * có người qua lại **20,4**.
  *
- * ⚠️ Đo ở tốc độ GỐC (1×). Clip phát nền ở `backdropRate` 0,5 nên độ động cảm
- * nhận được còn một nửa — đừng lấy con số này so thẳng với thứ nhìn thấy.
+ * 🔴 ĐÂY LÀ ĐIỀU KIỆN TUYỂN, KHÔNG PHẢI ĐỘ ĐỘNG NGƯỜI XEM NHẬN ĐƯỢC. Đo trên
+ * đoạn NGUỒN, tốc độ gốc, chưa qua `blur`/lớp phủ/Ken Burns của khung clip.
+ * Đo lại trên khung hình đã render thì con số tụt rất mạnh (một đoạn 11,8 ở
+ * đây giao ra chỉ còn trung vị 1 trên cả khung) — xem bảng số đo trong
+ * `remotion/src/InsightClip.tsx`. Muốn biết clip trông có động không thì phải
+ * đo trên chính file mp4 đã render, đừng suy từ con số này.
  */
 export function measureMotion(ffmpeg, mp4Path, durationSec, tmpDir) {
   const vf = "crop='min(iw,ih*9/16)':'min(ih,iw*16/9)',scale=64:114,format=rgb24";

@@ -243,14 +243,17 @@ function buildTimeline(spec: ScriptSpec): string {
   const bg = spec.backdrop ?? [];
   const hasBg = Boolean(bgVideo) || bg.length > 0;
   if (bgVideo) {
-    // Nói rõ nền là PHIM ĐANG CHẠY chứ không phải ảnh tĩnh, và nói rõ nó chạy
-    // CHẬM + mờ — nếu chỉ ghi "có video nền" thì hội đồng hình dung một clip
-    // nhiều chuyển động, tức tả sai đúng thứ vừa cố ý làm cho tĩnh.
-    const rate = spec.backdropRate ?? 0.5;
+    // Nói rõ nền là PHIM ĐANG CHẠY chứ không phải ảnh tĩnh. ⚠️ Câu này phải
+    // theo kịp số THẬT trong `VideoBackdrop`: bản đầu ghi "phát chậm 0,5× nên
+    // gần như trôi tại chỗ" — đo ra thì nền đổi trung vị 1/255, tức mô tả đang
+    // tả một thứ tĩnh hơn cả thứ đã tĩnh. Nay mặc định 1×.
+    const rate = spec.backdropRate ?? 1;
+    const nhip =
+      rate < 1 ? `phát chậm ${rate}× nên trôi rất chậm` : 'phát ở tốc độ thật';
     lines.push(
-      `NỀN CHẠY SUỐT CLIP — một ĐOẠN PHIM quay thật, phát chậm ${rate}× nên gần ` +
-        `như trôi tại chỗ, làm mờ nhẹ và phủ một lớp tối mỏng để chữ đọc được. ` +
-        `KHÔNG phải nền phẳng, cũng KHÔNG phải ảnh tĩnh:\n   ${describeVideo(bgVideo)}`
+      `NỀN CHẠY SUỐT CLIP — một ĐOẠN PHIM quay thật, ${nhip}, làm mờ nhẹ và phủ ` +
+        `một lớp tối mỏng để chữ đọc được. KHÔNG phải nền phẳng, cũng KHÔNG ` +
+        `phải ảnh tĩnh:\n   ${describeVideo(bgVideo)}`
     );
   } else if (bg.length > 0) {
     const bgDesc = bg.map((src) => describeImage(src));

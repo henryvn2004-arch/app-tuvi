@@ -811,10 +811,19 @@ const SOURCES: InsightSource[] = [
        * đây mà không đo lại bằng mắt trước.
        */
       /*
-       * Mưa trên cửa kính đêm — L=18,6 (đo trên ĐÚNG phần 9:16 sẽ lên hình),
-       * dài 27s nên ở tốc độ 0,5× phủ trọn clip mà không phải lặp.
+       * Cầu đêm, đèn thành phố phản chiếu mặt nước.
+       *
+       * ⚠️ Đoạn TRƯỚC ở đây là mưa trên cửa kính — tối hơn (L=18,6) nhưng đo ra
+       * **1,99/giây**, tức đứng im, và Henry xem clip nói ngay *"ko thấy video
+       * chi thấy hình tĩnh"*. Đoạn này L=41,4 (vẫn dưới trần 95) nhưng động
+       * **11,77** — gấp 6 lần. Chọn theo ĐỘ ĐỘNG trước, độ tối sau: nền không
+       * nhúc nhích thì cả lý do đổi từ ảnh sang video biến mất.
+       *
+       * 27s ⇒ ở tốc độ 1× phủ 810 khung, NGẮN hơn clip (963 khung) nên
+       * `VideoBackdrop` tự bọc `<Loop>` — vì thế `backdropSeconds` là BẮT BUỘC
+       * ở đây, bỏ trống là đoạn phim đứng ở khung cuối suốt phần còn lại.
        */
-      backdropVideo: 'stock-video/tone/suy-tu/189290.mp4',
+      backdropVideo: 'stock-video/tone/tinh-lang/3138.mp4',
       backdropSeconds: 27,
       music: 'tram-tinh.wav',
       hashtags: ['tinhcach', 'tamly', 'selfdiscovery', 'tuvi'],
