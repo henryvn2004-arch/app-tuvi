@@ -18,6 +18,7 @@ import { parseLlmJson } from '@/lib/api/tool-helpers';
 import {
   type ScriptSpec,
   TTS_CHARS_PER_SECOND,
+  budgetChars,
   estimateSpeechSeconds,
   estimateTotalSeconds,
   spokenCta,
@@ -135,18 +136,15 @@ const khoa = (s: ScriptSpec['scenes'][number]) => Boolean(s.speech?.trim());
  * model không sửa được nó — giao nguyên trần thì nó cắt đủ theo trần mà tổng
  * vẫn vượt.
  */
-/**
- * 🔑 BIÊN AN TOÀN 8%. Model đếm ký tự sai vài đơn vị là chuyện bình thường, và
- * ở đây "vài đơn vị" quyết định đỗ/trượt: lượt khảo sát có `ngu-hanh-ten` nhận
- * gợi ý hook **69 ký tự** trên trần 67 → cổng 1 báo *"đọc mất 5,1s (trần 5s)"*
- * → mất trắng vòng cuối vì 2 ký tự. Giao trần đúng bằng ngưỡng là bắt model
- * phải đếm chính xác tuyệt đối; giao thấp hơn một chút thì nó lệch vẫn còn nằm
- * trong ngưỡng.
+/*
+ * 🔑 Biên an toàn 8% nay nằm trong `budgetChars` (`script-spec.ts`) — DÙNG CHUNG
+ * với `gate-machine.ts`. Trước đây mỗi bên tự nhân một kiểu: ô `fix` của cổng 1
+ * nói "rút xuống dưới 67 ký tự" còn khối NGÂN SÁCH ở dưới nói "tối đa 62", và
+ * cả hai cùng vào MỘT prompt. Model nhận hai trần cho một ràng buộc thì nó theo
+ * cái lớn hơn — đúng chuỗi làm `ba-the-be-tac` trượt cả 3 vòng vì `hook.too-long`.
  */
-const BIEN_AN_TOAN = 0.92;
-
 function nganSachKyTu(spec: ScriptSpec, gate?: GateOptions) {
-  const kyTu = (giay: number) => Math.floor(giay * TTS_CHARS_PER_SECOND * BIEN_AN_TOAN);
+  const kyTu = budgetChars;
   const giayKhoa =
     estimateSpeechSeconds(spokenCta(spec)) +
     spec.scenes

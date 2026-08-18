@@ -61,6 +61,27 @@ export function estimateSpeechSeconds(text: string): number {
   return text.trim().length / TTS_CHARS_PER_SECOND;
 }
 
+/**
+ * Biên an toàn khi GIAO ngân sách ký tự cho model viết lại.
+ *
+ * Giao trần đúng bằng ngưỡng là bắt model đếm chính xác tuyệt đối — nó lệch vài
+ * ký tự là trượt cổng 1 và mất trắng một vòng hội đồng. Giao thấp hơn một chút
+ * thì lệch vẫn còn nằm trong ngưỡng.
+ */
+export const CHAR_BUDGET_MARGIN = 0.92;
+
+/**
+ * Số ký tự tối đa GIAO CHO MODEL cho một quãng đọc.
+ *
+ * 🔑 NGUỒN DUY NHẤT — mọi chỗ nói với model "tối đa N ký tự" phải gọi hàm này.
+ * Trước đây `gate-machine.ts` tự nhân `13.59` (ra 67) còn `viral-loop.ts` nhân
+ * thêm biên an toàn (ra 62), rồi cả hai con số cùng vào MỘT prompt — model nhận
+ * hai trần khác nhau cho cùng một ràng buộc, theo cái lớn hơn, rồi trượt.
+ */
+export function budgetChars(seconds: number): number {
+  return Math.floor(seconds * TTS_CHARS_PER_SECOND * CHAR_BUDGET_MARGIN);
+}
+
 /** Loại nguồn — mỗi loại có một adapter riêng dựng ra ScriptSpec. */
 export type VideoSourceType =
   | 'tool-demo' // quay màn hình một công cụ trên site

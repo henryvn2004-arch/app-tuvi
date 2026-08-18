@@ -20,6 +20,8 @@
 
 import {
   type ScriptSpec,
+  TTS_CHARS_PER_SECOND,
+  budgetChars,
   estimateSpeechSeconds,
   estimateTotalSeconds,
   spokenCta,
@@ -215,7 +217,7 @@ function checkHook(spec: ScriptSpec, issues: GateIssue[]): number {
       level: 'block',
       code: 'hook.too-long',
       message: `Câu mở đầu đọc mất ${secs.toFixed(1)}s (trần ${THRESHOLDS.hookMaxSeconds}s) — người xem đã lướt trước khi nghe hết.`,
-      fix: `Rút xuống dưới ${Math.floor(THRESHOLDS.hookMaxSeconds * 13.59)} ký tự, giữ đúng ý gây tò mò.`,
+      fix: `Rút xuống dưới ${budgetChars(THRESHOLDS.hookMaxSeconds)} ký tự, giữ đúng ý gây tò mò.`,
     });
   }
 
@@ -257,7 +259,7 @@ function checkPacing(spec: ScriptSpec, issues: GateIssue[], limits: PacingLimits
       level: 'block',
       code: 'length.too-long',
       message: `Clip dài ${total.toFixed(0)}s (trần ${limits.maxSeconds}s) — tỉ lệ xem hết tụt mạnh sau mốc này.`,
-      fix: `Cắt bớt ~${Math.ceil((total - 28) * 13.59)} ký tự lời đọc, bỏ cảnh ít giá trị nhất.`,
+      fix: `Cắt bớt ~${Math.ceil((total - limits.maxSeconds) * TTS_CHARS_PER_SECOND)} ký tự lời đọc, bỏ cảnh ít giá trị nhất.`,
     });
   }
   if (total < THRESHOLDS.totalMinSeconds) {
