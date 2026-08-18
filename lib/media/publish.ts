@@ -139,6 +139,8 @@ const CAPTION_STYLE: Record<string, CaptionStyle> = {
   instagram: { maxLen: 2200, linkStyle: 'bare' },
   threads: { maxLen: 500, linkStyle: 'full' },
   telegram: { maxLen: 1024, linkStyle: 'full' }, // trần caption của sendPhoto
+  // TikTok không có link bấm được trong caption ⇒ dạng trần để người xem gõ lại.
+  tiktok: { maxLen: 2200, linkStyle: 'bare' },
 };
 
 /** Bỏ query UTM, giữ host + đường dẫn — dạng người ta gõ lại được bằng tay. */
@@ -495,11 +497,99 @@ async function publishTelegram(row: QueueRow): Promise<AdapterOut> {
   }
 }
 
+const TIKTOK_BASE = 'https://open.tiktokapis.com/v2';
+const TIKTOK_TOKEN = process.env.TIKTOK_ACCESS_TOKEN || '';
+
+/**
+ * TikTok — Content Posting API, `PULL_FROM_URL`.
+ *
+ * Cùng lối "đưa URL, để nền tảng tự tải" như Facebook/Instagram, nên tái dùng
+ * đúng asset trong bucket `clips`. Hai bước: `/post/publish/video/init/` trả
+ * `publish_id`, rồi hỏi `/post/publish/status/fetch/` cho tới khi xong.
+ *
+ * 🔴 BA ĐIỀU KIỆN PHẢI BIẾT TRƯỚC, cả ba đều là việc tay, không code thay được:
+ *
+ * 1. **Miền của URL phải được VERIFY** trong TikTok Developer Portal (URL
+ *    Prefix ownership). Chưa verify thì `PULL_FROM_URL` trả
+ *    `url_ownership_unverified` — không phải lỗi token. Miền cần verify ở đây
+ *    là host Supabase Storage của bucket `clips`.
+ * 2. **Quyền `video.publish`** phải qua duyệt của TikTok. Trước khi duyệt, app
+ *    ở chế độ sandbox chỉ đăng được ở dạng **riêng tư** cho chính tài khoản dev.
+ * 3. **Token TikTok hết hạn sau 24 giờ** và phải làm mới bằng `refresh_token` —
+ *    khác hẳn Facebook (token Page vĩnh viễn). Vì thế `TIKTOK_ACCESS_TOKEN` đặt
+ *    tay sẽ chết sau một ngày; muốn chạy đều thì phải lưu refresh token và tự
+ *    làm mới. ⚠️ CHƯA làm phần đó — adapter này dùng được cho lượt thử tay, còn
+ *    chạy tự động hằng ngày thì phải bổ sung khâu làm mới token trước.
+ *
+ * ⚠️ Caption TikTok trần 2200 ký tự và KHÔNG có link bấm được — dùng
+ * `linkStyle: 'bare'` như Instagram để người xem còn gõ lại được địa chỉ.
+ */
+async function publishTiktok(row: QueueRow): Promise<AdapterOut> {
+  if (!TIKTOK_TOKEN) return { error: 'Thiếu env TIKTOK_ACCESS_TOKEN' };
+  const videoUrl = row.media_assets?.url || '';
+  if (!videoUrl) return { error: 'Asset không có URL' };
+  if (!isVideoAsset(videoUrl)) return { error: 'TikTok chỉ nhận video, asset này là ảnh' };
+
+  const H = {
+    Authorization: `Bearer ${TIKTOK_TOKEN}`,
+    'Content-Type': 'application/json; charset=UTF-8',
+  };
+
+  try {
+    const init = await fetch(`${TIKTOK_BASE}/post/publish/video/init/`, {
+      method: 'POST',
+      headers: H,
+      body: JSON.stringify({
+        post_info: { title: composeCaption(row, 'tiktok').slice(0, 2200) },
+        source_info: { source: 'PULL_FROM_URL', video_url: videoUrl },
+      }),
+    }).catch(() => null);
+    if (!init) return { error: 'Không gọi được TikTok' };
+    const ib = (await init.json().catch(() => ({}))) as {
+      data?: { publish_id?: string };
+      error?: { code?: string; message?: string };
+    };
+    // TikTok trả error.code = 'ok' khi THÀNH CÔNG — kiểm `!== 'ok'` chứ không
+    // kiểm sự tồn tại của `error`, nếu không lượt thành công cũng bị đọc là hỏng.
+    if (ib.error && ib.error.code && ib.error.code !== 'ok') {
+      return { error: `${ib.error.message || 'TikTok error'} (${ib.error.code})` };
+    }
+    const publishId = ib.data?.publish_id;
+    if (!publishId) return { error: 'TikTok không trả publish_id' };
+
+    // Chờ TikTok tải xong từ URL. Cùng ngân sách với Reels (~100s) vì đây cũng
+    // là bước nền tảng tự tải file về rồi mã hoá lại.
+    for (let i = 0; i < 20; i++) {
+      await sleep(i === 0 ? 2000 : 5000);
+      const st = await fetch(`${TIKTOK_BASE}/post/publish/status/fetch/`, {
+        method: 'POST',
+        headers: H,
+        body: JSON.stringify({ publish_id: publishId }),
+        cache: 'no-store',
+      }).catch(() => null);
+      const sb = (await st?.json().catch(() => ({}))) as {
+        data?: { status?: string; fail_reason?: string };
+      };
+      const s = String(sb?.data?.status || '').toUpperCase();
+      if (s === 'PUBLISH_COMPLETE') {
+        // TikTok KHÔNG trả URL bài — chỉ có publish_id. Đừng bịa một link
+        // mở ra 404; để trống, sổ vẫn tra ngược được bằng id.
+        return { externalId: publishId };
+      }
+      if (s === 'FAILED') return { error: sb?.data?.fail_reason || 'TikTok báo FAILED' };
+    }
+    return { error: 'TikTok chưa xử lý xong sau ~100s — vào Admin bấm thử lại' };
+  } catch (e) {
+    return { error: (e as Error).message };
+  }
+}
+
 const ADAPTERS: Record<string, (row: QueueRow) => Promise<AdapterOut>> = {
   facebook: publishFacebook,
   instagram: publishInstagram,
   threads: publishThreads,
   telegram: publishTelegram,
+  tiktok: publishTiktok,
 };
 
 /** Kênh đã có adapter thật — dùng để cảnh báo cấu hình trỏ vào chỗ chưa có. */
