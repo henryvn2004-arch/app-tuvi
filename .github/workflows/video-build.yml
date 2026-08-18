@@ -54,7 +54,6 @@ on:
         required: false
         default: 'https://www.tuviminhbao.com'
 
-
 # Một lượt dựng tại một thời điểm. Hai lượt cùng lúc sẽ ghi đè file của nhau
 # trong `remotion/out/`.
 concurrency:
