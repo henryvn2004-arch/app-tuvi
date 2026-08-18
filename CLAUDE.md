@@ -440,13 +440,82 @@ vì báo xanh trên danh sách cụt (bài học `check:motifs`).
   gộp là refactor riêng. `check:topics` chỉ chặn chúng trôi ở đúng lớp lỗi này.
 - ⚠️ **Chưa gọi LLM thật** — đo dừng ở tầng *mục nào vào context*, không đo chữ
   ra màn hình.
-- 🔐 **7 hàm SECURITY DEFINER thiếu `SET search_path`** (`add_credits` ·
-  `deduct_credits` · `get_credit_balance` · `handle_new_user_credits` ·
-  `chat_incr_free_usage` · `tg_incr_free_usage` ·
-  `trigger_referral_check_on_topup`) — sổ trước ghi 2, đo lại ra **7**; 45 hàm
-  còn lại đều đã có. **Đo ACL rồi: `anon`/`authenticated` KHÔNG gọi được cái
-  nào** (chỉ `postgres` + `service_role`) ⇒ là gia cố phòng thủ theo chiều sâu,
-  **không phải lỗ đang hở** — đừng thổi phồng. Tách PR riêng vì là SQL thuần.
+- ~~7 hàm SECURITY DEFINER thiếu `SET search_path`~~ → **ĐÃ VÁ**, xem mục dưới.
+
+---
+
+## 🔐 7 hàm SECURITY DEFINER hở `search_path` — và BỘ DÒ KHÔNG HỀ CANH NÓ (2026-08-18, PR sau)
+
+Sổ ghi nợ **2 hàm**; đo lại ra **7**. 45 hàm còn lại đều đã khai — 7 cái này là
+nhóm CŨ NHẤT, tạo trước khi có quy ước.
+
+### ⚠️ ĐỌC TRƯỚC KHI VIỆN DẪN — đây KHÔNG phải lỗ đang hở
+Đo ACL: `anon`/`authenticated` **không gọi được cái nào** (chỉ `postgres` +
+`service_role`). Muốn khai thác phải đã có service_role, mà có rồi thì đọc/ghi
+thẳng bảng được, không cần lách qua search_path. ⇒ **gia cố phòng thủ theo
+chiều sâu**. Đừng thổi thành sự cố.
+
+### 🔑 Vá bằng `ALTER FUNCTION`, KHÔNG `CREATE OR REPLACE`
+Nó không đụng một ký tự nào trong thân hàm ⇒ **không có cửa nào để bản đang
+chạy lệch khỏi bản repo** — đúng bệnh đã cắn hai lần (edge function chỉ sống
+trên dashboard; RPC deploy lượt đầu gõ chữ KHÔNG DẤU rồi chuỗi đó đi thẳng vào
+mô tả giao dịch người dùng đọc được).
+- **Đọc TRỌN thân cả 7 hàm TRƯỚC khi ghim** — bắt buộc: hàm nào tham chiếu
+  `auth.*`/`extensions.*` mà không nêu schema thì ghim `search_path = public` là
+  LÀM HỎNG nó. Đo ra cả 7 chỉ chạm `public` ⇒ an toàn. (`NOW()` ở `pg_catalog`,
+  luôn được tìm trước, không cần khai.)
+- 🔑 Dùng **`public, pg_temp`** chứ không `public` trần: Postgres tìm `pg_temp`
+  **trước tiên** trừ khi nó được nêu tường minh ở vị trí khác — để trần là vẫn
+  còn cửa che bảng thật bằng bảng TẠM cùng tên. ⚠️ Nghĩa là **45 hàm còn lại
+  đang ở mức YẾU HƠN 7 hàm này**; nợ đã ghi.
+
+### 🔴 Phát hiện chính: `security_audit()` KHÔNG canh search_path
+Nó canh 5 thứ (hàm hở cho anon · bơm sự kiện · thiết bị cày · referral bất
+thường · lệch số dư) và chạy **mỗi 3 giờ** qua `anomaly-alerts` — nhưng **không
+có mục nào về search_path**. Đó là lý do 7 hàm sống lâu mà không ai biết.
+⇒ Thêm **mục thứ 6 `ham_thieu_search_path`**, nối vào cả cảnh báo Telegram
+(cooldown `sec_no_search_path`) lẫn panel Bảo Mật của admin.
+
+### 🪤 Suýt kết luận NGƯỢC — đỏ vì LÝ DO KHÁC
+Lượt red-team đầu dựng một hàm probe rồi thấy `security_audit()` "bắt được" ⇒
+tôi đã báo với Henry là **nó đã canh sẵn**. SAI: probe mới tạo chưa siết ACL nên
+lọt vào mục CŨ `ham_ho_cho_anon`. Phải dựng lại probe **CÓ ACL đã siết** mới đo
+đúng — lúc đó mục MỚI ra `["__rt_nopath"]` còn mục CŨ vẫn `[]`.
+🔑 Cùng lớp lỗi "xanh/đỏ vì lý do sai" đã ghi nhiều lần. **Bộ dò đỏ chưa đủ —
+phải đỏ vì ĐÚNG cái mình đang đo.**
+
+### 🐞 Bắt kèm: `handle_new_user_credits` là HÀM CHẾT
+Không gắn trigger nào (đo `pg_trigger`). Tàn dư của bản quà đăng ký **10 Lượng**;
+bản đang sống là `handle_new_user_signup` (**25 Lượng**) ở trigger
+`on_auth_user_created` trên `auth.users`. **Không phát tiền hai lần** — nhưng để
+đó là cái bẫy cho người sau (hai hàm signup, không biết cái nào sống). Vá
+search_path luôn cho hết cảnh báo, **cố ý KHÔNG xoá** (xoá khó đảo, ngoài phạm vi).
+
+### ✅ `is_admin` hở cho anon là CỐ Ý, đừng đi "vá"
+Nó là hàm SECURITY DEFINER DUY NHẤT `anon`/`authenticated` gọi được, và
+`security_audit()` **loại trừ đích danh** nó. Lý do: **10 RLS policy trên 10
+bảng** gọi `is_admin` — gỡ EXECUTE là admin mất quyền đọc 10 bảng. Nó cũng chỉ
+trả boolean.
+
+### Verify
+`tsc` 0 · `lint` **0 lỗi / 77 warning = đúng mốc nền** · `prettier` cả cây sạch ·
+**22/22 bộ dò** · engine **185 pass** · 4/4 khối script `admin.html` parse OK.
+- **Đường tiền đo TRƯỚC và SAU khi vá, trùng khít từng con số** (chạy trong
+  transaction rồi `RAISE` để rollback): `bal=6156 · +7→6163 · −7→6156 · đọc lại
+  6156` · thiếu tiền vẫn ném đúng `insufficient_balance` · `chat_incr_free_usage`
+  và `tg_incr_free_usage` vẫn chạy. Verify sau đó: **0 dòng rác**, số dư nguyên vẹn.
+- **0 hàm còn thiếu** search_path (52 hàm SECURITY DEFINER), 7 hàm vừa vá đúng
+  `search_path=public, pg_temp`.
+- Thân `security_audit` **đọc ngược từ bản ĐANG CHẠY** (md5
+  `1ed76a8ae737f59a7415caeb135640b1`, 2.965 ký tự) rồi mới ghi vào repo.
+
+### CÒN LẠI
+- **45 hàm kia vẫn `public` trần** (yếu hơn 7 hàm vừa vá) — nâng lên
+  `public, pg_temp` là việc riêng: chỉ `ALTER`, không đụng thân, nhưng đụng 45
+  hàm đang chạy nên tách lượt.
+- **`handle_new_user_credits` vẫn nằm đó** dù là hàm chết — cần Henry chốt xoá.
+- ⚠️ Cảnh báo mới **chưa bắn lượt nào trên prod** (hiện `[]` nên nó im, đúng
+  thiết kế). Lượt đầu tiên nó nói gì thì phải đợi có hàm thiếu thật.
 
 ---
 

@@ -331,6 +331,7 @@ export async function checkAnomalies(): Promise<{ fired: FiredAlert[]; checked: 
   try {
     const audit = await callRpc<{
       ham_ho_cho_anon: string[];
+      ham_thieu_search_path: string[];
       bom_su_kien: { anon_id: string; events_24h: number }[];
       thiet_bi_cay: { anon_id: string; so_tai_khoan: number }[];
       referral_bat_thuong: { referrer: string; so_nguoi_7d: number }[];
@@ -345,6 +346,23 @@ export async function checkAnomalies(): Promise<{ fired: FiredAlert[]; checked: 
           `(tức ai mở trang web cũng gọi được):\n` +
           audit.ham_ho_cho_anon.map((f) => `   ↳ ${f}`).join('\n') +
           `\n   Vá: revoke execute on function <tên> from public, anon, authenticated;`,
+      });
+    }
+
+    // Cùng lập luận với `ham_ho_cho_anon` ngay trên: Postgres không chặn được ở
+    // tầng mặc định nên mỗi migration tương lai vẫn đẻ ra được một hàm thiếu.
+    // Hàm SECURITY DEFINER để trống search_path chạy bằng quyền CHỦ HÀM nhưng
+    // dùng search_path của NGƯỜI GỌI — có cửa cho bảng/hàm giả mạo chen vào.
+    // ⚠️ Mức độ tuỳ ACL: hở cho anon mới là gấp, còn chỉ service_role gọi được
+    // thì đây là gia cố phòng thủ theo chiều sâu — báo để vá, đừng đọc thành
+    // "đang bị tấn công".
+    if (audit.ham_thieu_search_path?.length && !inCooldown('sec_no_search_path')) {
+      fired.push({
+        key: 'sec_no_search_path',
+        text:
+          `🔐 ${audit.ham_thieu_search_path.length} hàm SECURITY DEFINER để TRỐNG search_path:\n` +
+          audit.ham_thieu_search_path.map((f) => `   ↳ ${f}`).join('\n') +
+          `\n   Vá: alter function <tên>(<kiểu tham số>) set search_path = public, pg_temp;`,
       });
     }
 
