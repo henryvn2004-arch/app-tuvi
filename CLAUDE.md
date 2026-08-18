@@ -5,6 +5,121 @@
 
 ---
 
+## 🔁 Vòng lặp trả bản CUỐI chứ không phải bản TỐT NHẤT · token TikTok · và pipeline CHƯA CHẠY THẬT lượt nào (2026-08-18, cùng PR #543)
+
+Vòng tiếp của track pipeline. Ba việc, và **cái thứ ba là thứ tôi tưởng đã xong**.
+
+### 🔴 A. `runViralLoop` trả bản CUỐI — trái chính tài liệu của nó
+`LoopResult` ghi *"bản đã qua cổng, hoặc bản **TỐT NHẤT** nếu hết vòng"*, còn
+code thì `spec = next` mỗi vòng rồi trả bản cuối. Đo trên `ba-the-be-tac`:
+
+| vòng | xem hết |
+|---|---|
+| 1 (bản tôi viết tay) | **3/4** |
+| 2 (model viết lại) | **0/4** |
+| 3 (dựng trên bản hỏng) | trượt luôn cổng 1 |
+
+Ba vòng đi LÙI, và thứ giao ra là bản tệ nhất trong ba.
+- 🔑 **Viết lại KHÔNG đơn điệu.** Model có thể làm tệ đi, nên vòng lặp phải là
+  *"thử rồi giữ cái tốt hơn"*, không phải *"cứ thay bằng cái mới nhất"*. Điểm
+  xếp theo thứ tự người xem quan tâm: xem hết → muốn lưu → muốn gửi. Vòng trượt
+  cổng 1 (chưa tới hội đồng) tính 0 — chưa có bằng chứng nào nói nó tốt hơn.
+- ⚠️ **Vá kèm một chỗ nói-sai cùng họ**: `remainingIssues` lấy của vòng CUỐI
+  trong khi `spec` nay là vòng TỐT NHẤT ⇒ in ra lý do của một kịch bản KHÁC với
+  kịch bản vừa giao. Cùng lớp *"đo một đằng, báo một nẻo"*. Nay lấy của đúng
+  vòng đẻ ra bản được chọn.
+
+### 🔴 B. Token TikTok — KHÔNG bắt chước YouTube được
+| Nền tảng | Token | Cách giữ |
+|---|---|---|
+| Facebook Page | **vĩnh viễn** | để yên trong env |
+| YouTube | access 1h, **refresh CỐ ĐỊNH** | env, dùng mãi |
+| **TikTok** | access **24h**, refresh **XOAY mỗi lượt** | phải GHI ĐƯỢC lúc chạy |
+
+TikTok trả `refresh_token` MỚI mỗi lượt làm mới và vô hiệu hoá cái cũ ⇒ để
+trong env là **hỏng sau đúng một lượt**. Cặp token vì thế nằm ở
+`app_config['tiktok.token']`.
+- ⚠️ **Chuỗi đứt là đứt hẳn**, không tự lành ⇒ thứ tự bắt buộc **GHI TRƯỚC,
+  DÙNG SAU**: ghi hỏng thì trả LỖI chứ tuyệt đối không dùng token đang cầm.
+- 🔑 **Khoá chống làm mới SONG SONG là bắt buộc, không phải phòng xa**: một lượt
+  `publishQueue` đăng nhiều clip, mỗi clip tự làm mới thì refresh token bị xoay
+  N lần và N−1 lượt tự giết nhau. Đo được: gỡ khoá → 3 lượt song song thành 3
+  lượt oauth + 3 lượt ghi.
+- Lỗi token vào nhóm CHẶN qua **tiền tố dùng chung `Cửa chưa mở`** ⇒ dừng cả
+  kênh thay vì đánh hỏng từng bài (bài học 84 dòng `yt_error` giống hệt nhau).
+  `channelFix` tách **BA cửa TikTok khác hẳn nhau** — miền chưa verify · chuỗi
+  đứt · token chết; nhầm cửa là đi sửa nhầm chỗ y hệt ca Facebook.
+- `docs/TIKTOK-TOKEN.md` — 5 bước cấp lần đầu + bảng đọc lỗi.
+
+### 🔴 C. ĐÍNH CHÍNH NẶNG NHẤT: pipeline CHƯA từng chạy thật lượt nào
+Tôi đã báo *"đã ráp xong"*. Đo lại prod thì:
+
+| | thực tế |
+|---|---|
+| Lượt Actions của `video-build` | **5, cả 5 TRƯỢT** |
+| …và cả 5 đều là | **`--dry-run` (khảo sát), 0 lượt render** |
+| Bucket `clips` | **0 file** |
+| `media_assets` video | **0 dòng** |
+
+⇒ *"ráp xong"* mới đúng ở tầng MÃ. Đường ống chưa giao một byte nào.
+- 🔑 **Bài học: "đã nối" ≠ "đã chảy".** Chuỗi có 6 mắt mà chỉ chạy tới mắt thứ 2
+  thì bốn mắt sau vẫn là giả thuyết. Phải soi **kho + bảng**, đừng đọc code.
+
+### 🔴 D. `clip-ingest` đang chạy vẫn là **v1** — lần thứ BA của cùng bệnh
+Đọc bản trên Supabase: chưa có khối xếp hàng `media_posts`, còn cắm cứng
+`width: 1080`. Sửa đổi trong repo **chưa bao giờ deploy**. Đã trả giá hai lần
+trước (`send-daily-push`, `youtube-upload`).
+- Và chú thích đầu file **NÓI NGƯỢC code bên dưới** (*"HÀM NÀY KHÔNG XẾP HÀNG
+  ĐĂNG"* trong khi 60 dòng cuối làm đúng việc đó). Chú thích sai còn tệ hơn
+  không có — người sau đọc rồi tin.
+- Deploy v6, đọc ngược chốt khớp.
+
+### 📊 Số đo đáng nhìn nhất: cổng 2 chấm HAI LOẠI clip rất khác nhau
+| loại | qua cổng 2 |
+|---|---|
+| insight | **4/6 (67%)** |
+| tool-demo | **3/18 (17%)** |
+
+Lời chê của hội đồng với tool-demo nhất quán: *"chỉ quay màn hình công cụ"* ·
+*"không có cơ sở khoa học"*. Persona hoài nghi `vp-35` đòi bằng chứng khoa học —
+với một clip demo công cụ tử vi thì đó là ngưỡng **không bao giờ đạt được**, nên
+nó thành một cái chặn vĩnh viễn chứ không phải một phép đo.
+- ⚠️ **CHƯA sửa, và cố ý chưa sửa.** Nới cổng cho khỏi thấy cảnh báo là đúng thứ
+  repo tự dặn tránh; còn kết luận "hội đồng sai" thì tôi chưa đủ bằng chứng.
+  Đây là quyết định NỘI DUNG cần Henry chốt: bỏ hẳn clip tool-demo, hay cho cổng
+  2 thành cảnh báo (không chặn) riêng cho loại đó.
+
+### Verify
+`tsc` 0 · `lint` 0 lỗi / 77 warning = mốc nền · `prettier` cả cây sạch ·
+**20/20 bộ dò**.
+- **5 bất biến vòng lặp** trên module thật (hội đồng + người viết lại là stub
+  tất định): điểm GIẢM DẦN 3→0→1 thì trả bản vòng 1, `remainingIssues` mang lỗi
+  vòng 1 chứ không phải vòng 3, và **ĐỐI CHỨNG** điểm TĂNG dần thì trả bản cuối.
+- **36 bất biến token TikTok** trên module thật (chặn tầng `fetch`): env thủ
+  công → 0 lượt mạng · DB còn hạn → 0 lượt làm mới · sắp hết hạn → gửi đúng
+  `grant_type`/refresh cũ/client key+secret, **lưu refresh token MỚI đã xoay**,
+  và **thứ tự oauth → ghi → trả** · ghi hỏng → KHÔNG trả token · `invalid_grant`
+  → chỉ đúng việc phải làm · **3 lượt song song → CHỈ 1 lượt làm mới**.
+- **Red-team 4 ca, có assert đột biến ĐÃ ăn trước khi đọc kết quả**: gỡ
+  `bestSpec` → đỏ · gỡ `bestRound` → đỏ · gỡ chốt ghi-trước → đỏ · gỡ khoá song
+  song → đỏ. Khôi phục xanh lại, 0 file rác.
+- 🪤 **Một lượt red-team ĐỖ GIẢ vì đột biến không ăn** (`perl` không khớp mẫu),
+  `grep -c` ra 0 mà tôi suýt đọc kết quả xanh đó là kết luận. Bài học đã ghi,
+  vấp lại: **assert đột biến đã ăn RỒI mới đọc kết quả.**
+
+### 🪤 Bẫy đã vấp
+- 🔴 **`tsc` emit `.js` lẫn vào `lib/`** (11 file) khi dựng harness — `outDir`
+  ngoài repo vẫn chưa đủ, phải khai **`rootDir`** đúng, và `git status` lại sau
+  mỗi lượt chạy. Bài học đã ghi ở track engine, vấp lại.
+- **TS5112** khi nêu file trên dòng lệnh lúc cwd có `tsconfig.json`; `--ignoreConfig`
+  chữa được lỗi đó nhưng **mất luôn `paths`** ⇒ `@/` không phân giải. Đường
+  đúng: một `tsconfig` riêng có `rootDir` + `paths`.
+- **`open.tiktokapis.com` bị egress chặn** (`403 CONNECT` = chưa chạm server,
+  KHÁC hẳn lỗi endpoint) ⇒ verify token dừng ở tầng stub, tên trường trong phản
+  hồi thật chưa chứng minh được. Ghi rõ trong doc thay vì để người sau tưởng đã kiểm.
+
+---
+
 ## 🏭 RÁP PIPELINE ĐĂNG CLIP — và cổng 2 KHÔNG chặn như tôi tưởng (2026-08-18, PR #543)
 
 Henry: *"bây giờ mày ráp flow vào thành cái pipeline auto chạy đi, xong tao sẽ
