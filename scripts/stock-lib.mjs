@@ -14,9 +14,11 @@
 // ============================================================
 
 import { execFileSync, spawnSync } from 'child_process';
-import { existsSync, readFileSync, readdirSync } from 'fs';
+import { existsSync, readFileSync, readdirSync, rmSync } from 'fs';
 import { inflateSync } from 'zlib';
 import { join } from 'path';
+
+const ROOT_DIR = new URL('..', import.meta.url).pathname;
 
 export const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
@@ -136,6 +138,39 @@ export const DENY_TAGS = [
   // jack o'lantern** vào tông "bí ẩn" (nó thật sự tối, thật sự có đèn lồng,
   // qua sạch mọi ngưỡng), và lượt trước lọt "christmas hats". Ảnh lễ hội
   // phương Tây đặt dưới một câu về vận mệnh thì đọc thành lạc kênh.
+  // ── CON VẬT LÀM CHỦ THỂ: chặn, cùng lý do lạc kênh ──
+  // Lượt nhập video lọt thẳng một đoạn **BẦY KHỈ** vào tông "suy tư" — cùng lớp
+  // lỗi với con MÈO đã lọt tông `nang-am` ở kho ảnh.
+  //
+  // ⚠️ DANH SÁCH NÀY CỐ Ý HẸP. Bản đầu tôi chặn cả `animal`/`wildlife`/`bird`
+  // và đo lại trên 94 bức đang có thì nó **loại oan 2 bức đúng chủ đề**: một
+  // con QUẠ trong tông *thiên nhiên u tối* (quạ chính là thứ tông đó muốn) và
+  // một hình **BÓNG BÀN TAY** trong tông *bàn tay* (thẻ có chữ `animal` vì là
+  // bóng hình con vật). Chặn rộng ở đây là phá đúng hai tông cần nó nhất.
+  //
+  // 🔑 Cơ chế THẬT đã vá ở chỗ khác: `must[]` của `suy-tu` có từ TƯ THẾ
+  // (`sitting`) mà con vật nào cũng mang. Danh sách này chỉ là lưới đỡ thứ hai
+  // cho mấy loài đọc thành "con vật là nhân vật chính".
+  'monkey',
+  'ape',
+  'apes',
+  'baboon',
+  'baboons',
+  'primate',
+  'primates',
+  'cat',
+  'kitten',
+  'dog',
+  'puppy',
+  'horse',
+  'cow',
+  'sheep',
+  'squirrel',
+  'lizard',
+  'reptile',
+  'snake',
+  'frog',
+  'spider',
   'halloween',
   'pumpkin',
   'jack o lantern',
@@ -379,17 +414,10 @@ export const TONES = [
       'asian man sitting alone dark room',
       'vietnamese woman portrait pensive',
     ],
-    must: [
-      'window',
-      'sitting',
-      'thinking',
-      'alone',
-      'portrait',
-      'pensive',
-      'woman',
-      'man',
-      'person',
-    ],
+    // ⚠️ CỐ Ý KHÔNG có `sitting`: từ TƯ THẾ thì con vật hay đồ vật nào cũng
+    // mang được, nên nó không nói CHỦ THỂ là ai. Đúng chỗ đoạn phim bầy khỉ
+    // lọt vào tông này. `must` chỉ được chứa từ nói về CHỦ THỂ / BỐI CẢNH.
+    must: ['window', 'thinking', 'alone', 'portrait', 'pensive', 'woman', 'man', 'person'],
   },
   {
     id: 'mo-mit',
@@ -626,6 +654,27 @@ export const BUCKETS = { tone: TONES, subject: SUBJECTS };
  */
 export function findFfmpeg() {
   if (process.env.FFMPEG && existsSync(process.env.FFMPEG)) return process.env.FFMPEG;
+  /*
+   * 🔑 ƯU TIÊN bản ffmpeg Remotion đóng gói sẵn.
+   *
+   * Tôi đã ghi nhầm một lần rằng "máy này không đo được khung hình video" — dựa
+   * trên bản đi kèm Playwright, vốn chỉ có **3 demuxer** và không có decoder
+   * h264. Nhưng `@remotion/compositor-*` mang theo một bản ffmpeg ĐẦY ĐỦ (42
+   * demuxer, h264/hevc/vp9) và nó nằm sẵn trong repo. Công cụ có sẵn mà tôi kết
+   * luận là không có ⇒ đi thẳng tới chỗ "không gác được độ động", rồi chọn phải
+   * một đoạn phim đứng im.
+   *
+   * Bài học: trước khi ghi "không làm được", kiểm hết công cụ ĐÃ CÓ TRONG REPO.
+   */
+  for (const d of [
+    'compositor-linux-x64-gnu',
+    'compositor-linux-arm64-gnu',
+    'compositor-darwin-x64',
+    'compositor-darwin-arm64',
+  ]) {
+    const p = join(ROOT_DIR, 'remotion/node_modules/@remotion', d, 'ffmpeg');
+    if (existsSync(p)) return p;
+  }
   try {
     return execFileSync('which', ['ffmpeg'], { encoding: 'utf8' }).trim() || null;
   } catch {
@@ -910,4 +959,72 @@ export function passesTags(tags, item) {
     if (!ok) return `lạc đề (không tag nào thuộc "${item.id}")`;
   }
   return null;
+}
+
+/**
+ * ĐỘ ĐỘNG của một đoạn phim — trung bình |Δ| mỗi pixel giữa hai khung cách nhau
+ * MỘT GIÂY, lấy trung vị của ba cặp rải đều. Thang 0–255.
+ *
+ * 🔴 VÌ SAO PHẢI CÓ: lượt nhập đầu tôi chọn đoạn phim theo TỐI + THẺ và không
+ * hề đo chuyển động — rồi đúng thứ lọt vào là một đoạn giọt nước BÁM KÍNH, đo
+ * ra **1,99/giây**, tức gần như đứng im. Henry xem clip và nói ngay *"trong
+ * clip tao ko thấy video chi thấy hình tĩnh"*. Nghịch lý là cổng độ sáng ĐẨY
+ * thẳng về phía đó: đoạn càng tối và càng phẳng thì càng dễ là đoạn không có
+ * gì chuyển động.
+ *
+ * Mốc đo được lúc chốt: giọt nước bám kính **1,99** · mây trôi **14,6** · phố
+ * có người qua lại **20,4**.
+ *
+ * ⚠️ Đo ở tốc độ GỐC (1×). Clip phát nền ở `backdropRate` 0,5 nên độ động cảm
+ * nhận được còn một nửa — đừng lấy con số này so thẳng với thứ nhìn thấy.
+ */
+export function measureMotion(ffmpeg, mp4Path, durationSec, tmpDir) {
+  const vf = "crop='min(iw,ih*9/16)':'min(ih,iw*16/9)',scale=64:114,format=rgb24";
+  const grab = (t, out) => {
+    execFileSync(
+      ffmpeg,
+      [
+        '-hide_banner',
+        '-v',
+        'error',
+        '-ss',
+        String(t),
+        '-i',
+        mp4Path,
+        '-vf',
+        vf,
+        '-frames:v',
+        '1',
+        '-y',
+        out,
+      ],
+      { stdio: ['ignore', 'ignore', 'pipe'] }
+    );
+    return decodePng(readFileSync(out));
+  };
+  const lum = (px, i, bpp) =>
+    bpp === 1 ? px[i] : 0.299 * px[i] + 0.587 * px[i + 1] + 0.114 * px[i + 2];
+  const delta = (a, b) => {
+    let s = 0;
+    const n = a.w * a.h;
+    for (let k = 0; k < n; k++) {
+      s += Math.abs(lum(a.px, k * a.bpp, a.bpp) - lum(b.px, k * b.bpp, b.bpp));
+    }
+    return s / n;
+  };
+
+  const A = join(tmpDir, '.mo-a.png');
+  const B = join(tmpDir, '.mo-b.png');
+  const ds = [];
+  try {
+    for (const f of [0.2, 0.5, 0.8]) {
+      const t = Math.max(0.5, Math.min(durationSec - 1.5, durationSec * f));
+      ds.push(delta(grab(t, A), grab(t + 1, B)));
+    }
+  } finally {
+    rmSync(A, { force: true });
+    rmSync(B, { force: true });
+  }
+  ds.sort((x, y) => x - y);
+  return Math.round(ds[1] * 100) / 100;
 }

@@ -106,10 +106,69 @@ warning = đúng mốc nền** (đo bằng `git stash` rồi so từng dòng) ·
 - Soi **4 khung hình thật** (hook · giữa · cảnh cuối · khung kết) — đây là phép
   kiểm duy nhất bắt được cả lỗi đo-sai-vùng-cắt lẫn lỗi in trùng tên miền.
 
+### 🔴 VÒNG SAU — "trong clip tao ko thấy video chi thấy hình tĩnh"
+Henry xem bản render đầu và nói đúng. Đo bằng pixel trên ba khung (40 · 300 ·
+700): vùng nền chỉ lệch **5–9 trên thang 255 (2–3,5%)**, mà phần lớn là Ken
+Burns chứ không phải đoạn phim.
+
+🔴 **Căn nguyên là tôi tự tuyên bố không đo được rồi thôi không đo.** Tôi ghi
+*"ffmpeg đi kèm Playwright chỉ có 3 demuxer, không mở được mp4 ⇒ máy không gác
+được độ động"* — đúng về bản Playwright, nhưng **`@remotion/compositor-*` mang
+theo một bản ffmpeg ĐẦY ĐỦ (42 demuxer, h264/hevc/vp9) và nó nằm sẵn trong
+repo**. Công cụ có sẵn mà tôi kết luận là không có.
+- 🔑 **Bài học: trước khi ghi "không làm được", rà hết công cụ ĐÃ CÓ TRONG
+  REPO.** Một dòng "không gác được" trong tài liệu là một cái cổng bị tắt vĩnh
+  viễn — và đúng cái cổng đó là cổng quan trọng nhất của kho video.
+
+**Và nó không phải xui — hai cổng KÉO NGƯỢC NHAU:** cổng độ sáng đẩy về phía
+đoạn tối+phẳng, mà đoạn tối+phẳng thì thường chẳng có gì chuyển động. Thiếu cổng
+độ động là cổng độ sáng tự chọn ra đoạn tĩnh.
+
+| đo được (Δ/giây, thang 0–255, tốc độ gốc) | |
+|---|---:|
+| giọt nước bám kính *(đoạn đã dùng)* | **1,99** |
+| mây trôi | 14,6 |
+| phố có người qua lại | 20,4 |
+
+- **`measureMotion()`** (`stock-lib.mjs`) — trung vị |Δ| của ba cặp khung cách
+  nhau 1 giây, đo trên ĐÚNG vùng cắt 9:16. `MOTION_MIN = 6` · `MOTION_MAX = 45`.
+- **Đối chứng bắt buộc khi đổi ffmpeg**: `measureImage` trên cùng file ra **số
+  đo TRÙNG KHÍT** giữa bản Playwright và bản Remotion ⇒ kho ảnh không đổi nghĩa.
+- ⚠️ **Cả một LỚP tông không có video**: mưa trên kính / sương đo ra 0,87–3,14
+  ⇒ tông `mo-mit` ra **0 đoạn**. Tập tông viết cho ẢNH TĨNH, không phải tông nào
+  cũng dịch được sang video. Đừng ép cho đủ.
+
+### 🐞 Kèm: con KHỈ lọt tông "suy tư" — và cổng đầu tiên của tôi quá rộng
+`must[]` của `suy-tu` có từ **TƯ THẾ** (`sitting`) mà con vật nào cũng mang ⇒
+lọt một đoạn `baboons, apes, cub`. Cùng lớp với con MÈO đã lọt `nang-am` ở kho
+ảnh, chỉ khác là qua bằng tư thế chứ không phải bối cảnh.
+- Vá ở CƠ CHẾ: gỡ từ tư thế khỏi `must` — **`must` chỉ được chứa từ nói về CHỦ
+  THỂ hoặc BỐI CẢNH**.
+- 🪤 Lưới đỡ thứ hai (deny con vật) bản đầu tôi làm **quá rộng** (`animal` ·
+  `wildlife` · `bird`): đo lại trên 94 bức đang có thì nó **loại oan 2 bức đúng
+  chủ đề** — một con QUẠ trong tông *thiên nhiên u tối*, và một hình **BÓNG BÀN
+  TAY** trong tông *bàn tay* (thẻ có chữ `animal` vì là bóng hình con vật). Thu
+  hẹp còn mấy loài đọc thành "con vật là nhân vật chính": **0 loại oan**, và nó
+  bắt được **1 bức lạc kênh có sẵn trong kho ảnh** — một macro mắt **ẾCH** nằm
+  trong tông *tĩnh lặng*. Bức đó vẫn còn trong manifest (kho đã commit, không tự
+  sửa); lượt nhập sau sẽ không lấy loại đó nữa.
+- 🪤 **Và cổng "khớp ít nhất MỘT tiêu chí brief" (`MIN_MATCHED`) mới là cổng
+  đúng tầng**: ba đoạn đáng ngờ nhất của lượt nhập đủ 10 tông đều có
+  `matched: []` — thằn lằn săn mồi · rừng chung chung · **trẻ con chạy trong
+  hẻm** dưới tông "bế tắc". Chặn theo *lạc brief* thì chặn được cả loại tôi chưa
+  nghĩ ra, thay vì đuổi mãi theo tên con vật.
+- 🪤 Lượt vá danh sách con vật đầu tiên tôi **sửa nhầm file** (`stock-video.mjs`
+  thay vì `stock-lib.mjs`) và lượt thay đó **không có `assert` nên hỏng im
+  lặng** — chỉ lộ vì red-team chạy lại thấy thằn lằn vẫn qua. Đúng bài học đã
+  ghi: *mọi lượt thay bằng script phải assert số lượt khớp*.
+- 🪤 Và phép audit của tôi ban đầu báo thêm 3 ca "lạc đề" — **artefact**: manifest
+  chỉ lưu caption đã CẮT ở 16 thẻ, còn lúc nhập kho cổng đọc thẻ THÔ. Đúng bài
+  học *"đo trên bản đã cắt gọn thì đang đo bản cắt"*, vấp lại ngay trong lượt đi
+  sửa một lỗi đo khác.
+
 ### CÒN LẠI
-- ⚠️ **Máy KHÔNG gác được ĐỘ ĐỘNG của đoạn phim** (thumbnail chỉ có một khung, và
-  ffmpeg ở đây không mở được mp4). Cách xử hiện tại không phải ĐO mà là ÉP:
-  `playbackRate` chậm. Đừng đọc "qua cổng" thành "đủ tĩnh".
+- ⚠️ **Máy vẫn KHÔNG gác được "đoạn phim này có ăn nhập với lời đọc không"** —
+  nó chỉ gác được ĐẸP-hay-không ở mức thô và độ động. Vẫn phải xem bằng mắt.
 - **Kho mới chỉ 3 đoạn / 2 tông.** Muốn đủ 16 tông thì chạy
   `node scripts/stock-video.mjs --bucket tone --per 2`.
 - **5 kịch bản insight còn lại vẫn nền tranh quẻ** — đổi là sửa data thuần.

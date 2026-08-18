@@ -39,6 +39,7 @@ import {
   ensureProxyEnv,
   findFfmpeg,
   measureImage,
+  measureMotion,
   passesTags,
   pixabayKey,
   sleep,
@@ -104,6 +105,50 @@ const MAX_MB = 60;
 
 /** Trần ứng viên SOI mỗi nhóm. */
 const SCREEN_CAP = 24;
+
+/**
+ * ══════════════════════════════════════════════════════════════════════
+ * ĐỘ ĐỘNG — cổng QUAN TRỌNG NHẤT của kho video, và là cổng tôi đã BỎ SÓT
+ * ══════════════════════════════════════════════════════════════════════
+ * Lượt nhập đầu chỉ gác TỐI + THẺ. Kết quả: lọt một đoạn giọt nước BÁM KÍNH
+ * (`1,99`/giây — gần như đứng im), render ra clip mà Henry xem xong nói *"trong
+ * clip tao ko thấy video chi thấy hình tĩnh"*. Nếu nền không nhúc nhích thì cả
+ * lý do đổi từ ảnh sang video biến mất.
+ *
+ * 🔑 Và nó KHÔNG phải xui: cổng độ sáng ĐẨY thẳng về phía đó — đoạn càng tối,
+ * càng phẳng thì càng dễ là đoạn chẳng có gì chuyển động. Hai cổng kéo ngược
+ * nhau, nên thiếu cổng này là cổng kia tự chọn ra đoạn tĩnh.
+ *
+ * Mốc đo được (thang 0–255 mỗi giây, ở tốc độ GỐC):
+ *     giọt nước bám kính  1,99   ← phải LOẠI
+ *     mây trôi           14,6    ← đúng mức
+ *     phố có người        20,4   ← nhiều, nhưng còn dùng được
+ *
+ * ⚠️ `MOTION_MIN` hiệu chỉnh trên ba mẫu đó — ít, nên đây là NGƯỠNG KHỞI ĐIỂM
+ * chứ không phải một phép đo chắc. `MOTION_MAX` thì lỏng hẳn, chỉ để chặn đoạn
+ * rung giật / cắt cảnh liên tục; phần "nền rối" đã có `DETAIL_MAX` lo.
+ */
+const MOTION_MIN = 6;
+const MOTION_MAX = 45;
+
+/**
+ * Phải khớp ÍT NHẤT MỘT tiêu chí brief (châu Á · moody · retro · huyền bí · dọc
+ * · đủ dài) mới được lấy.
+ *
+ * 🔴 Vì sao cần: lượt nhập đầu đủ 10 tông có ba đoạn `matched: []` — tức khớp
+ * **không tiêu chí nào**, chỉ được điểm nhờ hơi tối — và đúng ba đoạn đó là ba
+ * đoạn nhìn vào thấy sai ngay: một con **THẰN LẰN đang săn mồi** (lọt tông "tối
+ * giản" vì thẻ `wall lizard` tách ra có chữ `wall`), một cảnh rừng chung chung,
+ * và **trẻ con chạy trong hẻm** dưới tông "bế tắc".
+ *
+ * 🔑 Đây là cổng ĐÚNG TẦNG hơn việc thêm mãi tên con vật vào `DENY_TAGS`: nó
+ * chặn *mọi* thứ lạc brief, kể cả loại tôi chưa nghĩ ra. Chấp nhận tông nào
+ * không đủ hàng thì để thiếu — thà ít mà đúng.
+ *
+ * ⚠️ Cũng lộ một cơ chế: khớp theo TỪ làm thẻ GHÉP khớp nhầm nửa còn lại
+ * (`wall lizard` → `wall`). Ngược chiều với bẫy `war`/`warm` đã ghi, cùng gốc.
+ */
+const MIN_MATCHED = 1;
 
 // ============================================================
 // TIỆN ÍCH
@@ -311,7 +356,7 @@ for (const [bucketName, items] of groups) {
     // vài chục MB) — cùng lối "soi bản nhỏ trước" của kho ảnh.
     const dir = join(STAGE, bucketName, item.id);
     mkdirSync(dir, { recursive: true });
-    const scored = [];
+    let scored = [];
     for (const c of cands) {
       const r = pickRendition(c.hit);
       const thumb = r.thumbnail || c.hit.videos?.medium?.thumbnail;
@@ -348,6 +393,9 @@ for (const [bucketName, items] of groups) {
         rmSync(tmpPng, { force: true });
       }
     }
+    const junk = scored.filter((w) => w.why.length < MIN_MATCHED);
+    for (const w of junk) rejected.push({ id: w.hit.id, why: 'không khớp tiêu chí brief nào' });
+    scored = scored.filter((w) => w.why.length >= MIN_MATCHED);
     scored.sort((a, b) => b.score - a.score);
     const winners = scored.slice(0, need);
     console.log(`   ${scored.length} qua cổng độ sáng · lấy ${winners.length}`);
@@ -364,7 +412,13 @@ for (const [bucketName, items] of groups) {
       continue;
     }
 
-    for (const w of winners) {
+    // Độ động chỉ đo được trên TỆP PHIM, nên phải tải rồi mới biết — khác mọi
+    // cổng khác vốn chặn trước khi tốn byte nào. Đoạn nào trượt thì XOÁ và lấy
+    // ứng viên kế tiếp, thay vì bỏ trống chỗ.
+    const queue = scored.slice();
+    let taken = 0;
+    while (taken < need && queue.length) {
+      const w = queue.shift();
       const file = `${bucketName}/${item.id}/${w.hit.id}.mp4`;
       const abs = join(dir, `${w.hit.id}.mp4`);
       try {
@@ -374,7 +428,26 @@ for (const [bucketName, items] of groups) {
         const buf = Buffer.from(await res.arrayBuffer());
         if (buf.length < 10240) throw new Error(`tệp chỉ ${buf.length} byte`);
         writeFileSync(abs, buf);
+
+        const motion = measureMotion(ffmpeg, abs, w.hit.duration, dir);
+        if (motion < MOTION_MIN || motion > MOTION_MAX) {
+          rmSync(abs, { force: true });
+          rejected.push({
+            id: w.hit.id,
+            why:
+              motion < MOTION_MIN
+                ? `gần như đứng im (${motion}/giây)`
+                : `động quá (${motion}/giây)`,
+          });
+          console.log(
+            `   ↷ bỏ ${String(w.hit.id).padEnd(9)} độ động ${motion}/giây ` +
+              `(cần ${MOTION_MIN}–${MOTION_MAX})`
+          );
+          continue;
+        }
+
         known.add(`pixabay:${w.hit.id}`);
+        taken++;
         added.push({
           id: `${item.id}-${w.hit.id}`,
           bucket: bucketName,
@@ -386,6 +459,7 @@ for (const [bucketName, items] of groups) {
           duration: w.hit.duration,
           bytes: buf.length,
           brightness: { mean: w.m.mean, sd: w.m.sd },
+          motion,
           sat: w.m.sat,
           detail: w.m.detail,
           score: w.score,
@@ -402,7 +476,7 @@ for (const [bucketName, items] of groups) {
         console.log(
           `   ✓ ${String(w.hit.id).padEnd(9)} điểm ${String(w.score).padStart(3)} ` +
             `${w.r.width}x${w.r.height} ${w.hit.duration}s ` +
-            `${(buf.length / 1048576).toFixed(1)}MB L=${w.m.mean} [${w.why.join(' ')}]  ` +
+            `${(buf.length / 1048576).toFixed(1)}MB L=${w.m.mean} động=${motion} [${w.why.join(' ')}]  ` +
             captionFromTags(w.hit.tags).slice(0, 34)
         );
       } catch (e) {
@@ -429,6 +503,8 @@ console.log(`  API        ${apiCalls} lượt (trần ${MAX_REQUESTS})`);
 console.log(`  loại bỏ    ${rejected.length} ứng viên`);
 console.log(`  manifest   ${rel(MANIFEST)}`);
 console.log(`  video      ${rel(STAGE)}  (NGOÀI git)`);
-console.log(`\n⚠️ Máy gác được: đạo đức · lạc kênh · liên quan · độ sáng · người-phải-châu-Á.`);
-console.log(`   Máy KHÔNG gác được: đẹp, và ĐỘ ĐỘNG của đoạn phim. Phải xem bằng mắt.`);
+console.log(
+  `\n⚠️ Máy gác được: đạo đức · lạc kênh · liên quan · độ sáng · người-phải-châu-Á · ĐỘ ĐỘNG.`
+);
+console.log(`   Máy KHÔNG gác được: ĐẸP, và "đoạn phim này có ăn nhập với lời đọc không".`);
 console.log(`   Dải giữa khung đo cho khối chữ: ${TEXT_BAND[0]}–${TEXT_BAND[1]} chiều cao.`);
