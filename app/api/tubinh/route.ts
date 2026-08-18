@@ -169,15 +169,27 @@ function extractTuBinhContext(batTuData: any, question: string): string {
   if (batTuData.tuoiXem) ctx += 'Tuổi xem: ' + batTuData.tuoiXem + '\n';
 
   // Topic-based augmentation
+  //
+  // 🔴 Mẫu phải là CỤM ĐỦ NGHĨA, tuyệt đối không để âm tiết đơn ('quan', 'sao',
+  // 'chức'). Tiếng Việt viết RỜI từng âm tiết nên 'quan' khớp luôn "tổng quan",
+  // "quan hệ", "quan tâm", "liên quan", "quan điểm"; 'sao' khớp "tại sao",
+  // "vì sao", "làm sao", "ra sao". Hậu quả KHÔNG phải thừa một mục — nó cướp
+  // mất nhánh mặc định: câu mở như "cho tôi xem tổng quan" đáng ra nhận đủ 4
+  // mục (quanSat · tai · phuThe · daiVan) thì chỉ nhận đúng 1 mục lạc đề, và
+  // model phải luận chay phần còn lại. Đo được 14/17 câu mở dính lỗi này.
+  //
+  // ⛔ Và ĐỪNG vá bằng cách thêm biên từ (\b): đo rồi, ra 0/20 — vì trong
+  // "tổng quan" thì "quan" THẬT SỰ là một âm tiết đứng riêng, biên từ vẫn
+  // khớp. Biên từ chỉ cứu được ngôn ngữ viết liền, không cứu tiếng Việt.
   const topicMap: Record<string, string[]> = {
     'tài chính|tiền|tài lộc|làm giàu|thu nhập': ['tai'],
-    'sự nghiệp|công việc|nghề|quan|chức': ['quanSat'],
+    'sự nghiệp|công việc|nghề nghiệp|quan lộc|thăng tiến|thăng chức|chức vụ|thất nghiệp': ['quanSat'],
     'tình duyên|hôn nhân|vợ chồng|tình cảm': ['phuThe'],
     'con cái|con cháu': ['tuTuc'],
     'sức khỏe|bệnh|thân thể': ['suckhoe'],
     'đại vận|tiểu vận|vận hạn|vận trình': ['daiVan'],
     'lưu niên|năm nay|năm tới': ['luuNien'],
-    'thần sát|sao': ['thanSat'],
+    'thần sát|sao xấu|sao tốt|hung tinh|cát tinh|sao chiếu|sao nào|sao gì': ['thanSat'],
   };
 
   // Dò trên bản ĐÃ CHUẨN HOÁ VỊ TRÍ DẤU THANH (lib/vn-text.ts) — "sức khoẻ"
