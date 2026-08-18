@@ -207,7 +207,11 @@ function checkHook(spec: ScriptSpec, issues: GateIssue[]): number {
       level: 'block',
       code: 'hook.missing',
       message: 'Không có câu mở đầu.',
-      fix: 'Viết một câu mở đầu dưới 60 ký tự, đặt câu hỏi hoặc nêu một con số cụ thể.',
+      // Con số lấy từ `budgetChars`, KHÔNG ghi cứng: bản cũ ghi "60" trong khi
+      // `hook.too-long` ngay dưới suy ra 62 — hai trần cho một ràng buộc, đúng
+      // cái bẫy vừa tốn ba vòng viết lại của `ba-the-be-tac`. Hôm nay lệch 2 ký
+      // tự nên vô hại, nhưng đổi `hookMaxSeconds` một lượt là nó cắn thật.
+      fix: `Viết một câu mở đầu dưới ${budgetChars(THRESHOLDS.hookMaxSeconds)} ký tự, đặt câu hỏi hoặc nêu một con số cụ thể.`,
     });
     return 0;
   }
@@ -295,7 +299,21 @@ function checkPacing(spec: ScriptSpec, issues: GateIssue[], limits: PacingLimits
         level: 'block',
         code: 'scene.too-long',
         message: `Cảnh ${i + 1} kéo ${secs.toFixed(1)}s (trần ${THRESHOLDS.sceneMaxSeconds}s) — màn hình đứng quá lâu, đây là chỗ người xem lướt đi.`,
-        fix: `Tách cảnh ${i + 1} làm hai, hoặc đổi hình giữa chừng.`,
+        // 🔴 Ô `fix` PHẢI TRỎ VÀO ĐÚNG CẦN GẠT LÀM ĐỔI PHÉP ĐO. Bản cũ ghi
+        // *"tách cảnh làm hai, hoặc đổi hình giữa chừng"* — mà phép đo ngay
+        // trên là `estimateSpeechSeconds(spokenSceneText)`, tức THUẦN ĐỘ DÀI
+        // CHỮ: đổi hình không đổi một ký tự nào, còn tách cảnh thì tổng chữ
+        // vẫn nguyên. Model làm đúng lời khuyên vẫn trượt lại y chỗ cũ —
+        // `ba-kieu-ton-thuong` trượt `scene.too-long` CẢ BA vòng viết lại
+        // (Actions 32125541824) đúng vì thế.
+        //
+        // Cùng họ với `hook.too-long` đã vá: nêu thẳng con số, và lấy từ
+        // `budgetChars` DÙNG CHUNG với khối ngân sách của `viral-loop` — hai
+        // nơi tự nhân trần một kiểu là model nhận hai con số cho một ràng buộc.
+        fix:
+          sc.forceSeconds !== undefined
+            ? `Cảnh ${i + 1} đang khai cứng ${sc.forceSeconds}s — hạ xuống ≤${THRESHOLDS.sceneMaxSeconds}s, hoặc bỏ khai để độ dài đi theo lời đọc.`
+            : `Rút lời đọc cảnh ${i + 1} xuống dưới ${budgetChars(THRESHOLDS.sceneMaxSeconds)} ký tự (đang ${spokenSceneText(sc).trim().length}). Đổi hình KHÔNG rút ngắn được — phép đo này chỉ tính chữ.`,
       });
     }
     if (sc.text.trim().length > THRESHOLDS.sceneMaxChars) {
