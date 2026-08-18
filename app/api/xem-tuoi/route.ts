@@ -11,6 +11,7 @@ import { ok, err, options, parseBody } from '@/lib/cors';
 import { llmText, llmStreamResponse } from '@/lib/llm/complete';
 import { withToolOutcome } from '@/lib/ops/tool-outcome';
 import { LUAN_ARC, MAU_ARC } from '@/lib/agent/prompts';
+import { chuanHoaDauThanh } from '@/lib/vn-text';
 
 // ─── Chat system prompts ──────────────────────────────────────
 // ⚠️ ĐÂY LÀ BẢN CHÉP TAY, đứng ngoài `buildChatContext`. Nó phục vụ khung chat
@@ -67,9 +68,13 @@ function fmtLaso(ls: any, label: string, q: string): string {
     'cha mẹ|phụ mẫu':                                      ['Phụ Mẫu'],
     'đại vận|tiểu vận|vận hạn|vận trình':                 ['__daiVan__'],
   };
+  // Dò trên bản ĐÃ CHUẨN HOÁ VỊ TRÍ DẤU THANH (lib/vn-text.ts) — "sức khoẻ" và
+  // "sức khỏe" đều đúng chính tả, so chuỗi thô thì gõ lối kia là TRƯỢT IM LẶNG
+  // rồi rơi xuống nhánh mặc định, mất đúng cung câu hỏi nhắm tới.
+  const qn = chuanHoaDauThanh(q);
   const relevant = new Set(['Mệnh']);
   for (const [pattern, names] of Object.entries(topics)) {
-    if (new RegExp(pattern, 'i').test(q)) names.forEach(n => relevant.add(n));
+    if (new RegExp(chuanHoaDauThanh(pattern), 'i').test(qn)) names.forEach(n => relevant.add(n));
   }
   if (relevant.size === 1) ['Quan Lộc', 'Tài Bạch', 'Phu Thê'].forEach(n => relevant.add(n));
 

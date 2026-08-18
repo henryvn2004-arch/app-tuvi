@@ -5,6 +5,7 @@ import { NextRequest } from 'next/server';
 import { ok, err, options, parseBody } from '@/lib/cors';
 import { llmText, llmStreamResponse } from '@/lib/llm/complete';
 import { withToolOutcome } from '@/lib/ops/tool-outcome';
+import { chuanHoaDauThanh } from '@/lib/vn-text';
 
 const SUPABASE_URL = process.env.SUPABASE_URL!;
 const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_KEY!;
@@ -182,9 +183,13 @@ function extractTuBinhContext(batTuData: any, question: string): string {
     'thần sát|sao': ['thanSat'],
   };
 
+  // Dò trên bản ĐÃ CHUẨN HOÁ VỊ TRÍ DẤU THANH (lib/vn-text.ts) — "sức khoẻ"
+  // và "sức khỏe" đều đúng chính tả, so chuỗi thô thì gõ lối kia là TRƯỢT IM
+  // LẶNG rồi rơi xuống nhánh mặc định, mất đúng mục câu hỏi nhắm tới.
+  const qn = chuanHoaDauThanh(q);
   const relevant = new Set<string>();
   for (const [pattern, keys] of Object.entries(topicMap)) {
-    if (new RegExp(pattern, 'i').test(q)) keys.forEach(k => relevant.add(k));
+    if (new RegExp(chuanHoaDauThanh(pattern), 'i').test(qn)) keys.forEach(k => relevant.add(k));
   }
   if (relevant.size === 0) ['quanSat', 'tai', 'phuThe', 'daiVan'].forEach(k => relevant.add(k));
 
