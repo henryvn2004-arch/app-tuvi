@@ -128,6 +128,43 @@ Tải chính URL công khai về đo lại: **HTTP 200 · 14.773.367 byte · 79,
   *sổ có ghi không*, `media_posts` nói *van có rò không*. Chỉ nhìn nhãn job
   "success" thì cả ba câu đó đều chưa được trả lời.
 
+### 🔴 Nhưng lịch TUẦN thì KHÔNG BAO GIỜ dựng nổi 6 clip insight — 12/24 chết
+Lượt vừa giao ra là **một clip CHỈ ĐỊNH**, không phải `--all`. Đo `--all`: **24
+clip**, và render đo được **~6,5× thời lượng thật** (79,7s → **515s**) ⇒ ngân
+sách 150 phút chỉ với tới quãng đầu danh sách.
+
+Cộng thêm một tính chất **tưởng đã có mà không có**: đầu `build-video-batch.mjs`
+ghi *"NỐI LẠI ĐƯỢC — đã có mp4 thì bỏ qua"*. Đúng khi chạy tay, **sai trên
+Actions**: phép bỏ qua là `existsSync(remotion/out/<id>.mp4)`, mà runner là bản
+clone SẠCH ⇒ `out/` **rỗng ở mọi lượt**. Thứ tự lại cố định ⇒ tuần nào cũng dựng
+lại từ `than-so-hoc` rồi bị cắt đúng chỗ cũ.
+
+| mô phỏng 52 tuần, ngân sách với tới 12/24 clip | bản CŨ | sau khi vá |
+|---|---:|---:|
+| clip **KHÔNG BAO GIỜ được dựng** | **12** | **0** |
+| clip insight dựng được | **0/6** | **6/6, mỗi tuần** |
+| tuần để phủ trọn 24 clip | không bao giờ | **13** |
+
+🔑 **Và 12 clip chết đó gồm TRỌN BỘ insight** — kể cả `vi-sao-hay-hoan-lai` vừa
+giao ra hôm nay. Tức nhóm DUY NHẤT qua cổng 2 đều đặn nằm trọn trong phần
+không với tới.
+
+**Vá hai lớp, cả hai đo được:**
+1. **Xoay theo tuần ISO** cho `--all` — mỗi tuần một điểm bắt đầu khác.
+   ⛔ **CỐ Ý không lưu `out/` vào cache để giải**: cache mp4 thì sửa kịch bản
+   xong lượt sau vẫn bỏ qua vì *"đã có"* rồi **nộp lại clip CŨ** — đổi một lỗi
+   im lặng lấy một lỗi im lặng khác, mà cái sau còn tệ hơn (giao ra nội dung sai).
+2. **`insight` đi TRƯỚC, trọn bộ.** Thứ tự cũ đặt nhóm tỉ lệ qua cổng THẤP NHẤT
+   lên đầu — 18 tool-demo (**17%**) trước, 6 insight (**67%**) sau. 6 clip
+   insight chỉ ~50 phút nên luôn lọt ngân sách 150.
+- ⚠️ Đây là quyết định **XẾP LỊCH, không phải NỘI DUNG**. Câu hỏi treo (bỏ hẳn
+  clip tool-demo, hay cho cổng 2 thành cảnh báo riêng cho loại đó) vẫn nguyên.
+- Xoay mà im lặng thì đọc log ra "danh sách bị xáo trộn vì lỗi" ⇒ in điểm xoay
+  ở cả log lẫn tóm tắt, kèm câu giải thích `hoãn` ở cuối bảng là ĐÚNG thiết kế.
+- `--start <id>` ghim tay khi cần; id lạ → **exit 1** kèm lý do.
+- 🪤 **Phép đo `exit=0` đầu tiên của tôi SAI**: `$?` sau một pipe bắt mã thoát
+  của `tail`, không phải của `node`. Đo lại không qua pipe → đúng **exit 1**.
+
 ### 🐞 Bắt kèm: sổ ghi SAI LOẠI clip — `clip-ingest` đóng cứng `'tool-demo'`
 Clip insight đầu tiên vào `media_assets` dưới nhãn `source_type='tool-demo'`.
 Chưa va vào gì (đường ảnh dùng `khao_luan`, hai bucket rời nhau) — nhưng hai
