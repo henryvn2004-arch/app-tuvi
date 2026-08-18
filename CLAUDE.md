@@ -43,11 +43,34 @@ ngay**:
   (+15) · dấu `signup_rewarded_at` đã đặt · **đúng 1** dòng giao dịch, giữ nguyên
   dấu tiếng Việt · **chạy lại lần 2 → `rewarded=f`, số dư KHÔNG đổi** (chống trả
   hai lần).
-- ⚠️ **Nợ chưa vá, có chủ ý**: `UPDATE user_credits SET balance=... WHERE user_id
-  =...` **không soát số dòng**. Người chưa có dòng `user_credits` thì UPDATE ăn 0
-  dòng nhưng hàm VẪN ghi giao dịch + đánh dấu đã thưởng ⇒ **thưởng ma**. Chưa
-  thêm `GET DIAGNOSTICS` vì không trộn hai thay đổi vào cùng một lượt sửa đường
-  tiền — làm riêng.
+### 👻 Vòng sau — "THƯỞNG MA": `UPDATE user_credits` trần ở CẢ HAI tầng referral
+`UPDATE user_credits SET balance = balance + n WHERE user_id = …` **không soát số
+dòng**. Thiếu dòng ví ⇒ ăn 0 dòng, nhưng hàm **vẫn chạy tiếp** ghi
+`credit_transactions` + đánh dấu đã thưởng ⇒ **sổ nói đã trả, ví không tăng, không
+ai biết**.
+- 🔴 **Không phải lo hão**: đo được **9 tài khoản THẬT** (tạo 21/03–23/04, trước
+  khi có trigger quà đăng ký) đang KHÔNG có dòng `user_credits`.
+- **Vá = UPSERT + chốt số dòng**, không phải chỉ chốt: upsert thì người nhận có
+  tiền THẬT kể cả khi thiếu dòng; chốt `GET DIAGNOSTICS … <> 1` thì DỪNG HẲN để
+  referral còn `pending` mà thử lại, thay vì ghi sổ khống.
+- ⚠️ **CỐ Ý không `coalesce(credits_to_*, 0)`**: NULL là lỗi cấu hình, để nó ném
+  ràng buộc NOT NULL còn hơn lặng lẽ trả 0 Lượng rồi đánh dấu đã thưởng.
+- **Quét MỌI hàm ghi `user_credits`** mới ra chỗ thứ hai — `process_referral_reward`
+  (tầng 2, 30 mỗi bên) dính y hệt và **nặng hơn vì cộng cho HAI người**. Thân hàm
+  đó **trước đây không có trong repo** (tạo ad-hoc, repo chỉ nhắc tên ở lượt
+  revoke) → nay chép trọn vào `_patches/migration-referral-reward-upsert.sql`.
+- 🪤 **`deduct_credits` bị bộ dò gắn cờ đỏ nhưng ĐỌC RA THÌ AN TOÀN**: nó có
+  `RETURNING … IF NOT FOUND THEN RAISE EXCEPTION 'insufficient_balance'` nên thiếu
+  dòng ví là ném lỗi, không cho dùng chùa. **Bộ dò dò theo mẫu chuỗi thì phải đọc
+  code mới kết luận** — báo đỏ oan một hàm đang đúng cũng là một kiểu sai.
+- **Verify (rollback sạch, prod không đổi một byte)** — tầng 1: thiếu dòng → tự
+  tạo, balance 15, 1 giao dịch · có dòng → 15→30 cộng dồn · `ROW_COUNT`=1 ở cả hai
+  nhánh. Tầng 2: **cả hai bên thiếu dòng** → tạo đủ 2 dòng 30/30, 2 giao dịch,
+  `status=rewarded` · có dòng → 30→60 hai bên.
+- 🪤 **Red-team chính cái chốt** (chốt chưa từng đỏ thì chưa chứng minh được nó
+  biết đỏ): ép một thao tác ăn 0 dòng → chốt ném đúng nguyên văn kèm `rows=0`.
+- ⚠️ Còn lại, chưa đụng: `add_credits`/`deduct_credits` **thiếu `SET search_path`**
+  (hàm SECURITY DEFINER để trống là hở đường tiêm) — hai hàm referral đã có.
 - 🪤 **Suýt báo một check ĐỎ OAN**: `tsc` kêu `verboseLogs` không tồn tại ở
   `app/mcp/[key]/route.ts`. Không phải lỗi mã — `node_modules` trong container
   còn **`mcp-handler` 1.1.0** trong khi lock đã **2.1.0**. `npm ci` xong là sạch.
