@@ -353,6 +353,10 @@ export async function checkAnomalies(): Promise<{ fired: FiredAlert[]; checked: 
     // tầng mặc định nên mỗi migration tương lai vẫn đẻ ra được một hàm thiếu.
     // Hàm SECURITY DEFINER để trống search_path chạy bằng quyền CHỦ HÀM nhưng
     // dùng search_path của NGƯỜI GỌI — có cửa cho bảng/hàm giả mạo chen vào.
+    // 🔑 Bắt CẢ hàm chỉ khai 'public' TRẦN, không chỉ hàm để trống: Postgres tìm
+    // pg_temp TRƯỚC TIÊN trừ khi nó được nêu tường minh ở vị trí khác, nên 'public'
+    // trần vẫn còn cửa che bảng thật bằng bảng TẠM cùng tên (đã red-team: hàm
+    // 'public' trần đọc phải bảng tạm, hàm 'public, pg_temp' đọc đúng bảng thật).
     // ⚠️ Mức độ tuỳ ACL: hở cho anon mới là gấp, còn chỉ service_role gọi được
     // thì đây là gia cố phòng thủ theo chiều sâu — báo để vá, đừng đọc thành
     // "đang bị tấn công".
@@ -360,7 +364,7 @@ export async function checkAnomalies(): Promise<{ fired: FiredAlert[]; checked: 
       fired.push({
         key: 'sec_no_search_path',
         text:
-          `🔐 ${audit.ham_thieu_search_path.length} hàm SECURITY DEFINER để TRỐNG search_path:\n` +
+          `🔐 ${audit.ham_thieu_search_path.length} hàm SECURITY DEFINER thiếu pg_temp trong search_path:\n` +
           audit.ham_thieu_search_path.map((f) => `   ↳ ${f}`).join('\n') +
           `\n   Vá: alter function <tên>(<kiểu tham số>) set search_path = public, pg_temp;`,
       });
