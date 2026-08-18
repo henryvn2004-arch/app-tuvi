@@ -24,7 +24,7 @@ import { computeLaso, renderLasoCard } from '@/lib/engine/laso';
 import { computeTuBinh } from '@/lib/engine/tubinh';
 import { computeSinhCon, computeChonNgay, computeDatTen, computeDatTenDn } from '@/lib/engine/diachi';
 // Template prompt + context formatter dùng CHUNG với /api/lasotuvi (một bộ não).
-import { CHAT_SYSTEM_LASO, CHAT_SYSTEM_GENERAL, extractLasoContext, buildChatContext, focusHint, nguoiXemLine, RAIL_MAX_TOKENS } from '@/lib/agent/prompts';
+import { CHAT_SYSTEM_LASO, CHAT_SYSTEM_GENERAL, extractLasoContext, buildChatContext, focusHint, nguoiXemLine, RAIL_MAX_TOKENS, LASO_MAX_TOKENS } from '@/lib/agent/prompts';
 import { TOOLS_INSTRUCTION } from '@/lib/agent/tools';
 import { type ChatConfig } from '@/lib/config/appConfig';
 import {
@@ -267,6 +267,14 @@ export async function runAgent(
     // ── LÁ SỐ / GENERAL (Sprint 1.1): seed từ birth, prompt thương hiệu +
     // công cụ đầy đủ (lap_la_so, vận hạn, RAG). Dùng CHUNG extractLasoContext
     // với /api/lasotuvi → marker khớp prompt giàu.
+    //
+    // 🔴 Trần riêng cho 3 shape LÁ SỐ. Nhánh này KHÔNG đi qua
+    // `buildChatContext` (nó tự ráp `CHAT_SYSTEM_LASO`/`GENERAL` ngay bên
+    // dưới) nên con số per-prompt mà hàm đó trả về KHÔNG với tới đây — đặt
+    // trần ở `prompts.ts` thôi là đường rail THẬT vẫn chạy ở mức cũ, còn bài
+    // kiểm trên `buildChatContext` thì vẫn báo xanh. Đây đúng là đường mà
+    // shell rail + 3 kênh bot đang dùng, tức chỗ cần trần nhất.
+    railMaxTokens = Math.min(railMaxTokens, LASO_MAX_TOKENS);
     let lasoCtx = '';
     if (req.birth) {
       const res = computeLaso(req.birth);
@@ -921,10 +929,17 @@ const CHAT_FOLLOWUP_RULE =
   'đó là ĐỒNG Ý / yêu cầu nói tiếp về CHÍNH câu hỏi hay đề nghị mà CHÍNH BẠN vừa nêu ở lượt trả lời TRƯỚC. ' +
   'Hãy luận TIẾP đúng chủ đề đó ngay, TUYỆT ĐỐI không hỏi lại "bạn muốn xem gì", không luận lại từ đầu, không đổi chủ đề.';
 
+// ⚠️ VÍ DỤ Ở ĐÂY LÀ THỨ MODEL BẮT CHƯỚC — nên nó phải theo cùng luật thuật ngữ
+// với `arcCore`. Bản cũ nêu "Cung Quan Lộc ra sao?": chip gợi ý là thứ ĐẦU TIÊN
+// người dùng nhìn thấy sau câu trả lời, mà phần lớn họ không rành bộ môn — mời
+// bằng jargon là mời vào chỗ họ không hiểu. Ba ví dụ mới cố ý viết bằng lời
+// thường và hỏi về ĐỜI, khớp với arc vừa nhân ra cho cả 25 tool.
 const CHAT_SUGGEST_RULES =
   'CUỐI CÙNG, sau khi luận xong, xuống dòng và ghi ĐÚNG một dòng bắt đầu bằng "SUGGEST: " ' +
   'gồm 3 câu hỏi ngắn (mỗi câu ≤ 12 từ) mà người dùng có thể muốn hỏi TIẾP, bám sát nội dung vừa luận, ' +
-  'ngăn cách bằng " | ". Ví dụ: SUGGEST: Cung Quan Lộc ra sao? | Năm sau công việc thế nào? | Có nên đổi nghề? ' +
+  'ngăn cách bằng " | ". Viết bằng LỜI THƯỜNG như người dùng sẽ tự gõ — không mở đầu bằng tên riêng ' +
+  'chuyên môn (tên sao, cung, quẻ, can chi…), trừ khi họ vừa hỏi thẳng về đúng thứ đó. ' +
+  'Ví dụ: SUGGEST: Công việc năm sau thế nào? | Có nên đổi nghề không? | Tiền bạc thì sao? ' +
   'Dòng này KHÔNG phải nội dung luận (hệ thống tách ra làm nút gợi ý, không hiển thị). Không ghi gì sau 3 câu đó.';
 
 // ── Thời gian thực (múi giờ VN) tiêm vào prompt ──────────────
