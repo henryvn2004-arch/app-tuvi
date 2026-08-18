@@ -141,6 +141,31 @@ export function soXemHetCanCo(soTrongTep: number): number {
 }
 
 /**
+ * Mô tả tư thế nhân vật cho hội đồng — TỪ VỰNG ĐÓNG, khớp `POSES` trong
+ * `remotion/src/Character.tsx`.
+ *
+ * ⚠️ Vì sao chép tay ở đây thay vì import: `Character.tsx` là file React của
+ * gói `remotion/` (tách khỏi cây build của Next). Cái giá đã biết là hai bảng
+ * có thể trôi khỏi nhau — nên bảng này chỉ được ĐỌC theo khoá, và khoá nào
+ * thiếu thì rơi về `tư thế "<tên>"` chứ không im lặng bỏ qua.
+ *
+ * 🔑 Câu mô tả chỉ TẢ, CẤM KHEN — cùng luật đã đặt cho caption ảnh kho. Viết
+ * "nhân vật đứng rất biểu cảm" là dựng lại đúng cái gương: model chấm cao vì
+ * câu văn của tôi hay, không phải vì hình hợp nội dung.
+ */
+const POSE_MO_TA: Record<string, string> = {
+  chao: 'đứng thẳng, một tay giơ cao vẫy chào',
+  'suy-nghi': 'một tay chống cằm, đầu hơi nghiêng',
+  'hieu-ra': 'một tay giơ thẳng lên quá đỉnh đầu, ngón trỏ chỉ lên',
+  'phan-tich': 'chồm người về trước, một tay đưa thẳng ra phía trước',
+  'loi-khuyen': 'một tay mở ngang ra phía trước, lòng bàn tay ngửa',
+  'tinh-tam': 'hai tay chắp trước ngực, mắt nhắm',
+  'hanh-dong': 'sải một bước dài về phía trước, hai tay đánh so le',
+  'quay-lung': 'quay lưng lại phía người xem, hai tay buông xuôi',
+  'cui-dau': 'đầu cúi xuống, vai xuôi, người chùng thấp',
+};
+
+/**
  * Dựng bảng thời gian có mốc giây để model biết "giây thứ mấy" là chỗ nào.
  * Không có mốc này thì câu trả lời về điểm dừng chỉ là số bịa.
  */
@@ -208,6 +233,21 @@ function buildTimeline(spec: ScriptSpec): string {
       // Hội đồng người xem chấm theo thứ họ NHÌN THẤY — mô tả sai loại cảnh
       // là họ chấm một clip khác với clip sắp render.
       visual = withAccent(typoBase, sc.visual.accent);
+    } else if (sc.visual.kind === 'figure') {
+      /*
+       * 🔑 Đây là chỗ kênh HÌNH cuối cùng có phương sai thật.
+       *
+       * Mô tả rút từ TỪ VỰNG ĐÓNG của tư thế (`POSE_MO_TA`), không phải một
+       * câu tôi viết mới cho từng cảnh. Nhờ vậy hai cảnh khác tư thế thì hội
+       * đồng nhận hai dòng khác nhau — và khi nó chê "hình không ăn nhập" thì
+       * lời chê đó gắn vào một thứ ĐỔI ĐƯỢC (đổi tư thế), chứ không phải một
+       * hằng số viết tay như bản trước.
+       */
+      visual = withAccent(
+        `Nền đen, chữ lớn ở nửa trên. Nửa dưới: nhân vật hoạt hoạ tối giản của kênh — ` +
+          `${POSE_MO_TA[sc.visual.pose] ?? `tư thế "${sc.visual.pose}"`}.`,
+        sc.visual.accent
+      );
     } else {
       visual = withAccent(
         `Thẻ chữ: ${sc.visual.heading ?? ''} ${sc.visual.body ?? ''}`.trim(),

@@ -774,26 +774,30 @@ const SOURCES: InsightSource[] = [
       scenes: [
         {
           text: 'Kiểu thứ nhất im lặng. Bạn không cãi, chỉ lặng lẽ rút đi.',
-          visual: { kind: 'typo', accent: 'im lặng.' },
+          // "lặng lẽ rút đi" → quay lưng. Tư thế KỂ đúng câu đang đọc, không
+          // phải minh hoạ chung chung.
+          visual: { kind: 'figure', pose: 'quay-lung', accent: 'im lặng.' },
         },
         {
           text: 'Người ngoài tưởng bạn ổn. Thật ra bạn vừa đóng một cánh cửa.',
-          visual: { kind: 'typo', accent: 'đóng một cánh cửa.' },
+          visual: { kind: 'figure', pose: 'cui-dau', accent: 'đóng một cánh cửa.' },
         },
         {
           text: 'Kiểu thứ hai nói cho bằng hết. Bạn cần được nghe, không cần thắng.',
-          visual: { kind: 'typo', accent: 'được nghe,' },
+          visual: { kind: 'figure', pose: 'loi-khuyen', accent: 'được nghe,' },
         },
         {
           text: 'Kiểu thứ ba quay vào trong, tự trách mình trước khi kịp giận ai.',
-          visual: { kind: 'typo', accent: 'tự trách mình' },
+          visual: { kind: 'figure', pose: 'suy-nghi', accent: 'tự trách mình' },
         },
         {
           text: 'Không kiểu nào sai. Bạn chỉ học cách tự vệ từ rất sớm.',
-          visual: { kind: 'typo', accent: 'tự vệ từ rất sớm.' },
+          visual: { kind: 'figure', pose: 'tinh-tam', accent: 'tự vệ từ rất sớm.' },
         },
       ],
       ...cta('Bạn là kiểu nào?'),
+      hookPose: 'chao',
+      ctaPose: 'hieu-ra',
       music: 'tram-tinh.wav',
       hashtags: ['tinhcach', 'tamly', 'selfdiscovery', 'tuvi'],
     },

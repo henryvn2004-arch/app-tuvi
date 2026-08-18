@@ -75,7 +75,19 @@ export type SceneVisual =
    * riêng chứ không nhúng ký hiệu vào `text`, vì chính `text` đó còn được gửi
    * cho TTS và dùng làm phụ đề.
    */
-  | { kind: 'typo'; accent?: string };
+  | { kind: 'typo'; accent?: string }
+  /**
+   * Chữ lớn + NHÂN VẬT SIGNATURE của kênh, trên nền đen.
+   *
+   * 🔑 `pose` là tên trong một TỪ VỰNG ĐÓNG (`POSES` của `remotion/src/
+   * Character.tsx`), không phải mô tả tự do. Hai hệ quả cố ý:
+   *   · Chọn hình cho một cảnh là phép TRA BẢNG deterministic, 0đ — không gọi
+   *     API, không tải ảnh, không cần kho.
+   *   · Khi cổng 2 chấm *"hình có hợp nội dung không"*, nó so lời đọc với một
+   *     cái tên cố định dùng lại ở mọi clip, chứ không phải một câu mô tả tôi
+   *     viết mới cho từng bức — tức bớt được phần "chấm chính văn của mình".
+   */
+  | { kind: 'figure'; pose: string; accent?: string };
 
 export interface Scene {
   /** Lời đọc của cảnh này. Cũng CHÍNH LÀ phụ đề — một nguồn, không chép hai bản. */
@@ -128,6 +140,15 @@ export interface ScriptSpec {
    * mắt chạy theo ảnh chứ không đọc chữ — mà chữ mới là nội dung.
    */
   backdrop?: string[];
+  /**
+   * Tư thế nhân vật cho câu MỞ ĐẦU và câu KẾT — hai chỗ không nằm trong
+   * `scenes` nên không tự khai `visual` được.
+   *
+   * Khai một trong hai ⇒ clip chạy nền ĐEN + nhân vật signature, thay cho nền
+   * navy/ảnh. Bỏ trống cả hai ⇒ giữ nguyên hình dạng cũ.
+   */
+  hookPose?: string;
+  ctaPose?: string;
   /** Hashtag gợi ý cho lúc đăng — KHÔNG hiện trên clip. */
   hashtags?: string[];
 }

@@ -257,7 +257,9 @@ await localizeImages(spec);
 const toVisual = (v) =>
   v.kind === 'image'
     ? { kind: 'photo', src: v.src, accent: v.accent }
-    : { kind: 'typo', accent: v.accent };
+    : v.kind === 'figure'
+      ? { kind: 'figure', pose: v.pose, accent: v.accent }
+      : { kind: 'typo', accent: v.accent };
 
 const props = {
   topLabel: source.topLabel,
@@ -280,6 +282,8 @@ const props = {
   ...(voices ? { ctaAudio: voices[voices.length - 1].file } : {}),
   ...(spec.music ? { music: spec.music } : {}),
   ...(spec.backdrop?.length ? { backdrop: spec.backdrop } : {}),
+  ...(spec.hookPose ? { hookPose: spec.hookPose } : {}),
+  ...(spec.ctaPose ? { ctaPose: spec.ctaPose } : {}),
 };
 
 const propsFile = join(outDir, 'props.json');

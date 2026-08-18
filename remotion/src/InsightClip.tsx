@@ -29,6 +29,7 @@ import {
   useVideoConfig,
 } from 'remotion';
 import { BRAND, FONT } from './brand';
+import { CHAR, Character, POSES, type PoseName } from './Character';
 
 export type InsightScene = {
   text: string;
@@ -37,7 +38,8 @@ export type InsightScene = {
   audio?: string;
   visual:
     | { kind: 'typo'; accent?: string }
-    | { kind: 'photo'; src: string; accent?: string; caption?: string };
+    | { kind: 'photo'; src: string; accent?: string; caption?: string }
+    | { kind: 'figure'; pose: string; accent?: string };
 };
 
 // `type` chứ không `interface` — Remotion đòi props thoả `Record<string, unknown>`.
@@ -61,6 +63,12 @@ export type InsightProps = {
    * chính, ảnh chỉ bỏ cái nền phẳng đi.
    */
   backdrop?: string[];
+  /**
+   * Tư thế nhân vật cho hook / câu kết. Khai một trong hai ⇒ clip chuyển sang
+   * NỀN ĐEN + nhân vật signature.
+   */
+  hookPose?: string;
+  ctaPose?: string;
 };
 
 // ── Nền ───────────────────────────────────────────────────────────────────
@@ -412,6 +420,72 @@ const TypoScene: React.FC<{ text: string; accent?: string; label: string; noBg?:
   </AbsoluteFill>
 );
 
+/**
+ * Cảnh có NHÂN VẬT SIGNATURE — chữ ở trên, nhân vật đứng dưới, nền đen.
+ *
+ * 🔑 Vì sao nhân vật ở DƯỚI chứ không nằm sau chữ: chồng lên nhau là quay lại
+ * đúng bài toán vừa gỡ với ảnh chụp (chữ và hình tranh nhau một chỗ, phải phủ
+ * tối để cứu chữ, rồi hình chìm). Tách hai vùng thì cả hai đều đọc được và
+ * KHÔNG cần lớp phủ nào.
+ *
+ * ⚠️ Chừa 250px mép dưới: TikTok phủ caption + thanh điều hướng lên vùng đó.
+ * Đặt chân nhân vật thấp hơn là mất chân.
+ */
+const FigureScene: React.FC<{
+  text: string;
+  accent?: string;
+  label: string;
+  pose: string;
+}> = ({ text, accent, label, pose }) => {
+  const frame = useCurrentFrame();
+  const { fps } = useVideoConfig();
+  const enter = spring({ frame, fps, config: { damping: 200 }, durationInFrames: 14 });
+  /*
+   * Nhịp thở — nhún lên xuống rất chậm, biên độ 6px.
+   *
+   * Đây là thứ ảnh nhập KHÔNG làm được, và là lý do chính chọn vẽ bằng code:
+   * một nhân vật đứng chết trân 6 giây đọc là ảnh dán vào, còn nhân vật thở
+   * thì đọc là đang có mặt. Biên độ cố ý nhỏ — thấy được mà không gây chú ý.
+   */
+  const breathe = Math.sin((frame / fps) * Math.PI * 0.55) * 6;
+  const poseName = (pose in POSES ? pose : 'chao') as PoseName;
+
+  return (
+    <AbsoluteFill>
+      <TopBar label={label} />
+      <div
+        style={{
+          position: 'absolute',
+          top: 300,
+          left: 0,
+          right: 0,
+          height: 620,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          padding: '0 84px',
+        }}
+      >
+        <WordKaraoke text={text} accent={accent} baseSize={78} />
+      </div>
+      <div
+        style={{
+          position: 'absolute',
+          bottom: 250,
+          left: 0,
+          right: 0,
+          display: 'flex',
+          justifyContent: 'center',
+          opacity: enter,
+          transform: `translateY(${(1 - enter) * 44 + breathe}px)`,
+        }}
+      >
+        <Character pose={poseName} height={620} />
+      </div>
+    </AbsoluteFill>
+  );
+};
+
 // ── Cảnh ảnh ──────────────────────────────────────────────────────────────
 
 /**
@@ -540,6 +614,83 @@ const Outro: React.FC<{ text: string; noBg?: boolean }> = ({ text, noBg }) => {
 
 // ── Ghép ──────────────────────────────────────────────────────────────────
 
+/**
+ * Câu KẾT ở chế độ nhân vật.
+ *
+ * ⚠️ CỐ Ý BỎ triện `seal.webp` ở đây: nhân vật signature ĐÃ LÀ dấu thương hiệu
+ * của khung hình này. Bày cả hai là hai dấu tranh nhau, và triện thì người xem
+ * TikTok không đọc được ở cỡ đó. Tên miền thì GIỮ — đó mới là thứ gõ lại được.
+ */
+const OutroFigure: React.FC<{ text: string; pose: string; label: string }> = ({
+  text,
+  pose,
+  label,
+}) => {
+  const frame = useCurrentFrame();
+  const { fps } = useVideoConfig();
+  const s = spring({ frame, fps, config: { damping: 200 }, durationInFrames: 16 });
+  const poseName = (pose in POSES ? pose : 'hanh-dong') as PoseName;
+
+  return (
+    <AbsoluteFill>
+      <TopBar label={label} />
+      <div
+        style={{
+          position: 'absolute',
+          top: 300,
+          left: 0,
+          right: 0,
+          height: 620,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          padding: '0 84px',
+          opacity: s,
+        }}
+      >
+        <div
+          style={{
+            fontFamily: FONT.serif,
+            fontSize: fitSize(text.length, 74),
+            lineHeight: 1.3,
+            fontWeight: 700,
+            color: BRAND.textOnNavy,
+            textAlign: 'center',
+          }}
+        >
+          {text}
+        </div>
+        <div
+          style={{
+            marginTop: 40,
+            fontFamily: FONT.sans,
+            fontSize: 42,
+            letterSpacing: '0.06em',
+            color: CHAR.gold,
+          }}
+        >
+          tuviminhbao.com
+        </div>
+      </div>
+      <div
+        style={{
+          position: 'absolute',
+          bottom: 250,
+          left: 0,
+          right: 0,
+          display: 'flex',
+          justifyContent: 'center',
+          opacity: s,
+          transform: `translateY(${(1 - s) * 44}px)`,
+        }}
+      >
+        <Character pose={poseName} height={620} />
+      </div>
+    </AbsoluteFill>
+  );
+};
+
 export const InsightClip: React.FC<InsightProps> = ({
   hook,
   hookDurationInFrames,
@@ -551,6 +702,8 @@ export const InsightClip: React.FC<InsightProps> = ({
   topLabel,
   music,
   backdrop,
+  hookPose,
+  ctaPose,
 }) => {
   const { durationInFrames } = useVideoConfig();
 
@@ -566,15 +719,29 @@ export const InsightClip: React.FC<InsightProps> = ({
   // Thiếu vế thứ hai thì nền navy của từng cảnh phủ kín ảnh và cả clip trông y
   // hệt bản không có ảnh — hỏng theo kiểu KHÔNG có lỗi nào bắn ra.
   const hasBg = Boolean(backdrop && backdrop.length);
+  /*
+   * Chế độ NHÂN VẬT: nền đen, không ảnh, không lớp phủ nào.
+   *
+   * Suy từ chính nội dung clip chứ không thêm một cờ khai tay — khai cờ mà
+   * quên thì clip nền navy lẫn nhân vật, tức hai nhận diện trong một khung.
+   */
+  const hasFigure = Boolean(
+    hookPose || ctaPose || scenes.some((sc) => sc.visual.kind === 'figure')
+  );
+  const bg = hasFigure ? CHAR.ink : BRAND.navy;
 
   return (
-    <AbsoluteFill style={{ backgroundColor: BRAND.navy }}>
+    <AbsoluteFill style={{ backgroundColor: bg }}>
       {music ? <Audio src={staticFile(`music/${music}`)} volume={0.3} loop /> : null}
-      {hasBg ? <PhotoBackdrop images={backdrop as string[]} /> : null}
+      {hasBg && !hasFigure ? <PhotoBackdrop images={backdrop as string[]} /> : null}
 
       <Sequence durationInFrames={hookDurationInFrames} name="Hook">
         {hookAudio ? <Audio src={staticFile(hookAudio)} /> : null}
-        <Hook text={hook} label={topLabel} noBg={hasBg} />
+        {hookPose ? (
+          <FigureScene text={hook} label={topLabel} pose={hookPose} />
+        ) : (
+          <Hook text={hook} label={topLabel} noBg={hasBg} />
+        )}
       </Sequence>
 
       {scenes.map((sc, i) => (
@@ -593,8 +760,20 @@ export const InsightClip: React.FC<InsightProps> = ({
               label={topLabel}
               noBg={hasBg}
             />
+          ) : sc.visual.kind === 'figure' ? (
+            <FigureScene
+              text={sc.text}
+              accent={sc.visual.accent}
+              label={topLabel}
+              pose={sc.visual.pose}
+            />
           ) : (
-            <TypoScene text={sc.text} accent={sc.visual.accent} label={topLabel} noBg={hasBg} />
+            <TypoScene
+              text={sc.text}
+              accent={sc.visual.accent}
+              label={topLabel}
+              noBg={hasBg || hasFigure}
+            />
           )}
         </Sequence>
       ))}
@@ -605,7 +784,11 @@ export const InsightClip: React.FC<InsightProps> = ({
         name="Kết"
       >
         {ctaAudio ? <Audio src={staticFile(ctaAudio)} /> : null}
-        <Outro text={cta} noBg={hasBg} />
+        {ctaPose ? (
+          <OutroFigure text={cta} pose={ctaPose} label={topLabel} />
+        ) : (
+          <Outro text={cta} noBg={hasBg} />
+        )}
       </Sequence>
     </AbsoluteFill>
   );
