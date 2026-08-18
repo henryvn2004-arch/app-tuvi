@@ -142,6 +142,48 @@ export async function tgSendPhoto(
   return { messageId: j.result.message_id, username: j.result.chat?.username || '' };
 }
 
+/**
+ * Gửi VIDEO lên channel — cùng hình dạng `tgSendPhoto`, khác đúng endpoint và
+ * tên trường.
+ *
+ * `supports_streaming: true` để Telegram phát ngay thay vì bắt tải trọn file —
+ * clip 9:16 dài 30–120 giây thì đó là khác biệt giữa "xem luôn" và "bỏ qua".
+ *
+ * ⚠️ Trần caption của `sendVideo` là **1024** ký tự y như `sendPhoto` (KHÔNG
+ * phải 4096 của `sendMessage`) — người gọi đã cắt sẵn, đây là lưới an toàn cuối.
+ *
+ * ⚠️ Telegram tự tải file từ URL nên URL phải CÔNG KHAI, và trần cho cách này
+ * là 20MB (upload trực tiếp mới lên được 50MB). Clip 2 phút ở 720×1280 CRF 23
+ * đo được 19MB — sát trần, nên clip dài hơn phải hạ bitrate hoặc đổi sang upload
+ * nhị phân.
+ */
+export async function tgSendVideo(
+  chatId: number | string,
+  videoUrl: string,
+  caption: string,
+): Promise<{ messageId: number; username: string }> {
+  if (!TG_TOKEN) throw new Error('Thiếu env TELEGRAM_BOT_TOKEN');
+  const r = await fetch(`${TG_API}/sendVideo`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      chat_id: chatId,
+      video: videoUrl,
+      caption: (caption || '').slice(0, 1024),
+      supports_streaming: true,
+    }),
+  });
+  const j = (await r.json().catch(() => ({}))) as {
+    ok?: boolean;
+    description?: string;
+    result?: { message_id?: number; chat?: { username?: string } };
+  };
+  if (!j.ok || !j.result?.message_id) {
+    throw new Error(j.description || `Telegram HTTP ${r.status}`);
+  }
+  return { messageId: j.result.message_id, username: j.result.chat?.username || '' };
+}
+
 // ── Tải ẢNH người dùng gửi → base64 (cho runAgent luận nhân tướng/phong thủy) ──
 // Telegram 2 bước: getFile(file_id) → file_path; rồi tải nội dung từ
 // api.telegram.org/file/bot<token>/<path>. Trả ChatImage {data(base64,

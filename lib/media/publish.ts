@@ -30,7 +30,7 @@
 
 import { getConfigValue } from '@/lib/config/appConfig';
 import { GRAPH_BASE } from '@/lib/channels/meta';
-import { tgSendPhoto } from '@/lib/channels/telegram';
+import { tgSendPhoto, tgSendVideo } from '@/lib/channels/telegram';
 
 const SUPABASE_URL = process.env.SUPABASE_URL || '';
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY || '';
@@ -193,7 +193,8 @@ async function publishFacebook(row: QueueRow): Promise<AdapterOut> {
   if (!FB_PAGE_ID) return { error: 'Thiếu env FB_PAGE_ID (hoặc MESSENGER_PAGE_ID)' };
   if (!FB_TOKEN) return { error: 'Thiếu env FB_PAGE_ACCESS_TOKEN (hoặc MESSENGER_PAGE_ACCESS_TOKEN)' };
   const imageUrl = row.media_assets?.url || '';
-  if (!imageUrl) return { error: 'Asset không có URL ảnh' };
+  if (!imageUrl) return { error: 'Asset không có URL' };
+  if (isVideoAsset(imageUrl)) return publishFacebookVideo(row, imageUrl);
 
   try {
     const res = await fetch(`${GRAPH_BASE}/${FB_PAGE_ID}/photos`, {
@@ -255,13 +256,36 @@ async function readGraph(res: Response | null): Promise<{ body: GraphBody; error
  * chậm. Nên hỏi trạng thái tới khi xong; hỏng thì trả lý do thật của nền tảng
  * thay vì để bước publish báo một lỗi khó hiểu.
  */
+/**
+ * Asset này là VIDEO hay ẢNH?
+ *
+ * 🔑 Đọc theo ĐUÔI FILE chứ không theo `variant` — đuôi là sự thật vật lý về
+ * file, còn `variant` là quy ước đặt tên do người nộp tự khai (`clip-ingest`
+ * nhận nó từ form). Và `QueueRow.media_assets` vốn chỉ select `url` + `meta`,
+ * không có `variant` để mà đọc.
+ */
+function isVideoAsset(url: string): boolean {
+  try {
+    return /\.(mp4|mov|webm|m4v)$/i.test(new URL(url).pathname);
+  } catch {
+    return /\.(mp4|mov|webm|m4v)(\?|$)/i.test(url);
+  }
+}
+
+/**
+ * @param rounds số vòng hỏi. Mặc định 8 (~24s) đủ cho ẢNH; VIDEO phải nới hẳn —
+ *   Instagram xử lý một Reel thường mất 30–90 giây, hết vòng là bài bị đánh
+ *   `error` và phải vào Admin bấm thử lại. Đó là lý do nhánh video truyền 20
+ *   vòng (~100s) chứ không dùng mặc định.
+ */
 async function waitContainer(
   base: string,
   containerId: string,
   token: string,
   field: 'status_code' | 'status',
+  rounds = 8,
 ): Promise<string | undefined> {
-  for (let i = 0; i < 8; i++) {
+  for (let i = 0; i < rounds; i++) {
     await sleep(i === 0 ? 1500 : 3000);
     const res = await fetch(
       `${base}/${containerId}?fields=${field},error_message&access_token=${encodeURIComponent(token)}`,
@@ -276,7 +300,7 @@ async function waitContainer(
       return body.error_message || `container ${st.toLowerCase()}`;
     }
   }
-  return 'ảnh chưa xử lý xong sau ~24s — để lượt sau thử lại';
+  return `chưa xử lý xong sau ~${Math.round((1.5 + (rounds - 1) * 3) / 1)}s — vào Admin bấm thử lại`;
 }
 
 /** Đường dẫn công khai của bài, hỏi riêng vì bước publish chỉ trả về id. */
@@ -305,14 +329,24 @@ async function publishInstagram(row: QueueRow): Promise<AdapterOut> {
   if (!IG_USER_ID) return { error: 'Thiếu env IG_USER_ID' };
   if (!IG_TOKEN) return { error: 'Thiếu env IG_ACCESS_TOKEN (hoặc FB_PAGE_ACCESS_TOKEN)' };
   const imageUrl = row.media_assets?.url || '';
-  if (!imageUrl) return { error: 'Asset không có URL ảnh' };
+  if (!imageUrl) return { error: 'Asset không có URL' };
+
+  /*
+   * Video đi ĐÚNG chuỗi hai bước như ảnh, chỉ đổi tham số container:
+   * `media_type: 'REELS'` + `video_url`. Instagram KHÔNG còn nhận video dạng
+   * bài thường qua API — mọi video đăng bằng Graph đều là Reel, nên đây không
+   * phải lựa chọn mà là đường duy nhất.
+   *
+   * Và vì thế phải nới số vòng chờ: xử lý một Reel lâu hơn hẳn một tấm ảnh.
+   */
+  const isVideo = isVideoAsset(imageUrl);
 
   try {
     const created = await fetch(`${GRAPH_BASE}/${IG_USER_ID}/media`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        image_url: imageUrl,
+        ...(isVideo ? { media_type: 'REELS', video_url: imageUrl } : { image_url: imageUrl }),
         caption: composeCaption(row, 'instagram'),
         access_token: IG_TOKEN,
       }),
@@ -322,7 +356,7 @@ async function publishInstagram(row: QueueRow): Promise<AdapterOut> {
     const creationId = body.id;
     if (!creationId) return { error: 'Instagram không trả creation_id' };
 
-    const waitErr = await waitContainer(GRAPH_BASE, creationId, IG_TOKEN, 'status_code');
+    const waitErr = await waitContainer(GRAPH_BASE, creationId, IG_TOKEN, 'status_code', isVideo ? 20 : 8);
     if (waitErr) return { error: waitErr };
 
     const pub = await fetch(`${GRAPH_BASE}/${IG_USER_ID}/media_publish`, {
@@ -336,6 +370,44 @@ async function publishInstagram(row: QueueRow): Promise<AdapterOut> {
     if (!mediaId) return { error: 'Instagram trả về rỗng, không có media id' };
 
     return { externalId: mediaId, externalUrl: await permalinkOf(GRAPH_BASE, mediaId, IG_TOKEN) };
+  } catch (e) {
+    return { error: (e as Error).message };
+  }
+}
+
+/**
+ * Facebook Page — đăng VIDEO qua `/{page-id}/videos` với `file_url`.
+ *
+ * ⚖️ CỐ Ý dùng `/videos` chứ KHÔNG dùng `/video_reels` dù clip đã đúng khổ 9:16
+ * và Reels có reach tốt hơn hẳn: endpoint Reels bắt buộc chuỗi **ba bước**
+ * (`start` → upload nhị phân theo phiên resumable → `finish`), tức phải tự tải
+ * mp4 về runner rồi đẩy từng khúc — ba chỗ hỏng thay vì một, trong khi `/videos`
+ * chỉ cần một request và để Facebook tự tải từ URL công khai (cùng cơ chế đã
+ * chạy cho ảnh). Video dọc vẫn hiển thị bình thường trên dòng thời gian.
+ * ⇒ Nếu sau này đo được reach của `/videos` quá thấp thì mới đáng dựng Reels.
+ *
+ * ⚠️ Quyền cần thêm so với ảnh: `pages_manage_posts` là đủ cho cả hai, nhưng
+ * video phải qua bước xử lý phía Facebook nên `id` trả về NGAY còn bài thì hiện
+ * sau vài chục giây. Không chờ ở đây — chờ nghĩa là chiếm ngân sách thời gian
+ * của cả lượt cron cho một thứ Facebook chắc chắn sẽ làm xong.
+ */
+async function publishFacebookVideo(row: QueueRow, videoUrl: string): Promise<AdapterOut> {
+  try {
+    const res = await fetch(`${GRAPH_BASE}/${FB_PAGE_ID}/videos`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        file_url: videoUrl,
+        description: composeCaption(row, 'facebook'),
+        published: true,
+        access_token: FB_TOKEN,
+      }),
+    }).catch(() => null);
+    const { body, error } = await readGraph(res);
+    if (error) return { error };
+    const videoId = body.id;
+    if (!videoId) return { error: 'Graph trả về rỗng, không có video id' };
+    return { externalId: videoId, externalUrl: `https://www.facebook.com/${FB_PAGE_ID}/videos/${videoId}` };
   } catch (e) {
     return { error: (e as Error).message };
   }
@@ -356,15 +428,17 @@ async function publishThreads(row: QueueRow): Promise<AdapterOut> {
   if (!THREADS_USER_ID) return { error: 'Thiếu env THREADS_USER_ID' };
   if (!THREADS_TOKEN) return { error: 'Thiếu env THREADS_ACCESS_TOKEN' };
   const imageUrl = row.media_assets?.url || '';
-  if (!imageUrl) return { error: 'Asset không có URL ảnh' };
+  if (!imageUrl) return { error: 'Asset không có URL' };
+  const isVideo = isVideoAsset(imageUrl);
 
   try {
     const created = await fetch(`${THREADS_BASE}/${THREADS_USER_ID}/threads`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        media_type: 'IMAGE',
-        image_url: imageUrl,
+        ...(isVideo
+          ? { media_type: 'VIDEO', video_url: imageUrl }
+          : { media_type: 'IMAGE', image_url: imageUrl }),
         text: composeCaption(row, 'threads'),
         access_token: THREADS_TOKEN,
       }),
@@ -374,7 +448,7 @@ async function publishThreads(row: QueueRow): Promise<AdapterOut> {
     const creationId = body.id;
     if (!creationId) return { error: 'Threads không trả creation_id' };
 
-    const waitErr = await waitContainer(THREADS_BASE, creationId, THREADS_TOKEN, 'status');
+    const waitErr = await waitContainer(THREADS_BASE, creationId, THREADS_TOKEN, 'status', isVideo ? 20 : 8);
     if (waitErr) return { error: waitErr };
 
     const pub = await fetch(`${THREADS_BASE}/${THREADS_USER_ID}/threads_publish`, {
@@ -405,10 +479,11 @@ const TG_CHANNEL_ID = process.env.TELEGRAM_CHANNEL_ID || '';
 async function publishTelegram(row: QueueRow): Promise<AdapterOut> {
   if (!TG_CHANNEL_ID) return { error: 'Thiếu env TELEGRAM_CHANNEL_ID' };
   const imageUrl = row.media_assets?.url || '';
-  if (!imageUrl) return { error: 'Asset không có URL ảnh' };
+  if (!imageUrl) return { error: 'Asset không có URL' };
 
   try {
-    const { messageId, username } = await tgSendPhoto(TG_CHANNEL_ID, imageUrl, composeCaption(row, 'telegram'));
+    const send = isVideoAsset(imageUrl) ? tgSendVideo : tgSendPhoto;
+    const { messageId, username } = await send(TG_CHANNEL_ID, imageUrl, composeCaption(row, 'telegram'));
     return {
       externalId: String(messageId),
       // Channel riêng tư không có username → không có link công khai để lưu,
