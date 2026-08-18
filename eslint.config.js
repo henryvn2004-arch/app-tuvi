@@ -68,6 +68,9 @@ export default [
       '**/*.ts',
       '**/*.tsx',
       'tuvi-engine/',
+      // Sub-package riêng (React + JSX + tsconfig riêng) — cùng lý do với
+      // `tuvi-engine/`: nó tự lint/typecheck bằng cấu hình của chính nó.
+      'remotion/',
       'public/cach_cuc_all.json',
       'chunks_all.json',
       'sach/',

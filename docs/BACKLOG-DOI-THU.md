@@ -36,8 +36,8 @@ Công sức: **S** < 1 ngày · **M** 2–4 ngày · **L** > 1 tuần.
 
 | ID | Việc | Công | Khi nào |
 |---|---|---|---|
-| **P1** | Tách Lượng làm 2 loại: mua = vĩnh viễn, tặng = có hạn | M | 🟢 |
-| **P2** | Bậc thưởng nạp tăng dần, hiện % thưởng trên trang nạp | S | 🟢 |
+| **P1** | Tách Lượng làm 2 loại: mua = vĩnh viễn, tặng = có hạn | M | ⏸️ HOÃN |
+| **P2** | ~~Bậc thưởng nạp tăng dần, hiện % thưởng trên trang nạp~~ | S | ✅ ĐÃ CÓ |
 | **P3** | Bán kèm giảm giá tại màn thanh toán, **giới hạn 1 món** | M | 🟡 |
 | **P4** | Neo giá: hiện "tổng giá trị" khi gộp gói | S | 🟡 |
 | **P5** | Thử nâng giá theo bậc (A/B) — bắt đầu ở 2 tool chân dung | M | 🟡 |
@@ -46,11 +46,11 @@ Công sức: **S** < 1 ngày · **M** 2–4 ngày · **L** > 1 tuần.
 | **W2** | ~~Bản xem trước che chữ thay vì modal chặn~~ | M | ✅ XONG |
 | **W3** | ~~Hiện "còn X Lượng · thao tác này tốn Y" ngay trên nút~~ | S | ✅ XONG |
 | **T1** | ~~**Lá số NGƯỜI KHÁC**~~ (sếp/đồng nghiệp/người thân) — cẩm nang ứng xử | M | ✅ XONG |
-| **T2** | ~~Gói Cha Mẹ~~ → tool **Dạy Con Theo Lá Số** | M | ✅ XONG |
-| **T3** | ~~Gói Kinh doanh/Sale~~ → tool **Sổ Nhân Mạch** (đọc cả nhóm) | M | ✅ XONG |
+| **T2** | ~~Gói Cha Mẹ~~ → tool `day-con` **Dạy Con Theo Lá Số** | M | ✅ XONG |
+| **T3** | ~~Gói Kinh doanh/Sale~~ → tool `nhan-mach` **Sổ Nhân Mạch** (đọc cả nhóm) | M | ✅ XONG |
 | **T4** | **Đèn cầu an online** (có hạn 1 năm → tái tục) | M | 🟡 |
 | **T5** | Xin keo / thỉnh thần online | M | 🟡 |
-| **T6** | ~~**Duyên nợ tiền kiếp 2 người**~~ | M | ✅ XONG |
+| **T6** | ~~**Duyên nợ tiền kiếp 2 người**~~ — tool đã dựng trên engine sẵn có | M | ✅ XONG |
 | **T7** | Cửu tinh / Tam nguyên khí học | M | 🔴 |
 | **T8** | Quỷ Cốc Tử suy mệnh | M | 🔴 |
 | **T9** | Bộ bài Tây: Tarot · Lenormand · Rune · Luân xa | L | 🔴 |
@@ -61,15 +61,15 @@ Công sức: **S** < 1 ngày · **M** 2–4 ngày · **L** > 1 tuần.
 | **U1** | **Đa phái tử vi** (Trung Châu · Tam Hợp · Tứ Hoá Phi Tinh · Khâm Thiên) | L | 🔴 |
 | **U2** | Nhúng cổ tịch tra tại chỗ | L | 🔴 |
 | **U3** | Lá số nhiều tầng: lưu nguyệt · lưu nhật · lưu thời | M | 🟡 |
-| **U4** | ~~**Sổ lá số** — đồng bộ tài khoản~~ | M | ✅ XONG |
+| **U4** | ~~**Sổ lá số**~~ — đồng bộ tài khoản, không theo máy | M | ✅ XONG |
 | **S1** | Gói **Hội viên năm** — vận riêng hằng ngày + tool chữ không giới hạn | L | 🔴 |
 | **S2** | Ưu đãi hội viên khi mua lẻ (họ giảm 33%) | S | 🔴 |
 | **H1** | **Chợ tư vấn thầy thật**, ăn hoa hồng | L | 🔴 |
 | **H2** | Đặt lịch xem trực tiếp (1 thầy, thủ công, hotline/Zalo) | S | 🟡 |
 | **H3** | Khoá học tử vi online | L | 🔴 |
-| **M1** | ~~**Đóng gói `/cong-cu` theo NỖI LO**~~ | M | ✅ XONG |
+| **M1** | ~~**Đóng gói `/cong-cu` theo NỖI LO, không theo BỘ MÔN**~~ | M | ✅ XONG |
 | **M2** | ~~Đặt tên sản phẩm theo CÂU HỎI người ta gõ~~ | S | ✅ XONG |
-| **M3** | **Nhiệm vụ onboarding chia nhỏ** (Zalo/SĐT/email → mỗi việc một phần thưởng) | M | 🟢 |
+| **M3** | ~~**Nhiệm vụ onboarding chia nhỏ**~~ (mỗi việc một phần thưởng) | M | ✅ XONG |
 | **M4** | Trang SEO = trang BÁN được, không chỉ trang đọc | L | 🟡 |
 | **M5** | Kênh phân phối bên thứ ba (Zalo OA / báo / partner) | M | 🟡 |
 | **R1** | ~~Vận hôm nay → nhắc hằng ngày qua push~~ (kênh đã nối lại) | M | ✅ XONG |
@@ -95,12 +95,65 @@ một ⇒ không được vế nào.
 Lượng tặng trước, Lượng mua sau). **Chỉ áp cho Lượng cấp MỚI** — đặt hạn cho
 Lượng người ta đã cầm là phá lòng tin.
 
-### P2. Bậc thưởng nạp tăng dần 🟢 S
+### ⏸️ HOÃN (07/08, Henry chốt) — đo trước rồi mới thấy nó chưa tới lúc
+Bốn thứ đo được, mỗi thứ tự nó đã đủ để lùi:
+
+1. **Vế "mua = vĩnh viễn" ĐÃ đúng sẵn và đã hứa ra miệng** — mọi thẻ gói trên
+   `topup.html` ghi *"Không hết hạn"*, mà hệ thống vốn không có cơ chế hết hạn
+   nào. Nửa này của P1 không mua thêm gì.
+2. **Chính P1 cấm áp hồi tố** ⇒ **19.716 Lượng đang lưu hành giữ nguyên vĩnh
+   viễn** ⇒ P1 không đổi gì cho bất kỳ ai đang tồn tại; nó chỉ có hiệu lực với
+   Lượng cấp về sau.
+3. 🔑 **Con số quyết định: 35/46 ví còn số dư (76%) CHƯA TỪNG tiêu một Lượng
+   nào**, đang ôm 10.975 Lượng. Hạn dùng sinh ra để **tạo áp lực tiêu**, nhưng
+   76% số ví không đang chần chừ tiêu — họ **chưa từng mở cửa lần nào**. Đặt hạn
+   cho người chưa bao giờ dùng thì không tạo ra sự vội vàng, chỉ lấy lại thứ họ
+   vốn không đụng. Thứ kéo họ về là **một lý do để mở ra** (R1a · M3).
+4. **Giá phải trả có thật:** `deduct_credits` hiện là MỘT câu `UPDATE` nguyên tử
+   với chốt `balance >= p_amount`. Tách hai túi = viết lại thành tiêu-lô-theo-hạn
+   + bảng lô + cron quét hết hạn + rà mọi nơi đọc `balance`. Đây là hàm nguy
+   hiểm nhất hệ thống và đường tiền đã trả giá một lần (Duyên Nợ trừ 2 lần).
+
+⇒ **P1 là GIÀN GIÁO cho M3, không phải cải tiến tự đứng được** — mà giàn giáo
+thì dựng khi đã biết toà nhà hình gì. Làm M3 trước (không hạn dùng), đo xem có
+ai làm nhiệm vụ không. **Điều kiện mở lại P1:** M3 chạy thật VÀ tệp Lượng tặng
+phình lên tới mức thành nợ — lúc đó mới có dữ liệu để chọn ĐÚNG con số hạn, thay
+vì chọn bừa hôm nay rồi phải sửa.
+
+### P2. Bậc thưởng nạp tăng dần ✅ ĐÃ CÓ TỪ TRƯỚC (không phải việc mới)
 **Họ:** 300 → 0% · 600 → 8,3% · 1.200 → 8,3% · 3.000 → 10% · 3.600 → 11,1% ·
 4.800 → **12,5%**. Thưởng hiện thành **phiếu rời** (3 phiếu ×100) chứ không cộng
 thẳng — trông "được nhiều món" hơn là "được thêm ít phần trăm".
-**Mình:** gói 99k/199k/499k/999k có bậc giá tốt dần nhưng **không nói ra**.
-**Việc:** hiện thẳng "% thưởng" từng bậc trên `topup.html`.
+
+🔴 **ĐÍNH CHÍNH (07/08) — câu "mình không nói ra" là SAI lúc viết.** PR #350
+(31/07, dựng lại trang nạp) đã làm đúng việc này **5 ngày TRƯỚC** khi dòng
+backlog này ra đời. `renderPackages()` trong `topup.html` tính đơn giá + mức rẻ
+hơn **ngay lúc chạy từ chính `credit_packages`** (không chép số — đúng luật
+`check:prices`), mốc so là gói có đơn giá CAO NHẤT trong bảng, và chỉ hiện huy
+hiệu khi ≥5%. Render thật ra:
+
+| Gói | Trang đang hiện |
+|---|---|
+| Khởi Đầu 99.000đ / 100 | `990đ / Lượng` |
+| Phổ Thông 199.000đ / 240 | `829đ / Lượng` · **rẻ hơn 16%** |
+| Cao Cấp 499.000đ / 700 | `713đ / Lượng` · **rẻ hơn 28%** |
+| VIP 999.000đ / 1.600 | `624đ / Lượng` · **rẻ hơn 37%** |
+
+Tiêu đề trang: *"chỉ từ 624đ / Lượng"*. Thẻ nào cũng ghi *"Không hết hạn"*.
+
+🔑 **Bài học lặp lần thứ hai trong cùng một tuần** (lần đầu là R1 — giả định một
+tệp người nhận không tồn tại): **backlog viết từ việc soi ĐỐI THỦ, không phải từ
+việc soi CHÍNH MÌNH.** Trước khi làm bất cứ mục nào ở đây, mở file thật ra đọc —
+đừng tin dòng mô tả.
+
+⚠️ Cũng CỐ Ý không đổi sang cách nói **"+58,6% Lượng tặng thêm"** của họ: mình
+không có phiếu thưởng nào thật, giảm giá đã nằm sẵn trong số Lượng. Ghi "tặng
+thêm" là mời người ta đi tìm một món quà không tồn tại; còn "rẻ hơn 37%" thì lấy
+hai con số ngay trên thẻ chia ra là kiểm chứng được.
+
+**Phần DUY NHẤT còn thật:** mẹo hiện thưởng thành **phiếu rời**. Nhưng nó chỉ có
+nghĩa khi đã tách "Lượng tặng" khỏi "Lượng mua" ⇒ thuộc **P1**, không phải mục
+riêng.
 
 ### P3. Bán kèm tại màn thanh toán 🟡 M
 Nguyên văn trang họ: *"Bạn đã chọn 【Bát tự cách cục】NT$480, được hưởng ưu đãi
@@ -337,12 +390,27 @@ Tên mục thật trên trang họ: *"Tương lai mờ mịt, phải nhẫn tớ
 này hợp đổi nghề?"* · *"Con thi đại học hay cao đẳng nghề?"*
 ⇒ Đây cũng chính là **từ khoá người ta gõ vào Google** — ăn luôn cả SEO.
 
-### M3. Nhiệm vụ onboarding chia nhỏ 🟢 M
+### M3. Nhiệm vụ onboarding chia nhỏ ✅ XONG (07/08)
 **Họ:** liên kết LINE **+NT$100** · xác minh SĐT **+NT$80** · xác minh email
 **+NT$80** · làm đủ 3 việc → **tặng đèn cầu an**.
 **Mình:** phát thẳng 25 Lượng, đổi lại **không lấy được gì**.
 ⇒ Cùng số tiền, họ mua được SĐT + email + **một kênh nhắn tin đi thẳng vào máy
 người dùng**. Với mình kênh đó là **Zalo/Telegram** (đã có hạ tầng).
+
+### Đã làm gì — chi tiết ở CLAUDE.md
+Cái giá đang trả và cái nhận về, đo trước khi viết dòng nào: 48 người đã nhận 25
+Lượng (1.200 Lượng phát ra), đổi lại có **3** liên kết kênh chat · **2** lượt bật
+thông báo · **2** dòng sổ lá số của ĐÚNG một người · **0** lượt mời bạn.
+
+🔑 **KHÔNG cắt 25 Lượng quà đăng ký ra chia nhỏ** — cắt thì người mới cầm 5 Lượng
+và không chạy nổi tool nào (rẻ nhất 5, phần lớn 15–30), tức siết đúng đầu phễu
+vốn đã hỏng. Nhiệm vụ là phần **CỘNG THÊM**: 3 việc × 10 = **+30 Lượng**.
+
+Ba việc chọn theo thứ ĐANG thiếu: **lưu lá số** · **bật thông báo** · **liên kết
+MỘT kênh chat bất kỳ**. Bỏ "xác minh email" (Supabase đã xác minh lúc đăng ký) và
+"xác minh SĐT" (phải mua dịch vụ OTP cho 60 người). Việc **mời bạn** chỉ được bày
+mức thưởng 15 Lượng sẵn có, KHÔNG cộng thêm — trả hai lần cho một việc là mở
+đường farm.
 
 ### M4. Trang SEO phải bán được 🟡 L
 Họ có **713 đơn vị mệnh lý Nhật** trên subdomain riêng — kho programmatic mà
@@ -406,14 +474,32 @@ Xếp theo **tác động ÷ công sức**, và **không mục nào phụ thuộ
 
 | # | Việc | Vì sao |
 |---|---|---|
-| 1 | **M1 + M2** — đóng gói theo nỗi lo + đặt tên theo câu hỏi | Rẻ nhất, đụng ít code nhất, chạm thẳng chỗ đang tắc, ăn thêm SEO |
-| 2 | **T6** — dựng nốt Duyên nợ tiền kiếp | Engine đã xong và đang nằm không; mỗi lượt kéo 2 người |
-| 3 | **U4** — sổ lá số theo tài khoản | Vừa vá lỗi thật đã ghi trong CLAUDE.md, vừa là nền của T1 và S1 |
+| 1 | ~~**M1 + M2**~~ ✅ — đóng gói theo nỗi lo + đặt tên theo câu hỏi | Rẻ nhất, đụng ít code nhất, chạm thẳng chỗ đang tắc, ăn thêm SEO |
+| 2 | ~~**T6**~~ ✅ — dựng nốt Duyên nợ tiền kiếp | Engine đã xong và đang nằm không; mỗi lượt kéo 2 người |
+| 3 | ~~**U4**~~ ✅ — sổ lá số theo tài khoản | Vừa vá lỗi thật đã ghi trong CLAUDE.md, vừa là nền của T1 và S1 |
 | 4 | ~~**W3 + W2**~~ ✅ — hiện số dư trên nút + che chữ thay vì modal | Vài giờ, không rủi ro, sửa đúng khoảnh khắc người ta bỏ đi |
 | 5 | ~~**T1**~~ ✅ — lá số người khác | Dùng hằng tuần, và mỗi lượt nạp thêm một lá số vào hệ thống |
 
-**W1** (tính thử miễn phí) tác động lớn hơn tất cả, nhưng tốn công nhất và đụng
-mọi trang tool ⇒ để sau khi 1–5 xong.
+**🎉 Cả 5 mục đã xong**, cộng thêm T2/T3 (nội dung hai gói, dạng tool bán lẻ).
+
+### Chọn 5 tiếp theo — xếp lại sau khi đợt trên xong
+
+| # | Việc | Vì sao chọn nó bây giờ |
+|---|---|---|
+| ~~1~~ | ~~**D1** — đo *xem → mua* theo từng tool~~ ✅ | Xong ở #436 |
+| ~~5~~ | ~~**W1** — tính thử miễn phí~~ ✅ | Xong ở #434 cho 3 tool cẩm nang |
+| **1** | **R1** — Vận hôm nay → nhắc hằng ngày | Móc quay lại duy nhất đang có; **S1 chờ đúng nó** để chứng minh có người quay lại |
+| **2** | **P2** — bậc thưởng nạp tăng dần | Công S, đụng trang nạp, không rủi ro |
+| **3** | **M3** — nhiệm vụ onboarding chia nhỏ | Ví mới có 25 Lượng mà tool mới giá 15–20 ⇒ gần như chỉ đủ một lượt |
+| **4** | **P1** — tách Lượng mua / Lượng tặng | Sau khi D1 có số thì đây là mục giá đầu tiên có cơ sở để làm |
+| **5** | **W1 mở rộng** — port tính thử sang các tool còn lại | 3 tool cẩm nang đã có; 2 tool chân dung và Duyên Nợ thì chưa |
+
+🔑 **D1 vừa xong nghĩa là từ giờ mới có số để quyết mấy mục GIÁ.** Trước đó mọi
+tranh luận nâng giá / bỏ tool đều là đoán. Đợi vài tuần cho phễu theo tool tích
+đủ dữ liệu rồi hãy đụng P5 (thử nâng giá) và D2 (A/B giá).
+
+⚠️ **S1 (hội viên năm) vẫn KHÔNG nên làm trước R1.** Dựng đường thu tiền định kỳ
+cho thứ chưa đo được có ai quay lại lần hai hay không là dựng nhầm thứ tự.
 
 ---
 

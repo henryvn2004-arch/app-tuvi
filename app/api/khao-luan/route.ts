@@ -2,6 +2,7 @@
 // SSR: /khao-luan/:slug → HTML đầy đủ cho SEO
 export const maxDuration = 15;
 import { NextRequest, NextResponse } from 'next/server';
+import { PUBLISHED_ONLY } from '@/lib/content/publish-filter';
 
 const SUPABASE_URL = process.env.SUPABASE_URL!;
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY!;
@@ -186,7 +187,7 @@ export async function GET(request: NextRequest) {
 
   try {
     const r = await fetch(
-      `${SUPABASE_URL}/rest/v1/khao_luan?slug=eq.${encodeURIComponent(slug)}&select=*&limit=1`,
+      `${SUPABASE_URL}/rest/v1/khao_luan?slug=eq.${encodeURIComponent(slug)}&select=*&${PUBLISHED_ONLY}&limit=1`,
       { headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` } }
     );
     const rows = await r.json() as any[];
@@ -201,7 +202,7 @@ export async function GET(request: NextRequest) {
     let master: any = null;
     try {
       const promises: Promise<any>[] = [
-        fetch(`${SUPABASE_URL}/rest/v1/khao_luan?slug=neq.${encodeURIComponent(slug)}&category=eq.${encodeURIComponent(cat)}&select=slug,title,category&order=created_at.desc&limit=5`, { headers: sbHeaders })
+        fetch(`${SUPABASE_URL}/rest/v1/khao_luan?slug=neq.${encodeURIComponent(slug)}&category=eq.${encodeURIComponent(cat)}&select=slug,title,category&${PUBLISHED_ONLY}&order=created_at.desc&limit=5`, { headers: sbHeaders })
           .then(r => r.ok ? r.json() : []),
       ];
       if (masterId) {
@@ -215,7 +216,7 @@ export async function GET(request: NextRequest) {
       if (sameCat.length < 5) {
         const needed = 5 - sameCat.length;
         const otherRes = await fetch(
-          `${SUPABASE_URL}/rest/v1/khao_luan?slug=neq.${encodeURIComponent(slug)}&category=neq.${encodeURIComponent(cat)}&select=slug,title,category&order=created_at.desc&limit=${needed}`,
+          `${SUPABASE_URL}/rest/v1/khao_luan?slug=neq.${encodeURIComponent(slug)}&category=neq.${encodeURIComponent(cat)}&select=slug,title,category&${PUBLISHED_ONLY}&order=created_at.desc&limit=${needed}`,
           { headers: sbHeaders }
         );
         const other = otherRes.ok ? await otherRes.json() as any[] : [];

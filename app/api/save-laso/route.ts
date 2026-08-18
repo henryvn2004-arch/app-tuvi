@@ -5,7 +5,13 @@ import { createClient } from '@supabase/supabase-js';
 import { ok, err, options, parseBody } from '@/lib/cors';
 
 const SUPABASE_URL = process.env.SUPABASE_URL!;
-const SUPABASE_KEY = process.env.SUPABASE_ANON_KEY!;
+// Service key (KHÔNG phải anon key): anon key là public, và trước đây bảng
+// laso_public phải mở INSERT/UPDATE cho vai trò anon (qual=true, không giới
+// hạn dòng nào) để route này ghi được — nghĩa là bất kỳ ai cầm anon key (lộ
+// sẵn trong mọi trang client) đều gọi thẳng REST API Supabase để SỬA bất kỳ
+// dòng laso_public nào, bỏ qua toàn bộ logic của route này. Chuyển ghi qua
+// service key rồi khoá RLS anon insert/update lại (xem migration đi kèm).
+const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY!;
 
 // toolType (vd 'tu-binh') thêm tiền tố để mỗi sản phẩm lưu vào slug RIÊNG,
 // tránh đè lẫn nhau khi CÙNG một lá số (canChiNam+ngày sinh+giờ) được dùng cho

@@ -69,34 +69,45 @@
       </button>
     </div>
 
+    <!--
+      Tách Marketing ↔ Nội Dung (2026-08-11).
+      Trước đây một mục "Marketing & Nội Dung" gánh 9 nav, trong đó 6 là việc
+      NỘI DUNG. Nay Marketing chỉ còn đo TIỀN & NGƯỜI (landing → đăng ký → trả
+      tiền → quay lại → giới thiệu), còn mọi thứ thuộc vòng đời một tác phẩm
+      nằm ở mục Nội Dung bên dưới.
+    -->
     <div class="sidebar-section" data-team="marketing">
-      <div class="sidebar-section-label">Marketing &amp; Nội Dung</div>
+      <div class="sidebar-section-label">Marketing</div>
       <button class="nav-item" onclick="goTo('marketing')">
         <span class="ni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 16.5 8.5 11.5 1 19"/><polyline points="17 6 23 6 23 12"/></svg></span><span>Funnel &amp; Nguồn</span>
       </button>
       <button class="nav-item" onclick="goTo('retention')">
         <span class="ni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></span><span>Giữ Chân &amp; Doanh Thu</span>
       </button>
-      <button class="nav-item" onclick="goTo('distribution')">
-        <span class="ni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></span><span>Phân Phối Nội Dung</span>
-      </button>
-      <button class="nav-item" onclick="goTo('content')">
-        <span class="ni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg></span><span>YouTube Studio</span>
-      </button>
-      <button class="nav-item" onclick="goTo('cboard')">
-        <span class="ni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3h6v18H3z"/><path d="M15 3h6v11h-6z"/></svg></span><span>Content Board</span>
-      </button>
-      <button class="nav-item" onclick="goTo('khaoluan')">
-        <span class="ni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></span><span>Khảo Luận</span>
-      </button>
-      <button class="nav-item" onclick="goTo('nghiencuu')">
-        <span class="ni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></span><span>Nghiên Cứu</span>
-      </button>
-      <button class="nav-item" onclick="goTo('channels')">
-        <span class="ni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></span><span>Channels &amp; Push</span>
-      </button>
       <button class="nav-item" onclick="goTo('seo')">
         <span class="ni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span><span>SEO</span>
+      </button>
+    </div>
+
+    <div class="sidebar-section" data-team="marketing">
+      <div class="sidebar-section-label">Nội Dung</div>
+      <button class="nav-item" onclick="goTo('warehouse')">
+        <span class="ni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-6 9 6v11a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z"/><path d="M8 21V12h8v9"/></svg></span><span>Kho Nội Dung</span>
+      </button>
+      <!--
+        "Sản Xuất" KHÔNG phải một page mới: nó là nút mở nhóm 4 trang sản xuất
+        đã có (Content Board · Khảo Luận · Nghiên Cứu · YouTube Studio) qua một
+        thanh tab. Giữ nguyên 4 khối DOM + 4 loader cũ ⇒ 0 rủi ro hồi quy, mà
+        sidebar vẫn gọn. Xem `PROD_TABS` / `goToProd()` phía dưới.
+      -->
+      <button class="nav-item" id="nav-production" onclick="goToProd()">
+        <span class="ni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></span><span>Sản Xuất</span>
+      </button>
+      <button class="nav-item" onclick="goTo('distribution')">
+        <span class="ni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></span><span>Phân Phối</span>
+      </button>
+      <button class="nav-item" onclick="goTo('channels')">
+        <span class="ni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1.5"/></svg></span><span>Kênh &amp; Kết Nối</span>
       </button>
     </div>
 
@@ -182,6 +193,16 @@
               <button class="btn btn-ghost btn-sm" onclick="mktRange(90)">90N</button>
               <button class="btn btn-primary btn-sm" onclick="loadMarketing()">↻</button>
               <button class="btn btn-gold btn-sm" onclick="mktExportCSV()">⬇ CSV</button>
+      </div>
+
+      <!-- Thanh tab của mục "Sản Xuất" — cùng khuôn mkt-filterbar: một dải
+           dính dưới topbar, chỉ hiện ở đúng nhóm trang của nó. Bốn trang bên
+           dưới giữ nguyên DOM + loader cũ, đây chỉ là đường đi tới chúng. -->
+      <div class="mkt-filterbar" id="prod-tabbar" style="display:none">
+              <button class="btn btn-ghost btn-sm" data-prod-tab="cboard" onclick="goToProd('cboard')">Content Board</button>
+              <button class="btn btn-ghost btn-sm" data-prod-tab="khaoluan" onclick="goToProd('khaoluan')">Khảo Luận</button>
+              <button class="btn btn-ghost btn-sm" data-prod-tab="nghiencuu" onclick="goToProd('nghiencuu')">Nghiên Cứu</button>
+              <button class="btn btn-ghost btn-sm" data-prod-tab="content" onclick="goToProd('content')">YouTube Studio</button>
       </div>
 
     <div class="content">
@@ -634,6 +655,35 @@
           </div>
         </div>
       </div>
+
+        <!-- KHỐI 4 · MÃ KHUYẾN MÃI -->
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title"><svg class="pt-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10V6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v4a2 2 0 0 0 0 4v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4a2 2 0 0 0 0-4z"/><line x1="13" y1="5" x2="13" y2="19" stroke-dasharray="2 3"/></svg>Mã Khuyến Mãi</div>
+            <div class="panel-actions">
+              <span style="font-size:.72rem;color:var(--text-lt)" id="promocode-note">—</span>
+              <button class="btn btn-gold btn-sm" onclick="promoCodeNew()">+ Mã mới</button>
+              <button class="btn btn-primary btn-sm" onclick="loadPromoCodes()">↻</button>
+            </div>
+          </div>
+          <div id="promocode-alert" style="padding:0 .9rem"></div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Mã</th><th>Lượng</th><th>Đã dùng</th><th>Trần lượt</th><th>Chỉ TK mới (ngày)</th><th>Bắt buộc OAuth</th><th>Hết hạn</th><th>Bật</th><th>Ghi chú</th><th></th></tr></thead>
+              <tbody id="promocode-body"><tr><td colspan="10" class="loading"><span class="spin"></span>Đang tải...</td></tr></tbody>
+            </table>
+          </div>
+          <div class="panel-body" style="font-size:.72rem;color:var(--text-lt);line-height:1.7">
+            <b>Trần lượt</b> để trống = không giới hạn — đây là cần gạt ngân sách chính, đặt số rồi mới yên tâm phát mã ra ngoài.
+            <b>Chỉ TK mới</b> để trống = mọi tài khoản đổi được; đặt 30 nghĩa là chỉ tài khoản đăng ký trong 30 ngày gần đây.
+            <b>Bắt buộc OAuth</b> = chỉ tài khoản đăng nhập bằng Google/Facebook mới đổi được — đây là chốt chống lạm dụng CHÍNH.
+            Đo trên 62 tài khoản thật: 56 OAuth, 6 email (lượt cuối cách 3 tháng) ⇒ chốt này gần như không chặn người thật,
+            mà đẩy giá một tài khoản giả lên rất cao. Tắt nó là mở đường farm bằng email rác.
+            Mỗi tài khoản đổi được <b>đúng một mã trọn đời</b> (khoá ở tầng DB, không phải ở mã ứng dụng).
+            Số Lượng tối đa mỗi mã là <b>1.000</b> — chốt cứng trong RPC để một lần gõ thừa số 0 không phát cả gia tài.
+            Mã đã có người đổi thì <b>không xoá được</b>, hãy TẮT nó.
+          </div>
+        </div>
 
       <!-- ── CONTENT MANAGER ── -->
       <div class="page" id="page-content">
@@ -1322,7 +1372,91 @@
         </div>
       </div>
 
-      <!-- ── CONTENT BOARD (Marketing & Nội Dung) ── -->
+      <!-- ── KHO NỘI DUNG ──
+           Gom 6 bảng nội dung về một bảng đọc, kèm cột "đã ra kênh nào".
+           CHỈ ĐỌC: sửa nội dung vẫn ở trang Sản Xuất của từng pipeline. -->
+      <div class="page" id="page-warehouse">
+        <!-- `auto-fit` chứ không phải `repeat(4,1fr)` cứng: ở 390px bốn ô cố
+             định làm tràn ngang cả trang (đo được trên `nghiencuu`/`seo` là
+             21–25px — nợ có sẵn, cố ý không trộn vào PR này, nhưng cũng không
+             chép lại cho trang mới). -->
+        <div class="stats" id="wh-stats" style="grid-template-columns:repeat(auto-fit,minmax(190px,1fr))">
+          <div class="stat"><div class="stat-label">Tổng Tác Phẩm</div><div class="stat-value" id="wh-k-total">…</div><div class="stat-sub">6 nguồn nội dung</div></div>
+          <div class="stat green"><div class="stat-label">Đã Ra Kênh</div><div class="stat-value" id="wh-k-pub">…</div><div class="stat-sub" id="wh-k-pub-sub">…</div></div>
+          <div class="stat"><div class="stat-label">Đang Xếp Hàng</div><div class="stat-value" id="wh-k-queue">…</div><div class="stat-sub">chờ đăng</div></div>
+          <div class="stat"><div class="stat-label">Chưa Ra Kênh Nào</div><div class="stat-value" id="wh-k-idle">…</div><div class="stat-sub">nằm kho</div></div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title"><svg class="pt-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-6 9 6v11a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z"/><path d="M8 21V12h8v9"/></svg>Kho Theo Loại</div>
+          </div>
+          <div class="panel-body" id="wh-bykind"><div class="empty">Đang tải…</div></div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title"><svg class="pt-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>Đã Đăng Theo Kênh</div>
+          </div>
+          <div class="panel-body" id="wh-bychan"><div class="empty">Đang tải…</div></div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title"><svg class="pt-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><polyline points="7 14 11 9 15 12 21 5"/></svg>Hiệu Suất Kênh</div>
+            <div class="panel-actions" style="font-size:.72rem;color:var(--text-lt)" id="wh-met-when"></div>
+          </div>
+          <div class="panel-body" id="wh-metrics"><div class="empty">Đang tải…</div></div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title"><svg class="pt-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>Danh Sách</div>
+            <div class="panel-actions" style="display:flex;gap:8px;flex-wrap:wrap">
+              <input class="search-input" id="wh-q" placeholder="Tìm tiêu đề…" style="width:190px" onkeydown="if(event.key==='Enter'){whGo(0)}">
+              <select class="search-input" id="wh-kind" style="width:150px" onchange="whGo(0)">
+                <option value="">Mọi loại</option>
+                <option value="khao-luan">Khảo luận</option>
+                <option value="nghien-cuu">Nghiên cứu</option>
+                <option value="video-hoi-dap">Video hỏi-đáp</option>
+                <option value="tu-dien">Từ điển</option>
+                <option value="tai-lieu">Tài liệu</option>
+                <option value="sach">Sách</option>
+              </select>
+              <select class="search-input" id="wh-status" style="width:160px" onchange="whGo(0)">
+                <option value="">Mọi trạng thái</option>
+                <option value="published">Đã ra kênh</option>
+                <option value="queued">Đang xếp hàng</option>
+                <option value="unpublished">Chưa ra kênh</option>
+              </select>
+              <select class="search-input" id="wh-pub" style="width:150px" onchange="whGo(0)">
+                <option value="">Mọi bài</option>
+                <option value="draft">Chờ duyệt</option>
+                <option value="hidden">Đã gỡ</option>
+              </select>
+              <select class="search-input" id="wh-channel" style="width:140px" onchange="whGo(0)">
+                <option value="">Mọi kênh</option>
+                <option value="youtube">YouTube</option>
+                <option value="facebook">Facebook</option>
+                <option value="instagram">Instagram</option>
+                <option value="threads">Threads</option>
+                <option value="telegram">Telegram</option>
+                <option value="tiktok">TikTok</option>
+                <option value="fb-group">FB Group</option>
+              </select>
+              <select class="search-input" id="wh-sort" style="width:150px" onchange="whGo(0)">
+                <option value="">Mới nhất trước</option>
+                <option value="views">Nhiều view nhất</option>
+              </select>
+              <button class="btn btn-primary btn-sm" onclick="whGo(0)">↻</button>
+            </div>
+          </div>
+          <div class="table-wrap"><table class="table" id="wh-table"><tbody><tr><td class="empty">Đang tải…</td></tr></tbody></table></div>
+          <div class="panel-body" id="wh-pager" style="display:flex;gap:10px;align-items:center;justify-content:flex-end"></div>
+        </div>
+      </div>
+
+      <!-- ── CONTENT BOARD (Sản Xuất) ── -->
       <div class="page" id="page-cboard">
         <div class="panel">
           <div class="panel-header">
@@ -1451,15 +1585,30 @@ let _allUsers = [], _allCredits = [], _allLasos = [];
 let _currentPage = 'dashboard';
 
 const PAGE_TITLES = {
-  retention: 'Giữ Chân & Doanh Thu', distribution: 'Phân Phối Nội Dung',
+  retention: 'Giữ Chân & Doanh Thu', distribution: 'Nội Dung — Phân Phối',
   dashboard: 'Dashboard', users: 'Users', credits: 'Doanh Thu & Giao Dịch',
   lasos: 'Lá Số', pricing: 'Gói Nạp & Pricing', tools: 'Ví & Cấp Credits',
-  marketing: 'Funnel & Nguồn', content: 'YouTube Studio', cron: 'Vận Hành — Sức Khỏe & Jobs',
-  channels: 'Channels & Push', seo: 'SEO',
-  cboard: 'Content Board', khaoluan: 'Khảo Luận', nghiencuu: 'Nghiên Cứu',
+  marketing: 'Funnel & Nguồn', cron: 'Vận Hành — Sức Khỏe & Jobs',
+  channels: 'Nội Dung — Kênh & Kết Nối', seo: 'SEO',
+  warehouse: 'Nội Dung — Kho',
+  content: 'Sản Xuất — YouTube Studio', cboard: 'Sản Xuất — Content Board',
+  khaoluan: 'Sản Xuất — Khảo Luận', nghiencuu: 'Sản Xuất — Nghiên Cứu',
   sysconfig: 'System Config', apikeys: 'API & Keys', registry: 'Tools Registry',
   adminusers: 'Quản Trị Viên',
 };
+
+/**
+ * Bốn trang thuộc nhóm "Sản Xuất". Chúng vẫn là 4 page riêng (DOM + loader
+ * giữ nguyên), chỉ được gom lại sau MỘT nav item + một thanh tab.
+ */
+const PROD_TABS = ['cboard', 'khaoluan', 'nghiencuu', 'content'];
+let _prodTab = 'cboard';
+
+/** Mở nhóm Sản Xuất; không truyền tab thì quay lại tab đang xem dở. */
+function goToProd(tab) {
+  _prodTab = PROD_TABS.indexOf(tab) >= 0 ? tab : _prodTab;
+  goTo(_prodTab);
+}
 
 // ── AUTH ──
 //
@@ -1715,11 +1864,18 @@ function goTo(page) {
   // Thanh lọc ngày dùng chung: chỉ hiện ở 3 trang thật sự đọc from/to.
   const fb = document.getElementById('mkt-filterbar');
   if (fb) fb.style.display = MKT_PAGES.indexOf(page) >= 0 ? '' : 'none';
+  // Nhóm Sản Xuất: 4 trang con dùng chung MỘT nav item, nên nav phải được tô
+  // sáng bằng tay (không có `[onclick="goTo('cboard')"]` nào trong sidebar nữa)
+  // và thanh tab chỉ hiện khi đang ở trong nhóm.
+  const isProd = PROD_TABS.indexOf(page) >= 0;
+  const tb = document.getElementById('prod-tabbar');
+  if (tb) tb.style.display = isProd ? '' : 'none';
   // Lazy load
   const loaders = { users: loadUsers, credits: loadCredits, lasos: loadLasos,
                     pricing: loadPricingPage, tools: loadAdminUsers,
                     marketing: loadMarketingOnce, retention: loadMarketingOnce,
                     distribution: loadMarketingOnce,
+                    warehouse: loadWarehouse,
                     cron: loadCron, channels: loadChannels, seo: loadSeo,
                     cboard: loadContentBoard, khaoluan: loadKhaoLuan, nghiencuu: loadNghienCuu,
                     sysconfig: loadSysConfig, apikeys: loadApiKeys, registry: loadRegistry,
@@ -1732,6 +1888,23 @@ function goTo(page) {
     }
   } };
   if (loaders[page]) loaders[page]();
+
+  // ⚠️ ĐẶT SAU LOADER CÓ CHỦ Ý: loader của YouTube Studio gọi `showView()`, mà
+  // hàm đó (module con, dòng ~5109) ghi đè `topbar-title` VÀ xoá `active` khỏi
+  // MỌI `.nav-item`. Đặt trước thì vào tab đó là mất sạch dấu vị trí — nợ có
+  // sẵn (nav "YouTube Studio" cũ chưa bao giờ sáng), chỉ là trước đây không ai
+  // để ý vì nó đứng một mình.
+  if (isProd) {
+    _prodTab = page;
+    document.getElementById('topbar-title').textContent = PAGE_TITLES[page] || page;
+    document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+    document.getElementById('nav-production')?.classList.add('active');
+    document.querySelectorAll('#prod-tabbar [data-prod-tab]').forEach(b => {
+      const on = b.getAttribute('data-prod-tab') === page;
+      b.classList.toggle('btn-primary', on);
+      b.classList.toggle('btn-ghost', !on);
+    });
+  }
 }
 
 // ── PLACEHOLDER (module chưa build) ──
@@ -2161,6 +2334,301 @@ async function sendBroadcast(btn) {
     }
   } catch (e) { toast('Lỗi: ' + e.message, 'error'); }
   btn.disabled = false; btn.innerHTML = old;
+}
+
+// ── KHO NỘI DUNG ──
+//
+// Một bảng đọc gộp 6 nguồn (khảo luận · nghiên cứu · video hỏi-đáp · từ điển ·
+// tài liệu · sách) + cột "đã ra kênh nào". CHỈ ĐỌC — sửa nội dung vẫn ở trang
+// Sản Xuất của từng pipeline.
+//
+// ⚠️ Con số ở đây là ĐÃ ĐĂNG hay CHƯA, KHÔNG phải view/like/subscriber. Site
+// hiện chưa nạp một số liệu nào từ nền tảng (0 lượt gọi YouTube Analytics /
+// Meta Insights trong cả repo) — đó là việc riêng, đừng đọc bảng này rộng hơn
+// thứ nó thật sự đo.
+const WH_KIND_LABEL = {
+  'khao-luan': 'Khảo luận', 'nghien-cuu': 'Nghiên cứu', 'video-hoi-dap': 'Video hỏi-đáp',
+  'tu-dien': 'Từ điển', 'tai-lieu': 'Tài liệu', 'sach': 'Sách',
+};
+const WH_PAGE = 50;
+let _whOffset = 0;
+let _whRows = [];
+
+const WH_STATUS = {
+  published: { label: 'đang đăng', cls: 'badge-green' },
+  draft:     { label: 'chờ duyệt', cls: 'badge-warn' },
+  hidden:    { label: 'đã gỡ',     cls: 'badge-error' },
+};
+
+/** Trường sửa được của từng bảng — PHẢI khớp allowlist `EDITABLE` ở server.
+ *  Server mới là chốt chặn thật; bảng này chỉ để dựng form đúng ô. */
+const WH_FIELDS = {
+  khao_luan:       [['title', 'Tiêu đề'], ['excerpt', 'Tóm tắt'], ['category', 'Chuyên mục'], ['content', 'Nội dung']],
+  master_articles: [['title', 'Tiêu đề'], ['excerpt', 'Tóm tắt'], ['category', 'Chuyên mục'], ['content', 'Nội dung']],
+  tai_lieu:        [['title', 'Tiêu đề'], ['excerpt', 'Tóm tắt'], ['category', 'Chuyên mục'], ['content', 'Nội dung']],
+  tu_dien:         [['ten', 'Tên'], ['seo_title', 'Tiêu đề SEO'], ['seo_desc', 'Mô tả SEO'], ['content', 'Nội dung']],
+  sach_library:    [['title', 'Tiêu đề'], ['author', 'Tác giả'], ['excerpt', 'Tóm tắt'], ['content', 'Nội dung']],
+};
+
+function whParams(offset) {
+  const g = id => (document.getElementById(id)?.value || '').trim();
+  return `&limit=${WH_PAGE}&offset=${offset}` +
+    `&kind=${encodeURIComponent(g('wh-kind'))}` +
+    `&status=${encodeURIComponent(g('wh-status'))}` +
+    `&channel=${encodeURIComponent(g('wh-channel'))}` +
+    `&pub=${encodeURIComponent(g('wh-pub'))}` +
+    `&sort=${encodeURIComponent(g('wh-sort'))}` +
+    `&q=${encodeURIComponent(g('wh-q'))}`;
+}
+
+/**
+ * Hiệu suất kênh. Chưa kéo lượt nào thì nói THẲNG là chưa có số + chỉ đúng
+ * việc phải làm — hiện một bảng 0 view sẽ đọc thành "nội dung không ai xem",
+ * mà sự thật là mình chưa từng đo.
+ */
+function renderWhMetrics(m) {
+  const host = document.getElementById('wh-metrics');
+  const when = document.getElementById('wh-met-when');
+  if (!m || !m.has_data) {
+    when.textContent = '';
+    host.innerHTML = `<div class="empty" style="text-align:left;line-height:1.7">
+      <strong>Chưa kéo được số liệu nào từ nền tảng.</strong><br>
+      Cron <code>content-metrics</code> chạy 12:30 VN hằng ngày, nhưng cần
+      <code>YOUTUBE_API_KEY</code> trên Vercel mới đọc được view/like/subscriber
+      của YouTube (KHÔNG cần publish OAuth app cho việc này).<br>
+      Facebook cần <code>FB_PAGE_ACCESS_TOKEN</code> — cùng token đang cần cho đường đăng bài.
+    </div>`;
+    return;
+  }
+  when.textContent = m.last_run ? 'Đo lần cuối: ' + new Date(m.last_run).toLocaleString('vi-VN') : '';
+  const nf = n => (n === null || n === undefined) ? '—' : Number(n).toLocaleString('vi-VN');
+  const chans = (m.by_channel || []).map(c => `<tr>
+      <td>${escHtmlLocal(c.channel)}</td>
+      <td style="text-align:right">${nf(c.items)}</td>
+      <td style="text-align:right"><strong>${nf(c.views)}</strong></td>
+      <td style="text-align:right">${nf(c.likes)}</td>
+      <td style="text-align:right">${nf(c.comments)}</td>
+      <td style="text-align:right">${nf(c.followers)}</td>
+    </tr>`).join('');
+  const top = (m.top || []).map((t, i) => {
+    const url = /^https?:\/\//i.test(t.url || '') ? t.url : '';
+    const title = escHtmlLocal(t.title || t.external_id || '—');
+    return `<tr>
+      <td style="color:var(--text-lt)">${i + 1}</td>
+      <td>${url ? `<a href="${escHtmlLocal(url)}" target="_blank" rel="noopener" style="color:var(--text);text-decoration:underline">${title}</a>` : title}</td>
+      <td>${escHtmlLocal(t.channel)}</td>
+      <td style="text-align:right"><strong>${nf(t.views)}</strong></td>
+      <td style="text-align:right">${nf(t.likes)}</td>
+    </tr>`;
+  }).join('');
+  host.innerHTML = `
+    <table><thead><tr><th>Kênh</th><th style="text-align:right">Bài đo được</th>
+      <th style="text-align:right">Lượt xem</th><th style="text-align:right">Thích</th>
+      <th style="text-align:right">Bình luận</th><th style="text-align:right">Theo dõi</th></tr></thead>
+      <tbody>${chans || '<tr><td class="empty">—</td></tr>'}</tbody></table>
+    <div style="font-size:.72rem;color:var(--text-lt);margin:.5rem 0 1rem">
+      Số là <strong>tích luỹ từ lúc đăng</strong>, không phải theo ngày.
+      Nguồn: số công khai của nền tảng — chưa có watch-time / retention / nguồn traffic.
+    </div>
+    ${top ? `<div class="td-title" style="margin-bottom:.4rem">Xem nhiều nhất</div>
+      <table><thead><tr><th></th><th>Tác phẩm</th><th>Kênh</th>
+        <th style="text-align:right">Lượt xem</th><th style="text-align:right">Thích</th></tr></thead>
+        <tbody>${top}</tbody></table>` : ''}`;
+}
+
+function whGo(offset) { _whOffset = Math.max(0, offset || 0); loadWarehouse(); }
+
+/**
+ * Trình sửa bài — dựng bằng JS, không có markup sẵn trong trang.
+ *
+ * Nội dung nạp từ SERVER chứ không lấy từ dòng đang hiện: bảng kho chỉ có tiêu
+ * đề, còn thân bài mới là thứ người ta vào đây để sửa.
+ */
+async function whEdit(i) {
+  const r = _whRows[i];
+  if (!r || !r.editable) return;
+  const fields = WH_FIELDS[r.source_table];
+  if (!fields) { toast('Loại này chưa sửa được từ Kho'); return; }
+
+  const back = document.createElement('div');
+  back.className = 'modal-back';
+  back.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:2000;display:flex;align-items:center;justify-content:center;padding:16px';
+  back.innerHTML = `<div style="background:var(--surface);border-radius:12px;max-width:760px;width:100%;max-height:90vh;overflow:auto;padding:20px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.8rem">
+        <strong style="font-family:'Noto Serif',serif;font-size:1.05rem;color:var(--text)">Sửa nội dung</strong>
+        <button class="btn btn-ghost btn-sm" data-x>✕</button>
+      </div>
+      <div style="font-size:.72rem;color:var(--text-lt);margin-bottom:.9rem" data-meta></div>
+      <div data-form><div class="loading"><span class="spin"></span>Đang tải bài…</div></div>
+    </div>`;
+  back.addEventListener('click', e => { if (e.target === back || e.target.hasAttribute('data-x')) back.remove(); });
+  document.body.appendChild(back);
+
+  let row;
+  try {
+    row = await apiGet('admin-content-one', `&table=${encodeURIComponent(r.source_table)}&id=${encodeURIComponent(r.source_id)}`);
+  } catch (e) {
+    back.querySelector('[data-form]').innerHTML = `<div class="empty">Lỗi: ${escHtmlLocal(e.message)}</div>`;
+    return;
+  }
+  if (row && row.error) {
+    back.querySelector('[data-form]').innerHTML = `<div class="empty">Lỗi: ${escHtmlLocal(row.error)}</div>`;
+    return;
+  }
+  const data = (row && row.row) || {};
+  const canStatus = r.source_table === 'khao_luan' || r.source_table === 'master_articles';
+
+  back.querySelector('[data-meta]').textContent =
+    `${WH_KIND_LABEL[r.kind] || r.kind} · ${r.url || ''}` +
+    (data.updated_at ? ` · sửa lần cuối ${new Date(data.updated_at).toLocaleString('vi-VN')}${data.updated_by ? ' bởi ' + data.updated_by : ''}` : '');
+
+  back.querySelector('[data-form]').innerHTML =
+    fields.map(([k, label]) => {
+      const big = k === 'content';
+      return `<div style="margin-bottom:.8rem">
+        <div style="font-size:.74rem;color:var(--text-mid);margin-bottom:.25rem">${label}</div>
+        ${big
+          ? `<textarea class="search-input" data-f="${k}" style="width:100%;min-height:280px;font-family:ui-monospace,monospace;line-height:1.55"></textarea>`
+          : `<input class="search-input" data-f="${k}" style="width:100%">`}
+      </div>`;
+    }).join('') +
+    (canStatus ? `<div style="margin-bottom:.9rem">
+        <div style="font-size:.74rem;color:var(--text-mid);margin-bottom:.25rem">Trạng thái</div>
+        <select class="search-input" data-f="publish_status" style="width:220px">
+          <option value="published">Đang đăng (hiện trên web)</option>
+          <option value="draft">Chờ duyệt (ẩn khỏi web)</option>
+          <option value="hidden">Đã gỡ (ẩn khỏi web)</option>
+        </select>
+      </div>` : '')  +
+    `<div style="display:flex;gap:8px;justify-content:flex-end">
+        <button class="btn btn-ghost btn-sm" data-x>Huỷ</button>
+        <button class="btn btn-primary btn-sm" data-save>Lưu</button>
+     </div>`;
+
+  // Đổ giá trị bằng `.value` chứ KHÔNG nhét vào HTML: nội dung bài chứa đủ thứ
+  // dấu nháy và thẻ, ghép chuỗi là vỡ form (hoặc tệ hơn).
+  for (const [k] of fields) {
+    const el = back.querySelector(`[data-f="${k}"]`);
+    if (el) el.value = data[k] == null ? '' : String(data[k]);
+  }
+  if (canStatus) back.querySelector('[data-f="publish_status"]').value = data.publish_status || 'published';
+
+  back.querySelector('[data-save]').addEventListener('click', async ev => {
+    const btn = ev.currentTarget;
+    btn.disabled = true; btn.textContent = 'Đang lưu…';
+    const payload = { table: r.source_table, id: r.source_id };
+    for (const [k] of fields) {
+      const el = back.querySelector(`[data-f="${k}"]`);
+      if (el) payload[k] = el.value;
+    }
+    if (canStatus) payload.publish_status = back.querySelector('[data-f="publish_status"]').value;
+    try {
+      const res = await apiPost('admin-content-edit', payload);
+      if (res && res.error) throw new Error(res.error);
+      toast('Đã lưu');
+      back.remove();
+      loadWarehouse();
+    } catch (e) {
+      btn.disabled = false; btn.textContent = 'Lưu';
+      toast('Lỗi: ' + e.message);
+    }
+  });
+}
+
+async function loadWarehouse() {
+  const tbl = document.getElementById('wh-table');
+  tbl.innerHTML = `<tbody><tr><td class="empty"><span class="spin"></span> Đang tải…</td></tr></tbody>`;
+  let data;
+  try { data = await apiGet('admin-content-catalog', whParams(_whOffset)); }
+  catch (e) { tbl.innerHTML = `<tbody><tr><td class="empty">Lỗi: ${escHtmlLocal(e.message)}</td></tr></tbody>`; return; }
+  if (data && data.error) { tbl.innerHTML = `<tbody><tr><td class="empty">Lỗi: ${escHtmlLocal(data.error)}</td></tr></tbody>`; return; }
+
+  const st = (data && data.stats) || {};
+  const list = (data && data.list) || {};
+  const rows = list.rows || [];
+  const total = Number(st.total || 0);
+  const pub = Number(st.published_total || 0);
+  const byChan = st.by_channel || [];
+  const queued = byChan.filter(c => c.status !== 'live').reduce((s, c) => s + Number(c.n || 0), 0);
+
+  document.getElementById('wh-k-total').textContent = total.toLocaleString('vi-VN');
+  document.getElementById('wh-k-pub').textContent = pub.toLocaleString('vi-VN');
+  document.getElementById('wh-k-pub-sub').textContent =
+    total ? `${((pub / total) * 100).toFixed(1)}% kho` : '—';
+  document.getElementById('wh-k-queue').textContent = queued.toLocaleString('vi-VN');
+  document.getElementById('wh-k-idle').textContent = Math.max(0, total - pub).toLocaleString('vi-VN');
+
+  // Kho theo loại — thanh ngang, phần đã ra kênh tô đậm hơn phần còn nằm kho.
+  const kinds = st.by_kind || [];
+  const maxK = Math.max(1, ...kinds.map(k => Number(k.n || 0)));
+  document.getElementById('wh-bykind').innerHTML = kinds.length ? kinds.map(k => {
+    const n = Number(k.n || 0), p = Number(k.published || 0);
+    return `<div style="margin-bottom:.7rem">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:.25rem">
+        <span style="font-size:.8rem;color:var(--text-mid)">${escHtmlLocal(WH_KIND_LABEL[k.kind] || k.kind)}</span>
+        <strong style="font-family:'Noto Serif',serif;color:var(--text)">${n.toLocaleString('vi-VN')}
+          <span style="font-size:.68rem;color:var(--text-lt);font-family:inherit">(${p} đã ra kênh)</span></strong>
+      </div>
+      <div style="background:var(--border-lt);border-radius:5px;height:12px;overflow:hidden;display:flex">
+        <div style="width:${Math.round((p / maxK) * 100)}%;height:100%;background:var(--green)"></div>
+        <div style="width:${Math.round(((n - p) / maxK) * 100)}%;height:100%;background:var(--border)"></div>
+      </div>
+    </div>`;
+  }).join('') : '<div class="empty">Kho trống</div>';
+
+  document.getElementById('wh-bychan').innerHTML = byChan.length ? `<table>
+    <thead><tr><th>Kênh</th><th>Trạng thái</th><th style="text-align:right">Số bản</th></tr></thead>
+    <tbody>${byChan.map(c => `<tr>
+      <td>${escHtmlLocal(c.channel)}</td>
+      <td>${c.status === 'live'
+        ? '<span class="badge badge-green">đã đăng</span>'
+        : `<span class="badge badge-warn">${escHtmlLocal(c.status)}</span>`}</td>
+      <td style="text-align:right">${Number(c.n || 0).toLocaleString('vi-VN')}</td>
+    </tr>`).join('')}</tbody></table>`
+    : '<div class="empty">Chưa bản nào ra khỏi website</div>';
+
+  renderWhMetrics(data && data.metrics);
+
+  _whRows = rows;
+
+  tbl.innerHTML = `
+    <thead><tr><th>Tiêu đề</th><th>Loại</th><th>Trạng thái</th><th>Kênh</th>
+      <th style="text-align:right">Xem</th><th style="text-align:right">Ngày tạo</th><th></th></tr></thead>
+    <tbody>${rows.length ? rows.map((r, i) => {
+      const chans = (r.channels || []).map(c => {
+        const cls = c.status === 'live' ? 'badge-green' : (c.status === 'error' ? 'badge-error' : 'badge-warn');
+        const label = escHtmlLocal(c.channel) + (c.status === 'live' ? '' : ` · ${escHtmlLocal(c.status)}`);
+        // href chỉ nhận http(s) — chuỗi trong DB có thể là bất cứ gì.
+        const safe = /^https?:\/\//i.test(c.url || '') ? c.url : '';
+        return safe
+          ? `<a class="badge ${cls}" href="${escHtmlLocal(safe)}" target="_blank" rel="noopener">${label}</a>`
+          : `<span class="badge ${cls}">${label}</span>`;
+      }).join(' ') || '<span class="badge">chưa đăng</span>';
+      const url = /^(https?:\/\/|\/)/i.test(r.url || '') ? r.url : '';
+      const title = escHtmlLocal(r.title || '(không tiêu đề)');
+      const st = WH_STATUS[r.publish_status] || WH_STATUS.published;
+      // Khai màu chữ tường minh: thẻ <a> trần ăn màu link mặc định của trình
+      // duyệt (#0000EE) — trên nền tối đo được 1,8:1, gần như không đọc nổi.
+      return `<tr>
+        <td>${url ? `<a href="${escHtmlLocal(url)}" target="_blank" rel="noopener" style="color:var(--text);text-decoration:underline">${title}</a>` : title}</td>
+        <td><span class="badge">${escHtmlLocal(WH_KIND_LABEL[r.kind] || r.kind)}</span></td>
+        <td><span class="badge ${st.cls}">${st.label}</span></td>
+        <td>${chans}</td>
+        <td style="text-align:right;white-space:nowrap">${r.views === null || r.views === undefined ? '<span style="color:var(--text-lt)">—</span>' : Number(r.views).toLocaleString('vi-VN')}</td>
+        <td style="text-align:right;white-space:nowrap">${r.created_at ? new Date(r.created_at).toLocaleDateString('vi-VN') : '—'}</td>
+        <td style="text-align:right;white-space:nowrap">${r.editable
+          ? `<button class="btn btn-ghost btn-sm" onclick="whEdit(${i})">Sửa</button>`
+          : `<span style="font-size:.7rem;color:var(--text-lt)" title="Video có trang soạn riêng ở mục Sản Xuất">— Studio</span>`}</td>
+      </tr>`;
+    }).join('') : '<tr><td class="empty" colspan="7">Không có bản nào khớp bộ lọc</td></tr>'}</tbody>`;
+
+  const shown = Number(list.total || 0);
+  const from = shown ? _whOffset + 1 : 0;
+  const to = Math.min(_whOffset + WH_PAGE, shown);
+  document.getElementById('wh-pager').innerHTML = `
+    <span style="font-size:.78rem;color:var(--text-lt)">${from}–${to} / ${shown.toLocaleString('vi-VN')}</span>
+    <button class="btn btn-ghost btn-sm" ${_whOffset <= 0 ? 'disabled' : ''} onclick="whGo(${_whOffset - WH_PAGE})">←</button>
+    <button class="btn btn-ghost btn-sm" ${to >= shown ? 'disabled' : ''} onclick="whGo(${_whOffset + WH_PAGE})">→</button>`;
 }
 
 // ── SEO ──
@@ -3491,7 +3959,7 @@ async function loadMarketing() {
     if (nRev) nRev.textContent = 'giao dịch cũ chưa lưu VNĐ → suy theo ' + rateTxt + '/Lượng';
     const nSrc = document.getElementById('mkt-src-note');
     if (nSrc) nSrc.textContent = 'Quy đổi doanh thu: 1 Lượng ≈ ' + rateTxt;
-    renderMktFunnel(d.funnel || {});
+    renderMktFunnel(d.funnel || {}, d.trafficQuality || null);
     renderMktGa4(d.ga4 || null);
     renderMktSources(d.sources || []);
     renderMktAcq(d.acquisition || []);
@@ -4073,7 +4541,7 @@ function renderMktGa4(g) {
   </div>`;
 }
 
-function renderMktFunnel(f) {
+function renderMktFunnel(f, tq) {
   // Bậc funnel chính (thang theo visitors) + conv% so với bậc trước.
   const svgIc = (p) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px;vertical-align:-2px;margin-right:.3rem;opacity:.75">${p}</svg>`;
   const steps = [
@@ -4114,7 +4582,53 @@ function renderMktFunnel(f) {
   </div>`;
   const overall = (f.visitors > 0) ? ((f.paid || 0) / f.visitors * 100).toFixed(2) + '%' : '—';
   document.getElementById('mkt-funnel').innerHTML = rows + secondary +
-    `<div style="margin-top:.75rem;font-size:.72rem;color:var(--text-lt)">Chuyển đổi tổng visit → paid: <strong style="color:var(--text)">${overall}</strong></div>`;
+    `<div style="margin-top:.75rem;font-size:.72rem;color:var(--text-lt)">Chuyển đổi tổng visit → paid: <strong style="color:var(--text)">${overall}</strong></div>`
+    + renderTrafficQuality(tq, f.paid || 0);
+}
+
+// Dải chất lượng lưu lượng, đứng dưới phễu. Đọc từ RPC `traffic_quality` — CÙNG
+// nguồn mà CMO digest Telegram đang luận, cố ý không tự đếm lại ở đây.
+//
+// Vì sao cần: bậc "Khách ghé" đếm THÔ. Đo prod 05/08/2026 trên 30 ngày:
+// 1.005 danh tính, trong đó **871 vào đúng một lượt rồi biến mất** (0 user_id,
+// 0 đăng ký, 0 nạp tiền) và chỉ 83 có tương tác thật. Lấy 1.005 làm mẫu số rồi
+// đọc ra "chuyển đổi 0,10%" là một kết luận sai về sản phẩm dựa trên phép chia sai.
+//
+// ⚠️ Số nội bộ. Thanh "Khách ghé" ở trên nay CŨNG là số nội bộ đã lọc máy
+// (`visitors_human`) chứ không còn là GA4 nữa, nên hai bên cùng một định nghĩa
+// "máy" — cả hai đi qua `bot_anon_ids()`. Vẫn để thành dải riêng vì nó chia
+// nhóm theo CHẤT hành vi, còn thanh trên đếm đầu người.
+function renderTrafficQuality(tq, paid) {
+  if (!tq || tq.total == null) return '';
+  // `bot` gộp CẢ HAI cách nhận: `known_bot` (UA tự khai) + `fleet_bot` (đội máy,
+  // nhận qua hành vi). Bỏ `fleet_bot` ra là dải này nói "12 máy" ngay cạnh badge
+  // phễu nói "−489 máy" — hai con số cãi nhau trong cùng một màn hình.
+  const eng = tq.engaged || 0, drive = tq.drive_by || 0, brow = tq.browsed || 0;
+  const bot = (tq.known_bot || 0) + (tq.fleet_bot || 0);
+  const tot = tq.total || 0;
+  const pct = (n) => tot > 0 ? Math.round((n / tot) * 100) : 0;
+  const seg = (n, color, label) => n <= 0 ? '' :
+    `<div style="width:${pct(n)}%;background:${color}" title="${label}: ${n.toLocaleString()} (${pct(n)}%)"></div>`;
+  // Mẫu số ĐÃ LỌC. Đây là con số nên đọc, và nói rõ nó đã lọc.
+  const convEng = eng > 0 ? ((paid || 0) / eng * 100).toFixed(2) + '%' : null;
+  const ua = tq.ua_coverage || {};
+  // with_ua = 0 nghĩa là CHƯA đo được User-Agent, không phải "không có bot".
+  const botNote = (ua.with_ua === 0)
+    ? ' · <span style="color:var(--gold)">chưa thu được User-Agent nào — bot = 0 ở đây là “chưa đo”, không phải “không có”</span>'
+    : '';
+  return `<div style="margin-top:.9rem;padding-top:.8rem;border-top:1px solid var(--border-lt)">
+    <div class="stat-label" style="margin-bottom:.35rem" title="RPC traffic_quality — cùng nguồn với CMO digest gửi Telegram">Chất lượng lưu lượng (đo nội bộ, ${tot.toLocaleString()} danh tính)</div>
+    <div style="display:flex;height:10px;border-radius:5px;overflow:hidden;background:var(--border-lt)">
+      ${seg(eng, 'var(--green)', 'Tương tác thật')}${seg(brow, 'var(--blue)', 'Xem vài trang')}${seg(drive, 'var(--text-lt)', 'Ghé 1 lượt rồi đi')}${seg(bot, 'var(--red)', 'Máy (UA tự khai + đội máy nhận qua hành vi)')}
+    </div>
+    <div style="margin-top:.45rem;font-size:.7rem;color:var(--text-lt);line-height:1.55">
+      <strong style="color:var(--green)">${eng.toLocaleString()}</strong> tương tác thật
+      · <strong style="color:var(--text-mid)">${brow.toLocaleString()}</strong> xem vài trang
+      · <strong style="color:var(--text-mid)">${drive.toLocaleString()}</strong> ghé 1 lượt rồi đi
+      · <strong style="color:var(--text-mid)">${bot.toLocaleString()}</strong> máy${(tq.fleet_bot || 0) > 0 ? ` <span style="opacity:.75">(${(tq.known_bot || 0).toLocaleString()} tự khai + ${(tq.fleet_bot || 0).toLocaleString()} đội máy)</span>` : ''}${botNote}
+      ${convEng ? `<br>Chuyển đổi trên mẫu số ĐÃ LỌC (paid ÷ tương tác thật): <strong style="color:var(--text)">${convEng}</strong>` : ''}
+    </div>
+  </div>`;
 }
 
 function renderMktSources(rows) {
@@ -4331,6 +4845,16 @@ function mktExportCSV() {
   rows.push(['visitors', 'signups', 'activated', 'topup_intent', 'paid', 'returned']);
   rows.push([f.visitors || 0, f.signups || 0, f.activated || 0, f.topup_intent || 0, f.paid || 0, f.returned || 0]);
   rows.push([]);
+  // Khối RIÊNG chứ không thêm cột vào bảng funnel: `visitors` ở trên là số đang
+  // hiện trên thanh (GA4 khi có), còn đây là phân loại NỘI BỘ — nhét chung hàng
+  // là mời người đọc cộng trừ hai nguồn khác nhau.
+  const tq = _mktData.trafficQuality;
+  if (tq && tq.total != null) {
+    rows.push(['# Chất lượng lưu lượng (nội bộ, RPC traffic_quality)']);
+    rows.push(['total', 'engaged', 'browsed', 'drive_by', 'known_bot']);
+    rows.push([tq.total || 0, tq.engaged || 0, tq.browsed || 0, tq.drive_by || 0, tq.known_bot || 0]);
+    rows.push([]);
+  }
   rows.push(['# Sources']);
   rows.push(['source', 'signups', 'paid', 'conv_pct', 'revenue_credits', 'revenue_vnd', 'ltv_vnd']);
   (_mktData.sources || []).forEach(r => {
@@ -4471,7 +4995,7 @@ function fmtVnd(cr) { return (Math.max(0, cr || 0) * VND_PER_CREDIT).toLocaleStr
 // cụ, không thì bảng hiện bằng mức dự phòng rồi mới đúng.
 async function loadPricingPage() {
   await loadPackageRate();
-  loadPricing(); loadPackages(); loadPromo();
+  loadPricing(); loadPackages(); loadPromo(); loadPromoCodes();
 }
 
 async function loadPackageRate() {
@@ -4607,6 +5131,126 @@ async function savePackageRow(id) {
 
 // ── PROMO (khuyến mãi + referral, đọc/ghi app_config) ──
 const PROMO_KEYS = ['credits.signup_bonus_variants', 'credits.signup_bonus_device_cap', 'referral.signup_bonus_referrer', 'referral.signup_reward_cap'];
+
+// ── MÃ KHUYẾN MÃI (promo code) ──────────────────────────────────────────
+// Đây là bảng PHÁT TIỀN. Ba thứ cố ý KHÔNG cho sửa từ đây:
+//   · `used_count` — số đếm thật, sửa tay là mất khả năng đối soát ngân sách.
+//   · trần 1.000 Lượng/mã — chốt trong RPC, ô nhập chỉ chặn sớm cho dễ đọc lỗi.
+//   · xoá mã đã có người đổi — FK chặn; muốn dừng thì TẮT, để lại dấu vết.
+let _promoCodes = [];
+
+async function loadPromoCodes() {
+  const body = document.getElementById('promocode-body');
+  body.innerHTML = '<tr><td colspan="10" class="loading"><span class="spin"></span>Đang tải...</td></tr>';
+  try {
+    const d = await apiGet('admin-promo-list');
+    if (d.error) throw new Error(d.error);
+    _promoCodes = d.codes || [];
+    const note = document.getElementById('promocode-note');
+    if (note) {
+      note.textContent = `${_promoCodes.length} mã · đã phát ${Number(d.grantedCredits || 0).toLocaleString('vi-VN')} Lượng`;
+    }
+    if (!_promoCodes.length) {
+      body.innerHTML = '<tr><td colspan="10" class="empty">Chưa có mã nào. Bấm “+ Mã mới”.</td></tr>';
+      return;
+    }
+    body.innerHTML = _promoCodes.map(r => {
+      const id = encodeURIComponent(r.code);
+      const used = Number(r.used_count || 0);
+      const cap = r.max_uses == null ? null : Number(r.max_uses);
+      // Hết lượt là trạng thái đáng nhìn nhất — mã còn "bật" mà không ai đổi
+      // được nữa thì nhìn qua tưởng đang chạy.
+      const full = cap != null && used >= cap;
+      return `<tr>
+        <td><strong class="mono">${escHtmlLocal(r.code)}</strong></td>
+        <td><input type="number" class="price-input" style="width:68px" id="pc-credits-${id}" value="${Number(r.credits)}" min="0" max="1000"></td>
+        <td style="text-align:center;color:${full ? 'var(--red)' : 'var(--text-lt)'};font-weight:${full ? '700' : '400'}">${used}${full ? ' (hết)' : ''}</td>
+        <td><input type="number" class="price-input" style="width:68px" id="pc-max-${id}" value="${cap == null ? '' : cap}" min="0" placeholder="∞"></td>
+        <td><input type="number" class="price-input" style="width:68px" id="pc-days-${id}" value="${r.new_account_days == null ? '' : Number(r.new_account_days)}" min="1" placeholder="—"></td>
+        <td style="text-align:center"><input type="checkbox" id="pc-oauth-${id}" ${r.require_oauth !== false ? 'checked' : ''}></td>
+        <td><input type="date" class="price-input" style="width:118px" id="pc-exp-${id}" value="${r.expires_at ? String(r.expires_at).slice(0, 10) : ''}"></td>
+        <td style="text-align:center"><input type="checkbox" id="pc-en-${id}" ${r.enabled ? 'checked' : ''}></td>
+        <td><input class="price-input" style="width:120px;text-align:left" id="pc-note-${id}" value="${escHtmlLocal(r.note || '')}"></td>
+        <td style="white-space:nowrap">
+          <button class="btn btn-primary btn-sm" id="pc-btn-${id}" onclick="savePromoCode('${id}')">Lưu</button>
+          ${used === 0 ? `<button class="btn btn-ghost btn-sm" onclick="removePromoCode('${id}')">Xoá</button>` : ''}
+        </td>
+      </tr>`;
+    }).join('');
+  } catch (e) {
+    body.innerHTML = `<tr><td colspan="10" class="empty">Lỗi: ${escHtmlLocal(e.message)}</td></tr>`;
+  }
+}
+
+function promoCodeAlert(type, msg) {
+  const el = document.getElementById('promocode-alert');
+  if (!el) return;
+  el.innerHTML = `<div class="alert-box alert-${type === 'success' ? 'success' : 'error'}">${escHtmlLocal(msg)}</div>`;
+  setTimeout(() => { el.innerHTML = ''; }, 4000);
+}
+
+async function savePromoCode(idEnc) {
+  const code = decodeURIComponent(idEnc);
+  const btn = document.getElementById('pc-btn-' + idEnc);
+  const g = (p) => document.getElementById(`pc-${p}-${idEnc}`);
+  if (btn) { btn.disabled = true; btn.textContent = '...'; }
+  try {
+    const exp = g('exp').value;
+    const d = await apiPost('admin-promo-code', {
+      code,
+      credits: parseInt(g('credits').value, 10),
+      maxUses: g('max').value === '' ? null : parseInt(g('max').value, 10),
+      newAccountDays: g('days').value === '' ? null : parseInt(g('days').value, 10),
+      requireOauth: g('oauth').checked,
+      // Ô date cho NGÀY, quy về cuối ngày đó theo giờ VN — đặt hạn 20/08 mà mã
+      // chết từ 00:00 UTC (07:00 VN) là cắt mất gần trọn ngày cuối.
+      expiresAt: exp ? new Date(exp + 'T23:59:59+07:00').toISOString() : null,
+      enabled: g('en').checked,
+      note: g('note').value,
+    });
+    if (!d.success) throw new Error(d.error || 'Lưu hỏng');
+    promoCodeAlert('success', `Đã lưu mã ${code}`);
+    loadPromoCodes();
+  } catch (e) {
+    promoCodeAlert('error', e.message);
+  }
+  if (btn) { btn.disabled = false; btn.textContent = 'Lưu'; }
+}
+
+async function promoCodeNew() {
+  const code = prompt('Mã mới (chữ HOA, số, gạch ngang/dưới — 3–40 ký tự):', '');
+  if (!code) return;
+  const credits = prompt(`Mã "${code.toUpperCase().trim()}" tặng bao nhiêu Lượng? (0–1000)`, '100');
+  if (credits === null) return;
+  try {
+    const d = await apiPost('admin-promo-code', {
+      code,
+      credits: parseInt(credits, 10),
+      // Mặc định AN TOÀN, không phải mặc định tiện: chỉ tài khoản mới + bắt
+      // buộc OAuth. CỐ Ý không đặt trần lượt — trần chặn đúng phần tăng trưởng
+      // thật; chốt chống lạm dụng là OAuth (xem migration-promo-codes.sql).
+      maxUses: null,
+      newAccountDays: 30,
+      requireOauth: true,
+      enabled: true,
+      note: '',
+    });
+    if (!d.success) throw new Error(d.error || 'Tạo hỏng');
+    promoCodeAlert('success', `Đã tạo ${d.code} — mặc định trần 100 lượt, chỉ tài khoản mới ≤30 ngày. Sửa lại nếu cần.`);
+    loadPromoCodes();
+  } catch (e) { promoCodeAlert('error', e.message); }
+}
+
+async function removePromoCode(idEnc) {
+  const code = decodeURIComponent(idEnc);
+  if (!confirm(`Xoá hẳn mã "${code}"?\n\nMã đã có người đổi thì KHÔNG xoá được — hãy tắt nó thay vì xoá.`)) return;
+  try {
+    const d = await apiPost('admin-promo-code', { code, remove: true });
+    if (!d.success) throw new Error(d.error || 'Xoá hỏng');
+    promoCodeAlert('success', `Đã xoá ${code}`);
+    loadPromoCodes();
+  } catch (e) { promoCodeAlert('error', e.message); }
+}
 
 async function loadPromo() {
   const body = document.getElementById('promo-body');

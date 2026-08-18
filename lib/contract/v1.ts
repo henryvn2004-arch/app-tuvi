@@ -154,7 +154,7 @@ export interface ChatRequestV1 {
    * tự tính lại từ birth (computePastLife deterministic) — vừa an toàn, vừa
    * chắc chắn trùng nhân vật đang hiện trên màn hình.
    */
-  wrap?: 'past-life' | 'past-life-bond' | 'nguoi-khac' | 'day-con';
+  wrap?: 'past-life' | 'past-life-bond' | 'nguoi-khac' | 'day-con' | 'huong-nghiep-tre';
   /**
    * Quan hệ với người trong lá số — chỉ dùng với `wrap: 'nguoi-khac'`.
    *
@@ -244,6 +244,17 @@ export interface DoneEvent {
   };
   /** gợi ý câu hỏi tiếp theo do LLM sinh, bám câu trả lời vừa rồi (chip động) */
   suggestions?: string[];
+  /**
+   * Thẻ "công cụ này giúp được" khi model thấy câu hỏi cần một phép tính rail
+   * không làm được. Vắng mặt ở hầu hết lượt — model được dặn mặc định là IM.
+   *
+   * Gắn vào `done` chứ KHÔNG thêm một loại SSE event mới: adapter bot
+   * (createSSECollector) chỉ gom event `text`, thêm event lạ là rủi ro không
+   * đổi lấy gì — và thẻ hiện SAU câu trả lời mới đúng nhịp.
+   *
+   * ⛔ KHÔNG có trường giá, cố ý. Xem lib/tools/suggest-tool.ts.
+   */
+  toolSuggest?: { toolId: string; label: string; path: string; lyDo: string };
 }
 
 /** event: error — lỗi có mã để client xử lý */
@@ -315,12 +326,16 @@ export function validateChatRequest(body: unknown):
     return { ok: false, error: 'Thiếu client.platform / client.version' };
   }
 
+  // 🪤 Thêm giá trị `wrap` mới thì PHẢI thêm cả ở đây, không chỉ ở kiểu union
+  // phía trên — kiểu chỉ chặn lúc biên dịch, còn cửa thật là hàm này. Đã vấp
+  // một lần: hai tool vision thiếu trong danh sách và rail của chúng ăn 400.
   if (
     b.wrap != null &&
     b.wrap !== 'past-life' &&
     b.wrap !== 'past-life-bond' &&
     b.wrap !== 'nguoi-khac' &&
-    b.wrap !== 'day-con'
+    b.wrap !== 'day-con' &&
+    b.wrap !== 'huong-nghiep-tre'
   ) {
     return { ok: false, error: 'wrap không hợp lệ' };
   }

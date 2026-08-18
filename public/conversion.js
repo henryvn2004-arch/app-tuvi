@@ -53,7 +53,7 @@ const POPUP_DATA = {
   '/': {
     icon: '✦',
     headline: 'Mệnh lý không nên để mai sau mới biết',
-    body: 'Hiểu được bản mệnh, đại vận, tướng pháp giúp bạn chủ động trong những quyết định quan trọng. <strong>47 công cụ luận giải</strong> theo cổ pháp đang chờ bạn khám phá.',
+    body: 'Hiểu được bản mệnh, đại vận, tướng pháp giúp bạn chủ động trong những quyết định quan trọng. <strong>50+ công cụ luận giải</strong> theo cổ pháp đang chờ bạn khám phá.',
     cta: 'Khám Phá Công Cụ Mệnh Lý →',
     ctaHref: '/luan-giai.html',
     secondary: 'Để sau vậy',

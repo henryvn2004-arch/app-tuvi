@@ -35,7 +35,7 @@ export async function countRecentFailures(
   const col = field === 'email' ? 'email' : 'ip';
   const res = await fetch(
     `${SUPABASE_URL}/rest/v1/admin_login_attempts?${col}=eq.${encodeURIComponent(value)}&success=eq.false&created_at=gte.${encodeURIComponent(since)}&select=id&limit=200`,
-    { headers: SB_HEADERS }
+    { cache: 'no-store', headers: SB_HEADERS }
   );
   if (!res.ok) return 0;
   const rows = await res.json();

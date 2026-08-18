@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"></noscript>
-<link rel="stylesheet" href="/shell.css?v=16">
+<link rel="stylesheet" href="/shell.css?v=19">
 <style>
 .form-card{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);max-width:860px}
 .form-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:3px}
@@ -21,7 +21,7 @@
 .fg input:focus,.fg select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(20,85,164,.12)}
 .btn-go{background:var(--red);color:#fff;border:none;border-radius:8px;padding:10px 22px;font-size:14px;font-weight:600;cursor:pointer;font-family:var(--serif)}
 .btn-go:disabled{opacity:.6;cursor:not-allowed}
-.err{color:var(--red);font-size:13px;margin-top:8px;display:none}
+.err{color:var(--tx-red);font-size:13px;margin-top:8px;display:none}
 .err.active{display:block}
 .res-block{border:1px solid #E8E8E8;border-radius:10px;margin-bottom:16px;background:#fff;overflow:hidden;max-width:880px}
 .res-block-header{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;background:#F5F4F0;border-bottom:1px solid #E8E8E8}
@@ -33,11 +33,11 @@
 .dn-two{display:grid;grid-template-columns:1fr 1fr;gap:18px}
 @media(max-width:760px){.dn-two{grid-template-columns:1fr}}
 .dn-side{border:1px solid var(--line-2);border-radius:10px;padding:13px 14px;background:var(--paper)}
-.dn-side h3{font-family:var(--serif);font-size:14px;font-weight:700;margin-bottom:2px;color:#061A2E}
+.dn-side h3{font-family:var(--serif);font-size:14px;font-weight:700;margin-bottom:2px;color:var(--heading)}
 .dn-side p{font-size:11.5px;color:var(--text-lt);margin-bottom:10px}
 .dn-side-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
 .dn-rm{border:none;background:none;color:var(--text-lt);font-size:16px;line-height:1;cursor:pointer;padding:2px 4px}
-.dn-rm:hover{color:var(--red)}
+.dn-rm:hover{color:var(--tx-red)}
 .dn-addrow{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:12px}
 .dn-add{border:1px dashed var(--line-2);background:var(--paper);border-radius:8px;padding:8px 14px;font-size:13px;font-family:inherit;color:#7A5F26;font-weight:600;cursor:pointer}
 .dn-add:hover{border-color:#C8B084;background:#FBF8F1}
@@ -108,6 +108,7 @@
     </div>
     <div class="ws-body">
       <div id="introHost"></div>
+      <div id="shellRecent"></div>
       <div class="form-card" id="birthPanel">
         <h2>Nhập ngày sinh (dương lịch)</h2>
         <p class="sub">Quan hệ giữa các lá số theo cổ pháp quyết định loại duyên nợ — không bốc thăm, và đổi thứ tự nhập vẫn ra đúng một kết quả.</p>
@@ -125,7 +126,7 @@
         <div class="err" id="error-msg"></div>
       </div>
 
-      <div id="resPanel" style="display:none">
+      <div id="resPanel" data-ws-result style="display:none">
         <div class="res-block">
           <div class="res-block-header"><span class="res-block-title">Mối Duyên Kiếp Trước</span></div>
           <div class="res-block-body">
@@ -182,16 +183,16 @@
   <aside class="rail" id="shell-rail"></aside>
 </div>
 
-<script>window.SHELL_ACTIVE='duyen-no-tien-kiep';
+<script>window.SHELL_ACTIVE='duyen-no-tien-kiep';window.SHELL_HISTORY=true;
 window.SHELL_INTRO={key:'duyen-no-tien-kiep',title:'Duyên Nợ Tiền Kiếp',desc:'Đưa <b>hai tới năm lá số</b> vào cùng một thế giới phong kiến Á Đông rồi xem <b>kiếp trước họ là gì của nhau</b> — loại duyên nợ suy từ <b>địa chi cung Mệnh</b>, <b>ngũ hành nạp âm</b> và <b>chính tinh</b>, kèm câu chuyện 4 hồi và một bức tranh vẽ cả nhóm.'};</script>
 <script src="/laso-chart.js?v=3"></script>
-<script src="/tuvi-form.js?v=1"></script>
-<script src="/tuvi-paywall.js?v=16"></script>
+<script src="/tuvi-form.js?v=2"></script>
+<script src="/tuvi-paywall.js?v=21"></script>
 <script src="/auth.js?v=2"></script>
   <script src="/nav.js?v=22" data-icons-only></script>
-<script src="/shell.js?v=62"></script>
-<script src="/tools-shared/ai-loading-steps.js?v=2"></script>
-<script src="/tools-shared/portrait-recover.js?v=1"></script>
+<script src="/shell.js?v=72"></script>
+<script src="/tools-shared/ai-loading-steps.js?v=8"></script>
+<script src="/tools-shared/portrait-recover.js?v=2"></script>
 <script>
 
 var _currentSlug = '';
@@ -420,6 +421,9 @@ async function _doGenerate(freeRerun) {
   _imgWait && _imgWait.start();
   _loadingCtl = AiLoadingSteps.mount('loadingSteps', DN_STEPS);
   _loadingCtl.start();
+  // Sổ tới 5 người thì form rất dễ dài hơn màn hình — cuộn lên ngay để thấy có
+  // gì vừa chạy, không đứng im.
+  if (AiLoadingSteps.scrollToResult) AiLoadingSteps.scrollToResult('loading');
 
   var token = window.Auth?.getSession()?.access_token || '';
   var call = function (phase) {

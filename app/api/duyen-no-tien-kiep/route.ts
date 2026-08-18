@@ -42,74 +42,41 @@ import {
 } from '@/lib/agent/past-life-bond-story';
 import { generatePortraitImage } from '@/lib/image/openai-image';
 import type { BirthParams } from '@/lib/contract/v1';
+import { authUserFromRequest, parseLlmJson } from '@/lib/api/tool-helpers';
 import { withToolOutcome } from '@/lib/ops/tool-outcome';
 import { normalizeBondGroup, type BondGroup } from '@/lib/portraits/bond-key';
 import {
-  putCachedPortrait,
-  touchCache,
+  cacheFor,
   insertHistoryRow,
-  getCachedPortrait,
   userOwnsLaso,
   type PortraitPhase,
 } from '@/lib/portraits/cache';
 
+
+
 const TOOL_ID = 'duyen-no-tien-kiep';
+
+/**
+ * 🔴 PHIÊN BẢN CẤU TRÚC payload. BUMP mỗi khi thêm/đổi/bớt khoá mà TRANG cần để
+ * dựng đủ màn hình. Đổi CHỮ thì không bump (dòng cache cũ trả chữ cũ — khó
+ * chịu, không vỡ); đổi KHOÁ mà quên bump thì trang ẩn khối IM LẶNG.
+ *
+ * Mở màn ở 1: payload hiện tại CHÍNH LÀ phiên bản 1, và dòng cache ghi trước
+ * lượt cắm cơ chế (không có `_shape`) được đọc là 1 nên KHÔNG bị dựng lại oan.
+ *
+ * ⚠️ Cố ý KHÔNG nhét vào `lasoKey`: đổi khoá là mồ côi cả cache LẪN
+ * `userOwnsLaso` ⇒ người đã trả tiền bị tính lại.
+ */
+const SHAPE = 1;
+
+/** Vân tay CẤU TRÚC — `npm run check:cacheshape` canh khớp với `SHAPE` ở trên. */
+const SHAPE_FINGERPRINT = '7e1e42a5757a';
+
+/** Cửa DUY NHẤT vào cache của tool này; `shape` khai một lần tại đây. */
+const CACHE = cacheFor(TOOL_ID, SHAPE);
 
 const SUPABASE_URL = process.env.SUPABASE_URL!;
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY!;
-
-// ── Auth (cùng pattern 2 tool chân dung) ────────────────────────────────
-async function getUserFromToken(token: string) {
-  const res = await fetch(`${SUPABASE_URL}/auth/v1/user`, {
-    headers: { Authorization: `Bearer ${token}`, apikey: SUPABASE_KEY },
-  });
-  if (!res.ok) return null;
-  const u = await res.json();
-  return u?.id ? u : null;
-}
-
-async function authUser(
-  request: NextRequest,
-): Promise<{ error: string; status: number } | { user: { id: string } }> {
-  const auth = request.headers.get('Authorization');
-  if (!auth?.startsWith('Bearer ')) return { error: 'Unauthorized', status: 401 };
-  const user = await getUserFromToken(auth.slice(7));
-  if (!user?.id) return { error: 'Unauthorized', status: 401 };
-  return { user };
-}
-
-// Bóc JSON từ câu trả lời LLM — bản y hệt route Chân Dung Tiền Kiếp (đã trả giá
-// một lần vì bản giòn: model thêm một câu dẫn là hỏng cả lượt đã tính tiền).
-function parseJSON(text: string): unknown {
-  const t = String(text || '').replace(/```json|```/g, '').trim();
-  try {
-    return JSON.parse(t);
-  } catch {
-    /* thử cắt khối {...} bên dưới */
-  }
-  for (let i = t.indexOf('{'); i >= 0; i = t.indexOf('{', i + 1)) {
-    let depth = 0;
-    let inStr = false;
-    let esc = false;
-    for (let k = i; k < t.length; k++) {
-      const c = t[k];
-      if (esc) { esc = false; continue; }
-      if (c === '\\') { esc = true; continue; }
-      if (c === '"') { inStr = !inStr; continue; }
-      if (inStr) continue;
-      if (c === '{') depth++;
-      else if (c === '}' && --depth === 0) {
-        try {
-          return JSON.parse(t.slice(i, k + 1));
-        } catch {
-          /* khối này không phải JSON ta cần → thử khối kế tiếp */
-        }
-        break;
-      }
-    }
-  }
-  return null;
-}
 
 // Thứ tự các lá số được CHUẨN HOÁ ở `lib/portraits/bond-key.ts` — logic thuần,
 // tách khỏi route để test gọi được chính hàm đó (nạp route là nạp cả
@@ -291,7 +258,7 @@ async function handleStory(grp: BondGroup, userId: string) {
         output_tokens: llmRes.usage.output_tokens,
         cache_creation_input_tokens: 0,
         cache_read_input_tokens: 0,
-      });
+      }, llmRes.durationMs);
       return { raw: llmRes.text, model: llmRes.model };
     } catch (e) {
       console.error('[duyen-no-tien-kiep] LLM lỗi:', (e as Error)?.message);
@@ -301,7 +268,7 @@ async function handleStory(grp: BondGroup, userId: string) {
 
   let res = await askStory(false);
   if (!res) return err('Lỗi AI khi viết câu chuyện. Vui lòng thử lại.', 500);
-  let parsed = parseJSON(res.raw) as StoryJson | null;
+  let parsed = parseLlmJson(res.raw) as StoryJson | null;
 
   if (!okShape(parsed)) {
     const t = String(res.raw || '');
@@ -311,7 +278,7 @@ async function handleStory(grp: BondGroup, userId: string) {
     void logLlmParseFail(TOOL_ID, res.model, t, 1);
     res = await askStory(true);
     if (!res) return err('Lỗi AI khi viết câu chuyện. Vui lòng thử lại.', 500);
-    parsed = parseJSON(res.raw) as StoryJson | null;
+    parsed = parseLlmJson(res.raw) as StoryJson | null;
   }
   if (!okShape(parsed)) {
     const t = String(res.raw || '');
@@ -343,7 +310,7 @@ async function handleStory(grp: BondGroup, userId: string) {
     grp,
   );
   // Pha `story` KHÔNG có dòng lịch sử riêng (chỉ pha `image` ghi) → `row: null`.
-  void putCachedPortrait(TOOL_ID, 'story', grp.key, { payload, row: null }, userId);
+  CACHE.put('story', grp.key, { payload, row: null }, userId);
   return ok(payload);
 }
 
@@ -394,8 +361,8 @@ async function handleImage(grp: BondGroup, userId: string) {
       output_tokens: llmRes.usage.output_tokens,
       cache_creation_input_tokens: 0,
       cache_read_input_tokens: 0,
-    });
-    const parsed = parseJSON(llmRes.text) as
+    }, llmRes.durationMs);
+    const parsed = parseLlmJson(llmRes.text) as
       | { faceA?: string; faceB?: string; faces?: unknown[] }
       | null;
     faces =
@@ -423,7 +390,7 @@ async function handleImage(grp: BondGroup, userId: string) {
     const imgRes = await generatePortraitImage({ prompt: finalPrompt, size: '1536x1024' });
     imageB64 = imgRes.b64;
     imgModel = imgRes.model;
-    void logImageUsage(TOOL_ID, imgRes.model, imgRes.usage);
+    void logImageUsage(TOOL_ID, imgRes.model, imgRes.usage, imgRes.durationMs);
   } catch (e) {
     return err('Lỗi sinh ảnh: ' + (e instanceof Error ? e.message : 'không rõ'), 500);
   }
@@ -465,20 +432,20 @@ async function handleImage(grp: BondGroup, userId: string) {
   void railFreeTurnsPerGen().then((k) => railFreeGrant(userId, k)).catch(() => {});
 
   const payload = withLaso({ success: true, imageUrl, ...bondMeta(group) }, grp);
-  void putCachedPortrait(TOOL_ID, 'image', grp.key, { payload, row: historyRow }, userId);
+  CACHE.put('image', grp.key, { payload, row: historyRow }, userId);
   return ok(payload);
 }
 
 // ── History ─────────────────────────────────────────────────────────────
 async function handleHistory(request: NextRequest) {
-  const auth = await authUser(request);
+  const auth = await authUserFromRequest(request);
   if ('error' in auth) return err(auth.error, auth.status);
 
   const r = await fetch(
     `${SUPABASE_URL}/rest/v1/past_life_bonds?user_id=eq.${auth.user.id}` +
       '&select=id,created_at,image_url,bond_kind,bond_label,character_a,character_b,occupation_a,occupation_b,era' +
       '&order=created_at.desc&limit=20',
-    { headers: { Authorization: `Bearer ${SUPABASE_KEY}`, apikey: SUPABASE_KEY } },
+    { cache: 'no-store', headers: { Authorization: `Bearer ${SUPABASE_KEY}`, apikey: SUPABASE_KEY } },
   );
   if (!r.ok) return err('Lỗi tải lịch sử.', 500);
   return ok({ success: true, items: await r.json() });
@@ -507,17 +474,20 @@ function pairFromQuery(sp: URLSearchParams): BondGroup {
 }
 
 async function handleCacheStatus(request: NextRequest, sp: URLSearchParams) {
-  const auth = await authUser(request);
+  const auth = await authUserFromRequest(request);
   if ('error' in auth) return err(auth.error, auth.status);
 
   const { key } = pairFromQuery(sp);
   const [story, image, owns] = await Promise.all([
-    getCachedPortrait(TOOL_ID, 'story', key),
-    getCachedPortrait(TOOL_ID, 'image', key),
+    CACHE.get('story', key),
+    CACHE.get('image', key),
     userOwnsLaso(TOOL_ID, auth.user.id, key),
   ]);
-  const cached = Boolean(story) && Boolean(image);
-  return ok({ success: true, cached, free: cached && owns });
+  // ⚠️ `story`/`image` là OBJECT `{cached, stale}` — đọc thẳng chúng như boolean
+  // thì lúc nào cũng "có cache" và client bỏ luôn bước trả tiền.
+  const cached = Boolean(story.cached) && Boolean(image.cached);
+  const coDong = (story.cached || story.stale) && (image.cached || image.stale);
+  return ok({ success: true, cached, free: Boolean(coDong) && owns });
 }
 
 // ── Routes ──────────────────────────────────────────────────────────────
@@ -531,7 +501,7 @@ function validBirth(b: unknown): b is BirthParams {
 }
 
 async function runPost(request: NextRequest) {
-  const auth = await authUser(request);
+  const auth = await authUserFromRequest(request);
   if ('error' in auth) return err(auth.error, auth.status);
 
   const body = await parseBody(request);
@@ -560,11 +530,13 @@ async function runPost(request: NextRequest) {
   // Tra cache RIÊNG từng pha — hai pha chạy song song, lượt gốc có thể hỏng
   // giữa chừng và chỉ một pha kịp vào cache; coi cả hai là một khối thì nửa còn
   // thiếu được phát miễn phí.
-  const [cached, owns] = await Promise.all([
-    getCachedPortrait(TOOL_ID, phase, pair.key),
+  const [{ cached, stale }, owns] = await Promise.all([
+    CACHE.get(phase, pair.key),
     userOwnsLaso(TOOL_ID, auth.user.id, pair.key),
   ]);
-  const free = Boolean(cached) && owns;
+  // `free` xét cả dòng CŨ: đã trả tiền cho đúng cặp lá số đó rồi. `cached` thì
+  // `CACHE.get` đã lọc — dòng cũ không bao giờ được phục vụ.
+  const free = Boolean(cached || stale) && owns;
 
   if (!free) {
     // Chốt chặn thanh toán PHÍA SERVER — không có bước này thì gọi thẳng
@@ -574,7 +546,7 @@ async function runPost(request: NextRequest) {
   }
 
   if (cached) {
-    touchCache(TOOL_ID, phase, pair.key);
+    CACHE.touch(phase, pair.key);
     if (phase === 'image' && !owns && cached.row) {
       insertHistoryRow(TOOL_ID, { ...cached.row, user_id: auth.user.id, laso_key: pair.key });
       void railFreeTurnsPerGen().then((n) => railFreeGrant(auth.user.id, n)).catch(() => {});

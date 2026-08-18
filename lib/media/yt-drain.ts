@@ -53,6 +53,15 @@ const DEFAULT_DAILY = 3;
 const BLOCKING_PATTERNS = [
   'invalid_grant', // refresh token hết hạn/bị thu hồi — 84/86 bài đang mắc ở đây
   'cannot get access token',
+  // Token trỏ SAI KÊNH (edge `youtube-upload` v4 tự chốt trước khi đăng). Đây là
+  // lỗi của CÁI TOKEN chứ không phải của bài, nên thử bài kế tiếp chỉ tổ đăng
+  // nhầm thêm — 11/08 đã có 3 video công khai lên nhầm kênh cá nhân trước khi
+  // chốt này tồn tại. Tiền tố `channel_mismatch` do edge function phát ra; đổi
+  // bên đó thì phải đổi cả ở đây.
+  'channel_mismatch',
+  // Thiếu env của edge function (`youtube-upload` v4 gỡ giá trị viết cứng nên
+  // CLIENT_ID/SECRET nay bắt buộc). Cửa chưa mở thì bài nào cũng như bài nào.
+  'missing_env',
   'uploadlimitexceeded', // ngưỡng chống spam của YouTube (đã dính 2 lần)
   'quotaexceeded',
   'dailylimitexceeded',
@@ -182,7 +191,10 @@ export function formatDrainReport(r: DrainResult): string {
   }
   if (r.failed.length) {
     lines.push(`❌ Lỗi ${r.failed.length} bài:`);
-    for (const it of r.failed) lines.push(`  • ${it.title} — ${(it.error || '').slice(0, 200)}`);
+    // 400 chứ không phải 200: thông điệp của lỗi CHẶN nay mang cả chẩn đoán
+    // (scope đã cấp, tên kênh token đang trỏ tới) — cắt ở 200 là cụt đúng chỗ
+    // đáng đọc nhất, đã xảy ra thật ("Scope ĐỦ ⇒ tài kho…").
+    for (const it of r.failed) lines.push(`  • ${it.title} — ${(it.error || '').slice(0, 400)}`);
   }
   if (r.stoppedReason) lines.push(`⏸️ ${r.stoppedReason}`);
   if (r.stuck) lines.push(`⚠️ ${r.stuck} bài kẹt trạng thái "uploading" (dấu vết lượt bị giết ngang).`);
@@ -191,10 +203,32 @@ export function formatDrainReport(r: DrainResult): string {
 
   // Nhắc nguyên nhân gốc NGAY TRONG cảnh báo. Không có dòng này thì phản xạ tự
   // nhiên là đi cấp lại refresh token — vá được vài ngày rồi tắc y như cũ.
-  if (r.failed.some((f) => isBlocking(f.error || ''))) {
-    lines.push(
-      '\n🔑 Lỗi auth: cấp lại token là vá triệu chứng. Google Cloud → OAuth consent screen → PUBLISH APP (đang ở chế độ Testing thì refresh token chỉ sống 7 ngày), rồi mới chạy lại youtube-auth.',
-    );
+  //
+  // ⚠️ NHƯNG lời nhắc phải KHỚP LOẠI LỖI. Bản đầu bắn cùng một câu "PUBLISH
+  // APP" cho MỌI lỗi chặn, nên khi chốt kênh (v4) bắt được token trỏ sai kênh
+  // thì bản tin vẫn khuyên đi publish app — một việc đã làm xong, và không
+  // liên quan gì. Lời khuyên sai địa chỉ còn tệ hơn không khuyên: nó dẫn người
+  // đọc đi sửa nhầm chỗ rồi quay lại đúng lỗi cũ.
+  const blocked = r.failed.map((f) => (f.error || '').toLowerCase()).filter((m) => isBlocking(m));
+  if (blocked.length) {
+    const hit = (p: string) => blocked.some((m) => m.includes(p));
+    if (hit('missing_env')) {
+      lines.push(
+        '\n🔑 Thiếu cấu hình: đặt các env còn thiếu ở Supabase → Edge Functions → Secrets rồi chạy lại. Không phải lỗi token.',
+      );
+    } else if (hit('channel_mismatch')) {
+      lines.push(
+        '\n🔑 Token trỏ SAI KÊNH (hoặc chưa khai YOUTUBE_CHANNEL_ID) — KHÔNG phải token hết hạn, đừng đi publish app. Đọc kỹ dòng lỗi ở trên: nó nêu đúng kênh mà token đang trỏ tới và việc cần làm.',
+      );
+    } else if (hit('invalid_grant') || hit('cannot get access token')) {
+      lines.push(
+        '\n🔑 Lỗi auth: cấp lại token là vá triệu chứng. Google Cloud → OAuth consent screen → PUBLISH APP (đang ở chế độ Testing thì refresh token chỉ sống 7 ngày), rồi mới chạy lại youtube-auth.',
+      );
+    } else {
+      lines.push(
+        '\n🔑 Cửa đang khoá (quota/giới hạn đăng của YouTube). Đợi hết chu kỳ rồi chạy lại, đừng thử dồn.',
+      );
+    }
   }
   return lines.join('\n');
 }

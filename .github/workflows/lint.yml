@@ -13,7 +13,7 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
-      - uses: actions/setup-node@v6
+      - uses: actions/setup-node@v7
         with:
           node-version: '20'
           cache: 'npm'
@@ -31,11 +31,72 @@ jobs:
       - name: Không có giá chép cứng
         run: npm run check:prices
 
+      # Chặn tái phát lượt GET Supabase thiếu `cache:'no-store'`. Next bọc fetch
+      # TOÀN CỤC và nhớ kết quả kể cả trong route force-dynamic — bug này đã cắn
+      # ba lần, lần nào cũng im lặng: bản chia sẻ đã gỡ vẫn render, bộ giám sát
+      # báo job "chưa hề chạy", và nặng nhất là trừ tiền xong vẫn nhận 402 rồi
+      # người dùng bấm lại và bị trừ LẦN HAI.
+      - name: GET Supabase đều có no-store
+        run: npm run check:nostore
+
       # Chặn tái phát cách xếp công cụ chép tay: từng có BA mảng không khớp
       # nhau (/cong-cu xếp theo nhu cầu 58 công cụ, /app xếp theo bộ môn 34
       # công cụ), và thêm công cụ mới là phải nhớ sửa tay ba chỗ.
       - name: Không có nhóm/đường dẫn công cụ chép cứng
         run: npm run check:groups
+
+      # Chặn tái phát tool trong Luận Đường KHÔNG chia sẻ được. Chia sẻ khung
+      # giữa từng là opt-in của từng tool nên `day-con` không có nút Chia sẻ
+      # suốt từ lúc ra mắt, còn `thanh-tuong-pro`/`phong-thuy` thì không bao giờ
+      # gỡ nút → bấm Chia sẻ sau lượt mới là phát ra kết quả của LƯỢT TRƯỚC.
+      - name: Mọi tool Luận Đường chia sẻ được
+        run: npm run check:share
+
+      # Chặn tái phát tool trong Luận Đường KHÔNG có lịch sử hội thoại. Trang
+      # tool mới hay chép từ khuôn của một trang cũ, mà khuôn đó có thể thiếu
+      # khối này — đã tái phát HAI lần theo đúng đường đó. Không có gì báo:
+      # trang vẫn chạy, chỉ là người dùng không có đường nào mở lại phiên cũ.
+      - name: Mọi tool Luận Đường có lịch sử hội thoại
+        run: npm run check:history
+
+      # Chặn trang shell MỚI chép thiếu khuôn khởi động. Cùng đường tái phát với
+      # check:history nhưng thiếu thứ khác: `app-cong-so` từng thiếu thẻ font
+      # Noto Serif (chữ lặng lẽ rơi về Georgia), `app-gio-sinh` từng thiếu
+      # `auth.js` (người ĐANG ĐĂNG NHẬP bị bắt đăng nhập lại — chặn thẳng đường
+      # trả tiền). `nav.js` ở chế độ data-icons-only return sớm nên KHÔNG chèn
+      # `auth.js` hộ; trang shell phải tự khai.
+      - name: Trang shell nạp đủ khung khởi động
+        run: npm run check:shellboot
+
+      # Chặn gõ nhầm tên hàm trên `window.Auth`. Gõ nhầm KHÔNG ném lỗi — nó trả
+      # undefined và hỏng IM LẶNG. Đã trả giá: `app-gio-sinh` gọi
+      # `Auth.getToken()` (không tồn tại; API thật là `getSession()`) nên header
+      # Authorization rỗng → server 401 SAU KHI client đã trừ Lượng.
+      - name: Lời gọi Auth.* khớp API thật
+        run: npm run check:authapi
+
+      # Chặn tái phát lỗi "đòi đăng nhập với người ĐANG đăng nhập": access token
+      # Supabase sống ~1 giờ, `getSession().access_token` là ẢNH CHỤP nên nó trả
+      # cả token đã hết hạn → server 401. Đã trả giá trên prod (rail Kỳ Môn), và
+      # ở paywall thì tệ hơn: 401 đọc thành "chưa trả tiền" → tính tiền lần hai.
+      - name: Đường tiền/đường hỏi dùng token còn hạn
+        run: npm run check:token
+
+      # Chặn `animation:` trỏ tới @keyframes KHÔNG TỒN TẠI — trình duyệt không
+      # báo gì cả, phần tử vẫn hiện, chỉ là đứng im. Bắt được ngay lượt chạy
+      # đầu: banner "Chào mừng! Bạn đã nhận Lượng miễn phí" của `auth.js` mượn
+      # keyframe khai LƯỜI trong `tuvi-paywall.js`, mà 38/73 trang nạp auth.js
+      # còn không nạp paywall ⇒ chưa bao giờ fade vào.
+      - name: animation không trỏ vào keyframe ma
+        run: npm run check:keyframes
+
+      # Canh 27 khối hoạt động của Hướng Nghiệp Trẻ — phần người TRẢ TIỀN đọc kỹ
+      # nhất và là phần duy nhất không kiểm được bằng bất biến cấu trúc. Ba luật
+      # đều rút từ lỗi bắt được thật khi soi tay bảng: tên nghề lọt khối lứa 3–7
+      # (cờ `bayNghe` chỉ làm rỗng `ngheViDu`, không với tới chữ trong hoatDong),
+      # ngôn ngữ thi thố ở lứa 3–7, và hai hướng khác nhau gợi cùng một việc.
+      - name: bảng hoạt động trẻ em giữ đúng luật
+        run: npm run check:hoatdong
 
       # Chặn tái phát bảng 64 quẻ sai mã hào: đã có lúc 49/64 quẻ mang mã của
       # quẻ khác (77% lượt gieo ra sai lời đoán) mà không gì báo, vì nhánh "tìm
@@ -64,13 +125,64 @@ jobs:
       - name: Bảng mô-típ tranh 64 quẻ đầy đủ
         run: npm run check:motifs
 
+      # Hợp đồng laSoText ↔ bộ cắt/prompt luận giải. Đổi một mốc section (hay chỉ
+      # nối ghi chú vào sau nó) làm `findIndex` trả -1 → bộ cắt CÂM, cả lá số 22K
+      # ký tự đi thẳng vào prompt, model tự mò và bỏ qua phần engine đã chấm.
+      # KHÔNG ném lỗi, KHÔNG log, bài đọc vẫn trôi chảy → lỗi sống 2 tháng.
+      - name: Hợp đồng mốc laSoText (bộ cắt luận giải)
+        run: npm run check:laso
+
+      # Engine thêm trường mới mà extractor gửi rail không đọc → dữ liệu vẫn
+      # tính, trang vẫn hiện, rail thì mù. Đã cắn thật: `thapThan` (Thập Thần —
+      # cột app-bat-tu.html vẽ dưới mỗi trụ) chưa bao giờ tới model.
+      - name: Engine ↔ rail còn khớp trường (Bát Tự)
+        run: npm run check:railfields
+
+      # Anh em của bước trên, cho nhóm `wrap` (lá số đầy đủ + vỏ đóng vai).
+      # Nhóm này đi đường KHÁC hẳn nên bộ dò kia không với tới — và chính nó
+      # lòi ra 3 lỗi ở lượt rà thứ hai (5 trục/8 chất không tới rail ·
+      # `railDataDayDu` là code chết · bảng KIỂU bản trả tiền dùng thì rail mù).
+      - name: Engine ↔ rail còn khớp trường (nhóm wrap)
+        run: npm run check:railwrap
+
+      # `portrait_cache` khoá theo LÁ SỐ chứ không theo shape: đổi cấu trúc
+      # payload mà quên bump `SHAPE` thì dòng cache cũ được trả nguyên trạng
+      # MÃI MÃI và trang ẩn khối im lặng. Đã cắn HAI lần (#465 `day-con`,
+      # #475 `huong-nghiep-tre` — đo được trên prod một dòng `tuoi=43` vẫn
+      # mang lứa của bản kẹp tuổi cũ). Lời dặn trong mã không đủ; cần máy canh.
+      - name: Vân tay cấu trúc payload ↔ SHAPE cache
+        run: npm run check:cacheshape
+
+      # `khao_luan`/`master_articles` nay có `publish_status`, nhưng cột đó chỉ
+      # có nghĩa nếu MỌI bề mặt công khai lọc theo nó — đo được 12 chỗ đọc rải
+      # khắp app/ và lib/. Quên một chỗ thì bài đã gỡ xuống vẫn hiện ra ngoài,
+      # hỏng im lặng và chỉ lộ khi có người tình cờ mở đúng URL đó.
+      - name: Truy vấn công khai phải lọc trạng thái xuất bản
+        run: npm run check:publish
+
+      # Sổ job ↔ vercel.json ↔ file route. Lớp lỗi này tái phát BA LẦN (sổ cũ
+      # trong admin.html khai 5/9 job ⇒ CMO Digest chết 14 ngày; rồi bảng
+      # CRON_TRIGGERS cũng 5 mục ⇒ nút Chạy ngay chết; rồi 11/20 ⇒ "Unknown
+      # job"). Cả ba đều hỏng IM LẶNG cho tới khi có người bấm hoặc đi tìm.
+      - name: Sổ job khớp lịch cron và route thật
+        run: npm run check:jobs
+
+      # Đo 2026-08-17: 75% luật của 25 prompt rail là GIỌNG + HÌNH DẠNG, nghiệp
+      # vụ tử vi chỉ 25% — và riêng 3 shape lá số có TỚI BA bản mô tả bố cục
+      # chồng nhau, mỗi bản tự nhận "ĐỨNG TRÊN mọi luật khác". Nguyên nhân là
+      # cộng dồn: thấy model viết chưa ưng thì thêm một khối nữa, khối cũ vẫn
+      # nằm đó. Càng thêm luật thì luật càng loãng. Bộ dò chặn cả hai vế: trần
+      # ký tự cho phần luật, và mỗi shape chỉ được MỘT nguồn bố cục.
+      - name: Ngân sách prompt lá số (chống phình + một nguồn bố cục)
+        run: npm run check:prompt
+
   typecheck:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v7
 
-      - uses: actions/setup-node@v6
+      - uses: actions/setup-node@v7
         with:
           node-version: '20'
           cache: 'npm'

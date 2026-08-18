@@ -39,15 +39,34 @@ import type { BirthParams } from '@/lib/contract/v1';
 import { withToolOutcome } from '@/lib/ops/tool-outcome';
 import { authUserFromRequest, parseLlmJson } from '@/lib/api/tool-helpers';
 import {
+  cacheFor,
   lasoKey,
-  getCachedPortrait,
-  putCachedPortrait,
-  touchCache,
   insertHistoryRow,
   userOwnsLaso,
 } from '@/lib/portraits/cache';
 
+
+
 const TOOL_ID = 'nhan-mach';
+
+/**
+ * 🔴 PHIÊN BẢN CẤU TRÚC payload. BUMP mỗi khi thêm/đổi/bớt khoá mà TRANG cần để
+ * dựng đủ màn hình. Đổi CHỮ thì không bump (dòng cache cũ trả chữ cũ — khó
+ * chịu, không vỡ); đổi KHOÁ mà quên bump thì trang ẩn khối IM LẶNG.
+ *
+ * Mở màn ở 1: payload hiện tại CHÍNH LÀ phiên bản 1, và dòng cache ghi trước
+ * lượt cắm cơ chế (không có `_shape`) được đọc là 1 nên KHÔNG bị dựng lại oan.
+ *
+ * ⚠️ Cố ý KHÔNG nhét vào `lasoKey`: đổi khoá là mồ côi cả cache LẪN
+ * `userOwnsLaso` ⇒ người đã trả tiền bị tính lại.
+ */
+const SHAPE = 1;
+
+/** Vân tay CẤU TRÚC — `npm run check:cacheshape` canh khớp với `SHAPE` ở trên. */
+const SHAPE_FINGERPRINT = 'cc7d29bafb5f';
+
+/** Cửa DUY NHẤT vào cache của tool này; `shape` khai một lần tại đây. */
+const CACHE = cacheFor(TOOL_ID, SHAPE);
 
 const SUPABASE_URL = process.env.SUPABASE_URL!;
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY!;
@@ -157,7 +176,7 @@ async function buildReport(p: NhanMachProfile, userId: string, key: string, coLa
         output_tokens: r.usage.output_tokens,
         cache_creation_input_tokens: 0,
         cache_read_input_tokens: 0,
-      });
+      }, r.durationMs);
       return r;
     } catch (e) {
       console.error('[nhan-mach] LLM lỗi:', (e as Error)?.message);
@@ -225,7 +244,7 @@ async function buildReport(p: NhanMachProfile, userId: string, key: string, coLa
   };
   insertHistoryRow(TOOL_ID, { ...row, user_id: userId, laso_key: key });
   void railFreeTurnsPerGen().then((n) => railFreeGrant(userId, n)).catch(() => {});
-  void putCachedPortrait(TOOL_ID, 'main', key, { payload, row }, userId);
+  CACHE.put('main', key, { payload, row }, userId);
   return ok(payload);
 }
 
@@ -286,11 +305,13 @@ async function runPost(request: NextRequest) {
   }));
 
   const key = soKey(vaiList, birthSelf, births);
-  const [cached, owns] = await Promise.all([
-    getCachedPortrait(TOOL_ID, 'main', key),
+  const [{ cached, stale }, owns] = await Promise.all([
+    CACHE.get('main', key),
     userOwnsLaso(TOOL_ID, auth.user.id, key),
   ]);
-  const free = Boolean(cached) && owns;
+  // `free` xét cả dòng CŨ: người này đã trả tiền cho đúng lá số đó rồi. Còn
+  // `cached` thì `CACHE.get` đã lọc — dòng cũ không bao giờ được phục vụ.
+  const free = Boolean(cached || stale) && owns;
 
   if (!free) {
     const denied = await toolPaymentDenied(TOOL_ID, auth.user.id, String(body.slug || ''));
@@ -298,7 +319,7 @@ async function runPost(request: NextRequest) {
   }
 
   if (cached) {
-    touchCache(TOOL_ID, 'main', key);
+    CACHE.touch('main', key);
     if (!owns && cached.row) {
       insertHistoryRow(TOOL_ID, { ...cached.row, user_id: auth.user.id, laso_key: key });
       void railFreeTurnsPerGen().then((n) => railFreeGrant(auth.user.id, n)).catch(() => {});

@@ -20,22 +20,34 @@
  */
 import { readFileSync } from 'fs';
 import { createRequire } from 'module';
-import ts from 'typescript';
 
 const require = createRequire(import.meta.url);
 const ROOT = new URL('..', import.meta.url).pathname;
 
 const { QUE } = require(ROOT + 'public/tools-shared/kinh-dich.js');
 
-// Nạp file TS bằng cách biên dịch tại chỗ — cùng cách `gen-que-images.mjs` làm,
-// để script canh đọc CHÍNH file mà route dùng chứ không phải một bản chép.
+// Nạp file TS mà KHÔNG cần trình biên dịch: `que-motifs.ts` là một BẢNG DỮ LIỆU
+// thuần — đúng một khai báo `export const QUE_MOTIFS: … = { … };` và không có
+// dòng logic nào. Nên chỉ cần cắt phần vế phải của dấu `=` rồi cho JS tự đọc.
+//
+// 🔑 VÌ SAO KHÔNG DÙNG `ts.transpileModule` NHƯ TRƯỚC: gói `typescript@7` là bản
+// port native — nó CHỈ còn xuất `version`/`versionMajorMinor`, toàn bộ API biên
+// dịch trong JS (`transpileModule`, `ModuleKind`, `ScriptTarget`) đã biến mất.
+// Lượt bump 6→7 làm bộ dò này chết ngay lượt chạy đầu và kéo đỏ cả `main`; sửa
+// bằng cách bỏ hẳn phụ thuộc thì bump sau không đụng được tới nữa. Việc dịch TS
+// thật (file có logic) thì gọi `tsc` CLI — xem `gen-que-images.mjs`.
 const src = readFileSync(ROOT + 'lib/media/que-motifs.ts', 'utf8');
-const js = ts.transpileModule(src, {
-  compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2020 },
-}).outputText;
-const mod = { exports: {} };
-new Function('module', 'exports', js)(mod, mod.exports);
-const { QUE_MOTIFS } = mod.exports;
+const dau = src.match(/export const QUE_MOTIFS\b[^=]*=/);
+// Không khớp thì DỪNG HẲN, đừng đọc ra bảng rỗng rồi báo xanh: bộ dò câm nguy
+// hiểm hơn bộ dò đỏ (bài học "mọi lượt thay chuỗi bằng script phải assert").
+if (!dau) {
+  console.error(
+    '❌ check-que-motifs: không tìm thấy khai báo `export const QUE_MOTIFS … =` trong\n' +
+      '   lib/media/que-motifs.ts. Bố cục file đổi ⇒ PHẢI sửa bộ dò, đừng bỏ qua.'
+  );
+  process.exit(1);
+}
+const QUE_MOTIFS = new Function('return ' + src.slice(dau.index + dau[0].length))();
 
 let bad = 0;
 const fail = (m) => {

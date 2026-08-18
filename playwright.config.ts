@@ -8,6 +8,15 @@ const BASE_URL =
     ? `https://${process.env.VERCEL_URL}`
     : 'https://www.tuviminhbao.com');
 
+// Preview nằm sau Vercel Authentication (SSO). Vé qua cửa lấy bằng COOKIE, KHÔNG
+// phải bằng `extraHTTPHeaders` — xem `tests/auth.setup.ts`.
+//
+// 🔴 Vì sao không dùng header: `extraHTTPHeaders` áp lên MỌI request, kể cả
+// KHÁC ORIGIN. Gắn header lạ vào một request cross-origin làm nó thành preflight,
+// mà `fonts.gstatic.com` không cho phép header đó ⇒ font bị CORS chặn ⇒ lỗi
+// console ⇒ 26 ca "không có JS errors nghiêm trọng" đỏ oan. Đã đo thật, không
+// phải lo hão.
+
 export default defineConfig({
   testDir: './tests',
   testIgnore: ['**/smoke/**'],

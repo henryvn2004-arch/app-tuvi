@@ -5,9 +5,25 @@
    tham số `ls` (output của anSaoLaSo). KHÔNG DOM, KHÔNG AI, KHÔNG paywall.
    Dùng bởi: shell /app/luan-giai (render 24 phần free ở ô giữa). Standalone
    /luan-giai.html vẫn giữ bản inline (DRY hoá sau, PR riêng).
-   Public API: window.LuanGiaiCore = { TONG_PHAN, PHAN_LABELS_BASE, phanLabels, buildPreGenHtml }. */
+   renderInlineDaiVanLineChart(ls): vẽ canvas #chart-daivan-overview (phần 14,
+   cần Chart.js; tự thoát nếu thiếu Chart) — đúng khuôn
+   BatTuCore.renderInlineDaiVanLineChart của bat-tu-core.js.
+   Public API: window.LuanGiaiCore = { TONG_PHAN, PHAN_LABELS_BASE, phanLabels, buildPreGenHtml, renderInlineDaiVanLineChart }. */
+/* global Chart */
 (function (root) {
   var TONG_PHAN = 24;
+  var CAN10 = ['Giáp', 'Ất', 'Bính', 'Đinh', 'Mậu', 'Kỷ', 'Canh', 'Tân', 'Nhâm', 'Quý'];
+  var CHI12 = ['Tý', 'Sửu', 'Dần', 'Mão', 'Thìn', 'Tỵ', 'Ngọ', 'Mùi', 'Thân', 'Dậu', 'Tuất', 'Hợi'];
+  // Can của cung đại vận suy từ Can năm sinh (ngũ hổ độn) — CÙNG công thức
+  // _getCungCan của laso-chart.js (dán nhãn can-chi trên bàn lá số), viết lại
+  // tại chỗ để file này không phụ thuộc thứ tự nạp script khác.
+  function canChiDaiVan(ls, dv) {
+    if (!dv || !dv.diaChi) return '';
+    var canNam = ((ls && ls.canChiNam) || '').split(' ')[0];
+    var ci = CAN10.indexOf(canNam), di = CHI12.indexOf(dv.diaChi);
+    if (ci < 0 || di < 0) return dv.diaChi;
+    return CAN10[((ci % 5) * 2 + di) % 10] + ' ' + dv.diaChi;
+  }
   var PHAN_LABELS_BASE = [
     '',
     'Tổng Quan Lá Số',
@@ -146,22 +162,30 @@
         preGenHtml += `</div></div>`;
       }
     } else if (phan === 14) {
-      // Tổng quan đại vận: bảng điểm các đại vận (shell không có chart như
-      // standalone → render danh sách deterministic để phần này không trống).
+      // Tổng quan đại vận: SPLINE CHART thật (Chart.js tension:.35, đúng khuôn
+      // BatTuCore.renderInlineDaiVanLineChart của bat-tu-core.js) — trước đây
+      // phần này chỉ có score-bars (thanh ngang) vì lúc viết app-luan-giai.html
+      // chưa nạp Chart.js, không khớp "spline" như tool standalone (luan-giai.html
+      // vốn có canvas #chart-daivan thật). buildPreGenHtml chỉ trả HTML text;
+      // canvas #chart-daivan-overview cần renderInlineDaiVanLineChart(ls) (export
+      // dưới) gọi SAU khi HTML này đã vào DOM để thực sự vẽ.
       // Cắt 9 đại vận GIỐNG standalone (mọi chart/luận ở luan-giai.html đều
       // .slice(0,9)): daiVans có 12 phần tử nhưng 3 cái cuối (93–122t) không
-      // được chấm điểm → hiện ra 3 dòng trống "—" chỉ làm nhiễu.
+      // được chấm điểm → hiện ra 3 điểm trống chỉ làm nhiễu đồ thị.
       const dvs = (_astrolabe.daiVans || []).slice(0, 9);
       const cur = _astrolabe.daiVanHienTai;
       if (dvs.length) {
-        preGenHtml += `<div class="pregen-block"><div class="pregen-title"><span class="ic-inline" data-icon-emoji="📊" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">📊</span> Điểm các đại vận</div><div class="score-bars">`;
-        dvs.forEach((dv) => {
-          const tong = dv.scoring ? dv.scoring.tong : null;
-          const pct = tong != null ? (tong / 10 * 100).toFixed(0) : 0;
-          const col = tong >= 7 ? '#4ade80' : tong >= 4 ? '#60a5fa' : '#f87171';
-          const isCur = cur && dv.cungIdx === cur.cungIdx;
-          preGenHtml += `<div class="score-bar-row"><span class="score-label">${dv.tuoiStart}–${dv.tuoiEnd}t${isCur ? ' ●' : ''}</span><div class="score-bar-bg"><div class="score-bar-fill" style="width:${pct}%;background:${col}"></div></div><span class="score-val">${tong != null ? tong : '—'}</span></div>`;
-        });
+        const curIdx = dvs.findIndex(d => cur && d.cungIdx === cur.cungIdx);
+        const diff = dvs.length > 1 ? (((dvs[1].cungIdx - dvs[0].cungIdx) % 12) + 12) % 12 : 1;
+        const thuan = diff === 1;
+        preGenHtml += `<div class="pregen-block"><div class="pregen-title"><span class="ic-inline" data-icon-emoji="📈" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">📈</span> 9 đại vận — biểu đồ điểm số</div>`;
+        preGenHtml += `<div style="position:relative;height:240px;margin-top:8px"><canvas id="chart-daivan-overview"></canvas></div>`;
+        preGenHtml += `<div style="font-size:11px;color:#666;margin-top:12px;line-height:1.5">`;
+        preGenHtml += `· Khởi vận: ${dvs[0].tuoiStart} tuổi · Hướng: ${thuan ? 'thuận' : 'nghịch'}<br>`;
+        if (curIdx >= 0) {
+          const c = dvs[curIdx];
+          preGenHtml += `· Hiện tại: ĐV${curIdx + 1} (${canChiDaiVan(_astrolabe, c)}, ${c.tuoiStart}-${c.tuoiEnd}t)${c.scoring ? ' · ' + c.scoring.tong + '/10' : ''}`;
+        }
         preGenHtml += `</div></div>`;
       }
     } else if ((phan >= 15 && phan <= 23) || phan === 24) {
@@ -235,7 +259,64 @@
     return preGenHtml;
   }
 
-  var API = { TONG_PHAN: TONG_PHAN, PHAN_LABELS_BASE: PHAN_LABELS_BASE, phanLabels: phanLabels, buildPreGenHtml: buildPreGenHtml, buildCungStarHtml: buildCungStarHtml };
+  // Vẽ canvas #chart-daivan-overview mà buildPreGenHtml(14, ls) đã dựng HTML —
+  // PHẢI gọi SAU khi HTML đó đã chèn vào DOM thật (giống
+  // BatTuCore.renderInlineDaiVanLineChart, đúng khuôn màu #9A7B3A/#061A2E/
+  // #C0392B). Không có canvas / thiếu Chart.js / thiếu daiVans → im lặng bỏ
+  // qua (DOM chưa có phần 14, hoặc Chart.js chưa nạp).
+  function renderInlineDaiVanLineChart(ls) {
+    if (typeof Chart === 'undefined' || !ls) return;
+    var canvas = (typeof document !== 'undefined') ? document.getElementById('chart-daivan-overview') : null;
+    var dvs = (ls.daiVans || []).slice(0, 9);
+    if (!canvas || !dvs.length) return;
+    var cur = ls.daiVanHienTai;
+    var labels = dvs.map(function (dv, i) { return 'ĐV' + (i + 1) + ' (' + dv.tuoiStart + '-' + dv.tuoiEnd + 't)'; });
+    var scores = dvs.map(function (dv) { return dv.scoring ? dv.scoring.tong : 0; });
+    if (root._lgDaiVanChart) { try { root._lgDaiVanChart.destroy(); } catch (e) {} }
+    root._lgDaiVanChart = new Chart(canvas.getContext('2d'), {
+      type: 'line',
+      data: {
+        labels: labels,
+        datasets: [{
+          label: 'Điểm Vận',
+          data: scores,
+          borderColor: '#9A7B3A',
+          backgroundColor: 'rgba(154,123,58,0.15)',
+          fill: true,
+          tension: 0.35,
+          pointRadius: 6,
+          pointHoverRadius: 8,
+          pointBackgroundColor: dvs.map(function (dv) { return cur && dv.cungIdx === cur.cungIdx ? '#C0392B' : '#061A2E'; }),
+          pointBorderColor: '#fff',
+          pointBorderWidth: 2,
+        }],
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        scales: {
+          y: { min: 0, max: 10, ticks: { stepSize: 2, font: { size: 11 } } },
+          x: { ticks: { font: { size: 10 }, maxRotation: 30, minRotation: 0 } },
+        },
+        plugins: {
+          legend: { display: false },
+          tooltip: { callbacks: {
+            title: function (items) { return labels[items[0].dataIndex]; },
+            label: function (item) {
+              var dv = dvs[item.dataIndex];
+              var palace = ls.palaces && ls.palaces[dv.cungIdx];
+              return [
+                (palace ? 'Cung ' + palace.cungName + ' (' + canChiDaiVan(ls, dv) + ')' : canChiDaiVan(ls, dv)),
+                'Điểm: ' + (dv.scoring ? dv.scoring.tong : '—') + '/10',
+                dv.tuoiStart + '-' + dv.tuoiEnd + ' tuổi',
+              ];
+            },
+          } },
+        },
+      },
+    });
+  }
+
+  var API = { TONG_PHAN: TONG_PHAN, PHAN_LABELS_BASE: PHAN_LABELS_BASE, phanLabels: phanLabels, buildPreGenHtml: buildPreGenHtml, buildCungStarHtml: buildCungStarHtml, renderInlineDaiVanLineChart: renderInlineDaiVanLineChart };
   if (typeof module !== 'undefined' && module.exports) module.exports = API;
   else root.LuanGiaiCore = API;
 })(typeof window !== 'undefined' ? window : globalThis);

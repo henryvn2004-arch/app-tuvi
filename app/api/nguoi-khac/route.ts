@@ -28,68 +28,40 @@ import {
   buildNguoiKhacPrompt,
 } from '@/lib/agent/nguoi-khac-prompt';
 import type { BirthParams } from '@/lib/contract/v1';
+import { authUserFromRequest, parseLlmJson } from '@/lib/api/tool-helpers';
 import { withToolOutcome } from '@/lib/ops/tool-outcome';
 import {
+  cacheFor,
   lasoKey,
-  getCachedPortrait,
-  putCachedPortrait,
-  touchCache,
   insertHistoryRow,
   userOwnsLaso,
 } from '@/lib/portraits/cache';
 
+
+
 const TOOL_ID = 'nguoi-khac';
+
+/**
+ * 🔴 PHIÊN BẢN CẤU TRÚC payload. BUMP mỗi khi thêm/đổi/bớt khoá mà TRANG cần để
+ * dựng đủ màn hình. Đổi CHỮ thì không bump (dòng cache cũ trả chữ cũ — khó
+ * chịu, không vỡ); đổi KHOÁ mà quên bump thì trang ẩn khối IM LẶNG.
+ *
+ * Mở màn ở 1: payload hiện tại CHÍNH LÀ phiên bản 1, và dòng cache ghi trước
+ * lượt cắm cơ chế (không có `_shape`) được đọc là 1 nên KHÔNG bị dựng lại oan.
+ *
+ * ⚠️ Cố ý KHÔNG nhét vào `lasoKey`: đổi khoá là mồ côi cả cache LẪN
+ * `userOwnsLaso` ⇒ người đã trả tiền bị tính lại.
+ */
+const SHAPE = 1;
+
+/** Vân tay CẤU TRÚC — `npm run check:cacheshape` canh khớp với `SHAPE` ở trên. */
+const SHAPE_FINGERPRINT = '5ca3e50e1109';
+
+/** Cửa DUY NHẤT vào cache của tool này; `shape` khai một lần tại đây. */
+const CACHE = cacheFor(TOOL_ID, SHAPE);
 
 const SUPABASE_URL = process.env.SUPABASE_URL!;
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY!;
-
-async function authUser(
-  request: NextRequest,
-): Promise<{ error: string; status: number } | { user: { id: string } }> {
-  const auth = request.headers.get('Authorization');
-  if (!auth?.startsWith('Bearer ')) return { error: 'Unauthorized', status: 401 };
-  const res = await fetch(`${SUPABASE_URL}/auth/v1/user`, {
-    headers: { Authorization: auth, apikey: SUPABASE_KEY },
-    cache: 'no-store',
-  });
-  if (!res.ok) return { error: 'Unauthorized', status: 401 };
-  const u = await res.json();
-  if (!u?.id) return { error: 'Unauthorized', status: 401 };
-  return { user: { id: u.id as string } };
-}
-
-// Bóc JSON từ câu trả lời LLM — bản dùng chung với 2 route chân dung (bản giòn
-// đã trả giá một lần: model thêm một câu dẫn là hỏng cả lượt đã tính tiền).
-function parseJSON(text: string): unknown {
-  const t = String(text || '').replace(/```json|```/g, '').trim();
-  try {
-    return JSON.parse(t);
-  } catch {
-    /* thử cắt khối {...} cân bằng bên dưới */
-  }
-  for (let i = t.indexOf('{'); i >= 0; i = t.indexOf('{', i + 1)) {
-    let depth = 0;
-    let inStr = false;
-    let esc = false;
-    for (let k = i; k < t.length; k++) {
-      const c = t[k];
-      if (esc) { esc = false; continue; }
-      if (c === '\\') { esc = true; continue; }
-      if (c === '"') { inStr = !inStr; continue; }
-      if (inStr) continue;
-      if (c === '{') depth++;
-      else if (c === '}' && --depth === 0) {
-        try {
-          return JSON.parse(t.slice(i, k + 1));
-        } catch {
-          /* khối này không phải JSON ta cần → thử khối kế tiếp */
-        }
-        break;
-      }
-    }
-  }
-  return null;
-}
 
 function validBirth(b: unknown): b is BirthParams {
   const x = b as BirthParams | undefined;
@@ -193,7 +165,7 @@ async function buildReport(
         output_tokens: r.usage.output_tokens,
         cache_creation_input_tokens: 0,
         cache_read_input_tokens: 0,
-      });
+      }, r.durationMs);
       return r;
     } catch (e) {
       console.error('[nguoi-khac] LLM lỗi:', (e as Error)?.message);
@@ -208,7 +180,7 @@ async function buildReport(
 
   let res = await ask(false);
   if (!res) return err('Lỗi AI khi dựng bản luận. Vui lòng thử lại.', 500);
-  let parsed = parseJSON(res.text) as CamNang | null;
+  let parsed = parseLlmJson(res.text) as CamNang | null;
 
   if (!okShape(parsed)) {
     const t = String(res.text || '');
@@ -216,7 +188,7 @@ async function buildReport(
     void logLlmParseFail(TOOL_ID, res.model, t, 1);
     res = await ask(true);
     if (!res) return err('Lỗi AI khi dựng bản luận. Vui lòng thử lại.', 500);
-    parsed = parseJSON(res.text) as CamNang | null;
+    parsed = parseLlmJson(res.text) as CamNang | null;
   }
   if (!okShape(parsed)) {
     const t = String(res.text || '');
@@ -249,7 +221,7 @@ async function buildReport(
   };
   insertHistoryRow(TOOL_ID, { ...row, user_id: userId, laso_key: key });
   void railFreeTurnsPerGen().then((n) => railFreeGrant(userId, n)).catch(() => {});
-  void putCachedPortrait(TOOL_ID, 'main', key, { payload, row }, userId);
+  CACHE.put('main', key, { payload, row }, userId);
   return ok(payload);
 }
 
@@ -291,7 +263,7 @@ async function runPreview(request: NextRequest) {
 }
 
 async function runPost(request: NextRequest) {
-  const auth = await authUser(request);
+  const auth = await authUserFromRequest(request);
   if ('error' in auth) return err(auth.error, auth.status);
 
   const body = await parseBody(request);
@@ -303,11 +275,13 @@ async function runPost(request: NextRequest) {
   const birthSelf = validBirth(body.birthSelf) ? (body.birthSelf as BirthParams) : null;
 
   const key = lasoKey(birth, cacheExtra(quanHe, birthSelf));
-  const [cached, owns] = await Promise.all([
-    getCachedPortrait(TOOL_ID, 'main', key),
+  const [{ cached, stale }, owns] = await Promise.all([
+    CACHE.get('main', key),
     userOwnsLaso(TOOL_ID, auth.user.id, key),
   ]);
-  const free = Boolean(cached) && owns;
+  // `free` xét cả dòng CŨ: người này đã trả tiền cho đúng lá số đó rồi. Còn
+  // `cached` thì `CACHE.get` đã lọc — dòng cũ không bao giờ được phục vụ.
+  const free = Boolean(cached || stale) && owns;
 
   if (!free) {
     // Chốt chặn thanh toán PHÍA SERVER — thiếu bước này thì gọi thẳng endpoint
@@ -317,7 +291,7 @@ async function runPost(request: NextRequest) {
   }
 
   if (cached) {
-    touchCache(TOOL_ID, 'main', key);
+    CACHE.touch('main', key);
     if (!owns && cached.row) {
       insertHistoryRow(TOOL_ID, { ...cached.row, user_id: auth.user.id, laso_key: key });
       void railFreeTurnsPerGen().then((n) => railFreeGrant(auth.user.id, n)).catch(() => {});
@@ -347,7 +321,7 @@ async function runPost(request: NextRequest) {
 }
 
 async function handleHistory(request: NextRequest) {
-  const auth = await authUser(request);
+  const auth = await authUserFromRequest(request);
   if ('error' in auth) return err(auth.error, auth.status);
   const r = await fetch(
     `${SUPABASE_URL}/rest/v1/nguoi_khac_reports?user_id=eq.${auth.user.id}` +
@@ -360,7 +334,7 @@ async function handleHistory(request: NextRequest) {
 }
 
 async function handleCacheStatus(request: NextRequest, sp: URLSearchParams) {
-  const auth = await authUser(request);
+  const auth = await authUserFromRequest(request);
   if ('error' in auth) return err(auth.error, auth.status);
   const n = (k: string) => Number(sp.get(k) || 0);
   const birth: BirthParams = {
@@ -382,11 +356,11 @@ async function handleCacheStatus(request: NextRequest, sp: URLSearchParams) {
       }
     : null;
   const key = lasoKey(birth, cacheExtra(resolveQuanHe(sp.get('qh')), self));
-  const [cached, owns] = await Promise.all([
-    getCachedPortrait(TOOL_ID, 'main', key),
+  const [{ cached, stale }, owns] = await Promise.all([
+    CACHE.get('main', key),
     userOwnsLaso(TOOL_ID, auth.user.id, key),
   ]);
-  return ok({ success: true, cached: Boolean(cached), free: Boolean(cached) && owns });
+  return ok({ success: true, cached: Boolean(cached), free: Boolean(cached || stale) && owns });
 }
 
 export async function OPTIONS() {

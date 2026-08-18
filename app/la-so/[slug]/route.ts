@@ -10,6 +10,8 @@ export const maxDuration = 30;     // allow 30s for engine on cold start
 import { NextRequest, NextResponse } from 'next/server';
 import { readFileSync } from 'fs';
 import { join } from 'path';
+import { NOINDEX_FOLLOW } from '@/lib/seo/index-policy';
+import { PUBLISHED_ONLY } from '@/lib/content/publish-filter';
 
 // ⚠️ Module-level: must run before any request so that if loadEngine() sets
 // globalThis.window = globalThis, Next.js URL parsing (getLocationOrigin)
@@ -144,6 +146,7 @@ function buildPregenHTML(row: Record<string,unknown>, slug: string): string {
 <meta property="og:type" content="article">
 <meta property="og:url" content="${url}">
 <link rel="canonical" href="${url}">
+${NOINDEX_FOLLOW}
 <link rel="icon" type="image/webp" href="/seal.webp">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -357,10 +360,13 @@ function parseIsrSlug(slug: string): IsrParams | null {
 // một form TRỐNG và phải gõ lại đúng cái ngày sinh vừa xem. Đo 7 ngày (28/07):
 // 35 khách đọc trang nội dung SEO, đúng 1 người đi tiếp sang tool.
 //
-// Nay đẩy thẳng dữ liệu qua query sang `/app/luan-giai` (Luận Đường — bản 24 phần
-// vẫn xem miễn phí, chỉ phần AI chuyên sâu mới tính Lượng); `Shell.prefillForm`
+// Nay đẩy thẳng dữ liệu qua query sang `/app/luan-giai` (Luận Đường); `Shell.prefillForm`
 // đọc query rồi `?auto=1` tự chạy (public/shell.js). `gio` là giờ DƯƠNG 0–23 lấy
 // từ GIO_HOURS — khớp field gioHour của TuviForm.setData, KHÔNG dùng nhánh gioIdx.
+// ⚠️ Nhãn của MỌI nút dùng hàm này TUYỆT ĐỐI không được hứa "miễn phí": nó trỏ
+// sang Luận Giải — một tool TRẢ PHÍ — và nằm trên ~438K trang SEO, nên một lời
+// hứa sai sẽ lặp lại ở khắp nơi và không rút lại được. Giá chỉ nêu ở trang tool
+// / tool trong shell, nơi đọc thẳng `tool_pricing` nên đổi giá là tự đúng.
 function appLuanGiaiHref(p: IsrParams | null): string {
   if (!p) return '/app/luan-giai';
   const q = new URLSearchParams({
@@ -468,6 +474,27 @@ const BC_MAP: Record<string,string> = {Miếu:'M',Vượng:'V',Đắc:'Đ',Bình
 const TS_SET = new Set(['Tràng Sinh','Mộc Dục','Quan Đới','Lâm Quan','Đế Vượng','Suy','Bệnh','Tử','Mộ','Tuyệt','Thai','Dưỡng']);
 const G_CAN = ['Giáp','Ất','Bính','Đinh','Mậu','Kỷ','Canh','Tân','Nhâm','Quý'];
 
+/**
+ * Đại vận chứa năm đang xem.
+ *
+ * 🐞 Bản cũ dùng `dvs.find(d => d.isCurrentDV)` — nhưng engine KHÔNG BAO GIỜ đặt
+ * cờ `isCurrentDV` (grep `public/tuvi-ansao-engine.js`: 0 lượt; nó trả một object
+ * riêng `daiVanHienTai`). Nên `curDV` luôn `undefined`, và mọi khối phụ thuộc nó
+ * lặng lẽ biến mất: đoạn "Đại vận đang chạy", phần tô sáng cung đại vận trên bảng
+ * lá số, và một mục FAQ. Lỗi im lặng — trang vẫn dựng đủ, chỉ thiếu vài khối mà
+ * không có gì báo. Verify bằng cách render trang thật: `grep 'Đại vận đang chạy'`
+ * ra 0 lượt trước khi vá, có sau khi vá.
+ *
+ * Điều này làm lỗi "điểm vận năm" nặng thêm một bậc trên `luan-giai`: thẻ đại vận
+ * (điểm THẬT) chưa từng hiện, nên con số duy nhất người đọc thấy cho giai đoạn
+ * này chính là điểm nội suy — không có gì cạnh bên để đối chiếu.
+ */
+function curDaiVan(ls: Rec, dvs: Rec[]): Rec | undefined {
+  const t = Number(ls.tuoiXem);
+  if (!t) return undefined;
+  return dvs.find((d) => Number(d.tuoiStart) <= t && t <= Number(d.tuoiEnd));
+}
+
 function renderGrid(ls: Rec, canIdx: number): string {
   const palaces = (ls.palaces as Rec[]) || [];
   const dcMap: Record<number, Rec> = {};
@@ -480,7 +507,7 @@ function renderGrid(ls: Rec, canIdx: number): string {
   grid[1][1] = grid[1][2] = grid[2][1] = grid[2][2] = 'center';
 
   const dvs   = (ls.daiVans as Rec[]) || [];
-  const curDV = dvs.find(d => d.isCurrentDV) as Rec|undefined;
+  const curDV = curDaiVan(ls, dvs) as Rec|undefined;
 
   function phuCls(s: Rec): string {
     const ten = String(s.ten||''); const hoa = String(s.hoa||'');
@@ -1058,19 +1085,26 @@ function render24Sections(ls: Rec, params: IsrParams): string {
   const dvSecs = Array.from({length:9}, (_, i) => buildDVSection(i, 15+i));
 
   // ── Section 24: Tiểu Vận Năm Xem ─────────────────────────────────────────
-  const curDV    = dvs.find(d => d.isCurrentDV) as Rec|undefined;
+  const curDV    = curDaiVan(ls, dvs) as Rec|undefined;
   const tvThis   = tieuVanSc.find(t=>Number(t.nam)===namXem) as Rec|undefined;
-  const tvScore  = tvThis ? Number(tvThis.mainScore||0) : 0;
   const tvDC     = tvThis ? String(tvThis.diaChi||'') : '';
-  const tvDir    = tvThis ? String(tvThis.direction||'') : '';
+  // 🔑 CỐ Ý bỏ "điểm/10" của năm và bỏ nhãn "đang tăng/giảm".
+  //   • `mainScore` là đường LÀM MƯỢT nội suy giữa các mốc đại vận (xem chú
+  //     thích `VanNam` trong lib/engine/cong-so.ts) — không đọc một ngôi sao
+  //     nào của năm, nên nó là điểm của ĐẠI VẬN chứ không phải của năm.
+  //   • `direction` là dấu của catCount−satCount (CÁN CÂN cát/sát), KHÔNG phải
+  //     xu hướng điểm: đo 912 lá số, nó lệch với đà thật của `mainScore` 67,7%
+  //     số ca. Gọi nó là "↑ Đang tăng" là nói sai hai phần ba số trang.
+  const tvCat    = tvThis ? Number(tvThis.catCount||0) : 0;
+  const tvSat    = tvThis ? Number(tvThis.satCount||0) : 0;
   const tvWindow = tieuVanSc.filter(t=>Number(t.nam)>=namXem-1&&Number(t.nam)<=namXem+2)
     .sort((a,b)=>Number(a.nam)-Number(b.nam));
 
   let b24 = '';
   if (tvThis) {
-    const tvCol = tvScore>=7?'#1E6B3C':tvScore>=4?'#9A7B3A':'#C0392B';
-    const tvDirLbl = tvDir==='up'?'↑ Đang tăng':tvDir==='down'?'↓ Đang giảm':'→ Ổn định';
-    b24 += `<p>Tiểu vận năm <strong>${namXem}</strong>: cung <strong>${esc(tvDC)}</strong>. Điểm <strong style="color:${tvCol}">${tvScore.toFixed(1)}/10</strong> — ${esc(tvDirLbl)}.</p>`;
+    const tvCol = tvCat>tvSat?'#1E6B3C':tvCat<tvSat?'#C0392B':'#9A7B3A';
+    const tvCanCan = tvCat>tvSat?'cát nhiều hơn sát':tvCat<tvSat?'sát nhiều hơn cát':'cát sát cân nhau';
+    b24 += `<p>Tiểu vận năm <strong>${namXem}</strong>: cung <strong>${esc(tvDC)}</strong> — <strong style="color:${tvCol}">${esc(tvCanCan)}</strong>. Tiểu vận KHÔNG có điểm riêng; tốt/xấu của năm đọc ở cung hạn và cán cân cát/sát, còn điểm là của khung đại vận bên dưới.</p>`;
     if (Number(tvThis.satCount)>0) b24 += `<p style="color:#C0392B;font-size:12px">⚠ ${tvThis.satCount} sát tinh ảnh hưởng — chú ý sức khỏe và tránh rủi ro.</p>`;
     if (Number(tvThis.catCount)>0) b24 += `<p style="color:#1E6B3C;font-size:12px">✦ ${tvThis.catCount} cát tinh hỗ trợ trong năm này.</p>`;
   }
@@ -1080,7 +1114,11 @@ function render24Sections(ls: Rec, params: IsrParams): string {
     b24 += `<p style="font-size:12px;color:#666">Đại vận đang chạy: <strong>Cung ${esc(String(curDV.diaChi||''))}</strong> (${esc(String(curDV.tuoiStart||''))}–${esc(String(curDV.tuoiEnd||''))}t)${dvT2>0?`, điểm ${dvT2}/10`:''} — tiểu vận được xét trong bối cảnh đại vận này.</p>`;
   }
   if (tvWindow.length > 1) {
-    b24 += `<div style="display:flex;gap:6px;margin:10px 0;flex-wrap:wrap">`;
+    // Dải này vẽ ĐƯỜNG VẬN — tức chính `mainScore`, và ở ĐÂY dùng nó là đúng
+    // vai: nó sinh ra để làm đường cong. Chỉ cần nói thẳng nó là đường đại vận
+    // đã làm mượt, đừng để người đọc hiểu mỗi ô là "điểm của năm đó".
+    b24 += `<p style="font-size:11px;color:#888;margin:10px 0 4px">Đường vận qua các năm (điểm đại vận đã làm mượt giữa hai chặng — KHÔNG phải điểm chấm riêng cho từng năm):</p>`;
+    b24 += `<div style="display:flex;gap:6px;margin:0 0 10px;flex-wrap:wrap">`;
     tvWindow.forEach(t => {
       const tSc=Number(t.mainScore||0); const tNam=Number(t.nam); const isThis=tNam===namXem;
       b24 += `<div style="text-align:center;padding:7px 10px;border:${isThis?'2px solid #1455A4':'1px solid #e0e0e0'};border-radius:6px;background:${isThis?'#EEF4FF':'#fff'};min-width:64px">
@@ -1161,7 +1199,7 @@ async function fetchRelatedArticles(cungMenh: string, chinhTinh: string): Promis
   for (const kw of keywords) {
     try {
       const r = await fetch(
-        `${SB_URL}/rest/v1/master_articles?tags=cs.%7B"${encodeURIComponent(kw)}"%7D&select=slug,title,excerpt&order=created_at.desc&limit=4`,
+        `${SB_URL}/rest/v1/master_articles?tags=cs.%7B"${encodeURIComponent(kw)}"%7D&select=slug,title,excerpt&${PUBLISHED_ONLY}&order=created_at.desc&limit=4`,
         { headers: h }
       );
       if (r.ok) {
@@ -1173,7 +1211,7 @@ async function fetchRelatedArticles(cungMenh: string, chinhTinh: string): Promis
   // Fallback: latest 4 articles
   try {
     const r = await fetch(
-      `${SB_URL}/rest/v1/master_articles?select=slug,title,excerpt&order=created_at.desc&limit=4`,
+      `${SB_URL}/rest/v1/master_articles?select=slug,title,excerpt&${PUBLISHED_ONLY}&order=created_at.desc&limit=4`,
       { headers: h }
     );
     if (r.ok) return (await r.json() as ArticleStub[]) || [];
@@ -1194,7 +1232,7 @@ function buildIsrHTML(ls: Rec, params: IsrParams, slug: string, relatedArticles:
   const napAm      = String(ls.napAm || '');
   const scores     = (ls.cungScores as Record<string, Record<string,number>>) || {};
   const dvs        = (ls.daiVans as Rec[]) || [];
-  const curDV      = dvs.find(d => d.isCurrentDV) as Rec|undefined;
+  const curDV      = curDaiVan(ls, dvs) as Rec|undefined;
   const { dd, mm, year, gioIdx, gioi, namXem } = params;
   const gtLabel    = gioi === 'nam' ? 'Nam' : 'Nữ';
   const gioLabel   = GIO_NAMES[gioIdx];
@@ -1261,6 +1299,7 @@ function buildIsrHTML(ls: Rec, params: IsrParams, slug: string, relatedArticles:
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="${esc(ogUrl)}">
 <link rel="canonical" href="${esc(url)}">
+${NOINDEX_FOLLOW}
 <link rel="icon" type="image/webp" href="/seal.webp">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@0,400;0,700&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@0,400;0,700&display=swap" rel="stylesheet"></noscript>
@@ -1359,7 +1398,7 @@ a.sao-link:hover{opacity:1;border-bottom-style:solid}
       <div class="cta-box">
         <h3>Luận Giải AI — 24 Phần</h3>
         <p>Phân tích chuyên sâu tính cách, sự nghiệp, tình duyên, vận hạn năm ${namXem} — ngày giờ sinh đã điền sẵn, không phải nhập lại.</p>
-        <a class="cta-btn" href="${appLuanGiaiHref(params)}">Xem Luận Giải Miễn Phí →</a>
+        <a class="cta-btn" href="${appLuanGiaiHref(params)}">Xem Luận Giải AI →</a>
       </div>
 
       <div id="share-bar-isr"></div>

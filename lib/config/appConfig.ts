@@ -13,6 +13,8 @@
 // Xem _patches/migration-app-config.sql + docs/KIEN-TRUC-VA-LO-TRINH.md.
 // ============================================================
 
+import { COMPANION_DEFAULTS, type CompanionConfig, type CrisisLine } from '@/lib/agent/companion';
+
 const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY;
 
@@ -47,6 +49,13 @@ export interface ChatConfig {
    * trong app_config để bật/tắt từng tool — KHÔNG cần deploy.
    */
   providerRoutes: Record<string, string>;
+  /**
+   * Tầng 1 của rail — cách hành xử khi người dùng đang tâm sự (lib/agent/
+   * companion.ts). Đọc CÙNG lượt fetch với các khoá chat.* khác để không thêm
+   * một vòng mạng vào đường nóng của rail.
+   * `enabled:false` → rail quay lại đúng hành vi cũ; khối NGUY CẤP vẫn giữ.
+   */
+  companion: CompanionConfig;
 }
 
 export const DEFAULTS: ChatConfig = {
@@ -70,6 +79,7 @@ export const DEFAULTS: ChatConfig = {
     // lẫn lá-số (đều đi path 'laso').
     laso: 'anthropic',
   },
+  companion: COMPANION_DEFAULTS,
 };
 
 // Ánh xạ key trong DB → field. Thiếu key nào thì giữ default field đó.
@@ -81,6 +91,7 @@ const KEY_MAP: Record<string, keyof ChatConfig> = {
   'chat.cost': 'cost',
   'chat.provider_routes': 'providerRoutes',
   'chat.standalone_provider': 'standaloneProvider',
+  'chat.companion': 'companion',
 };
 
 const TTL_MS = 60_000;
@@ -103,7 +114,7 @@ export async function getChatConfig(): Promise<ChatConfig> {
         .join(',');
       const res = await fetch(
         `${SUPABASE_URL}/rest/v1/app_config?key=in.(${encodeURIComponent(keys)})&select=key,value`,
-        {
+        { cache: 'no-store',
           headers: {
             apikey: SUPABASE_KEY,
             Authorization: `Bearer ${SUPABASE_KEY}`,
@@ -144,6 +155,33 @@ function applyField(cfg: ChatConfig, field: keyof ChatConfig, value: unknown) {
       }
       cfg.providerRoutes = routes;
     }
+    return;
+  }
+  if (field === 'companion') {
+    // ⚠️ MERGE theo từng khoá, KHÔNG ghi đè cả object như providerRoutes.
+    // Lý do khác nhau: ghi `{"enabled":false}` để tắt tạm mà xoá luôn danh
+    // sách số nguy cấp thì đúng lúc cần nhất lại không có số nào. Khoá nào
+    // khai thì đổi khoá đó, còn lại giữ mặc định.
+    if (!value || typeof value !== 'object' || Array.isArray(value)) return;
+    const v = value as Record<string, unknown>;
+    const next: CompanionConfig = { ...COMPANION_DEFAULTS };
+    if (typeof v.enabled === 'boolean') next.enabled = v.enabled;
+    if (Array.isArray(v.crisis_lines)) {
+      // Chỉ nhận dòng có ĐỦ tên + số dạng chuỗi. Dòng khuyết bị bỏ chứ không
+      // rơi vào prompt thành "undefined — undefined".
+      const lines = (v.crisis_lines as unknown[]).flatMap((raw) => {
+        if (!raw || typeof raw !== 'object') return [];
+        const r = raw as Record<string, unknown>;
+        const ten = typeof r.ten === 'string' ? r.ten.trim() : '';
+        const so = typeof r.so === 'string' ? r.so.trim() : '';
+        if (!ten || !so) return [];
+        const gio = typeof r.gio === 'string' && r.gio.trim() ? r.gio.trim() : undefined;
+        return [{ ten, so, gio } as CrisisLine];
+      });
+      // Mảng rỗng/toàn dòng hỏng → GIỮ mặc định (115) thay vì để trắng.
+      if (lines.length) next.crisisLines = lines;
+    }
+    cfg.companion = next;
     return;
   }
   // maxRounds | maxTokens | cost — số

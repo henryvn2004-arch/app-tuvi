@@ -37,6 +37,10 @@ import {
   majorsOrBorrow,
   starLabel,
   kieuCuaCung,
+  resolveVanNam,
+  vanNamLine,
+  LUAT_VAN_NAM,
+  type VanNam,
 } from './cong-so';
 import { QUAN_HE, type QuanHeDef, type QuanHeId, resolveQuanHe, KHONG_DOC } from './nguoi-khac';
 
@@ -67,7 +71,7 @@ export interface ThanhVien {
   chinhTinhQuanLoc: string[];
   muonMenh: boolean;
   than: string;
-  vanNam: { diem: number | null; huong: string | null } | null;
+  vanNam: VanNam | null;
   /** Chỉ có khi người xem đưa lá số của chính mình. */
   voiBan: {
     cung: string;
@@ -106,14 +110,16 @@ export interface NhanMachProfile {
   nenTimThem: KieuDef | null;
   cap: CapNguoi[];
   /** Thứ tự gợi ý tiếp cận — theo VẬN NĂM của từng người, không phải mức quan trọng. */
-  thuTuTiepCan: { ten: string; diem: number | null; huong: string | null }[];
+  thuTuTiepCan: {
+    ten: string;
+    /** Điểm KHUNG đại vận chứa năm xem — KHÔNG phải điểm của năm (năm không có điểm). */
+    khungDiem: number | null;
+    /** cát − sát của năm; phá thế hoà khi hai người cùng mức đại vận. */
+    canCan: number | null;
+    moTa: string | null;
+  }[];
 }
 
-const HUONG_VI: Record<string, string> = {
-  up: 'đang lên',
-  down: 'đang xuống',
-  flat: 'đi ngang',
-};
 
 function thanCung(ls: Laso): string {
   const p = ((ls.palaces as Rec[]) || []).find((x) => x && x.isThan === true);
@@ -149,8 +155,6 @@ export function computeNhanMach(
 
   const thanhVien: ThanhVien[] = list.map((n, i) => {
     const phan = phanKieu(n.ls);
-    const tvs = (n.ls.tieuVanScores as Rec[]) || [];
-    const tvNam = tvs.find((t) => t.nam === nam);
     const vai = QUAN_HE[resolveQuanHe(n.vai)];
 
     let voiBan: ThanhVien['voiBan'] = null;
@@ -177,12 +181,7 @@ export function computeNhanMach(
       chinhTinhQuanLoc: phan.saoQuan,
       muonMenh: phan.muonMenh,
       than: thanCung(n.ls),
-      vanNam: tvNam
-        ? {
-            diem: typeof tvNam.mainScore === 'number' ? (tvNam.mainScore as number) : null,
-            huong: HUONG_VI[String(tvNam.direction || '')] || null,
-          }
-        : null,
+      vanNam: resolveVanNam(n.ls, nam),
       voiBan,
     };
   });
@@ -231,9 +230,31 @@ export function computeNhanMach(
 
   // ── Thứ tự tiếp cận: theo vận năm của CHÍNH họ. Người chưa chấm được vận
   // xuống cuối chứ không đoán bừa một con số.
+  //
+  // 🔑 KHOÁ XẾP đổi, và đây là chỗ lỗi cắn sâu nhất trong cả 4 tool: bản cũ xếp
+  // theo `tieuVanScores[].mainScore` — một đường LÀM MƯỢT nội suy giữa các mốc
+  // đại vận (xem chú thích `VanNam` trong `cong-so.ts`). Tức thứ tự *nên gặp ai
+  // trước* đang do một tạo tác của biểu đồ quyết định, và nó lệch tới 3,6 điểm
+  // so với đại vận thật ở 8,4% lá số — đủ để đảo chỗ hai người trong danh sách.
+  //
+  // Nay xếp theo hai tầng CÓ THẬT, đúng thứ tự trọng số của `execTraVanHan`:
+  //   1) điểm KHUNG đại vận — tầng duy nhất engine chấm điểm thật;
+  //   2) cán cân cát − sát của chính năm đó — tín hiệu DUY NHẤT theo năm mà
+  //      engine có (gộp sao 3 cung hạn), dùng để phá thế hoà giữa những người
+  //      đang cùng một mức đại vận.
+  // ⚠️ Vẫn là GỢI Ý thứ tự theo vận, KHÔNG phải bảng xếp hạng mức quan trọng —
+  // trang và prompt đều phải nói rõ điều đó.
   const thuTuTiepCan = thanhVien
-    .map((t) => ({ ten: t.ten, diem: t.vanNam?.diem ?? null, huong: t.vanNam?.huong ?? null }))
-    .sort((x, y) => (y.diem ?? -1) - (x.diem ?? -1));
+    .map((t) => ({
+      ten: t.ten,
+      khungDiem: t.vanNam?.khung?.diem ?? null,
+      canCan: t.vanNam?.catSat ? t.vanNam.catSat.cat - t.vanNam.catSat.sat : null,
+      moTa: t.vanNam ? vanNamLine(t.vanNam) : null,
+    }))
+    .sort(
+      (x, y) =>
+        (y.khungDiem ?? -1) - (x.khungDiem ?? -1) || (y.canCan ?? -99) - (x.canCan ?? -99),
+    );
 
   return {
     namXem: nam,
@@ -283,10 +304,12 @@ export function railData(p: NhanMachProfile): Record<string, string | number | b
       .map(
         (t) =>
           `${t.ten} (${t.vai.label}) — kiểu ${t.kieu.ten}${t.lai && t.kieuPhu ? ` pha ${t.kieuPhu.ten}` : ''}` +
-          (t.vanNam?.diem == null ? '' : `, vận năm ${t.vanNam.diem}/10`) +
-          (t.vanNam?.huong ? ` (${t.vanNam.huong})` : ''),
+          (t.vanNam ? `, vận năm ${vanNamLine(t.vanNam)}` : ''),
       )
       .join(' | '),
+    // Danh sách trên mang vận năm của TỪNG người ⇒ phải kèm luật, không thì rail
+    // đọc con số khung đại vận thành "điểm vận năm nay" của người đó.
+    luatVanNam: LUAT_VAN_NAM,
     phanBoKieu: p.phanBo
       .filter((x) => x.soNguoi > 0)
       .map((x) => `${x.ten}: ${x.soNguoi} (${x.ten_nguoi.join(', ')})`)
@@ -300,11 +323,22 @@ export function railData(p: NhanMachProfile): Record<string, string | number | b
   if (p.nenTimThem) d.kieuNenTimThem = `${p.nenTimThem.ten} — ${p.nenTimThem.motCau}`;
   const giam = p.cap.filter((c) => c.loai === 'giam-chan');
   const bu = p.cap.filter((c) => c.loai === 'bu-nhau');
-  if (giam.length) d.capDeGiamChan = giam.map((c) => `${c.a} ↔ ${c.b}`).join(' | ');
-  if (bu.length) d.capDeBuNhau = bu.slice(0, 6).map((c) => `${c.a} ↔ ${c.b}`).join(' | ');
+  // Kèm LÝ DO từng cặp (`vi`) — trang có hiện, mà trước đây rail chỉ nhận
+  // "A ↔ B" trơ. Hỏi "vì sao hai người này bù nhau" thì nó phải luận chay dù
+  // engine đã tính sẵn câu trả lời. Cùng họ lỗi `thapThan` của Bát Tự.
+  const capLine = (c: { a: string; b: string; vi?: string }) =>
+    `${c.a} ↔ ${c.b}${c.vi ? ` — ${c.vi}` : ''}`;
+  if (giam.length) d.capDeGiamChan = giam.map(capLine).join(' | ');
+  if (bu.length) d.capDeBuNhau = bu.slice(0, 6).map(capLine).join(' | ');
+  // Nêu rõ con số là của KHUNG đại vận, không phải điểm của năm — nếu không,
+  // rail đọc "Minh (8.7/10)" thành "vận năm nay của Minh 8,7 điểm".
   d.thuTuTiepCan = p.thuTuTiepCan
-    .map((t) => `${t.ten}${t.diem == null ? '' : ` (${t.diem}/10)`}`)
+    .map((t) => `${t.ten}${t.khungDiem == null ? '' : ` (khung đại vận ${t.khungDiem}/10)`}`)
     .join(' → ');
+  d.luatThuTuTiepCan =
+    'Thứ tự trên xếp theo điểm KHUNG ĐẠI VẬN rồi tới cán cân cát/sát của năm. ' +
+    'Đây là gợi ý THỜI ĐIỂM tiếp cận, KHÔNG phải bảng xếp hạng mức quan trọng của từng người, ' +
+    'và NĂM không có điểm riêng — đừng gán "điểm/10" cho năm của ai.';
   const coBan = p.thanhVien.filter((t) => t.voiBan);
   if (coBan.length) {
     d.nguoiNayTrongLaSoBan = coBan

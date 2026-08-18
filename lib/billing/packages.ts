@@ -40,7 +40,7 @@ export async function getPackages(): Promise<Record<string, CreditPackage>> {
     try {
       const res = await fetch(
         `${SUPABASE_URL}/rest/v1/credit_packages?enabled=eq.true&select=package_id,credits,amount_vnd,amount_usd,label`,
-        { headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` } },
+        { cache: 'no-store', headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` } },
       );
       if (res.ok) {
         const rows = (await res.json()) as {

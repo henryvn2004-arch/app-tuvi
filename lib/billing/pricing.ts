@@ -26,7 +26,7 @@ async function loadPricing(): Promise<Record<string, PriceRow>> {
   const map: Record<string, PriceRow> = {};
   if (SUPABASE_URL && SUPABASE_KEY) {
     try {
-      const res = await fetch(`${SUPABASE_URL}/rest/v1/tool_pricing?select=tool_id,credits,enabled`, {
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/tool_pricing?select=tool_id,credits,enabled`, { cache: 'no-store',
         headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` },
       });
       if (res.ok) {

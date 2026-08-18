@@ -14,6 +14,7 @@ package-lock.json
 
 # Sub-package with own setup
 tuvi-engine/
+remotion/
 
 # Generated / vendor data
 public/cach_cuc_all.json

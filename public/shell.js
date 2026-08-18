@@ -150,6 +150,23 @@
     (document.head || document.documentElement).appendChild(s);
   }
 
+  // ── GHI NGUỒN / CỔ PHÁP (tăng trust) ──
+  // Nạp /tool-sources.js sớm ở boot() (fire-and-forget) để lúc trang tự gọi
+  // ToolSources.noteHtml() sau khi tính xong đã sẵn sàng, không phải đợi
+  // mạng lần đầu. introOnce() gọi lại có callback để điền khối giới thiệu
+  // ngay cả khi script chưa kịp tải lúc render intro.
+  function ensureToolSourcesJs(cb) {
+    if (window.ToolSources) { cb(); return; }
+    var id = 'tvmb-tool-sources-js';
+    var s = document.getElementById(id);
+    if (!s) {
+      s = document.createElement('script');
+      s.id = id; s.src = '/tool-sources.js?v=1'; s.async = true;
+      (document.head || document.documentElement).appendChild(s);
+    }
+    s.addEventListener('load', function () { if (window.ToolSources) cb(); });
+  }
+
   // SỔ LÁ SỐ theo tài khoản (U4) — nạp ĐỘNG và CHỈ khi đã đăng nhập.
   //
   // Vì sao không đưa thẻ <script> vào 7 trang có form: thêm tay thì sẽ sót, mà
@@ -167,7 +184,7 @@
     var el = document.getElementById('tvmb-charts-js');
     if (el) { el.addEventListener('load', go); return; }
     var s = document.createElement('script');
-    s.id = 'tvmb-charts-js'; s.src = '/user-charts.js?v=2'; s.async = true;
+    s.id = 'tvmb-charts-js'; s.src = '/user-charts.js?v=3'; s.async = true;
     s.addEventListener('load', go);
     (document.head || document.documentElement).appendChild(s);
   }
@@ -177,12 +194,15 @@
   var _refCode = null, _refCodeBusy = false;
   function loadRefCode() {
     if (_refCode || _refCodeBusy) return;
-    var tk = getToken(); if (!tk) return;
+    if (!getToken()) return;
     _refCodeBusy = true;
-    fetch('/api/payment?action=my-referral', { headers: { 'Authorization': 'Bearer ' + tk } })
+    freshToken().then(function (tk) {
+      if (!tk) { _refCodeBusy = false; return; }
+      return fetch('/api/payment?action=my-referral', { headers: { 'Authorization': 'Bearer ' + tk } })
       .then(function (r) { return r.json(); })
       .then(function (j) { _refCodeBusy = false; if (j && j.code) _refCode = j.code; })
       .catch(function () { _refCodeBusy = false; });
+    }).catch(function () { _refCodeBusy = false; });
   }
 
   // Gắn mã giới thiệu + UTM vào link chia sẻ. utm_campaign = tool_id để panel
@@ -267,6 +287,11 @@
       el.addEventListener('click', function () { el.parentElement.classList.toggle('closed'); });
     });
     host.querySelector('[data-act="cmd"]').addEventListener('click', openCmd);
+    // Khối avatar/tên vừa bị dựng lại TRẮNG ("Khách"/"Đăng nhập →") — nếu danh
+    // mục tải xong SAU lượt paintAuth() đầu (đua nhau, tuỳ tốc độ mạng) thì tên
+    // thật + số dư vừa sơn xong bị đè mất, không có gì sơn lại. Gọi ngay tại
+    // đây để đúng bất kể ai chạy trước.
+    paintAuth();
   }
 
   // ── RENDER RAIL ──
@@ -357,6 +382,9 @@
   var HIST_CAP = 40;
   var newId = function () { return (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : ('s' + Date.now() + Math.random().toString(36).slice(2, 8)); };
   var curMeta = null; // {restore,title,createdAt} của thread đang mở
+  // Tool gọi rememberBirth = khai 'lá số này là CỦA CHÍNH người dùng'. Tool
+  // đọc lá số NGƯỜI KHÁC (con, sếp, cả đội) cố ý KHÔNG gọi — xem (3) bên dưới.
+  var birthOwned = false;
   var ctxCalls = 0;   // số lần tool đã gọi setContext (0 = trang chưa dựng được gì)
   // Tool đã gộp: đọc kèm phiên lịch sử của tool cũ (la-so đã gộp vào luan-giai).
   var HIST_ALIAS = { 'luan-giai': ['la-so'] };
@@ -428,11 +456,14 @@
   }
   // ── Đồng bộ server (best-effort, KHÔNG bao giờ ném lỗi vào tool) ──
   function histSrvUpsert(rec) {
-    var tk = getToken(); if (!tk) return;
+    if (!getToken()) return;
     try {
-      fetch('/api/tuvi-chats', { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + tk },
+      freshToken().then(function (tk) {
+      if (!tk) return;
+      return fetch('/api/tuvi-chats', { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + tk },
         body: JSON.stringify({ id: rec.id, label: rec.title || 'Phiên', type: 'app-' + rec.toolId, laso_data: rec.restore || null,
           messages: rec.messages || [], last_msg: rec.lastMsg || '', updated_at: new Date(rec.updatedAt).toISOString() }) }).catch(function () {});
+      }).catch(function () {});
     } catch (e) { /* ignore */ }
   }
   function histSrvDelete(id) {
@@ -440,9 +471,11 @@
     try { fetch('/api/tuvi-chats?id=' + encodeURIComponent(id), { method: 'DELETE', headers: { 'Authorization': 'Bearer ' + tk } }).catch(function () {}); } catch (e) { /* ignore */ }
   }
   function histSrvList(tool, cb) {
-    var tk = getToken(); if (!tk) { cb(null); return; }
+    if (!getToken()) { cb(null); return; }
     try {
-      fetch('/api/tuvi-chats', { headers: { 'Authorization': 'Bearer ' + tk } })
+      freshToken().then(function (tk) {
+      if (!tk) { cb(null); return; }
+      return fetch('/api/tuvi-chats', { headers: { 'Authorization': 'Bearer ' + tk } })
         .then(function (r) { return r.ok ? r.json() : null; })
         .then(function (j) {
           if (!j || !j.chats) { cb(null); return; }
@@ -454,6 +487,7 @@
           });
           cb(out);
         }).catch(function () { cb(null); });
+      }).catch(function () { cb(null); });
     } catch (e) { cb(null); }
   }
   function histMerge(local, server) {
@@ -557,7 +591,11 @@
       } catch (e) { /* ignore */ }
       // Ghi lại đã CHUẨN HOÁ: phiên cũ lưu birth shape {dd,mm,yyyy} — để nguyên
       // thì prefillForm/TuviForm.setData không nhận ra field nào (xem normBirth).
-      if (sess.restore && sess.restore.birth) {
+      // Chỉ đồng bộ app_birth khi phiên đó là lá số CỦA CHÍNH người dùng.
+      // selfBirth === false ⇒ tool đọc lá số người khác; ghi đè là lá số con/sếp
+      // chiếm chỗ lá số của họ, kéo theo cả thẻ 'Vận hôm nay' ở trang chủ.
+      // Phiên CŨ không có cờ này (undefined) ⇒ giữ nguyên hành vi trước đây.
+      if (sess.restore && sess.restore.birth && sess.restore.selfBirth !== false) {
         try { localStorage.setItem('app_birth', JSON.stringify(normBirth(sess.restore.birth))); } catch (e) { /* ignore */ }
       }
       // Reload về ?auto=1 SẠCH (bỏ mọi query cũ như ?restore) → tránh lặp khi
@@ -623,24 +661,69 @@
     });
     var x = el.querySelector('[data-act="hist-close"]'); if (x) x.addEventListener('click', function () { el.style.display = 'none'; });
   }
+  function openHistPanel() {
+    var el = document.getElementById('railHist'); if (!el) return;
+    el.style.display = 'block'; renderHistInto(el);
+  }
   function toggleHistPanel() {
     var el = document.getElementById('railHist'); if (!el) return;
-    if (!el.style.display || el.style.display === 'none') { el.style.display = 'block'; renderHistInto(el); }
+    if (!el.style.display || el.style.display === 'none') openHistPanel();
     else { el.style.display = 'none'; }
   }
   // ── UI: "Phiên gần đây" ở empty-state (tool đặt <div id="shellRecent">) ──
+  // Nhãn phải mô tả CUỘC HỘI THOẠI, không phải lá số. Title do tool tự ghép từ
+  // tên + ngày sinh (vd `'Luận giải '+ten+' · '+ngay+' · năm '+namxem`) nên nhiều
+  // phiên KHÁC NHAU của cùng một lá số ra chuỗi y hệt — danh sách trông như bị
+  // lặp, người dùng không phân biệt được nên không bấm. Mà `saveCurrent` chỉ lưu
+  // phiên khi đã có ít nhất một lượt hỏi–đáp ⇒ thứ phân biệt chúng luôn tồn tại:
+  // CÂU HỎI ĐẦU. Đưa nó lên dòng chính, tên/ngày sinh tụt xuống dòng phụ.
+  function sessTopic(s) {
+    var ms = s.messages || [];
+    for (var i = 0; i < ms.length; i++) if (ms[i].role === 'user' && ms[i].content) return ms[i].content.slice(0, 120);
+    return (s.lastMsg || s.title || 'Phiên').slice(0, 120);
+  }
+  // Dòng phụ dựng TỪ DỮ LIỆU LÁ SỐ, KHÔNG cắt chuỗi title: tiền tố title là chữ
+  // mỗi tool tự viết, còn nhãn tool trong sidebar đọc từ `tool_pricing.label` —
+  // hai bên khác hoa/thường ('Luận giải' vs 'Luận Giải') nên cắt theo chuỗi sẽ
+  // trượt IM LẶNG, để lại đúng phần thừa mình định bỏ.
+  function sessSubject(s) {
+    var b = s.restore && s.restore.birth ? normBirth(s.restore.birth) : null;
+    if (!b || !b.ngay || !b.thang || !b.nam) return '';
+    var who = String(b.hoten || '').trim();
+    return (who ? who + ' · ' : '') + (+b.ngay) + '/' + (+b.thang) + '/' + b.nam;
+  }
+  // Khoá gộp CỐ Ý bỏ TÊN: cùng một người hay bị gõ hai kiểu ('TL' vs 'Thuy Lưu')
+  // → tính cả tên vào khoá thì đếm ra hai lá số khác nhau.
+  function sessBirthKey(s) {
+    var b = s.restore && s.restore.birth ? normBirth(s.restore.birth) : null;
+    if (!b || !b.ngay || !b.thang || !b.nam) return '';
+    return [b.nam, b.thang, b.ngay, b.gioIdx == null ? '?' : b.gioIdx, b.gioitinh || '?'].join('|');
+  }
+  var RECENT_SHOW = 2; // phần còn lại nằm sau "Tất cả (N)" → panel Lịch sử của rail
   function renderRecent(el) {
     if (!el || !ACTIVE || !HIST_ON) { if (el) { el.style.display = 'none'; el.innerHTML = ''; } return; }
     histListAll(ACTIVE, function (list) {
       if (!list.length) { el.style.display = 'none'; el.innerHTML = ''; return; }
       el.style.display = '';
-      el.innerHTML = '<div class="recent-h">Phiên gần đây</div><div class="recent-list">' +
-        list.slice(0, 6).map(function (s) {
+      // Đếm số phiên theo LÁ SỐ để nói "· 3 phiên" thay vì bày 3 dòng trông y hệt.
+      var cnt = {};
+      list.forEach(function (s) { var k = sessBirthKey(s); if (k) cnt[k] = (cnt[k] || 0) + 1; });
+      el.innerHTML = '<div class="recent-h"><span>Phiên gần đây</span>' +
+        (list.length > RECENT_SHOW ? '<button type="button" class="recent-all" data-act="recent-all">Tất cả (' + list.length + ') ›</button>' : '') +
+        '</div><div class="recent-list">' +
+        list.slice(0, RECENT_SHOW).map(function (s) {
+          var k = sessBirthKey(s), sub = sessSubject(s);
+          if (sub && k && cnt[k] > 1) sub += ' · ' + cnt[k] + ' phiên';
           return '<button class="recent-item" type="button" data-id="' + esc(s.id) + '">' +
-            '<span class="ri-t">' + esc(s.title || 'Phiên') + '</span>' +
+            '<span class="ri-m"><span class="ri-t">' + esc(sessTopic(s)) + '</span>' +
+            (sub ? '<span class="ri-b">' + esc(sub) + '</span>' : '') + '</span>' +
             '<span class="ri-s">' + esc(relTime(s.updatedAt)) + '</span></button>';
         }).join('') + '</div>';
       el.querySelectorAll('.recent-item').forEach(function (b) { b.addEventListener('click', function () { restoreSession(b.getAttribute('data-id')); }); });
+      // Mở rail TRƯỚC rồi mới mở panel: trên mobile rail nằm ngoài màn hình, chỉ
+      // bật panel thôi thì bấm xong không thấy gì xảy ra.
+      var all = el.querySelector('[data-act="recent-all"]');
+      if (all) all.addEventListener('click', function () { Shell.openRail(); openHistPanel(); });
     });
   }
   function renderRecentAll() { var el = document.getElementById('shellRecent'); if (el) renderRecent(el); }
@@ -669,7 +752,7 @@
   // tuvi-chat: mỗi phiên/máy random 1 thầy (avatar /authors/<id>.jpg + văn
   // phong). Gửi authorName/authorStyle lên /api/v1/chat để đổi giọng luận. ──
   var AUTHOR_ROSTER = [
-    { id: 'bac-minh',    name: 'Bắc Minh',    style: 'Hệ thống, rõ ràng, luôn giải thích nguyên lý nền tảng trước khi luận sao. Xuất thân dạy học lâu năm, quen nếp giảng có mở-thân-kết. Luôn có 1 câu khẳng định chắc nịch kiểu "quy luật là quy luật, không có ngoại lệ" — nghe hơi phũ nhưng đúng, không chừa đường lùi.' },
+    { id: 'bac-minh',    name: 'Bắc Minh',    style: 'Hệ thống, rõ ràng, luôn nêu nguyên lý nền tảng trước khi luận sao — nhưng nêu gọn trong một vế câu, không giảng bài. Xuất thân dạy học lâu năm. Luôn có 1 câu khẳng định chắc nịch kiểu "quy luật là quy luật, không có ngoại lệ" — nghe hơi phũ nhưng đúng, không chừa đường lùi.' },
     { id: 'co-nguyet',   name: 'Cổ Nguyệt',   style: 'Nghiêng về vòng Tràng Sinh và triết học cổ đại, nghiên cứu Dịch lý/cổ thư nhiều năm, sống khép kín. Hay tung ra 1 câu nghịch lý gây sốc nhẹ kiểu "cái bạn tự hào nhất chính là thứ đang âm thầm hại bạn" khiến người nghe khựng lại.' },
     { id: 'dau-nam',     name: 'Đẩu Nam',     style: 'Chuyên về tình cảm, hôn nhân, phu thê. Mê văn học lãng mạn Việt Nam nhưng nhìn đời thực tế. Hay nói thẳng phũ phàng 1 sự thật ít ai muốn nghe về tình yêu (kiểu "nhiều khi người ta ở lại vì quen chứ chưa chắc vì yêu") rồi mới nhẹ nhàng gỡ lại.' },
     { id: 'dieu-khong',  name: 'Diệu Không',  style: 'Chuyên về nghề nghiệp, sự nghiệp, tài lộc. Từng làm kinh doanh/quản lý trước khi theo nghiệp xem số, ghét vòng vo. Phán thẳng 1 câu có thể gây khó chịu nhưng đúng trọng tâm, kiểu "đang lãng phí tài năng ở đúng vị trí này" — không nịnh, hơi sốc.' },
@@ -934,16 +1017,288 @@
     return birthSummaryLine(o.birth || (ctx && ctx.birth) || null);
   }
 
-  // Tool gọi Shell.setShareable({kind:'image'|'text', title, imageUrl?, text?})
-  // ngay sau khi có kết quả → nút "Chia sẻ" tự hiện trong .ws-actions (nếu
-  // trang có toolbar đó), không cần tool tự vẽ nút/markup riêng. Khác
-  // shareSession (chia sẻ transcript rail): cái này chia sẻ ĐÚNG kết quả
-  // (ảnh AI hoặc trích văn bản) ra permalink /ket-qua/<id> có OG:image thật.
-  var shareable = null;
+  // ══════════════════════════════════════════════════════════════════════
+  // CHIA SẺ WORKSPACE — VIỆC CỦA SHELL, KHÔNG PHẢI CỦA TỪNG TOOL
+  // ══════════════════════════════════════════════════════════════════════
+  //
+  // Bản cũ bắt MỖI tool tự nhớ bốn việc: gọi `setShareable` đúng lúc có kết
+  // quả · gọi `setShareable(null)` khi quay về form · tự chép `toolId` ·
+  // và tự dựng một bản văn bản THỨ HAI song song với DOM đang hiện. 32 tool
+  // × 4 nghĩa vụ = 128 chỗ để quên, không có gì canh. Và đã quên thật:
+  //   · `day-con` KHÔNG có nút Chia sẻ từ lúc ra mắt tới khi Henry báo;
+  //   · `thanh-tuong-pro` và `phong-thuy` không bao giờ gỡ nút → bấm Chia sẻ
+  //     sau khi đổi ảnh là phát ra kết quả của LƯỢT TRƯỚC.
+  //
+  // 🔑 Nay đảo vai: shell theo dõi VÙNG KẾT QUẢ của workspace và tự bật/tắt
+  // nút. Tool KHÔNG phải làm gì để có nút Chia sẻ. `setShareable` vẫn còn
+  // nhưng đổi nghĩa — từ BẮT BUỘC thành LÀM GIÀU (ảnh AI, khối `blocks` có
+  // cấu trúc, tiêu đề đắt hơn): tool đưa gì thì cái đó thắng bản shell tự suy.
+  //
+  // Giao ước DUY NHẤT của trang: đánh dấu vùng kết quả bằng `data-ws-result`.
+  // Có đường lùi theo hai id đã thành lệ (`#resPanel` · `#resultCard`) nên
+  // phần lớn trang chạy được mà không cần sửa; `scripts/check-shell-share.mjs`
+  // chặn trang shell mới quên khai (chạy trong CI lint).
+  var shareable = null; // payload TOOL đưa — làm giàu, được ưu tiên
+  var autoShare = null; // payload SHELL tự suy từ DOM — lưới đỡ
+  var _wsResVisible = false, _wsResObs = null, _wsResTimer = null;
+  // Tool gọi thẳng `setShareable(null)` là một CÂU KHẲNG ĐỊNH ("lượt này không
+  // có gì để chia sẻ" — vd fetch hỏng, khung kết quả đang hiện đúng câu báo
+  // lỗi). Lời khai đó mạnh hơn phép suy từ DOM của shell, nên phải tắt hẳn
+  // lưới đỡ tới lượt chạy SAU (khung kết quả ẩn rồi hiện lại).
+  var _shareMuted = false;
+
+  function currentShare() { return shareable || autoShare; }
+
+  // Vùng kết quả của workspace. `null` = trang chưa khai → shell KHÔNG tự
+  // động gì cả, hành vi y hệt bản cũ (không hồi quy cho trang lạ).
+  function wsResultHost() {
+    return document.querySelector('[data-ws-result]')
+      || document.getElementById('resPanel')
+      || document.getElementById('resultCard');
+  }
+  // `offsetParent` null là ẩn KỂ CẢ khi cha ẩn — đúng thứ cần, vì mọi tool
+  // đều ẩn/hiện bằng `display` trên chính khối cha. Kèm getClientRects cho
+  // trường hợp position:fixed (offsetParent cũng null nhưng vẫn đang hiện).
+  function shownEl(el) {
+    return !!(el && (el.offsetWidth || el.offsetHeight || el.getClientRects().length));
+  }
+
+  // Những gì KHÔNG được rơi vào bản chia sẻ tự suy: điều khiển (nút/ô nhập),
+  // tường trả phí (chia sẻ ra ngoài đúng lời mời trả tiền thì vô nghĩa), thẻ
+  // giới thiệu, và mọi khối trang tự khai là riêng tư bằng `data-share-skip`.
+  var SHARE_SKIP_SEL = 'script,style,noscript,button,input,textarea,select,option,svg,form,canvas,' +
+    '.ws-actions,.intro-card,.tpw-lock-veil,.tpw-lock-blur,.tpw-wall,.tpw-prev,[data-share-skip],[aria-hidden="true"]';
+  var SHARE_BLOCK_TAG = /^(P|DIV|SECTION|ARTICLE|HEADER|FOOTER|LI|TR|H1|H2|H3|H4|H5|H6|BLOCKQUOTE|PRE|TABLE|UL|OL|DL|DT|DD|BR|HR)$/;
+  var SHARE_TEXT_CAP = 4000;
+
+  function domShareText(host) {
+    var buf = [], line = [], chars = 0;
+    var flush = function () { if (line.length) { buf.push(line.join(' ')); line = []; } };
+    var walk = function (el, depth) {
+      if (depth > 24 || chars > SHARE_TEXT_CAP) return;
+      var kids = el.childNodes;
+      for (var i = 0; i < kids.length; i++) {
+        if (chars > SHARE_TEXT_CAP) return;
+        var n = kids[i];
+        if (n.nodeType === 3) {
+          var t = String(n.nodeValue).replace(/\s+/g, ' ').trim();
+          if (t) { line.push(t); chars += t.length + 1; }
+          continue;
+        }
+        if (n.nodeType !== 1) continue;
+        try { if (n.matches && n.matches(SHARE_SKIP_SEL)) continue; } catch (e) { /* ignore */ }
+        if (!shownEl(n)) continue;
+        var isBlock = SHARE_BLOCK_TAG.test(n.tagName);
+        if (isBlock) flush();
+        walk(n, depth + 1);
+        if (isBlock) flush();
+      }
+    };
+    walk(host, 0);
+    flush();
+    return buf.join('\n').replace(/\n{3,}/g, '\n\n').trim().slice(0, SHARE_TEXT_CAP);
+  }
+
+  // Tiêu đề mặc định lấy từ CHÍNH thanh tiêu đề workspace — thứ người dùng
+  // đang nhìn — thay vì bắt mỗi tool chép lại tên mình một lần nữa.
+  function wsTitleText() {
+    var b = document.querySelector('.ws-title b');
+    var t = b ? String(b.textContent || '').trim() : '';
+    return t || 'Kết quả Luận Đường';
+  }
+
+  // Chuẩn hoá payload — MỘT phép duy nhất cho cả hai đường (tool đưa / shell
+  // tự suy), nên bản tự suy không bao giờ thiếu khối lá số hay lệch shape.
+  function normalizeShare(o) {
+    var kind = o.kind === 'image' ? 'image' : 'text';
+    var blocks = Array.isArray(o.blocks) ? o.blocks.slice() : null;
+    var text = o.text || null;
+    // Lá số của CHÍNH lượt này: tool truyền thẳng (o.birth) hoặc lấy từ ngữ
+    // cảnh tool đã set. CỐ Ý không đụng birthSnapshot()/localStorage — lá số
+    // còn sót từ tool khác sẽ gắn nhầm chủ nhân cho bản chia sẻ.
+    var bLine = shareBirthLines(o);
+    if (bLine) {
+      if (blocks) blocks.unshift({ header: 'Lá số dùng để luận', text: bLine });
+      else if (kind === 'text') text = bLine + '\n\n' + (text || '');
+      else blocks = [{ header: 'Lá số dùng để luận', text: bLine },
+        { header: null, image: o.imageUrl || null, text: text }];
+    }
+    return {
+      kind: kind,
+      toolId: o.toolId || ACTIVE || 'app',
+      title: String(o.title || 'Kết quả Luận Đường').slice(0, 160),
+      imageUrl: o.imageUrl || null,
+      text: text,
+      blocks: blocks,
+    };
+  }
+
+  function deriveShareable(host) {
+    var text = domShareText(host);
+    // Ngưỡng: dưới mức này thì khung mới có mỗi tiêu đề/spinner, chia sẻ ra là
+    // một trang trống. Thà không có nút còn hơn phát một link rỗng.
+    if (text.length < 60) return null;
+    return normalizeShare({ kind: 'text', title: wsTitleText(), text: text });
+  }
+
+  // Chạy lại mỗi khi khung giữa đổi. Ba việc, theo đúng thứ tự:
+  //   1. kết quả vừa BIẾN MẤT (hiện → ẩn) ⇒ vứt luôn payload tool đã đưa, nó
+  //      thuộc về lượt trước — đây là chỗ vá lỗi "chia sẻ nhầm kết quả cũ";
+  //   2. đang hiện ⇒ tự suy một payload dự phòng từ DOM;
+  //   3. vẽ lại nút.
+  function refreshWsShare() {
+    var host = wsResultHost();
+    if (!host) { renderShareBtn(); return; } // trang chưa khai vùng kết quả → giữ lối cũ
+    var vis = shownEl(host);
+    if (_wsResVisible && !vis) shareable = null; // kết quả biến mất → payload lượt trước hết hiệu lực
+    if (!_wsResVisible && vis) _shareMuted = false; // lượt chạy mới → mở lại lưới đỡ
+    _wsResVisible = vis;
+    autoShare = vis && !_shareMuted ? deriveShareable(host) : null;
+    renderShareBtn();
+    renderPdfBtn(vis);
+    maybeAppendSrcNote(host);
+  }
+
+  // Ghi nguồn/cổ pháp cuối kết quả — bám ĐÚNG cơ chế phát hiện "vùng kết quả"
+  // vừa dùng cho Chia sẻ/PDF (`wsResultHost` + ngưỡng `currentShare()`), nên
+  // KHÔNG tool nào phải tự khai gì thêm để có dòng này. Tool nào đã tự chèn
+  // một khối `.tvmb-src-note` riêng (vd. bat-tu gọi thẳng `noteHtml()`, hoặc
+  // day-con viết tay vào caveat tĩnh) thì bỏ qua — không chèn chồng lần hai.
+  function maybeAppendSrcNote(host) {
+    if (!host || !currentShare()) return; // chưa có gì đáng kể để nói "nguồn" cho nó (cùng ngưỡng Chia sẻ)
+    if (host.querySelector('.tvmb-src-note')) return;
+    ensureToolSourcesJs(function () {
+      if (!host.isConnected || host.querySelector('.tvmb-src-note')) return; // đã chèn trong lúc đợi mạng, hoặc trang đã rời khỏi
+      if (!window.ToolSources.line(ACTIVE)) return; // tool chưa có trong sổ nguồn → im lặng
+      host.insertAdjacentHTML('beforeend', window.ToolSources.noteHtml(ACTIVE));
+    });
+  }
+  function watchWsResult() {
+    // 🪤 Bám `#ws` là SAI: `app.html` (tool Lá Số, `/app/la-so`) dùng
+    // `<main class="ws">` KHÔNG có id — observer câm đúng trên tool đầu bảng
+    // mà không có gì báo. Lấy gốc theo nhiều đường, cuối cùng là <body>.
+    var ws = document.getElementById('ws') || document.querySelector('main.ws') || document.body;
+    if (!ws || _wsResObs || typeof MutationObserver === 'undefined') { refreshWsShare(); return; }
+    // Gộp nhịp: tool render kết quả bằng hàng trăm lượt đổi DOM liên tiếp;
+    // đo lại sau mỗi lượt vừa tốn vừa bắt được trạng thái dựng dở.
+    _wsResObs = new MutationObserver(function () {
+      clearTimeout(_wsResTimer);
+      _wsResTimer = setTimeout(refreshWsShare, 220);
+    });
+    _wsResObs.observe(ws, { subtree: true, childList: true, attributes: true, attributeFilter: ['style', 'class', 'hidden'] });
+    refreshWsShare();
+  }
+
+  // ── LƯU PDF — cùng vòng đời với nút Chia sẻ ──────────────────────────
+  // Trước đây đúng 3/33 tool có nút PDF, mỗi tool tự dựng một thanh riêng
+  // trong nội dung + tự chép một khối @media print. Nay shell lo cả hai:
+  // luật in nằm ở `shell.css`, nút nằm ở đây, và nó bám đúng mốc
+  // `data-ws-result` sẵn có nên tool KHÔNG phải khai thêm gì.
+  //
+  // CỐ Ý dùng `window.print()` chứ không dựng PDF bằng thư viện: trình duyệt
+  // đã cho chọn "Lưu thành PDF" ngay trong hộp thoại in, giữ được chữ thật
+  // (chọn/tìm/copy được) và không thêm một byte JS nào. Bản dựng bằng canvas
+  // chỉ ra ảnh, nặng hơn mà đọc kém hơn.
+  function renderPdfBtn(visible) {
+    var host = document.querySelector('.ws-actions');
+    var btn = document.getElementById('wsPdfBtn');
+    if (!visible) { if (btn) btn.remove(); return; }
+    if (!host || btn) return;
+    btn = document.createElement('button');
+    btn.type = 'button'; btn.className = 'btn'; btn.id = 'wsPdfBtn';
+    btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" style="width:14px;height:14px;vertical-align:-2px;margin-right:4px"><path d="M12 3v11m0 0 4-4m-4 4-4-4"/><path d="M4 17v2.5A1.5 1.5 0 0 0 5.5 21h13a1.5 1.5 0 0 0 1.5-1.5V17"/></svg>Lưu PDF';
+    btn.addEventListener('click', printWorkspace);
+    host.appendChild(btn);
+  }
+  function printWorkspace() {
+    try { track('pdf_download', { tool_id: ACTIVE }); } catch (e) { /* ignore */ }
+    ensurePrintHead();
+    window.print();
+  }
+  // Bản in không có `.ws-top` (đã ẩn) nên tự nó không nói được đây là kết quả
+  // gì của ai. Dựng một khối CHỈ hiện lúc in, lấy đúng chữ đang có trên màn
+  // hình + dòng lá số của chính lượt này — cùng nguồn với bản chia sẻ, nên hai
+  // bản không nói khác nhau.
+  function ensurePrintHead() {
+    var host = wsResultHost();
+    if (!host) return;
+    var head = document.getElementById('wsPrintHead');
+    if (!head) {
+      head = document.createElement('div');
+      head.className = 'ws-print-head'; head.id = 'wsPrintHead';
+      host.insertBefore(head, host.firstChild);
+    }
+    var sub = shareBirthLines({ birth: (ctx && ctx.birth) || null });
+    head.innerHTML = '<b>' + esc(wsTitleText()) + '</b>' +
+      (sub ? '<span>' + esc(sub) + '</span>' : '') +
+      '<span>tuviminhbao.com</span>';
+  }
+
+  // ══════════════════════════════════════════════════════════════════════
+  // ORB TRÊN NÚT HỎI — lời mời, không phải đồ trang trí
+  // ══════════════════════════════════════════════════════════════════════
+  //
+  // Đo trước khi làm: nút `✦ Hỏi` mang class `mobile-only`, tức trên desktop
+  // KHÔNG tồn tại (rail vốn hiện sẵn ở cột phải). Nên đây là lời mời dành cho
+  // MOBILE — chỗ rail nằm ngoài màn hình và người ta không biết là có nó.
+  //
+  // Ba luật, và luật thứ hai mới là phần đáng giá:
+  //  1. Dùng LẠI orb của `ai-loading-steps.js` (#455/#457) — nó đã có 4 biến
+  //     thể, keyframes và nhánh `prefers-reduced-motion`. Chép lại CSS đó vào
+  //     `shell.css` là dựng bản thứ hai để rồi hai bản trôi khỏi nhau.
+  //  2. CHỈ sáng khi có gì để hỏi (`ctx` đã set = tool ra kết quả) VÀ người
+  //     dùng CHƯA mở rail lần nào trong phiên. Mở rồi là tắt hẳn. Sáng vĩnh
+  //     viễn thì thành nhiễu — người ta học cách bỏ qua nó — và một animation
+  //     chạy suốt trên mobile là ăn pin thật.
+  //  3. Nạp module theo lối LƯỜI: `ai-loading-steps.js` mới có ở 24/33 trang.
+  //     Thiếu nó thì nút giữ nguyên chữ `✦ Hỏi` như cũ, không vỡ gì.
+  var _railOpened = false, _orbOn = false;
+  function ensureOrbJs(cb) {
+    if (window.AiLoadingSteps && window.AiLoadingSteps.orbHtml) { cb(); return; }
+    var id = 'tvmb-orb-js';
+    var s = document.getElementById(id);
+    if (!s) {
+      s = document.createElement('script');
+      s.id = id; s.src = '/tools-shared/ai-loading-steps.js?v=7'; s.async = true;
+      (document.head || document.documentElement).appendChild(s);
+    }
+    s.addEventListener('load', function () {
+      if (window.AiLoadingSteps && window.AiLoadingSteps.orbHtml) cb();
+    });
+  }
+  function askBtnEl() {
+    var host = document.querySelector('.ws-actions');
+    if (!host) return null;
+    var bs = host.querySelectorAll('button');
+    for (var i = 0; i < bs.length; i++) {
+      var oc = bs[i].getAttribute('onclick') || '';
+      if (oc.indexOf('openRail') >= 0) return bs[i];
+    }
+    return null;
+  }
+  function syncAskOrb() {
+    var b = askBtnEl();
+    if (!b) return;
+    var want = !!ctx && !_railOpened;
+    if (want === _orbOn) return;
+    if (!want) { // tắt: trả lại đúng chữ cũ, không để lại dấu vết
+      b.innerHTML = '✦ Hỏi'; _orbOn = false; return;
+    }
+    ensureOrbJs(function () {
+      if (!ctx || _railOpened) return; // trạng thái đã đổi trong lúc chờ nạp
+      var el = askBtnEl(); if (!el) return;
+      el.innerHTML = window.AiLoadingSteps.orbHtml({ size: 18, variant: 'a' }) +
+        '<span style="margin-left:6px">Hỏi</span>';
+      el.style.display = 'inline-flex';
+      el.style.alignItems = 'center';
+      _orbOn = true;
+    });
+  }
+
   function renderShareBtn() {
     var host = document.querySelector('.ws-actions');
     var btn = document.getElementById('wsShareBtn');
-    if (!shareable) { if (btn) btn.remove(); return; }
+    if (!currentShare()) { if (btn) btn.remove(); return; }
     if (!host) return; // trang chưa có toolbar .ws-actions → bỏ qua, không vỡ gì
     loadRefCode(); // lúc boot có thể chưa đăng nhập; thử lại khi sắp có nút Chia sẻ
     if (!btn) {
@@ -955,9 +1310,9 @@
     }
   }
   function shareWorkspace() {
-    if (!shareable) return;
+    if (!currentShare()) return;
     var btn = document.getElementById('wsShareBtn'); if (btn) btn.disabled = true;
-    var s = shareable;
+    var s = currentShare();
     var reEnable = function () { if (btn) btn.disabled = false; };
     // Gửi kèm token: server ghi shared_results.owner_user_id → panel Vòng Lặp
     // Viral đếm được SỐ NGƯỜI chia sẻ (mẫu số của K-factor), không chỉ số link.
@@ -1111,8 +1466,16 @@
     return _rc.freeTurns + Math.floor(_rc.balance / _rc.price);
   }
 
-  function loadRailStatus() {
-    var token = getToken();
+  async function loadRailStatus() {
+    // Token phải còn HẠN, không chỉ tồn tại: gửi token hết hạn thì server đọc
+    // thành khách vô danh và đồng hồ hiện "Đã hết câu dùng thử · Đăng ký nhận
+    // thêm" cho đúng một người đang đăng nhập — cùng lớp lỗi với rail đòi đăng
+    // nhập, chỉ khác bề mặt.
+    var token = await freshToken();
+    // Chưa có token NHƯNG Auth đang khôi phục phiên ⇒ CHƯA BIẾT người này là ai.
+    // Hỏi ví lúc này là nhận về trạng thái khách vô danh. Thà im lặng vài giây —
+    // vòng theo dõi phiên ở cuối file sẽ gọi lại ngay khi biết chắc.
+    if (!token && window.Auth && Auth.isRestoring && Auth.isRestoring()) return;
     var url = token
       ? '/api/payment?action=rail-status'
       : '/api/payment?action=rail-status&anon=' + encodeURIComponent(anonId());
@@ -1139,6 +1502,7 @@
         _rc.vndPerCredit = d.vndPerCredit || 1000;
         _rc.loaded = true;
         renderRailMeter();
+        paintSidebarBalance();
       })
       .catch(function () { /* đồng hồ chỉ là trợ giúp — hỏng thì im lặng, không chặn hỏi */ });
   }
@@ -1199,7 +1563,7 @@
           '<div class="stm-d">' + esc(thay) + ' còn nhiều điều muốn nói về lá số này. ' +
             (câu ? 'Đăng ký (miễn phí) là được tặng <b>' + bonus + ' Lượng</b> — đủ hỏi thêm <b>' + câu + ' câu</b> nữa.'
                  : 'Đăng ký miễn phí để được tặng Lượng và hỏi tiếp.') +
-            ' Lá số vẫn xem miễn phí, không mất gì.</div>' +
+            ' Lá số đang xem vẫn giữ nguyên.</div>' +
           '<button class="stm-btn" type="button" data-act="do-signup">Đăng ký miễn phí →</button>' +
           '<button class="stm-later" type="button">Để sau</button>' +
         '</div>';
@@ -1231,6 +1595,7 @@
     if (typeof pw.freeTurns === 'number') _rc.freeTurns = pw.freeTurns;
     if (_rc.price != null && _rc.balance != null) _rc.loaded = true;
     renderRailMeter();
+    paintSidebarBalance();
   }
 
   function creditVnd(c) {
@@ -1356,6 +1721,16 @@
     return out.join('');
   }
   function getToken() { try { var s = window.Auth && Auth.getSession && Auth.getSession(); return s ? s.access_token : null; } catch (e) { return null; } }
+  // Token cho lượt gọi API: kiểm hạn + tự xoay TRƯỚC khi gửi. `getToken()` là ảnh
+  // chụp, nó trả cả token đã hết hạn → server 401 → rail đòi đăng nhập với đúng
+  // người đang đăng nhập. Bản cũ của auth.js chưa có `getFreshToken` (còn trong
+  // cache trình duyệt) thì rơi về ảnh chụp như trước, không vỡ.
+  async function freshToken() {
+    try {
+      if (window.Auth && Auth.getFreshToken) return await Auth.getFreshToken();
+    } catch (e) { /* ignore */ }
+    return getToken();
+  }
   function setSend(on) { var s = document.getElementById('railSend'), i = document.getElementById('railInput'), a = document.getElementById('railAttach'); if (s) s.disabled = !on; if (a) a.disabled = !on; if (i) { i.disabled = !on; if (on) i.focus(); } }
 
   function parseSSE(block) {
@@ -1417,7 +1792,11 @@
       sessionId = newId();
       // Meta cho thread mới: restore payload đủ để dựng lại center (mặc định =
       // snapshot birth đã nhớ + scenario), title lấy từ label.
-      curMeta = { restore: Object.assign({ birth: birthSnapshot(), scenario: o.scenario || null, form: snapshotForm() }, o.restore || {}), title: o.title || o.label || 'Phiên', createdAt: Date.now() };
+      // birth của phiên lấy từ lá số TOOL VỪA DÙNG trước, chỉ rơi về app_birth
+      // khi tool không đưa (tool ảnh). Đọc thẳng app_birth là tool xem lá số
+      // NGƯỜI KHÁC (day-con · nguoi-khac · nhan-mach) dán nhãn phiên bằng lá số
+      // của chính người dùng — nhãn nói SAI người mà không có gì báo.
+      curMeta = { restore: Object.assign({ birth: normBirth(o.birth) || birthSnapshot(), selfBirth: birthOwned, scenario: o.scenario || null, form: snapshotForm() }, o.restore || {}), title: o.title || o.label || 'Phiên', createdAt: Date.now() };
       var c = document.getElementById('railCtx'), t = document.getElementById('railCtxTxt');
       if (o.label) { c.style.display = ''; t.innerHTML = 'Đang gắn: <b>' + esc(o.label) + '</b>'; }
       var ta = document.getElementById('railInput');
@@ -1426,7 +1805,10 @@
       var att = document.getElementById('railAttach'); if (att) att.disabled = false;
       greet(o);
       // Ngữ cảnh mới = phiên hỏi mới: đếm lại từ đầu và cho thẻ mời hiện lại.
-      _askCount = 0; _upsellShown = false; _cungAsked = [];
+      _askCount = 0; _upsellShown = false; _cungAsked = []; _suggestShown = false; pendingSuggest = null;
+      // Vừa có thứ để hỏi → mời bằng orb trên nút Hỏi (mobile). Ngữ cảnh MỚI
+      // là một lượt mời mới, nên mở lại cả cờ "đã mở rail".
+      _railOpened = false; syncAskOrb();
       // Nạp ví để đồng hồ hiện "còn N câu" NGAY khi mở rail, chưa cần hỏi câu nào.
       loadRailStatus();
       // KHÔI PHỤC phiên đã lưu (đi qua sessionStorage khi bấm 1 mục lịch sử):
@@ -1455,7 +1837,12 @@
     ask: function (t) { ask(t); },
     openCmd: openCmd,
     toggleTheme: toggleTheme,
-    openRail: function () { var r = document.getElementById('shell-rail'); if (r) { r.classList.add('open'); syncBackdrop(); } },
+    // Mở rail = lời mời đã được nhận → tắt orb. Nếu không tắt thì nó nhấp nháy
+    // suốt cả lượt hỏi đáp, tức nài người ta làm đúng cái họ vừa làm.
+    openRail: function () {
+      var r = document.getElementById('shell-rail'); if (r) { r.classList.add('open'); syncBackdrop(); }
+      _railOpened = true; syncAskOrb();
+    },
     // Empty-state "Phiên gần đây": tool đặt <div id="shellRecent"></div> ở khối
     // nhập rồi gọi Shell.renderRecent() (hoặc shell tự gọi lúc boot). No-op nếu
     // tool chưa bật window.SHELL_HISTORY.
@@ -1485,10 +1872,35 @@
     // BẮN-VÀ-QUÊN nằm sau: không await, không chặn, hỏng thì thôi. Đảo thứ tự
     // hai việc này là biến một hàm đồng bộ thành phụ thuộc mạng.
     rememberBirth: function (fd) {
+      birthOwned = true;
       try { localStorage.setItem('app_birth', JSON.stringify(fd)); } catch (e) { /* ignore */ }
       try { if (window.UserCharts) window.UserCharts.save(fd, ''); } catch (e) { /* ignore */ }
     },
     getRememberedBirth: function () { return birthSnapshot(); },
+    // Lần GẦN NHẤT người này trò chuyện với thầy (mọi tool), tính bằng mili-giây
+    // — 0 nếu chưa lần nào. Để trang dựng câu chào hỏi thăm ("mấy hôm nay con
+    // thế nào") mà không phải gọi mạng lượt nào.
+    // ⚠️ Đọc localStorage nên chỉ đúng TRÊN MÁY NÀY: đổi máy hoặc xoá cache thì
+    // về 0 và câu chào rơi về bản "lần đầu". Chấp nhận được — nó chỉ chọn CÂU
+    // CHỮ, còn hồ sơ thật thì nằm ở server (tầng 2). Cố ý không hỏi server:
+    // một lượt mạng nữa lúc mở trang chỉ để chọn lời chào là không đáng.
+    // Khoá `app_hist_v1_*` là của CHÍNH shell.js — trang tự đọc là dựng bản
+    // kiến thức thứ hai rồi trôi lệch lúc nào không biết.
+    lastChatAt: function () {
+      var newest = 0;
+      try {
+        for (var i = 0; i < localStorage.length; i++) {
+          var k = localStorage.key(i);
+          if (!k || k.indexOf('app_hist_v1_') !== 0) continue;
+          var arr = JSON.parse(localStorage.getItem(k) || '[]') || [];
+          for (var j = 0; j < arr.length; j++) {
+            var t = Number(arr[j] && arr[j].createdAt) || 0;
+            if (t > newest) newest = t;
+          }
+        }
+      } catch (e) { /* quota / JSON hỏng → coi như chưa từng trò chuyện */ }
+      return newest;
+    },
     // Gắn UTM + mã giới thiệu vào một URL bất kỳ (dùng cho mã QR in trong ảnh
     // tải về — ảnh không mang link bấm được nên QR là đường đo duy nhất).
     viralUrl: function (url, toolId, opts) { return withViralParams(url, toolId, opts); },
@@ -1540,46 +1952,44 @@
       if (this.introSeen(key)) { host.innerHTML = ''; return; }
       host.innerHTML = '<div class="intro-card"><button class="intro-x" type="button" aria-label="Ẩn giới thiệu">×</button>' +
         '<div class="intro-t"><span class="spark">✦</span> ' + esc(opts.title || '') + '</div>' +
-        '<div class="intro-d">' + (opts.desc || '') + '</div></div>';
+        '<div class="intro-d">' + (opts.desc || '') + '</div>' +
+        '<div id="introSrc"></div></div>';
       var self = this;
       var x = host.querySelector('.intro-x');
       if (x) x.addEventListener('click', function () { self.markIntroSeen(key); host.innerHTML = ''; });
+      // Dòng "Theo <cổ pháp> · phương pháp Tử Vi Minh Bảo" — nạp động, điền
+      // sau khi kịp tải; nếu khối intro đã bị đóng trước đó thì bỏ qua.
+      ensureToolSourcesJs(function () {
+        var slot = document.getElementById('introSrc');
+        if (slot) slot.innerHTML = window.ToolSources.introHtml(key);
+      });
     },
     // Gọi khi trang đã chạy (có kết quả): nhớ đã xem + ẩn intro.
     dismissIntro: function (key) { this.markIntroSeen(key); var h = document.getElementById('introHost'); if (h) h.innerHTML = ''; },
-    // Chia sẻ kết quả khung giữa (workspace) — dùng chung cho mọi tool. Gọi
-    // ngay sau khi có kết quả: Shell.setShareable({kind:'image'|'text', title,
-    // imageUrl?, text?, blocks?}). blocks (tùy chọn) = mảng {header?,image?,text?}
-    // để trang /ket-qua render lại y hệt layout card (.res-block) của workspace
-    // thay vì chỉ ảnh+text phẳng — dùng khi kết quả có nhiều "thẻ" như workspace
-    // (vd Cung Phu Thê / Chân Dung / Luận Giải). Gọi Shell.setShareable(null) để
-    // ẩn nút (vd tool quay lại form nhập để làm mới kết quả).
+    // Chia sẻ kết quả khung giữa (workspace).
+    //
+    // ⚠️ KHÔNG BẮT BUỘC nữa. Shell tự bật nút Chia sẻ cho mọi tool có khai
+    // vùng kết quả (`data-ws-result`, hoặc id đã thành lệ `#resPanel` /
+    // `#resultCard`) và tự gỡ khi vùng đó biến mất. Hàm này là chỗ LÀM GIÀU:
+    // gọi khi muốn bản chia sẻ đẹp hơn bản shell tự suy từ DOM —
+    // {kind:'image'|'text', title, imageUrl?, text?, blocks?}. `blocks` (tùy
+    // chọn) = mảng {header?,image?,text?} để trang /ket-qua render lại y hệt
+    // layout card (.res-block) của workspace thay vì ảnh+text phẳng (vd Cung
+    // Phu Thê / Chân Dung / Luận Giải).
+    //
+    // `setShareable(null)` nay là một CÂU KHẲNG ĐỊNH — "lượt này KHÔNG có gì
+    // đáng chia sẻ" (fetch hỏng, khung đang hiện câu báo lỗi) — nên nó tắt cả
+    // lưới đỡ tự suy tới lượt chạy sau. Chỉ để dọn nút khi quay về form thì
+    // KHÔNG cần gọi: shell thấy vùng kết quả ẩn đi là tự gỡ.
     /** Một dòng tóm tắt lá số — trang tự render để hiện trên màn hình, dùng
      *  CHUNG chuỗi với bản chèn vào link chia sẻ (không lệch nhau). */
     birthSummary: function (b) { return birthSummaryLine(b); },
     setShareable: function (o) {
-      if (!o) { shareable = null; renderShareBtn(); return; }
-      var kind = o.kind === 'image' ? 'image' : 'text';
-      var blocks = Array.isArray(o.blocks) ? o.blocks.slice() : null;
-      var text = o.text || null;
-      // Lá số của CHÍNH lượt này: tool truyền thẳng (o.birth) hoặc lấy từ ngữ
-      // cảnh tool đã set. CỐ Ý không đụng birthSnapshot()/localStorage — lá số
-      // còn sót từ tool khác sẽ gắn nhầm chủ nhân cho bản chia sẻ.
-      var bLine = shareBirthLines(o);
-      if (bLine) {
-        if (blocks) blocks.unshift({ header: 'Lá số dùng để luận', text: bLine });
-        else if (kind === 'text') text = bLine + '\n\n' + (text || '');
-        else blocks = [{ header: 'Lá số dùng để luận', text: bLine },
-          { header: null, image: o.imageUrl || null, text: text }];
-      }
-      shareable = {
-        kind: kind,
-        toolId: o.toolId || ACTIVE || 'app',
-        title: String(o.title || 'Kết quả Luận Đường').slice(0, 160),
-        imageUrl: o.imageUrl || null,
-        text: text,
-        blocks: blocks,
-      };
+      // Chốt trạng thái hiện/ẩn TRƯỚC rồi mới tắt tiếng: gọi ngược lại thì cạnh
+      // lên "lượt chạy mới" của chính lượt này gỡ luôn cờ vừa đặt (tool báo lỗi
+      // khi khung kết quả đang hiện → shell vẫn tự đỡ đè lên lời khai của tool).
+      if (!o) { shareable = null; refreshWsShare(); _shareMuted = true; autoShare = null; renderShareBtn(); return; }
+      shareable = normalizeShare(o); _shareMuted = false;
       renderShareBtn();
     },
   };
@@ -1601,7 +2011,7 @@
       ctxChips = ctxChipsOrig.slice(); greet({ greeting: 'Bắt đầu hội thoại mới. Bạn muốn hỏi gì về lá số này?' });
       // Hội thoại mới → đếm lại câu, và cho thẻ mời có cơ hội hiện lại (một lần
       // mỗi hội thoại, không phải một lần mỗi phiên trình duyệt).
-      _askCount = 0; _upsellShown = false; _cungAsked = [];
+      _askCount = 0; _upsellShown = false; _cungAsked = []; _suggestShown = false; pendingSuggest = null;
       renderRailMeter();
     }
   }
@@ -1640,7 +2050,7 @@
     var acc = '';
     try {
       var headers = { 'Content-Type': 'application/json' };
-      var token = getToken(); if (token) headers['Authorization'] = 'Bearer ' + token;
+      var token = await freshToken(); if (token) headers['Authorization'] = 'Bearer ' + token;
       // anon_id đi kèm để server đếm lượt DÙNG THỬ khi chưa đăng nhập. Người đã
       // đăng nhập vẫn gửi (vô hại — server bỏ qua vì có token).
       var body = { session_id: sessionId, stream: true, messages: messages.slice(-12), client: { platform: 'web', version: '1.0.0', anon_id: anonId() } };
@@ -1654,6 +2064,19 @@
         if (body.scenario) { body.scenario = Object.assign({}, body.scenario, { authorName: _author.name, authorStyle: _author.style }); }
       }
       var res = await fetch('/api/v1/chat', { method: 'POST', headers: headers, body: JSON.stringify(body) });
+      // ── 401 dù VỪA gửi token → ép xoay MỘT lần rồi thử lại ─────────────
+      // Còn đúng một khe hở sau khi đã kiểm hạn ở trên: đồng hồ máy lệch, hoặc
+      // phiên bị thu hồi phía server. Thử lại một lượt rẻ hơn nhiều so với việc
+      // quẳng tường đăng nhập vào mặt người đang đăng nhập. CHỈ thử khi lượt
+      // đầu CÓ token — không có token thì đây là khách thật, 401 là đúng.
+      if (res.status === 401 && token && window.Auth && Auth.refresh) {
+        var token2 = null;
+        try { token2 = await Auth.refresh(); } catch (e) { /* ignore */ }
+        if (token2 && token2 !== token) {
+          headers['Authorization'] = 'Bearer ' + token2;
+          res = await fetch('/api/v1/chat', { method: 'POST', headers: headers, body: JSON.stringify(body) });
+        }
+      }
       if (res.status === 401) {
         // Hết phần DÙNG THỬ (khách vô danh đã hỏi hết số câu được cấp) → tường
         // ĐĂNG KÝ, không phải hộp đăng nhập trơ. Người này chưa có tài khoản nên
@@ -1720,6 +2143,7 @@
           else if (ev.name === 'done' && ev.data) {
             if (ev.data.suggestions && ev.data.suggestions.length) ctxChips = ev.data.suggestions.slice(0, 4);
             applyPaywallInfo(ev.data.paywall);
+            if (ev.data.toolSuggest) pendingSuggest = ev.data.toolSuggest;
           }
         }
       }
@@ -1730,6 +2154,7 @@
       // Thẻ mời SAU khi câu trả lời đã hiện xong — chèn trước lúc đó thì nó đứng
       // chen giữa lúc người ta đang đọc, thành quảng cáo cắt ngang.
       maybeShowUpsell();
+      if (pendingSuggest) { showToolSuggest(pendingSuggest); pendingSuggest = null; }
       // Đến từ link chia sẻ + đã hỏi thật lần đầu → ghi nhận 1 lượt chuyển đổi.
       if (_fromshareId && !_convFired) { _convFired = true; trackConvert(_fromshareId); }
     } catch (e) {
@@ -1739,6 +2164,41 @@
     } finally {
       streaming = false; setSend(true); renderSuggs(); chat.scrollTop = chat.scrollHeight;
     }
+  }
+
+  // ── THẺ GỢI Ý CÔNG CỤ (bước 4) ──
+  // Server chỉ ĐỀ NGHỊ; chỗ giữ luật "tối đa MỘT lần mỗi cuộc trò chuyện" nằm
+  // ở đây, vì client mới là bên có trạng thái phiên. Model được dặn tự kiềm chế
+  // trong mô tả tool, nhưng dặn không phải là chặn — nó quên là mỗi lượt một
+  // thẻ, và một khung chat đầy thẻ mời thì đọc thành quảng cáo.
+  var pendingSuggest = null;   // thẻ của lượt này, dựng sau khi chữ hiện xong
+  var _suggestShown = false;   // đã hiện thẻ trong cuộc trò chuyện này chưa
+
+  function showToolSuggest(s) {
+    if (_suggestShown || !s || !s.path || !s.label) return;
+    // Chốt lại ở client: không bao giờ dẫn ra ngoài site, không nhận
+    // javascript:. `path` do DANH MỤC cấp chứ không do model, nhưng đây là thứ
+    // đi thẳng vào href nên vẫn kiểm.
+    if (String(s.path).charAt(0) !== '/' || String(s.path).indexOf('//') === 0) return;
+    _suggestShown = true;
+    var chat = document.getElementById('chat');
+    if (!chat) return;
+    var d = document.createElement('div');
+    d.className = 'tool-suggest';
+    // ⛔ KHÔNG hiện giá — xem lib/tools/suggest-tool.ts. Thẻ chỉ nói CÔNG CỤ
+    // NÀO và GIÚP ĐƯỢC GÌ; người chat thường xuyên vốn đã có Lượng, dán giá
+    // vào đúng lúc họ đang cần giúp là biến chỉ đường thành chào hàng.
+    d.innerHTML =
+      '<div class="ts-b"><div class="ts-t">' + esc(s.label) + '</div>' +
+      '<div class="ts-d">' + esc(s.lyDo || '') + '</div></div>' +
+      '<a class="ts-go" href="' + esc(s.path) + '">Mở</a>';
+    chat.appendChild(d);
+    chat.scrollTop = chat.scrollHeight;
+    try { track('cta_click', { tool_id: s.toolId, slug: 'rail_suggest_shown' }); } catch (e) { /* ignore */ }
+    var go = d.querySelector('.ts-go');
+    if (go) go.addEventListener('click', function () {
+      try { track('cta_click', { tool_id: s.toolId, slug: 'rail_suggest_open' }); } catch (e) { /* ignore */ }
+    });
   }
 
   // ── COMMAND PALETTE ──
@@ -1808,15 +2268,34 @@
     document.body.classList.toggle('drawer-open', open);
   }
   window.shellSyncBackdrop = syncBackdrop;
+  // Số dư Lượng ngay dưới tên trong sidebar — trước đây chỗ đó chỉ có "Xem hồ
+  // sơ →" tĩnh, người dùng không biết còn bao nhiêu Lượng tới khi bí giữa
+  // chừng một tool. Đọc thẳng `_rc.balance` — cái rail ĐÃ tự nạp cho đồng hồ
+  // "Còn N câu hỏi" (loadRailStatus) — nên KHÔNG thêm lượt mạng riêng.
+  // Tự bảo vệ (không cần người gọi kiểm trước): khách vô danh hoặc chưa biết
+  // số dư thì giữ nguyên chữ cũ, không bịa số.
+  function paintSidebarBalance() {
+    try {
+      var s = window.Auth && Auth.getSession && Auth.getSession();
+      if (!(s && s.user)) return; // khách vô danh — giữ "Đăng nhập →"
+      var known = _rc.balance != null && !_rc.anon;
+      var txt = known ? _rc.balance.toLocaleString('vi-VN') : null;
+      var sub = document.getElementById('sbSub');
+      if (sub) sub.textContent = txt != null ? (txt + ' Lượng · Nạp thêm →') : 'Xem hồ sơ →';
+      var pill = document.getElementById('sbBalance');
+      if (pill) pill.textContent = txt != null ? txt : '—';
+    } catch (e) { /* ignore */ }
+  }
+
   function paintAuth() {
     try {
       var s = window.Auth && Auth.getSession && Auth.getSession();
       if (s && s.user) {
         var nm = (s.user.email || 'Bạn').split('@')[0];
         var e1 = document.getElementById('sbName'); if (e1) e1.textContent = nm;
-        var e2 = document.getElementById('sbSub'); if (e2) e2.textContent = 'Xem hồ sơ →';
         var e3 = document.getElementById('sbAva'); if (e3) e3.textContent = (nm[0] || '?').toUpperCase();
       }
+      paintSidebarBalance();
     } catch (e) { /* ignore */ }
   }
 
@@ -1865,8 +2344,10 @@
       '<button class="tab' + (isTool ? ' active' : '') + '" type="button" data-tab="tools">' + ti('grid') + 'Công cụ</button>' +
       '<a class="tab' + (isAcct ? ' active' : '') + '" href="/app/tai-khoan">' + ti('user') + 'Tài khoản</a>';
     document.body.appendChild(nav);
+    // Đi qua CHÍNH Shell.openRail (thay vì tự mở) để lời mời tắt được ở CẢ hai
+    // đường mở rail — mở bằng tab mà orb vẫn nhấp nháy thì nó nói sai.
     nav.querySelector('[data-tab="rail"]').addEventListener('click', function () {
-      var r = document.getElementById('shell-rail'); if (r) { r.classList.add('open'); syncBackdrop(); }
+      Shell.openRail();
     });
     nav.querySelector('[data-tab="tools"]').addEventListener('click', function () {
       var s = document.getElementById('shell-sidebar'); if (s) { s.classList.add('open'); syncBackdrop(); }
@@ -1903,6 +2384,28 @@
     } catch (e) { /* ignore */ }
   }
 
+  // `window.refreshNavCredits` là tín hiệu "số dư vừa đổi" dùng chung cả site
+  // (auth.js gọi sau đăng nhập, tuvi-paywall.js gọi sau khi trừ Lượng). Nối
+  // vào bằng ACCESSOR, không gán đè — thứ tự nạp script giữa auth.js/
+  // tuvi-paywall.js/shell.js không cố định theo từng trang, gán đè thì bên
+  // nạp trước mất hẳn hook mà không có gì báo (đúng mẹo `_hookBalanceRefresh`
+  // của tuvi-paywall.js, viết lại ở đây để không phụ thuộc file đó có mặt).
+  (function hookBalanceRefresh() {
+    var inner = window.refreshNavCredits;
+    try {
+      Object.defineProperty(window, 'refreshNavCredits', {
+        configurable: true,
+        get: function () {
+          return function () {
+            try { if (typeof inner === 'function') inner.apply(this, arguments); } catch (e) { /* ignore */ }
+            loadRailStatus(); // đọc lại ví thật, tự vẽ lại sidebar bên trong
+          };
+        },
+        set: function (fn) { inner = fn; },
+      });
+    } catch (e) { /* trình duyệt chặn defineProperty → sidebar vẫn tự đúng ở lượt tải trang sau */ }
+  })();
+
   // ── BOOT ──
   function boot() {
     // Marketing: nạp track.js (page_view tự bắn) + đánh dấu mở tool trong shell.
@@ -1910,6 +2413,8 @@
     // Viral: bắt ?ref= (người tới từ link chia sẻ) + nạp sẵn mã của chính mình.
     ensureReferralJs();
     loadRefCode();
+    // Ghi nguồn/cổ pháp: prefetch sớm, chưa cần dùng ngay (fire-and-forget).
+    ensureToolSourcesJs(function () { /* sẵn sàng cho lượt noteHtml() sau khi tool tính xong */ });
     // Sổ lá số — đặt SAU prefillForm của trang (trang gọi ở init của chính nó,
     // đồng bộ) nên không có lượt nào đá nhau: sổ chỉ điền khi form còn trống.
     ensureUserChartsJs();
@@ -1939,16 +2444,40 @@
     });
     // Theo dõi phiên đăng nhập tới khi SẴN SÀNG (Auth có thể refresh token async
     // qua cookie): cập nhật avatar/tên + nạp lại lịch sử NGAY khi token xuất hiện.
-    var tries = 0, hadTok = !!getToken();
+    var tries = 0, hadTok = !!getToken(), wasRestoring = false;
+    // Đã đăng nhập SẴN lúc boot (không phải vừa mới xuất hiện) ⇒ nhánh
+    // `tok && !hadTok` bên dưới sẽ KHÔNG BAO GIỜ đúng cho người này — nó chỉ
+    // bắt lúc token VỪA XUẤT HIỆN. Không gọi riêng ở đây thì số dư sidebar chỉ
+    // có sau khi họ mở một tool (chỗ DUY NHẤT khác gọi `loadRailStatus` là
+    // trong `setContext`), tức mở app lên vẫn thấy "Xem hồ sơ →" trống trơn.
+    if (hadTok) loadRailStatus();
     var t = setInterval(function () {
       paintAuth();
       var tok = !!getToken();
-      if (tok && !hadTok) { hadTok = true; pushLocalToServer(); refreshHistoryUI(); } // đăng nhập vừa sẵn sàng → đẩy local + kéo lịch sử server về
-      if (++tries > 30) clearInterval(t);
+      // Khôi phục xong mà VẪN không có token ⇒ đúng là khách vãng lai. Giờ mới
+      // hỏi ví được (lượt trong `setContext` đã cố ý bỏ qua lúc còn chưa biết).
+      var restoring = !!(window.Auth && Auth.isRestoring && Auth.isRestoring());
+      if (wasRestoring && !restoring && !tok) loadRailStatus();
+      wasRestoring = restoring;
+      // 🐞 `loadRailStatus()` ở đây là BẮT BUỘC, không phải cho đẹp. Nó chỉ chạy
+      // một lần trong `setContext`, mà lúc đó token thường CHƯA có (access token
+      // ~1h nên mở lại tab là hết hạn, Auth phải refresh qua cookie BẤT ĐỒNG BỘ).
+      // Không có token ⇒ hỏi `rail-status` theo đường KHÁCH VÔ DANH ⇒ đồng hồ
+      // chốt `_rc.anon=true`, và với máy đã tiêu hết 3 câu dùng thử thì nó hiện
+      // "Đã hết câu dùng thử · Đăng ký nhận thêm" cho ĐÚNG một người đang đăng
+      // nhập. Lịch sử đã có đường tự lành ở ngay dòng này từ trước; ví thì chưa.
+      if (tok && !hadTok) { hadTok = true; pushLocalToServer(); refreshHistoryUI(); loadRailStatus(); } // đăng nhập vừa sẵn sàng → đẩy local + kéo lịch sử + nạp lại ví
+      // Dừng NGAY khi đã bắt được token; còn không thì kiên nhẫn tới ~18 giây.
+      // Mốc cũ 9 giây là quá ngắn cho lượt refresh phải đi qua cookie server —
+      // quá hạn thì đồng hồ ví kẹt vĩnh viễn ở trạng thái khách vô danh.
+      if (tok || ++tries > 60) clearInterval(t);
     }, 300);
     // Empty-state intro (hướng B): trang khai window.SHELL_INTRO={key,title,desc}
     // + có #introHost → shell tự hiện cho người mới, ẩn sau lần dùng đầu.
     if (window.SHELL_INTRO && window.SHELL_INTRO.key) Shell.introOnce(window.SHELL_INTRO.key, window.SHELL_INTRO);
+    // Nút Chia sẻ của khung giữa: shell tự theo dõi vùng kết quả, tool không
+    // phải khai báo gì. Xem khối "CHIA SẺ WORKSPACE" ở trên.
+    watchWsResult();
     renderRecentAll();
     // Deep-link khôi phục từ hub Tài khoản: /app/<tool>?restore=<id> → khôi phục
     // đúng phiên (reload về ?auto=1 sạch trong restoreSession).

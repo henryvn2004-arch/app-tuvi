@@ -130,6 +130,24 @@
     return 'rgba(' + ((n >> 16) & 255) + ',' + ((n >> 8) & 255) + ',' + (n & 255) + ',' + a + ')';
   }
 
+  // Gãy nhãn thành TỐI ĐA 2 dòng, chọn chỗ ngắt cho hai dòng CÂN NHAU nhất
+  // thay vì ngắt tham lam: "Đường / công danh" gọn hơn "Đường công / danh",
+  // mà bề rộng của dòng dài nhất mới là thứ quyết định bán kính bên dưới.
+  function wrap2(ctx, text, maxW) {
+    var s = String(text || '');
+    if (ctx.measureText(s).width <= maxW) return [s];
+    var words = s.split(' ');
+    if (words.length < 2) return [s];
+    var best = null;
+    for (var k = 1; k < words.length; k++) {
+      var a = words.slice(0, k).join(' ');
+      var b = words.slice(k).join(' ');
+      var m = Math.max(ctx.measureText(a).width, ctx.measureText(b).width);
+      if (!best || m < best.m) best = { m: m, lines: [a, b] };
+    }
+    return best.lines;
+  }
+
   // ── Radar 12 chiều ─────────────────────────────────────────
   function veRadar(ctx, box, ho, opt) {
     opt = opt || {};
@@ -140,13 +158,44 @@
     var n = items.length;
     var cx = box.x + box.w / 2;
     var cy = box.y + box.h / 2;
-    // Chừa chỗ cho nhãn quanh vòng — không chừa thì chữ bị cắt ở mép canvas.
-    var R = Math.min(box.w, box.h) / 2 - Math.max(46, Math.min(box.w, box.h) * 0.17);
-    if (R <= 10) return;
+    var side = Math.min(box.w, box.h);
 
     var ang = function (i) {
       return (Math.PI * 2 * i) / n - Math.PI / 2;
     };
+
+    // ── Cỡ chữ + bán kính: ĐO nhãn rồi mới chốt, không chừa lề cố định ──
+    // Bản cũ lấy cỡ chữ theo bán kính (R*0.115 ⇒ 20px ở khổ 520) rồi chừa một
+    // lề cứng max(46, side*0.17) cho nhãn. Lề đó hẹp hơn bề rộng chữ THẬT của
+    // những nhãn dài nhất ("Đồng sự ngang hàng", "Nền tảng hậu phương") nên
+    // đuôi nhãn tràn khỏi canvas và bị cắt cụt. Nay: chốt cỡ chữ theo KHỔ vẽ,
+    // gãy nhãn dài xuống 2 dòng, rồi giải ngược R từ bề rộng đo được — bán
+    // kính tự co lại vừa đủ, không nhãn nào chạm mép dù nhãn có đổi.
+    var fs = Math.max(9, Math.min(12, Math.round(side * 0.021)));
+    ctx.font = fs + 'px ' + (opt.sans || 'system-ui, sans-serif');
+    var lh = fs * 1.25;
+
+    var labs = items.map(function (it) {
+      return wrap2(ctx, it.nhan, side * 0.145);
+    });
+    var labW = labs.map(function (ls) {
+      return ls.reduce(function (m, s) {
+        return Math.max(m, ctx.measureText(s).width);
+      }, 0);
+    });
+
+    var R = side / 2 - fs * 2;
+    for (var q = 0; q < n; q++) {
+      var aq = ang(q);
+      var cq = Math.abs(Math.cos(aq));
+      var sq = Math.abs(Math.sin(aq));
+      // Nhãn trên/dưới căn giữa nên chỉ ăn NỬA bề rộng về mỗi phía.
+      var halfW = cq < 0.25 ? labW[q] / 2 : labW[q];
+      var halfH = ((labs[q].length - 1) * lh) / 2 + fs * 0.7;
+      if (cq > 0.02) R = Math.min(R, (box.w / 2 - 3 - halfW) / cq - fs * 1.5);
+      if (sq > 0.02) R = Math.min(R, (box.h / 2 - 3 - halfH) / sq - fs * 1.1);
+    }
+    if (R <= 10) return;
 
     ctx.lineWidth = 1;
     [0.25, 0.5, 0.75, 1].forEach(function (t) {
@@ -187,8 +236,6 @@
     ctx.lineWidth = 2;
     ctx.stroke();
 
-    var fs = Math.max(9, Math.round(R * 0.115));
-    ctx.font = fs + 'px ' + (opt.sans || 'system-ui, sans-serif');
     ctx.textBaseline = 'middle';
     items.forEach(function (it, i) {
       var a = ang(i);
@@ -197,7 +244,11 @@
       var c = Math.cos(a);
       ctx.textAlign = Math.abs(c) < 0.25 ? 'center' : c > 0 ? 'left' : 'right';
       ctx.fillStyle = it.namNay ? KIEU_MAU[ho.kieu.id] : dim;
-      ctx.fillText(it.nhan, lx, ly);
+      var lines = labs[i];
+      var y0 = ly - ((lines.length - 1) * lh) / 2;
+      lines.forEach(function (s, k) {
+        ctx.fillText(s, lx, y0 + k * lh);
+      });
       // Chấm điểm ngay trên đỉnh — để đọc được con số mà không cần bảng.
       var t = Math.max(0, Math.min(1, it.diem / 10));
       ctx.beginPath();
@@ -287,12 +338,16 @@
   }
 
   // ── Render HTML kết quả ────────────────────────────────────
-  function bangHTML(ho) {
+  //
+  // Tách HEAD (kiểu người — tên + tư tưởng + một câu) khỏi BODY (mọi thứ còn
+  // lại: 6 thẻ · mạnh/yếu · ngành nghề · radar 12 mặt · lộ trình 4 chặng ·
+  // ghép đội · cơ sở). Khách CHƯA đăng ký chỉ được xem HEAD — đó là "phần đầu"
+  // đủ để thấy tool ĐÚNG là đang đọc lá số của họ, còn BODY gộp vào cùng tấm
+  // khoá với tầng nhánh trả tiền (`dungTuong` bên `app-cong-so.html`).
+  function headHTML(ho) {
     var mau = KIEU_MAU[ho.kieu.id];
     var k = ho.kieu;
-    var h = [];
-
-    h.push(
+    return (
       '<div class="cs-head" style="border-left:4px solid ' + mau + '">' +
         '<div class="cs-kieu" style="color:' + mau + '">' + esc(k.ten) + '</div>' +
         '<div class="cs-tt">' + esc(k.tuTuong) + ' · ' + esc(k.saoNhom.join(' · ')) + '</div>' +
@@ -304,6 +359,12 @@
           : '') +
         '</div>'
     );
+  }
+
+  function bodyHTML(ho) {
+    var mau = KIEU_MAU[ho.kieu.id];
+    var k = ho.kieu;
+    var h = [];
 
     h.push(
       '<div class="cs-grid">' +
@@ -463,11 +524,99 @@
     return h.join('');
   }
 
+  /** Bản gộp — dùng khi KHÔNG cần tách head/body (vd người đã đăng nhập). */
+  function bangHTML(ho) {
+    return headHTML(ho) + bodyHTML(ho);
+  }
+
   function card(t, body) {
     return '<div class="cs-card"><b>' + t + '</b><div>' + body + '</div></div>';
   }
   function row(k, v) {
     return '<div class="cs-row"><span>' + esc(k) + '</span><div>' + esc(v) + '</div></div>';
+  }
+
+  // ── TẦNG NHÁNH (phần trả tiền) ─────────────────────────────
+  // Chỉ dựng được khi payload đến từ POST — lượt GET tính thử KHÔNG mang
+  // `hoSo.nhanh` (server gỡ bằng `hoSoTinhThu`). Nên hàm này tự trả '' nếu
+  // không có dữ liệu, thay vì dựng khung rỗng trông như hỏng.
+  function nhanhHTML(ho) {
+    var nh = ho && ho.nhanh;
+    if (!nh || !nh.goiY || !nh.goiY.length) return '';
+    var h = [];
+
+    h.push('<div class="cs-sec"><h3>Nhánh nghề hợp với bạn</h3>');
+    h.push(
+      '<p class="cs-note">Ba tầng ở trên nói bạn hợp <b>lĩnh vực</b> nào và ' +
+        'ở <b>quy mô</b> nào. Phần này nói <b>nhánh cụ thể</b> bên trong lĩnh vực đó — ' +
+        'cùng một ngành nhưng mỗi nhánh cần một chất người khác hẳn.</p>'
+    );
+
+    if (nh.moNhat) {
+      h.push(
+        '<div class="cs-warn">Lá số của bạn <b>không chỉ ra một nhánh nào nổi bật</b> ' +
+          'trong lĩnh vực này. Nói thẳng là chưa đủ tín hiệu để chốt — phần dưới chỉ là ' +
+          'hướng tham khảo, đừng đọc như một lời khẳng định.</div>'
+      );
+    }
+    if (nh.lechBac) {
+      h.push(
+        '<div class="cs-warn">Các nhánh dưới đây hợp với <b>chất người</b> của bạn nhưng ' +
+          '<b>chưa khớp bậc chức phận hiện tại</b>. Đọc chúng như HƯỚNG ĐI, không phải chỗ ' +
+          'đứng ngay bây giờ.</div>'
+      );
+    }
+
+    nh.goiY.forEach(function (g, i) {
+      h.push(
+        '<div class="cs-nhanh' + (g.phoThong ? ' cs-nhanh-pt' : '') + '">' +
+          '<div class="cs-nhanh-top">' +
+            '<span class="cs-nhanh-ten">' + (i + 1) + '. ' + esc(g.ten) + '</span>' +
+            // Nhánh phổ thông KHÔNG hiện % — con số ở đó vô nghĩa vì nghề không
+            // đòi một chất người đặc thù nào, bày ra là giả vờ có kết luận.
+            (g.phoThong ? '' : '<span class="cs-nhanh-diem">khớp ' + esc(String(g.diem)) + '%</span>') +
+          '</div>' +
+          '<div class="cs-nhanh-chat">' + esc(g.chat) + '</div>' +
+          (g.vi && g.vi.length
+            ? '<div class="cs-nhanh-vi"><b>Vì sao hợp:</b> ' + g.vi.map(esc).join(' · ') + '</div>'
+            : '') +
+          '<ul class="cs-nganh">' + g.viec.map(function (v) { return '<li>' + esc(v) + '</li>'; }).join('') + '</ul>' +
+          (g.hopBac ? '' : '<div class="cs-nhanh-bac">Nhánh này thường ở bậc khác với bậc chức phận lá số đang chỉ ra.</div>') +
+        '</div>'
+      );
+    });
+
+    if (nh.chatNguoi && nh.chatNguoi.length) {
+      h.push(
+        '<div class="cs-grid">' +
+          row('Chất người nổi bật', nh.chatNguoi.map(function (t) { return t.ten + ' — ' + t.cao; }).join(' · ')) +
+          // ⚠️ Nhãn PHẢI là "nghề không đòi hỏi", KHÔNG được viết thành "bạn
+          // thiếu". Đây là chỗ duy nhất trong tool có thể xúc phạm người dùng
+          // bằng một dòng nhãn, và không test nào bắt được.
+          (nh.neTranh && nh.neTranh.length
+            ? row('Nghề hợp với bạn thường KHÔNG đòi hỏi', nh.neTranh.map(function (t) { return t.ten + ' — ' + t.thap; }).join(' · '))
+            : '') +
+        '</div>'
+      );
+    }
+
+    h.push(
+      // "tvmb-src-note" + data-share-skip: đánh dấu để shell.js không tự chèn
+      // chồng thêm một khối nguồn thứ hai (xem `maybeAppendSrcNote` trong
+      // shell.js), và loại khối này khỏi bản chia sẻ tự suy.
+      '<p class="cs-note tvmb-src-note" data-share-skip>📚 <b>Nguồn:</b> Theo <i>Tử Vi Đẩu Số Tân Biên</i> ' +
+        '(Vân Đằng Thái Thứ Lang) và <i>Trung Châu Phái — Lục Thập Tinh Hệ</i> (Vương Đình Chi). ' +
+        'Bốn kiểu người và cách gợi ngành là phương pháp riêng do <b>đội ngũ chuyên gia Tử Vi Minh Bảo</b> xây dựng.<br><br>' +
+        'Con số phần trăm là độ <b>khớp giữa chất người và chất việc</b>, ' +
+        '<b>không phải</b> khả năng thành công. Danh sách nghề là quy chiếu của trang cho ' +
+        'bối cảnh Việt Nam; đang làm nghề không có trong danh sách thì đối chiếu theo ' +
+        '<b>chất việc</b>, đừng đọc thành “bạn đang làm sai nghề”. ' +
+        // Đường dẫn ghi công — giấy phép CC BY của bộ dữ liệu dùng để CHẤM đòi
+        // ghi công, nhưng bản đọc KHÔNG nêu tên nguồn (xem CLAUDE.md). Một link
+        // ở cuối phần là chỗ đúng: không chen vào nội dung, mà vẫn có đường tới.
+        '<a href="/nguon-du-lieu.html" target="_blank" rel="noopener">Nguồn dữ liệu →</a></p></div>'
+    );
+    return h.join('');
   }
 
   // ── Gọi API ────────────────────────────────────────────────
@@ -484,9 +633,42 @@
       .catch(function () { return null; });
   }
 
+  /**
+   * Mở TẦNG NHÁNH — đường TRẢ TIỀN. POST chứ không GET vì lượt này động tới ví.
+   * `slug` PHẢI bắt đầu bằng đúng `cong-so`: `hasRecentToolPayment` lọc
+   * `slug=like.<tool_id>*`, slug ngắn hơn thì lưới đỡ "đã trả tiền mà vẫn ăn
+   * 402" chết im lặng — đã trả giá một lần ở Duyên Nợ.
+   */
+  function moNhanh(p, slug, token) {
+    var head = { 'Content-Type': 'application/json' };
+    if (token) head.Authorization = 'Bearer ' + token;
+    return fetch('/api/cong-so', {
+      method: 'POST',
+      headers: head,
+      body: JSON.stringify({
+        d: p.ngay, m: p.thang, y: p.nam, gio: p.gio,
+        gt: p.gioiTinh === 'nu' ? 'nu' : 'nam',
+        am: p.amLich ? '1' : '0',
+        tt: p.trangThai || 'nhan-vien',
+        slug: slug,
+      }),
+    }).then(function (r) {
+      return r.json().then(function (j) {
+        // Trả cả status để trang phân biệt "chưa trả tiền" (402 → dựng lại
+        // tường) với lỗi thật (500 → báo lỗi). Nuốt hết thành null là người
+        // dùng vừa trả tiền xong lại thấy một câu lỗi chung chung.
+        return { ok: r.ok && j && j.ok, status: r.status, data: j };
+      });
+    });
+  }
+
   window.CongSoTool = {
     lap: lap,
+    moNhanh: moNhanh,
+    headHTML: headHTML,
+    bodyHTML: bodyHTML,
     bangHTML: bangHTML,
+    nhanhHTML: nhanhHTML,
     veToaDoCanvas: veToaDoCanvas,
     veRadarCanvas: veRadarCanvas,
     posterDraw: posterDraw,

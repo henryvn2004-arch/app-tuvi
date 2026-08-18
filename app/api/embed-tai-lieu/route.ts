@@ -9,7 +9,7 @@ const OPENAI_KEY   = process.env.OPENAI_API_KEY!;
 const BATCH_SIZE   = 10;
 
 async function sbFetch(path: string, opts: RequestInit = {}) {
-  const res = await fetch(`${SUPABASE_URL}/rest/v1${path}`, {
+  const res = await fetch(`${SUPABASE_URL}/rest/v1${path}`, { cache: 'no-store',
     ...opts,
     headers: { 'Content-Type': 'application/json', 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}`, ...(opts.headers as Record<string,string> || {}) },
   });

@@ -97,12 +97,35 @@ export const HAN_VIET: Record<string, string> = {
   // 🐞 `屠` (Thiên Đồ Sát) do CHÍNH `scripts/check-terms.mjs` bắt được — nó
   // hiếm nên không rơi vào lưới đo tay lúc dựng bảng.
   屠: 'Đồ',
+  // 🐞 4 chữ dưới lọt ra tool Bát Tự trên PROD, bắt được khi quét rộng 352 lá
+  // số (lưới của bộ dò chỉ 3 lá nên không thấy): `妄语煞` ra *"妄 语 Sát"*,
+  // `戟锋煞` ra *"戟 Phong Sát"*, `岁窠` ra *"Tuế 窠"*.
+  妄: 'Vọng', 语: 'Ngữ', 窠: 'Khoa', 戟: 'Kích',
+  // 🔑 14 chữ dưới thì 352 lá số VẪN KHÔNG sinh ra — chúng chỉ lộ khi bỏ hẳn
+  // lối quét mẫu và đối chiếu với TRỌN từ vựng thần sát của nguồn (199 tên).
+  // Bài học: quét mẫu chỉ chứng minh được thứ mẫu CHẠM TỚI; muốn nói "bảng
+  // phủ đủ" thì phải đọc chính danh sách của nguồn.
+  狡: 'Giảo', 挂: 'Quải', 颠: 'Điên', 倒: 'Đảo', 平: 'Bình', 悬: 'Huyền',
+  针: 'Châm', 字: 'Tự', 杖: 'Trượng', 阙: 'Khuyết', 曲: 'Khúc', 脚: 'Cước',
+  聋: 'Lung', 哑: 'Á',
 };
 
-/** Phiên một chuỗi Hán sang Hán-Việt, cách nhau bằng dấu cách. */
+/**
+ * Phiên một chuỗi Hán sang Hán-Việt, cách nhau bằng dấu cách.
+ *
+ * 🐞 Rơi về CAN/CHI là BẮT BUỘC, không phải phòng xa: `HAN_VIET` dựng từ chữ
+ * trong TÊN CÁCH CỤC nên không có địa chi — y hệt cái bẫy mà chú thích của
+ * `canChiViet` ngay dưới đã tả. Thần sát bát tự thì mang địa chi thật:
+ * `九丑` ra *"Cửu 丑"* trên prod cho tới lượt vá này.
+ *
+ * ⚠️ `HAN_VIET` phải đứng TRƯỚC — đây là thay đổi CỘNG THÊM, không được đổi
+ * chuỗi nào đang đúng. `辰` là chữ DUY NHẤT hai bảng đọc khác nhau
+ * (`HAN_VIET` "Thần" của 时辰/星辰 vs địa chi "Thìn"); đảo thứ tự là lặng lẽ
+ * viết lại mọi chỗ đang đọc "Thần".
+ */
 export function phienAm(han: string): string {
   return Array.from(String(han || ''))
-    .map((c) => HAN_VIET[c] || c)
+    .map((c) => HAN_VIET[c] || CAN_HAN[c] || CHI_HAN[c] || c)
     .join(' ')
     .replace(/\s+/g, ' ')
     .trim();

@@ -263,6 +263,7 @@ body{font-family:Arial,sans-serif;background:var(--bg-soft);color:var(--text);mi
       <button class="tab-btn active" data-tab="lichsu"><span class="tab-ic" data-icon="layout-grid"></span> Lịch Sử <span id="countAll" class="chat-count" style="margin-left:.35rem;display:none"></span></button>
       <button class="tab-btn" data-tab="credits"><span class="tab-ic" data-icon="wallet"></span> Ví Lượng</button>
       <button class="tab-btn" data-tab="ketnoi"><span class="tab-ic" data-icon="link"></span> Kết Nối</button>
+      <button class="tab-btn" data-tab="thaynho"><span class="tab-ic" data-icon="scroll-text"></span> Thầy Nhớ</button>
       <button class="tab-btn" data-tab="account"><span class="tab-ic" data-icon="user"></span> Tài Khoản</button>
     </div>
 
@@ -544,6 +545,44 @@ body{font-family:Arial,sans-serif;background:var(--bg-soft);color:var(--text);mi
       </div>
     </div>
 
+    <!-- Tab: Thầy Nhớ (hồ sơ tầng 2 — xem/sửa/xoá thứ Thầy tự ghi lại) -->
+    <div class="tab-content" id="tab-thaynho">
+      <style>
+        .mem-intro{background:var(--gold-lt,#F9F4EB);border:1px solid var(--gold-soft,#e8d9b0);border-radius:10px;padding:.9rem 1rem;margin-bottom:1rem;font-size:.87rem;line-height:1.6;color:var(--text)}
+        .mem-item{display:flex;gap:.7rem;align-items:flex-start;padding:.75rem .85rem;border:1px solid var(--line,#e6e2d8);border-radius:10px;margin-bottom:.55rem;background:var(--surface,#fff)}
+        .mem-body{flex:1;min-width:0}
+        .mem-kind{font-size:.72rem;font-weight:700;color:var(--text-lt);text-transform:uppercase;letter-spacing:.03em}
+        .mem-text{font-size:.9rem;line-height:1.5;color:var(--text);margin-top:.15rem;word-wrap:break-word}
+        .mem-src{font-size:.72rem;color:var(--text-lt);margin-top:.2rem}
+        .mem-act{display:flex;gap:.35rem;flex-shrink:0}
+        .mem-btn{border:1px solid var(--line,#e6e2d8);background:transparent;border-radius:7px;padding:.35rem .6rem;font-size:.78rem;cursor:pointer;color:var(--text)}
+        .mem-btn:hover{background:var(--gold-lt,#F9F4EB)}
+        .mem-btn.danger{color:var(--tx-red,#C0392B);border-color:#e2b6b0}
+        .mem-edit{width:100%;font-size:.9rem;padding:.5rem;border:1px solid var(--line,#e6e2d8);border-radius:7px;background:var(--surface,#fff);color:var(--text);font-family:inherit}
+        .mem-empty{text-align:center;padding:2rem 1rem;color:var(--text-lt);font-size:.9rem;line-height:1.7}
+        .mem-add{display:flex;gap:.5rem;margin-top:1rem;flex-wrap:wrap}
+        .mem-add select,.mem-add input{font-size:16px;padding:.55rem;border:1px solid var(--line,#e6e2d8);border-radius:8px;background:var(--surface,#fff);color:var(--text)}
+        .mem-add input{flex:1;min-width:180px}
+      </style>
+      <div class="account-section">
+        <h3>Thầy nhớ gì về bạn</h3>
+        <div class="mem-intro">
+          Trong lúc trò chuyện, Thầy tự ghi lại vài điều về hoàn cảnh của bạn để lần sau
+          còn biết mà hỏi thăm cho trúng — không phải hỏi lại từ đầu mỗi lần.
+          <b>Bạn toàn quyền sửa hoặc xoá bất cứ mục nào.</b> Xoá rồi là Thầy quên hẳn.
+          <br><br>
+          Những ghi chú này <b>chỉ dùng cho riêng cuộc trò chuyện của bạn</b> — không hiện
+          trong link chia sẻ, không in lên ảnh, không ai khác đọc được.
+        </div>
+        <div id="memList"><div class="mem-empty">Đang tải…</div></div>
+        <div class="mem-add">
+          <select id="memAddKind" aria-label="Nhóm"></select>
+          <input id="memAddText" type="text" placeholder="Tự thêm một điều bạn muốn Thầy nhớ…" maxlength="200"/>
+          <button class="btn-primary" onclick="memAdd()">Thêm</button>
+        </div>
+      </div>
+    </div>
+
     <!-- Tab: Tài Khoản -->
     <div class="tab-content" id="tab-account">
       <div id="accountContent">
@@ -642,6 +681,6 @@ body{font-family:Arial,sans-serif;background:var(--bg-soft);color:var(--text);mi
 
 <script src="/nav.js?v=22"></script>
 <script src="/auth.js?v=2"></script>
-<script src="/account-core.js?v=2"></script>
+<script src="/account-core.js?v=3"></script>
 </body>
 </html>

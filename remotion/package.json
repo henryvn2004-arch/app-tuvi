@@ -1,0 +1,22 @@
+{
+  "name": "tuvi-video",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Dựng video dọc 9:16 cho social — xem docs/VIDEO-PIPELINE.md",
+  "scripts": {
+    "studio": "remotion studio",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@remotion/cli": "4.0.409",
+    "@remotion/media-utils": "4.0.409",
+    "@remotion/renderer": "4.0.409",
+    "react": "19.2.0",
+    "react-dom": "19.2.0",
+    "remotion": "4.0.409"
+  },
+  "devDependencies": {
+    "@types/react": "19.2.2",
+    "typescript": "^5.9.3"
+  }
+}

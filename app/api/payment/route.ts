@@ -14,8 +14,9 @@ import { getToolPrice } from '@/lib/billing/pricing';
 import { hasSlugAccess } from '@/lib/billing/credits';
 import { freeGenGate, FREE_GEN_CAP_MESSAGE, railFreeRemaining } from '@/lib/billing/viral-budget';
 import { anonTrialStatus } from '@/lib/billing/anon-trial';
+import { syncOnboardingTasks } from '@/lib/onboarding/tasks';
 import { getConfigValue } from '@/lib/config/appConfig';
-import { CRON_RUNS_LIMIT, evaluateJobs, fetchPgcronRuns, syncJobFirstSeen } from '@/lib/ops/jobs';
+import { CRON_RUNS_LIMIT, JOBS, evaluateJobs, fetchPgcronRuns, syncJobFirstSeen } from '@/lib/ops/jobs';
 import { checkEnv } from '@/lib/ops/preflight';
 import { logCronRun } from '@/lib/cron/log';
 import { tgSendMessage } from '@/lib/channels/telegram';
@@ -25,6 +26,10 @@ import { getAdminUser } from '@/lib/admin/auth';
 import { generateContentSuggestions } from '@/lib/marketing/content-suggestions';
 import { generateContentPackText } from '@/lib/marketing/content-pack';
 import { SUPPORTED_CHANNELS } from '@/lib/media/publish';
+import {
+  listMemory, rememberFact, forgetFact, editFact,
+  MEMORY_KIND_LABELS, MAX_MEMORY_ITEMS, MAX_MEMORY_LEN,
+} from '@/lib/memory/store';
 
 const PAYPAL_BASE = process.env.PAYPAL_MODE === 'live'
   ? 'https://api-m.paypal.com'
@@ -68,9 +73,14 @@ const SB_HEADERS = {
   'Authorization': `Bearer ${SUPABASE_KEY}`,
 };
 
+// ⚠️ `cache:'no-store'` BẮT BUỘC: Next bọc `fetch` toàn cục và nhớ kết quả kể
+// cả trong route động. Đây là CỬA XÁC THỰC của toàn bộ /api/payment — gồm cả
+// nhánh admin — nên một phản hồi bị nhớ lại nghĩa là phiên đã huỷ / quyền vừa
+// bị gỡ vẫn qua cửa. Cùng bài học đã trả giá ở `hasSlugAccess`.
 async function getUserFromToken(token: string): Promise<{ id: string; email?: string; created_at?: string } | null> {
   const res = await fetch(`${SUPABASE_URL}/auth/v1/user`, {
     headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${token}` },
+    cache: 'no-store',
   });
   if (!res.ok) return null;
   return await res.json();
@@ -94,7 +104,7 @@ async function logEvent(row: Record<string, unknown>): Promise<void> {
 async function getBalance(userId: string): Promise<number> {
   const res = await fetch(
     `${SUPABASE_URL}/rest/v1/user_credits?user_id=eq.${encodeURIComponent(userId)}&select=balance&limit=1`,
-    { headers: SB_HEADERS }
+    { cache: 'no-store', headers: SB_HEADERS }
   );
   if (!res.ok) return 0;
   const rows = await res.json();
@@ -285,7 +295,7 @@ async function handleCapture(body: Record<string, unknown>): Promise<Response> {
     if (order.status === 'COMPLETED') {
       const dupRes = await fetch(
         `${SUPABASE_URL}/rest/v1/credit_transactions?paypal_order_id=eq.${encodeURIComponent(orderId)}&limit=1&select=id`,
-        { headers: SB_HEADERS }
+        { cache: 'no-store', headers: SB_HEADERS }
       );
       if (dupRes.ok && (await dupRes.json()).length > 0) {
         return ok({ success: true, status: 'already_completed', credits: pkg.credits });
@@ -403,7 +413,7 @@ async function handleAdminGrant(request: NextRequest, body: Record<string, unkno
     // Resolve userId from email if needed
     let userId = targetId;
     if (!userId && targetEmail) {
-      const r = await fetch(`${SUPABASE_URL}/auth/v1/admin/users?email=${encodeURIComponent(targetEmail)}`, {
+      const r = await fetch(`${SUPABASE_URL}/auth/v1/admin/users?email=${encodeURIComponent(targetEmail)}`, { cache: 'no-store',
         headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` },
       });
       if (!r.ok) return err('User not found', 404);
@@ -528,7 +538,7 @@ async function handleAdminUsers(request: NextRequest, sp: URLSearchParams): Prom
     for (let page = 1; page <= MAX_PAGES; page++) {
       const authRes = await fetch(
         `${SUPABASE_URL}/auth/v1/admin/users?page=${page}&per_page=${perPage}`,
-        { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } }
+        { cache: 'no-store', headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } }
       );
       if (!authRes.ok) throw new Error(`Auth API failed: ${authRes.status}`);
       const authData = await authRes.json();
@@ -540,7 +550,7 @@ async function handleAdminUsers(request: NextRequest, sp: URLSearchParams): Prom
     // Fetch all credit balances
     const credRes = await fetch(
       `${SUPABASE_URL}/rest/v1/user_credits?select=user_id,balance`,
-      { headers: SB_HEADERS }
+      { cache: 'no-store', headers: SB_HEADERS }
     );
     const credits: { user_id: string; balance: number }[] = credRes.ok ? await credRes.json() : [];
     const creditMap: Record<string, number> = {};
@@ -550,7 +560,7 @@ async function handleAdminUsers(request: NextRequest, sp: URLSearchParams): Prom
     // signup_bonus/admin_grant (đều amount > 0) → không còn thổi phồng như cũ.
     const spendRes = await fetch(
       `${SUPABASE_URL}/rest/v1/credit_transactions?select=user_id&amount=lt.0`,
-      { headers: SB_HEADERS }
+      { cache: 'no-store', headers: SB_HEADERS }
     );
     const spends: { user_id: string }[] = spendRes.ok ? await spendRes.json() : [];
     const useCount: Record<string, number> = {};
@@ -652,7 +662,7 @@ async function handleCheckBank(sp: URLSearchParams): Promise<Response> {
   if (!orderCode) return err('Missing orderCode', 400);
   const res = await fetch(
     `${SUPABASE_URL}/rest/v1/bank_orders?order_code=eq.${encodeURIComponent(orderCode)}&select=status,credits&limit=1`,
-    { headers: SB_HEADERS }
+    { cache: 'no-store', headers: SB_HEADERS }
   );
   const rows: { status: string; credits: number }[] = res.ok ? await res.json() : [];
   if (!rows.length) return err('Order not found', 404);
@@ -665,22 +675,20 @@ async function handleCheckBank(sp: URLSearchParams): Promise<Response> {
 // chỉ đọc/ghi qua service key ở đây. Job Vercel tự log qua withCronLog;
 // edge (auto-pipeline) log tay trong trigger.
 const CRON_SECRET = process.env.CRON_SECRET || '';
-// Phải khớp với sổ job ở lib/ops/jobs.ts. Bảng này TRƯỚC ĐÂY cũng chỉ có 5
-// mục như sổ cũ trong admin.html, nên nút "Chạy ngay" của 5 job mới thêm không
-// hoạt động — cùng một kiểu trôi lệch giữa hai danh sách chép tay.
-const CRON_TRIGGERS: Record<string, { path?: string; edge?: string }> = {
-  'cron-khao-luan':    { path: '/api/cron-khao-luan' },
-  'cron-master-write': { path: '/api/cron-master-write' },
-  'cron-push':         { path: '/api/cron-push' },
-  'cron-daily-push':   { path: '/api/cron/daily-push' },
-  'auto-pipeline':     { edge: 'auto-pipeline' },
-  'ops-digest':        { path: '/api/cron/ops-digest' },
-  'cmo-digest':        { path: '/api/cron/cmo-digest' },
-  'anomaly-alerts':    { path: '/api/cron/anomaly-alerts' },
-  'autopilot-price':   { path: '/api/cron/autopilot-price' },
-  'autopilot-promo':   { path: '/api/cron/autopilot-promo' },
-  'autopilot-nudge':   { path: '/api/cron/autopilot-nudge' },
-};
+// 🔑 SUY TỪ SỔ JOB, không chép tay nữa.
+//
+// Bản trước là một bảng riêng ở đây, và chú thích của chính nó đã ghi: *"Bảng
+// này TRƯỚC ĐÂY cũng chỉ có 5 mục như sổ cũ trong admin.html, nên nút Chạy ngay
+// của 5 job mới thêm không hoạt động — cùng một kiểu trôi lệch giữa hai danh
+// sách chép tay."* Tức lỗi đã xảy ra một lần, được vá bằng cách CHÉP TAY lại
+// cho khớp — rồi trôi tiếp: tới 11/08 sổ khai 20 job có nút, bảng này biết 11,
+// nên `yt-drain`/`media-build`/`content-metrics`… bấm ra "Unknown job".
+//
+// Vá bằng cách chép tay lần thứ ba là hẹn lần trôi thứ ba. Đường dẫn nay nằm
+// TRONG sổ (`JobSpec.path`/`edge`), map này chỉ là phép chiếu.
+const CRON_TRIGGERS: Record<string, { path?: string; edge?: string }> = Object.fromEntries(
+  JOBS.filter((j) => j.path || j.edge).map((j) => [j.key, { path: j.path, edge: j.edge }]),
+);
 
 async function handleAdminCronRuns(request: NextRequest): Promise<Response> {
   const token = (request.headers.get('Authorization') || '').replace('Bearer ', '').trim();
@@ -825,7 +833,7 @@ const CHANNEL_PLATFORMS = ['telegram', 'messenger', 'whatsapp'] as const;
 
 async function countExact(path: string): Promise<number> {
   try {
-    const res = await fetch(`${SUPABASE_URL}/rest/v1/${path}`, {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/${path}`, { cache: 'no-store',
       headers: { ...SB_HEADERS, Prefer: 'count=exact' },
     });
     return parseInt(res.headers.get('content-range')?.split('/')[1] || '0', 10);
@@ -840,9 +848,9 @@ async function handleAdminChannels(request: NextRequest): Promise<Response> {
   const sevenDaysAgo = new Date(Date.now() - 7 * 864e5).toISOString().slice(0, 10);
   try {
     const [sessionsRes, linksRes, usageRes, webPush, nativeTotal, nativeEnabled] = await Promise.all([
-      fetch(`${SUPABASE_URL}/rest/v1/chat_sessions?select=platform,chat_id,updated_at&limit=5000`, { headers: SB_HEADERS }),
-      fetch(`${SUPABASE_URL}/rest/v1/chat_links?select=platform&limit=5000`, { headers: SB_HEADERS }),
-      fetch(`${SUPABASE_URL}/rest/v1/chat_usage?select=platform,count,day&day=gte.${sevenDaysAgo}&limit=5000`, { headers: SB_HEADERS }),
+      fetch(`${SUPABASE_URL}/rest/v1/chat_sessions?select=platform,chat_id,updated_at&limit=5000`, { cache: 'no-store', headers: SB_HEADERS }),
+      fetch(`${SUPABASE_URL}/rest/v1/chat_links?select=platform&limit=5000`, { cache: 'no-store', headers: SB_HEADERS }),
+      fetch(`${SUPABASE_URL}/rest/v1/chat_usage?select=platform,count,day&day=gte.${sevenDaysAgo}&limit=5000`, { cache: 'no-store', headers: SB_HEADERS }),
       countExact('push_subscriptions?select=id&limit=1'),
       countExact('push_tokens?select=token&limit=1'),
       countExact('push_tokens?select=token&enabled=eq.true&limit=1'),
@@ -886,7 +894,7 @@ async function handleAdminChannelBroadcast(request: NextRequest, body: Record<st
   if (!process.env.TELEGRAM_BOT_TOKEN) return err('Chưa cấu hình TELEGRAM_BOT_TOKEN', 400);
 
   try {
-    const res = await fetch(`${SUPABASE_URL}/rest/v1/chat_sessions?platform=eq.telegram&select=chat_id&limit=5000`, { headers: SB_HEADERS });
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/chat_sessions?platform=eq.telegram&select=chat_id&limit=5000`, { cache: 'no-store', headers: SB_HEADERS });
     const rows: { chat_id: string }[] = res.ok ? await res.json() : [];
     const chatIds = Array.from(new Set(rows.map((r) => r.chat_id)));
 
@@ -922,7 +930,7 @@ async function handleAdminNudgeUser(request: NextRequest, body: Record<string, u
     const since = new Date(Date.now() - 24 * 3600 * 1000).toISOString();
     const cooldownRes = await fetch(
       `${SUPABASE_URL}/rest/v1/events?user_id=eq.${userId}&event_type=eq.retention_nudge&ts=gte.${since}&select=id&limit=1`,
-      { headers: SB_HEADERS },
+      { cache: 'no-store', headers: SB_HEADERS },
     );
     const cooldownRows: unknown[] = cooldownRes.ok ? await cooldownRes.json() : [];
     if (cooldownRows.length) return err('Đã nhắc user này trong 24h qua — đợi thêm để tránh spam', 429);
@@ -931,7 +939,7 @@ async function handleAdminNudgeUser(request: NextRequest, body: Record<string, u
       if (!process.env.TELEGRAM_BOT_TOKEN) return err('Chưa cấu hình TELEGRAM_BOT_TOKEN', 400);
       const linkRes = await fetch(
         `${SUPABASE_URL}/rest/v1/chat_links?platform=eq.telegram&user_id=eq.${userId}&select=external_id&limit=1`,
-        { headers: SB_HEADERS },
+        { cache: 'no-store', headers: SB_HEADERS },
       );
       const linkRows: { external_id: string }[] = linkRes.ok ? await linkRes.json() : [];
       if (!linkRows.length) return err('User chưa liên kết Telegram', 400);
@@ -941,7 +949,7 @@ async function handleAdminNudgeUser(request: NextRequest, body: Record<string, u
       if (!FIREBASE_SA) return err('Chưa cấu hình FIREBASE_SERVICE_ACCOUNT', 400);
       const tokRes = await fetch(
         `${SUPABASE_URL}/rest/v1/push_tokens?user_id=eq.${userId}&enabled=eq.true&select=token`,
-        { headers: SB_HEADERS },
+        { cache: 'no-store', headers: SB_HEADERS },
       );
       const tokRows: { token: string }[] = tokRes.ok ? await tokRes.json() : [];
       if (!tokRows.length) return err('User chưa có thiết bị đăng ký nhận Push', 400);
@@ -1008,7 +1016,7 @@ function parseTopicLines(text: string): string[] {
 }
 
 async function queueCounts(typeFilter: string): Promise<Record<string, number>> {
-  const res = await fetch(`${SUPABASE_URL}/rest/v1/topic_queue?${typeFilter}&select=status&limit=5000`, { headers: SB_HEADERS });
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/topic_queue?${typeFilter}&select=status&limit=5000`, { cache: 'no-store', headers: SB_HEADERS });
   const rows: { status: string }[] = res.ok ? await res.json() : [];
   const counts: Record<string, number> = { pending: 0, processing: 0, done: 0, error: 0 };
   for (const r of rows) counts[r.status] = (counts[r.status] || 0) + 1;
@@ -1025,9 +1033,9 @@ async function handleAdminContentBoard(request: NextRequest): Promise<Response> 
     const [khCounts, ncCounts, khRes, ncRes, ytRes] = await Promise.all([
       queueCounts('type=not.in.(master-article,tai-lieu)'),
       queueCounts('type=eq.master-article'),
-      fetch(`${SUPABASE_URL}/rest/v1/khao_luan?select=slug,title,category,created_at&order=created_at.desc&limit=8`, { headers: SB_HEADERS }),
-      fetch(`${SUPABASE_URL}/rest/v1/master_articles?select=slug,title,master_id,created_at&order=created_at.desc&limit=8`, { headers: SB_HEADERS }),
-      fetch(`${SUPABASE_URL}/rest/v1/van_dap?publish_status=eq.published&select=id,title,chu_de,created_at&order=created_at.desc&limit=8`, { headers: SB_HEADERS }),
+      fetch(`${SUPABASE_URL}/rest/v1/khao_luan?select=slug,title,category,created_at&order=created_at.desc&limit=8`, { cache: 'no-store', headers: SB_HEADERS }),
+      fetch(`${SUPABASE_URL}/rest/v1/master_articles?select=slug,title,master_id,created_at&order=created_at.desc&limit=8`, { cache: 'no-store', headers: SB_HEADERS }),
+      fetch(`${SUPABASE_URL}/rest/v1/van_dap?publish_status=eq.published&select=id,title,chu_de,created_at&order=created_at.desc&limit=8`, { cache: 'no-store', headers: SB_HEADERS }),
     ]);
     const khItems = (khRes.ok ? await khRes.json() : []) as { slug: string; title: string; category: string; created_at: string }[];
     const ncItems = (ncRes.ok ? await ncRes.json() : []) as { slug: string; title: string; master_id: string; created_at: string }[];
@@ -1056,8 +1064,8 @@ async function handleAdminKhaoLuan(request: NextRequest): Promise<Response> {
   try {
     const [queueCountsRes, allRes, recentRes] = await Promise.all([
       queueCounts('type=not.in.(master-article,tai-lieu)'),
-      fetch(`${SUPABASE_URL}/rest/v1/khao_luan?select=category,created_at&limit=2000`, { headers: SB_HEADERS }),
-      fetch(`${SUPABASE_URL}/rest/v1/khao_luan?select=slug,title,category,master_id,created_at&order=created_at.desc&limit=40`, { headers: SB_HEADERS }),
+      fetch(`${SUPABASE_URL}/rest/v1/khao_luan?select=category,created_at&limit=2000`, { cache: 'no-store', headers: SB_HEADERS }),
+      fetch(`${SUPABASE_URL}/rest/v1/khao_luan?select=slug,title,category,master_id,created_at&order=created_at.desc&limit=40`, { cache: 'no-store', headers: SB_HEADERS }),
     ]);
     const all = (allRes.ok ? await allRes.json() : []) as { category: string; created_at: string }[];
     const recent = recentRes.ok ? await recentRes.json() : [];
@@ -1105,9 +1113,9 @@ async function handleAdminNghienCuu(request: NextRequest): Promise<Response> {
   try {
     const [queueCountsRes, profilesRes, allRes, recentRes] = await Promise.all([
       queueCounts('type=eq.master-article'),
-      fetch(`${SUPABASE_URL}/rest/v1/master_profiles?select=id,display_name,primary_article_type,specialty_topics&order=display_name.asc`, { headers: SB_HEADERS }),
-      fetch(`${SUPABASE_URL}/rest/v1/master_articles?select=master_id,word_count,created_at&limit=2000`, { headers: SB_HEADERS }),
-      fetch(`${SUPABASE_URL}/rest/v1/master_articles?select=slug,title,master_id,category,word_count,created_at&order=created_at.desc&limit=40`, { headers: SB_HEADERS }),
+      fetch(`${SUPABASE_URL}/rest/v1/master_profiles?select=id,display_name,primary_article_type,specialty_topics&order=display_name.asc`, { cache: 'no-store', headers: SB_HEADERS }),
+      fetch(`${SUPABASE_URL}/rest/v1/master_articles?select=master_id,word_count,created_at&limit=2000`, { cache: 'no-store', headers: SB_HEADERS }),
+      fetch(`${SUPABASE_URL}/rest/v1/master_articles?select=slug,title,master_id,category,word_count,created_at&order=created_at.desc&limit=40`, { cache: 'no-store', headers: SB_HEADERS }),
     ]);
     const profiles = (profilesRes.ok ? await profilesRes.json() : []) as { id: string; display_name: string; primary_article_type: string; specialty_topics: string[] }[];
     const all = (allRes.ok ? await allRes.json() : []) as { master_id: string; word_count: number; created_at: string }[];
@@ -1208,8 +1216,8 @@ async function handleAdminMcp(request: NextRequest): Promise<Response> {
 
   try {
     const [keysRes, usageRes] = await Promise.all([
-      fetch(`${SUPABASE_URL}/rest/v1/mcp_keys?select=key,tier,label,charts_allowed,backtest_years,future_years,active,created_at,user_id&order=created_at.desc&limit=500`, { headers: SB_HEADERS }),
-      fetch(`${SUPABASE_URL}/rest/v1/mcp_usage?select=key,tool,created_at&order=created_at.desc&limit=5000`, { headers: SB_HEADERS }),
+      fetch(`${SUPABASE_URL}/rest/v1/mcp_keys?select=key,tier,label,charts_allowed,backtest_years,future_years,active,created_at,user_id&order=created_at.desc&limit=500`, { cache: 'no-store', headers: SB_HEADERS }),
+      fetch(`${SUPABASE_URL}/rest/v1/mcp_usage?select=key,tool,created_at&order=created_at.desc&limit=5000`, { cache: 'no-store', headers: SB_HEADERS }),
     ]);
     if (!keysRes.ok) throw new Error(await keysRes.text());
     type McpKeyRow = { key: string; tier: string; label: string | null; charts_allowed: number; backtest_years: number; future_years: number; active: boolean; created_at: string; user_id: string | null };
@@ -1232,7 +1240,7 @@ async function handleAdminMcp(request: NextRequest): Promise<Response> {
     const emailMap: Record<string, string> = {};
     await Promise.all(userIds.map(async (uid) => {
       try {
-        const r = await fetch(`${SUPABASE_URL}/auth/v1/admin/users/${uid}`, {
+        const r = await fetch(`${SUPABASE_URL}/auth/v1/admin/users/${uid}`, { cache: 'no-store',
           headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` },
         });
         if (r.ok) { const u = await r.json(); if (u?.email) emailMap[uid] = u.email; }
@@ -1299,6 +1307,8 @@ export async function GET(request: NextRequest) {
   if (action === 'balance')      return handleBalance(searchParams);
   if (action === 'check')        return handleCheck(searchParams);
   if (action === 'signup-bonus') return handleSignupBonus();
+  if (action === 'promo-info')   return handlePromoInfo(searchParams);
+  if (action === 'admin-promo-list') return handleAdminPromoList(request);
   if (action === 'admin-users')  return handleAdminUsers(request, searchParams);
   if (action === 'admin-users-list') return handleAdminUsersList(request);
   if (action === 'admin-login-attempts') return handleAdminLoginAttempts(request);
@@ -1316,10 +1326,13 @@ export async function GET(request: NextRequest) {
   if (action === 'admin-mcp') return handleAdminMcp(request);
   if (action === 'admin-env-status') return handleAdminEnvStatus(request);
   if (action === 'my-referral') return handleMyReferral(request, searchParams);
+  if (action === 'my-memory')   return handleMyMemory(request);
   if (action === 'rail-status') return handleRailStatus(request, searchParams);
   if (action === 'signup-bonus') return handleSignupBonus();
   if (action === 'admin-viral') return handleAdminViral(request, searchParams);
   if (action === 'admin-tool-funnel') return handleAdminToolFunnel(request, searchParams);
+  if (action === 'admin-content-catalog') return handleAdminContentCatalog(request, searchParams);
+  if (action === 'admin-content-one') return handleAdminContentOne(request, searchParams);
   if (action === 'admin-content-pack') return handleAdminContentPack(request, searchParams);
   if (action === 'admin-media-queue') return handleAdminMediaQueue(request, searchParams);
   if (action === 'admin-seeding') return handleAdminSeeding(request);
@@ -1340,7 +1353,7 @@ async function handleAdminUsersList(request: NextRequest): Promise<Response> {
 
   const res = await fetch(
     `${SUPABASE_URL}/rest/v1/admin_users?select=email,display_name,team,role,active,invited_by,created_at&order=created_at.asc`,
-    { headers: SB_HEADERS }
+    { cache: 'no-store', headers: SB_HEADERS }
   );
   if (!res.ok) return err('Lỗi tải danh sách', 500);
   return ok({ users: await res.json() });
@@ -1356,7 +1369,7 @@ async function handleAdminLoginAttempts(request: NextRequest): Promise<Response>
 
   const res = await fetch(
     `${SUPABASE_URL}/rest/v1/admin_login_attempts?select=email,ip,success,method,detail,created_at&order=created_at.desc&limit=200`,
-    { headers: SB_HEADERS }
+    { cache: 'no-store', headers: SB_HEADERS }
   );
   if (!res.ok) return err('Lỗi tải audit log', 500);
   return ok({ attempts: await res.json() });
@@ -1397,7 +1410,7 @@ async function handleAdminUsersSetActive(request: NextRequest, body: Record<stri
 
   if (!active) {
     // Chặn khoá owner CUỐI CÙNG — tránh khoá hết quyền quản trị.
-    const r = await fetch(`${SUPABASE_URL}/rest/v1/admin_users?role=eq.owner&active=eq.true&select=email`, {
+    const r = await fetch(`${SUPABASE_URL}/rest/v1/admin_users?role=eq.owner&active=eq.true&select=email`, { cache: 'no-store',
       headers: SB_HEADERS,
     });
     const owners = r.ok ? await r.json() : [];
@@ -1426,10 +1439,10 @@ async function handleAdminUserDetail(request: NextRequest, sp: URLSearchParams):
 
   try {
     const [txnRes, attrRes, evRes, credRes] = await Promise.all([
-      fetch(`${SUPABASE_URL}/rest/v1/credit_transactions?user_id=eq.${uid}&order=created_at.desc&limit=100&select=amount,type,description,slug,created_at`, { headers: SB_HEADERS }),
-      fetch(`${SUPABASE_URL}/rest/v1/user_attribution?user_id=eq.${uid}&limit=1&select=*`, { headers: SB_HEADERS }),
-      fetch(`${SUPABASE_URL}/rest/v1/events?user_id=eq.${uid}&order=ts.desc&limit=2000&select=event_type,tool_id,ts`, { headers: SB_HEADERS }),
-      fetch(`${SUPABASE_URL}/rest/v1/user_credits?user_id=eq.${uid}&limit=1&select=balance,referral_code`, { headers: SB_HEADERS }),
+      fetch(`${SUPABASE_URL}/rest/v1/credit_transactions?user_id=eq.${uid}&order=created_at.desc&limit=100&select=amount,type,description,slug,created_at`, { cache: 'no-store', headers: SB_HEADERS }),
+      fetch(`${SUPABASE_URL}/rest/v1/user_attribution?user_id=eq.${uid}&limit=1&select=*`, { cache: 'no-store', headers: SB_HEADERS }),
+      fetch(`${SUPABASE_URL}/rest/v1/events?user_id=eq.${uid}&order=ts.desc&limit=2000&select=event_type,tool_id,ts`, { cache: 'no-store', headers: SB_HEADERS }),
+      fetch(`${SUPABASE_URL}/rest/v1/user_credits?user_id=eq.${uid}&limit=1&select=balance,referral_code`, { cache: 'no-store', headers: SB_HEADERS }),
     ]);
 
     const transactions = txnRes.ok ? await txnRes.json() : [];
@@ -1504,18 +1517,32 @@ async function handleAdminMarketing(request: NextRequest, sp: URLSearchParams): 
   };
 
   try {
-    const [funnel, sources, acquisition, campaigns, traffic, revenue, cohorts, ga4] = await Promise.all([
-      callRpc('marketing_funnel'),
-      callRpc('marketing_sources'),
-      callRpc('marketing_acquisition'),
-      callRpc('marketing_campaigns'),
-      callRpc('marketing_traffic'),
-      callRpc('marketing_revenue'),
-      callCohorts(),
-      getGa4Breakdown(from.toISOString().slice(0, 10), to.toISOString().slice(0, 10)),
-    ]);
+    const [funnel, sources, acquisition, campaigns, traffic, revenue, cohorts, ga4, trafficQuality] =
+      await Promise.all([
+        callRpc('marketing_funnel'),
+        callRpc('marketing_sources'),
+        callRpc('marketing_acquisition'),
+        callRpc('marketing_campaigns'),
+        callRpc('marketing_traffic'),
+        callRpc('marketing_revenue'),
+        callCohorts(),
+        getGa4Breakdown(from.toISOString().slice(0, 10), to.toISOString().slice(0, 10)),
+        // Phân loại chất lượng lưu lượng — CÙNG RPC mà CMO digest đã dùng, cố ý
+        // KHÔNG viết một phép đếm "khách thật" thứ hai ở đây: `traffic_quality`
+        // đã định nghĩa `engaged` và digest đang luận trên đó, hai định nghĩa
+        // song song thì sớm muộn cũng trôi khỏi nhau (bệnh đã trả giá ở #409).
+        //
+        // best-effort như GA4: đây là LỚP CHỒNG LÊN phễu, hỏng thì mất một dòng
+        // chú thích chứ không được kéo sập cả trang Marketing.
+        callRpc('traffic_quality').catch((e) => {
+          console.warn('[admin-marketing] traffic_quality lỗi:', (e as Error).message);
+          return null;
+        }),
+      ]);
     // Bậc 'visitors' của phễu = NGƯỜI THẬT (`visitors_human`, đã trừ đội máy —
-    // xem _patches/migration-bot-filter.sql).
+    // xem _patches/migration-bot-filter.sql). Cùng một định nghĩa "máy" với
+    // `traffic_quality` ngay trên: cả hai đi qua `bot_anon_ids()`, không có bản
+    // luật thứ hai.
     //
     // 🔴 CỐ Ý KHÔNG lấy GA4 sessions làm bậc này nữa (trước đây có). GA4 đo ở
     // phía Google nên KHÔNG lọc được bot lẫn CI Playwright, và không có bản
@@ -1534,6 +1561,7 @@ async function handleAdminMarketing(request: NextRequest, sp: URLSearchParams): 
     }
     return ok({
       funnel, sources, acquisition, campaigns, traffic, revenue, cohorts, cohortWeeks,
+      trafficQuality,
       ga4: ga4 ? { ...ga4, internalVisitors } : null,
       from: from.toISOString(), to: to.toISOString(),
     });
@@ -1561,6 +1589,144 @@ async function handleAdminViral(request: NextRequest, sp: URLSearchParams): Prom
     });
     if (!res.ok) throw new Error(`viral_loop_funnel: ${await res.text()}`);
     return ok({ viral: await res.json(), from: from.toISOString(), to: to.toISOString() });
+  } catch (e: unknown) { return err((e as Error).message); }
+}
+
+// ── GET: admin-content-catalog (Kho Nội Dung) ────────────────────
+// Gom 6 bảng nội dung (khảo luận · nghiên cứu · video hỏi-đáp · từ điển · tài
+// liệu · sách) về MỘT bảng đọc, kèm cột "đã ra kênh nào".
+//
+// CHỈ ĐỌC — không có đường ghi ngược về 6 bảng nguồn. Sửa nội dung vẫn ở trang
+// Sản Xuất của từng pipeline; kho này để NHÌN, và để thấy phần lớn kho chưa
+// từng ra khỏi website.
+//
+// Action RIÊNG (không nhét vào `admin-marketing`) theo đúng tiền lệ
+// `admin-viral`/`admin-tool-funnel`: chỗ đó đã gánh 8 RPC + một lượt GA4.
+async function handleAdminContentCatalog(request: NextRequest, sp: URLSearchParams): Promise<Response> {
+  const token = (request.headers.get('Authorization') || '').replace('Bearer ', '').trim();
+  const admin = await verifyAdmin(token);
+  if (!admin) return err('Unauthorized', 403);
+
+  const limit = Math.min(Math.max(Number(sp.get('limit') || 50) || 50, 1), 200);
+  const offset = Math.max(Number(sp.get('offset') || 0) || 0, 0);
+
+  const rpc = async (fn: string, body: unknown) => {
+    const r = await fetch(`${SUPABASE_URL}/rest/v1/rpc/${fn}`, {
+      method: 'POST', headers: SB_HEADERS, body: JSON.stringify(body), cache: 'no-store',
+    });
+    if (!r.ok) throw new Error(`${fn}: ${await r.text()}`);
+    return r.json();
+  };
+
+  try {
+    const [stats, list, metrics] = await Promise.all([
+      rpc('content_catalog_stats', {}),
+      rpc('content_catalog_list', {
+        p_kind: sp.get('kind') || null,
+        p_channel: sp.get('channel') || null,
+        p_status: sp.get('status') || null,
+        p_q: sp.get('q') || null,
+        p_limit: limit,
+        p_offset: offset,
+        p_sort: sp.get('sort') || null,
+        p_pub: sp.get('pub') || null,
+      }),
+      rpc('content_metrics_overview', { p_days: 30 }),
+    ]);
+    return ok({ stats, list, metrics, limit, offset });
+  } catch (e: unknown) { return err((e as Error).message); }
+}
+
+// ── POST: admin-content-edit / admin-content-status ──────────────
+// Sửa nội dung + gỡ xuống / đăng lại, ngay trong Kho.
+//
+// 🔴 CHỖ NGUY HIỂM NHẤT của tính năng này: `table` do CLIENT gửi. Ghép thẳng
+// vào đường dẫn PostgREST là mở cửa cho phiên admin ghi vào BẤT KỲ bảng nào
+// (`user_credits`, `admin_users`…). Nên có ALLOWLIST cứng ở dưới, và cả tên
+// CỘT cũng phải nằm trong danh sách trắng — không nhận bừa khoá từ body.
+const EDITABLE: Record<string, { pk: string; cols: string[]; status?: boolean }> = {
+  khao_luan:       { pk: 'id', cols: ['title', 'excerpt', 'category', 'content'], status: true },
+  master_articles: { pk: 'id', cols: ['title', 'excerpt', 'category', 'content'], status: true },
+  tai_lieu:        { pk: 'id', cols: ['title', 'excerpt', 'category', 'content'] },
+  tu_dien:         { pk: 'id', cols: ['ten', 'seo_title', 'seo_desc', 'content'] },
+  sach_library:    { pk: 'id', cols: ['title', 'author', 'excerpt', 'content'] },
+  // ⛔ `van_dap` CỐ Ý không có ở đây: nó đã có trang soạn riêng (YouTube
+  // Studio) với kịch bản/TTS/mix. Dựng bộ sửa thứ hai cho cùng dữ liệu là hai
+  // bản trôi khỏi nhau.
+};
+const PUBLISH_STATES = ['published', 'draft', 'hidden'];
+
+/** Nạp NGUYÊN một bài để sửa. Kho chỉ có tiêu đề; thân bài mới là thứ người ta
+ *  vào đây để sửa, mà kéo `content` cho cả 50 dòng danh sách thì phí. */
+async function handleAdminContentOne(request: NextRequest, sp: URLSearchParams): Promise<Response> {
+  const token = (request.headers.get('Authorization') || '').replace('Bearer ', '').trim();
+  const admin = await verifyAdmin(token);
+  if (!admin) return err('Unauthorized', 403);
+
+  const table = sp.get('table') || '';
+  const id = sp.get('id') || '';
+  const spec = EDITABLE[table];
+  if (!spec) return err(`Không đọc được bảng "${table}" từ Kho`, 400);
+  if (!id) return err('Thiếu id', 400);
+
+  const cols = [spec.pk, ...spec.cols, ...(spec.status ? ['publish_status', 'updated_at', 'updated_by'] : [])];
+  try {
+    const r = await fetch(
+      `${SUPABASE_URL}/rest/v1/${table}?${encodeURIComponent(spec.pk)}=eq.${encodeURIComponent(id)}` +
+        `&select=${cols.join(',')}&limit=1`,
+      { headers: SB_HEADERS, cache: 'no-store' },
+    );
+    if (!r.ok) throw new Error(await r.text());
+    const rows = (await r.json()) as unknown[];
+    if (!rows.length) return err('Không tìm thấy bản ghi', 404);
+    return ok({ row: rows[0] });
+  } catch (e: unknown) { return err((e as Error).message); }
+}
+
+async function handleAdminContentEdit(request: NextRequest, body: Record<string, unknown>): Promise<Response> {
+  const token = (request.headers.get('Authorization') || '').replace('Bearer ', '').trim();
+  const admin = await verifyAdmin(token);
+  if (!admin) return err('Unauthorized', 403);
+
+  const table = String(body.table || '');
+  const id = String(body.id || '');
+  const spec = EDITABLE[table];
+  if (!spec) return err(`Không sửa được bảng "${table}" từ Kho`, 400);
+  if (!id) return err('Thiếu id', 400);
+
+  const patch: Record<string, unknown> = {};
+  for (const c of spec.cols) {
+    if (body[c] !== undefined) patch[c] = body[c] === null ? null : String(body[c]);
+  }
+  if (body.publish_status !== undefined) {
+    if (!spec.status) return err(`Bảng "${table}" không có trạng thái xuất bản`, 400);
+    const st = String(body.publish_status);
+    if (!PUBLISH_STATES.includes(st)) return err('Trạng thái không hợp lệ', 400);
+    patch.publish_status = st;
+  }
+  if (!Object.keys(patch).length) return err('Không có gì để sửa', 400);
+
+  // Chỉ hai bảng đó có `updated_at`/`updated_by` — hỏi cột không tồn tại là
+  // PostgREST trả 400 và lượt sửa hỏng nguyên.
+  if (spec.status) {
+    patch.updated_at = new Date().toISOString();
+    patch.updated_by = admin.email || 'admin';
+  }
+
+  try {
+    const r = await fetch(
+      `${SUPABASE_URL}/rest/v1/${table}?${encodeURIComponent(spec.pk)}=eq.${encodeURIComponent(id)}`,
+      {
+        method: 'PATCH',
+        headers: { ...SB_HEADERS, Prefer: 'return=representation' },
+        body: JSON.stringify(patch),
+        cache: 'no-store',
+      },
+    );
+    if (!r.ok) throw new Error(await r.text());
+    const rows = (await r.json()) as unknown[];
+    if (!rows.length) return err('Không tìm thấy bản ghi', 404);
+    return ok({ updated: Object.keys(patch), row: rows[0] });
   } catch (e: unknown) { return err((e as Error).message); }
 }
 
@@ -1889,8 +2055,8 @@ async function handleAdminAutopilotLog(request: NextRequest): Promise<Response> 
   try {
     const cfgKeys = ['marketing.autopilot_enabled', 'marketing.autopilot_price_bounds', 'marketing.autopilot_promo', 'marketing.autopilot_segment_nudge'];
     const [actionsRes, cfgRes] = await Promise.all([
-      fetch(`${SUPABASE_URL}/rest/v1/autopilot_actions?select=id,ts,action_type,mode,target,before,after,reason,meta&order=ts.desc&limit=100`, { headers: SB_HEADERS }),
-      fetch(`${SUPABASE_URL}/rest/v1/app_config?key=in.(${cfgKeys.map((k) => `"${k}"`).join(',')})&select=key,value`, { headers: SB_HEADERS }),
+      fetch(`${SUPABASE_URL}/rest/v1/autopilot_actions?select=id,ts,action_type,mode,target,before,after,reason,meta&order=ts.desc&limit=100`, { cache: 'no-store', headers: SB_HEADERS }),
+      fetch(`${SUPABASE_URL}/rest/v1/app_config?key=in.(${cfgKeys.map((k) => `"${k}"`).join(',')})&select=key,value`, { cache: 'no-store', headers: SB_HEADERS }),
     ]);
     const actions = actionsRes.ok ? await actionsRes.json() : [];
     const cfgRows: { key: string; value: unknown }[] = cfgRes.ok ? await cfgRes.json() : [];
@@ -2021,6 +2187,46 @@ async function handleRailStatus(request: NextRequest, sp: URLSearchParams): Prom
   }
 }
 
+// ── Hồ sơ "Thầy nhớ gì về con" (TẦNG 2) ──────────────────────────
+// Bốn action của CHÍNH CHỦ. Mọi lượt đều giải userId TỪ TOKEN rồi mới đụng DB
+// — không nhận userId trong body, vì đó là đường một người sửa hồ sơ người
+// khác. Tầng store cũng luôn kèm user_id trong bộ lọc (đai an toàn thứ hai).
+async function memoryUser(request: NextRequest): Promise<{ id: string } | null> {
+  const t = (request.headers.get('Authorization') || '').replace('Bearer ', '').trim();
+  if (!t) return null;
+  const u = await getUserFromToken(t);
+  return u ? { id: u.id } : null;
+}
+
+async function handleMyMemory(request: NextRequest): Promise<Response> {
+  const u = await memoryUser(request);
+  if (!u) return err('Invalid token', 401);
+  const items = await listMemory(u.id);
+  return ok({ items, kinds: MEMORY_KIND_LABELS, max: MAX_MEMORY_ITEMS, maxLen: MAX_MEMORY_LEN });
+}
+
+async function handleMemoryEdit(request: NextRequest, body: Record<string, unknown>): Promise<Response> {
+  const u = await memoryUser(request);
+  if (!u) return err('Invalid token', 401);
+  const done = await editFact(u.id, String(body?.id || ''), body?.noi_dung, body?.loai);
+  return done ? ok({ ok: true }) : err('Không sửa được mục này.', 400);
+}
+
+async function handleMemoryDelete(request: NextRequest, body: Record<string, unknown>): Promise<Response> {
+  const u = await memoryUser(request);
+  if (!u) return err('Invalid token', 401);
+  const done = await forgetFact(u.id, String(body?.id || ''));
+  return done ? ok({ ok: true }) : err('Không tìm thấy mục này.', 404);
+}
+
+async function handleMemoryAdd(request: NextRequest, body: Record<string, unknown>): Promise<Response> {
+  const u = await memoryUser(request);
+  if (!u) return err('Invalid token', 401);
+  // nguồn 'nguoi' — chính chủ tự khai thì không được lẫn với thứ máy đoán ra.
+  const r = await rememberFact(u.id, body?.loai, body?.noi_dung, 'nguoi');
+  return r.ok ? ok({ ok: true }) : err('Không thêm được (nội dung quá ngắn?).', 400);
+}
+
 async function handleMyReferral(request: NextRequest, sp: URLSearchParams): Promise<Response> {
   const userToken = (request.headers.get('Authorization') || '').replace('Bearer ', '').trim();
   if (!userToken) return err('Missing Authorization token', 401);
@@ -2034,8 +2240,8 @@ async function handleMyReferral(request: NextRequest, sp: URLSearchParams): Prom
     // tool_pricing).
     const tool = String(sp.get('tool') || '').slice(0, 60);
     const [credRes, refRes, reward, cap, toolPrice] = await Promise.all([
-      fetch(`${SUPABASE_URL}/rest/v1/user_credits?user_id=eq.${uid}&limit=1&select=referral_code,balance`, { headers: SB_HEADERS }),
-      fetch(`${SUPABASE_URL}/rest/v1/referrals?referrer_user_id=eq.${uid}&select=status,signup_rewarded_at,credits_to_referrer`, { headers: SB_HEADERS }),
+      fetch(`${SUPABASE_URL}/rest/v1/user_credits?user_id=eq.${uid}&limit=1&select=referral_code,balance`, { cache: 'no-store', headers: SB_HEADERS }),
+      fetch(`${SUPABASE_URL}/rest/v1/referrals?referrer_user_id=eq.${uid}&select=status,signup_rewarded_at,credits_to_referrer`, { cache: 'no-store', headers: SB_HEADERS }),
       getConfigValue<number>('referral.signup_bonus_referrer', 10),
       getConfigValue<number>('referral.signup_reward_cap', 20),
       tool ? getToolPrice(tool) : Promise.resolve(null),
@@ -2061,6 +2267,33 @@ async function handleMyReferral(request: NextRequest, sp: URLSearchParams): Prom
       toolPrice,
     });
   } catch (e: unknown) { return err((e as Error).message); }
+}
+
+// ── POST: onboarding-sync (M3) ─────────────────────────────────
+// Headers: Authorization: Bearer <user_token>. Trả trạng thái 3 nhiệm vụ và
+// CỘNG NGAY phần vừa hoàn thành (xem lib/onboarding/tasks.ts).
+//
+// Vì sao POST chứ không GET: lượt gọi này CÓ tác dụng phụ — nó cộng Lượng vào
+// ví. Để ở GET là mời trình duyệt/CDN prefetch nó, mà prefetch một endpoint
+// phát tiền là loại lỗi rất khó nhìn ra.
+//
+// Vì sao BẮT BUỘC auth: phần thưởng gắn vào một tài khoản cụ thể; nhận `userId`
+// qua body như `action=balance` đang làm là để bất kỳ ai đoán được id cũng kích
+// được lượt cộng Lượng cho người khác.
+//
+// Trả kèm `balance` để trang cập nhật số dư trong CÙNG một lượt mạng thay vì
+// phải hỏi `action=balance` ngay sau đó.
+async function handleOnboardingSync(request: NextRequest): Promise<Response> {
+  const userToken = (request.headers.get('Authorization') || '').replace('Bearer ', '').trim();
+  if (!userToken) return err('Missing Authorization token', 401);
+  try {
+    const user = await getUserFromToken(userToken);
+    if (!user) return err('Invalid token', 401);
+    const state = await syncOnboardingTasks(user.id);
+    return ok({ ...state, balance: await getBalance(user.id) });
+  } catch (e) {
+    return err(e instanceof Error ? e.message : 'onboarding-sync failed', 500);
+  }
 }
 
 // ── POST: referral-register ────────────────────────────────────
@@ -2097,7 +2330,7 @@ async function handleReferralRegister(request: NextRequest, body: Record<string,
     // Lookup referrer by code
     const lookupRes = await fetch(
       `${SUPABASE_URL}/rest/v1/user_credits?referral_code=eq.${encodeURIComponent(refCode)}&select=user_id&limit=1`,
-      { headers: SB_HEADERS }
+      { cache: 'no-store', headers: SB_HEADERS }
     );
     const rows: { user_id: string }[] = lookupRes.ok ? await lookupRes.json() : [];
     if (!rows.length) return err('Referral code không tồn tại', 404);
@@ -2154,10 +2387,189 @@ async function handleReferralRegister(request: NextRequest, body: Record<string,
   } catch (e: unknown) { return err((e as Error).message); }
 }
 
+// ── MÃ KHUYẾN MÃI ──────────────────────────────────────────────
+// Đường phát tiền, nên mọi chốt chặn nằm dưới DB (`promo_code_redeem`): trần
+// mỗi lượt, trần tổng lượt, hạn dùng, tuổi tài khoản, và chống-đổi-hai-lần
+// bằng KHOÁ CHÍNH. Tầng này chỉ làm hai việc: xác thực người gọi và dịch mã
+// lý do sang câu người đọc hiểu được.
+//
+// ⚠️ CỐ Ý không tự kiểm gì thêm ở đây. Kiểm ở hai tầng thì hai tầng sẽ trôi
+// khỏi nhau — đúng lớp lỗi đã trả giá nhiều lần trong repo này.
+
+/** Mã lý do từ RPC → câu cho người dùng. Không rò chi tiết cấu hình ra ngoài. */
+const PROMO_REASONS: Record<string, string> = {
+  not_found: 'Mã không đúng. Kiểm tra lại giúp bạn nhé.',
+  disabled: 'Mã này đã ngừng áp dụng.',
+  expired: 'Mã này đã hết hạn.',
+  exhausted: 'Mã đã hết lượt. Cảm ơn bạn đã quan tâm!',
+  already_redeemed: 'Tài khoản của bạn đã dùng mã khuyến mãi rồi — mỗi tài khoản chỉ dùng được một lần.',
+  account_too_old: 'Mã này chỉ dành cho tài khoản mới đăng ký.',
+  need_oauth: 'Mã này chỉ áp dụng cho tài khoản đăng nhập bằng Google hoặc Facebook.',
+  invalid_input: 'Mã không hợp lệ.',
+};
+
+/**
+ * Thông tin CÔNG KHAI của một mã: còn dùng được không, tặng bao nhiêu Lượng.
+ *
+ * Dùng để ô nhập mã nói được "mã này tặng 100 Lượng" TRƯỚC khi người ta bấm —
+ * và quan trọng hơn, để con số hiện ra luôn khớp DB. Viết cứng "100 Lượng"
+ * trên giao diện là đúng lớp lỗi `check:prices` sinh ra để chặn: một con số CŨ
+ * nguy hiểm hơn hẳn một ô đang tải, vì người ta TIN nó.
+ */
+async function handlePromoInfo(sp: URLSearchParams): Promise<Response> {
+  const code = (sp.get('code') || '').toUpperCase().trim();
+  if (!code || code.length > 40) return ok({ found: false });
+  try {
+    const res = await fetch(
+      `${SUPABASE_URL}/rest/v1/promo_codes?code=eq.${encodeURIComponent(code)}&select=code,credits,enabled,max_uses,used_count,expires_at&limit=1`,
+      { cache: 'no-store', headers: SB_HEADERS }
+    );
+    const rows = res.ok ? await res.json() : [];
+    const r = rows[0];
+    if (!r) return ok({ found: false });
+    const live =
+      r.enabled === true &&
+      (!r.expires_at || Date.parse(r.expires_at) > Date.now()) &&
+      (r.max_uses === null || r.used_count < r.max_uses);
+    // KHÔNG trả `used_count`/`max_uses` ra ngoài — đó là ngân sách nội bộ.
+    return ok({ found: true, code: r.code, credits: r.credits, live });
+  } catch { return ok({ found: false }); }
+}
+
+async function handleAdminPromoList(request: NextRequest): Promise<Response> {
+  const token = (request.headers.get('Authorization') || '').replace('Bearer ', '').trim();
+  const admin = await verifyAdmin(token);
+  if (!admin) return err('Unauthorized — admin only', 403);
+  try {
+    const [codesRes, redRes] = await Promise.all([
+      fetch(`${SUPABASE_URL}/rest/v1/promo_codes?select=*&order=created_at.desc`, {
+        cache: 'no-store', headers: SB_HEADERS,
+      }),
+      fetch(
+        `${SUPABASE_URL}/rest/v1/promo_redemptions?select=code,credits_granted,redeemed_at&order=redeemed_at.desc&limit=50`,
+        { cache: 'no-store', headers: SB_HEADERS }
+      ),
+    ]);
+    const codes = codesRes.ok ? await codesRes.json() : [];
+    const recent = redRes.ok ? await redRes.json() : [];
+    const granted = (codes as Array<{ credits: number; used_count: number }>).reduce(
+      (s, c) => s + (Number(c.credits) || 0) * (Number(c.used_count) || 0), 0
+    );
+    return ok({ codes, recent, grantedCredits: granted, maxCreditsPerCode: 1000 });
+  } catch (e: unknown) { return err((e as Error).message); }
+}
+
+async function handlePromoRedeem(request: NextRequest, body: Record<string, unknown>): Promise<Response> {
+  const token = (request.headers.get('Authorization') || '').replace('Bearer ', '').trim();
+  if (!token) return err('Missing Authorization token', 401);
+
+  // Chỉ chặn ca vô lý rõ ràng (rỗng / dài bất thường) để khỏi gửi rác xuống DB.
+  // KHÔNG kiểm độ dài cố định như referral (8 ký tự): mã khuyến mãi do người
+  // đặt tên, `TUVIMINHBAO` đã 11 ký tự.
+  const code = String(body.code || '').toUpperCase().trim();
+  if (!code || code.length > 40) return err('Mã không hợp lệ', 400);
+
+  try {
+    const user = await getUserFromToken(token);
+    if (!user) return err('Invalid token', 401);
+
+    const rows = (await rpcSafe('promo_code_redeem', { p_user_id: user.id, p_code: code })) as Array<{
+      ok: boolean; reason: string; credits: number; code: string;
+    }>;
+    // `rpcSafe` nuốt lỗi thành mảng rỗng. Ở đường phát tiền thì im lặng là tệ
+    // nhất: người dùng gõ đúng mã mà không có gì xảy ra. Nói thẳng là hỏng.
+    if (!rows.length) return err('Không đổi được mã lúc này, thử lại sau giúp bạn.', 503);
+
+    const r = rows[0];
+    if (!r.ok) {
+      return ok({
+        success: false,
+        reason: r.reason,
+        message: PROMO_REASONS[r.reason] || 'Không đổi được mã này.',
+        balance: await getBalance(user.id),
+      });
+    }
+
+    void logEvent({
+      event_type: 'promo_redeem',
+      user_id: user.id,
+      meta: { code: r.code, credits: r.credits },
+    });
+
+    return ok({
+      success: true,
+      code: r.code,
+      credits: r.credits,
+      balance: await getBalance(user.id),
+      message: `Đã cộng ${r.credits} Lượng vào tài khoản của bạn!`,
+    });
+  } catch (e: unknown) { return err((e as Error).message); }
+}
+
+/** Thêm/sửa một mã. Admin only. */
+async function handleAdminPromoCode(request: NextRequest, body: Record<string, unknown>): Promise<Response> {
+  const token = (request.headers.get('Authorization') || '').replace('Bearer ', '').trim();
+  const admin = await verifyAdmin(token);
+  if (!admin) return err('Unauthorized — admin only', 403);
+
+  const code = String(body.code || '').toUpperCase().trim();
+  if (!code || !/^[A-Z0-9_-]{3,40}$/.test(code)) {
+    return err('Mã chỉ gồm chữ HOA, số, gạch ngang/dưới; 3–40 ký tự', 400);
+  }
+  if (body.remove === true) {
+    // Xoá thì phải để FK của `promo_redemptions` (on delete restrict) chặn —
+    // mã đã có người đổi thì xoá là mất dấu vết một khoản đã phát.
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/promo_codes?code=eq.${encodeURIComponent(code)}`, {
+      method: 'DELETE', headers: SB_HEADERS,
+    });
+    if (!res.ok) {
+      return err('Không xoá được — nhiều khả năng mã đã có người đổi. Hãy TẮT mã thay vì xoá.', 400);
+    }
+    return ok({ success: true, removed: code });
+  }
+
+  const credits = Number(body.credits);
+  if (!Number.isInteger(credits) || credits < 0 || credits > 1000) {
+    // Cùng trần với `PROMO_MAX_CREDITS` trong RPC. Kiểm ở đây để admin nhận câu
+    // lỗi đọc được, thay vì một exception Postgres thô.
+    return err('Số Lượng phải là số nguyên 0–1000', 400);
+  }
+  const row: Record<string, unknown> = {
+    code,
+    credits,
+    enabled: body.enabled !== false,
+    max_uses: body.maxUses === null || body.maxUses === '' ? null : Number(body.maxUses),
+    new_account_days:
+      body.newAccountDays === null || body.newAccountDays === '' ? null : Number(body.newAccountDays),
+    // Mặc định BẬT khi client không gửi — đây là chốt chống lạm dụng chính,
+    // không được lặng lẽ tắt chỉ vì thiếu một trường trong payload.
+    require_oauth: body.requireOauth !== false,
+    expires_at: body.expiresAt ? String(body.expiresAt) : null,
+    note: String(body.note || '').slice(0, 300) || null,
+    updated_at: new Date().toISOString(),
+  };
+  if (row.max_uses !== null && !Number.isInteger(row.max_uses as number)) return err('Trần lượt không hợp lệ', 400);
+  if (row.new_account_days !== null && !Number.isInteger(row.new_account_days as number)) {
+    return err('Số ngày không hợp lệ', 400);
+  }
+
+  // ⚠️ KHÔNG đụng `used_count` — nó là số đếm THẬT, sửa tay là mất khả năng đối
+  // soát ngân sách đã phát.
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/promo_codes?on_conflict=code`, {
+    method: 'POST',
+    headers: { ...SB_HEADERS, Prefer: 'resolution=merge-duplicates,return=representation' },
+    body: JSON.stringify(row),
+  });
+  if (!res.ok) return err('Lưu hỏng: ' + (await res.text()).slice(0, 200), 400);
+  return ok({ success: true, code });
+}
+
 export async function POST(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const action = searchParams.get('action');
   const body   = await parseBody(request);
+  if (action === 'promo-redeem')      return handlePromoRedeem(request, body);
+  if (action === 'admin-promo-code')  return handleAdminPromoCode(request, body);
   if (action === 'topup')             return handleTopup(body);
   if (action === 'capture')           return handleCapture(body);
   if (action === 'deduct')            return handleDeduct(request, body);
@@ -2169,6 +2581,7 @@ export async function POST(request: NextRequest) {
   if (action === 'admin-channel-broadcast') return handleAdminChannelBroadcast(request, body);
   if (action === 'admin-nudge-user') return handleAdminNudgeUser(request, body);
   if (action === 'admin-media-decide') return handleAdminMediaDecide(request, body);
+  if (action === 'admin-content-edit') return handleAdminContentEdit(request, body);
   if (action === 'admin-seeding-group') return handleAdminSeedingGroup(request, body);
   if (action === 'admin-seeding-draft') return handleAdminSeedingDraft(request, body);
   if (action === 'admin-khao-luan-topics') return handleAdminKhaoLuanTopics(request, body);
@@ -2178,5 +2591,9 @@ export async function POST(request: NextRequest) {
   if (action === 'admin-users-set-active') return handleAdminUsersSetActive(request, body);
   if (action === 'create-bank')       return handleCreateBank(body);
   if (action === 'referral-register') return handleReferralRegister(request, body);
+  if (action === 'onboarding-sync')   return handleOnboardingSync(request);
+  if (action === 'memory-edit')       return handleMemoryEdit(request, body);
+  if (action === 'memory-delete')     return handleMemoryDelete(request, body);
+  if (action === 'memory-add')        return handleMemoryAdd(request, body);
   return err('Invalid action.', 400);
 }

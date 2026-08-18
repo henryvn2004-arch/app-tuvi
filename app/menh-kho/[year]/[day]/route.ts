@@ -4,6 +4,10 @@
 export const revalidate = false;
 
 import { NextRequest, NextResponse } from 'next/server';
+// 18.628 trang day hub — 49% số URL đã nộp, xếp hạng ~1,4 mà 0 nhấp. Xem
+// lib/seo/index-policy.ts để biết vì sao rút và vì sao phải là noindex chứ
+// không phải gỡ khỏi sitemap. Hub NĂM (51 trang) CỐ Ý vẫn index.
+import { NOINDEX_FOLLOW } from '@/lib/seo/index-policy';
 
 const BASE      = 'https://www.tuviminhbao.com';
 const NAM_XEM   = 2027; // cập nhật hằng năm
@@ -109,6 +113,7 @@ export async function GET(
 <meta property="og:type" content="website">
 <meta property="og:url" content="${esc(url)}">
 <link rel="canonical" href="${esc(url)}">
+${NOINDEX_FOLLOW}
 <link rel="icon" type="image/webp" href="/seal.webp">
 <script type="application/ld+json">${schema}</script>
 <style>
@@ -167,7 +172,7 @@ h1 em{font-style:italic;color:var(--gold)}
 
   <div class="cta-box">
     <p>Muốn nhập ngày sinh khác và nhận luận giải AI chuyên sâu 24 phần?</p>
-    <a class="cta-btn" href="/luan-giai.html">Xem Lá Số Miễn Phí →</a>
+    <a class="cta-btn" href="/luan-giai.html">Xem Lá Số →</a>
   </div>
 
   <p class="note">* Lá số hiển thị vận hạn năm ${NAM_XEM}. Để xem năm khác, dùng công cụ luận giải trực tiếp.</p>

@@ -1,6 +1,7 @@
 // app/tac-gia/[slug]/route.ts — Author profile page with JSON-LD Person schema (EEAT)
 export const revalidate = 86400;
 import { NextRequest, NextResponse } from 'next/server';
+import { PUBLISHED_ONLY } from '@/lib/content/publish-filter';
 
 const SB_URL = process.env.SUPABASE_URL!;
 const SB_KEY = process.env.SUPABASE_SERVICE_KEY!;
@@ -217,8 +218,8 @@ export async function GET(
   try {
     const [masterRes, articlesRes, countRes] = await Promise.all([
       fetch(`${SB_URL}/rest/v1/master_profiles?id=eq.${encodeURIComponent(slug)}&select=*&limit=1`, { headers: sbHeaders }),
-      fetch(`${SB_URL}/rest/v1/master_articles?master_id=eq.${encodeURIComponent(slug)}&select=slug,title,excerpt,category,word_count,created_at&order=created_at.desc&limit=50`, { headers: sbHeaders }),
-      fetch(`${SB_URL}/rest/v1/master_articles?master_id=eq.${encodeURIComponent(slug)}&select=id`, { headers: { ...sbHeaders, 'Prefer': 'count=exact' } }),
+      fetch(`${SB_URL}/rest/v1/master_articles?master_id=eq.${encodeURIComponent(slug)}&select=slug,title,excerpt,category,word_count,created_at&${PUBLISHED_ONLY}&order=created_at.desc&limit=50`, { headers: sbHeaders }),
+      fetch(`${SB_URL}/rest/v1/master_articles?master_id=eq.${encodeURIComponent(slug)}&select=id&${PUBLISHED_ONLY}`, { headers: { ...sbHeaders, 'Prefer': 'count=exact' } }),
     ]);
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kiểu Tóc & Kính Mắt Hợp Tướng Mặt — Tử Vi Minh Bảo</title>
+<meta name="description" content="Chụp ảnh khuôn mặt — AI phân tích hình dạng và gợi ý kiểu tóc phù hợp theo nhân tướng học. Thử kiểu tóc ngay trên ảnh bằng Replicate AI.">
+<link rel="icon" type="image/webp" href="/seal.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"></noscript>
+<link rel="stylesheet" href="/shell.css?v=19">
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh@0.4/face_mesh.js" crossorigin="anonymous"></script>
+<style>
+.kt-card{background:var(--white);border:1px solid var(--line);border-radius:14px;padding:20px 22px;box-shadow:var(--shadow);max-width:760px;margin-bottom:16px}
+.kt-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:4px;display:flex;align-items:center;gap:8px}
+.kt-card p.sub{font-size:12.5px;color:var(--text-lt);margin-bottom:14px}
+.upload-area{border:2px dashed var(--line-2);border-radius:12px;padding:40px 24px;text-align:center;cursor:pointer;transition:all .2s;background:var(--paper);position:relative}
+.upload-area:hover,.upload-area.dragover{border-color:var(--gold);background:var(--gold-lt)}
+.upload-area input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.upload-icon{font-size:48px;margin-bottom:12px;display:block}
+.upload-title{font-size:16px;font-weight:700;color:var(--heading);margin-bottom:6px}
+.upload-sub{font-size:13px;color:var(--text-lt)}
+.preview-wrap{text-align:center;margin-top:16px}
+.preview-img{max-width:280px;max-height:360px;width:100%;border-radius:12px;display:inline-block;object-fit:cover}
+.remove-btn{display:block;margin:10px auto 0;background:none;border:1px solid var(--line-2);border-radius:4px;padding:6px 16px;font-size:12px;color:var(--text-mid);cursor:pointer;font-family:inherit}
+.camera-btn{display:inline-flex;align-items:center;gap:8px;padding:12px 24px;background:var(--navy);color:var(--gold);border:none;border-radius:6px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;margin:12px auto 0}
+.privacy-notice{display:flex;align-items:flex-start;gap:10px;padding:12px 16px;background:var(--gold-lt);border-radius:8px;border-left:3px solid var(--blue);font-size:12px;color:var(--tx-blue);margin-top:16px}
+.input-tabs{display:flex;gap:0;border-bottom:2px solid var(--border-lt);margin-bottom:20px}
+.input-tab{padding:10px 20px;font-size:13px;font-weight:600;cursor:pointer;color:var(--text-lt);border-bottom:2px solid transparent;margin-bottom:-2px;font-family:inherit;background:none;border-top:none;border-left:none;border-right:none;transition:all .15s}
+.input-tab.active{color:var(--heading);border-bottom-color:var(--gold)}
+.input-pane{display:none} .input-pane.active{display:block}
+.gender-row{display:flex;gap:10px;margin-bottom:20px}
+.gender-btn{flex:1;padding:10px;background:var(--paper);border:2px solid var(--line-2);border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;color:var(--text-mid);transition:all .15s}
+.gender-btn.active{background:var(--navy);color:var(--gold);border-color:var(--navy)}
+.ai-loading{display:flex;flex-direction:column;align-items:center;gap:16px;padding:40px 0}
+.result-section{display:none;margin-top:16px}
+.result-section.active{display:block}
+.face-shape-card{display:flex;align-items:center;gap:16px;background:var(--navy);color:#fff;border-radius:12px;padding:18px 20px;margin-bottom:20px}
+.shape-emoji{font-size:42px;flex-shrink:0}
+.shape-label{font-size:11px;opacity:.6;margin-bottom:3px;letter-spacing:.5px;text-transform:uppercase}
+.shape-name{font-size:22px;font-weight:700;font-family:var(--serif);margin-bottom:4px}
+.shape-desc{font-size:13px;opacity:.78;line-height:1.5}
+.styles-title{font-size:14px;font-weight:700;color:var(--heading);margin-bottom:12px}
+.style-cards{display:flex;flex-direction:column;gap:10px}
+.style-thumb{width:52px;height:64px;flex-shrink:0;border-radius:8px;overflow:hidden;background:var(--paper);border:1px solid var(--border-lt)}
+.style-card{border:1.5px solid var(--line-2);border-radius:10px;padding:14px 16px;cursor:pointer;transition:all .18s;background:var(--white);display:flex;align-items:flex-start;gap:12px}
+.style-card:hover{border-color:var(--gold);background:var(--gold-lt)}
+.style-card.selected{border-color:var(--navy);background:var(--paper-2)}
+.style-rank{font-size:11px;font-weight:700;background:var(--paper);color:var(--gold-soft);padding:3px 8px;border-radius:20px;flex-shrink:0;margin-top:2px}
+.style-info{flex:1}
+.style-name{font-size:14px;font-weight:700;color:var(--heading);margin-bottom:3px}
+.style-sub{font-size:12px;color:var(--text-lt);margin-bottom:6px}
+.style-reason{font-size:12px;color:var(--text-mid);font-style:italic;line-height:1.5}
+.try-btn{background:var(--navy);color:var(--gold);border:none;border-radius:6px;padding:8px 14px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;flex-shrink:0;white-space:nowrap;align-self:center;transition:opacity .15s}
+.try-btn:hover{opacity:.85} .try-btn:disabled{opacity:.4;cursor:not-allowed}
+.tip-box{background:var(--gold-lt);border:1px solid var(--gold);border-radius:8px;padding:12px 14px;margin-top:16px;font-size:13px;color:var(--heading);line-height:1.6}
+.tip-box strong{color:var(--gold-soft)}
+.result-tab{padding:10px 18px;font-size:13px;font-weight:700;cursor:pointer;color:var(--text-lt);border-bottom:2px solid transparent;margin-bottom:-2px;font-family:inherit;background:none;border-top:none;border-left:none;border-right:none;transition:all .15s}
+.result-tab.active{color:var(--heading);border-bottom-color:var(--gold)}
+.result-pane{display:none} .result-pane.active{display:block}
+.glasses-icon{font-size:28px;flex-shrink:0;width:52px;height:64px;display:flex;align-items:center;justify-content:center;background:var(--paper);border:1px solid var(--border-lt);border-radius:8px}
+.tryon-section{margin-top:16px;border-top:2px solid var(--border-lt);padding-top:20px}
+.tryon-title{font-size:15px;font-weight:700;color:var(--heading);margin-bottom:16px}
+.tryon-loading{display:none;text-align:center;padding:20px 0}
+.before-after{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
+.ba-col{text-align:center}
+.ba-label{font-size:11px;font-weight:700;color:var(--text-lt);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
+.ba-img{width:100%;border-radius:10px;object-fit:cover;aspect-ratio:3/4;display:block}
+.ba-img-before{filter:brightness(.95)}
+.tryon-actions{display:flex;gap:10px;flex-wrap:wrap}
+.btn-download{flex:1;padding:11px;background:var(--green);color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit}
+.btn-retry{flex:1;padding:11px;background:transparent;color:var(--heading);border:1.5px solid var(--navy);border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit}
+.error-msg{display:none;background:#fff5f5;border:1px solid #fcc;border-radius:8px;padding:12px 14px;color:var(--red);font-size:13px;margin-top:12px}
+.error-msg.active{display:block}
+.tag-good{display:inline-flex;align-items:center;gap:5px;font-size:12px;color:var(--tx-green);background:var(--paper);border:1px solid var(--border-lt);border-radius:20px;padding:4px 10px}
+.tag-bad{display:inline-flex;align-items:center;gap:5px;font-size:12px;color:var(--tx-red);background:var(--paper);border:1px solid var(--border-lt);border-radius:20px;padding:4px 10px}
+.btn-cancel{background:none;border:1px solid var(--line-2);border-radius:8px;padding:10px 18px;font-size:13px;color:var(--text-mid);cursor:pointer;font-family:inherit}
+</style>
+</head>
+<body>
+
+<div class="shell">
+  <aside class="sb" id="shell-sidebar"></aside>
+
+  <main class="ws" id="ws">
+    <div class="ws-top">
+      <button class="btn mobile-only" onclick="document.getElementById('shell-sidebar').classList.toggle('open');window.shellSyncBackdrop&&shellSyncBackdrop()" aria-label="Menu">☰</button>
+      <div class="ws-title"><b>Kiểu Tóc &amp; Kính Mắt Hợp Tướng Mặt</b><span>AI phân tích hình dạng khuôn mặt, gợi ý kiểu tóc + thử ngay trên ảnh</span></div>
+      <div class="ws-actions">
+        <button class="btn mobile-only" onclick="Shell.openRail()">✦ Hỏi</button>
+      </div>
+    </div>
+    <div class="ws-body">
+      <div id="introHost"></div>
+      <div id="shellRecent"></div>
+
+      <div class="kt-card" id="inputSection">
+        <h2><span class="ic" data-icon="camera"></span> Tải Ảnh Lên</h2>
+        <p class="sub">AI phân tích hình khuôn mặt và gợi ý kiểu tóc + kính mắt phù hợp theo nhân tướng học.</p>
+
+        <div style="margin-bottom:20px">
+          <div style="font-size:13px;font-weight:600;color:var(--text-mid);margin-bottom:8px">Giới tính</div>
+          <div class="gender-row">
+            <button class="gender-btn active" id="genderNam" onclick="setGender('nam',this)">Nam</button>
+            <button class="gender-btn" id="genderNu" onclick="setGender('nu',this)">Nữ</button>
+          </div>
+        </div>
+
+        <div class="privacy-notice">
+          <span class="ic" data-icon="lock"></span>
+          <div><strong>Quyền riêng tư:</strong> Ảnh chỉ gửi đến AI để phân tích, không lưu trên server của chúng tôi. Replicate xử lý và trả về ảnh kết quả, không lưu trữ lâu dài.</div>
+        </div>
+
+        <div class="input-tabs" style="margin-top:20px">
+          <button class="input-tab active" onclick="switchTab('upload',this)"><span class="ic" data-icon="folder"></span> Tải Ảnh Lên</button>
+          <button class="input-tab" onclick="switchTab('camera',this)"><span class="ic" data-icon="camera"></span> Chụp Ảnh</button>
+        </div>
+
+        <div class="input-pane active" id="pane-upload">
+          <div id="uploadArea" class="upload-area" ondragover="onDragOver(event)" ondragleave="onDragLeave(event)" ondrop="onDrop(event)">
+            <input type="file" id="fileInput" accept="image/*" onchange="onFileSelect(event)">
+            <span class="upload-icon ic" data-icon="scissors" style="font-size:48px;display:block"></span>
+            <div class="upload-title">Kéo thả ảnh vào đây hoặc click để chọn</div>
+            <div class="upload-sub">JPG, PNG, WebP — tối đa 5MB</div>
+          </div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:14px;justify-content:center">
+            <div class="tag-good">✓ Thẳng mặt, chính diện</div>
+            <div class="tag-good">✓ Ánh sáng tự nhiên, đều</div>
+            <div class="tag-good">✓ Thấy rõ từ trán đến cằm</div>
+            <div class="tag-bad">✗ Đội mũ, đội khăn che tóc</div>
+            <div class="tag-bad">✗ Ngược sáng, tối</div>
+            <div class="tag-bad">✗ Nghiêng mặt nhiều</div>
+          </div>
+        </div>
+
+        <div class="input-pane" id="pane-camera">
+          <div style="text-align:center;padding:16px 20px 20px">
+            <div id="preCamTips" style="margin-bottom:16px">
+              <p style="font-size:14px;color:var(--text-mid)">Nhìn thẳng vào camera, đảm bảo ánh sáng đủ và khuôn mặt chiếm phần lớn khung hình.</p>
+            </div>
+            <div id="camWrap" style="display:none;position:relative;max-width:320px;margin:0 auto">
+              <video id="camVideo" autoplay playsinline style="width:100%;border-radius:10px;transform:scaleX(-1)"></video>
+              <canvas id="camCanvas" style="display:none"></canvas>
+            </div>
+            <div id="camBtns" style="display:none;gap:12px;justify-content:center;margin-top:12px">
+              <button onclick="capturePhoto()" style="padding:10px 24px;background:var(--navy);color:var(--gold);border:none;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit"><span class="ic" data-icon="camera"></span> Chụp</button>
+              <button onclick="stopCamera()" style="padding:10px 20px;background:transparent;border:1.5px solid var(--line-2);border-radius:8px;font-size:13px;cursor:pointer;font-family:inherit;color:var(--text-mid)">Huỷ</button>
+            </div>
+            <button id="openCamBtn" class="camera-btn" onclick="openCamera()"><span class="ic" data-icon="camera"></span> Mở Camera</button>
+          </div>
+        </div>
+
+        <div id="previewSection" style="display:none;margin-top:16px;text-align:center">
+          <div class="preview-wrap">
+            <img id="previewImg" class="preview-img" src="" alt="Preview ảnh">
+          </div>
+          <button class="remove-btn" onclick="removePhoto()">✕ Đổi ảnh khác</button>
+        </div>
+
+        <div class="error-msg" id="error-msg"></div>
+
+        <button id="analyzeBtn" onclick="analyze()" disabled class="btn-analyze" style="width:100%;margin-top:20px;padding:14px;background:var(--navy);color:var(--gold);border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;font-family:var(--serif);letter-spacing:.3px;transition:opacity .15s">
+          <span class="ic" data-icon="sparkles"></span> Phân Tích Khuôn Mặt &amp; Gợi Ý Phong Cách — <span data-tvp-price="kieu-toc-phan-tich">…</span> Lượng
+        </button>
+        <div style="font-size:11px;color:var(--text-lt);text-align:center;margin-top:8px">Phân tích ~5s · Thử kiểu ~25s</div>
+      </div>
+
+      <div class="result-section" id="resultSection">
+        <div class="kt-card ai-loading" id="analysisLoading" style="display:none">
+          <div id="analysisStepsHost"></div>
+        </div>
+
+        <div id="faceShapeCard" class="face-shape-card" style="display:none">
+          <div class="shape-emoji ic" id="shapeEmoji" data-icon="user"></div>
+          <div style="flex:1">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:2px">
+              <div class="shape-label" style="margin:0">Hình dạng khuôn mặt</div>
+              <span id="ageGroupBadge" style="font-size:10px;background:rgba(255,255,255,.15);color:#fff;padding:2px 8px;border-radius:10px;display:none"></span>
+            </div>
+            <div class="shape-name" id="shapeName">—</div>
+            <div class="shape-desc" id="shapeDesc">—</div>
+            <div id="tuongHocInsight" style="font-size:11px;color:rgba(255,255,255,.6);font-style:italic;margin-top:6px;line-height:1.5;display:none"><span class="ic" data-icon="book-open"></span> <span id="tuongHocInsightText"></span></div>
+          </div>
+        </div>
+
+        <div class="kt-card" id="resultTabsWrap" data-ws-result style="display:none">
+          <div style="display:flex;gap:0;border-bottom:2px solid var(--border-lt);margin-bottom:16px">
+            <button class="result-tab active" id="tab-hair" onclick="switchResultTab('hair',this)"><span class="ic" data-icon="scissors"></span> Kiểu Tóc</button>
+            <button class="result-tab" id="tab-glasses" onclick="switchResultTab('glasses',this)"><span class="ic" data-icon="glasses"></span> Kính Mắt</button>
+          </div>
+
+          <div id="pane-hair" class="result-pane active">
+            <div class="styles-title"><span class="ic" data-icon="sparkles"></span> Tất cả kiểu tóc — <span class="ic" data-icon="star"></span> là phù hợp nhất theo tướng mặt của bạn</div>
+            <div class="style-cards" id="styleCardsList"></div>
+          </div>
+
+          <div id="pane-glasses" class="result-pane" style="display:none">
+            <div class="styles-title"><span class="ic" data-icon="glasses"></span> Kiểu kính phù hợp theo cấu trúc khuôn mặt</div>
+            <div class="style-cards" id="glassesCardsList"></div>
+          </div>
+
+          <div class="tip-box" id="tipBox" style="display:none;margin-top:12px">
+            <strong><span class="ic" data-icon="message-circle"></span> Lời khuyên: </strong><span id="tipText"></span>
+          </div>
+        </div>
+
+        <div class="kt-card tryon-section" id="tryonSection" style="display:none">
+          <div class="tryon-title" id="tryonTitle"><span class="ic" id="tryonTitleIcon"></span> <span id="tryonTitleText">Thử Trên Ảnh</span></div>
+          <div class="tryon-loading" id="tryonLoading">
+            <div id="tryonStepsHost"></div>
+          </div>
+          <div id="tryonResult" style="display:none">
+            <div class="before-after">
+              <div class="ba-col">
+                <div class="ba-label">Ảnh gốc</div>
+                <img id="imgBefore" class="ba-img ba-img-before" src="" alt="Ảnh gốc">
+              </div>
+              <div class="ba-col">
+                <div class="ba-label" id="afterLabel">Sau khi thử</div>
+                <img id="imgAfter" class="ba-img" src="" alt="Kết quả">
+              </div>
+            </div>
+            <div class="tryon-actions">
+              <button class="btn-download" onclick="downloadResult()"><span class="ic" data-icon="chevron-down"></span> Tải Ảnh Kết Quả</button>
+              <button class="btn-retry" onclick="clearTryon()"><span class="ic" data-icon="rotate-cw"></span> Thử Kiểu Khác</button>
+            </div>
+          </div>
+          <div class="error-msg" id="tryon-error-msg"></div>
+        </div>
+
+        <div id="resetWrap" style="display:none;margin-top:12px;text-align:center">
+          <button onclick="resetAll()" class="btn-cancel"><span class="ic" data-icon="rotate-cw"></span> Phân tích ảnh khác</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <aside class="rail" id="shell-rail"></aside>
+</div>
+
+<script>window.SHELL_ACTIVE='kieu-toc-phan-tich';window.SHELL_HISTORY=true;
+window.SHELL_INTRO={key:'kieu-toc-phan-tich',title:'Kiểu Tóc & Kính Mắt Hợp Tướng Mặt',desc:'Chụp ảnh khuôn mặt — <b>AI</b> phân tích hình dạng và gợi ý kiểu tóc + kính mắt theo nhân tướng học, thử ngay trên ảnh.'};</script>
+<script src="/auth.js?v=2"></script>
+<script src="/tuvi-paywall.js?v=20"></script>
+  <script src="/nav.js?v=22" data-icons-only></script>
+<script src="/shell.js?v=72"></script>
+<script src="/tools-shared/ai-loading-steps.js?v=8"></script>
+<script>
+function initKieuToc(){
+  Shell.setContext({
+    label:'Kiểu Tóc & Kính Mắt Hợp Tướng Mặt',
+    placeholder:'Hỏi thầy về kiểu tóc hợp tướng…',
+    greeting:'Chào bạn. Tải ảnh khuôn mặt ở khung bên trái, tôi sẽ gợi ý kiểu tóc và kính mắt hợp tướng. Sau khi có kết quả, cứ hỏi tôi thêm.',
+    chips:['Mặt tôi hợp kiểu tóc nào?','Vì sao nên tránh kiểu này?','Kính mắt nào hợp tướng mặt tôi?']
+  });
+}
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initKieuToc); else initKieuToc();
+
+// ══════════════════════════════════════════════════════════════════════
+// Port từ public/tools/kieu-toc-ai.html — giữ nguyên MediaPipe FaceMesh đo
+// mặt + gate Lượng 2 sản phẩm (phân tích + tryon) + luồng camera/upload.
+// ══════════════════════════════════════════════════════════════════════
+const SB_TEMPLATES = 'https://dciwkfdqhhddeymlisey.supabase.co/storage/v1/object/public/hair-templates';
+const TEMPLATE_MAP = {
+  undercut:    'undercut_nam',    pompadour:   'pompadour_nam',  curtain:     'curtain_nam',
+  buzz:        'buzz_nam',        textured:    'textured_nam',   two_block:   'two_block_nam',
+  side_part:   'side_part_nam',   slick_back:  'slick_back_nam',
+  cushion_perm:'cushion_perm_nam',layered_curl:'layered_curl_nam',perm_wave:  'perm_wave_nam',
+  curtain_nu:  'curtain_nu',      wolf:        'wolf_nu',        bob:         'bob_nu',
+  long_layers: 'long_layers_nu',  pixie:       'pixie_nu',       side_waves:  'side_waves_nu',
+  wispy:       'wispy_nu',        shag:        'shag_nu',        lob:         'lob_nu',
+  blunt_fringe:'blunt_fringe_nu', textured_wavy:'textured_wavy_nu', pompadour_nu:'pompadour_nu',
+  undercut_nu: 'undercut_nu',     textured_nu: 'textured_nam',
+  korean_perm: 'korean_perm_nu',  hime:        'hime_nu',        jellyfish:   'jellyfish_nu',
+  butterfly:   'butterfly_nu',    aline_bob:   'aline_bob_nu',   glass_hair:  'glass_hair_nu',
+  money_piece: 'money_piece_nu',
+};
+
+function _getTemplateId(id, gender) {
+  if (gender === 'nu') {
+    const nuMap = { curtain:'curtain_nu', textured:'textured_wavy_nu', pompadour:'pompadour_nu', buzz:'buzz_nu' };
+    if (nuMap[id]) return nuMap[id];
+  } else {
+    const namMap = { curtain:'curtain_nam', textured:'textured_nam', pompadour:'pompadour_nam', buzz:'buzz_nam' };
+    if (namMap[id]) return namMap[id];
+  }
+  return TEMPLATE_MAP[id] || null;
+}
+
+function _hairThumb(id, gender) {
+  const tplId = _getTemplateId(id, gender);
+  if (tplId) {
+    return `<img src="${SB_TEMPLATES}/${tplId}.jpg"
+      style="width:52px;height:64px;object-fit:cover;border-radius:7px;border:1px solid var(--border-lt);display:block;flex-shrink:0"
+      loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"
+      alt="${id}"/>
+    <div class="ic" data-icon="scissors" style="width:52px;height:64px;display:none;align-items:center;justify-content:center;background:var(--paper);border:1px solid var(--border-lt);border-radius:7px;font-size:22px"></div>`;
+  }
+  return `<div class="ic" data-icon="scissors" style="width:52px;height:64px;display:flex;align-items:center;justify-content:center;background:var(--paper);border:1px solid var(--border-lt);border-radius:7px;font-size:22px"></div>`;
+}
+
+const STYLE_META = {
+  undercut:    { name: 'Undercut',         sub: 'Fade hai bên sát, đỉnh dài — cổ điển hiện đại' },
+  pompadour:   { name: 'Pompadour',        sub: 'Bờm vuốt cao phía trước — vintage-modern' },
+  curtain:     { name: 'Curtain Bangs',    sub: 'Mái rèm rẽ ngôi giữa, tự nhiên' },
+  buzz:        { name: 'Buzz Cut',         sub: 'Cắt đều ngắn, tôn đường nét khuôn mặt' },
+  textured:    { name: 'Textured Crop',    sub: 'Ngắn lởm kết cấu, cá tính, dễ tạo kiểu' },
+  two_block:   { name: 'Two Block',        sub: 'Phong cách Hàn — cạo hai bên, đỉnh dài tự nhiên' },
+  side_part:   { name: 'Side Part',        sub: 'Rẽ ngôi bên, chải phẳng — chuyên nghiệp lịch lãm' },
+  slick_back:  { name: 'Slick Back',       sub: 'Chải ngược ra sau bóng mượt — mạnh mẽ sang trọng' },
+  curtain_nu:  { name: 'Curtain Bangs',    sub: 'Mái rèm mềm, rẽ ngôi giữa — lãng mạn nữ tính' },
+  wolf:        { name: 'Wolf Cut',         sub: 'Layers phân tầng wispy — cá tính Gen Z' },
+  bob:         { name: 'Bob Ngắn',         sub: 'Bob ngang hàm gọn gàng — chắc và sạch sẽ' },
+  long_layers: { name: 'Long Layers',      sub: 'Tóc dài layers mềm tự nhiên — nữ tính thanh lịch' },
+  pixie:       { name: 'Pixie Cut',        sub: 'Tóc rất ngắn táo bạo — cá tính tự tin' },
+  side_waves:  { name: 'Side Part Waves',  sub: 'Rẽ ngôi bên + sóng mềm — quý phái gợi cảm' },
+  wispy:       { name: 'Wispy Bangs',      sub: 'Mái thưa mềm mại — trẻ trung nhẹ nhàng' },
+  shag:        { name: 'Shag Cut',         sub: 'Layers lởm + curtain bangs — retro-modern' },
+  lob:         { name: 'Lob (Long Bob)',   sub: 'Bob dài ngang vai — tinh tế đa dụng' },
+  blunt_fringe:{ name: 'Blunt Fringe',     sub: 'Mái thẳng ngang trán + tóc dài — rõ nét cá tính' },
+  textured_wavy:{ name:'Textured Wavy',    sub: 'Sóng tự nhiên có kết cấu — effortless và trendy' },
+  pompadour_nu:{ name: 'Pompadour Nữ',     sub: 'Bờm phồng phía trước mềm mại — thanh lịch sang trọng' },
+  cushion_perm:{ name: 'Cushion Perm',     sub: 'Perm sóng mềm Hàn — phồng nhẹ tự nhiên, đang hot 2026' },
+  layered_curl:{ name: 'Layered Curl',     sub: 'Curl phân tầng khói mềm — trẻ trung, chống lão hóa' },
+  perm_wave:   { name: 'Wave Perm',        sub: 'Perm sóng Hàn tự nhiên — dễ tạo kiểu, hiện đại' },
+  korean_perm: { name: 'Korean Wave Perm', sub: 'Perm sóng Hàn lãng mạn — xu hướng số 1 châu Á 2025' },
+  hime:        { name: 'Hime Cut',         sub: 'Mái thẳng + layers kiểu công chúa Nhật — đang viral' },
+  jellyfish:   { name: 'Jellyfish Cut',    sub: 'Tầng trên ngắn + tầng dưới dài — Gen Z, edgy' },
+  butterfly:   { name: 'Butterfly Cut',    sub: 'Layers frame mặt, phồng volume — hot TikTok 2025' },
+  aline_bob:   { name: 'A-line Bob',       sub: 'Bob vát góc — ngắn sau, dài trước, sắc nét hiện đại' },
+  glass_hair:  { name: 'Glass Hair',       sub: 'Tóc thẳng siêu bóng mượt — trend Hàn đỉnh cao' },
+  money_piece: { name: 'Money Piece',      sub: 'Highlight frame mặt 2 bên — trendy, ít tốn công' },
+};
+
+const GLASSES_META = {
+  rectangle: { name: 'Gọng Chữ Nhật',   sub: 'Gọng mỏng hiện đại — phù hợp hầu hết khuôn mặt',  icon: 'glasses' },
+  round:     { name: 'Gọng Tròn Retro',  sub: 'Phong cách Hàn/vintage — làm mềm khuôn mặt vuông',  icon: 'circle-dot' },
+  oval:      { name: 'Gọng Oval',        sub: 'Nhẹ nhàng tinh tế — hài hòa với mọi khuôn mặt',     icon: 'glasses' },
+  browline:  { name: 'Browline Bán Viền', sub: 'Nửa viền trên đậm — trí thức lịch lãm',             icon: 'glasses' },
+  cat_eye:   { name: 'Cat Eye',          sub: 'Đuôi vát lên — nữ tính quyến rũ (phù hợp nữ nhiều)', icon: 'glasses' },
+  aviator:   { name: 'Aviator',          sub: 'Giọt nước cổ điển — unisex, mạnh mẽ tự tin',         icon: 'glasses' },
+};
+
+const ALL_STYLES_NAM = ['undercut','pompadour','curtain','buzz','textured','two_block','side_part','slick_back','cushion_perm','layered_curl','perm_wave'];
+const ALL_STYLES_NU  = ['curtain_nu','wolf','bob','long_layers','pixie','side_waves','wispy','shag','lob','blunt_fringe','textured_wavy','pompadour_nu','undercut_nu','korean_perm','hime','jellyfish','butterfly','aline_bob','glass_hair','money_piece'];
+
+const SHAPE_ICON = { oval: 'user', round: 'circle-dot', square: 'user', heart: 'heart', oblong: 'user' };
+
+let _imageData = null;
+let _mediaType = 'image/jpeg';
+let _gender = 'nam';
+let _analysisResult = null;
+let _currentSlug = null;
+let _camStream = null;
+let _tryonImgUrl = null;
+let _selectedStyleId = null;
+const ANALYSIS_STEPS = [
+  { label: 'Đo khuôn mặt bằng MediaPipe', ms: 1000 },
+  { label: 'AI phân tích hình dạng khuôn mặt', ms: 0 },
+];
+const TRYON_STEPS = [
+  { label: 'Chuẩn bị ảnh & prompt', ms: 1200 },
+  { label: 'AI đang tạo ảnh kiểu tóc mới', ms: 0 },
+];
+let _analysisLoadingCtl = null;
+let _tryonLoadingCtl = null;
+
+function setGender(g, btn) {
+  _gender = g;
+  document.querySelectorAll('.gender-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+function switchTab(id, btn) {
+  document.querySelectorAll('.input-tab').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.input-pane').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('pane-' + id).classList.add('active');
+}
+
+function onDragOver(e) { e.preventDefault(); document.getElementById('uploadArea').classList.add('dragover'); }
+function onDragLeave(e) { document.getElementById('uploadArea').classList.remove('dragover'); }
+function onDrop(e) {
+  e.preventDefault();
+  document.getElementById('uploadArea').classList.remove('dragover');
+  const file = e.dataTransfer.files[0];
+  if (file) loadFile(file);
+}
+function onFileSelect(e) { if (e.target.files[0]) loadFile(e.target.files[0]); }
+
+async function loadFile(file) {
+  if (!file.type.startsWith('image/')) return;
+  if (file.size > 5 * 1024 * 1024) { showError('Ảnh quá lớn (tối đa 5MB). Vui lòng chọn ảnh khác.'); return; }
+  const MAX = 1024;
+  try {
+    const bitmap = await createImageBitmap(file);
+    const scale = Math.min(1, MAX / Math.max(bitmap.width, bitmap.height));
+    const w = Math.round(bitmap.width * scale), h = Math.round(bitmap.height * scale);
+    const cv = document.createElement('canvas');
+    cv.width = w; cv.height = h;
+    cv.getContext('2d').drawImage(bitmap, 0, 0, w, h);
+    bitmap.close();
+    _mediaType = 'image/jpeg';
+    showPreview(cv.toDataURL('image/jpeg', 0.88));
+  } catch(_) {
+    const reader = new FileReader();
+    reader.onload = e => {
+      const img = new Image();
+      img.onload = () => {
+        const scale = Math.min(1, MAX / Math.max(img.naturalWidth, img.naturalHeight));
+        const w = Math.round(img.naturalWidth * scale), h = Math.round(img.naturalHeight * scale);
+        const cv = document.createElement('canvas');
+        cv.width = w; cv.height = h;
+        cv.getContext('2d').drawImage(img, 0, 0, w, h);
+        _mediaType = 'image/jpeg';
+        showPreview(cv.toDataURL('image/jpeg', 0.88));
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  }
+}
+
+function showPreview(dataUrl) {
+  _imageData = dataUrl.split(',')[1];
+  const img = document.getElementById('previewImg');
+  img.src = dataUrl;
+  document.getElementById('uploadArea').style.display = 'none';
+  document.getElementById('previewSection').style.display = 'block';
+  document.getElementById('analyzeBtn').disabled = false;
+  clearError();
+}
+
+function removePhoto() {
+  _imageData = null;
+  document.getElementById('previewSection').style.display = 'none';
+  document.getElementById('uploadArea').style.display = 'block';
+  document.getElementById('fileInput').value = '';
+  document.getElementById('analyzeBtn').disabled = true;
+  stopCamera();
+}
+
+async function openCamera() {
+  try {
+    _camStream = await navigator.mediaDevices.getUserMedia({video:{facingMode:'user',width:640,height:480}});
+    const vid = document.getElementById('camVideo');
+    vid.srcObject = _camStream;
+    document.getElementById('preCamTips').style.display = 'none';
+    document.getElementById('camWrap').style.display = 'block';
+    document.getElementById('camBtns').style.display = 'flex';
+    document.getElementById('openCamBtn').style.display = 'none';
+  } catch(e) {
+    showError('Không thể mở camera. Vui lòng tải ảnh lên thay thế.');
+  }
+}
+function capturePhoto() {
+  const vid = document.getElementById('camVideo');
+  const cv = document.getElementById('camCanvas');
+  cv.width = vid.videoWidth; cv.height = vid.videoHeight;
+  cv.getContext('2d').drawImage(vid, 0, 0);
+  const dataUrl = cv.toDataURL('image/jpeg', 0.88);
+  _mediaType = 'image/jpeg';
+  stopCamera();
+  showPreview(dataUrl);
+}
+function stopCamera() {
+  if (_camStream) { _camStream.getTracks().forEach(t => t.stop()); _camStream = null; }
+  const vid = document.getElementById('camVideo');
+  vid.style.display = 'none'; vid.srcObject = null;
+  document.getElementById('camBtns').style.display = 'none';
+  document.getElementById('openCamBtn').style.display = 'inline-flex';
+  document.getElementById('preCamTips').style.display = 'block';
+  document.getElementById('camWrap').style.display = 'none';
+}
+
+function showError(msg) {
+  const el = document.getElementById('error-msg');
+  el.textContent = '⚠ ' + msg; el.classList.add('active');
+}
+function clearError() {
+  document.getElementById('error-msg').classList.remove('active');
+}
+function showTryonError(msg) {
+  const el = document.getElementById('tryon-error-msg');
+  el.textContent = '⚠ ' + msg; el.classList.add('active');
+}
+function clearTryonError() {
+  document.getElementById('tryon-error-msg').classList.remove('active');
+}
+
+async function analyze() {
+  if (!_imageData) return;
+  clearError();
+  document.getElementById('analyzeBtn').disabled = true;
+
+  TuviPaywall.init({ product: 'kieu-toc-phan-tich', slug: () => _currentSlug, onUnlock: () => {} });
+  _currentSlug = TuviPaywall.generateToolSlug('kieu-toc-phan-tich');
+  _saveStateForAuth();
+  await TuviPaywall.requireCredits(_currentSlug, async () => {
+    await _doPhanTich();
+  });
+  document.getElementById('analyzeBtn').disabled = false;
+}
+
+async function _measureFace(imageDataUrl) {
+  try {
+    const img = new Image();
+    await new Promise((res, rej) => { img.onload = res; img.onerror = rej; img.src = imageDataUrl; });
+    const W = img.naturalWidth, H = img.naturalHeight;
+    if (!window.FaceMesh) return null;
+    const fm = new FaceMesh({ locateFile: f => `https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh@0.4/${f}` });
+    fm.setOptions({ maxNumFaces: 1, refineLandmarks: false, minDetectionConfidence: 0.5, minTrackingConfidence: 0.5 });
+    return await new Promise(resolve => {
+      fm.onResults(res => {
+        if (!res.multiFaceLandmarks?.[0]) { resolve(null); return; }
+        const lm = res.multiFaceLandmarks[0];
+        const x = i => lm[i].x * W, y = i => lm[i].y * H;
+        const faceW  = Math.abs(x(234) - x(454));
+        const jawW   = Math.abs(x(172) - x(397));
+        const foreW  = Math.abs(x(103) - x(332));
+        const faceH  = Math.abs(y(10)  - y(175));
+        resolve({
+          faceWidth:    Math.round(faceW),
+          jawWidth:     Math.round(jawW),
+          foreheadWidth:Math.round(foreW),
+          faceHeight:   Math.round(faceH),
+          widthToHeight:+(faceW / faceH).toFixed(2),
+          jawToFace:    +(jawW / faceW).toFixed(2),
+          foreToJaw:    +(foreW / jawW).toFixed(2),
+        });
+      });
+      const cv = document.createElement('canvas');
+      cv.width = W; cv.height = H;
+      cv.getContext('2d').drawImage(img, 0, 0);
+      fm.send({ image: cv }).catch(() => resolve(null));
+      setTimeout(() => resolve(null), 3000);
+    });
+  } catch(e) { return null; }
+}
+
+async function _doPhanTich() {
+  const resultSec = document.getElementById('resultSection');
+  resultSec.classList.add('active');
+  resultSec.style.display = 'block';
+  document.getElementById('analysisLoading').style.display = 'flex';
+  document.getElementById('faceShapeCard').style.display = 'none';
+  document.getElementById('resultTabsWrap').style.display = 'none';
+  document.getElementById('tryonSection').style.display = 'none';
+  document.getElementById('resetWrap').style.display = 'none';
+  resultSec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  _analysisLoadingCtl = AiLoadingSteps.mount('analysisStepsHost', ANALYSIS_STEPS);
+  _analysisLoadingCtl.start();
+
+  const faceMeasurements = await _measureFace('data:' + _mediaType + ';base64,' + _imageData);
+
+  try {
+    const res = await fetch('/api/tuong-mat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        action: 'kieu-toc-phan-tich',
+        image: _imageData,
+        mediaType: _mediaType,
+        gender: _gender,
+        faceMeasurements
+      })
+    });
+    if (!res.ok) {
+      const d = await res.json().catch(() => ({}));
+      throw new Error(d.error || 'Lỗi ' + res.status);
+    }
+    const data = await res.json();
+    if (data.error) throw new Error(data.error);
+    _analysisResult = data;
+    renderAnalysis(data);
+  } catch(e) {
+    _analysisLoadingCtl && _analysisLoadingCtl.stop();
+    document.getElementById('analysisLoading').style.display = 'none';
+    showError('Lỗi phân tích: ' + (e.message || 'Vui lòng thử lại.'));
+    resultSec.style.display = 'none';
+  }
+}
+
+function switchResultTab(tab, btn) {
+  document.querySelectorAll('.result-tab').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.result-pane').forEach(p => { p.style.display = 'none'; p.classList.remove('active'); });
+  btn.classList.add('active');
+  const pane = document.getElementById('pane-' + tab);
+  pane.style.display = 'block'; pane.classList.add('active');
+}
+
+function renderAnalysis(data) {
+  _analysisLoadingCtl && _analysisLoadingCtl.finish();
+  document.getElementById('analysisLoading').style.display = 'none';
+
+  const shapeIconKey = SHAPE_ICON[data.faceShape] || 'user';
+  document.getElementById('shapeEmoji').innerHTML = window.iconHtml ? window.iconHtml(shapeIconKey) : '';
+  document.getElementById('shapeName').textContent = data.faceShapeVN || '—';
+  document.getElementById('shapeDesc').textContent = data.desc || '';
+  if (data.ageGroup) {
+    const badge = document.getElementById('ageGroupBadge');
+    badge.textContent = { '20s': '20s', '30s': '30s', '40s+': '40s+' }[data.ageGroup] || data.ageGroup;
+    badge.style.display = 'inline';
+  }
+  if (data.tuongHocInsight) {
+    document.getElementById('tuongHocInsightText').textContent = data.tuongHocInsight;
+    document.getElementById('tuongHocInsight').style.display = 'block';
+  }
+  document.getElementById('faceShapeCard').style.display = 'flex';
+
+  const hairList = document.getElementById('styleCardsList');
+  hairList.innerHTML = '';
+  const hairRanked = data.hairRanked || data.ranked || [];
+  const hairRankMap = {};
+  hairRanked.forEach((id, i) => { hairRankMap[id] = i + 1; });
+  const allStyles = _gender === 'nu' ? ALL_STYLES_NU : ALL_STYLES_NAM;
+  const orderedStyles = [
+    ...hairRanked.filter(id => STYLE_META[id]),
+    ...allStyles.filter(id => !hairRankMap[id] && STYLE_META[id])
+  ];
+  orderedStyles.forEach((id) => {
+    const meta = STYLE_META[id]; if (!meta) return;
+    const rank = hairRankMap[id];
+    const card = document.createElement('div');
+    card.className = 'style-card'; card.id = 'sc_' + id;
+    const rankBadge = rank
+      ? `<span class="style-rank" style="background:var(--gold-lt);color:var(--gold-soft)"><span class="ic" data-icon="star"></span> #${rank}</span>`
+      : `<span class="style-rank"><span class="ic" data-icon="scissors"></span></span>`;
+    card.innerHTML = `
+      ${_hairThumb(id, _gender)}
+      <div class="style-info" style="flex:1">
+        <div style="display:flex;align-items:center;gap:6px;margin-bottom:3px">
+          ${rankBadge}
+          <div class="style-name">${meta.name}</div>
+        </div>
+        <div class="style-sub">${meta.sub}</div>
+        ${(data.hairReasons||data.reasons||{})[id] ? `<div class="style-reason"><span class="ic" data-icon="lightbulb"></span> ${(data.hairReasons||data.reasons)[id]}</div>` : ''}
+      </div>
+      <button class="try-btn" onclick="selectStyle('${id}','hair')">Thử →</button>
+    `;
+    hairList.appendChild(card);
+  });
+  window.mountIcons && window.mountIcons(hairList);
+
+  const glassesList = document.getElementById('glassesCardsList');
+  glassesList.innerHTML = '';
+  const glassesRanked = data.glassesRanked || [];
+  glassesRanked.forEach((id, i) => {
+    const meta = GLASSES_META[id]; if (!meta) return;
+    const card = document.createElement('div');
+    card.className = 'style-card'; card.id = 'gc_' + id;
+    card.innerHTML = `
+      <div class="glasses-icon ic" data-icon="${meta.icon}"></div>
+      <div class="style-info" style="flex:1">
+        <div style="display:flex;align-items:center;gap:6px;margin-bottom:3px">
+          <span class="style-rank">#${i+1}</span>
+          <div class="style-name">${meta.name}</div>
+        </div>
+        <div class="style-sub">${meta.sub}</div>
+        ${(data.glassesReasons||{})[id] ? `<div class="style-reason"><span class="ic" data-icon="lightbulb"></span> ${data.glassesReasons[id]}</div>` : ''}
+      </div>
+      <button class="try-btn" onclick="selectStyle('${id}','glasses')">Thử →</button>
+    `;
+    glassesList.appendChild(card);
+  });
+  window.mountIcons && window.mountIcons(glassesList);
+
+  if (hairRanked.length || glassesRanked.length) {
+    document.getElementById('resultTabsWrap').style.display = 'block';
+  }
+
+  if (data.tip) {
+    document.getElementById('tipText').textContent = data.tip;
+    document.getElementById('tipBox').style.display = 'block';
+  }
+  document.getElementById('resetWrap').style.display = 'block';
+
+  if (window.SHELL_INTRO) Shell.dismissIntro(window.SHELL_INTRO.key);
+  Shell.setContext({
+    label: 'Kiểu Tóc — ' + (data.faceShapeVN || ''),
+    greeting: 'Khuôn mặt của bạn thuộc dạng **' + (data.faceShapeVN || '') + '**. Bạn muốn hỏi thêm về kiểu tóc hay kính mắt hợp tướng?',
+    chips: ['Vì sao kiểu này hợp mặt tôi?', 'Nên tránh kiểu tóc nào?', 'Kính mắt nào hợp tướng mặt tôi?']
+  });
+  Shell.setShareable({
+    kind: 'text', toolId: 'kieu-toc-phan-tich', title: 'Kiểu tóc hợp tướng mặt của tôi',
+    text: 'Hình dạng khuôn mặt: ' + (data.faceShapeVN || '') + (data.desc ? '\n' + data.desc : '') + (data.tip ? '\n\n💬 ' + data.tip : '')
+  });
+}
+
+async function selectStyle(styleId, type = 'hair') {
+  _selectedStyleId = styleId;
+  const meta = type === 'glasses' ? GLASSES_META[styleId] : STYLE_META[styleId];
+
+  document.querySelectorAll('.style-card').forEach(c => c.classList.remove('selected'));
+  const cardId = type === 'glasses' ? 'gc_' + styleId : 'sc_' + styleId;
+  const card = document.getElementById(cardId);
+  if (card) card.classList.add('selected');
+
+  TuviPaywall.init({ product: 'kieu-toc-tryon', slug: () => _currentSlug, onUnlock: () => {} });
+  _currentSlug = TuviPaywall.generateToolSlug('kieu-toc-tryon');
+  _saveStateForAuth();
+  await TuviPaywall.requireCredits(_currentSlug, async () => {
+    await _doTryOn(styleId, meta, type);
+  });
+}
+
+async function _doTryOn(styleId, meta, type = 'hair') {
+  clearTryonError();
+  const tryonSec = document.getElementById('tryonSection');
+  tryonSec.style.display = 'block';
+  const typeIconKey = type === 'glasses' ? 'glasses' : 'scissors';
+  document.getElementById('tryonTitleIcon').innerHTML = window.iconHtml ? window.iconHtml(typeIconKey) : '';
+  document.getElementById('tryonTitleText').textContent = 'Thử: ' + (meta?.name || styleId);
+  document.getElementById('tryonLoading').style.display = 'block';
+  document.getElementById('tryonResult').style.display = 'none';
+  tryonSec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  _tryonLoadingCtl = AiLoadingSteps.mount('tryonStepsHost', TRYON_STEPS);
+  _tryonLoadingCtl.start();
+
+  document.querySelectorAll('.try-btn').forEach(b => b.disabled = true);
+
+  try {
+    const res = await fetch('/api/tuong-mat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        action: 'kieu-toc-tryon',
+        image: _imageData,
+        mediaType: _mediaType,
+        style_id: styleId,
+        gender: _gender,
+        type
+      })
+    });
+    if (!res.ok) {
+      const d = await res.json().catch(() => ({}));
+      throw new Error(d.error || 'Lỗi ' + res.status);
+    }
+    const data = await res.json();
+    if (!data.imageUrl) throw new Error('Không nhận được ảnh kết quả.');
+
+    _tryonImgUrl = data.imageUrl;
+    document.getElementById('imgBefore').src = 'data:' + _mediaType + ';base64,' + _imageData;
+    document.getElementById('imgAfter').src = data.imageUrl;
+    document.getElementById('afterLabel').textContent = meta?.name || styleId;
+    _tryonLoadingCtl && _tryonLoadingCtl.finish();
+    document.getElementById('tryonLoading').style.display = 'none';
+    document.getElementById('tryonResult').style.display = 'block';
+    _saveTryonReading(styleId, data.imageUrl);
+    Shell.setShareable({
+      kind: 'image', title: 'Kiểu tóc mới của tôi (AI try-on)',
+      imageUrl: data.imageUrl, text: 'Thử kiểu tóc: ' + (meta?.name || styleId)
+    });
+  } catch(e) {
+    _tryonLoadingCtl && _tryonLoadingCtl.stop();
+    document.getElementById('tryonLoading').style.display = 'none';
+    showTryonError('Lỗi tạo ảnh: ' + (e.message || 'Vui lòng thử lại.'));
+  } finally {
+    document.querySelectorAll('.try-btn').forEach(b => b.disabled = false);
+  }
+}
+
+function clearTryon() {
+  document.getElementById('tryonSection').style.display = 'none';
+  _selectedStyleId = null;
+  document.querySelectorAll('.style-card').forEach(c => c.classList.remove('selected'));
+}
+
+async function downloadResult() {
+  if (!_tryonImgUrl) return;
+  try {
+    const res = await fetch(_tryonImgUrl);
+    const blob = await res.blob();
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = 'kieu-toc-' + (_selectedStyleId || 'result') + '.png';
+    a.click(); URL.revokeObjectURL(url);
+  } catch(e) {
+    window.open(_tryonImgUrl, '_blank');
+  }
+}
+
+function resetAll() {
+  removePhoto();
+  document.getElementById('resultSection').style.display = 'none';
+  document.getElementById('resultSection').classList.remove('active');
+  _analysisResult = null; _tryonImgUrl = null; _selectedStyleId = null;
+  Shell.setShareable(null);
+  document.getElementById('inputSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function _saveStateForAuth() {
+  try {
+    sessionStorage.setItem('tvmb_kieu_toc_state', JSON.stringify({
+      _savedAt: Date.now(),
+      _imageData,
+      _mediaType,
+      _gender,
+    }));
+  } catch(e) {}
+}
+
+function _restoreStateAfterAuth() {
+  try {
+    const raw = sessionStorage.getItem('tvmb_kieu_toc_state');
+    if (!raw) return false;
+    const saved = JSON.parse(raw);
+    if (Date.now() - (saved._savedAt || 0) > 10 * 60 * 1000) {
+      sessionStorage.removeItem('tvmb_kieu_toc_state');
+      return false;
+    }
+    sessionStorage.removeItem('tvmb_kieu_toc_state');
+    if (saved._imageData) {
+      _imageData = saved._imageData;
+      _mediaType = saved._mediaType || 'image/jpeg';
+      _gender = saved._gender || 'nam';
+      document.querySelectorAll('.gender-btn').forEach(b => b.classList.remove('active'));
+      const gBtn = document.getElementById(_gender === 'nu' ? 'genderNu' : 'genderNam');
+      if (gBtn) gBtn.classList.add('active');
+      const imgEl = document.getElementById('previewImg');
+      if (imgEl) imgEl.src = 'data:' + _mediaType + ';base64,' + _imageData;
+      document.getElementById('uploadArea').style.display = 'none';
+      document.getElementById('previewSection').style.display = 'block';
+      document.getElementById('analyzeBtn').disabled = false;
+      setTimeout(() => {
+        if (window.Auth?.isLoggedIn() && _imageData) {
+          document.getElementById('analyzeBtn').click();
+        }
+      }, 800);
+    }
+    return true;
+  } catch(e) { return false; }
+}
+
+async function _saveTryonReading(styleId, imageUrl) {
+  try {
+    const token = window.Auth?.getSession()?.access_token;
+    if (!token) return;
+    fetch('/api/history?action=save_tuong', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+      body: JSON.stringify({ tool: 'kieu-toc-' + styleId, result_text: imageUrl, thumbnail: null }),
+    }).catch(() => {});
+  } catch(e) {}
+}
+
+(function() { _restoreStateAfterAuth(); })();
+</script>
+</body>
+</html>

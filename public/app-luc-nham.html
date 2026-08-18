@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"></noscript>
-<link rel="stylesheet" href="/shell.css?v=16">
+<link rel="stylesheet" href="/shell.css?v=19">
 <style>
 .form-card{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);max-width:600px}
 .form-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:3px}
@@ -21,7 +21,7 @@
 .fg input{width:80px}
 .fg input:focus,.fg select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(20,85,164,.12)}
 .btn-go{background:var(--red);color:#fff;border:none;border-radius:8px;padding:10px 22px;font-size:14px;font-weight:600;cursor:pointer;font-family:var(--serif)}
-.err{color:var(--red);font-size:13px;margin-top:8px;display:none}.err.active{display:block}
+.err{color:var(--tx-red);font-size:13px;margin-top:8px;display:none}.err.active{display:block}
 #resPanel{display:none;max-width:820px}
 .res-block{background:#fff;border:1px solid var(--border-lt);border-radius:10px;overflow:hidden;box-shadow:var(--shadow)}
 .res-block-header{background:var(--navy);padding:12px 16px}
@@ -32,7 +32,7 @@
 .than-card{padding:14px 12px;border-radius:8px;border:1px solid var(--border-lt);text-align:center}
 .than-card.active-than{background:#e8f0fe;border-color:#1455A4;outline:2px solid #1455A4}
 .than-card.good{background:#eaf4ed;border-color:#c3e0cc}.than-card.bad{background:#fef0ef;border-color:#f5c0bc}
-.than-name{font-size:13px;font-weight:700;color:var(--navy);margin-bottom:4px}
+.than-name{font-size:13px;font-weight:700;color:var(--heading);margin-bottom:4px}
 .than-gio{font-size:11px;color:var(--text-lt);margin-bottom:6px}
 .than-type{font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:2px 6px;border-radius:2px}
 .ty-good{background:#c3e0cc;color:#1E6B3C}.ty-bad{background:#f5c0bc;color:#C0392B}
@@ -80,7 +80,7 @@
         <div class="err" id="error-msg"></div>
       </div>
 
-      <div id="resPanel">
+      <div id="resPanel" data-ws-result>
         <div class="res-block">
           <div class="res-block-header"><span class="res-block-title" id="resTitle">—</span></div>
           <div class="res-block-body" id="activeBox" style="margin-bottom:20px"></div>
@@ -103,7 +103,7 @@ window.SHELL_INTRO={key:'luc-nham',title:'Lục Nhâm Giản',desc:'Tra <b>12 th
 <script src="/tools-shared/dai-luc-nham.js?v=1"></script>
 <script src="/auth.js?v=2"></script>
   <script src="/nav.js?v=22" data-icons-only></script>
-<script src="/shell.js?v=62"></script>
+<script src="/shell.js?v=72"></script>
 <script>
 // Ô giữa dùng CHUNG /tools-shared/luc-nham.js với /tools/luc-nham.html.
 // `luc-nham.js` nay CHỈ kiểm ngày + dựng tiêu đề. Phần thần tướng lấy từ

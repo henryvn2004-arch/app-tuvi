@@ -1,0 +1,89 @@
+name: Next Build
+
+# 🔴 VÌ SAO CÓ WORKFLOW NÀY (đọc trước khi sửa/tắt):
+# Lượt bump `typescript` 6 → 7 (#388) làm **7 lượt deploy production ERROR** mà
+# KHÔNG check nào trên PR đỏ. Căn nguyên là CI chưa bao giờ chạy `next build`:
+#   · job tên `build` trong danh sách check là **build-android.yml**, không phải
+#     bản dựng web — cái tên đó tự nó đã đánh lừa;
+#   · `lint` và `typecheck` gọi `tsc` **CLI**, không đi qua compiler API, nên
+#     vẫn xanh trong khi `next build` chết vì đúng API đó bị gỡ.
+# ⇒ Vercel là nơi DUY NHẤT bắt được, và người ta thì đọc "7 check xanh" rồi
+# merge. Job này lấp đúng lỗ đó.
+#
+# 🔑 TÊN JOB LÀ `next-build`, CỐ Ý KHÔNG PHẢI `build`. Hai check cùng tên `build`
+# là tái lập chính sự nhầm lẫn vừa trả giá.
+
+on:
+  push:
+    branches: [main, dev]
+  pull_request:
+    branches: [main, dev]
+
+jobs:
+  next-build:
+    # ⛔ TUYỆT ĐỐI KHÔNG thêm `if: github.actor != 'dependabot[bot]'` như
+    # playwright.yml/lighthouse.yml. Hai cái đó bỏ qua Dependabot vì chúng cần
+    # SECRET mà Dependabot không được cấp. Job này KHÔNG dùng secret nào — và
+    # lượt bump nó sinh ra để chặn (#388) CHÍNH LÀ một PR Dependabot. Bỏ qua
+    # Dependabot ở đây là gỡ đúng cái chốt vừa dựng.
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - run: npm ci
+
+      # `prebuild` tự dựng tuvi-engine (`cd tuvi-engine && npm ci && npm run build`)
+      # nên không cần bước riêng ở đây.
+
+      # Prerender đọc Supabase ngay lúc dựng. Không có gì trả lời thì build chết
+      # ở DNS và ta không phân biệt được "mã hỏng" với "thiếu env" — bẫy đã ghi
+      # trong CLAUDE.md. Stub trả rỗng cho mọi lượt đọc để mã thoát nói về MÃ.
+      - name: Bật stub PostgREST
+        run: |
+          node scripts/stub-postgrest.mjs 54321 &
+          for i in $(seq 1 20); do
+            curl -sf http://127.0.0.1:54321/ >/dev/null && break
+            sleep 0.5
+          done
+          curl -sf http://127.0.0.1:54321/ >/dev/null || {
+            echo "::error::stub PostgREST không lên — bước dựng sẽ đo nhầm hạ tầng thay vì đo mã."
+            exit 1
+          }
+
+      - name: next build
+        id: nextbuild
+        env:
+          # Giá trị GIẢ, cố ý vô hại. Chỉ đủ để lượt khởi tạo client không ném
+          # `supabaseUrl is required`. KHÔNG thêm env thật vào đây: bản dựng này
+          # chạy trên mã của PR bất kỳ.
+          SUPABASE_URL: http://127.0.0.1:54321
+          SUPABASE_SERVICE_KEY: stub-service-key
+          SUPABASE_ANON_KEY: stub-anon-key
+        run: |
+          set -o pipefail
+          npm run build 2>&1 | tee build.log
+
+      # Mã thoát đã đủ chặn, nhưng in thẳng nguyên nhân ra thì lượt sau khỏi phải
+      # đi chẩn lại từ đầu — đây đúng là lỗi đã tốn 7 lượt deploy để nhận ra.
+      - name: Nêu rõ nếu vỡ ở tầng TypeScript
+        if: failure()
+        run: |
+          if grep -q "does not provide the compiler API" build.log; then
+            echo "::error::TypeScript đang dùng KHÔNG cung cấp compiler API mà Next cần."
+            echo "::error::TS 7 là bản port native — API biên dịch trong JS đã bị gỡ."
+            echo "::error::Trả root về TypeScript 6 (chốt ignore đã có trong .github/dependabot.yml)."
+          fi
+
+      - name: Giữ log khi hỏng
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: next-build-log
+          path: build.log
+          if-no-files-found: ignore

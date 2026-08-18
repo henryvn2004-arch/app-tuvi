@@ -157,6 +157,7 @@ try {
 
   const kich = `
 import { createRequire } from 'node:module';
+import { readFileSync } from 'node:fs';
 const { TimeManager } = await import('mingyu-core/calendar');
 TimeManager.setTimezoneOffsetMinutesOverride(420);
 const out = {};
@@ -180,6 +181,84 @@ quet('bat-tu', [[3,6,1998,1],[17,11,1975,7],[28,2,2004,11]].map(([d,m,y,g]) => {
 const { lapBanDo, railData: bdRail } = await import('./lib/tayphuong/natal.js');
 quet('ban-do-sao', [[3,6,1998,1,30],[22,12,1980,18,5]].map(([d,m,y,h,mi]) => { const b = lapBanDo({ngay:d,thang:m,nam:y,gio:h,phut:mi,vido:21.03,kinhdo:105.83,muiGio:7}); return [b, bdRail(b)]; }));
 
+/* ─── PHỦ TRỌN TỪ VỰNG, không phải phủ mẫu ────────────────────────────────
+   Quét mẫu ở trên chỉ chứng minh được thứ mà mẫu CHẠM TỚI. Đo thật: lưới cũ
+   (3 lá số) bỏ lọt 4 tên; nới lên 352 lá số vẫn bỏ lọt thêm 10 tên nữa —
+   chúng hiếm tới mức không lá nào trong lưới sinh ra. Nên với nguồn nào
+   LIỆT KÊ ĐƯỢC danh sách tên, phải đối chiếu trọn danh sách đó. */
+const HANR = /[\\u3400-\\u4dbf\\u4e00-\\u9fff]/;
+const goc = (o, ra = new Set()) => {
+  if (typeof o === 'string') { if (HANR.test(o)) ra.add(o); return ra; }
+  if (Array.isArray(o)) { o.forEach(v => goc(v, ra)); return ra; }
+  if (o && typeof o === 'object') Object.entries(o).forEach(([k, v]) => { if (HANR.test(k)) ra.add(k); goc(v, ra); });
+  return ra;
+};
+// ⚠️ Bọc try/catch để nguồn dời/đổi bố cục thì rơi về \`n: 0\` — chốt ngưỡng ở
+// phía dưới mới in được câu hướng dẫn. Không bọc thì lượt chạy chết bằng một
+// bãi ERR_MODULE_NOT_FOUND, đọc xong vẫn không biết phải sửa gì.
+try {
+  const { docThanSat: bzDoc } = await import('./lib/bazi/terms.js');
+  // Nạp bằng đường dẫn TUYỆT ĐỐI: bảng này không nằm trong \`exports\` của
+  // \`mingyu-core\` nên gọi theo tên gói sẽ bị chặn.
+  const bzData = await import(${JSON.stringify(
+    'file://' + join(process.cwd(), 'node_modules/mingyu-core/dist/bazi/baziShenShaData.js')
+  )});
+  const bzTen = goc(bzData.shenShaTypes);
+  out['tuvung-bat-tu'] = { n: bzTen.size, sot: [...bzTen].filter(s => HANR.test(bzDoc(s).ten)) };
+} catch (e) {
+  out['tuvung-bat-tu'] = { n: 0, sot: [], loi: String(e && e.message || e) };
+}
+
+try {
+  const { docThanSat: hlDoc } = await import('./lib/almanac/terms.js');
+  const { listHuangliShenshaNames } = await import('mingyu-core/shensha');
+  const hlTen = listHuangliShenshaNames();
+  out['tuvung-hoang-lich'] = { n: hlTen.length, sot: hlTen.filter(s => HANR.test(hlDoc(s).ten)) };
+} catch (e) {
+  out['tuvung-hoang-lich'] = { n: 0, sot: [], loi: String(e && e.message || e) };
+}
+
+/* Lục Nhâm — nguồn KHÔNG export danh sách tên, chỉ export CON SỐ
+   \`REGISTERED_LIUREN_GUA_TI_COUNT\`. Nên rút tên từ chính khối luật rồi
+   ĐỐI CHIẾU số rút được với con số nguồn khai: bố cục đổi ⇒ hai số lệch ⇒
+   đỏ kèm hướng dẫn, thay vì lặng lẽ kiểm một danh sách cụt.
+   Cộng thêm bộ pháp thủ truyền CỬU TÔNG MÔN — tập ĐÓNG của cổ pháp, không nở
+   theo lượt bump, nên khai thẳng tại đây. Chính \`遥克\`/\`昴星\` đứng một mình
+   và \`铸印卦\` đã lọt qua 4.392 khóa mẫu mà không lá nào sinh ra. */
+try {
+  const { docKhoaThe: lnDoc, docPhap: lnPhap } = await import('./lib/liuren/terms.js');
+  const nguon = ${JSON.stringify(
+    'file://' +
+      join(
+        process.cwd(),
+        'node_modules/mingyu-core/dist/divination/algorithms/liuren/helpers/transmission.js'
+      )
+  )};
+  const { REGISTERED_LIUREN_GUA_TI_COUNT: soKhai } = await import(nguon);
+  const src = readFileSync(new URL(nguon), 'utf8');
+  const khoi = src.slice(
+    src.indexOf('const REGISTERED_GUA_TI_RULES'),
+    src.indexOf('export const REGISTERED_LIUREN_GUA_TI_COUNT')
+  );
+  const quai = [...khoi.matchAll(/name:\\s*'([^']+)'/g)].map(m => m[1]);
+  // Tên PHÁP rút thẳng từ nguồn, KHÔNG suy bằng cách chắp đuôi \`法\` vào mọi
+  // khóa thể: \`蒿矢\` là biến thể CỦA \`遥克法\` chứ không phải một pháp riêng,
+  // chắp bừa là bộ dò kêu oan — mà kêu oan thì người ta tắt nó đi.
+  const lessons = readFileSync(new URL(nguon.replace('transmission.js', 'lessons.js')), 'utf8');
+  const phap = [...new Set([...lessons.matchAll(/'([\\u4e00-\\u9fff]{1,6}法)'/g)].map(m => m[1]))];
+  // Nhãn khóa thể đứng MỘT MÌNH trong \`patternTags\` (tập đóng của cổ pháp).
+  const NHAN = ['元首','重审','比用','涉害','遥克','蒿矢','弹射','伏吟','自任',
+    '自信','返吟','反吟','无依','八专','昴星','虎视','冬蛇掩目','别责','递传','回环'];
+  const sot = [
+    ...quai.filter(s => HANR.test(lnDoc(s))),
+    ...NHAN.filter(s => HANR.test(lnDoc(s))),
+    ...phap.filter(s => HANR.test(lnPhap(s).ten)),
+  ];
+  out['tuvung-luc-nham'] = { n: quai.length, soKhai, soPhap: phap.length, sot };
+} catch (e) {
+  out['tuvung-luc-nham'] = { n: 0, sot: [], loi: String(e && e.message || e) };
+}
+
 console.log('__KQ__' + JSON.stringify(out));
 `;
   writeFileSync(join(build, 'check.mjs'), kich);
@@ -191,6 +270,9 @@ console.log('__KQ__' + JSON.stringify(out));
 
   console.log('Quét chữ chưa dịch trong payload của các tool:\n');
   for (const [ten, r] of Object.entries(kq)) {
+    // Hai mục `tuvung-*` không phải payload — chúng đối chiếu TRỌN danh sách
+    // tên của nguồn, xử riêng ở dưới.
+    if (ten.startsWith('tuvung-')) continue;
     bao(r.han.length === 0, `${ten.padEnd(12)} — chữ Hán lọt: ${r.han.join('') || 'không'}`);
 
     // 🐞 Loại lỗi THỨ HAI, khác hẳn chữ chưa dịch: giá trị hỏng bị NỘI SUY vào
@@ -216,6 +298,50 @@ console.log('__KQ__' + JSON.stringify(out));
         `${ten.padEnd(12)} — thuật ngữ Anh của celestine còn sót: ${sot.join(', ') || 'không'}`
       );
     }
+  }
+
+  console.log('\nĐối chiếu TRỌN danh sách tên của nguồn:\n');
+  // 🔑 Lục Nhâm có thêm một chốt mà hai mục kia không có: nguồn EXPORT con số
+  // luật đã đăng ký, nên rút tên xong phải khớp đúng con số đó. Lệch = bố cục
+  // nguồn đã đổi ⇒ danh sách rút ra không còn đáng tin, phải sửa bộ dò chứ
+  // không phải nới nó.
+  {
+    const r = kq['tuvung-luc-nham'];
+    if (r && r.n && r.soKhai != null && r.n !== r.soKhai) {
+      console.error(
+        `❌ tuvung-luc-nham — rút được ${r.n} khóa thể nhưng nguồn khai ${r.soKhai}.\n` +
+          '   Khối `REGISTERED_GUA_TI_RULES` đã đổi bố cục ⇒ PHẢI sửa cách rút ' +
+          'tên trong bộ dò. Bỏ qua là kiểm một danh sách cụt mà vẫn báo xanh.'
+      );
+      loi++;
+    }
+  }
+
+  for (const [ten, nguong] of [
+    ['tuvung-bat-tu', 150],
+    ['tuvung-hoang-lich', 120],
+    ['tuvung-luc-nham', 10],
+  ]) {
+    const r = kq[ten];
+    // Đọc ra danh sách RỖNG rồi báo xanh còn tệ hơn báo đỏ — cùng chốt đã dựng
+    // trong `check-que-motifs.mjs`. Bảng thần sát Bát Tự lấy qua đường dist nội
+    // bộ của `mingyu-core` (không có trong `exports`) nên lượt bump có thể dời
+    // nó; ngưỡng dưới đây làm chuông báo thay vì để bộ dò câm.
+    if (!r || r.n < nguong) {
+      console.error(
+        `❌ ${ten} — chỉ đọc được ${r ? r.n : 0} tên (chờ ≥ ${nguong}).\n` +
+          (r?.loi ? `   Lỗi khi đọc nguồn: ${r.loi}\n` : '') +
+          '   Nguồn đã đổi bố cục ⇒ PHẢI sửa bộ dò. Đừng bỏ qua: đọc hụt danh ' +
+          'sách thì mục này xanh mà không kiểm gì cả.'
+      );
+      loi++;
+      continue;
+    }
+    bao(
+      r.sot.length === 0,
+      `${ten.padEnd(18)} — ${r.n} tên${r.soPhap ? ` + ${r.soPhap} pháp` : ''}` +
+        `, còn chữ Hán: ${r.sot.join(', ') || 'không'}`
+    );
   }
 } finally {
   rmSync(out, { recursive: true, force: true });

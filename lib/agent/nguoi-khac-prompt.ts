@@ -16,6 +16,8 @@
 // ============================================================
 
 import type { NguoiKhacProfile } from '@/lib/engine/nguoi-khac';
+import { vanNamLine, LUAT_VAN_NAM } from '@/lib/engine/cong-so';
+import { matDocBlock } from '@/lib/agent/rail-blocks';
 
 export const NGUOI_KHAC_SYSTEM_PROMPT = `Bạn là một người xem tử vi lâu năm, đang viết một BẢN CẨM NANG ỨNG XỬ cho người đến hỏi.
 
@@ -105,10 +107,8 @@ export function buildNguoiKhacPrompt(p: NguoiKhacProfile, ten: string): string {
     L.push('Không đọc được đại vận đang chạy — ĐỪNG bịa, bỏ qua phần thời điểm hoặc nói theo vận năm.');
   }
   if (p.vanNam) {
-    L.push(
-      `Vận năm ${p.vanNam.nam}: ${TIER(p.vanNam.diem)}` +
-        (p.vanNam.huong ? `, đà ${p.vanNam.huong}` : ''),
-    );
+    L.push(`Vận năm ${vanNamLine(p.vanNam)}`);
+    L.push(LUAT_VAN_NAM);
   }
   L.push('');
 
@@ -194,6 +194,65 @@ export const NGUOI_KHAC_SCHEMA = {
  * Cùng lối `pastLifeRailWrapper`: CHỈ THÊM, không sửa/bớt phần lá số vốn có —
  * rail vẫn giữ nguyên toàn bộ khả năng luận lá số, chỉ đổi GÓC NHÌN.
  */
+/**
+ * Chi tiết KIỂU NGƯỜI cho rail.
+ *
+ * Vì sao cần: bản TRẢ TIỀN dựng đoạn văn từ chính mấy trường này (xem
+ * `buildNguoiKhacPrompt` — `Động lực gốc`, `Đạt chất`, `Hợp/Kỵ môi trường`).
+ * Người dùng ĐỌC đoạn đó rồi hỏi rail *"vì sao anh ấy kỵ môi trường kia?"* —
+ * trước đây rail chỉ có nhãn kiểu + một câu, nên phải luận chay. Đúng họ lỗi
+ * `thapThan` của Bát Tự: engine tính, người dùng đọc, model mù.
+ *
+ * Bảng KIỂU là quy chiếu TỰ ĐẶT của trang, model không suy lại được từ lá số —
+ * nên không gửi là mất hẳn, khác với mấy cung vốn có sẵn trong lá số.
+ */
+function kieuBlock(k: {
+  dongLuc?: string;
+  datChat?: string;
+  kieuDan?: string;
+  moiTruongHop?: string;
+  moiTruongKy?: string;
+  manh?: string;
+  yeu?: string;
+}): string {
+  const row = (nhan: string, v?: string) => (v ? `  ${nhan}: ${v}\n` : '');
+  const s =
+    row('Động lực gốc', k.dongLuc) +
+    row('Nhận ra ngay ở chỗ làm', k.datChat) +
+    row('Khi có quyền thì dẫn người kiểu', k.kieuDan) +
+    row('Hợp môi trường', k.moiTruongHop) +
+    row('Kỵ môi trường', k.moiTruongKy) +
+    row('Mạnh', k.manh) +
+    row('Chỗ hay vấp', k.yeu);
+  return s ? `--- CHI TIẾT KIỂU NGƯỜI (dùng đúng mấy dòng này, đừng tự nghĩ thêm) ---\n${s}` : '';
+}
+
+/**
+ * Mặt "với bạn" — cung trong lá số NGƯỜI XEM nói về hạng người này.
+ *
+ * 🔑 Đây là thứ rail KHÔNG có đường nào suy lại: nó bắc qua lá số THỨ HAI (của
+ * chính người đang chat), mà rail chỉ nạp được lá số đang xem. Trang thì hiện
+ * hẳn khối này. Không gửi ⇒ hỏi *"tôi với người này hợp nhau chỗ nào"* là model
+ * luận chay trên đúng câu hỏi tool sinh ra để trả lời.
+ */
+function voiBanBlock(v: NguoiKhacProfile['voiBan']): string {
+  if (!v) return '';
+  let s = `--- ĐỐI CHIẾU VỚI LÁ SỐ NGƯỜI ĐANG CHAT (họ có đưa lá số của mình) ---\n`;
+  s += `  Cung ${v.cung} trong lá số NGƯỜI ĐANG CHAT nói về hạng người này`;
+  s += v.muon ? ' (vô chính diệu — mượn xung chiếu)' : '';
+  s += v.sao && v.sao.length ? `: ${v.sao.join(', ')}` : '';
+  s += '\n';
+  if (v.kieuTen) s += `  Cung đó mô tả một người kiểu: ${v.kieuTen}\n`;
+  if (v.khop != null)
+    s += v.khop
+      ? '  → TRÙNG kiểu của người trong lá số: thứ họ mong gặp đúng là thứ người kia vốn có.\n'
+      : '  → KHÁC kiểu của người trong lá số: chỗ lệch giữa cái họ mong và người thật.\n';
+  s += v.cungTinh
+    ? '  Hai kiểu CÙNG tính âm/dương → phản ứng giống nhau nên dễ va nhau.\n'
+    : '  Hai kiểu KHÁC tính âm/dương → dễ bù cho nhau hơn là va nhau.\n';
+  return s;
+}
+
 export function nguoiKhacRailWrapper(p: NguoiKhacProfile, tenRaw: string): string {
   // Tên do người dùng gõ → chỉ đi vào system sau khi bóc hết ký tự có thể dùng
   // để bẻ prompt (xuống dòng, ngoặc nhọn, backtick) và cắt ngắn. Cùng lối phòng
@@ -216,6 +275,7 @@ Lá số ở trên KHÔNG phải của người đang chat. Đó là lá số c�
 - CẤM luận SỨC KHOẺ, BỆNH TẬT, TIỀN RIÊNG, HÔN NHÂN của người này${p.quanHe.id === 'ban-doi' ? ' (riêng chuyện hai người với nhau thì được, ở mức cách cư xử)' : ''}. Người đó không có mặt để đồng ý.
 - CẤM phán giá trị ("người này tệ/khó ưa"). Tính cách chỉ hợp hoặc không hợp bối cảnh.
 - Kiểu người theo khung này: ${p.kieu.ten} — ${p.kieu.motCau}${p.phan.lai && p.kieuPhu ? ` (SÁT RANH GIỚI với kiểu ${p.kieuPhu.ten}, phải nói rõ là pha, đừng ép nhãn)` : ''}.
+${kieuBlock(p.kieu)}${matDocBlock(p.matDoc, 'CÁC MẶT TOOL NÀY ĐỌC (đúng mấy cung này, đúng vai này)')}${voiBanBlock(p.voiBan)}
 - CẤM gọi đây là trắc nghiệm/khoa học/đã kiểm định, CẤM đối chiếu DISC/MBTI.
 === HẾT KHỐI NGƯỜI KHÁC ===`;
 }

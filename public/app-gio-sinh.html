@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Xác Định Giờ Sinh — Tử Vi Minh Bảo</title>
+<meta name="description" content="Không nhớ giờ sinh? Lập cả 12 lá số khả nghi rồi thu hẹp bằng vài câu hỏi về sức khoẻ và các giai đoạn đã sống qua.">
+<link rel="icon" type="image/webp" href="/seal.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"></noscript>
+<link rel="stylesheet" href="/shell.css?v=19">
+<style>
+.form-card{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);max-width:860px}
+.form-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:3px}
+.form-card p.sub{font-size:12.5px;color:var(--text-lt);margin-bottom:14px}
+.frow{display:flex;gap:11px;flex-wrap:wrap;align-items:flex-end;margin-bottom:12px}
+.fg{display:flex;flex-direction:column;gap:5px}
+.fg label{font-size:10.5px;font-weight:600;color:var(--text-lt);letter-spacing:.04em;text-transform:uppercase}
+.fg input,.fg select{border:1px solid var(--line-2);border-radius:7px;padding:8px 10px;font-size:13.5px;font-family:inherit;color:var(--text);background:var(--paper);outline:none}
+.fg input:focus,.fg select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(20,85,164,.12)}
+/* ⚠️ Scope theo ID RIÊNG, KHÔNG nhắm `.fg select` chung — bài học trang Công Sở. */
+#gs-nam{width:104px}#gs-ngay,#gs-thang{width:84px}#gs-gt,#gs-lich{width:132px}
+.btn-go{background:var(--red);color:#fff;border:none;border-radius:8px;padding:10px 22px;font-size:14px;font-weight:600;cursor:pointer;font-family:var(--serif)}
+.btn-go:disabled{opacity:.6;cursor:not-allowed}
+.err{color:var(--tx-red);font-size:13px;margin-top:8px;display:none}
+.err.active{display:block}
+
+.sec{border:1px solid var(--line);border-radius:10px;margin-bottom:16px;background:var(--white);overflow:hidden;max-width:880px}
+.sec-h{background:var(--paper-2);padding:9px 14px;font-family:var(--serif);font-size:13px;font-weight:600;border-bottom:1px solid var(--line)}
+.sec-b{padding:14px}
+.note{font-size:12.5px;color:var(--text-lt);line-height:1.65}
+
+/* ── Lưới 12 giờ khả nghi (tầng tính thử) ── */
+.grid12{display:grid;grid-template-columns:repeat(auto-fill,minmax(178px,1fr));gap:9px}
+.cand{border:1px solid var(--line-2);border-radius:8px;padding:9px 11px;background:var(--paper)}
+.cand b{font-family:var(--serif);font-size:13.5px}
+.cand .k{font-size:11px;color:var(--text-lt)}
+.cand .s{font-size:12px;margin-top:5px;line-height:1.5}
+
+/* ── Khảo sát ── */
+.qwrap{max-width:720px}
+.qprog{font-size:11.5px;color:var(--text-lt);letter-spacing:.04em;text-transform:uppercase;margin-bottom:8px}
+.qtitle{font-family:var(--serif);font-size:16.5px;font-weight:600;line-height:1.45;margin-bottom:5px}
+.qhint{font-size:12.5px;color:var(--text-lt);margin-bottom:14px;line-height:1.6}
+.opt{display:block;width:100%;text-align:left;border:1px solid var(--line-2);background:var(--paper);border-radius:9px;padding:12px 14px;margin-bottom:9px;font-size:13.5px;font-family:inherit;color:var(--text);cursor:pointer;line-height:1.55}
+.opt:hover{border-color:var(--blue);background:var(--gold-lt)}
+.opt-skip{color:var(--text-lt);font-style:italic}
+
+/* ── Kết quả ── */
+.rank{border:1px solid var(--line-2);border-radius:10px;padding:12px 14px;margin-bottom:10px;background:var(--paper)}
+.rank.top{border-color:var(--gold);background:var(--gold-lt)}
+.rank-h{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.rank-h b{font-family:var(--serif);font-size:16px}
+.rank-pct{margin-left:auto;font-family:var(--serif);font-size:19px;font-weight:700}
+.bar{height:6px;border-radius:3px;background:var(--line);margin:8px 0 10px;overflow:hidden}
+.bar>i{display:block;height:100%;background:var(--gold);border-radius:3px}
+.ev{font-size:12.5px;line-height:1.65;margin-top:3px}
+.ev .y{color:var(--tx-green)}
+.ev .n{color:var(--text-lt)}
+.badge{display:inline-block;border-radius:999px;padding:2px 10px;font-size:11px;font-weight:600;letter-spacing:.03em}
+.badge.cao{background:#E6F3EA;color:var(--tx-green)}
+.badge.vua{background:var(--gold-lt);color:var(--tx-gold)}
+.badge.thap{background:var(--paper-2);color:var(--text-lt)}
+@media(max-width:520px){.rank-pct{margin-left:0}}
+</style>
+</head>
+<body>
+<div class="shell">
+  <aside class="sb" id="shell-sidebar"></aside>
+
+  <main class="ws" id="ws">
+    <div class="ws-top">
+      <button class="btn mobile-only" onclick="document.getElementById('shell-sidebar').classList.toggle('open');window.shellSyncBackdrop&&shellSyncBackdrop()" aria-label="Menu">☰</button>
+      <div class="ws-title"><b>Xác Định Giờ Sinh</b><span>Không nhớ giờ sinh thì bắt đầu từ đây</span></div>
+      <!-- `.ws-actions` là chỗ shell CHÈN nút Chia sẻ/PDF. `check:share` canh. -->
+      <div class="ws-actions">
+        <button class="btn" id="btnEdit" onclick="_reset()" style="display:none">Làm lại</button>
+        <button class="btn mobile-only" onclick="Shell.openRail()">✦ Hỏi</button>
+      </div>
+    </div>
+    <div class="ws-body">
+      <div id="introHost"></div>
+      <div id="shellRecent"></div>
+
+      <div id="birthPanel">
+        <div class="form-card">
+          <h2>Xác Định Giờ Sinh</h2>
+          <p class="sub">Chỉ cần <b>ngày tháng năm sinh</b> — giờ chính là thứ đi tìm. Máy lập cả <b>12 lá số khả nghi</b> rồi thu hẹp dần bằng vài câu hỏi về sức khoẻ và các giai đoạn anh/chị đã sống qua.</p>
+          <div class="frow">
+            <div class="fg"><label for="gs-ngay">Ngày</label><select id="gs-ngay"></select></div>
+            <div class="fg"><label for="gs-thang">Tháng</label><select id="gs-thang"></select></div>
+            <div class="fg"><label for="gs-nam">Năm</label><input type="number" id="gs-nam" placeholder="1984" min="1900" max="2030"></div>
+            <div class="fg"><label for="gs-lich">Loại lịch</label><select id="gs-lich"><option value="duong">Dương lịch</option><option value="am">Âm lịch</option></select></div>
+            <div class="fg"><label for="gs-gt">Giới tính</label><select id="gs-gt"><option value="nam">Nam</option><option value="nu">Nữ</option></select></div>
+          </div>
+          <button class="btn-go" id="btnGo" onclick="start()">Xem 12 giờ khả nghi</button>
+          <div class="err" id="error-msg"></div>
+          <p class="sub" style="margin:12px 0 0">Bước xem 12 lá số khả nghi là <b>miễn phí</b>. Phần khảo sát thu hẹp và bảng xếp hạng mới tính Lượng.</p>
+        </div>
+      </div>
+
+      <!-- `data-ws-result` là giao ước DUY NHẤT với shell. `check:share` canh. -->
+      <div id="resPanel" data-ws-result style="display:none">
+        <!-- Tầng MIỄN PHÍ: bày 12 giả thuyết -->
+        <div id="freeBlock" style="display:none">
+          <div class="sec">
+            <div class="sec-h">Cùng một ngày sinh — 12 lá số hoàn toàn khác nhau</div>
+            <div class="sec-b">
+              <p class="note" style="margin-bottom:12px">Giờ sinh đổi thì cung Mệnh đổi, cục đổi, kéo theo toàn bộ vị trí sao đổi. Đây là 12 khả năng của <b id="freeLine"></b> — chỉ một trong số này là lá số thật của anh/chị.</p>
+              <div class="grid12" id="grid12"></div>
+            </div>
+          </div>
+          <div class="sec">
+            <div class="sec-h">Bước tiếp theo — thu hẹp bằng khảo sát</div>
+            <div class="sec-b">
+              <p class="note" id="surveyPitch"></p>
+              <div id="lockHost" style="margin-top:12px"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tầng TRẢ TIỀN: khảo sát -->
+        <div id="surveyBlock" class="sec" style="display:none">
+          <div class="sec-h">Khảo sát thu hẹp</div>
+          <div class="sec-b qwrap">
+            <div class="qprog" id="qprog"></div>
+            <div class="qtitle" id="qtitle"></div>
+            <div class="qhint" id="qhint"></div>
+            <div id="qopts"></div>
+          </div>
+        </div>
+
+        <!-- Tầng TRẢ TIỀN: kết quả -->
+        <div id="resultBlock" style="display:none">
+          <div class="sec">
+            <div class="sec-h">Giờ sinh khả năng cao nhất</div>
+            <div class="sec-b">
+              <p style="margin-bottom:12px"><span class="badge" id="tcBadge"></span> <span class="note" id="tcNote"></span></p>
+              <div id="rankHost"></div>
+              <p class="note" id="loiKhuyen" style="margin-top:14px"></p>
+            </div>
+          </div>
+
+          <!-- Cả tool này tồn tại để sinh ra ĐÚNG MỘT dữ kiện: giờ sinh. Thiếu
+               khối này thì người dùng trả Lượng, đọc ra "giờ Sửu", rồi phải tự
+               nhớ và gõ lại tay ở mọi tool khác — tức dữ kiện vừa mua bị vứt đi
+               ngay tại chỗ. -->
+          <div class="sec" id="chotBlock">
+            <div class="sec-h">Chốt giờ và dùng tiếp</div>
+            <div class="sec-b">
+              <p class="note" style="margin-bottom:11px">Chọn giờ anh/chị muốn dùng. Máy ghi vào <b>Sổ lá số</b> của tài khoản, nên mọi công cụ khác điền sẵn — khỏi gõ lại và khỏi nhớ.</p>
+              <div class="frow" id="chotRow">
+                <div class="fg"><label for="gs-chot">Giờ muốn dùng</label><select id="gs-chot"></select></div>
+                <button class="btn" id="btnLuu" onclick="luuVaoSo()">Lưu vào sổ lá số</button>
+                <button class="btn-go" id="btnLuan" onclick="sangLuanGiai()">Luận giải lá số này →</button>
+              </div>
+              <p class="note" id="chotMsg" style="margin-top:2px"></p>
+              <p class="note" id="chotAm" style="margin-top:2px;display:none">Anh/chị nhập ngày sinh theo <b>âm lịch</b>. Các công cụ khác nhận <b>dương lịch</b>, và hệ thống chưa có đường đổi ngược âm → dương, nên chưa bàn giao tự động được. Giờ vừa chốt ở trên vẫn dùng được — nhập tay khi mở công cụ khác.</p>
+            </div>
+          </div>
+
+          <div class="sec">
+            <div class="sec-h">Vì sao không phải một con số chắc nịch</div>
+            <div class="sec-b">
+              <p class="note">Cách này thu hẹp bằng mức khớp giữa câu trả lời của anh/chị và từng lá số, nên nó <b>xếp hạng khả năng</b> chứ không chứng minh được giờ nào đúng. Với người trả lời sát thực tế, giờ đúng nằm trong 3 giờ đầu ở phần lớn trường hợp — nhưng giờ đứng đầu thì không chắc bằng. Vì thế trang này đưa cả danh sách kèm bằng chứng để anh/chị tự soát, thay vì đưa một con số nghe cho chắc.</p>
+              <p class="note" style="margin-top:10px">Cách kiểm chắc nhất: lập lá số cho <b>hai giờ đầu bảng</b>, đọc phần vận hạn 5 năm gần đây, giờ nào tả đúng hơn thì lấy giờ đó.</p>
+            </div>
+          </div>
+          <div class="sec">
+            <div class="sec-h">Anh/chị vốn đã biết chắc giờ sinh?</div>
+            <div class="sec-b">
+              <p class="note" style="margin-bottom:10px">Nếu có giấy khai sinh hoặc người nhà nhớ chắc, cho máy biết giờ đúng — đối chiếu với kết quả vừa rồi giúp chúng tôi hiệu chỉnh phương pháp. Không bắt buộc, và không ảnh hưởng gì tới bản đọc của anh/chị.</p>
+              <div class="frow" style="margin:0">
+                <div class="fg"><label for="gs-that">Giờ đúng (nếu biết)</label><select id="gs-that"></select></div>
+                <button class="btn" id="btnGui" onclick="guiDoiChieu()">Gửi đối chiếu</button>
+              </div>
+              <p class="note" id="gtMsg" style="margin-top:8px"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <aside class="rail" id="shell-rail"></aside>
+</div>
+
+<script>window.SHELL_ACTIVE='gio-sinh';window.SHELL_HISTORY=true;
+window.SHELL_INTRO={key:'gio-sinh',title:'Xác Định Giờ Sinh',desc:'Không nhớ giờ sinh thì gần như không dùng được tool tử vi nào. Ở đây máy lập <b>cả 12 lá số khả nghi</b> cho ngày sinh của anh/chị, rồi hỏi vài câu về <b>sức khoẻ</b> và <b>các giai đoạn đã sống qua</b> để thu hẹp lại. Kết quả là <b>2–3 giờ khả năng cao nhất kèm bằng chứng</b> — không phải một con số chắc nịch.'};</script>
+
+<script src="/tuvi-paywall.js?v=21"></script>
+<!-- ⚠️ BẮT BUỘC. `nav.js` ở chế độ `data-icons-only` RETURN SỚM nên KHÔNG chèn
+     `auth.js` — trang shell phải tự khai. Thiếu nó thì `window.Auth` không tồn
+     tại, paywall coi người ĐANG ĐĂNG NHẬP là khách và bắt đăng nhập lại.
+     `check:shellboot` canh đúng chỗ này. -->
+<script src="/auth.js?v=2"></script>
+<script src="/nav.js?v=22" data-icons-only></script>
+<script src="/shell.js?v=72"></script>
+<script>
+const TOOL_ID='gio-sinh';
+let _birth=null,_answers=[],_pub=null,_lastResult=null,_slug='';
+TuviPaywall.init({product:TOOL_ID,slug:function(){return _slug;}});
+
+// ── Dựng ô nhập ─────────────────────────────────────────────
+(function initForm(){
+  const d=document.getElementById('gs-ngay'),m=document.getElementById('gs-thang'),t=document.getElementById('gs-that');
+  for(let i=1;i<=31;i++) d.insertAdjacentHTML('beforeend','<option value="'+i+'">'+i+'</option>');
+  for(let i=1;i<=12;i++) m.insertAdjacentHTML('beforeend','<option value="'+i+'">'+i+'</option>');
+  const CHI=['Tý','Sửu','Dần','Mão','Thìn','Tỵ','Ngọ','Mùi','Thân','Dậu','Tuất','Hợi'];
+  const KH=['23–01h','01–03h','03–05h','05–07h','07–09h','09–11h','11–13h','13–15h','15–17h','17–19h','19–21h','21–23h'];
+  t.insertAdjacentHTML('beforeend','<option value="">— chưa biết —</option>');
+  CHI.forEach((c,i)=>t.insertAdjacentHTML('beforeend','<option value="'+i+'">Giờ '+c+' ('+KH[i]+')</option>'));
+})();
+
+function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function showErr(m){const e=document.getElementById('error-msg');e.textContent=m;e.classList.add('active');}
+function clearErr(){document.getElementById('error-msg').classList.remove('active');}
+
+function readBirth(){
+  const y=parseInt(document.getElementById('gs-nam').value,10);
+  if(!y||y<1900||y>2030){showErr('Nhập năm sinh trong khoảng 1900–2030.');return null;}
+  return {day:+document.getElementById('gs-ngay').value,month:+document.getElementById('gs-thang').value,year:y,
+    gender:document.getElementById('gs-gt').value,isLunar:document.getElementById('gs-lich').value==='am',hourBranch:0};
+}
+
+function _reset(){
+  document.getElementById('resPanel').style.display='none';
+  document.getElementById('birthPanel').style.display='';
+  document.getElementById('btnEdit').style.display='none';
+  document.getElementById('freeBlock').style.display='none';
+  document.getElementById('surveyBlock').style.display='none';
+  document.getElementById('resultBlock').style.display='none';
+  _answers=[];_lastResult=null;_lastPreview=null;
+}
+
+// ── Bước 1: TÍNH THỬ (miễn phí, không đăng nhập) ────────────
+async function start(){
+  clearErr();
+  const b=readBirth(); if(!b) return;
+  _birth=b;
+  // Slug MANG ngày sinh: đổi ngày sinh là một lượt trả tiền mới, không dùng
+  // lại lượt cũ. Tiền tố phải ĐÚNG `gio-sinh` — server chốt lại chỗ này.
+  _slug=TuviPaywall.generateToolSlug(TOOL_ID+'-'+b.day+b.month+b.year+b.gender+(b.isLunar?'a':'d'));
+  const btn=document.getElementById('btnGo'); btn.disabled=true; btn.textContent='Đang lập 12 lá số…';
+  try{
+    const r=await fetch('/api/gio-sinh?preview=1',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({birth:b})});
+    const j=await r.json();
+    if(!r.ok||!j.success) throw new Error(j.error||'Không lập được lá số.');
+    renderFree(j);
+    if(window.SHELL_INTRO) Shell.dismissIntro(window.SHELL_INTRO.key);
+    document.getElementById('birthPanel').style.display='none';
+    document.getElementById('resPanel').style.display='';
+    document.getElementById('btnEdit').style.display='';
+    Shell.setContext&&Shell.setContext({birth:b,label:'Xác định giờ sinh',
+      greeting:'Anh/chị chưa chốt được giờ sinh — hỏi tôi về cách phân biệt các giờ khả nghi cũng được.',
+      chips:['Vì sao đổi giờ sinh lại đổi cả lá số?','Cung Tật Ách nói lên điều gì?','Không nhớ giờ sinh thì xem tử vi được không?']});
+  }catch(e){showErr(e.message||'Có lỗi xảy ra.');}
+  finally{btn.disabled=false;btn.textContent='Xem 12 giờ khả nghi';}
+}
+
+let _lastPreview=null;
+
+function renderFree(j){
+  _lastPreview=j;
+  document.getElementById('freeLine').textContent =
+    _birth.day+'/'+_birth.month+'/'+_birth.year+(_birth.isLunar?' (âm lịch)':' (dương lịch)')+' · '+(_birth.gender==='nam'?'Nam':'Nữ');
+  document.getElementById('surveyPitch').innerHTML =
+    'Với ngày sinh này máy dựng được <b>'+esc(j.soCauHoi)+' câu hỏi</b> riêng — đáp án là các nhóm giờ có dấu hiệu khác nhau của <b>chính ngày này</b>, nên mỗi người một bộ câu khác nhau. Trả lời xong sẽ ra <b>2–3 giờ khả năng cao nhất kèm bằng chứng từng câu</b>.';
+  document.getElementById('freeBlock').style.display='';
+  buildLock();
+}
+
+function _renderGrid(j){
+  document.getElementById('grid12').innerHTML = j.ungVien.map(u=>
+    '<div class="cand"><b>Giờ '+esc(u.chi)+'</b> <span class="k">'+esc(u.khung)+'</span>'+
+    '<div class="s"><span class="k">Mệnh:</span> '+esc(u.menhStars.join(' + ')||'vô chính diệu')+
+    '<br><span class="k">Tật Ách:</span> '+esc(u.tatStars.join(' + ')||'vô chính diệu')+'</div></div>').join('');
+  document.getElementById('grid12').style.display='';
+}
+
+// Đã đăng nhập → KHÔNG dựng tường xem trước nữa MÀ CŨNG không còn giới hạn
+// "phần đầu": thấy đủ 12 lá số khả nghi, rồi một nút bấm gate (trừ Lượng) mở
+// thẳng khảo sát — đúng luồng #512 đã áp cho 6 tool kia.
+//
+// Chưa đăng nhập → CHỈ chừa phần đầu (câu giới thiệu). Lưới 12 lá số khả nghi
+// — dù bản thân nó vẫn tính MIỄN PHÍ — cũng gộp vào tấm khoá cùng phần khảo
+// sát: tấm khoá là CTA đăng ký, không phải chỗ xin thêm Lượng của người đã có
+// ví, nên phải che HẾT phần "có cấu trúc" chứ không chỉ che phần trả tiền.
+function buildLock(){
+  const host=document.getElementById('lockHost');
+  if(!window.TuviPaywall||!TuviPaywall.lockPreview){
+    host.innerHTML='<p class="note">Chưa đọc được bảng giá — tải lại trang giúp tôi.</p>';return;
+  }
+  if(_daDangNhap()){
+    if(_lastPreview) _renderGrid(_lastPreview);
+    host.innerHTML='<button class="btn-go" id="btnKhaoSat">Bắt đầu khảo sát thu hẹp — <span data-tvp-price="'+TOOL_ID+'">…</span> Lượng →</button>';
+    TuviPaywall.fillPriceSlots(host);
+    document.getElementById('btnKhaoSat').addEventListener('click',function(){
+      TuviPaywall.requireCredits(_slug,function(){return runSurvey();});
+    });
+    return;
+  }
+  document.getElementById('grid12').innerHTML='';
+  document.getElementById('grid12').style.display='none';
+  TuviPaywall.lockPreview({
+    host:host,
+    title:'⊙ Hồ sơ giờ sinh chưa mở',
+    items:['Đủ 12 lá số khả nghi (Mệnh + Tật Ách từng giờ)','Bộ câu hỏi dựng riêng theo ngày sinh','Xếp hạng 12 giờ theo khả năng','Bằng chứng khớp/lệch từng câu','Mức tin cậy và lời khuyên chốt giờ'],
+    cta:'Đăng ký để mở đủ 12 lá số + khảo sát',
+    slug:function(){return _slug;},
+    onUnlock:function(){return runSurvey();},
+  });
+}
+
+// ── Bước 2: KHẢO SÁT (trả tiền) ─────────────────────────────
+async function post(){
+  // ⚠️ `Auth.getToken` KHÔNG TỒN TẠI — API thật là `getSession()`. Viết nhầm tên
+  // thì `tok` rỗng, không có header Authorization, server trả 401 SAU KHI client
+  // đã trừ Lượng. `check:authapi` canh mọi lời gọi `Auth.*` khớp API thật.
+  const tok=(window.Auth&&Auth.getSession&&Auth.getSession()&&Auth.getSession().access_token)||'';
+  const r=await fetch('/api/gio-sinh',{method:'POST',
+    headers:Object.assign({'Content-Type':'application/json'},tok?{Authorization:'Bearer '+tok}:{}),
+    body:JSON.stringify({birth:_birth,answers:_answers,slug:_slug})});
+  const j=await r.json();
+  if(!r.ok||!j.success){
+    const e=new Error(j.error||'Có lỗi xảy ra.'); e.status=r.status; throw e;
+  }
+  return j;
+}
+
+async function runSurvey(){
+  document.getElementById('freeBlock').style.display='none';
+  document.getElementById('surveyBlock').style.display='';
+  try{ step(await post()); }catch(e){ onPaidErr(e); }
+}
+
+function step(j){
+  if(j.done){ renderResult(j); return; }
+  _pub=j.question;
+  document.getElementById('qprog').textContent='Câu '+(j.daHoi+1)+' / tối đa '+j.tongToiDa;
+  document.getElementById('qtitle').textContent=j.question.title;
+  const h=document.getElementById('qhint'); h.textContent=j.question.hint||''; h.style.display=j.question.hint?'':'none';
+  const box=document.getElementById('qopts'); box.innerHTML='';
+  j.question.options.forEach(o=>{
+    const b=document.createElement('button'); b.className='opt'; b.textContent=o.label;
+    b.onclick=()=>answer(o.value); box.appendChild(b);
+  });
+  // "Không rõ" LUÔN có: ép người ta chọn bừa là bơm nhiễu vào chính phép suy.
+  const s=document.createElement('button'); s.className='opt opt-skip'; s.textContent='Không rõ / không nhớ — bỏ qua câu này';
+  s.onclick=()=>answer('?'); box.appendChild(s);
+  document.getElementById('surveyBlock').scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+
+async function answer(v){
+  if(!_pub) return;
+  _answers.push({id:_pub.id,value:v}); _pub=null;
+  document.getElementById('qopts').innerHTML='<p class="note">Đang tính…</p>';
+  try{ step(await post()); }catch(e){ onPaidErr(e); }
+}
+
+/**
+ * Lỗi ở đường trả tiền KHÔNG quẳng người ta về form trống — họ vừa trả tiền và
+ * đang nhìn phần tính thử. Giữ màn hình, dựng lại tường, báo bằng chữ.
+ */
+function onPaidErr(e){
+  document.getElementById('surveyBlock').style.display='none';
+  document.getElementById('freeBlock').style.display='';
+  const host=document.getElementById('lockHost');
+  host.innerHTML='<p class="note" style="color:var(--tx-red)">'+esc(e.message||'Có lỗi xảy ra.')+'</p>';
+  if(e.status===402||e.status===401) buildLock();
+}
+
+// ── Bước 3: KẾT QUẢ ─────────────────────────────────────────
+function renderResult(j){
+  _lastResult=j;
+  const k=j.ketQua;
+  document.getElementById('surveyBlock').style.display='none';
+  document.getElementById('resultBlock').style.display='';
+  const badge=document.getElementById('tcBadge');
+  badge.textContent='Tin cậy: '+k.mucTinCay;
+  badge.className='badge '+(k.mucTinCay==='cao'?'cao':k.mucTinCay==='vừa'?'vua':'thap');
+  document.getElementById('tcNote').textContent=
+    'Dựa trên '+k.soCauDaHoi+' câu đã trả lời · độ khớp '+Math.round(k.doKhop*100)+'%';
+
+  document.getElementById('rankHost').innerHTML = k.shortlist.map((r,i)=>{
+    const ev=[].concat(
+      r.khop.slice(0,4).map(x=>'<div class="ev y">✓ '+esc(x)+'</div>'),
+      r.lech.slice(0,3).map(x=>'<div class="ev n">✕ '+esc(x)+'</div>'));
+    return '<div class="rank'+(i===0?' top':'')+'">'+
+      '<div class="rank-h"><b>Giờ '+esc(r.chi)+'</b><span class="note">'+esc(r.khung)+' · cục '+esc(r.cuc)+'</span>'+
+      '<span class="rank-pct">'+esc(r.pct)+'%</span></div>'+
+      '<div class="bar"><i style="width:'+Math.max(2,Math.min(100,r.pct))+'%"></i></div>'+
+      '<div class="note" style="margin-bottom:6px">Mệnh: '+esc(r.menhStars.join(' + ')||'vô chính diệu')+
+      ' · Tật Ách: '+esc(r.tatStars.join(' + ')||'vô chính diệu')+'</div>'+ev.join('')+'</div>';
+  }).join('');
+  document.getElementById('loiKhuyen').textContent=k.loiKhuyen;
+  renderChot(k);
+
+  Shell.setShareable&&Shell.setShareable({
+    toolId:TOOL_ID,title:'Giờ sinh khả năng cao nhất',birth:_birth,
+    blocks:[{kind:'text',title:'Kết quả',text:k.shortlist.map((r,i)=>(i+1)+'. Giờ '+r.chi+' ('+r.khung+') — '+r.pct+'%').join('\n')},
+            {kind:'text',title:'Lời khuyên',text:k.loiKhuyen}],
+  });
+}
+
+// ── Chốt giờ → sổ lá số → luận giải ─────────────────────────
+// Xếp theo ĐÚNG thứ tự bảng xếp hạng, giờ đầu bảng chọn sẵn — nhưng vẫn cho
+// đổi: tool này xếp hạng khả năng chứ không chứng minh giờ nào đúng (xem mục
+// "Vì sao không phải một con số chắc nịch"), nên khoá cứng vào giờ #1 là nói
+// chắc hơn thứ máy biết. Ai đã tự soát bằng chứng và chọn giờ #2 thì phải theo họ.
+function renderChot(k){
+  const sel=document.getElementById('gs-chot');
+  sel.innerHTML=k.shortlist.map((r,i)=>
+    '<option value="'+r.gioIdx+'"'+(i===0?' selected':'')+'>Giờ '+esc(r.chi)+' · '+esc(r.khung)+' · '+esc(String(r.pct))+'%</option>').join('');
+  document.getElementById('chotMsg').textContent='';
+  // Âm lịch: không có đường bàn giao. KHÔNG ghi bừa ngày âm vào sổ như thể nó
+  // là ngày dương — tool đích sẽ lập một lá số KHÁC mà không có gì báo.
+  const am=!!(_birth&&_birth.isLunar);
+  document.getElementById('chotRow').style.display=am?'none':'';
+  document.getElementById('chotAm').style.display=am?'':'none';
+}
+
+// Birth theo shape TuviForm (dương lịch) để bàn giao. `gioHour = gioIdx*2` là
+// giờ giữa khung của địa chi đó (Tý=0h, Sửu=2h…) — khớp hourMinToGioIdx.
+function _birthChot(){
+  if(!_birth||_birth.isLunar) return null;
+  const idx=parseInt(document.getElementById('gs-chot').value,10);
+  if(!(idx>=0&&idx<=11)) return null;
+  return {hoten:'',ngay:_birth.day,thang:_birth.month,nam:_birth.year,
+    gioIdx:idx,gioHour:(idx*2)%24,gioPhut:0,
+    gioitinh:_birth.gender==='nu'?'nu':'nam',namXem:new Date().getFullYear()};
+}
+function _daDangNhap(){
+  try{ return !!(window.Auth&&Auth.getSession&&Auth.getSession().access_token); }catch(e){ return false; }
+}
+
+async function luuVaoSo(){
+  const b=_birthChot(); if(!b) return;
+  const msg=document.getElementById('chotMsg');
+  // localStorage là đường ghi ĐỒNG BỘ và luôn chạy (kể cả khách chưa đăng nhập).
+  Shell.rememberBirth(b);
+  if(!_daDangNhap()){
+    msg.textContent='Đã nhớ trên máy này — mở công cụ khác là có sẵn. Đăng nhập thì lá số vào sổ của tài khoản, đổi máy vẫn còn.';
+    return;
+  }
+  msg.textContent='Đang lưu…';
+  // Lượt ghi thứ hai, CHỈ để biết ghi được hay không: `rememberBirth` ghi sổ kiểu
+  // bắn-và-quên nên không nói được kết quả, mà báo "đã lưu" trong khi hỏng đúng
+  // là kiểu nói dối im lặng cần tránh. Cùng khoá (chart_key) + upsert
+  // merge-duplicates ⇒ hai lượt vẫn ra ĐÚNG MỘT dòng.
+  let it=null;
+  try{ it=window.UserCharts?await UserCharts.save(b,''):null; }catch(e){ it=null; }
+  msg.textContent = it
+    ? 'Đã lưu vào sổ lá số. Các công cụ khác sẽ điền sẵn giờ này.'
+    : 'Chưa ghi được vào sổ (mạng hoặc phiên đăng nhập). Giờ vừa chốt vẫn được nhớ trên máy này.';
+}
+
+function sangLuanGiai(){
+  const b=_birthChot(); if(!b) return;
+  Shell.rememberBirth(b);
+  // ⛔ KHÔNG gắn `?auto=1`: trang Luận Giải thấy cờ đó là TỰ CHẠY (`app-luan-giai`
+  // gọi doLuan()), mà đó là lượt TRỪ LƯỢNG. Điền sẵn form rồi để người ta tự bấm.
+  location.href='/app/luan-giai';
+}
+
+// ── Vòng hiệu chuẩn: thu ground truth ───────────────────────
+async function guiDoiChieu(){
+  const v=document.getElementById('gs-that').value;
+  const msg=document.getElementById('gtMsg');
+  if(v===''){ msg.textContent='Chọn giờ đúng trước đã.'; return; }
+  if(!_lastResult){ msg.textContent='Chưa có kết quả để đối chiếu.'; return; }
+  const k=_lastResult.ketQua;
+  try{
+    window.Track&&Track.event&&Track.event('gio_sinh_doi_chieu',{tool_id:TOOL_ID,meta:{
+      gioTuKhai:+v, doanTop:k.tatCa[0]&&k.tatCa[0].gioIdx, doanShortlist:k.shortlist.map(x=>x.gioIdx),
+      doKhop:k.doKhop, soCau:k.soCauDaHoi, mucTinCay:k.mucTinCay,
+      trungTop:k.tatCa[0]&&k.tatCa[0].gioIdx===+v, trungShortlist:k.shortlist.some(x=>x.gioIdx===+v)}});
+    const dung=k.shortlist.some(x=>x.gioIdx===+v);
+    msg.textContent=dung?'Cảm ơn anh/chị — giờ đúng nằm trong danh sách máy đưa ra. Ghi nhận rồi.'
+      :'Cảm ơn anh/chị — lần này máy đoán trượt. Đúng loại ca chúng tôi cần để chỉnh lại phương pháp.';
+  }catch(e){ msg.textContent='Không gửi được, nhưng không sao — bản đọc của anh/chị không đổi.'; }
+  document.getElementById('btnGui').disabled=true;
+}
+</script>
+</body>
+</html>

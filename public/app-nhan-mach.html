@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"></noscript>
-<link rel="stylesheet" href="/shell.css?v=16">
+<link rel="stylesheet" href="/shell.css?v=19">
 <style>
 .form-card{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);max-width:880px}
 .form-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:3px}
@@ -21,7 +21,7 @@
 .fg input:focus,.fg select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(20,85,164,.12)}
 .btn-go{background:var(--red);color:#fff;border:none;border-radius:8px;padding:10px 22px;font-size:14px;font-weight:600;cursor:pointer;font-family:var(--serif)}
 .btn-go:disabled{opacity:.6;cursor:not-allowed}
-.err{color:var(--red);font-size:13px;margin-top:8px;display:none}
+.err{color:var(--tx-red);font-size:13px;margin-top:8px;display:none}
 .err.active{display:block}
 .res-block{border:1px solid #E8E8E8;border-radius:10px;margin-bottom:16px;background:#fff;overflow:hidden;max-width:900px}
 .res-block-header{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;background:#F5F4F0;border-bottom:1px solid #E8E8E8}
@@ -38,7 +38,7 @@
 .nm-who .s{display:block;font-size:11.5px;color:var(--text-lt);margin-top:1px}
 .nm-row select{border:1px solid var(--line-2);border-radius:7px;padding:6px 9px;font-size:12.5px;font-family:inherit;background:var(--white);color:var(--text)}
 .nm-row .del{border:none;background:none;color:var(--text-lt);font-size:15px;cursor:pointer;padding:0 3px}
-.nm-row .del:hover{color:var(--red)}
+.nm-row .del:hover{color:var(--tx-red)}
 .nm-empty{font-size:13px;color:var(--text-lt);line-height:1.75;padding:14px;border:1px dashed var(--line-2);border-radius:9px;background:var(--paper)}
 .nm-add{margin-top:6px;font-size:12.5px}
 .nm-add summary{cursor:pointer;color:#7A5F26;font-weight:600}
@@ -89,6 +89,7 @@
     </div>
     <div class="ws-body">
       <div id="introHost"></div>
+      <div id="shellRecent"></div>
       <div class="form-card" id="birthPanel">
         <h2>Chọn người trong sổ</h2>
         <p class="sub">Chọn từ <b>2 đến 8</b> người, gán vai cho từng người. Sổ lá số dùng chung với các công cụ khác — thêm một lần, dùng mãi.</p>
@@ -105,7 +106,10 @@
                 <input id="addTen" type="text" placeholder="Sếp Hùng, chị Lan, khách A…" maxlength="40">
               </div>
             </div>
-            <div id="addPersonBox"></div>
+            <!-- data-uc-skip: trang này TỰ quản sổ lá số (ô chọn + vai + xoá,
+                 xem renderSo()). Để user-charts.js gắn thêm thanh của nó nữa là
+                 hai bộ điều khiển cho cùng một dữ liệu. -->
+            <div id="addPersonBox" data-uc-skip></div>
             <div class="frow" style="margin-bottom:0;margin-top:10px">
               <button class="btn" id="btnAdd" onclick="addPerson()">Lưu vào sổ</button>
             </div>
@@ -117,7 +121,7 @@
           <summary id="selfSummary">Thêm lá số của chính bạn (không bắt buộc)</summary>
           <div class="inner">
             <p class="sub" style="margin-bottom:9px">Có lá số của bạn thì bản đọc có thêm mục <b>“Bạn đứng ở đâu trong nhóm”</b> — bạn dễ va với ai, bù được cho ai.</p>
-            <div id="selfBox"></div>
+            <div id="selfBox" data-uc-skip></div>
           </div>
         </details>
 
@@ -127,7 +131,7 @@
         <div class="err" id="error-msg"></div>
       </div>
 
-      <div id="resPanel" style="display:none">
+      <div id="resPanel" data-ws-result style="display:none">
         <div class="res-block">
           <div class="res-block-header"><span class="res-block-title">Nhóm Này Hình Gì</span></div>
           <div class="res-block-body">
@@ -185,12 +189,6 @@
           <div class="res-block-body"><div class="nm-motcau" id="motCau"></div></div>
         </div>
 
-        <!-- W1 — tường "đã tính thử": phần trên đã chạy THẬT và miễn phí. -->
-        <div class="res-block" id="lockBlock" style="display:none">
-          <div class="res-block-header"><span class="res-block-title">Phần Luận Chưa Mở</span></div>
-          <div class="res-block-body" id="lockHost" data-tvp-lock style="padding-top:6px"></div>
-        </div>
-
         <div class="res-block" style="background:#FBF3DE;border-color:#e8d9b0">
           <div class="res-block-body" style="font-size:12.5px;line-height:1.68;color:#5a5145">
             💡 Bản đọc này phác hoạ từ các dữ liệu trong lá số Tử Vi, kết hợp kinh nghiệm nghiên cứu của tiền nhân để lại. Mang tính tham khảo.<br><br>
@@ -209,16 +207,16 @@
   <aside class="rail" id="shell-rail"></aside>
 </div>
 
-<script>window.SHELL_ACTIVE='nhan-mach';
+<script>window.SHELL_ACTIVE='nhan-mach';window.SHELL_HISTORY=true;
 window.SHELL_INTRO={key:'nhan-mach',title:'Sổ Nhân Mạch',desc:'Đưa <b>cả đội</b> hoặc <b>danh sách khách</b> vào một chỗ để biết <b>nhóm thiếu kiểu người nào</b>, <b>ai với ai dễ giẫm chân</b>, và <b>tuần này nên gặp ai trước</b>. Khác công cụ Lá Số Người Khác ở chỗ nó đọc cả nhóm cùng lúc.'};</script>
 <script src="/laso-chart.js?v=3"></script>
-<script src="/tuvi-form.js?v=1"></script>
-<script src="/tuvi-paywall.js?v=16"></script>
+<script src="/tuvi-form.js?v=2"></script>
+<script src="/tuvi-paywall.js?v=21"></script>
 <script src="/auth.js?v=2"></script>
   <script src="/nav.js?v=22" data-icons-only></script>
-<script src="/shell.js?v=62"></script>
+<script src="/shell.js?v=72"></script>
 <script src="/user-charts.js?v=2"></script>
-<script src="/tools-shared/ai-loading-steps.js?v=1"></script>
+<script src="/tools-shared/ai-loading-steps.js?v=8"></script>
 <script>
 
 var _currentSlug = '';
@@ -391,17 +389,8 @@ function _toBirth(b) {
   };
 }
 
-// ── W1: bấm nút là CHẠY THẬT, miễn phí ─────────────────────────────────────
-// Tầng deterministic (kiểu từng người · phân bố nhóm · lỗ hổng · các cặp · thứ
-// tự tiếp cận) là tra bảng — 0 lượt LLM, 0đ. Tường chỉ đứng trên phần chữ.
-var NM_KHOA = [
-  'Nhóm này hình gì — mạnh chiều nào, hụt chiều nào',
-  'Từng người: giao việc kiểu nào thì họ chạy, nói câu gì',
-  'Cặp nào nên tách, cặp nào nên ghép, ở việc gì',
-  'Ai đang phải gánh phần nhóm còn thiếu',
-  'Ba việc làm được tuần này',
-];
-
+// A — bấm nút có Lượng là CHẠY THẬT ngay; thiếu/không đủ Lượng thì
+// `requireCredits` tự bật popup (đăng nhập · nạp thêm).
 async function analyze() {
   showError('');
   var ids = Object.keys(_chon);
@@ -427,44 +416,7 @@ async function analyze() {
 
   _currentSlug = TuviPaywall.generateToolSlug('nhan-mach-' + nguoi.length + '-' + ids.join('').slice(0, 24));
 
-  _openPanel();
-  _loadingCtl = AiLoadingSteps.mount('loadingSteps', NM_STEPS.slice(0, 2));
-  _loadingCtl.start();
-  var prev;
-  try {
-    var r = await fetch('/api/nhan-mach?preview=1', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(_lastPayload),
-    });
-    prev = await r.json();
-    if (!r.ok || !prev.success) throw new Error(prev.error || 'Lỗi ' + r.status);
-  } catch (e) {
-    _loadingCtl && _loadingCtl.stop();
-    _closePanel();
-    showError('Lỗi: ' + (e.message || 'Không thể kết nối. Vui lòng thử lại.'));
-    return;
-  }
-  _loadingCtl && _loadingCtl.finish();
-  document.getElementById('loading').style.display = 'none';
-  document.getElementById('card').style.display = 'block';
-  document.getElementById('btnEdit').style.display = '';
-  renderMeta(prev);
-  // D1 — bậc "đã tính thử" của phễu theo tool. Bắn ở ĐÂY chứ không ở lúc bấm
-  // nút: bấm rồi mà lá số hỏng thì không có gì để xem, tính vào phễu là thổi
-  // mẫu số lên rồi tỉ lệ mở nhìn tệ hơn thực tế.
-  try { if (window.Track) window.Track.event('preview_shown', { tool_id: 'nhan-mach' }); } catch (e) { /* đo hỏng không chặn gì */ }
-  if (window.SHELL_INTRO) Shell.dismissIntro(window.SHELL_INTRO.key);
-
-  document.getElementById('lockBlock').style.display = 'block';
-  await TuviPaywall.lockPreview({
-    host: document.getElementById('lockHost'),
-    title: '⊙ Còn phần luận chưa mở',
-    items: NM_KHOA,
-    cta: 'Mở bản đọc đầy đủ',
-    slug: function () { return _currentSlug; },
-    onUnlock: function () { return _doGenerate(); },
-  });
+  await TuviPaywall.requireCredits(_currentSlug, function () { return _doGenerate(); });
 }
 
 function _openPanel() {
@@ -473,7 +425,7 @@ function _openPanel() {
   document.getElementById('loading').style.display = 'block';
   document.getElementById('card').style.display = 'none';
   ['gapBlock', 'peopleBlock', 'capCoSoBlock', 'capBlock', 'orderBlock', 'todoBlock',
-   'withBlock', 'endBlock', 'lockBlock'].forEach(function (id) {
+   'withBlock', 'endBlock'].forEach(function (id) {
     document.getElementById(id).style.display = 'none';
   });
   document.getElementById('tongQuan').style.display = 'none';
@@ -487,11 +439,12 @@ function _closePanel() {
 }
 
 async function _doGenerate() {
-  document.getElementById('lockBlock').style.display = 'none';
-  TuviPaywall._closeLock();
-  _loadingCtl = AiLoadingSteps.mount('loadingSteps', NM_STEPS.slice(2));
-  document.getElementById('loading').style.display = 'block';
+  _openPanel();
+  _loadingCtl = AiLoadingSteps.mount('loadingSteps', NM_STEPS);
   _loadingCtl.start();
+  // Sổ 2-8 người thì form dễ dài hơn màn hình — cuộn lên ngay để thấy có gì
+  // vừa chạy, không đứng im.
+  AiLoadingSteps.scrollToResult('loading');
 
   var token = window.Auth?.getSession()?.access_token || '';
   try {
@@ -525,13 +478,30 @@ async function _doGenerate() {
         'Tuần này nên gặp ai trước và mở lời thế nào?',
       ],
     });
+
+    // Chia sẻ CHỈ gắn ở đường đã mở khoá (sau renderProse).
+    // ⚠️ Sổ này chứa lá số của TỚI 8 người vắng mặt. Bản chia sẻ vì thế CỐ Ý chỉ
+    // mang phần ĐỘI (phân bố kiểu, chỗ trống, cặp dễ giẫm chân) và KHÔNG nêu tên
+    // ai kèm nhận xét cá nhân — engine vốn đã không chấm điểm tổng từng người,
+    // bản chia sẻ không được là đường vòng để dựng lại một bảng xếp hạng.
+    Shell.setShareable({
+      kind: 'text',
+      toolId: 'nhan-mach',
+      title: 'Sổ nhân mạch — đọc nhóm ' + data.soNguoi + ' người',
+      text: [
+        'Nhóm ' + data.soNguoi + ' người.',
+        (data.phanBo || []).filter(function (b) { return b.soNguoi; })
+          .map(function (b) { return b.ten + ': ' + b.soNguoi; }).join(' · '),
+        (data.thieuKieu || []).length
+          ? 'Đội đang thiếu kiểu: ' + data.thieuKieu.map(function (k) { return k.ten; }).join(', ')
+          : 'Đội có đủ bốn kiểu.',
+        data.nenTimThem ? 'Nên tìm thêm kiểu: ' + data.nenTimThem.ten : '',
+      ].filter(Boolean).join('\n'),
+    });
   } catch (e) {
-    // Giữ nguyên phần tính thử đang hiện — quẳng người ta về form trống là xoá
-    // luôn thứ họ vừa xem (và có thể vừa trả tiền cho phần sau).
     _loadingCtl && _loadingCtl.stop();
-    document.getElementById('loading').style.display = 'none';
-    document.getElementById('lockBlock').style.display = 'block';
-    TuviPaywall._banner('Chưa mở được phần luận: ' + (e.message || 'lỗi kết nối') + '. Bạn thử lại giúp.');
+    _closePanel();
+    showError('Lỗi: ' + (e.message || 'Không thể kết nối. Vui lòng thử lại.'));
   }
 }
 
@@ -568,7 +538,11 @@ function renderMeta(data) {
       '<div class="r">' + esc((t.vai || {}).label || '') +
       ((t.kieu || {}).ten ? ' · kiểu ' + esc(t.kieu.ten) : '') +
       (t.lai && t.kieuPhu ? ' (pha ' + esc(t.kieuPhu.ten) + ')' : '') +
-      (t.vanNam && t.vanNam.diem != null ? ' · vận năm ' + t.vanNam.diem + '/10' : '') + '</div>' +
+      // ⚠️ Payload CŨ trong cache mang `diem` (điểm nội suy); bản mới mang
+      // `khung` = điểm ĐẠI VẬN thật. Nêu rõ là khung, đừng để đọc thành điểm năm.
+      (t.vanNam && t.vanNam.khung && t.vanNam.khung.diem != null
+        ? ' · khung đại vận ' + t.vanNam.khung.diem + '/10'
+        : (t.vanNam && t.vanNam.diem != null ? ' · vận năm ' + t.vanNam.diem + '/10' : '')) + '</div>' +
       '<div class="w"></div><div class="q"></div></div>';
   }).join('');
   if (ppl) {
@@ -592,6 +566,14 @@ function renderMeta(data) {
   var tt = (data.thuTuTiepCan || []);
   if (tt.length) {
     document.getElementById('thuTu').innerHTML = tt.map(function (t, i) {
+      // Bản mới: `khungDiem` (điểm đại vận thật) + `canCan` (cát−sát của năm).
+      // Bản CŨ trong cache: `diem`/`huong` — vẫn phải đọc được.
+      if (t.khungDiem != null || t.canCan != null) {
+        var d = [];
+        if (t.khungDiem != null) d.push('khung đại vận ' + t.khungDiem + '/10');
+        if (t.canCan != null) d.push('cát−sát ' + (t.canCan > 0 ? '+' : '') + t.canCan);
+        return (i + 1) + '. <b>' + esc(t.ten) + '</b> — ' + d.join(' · ');
+      }
       return (i + 1) + '. <b>' + esc(t.ten) + '</b>' +
         (t.diem == null ? ' — chưa chấm vận năm' : ' — vận năm ' + t.diem + '/10' + (t.huong ? ' (' + esc(t.huong) + ')' : ''));
     }).join('<br>');
@@ -651,6 +633,8 @@ function showForm() {
   document.getElementById('resPanel').style.display = 'none';
   document.getElementById('birthPanel').style.display = 'block';
   document.getElementById('btnEdit').style.display = 'none';
+  // Quay về form thì gỡ nút Chia sẻ — bản vừa xem không còn trên màn hình nữa.
+  Shell.setShareable(null);
 }
 
 async function _loadHistory() {

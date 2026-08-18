@@ -61,10 +61,18 @@ export const DANG_TRUYEN: Record<string, { ten: string; nghia: string }> = {
   回环: { ten: 'Hồi hoàn', nghia: 'ba truyền quay vòng, việc lặp lại chỗ cũ' },
 };
 
-/** 37 khóa thể + 12 dạng "X phát dụng". */
+/**
+ * 40 khóa thể + 12 dạng "X phát dụng".
+ *
+ * ⚠️ Phải phủ TRỌN danh sách khóa thể tam truyền nguồn khai (13 quái/khóa) và
+ * trọn bộ pháp thủ truyền cửu tông môn. `check:terms` đối chiếu tự động —
+ * xem mục `tuvung-luc-nham`. Đừng thêm bằng cách chạy vài lá số rồi thấy đủ:
+ * `铸印卦` từng lọt qua 4.392 khóa mẫu mà không lá nào sinh ra nó.
+ */
 export const KHOA_THE: Record<string, string> = {
   元首: 'Nguyên Thủ', 重审: 'Trùng Thẩm', 比用: 'Tỷ Dụng', 涉害: 'Thiệp Hại',
   别责: 'Biệt Trách', 八专: 'Bát Chuyên', 伏吟: 'Phục Ngâm', 反吟: 'Phản Ngâm',
+  遥克: 'Dao Khắc', 昴星: 'Mão Tinh',
   返吟比用: 'Phản Ngâm Tỷ Dụng', 返吟重审: 'Phản Ngâm Trùng Thẩm',
   返吟元首: 'Phản Ngâm Nguyên Thủ', 返吟涉害: 'Phản Ngâm Thiệp Hại',
   遥克比用: 'Dao Khắc Tỷ Dụng', 遥克涉害: 'Dao Khắc Thiệp Hại',
@@ -72,7 +80,7 @@ export const KHOA_THE: Record<string, string> = {
   自任: 'Tự Nhiệm', 自信: 'Tự Tín', 无依: 'Vô Y', 无禄卦: 'Vô Lộc',
   蒿矢: 'Cao Thỉ', 弹射: 'Đạn Xạ', 虎视: 'Hổ Thị', 冬蛇掩目: 'Đông Xà Yểm Mục',
   三交卦: 'Tam Giao', 玄胎卦: 'Huyền Thai', 励德卦: 'Lệ Đức', 龙德课: 'Long Đức',
-  斫轮卦: 'Chước Luân', 高盖乘轩卦: 'Cao Cái Thừa Hiên',
+  斫轮卦: 'Chước Luân', 高盖乘轩卦: 'Cao Cái Thừa Hiên', 铸印卦: 'Chú Ấn',
   曲直卦: 'Khúc Trực', 炎上卦: 'Viêm Thượng', 稼穑卦: 'Giá Sắc',
   从革卦: 'Tòng Cách', 润下卦: 'Nhuận Hạ',
   传不逢空: 'Truyền không gặp Không', 空亡入传: 'Không Vong nhập truyền',
@@ -119,13 +127,32 @@ export function docQuanHe(raw: string): string {
   return phienAm(s);
 }
 
-/** Khóa thể: tra bảng, riêng dạng `X发用` thì ghép từ tên thiên tướng. */
+/**
+ * Khóa thể: tra bảng, riêng dạng `X发用` thì ghép từ tên thiên tướng.
+ *
+ * 🐞 `mingyu-core` 0.1.24 sinh khóa thể GHÉP mới `伏吟重审` mà bảng không có ⇒
+ * rơi về phiên âm từng chữ và lọt nguyên chữ `审` ra giao diện (*"Phục Ngâm
+ * Trùng 审"*). Đây là lần thứ TƯ của cùng một họ lỗi trong track `mingyu-core`,
+ * và `docPhap` ngay dưới đã phải vá đúng như vậy — chỉ `docKhoaThe` bị bỏ quên.
+ * ⇒ Tách GHÉP TỔNG QUÁT: thử mọi chỗ cắt thành hai khóa thể đã biết. Nhờ vậy
+ * `伏吟重审` đọc thành *"Phục Ngâm Trùng Thẩm"*, và lượt bump SAU có đẻ thêm
+ * dạng ghép nào thì cũng đã có đường đọc.
+ *
+ * ⚠️ Bảng vẫn giữ mấy dạng ghép khai sẵn (`返吟重审`, `遥克涉害`…): tra đúng
+ * nguyên chuỗi chạy TRƯỚC nên chúng vẫn thắng, và `返吟` không phải khóa đứng
+ * một mình (bảng có `反吟`, khác chữ) nên bộ tách không thay chúng được.
+ */
 export function docKhoaThe(raw: string): string {
   const s = String(raw || '');
   if (KHOA_THE[s]) return KHOA_THE[s];
   if (s.endsWith('发用')) {
     const g = THIEN_TUONG[s.slice(0, -2)];
     return (g ? g.ten : phienAm(s.slice(0, -2))) + ' phát dụng';
+  }
+  for (let i = 1; i < s.length; i++) {
+    const a = KHOA_THE[s.slice(0, i)];
+    const b = KHOA_THE[s.slice(i)];
+    if (a && b) return `${a} ${b}`;
   }
   return phienAm(s);
 }

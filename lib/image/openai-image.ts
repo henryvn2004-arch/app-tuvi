@@ -42,10 +42,16 @@ export interface GeneratePortraitResult {
   usage: { text_tokens: number; image_input_tokens: number; image_output_tokens: number };
   /** Model THỰC SỰ đã gọi — để log ghi đúng tên chứ không chép lại hằng số ở chỗ gọi. */
   model: string;
+  /** Thời lượng THẬT của lượt vẽ (ms). Trước đây latency ảnh chỉ đo được gián
+   * tiếp bằng khoảng cách hai mốc log của pha ảnh và pha truyện chạy song song
+   * — mẹo đó chỉ đúng với tool 2 pha, và sai hẳn khi đổi model (gpt-image-1 →
+   * gpt-image-2 làm thời gian gấp đôi mà không ai đo lại). */
+  durationMs: number;
 }
 
 /** Trả về base64 PNG (không kèm data: prefix) + usage token thật. Ném lỗi nếu API thất bại. */
 export async function generatePortraitImage(opts: GeneratePortraitOpts): Promise<GeneratePortraitResult> {
+  const _t0 = Date.now();
   if (!OPENAI_KEY) throw new Error('openai-image: thiếu OPENAI_API_KEY');
 
   const model = opts.model || OPENAI_IMAGE_MODEL;
@@ -94,5 +100,5 @@ export async function generatePortraitImage(opts: GeneratePortraitOpts): Promise
     console.warn(`[openai-image] ${model} trả ảnh nhưng KHÔNG có usage — chi phí lượt này không được ghi.`);
   }
 
-  return { b64, model, usage };
+  return { b64, model, usage, durationMs: Date.now() - _t0 };
 }
