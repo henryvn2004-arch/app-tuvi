@@ -342,6 +342,30 @@ export async function runViralLoop(
   const rounds: LoopRound[] = [];
   let spec = input;
 
+  /*
+   * ── GIỮ BẢN TỐT NHẤT ──────────────────────────────────────────────────────
+   *
+   * 🔴 Bản trước trả về `spec` = bản CUỐI CÙNG, trong khi chính interface ghi
+   * "bản đã qua cổng, hoặc bản TỐT NHẤT nếu hết vòng" — tài liệu nói một đằng,
+   * code làm một nẻo.
+   *
+   * Đo được trên `ba-the-be-tac`: vòng 1 **3/4 xem hết**, vòng 2 model viết lại
+   * làm hỏng còn **0/4**, vòng 3 lấy bản hỏng đó làm nền rồi trượt luôn cổng 1.
+   * Ba vòng đi LÙI, và thứ giao ra là bản tệ nhất trong ba.
+   *
+   * 🔑 Viết lại KHÔNG đơn điệu — model có thể làm tệ đi. Vòng lặp vì thế phải
+   * là "thử rồi giữ cái tốt hơn", không phải "cứ thay bằng cái mới nhất".
+   *
+   * Điểm xếp theo thứ tự người xem thật sự quan tâm: xem hết → muốn lưu → muốn
+   * gửi. Vòng trượt cổng 1 (chưa tới hội đồng) tính 0 — chưa có bằng chứng nào
+   * nói nó tốt hơn.
+   */
+  let bestSpec = input;
+  let bestScore = -1;
+  let bestRound: LoopRound | null = null;
+  const diem = (a: AudienceGateResult | null) =>
+    a ? a.soXemHetTrongTep * 1000 + a.tiLeMuonLuu * 10 + a.tiLeMuonChiaSe : 0;
+
   for (let round = 1; round <= maxRounds; round++) {
     const machine = runMachineGate(spec, opts.gate);
 
@@ -373,7 +397,21 @@ export async function runViralLoop(
       hookMaxChars: nsCong2.hook,
       sceneMaxChars: nsCong2.canh,
     });
-    rounds.push({ round, machine, audience, rewriteHint: audience.pass ? '' : audience.goiYSua });
+    const thisRound: LoopRound = {
+      round,
+      machine,
+      audience,
+      rewriteHint: audience.pass ? '' : audience.goiYSua,
+    };
+    rounds.push(thisRound);
+
+    // Chốt bản tốt nhất NGAY SAU khi chấm, trước khi vòng sau ghi đè `spec`.
+    const d = diem(audience);
+    if (d > bestScore) {
+      bestScore = d;
+      bestSpec = spec;
+      bestRound = thisRound;
+    }
 
     if (audience.pass) {
       return {
@@ -390,13 +428,20 @@ export async function runViralLoop(
     spec = next;
   }
 
-  const last = rounds[rounds.length - 1];
+  // ⚠️ Lỗi còn lại phải MÔ TẢ ĐÚNG BẢN GIAO RA. Lấy của vòng cuối trong khi
+  // giao bản vòng 1 là in ra lý do của một kịch bản khác — đúng lớp lỗi "đo
+  // một đằng, báo một nẻo" đã ghi trong CLAUDE.md. Chưa vòng nào tới được hội
+  // đồng thì mới rơi về vòng cuối (lúc đó bestSpec = bản gốc, và lỗi cổng 1
+  // của vòng cuối là thứ gần nhất nói được vì sao không đi tiếp).
+  const nguon = bestRound ?? rounds[rounds.length - 1];
   return {
     pass: false,
-    spec,
+    // Hết vòng mà chưa qua ⇒ giao bản TỐT NHẤT đã chấm, không phải bản cuối.
+    spec: bestSpec,
     rounds,
-    remainingIssues: [...(last?.machine.issues ?? []), ...(last?.audience?.issues ?? [])].filter(
-      (i) => i.level === 'block'
-    ),
+    remainingIssues: [
+      ...(nguon?.machine.issues ?? []),
+      ...(nguon?.audience?.issues ?? []),
+    ].filter((i) => i.level === 'block'),
   };
 }

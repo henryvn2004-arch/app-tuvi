@@ -845,23 +845,23 @@ const SOURCES: InsightSource[] = [
     toolId: 'kinh-dich',
     spec: {
       title: 'Ba tình thế bế tắc trong Kinh Dịch',
-      hook: 'Người xưa vẽ ba tình thế bế tắc.',
+      hook: 'Bốn kiểu bế tắc — bạn đang ở kiểu nào?',
       scenes: [
         {
-          text: 'Truân: bạn mới bắt đầu, và mọi thứ còn rối như tơ vò.',
-          visual: { kind: 'image', src: QUE('17-kw03.png'), accent: 'Truân:' },
+          text: 'Mới bắt đầu mà rối như tơ vò, chưa biết gỡ từ đâu. Người xưa gọi là quẻ Truân.',
+          visual: { kind: 'image', src: QUE('17-kw03.png'), accent: 'rối như tơ vò' },
         },
         {
-          text: 'Kiển: đường trước mặt nghẽn, mà quay lại thì không cam.',
-          visual: { kind: 'image', src: QUE('20-kw39.png'), accent: 'Kiển:' },
+          text: 'Đi tiếp thì nghẽn, quay lại thì không cam. Cổ nhân đặt tên quẻ Kiển.',
+          visual: { kind: 'image', src: QUE('20-kw39.png'), accent: 'không cam' },
         },
         {
-          text: 'Khốn: bạn vẫn gắng, nhưng nói ra thì không ai hiểu.',
-          visual: { kind: 'image', src: QUE('26-kw47.png'), accent: 'Khốn:' },
+          text: 'Bạn vẫn gắng, nhưng nói ra thì không ai hiểu. Đó là quẻ Khốn.',
+          visual: { kind: 'image', src: QUE('26-kw47.png'), accent: 'không ai hiểu' },
         },
         {
-          text: 'Khảm: hết lớp này tới lớp khác, tới mức bạn quen dần.',
-          visual: { kind: 'image', src: QUE('18-kw29.png'), accent: 'Khảm:' },
+          text: 'Hết lớp này tới lớp khác, tới mức bạn quen dần. Quẻ Khảm.',
+          visual: { kind: 'image', src: QUE('18-kw29.png'), accent: 'quen dần' },
         },
         {
           text: 'Cổ nhân không gọi đó là số phận của bạn. Chỉ là một giai đoạn.',
