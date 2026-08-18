@@ -1,5 +1,9 @@
-// clip-ingest v1 — nhận một clip 9:16 từ GitHub Actions, cất vào Storage rồi
-// ghi một dòng vào `media_assets`.
+// clip-ingest v2 — nhận một clip 9:16 từ GitHub Actions, cất vào Storage, ghi
+// một dòng vào `media_assets`, và (SAU MỘT CÁI VAN) xếp hàng đăng.
+//
+// v1 → v2: nhận `width`/`height` do người nộp khai (clip nay giao ra 720×1280,
+// viết cứng 1080×1920 là sổ nói sai về chính file trong kho) và thêm bước xếp
+// hàng `media_posts` sau cờ `social.clip_autopost` — xem khối cuối file.
 //
 // 🔑 VÌ SAO LÀ MỘT HÀM EDGE chứ không để Actions tự ghi thẳng vào Supabase:
 // ghi thẳng thì runner phải cầm `SUPABASE_SERVICE_KEY` — khoá mở toang toàn bộ
@@ -8,12 +12,15 @@
 // `CLIP_INGEST_SECRET`: làm được đúng một việc là nộp clip, xoay lại là một
 // dòng lệnh, và nếu lộ thì thiệt hại tối đa là vài clip rác trong kho.
 //
-// ⚠️ HÀM NÀY KHÔNG XẾP HÀNG ĐĂNG. Nó chỉ CẤT + GHI SỔ (`media_assets`).
-// Việc biến một clip thành bài đăng (`media_posts`) là quyết định NỘI DUNG —
-// caption, hashtag, kênh nào trước — nên nằm ở một bước riêng, có người chốt.
-// Chèn thẳng vào `media_posts` với `channel` chưa có adapter thì `publishQueue`
-// sẽ quét trúng rồi đánh dấu `error` cho cả lô (nó lọc theo TRẠNG THÁI, không
-// lọc theo kênh) — tức tự tay làm hỏng hàng đợi của chính mình.
+// ⚠️ XẾP HÀNG ĐĂNG NẰM SAU MỘT CÁI VAN, mặc định ĐÓNG (`social.clip_autopost`
+// = false). Biến một clip thành bài đăng là quyết định NỘI DUNG — nên van do
+// người mở, không phải mặc định bật. Van đóng thì hàm này chỉ CẤT + GHI SỔ
+// (`media_assets`) đúng như bản v1.
+//
+// 🪤 Và kênh phải lấy từ `social.channels`, đừng khai một danh sách ở đây:
+// chèn `media_posts` với `channel` chưa có adapter thì `publishQueue` quét
+// trúng rồi đánh dấu `error` cho cả lô (nó lọc theo TRẠNG THÁI, không lọc theo
+// kênh) — tức tự tay làm hỏng hàng đợi của chính mình.
 //
 // 🧷 Nguồn nằm TRONG repo, không chỉ trên dashboard Supabase. Bài học đã trả
 // giá hai lần (`send-daily-push`, `youtube-upload`): bản đang chạy khác bản
@@ -146,10 +153,11 @@ Deno.serve(async (req) => {
    *
    * 🔴 VÌ SAO PHẢI CÓ VAN RIÊNG chứ không dùng luôn `social.autopost_enabled`:
    * cờ đó đang BẬT trên prod cho đường ẢNH (bài trích từ `khao_luan`, có
-   * brand-check gác trước khi vào kho). Clip video thì KHÔNG đi qua brand-check
-   * — nó qua cổng 1 + hội đồng cổng 2, mà cổng 2 hiện đang chặn nên lượt dựng
-   * phải `--no-audience`. Dùng chung cờ nghĩa là clip CHƯA ai xem tự lên trang
-   * công khai ngay lượt cron kế tiếp.
+   * brand-check gác trước khi vào kho). Clip video KHÔNG đi qua brand-check —
+   * nó qua cổng 1 + hội đồng cổng 2. Hai cổng đó gác CHỮ và nhịp, **không ai
+   * gác phần HÌNH**: chưa phép đo nào nói được đoạn phim nền có ăn nhập với lời
+   * đọc không. Dùng chung cờ nghĩa là một clip CHƯA AI NHÌN tự lên trang công
+   * khai ngay lượt cron kế tiếp.
    * ⇒ `social.clip_autopost` mặc định **false**: đường nối xong, van do người mở.
    *
    * 🔑 Và CỐ Ý không giữ danh sách kênh ở đây. Chép `SUPPORTED_CHANNELS` sang
