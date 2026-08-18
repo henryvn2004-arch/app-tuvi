@@ -49,6 +49,7 @@ import {
   findFfmpeg,
   measureImage,
   measureMotion,
+  videoDurationSec,
   passesTags,
   pixabayKey,
   sleep,
@@ -537,7 +538,9 @@ for (const [bucketName, items] of groups) {
           caption: captionFromTags(w.hit.tags),
           width: w2,
           height: h2,
-          duration: w.hit.duration,
+          // ĐO trên chính file trong kho, KHÔNG lấy số nguyên đã làm tròn của
+          // nhà cung cấp — xem `videoDurationSec` cho lý do (bẫy đứng khung cuối).
+          duration: Math.floor(videoDurationSec(ffmpeg, abs) ?? w.hit.duration),
           bytes: statSync(abs).size,
           brightness: { mean: w.m.mean, sd: w.m.sd },
           motion,
@@ -549,6 +552,25 @@ for (const [bucketName, items] of groups) {
           textSafe: w.m.mean <= BRIGHT_MAX,
           provider: 'pixabay',
           providerId: w.hit.id,
+          // 🔑 Địa chỉ DỰNG LẠI kho. File mp4 nằm ngoài git nên bản clone sạch
+          // (runner CI) phải tải lại được — `scripts/restore-stock.mjs` đọc
+          // đúng hai trường này. URL CDN Pixabay là đường dẫn cố định, KHÔNG
+          // có chữ ký hết hạn như `webformatURL` của ảnh, nên pin được.
+          //
+          // ⚠️ Ưu tiên biến thể có ĐÚNG khổ đã lưu, không phải biến thể đã tải:
+          // đoạn 4K bị thu nhỏ lúc nhập kho, mà tải lại bản 4K rồi thu nhỏ ở
+          // runner là thêm một bước ffmpeg để ra thứ Pixabay vốn phát sẵn. Đã
+          // đối chứng: bản 1920 của Pixabay đo ra độ động trùng khít bản ffmpeg
+          // thu nhỏ tại máy (lệch ≤0,03). Không có biến thể trùng khổ thì ghi
+          // `rescaled` để khâu khôi phục biết phải thu nhỏ lại.
+          ...(() => {
+            const khop = Object.entries(w.hit.videos || {}).find(
+              ([, v]) => v?.url && v.width === w2 && v.height === h2
+            );
+            return khop
+              ? { variant: khop[0], url: khop[1].url }
+              : { variant: w.r.k, url: w.r.url, rescaled: true };
+          })(),
           pageURL: w.hit.pageURL,
           author: w.hit.user,
           authorURL: w.hit.userURL,

@@ -291,7 +291,12 @@ const SOURCES: InsightSource[] = [
       // không lấy bừa một bức cho có tranh.
       // mây vần, tông u ám — hợp câu 'tưởng là tính cách, thật ra là vết thương'.
       backdropVideo: 'stock-video/tone/suy-tu/117690.mp4',
-      backdropSeconds: 15,
+      // ⚠️ LÀM TRÒN XUỐNG, không lấy số nguyên của nhà cung cấp: `VideoBackdrop`
+      // tính `covers = floor(seconds*fps/rate)` rồi bọc `<Loop>` đúng ngần ấy
+      // khung. Khai THỪA dù chỉ nửa giây là mỗi vòng lặp đứng ở khung cuối chừng
+      // ấy — đúng bẫy "OffthreadVideo đứng khung cuối". Đo thật: 14,51s (Pixabay
+      // khai tròn 15).
+      backdropSeconds: 14,
       hashtags: ['tinhcach', 'tamly', 'chualanh', 'selfdiscovery'],
     },
   },
@@ -441,7 +446,8 @@ const SOURCES: InsightSource[] = [
       // PAYOFF + câu kết — chỗ nội dung chuyển từ bế tắc sang bước đi được.
       // ngọn đèn lắc trong gió — bồn chồn, đúng cảm giác trì hoãn vì sợ.
       backdropVideo: 'stock-video/tone/bi-an/102.mp4',
-      backdropSeconds: 20,
+      // Làm tròn XUỐNG — xem chú thích ở `vi-sao-hay-hoan-lai`. Đo thật: 19,64s.
+      backdropSeconds: 19,
       hashtags: ['trihoan', 'tamly', 'nangsuat', 'selfdiscovery'],
     },
   },

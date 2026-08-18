@@ -982,6 +982,34 @@ export function passesTags(tags, item) {
  * `remotion/src/InsightClip.tsx`. Muốn biết clip trông có động không thì phải
  * đo trên chính file mp4 đã render, đừng suy từ con số này.
  */
+/**
+ * Độ dài THẬT của một mp4, tính bằng giây (số thực).
+ *
+ * 🪤 VÌ SAO KHÔNG TIN CON SỐ CỦA NHÀ CUNG CẤP: Pixabay trả `duration` là số
+ * NGUYÊN đã làm tròn — có đoạn khai 15 mà thật ra 14,51, khai 20 mà thật 19,64.
+ * `backdropSeconds` trong kịch bản suy từ con số này, mà `VideoBackdrop` lại
+ * tính `covers = floor(seconds*fps/rate)` rồi bọc `<Loop>` đúng ngần ấy khung.
+ * Khai THỪA nửa giây là mỗi vòng lặp đứng ở khung cuối nửa giây — đúng bẫy
+ * "OffthreadVideo đứng khung cuối", và nó hỏng IM LẶNG (clip vẫn ra, chỉ giật).
+ *
+ * ⇒ Đo trên chính file trong kho, rồi LÀM TRÒN XUỐNG khi khai `backdropSeconds`.
+ */
+export function videoDurationSec(ffmpeg, mp4Path) {
+  // `ffmpeg -i` không có output nên luôn thoát khác 0 và in thông tin ra stderr
+  // — đó là đường đọc, không phải lỗi.
+  let err = '';
+  try {
+    execFileSync(ffmpeg, ['-hide_banner', '-i', mp4Path], {
+      stdio: ['ignore', 'ignore', 'pipe'],
+    });
+  } catch (e) {
+    err = String(e.stderr || '');
+  }
+  const m = err.match(/Duration: (\d+):(\d+):([\d.]+)/);
+  if (!m) return null;
+  return Number(m[1]) * 3600 + Number(m[2]) * 60 + parseFloat(m[3]);
+}
+
 export function measureMotion(ffmpeg, mp4Path, durationSec, tmpDir) {
   const vf = "crop='min(iw,ih*9/16)':'min(ih,iw*16/9)',scale=64:114,format=rgb24";
   const grab = (t, out) => {

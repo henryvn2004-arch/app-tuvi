@@ -114,6 +114,27 @@ jobs:
       - name: Sinh nhạc nền
         run: node scripts/gen-music-bed.mjs --all
 
+      # 🔴 KHO NỀN VIDEO NẰM NGOÀI GIT (97MB, `.gitignore`) — bản clone sạch
+      # không có byte nào, và `OffthreadVideo` gặp 404 rồi kéo sập cả lượt
+      # render. Đo được: lượt 32116193607 trượt cả hai clip đúng ở đây.
+      #
+      # Khoá cache băm CHÍNH manifest: đổi/thêm một đoạn là khoá đổi ⇒ tải lại;
+      # còn lại thì trúng cache và bước dưới thành no-op. `restore-keys` cho
+      # lượt sau rơi về kho cũ rồi chỉ tải phần chênh, thay vì tải trắng 97MB.
+      - name: Cache kho nền video
+        uses: actions/cache@v4
+        with:
+          path: remotion/public/stock-video
+          key: stock-video-${{ hashFiles('lib/video/stock-video-manifest.json') }}
+          restore-keys: stock-video-
+
+      # Tải bằng HTTP TRẦN từ CDN Pixabay — CỐ Ý không qua Supabase Storage:
+      # đẩy lên đó cần `SUPABASE_SERVICE_KEY`, mà cả track này đã cố ý không
+      # đưa khoá đó vào Actions (xem `clip-ingest`). Runner vì thế không cần
+      # thêm một secret nào cho bước này.
+      - name: Dựng lại kho nền video
+        run: node scripts/restore-stock.mjs
+
       - name: Dựng clip
         env:
           # Khoá gọi hàm edge TTS. Không khai thì script dùng anon key công khai
