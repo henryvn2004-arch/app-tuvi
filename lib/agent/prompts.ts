@@ -440,10 +440,10 @@ export const MAU_ARC_CHUNG = mauArc(
 //   · luật thuật ngữ (tên riêng để trong ngoặc, không mở đầu câu)
 //   · ngân sách từ của từng phần
 // Viết lại chúng ở đây là dựng bản thứ hai rồi hai bản trôi khỏi nhau.
-const arcDoc = (o: { canCu: string; phepDich: string }) => `── HAI THỨ BẮT BUỘC CÓ TRONG MỖI PHẦN (BỔ SUNG cho luật phán quyết ở trên, KHÔNG thay nó) ──
+const arcDoc = (o: { canCu: string; moc: string; phepDich: string }) => `── HAI THỨ BẮT BUỘC CÓ TRONG MỖI PHẦN (BỔ SUNG cho luật phán quyết ở trên, KHÔNG thay nó) ──
 Viết LIỀN MẠCH trong văn xuôi. TUYỆT ĐỐI không in tên hai mục này ra màn hình, không đánh số, không tách thành tiêu đề.
 - HÀNH VI ĐỜI THƯỜNG (1–2 việc): việc cụ thể tới mức người đọc tự soi ra mình — "hay nhận việc rồi ôm một mình", "cãi xong là im mấy ngày", "tiền vào tay là có chỗ gọi tên ngay". Phải mọc ra từ ${o.canCu} của CHÍNH phần đang viết, KHÔNG phải câu chung chung ai đọc cũng thấy đúng. Chật chỗ thì lấy MỘT cái đắt nhất.
-- MỘT CÂU LẬT: lật góc nhìn — cái người đọc tưởng là chỗ yếu hoá ra là chỗ mạnh, hoặc ngược lại. PHẢI rút từ dữ liệu thật của phần đó; không có căn cứ thì BỎ HẲN, tuyệt đối không nói ngược cho kêu.
+- MỘT CÂU LẬT (đặt NGAY SAU phần giải thích, trước câu kết): lật góc nhìn — cái người đọc tưởng là chỗ yếu hoá ra là chỗ dùng được, hoặc chỗ tưởng là may lại có cái giá của nó. Đây KHÔNG phải mục tuỳ chọn: ${o.moc} Chỉ được BỎ khi phần đó thật sự không có gì để lật; đã lật thì phải bám dữ kiện, tuyệt đối không nói ngược cho kêu.
 
 ── GIỌNG ──
 Viết như đang NÓI với người ngồi đối diện — chêm khẩu ngữ tự nhiên (thì, à, này, nhé, đấy, cơ, chứ), mỗi đoạn 1–2 cái. KHÔNG chêm vào câu phán quyết in đậm, không chêm vào câu chốt.
@@ -464,25 +464,73 @@ const PHEP_DICH_LASO = `· [Phu Thê] Thiên Đồng(hãm) + Đà La → ✅ hà
 · [Tài Bạch] Vũ Khúc(miếu) + Hóa Lộc → ✅ câu lật: "Cái tính chi ly mà người nhà hay kêu lại đúng là chỗ giữ được tiền cho anh." ❌ "Vũ Khúc miếu địa Hóa Lộc là cách cục tài lộc tốt."`;
 
 export const DOC_ARC_LASO = arcDoc({
+  moc: 'nhãn Luận sao Yếu / Xấu rõ hoặc có sát tinh → chỉ ra chỗ cái yếu ấy vẫn dùng được vào việc gì; nhãn Tốt rõ / Khá hoặc có cách cục quý → chỉ ra cái giá đi kèm.',
   canCu: 'sao / cách cục / độ sáng',
   phepDich: PHEP_DICH_LASO,
 });
 
 export const DOC_ARC_PHU_THE = arcDoc({
+  moc: 'nhãn Luận sao Yếu / Xấu rõ hoặc có sát tinh tại Phu Thê → chỉ ra chỗ cái yếu ấy vẫn dùng được vào việc gì trong đời sống vợ chồng; nhãn Tốt rõ / Khá → chỉ ra cái giá đi kèm.',
   canCu: 'sao / cách cục / độ sáng của cung Phu Thê',
   phepDich: PHEP_DICH_LASO,
 });
 
 export const DOC_ARC_TUBINH = arcDoc({
+  moc: 'cường nhược lệch nặng hoặc cách cục phá → chỉ ra chỗ cái lệch ấy vẫn dùng được vào việc gì; cách cục thành hoặc đại vận điểm cao → chỉ ra cái giá đi kèm.',
   canCu: 'can chi / thập thần / cường nhược / dụng thần',
   phepDich: `· [Nhật Can] Canh kim, thân nhược, Quan Sát vượng → ✅ hành vi: "Việc dồn tới là anh nhận hết, tối về mới thấy mình gánh phần của ba người." ❌ "Nhật chủ Canh kim thân nhược, Quan Sát vượng khắc thân."
 · [Dụng thần] Hỏa → ✅ câu lật: "Cái nóng ruột hay bị chê là thiếu kiên nhẫn lại chính là thứ kéo anh ra khỏi mấy giai đoạn ì." ❌ "Dụng thần là Hỏa, hỷ Mộc Hỏa, kỵ Kim Thủy."`,
 });
 
 export const DOC_ARC_TUONG_HOP = arcDoc({
+  moc: 'tiêu chí điểm THẤP → chỉ ra chỗ khác biệt ấy vẫn dùng được vào việc gì; tiêu chí điểm CAO → chỉ ra chỗ quá giống nhau thành ra dễ cùng bỏ qua một việc.',
   canCu: 'ngũ hành / can chi / sao của HAI lá số',
   phepDich: `· [Ngũ hành] nam Kim – nữ Mộc, Kim khắc Mộc → ✅ hành vi: "Anh nói một câu là chị nghĩ cả buổi; chị im thì anh lại tưởng xong chuyện." ❌ "Nam mệnh Kim khắc nữ mệnh Mộc, ngũ hành tương khắc."
 · [Xét tuổi] Tam Hợp → ✅ câu lật: "Hợp nhau tới mức chẳng ai chịu nói thẳng — chỗ dễ chịu nhất lại đúng là chỗ hai người hay né việc khó." ❌ "Hai tuổi thuộc Tam Hợp, chủ hòa hợp."`,
+});
+
+// ─── GIỌNG cho BẢN CÓ CẤU TRÚC (họ 2 — JSON schema trả tiền · phong thuỷ · đặt tên · chọn ngày) ───
+//
+// 🔴 KHÔNG dùng `LUAN_ARC` lẫn `arcDoc` ở đây. Cả hai đều khai HÌNH DẠNG (nhịp
+// đoạn, cấm tiêu đề / cấm liệt kê, ngân sách từ), mà hình dạng của nhóm này là
+// SCHEMA: `day-con` 12 field theo `propertyOrdering`, `dat-ten-con` bắt buộc
+// "3 nhóm × 4 tên", `chon-ngay-tot` bắt buộc "4–5 khoảng ngày". Dán luật cấm
+// liệt kê vào đó là PHÁ đúng hợp đồng chúng phải giữ.
+//
+// ⇒ Khối này chỉ chở thứ ĐỘC LẬP với hình dạng: GIỌNG và PHÉP DỊCH. Chúng nói về
+// chữ BÊN TRONG mỗi field, không nói field nào đứng đâu ⇒ **KHÔNG đổi schema,
+// KHÔNG đổi payload, nên KHÔNG phải bump `SHAPE`.**
+//
+// Slot `twist` để RỖNG cho tool trả DANH SÁCH (đặt tên · chọn ngày): một danh
+// sách 12 cái tên không có chỗ nào để lật góc nhìn.
+const arcGiong = (o: { phepDich: string; twist?: string }) => `── GIỌNG (áp cho chữ BÊN TRONG mỗi mục; KHÔNG đổi bố cục hay số mục) ──
+Viết như đang NÓI với người ngồi đối diện — chêm khẩu ngữ tự nhiên (thì, à, này, nhé, đấy, cơ, chứ), mỗi mục 1–2 cái. KHÔNG chêm vào câu mở đầu và không chêm vào câu chốt của mục.
+CẤM: "Như vậy có thể thấy" · "Nhìn chung" · "Tóm lại" · "Về mặt…" · "Thứ nhất… thứ hai" · "Trước tiên cần hiểu rằng" · câu chung chung ai đọc cũng thấy đúng.${o.twist || ''}
+
+── PHÉP DỊCH (dữ kiện → câu). Học đúng phép biến đổi này, đừng chép chữ ──
+${o.phepDich}`;
+
+// Câu lật CỐ Ý viết theo hướng "chỗ tưởng yếu hoá ra là chỗ mạnh" — nó CỦNG CỐ
+// luật đã có của nhóm này ("tính cách không tốt cũng không xấu, chỉ hợp hoặc
+// không hợp bối cảnh"), chứ không mở đường phán giá trị.
+const TWIST_NHE =
+  '\nMỘT CÂU LẬT: ở mục nói về tính cách, thêm ĐÚNG MỘT câu lật góc nhìn — chỗ người đọc tưởng là điểm yếu hoá ra là chỗ mạnh trong đúng bối cảnh nào. Phải rút từ dữ kiện thật; không có căn cứ thì BỎ HẲN, tuyệt đối không nói ngược cho kêu.';
+
+export const ARC_GIONG_TRE = arcGiong({
+  twist: TWIST_NHE,
+  phepDich: `· [Trục] Nhịp 7,4/10 → ✅ "Cháu ngồi yên được chừng mười lăm phút là chân bắt đầu ngọ nguậy, phải cho đứng dậy một lúc rồi mới vào tiếp." ❌ "Trục nhịp đạt 7,4/10, thuộc nhóm cao."
+· [Chất] Ngôn ngữ nổi bật → ✅ "Cháu kể chuyện ở lớp mà người lớn nghe cũng phải cười — chỗ này đáng cho học thêm." ❌ "Chất năng khiếu ngôn ngữ vượt ngưỡng."`,
+});
+
+export const ARC_GIONG_NGUOI = arcGiong({
+  twist: TWIST_NHE,
+  phepDich: `· [Mệnh] Cự Môn + Hóa Kỵ → ✅ "Người này nói thẳng, nghe hơi mất lòng, nhưng được cái không giấu ý sau lưng." ❌ "Cự Môn Hóa Kỵ tại Mệnh chủ thị phi khẩu thiệt."
+· [Kiểu] Khai sáng → ✅ "Đưa việc mới là mắt sáng lên; giao việc lặp đi lặp lại thì đuối rất nhanh." ❌ "Thuộc kiểu Khai sáng, động lực gốc là cái mới."`,
+});
+
+export const ARC_GIONG_NGU_HANH = arcGiong({
+  phepDich: `· [Nạp âm] Canh Ngọ — Lộ Bàng Thổ → ✅ "Mệnh anh thuộc kiểu đất ven đường, hợp mấy màu vàng đất, nâu nhạt." ❌ "Mệnh Lộ Bàng Thổ, nạp âm Canh Ngọ, thuộc hành Thổ."
+· [Quan hệ] ngày Hỏa sinh mệnh Thổ → ✅ "Hôm nay là ngày nâng mình lên, mặc tông ấm vào cho thuận." ❌ "Ngày Hỏa sinh mệnh Thổ, tương sinh."`,
 });
 
 // Khối dán vào MỌI prompt kịch bản của rail (~22 prompt / 24 toolType).
