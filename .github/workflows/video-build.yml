@@ -13,6 +13,24 @@
 name: Video Build
 
 on:
+  # ✅ ĐÃ BẬT LỊCH. Hai điều kiện chốt lúc dựng workflow này — "đủ kịch bản cho
+  # nhiều tool" và "đã nối được đường đăng bài" — nay đều thoả: 18 kịch bản demo
+  # tool + 6 kịch bản insight (5/6 qua cổng 2), và `lib/media/publish.ts` đã có
+  # đường đăng VIDEO cho 5 kênh.
+  #
+  # 🔑 TUẦN chứ không phải NGÀY, và đây là lý do: `build-video-batch.mjs` bỏ qua
+  # clip đã có file (chỉ `--force` mới dựng lại), nên chạy hằng ngày là 6 ngày
+  # no-op mỗi tuần. Giá trị của lịch nằm ở chỗ "thêm kịch bản mới thì tự dựng",
+  # mà nhịp thêm kịch bản là hàng tuần chứ không hàng ngày.
+  #
+  # ⚠️ Nhịp ĐĂNG thì độc lập và vốn đã hằng ngày: cron `media-build` (09:30 VN)
+  # gọi `publishQueue()` xả dần theo `social.publish_daily`. Dựng một lượt, đăng
+  # nhỏ giọt nhiều ngày — đừng gộp hai nhịp này làm một.
+  #
+  # 08:00 VN thứ Hai = 01:00 UTC, tức TRƯỚC lượt đăng 09:30 cùng ngày 1,5 giờ:
+  # clip dựng xong kịp vào hàng đợi ngay hôm đó thay vì chờ sang hôm sau.
+  schedule:
+    - cron: '0 1 * * 1'
   workflow_dispatch:
     inputs:
       tools:
@@ -36,9 +54,6 @@ on:
         required: false
         default: 'https://www.tuviminhbao.com'
 
-# ⚠️ CỐ Ý CHƯA CÓ `schedule`. Chạy tự động hằng ngày chỉ có nghĩa khi đã có đủ
-# kịch bản cho nhiều tool VÀ đã nối được đường đăng bài. Bật lịch lúc mới có 1
-# kịch bản là mỗi sáng dựng lại đúng một clip đã có.
 
 # Một lượt dựng tại một thời điểm. Hai lượt cùng lúc sẽ ghi đè file của nhau
 # trong `remotion/out/`.
