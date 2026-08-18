@@ -118,6 +118,62 @@ câu anh dặn *"chỉ đổi shape giọng"* đã trả lời sẵn.
   luật cấm liệt kê → đỏ cả 3 bản). Ca 2 lượt đầu **đột biến KHÔNG ăn** vì tôi neo
   vào chuỗi đã bị prettier gói lại — chốt assert bắt được, phải neo theo DÒNG.
 
+### 📏 ĐO BẰNG GEMINI THẬT — arc ăn ở GIỌNG, ăn nửa vời ở CÂU LẬT
+`scripts/demo-arcdoc.mjs` (MỚI) đo `arcDoc` trên **bản luận giải**, biến DUY NHẤT
+là system có `${DOC_ARC_LASO}` hay không (lá số · câu lệnh từng phần · model ·
+nhiệt độ · trần token giữ y hệt). `gemini-2.5-flash`, `thinkingBudget: 0`, n=9.
+
+| chỉ số / lượt | TRƯỚC | SAU |
+|---|---:|---:|
+| khẩu ngữ | 1,7 | **4,7** |
+| hành vi cụ thể | 1,7 | **2,6** |
+| **có câu lật** | **0/9** | **3/9** |
+| mở câu bằng tên sao | 0,1 | 0,1 |
+| số từ | 213 | 225 |
+
+⇒ **Giọng ăn rõ. Câu lật chỉ ra ở 1/3 số lượt** — nhưng bản đối chứng là **0/9**,
+tức arc có tạo ra nó, chỉ chưa chắc tay. Mở câu bằng tên sao vốn đã tốt sẵn (luật
+đó có từ trước arc), độ dài gần như không đổi.
+
+- 🪤 **Bộ dò của TÔI mù, suýt kết luận ngược.** Lượt đầu nó báo **1/6** rồi sau
+  một lượt sửa prompt báo **0/6** — tôi đã suýt ghi "arcDoc không ăn". Thật ra
+  regex chỉ dò đúng CỤM TỪ của bản cũ (`hoá ra`, `tưởng là`); đổi cách diễn đạt
+  là nó không thấy. Nới bộ dò rồi ĐỌC trọn output thì ra 3/3 ở mẫu nhỏ, 3/9 ở
+  mẫu lớn. **Cùng lớp lỗi `\bcon\b` khớp "con vật" — và lần này nó suýt làm tôi
+  gỡ một thứ đang chạy đúng.**
+- 🪤 **Mẫu bị cắt ở 700 ký tự** trong khi câu lật được dặn đặt GẦN CUỐI ⇒ in mẫu
+  cụt là đo hụt đúng chỗ cần nhìn.
+- ⚠️ **Slot `moc` (mốc bám dữ liệu để lật): KHÔNG đo được là có ích.** Thêm nó
+  rồi đo lại vẫn ra cùng tỉ lệ (1/3 vs 3/9 — bằng nhau). GIỮ vì một lý do ĐỊNH
+  TÍNH đọc ra được, không phải vì số liệu: dòng cũ tự cho model đường thoát
+  *"không có căn cứ thì bỏ hẳn"*, dòng mới buộc nó bám vào nhãn `Luận sao` mà
+  prompt VỐN ĐÃ tính sẵn. Đừng viện con số để bênh nó.
+- ⚠️ n=9 là **mẫu nhỏ**, một lá số, ba phần. Đừng đọc rộng hơn thế.
+
+### 🧷 `check:prompt` LUẬT 4 — canh nốt 4 prompt luận giải ở route
+Ba luật cũ chỉ quét `lib/agent/prompts.ts`, nên 4 bản LUẬN GIẢI (thứ TRẢ TIỀN để
+đọc) nằm ngoài mọi trần — mà `SYSTEM_PROMPT` đã **10.417 ký tự** và không có gì
+canh. Nay có trần + luật một-nguồn-bố-cục, cộng một luật RIÊNG: **cấm kéo arc
+CHAT vào bản luận giải** (nó mang bối cảnh *"vừa đọc xong bản luận đầy đủ"* +
+ngân sách 120–180 từ ⇒ prompt tự mâu thuẫn).
+
+| prompt | ký tự / trần |
+|---|---:|
+| `SYSTEM_PROMPT` (24 phần) | 10.417 / 11.800 |
+| `SYSTEM_PROMPT_TUBINH` (16 phần) | 8.684 / 9.400 |
+| `PHU_THE_LUAN_GIAI_SYSTEM_PROMPT` | 5.814 / 6.600 |
+| `LUAN_GIAI_TUONG_HOP_SYSTEM` (9 phần) | 2.358 / 2.400 |
+
+Red-team **4/4 đỏ đúng**: phình vượt trần · kéo arc chat vào · gỡ arc đi · đổi
+tên prompt → **DỪNG HẲN** thay vì báo xanh. Đối chứng khôi phục xanh.
+
+### 🗺️ Quét lần cuối: KHÔNG còn tool người dùng nào chưa phủ
+Rà mọi chỗ gọi LLM có `system` trong `app/` + `lib/`: **19 file**. Đã phủ hết
+đường người dùng. Ba chỗ còn `arc=0` là **truyện tiền kiếp** (cố ý). Còn
+`lib/marketing/*` · `lib/media/*` · `lib/video/*` là **công cụ nội bộ** (digest
+Telegram cho admin · kịch bản TikTok · hội đồng chấm clip) — arc là luật cho văn
+LUẬN gửi người dùng, áp vào đó là sai chỗ.
+
 ### CÒN LẠI
 - 🔴 **CHƯA gọi LLM thật lượt nào** — verify dừng ở tầng CHỮ VÀO PROMPT. Arc có ăn
   hay không thì phải chạy `scripts/demo-luan.mjs` bằng `gemini-2.5-flash` (nhớ

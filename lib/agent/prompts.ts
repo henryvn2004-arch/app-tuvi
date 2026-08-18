@@ -440,10 +440,10 @@ export const MAU_ARC_CHUNG = mauArc(
 //   · luật thuật ngữ (tên riêng để trong ngoặc, không mở đầu câu)
 //   · ngân sách từ của từng phần
 // Viết lại chúng ở đây là dựng bản thứ hai rồi hai bản trôi khỏi nhau.
-const arcDoc = (o: { canCu: string; phepDich: string }) => `── HAI THỨ BẮT BUỘC CÓ TRONG MỖI PHẦN (BỔ SUNG cho luật phán quyết ở trên, KHÔNG thay nó) ──
+const arcDoc = (o: { canCu: string; moc: string; phepDich: string }) => `── HAI THỨ BẮT BUỘC CÓ TRONG MỖI PHẦN (BỔ SUNG cho luật phán quyết ở trên, KHÔNG thay nó) ──
 Viết LIỀN MẠCH trong văn xuôi. TUYỆT ĐỐI không in tên hai mục này ra màn hình, không đánh số, không tách thành tiêu đề.
 - HÀNH VI ĐỜI THƯỜNG (1–2 việc): việc cụ thể tới mức người đọc tự soi ra mình — "hay nhận việc rồi ôm một mình", "cãi xong là im mấy ngày", "tiền vào tay là có chỗ gọi tên ngay". Phải mọc ra từ ${o.canCu} của CHÍNH phần đang viết, KHÔNG phải câu chung chung ai đọc cũng thấy đúng. Chật chỗ thì lấy MỘT cái đắt nhất.
-- MỘT CÂU LẬT: lật góc nhìn — cái người đọc tưởng là chỗ yếu hoá ra là chỗ mạnh, hoặc ngược lại. PHẢI rút từ dữ liệu thật của phần đó; không có căn cứ thì BỎ HẲN, tuyệt đối không nói ngược cho kêu.
+- MỘT CÂU LẬT (đặt NGAY SAU phần giải thích, trước câu kết): lật góc nhìn — cái người đọc tưởng là chỗ yếu hoá ra là chỗ dùng được, hoặc chỗ tưởng là may lại có cái giá của nó. Đây KHÔNG phải mục tuỳ chọn: ${o.moc} Chỉ được BỎ khi phần đó thật sự không có gì để lật; đã lật thì phải bám dữ kiện, tuyệt đối không nói ngược cho kêu.
 
 ── GIỌNG ──
 Viết như đang NÓI với người ngồi đối diện — chêm khẩu ngữ tự nhiên (thì, à, này, nhé, đấy, cơ, chứ), mỗi đoạn 1–2 cái. KHÔNG chêm vào câu phán quyết in đậm, không chêm vào câu chốt.
@@ -464,22 +464,26 @@ const PHEP_DICH_LASO = `· [Phu Thê] Thiên Đồng(hãm) + Đà La → ✅ hà
 · [Tài Bạch] Vũ Khúc(miếu) + Hóa Lộc → ✅ câu lật: "Cái tính chi ly mà người nhà hay kêu lại đúng là chỗ giữ được tiền cho anh." ❌ "Vũ Khúc miếu địa Hóa Lộc là cách cục tài lộc tốt."`;
 
 export const DOC_ARC_LASO = arcDoc({
+  moc: 'nhãn Luận sao Yếu / Xấu rõ hoặc có sát tinh → chỉ ra chỗ cái yếu ấy vẫn dùng được vào việc gì; nhãn Tốt rõ / Khá hoặc có cách cục quý → chỉ ra cái giá đi kèm.',
   canCu: 'sao / cách cục / độ sáng',
   phepDich: PHEP_DICH_LASO,
 });
 
 export const DOC_ARC_PHU_THE = arcDoc({
+  moc: 'nhãn Luận sao Yếu / Xấu rõ hoặc có sát tinh tại Phu Thê → chỉ ra chỗ cái yếu ấy vẫn dùng được vào việc gì trong đời sống vợ chồng; nhãn Tốt rõ / Khá → chỉ ra cái giá đi kèm.',
   canCu: 'sao / cách cục / độ sáng của cung Phu Thê',
   phepDich: PHEP_DICH_LASO,
 });
 
 export const DOC_ARC_TUBINH = arcDoc({
+  moc: 'cường nhược lệch nặng hoặc cách cục phá → chỉ ra chỗ cái lệch ấy vẫn dùng được vào việc gì; cách cục thành hoặc đại vận điểm cao → chỉ ra cái giá đi kèm.',
   canCu: 'can chi / thập thần / cường nhược / dụng thần',
   phepDich: `· [Nhật Can] Canh kim, thân nhược, Quan Sát vượng → ✅ hành vi: "Việc dồn tới là anh nhận hết, tối về mới thấy mình gánh phần của ba người." ❌ "Nhật chủ Canh kim thân nhược, Quan Sát vượng khắc thân."
 · [Dụng thần] Hỏa → ✅ câu lật: "Cái nóng ruột hay bị chê là thiếu kiên nhẫn lại chính là thứ kéo anh ra khỏi mấy giai đoạn ì." ❌ "Dụng thần là Hỏa, hỷ Mộc Hỏa, kỵ Kim Thủy."`,
 });
 
 export const DOC_ARC_TUONG_HOP = arcDoc({
+  moc: 'tiêu chí điểm THẤP → chỉ ra chỗ khác biệt ấy vẫn dùng được vào việc gì; tiêu chí điểm CAO → chỉ ra chỗ quá giống nhau thành ra dễ cùng bỏ qua một việc.',
   canCu: 'ngũ hành / can chi / sao của HAI lá số',
   phepDich: `· [Ngũ hành] nam Kim – nữ Mộc, Kim khắc Mộc → ✅ hành vi: "Anh nói một câu là chị nghĩ cả buổi; chị im thì anh lại tưởng xong chuyện." ❌ "Nam mệnh Kim khắc nữ mệnh Mộc, ngũ hành tương khắc."
 · [Xét tuổi] Tam Hợp → ✅ câu lật: "Hợp nhau tới mức chẳng ai chịu nói thẳng — chỗ dễ chịu nhất lại đúng là chỗ hai người hay né việc khó." ❌ "Hai tuổi thuộc Tam Hợp, chủ hòa hợp."`,
