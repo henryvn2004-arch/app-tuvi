@@ -28,6 +28,13 @@ const NHAN = {
   'hanh-dong': '7 · Bước đi',
   'quay-lung': '+ · Quay lưng, đi xa',
   'cui-dau': '+ · Cúi đầu',
+  'ngoi-buon': '8 · Ngồi lặng',
+  'ngoi-an': '9 · Ngồi ăn',
+  chay: '10 · Chạy',
+  'voi-tay': '11 · Với tay',
+  'dang-tay': '12 · Dang tay',
+  'che-mat': '13 · Che mặt',
+  'ngoai-lai': '14 · Ngoái lại',
 } satisfies Record<PoseName, string>;
 
 /**
@@ -44,9 +51,16 @@ const FREEZE: Record<PoseName, number> = {
   'phan-tich': 1.2,
   'loi-khuyen': 1.1,
   'tinh-tam': 0.9,
-  'hanh-dong': 0.31,
-  'quay-lung': 0.44,
+  'hanh-dong': 0.27,
+  'quay-lung': 0.33,
   'cui-dau': 1.6,
+  'ngoi-buon': 1.6,
+  'ngoi-an': 0.32,
+  chay: 0.17,
+  'voi-tay': 0.35,
+  'dang-tay': 0.6,
+  'che-mat': 0.6,
+  'ngoai-lai': 0.36,
 };
 
 /** Đạo cụ gắn kèm vài tư thế, để soi luôn chỗ vật nằm trên tay. */
@@ -54,6 +68,7 @@ const PROP_OF: Partial<Record<PoseName, string>> = {
   'phan-tich': 'kinh-lup',
   'loi-khuyen': 'trai-tim',
   'hieu-ra': 'la-so',
+  'ngoi-buon': 'dong-ho',
 };
 
 export const CharacterSheet: React.FC = () => (
@@ -78,21 +93,21 @@ export const CharacterSheet: React.FC = () => (
 
     <div
       style={{
-        marginTop: 30,
+        marginTop: 24,
         display: 'grid',
-        gridTemplateColumns: 'repeat(3, 1fr)',
-        rowGap: 14,
-        columnGap: 8,
+        gridTemplateColumns: 'repeat(4, 1fr)',
+        rowGap: 10,
+        columnGap: 6,
       }}
     >
       {POSE_NAMES.map((n) => (
         <div key={n} style={{ textAlign: 'center' }}>
           <div
-            style={{ height: 330, display: 'flex', alignItems: 'flex-end', justifyContent: 'center' }}
+            style={{ height: 268, display: 'flex', alignItems: 'flex-end', justifyContent: 'center' }}
           >
-            <Character pose={n} timeSec={FREEZE[n]} prop={PROP_OF[n]} height={312} />
+            <Character pose={n} timeSec={FREEZE[n]} prop={PROP_OF[n]} height={252} />
           </div>
-          <div style={{ fontFamily: FONT.sans, color: '#C8CDD4', fontSize: 23, marginTop: 4 }}>
+          <div style={{ fontFamily: FONT.sans, color: '#C8CDD4', fontSize: 20, marginTop: 2 }}>
             {NHAN[n]}
           </div>
         </div>

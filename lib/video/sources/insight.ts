@@ -780,15 +780,17 @@ const SOURCES: InsightSource[] = [
         },
         {
           text: 'Người ngoài tưởng bạn ổn. Thật ra bạn vừa đóng một cánh cửa.',
-          // Ký hiệu bắt ĐÚNG hình ảnh câu đang đọc, không phải minh hoạ chung
-          // chung. Đặt `tren` vì cánh cửa là thứ NGƯỜI KHÁC không thấy — nó
-          // đứng riêng chứ không nằm trong tay nhân vật đang cúi đầu.
+          // 🔑 Câu này có HAI người trong đó ("người ngoài" ↔ "bạn"), nên hình
+          // cũng phải có hai. Một người ăn như không có chuyện gì, người kia
+          // ngồi lặng — và `gap: 'xa'` chừa khoảng trống giữa họ, đó mới là
+          // thứ kể được "vừa đóng một cánh cửa" mà không cần vẽ cánh cửa nào.
           visual: {
-            kind: 'figure',
-            pose: 'cui-dau',
+            kind: 'duo',
+            poseL: 'ngoi-an',
+            poseR: 'ngoi-buon',
+            set: 'ban-an',
+            gap: 'xa',
             accent: 'đóng một cánh cửa.',
-            glyph: 'canh-cua',
-            glyphAt: 'tren',
           },
         },
         {

@@ -5,6 +5,116 @@
 
 ---
 
+## 🏃 Nhịp ĐO ĐƯỢC là quá chậm · 14 tư thế · cảnh HAI người (2026-08-18, cùng PR #543)
+
+Henry: *"nhân vật chuyển động chậm quá, có thể thêm hình, đa dạng hơn"* ·
+*"thiếu hình nhiều người (>= 2 người)"* · *"chuyển động… đang ko giống người
+lắm, mày nghiên cứu xem có bộ nào free… mang nó về dùng cho nhanh"*.
+
+### 🔍 Nghiên cứu bộ ngoài — kết luận: KHÔNG mang về. Lý do là CẤU TRÚC.
+| Nguồn | Chặn ở đâu |
+|---|---|
+| **Rive Community** | **CC BY — bắt buộc ghi công**, đúng bức tường đã loại Unsplash (phải in tên tác giả lên khung 9:16 vốn chật chữ) |
+| **LottieFiles** | Egress proxy CHẶN `lottiefiles.com` ⇒ **không đọc được điều khoản, và tôi không đoán**. `@remotion/lottie` thì có thật và chạy được — nhưng xem lý do cấu trúc dưới đây |
+| **CC0 modular vector characters** (itch.io/OpenGameArt) | Sprite game, PNG, phong cách pixel/game — không phải mascot phẳng của kênh |
+| **Quaternius Universal Animation** | 3D |
+
+🔑 **Lý do quyết định KHÔNG phụ thuộc vào giấy phép**: mọi chợ asset đều là
+**nhân vật CỦA NGƯỜI KHÁC**, mỗi tệp một tác giả. Lấy "ngồi buồn" của tác giả A
+ghép "chạy" của tác giả B ra HAI nhân vật khác nhau — đúng con số đã đo ở lượt
+khảo sát vector Pixabay (**9 tác giả trong 50 kết quả**). Mà cả điểm của nhân
+vật signature là MỘT nhân vật xuất hiện ở mọi clip để người xem nhận ra kênh.
+Tìm kỹ hơn không sửa được, vì đó là tính chất của cái chợ chứ không phải của
+lượt tìm.
+- Trường hợp duy nhất dùng được: một tác giả xuất bản TRỌN bộ, miễn phí, sửa
+  màu được — hiếm, và đánh cược thương hiệu vào một gói asset có thể biến mất.
+- ⇒ Thứ đáng lấy từ ngành hoạt hình là **NHỊP**, không phải asset.
+
+### 🔴 Và nhịp thì đo được là SAI — đây mới là câu trả lời cho "không giống người"
+Quy toàn bộ nhịp cũ (rad/s) ra Hz rồi so với mốc người thật:
+
+| | cũ | người thật | |
+|---|---:|---|---|
+| vẫy tay | **0,83 Hz** | 2–3 Hz | chậm **~2,6×** |
+| tay giảng | **0,21 Hz** | ~1 Hz | chậm **~4,4×** |
+| tay quét | **0,20 Hz** | ~0,5 Hz | chậm **~2,5×** |
+| bước đi | 95 bước/phút | 100–120 | hơi chậm |
+| thở | 17 nhịp/phút | 12–18 | **ĐÚNG** |
+
+Cộng thêm hai lỗi hình dạng, và chúng mới là phần "rô-bốt":
+1. **Mọi nhịp là `Math.sin` đối xứng** — đi và về cùng tốc độ. Cử động người
+   **bật ra nhanh, thu về chậm**. ⇒ thêm `beat()` (28% chu kỳ bật ra, 72% về)
+   dùng cho MỌI cử động có chủ đích; `osc()` chỉ giữ cho thứ vốn đối xứng thật
+   (thở, đung đưa, bước chân).
+2. **Lò xo chuyển tư thế đặt `damping: 200`** = tắt dần tới hạn = **không có độ
+   vọt quá đà**. Đúng cho chữ và khối giao diện, sai hẳn cho cơ thể. ⇒
+   `SPRING_POSE = {damping: 13, mass: 0.55, stiffness: 110}`.
+3. Thêm **overlapping action**: đoạn NGỌN của chi tới đích trễ 3 khung so với
+   đoạn gốc (`blendLate`). Ở người cẳng tay LUÔN tới sau cánh tay trên; hai
+   đoạn khớp nhau tuyệt đối chính là cái mắt đọc ra "máy".
+
+🔑 Nhịp nay khai bằng **Hz** chứ không phải rad/s — đọc phát biết nhanh chậm,
+và so được thẳng với mốc người thật. Đơn vị sai là lý do lỗi này sống lâu.
+
+### 🧍 9 → 14 tư thế
+Thêm `ngoi-buon` · `ngoi-an` · `chay` · `voi-tay` · `dang-tay` · `che-mat` ·
+`ngoai-lai`. Ba chỗ hỏng chỉ lộ trên bảng đối chiếu:
+- **`che-mat` không che được gì** — thứ tự vẽ mặc định là tay TRƯỚC, đầu ĐÈ LÊN
+  (đúng cho mọi tư thế khác), nên hai bàn tay nấp SAU đầu và hai mắt vẫn nhìn
+  thẳng. Thêm cờ `armsFront`.
+- **`chay` ngả 17° đọc thành "sắp ngã sấp"** → 13°. Sải chân mới là thứ kể chạy.
+- **Ngồi dạng chân kiểu ếch.** Đây là giới hạn THẬT của hình chiếu thẳng mặt:
+  đùi lẽ ra hướng về phía người xem và bị rút ngắn, hình phẳng không tả được.
+  Giảm bớt bằng ống chân chụm vào (gối 164, bàn chân 134), và **hai tư thế ngồi
+  chỉ nên dùng KÈM `set`**.
+- ⚠️ `crouch` của tư thế ngồi **giải ngược từ ràng buộc "bàn chân chạm đất"**
+  (92 = 266 − 174), không phải số chọn cho vừa mắt. Đổi góc đùi là phải tính lại.
+
+### 👥 Cảnh HAI người — `kind: 'duo'`
+Rất nhiều câu đắt nhất của kênh có hai người trong đó (*"vẫn ngồi ăn cơm với
+bạn, nhưng tâm trí đã rời xa"* — ví dụ của Henry). Vẽ một nhân vật đơn độc dưới
+câu đó là **hình nói ngược lời**.
+- `poseL` · `poseR` · `set` (`ban-an` · `ghe-bang`) · `gap` (`gan` · `xa`).
+- 🔑 `gap` là **từ vựng ĐÓNG hai giá trị**, không phải số pixel: nó mang NGHĨA
+  (gần nhau / cách biệt) nên cổng 2 mô tả được. Cho khai số thì mỗi kịch bản
+  một con số, không so được giữa các clip.
+- 🔑 Hai người **lệch pha nửa nhịp** (`timeSec + 1.4`). Cùng pha thì đọc ra là
+  một hình bị nhân đôi, không phải hai người.
+- ⚠️ Mọi kích thước đồ đạc **giải ngược từ chiều cao ngồi**: mặt bàn ở 78,7%
+  chiều cao hộp, muốn nó rơi giữa hông (184) và vai (407) ⇒ hộp cao 318 ⇒ rộng
+  911. Đổi `DUO_H` hay đổi tư thế ngồi là phải tính lại, không chỉnh mò.
+- 🪤 **Bát vẽ CHÌM dưới mặt bàn** ở bản đầu: trong SVG y tăng XUỐNG, nên "đặt
+  lên bàn" là TRỪ đi. Render ra chỉ còn hai vạch vàng ló lên.
+- 🪤 **`DUO_H` phải LỚN HƠN cảnh một người** (980 vs 820): ngồi hạ thân người
+  ~92 đơn vị nên cùng `height` thì cảnh hai người trông thấp và bé, hở một mảng
+  đen ~500px giữa chữ và nhân vật. Chữ cũng phải hạ theo (top 386 thay vì 292).
+
+### 📌 Trả lời câu "để Remotion tự code chuyển động theo ngữ cảnh script"
+**Thêm một tư thế KHÔNG đắt** — nó là 8 con số. Chỗ đắt là **biết nó trông có
+đúng không**, mà điều đó chỉ render ra rồi NHÌN mới biết (bằng chứng: 3/7 tư thế
+mới sai ngay lượt đầu, không lỗi nào tsc bắt được). Một model sinh góc chi thì
+không nhìn được thứ nó vừa sinh ⇒ sẽ đẻ ra tư thế gãy mà không gì chặn.
+- ⇒ Đường đúng là **giữ TỪ VỰNG ĐÓNG rồi cho LLM CHỌN trong đó**, và mở rộng
+  từ vựng khi thiếu. Mỗi mục chỉ phải soi bằng mắt MỘT lần, dùng được mãi.
+- Và còn một lý do nữa: cổng 2 cần mô tả ỔN ĐỊNH để so giữa các clip. Cho model
+  tự viết mô tả cử động cho từng cảnh là quay lại đúng cái gương mà mục 🖼️ đã mổ.
+
+### Verify
+`tsc` root 0 · `tsc` remotion 0 · `prettier` cả cây sạch · `lint` **0 lỗi / 77
+warning = mốc nền** · **20/20 bộ dò** · engine **185 pass**.
+- Bảng đối chiếu 14 tư thế + 20 đạo cụ render và soi bằng mắt; cảnh hai người
+  soi riêng ở khung 300.
+
+### CÒN LẠI
+- **Hai tư thế ngồi trông vẫn hơi dạng chân** khi KHÔNG có `set`. Giới hạn hình
+  chiếu, không phải số sai — muốn hết hẳn thì phải có tư thế vẽ theo lối nhìn
+  nghiêng, tức một bộ khung thứ hai.
+- **Chưa có tư thế hai người TƯƠNG TÁC** (ôm, quay lưng vào nhau, một người bỏ
+  đi). `duo` hiện chỉ đặt hai tư thế đơn cạnh nhau.
+- Cổng 2 vẫn chưa có `visual.mismatch`, `rewriteSpec` vẫn chỉ viết lại CHỮ.
+
+---
+
 ## 🕺 Nhân vật BIẾT CỬ ĐỘNG + 20 đạo cụ — và 4 lỗi chỉ lộ khi SOI KHUNG HÌNH (2026-08-18, PR #543)
 
 Henry: *"nhân vật chưa đạt, nhìn boring lắm, chắc phải làm motion luôn"* · *"màu

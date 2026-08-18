@@ -171,6 +171,19 @@ const POSE_MO_TA: Record<string, string> = {
   'hanh-dong': 'ĐANG BƯỚC ĐI thật — hai chân sải luân phiên, hai tay đánh so le, thân nhún theo bước',
   'quay-lung': 'quay lưng lại và BƯỚC ĐI XA DẦN, hình nhỏ lại như đang rời khỏi khung',
   'cui-dau': 'đầu cúi, vai xuôi, người chùng xuống rồi nhấc lên chậm như đang thở dài',
+  'ngoi-buon': 'NGỒI, hai tay buông trên đùi, vai xuôi, đầu cúi, gần như không nhúc nhích',
+  'ngoi-an': 'NGỒI ăn, cứ vài giây lại đưa tay lên miệng rồi hạ xuống',
+  chay: 'ĐANG CHẠY — sải chân rộng và nhanh, người ngả hẳn về trước, tay co đánh mạnh',
+  'voi-tay': 'chồm hẳn tới, vươn một tay ra trước như níu lại, rướn theo từng nhịp',
+  'dang-tay': 'mở hai tay ra ngang, kiểu bất lực / "thì sao"',
+  'che-mat': 'hai tay ôm lấy mặt, vai rung khẽ',
+  'ngoai-lai': 'vừa bước đi vừa quay đầu nhìn lại phía sau, hình nhỏ dần',
+};
+
+/** Mô tả đồ đạc trong cảnh hai người. CHỈ TẢ, không khen. */
+const SET_MO_TA: Record<string, string> = {
+  'ban-an': 'một chiếc bàn ăn có hai bát đặt trên mặt bàn',
+  'ghe-bang': 'một băng ghế dài',
 };
 
 /**
@@ -243,7 +256,9 @@ function buildTimeline(spec: ScriptSpec): string {
    * theo hai luật khác nhau là hội đồng tả một clip, máy render một clip khác.
    */
   const hasFigure = Boolean(
-    spec.hookPose || spec.ctaPose || spec.scenes.some((sc) => sc.visual.kind === 'figure')
+    spec.hookPose ||
+      spec.ctaPose ||
+      spec.scenes.some((sc) => sc.visual.kind === 'figure' || sc.visual.kind === 'duo')
   );
 
   /** Nền của MỘT cảnh chữ — phụ thuộc clip có ảnh nền / có nhân vật hay không. */
@@ -309,6 +324,19 @@ function buildTimeline(spec: ScriptSpec): string {
           `${POSE_MO_TA[sc.visual.pose] ?? `tư thế "${sc.visual.pose}"`}. ` +
           `Nhân vật CHUYỂN từ tư thế cảnh trước sang tư thế này trong nửa giây đầu.` +
           glyphPhrase(sc.visual.glyph, sc.visual.glyphAt),
+        sc.visual.accent
+      );
+    } else if (sc.visual.kind === 'duo') {
+      const ta = POSE_MO_TA[sc.visual.poseL] ?? `tư thế "${sc.visual.poseL}"`;
+      const tb = POSE_MO_TA[sc.visual.poseR] ?? `tư thế "${sc.visual.poseR}"`;
+      const set = sc.visual.set ? ` Giữa khung có ${SET_MO_TA[sc.visual.set] ?? sc.visual.set}.` : '';
+      const gap =
+        sc.visual.gap === 'xa'
+          ? ' Hai người ngồi CÁCH XA nhau, chừa một khoảng trống rõ ở giữa.'
+          : '';
+      visual = withAccent(
+        `Nền đen, chữ lớn ở nửa trên. Nửa dưới: HAI nhân vật hoạt hoạ tối giản ` +
+          `của kênh. Người bên trái ${ta}. Người bên phải ${tb}.${set}${gap}`,
         sc.visual.accent
       );
     } else {

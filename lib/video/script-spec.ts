@@ -103,6 +103,26 @@ export type SceneVisual =
       glyph?: string;
       /** `tay` = nhân vật cầm (mặc định) · `tren` = icon nổi phía trên chữ. */
       glyphAt?: 'tay' | 'tren';
+    }
+  /**
+   * HAI nhân vật trong một khung — cho câu nói về một MỐI QUAN HỆ.
+   *
+   * 🔑 Vì sao là một `kind` riêng chứ không phải `figure` có thêm người thứ
+   * hai: bố cục khác hẳn (hai người + đồ đạc + khoảng cách giữa họ), và quan
+   * trọng hơn — cổng 2 phải mô tả được "trong khung có mấy người". Nhét vào
+   * `figure` thì số người thành một trường tuỳ chọn dễ quên, mà quên thì hội
+   * đồng lại đọc ra một khung khác với khung sắp render.
+   */
+  | {
+      kind: 'duo';
+      /** Tư thế người bên trái / bên phải — cùng từ vựng `POSES`. */
+      poseL: string;
+      poseR: string;
+      /** Đồ đạc: `ban-an` · `ghe-bang`. Bỏ trống = không có gì. */
+      set?: string;
+      /** `gan` (mặc định) · `xa` — khoảng cách MANG NGHĨA, không phải pixel. */
+      gap?: 'gan' | 'xa';
+      accent?: string;
     };
 
 export interface Scene {

@@ -28,6 +28,16 @@ const W = 7;
 /** Nét phụ — chi tiết bên trong, mảnh hơn để không tranh với đường bao. */
 const W2 = 5;
 const INK = '#FFFFFF';
+/**
+ * Nét viền tối cho ĐỒ ĐẠC (`SETS`).
+ *
+ * ⚠️ Bắt buộc, không phải trang trí: đồ đạc màu trắng vẽ ĐÈ lên thân người
+ * cũng màu trắng thì hai mảng tan vào nhau — đúng lỗi đã phải vá ở tay/thân
+ * nhân vật. Chép cùng một giá trị `#0A0A0F` với `CHAR.ink` thay vì import, để
+ * `Glyphs` không phụ thuộc ngược vào `Character` (Character đã import Glyphs).
+ */
+const DARK = '#0A0A0F';
+const OUT = 9;
 
 type Draw = (c: string) => React.ReactNode;
 
@@ -298,6 +308,118 @@ export const GLYPHS: Record<string, { draw: Draw; scale?: number }> = {
       </>
     ),
   },
+};
+
+/**
+ * BỐI CẢNH — đồ đạc của một cảnh, khác hẳn `GLYPHS` ở KÍCH THƯỚC và VAI TRÒ:
+ * glyph là một ký hiệu cầm tay/nổi trong khung, còn set là thứ nhân vật ngồi
+ * vào hoặc đứng cạnh, vẽ đè lên phần dưới thân người.
+ *
+ * Cố ý để RẤT ÍT món. Mỗi món thêm vào là một thứ nữa phải ăn khớp với chiều
+ * cao nhân vật ở mọi tư thế ngồi — và sai một chút thì nhân vật lơ lửng trên
+ * mặt bàn. Chỉ thêm khi có kịch bản thật cần.
+ */
+export const SETS: Record<string, { w: number; h: number; draw: (c: string) => React.ReactNode }> = {
+  /** Bàn ăn — mặt bàn + hai chân + hai bát. Cảnh "ngồi ăn cùng nhau". */
+  'ban-an': {
+    w: 860,
+    h: 300,
+    draw: (c) => (
+      <>
+        {/*
+         * ⚠️ Bát phải nằm ở y NHỎ HƠN mặt bàn. Bản đầu vẽ bát từ y=64 cong
+         * XUỐNG, tức chìm hẳn dưới mặt bàn — render ra chỉ còn hai vạch vàng
+         * ló lên. Trong SVG y tăng xuống dưới, nên "đặt lên bàn" = trừ đi.
+         */}
+        {[250, 610].map((x) => (
+          <g key={x}>
+            <path d={`M${x - 44},14 q44,84 88,0 Z`} fill={INK} stroke={DARK} strokeWidth={OUT} />
+            <path
+              d={`M${x - 50},12 L${x + 50},12`}
+              stroke={c}
+              strokeWidth={12}
+              strokeLinecap="round"
+            />
+          </g>
+        ))}
+        <rect
+          x={0}
+          y={64}
+          width={860}
+          height={36}
+          rx={18}
+          fill={INK}
+          stroke={DARK}
+          strokeWidth={OUT}
+        />
+        <rect
+          x={132}
+          y={96}
+          width={28}
+          height={198}
+          rx={10}
+          fill={INK}
+          stroke={DARK}
+          strokeWidth={OUT}
+        />
+        <rect
+          x={700}
+          y={96}
+          width={28}
+          height={198}
+          rx={10}
+          fill={INK}
+          stroke={DARK}
+          strokeWidth={OUT}
+        />
+      </>
+    ),
+  },
+  /** Băng ghế — cảnh "ngồi cạnh nhau" mà không có bàn. */
+  // ⚠️ Tỉ lệ cao/rộng của băng ghế phải khớp CHIỀU CAO NGỒI: mặt ghế nằm ở
+  // đỉnh hộp, nên `h` quyết định ghế cao bao nhiêu so với bề rộng. 140/800
+  // là con số giải ngược từ mốc hông của tư thế ngồi — đổi `h` là ghế đâm
+  // qua mông hoặc lơ lửng dưới chân.
+  'ghe-bang': {
+    w: 800,
+    h: 140,
+    draw: () => (
+      <>
+        <rect x={0} y={0} width={800} height={30} rx={15} fill={INK} stroke={DARK} strokeWidth={OUT} />
+        <rect x={92} y={28} width={24} height={104} rx={9} fill={INK} stroke={DARK} strokeWidth={OUT} />
+        <rect
+          x={684}
+          y={28}
+          width={24}
+          height={104}
+          rx={9}
+          fill={INK}
+          stroke={DARK}
+          strokeWidth={OUT}
+        />
+      </>
+    ),
+  },
+};
+
+export type SetName = keyof typeof SETS;
+
+export function isSet(name: string | undefined): name is SetName {
+  return Boolean(name && name in SETS);
+}
+
+/** Vẽ bối cảnh. `width` là bề rộng THẬT trên khung 1080×1920. */
+export const SceneSet: React.FC<{ name: SetName; width?: number; color?: string }> = ({
+  name,
+  width = 860,
+  color = BRAND.gold,
+}) => {
+  const s = SETS[name];
+  return (
+    <svg width={width} height={(width * s.h) / s.w} viewBox={`0 0 ${s.w} ${s.h}`}>
+      {s.draw(color)}
+    </svg>
+  );
 };
 
 export type GlyphName = keyof typeof GLYPHS;

@@ -114,9 +114,61 @@ export type Pose = {
   face?: 'front' | 'side' | 'back';
   /** Mắt nhắm — dùng cho tĩnh tâm / thiền. */
   eyesClosed?: boolean;
+  /**
+   * Vẽ hai tay ĐÈ LÊN đầu thay vì nằm sau.
+   *
+   * 🔑 Bắt buộc cho `che-mat`: thứ tự vẽ mặc định là tay TRƯỚC rồi đầu ĐÈ LÊN
+   * (đúng cho mọi tư thế khác, để tay không che mất mặt). Nhưng ở tư thế ôm
+   * mặt thì đó chính là điều cần — bản đầu render ra hai bàn tay nấp SAU đầu
+   * và hai con mắt vẫn nhìn thẳng, tức tư thế nói một đằng hình vẽ một nẻo.
+   */
+  armsFront?: boolean;
 };
 
 const rad = (deg: number) => (deg * Math.PI) / 180;
+const TAU = Math.PI * 2;
+
+// ── Nhịp: khai bằng HZ, và KHÔNG dùng sin đối xứng ────────────────────────
+//
+// 🔴 Hai lý do đo được khiến bản trước "không giống người":
+//
+// 1. CHẬM. Đo lại toàn bộ nhịp cũ (đơn vị rad/s) quy ra Hz rồi so với mốc
+//    người thật thì lệch rất xa — và lệch theo đúng một hướng:
+//
+//      vẫy tay      0,83 Hz  ← người vẫy 2–3 Hz      (chậm ~2,6×)
+//      tay giảng    0,21 Hz  ← nhịp tay khi nói ~1 Hz (chậm ~4,4×)
+//      tay quét     0,20 Hz  ← ~0,5 Hz                (chậm ~2,5×)
+//      bước đi      95 bước/phút ← người 100–120      (hơi chậm)
+//      thở          17 nhịp/phút ← 12–18              (ĐÚNG, giữ nguyên)
+//
+// 2. ĐỐI XỨNG. `Math.sin` đi và về cùng tốc độ. Cử động người thì **bật ra
+//    nhanh, về chậm** — đó là thứ mắt đọc ra là "sống" hay "máy". Một nhịp
+//    sin hoàn hảo chính là định nghĩa của chuyển động rô-bốt.
+//
+// ⇒ Từ đây khai nhịp bằng **Hz** (đọc phát biết nhanh chậm) và có hai dạng
+// sóng: `osc` cho thứ vốn đối xứng thật (thở, đung đưa), `beat` cho MỌI cử
+// động có chủ đích (vẫy, chỉ, đưa tay, gắp thức ăn).
+
+/** Dao động đối xứng, biên độ ±1. Dùng cho thở / đung đưa / bước chân. */
+const osc = (t: number, hz: number) => Math.sin(t * hz * TAU);
+
+/**
+ * Một CÚ ra-vào có chủ đích, biên độ 0→1→0: bật ra trong 28% chu kỳ (nhanh,
+ * chạm đích êm) rồi thu về trong 72% còn lại (chậm). Đây là hình dạng thời
+ * gian của gần như mọi cử động tay có ý định ở người.
+ */
+function beat(t: number, hz: number) {
+  const u = (((t * hz) % 1) + 1) % 1;
+  if (u < 0.28) {
+    const k = u / 0.28;
+    return 1 - Math.pow(1 - k, 3); // ease-out mạnh: ra nhanh rồi ghìm lại
+  }
+  const k = (u - 0.28) / 0.72;
+  return Math.cos(k * Math.PI) * 0.5 + 0.5; // về chậm, mượt hai đầu
+}
+
+/** `beat` quy về biên độ ±1 — cho cử động qua-lại có hướng (vẫy tay). */
+const beat2 = (t: number, hz: number) => beat(t, hz) * 2 - 1;
 
 /** Dựng đường gấp khúc của một chi từ hai góc. */
 function limbPoints(ox: number, oy: number, side: 1 | -1, l1: number, l2: number, limb: Limb) {
@@ -236,6 +288,92 @@ export const POSES = {
     crouch: 30,
     lean: 9,
   },
+
+  // ── Nhóm NGỒI ────────────────────────────────────────────────────────────
+  //
+  // 🔑 `crouch: 92` giải NGƯỢC từ ràng buộc "bàn chân chạm đất": đùi mở 64°
+  // nên gối tụt `cos(64°)×118 = 51,7`; ống chân hơi chụm vào trong (−14°) nên
+  // bàn chân tụt thêm `cos(14°)×126 = 122,3` ⇒ hông phải ở `174`, tức
+  // `crouch = 266 − 174 = 92`. Lệch số này là nhân vật ngồi lơ lửng hoặc thọc
+  // chân xuống dưới sàn.
+  //
+  // ⚠️ Ống chân CHỤM VÀO (gối 164, bàn chân 134) chứ không thẳng đứng: dựng
+  // thẳng thì hai chân dạng ngang bằng nhau và đọc thành ngồi xổm kiểu ếch.
+  // Đây là giới hạn thật của hình chiếu THẲNG MẶT — đùi lẽ ra phải hướng về
+  // phía người xem và bị rút ngắn, mà hình phẳng thì không tả được. Vì vậy
+  // hai tư thế ngồi CHỈ nên dùng kèm `set` (bàn / băng ghế).
+  /** 8 · Ngồi lặng — vai xuôi, tay buông trên đùi, đầu cúi. */
+  'ngoi-buon': {
+    armR: { a1: 30, a2: 44 },
+    armL: { a1: 30, a2: 44 },
+    legR: { a1: 64, a2: -78 },
+    legL: { a1: 64, a2: -78 },
+    crouch: 92,
+    headTilt: 16,
+    headDx: 14,
+    headDy: -30,
+    lean: 5,
+  },
+  /** 9 · Ngồi ăn — một tay đưa lên miệng, tay kia đặt xuống. */
+  'ngoi-an': {
+    armR: { a1: 55, a2: 130 },
+    armL: { a1: 26, a2: 34 },
+    legR: { a1: 64, a2: -78 },
+    legL: { a1: 64, a2: -78 },
+    crouch: 92,
+  },
+
+  // ── Nhóm CHUYỂN ĐỘNG MẠNH ────────────────────────────────────────────────
+  /** 10 · Chạy — dáng NGHỈ; sải chân nhanh do MOTIONS sinh. Ngả người nhiều. */
+  chay: {
+    armR: { a1: 10, a2: -58 },
+    armL: { a1: 10, a2: -58 },
+    legR: { a1: 4, a2: 2 },
+    legL: { a1: 4, a2: 2 },
+    // 13° chứ không phải 17: soi bảng đối chiếu thì 17° đọc thành "sắp ngã
+    // sấp" chứ không thành "đang chạy" — sải chân mới là thứ kể chạy, độ ngả
+    // chỉ để đỡ nó.
+    lean: 13,
+  },
+  /** 11 · Với tay — chồm hẳn tới, một tay vươn ra trước như níu lại. */
+  'voi-tay': {
+    armR: { a1: 88, a2: 10 },
+    armL: { a1: -24, a2: 24 },
+    legR: { a1: 24, a2: -10 },
+    legL: { a1: -18, a2: 26 },
+    lean: 15,
+  },
+  /** 12 · Dang tay — hai tay mở ngang, bất lực / "thì sao?". */
+  'dang-tay': {
+    armR: { a1: 118, a2: -36 },
+    armL: { a1: 118, a2: -36 },
+    legR: { a1: 8, a2: 2 },
+    legL: { a1: 8, a2: 2 },
+    headTilt: 7,
+  },
+  /**
+   * 13 · Che mặt — hai tay ôm lấy mặt.
+   *
+   * Tính được là tay CHẠM tới mặt thật (khác `suy-nghi`): bàn tay rơi vào
+   * (84, 635), cách tâm đầu 91 đơn vị < bán kính 100 ⇒ nằm trong khuôn mặt.
+   */
+  'che-mat': {
+    armR: { a1: 150, a2: 60 },
+    armL: { a1: 150, a2: 60 },
+    legR: { a1: 5, a2: 2 },
+    legL: { a1: 5, a2: 2 },
+    headDy: -10,
+    armsFront: true,
+  },
+  /** 14 · Ngoái lại — đang bước đi nhưng còn quay đầu nhìn về phía sau. */
+  'ngoai-lai': {
+    armR: { a1: 10, a2: 5 },
+    armL: { a1: 10, a2: 5 },
+    legR: { a1: 5, a2: 2 },
+    legL: { a1: 5, a2: 2 },
+    face: 'side',
+    headTilt: -10,
+  },
 } satisfies Record<string, Pose>;
 
 export type PoseName = keyof typeof POSES;
@@ -272,8 +410,32 @@ type Motion = {
   sway?: (t: number) => number;
 };
 
-/** Nhịp thở nền, áp cho mọi tư thế không khai riêng. Chậm và nhỏ, cố ý. */
-const BREATHE: Motion = { bob: (t) => Math.sin(t * 1.75) * 5 };
+/**
+ * Một chu kỳ BƯỚC dùng chung cho đi bộ · rút lui · chạy.
+ *
+ * Hai chân so le, hai tay đánh NGƯỢC pha với chân cùng bên (đúng cách người
+ * đi — cùng pha là dáng đi rô-bốt), và gối chỉ co ở chân đang ĐƯA VỀ SAU
+ * (`Math.max(0, ∓w)`) chứ không co suốt chu kỳ.
+ *
+ * `amp` = biên độ sải (độ) — 20 là bước rút lui, 27 là đi thường, 42 là chạy.
+ */
+function stride(t: number, hz: number, amp: number, armScale = 0.76): Delta {
+  const w = osc(t, hz);
+  return {
+    legR: { a1: amp * w, a2: -amp * 0.52 * Math.max(0, -w) },
+    legL: { a1: -amp * w, a2: -amp * 0.52 * Math.max(0, w) },
+    armR: { a1: -amp * armScale * w, a2: 0 },
+    armL: { a1: amp * armScale * w, a2: 0 },
+  };
+}
+
+/**
+ * Nhịp thở nền, áp cho mọi tư thế không khai riêng.
+ *
+ * 0,28 Hz = **17 nhịp/phút** — nằm đúng dải người thật (12–18), nên đây là
+ * nhịp DUY NHẤT của bản trước không phải chỉnh.
+ */
+const BREATHE: Motion = { bob: (t) => osc(t, 0.28) * 5 };
 
 /**
  * Nhịp riêng từng tư thế.
@@ -284,79 +446,105 @@ const BREATHE: Motion = { bob: (t) => Math.sin(t * 1.75) * 5 };
  * hoạt hình rung lắc, và mắt người xem rời khỏi CHỮ — mà chữ mới là nội dung.
  */
 const MOTIONS: Partial<Record<PoseName, Motion>> = {
-  /** Vẫy tay thật: cẳng tay quét qua lại quanh khuỷu đang giơ cao. */
+  /** Vẫy tay: **2,2 Hz** — bản trước 0,83 Hz, chậm gần 3 lần so với người thật. */
   chao: {
-    pose: (t) => ({ armR: { a1: Math.sin(t * 5.2) * 5, a2: Math.sin(t * 5.2) * 22 } }),
-    bob: (t) => Math.sin(t * 1.9) * 4,
+    pose: (t) => ({ armR: { a1: beat2(t, 2.2) * 6, a2: beat2(t, 2.2) * 24 } }),
+    bob: (t) => osc(t, 0.34) * 4,
   },
-  /** Đầu đưa qua lại rất chậm + ngón tay gõ nhẹ vào cằm. */
+  /** Đầu đưa qua lại (0,19 Hz — chậm là ĐÚNG ở đây) + ngón tay gõ nhẹ vào cằm. */
   'suy-nghi': {
     pose: (t) => ({
-      headTilt: Math.sin(t * 0.85) * 5,
-      armR: { a1: 0, a2: Math.sin(t * 4.4) * 4 },
+      headTilt: osc(t, 0.19) * 5,
+      armR: { a1: 0, a2: beat2(t, 1.1) * 5 },
     }),
-    bob: (t) => Math.sin(t * 1.6) * 4,
+    bob: (t) => osc(t, 0.26) * 4,
   },
   /**
    * Bật lên một nhịp ở đầu cảnh rồi giữ — đúng "pop" của brief.
    * Cánh tay giơ nảy nhẹ theo, để nó không đứng chết sau cú bật.
    */
   'hieu-ra': {
-    pose: (t) => ({ armR: { a1: Math.sin(t * 3.4) * 4, a2: 0 } }),
-    bob: (t) => Math.max(0, 1 - t * 2.6) * 26 + Math.sin(t * 1.9) * 4,
+    pose: (t) => ({ armR: { a1: osc(t, 0.62) * 4, a2: 0 } }),
+    bob: (t) => Math.max(0, 1 - t * 2.6) * 26 + osc(t, 0.32) * 4,
     zoom: (t) => 1 + Math.max(0, 1 - t * 3) * 0.05,
   },
-  /** Tay đưa vật quét một cung nhỏ — như đang soi. */
+  /** Tay đưa vật quét một cung — 0,45 Hz, nhanh gấp đôi bản trước. */
   'phan-tich': {
-    pose: (t) => ({ armR: { a1: Math.sin(t * 1.25) * 8, a2: Math.sin(t * 1.25) * -5 } }),
-    bob: (t) => Math.sin(t * 1.7) * 4,
-    sway: (t) => Math.sin(t * 1.25) * 9,
+    pose: (t) => ({ armR: { a1: osc(t, 0.45) * 9, a2: osc(t, 0.45) * -6 } }),
+    bob: (t) => osc(t, 0.28) * 4,
+    sway: (t) => osc(t, 0.45) * 10,
   },
-  /** Lòng bàn tay nâng lên hạ xuống — nhịp của người đang giảng. */
-  'loi-khuyen': {
-    pose: (t) => ({ armR: { a1: Math.sin(t * 1.35) * 6, a2: Math.sin(t * 1.35) * 5 } }),
-    bob: (t) => Math.sin(t * 1.7) * 4,
-  },
-  /** Thở SÂU — biên độ gấp đôi bình thường, đó chính là nội dung của tư thế. */
-  'tinh-tam': { bob: (t) => Math.sin(t * 1.15) * 10 },
   /**
-   * Bước đi thật: hai chân sải luân phiên, hai tay đánh ngược pha, thân nhún
-   * ở tần số GẤP ĐÔI (mỗi bước một nhịp nhún, không phải mỗi chu kỳ một nhịp).
+   * Nhịp tay của người đang giảng: **0,62 Hz** và là `beat` chứ không phải
+   * sin — tay hất ra rồi buông về, đó mới là hình dạng thời gian thật.
    */
+  'loi-khuyen': {
+    pose: (t) => ({ armR: { a1: beat(t, 0.62) * 12 - 4, a2: beat(t, 0.62) * 9 - 3 } }),
+    bob: (t) => osc(t, 0.28) * 4,
+  },
+  /** Thở SÂU — 0,18 Hz (11 nhịp/phút), biên độ gấp đôi. Chính là nội dung tư thế. */
+  'tinh-tam': { bob: (t) => osc(t, 0.18) * 10 },
+  /** Bước đi: **0,92 Hz = 110 bước/phút**, đúng nhịp đi bộ thoải mái của người. */
   'hanh-dong': {
-    pose: (t) => {
-      const w = Math.sin(t * 5);
-      return {
-        legR: { a1: 26 * w, a2: -14 * Math.max(0, -w) },
-        legL: { a1: -26 * w, a2: -14 * Math.max(0, w) },
-        armR: { a1: -20 * w, a2: 0 },
-        armL: { a1: 20 * w, a2: 0 },
-      };
-    },
-    bob: (t) => -Math.abs(Math.sin(t * 5)) * 9 + 5,
+    pose: (t) => stride(t, 0.92, 27),
+    bob: (t) => -Math.abs(osc(t, 0.92)) * 9 + 5,
   },
   /**
-   * Quay lưng ĐI XA DẦN: cùng bước cycle, chậm hơn, cộng thu nhỏ 16% trong 3
-   * giây đầu. Đây là tư thế duy nhất kể một hành động có HƯỚNG — "rút đi" —
-   * nên nó phải thấy được là đang rời khỏi khung, không chỉ là quay lưng đứng.
+   * Quay lưng ĐI XA DẦN: 0,75 Hz (90 bước/phút — CHẬM hơn mức thường một
+   * cách có chủ ý, đây là bước rút lui), cộng thu nhỏ 16% trong 3 giây đầu.
+   * Tư thế duy nhất kể một hành động có HƯỚNG nên phải thấy được là rời khung.
    */
   'quay-lung': {
-    pose: (t) => {
-      const w = Math.sin(t * 3.6);
-      return {
-        legR: { a1: 19 * w, a2: -10 * Math.max(0, -w) },
-        legL: { a1: -19 * w, a2: -10 * Math.max(0, w) },
-        armR: { a1: -14 * w, a2: 0 },
-        armL: { a1: 14 * w, a2: 0 },
-      };
-    },
-    bob: (t) => -Math.abs(Math.sin(t * 3.6)) * 7 + 4,
+    pose: (t) => stride(t, 0.75, 20),
+    bob: (t) => -Math.abs(osc(t, 0.75)) * 7 + 4,
     zoom: (t) => 1 - Math.min(t, 3) * 0.055,
   },
-  /** Thở dài: vai chùng xuống rồi nhấc lên rất chậm, biên độ lớn. */
+  /** Ngoái lại: vẫn bước đi như `quay-lung`, đầu quay nhìn về sau. */
+  'ngoai-lai': {
+    pose: (t) => ({ ...stride(t, 0.7, 18), headTilt: osc(t, 0.22) * 4 }),
+    bob: (t) => -Math.abs(osc(t, 0.7)) * 6 + 4,
+    zoom: (t) => 1 - Math.min(t, 3) * 0.04,
+  },
+  /** Chạy: **1,5 Hz = 180 bước/phút**, sải rộng, nhún mạnh. */
+  chay: {
+    pose: (t) => stride(t, 1.5, 42, 0.62),
+    bob: (t) => -Math.abs(osc(t, 1.5)) * 16 + 9,
+  },
+  /** Thở dài: vai chùng rồi nhấc lên rất chậm (0,15 Hz), biên độ lớn. */
   'cui-dau': {
-    pose: (t) => ({ crouch: Math.sin(t * 0.95) * 8, headTilt: Math.sin(t * 0.95) * 3 }),
-    bob: (t) => Math.sin(t * 0.95) * 3,
+    pose: (t) => ({ crouch: osc(t, 0.15) * 8, headTilt: osc(t, 0.15) * 3 }),
+    bob: (t) => osc(t, 0.15) * 3,
+  },
+  /** Ngồi lặng: gần như không động, chỉ lồng ngực. Đứng im mới đúng nghĩa. */
+  'ngoi-buon': {
+    pose: (t) => ({ crouch: osc(t, 0.14) * 5, headTilt: osc(t, 0.14) * 2 }),
+    bob: (t) => osc(t, 0.2) * 3,
+  },
+  /** Ngồi ăn: cứ ~2,4 giây một lần đưa tay lên miệng rồi hạ xuống. */
+  'ngoi-an': {
+    pose: (t) => {
+      const b = beat(t, 0.42);
+      return { armR: { a1: -18 * (1 - b), a2: -26 * (1 - b) } };
+    },
+    bob: (t) => osc(t, 0.24) * 3,
+  },
+  /** Với tay: gân người rướn tới từng nhịp ngắn, không phải đưa tay đều đều. */
+  'voi-tay': {
+    pose: (t) => ({
+      armR: { a1: beat(t, 0.75) * 14 - 4, a2: 0 },
+      lean: beat(t, 0.75) * 4,
+    }),
+    bob: (t) => osc(t, 0.3) * 4,
+  },
+  /** Dang tay: giữ nguyên, chỉ nhún vai một nhịp rất nhỏ. */
+  'dang-tay': {
+    pose: (t) => ({ armR: { a1: osc(t, 0.4) * 4, a2: 0 }, armL: { a1: osc(t, 0.4) * 4, a2: 0 } }),
+    bob: (t) => osc(t, 0.3) * 4,
+  },
+  /** Che mặt: vai rung khẽ — biên độ RẤT nhỏ, quá tay là thành hài. */
+  'che-mat': {
+    pose: (t) => ({ crouch: Math.abs(osc(t, 1.1)) * 4 }),
+    bob: (t) => osc(t, 0.24) * 3 - Math.abs(osc(t, 1.1)) * 2,
   },
 };
 
@@ -370,9 +558,18 @@ const blinking = (t: number) => (t + 1.1) % BLINK_PERIOD < BLINK_LEN;
 // ── Pha trộn hai tư thế ───────────────────────────────────────────────────
 
 const lerp = (a: number, b: number, k: number) => a + (b - a) * k;
-const lerpLimb = (a: Limb, b: Limb, k: number): Limb => ({
+
+/**
+ * Nội suy một chi, với đoạn NGỌN chạy CHẬM HƠN đoạn gốc (`kLate`).
+ *
+ * 🔑 Đây là "overlapping action" — luật hoạt hình cổ điển và là tín hiệu
+ * mạnh thứ hai (sau độ vọt quá đà) phân biệt cử động người với cử động máy:
+ * ở người, cẳng tay LUÔN tới đích sau cánh tay trên, không bao giờ cùng lúc.
+ * Hai đoạn chuyển động khớp nhau tuyệt đối chính là cái nhìn ra "rô-bốt".
+ */
+const lerpLimb = (a: Limb, b: Limb, k: number, kLate: number): Limb => ({
   a1: lerp(a.a1, b.a1, k),
-  a2: lerp(a.a2, b.a2, k),
+  a2: lerp(a.a2, b.a2, kLate),
 });
 
 /**
@@ -382,15 +579,15 @@ const lerpLimb = (a: Limb, b: Limb, k: number): Limb => ({
  * nửa quay mặt là một cái đầu không có nghĩa, còn mắt "nhắm 50%" thì trông như
  * lỗi render. Chỉ GÓC mới nội suy được.
  */
-function blendPose(from: Pose, to: Pose, k: number): Pose {
-  if (k >= 1) return to;
-  if (k <= 0) return from;
+function blendPose(from: Pose, to: Pose, k: number, kLate = k): Pose {
+  if (k >= 1 && kLate >= 1) return to;
+  if (k <= 0 && kLate <= 0) return from;
   const late = k >= 0.5 ? to : from;
   return {
-    armR: lerpLimb(from.armR, to.armR, k),
-    armL: lerpLimb(from.armL, to.armL, k),
-    legR: lerpLimb(from.legR, to.legR, k),
-    legL: lerpLimb(from.legL, to.legL, k),
+    armR: lerpLimb(from.armR, to.armR, k, kLate),
+    armL: lerpLimb(from.armL, to.armL, k, kLate),
+    legR: lerpLimb(from.legR, to.legR, k, kLate),
+    legL: lerpLimb(from.legL, to.legL, k, kLate),
     lean: lerp(from.lean ?? 0, to.lean ?? 0, k),
     headTilt: lerp(from.headTilt ?? 0, to.headTilt ?? 0, k),
     headDx: lerp(from.headDx ?? 0, to.headDx ?? 0, k),
@@ -436,6 +633,8 @@ export const Character: React.FC<{
   fromPose?: PoseName | Pose;
   /** 0 = còn ở `fromPose`, 1 = đã sang hẳn `pose`. */
   blend?: number;
+  /** Như `blend` nhưng CHẬM HƠN một nhịp, dành cho đoạn ngọn của chi. */
+  blendLate?: number;
   /**
    * Giây kể từ đầu cảnh. Bỏ trống ⇒ hình ĐỨNG YÊN hoàn toàn (dùng cho bảng
    * đối chiếu tư thế). Có giá trị ⇒ chạy nhịp riêng + thở + chớp mắt.
@@ -450,9 +649,22 @@ export const Character: React.FC<{
   /** Đạo cụ cầm ở tay phải. Tên trong `GLYPHS`; tên lạ thì bỏ qua, không vỡ. */
   prop?: GlyphName | string;
   style?: React.CSSProperties;
-}> = ({ pose, fromPose, blend = 1, timeSec, height = 620, flip, shadow = true, prop, style }) => {
+}> = ({
+  pose,
+  fromPose,
+  blend = 1,
+  blendLate,
+  timeSec,
+  height = 620,
+  flip,
+  shadow = true,
+  prop,
+  style,
+}) => {
   const target = resolve(pose);
-  const base = fromPose ? blendPose(resolve(fromPose), target, blend) : target;
+  const base = fromPose
+    ? blendPose(resolve(fromPose), target, blend, blendLate ?? blend)
+    : target;
 
   // Nhịp lấy theo tư thế ĐÍCH, không theo tư thế đang pha: nửa nhịp đi bộ
   // trộn nửa nhịp vẫy tay ra một thứ không đọc được là gì.
@@ -503,6 +715,40 @@ export const Character: React.FC<{
   const propX = armR.end[0] + armR.dir[0] * 38;
   const propY = armR.end[1] + armR.dir[1] * 38;
 
+  /*
+   * 🔑 Mỗi bộ phận vẽ HAI lượt: nét viền tối rộng hơn, rồi thân trắng đè lên.
+   * Đây vừa là mục "STYLE LINE · đường viền mềm" của brief, vừa chữa một lỗi
+   * ĐO ĐƯỢC ở lượt render đầu: tay trắng nằm trên thân trắng thì tan vào nhau,
+   * tư thế chống cằm nhìn thành cụt tay. Viền tối là thứ duy nhất tách được
+   * hai mảng cùng màu.
+   *
+   * ⚠️ THỨ TỰ VẼ quan trọng: viền của bộ phận sau che thân của bộ phận trước,
+   * nên phải đi từ lớp xa nhất (chân) tới gần nhất. Gộp hết viền lên trước rồi
+   * mới tô thân thì không tách được gì.
+   */
+  const limb = (d: string, w: number, key: string) => (
+    <g key={key}>
+      {[CHAR.ink, CHAR.body].map((color, j) => (
+        <path
+          key={j}
+          d={d}
+          stroke={color}
+          strokeWidth={j === 0 ? w + OUTLINE * 2 : w}
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          fill="none"
+        />
+      ))}
+    </g>
+  );
+
+  const arms = (
+    <>
+      {limb(armL.d, ARM_W, 'armL')}
+      {limb(armR.d, ARM_W, 'armR')}
+    </>
+  );
+
   return (
     <svg width={w} height={height} viewBox={vb} style={{ overflow: 'visible', ...style }}>
       {/* y trong SVG hướng xuống, còn hệ của nhân vật hướng lên ⇒ lật một lần
@@ -541,46 +787,27 @@ export const Character: React.FC<{
            * trước, nên phải đi từ lớp xa nhất (chân) tới gần nhất (đầu). Gộp
            * hết viền lên trước rồi mới tô thân thì không tách được gì.
            */}
-          {[
-            { d: legL.d, w: LEG_W },
-            { d: legR.d, w: LEG_W },
-            { d: null, w: 0 }, // chỗ của thân, xử lý riêng bên dưới
-            { d: armL.d, w: ARM_W },
-            { d: armR.d, w: ARM_W },
-          ].map((part, i) =>
-            part.d === null ? (
-              <g key="than">
-                {[CHAR.ink, CHAR.body].map((color, j) => (
-                  <path
-                    key={j}
-                    d={`M${-SHOULDER_X},${shoulderY}
-                        L${SHOULDER_X},${shoulderY}
-                        Q${SHOULDER_X + 10},${(shoulderY + hipY) / 2} ${HIP_X + 4},${hipY}
-                        L${-HIP_X - 4},${hipY}
-                        Q${-SHOULDER_X - 10},${(shoulderY + hipY) / 2} ${-SHOULDER_X},${shoulderY} Z`}
-                    fill={color}
-                    stroke={color}
-                    strokeWidth={j === 0 ? 34 + OUTLINE * 2 : 34}
-                    strokeLinejoin="round"
-                  />
-                ))}
-              </g>
-            ) : (
-              <g key={i}>
-                {[CHAR.ink, CHAR.body].map((color, j) => (
-                  <path
-                    key={j}
-                    d={part.d}
-                    stroke={color}
-                    strokeWidth={j === 0 ? part.w + OUTLINE * 2 : part.w}
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    fill="none"
-                  />
-                ))}
-              </g>
-            )
-          )}
+          {limb(legL.d, LEG_W, 'legL')}
+          {limb(legR.d, LEG_W, 'legR')}
+
+          <g key="than">
+            {[CHAR.ink, CHAR.body].map((color, j) => (
+              <path
+                key={j}
+                d={`M${-SHOULDER_X},${shoulderY}
+                    L${SHOULDER_X},${shoulderY}
+                    Q${SHOULDER_X + 10},${(shoulderY + hipY) / 2} ${HIP_X + 4},${hipY}
+                    L${-HIP_X - 4},${hipY}
+                    Q${-SHOULDER_X - 10},${(shoulderY + hipY) / 2} ${-SHOULDER_X},${shoulderY} Z`}
+                fill={color}
+                stroke={color}
+                strokeWidth={j === 0 ? 34 + OUTLINE * 2 : 34}
+                strokeLinejoin="round"
+              />
+            ))}
+          </g>
+
+          {p.armsFront ? null : arms}
 
           {/* Đầu + mắt. Lật lại trục y cho mắt vì hình mắt không đối xứng. */}
           <g
@@ -618,6 +845,8 @@ export const Character: React.FC<{
               </g>
             ) : null}
           </g>
+
+          {p.armsFront ? arms : null}
 
           {/*
            * Đạo cụ vẽ SAU CÙNG (nằm trên tay) và tự lật trục y lại — glyph vẽ

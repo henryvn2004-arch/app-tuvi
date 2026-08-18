@@ -30,7 +30,7 @@ import {
 } from 'remotion';
 import { BRAND, FONT } from './brand';
 import { CHAR, Character, isPose, type PoseName } from './Character';
-import { Glyph, isGlyph } from './Glyphs';
+import { Glyph, SceneSet, isGlyph, isSet } from './Glyphs';
 
 export type InsightScene = {
   text: string;
@@ -48,8 +48,30 @@ export type InsightScene = {
         glyph?: string;
         /** `tay` = nhân vật cầm (mặc định) · `tren` = icon nổi phía trên chữ. */
         glyphAt?: 'tay' | 'tren';
+      }
+    | {
+        kind: 'duo';
+        poseL: string;
+        poseR: string;
+        /** Đồ đạc trong cảnh (`ban-an` · `ghe-bang`). Bỏ trống = không có. */
+        set?: string;
+        /** Khoảng cách giữa hai người — `xa` để tả sự cách biệt. */
+        gap?: 'gan' | 'xa';
+        accent?: string;
       };
 };
+
+/**
+ * Lò xo cho chuyển tư thế — CÓ độ vọt quá đà.
+ *
+ * 🔴 `damping: 200` (mọi chỗ khác trong file này) là lò xo tắt dần tới hạn:
+ * chạy tới đích rồi dừng phắt, KHÔNG nảy. Đúng cho chữ và khối giao diện,
+ * nhưng sai hẳn cho cơ thể người — vọt quá đà rồi lắc về là dấu hiệu số một
+ * mắt dùng để phân biệt cử động sống với cử động máy.
+ */
+const SPRING_POSE = { damping: 13, mass: 0.55, stiffness: 110 } as const;
+/** Trễ 3 khung cho ĐOẠN NGỌN của chi — "overlapping action", xem `lerpLimb`. */
+const LATE_FRAMES = 3;
 
 // `type` chứ không `interface` — Remotion đòi props thoả `Record<string, unknown>`.
 export type InsightProps = {
@@ -510,8 +532,9 @@ const FigureScene: React.FC<{
   const enter = entry
     ? spring({ frame, fps, config: { damping: 200 }, durationInFrames: 18 })
     : 1;
-  // Chuyển tư thế: nhanh hơn hiệu ứng vào — nửa giây là nhịp một cử động thật.
-  const blend = spring({ frame, fps, config: { damping: 200 }, durationInFrames: 15 });
+  // Chuyển tư thế: lò xo có nảy, và đoạn ngọn của chi tới đích trễ hơn.
+  const blend = spring({ frame, fps, config: SPRING_POSE });
+  const blendLate = spring({ frame, fps, config: SPRING_POSE, delay: LATE_FRAMES });
 
   const poseName: PoseName = isPose(pose) ? pose : 'chao';
   const prev: PoseName | undefined = isPose(fromPose) ? fromPose : undefined;
@@ -576,10 +599,132 @@ const FigureScene: React.FC<{
           pose={poseName}
           fromPose={prev}
           blend={blend}
+          blendLate={blendLate}
           timeSec={frame / fps}
           height={820}
           prop={glyphAt === 'tay' ? glyph : undefined}
         />
+      </div>
+    </AbsoluteFill>
+  );
+};
+
+/**
+ * Cảnh HAI NGƯỜI — cho những câu nói về một mối quan hệ, không về một người.
+ *
+ * 🔑 Vì sao cần: rất nhiều câu đắt nhất của kênh là câu có hai người trong đó
+ * (*"vẫn ngồi ăn cơm với bạn, nhưng tâm trí đã rời xa"*). Vẽ một nhân vật đơn
+ * độc dưới câu đó là hình NÓI NGƯỢC lời — người xem thấy một người trong khi
+ * tai nghe kể về hai. Đó là đúng loại lệch hình-với-lời mà cổng 2 sinh ra để
+ * bắt.
+ *
+ * ⚠️ Khoảng cách (`gap`) là một TỪ VỰNG ĐÓNG hai giá trị chứ không phải số
+ * pixel tự do: nó mang NGHĨA (gần nhau / cách biệt), và cổng 2 phải mô tả
+ * được nó bằng lời. Cho khai số thì mỗi kịch bản một con số, không so được.
+ */
+/**
+ * ⚠️ 800 chứ không phải 660: tư thế NGỒI hạ thân người xuống ~92 đơn vị nội
+ * bộ, nên ở cùng một `height` thì cảnh hai người trông thấp và bé hơn hẳn
+ * cảnh một người — soi khung hình thật thì hở một mảng đen ~500px giữa chữ
+ * và nhân vật.
+ */
+const DUO_H = 980;
+/**
+ * Bề rộng đồ đạc — GIẢI NGƯỢC từ chiều cao ngồi, không phải chọn cho vừa mắt.
+ *
+ * Mặt bàn nằm ở 78,7% chiều cao hộp tính từ đáy; hộp thì tỉ lệ theo bề rộng.
+ * Muốn mặt bàn rơi vào giữa hông (151) và vai (333) của người ĐANG NGỒI, tức
+ * ~242 trên mặt sàn, thì hộp phải cao 308 ⇒ rộng `308 × 860/300 ≈ 880`.
+ * Đổi tư thế ngồi hay đổi `DUO_H` là phải tính lại con số này.
+ */
+const SET_FIT: Record<string, { width: number; bottom: number }> = {
+  'ban-an': { width: 911, bottom: 0 },
+  'ghe-bang': { width: 820, bottom: 0 },
+};
+
+const DuoScene: React.FC<{
+  text: string;
+  accent?: string;
+  label: string;
+  poseL: string;
+  poseR: string;
+  set?: string;
+  gap?: 'gan' | 'xa';
+}> = ({ text, accent, label, poseL, poseR, set, gap = 'gan' }) => {
+  const frame = useCurrentFrame();
+  const { fps } = useVideoConfig();
+  const enter = spring({ frame, fps, config: { damping: 200 }, durationInFrames: 18 });
+  const dx = gap === 'xa' ? 236 : 156;
+  const t = frame / fps;
+  const left: PoseName = isPose(poseL) ? poseL : 'ngoi-buon';
+  const right: PoseName = isPose(poseR) ? poseR : 'ngoi-buon';
+  const fit = set ? SET_FIT[set] : undefined;
+
+  // Chân nhân vật nằm cao hơn đáy khung nhìn 12,1% (lề của SVG) — đồ đạc phải
+  // neo theo mốc đó, không phải theo đáy khung, nếu không bàn lơ lửng.
+  const feetUp = DUO_H * 0.121;
+
+  return (
+    <AbsoluteFill>
+      <TopBar label={label} />
+      <div
+        style={{
+          position: 'absolute',
+          // Chữ đặt THẤP hơn cảnh một người: tư thế ngồi làm đỉnh đầu tụt
+          // xuống ~130px so với đứng, nên giữ nguyên mốc chữ là hở một mảng
+          // đen lớn ở khoảng giữa.
+          top: 386,
+          left: 0,
+          right: 0,
+          height: 470,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          padding: '0 84px',
+        }}
+      >
+        <WordKaraoke text={text} accent={accent} baseSize={78} />
+      </div>
+      <div
+        style={{
+          position: 'absolute',
+          bottom: 250,
+          left: 0,
+          right: 0,
+          height: DUO_H,
+          opacity: enter,
+        }}
+      >
+        {[
+          { pose: left, shift: -dx, phase: 0 },
+          // Lệch pha nửa nhịp: hai người thở/động CÙNG LÚC thì đọc ra là một
+          // hình bị nhân đôi, không phải hai người.
+          { pose: right, shift: dx, phase: 1.4 },
+        ].map((c, i) => (
+          <div
+            key={i}
+            style={{
+              position: 'absolute',
+              bottom: 0,
+              left: '50%',
+              transform: `translateX(calc(-50% + ${c.shift}px))`,
+            }}
+          >
+            <Character pose={c.pose} timeSec={t + c.phase} height={DUO_H} shadow={!set} />
+          </div>
+        ))}
+        {fit && isSet(set) ? (
+          <div
+            style={{
+              position: 'absolute',
+              bottom: feetUp + fit.bottom,
+              left: '50%',
+              transform: 'translateX(-50%)',
+            }}
+          >
+            <SceneSet name={set} width={fit.width} />
+          </div>
+        ) : null}
       </div>
     </AbsoluteFill>
   );
@@ -847,7 +992,9 @@ export const InsightClip: React.FC<InsightProps> = ({
    * quên thì clip nền navy lẫn nhân vật, tức hai nhận diện trong một khung.
    */
   const hasFigure = Boolean(
-    hookPose || ctaPose || scenes.some((sc) => sc.visual.kind === 'figure')
+    hookPose ||
+      ctaPose ||
+      scenes.some((sc) => sc.visual.kind === 'figure' || sc.visual.kind === 'duo')
   );
   const bg = hasFigure ? CHAR.ink : BRAND.navy;
 
@@ -908,6 +1055,16 @@ export const InsightClip: React.FC<InsightProps> = ({
               accent={sc.visual.accent}
               label={topLabel}
               noBg={hasBg}
+            />
+          ) : sc.visual.kind === 'duo' ? (
+            <DuoScene
+              text={sc.text}
+              accent={sc.visual.accent}
+              label={topLabel}
+              poseL={sc.visual.poseL}
+              poseR={sc.visual.poseR}
+              set={sc.visual.set}
+              gap={sc.visual.gap}
             />
           ) : sc.visual.kind === 'figure' ? (
             <FigureScene

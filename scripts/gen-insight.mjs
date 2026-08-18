@@ -259,7 +259,9 @@ const toVisual = (v) =>
     ? { kind: 'photo', src: v.src, accent: v.accent }
     : v.kind === 'figure'
       ? { kind: 'figure', pose: v.pose, accent: v.accent, glyph: v.glyph, glyphAt: v.glyphAt }
-      : { kind: 'typo', accent: v.accent };
+      : v.kind === 'duo'
+        ? { kind: 'duo', poseL: v.poseL, poseR: v.poseR, set: v.set, gap: v.gap, accent: v.accent }
+        : { kind: 'typo', accent: v.accent };
 
 const props = {
   topLabel: source.topLabel,
