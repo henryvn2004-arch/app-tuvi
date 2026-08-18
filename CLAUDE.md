@@ -375,11 +375,78 @@ hành vi một route đang chạy để lấy một lợi ích chưa ai kêu —
 
 ### CÒN LẠI
 - **Ba bảng chủ đề vẫn là ba bản chép tay** (xem trên) — chúng sẽ trôi khỏi nhau.
-- Mẫu `quan` (và `sao` trong `'thần sát|sao'`) còn khớp theo CHUỖI CON, chưa có
-  biên từ. Nợ có sẵn.
+  Nay có `check:topics` canh cả ba ở đúng chỗ đã cắn, nhưng **chưa gộp**.
+- ~~Mẫu `quan`/`sao` khớp theo CHUỖI CON, chưa có biên từ~~ → **ĐÃ VÁ, và chẩn
+  đoán cũ SAI** (xem mục ngay dưới).
 - Chưa dùng `chuanHoaDauThanh` cho các bộ dò tiếng Việt khác trong repo (nhận
   diện chế độ của `companion.ts`, dò từ khoá nội dung…) — mới phủ đúng 3 bộ dò
   CHỦ ĐỀ CÂU HỎI.
+
+---
+
+## 🔤 BIÊN TỪ KHÔNG CỨU ĐƯỢC TIẾNG VIỆT — mẫu phải là CỤM (2026-08-18, PR sau)
+
+Vá nốt món nợ tự ghi ở mục trên. Đi đo thì lộ ra **chẩn đoán cũ của chính tôi
+sai**, và cái sai đó đang chỉ người sau đi nhầm đường.
+
+### 🔴 Sổ ghi *"chưa có biên từ"* — thêm biên từ ra **0/20 lệch**
+Vì **tiếng Việt viết RỜI từng âm tiết**: trong *"tổng quan"* thì `quan` THẬT SỰ
+là một âm tiết đứng riêng, nên `\bquan\b` vẫn khớp. Biên từ chỉ cứu được ngôn
+ngữ viết liền (`war` ăn vào `warm` — đúng bối cảnh mẹo đó sinh ra, ở track kho
+ảnh). Áp sang tiếng Việt là **vá một thứ không tồn tại**.
+🔑 **Cách vá đúng: thay bằng CỤM ĐỦ NGHĨA** — đúng như hai bảng kia vốn đã làm
+(`quan lộc`), chỉ bản `tubinh` lỏng.
+
+### 🔴 Hỏng KHÔNG phải "thừa một mục" — nó CƯỚP nhánh mặc định
+`relevant` là SET cộng dồn, mà nhánh mặc định chỉ chạy khi SET **rỗng**. Nên câu
+mở dính một mẫu oan là mất luôn cả bộ mặc định:
+
+| câu | cũ | mới |
+|---|---|---|
+| *"Cho tôi xem tổng quan lá số"* | `quanSat` | 4 mục mặc định |
+| *"Tại sao tôi hay gặp chuyện không may?"* | `thanSat` | 4 mục mặc định |
+| *"Làm sao để cải thiện vận số?"* | `thanSat` | 4 mục mặc định |
+
+`quan` khớp *tổng quan · quan hệ · quan tâm · liên quan · quan điểm*; `sao` khớp
+*tại sao · vì sao · làm sao · ra sao*; `chức` khớp *tổ chức · chức năng*. Đây là
+loại câu phổ biến NHẤT lúc người ta vừa mở tool, và chúng đang nhận đúng một mục
+lạc đề rồi để model luận chay phần còn lại. Không lỗi nào bắn ra.
+
+### Bản vá còn THÊM PHỦ, không chỉ bớt oan
+Mẫu cũ thiếu hẳn *thăng tiến · thất nghiệp · hung tinh* nên 3 câu nghiệp vụ thật
+đang rơi nhánh mặc định; bản mới bắt đúng chủ đề.
+
+### Verify
+`tsc` 0 · `lint` **0 lỗi / 77 warning = đúng mốc nền** · `prettier` cả cây sạch ·
+**22/22 bộ dò** · engine **185 pass**.
+- Bóc bảng + vòng dò từ **MÃ NGUỒN THẬT**, `chuanHoaDauThanh` từ **bản BIÊN
+  DỊCH**, đối chứng bản cũ bằng `git show origin/main:` — có assert bản đối
+  chứng **còn mang mẫu lỏng** trước khi đọc kết quả (không thì đang so với chính
+  mình).
+- **17/17 câu MỞ** nay rơi đúng nhánh mặc định · **24/24 câu ĐÚNG CHỦ ĐỀ** giữ
+  đủ mục cần. 6 ca lệch cũ/mới đều là **cải thiện**, đã soi từng ca.
+
+### 🧷 `check:topics` (bộ dò thứ 22) — canh cả BA bảng
+Luật: mẫu không được là **âm tiết đơn** thuộc bảng `AM_TIET_NGUY` (10 âm tiết,
+mỗi cái kèm ví dụ khớp oan — giữ HẸP vì bộ dò kêu oan là bộ dò bị tắt đi).
+Không bóc được bảng, hoặc bóc ra **< 5 mẫu** ⇒ **DỪNG HẲN** kèm hướng dẫn, thay
+vì báo xanh trên danh sách cụt (bài học `check:motifs`).
+- **Red-team 4/4 đỏ đúng**: đặt lại `quan` · đặt lại `sao` · đổi tên biến bảng →
+  nhánh DỪNG · rút bảng còn 2 mẫu → nhánh nghi-đọc-hụt. Đối chứng khôi phục
+  xanh, 0 file rác. Mỗi ca **assert đột biến đã ăn** trước khi đọc kết quả.
+
+### CÒN LẠI
+- **Chưa gộp 3 bảng** — chúng trả về KHOÁ khác nhau (`suckhoe` vs `Tật Ách`) nên
+  gộp là refactor riêng. `check:topics` chỉ chặn chúng trôi ở đúng lớp lỗi này.
+- ⚠️ **Chưa gọi LLM thật** — đo dừng ở tầng *mục nào vào context*, không đo chữ
+  ra màn hình.
+- 🔐 **7 hàm SECURITY DEFINER thiếu `SET search_path`** (`add_credits` ·
+  `deduct_credits` · `get_credit_balance` · `handle_new_user_credits` ·
+  `chat_incr_free_usage` · `tg_incr_free_usage` ·
+  `trigger_referral_check_on_topup`) — sổ trước ghi 2, đo lại ra **7**; 45 hàm
+  còn lại đều đã có. **Đo ACL rồi: `anon`/`authenticated` KHÔNG gọi được cái
+  nào** (chỉ `postgres` + `service_role`) ⇒ là gia cố phòng thủ theo chiều sâu,
+  **không phải lỗ đang hở** — đừng thổi phồng. Tách PR riêng vì là SQL thuần.
 
 ---
 

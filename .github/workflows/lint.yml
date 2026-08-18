@@ -176,6 +176,9 @@ jobs:
       - name: Ngân sách prompt lá số (chống phình + một nguồn bố cục)
         run: npm run check:prompt
 
+      - name: Bộ dò chủ đề câu hỏi (mẫu phải là cụm đủ nghĩa, không âm tiết đơn)
+        run: npm run check:topics
+
   typecheck:
     runs-on: ubuntu-latest
     timeout-minutes: 10
