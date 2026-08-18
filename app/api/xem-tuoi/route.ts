@@ -10,28 +10,45 @@ import { NextRequest } from 'next/server';
 import { ok, err, options, parseBody } from '@/lib/cors';
 import { llmText, llmStreamResponse } from '@/lib/llm/complete';
 import { withToolOutcome } from '@/lib/ops/tool-outcome';
+import { LUAN_ARC, MAU_ARC } from '@/lib/agent/prompts';
 
 // ─── Chat system prompts ──────────────────────────────────────
+// ⚠️ ĐÂY LÀ BẢN CHÉP TAY, đứng ngoài `buildChatContext`. Nó phục vụ khung chat
+// của HAI TRANG STANDALONE `xem-tuoi.html` + `xem-lam-an.html` (chúng gọi
+// `/api/xem-tuoi?action=chat`, không nạp `shell.js`).
+// 🔴 Luật cũ ở đây đã tự mâu thuẫn với phần còn lại của site: "120-250 từ" và
+// "Dẫn chứng sao tinh, cung vị, can chi cụ thể" — tức BẮT mở câu bằng thuật ngữ,
+// đúng thứ arc vừa bỏ. Sửa `prompts.ts` mà quên chỗ này thì hai trang đó vẫn
+// nói giọng cũ, và người dùng gặp hai giọng khác nhau trên cùng một site.
+// ⇒ Nay nội suy THẲNG `LUAN_ARC` + `MAU_ARC` dùng chung; chỉ giữ lại phần luật
+// riêng của route (không bullet/emoji, ngôn ngữ xác suất cho tương lai, không
+// lộ trường phái). Bộ trích context thì CỐ Ý giữ bản riêng: nó đọc thêm shape
+// tương hợp (`_lsA`, `_partnerLaso`) mà bản chung không có — gỡ nốt là một lượt
+// refactor khác, rủi ro hơn hẳn phần luật.
+const CHAT_RIENG_XEM_TUOI = `- Tiếng Việt, không dùng bullet, không dùng emoji
+- Riêng kết quả tương lai mới dùng ngôn ngữ xác suất, không hứa hẹn tuyệt đối
+- Không tiết lộ trường phái hay tài liệu`;
+
 const CHAT_SYSTEM_LASO = (ctx: string) => `Bạn là chuyên gia Tử Vi Đẩu Số theo cổ pháp, luận giải sâu sắc, văn phong trí thức Hà Nội xưa — điềm đạm, súc tích, sâu sắc. Bạn đang trả lời trên nền tảng Tử Vi Minh Bảo.
 
+${LUAN_ARC}
+
+${MAU_ARC}
+
 Nguyên tắc:
-- Tiếng Việt, không dùng bullet, không dùng emoji
-- 120-250 từ cho câu thông thường, tối đa 400 từ cho câu phức tạp
-- Dẫn chứng sao tinh, cung vị, can chi cụ thể từ lá số
-- Trả lời dứt khoát: cung/việc được hỏi tốt hay xấu, mạnh hay yếu — neo vào "Điểm cung X/10" và nhãn cách cục (TỐT/XẤU) nếu có. Cấm tâng bốc, cấm nước đôi né tránh; có điểm mạnh phải kèm điểm yếu cụ thể, ngang sức. Điểm thấp hoặc có sát tinh/hung cách phải cảnh báo thẳng.
-- Riêng kết quả tương lai mới dùng ngôn ngữ xác suất, không hứa hẹn tuyệt đối
-- Không tiết lộ trường phái hay tài liệu
+${CHAT_RIENG_XEM_TUOI}
 
 === DỮ LIỆU LÁ SỐ ===
 ${ctx}`;
 
 const CHAT_SYSTEM_GENERAL = `Bạn là chuyên gia Tử Vi Đẩu Số theo cổ pháp, luận giải sâu sắc, văn phong trí thức Hà Nội xưa — điềm đạm, súc tích, sâu sắc. Bạn đang trả lời trên nền tảng Tử Vi Minh Bảo.
 
+${LUAN_ARC}
+
+${MAU_ARC}
+
 Nguyên tắc:
-- Tiếng Việt, không dùng bullet, không dùng emoji
-- 120-250 từ cho câu thông thường, tối đa 400 từ cho câu phức tạp
-- Dẫn chiếu nguyên lý cổ pháp, nêu ví dụ sao tinh, cung vị cụ thể khi minh họa
-- Không hứa hẹn tuyệt đối, không tiết lộ trường phái`;
+${CHAT_RIENG_XEM_TUOI}`;
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function fmtLaso(ls: any, label: string, q: string): string {
