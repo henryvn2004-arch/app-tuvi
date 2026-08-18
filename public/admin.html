@@ -3379,29 +3379,43 @@ function fmtPctChange(cur, prev, label) {
 function renderDashEngagement(eng) {
   const host = document.getElementById('dash-engagement');
   const days = eng.days || [];
-  // NGƯỜI THẬT (đã trừ đội máy) là con số chính. Bản thô chỉ còn nằm ở tooltip.
-  // Lý do: số thô nhảy theo lưu lượng bot chứ không theo người — ngày 18/08 nó
-  // báo WAU 477 vs 758 ("giảm 37%") trong khi người thật là 87 vs 88, đi ngang.
+  // Con số LỚN là NGƯỜI THẬT, và ngay dưới nó là dòng máy + tổng. CỐ Ý hiện cả
+  // hai chứ không giấu số máy vào tooltip: mục đích của việc tách là để SO
+  // được, mà giấu một vế đi thì không so được.
+  //
+  // Vì sao người thật làm số chính: số thô nhảy theo lưu lượng bot chứ không
+  // theo người — ngày 18/08 nó báo WAU 477 vs 758 ("giảm 37%") trong khi người
+  // thật là 87 vs 88, đi ngang.
   const pick = (h, raw) => (eng[h] != null ? eng[h] : (eng[raw] || 0));
   const dauT = pick('dau_today_human', 'dau_today');
   const dauY = pick('dau_yesterday_human', 'dau_yesterday');
   const wau = pick('wau_human', 'wau'), wauP = pick('wau_prev_human', 'wau_prev');
   const mau = pick('mau_human', 'mau'), mauP = pick('mau_prev_human', 'mau_prev');
-  const rawTip = (h, raw) => (eng[h] != null && eng[raw] != null && eng[raw] !== eng[h])
-    ? ` title="Đã trừ máy. Số thô còn lẫn bot: ${(eng[raw] || 0).toLocaleString()}"` : '';
+  // Dòng phụ "N máy · tổng M". Chỉ hiện khi ĐO ĐƯỢC phần máy — không có bản
+  // `_human` thì im, đừng bịa ra con số 0 máy nghe như đã lọc rồi.
+  const botLine = (h, raw) => {
+    if (eng[h] == null || eng[raw] == null) return '';
+    const bot = Math.max(0, eng[raw] - eng[h]);
+    if (bot <= 0) return '<div class="d" style="color:var(--text-lt)">0 máy</div>';
+    return `<div class="d" style="color:var(--text-lt)">${bot.toLocaleString()} máy · tổng ${(eng[raw]).toLocaleString()}</div>`;
+  };
   const stickiness = mau > 0 ? (dauT / mau) * 100 : 0;
   host.innerHTML = `
     <div class="eng-tiles">
-      <div class="eng-tile"${rawTip('dau_today_human', 'dau_today')}><div class="v tabular">${dauT.toLocaleString()}</div><div class="l">DAU hôm nay</div>${fmtPctChange(dauT, dauY, 'so hôm qua')}</div>
-      <div class="eng-tile"${rawTip('wau_human', 'wau')}><div class="v tabular">${wau.toLocaleString()}</div><div class="l">WAU (7 ngày)</div>${fmtPctChange(wau, wauP, 'so 7N trước')}</div>
-      <div class="eng-tile"${rawTip('mau_human', 'mau')}><div class="v tabular">${mau.toLocaleString()}</div><div class="l">MAU (30 ngày)</div>${fmtPctChange(mau, mauP, 'so 30N trước')}</div>
+      <div class="eng-tile"><div class="v tabular">${dauT.toLocaleString()}</div><div class="l">DAU hôm nay · người thật</div>${fmtPctChange(dauT, dauY, 'so hôm qua')}${botLine('dau_today_human', 'dau_today')}</div>
+      <div class="eng-tile"><div class="v tabular">${wau.toLocaleString()}</div><div class="l">WAU 7 ngày · người thật</div>${fmtPctChange(wau, wauP, 'so 7N trước')}${botLine('wau_human', 'wau')}</div>
+      <div class="eng-tile"><div class="v tabular">${mau.toLocaleString()}</div><div class="l">MAU 30 ngày · người thật</div>${fmtPctChange(mau, mauP, 'so 30N trước')}${botLine('mau_human', 'mau')}</div>
       <div class="eng-tile"><div class="v tabular">${stickiness.toFixed(1).replace('.', ',')}%</div><div class="l">Stickiness (DAU/MAU)</div><div class="d" style="color:var(--text-lt)">trung bình ngành ~13%</div></div>
     </div>
     <div class="chart-wrap">
       <svg id="dashDauChart" viewBox="0 0 900 160" style="width:100%;height:160px;overflow:visible" preserveAspectRatio="none"></svg>
       <div class="chart-tip" id="dashDauTip"></div>
     </div>
-    <div class="panel-sub" style="margin-top:6px;font-size:.68rem;color:var(--text-lt)">Người dùng hoạt động mỗi ngày, <strong>đã lọc máy</strong> (bot tự khai + đội máy nhận qua hành vi)${days.length ? ` · ${fmtDate(days[0].day)} – ${fmtDate(days[days.length - 1].day)} (${days.length} ngày)` : ''} · di chuột để xem số thô</div>
+    <div class="panel-sub" style="margin-top:6px;font-size:.68rem;color:var(--text-lt);display:flex;flex-wrap:wrap;gap:.15rem .8rem;align-items:center">
+      <span style="display:inline-flex;align-items:center;gap:.3rem"><svg width="18" height="6"><line x1="0" y1="3" x2="18" y2="3" stroke="var(--gold-soft)" stroke-width="2"/></svg> Người thật</span>
+      <span style="display:inline-flex;align-items:center;gap:.3rem"><svg width="18" height="6"><line x1="0" y1="3" x2="18" y2="3" stroke="var(--text-lt)" stroke-width="1.5" stroke-dasharray="4 3"/></svg> Tổng, kể cả máy</span>
+      <span>Khoảng cách giữa hai đường = lưu lượng máy${days.length ? ` · ${fmtDate(days[0].day)} – ${fmtDate(days[days.length - 1].day)}` : ''}</span>
+    </div>
   `;
   initDashChart(days);
 }
@@ -3410,14 +3424,22 @@ function initDashChart(days) {
   const svg = document.getElementById('dashDauChart');
   const tip = document.getElementById('dashDauTip');
   if (!svg || !days.length) return;
-  // Vẽ NGƯỜI THẬT. Bản thô vẫn còn trong `d.dau` cho tooltip đối chiếu.
+  // HAI ĐƯỜNG, cố ý không thay nhau: `vals` = người thật (đường đậm), `valsTot`
+  // = TOÀN BỘ lưu lượng kể cả máy (đường mờ đứt nét). Khoảng cách giữa hai
+  // đường CHÍNH LÀ phần máy — vẽ một đường rồi nhét số kia vào tooltip thì
+  // không so được bằng mắt, mà so được mới là điểm của việc tách.
   const vals = days.map((d) => (d.dau_human != null ? d.dau_human : d.dau));
+  const valsTot = days.map((d) => (d.dau != null ? d.dau : d.dau_human));
+  const hasBot = valsTot.some((v, i) => v > vals[i]);
   const W = 900, H = 160, PAD = 4;
-  const max = Math.max(1, ...vals), min = Math.min(...vals);
+  // Thang đo chung cho cả hai đường, nếu không thì hai đường không so được.
+  const max = Math.max(1, ...vals, ...valsTot), min = Math.min(...vals, ...valsTot);
   const range = Math.max(1, max - min);
   const n = vals.length;
   const xs = vals.map((v, i) => PAD + (i * (W - PAD * 2)) / Math.max(1, n - 1));
-  const ys = vals.map((v) => H - 22 - ((v - min) / range) * (H - 40));
+  const yOf = (v) => H - 22 - ((v - min) / range) * (H - 40);
+  const ys = vals.map(yOf);
+  const ysTot = valsTot.map(yOf);
 
   const NS = 'http://www.w3.org/2000/svg';
   function el(tag, attrs) {
@@ -3441,6 +3463,16 @@ function initDashChart(days) {
   defs.appendChild(grad);
   svg.appendChild(defs);
   svg.appendChild(el('path', { d: areaD, fill: 'url(#dashDauGrad)' }));
+
+  // Đường TỔNG (kể cả máy) vẽ TRƯỚC, mờ + đứt nét, để nó làm nền chứ không
+  // tranh chỗ với đường người thật.
+  if (hasBot) {
+    const totD = 'M' + xs.map((x, i) => x + ',' + ysTot[i]).join(' L');
+    svg.appendChild(el('path', {
+      d: totD, fill: 'none', stroke: 'var(--text-lt)', 'stroke-width': 1.5,
+      'stroke-dasharray': '4 3', opacity: 0.75, 'stroke-linejoin': 'round',
+    }));
+  }
 
   const lineD = 'M' + xs.map((x, i) => x + ',' + ys[i]).join(' L');
   svg.appendChild(el('path', { d: lineD, fill: 'none', stroke: 'var(--gold-soft)', 'stroke-width': 2, 'stroke-linejoin': 'round', 'stroke-linecap': 'round' }));
@@ -3476,9 +3508,11 @@ function initDashChart(days) {
     dot.setAttribute('cx', x); dot.setAttribute('cy', y); dot.setAttribute('opacity', 1);
     tip.style.left = (x / W) * rect.width + 'px';
     tip.style.top = (y / H) * rect.height + 'px';
-    const rawDau = days[idx].dau;
-    const botPart = (rawDau != null && rawDau > vals[idx]) ? ` <span style="opacity:.6">(thô ${rawDau}, −${rawDau - vals[idx]} máy)</span>` : '';
-    tip.innerHTML = `<strong>${vals[idx]}</strong> người thật${botPart} · ${fmtDate(days[idx].day)}`;
+    const bot = Math.max(0, valsTot[idx] - vals[idx]);
+    const botPart = bot > 0
+      ? ` · <span style="opacity:.7">${bot.toLocaleString()} máy</span> · tổng ${valsTot[idx].toLocaleString()}`
+      : '';
+    tip.innerHTML = `<strong>${vals[idx].toLocaleString()}</strong> người thật${botPart} · ${fmtDate(days[idx].day)}`;
     tip.style.opacity = 1;
   });
   hitArea.addEventListener('mouseleave', () => {
