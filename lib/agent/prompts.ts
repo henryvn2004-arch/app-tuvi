@@ -485,6 +485,50 @@ export const DOC_ARC_TUONG_HOP = arcDoc({
 · [Xét tuổi] Tam Hợp → ✅ câu lật: "Hợp nhau tới mức chẳng ai chịu nói thẳng — chỗ dễ chịu nhất lại đúng là chỗ hai người hay né việc khó." ❌ "Hai tuổi thuộc Tam Hợp, chủ hòa hợp."`,
 });
 
+// ─── GIỌNG cho BẢN CÓ CẤU TRÚC (họ 2 — JSON schema trả tiền · phong thuỷ · đặt tên · chọn ngày) ───
+//
+// 🔴 KHÔNG dùng `LUAN_ARC` lẫn `arcDoc` ở đây. Cả hai đều khai HÌNH DẠNG (nhịp
+// đoạn, cấm tiêu đề / cấm liệt kê, ngân sách từ), mà hình dạng của nhóm này là
+// SCHEMA: `day-con` 12 field theo `propertyOrdering`, `dat-ten-con` bắt buộc
+// "3 nhóm × 4 tên", `chon-ngay-tot` bắt buộc "4–5 khoảng ngày". Dán luật cấm
+// liệt kê vào đó là PHÁ đúng hợp đồng chúng phải giữ.
+//
+// ⇒ Khối này chỉ chở thứ ĐỘC LẬP với hình dạng: GIỌNG và PHÉP DỊCH. Chúng nói về
+// chữ BÊN TRONG mỗi field, không nói field nào đứng đâu ⇒ **KHÔNG đổi schema,
+// KHÔNG đổi payload, nên KHÔNG phải bump `SHAPE`.**
+//
+// Slot `twist` để RỖNG cho tool trả DANH SÁCH (đặt tên · chọn ngày): một danh
+// sách 12 cái tên không có chỗ nào để lật góc nhìn.
+const arcGiong = (o: { phepDich: string; twist?: string }) => `── GIỌNG (áp cho chữ BÊN TRONG mỗi mục; KHÔNG đổi bố cục hay số mục) ──
+Viết như đang NÓI với người ngồi đối diện — chêm khẩu ngữ tự nhiên (thì, à, này, nhé, đấy, cơ, chứ), mỗi mục 1–2 cái. KHÔNG chêm vào câu mở đầu và không chêm vào câu chốt của mục.
+CẤM: "Như vậy có thể thấy" · "Nhìn chung" · "Tóm lại" · "Về mặt…" · "Thứ nhất… thứ hai" · "Trước tiên cần hiểu rằng" · câu chung chung ai đọc cũng thấy đúng.${o.twist || ''}
+
+── PHÉP DỊCH (dữ kiện → câu). Học đúng phép biến đổi này, đừng chép chữ ──
+${o.phepDich}`;
+
+// Câu lật CỐ Ý viết theo hướng "chỗ tưởng yếu hoá ra là chỗ mạnh" — nó CỦNG CỐ
+// luật đã có của nhóm này ("tính cách không tốt cũng không xấu, chỉ hợp hoặc
+// không hợp bối cảnh"), chứ không mở đường phán giá trị.
+const TWIST_NHE =
+  '\nMỘT CÂU LẬT: ở mục nói về tính cách, thêm ĐÚNG MỘT câu lật góc nhìn — chỗ người đọc tưởng là điểm yếu hoá ra là chỗ mạnh trong đúng bối cảnh nào. Phải rút từ dữ kiện thật; không có căn cứ thì BỎ HẲN, tuyệt đối không nói ngược cho kêu.';
+
+export const ARC_GIONG_TRE = arcGiong({
+  twist: TWIST_NHE,
+  phepDich: `· [Trục] Nhịp 7,4/10 → ✅ "Cháu ngồi yên được chừng mười lăm phút là chân bắt đầu ngọ nguậy, phải cho đứng dậy một lúc rồi mới vào tiếp." ❌ "Trục nhịp đạt 7,4/10, thuộc nhóm cao."
+· [Chất] Ngôn ngữ nổi bật → ✅ "Cháu kể chuyện ở lớp mà người lớn nghe cũng phải cười — chỗ này đáng cho học thêm." ❌ "Chất năng khiếu ngôn ngữ vượt ngưỡng."`,
+});
+
+export const ARC_GIONG_NGUOI = arcGiong({
+  twist: TWIST_NHE,
+  phepDich: `· [Mệnh] Cự Môn + Hóa Kỵ → ✅ "Người này nói thẳng, nghe hơi mất lòng, nhưng được cái không giấu ý sau lưng." ❌ "Cự Môn Hóa Kỵ tại Mệnh chủ thị phi khẩu thiệt."
+· [Kiểu] Khai sáng → ✅ "Đưa việc mới là mắt sáng lên; giao việc lặp đi lặp lại thì đuối rất nhanh." ❌ "Thuộc kiểu Khai sáng, động lực gốc là cái mới."`,
+});
+
+export const ARC_GIONG_NGU_HANH = arcGiong({
+  phepDich: `· [Nạp âm] Canh Ngọ — Lộ Bàng Thổ → ✅ "Mệnh anh thuộc kiểu đất ven đường, hợp mấy màu vàng đất, nâu nhạt." ❌ "Mệnh Lộ Bàng Thổ, nạp âm Canh Ngọ, thuộc hành Thổ."
+· [Quan hệ] ngày Hỏa sinh mệnh Thổ → ✅ "Hôm nay là ngày nâng mình lên, mặc tông ấm vào cho thuận." ❌ "Ngày Hỏa sinh mệnh Thổ, tương sinh."`,
+});
+
 // Khối dán vào MỌI prompt kịch bản của rail (~22 prompt / 24 toolType).
 // Ghép sẵn thành MỘT hằng số để mỗi prompt chỉ nội suy một chỗ — thêm tool mới
 // chép đúng dòng `${RAIL_SHAPE_AND_VOICE}` là có đủ cả hai, không sót nửa nào.

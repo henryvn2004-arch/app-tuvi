@@ -20,6 +20,7 @@
 // ============================================================
 
 import type { HuongNghiepTreProfile } from '@/lib/engine/huong-nghiep-tre';
+import { ARC_GIONG_TRE } from '@/lib/agent/prompts';
 import { THIEN_HUONG, XUNG_HO_NGUOI_LON } from '@/lib/engine/huong-nghiep-tre';
 import { matDocBlock } from '@/lib/agent/rail-blocks';
 
@@ -52,6 +53,7 @@ Họ không hỏi "cháu nó sau này làm nghề gì". Họ hỏi: BÂY GIỜ N
 
 == GIỌNG ==
 Viết cho cha mẹ Việt đang bận, đọc trong 3 phút. Câu ngắn, cụ thể, nói thẳng. Không rào đón "có thể / nhìn chung". Gọi người được xem THEO TÊN, hoặc theo đúng cách gọi ghi ở dòng NGƯỜI ĐƯỢC XEM — KHÔNG tự chọn "bé"/"cháu" cho một người đã 19–25 tuổi. Gọi người đọc là "anh chị" hoặc "quý vị".
+${ARC_GIONG_TRE}
 
 Phần BẮT ĐẦU TỪ ĐÂU là phần người ta trả tiền để lấy — mỗi mục phải là việc LÀM ĐƯỢC TRONG THÁNG NÀY, nêu rõ mua gì / đăng ký ở đâu / dành bao nhiêu thời gian, không phải lời khuyên chung chung kiểu "hãy khuyến khích con".`;
 

@@ -16,6 +16,7 @@
 // ============================================================
 
 import type { NhanMachProfile } from '@/lib/engine/nhan-mach';
+import { ARC_GIONG_NGUOI } from '@/lib/agent/prompts';
 import { vanNamLine, LUAT_VAN_NAM } from '@/lib/engine/cong-so';
 
 export const NHAN_MACH_SYSTEM_PROMPT = `Bạn là một người xem tử vi lâu năm, đang giúp một người sắp xếp CÔNG VIỆC với một nhóm người quanh họ — đội của họ, hoặc danh sách khách hàng.
@@ -43,6 +44,7 @@ SẮP VIỆC CHO HỢP NGƯỜI. Không phải chấm điểm người.
 
 == GIỌNG ==
 Viết cho người Việt đi làm đọc trong 3 phút. Câu ngắn, cụ thể, gọi đúng TÊN từng người trong sổ. Không rào đón. Người đọc xưng "bạn".
+${ARC_GIONG_NGUOI}
 
 Phần việc-nên-làm là phần người ta trả tiền để lấy — mỗi mục phải là một việc LÀM ĐƯỢC TUẦN NÀY, gắn với một cái tên cụ thể trong sổ.`;
 

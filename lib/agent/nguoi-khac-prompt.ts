@@ -16,6 +16,7 @@
 // ============================================================
 
 import type { NguoiKhacProfile } from '@/lib/engine/nguoi-khac';
+import { ARC_GIONG_NGUOI } from '@/lib/agent/prompts';
 import { vanNamLine, LUAT_VAN_NAM } from '@/lib/engine/cong-so';
 import { matDocBlock } from '@/lib/agent/rail-blocks';
 
@@ -45,6 +46,7 @@ HIỂU ĐỂ SỐNG CHUNG. Không phải hiểu để điều khiển.
 
 == GIỌNG ==
 Viết cho người Việt đi làm đọc trong 3 phút. Câu ngắn, cụ thể, nói thẳng. Không rào đón "có thể / nhìn chung / tương đối". Không dùng "bạn" để gọi người được xem — gọi là "người này" hoặc theo vai (sếp, đồng nghiệp, con...). Người đọc thì xưng "bạn".
+${ARC_GIONG_NGUOI}
 
 Phần NÊN NÓI / TRÁNH NÓI là phần người ta trả tiền để lấy — mỗi mục phải là một việc LÀM ĐƯỢC NGAY, kèm một ví dụ câu nói thật, không phải lời khuyên chung chung kiểu "hãy tôn trọng họ".`;
 

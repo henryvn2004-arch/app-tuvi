@@ -90,6 +90,34 @@ của nó là chính tinh + tam phương tứ chính; bản CHUNG khai can chi.
   tên biến trong scope của `new Function`) → vá để nó báo đỏ thay vì ném lỗi.
   Bài học cũ: *chốt chặn mà chết trước khi tới lượt nó thì không phải chốt chặn.*
 
+### 🧩 Đợt 3 — `arcGiong` cho BẢN CÓ CẤU TRÚC (8 bề mặt, KHÔNG bump `SHAPE`)
+Nhóm này hình dạng LÀ SCHEMA: `day-con` 12 field theo `propertyOrdering`,
+`dat-ten-con` bắt buộc *"3 nhóm × 4 tên"*, `chon-ngay-tot` *"4–5 khoảng ngày"*.
+⇒ **`LUAN_ARC` lẫn `arcDoc` đều PHÁ chúng** (cả hai cấm liệt kê / cấm tiêu đề).
+`arcGiong` vì thế chỉ chở **GIỌNG + PHÉP DỊCH** — thứ nói về chữ BÊN TRONG mỗi
+field, không nói field nào đứng đâu ⇒ **schema không đổi ⇒ payload không đổi ⇒
+KHÔNG phải bump `SHAPE`.** Đây chính là phương án (a) đã treo chờ Henry chốt;
+câu anh dặn *"chỉ đổi shape giọng"* đã trả lời sẵn.
+- 3 bản: `ARC_GIONG_TRE` · `ARC_GIONG_NGUOI` · `ARC_GIONG_NGU_HANH`.
+- 🔑 **Slot `twist` để RỖNG cho tool trả DANH SÁCH** (đặt tên · chọn ngày · phong
+  thuỷ): 12 cái tên thì không có chỗ nào để lật góc nhìn.
+- 🔑 **Câu lật CỐ Ý viết theo hướng "chỗ tưởng yếu hoá ra là chỗ mạnh"** — nó
+  CỦNG CỐ luật sẵn có của nhóm (*"tính cách không tốt cũng không xấu, chỉ hợp
+  hoặc không hợp bối cảnh"*), không mở đường phán giá trị. Bốn prompt này gánh
+  rào chắn đạo đức rất nặng (cấm thao túng · cấm so sánh anh chị em · cấm chữ lo
+  âu/trầm cảm · cấm đoán đỗ trượt) — thêm lớp nào cũng phải xét nó có đá vào đó không.
+- 🪤 **Cả 4 prompt ĐÃ CÓ SẴN khối `== GIỌNG ==`** ⇒ nối VÀO đó, không dựng khối
+  thứ hai. `/api/phong-thuy` thì lượt gọi LLM **không có `system`** nào — chỗ nối
+  là thêm `system`, không đụng một chữ trong khối JSON.
+- Verify: **schema 4 bản TRÙNG KHÍT từng byte** (861 · 709 · 675 · 748 ký tự) —
+  đây là bất biến gánh câu "không phải bump SHAPE" · 41+25+22+21 dòng cũ còn
+  nguyên · **Δ đúng bằng `len(ARC_GIONG_*) + 1`** · arcGiong KHÔNG mang luật hình
+  dạng nào · 6 rào chắn đạo đức còn nguyên · 3 action giữ nguyên hợp đồng
+  `Format:` · **A/B 26 toolType rail: trùng khít từng byte**.
+- 🪤 Red-team 2/2 đỏ đúng (đổi một khoá schema → ca schema đỏ · cho arcGiong mang
+  luật cấm liệt kê → đỏ cả 3 bản). Ca 2 lượt đầu **đột biến KHÔNG ăn** vì tôi neo
+  vào chuỗi đã bị prettier gói lại — chốt assert bắt được, phải neo theo DÒNG.
+
 ### CÒN LẠI
 - 🔴 **CHƯA gọi LLM thật lượt nào** — verify dừng ở tầng CHỮ VÀO PROMPT. Arc có ăn
   hay không thì phải chạy `scripts/demo-luan.mjs` bằng `gemini-2.5-flash` (nhớ
