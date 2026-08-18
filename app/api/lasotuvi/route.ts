@@ -5,7 +5,7 @@ import { NextRequest } from 'next/server';
 import { ok, err, options, parseBody, CORS_HEADERS } from '@/lib/cors';
 // Lõi dùng chung — trích sang lib/agent (một bộ não).
 import { execLasoTool, toolLabel } from '@/lib/agent/tools';
-import { buildChatContext, XUNG_HO_RULE, nguoiXemLine } from '@/lib/agent/prompts';
+import { buildChatContext, XUNG_HO_RULE, nguoiXemLine, DOC_ARC_LASO } from '@/lib/agent/prompts';
 // LLM Gemini-primary + Anthropic-backup (provider từ app_config
 // 'chat.standalone_provider'). callLLMTools trả shape Anthropic → giữ nguyên
 // vòng lặp tool bên dưới; llmTextFull cho luận 24 phần (phan) — bản `Full` để
@@ -53,6 +53,8 @@ PHÁN QUYẾT BẮT BUỘC — NEO VÀO DỮ LIỆU ENGINE, NÓI RA BẰNG ĐỜ
   cục cùng lúc. KHÔNG được mâu thuẫn với dữ liệu: nhãn "Yếu" thì cấm viết như cung tốt; đại vận
   4/10 thì cấm viết như giai đoạn đẹp.
 - Phân biệt rõ: ĐÁNH GIÁ CẤU TRÚC lá số (mạnh/yếu) là chắc chắn — nói dứt khoát; chỉ DỰ ĐOÁN kết quả tương lai mới dùng ngôn ngữ xác suất. Đừng lấy "khiêm tốn về tương lai" làm cớ né đánh giá cấu trúc.
+
+${DOC_ARC_LASO}
 
 NGUYÊN TẮC LUẬN GIẢI CỔ PHÁP:
 1. Tam phương tứ chính: Luôn xét cung đang luận trong mối quan hệ với cung tam hợp và cung xung chiếu.
