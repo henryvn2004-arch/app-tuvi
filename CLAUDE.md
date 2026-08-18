@@ -1892,12 +1892,94 @@ trả boolean.
   `1ed76a8ae737f59a7415caeb135640b1`, 2.965 ký tự) rồi mới ghi vào repo.
 
 ### CÒN LẠI
-- **45 hàm kia vẫn `public` trần** (yếu hơn 7 hàm vừa vá) — nâng lên
-  `public, pg_temp` là việc riêng: chỉ `ALTER`, không đụng thân, nhưng đụng 45
-  hàm đang chạy nên tách lượt.
-- **`handle_new_user_credits` vẫn nằm đó** dù là hàm chết — cần Henry chốt xoá.
+- ~~45 hàm kia vẫn `public` trần~~ · ~~`handle_new_user_credits` vẫn nằm đó~~ →
+  **ĐÃ XONG cả hai**, xem mục ngay dưới (và con số 45 là SAI — thật ra 44).
 - ⚠️ Cảnh báo mới **chưa bắn lượt nào trên prod** (hiện `[]` nên nó im, đúng
   thiết kế). Lượt đầu tiên nó nói gì thì phải đợi có hàm thiếu thật.
+
+---
+
+## 🔐 Vá nốt 44 hàm SECDEF — và BỘ DÒ CỦA CHÍNH TÔI vẫn mù với lớp lỗi này (2026-08-18, PR sau)
+
+Henry chốt hai việc treo ở mục trên: *"1. Xoá `handle_new_user_credits` >> ok làm
+đi. 2. Nâng 45 hàm còn lại lên `public, pg_temp` >> ok làm đi"*. (Việc 3 — gộp 3
+bảng chủ đề — anh chốt **để đấy**.)
+
+### 🔢 ĐÍNH CHÍNH con số của chính tôi: 45 → **44**
+Đo lại: 52 hàm SECURITY DEFINER = **43 hàm `public` trần** + **1 hàm `public, cron`**
++ 8 hàm đã ở `public, pg_temp`. Sổ ghi "45" là suy, không phải đo.
+
+### 🔑 Đợt này AN TOÀN HƠN HẲN đợt 1, và lý do là CẤU TRÚC chứ không phải cẩn thận hơn
+| | Đợt 1 (7 hàm) | Đợt 2 (44 hàm) |
+|---|---|---|
+| Đi từ | **TRỐNG** → `public, pg_temp` | `public` → `public, pg_temp` |
+| Bản chất | có thể **LÀM MẤT** schema hàm đang cần | **CHỈ THÊM** |
+`pg_temp` VỐN ĐÃ ngầm nằm ở **ĐẦU** search_path; nêu tường minh chỉ **DỜI nó xuống
+CUỐI**. Không hàm nào mất quyền tìm thấy thứ gì ⇒ không cần đọc trọn thân 44 hàm
+như đợt 1. Vẫn đo 3 điều trước khi đụng: **4 hàm** chạm schema ngoài `public` (cả 4
+đều **nêu tên schema tường minh** — 3 hàm `auth.*`, 1 hàm `cron.*`) · **0 hàm** dùng
+bảng tạm · **0 hàm** gọi hàm extension (`uuid_generate_v4`/`crypt`/`digest`…) không
+nêu schema.
+- ⚠️ **`ops_pgcron_runs` PHẢI giữ `cron`** → `public, cron, pg_temp`. Ghim
+  `public, pg_temp` trần cho nó là làm chết panel Cron của admin. Đây đúng cái bẫy
+  đợt 1 đã cảnh báo, và là hàm DUY NHẤT dính.
+- Đo ACL trước: **0/44 hàm** anon/authenticated gọi được ⇒ vẫn là **gia cố phòng
+  thủ theo chiều sâu**, KHÔNG phải lỗ đang hở. Đừng thổi thành sự cố.
+
+### 🔴 Phát hiện chính: bộ dò `security_audit()` MÙ với đúng lớp lỗi vừa vá
+Mục thứ 6 `ham_thieu_search_path` (thêm ở đợt 1) khai điều kiện `p.proconfig is null`
+— tức **chỉ bắt hàm để TRỐNG hẳn**. Dựng probe SECURITY DEFINER, ACL đã siết,
+`search_path = public` trần ⇒ **cả `ham_thieu_search_path` LẪN `ham_ho_cho_anon`
+đều `[]`**. Không mục nào nhìn thấy nó.
+- 🔑 **Mà lỗ này CÓ THẬT** — red-team đo trực tiếp, hai hàm cùng thân chỉ khác
+  search_path, rồi dựng bảng TẠM cùng tên bảng thật:
+
+  | hàm | đọc ra |
+  |---|---:|
+  | `set search_path = public` | **999** ← đọc phải bảng TẠM |
+  | `set search_path = public, pg_temp` | **1** ← đọc đúng bảng thật |
+
+  ⇒ Lượt vá này KHÔNG phải đổi metadata cho vui; nó bịt một đường che bảng đo được.
+- ⇒ Đổi điều kiện sang **"KHÔNG nêu `pg_temp`"**:
+  `coalesce(array_to_string(p.proconfig, ','), '') !~ 'pg_temp'`.
+- **Áp bằng cách đọc ngược `pg_get_functiondef` của bản ĐANG CHẠY rồi `replace` đúng
+  một điều kiện + một cụm chú thích**, có **4 chốt assert DỪNG HẲN** nếu không khớp
+  — chép tay 2.798 ký tự là mở cửa cho bản chạy lệch bản repo (bệnh đã cắn hai lần).
+- 🔑 Red-team lại sau khi vá: `ham_thieu_search_path = ["__rt_baretran"]` còn
+  `ham_ho_cho_anon` vẫn `[]` ⇒ **đỏ vì ĐÚNG cái đang đo**, không lọt nhầm mục cũ —
+  đúng bài học đã phải học ở đợt 1.
+- **Quét cả chỗ MÔ TẢ công thức** (bài học lặp): nhãn panel admin và chữ cảnh báo
+  Telegram đều đang ghi *"để trống search_path"* — nay sai nghĩa, đã sửa cả hai.
+
+### 🐞 `handle_new_user_credits` — xoá, sau khi đo chứ không sau khi nhớ
+Chứng minh trước khi xoá (xoá khó đảo): **0 trigger** dùng nó · **0 phụ thuộc**
+view/hàm/rule · `auth.users` chỉ có đúng **1** trigger `on_auth_user_created ->
+handle_new_user_signup` (bản sống, 25 Lượng). Thân cũ (10 Lượng, `EXCEPTION WHEN
+OTHERS THEN RETURN NEW` — nuốt lỗi) chép nguyên vào file migration làm **đường đảo**.
+
+### Verify
+`tsc` 0 · `lint` **0 lỗi / 77 warning = đúng mốc nền** · `prettier` cả cây sạch ·
+**22/22 bộ dò** · engine **185 pass** · 4/4 khối script `admin.html` parse OK.
+- **12 phép đo md5/số dòng TRÙNG KHÍT trước/sau** trên hàm đọc thuần, gồm
+  `ops_pgcron_runs` (5 dòng, cùng md5 ⇒ vẫn đọc được schema `cron`),
+  `dashboard_at_risk` + `marketing_signup_truth` (hai hàm đọc `auth.users`),
+  `security_audit`, `marketing_funnel`, `traffic_quality`, `viral_loop_funnel`…
+- **Đường tiền đo TRƯỚC và SAU, trùng khít từng con số** (chạy trong transaction rồi
+  `RAISE` để rollback): `bal=10010 · +7→10017 · −7→10010 · get_balance=10010` ·
+  thiếu tiền vẫn ném đúng `insufficient_balance` · `chat_incr_free_usage` và
+  `tg_incr_free_usage` vẫn chạy.
+- Sau tất cả: **51 hàm SECDEF, 0 hàm thiếu `pg_temp`**, `security_audit` trả `[]` ở
+  cả hai mục bảo mật · **0 dòng rác**, 0 hàm/bảng probe còn sót, số dư nguyên vẹn,
+  0 giao dịch lạ.
+
+### CÒN LẠI
+- ⚠️ **Chưa có lượt cảnh báo THẬT nào bắn trên prod** — hiện `[]` nên nó im, đúng
+  thiết kế. Lượt đầu tiên nó nói gì thì phải đợi có hàm thiếu thật.
+- **`_patches/migration-secdef-search-path.sql` (đợt 1) còn dòng `ALTER` cho
+  `handle_new_user_credits`** — CỐ Ý không sửa: đó là bản ghi LỊCH SỬ của việc đã
+  làm, không phải script chạy lại.
+- Đường duy nhất còn đẻ ra hàm thiếu `pg_temp` là **migration tương lai**. Bộ dò nay
+  canh đúng lớp đó và chạy mỗi 3 giờ qua `anomaly-alerts`.
 
 ---
 
