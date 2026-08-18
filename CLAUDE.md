@@ -252,6 +252,39 @@ một **tranh quẻ tĩnh** chiếm gần trọn khung, nền video chỉ ló �
   đồng vì thế chấm một bố cục khác hẳn bố cục sắp render. Đã sửa; `describeImage`
   vốn đã phân biệt tranh quẻ, câu bao ngoài chỉ được tả CHỖ ĐẶT.
 
+### 📏 ĐỘ DÀI đi theo LỜI ĐỌC · giao ra 720×1280 (2026-08-18, cùng PR)
+Henry: *"Độ dài phụ thuộc vào gì? Vào script ah? Hay tốc độ đọc của TTS?…
+Ko giới hạn"* · *"Dung lượng thấp thôi. Nhẹ 720x1280 cũng dc. Thường user xem
+trên mobile mah"*. Anh đoán đúng chỗ:
+
+| chế độ | độ dài mỗi cảnh |
+|---|---|
+| có TTS | **độ dài THẬT của mp3** + 0,12s |
+| `--no-voice` | ước `số ký tự / 13,59` + 0,4s |
+
+- Cần gạt tốc độ đọc **đã có sẵn**: `CLIP_SPEED = '1.15'` (`scripts/tts-clip.mjs`).
+- ⚠️ **Bản `--no-voice` DÀI HƠN bản thật 15–25%** — hằng số 13,59 ước dư (đã đo:
+  `than-so-hoc` ước 37,6s → thật 32,4s). Đừng đọc độ dài của bản không giọng
+  thành độ dài clip.
+- 🔴 **Lỗi tìm ra khi đi tra: `TTS_CHARS_PER_SECOND` (13,59) và `CLIP_SPEED`
+  (1,15) nằm HAI FILE, KHÔNG có ràng buộc nào nối.** Đổi tốc độ đọc mà quên bên
+  kia thì cổng 1 lặng lẽ ước sai — đọc nhanh hơn nhưng vẫn tính theo tốc độ cũ ⇒
+  mọi clip bị chấm "quá dài" rồi `rewriteSpec` **đi cắt lời đọc cho một vấn đề
+  không tồn tại**. Đã ghi chú thích trỏ vào nhau ở cả hai chỗ kèm công thức quy
+  đổi. (Chưa dựng bộ dò — hai hằng số, chú thích hai chiều là đủ mức.)
+
+**Khổ giao ra 720×1280 bằng `--scale`, KHÔNG đổi `VIDEO`:**
+- Mọi toạ độ trong `InsightClip.tsx` là số **TUYỆT ĐỐI** (ảnh 944×944, chữ ở
+  `top: 1176`) ⇒ đổi `VIDEO` trong `brand.ts` là bố cục **tràn khung**.
+  `--scale` thu nhỏ lúc RASTER nên toạ độ logic không đổi một chữ.
+- **2/3** vì nó cho số CHẴN ở cả hai chiều (1080→720, 1920→1280) — scale lẻ ra
+  chiều lẻ thì h264 từ chối.
+- 🔑 **Nhưng thủ phạm chính của file 64–80MB là CRF, không phải độ phân giải**:
+  Remotion mặc định **CRF 18** = gần như không nén. Đặt **23**.
+- 🪤 **`pkill -f` khớp CHÍNH dòng lệnh của nó → tự giết (exit 144), lần thứ BA.**
+  Cách tránh: `pkill -f 'gen-insight[.]mjs'` — dấu ngoặc vuông làm chuỗi lệnh
+  không còn khớp literal.
+
 ### ⚡ "Nhanh gọn hiệu quả nhất" — và hai thứ tôi đề nghị đều KHÔNG phải chỗ chặn
 Henry: *"mày tự chọn đi. Tao chỉ muốn ra dc video chạy một cách nhanh gọn hiệu
 quả nhất"* giữa (A) cắm Pexels làm nguồn thứ hai và (B) cho LLM chọn tông.
