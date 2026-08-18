@@ -31,6 +31,7 @@
 import { getConfigValue } from '@/lib/config/appConfig';
 import { GRAPH_BASE } from '@/lib/channels/meta';
 import { tgSendPhoto, tgSendVideo } from '@/lib/channels/telegram';
+import { getTiktokAccessToken } from '@/lib/media/tiktok-token';
 
 const SUPABASE_URL = process.env.SUPABASE_URL || '';
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY || '';
@@ -55,6 +56,11 @@ const BLOCKING_PATTERNS = [
   // thì mỗi bài của kênh chưa cấu hình lại thành một dòng `error` riêng — với
   // 4 kênh là vài chục dòng lỗi mỗi sáng, và bài thì mất luôn khỏi hàng đợi.
   'thiếu env',
+  // Dấu hiệu DÙNG CHUNG cho mọi adapter: cửa của kênh chưa mở (token chết,
+  // chưa cấp lần đầu, không làm mới được). Đây là lỗi của CÁI CỬA chứ không
+  // phải của bài — thử bài kế tiếp chỉ đẻ thêm một dòng lỗi giống hệt. Kênh
+  // nào cần thì tự bọc lỗi bằng tiền tố này (xem `publishTiktok`).
+  'cửa chưa mở',
   'oauthexception',
   'access token',
   'session has expired',
@@ -498,7 +504,6 @@ async function publishTelegram(row: QueueRow): Promise<AdapterOut> {
 }
 
 const TIKTOK_BASE = 'https://open.tiktokapis.com/v2';
-const TIKTOK_TOKEN = process.env.TIKTOK_ACCESS_TOKEN || '';
 
 /**
  * TikTok — Content Posting API, `PULL_FROM_URL`.
@@ -515,23 +520,32 @@ const TIKTOK_TOKEN = process.env.TIKTOK_ACCESS_TOKEN || '';
  *    là host Supabase Storage của bucket `clips`.
  * 2. **Quyền `video.publish`** phải qua duyệt của TikTok. Trước khi duyệt, app
  *    ở chế độ sandbox chỉ đăng được ở dạng **riêng tư** cho chính tài khoản dev.
- * 3. **Token TikTok hết hạn sau 24 giờ** và phải làm mới bằng `refresh_token` —
- *    khác hẳn Facebook (token Page vĩnh viễn). Vì thế `TIKTOK_ACCESS_TOKEN` đặt
- *    tay sẽ chết sau một ngày; muốn chạy đều thì phải lưu refresh token và tự
- *    làm mới. ⚠️ CHƯA làm phần đó — adapter này dùng được cho lượt thử tay, còn
- *    chạy tự động hằng ngày thì phải bổ sung khâu làm mới token trước.
+ * 3. **Token TikTok hết hạn sau 24 giờ** và refresh token thì **XOAY mỗi lượt
+ *    làm mới** — khác hẳn Facebook (token Page vĩnh viễn) lẫn YouTube (refresh
+ *    token cố định để yên trong env). Khâu làm mới nằm ở
+ *    `lib/media/tiktok-token.ts`, lưu cặp token trong `app_config` vì env
+ *    không tự ghi lại được. Xem `docs/TIKTOK-TOKEN.md` cho lượt cấp đầu tiên.
  *
  * ⚠️ Caption TikTok trần 2200 ký tự và KHÔNG có link bấm được — dùng
  * `linkStyle: 'bare'` như Instagram để người xem còn gõ lại được địa chỉ.
  */
 async function publishTiktok(row: QueueRow): Promise<AdapterOut> {
-  if (!TIKTOK_TOKEN) return { error: 'Thiếu env TIKTOK_ACCESS_TOKEN' };
   const videoUrl = row.media_assets?.url || '';
   if (!videoUrl) return { error: 'Asset không có URL' };
   if (!isVideoAsset(videoUrl)) return { error: 'TikTok chỉ nhận video, asset này là ảnh' };
 
+  // Lấy token TRƯỚC khi soi asset xong — nhưng SAU khi loại ảnh, để lượt asset
+  // sai loại không tốn một vòng làm mới token.
+  const tk = await getTiktokAccessToken();
+  if (tk.error || !tk.token) {
+    // Tiền tố `Cửa chưa mở` đưa lỗi này vào nhóm CHẶN ⇒ dừng cả kênh TikTok
+    // thay vì đánh hỏng từng bài. Token chết là lỗi của CÁI CỬA.
+    return { error: `Cửa chưa mở — ${tk.error || 'không lấy được token TikTok'}` };
+  }
+  if (tk.warn) console.warn(`[publish] TikTok: ${tk.warn}`);
+
   const H = {
-    Authorization: `Bearer ${TIKTOK_TOKEN}`,
+    Authorization: `Bearer ${tk.token}`,
     'Content-Type': 'application/json; charset=UTF-8',
   };
 
@@ -774,6 +788,14 @@ export function formatPublishReport(r: PublishResult): string {
 function channelFix(ch: string, msgs: string[]): string {
   const hit = (p: string) => msgs.some((m) => m.includes(p));
   if (ch === 'facebook' && (hit('session has expired') || hit('has expired'))) return FB_TOKEN_EXPIRED;
+  if (ch === 'tiktok') {
+    // 🔑 TikTok có BA cửa khác hẳn nhau, và nhầm cửa là đi sửa nhầm chỗ y hệt
+    // ca Facebook: miền chưa verify KHÔNG phải chuyện token, mà lỗi của nó
+    // cũng bay ra từ cùng một adapter.
+    if (hit('url_ownership_unverified') || hit('url ownership')) return TT_URL_UNVERIFIED;
+    if (hit('ghi vào app_config không được')) return TT_CHAIN_BROKEN;
+    if (hit('invalid_grant') || hit('chưa có token')) return TT_TOKEN_DEAD;
+  }
   return CHANNEL_SETUP[ch] || '';
 }
 
@@ -796,6 +818,36 @@ const FB_TOKEN_EXPIRED =
   '⛔ Bước (2) cần ĐỌC App Secret — chỉ copy, TUYỆT ĐỐI không bấm Reset: ' +
   'MESSENGER_APP_SECRET và WHATSAPP_APP_SECRET đang dùng chính giá trị đó, reset là chết webhook cả hai kênh.';
 
+/**
+ * ⚠️ Ca này KHÔNG phải chuyện token, dù nó bay ra từ cùng adapter TikTok.
+ * `PULL_FROM_URL` đòi miền chứa file phải được XÁC MINH SỞ HỮU trong Developer
+ * Portal. Đi cấp lại token cho lỗi này là mất công vô ích — đúng cái bẫy
+ * "một câu khuyên cho hai nguyên nhân" mà hàng đợi Facebook đã trả giá.
+ */
+const TT_URL_UNVERIFIED =
+  'MIỀN CHƯA XÁC MINH — không phải lỗi token, đừng đi cấp lại token. `PULL_FROM_URL` đòi ' +
+  'miền chứa file video phải được verify sở hữu. TikTok Developer Portal → app → ' +
+  'Manage apps → URL properties → thêm URL prefix của host Supabase Storage (bucket `clips`) ' +
+  'rồi làm bước xác minh. Verify xong mới đăng được, không cần đổi gì trong code.';
+
+/**
+ * 🔴 Ca NẶNG NHẤT và là lý do module token phải GHI TRƯỚC DÙNG SAU: refresh
+ * token TikTok XOAY mỗi lượt làm mới, nên làm mới xong mà không lưu được cái
+ * mới thì cái cũ đã chết và chuỗi đứt hẳn — không tự lành được.
+ */
+const TT_CHAIN_BROKEN =
+  'CHUỖI TOKEN ĐỨT — đã làm mới được nhưng ghi vào `app_config` hỏng, nên refresh token mới ' +
+  'không ai giữ còn cái cũ thì TikTok đã vô hiệu hoá. Không tự lành. Phải cấp lại bằng tay ' +
+  '(xem docs/TIKTOK-TOKEN.md) rồi đặt TIKTOK_REFRESH_TOKEN trên Vercel. ' +
+  'Kiểm luôn vì sao ghi hỏng: SUPABASE_SERVICE_KEY còn đúng không.';
+
+/** Chưa cấp lần đầu, hoặc refresh token đã hết 365 ngày. Cùng một việc phải làm. */
+const TT_TOKEN_DEAD =
+  'CHƯA CÓ / HẾT HẠN refresh token. Access token TikTok sống 24 giờ và refresh token XOAY mỗi ' +
+  'lượt làm mới, nên KHÔNG đặt tay một access token rồi để đó được. Làm theo docs/TIKTOK-TOKEN.md ' +
+  '(cấp một lượt bằng tay → đặt TIKTOK_REFRESH_TOKEN + TIKTOK_CLIENT_KEY + TIKTOK_CLIENT_SECRET ' +
+  'trên Vercel → Redeploy). Từ lượt sau hệ thống tự làm mới và tự lưu vào `app_config`.';
+
 /** Việc tay cần làm khi một kênh báo lỗi auth/quyền (ca chung). */
 const CHANNEL_SETUP: Record<string, string> = {
   facebook:
@@ -813,4 +865,10 @@ const CHANNEL_SETUP: Record<string, string> = {
   telegram:
     'thêm bot làm ADMIN của channel (quyền đăng bài), rồi đặt TELEGRAM_CHANNEL_ID trên Vercel ' +
     '(dạng `@ten_channel` hoặc id số `-100…`). Token bot dùng chung TELEGRAM_BOT_TOKEN đã có.',
+  tiktok:
+    'cần BA thứ, thiếu cái nào cũng không đăng được: (1) quyền `video.publish` đã qua duyệt ' +
+    '(trước khi duyệt, app sandbox chỉ đăng RIÊNG TƯ cho chính tài khoản dev); (2) miền của ' +
+    'bucket `clips` đã verify sở hữu trong Developer Portal (URL properties); (3) token — đặt ' +
+    'TIKTOK_CLIENT_KEY + TIKTOK_CLIENT_SECRET + TIKTOK_REFRESH_TOKEN trên Vercel, xem ' +
+    'docs/TIKTOK-TOKEN.md.',
 };
