@@ -188,15 +188,58 @@ async function main() {
   console.log(`Đã tải ${(tong / 1e6).toFixed(1)}MB.`);
 
   if (hong.length) {
+    const huongDan =
+      `URL CDN Pixabay là đường dẫn cố định, nên 404 ở đây nghĩa là nhà cung ` +
+      `cấp đã GỠ đoạn phim. Chạy \`node scripts/stock-video.mjs --bucket tone\` ` +
+      `để tuyển đoạn thay thế, rồi sửa \`backdropVideo\` trong ` +
+      `\`lib/video/sources/insight.ts\` cho khớp.`;
+    const danhSach = hong.map((h) => `  · ${h.file} — ${h.ly}\n    ${h.url}`).join('\n');
+
+    /*
+     * 🔑 HỎNG MỘT PHẦN ≠ HỎNG CẢ KHO — và phân biệt được hai ca đó mới là chỗ
+     * đáng giá của khối này.
+     *
+     * Bản đầu `exit(1)` cho MỌI ca hỏng. Bước này chạy TRƯỚC bước dựng clip
+     * trong workflow, nên đúng một đoạn phim bị Pixabay gỡ là **cả tuần không
+     * giao được clip nào** — kể cả 5 clip khác có đủ nền. Nghịch thẳng tính
+     * chất số 2 mà chính `build-video-batch.mjs` khai ở đầu file: *"hỏng một
+     * clip KHÔNG kéo cả loạt"*.
+     *
+     * Nay chỉ chặn khi **KHO RỖNG HOÀN TOÀN** — đó là dấu hiệu của hạ tầng
+     * (mất mạng, egress chặn), chứ một nhà cung cấp không xoá sạch kho trong
+     * cùng một đêm. Hỏng lẻ thì kêu TO rồi đi tiếp: clip nào cần đúng đoạn đó
+     * sẽ tự trượt ở `OffthreadVideo` và batch bắt riêng nó.
+     *
+     * 🪤 **Phép đo đầu của tôi SAI và red-team bắt được**: tôi chốt bằng
+     * `tong === 0` (số byte tải về). Ca thật hay gặp nhất — 6 đoạn ĐÃ CÓ trên
+     * đĩa, đúng 1 đoạn bị gỡ — cũng cho `tong === 0` vì không tải nổi byte nào,
+     * nên nó đọc "kho vẫn còn 6 đoạn dùng được" thành "cả kho chết" rồi chặn.
+     * Đại lượng đúng là **kho CÒN DÙNG ĐƯỢC bao nhiêu đoạn**, không phải tải về
+     * bao nhiêu byte. Cùng lớp bài học "ô `fix` phải nêu đúng đại lượng phép đo
+     * đọc" vừa vá ở `gate-machine`.
+     *
+     * ⚠️ Kêu to là BẮT BUỘC, không phải trang trí: kho thiếu âm thầm thì lượt
+     * sau lại tưởng đủ. Vì thế còn ghi thẳng vào tóm tắt lượt chạy.
+     */
+    const dungDuoc = coSan + (canTai.length - hong.length);
+    const toanBo = dungDuoc === 0;
     console.error(
-      `\n🔴 ${hong.length} đoạn KHÔNG tải được:\n` +
-        hong.map((h) => `  · ${h.file} — ${h.ly}\n    ${h.url}`).join('\n') +
-        `\n\nURL CDN Pixabay là đường dẫn cố định, nên 404 ở đây nghĩa là nhà ` +
-        `cung cấp đã GỠ đoạn phim. Chạy \`node scripts/stock-video.mjs --bucket tone\` ` +
-        `để tuyển đoạn thay thế, rồi sửa \`backdropVideo\` trong ` +
-        `\`lib/video/sources/insight.ts\` cho khớp.`
+      `\n${toanBo ? '🔴' : '⚠️'} ${hong.length} đoạn KHÔNG tải được:\n${danhSach}\n\n${huongDan}`
     );
-    process.exit(1);
+
+    if (process.env.GITHUB_STEP_SUMMARY) {
+      fs.appendFileSync(
+        process.env.GITHUB_STEP_SUMMARY,
+        `\n## 🎞️ Kho nền video\n\n${toanBo ? '🔴' : '⚠️'} **${hong.length}/${videos.length} đoạn không tải được** (kho còn ${dungDuoc} đoạn dùng được)` +
+          (toanBo ? ' — KHÔNG đoạn nào tải được, nhiều khả năng là mạng/egress.\n\n' : '\n\n') +
+          `${danhSach}\n\n${huongDan}\n` +
+          (toanBo
+            ? ''
+            : '\n> Vẫn dựng tiếp. Clip nào cần đúng đoạn thiếu sẽ tự trượt và được bắt riêng.\n')
+      );
+    }
+
+    if (toanBo) process.exit(1);
   }
 }
 
