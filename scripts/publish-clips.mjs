@@ -156,6 +156,9 @@ for (const f of files) {
     }
     if (side.width) form.set('width', String(side.width));
     if (side.height) form.set('height', String(side.height));
+    // Loại nguồn do BÊN DỰNG khai (sidecar). Không khai thì hàm edge giữ mặc
+    // định `tool-demo` như cũ — clip demo công cụ chưa ghi trường này.
+    if (side.sourceType) form.set('source_type', String(side.sourceType));
     form.set(
       'meta',
       JSON.stringify({ built_at: new Date().toISOString(), run: process.env.GITHUB_RUN_ID || null })

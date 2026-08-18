@@ -1,5 +1,8 @@
-// clip-ingest v2 — nhận một clip 9:16 từ GitHub Actions, cất vào Storage, ghi
+// clip-ingest v3 — nhận một clip 9:16 từ GitHub Actions, cất vào Storage, ghi
 // một dòng vào `media_assets`, và (SAU MỘT CÁI VAN) xếp hàng đăng.
+//
+// v2 → v3: `source_type` do người nộp khai (mặc định giữ `tool-demo`) — bản
+// trước đóng cứng nên clip insight vào sổ dưới nhãn của loại khác.
 //
 // v1 → v2: nhận `width`/`height` do người nộp khai (clip nay giao ra 720×1280,
 // viết cứng 1080×1920 là sổ nói sai về chính file trong kho) và thêm bước xếp
@@ -122,8 +125,18 @@ Deno.serve(async (req) => {
   const width = Number(form.get('width')) || 1080;
   const height = Number(form.get('height')) || 1920;
 
+  // 🔑 LOẠI NGUỒN do NGƯỜI NỘP khai, không đóng cứng. Bản trước gán
+  // `'tool-demo'` cho MỌI clip nên clip insight vào sổ dưới nhãn của loại
+  // khác. Chưa va vào gì (ảnh dùng `khao_luan`), nhưng hai loại này qua cổng 2
+  // rất khác nhau — insight 4/6 (67%) · demo công cụ 3/18 (17%) — nên sổ không
+  // phân biệt được thì mọi phép đo theo loại đều sai.
+  // Mặc định giữ `tool-demo` để clip demo công cụ (chưa khai trường này) không
+  // đổi hành vi; và `SLUG` gác vì giá trị này vào UNIQUE key.
+  const srcType = String(form.get('source_type') ?? 'tool-demo');
+  if (!SLUG.test(srcType)) return json({ error: 'source_type không hợp lệ' }, 400);
+
   const row = {
-    source_type: 'tool-demo',
+    source_type: srcType,
     source_id: toolId,
     variant,
     url,

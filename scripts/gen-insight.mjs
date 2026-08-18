@@ -363,6 +363,13 @@ if (!STILL) {
     JSON.stringify(
       {
         id: ID,
+        // 🔑 LOẠI NGUỒN, đi thẳng vào `media_assets.source_type`. Bản trước để
+        // hàm `clip-ingest` đóng cứng `'tool-demo'` cho MỌI clip, nên clip
+        // insight vào sổ dưới nhãn của loại khác. Chưa va vào gì (ảnh dùng
+        // `khao_luan`), nhưng hai loại này qua cổng 2 rất khác nhau — insight
+        // 4/6 (67%) · demo công cụ 3/18 (17%) — mà đó đúng là ranh giới cần
+        // quyết. Sổ không phân biệt được thì mọi phép đo theo loại đều sai.
+        sourceType: 'insight',
         // Câu kết là dòng người xem đọc được — đúng thứ nên làm caption.
         caption: spec.cta,
         hashtags: spec.hashtags ?? [],
