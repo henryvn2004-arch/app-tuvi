@@ -17,7 +17,7 @@
 export interface JobSpec {
   key: string;
   label: string;
-  source: 'vercel' | 'edge' | 'pgcron';
+  source: 'vercel' | 'edge' | 'pgcron' | 'actions';
   /** Chu kỳ kỳ vọng (phút). Dùng để tính "đã trễ". */
   everyMinutes: number;
   /** Mô tả lịch cho người đọc. */
@@ -64,6 +64,19 @@ export interface JobSpec {
    * `ops_pgcron_runs` (_patches/migration-ops-pgcron-runs.sql).
    */
   pgcronJob?: string;
+  /**
+   * Job chạy bằng GitHub Actions: tên file workflow trong `.github/workflows/`.
+   *
+   * 🔑 Job loại này KHÔNG đi qua `withCronLog` (nó chạy ngoài Vercel), nên nó
+   * chỉ có mặt trong `cron_runs` nhờ tự ghi nhịp tim qua hàm edge `clip-ingest`
+   * (`?job=1` — xem `scripts/job-heartbeat.mjs`). Không có nhịp tim đó thì cả
+   * mắt xích này VẮNG MẶT trên panel, đúng lỗi gốc của track S4.
+   *
+   * ⚠️ Và vì thế nó KHÔNG có `path`/`edge` ⇒ panel không hiện nút "Chạy ngay":
+   * bấm từ admin không kích được một workflow GitHub. Hiện nút rồi báo lỗi là
+   * đúng cái bẫy "9 job hiện nút bấm rồi trả về Unknown job" đã ghi ở trên.
+   */
+  workflow?: string;
 }
 
 const H = 60;
@@ -169,6 +182,25 @@ export const JOBS: JobSpec[] = [
   { key: 'content-metrics', label: 'Kéo số liệu nội dung', source: 'vercel', everyMinutes: D,
     schedule: '12:30 VN hằng ngày', sink: 'content_metrics + channel_stats', path: '/api/cron/content-metrics',
     since: '2026-08-11' },
+  /*
+   * Job ĐẦU TIÊN chạy ngoài Vercel/Supabase — nó ở GitHub Actions.
+   *
+   * 🔴 VÌ SAO PHẢI CÓ MẶT Ở ĐÂY: đây là mắt xích ĐẦU của đường ống clip (dựng
+   * ra file), mà nó lại là mắt duy nhất không đi qua `withCronLog`. Trước dòng
+   * này, panel Cron & Jobs chỉ thấy clip TỪ LÚC nó đã vào kho — khâu dựng chết
+   * thì nhìn vào panel không phân biệt được với "tuần này không có clip nào
+   * qua cổng". Muốn biết phải mở tab Actions, tức một phần của đường ống nằm
+   * ngoài chỗ người ta ngồi nhìn. Đúng lỗi gốc đã đẻ ra cả cuốn sổ này.
+   *
+   * Nhịp tim do `scripts/job-heartbeat.mjs` ghi qua hàm edge `clip-ingest`
+   * (`?job=1`) — runner CỐ Ý không cầm service key nên không ghi thẳng được.
+   *
+   * ⚠️ KHÔNG khai `path`: admin không kích được workflow GitHub, hiện nút "Chạy
+   * ngay" rồi báo lỗi là tái lập đúng cái bẫy 9-nút-chết đã ghi ở trên.
+   */
+  { key: 'video-build', label: 'Dựng clip 9:16', source: 'actions', everyMinutes: 7 * D,
+    schedule: 'T2 08:00 VN hằng tuần', sink: 'clips (Storage) + media_assets',
+    workflow: 'video-build.yml', since: '2026-08-18' },
 ];
 
 export interface CronRun {

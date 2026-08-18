@@ -1931,7 +1931,11 @@ const CRON_JOBS = [
   { key:'cron-daily-push',   label:'Push (app/FCM)',   source:'vercel', schedule:'00:00 hằng ngày',     sink:'push_tokens (FCM)',     trigger:true },
   { key:'auto-pipeline',     label:'Pipeline YouTube', source:'edge',   schedule:'00:00 (pg_cron)',     sink:'auto-pipeline (edge)',  trigger:true },
 ];
-const SRC_BADGE = { vercel:'badge-blue', edge:'badge-gold', pgcron:'badge-gold' };
+const SRC_BADGE = { vercel:'badge-blue', edge:'badge-gold', pgcron:'badge-gold', actions:'badge-green' };
+// Job chạy ngoài Vercel thì admin KHÔNG kích được — nút "Chạy ngay" sẽ là một
+// nút chết. Thay bằng link mở đúng workflow trên GitHub: người đọc vẫn tới được
+// chỗ bấm, mà không có nút nào hứa hão.
+const GH_REPO = 'henryvn2004-arch/app-tuvi';
 
 function relTime(iso) {
   if (!iso) return '—';
@@ -2254,7 +2258,13 @@ async function loadCron() {
       <td style="font-size:.74rem;color:var(--text-lt)">${escHtmlLocal(j.sink)}</td>
       <td style="font-size:.74rem">${r ? relTime(r.started_at) : '<span style="color:var(--red)">chưa có log</span>'}${r&&r.duration_ms!=null?` · ${fmtDur(r.duration_ms)}`:''}</td>
       <td>${r ? cronStatusBadge(r.status) : '<span class="badge badge-grey">—</span>'}</td>
-      <td>${j.trigger ? `<button class="btn btn-ghost btn-sm" onclick="triggerCron('${j.key}',this)">▶ Chạy ngay</button>` : ''}</td>
+      <td>${
+        j.trigger
+          ? `<button class="btn btn-ghost btn-sm" onclick="triggerCron('${j.key}',this)">▶ Chạy ngay</button>`
+          : j.workflow
+            ? `<a class="btn btn-ghost btn-sm" target="_blank" rel="noopener" href="https://github.com/${GH_REPO}/actions/workflows/${encodeURIComponent(j.workflow)}">↗ Mở Actions</a>`
+            : ''
+      }</td>
     </tr>`;
   }).join('');
 

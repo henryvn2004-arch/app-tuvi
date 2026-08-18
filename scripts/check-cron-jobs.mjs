@@ -107,6 +107,23 @@ for (const j of JOBS) {
   }
 }
 
+// ── Luật 6: job GitHub Actions phải trỏ vào workflow CÓ THẬT ────────────────
+// Cùng tinh thần luật 2 (route thật trên đĩa): tên workflow gõ sai thì panel
+// vẫn hiện job đẹp đẽ, chỉ là nó trỏ vào một file không tồn tại — và người đọc
+// đi tìm ở đúng chỗ không có gì.
+for (const j of JOBS) {
+  if (j.source !== 'actions') continue;
+  if (!j.workflow) {
+    problems.push(`'${j.key}': source='actions' mà không khai tên workflow`);
+    continue;
+  }
+  if (!fs.existsSync(path.join(ROOT, '.github/workflows', j.workflow))) {
+    problems.push(
+      `'${j.key}': khai workflow '${j.workflow}' nhưng không có file ở .github/workflows/`
+    );
+  }
+}
+
 if (problems.length) {
   console.error('❌ Sổ job / lịch cron / route thật KHÔNG khớp:\n');
   for (const p of problems) console.error(`  • ${p}`);
