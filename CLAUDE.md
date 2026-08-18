@@ -111,6 +111,39 @@ chạm trần ở đúng chỗ cũ.
   từ ô `fix` của hook sang ô của cảnh khi nối chuỗi. Đo theo TỪNG mã lỗi mới
   đúng. **Nối các ô lại rồi dò một lượt là tự đẻ ra kết luận sai.**
 
+### ✅ ĐÍNH CHÍNH của chính tôi: đường ống ĐÃ GIAO — lượt `32127605911`
+Mục dưới ghi *"pipeline CHƯA từng chạy thật lượt nào"* và *"đường ống chưa giao
+một byte nào"*. Nay đã sai. Đo trên **KHO + BẢNG**, không đọc nhãn "success":
+
+| | trước | sau |
+|---|---:|---:|
+| file trong bucket `clips` | **0** | **1** |
+| dòng video trong `media_assets` | **0** | **1** |
+| dòng `media_posts` | 0 | **0** ✅ đúng — van `social.clip_autopost` đang ĐÓNG |
+
+Tải chính URL công khai về đo lại: **HTTP 200 · 14.773.367 byte · 79,74s ·
+720×1280 · h264 + aac**. Cột `width/height` ghi **720×1280** chứng minh
+`clip-ingest` v6+ đã ăn, không phải v1 cắm cứng 1080×1920.
+- 🔑 **Vì sao phải đo cả ba chỗ**: bucket nói *file có tới nơi không*, bảng nói
+  *sổ có ghi không*, `media_posts` nói *van có rò không*. Chỉ nhìn nhãn job
+  "success" thì cả ba câu đó đều chưa được trả lời.
+
+### 🐞 Bắt kèm: sổ ghi SAI LOẠI clip — `clip-ingest` đóng cứng `'tool-demo'`
+Clip insight đầu tiên vào `media_assets` dưới nhãn `source_type='tool-demo'`.
+Chưa va vào gì (đường ảnh dùng `khao_luan`, hai bucket rời nhau) — nhưng hai
+loại này qua **cổng 2 rất khác nhau: insight 4/6 (67%) · demo công cụ 3/18
+(17%)**, mà đó đúng là ranh giới Henry phải quyết. Sổ không phân biệt được thì
+mọi phép đo theo loại đều sai, và lúc 18 clip demo đổ vào thì **không tách
+ngược ra được nữa**.
+- Vá ở BÊN DỰNG: `gen-insight.mjs` ghi `sourceType` vào sidecar →
+  `publish-clips.mjs` chuyển tiếp → hàm edge nhận. **Giữ mặc định `tool-demo`**
+  để clip demo công cụ (chưa khai trường này) không đổi hành vi; `SLUG` gác vì
+  giá trị này đi vào UNIQUE key.
+- Deploy **v7**, **đọc ngược bản đang chạy**: cả 14 dòng thêm khớp nguyên văn,
+  dòng cũ `source_type: 'tool-demo'` đã biến mất. Dòng sổ ghi sai cũng vá xong.
+- 🔑 Đây là lần thứ TƯ của bệnh *"bản chạy khác bản repo"* — nay có nếp cố định:
+  sửa file trong `_patches/` → deploy → **đọc ngược rồi mới báo xong**.
+
 ### 🪤 Bẫy đã vấp
 - **`import()` một script CLI là CHẠY nó.** Lượt kiểm cú pháp cuối vô ý gọi
   `import('scripts/stock-video.mjs')` → script bắt đầu gọi API Pixabay thật.
@@ -119,6 +152,17 @@ chạm trần ở đúng chỗ cũ.
 - **`ffprobe` không đi kèm bản ffmpeg của Remotion** — đọc độ dài phải parse
   dòng `Duration:` trong **stderr** của `ffmpeg -i` (lệnh đó luôn thoát khác 0
   vì không có output; đó là đường đọc, không phải lỗi).
+- 🔴 **Đếm file mới bằng `created_at` là ĐẾM HỤT.** Storage upload dùng
+  `x-upsert: 'true'` ⇒ ghi đè GIỮ NGUYÊN `created_at`. Tôi đọc ra "0 file mới
+  hôm nay" rồi suýt kết luận là TTS chưa ghi được gì; đo lại theo **`updated_at`**
+  mới thấy đúng.
+- 🪤 **HAI chẩn đoán liên tiếp của tôi về bức tường TTS đều SAI, và số liệu bác
+  cả hai**: (a) *"trần theo phút"* — bác bởi lượt `32126527840` chết ngay câu
+  ĐẦU TIÊN sau đó 14 phút; (b) *"cạn hạn mức tích luỹ"* — bác bởi 4 file vẫn
+  ghi được lúc 10:38. Nhà cung cấp chặn **ngắt quãng và tự khỏi**. 🔑 Bài học:
+  *đoán nguyên nhân của bên thứ ba khi chưa đọc được nguyên văn lỗi của họ là
+  đoán mò* — và đó chính là lý do phải vá `tts-clip` v4 để giữ lại status + body
+  thật thay vì nuốt thành `Unexpected token '<'`.
 
 ---
 
@@ -181,6 +225,9 @@ Tôi đã báo *"đã ráp xong"*. Đo lại prod thì:
 ⇒ *"ráp xong"* mới đúng ở tầng MÃ. Đường ống chưa giao một byte nào.
 - 🔑 **Bài học: "đã nối" ≠ "đã chảy".** Chuỗi có 6 mắt mà chỉ chạy tới mắt thứ 2
   thì bốn mắt sau vẫn là giả thuyết. Phải soi **kho + bảng**, đừng đọc code.
+- ✅ **HẾT HẠN — số trong bảng này là của lúc đo, nay đã khác.** Lượt
+  `32127605911` giao ra thật: bucket `clips` **1 file**, `media_assets` **1
+  dòng video** 720×1280. Xem mục đầu file. Bài học ở trên thì vẫn nguyên giá trị.
 
 ### 🔴 D. `clip-ingest` đang chạy vẫn là **v1** — lần thứ BA của cùng bệnh
 Đọc bản trên Supabase: chưa có khối xếp hàng `media_posts`, còn cắm cứng
