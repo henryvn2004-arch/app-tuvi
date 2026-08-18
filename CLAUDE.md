@@ -208,12 +208,33 @@ trong trọn một giây, và cổng cũ chấm nó là "đủ động".
 - 🪤 **Bẫy đo lại vấp ngay trong lượt này**: đổi đoạn nền rồi đo *trong khi render
   chưa xong* → ra y hệt số cũ, suýt kết luận "đổi đoạn không ăn thua". Phải chốt
   mtime của mp4 TRƯỚC khi đo.
-- ⚠️ **Đoạn 4K làm render CHẬM GẤP 3**: nền 1080p render ~4 phút, nền 3840×2160
-  mất **hơn 12 phút** cho cùng một clip 32 giây — `OffthreadVideo` giải mã lại
-  từng khung ở độ phân giải gốc rồi mới thu về 1080×1920. Kho đang có **3/7 đoạn
-  là 4K**, nên lượt dựng 18 clip sẽ đắt hơn hẳn dự tính. Chỗ vá đúng là **thu
-  nhỏ về 1080 ngay lúc NHẬP KHO** (ffmpeg đi kèm Remotion làm được, một lượt duy
-  nhất) — chưa làm, ghi lại để khỏi đi chẩn lại từ đầu.
+### ⚡ "Nhanh gọn hiệu quả nhất" — và hai thứ tôi đề nghị đều KHÔNG phải chỗ chặn
+Henry: *"mày tự chọn đi. Tao chỉ muốn ra dc video chạy một cách nhanh gọn hiệu
+quả nhất"* giữa (A) cắm Pexels làm nguồn thứ hai và (B) cho LLM chọn tông.
+**Đo trước khi chọn thì cả hai đều không đáng làm lúc này:**
+- (A) chỉ có **6 kịch bản insight**, mà kho đã có **7 đoạn / 6 tông** ⇒ đủ dùng.
+  Và tông rỗng nặng nhất (`mo-mit`: sương, mưa trên kính) rỗng vì **bản chất nó
+  không có chuyển động** — thêm nguồn cũng không cứu được.
+- (B) chọn tông bằng tay cho 6 kịch bản là **6 dòng**. Dựng đường LLM chọn tông
+  trong khi chỉ có 6 tông có hàng là làm một cần gạt không có chỗ để gạt.
+
+**Hai chỗ chặn THẬT, đo được:**
+1. 🔴 **Nền 4K làm render chậm gấp 3** — 1080p ~4 phút, 3840×2160 **hơn 12 phút**
+   cho cùng clip 32 giây: `OffthreadVideo` giải mã lại từng khung ở độ phân giải
+   gốc rồi mới thu về 1080×1920, mà nền còn bị `blur` + lớp phủ nên **độ phân
+   giải dư đó không lên hình**. ⇒ thu nhỏ về 1920 **ngay lúc NHẬP KHO**, và thu
+   nhỏ luôn 3 đoạn đang có (kho 168MB → 93MB).
+   **Đối chứng bắt buộc**: đo lại độ động trước/sau — `14,61→14,56` ·
+   `22,61→22,58` · `9,42→9,31` ⇒ phép đo không đổi nghĩa.
+2. **5/6 kịch bản vẫn nền tranh quẻ**, và `ba-the-be-tac` thì **không có nền
+   nào** — đúng clip hội đồng cổng 2 chê *"chỉ chữ trên nền xanh đơn điệu"*. ⇒
+   cắm nền video cho cả 5, mỗi clip một đoạn KHÁC nhau, ghép theo NGHĨA (mây vần
+   u ám · đèn lắc trong gió cho *trì hoãn vì sợ* · hai bàn tay trên phố cho *bốn
+   bước trước khi rời đi* · phố đông người cho *hai người cùng lương* · hình khối
+   siêu thực cho *ba thế bế tắc*). Lý do ghép ghi ngay tại chỗ trong `insight.ts`.
+- 🔑 **Bài học chọn việc: câu hỏi Henry đặt là câu hỏi CỦA TÔI đưa ra.** Anh chỉ
+  nói mục tiêu ("ra được video, nhanh gọn"). Chọn một trong hai phương án tôi tự
+  nghĩ ra mà không đo lại là để cái khung của mình quyết thay cho số đo.
 
 ### 🐞 Kèm: con KHỈ lọt tông "suy tư" — và cổng đầu tiên của tôi quá rộng
 `must[]` của `suy-tu` có từ **TƯ THẾ** (`sitting`) mà con vật nào cũng mang ⇒
