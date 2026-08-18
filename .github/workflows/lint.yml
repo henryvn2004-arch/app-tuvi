@@ -167,6 +167,15 @@ jobs:
       - name: Sổ job khớp lịch cron và route thật
         run: npm run check:jobs
 
+      # Đo 2026-08-17: 75% luật của 25 prompt rail là GIỌNG + HÌNH DẠNG, nghiệp
+      # vụ tử vi chỉ 25% — và riêng 3 shape lá số có TỚI BA bản mô tả bố cục
+      # chồng nhau, mỗi bản tự nhận "ĐỨNG TRÊN mọi luật khác". Nguyên nhân là
+      # cộng dồn: thấy model viết chưa ưng thì thêm một khối nữa, khối cũ vẫn
+      # nằm đó. Càng thêm luật thì luật càng loãng. Bộ dò chặn cả hai vế: trần
+      # ký tự cho phần luật, và mỗi shape chỉ được MỘT nguồn bố cục.
+      - name: Ngân sách prompt lá số (chống phình + một nguồn bố cục)
+        run: npm run check:prompt
+
   typecheck:
     runs-on: ubuntu-latest
     timeout-minutes: 10

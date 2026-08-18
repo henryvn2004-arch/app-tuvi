@@ -25,8 +25,11 @@ const ANTHROPIC_KEY = process.env.ANTHROPIC_API_KEY || '';
 const USE_GEMINI = !!GEMINI_KEY;
 const GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-2.5-flash';
 const ANTHROPIC_MODEL = process.env.ANTHROPIC_MODEL || 'claude-sonnet-4-6';
-const MODEL = USE_GEMINI ? GEMINI_MODEL : ANTHROPIC_MODEL;
-const HAS_KEY = USE_GEMINI || !!ANTHROPIC_KEY;
+const OPENAI_KEY = process.env.OPENAI_API_KEY || '';
+const OPENAI_MODEL = process.env.OPENAI_MODEL || 'gpt-4o';
+const MODEL = USE_GEMINI ? GEMINI_MODEL : ANTHROPIC_KEY ? ANTHROPIC_MODEL : OPENAI_MODEL;
+const PROVIDER = USE_GEMINI ? 'GEMINI' : ANTHROPIC_KEY ? 'ANTHROPIC' : 'OPENAI (đường lùi)';
+const HAS_KEY = USE_GEMINI || !!ANTHROPIC_KEY || !!OPENAI_KEY;
 
 // ── Nạp engine + tính lá số ─────────────────────────────────────
 const GIO = [23, 1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21];
@@ -137,10 +140,14 @@ const now = new Date().toLocaleDateString('vi-VN', {
   month: '2-digit',
   year: 'numeric',
 });
-function extractDiemNhan() {
+// Đọc THẲNG khối thật trong lib/agent/prompts.ts để bản "after" không lệch với
+// prod. Trước đây đọc `DIEM_NHAN_RULES`; khối đó đã bị thay bằng `LUAN_ARC` +
+// `MAU_ARC` (arc 5 lớp) — xem chú thích tại chỗ khai `LUAN_ARC`.
+function extractBlock(name) {
   const src = readFileSync('lib/agent/prompts.ts', 'utf8');
-  const m = src.match(/export const DIEM_NHAN_RULES = `([\s\S]*?)`;/);
-  return m ? m[1] : '(không đọc được DIEM_NHAN_RULES)';
+  const m = src.match(new RegExp('export const ' + name + ' = `([\\s\\S]*?)`;'));
+  if (!m) throw new Error(`Không đọc được ${name} trong lib/agent/prompts.ts — khối đã đổi tên?`);
+  return m[1];
 }
 const SHAPE = (lenLine) => `Bạn là chuyên gia Tử Vi Đẩu Số. Phụng sự trang Tử Vi Minh Bảo.
 
@@ -159,14 +166,20 @@ THÔNG TIN THỜI GIAN: Hôm nay ${now}. Đây là CHAT, không phải bài lu�
 - Dẫn chứng sao/cung/can chi cụ thể từ lá số dưới; xét tam phương tứ chính, không đoán đơn sao. Không bịa "điểm cung/10".
 - Xưng hô: người xem NAM → gọi "anh".`;
 
+// BEFORE = khung "4 lớp" cũ (phán quyết → dẫn chứng → kết → mở nút).
 const OLD_SYSTEM = (ctx) =>
   SHAPE('ĐỘ DÀI: mặc định 130–200 từ, phức tạp tối đa 280.') + '\n\n=== DỮ LIỆU LÁ SỐ ===\n' + ctx;
+// AFTER = arc 5 lớp THẬT đang chạy (mở → hành vi → twist → vì sao → chốt).
+// Cố ý KHÔNG ghép `SHAPE` vào: arc là NGUỒN DUY NHẤT về hình dạng, dán thêm
+// khung 4 lớp cũ lên trên là dựng lại đúng cảnh hai bố cục chồng nhau mà bản
+// mới sinh ra để gỡ.
 const NEW_SYSTEM = (ctx) =>
-  SHAPE(
-    'ĐỘ DÀI: mặc định 150–230 từ, phức tạp tối đa 320; câu phán quyết & mạch hình ảnh được ưu tiên chỗ.'
-  ) +
+  `Bạn là chuyên gia Tử Vi Đẩu Số. Phụng sự trang Tử Vi Minh Bảo.\n\n` +
+  `THÔNG TIN THỜI GIAN: Hôm nay ${now}.\n\n` +
+  extractBlock('LUAN_ARC') +
   '\n\n' +
-  extractDiemNhan() +
+  extractBlock('MAU_ARC') +
+  '\n\n- Xưng hô: người xem NAM → gọi "anh".' +
   '\n\n=== DỮ LIỆU LÁ SỐ ===\n' +
   ctx;
 
@@ -216,8 +229,33 @@ async function callAnthropic(system, userMsg) {
   const j = await resp.json();
   return (j.content || []).map((b) => b.text || '').join('');
 }
+// ⚠️ Nhánh OpenAI là ĐƯỜNG LÙI để còn chạy được ở nơi chỉ có OPENAI_API_KEY —
+// prod luận-giải chạy GEMINI, nên đọc kết quả từ nhánh này thì so BEFORE↔AFTER
+// (cùng model, biến duy nhất là prompt) chứ ĐỪNG đọc thành "prod sẽ viết vậy".
+async function callOpenAI(system, userMsg) {
+  const resp = await fetch('https://api.openai.com/v1/chat/completions', {
+    method: 'POST',
+    headers: { 'content-type': 'application/json', authorization: `Bearer ${OPENAI_KEY}` },
+    body: JSON.stringify({
+      model: OPENAI_MODEL,
+      max_completion_tokens: 1200,
+      messages: [
+        { role: 'system', content: system },
+        { role: 'user', content: userMsg },
+      ],
+    }),
+  });
+  if (!resp.ok)
+    throw new Error('OpenAI ' + resp.status + ' — ' + (await resp.text()).slice(0, 300));
+  const j = await resp.json();
+  return j.choices?.[0]?.message?.content || '';
+}
 const callLLM = (system, userMsg) =>
-  USE_GEMINI ? callGemini(system, userMsg) : callAnthropic(system, userMsg);
+  USE_GEMINI
+    ? callGemini(system, userMsg)
+    : ANTHROPIC_KEY
+      ? callAnthropic(system, userMsg)
+      : callOpenAI(system, userMsg);
 
 // ── Main ─────────────────────────────────────────────────────────
 const ls = computeLaso(BIRTH);
@@ -229,13 +267,13 @@ const bar = (t) => '\n' + '═'.repeat(72) + '\n' + t + '\n' + '═'.repeat(72);
 console.log(
   `Lá số: ${ls.canChiNam}, Mệnh tại ${ls.menhDC}, Thân tại ${ls.thanDC} · năm xem ${NAM_XEM}`
 );
-console.log(
-  `Câu hỏi: "${QUESTION}"  · provider: ${USE_GEMINI ? 'GEMINI' : 'ANTHROPIC'} · model: ${MODEL}`
-);
+console.log(`Câu hỏi: "${QUESTION}"  · provider: ${PROVIDER} · model: ${MODEL}`);
 
 if (!HAS_KEY) {
   console.log(
-    bar('KHÔNG có GEMINI_API_KEY / ANTHROPIC_API_KEY → in prompt đã ráp (không gọi LLM)')
+    bar(
+      'KHÔNG có GEMINI_API_KEY / ANTHROPIC_API_KEY / OPENAI_API_KEY → in prompt đã ráp (không gọi LLM)'
+    )
   );
   console.log(bar('SYSTEM — AFTER (mới)'));
   console.log(newSys);
