@@ -289,7 +289,9 @@ const SOURCES: InsightSource[] = [
       // MỘT bức cho cả clip. Quẻ Khảm (kw29) — nước chồng nước, hiểm nối hiểm:
       // hợp đúng nội dung "cái vòng phòng vệ lặp lại". Chọn theo NGHĨA chứ
       // không lấy bừa một bức cho có tranh.
-      backdrop: [QUE('18-kw29.png')],
+      // mây vần, tông u ám — hợp câu 'tưởng là tính cách, thật ra là vết thương'.
+      backdropVideo: 'stock-video/tone/suy-tu/117690.mp4',
+      backdropSeconds: 15,
       hashtags: ['tinhcach', 'tamly', 'chualanh', 'selfdiscovery'],
     },
   },
@@ -437,7 +439,9 @@ const SOURCES: InsightSource[] = [
       // tình cờ: Truân (kw03, khởi đầu rối như tơ vò) → Khốn (kw47, gắng mà
       // không thoát) → Càn (kw01, tiến, hành động). Ảnh cuối rơi vào đoạn
       // PAYOFF + câu kết — chỗ nội dung chuyển từ bế tắc sang bước đi được.
-      backdrop: [QUE('17-kw03.png'), QUE('26-kw47.png'), QUE('63-kw01.png')],
+      // ngọn đèn lắc trong gió — bồn chồn, đúng cảm giác trì hoãn vì sợ.
+      backdropVideo: 'stock-video/tone/bi-an/102.mp4',
+      backdropSeconds: 20,
       hashtags: ['trihoan', 'tamly', 'nangsuat', 'selfdiscovery'],
     },
   },
@@ -600,7 +604,9 @@ const SOURCES: InsightSource[] = [
       // (checkout sạch, không có thư mục đó) gãy ngay. Chạy
       // `scripts/stock-upload.mjs` xong thì manifest có `url` và dòng trên
       // chạy được ở mọi nơi.
-      backdrop: [QUE('43-kw38.png'), QUE('56-kw12.png'), QUE('53-kw37.png')],
+      // hai bàn tay trên phố — đúng chủ đề bốn bước trước khi rời đi.
+      backdropVideo: 'stock-video/tone/chia-xa/152798.mp4',
+      backdropSeconds: 27,
       hashtags: ['honnhan', 'tamly', 'giadinh', 'selfdiscovery'],
     },
   },
@@ -758,7 +764,9 @@ const SOURCES: InsightSource[] = [
       music: 'u-hoai.wav',
       // Ích (kw42 — thêm vào) → Tổn (kw41 — hao đi) → Tiết (kw60 — biết dừng,
       // rơi đúng đoạn payoff). Cặp Tổn/Ích là cặp quẻ kinh điển về được–mất.
-      backdrop: [QUE('49-kw42.png'), QUE('35-kw41.png'), QUE('19-kw60.png')],
+      // phố đông người qua lại — đúng bối cảnh hai người cùng lương.
+      backdropVideo: 'stock-video/tone/co-don/1643.mp4',
+      backdropSeconds: 14,
       hashtags: ['tienbac', 'tamly', 'tietkiem', 'selfdiscovery'],
     },
   },
@@ -861,6 +869,11 @@ const SOURCES: InsightSource[] = [
         },
       ],
       ...cta('Bạn đang ở tình thế nào?'),
+      // Trước đây clip này KHÔNG có nền nào — hội đồng cổng 2 chê đúng chữ
+      // "chỉ chữ trên nền xanh đơn điệu". Hình khối siêu thực hợp với ba
+      // tình thế bế tắc của cổ pháp mà không vẽ ra một chủ thể cụ thể nào.
+      backdropVideo: 'stock-video/tone/toi-gian/57545.mp4',
+      backdropSeconds: 16,
       music: 'lang-le.wav',
       hashtags: ['kinhdich', 'bettac', 'coHoc', 'tuvi'],
     },

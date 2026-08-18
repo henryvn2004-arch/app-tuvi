@@ -30,8 +30,17 @@
 // ⚠️ CỐ Ý KHÔNG có `schedule`. Đây là lượt dựng kho, chạy tay khi thiếu.
 // ============================================================
 
-import { existsSync, mkdirSync, readFileSync, writeFileSync, rmSync } from 'fs';
+import {
+  existsSync,
+  mkdirSync,
+  readFileSync,
+  writeFileSync,
+  rmSync,
+  renameSync,
+  statSync,
+} from 'fs';
 import { join, dirname } from 'path';
+import { execFileSync } from 'child_process';
 import {
   BUCKETS,
   TEXT_BAND,
@@ -458,6 +467,45 @@ for (const [bucketName, items] of groups) {
         if (buf.length < 10240) throw new Error(`tệp chỉ ${buf.length} byte`);
         writeFileSync(abs, buf);
 
+        // Thu nhỏ về 1920 NGAY LÚC NHẬP — đo được: nền 4K làm render chậm gấp
+        // 3 (12 phút thay vì 4 cho cùng một clip 32 giây) vì `OffthreadVideo`
+        // giải mã lại từng khung ở độ phân giải gốc rồi mới thu về 1080×1920.
+        // Nền còn bị `blur` + lớp phủ nên độ phân giải dư đó KHÔNG lên hình.
+        // ⚠️ Đối chứng khi làm: đo lại độ động trước/sau trên 3 đoạn 4K —
+        // 14,61→14,56 · 22,61→22,58 · 9,42→9,31, tức phép đo không đổi nghĩa.
+        let w2 = w.r.width;
+        let h2 = w.r.height;
+        if (w2 > 1920) {
+          const small = join(dir, `${w.hit.id}.small.mp4`);
+          execFileSync(
+            ffmpeg,
+            [
+              '-hide_banner',
+              '-v',
+              'error',
+              '-i',
+              abs,
+              '-vf',
+              'scale=1920:-2',
+              '-c:v',
+              'libx264',
+              '-crf',
+              '20',
+              '-preset',
+              'medium',
+              '-an',
+              '-movflags',
+              '+faststart',
+              '-y',
+              small,
+            ],
+            { stdio: ['ignore', 'ignore', 'pipe'] }
+          );
+          renameSync(small, abs);
+          h2 = Math.round((h2 * 1920) / w2);
+          w2 = 1920;
+        }
+
         const mo = measureMotion(ffmpeg, abs, w.hit.duration, dir);
         const motion = mo.mean;
         const spread = mo.spread;
@@ -487,10 +535,10 @@ for (const [bucketName, items] of groups) {
           key: item.id,
           file,
           caption: captionFromTags(w.hit.tags),
-          width: w.r.width,
-          height: w.r.height,
+          width: w2,
+          height: h2,
           duration: w.hit.duration,
-          bytes: buf.length,
+          bytes: statSync(abs).size,
           brightness: { mean: w.m.mean, sd: w.m.sd },
           motion,
           motionSpread: spread,
@@ -509,7 +557,7 @@ for (const [bucketName, items] of groups) {
         });
         console.log(
           `   ✓ ${String(w.hit.id).padEnd(9)} điểm ${String(w.score).padStart(3)} ` +
-            `${w.r.width}x${w.r.height} ${w.hit.duration}s ` +
+            `${w2}x${h2} ${w.hit.duration}s ` +
             `${(buf.length / 1048576).toFixed(1)}MB L=${w.m.mean} động=${motion}/${spread} [${w.why.join(' ')}]  ` +
             captionFromTags(w.hit.tags).slice(0, 34)
         );
