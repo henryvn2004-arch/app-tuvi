@@ -18,6 +18,7 @@ import { currentNamXem } from "@/lib/engine/namxem";
 import { todayVN } from "@/lib/engine/van-ngay";
 import { tuongHopScores } from "@/lib/engine/tuong-hop";
 import { matchVanHanCombos, formatComboLines, type LayerCung } from "@/lib/agent/vanHanCombos";
+import { chuanHoaDauThanh } from "@/lib/vn-text";
 
 // "Hôm nay" gửi cho LLM PHẢI theo giờ VN, không theo giờ server (Vercel chạy
 // UTC) — nếu không, trong khung 00:00–06:59 giờ VN (=17:00–23:59 UTC hôm
@@ -960,13 +961,21 @@ const FOCUS_TOPICS: Record<string, string[]> = {
   'đại vận|tiểu vận|vận hạn|vận trình':                 ['__daiVan__'],
 };
 
+// Dò trên bản ĐÃ CHUẨN HOÁ VỊ TRÍ DẤU THANH (xem lib/vn-text.ts): tiếng Việt
+// có hai lối bỏ dấu đều đúng ("sức khoẻ" ↔ "sức khỏe"), so chuỗi thô thì gõ
+// lối kia là TRƯỢT IM LẶNG rồi rơi xuống nhánh mặc định — mất đúng cung mà câu
+// hỏi nhắm tới. Biên dịch MỘT lần lúc nạp module, không dựng RegExp mỗi lượt.
+const FOCUS_MATCHERS: Array<[RegExp, string[]]> = Object.entries(FOCUS_TOPICS).map(
+  ([pattern, names]) => [new RegExp(chuanHoaDauThanh(pattern), 'i'), names],
+);
+
 // Cung liên quan tới câu hỏi (luôn có Mệnh; hỏi chung → thêm Quan/Tài/Phu Thê;
 // năm/vận → thêm '__daiVan__'). Giữ NGUYÊN logic cũ để parity /api/lasotuvi.
 export function relevantPalaces(question: string): Set<string> {
-  const q = (question || '').toLowerCase();
+  const q = chuanHoaDauThanh((question || '').toLowerCase());
   const relevant = new Set<string>(['Mệnh']);
-  for (const [pattern, names] of Object.entries(FOCUS_TOPICS)) {
-    if (new RegExp(pattern, 'i').test(q)) names.forEach((n) => relevant.add(n));
+  for (const [re, names] of FOCUS_MATCHERS) {
+    if (re.test(q)) names.forEach((n) => relevant.add(n));
   }
   if (relevant.size === 1) ['Quan Lộc', 'Tài Bạch', 'Phu Thê'].forEach((n) => relevant.add(n));
   if (/năm\s*\d{4}/i.test(q)) relevant.add('__daiVan__');

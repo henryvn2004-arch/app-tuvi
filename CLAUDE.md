@@ -5,6 +5,85 @@
 
 ---
 
+## 🩺 "sức khoẻ" gõ lối CŨ thì TRƯỢT bộ dò chủ đề — 3 bản chép tay cùng dính (2026-08-18, PR sau)
+
+Henry: *"vá đi"*. Bắt được lúc trả lời câu hỏi *"rút gọn token có tạo room cho
+data không"* — đi đo `focusHint` thì lộ ra bảng từ khoá dò hụt.
+
+### 🔴 Căn nguyên: tiếng Việt có HAI lối bỏ dấu thanh, bảng chỉ khai một
+`FOCUS_TOPICS` viết `'sức khỏe|bệnh|thân thể|tật ách'` (lối MỚI, dấu ở nguyên âm
+sau). Người gõ lối CŨ — `sức khoẻ` — **trượt sạch bảng**, rơi xuống nhánh mặc
+định `Mệnh · Quan Lộc · Tài Bạch · Phu Thê` ⇒ hỏi sức khoẻ mà **KHÔNG có Tật
+Ách**, đúng cung câu hỏi nhắm tới. Không lỗi nào bắn ra. Cùng lớp `\bcon\b`
+khớp "con vật".
+- **Không phải một chỗ — BA bản chép tay** cùng một bảng, cùng một bệnh:
+  `lib/agent/prompts.ts` (rail, 10 tool đường lá số + 3 kênh bot) ·
+  `app/api/tubinh/route.ts` · `app/api/xem-tuoi/route.ts` (bản chép tay phục vụ
+  `xem-tuoi.html` + `xem-lam-an.html` — đúng bề mặt vừa vá ở #545).
+- ⚠️ **CỐ Ý chưa gộp 3 bảng làm một**: `/api/lasotuvi` neo parity vào bản của
+  `prompts.ts`, còn hai bản kia trả về KHOÁ khác nhau (`suckhoe` vs `Tật Ách`).
+  Gộp là một lượt refactor riêng, rủi ro hơn hẳn phần vá này.
+
+### 🔑 Vá bằng CHUẨN HOÁ VỊ TRÍ dấu, KHÔNG phải bỏ dấu thanh
+`lib/vn-text.ts` → `chuanHoaDauThanh()`: NFD, rồi trong mỗi CỤM nguyên âm dời
+dấu thanh về nguyên âm ĐẦU. Vị trí đó là **quy ước nội bộ**, không nhằm đúng
+chính tả — chỉ cần mẫu dò và câu hỏi cùng đi qua một hàm.
+- 🔴 **Bỏ dấu thanh là đổi lỗ hổng này lấy lỗ hổng khác**: `tật`↔`tất`,
+  `tiền`↔`tiến`, `bệnh`↔`bênh` sẽ nhập làm một. Ở đây dấu thanh GIỮ NGUYÊN nên
+  hai LỐI VIẾT gặp nhau mà hai CHỮ khác thanh vẫn tách bạch — có 9 ca đối chứng
+  canh đúng điều đó.
+- ⛔ **Đừng vá bằng cách thêm từng biến thể vào bảng** — thêm biến thể là hẹn lần
+  sót kế tiếp (`hoà/hòa` · `thuý/thúy` · `xoà/xòa` · `loà/lòa`… còn dài). Hàm
+  này phủ cả họ đó miễn phí.
+- Chỉ dùng để DÒ, không để in ra: `chuanHoaDauThanh('quý') = 'qúy'`.
+- Rail biên dịch bảng **MỘT lần lúc nạp module** (`FOCUS_MATCHERS`), không dựng
+  `RegExp` mỗi lượt.
+
+### 🐞 Bắt kèm — nợ CÓ SẴN, cố ý KHÔNG đụng
+`/api/tubinh` khai mẫu `'sự nghiệp|công việc|nghề|quan|chức'`: **`quan` là chuỗi
+con** nên *"cho tôi xem tổng **quan**"* khớp `quanSat`. Đã đối chứng trên logic
+`origin/main`: y hệt ⇒ **có sẵn, không phải hồi quy của lượt vá**. Siết nó là đổi
+hành vi một route đang chạy để lấy một lợi ích chưa ai kêu — tách việc.
+- 🪤 Và nó suýt làm bài kiểm của tôi báo đỏ oan: ca *"câu không chủ đề → rỗng"*
+  đỏ vì `tổng quan`. **Kỳ vọng của TEST sai, không phải code** — đổi sang đo
+  PARITY với bản cũ thay vì đoán kết quả đúng.
+
+### Verify
+`tsc` 0 · `lint` **0 lỗi / 77 warning = đúng mốc nền** · `prettier` cả cây sạch ·
+**21/21 bộ dò** · engine **185 pass**.
+- **Hàm chuẩn hoá, 8 cặp phải TRÙNG + 9 cặp phải KHÁC**: `khoẻ/khỏe` · `hoà/hòa`
+  · `thuý/thúy` · `hoá/hóa` · `loà/lòa` · `xoè/xòe` · `quý/qúy` · `tuỳ/tùy` gặp
+  nhau; **`tật`≠`tất`** · `tiền`≠`tiến`≠`tiên` · `bệnh`≠`bênh` · `hòa`≠`hóa` ·
+  `mẹ`≠`mẻ` · `con`≠`còn` · `bạn`≠`bàn` · `sao`≠`sáo` vẫn tách. Kèm bất biến:
+  idempotent · không nuốt chữ · **số dấu thanh không đổi** · `năm 2027` giữ
+  nguyên (nhánh `/năm \d{4}/` không bị đụng).
+- **Rail trên MODULE THẬT** (biên dịch `prompts.ts` + hook `Module._resolveFilename`
+  cho alias `@/`): 15 ca chủ đề đúng cung + 6 đối chứng (nhánh mặc định giữ đúng
+  4 cung · hỏi sức khoẻ KHÔNG rơi nhánh mặc định · `tiến bộ`/`tất cả`/`bênh vực`/
+  `sáo măng` không khớp bừa).
+- 🪤 **ĐỐI CHỨNG `origin/main` bằng `git worktree`**: lối cũ ra `Mệnh · Quan Lộc
+  · Tài Bạch · Phu Thê` (**0 Tật Ách**), lối mới ra `Mệnh · Tật Ách` ⇒ lỗi có
+  thật. Bản mới: hai lối ra Y HỆT. Có assert bản đối chứng **không** mang bản vá
+  trước khi đọc kết quả.
+- **PARITY 43 câu viết lối MỚI: cũ vs mới TRÙNG KHÍT** ⇒ bản vá chỉ NỚI, không
+  đổi hành vi nào đang đúng. Hai route kia bóc thẳng bảng + vòng dò từ **bản
+  BIÊN DỊCH** (không chép tay) rồi so cùng cách: tubinh 16 câu, xem-tuoi 14 câu,
+  đều trùng khít; mỗi bên 2 đối chứng chứng minh bản cũ trượt lối cũ.
+- 🪤 **Bẫy cwd lần thứ SÁU**: `cd tuvi-engine && npm test` giữ lại cwd. Đã đo
+  xong mới nhận ra — lần sau về gốc repo NGAY sau lệnh đó.
+- 🪤 Bản đầu viết dấu tổ hợp THẲNG trong regex (vô hình khi đọc diff) → đổi hết
+  sang `\uXXXX`. Dấu phụ trong mã nguồn phải viết bằng escape.
+
+### CÒN LẠI
+- **Ba bảng chủ đề vẫn là ba bản chép tay** (xem trên) — chúng sẽ trôi khỏi nhau.
+- Mẫu `quan` (và `sao` trong `'thần sát|sao'`) còn khớp theo CHUỖI CON, chưa có
+  biên từ. Nợ có sẵn.
+- Chưa dùng `chuanHoaDauThanh` cho các bộ dò tiếng Việt khác trong repo (nhận
+  diện chế độ của `companion.ts`, dò từ khoá nội dung…) — mới phủ đúng 3 bộ dò
+  CHỦ ĐỀ CÂU HỎI.
+
+---
+
 ## ✍️ 75% PROMPT LÀ LUẬT GIỌNG — arc 5 lớp THAY 3 bản bố cục chồng nhau (2026-08-17, PR #541)
 
 Henry: *"cách luận giải, chat… chỉnh sửa để nó hook users hơn"* kèm 5 bước (mở
