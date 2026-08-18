@@ -208,6 +208,24 @@ trong trọn một giây, và cổng cũ chấm nó là "đủ động".
 - 🪤 **Bẫy đo lại vấp ngay trong lượt này**: đổi đoạn nền rồi đo *trong khi render
   chưa xong* → ra y hệt số cũ, suýt kết luận "đổi đoạn không ăn thua". Phải chốt
   mtime của mp4 TRƯỚC khi đo.
+
+### ✅ ĐO TRÊN BẢN GIAO RA — cổng mới đứng vững, dải chết biến mất
+Đo lại trên chính mp4 đã render (không tin số của cổng), cùng phép đo cũ:
+
+| dải | cầu đêm *(cổng TB, đã gỡ)* | rừng tối *(cổng trung vị)* |
+|---|---:|---:|
+| trên | **0** | **3** |
+| giữa *(có chữ chạy — không thuần nền)* | 1 | 9 |
+| dưới | 6 | 2 |
+| **cả khung** | **1** | **4** |
+
+🔑 Chỗ đắt nhất **không phải** con số cả khung mà là **dải TRÊN: 0 → 3**. Bản cũ
+có hai phần ba khung đứng im hoàn toàn nên mắt đọc ra ảnh tĩnh dù cổng chấm 11,8;
+bản mới **không dải nào chết**. Đúng thứ `MOTION_SPREAD_MIN` sinh ra để gác.
+- ⚠️ **Dải GIỮA không dùng để kết luận về nền** — `WordKaraoke` chạy chữ ở đúng
+  vùng đó nên số ấy lẫn chuyển động của chữ. So được vì hai clip cùng khuôn, cùng
+  nhịp chữ, chỉ khác đoạn nền; nhưng đừng trích nó ra một mình.
+
 ### ⚡ "Nhanh gọn hiệu quả nhất" — và hai thứ tôi đề nghị đều KHÔNG phải chỗ chặn
 Henry: *"mày tự chọn đi. Tao chỉ muốn ra dc video chạy một cách nhanh gọn hiệu
 quả nhất"* giữa (A) cắm Pexels làm nguồn thứ hai và (B) cho LLM chọn tông.
