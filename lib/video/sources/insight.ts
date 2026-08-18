@@ -869,11 +869,23 @@ const SOURCES: InsightSource[] = [
         },
       ],
       ...cta('Bạn đang ở tình thế nào?'),
-      // Trước đây clip này KHÔNG có nền nào — hội đồng cổng 2 chê đúng chữ
-      // "chỉ chữ trên nền xanh đơn điệu". Hình khối siêu thực hợp với ba
-      // tình thế bế tắc của cổ pháp mà không vẽ ra một chủ thể cụ thể nào.
-      backdropVideo: 'stock-video/tone/toi-gian/57545.mp4',
-      backdropSeconds: 16,
+      /*
+       * ⛔ CỐ Ý KHÔNG cắm `backdropVideo` — đã thử và ĐO ra là sai hướng.
+       *
+       * Đây là kịch bản DUY NHẤT mà cả 5 cảnh đều dùng `visual.kind='image'`
+       * (tranh quẻ Kinh Dịch): tranh là NỘI DUNG chứ không phải trang trí, và
+       * `PhotoScene` đặt nó thành ô 944×944 chiếm ~87% bề ngang. Nền video vì
+       * thế chỉ ló ra ở một dải viền mỏng.
+       *
+       * Đo trên bản đã render KÈM nền video: độ động giao ra trung vị **1** —
+       * bằng đúng clip đã bị loại — trong khi đoạn nguồn đo 9,31. Không phải
+       * nền dở, mà là nền gần như không lên hình. Đổi lại file phình
+       * **6MB → 40MB** (h264 tốn bit cho dải viền động) và render lâu hơn.
+       *
+       * 🔑 Luật rút ra: nền video chỉ đáng khi cảnh là `typo` — tức nền CHÍNH
+       * LÀ hình. Cảnh `image`/`figure` đã có chủ thể chiếm khung thì nền video
+       * là chi phí thuần.
+       */
       music: 'lang-le.wav',
       hashtags: ['kinhdich', 'bettac', 'coHoc', 'tuvi'],
     },

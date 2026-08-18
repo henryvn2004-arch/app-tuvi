@@ -317,8 +317,17 @@ function buildTimeline(spec: ScriptSpec): string {
     if (sc.visual.kind === 'screen') {
       visual = `Quay màn hình thật của công cụ trên điện thoại${sc.visual.label ? ` — ${sc.visual.label}` : ''}.`;
     } else if (sc.visual.kind === 'image') {
+      /*
+       * ⚠️ Mô tả phải khớp `PhotoScene`: ô VUÔNG 944×944 bo góc 28, đặt ở nửa
+       * trên khung 1080×1920 (≈87% bề ngang, ≈49% chiều cao) — KHÔNG phải "chiếm
+       * cả khung". Bản trước ghi "Ảnh chụp chiếm cả khung" nên hội đồng chấm một
+       * bố cục khác hẳn bố cục sắp render, và với tranh quẻ thì còn gọi sai cả
+       * LOẠI hình (tranh vẽ tay, không phải ảnh chụp). `describeImage` đã tự
+       * phân biệt tranh quẻ với ảnh kho — câu bao ngoài chỉ được tả CHỖ ĐẶT.
+       */
       visual = withAccent(
-        `Ảnh chụp chiếm cả khung, phóng chậm: ${describeImage(sc.visual.src, sc.visual.caption)}.`,
+        `Hình vuông lớn bo góc đặt ở nửa trên khung, phóng chậm, chữ nằm dưới: ` +
+          `${describeImage(sc.visual.src, sc.visual.caption)}.`,
         sc.visual.accent
       );
     } else if (sc.visual.kind === 'typo') {

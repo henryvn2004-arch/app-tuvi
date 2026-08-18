@@ -226,6 +226,32 @@ bản mới **không dải nào chết**. Đúng thứ `MOTION_SPREAD_MIN` sinh 
   vùng đó nên số ấy lẫn chuyển động của chữ. So được vì hai clip cùng khuôn, cùng
   nhịp chữ, chỉ khác đoạn nền; nhưng đừng trích nó ra một mình.
 
+### 🔴 NỀN VIDEO CHỈ ĐÁNG KHI CẢNH LÀ `typo` — và tôi đã cắm nhầm một chỗ
+Render `ba-the-be-tac` xong, đo giao ra: **trung vị 1 · TB 3,03** — bằng đúng
+clip đã bị loại, trong khi đoạn nguồn (`toi-gian/57545`) đo **trung vị 9,31**.
+Loại trừ lần lượt: `backdropSeconds` khai ĐÚNG độ dài thật cả 6 đoạn (bẫy
+"`OffthreadVideo` đứng khung cuối" — không phải); `backdropRate` cả hai clip đều
+mặc định 1 (không phải). **Chỉ khi CHỤP KHUNG RA NHÌN mới thấy**: clip này hiện
+một **tranh quẻ tĩnh** chiếm gần trọn khung, nền video chỉ ló ở dải viền mỏng.
+
+| kịch bản | loại cảnh | nền video |
+|---|---|---|
+| 5 kịch bản kia | **100% `typo`** | đúng chỗ — nền CHÍNH LÀ hình |
+| `ba-the-be-tac` | **100% `image`** (tranh quẻ) | chỉ là viền ⇒ **đã gỡ** |
+
+- 🔑 **Luật: nền video chỉ đáng khi cảnh là `typo`.** Cảnh `image`/`figure`/`duo`
+  đã có chủ thể chiếm khung thì nền video là **chi phí thuần** — file phình
+  **6MB → 40MB** (h264 tốn bit cho dải viền động) và render lâu hơn, đổi lấy thứ
+  người xem gần như không thấy.
+- ⚠️ Và tranh quẻ ở clip này là **NỘI DUNG** (kịch bản dựng quanh 3 quẻ Kinh
+  Dịch), không phải trang trí — đừng gỡ tranh để nhét nền vào.
+- 🐞 **Bắt kèm, cùng lớp "mô tả sai loại cảnh"**: `buildTimeline` mô tả MỌI cảnh
+  `image` là *"Ảnh chụp chiếm cả khung"*, trong khi `PhotoScene` đặt nó thành ô
+  vuông **944×944** bo góc ở nửa trên khung 1080×1920 (~87% ngang, ~49% dọc) —
+  sai cả **bố cục** lẫn **loại hình** (tranh vẽ tay, không phải ảnh chụp). Hội
+  đồng vì thế chấm một bố cục khác hẳn bố cục sắp render. Đã sửa; `describeImage`
+  vốn đã phân biệt tranh quẻ, câu bao ngoài chỉ được tả CHỖ ĐẶT.
+
 ### ⚡ "Nhanh gọn hiệu quả nhất" — và hai thứ tôi đề nghị đều KHÔNG phải chỗ chặn
 Henry: *"mày tự chọn đi. Tao chỉ muốn ra dc video chạy một cách nhanh gọn hiệu
 quả nhất"* giữa (A) cắm Pexels làm nguồn thứ hai và (B) cho LLM chọn tông.
