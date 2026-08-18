@@ -5,6 +5,127 @@
 
 ---
 
+## 🎬 GỠ nhân vật, thay bằng NỀN VIDEO — nhân vật sai VAI chứ không chỉ xấu (2026-08-18, cùng PR #543)
+
+Henry xem bản render: *"Mèn. Tao thấy cái amination nó vừa xấu vừa chả liên quan
+gì đến nội dung script. Cho vào càng thêm confused. Mày xem có tool nào có sẵn
+hay repo nào trên github cho phép tạo amination theo script có sẵn ko?"*
+
+### 🔴 Hai lỗi tách bạch, và lỗi thứ hai là lỗi CẤU TRÚC
+1. **"chả liên quan"** — đúng theo nghĩa đen: tư thế do TÔI gõ tay trong
+   `insight.ts`, không có cơ chế nào nối nó với lời đọc. Lượt trước tôi trả lời
+   *"giữ từ vựng đóng rồi cho LLM chọn"* nhưng **chưa bao giờ dựng phần LLM
+   chọn** — nên nó vẫn là phỏng đoán của tôi. Nói một hướng rồi không đi là tự
+   để lại một lời hứa hụt.
+2. **"càng thêm confused"** — clip này có **CHỮ CHẠY + GIỌNG ĐỌC**. Nhân vật cử
+   động là một **CHỦ THỂ**, mà chủ thể thì tranh mắt với chữ. Chính CLAUDE.md đã
+   đo đúng điều đó ở lượt chọn ảnh (*"ảnh đổi mỗi 3 giây thì mắt chạy theo ảnh
+   chứ không đọc chữ"*) — nhân vật cử động còn mạnh hơn một bức ảnh đổi.
+   ⇒ **Kể cả một nhân vật ĐẸP cũng làm format này tệ đi.** Đây mới là câu trả
+   lời, không phải "vẽ lại cho khéo hơn".
+
+### 🔎 Khảo sát tool/repo — ba nhóm, không nhóm nào dùng được
+| Nhóm | Đại diện | Chặn ở đâu |
+|---|---|---|
+| Ráp clip từ script | `short-video-maker` (MIT, **chạy bằng chính Remotion**) | Chính là kiến trúc mình đang có (stock + TTS + phụ đề), nhưng **chỉ tiếng Anh** (Kokoro). Không có gì để mang về |
+| Script → phim hoạt hình | `Toonflow` | **AGPL-3.0** (chạy rời như app desktop thì không lây), và bên trong vẫn gọi API video TRẢ TIỀN — nó là vỏ, không phải máy miễn phí |
+| Chữ → cử động nhân vật | `Animato` (MIT) · `text-to-motion`/MDM | Cần mô hình 3D ĐÃ GẮN XƯƠNG (mình không có) + `bpy`/GPU, đầu ra 3D ⇒ phải dựng đường render thứ hai |
+
+🔑 **Điều đáng giá nhất của lượt khảo sát**: lướt cả topic
+`youtube-shorts-generator` — **KHÔNG repo nào vẽ nhân vật**, tất cả đi stock
+footage. Đó không phải vì họ lười, đó là hình dạng ĐÚNG cho clip có chữ dẫn dắt.
+- Đường DUY NHẤT thật sự cho "animation bám script" là **model sinh video**
+  (Veo 3.1 Lite ~$0,03/giây ⇒ clip 40s ≈ **31.000đ**, có reference-to-video giữ
+  nhân vật nhất quán). Nhưng **tối đa 8 giây/lượt** ⇒ clip 40s = 5 cú cắt, và
+  vẫn dính đúng vấn đề tranh mắt ở trên.
+
+### ✅ Đã làm — nền VIDEO, và nó đi NGƯỢC hẳn nhân vật
+Nền video cố tình **không có chủ thể, không kể chuyện**. Ba lớp ép nó ở đúng vai:
+`playbackRate` 0,5 · `blur(6px)` · lớp phủ navy 0,20 + tối dần hai đầu (**dùng
+lại** của `PhotoBackdrop`, không dựng bản thứ hai).
+- **`scripts/stock-lib.mjs` (mới)** — tách TỪ VỰNG + CỔNG LỌC + PHÉP ĐO ra dùng
+  chung. Kho ảnh và kho video phải gác CÙNG bộ luật (đạo đức · người-phải-châu-Á
+  · liên quan theo `must[]`); chép hai bản là hẹn ngày một kho hở mà kho kia vẫn
+  báo xanh. `stock-ingest.mjs` 1.300 → 523 dòng, **đối chứng `--list` trùng khít
+  byte-for-byte**.
+- **`scripts/stock-video.mjs` (mới)** — `pixabay.com/api/videos/`, cùng khoá.
+  ⚖️ Điều khoản đọc tận nơi, video KHÁC ảnh đúng một điểm: *"Videos **may be
+  embedded directly** in your applications"* — video ĐƯỢC phép hotlink. Vẫn tải
+  về, nhưng vì lý do KHÁC luật (render lại sau 6 tháng phải ra đúng clip đó).
+- **`backdropVideo` + `backdropRate` + `backdropSeconds`** trong `ScriptSpec` →
+  `VideoBackdrop` trong `InsightClip`.
+
+### 🪤 Bốn cái bẫy, cả bốn chỉ lộ khi CHẠY THẬT
+1. 🔴 **`fetch` của Node KHÔNG tự đi qua proxy, `curl` thì có.** `curl` tới được
+   Pixabay (400 = thiếu khoá, tức ĐÃ CHẠM SERVER) còn `fetch` ăn **403 của
+   proxy**. Phân biệt được hai mã đó thì mới khỏi đi sửa nhầm sang phía khoá API.
+   Vá bằng `ensureProxyEnv()` — tự chạy lại chính mình một lần kèm
+   `NODE_USE_ENV_PROXY=1` (cờ đọc lúc KHỞI ĐỘNG nên gán trong mã là quá muộn).
+2. **ffmpeg đi kèm Playwright chỉ có 3 demuxer, KHÔNG có mp4/h264** ⇒ không đo
+   được khung hình video tại máy này. Đo trên **thumbnail** — đúng mẹo "soi bản
+   nhỏ trước" đã chứng minh ở kho ảnh (lệch trung bình 0,19).
+3. 🔴 **PHÉP ĐO RỘNG HƠN THỨ ĐƯỢC RENDER.** `measureImage` ép cả khung về 64×114
+   (đúng cho kho ảnh vì ảnh ngang vốn bị loại), nhưng video ngang thì
+   `objectFit: cover` **CẮT GIỮA về 9:16 và vứt hai mép**. Đoạn 11722 đo ra
+   L=36,3 mà khung hình thật có một **quầng đèn vàng lớn chiếm nửa khung** — chỉ
+   lộ khi chụp khung ra nhìn. Thêm `fit: 'crop916'`; đo lại thì chính đoạn đó bị
+   LOẠI. Cùng lớp với *"đo trên bản đã cắt gọn thì đang đo bản cắt"*, chỉ ngược
+   chiều.
+4. **Port thiếu cổng**: kho ảnh chặn cứng cả `sat`/`detail`/`sd`, tôi mới port
+   mỗi độ sáng ⇒ lọt ngay một đoạn hoàng hôn `sat=64,6` (`sunset, karate`) —
+   đúng thứ brief gọi là "sáng-vui-nhiều-màu". Port nốt cả bốn.
+
+### 🔴 Và hội đồng lại CHÊ ĐÚNG THỨ VỪA SỬA
+Lượt chạy đầu cổng 2 chặn với lý do *"chỉ chữ trên nền xanh đơn điệu, không có
+hình ảnh"* — trong khi clip CÓ nền mưa. Vì `buildTimeline` chưa biết
+`backdropVideo`. **Đây là lần thứ hai của cùng một lỗi**: thêm một loại hình mới
+mà quên dạy bảng thời gian thì hội đồng bị bảo là clip chỉ có chữ, rồi than đúng
+câu đó. ⇒ `describeVideo()` trong `stock-catalog.ts` (mô tả = TAG CỦA NHÀ CUNG
+CẤP, không phải chữ tôi viết) + ba nhánh trong `buildTimeline`.
+- 🔑 **Luật rút ra: thêm một `visual.kind` hay một loại nền mới thì PHẢI sửa
+  `gate-audience.ts` trong CÙNG lượt.** Không thì cổng 2 chấm một clip khác với
+  clip máy render.
+
+### 🐞 Bắt kèm: tên miền in HAI LẦN ở khung kết (bản navy)
+`buildCta` đã chở sẵn `tuviminhbao.com` trong câu kết, `Outro` in thêm một dòng
+nữa. Lỗi đã vá cho `OutroFigure` nhưng **cố ý chưa đụng bản navy** vì lúc đó nó
+là khung kết của 5 clip đang chạy — nay clip insight quay lại đúng đường này nên
+lộ lại. Vá bằng cùng một chốt `includes('tuviminhbao.com')`.
+
+### Verify
+`tsc` root 0 · `tsc` remotion 0 · `prettier` cả cây sạch · `lint` **0 lỗi / 77
+warning = đúng mốc nền** (đo bằng `git stash` rồi so từng dòng) · **20/20 bộ dò**.
+- **13/13 ca red-team cổng lọc dùng chung**: 5 ca phải LOẠI (mặt người không dấu
+  hiệu châu Á · `bamboo`/`lantern` chỉ là bối cảnh · đạo đức · lạc văn hoá · lạc
+  đề) và 8 ca phải NHẬN (`silhouette`/`shadow`/`hands` miễn cổng người · người
+  châu Á · và ba ca biên `war`∌`warm`, `poor`∌`poori`, `grave`∌`gravel`).
+- **Đối chứng refactor**: `stock-ingest --list --bucket all` trùng khít byte-for-byte.
+- **Chốt hội đồng ĐÃ NHÌN THẤY nền**: chặn ở tầng `fetch` để bắt đúng chuỗi bay
+  lên nhà cung cấp — prompt nay mang *"NỀN CHẠY SUỐT CLIP — một ĐOẠN PHIM quay
+  thật, phát chậm 0.5×…"* kèm tag thật, và **hết câu "nền xanh đậm phẳng"**.
+- Soi **4 khung hình thật** (hook · giữa · cảnh cuối · khung kết) — đây là phép
+  kiểm duy nhất bắt được cả lỗi đo-sai-vùng-cắt lẫn lỗi in trùng tên miền.
+
+### CÒN LẠI
+- ⚠️ **Máy KHÔNG gác được ĐỘ ĐỘNG của đoạn phim** (thumbnail chỉ có một khung, và
+  ffmpeg ở đây không mở được mp4). Cách xử hiện tại không phải ĐO mà là ÉP:
+  `playbackRate` chậm. Đừng đọc "qua cổng" thành "đủ tĩnh".
+- **Kho mới chỉ 3 đoạn / 2 tông.** Muốn đủ 16 tông thì chạy
+  `node scripts/stock-video.mjs --bucket tone --per 2`.
+- **5 kịch bản insight còn lại vẫn nền tranh quẻ** — đổi là sửa data thuần.
+- **Cổng 2 vẫn chưa có `visual.mismatch`**, `rewriteSpec` vẫn chỉ viết lại CHỮ.
+- `Character.tsx` / `Glyphs.tsx` **CỐ Ý giữ nguyên** — chúng vẫn đúng cho loại
+  clip KHÔNG có chữ dẫn dắt. Đừng xoá, cũng đừng bật lại mà không soi bằng mắt.
+- ⚠️ **Việc tay Henry — XOAY KHOÁ**: một lệnh kiểm tra của tôi đã in NGUYÊN GIÁ
+  TRỊ `PIXABAY_API_KEY` và `GEMINI_API_KEY` ra log phiên. Xoay cả hai.
+- 🔴 **`PIXABAY_API_KEY` trong environment đang HỎNG**: 89 ký tự, có dấu cách —
+  khoá Pixabay bị dán dính luôn `GEMINI_API_KEY=...` thành một dòng. Script đã tự
+  cắt ở khoảng trắng đầu, nhưng lúc xoay khoá thì đặt lại cho đúng, mỗi biến một
+  dòng (đúng luật đã ghi: *"dán giá trị THÔ — không `;`, không dấu nháy, không
+  xuống dòng"*).
+
+---
+
 ## 🏃 Nhịp ĐO ĐƯỢC là quá chậm · 14 tư thế · cảnh HAI người (2026-08-18, cùng PR #543)
 
 Henry: *"nhân vật chuyển động chậm quá, có thể thêm hình, đa dạng hơn"* ·

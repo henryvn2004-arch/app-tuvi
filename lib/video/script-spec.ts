@@ -177,6 +177,23 @@ export interface ScriptSpec {
    */
   backdrop?: string[];
   /**
+   * ĐOẠN PHIM nền cho cả clip — đường dẫn trong `remotion/public/`, lấy từ kho
+   * `scripts/stock-video.mjs` dựng.
+   *
+   * 🔑 Thắng `backdrop` khi khai cả hai: một clip chỉ có MỘT nền. Chọn theo
+   * TÔNG (cô đơn · suy tư · mờ mịt…), KHÔNG theo từng cảnh — nền đổi giữa
+   * chừng thì mắt lại chạy theo nền.
+   *
+   * ⚠️ Nền video là để BỎ CÁI NỀN PHẲNG ĐI, không phải để minh hoạ lời đọc.
+   * Đừng đi tìm đoạn phim "đúng ý câu này" — đó là đường dẫn thẳng tới cái bẫy
+   * nhân vật vừa phải gỡ: hình tranh mắt với chữ.
+   */
+  backdropVideo?: string;
+  /** Tốc độ phát nền (mặc định 0,5). Cần gạt chỉnh mức "nền có nổi quá không". */
+  backdropRate?: number;
+  /** Độ dài đoạn phim nền (giây) — chỉ cần khi nó NGẮN hơn clip, để lặp cho liền. */
+  backdropSeconds?: number;
+  /**
    * Tư thế nhân vật cho câu MỞ ĐẦU và câu KẾT — hai chỗ không nằm trong
    * `scenes` nên không tự khai `visual` được.
    *

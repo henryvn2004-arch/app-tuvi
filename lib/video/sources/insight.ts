@@ -774,56 +774,48 @@ const SOURCES: InsightSource[] = [
       scenes: [
         {
           text: 'Kiểu thứ nhất im lặng. Bạn không cãi, chỉ lặng lẽ rút đi.',
-          // "lặng lẽ rút đi" → quay lưng. Tư thế KỂ đúng câu đang đọc, không
-          // phải minh hoạ chung chung.
-          visual: { kind: 'figure', pose: 'quay-lung', accent: 'im lặng.' },
+          visual: { kind: 'typo', accent: 'im lặng.' },
         },
         {
           text: 'Người ngoài tưởng bạn ổn. Thật ra bạn vừa đóng một cánh cửa.',
-          // 🔑 Câu này có HAI người trong đó ("người ngoài" ↔ "bạn"), nên hình
-          // cũng phải có hai. Một người ăn như không có chuyện gì, người kia
-          // ngồi lặng — và `gap: 'xa'` chừa khoảng trống giữa họ, đó mới là
-          // thứ kể được "vừa đóng một cánh cửa" mà không cần vẽ cánh cửa nào.
-          visual: {
-            kind: 'duo',
-            poseL: 'ngoi-an',
-            poseR: 'ngoi-buon',
-            set: 'ban-an',
-            gap: 'xa',
-            accent: 'đóng một cánh cửa.',
-          },
+          visual: { kind: 'typo', accent: 'đóng một cánh cửa.' },
         },
         {
           text: 'Kiểu thứ hai nói cho bằng hết. Bạn cần được nghe, không cần thắng.',
-          visual: {
-            kind: 'figure',
-            pose: 'loi-khuyen',
-            accent: 'được nghe,',
-            glyph: 'trai-tim',
-            glyphAt: 'tay',
-          },
+          visual: { kind: 'typo', accent: 'được nghe,' },
         },
         {
           text: 'Kiểu thứ ba quay vào trong, tự trách mình trước khi kịp giận ai.',
-          visual: {
-            kind: 'figure',
-            pose: 'suy-nghi',
-            accent: 'tự trách mình',
-            glyph: 'guong',
-            glyphAt: 'tren',
-          },
+          visual: { kind: 'typo', accent: 'tự trách mình' },
         },
         {
           text: 'Không kiểu nào sai. Bạn chỉ học cách tự vệ từ rất sớm.',
-          visual: { kind: 'figure', pose: 'tinh-tam', accent: 'tự vệ từ rất sớm.' },
+          visual: { kind: 'typo', accent: 'tự vệ từ rất sớm.' },
         },
       ],
       ...cta('Bạn là kiểu nào?'),
-      hookPose: 'chao',
-      ctaPose: 'hieu-ra',
-      // Lá số giơ cao đúng lúc tên miền hiện ra — vật của thương hiệu, không
-      // phải một icon trang trí.
-      ctaGlyph: 'la-so',
+      /*
+       * 🔴 ĐÃ GỠ NHÂN VẬT SIGNATURE khỏi kịch bản này (18/08/2026).
+       *
+       * Henry xem bản render: *"vừa xấu vừa chả liên quan gì đến nội dung
+       * script. Cho vào càng thêm confused."* Hai lỗi tách bạch, và lỗi thứ
+       * hai mới là lỗi cấu trúc:
+       *   · tư thế do TÔI gõ tay ở chính chỗ này — không có cơ chế nào nối nó
+       *     với lời đọc, nên nó lệch là đương nhiên;
+       *   · clip này có CHỮ CHẠY + GIỌNG ĐỌC, mà nhân vật cử động là một CHỦ
+       *     THỂ ⇒ nó tranh mắt với chữ. Chính CLAUDE.md đã đo: *"ảnh đổi mỗi
+       *     3 giây thì mắt chạy theo ảnh chứ không đọc chữ"*.
+       *
+       * ⚠️ `Character.tsx` / `Glyphs.tsx` CỐ Ý giữ nguyên trên đĩa — chúng vẫn
+       * đúng cho loại clip KHÔNG có chữ dẫn dắt. Đừng xoá, cũng đừng bật lại ở
+       * đây mà không đo lại bằng mắt trước.
+       */
+      /*
+       * Mưa trên cửa kính đêm — L=18,6 (đo trên ĐÚNG phần 9:16 sẽ lên hình),
+       * dài 27s nên ở tốc độ 0,5× phủ trọn clip mà không phải lặp.
+       */
+      backdropVideo: 'stock-video/tone/suy-tu/189290.mp4',
+      backdropSeconds: 27,
       music: 'tram-tinh.wav',
       hashtags: ['tinhcach', 'tamly', 'selfdiscovery', 'tuvi'],
     },

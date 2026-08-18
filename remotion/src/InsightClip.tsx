@@ -21,6 +21,8 @@ import {
   AbsoluteFill,
   Audio,
   Img,
+  Loop,
+  OffthreadVideo,
   Sequence,
   interpolate,
   spring,
@@ -94,6 +96,20 @@ export type InsightProps = {
    * chính, ảnh chỉ bỏ cái nền phẳng đi.
    */
   backdrop?: string[];
+  /**
+   * ĐOẠN PHIM nền cho cả clip — đường dẫn trong `remotion/public/`.
+   *
+   * Thắng `backdrop` khi khai cả hai (một clip chỉ có MỘT nền). Chọn theo TÔNG
+   * của clip, không theo từng cảnh — cùng lý do đã ghi ở `backdrop`.
+   */
+  backdropVideo?: string;
+  /**
+   * Tốc độ phát nền. Mặc định 0,5 — xem khối chú thích của `VideoBackdrop`.
+   * Đây là CẦN GẠT chính để chỉnh mức "nền có tranh mắt không".
+   */
+  backdropRate?: number;
+  /** Độ dài đoạn phim nền (giây) — chỉ cần khi nó NGẮN hơn clip, để bọc `Loop`. */
+  backdropSeconds?: number;
   /**
    * Tư thế nhân vật cho hook / câu kết. Khai một trong hai ⇒ clip chuyển sang
    * NỀN ĐEN + nhân vật signature.
@@ -223,6 +239,75 @@ const PhotoBackdrop: React.FC<{ images: string[] }> = ({ images }) => {
        * trên, còn TikTok phủ caption + thanh điều hướng lên ~250px mép dưới.
        * Hai vùng đó phải tối bất kể bức ảnh bên dưới là gì.
        */}
+      <AbsoluteFill
+        style={{
+          background: `linear-gradient(180deg, ${BRAND.navy} 0%, transparent 22%, transparent 74%, ${BRAND.navy} 100%)`,
+        }}
+      />
+    </AbsoluteFill>
+  );
+};
+
+/**
+ * NỀN VIDEO — đoạn phim stock chạy chậm sau khối chữ.
+ *
+ * 🔑 VÌ SAO CÓ, VÀ VÌ SAO NÓ KHÔNG PHẢI "NHÂN VẬT PHIÊN BẢN 2":
+ * Nhân vật vẽ tay bị bác vì hai lẽ — xấu, và *tranh mắt với chữ*. Nền video
+ * giải đúng vế thứ hai bằng cách đi ngược hẳn: nó cố tình KHÔNG có chủ thể,
+ * KHÔNG kể chuyện, chỉ làm cái nền thôi hết đứng im. Ba lớp ép nó ở đúng vai:
+ *
+ *   1. `playbackRate` chậm — mưa rơi, sương trôi, ánh đèn lắc nhẹ. Đây là thứ
+ *      thay cho phép đo độ động mà máy này KHÔNG làm được (ffmpeg đi kèm
+ *      Playwright không có demuxer mp4 — xem `scripts/stock-video.mjs`).
+ *   2. `blur(6px)` — y hệt `PhotoBackdrop`, đẩy nền ra sau mặt phẳng chữ.
+ *   3. Lớp phủ navy 0,20 + tối dần hai đầu — DÙNG LẠI nguyên, không dựng bản
+ *      thứ hai. Đổi ở đây mà quên bên kia là hai nền hai tông.
+ *
+ * ⚠️ `muted` là BẮT BUỘC: clip đã có giọng đọc + nhạc nền, tiếng gốc của đoạn
+ * stock chen vào là ba nguồn âm cùng lúc.
+ *
+ * 🪤 `OffthreadVideo` KHÔNG có prop `loop` (tsc bắt được ngay). Muốn lặp thì
+ * bọc `<Loop>` — và phải biết đoạn phim dài bao nhiêu, nên `seconds` do kịch
+ * bản khai. Bỏ trống ⇒ không bọc, đúng cho đoạn đủ dài (ở tốc độ 0,5 thì 20
+ * giây nguồn đã phủ 40 giây clip).
+ */
+const VideoBackdrop: React.FC<{ src: string; rate: number; seconds?: number }> = ({
+  src,
+  rate,
+  seconds,
+}) => {
+  const frame = useCurrentFrame();
+  const { durationInFrames, fps } = useVideoConfig();
+  // Ken Burns rất nhẹ — nhẹ hơn hẳn ảnh tĩnh (1,05→1,18) vì bản thân đoạn phim
+  // đã có chuyển động sẵn. Cộng hai thứ ở mức mạnh là nền lại nổi lên.
+  const scale = interpolate(frame, [0, Math.max(1, durationInFrames)], [1.06, 1.12], {
+    extrapolateRight: 'clamp',
+  });
+
+  const video = (
+    <OffthreadVideo
+      src={staticFile(src)}
+      muted
+      playbackRate={rate}
+      style={{
+        width: '100%',
+        height: '100%',
+        objectFit: 'cover',
+        transform: `scale(${scale})`,
+        filter: 'blur(6px)',
+      }}
+    />
+  );
+  // Số khung TRÊN DÒNG THỜI GIAN mà đoạn phim phủ được: chậm lại thì phủ dài
+  // ra, nên chia cho `rate`.
+  const covers = seconds ? Math.floor((seconds * fps) / Math.max(0.01, rate)) : 0;
+  const needLoop = covers > 0 && covers < durationInFrames;
+
+  return (
+    <AbsoluteFill style={{ background: BRAND.navy }}>
+      {needLoop ? <Loop durationInFrames={covers}>{video}</Loop> : video}
+      {/* Hai lớp dưới đây khớp NGUYÊN VĂN `PhotoBackdrop` — xem chú thích ở đó. */}
+      <AbsoluteFill style={{ background: BRAND.navy, opacity: 0.2 }} />
       <AbsoluteFill
         style={{
           background: `linear-gradient(180deg, ${BRAND.navy} 0%, transparent 22%, transparent 74%, ${BRAND.navy} 100%)`,
@@ -837,18 +922,30 @@ const Outro: React.FC<{ text: string; noBg?: boolean }> = ({ text, noBg }) => {
             >
               {text}
             </div>
-            <div
-              style={{
-                marginTop: 38,
-                fontFamily: FONT.sans,
-                fontSize: 40,
-                letterSpacing: '0.06em',
-                color: BRAND.gold,
-                opacity: s,
-              }}
-            >
-              tuviminhbao.com
-            </div>
+            {/*
+             * 🔴 CHỈ in tên miền khi câu kết CHƯA có nó.
+             *
+             * `buildCta` đã chở sẵn "tuviminhbao.com" trong câu kết từ lượt thêm
+             * mã khuyến mãi, nên dòng này in ra là tên miền hiện HAI LẦN chồng
+             * nhau trong cùng một khung. Lỗi đã vá cho `OutroFigure` nhưng CỐ Ý
+             * chưa đụng bản navy vì lúc đó nó là khung kết của 5 clip đang chạy
+             * — nay clip insight quay lại đúng đường này nên lộ lại, và vá được
+             * mà không đổi gì với câu kết không chứa tên miền.
+             */}
+            {text.toLowerCase().includes('tuviminhbao.com') ? null : (
+              <div
+                style={{
+                  marginTop: 38,
+                  fontFamily: FONT.sans,
+                  fontSize: 40,
+                  letterSpacing: '0.06em',
+                  color: BRAND.gold,
+                  opacity: s,
+                }}
+              >
+                tuviminhbao.com
+              </div>
+            )}
           </div>
         </TextPlate>
       </AbsoluteFill>
@@ -966,6 +1063,9 @@ export const InsightClip: React.FC<InsightProps> = ({
   topLabel,
   music,
   backdrop,
+  backdropVideo,
+  backdropRate,
+  backdropSeconds,
   hookPose,
   ctaPose,
   hookGlyph,
@@ -984,7 +1084,8 @@ export const InsightClip: React.FC<InsightProps> = ({
   // Có ảnh nền ⇒ ảnh vẽ MỘT lần ở ngoài, và mọi cảnh thôi vẽ nền riêng của nó.
   // Thiếu vế thứ hai thì nền navy của từng cảnh phủ kín ảnh và cả clip trông y
   // hệt bản không có ảnh — hỏng theo kiểu KHÔNG có lỗi nào bắn ra.
-  const hasBg = Boolean(backdrop && backdrop.length);
+  const hasVideoBg = Boolean(backdropVideo);
+  const hasBg = hasVideoBg || Boolean(backdrop && backdrop.length);
   /*
    * Chế độ NHÂN VẬT: nền đen, không ảnh, không lớp phủ nào.
    *
@@ -1022,7 +1123,16 @@ export const InsightClip: React.FC<InsightProps> = ({
   return (
     <AbsoluteFill style={{ backgroundColor: bg }}>
       {music ? <Audio src={staticFile(`music/${music}`)} volume={0.3} loop /> : null}
-      {hasBg && !hasFigure ? <PhotoBackdrop images={backdrop as string[]} /> : null}
+      {hasVideoBg && !hasFigure ? (
+        <VideoBackdrop
+          src={backdropVideo as string}
+          rate={backdropRate ?? 0.5}
+          seconds={backdropSeconds}
+        />
+      ) : null}
+      {hasBg && !hasVideoBg && !hasFigure ? (
+        <PhotoBackdrop images={backdrop as string[]} />
+      ) : null}
 
       <Sequence durationInFrames={hookDurationInFrames} name="Hook">
         {hookAudio ? <Audio src={staticFile(hookAudio)} /> : null}

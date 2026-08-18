@@ -28,7 +28,7 @@
 import { llmTextFull } from '@/lib/llm/complete';
 import { parseLlmJson } from '@/lib/api/tool-helpers';
 import { type ScriptSpec, estimateSpeechSeconds } from './script-spec';
-import { describeImage } from './stock-catalog';
+import { describeImage, describeVideo } from './stock-catalog';
 import type { GateIssue } from './gate-machine';
 
 /**
@@ -239,10 +239,21 @@ function buildTimeline(spec: ScriptSpec): string {
    * chỉ có chữ trên nền phẳng — rồi than đúng câu đó. Lời than "chỉ có chữ
    * trên nền xanh" phần lớn là do bảng thời gian nói vậy, không phải do clip.
    */
+  const bgVideo = spec.backdropVideo ?? '';
   const bg = spec.backdrop ?? [];
-  const bgDesc = bg.map((src) => describeImage(src));
-  const hasBg = bg.length > 0;
-  if (hasBg) {
+  const hasBg = Boolean(bgVideo) || bg.length > 0;
+  if (bgVideo) {
+    // Nói rõ nền là PHIM ĐANG CHẠY chứ không phải ảnh tĩnh, và nói rõ nó chạy
+    // CHẬM + mờ — nếu chỉ ghi "có video nền" thì hội đồng hình dung một clip
+    // nhiều chuyển động, tức tả sai đúng thứ vừa cố ý làm cho tĩnh.
+    const rate = spec.backdropRate ?? 0.5;
+    lines.push(
+      `NỀN CHẠY SUỐT CLIP — một ĐOẠN PHIM quay thật, phát chậm ${rate}× nên gần ` +
+        `như trôi tại chỗ, làm mờ nhẹ và phủ một lớp tối mỏng để chữ đọc được. ` +
+        `KHÔNG phải nền phẳng, cũng KHÔNG phải ảnh tĩnh:\n   ${describeVideo(bgVideo)}`
+    );
+  } else if (bg.length > 0) {
+    const bgDesc = bg.map((src) => describeImage(src));
     lines.push(
       `NỀN CHẠY SUỐT CLIP — ${bg.length} bức ảnh chụp thật, luân phiên chậm, ` +
         `có hiệu ứng phóng nhẹ (Ken Burns), phủ một lớp tối mỏng cho chữ đọc được:\n` +
@@ -264,7 +275,7 @@ function buildTimeline(spec: ScriptSpec): string {
   /** Nền của MỘT cảnh chữ — phụ thuộc clip có ảnh nền / có nhân vật hay không. */
   const typoBase = hasBg
     ? 'Chữ lớn giữa màn hình, sáng dần theo nhịp đọc, đặt trên một khối nền mờ ' +
-      'viền vàng nổi trên bức ảnh nền đang chạy.'
+      `viền vàng nổi trên ${bgVideo ? 'đoạn phim nền đang trôi' : 'bức ảnh nền đang chạy'}.`
     : hasFigure
       ? 'Chữ lớn giữa màn hình trên nền ĐEN tuyền, sáng dần theo nhịp đọc.'
       : 'Chữ lớn phủ giữa màn hình, sáng dần theo nhịp đọc, nền xanh đậm phẳng.';
@@ -291,9 +302,11 @@ function buildTimeline(spec: ScriptSpec): string {
           `giản của kênh (người trắng, không có miệng, hai chấm mắt) phóng to dần ` +
           `bước vào khung — ${POSE_MO_TA[spec.hookPose] ?? `tư thế "${spec.hookPose}"`}.` +
           glyphPhrase(spec.hookGlyph)
-      : hasBg
-        ? `Chữ lớn hiện ngay, trên khối nền mờ đặt giữa bức ảnh nền (${bgDesc[0]}).`
-        : 'Chữ lớn hiện ngay giữa màn hình trên nền xanh đậm.'
+      : bgVideo
+        ? `Chữ lớn hiện ngay, trên khối nền mờ đặt giữa ĐOẠN PHIM nền đang trôi chậm (${describeVideo(bgVideo)}).`
+        : bg.length > 0
+          ? `Chữ lớn hiện ngay, trên khối nền mờ đặt giữa bức ảnh nền (${describeImage(bg[0])}).`
+          : 'Chữ lớn hiện ngay giữa màn hình trên nền xanh đậm.'
   );
 
   spec.scenes.forEach((sc, i) => {
