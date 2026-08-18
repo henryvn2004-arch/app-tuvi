@@ -124,8 +124,58 @@ function resolveJobs() {
     for (const i of listIds('insight.ts', 'id')) jobs.push({ id: i, kind: 'insight' });
     return jobs;
   }
-  for (const t of csv(val('--tools', ''))) jobs.push({ id: t, kind: 'tool-demo' });
-  for (const i of csv(val('--insight', ''))) jobs.push({ id: i, kind: 'insight' });
+  /*
+   * 🔑 KIỂM ID TRƯỚC KHI NHẬN. `--all` dựng danh sách TỪ NGUỒN nên tự đúng;
+   * hai cờ hẹp thì nhận thẳng chuỗi người gõ — mà đó chính là hai ô NHẬP TỰ DO
+   * của `workflow_dispatch`. Gõ sai một chữ thì bản cũ vẫn nhận, chạy tới tận
+   * khâu render mới hỏng, rồi bảng tóm tắt ghi `TRƯỢT` — đọc thành *pipeline
+   * hỏng* chứ không phải *gõ sai một chữ*.
+   *
+   * Hỏng phải nêu ĐÚNG thứ người đọc cần: id nào lạ, và có những id nào.
+   * (Cờ `--start` đã kiểm sẵn theo lối này; hai cờ cũ thì chưa — nay khớp lại.)
+   */
+  const idTool = new Set(listIds('tool-demo.ts', 'toolId'));
+  const idInsight = new Set(listIds('insight.ts', 'id'));
+  const la = [];
+
+  for (const t of csv(val('--tools', ''))) {
+    // Dựng được clip tool-demo cần CẢ HAI: công thức quay VÀ kịch bản. Thiếu
+    // cái nào thì nói rõ thiếu cái nào — hai thứ sửa ở hai file khác nhau.
+    const coRecipe = Object.prototype.hasOwnProperty.call(TOOL_RECIPES, t);
+    const coScript = idTool.has(t);
+    if (!coRecipe || !coScript) {
+      la.push(
+        `  · --tools "${t}" — ${
+          !coRecipe && !coScript
+            ? 'không có công thức quay LẪN kịch bản'
+            : !coRecipe
+              ? 'thiếu công thức quay (scripts/tool-recipes.mjs)'
+              : 'thiếu kịch bản (lib/video/sources/tool-demo.ts)'
+        }`
+      );
+      continue;
+    }
+    jobs.push({ id: t, kind: 'tool-demo' });
+  }
+
+  for (const i of csv(val('--insight', ''))) {
+    if (!idInsight.has(i)) {
+      la.push(`  · --insight "${i}" — không có trong lib/video/sources/insight.ts`);
+      continue;
+    }
+    jobs.push({ id: i, kind: 'insight' });
+  }
+
+  if (la.length) {
+    console.error(`\n❌ ${la.length} id không dựng được:\n${la.join('\n')}`);
+    const dungDuoc = [...idTool].filter((t) =>
+      Object.prototype.hasOwnProperty.call(TOOL_RECIPES, t)
+    );
+    console.error(`\n  tool-demo dựng được : ${dungDuoc.join(' · ') || '(không có)'}`);
+    console.error(`  insight dựng được   : ${[...idInsight].join(' · ') || '(không có)'}`);
+    process.exit(1);
+  }
+
   return jobs;
 }
 
