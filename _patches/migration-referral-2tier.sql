@@ -41,9 +41,13 @@ BEGIN
   IF v_cap IS NULL THEN v_cap := 20; END IF;
 
   -- Anti-farm: cap số lượt thưởng signup / referrer / 30 ngày.
+  -- 🔴 PHẢI ghi rõ `referrals.referrer_user_id`: RETURNS TABLE khai OUT param
+  -- CÙNG TÊN với cột này, để trần thì Postgres ném 42702 "ambiguous" và CẢ HÀM
+  -- chết ngay tại đây — tức không lượt thưởng nào từng trả được. Cùng lớp lỗi đã
+  -- vấp ở `promo_code_redeem` (`where promo_codes.code = v_code`).
   SELECT COUNT(*) INTO v_count FROM referrals
-   WHERE referrer_user_id = v_ref.referrer_user_id
-     AND signup_rewarded_at > NOW() - INTERVAL '30 days';
+   WHERE referrals.referrer_user_id = v_ref.referrer_user_id
+     AND referrals.signup_rewarded_at > NOW() - INTERVAL '30 days';
   IF v_count >= v_cap THEN
     UPDATE referrals SET signup_rewarded_at = NOW() WHERE id = v_ref.id; -- đánh dấu đã xét
     RETURN QUERY SELECT FALSE, v_ref.referrer_user_id, 0; RETURN;

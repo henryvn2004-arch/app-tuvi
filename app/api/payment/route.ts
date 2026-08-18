@@ -2369,7 +2369,14 @@ async function handleReferralRegister(request: NextRequest, body: Record<string,
       const first = Array.isArray(r) ? (r[0] as Record<string, unknown> | undefined) : null;
       rewarded = first?.rewarded === true;
       creditsGranted = Number(first?.credits_granted) || 0;
-    } catch { /* best-effort */ }
+    } catch (e) {
+      // Best-effort: thưởng hỏng KHÔNG được chặn lượt đăng ký. Nhưng phải KÊU —
+      // `catch {}` rỗng ở đây đã giấu một hàm chết hẳn (42702 ambiguous column)
+      // suốt 6 ngày: referral vẫn ghi sổ, tiền thì không bao giờ tới tay ai, và
+      // không có dòng log nào để lần ra. Im lặng ở đường phát tiền là kiểu hỏng
+      // tệ nhất — nó trông y hệt lúc chạy đúng.
+      console.error('[referral-register] process_referral_signup thất bại:', e);
+    }
 
     // Mắt xích cuối của vòng lặp viral (V2.4): mã ĐÃ ăn. tool_id = tool của link
     // chia sẻ đưa người này tới → panel Vòng Lặp Viral tính được K-factor TỪNG

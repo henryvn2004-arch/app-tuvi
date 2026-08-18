@@ -5,6 +5,58 @@
 
 ---
 
+## 💸 Đường trả thưởng giới thiệu CHẾT TỪ LÚC VIẾT RA — `catch {}` giấu 6 ngày (2026-08-18)
+
+Báo cáo CMO thấy `referrals` có 1 dòng mà `signup_rewarded_at` NULL đã 6 ngày.
+Tưởng lỗi chớp nhoáng, gọi tay `process_referral_signup(...)` thì **hàm ném lỗi
+ngay**:
+```
+42702: column reference "referrer_user_id" is ambiguous — line 20
+```
+`RETURNS TABLE(rewarded, referrer_user_id, credits_granted)` khai OUT param
+**trùng tên** cột `referrals.referrer_user_id` trong câu đếm trần 30 ngày.
+⇒ **Mọi lượt gọi đều chết. Đường thưởng chưa bao giờ trả được cho ai.**
+
+- 🔴 **Lần thứ HAI cùng lớp lỗi** — `promo_code_redeem` đã phải vá y hệt
+  (`where promo_codes.code = v_code`). Luật: **hàm `RETURNS TABLE` thì MỌI cột
+  trong thân phải ghi kèm tên bảng**, đừng trông vào việc tên không đụng nhau.
+- 🔑 **Thứ giấu nó là `} catch { /* best-effort */ }` RỖNG** ở
+  `app/api/payment/route.ts`. `rpc()` CÓ ném kèm nguyên văn body lỗi — chuỗi
+  `42702` đã bay ra thật rồi bị nuốt trọn, không một dòng log. Best-effort là
+  ĐÚNG (thưởng hỏng không được chặn lượt đăng ký) nhưng **im lặng thì sai**: dòng
+  referral vẫn ghi sổ, tiền không tới tay ai, và nhìn từ ngoài y hệt lúc chạy
+  đúng. Nay có `console.error`.
+- **Bộ dò tái phát** (chạy được ngay, không cần file):
+  ```sql
+  with fn as (select p.proname, unnest(p.proargnames[array_length(p.proargnames,1)
+      - (select count(*) from unnest(p.proargmodes) m where m='t') + 1 :
+      array_length(p.proargnames,1)]) as out_name, p.prosrc
+    from pg_proc p join pg_namespace n on n.oid=p.pronamespace
+    where n.nspname='public' and p.proargmodes is not null and 't'=any(p.proargmodes))
+  select proname, out_name from fn
+   where out_name is not null and prosrc ~* ('(where|and|on)\s+'||out_name||'\s*=');
+  ```
+  ⚠️ **Red-team nó trước khi tin kết quả rỗng**: đo được nó quét **97 OUT param /
+  20 hàm** và regex khớp đúng chuỗi hỏng ⇒ rỗng là xanh THẬT. Bộ dò trả rỗng vì
+  chính nó hỏng thì tệ hơn không có.
+- **Verify sau khi vá** (đường tiền phải soi đủ 4 chiều): số dư 6.151 → **6.166**
+  (+15) · dấu `signup_rewarded_at` đã đặt · **đúng 1** dòng giao dịch, giữ nguyên
+  dấu tiếng Việt · **chạy lại lần 2 → `rewarded=f`, số dư KHÔNG đổi** (chống trả
+  hai lần).
+- ⚠️ **Nợ chưa vá, có chủ ý**: `UPDATE user_credits SET balance=... WHERE user_id
+  =...` **không soát số dòng**. Người chưa có dòng `user_credits` thì UPDATE ăn 0
+  dòng nhưng hàm VẪN ghi giao dịch + đánh dấu đã thưởng ⇒ **thưởng ma**. Chưa
+  thêm `GET DIAGNOSTICS` vì không trộn hai thay đổi vào cùng một lượt sửa đường
+  tiền — làm riêng.
+- 🪤 **Suýt báo một check ĐỎ OAN**: `tsc` kêu `verboseLogs` không tồn tại ở
+  `app/mcp/[key]/route.ts`. Không phải lỗi mã — `node_modules` trong container
+  còn **`mcp-handler` 1.1.0** trong khi lock đã **2.1.0**. `npm ci` xong là sạch.
+  Cùng họ "đo trên bản CŨ" — **`npm ci` trước khi tin bất kỳ lượt typecheck nào**.
+- 🪤 Và vấp lại **bẫy cwd lần thứ NĂM**: `cd tuvi-engine && … && npx tsc` chạy
+  tsc ở engine chứ không ở gốc.
+
+---
+
 ## 🤖 ĐỌC SỐ TRAFFIC: luôn dùng bản `_human` (2026-08-18, PR #544)
 
 **83% con số "visitors" của mọi báo cáo là MÁY.** Một đội bot 1.326 `anon_id`
