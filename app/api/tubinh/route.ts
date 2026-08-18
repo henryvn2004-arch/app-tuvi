@@ -6,7 +6,7 @@ import { ok, err, options, parseBody } from '@/lib/cors';
 import { llmText, llmStreamResponse } from '@/lib/llm/complete';
 import { withToolOutcome } from '@/lib/ops/tool-outcome';
 import { chuanHoaDauThanh } from '@/lib/vn-text';
-import { LUAN_ARC_CHUNG, MAU_ARC_CHUNG } from '@/lib/agent/prompts';
+import { LUAN_ARC_CHUNG, MAU_ARC_CHUNG, DOC_ARC_TUBINH } from '@/lib/agent/prompts';
 
 const SUPABASE_URL = process.env.SUPABASE_URL!;
 const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_KEY!;
@@ -58,6 +58,8 @@ PHÁN QUYẾT BẮT BUỘC — NEO VÀO ĐIỂM SỐ:
 - MỞ ĐẦU mỗi phần bằng MỘT câu chốt in đậm neo vào con số đã tính (cường nhược .../10, score đại vận, thành/phá): phần này mạnh hay yếu, thuận hay nghịch. Rồi mới giải thích vì sao.
 - Phần thân KHÔNG được mâu thuẫn với con số: cường nhược 3/10 hay đại vận nghịch thì cấm viết như giai đoạn tốt.
 - Đánh giá CẤU TRÚC bát tự (mạnh/yếu) nói dứt khoát; chỉ DỰ ĐOÁN kết quả tương lai mới dùng ngôn ngữ xác suất.
+
+${DOC_ARC_TUBINH}
 
 NGUYÊN TẮC LUẬN GIẢI (không cần kể ra cho người đọc):
 - Mọi luận giải xoay quanh Nhật Can (bản thân đương số) và mùa sinh.

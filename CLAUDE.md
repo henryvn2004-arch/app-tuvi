@@ -5,6 +5,104 @@
 
 ---
 
+## ✍️ ARC RA TỚI BẢN LUẬN GIẢI — `arcDoc` KHÁC `LUAN_ARC`, đừng dùng lẫn (2026-08-18, PR sau)
+
+Henry: *"fix này phải dc apply cho các tool luôn… rà soát lại prompt của từng tool"*.
+Rà xong ra bản đồ: arc mới chỉ phủ **KHUNG CHAT**, chưa phủ **BẢN LUẬN GIẢI** —
+tức trên cùng một trang, khung chat bên phải đã có arc còn ô GIỮA (thứ bán tiền)
+thì chưa. Làm 2 đợt.
+
+### 🔴 KHÔNG dán `LUAN_ARC` vào bản luận giải được — nó mang bối cảnh CHAT
+Dòng đầu `arcCore`: *"người hỏi **VỪA đọc xong bản luận đầy đủ** ở màn hình bên
+cạnh… **Cấm tóm tắt lại thứ họ vừa đọc**"*, cộng ngân sách **120–180 từ**. Bản
+luận giải CHÍNH LÀ cái "bản luận đầy đủ" đó, và mỗi phần đã tự khai ngân sách
+riêng (220–280 / 120–160 / 180–220 từ) ⇒ dán vào là prompt tự mâu thuẫn, đúng
+bệnh "hai nguồn bố cục" #541 đi gỡ.
+⇒ **`arcDoc`** (`prompts.ts`) là hàm dựng RIÊNG cho văn luận dài, 4 bản:
+`DOC_ARC_LASO` · `DOC_ARC_TUBINH` · `DOC_ARC_PHU_THE` · `DOC_ARC_TUONG_HOP`.
+
+### 🔑 `arcDoc` CỐ Ý chỉ chở phần CÒN THIẾU — đọc trước khi định "bổ sung" thêm
+Prompt luận giải **đã có sẵn, và có bản MẠNH HƠN vì gắn cổ pháp**: câu phán quyết
+in đậm mở mỗi phần (lớp ①) · giải thích bằng hệ quả, chọn 1–2 căn cứ nặng ký
+(lớp ④) · luật thuật ngữ (*"tên sao để gọn trong ngoặc theo SAU, **không mở đầu
+câu bằng tên**"* — đúng y luật của arc) · ngân sách từ. Viết lại chúng ở arcDoc là
+dựng bản thứ hai rồi hai bản trôi khỏi nhau.
+⇒ arcDoc chỉ có **4 thứ**: ② HÀNH VI đời thường · ③ MỘT CÂU LẬT · GIỌNG khẩu ngữ
+· PHÉP DỊCH (cặp ✅/❌ kèm dữ kiện nguồn — #541 đã đo: giọng học bằng VÍ DỤ rẻ và
+ăn hơn học bằng LUẬT).
+- 🪤 **Bản đầu tôi có lớp ⑤ CHỐT, đã GỠ**: nó mâu thuẫn với luật ĐANG CÓ.
+  `/api/tubinh` **BẮT BUỘC** mỗi phần trả lời *"nên làm gì để khai thác điểm mạnh
+  / **hóa giải** điểm yếu"*; `/api/lasotuvi` cho *"gợi ý nhẹ nếu cần"*; `phu-the`
+  kết bằng *"1-2 câu tác động cụ thể"*. Ba nơi khai ba kiểu. Mà **"hóa giải" là
+  khái niệm CỔ PHÁP, không phải hình dạng** — Henry đã chốt *"chỉ đổi shape giọng,
+  ko đổi cổ pháp hay phương pháp luận giải"*. Thêm luật chốt là vừa chồng vừa
+  ngược. 🔑 **Trước khi thêm một lớp, đọc xem prompt đích đã tự khai lớp đó chưa.**
+
+### 🗺️ 4 bề mặt đã nối (đợt 2)
+| Bề mặt | Chỗ nối |
+|---|---|
+| Luận giải 24 phần lá số | `SYSTEM_PROMPT` (`/api/lasotuvi`) |
+| Luận giải 16 phần Tử Bình | `SYSTEM_PROMPT_TUBINH` |
+| Phu Thê (tool Chân Dung Vợ Chồng) | `PHU_THE_LUAN_GIAI_SYSTEM_PROMPT` |
+| **Luận giải 9 phần Xem Tuổi / Xem Làm Ăn** | `LUAN_GIAI_TUONG_HOP_SYSTEM` (MỚI) |
+- 🔑 **Xem Tuổi: prompt từng phần dựng ở CLIENT, có 3 bản chép tay** (`xem-tuoi.html`
+  · `xem-lam-an.html` · `app-xem-tuoi.html`, hiện còn trùng khít). Nhưng system
+  trước đó chỉ là **MỘT DÒNG** ở server ⇒ đặt arc vào system là phủ cả ba bề mặt
+  bằng một chỗ, **không phải sửa 3 file HTML**. Nhân tiện thêm luật ① cho nó (trước
+  không có), nếu không thì câu *"BỔ SUNG cho luật phán quyết ở trên"* trỏ vào hư vô.
+
+### Đợt 1 — chat Tử Bình standalone (PR #547, đã prod)
+`tu-binh.html` gọi `/api/tubinh?action=chat` với **2 system inline riêng** ⇒ đứng
+ngoài đợt nhân arc. Nay nội suy CHÍNH `LUAN_ARC_CHUNG` + `MAU_ARC_CHUNG` — đúng
+khối `CHAT_SYSTEM_TU_BINH` của shell dùng qua `RAIL_SHAPE_AND_VOICE`, nên hai bề
+mặt cùng bộ môn không trôi khỏi nhau. Không dùng `LUAN_ARC` (bản lá số) vì căn cứ
+của nó là chính tinh + tam phương tứ chính; bản CHUNG khai can chi.
+- Trần token giữ **800**: arc chốt tối đa 300 từ, hẹp hơn mức 450 từ của luật cũ.
+
+### 🔍 Hai đính chính của chính tôi trong lượt rà
+1. **"3 action `dat-ten-con`/`dat-ten-dn`/`chon-ngay-tot` gần như không có luật
+   hình dạng"** — SAI, tôi grep trúng một dòng rồi suy. Đọc thật thì cả ba có hợp
+   đồng format CHẶT (`3 nhóm × 4 tên`, mỗi tên một dòng field, `maxTokens` 4000–5000)
+   ⇒ **arc chat sẽ PHÁ chúng** (arc cấm tiêu đề/liệt kê, chúng bắt buộc phải có).
+   Chuyển sang nhóm "bản có cấu trúc", cùng họ 4 prompt JSON trả tiền.
+2. **"Xung đột: prompt bắt kèm bằng chứng sao, arc cấm mở câu bằng tên sao"** —
+   SAI. Đọc trọn khối thì prompt đã tự nói *"tên sao… để gọn trong ngoặc theo SAU,
+   không mở đầu câu bằng tên"*, tức **đúng y luật arc**. Không có xung đột.
+🔑 Cùng một bài học hai lần: **grep ra một dòng rồi suy ra cả khối là đọc mắt, không phải đo.**
+
+### Verify
+`tsc` 0 · `lint` **0 lỗi / 77 warning = đúng mốc nền** · `prettier` cả cây sạch ·
+**21/21 bộ dò** · engine **185 pass**.
+- **Bóc 4 prompt từ MÃ NGUỒN thật, arc resolve từ bản BIÊN DỊCH**, đối chứng
+  `origin/main` bằng `git worktree`:
+  - **CHỈ THÊM, KHÔNG SỬA/BỚT**: 72 + 76 + 47 dòng của bản cũ **còn nguyên văn**;
+    system 1 dòng của xem-tuoi còn nguyên bên trong hằng mới.
+  - 🔑 **Δ đúng BẰNG `len(DOC_ARC_*) + 2`** ở cả ba (1520 · 1547 · 1537) ⇒ **không
+    có gì khác lọt vào**. Đây là bất biến gánh câu "chỉ đổi shape, không đổi cổ pháp".
+  - arcDoc **KHÔNG** mang bối cảnh chat · ngân sách 120–180 từ · bản thứ hai của
+    ① · bản thứ hai luật thuật ngữ · lớp chốt mâu thuẫn.
+- **A/B 26 toolType qua `buildChatContext`: TRÙNG KHÍT từng byte** ⇒ rail + 24
+  prompt kịch bản (đang chạy prod) không đổi một byte.
+- **Red-team 3/3 đỏ đúng** (xoá một luật cổ pháp → đỏ 3 ca gồm cả Δ · chèn một câu
+  lạ ngoài arc → **chỉ Δ bắt được** · cho arcDoc mang ngân sách chat → đỏ), đối
+  chứng khôi phục xanh, 0 file rác.
+- 🪤 Ca red-team ở **đợt 1** lộ bộ kiểm **CHẾT trước khi tới lượt assert** (thiếu
+  tên biến trong scope của `new Function`) → vá để nó báo đỏ thay vì ném lỗi.
+  Bài học cũ: *chốt chặn mà chết trước khi tới lượt nó thì không phải chốt chặn.*
+
+### CÒN LẠI
+- 🔴 **CHƯA gọi LLM thật lượt nào** — verify dừng ở tầng CHỮ VÀO PROMPT. Arc có ăn
+  hay không thì phải chạy `scripts/demo-luan.mjs` bằng `gemini-2.5-flash` (nhớ
+  `thinkingBudget: 0`, nếu không cả hai nhánh đều cụt giữa câu) hoặc test prod.
+- **Đợt 3 chưa làm** — 4 bản JSON schema trả tiền + `/api/phong-thuy` + 3 action
+  đặt-tên/chọn-ngày. ⚠️ Thêm field = đổi payload ⇒ **BẮT BUỘC bump `SHAPE`** (đã
+  cắn 2 lần). Cần Henry chốt: nhét twist vào field ĐÃ CÓ (không đổi schema) hay
+  thêm field `twist` riêng (phải bump).
+- **KHÔNG áp arc cho truyện tiền kiếp** (`past-life-story` · `past-life-bond` ·
+  `chan-dung-vo-chong`): văn KỂ CHUYỆN, đã CẤM TUYỆT ĐỐI thuật ngữ tử vi và có
+  luật riêng bám điểm 9 đại vận. Arc là luật cho văn LUẬN.
+- `check:prompt` chỉ quét `lib/agent/prompts.ts`, **chưa canh** 4 prompt luận giải
+  ở route — trần ký tự và luật một-nguồn-bố-cục không với tới chúng.
 ## 💸 Đường trả thưởng giới thiệu CHẾT TỪ LÚC VIẾT RA — `catch {}` giấu 6 ngày (2026-08-18)
 
 Báo cáo CMO thấy `referrals` có 1 dòng mà `signup_rewarded_at` NULL đã 6 ngày.

@@ -424,6 +424,67 @@ export const MAU_ARC_CHUNG = mauArc(
 · [Thần số học] số chủ đạo 8 → ✅ "Chị hợp việc cầm tiền cầm người, giao gì cũng xong — kẹt ở chỗ ôm hết vào rồi tự mệt một mình." ❌ "Số chủ đạo 8 chủ về quyền lực, tài chính và tham vọng."`
 );
 
+// ─── ARC CHO VĂN LUẬN DÀI (họ 3 — bản luận giải nhiều phần / một phần đứng riêng) ───
+//
+// 🔴 KHÔNG dùng `LUAN_ARC`/`LUAN_ARC_CHUNG` ở đây. Hai khối đó mở đầu bằng bối
+// cảnh CHAT ("người hỏi VỪA đọc xong bản luận đầy đủ ở màn hình bên cạnh — cấm
+// tóm tắt lại thứ họ vừa đọc") và mang ngân sách 120–180 từ. Bản luận giải CHÍNH
+// LÀ cái "bản luận đầy đủ" đó, còn ngân sách thì mỗi phần đã tự khai ở đầu prompt
+// của nó ⇒ dán vào là prompt tự mâu thuẫn, đúng bệnh "hai nguồn bố cục" mà #541
+// đi gỡ.
+//
+// ⚠️ Khối này CỐ Ý chỉ chở phần CÒN THIẾU. Prompt luận giải đã có sẵn — và có bản
+// MẠNH HƠN vì gắn với cổ pháp — các thứ sau, nên ở đây tuyệt đối không viết lại:
+//   · câu phán quyết mở đầu, in đậm, nghĩa đời thường trước  (lớp ①)
+//   · phần giải thích bằng hệ quả, chọn 1–2 căn cứ nặng ký    (lớp ④)
+//   · luật thuật ngữ (tên riêng để trong ngoặc, không mở đầu câu)
+//   · ngân sách từ của từng phần
+// Viết lại chúng ở đây là dựng bản thứ hai rồi hai bản trôi khỏi nhau.
+const arcDoc = (o: { canCu: string; phepDich: string }) => `── HAI THỨ BẮT BUỘC CÓ TRONG MỖI PHẦN (BỔ SUNG cho luật phán quyết ở trên, KHÔNG thay nó) ──
+Viết LIỀN MẠCH trong văn xuôi. TUYỆT ĐỐI không in tên hai mục này ra màn hình, không đánh số, không tách thành tiêu đề.
+- HÀNH VI ĐỜI THƯỜNG (1–2 việc): việc cụ thể tới mức người đọc tự soi ra mình — "hay nhận việc rồi ôm một mình", "cãi xong là im mấy ngày", "tiền vào tay là có chỗ gọi tên ngay". Phải mọc ra từ ${o.canCu} của CHÍNH phần đang viết, KHÔNG phải câu chung chung ai đọc cũng thấy đúng. Chật chỗ thì lấy MỘT cái đắt nhất.
+- MỘT CÂU LẬT: lật góc nhìn — cái người đọc tưởng là chỗ yếu hoá ra là chỗ mạnh, hoặc ngược lại. PHẢI rút từ dữ liệu thật của phần đó; không có căn cứ thì BỎ HẲN, tuyệt đối không nói ngược cho kêu.
+
+── GIỌNG ──
+Viết như đang NÓI với người ngồi đối diện — chêm khẩu ngữ tự nhiên (thì, à, này, nhé, đấy, cơ, chứ), mỗi đoạn 1–2 cái. KHÔNG chêm vào câu phán quyết in đậm, không chêm vào câu chốt.
+CẤM: "Như vậy có thể thấy" · "Nhìn chung" · "Tóm lại" · "Về mặt…" · "Thứ nhất… thứ hai" · "Trước tiên cần hiểu rằng" · rào đón ở câu chốt.
+
+── PHÉP DỊCH (dữ kiện → câu). Học đúng phép biến đổi này, đừng chép chữ ──
+${o.phepDich}`;
+
+// ⚠️ CỐ Ý KHÔNG có lớp CHỐT ở đây, dù arc chat có. Cả ba prompt luận giải đích
+// đều ĐÃ tự khai cách kết, và khai khác nhau: `/api/lasotuvi` cho "gợi ý nhẹ nếu
+// cần, nhưng không dạy đời"; `/api/tubinh` thì BẮT BUỘC mỗi phần trả lời "nên làm
+// gì để khai thác điểm mạnh / hóa giải điểm yếu"; `phu-the-luan-giai` kết bằng
+// "1-2 câu tác động cụ thể tới hôn nhân". Thêm một luật chốt nữa là vừa chồng lên
+// vừa mâu thuẫn với chúng — mà "hóa giải" là khái niệm cổ pháp, không phải hình
+// dạng, nên không được đụng.
+
+const PHEP_DICH_LASO = `· [Phu Thê] Thiên Đồng(hãm) + Đà La → ✅ hành vi: "Chuyện nhà có gì cũng để bụng, đợi tới lúc không chịu nổi nữa mới nói một thể." ❌ "Thiên Đồng hãm địa gặp Đà La chủ hôn nhân trắc trở."
+· [Tài Bạch] Vũ Khúc(miếu) + Hóa Lộc → ✅ câu lật: "Cái tính chi ly mà người nhà hay kêu lại đúng là chỗ giữ được tiền cho anh." ❌ "Vũ Khúc miếu địa Hóa Lộc là cách cục tài lộc tốt."`;
+
+export const DOC_ARC_LASO = arcDoc({
+  canCu: 'sao / cách cục / độ sáng',
+  phepDich: PHEP_DICH_LASO,
+});
+
+export const DOC_ARC_PHU_THE = arcDoc({
+  canCu: 'sao / cách cục / độ sáng của cung Phu Thê',
+  phepDich: PHEP_DICH_LASO,
+});
+
+export const DOC_ARC_TUBINH = arcDoc({
+  canCu: 'can chi / thập thần / cường nhược / dụng thần',
+  phepDich: `· [Nhật Can] Canh kim, thân nhược, Quan Sát vượng → ✅ hành vi: "Việc dồn tới là anh nhận hết, tối về mới thấy mình gánh phần của ba người." ❌ "Nhật chủ Canh kim thân nhược, Quan Sát vượng khắc thân."
+· [Dụng thần] Hỏa → ✅ câu lật: "Cái nóng ruột hay bị chê là thiếu kiên nhẫn lại chính là thứ kéo anh ra khỏi mấy giai đoạn ì." ❌ "Dụng thần là Hỏa, hỷ Mộc Hỏa, kỵ Kim Thủy."`,
+});
+
+export const DOC_ARC_TUONG_HOP = arcDoc({
+  canCu: 'ngũ hành / can chi / sao của HAI lá số',
+  phepDich: `· [Ngũ hành] nam Kim – nữ Mộc, Kim khắc Mộc → ✅ hành vi: "Anh nói một câu là chị nghĩ cả buổi; chị im thì anh lại tưởng xong chuyện." ❌ "Nam mệnh Kim khắc nữ mệnh Mộc, ngũ hành tương khắc."
+· [Xét tuổi] Tam Hợp → ✅ câu lật: "Hợp nhau tới mức chẳng ai chịu nói thẳng — chỗ dễ chịu nhất lại đúng là chỗ hai người hay né việc khó." ❌ "Hai tuổi thuộc Tam Hợp, chủ hòa hợp."`,
+});
+
 // Khối dán vào MỌI prompt kịch bản của rail (~22 prompt / 24 toolType).
 // Ghép sẵn thành MỘT hằng số để mỗi prompt chỉ nội suy một chỗ — thêm tool mới
 // chép đúng dòng `${RAIL_SHAPE_AND_VOICE}` là có đủ cả hai, không sót nửa nào.

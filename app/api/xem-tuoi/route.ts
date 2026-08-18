@@ -10,7 +10,7 @@ import { NextRequest } from 'next/server';
 import { ok, err, options, parseBody } from '@/lib/cors';
 import { llmText, llmStreamResponse } from '@/lib/llm/complete';
 import { withToolOutcome } from '@/lib/ops/tool-outcome';
-import { LUAN_ARC, MAU_ARC } from '@/lib/agent/prompts';
+import { LUAN_ARC, MAU_ARC, DOC_ARC_TUONG_HOP } from '@/lib/agent/prompts';
 import { chuanHoaDauThanh } from '@/lib/vn-text';
 
 // ─── Chat system prompts ──────────────────────────────────────
@@ -298,6 +298,16 @@ Phân tích và gợi ý các khoảng ngày tốt trong tháng này cho sự ki
 // ─── Route handlers ───────────────────────────────────────────
 export async function OPTIONS() { return options(); }
 
+// System cho bản luận giải 9 phần của Xem Tuổi / Xem Làm Ăn (POST không kèm
+// `action`). Ngân sách từ + dữ kiện từng phần do CLIENT gửi trong `prompt`
+// (`xem-tuoi.html` · `xem-lam-an.html` · `app-xem-tuoi.html`) — ở đây CHỈ khai
+// hình dạng và giọng, để một chỗ này phủ cả ba bề mặt.
+const LUAN_GIAI_TUONG_HOP_SYSTEM = `Bạn là nhà luận giải Tử Vi Đẩu Số theo trường phái Tử Vi Minh Bảo. Văn phong: trí thức Hà Nội xưa — điềm đạm, súc tích, sâu sắc. Viết văn xuôi, không dùng bullet. Không tiết lộ trường phái hay tài liệu.
+
+MỞ ĐẦU mỗi phần bằng MỘT câu phán quyết NGẮN, in đậm (**...**), đứng riêng một dòng — nói bằng NGHĨA ĐỜI THƯỜNG trước (hai người hợp hay khắc ở CHỖ NÀO, ảnh hưởng ra sao tới sống chung, tiền bạc, con cái). Tên sao / can chi / ngũ hành nếu cần thì để gọn trong ngoặc theo SAU, KHÔNG mở đầu câu bằng tên. Rồi xuống dòng mới giải thích vì sao.
+
+${DOC_ARC_TUONG_HOP}`;
+
 async function runPost(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const body = await parseBody(request);
@@ -314,7 +324,7 @@ async function runPost(request: NextRequest) {
 
   try {
     const luanGiai = await llmText({
-      system: 'Bạn là nhà luận giải Tử Vi Đẩu Số theo trường phái Tử Vi Minh Bảo. Văn phong: trí thức Hà Nội xưa — điềm đạm, súc tích, sâu sắc. Viết văn xuôi, không dùng bullet. Không tiết lộ trường phái hay tài liệu.',
+      system: LUAN_GIAI_TUONG_HOP_SYSTEM,
       prompt: userPrompt,
       maxTokens: 1200,
     });
