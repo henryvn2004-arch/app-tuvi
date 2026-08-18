@@ -631,6 +631,29 @@ ghi được `cron_runs` mà không có secret.
   dòng `cron_runs` có `source='actions'` xuất hiện lúc job bắt đầu (không phải
   lúc kết thúc).
 
+### 🔴 MỞ VAN KHÔNG XẾP HÀNG ĐƯỢC 5 CLIP ĐÃ CÓ — thứ tự bắt buộc, đo được
+Đo trước khi khuyên Henry mở van: **cả 5 clip trong `media_assets` đều có ĐÚNG 0
+dòng `media_posts`**. Van đóng lúc chúng được nộp nên `clip-ingest` chưa bao giờ
+chạy tới khối xếp hàng ⇒ **mở `social.clip_autopost` chỉ ăn cho clip nộp về SAU
+đó**, không hồi tố.
+- 🔑 Và **KHÔNG backfill được từ DB**: `media_assets.meta` của clip chỉ giữ
+  `built_at · bytes · ingested_at · path · run` — **không có caption, không có
+  hashtag**. Hai thứ đó đi qua **sidecar `<id>.meta.json`** do `gen-insight` ghi
+  lúc render, `publish-clips` chuyển tiếp thành form field, và `clip-ingest` chỉ
+  đọc chúng TRONG khối xếp hàng. Van đóng ⇒ chúng không được lưu ở đâu cả.
+- ⇒ **Thứ tự bắt buộc: MỞ VAN TRƯỚC, rồi mới tới lượt dựng.** Lượt `--all` hằng
+  tuần vốn dựng lại từ đầu (runner là bản clone sạch — khoản hao ~41 phút đã ghi
+  ở mục trên) nên nó tự nộp lại và tự xếp hàng. Mở van SAU lượt dựng thì phải
+  đợi thêm trọn một tuần.
+- ⚠️ Đây đúng cái bẫy đọc-nhầm đã ghi ở mục *"van mở ra cũng không clip nào đi"*,
+  chỉ khác nguyên nhân: lần đó là hàng đợi đứng yên, lần này là **chưa từng có
+  dòng hàng đợi nào để mà đứng**. Cả hai nhìn từ ngoài đều là *"mở van → im lặng
+  → chắc pipeline clip hỏng"*, trong khi mã chạy đúng.
+- **Đo lại hàng đợi ảnh (18/08):** 54 bài `queued` · 0 `live` · 0 `error` · bài
+  cũ nhất **02/08**. Chỉ **1/54** bài mang dấu lỗi *"session is invalid (code
+  190)"* — tức chốt *"lỗi CHẶN dừng cả kênh"* chạy đúng: nó thử ĐÚNG một bài rồi
+  dừng, không đốt sạch 54 bài vào một cái token đã chết.
+
 ### 🪤 Bẫy đã vấp
 - **`import()` một script CLI là CHẠY nó.** Lượt kiểm cú pháp cuối vô ý gọi
   `import('scripts/stock-video.mjs')` → script bắt đầu gọi API Pixabay thật.
