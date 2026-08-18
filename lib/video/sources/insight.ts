@@ -851,27 +851,59 @@ const SOURCES: InsightSource[] = [
     toolId: 'kinh-dich',
     spec: {
       title: 'Ba tình thế bế tắc trong Kinh Dịch',
-      hook: 'Bốn kiểu bế tắc — bạn đang ở kiểu nào?',
+      /*
+       * ✍️ VIẾT LẠI THEO LỜI CHÊ ĐO ĐƯỢC — không phải sửa cho khác đi.
+       *
+       * Bản trước trượt cổng 2 **cả 3 vòng, 0/4 người xem hết**, và lời chê
+       * lặp gần như nguyên văn qua từng vòng, từ ba persona khác nhau:
+       *   · `sv-22`   — *"mấy cái quẻ này lạ quá, KHÔNG BIẾT LÀ GÌ"*
+       *   · `vp-35`   — *"không giải thích rõ quẻ là gì, TẠI SAO nó liên quan"*
+       *   · `tin-45`  — *"chỉ nêu vấn đề và tên quẻ, KHÔNG có lời khuyên cụ thể"*
+       *
+       * Ba lời đó chỉ vào ba chỗ hụt tách bạch, và bản cũ hụt cả ba:
+       *   1. chưa bao giờ nói **quẻ là cái gì** → thêm hẳn một cảnh mở giải thích
+       *   2. chỉ CHẨN mà không KHUYÊN → mỗi tình thế nay kèm một việc làm được
+       *   3. **bốn** tên lạ trong 30 giây là quá tải → cắt còn **ba**, đúng
+       *      luôn với tiêu đề và với id `ba-the-be-tac` (bản cũ tự mâu thuẫn:
+       *      tiêu đề "Ba", hook "Bốn kiểu")
+       *
+       * ⚠️ Lời chê của `luot-vo-dinh` (*"chữ to trên nền đơn giản"*, bỏ ở 2–3s)
+       * là lời chê về HÌNH và nó ĐÚNG — hook clip này không có nền lẫn tranh,
+       * chỉ chữ trên navy. Viết lại chữ KHÔNG chữa được nó. Xem ghi chú
+       * `backdropVideo` bên dưới: chỗ đó là đánh đổi đã đo, chưa có đường gỡ rẻ.
+       */
+      /*
+       * 🪤 Bản viết lại ĐẦU của tôi bỏ mất dạng CÂU HỎI và cổng 1 kêu ngay
+       * `hook.no-pattern` — hook cũ *"bạn đang ở kiểu nào?"* vốn đã đúng dạng,
+       * tôi sửa nội dung rồi vô tình gỡ luôn cái đang đúng. Nay giữ CẢ HAI:
+       * câu hỏi (dạng giữ chân) + lời hứa mới (người xưa đã đặt tên cho nó).
+       */
+      hook: 'Bạn đang bế tắc kiểu gì? Người xưa đã đặt tên cho nó.',
       scenes: [
         {
-          text: 'Mới bắt đầu mà rối như tơ vò, chưa biết gỡ từ đâu. Người xưa gọi là quẻ Truân.',
-          visual: { kind: 'image', src: QUE('17-kw03.png'), accent: 'rối như tơ vò' },
+          // Cảnh mở TRẢ LỜI thẳng câu "quẻ là gì" — thứ hai persona hỏi mà bản
+          // cũ không có. Đặt trước mọi tên quẻ, nếu không thì tên đầu tiên đã
+          // rơi vào chỗ trống.
+          text: 'Kinh Dịch có 64 quẻ. Mỗi quẻ là tên gọi cho một tình thế người ta hay mắc.',
+          visual: { kind: 'image', src: QUE('63-kw01.png'), accent: 'một tình thế' },
         },
         {
-          text: 'Đi tiếp thì nghẽn, quay lại thì không cam. Cổ nhân đặt tên quẻ Kiển.',
-          visual: { kind: 'image', src: QUE('20-kw39.png'), accent: 'không cam' },
+          text: 'Mới bắt đầu mà rối như tơ vò. Quẻ Truân. Người xưa khuyên: đừng gỡ một mình.',
+          visual: { kind: 'image', src: QUE('17-kw03.png'), accent: 'đừng gỡ một mình' },
         },
         {
-          text: 'Bạn vẫn gắng, nhưng nói ra thì không ai hiểu. Đó là quẻ Khốn.',
-          visual: { kind: 'image', src: QUE('26-kw47.png'), accent: 'không ai hiểu' },
+          text: 'Đi tiếp thì nghẽn, quay lại không cam. Quẻ Kiển. Lời khuyên: đổi đường, đừng đâm thẳng.',
+          visual: { kind: 'image', src: QUE('20-kw39.png'), accent: 'đổi đường' },
         },
         {
-          text: 'Hết lớp này tới lớp khác, tới mức bạn quen dần. Quẻ Khảm.',
-          visual: { kind: 'image', src: QUE('18-kw29.png'), accent: 'quen dần' },
+          text: 'Bạn vẫn gắng, nói ra không ai hiểu. Quẻ Khốn. Cổ nhân bảo: bớt lời, làm cho họ thấy.',
+          visual: { kind: 'image', src: QUE('26-kw47.png'), accent: 'làm cho họ thấy' },
         },
         {
-          text: 'Cổ nhân không gọi đó là số phận của bạn. Chỉ là một giai đoạn.',
-          visual: { kind: 'image', src: QUE('63-kw01.png'), accent: 'một giai đoạn.' },
+          // Đóng trên tranh quẻ KHẢM — quẻ hiểm nhất trong bốn quẻ bản cũ nêu.
+          // Đặt câu "cũng có lối ra" lên đúng bức khó nhất thì câu đó nặng hơn.
+          text: 'Cổ nhân không gọi đó là số phận. Quẻ khó nhất cũng có lối ra.',
+          visual: { kind: 'image', src: QUE('18-kw29.png'), accent: 'cũng có lối ra' },
         },
       ],
       ...cta('Bạn đang ở tình thế nào?'),

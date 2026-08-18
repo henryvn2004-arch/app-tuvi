@@ -165,6 +165,42 @@ không với tới.
 - 🪤 **Phép đo `exit=0` đầu tiên của tôi SAI**: `$?` sau một pipe bắt mã thoát
   của `tail`, không phải của `node`. Đo lại không qua pipe → đúng **exit 1**.
 
+### 🛑 `ba-the-be-tac`: viết lại KHÔNG cứu được — chặn ở HÌNH, không ở CHỮ
+Lượt `32129885534` giao ra **4/5 clip insight** (cộng `vi-sao-hay-hoan-lai` hôm
+trước là **5/6**). Riêng `ba-the-be-tac` trượt cổng 2 cả 3 vòng, lần thứ ba.
+
+Đọc lời chê thì nó tách thành **ba chỗ hụt riêng biệt**, và bản cũ hụt cả ba:
+| persona | chê gì | vá bằng |
+|---|---|---|
+| `sv-22` | *"mấy cái quẻ này lạ quá, KHÔNG BIẾT LÀ GÌ"* | thêm cảnh mở giải thích quẻ là gì |
+| `tin-45` | *"chỉ nêu vấn đề và tên quẻ, KHÔNG có lời khuyên"* | mỗi tình thế kèm một việc làm được |
+| `vp-35` | *"không giải thích TẠI SAO nó liên quan"* | như trên, đặt trước mọi tên quẻ |
+
+Viết lại xong, đo trên cổng THẬT: **0/4 → 1/4 → 0/5**. Tức **phẳng**, và mẫu số
+còn đổi giữa hai lượt (4 rồi 5 người trong tệp) — đúng phương sai đã ghi.
+- ✅ Phần chữ CÓ ăn, đo được: `vp-35` từ bỏ ở **7–11s** lên bỏ ở **15s**. Nhưng
+  đó là một persona trong một vòng — **đừng đọc rộng hơn thế**.
+- 🔴 **Chỗ thật sự chặn là HÌNH.** `luot-vo-dinh` bỏ ở **3s** trong MỌI vòng của
+  CẢ BA bản kịch bản, và lý do luôn là hình: *"chữ to nhưng không có hình ảnh
+  hay hiệu ứng gì"* · *"các hình vẽ quẻ tông màu trầm, không tạo cảm giác hứng
+  thú"*. **Viết lại chữ không chạm được vào đó.**
+- ⚠️ Và lời chê đó **KHÔNG phải artefact của `buildTimeline`** — đã đi kiểm:
+  `describeImage` tả tranh quẻ đúng, nhánh cảnh `image` tả đúng ô 944×944. Hook
+  clip này thì thật sự không có nền lẫn tranh, chỉ chữ trên navy. Hội đồng chê
+  đúng thứ sắp render.
+- 🪤 **Bản viết lại ĐẦU của tôi tự gây một hồi quy**: bỏ mất dạng CÂU HỎI của
+  hook → cổng 1 kêu `hook.no-pattern`. Hook cũ vốn đã đúng dạng; tôi sửa nội
+  dung rồi vô tình gỡ luôn cái đang đúng. **Sửa một thuộc tính thì phải liệt kê
+  các thuộc tính KHÁC mà chỗ đó đang giữ.**
+- **GIỮ bản viết lại** dù không qua cổng: nó vá ba lỗi có thật độc lập với cổng
+  (không giải thích quẻ · chỉ chẩn không khuyên · tiêu đề "Ba" mà hook "Bốn"),
+  và kết quả cổng thì phẳng chứ không tệ đi.
+- 🛑 **DỪNG mài kịch bản này.** Ba bản, ~9 vòng chấm, cùng một persona bỏ ở cùng
+  một giây vì cùng một lý do. Đây là kết luận về ĐỊNH DẠNG — *tranh vẽ tay tông
+  trầm, tĩnh, không hợp luồng lướt* — chứ không phải một câu chữ chưa đủ hay.
+  Đường đi tiếp là quyết định của Henry: đổi hẳn định dạng clip này (nền động
+  cho cảnh `typo`, bỏ tranh quẻ làm hình chính), hay bỏ clip này.
+
 ### 🔴 VAN MỞ RA CŨNG KHÔNG CÓ CLIP NÀO ĐI — hàng đợi ĐỨNG YÊN VĨNH VIỄN
 Đo `media_posts` trước khi khuyên Henry mở van `social.clip_autopost`:
 
