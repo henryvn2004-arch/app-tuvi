@@ -225,8 +225,25 @@ export async function ttsScene(text, { voice = '', speed = CLIP_SPEED } = {}) {
     } catch (e) {
       lastErr = e;
       if (attempt < RETRIES) {
-        console.warn(`   ⚠️ TTS lượt ${attempt} hỏng (${e.message.slice(0, 80)}) — thử lại…`);
-        await sleep(attempt * 4000);
+        // 🔑 HAI LOẠI HỎNG, CHỜ HAI KIỂU KHÁC HẲN.
+        //
+        // Nhà cung cấp trả HTML (`<!DOCTYPE`) thay vì JSON là trang lỗi ở tầng
+        // CỔNG — chạm trần, không phải lỗi của câu này. Đo trên Actions
+        // (32125541824): 19 câu trót lọt rồi 5 lượt liên tiếp cùng chữ ký đó,
+        // và cả 4 lượt thử lại trong ~2,5 phút đều hỏng ⇒ backoff 4→16 giây là
+        // quá ngắn cho thứ đang chặn.
+        //
+        // ⚠️ CHƯA BIẾT trần đó tính theo PHÚT hay theo tổng lượt/ký tự của tài
+        // khoản. Chờ lâu chỉ cứu được ca thứ nhất. Lưới đỡ THẬT cho ca thứ hai
+        // nằm ở chỗ khác: cache giọng đọc nay lưu kể cả khi job trượt
+        // (`video-build.yml`), nên mỗi lượt chạy giữ được phần đã sinh.
+        const congChan = /<!DOCTYPE|<html/i.test(e.message);
+        const cho = congChan ? [30000, 75000, 150000][attempt - 1] || 150000 : attempt * 4000;
+        console.warn(
+          `   ⚠️ TTS lượt ${attempt} hỏng (${e.message.slice(0, 80)}) — ` +
+            `${congChan ? `nghi chạm trần, chờ ${cho / 1000}s` : 'thử lại'}…`
+        );
+        await sleep(cho);
       }
     }
   }
