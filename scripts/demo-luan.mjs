@@ -13,8 +13,11 @@ import { readFileSync } from 'fs';
 // ── Cấu hình demo ────────────────────────────────────────────────
 const BIRTH = { day: 3, month: 6, year: 1998, hourBranch: 1, gender: 'nam' }; // nam, giờ Sửu
 const NAM_XEM = 2026;
-const QUESTION = 'Sự nghiệp của tôi thế nào, hợp làm nghề gì?';
-const FOCUS = ['Quan Lộc', 'Mệnh']; // trọng tâm câu hỏi
+// Đổi câu hỏi/trọng tâm không cần sửa file:
+//   QUESTION="..." FOCUS="Quan Lộc" node scripts/demo-luan.mjs
+// Cần thiết để đo nhánh "hỏi có/không → 1-3 câu", khác hẳn nhánh hỏi rộng.
+const QUESTION = process.env.QUESTION || 'Sự nghiệp của tôi thế nào, hợp làm nghề gì?';
+const FOCUS = (process.env.FOCUS || 'Quan Lộc,Mệnh').split(',').map((s) => s.trim());
 
 // Provider: Gemini nếu có GEMINI_API_KEY (khớp prod luận-giải), else Anthropic.
 const GEMINI_KEY = process.env.GEMINI_API_KEY || '';
@@ -189,7 +192,16 @@ async function callGemini(system, userMsg) {
     body: JSON.stringify({
       systemInstruction: { parts: [{ text: system }] },
       contents: [{ role: 'user', parts: [{ text: userMsg }] }],
-      generationConfig: { maxOutputTokens: 1200, temperature: 1 },
+      // Khớp ĐÚNG prod (lib/llm/complete.ts + lib/agent/providers/gemini.ts):
+      // thinkingBudget 0 + temperature 0.7. Thiếu thinkingBudget thì
+      // gemini-2.5-flash đốt gần hết ngân sách vào token "suy nghĩ" (đo được:
+      // thoughtsTokenCount 1003/1200) → finishReason MAX_TOKENS, bản trả lời bị
+      // CẮT giữa câu ở CẢ hai nhánh ⇒ không đọc được A/B.
+      generationConfig: {
+        maxOutputTokens: 1200,
+        temperature: 0.7,
+        thinkingConfig: { thinkingBudget: 0 },
+      },
     }),
   });
   if (!resp.ok)

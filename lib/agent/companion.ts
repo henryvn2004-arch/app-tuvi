@@ -10,12 +10,15 @@
 //   3. data tool đang mở              — đổi theo tool (đã có, ~25 prompt)
 //
 // 🔑 VÌ SAO PHẢI GHI ĐÈ HÌNH DẠNG, KHÔNG CHỈ THÊM KIẾN THỨC:
-// `LUAN_ARC` ép lớp ① "MỞ — chốt thẳng, sắc, in đậm (**…**)" rồi lớp ⑤ "CHỐT
-// bằng một việc làm được tuần này"; `GIONG_NGUOI_RULES` (nhánh ~22 prompt kịch
-// bản) khuyến khích khẩu ngữ tự nhiên. Cả hai được dựng để một lượt ĐÁNG NHỚ VÀ KỂ LẠI
-// ĐƯỢC — đúng cho câu hỏi tra cứu, hỏng hẳn với người vừa gõ "em mất việc
-// hai tháng rồi". Nên khối này phải đứng SAU chúng trong system và nói rõ
-// nó ghi đè cái gì; đảo thứ tự là model theo luật cũ.
+// Arc (`LUAN_ARC` cho 3 shape lá số · `LUAN_ARC_CHUNG` cho ~22 prompt kịch bản —
+// từ 2026-08-18 CẢ HAI họ đều đi qua cùng một lõi `arcCore`) ép lớp ① "MỞ — chốt
+// thẳng, sắc, in đậm (**…**)", lớp ② liệt hành vi cụ thể, rồi lớp ⑤ "CHỐT bằng
+// một việc làm được tuần này", và khuyến khích khẩu ngữ tự nhiên. Dựng để một
+// lượt ĐÁNG NHỚ VÀ KỂ LẠI ĐƯỢC — đúng cho câu hỏi tra cứu, hỏng hẳn với người
+// vừa gõ "em mất việc hai tháng rồi". Nên khối này phải đứng SAU chúng trong
+// system và nói rõ nó ghi đè cái gì; đảo thứ tự là model theo luật cũ.
+// 🔑 Nhờ hai họ nay chung một lõi, mấy câu ghi đè bên dưới (trích đích danh
+// "lớp ①", "lớp ⑤", "nhịp 5 lớp") ăn cho CẢ ~25 tool chứ không riêng lá số.
 //
 // ⚠️ ĐÁNH ĐỔI CÓ Ý THỨC: đứng sau = không dùng được prompt-cache dùng chung
 // giữa các user (tiền tố phải ổn định mới cache được). Chọn đúng trước, rẻ

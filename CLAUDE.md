@@ -122,6 +122,85 @@ tăng/giảm nào của traffic, phải xem bản `_human`.**
 
 ---
 
+## 🩺 "sức khoẻ" gõ lối CŨ thì TRƯỢT bộ dò chủ đề — 3 bản chép tay cùng dính (2026-08-18, PR sau)
+
+Henry: *"vá đi"*. Bắt được lúc trả lời câu hỏi *"rút gọn token có tạo room cho
+data không"* — đi đo `focusHint` thì lộ ra bảng từ khoá dò hụt.
+
+### 🔴 Căn nguyên: tiếng Việt có HAI lối bỏ dấu thanh, bảng chỉ khai một
+`FOCUS_TOPICS` viết `'sức khỏe|bệnh|thân thể|tật ách'` (lối MỚI, dấu ở nguyên âm
+sau). Người gõ lối CŨ — `sức khoẻ` — **trượt sạch bảng**, rơi xuống nhánh mặc
+định `Mệnh · Quan Lộc · Tài Bạch · Phu Thê` ⇒ hỏi sức khoẻ mà **KHÔNG có Tật
+Ách**, đúng cung câu hỏi nhắm tới. Không lỗi nào bắn ra. Cùng lớp `\bcon\b`
+khớp "con vật".
+- **Không phải một chỗ — BA bản chép tay** cùng một bảng, cùng một bệnh:
+  `lib/agent/prompts.ts` (rail, 10 tool đường lá số + 3 kênh bot) ·
+  `app/api/tubinh/route.ts` · `app/api/xem-tuoi/route.ts` (bản chép tay phục vụ
+  `xem-tuoi.html` + `xem-lam-an.html` — đúng bề mặt vừa vá ở #545).
+- ⚠️ **CỐ Ý chưa gộp 3 bảng làm một**: `/api/lasotuvi` neo parity vào bản của
+  `prompts.ts`, còn hai bản kia trả về KHOÁ khác nhau (`suckhoe` vs `Tật Ách`).
+  Gộp là một lượt refactor riêng, rủi ro hơn hẳn phần vá này.
+
+### 🔑 Vá bằng CHUẨN HOÁ VỊ TRÍ dấu, KHÔNG phải bỏ dấu thanh
+`lib/vn-text.ts` → `chuanHoaDauThanh()`: NFD, rồi trong mỗi CỤM nguyên âm dời
+dấu thanh về nguyên âm ĐẦU. Vị trí đó là **quy ước nội bộ**, không nhằm đúng
+chính tả — chỉ cần mẫu dò và câu hỏi cùng đi qua một hàm.
+- 🔴 **Bỏ dấu thanh là đổi lỗ hổng này lấy lỗ hổng khác**: `tật`↔`tất`,
+  `tiền`↔`tiến`, `bệnh`↔`bênh` sẽ nhập làm một. Ở đây dấu thanh GIỮ NGUYÊN nên
+  hai LỐI VIẾT gặp nhau mà hai CHỮ khác thanh vẫn tách bạch — có 9 ca đối chứng
+  canh đúng điều đó.
+- ⛔ **Đừng vá bằng cách thêm từng biến thể vào bảng** — thêm biến thể là hẹn lần
+  sót kế tiếp (`hoà/hòa` · `thuý/thúy` · `xoà/xòa` · `loà/lòa`… còn dài). Hàm
+  này phủ cả họ đó miễn phí.
+- Chỉ dùng để DÒ, không để in ra: `chuanHoaDauThanh('quý') = 'qúy'`.
+- Rail biên dịch bảng **MỘT lần lúc nạp module** (`FOCUS_MATCHERS`), không dựng
+  `RegExp` mỗi lượt.
+
+### 🐞 Bắt kèm — nợ CÓ SẴN, cố ý KHÔNG đụng
+`/api/tubinh` khai mẫu `'sự nghiệp|công việc|nghề|quan|chức'`: **`quan` là chuỗi
+con** nên *"cho tôi xem tổng **quan**"* khớp `quanSat`. Đã đối chứng trên logic
+`origin/main`: y hệt ⇒ **có sẵn, không phải hồi quy của lượt vá**. Siết nó là đổi
+hành vi một route đang chạy để lấy một lợi ích chưa ai kêu — tách việc.
+- 🪤 Và nó suýt làm bài kiểm của tôi báo đỏ oan: ca *"câu không chủ đề → rỗng"*
+  đỏ vì `tổng quan`. **Kỳ vọng của TEST sai, không phải code** — đổi sang đo
+  PARITY với bản cũ thay vì đoán kết quả đúng.
+
+### Verify
+`tsc` 0 · `lint` **0 lỗi / 77 warning = đúng mốc nền** · `prettier` cả cây sạch ·
+**21/21 bộ dò** · engine **185 pass**.
+- **Hàm chuẩn hoá, 8 cặp phải TRÙNG + 9 cặp phải KHÁC**: `khoẻ/khỏe` · `hoà/hòa`
+  · `thuý/thúy` · `hoá/hóa` · `loà/lòa` · `xoè/xòe` · `quý/qúy` · `tuỳ/tùy` gặp
+  nhau; **`tật`≠`tất`** · `tiền`≠`tiến`≠`tiên` · `bệnh`≠`bênh` · `hòa`≠`hóa` ·
+  `mẹ`≠`mẻ` · `con`≠`còn` · `bạn`≠`bàn` · `sao`≠`sáo` vẫn tách. Kèm bất biến:
+  idempotent · không nuốt chữ · **số dấu thanh không đổi** · `năm 2027` giữ
+  nguyên (nhánh `/năm \d{4}/` không bị đụng).
+- **Rail trên MODULE THẬT** (biên dịch `prompts.ts` + hook `Module._resolveFilename`
+  cho alias `@/`): 15 ca chủ đề đúng cung + 6 đối chứng (nhánh mặc định giữ đúng
+  4 cung · hỏi sức khoẻ KHÔNG rơi nhánh mặc định · `tiến bộ`/`tất cả`/`bênh vực`/
+  `sáo măng` không khớp bừa).
+- 🪤 **ĐỐI CHỨNG `origin/main` bằng `git worktree`**: lối cũ ra `Mệnh · Quan Lộc
+  · Tài Bạch · Phu Thê` (**0 Tật Ách**), lối mới ra `Mệnh · Tật Ách` ⇒ lỗi có
+  thật. Bản mới: hai lối ra Y HỆT. Có assert bản đối chứng **không** mang bản vá
+  trước khi đọc kết quả.
+- **PARITY 43 câu viết lối MỚI: cũ vs mới TRÙNG KHÍT** ⇒ bản vá chỉ NỚI, không
+  đổi hành vi nào đang đúng. Hai route kia bóc thẳng bảng + vòng dò từ **bản
+  BIÊN DỊCH** (không chép tay) rồi so cùng cách: tubinh 16 câu, xem-tuoi 14 câu,
+  đều trùng khít; mỗi bên 2 đối chứng chứng minh bản cũ trượt lối cũ.
+- 🪤 **Bẫy cwd lần thứ SÁU**: `cd tuvi-engine && npm test` giữ lại cwd. Đã đo
+  xong mới nhận ra — lần sau về gốc repo NGAY sau lệnh đó.
+- 🪤 Bản đầu viết dấu tổ hợp THẲNG trong regex (vô hình khi đọc diff) → đổi hết
+  sang `\uXXXX`. Dấu phụ trong mã nguồn phải viết bằng escape.
+
+### CÒN LẠI
+- **Ba bảng chủ đề vẫn là ba bản chép tay** (xem trên) — chúng sẽ trôi khỏi nhau.
+- Mẫu `quan` (và `sao` trong `'thần sát|sao'`) còn khớp theo CHUỖI CON, chưa có
+  biên từ. Nợ có sẵn.
+- Chưa dùng `chuanHoaDauThanh` cho các bộ dò tiếng Việt khác trong repo (nhận
+  diện chế độ của `companion.ts`, dò từ khoá nội dung…) — mới phủ đúng 3 bộ dò
+  CHỦ ĐỀ CÂU HỎI.
+
+---
+
 ## ✍️ 75% PROMPT LÀ LUẬT GIỌNG — arc 5 lớp THAY 3 bản bố cục chồng nhau (2026-08-17, PR #541)
 
 Henry: *"cách luận giải, chat… chỉnh sửa để nó hook users hơn"* kèm 5 bước (mở
@@ -238,6 +317,175 @@ Hai luật: **trần ký tự** phần luật từng shape · **mỗi shape ch�
 - ⚠️ **`playwright`/`lighthouse`/`smoke` VẮNG MẶT trên PR #541** (chạy theo
   `deployment_status`, Vercel chưa gắn status). 4 check xanh ≠ đủ 7 — đếm trước
   khi kết luận.
+
+### 📏 Đo bằng GEMINI THẬT — arc ăn ở GIỌNG, không ăn ở ĐỘ DÀI (PR #542)
+Chạy được `scripts/demo-luan.mjs` bằng `gemini-2.5-flash` (model prod).
+
+| | trước arc | sau arc |
+|---|---:|---:|
+| Tên sao lọt ra màn hình / lượt | **11,0** | **0,0** |
+| Có twist (lật góc nhìn) | 0/3 | **3/3** |
+| Câu phán quyết in đậm | 2/3 | **3/3** |
+| Khẩu ngữ / lượt | 6,0 | **8,7** |
+| **Độ dài (mục tiêu 120–180 từ)** | 214 | **211** |
+
+🔑 **Arc đổi được GIỌNG và BỐ CỤC, không đổi được ĐỘ DÀI.** Nhánh "hỏi có/không
+→ 1–3 câu" còn ra **203 từ**, tức dài hơn cả câu hỏi rộng — luật ngân sách viết
+ra nhưng model không theo.
+- 🪤 **Script đo trước đó CHƯA BAO GIỜ đọc được bằng Gemini**: `gemini-2.5-flash`
+  bật *thinking* mặc định và token suy nghĩ **ăn chung `maxOutputTokens`**
+  (`thoughtsTokenCount 1003/1200` → `finishReason: MAX_TOKENS`) ⇒ **cả hai nhánh
+  BEFORE/AFTER đều cụt giữa câu**. Prod khai `thinkingBudget: 0`, script thì
+  không. Hỏng im lặng kiểu tệ nhất — bản cụt vẫn là văn xuôi hợp lệ, nhìn qua
+  tưởng *"model viết cụt"*.
+- 🪤 Bộ dò jargon **kêu oan vì tên sao "Tuần"** khớp vào "tuần này"/"tuần tới" —
+  đúng lớp lỗi `\bcon\b` khớp "con vật". Phải dò dạng đủ *"Tuần án ngữ"*.
+
+### 🔢 `max_tokens` KHÔNG ép được ngân sách từ — và trần suýt không với tới rail
+`RAIL_MAX_TOKENS = 1000` ≈ **800 từ** trong khi `LUAN_ARC` hứa trần 300 ⇒ trần cũ
+chưa bao giờ gác gì. Nay 3 shape lá số dùng **`LASO_MAX_TOKENS = 900`**, suy từ
+đo chứ không suy từ ngân sách prompt hứa: token/từ tiếng Việt **1,25** (dày thuật
+ngữ **1,32**), bản dài nhất model TỰ viết ra khi thả rộng là **797 token / 580 từ**.
+- 🪤 **Ba lần siết đều CẮT GIỮA CÂU**: trần 380 → **2/4** lượt "hỏi sâu" bị cắt ·
+  660 → **1/8** · 800 → có lượt dùng **797/800**. Câu *"liệt kê từng sao"* **không
+  có trần tự nhiên** — mọi trần đều sẽ chạm, kể cả 1000 đang chạy.
+- 🔑 **Kết luận: `max_tokens` là lưới đỡ chặn lượt chạy hoang, KHÔNG phải cái kéo
+  độ dài.** Model không nhìn thấy trần nên trần không dạy được nó viết ngắn. Muốn
+  kéo trung bình xuống thì sửa `LUAN_ARC`, đừng hạ con số này.
+- 🔴 **Và trần đó suýt KHÔNG với tới đường rail THẬT**: nhánh birth của `runAgent`
+  **không đi qua `buildChatContext`** (nó tự ráp `CHAT_SYSTEM_LASO`/`GENERAL`) nên
+  `railMaxTokens` nằm nguyên ở 1000. Đặt trần trong `prompts.ts` chỉ ăn ở nhánh
+  scenario + route legacy `/api/lasotuvi`. Đã vá thêm một dòng trong `run.ts`.
+- 🔑 **Bài kiểm đầu XANH OAN vì đo NHẦM TẦNG**: 21 bất biến đo giá trị
+  `buildChatContext` TRẢ VỀ, mà đường rail không đọc giá trị đó. Cùng lớp lỗi
+  *"bài kiểm đặt tên theo điều muốn chứng minh"*. ⇒ **Đo con số ĐI RA DÂY**
+  (chặn `fetch`, đọc `max_tokens` trong request thật), đừng đo hàm trả về gì.
+
+### 🔵 Thuật ngữ: HẠN CHẾ thay vì CẤM (Henry chốt)
+*"rule chỉ nên hạn chế sử dụng thôi… khi users muốn hỏi sâu, thì đôi khi phải mang
+jargon ra giải thích"*. Luật cũ cấm gần tuyệt đối (*"tối đa MỘT lần trong cả
+lượt"*, *"Ngoại lệ DUY NHẤT"*) — chặn đúng lúc thuật ngữ có giá trị nhất.
+- **GIỮ đúng luật gánh chất lượng**: *mỗi câu phải ĐỨNG VỮNG khi xoá hết tên riêng
+  đi*. Đó mới là thứ chặn lối viết đọc tên sao thay cho nghĩa; phần còn lại chỉ là
+  hàng rào phẳng. Gỡ luôn mâu thuẫn còn sót trong `MAU_ARC` (*"KHÔNG một tên sao nào"*).
+- Đo lại trên Gemini: hỏi thường **1,0–3,0** tên riêng/lượt · hỏi sâu **7,5–15,0**
+  ⇒ luật nay giãn theo ĐỘ SÂU thay vì chặn phẳng.
+- ⚠️ **Hai việc kéo NGƯỢC nhau**: cho gọi tên sao thì câu dài thêm. Nên trần phải
+  **nới** chứ không siết — không thể vừa ép ngắn vừa mở thuật ngữ.
+
+### 🔁 NHÂN ARC RA 22 PROMPT KỊCH BẢN + 2 trang standalone (2026-08-18, PR sau)
+Henry test prod xong: *"ok rồi đó. Mày apply fix cho các chỗ còn lại đi"*, kèm câu
+hỏi đúng chỗ: *"fix này cho cả tool trên shell và standalone luôn đúng ko?"*.
+
+### 🔴 Trả lời: KHÔNG — và chỗ hụt nằm ở standalone
+| Bề mặt | Gọi gì | Trước PR này |
+|---|---|---|
+| 10 tool shell đường lá số | `/api/v1/chat` | ✅ đã có arc |
+| `luan-giai.html` standalone | `/api/lasotuvi?action=chat` → dùng chung `buildChatContext` | ✅ đã có |
+| **`xem-tuoi.html` + `xem-lam-an.html`** | `/api/xem-tuoi?action=chat` — **bản chép tay** | ❌ đứng ngoài |
+| **47 trang `/tools/*.html`** | **0 file gọi chat** | — không có gì để áp |
+- 🔑 `/tools/*.html` không có khung chat NÀO (đo: 0/47 file gọi `api/v1/chat`,
+  `action=chat`). Đừng đi tìm cách áp arc vào đó — không có bề mặt để áp.
+- Bản chép tay `/api/xem-tuoi` còn nguyên luật ngược hẳn arc: *"120-250 từ"* và
+  *"Dẫn chứng sao tinh, cung vị, can chi cụ thể"* — tức BẮT mở câu bằng jargon.
+  Nay nội suy thẳng `LUAN_ARC` + `MAU_ARC`. ⚠️ **Bộ trích context CỐ Ý giữ bản
+  riêng**: nó đọc thêm shape tương hợp (`_lsA`, `_partnerLaso`) mà bản chung
+  không có — gỡ nốt là một lượt refactor khác, rủi ro hơn hẳn phần luật.
+
+### 🧩 `arcCore` — MỘT lõi, hai họ prompt
+Không chép arc ra làm hai bản (chép là hai bản trôi khỏi nhau — bẫy
+`formatLaSoV2`/`parseLlmJson` đã trả giá). Lõi nhận **7 slot** cho đúng phần
+khác nhau giữa bộ môn: `canCu` · `duoi` · `ngoaiLeBang` · `tenRieng` ·
+`khongRanh` · `hoiSau` · `camBia` · `xungHo`. `LUAN_ARC` (lá số) và
+`LUAN_ARC_CHUNG` (22 kịch bản) là hai lượt gọi. `mauArc` tương tự cho few-shot.
+- **Gỡ hẳn 4 khối chết**: `RAIL_CHAT_RULES` · `PERSONA_RULE` ·
+  `PLAIN_LANGUAGE_RULE` · `GIONG_NGUOI_RULES` (nay 0 nơi dùng).
+- 🪤 **Refactor của TÔI làm trôi 4 chỗ trong bản lá số** — mà lá số đã test prod:
+  đảo vế câu lớp ④, đổi *"KHÔNG biết tử vi"* → *"KHÔNG rành bộ môn này"*, và
+  **bỏ mất danh sách chống bịa `(sao, cách cục, can chi, con số)`**. Ba trong
+  bốn chỗ làm YẾU prompt. ⇒ **Bất biến bắt buộc: 3 shape lá số phải TRÙNG KHÍT
+  từng byte.** Tách thêm slot cho tới khi A/B ra 0 lệch.
+
+### 🔴 Hai hồi quy chỉ lộ khi ĐỌC OUTPUT, không lộ khi đo kích thước
+1. **24 tool TỰ HỨA trả bảng** (`NGOẠI LỆ — … bảng Markdown` trong khối Nguyên
+   tắc của từng tool) mà arc lại cấm phẳng *"không gạch đầu dòng"*. Hai luật
+   ngược nhau trong CÙNG một prompt — đúng bệnh #541 đi chữa. ⇒ slot
+   `ngoaiLeBang`, trỏ ngược về chính NGOẠI LỆ đó. Lá số **không** hứa bảng ở đâu
+   nên vẫn cấm phẳng (và giữ byte-identical).
+2. **23/24 prompt kịch bản KHÔNG có luật xưng hô nào.** Trước đây model soi
+   gương theo lời người dùng; mẫu few-shot dùng "anh"/"chị" kéo nó đi ĐOÁN GIỚI
+   TÍNH — đo thật: hỏi bằng *"em"* mà đáp bằng *"anh"*. Gọi một phụ nữ là "anh"
+   tệ hơn hẳn hành vi cũ. ⇒ slot `xungHo` dạy soi gương + cấm suy giới từ mẫu.
+   Đo lại 6 lượt × 3 tool: **0 lượt đoán giới sai**.
+
+### 🧷 Bộ dò `check:prompt` ĐÃ MÙ MỘT LẦN NGAY TRONG LƯỢT NÀY
+Arc chuyển sang hàm dựng ⇒ bộ dò chỉ bóc template literal nên `LUAN_ARC` resolve
+ra RỖNG: nó báo **2.675/7.000 và VẪN XANH**. Vá xong đo lại ra **đúng
+6.976/7.263/9.405** — khớp tuyệt đối con số trước refactor, đó mới là bằng chứng
+phép mở rộng chuẩn.
+- 🪤 Ba bẫy regex phải sửa: (a) không nhảy qua thân template ⇒ quét lại BÊN
+  TRONG; (b) nhóm tham số lười ⇒ `const authorName = (…)` nuốt xuyên vài nghìn
+  ký tự tới `) => \`` của khai báo tận sau, ăn gọn `arcCore`; (c) lời gọi kết
+  bằng `});` chứ không phải `);` ⇒ lời gọi đầu nuốt args của lời gọi sau.
+- **Thêm SÀN 60% trần**: bộ dò đọc hụt thì ĐỎ, không được báo xanh trên chuỗi
+  gần rỗng. Đây là luật sinh ra từ chính lần mù vừa rồi.
+- **Thêm luật 3**: 22 prompt kịch bản mỗi cái đúng MỘT nguồn bố cục (trước chỉ
+  canh 3 shape lá số). Red-team **4/4 đỏ đúng** (đổi tên hàm dựng → DỪNG HẲN ·
+  dán hai nguồn · mất nguồn · phình 900 ký tự), đối chứng khôi phục xanh.
+- 🪤 Hai ca red-team đầu **báo XANH oan vì đột biến KHÔNG ăn** (tên hằng là
+  `const` chứ không `export const`). Bài học lặp: **assert đột biến đã ăn rồi
+  mới đọc kết quả.**
+
+### 📏 Đo bằng Gemini thật trên tool kịch bản
+| `nap-am` — *"Mệnh em thế nào, hợp làm gì?"* | trước | sau |
+|---|---:|---:|
+| số từ | 88,5 | 142,0 |
+| bị cắt giữa câu | 0 | 0 |
+Bản TRƯỚC mở bằng *"nạp âm Thành Đầu Thổ, tức là…"* rồi liệt kê nghề chung
+chung. Bản SAU mở bằng *"Mệnh anh thuộc kiểu đất thành đầu tường, vững chãi mà
+kín đáo"* → hành vi cụ thể → câu lật → việc làm được tuần này.
+- ⚠️ Có **một lượt** model chép nguyên cụm ví dụ của lớp ② (*"hay nhận việc rồi
+  ôm một mình"*) khi câu hỏi gần trùng mẫu #3. Đo rộng 12 lượt × 4 tool: **0/12
+  ở CẢ hai bên** ⇒ không phải lỗi hệ thống, nhưng là mục đáng theo dõi; thấy
+  nhiều thì đổi ví dụ ở lớp ② chứ đừng nới luật.
+- 🪤 **Bẫy cwd lần thứ NĂM**: `cd tuvi-engine && npm test` giữ lại cwd → lượt
+  chụp prompt kế tiếp đọc hụt `public/tuong-hop.js`, ra "lá số KHÔNG trùng khít"
+  và 3 giá trị Δ khác nhau. Suýt đọc thành hồi quy thật. Chạy lại từ gốc repo
+  thì sạch. **Trước khi tin một phép đo bỗng dưng đỏ, kiểm cwd.**
+
+### Verify
+`tsc` 0 · `lint` **0 lỗi / 77 warning = đúng mốc nền** · `prettier` cả cây sạch ·
+**18/18 bộ dò** · engine **185 pass**.
+- **A/B 26 prompt trên MODULE THẬT**: 3 shape lá số **TRÙNG KHÍT từng byte**
+  (bất biến quan trọng nhất — đã test prod) · 24 kịch bản đổi **đúng −1049 ký
+  tự, con số ĐỒNG NHẤT** ⇒ đúng một khối bị thay, không chỗ nào lệch riêng ·
+  trần token kịch bản giữ nguyên 1000 · arc + luật xưng hô + ngoại lệ bảng có
+  mặt ở cả 24 · luật cũ gỡ sạch.
+- **11/11 bất biến trên route `/api/xem-tuoi`** (cắt chú thích trước khi dò —
+  chú thích vừa viết có nhắc nguyên văn luật cũ, dò trên file thô là bắt vào
+  chính lời giải thích của mình).
+
+### CÒN LẠI
+- **Họ 2 (bản luận trả tiền, JSON schema) và họ 3 (24 phần) VẪN chưa đụng** —
+  đây là phần người ta TRẢ TIỀN để đọc. Họ 2 phải ánh xạ arc vào FIELD của
+  schema, và ⚠️ **đổi/thêm field = đổi payload ⇒ BẮT BUỘC bump `SHAPE`**.
+- `/api/phong-thuy` có 5–6 system inline phục vụ 5 tool (cả shell lẫn
+  standalone) — **chưa đụng**, chúng trả JSON có cấu trúc chứ không phải chat.
+- `extractLasoContext` vẫn còn **hai bản** (chung + riêng của `/api/xem-tuoi`).
+
+### 🗺️ ĐÚNG tool nào đã đổi (để test prod)
+3 shape lá số phủ **đường `birth`**, tức **10 mặt trang** + 3 kênh bot + route
+legacy: `/app/la-so` · `/app/luan-giai` · `/app/gio-sinh` · `/app/day-con` ·
+`/app/nguoi-khac` · `/app/huong-nghiep-tre` · `/app/chan-dung-tien-kiep` ·
+`/app/chan-dung-vo-chong` · `/app/duyen-no-tien-kiep` · `/app` (Trò chuyện với Thầy).
+- ⚠️ **Chỉ KHUNG CHAT bên phải đổi.** Bản luận chính giữa trang (họ 2 — JSON
+  schema trả tiền; họ 3 — 24 phần) **KHÔNG đụng**. Test nhầm ô giữa thì không
+  thấy gì đổi.
+- **24 `toolType` kịch bản (22 prompt, 3 cái dùng chung `CHAT_SYSTEM_COMPAT`)
+  chưa đụng**: xem-tuoi · xem-lam-an · tuong-hop · tu-binh · xem-tuoi-sinh-con ·
+  chon-ngay-tot · dat-ten-con · dat-ten-dn · nap-am · kim-lau · ngu-hanh-ten ·
+  than-so-hoc · bat-trach · kinh-dich · mai-hoa · ky-mon · hoang-dao · ngay-tot ·
+  luc-nham · ban-do-sao · cong-so · nhan-mach · xem-tuong · phong-thuy.
 
 ---
 

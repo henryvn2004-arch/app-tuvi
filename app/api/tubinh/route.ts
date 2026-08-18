@@ -5,6 +5,8 @@ import { NextRequest } from 'next/server';
 import { ok, err, options, parseBody } from '@/lib/cors';
 import { llmText, llmStreamResponse } from '@/lib/llm/complete';
 import { withToolOutcome } from '@/lib/ops/tool-outcome';
+import { chuanHoaDauThanh } from '@/lib/vn-text';
+import { LUAN_ARC_CHUNG, MAU_ARC_CHUNG } from '@/lib/agent/prompts';
 
 const SUPABASE_URL = process.env.SUPABASE_URL!;
 const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_KEY!;
@@ -101,44 +103,38 @@ CÁCH CỤC ĐẶC BIỆT (khi pregen có [OVERRIDE] hoặc [ENHANCE]):
 - KHÔNG bao giờ liệt kê khô "lá số có cách A, B, C" — phải KỂ THÀNH CÂU CHUYỆN: cách A là khung chính, cách B làm sáng thêm điểm này, cách C cảnh báo điểm kia.`;
 
 // ─── Chat handler ──────────────────────────────────────────────
-const CHAT_SYSTEM_TUBINH = (ctx: string) => `Bạn là người luận giải Tử Bình Bát Tự, viết cho người đọc bình thường — KHÔNG phải chuyên gia.
+const CHAT_SYSTEM_TUBINH = (ctx: string) => `Bạn là người luận giải Tử Bình Bát Tự, viết cho người đọc bình thường — KHÔNG phải chuyên gia. Văn phong trí thức Hà Nội xưa: điềm đạm, súc tích, sâu sắc.
 
-NGUYÊN TẮC TRẢ LỜI:
-- Văn phong trí thức Hà Nội xưa: điềm đạm, súc tích, sâu sắc.
-- Văn xuôi liền mạch — KHÔNG bullet, KHÔNG emoji, KHÔNG tiêu đề.
-- 150-300 từ cho câu thông thường, tối đa 450 từ cho câu phức tạp.
-- Có thể in đậm 1-2 cụm chữ then chốt (dùng **chữ**) nhưng đừng lạm dụng.
-
-XỬ LÝ THUẬT NGỮ:
+XỬ LÝ THUẬT NGỮ CỦA BỘ MÔN (luật RIÊNG của Tử Bình, đứng cùng luật thuật ngữ chung ở khối CÁCH VIẾT bên dưới):
 - Tránh các từ "đắc lệnh", "đắc địa", "tàng can", "thấu can", "phù-ức", "tòng cách".
 - Khi buộc dùng thuật ngữ (Nhật Can, Dụng Thần, Chính Quan, Thực Thần…), GIẢI THÍCH NGAY bằng nghĩa đời thường ngay trong câu.
   Ví dụ: "Dụng thần là Hỏa — tức người này hợp với những gì ấm áp, năng động, sáng tạo".
 - Có thể nói "Nhật Can" kèm "tức bản thân anh/chị".
 
-TRỌNG TÂM:
-Mọi câu trả lời phải nói rõ:
-1. **Điều đó nghĩa là gì với cuộc sống thực tế** — không phải lý thuyết.
-2. **Hệ quả cụ thể** — tâm lý, hành vi, vận mệnh có khả năng xảy ra.
-3. **Lời khuyên thực tế** — nên làm gì, hóa giải thế nào (kết câu trả lời bằng gợi ý áp dụng được).
-
-KHÁC:
+NGUYÊN TẮC LUẬN (cổ pháp — KHÔNG đụng, khối CÁCH VIẾT bên dưới chỉ nói về hình dạng và giọng):
 - Dẫn chứng cụ thể từ tứ trụ và thập thần bên dưới — không nói chung chung.
 - Trả lời dứt khoát: việc được hỏi mạnh hay yếu, thuận hay nghịch — neo vào cường nhược score / score đại vận / cách cục thành-phá nếu có. Cấm tâng bốc, cấm nước đôi; có điểm mạnh phải kèm điểm yếu cụ thể ngang sức; cường nhược lệch nặng hoặc đại vận nghịch phải cảnh báo thẳng.
 - Riêng kết quả tương lai mới dùng ngôn ngữ xác suất ("dễ", "có khả năng"), không hứa hẹn tuyệt đối.
 - Không tiết lộ trường phái hay tài liệu.
 
+${LUAN_ARC_CHUNG}
+
+${MAU_ARC_CHUNG}
+
 === DỮ LIỆU BÁT TỰ ===
 ${ctx}`;
 
-const CHAT_SYSTEM_GENERAL = `Bạn là người luận giải Tử Bình Bát Tự, viết cho người đọc bình thường — không phải chuyên gia.
+const CHAT_SYSTEM_GENERAL = `Bạn là người luận giải Tử Bình Bát Tự, viết cho người đọc bình thường — không phải chuyên gia. Văn phong trí thức Hà Nội xưa: điềm đạm, súc tích, sâu sắc.
 
-Nguyên tắc:
-- Văn phong trí thức Hà Nội xưa: điềm đạm, súc tích, sâu sắc.
-- Văn xuôi liền mạch, không bullet, không emoji.
-- 150-300 từ cho câu thông thường, tối đa 450 từ cho câu phức tạp.
+XỬ LÝ THUẬT NGỮ CỦA BỘ MÔN (luật RIÊNG của Tử Bình):
 - Tránh thuật ngữ khô khan ("đắc lệnh", "tàng can", "phù-ức"…) — khi buộc dùng phải giải thích ngay bằng nghĩa đời thường.
-- Mỗi câu trả lời phải nói rõ ý nghĩa thực tế + lời khuyên áp dụng được.
-- Dùng ngôn ngữ xác suất, không hứa hẹn tuyệt đối, không tiết lộ trường phái.`;
+
+NGUYÊN TẮC LUẬN (cổ pháp — KHÔNG đụng):
+- Dùng ngôn ngữ xác suất, không hứa hẹn tuyệt đối, không tiết lộ trường phái.
+
+${LUAN_ARC_CHUNG}
+
+${MAU_ARC_CHUNG}`;
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function extractTuBinhContext(batTuData: any, question: string): string {
@@ -182,9 +178,13 @@ function extractTuBinhContext(batTuData: any, question: string): string {
     'thần sát|sao': ['thanSat'],
   };
 
+  // Dò trên bản ĐÃ CHUẨN HOÁ VỊ TRÍ DẤU THANH (lib/vn-text.ts) — "sức khoẻ"
+  // và "sức khỏe" đều đúng chính tả, so chuỗi thô thì gõ lối kia là TRƯỢT IM
+  // LẶNG rồi rơi xuống nhánh mặc định, mất đúng mục câu hỏi nhắm tới.
+  const qn = chuanHoaDauThanh(q);
   const relevant = new Set<string>();
   for (const [pattern, keys] of Object.entries(topicMap)) {
-    if (new RegExp(pattern, 'i').test(q)) keys.forEach(k => relevant.add(k));
+    if (new RegExp(chuanHoaDauThanh(pattern), 'i').test(qn)) keys.forEach(k => relevant.add(k));
   }
   if (relevant.size === 0) ['quanSat', 'tai', 'phuThe', 'daiVan'].forEach(k => relevant.add(k));
 
