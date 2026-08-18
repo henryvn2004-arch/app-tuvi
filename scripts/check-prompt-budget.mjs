@@ -267,6 +267,93 @@ if (badScenario.length) {
   );
 }
 
+// ── Luật 4: 4 prompt LUẬN GIẢI ở route — trần + đúng MỘT nguồn bố cục ────
+// Ba luật trên chỉ quét `lib/agent/prompts.ts`, nên 4 bản LUẬN GIẢI (thứ người
+// ta TRẢ TIỀN để đọc) nằm ngoài mọi trần: chúng khai prompt INLINE trong route.
+// Đó đúng là chỗ cơ chế cộng dồn dễ tái diễn nhất — prompt 24 phần đã 10.499 ký
+// tự và không có gì canh.
+//
+// ⚠️ Trần đặt SÁT mức hiện tại + biên ~12%. Nới trần là một QUYẾT ĐỊNH phải ghi
+// lý do, không phải thao tác dọn đường cho một khối mới.
+const DOC_FILES = {
+  'app/api/lasotuvi/route.ts': { name: 'SYSTEM_PROMPT', cap: 11800, arc: 'DOC_ARC_LASO' },
+  'app/api/tubinh/route.ts': { name: 'SYSTEM_PROMPT_TUBINH', cap: 9400, arc: 'DOC_ARC_TUBINH' },
+  'lib/agent/phu-the-luan-giai.ts': {
+    name: 'PHU_THE_LUAN_GIAI_SYSTEM_PROMPT',
+    cap: 6600,
+    arc: 'DOC_ARC_PHU_THE',
+  },
+  'app/api/xem-tuoi/route.ts': {
+    name: 'LUAN_GIAI_TUONG_HOP_SYSTEM',
+    cap: 2400,
+    arc: 'DOC_ARC_TUONG_HOP',
+  },
+};
+// Khối bố cục của VĂN LUẬN DÀI. Một bản luận giải chỉ được dùng ĐÚNG MỘT —
+// và tuyệt đối không được kéo thêm arc CHAT vào (nó mang bối cảnh "vừa đọc xong
+// bản luận đầy đủ" + ngân sách 120–180 từ, tức tự mâu thuẫn với chính nó).
+const DOC_BLOCKS = ['DOC_ARC_LASO', 'DOC_ARC_TUBINH', 'DOC_ARC_PHU_THE', 'DOC_ARC_TUONG_HOP'];
+const CHAT_BLOCKS = [
+  'LUAN_ARC',
+  'LUAN_ARC_CHUNG',
+  'MAU_ARC',
+  'MAU_ARC_CHUNG',
+  'RAIL_SHAPE_AND_VOICE',
+];
+
+console.log('\n── Bản LUẬN GIẢI ở route: trần + một nguồn bố cục ──');
+for (const [file, spec] of Object.entries(DOC_FILES)) {
+  let fsrc;
+  try {
+    fsrc = readFileSync(file, 'utf8');
+  } catch {
+    console.error(`✗ Không đọc được ${file}. Route dời chỗ? Sửa bộ dò — đừng bỏ qua.`);
+    process.exit(1);
+  }
+  const m = fsrc.match(new RegExp('const ' + spec.name + ' = (`[\\s\\S]*?`);\\n'));
+  if (!m) {
+    console.error(
+      `✗ Không bóc được \`${spec.name}\` trong ${file}.\n` +
+        `  Prompt đổi tên hay đổi cách khai? Sửa bộ dò cho khớp — đừng bỏ qua.`
+    );
+    process.exit(1);
+  }
+  const body = m[1];
+  // resolve các khối nội suy từ prompts.ts (arc + luật xưng hô), phần còn lại bỏ rỗng
+  const len = resolve(raw, body).length;
+  const pct = Math.round((len / spec.cap) * 100);
+  console.log(
+    `  ${spec.name.padEnd(32)} ${String(len).padStart(6)} / ${spec.cap} ký tự  (${pct}%)`
+  );
+  const floor = Math.round(spec.cap * 0.6);
+  if (len < floor)
+    errors.push(
+      `${spec.name}: phần luật chỉ ${len} ký tự, DƯỚI sàn ${floor}.\n` +
+        `  → Gần như chắc chắn bộ dò đọc hụt (arc dựng bằng hàm? đổi cách khai?),\n` +
+        `    chứ không phải prompt vừa gọn đi. Sửa bộ dò trước khi tin con số này.`
+    );
+  if (len > spec.cap)
+    errors.push(
+      `${spec.name}: phần luật ${len} ký tự, vượt trần ${spec.cap}.\n` +
+        `  → CẮT chỗ khác trước khi thêm khối mới. Đây là bản người dùng TRẢ TIỀN để đọc;\n` +
+        `    prompt phình lên thì mọi luật trong đó loãng đi.`
+    );
+  const refs = directRefs(body);
+  const doc = [...new Set(refs.filter((r) => DOC_BLOCKS.includes(r)))];
+  const chat = [...new Set(refs.filter((r) => CHAT_BLOCKS.includes(r)))];
+  if (doc.length !== 1 || doc[0] !== spec.arc)
+    errors.push(
+      `${spec.name} nội suy ${doc.length ? doc.join(' + ') : '(không có)'} — chờ đúng \`${spec.arc}\`.\n` +
+        `  → Mỗi bản luận giải đúng MỘT nguồn bố cục cho văn luận dài.`
+    );
+  if (chat.length)
+    errors.push(
+      `${spec.name} kéo cả arc CHAT vào: ${chat.join(' + ')}.\n` +
+        `  → Arc chat mang bối cảnh "người hỏi VỪA đọc xong bản luận đầy đủ" + ngân sách\n` +
+        `    120–180 từ. Bản luận giải CHÍNH LÀ cái bản đó ⇒ prompt tự mâu thuẫn.`
+    );
+}
+
 if (errors.length) {
   console.error('\n✗ check:prompt — ' + errors.length + ' lỗi:\n');
   for (const e of errors) console.error('  • ' + e + '\n');

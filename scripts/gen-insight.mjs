@@ -20,7 +20,7 @@ import { createHash } from 'crypto';
 import { existsSync, mkdirSync, writeFileSync } from 'fs';
 import { join } from 'path';
 import { ttsScene, pickVoice } from './tts-clip.mjs';
-import { compileVideoLib, chayCong2 } from './video-lib.mjs';
+import { compileVideoLib, chayCong2, EXIT_GATE } from './video-lib.mjs';
 
 const ROOT = new URL('..', import.meta.url).pathname;
 const REMOTION = join(ROOT, 'remotion');
@@ -66,7 +66,26 @@ const MAX_SECONDS = Number(val('--max-seconds', '240'));
  * không sao — nền tảng nào cũng nén lại; nhưng bản gửi đi DUYỆT thì có trần.
  * Hai nhu cầu khác nhau nên để người chạy chọn, đừng hạ chất lượng mặc định.
  */
-const CRF = val('--crf', '');
+/*
+ * ── KHỔ GIAO RA: 720×1280, KHÔNG phải 1080×1920 ───────────────────────────
+ *
+ * Khung DỰNG vẫn là 1080×1920 (`VIDEO` trong `remotion/src/brand.ts`) — mọi
+ * toạ độ trong `InsightClip.tsx` là số TUYỆT ĐỐI (ảnh 944×944, chữ ở top 1176),
+ * đổi `VIDEO` là bố cục tràn khung. `--scale` của Remotion thu nhỏ lúc RASTER
+ * nên toạ độ logic không đổi một chữ.
+ *
+ * 2/3 chọn vì nó cho ra số chẵn ở CẢ HAI chiều (1080→720, 1920→1280) — scale
+ * lẻ ra chiều lẻ thì h264 từ chối.
+ *
+ * Đổi lại: ít pixel hơn 2,25 lần ⇒ render nhanh hơn và file nhẹ hơn, mà khổ
+ * này vốn là khổ chuẩn của TikTok/Reels. Muốn bản 1080 thì `--scale 1`.
+ */
+const SCALE = val('--scale', String(2 / 3));
+/*
+ * Remotion mặc định CRF 18 (gần như không nén) — đó là lý do clip 2 phút ra
+ * 64–80MB. 23 là mức "nhìn không ra khác" của h264, giảm file ~2–3 lần.
+ */
+const CRF = val('--crf', '23');
 /** Khoảng "đẹp" cho clip dạy — ngoài khoảng chỉ WARN, không chặn. */
 const SWEET = [45, 120];
 
@@ -113,7 +132,7 @@ console.log(
 for (const i of g1.issues) console.log(`   [${i.level}] ${i.code}: ${i.message}`);
 if (!g1.pass) {
   console.error('\n❌ Dừng: kịch bản không qua cổng 1.');
-  process.exit(1);
+  process.exit(EXIT_GATE);
 }
 
 // ── Cổng 2 ────────────────────────────────────────────────────────────────
@@ -126,7 +145,9 @@ if (!g1.pass) {
     gate: GATE,
     maxRounds: MAX_ROUNDS,
   });
-  if (!kq.pass) process.exit(1);
+  // Thiếu khoá model thì hội đồng CHƯA HỀ CHẤM — đó là hỏng cấu hình (mã 1),
+  // không phải "kịch bản dở". Xem `EXIT_GATE` trong video-lib.mjs.
+  if (!kq.pass) process.exit(kq.reason === 'gate' ? EXIT_GATE : 1);
   spec = kq.spec;
 }
 
@@ -257,7 +278,11 @@ await localizeImages(spec);
 const toVisual = (v) =>
   v.kind === 'image'
     ? { kind: 'photo', src: v.src, accent: v.accent }
-    : { kind: 'typo', accent: v.accent };
+    : v.kind === 'figure'
+      ? { kind: 'figure', pose: v.pose, accent: v.accent, glyph: v.glyph, glyphAt: v.glyphAt }
+      : v.kind === 'duo'
+        ? { kind: 'duo', poseL: v.poseL, poseR: v.poseR, set: v.set, gap: v.gap, accent: v.accent }
+        : { kind: 'typo', accent: v.accent };
 
 const props = {
   topLabel: source.topLabel,
@@ -280,6 +305,13 @@ const props = {
   ...(voices ? { ctaAudio: voices[voices.length - 1].file } : {}),
   ...(spec.music ? { music: spec.music } : {}),
   ...(spec.backdrop?.length ? { backdrop: spec.backdrop } : {}),
+  ...(spec.backdropVideo ? { backdropVideo: spec.backdropVideo } : {}),
+  ...(spec.backdropRate ? { backdropRate: spec.backdropRate } : {}),
+  ...(spec.backdropSeconds ? { backdropSeconds: spec.backdropSeconds } : {}),
+  ...(spec.hookPose ? { hookPose: spec.hookPose } : {}),
+  ...(spec.ctaPose ? { ctaPose: spec.ctaPose } : {}),
+  ...(spec.hookGlyph ? { hookGlyph: spec.hookGlyph } : {}),
+  ...(spec.ctaGlyph ? { ctaGlyph: spec.ctaGlyph } : {}),
 };
 
 const propsFile = join(outDir, 'props.json');
@@ -290,6 +322,10 @@ const outFile = join(REMOTION, 'out', `${ID}.${STILL ? 'png' : 'mp4'}`);
 
 console.log(`\n── RENDER ───────────────────────────────────`);
 console.log(`   ${STILL ? 'khung hình tĩnh' : 'video'} → ${outFile}`);
+if (!STILL) {
+  const s = Number(SCALE);
+  console.log(`   khổ: ${Math.round(1080 * s)}×${Math.round(1920 * s)}  ·  CRF ${CRF}`);
+}
 
 execFileSync(
   'npx',
@@ -302,6 +338,7 @@ execFileSync(
     `--props=${propsFile}`,
     ...(STILL ? [`--frame=${val('--frame', '40')}`] : []),
     ...(!STILL && CRF ? [`--crf=${CRF}`] : []),
+    ...(SCALE && SCALE !== '1' ? [`--scale=${SCALE}`] : []),
   ],
   {
     cwd: REMOTION,
@@ -309,5 +346,43 @@ execFileSync(
     env: { ...process.env, REMOTION_CHROMIUM: 'auto' },
   }
 );
+
+/*
+ * ── SIDECAR cho khâu nộp kho ───────────────────────────────────────────────
+ *
+ * `publish-clips.mjs` chỉ cầm mỗi file mp4 — nó không biết caption, thẻ, hay
+ * khổ giao ra. Ghi cạnh clip một file JSON để nó đọc.
+ *
+ * 🔑 VÌ SAO SIDECAR chứ không để khâu nộp tự đọc lại `insight.ts`: cổng 2 có
+ * thể VIẾT LẠI kịch bản (`rewriteSpec`) trước khi render, nên `spec` ở đây là
+ * bản THẬT SỰ đã dựng thành clip, còn file nguồn là bản trước khi viết lại.
+ * Đọc lại nguồn là caption nói một đằng, clip nói một nẻo.
+ */
+if (!STILL) {
+  const s = Number(SCALE);
+  writeFileSync(
+    join(REMOTION, 'out', `${ID}.meta.json`),
+    JSON.stringify(
+      {
+        id: ID,
+        // 🔑 LOẠI NGUỒN, đi thẳng vào `media_assets.source_type`. Bản trước để
+        // hàm `clip-ingest` đóng cứng `'tool-demo'` cho MỌI clip, nên clip
+        // insight vào sổ dưới nhãn của loại khác. Chưa va vào gì (ảnh dùng
+        // `khao_luan`), nhưng hai loại này qua cổng 2 rất khác nhau — insight
+        // 4/6 (67%) · demo công cụ 3/18 (17%) — mà đó đúng là ranh giới cần
+        // quyết. Sổ không phân biệt được thì mọi phép đo theo loại đều sai.
+        sourceType: 'insight',
+        // Câu kết là dòng người xem đọc được — đúng thứ nên làm caption.
+        caption: spec.cta,
+        hashtags: spec.hashtags ?? [],
+        width: Math.round(1080 * s),
+        height: Math.round(1920 * s),
+        builtAt: new Date().toISOString(),
+      },
+      null,
+      2
+    )
+  );
+}
 
 console.log(`\n✓ Xong: ${outFile}`);

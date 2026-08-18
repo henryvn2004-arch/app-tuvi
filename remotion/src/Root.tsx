@@ -1,6 +1,7 @@
 import { Composition } from 'remotion';
 import { ToolDemo, type ToolDemoProps } from './ToolDemo';
 import { InsightClip, type InsightProps } from './InsightClip';
+import { CharacterSheet } from './CharacterSheet';
 import { VIDEO } from './brand';
 
 /**
@@ -65,6 +66,15 @@ export const RemotionRoot: React.FC = () => (
       defaultProps={INSIGHT}
       durationInFrames={totalFrames(INSIGHT)}
       calculateMetadata={({ props }) => ({ durationInFrames: totalFrames(props) })}
+    />
+    {/* Bảng soi tư thế nhân vật — công cụ DUYỆT, không phải clip để đăng. */}
+    <Composition
+      id="CharacterSheet"
+      component={CharacterSheet}
+      fps={VIDEO.fps}
+      width={VIDEO.width}
+      height={VIDEO.height}
+      durationInFrames={1}
     />
   </>
 );

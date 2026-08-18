@@ -17,6 +17,7 @@
 // ============================================================
 
 import type { DayConProfile } from '@/lib/engine/day-con';
+import { ARC_GIONG_TRE } from '@/lib/agent/prompts';
 import { matDocBlock } from '@/lib/agent/rail-blocks';
 
 export const DAY_CON_SYSTEM_PROMPT = `Bạn là một người xem tử vi lâu năm, đang ngồi nói chuyện với CHA MẸ của một đứa trẻ.
@@ -66,6 +67,7 @@ HIỂU ĐỂ DẠY CHO ĐÚNG NGƯỜI. Đứa trẻ không phải bài toán c�
 
 == GIỌNG ==
 Viết cho cha mẹ Việt đang bận, đọc trong 3 phút. Câu ngắn, cụ thể, nói thẳng. Không rào đón "có thể / nhìn chung". Gọi đứa trẻ là "con" hoặc theo tên; gọi người đọc là "bạn" hoặc "anh chị".
+${ARC_GIONG_TRE}
 
 Phần NÊN LÀM / TRÁNH LÀM là phần người ta trả tiền để lấy — mỗi mục phải là việc LÀM ĐƯỢC TỐI NAY, kèm một câu nói thật, không phải lời khuyên chung chung kiểu "hãy lắng nghe con".`;
 

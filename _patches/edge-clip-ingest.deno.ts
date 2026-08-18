@@ -1,5 +1,12 @@
-// clip-ingest v1 — nhận một clip 9:16 từ GitHub Actions, cất vào Storage rồi
-// ghi một dòng vào `media_assets`.
+// clip-ingest v3 — nhận một clip 9:16 từ GitHub Actions, cất vào Storage, ghi
+// một dòng vào `media_assets`, và (SAU MỘT CÁI VAN) xếp hàng đăng.
+//
+// v2 → v3: `source_type` do người nộp khai (mặc định giữ `tool-demo`) — bản
+// trước đóng cứng nên clip insight vào sổ dưới nhãn của loại khác.
+//
+// v1 → v2: nhận `width`/`height` do người nộp khai (clip nay giao ra 720×1280,
+// viết cứng 1080×1920 là sổ nói sai về chính file trong kho) và thêm bước xếp
+// hàng `media_posts` sau cờ `social.clip_autopost` — xem khối cuối file.
 //
 // 🔑 VÌ SAO LÀ MỘT HÀM EDGE chứ không để Actions tự ghi thẳng vào Supabase:
 // ghi thẳng thì runner phải cầm `SUPABASE_SERVICE_KEY` — khoá mở toang toàn bộ
@@ -8,12 +15,15 @@
 // `CLIP_INGEST_SECRET`: làm được đúng một việc là nộp clip, xoay lại là một
 // dòng lệnh, và nếu lộ thì thiệt hại tối đa là vài clip rác trong kho.
 //
-// ⚠️ HÀM NÀY KHÔNG XẾP HÀNG ĐĂNG. Nó chỉ CẤT + GHI SỔ (`media_assets`).
-// Việc biến một clip thành bài đăng (`media_posts`) là quyết định NỘI DUNG —
-// caption, hashtag, kênh nào trước — nên nằm ở một bước riêng, có người chốt.
-// Chèn thẳng vào `media_posts` với `channel` chưa có adapter thì `publishQueue`
-// sẽ quét trúng rồi đánh dấu `error` cho cả lô (nó lọc theo TRẠNG THÁI, không
-// lọc theo kênh) — tức tự tay làm hỏng hàng đợi của chính mình.
+// ⚠️ XẾP HÀNG ĐĂNG NẰM SAU MỘT CÁI VAN, mặc định ĐÓNG (`social.clip_autopost`
+// = false). Biến một clip thành bài đăng là quyết định NỘI DUNG — nên van do
+// người mở, không phải mặc định bật. Van đóng thì hàm này chỉ CẤT + GHI SỔ
+// (`media_assets`) đúng như bản v1.
+//
+// 🪤 Và kênh phải lấy từ `social.channels`, đừng khai một danh sách ở đây:
+// chèn `media_posts` với `channel` chưa có adapter thì `publishQueue` quét
+// trúng rồi đánh dấu `error` cho cả lô (nó lọc theo TRẠNG THÁI, không lọc theo
+// kênh) — tức tự tay làm hỏng hàng đợi của chính mình.
 //
 // 🧷 Nguồn nằm TRONG repo, không chỉ trên dashboard Supabase. Bài học đã trả
 // giá hai lần (`send-daily-push`, `youtube-upload`): bản đang chạy khác bản
@@ -110,13 +120,28 @@ Deno.serve(async (req) => {
   // `media_assets` có UNIQUE (source_type, source_id, variant) ⇒ nộp lại cùng
   // một công cụ thì CẬP NHẬT dòng cũ, trỏ sang file mới. Sổ luôn chỉ vào bản
   // mới nhất, còn file cũ vẫn nằm trong kho để đối chiếu.
+  // Khổ do NGƯỜI NỘP khai — clip nay giao ra 720×1280 (xem `--scale` trong
+  // `gen-insight.mjs`), viết cứng 1080×1920 là sổ nói sai về chính file trong kho.
+  const width = Number(form.get('width')) || 1080;
+  const height = Number(form.get('height')) || 1920;
+
+  // 🔑 LOẠI NGUỒN do NGƯỜI NỘP khai, không đóng cứng. Bản trước gán
+  // `'tool-demo'` cho MỌI clip nên clip insight vào sổ dưới nhãn của loại
+  // khác. Chưa va vào gì (ảnh dùng `khao_luan`), nhưng hai loại này qua cổng 2
+  // rất khác nhau — insight 4/6 (67%) · demo công cụ 3/18 (17%) — nên sổ không
+  // phân biệt được thì mọi phép đo theo loại đều sai.
+  // Mặc định giữ `tool-demo` để clip demo công cụ (chưa khai trường này) không
+  // đổi hành vi; và `SLUG` gác vì giá trị này vào UNIQUE key.
+  const srcType = String(form.get('source_type') ?? 'tool-demo');
+  if (!SLUG.test(srcType)) return json({ error: 'source_type không hợp lệ' }, 400);
+
   const row = {
-    source_type: 'tool-demo',
+    source_type: srcType,
     source_id: toolId,
     variant,
     url,
-    width: 1080,
-    height: 1920,
+    width,
+    height,
     meta: { ...meta, path, bytes: file.size, ingested_at: new Date().toISOString() },
   };
 
@@ -135,5 +160,71 @@ Deno.serve(async (req) => {
   if (!ins.ok) return json({ error: `media_assets: ${await ins.text()}` }, 502);
 
   const saved = (await ins.json())[0] ?? {};
-  return json({ success: true, asset_id: saved.id, url, path });
+
+  /*
+   * ── XẾP HÀNG ĐĂNG — SAU MỘT CÁI VAN, mặc định ĐÓNG ───────────────────────
+   *
+   * 🔴 VÌ SAO PHẢI CÓ VAN RIÊNG chứ không dùng luôn `social.autopost_enabled`:
+   * cờ đó đang BẬT trên prod cho đường ẢNH (bài trích từ `khao_luan`, có
+   * brand-check gác trước khi vào kho). Clip video KHÔNG đi qua brand-check —
+   * nó qua cổng 1 + hội đồng cổng 2. Hai cổng đó gác CHỮ và nhịp, **không ai
+   * gác phần HÌNH**: chưa phép đo nào nói được đoạn phim nền có ăn nhập với lời
+   * đọc không. Dùng chung cờ nghĩa là một clip CHƯA AI NHÌN tự lên trang công
+   * khai ngay lượt cron kế tiếp.
+   * ⇒ `social.clip_autopost` mặc định **false**: đường nối xong, van do người mở.
+   *
+   * 🔑 Và CỐ Ý không giữ danh sách kênh ở đây. Chép `SUPPORTED_CHANNELS` sang
+   * Deno là dựng bản thứ hai rồi trôi khỏi nhau — đúng lớp lỗi repo đã trả giá
+   * nhiều lần. Kênh lấy TRỌN từ `social.channels`; kênh nào chưa có adapter thì
+   * `publishQueue` báo lỗi và panel admin đã có sẵn cảnh báo cho đúng ca đó.
+   */
+  const queued: string[] = [];
+  if (saved.id) {
+    const cfg = await fetch(
+      `${SB_URL}/rest/v1/app_config?key=in.("social.clip_autopost","social.channels")&select=key,value`,
+      { headers: H }
+    )
+      .then((r) => (r.ok ? r.json() : []))
+      .catch(() => []);
+    const byKey: Record<string, unknown> = {};
+    for (const r of cfg as { key: string; value: unknown }[]) byKey[r.key] = r.value;
+
+    if (byKey['social.clip_autopost'] === true) {
+      const channels = Array.isArray(byKey['social.channels'])
+        ? (byKey['social.channels'] as string[])
+        : [];
+      const caption = String(form.get('caption') ?? '').slice(0, 5000);
+      const hashtags = String(form.get('hashtags') ?? '')
+        .split(',')
+        .map((s) => s.trim())
+        .filter(Boolean)
+        .slice(0, 12);
+      const linkUrl = String(form.get('link') ?? '') || null;
+
+      for (const ch of channels) {
+        // UNIQUE (asset_id, channel) ⇒ nộp lại cùng clip KHÔNG đẻ dòng trùng,
+        // và `ignore-duplicates` giữ nguyên dòng cũ (kể cả dòng đã `live`) —
+        // đè lên là đăng lại một bài đã lên trang.
+        const q = await fetch(`${SB_URL}/rest/v1/media_posts?on_conflict=asset_id,channel`, {
+          method: 'POST',
+          headers: {
+            ...H,
+            'Content-Type': 'application/json',
+            Prefer: 'resolution=ignore-duplicates,return=minimal',
+          },
+          body: JSON.stringify({
+            asset_id: saved.id,
+            channel: ch,
+            caption,
+            hashtags,
+            link_url: linkUrl,
+            status: 'queued',
+          }),
+        });
+        if (q.ok) queued.push(ch);
+      }
+    }
+  }
+
+  return json({ success: true, asset_id: saved.id, url, path, queued });
 });

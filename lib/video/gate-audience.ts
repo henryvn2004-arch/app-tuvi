@@ -28,7 +28,7 @@
 import { llmTextFull } from '@/lib/llm/complete';
 import { parseLlmJson } from '@/lib/api/tool-helpers';
 import { type ScriptSpec, estimateSpeechSeconds } from './script-spec';
-import { describeImage } from './stock-catalog';
+import { describeImage, describeVideo } from './stock-catalog';
 import type { GateIssue } from './gate-machine';
 
 /**
@@ -63,6 +63,17 @@ export interface ViewerVerdict {
    * vùng quan tâm của họ không. Xem chú thích ở `AUDIENCE_THRESHOLDS`.
    */
   trongTepMucTieu?: boolean;
+  /**
+   * Người này bỏ đi vì HÌNH (nền phẳng, tranh tĩnh, không có gì động, màu tẻ)
+   * chứ không phải vì CHỮ. Chỉ có nghĩa khi họ thật sự bỏ đi.
+   *
+   * 🔑 VÌ SAO PHẢI HỎI THẲNG MODEL thay vì dò chữ trong `lyDo`: dò chuỗi tiếng
+   * Việt trên văn tự do là đúng lớp lỗi repo này đã trả giá ba lần (`\bcon\b`
+   * khớp "con vật", `quan` khớp "tổng quan", `Tuần` khớp "tuần này"). Model đã
+   * đọc bảng thời gian rồi — thêm một trường boolean vào schema là **0 lượt gọi
+   * thêm, 0đ**, mà lại đo đúng thứ cần đo.
+   */
+  boViHinh?: boolean;
 }
 
 /** Trần ký tự cổng 1 sẽ chấm — hội đồng phải viết gợi ý NẰM TRONG mức này. */
@@ -130,6 +141,15 @@ export const AUDIENCE_THRESHOLDS = {
   minTrongTep: 4,
   /** Số người (trong tệp) phải muốn lưu HOẶC gửi cho ai đó. */
   minLuuHoacChiaSe: 2,
+  /**
+   * Số người tối thiểu phải bỏ đi VÌ HÌNH thì mới gọi là lỗi ĐỊNH DẠNG.
+   *
+   * ⚠️ 2 chứ không phải 1: một người chê hình là GU cá nhân, hai người trở lên
+   * cùng chỉ vào phần nhìn thì đó là tính chất của clip. Cộng thêm điều kiện
+   * "chiếm quá nửa số người bỏ đi" — vài người chê hình trong khi đa số chê chữ
+   * thì cần gạt đúng vẫn là chữ.
+   */
+  minBoViHinh: 2,
 } as const;
 
 /** Số người trong tệp phải xem hết, suy từ cỡ tệp. */
@@ -138,6 +158,89 @@ export function soXemHetCanCo(soTrongTep: number): number {
     AUDIENCE_THRESHOLDS.minXemHetTuyetDoi,
     Math.ceil(soTrongTep * AUDIENCE_THRESHOLDS.tiLeXemHetTrongTep)
   );
+}
+
+/**
+ * Mô tả tư thế nhân vật cho hội đồng — TỪ VỰNG ĐÓNG, khớp `POSES` trong
+ * `remotion/src/Character.tsx`.
+ *
+ * ⚠️ Vì sao chép tay ở đây thay vì import: `Character.tsx` là file React của
+ * gói `remotion/` (tách khỏi cây build của Next). Cái giá đã biết là hai bảng
+ * có thể trôi khỏi nhau — nên bảng này chỉ được ĐỌC theo khoá, và khoá nào
+ * thiếu thì rơi về `tư thế "<tên>"` chứ không im lặng bỏ qua.
+ *
+ * 🔑 Câu mô tả chỉ TẢ, CẤM KHEN — cùng luật đã đặt cho caption ảnh kho. Viết
+ * "nhân vật đứng rất biểu cảm" là dựng lại đúng cái gương: model chấm cao vì
+ * câu văn của tôi hay, không phải vì hình hợp nội dung.
+ */
+/**
+ * Mô tả tư thế — và nay là mô tả CỬ ĐỘNG, không phải dáng đứng.
+ *
+ * 🔑 Phải sửa cùng lúc với lượt thêm chuyển động vào `Character.tsx`: hội đồng
+ * chấm theo đúng dòng này, nên nếu nó vẫn tả một dáng ĐỨNG YÊN trong khi clip
+ * đã có nhân vật vẫy tay/bước đi thì hội đồng lại đang chấm một clip khác với
+ * clip sắp render — đúng lớp lỗi mà cả track này sinh ra để vá.
+ */
+const POSE_MO_TA: Record<string, string> = {
+  chao: 'đứng thẳng, giơ một tay lên VẪY chào (tay vẫy qua lại liên tục)',
+  'suy-nghi': 'chống cằm, đầu đưa qua lại chậm, ngón tay gõ nhẹ vào cằm',
+  'hieu-ra': 'bật nảy lên một nhịp rồi giơ thẳng tay quá đỉnh đầu, ngón trỏ chỉ lên',
+  'phan-tich': 'chồm người về trước, tay đưa vật ra trước và quét chậm qua lại như đang soi',
+  'loi-khuyen': 'mở một tay ra trước, lòng bàn tay ngửa, tay nâng lên hạ xuống theo nhịp nói',
+  'tinh-tam': 'hai tay chắp trước ngực, mắt nhắm, lồng ngực phồng xẹp theo nhịp thở sâu',
+  'hanh-dong': 'ĐANG BƯỚC ĐI thật — hai chân sải luân phiên, hai tay đánh so le, thân nhún theo bước',
+  'quay-lung': 'quay lưng lại và BƯỚC ĐI XA DẦN, hình nhỏ lại như đang rời khỏi khung',
+  'cui-dau': 'đầu cúi, vai xuôi, người chùng xuống rồi nhấc lên chậm như đang thở dài',
+  'ngoi-buon': 'NGỒI, hai tay buông trên đùi, vai xuôi, đầu cúi, gần như không nhúc nhích',
+  'ngoi-an': 'NGỒI ăn, cứ vài giây lại đưa tay lên miệng rồi hạ xuống',
+  chay: 'ĐANG CHẠY — sải chân rộng và nhanh, người ngả hẳn về trước, tay co đánh mạnh',
+  'voi-tay': 'chồm hẳn tới, vươn một tay ra trước như níu lại, rướn theo từng nhịp',
+  'dang-tay': 'mở hai tay ra ngang, kiểu bất lực / "thì sao"',
+  'che-mat': 'hai tay ôm lấy mặt, vai rung khẽ',
+  'ngoai-lai': 'vừa bước đi vừa quay đầu nhìn lại phía sau, hình nhỏ dần',
+};
+
+/** Mô tả đồ đạc trong cảnh hai người. CHỈ TẢ, không khen. */
+const SET_MO_TA: Record<string, string> = {
+  'ban-an': 'một chiếc bàn ăn có hai bát đặt trên mặt bàn',
+  'ghe-bang': 'một băng ghế dài',
+};
+
+/**
+ * Mô tả ký hiệu (đạo cụ / icon). Cùng luật với `POSE_MO_TA`: **CHỈ TẢ, CẤM
+ * KHEN** — "một chiếc kính lúp" được, "biểu tượng tinh tế" thì cấm. Khen là
+ * dựng lại đúng cái gương mà mục 🖼️ trong CLAUDE.md đã mổ.
+ */
+const GLYPH_MO_TA: Record<string, string> = {
+  'la-so': 'một lá số tử vi 12 cung (khung vuông chia ô, giữa để trống)',
+  'dong-xu': 'một đồng xu cổ tròn có lỗ vuông ở giữa',
+  'la-ban': 'một chiếc la bàn, kim chỉ hình thoi',
+  'den-long': 'một chiếc đèn lồng có ngọn lửa đỏ bên trong',
+  'ngoi-sao': 'một ngôi sao năm cánh viền vàng',
+  'mat-trang': 'một vầng trăng khuyết',
+  'kinh-lup': 'một chiếc kính lúp',
+  sach: 'một quyển sách đang mở',
+  'bong-den': 'một bóng đèn đang toả tia sáng',
+  'dau-hoi': 'một dấu hỏi lớn',
+  guong: 'một chiếc gương soi có cán',
+  'dong-ho': 'một chiếc đồng hồ tròn có kim',
+  'ban-do': 'một tấm bản đồ gấp',
+  'mui-ten': 'một mũi tên chỉ về phía trước',
+  tui: 'một chiếc túi xách có quai',
+  'canh-cua': 'một cánh cửa đóng, có tay nắm',
+  'chia-khoa': 'một chiếc chìa khoá',
+  'trai-tim': 'một trái tim đặc màu đỏ',
+  'chiec-o': 'một chiếc ô đang mở',
+  but: 'một cây bút lông',
+};
+
+/** Ghép mô tả ký hiệu vào câu tả cảnh, theo đúng chỗ nó được đặt. */
+function glyphPhrase(glyph?: string, at?: 'tay' | 'tren'): string {
+  if (!glyph) return '';
+  const d = GLYPH_MO_TA[glyph] ?? `một ký hiệu "${glyph}"`;
+  return at === 'tren'
+    ? ` Phía trên khối chữ có ${d} hiện lên.`
+    : ` Nhân vật cầm ${d} trên tay.`;
 }
 
 /**
@@ -156,10 +259,24 @@ function buildTimeline(spec: ScriptSpec): string {
    * chỉ có chữ trên nền phẳng — rồi than đúng câu đó. Lời than "chỉ có chữ
    * trên nền xanh" phần lớn là do bảng thời gian nói vậy, không phải do clip.
    */
+  const bgVideo = spec.backdropVideo ?? '';
   const bg = spec.backdrop ?? [];
-  const bgDesc = bg.map((src) => describeImage(src));
-  const hasBg = bg.length > 0;
-  if (hasBg) {
+  const hasBg = Boolean(bgVideo) || bg.length > 0;
+  if (bgVideo) {
+    // Nói rõ nền là PHIM ĐANG CHẠY chứ không phải ảnh tĩnh. ⚠️ Câu này phải
+    // theo kịp số THẬT trong `VideoBackdrop`: bản đầu ghi "phát chậm 0,5× nên
+    // gần như trôi tại chỗ" — đo ra thì nền đổi trung vị 1/255, tức mô tả đang
+    // tả một thứ tĩnh hơn cả thứ đã tĩnh. Nay mặc định 1×.
+    const rate = spec.backdropRate ?? 1;
+    const nhip =
+      rate < 1 ? `phát chậm ${rate}× nên trôi rất chậm` : 'phát ở tốc độ thật';
+    lines.push(
+      `NỀN CHẠY SUỐT CLIP — một ĐOẠN PHIM quay thật, ${nhip}, làm mờ nhẹ và phủ ` +
+        `một lớp tối mỏng để chữ đọc được. KHÔNG phải nền phẳng, cũng KHÔNG ` +
+        `phải ảnh tĩnh:\n   ${describeVideo(bgVideo)}`
+    );
+  } else if (bg.length > 0) {
+    const bgDesc = bg.map((src) => describeImage(src));
     lines.push(
       `NỀN CHẠY SUỐT CLIP — ${bg.length} bức ảnh chụp thật, luân phiên chậm, ` +
         `có hiệu ứng phóng nhẹ (Ken Burns), phủ một lớp tối mỏng cho chữ đọc được:\n` +
@@ -167,11 +284,24 @@ function buildTimeline(spec: ScriptSpec): string {
     );
   }
 
-  /** Nền của MỘT cảnh chữ — phụ thuộc clip có ảnh nền hay không. */
+  /*
+   * Clip ở CHẾ ĐỘ NHÂN VẬT: nền đen tuyền, không ảnh. Suy đúng như
+   * `InsightClip.tsx` suy, chứ không thêm một cờ khai tay — hai nơi tự suy
+   * theo hai luật khác nhau là hội đồng tả một clip, máy render một clip khác.
+   */
+  const hasFigure = Boolean(
+    spec.hookPose ||
+      spec.ctaPose ||
+      spec.scenes.some((sc) => sc.visual.kind === 'figure' || sc.visual.kind === 'duo')
+  );
+
+  /** Nền của MỘT cảnh chữ — phụ thuộc clip có ảnh nền / có nhân vật hay không. */
   const typoBase = hasBg
     ? 'Chữ lớn giữa màn hình, sáng dần theo nhịp đọc, đặt trên một khối nền mờ ' +
-      'viền vàng nổi trên bức ảnh nền đang chạy.'
-    : 'Chữ lớn phủ giữa màn hình, sáng dần theo nhịp đọc, nền xanh đậm phẳng.';
+      `viền vàng nổi trên ${bgVideo ? 'đoạn phim nền đang trôi' : 'bức ảnh nền đang chạy'}.`
+    : hasFigure
+      ? 'Chữ lớn giữa màn hình trên nền ĐEN tuyền, sáng dần theo nhịp đọc.'
+      : 'Chữ lớn phủ giữa màn hình, sáng dần theo nhịp đọc, nền xanh đậm phẳng.';
 
   /** `accent` = cụm chữ được tô VÀNG. Trước đây không bao giờ tới hội đồng. */
   const withAccent = (base: string, accent?: string) =>
@@ -190,9 +320,16 @@ function buildTimeline(spec: ScriptSpec): string {
   push(
     'MỞ ĐẦU',
     spec.hook,
-    hasBg
-      ? `Chữ lớn hiện ngay, trên khối nền mờ đặt giữa bức ảnh nền (${bgDesc[0]}).`
-      : 'Chữ lớn hiện ngay giữa màn hình trên nền xanh đậm.'
+    spec.hookPose
+      ? `Nền ĐEN. Chữ lớn hiện ngay ở nửa trên. Nửa dưới: nhân vật hoạt hoạ tối ` +
+          `giản của kênh (người trắng, không có miệng, hai chấm mắt) phóng to dần ` +
+          `bước vào khung — ${POSE_MO_TA[spec.hookPose] ?? `tư thế "${spec.hookPose}"`}.` +
+          glyphPhrase(spec.hookGlyph)
+      : bgVideo
+        ? `Chữ lớn hiện ngay, trên khối nền mờ đặt giữa ĐOẠN PHIM nền đang trôi chậm (${describeVideo(bgVideo)}).`
+        : bg.length > 0
+          ? `Chữ lớn hiện ngay, trên khối nền mờ đặt giữa bức ảnh nền (${describeImage(bg[0])}).`
+          : 'Chữ lớn hiện ngay giữa màn hình trên nền xanh đậm.'
   );
 
   spec.scenes.forEach((sc, i) => {
@@ -200,14 +337,53 @@ function buildTimeline(spec: ScriptSpec): string {
     if (sc.visual.kind === 'screen') {
       visual = `Quay màn hình thật của công cụ trên điện thoại${sc.visual.label ? ` — ${sc.visual.label}` : ''}.`;
     } else if (sc.visual.kind === 'image') {
+      /*
+       * ⚠️ Mô tả phải khớp `PhotoScene`: ô VUÔNG 944×944 bo góc 28, đặt ở nửa
+       * trên khung 1080×1920 (≈87% bề ngang, ≈49% chiều cao) — KHÔNG phải "chiếm
+       * cả khung". Bản trước ghi "Ảnh chụp chiếm cả khung" nên hội đồng chấm một
+       * bố cục khác hẳn bố cục sắp render, và với tranh quẻ thì còn gọi sai cả
+       * LOẠI hình (tranh vẽ tay, không phải ảnh chụp). `describeImage` đã tự
+       * phân biệt tranh quẻ với ảnh kho — câu bao ngoài chỉ được tả CHỖ ĐẶT.
+       */
       visual = withAccent(
-        `Ảnh chụp chiếm cả khung, phóng chậm: ${describeImage(sc.visual.src, sc.visual.caption)}.`,
+        `Hình vuông lớn bo góc đặt ở nửa trên khung, phóng chậm, chữ nằm dưới: ` +
+          `${describeImage(sc.visual.src, sc.visual.caption)}.`,
         sc.visual.accent
       );
     } else if (sc.visual.kind === 'typo') {
       // Hội đồng người xem chấm theo thứ họ NHÌN THẤY — mô tả sai loại cảnh
       // là họ chấm một clip khác với clip sắp render.
       visual = withAccent(typoBase, sc.visual.accent);
+    } else if (sc.visual.kind === 'figure') {
+      /*
+       * 🔑 Đây là chỗ kênh HÌNH cuối cùng có phương sai thật.
+       *
+       * Mô tả rút từ TỪ VỰNG ĐÓNG của tư thế (`POSE_MO_TA`), không phải một
+       * câu tôi viết mới cho từng cảnh. Nhờ vậy hai cảnh khác tư thế thì hội
+       * đồng nhận hai dòng khác nhau — và khi nó chê "hình không ăn nhập" thì
+       * lời chê đó gắn vào một thứ ĐỔI ĐƯỢC (đổi tư thế), chứ không phải một
+       * hằng số viết tay như bản trước.
+       */
+      visual = withAccent(
+        `Nền đen, chữ lớn ở nửa trên. Nửa dưới: nhân vật hoạt hoạ tối giản của kênh — ` +
+          `${POSE_MO_TA[sc.visual.pose] ?? `tư thế "${sc.visual.pose}"`}. ` +
+          `Nhân vật CHUYỂN từ tư thế cảnh trước sang tư thế này trong nửa giây đầu.` +
+          glyphPhrase(sc.visual.glyph, sc.visual.glyphAt),
+        sc.visual.accent
+      );
+    } else if (sc.visual.kind === 'duo') {
+      const ta = POSE_MO_TA[sc.visual.poseL] ?? `tư thế "${sc.visual.poseL}"`;
+      const tb = POSE_MO_TA[sc.visual.poseR] ?? `tư thế "${sc.visual.poseR}"`;
+      const set = sc.visual.set ? ` Giữa khung có ${SET_MO_TA[sc.visual.set] ?? sc.visual.set}.` : '';
+      const gap =
+        sc.visual.gap === 'xa'
+          ? ' Hai người ngồi CÁCH XA nhau, chừa một khoảng trống rõ ở giữa.'
+          : '';
+      visual = withAccent(
+        `Nền đen, chữ lớn ở nửa trên. Nửa dưới: HAI nhân vật hoạt hoạ tối giản ` +
+          `của kênh. Người bên trái ${ta}. Người bên phải ${tb}.${set}${gap}`,
+        sc.visual.accent
+      );
     } else {
       visual = withAccent(
         `Thẻ chữ: ${sc.visual.heading ?? ''} ${sc.visual.body ?? ''}`.trim(),
@@ -226,9 +402,13 @@ function buildTimeline(spec: ScriptSpec): string {
   push(
     'KẾT',
     spec.cta,
-    hasBg
-      ? 'Thẻ chữ kèm logo và tên miền, vẫn trên bức ảnh nền.'
-      : 'Thẻ chữ kèm logo và tên miền.'
+    spec.ctaPose
+      ? `Nền ĐEN. Câu kết + tên miền tuviminhbao.com ở nửa trên. Nửa dưới: nhân ` +
+          `vật — ${POSE_MO_TA[spec.ctaPose] ?? `tư thế "${spec.ctaPose}"`}.` +
+          glyphPhrase(spec.ctaGlyph)
+      : hasBg
+        ? 'Thẻ chữ kèm logo và tên miền, vẫn trên bức ảnh nền.'
+        : 'Thẻ chữ kèm logo và tên miền.'
   );
 
   lines.push(
@@ -271,6 +451,16 @@ LUẬT BẮT BUỘC:
    nghị sẽ được đưa thẳng cho người viết lại dùng gần như nguyên văn, rồi bị một
    bộ đếm máy chấm lại. Đề nghị một câu mở đầu dài hơn trần là bạn vừa ra lệnh
    cho họ trượt — và cả lượt sửa đó mất trắng. Cần hay thì cắt CHỮ, đừng cắt Ý.
+9. boViHinh — người này bỏ đi vì HÌNH hay vì CHỮ? Chỉ khai khi họ THẬT SỰ bỏ đi
+   (xem hết ⇒ false).
+   · true  — thứ đẩy họ đi nằm ở PHẦN NHÌN: nền phẳng đơn điệu, hình tĩnh không
+     nhúc nhích, tranh/ảnh tông trầm buồn tẻ, chỉ có chữ chạy, không có gì cho
+     mắt bám vào.
+   · false — thứ đẩy họ đi nằm ở PHẦN NGHE/ĐỌC: câu mở nhạt, khó hiểu, lê thê,
+     không tin, không liên quan tới họ.
+   Cả hai cùng dở thì chọn cái NẶNG HƠN, đừng khai true cho có.
+   ⚠️ Trường này quyết định người ta đi sửa CHỮ hay đi đổi ĐỊNH DẠNG — hai việc
+   tốn công khác hẳn nhau. Khai sai là đẩy họ sửa nhầm chỗ suốt nhiều vòng.
 
 Trả về ĐÚNG JSON theo schema, không thêm lời dẫn.`;
 
@@ -289,8 +479,9 @@ const SCHEMA = {
           muonGuiChoAiDo: { type: 'boolean' },
           binhLuan: { type: 'string', nullable: true },
           trongTepMucTieu: { type: 'boolean' },
+          boViHinh: { type: 'boolean' },
         },
-        required: ['id', 'lyDo', 'muonLuu', 'muonGuiChoAiDo', 'trongTepMucTieu'],
+        required: ['id', 'lyDo', 'muonLuu', 'muonGuiChoAiDo', 'trongTepMucTieu', 'boViHinh'],
       },
     },
     giayRoiRungNang: { type: 'number', nullable: true },
@@ -314,8 +505,9 @@ export async function runAudienceGate(
       `Với mỗi người trong bảy người trên, trả lời: họ lướt đi ở giây thứ mấy ` +
       `(boQuaOGiay, để null nếu xem hết), vì sao (lyDo), chủ đề có thuộc mối ` +
       `quan tâm của họ không (trongTepMucTieu), có muốn lưu lại không ` +
-      `(muonLuu), có muốn gửi cho ai đó không (muonGuiChoAiDo), và họ sẽ bình ` +
-      `luận gì nếu có (binhLuan, null nếu không bình luận gì).\n\n` +
+      `(muonLuu), có muốn gửi cho ai đó không (muonGuiChoAiDo), họ sẽ bình ` +
+      `luận gì nếu có (binhLuan, null nếu không bình luận gì), và nếu bỏ đi thì ` +
+      `thứ đẩy họ đi là HÌNH hay CHỮ (boViHinh — xem luật 9).\n\n` +
       `Sau đó cho biết giây nào bị nhiều người bỏ đi nhất (giayRoiRungNang) và ` +
       `một chỉ dẫn sửa cụ thể (goiYSua).` +
       (budget
@@ -426,6 +618,61 @@ export async function runAudienceGate(
         fix: 'Thêm một thông tin cụ thể đáng lưu lại, hoặc một điểm khiến người xem nghĩ tới một người quen cụ thể.',
       });
     }
+    /*
+     * ── LỖI ĐỊNH DẠNG: người ta bỏ đi vì HÌNH, không phải vì CHỮ ─────────────
+     *
+     * 🔴 ĐÂY LÀ BẢN VÁ CỦA MỘT VÒNG LẶP KHÔNG THỂ HỘI TỤ, đo trên `ba-the-be-tac`:
+     * ba bản kịch bản, ~9 vòng chấm, `luot-vo-dinh` bỏ ở ĐÚNG 3s trong MỌI vòng
+     * của CẢ BA bản, lý do luôn là hình (*"chữ to nhưng không có hình ảnh hay
+     * hiệu ứng gì"* · *"các hình vẽ quẻ tông màu trầm, không tạo cảm giác hứng
+     * thú"*). Kết quả ba lần viết lại: 0/4 → 1/4 → 0/5, tức PHẲNG.
+     *
+     * 🔑 Căn nguyên là một BẤT KHẢ THI VỀ CẤU TRÚC, không phải kịch bản dở:
+     * `rewriteSpec` CHỈ sửa được CHỮ (luật 1 của nó ghi thẳng "không đụng phần
+     * hình"). Lời chê về HÌNH đưa cho nó là ra lệnh cho một cái máy làm việc nó
+     * không có tay để làm — mỗi vòng đốt hai lượt LLM để nhận lại đúng lời chê cũ.
+     *
+     * Cùng họ với `hook.too-long` (hỏng vì HAI con số) và `scene.too-long` (hỏng
+     * vì KHÔNG con số nào): **ô `fix` phải nêu đúng CẦN GẠT mà người sửa có
+     * trong tay.** Ở đây cần gạt không nằm trong chữ, nên phải nói ra điều đó.
+     */
+    const boDiTrongTep = trongTep.filter((v) => !daXemHet(v));
+    const boViHinh = boDiTrongTep.filter((v) => v.boViHinh === true);
+    /*
+     * 🪤 CHỈ XÉT KHI CLIP ĐANG TRƯỢT VÌ GIỮ CHÂN — và đây là bản vá một lỗi tôi
+     * tự gây ra trong chính lượt này, bắt được bằng cách soi ngưỡng chứ không
+     * phải bằng test (test của tôi chỉ dựng ca đang trượt nên nó xanh oan).
+     *
+     * Bản đầu kiểm độc lập ⇒ một clip **5/7 xem hết** (QUA ngưỡng) mà đúng 2
+     * người bỏ và cả 2 chê hình sẽ bị chặn: 2 ≥ 2 và 2×2 ≥ 2. Tức clip đang
+     * chạy tốt bỗng bị chặn vì gu của hai người — hồi quy thẳng trên 4 clip
+     * insight đang giao được.
+     *
+     * 🔑 `visual.format` là chẩn đoán "VÌ SAO trượt", không phải một phép chấm
+     * độc lập. Clip giữ chân đủ thì vài lời chê hình là GU, không phải lỗi định
+     * dạng — và đổi định dạng của một clip đang qua cổng là canh bạc không ai xin.
+     */
+    if (
+      xemHetTrongTep < can &&
+      boViHinh.length >= AUDIENCE_THRESHOLDS.minBoViHinh &&
+      boViHinh.length * 2 >= boDiTrongTep.length
+    ) {
+      issues.push({
+        level: 'block',
+        code: 'visual.format',
+        message:
+          `${boViHinh.length}/${boDiTrongTep.length} người bỏ đi vì PHẦN NHÌN, không phải vì lời: ` +
+          boViHinh.map((v) => `${v.id} (${v.lyDo})`).join(' · '),
+        // Ô `fix` này CỐ Ý không phải một chỉ dẫn viết lại — vòng lặp đọc mã
+        // `visual.format` là DỪNG, chứ không đưa cho người viết lại (xem
+        // `viral-loop.ts`). Chữ ở đây viết cho NGƯỜI đọc log.
+        fix:
+          'ĐỔI ĐỊNH DẠNG, đừng sửa chữ — viết lại lời không chạm được vào lỗi này. ' +
+          'Cảnh `image`/`figure` đang chiếm khung thì chuyển sang `typo` + `backdropVideo` ' +
+          '(nền động), hoặc đổi sang một loại hình khác hẳn.',
+      });
+    }
+
     // Người lướt vô định bỏ rất sớm là dấu hiệu clip chỉ phục vụ được tệp sẵn có.
     const voDinh = viewers.find((v) => v.id === 'luot-vo-dinh');
     if (voDinh && typeof voDinh.boQuaOGiay === 'number' && voDinh.boQuaOGiay <= 3) {

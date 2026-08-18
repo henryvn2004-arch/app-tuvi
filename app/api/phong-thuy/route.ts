@@ -8,6 +8,7 @@ export const maxDuration = 300;
 export const runtime = 'nodejs';
 
 import { NextRequest } from 'next/server';
+import { ARC_GIONG_NGU_HANH } from '@/lib/agent/prompts';
 import { ok, err, options, parseBody } from '@/lib/cors';
 import { llmText, type LlmImage } from '@/lib/llm/complete';
 import { authUserFromRequest, parseLlmJson } from '@/lib/api/tool-helpers';
@@ -690,7 +691,7 @@ Trả về JSON thuần túy:
 
   let raw: string;
   try {
-    raw = await llmText({ prompt, maxTokens: 1000 });
+    raw = await llmText({ system: ARC_GIONG_NGU_HANH, prompt, maxTokens: 1000 });
   } catch {
     return err('Lỗi AI.', 500);
   }

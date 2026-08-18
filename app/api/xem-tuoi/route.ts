@@ -10,7 +10,7 @@ import { NextRequest } from 'next/server';
 import { ok, err, options, parseBody } from '@/lib/cors';
 import { llmText, llmStreamResponse } from '@/lib/llm/complete';
 import { withToolOutcome } from '@/lib/ops/tool-outcome';
-import { LUAN_ARC, MAU_ARC, DOC_ARC_TUONG_HOP } from '@/lib/agent/prompts';
+import { LUAN_ARC, MAU_ARC, DOC_ARC_TUONG_HOP, ARC_GIONG_NGU_HANH } from '@/lib/agent/prompts';
 import { chuanHoaDauThanh } from '@/lib/vn-text';
 
 // ─── Chat system prompts ──────────────────────────────────────
@@ -221,7 +221,9 @@ Ngũ hành sinh: Mộc→Hỏa→Thổ→Kim→Thủy→Mộc
 Ngũ hành khắc: Mộc→Thổ, Thổ→Thủy, Thủy→Hỏa, Hỏa→Kim, Kim→Mộc
 
 Format: Trả về 3 nhóm (mỗi nhóm 4 tên), tiêu đề nhóm theo mức ưu tiên ngũ hành. Mỗi tên:
-**[Họ + Tên đầy đủ]** — Chữ Hán: [chữ] · Âm HV: [âm] · Nghĩa: [nghĩa ngắn gọn] · Hành chữ: [hành] · Phù hợp vì: [1 câu lý do ngũ hành]`;
+**[Họ + Tên đầy đủ]** — Chữ Hán: [chữ] · Âm HV: [âm] · Nghĩa: [nghĩa ngắn gọn] · Hành chữ: [hành] · Phù hợp vì: [1 câu lý do ngũ hành]
+
+${ARC_GIONG_NGU_HANH}`;
 
   const user = `Đặt tên cho con:
 - Họ: ${ho} | Giới tính: ${gioiTinh}
@@ -251,7 +253,9 @@ Cơ sở tư vấn:
 KHÔNG dùng: số nét cát hung, phong thủy màu sắc mà không có cơ sở. Trung thực về giới hạn: đây là gợi ý tham khảo, không đảm bảo thành công kinh doanh.
 
 Format: 3 nhóm × 4 tên. Mỗi tên:
-**[Tên đề xuất]** — Ý nghĩa: [giải thích] · Hành: [hành tên] · Ngũ hành phù hợp: [lý do] · Ghi chú thực tiễn: [1 câu]`;
+**[Tên đề xuất]** — Ý nghĩa: [giải thích] · Hành: [hành tên] · Ngũ hành phù hợp: [lý do] · Ghi chú thực tiễn: [1 câu]
+
+${ARC_GIONG_NGU_HANH}`;
 
   const user = `Đặt tên doanh nghiệp:
 - Chủ: ${hoTen} | Năm sinh: ${namSinh} (${canChiChu}) — Nạp âm: ${napAmChu}
@@ -283,7 +287,9 @@ Giới hạn trung thực: Không có cơ sở dữ liệu Thông Thư thực t�
 Format: Gợi ý 4–5 khoảng thời gian tốt trong tháng, mỗi khoảng gồm:
 **[Ngày X–Y tháng Z]** — Can chi ngày: [...] · Lý do: [nguyên lý cụ thể] · Phù hợp vì: [liên hệ với ngũ hành người] · Lưu ý: [điều cần tránh nếu có]
 
-Cuối: 1 đoạn tổng hợp khuyến nghị và lưu ý thực tiễn.`;
+Cuối: 1 đoạn tổng hợp khuyến nghị và lưu ý thực tiễn.
+
+${ARC_GIONG_NGU_HANH}`;
 
   const user = `Chọn ngày tốt cho sự kiện:
 - Sự kiện: ${suKien}

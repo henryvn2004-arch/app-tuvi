@@ -131,9 +131,34 @@ for (const f of files) {
   const abs = join(OUT_DIR, f);
   const bytes = statSync(abs).size;
   try {
+    /*
+     * Sidecar `<id>.meta.json` do `gen-insight.mjs` ghi ra ngay sau lượt render
+     * — nguồn DUY NHẤT của caption/thẻ/khổ. Không có sidecar (clip demo tool
+     * dựng bằng `gen-video.mjs`) thì bỏ trống: cửa nhận vẫn cất file và ghi sổ
+     * như cũ, chỉ là không có chữ để xếp hàng đăng.
+     */
+    const sidePath = join(OUT_DIR, `${toolId}.meta.json`);
+    let side = {};
+    if (existsSync(sidePath)) {
+      try {
+        side = JSON.parse(readFileSync(sidePath, 'utf8'));
+      } catch {
+        console.error(`⚠️  ${toolId} — sidecar hỏng, bỏ qua phần caption`);
+      }
+    }
+
     const form = new FormData();
     form.set('tool_id', toolId);
     form.set('variant', 'clip-9x16');
+    if (side.caption) form.set('caption', String(side.caption));
+    if (Array.isArray(side.hashtags) && side.hashtags.length) {
+      form.set('hashtags', side.hashtags.join(','));
+    }
+    if (side.width) form.set('width', String(side.width));
+    if (side.height) form.set('height', String(side.height));
+    // Loại nguồn do BÊN DỰNG khai (sidecar). Không khai thì hàm edge giữ mặc
+    // định `tool-demo` như cũ — clip demo công cụ chưa ghi trường này.
+    if (side.sourceType) form.set('source_type', String(side.sourceType));
     form.set(
       'meta',
       JSON.stringify({ built_at: new Date().toISOString(), run: process.env.GITHUB_RUN_ID || null })

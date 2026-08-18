@@ -25,6 +25,7 @@
 // ============================================================
 
 import manifest from './stock-manifest.json';
+import videoManifest from './stock-video-manifest.json';
 
 export interface StockImage {
   id: string;
@@ -153,3 +154,54 @@ export function stockBackdrop(tone: string, seed: string): string[] {
 }
 
 export const STOCK_COUNT = IMAGES.length;
+
+// ============================================================
+// KHO VIDEO NỀN
+// ============================================================
+/**
+ * Cùng nguyên tắc với ảnh: mô tả là TAG CỦA NHÀ CUNG CẤP, không phải chữ tôi
+ * viết. Nếu tôi tự tả đoạn phim thì hội đồng chấm văn của tôi, không chấm cái
+ * nền — đúng cái gương đã bị rút lại một lần.
+ *
+ * 🔴 Vì sao phải có: cổng 2 vừa chê một clip CÓ nền mưa là *"chỉ chữ trên nền
+ * xanh đơn điệu"* — vì `buildTimeline` chưa biết `backdropVideo`. Đây đúng lớp
+ * lỗi "hội đồng chấm hình mà không nhìn thấy hình": thêm một loại hình mới mà
+ * quên dạy bảng thời gian là hội đồng lại chê đúng thứ mình vừa sửa xong.
+ */
+export interface StockVideo {
+  id: string;
+  bucket: string;
+  key: string;
+  file: string;
+  caption: string;
+  width: number;
+  height: number;
+  duration: number;
+  brightness?: { mean: number; sd: number } | null;
+  score?: number;
+  matched?: string[];
+  textSafe?: boolean | null;
+  provider: string;
+  providerId: number;
+  pageURL: string;
+  author: string;
+  authorURL: string;
+  license: string;
+}
+
+const VIDEOS = (videoManifest.videos ?? []) as StockVideo[];
+
+export function findStockVideo(src: string): StockVideo | null {
+  if (!src) return null;
+  const clean = src.split('?')[0];
+  return VIDEOS.find((v) => clean.endsWith(v.file)) ?? null;
+}
+
+/** Mô tả đoạn phim nền cho hội đồng đọc. Không biết thì NÓI là không biết. */
+export function describeVideo(src: string): string {
+  const v = findStockVideo(src);
+  if (!v) return 'CHƯA CÓ MÔ TẢ — đừng phán đoán gì về đoạn phim này';
+  return `${v.caption} (đoạn phim quay thật, dài ${v.duration}s)`;
+}
+
+export const STOCK_VIDEO_COUNT = VIDEOS.length;

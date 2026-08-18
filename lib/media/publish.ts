@@ -30,7 +30,8 @@
 
 import { getConfigValue } from '@/lib/config/appConfig';
 import { GRAPH_BASE } from '@/lib/channels/meta';
-import { tgSendPhoto } from '@/lib/channels/telegram';
+import { tgSendPhoto, tgSendVideo } from '@/lib/channels/telegram';
+import { getTiktokAccessToken } from '@/lib/media/tiktok-token';
 
 const SUPABASE_URL = process.env.SUPABASE_URL || '';
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY || '';
@@ -55,6 +56,11 @@ const BLOCKING_PATTERNS = [
   // thì mỗi bài của kênh chưa cấu hình lại thành một dòng `error` riêng — với
   // 4 kênh là vài chục dòng lỗi mỗi sáng, và bài thì mất luôn khỏi hàng đợi.
   'thiếu env',
+  // Dấu hiệu DÙNG CHUNG cho mọi adapter: cửa của kênh chưa mở (token chết,
+  // chưa cấp lần đầu, không làm mới được). Đây là lỗi của CÁI CỬA chứ không
+  // phải của bài — thử bài kế tiếp chỉ đẻ thêm một dòng lỗi giống hệt. Kênh
+  // nào cần thì tự bọc lỗi bằng tiền tố này (xem `publishTiktok`).
+  'cửa chưa mở',
   'oauthexception',
   'access token',
   'session has expired',
@@ -139,6 +145,8 @@ const CAPTION_STYLE: Record<string, CaptionStyle> = {
   instagram: { maxLen: 2200, linkStyle: 'bare' },
   threads: { maxLen: 500, linkStyle: 'full' },
   telegram: { maxLen: 1024, linkStyle: 'full' }, // trần caption của sendPhoto
+  // TikTok không có link bấm được trong caption ⇒ dạng trần để người xem gõ lại.
+  tiktok: { maxLen: 2200, linkStyle: 'bare' },
 };
 
 /** Bỏ query UTM, giữ host + đường dẫn — dạng người ta gõ lại được bằng tay. */
@@ -193,7 +201,8 @@ async function publishFacebook(row: QueueRow): Promise<AdapterOut> {
   if (!FB_PAGE_ID) return { error: 'Thiếu env FB_PAGE_ID (hoặc MESSENGER_PAGE_ID)' };
   if (!FB_TOKEN) return { error: 'Thiếu env FB_PAGE_ACCESS_TOKEN (hoặc MESSENGER_PAGE_ACCESS_TOKEN)' };
   const imageUrl = row.media_assets?.url || '';
-  if (!imageUrl) return { error: 'Asset không có URL ảnh' };
+  if (!imageUrl) return { error: 'Asset không có URL' };
+  if (isVideoAsset(imageUrl)) return publishFacebookVideo(row, imageUrl);
 
   try {
     const res = await fetch(`${GRAPH_BASE}/${FB_PAGE_ID}/photos`, {
@@ -255,13 +264,36 @@ async function readGraph(res: Response | null): Promise<{ body: GraphBody; error
  * chậm. Nên hỏi trạng thái tới khi xong; hỏng thì trả lý do thật của nền tảng
  * thay vì để bước publish báo một lỗi khó hiểu.
  */
+/**
+ * Asset này là VIDEO hay ẢNH?
+ *
+ * 🔑 Đọc theo ĐUÔI FILE chứ không theo `variant` — đuôi là sự thật vật lý về
+ * file, còn `variant` là quy ước đặt tên do người nộp tự khai (`clip-ingest`
+ * nhận nó từ form). Và `QueueRow.media_assets` vốn chỉ select `url` + `meta`,
+ * không có `variant` để mà đọc.
+ */
+function isVideoAsset(url: string): boolean {
+  try {
+    return /\.(mp4|mov|webm|m4v)$/i.test(new URL(url).pathname);
+  } catch {
+    return /\.(mp4|mov|webm|m4v)(\?|$)/i.test(url);
+  }
+}
+
+/**
+ * @param rounds số vòng hỏi. Mặc định 8 (~24s) đủ cho ẢNH; VIDEO phải nới hẳn —
+ *   Instagram xử lý một Reel thường mất 30–90 giây, hết vòng là bài bị đánh
+ *   `error` và phải vào Admin bấm thử lại. Đó là lý do nhánh video truyền 20
+ *   vòng (~100s) chứ không dùng mặc định.
+ */
 async function waitContainer(
   base: string,
   containerId: string,
   token: string,
   field: 'status_code' | 'status',
+  rounds = 8,
 ): Promise<string | undefined> {
-  for (let i = 0; i < 8; i++) {
+  for (let i = 0; i < rounds; i++) {
     await sleep(i === 0 ? 1500 : 3000);
     const res = await fetch(
       `${base}/${containerId}?fields=${field},error_message&access_token=${encodeURIComponent(token)}`,
@@ -276,7 +308,7 @@ async function waitContainer(
       return body.error_message || `container ${st.toLowerCase()}`;
     }
   }
-  return 'ảnh chưa xử lý xong sau ~24s — để lượt sau thử lại';
+  return `chưa xử lý xong sau ~${Math.round((1.5 + (rounds - 1) * 3) / 1)}s — vào Admin bấm thử lại`;
 }
 
 /** Đường dẫn công khai của bài, hỏi riêng vì bước publish chỉ trả về id. */
@@ -305,14 +337,24 @@ async function publishInstagram(row: QueueRow): Promise<AdapterOut> {
   if (!IG_USER_ID) return { error: 'Thiếu env IG_USER_ID' };
   if (!IG_TOKEN) return { error: 'Thiếu env IG_ACCESS_TOKEN (hoặc FB_PAGE_ACCESS_TOKEN)' };
   const imageUrl = row.media_assets?.url || '';
-  if (!imageUrl) return { error: 'Asset không có URL ảnh' };
+  if (!imageUrl) return { error: 'Asset không có URL' };
+
+  /*
+   * Video đi ĐÚNG chuỗi hai bước như ảnh, chỉ đổi tham số container:
+   * `media_type: 'REELS'` + `video_url`. Instagram KHÔNG còn nhận video dạng
+   * bài thường qua API — mọi video đăng bằng Graph đều là Reel, nên đây không
+   * phải lựa chọn mà là đường duy nhất.
+   *
+   * Và vì thế phải nới số vòng chờ: xử lý một Reel lâu hơn hẳn một tấm ảnh.
+   */
+  const isVideo = isVideoAsset(imageUrl);
 
   try {
     const created = await fetch(`${GRAPH_BASE}/${IG_USER_ID}/media`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        image_url: imageUrl,
+        ...(isVideo ? { media_type: 'REELS', video_url: imageUrl } : { image_url: imageUrl }),
         caption: composeCaption(row, 'instagram'),
         access_token: IG_TOKEN,
       }),
@@ -322,7 +364,7 @@ async function publishInstagram(row: QueueRow): Promise<AdapterOut> {
     const creationId = body.id;
     if (!creationId) return { error: 'Instagram không trả creation_id' };
 
-    const waitErr = await waitContainer(GRAPH_BASE, creationId, IG_TOKEN, 'status_code');
+    const waitErr = await waitContainer(GRAPH_BASE, creationId, IG_TOKEN, 'status_code', isVideo ? 20 : 8);
     if (waitErr) return { error: waitErr };
 
     const pub = await fetch(`${GRAPH_BASE}/${IG_USER_ID}/media_publish`, {
@@ -336,6 +378,44 @@ async function publishInstagram(row: QueueRow): Promise<AdapterOut> {
     if (!mediaId) return { error: 'Instagram trả về rỗng, không có media id' };
 
     return { externalId: mediaId, externalUrl: await permalinkOf(GRAPH_BASE, mediaId, IG_TOKEN) };
+  } catch (e) {
+    return { error: (e as Error).message };
+  }
+}
+
+/**
+ * Facebook Page — đăng VIDEO qua `/{page-id}/videos` với `file_url`.
+ *
+ * ⚖️ CỐ Ý dùng `/videos` chứ KHÔNG dùng `/video_reels` dù clip đã đúng khổ 9:16
+ * và Reels có reach tốt hơn hẳn: endpoint Reels bắt buộc chuỗi **ba bước**
+ * (`start` → upload nhị phân theo phiên resumable → `finish`), tức phải tự tải
+ * mp4 về runner rồi đẩy từng khúc — ba chỗ hỏng thay vì một, trong khi `/videos`
+ * chỉ cần một request và để Facebook tự tải từ URL công khai (cùng cơ chế đã
+ * chạy cho ảnh). Video dọc vẫn hiển thị bình thường trên dòng thời gian.
+ * ⇒ Nếu sau này đo được reach của `/videos` quá thấp thì mới đáng dựng Reels.
+ *
+ * ⚠️ Quyền cần thêm so với ảnh: `pages_manage_posts` là đủ cho cả hai, nhưng
+ * video phải qua bước xử lý phía Facebook nên `id` trả về NGAY còn bài thì hiện
+ * sau vài chục giây. Không chờ ở đây — chờ nghĩa là chiếm ngân sách thời gian
+ * của cả lượt cron cho một thứ Facebook chắc chắn sẽ làm xong.
+ */
+async function publishFacebookVideo(row: QueueRow, videoUrl: string): Promise<AdapterOut> {
+  try {
+    const res = await fetch(`${GRAPH_BASE}/${FB_PAGE_ID}/videos`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        file_url: videoUrl,
+        description: composeCaption(row, 'facebook'),
+        published: true,
+        access_token: FB_TOKEN,
+      }),
+    }).catch(() => null);
+    const { body, error } = await readGraph(res);
+    if (error) return { error };
+    const videoId = body.id;
+    if (!videoId) return { error: 'Graph trả về rỗng, không có video id' };
+    return { externalId: videoId, externalUrl: `https://www.facebook.com/${FB_PAGE_ID}/videos/${videoId}` };
   } catch (e) {
     return { error: (e as Error).message };
   }
@@ -356,15 +436,17 @@ async function publishThreads(row: QueueRow): Promise<AdapterOut> {
   if (!THREADS_USER_ID) return { error: 'Thiếu env THREADS_USER_ID' };
   if (!THREADS_TOKEN) return { error: 'Thiếu env THREADS_ACCESS_TOKEN' };
   const imageUrl = row.media_assets?.url || '';
-  if (!imageUrl) return { error: 'Asset không có URL ảnh' };
+  if (!imageUrl) return { error: 'Asset không có URL' };
+  const isVideo = isVideoAsset(imageUrl);
 
   try {
     const created = await fetch(`${THREADS_BASE}/${THREADS_USER_ID}/threads`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        media_type: 'IMAGE',
-        image_url: imageUrl,
+        ...(isVideo
+          ? { media_type: 'VIDEO', video_url: imageUrl }
+          : { media_type: 'IMAGE', image_url: imageUrl }),
         text: composeCaption(row, 'threads'),
         access_token: THREADS_TOKEN,
       }),
@@ -374,7 +456,7 @@ async function publishThreads(row: QueueRow): Promise<AdapterOut> {
     const creationId = body.id;
     if (!creationId) return { error: 'Threads không trả creation_id' };
 
-    const waitErr = await waitContainer(THREADS_BASE, creationId, THREADS_TOKEN, 'status');
+    const waitErr = await waitContainer(THREADS_BASE, creationId, THREADS_TOKEN, 'status', isVideo ? 20 : 8);
     if (waitErr) return { error: waitErr };
 
     const pub = await fetch(`${THREADS_BASE}/${THREADS_USER_ID}/threads_publish`, {
@@ -405,10 +487,11 @@ const TG_CHANNEL_ID = process.env.TELEGRAM_CHANNEL_ID || '';
 async function publishTelegram(row: QueueRow): Promise<AdapterOut> {
   if (!TG_CHANNEL_ID) return { error: 'Thiếu env TELEGRAM_CHANNEL_ID' };
   const imageUrl = row.media_assets?.url || '';
-  if (!imageUrl) return { error: 'Asset không có URL ảnh' };
+  if (!imageUrl) return { error: 'Asset không có URL' };
 
   try {
-    const { messageId, username } = await tgSendPhoto(TG_CHANNEL_ID, imageUrl, composeCaption(row, 'telegram'));
+    const send = isVideoAsset(imageUrl) ? tgSendVideo : tgSendPhoto;
+    const { messageId, username } = await send(TG_CHANNEL_ID, imageUrl, composeCaption(row, 'telegram'));
     return {
       externalId: String(messageId),
       // Channel riêng tư không có username → không có link công khai để lưu,
@@ -420,11 +503,107 @@ async function publishTelegram(row: QueueRow): Promise<AdapterOut> {
   }
 }
 
+const TIKTOK_BASE = 'https://open.tiktokapis.com/v2';
+
+/**
+ * TikTok — Content Posting API, `PULL_FROM_URL`.
+ *
+ * Cùng lối "đưa URL, để nền tảng tự tải" như Facebook/Instagram, nên tái dùng
+ * đúng asset trong bucket `clips`. Hai bước: `/post/publish/video/init/` trả
+ * `publish_id`, rồi hỏi `/post/publish/status/fetch/` cho tới khi xong.
+ *
+ * 🔴 BA ĐIỀU KIỆN PHẢI BIẾT TRƯỚC, cả ba đều là việc tay, không code thay được:
+ *
+ * 1. **Miền của URL phải được VERIFY** trong TikTok Developer Portal (URL
+ *    Prefix ownership). Chưa verify thì `PULL_FROM_URL` trả
+ *    `url_ownership_unverified` — không phải lỗi token. Miền cần verify ở đây
+ *    là host Supabase Storage của bucket `clips`.
+ * 2. **Quyền `video.publish`** phải qua duyệt của TikTok. Trước khi duyệt, app
+ *    ở chế độ sandbox chỉ đăng được ở dạng **riêng tư** cho chính tài khoản dev.
+ * 3. **Token TikTok hết hạn sau 24 giờ** và refresh token thì **XOAY mỗi lượt
+ *    làm mới** — khác hẳn Facebook (token Page vĩnh viễn) lẫn YouTube (refresh
+ *    token cố định để yên trong env). Khâu làm mới nằm ở
+ *    `lib/media/tiktok-token.ts`, lưu cặp token trong `app_config` vì env
+ *    không tự ghi lại được. Xem `docs/TIKTOK-TOKEN.md` cho lượt cấp đầu tiên.
+ *
+ * ⚠️ Caption TikTok trần 2200 ký tự và KHÔNG có link bấm được — dùng
+ * `linkStyle: 'bare'` như Instagram để người xem còn gõ lại được địa chỉ.
+ */
+async function publishTiktok(row: QueueRow): Promise<AdapterOut> {
+  const videoUrl = row.media_assets?.url || '';
+  if (!videoUrl) return { error: 'Asset không có URL' };
+  if (!isVideoAsset(videoUrl)) return { error: 'TikTok chỉ nhận video, asset này là ảnh' };
+
+  // Lấy token TRƯỚC khi soi asset xong — nhưng SAU khi loại ảnh, để lượt asset
+  // sai loại không tốn một vòng làm mới token.
+  const tk = await getTiktokAccessToken();
+  if (tk.error || !tk.token) {
+    // Tiền tố `Cửa chưa mở` đưa lỗi này vào nhóm CHẶN ⇒ dừng cả kênh TikTok
+    // thay vì đánh hỏng từng bài. Token chết là lỗi của CÁI CỬA.
+    return { error: `Cửa chưa mở — ${tk.error || 'không lấy được token TikTok'}` };
+  }
+  if (tk.warn) console.warn(`[publish] TikTok: ${tk.warn}`);
+
+  const H = {
+    Authorization: `Bearer ${tk.token}`,
+    'Content-Type': 'application/json; charset=UTF-8',
+  };
+
+  try {
+    const init = await fetch(`${TIKTOK_BASE}/post/publish/video/init/`, {
+      method: 'POST',
+      headers: H,
+      body: JSON.stringify({
+        post_info: { title: composeCaption(row, 'tiktok').slice(0, 2200) },
+        source_info: { source: 'PULL_FROM_URL', video_url: videoUrl },
+      }),
+    }).catch(() => null);
+    if (!init) return { error: 'Không gọi được TikTok' };
+    const ib = (await init.json().catch(() => ({}))) as {
+      data?: { publish_id?: string };
+      error?: { code?: string; message?: string };
+    };
+    // TikTok trả error.code = 'ok' khi THÀNH CÔNG — kiểm `!== 'ok'` chứ không
+    // kiểm sự tồn tại của `error`, nếu không lượt thành công cũng bị đọc là hỏng.
+    if (ib.error && ib.error.code && ib.error.code !== 'ok') {
+      return { error: `${ib.error.message || 'TikTok error'} (${ib.error.code})` };
+    }
+    const publishId = ib.data?.publish_id;
+    if (!publishId) return { error: 'TikTok không trả publish_id' };
+
+    // Chờ TikTok tải xong từ URL. Cùng ngân sách với Reels (~100s) vì đây cũng
+    // là bước nền tảng tự tải file về rồi mã hoá lại.
+    for (let i = 0; i < 20; i++) {
+      await sleep(i === 0 ? 2000 : 5000);
+      const st = await fetch(`${TIKTOK_BASE}/post/publish/status/fetch/`, {
+        method: 'POST',
+        headers: H,
+        body: JSON.stringify({ publish_id: publishId }),
+        cache: 'no-store',
+      }).catch(() => null);
+      const sb = (await st?.json().catch(() => ({}))) as {
+        data?: { status?: string; fail_reason?: string };
+      };
+      const s = String(sb?.data?.status || '').toUpperCase();
+      if (s === 'PUBLISH_COMPLETE') {
+        // TikTok KHÔNG trả URL bài — chỉ có publish_id. Đừng bịa một link
+        // mở ra 404; để trống, sổ vẫn tra ngược được bằng id.
+        return { externalId: publishId };
+      }
+      if (s === 'FAILED') return { error: sb?.data?.fail_reason || 'TikTok báo FAILED' };
+    }
+    return { error: 'TikTok chưa xử lý xong sau ~100s — vào Admin bấm thử lại' };
+  } catch (e) {
+    return { error: (e as Error).message };
+  }
+}
+
 const ADAPTERS: Record<string, (row: QueueRow) => Promise<AdapterOut>> = {
   facebook: publishFacebook,
   instagram: publishInstagram,
   threads: publishThreads,
   telegram: publishTelegram,
+  tiktok: publishTiktok,
 };
 
 /** Kênh đã có adapter thật — dùng để cảnh báo cấu hình trỏ vào chỗ chưa có. */
@@ -609,6 +788,14 @@ export function formatPublishReport(r: PublishResult): string {
 function channelFix(ch: string, msgs: string[]): string {
   const hit = (p: string) => msgs.some((m) => m.includes(p));
   if (ch === 'facebook' && (hit('session has expired') || hit('has expired'))) return FB_TOKEN_EXPIRED;
+  if (ch === 'tiktok') {
+    // 🔑 TikTok có BA cửa khác hẳn nhau, và nhầm cửa là đi sửa nhầm chỗ y hệt
+    // ca Facebook: miền chưa verify KHÔNG phải chuyện token, mà lỗi của nó
+    // cũng bay ra từ cùng một adapter.
+    if (hit('url_ownership_unverified') || hit('url ownership')) return TT_URL_UNVERIFIED;
+    if (hit('ghi vào app_config không được')) return TT_CHAIN_BROKEN;
+    if (hit('invalid_grant') || hit('chưa có token')) return TT_TOKEN_DEAD;
+  }
   return CHANNEL_SETUP[ch] || '';
 }
 
@@ -631,6 +818,36 @@ const FB_TOKEN_EXPIRED =
   '⛔ Bước (2) cần ĐỌC App Secret — chỉ copy, TUYỆT ĐỐI không bấm Reset: ' +
   'MESSENGER_APP_SECRET và WHATSAPP_APP_SECRET đang dùng chính giá trị đó, reset là chết webhook cả hai kênh.';
 
+/**
+ * ⚠️ Ca này KHÔNG phải chuyện token, dù nó bay ra từ cùng adapter TikTok.
+ * `PULL_FROM_URL` đòi miền chứa file phải được XÁC MINH SỞ HỮU trong Developer
+ * Portal. Đi cấp lại token cho lỗi này là mất công vô ích — đúng cái bẫy
+ * "một câu khuyên cho hai nguyên nhân" mà hàng đợi Facebook đã trả giá.
+ */
+const TT_URL_UNVERIFIED =
+  'MIỀN CHƯA XÁC MINH — không phải lỗi token, đừng đi cấp lại token. `PULL_FROM_URL` đòi ' +
+  'miền chứa file video phải được verify sở hữu. TikTok Developer Portal → app → ' +
+  'Manage apps → URL properties → thêm URL prefix của host Supabase Storage (bucket `clips`) ' +
+  'rồi làm bước xác minh. Verify xong mới đăng được, không cần đổi gì trong code.';
+
+/**
+ * 🔴 Ca NẶNG NHẤT và là lý do module token phải GHI TRƯỚC DÙNG SAU: refresh
+ * token TikTok XOAY mỗi lượt làm mới, nên làm mới xong mà không lưu được cái
+ * mới thì cái cũ đã chết và chuỗi đứt hẳn — không tự lành được.
+ */
+const TT_CHAIN_BROKEN =
+  'CHUỖI TOKEN ĐỨT — đã làm mới được nhưng ghi vào `app_config` hỏng, nên refresh token mới ' +
+  'không ai giữ còn cái cũ thì TikTok đã vô hiệu hoá. Không tự lành. Phải cấp lại bằng tay ' +
+  '(xem docs/TIKTOK-TOKEN.md) rồi đặt TIKTOK_REFRESH_TOKEN trên Vercel. ' +
+  'Kiểm luôn vì sao ghi hỏng: SUPABASE_SERVICE_KEY còn đúng không.';
+
+/** Chưa cấp lần đầu, hoặc refresh token đã hết 365 ngày. Cùng một việc phải làm. */
+const TT_TOKEN_DEAD =
+  'CHƯA CÓ / HẾT HẠN refresh token. Access token TikTok sống 24 giờ và refresh token XOAY mỗi ' +
+  'lượt làm mới, nên KHÔNG đặt tay một access token rồi để đó được. Làm theo docs/TIKTOK-TOKEN.md ' +
+  '(cấp một lượt bằng tay → đặt TIKTOK_REFRESH_TOKEN + TIKTOK_CLIENT_KEY + TIKTOK_CLIENT_SECRET ' +
+  'trên Vercel → Redeploy). Từ lượt sau hệ thống tự làm mới và tự lưu vào `app_config`.';
+
 /** Việc tay cần làm khi một kênh báo lỗi auth/quyền (ca chung). */
 const CHANNEL_SETUP: Record<string, string> = {
   facebook:
@@ -648,4 +865,10 @@ const CHANNEL_SETUP: Record<string, string> = {
   telegram:
     'thêm bot làm ADMIN của channel (quyền đăng bài), rồi đặt TELEGRAM_CHANNEL_ID trên Vercel ' +
     '(dạng `@ten_channel` hoặc id số `-100…`). Token bot dùng chung TELEGRAM_BOT_TOKEN đã có.',
+  tiktok:
+    'cần BA thứ, thiếu cái nào cũng không đăng được: (1) quyền `video.publish` đã qua duyệt ' +
+    '(trước khi duyệt, app sandbox chỉ đăng RIÊNG TƯ cho chính tài khoản dev); (2) miền của ' +
+    'bucket `clips` đã verify sở hữu trong Developer Portal (URL properties); (3) token — đặt ' +
+    'TIKTOK_CLIENT_KEY + TIKTOK_CLIENT_SECRET + TIKTOK_REFRESH_TOKEN trên Vercel, xem ' +
+    'docs/TIKTOK-TOKEN.md.',
 };
