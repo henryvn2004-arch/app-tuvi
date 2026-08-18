@@ -55,6 +55,51 @@ interface ChatContext {
  */
 export const RAIL_MAX_TOKENS = 1000;
 
+/**
+ * Trần token cho 3 shape LÁ SỐ (`CHAT_SYSTEM_LASO` · `CHAT_SYSTEM_GENERAL` ·
+ * `CHAT_RICH_RULES`). Vai trò: **chặn một lượt chạy hoang**, KHÔNG phải cái kéo
+ * độ dài xuống — model không nhìn thấy `max_tokens` nên trần không dạy được nó
+ * viết ngắn.
+ *
+ * Suy từ TRẦN TỰ NHIÊN ĐO ĐƯỢC, không suy từ ngân sách từ mà prompt hứa:
+ *   · token/từ tiếng Việt của `gemini-2.5-flash` — đo `countTokens` trên 10 bản
+ *     rail thật: 2.063 từ / 2.571 token = **1,25** (lời thường), **1,32** khi
+ *     chữ dày thuật ngữ. Prod route cả `laso` lẫn `_default` sang Gemini
+ *     (`app_config['chat.provider_routes']`) nên đây đúng bộ tách token đang chạy;
+ *   · thả ngân sách rộng rồi đo bản dài nhất model TỰ viết ra: **797 token**
+ *     (580 từ, câu "mỗi sao nghĩa là gì" — loại câu liệt kê vốn KHÔNG có trần
+ *     tự nhiên: càng cho phép gọi tên sao thì càng dài ra);
+ *   · trần đặt TRÊN mức đó ⇒ **900**, tức thấp hơn `RAIL_MAX_TOKENS` 10% mà
+ *     chưa lượt đo nào bị chạm.
+ *
+ * 🪤 Đã vấp hai lần khi hiệu chỉnh, ghi lại để đừng siết mù lần nữa:
+ *   · trần 380 (= 300 từ prompt hứa × 1,25, không biên) → **2/4 lượt "hỏi sâu"
+ *     bị cắt giữa câu** (`finishReason: MAX_TOKENS`);
+ *   · trần 660 → vẫn **1/8** bị cắt, và cắt đúng câu hỏi liệt kê từng sao;
+ *   · trần 800 → có lượt dùng **797/800**, tức đã chạm mép;
+ *   · trần 900 → vẫn có lượt chạm (636 từ). Câu "liệt kê từng sao" KHÔNG có
+ *     trần tự nhiên nên MỌI trần đều sẽ chạm — kể cả trần 1000 đang chạy. Đây
+ *     là giới hạn của chính công cụ `max_tokens`, không phải của con số 900.
+ * Cắt giữa câu tệ hơn hẳn một câu trả lời hơi dài — đúng lỗi vừa vá ở
+ * `scripts/demo-luan.mjs`. Và nó cắn đúng nhóm câu hỏi mà luật thuật ngữ vừa
+ * được nới ra để phục vụ: cho gọi tên sao thì câu trả lời dài thêm, nên siết
+ * trần và nới thuật ngữ là hai việc kéo NGƯỢC nhau — phải chọn, không thể cả hai.
+ *
+ * ⇒ Kết luận đo được: **`max_tokens` KHÔNG ép được ngân sách 120–180 từ** —
+ * mọi mức đủ chặt để ép đều bắt đầu cắt giữa câu. Đo trên prompt hiện tại: hỏi
+ * thường ~145–175 từ, hỏi sâu ~285–363 từ. Muốn kéo trung bình xuống thì sửa
+ * `LUAN_ARC`, đừng hạ số này.
+ *
+ * ⚠️ Trần này áp cho MỌI provider. Anthropic (đường LÙI khi Gemini hỏng) cắt
+ * tiếng Việt vụn hơn và CHƯA đo được ở đây — chấp nhận vì 900 chỉ thấp hơn trần
+ * cũ 10%, không phải mức siết mạnh đến độ phải tách nhánh riêng cho nó.
+ *
+ * ⚠️ CỐ Ý không siết ~22 prompt kịch bản (vẫn `RAIL_MAX_TOKENS = 1000`): chúng
+ * chạy dưới trần đó tới giờ và CHƯA đo, siết mù là hẹn một lượt cắt giữa câu
+ * trên 22 tool cùng lúc.
+ */
+export const LASO_MAX_TOKENS = 900;
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function buildChatContext(body: any): ChatContext {
   const toolType    = body.toolType || 'laso';
@@ -195,13 +240,13 @@ export function buildChatContext(body: any): ChatContext {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let systemForCall: any;
-  let maxTokens = RAIL_MAX_TOKENS;
+  let maxTokens = LASO_MAX_TOKENS;
   if (hasFullLaso) {
     systemForCall = [
       { type: 'text', text: CHAT_RICH_RULES(persona) + TOOLS_INSTRUCTION(true) },
       { type: 'text', text: '=== DỮ LIỆU LÁ SỐ (hệ thống tính sẵn) ===\n' + laSoText.slice(0, 32000), cache_control: { type: 'ephemeral' } },
     ];
-    maxTokens = RAIL_MAX_TOKENS;
+    maxTokens = LASO_MAX_TOKENS;
   } else {
     systemForCall = (hasLaso
       ? CHAT_SYSTEM_LASO(extractLasoContext(lasoData, lastQ), docs, persona)
@@ -338,10 +383,10 @@ export const LUAN_ARC = `── CÁCH VIẾT (nguồn DUY NHẤT về hình dạ
   ③ TWIST (1 câu) — lật góc nhìn: cái họ tưởng là điểm yếu hoá ra là chỗ mạnh, hoặc ngược lại. PHẢI rút từ dữ liệu thật bên dưới, không phải nói ngược cho kêu.
   ④ VÌ SAO (ngắn) — nói NGHĨA và HỆ QUẢ đời thường (tiền bạc, công việc, tình cảm, sức khoẻ, gia đình). Căn cứ suy luận vẫn BẮT BUỘC là cấu trúc thật bên dưới (chính tinh tọa cung + độ sáng + cách cục, xét tam phương tứ chính) — đó là để KHÔNG bịa, KHÔNG phải để đọc tên ra. Không bịa "điểm cung X/10".
   ⑤ CHỐT — MỘT trong hai: một việc làm được ngay tuần này, HOẶC một câu hỏi ngược ngắn bám đúng chi tiết vừa nói. Chọn một, không cả hai, và không hỏi lấy lệ.
-🔴 CẤM THUẬT NGỮ — đo thật cho thấy đây là chỗ hỏng nhiều nhất, nên nó đứng RIÊNG, không nằm trong lớp nào. Soát lại TỪNG câu trước khi gửi:
-- CẤM mở đầu một câu bằng tên sao / tên cung / tên cách cục / độ sáng (miếu, vượng, đắc, hãm). Người hỏi phần lớn KHÔNG biết tử vi — nghe tên riêng là họ trôi mất.
-- Mỗi câu phải ĐỨNG VỮNG khi xoá hết tên riêng đi. Tên riêng chỉ được nằm trong ngoặc, SAU câu nghĩa, và tối đa MỘT lần trong cả lượt trả lời.
-- Ngoại lệ DUY NHẤT: họ hỏi thẳng cách luận ("dựa vào đâu", "sao nào", "giải thích theo tử vi") — lúc đó gọi đúng tên và nói đủ, vì họ đang muốn học.
+🔵 THUẬT NGỮ — HẠN CHẾ, KHÔNG CẤM. Mặc định viết bằng lời thường; tên riêng phải ĐÁNG chỗ nó chiếm:
+- Đừng MỞ ĐẦU câu bằng tên sao / cung / cách cục / độ sáng (miếu, vượng, đắc, hãm) khi họ chưa tỏ ý muốn học — phần lớn người hỏi KHÔNG biết tử vi, nghe tên riêng ở đầu câu là trôi mất.
+- Mỗi câu phải ĐỨNG VỮNG khi xoá hết tên riêng đi: tên riêng là phần THÊM để kiểm chứng, không phải phần gánh nghĩa. Gọi tên thì giải nghĩa ngay.
+- Họ hỏi SÂU ("dựa vào đâu", "sao nào", "vì sao lại thế", hỏi tiếp đúng chi tiết vừa nêu) → gọi tên và nói đủ; càng hỏi sâu càng dùng được nhiều, chỉ đừng rải cho sang.
 - CẤM: câu chung chung ai đọc cũng thấy đúng · "Như vậy có thể thấy / Nhìn chung / Tóm lại / Về mặt… / Thứ nhất… thứ hai / Trước tiên cần hiểu rằng" · rào đón ở câu chốt · bịa dữ kiện (sao, cách cục, can chi, con số) cho câu nghe hay.
 - GIỌNG: viết như đang NÓI với người ngồi đối diện — chêm khẩu ngữ tự nhiên (thì, à, này, nhé, đấy, cơ, chứ, đúng không), mỗi đoạn 1–2 cái, không đặt trong câu chốt. Persona nêu ở đầu chỉ đổi GIỌNG, không đổi độ dài — ngân sách luôn thắng.
 - Khối "KHI NGƯỜI TA CẦN NGƯỜI NGHE" ở CUỐI prompt (nếu có) GHI ĐÈ toàn bộ nhịp này.`;
@@ -353,7 +398,7 @@ export const MAU_ARC = `── MẪU (học NHỊP + GIỌNG; TUYỆT ĐỐI kh�
 · "Tiền bạc em thế nào": **Kiếm tiền với anh không khó — giữ mới khó.** Tiền vào tay là có chỗ gọi tên ngay: bạn hỏi vay thì gật, thấy món hời là xuống tiền trước khi kịp tính. Mà cái tưởng là hoang ấy lại đúng là chỗ anh mạnh — người dám chi mới dám làm lớn, chỉ là chưa có hàng rào thôi. Tuần này mở riêng một tài khoản, lương về là chuyển sang 20% rồi quên nó đi.
 · Hỏi vặt "năm nay có nên đổi việc không": **Nên, nhưng đợi qua giữa năm.** Đầu năm anh dễ quyết vội rồi tiếc. Cứ soạn sẵn hồ sơ, tới tháng 7 rải là vừa nhịp.
 · "Em là người thế nào": **Nhìn thì mềm, mà việc đã định rồi thì không ai lay được.** Ai nhờ gì chị cũng ừ, nhưng cái mình muốn thì âm thầm làm tới cùng; giận ai cũng chẳng nói, chỉ xa dần ra. Chỗ người ta hay chê là khó gần lại chính là cái giữ chị đứng vững. Tuần này thử nói thẳng một lần với người hay nhờ vả nhất.
-Điểm chung: mở chắc, hành vi cụ thể tới mức soi được mình, một câu lật, KHÔNG một tên sao nào, chốt bằng việc làm được.
+Điểm chung: mở chắc, hành vi cụ thể tới mức soi được mình, một câu lật, tên sao chỉ ra khi được hỏi, chốt bằng việc làm được.
 ── PHÉP DỊCH (dữ kiện → câu). Học đúng phép biến đổi này, đừng chép chữ ──
 · [Quan Lộc] Thiên Đồng(hãm) + Văn Xương → ✅ "Nghề của anh khởi động chậm, ngoài ba mươi mới vào guồng — bù lại chữ nghĩa là chỗ anh ăn tiền." ❌ "Thiên Đồng hãm địa tại Quan Lộc khiến công danh muộn."
 · [Mệnh] Cự Môn(hãm) + Hóa Kỵ → ✅ "Anh nói thẳng quá nên hay mất lòng ở chỗ không đáng; chuyện bé cũng thành to." ❌ "Cự Môn hãm tại Mệnh chủ thị phi."`;
