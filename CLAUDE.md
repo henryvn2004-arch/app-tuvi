@@ -5,6 +5,75 @@
 
 ---
 
+## 🧱 Lượt render THẬT đầu tiên TRƯỢT — kho nền nằm ngoài git (2026-08-18, cùng PR #543)
+
+Bấm lượt `video-build` **không phải `--dry-run`** đầu tiên. Trượt cả 2 clip,
+và lỗi đúng ở mắt xích thứ ba của chuỗi:
+
+```
+404 http://localhost:3000/public/stock-video/tone/thien-nhien-toi/203449.mp4
+```
+
+🔑 **Đây là bằng chứng cho chính bài học vừa ghi ở mục dưới** (*"đã nối" ≠ "đã
+chảy"*). Kho video 97MB nằm NGOÀI git — đúng lối tranh quẻ và kho ảnh, thứ
+commit là manifest — nên bản clone sạch của runner **không có một byte nào**.
+Ở máy phát triển kho có sẵn nên không lộ; chỉ lượt chạy thật mới lộ.
+
+### 🔑 Chọn đường TẢI THẲNG TỪ CDN, không qua Supabase Storage
+| Đường | Chặn ở đâu |
+|---|---|
+| Đẩy kho lên Storage rồi runner tải | Cần `SUPABASE_SERVICE_KEY` để ĐẨY — cả track cố ý không đưa khoá đó vào Actions (xem `clip-ingest`). Bucket `stock` còn **chưa tồn tại**, và container này không có khoá để tự tạo |
+| Commit 97MB mp4 vào git | Ngược hẳn `.gitignore` đang có, và git không phải chỗ chứa nhị phân |
+| Nhập lại kho từ API Pixabay mỗi lượt | Cần `PIXABAY_API_KEY` làm secret + tải lại mỗi lượt + **không tất định** (cổng có thể tuyển đoạn khác) |
+| ✅ **Pin URL CDN vào manifest** | URL Pixabay là **đường dẫn cố định** (`cdn.pixabay.com/video/<ngày>/<id>-<mã>_<khổ>.mp4`), **không có chữ ký hết hạn** như `webformatURL` của ảnh ⇒ tải bằng **HTTP trần, 0 secret** |
+
+`scripts/restore-stock.mjs` + cache Actions băm theo manifest. Khôi phục từ kho
+RỖNG: **7/7 trong 4,9 giây**; chạy lại là no-op.
+- ⚖️ Vẫn TẢI VỀ chứ không hotlink lúc render, dù điều khoản Pixabay **cho phép**
+  nhúng video trực tiếp — lý do là tất định (render lại sau 6 tháng phải ra đúng
+  clip đó), không phải lý do luật.
+- ⚠️ **ĐỐI CHỨNG BẮT BUỘC trước khi pin**: manifest vốn đo trên bản **ffmpeg thu
+  nhỏ tại máy**, còn runner sẽ nhận bản 1920 **của chính Pixabay** — hai file
+  khác nhau. Đo lại độ động trên cả 7: lệch tối đa **0,03** (`mean`) và **0,10**
+  (`spread`), cả 7 vẫn qua `MOTION_MIN`/`MOTION_SPREAD_MIN`. Đổi nguồn file
+  KHÔNG đổi nghĩa phép đo. **Đổi `variant` thì phải đo lại, đừng sửa mò.**
+
+### 🐞 Bắt kèm hai lỗi cùng họ, cả hai hỏng IM LẶNG
+1. **`backdropSeconds` khai THỪA độ dài thật** (15 vs **14,51** · 20 vs
+   **19,64**). `VideoBackdrop` tính `covers = floor(seconds*fps/rate)` rồi bọc
+   `<Loop>` đúng ngần ấy khung ⇒ khai thừa nửa giây là **mỗi vòng lặp đứng ở
+   khung cuối nửa giây** — đúng bẫy *"OffthreadVideo đứng khung cuối"* đã ghi.
+   Clip vẫn ra, chỉ giật, nên không phép đo nào chạm tới.
+2. **Căn nguyên: manifest chép số nguyên ĐÃ LÀM TRÒN của nhà cung cấp.** Vá ở
+   nguồn — `videoDurationSec()` (`stock-lib.mjs`) + lượt nhập kho nay ĐO trên
+   chính file, thay vì để lại con số sai sẵn đó cho lượt sau copy. 🔑 **Sửa số
+   trong data mà không sửa chỗ ĐẺ RA số là hẹn ngày nó quay lại.**
+
+### ✅ Thứ KHÔNG phải vá (đã kiểm để loại trừ)
+Tranh quẻ đi qua **URL Storage công khai** (`portraits/que-phuc-hy/*.png`, đo
+HTTP 200) ⇒ runner tải được. Nhạc nền do `gen-music-bed.mjs` sinh lại trong
+chính workflow. Chỉ `stock-video/` là thiếu.
+
+### Verify
+`tsc` 0 · `lint` 0 lỗi / 77 warning = mốc nền · `prettier` cả cây sạch ·
+`node --check` 3 script.
+- Khôi phục từ kho **RỖNG** 7/7 · chạy lại no-op · đo lại độ động sau khôi phục
+  **7/7 khớp và qua cổng**.
+- **Render thật đầu-cuối một clip**: ra `720×1280 · 32,15s · h264+aac · 3,8MB`.
+- Parse lại thứ tự bước workflow (khôi phục kho đứng TRƯỚC dựng clip) — không
+  đọc diff bằng mắt, đúng bài học `schedule` đặt nhầm cấp.
+
+### 🪤 Bẫy đã vấp
+- **`import()` một script CLI là CHẠY nó.** Lượt kiểm cú pháp cuối vô ý gọi
+  `import('scripts/stock-video.mjs')` → script bắt đầu gọi API Pixabay thật.
+  Dừng kịp, đã verify manifest vẫn 7 đoạn và không file rác. **Kiểm cú pháp thì
+  dùng `node --check`, đừng dùng `import`.**
+- **`ffprobe` không đi kèm bản ffmpeg của Remotion** — đọc độ dài phải parse
+  dòng `Duration:` trong **stderr** của `ffmpeg -i` (lệnh đó luôn thoát khác 0
+  vì không có output; đó là đường đọc, không phải lỗi).
+
+---
+
 ## 🔁 Vòng lặp trả bản CUỐI chứ không phải bản TỐT NHẤT · token TikTok · và pipeline CHƯA CHẠY THẬT lượt nào (2026-08-18, cùng PR #543)
 
 Vòng tiếp của track pipeline. Ba việc, và **cái thứ ba là thứ tôi tưởng đã xong**.
