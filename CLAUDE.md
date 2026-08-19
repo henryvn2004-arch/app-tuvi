@@ -149,9 +149,17 @@ hỏng từ 4,1s lên 9,1s mà chắc chắn trả rỗng.
   mới ra ngoài TRƯỚC khi tráo.**
 - 🪤 `next dev` lại tự ghi `next-env.d.ts` — đã `git checkout`, không commit.
 
+### ✅ ĐÃ ĐO TRÊN PROD (sau khi gộp `c0b766c`)
+3 trang `/la-so/*` (gồm 1 slug chưa từng gọi ⇒ `x-vercel-cache: MISS`, tức compute
+thật): **200 trong 0,86–1,55 giây**. Slug rác → **404**. **0 runtime error** trong
+30 phút.
+- ⚠️ **TTL không đọc được từ ngoài**: Vercel tiêu thụ `s-maxage` ở tầng CDN rồi
+  chỉ phát ra `cache-control: public`. Bằng chứng cho phần TTL nằm ở 23 ca trên
+  handler thật, không nằm ở header prod — đừng đi tìm `31536000` trong response.
+
 ### CÒN LẠI
-- Chưa đo trên prod. Dấu hiệu vá đúng: nhóm *"Task timed out"* của `/la-so/[slug]`
-  ngừng mọc thêm ở đợt bot cào kế tiếp.
+- Dấu hiệu vá đúng về lâu dài: nhóm *"Task timed out"* của `/la-so/[slug]` ngừng
+  mọc thêm ở đợt bot cào kế tiếp.
 - Hạn giờ 4s và ngân sách 5s là **con số chọn**, chưa hiệu chỉnh theo p95 thật của
   Supabase. Thấy trang hay hụt khối bài liên quan thì nới ngân sách, đừng nới hạn giờ.
 
@@ -214,6 +222,14 @@ CÙNG ORIGIN. Hành vi Google đổi theo UA là thứ mình không kiểm đư�
   thấy trên prod · EOT → ném. Đây là mắt xích #557 thiếu.
 - 🪤 `pkill -f 'stub-postgrest[.]mjs'` **vẫn tự giết** (exit 144) — ngoặc vuông
   không cứu được khi chính dòng lệnh shell chứa chuỗi đó. Bắt PID rồi `kill "$PID"`.
+
+### ✅ ĐÃ ĐO TRÊN PROD (sau khi gộp `c0b766c`)
+`/fonts/be-vietnam-pro-700.ttf` trả **126.228 byte, chữ ký `00010000`**. Cả 4 route
+OG ra **PNG thật**: `/api/og` 75.881 byte (1200×630) · `/api/og/laso` 105.930 ·
+`/api/og/social` 114.593 (1080×1350) · `/api/og/luan-duong` 33.658. Soi bằng mắt:
+chữ tiếng Việt đủ dấu ("Thử", "Cung Tý", "Luận bởi Thầy"). **0 runtime error** 30 phút.
+- 🪤 Lượt gọi ĐẦU của `/api/og/luan-duong` timeout 30s rồi các lượt sau 0,37s ⇒ đó
+  là **cold start**, không phải lỗi. Đừng đọc một lượt đầu thành hỏng.
 
 ### CÒN LẠI
 - Font là file nhị phân trong git (246KB). Bump bản Be Vietnam Pro thì phải tải
