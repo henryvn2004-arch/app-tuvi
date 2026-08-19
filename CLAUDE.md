@@ -5,6 +5,114 @@
 
 ---
 
+## 📡 BẢN ĐỒ 8 KÊNH SOCIAL — trạng thái thật, đo trước khi làm (2026-08-19, CHƯA CODE)
+
+Henry: *"bây giờ setup từng cái social nhé: youtube - có rồi, facebook - có rồi
+giờ fix, tiktok - tao dùng account cá nhân trước, X - tạo mới, instagram - tạo
+mới, zalo - tuần sau sau khi có business license, còn gì nữa ko?"*
+
+### 🔴 ĐÍNH CHÍNH tiền đề: "YouTube có rồi" ĐÚNG cho video hỏi-đáp, SAI cho CLIP
+Đo trên mã: `yt-drain.ts` đọc bảng **`van_dap`** rồi gọi edge `youtube-upload`.
+Còn clip 9:16 đi đường HOÀN TOÀN KHÁC: `media_assets` → `media_posts` →
+`publishQueue()` → `ADAPTERS`. Mà `ADAPTERS` (`lib/media/publish.ts:601`) chỉ có
+**5 khoá: facebook · instagram · threads · telegram · tiktok** — **không có
+youtube**. ⇒ clip hiện KHÔNG lên YouTube Shorts được; phải viết adapter mới
+(tái dùng chính edge function sẵn có, không dựng đường thứ hai).
+
+### 🗺️ Bảng trạng thái (adapter = mã đã viết; env = tên biến Vercel THẬT trong code)
+| Kênh | Adapter | Env cần | Chặn ở đâu |
+|---|---|---|---|
+| **facebook** | ✅ | `FB_PAGE_ID` · `FB_PAGE_ACCESS_TOKEN` | token chết từ 02/08 (`code 190`) |
+| **telegram** | ✅ | `TELEGRAM_CHANNEL_ID` | **chỉ thiếu 1 env** — bot token đã có sẵn |
+| **instagram** | ✅ | `IG_USER_ID` · `IG_ACCESS_TOKEN` | cần IG **Business** + link Page + xin `instagram_content_publish` |
+| **threads** | ✅ | `THREADS_USER_ID` · `THREADS_ACCESS_TOKEN` | **token RIÊNG** (`graph.threads.net`), page token FB KHÔNG dùng được |
+| **tiktok** | ✅ | `TIKTOK_CLIENT_KEY` · `TIKTOK_CLIENT_SECRET` (+seed refresh) | verify SỞ HỮU MIỀN + xin `video.publish` |
+| **youtube (clip)** | ❌ | — | phải viết adapter (xem đính chính trên) |
+| **X** | ❌ | — | phải viết adapter **+ đo giá API trước** |
+| **zalo** | ❌ | — | chờ GPKD (đúng như Henry chốt) |
+
+### 🔑 Ba thứ trả lời câu "còn gì nữa ko?" — đều là kênh RẺ mà Henry chưa nhắc
+1. **Telegram channel — rẻ nhất, ~5 phút, KHÔNG cần duyệt ai.** Adapter đã có,
+   `TELEGRAM_BOT_TOKEN` đã nằm trên Vercel từ track bot chat. Việc tay: tạo
+   channel → thêm bot làm admin (bật quyền đăng) → đặt `TELEGRAM_CHANNEL_ID`.
+   **Nên làm ĐẦU TIÊN** — nó là phép thử đầu-cuối rẻ nhất cho cả đường clip
+   (chứng minh `publishQueue` → adapter → kênh công khai chạy thật), trước khi
+   đi qua mấy cửa duyệt tốn nhiều ngày.
+2. **Threads đi KÈM Instagram, gần như miễn phí.** Tài khoản Threads đẻ ra từ
+   chính IG. ⚠️ Nhưng **token TÁCH BẠCH** (`graph.threads.net`, scope
+   `threads_basic` + `threads_content_publish`) — dùng nhầm page token FB là
+   401. Tạo IG thì cấp luôn token Threads trong cùng lượt, đừng tách hai đợt.
+3. **Pinterest** — có trong `docs/MEDIA-PIPELINE-PLAN.md` (M6), chưa làm. Clip
+   dọc hợp Idea Pins, nhưng lưu lượng VN thấp ⇒ **cố ý xếp sau cùng**.
+
+### ⚠️ Hai cửa phải ĐO TRƯỚC KHI TẠO TÀI KHOẢN (tạo xong mới biết tắc là mất công)
+- **X (Twitter):** viết chữ thì free tier đủ, nhưng **ĐĂNG VIDEO đi qua endpoint
+  media upload** — theo tài liệu thì bậc free thường không mở cửa đó, phải lên
+  bậc trả phí. **CHƯA verify được từ container này** (egress chặn host ngoài,
+  đúng như `open.tiktokapis.com` đã dính `403 CONNECT`). ⇒ Việc đầu tiên của
+  kênh X là **đọc bảng giá + quyền của X API**, KHÔNG phải tạo account.
+- **TikTok account CÁ NHÂN:** Content Posting API đòi **verify sở hữu miền**
+  (`PULL_FROM_URL` chỉ nhận URL từ miền đã xác minh — CDN của người khác không
+  bao giờ verify được). Và app **chưa qua audit** thì bài đăng ra nhiều khả năng
+  ở chế độ **riêng tư (SELF_ONLY)** — tức đăng thành công mà không ai thấy.
+  🔑 **Phải biết trước điều này**, không thì đọc thành "pipeline hỏng" trong khi
+  mã chạy đúng — đúng lớp lỗi *"mở van mà im lặng"* đã ghi hai lần ở track clip.
+
+### 🔐 LUẬT KHI CẤP TOKEN (đã trả giá một lần, đừng lặp)
+- ⛔ **KHÔNG dán giá trị token/secret vào chat.** Chat lưu lại — đúng lý do đã
+  phải xoay service key Supabase. Henry tự đặt trên Vercel rồi chỉ báo "đã đặt".
+- ⚠️ Bước đổi token Facebook cần **ĐỌC** App Secret: **chỉ copy, KHÔNG bấm
+  Reset** — `MESSENGER_APP_SECRET`/`WHATSAPP_APP_SECRET` đang dùng chính giá trị
+  đó, reset là chết webhook cả hai kênh chat đang chạy.
+- Token Page Facebook phải là loại **VĨNH VIỄN** (suy từ user token dài hạn qua
+  `fb_exchange_token` → `/me/accounts`), và **phải kiểm `debug_token` thấy
+  `expires_at: 0`** mới chắc — thiếu bước kiểm thì không phân biệt được với một
+  token ngắn hạn nữa. Chi tiết: `channelFix()` trong `lib/media/publish.ts`.
+- TikTok: refresh token **XOAY mỗi lượt làm mới**, cặp token nằm ở
+  `app_config['tiktok.token']` chứ không phải env. Xem `docs/TIKTOK-TOKEN.md`.
+
+### 🔴 THỨ TỰ BẮT BUỘC (sai thứ tự là im lặng không có gì đi)
+Đo prod 19/08: `social.channels=["facebook"]` · `publish_daily=3` ·
+`build_daily=3` · `clip_autopost=**false**` · `autopost_enabled=true`.
+1. **Vá token Facebook** — 54 bài ảnh đang kẹt, và mỗi ngày token chết là **+3
+   bài** vào đống (vào 3 = ra 0). Không vá thì mở kênh mới cũng vô nghĩa: lỗi
+   CHẶN dừng theo KÊNH nên FB hỏng không kéo kênh khác, nhưng đống 54 bài vẫn
+   nằm đó chắn hàng đợi `created_at.asc`.
+2. **Nới trần đăng** — `publish_daily` phải ≥ `build_daily × số kênh`, nếu
+   không hàng đợi phình mãi mà **không có lỗi nào bắn ra**:
+   `update app_config set value='8'::jsonb where key='social.publish_daily';`
+   (⚠️ `HARD_MAX = 10` trong `publish.ts` — nới quá số đó là vô tác dụng.)
+3. **MỞ VAN CLIP TRƯỚC LƯỢT DỰNG**:
+   `update app_config set value='true'::jsonb where key='social.clip_autopost';`
+   🔑 Không hồi tố được: `clip-ingest` chỉ đọc caption/hashtag **BÊN TRONG** khối
+   xếp hàng, van đóng thì hai thứ đó không được lưu ở đâu cả ⇒ 5 clip đã có
+   trong `media_assets` **không backfill được từ DB**. Mở van xong thì bấm
+   `video-build` (workflow_dispatch, input `insight`) cho nó dựng lại + tự nộp.
+4. **Rồi mới thêm kênh** vào `social.channels` — mỗi lần thêm một kênh, quay lại
+   bước 2 tính lại trần.
+
+### 📋 Việc tay Henry, xếp theo RẺ → ĐẮT (làm tuần tự, đừng làm song song)
+| # | Việc | Mất bao lâu | Chặn bởi |
+|---|---|---|---|
+| 1 | Token Page Facebook + 3 câu SQL ở trên | ~15 phút | — |
+| 2 | Telegram channel + bot admin + `TELEGRAM_CHANNEL_ID` | ~5 phút | — |
+| 3 | Đo giá/quyền **X API** (chưa tạo account vội) | ~15 phút đọc | — |
+| 4 | IG Business + link Page → xin `instagram_content_publish` **+ token Threads cùng lượt** | vài ngày duyệt | Meta review |
+| 5 | TikTok: verify miền + xin `video.publish` | vài ngày duyệt | TikTok review |
+| 6 | Publish YouTube OAuth app (còn Testing ⇒ refresh token chết sau 7 ngày) | ~10 phút | — |
+| 7 | Zalo OA | tuần sau | GPKD |
+
+### CÒN LẠI (việc CODE, chưa làm)
+- **Adapter YouTube cho đường clip** — tái dùng edge `youtube-upload`, KHÔNG
+  dựng đường thứ hai. ⚠️ Phải giữ chốt `assertChannel()` (đã cứu một lần: 3
+  video từng lên nhầm kênh cá nhân).
+- **Adapter X** — chỉ viết SAU khi biết bậc API nào đăng được video.
+- **Adapter Zalo OA** — sau khi có GPKD.
+- ⚠️ **Việc tay còn treo từ trước:** xoay `PIXABAY_API_KEY` + `GEMINI_API_KEY`
+  (một lệnh kiểm tra cũ đã in nguyên giá trị ra log phiên).
+
+---
+
 ## 🪝 VIRAL CORE cho 2 cron viết bài SEO — và nó ĐÃ CÓ SẴN trong repo (2026-08-18, PR này)
 
 Henry: *"giọng văn style viết bài xuyên suốt các content của site phải tuân theo
