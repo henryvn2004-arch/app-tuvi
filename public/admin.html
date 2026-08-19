@@ -106,6 +106,15 @@
       <button class="nav-item" onclick="goTo('distribution')">
         <span class="ni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></span><span>Phân Phối</span>
       </button>
+      <!--
+        Backlink — máy tìm cơ hội + soạn nội dung, người tự tay dán/gửi rồi
+        đánh dấu "Đã dùng". CÙNG TRIẾT LÝ Seeding Group (Groups API bị Meta gỡ
+        hồi 2024): không có nút đăng/gửi nào trong toàn bộ trang này. Xem đầu
+        _patches/migration-backlinks.sql.
+      -->
+      <button class="nav-item" onclick="goTo('backlinks')">
+        <span class="ni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></span><span>Backlink</span>
+      </button>
       <button class="nav-item" onclick="goTo('channels')">
         <span class="ni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1.5"/></svg></span><span>Kênh &amp; Kết Nối</span>
       </button>
@@ -568,6 +577,58 @@
           </div>
         </div>
 
+      </div>
+
+      <!-- ── BACKLINK ── -->
+      <div class="page" id="page-backlinks">
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title"><svg class="pt-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>Cơ Hội Backlink</div>
+            <div class="panel-actions">
+              <span class="badge badge-grey" id="bl-p-badge">…</span>
+              <button class="btn btn-outline btn-sm" id="bl-p-run-btn" onclick="blRunNow('prospect', this)">🔍 Tìm cơ hội mới</button>
+              <button class="btn btn-outline btn-sm" id="bl-bl-run-btn" onclick="blRunNow('brokenlinks', this)">🔗💀 Quét link chết</button>
+              <button class="btn btn-primary btn-sm" onclick="loadBacklinks()">↻</button>
+            </div>
+          </div>
+          <div class="panel-body" style="font-size:.76rem;color:var(--text-lt);padding-bottom:.5rem">
+            Cron <code>backlink-prospect</code> tìm cơ hội mới mỗi T3 qua <b>BỐN nguồn độc lập</b>, ba nguồn đầu 0 API key: danh sách tĩnh đã vét tay · <a href="https://www.google.com/alerts" target="_blank" rel="noopener">Google Alerts</a> RSS (nhắc tên chưa gắn link — cần Henry tạo alert một lần, dán URL feed vào <code>GOOGLE_ALERTS_RSS_URLS</code>) · quét link chết trên trang tài nguyên đúng ngách (nút "🔗💀" ở trên, chạy riêng mỗi T5) · Brave Search API (<b>tuỳ chọn</b>, cần <code>BRAVE_SEARCH_API_KEY</code>). Thiếu nguồn nào thì các nguồn còn lại vẫn chạy đều. Cron <code>backlink-content</code> mỗi sáng soạn sẵn nội dung cho cơ hội <b>chưa soạn</b>, qua brand-safety trước khi lưu. <b>Không có nút đăng/gửi nào</b> — soạn xong đợi ở tab "Nội Dung Cần Duyệt", người tự tay dán/gửi rồi đánh dấu Đã dùng.
+          </div>
+          <div id="bl-prospects" style="padding:0 1rem 1rem">
+            <div class="loading"><span class="spin"></span>Đang tải...</div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title"><svg class="pt-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z"/><path d="M4 9h16"/><path d="M9 4v16"/></svg>Nội Dung Cần Duyệt</div>
+            <div class="panel-actions">
+              <span class="badge badge-grey" id="bl-c-badge">…</span>
+              <button class="btn btn-outline btn-sm" id="bl-c-run-btn" onclick="blRunNow('content', this)">✍️ Soạn ngay</button>
+            </div>
+          </div>
+          <div class="panel-body" style="font-size:.76rem;color:var(--text-lt);padding-bottom:.5rem">
+            Bản nháp do AI soạn theo đúng loại cơ hội (mô tả nộp directory / bài web2.0 / email pitch guest post / email cho link chết-tài nguyên). Sửa tay nếu muốn, bấm <b>Copy</b> rồi tự dán/gửi, xong bấm <b>Đã dùng</b> — lúc đó nhịp mới tính là xong.
+          </div>
+          <div id="bl-content" style="padding:0 1rem 1rem"></div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title"><svg class="pt-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>Liên Kết Đang Theo Dõi</div>
+            <div class="panel-actions">
+              <span class="badge badge-grey" id="bl-l-badge">…</span>
+              <button class="btn btn-outline btn-sm" id="bl-l-run-btn" onclick="blRunNow('check', this)">🔎 Kiểm tra ngay</button>
+              <button class="btn btn-primary btn-sm" onclick="loadBacklinks()">↻</button>
+            </div>
+          </div>
+          <div class="panel-body" style="font-size:.76rem;color:var(--text-lt);padding-bottom:.5rem">
+            Sau khi tự tay dán/gửi và link đã LÊN THẬT, thêm nó vào đây — cron <code>backlink-check</code> mỗi sáng ghé lại trang đó (User-Agent tự nhận là bot, chỉ đọc HTML công khai) để xác nhận link còn sống, đọc lại dofollow/nofollow. Link biến mất sẽ báo về Telegram. Cùng lượt, cron còn hỏi <a href="https://www.bing.com/webmasters" target="_blank" rel="noopener">Bing Webmaster Tools</a> (miễn phí — cần Henry xác minh site một lần rồi dán API key vào <code>BING_WEBMASTER_API_KEY</code>) xem có backlink MỚI nào hệ thống chưa từng biết không, tự thêm vào bảng này.
+          </div>
+          <div id="bl-links" style="padding:0 1rem 1rem">
+            <div class="loading"><span class="spin"></span>Đang tải...</div>
+          </div>
+        </div>
       </div>
 
       <!-- ── LÁ SỐ ── -->
@@ -1599,6 +1660,7 @@ const PAGE_TITLES = {
   marketing: 'Funnel & Nguồn', cron: 'Vận Hành — Sức Khỏe & Jobs',
   channels: 'Nội Dung — Kênh & Kết Nối', seo: 'SEO',
   warehouse: 'Nội Dung — Kho',
+  backlinks: 'Nội Dung — Backlink',
   content: 'Sản Xuất — YouTube Studio', cboard: 'Sản Xuất — Content Board',
   khaoluan: 'Sản Xuất — Khảo Luận', nghiencuu: 'Sản Xuất — Nghiên Cứu',
   sysconfig: 'System Config', apikeys: 'API & Keys', registry: 'Tools Registry',
@@ -1884,6 +1946,7 @@ function goTo(page) {
                     marketing: loadMarketingOnce, retention: loadMarketingOnce,
                     distribution: loadMarketingOnce,
                     warehouse: loadWarehouse,
+                    backlinks: loadBacklinks,
                     cron: loadCron, channels: loadChannels, seo: loadSeo,
                     cboard: loadContentBoard, khaoluan: loadKhaoLuan, nghiencuu: loadNghienCuu,
                     sysconfig: loadSysConfig, apikeys: loadApiKeys, registry: loadRegistry,
@@ -4541,6 +4604,354 @@ async function seedDecide(draftId, decision) {
     loadSeeding();
   } catch (e) {
     toast('Lỗi: ' + e.message, 'error');
+  }
+}
+
+// ── Backlink ─────────────────────────────────────────────────────────────────
+// Cùng triết lý Seeding Group: máy tìm + soạn, người bấm Copy rồi tự tay dán/
+// gửi. KHÔNG có nút nào gọi ra ngoài — xem đầu migration-backlinks.sql.
+let _blProspects = [];
+
+function blSafeUrl(u) {
+  const s = String(u || '').trim();
+  return /^https?:\/\//i.test(s) ? s : '';
+}
+
+const BL_KIND_LABELS = {
+  directory: 'Danh bạ / Directory', resource_page: 'Trang tài nguyên',
+  broken_link: 'Link chết cần thay', guest_post: 'Bài viết khách',
+  web2: 'Web2.0 (Medium/Blog)', social_profile: 'Hồ sơ mạng xã hội',
+  unlinked_mention: 'Đã nhắc tên, chưa gắn link', other: 'Khác',
+};
+const BL_CONTENT_KIND_LABELS = {
+  directory_listing: 'Mô tả nộp directory', web2_article: 'Bài web2.0',
+  guest_pitch: 'Email pitch guest post', outreach_email: 'Email liên hệ',
+  broken_link_pitch: 'Email link chết/tài nguyên',
+};
+const BL_PROSPECT_STATUS = {
+  new: ['badge-green', 'Mới'], content_ready: ['badge-blue', 'Đã soạn — chờ duyệt'],
+  submitted: ['badge-grey', 'Đã gửi/đăng'], skipped: ['badge-grey', 'Đã bỏ'],
+  dead: ['badge-red', 'Hết giá trị'],
+};
+const BL_PROSPECT_RANK = { new: 0, content_ready: 1, submitted: 2, skipped: 3, dead: 4 };
+const BL_SOURCE_LABELS = {
+  manual: 'Tay', search: 'Brave', seed_list: 'Danh sách tĩnh',
+  alert_rss: 'Google Alerts', broken_link_scan: 'Quét link chết',
+};
+const BL_LINK_STATUS = {
+  unchecked: ['badge-grey', 'Chưa kiểm'], alive: ['badge-green', 'Còn sống'], dead: ['badge-red', 'Đã mất'],
+};
+
+async function loadBacklinks() {
+  try {
+    const d = await apiGet('admin-backlinks');
+    if (d.error) throw new Error(d.error);
+    _blProspects = d.prospects || [];
+    const content = d.content || [];
+    const links = d.links || [];
+
+    const openProspects = _blProspects.filter((p) => p.status === 'new' || p.status === 'content_ready').length;
+    const pBadge = document.getElementById('bl-p-badge');
+    if (pBadge) { pBadge.className = 'badge ' + (openProspects ? 'badge-green' : 'badge-grey'); pBadge.textContent = openProspects ? openProspects + ' cơ hội mở' : 'Sổ trống'; }
+
+    const drafts = content.filter((c) => c.status === 'draft').length;
+    const cBadge = document.getElementById('bl-c-badge');
+    if (cBadge) { cBadge.className = 'badge ' + (drafts ? 'badge-green' : 'badge-grey'); cBadge.textContent = drafts ? drafts + ' chờ duyệt' : 'Không có bài chờ'; }
+
+    const alive = links.filter((l) => l.status === 'alive').length;
+    const lBadge = document.getElementById('bl-l-badge');
+    if (lBadge) { lBadge.className = 'badge ' + (links.length ? 'badge-green' : 'badge-grey'); lBadge.textContent = links.length ? alive + ' sống / ' + links.length + ' tổng' : 'Chưa theo dõi link nào'; }
+
+    renderBlProspects(_blProspects);
+    renderBlContent(content);
+    renderBlLinks(links);
+  } catch (e) {
+    ['bl-prospects', 'bl-content', 'bl-links'].forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) el.innerHTML = `<div class="empty">Lỗi: ${escHtmlLocal(e.message)}</div>`;
+    });
+  }
+}
+
+function blKindOptions(selected) {
+  return Object.keys(BL_KIND_LABELS).map((k) =>
+    `<option value="${k}" ${k === selected ? 'selected' : ''}>${escHtmlLocal(BL_KIND_LABELS[k])}</option>`).join('');
+}
+
+function renderBlProspects(prospects) {
+  const host = document.getElementById('bl-prospects');
+  if (!host) return;
+  const form = `
+    <div style="border:1px solid var(--border);border-radius:8px;padding:.75rem;margin-bottom:.9rem">
+      <div style="font-size:.78rem;font-weight:600;margin-bottom:.5rem" id="bl-p-form-title">Thêm cơ hội bằng tay</div>
+      <input type="hidden" id="bl-p-f-id">
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:.5rem">
+        <select id="bl-p-f-kind" style="padding:.45rem;border:1px solid var(--border);border-radius:6px;background:var(--bg);color:var(--text);font-size:.78rem">${blKindOptions('directory')}</select>
+        <input id="bl-p-f-name" placeholder="Tên (site/trang/người)" style="padding:.45rem;border:1px solid var(--border);border-radius:6px;background:var(--bg);color:var(--text);font-size:.78rem">
+        <input id="bl-p-f-url" placeholder="https://..." style="padding:.45rem;border:1px solid var(--border);border-radius:6px;background:var(--bg);color:var(--text);font-size:.78rem">
+        <input id="bl-p-f-topic" placeholder="Chủ đề/ngách (tuỳ chọn)" style="padding:.45rem;border:1px solid var(--border);border-radius:6px;background:var(--bg);color:var(--text);font-size:.78rem">
+        <input id="bl-p-f-email" placeholder="Email liên hệ (tuỳ chọn)" style="padding:.45rem;border:1px solid var(--border);border-radius:6px;background:var(--bg);color:var(--text);font-size:.78rem">
+        <input id="bl-p-f-priority" type="number" min="-9" max="9" placeholder="Ưu tiên (0 mặc định)" style="padding:.45rem;border:1px solid var(--border);border-radius:6px;background:var(--bg);color:var(--text);font-size:.78rem">
+      </div>
+      <textarea id="bl-p-f-notes" placeholder="Ghi chú — BẮT BUỘC cho 'link chết'/'trang tài nguyên': mô tả CỤ THỂ chỗ cần chèn/thay link, không có thì AI không soạn được" style="width:100%;margin-top:.5rem;padding:.45rem;min-height:52px;border:1px solid var(--border);border-radius:6px;background:var(--bg);color:var(--text);font-size:.78rem;resize:vertical"></textarea>
+      <div style="display:flex;gap:.5rem;margin-top:.5rem;align-items:center">
+        <button class="btn btn-primary btn-sm" onclick="blProspectSave()">Lưu cơ hội</button>
+        <button class="btn btn-outline btn-sm" onclick="blProspectReset()">Xoá form</button>
+      </div>
+    </div>`;
+
+  if (!prospects.length) {
+    host.innerHTML = form + '<div class="empty">Sổ cơ hội còn trống. Thêm bằng tay ở trên, hoặc bấm "🔍 Tìm cơ hội mới" (cần cấu hình BRAVE_SEARCH_API_KEY).</div>';
+    return;
+  }
+
+  const sorted = prospects.slice().sort((a, b) => (BL_PROSPECT_RANK[a.status] ?? 9) - (BL_PROSPECT_RANK[b.status] ?? 9) || b.priority - a.priority);
+  host.innerHTML = form + `
+    <div class="table-wrap"><table><thead><tr>
+      <th>Tên</th><th>Loại</th><th>Nguồn</th><th>Chủ đề</th><th>Trạng thái</th><th></th>
+    </tr></thead><tbody>` + sorted.map((p) => {
+      const [cls, label] = BL_PROSPECT_STATUS[p.status] || ['badge-grey', p.status];
+      return `<tr>
+        <td><a href="${escHtmlLocal(blSafeUrl(p.url))}" target="_blank" rel="noopener">${escHtmlLocal(p.name)}</a>
+            ${p.notes ? `<div style="font-size:.68rem;color:var(--text-lt)">${escHtmlLocal(p.notes.slice(0, 90))}</div>` : ''}</td>
+        <td style="font-size:.72rem;color:var(--text-lt)">${escHtmlLocal(BL_KIND_LABELS[p.kind] || p.kind)}</td>
+        <td style="font-size:.7rem;color:var(--text-lt)">${escHtmlLocal(BL_SOURCE_LABELS[p.source] || p.source || '—')}</td>
+        <td style="font-size:.72rem;color:var(--text-lt)">${escHtmlLocal(p.topic || '—')}</td>
+        <td><span class="badge ${cls}">${escHtmlLocal(label)}</span></td>
+        <td style="white-space:nowrap">
+          <button class="btn-mini" onclick="blProspectEdit('${p.id}')">Sửa</button>
+          <button class="btn-mini" onclick="blProspectDelete('${p.id}')">Xoá</button>
+        </td>
+      </tr>`;
+    }).join('') + '</tbody></table></div>';
+}
+
+function blProspectReset() {
+  ['id', 'name', 'url', 'topic', 'email', 'priority', 'notes'].forEach((k) => {
+    const el = document.getElementById('bl-p-f-' + k);
+    if (el) el.value = '';
+  });
+  const k = document.getElementById('bl-p-f-kind'); if (k) k.value = 'directory';
+  const t = document.getElementById('bl-p-form-title'); if (t) t.textContent = 'Thêm cơ hội bằng tay';
+}
+
+function blProspectEdit(id) {
+  const p = _blProspects.find((x) => x.id === id);
+  if (!p) return;
+  const set = (k, v) => { const el = document.getElementById('bl-p-f-' + k); if (el) el.value = v == null ? '' : v; };
+  set('id', p.id); set('kind', p.kind); set('name', p.name); set('url', p.url);
+  set('topic', p.topic); set('email', p.contact_email); set('priority', p.priority); set('notes', p.notes);
+  const t = document.getElementById('bl-p-form-title'); if (t) t.textContent = 'Sửa: ' + p.name;
+  document.getElementById('bl-p-f-name').scrollIntoView({ block: 'center', behavior: 'smooth' });
+}
+
+async function blProspectSave() {
+  const val = (k) => (document.getElementById('bl-p-f-' + k) || {}).value || '';
+  try {
+    const d = await apiPost('admin-backlink-prospect', {
+      op: 'save', id: val('id'), kind: val('kind'), name: val('name').trim(), url: val('url').trim(),
+      topic: val('topic').trim(), contactEmail: val('email').trim(), priority: Number(val('priority')) || 0,
+      notes: val('notes').trim(),
+    });
+    if (d.error) throw new Error(d.error);
+    toast('Đã lưu', 'success');
+    blProspectReset();
+    loadBacklinks();
+  } catch (e) {
+    toast('Lỗi: ' + e.message, 'error');
+  }
+}
+
+async function blProspectDelete(id) {
+  const p = _blProspects.find((x) => x.id === id);
+  if (!confirm('Xoá "' + (p ? p.name : id) + '" khỏi sổ? Nội dung đã soạn cho cơ hội này cũng mất theo.')) return;
+  try {
+    const d = await apiPost('admin-backlink-prospect', { op: 'delete', id });
+    if (d.error) throw new Error(d.error);
+    toast('Đã xoá', 'success');
+    loadBacklinks();
+  } catch (e) {
+    toast('Lỗi: ' + e.message, 'error');
+  }
+}
+
+function renderBlContent(content) {
+  const host = document.getElementById('bl-content');
+  if (!host) return;
+  if (!content.length) {
+    host.innerHTML = '<div class="empty">Chưa có nội dung nào. Cron <code>backlink-content</code> chạy 09:15 mỗi sáng cho các cơ hội chưa soạn.</div>';
+    return;
+  }
+  const byId = {};
+  _blProspects.forEach((p) => { byId[p.id] = p; });
+
+  const ORDER = { draft: 0, used: 1, skipped: 2 };
+  const sorted = content.slice().sort((a, b) => (ORDER[a.status] ?? 9) - (ORDER[b.status] ?? 9) || new Date(b.created_at) - new Date(a.created_at));
+
+  host.innerHTML = sorted.map((c) => {
+    const p = byId[c.prospect_id] || {};
+    const open = c.status === 'draft';
+    const [cls, label] = { draft: ['badge-green', 'Chờ duyệt'], used: ['badge-grey', 'Đã dùng'], skipped: ['badge-grey', 'Đã bỏ'] }[c.status] || ['badge-grey', c.status];
+    return `
+    <div style="padding:.9rem 0;border-bottom:1px solid var(--border)">
+      <div style="display:flex;gap:.5rem;align-items:center;margin-bottom:.35rem;flex-wrap:wrap">
+        <span class="badge ${cls}">${escHtmlLocal(label)}</span>
+        <span class="badge badge-grey">${escHtmlLocal(BL_CONTENT_KIND_LABELS[c.kind] || c.kind)}</span>
+        <a href="${escHtmlLocal(blSafeUrl(p.url))}" target="_blank" rel="noopener" style="font-size:.72rem;color:var(--text-lt)">${escHtmlLocal(p.name || 'cơ hội đã xoá')}</a>
+      </div>
+      ${c.title ? `<input id="bl-cc-title-${c.id}" ${open ? '' : 'disabled'} value="${escHtmlLocal(c.title)}" placeholder="Tiêu đề / subject" style="width:100%;margin-bottom:.35rem;padding:.4rem;font-size:.76rem;font-weight:600;border:1px solid var(--border);border-radius:6px;background:var(--bg);color:var(--text)">` : ''}
+      <textarea id="bl-cc-body-${c.id}" ${open ? '' : 'disabled'}
+                style="width:100%;min-height:110px;font-size:.78rem;padding:.5rem;border:1px solid var(--border);border-radius:6px;background:var(--bg);color:var(--text);resize:vertical"
+      >${escHtmlLocal(c.body || '')}</textarea>
+      ${open ? `
+      <div style="display:flex;gap:.5rem;margin-top:.5rem;flex-wrap:wrap">
+        <button class="btn btn-primary btn-sm" onclick="blContentCopy('${c.id}')">Copy</button>
+        ${blSafeUrl(p.url) ? `<a class="btn btn-outline btn-sm" href="${escHtmlLocal(blSafeUrl(p.url))}" target="_blank" rel="noopener">Mở trang →</a>` : ''}
+        <button class="btn btn-outline btn-sm" onclick="blContentDecide('${c.id}','used')">Đã dùng</button>
+        <button class="btn btn-outline btn-sm" onclick="blContentDecide('${c.id}','skip')">Bỏ qua</button>
+      </div>` : ''}
+    </div>`;
+  }).join('');
+}
+
+async function blContentCopy(id) {
+  const titleEl = document.getElementById('bl-cc-title-' + id);
+  const bodyEl = document.getElementById('bl-cc-body-' + id);
+  const text = [(titleEl ? titleEl.value.trim() : ''), (bodyEl ? bodyEl.value.trim() : '')].filter(Boolean).join('\n\n');
+  try {
+    await navigator.clipboard.writeText(text);
+    toast('Đã copy', 'success');
+  } catch {
+    if (bodyEl) { bodyEl.focus(); bodyEl.select(); }
+    toast('Trình duyệt chặn clipboard — chữ đã được chọn sẵn, bấm Ctrl+C', 'error');
+  }
+}
+
+async function blContentDecide(id, decision) {
+  const titleEl = document.getElementById('bl-cc-title-' + id);
+  const bodyEl = document.getElementById('bl-cc-body-' + id);
+  try {
+    const d = await apiPost('admin-backlink-content', {
+      contentId: id, decision,
+      title: titleEl ? titleEl.value.trim() : '',
+      body: bodyEl ? bodyEl.value.trim() : '',
+    });
+    if (d.error) throw new Error(d.error);
+    toast(decision === 'used' ? 'Đã ghi nhận — cơ hội chuyển sang "Đã gửi/đăng"' : 'Đã bỏ — cơ hội quay lại "Mới" để soạn phương án khác', 'success');
+    loadBacklinks();
+  } catch (e) {
+    toast('Lỗi: ' + e.message, 'error');
+  }
+}
+
+function renderBlLinks(links) {
+  const host = document.getElementById('bl-links');
+  if (!host) return;
+  const prospectOpts = _blProspects.map((p) => `<option value="${p.id}">${escHtmlLocal(p.name)}</option>`).join('');
+  const form = `
+    <div style="border:1px solid var(--border);border-radius:8px;padding:.75rem;margin-bottom:.9rem">
+      <div style="font-size:.78rem;font-weight:600;margin-bottom:.5rem">Thêm link đang theo dõi</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:.5rem">
+        <input id="bl-l-f-source" placeholder="URL trang MANG link (https://...)" style="padding:.45rem;border:1px solid var(--border);border-radius:6px;background:var(--bg);color:var(--text);font-size:.78rem">
+        <input id="bl-l-f-target" placeholder="URL trên site mình" value="https://www.tuviminhbao.com/" style="padding:.45rem;border:1px solid var(--border);border-radius:6px;background:var(--bg);color:var(--text);font-size:.78rem">
+        <input id="bl-l-f-anchor" placeholder="Anchor text (tuỳ chọn)" style="padding:.45rem;border:1px solid var(--border);border-radius:6px;background:var(--bg);color:var(--text);font-size:.78rem">
+        <select id="bl-l-f-prospect" style="padding:.45rem;border:1px solid var(--border);border-radius:6px;background:var(--bg);color:var(--text);font-size:.78rem"><option value="">(không gắn cơ hội nào)</option>${prospectOpts}</select>
+      </div>
+      <div style="display:flex;gap:.5rem;margin-top:.5rem;align-items:center">
+        <button class="btn btn-primary btn-sm" onclick="blLinkSave()">Lưu link</button>
+        <button class="btn btn-outline btn-sm" onclick="blLinkReset()">Xoá form</button>
+        <span style="font-size:.7rem;color:var(--text-lt)">Cron sẽ tự kiểm lại mỗi sáng, cũ nhất trước.</span>
+      </div>
+    </div>`;
+
+  if (!links.length) {
+    host.innerHTML = form + '<div class="empty">Chưa theo dõi link nào.</div>';
+    return;
+  }
+
+  host.innerHTML = form + `
+    <div class="table-wrap"><table><thead><tr>
+      <th>Nguồn</th><th>Anchor</th><th>Rel</th><th>Trạng thái</th><th>Kiểm gần nhất</th><th></th>
+    </tr></thead><tbody>` + links.map((l) => {
+      const [cls, label] = BL_LINK_STATUS[l.status] || ['badge-grey', l.status];
+      const checked = l.last_checked_at ? new Date(l.last_checked_at).toLocaleDateString('vi-VN') : '—';
+      return `<tr>
+        <td><a href="${escHtmlLocal(blSafeUrl(l.source_url))}" target="_blank" rel="noopener">${escHtmlLocal(l.source_url)}</a></td>
+        <td style="font-size:.72rem;color:var(--text-lt)">${escHtmlLocal(l.anchor_text || '—')}</td>
+        <td><span class="badge ${l.rel === 'dofollow' ? 'badge-green' : 'badge-grey'}">${escHtmlLocal(l.rel)}</span></td>
+        <td><span class="badge ${cls}">${escHtmlLocal(label)}</span></td>
+        <td style="font-size:.72rem">${checked}</td>
+        <td><button class="btn-mini" onclick="blLinkDelete('${l.id}')">Xoá</button></td>
+      </tr>`;
+    }).join('') + '</tbody></table></div>';
+}
+
+function blLinkReset() {
+  ['source', 'target', 'anchor'].forEach((k) => { const el = document.getElementById('bl-l-f-' + k); if (el) el.value = k === 'target' ? 'https://www.tuviminhbao.com/' : ''; });
+  const p = document.getElementById('bl-l-f-prospect'); if (p) p.value = '';
+}
+
+async function blLinkSave() {
+  const val = (k) => (document.getElementById('bl-l-f-' + k) || {}).value || '';
+  try {
+    const d = await apiPost('admin-backlink-link', {
+      op: 'save', sourceUrl: val('source').trim(), targetUrl: val('target').trim(),
+      anchorText: val('anchor').trim(), prospectId: val('prospect'),
+    });
+    if (d.error) throw new Error(d.error);
+    toast('Đã lưu', 'success');
+    blLinkReset();
+    loadBacklinks();
+  } catch (e) {
+    toast('Lỗi: ' + e.message, 'error');
+  }
+}
+
+async function blLinkDelete(id) {
+  if (!confirm('Ngừng theo dõi link này?')) return;
+  try {
+    const d = await apiPost('admin-backlink-link', { op: 'delete', id });
+    if (d.error) throw new Error(d.error);
+    toast('Đã xoá', 'success');
+    loadBacklinks();
+  } catch (e) {
+    toast('Lỗi: ' + e.message, 'error');
+  }
+}
+
+const BL_RUN_LABELS = {
+  // prospect nay gộp BỐN nguồn — đọc đúng shape lồng ProspectingResult
+  // (lib/backlinks/prospecting.ts), không còn phẳng d.found/d.inserted.
+  prospect: (d) => {
+    const parts = [
+      `tĩnh +${(d.seedList || {}).inserted || 0}`,
+      `Alerts +${(d.alertsRss || {}).inserted || 0}`,
+      `Brave +${(d.brave || {}).inserted || 0}`,
+    ];
+    return `Tổng thêm mới ${d.totalInserted || 0} (${parts.join(' · ')})`;
+  },
+  content: (d) => `Đã soạn ${(d.built || []).length}` + (d.skipped && d.skipped.length ? `, bỏ qua ${d.skipped.length}` : ''),
+  check: (d) => `Đã kiểm ${d.checked || 0} — ${d.alive || 0} sống, ${d.dead || 0} mất` +
+    ((d.bing || {}).newLinks ? ` · Bing phát hiện ${d.bing.newLinks} backlink mới` : ''),
+  brokenlinks: (d) => `Soi ${d.pagesScanned || 0} trang, thấy ${d.deadFound || 0} link chết đúng ngách (mới ${d.inserted || 0}, bổ sung ghi chú ${d.enriched || 0})`,
+};
+
+const BL_RUN_BTN_LABELS = {
+  prospect: '🔍 Tìm cơ hội mới', content: '✍️ Soạn ngay', check: '🔎 Kiểm tra ngay',
+  brokenlinks: '🔗💀 Quét link chết',
+};
+
+async function blRunNow(kind, btn) {
+  if (btn) { btn.disabled = true; btn.textContent = 'Đang chạy…'; }
+  try {
+    const d = await apiPost('admin-backlink-run', { kind });
+    if (d.error) throw new Error(d.error);
+    toast((BL_RUN_LABELS[kind] || (() => 'Xong'))(d), 'success');
+    loadBacklinks();
+  } catch (e) {
+    toast('Lỗi: ' + e.message, 'error');
+  } finally {
+    if (btn) { btn.disabled = false; btn.textContent = BL_RUN_BTN_LABELS[kind] || 'Chạy'; }
   }
 }
 
