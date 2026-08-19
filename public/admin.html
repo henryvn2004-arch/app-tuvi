@@ -219,6 +219,14 @@
           <div class="panel-body" id="dash-channel-health"><div class="loading"><span class="spin"></span>Đang tải...</div></div>
         </div>
 
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title"><svg class="pt-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/><path d="m14.31 8-2.31 4h4"/><path d="M12 12v6"/></svg>Lỗi JS Client (24h)</div>
+            <span style="font-size:.72rem;color:var(--text-lt)">bắt từ track.js — thay Sentry ở tầng client</span>
+          </div>
+          <div class="table-wrap" id="dash-js-errors"><div class="loading"><span class="spin"></span>Đang tải...</div></div>
+        </div>
+
         <div class="stats" id="stats-grid">
           <div class="stat"><div class="stat-label">Users</div><div class="stat-value spin-val">…</div><div class="stat-sub">tổng tài khoản</div></div>
           <div class="stat green"><div class="stat-label">Credits Nạp</div><div class="stat-value spin-val">…</div><div class="stat-sub">tổng</div></div>
@@ -3339,16 +3347,41 @@ async function loadDashboardV2() {
     // để ô "Doanh Thu" trên Dashboard và bảng LTV bên Marketing không lệch nhau.
     if (data.margin && Number(data.margin.vnd_per_credit) > 0) MKT_VND = Number(data.margin.vnd_per_credit);
     renderDashChannelHealth(data.channelHealth || []);
+    renderDashJsErrors(data.jsErrors || []);
     renderDashEngagement(data.engagement || {});
     renderDashContentProduction(data.content || {});
     renderDashContentRevenue(data.contentRevenue || []);
     renderDashMargin(data.margin || {});
     renderDashAtRisk(data.atRisk || []);
   } catch (e) {
-    ['dash-channel-health', 'dash-engagement', 'dash-content-production', 'dash-content-revenue', 'dash-margin', 'dash-at-risk'].forEach((id) => {
+    ['dash-channel-health', 'dash-js-errors', 'dash-engagement', 'dash-content-production', 'dash-content-revenue', 'dash-margin', 'dash-at-risk'].forEach((id) => {
       document.getElementById(id).innerHTML = `<div class="empty">Lỗi: ${e.message}</div>`;
     });
   }
+}
+
+// Lỗi JS client — thay Sentry ở tầng client (xem track.js + migration-js-error.sql).
+// Gộp theo (message, path, kind); rows đã sắp giảm dần theo occurrences từ RPC.
+function renderDashJsErrors(rows) {
+  const host = document.getElementById('dash-js-errors');
+  if (!rows.length) {
+    host.innerHTML = `<div class="empty">0 lỗi JS trong 24h qua — hoặc bản vá chưa deploy, chưa có dữ liệu nào để đọc.</div>`;
+    return;
+  }
+  host.innerHTML = `<table>
+    <thead><tr><th>Thông Điệp</th><th>Trang</th><th style="text-align:right">Số Lượt</th><th style="text-align:right">Người</th><th>Lần Cuối</th></tr></thead>
+    <tbody>${rows.map((r) => {
+      const kindBadge = r.kind === 'unhandledrejection' ? '<span class="badge badge-pending" style="margin-right:6px">promise</span>' : '';
+      return `<tr>
+        <td class="td-title" style="max-width:420px;white-space:normal;word-break:break-word">${kindBadge}${escHtmlLocal(r.message)}</td>
+        <td style="color:var(--text-lt);font-size:.72rem;max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${escHtmlLocal(r.path)}</td>
+        <td style="text-align:right"><strong class="tabular">${r.occurrences}</strong></td>
+        <td style="text-align:right;color:var(--text-lt)" class="tabular">${r.users}</td>
+        <td style="color:var(--text-lt);font-size:.72rem">${fmtDate(r.last_seen)}</td>
+      </tr>`;
+    }).join('')}</tbody>
+  </table>
+  <div class="panel-sub" style="padding:10px 20px;font-size:.68rem;color:var(--text-lt)">Đã lọc nhiễu ở client (ResizeObserver, extension trình duyệt, "Script error." không nguồn) + trần 8 lỗi/lượt tải trang. Gộp theo thông điệp+trang, sắp theo số lượt.</div>`;
 }
 
 const CHAN_META = {

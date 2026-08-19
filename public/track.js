@@ -217,6 +217,79 @@
 
   window.Track = { event: event, anonId: anonId, sessionId: sid };
 
+  // ============================================================
+  // js_error — bắt lỗi JS phía client, thay phần Sentry đang gỡ dần.
+  // Sentry chỉ có mặt ở 7/89 trang (0 trang /app/*) và KHÔNG báo được lỗi chạy
+  // trong trình duyệt — hai bug thật tìm được hôm nay (ảnh OG rỗng + timeout
+  // /la-so) đều lộ ra qua log runtime Vercel (lỗi SERVER), không phải qua
+  // Sentry. Track.js đã có sẵn đường /api/track → bảng events trên MỌI trang,
+  // nên đây là chỗ rẻ nhất vá đúng lỗ còn thiếu: lỗi CHẠY TRÊN MÁY người dùng.
+  //
+  // Chống lũ: một vòng lặp render hỏng có thể ném hàng nghìn lỗi/giây. Trần
+  // cứng mỗi lượt tải trang + gộp lỗi LẶP LẠI y hệt (cùng thông điệp+dòng)
+  // thành một lượt gửi — không thì chính bản thân việc "báo lỗi" lại làm
+  // nghẽn mạng của người dùng đang gặp lỗi.
+  // ============================================================
+  var JS_ERR_CAP = 8;
+  var jsErrSent = 0;
+  var jsErrSeen = {};
+
+  function jsErrKey(msg, src, line) {
+    return (msg || '') + '|' + (src || '') + '|' + (line || '');
+  }
+
+  // Nhiễu KHÔNG đáng báo — lọc TRƯỚC khi tính vào trần, không thì vài giây
+  // đầu trang đã ăn hết CAP bằng rác không hành động được gì.
+  function jsErrIsNoise(msg, src) {
+    if (!msg) return true;
+    // Cross-origin script (extension trình duyệt, thư viện bên thứ ba không
+    // CORS) — trình duyệt cố ý giấu chi tiết, "Script error." trơ trụi không
+    // nói được gì để hành động theo.
+    if (/^script error\.?$/i.test(msg) && !src) return true;
+    // Quirk vô hại của trình duyệt, không phải lỗi của mình — khuyến nghị
+    // chuẩn của cả Sentry lẫn cộng đồng là bỏ qua nó.
+    if (/ResizeObserver loop/i.test(msg)) return true;
+    // Extension trình duyệt (AdBlock, Grammarly...) ném lỗi trong sandbox
+    // riêng của nó, không phải code của site.
+    if (src && /^(chrome|moz|safari)-extension:\/\//i.test(src)) return true;
+    return false;
+  }
+
+  function reportJsError(kind, msg, src, line, col, stack) {
+    if (jsErrIsNoise(msg, src)) return;
+    var key = jsErrKey(msg, src, line);
+    if (jsErrSeen[key]) return; // lỗi lặp lại y hệt trong cùng lượt tải trang — báo 1 lần là đủ
+    jsErrSeen[key] = true;
+    if (jsErrSent >= JS_ERR_CAP) return; // vòng lặp hỏng thì ngừng gửi, đừng nghẽn thêm mạng của người dùng
+    jsErrSent++;
+    event('js_error', {
+      meta: {
+        kind: kind, // 'error' | 'unhandledrejection'
+        message: String(msg || '').slice(0, 300),
+        src: src ? String(src).slice(0, 300) : null,
+        line: line || null,
+        col: col || null,
+        stack: stack ? String(stack).slice(0, 1200) : null
+      }
+    });
+  }
+
+  window.addEventListener('error', function (e) {
+    // Ảnh/CSS/script tải hỏng cũng nổ 'error' nhưng KHÔNG có message — đó là
+    // lỗi TÀI NGUYÊN, không phải lỗi JS, và đã đo được ở nơi khác (log 404/500
+    // phía server). Bỏ qua để không lẫn hai loại lỗi khác hẳn nhau.
+    if (!e || !e.message) return;
+    reportJsError('error', e.message, e.filename, e.lineno, e.colno, e.error && e.error.stack);
+  });
+
+  window.addEventListener('unhandledrejection', function (e) {
+    var reason = e && e.reason;
+    var msg, stack;
+    if (reason instanceof Error) { msg = reason.message; stack = reason.stack; }
+    else { try { msg = JSON.stringify(reason); } catch (err) { msg = String(reason); } }
+    reportJsError('unhandledrejection', msg, null, null, null, stack);
+  });
+
   // Tự động page_view mỗi lần tải trang (trừ trang kỹ thuật — xem TRACK_QUIET).
   if (!quiet) event('page_view');
 })();
