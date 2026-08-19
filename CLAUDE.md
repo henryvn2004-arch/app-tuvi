@@ -139,6 +139,96 @@ CÙNG ORIGIN. Hành vi Google đổi theo UA là thứ mình không kiểm đư�
 ### CÒN LẠI
 - Font là file nhị phân trong git (246KB). Bump bản Be Vietnam Pro thì phải tải
   lại TTF **bằng lượt fetch KHÔNG gửi UA**, không thì lấy phải woff2.
+## 📡 BẢN ĐỒ 8 KÊNH SOCIAL — audit trước khi ráp Telegram + vá Facebook (2026-08-19)
+
+Henry: *"Ráp social channels theo bản đồ 8 kênh… bắt đầu bằng Telegram channel,
+rồi vá token Facebook."* Bản đồ này **CHƯA TỪNG có trong file** — đo lại từ đầu
+rồi ghi ra đây làm điểm tựa DUY NHẤT cho track kênh, để phiên sau khỏi phải đào
+lại `lib/media/publish.ts` + `lib/channels/*` từ số không.
+
+### 🔑 8 = 6 kênh ĐĂNG (posting) + 2 kênh CHAT (Messenger · WhatsApp)
+Telegram **đếm một lần** dù có hai vai (bot DM đã sống từ lâu, channel-posting
+thì chưa) — cùng một `TELEGRAM_BOT_TOKEN`, khác nhau ở đích gửi.
+
+| # | Kênh | Vai | Trạng thái (đo thật 19/08) | Chặn ở đâu |
+|---|---|---|---|---|
+| 1 | **Facebook Page** | đăng | 🔴 **54 bài `queued`, 0 `live`** | token chết — `code 190 "session is invalid because the user logged out"`, lượt thử gần nhất **18/08** vẫn dính |
+| 2 | Instagram | đăng | ⚪ chưa bật (`social.channels` chỉ có `["facebook"]`) | thiếu `IG_USER_ID`+`IG_ACCESS_TOKEN`, cần IG Business đã liên kết Page |
+| 3 | Threads | đăng | ⚪ chưa bật | thiếu `THREADS_USER_ID`+`THREADS_ACCESS_TOKEN` (token RIÊNG, không dùng chung Facebook) |
+| 4 | **Telegram (channel-posting)** | đăng | ⚪ chưa bật — **code 100% sẵn sàng** | chỉ thiếu việc tay: bot làm admin channel + `TELEGRAM_CHANNEL_ID` |
+| 5 | TikTok | đăng | ⚪ **chưa từng cấp** — `app_config` không có khoá `tiktok.token` | cần đủ 3 thứ độc lập: quyền `video.publish` đã duyệt · miền bucket `clips` đã verify · cặp token (xem `docs/TIKTOK-TOKEN.md`) |
+| 6 | **YouTube** | đăng | ✅ **SỐNG** — 47 `live` (mới nhất 18/08), 49 `pending`, 54 `error` là rác cũ trước lượt vá 16/07 | không chặn gì |
+| 7 | **Telegram (bot DM)** | chat | ✅ SỐNG — `events.bot_reply platform=telegram` 3 lượt `ok=true`, mới nhất 07/08 | không chặn gì |
+| 8a | Messenger | chat | 🔴 **im lặng từ 27/06** — `chat_sessions` 1 dòng, 0 event `bot_reply` trong 30 ngày | Page Development mode / chưa publish / chưa có username (đo hồi 06/24, chưa ai xác nhận đã sửa) |
+| 8b | **WhatsApp** | chat | ✅ **SỐNG** — `events.bot_reply platform=whatsapp` mới nhất **18/08** | không chặn gì — đã tự lành sau đợt tắc hồi 06/24 |
+
+### Bằng chứng đo được (đọc để khỏi đo lại)
+```sql
+-- app_config: social.channels=["facebook"] · autopost_enabled=true · publish_daily=3
+-- media_posts: facebook/queued=54, không có dòng nào channel khác
+-- van_dap: yt_status live=47 · pending=49 · error=54(cũ, trước 16/07)
+-- events(event_type='bot_reply', 30 ngày): telegram=3 ok · web=148 ok · whatsapp=2 ok · messenger=0
+-- app_config KHÔNG có khoá 'tiktok.token' ⇒ TikTok chưa cấp token lần nào
+```
+
+### 🔴 Vì sao PHIÊN NÀY dừng ở đây — cả hai việc ưu tiên đều chặn bởi thứ code không thay được
+Đã đọc trọn `lib/media/publish.ts` (5 adapter đăng), `lib/channels/telegram.ts`
+(`tgSendPhoto`/`tgSendVideo`), `lib/media/build.ts` (dựng hàng đợi theo
+`social.channels`) — **0 bug tìm thấy, 0 dòng cần sửa**. Cả hai việc Henry giao
+đều là việc TAY thuần túy, không có ngách code nào thay được:
+- **Telegram channel**: cần Henry mở app Telegram tạo/chọn channel, thêm bot làm
+  admin (quyền đăng bài), lấy id channel, rồi đặt `TELEGRAM_CHANNEL_ID` trên
+  Vercel. Không có tool nào trong phiên này tạo được channel Telegram hay đọc
+  được giá trị env đã đặt (đã kiểm: không có `TELEGRAM_BOT_TOKEN` trong env của
+  container, và bộ Vercel MCP hiện có không có tool đọc/ghi Environment
+  Variables — chỉ có deploy/protection/domains/analytics).
+- **Facebook token**: cần Henry vào Graph API Explorer (đăng nhập Facebook) đổi
+  token ngắn hạn → dài hạn → token Page vĩnh viễn (chuỗi 5 bước đã có sẵn, nguyên
+  văn trong `FB_TOKEN_EXPIRED` ở `lib/media/publish.ts`). Đây là OAuth tương tác,
+  không gọi API thay được.
+
+⇒ **Việc còn lại của phiên này chỉ là chuẩn bị cho đúng, không phải chờ không
+làm gì**: xác nhận code sẵn sàng (xong), viết bản đồ này (xong), và đưa Henry
+đúng danh sách việc tay + câu SQL bấm phát ăn ngay khi anh xong phần của mình.
+**KHÔNG tự flip `social.channels` thêm `"telegram"` trước khi biết
+`TELEGRAM_CHANNEL_ID` đã đặt** — flip sớm không hỏng gì (lỗi `Thiếu env` là lỗi
+CHẶN, bài ở lại `queued`, không tạo rác) nhưng cũng không ích gì, chỉ tổ mỗi
+sáng cron báo thêm một dòng "Telegram: thiếu env" vô nghĩa.
+
+### Việc tay Henry — làm xong bước nào, nói bước đó, KHÔNG dán token vào chat
+(Dán secret vào chat là lý do phải xoay `SUPABASE_SERVICE_KEY` một lần — đừng lặp lại.)
+
+**1. Telegram channel (rẻ nhất — token bot ĐÃ có sẵn, không xin quyền ai):**
+1. Tạo channel Telegram (hoặc dùng channel có sẵn) → **Add Admin** → chọn bot
+   `@tuviminhbao_bot` → bật quyền **Post Messages**.
+2. Lấy id channel: `@ten_channel` (channel công khai) hoặc id số dạng `-100…`
+   (channel riêng tư — mở channel trên web Telegram, id nằm trong URL).
+3. Vercel → app-tuvi → Settings → Environment Variables → thêm
+   `TELEGRAM_CHANNEL_ID` = giá trị vừa lấy → **Redeploy**.
+4. Báo lại "xong Telegram" — chạy ngay:
+   ```sql
+   update public.app_config set value = '["facebook","telegram"]'::jsonb
+    where key = 'social.channels';
+   ```
+
+**2. Facebook token (vá đường đang kẹt 54 bài):**
+1. [Graph API Explorer](https://developers.facebook.com/tools/explorer/) → chọn
+   app của repo → lấy **User Token** có quyền `pages_manage_posts` +
+   `pages_read_engagement`.
+2. Đổi sang User Token DÀI HẠN: `GET /oauth/access_token?grant_type=fb_exchange_token&client_id=<app-id>&client_secret=<app-secret>&fb_exchange_token=<token vừa lấy>`
+   (App Secret: **chỉ copy, TUYỆT ĐỐI đừng bấm Reset** — `MESSENGER_APP_SECRET`
+   và `WHATSAPP_APP_SECRET` đang dùng chung giá trị này, reset là sập cả hai
+   webhook đang chạy).
+3. Dùng token dài hạn gọi `GET /me/accounts` → `access_token` của Page trả về
+   là loại **VĨNH VIỄN**.
+4. Kiểm ở `/debug_token` — phải thấy `expires_at: 0` (Never) mới đúng.
+5. Vercel → đặt `FB_PAGE_ACCESS_TOKEN` (+ `FB_PAGE_ID` nếu chưa có) → Redeploy.
+   Không cần chạm DB gì — 54 bài đang `queued` (không phải `error`) sẽ tự đăng
+   ở lượt cron kế tiếp (`media-build`, 09:30 sáng VN).
+
+**3. Messenger (đã im lặng từ 27/06, chưa ai xác nhận sửa):** kiểm Meta App →
+Page có publish chưa / có username chưa — WhatsApp cùng app đã tự lành nên nhiều
+khả năng chỉ còn mỗi Messenger dở dang.
 
 ## 🔮 Thêm lớp DỰ BÁO vào arc ô GIỮA — và arc ô giữa KHÔNG phải 5 lớp (2026-08-19, PR sau)
 
@@ -220,7 +310,6 @@ trước** (740 → ~590) theo đúng lời bộ dò dặn, rồi mới nới 2 
   **CỐ Ý không đụng** — chúng trả danh sách/schema chứ không phải văn luận, và
   `day-con` còn cấm đoán đỗ/trượt cho trẻ em. `viral-core` (2 cron bài SEO) cũng không.
 
-
 ## 🖼️ Ảnh preview link chia sẻ HỎNG 108 lượt/tuần — và chẩn đoán ĐẦU của tôi SAI (2026-08-19, PR sau)
 
 Henry hỏi về Sentry MCP. Đi đo thì Sentry chỉ nằm trên **7/141 trang** `public/`
@@ -286,6 +375,126 @@ minh next build chạy"*) · quét lại: **0 route còn tự nạp font**, cả
 
 ## Project
 **tuviminhbao.com** — Tử Vi Đẩu Số app (Next.js 16, Supabase, Vercel)
+
+---
+
+## 📅 Tool MỚI "Vận Hạn 12 Tháng Tới" — và một lỗi CỔ PHÁP sai 11,4% số ngày (2026-08-19, PR này)
+
+Henry: *"tool để xem vận hạn cụ thể trong 12 tháng tới, tính từ ngày xem… flow y
+hệt flow luận giải lá số"*, và chốt 5 phần: 4 phần đầu **lấy nguyên** của luận
+giải 24 phần (tổng quan · hành trình đại vận · đại vận hiện tại · tiểu vận năm),
+phần 5 là mới — *"phần này làm **từng tháng** nhé"*. `/app/van-han-nam`, **50
+Lượng**, khung 12 tháng **MIỄN PHÍ**.
+
+### 🔴 Đi kiểm flow thì lộ lỗi tra tiểu hạn — `tv.nam` là năm ÂM, code tra bằng năm DƯƠNG
+`resolveNhatHanIdx`/`resolveNguyetHanSegments` (`lib/engine/van-ngay.ts`) tìm
+`tieuVanScores.find(x => x.nam === năm DƯƠNG)`. Nhưng engine dựng `tv.nam` từ
+**năm ÂM** (`namSinhDL = namAL`, `nam = namAL + tuoi − 1`), mà tuổi mụ nhảy ở
+**Tết** chứ không ở 1/1 ⇒ **mọi ngày từ 1/1 tới Tết đều tra nhầm sang tiểu hạn
+của năm sau**.
+- **Đo trên 4 lá số × 2 năm = 2.920 lượt tra ngày: 332 lượt đổi kết quả
+  (11,4%)**, dồn đúng chỗ dự đoán — 1/2026 **124** · 2/2026 **64** · 1/2027
+  **124** · 2/2027 **20**; tháng 3–12 **0**.
+- Ca quyết: **15/1/2027 dương = ÂL 8/12/2026** → bản mới ra tiểu hạn **Điền
+  Trạch** (đúng), bản cũ ra **Quan Lộc**.
+- **Henry chốt vá ở GỐC** — nên thẻ *Vận hôm nay* (`/app`) và 2 tool rail
+  (`tra_nguyet_van`/`tra_nhat_van`) cùng được vá, không riêng tool mới.
+
+### 🔑 Tháng dương chứa Tết mang HAI tiểu hạn — và đó là nội dung, không phải lỗi
+Một tháng dương gần như luôn bị cắt bởi 2 tháng âm; riêng tháng chứa Tết thì hai
+đoạn còn thuộc **hai NĂM âm khác nhau** ⇒ hai tiểu hạn khác nhau. Nên
+`NguyetHanSegment` nay mang `namAL` + `tv` + `tieuHanIdx`/`luuNienIdx` **của
+chính đoạn đó** thay vì dùng chung một tiểu hạn cho cả tháng. Đo được:
+`T2/2027 · đoạn 1–5 · ÂL 12/2026 · tiểu hạn Điền Trạch` và `đoạn 6–28 · ÂL
+1/2027 · tiểu hạn Quan Lộc`. `execTraNguyetVan` in cảnh báo ĐỔI NỀN khi hai đoạn
+lệch năm âm; có ca ĐỐI CHỨNG tháng không chứa Tết thì **không** có dòng đó.
+
+### 🧩 Prompt luận giải DỜI sang `lib/agent/luan-giai-doc.ts` — vì Next chặn export lạ
+4 phần đầu phải dùng **CHÍNH** `SYSTEM_PROMPT` + `buildPrompt` của
+`/api/lasotuvi`, mà Next 16 chỉ cho route file export handler ⇒ không import
+sang được. Dời trọn khối (kèm `CUNG_BY_PHAN`/`CUNG_DESC`/`trimLaSo`) ra `lib/`,
+route chỉ còn import.
+- **Bất biến gánh phép dời: A/B **24/24 prompt TRÙNG KHÍT từng byte** với bản
+  `HEAD`.** Không có phép đo này thì "chỉ dời file" là một canh bạc trên đúng
+  đường đang bán 1.500 Lượng.
+- Thêm `laSoContextFor(phan, laSoText)` thay cho việc cắt chuỗi
+  `split('\n\nPHẦN 24')` — bóc bằng dấu hiệu trong prompt là hỏng IM LẶNG lần
+  sau ai đó sửa câu chữ.
+- ⚠️ `check:prompt` phải trỏ sang file mới (`DOC_FILES`), không thì nó lặng lẽ
+  quét một file không còn prompt nào.
+
+### 🔑 Ba quyết định Henry chốt, và vì sao chúng nằm ở tầng dữ liệu
+1. **Slug MANG mốc tháng** (`van-han-nam-<yyyy>-<mm>-…`) ⇒ cửa sổ 12 tháng khác
+   là **sản phẩm khác**, phải trả lại. Neo theo lá số thôi thì tháng sau mở lại
+   ra bản cũ mà tiêu đề vẫn hứa "12 tháng tới".
+2. **Khung 12 tháng miễn phí, chỉ phần CHỮ trả tiền** — khung là tra bảng thuần
+   (0 lượt LLM, 0đ), đúng khuôn W1: cho xem trước thứ chứng minh engine đọc đúng
+   lá số, rồi mới dựng tường.
+3. **Tính ở SERVER** (`lib/engine/van-han-12.ts`), KHÔNG port sang
+   `public/tools-shared/`: nó dùng lại `resolveNguyetHanSegments` +
+   `describeHanCungRich` + `matchVanHanCombos` (958 cách cục) — chép sang client
+   là bản thứ hai của cùng bộ luật rồi hai bản trôi khỏi nhau.
+
+### 🪤 Bẫy đã vấp
+1. 🔴 **Đối chứng `origin/main` HẾT HẠN, lần thứ ba trong repo**: `git worktree
+   add origin/main` lấy commit **#540** trong khi HEAD là **#554**, nên
+   `SYSTEM_PROMPT` "khác nhau" (bản cũ chưa có `${DOC_ARC_LASO}`) và tao suýt
+   báo phép dời làm hỏng prompt. Đường đúng: `git show HEAD:<file>` vào cây đối
+   chứng. **Neo `origin/main` chưa đủ — phải neo đúng cái mình đang so.**
+2. **`TuviPaywall.fillPriceSlots(host)` KHÔNG được await** trong trang (nút hiện
+   ngay, giá điền sau một nhịp mạng) ⇒ `page.textContent()` là **ảnh chụp tức
+   thời** và luôn đọc ra `…`. Phải dùng web-first assertion (`toContainText`) —
+   đúng bài học `isVisible()` đã ghi, chỉ khác hàm.
+3. 🔴 **`tool-prices.js` gọi `Promise.all` BA lượt REST** (`tool_pricing` +
+   `credit_packages` + `tool_groups`) và **fail-CLOSED cả cụm** khi một lượt
+   hỏng. Stub thiếu `credit_packages` (trang này không dùng tới) là giá vẫn ra
+   `…` — mất 2 vòng chẩn vì route `tool_pricing` rõ ràng ĐÃ bị chặn đúng.
+4. `export const TONG_PHAN` / `export function phanLabels` trong route file →
+   Next từ chối. Hằng số phụ trong route phải là `const` thường.
+5. **`pkill -f '3311'` tự giết (exit 144) — lần thứ NĂM.** Ngoặc vuông:
+   `pkill -f '331[1]'`.
+
+### Verify
+`tsc` 0 · `lint` **0 lỗi / 77 warning = đúng mốc nền** · `prettier` cả cây sạch ·
+**21/21 bộ dò** (gồm `check:prompt` sau khi trỏ file mới: `SYSTEM_PROMPT`
+10.784/11.800) · engine **185 pass**.
+- **A/B 24 prompt luận giải TRÙNG KHÍT từng byte** với `HEAD` (bất biến quan
+  trọng nhất — đường đang bán không đổi một byte).
+- **6 ca Playwright trên TRANG THẬT** (Next dev, route `action=khung` chạy
+  THẬT): khách chưa đăng nhập → **0 lượt `action=deduct`**, dựng đủ 16 phần, quét
+  toàn bộ chữ hiện ra **0 câu chữ AI lọt** · tháng chứa Tết tách 2 đoạn kèm cảnh
+  báo đổi nền + **ĐỐI CHỨNG** tháng không Tết không có dòng đó · rail nhận đúng
+  ngữ cảnh · 390px **0px tràn ngang** · đã đăng nhập chưa mua → bấm mở **trừ
+  Lượng ĐÚNG 1 lần**, sinh đủ 16 phần, khoá-mini tắt hết, **0 lỗi JS** · **ĐỐI
+  CHỨNG đã mua** → hiện lại cache, **0 lượt trừ Lượng, 0 lượt gọi model** ·
+  slug mang đúng mốc `yyyy-mm`.
+- Khung 12 tháng đo trên lá số thật: 12/12 tháng đủ 2 đoạn, tổ hợp sao có mặt,
+  `dangDienRa` rơi đúng đoạn chứa hôm nay.
+
+### ✅ ĐÃ BẬT TRÊN PROD — hết việc tay
+Trình tự đã chạy ĐÚNG thứ tự bắt buộc: merge (`d8dfe90`) → **đợi prod phục vụ
+`/app/van-han-nam` trả 200** (verify header `x-nextjs-rewritten-path:
+/app-van-han-nam.html`) → **rồi mới** `enabled=true`. Verify sau khi bật: 56 tool
+đang bật, `credits=50`, `is_free=false`, và cả hai khoá `need_tags`
+(`van-han` · `ban-than`) đều khớp nhóm ĐANG BẬT ⇒ không rơi vào "Khác".
+- 🔑 **Migration an toàn chạy TRƯỚC deploy, câu BẬT thì không.** File
+  `_patches/migration-van-han-nam.sql` tạo dòng ở `enabled=false` và
+  `on conflict do update` CỐ Ý không đụng cột đó — tách được hai việc này là rút
+  ngắn cửa sổ rủi ro. Bật trước deploy là công cụ hiện trên `/cong-cu` trong khi
+  route chưa tồn tại → **404 cho người thật** (bài học "dữ liệu đi SAU giao
+  diện" đã làm 58 công cụ rơi vào "Khác" 4 phút).
+- Tắt lại nếu cần: `update tool_pricing set enabled = false, updated_at = now()
+  where tool_id = 'van-han-nam';`
+
+### CÒN LẠI
+- 🔴 **Chưa gọi LLM thật lượt nào** — container không có key, verify dừng ở tầng
+  *chữ vào prompt* + tầng render. Chỗ đáng đọc đầu tiên trên prod: phần tháng có
+  bị lặp ý giữa 12 tháng không (12 prompt cùng khuôn, chỉ khác dữ liệu cung).
+- **Chưa có trang standalone SEO** — mới có trang shell. *"vận hạn tháng này"* có
+  cầu thật.
+- Tool này **không** dùng `portrait_cache` mà dùng `laso_public.luan_giai` như
+  luận giải 24 phần ⇒ không có cơ chế `SHAPE`; đổi cấu trúc phần chữ thì bản đã
+  mua vẫn giữ nguyên bản cũ (đúng ý "một lá số một kết quả").
 
 ---
 

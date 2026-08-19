@@ -47,6 +47,7 @@ const TuviPaywall = (() => {
     'huong-nghiep-tre': { title: 'Hướng Nghiệp Sớm Cho Con' },
     'gio-sinh': { title: 'Xác Định Giờ Sinh' },
     'nhan-mach': { title: 'Sổ Nhân Mạch' },
+    'van-han-nam': { title: 'Vận Hạn 12 Tháng Tới' },
   };
 
   const TOOL_TYPE = {
@@ -77,6 +78,7 @@ const TuviPaywall = (() => {
     'huong-nghiep-tre': 'use_huong_nghiep_tre',
     'gio-sinh': 'use_gio_sinh',
     'nhan-mach': 'use_nhan_mach',
+    'van-han-nam': 'use_van_han_nam',
   };
 
   let _cfg        = null;

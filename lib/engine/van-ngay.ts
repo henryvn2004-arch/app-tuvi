@@ -354,8 +354,8 @@ export function computeTuan(
 type AnyRec = Record<string, any>;
 
 /**
- * Cung nguyệt hạn cho MỘT THÁNG ÂM LỊCH cụ thể (nam = năm dương lịch dùng để
- * tra `tieuVanScores`/`nguyetVanScores` — quy ước sẵn có trong cả file này).
+ * Cung nguyệt hạn cho MỘT THÁNG ÂM LỊCH cụ thể (`namAL` = năm ÂM LỊCH dùng để
+ * tra `nguyetVanScores` — CÙNG quy ước với `tieuVanScores[].nam`, xem `findTieuVan`).
  * Ưu tiên bảng `nguyetVanScores` pre-computed; fallback tính trực tiếp qua
  * `tinhNguyetHan` khi lá số có mang `thangSinhAL`/`gioSinhIdx`.
  *
@@ -365,11 +365,11 @@ type AnyRec = Record<string, any>;
  */
 function nguyetHanIdxForThangAL(
   lasoData: AnyRec,
-  nam: number,
+  namAL: number,
   tieuHanIdx: number,
   thangAL: number,
 ): number | null {
-  const preMonths = (lasoData.nguyetVanScores || []).find((e: AnyRec) => Number(e.nam) === nam)?.months;
+  const preMonths = (lasoData.nguyetVanScores || []).find((e: AnyRec) => Number(e.nam) === namAL)?.months;
   if (Array.isArray(preMonths) && preMonths[thangAL - 1] != null) {
     return Number(preMonths[thangAL - 1]);
   }
@@ -377,6 +377,28 @@ function nguyetHanIdxForThangAL(
   const gioSinhIdx = lasoData.gioSinhIdx != null ? Number(lasoData.gioSinhIdx) : -1;
   if (!thangSinhAL || gioSinhIdx === -1) return null;
   return ((tinhNguyetHan(tieuHanIdx, thangSinhAL, gioSinhIdx).cach1 + thangAL - 1) % 12 + 12) % 12;
+}
+
+/**
+ * Tra dòng tiểu vận của MỘT NĂM ÂM LỊCH.
+ *
+ * 🔴 Vì sao phải là năm ÂM chứ không phải năm dương (vá 2026-08-19): engine đặt
+ * `tieuVanScores[].nam = namAL_sinh + tuoiMu - 1` — tức trường `nam` đó là NĂM
+ * ÂM, vì tuổi mụ nhảy ở Tết chứ không nhảy ở 1/1. Bản cũ tra bằng năm DƯƠNG của
+ * ngày được hỏi nên mọi ngày từ 1/1 tới trước Tết (~37 ngày/năm ≈ 10%) lấy nhầm
+ * tiểu hạn của năm ÂM SAU, lệch đúng một cung.
+ * Đo được trên lá số Nam 3/6/1998 giờ Sửu: 15/1/2027 dương = ÂL 8/12/2026 →
+ * tiểu hạn đúng là Điền Trạch (năm ÂL 2026); bản cũ tra nam=2027 ra Quan Lộc.
+ */
+function findTieuVan(lasoData: AnyRec, namAL: number): { ok: true; tv: AnyRec } | { ok: false; error: string } {
+  const tvs = lasoData?.tieuVanScores;
+  if (!Array.isArray(tvs) || !tvs.length) return { ok: false, error: 'Lá số này chưa có dữ liệu tiểu vận theo năm.' };
+  const tv = tvs.find((t: AnyRec) => Number(t.nam) === namAL);
+  if (!tv) {
+    const yrs = tvs.map((t: AnyRec) => Number(t.nam));
+    return { ok: false, error: `Năm ${namAL} ngoài phạm vi lá số (chỉ có ${Math.min(...yrs)}–${Math.max(...yrs)}).` };
+  }
+  return { ok: true, tv };
 }
 
 /**
@@ -399,21 +421,18 @@ export function resolveNhatHanIdx(
 ): { ok: true; nhatHanIdx: number; nguyetHanIdx: number; tieuHanIdx: number; tv: AnyRec; ngayAL: number; thangAL: number }
   | { ok: false; error: string } {
   const lunar = solarToLunar(ngay, thang, nam);
-  const ngayAL = lunar.day, thangAL = lunar.month;
+  const ngayAL = lunar.day, thangAL = lunar.month, namAL = lunar.year;
 
-  const tvs = lasoData?.tieuVanScores;
-  if (!Array.isArray(tvs) || !tvs.length) return { ok: false, error: 'Lá số này chưa có dữ liệu tiểu vận theo năm.' };
-  const tv = tvs.find((t: AnyRec) => Number(t.nam) === nam);
-  if (!tv) {
-    const yrs = tvs.map((t: AnyRec) => Number(t.nam));
-    return { ok: false, error: `Năm ${nam} ngoài phạm vi lá số (chỉ có ${Math.min(...yrs)}–${Math.max(...yrs)}).` };
-  }
+  // Tra theo năm ÂM của CHÍNH ngày được hỏi — xem `findTieuVan`.
+  const rt = findTieuVan(lasoData, namAL);
+  if (!rt.ok) return rt;
+  const tv = rt.tv;
 
   const palaces: AnyRec[] = lasoData.palaces || [];
   const tieuHanIdx = palaces.findIndex((p) => p.cungName === tv.tieuHanCung);
   if (tieuHanIdx === -1) return { ok: false, error: `Không tìm thấy cung tiểu hạn "${tv.tieuHanCung}" trong lá số.` };
 
-  const nguyetHanIdx = nguyetHanIdxForThangAL(lasoData, nam, tieuHanIdx, thangAL);
+  const nguyetHanIdx = nguyetHanIdxForThangAL(lasoData, namAL, tieuHanIdx, thangAL);
   if (nguyetHanIdx == null) return { ok: false, error: 'Lá số thiếu dữ liệu tháng sinh / giờ sinh.' };
   return { ok: true, nhatHanIdx: tinhNhatHan(nguyetHanIdx, ngayAL), nguyetHanIdx, tieuHanIdx, tv, ngayAL, thangAL };
 }
@@ -433,6 +452,15 @@ export interface NguyetHanSegment {
   nguyetHanIdx: number;
   /** Đoạn có chứa "hôm nay" không — chỉ có ý nghĩa khi tra đúng tháng/năm hiện tại. */
   isCurrent: boolean;
+  /**
+   * Năm ÂM LỊCH của đoạn — và vì thế cả tiểu hạn/lưu niên đi kèm. Tháng dương
+   * chứa Tết bị cắt thành HAI đoạn thuộc HAI năm âm khác nhau ⇒ hai đoạn đó có
+   * tiểu hạn KHÁC nhau. Gộp một tiểu hạn cho cả tháng là sai đúng chỗ giao thừa.
+   */
+  namAL: number;
+  tv: AnyRec;
+  tieuHanIdx: number;
+  luuNienIdx: number;
 }
 
 /**
@@ -456,19 +484,7 @@ export function resolveNguyetHanSegments(
   nam: number,
 ): { ok: true; tieuHanIdx: number; luuNienIdx: number; tv: AnyRec; segments: NguyetHanSegment[] }
   | { ok: false; error: string } {
-  const tvs = lasoData?.tieuVanScores;
-  if (!Array.isArray(tvs) || !tvs.length) return { ok: false, error: 'Lá số này chưa có dữ liệu tiểu vận theo năm.' };
-  const tv = tvs.find((t: AnyRec) => Number(t.nam) === nam);
-  if (!tv) {
-    const yrs = tvs.map((t: AnyRec) => Number(t.nam));
-    return { ok: false, error: `Năm ${nam} ngoài phạm vi lá số (chỉ có ${Math.min(...yrs)}–${Math.max(...yrs)}).` };
-  }
-
   const palaces: AnyRec[] = lasoData.palaces || [];
-  const tieuHanIdx = palaces.findIndex((p) => p.cungName === tv.tieuHanCung);
-  if (tieuHanIdx === -1) return { ok: false, error: `Không tìm thấy cung tiểu hạn "${tv.tieuHanCung}" trong lá số.` };
-  const luuNienIdx = palaces.findIndex((p) => p.cungName === tv.luuNienCung);
-
   const lastDay = daysInSolarMonth(thang, nam);
   const l1 = solarToLunar(1, thang, nam);
   const lEnd = solarToLunar(lastDay, thang, nam);
@@ -476,32 +492,48 @@ export function resolveNguyetHanSegments(
   const today = todayVN();
   const isCurrentMonth = today.m === thang && today.y === nam;
 
-  const bounds: { tuNgay: number; denNgay: number; thangAL: number; isLeap: boolean }[] = [];
-  if (l1.month === lEnd.month && !!l1.isLeap === !!lEnd.isLeap) {
-    bounds.push({ tuNgay: 1, denNgay: lastDay, thangAL: l1.month, isLeap: !!l1.isLeap });
+  // Điểm chuyển giao xét CẢ tháng âm LẪN năm âm: tháng dương chứa Tết đổi năm
+  // âm (12 → 1) nên nếu chỉ so tháng thì vẫn bắt được, nhưng so cả hai cho rõ ý.
+  const sameLunarBlock = l1.month === lEnd.month && !!l1.isLeap === !!lEnd.isLeap && l1.year === lEnd.year;
+  const bounds: { tuNgay: number; denNgay: number; thangAL: number; isLeap: boolean; namAL: number }[] = [];
+  if (sameLunarBlock) {
+    bounds.push({ tuNgay: 1, denNgay: lastDay, thangAL: l1.month, isLeap: !!l1.isLeap, namAL: l1.year });
   } else {
     // Dò NGÀY ĐẦU TIÊN mà tháng âm khác ngày 1 — đó là điểm chuyển giao.
     let cut = lastDay;
     for (let d = 2; d <= lastDay; d++) {
       const l = solarToLunar(d, thang, nam);
-      if (l.month !== l1.month || !!l.isLeap !== !!l1.isLeap) { cut = d; break; }
+      if (l.month !== l1.month || !!l.isLeap !== !!l1.isLeap || l.year !== l1.year) { cut = d; break; }
     }
-    bounds.push({ tuNgay: 1, denNgay: cut - 1, thangAL: l1.month, isLeap: !!l1.isLeap });
-    bounds.push({ tuNgay: cut, denNgay: lastDay, thangAL: lEnd.month, isLeap: !!lEnd.isLeap });
+    bounds.push({ tuNgay: 1, denNgay: cut - 1, thangAL: l1.month, isLeap: !!l1.isLeap, namAL: l1.year });
+    bounds.push({ tuNgay: cut, denNgay: lastDay, thangAL: lEnd.month, isLeap: !!lEnd.isLeap, namAL: lEnd.year });
   }
 
+  // Mỗi đoạn tra tiểu hạn theo NĂM ÂM CỦA CHÍNH NÓ. Tháng dương chứa Tết có hai
+  // đoạn thuộc hai năm âm ⇒ hai tiểu hạn khác nhau; dùng chung một tv là sai.
   const segments: NguyetHanSegment[] = [];
   for (const b of bounds) {
-    const idx = nguyetHanIdxForThangAL(lasoData, nam, tieuHanIdx, b.thangAL);
+    const rt = findTieuVan(lasoData, b.namAL);
+    if (!rt.ok) return rt;
+    const segTv = rt.tv;
+    const segTieuHanIdx = palaces.findIndex((p) => p.cungName === segTv.tieuHanCung);
+    if (segTieuHanIdx === -1) return { ok: false, error: `Không tìm thấy cung tiểu hạn "${segTv.tieuHanCung}" trong lá số.` };
+    const idx = nguyetHanIdxForThangAL(lasoData, b.namAL, segTieuHanIdx, b.thangAL);
     if (idx == null) return { ok: false, error: 'Lá số thiếu dữ liệu tháng sinh / giờ sinh để tính nguyệt hạn.' };
     segments.push({
       ...b,
       nguyetHanIdx: idx,
       isCurrent: isCurrentMonth && today.d >= b.tuNgay && today.d <= b.denNgay,
+      tv: segTv,
+      tieuHanIdx: segTieuHanIdx,
+      luuNienIdx: palaces.findIndex((p) => p.cungName === segTv.luuNienCung),
     });
   }
 
-  return { ok: true, tieuHanIdx, luuNienIdx, tv, segments };
+  // Ba trường cấp 1 giữ lại cho caller cũ — lấy theo đoạn ĐANG DIỄN RA, không
+  // thì đoạn đầu. Caller nào luận theo TỪNG đoạn thì đọc `segments[].tv`.
+  const act = segments.find((x) => x.isCurrent) || segments[0]!;
+  return { ok: true, tieuHanIdx: act.tieuHanIdx, luuNienIdx: act.luuNienIdx, tv: act.tv, segments };
 }
 
 /**
