@@ -276,7 +276,10 @@ if (badScenario.length) {
 // ⚠️ Trần đặt SÁT mức hiện tại + biên ~12%. Nới trần là một QUYẾT ĐỊNH phải ghi
 // lý do, không phải thao tác dọn đường cho một khối mới.
 const DOC_FILES = {
-  'app/api/lasotuvi/route.ts': { name: 'SYSTEM_PROMPT', cap: 11800, arc: 'DOC_ARC_LASO' },
+  // Prompt 24 phần DỜI khỏi route sang lib (tool "Vận Hạn 12 Tháng Tới" dùng
+  // lại 4 phần đầu; Next chặn export lạ trong route file). Nội dung KHÔNG đổi
+  // — A/B đã chứng minh 24 prompt trùng khít từng byte.
+  'lib/agent/luan-giai-doc.ts': { name: 'SYSTEM_PROMPT', cap: 11800, arc: 'DOC_ARC_LASO' },
   'app/api/tubinh/route.ts': { name: 'SYSTEM_PROMPT_TUBINH', cap: 9400, arc: 'DOC_ARC_TUBINH' },
   // Nới 6600 → 7000 (2026-08-19): `arcDoc` thêm lớp DỰ BÁO (+~590 ký tự cho MỌI
   // bản luận giải). Lá số và Tử Bình còn dư chỗ; hai bản dưới thì không.

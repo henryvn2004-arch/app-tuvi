@@ -122,8 +122,11 @@ function _palaceStarText(p: any, capPhu = 6): string {
 }
 // Mô tả 1 cung hạn KÈM tam hợp xung chiếu, xếp theo trọng số: tọa thủ (nặng
 // nhất) → xung chiếu → tam hợp. Xuống dòng thụt lề cho dễ đọc.
+// EXPORT vì `lib/engine/van-han-12.ts` (tool Vận Hạn 12 Tháng Tới) dựng khối
+// dữ liệu tháng cho LLM — phải nói CÙNG một thứ với rail chat, chép bản thứ
+// hai là hai bản trôi khỏi nhau.
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function describeHanCungRich(palaces: any[], idx: number): string {
+export function describeHanCungRich(palaces: any[], idx: number): string {
   if (idx < 0 || !palaces[idx]) return '?';
   const lines: string[] = [];
   lines.push(`tọa thủ (${palaces[idx].cungName}): ${_palaceStarText(palaces[idx])}`);
@@ -138,7 +141,7 @@ function describeHanCungRich(palaces: any[], idx: number): string {
 // Các LayerCung của 1 cung hạn (tọa + xung + tam hợp) cho combo matcher — để
 // cách cục hình thành nhờ sao HỘI/XUNG CHIẾU cũng được bắt (không chỉ tọa thủ).
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function hanClusterLayers(palaces: any[], idx: number, label: string): LayerCung[] {
+export function hanClusterLayers(palaces: any[], idx: number, label: string): LayerCung[] {
   if (idx < 0) return [];
   const out: LayerCung[] = [];
   if (palaces[idx]) out.push({ label, palace: palaces[idx] });
@@ -209,15 +212,23 @@ export function execTraNguyetVan(lasoData: any, input: any): string {
   const { tv, tieuHanIdx, luuNienIdx, segments } = rs;
 
   const palaces = lasoData.palaces || [];
+  // Hai đoạn của một tháng dương có thể thuộc HAI năm âm khác nhau (tháng chứa
+  // Tết) ⇒ tiểu hạn khác nhau. Chỉ in một dòng tiểu hạn chung khi cả tháng
+  // thật sự nằm trong MỘT năm âm; không thì nêu theo từng đoạn.
+  const cungTieuHan = [...new Set(segments.map((x) => String(x.tv.tieuHanCung)))];
   let out = `NGUYỆT HẠN THÁNG ${thang}/${nam} DƯƠNG LỊCH (tuổi ${tv.tuoi}) — đọc CẢ tọa thủ + tam hợp xung chiếu (tọa thủ nặng nhất → xung → tam hợp):\n`;
-  out += `- Tiểu hạn năm ${nam}: cung ${tv.tieuHanCung}.\n`;
+  if (cungTieuHan.length === 1) out += `- Tiểu hạn năm ÂL ${segments[0]!.namAL}: cung ${cungTieuHan[0]}.\n`;
   if (segments.length > 1) {
     out += `⚠️ Tháng dương lịch này CẮT NGANG 2 tháng âm lịch — dưới đây là 2 ĐOẠN HẠN KHÁC NHAU, PHẢI phân biệt rõ theo ngày khi luận, KHÔNG được gộp chung một hạn cho cả tháng.\n`;
+    if (cungTieuHan.length > 1) {
+      out += `⚠️ Hai đoạn còn thuộc HAI NĂM ÂM khác nhau (giao thừa nằm trong tháng dương này) nên TIỂU HẠN cũng đổi giữa chừng — mỗi đoạn có nền tiểu hạn riêng, nêu rõ khi luận.\n`;
+    }
   }
   for (const seg of segments) {
     const nhanNgay = segments.length > 1 ? `ngày ${seg.tuNgay}–${seg.denNgay}/${thang}` : `cả tháng ${thang}/${nam}`;
     const nowMark = seg.isCurrent ? ' — ĐANG DIỄN RA (hôm nay rơi vào đoạn này)' : '';
-    out += `- Đoạn ${nhanNgay} (ÂL tháng ${seg.thangAL}${seg.isLeap ? ' nhuận' : ''})${nowMark}, cung ${_cungNameOf(palaces, seg.nguyetHanIdx)}:\n    ${describeHanCungRich(palaces, seg.nguyetHanIdx)}\n`;
+    const nenTH = cungTieuHan.length > 1 ? `, nền tiểu hạn năm ÂL ${seg.namAL}: cung ${seg.tv.tieuHanCung}` : '';
+    out += `- Đoạn ${nhanNgay} (ÂL tháng ${seg.thangAL}${seg.isLeap ? ' nhuận' : ''})${nowMark}${nenTH}, cung ${_cungNameOf(palaces, seg.nguyetHanIdx)}:\n    ${describeHanCungRich(palaces, seg.nguyetHanIdx)}\n`;
   }
 
   // Tổ hợp sao chéo tầng (mức THÁNG): đại vận (tọa) + tiểu hạn/lưu niên/nguyệt
