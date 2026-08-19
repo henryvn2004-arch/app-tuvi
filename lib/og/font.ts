@@ -1,64 +1,101 @@
 // lib/og/font.ts — NGUỒN DUY NHẤT nạp font cho 4 route OG (Satori/ImageResponse).
 //
-// 🔴 VÌ SAO CÓ FILE NÀY: prod đo được 108 lượt / 30 người trong 7 ngày ném
-//    "No fonts are loaded. At least one font is required to calculate the layout."
-//    trên /api/og và /api/og/laso (Vercel runtime errors).
+// 🔴 LỊCH SỬ HAI VÒNG CHẨN, ĐỌC TRƯỚC KHI SỬA:
+//    Vòng 1 (#557) đo prod thấy 108 lượt/tuần ném "No fonts are loaded…" trên
+//    /api/og và /api/og/laso. Tôi kết luận nguyên nhân là nhánh `: []` (fetch
+//    Google Fonts hỏng ⇒ mảng font rỗng) và NỚI regex nhận cả `woff2`.
+//    ⇒ SAI, và bản vá đó đẻ ra lỗi MỚI ngay khi deploy:
+//       "Unsupported OpenType signature wOF2" trên CẢ BỐN route.
 //
-// 🔑 CĂN NGUYÊN KHÔNG PHẢI REGEX — đã loại trừ: /api/og gửi UA cũ (MSIE) và dò
-//    đúng `.ttf`, tức UA và regex KHỚP nhau hoàn hảo, mà vẫn ném. Chỗ hỏng nằm ở
-//    nhánh `const fonts = fontData ? [...] : []` mà cả 4 route đều chép: hễ lượt
-//    fetch ra Google Fonts hỏng (mạng edge chớp, rate-limit, timeout) là mảng font
-//    RỖNG, và Satori luôn ném đúng câu trên khi không có font nào.
-//    ⇒ Nới regex chỉ giảm TẦN SUẤT, không bịt được lỗi. Chốt chặn thật là:
-//       nạp hỏng ⇒ ĐỪNG gọi Satori, trả ảnh tĩnh (xem `ogFallbackRedirect`).
+// 🔑 CĂN NGUYÊN THẬT — đo bằng cách hỏi thẳng Google Fonts với từng User-Agent:
+//    | UA gửi đi            | Google trả về                       | Satori |
+//    |----------------------|-------------------------------------|--------|
+//    | Chrome hiện đại      | …/xxx.woff2                         | ❌ ném |
+//    | MSIE (UA cũ)         | …/l/font?kit=… (EOT, KHÔNG có đuôi) | ❌      |
+//    | KHÔNG gửi UA         | …/xxx.ttf                           | ✅      |
+//    ⇒ Satori CHỈ đọc được TTF/OTF. Mọi UA mà 4 route từng gửi đều KHÔNG ra TTF:
+//      UA hiện đại ra woff2 (ném Unsupported), UA cũ ra URL KHÔNG CÓ ĐUÔI nên
+//      regex `\.ttf` trượt ⇒ mảng rỗng ⇒ đúng câu "No fonts are loaded" của 108
+//      lượt kia. Tức chẩn đoán vòng 1 nhìn nhầm triệu chứng của cùng một gốc.
 //
-// ⚠️ CẤM cache giá trị null: /api/og/social trước đây ghi `fontCache[w] = null` khi
-//    hỏng ⇒ MỘT lượt mạng chớp là edge isolate đó KHÔNG BAO GIỜ có font nữa, mọi
-//    lượt sau đều 500 cho tới khi isolate bị thu hồi. Chỉ cache khi THÀNH CÔNG.
+// ✅ CÁCH VÁ: TỰ HOST file TTF trong `public/fonts/` và nạp qua CÙNG ORIGIN.
+//    Bỏ hẳn Google Fonts khỏi đường chính — hành vi của họ đổi theo UA là thứ
+//    mình không kiểm được, và đó chính là chỗ đã hỏng hai lần.
+//
+// 🔑 CHỐT CHẶN THẬT LÀ CHỮ KÝ NHỊ PHÂN, KHÔNG PHẢI ĐUÔI FILE: `looksLikeSfnt`
+//    đọc 4 byte đầu. Đuôi `.ttf` không chứng minh nội dung là TTF (Google từng
+//    trả EOT qua một URL không đuôi), còn chữ ký thì có. Nhờ nó, đường dự phòng
+//    Google KHÔNG THỂ nhét woff2/EOT vào Satori dù regex có lỏng tới đâu.
+//
+// ⚠️ CẤM cache giá trị null: /api/og/social trước đây ghi `fontCache[w] = null`
+//    khi hỏng ⇒ MỘT lượt mạng chớp là edge isolate đó KHÔNG BAO GIỜ có font nữa.
+//    Chỉ cache khi THÀNH CÔNG.
 
 export type OgFontWeight = 400 | 700;
 
 const fontCache = new Map<OgFontWeight, ArrayBuffer>();
 
-// Hai User-Agent CỐ Ý khác nhau: Google Fonts trả định dạng theo UA (UA hiện đại
-// → woff2, UA cũ → ttf). Thử lần lượt nên một bên đổi hành vi vẫn còn đường kia.
-const UA_LIST = [
-  'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0 Safari/537.36',
-  'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1)',
-];
-
-// Satori đọc được cả ba định dạng ⇒ nhận hết, đừng ghim một cái.
-const FONT_URL_RE = /url\((https:\/\/fonts\.gstatic\.com\/[^)]+\.(?:woff2|ttf|otf))\)/;
-
 const FETCH_TIMEOUT_MS = 3000;
 
-async function fetchWithTimeout(url: string, init?: RequestInit): Promise<Response> {
-  return fetch(url, { ...init, signal: AbortSignal.timeout(FETCH_TIMEOUT_MS) });
+/**
+ * Satori/OpenType chỉ nhận sfnt: TTF (`\x00\x01\x00\x00`, `true`, `ttcf`) và
+ * OTF (`OTTO`). Từ chối `wOF2`/`wOFF`/EOT ngay tại đây thay vì để Satori ném.
+ */
+function looksLikeSfnt(buf: ArrayBuffer): boolean {
+  if (buf.byteLength < 4) return false;
+  const b = new Uint8Array(buf, 0, 4);
+  const tag = String.fromCharCode(b[0], b[1], b[2], b[3]);
+  if (tag === 'OTTO' || tag === 'true' || tag === 'ttcf') return true;
+  return b[0] === 0x00 && b[1] === 0x01 && b[2] === 0x00 && b[3] === 0x00;
+}
+
+async function fetchBuf(url: string, init?: RequestInit): Promise<ArrayBuffer | null> {
+  const res = await fetch(url, { ...init, signal: AbortSignal.timeout(FETCH_TIMEOUT_MS) });
+  if (!res.ok) return null;
+  const buf = await res.arrayBuffer();
+  return buf.byteLength > 0 ? buf : null;
+}
+
+/** Đường CHÍNH: file nằm trong `public/fonts/`, cùng origin, không phụ thuộc ai. */
+async function loadSelfHosted(weight: OgFontWeight, origin: string): Promise<ArrayBuffer | null> {
+  try {
+    const buf = await fetchBuf(new URL(`/fonts/be-vietnam-pro-${weight}.ttf`, origin).toString());
+    return buf && looksLikeSfnt(buf) ? buf : null;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Đường DỰ PHÒNG: chỉ chạy khi file tự host không tới được (deploy hụt asset).
+ * CỐ Ý không gửi User-Agent — đo được đó là cách DUY NHẤT Google trả `.ttf`.
+ */
+async function loadFromGoogle(weight: OgFontWeight): Promise<ArrayBuffer | null> {
+  try {
+    const res = await fetch(
+      `https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@${weight}&subset=vietnamese`,
+      { signal: AbortSignal.timeout(FETCH_TIMEOUT_MS) },
+    );
+    if (!res.ok) return null;
+    const css = await res.text();
+    const m = css.match(/url\((https:\/\/fonts\.gstatic\.com\/[^)]+\.(?:ttf|otf))\)/);
+    if (!m) return null;
+    const buf = await fetchBuf(m[1]);
+    return buf && looksLikeSfnt(buf) ? buf : null;
+  } catch {
+    return null;
+  }
 }
 
 /** Nạp Be Vietnam Pro theo độ đậm. Trả null khi không nạp được — KHÔNG ném. */
-export async function loadOgFont(weight: OgFontWeight): Promise<ArrayBuffer | null> {
+export async function loadOgFont(weight: OgFontWeight, origin: string): Promise<ArrayBuffer | null> {
   const cached = fontCache.get(weight);
   if (cached) return cached;
 
-  for (const ua of UA_LIST) {
-    try {
-      const css = await fetchWithTimeout(
-        `https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@${weight}&subset=vietnamese`,
-        { headers: { 'User-Agent': ua } },
-      ).then((r) => r.text());
-
-      const m = css.match(FONT_URL_RE);
-      if (!m) continue; // UA này trả định dạng lạ → thử UA kia
-
-      const buf = await fetchWithTimeout(m[1]).then((r) => r.arrayBuffer());
-      if (!buf || buf.byteLength === 0) continue;
-
-      fontCache.set(weight, buf); // chỉ cache khi THÀNH CÔNG
-      return buf;
-    } catch {
-      // nuốt rồi thử UA kế tiếp; hết UA thì trả null cho phía gọi quyết định
-    }
+  const buf = (await loadSelfHosted(weight, origin)) ?? (await loadFromGoogle(weight));
+  if (buf) {
+    fontCache.set(weight, buf); // chỉ cache khi THÀNH CÔNG
+    return buf;
   }
   console.warn(`[og-font] không nạp được Be Vietnam Pro ${weight} — sẽ trả ảnh tĩnh`);
   return null;
@@ -72,8 +109,9 @@ export type SatoriFont = {
 };
 
 /** Dựng mảng font cho ImageResponse. Mảng RỖNG = phải đi đường `ogFallbackRedirect`. */
-export async function loadOgFonts(weights: OgFontWeight[]): Promise<SatoriFont[]> {
-  const loaded = await Promise.all(weights.map((w) => loadOgFont(w)));
+export async function loadOgFonts(weights: OgFontWeight[], req: Request): Promise<SatoriFont[]> {
+  const origin = new URL(req.url).origin;
+  const loaded = await Promise.all(weights.map((w) => loadOgFont(w, origin)));
   return weights.flatMap((w, i) => {
     const data = loaded[i];
     return data ? [{ name: 'BeVN', data, weight: w, style: 'normal' as const }] : [];

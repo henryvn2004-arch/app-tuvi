@@ -57,7 +57,7 @@ export async function GET(request: NextRequest) {
   const quote = clamp(p.get('q') || '', 190);
   const title = clamp(p.get('t') || '', 90);
 
-  const fonts = await loadOgFonts([700, 400]);
+  const fonts = await loadOgFonts([700, 400], request);
   // Không font nào ⇒ Satori ném "No fonts are loaded" (500). Ảnh tĩnh vẫn hơn.
   if (!fonts.length) return ogFallbackRedirect(request);
   const fontFamily = 'BeVN, sans-serif';

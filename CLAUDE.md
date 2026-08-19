@@ -1,5 +1,144 @@
 # CLAUDE.md — Context cho Claude Code
 
+## ⏱️ Timeout 30 giây: KHÔNG phải đường tiền, và engine vô can (2026-08-19, cùng PR)
+
+Sổ ghi *"timeout 30 giây trên `/api/payment` + `/la-so/[slug]` — cái đầu là đường
+tiền"*. Đo lại **theo môi trường** thì vế đó SAI:
+
+| production, 7 ngày | |
+|---|---:|
+| lượt 504 | **24** |
+| `/la-so/[slug]` | **24 (100%)** |
+| **`/api/payment`** | **0** |
+
+Mấy lượt `/api/payment` 504 nằm ở **preview của nhánh `claude/remotion-video-m2hmam`**
+(trần 15 giây, không phải 30) — tức của một session khác, không phải đường tiền prod.
+🔑 **Nhóm lỗi gộp nhiều route thì phải tách theo môi trường trước khi kết luận** —
+đọc nhãn nhóm rồi suy là cách nhanh nhất báo động nhầm chỗ.
+
+### 🔑 Engine VÔ CAN — đo trước khi đoán
+| | |
+|---|---:|
+| `loadEngine()` (1 lần/instance) | **9,5 ms** |
+| lập MỘT lá số | p50 **5,1 ms** · p95 11,3 ms · max 29,3 ms |
+
+Chú thích trong route ghi *"maxDuration = 30 — allow 30s for engine on cold start"*
+⇒ **mô tả sai chỗ đắt**. Thủ phạm là mấy lượt đọc Supabase: ca xấu nhất **6 lượt
+TUẦN TỰ** (`laso_public` → `laso_pregen` → 3 keyword bài liên quan → fallback) và
+**KHÔNG lượt nào có hạn giờ**. 24 lượt 504 dồn thành cụm ~46 giây, `cache=MISS`,
+mỗi slug một lượt — đúng hình dạng một đợt bot cào.
+
+### 🔴 Lỗi NẶNG HƠN cái timeout, tìm ra khi đọc nhánh lỗi
+`catch { /* continue */ }` nuốt lỗi `laso_public` rồi rơi xuống ISR, **vẫn dán
+`s-maxage=31536000`**. Nghĩa là Supabase chớp MỘT nhịp đúng lúc bot cào trang của
+người ĐÃ TRẢ TIỀN ⇒ CDN ghim bản ISR **một năm**, bản họ mua biến mất, không gì báo.
+- ⇒ `sbFetch` phân biệt **`ok:false` (không hỏi được)** với **`ok:true, rows:[]`
+  (đã hỏi, chắc chắn không có)**. `publicKnown=false` ⇒ cache **300 giây**.
+- Cùng lớp ở nhánh 404: slug của bản trả tiền không nhất thiết đúng khuôn ISR
+  (`parseIsrSlug` trả null) ⇒ bản cũ ghim 404 **một năm**. Nay cũng 300 giây.
+- ⚠️ Có **ca ĐỐI CHỨNG** canh chiều ngược: Supabase LÀNH + slug rác thì **vẫn phải
+  ghim 404 một năm** — vá cái này mà nới lỏng luôn ca kia là mở lại cửa đốt
+  invocation cho bot cào slug rác.
+
+### Đã làm
+`sbFetch` (hạn giờ 4s, dùng chung) · `laso_public` + `laso_pregen` chạy **song
+song** · `fetchRelatedArticles` **gộp mọi keyword vào MỘT lượt `or=`** (bản cũ tối
+đa 4 lượt tuần tự cho một khối trang trí) + ngân sách 5s · **Supabase vừa không
+trả lời được hai lượt đầu thì BỎ HẲN khối bài liên quan** — đo được nó kéo lượt
+hỏng từ 4,1s lên 9,1s mà chắc chắn trả rỗng.
+
+### Verify — A/B trên ROUTE THẬT (Next dev + Supabase giả điều khiển được)
+| ca | bản `origin/main` | bản mới |
+|---|---|---|
+| Supabase TREO | **TREO >25s** (prod = 504) | **200 trong 4,1s**, cache 5 phút |
+| slug rác + TREO | **TREO >25s** | **404 trong 4,0s**, cache 5 phút |
+| Supabase CHẬM 9s | 200 sau **27,2s**, **ghim 1 NĂM** | 200 sau 4,1s, cache 5 phút |
+
+27,2 giây của bản cũ là 3 lượt tuần tự × 9s — con số tự nó chỉ ra chỗ hỏng.
+- **23/23 ca** trên handler thật: bản trả tiền được phục vụ và **2 lượt query lệch
+  nhau <60ms** (chứng minh song song) · nhánh đó **0 lượt hỏi bài liên quan** ·
+  ISR cache 1 năm · bài liên quan **≤2 lượt** và có `or=(` · ĐỐI CHỨNG slug rác +
+  Supabase lành vẫn ghim 1 năm.
+- `tsc` 0 · `lint` **0 lỗi / 77 warning = mốc nền** · `prettier` sạch · **22/22 bộ
+  dò** · engine **185 pass** · **`next build` exit 0, 64/64 trang**.
+- 🪤 **2 ca đỏ đầu là lỗi của BÀI KIỂM**: stub trả `html_content` do tôi bịa, shape
+  thật là `can_chi_nam`/`cung_menh`/`rendered_html`. Bài học cũ lặp lại — **lấy
+  shape THẲNG từ code, đừng bịa**.
+- 🪤 `git worktree` + symlink `node_modules` **vẫn gãy với Turbopack**
+  (*"Symlink points out of the filesystem root"*). Đường đi được đã ghi sẵn trong
+  file này: tráo file ngay trong cây đang chạy, Next dev tự nạp lại. **Sao lưu bản
+  mới ra ngoài TRƯỚC khi tráo.**
+- 🪤 `next dev` lại tự ghi `next-env.d.ts` — đã `git checkout`, không commit.
+
+### CÒN LẠI
+- Chưa đo trên prod. Dấu hiệu vá đúng: nhóm *"Task timed out"* của `/la-so/[slug]`
+  ngừng mọc thêm ở đợt bot cào kế tiếp.
+- Hạn giờ 4s và ngân sách 5s là **con số chọn**, chưa hiệu chỉnh theo p95 thật của
+  Supabase. Thấy trang hay hụt khối bài liên quan thì nới ngân sách, đừng nới hạn giờ.
+
+## 🔤 Ảnh OG: chẩn đoán vòng 1 SAI, bản vá của tôi đẻ ra lỗi MỚI (2026-08-19, PR sau)
+
+Henry: *"tao click thử cái link trên, thì nó ko hiện ra gì"*. Đo ngay: cả 4 route OG
+trả **HTTP 200 · `content-type: image/png` · body 0 BYTE** (0,3–0,8s, không phải
+đang vẽ). Ảnh tĩnh cùng domain ra 26.674 byte ⇒ **proxy không nuốt body, route
+thật sự trả rỗng.**
+
+### 🔴 Lỗi MỚI, do chính bản vá #557 đẻ ra
+```
+Error: Unsupported OpenType signature wOF2
+count=15  routes=/api/og, /api/og/social, /api/og/laso, /api/og/luan-duong
+first=2026-08-19T02:18:06Z   ← ngay sau khi deploy #557
+```
+#557 nới regex nhận `woff2` kèm chú thích *"Satori đọc được cả ba định dạng"* —
+**câu đó là tôi suy đoán, không đo.** Satori CHỈ đọc sfnt (TTF/OTF).
+
+### 🔑 Căn nguyên THẬT — hỏi thẳng Google Fonts từng User-Agent
+| UA gửi đi | Google trả về | Satori |
+|---|---|---|
+| Chrome hiện đại | `…/xxx.woff2` | ❌ ném `Unsupported wOF2` |
+| MSIE (UA cũ) | `…/l/font?kit=…` — **EOT, KHÔNG CÓ ĐUÔI** | ❌ |
+| **KHÔNG gửi UA** | `…/xxx.ttf` | ✅ |
+
+⇒ **Không UA nào trong 4 route từng cho ra TTF.** UA cũ ra URL không đuôi nên
+regex `\.ttf` **trượt** → mảng rỗng → đúng câu *"No fonts are loaded"* của 108
+lượt cũ. Tức chẩn đoán vòng 1 (*"fetch hỏng nên mảng rỗng"*) nhìn đúng triệu
+chứng nhưng **sai nguyên nhân**, và bản vá theo nó làm hỏng thêm 2 route đang
+lành. 🔑 **Chẩn đoán ĐẦU của tôi ở #557 nói "regex không phải nguyên nhân" —
+hoá ra regex ĐÚNG là một nửa nguyên nhân.** Bài học: đính chính mà không đo lại
+tận nguồn thì chỉ đổi một phỏng đoán lấy một phỏng đoán khác.
+
+### Cách vá — bỏ Google khỏi đường CHÍNH
+**Tự host `public/fonts/be-vietnam-pro-{400,700}.ttf`** (120KB + 126KB), nạp qua
+CÙNG ORIGIN. Hành vi Google đổi theo UA là thứ mình không kiểm được, và đúng chỗ
+đó đã hỏng hai lần. Google giữ lại làm **dự phòng** (không gửi UA, chỉ nhận
+`ttf|otf`) cho ca deploy hụt asset.
+- 🔑 **Chốt chặn thật là CHỮ KÝ NHỊ PHÂN, không phải đuôi file** (`looksLikeSfnt`
+  đọc 4 byte đầu: `00 01 00 00` · `OTTO` · `true` · `ttcf`). Đuôi `.ttf` không
+  chứng minh nội dung — Google từng trả EOT qua URL không đuôi. Nhờ nó, đường dự
+  phòng **không thể** nhét woff2/EOT vào Satori dù regex lỏng tới đâu.
+- `ogFallbackRedirect` (302 → `/seal.webp`) của #557 GIỮ NGUYÊN — nó đúng, chỉ là
+  chưa bao giờ chạy tới vì font woff2 nạp "thành công" rồi Satori mới ném.
+
+### Verify
+`tsc` 0 · `lint` **0 lỗi / 77 warning = mốc nền** · `prettier` cả cây sạch ·
+**22/22 bộ dò** · engine **185 pass** · **`next build` exit 0, 64/64 trang**.
+- **19/19 ca trên MODULE THẬT** (biên dịch `font.ts`, stub `fetch`): tự host OK →
+  **1 lượt mạng, 0 lượt chạm Google** · tự host 404 → rơi sang Google · **ca hồi
+  quy #557: Google trả woff2 → TỪ CHỐI** · URL không đuôi (EOT) → từ chối · **tự
+  host trả EOT dưới đuôi `.ttf` → từ chối rồi lấy bản Google** · cả hai hỏng →
+  mảng rỗng, KHÔNG ném · **cấm cache null** (hỏng rồi sau đó OK vẫn nạp lại
+  được) · cache khi thành công thì lượt 2 **0 lượt mạng** · một weight hỏng vẫn
+  giữ weight kia.
+- 🔑 **RENDER THẬT bằng `@vercel/og` bản Node** (`next/dist/compiled/@vercel/og/index.node.js`
+  — dùng được ngoài edge, khác `next/og`): TTF tự host → **PNG 1200×630, 36.263
+  byte, chữ tiếng Việt đủ dấu** · WOFF2 → ném **đúng nguyên văn** câu lỗi đang
+  thấy trên prod · EOT → ném. Đây là mắt xích #557 thiếu.
+- 🪤 `pkill -f 'stub-postgrest[.]mjs'` **vẫn tự giết** (exit 144) — ngoặc vuông
+  không cứu được khi chính dòng lệnh shell chứa chuỗi đó. Bắt PID rồi `kill "$PID"`.
+
+### CÒN LẠI
+- Font là file nhị phân trong git (246KB). Bump bản Be Vietnam Pro thì phải tải
+  lại TTF **bằng lượt fetch KHÔNG gửi UA**, không thì lấy phải woff2.
 ## 📡 BẢN ĐỒ 8 KÊNH SOCIAL — audit trước khi ráp Telegram + vá Facebook (2026-08-19)
 
 Henry: *"Ráp social channels theo bản đồ 8 kênh… bắt đầu bằng Telegram channel,

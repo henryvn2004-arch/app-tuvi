@@ -25,7 +25,7 @@ export async function GET(req: NextRequest) {
   const canChi = sp.get('cc_nam') || '';       // can chi năm (e.g. Canh Ngọ)
 
   const cachCucList = cc.split(',').filter(Boolean).slice(0, 3);
-  const fonts = await loadOgFonts([700]);
+  const fonts = await loadOgFonts([700], req);
   // Không font nào ⇒ Satori ném "No fonts are loaded" (500). Trả ảnh tĩnh thay vì
   // để link chia sẻ mất sạch preview.
   if (!fonts.length) return ogFallbackRedirect(req);

@@ -16,7 +16,7 @@ export async function GET(req: NextRequest) {
   const thay = (sp.get('thay') || 'Thầy Luận Đường').slice(0, 40);
   const q = (sp.get('q') || '').replace(/\s+/g, ' ').trim().slice(0, 150);
 
-  const fonts = await loadOgFonts([400, 700]);
+  const fonts = await loadOgFonts([400, 700], req);
   // Nới regex ở bản trước mới giảm TẦN SUẤT trượt; mảng rỗng vẫn ném 500. Chốt thật.
   if (!fonts.length) return ogFallbackRedirect(req);
 
