@@ -3,10 +3,19 @@
 // VẬN HẠN 12 THÁNG TỚI — khung deterministic của tool `van-han-nam`.
 //
 // Tool này là LÁT CẮT SÂU của bản Luận Giải: chỉ tiểu vận năm + 12 nguyệt vận,
-// tính TỪ THÁNG NGƯỜI DÙNG ĐANG XEM (không phải từ tháng Giêng). File này KHÔNG
-// tính lại gì về cổ pháp — nó gọi `resolveNguyetHanSegments` (nguồn duy nhất
-// của phép "tháng này rơi vào cung nào", dùng chung với rail chat + thẻ Vận
-// Ngày) rồi gói lại thành 12 khối đọc được.
+// tính TỪ THÁNG ÂM NGƯỜI DÙNG ĐANG SỐNG. File này KHÔNG tính lại gì về cổ pháp
+// — nó gọi `lunarMonthsFrom` (phép lịch) + `resolveNguyetHanForLunarMonth`
+// (nguồn duy nhất của phép "tháng âm này rơi vào cung nào", dùng chung với rail
+// chat + thẻ Vận Ngày) rồi gói lại thành 12 khối đọc được.
+//
+// 🔴 Vì sao khung là THÁNG ÂM chứ không phải tháng dương (đổi 2026-08-19):
+// nguyệt hạn là khái niệm của lịch ÂM — nó đổi ở mùng 1 âm, không đổi ở ngày 1
+// dương. Bản đầu trình bày theo tháng dương nên gần như tháng nào cũng bị hai
+// tháng âm cắt ngang (vd 8/2026: ngày 1–12 còn tháng 6 ÂL, từ 13 đã sang tháng
+// 7 ÂL) ⇒ mỗi phần phải chẻ đôi "nửa đầu thế này, nửa sau thế kia", đọc rời rạc
+// mà chẳng vì lý do cổ pháp nào — chỉ vì cái khung mình tự chọn. Nay mỗi phần là
+// TRỌN một tháng âm; ngày dương chỉ đóng vai NHÃN để người đọc biết nó rơi vào
+// quãng nào của lịch họ đang dùng.
 //
 // 🔑 Vì sao ở SERVER chứ không port sang `public/tools-shared/`: phép mô tả một
 // cung hạn (`describeHanCungRich`) và bộ khớp tổ hợp sao chéo tầng
@@ -18,7 +27,11 @@
 // thật; nguyệt hạn luận theo cung + sao, gán điểm là bịa.
 // ============================================================
 
-import { resolveNguyetHanSegments } from '@/lib/engine/van-ngay';
+import {
+  lunarMonthsFrom,
+  resolveNguyetHanForLunarMonth,
+  type LunarMonthSpan,
+} from '@/lib/engine/van-ngay';
 import { describeHanCungRich, hanClusterLayers } from '@/lib/agent/tools';
 import { matchVanHanCombos, formatComboLines, type LayerCung } from '@/lib/agent/vanHanCombos';
 
@@ -33,44 +46,46 @@ const BAI = ['Thiên Khốc', 'Thiên Hư', 'Tang Môn', 'Bạch Hổ', 'Đại 
 const CAT = ['Văn Xương', 'Văn Khúc', 'Thiên Khôi', 'Thiên Việt', 'Tả Phụ', 'Hữu Bật',
   'Lộc Tồn', 'Hóa Lộc', 'Hóa Quyền', 'Hóa Khoa'];
 
-/** MỘT đoạn hạn trong một tháng dương (tháng bị Tết/giao tháng âm cắt → 2 đoạn). */
-export interface DoanThang {
-  tuNgay: number;
-  denNgay: number;
+/** MỘT tháng âm trong khung 12 tháng. */
+export interface ThangKhung {
+  /** Thứ tự trong khung, 1..12 (1 = tháng âm đang sống). */
+  stt: number;
   thangAL: number;
   namAL: number;
   isLeap: boolean;
-  /** Đoạn chứa "hôm nay" (chỉ đúng khi đang xét tháng hiện tại). */
+  /** 'Tháng 1 ÂL' (kèm 'nhuận' khi cần) — nhãn NGẮN cho thanh nhảy/chip. */
+  nhan: string;
+  /** 'Tháng 1 ÂL (15/2/2026 – 13/3/2026)' — nhãn ĐẦY ĐỦ cho tiêu đề phần. */
+  nhanDay: string;
+  /** '15/2/2026' – '13/3/2026' (dương lịch). */
+  duongTu: string;
+  duongDen: string;
+  soNgay: number;
+  /** Tháng âm đang chứa hôm nay. */
   dangDienRa: boolean;
   cungNguyetHan: string;
   chinhTinh: string[];
   catTinh: string[];
   satTinh: string[];
   baiTinh: string[];
-  /** Nền của đoạn — tiểu hạn & lưu niên của ĐÚNG năm âm mà đoạn thuộc về. */
+  /** Nền của tháng — tiểu hạn & lưu niên của năm âm mà tháng này thuộc về. */
   cungTieuHan: string;
   cungLuuNien: string;
-}
-
-export interface ThangKhung {
-  /** Thứ tự trong khung, 1..12 (1 = tháng đang xem). */
-  stt: number;
-  thang: number;
-  nam: number;
-  /** '8/2026' — nhãn ngắn cho tiêu đề phần. */
-  nhan: string;
-  doan: DoanThang[];
-  /** Tổ hợp sao chéo tầng của đoạn chính (đang diễn ra, hoặc đoạn đầu). */
+  /** Tuổi mụ trong năm âm đó. */
+  tuoi: number;
+  /** Tổ hợp sao chéo tầng (đại vận · tiểu hạn · lưu niên · nguyệt hạn). */
   toHop: { ten: string; loai: string; tomTat: string }[];
   /** Lỗi engine cho riêng tháng này (ngoài phạm vi lá số…) — null nếu ổn. */
   loi: string | null;
 }
 
 export interface Khung12Thang {
-  tuThang: number;
-  tuNam: number;
-  denThang: number;
-  denNam: number;
+  /** Nhãn tháng âm đầu/cuối khung. */
+  tuNhan: string;
+  denNhan: string;
+  /** Dải ngày dương của cả khung. */
+  duongTu: string;
+  duongDen: string;
   thangs: ThangKhung[];
 }
 
@@ -86,105 +101,122 @@ function chinhTinhOf(p: AnyRec | undefined): string[] {
     .filter(Boolean);
 }
 
-/** (thang, nam) + n tháng → (thang, nam). n có thể âm. */
-export function addMonths(thang: number, nam: number, n: number): { thang: number; nam: number } {
-  const t0 = (nam * 12 + (thang - 1)) + n;
-  return { thang: (t0 % 12) + 1, nam: Math.floor(t0 / 12) };
+/** '15/2/2026' — dạng ngày người Việt đọc, KHÔNG pad số 0. */
+export function dmy(x: { d: number; m: number; y: number }): string {
+  return `${x.d}/${x.m}/${x.y}`;
+}
+
+/** 'Tháng 6 nhuận ÂL' — nhãn ngắn. */
+export function nhanThangAL(s: Pick<LunarMonthSpan, 'thangAL' | 'isLeap'>): string {
+  return `Tháng ${s.thangAL}${s.isLeap ? ' nhuận' : ''} ÂL`;
 }
 
 /**
- * Khung 12 tháng tới tính TỪ tháng `tuThang/tuNam` (bao gồm chính nó).
+ * 'Tháng 1 ÂL (15/2/2026 – 13/3/2026)'.
  *
- * Mỗi tháng có thể có 2 đoạn hạn (tháng âm cắt ngang); tháng chứa Tết còn đổi
- * cả TIỂU HẠN giữa chừng — `DoanThang.cungTieuHan` vì thế nằm ở tầng ĐOẠN chứ
- * không phải tầng tháng.
+ * 🔑 Khoảng ngày dương KHÔNG phải trang trí: người đọc sống theo lịch dương, nói
+ * "tháng 1 âm" trơ trọi là bắt họ tự đi tra. Đây là nguồn DUY NHẤT dựng nhãn —
+ * trang, mục lục và prompt cùng đọc nó nên ba bề mặt không nói lệch nhau.
  */
-export function buildKhung12Thang(lasoData: AnyRec, tuThang: number, tuNam: number): Khung12Thang {
+export function nhanThangALDay(s: LunarMonthSpan): string {
+  return `${nhanThangAL(s)} (${dmy(s.tu)} – ${dmy(s.den)})`;
+}
+
+/** 12 tháng âm kể từ tháng âm chứa ngày dương dd/mm/yy. */
+export function spans12(dd: number, mm: number, yy: number): LunarMonthSpan[] {
+  return lunarMonthsFrom(dd, mm, yy, SO_THANG);
+}
+
+/**
+ * Khung 12 tháng ÂM tới, tính từ tháng âm chứa ngày dương dd/mm/yy.
+ *
+ * Mỗi tháng âm nằm TRỌN trong một năm âm ⇒ đúng một tiểu hạn, một nguyệt hạn.
+ * Không còn khối "đoạn" nào để chẻ — đó là cả điểm của việc đổi khung sang âm lịch.
+ */
+export function buildKhung12Thang(lasoData: AnyRec, dd: number, mm: number, yy: number): Khung12Thang {
   const palaces: AnyRec[] = lasoData?.palaces || [];
+  const spans = spans12(dd, mm, yy);
   const thangs: ThangKhung[] = [];
 
-  for (let i = 0; i < SO_THANG; i++) {
-    const { thang, nam } = addMonths(tuThang, tuNam, i);
-    const rs = resolveNguyetHanSegments(lasoData, thang, nam);
+  spans.forEach((s, i) => {
+    const base = {
+      stt: i + 1,
+      thangAL: s.thangAL, namAL: s.namAL, isLeap: s.isLeap,
+      nhan: nhanThangAL(s), nhanDay: nhanThangALDay(s),
+      duongTu: dmy(s.tu), duongDen: dmy(s.den), soNgay: s.soNgay,
+      dangDienRa: s.dangDienRa,
+    };
+    const rs = resolveNguyetHanForLunarMonth(lasoData, s.thangAL, s.namAL);
     if (!rs.ok) {
-      thangs.push({ stt: i + 1, thang, nam, nhan: `${thang}/${nam}`, doan: [], toHop: [], loi: rs.error });
-      continue;
+      thangs.push({
+        ...base,
+        cungNguyetHan: '?', chinhTinh: [], catTinh: [], satTinh: [], baiTinh: [],
+        cungTieuHan: '?', cungLuuNien: '?', tuoi: 0, toHop: [], loi: rs.error,
+      });
+      return;
     }
-    const doan: DoanThang[] = rs.segments.map((s) => {
-      const p = palaces[s.nguyetHanIdx];
-      // Cát/sát/bại đọc trên CẢ chùm tam phương tứ chính — cổ pháp luận hạn
-      // không chỉ đọc sao tọa thủ (cùng luật với describeHanCungRich).
-      const chum = [p, palaces[(s.nguyetHanIdx + 4) % 12], palaces[(s.nguyetHanIdx + 8) % 12], palaces[(s.nguyetHanIdx + 6) % 12]];
-      const gom = (list: string[]) => [...new Set(chum.flatMap((x) => starsOf(x, list)))];
-      return {
-        tuNgay: s.tuNgay, denNgay: s.denNgay, thangAL: s.thangAL, namAL: s.namAL, isLeap: s.isLeap,
-        dangDienRa: s.isCurrent,
-        cungNguyetHan: String(p?.cungName || '?'),
-        chinhTinh: chinhTinhOf(p),
-        catTinh: gom(CAT), satTinh: gom(SAT), baiTinh: gom(BAI),
-        cungTieuHan: String(s.tv?.tieuHanCung || '?'),
-        cungLuuNien: String(s.tv?.luuNienCung || '?'),
-      };
-    });
-    const act = rs.segments.find((s) => s.isCurrent) || rs.segments[0]!;
-    const dv = (lasoData.daiVans || [])[act.tv?.dvIdx];
+    const p = palaces[rs.nguyetHanIdx];
+    // Cát/sát/bại đọc trên CẢ chùm tam phương tứ chính — cổ pháp luận hạn không
+    // chỉ đọc sao tọa thủ (cùng luật với describeHanCungRich).
+    const chum = [p, palaces[(rs.nguyetHanIdx + 4) % 12], palaces[(rs.nguyetHanIdx + 8) % 12], palaces[(rs.nguyetHanIdx + 6) % 12]];
+    const gom = (list: string[]) => [...new Set(chum.flatMap((x) => starsOf(x, list)))];
+    const dv = (lasoData.daiVans || [])[rs.tv?.dvIdx];
     const layers: LayerCung[] = [
       { label: 'đại vận', palace: dv ? palaces[dv.cungIdx] : null },
-      ...hanClusterLayers(palaces, act.tieuHanIdx, 'tiểu hạn'),
-      ...hanClusterLayers(palaces, act.luuNienIdx, 'lưu niên'),
-      ...hanClusterLayers(palaces, act.nguyetHanIdx, 'nguyệt hạn'),
+      ...hanClusterLayers(palaces, rs.tieuHanIdx, 'tiểu hạn'),
+      ...hanClusterLayers(palaces, rs.luuNienIdx, 'lưu niên'),
+      ...hanClusterLayers(palaces, rs.nguyetHanIdx, 'nguyệt hạn'),
     ];
     thangs.push({
-      stt: i + 1, thang, nam, nhan: `${thang}/${nam}`, doan, loi: null,
+      ...base,
+      cungNguyetHan: String(p?.cungName || '?'),
+      chinhTinh: chinhTinhOf(p),
+      catTinh: gom(CAT), satTinh: gom(SAT), baiTinh: gom(BAI),
+      cungTieuHan: String(rs.tv?.tieuHanCung || '?'),
+      cungLuuNien: String(rs.tv?.luuNienCung || '?'),
+      tuoi: Number(rs.tv?.tuoi) || 0,
       toHop: matchVanHanCombos(layers, 5).map((h) => ({ ten: h.ten, loai: h.loai, tomTat: h.tomTat })),
+      loi: null,
     });
-  }
+  });
 
-  const last = addMonths(tuThang, tuNam, SO_THANG - 1);
-  return { tuThang, tuNam, denThang: last.thang, denNam: last.nam, thangs };
+  const first = spans[0]!, last = spans[spans.length - 1]!;
+  return {
+    tuNhan: nhanThangAL(first), denNhan: nhanThangAL(last),
+    duongTu: dmy(first.tu), duongDen: dmy(last.den),
+    thangs,
+  };
 }
 
 /**
- * Khối dữ liệu MỘT THÁNG cho prompt — cùng ngôn ngữ với tool `tra_nguyet_van`
- * của rail (dùng chung `describeHanCungRich` + `formatComboLines`) để hai bề
- * mặt không nói khác nhau về cùng một tháng.
+ * Khối dữ liệu MỘT THÁNG ÂM cho prompt — cùng ngôn ngữ với tool `tra_nguyet_van`
+ * của rail (dùng chung `describeHanCungRich` + `formatComboLines`) để hai bề mặt
+ * không nói khác nhau về cùng một tháng.
  */
-export function describeThangForLLM(lasoData: AnyRec, thang: number, nam: number): string {
-  const rs = resolveNguyetHanSegments(lasoData, thang, nam);
-  if (!rs.ok) return `THÁNG ${thang}/${nam}: ${rs.error}`;
+export function describeThangForLLM(lasoData: AnyRec, s: LunarMonthSpan): string {
+  const rs = resolveNguyetHanForLunarMonth(lasoData, s.thangAL, s.namAL);
+  const head = `=== ${nhanThangAL(s)} năm ${s.namAL} — dương lịch ${dmy(s.tu)} đến ${dmy(s.den)} (${s.soNgay} ngày) ===\n`;
+  if (!rs.ok) return head + rs.error;
+
   const palaces: AnyRec[] = lasoData.palaces || [];
-  const cungTieuHan = [...new Set(rs.segments.map((s) => String(s.tv.tieuHanCung)))];
-
-  let out = `=== THÁNG ${thang}/${nam} DƯƠNG LỊCH ===\n`;
+  let out = head;
   out += `Nguyệt hạn KHÔNG có điểm riêng — luận theo CÁCH CỤC + sao (tọa thủ + tam hợp xung chiếu) của cung hạn, đại vận chỉ giới hạn biên độ.\n`;
+  out += `Tháng âm này nằm TRỌN trong năm ÂL ${s.namAL} ⇒ chỉ MỘT nền tiểu hạn, MỘT cung nguyệt hạn cho cả tháng — không chia nửa đầu / nửa sau.\n`;
 
-  const act = rs.segments.find((s) => s.isCurrent) || rs.segments[0]!;
-  const dv = (lasoData.daiVans || [])[act.tv?.dvIdx];
+  const dv = (lasoData.daiVans || [])[rs.tv?.dvIdx];
   if (dv) {
     const dvP = palaces[dv.cungIdx];
     out += `- KHUNG ĐẠI VẬN ${dv.diaChi} (${dv.tuoiStart}–${dv.tuoiEnd} tuổi)${dvP?.cungName ? `, đóng tại cung ${dvP.cungName}` : ''}` +
       `${dv.scoring?.tong != null ? `: điểm ${dv.scoring.tong}/10 ${dv.scoring.flag || ''}` : ''} — chỉ GIỚI HẠN BIÊN ĐỘ, KHÔNG quyết định tốt/xấu của tháng.\n`;
   }
-  if (cungTieuHan.length === 1) {
-    out += `- Nền năm (ÂL ${act.namAL}, tuổi ${act.tv.tuoi}): tiểu hạn cung ${act.tv.tieuHanCung}, lưu niên đại hạn cung ${act.tv.luuNienCung}.\n`;
-  }
-  if (rs.segments.length > 1) {
-    out += `⚠️ Tháng dương này CẮT NGANG 2 tháng âm — 2 ĐOẠN HẠN KHÁC NHAU, PHẢI phân biệt theo NGÀY khi luận, KHÔNG gộp chung một hạn cho cả tháng.\n`;
-    if (cungTieuHan.length > 1) {
-      out += `⚠️ Hai đoạn còn thuộc HAI NĂM ÂM (giao thừa rơi vào tháng này) nên NỀN TIỂU HẠN cũng đổi giữa chừng — nêu rõ mốc đổi khi luận.\n`;
-    }
-  }
-  for (const s of rs.segments) {
-    const nhan = rs.segments.length > 1 ? `ngày ${s.tuNgay}–${s.denNgay}/${thang}` : `cả tháng ${thang}/${nam}`;
-    const now = s.isCurrent ? ' — ĐANG DIỄN RA' : '';
-    const nen = cungTieuHan.length > 1 ? `, nền tiểu hạn năm ÂL ${s.namAL}: cung ${s.tv.tieuHanCung}` : '';
-    out += `- Đoạn ${nhan} (ÂL tháng ${s.thangAL}${s.isLeap ? ' nhuận' : ''})${now}${nen}, nguyệt hạn cung ${palaces[s.nguyetHanIdx]?.cungName || '?'}:\n    ${describeHanCungRich(palaces, s.nguyetHanIdx)}\n`;
-  }
+  out += `- Nền năm (ÂL ${s.namAL}, tuổi ${rs.tv.tuoi}): tiểu hạn cung ${rs.tv.tieuHanCung}, lưu niên đại hạn cung ${rs.tv.luuNienCung}.\n`;
+  out += `- Nguyệt hạn cung ${palaces[rs.nguyetHanIdx]?.cungName || '?'}:\n    ${describeHanCungRich(palaces, rs.nguyetHanIdx)}\n`;
+
   const layers: LayerCung[] = [
     { label: 'đại vận', palace: dv ? palaces[dv.cungIdx] : null },
-    ...hanClusterLayers(palaces, act.tieuHanIdx, 'tiểu hạn'),
-    ...hanClusterLayers(palaces, act.luuNienIdx, 'lưu niên'),
-    ...hanClusterLayers(palaces, act.nguyetHanIdx, 'nguyệt hạn'),
+    ...hanClusterLayers(palaces, rs.tieuHanIdx, 'tiểu hạn'),
+    ...hanClusterLayers(palaces, rs.luuNienIdx, 'lưu niên'),
+    ...hanClusterLayers(palaces, rs.nguyetHanIdx, 'nguyệt hạn'),
   ];
   out += formatComboLines(matchVanHanCombos(layers));
   return out;

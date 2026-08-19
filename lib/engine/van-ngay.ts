@@ -442,6 +442,115 @@ function daysInSolarMonth(thang: number, nam: number): number {
   return new Date(Date.UTC(nam, thang, 0)).getUTCDate();
 }
 
+/** Cộng n ngày (UTC) — tránh lệch múi giờ / giờ mùa hè. */
+function addDaysUTC(dt: Date, n: number): Date {
+  const x = new Date(dt.getTime());
+  x.setUTCDate(x.getUTCDate() + n);
+  return x;
+}
+function ymdOf(dt: Date): { d: number; m: number; y: number } {
+  return { d: dt.getUTCDate(), m: dt.getUTCMonth() + 1, y: dt.getUTCFullYear() };
+}
+function lunarOf(dt: Date) {
+  const q = ymdOf(dt);
+  return solarToLunar(q.d, q.m, q.y);
+}
+
+/**
+ * Mùng 1 của tháng âm KẾ TIẾP, tính từ mùng 1 của tháng âm hiện tại.
+ *
+ * Tháng âm là tháng sóc vọng nên chỉ dài 29 hoặc 30 ngày — hỏi đúng hai mốc đó
+ * là xong. Vòng dò 27–32 chỉ là lưới đỡ: thà ném lỗi còn hơn trả một ngày sai
+ * rồi cả khung 12 tháng lệch mà không gì báo.
+ */
+function nextLunarMonthStart(mung1: Date): Date {
+  for (const len of [29, 30, 27, 28, 31, 32]) {
+    const c = addDaysUTC(mung1, len);
+    if (lunarOf(c).day === 1) return c;
+  }
+  throw new Error('Không dò được mùng 1 của tháng âm kế tiếp.');
+}
+
+/** MỘT tháng âm lịch, kèm khoảng ngày DƯƠNG mà nó phủ. */
+export interface LunarMonthSpan {
+  thangAL: number;
+  namAL: number;
+  isLeap: boolean;
+  /** Ngày dương của mùng 1 âm. */
+  tu: { d: number; m: number; y: number };
+  /** Ngày dương của ngày cuối tháng âm. */
+  den: { d: number; m: number; y: number };
+  /** 29 hoặc 30. */
+  soNgay: number;
+  /** Tháng âm này đang chứa "hôm nay" (giờ VN). */
+  dangDienRa: boolean;
+}
+
+/**
+ * `count` tháng ÂM LỊCH liên tiếp, bắt đầu từ tháng âm CHỨA ngày dương dd/mm/yy.
+ *
+ * 🔑 Vì sao duyệt bằng NGÀY DƯƠNG chứ không cộng số tháng: lịch âm có tháng
+ * NHUẬN (năm nhuận 13 tháng) và mỗi tháng dài 29 hoặc 30 ngày — không có phép
+ * cộng nào đúng cho cả hai. `solarToLunar` là nguồn DUY NHẤT biết ranh giới đó,
+ * nên hỏi thẳng nó thay vì tự dựng bản lịch âm thứ hai.
+ */
+export function lunarMonthsFrom(dd: number, mm: number, yy: number, count: number): LunarMonthSpan[] {
+  const l0 = solarToLunar(dd, mm, yy);
+  // Lùi về mùng 1 của chính tháng âm đang chứa ngày này.
+  let cur = addDaysUTC(new Date(Date.UTC(yy, mm - 1, dd)), -(l0.day - 1));
+  const t = todayVN();
+  const todayMs = Date.UTC(t.y, t.m - 1, t.d);
+
+  const out: LunarMonthSpan[] = [];
+  for (let i = 0; i < count; i++) {
+    const lc = lunarOf(cur);
+    const nxt = nextLunarMonthStart(cur);
+    const den = addDaysUTC(nxt, -1);
+    out.push({
+      thangAL: lc.month,
+      namAL: lc.year,
+      isLeap: !!lc.isLeap,
+      tu: ymdOf(cur),
+      den: ymdOf(den),
+      soNgay: Math.round((nxt.getTime() - cur.getTime()) / 86400000),
+      dangDienRa: todayMs >= cur.getTime() && todayMs <= den.getTime(),
+    });
+    cur = nxt;
+  }
+  return out;
+}
+
+/**
+ * Nguyệt hạn + nền năm cho MỘT THÁNG ÂM LỊCH.
+ *
+ * Khác `resolveNguyetHanSegments` (hỏi theo tháng DƯƠNG nên phải cắt đoạn): một
+ * tháng âm nằm TRỌN trong một năm âm ⇒ đúng MỘT tiểu hạn, MỘT nguyệt hạn, không
+ * có gì để chẻ. Cả hai đường đi qua cùng `findTieuVan` + `nguyetHanIdxForThangAL`
+ * nên không thể nói khác nhau về cùng một tháng.
+ */
+export function resolveNguyetHanForLunarMonth(
+  lasoData: AnyRec,
+  thangAL: number,
+  namAL: number,
+): { ok: true; nguyetHanIdx: number; tieuHanIdx: number; luuNienIdx: number; tv: AnyRec }
+  | { ok: false; error: string } {
+  const palaces: AnyRec[] = lasoData.palaces || [];
+  const rt = findTieuVan(lasoData, namAL);
+  if (!rt.ok) return rt;
+  const tv = rt.tv;
+  const tieuHanIdx = palaces.findIndex((p) => p.cungName === tv.tieuHanCung);
+  if (tieuHanIdx === -1) return { ok: false, error: `Không tìm thấy cung tiểu hạn "${tv.tieuHanCung}" trong lá số.` };
+  const idx = nguyetHanIdxForThangAL(lasoData, namAL, tieuHanIdx, thangAL);
+  if (idx == null) return { ok: false, error: 'Lá số thiếu dữ liệu tháng sinh / giờ sinh để tính nguyệt hạn.' };
+  return {
+    ok: true,
+    nguyetHanIdx: idx,
+    tieuHanIdx,
+    luuNienIdx: palaces.findIndex((p) => p.cungName === tv.luuNienCung),
+    tv,
+  };
+}
+
 export interface NguyetHanSegment {
   /** Ngày dương lịch bắt đầu đoạn (trong tháng đang tra). */
   tuNgay: number;
@@ -513,20 +622,15 @@ export function resolveNguyetHanSegments(
   // đoạn thuộc hai năm âm ⇒ hai tiểu hạn khác nhau; dùng chung một tv là sai.
   const segments: NguyetHanSegment[] = [];
   for (const b of bounds) {
-    const rt = findTieuVan(lasoData, b.namAL);
-    if (!rt.ok) return rt;
-    const segTv = rt.tv;
-    const segTieuHanIdx = palaces.findIndex((p) => p.cungName === segTv.tieuHanCung);
-    if (segTieuHanIdx === -1) return { ok: false, error: `Không tìm thấy cung tiểu hạn "${segTv.tieuHanCung}" trong lá số.` };
-    const idx = nguyetHanIdxForThangAL(lasoData, b.namAL, segTieuHanIdx, b.thangAL);
-    if (idx == null) return { ok: false, error: 'Lá số thiếu dữ liệu tháng sinh / giờ sinh để tính nguyệt hạn.' };
+    const rs = resolveNguyetHanForLunarMonth(lasoData, b.thangAL, b.namAL);
+    if (!rs.ok) return rs;
     segments.push({
       ...b,
-      nguyetHanIdx: idx,
+      nguyetHanIdx: rs.nguyetHanIdx,
       isCurrent: isCurrentMonth && today.d >= b.tuNgay && today.d <= b.denNgay,
-      tv: segTv,
-      tieuHanIdx: segTieuHanIdx,
-      luuNienIdx: palaces.findIndex((p) => p.cungName === segTv.luuNienCung),
+      tv: rs.tv,
+      tieuHanIdx: rs.tieuHanIdx,
+      luuNienIdx: rs.luuNienIdx,
     });
   }
 

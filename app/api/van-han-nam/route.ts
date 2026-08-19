@@ -6,7 +6,10 @@ import { ok, err, options, parseBody } from '@/lib/cors';
 import { computeLaso, formatLaSoV2, type Laso } from '@/lib/engine/laso';
 import { SYSTEM_PROMPT, buildPrompt, laSoContextFor } from '@/lib/agent/luan-giai-doc';
 import { nguoiXemLine } from '@/lib/agent/prompts';
-import { buildKhung12Thang, describeThangForLLM, addMonths, SO_THANG } from '@/lib/engine/van-han-12';
+import {
+  buildKhung12Thang, describeThangForLLM, spans12, nhanThangAL, nhanThangALDay, dmy, SO_THANG,
+} from '@/lib/engine/van-han-12';
+import type { LunarMonthSpan } from '@/lib/engine/van-ngay';
 import { llmTextFull } from '@/lib/llm/complete';
 import { logLlmUsage } from '@/lib/agent/usage';
 import { withToolOutcome } from '@/lib/ops/tool-outcome';
@@ -23,7 +26,7 @@ type AnyRec = Record<string, any>;
 //   2 → phần 14 Hành trình cuộc đời (9 đại vận)
 //   3 → phần 14+n Đại vận HIỆN TẠI (n = số thứ tự đại vận đang đi)
 //   4 → phần 24 Tiểu vận năm nay
-//   5..16 → 12 nguyệt vận (MỚI — prompt ở `buildPromptThang` dưới)
+//   5..16 → 12 nguyệt vận theo THÁNG ÂM (MỚI — prompt ở `buildPromptThang` dưới)
 const TONG_PHAN = 4 + SO_THANG;
 const PHAN_THANG_DAU = 5;
 
@@ -41,31 +44,34 @@ function dvHienTaiSo(ls: Laso): number {
 /** Nhãn 16 phần — client dựng mục lục từ đây (qua `action=khung`), KHÔNG chép
  *  tay bản thứ hai. CỐ Ý không `export`: Next App Router chỉ nhận GET/POST/… làm
  *  export của route file, thêm export lạ là gãy bản dựng. */
-function phanLabels(ls: Laso | null, tuThang: number, tuNam: number): string[] {
+function phanLabels(ls: Laso | null, spans: LunarMonthSpan[]): string[] {
   const dv = ls ? ((ls.daiVans as AnyRec[]) || [])[dvHienTaiSo(ls) - 1] : null;
-  const L = [
+  return [
     '',
     'Tổng quan lá số',
     'Hành trình cuộc đời',
     dv ? `Đại vận hiện tại (${dv.tuoiStart}–${dv.tuoiEnd}t)` : 'Đại vận hiện tại',
     'Tiểu vận năm nay',
+    ...spans.map((s) => nhanThangALDay(s)),
   ];
-  for (let i = 0; i < SO_THANG; i++) {
-    const { thang, nam } = addMonths(tuThang, tuNam, i);
-    L.push(`Tháng ${thang}/${nam}`);
-  }
-  return L;
 }
 
 // ─── Prompt phần THÁNG (phần MỚI duy nhất của tool này) ────────
 function buildPromptThang(
   ls: Laso,
-  thang: number,
-  nam: number,
+  span: LunarMonthSpan,
   stt: number,
   docs?: string,
 ): string {
-  const khoiThang = describeThangForLLM(ls as AnyRec, thang, nam);
+  const khoiThang = describeThangForLLM(ls as AnyRec, span);
+  const nhan = nhanThangAL(span);
+  const dmyTu = dmy(span.tu), dmyDen = dmy(span.den);
+  // Tháng NHUẬN dùng CÙNG cung nguyệt hạn với tháng chính (engine tra chung một
+  // ô `nguyetVanScores`). Không dặn thì model viết lại gần y nguyên phần trước —
+  // hai phần liền nhau đọc thành lặp.
+  const luatNhuan = span.isLeap
+    ? `\n- ⚠️ Đây là THÁNG NHUẬN: cung nguyệt hạn TRÙNG với tháng ${span.thangAL} ÂL ngay trước. ĐỪNG viết lại bản luận của tháng trước — hãy nói về phần TIẾP NỐI: việc dở dang của tháng trước nay có thêm một tháng nữa để xử lý, và điều gì đã khác đi so với đầu chu kỳ.`
+    : '';
   // Lá số cắt theo khuôn phần 24 (tiểu vận & năm xem): đầu lá số + khối 9 đại
   // vận + cách cục — đúng thứ cần để đặt tháng vào khung năm, không kéo cả 12
   // cung vào cho loãng.
@@ -76,15 +82,16 @@ function buildPromptThang(
 
 ${khoiThang}${docsSection}
 
-PHẦN ${4 + stt} — NGUYỆT VẬN THÁNG ${thang}/${nam} (140-180 từ)
+PHẦN ${4 + stt} — NGUYỆT VẬN ${nhanThangALDay(span)} (140-180 từ)
 Đây là tháng thứ ${stt} trong 12 tháng tới. Người đọc đang xem một bản riêng về VẬN HẠN — họ cần biết tháng này NÊN LÀM GÌ và NÉ GÌ, không cần học lại lý thuyết.
 
 ⚠️ CĂN CỨ NỘI BỘ, BẮT BUỘC BÁM ĐÚNG (dùng để KHÔNG bịa, không phải để liệt kê hết cho người đọc):
-- Cung nguyệt hạn + sao tọa thủ/xung chiếu/tam hợp của ĐÚNG khối "THÁNG ${thang}/${nam}" ở trên. TRỌNG SỐ: tọa thủ nặng nhất → xung chiếu → tam hợp. Cung vô chính diệu thì MƯỢN chính tinh tam hợp/xung để luận.
+- Cung nguyệt hạn + sao tọa thủ/xung chiếu/tam hợp của ĐÚNG khối "${nhan}" ở trên. TRỌNG SỐ: tọa thủ nặng nhất → xung chiếu → tam hợp. Cung vô chính diệu thì MƯỢN chính tinh tam hợp/xung để luận.
 - Nếu khối trên có "TỔ HỢP SAO" thì ƯU TIÊN luận theo tổ hợp — ý nghĩa rõ hơn từng sao lẻ.
-- Nếu tháng có 2 ĐOẠN thì PHẢI nói rõ mốc ngày và luận TÁCH BẠCH hai đoạn (nửa đầu / nửa sau khác nhau thế nào). Tuyệt đối KHÔNG gộp thành một hạn cho cả tháng.
+- Tháng ÂM LỊCH này là MỘT khối liền: một cung nguyệt hạn, một nền tiểu hạn cho cả tháng. KHÔNG chẻ "nửa đầu tháng thế này, nửa sau thế kia" — không có căn cứ nào cho phép chẻ.
+- 🗓 MỐC THỜI GIAN NÓI VỚI NGƯỜI ĐỌC PHẢI LÀ NGÀY DƯƠNG: họ sống theo lịch dương. Mở đầu hoặc trong câu đầu phải nhắc quãng ${dmyTu} – ${dmyDen}; muốn nói "đầu tháng" / "giữa tháng" / "cuối tháng" thì kèm ngày dương cụ thể nằm TRONG quãng đó. CẤM nêu ngày dương ngoài quãng này, và CẤM gọi nó là "tháng ${span.tu.m} dương lịch" (tháng âm không trùng tháng dương).
 - CẤM bịa "điểm tháng X/10" — chỉ ĐẠI VẬN mới có điểm/10 thật. Điểm đại vận chỉ dùng để chỉnh BIÊN ĐỘ: đại vận cao thì cái tốt bung rực rỡ và cái xấu đỡ nặng; đại vận thấp thì ngược lại.
-- CẤM bịa sao/cách cục không có trong khối trên.
+- CẤM bịa sao/cách cục không có trong khối trên.${luatNhuan}
 
 MỞ ĐẦU bằng câu phán quyết NGẮN, in đậm, đứng riêng một dòng — nói bằng nghĩa đời thực (tháng này thuận hay chật, nên tiến hay nên giữ), KHÔNG mở đầu bằng tên cung/sao.
 Xuống dòng rồi viết 1-2 đoạn ngắn, ngôn ngữ đời thường:
@@ -116,12 +123,15 @@ async function runPost(request: NextRequest) {
 
   const birth = readBirth(body);
   if (!birth) return err('Thiếu thông tin ngày sinh.', 400);
-  const tuThang = Number(body.tuThang), tuNam = Number(body.tuNam);
-  if (!(tuThang >= 1 && tuThang <= 12) || !(tuNam >= 1900 && tuNam <= 2100)) {
-    return err('Thiếu hoặc sai tháng/năm bắt đầu.', 400);
+  // Mốc là NGÀY DƯƠNG người dùng đang đứng — phải có ngày, không chỉ tháng:
+  // tháng âm đổi ở giữa tháng dương, nên hai ngày trong cùng một tháng dương có
+  // thể thuộc hai tháng âm khác nhau ⇒ hai khung 12 tháng khác nhau.
+  const tuNgay = Number(body.tuNgay), tuThang = Number(body.tuThang), tuNam = Number(body.tuNam);
+  if (!(tuNgay >= 1 && tuNgay <= 31) || !(tuThang >= 1 && tuThang <= 12) || !(tuNam >= 1900 && tuNam <= 2100)) {
+    return err('Thiếu hoặc sai ngày/tháng/năm bắt đầu.', 400);
   }
-  // Năm xem = năm của THÁNG ĐANG XEM → đại vận/tiểu hạn "hiện tại" khớp đúng
-  // thời điểm người dùng mở tool, không phải năm mặc định của engine.
+  // Năm xem = năm DƯƠNG người dùng đang đứng → đại vận/tiểu hạn "hiện tại" khớp
+  // đúng thời điểm mở tool (cùng quy ước `currentNamXem()` của cả repo).
   const r = computeLaso(birth, tuNam);
   if (!r.ok || !r.ls) return err(r.error || 'Không lập được lá số.', 400);
   const ls = r.ls;
@@ -131,8 +141,8 @@ async function runPost(request: NextRequest) {
   // đứng trên phần CHỮ do AI viết.
   if (action === 'khung') {
     return ok({
-      khung: buildKhung12Thang(ls as AnyRec, tuThang, tuNam),
-      labels: phanLabels(ls, tuThang, tuNam),
+      khung: buildKhung12Thang(ls as AnyRec, tuNgay, tuThang, tuNam),
+      labels: phanLabels(ls, spans12(tuNgay, tuThang, tuNam)),
       tongPhan: TONG_PHAN,
       dvHienTai: dvHienTaiSo(ls),
     });
@@ -150,8 +160,10 @@ async function runPost(request: NextRequest) {
       prompt = (nx ? nx + '\n' : '') + buildPrompt(map[phan]!, formatLaSoV2(ls), docs);
     } else {
       const stt = phan - PHAN_THANG_DAU + 1;
-      const { thang, nam } = addMonths(tuThang, tuNam, stt - 1);
-      prompt = (nx ? nx + '\n' : '') + buildPromptThang(ls, thang, nam, stt, docs);
+      // Chỉ cần bảng LỊCH để biết tháng âm thứ stt — không dựng cả khung (khớp
+      // 958 cách cục × 12 tháng) chỉ để lấy một mốc.
+      const span = spans12(tuNgay, tuThang, tuNam)[stt - 1]!;
+      prompt = (nx ? nx + '\n' : '') + buildPromptThang(ls, span, stt, docs);
     }
   } catch (e: unknown) {
     return err('buildPrompt error: ' + (e as Error).message);
