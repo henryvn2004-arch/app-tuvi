@@ -1,28 +1,9 @@
 // app/api/og/route.tsx — Dynamic OG image for all content types
 import { ImageResponse } from 'next/og';
 import { NextRequest } from 'next/server';
+import { loadOgFonts, ogFallbackRedirect } from '@/lib/og/font';
 
 export const runtime = 'edge';
-
-// Cache font across edge invocations
-let fontCache: ArrayBuffer | null = null;
-
-async function loadFont(): Promise<ArrayBuffer | null> {
-  if (fontCache) return fontCache;
-  try {
-    // @vercel/og (Satori) only supports TTF — request old UA to get TTF from Google Fonts
-    const css = await fetch(
-      'https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@700&display=swap',
-      { headers: { 'User-Agent': 'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1)' } }
-    ).then(r => r.text());
-    const match = css.match(/url\((https:\/\/fonts\.gstatic\.com\/[^)]+\.ttf)\)/);
-    if (!match) return null;
-    fontCache = await fetch(match[1]).then(r => r.arrayBuffer());
-    return fontCache;
-  } catch {
-    return null;
-  }
-}
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
@@ -32,10 +13,10 @@ export async function GET(request: NextRequest) {
   const title = rawTitle.length > 55 ? rawTitle.slice(0, 52) + '…' : rawTitle;
   const fontSize = title.length > 36 ? 40 : 52;
 
-  const fontData = await loadFont();
-  const fonts = fontData
-    ? [{ name: 'BeVN', data: fontData, weight: 700 as const, style: 'normal' as const }]
-    : [];
+  const fonts = await loadOgFonts([700]);
+  // Không font nào ⇒ Satori sẽ ném "No fonts are loaded" (500, mạng xã hội không có
+  // preview NÀO). Trả ảnh thương hiệu tĩnh thay vì đổ lỗi ra ngoài.
+  if (!fonts.length) return ogFallbackRedirect(request);
 
   return new ImageResponse(
     (
