@@ -1,5 +1,68 @@
 # CLAUDE.md — Context cho Claude Code
 
+## 🖼️ Ảnh preview link chia sẻ HỎNG 108 lượt/tuần — và chẩn đoán ĐẦU của tôi SAI (2026-08-19, PR sau)
+
+Henry hỏi về Sentry MCP. Đi đo thì Sentry chỉ nằm trên **7/141 trang** `public/`
+(0 trang `/app/*` — tức bỏ trọn khu người dùng chạy tool và trả tiền), nhưng
+**Vercel runtime errors** thì đọc được ngay và lộ 2 nhóm lỗi đang sống:
+
+| Lỗi | Lượt / người (7N) | Route |
+|---|---:|---|
+| `No fonts are loaded` | **108 / 30** | `/api/og` · `/api/og/laso` |
+| Timeout 30 giây | 77 / 50 | `/api/payment` · `/la-so/[slug]` |
+
+### 🔴 Chẩn đoán ĐẦU của tôi: "trượt regex vì User-Agent" — SAI, phải đính chính
+Google Fonts trả `woff2` hay `ttf` tuỳ UA, nên tôi kết luận mấy route dò một định
+dạng sẽ trượt. Đo từng route thì **UA và regex ĐỀU KHỚP NHAU**:
+
+| Route | UA gửi | Regex | Khớp? | Vẫn lỗi? |
+|---|---|---|---|---|
+| `/api/og` | MSIE 6.0 → ttf | `.ttf` | ✅ | 🔴 **có** |
+| `/api/og/laso` | Mozilla/5.0 | `.woff2` | ✅ | 🔴 **có** |
+| `/api/og/luan-duong` | Mozilla/5.0 | `woff2\|ttf\|otf` | ✅ | không |
+
+`/api/og` khớp hoàn hảo mà vẫn ném ⇒ **regex không phải nguyên nhân**.
+🔑 **Căn nguyên thật nằm ở dòng `const fonts = fontData ? [...] : []`** mà cả 4
+route đều chép: lượt `fetch` ra Google Fonts hỏng (mạng edge chớp, rate-limit,
+timeout) → mảng font **RỖNG** → Satori LUÔN ném đúng câu đó. Nới regex chỉ giảm
+TẦN SUẤT, **không bịt được lỗi** — kể cả bản `luan-duong` tôi tưởng "đã vá".
+
+### Cách vá — `lib/og/font.ts`, nguồn DUY NHẤT cho cả 4 route
+1. **Nạp hỏng ⇒ ĐỪNG gọi Satori.** `ogFallbackRedirect` trả 302 về `/seal.webp`
+   (chính ảnh `og:image` của trang chủ). Mạng xã hội gặp 500 thì **không có
+   preview NÀO**; gặp ảnh tĩnh thì vẫn có ảnh thương hiệu. Cache 302 chỉ **5
+   phút** — lượt hỏng là nhất thời, đừng để CDN ghim ảnh tĩnh lâu.
+2. **Thử HAI User-Agent** (mới rồi cũ) + regex nhận cả `woff2|ttf|otf` ⇒ một bên
+   đổi hành vi vẫn còn đường kia.
+3. 🔴 **CẤM cache giá trị null** — `/api/og/social` trước đây ghi
+   `fontCache[weight] = null` khi hỏng ⇒ **MỘT lượt mạng chớp là edge isolate đó
+   không bao giờ có font nữa**, mọi lượt sau 500 tới khi isolate bị thu hồi.
+   Chỉ cache khi THÀNH CÔNG.
+4. `AbortSignal.timeout(3000)` — Google Fonts chậm thì route chạm trần thời gian.
+
+### Verify
+`tsc` 0 · `lint` **0 lỗi / 77 warning = đúng mốc nền** · `prettier` cả cây sạch ·
+**`next build` exit 0** (stub PostgREST như CI — bài học *"tsc xanh KHÔNG chứng
+minh next build chạy"*) · quét lại: **0 route còn tự nạp font**, cả 4 đi qua module chung.
+- 🪤 `next/og` **không import được ngoài edge runtime** (`ERR_MODULE_NOT_FOUND` cả
+  ESM lẫn CJS) nên không tái hiện được tại chỗ. Bằng chứng đứng vững nhờ ba vế:
+  thông điệp lỗi Vercel CHÍNH LÀ câu Satori ném khi rỗng · code có nhánh `: []` ·
+  và ca `/api/og` loại trừ được giả thuyết regex.
+- 🪤 **`403 CONNECT` khi curl `js.sentry-cdn.com` là proxy container chặn**, KHÔNG
+  phải Sentry chết — chưa chạm tới server. Đừng đọc thành "tài khoản đã khoá".
+
+### CÒN LẠI
+- **Sentry: 7/141 trang, 0 trang `/app/*`.** Gói `@sentry/*` trong `package-lock`
+  là phụ thuộc của **`lighthouse`** (devDep CI) — bỏ Sentry không đụng tới nó.
+  Đường thay đã có sẵn: lỗi SERVER → Vercel runtime errors; lỗi CLIENT → thêm
+  `window.onerror`/`unhandledrejection` bắn `js_error` vào `/api/track` (phủ 141
+  trang thay vì 7). **Chưa làm** — và phải dựng đường thay TRƯỚC khi gỡ 7 thẻ.
+- 🔴 **Timeout 30 giây trên `/api/payment` + `/la-so/[slug]`** (77 lượt / 50
+  người) **CHƯA đào**. Cái đầu là đường tiền.
+- Chưa đo được ảnh OG thật sau khi vá — phải deploy rồi mở
+  `/api/og?title=...` xem có ra ảnh không.
+
+
 ## Project
 **tuviminhbao.com** — Tử Vi Đẩu Số app (Next.js 16, Supabase, Vercel)
 
