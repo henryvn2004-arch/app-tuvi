@@ -26,6 +26,12 @@ import { getAdminUser } from '@/lib/admin/auth';
 import { generateContentSuggestions } from '@/lib/marketing/content-suggestions';
 import { generateContentPackText } from '@/lib/marketing/content-pack';
 import { SUPPORTED_CHANNELS } from '@/lib/media/publish';
+import { sbGet as blGet, sbPatch as blPatch, sbDelete as blDelete } from '@/lib/backlinks/db';
+import { buildContentDrafts, type Prospect as BlProspect, type ProspectKind as BlKind } from '@/lib/backlinks/content';
+import { runProspecting } from '@/lib/backlinks/prospecting';
+import { runLinkCheck } from '@/lib/backlinks/tracker';
+import { runBrokenLinkScan } from '@/lib/backlinks/broken-links';
+import { discoverBingBacklinks } from '@/lib/backlinks/bing-webmaster';
 import {
   listMemory, rememberFact, forgetFact, editFact,
   MEMORY_KIND_LABELS, MAX_MEMORY_ITEMS, MAX_MEMORY_LEN,
@@ -1336,6 +1342,7 @@ export async function GET(request: NextRequest) {
   if (action === 'admin-content-pack') return handleAdminContentPack(request, searchParams);
   if (action === 'admin-media-queue') return handleAdminMediaQueue(request, searchParams);
   if (action === 'admin-seeding') return handleAdminSeeding(request);
+  if (action === 'admin-backlinks') return handleAdminBacklinks(request);
   if (action === 'check-bank')  return handleCheckBank(searchParams);
   return err('Invalid action.', 400);
 }
@@ -2043,6 +2050,230 @@ async function handleAdminSeedingDraft(request: NextRequest, body: Record<string
   }
 }
 
+// ============================================================
+// TRACK BACKLINK — admin đọc/ghi 3 bảng backlink_prospects/backlink_content/
+// backlink_links. Nguồn logic ở lib/backlinks/*; ở đây chỉ auth + validate +
+// CRUD mỏng, cùng khuôn với admin-seeding-* ngay phía trên.
+//
+// KHÔNG có action nào gọi ra ngoài (đăng/gửi) — xem đầu
+// _patches/migration-backlinks.sql. `admin-backlink-run` chỉ chạy LẠI đúng
+// những hàm cron 3 route /api/cron/backlink-* đã gọi, để Henry bấm thử ngay
+// thay vì đợi lịch, không phải một đường mới.
+// ============================================================
+
+const BL_PROSPECT_KINDS: BlKind[] = [
+  'directory', 'resource_page', 'broken_link', 'guest_post',
+  'web2', 'social_profile', 'unlinked_mention', 'other',
+];
+
+// ── GET: admin-backlinks — toàn bộ dữ liệu cho panel Backlink. ──
+async function handleAdminBacklinks(request: NextRequest): Promise<Response> {
+  const token = (request.headers.get('Authorization') || '').replace('Bearer ', '').trim();
+  const admin = await verifyAdmin(token);
+  if (!admin) return err('Unauthorized', 403);
+
+  try {
+    const [prospects, content, links] = await Promise.all([
+      blGet<BlProspect>(
+        'backlink_prospects?select=id,kind,name,url,topic,contact_email,notes,status,priority,source,created_at,updated_at' +
+          '&order=status.asc,priority.desc,created_at.desc&limit=300',
+      ),
+      blGet<Record<string, unknown>>(
+        'backlink_content?select=id,prospect_id,kind,title,body,meta,status,created_at' +
+          '&order=status.asc,created_at.desc&limit=150',
+      ),
+      blGet<Record<string, unknown>>(
+        'backlink_links?select=id,prospect_id,source_url,target_url,anchor_text,rel,status,first_seen_at,last_checked_at,notes' +
+          '&order=status.asc,last_checked_at.asc.nullsfirst&limit=300',
+      ),
+    ]);
+    return ok({ prospects, content, links });
+  } catch (e: unknown) {
+    return err((e as Error).message);
+  }
+}
+
+// ── POST: admin-backlink-prospect — thêm/sửa/xoá một cơ hội. ──
+async function handleAdminBacklinkProspect(request: NextRequest, body: Record<string, unknown>): Promise<Response> {
+  const token = (request.headers.get('Authorization') || '').replace('Bearer ', '').trim();
+  const admin = await verifyAdmin(token);
+  if (!admin) return err('Unauthorized', 403);
+
+  const op = String(body.op || 'save').trim();
+  const id = String(body.id || '').trim();
+  if (id && !/^[0-9a-f-]{36}$/i.test(id)) return err('id không hợp lệ', 400);
+
+  if (op === 'delete') {
+    if (!id) return err('Thiếu id', 400);
+    const okDel = await blDelete('backlink_prospects', `id=eq.${id}`);
+    if (!okDel) return err('Không xoá được');
+    return ok({ deleted: true });
+  }
+
+  const name = String(body.name || '').trim();
+  const url = String(body.url || '').trim();
+  const kind = String(body.kind || '').trim() as BlKind;
+  if (!name) return err('Thiếu tên', 400);
+  // Chỉ nhận http(s) — URL này đổ thẳng vào <a href> trong admin.html.
+  if (!/^https?:\/\/[^\s]+$/i.test(url)) return err('URL phải bắt đầu bằng http:// hoặc https://', 400);
+  if (!BL_PROSPECT_KINDS.includes(kind)) return err('kind không hợp lệ', 400);
+
+  const priorityRaw = Number(body.priority);
+  const row: Record<string, unknown> = {
+    kind,
+    name,
+    url,
+    topic: String(body.topic || '').trim() || null,
+    contact_email: String(body.contactEmail || '').trim() || null,
+    notes: String(body.notes || '').trim() || null,
+    priority: Number.isFinite(priorityRaw) ? Math.round(priorityRaw) : 0,
+    updated_at: new Date().toISOString(),
+  };
+  // Tạo mới thêm status/source mặc định; sửa thì KHÔNG đụng status — đổi
+  // status có action riêng, tránh gộp hai việc khác nhau vào một form.
+  if (!id) {
+    row.status = 'new';
+    row.source = 'manual';
+  }
+
+  try {
+    const res = await fetch(
+      id ? `${SUPABASE_URL}/rest/v1/backlink_prospects?id=eq.${id}` : `${SUPABASE_URL}/rest/v1/backlink_prospects`,
+      {
+        method: id ? 'PATCH' : 'POST',
+        headers: { ...SB_HEADERS, Prefer: 'return=representation' },
+        body: JSON.stringify(row),
+        cache: 'no-store',
+      },
+    );
+    if (!res.ok) {
+      const t = await res.text();
+      if (t.includes('backlink_prospects_url_uniq')) return err('URL này đã có trong sổ rồi', 409);
+      return err(t);
+    }
+    const rows = (await res.json()) as unknown[];
+    if (id && !rows.length) return err('Không tìm thấy cơ hội với id đó', 404);
+    return ok({ saved: true });
+  } catch (e: unknown) {
+    return err((e as Error).message);
+  }
+}
+
+// ── POST: admin-backlink-content — chốt số phận một bản nháp (used/skip),
+// hoặc thêm 1 mục cho phép SỬA TAY nội dung trước khi Copy. ──
+async function handleAdminBacklinkContent(request: NextRequest, body: Record<string, unknown>): Promise<Response> {
+  const token = (request.headers.get('Authorization') || '').replace('Bearer ', '').trim();
+  const admin = await verifyAdmin(token);
+  if (!admin) return err('Unauthorized', 403);
+
+  const contentId = String(body.contentId || '').trim();
+  const decision = String(body.decision || '').trim();
+  if (!/^[0-9a-f-]{36}$/i.test(contentId)) return err('contentId không hợp lệ', 400);
+  if (decision !== 'used' && decision !== 'skip') return err('decision phải là used hoặc skip', 400);
+
+  const bodyText = typeof body.body === 'string' ? body.body.trim() : '';
+  const title = typeof body.title === 'string' ? body.title.trim() : '';
+  const patch: Record<string, unknown> = { status: decision === 'used' ? 'used' : 'skipped', updated_at: new Date().toISOString() };
+  // Giữ lại bản đã sửa tay — nhật ký phải nói đúng thứ THẬT SỰ được dùng.
+  if (bodyText) patch.body = bodyText;
+  if (title) patch.title = title;
+
+  const rows = await fetch(`${SUPABASE_URL}/rest/v1/backlink_content?id=eq.${contentId}&status=eq.draft`, {
+    method: 'PATCH',
+    headers: { ...SB_HEADERS, Prefer: 'return=representation' },
+    body: JSON.stringify(patch),
+  });
+  if (!rows.ok) return err(await rows.text());
+  const updated = (await rows.json()) as { prospect_id?: string }[];
+  if (!updated.length) return err('Không tìm thấy bản nháp đang chờ với id đó (có thể đã xử lý rồi)', 404);
+
+  // used → cơ hội coi như đã đi (Henry tự tay nộp/gửi rồi); skip → quay lại
+  // 'new' để lượt content sau soạn phương án khác, không kẹt mãi ở content_ready.
+  if (updated[0].prospect_id) {
+    await blPatch('backlink_prospects', `id=eq.${updated[0].prospect_id}`, {
+      status: decision === 'used' ? 'submitted' : 'new',
+      updated_at: new Date().toISOString(),
+    });
+  }
+  return ok({ updated: true, status: patch.status });
+}
+
+// ── POST: admin-backlink-link — thêm/xoá một link đang theo dõi bằng tay. ──
+async function handleAdminBacklinkLink(request: NextRequest, body: Record<string, unknown>): Promise<Response> {
+  const token = (request.headers.get('Authorization') || '').replace('Bearer ', '').trim();
+  const admin = await verifyAdmin(token);
+  if (!admin) return err('Unauthorized', 403);
+
+  const op = String(body.op || 'save').trim();
+  const id = String(body.id || '').trim();
+  if (id && !/^[0-9a-f-]{36}$/i.test(id)) return err('id không hợp lệ', 400);
+
+  if (op === 'delete') {
+    if (!id) return err('Thiếu id', 400);
+    const okDel = await blDelete('backlink_links', `id=eq.${id}`);
+    if (!okDel) return err('Không xoá được');
+    return ok({ deleted: true });
+  }
+
+  const sourceUrl = String(body.sourceUrl || '').trim();
+  const targetUrl = String(body.targetUrl || 'https://www.tuviminhbao.com/').trim();
+  if (!/^https?:\/\/[^\s]+$/i.test(sourceUrl)) return err('URL nguồn phải bắt đầu bằng http:// hoặc https://', 400);
+  if (!/^https?:\/\/[^\s]+$/i.test(targetUrl)) return err('URL đích không hợp lệ', 400);
+
+  const row: Record<string, unknown> = {
+    source_url: sourceUrl,
+    target_url: targetUrl,
+    anchor_text: String(body.anchorText || '').trim() || null,
+    notes: String(body.notes || '').trim() || null,
+  };
+  const prospectId = String(body.prospectId || '').trim();
+  if (prospectId && /^[0-9a-f-]{36}$/i.test(prospectId)) row.prospect_id = prospectId;
+
+  try {
+    const res = await fetch(id ? `${SUPABASE_URL}/rest/v1/backlink_links?id=eq.${id}` : `${SUPABASE_URL}/rest/v1/backlink_links`, {
+      method: id ? 'PATCH' : 'POST',
+      headers: { ...SB_HEADERS, Prefer: 'return=representation' },
+      body: JSON.stringify(row),
+      cache: 'no-store',
+    });
+    if (!res.ok) {
+      const t = await res.text();
+      if (t.includes('backlink_links_uniq')) return err('Link này đã được theo dõi rồi', 409);
+      return err(t);
+    }
+    const rows = (await res.json()) as unknown[];
+    if (id && !rows.length) return err('Không tìm thấy link với id đó', 404);
+    return ok({ saved: true });
+  } catch (e: unknown) {
+    return err((e as Error).message);
+  }
+}
+
+// ── POST: admin-backlink-run — bấm chạy tay MỘT trong bốn việc cron làm sẵn.
+// Dùng lại ĐÚNG hàm mà route cron gọi — không phải một đường thứ hai. `check`
+// gọi thêm discoverBingBacklinks() TRƯỚC runLinkCheck(), khớp đúng thứ tự
+// app/api/cron/backlink-check/route.ts đang làm. ──
+async function handleAdminBacklinkRun(request: NextRequest, body: Record<string, unknown>): Promise<Response> {
+  const token = (request.headers.get('Authorization') || '').replace('Bearer ', '').trim();
+  const admin = await verifyAdmin(token);
+  if (!admin) return err('Unauthorized', 403);
+
+  const kind = String(body.kind || '').trim();
+  try {
+    if (kind === 'prospect') return ok(await runProspecting());
+    if (kind === 'content') return ok(await buildContentDrafts());
+    if (kind === 'check') {
+      const bing = await discoverBingBacklinks();
+      const r = await runLinkCheck();
+      return ok({ bing, ...r });
+    }
+    if (kind === 'brokenlinks') return ok(await runBrokenLinkScan());
+    return err('kind phải là prospect, content, check hoặc brokenlinks', 400);
+  } catch (e: unknown) {
+    return err((e as Error).message);
+  }
+}
+
 // ── GET: admin-autopilot-log (M0.6, track Marketing Autopilot) — nhật ký
 // hành động autopilot (shadow/live) + trạng thái cấu hình hiện tại. THUẦN
 // ĐỌC — không có action bật/tắt qua API này có chủ đích (rủi ro cao, Henry
@@ -2076,9 +2307,11 @@ async function handleAdminAutopilotLog(request: NextRequest): Promise<Response> 
 }
 
 // ── GET: admin-dashboard-v2 (Engagement + Content Revenue + At-risk + Content Production) ──
-// Đọc 3 RPC mới (dashboard_engagement/dashboard_content_revenue/dashboard_at_risk,
-// migration-dashboard-v2.sql) + đếm nhanh 3 pipeline nội dung (count=exact, không
-// tải nguyên bảng — khác handleAdminContentBoard vốn tải hàng để dựng "recent").
+// Đọc RPC dashboard_engagement/dashboard_content_revenue/dashboard_at_risk
+// (migration-dashboard-v2.sql) + đếm nhanh 3 pipeline nội dung (count=exact,
+// không tải nguyên bảng — khác handleAdminContentBoard vốn tải hàng để dựng
+// "recent") + channel_error_rate + dashboard_margin + js_error_top (lỗi JS
+// client, migration-js-error.sql — thay phần Sentry đang gỡ dần).
 async function handleAdminDashboardV2(request: NextRequest): Promise<Response> {
   const token = (request.headers.get('Authorization') || '').replace('Bearer ', '').trim();
   const admin = await verifyAdmin(token);
@@ -2097,7 +2330,7 @@ async function handleAdminDashboardV2(request: NextRequest): Promise<Response> {
   };
 
   try {
-    const [engagement, contentRevenue, atRisk, khTotal, kh7d, ncTotal, nc7d, ytTotal, yt7d, channelHealth, margin] = await Promise.all([
+    const [engagement, contentRevenue, atRisk, khTotal, kh7d, ncTotal, nc7d, ytTotal, yt7d, channelHealth, margin, jsErrors] = await Promise.all([
       callRpc('dashboard_engagement', { p_days: 30 }),
       callRpc('dashboard_content_revenue', { p_from: from.toISOString(), p_to: to.toISOString() }),
       callRpc('dashboard_at_risk', { p_idle_days: 14, p_min_events: 3, p_limit: 20 }),
@@ -2109,6 +2342,7 @@ async function handleAdminDashboardV2(request: NextRequest): Promise<Response> {
       countExact(`van_dap?select=id&limit=1&publish_status=eq.published&created_at=gte.${sevenDaysAgo}`),
       callRpc('channel_error_rate', { p_hours: 24 }),
       callRpc('dashboard_margin', { p_from: from.toISOString(), p_to: to.toISOString() }),
+      callRpc('js_error_top', { p_hours: 24, p_limit: 30 }),
     ]);
 
     return ok({
@@ -2117,6 +2351,7 @@ async function handleAdminDashboardV2(request: NextRequest): Promise<Response> {
       atRisk,
       channelHealth,
       margin,
+      jsErrors,
       content: {
         khaoLuan:  { total: khTotal, last7d: kh7d },
         nghienCuu: { total: ncTotal, last7d: nc7d },
@@ -2591,6 +2826,10 @@ export async function POST(request: NextRequest) {
   if (action === 'admin-content-edit') return handleAdminContentEdit(request, body);
   if (action === 'admin-seeding-group') return handleAdminSeedingGroup(request, body);
   if (action === 'admin-seeding-draft') return handleAdminSeedingDraft(request, body);
+  if (action === 'admin-backlink-prospect') return handleAdminBacklinkProspect(request, body);
+  if (action === 'admin-backlink-content') return handleAdminBacklinkContent(request, body);
+  if (action === 'admin-backlink-link') return handleAdminBacklinkLink(request, body);
+  if (action === 'admin-backlink-run') return handleAdminBacklinkRun(request, body);
   if (action === 'admin-khao-luan-topics') return handleAdminKhaoLuanTopics(request, body);
   if (action === 'admin-nghien-cuu-topics') return handleAdminNghienCuuTopics(request, body);
   if (action === 'admin-mcp-update') return handleAdminMcpUpdate(request, body);

@@ -104,8 +104,29 @@
     // phải vẽ cùng một glyph cho cùng một công cụ.
     'heart-handshake': '<path d="M19.414 14.414C21 12.828 22 11.5 22 9.5a5.5 5.5 0 0 0-9.591-3.676.6.6 0 0 1-.818.001A5.5 5.5 0 0 0 2 9.5c0 2.3 1.5 4 3 5.5l5.535 5.362a2 2 0 0 0 2.879.052 2.12 2.12 0 0 0-.004-3 2.124 2.124 0 1 0 3-3 2.124 2.124 0 0 0 3.004 0 2 2 0 0 0 0-2.828l-1.881-1.882a2.41 2.41 0 0 0-3.409 0l-1.71 1.71a2 2 0 0 1-2.828 0 2 2 0 0 1 0-2.828l2.823-2.762"/>',
   };
+  /** Bóc phần bên trong `<svg>…</svg>` — dùng khi mượn icon đã bọc sẵn thẻ
+   *  riêng (bộ dùng chung của nav.js) để nhét vào khung svg của chính mình. */
+  function svgInner(html) {
+    var m = /^<svg[^>]*>([\s\S]*)<\/svg>$/.exec(html || '');
+    return m ? m[1] : '';
+  }
+  // 🔑 `tool_pricing.icon` phần lớn là EMOJI THÔ (🔮 🖼️ 🏯 ✍️ ☉ …), không phải
+  // tên icon — bảng `ICONS` bên trên chỉ có ~30 mục nên hầu hết rơi vào
+  // `fallback`. Trước khi trả fallback, mượn bộ giải mã DÙNG CHUNG của nav.js
+  // (88 icon Lucide + bảng quy đổi emoji→icon) — nó đã nạp sẵn ở chế độ
+  // chỉ-icon trên MỌI trang shell (`<script src="/nav.js" data-icons-only>`),
+  // và `cong-cu.html` đã làm đúng việc này từ trước — sidebar chỉ quên làm
+  // theo, nên mới sinh ra cảnh "cái hiện icon riêng, cái hiện chấm tròn".
+  function iconInner(name, fallback) {
+    if (ICONS[name]) return ICONS[name];
+    if (window.iconHtml) {
+      var got = svgInner(window.iconHtml(name));
+      if (got) return got;
+    }
+    return fallback;
+  }
   function svg(name, cls) {
-    return '<svg class="' + (cls || 'ic') + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">' + (ICONS[name] || ICONS.dot) + '</svg>';
+    return '<svg class="' + (cls || 'ic') + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">' + iconInner(name, ICONS.dot) + '</svg>';
   }
   var CHEV = '<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>';
   function esc(s) { return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
@@ -2214,7 +2235,7 @@
   }
   var cSel = 0, cShown = CMDS;
   buildCmds();
-  function cmdIcon(n) { return '<svg class="ri" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">' + (ICONS[n] || ICONS.grid) + '</svg>'; }
+  function cmdIcon(n) { return '<svg class="ri" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">' + iconInner(n, ICONS.grid) + '</svg>'; }
   function cRender() {
     var el = document.getElementById('cmdkList'); if (!el) return;
     if (!cShown.length) { el.innerHTML = '<div class="cmdk-empty">Không tìm thấy.</div>'; return; }
