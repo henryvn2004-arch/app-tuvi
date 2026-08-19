@@ -187,6 +187,19 @@ export function todayVN(): { y: number; m: number; d: number } {
   return { y: t.getUTCFullYear(), m: t.getUTCMonth() + 1, d: t.getUTCDate() };
 }
 
+/**
+ * Tháng/năm ÂM LỊCH của HÔM NAY (giờ VN) — mốc cho rail chat quy đổi câu hỏi
+ * kiểu "tháng Giêng", "tháng 7 âm lịch": model không có phép đổi ÂM→DƯƠNG
+ * (repo không có hàm đó — xem `lunarMonthsFrom`), nhưng biết hôm nay đang ở
+ * tháng ÂM nào thì suy được XẤP XỈ tháng dương tương ứng để gọi `tra_nguyet_van`,
+ * và tool sẽ tự chốt lại đúng ranh giới tháng âm dù mốc đưa vào hơi lệch.
+ */
+export function todayVNLunar(): { thangAL: number; namAL: number; isLeap: boolean } {
+  const t = todayVN();
+  const l = solarToLunar(t.d, t.m, t.y);
+  return { thangAL: l.month, namAL: l.year, isLeap: !!l.isLeap };
+}
+
 function canIdxOfDay(canChiNgay: string): number {
   const i = CAN.indexOf(canChiNgay.split(' ')[0] || '');
   return i < 0 ? 0 : i;
@@ -518,6 +531,36 @@ export function lunarMonthsFrom(dd: number, mm: number, yy: number, count: numbe
     cur = nxt;
   }
   return out;
+}
+
+/**
+ * '15/2/2026' — dạng ngày người Việt đọc, KHÔNG pad số 0.
+ *
+ * Dời từ `van-han-12.ts` sang đây (2026-08-19, vá `tra_nguyet_van` của rail):
+ * cả `tools.ts` lẫn `van-han-12.ts` đều cần nhãn này mà `tools.ts` không được
+ * import ngược `van-han-12.ts` (nó vốn đã import `describeHanCungRich` FROM
+ * `tools.ts` — import ngược lại là vòng lặp). `van-ngay.ts` không phụ thuộc
+ * cả hai nên là chỗ đứng chung an toàn duy nhất.
+ */
+export function dmy(x: { d: number; m: number; y: number }): string {
+  return `${x.d}/${x.m}/${x.y}`;
+}
+
+/** 'Tháng 6 nhuận ÂL' — nhãn ngắn. */
+export function nhanThangAL(s: Pick<LunarMonthSpan, 'thangAL' | 'isLeap'>): string {
+  return `Tháng ${s.thangAL}${s.isLeap ? ' nhuận' : ''} ÂL`;
+}
+
+/**
+ * 'Tháng 1 ÂL (15/2/2026 – 13/3/2026)'.
+ *
+ * 🔑 Khoảng ngày dương KHÔNG phải trang trí: người đọc sống theo lịch dương, nói
+ * "tháng 1 âm" trơ trọi là bắt họ tự đi tra. Đây là nguồn DUY NHẤT dựng nhãn —
+ * trang, mục lục, prompt của tool 12 tháng LẪN câu trả lời rail đều đọc nó nên
+ * không bề mặt nào nói lệch nhau.
+ */
+export function nhanThangALDay(s: LunarMonthSpan): string {
+  return `${nhanThangAL(s)} (${dmy(s.tu)} – ${dmy(s.den)})`;
 }
 
 /**

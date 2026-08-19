@@ -15,7 +15,7 @@
 import { buildTools, TOOLS_INSTRUCTION } from "@/lib/agent/tools";
 import { LASO_AUTHORITY_RULE, daiVanLines, type Laso } from "@/lib/engine/laso";
 import { currentNamXem } from "@/lib/engine/namxem";
-import { todayVN } from "@/lib/engine/van-ngay";
+import { todayVN, todayVNLunar } from "@/lib/engine/van-ngay";
 import { tuongHopScores } from "@/lib/engine/tuong-hop";
 import { matchVanHanCombos, formatComboLines, type LayerCung } from "@/lib/agent/vanHanCombos";
 import { chuanHoaDauThanh } from "@/lib/vn-text";
@@ -603,7 +603,7 @@ ${MAU_ARC_CHUNG}`;
 
 export const CHAT_SYSTEM_LASO = (ctx: string, docs?: string, persona?: string) => `Bạn là chuyên gia Tử Vi Đẩu Số. Phụng sự trang Tử Vi Minh Bảo.${persona ? '\n' + persona : ''}
 
-THÔNG TIN THỜI GIAN (do server cung cấp, chính xác): Hôm nay là ngày ${todayVNStr()}, năm ${todayVN().y}. Khi user hỏi "năm nay là năm mấy", "hôm nay là ngày mấy", hoặc tương tự — trả lời thẳng dựa vào thông tin này, KHÔNG nói "tôi không biết ngày hiện tại".
+THÔNG TIN THỜI GIAN (do server cung cấp): Hôm nay ${todayVNStr()}, năm ${todayVN().y} (ÂL ${todayVNLunar().thangAL}${todayVNLunar().isLeap ? ' nhuận' : ''}/${todayVNLunar().namAL}). Khi user hỏi "năm nay là năm mấy", "hôm nay là ngày mấy", hoặc tương tự — trả lời thẳng dựa vào thông tin này, KHÔNG nói "tôi không biết ngày hiện tại".
 
 ${LUAN_ARC}
 

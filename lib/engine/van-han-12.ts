@@ -30,10 +30,20 @@
 import {
   lunarMonthsFrom,
   resolveNguyetHanForLunarMonth,
+  dmy,
+  nhanThangAL,
+  nhanThangALDay,
   type LunarMonthSpan,
 } from '@/lib/engine/van-ngay';
-import { describeHanCungRich, hanClusterLayers } from '@/lib/agent/tools';
-import { matchVanHanCombos, formatComboLines, type LayerCung } from '@/lib/agent/vanHanCombos';
+import { hanClusterLayers, describeThangForLLM } from '@/lib/agent/tools';
+import { matchVanHanCombos, type LayerCung } from '@/lib/agent/vanHanCombos';
+
+// `dmy`/`nhanThangAL`/`nhanThangALDay` dời sang `van-ngay.ts` (2026-08-19, vá
+// rail `tra_nguyet_van`) — re-export ở đây để `app/api/van-han-nam/route.ts`
+// (import chúng TỪ file này) không phải sửa gì. `describeThangForLLM` cũng dời
+// sang `tools.ts` cùng lý do (nó cần `describeHanCungRich`, mà file đó không
+// được import ngược `van-han-12.ts`) — re-export tương tự.
+export { dmy, nhanThangAL, nhanThangALDay, describeThangForLLM };
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 type AnyRec = Record<string, any>;
@@ -101,27 +111,6 @@ function chinhTinhOf(p: AnyRec | undefined): string[] {
     .filter(Boolean);
 }
 
-/** '15/2/2026' — dạng ngày người Việt đọc, KHÔNG pad số 0. */
-export function dmy(x: { d: number; m: number; y: number }): string {
-  return `${x.d}/${x.m}/${x.y}`;
-}
-
-/** 'Tháng 6 nhuận ÂL' — nhãn ngắn. */
-export function nhanThangAL(s: Pick<LunarMonthSpan, 'thangAL' | 'isLeap'>): string {
-  return `Tháng ${s.thangAL}${s.isLeap ? ' nhuận' : ''} ÂL`;
-}
-
-/**
- * 'Tháng 1 ÂL (15/2/2026 – 13/3/2026)'.
- *
- * 🔑 Khoảng ngày dương KHÔNG phải trang trí: người đọc sống theo lịch dương, nói
- * "tháng 1 âm" trơ trọi là bắt họ tự đi tra. Đây là nguồn DUY NHẤT dựng nhãn —
- * trang, mục lục và prompt cùng đọc nó nên ba bề mặt không nói lệch nhau.
- */
-export function nhanThangALDay(s: LunarMonthSpan): string {
-  return `${nhanThangAL(s)} (${dmy(s.tu)} – ${dmy(s.den)})`;
-}
-
 /** 12 tháng âm kể từ tháng âm chứa ngày dương dd/mm/yy. */
 export function spans12(dd: number, mm: number, yy: number): LunarMonthSpan[] {
   return lunarMonthsFrom(dd, mm, yy, SO_THANG);
@@ -186,38 +175,4 @@ export function buildKhung12Thang(lasoData: AnyRec, dd: number, mm: number, yy: 
     duongTu: dmy(first.tu), duongDen: dmy(last.den),
     thangs,
   };
-}
-
-/**
- * Khối dữ liệu MỘT THÁNG ÂM cho prompt — cùng ngôn ngữ với tool `tra_nguyet_van`
- * của rail (dùng chung `describeHanCungRich` + `formatComboLines`) để hai bề mặt
- * không nói khác nhau về cùng một tháng.
- */
-export function describeThangForLLM(lasoData: AnyRec, s: LunarMonthSpan): string {
-  const rs = resolveNguyetHanForLunarMonth(lasoData, s.thangAL, s.namAL);
-  const head = `=== ${nhanThangAL(s)} năm ${s.namAL} — dương lịch ${dmy(s.tu)} đến ${dmy(s.den)} (${s.soNgay} ngày) ===\n`;
-  if (!rs.ok) return head + rs.error;
-
-  const palaces: AnyRec[] = lasoData.palaces || [];
-  let out = head;
-  out += `Nguyệt hạn KHÔNG có điểm riêng — luận theo CÁCH CỤC + sao (tọa thủ + tam hợp xung chiếu) của cung hạn, đại vận chỉ giới hạn biên độ.\n`;
-  out += `Tháng âm này nằm TRỌN trong năm ÂL ${s.namAL} ⇒ chỉ MỘT nền tiểu hạn, MỘT cung nguyệt hạn cho cả tháng — không chia nửa đầu / nửa sau.\n`;
-
-  const dv = (lasoData.daiVans || [])[rs.tv?.dvIdx];
-  if (dv) {
-    const dvP = palaces[dv.cungIdx];
-    out += `- KHUNG ĐẠI VẬN ${dv.diaChi} (${dv.tuoiStart}–${dv.tuoiEnd} tuổi)${dvP?.cungName ? `, đóng tại cung ${dvP.cungName}` : ''}` +
-      `${dv.scoring?.tong != null ? `: điểm ${dv.scoring.tong}/10 ${dv.scoring.flag || ''}` : ''} — chỉ GIỚI HẠN BIÊN ĐỘ, KHÔNG quyết định tốt/xấu của tháng.\n`;
-  }
-  out += `- Nền năm (ÂL ${s.namAL}, tuổi ${rs.tv.tuoi}): tiểu hạn cung ${rs.tv.tieuHanCung}, lưu niên đại hạn cung ${rs.tv.luuNienCung}.\n`;
-  out += `- Nguyệt hạn cung ${palaces[rs.nguyetHanIdx]?.cungName || '?'}:\n    ${describeHanCungRich(palaces, rs.nguyetHanIdx)}\n`;
-
-  const layers: LayerCung[] = [
-    { label: 'đại vận', palace: dv ? palaces[dv.cungIdx] : null },
-    ...hanClusterLayers(palaces, rs.tieuHanIdx, 'tiểu hạn'),
-    ...hanClusterLayers(palaces, rs.luuNienIdx, 'lưu niên'),
-    ...hanClusterLayers(palaces, rs.nguyetHanIdx, 'nguyệt hạn'),
-  ];
-  out += formatComboLines(matchVanHanCombos(layers));
-  return out;
 }
