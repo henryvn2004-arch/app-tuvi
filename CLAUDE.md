@@ -68,16 +68,104 @@ chẻ nửa đầu/nửa sau).
   emit ra `/tmp` là gãy — hook `Module._resolveFilename` phải xử lý riêng nhánh đó.
 
 ### CÒN LẠI
-- ⚠️ **Hai bản Henry đã mua hôm nay mang slug CŨ** (`van-han-nam-2026-08-…`) nên
-  mở lại sẽ thành bản chưa mua — nội dung của chúng dựng theo khung dương, tức
-  đúng thứ vừa bỏ. Muốn hoàn 100 Lượng thì qua RPC `add_credits` (KHÔNG sửa thẳng
-  `user_credits.balance` — sổ giao dịch phải giải thích được số dư).
-- **Rail `tra_nguyet_van` vẫn hỏi theo tháng DƯƠNG** ⇒ hỏi sâu một tháng trong
-  rail vẫn nhận bản chẻ 2 đoạn. Cùng cổ pháp, khác cách trình bày. CỐ Ý chưa đụng:
-  đó là đường dùng chung của mọi tool lá số, đổi là đổi hành vi rất rộng.
+- ✅ **ĐÃ HOÀN.** Hai bản Henry mua sáng hôm bung khung sang tháng âm mang slug
+  CŨ (`van-han-nam-2026-08-…`) nên mở lại thành bản chưa mua. Hoàn qua RPC
+  `add_credits` (**KHÔNG** sửa thẳng `user_credits.balance`) + một dòng
+  `credit_transactions type='refund'` giải thích số dư: `+100` (6.056 → 6.156).
+- ✅ **ĐÃ SỬA — xem mục "Rail `tra_nguyet_van` đổi sang tháng ÂM" ngay dưới.**
 - 🔴 **Vẫn CHƯA gọi LLM thật lượt nào** — container không có key. Chỗ đáng đọc
   đầu tiên trên prod: model có bám đúng quãng ngày dương không, và 12 phần có lặp
   ý nhau không (12 prompt cùng khuôn, chỉ khác dữ liệu cung).
+
+## 🌙 Rail `tra_nguyet_van` đổi sang tháng ÂM — nốt "đường dùng chung" đã né ở PR trước (2026-08-19, PR sau)
+
+Henry: *"Rail vẫn tra nguyệt vận theo tháng dương, nên hỏi sâu một tháng trong
+khung chat vẫn nhận bản chẻ hai đoạn. Cùng cổ pháp, khác cách trình bày. Em cố ý
+không đụng vì đó là đường dùng chung của mọi tool lá số. >> sửa cho rail luôn đi,
+luận theo tháng âm lịch và ghi chú ngày dương lịch."*
+
+### 🔑 KHÔNG viết lại luật — chỉ đổi CÁCH GỌI cùng một hàm đã có
+`describeThangForLLM` (dựng khối chữ "một tháng âm ra sao" cho LLM đọc) đã tồn
+tại từ PR trước, dùng cho tool đứng riêng "Vận Hạn 12 Tháng Tới". Chú thích của
+nó lúc đó đã tự nói trước: *"dùng chung với rail chat + thẻ Vận Ngày"* — nay mới
+thật sự nối dây. `execTraNguyetVan` (rail) bỏ hẳn `resolveNguyetHanSegments`
+(hàm trả 1–2 ĐOẠN theo tháng dương), gọi `lunarMonthsFrom(ngay, thang, nam, 1)`
+lấy ĐÚNG một `LunarMonthSpan` rồi đưa thẳng cho `describeThangForLLM`. Không có
+nhánh "2 đoạn" nào để mà chọn nữa — mỗi lượt gọi chốt MỘT tháng âm.
+
+### 🔴 Đổi vị trí hàm để TRÁNH VÒNG LẶP IMPORT — không phải tùy hứng
+`describeThangForLLM` (và `dmy`/`nhanThangAL`/`nhanThangALDay`) dời từ
+`van-han-12.ts` sang **`lib/agent/tools.ts`** (rồi re-export ngược lại để
+`app/api/van-han-nam/route.ts` không phải sửa một dòng import nào). Lý do:
+`describeThangForLLM` cần `describeHanCungRich` (định nghĩa trong `tools.ts`),
+mà `van-han-12.ts` đã import NGƯỢC `describeHanCungRich`/`hanClusterLayers` TỪ
+`tools.ts` — đặt hàm dùng chung ở `van-han-12.ts` thì `tools.ts` import nó về là
+vòng lặp `tools.ts → van-han-12.ts → tools.ts`. `dmy`/`nhanThangAL`/
+`nhanThangALDay` không phụ thuộc gì nên dời xuống tầng THẤP NHẤT (`van-ngay.ts`,
+nơi cả hai file kia đều đã import từ đó) — đúng chỗ đứng chung an toàn duy nhất.
+
+### 🔑 Đầu vào tool: vẫn là NGÀY/THÁNG/NĂM DƯƠNG (mốc), không phải tháng ÂM trực tiếp
+Cân nhắc cho model gõ thẳng tháng ÂM (`thangAL`/`namAL`) — **bỏ**: repo không có
+hàm ÂM→DƯƠNG nào (đã xác nhận bằng grep, và chính CLAUDE.md mục Vận Hạn 12 Tháng
+đã ghi rõ "form có ô `gs-lich` mà cả repo không có hàm âm→dương nào" là một cửa
+CHẶN, không tự chế). Xây thêm một phép quy đổi chưa verify chỉ để phục vụ đúng
+tool này là rủi ro không cân xứng.
+- **Giữ mốc DƯƠNG, thêm `ngay` (tùy chọn, mặc định 15)** vào schema
+  `tra_nguyet_van`, mirror đúng khuôn `tra_nhat_van` đã có sẵn (model vốn đã
+  quen suy luận theo ngày/tháng/năm dương đầy đủ). Không truyền hoặc truyền rác
+  → tool tự lấy **ngày 15** làm mốc (giữa tháng, né rơi đúng đầu/cuối tháng — nơi
+  hay có ranh giới âm lịch).
+- **Hỏi "tháng này"** → dặn model dùng ĐÚNG ngày/tháng/năm dương của HÔM NAY.
+- **Hỏi thẳng bằng tháng ÂM** ("tháng Giêng", "tháng 7 âm lịch", "tháng Chạp") →
+  dặn model TỰ QUY ĐỔI XẤP XỈ sang tháng dương dựa vào tháng ÂM hôm nay, rồi
+  tool tự chốt lại đúng ranh giới — mốc hơi lệch không sao vì
+  `lunarMonthsFrom` luôn snap về ĐÚNG tháng âm chứa ngày đưa vào.
+- ⇒ Thêm `todayVNLunar()` (`van-ngay.ts`, gọi `solarToLunar` trên `todayVN()`)
+  và tiêm vào dòng THÔNG TIN THỜI GIAN của `CHAT_SYSTEM_LASO`: *"Hôm nay
+  19/08/2026, năm 2026 (ÂL 7/2026)"* — cho model một MỐC ÂM để quy đổi tương
+  đối, giống hệt cách nó vốn đã suy luận tương đối trên mốc DƯƠNG.
+
+### 🧷 Nới trần `check:prompt` — KHÔNG, cắt chữ để không phải nới
+`CHAT_SYSTEM_LASO` chạm trần 7.000 ký tự (7.199) ngay sau khi thêm câu ÂL. Đúng
+luật bộ dò này tự đặt ra (*"CẮT chỗ khác trước khi thêm khối mới… phình lên là
+mọi luật trong đó loãng đi"*) — không nới trần. Rút gọn câu vừa thêm qua vài
+vòng đo-lại (bỏ "chính xác" thừa, bỏ "là ngày", nén phần ÂL còn `(ÂL 7/2026)`
+thay vì viết đủ chữ "tháng… năm… ÂM LỊCH") → **6.994/7.000**, xanh mà không đụng
+một luật cũ nào.
+
+### Verify
+`tsc` 0 lỗi · `lint` 0 lỗi/77 warning = đúng mốc nền · `prettier --check` sạch ·
+**22/22 bộ dò**, gồm `check:prompt` (đúng bộ dò suýt chặn lượt vá này) và
+`check:laso`/`check:railfields`/`check:railwrap` (không đứt vì hàm dùng chung bị
+dời chỗ).
+- **500 assertion trên MODULE THẬT** (biên dịch `tools.ts`+`van-han-12.ts`+
+  `van-ngay.ts`+`laso.ts`, hook `Module._resolveFilename` cho `tuvi-engine/dist`
+  và alias `@/`, 2 lá số thật): `todayVNLunar()` khớp `solarToLunar` trực tiếp ·
+  **quét 24 tháng dương liên tiếp × 2 lá số, gọi cả ngày=3 lẫn ngày=28 trong
+  CÙNG một tháng dương** — 42/48 lượt xác nhận ĐỘC LẬP bằng `solarToLunar` là
+  tháng dương đó thật sự bị cắt ngang, và ở mọi ca output **0 lần chữ "ĐOẠN"**,
+  luôn đúng khuôn nhãn `=== Tháng N[ nhuận] ÂL năm YYYY — dương lịch d/m/yyyy đến
+  d/m/yyyy (K ngày) ===`, luôn có câu "không chia nửa đầu / nửa sau" · `ngay`
+  rác/âm/ngoài phạm vi/bỏ trống đều ra **kết quả giống hệt** `ngay:15` · thiếu
+  `thang`/`nam` → báo lỗi thân thiện, không throw · **`describeThangForLLM`/
+  `dmy`/`nhanThangAL`/`nhanThangALDay` re-export từ `van-han-12.ts` là ĐÚNG cùng
+  function reference**, không phải bản chép lại · `buildKhung12Thang` (tool đứng
+  riêng) không hồi quy sau khi hàm dùng chung bị dời chỗ · schema
+  `tra_nguyet_van` đúng `required:["thang","nam"]` + có `ngay` tùy chọn, mô tả
+  hết nhắc "2 đoạn" · `TOOLS_INSTRUCTION` hết chữ "2 ĐOẠN", có "MỘT khối duy
+  nhất" và ví dụ "tháng Giêng".
+
+### CÒN LẠI
+- 🔴 **MCP tool `van_han` (`lib/mcp/tools/van-han.ts`, phục vụ Claude Desktop/
+  client MCP ngoài, KHÁC rail của website) VẪN trả `nguyet_han.doan[]` kiểu CŨ**
+  — nó gọi cùng `resolveNguyetHanSegments` chưa đụng. CỐ Ý chưa đổi: đây là
+  schema JSON có cấu trúc cho client BÊN NGOÀI đọc, không phải văn bản cho LLM
+  nội bộ diễn giải — đổi shape mảng `doan[]` thành một khối là phá hợp đồng của
+  bất kỳ ai đang tích hợp theo tài liệu tool hiện tại. Cần quyết định RIÊNG (và
+  version-bump có chủ đích) nếu muốn đồng bộ nốt bề mặt này.
+- **Chưa gọi LLM thật lượt nào** — verify dừng ở tầng dữ liệu vào prompt + tầng
+  gọi hàm. Henry hỏi rail sâu một tháng trên prod rồi đọc câu trả lời mới là
+  phép thử thật cuối cùng: có còn thấy "nửa đầu tháng… nửa sau tháng…" không.
 
 ## ⏱️ Timeout 30 giây: KHÔNG phải đường tiền, và engine vô can (2026-08-19, cùng PR)
 
