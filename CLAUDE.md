@@ -1,5 +1,96 @@
 # CLAUDE.md — Context cho Claude Code
 
+## 📡 BẢN ĐỒ 8 KÊNH SOCIAL — audit trước khi ráp Telegram + vá Facebook (2026-08-19)
+
+Henry: *"Ráp social channels theo bản đồ 8 kênh… bắt đầu bằng Telegram channel,
+rồi vá token Facebook."* Bản đồ này **CHƯA TỪNG có trong file** — đo lại từ đầu
+rồi ghi ra đây làm điểm tựa DUY NHẤT cho track kênh, để phiên sau khỏi phải đào
+lại `lib/media/publish.ts` + `lib/channels/*` từ số không.
+
+### 🔑 8 = 6 kênh ĐĂNG (posting) + 2 kênh CHAT (Messenger · WhatsApp)
+Telegram **đếm một lần** dù có hai vai (bot DM đã sống từ lâu, channel-posting
+thì chưa) — cùng một `TELEGRAM_BOT_TOKEN`, khác nhau ở đích gửi.
+
+| # | Kênh | Vai | Trạng thái (đo thật 19/08) | Chặn ở đâu |
+|---|---|---|---|---|
+| 1 | **Facebook Page** | đăng | 🔴 **54 bài `queued`, 0 `live`** | token chết — `code 190 "session is invalid because the user logged out"`, lượt thử gần nhất **18/08** vẫn dính |
+| 2 | Instagram | đăng | ⚪ chưa bật (`social.channels` chỉ có `["facebook"]`) | thiếu `IG_USER_ID`+`IG_ACCESS_TOKEN`, cần IG Business đã liên kết Page |
+| 3 | Threads | đăng | ⚪ chưa bật | thiếu `THREADS_USER_ID`+`THREADS_ACCESS_TOKEN` (token RIÊNG, không dùng chung Facebook) |
+| 4 | **Telegram (channel-posting)** | đăng | ⚪ chưa bật — **code 100% sẵn sàng** | chỉ thiếu việc tay: bot làm admin channel + `TELEGRAM_CHANNEL_ID` |
+| 5 | TikTok | đăng | ⚪ **chưa từng cấp** — `app_config` không có khoá `tiktok.token` | cần đủ 3 thứ độc lập: quyền `video.publish` đã duyệt · miền bucket `clips` đã verify · cặp token (xem `docs/TIKTOK-TOKEN.md`) |
+| 6 | **YouTube** | đăng | ✅ **SỐNG** — 47 `live` (mới nhất 18/08), 49 `pending`, 54 `error` là rác cũ trước lượt vá 16/07 | không chặn gì |
+| 7 | **Telegram (bot DM)** | chat | ✅ SỐNG — `events.bot_reply platform=telegram` 3 lượt `ok=true`, mới nhất 07/08 | không chặn gì |
+| 8a | Messenger | chat | 🔴 **im lặng từ 27/06** — `chat_sessions` 1 dòng, 0 event `bot_reply` trong 30 ngày | Page Development mode / chưa publish / chưa có username (đo hồi 06/24, chưa ai xác nhận đã sửa) |
+| 8b | **WhatsApp** | chat | ✅ **SỐNG** — `events.bot_reply platform=whatsapp` mới nhất **18/08** | không chặn gì — đã tự lành sau đợt tắc hồi 06/24 |
+
+### Bằng chứng đo được (đọc để khỏi đo lại)
+```sql
+-- app_config: social.channels=["facebook"] · autopost_enabled=true · publish_daily=3
+-- media_posts: facebook/queued=54, không có dòng nào channel khác
+-- van_dap: yt_status live=47 · pending=49 · error=54(cũ, trước 16/07)
+-- events(event_type='bot_reply', 30 ngày): telegram=3 ok · web=148 ok · whatsapp=2 ok · messenger=0
+-- app_config KHÔNG có khoá 'tiktok.token' ⇒ TikTok chưa cấp token lần nào
+```
+
+### 🔴 Vì sao PHIÊN NÀY dừng ở đây — cả hai việc ưu tiên đều chặn bởi thứ code không thay được
+Đã đọc trọn `lib/media/publish.ts` (5 adapter đăng), `lib/channels/telegram.ts`
+(`tgSendPhoto`/`tgSendVideo`), `lib/media/build.ts` (dựng hàng đợi theo
+`social.channels`) — **0 bug tìm thấy, 0 dòng cần sửa**. Cả hai việc Henry giao
+đều là việc TAY thuần túy, không có ngách code nào thay được:
+- **Telegram channel**: cần Henry mở app Telegram tạo/chọn channel, thêm bot làm
+  admin (quyền đăng bài), lấy id channel, rồi đặt `TELEGRAM_CHANNEL_ID` trên
+  Vercel. Không có tool nào trong phiên này tạo được channel Telegram hay đọc
+  được giá trị env đã đặt (đã kiểm: không có `TELEGRAM_BOT_TOKEN` trong env của
+  container, và bộ Vercel MCP hiện có không có tool đọc/ghi Environment
+  Variables — chỉ có deploy/protection/domains/analytics).
+- **Facebook token**: cần Henry vào Graph API Explorer (đăng nhập Facebook) đổi
+  token ngắn hạn → dài hạn → token Page vĩnh viễn (chuỗi 5 bước đã có sẵn, nguyên
+  văn trong `FB_TOKEN_EXPIRED` ở `lib/media/publish.ts`). Đây là OAuth tương tác,
+  không gọi API thay được.
+
+⇒ **Việc còn lại của phiên này chỉ là chuẩn bị cho đúng, không phải chờ không
+làm gì**: xác nhận code sẵn sàng (xong), viết bản đồ này (xong), và đưa Henry
+đúng danh sách việc tay + câu SQL bấm phát ăn ngay khi anh xong phần của mình.
+**KHÔNG tự flip `social.channels` thêm `"telegram"` trước khi biết
+`TELEGRAM_CHANNEL_ID` đã đặt** — flip sớm không hỏng gì (lỗi `Thiếu env` là lỗi
+CHẶN, bài ở lại `queued`, không tạo rác) nhưng cũng không ích gì, chỉ tổ mỗi
+sáng cron báo thêm một dòng "Telegram: thiếu env" vô nghĩa.
+
+### Việc tay Henry — làm xong bước nào, nói bước đó, KHÔNG dán token vào chat
+(Dán secret vào chat là lý do phải xoay `SUPABASE_SERVICE_KEY` một lần — đừng lặp lại.)
+
+**1. Telegram channel (rẻ nhất — token bot ĐÃ có sẵn, không xin quyền ai):**
+1. Tạo channel Telegram (hoặc dùng channel có sẵn) → **Add Admin** → chọn bot
+   `@tuviminhbao_bot` → bật quyền **Post Messages**.
+2. Lấy id channel: `@ten_channel` (channel công khai) hoặc id số dạng `-100…`
+   (channel riêng tư — mở channel trên web Telegram, id nằm trong URL).
+3. Vercel → app-tuvi → Settings → Environment Variables → thêm
+   `TELEGRAM_CHANNEL_ID` = giá trị vừa lấy → **Redeploy**.
+4. Báo lại "xong Telegram" — chạy ngay:
+   ```sql
+   update public.app_config set value = '["facebook","telegram"]'::jsonb
+    where key = 'social.channels';
+   ```
+
+**2. Facebook token (vá đường đang kẹt 54 bài):**
+1. [Graph API Explorer](https://developers.facebook.com/tools/explorer/) → chọn
+   app của repo → lấy **User Token** có quyền `pages_manage_posts` +
+   `pages_read_engagement`.
+2. Đổi sang User Token DÀI HẠN: `GET /oauth/access_token?grant_type=fb_exchange_token&client_id=<app-id>&client_secret=<app-secret>&fb_exchange_token=<token vừa lấy>`
+   (App Secret: **chỉ copy, TUYỆT ĐỐI đừng bấm Reset** — `MESSENGER_APP_SECRET`
+   và `WHATSAPP_APP_SECRET` đang dùng chung giá trị này, reset là sập cả hai
+   webhook đang chạy).
+3. Dùng token dài hạn gọi `GET /me/accounts` → `access_token` của Page trả về
+   là loại **VĨNH VIỄN**.
+4. Kiểm ở `/debug_token` — phải thấy `expires_at: 0` (Never) mới đúng.
+5. Vercel → đặt `FB_PAGE_ACCESS_TOKEN` (+ `FB_PAGE_ID` nếu chưa có) → Redeploy.
+   Không cần chạm DB gì — 54 bài đang `queued` (không phải `error`) sẽ tự đăng
+   ở lượt cron kế tiếp (`media-build`, 09:30 sáng VN).
+
+**3. Messenger (đã im lặng từ 27/06, chưa ai xác nhận sửa):** kiểm Meta App →
+Page có publish chưa / có username chưa — WhatsApp cùng app đã tự lành nên nhiều
+khả năng chỉ còn mỗi Messenger dở dang.
+
 ## 🔮 Thêm lớp DỰ BÁO vào arc ô GIỮA — và arc ô giữa KHÔNG phải 5 lớp (2026-08-19, PR sau)
 
 Henry: *"ngay sau ý 3. twist thì thêm ý 3'. đưa ra 1-2 prediction về tương lai…
@@ -79,7 +170,6 @@ trước** (740 → ~590) theo đúng lời bộ dò dặn, rồi mới nới 2 
 - **`arcGiong`** (nhóm JSON trả tiền: day-con · đặt tên · chọn ngày · phong thuỷ)
   **CỐ Ý không đụng** — chúng trả danh sách/schema chứ không phải văn luận, và
   `day-con` còn cấm đoán đỗ/trượt cho trẻ em. `viral-core` (2 cron bài SEO) cũng không.
-
 
 ## 🖼️ Ảnh preview link chia sẻ HỎNG 108 lượt/tuần — và chẩn đoán ĐẦU của tôi SAI (2026-08-19, PR sau)
 
