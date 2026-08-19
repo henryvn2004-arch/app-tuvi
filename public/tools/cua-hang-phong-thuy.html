@@ -299,7 +299,7 @@ h1,h2,h3,h4{font-family:'Noto Serif',serif;}
         <span style="font-size:10px;background:#e8f0fe;color:#1455A4;padding:2px 8px;border-radius:10px;font-weight:600;margin-left:4px;">Replicate · 30 lượng</span>
       </div>
       <p style="font-size:12px;color:var(--text-mid);line-height:1.65;margin-bottom:14px;">AI render lại không gian kinh doanh theo màu ngũ hành bản mệnh và bố trí tối ưu thu hút tài lộc.</p>
-      <div id="renderIdle"><button class="render-btn" id="btnRender" onclick="doRoomRender()">✨ Render Không Gian Theo Phong Thủy</button></div>
+      <div id="renderIdle"><button class="render-btn" id="btnRender" onclick="doRoomRender()"><span class="ic-inline" data-icon-emoji="✨" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">✨</span> Render Không Gian Theo Phong Thủy</button></div>
       <div id="renderLoading" style="display:none;text-align:center;padding:20px 0;">
         <div id="renderStepsHost"></div>
       </div>
@@ -443,7 +443,8 @@ function renderResults(data){
     const isMove=r.action==='move',isKeep=r.action==='keep';
     const mv=isKeep?`<span class="pos-keep">✓ Giữ nguyên</span>`:isMove?`<span class="pos-from">${DIR_VN[r.currentPosition]||r.currentPosition}</span> → <span class="pos-to">${DIR_VN[r.recommendedPosition]||r.recommendedPosition}</span>`:`<span style="color:var(--text-mid)">${r.action==='remove'?'Dọn bỏ':'Điều chỉnh'}</span>`;
     const pl={high:'⚠ Quan Trọng',medium:'→ Nên Làm',low:'◎ Tuỳ Ý'}[r.priority]||r.priority;
-    rl.innerHTML+=`<div class="rec-item priority-${r.priority||'medium'}"><div><span class="rec-badge">${pl}</span></div><div class="rec-body"><div class="rec-title">${getIcon(r.furnitureId||r.itemId)} ${r.furnitureName||r.itemName}</div><div class="rec-move">${mv}</div><div class="rec-reason">${r.reason||''}</div>${r.improvement?`<div class="rec-impr">↑ ~${r.improvement} điểm</div>`:''}${r.businessImpact?`<div style="font-size:10px;color:var(--blue);margin-top:2px;">💼 ${r.businessImpact}</div>`:''}${r.improvement===undefined&&!r.businessImpact?'':''}</div></div>`;
+    const biIc=window.iconHtml?window.iconHtml('briefcase'):'💼';
+    rl.innerHTML+=`<div class="rec-item priority-${r.priority||'medium'}"><div><span class="rec-badge">${pl}</span></div><div class="rec-body"><div class="rec-title">${getIcon(r.furnitureId||r.itemId)} ${r.furnitureName||r.itemName}</div><div class="rec-move">${mv}</div><div class="rec-reason">${r.reason||''}</div>${r.improvement?`<div class="rec-impr">↑ ~${r.improvement} điểm</div>`:''}${r.businessImpact?`<div style="font-size:10px;color:var(--blue);margin-top:2px;">${biIc} ${r.businessImpact}</div>`:''}${r.improvement===undefined&&!r.businessImpact?'':''}</div></div>`;
   });
 
   // Shopping
@@ -451,7 +452,8 @@ function renderResults(data){
   (analysis.shoppingList||[]).forEach(s=>{
     const uc=s.urgency==='nên có'?'urg-must':s.urgency==='tốt nếu có'?'urg-good':'urg-opt';
     const ul=s.urgency==='nên có'?'Nên Có':s.urgency==='tốt nếu có'?'Tốt Nếu Có':'Tuỳ Ý';
-    sg.innerHTML+=`<div class="shop-item"><div class="shop-hdr"><span class="shop-icon">${s.icon||'✨'}</span><span class="shop-name">${s.item}</span><span class="shop-urg ${uc}">${ul}</span></div><div class="shop-pos">📍 ${DIR_VN[s.position]||s.position||''}</div><div class="shop-reason">${s.reason||''}</div><div class="shop-price">💰 ${s.priceRange||''}</div></div>`;
+    const sIc=window.iconHtml?window.iconHtml(s.icon,window.ICONS&&window.ICONS.sparkles):(s.icon||'✨');
+    sg.innerHTML+=`<div class="shop-item"><div class="shop-hdr"><span class="shop-icon">${sIc}</span><span class="shop-name">${s.item}</span><span class="shop-urg ${uc}">${ul}</span></div><div class="shop-pos">${window.iconHtml?window.iconHtml('pin'):'📍'} ${DIR_VN[s.position]||s.position||''}</div><div class="shop-reason">${s.reason||''}</div><div class="shop-price">${window.iconHtml?window.iconHtml('dollar-sign'):'💰'} ${s.priceRange||''}</div></div>`;
   });
   if(!(analysis.shoppingList||[]).length)sg.innerHTML='<p style="color:var(--text-lt);font-size:12px;">Không có đề xuất thêm vật phẩm.</p>';
 
@@ -464,7 +466,7 @@ function renderResults(data){
   setTimeout(()=>sec.scrollIntoView({behavior:'smooth',block:'start'}),200);
 }
 
-function getIcon(id){return({bed:'🛏',desk:'🖥',sofa:'🛋',altar:'🏮',stove:'🔥',plant:'🌿',mirror:'🪞',door:'🚪',toilet:'🚿',water:'💧',wardrobe:'🚪',tv:'📺',monitor:'🖥',laptop:'💻',lamp:'💡',phone:'📱',notebook:'📒',keyboard:'⌨️',mouse:'🖱',clock:'🕐',speaker:'🔊',printer:'🖨',drawer:'🗄',cashier:'💰',entrance:'🚪',display:'🛍',storage:'📦',counter:'🪞',safe:'🔒',seating:'💺',sign:'🪧',light:'💡'})[id]||'📦';}
+function getIcon(id){var e=({bed:'🛏',desk:'🖥',sofa:'🛋',altar:'🏮',stove:'🔥',plant:'🌿',mirror:'🪞',door:'🚪',toilet:'🚿',water:'💧',wardrobe:'🚪',tv:'📺',monitor:'🖥',laptop:'💻',lamp:'💡',phone:'📱',notebook:'📒',keyboard:'⌨️',mouse:'🖱',clock:'🕐',speaker:'🔊',printer:'🖨',drawer:'🗄',cashier:'💰',entrance:'🚪',display:'🛍',storage:'📦',counter:'🪞',safe:'🔒',seating:'💺',sign:'🪧',light:'💡'})[id]||'📦';return window.iconHtml?window.iconHtml(e):e;}
 function getExtraBody(){return{spaceType:document.getElementById('spaceType').value};}
 function renderExtraResults(data){const a=data.analysis;if(a.wealthTips){document.getElementById('wealthCard').style.display='block';document.getElementById('wealthContent').textContent=a.wealthTips;}}
 

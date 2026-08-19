@@ -409,8 +409,8 @@
             </div>
             <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:10px">
               <button class="btn btn-gold btn-sm" onclick="utmBuild()">Tạo link</button>
-              <button class="btn btn-outline btn-sm" onclick="utmCopy()">📋 Copy</button>
-              <button class="btn btn-outline btn-sm" onclick="utmSave()">💾 Lưu để dành</button>
+              <button class="btn btn-outline btn-sm" onclick="utmCopy()"><span class="ic-inline" data-icon="clipboard" data-icon-emoji="📋" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">📋</span> Copy</button>
+              <button class="btn btn-outline btn-sm" onclick="utmSave()"><span class="ic-inline" data-icon="save" data-icon-emoji="💾" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">💾</span> Lưu để dành</button>
             </div>
             <input class="search-input" id="utm-out" readonly placeholder="Link gắn UTM sẽ hiện ở đây…" style="width:100%;font-family:monospace;font-size:.74rem" onclick="this.select()">
             <div style="margin-top:14px">
@@ -1202,7 +1202,7 @@
         </div>
         <div class="panel">
           <div class="panel-header">
-            <div class="panel-title">⏱ Lịch & Trạng Thái Job</div>
+            <div class="panel-title"><span class="ic-inline" data-icon="hourglass" data-icon-emoji="⏱" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">⏱</span> Lịch & Trạng Thái Job</div>
             <div class="panel-actions">
               <span style="font-size:.72rem;color:var(--text-lt)">Log ghi vào <code>cron_runs</code> · giờ VN</span>
               <button class="btn btn-primary btn-sm" onclick="loadCron()">↻</button>
@@ -2042,23 +2042,24 @@ function renderSecurityAudit(a) {
   if (!host) return;
   if (!a) { host.innerHTML = ''; return; }
 
+  const gIc = (name, emoji) => `<span class="ic-inline" data-icon="${name}" data-icon-emoji="${emoji}" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">${emoji}</span>`;
   const groups = [
-    { key: 'lech_so_du', icon: '🚨', label: 'Ví lệch số dư so với sổ giao dịch', crit: true,
+    { key: 'lech_so_du', icon: gIc('siren', '🚨'), label: 'Ví lệch số dư so với sổ giao dịch', crit: true,
       hint: 'Tiền tự sinh ra mà không có giao dịch nào giải thích — điều tra ngay.',
       line: r => `${r.user_id} — số dư ${r.so_du} vs sổ ${r.tong_so}` },
-    { key: 'ham_ho_cho_anon', icon: '🔓', label: 'Hàm RPC hở cho khách vãng lai', crit: true,
+    { key: 'ham_ho_cho_anon', icon: gIc('lock', '🔓'), label: 'Hàm RPC hở cho khách vãng lai', crit: true,
       hint: 'Vá: revoke execute on function &lt;tên&gt; from public, anon, authenticated;',
       line: r => String(r) },
-    { key: 'ham_thieu_search_path', icon: '🔐', label: 'Hàm SECURITY DEFINER thiếu pg_temp trong search_path', crit: false,
+    { key: 'ham_thieu_search_path', icon: gIc('lock', '🔐'), label: 'Hàm SECURITY DEFINER thiếu pg_temp trong search_path', crit: false,
       hint: 'Chạy bằng quyền chủ hàm nhưng dùng search_path của người gọi. Bắt cả hàm chỉ khai &quot;public&quot; trần — Postgres tìm pg_temp TRƯỚC TIÊN trừ khi nó được nêu ở vị trí khác, nên vẫn còn cửa che bảng thật bằng bảng TẠM cùng tên. Mức độ tuỳ ACL — hở cho anon mới là gấp. Vá: alter function &lt;tên&gt;(&lt;kiểu&gt;) set search_path = public, pg_temp;',
       line: r => String(r) },
-    { key: 'bom_su_kien', icon: '📈', label: 'Nguồn bơm sự kiện bất thường', crit: false,
+    { key: 'bom_su_kien', icon: gIc('trending-up', '📈'), label: 'Nguồn bơm sự kiện bất thường', crit: false,
       hint: 'Số liệu này nuôi autopilot M0.6 — bơm được là lái được hành động thật.',
       line: r => `${r.anon_id} — ${r.events_24h} event/24h` },
-    { key: 'thiet_bi_cay', icon: '👥', label: 'Thiết bị gắn nhiều tài khoản', crit: false,
+    { key: 'thiet_bi_cay', icon: gIc('users', '👥'), label: 'Thiết bị gắn nhiều tài khoản', crit: false,
       hint: 'Nghi cày quà đăng ký. anon_id nằm localStorage nên chỉ bắt được loại lười.',
       line: r => `${r.anon_id} — ${r.so_tai_khoan} tài khoản` },
-    { key: 'referral_bat_thuong', icon: '🎁', label: 'Lượt mời tăng vọt (7 ngày)', crit: false,
+    { key: 'referral_bat_thuong', icon: gIc('gift', '🎁'), label: 'Lượt mời tăng vọt (7 ngày)', crit: false,
       hint: '', line: r => `${r.referrer} — ${r.so_nguoi_7d} người` },
   ];
 
@@ -2106,7 +2107,7 @@ function renderReconcile(rows) {
   host.innerHTML = `
     <div style="padding:.7rem 1rem;border-top:1px solid var(--line)">
       <div style="font-size:.76rem;font-weight:700;color:var(--text);margin-bottom:.45rem">
-        💰 Đối soát trừ Lượng ↔ giao hàng (30 ngày)
+        <span class="ic-inline" data-icon="dollar-sign" data-icon-emoji="💰" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">💰</span> Đối soát trừ Lượng ↔ giao hàng (30 ngày)
         ${atRisk
           ? `<span style="color:var(--red);font-weight:700"> — ${atRisk} Lượng đang treo</span>`
           : `<span style="color:var(--green);font-weight:600"> — cân đối</span>`}
@@ -2141,7 +2142,7 @@ function renderOpsAlerts(alerts) {
   host.innerHTML = `
     <div style="border:1px solid var(--red);border-radius:var(--radius);background:color-mix(in srgb,var(--red) 8%,transparent);padding:.7rem .9rem">
       <div style="font-weight:700;color:var(--red);font-size:.82rem;margin-bottom:.4rem">
-        🚨 ${rows.length} cảnh báo vận hành (48h qua)
+        <span class="ic-inline" data-icon="siren" data-icon-emoji="🚨" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">🚨</span> ${rows.length} cảnh báo vận hành (48h qua)
       </div>
       ${rows.map(a => `
         <div style="font-size:.76rem;color:var(--text);margin:.25rem 0;white-space:pre-wrap">
@@ -6242,7 +6243,7 @@ async function uploadToYT(id) {
   const btn = document.getElementById('btn-yt-upload');
   const statusEl = document.getElementById('yt-upload-status');
   if (btn) btn.disabled = true;
-  if (statusEl) statusEl.textContent = '⏳ Đang upload...';
+  if (statusEl) statusEl.innerHTML = '<span class="ic-inline" data-icon="hourglass" data-icon-emoji="⏳" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">⏳</span> Đang upload...';
 
   try {
     const resp = await fetch(

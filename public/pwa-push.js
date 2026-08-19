@@ -169,7 +169,6 @@
     el.id = 'push-optin';
     el.innerHTML =
       '<div role="dialog" aria-label="Bật nhắc vận hằng ngày" style="position:fixed;bottom:20px;left:50%;transform:translateX(-50%);width:min(360px,calc(100vw - 32px));background:#fff;color:#061A2E;border-radius:14px;box-shadow:0 8px 32px rgba(0,0,0,.24);padding:20px;z-index:9998;font-family:system-ui,-apple-system,Segoe UI,Arial,sans-serif">' +
-      '<div style="font-size:22px;margin-bottom:8px">🔔</div>' +
       '<div style="font-size:15px;font-weight:700;margin-bottom:6px">' + label + '</div>' +
       '<div style="font-size:13px;color:#555;margin-bottom:16px;line-height:1.5">Mỗi sáng 7h: ngày tốt hay xấu, trực gì, hợp việc gì — và ngày nào xung tuổi bạn. Tắt lúc nào cũng được.</div>' +
       '<div style="display:flex;gap:10px">' +

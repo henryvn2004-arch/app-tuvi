@@ -400,8 +400,8 @@ document.getElementById('btnTgLink').onclick = async () => {
     if (d.url) {
       // Mở bot Telegram với token /start → bot tự gắn ví.
       window.open(d.url, '_blank');
-      document.getElementById('tgLinkStatus').textContent =
-        '⏳ Đã mở Telegram — bấm "Bắt đầu / Start" trong bot để hoàn tất, rồi tải lại trang.';
+      document.getElementById('tgLinkStatus').innerHTML =
+        ic('hourglass') + ' Đã mở Telegram — bấm "Bắt đầu / Start" trong bot để hoàn tất, rồi tải lại trang.';
     } else {
       alert('Không tạo được liên kết, thử lại sau nhé.');
     }
@@ -460,8 +460,8 @@ document.getElementById('btnWaLink').onclick = async () => {
     if (d.url) {
       // Mở WhatsApp với tin soạn sẵn "/link <token>" → gửi để bot gắn ví.
       window.open(d.url, '_blank');
-      document.getElementById('waLinkStatus').textContent =
-        '⏳ Đã mở WhatsApp — bấm GỬI tin soạn sẵn để hoàn tất, rồi tải lại trang.';
+      document.getElementById('waLinkStatus').innerHTML =
+        ic('hourglass') + ' Đã mở WhatsApp — bấm GỬI tin soạn sẵn để hoàn tất, rồi tải lại trang.';
     } else {
       alert('Không tạo được liên kết, thử lại sau nhé.');
     }
@@ -520,9 +520,9 @@ document.getElementById('btnMsgrLink').onclick = async () => {
     if (d.url) {
       // Mở Messenger với m.me/<page>?ref=<token> → bot tự gắn ví.
       window.open(d.url, '_blank');
-      const fallback = d.token ? ` Nếu chưa tự liên kết, gửi tin: /link ${d.token}` : '';
-      document.getElementById('msgrLinkStatus').textContent =
-        '⏳ Đã mở Messenger — bấm "Bắt đầu / Get Started" hoặc gửi 1 tin để hoàn tất, rồi tải lại trang.' + fallback;
+      const fallback = d.token ? ` Nếu chưa tự liên kết, gửi tin: /link ${escHtml(d.token)}` : '';
+      document.getElementById('msgrLinkStatus').innerHTML =
+        ic('hourglass') + ' Đã mở Messenger — bấm "Bắt đầu / Get Started" hoặc gửi 1 tin để hoàn tất, rồi tải lại trang.' + fallback;
     } else {
       alert('Không tạo được liên kết, thử lại sau nhé.');
     }

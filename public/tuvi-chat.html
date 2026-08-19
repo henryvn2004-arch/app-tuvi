@@ -1235,7 +1235,7 @@ var TuviTTS = (function() {
       '<div class="wa-ci-av" style="background:' + avColor + '">' + avContent + '</div>' +
       '<div class="wa-ci-info">' +
         '<div class="wa-ci-row">' +
-          '<span class="wa-ci-name">' + (chat.pinned ? '📌 ' : '') + escHtml(chat.label) + '</span>' +
+          '<span class="wa-ci-name">' + (chat.pinned ? (window.iconHtml ? window.iconHtml('pin') : '') + ' ' : '') + escHtml(chat.label) + '</span>' +
           (chat.updatedAt ? '<span class="wa-ci-time">' + fmtTime(chat.updatedAt) + '</span>' : '') +
         '</div>' +
         '<div class="wa-ci-preview">' + escHtml(chat.lastMsg || '') + '</div>' +
@@ -1328,7 +1328,7 @@ var TuviTTS = (function() {
     } else {
       chat.messages.forEach(function(m) {
         // Ảnh không lưu base64 → tin ảnh-only hiện nhãn nhẹ khi mở lại.
-        var c = m.content || (m.hasImages ? '_🖼️ (đã gửi ảnh)_' : '');
+        var c = m.content || (m.hasImages ? '_(đã gửi ảnh)_' : '');
         appendMsg(m.role === 'assistant' ? 'bot' : 'user', c);
       });
       var activeCfg = toolCfg(chat.toolType);
@@ -2564,9 +2564,9 @@ var TuviTTS = (function() {
                 toolLabel.className = 'tc-tool-label';
                 bub.insertBefore(toolLabel, cursor);
               }
-              toolLabel.textContent = ename === 'tool_call'
-                ? ('⚙ ' + (d1.name || ''))
-                : (d1.text || '…');
+              toolLabel.innerHTML = ename === 'tool_call'
+                ? ((window.iconHtml ? window.iconHtml('settings') : '') + ' ' + escHtml(d1.name || ''))
+                : escHtml(d1.text || '…');
             } else if (ename === 'text') {
               if (toolLabel) { toolLabel.remove(); toolLabel = null; }
               accumulated += (d1.delta || '');

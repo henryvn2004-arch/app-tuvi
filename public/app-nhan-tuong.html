@@ -77,17 +77,17 @@
       <div class="dt-card" id="inputCard">
         <h2>Tải ảnh khuôn mặt</h2>
         <p class="sub">AI phân tích đôi mắt theo Nhãn Pháp cổ truyền: hình dạng, tròng mắt, ánh mắt, Tam Bạch Nhãn.</p>
-        <div class="dt-privacy"><span>🔒</span><div>Ảnh chỉ gửi tới AI để phân tích, không lưu trên server. Chụp thẳng mặt, đủ sáng — hệ thống sẽ tự zoom vào vùng mắt.</div></div>
+        <div class="dt-privacy"><span class="ic" data-icon="lock"></span><div>Ảnh chỉ gửi tới AI để phân tích, không lưu trên server. Chụp thẳng mặt, đủ sáng — hệ thống sẽ tự zoom vào vùng mắt.</div></div>
 
         <div class="dt-input-tabs">
-          <button class="dt-input-tab active" onclick="switchTab('upload',this)">📁 Tải Ảnh Lên</button>
-          <button class="dt-input-tab" onclick="switchTab('camera',this)">📷 Chụp Ảnh</button>
+          <button class="dt-input-tab active" onclick="switchTab('upload',this)"><span class="ic" data-icon="folder"></span> Tải Ảnh Lên</button>
+          <button class="dt-input-tab" onclick="switchTab('camera',this)"><span class="ic" data-icon="camera"></span> Chụp Ảnh</button>
         </div>
 
         <div class="dt-input-pane active" id="pane-upload">
           <div id="uploadArea" class="upload-area" ondragover="onDragOver(event)" ondragleave="onDragLeave(event)" ondrop="onDrop(event)">
             <input type="file" id="fileInput" accept="image/*" onchange="onFileSelect(event)">
-            <span class="upload-icon">👁</span>
+            <span class="upload-icon"><span class="ic" data-icon="eye"></span></span>
             <div class="upload-title">Kéo thả ảnh vào đây hoặc click để chọn</div>
             <div class="upload-sub">JPG, PNG, WebP — tối đa 5MB · Chụp thẳng mặt, thấy rõ 2 mắt</div>
           </div>
@@ -96,13 +96,13 @@
         <div class="dt-input-pane" id="pane-camera">
           <div style="text-align:center;padding:12px 0 16px">
             <div id="preCamTips">
-              <button class="camera-btn" id="openCamBtn" onclick="openCamera()"><span>📷</span> Mở Camera</button>
+              <button class="camera-btn" id="openCamBtn" onclick="openCamera()"><span class="ic" data-icon="camera"></span> Mở Camera</button>
             </div>
             <div id="camWrap" style="display:none;position:relative;width:280px;margin:0 auto">
               <video id="camVideo" style="width:280px;border-radius:12px;display:block" autoplay playsinline></video>
             </div>
             <div id="camBtns" style="display:none;margin-top:14px;gap:10px;justify-content:center;flex-wrap:wrap">
-              <button class="btn-go" onclick="capturePhoto()" style="margin:0">📸 Chụp</button>
+              <button class="btn-go" onclick="capturePhoto()" style="margin:0"><span class="ic" data-icon="camera"></span> Chụp</button>
               <button class="btn-cancel" onclick="stopCamera()">✕ Huỷ</button>
             </div>
             <canvas id="camCanvas" style="display:none"></canvas>
@@ -114,7 +114,7 @@
             <img id="previewImg" class="preview-img" alt="Ảnh đã chọn">
             <canvas id="overlayCanvas" class="overlay-canvas"></canvas>
             <div class="preview-badge">✓ Ảnh đã chọn</div>
-            <div class="mp-badge" id="mpBadge">👁 Mắt đã xác định</div>
+            <div class="mp-badge" id="mpBadge"><span class="ic" data-icon="eye"></span> Mắt đã xác định</div>
           </div>
           <div class="eye-panels" id="eyePanels" style="display:none">
             <div class="eye-panel"><div class="eye-panel-label">Mắt trái</div><canvas id="eyeLeft" width="110" height="55"></canvas></div>
@@ -124,7 +124,7 @@
         </div>
 
         <div style="text-align:center;margin-top:18px">
-          <button class="btn-go" id="analyzeBtn" onclick="analyze()" disabled>👁 Phân Tích Nhãn Tướng — <span data-tvp-price="nhan-tuong">…</span> Lượng</button>
+          <button class="btn-go" id="analyzeBtn" onclick="analyze()" disabled><span class="ic" data-icon="eye"></span> Phân Tích Nhãn Tướng — <span data-tvp-price="nhan-tuong">…</span> Lượng</button>
         </div>
         <div class="dt-error" id="error-msg"></div>
       </div>
@@ -397,7 +397,9 @@ async function analyze() {
 
 async function _doAnalyze() {
   document.getElementById('resultCard').style.display='block';
-  document.getElementById('aiResult').innerHTML='<div class="dt-loading"><span class="dt-loading-icon">👁</span><div class="dt-loading-text">AI đang phân tích nhãn tướng...<br><span style="font-size:12px;opacity:.7">Thường mất 15–20 giây</span></div></div>';
+  const aiResultEl = document.getElementById('aiResult');
+  aiResultEl.innerHTML='<div class="dt-loading"><span class="dt-loading-icon ic" data-icon="eye"></span><div class="dt-loading-text">AI đang phân tích nhãn tướng...<br><span style="font-size:12px;opacity:.7">Thường mất 15–20 giây</span></div></div>';
+  window.mountIcons && window.mountIcons(aiResultEl);
   document.getElementById('resultCard').scrollIntoView({behavior:'smooth',block:'start'});
 
   try {

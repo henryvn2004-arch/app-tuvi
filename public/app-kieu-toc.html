@@ -684,7 +684,7 @@ function renderAnalysis(data) {
   });
   Shell.setShareable({
     kind: 'text', toolId: 'kieu-toc-phan-tich', title: 'Kiểu tóc hợp tướng mặt của tôi',
-    text: 'Hình dạng khuôn mặt: ' + (data.faceShapeVN || '') + (data.desc ? '\n' + data.desc : '') + (data.tip ? '\n\n💬 ' + data.tip : '')
+    text: 'Hình dạng khuôn mặt: ' + (data.faceShapeVN || '') + (data.desc ? '\n' + data.desc : '') + (data.tip ? '\n\n' + data.tip : '')
   });
 }
 

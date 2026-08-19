@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>YouTube Auth — Tử Vi Minh Bảo</title>
+<script src="/nav.js?v=22" data-icons-only></script>
 <style>
 body { font-family: Arial, sans-serif; background:#061A2E; color:#fff; display:flex; align-items:center; justify-content:center; min-height:100vh; margin:0; }
 .box { background:#0D3B5E; border:1px solid rgba(154,123,58,0.3); border-radius:10px; padding:40px 36px; width:100%; max-width:500px; text-align:center; }
@@ -27,7 +28,7 @@ code { background:rgba(0,0,0,0.4); padding:2px 6px; border-radius:3px; }
 </head>
 <body>
 <div class="box">
-  <h1>🎬 YouTube Authorization</h1>
+  <h1><span class="ic" data-icon="film"></span> YouTube Authorization</h1>
   <p>Authorize 1 lần để lấy Refresh Token.<br>Token này dùng mãi để auto-upload YouTube.</p>
 
   <!--
@@ -45,12 +46,12 @@ code { background:rgba(0,0,0,0.4); padding:2px 6px; border-radius:3px; }
     <code>myaccount.google.com/permissions</code> gỡ quyền của app rồi quay lại đây.
   </div>
 
-  <button class="btn" onclick="startAuth()" id="btn-auth">🔗 Authorize với Google</button>
+  <button class="btn" onclick="startAuth()" id="btn-auth"><span class="ic" data-icon="link"></span> Authorize với Google</button>
 
   <div id="token-section">
-    <label>✅ Refresh Token của mày — copy hết vào Supabase Secrets</label>
+    <label><span class="ic" data-icon="check-circle"></span> Refresh Token của mày — copy hết vào Supabase Secrets</label>
     <textarea id="token-box" readonly onclick="this.select()"></textarea>
-    <button class="copy-btn" onclick="copyToken()">📋 Copy Token</button>
+    <button class="copy-btn" onclick="copyToken()"><span class="ic" data-icon="clipboard"></span> Copy Token</button>
   </div>
 
   <div id="msg"></div>
@@ -94,17 +95,17 @@ function copyToken() {
   ta.select();
   document.execCommand('copy');
   navigator.clipboard.writeText(ta.value).catch(()=>{});
-  setMsg('✅ Đã copy!', 'ok');
+  setMsg('Đã copy!', 'ok');
 }
 
 async function handleCallback() {
   const code = new URLSearchParams(location.search).get('code');
   const err  = new URLSearchParams(location.search).get('error');
-  if (err) { setMsg('❌ ' + err, 'err'); return; }
+  if (err) { setMsg(err, 'err'); return; }
   if (!code) return;
 
   document.getElementById('btn-auth').style.display = 'none';
-  setMsg('⏳ Đang lấy token...', '');
+  setMsg('Đang lấy token...', '');
 
   try {
     const resp = await fetch(EDGE + '?code=' + encodeURIComponent(code));
@@ -116,11 +117,11 @@ async function handleCallback() {
     // Hiện token
     document.getElementById('token-box').value = data.refresh_token;
     document.getElementById('token-section').style.display = 'block';
-    setMsg('✅ Lấy token thành công! Copy và lưu vào Supabase Secrets.', 'ok');
+    setMsg('Lấy token thành công! Copy và lưu vào Supabase Secrets.', 'ok');
 
     history.replaceState({}, '', location.pathname);
   } catch(e) {
-    setMsg('❌ Lỗi: ' + e.message, 'err');
+    setMsg('Lỗi: ' + e.message, 'err');
     document.getElementById('btn-auth').style.display = '';
   }
 }

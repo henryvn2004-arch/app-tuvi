@@ -109,6 +109,7 @@ body {
 </div>
 
 <script src="/auth.js?v=2"></script>
+<script src="/nav.js?v=22" data-icons-only></script>
 <script>
 const params  = new URLSearchParams(window.location.search);
 const slug    = params.get('slug') || '';
@@ -162,7 +163,7 @@ function getPackageLabel(slug) {
 function showSuccess(slug, credits, balance) {
   const label = getPackageLabel(slug);
   document.getElementById('card').innerHTML = `
-    <div class="icon">🎉</div>
+    <div class="icon ic" style="width:1em;height:1em;margin-left:auto;margin-right:auto">${window.iconHtml?window.iconHtml('gift'):''}</div>
     <div class="title">Nạp credits thành công!</div>
     <div class="credit-badge">
       +${credits} Credits
@@ -189,7 +190,7 @@ function showSuccess(slug, credits, balance) {
 
 function showError(msg) {
   document.getElementById('card').innerHTML = `
-    <div class="icon">❌</div>
+    <div class="icon ic" style="width:1em;height:1em;margin-left:auto;margin-right:auto">${window.iconHtml?window.iconHtml('x-circle'):''}</div>
     <div class="title">Có lỗi xảy ra</div>
     <div class="subtitle" style="color:#C0392B">${msg}</div>
     <div style="margin-top:20px;display:flex;flex-wrap:wrap;justify-content:center;gap:8px">

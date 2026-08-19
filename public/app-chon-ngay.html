@@ -206,7 +206,7 @@ async function _doChonNgayAI(){
   var btn=document.getElementById('btnUnlock');
   if(btn)btn.disabled=true;
   var el=document.getElementById('dtResult');
-  el.innerHTML='<div class="phan-empty">📅 AI đang phân tích ngày tốt… thường mất 15–25 giây</div>';
+  el.innerHTML='<div class="phan-empty">'+(window.iconHtml?window.iconHtml('calendar'):'')+' AI đang phân tích ngày tốt… thường mất 15–25 giây</div>';
   el.scrollIntoView({behavior:'smooth',block:'nearest'});
   try{
     var res=await fetch('/api/xem-tuoi?action=chon-ngay-tot',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({

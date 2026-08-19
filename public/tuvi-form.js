@@ -101,7 +101,7 @@ window.TuviForm = (() => {
   ];
 
   const TOOLTIP_CONTENT = `<div class="tvf-tooltip-box">
-    <div class="tvf-tooltip-title">⏰ Lịch sử múi giờ Việt Nam</div>
+    <div class="tvf-tooltip-title"><span class="ic" data-icon="clock"></span> Lịch sử múi giờ Việt Nam</div>
     <p>Giờ gốc theo cổ pháp: giờ <b>Tý</b> = 23:00–00:59. Tuy nhiên trong lịch sử, VN đã nhiều lần thay đổi múi giờ:</p>
     <ul>
       <li><b>1942–09/3/1944</b> (UTC+8): giờ Tý = 00:00–01:59</li>
@@ -315,7 +315,7 @@ window.TuviForm = (() => {
                  target="_blank" rel="noopener"
                  style="font-size:12px;color:var(--gold);text-decoration:none;display:inline-flex;align-items:center;gap:5px;opacity:0.8;transition:opacity 0.15s"
                  onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'">
-                <span>⬇</span><span>Xem mẫu luận giải PDF</span>
+                <span class="ic" data-icon="chevron-down"></span><span>Xem mẫu luận giải PDF</span>
               </a>
             </div>` : ''}
           </div>
@@ -326,6 +326,13 @@ window.TuviForm = (() => {
     const container = document.getElementById(containerId);
     if (container) {
       container.innerHTML = html;
+      // Icon trong TOOLTIP_CONTENT/liên kết mẫu PDF được dựng bằng `<span
+      // data-icon>` chứ không nội suy trực tiếp `window.iconHtml()` — file này
+      // (const TOOLTIP_CONTENT ở top-level) chạy TRƯỚC khi nav.js kịp thực thi
+      // ở nhiều trang (tuvi-form.js nạp sớm hơn nav.js trong HTML), nên gọi
+      // `iconHtml` ngay lúc parse module sẽ luôn ra rỗng. Mount LẠI ở đây, sau
+      // khi DOM đã tồn tại thật, để không phụ thuộc thứ tự nạp script.
+      if (window.mountIcons) window.mountIcons(container);
       // 🔑 Form TỰ KHAI mình là form lá số, kèm prefix. `user-charts.js` dò theo
       // dấu này để gắn thanh "Sổ lá số".
       //

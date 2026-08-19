@@ -301,7 +301,7 @@ h1,h2,h3{font-family:'Noto Serif',serif;}
         <div class="style-btns">
           <button class="style-btn active" id="sbCongSo" onclick="setStyle('cong-so',this)"><span class="ic" data-icon="briefcase"></span> Công Sở</button>
           <button class="style-btn" id="sbCasual"  onclick="setStyle('casual',this)"><span class="ic" data-icon="shirt"></span> Casual</button>
-          <button class="style-btn" id="sbSangTrong" onclick="setStyle('sang-trong',this)">✨ Sang Trọng</button>
+          <button class="style-btn" id="sbSangTrong" onclick="setStyle('sang-trong',this)"><span class="ic" data-icon="sparkles"></span> Sang Trọng</button>
           <button class="style-btn" id="sbDaoPho" onclick="setStyle('dao-pho',this)"><span class="ic" data-icon="package"></span> Dạo Phố</button>
         </div>
         <button class="btn-tryon" id="btnTryon" onclick="doTryon()"><span class="ic" data-icon="sparkles"></span> Thử Trang Phục Ngay</button>
@@ -325,7 +325,7 @@ h1,h2,h3{font-family:'Noto Serif',serif;}
           </div>
         </div>
         <div style="display:flex;gap:8px;">
-          <button onclick="downloadTryonResult()" style="flex:1;padding:10px;background:var(--green);color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:Arial,sans-serif;">⬇ Tải Ảnh</button>
+          <button onclick="downloadTryonResult()" style="flex:1;padding:10px;background:var(--green);color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:Arial,sans-serif;"><span class="ic" data-icon="chevron-down"></span> Tải Ảnh</button>
           <button onclick="resetTryon()" style="flex:1;padding:10px;background:transparent;border:1.5px solid var(--border);border-radius:8px;font-size:12px;cursor:pointer;font-family:Arial,sans-serif;color:var(--text-mid);"><span class="ic" data-icon="rotate-cw"></span> Thử Lại</button>
         </div>
       </div>
@@ -455,7 +455,7 @@ function renderResults(data){
   const bg=NH_BG[napAmHanh]||'linear-gradient(135deg,#888,#aaa)';
   const banner=document.getElementById('menhBanner');
   banner.style.background=bg;banner.style.color='#fff';
-  document.getElementById('menhIcon').textContent=NH_ICON[napAmHanh]||'🌟';
+  document.getElementById('menhIcon').innerHTML=window.iconHtml?window.iconHtml(NH_ICON[napAmHanh]||'🌟'):(NH_ICON[napAmHanh]||'🌟');
   document.getElementById('menhTitle').textContent=`Mệnh ${napAmHanh} · Quái ${s.guaNum} ${s.guaName}`;
   document.getElementById('menhSub').textContent=`Màu chủ: ${(colorData.primary||[]).slice(0,3).join(', ')}`;
   document.getElementById('menhSummary').textContent=s.summary||'';
@@ -481,7 +481,7 @@ function renderResults(data){
     const colors=cl[cat.id]||[];
     if(!colors.length)return;
     cg.innerHTML+=`<div class="clothing-item">
-      <div class="clothing-header"><span class="clothing-icon">${cat.icon}</span><span class="clothing-cat">${cat.name}</span></div>
+      <div class="clothing-header"><span class="clothing-icon">${window.iconHtml?window.iconHtml(cat.icon):cat.icon}</span><span class="clothing-cat">${cat.name}</span></div>
       <div class="clothing-colors">${colors.map(c=>clothingTag(c)).join('')}</div>
       ${(cl.avoidColors||[]).length?`<div class="clothing-avoid">✗ Tránh: ${(cl.avoidColors||[]).slice(0,3).join(', ')}</div>`:''}
     </div>`;
@@ -493,7 +493,7 @@ function renderResults(data){
   Object.entries(s.occasions||{}).forEach(([k,v])=>{
     const oc=occs[k]||{icon:'📅',name:k};
     og.innerHTML+=`<div class="occasion-item">
-      <div class="occasion-header"><span class="occasion-icon">${oc.icon}</span><span class="occasion-name">${oc.name}</span></div>
+      <div class="occasion-header"><span class="occasion-icon">${window.iconHtml?window.iconHtml(oc.icon):oc.icon}</span><span class="occasion-name">${oc.name}</span></div>
       <div class="occasion-colors">${(v.colors||[]).map(c=>clothingTag(c)).join('')}</div>
       <div class="occasion-tip">${v.tip||''}</div>
     </div>`;
@@ -509,7 +509,7 @@ function renderResults(data){
       <div class="combo-score-circle" style="background:${bg2};">${sc}</div>
       <div class="combo-body">
         <div class="combo-name">${combo.name||'Combo '+sc}</div>
-        <div class="combo-items">🎽 ${(combo.items||[]).join(' · ')}</div>
+        <div class="combo-items">${window.iconHtml?window.iconHtml('🎽'):''} ${(combo.items||[]).join(' · ')}</div>
         <div class="combo-vibe">${combo.vibe||''}</div>
       </div>
     </div>`;

@@ -815,7 +815,7 @@ select.form-input { cursor: pointer; }
               <span>Mở Khóa Luận Giải Đầy Đủ</span>
               <span style="font-size:16px">→</span>
             </button>
-            <div class="paywall-secure">🔒 Modal xác nhận sẽ hiện ra · Credits không hết hạn</div>
+            <div class="paywall-secure">${window.iconHtml?window.iconHtml('lock'):''} Modal xác nhận sẽ hiện ra · Credits không hết hạn</div>
           </div>` : `
           <div class="paywall-gate" id="lock-box-${i}" style="display:none;margin:0">
             <div class="paywall-eyebrow">紫微明寶 · Đang Tải</div>
@@ -859,7 +859,7 @@ select.form-input { cursor: pointer; }
 
     function renderCachCucCard(m) {
       const cls = !m.hopLe ? 'warn' : (m.override ? 'override' : '');
-      const badge = !m.hopLe ? '⚠ Bán cách' : (m.override ? '🔥 Ngoại cách (thay nội cách)' : '✨ Cách bổ trợ');
+      const badge = !m.hopLe ? '⚠ Bán cách' : (m.override ? (window.iconHtml?window.iconHtml('flame'):'') + ' Ngoại cách (thay nội cách)' : (window.iconHtml?window.iconHtml('sparkles'):'') + ' Cách bổ trợ');
       const reasons = (m.lyDo || []).map(r => '· ' + r).join('<br>');
       return `
         <div class="pregen-block ${cls}">
@@ -1766,7 +1766,7 @@ select.form-input { cursor: pointer; }
         claudeBox.style.display = '';
         claudeBox.innerHTML = `
           <div style="background:rgba(192,57,43,0.06);border:1px solid var(--red);padding:16px;color:var(--red);font-size:13px">
-            ❌ Lỗi tải phần ${_currentPhan}: ${e.message}
+            ${window.iconHtml?window.iconHtml('x-circle'):''} Lỗi tải phần ${_currentPhan}: ${e.message}
             <button class="btn-tool" style="margin-left:12px" onclick="window.tubinhRetry(${_currentPhan})">↻ Thử lại</button>
           </div>`;
       }

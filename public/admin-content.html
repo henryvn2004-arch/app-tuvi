@@ -757,7 +757,7 @@ audio { height: 32px; flex: 1; }
       <span class="icon"><span class="ic-inline" data-icon="volume-2" data-icon-emoji="🔊" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">🔊</span></span> TTS Queue
     </a>
     <a class="nav-item" onclick="showView('youtube')">
-      <span class="icon">▶️</span> YouTube Upload
+      <span class="icon"><span class="ic-inline" data-icon="film" data-icon-emoji="▶️" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">▶️</span></span> YouTube Upload
     </a>
     <div class="nav-section" style="margin-top:12px">Cài đặt</div>
     <a class="nav-item" onclick="showView('settings')">
@@ -840,7 +840,7 @@ audio { height: 32px; flex: 1; }
     <!-- ── LIST VIEW ── -->
     <div id="view-list" style="display:none">
       <div style="display:flex; gap:10px; margin-bottom:16px; flex-wrap:wrap">
-        <input type="text" class="form-control" id="search-input" placeholder="🔍 Tìm kiếm tiêu đề..." style="max-width:300px" oninput="filterList()">
+        <input type="text" class="form-control" id="search-input" placeholder="Tìm kiếm tiêu đề..." style="max-width:300px" oninput="filterList()">
         <select class="form-control" id="filter-status" onchange="filterList()" style="max-width:160px">
           <option value="">Tất cả trạng thái</option>
           <option value="draft">Draft</option>
@@ -906,7 +906,7 @@ audio { height: 32px; flex: 1; }
     <div id="view-youtube" style="display:none">
       <div class="panel">
         <div class="panel-header">
-          <span class="panel-title">▶️ YouTube Upload Queue</span>
+          <span class="panel-title"><span class="ic-inline" data-icon="film" data-icon-emoji="▶️" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">▶️</span> YouTube Upload Queue</span>
           <button class="btn btn-gold btn-sm" onclick="processYTQueue()"><span class="ic-inline" data-icon="package" data-icon-emoji="📤" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">📤</span> Upload tất cả</button>
         </div>
         <div class="panel-body">
@@ -965,7 +965,7 @@ audio { height: 32px; flex: 1; }
             <div class="form-group">
               <label class="form-label">YouTube default description (template)</label>
               <textarea class="form-control" id="cfg-yt-desc" rows="4"
-                placeholder="🔮 {title}&#10;&#10;Tử Vi Minh Bảo — luận giải lá số theo cổ pháp.&#10;🌐 tuviminhbao.com"></textarea>
+                placeholder="{title}&#10;&#10;Tử Vi Minh Bảo — luận giải lá số theo cổ pháp.&#10;tuviminhbao.com"></textarea>
             </div>
           </div>
           <button class="btn btn-primary" onclick="saveSettings()"><span class="ic-inline" data-icon="save" data-icon-emoji="💾" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">💾</span> Lưu cài đặt</button>
@@ -990,7 +990,7 @@ audio { height: 32px; flex: 1; }
         <div class="tab active" id="tab-info" onclick="switchTab('info')"><span class="ic-inline" data-icon="file-text" data-icon-emoji="📝" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">📝</span> Thông tin</div>
         <div class="tab" id="tab-script" onclick="switchTab('script')"><span class="ic-inline" data-icon="mic" data-icon-emoji="🎙" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">🎙</span> Kịch bản</div>
         <div class="tab" id="tab-tts" onclick="switchTab('tts-tab')"><span class="ic-inline" data-icon="volume-2" data-icon-emoji="🔊" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">🔊</span> TTS & Audio</div>
-        <div class="tab" id="tab-yt" onclick="switchTab('yt')">▶️ YouTube</div>
+        <div class="tab" id="tab-yt" onclick="switchTab('yt')"><span class="ic-inline" data-icon="film" data-icon-emoji="▶️" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">▶️</span> YouTube</div>
       </div>
 
       <!-- Info tab -->
@@ -1030,7 +1030,7 @@ audio { height: 32px; flex: 1; }
         <div style="margin-top:16px; display:flex; gap:10px; flex-wrap:wrap; align-items:center">
           <select class="form-control" id="khao-luan-select" style="max-width:360px; flex:1"
             onchange="previewKhaoLuan(this.value)">
-            <option value=""><span class="ic-inline" data-icon="book-open" data-icon-emoji="📚" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">📚</span> Chọn bài từ Khảo Luận...</option>
+            <option value="">Chọn bài từ Khảo Luận...</option>
           </select>
           <button class="btn btn-primary" onclick="importKhaoLuan()" id="btn-import-kl" disabled>
             <span class="ic-inline" data-icon="package" data-icon-emoji="📥" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">📥</span> Nhập vào script
@@ -1386,14 +1386,14 @@ function renderScriptEditor() {
   const container = document.getElementById('script-lines');
   if (!scriptLines.length) {
     container.innerHTML = `<div style="padding:20px; text-align:center; color:var(--text-lt); font-size:13px">
-      Chưa có kịch bản. Nhấn "+ Câu hỏi" hoặc "✨ Sinh kịch bản bằng AI" để bắt đầu.
+      Chưa có kịch bản. Nhấn "+ Câu hỏi" hoặc "<span class="ic-inline" data-icon="sparkles" data-icon-emoji="✨" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">✨</span> Sinh kịch bản bằng AI" để bắt đầu.
     </div>`;
   } else {
     container.innerHTML = scriptLines.map((line, i) => `
       <div class="script-line" data-idx="${i}">
         <div class="line-role">
           <span class="role-badge ${line.role === 'hoi' ? 'hoi' : 'tra-loi'}">
-            ${line.role === 'hoi' ? '🎙 Hỏi' : '🧧 Trả lời'}
+            ${line.role === 'hoi' ? '<span class="ic-inline" data-icon="mic" data-icon-emoji="🎙" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">🎙</span> Hỏi' : '<span class="ic-inline" data-icon="gift" data-icon-emoji="🧧" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">🧧</span> Trả lời'}
           </span>
         </div>
         <div class="line-text">
@@ -1479,7 +1479,7 @@ async function loadKhaoLuanList() {
     const data = await sbFetch('khao_luan?select=id,title,excerpt,category&order=created_at.desc&limit=100');
     khaoLuanCache = data || [];
     const sel = document.getElementById('khao-luan-select');
-    sel.innerHTML = '<option value=""><span class="ic-inline" data-icon="book-open" data-icon-emoji="📚" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">📚</span> Chọn bài từ Khảo Luận...</option>';
+    sel.innerHTML = '<option value="">Chọn bài từ Khảo Luận...</option>';
     khaoLuanCache.forEach(item => {
       const opt = document.createElement('option');
       opt.value = item.id;
@@ -1633,7 +1633,7 @@ async function addScriptLineAI() {
 function openCreateModal() {
   currentEditId = null;
   scriptLines = [];
-  document.getElementById('modal-title').textContent = '✏️ Tạo nội dung mới';
+  document.getElementById('modal-title').innerHTML = '<span class="ic-inline" data-icon="pencil" data-icon-emoji="✏️" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">✏️</span> Tạo nội dung mới';
   document.getElementById('f-title').value = '';
   document.getElementById('f-chu-de').value = '';
   document.getElementById('f-tags').value = '';
@@ -1652,7 +1652,7 @@ async function editItem(id) {
   if (!item) return;
   currentEditId = id;
   scriptLines = item.noi_dung || [];
-  document.getElementById('modal-title').textContent = '✏️ Sửa nội dung';
+  document.getElementById('modal-title').innerHTML = '<span class="ic-inline" data-icon="pencil" data-icon-emoji="✏️" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">✏️</span> Sửa nội dung';
   document.getElementById('f-title').value = item.title || '';
   document.getElementById('f-chu-de').value = item.chu_de || '';
   document.getElementById('f-tags').value = (item.tags || []).join(', ');
@@ -1917,7 +1917,7 @@ async function uploadToYT(id) {
   const btn = document.getElementById('btn-yt-upload');
   const statusEl = document.getElementById('yt-upload-status');
   if (btn) btn.disabled = true;
-  if (statusEl) statusEl.textContent = '⏳ Đang upload...';
+  if (statusEl) statusEl.innerHTML = '<span class="ic-inline" data-icon="hourglass" data-icon-emoji="⏳" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">⏳</span> Đang upload...';
 
   try {
     const resp = await fetch(
@@ -1941,7 +1941,7 @@ async function uploadToYT(id) {
     }
   } catch (e) {
     toast('Lỗi upload: ' + e.message, 'error');
-    if (statusEl) statusEl.textContent = '❌ ' + e.message;
+    if (statusEl) statusEl.innerHTML = '<span class="ic-inline" data-icon="x-circle" data-icon-emoji="❌" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">❌</span> ' + escHtml(e.message);
   } finally {
     if (btn) btn.disabled = false;
   }

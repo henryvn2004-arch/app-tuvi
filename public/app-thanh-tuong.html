@@ -89,10 +89,10 @@
       <div class="dt-card" id="inputCard">
         <h2>Ghi Âm Giọng Nói</h2>
         <p class="sub">AI phân tích giọng nói theo Ngũ Âm: Kim · Mộc · Thủy · Hỏa · Thổ.</p>
-        <div class="dt-privacy"><span>🔒</span><div>Âm thanh xử lý hoàn toàn trong trình duyệt. Chỉ gửi các chỉ số đo được (không gửi file audio) lên server để AI phân tích.</div></div>
+        <div class="dt-privacy"><span class="ic" data-icon="lock"></span><div>Âm thanh xử lý hoàn toàn trong trình duyệt. Chỉ gửi các chỉ số đo được (không gửi file audio) lên server để AI phân tích.</div></div>
 
         <div class="passage-card">
-          <div class="passage-label">📖 Đọc đoạn thơ này (tự nhiên, rõ ràng)</div>
+          <div class="passage-label"><span class="ic" data-icon="book-open"></span> Đọc đoạn thơ này (tự nhiên, rõ ràng)</div>
           <div class="passage-text">
             Công cha như núi <em>Thái Sơn</em>,<br>
             nghĩa mẹ như nước trong nguồn <em>chảy ra</em>.<br>
@@ -105,7 +105,7 @@
         <div class="record-wrap">
           <div class="countdown-badge" id="countdownBadge"></div>
           <button class="btn-record" id="recordBtn" onclick="toggleRecord()">
-            <span id="recordIcon">🎙</span>
+            <span id="recordIcon" class="ic" data-icon="mic"></span>
             <span id="recordLabel">Bắt Đầu Thu Âm</span>
           </button>
           <div class="status-msg" id="statusMsg">Nhấn để bắt đầu thu âm · Cho phép truy cập microphone khi trình duyệt hỏi</div>
@@ -119,7 +119,7 @@
         </div>
 
         <div class="features-panel" id="featuresPanel">
-          <div class="features-title">📊 Kết quả đo lường giọng nói</div>
+          <div class="features-title"><span class="ic" data-icon="bar-chart-3"></span> Kết quả đo lường giọng nói</div>
           <div class="features-grid" id="featuresGrid"></div>
           <div style="text-align:center;margin-top:6px">
             <span id="nguAmBadge" class="ngu-am-badge"></span>
@@ -127,7 +127,7 @@
         </div>
 
         <div style="text-align:center;margin-top:18px">
-          <button class="btn-go" id="analyzeBtn" onclick="analyze()" disabled>🎵 Phân Tích Thanh Tướng — <span data-tvp-price="thanh-tuong">…</span> Lượng</button>
+          <button class="btn-go" id="analyzeBtn" onclick="analyze()" disabled><span class="ic" data-icon="music"></span> Phân Tích Thanh Tướng — <span data-tvp-price="thanh-tuong">…</span> Lượng</button>
         </div>
         <div class="dt-error" id="error-msg"></div>
       </div>
@@ -262,18 +262,18 @@ function updateRecordUI(recording, processing = false) {
   btn.classList.remove('recording', 'processing');
   if (recording) {
     btn.classList.add('recording');
-    icon.textContent = '⏹';
+    icon.textContent = '⏹'; // không có icon "dừng" trong bộ Lucide đang dùng — giữ nguyên
     label.textContent = 'Dừng Lại';
     timerWrap.classList.add('visible');
     waveWrap.classList.add('visible');
     document.getElementById('statusMsg').textContent = 'Đang thu âm — hãy đọc đoạn thơ trên...';
   } else if (processing) {
     btn.classList.add('processing');
-    icon.textContent = '⏳';
+    icon.innerHTML = window.iconHtml ? window.iconHtml('hourglass') : '⏳';
     label.textContent = 'Đang xử lý...';
     timerWrap.classList.remove('visible');
   } else {
-    icon.textContent = '🎙';
+    icon.innerHTML = window.iconHtml ? window.iconHtml('mic') : '🎙';
     label.textContent = 'Thu Âm Lại';
     timerWrap.classList.remove('visible');
     waveWrap.classList.remove('visible');
@@ -581,7 +581,9 @@ async function analyze() {
 
 async function _doAnalyze() {
   document.getElementById('resultCard').style.display = 'block';
-  document.getElementById('aiResult').innerHTML = '<div class="dt-loading"><span class="dt-loading-icon">🎵</span><div class="dt-loading-text">AI đang luận giải thanh tướng...<br><span style="font-size:12px;opacity:.7">Thường mất 10–15 giây</span></div></div>';
+  const aiResultEl = document.getElementById('aiResult');
+  aiResultEl.innerHTML = '<div class="dt-loading"><span class="dt-loading-icon ic" data-icon="music"></span><div class="dt-loading-text">AI đang luận giải thanh tướng...<br><span style="font-size:12px;opacity:.7">Thường mất 10–15 giây</span></div></div>';
+  window.mountIcons && window.mountIcons(aiResultEl);
   document.getElementById('resultCard').scrollIntoView({ behavior: 'smooth', block: 'start' });
 
   try {
@@ -654,7 +656,7 @@ function resetTool() {
   document.getElementById('waveWrap').classList.remove('visible');
   document.getElementById('timerBarWrap').classList.remove('visible');
   document.getElementById('recordBtn').classList.remove('recording', 'processing');
-  document.getElementById('recordIcon').textContent = '🎙';
+  document.getElementById('recordIcon').innerHTML = window.iconHtml ? window.iconHtml('mic') : '🎙';
   document.getElementById('recordLabel').textContent = 'Bắt Đầu Thu Âm';
   document.getElementById('inputCard').scrollIntoView({ behavior: 'smooth', block: 'start' });
   Shell.setShareable(null);

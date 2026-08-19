@@ -181,7 +181,7 @@ select.form-control{appearance:none;background-image:url("data:image/svg+xml,%3C
 
   <div class="page-tabs">
     <button class="page-tab active" onclick="showPage('wardrobe',this)"><span class="ic" data-icon="shirt"></span> Tủ Đồ <span id="wardrobeCount" style="background:var(--navy);color:#fff;font-size:9px;padding:1px 6px;border-radius:10px;margin-left:3px;">0</span></button>
-    <button class="page-tab" onclick="showPage('mix',this)">✨ Mix & Match</button>
+    <button class="page-tab" onclick="showPage('mix',this)"><span class="ic" data-icon="sparkles"></span> Mix & Match</button>
     <button class="page-tab" onclick="showPage('add',this)">＋ Thêm Đồ</button>
   </div>
 
@@ -191,11 +191,11 @@ select.form-control{appearance:none;background-image:url("data:image/svg+xml,%3C
     <div class="wardrobe-filters">
       <button class="filter-btn active" onclick="filterWardrobe('all',this)"><span class="ic" data-icon="folder"></span> Tất cả</button>
       <button class="filter-btn" onclick="filterWardrobe('top',this)"><span class="ic" data-icon="shirt"></span> Áo</button>
-      <button class="filter-btn" onclick="filterWardrobe('bottom',this)">👖 Quần/Váy</button>
+      <button class="filter-btn" onclick="filterWardrobe('bottom',this)"><span class="ic" data-icon="shirt"></span> Quần/Váy</button>
       <button class="filter-btn" onclick="filterWardrobe('dress',this)"><span class="ic" data-icon="shirt"></span> Đầm</button>
-      <button class="filter-btn" onclick="filterWardrobe('outer',this)">🧥 Áo khoác</button>
-      <button class="filter-btn" onclick="filterWardrobe('shoes',this)">👟 Giày</button>
-      <button class="filter-btn" onclick="filterWardrobe('accessory',this)">💍 Phụ kiện</button>
+      <button class="filter-btn" onclick="filterWardrobe('outer',this)"><span class="ic" data-icon="shirt"></span> Áo khoác</button>
+      <button class="filter-btn" onclick="filterWardrobe('shoes',this)"><span class="ic" data-icon="sparkles"></span> Giày</button>
+      <button class="filter-btn" onclick="filterWardrobe('accessory',this)"><span class="ic" data-icon="gem"></span> Phụ kiện</button>
     </div>
     <div class="wardrobe-grid" id="wardrobeGrid">
       <div class="empty-state" style="grid-column:1/-1">
@@ -219,18 +219,18 @@ select.form-control{appearance:none;background-image:url("data:image/svg+xml,%3C
                 <div class="occ-pill active" onclick="setOcc(this,'daily')"><span class="ic" data-icon="leaf"></span> Hàng ngày</div>
                 <div class="occ-pill" onclick="setOcc(this,'work')"><span class="ic" data-icon="briefcase"></span> Đi làm</div>
                 <div class="occ-pill" onclick="setOcc(this,'date')"><span class="ic" data-icon="heart"></span> Hẹn hò</div>
-                <div class="occ-pill" onclick="setOcc(this,'party')">🎉 Tiệc</div>
-                <div class="occ-pill" onclick="setOcc(this,'sport')">🏃 Thể thao</div>
-                <div class="occ-pill" onclick="setOcc(this,'travel')">✈️ Du lịch</div>
+                <div class="occ-pill" onclick="setOcc(this,'party')"><span class="ic" data-icon="gift"></span> Tiệc</div>
+                <div class="occ-pill" onclick="setOcc(this,'sport')"><span class="ic" data-icon="dumbbell"></span> Thể thao</div>
+                <div class="occ-pill" onclick="setOcc(this,'travel')"><span class="ic" data-icon="compass"></span> Du lịch</div>
               </div>
             </div>
             <div class="form-group">
               <label class="form-label">Thời tiết</label>
               <div class="weather-row" id="weatherBtns">
-                <div class="weather-btn active" onclick="setWeather(this,'hot')">☀️ Nóng</div>
-                <div class="weather-btn" onclick="setWeather(this,'warm')">🌤 Ấm</div>
-                <div class="weather-btn" onclick="setWeather(this,'cool')">🌥 Mát</div>
-                <div class="weather-btn" onclick="setWeather(this,'cold')">🥶 Lạnh</div>
+                <div class="weather-btn active" onclick="setWeather(this,'hot')"><span class="ic" data-icon="sun"></span> Nóng</div>
+                <div class="weather-btn" onclick="setWeather(this,'warm')"><span class="ic" data-icon="sunrise"></span> Ấm</div>
+                <div class="weather-btn" onclick="setWeather(this,'cool')"><span class="ic" data-icon="waves"></span> Mát</div>
+                <div class="weather-btn" onclick="setWeather(this,'cold')"><span class="ic" data-icon="sparkles"></span> Lạnh</div>
               </div>
             </div>
             <div class="form-group">
@@ -241,7 +241,7 @@ select.form-control{appearance:none;background-image:url("data:image/svg+xml,%3C
               <label class="form-label">Phong cách ưa thích</label>
               <input type="text" id="mixStylePref" class="form-control" placeholder="VD: tối giản, Hàn Quốc, sporty...">
             </div>
-            <button class="btn-gold" id="btnMix" onclick="doMix()">✨ Mix & Match Outfit</button>
+            <button class="btn-gold" id="btnMix" onclick="doMix()"><span class="ic" data-icon="sparkles"></span> Mix & Match Outfit</button>
           </div>
         </div>
       </div>
@@ -257,7 +257,7 @@ select.form-control{appearance:none;background-image:url("data:image/svg+xml,%3C
           </div>
         </div>
         <div id="mixEmpty" style="text-align:center;padding:50px 20px;color:var(--text-lt);">
-          <div style="font-size:36px;margin-bottom:10px;">✨</div>
+          <div style="font-size:36px;margin-bottom:10px;"><span class="ic" data-icon="sparkles"></span></div>
           <div style="font-size:13px;">Chọn dịp + thời tiết rồi nhấn Mix & Match</div>
         </div>
       </div>
@@ -355,8 +355,8 @@ function renderStats() {
   const byCat = {};
   _wardrobe.forEach(i => { byCat[i.category] = (byCat[i.category] || 0) + 1; });
   bar.innerHTML = Object.entries(byCat).map(([cat,n]) =>
-    `<div class="stat-chip">${CAT_ICON[cat]||'👔'} <strong>${n}</strong> ${CAT_VN[cat]||cat}</div>`
-  ).join('') + `<div class="stat-chip">📦 Tổng <strong>${_wardrobe.length}</strong> món</div>`;
+    `<div class="stat-chip">${window.iconHtml?window.iconHtml(CAT_ICON[cat]||'👔'):(CAT_ICON[cat]||'👔')} <strong>${n}</strong> ${CAT_VN[cat]||cat}</div>`
+  ).join('') + `<div class="stat-chip">${window.iconHtml?window.iconHtml('📦'):''} Tổng <strong>${_wardrobe.length}</strong> món</div>`;
   bar.style.display = 'flex';
   document.getElementById('wardrobeCount').textContent = _wardrobe.length;
 }
@@ -366,7 +366,7 @@ function renderWardrobe() {
   const items = _filterCat === 'all' ? _wardrobe : _wardrobe.filter(i => i.category === _filterCat);
   if (!items.length) {
     grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1">
-      <div class="empty-icon">${_filterCat === 'all' ? '👗' : CAT_ICON[_filterCat] || '👗'}</div>
+      <div class="empty-icon">${window.iconHtml ? window.iconHtml(_filterCat === 'all' ? '👗' : (CAT_ICON[_filterCat] || '👗')) : (_filterCat === 'all' ? '👗' : CAT_ICON[_filterCat] || '👗')}</div>
       <div style="font-size:13px;color:var(--navy);font-weight:600;margin-bottom:4px;">
         ${_filterCat === 'all' ? 'Tủ đồ trống' : 'Chưa có ' + (CAT_VN[_filterCat]||_filterCat)}
       </div>
@@ -379,7 +379,7 @@ function renderWardrobe() {
       <img src="${item.image_url}" alt="${item.ai_desc || ''}" loading="lazy">
       <button class="wardrobe-item-delete" onclick="event.stopPropagation();deleteItem('${item.id}','${item.image_url}')">✕</button>
       <div class="wardrobe-item-info">
-        <div class="wardrobe-item-cat">${CAT_ICON[item.category]||''} ${CAT_VN[item.category]||item.category}</div>
+        <div class="wardrobe-item-cat">${window.iconHtml?window.iconHtml(CAT_ICON[item.category]||''):(CAT_ICON[item.category]||'')} ${CAT_VN[item.category]||item.category}</div>
         <div class="wardrobe-item-color">
           <div class="color-dot" style="background:${item.color_hex||'#888'}"></div>
           <div class="wardrobe-item-name">${item.color_main||''} ${item.ai_desc||''}</div>
@@ -489,7 +489,7 @@ async function addItem() {
       const item = data.item;
       const tags = document.getElementById('classifyTags');
       tags.innerHTML = `
-        <span class="tag cat">${CAT_ICON[item.category]||''} ${CAT_VN[item.category]||item.category}</span>
+        <span class="tag cat">${window.iconHtml?window.iconHtml(CAT_ICON[item.category]||''):(CAT_ICON[item.category]||'')} ${CAT_VN[item.category]||item.category}</span>
         ${item.color_main ? `<span class="tag" style="background:${item.color_hex||'#888'}22;color:${item.color_hex||'#888'};border:1px solid ${item.color_hex||'#888'}44">⬤ ${item.color_main}</span>` : ''}
         ${item.napam_hanh ? `<span class="tag hanh">Hành ${item.napam_hanh}</span>` : ''}
         ${(item.style_tags||[]).map(t => `<span class="tag">${t}</span>`).join('')}
@@ -570,13 +570,14 @@ async function doMix() {
 
 function renderMixResults(data) {
   const cards = document.getElementById('outfitCards');
-  const WEATHER_LABEL = {hot:'☀️ Nóng',warm:'🌤 Ấm',cool:'🌥 Mát',cold:'🥶 Lạnh'};
+  const WEATHER_LABEL = {hot:'Nóng',warm:'Ấm',cool:'Mát',cold:'Lạnh'};
+  const WEATHER_ICON = {hot:'sun',warm:'sunrise',cool:'waves',cold:'sparkles'};
   cards.innerHTML = (data.outfits || []).map((outfit, i) => {
     const items = outfit.itemDetails || [];
     const thumbs = items.map(item => `
       <div class="outfit-item-thumb">
         <img src="${item.image_url}" alt="${item.ai_desc||''}" loading="lazy">
-        <div class="outfit-item-thumb-cat">${CAT_ICON[item.category]||''} ${CAT_VN[item.category]||item.category}</div>
+        <div class="outfit-item-thumb-cat">${window.iconHtml?window.iconHtml(CAT_ICON[item.category]||''):(CAT_ICON[item.category]||'')} ${CAT_VN[item.category]||item.category}</div>
       </div>`).join('');
     return `
       <div class="outfit-card-result">
@@ -585,11 +586,11 @@ function renderMixResults(data) {
             <div class="outfit-name">#${i+1} ${outfit.name || 'Outfit'}</div>
             <div class="outfit-vibe">${outfit.vibe || ''}</div>
           </div>
-          <div style="font-size:11px;opacity:.6">${WEATHER_LABEL[_weather]||''} · ${OCC_VN[_occasion]||_occasion}</div>
+          <div style="font-size:11px;opacity:.6">${window.iconHtml&&WEATHER_ICON[_weather]?window.iconHtml(WEATHER_ICON[_weather]):''} ${WEATHER_LABEL[_weather]||''} · ${OCC_VN[_occasion]||_occasion}</div>
         </div>
         <div class="outfit-items-row">${thumbs}</div>
         <div class="outfit-why">${outfit.why || ''}</div>
-        ${outfit.tip ? `<div class="outfit-tip">💡 ${outfit.tip}</div>` : ''}
+        ${outfit.tip ? `<div class="outfit-tip">${window.iconHtml?window.iconHtml('💡'):''} ${outfit.tip}</div>` : ''}
       </div>`;
   }).join('');
 

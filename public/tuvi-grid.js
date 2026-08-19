@@ -196,7 +196,7 @@ const TuviGrid = (() => {
         ${conv._dl ? `<div class="center-row"><span class="ic-inline" data-icon="calendar" data-icon-emoji="📅" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">📅</span> ${conv._dl.day}/${conv._dl.month}/${conv._dl.year} (DL) · giờ ${conv.gioChi||''}</div>` : ''}
         <div class="center-row"><span class="ic-inline" data-icon="calendar" data-icon-emoji="📅" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">📅</span> ${conv.amLich ? conv.amLich.day+'/'+conv.amLich.month+'/'+conv.amLich.year : ''} (ÂL) · giờ ${conv.gioChi||''}</div>
         <div class="center-row"><span class="ic-inline" data-icon="cake" data-icon-emoji="🎂" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">🎂</span> ${ls.tuoiXem} tuổi (âm lịch)</div>
-        <div class="center-row">⚧ ${gioitinh === 'nam' ? 'Nam' : 'Nữ'}</div>
+        <div class="center-row"><span class="ic-inline" data-icon="user" data-icon-emoji="⚧" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">⚧</span> ${gioitinh === 'nam' ? 'Nam' : 'Nữ'}</div>
         <hr class="center-divider">
         <div class="center-row">Năm: <b style="color:var(--navy)">${ls.canChiNam}</b></div>
         <div class="center-row">Mệnh: <b style="color:var(--navy)">${NAP_AM_FULL[ls.canChiNam] || ls.napAm}</b></div>

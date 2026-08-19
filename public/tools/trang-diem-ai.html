@@ -329,7 +329,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg-soft); color: va
     <!-- Header -->
     <div class="result-header" id="resultHeader">
       <div class="face-badge">
-        <div class="face-emoji" id="faceEmoji">🪞</div>
+        <div class="face-emoji" id="faceEmoji"><span class="ic" data-icon="aperture"></span></div>
         <div class="face-label" id="faceLabel">Tướng mặt</div>
       </div>
       <div class="result-info">
@@ -352,8 +352,8 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg-soft); color: va
       <div class="tryon-result" id="tryonResult" style="display:none">
         <img id="tryonImg" alt="result">
         <div class="tryon-actions">
-          <button class="btn-download" onclick="downloadResult()">⬇ Tải ảnh</button>
-          <button class="btn-retry" onclick="retryStyle()">↺ Thử lại</button>
+          <button class="btn-download" onclick="downloadResult()"><span class="ic" data-icon="chevron-down"></span> Tải ảnh</button>
+          <button class="btn-retry" onclick="retryStyle()"><span class="ic" data-icon="rotate-cw"></span> Thử lại</button>
         </div>
       </div>
     </div>
@@ -558,7 +558,7 @@ function renderResults(data) {
 
   // Header
   const faceShape = data.faceShape || 'oval';
-  document.getElementById('faceEmoji').textContent = FACE_EMOJI[faceShape] || '🪞';
+  document.getElementById('faceEmoji').innerHTML = window.iconHtml ? window.iconHtml(FACE_EMOJI[faceShape] || '🪞') : (FACE_EMOJI[faceShape] || '🪞');
   document.getElementById('faceLabel').textContent = data.faceShapeVN || '';
   document.getElementById('faceShapeText').textContent = `Mặt ${data.faceShapeVN || ''} · ${data.ageGroup || ''} · Da ${data.skinTone || ''}`;
   document.getElementById('tuongHocText').textContent = data.tuongHocInsight || '';
@@ -592,7 +592,7 @@ function renderResults(data) {
     const card = document.createElement('div');
     card.className = 'style-card' + (isMenh && rank ? ' menh-match' : '');
     card.innerHTML = `
-      <div class="style-emoji">${meta.emoji}</div>
+      <div class="style-emoji">${window.iconHtml ? window.iconHtml(meta.emoji) : meta.emoji}</div>
       <div class="style-info">
         <div class="style-name-row">
           ${rank ? `<span class="style-rank-badge">✦ #${rank} phù hợp</span>` : ''}
