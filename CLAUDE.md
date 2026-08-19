@@ -242,15 +242,20 @@ route chỉ còn import.
 - Khung 12 tháng đo trên lá số thật: 12/12 tháng đủ 2 đoạn, tổ hợp sao có mặt,
   `dangDienRa` rơi đúng đoạn chứa hôm nay.
 
-### 🔑 VIỆC TAY HENRY — chạy SAU khi deploy, không được chạy trước
-`_patches/migration-van-han-nam.sql` **ĐÃ CHẠY prod** nhưng cố ý để
-`enabled=false` (`on conflict do update` KHÔNG đụng cột đó). Bật:
-```sql
-update tool_pricing set enabled = true, updated_at = now() where tool_id = 'van-han-nam';
-```
-Bật TRƯỚC deploy là công cụ hiện trên `/cong-cu` trong khi route chưa tồn tại →
-**404 cho người thật** (đúng bài học "dữ liệu đi SAU giao diện" đã làm 58 công cụ
-rơi vào "Khác" 4 phút).
+### ✅ ĐÃ BẬT TRÊN PROD — hết việc tay
+Trình tự đã chạy ĐÚNG thứ tự bắt buộc: merge (`d8dfe90`) → **đợi prod phục vụ
+`/app/van-han-nam` trả 200** (verify header `x-nextjs-rewritten-path:
+/app-van-han-nam.html`) → **rồi mới** `enabled=true`. Verify sau khi bật: 56 tool
+đang bật, `credits=50`, `is_free=false`, và cả hai khoá `need_tags`
+(`van-han` · `ban-than`) đều khớp nhóm ĐANG BẬT ⇒ không rơi vào "Khác".
+- 🔑 **Migration an toàn chạy TRƯỚC deploy, câu BẬT thì không.** File
+  `_patches/migration-van-han-nam.sql` tạo dòng ở `enabled=false` và
+  `on conflict do update` CỐ Ý không đụng cột đó — tách được hai việc này là rút
+  ngắn cửa sổ rủi ro. Bật trước deploy là công cụ hiện trên `/cong-cu` trong khi
+  route chưa tồn tại → **404 cho người thật** (bài học "dữ liệu đi SAU giao
+  diện" đã làm 58 công cụ rơi vào "Khác" 4 phút).
+- Tắt lại nếu cần: `update tool_pricing set enabled = false, updated_at = now()
+  where tool_id = 'van-han-nam';`
 
 ### CÒN LẠI
 - 🔴 **Chưa gọi LLM thật lượt nào** — container không có key, verify dừng ở tầng
