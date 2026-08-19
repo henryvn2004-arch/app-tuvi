@@ -201,6 +201,18 @@ export const JOBS: JobSpec[] = [
   { key: 'video-build', label: 'Dựng clip 9:16', source: 'actions', everyMinutes: 7 * D,
     schedule: 'T2 08:00 VN hằng tuần', sink: 'clips (Storage) + media_assets',
     workflow: 'video-build.yml', since: '2026-08-18' },
+  // Track Backlink — máy soạn, người tự tay dán/gửi (xem đầu
+  // _patches/migration-backlinks.sql). `since` = ngày merge: cả ba job chưa
+  // từng chạy nên cron_runs trống, thiếu mốc này bộ dò kêu ngay "CHƯA HỀ chạy".
+  { key: 'backlink-prospect', label: 'Backlink — tìm cơ hội', source: 'vercel', everyMinutes: 7 * D,
+    schedule: 'T3 08:45 VN hằng tuần', sink: 'backlink_prospects', path: '/api/cron/backlink-prospect',
+    since: '2026-08-19' },
+  { key: 'backlink-content', label: 'Backlink — soạn nội dung', source: 'vercel', everyMinutes: D,
+    schedule: '09:15 VN hằng ngày', sink: 'backlink_content', path: '/api/cron/backlink-content',
+    since: '2026-08-19' },
+  { key: 'backlink-check', label: 'Backlink — kiểm link sống', source: 'vercel', everyMinutes: D,
+    schedule: '09:45 VN hằng ngày', sink: 'backlink_links', path: '/api/cron/backlink-check',
+    since: '2026-08-19' },
 ];
 
 export interface CronRun {

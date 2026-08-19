@@ -25,6 +25,9 @@
     { "path": "/api/cron/yt-drain",    "schedule": "0 4 * * *"  },
     { "path": "/api/cron/media-build", "schedule": "30 2 * * *" },
     { "path": "/api/cron/seeding-build", "schedule": "30 1 * * *" },
-    { "path": "/api/cron/content-metrics", "schedule": "30 5 * * *" }
+    { "path": "/api/cron/content-metrics", "schedule": "30 5 * * *" },
+    { "path": "/api/cron/backlink-prospect", "schedule": "45 1 * * 2" },
+    { "path": "/api/cron/backlink-content",  "schedule": "15 2 * * *" },
+    { "path": "/api/cron/backlink-check",    "schedule": "45 2 * * *" }
   ]
 }
