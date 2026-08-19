@@ -28,6 +28,7 @@
     { "path": "/api/cron/content-metrics", "schedule": "30 5 * * *" },
     { "path": "/api/cron/backlink-prospect", "schedule": "45 1 * * 2" },
     { "path": "/api/cron/backlink-content",  "schedule": "15 2 * * *" },
-    { "path": "/api/cron/backlink-check",    "schedule": "45 2 * * *" }
+    { "path": "/api/cron/backlink-check",    "schedule": "45 2 * * *" },
+    { "path": "/api/cron/backlink-broken-links", "schedule": "45 1 * * 4" }
   ]
 }

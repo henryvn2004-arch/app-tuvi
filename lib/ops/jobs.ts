@@ -213,6 +213,9 @@ export const JOBS: JobSpec[] = [
   { key: 'backlink-check', label: 'Backlink — kiểm link sống', source: 'vercel', everyMinutes: D,
     schedule: '09:45 VN hằng ngày', sink: 'backlink_links', path: '/api/cron/backlink-check',
     since: '2026-08-19' },
+  { key: 'backlink-broken-links', label: 'Backlink — quét link chết', source: 'vercel', everyMinutes: 7 * D,
+    schedule: 'T5 08:45 VN hằng tuần', sink: 'backlink_prospects', path: '/api/cron/backlink-broken-links',
+    since: '2026-08-19' },
 ];
 
 export interface CronRun {

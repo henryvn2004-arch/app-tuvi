@@ -579,11 +579,12 @@
             <div class="panel-actions">
               <span class="badge badge-grey" id="bl-p-badge">…</span>
               <button class="btn btn-outline btn-sm" id="bl-p-run-btn" onclick="blRunNow('prospect', this)">🔍 Tìm cơ hội mới</button>
+              <button class="btn btn-outline btn-sm" id="bl-bl-run-btn" onclick="blRunNow('brokenlinks', this)">🔗💀 Quét link chết</button>
               <button class="btn btn-primary btn-sm" onclick="loadBacklinks()">↻</button>
             </div>
           </div>
           <div class="panel-body" style="font-size:.76rem;color:var(--text-lt);padding-bottom:.5rem">
-            Cron <code>backlink-prospect</code> tìm cơ hội mới mỗi T3 qua Brave Search API (<b>tuỳ chọn</b> — chưa cấu hình <code>BRAVE_SEARCH_API_KEY</code> thì bỏ trống, vẫn thêm được bằng tay ở dưới). Cron <code>backlink-content</code> mỗi sáng soạn sẵn nội dung cho cơ hội <b>chưa soạn</b>, qua brand-safety trước khi lưu. <b>Không có nút đăng/gửi nào</b> — soạn xong đợi ở tab "Nội Dung Cần Duyệt", người tự tay dán/gửi rồi đánh dấu Đã dùng.
+            Cron <code>backlink-prospect</code> tìm cơ hội mới mỗi T3 qua <b>BỐN nguồn độc lập</b>, ba nguồn đầu 0 API key: danh sách tĩnh đã vét tay · <a href="https://www.google.com/alerts" target="_blank" rel="noopener">Google Alerts</a> RSS (nhắc tên chưa gắn link — cần Henry tạo alert một lần, dán URL feed vào <code>GOOGLE_ALERTS_RSS_URLS</code>) · quét link chết trên trang tài nguyên đúng ngách (nút "🔗💀" ở trên, chạy riêng mỗi T5) · Brave Search API (<b>tuỳ chọn</b>, cần <code>BRAVE_SEARCH_API_KEY</code>). Thiếu nguồn nào thì các nguồn còn lại vẫn chạy đều. Cron <code>backlink-content</code> mỗi sáng soạn sẵn nội dung cho cơ hội <b>chưa soạn</b>, qua brand-safety trước khi lưu. <b>Không có nút đăng/gửi nào</b> — soạn xong đợi ở tab "Nội Dung Cần Duyệt", người tự tay dán/gửi rồi đánh dấu Đã dùng.
           </div>
           <div id="bl-prospects" style="padding:0 1rem 1rem">
             <div class="loading"><span class="spin"></span>Đang tải...</div>
@@ -614,7 +615,7 @@
             </div>
           </div>
           <div class="panel-body" style="font-size:.76rem;color:var(--text-lt);padding-bottom:.5rem">
-            Sau khi tự tay dán/gửi và link đã LÊN THẬT, thêm nó vào đây — cron <code>backlink-check</code> mỗi sáng ghé lại trang đó (User-Agent tự nhận là bot, chỉ đọc HTML công khai) để xác nhận link còn sống, đọc lại dofollow/nofollow. Link biến mất sẽ báo về Telegram.
+            Sau khi tự tay dán/gửi và link đã LÊN THẬT, thêm nó vào đây — cron <code>backlink-check</code> mỗi sáng ghé lại trang đó (User-Agent tự nhận là bot, chỉ đọc HTML công khai) để xác nhận link còn sống, đọc lại dofollow/nofollow. Link biến mất sẽ báo về Telegram. Cùng lượt, cron còn hỏi <a href="https://www.bing.com/webmasters" target="_blank" rel="noopener">Bing Webmaster Tools</a> (miễn phí — cần Henry xác minh site một lần rồi dán API key vào <code>BING_WEBMASTER_API_KEY</code>) xem có backlink MỚI nào hệ thống chưa từng biết không, tự thêm vào bảng này.
           </div>
           <div id="bl-links" style="padding:0 1rem 1rem">
             <div class="loading"><span class="spin"></span>Đang tải...</div>
@@ -4600,6 +4601,10 @@ const BL_PROSPECT_STATUS = {
   dead: ['badge-red', 'Hết giá trị'],
 };
 const BL_PROSPECT_RANK = { new: 0, content_ready: 1, submitted: 2, skipped: 3, dead: 4 };
+const BL_SOURCE_LABELS = {
+  manual: 'Tay', search: 'Brave', seed_list: 'Danh sách tĩnh',
+  alert_rss: 'Google Alerts', broken_link_scan: 'Quét link chết',
+};
 const BL_LINK_STATUS = {
   unchecked: ['badge-grey', 'Chưa kiểm'], alive: ['badge-green', 'Còn sống'], dead: ['badge-red', 'Đã mất'],
 };
@@ -4670,13 +4675,14 @@ function renderBlProspects(prospects) {
   const sorted = prospects.slice().sort((a, b) => (BL_PROSPECT_RANK[a.status] ?? 9) - (BL_PROSPECT_RANK[b.status] ?? 9) || b.priority - a.priority);
   host.innerHTML = form + `
     <div class="table-wrap"><table><thead><tr>
-      <th>Tên</th><th>Loại</th><th>Chủ đề</th><th>Trạng thái</th><th></th>
+      <th>Tên</th><th>Loại</th><th>Nguồn</th><th>Chủ đề</th><th>Trạng thái</th><th></th>
     </tr></thead><tbody>` + sorted.map((p) => {
       const [cls, label] = BL_PROSPECT_STATUS[p.status] || ['badge-grey', p.status];
       return `<tr>
         <td><a href="${escHtmlLocal(blSafeUrl(p.url))}" target="_blank" rel="noopener">${escHtmlLocal(p.name)}</a>
             ${p.notes ? `<div style="font-size:.68rem;color:var(--text-lt)">${escHtmlLocal(p.notes.slice(0, 90))}</div>` : ''}</td>
         <td style="font-size:.72rem;color:var(--text-lt)">${escHtmlLocal(BL_KIND_LABELS[p.kind] || p.kind)}</td>
+        <td style="font-size:.7rem;color:var(--text-lt)">${escHtmlLocal(BL_SOURCE_LABELS[p.source] || p.source || '—')}</td>
         <td style="font-size:.72rem;color:var(--text-lt)">${escHtmlLocal(p.topic || '—')}</td>
         <td><span class="badge ${cls}">${escHtmlLocal(label)}</span></td>
         <td style="white-space:nowrap">
@@ -4881,9 +4887,25 @@ async function blLinkDelete(id) {
 }
 
 const BL_RUN_LABELS = {
-  prospect: (d) => `Tìm thấy ${d.found || 0}, thêm mới ${d.inserted || 0}` + (d.configured === false ? ' — chưa cấu hình BRAVE_SEARCH_API_KEY' : ''),
+  // prospect nay gộp BỐN nguồn — đọc đúng shape lồng ProspectingResult
+  // (lib/backlinks/prospecting.ts), không còn phẳng d.found/d.inserted.
+  prospect: (d) => {
+    const parts = [
+      `tĩnh +${(d.seedList || {}).inserted || 0}`,
+      `Alerts +${(d.alertsRss || {}).inserted || 0}`,
+      `Brave +${(d.brave || {}).inserted || 0}`,
+    ];
+    return `Tổng thêm mới ${d.totalInserted || 0} (${parts.join(' · ')})`;
+  },
   content: (d) => `Đã soạn ${(d.built || []).length}` + (d.skipped && d.skipped.length ? `, bỏ qua ${d.skipped.length}` : ''),
-  check: (d) => `Đã kiểm ${d.checked || 0} — ${d.alive || 0} sống, ${d.dead || 0} mất`,
+  check: (d) => `Đã kiểm ${d.checked || 0} — ${d.alive || 0} sống, ${d.dead || 0} mất` +
+    ((d.bing || {}).newLinks ? ` · Bing phát hiện ${d.bing.newLinks} backlink mới` : ''),
+  brokenlinks: (d) => `Soi ${d.pagesScanned || 0} trang, thấy ${d.deadFound || 0} link chết đúng ngách (mới ${d.inserted || 0}, bổ sung ghi chú ${d.enriched || 0})`,
+};
+
+const BL_RUN_BTN_LABELS = {
+  prospect: '🔍 Tìm cơ hội mới', content: '✍️ Soạn ngay', check: '🔎 Kiểm tra ngay',
+  brokenlinks: '🔗💀 Quét link chết',
 };
 
 async function blRunNow(kind, btn) {
@@ -4896,7 +4918,7 @@ async function blRunNow(kind, btn) {
   } catch (e) {
     toast('Lỗi: ' + e.message, 'error');
   } finally {
-    if (btn) { btn.disabled = false; btn.textContent = { prospect: '🔍 Tìm cơ hội mới', content: '✍️ Soạn ngay', check: '🔎 Kiểm tra ngay' }[kind] || 'Chạy'; }
+    if (btn) { btn.disabled = false; btn.textContent = BL_RUN_BTN_LABELS[kind] || 'Chạy'; }
   }
 }
 

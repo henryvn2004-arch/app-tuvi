@@ -30,6 +30,8 @@ import { sbGet as blGet, sbPatch as blPatch, sbDelete as blDelete } from '@/lib/
 import { buildContentDrafts, type Prospect as BlProspect, type ProspectKind as BlKind } from '@/lib/backlinks/content';
 import { runProspecting } from '@/lib/backlinks/prospecting';
 import { runLinkCheck } from '@/lib/backlinks/tracker';
+import { runBrokenLinkScan } from '@/lib/backlinks/broken-links';
+import { discoverBingBacklinks } from '@/lib/backlinks/bing-webmaster';
 import {
   listMemory, rememberFact, forgetFact, editFact,
   MEMORY_KIND_LABELS, MAX_MEMORY_ITEMS, MAX_MEMORY_LEN,
@@ -2247,8 +2249,10 @@ async function handleAdminBacklinkLink(request: NextRequest, body: Record<string
   }
 }
 
-// ── POST: admin-backlink-run — bấm chạy tay MỘT trong ba việc cron làm sẵn.
-// Dùng lại ĐÚNG hàm mà route cron gọi — không phải một đường thứ hai. ──
+// ── POST: admin-backlink-run — bấm chạy tay MỘT trong bốn việc cron làm sẵn.
+// Dùng lại ĐÚNG hàm mà route cron gọi — không phải một đường thứ hai. `check`
+// gọi thêm discoverBingBacklinks() TRƯỚC runLinkCheck(), khớp đúng thứ tự
+// app/api/cron/backlink-check/route.ts đang làm. ──
 async function handleAdminBacklinkRun(request: NextRequest, body: Record<string, unknown>): Promise<Response> {
   const token = (request.headers.get('Authorization') || '').replace('Bearer ', '').trim();
   const admin = await verifyAdmin(token);
@@ -2258,8 +2262,13 @@ async function handleAdminBacklinkRun(request: NextRequest, body: Record<string,
   try {
     if (kind === 'prospect') return ok(await runProspecting());
     if (kind === 'content') return ok(await buildContentDrafts());
-    if (kind === 'check') return ok(await runLinkCheck());
-    return err('kind phải là prospect, content hoặc check', 400);
+    if (kind === 'check') {
+      const bing = await discoverBingBacklinks();
+      const r = await runLinkCheck();
+      return ok({ bing, ...r });
+    }
+    if (kind === 'brokenlinks') return ok(await runBrokenLinkScan());
+    return err('kind phải là prospect, content, check hoặc brokenlinks', 400);
   } catch (e: unknown) {
     return err((e as Error).message);
   }

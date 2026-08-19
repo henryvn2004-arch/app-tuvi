@@ -1,27 +1,37 @@
 // lib/backlinks/prospecting.ts
 // ============================================================
-// TÌM CƠ HỘI backlink bằng search API — TUỲ CHỌN, KHÔNG BẮT BUỘC.
+// TÌM CƠ HỘI backlink — BA NGUỒN ĐỘC LẬP, mỗi nguồn tự chịu lỗi riêng (một
+// nguồn hỏng/chưa cấu hình không được kéo sập nguồn khác):
 //
-// Dùng Brave Search API (`BRAVE_SEARCH_API_KEY`), không phải Google Custom
-// Search hay Bing: cả hai đã kiểm tra và loại — Google Custom Search JSON API
-// đóng cửa với khách mới từ 2025, ngừng hẳn 01/2027; Bing Web Search API bị
-// Microsoft khai tử 08/2026, không còn cách đăng ký mới. Brave vẫn đang bán,
-// có gói $5 credit miễn phí ban đầu (~1.000 lượt) rồi trả theo lượt rất rẻ —
-// với nhịp tìm hằng tuần của module này (≈15-20 lượt/tuần) gần như không tốn gì.
+//  - runSeedListProspecting (seed-list.ts) — danh sách tĩnh, 0 key, LUÔN chạy.
+//  - runAlertsRssProspecting (alerts-rss.ts) — Google Alerts RSS, 0 key
+//    (chỉ cần Henry set env một lần), LUÔN chạy khi đã cấu hình.
+//  - runBraveProspecting (dưới đây) — Brave Search API, TUỲ CHỌN.
 //
-// ⚠️ CHỈ TÌM, KHÔNG TỰ VÀO TỪNG TRANG XÁC MINH. Kết quả tìm kiếm là GỢI Ý cho
-// người/AI content duyệt tiếp, không phải bằng chứng "đây chắc chắn là chỗ
-// đáng nộp hồ sơ" — mọi cơ hội tìm ra đều vào `status='new'`, không tự nhảy
-// lên 'content_ready'. Đây KHÔNG phải một con bot crawl hàng loạt trang thứ
-// ba (rủi ro động chạm robots.txt/ToS của từng site) — chỉ gọi ĐÚNG MỘT API
-// tìm kiếm chính chủ, tôn trọng rate limit của họ.
+// VÌ SAO BRAVE, KHÔNG PHẢI GOOGLE/BING (đã cân nhắc trước khi chọn, kiểm lại
+// 2026-08-19): Google Custom Search JSON API đóng cho khách hàng MỚI từ
+// 2025, tắt hẳn 1/1/2027 — repo này chưa từng có key cũ nên không xin được
+// key mới. Bing Web Search API (dịch vụ tìm kiếm chung) Microsoft đã khai tử
+// HẲN từ 11/8/2025, không còn cách đăng ký. Brave còn sống, có gói $5 free
+// credit ban đầu (~1.000 lượt) rồi trả rất rẻ theo lượt.
 //
-// Chưa cấu hình key → trả configured:false, KHÔNG throw, KHÔNG chặn cron —
-// cơ hội vẫn thêm được bằng tay qua admin. Cùng lối `keyword-suggest.ts`.
+// NHƯNG Brave KHÔNG CÒN LÀ NGUỒN DUY NHẤT NỮA — đây là bài học rút ra từ
+// chính lần đầu ráp module này: một nguồn duy nhất cần key trả phí biến
+// "tự động 80-90%" thành "tự động khi nào có key, không thì gõ tay", đúng
+// ngược lại yêu cầu ban đầu. Hai nguồn kia (seed-list, alerts-rss) không
+// cần một đồng nào để chạy đều — hệ thống tự động THẬT NGAY TỪ ĐẦU, Brave
+// chỉ là lớp mở rộng thêm khi Henry cấp key.
+//
+// ⚠️ Cả ba nguồn CHỈ TÌM, KHÔNG TỰ VÀO TỪNG TRANG XÁC MINH. Kết quả tìm kiếm
+// là GỢI Ý cho người/AI content duyệt tiếp, không phải bằng chứng "đây chắc
+// chắn là chỗ đáng nộp hồ sơ" — mọi cơ hội tìm ra đều vào `status='new'`,
+// không tự nhảy lên 'content_ready'.
 // ============================================================
 
 import { sbConfigured, sbInsert } from './db';
 import type { Prospect, ProspectKind } from './content';
+import { runSeedListProspecting, type SeedListResult } from './seed-list';
+import { runAlertsRssProspecting, type AlertsRssResult } from './alerts-rss';
 
 const BRAVE_KEY = process.env.BRAVE_SEARCH_API_KEY || '';
 const BRAVE_URL = 'https://api.search.brave.com/res/v1/web/search';
@@ -82,7 +92,7 @@ async function braveSearch(query: string): Promise<BraveResult[]> {
   return data.web?.results || [];
 }
 
-export interface ProspectingResult {
+export interface BraveProspectingResult {
   configured: boolean;
   queries: string[];
   found: number;
@@ -91,7 +101,7 @@ export interface ProspectingResult {
   note?: string;
 }
 
-export async function runProspecting(limitPerRun = 15): Promise<ProspectingResult> {
+async function runBraveProspecting(limitPerRun = 15): Promise<BraveProspectingResult> {
   if (!BRAVE_KEY || !sbConfigured()) {
     return { configured: false, queries: [], found: 0, inserted: 0, skipped: 0, note: 'chưa cấu hình BRAVE_SEARCH_API_KEY' };
   }
@@ -153,4 +163,27 @@ export async function runProspecting(limitPerRun = 15): Promise<ProspectingResul
   }
 
   return { configured: true, queries: usedQueries, found, inserted, skipped };
+}
+
+export interface ProspectingResult {
+  seedList: SeedListResult;
+  alertsRss: AlertsRssResult;
+  brave: BraveProspectingResult;
+  totalInserted: number;
+}
+
+/** Chạy CẢ BA nguồn — song song, độc lập, không nguồn nào chặn nguồn khác. */
+export async function runProspecting(limitPerRun = 15): Promise<ProspectingResult> {
+  const [seedList, alertsRss, brave] = await Promise.all([
+    runSeedListProspecting().catch(
+      (): SeedListResult => ({ total: 0, inserted: 0, skipped: 0 }),
+    ),
+    runAlertsRssProspecting(limitPerRun).catch(
+      (): AlertsRssResult => ({ configured: false, feeds: 0, found: 0, inserted: 0, skipped: 0, note: 'lỗi khi đọc feed' }),
+    ),
+    runBraveProspecting(limitPerRun).catch(
+      (): BraveProspectingResult => ({ configured: false, queries: [], found: 0, inserted: 0, skipped: 0, note: 'lỗi gọi Brave Search' }),
+    ),
+  ]);
+  return { seedList, alertsRss, brave, totalInserted: seedList.inserted + alertsRss.inserted + brave.inserted };
 }
