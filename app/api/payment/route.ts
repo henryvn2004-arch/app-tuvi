@@ -2076,9 +2076,11 @@ async function handleAdminAutopilotLog(request: NextRequest): Promise<Response> 
 }
 
 // ── GET: admin-dashboard-v2 (Engagement + Content Revenue + At-risk + Content Production) ──
-// Đọc 3 RPC mới (dashboard_engagement/dashboard_content_revenue/dashboard_at_risk,
-// migration-dashboard-v2.sql) + đếm nhanh 3 pipeline nội dung (count=exact, không
-// tải nguyên bảng — khác handleAdminContentBoard vốn tải hàng để dựng "recent").
+// Đọc RPC dashboard_engagement/dashboard_content_revenue/dashboard_at_risk
+// (migration-dashboard-v2.sql) + đếm nhanh 3 pipeline nội dung (count=exact,
+// không tải nguyên bảng — khác handleAdminContentBoard vốn tải hàng để dựng
+// "recent") + channel_error_rate + dashboard_margin + js_error_top (lỗi JS
+// client, migration-js-error.sql — thay phần Sentry đang gỡ dần).
 async function handleAdminDashboardV2(request: NextRequest): Promise<Response> {
   const token = (request.headers.get('Authorization') || '').replace('Bearer ', '').trim();
   const admin = await verifyAdmin(token);
@@ -2097,7 +2099,7 @@ async function handleAdminDashboardV2(request: NextRequest): Promise<Response> {
   };
 
   try {
-    const [engagement, contentRevenue, atRisk, khTotal, kh7d, ncTotal, nc7d, ytTotal, yt7d, channelHealth, margin] = await Promise.all([
+    const [engagement, contentRevenue, atRisk, khTotal, kh7d, ncTotal, nc7d, ytTotal, yt7d, channelHealth, margin, jsErrors] = await Promise.all([
       callRpc('dashboard_engagement', { p_days: 30 }),
       callRpc('dashboard_content_revenue', { p_from: from.toISOString(), p_to: to.toISOString() }),
       callRpc('dashboard_at_risk', { p_idle_days: 14, p_min_events: 3, p_limit: 20 }),
@@ -2109,6 +2111,7 @@ async function handleAdminDashboardV2(request: NextRequest): Promise<Response> {
       countExact(`van_dap?select=id&limit=1&publish_status=eq.published&created_at=gte.${sevenDaysAgo}`),
       callRpc('channel_error_rate', { p_hours: 24 }),
       callRpc('dashboard_margin', { p_from: from.toISOString(), p_to: to.toISOString() }),
+      callRpc('js_error_top', { p_hours: 24, p_limit: 30 }),
     ]);
 
     return ok({
@@ -2117,6 +2120,7 @@ async function handleAdminDashboardV2(request: NextRequest): Promise<Response> {
       atRisk,
       channelHealth,
       margin,
+      jsErrors,
       content: {
         khaoLuan:  { total: khTotal, last7d: kh7d },
         nghienCuu: { total: ncTotal, last7d: nc7d },
