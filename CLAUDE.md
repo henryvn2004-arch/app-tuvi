@@ -1,5 +1,84 @@
 # CLAUDE.md — Context cho Claude Code
 
+## 🌙 Vận Hạn 12 Tháng đổi sang KHUNG THÁNG ÂM — hết cảnh "nửa đầu / nửa sau" (2026-08-19, PR sau)
+
+Henry: *"nó bị sẻ nằm giữa 2 tháng âm lịch. Đâm ra luận giải cũng bị sẻ nên có
+cảm giác nửa đầu tháng thế này nửa sau tháng thế kia >> chỉnh lại luận theo đúng
+tháng âm lịch thôi và trình bày thì ghi thêm ngày dương lịch."*
+
+### 🔑 Đây KHÔNG phải lỗi cổ pháp — là cái KHUNG mình tự chọn sai
+Nguyệt hạn đổi ở **mùng 1 ÂM**, không đổi ở ngày 1 dương. Bản đầu bày theo tháng
+dương nên gần như tháng nào cũng bị hai tháng âm cắt ngang (8/2026: ngày 1–12
+còn tháng 6 ÂL, từ 13 sang tháng 7 ÂL) ⇒ mỗi phần buộc phải chẻ đôi, và cái chẻ
+đó **không phục vụ một luật cổ pháp nào** — nó chỉ là hệ quả của việc gộp hai
+lịch. Nay mỗi phần là TRỌN một tháng âm; ngày dương tụt xuống vai **NHÃN**:
+`Tháng 1 ÂL (6/2/2027 – 7/3/2027)`.
+- 🔑 **Bằng chứng khung mới đúng, đọc được bằng mắt:** cung nguyệt hạn nay chạy
+  **tuần tự một cung mỗi tháng** (Thiên Di → Tật Ách → Tài Bạch → …) và **liền
+  mạch qua Tết** (tháng 12 ÂL Huynh Đệ → tháng 1 ÂL Phụ Mẫu) — đúng hình dạng cổ
+  pháp. Khung dương lịch che mất chính cái nhịp đó.
+- Vì thế **cảnh báo "đổi nền tiểu hạn giữa chừng" biến mất theo** (một tháng âm
+  nằm trọn trong một năm âm ⇒ đúng một tiểu hạn). Không phải bỏ tính năng — nó
+  là thứ chỉ tồn tại vì khung cũ.
+
+### ⚠️ Ba chỗ buộc phải đổi theo, không đổi là hỏng IM LẶNG
+1. **Payload phải mang NGÀY**, không chỉ tháng: tháng âm đổi ở GIỮA tháng dương
+   nên 1/8 và 20/8 thuộc hai tháng âm khác nhau ⇒ hai khung khác nhau. Route nay
+   nhận `tuNgay/tuThang/tuNam`.
+2. **Slug neo theo THÁNG ÂM** (`van-han-nam-al<namAL>-<thangAL>[n]`) — giữ mốc
+   tháng dương thì hai cửa sổ khác nhau dùng chung một slug, đúng cái bẫy mà
+   chú thích slug cũ đã cảnh báo. Client gán `TOOL_TYPE` SAU khi có khung (chỉ
+   server biết ranh giới tháng âm).
+3. **Chip/ask gửi rail LUÔN kèm quãng ngày dương**: rail `tra_nguyet_van` vẫn
+   hỏi theo **tháng DƯƠNG**, đưa nó mỗi chữ "tháng 7 ÂL" là nó tra nhầm sang
+   tháng 7 dương lịch.
+
+### 🗓 Luật prompt mới: mốc nói với người đọc phải là NGÀY DƯƠNG
+Người đọc sống theo lịch dương. Prompt bắt nhắc quãng `d/m/yyyy – d/m/yyyy`,
+cấm nêu ngày ngoài quãng, và **cấm gọi nó là "tháng N dương lịch"**. Bỏ hẳn luật
+"nếu có 2 đoạn thì tách bạch"; thay bằng luật ngược lại (một khối liền, KHÔNG
+chẻ nửa đầu/nửa sau).
+- **Tháng NHUẬN có luật riêng**: engine tra chung một ô `nguyetVanScores` nên
+  tháng nhuận **trùng cung** với tháng chính ⇒ không dặn thì model viết lại gần
+  y nguyên phần trước. Prompt nay bảo nó nói về phần TIẾP NỐI.
+
+### Verify
+`tsc` 0 · `lint` **0 lỗi / 77 warning = đúng mốc nền** · `prettier` cả cây sạch ·
+**22/22 bộ dò**.
+- **28.669 assertion trên MODULE THẬT**, quét **585 cửa sổ** (mọi ngày dương
+  2024–2031, bước 5 ngày): 12 tháng liền mạch **không hở/không chồng** · mỗi
+  tháng **29 hoặc 30 ngày** · mốc luôn nằm trong tháng đầu · mùng 1 khớp
+  `solarToLunar` · **212 cửa sổ có tháng NHUẬN** (2025-6, 2028-5, 2031-3) và ca
+  nhuận dựng khung + parity đầy đủ.
+- 🔑 **PARITY với đường rail đang chạy: 12/12 tháng × 4 lá số, 0 lệch** — cùng
+  tháng âm thì `resolveNguyetHanForLunarMonth` và `resolveNguyetHanSegments` ra
+  cùng cung nguyệt hạn + cùng tiểu hạn. Đây là bất biến gánh câu *"chỉ đổi cách
+  gom, KHÔNG đổi cổ pháp"*; `resolveNguyetHanSegments` cũng được refactor để gọi
+  chính hàm mới nên hai bề mặt không còn hai bản tính.
+- **7 ca Playwright trên TRANG THẬT**: 12 tiêu đề đúng khuôn `Tháng N ÂL (d/m/yyyy
+  – d/m/yyyy)` · **mỗi tháng đúng MỘT khối** `.vh-doan` · quét toàn bộ chữ hiện ra
+  **0 lần "cắt ngang" / "2 tháng âm lịch" / "đổi giữa chừng"** · đúng MỘT tháng
+  gắn "đang diễn ra" · thanh nhảy dùng nhãn ngắn · payload có `tuNgay` · slug ra
+  `van-han-nam-al2026-07` · chip + bản chia sẻ đều kèm quãng dương · 390px không
+  tràn · 0 lỗi JS.
+- 🪤 **Bẫy cũ vấp lại, cả ba đã ghi sẵn trong file này**: (a) `page.route` đăng ký
+  SAU được ưu tiên → catch-all `**/api/**` nuốt stub riêng, khung không dựng
+  được; (b) `innerText` trả **chữ HOA** vì `.lb` có `text-transform:uppercase`;
+  (c) module `lib/` kéo `tuvi-engine/dist` bằng đường dẫn TƯƠNG ĐỐI nên harness
+  emit ra `/tmp` là gãy — hook `Module._resolveFilename` phải xử lý riêng nhánh đó.
+
+### CÒN LẠI
+- ⚠️ **Hai bản Henry đã mua hôm nay mang slug CŨ** (`van-han-nam-2026-08-…`) nên
+  mở lại sẽ thành bản chưa mua — nội dung của chúng dựng theo khung dương, tức
+  đúng thứ vừa bỏ. Muốn hoàn 100 Lượng thì qua RPC `add_credits` (KHÔNG sửa thẳng
+  `user_credits.balance` — sổ giao dịch phải giải thích được số dư).
+- **Rail `tra_nguyet_van` vẫn hỏi theo tháng DƯƠNG** ⇒ hỏi sâu một tháng trong
+  rail vẫn nhận bản chẻ 2 đoạn. Cùng cổ pháp, khác cách trình bày. CỐ Ý chưa đụng:
+  đó là đường dùng chung của mọi tool lá số, đổi là đổi hành vi rất rộng.
+- 🔴 **Vẫn CHƯA gọi LLM thật lượt nào** — container không có key. Chỗ đáng đọc
+  đầu tiên trên prod: model có bám đúng quãng ngày dương không, và 12 phần có lặp
+  ý nhau không (12 prompt cùng khuôn, chỉ khác dữ liệu cung).
+
 ## ⏱️ Timeout 30 giây: KHÔNG phải đường tiền, và engine vô can (2026-08-19, cùng PR)
 
 Sổ ghi *"timeout 30 giây trên `/api/payment` + `/la-so/[slug]` — cái đầu là đường
