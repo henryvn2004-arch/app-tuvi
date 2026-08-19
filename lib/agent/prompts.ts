@@ -481,10 +481,11 @@ export const MAU_ARC_CHUNG = mauArc(
 //   · luật thuật ngữ (tên riêng để trong ngoặc, không mở đầu câu)
 //   · ngân sách từ của từng phần
 // Viết lại chúng ở đây là dựng bản thứ hai rồi hai bản trôi khỏi nhau.
-const arcDoc = (o: { canCu: string; moc: string; phepDich: string }) => `── HAI THỨ BẮT BUỘC CÓ TRONG MỖI PHẦN (BỔ SUNG cho luật phán quyết ở trên, KHÔNG thay nó) ──
-Viết LIỀN MẠCH trong văn xuôi. TUYỆT ĐỐI không in tên hai mục này ra màn hình, không đánh số, không tách thành tiêu đề.
+const arcDoc = (o: { canCu: string; moc: string; duBao: string; phepDich: string }) => `── BA THỨ BẮT BUỘC CÓ TRONG MỖI PHẦN (BỔ SUNG cho luật phán quyết ở trên, KHÔNG thay nó) ──
+Viết LIỀN MẠCH trong văn xuôi. TUYỆT ĐỐI không in tên ba mục này ra màn hình, không đánh số, không tách thành tiêu đề.
 - HÀNH VI ĐỜI THƯỜNG (1–2 việc): việc cụ thể tới mức người đọc tự soi ra mình — "hay nhận việc rồi ôm một mình", "cãi xong là im mấy ngày", "tiền vào tay là có chỗ gọi tên ngay". Phải mọc ra từ ${o.canCu} của CHÍNH phần đang viết, KHÔNG phải câu chung chung ai đọc cũng thấy đúng. Chật chỗ thì lấy MỘT cái đắt nhất.
 - MỘT CÂU LẬT (đặt NGAY SAU phần giải thích, trước câu kết): lật góc nhìn — cái người đọc tưởng là chỗ yếu hoá ra là chỗ dùng được, hoặc chỗ tưởng là may lại có cái giá của nó. Đây KHÔNG phải mục tuỳ chọn: ${o.moc} Chỉ được BỎ khi phần đó thật sự không có gì để lật; đã lật thì phải bám dữ kiện, tuyệt đối không nói ngược cho kêu.
+- MỘT–HAI DỰ BÁO (đặt NGAY SAU câu lật, SÁT câu kết — để câu hành động ở cuối là việc làm được CHO chính dự báo này): chuyện gì nhiều khả năng tới (thăng chức, đổi việc, quan hệ căng lên hay dịu xuống). Phải mọc ra từ dữ kiện của CHÍNH phần đang viết. ${o.duBao} Nói bằng ngôn ngữ xác suất ("nhiều khả năng", "có xu hướng"), KHÔNG hứa chắc, KHÔNG doạ. Không có căn cứ thì BỎ HẲN — thà thiếu một dự báo còn hơn bịa một cái mốc.
 
 ── GIỌNG ──
 Viết như đang NÓI với người ngồi đối diện — chêm khẩu ngữ tự nhiên (thì, à, này, nhé, đấy, cơ, chứ), mỗi đoạn 1–2 cái. KHÔNG chêm vào câu phán quyết in đậm, không chêm vào câu chốt.
@@ -505,18 +506,24 @@ const PHEP_DICH_LASO = `· [Phu Thê] Thiên Đồng(hãm) + Đà La → ✅ hà
 · [Tài Bạch] Vũ Khúc(miếu) + Hóa Lộc → ✅ câu lật: "Cái tính chi ly mà người nhà hay kêu lại đúng là chỗ giữ được tiền cho anh." ❌ "Vũ Khúc miếu địa Hóa Lộc là cách cục tài lộc tốt."`;
 
 export const DOC_ARC_LASO = arcDoc({
+  duBao:
+    'Phần CÓ khối đại vận → neo vào mốc THẬT đó ("quãng ngoài 30 tới đầu 40"). Phần luận TỪNG CUNG thì KHÔNG có mốc → đoán theo ĐIỀU KIỆN ("còn ở chỗ nhiều người quyết thay thì…"), cấm suy ra năm/tháng.',
   moc: 'nhãn Luận sao Yếu / Xấu rõ hoặc có sát tinh → chỉ ra chỗ cái yếu ấy vẫn dùng được vào việc gì; nhãn Tốt rõ / Khá hoặc có cách cục quý → chỉ ra cái giá đi kèm.',
   canCu: 'sao / cách cục / độ sáng',
   phepDich: PHEP_DICH_LASO,
 });
 
 export const DOC_ARC_PHU_THE = arcDoc({
+  duBao:
+    'Cung Phu Thê KHÔNG có trục thời gian → CHỈ đoán theo ĐIỀU KIỆN ("nếu vẫn để chuyện tiền nong không nói rõ thì…"). ⚠️ Vẫn giữ luật cấm sẵn có: không ước lượng số tuổi / số năm chênh lệch với bạn đời, kể cả trong dự báo.',
   moc: 'nhãn Luận sao Yếu / Xấu rõ hoặc có sát tinh tại Phu Thê → chỉ ra chỗ cái yếu ấy vẫn dùng được vào việc gì trong đời sống vợ chồng; nhãn Tốt rõ / Khá → chỉ ra cái giá đi kèm.',
   canCu: 'sao / cách cục / độ sáng của cung Phu Thê',
   phepDich: PHEP_DICH_LASO,
 });
 
 export const DOC_ARC_TUBINH = arcDoc({
+  duBao:
+    'Phần CÓ score đại vận → neo vào đúng quãng ấy. Phần luận cường nhược / thập thần / dụng thần KHÔNG có mốc → đoán theo ĐIỀU KIỆN, cấm suy ra năm.',
   moc: 'cường nhược lệch nặng hoặc cách cục phá → chỉ ra chỗ cái lệch ấy vẫn dùng được vào việc gì; cách cục thành hoặc đại vận điểm cao → chỉ ra cái giá đi kèm.',
   canCu: 'can chi / thập thần / cường nhược / dụng thần',
   phepDich: `· [Nhật Can] Canh kim, thân nhược, Quan Sát vượng → ✅ hành vi: "Việc dồn tới là anh nhận hết, tối về mới thấy mình gánh phần của ba người." ❌ "Nhật chủ Canh kim thân nhược, Quan Sát vượng khắc thân."
@@ -524,6 +531,8 @@ export const DOC_ARC_TUBINH = arcDoc({
 });
 
 export const DOC_ARC_TUONG_HOP = arcDoc({
+  duBao:
+    'Bản chấm tương hợp KHÔNG có trục thời gian → CHỈ đoán theo ĐIỀU KIỆN, bám tiêu chí điểm cao/thấp của phần đang viết. Cấm nêu năm cưới, năm sinh con, hay bất kỳ mốc lịch nào.',
   moc: 'tiêu chí điểm THẤP → chỉ ra chỗ khác biệt ấy vẫn dùng được vào việc gì; tiêu chí điểm CAO → chỉ ra chỗ quá giống nhau thành ra dễ cùng bỏ qua một việc.',
   canCu: 'ngũ hành / can chi / sao của HAI lá số',
   phepDich: `· [Ngũ hành] nam Kim – nữ Mộc, Kim khắc Mộc → ✅ hành vi: "Anh nói một câu là chị nghĩ cả buổi; chị im thì anh lại tưởng xong chuyện." ❌ "Nam mệnh Kim khắc nữ mệnh Mộc, ngũ hành tương khắc."
