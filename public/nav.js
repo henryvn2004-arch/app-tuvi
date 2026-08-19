@@ -192,7 +192,7 @@
     '⭕':'circle-dot','⬜':'layout-grid','🫀':'heart','📏':'scroll-text','🥚':'aperture',
     '🫧':'aperture','🕶':'glasses','🕶️':'glasses','😺':'eye','✈':'glasses','✈️':'glasses',
     '🌍':'globe','🌎':'globe','👖':'shirt','👜':'package',
-    '🍂':'leaf','🍁':'leaf','🌑':'moon','💆':'smile','⌚':'gem','👔':'shirt','🍵':'leaf',
+    '🍂':'leaf','🍁':'leaf','🌑':'moon','💆':'smile','⌚':'gem','🍵':'leaf',
     '🔑':'lock','🧹':'trash-2',
   };
 
