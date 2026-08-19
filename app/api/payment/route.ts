@@ -2141,6 +2141,7 @@ async function handleAdminBacklinkProspect(request: NextRequest, body: Record<st
         method: id ? 'PATCH' : 'POST',
         headers: { ...SB_HEADERS, Prefer: 'return=representation' },
         body: JSON.stringify(row),
+        cache: 'no-store',
       },
     );
     if (!res.ok) {
@@ -2231,6 +2232,7 @@ async function handleAdminBacklinkLink(request: NextRequest, body: Record<string
       method: id ? 'PATCH' : 'POST',
       headers: { ...SB_HEADERS, Prefer: 'return=representation' },
       body: JSON.stringify(row),
+      cache: 'no-store',
     });
     if (!res.ok) {
       const t = await res.text();
