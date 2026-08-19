@@ -91,6 +91,86 @@ sáng cron báo thêm một dòng "Telegram: thiếu env" vô nghĩa.
 Page có publish chưa / có username chưa — WhatsApp cùng app đã tự lành nên nhiều
 khả năng chỉ còn mỗi Messenger dở dang.
 
+## 🔮 Thêm lớp DỰ BÁO vào arc ô GIỮA — và arc ô giữa KHÔNG phải 5 lớp (2026-08-19, PR sau)
+
+Henry: *"ngay sau ý 3. twist thì thêm ý 3'. đưa ra 1-2 prediction về tương lai…
+thế thì nó relevant hơn với 5. kết bằng 1 gợi ý hành động nhỏ"* · *"rail chatbox
+thì ko cần thêm ý này, chỉ cho phần luận giải của tool ở giữa thôi"*.
+
+### 🔴 Đính chính tiền đề: arc 5 lớp là arc CHAT, ô giữa dùng hàm KHÁC
+| Lớp | rail chat (`arcCore`) | ô giữa (`arcDoc`) |
+|---|---|---|
+| ① mở đánh thẳng · ④ giải thích | ✅ | nằm ở **prompt đích** |
+| ② hành vi · ③ twist | ✅ | ✅ |
+| ⑤ chốt hành động | ✅ | 🔴 **không có trong arc** |
+
+⑤ **cố ý** không nằm trong `arcDoc` (comment ghi sẵn lý do): ba prompt đích đã tự
+khai cách kết và khai KHÁC NHAU — lá số *"gợi ý nhẹ, không dạy đời"* · Tử Bình
+**bắt buộc** *"nên làm gì để hóa giải"* · Phu Thê *"1–2 câu tác động tới hôn nhân"*.
+⇒ Ý *"prediction đứng sát ⑤"* vẫn đúng về THỨ TỰ ĐỌC, nhưng ⑤ không cùng chỗ với
+arc — nên lớp mới tự nói *"đặt SÁT câu kết"* thay vì trỏ vào một lớp nó không có.
+
+### 🔑 Không phải phần nào cũng có TRỤC THỜI GIAN để đoán
+| Bề mặt | Có mốc thật? |
+|---|---|
+| Lá số phần **14–24** | ✅ đại vận: mốc tuổi + điểm/10 |
+| Lá số phần **3–13** (12 cung) | 🔴 **không** — `route.ts` cắt riêng, phần cung 0 lẫn khối đại vận |
+| Tử Bình | ✅ score đại vận |
+| Phu Thê | 🔴 không, **và đang CẤM** nêu số tuổi/số năm chênh lệch |
+| Xem Tuổi / Làm Ăn | 🔴 không — nó chấm tương hợp hai người |
+
+Ví dụ Henry đưa (*"cung Quan Lộc → sắp tới thăng chức"*) rơi đúng phần 3–13, chỗ
+KHÔNG có mốc nào. **Ép prediction ở đó là mời model bịa thời điểm.** Henry chốt
+phương án dạng **ĐIỀU KIỆN**: có mốc thì neo mốc thật (*"quãng ngoài 30 tới đầu
+40"*), không có mốc thì đoán theo điều kiện (*"còn ở chỗ nhiều người quyết thay
+thì…"*), và **không có căn cứ thì BỎ HẲN** — thà thiếu một dự báo còn hơn bịa mốc.
+⇒ slot mới `duBao`, mỗi bản khai riêng mốc của mình.
+
+### 🪤 Bẫy suýt vấp: định trỏ về *"luật xác suất đã nêu ở trên"*
+`/api/lasotuvi` và `/api/tubinh` ĐÃ có luật *"dự đoán tương lai thì dùng ngôn ngữ
+xác suất"*, nên tôi định trỏ ngược về nó cho gọn. Đo lại: **`phu-the` và
+`LUAN_GIAI_TUONG_HOP` KHÔNG có luật đó** ⇒ câu trỏ sẽ chỉ vào hư vô ở 2/4 bề mặt —
+đúng bẫy đã vấp một lần với xem-tuoi (*"BỔ SUNG cho luật phán quyết ở trên"* trỏ
+vào thứ không tồn tại). ⇒ khối mới **tự mang** luật xác suất, viết cực ngắn.
+
+### ⚖️ Nới trần — quyết định có ghi lý do, không phải dọn đường
+Khối mới +559…+633 ký tự cho MỌI bản. Lượt đầu 3/4 vượt trần ⇒ **cắt ngắn khối
+trước** (740 → ~590) theo đúng lời bộ dò dặn, rồi mới nới 2 bản còn thiếu chỗ:
+`PHU_THE` 6.600 → **7.000** · `LUAN_GIAI_TUONG_HOP` 2.400 → **3.100**.
+- 🔑 Bản cuối nhảy **+23%** KHÔNG phải vì phình bất thường mà vì nó **vốn mỏng
+  nhất** (2.358) — cùng một khối 590 ký tự thì ở đó chiếm tỉ lệ lớn hơn hẳn.
+- ⚖️ Chọn nới thay vì cắt luật sẵn có: đây là prompt TRẢ TIỀN, mà không có căn cứ
+  nào nói luật nào đáng cắt — cắt mò một luật đang chạy đúng rủi ro hơn hẳn.
+
+### Verify
+`tsc` 0 · `lint` **0 lỗi / 77 warning = đúng mốc nền** · `prettier` cả cây sạch ·
+**22/22 bộ dò đo bằng MÃ THOÁT** · engine **185 pass** · **`next build` exit 0**.
+- **A/B với `origin/main` qua `git worktree`, biên dịch cả hai bản + hook
+  `Module._resolveFilename`**: **rail 8/8 hằng arc TRÙNG KHÍT** · **26 toolType qua
+  `buildChatContext` TRÙNG KHÍT** (đúng câu Henry dặn rail không đụng) · 4 `DOC_ARC_*`
+  đều đổi · **diff từng DÒNG: mỗi bản chỉ mất ĐÚNG 2 dòng tiêu đề** (HAI→BA THỨ,
+  hai→ba mục) — 0 luật cũ bị sửa hay bớt.
+- **40/40 bất biến nội dung**: 0 rò `${o.duBao}` · mỗi bản mang ĐÚNG slot của mình ·
+  **0 lẫn slot chéo** (Tương Hợp/Phu Thê không dính chữ "đại vận") · Phu Thê GIỮ luật
+  cấm số tuổi · cả 4 có ngôn ngữ xác suất + "KHÔNG hứa chắc" + "BỎ HẲN" + "SÁT câu kết".
+- 🪤 **Đối chứng suýt ĐỖ GIẢ**: assert *"bản main không có lớp dự báo"* báo ✅ trong
+  khi thật ra **file biên dịch không tồn tại** nên `grep` fail. Phải kiểm FILE CÓ
+  TỒN TẠI trước rồi mới đọc kết quả grep.
+- 🪤 **TS5042 rồi TS5112 lặp lại** (`-p` lẫn file trên dòng lệnh; rồi có `tsconfig.json`
+  trong cwd). Đường đúng cho harness cần alias `@/`: **tsconfig riêng dùng `include`,
+  KHÔNG nêu file trên dòng lệnh** — giữ được `paths`, không dính cả hai lỗi.
+- 🪤 `prompts.ts` kéo theo `tuvi-engine/dist` bằng **đường dẫn TƯƠNG ĐỐI** nên emit ra
+  `/tmp` là gãy; hook phải xử lý riêng nhánh đó.
+
+### CÒN LẠI
+- 🔴 **CHƯA gọi LLM thật lượt nào** — verify dừng ở tầng CHỮ VÀO PROMPT. Dự báo có
+  thật sự bám dữ kiện hay model bịa mốc thì phải chạy một lá số trên prod rồi ĐỌC.
+  Chỗ đáng soi trước: một phần luận TỪNG CUNG (3–13) — nếu ở đó model vẫn nặn ra mốc
+  thời gian thì slot `duBao` của `DOC_ARC_LASO` chưa đủ chặt.
+- **`arcGiong`** (nhóm JSON trả tiền: day-con · đặt tên · chọn ngày · phong thuỷ)
+  **CỐ Ý không đụng** — chúng trả danh sách/schema chứ không phải văn luận, và
+  `day-con` còn cấm đoán đỗ/trượt cho trẻ em. `viral-core` (2 cron bài SEO) cũng không.
+
 ## 🖼️ Ảnh preview link chia sẻ HỎNG 108 lượt/tuần — và chẩn đoán ĐẦU của tôi SAI (2026-08-19, PR sau)
 
 Henry hỏi về Sentry MCP. Đi đo thì Sentry chỉ nằm trên **7/141 trang** `public/`
@@ -156,6 +236,121 @@ minh next build chạy"*) · quét lại: **0 route còn tự nạp font**, cả
 
 ## Project
 **tuviminhbao.com** — Tử Vi Đẩu Số app (Next.js 16, Supabase, Vercel)
+
+---
+
+## 📅 Tool MỚI "Vận Hạn 12 Tháng Tới" — và một lỗi CỔ PHÁP sai 11,4% số ngày (2026-08-19, PR này)
+
+Henry: *"tool để xem vận hạn cụ thể trong 12 tháng tới, tính từ ngày xem… flow y
+hệt flow luận giải lá số"*, và chốt 5 phần: 4 phần đầu **lấy nguyên** của luận
+giải 24 phần (tổng quan · hành trình đại vận · đại vận hiện tại · tiểu vận năm),
+phần 5 là mới — *"phần này làm **từng tháng** nhé"*. `/app/van-han-nam`, **50
+Lượng**, khung 12 tháng **MIỄN PHÍ**.
+
+### 🔴 Đi kiểm flow thì lộ lỗi tra tiểu hạn — `tv.nam` là năm ÂM, code tra bằng năm DƯƠNG
+`resolveNhatHanIdx`/`resolveNguyetHanSegments` (`lib/engine/van-ngay.ts`) tìm
+`tieuVanScores.find(x => x.nam === năm DƯƠNG)`. Nhưng engine dựng `tv.nam` từ
+**năm ÂM** (`namSinhDL = namAL`, `nam = namAL + tuoi − 1`), mà tuổi mụ nhảy ở
+**Tết** chứ không ở 1/1 ⇒ **mọi ngày từ 1/1 tới Tết đều tra nhầm sang tiểu hạn
+của năm sau**.
+- **Đo trên 4 lá số × 2 năm = 2.920 lượt tra ngày: 332 lượt đổi kết quả
+  (11,4%)**, dồn đúng chỗ dự đoán — 1/2026 **124** · 2/2026 **64** · 1/2027
+  **124** · 2/2027 **20**; tháng 3–12 **0**.
+- Ca quyết: **15/1/2027 dương = ÂL 8/12/2026** → bản mới ra tiểu hạn **Điền
+  Trạch** (đúng), bản cũ ra **Quan Lộc**.
+- **Henry chốt vá ở GỐC** — nên thẻ *Vận hôm nay* (`/app`) và 2 tool rail
+  (`tra_nguyet_van`/`tra_nhat_van`) cùng được vá, không riêng tool mới.
+
+### 🔑 Tháng dương chứa Tết mang HAI tiểu hạn — và đó là nội dung, không phải lỗi
+Một tháng dương gần như luôn bị cắt bởi 2 tháng âm; riêng tháng chứa Tết thì hai
+đoạn còn thuộc **hai NĂM âm khác nhau** ⇒ hai tiểu hạn khác nhau. Nên
+`NguyetHanSegment` nay mang `namAL` + `tv` + `tieuHanIdx`/`luuNienIdx` **của
+chính đoạn đó** thay vì dùng chung một tiểu hạn cho cả tháng. Đo được:
+`T2/2027 · đoạn 1–5 · ÂL 12/2026 · tiểu hạn Điền Trạch` và `đoạn 6–28 · ÂL
+1/2027 · tiểu hạn Quan Lộc`. `execTraNguyetVan` in cảnh báo ĐỔI NỀN khi hai đoạn
+lệch năm âm; có ca ĐỐI CHỨNG tháng không chứa Tết thì **không** có dòng đó.
+
+### 🧩 Prompt luận giải DỜI sang `lib/agent/luan-giai-doc.ts` — vì Next chặn export lạ
+4 phần đầu phải dùng **CHÍNH** `SYSTEM_PROMPT` + `buildPrompt` của
+`/api/lasotuvi`, mà Next 16 chỉ cho route file export handler ⇒ không import
+sang được. Dời trọn khối (kèm `CUNG_BY_PHAN`/`CUNG_DESC`/`trimLaSo`) ra `lib/`,
+route chỉ còn import.
+- **Bất biến gánh phép dời: A/B **24/24 prompt TRÙNG KHÍT từng byte** với bản
+  `HEAD`.** Không có phép đo này thì "chỉ dời file" là một canh bạc trên đúng
+  đường đang bán 1.500 Lượng.
+- Thêm `laSoContextFor(phan, laSoText)` thay cho việc cắt chuỗi
+  `split('\n\nPHẦN 24')` — bóc bằng dấu hiệu trong prompt là hỏng IM LẶNG lần
+  sau ai đó sửa câu chữ.
+- ⚠️ `check:prompt` phải trỏ sang file mới (`DOC_FILES`), không thì nó lặng lẽ
+  quét một file không còn prompt nào.
+
+### 🔑 Ba quyết định Henry chốt, và vì sao chúng nằm ở tầng dữ liệu
+1. **Slug MANG mốc tháng** (`van-han-nam-<yyyy>-<mm>-…`) ⇒ cửa sổ 12 tháng khác
+   là **sản phẩm khác**, phải trả lại. Neo theo lá số thôi thì tháng sau mở lại
+   ra bản cũ mà tiêu đề vẫn hứa "12 tháng tới".
+2. **Khung 12 tháng miễn phí, chỉ phần CHỮ trả tiền** — khung là tra bảng thuần
+   (0 lượt LLM, 0đ), đúng khuôn W1: cho xem trước thứ chứng minh engine đọc đúng
+   lá số, rồi mới dựng tường.
+3. **Tính ở SERVER** (`lib/engine/van-han-12.ts`), KHÔNG port sang
+   `public/tools-shared/`: nó dùng lại `resolveNguyetHanSegments` +
+   `describeHanCungRich` + `matchVanHanCombos` (958 cách cục) — chép sang client
+   là bản thứ hai của cùng bộ luật rồi hai bản trôi khỏi nhau.
+
+### 🪤 Bẫy đã vấp
+1. 🔴 **Đối chứng `origin/main` HẾT HẠN, lần thứ ba trong repo**: `git worktree
+   add origin/main` lấy commit **#540** trong khi HEAD là **#554**, nên
+   `SYSTEM_PROMPT` "khác nhau" (bản cũ chưa có `${DOC_ARC_LASO}`) và tao suýt
+   báo phép dời làm hỏng prompt. Đường đúng: `git show HEAD:<file>` vào cây đối
+   chứng. **Neo `origin/main` chưa đủ — phải neo đúng cái mình đang so.**
+2. **`TuviPaywall.fillPriceSlots(host)` KHÔNG được await** trong trang (nút hiện
+   ngay, giá điền sau một nhịp mạng) ⇒ `page.textContent()` là **ảnh chụp tức
+   thời** và luôn đọc ra `…`. Phải dùng web-first assertion (`toContainText`) —
+   đúng bài học `isVisible()` đã ghi, chỉ khác hàm.
+3. 🔴 **`tool-prices.js` gọi `Promise.all` BA lượt REST** (`tool_pricing` +
+   `credit_packages` + `tool_groups`) và **fail-CLOSED cả cụm** khi một lượt
+   hỏng. Stub thiếu `credit_packages` (trang này không dùng tới) là giá vẫn ra
+   `…` — mất 2 vòng chẩn vì route `tool_pricing` rõ ràng ĐÃ bị chặn đúng.
+4. `export const TONG_PHAN` / `export function phanLabels` trong route file →
+   Next từ chối. Hằng số phụ trong route phải là `const` thường.
+5. **`pkill -f '3311'` tự giết (exit 144) — lần thứ NĂM.** Ngoặc vuông:
+   `pkill -f '331[1]'`.
+
+### Verify
+`tsc` 0 · `lint` **0 lỗi / 77 warning = đúng mốc nền** · `prettier` cả cây sạch ·
+**21/21 bộ dò** (gồm `check:prompt` sau khi trỏ file mới: `SYSTEM_PROMPT`
+10.784/11.800) · engine **185 pass**.
+- **A/B 24 prompt luận giải TRÙNG KHÍT từng byte** với `HEAD` (bất biến quan
+  trọng nhất — đường đang bán không đổi một byte).
+- **6 ca Playwright trên TRANG THẬT** (Next dev, route `action=khung` chạy
+  THẬT): khách chưa đăng nhập → **0 lượt `action=deduct`**, dựng đủ 16 phần, quét
+  toàn bộ chữ hiện ra **0 câu chữ AI lọt** · tháng chứa Tết tách 2 đoạn kèm cảnh
+  báo đổi nền + **ĐỐI CHỨNG** tháng không Tết không có dòng đó · rail nhận đúng
+  ngữ cảnh · 390px **0px tràn ngang** · đã đăng nhập chưa mua → bấm mở **trừ
+  Lượng ĐÚNG 1 lần**, sinh đủ 16 phần, khoá-mini tắt hết, **0 lỗi JS** · **ĐỐI
+  CHỨNG đã mua** → hiện lại cache, **0 lượt trừ Lượng, 0 lượt gọi model** ·
+  slug mang đúng mốc `yyyy-mm`.
+- Khung 12 tháng đo trên lá số thật: 12/12 tháng đủ 2 đoạn, tổ hợp sao có mặt,
+  `dangDienRa` rơi đúng đoạn chứa hôm nay.
+
+### 🔑 VIỆC TAY HENRY — chạy SAU khi deploy, không được chạy trước
+`_patches/migration-van-han-nam.sql` **ĐÃ CHẠY prod** nhưng cố ý để
+`enabled=false` (`on conflict do update` KHÔNG đụng cột đó). Bật:
+```sql
+update tool_pricing set enabled = true, updated_at = now() where tool_id = 'van-han-nam';
+```
+Bật TRƯỚC deploy là công cụ hiện trên `/cong-cu` trong khi route chưa tồn tại →
+**404 cho người thật** (đúng bài học "dữ liệu đi SAU giao diện" đã làm 58 công cụ
+rơi vào "Khác" 4 phút).
+
+### CÒN LẠI
+- 🔴 **Chưa gọi LLM thật lượt nào** — container không có key, verify dừng ở tầng
+  *chữ vào prompt* + tầng render. Chỗ đáng đọc đầu tiên trên prod: phần tháng có
+  bị lặp ý giữa 12 tháng không (12 prompt cùng khuôn, chỉ khác dữ liệu cung).
+- **Chưa có trang standalone SEO** — mới có trang shell. *"vận hạn tháng này"* có
+  cầu thật.
+- Tool này **không** dùng `portrait_cache` mà dùng `laso_public.luan_giai` như
+  luận giải 24 phần ⇒ không có cơ chế `SHAPE`; đổi cấu trúc phần chữ thì bản đã
+  mua vẫn giữ nguyên bản cũ (đúng ý "một lá số một kết quả").
 
 ---
 

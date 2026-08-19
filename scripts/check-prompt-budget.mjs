@@ -276,16 +276,27 @@ if (badScenario.length) {
 // ⚠️ Trần đặt SÁT mức hiện tại + biên ~12%. Nới trần là một QUYẾT ĐỊNH phải ghi
 // lý do, không phải thao tác dọn đường cho một khối mới.
 const DOC_FILES = {
-  'app/api/lasotuvi/route.ts': { name: 'SYSTEM_PROMPT', cap: 11800, arc: 'DOC_ARC_LASO' },
+  // Prompt 24 phần DỜI khỏi route sang lib (tool "Vận Hạn 12 Tháng Tới" dùng
+  // lại 4 phần đầu; Next chặn export lạ trong route file). Nội dung KHÔNG đổi
+  // — A/B đã chứng minh 24 prompt trùng khít từng byte.
+  'lib/agent/luan-giai-doc.ts': { name: 'SYSTEM_PROMPT', cap: 11800, arc: 'DOC_ARC_LASO' },
   'app/api/tubinh/route.ts': { name: 'SYSTEM_PROMPT_TUBINH', cap: 9400, arc: 'DOC_ARC_TUBINH' },
+  // Nới 6600 → 7000 (2026-08-19): `arcDoc` thêm lớp DỰ BÁO (+~590 ký tự cho MỌI
+  // bản luận giải). Lá số và Tử Bình còn dư chỗ; hai bản dưới thì không.
+  // ⚖️ Chọn nới thay vì cắt luật sẵn có: đây là prompt TRẢ TIỀN, mà không có căn
+  // cứ nào nói luật nào trong đó đáng cắt — cắt mò một luật đang chạy đúng thì
+  // rủi ro hơn hẳn việc nới một con số có ghi lý do.
   'lib/agent/phu-the-luan-giai.ts': {
     name: 'PHU_THE_LUAN_GIAI_SYSTEM_PROMPT',
-    cap: 6600,
+    cap: 7000,
     arc: 'DOC_ARC_PHU_THE',
   },
+  // Nới 2400 → 3100 (2026-08-19), tỉ lệ nhảy nhiều nhất (+23%) KHÔNG phải vì nó
+  // phình bất thường mà vì nó vốn MỎNG NHẤT (2358) — cùng một khối 590 ký tự thì
+  // ở đây chiếm tỉ lệ lớn hơn hẳn ba bản kia.
   'app/api/xem-tuoi/route.ts': {
     name: 'LUAN_GIAI_TUONG_HOP_SYSTEM',
-    cap: 2400,
+    cap: 3100,
     arc: 'DOC_ARC_TUONG_HOP',
   },
 };
