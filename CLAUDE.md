@@ -1,5 +1,69 @@
 # CLAUDE.md — Context cho Claude Code
 
+## 🔤 Ảnh OG: chẩn đoán vòng 1 SAI, bản vá của tôi đẻ ra lỗi MỚI (2026-08-19, PR sau)
+
+Henry: *"tao click thử cái link trên, thì nó ko hiện ra gì"*. Đo ngay: cả 4 route OG
+trả **HTTP 200 · `content-type: image/png` · body 0 BYTE** (0,3–0,8s, không phải
+đang vẽ). Ảnh tĩnh cùng domain ra 26.674 byte ⇒ **proxy không nuốt body, route
+thật sự trả rỗng.**
+
+### 🔴 Lỗi MỚI, do chính bản vá #557 đẻ ra
+```
+Error: Unsupported OpenType signature wOF2
+count=15  routes=/api/og, /api/og/social, /api/og/laso, /api/og/luan-duong
+first=2026-08-19T02:18:06Z   ← ngay sau khi deploy #557
+```
+#557 nới regex nhận `woff2` kèm chú thích *"Satori đọc được cả ba định dạng"* —
+**câu đó là tôi suy đoán, không đo.** Satori CHỈ đọc sfnt (TTF/OTF).
+
+### 🔑 Căn nguyên THẬT — hỏi thẳng Google Fonts từng User-Agent
+| UA gửi đi | Google trả về | Satori |
+|---|---|---|
+| Chrome hiện đại | `…/xxx.woff2` | ❌ ném `Unsupported wOF2` |
+| MSIE (UA cũ) | `…/l/font?kit=…` — **EOT, KHÔNG CÓ ĐUÔI** | ❌ |
+| **KHÔNG gửi UA** | `…/xxx.ttf` | ✅ |
+
+⇒ **Không UA nào trong 4 route từng cho ra TTF.** UA cũ ra URL không đuôi nên
+regex `\.ttf` **trượt** → mảng rỗng → đúng câu *"No fonts are loaded"* của 108
+lượt cũ. Tức chẩn đoán vòng 1 (*"fetch hỏng nên mảng rỗng"*) nhìn đúng triệu
+chứng nhưng **sai nguyên nhân**, và bản vá theo nó làm hỏng thêm 2 route đang
+lành. 🔑 **Chẩn đoán ĐẦU của tôi ở #557 nói "regex không phải nguyên nhân" —
+hoá ra regex ĐÚNG là một nửa nguyên nhân.** Bài học: đính chính mà không đo lại
+tận nguồn thì chỉ đổi một phỏng đoán lấy một phỏng đoán khác.
+
+### Cách vá — bỏ Google khỏi đường CHÍNH
+**Tự host `public/fonts/be-vietnam-pro-{400,700}.ttf`** (120KB + 126KB), nạp qua
+CÙNG ORIGIN. Hành vi Google đổi theo UA là thứ mình không kiểm được, và đúng chỗ
+đó đã hỏng hai lần. Google giữ lại làm **dự phòng** (không gửi UA, chỉ nhận
+`ttf|otf`) cho ca deploy hụt asset.
+- 🔑 **Chốt chặn thật là CHỮ KÝ NHỊ PHÂN, không phải đuôi file** (`looksLikeSfnt`
+  đọc 4 byte đầu: `00 01 00 00` · `OTTO` · `true` · `ttcf`). Đuôi `.ttf` không
+  chứng minh nội dung — Google từng trả EOT qua URL không đuôi. Nhờ nó, đường dự
+  phòng **không thể** nhét woff2/EOT vào Satori dù regex lỏng tới đâu.
+- `ogFallbackRedirect` (302 → `/seal.webp`) của #557 GIỮ NGUYÊN — nó đúng, chỉ là
+  chưa bao giờ chạy tới vì font woff2 nạp "thành công" rồi Satori mới ném.
+
+### Verify
+`tsc` 0 · `lint` **0 lỗi / 77 warning = mốc nền** · `prettier` cả cây sạch ·
+**22/22 bộ dò** · engine **185 pass** · **`next build` exit 0, 64/64 trang**.
+- **19/19 ca trên MODULE THẬT** (biên dịch `font.ts`, stub `fetch`): tự host OK →
+  **1 lượt mạng, 0 lượt chạm Google** · tự host 404 → rơi sang Google · **ca hồi
+  quy #557: Google trả woff2 → TỪ CHỐI** · URL không đuôi (EOT) → từ chối · **tự
+  host trả EOT dưới đuôi `.ttf` → từ chối rồi lấy bản Google** · cả hai hỏng →
+  mảng rỗng, KHÔNG ném · **cấm cache null** (hỏng rồi sau đó OK vẫn nạp lại
+  được) · cache khi thành công thì lượt 2 **0 lượt mạng** · một weight hỏng vẫn
+  giữ weight kia.
+- 🔑 **RENDER THẬT bằng `@vercel/og` bản Node** (`next/dist/compiled/@vercel/og/index.node.js`
+  — dùng được ngoài edge, khác `next/og`): TTF tự host → **PNG 1200×630, 36.263
+  byte, chữ tiếng Việt đủ dấu** · WOFF2 → ném **đúng nguyên văn** câu lỗi đang
+  thấy trên prod · EOT → ném. Đây là mắt xích #557 thiếu.
+- 🪤 `pkill -f 'stub-postgrest[.]mjs'` **vẫn tự giết** (exit 144) — ngoặc vuông
+  không cứu được khi chính dòng lệnh shell chứa chuỗi đó. Bắt PID rồi `kill "$PID"`.
+
+### CÒN LẠI
+- Font là file nhị phân trong git (246KB). Bump bản Be Vietnam Pro thì phải tải
+  lại TTF **bằng lượt fetch KHÔNG gửi UA**, không thì lấy phải woff2.
+
 ## 🔮 Thêm lớp DỰ BÁO vào arc ô GIỮA — và arc ô giữa KHÔNG phải 5 lớp (2026-08-19, PR sau)
 
 Henry: *"ngay sau ý 3. twist thì thêm ý 3'. đưa ra 1-2 prediction về tương lai…

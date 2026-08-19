@@ -13,7 +13,7 @@ export async function GET(request: NextRequest) {
   const title = rawTitle.length > 55 ? rawTitle.slice(0, 52) + '…' : rawTitle;
   const fontSize = title.length > 36 ? 40 : 52;
 
-  const fonts = await loadOgFonts([700]);
+  const fonts = await loadOgFonts([700], request);
   // Không font nào ⇒ Satori sẽ ném "No fonts are loaded" (500, mạng xã hội không có
   // preview NÀO). Trả ảnh thương hiệu tĩnh thay vì đổ lỗi ra ngoài.
   if (!fonts.length) return ogFallbackRedirect(request);
