@@ -27,6 +27,40 @@ const SB_URL = process.env.SUPABASE_URL!;
 const SB_KEY = process.env.SUPABASE_SERVICE_KEY!;
 const BASE   = 'https://www.tuviminhbao.com';
 
+// ── Hạn giờ cho MỌI lượt đọc Supabase ────────────────────────────────────────
+// 🔴 VÌ SAO: prod đo được 24 lượt 504 "Task timed out after 30 seconds", 100% rơi
+//    vào route này, dồn thành cụm ~46 giây (bot cào, `cache=MISS`, mỗi slug một
+//    lượt). Engine KHÔNG phải thủ phạm — đo được nạp 9,5ms, lập một lá số p50
+//    5,1ms / p95 11,3ms. Thủ phạm là mấy lượt `fetch` Supabase: ca xấu nhất
+//    **6 lượt TUẦN TỰ** (laso_public → laso_pregen → 3 keyword bài liên quan →
+//    fallback) và KHÔNG lượt nào có hạn giờ ⇒ Supabase nghẽn một nhịp là request
+//    treo tới khi Vercel giết ở giây thứ 30.
+const SB_TIMEOUT_MS = 4000;
+// Ngân sách cho phần "bài liên quan" — nó là khối TRANG TRÍ cuối trang, không
+// phải nội dung chính. Hết giờ thì bỏ khối đó chứ đừng để cả trang chết.
+const RELATED_BUDGET_MS = 5000;
+
+type SbResult<T> = { ok: boolean; rows: T[] };
+
+/**
+ * Đọc Supabase có hạn giờ. Trả `ok:false` khi KHÔNG hỏi được (mạng/timeout/5xx)
+ * — khác hẳn `ok:true, rows:[]` nghĩa là ĐÃ hỏi và chắc chắn không có dòng nào.
+ * 🔑 Phân biệt hai ca này là chuyện đúng/sai, không phải chuyện gọn: xem chỗ
+ *    dùng `publicKnown` bên dưới.
+ */
+async function sbFetch<T = Rec>(url: string, timeoutMs = SB_TIMEOUT_MS): Promise<SbResult<T>> {
+  try {
+    const r = await fetch(url, {
+      headers: { apikey: SB_KEY, Authorization: `Bearer ${SB_KEY}` },
+      signal: AbortSignal.timeout(timeoutMs),
+    });
+    if (!r.ok) return { ok: false, rows: [] };
+    return { ok: true, rows: ((await r.json()) as T[]) || [] };
+  } catch {
+    return { ok: false, rows: [] };
+  }
+}
+
 // Năm xem canonical — KHỚP với sitemap-pregen + hub menh-kho (NAM_XEM=2027).
 // Mọi ISR slug có namXem khác sẽ 301 về năm này để gom crawl/cache về 1 URL,
 // tránh recompute engine cho 21 biến thể năm (2020–2040) = chảy máu Fluid CPU.
@@ -1193,29 +1227,33 @@ function buildRelatedLinks(params: IsrParams): string {
 type ArticleStub = { slug: string; title: string; excerpt: string };
 
 async function fetchRelatedArticles(cungMenh: string, chinhTinh: string): Promise<ArticleStub[]> {
-  const h = { apikey: SB_KEY, Authorization: `Bearer ${SB_KEY}` };
-  const keywords = [cungMenh, ...chinhTinh.split(', ').slice(0,2)].filter(Boolean);
-  // Try each keyword, return first non-empty result
-  for (const kw of keywords) {
-    try {
-      const r = await fetch(
-        `${SB_URL}/rest/v1/master_articles?tags=cs.%7B"${encodeURIComponent(kw)}"%7D&select=slug,title,excerpt&${PUBLISHED_ONLY}&order=created_at.desc&limit=4`,
-        { headers: h }
-      );
-      if (r.ok) {
-        const rows = await r.json() as ArticleStub[];
-        if (rows?.length) return rows;
-      }
-    } catch { /* continue */ }
-  }
-  // Fallback: latest 4 articles
-  try {
-    const r = await fetch(
-      `${SB_URL}/rest/v1/master_articles?select=slug,title,excerpt&${PUBLISHED_ONLY}&order=created_at.desc&limit=4`,
-      { headers: h }
+  const keywords = [cungMenh, ...chinhTinh.split(', ').slice(0, 2)].filter(Boolean);
+  const t0 = Date.now();
+  const left = () => Math.max(0, RELATED_BUDGET_MS - (Date.now() - t0));
+
+  // 🔑 GỘP mọi keyword vào MỘT lượt `or=` thay vì hỏi lần lượt từng cái. Bản cũ
+  //    chạy tối đa 3 lượt TUẦN TỰ rồi mới tới fallback — bốn lượt cho một khối
+  //    trang trí, và chính chuỗi đó kéo dài request tới mức Vercel giết.
+  if (keywords.length && left() > 0) {
+    const ors = keywords
+      .map((kw) => `tags.cs.%7B%22${encodeURIComponent(kw)}%22%7D`)
+      .join(',');
+    const r = await sbFetch<ArticleStub>(
+      `${SB_URL}/rest/v1/master_articles?or=(${ors})&select=slug,title,excerpt&${PUBLISHED_ONLY}&order=created_at.desc&limit=4`,
+      Math.min(SB_TIMEOUT_MS, left()),
     );
-    if (r.ok) return (await r.json() as ArticleStub[]) || [];
-  } catch { /* ignore */ }
+    if (r.rows.length) return r.rows;
+  }
+
+  // Fallback: 4 bài mới nhất. Hết ngân sách thì thôi hẳn — khối này không đáng
+  // để một trang lá số phải chờ.
+  if (left() > 0) {
+    const r = await sbFetch<ArticleStub>(
+      `${SB_URL}/rest/v1/master_articles?select=slug,title,excerpt&${PUBLISHED_ONLY}&order=created_at.desc&limit=4`,
+      Math.min(SB_TIMEOUT_MS, left()),
+    );
+    if (r.rows.length) return r.rows;
+  }
   return [];
 }
 
@@ -1457,43 +1495,36 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ slu
   const { slug } = await params;
   if (!slug) return NextResponse.redirect(`${BASE}/menh-kho.html`);
 
-  const headers = { 'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}` };
+  // 1+2. laso_public (bản người ĐÃ TRẢ TIỀN) và laso_pregen — hỏi SONG SONG.
+  // Bản cũ chạy tuần tự: hai lượt đọc độc lập nhau mà cái sau phải đợi cái trước.
+  const [pub, pre] = await Promise.all([
+    sbFetch(`${SB_URL}/rest/v1/laso_public?slug=eq.${encodeURIComponent(slug)}&select=*&limit=1`),
+    sbFetch(`${SB_URL}/rest/v1/laso_pregen?slug=eq.${encodeURIComponent(slug)}&select=*&limit=1`),
+  ]);
 
-  // 1. Try laso_public (user-paid, full AI analysis)
-  try {
-    const pubRes = await fetch(
-      `${SB_URL}/rest/v1/laso_public?slug=eq.${encodeURIComponent(slug)}&select=*&limit=1`,
-      { headers }
-    );
-    if (pubRes.ok) {
-      const rows = await pubRes.json();
-      if (rows?.length) {
-        const html = buildPublicHTML(rows[0], slug);
-        return new NextResponse(html, { headers: {
-          'Content-Type': 'text/html; charset=utf-8',
-          'Cache-Control': 'public, s-maxage=86400, stale-while-revalidate=604800',
-        }});
-      }
-    }
-  } catch { /* continue */ }
+  if (pub.rows.length) {
+    return new NextResponse(buildPublicHTML(pub.rows[0], slug), {
+      headers: {
+        'Content-Type': 'text/html; charset=utf-8',
+        'Cache-Control': 'public, s-maxage=86400, stale-while-revalidate=604800',
+      },
+    });
+  }
+  if (pre.rows.length) {
+    return new NextResponse(buildPregenHTML(pre.rows[0], slug), {
+      headers: {
+        'Content-Type': 'text/html; charset=utf-8',
+        'Cache-Control': 'public, s-maxage=86400, stale-while-revalidate=604800',
+      },
+    });
+  }
 
-  // 2. Try laso_pregen (old pre-generated batch)
-  try {
-    const preRes = await fetch(
-      `${SB_URL}/rest/v1/laso_pregen?slug=eq.${encodeURIComponent(slug)}&select=*&limit=1`,
-      { headers }
-    );
-    if (preRes.ok) {
-      const rows = await preRes.json();
-      if (rows?.length) {
-        const html = buildPregenHTML(rows[0], slug);
-        return new NextResponse(html, { headers: {
-          'Content-Type': 'text/html; charset=utf-8',
-          'Cache-Control': 'public, s-maxage=86400, stale-while-revalidate=604800',
-        }});
-      }
-    }
-  } catch { /* continue */ }
+  // 🔴 CHỐT ĐÚNG/SAI: `publicKnown=false` nghĩa là KHÔNG HỎI ĐƯỢC laso_public,
+  //    chứ không phải "chắc chắn không có". Bản cũ nuốt lỗi rồi rơi xuống ISR và
+  //    vẫn dán `s-maxage=31536000` ⇒ Supabase chớp MỘT nhịp đúng lúc bot cào
+  //    trang của người đã trả tiền là CDN ghim bản ISR **một năm**, bản họ mua
+  //    biến mất mà không có gì báo. Nay ca đó chỉ được cache 5 phút.
+  const publicKnown = pub.ok;
 
   // 3. Try ISR compute (new 438K slug format)
   const isrParams = parseIsrSlug(slug);
@@ -1531,11 +1562,17 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ slu
           const menhP     = palaces.find(p => p.isMenh) as Rec|undefined;
           const cungMenh  = String(menhP?.cungName || '');
           const chinhTinh = ((menhP?.majorStars as Rec[])||[]).map(s=>String(s.ten||'')).join(', ');
-          const relatedArticles = await fetchRelatedArticles(cungMenh, chinhTinh);
+          // 🔑 Supabase vừa không trả lời được ở hai lượt trên thì đừng hỏi nó
+          //    thêm cho một khối TRANG TRÍ — đo được nó kéo lượt hỏng từ 4,1s
+          //    lên 9,1s mà chắc chắn trả về rỗng.
+          const sbAlive = pub.ok || pre.ok;
+          const relatedArticles = sbAlive ? await fetchRelatedArticles(cungMenh, chinhTinh) : [];
           const html = buildIsrHTML(ls, isrParams, slug, relatedArticles);
           return new NextResponse(html, { headers: {
             'Content-Type': 'text/html; charset=utf-8',
-            'Cache-Control': 'public, s-maxage=31536000, stale-while-revalidate=86400',
+            'Cache-Control': publicKnown
+              ? 'public, s-maxage=31536000, stale-while-revalidate=86400'
+              : 'public, s-maxage=300',
           }});
         }
       }
@@ -1551,7 +1588,11 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ slu
   //   - parse fail (isrParams null): slug không đúng format → rác vĩnh viễn → cache 1 năm.
   //   - parse ok nhưng engine trả null (vd ngày 31-02): hiếm, cache 1 ngày cho an toàn
   //     (phòng trường hợp Supabase lỗi tạm thời khiến lá số thật rớt xuống đây).
-  const notFoundTtl = isrParams ? 86400 : 31536000;
+  // 🔑 CÙNG LỚP với `publicKnown` ở trên: chưa hỏi được laso_public thì KHÔNG
+  //    được ghim 404. Slug của bản trả tiền không nhất thiết đúng khuôn ISR
+  //    (`parseIsrSlug` trả null) ⇒ bản cũ sẽ cache 404 **một năm** cho đúng
+  //    trang người ta vừa mua, chỉ vì Supabase chớp một nhịp.
+  const notFoundTtl = !publicKnown ? 300 : isrParams ? 86400 : 31536000;
   return new NextResponse(
     `<!DOCTYPE html><html lang="vi"><head><meta charset="UTF-8"><title>Không tìm thấy</title><meta name="robots" content="noindex"></head><body><p>Lá số này không tồn tại. <a href="${BASE}/menh-kho.html">Xem mệnh khố</a></p></body></html>`,
     { status: 404, headers: {

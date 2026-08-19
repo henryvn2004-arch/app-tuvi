@@ -1,5 +1,81 @@
 # CLAUDE.md — Context cho Claude Code
 
+## ⏱️ Timeout 30 giây: KHÔNG phải đường tiền, và engine vô can (2026-08-19, cùng PR)
+
+Sổ ghi *"timeout 30 giây trên `/api/payment` + `/la-so/[slug]` — cái đầu là đường
+tiền"*. Đo lại **theo môi trường** thì vế đó SAI:
+
+| production, 7 ngày | |
+|---|---:|
+| lượt 504 | **24** |
+| `/la-so/[slug]` | **24 (100%)** |
+| **`/api/payment`** | **0** |
+
+Mấy lượt `/api/payment` 504 nằm ở **preview của nhánh `claude/remotion-video-m2hmam`**
+(trần 15 giây, không phải 30) — tức của một session khác, không phải đường tiền prod.
+🔑 **Nhóm lỗi gộp nhiều route thì phải tách theo môi trường trước khi kết luận** —
+đọc nhãn nhóm rồi suy là cách nhanh nhất báo động nhầm chỗ.
+
+### 🔑 Engine VÔ CAN — đo trước khi đoán
+| | |
+|---|---:|
+| `loadEngine()` (1 lần/instance) | **9,5 ms** |
+| lập MỘT lá số | p50 **5,1 ms** · p95 11,3 ms · max 29,3 ms |
+
+Chú thích trong route ghi *"maxDuration = 30 — allow 30s for engine on cold start"*
+⇒ **mô tả sai chỗ đắt**. Thủ phạm là mấy lượt đọc Supabase: ca xấu nhất **6 lượt
+TUẦN TỰ** (`laso_public` → `laso_pregen` → 3 keyword bài liên quan → fallback) và
+**KHÔNG lượt nào có hạn giờ**. 24 lượt 504 dồn thành cụm ~46 giây, `cache=MISS`,
+mỗi slug một lượt — đúng hình dạng một đợt bot cào.
+
+### 🔴 Lỗi NẶNG HƠN cái timeout, tìm ra khi đọc nhánh lỗi
+`catch { /* continue */ }` nuốt lỗi `laso_public` rồi rơi xuống ISR, **vẫn dán
+`s-maxage=31536000`**. Nghĩa là Supabase chớp MỘT nhịp đúng lúc bot cào trang của
+người ĐÃ TRẢ TIỀN ⇒ CDN ghim bản ISR **một năm**, bản họ mua biến mất, không gì báo.
+- ⇒ `sbFetch` phân biệt **`ok:false` (không hỏi được)** với **`ok:true, rows:[]`
+  (đã hỏi, chắc chắn không có)**. `publicKnown=false` ⇒ cache **300 giây**.
+- Cùng lớp ở nhánh 404: slug của bản trả tiền không nhất thiết đúng khuôn ISR
+  (`parseIsrSlug` trả null) ⇒ bản cũ ghim 404 **một năm**. Nay cũng 300 giây.
+- ⚠️ Có **ca ĐỐI CHỨNG** canh chiều ngược: Supabase LÀNH + slug rác thì **vẫn phải
+  ghim 404 một năm** — vá cái này mà nới lỏng luôn ca kia là mở lại cửa đốt
+  invocation cho bot cào slug rác.
+
+### Đã làm
+`sbFetch` (hạn giờ 4s, dùng chung) · `laso_public` + `laso_pregen` chạy **song
+song** · `fetchRelatedArticles` **gộp mọi keyword vào MỘT lượt `or=`** (bản cũ tối
+đa 4 lượt tuần tự cho một khối trang trí) + ngân sách 5s · **Supabase vừa không
+trả lời được hai lượt đầu thì BỎ HẲN khối bài liên quan** — đo được nó kéo lượt
+hỏng từ 4,1s lên 9,1s mà chắc chắn trả rỗng.
+
+### Verify — A/B trên ROUTE THẬT (Next dev + Supabase giả điều khiển được)
+| ca | bản `origin/main` | bản mới |
+|---|---|---|
+| Supabase TREO | **TREO >25s** (prod = 504) | **200 trong 4,1s**, cache 5 phút |
+| slug rác + TREO | **TREO >25s** | **404 trong 4,0s**, cache 5 phút |
+| Supabase CHẬM 9s | 200 sau **27,2s**, **ghim 1 NĂM** | 200 sau 4,1s, cache 5 phút |
+
+27,2 giây của bản cũ là 3 lượt tuần tự × 9s — con số tự nó chỉ ra chỗ hỏng.
+- **23/23 ca** trên handler thật: bản trả tiền được phục vụ và **2 lượt query lệch
+  nhau <60ms** (chứng minh song song) · nhánh đó **0 lượt hỏi bài liên quan** ·
+  ISR cache 1 năm · bài liên quan **≤2 lượt** và có `or=(` · ĐỐI CHỨNG slug rác +
+  Supabase lành vẫn ghim 1 năm.
+- `tsc` 0 · `lint` **0 lỗi / 77 warning = mốc nền** · `prettier` sạch · **22/22 bộ
+  dò** · engine **185 pass** · **`next build` exit 0, 64/64 trang**.
+- 🪤 **2 ca đỏ đầu là lỗi của BÀI KIỂM**: stub trả `html_content` do tôi bịa, shape
+  thật là `can_chi_nam`/`cung_menh`/`rendered_html`. Bài học cũ lặp lại — **lấy
+  shape THẲNG từ code, đừng bịa**.
+- 🪤 `git worktree` + symlink `node_modules` **vẫn gãy với Turbopack**
+  (*"Symlink points out of the filesystem root"*). Đường đi được đã ghi sẵn trong
+  file này: tráo file ngay trong cây đang chạy, Next dev tự nạp lại. **Sao lưu bản
+  mới ra ngoài TRƯỚC khi tráo.**
+- 🪤 `next dev` lại tự ghi `next-env.d.ts` — đã `git checkout`, không commit.
+
+### CÒN LẠI
+- Chưa đo trên prod. Dấu hiệu vá đúng: nhóm *"Task timed out"* của `/la-so/[slug]`
+  ngừng mọc thêm ở đợt bot cào kế tiếp.
+- Hạn giờ 4s và ngân sách 5s là **con số chọn**, chưa hiệu chỉnh theo p95 thật của
+  Supabase. Thấy trang hay hụt khối bài liên quan thì nới ngân sách, đừng nới hạn giờ.
+
 ## 🔤 Ảnh OG: chẩn đoán vòng 1 SAI, bản vá của tôi đẻ ra lỗi MỚI (2026-08-19, PR sau)
 
 Henry: *"tao click thử cái link trên, thì nó ko hiện ra gì"*. Đo ngay: cả 4 route OG
