@@ -374,7 +374,7 @@
     + '<a class="nav-logo" href="/"><img src="/seal.webp" alt="">'
     + '<div><div class="name">Tử Vi Minh Bảo</div><div class="url">Tri mệnh lý – Thuận thế hành</div></div></a>'
     + '<div class="nav-links" id="nav-links">'
-    + '<a class="nav-link nav-cta-ld' + (isActive('/app')?' active':'') + '" href="/app">✦ Luận Đường</a>'
+    + '<a class="nav-link nav-cta-ld' + (isActive('/app')?' active':'') + '" href="/app" title="Lập lá số và hỏi trợ lý AI — vào đây để dùng công cụ">✦ Luận Đường</a>'
     + dd_kp
     + dd_cn
     + '</div>'
