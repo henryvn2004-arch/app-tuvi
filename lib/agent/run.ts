@@ -37,6 +37,14 @@ import {
   toGeminiTools,
   toGeminiContents,
 } from '@/lib/agent/providers/gemini';
+import {
+  kimiConfigured,
+  streamKimi,
+  toKimiMessages,
+  toKimiTools,
+  streamKimiTurn,
+  kimiToolResultMessage,
+} from '@/lib/agent/providers/kimi';
 import { logLlmUsage, type LlmUsage } from '@/lib/agent/usage';
 import { buildCompanionLayer } from '@/lib/agent/companion';
 import { listMemory, rememberFact, forgetFact, formatMemoryForPrompt } from '@/lib/memory/store';
@@ -506,6 +514,104 @@ export async function runAgent(
   // bát-tự (tool-call) và vision LUÔN dùng Sonnet. Lỗi Gemini ở request-time →
   // fallback SẠCH xuống loop Anthropic bên dưới (chưa gửi byte nào).
   const scenarioType = scenario?.type || 'laso';
+
+  // ── PROVIDER ROUTING — KIMI K3 LÀ PRIMARY (chốt Henry 2026-08-20: "Kimi K3
+  // primary, back up 1 là opus 5, back up 2 là gemini flash"). Model hỗ trợ
+  // NATIVE cả vision lẫn function-calling nên KHÔNG cần eligibility gate theo
+  // scenario như Gemini (giới hạn đó là của Gemini, không phải của Kimi) —
+  // thử cho MỌI kịch bản, kể cả 'laso' (vương miện) và vision. Lỗi ở
+  // request-time (chưa gửi byte nào) → rơi SẠCH xuống chuỗi cũ bên dưới
+  // (Anthropic/Opus 5 rồi Gemini) — chuỗi đó GIỮ NGUYÊN, không đụng, nên nó
+  // tự động trở thành backup-1/backup-2 đúng thứ tự Henry chốt.
+  const runKimiTools = async (): Promise<ProviderOutcome> => {
+    const kTools = toKimiTools(tools);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const kMessages: any[] = toKimiMessages(system, convo);
+    let progressed = false;
+    try {
+      for (let round = 0; round <= cfg.maxRounds; round++) {
+        const forceAnswer = round === cfg.maxRounds; // vòng cuối: ép trả lời, cấm tool
+        const turn = await streamKimiTurn(kMessages, forceAnswer ? null : kTools, cfg, send);
+        progressed = progressed || turn.sentText || turn.toolCalls.length > 0;
+
+        if (!forceAnswer && turn.toolCalls.length) {
+          kMessages.push(turn.assistantMessage);
+          for (const tc of turn.toolCalls) {
+            toolsUsed.push(tc.name);
+            if (tc.name === 'lap_la_so' && tc.args) {
+              const b = buildBirthFromInput(tc.args);
+              if (b) capturedBirth = b;
+            }
+            const run = await executeTool(tc.name, tc.args, ctx);
+            send(sse.toolCall({ name: tc.name, args: safeArgs(tc.args) }));
+            send(sse.status({ text: run.label }));
+            const rc = typeof run.content === 'string' ? run.content : JSON.stringify(run.content);
+            kMessages.push(kimiToolResultMessage(tc.id, rc));
+          }
+          continue;
+        }
+        suggestions = turn.suggestions;
+        break;
+      }
+      const justBuilt = toolsUsed.includes('lap_la_so') || toolsUsed.includes('mo_la_so');
+      const lasoCard = justBuilt && ctx.ls ? renderLasoCard(ctx.ls, ctx.birth) : null;
+      return {
+        ok: true,
+        result: {
+          toolsUsed,
+          birth: ctx.birth ?? capturedBirth,
+          activeProfile: ctx.activeProfile,
+          subjectSwitched: ctx.subjectSwitched,
+          lasoCard,
+          suggestions,
+          toolSuggest: ctx.toolSuggestion,
+        },
+      };
+    } catch (e) {
+      console.error('[runAgent] Kimi-tools lỗi:', (e as Error)?.message);
+      // progressed = đã stream dở / đã chạy tool → caller không được thử lại.
+      return { ok: false, midStream: progressed };
+    }
+  };
+
+  if (kimiConfigured()) {
+    if (tools.length) {
+      const r = await runKimiTools();
+      if (r.ok) return r.result;
+      if (r.midStream) {
+        // Đã stream dở → báo lỗi và đóng lượt, KHÔNG thử provider khác (tránh trả trùng).
+        send(sse.error({ code: 'internal', message: 'Kimi error mid-stream' }));
+        const justBuilt = toolsUsed.includes('lap_la_so') || toolsUsed.includes('mo_la_so');
+        return {
+          toolsUsed,
+          birth: ctx.birth ?? capturedBirth,
+          activeProfile: ctx.activeProfile,
+          subjectSwitched: ctx.subjectSwitched,
+          lasoCard: justBuilt && ctx.ls ? renderLasoCard(ctx.ls, ctx.birth) : null,
+          suggestions,
+          toolSuggest: ctx.toolSuggestion,
+        };
+      }
+      // Hỏng sạch (chưa stream gì) → rơi xuống chuỗi cũ (Opus 5 rồi Gemini).
+    } else {
+      try {
+        suggestions = await streamKimi(system, convo, cfg, send);
+        return {
+          toolsUsed,
+          birth: capturedBirth,
+          activeProfile: ctx.activeProfile,
+          subjectSwitched: ctx.subjectSwitched,
+          lasoCard: null,
+          suggestions,
+          toolSuggest: ctx.toolSuggestion,
+        };
+      } catch (e) {
+        console.error('[runAgent] Kimi lỗi → fallback chuỗi cũ (Opus 5 rồi Gemini):', (e as Error)?.message);
+        // rơi xuống chuỗi cũ bên dưới (an toàn: chưa stream text nào)
+      }
+    }
+  }
+
   if (geminiEligible(scenarioType, hasImages, cfg.providerRoutes)) {
     try {
       suggestions = await streamGemini(system, convo, cfg, send);

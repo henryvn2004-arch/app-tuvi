@@ -17,13 +17,21 @@
 
 import { getChatConfig } from '@/lib/config/appConfig';
 import { toGeminiTools } from '@/lib/agent/providers/gemini';
+import { toKimiTools } from '@/lib/agent/providers/kimi';
 
 const GEMINI_KEY = process.env.GEMINI_API_KEY || '';
 const GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-2.5-flash';
 const GEMINI_BASE = 'https://generativelanguage.googleapis.com/v1beta/models';
 const ANTHROPIC_KEY = process.env.ANTHROPIC_API_KEY || '';
-const ANTHROPIC_MODEL = 'claude-sonnet-4-6';
+// Backup-1 (chốt Henry 2026-08-20: Kimi K3 primary → Opus 5 backup-1 → Gemini
+// Flash backup-2). Hằng số này KHÔNG đọc được từ app_config — đổi model thì
+// phải sửa trực tiếp ở đây rồi deploy.
+const ANTHROPIC_MODEL = 'claude-opus-5';
 const ANTHROPIC_URL = 'https://api.anthropic.com/v1/messages';
+// Primary — Kimi K3 (Moonshot AI), endpoint OpenAI-compatible Chat Completions.
+const KIMI_KEY = process.env.KIMIK3_API_KEY || '';
+const KIMI_MODEL = process.env.KIMI_MODEL || 'kimi-k3';
+const KIMI_URL = 'https://api.moonshot.ai/v1/chat/completions';
 
 export interface LlmImage {
   data: string; // base64 (không kèm data: prefix)
@@ -135,6 +143,82 @@ function geminiChunkText(raw: string): string {
   return (j?.candidates?.[0]?.content?.parts as any[] | undefined)?.map((p) => p.text).filter(Boolean).join('') || '';
 }
 
+// ─── Kimi K3 (Moonshot AI, OpenAI-compatible Chat Completions) ──
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function buildKimiMessages(o: LlmTextOpts): any[] {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const out: any[] = [];
+  if (o.system) out.push({ role: 'system', content: o.system });
+  if (o.messages?.length) {
+    for (const m of o.messages) {
+      const c = String(m.content || '').trim();
+      if (c) out.push({ role: m.role === 'assistant' ? 'assistant' : 'user', content: c });
+    }
+  } else if (o.images?.length) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const parts: any[] = [];
+    for (const im of o.images) {
+      parts.push({ type: 'image_url', image_url: { url: `data:${im.mediaType || 'image/jpeg'};base64,${im.data}` } });
+    }
+    parts.push({ type: 'text', text: o.prompt || '' });
+    out.push({ role: 'user', content: parts });
+  } else {
+    out.push({ role: 'user', content: o.prompt || '' });
+  }
+  return out;
+}
+
+async function kimiText(o: LlmTextOpts, maxTokens: number): Promise<RawLlmResult> {
+  if (!KIMI_KEY) throw new Error('kimi: thiếu KIMIK3_API_KEY');
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const body: any = {
+    model: KIMI_MODEL,
+    messages: buildKimiMessages(o),
+    max_tokens: maxTokens,
+    temperature: o.temperature ?? 0.7,
+  };
+  if (o.json) body.response_format = { type: 'json_object' };
+  const r = await fetch(KIMI_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${KIMI_KEY}` },
+    body: JSON.stringify(body),
+  });
+  if (!r.ok) throw new Error(`kimi ${r.status}: ${(await r.text()).slice(0, 200)}`);
+  const j = await r.json();
+  const t = j?.choices?.[0]?.message?.content || '';
+  if (!t) throw new Error('kimi: completion rỗng');
+  return {
+    text: t,
+    usage: {
+      input_tokens: j?.usage?.prompt_tokens || 0,
+      output_tokens: j?.usage?.completion_tokens || 0,
+    },
+  };
+}
+
+async function openKimiStream(o: LlmTextOpts, maxTokens: number): Promise<Response> {
+  if (!KIMI_KEY) throw new Error('kimi: thiếu KIMIK3_API_KEY');
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const body: any = {
+    model: KIMI_MODEL,
+    messages: buildKimiMessages(o),
+    max_tokens: maxTokens,
+    temperature: o.temperature ?? 0.7,
+    stream: true,
+  };
+  return fetch(KIMI_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${KIMI_KEY}` },
+    body: JSON.stringify(body),
+  });
+}
+
+// Lấy text từ 1 payload SSE của Kimi (đã strip 'data: ', shape OpenAI delta).
+function kimiChunkText(raw: string): string {
+  const j = JSON.parse(raw);
+  return j?.choices?.[0]?.delta?.content || '';
+}
+
 // ─── Anthropic ─────────────────────────────────────────────────
 function buildAnthropicBody(o: LlmTextOpts, maxTokens: number, stream: boolean) {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -205,20 +289,28 @@ function anthropicChunkText(raw: string): string {
   return '';
 }
 
-// ─── Chọn provider (chính + backup) ────────────────────────────
+// ─── Chọn provider (chính + 2 backup) ───────────────────────────
+// Chốt Henry 2026-08-20: Kimi K3 primary → Opus 5 (anthropic) backup-1 →
+// Gemini Flash backup-2. `standaloneProvider` (app_config
+// 'chat.standalone_provider') vẫn giữ được vai trò ĐẶT LÊN ĐẦU một provider
+// cụ thể (vd ép 'gemini' để né Kimi/Opus khi cần) — còn lại xếp theo thứ tự
+// chuẩn phía sau. Kimi thiếu key thì `kimiText`/`openKimiStream` tự ném lỗi
+// ngay, vòng thử-provider-kế-tiếp bên dưới xử lý y như mọi lỗi khác.
+const CANONICAL_ORDER = ['kimi', 'anthropic', 'gemini'];
 async function providerOrder(): Promise<string[]> {
-  let primary = 'gemini';
+  let primary = 'kimi';
   try {
-    primary = (await getChatConfig()).standaloneProvider || 'gemini';
+    primary = (await getChatConfig()).standaloneProvider || 'kimi';
   } catch {
-    /* getChatConfig không throw; phòng hờ → gemini */
+    /* getChatConfig không throw; phòng hờ → kimi */
   }
-  return primary === 'anthropic' ? ['anthropic', 'gemini'] : ['gemini', 'anthropic'];
+  if (!CANONICAL_ORDER.includes(primary)) primary = 'kimi';
+  return [primary, ...CANONICAL_ORDER.filter((p) => p !== primary)];
 }
 
 export interface LlmTextFullResult {
   text: string;
-  provider: 'gemini' | 'anthropic';
+  provider: 'gemini' | 'anthropic' | 'kimi';
   model: string;
   usage: { input_tokens: number; output_tokens: number };
   /** Thời lượng THẬT của lượt gọi (ms), tính cả lượt fallback provider nếu có.
@@ -239,12 +331,12 @@ export async function llmTextFull(o: LlmTextOpts): Promise<LlmTextFullResult> {
   let lastErr: unknown;
   for (const p of order) {
     try {
-      const r = p === 'gemini' ? await geminiText(o, maxTokens) : await anthropicText(o, maxTokens);
+      const r = p === 'kimi' ? await kimiText(o, maxTokens) : p === 'gemini' ? await geminiText(o, maxTokens) : await anthropicText(o, maxTokens);
       return {
         text: r.text,
         usage: r.usage,
-        provider: p as 'gemini' | 'anthropic',
-        model: p === 'gemini' ? GEMINI_MODEL : ANTHROPIC_MODEL,
+        provider: p as 'gemini' | 'anthropic' | 'kimi',
+        model: p === 'kimi' ? KIMI_MODEL : p === 'gemini' ? GEMINI_MODEL : ANTHROPIC_MODEL,
         durationMs: Date.now() - t0,
       };
     } catch (e) {
@@ -311,7 +403,12 @@ export async function llmStreamResponse(
   let lastErr = '';
   for (const p of order) {
     try {
-      const u = p === 'gemini' ? await openGeminiStream(o, maxTokens) : await openAnthropicStream(o, maxTokens);
+      const u =
+        p === 'kimi'
+          ? await openKimiStream(o, maxTokens)
+          : p === 'gemini'
+            ? await openGeminiStream(o, maxTokens)
+            : await openAnthropicStream(o, maxTokens);
       if (u.ok && u.body) {
         upstream = u;
         usedProvider = p;
@@ -329,7 +426,7 @@ export async function llmStreamResponse(
     return new Response(emitErr(lastErr || 'LLM không khả dụng'), { headers: sseHeaders(extraHeaders) });
   }
 
-  const parseChunk = usedProvider === 'gemini' ? geminiChunkText : anthropicChunkText;
+  const parseChunk = usedProvider === 'kimi' ? kimiChunkText : usedProvider === 'gemini' ? geminiChunkText : anthropicChunkText;
   const body = upstream.body!;
 
   const stream = new ReadableStream({
@@ -484,6 +581,91 @@ async function anthropicCallTools(
   return r.json();
 }
 
+// Convo Anthropic (kèm tool_use/tool_result) → messages OpenAI/Kimi. Khác
+// convoToGeminiFC ở chỗ tool_use gói thành `tool_calls` trên message
+// 'assistant' (không lồng trong content), và tool_result tách thành message
+// RIÊNG role:'tool' (không lồng trong content của user) — đúng shape
+// Chat Completions.
+function convoToKimiMessages(system: any, convo: any[]): any[] {
+  const out: any[] = [{ role: 'system', content: systemText(system) }];
+  for (const m of convo) {
+    const role = m.role === 'assistant' ? 'assistant' : 'user';
+    const c = m.content;
+    if (typeof c === 'string') {
+      if (c) out.push({ role, content: c });
+      continue;
+    }
+    if (!Array.isArray(c)) continue;
+    const textParts: any[] = [];
+    const toolCalls: any[] = [];
+    const toolResults: any[] = [];
+    for (const b of c) {
+      if (b?.type === 'text' && b.text) {
+        textParts.push({ type: 'text', text: b.text });
+      } else if (b?.type === 'tool_use') {
+        toolCalls.push({ id: b.id, type: 'function', function: { name: b.name, arguments: JSON.stringify(b.input || {}) } });
+      } else if (b?.type === 'tool_result') {
+        const rc = typeof b.content === 'string' ? b.content : JSON.stringify(b.content);
+        toolResults.push({ role: 'tool', tool_call_id: b.tool_use_id, content: rc });
+      } else if (b?.type === 'image' && b.source?.data) {
+        textParts.push({ type: 'image_url', image_url: { url: `data:${b.source.media_type || 'image/jpeg'};base64,${b.source.data}` } });
+      }
+    }
+    if (toolCalls.length) {
+      const txt = textParts.filter((p) => p.type === 'text').map((p) => p.text).join('') || null;
+      out.push({ role: 'assistant', content: txt, tool_calls: toolCalls });
+    } else if (textParts.length) {
+      out.push({ role, content: textParts.length === 1 && textParts[0].type === 'text' ? textParts[0].text : textParts });
+    }
+    for (const tr of toolResults) out.push(tr);
+  }
+  return out;
+}
+
+async function kimiCallTools(
+  system: any,
+  convo: any[],
+  tools: any[],
+  toolChoiceNone: boolean,
+  maxTokens: number,
+): Promise<any> {
+  if (!KIMI_KEY) throw new Error('kimi: thiếu KIMIK3_API_KEY');
+  const body: any = { model: KIMI_MODEL, messages: convoToKimiMessages(system, convo), max_tokens: maxTokens };
+  if (tools?.length) {
+    body.tools = toKimiTools(tools);
+    if (toolChoiceNone) body.tool_choice = 'none';
+  }
+  const r = await fetch(KIMI_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${KIMI_KEY}` },
+    body: JSON.stringify(body),
+  });
+  if (!r.ok) throw new Error('kimi ' + r.status + ': ' + (await r.text()).slice(0, 200));
+  const j = await r.json();
+  const msg = j?.choices?.[0]?.message || {};
+  const content: any[] = [];
+  if (msg.content) content.push({ type: 'text', text: msg.content });
+  let hasTool = false;
+  for (const tc of msg.tool_calls || []) {
+    hasTool = true;
+    let args: any = {};
+    try {
+      args = tc.function?.arguments ? JSON.parse(tc.function.arguments) : {};
+    } catch {
+      args = {};
+    }
+    content.push({ type: 'tool_use', id: tc.id, name: tc.function?.name, input: args });
+  }
+  return {
+    content,
+    stop_reason: hasTool ? 'tool_use' : 'end_turn',
+    usage: {
+      input_tokens: j?.usage?.prompt_tokens || 0,
+      output_tokens: j?.usage?.completion_tokens || 0,
+    },
+  };
+}
+
 /**
  * Một lượt LLM có function-calling, TRẢ VỀ shape Anthropic
  * ({content, stop_reason, usage}) dù provider là Gemini. Provider chính đọc từ
@@ -508,11 +690,13 @@ export async function callLLMTools(
   for (const p of order) {
     try {
       const r =
-        p === 'gemini'
-          ? await geminiCallTools(system, convo, tools, toolChoiceNone, maxTokens)
-          : await anthropicCallTools(system, convo, tools, toolChoiceNone, maxTokens);
+        p === 'kimi'
+          ? await kimiCallTools(system, convo, tools, toolChoiceNone, maxTokens)
+          : p === 'gemini'
+            ? await geminiCallTools(system, convo, tools, toolChoiceNone, maxTokens)
+            : await anthropicCallTools(system, convo, tools, toolChoiceNone, maxTokens);
       r.provider = p;
-      r.model = p === 'gemini' ? GEMINI_MODEL : ANTHROPIC_MODEL;
+      r.model = p === 'kimi' ? KIMI_MODEL : p === 'gemini' ? GEMINI_MODEL : ANTHROPIC_MODEL;
       return r;
     } catch (e) {
       lastErr = e;
