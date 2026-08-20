@@ -129,6 +129,9 @@ export async function streamKimi(
     if (typeof delta?.content === 'string' && delta.content) onText(delta.content);
   });
 
+  // sentLen theo dõi ĐÚNG số ký tự đã thật sự gửi qua send() suốt cả stream
+  // (flushSafe/onText giữa dòng CŨNG cộng dồn vào nó) — nên chỉ cần đọc lại
+  // biến này, không cần biến `sentText` riêng theo dõi thiếu-sót giữa các khối.
   if (markerAt < 0 && full.length > sentLen) {
     send(sse.text({ delta: full.slice(sentLen) }));
     sentLen = full.length;
@@ -137,6 +140,13 @@ export async function streamKimi(
     send(sse.text({ delta: full }));
     return [];
   }
+  // 🔴 Kimi trả HTTP 200 hợp lệ mà KHÔNG một chữ nào tới người dùng (K3 hết
+  // token vào "suy nghĩ ẩn" trước khi kịp trả lời, hoặc model trả completion
+  // rỗng thật) — TRƯỚC ĐÂY hàm trả về [] êm re, run.ts coi là THÀNH CÔNG và
+  // trả thẳng cho người dùng → màn hình trống, không còn đường fallback sang
+  // Anthropic/Gemini. Ném lỗi để caller coi đây là hỏng, y như một exception
+  // mạng thật (2026-08-20, đúng ca Henry báo "chat rail không có nội dung gì").
+  if (sentLen === 0) throw new Error('kimi: trả lời rỗng (0 chữ)');
   if (markerAt < 0) return [];
   return full
     .slice(markerAt + MARKER.length)

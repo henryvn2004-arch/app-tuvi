@@ -527,12 +527,18 @@ export async function runAgent(
     const kTools = toKimiTools(tools);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const kMessages: any[] = toKimiMessages(system, convo);
-    let progressed = false;
+    // 🔴 CHỈ tín hiệu này được phép cấm thử provider khác — tool call KHÔNG
+    // tính: tool đọc thuần (idempotent), provider sau chạy lại vẫn an toàn.
+    // Chỉ CHỮ đã hiện ra màn hình mới tạo rủi ro "hai câu trả lời chồng nhau"
+    // (2026-08-20 — trước đây gộp chung với tool-call vào `progressed`, khiến
+    // lượt "chạy tool xong rồi im" bị coi là đã tiến triển dù người dùng chưa
+    // thấy một chữ nào).
+    let anyTextSent = false;
     try {
       for (let round = 0; round <= cfg.maxRounds; round++) {
         const forceAnswer = round === cfg.maxRounds; // vòng cuối: ép trả lời, cấm tool
         const turn = await streamKimiTurn(kMessages, forceAnswer ? null : kTools, cfg, send);
-        progressed = progressed || turn.sentText || turn.toolCalls.length > 0;
+        anyTextSent = anyTextSent || turn.sentText;
 
         if (!forceAnswer && turn.toolCalls.length) {
           kMessages.push(turn.assistantMessage);
@@ -553,6 +559,16 @@ export async function runAgent(
         suggestions = turn.suggestions;
         break;
       }
+      // 🔴 Kimi hoàn tất mọi vòng (0 exception) mà KHÔNG một chữ nào tới người
+      // dùng (K3 hết token vào "suy nghĩ ẩn" trước khi kịp trả lời, hoặc model
+      // trả rỗng thật) — TRƯỚC ĐÂY vẫn coi là ok:true và trả thẳng, người dùng
+      // nhận màn hình trống, KHÔNG CÒN đường sang Anthropic/Gemini. Coi đây là
+      // hỏng, y như một exception mạng thật, để rơi xuống chuỗi backup (đúng
+      // ca Henry báo "chat rail không có nội dung gì", 2026-08-20).
+      if (!anyTextSent) {
+        console.error('[runAgent] Kimi-tools trả rỗng (0 chữ, 0 lỗi) → coi như hỏng, thử backup');
+        return { ok: false, midStream: false };
+      }
       const justBuilt = toolsUsed.includes('lap_la_so') || toolsUsed.includes('mo_la_so');
       const lasoCard = justBuilt && ctx.ls ? renderLasoCard(ctx.ls, ctx.birth) : null;
       return {
@@ -569,8 +585,9 @@ export async function runAgent(
       };
     } catch (e) {
       console.error('[runAgent] Kimi-tools lỗi:', (e as Error)?.message);
-      // progressed = đã stream dở / đã chạy tool → caller không được thử lại.
-      return { ok: false, midStream: progressed };
+      // anyTextSent = đã stream CHỮ dở → caller không được thử lại. Tool đã
+      // chạy (nếu có) không tính, xem chú thích ở khai báo phía trên.
+      return { ok: false, midStream: anyTextSent };
     }
   };
 
@@ -647,12 +664,15 @@ export async function runAgent(
     const gTools = toGeminiTools(tools);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const gContents: any[] = toGeminiContents(convo);
-    let progressed = false;
+    // 🔴 CHỈ chữ đã hiện ra màn hình mới cấm thử provider khác — tool call
+    // không tính (đọc thuần, idempotent). Cùng đợt vá với Kimi (2026-08-20),
+    // xem chú thích đầy đủ ở `runKimiTools`.
+    let anyTextSent = false;
     try {
       for (let round = 0; round <= cfg.maxRounds; round++) {
         const forceAnswer = round === cfg.maxRounds; // vòng cuối: bỏ tool để ép trả lời
         const turn = await streamGeminiTurn(system, gContents, forceAnswer ? null : gTools, cfg, send);
-        progressed = progressed || turn.sentText || turn.functionCalls.length > 0;
+        anyTextSent = anyTextSent || turn.sentText;
 
         if (!forceAnswer && turn.functionCalls.length) {
           gContents.push({ role: 'model', parts: turn.modelParts });
@@ -676,6 +696,14 @@ export async function runAgent(
         suggestions = turn.suggestions;
         break;
       }
+      // 🔴 Gemini hoàn tất mọi vòng (0 exception) mà KHÔNG một chữ nào tới
+      // người dùng → coi như hỏng để rơi xuống Anthropic, cùng lý do đã vá
+      // cho Kimi (2026-08-20): "thành công nhưng rỗng" trước đây vẫn trả
+      // ok:true, người dùng nhận màn hình trống không có đường cứu.
+      if (!anyTextSent) {
+        console.error('[runAgent] Gemini-tools trả rỗng (0 chữ, 0 lỗi) → coi như hỏng, thử backup');
+        return { ok: false, midStream: false };
+      }
       const justBuilt = toolsUsed.includes('lap_la_so') || toolsUsed.includes('mo_la_so');
       const lasoCard = justBuilt && ctx.ls ? renderLasoCard(ctx.ls, ctx.birth) : null;
       return {
@@ -692,8 +720,8 @@ export async function runAgent(
       };
     } catch (e) {
       console.error('[runAgent] Gemini-tools lỗi:', (e as Error)?.message);
-      // progressed = đã stream dở / đã chạy tool → caller không được thử lại.
-      return { ok: false, midStream: progressed };
+      // anyTextSent = đã stream CHỮ dở → caller không được thử lại.
+      return { ok: false, midStream: anyTextSent };
     }
     // Vòng lặp kết thúc mà không return (không thể xảy ra — vòng cuối luôn ép
     // trả lời rồi break) → coi như hỏng sạch, caller thử provider khác.
