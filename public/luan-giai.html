@@ -413,6 +413,23 @@ select.form-input { cursor: pointer; }
 .pregen-divider { display:flex; align-items:center; gap:10px; margin:20px 0 12px; }
 .pregen-divider::before, .pregen-divider::after { content:''; flex:1; border-top:1px solid #383838; }
 .pregen-divider span { font-size:11px; color:#5588cc; font-weight:600; letter-spacing:0.8px; text-transform:uppercase; white-space:nowrap; }
+/* Gấp phần TÍNH TOÁN (deterministic) — mặc định ĐÓNG, xem chú thích tại
+   renderPreGenFree(). Khác app-luan-giai.html: ở ĐÂY preGenHtml luôn hiện
+   NGAY từ đầu cho MỌI phần (kể cả phần chưa trả tiền — trước cả lock box),
+   nên không cần điều kiện `!locked` nào, gấp thẳng luôn. Marker tam giác
+   mặc định của trình duyệt GIỮ NGUYÊN — đủ để đọc là "bấm để mở". */
+.lg-calc { margin-bottom: 2px; }
+.lg-calc summary { cursor: pointer; font-size: 12px; color: var(--text-lt); font-weight: 600; padding: 2px 0; }
+.lg-calc summary:hover { color: var(--gold); }
+.lg-calc[open] summary { margin-bottom: 8px; }
+/* Gợi ý tool khác — chỉ hiện cho cung có mối liên hệ thật xác nhận, xem
+   CUNG_TOOL_LINKS/cungRelatedHtml(). */
+.lg-related { margin-top: 16px; display: flex; flex-direction: column; gap: 6px; }
+.lg-related-h { font-size: 10.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--text-lt); font-weight: 700; margin-bottom: 2px; }
+.lg-related-link { display: block; padding: 9px 12px; border: 1px solid var(--border-lt); border-radius: 9px; text-decoration: none; color: inherit; background: var(--bg-soft); }
+.lg-related-link:hover { border-color: var(--gold); }
+.lg-related-link b { display: block; font-size: 12.5px; color: var(--navy); font-family: 'Noto Serif', Georgia, serif; font-weight: 600; }
+.lg-related-link span { display: block; font-size: 11.5px; color: var(--text-lt); margin-top: 2px; }
 .pregen-scores { }
 .score-bars { display:flex; flex-direction:column; gap:6px; margin-top:4px; }
 .score-bar-row { display:flex; align-items:center; gap:8px; }
@@ -1093,6 +1110,44 @@ select.form-input { cursor: pointer; }
     ['Tiểu vận năm xem là phân tích gần nhất với thực tế hiện tại — sao tiểu vận kết hợp với đại vận đang chạy tạo ra bức tranh cụ thể về những gì đang và sẽ diễn ra trong năm này...', 'Đây là phần quan trọng nhất cho những ai muốn hiểu năm hiện tại: lá số này có một cấu hình tiểu vận cho thấy những cơ hội và thách thức cụ thể — cùng cách hành động phù hợp nhất để tận dụng tốt giai đoạn này...'],
   ];
 
+  // File này không nạp laso-chart.js nên không có esc() sẵn — định nghĩa local,
+  // CÙNG luật escape với bản dùng chung site (& < >).
+  function esc(s) { return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+
+  // ── Liên kết sang tool khác — CHỈ áp cho cung có MỘT MỐI LIÊN HỆ THẬT, xác
+  // nhận qua chính mô tả/tiêu đề của tool đó (không đoán bừa bằng từ khoá).
+  // Cùng bảng với app-luan-giai.html — xem chú thích đầy đủ ở đó. CỐ Ý không
+  // phủ đủ 12 cung (7 cung còn lại chưa có tool nào thật sự đọc đúng chúng),
+  // và Cung Tật Ách TUYỆT ĐỐI không gắn gợi ý nào (luật cấm ngụ ý chẩn đoán/
+  // tiên lượng bệnh tật).
+  const CUNG_TOOL_LINKS = {
+    'Cung Mệnh': [
+      { path:'/app/bat-trach', label:'Hướng Bát Trạch', note:'Soi thêm 8 hướng tốt xấu từ chính cung Mệnh này' }
+    ],
+    'Cung Điền Trạch': [
+      { path:'/app/phong-thuy', label:'Phong Thủy Nội Thất', note:'Chụp ảnh phòng để AI chấm điểm bố trí' }
+    ],
+    'Cung Quan Lộc': [
+      { path:'/app/cong-so', label:'Tử Vi Công Sở', note:'Đọc lại đúng lá số này bằng ngôn ngữ công việc' }
+    ],
+    'Cung Tử Tức': [
+      { path:'/app/day-con', label:'Dạy Con Theo Lá Số', note:'Con hợp cách dạy nào, nên thúc hay nên để yên' },
+      { path:'/app/huong-nghiep-tre', label:'Hướng Nghiệp Sớm Cho Con', note:'Nên cho con làm quen với thứ gì từ bây giờ' }
+    ],
+    'Cung Phu Thê': [
+      { path:'/app/xem-tuoi', label:'Xem Tuổi Vợ Chồng', note:'Đối chiếu với lá số người kia' },
+      { path:'/app/chan-dung-vo-chong', label:'Chân Dung Vợ Chồng', note:'Vẽ chân dung người phối ngẫu từ chính cung này' },
+      { path:'/app/duyen-no-tien-kiep', label:'Duyên Nợ Tiền Kiếp', note:'Kiếp trước hai người là gì của nhau' }
+    ]
+  };
+  function cungRelatedHtml(label) {
+    const links = CUNG_TOOL_LINKS[label];
+    if (!links || !links.length) return '';
+    return '<div class="lg-related"><div class="lg-related-h">Đọc sâu hơn</div>'
+      + links.map(l => '<a class="lg-related-link" href="' + l.path + '"><b>' + esc(l.label) + '</b><span>' + esc(l.note) + '</span></a>').join('')
+      + '</div>';
+  }
+
   // QUERIES động — dùng dữ liệu lá số thực để RAG tìm tài liệu relevant hơn
   function _getStarNames(cungName) {
     if (!_astrolabe) return '';
@@ -1364,6 +1419,15 @@ select.form-input { cursor: pointer; }
       // Pre-gen data (cách cục, scoring...)
       const preGenHtml = buildPreGenHtml(phan);
       const divider = preGenHtml ? `<div class="pregen-divider"><span>Luận giải</span></div>` : '';
+      // Khối TÍNH TOÁN (deterministic) GẤP LẠI mặc định — nó luôn dựng xong NGAY
+      // ở đây (renderPreGenFree chạy cho MỌI phần, kể cả phần chưa trả tiền, lúc
+      // lập lá số), trong khi phần LUẬN THẬT (AI, claude-content) chỉ tới sau khi
+      // stream/thanh toán xong. Không có khái niệm "locked" ở đây như bên
+      // app-luan-giai.html — preGenHtml luôn hiện với MỌI người, nên gấp thẳng,
+      // không cần điều kiện gì thêm.
+      const preGenHtmlWrapped = preGenHtml
+        ? `<details class="lg-calc"><summary>Xem cơ sở tính toán</summary>${preGenHtml}</details>`
+        : preGenHtml;
 
       // Lock box — paywall box đẹp cho mỗi phần
       const lockBox = `
@@ -1435,7 +1499,7 @@ select.form-input { cursor: pointer; }
         <div class="phan-claude-content" id="claude-content-${phan}" style="display:none"></div>`;
 
 
-      section.innerHTML = html + preGenHtml + chartHtml + divider + lockBox;
+      section.innerHTML = html + preGenHtmlWrapped + chartHtml + divider + lockBox;
       // preGenHtml mang span [data-icon-emoji]; mountIcons() của nav.js chỉ tự
       // chạy lúc nạp + khi DOM đóng, còn khối này chèn SAU đó → không quét tới,
       // span rơi về nội dung dự phòng và in EMOJI THÔ ra màn hình.
@@ -1595,7 +1659,7 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
       // Show full P1 với streaming animation, ẩn lock box
       claudeBox.style.display = '';
       lockBox.style.display = 'none';
-      streamIntoEl(claudeBox, renderMarkdown(data.luanGiai) + `<div class="ux-share-bar"><button onclick="uxCopySection(this, 1)" class="ux-share-btn">📋 Sao chép phần này</button></div>`, () => {});
+      streamIntoEl(claudeBox, renderMarkdown(data.luanGiai) + `<div class="ux-share-bar"><button onclick="uxCopySection(this, 1)" class="ux-share-btn">📋 Sao chép phần này</button></div>` + cungRelatedHtml(PHAN_LABELS[1]), () => {});
       updateMucLuc(1, 'done');
 
     } catch(e) { /* silent fail — lock box vẫn hiện như cũ */ }
@@ -1803,7 +1867,7 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
       if (claudeBox) {
         claudeBox.style.display = '';
         const shareBar = `<div class="ux-share-bar"><button onclick="uxCopySection(this, ${_currentPhan})" class="ux-share-btn">📋 Sao chép phần này</button></div>`;
-        streamIntoEl(claudeBox, renderMarkdown(data.luanGiai) + shareBar, () => {});
+        streamIntoEl(claudeBox, renderMarkdown(data.luanGiai) + shareBar + cungRelatedHtml(PHAN_LABELS[_currentPhan]), () => {});
       }
       if (lockBox) lockBox.style.display = 'none';
 
