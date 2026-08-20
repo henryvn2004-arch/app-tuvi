@@ -176,7 +176,8 @@ window.SHELL_INTRO={key:'luan-giai',title:'Luận giải Tử Vi',desc:'Lập l�
 <script src="/tuvi-paywall.js?v=21"></script>
   <script src="/nav.js?v=22" data-icons-only></script>
 <script src="/shell.js?v=74"></script>
-<script src="/tools-shared/ai-loading-steps.js?v=8"></script>
+<script src="/tools-shared/ai-loading-steps.js?v=9"></script>
+<script src="/tools-shared/phan-pool.js?v=1"></script>
 <script>
 // ── Form nhập (dùng chung TuviForm — có "Sinh ở ngoài Việt Nam?" + parity giờ
 // sinh lịch sử với standalone) ──
@@ -426,7 +427,9 @@ function toggleMini(){
 // RAG/phần khác nhau, tách sớm rủi ro hơn lợi).
 // ══════════════════════════════════════════════════════════════════════
 var _astrolabe=null, _hoTen='', _ngay=0, _thang=0, _nam=0, _gioitinh='nam', _namXem=0, _laSoText=null;
-var _pendingSlug=null, _currentPhan=0, _luanGiaiStore={};
+var _pendingSlug=null, _luanGiaiStore={};
+// Số phần chạy song song — xem lý do chọn 3 trong tools-shared/phan-pool.js.
+var PHAN_CONCURRENCY=3;
 // ETA tự hiệu chỉnh: đo nhịp NGAY TRONG phiên này thay vì hứa theo một con
 // số chép cứng (số chép cứng nói dối vào đúng ngày đổi model).
 var _pace=(window.AiLoadingSteps&&AiLoadingSteps.pacer)?AiLoadingSteps.pacer():null;
@@ -620,27 +623,37 @@ async function _startLuanGiaiAI(){
   document.getElementById('lgUnlock').style.display='none';
   document.getElementById('lgProgress').style.display='block';
   // Đã trả tiền — tắt hết khoá-mini NGAY, kể cả những phần chưa tới lượt sinh
-  // chữ (sinh tuần tự từ phần 1). Để chúng sáng đèn "chưa mở" trong lúc đang
-  // luận là mời bấm lại một lượt mua đã xảy ra rồi.
+  // chữ (nay sinh SONG SONG 3 phần/đợt, không còn theo đúng thứ tự 1→24). Để
+  // chúng sáng đèn "chưa mở" trong lúc đang luận là mời bấm lại một lượt mua
+  // đã xảy ra rồi.
   _paintSecLocks(false);
-  _currentPhan=0; _luanGiaiStore={};
+  _luanGiaiStore={};
   _pace&&_pace.reset();
-  await _loadNextPhanAI();
-}
-async function _loadNextPhanAI(){
-  if(_currentPhan>=LuanGiaiCore.TONG_PHAN){
+  // Kimi K3 (primary) ~120 giây/phần — chạy tuần tự 24 phần có thể tới 48
+  // phút. Bể PhanPool chạy PHAN_CONCURRENCY phần song song (mỗi phần độc lập,
+  // không đọc kết quả phần khác) ⇒ giảm tổng thời gian chờ ~PHAN_CONCURRENCY
+  // lần mà không đụng gì tới model. Xem tools-shared/phan-pool.js.
+  var result=await PhanPool.run({
+    total:LuanGiaiCore.TONG_PHAN,
+    concurrency:PHAN_CONCURRENCY,
+    progressEl:'lgProgress',
+    progressPrefix:'Đang luận giải phần',
+    pace:_pace,
+    runPart:_runPhanLuanGiai,
+  });
+  if(result.ok){
     document.getElementById('lgProgress').textContent='✓ Luận giải hoàn tất';
     _saveLuanGiaiResult();
-    return;
+  }else{
+    document.getElementById('lgProgress').textContent=
+      '⚠ '+result.failed.length+' phần lỗi (phần '+result.failed.join(', ')+') — bấm ↻ Thử lại ở từng phần rồi tải lại trang.';
   }
-  _currentPhan++;
-  var p=_currentPhan;
-  // Còn LẠI tính từ phần này trở đi. Chưa đủ mẫu thì remainText trả '' —
-  // im lặng, không hứa.
-  var _eta=_pace?_pace.remainText(LuanGiaiCore.TONG_PHAN-p+1):'';
-  document.getElementById('lgProgress').textContent=
-    'Đang luận giải phần '+p+' / '+LuanGiaiCore.TONG_PHAN+(_eta?' · '+_eta:'...');
-  _pace&&_pace.begin();
+}
+// Chạy MỘT phần — gọi từ trong bể (PhanPool) và trực tiếp từ nút "↻ Thử lại"
+// (retry chỉ cần làm lại đúng phần lỗi, không cần chạy lại cả bể). Trả
+// true/false, KHÔNG throw ra ngoài — bể tự bọc try/catch nhưng lượt gọi trực
+// tiếp từ nút Thử lại thì không, nên hàm này tự nuốt lỗi ở nhánh catch.
+async function _runPhanLuanGiai(p){
   var box=document.getElementById('claude-content-'+p);
   // Chờ MỘT CỤC (không stream) và tốn hơn 10 giây ⇒ orb, theo luật ở đầu
   // ai-loading-steps.js. Trước đây chỗ này chỉ có một dòng chữ TĨNH nên người
@@ -659,36 +672,42 @@ async function _loadNextPhanAI(){
   }
   // PHẢI stop trước mọi lượt ghi đè `box`, nếu không đồng hồ chạy ngầm.
   var doneWait=function(){ if(w){ w.stop(); w=null; } };
-  // Cuộn tới đúng phần đang stream — không thì user tưởng trang đứng im (đã fix
-  // theo phản hồi Henry). .sec đã có scroll-margin-top neo theo --ws-top-h (bù header + .jump sticky).
-  var secEl=document.getElementById('sec-'+p);
-  if(secEl)secEl.scrollIntoView({behavior:'smooth',block:'start'});
   try{
     var docs='';
     try{
       var sr=await fetch('/api/search',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({query:QUERIES[p](),matchCount:p===1?10:7})});
       docs=(await sr.json()).docs||'';
     }catch(e){}
-    if(p>1)await new Promise(function(r){setTimeout(r,600);});
     var resp=await fetch('/api/lasotuvi',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({hoTen:_hoTen,ngay:_ngay,thang:_thang,nam:_nam,gioiTinh:_gioitinh,namXem:_namXem,laSoText:_laSoText,phan:p,docs:docs})});
     var data=await resp.json();
     if(data.error||!data.luanGiai){
       doneWait();
-      if(box)box.innerHTML='<div class="laso-error">Lỗi khi luận giải phần '+p+'. <button class="btn" onclick="window._lgRetryPhan()">↻ Thử lại</button></div>';
-      return;
+      if(box)box.innerHTML='<div class="laso-error">Lỗi khi luận giải phần '+p+'. <button class="btn" onclick="window._lgRetryPhan('+p+')">↻ Thử lại</button></div>';
+      return false;
     }
     _luanGiaiStore[p]=data.luanGiai;
-    _pace&&_pace.end();   // chỉ ghi nhịp ở nhánh THÀNH CÔNG
     doneWait();
     if(box)box.innerHTML=renderMarkdown(data.luanGiai);
+    return true;
   }catch(e){
     doneWait();
-    if(box)box.innerHTML='<div class="laso-error">Lỗi phần '+p+': '+esc(e.message)+' <button class="btn" onclick="window._lgRetryPhan()">↻ Thử lại</button></div>';
-    return;
+    if(box)box.innerHTML='<div class="laso-error">Lỗi phần '+p+': '+esc(e.message)+' <button class="btn" onclick="window._lgRetryPhan('+p+')">↻ Thử lại</button></div>';
+    return false;
   }
-  await _loadNextPhanAI();
 }
-window._lgRetryPhan=function(){ _currentPhan--; _loadNextPhanAI(); };
+window._lgRetryPhan=function(p){
+  _runPhanLuanGiai(p).then(function(ok){
+    if(ok){
+      // Lưu lại NẾU lúc này store đã đủ cả 24 phần — retry một phần lẻ có thể
+      // là phần LỖI CUỐI CÙNG còn thiếu để hoàn tất cả lượt.
+      var n=0; for(var k=1;k<=LuanGiaiCore.TONG_PHAN;k++)if(_luanGiaiStore[k])n++;
+      if(n>=LuanGiaiCore.TONG_PHAN){
+        document.getElementById('lgProgress').textContent='✓ Luận giải hoàn tất';
+        _saveLuanGiaiResult();
+      }
+    }
+  });
+};
 
 // Lưu như standalone — POST /api/save-laso (bảng laso_public, cùng slug) →
 // tự động vào "Lịch sử" ở Tài khoản (đã đọc laso_public qua /api/history)

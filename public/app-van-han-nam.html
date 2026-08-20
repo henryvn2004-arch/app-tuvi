@@ -143,7 +143,8 @@ window.SHELL_INTRO={key:'van-han-nam',title:'Vận Hạn 12 Tháng Tới',desc:'
 <script src="/tuvi-paywall.js?v=21"></script>
 <script src="/nav.js?v=22" data-icons-only></script>
 <script src="/shell.js?v=74"></script>
-<script src="/tools-shared/ai-loading-steps.js?v=8"></script>
+<script src="/tools-shared/ai-loading-steps.js?v=9"></script>
+<script src="/tools-shared/phan-pool.js?v=1"></script>
 <script>
 TuviForm.render('tuviFormHost', {mode:'compact', gioitinh:'nam'});
 TuviPaywall.init({product:'van-han-nam'});
@@ -174,8 +175,10 @@ function scoreColor(t){ return t>=7?'var(--green)':t>=5?'var(--gold-soft)':'var(
 function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
 var _astrolabe=null,_hoTen='',_ngay=0,_thang=0,_nam=0,_gioitinh='nam',_laSoText=null;
-var _khung=null,_labels=null,_tongPhan=0,_pendingSlug=null,_currentPhan=0,_store={};
+var _khung=null,_labels=null,_tongPhan=0,_pendingSlug=null,_store={};
 var _pace=(window.AiLoadingSteps&&AiLoadingSteps.pacer)?AiLoadingSteps.pacer():null;
+// Số phần chạy song song — xem lý do chọn 3 trong tools-shared/phan-pool.js.
+var PHAN_CONCURRENCY=3;
 var SB_URL_VH='https://dciwkfdqhhddeymlisey.supabase.co';
 var SB_ANON_VH='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRjaXdrZmRxaGhkZGV5bWxpc2V5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyMzQ2MzksImV4cCI6MjA4ODgxMDYzOX0._3aXoe0hO-46J1gASUiNv__tWjSzLZFTL0M3-47L26I';
 
@@ -442,9 +445,27 @@ async function _startAI(){
   document.getElementById('vhUnlock').style.display='none';
   document.getElementById('vhProgress').style.display='block';
   _paintSecLocks(false);
-  _currentPhan=0;_store={};
+  _store={};
   _pace&&_pace.reset();
-  await _loadNext();
+  // Kimi K3 (primary) ~120 giây/phần — chạy tuần tự 12+ phần có thể chờ rất
+  // lâu. Bể PhanPool chạy PHAN_CONCURRENCY phần song song (mỗi phần độc lập,
+  // không đọc kết quả phần khác) ⇒ giảm tổng thời gian chờ ~PHAN_CONCURRENCY
+  // lần mà không đụng gì tới model. Xem tools-shared/phan-pool.js.
+  var result=await PhanPool.run({
+    total:_tongPhan,
+    concurrency:PHAN_CONCURRENCY,
+    progressEl:'vhProgress',
+    progressPrefix:'Đang luận phần',
+    pace:_pace,
+    runPart:_runPhanVanHan,
+  });
+  if(result.ok){
+    document.getElementById('vhProgress').textContent='✓ Luận vận hạn hoàn tất';
+    _saveResult();
+  }else{
+    document.getElementById('vhProgress').textContent=
+      '⚠ '+result.failed.length+' phần lỗi (phần '+result.failed.join(', ')+') — bấm ↻ Thử lại ở từng phần rồi tải lại trang.';
+  }
 }
 // Truy vấn RAG theo từng phần — phần tháng bám cung nguyệt hạn + sao của đúng
 // tháng đó (không phải một truy vấn chung cho cả 12 tháng).
@@ -457,17 +478,8 @@ function ragQuery(p){
   if(!t||t.loi) return 'lưu nguyệt hạn vận tháng';
   return 'lưu nguyệt hạn cung '+t.cungNguyetHan+' '+t.chinhTinh.join(' ')+' vận tháng';
 }
-async function _loadNext(){
-  if(_currentPhan>=_tongPhan){
-    document.getElementById('vhProgress').textContent='✓ Luận vận hạn hoàn tất';
-    _saveResult();
-    return;
-  }
-  _currentPhan++;
-  var p=_currentPhan;
-  var _eta=_pace?_pace.remainText(_tongPhan-p+1):'';
-  document.getElementById('vhProgress').textContent='Đang luận phần '+p+' / '+_tongPhan+(_eta?' · '+_eta:'...');
-  _pace&&_pace.begin();
+// Chạy MỘT phần — gọi từ trong bể (PhanPool) và trực tiếp từ nút "↻ Thử lại".
+async function _runPhanVanHan(p){
   var box=document.getElementById('claude-content-'+p);
   var w=null;
   if(box){
@@ -480,35 +492,41 @@ async function _loadNext(){
     }
   }
   var doneWait=function(){ if(w){ w.stop(); w=null; } };
-  var secEl=document.getElementById('sec-'+p);
-  if(secEl)secEl.scrollIntoView({behavior:'smooth',block:'start'});
   try{
     var docs='';
     try{
       var sr=await fetch('/api/search',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({query:ragQuery(p),matchCount:p===1?10:7})});
       docs=(await sr.json()).docs||'';
     }catch(e){}
-    if(p>1)await new Promise(function(r){setTimeout(r,600);});
     var resp=await fetch('/api/van-han-nam',{method:'POST',headers:{'Content-Type':'application/json'},
       body:JSON.stringify({birth:_birthPayload(),tuNgay:TU_NGAY,tuThang:TU_THANG,tuNam:TU_NAM,phan:p,docs:docs})});
     var data=await resp.json();
     if(data.error||!data.luanGiai){
       doneWait();
-      if(box)box.innerHTML='<div class="laso-error">Lỗi khi luận phần '+p+'. <button class="btn" onclick="window._vhRetry()">↻ Thử lại</button></div>';
-      return;
+      if(box)box.innerHTML='<div class="laso-error">Lỗi khi luận phần '+p+'. <button class="btn" onclick="window._vhRetry('+p+')">↻ Thử lại</button></div>';
+      return false;
     }
     _store[p]=data.luanGiai;
-    _pace&&_pace.end();
     doneWait();
     if(box)box.innerHTML=renderMarkdown(data.luanGiai);
+    return true;
   }catch(e){
     doneWait();
-    if(box)box.innerHTML='<div class="laso-error">Lỗi phần '+p+': '+esc(e.message)+' <button class="btn" onclick="window._vhRetry()">↻ Thử lại</button></div>';
-    return;
+    if(box)box.innerHTML='<div class="laso-error">Lỗi phần '+p+': '+esc(e.message)+' <button class="btn" onclick="window._vhRetry('+p+')">↻ Thử lại</button></div>';
+    return false;
   }
-  await _loadNext();
 }
-window._vhRetry=function(){ _currentPhan--; _loadNext(); };
+window._vhRetry=function(p){
+  _runPhanVanHan(p).then(function(ok){
+    if(ok){
+      var n=0; for(var k=1;k<=_tongPhan;k++)if(_store[k])n++;
+      if(n>=_tongPhan){
+        document.getElementById('vhProgress').textContent='✓ Luận vận hạn hoàn tất';
+        _saveResult();
+      }
+    }
+  });
+};
 
 function renderMarkdown(text){
   var lines=String(text||'').split('\n'),out='';
