@@ -117,6 +117,18 @@
 .today-ask:hover{filter:brightness(1.08)}
 .today-share{background:rgba(255,255,255,.08);color:#fff;border:1px solid rgba(255,255,255,.18);border-radius:10px;padding:12px 16px;font-size:13.5px;font-weight:600;font-family:inherit;cursor:pointer;display:inline-flex;align-items:center;gap:7px;white-space:nowrap}
 .today-share:hover{background:rgba(255,255,255,.14)}
+/* ── CHÀO LẦN ĐẦU — thay thẻ Vận Hôm Nay cho khách CHƯA có lá số nhớ và CHƯA
+   đăng nhập. Nền SÁNG, viền vàng nhạt — cố ý KHÁC hẳn navy của today-card để
+   không đọc lẫn với "nội dung ngày" (đây là màn chào, không phải dữ kiện). */
+.welcome-card{background:#fff;border:1px solid var(--gold-soft);border-radius:16px;padding:22px 24px;margin-bottom:22px}
+.wc-eyebrow{font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold-soft);font-weight:700;margin-bottom:6px}
+.wc-title{font-family:var(--serif);font-size:19px;font-weight:600;color:var(--heading);margin-bottom:6px;line-height:1.3}
+.wc-sub{font-size:13px;color:var(--text-mid);line-height:1.55;margin-bottom:16px;max-width:580px}
+.welcome-card .cards{margin-bottom:16px}
+/* Thẻ gợi ý dùng LẠI .tcard có sẵn (xem renderHomeCards) nhưng KHÔNG in giá —
+   đây là màn chào đầu tiên, chưa phải lúc nói tới Lượng. */
+.wc-ask{background:var(--red);color:#fff;border:none;border-radius:10px;padding:12px 18px;font-size:13.5px;font-weight:600;font-family:var(--serif);cursor:pointer;display:inline-flex;align-items:center;gap:8px}
+.wc-ask:hover{filter:brightness(1.08)}
 /* ── NHIỆM VỤ MỞ KHOÁ LƯỢNG (M3) ───────────────────────────────────────────
    CỐ Ý để nền SÁNG, ngược hẳn thẻ Vận hôm nay (navy): hai khối nằm sát nhau,
    cùng tông là đọc thành một khối dài và mắt trượt qua. */
@@ -166,6 +178,21 @@
     </div>
     <div class="ws-body">
       <div class="home-body">
+        <!-- Chào lần đầu — CHỈ hiện khi CHƯA có lá số nhớ VÀ CHƯA đăng nhập
+             (xem `_returning` trong script bên dưới). Đứng lần đầu vào /app,
+             người ta thấy ngay thẻ Vận Hôm Nay và tưởng đó LÀ công cụ chính,
+             đọc xong không biết đi đâu tiếp. Khối này thay chỗ đó bằng một lời
+             chào + vài công cụ gợi ý + đường mở rail — đúng vai một "tiếp tân".
+             Người ĐANG QUAY LẠI (có lá số hoặc đã đăng ký) không thấy gì đổi:
+             card.style.display toggle giữa hai khối này, KHÔNG đụng logic của
+             #todayCard. -->
+        <div class="welcome-card" id="welcomeCard" style="display:none">
+          <div class="wc-eyebrow">Lần đầu ghé Luận Đường</div>
+          <div class="wc-title">Đây là nơi bạn lập lá số &amp; hỏi trợ lý AI</div>
+          <p class="wc-sub">Chọn một công cụ bên dưới để bắt đầu, hoặc bấm "Hỏi trợ lý" nếu chưa biết bắt đầu từ đâu — trợ lý sẽ hỏi lại và giới thiệu đúng công cụ.</p>
+          <div class="cards" id="wcCards"></div>
+          <button class="wc-ask" id="welcomeAsk" type="button">✦ Hỏi trợ lý — tôi nên bắt đầu từ đâu?</button>
+        </div>
         <div class="today-card" id="todayCard" style="display:none">
           <div class="glow"></div>
           <div class="today-hanh" id="todayHanh"></div>
@@ -304,6 +331,35 @@ function renderHomeCards(d){
 }
 renderHomeCards(window.ToolPrices ? ToolPrices.navFallback() : null);
 if(window.ToolPrices) ToolPrices.load().then(function(d){ if(d) renderHomeCards(d); });
+
+/* ── 4 công cụ gợi ý cho khối "Chào lần đầu" ──────────────────────────────
+   Chọn CÓ CHỦ ĐÍCH, không phải 4 tool đầu bảng: laso (sản phẩm chính) ·
+   tuong-hop + than-so-hoc (MIỄN PHÍ, dùng thử được ngay không cần trả Lượng)
+   · gio-sinh (tool "cửa ngõ" — không nhớ giờ sinh thì nhiều tool khác không
+   dùng đúng được, xem tooltip trong tuvi-form.js). CỐ Ý không in giá lên các
+   thẻ này (khác .tcard trong renderHomeCards) — đây là màn chào, chưa phải
+   lúc nói tới Lượng. */
+var WELCOME_PICKS=['laso','tuong-hop','gio-sinh','than-so-hoc'];
+function welcomeCardHtml(rows, toolId){
+  var it=null;
+  for(var i=0;i<rows.length;i++){ if(rows[i]&&rows[i].tool_id===toolId){ it=rows[i]; break; } }
+  if(!it||!it.app_path) return '';
+  return '<a class="tcard" href="'+esc(it.app_path)+'">'+
+    '<div class="ic">'+(window.iconHtml?window.iconHtml(it.icon):svg('grid'))+'</div>'+
+    '<div class="tx"><b>'+esc(it.label)+'</b><span>'+esc(it.question||it.description||'')+'</span></div>'+
+    '</a>';
+}
+function renderWelcomeCards(d){
+  var host=document.getElementById('wcCards'); if(!host) return;
+  var rows=(d&&d.rows)||[];
+  if(!rows.length) return; // chưa có dữ liệu — giữ nguyên lượt render trước (hoặc trống), đừng xoá về rỗng
+  var html='';
+  for(var i=0;i<WELCOME_PICKS.length;i++) html+=welcomeCardHtml(rows, WELCOME_PICKS[i]);
+  host.innerHTML=html;
+  if(window.mountIcons) window.mountIcons(host);
+}
+renderWelcomeCards(window.ToolPrices ? ToolPrices.navFallback() : null);
+if(window.ToolPrices) ToolPrices.load().then(function(d){ if(d) renderWelcomeCards(d); });
 </script>
 
 <script>
@@ -338,6 +394,16 @@ if(window.ToolPrices) ToolPrices.load().then(function(d){ if(d) renderHomeCards(
   function qrLink(){ return Poster.qrLink('van-ngay','/app'); }
 
   var _birth=null, _hasBirth=false, _today=null, _week=null, _viewing=null;
+  // "Returning" = có lá số nhớ trên máy HOẶC đã đăng nhập. Quyết định khối nào
+  // hiện đầu trang: thẻ Vận Hôm Nay (returning) hay lời chào + gợi ý tool
+  // (lần đầu). `_hasBirth` là tín hiệu ĐỒNG BỘ, đáng tin ngay từ đầu; đăng nhập
+  // thì KHÔNG — Auth có thể chưa khôi phục phiên xong lúc `run()` chạy (đúng
+  // bẫy `syncTasks` đã ghi bên dưới), nên nhánh đó được RE-CHECK ở
+  // `maybeUpgradeToReturning()` trên cùng nhịp hoãn 1,2 giây thay vì tin ngay.
+  var _returning=false;
+  function isLoggedIn(){
+    try{ var s=window.Auth&&Auth.getSession&&Auth.getSession(); return !!(s&&s.access_token); }catch(e){ return false; }
+  }
   // Bản CHỮ THUẦN của khối "Vận riêng của bạn" — poster vẽ trên canvas nên
   // không dùng lại được chuỗi có thẻ <b>; dựng song song ngay lúc render để hai
   // bên không bao giờ nói khác nhau.
@@ -390,6 +456,7 @@ if(window.ToolPrices) ToolPrices.load().then(function(d){ if(d) renderHomeCards(
   // VÀ api chỉ hiểu shape contract (day/month/year) → PHẢI đổi, đừng truyền thẳng.
   try{ _birth=(Shell.getRememberedBirth&&Shell.birthToApi)?Shell.birthToApi(Shell.getRememberedBirth()):null; }catch(e){}
   _hasBirth=!!(_birth&&_birth.day&&_birth.month&&_birth.year);
+  _returning=_hasBirth||isLoggedIn();
 
   fetchDay(_today,true)
     .then(function(v){ if(v&&v.ok){ if(v.tuan)_week=v.tuan; render(v,_today,_birth,_hasBirth); }
@@ -402,7 +469,21 @@ if(window.ToolPrices) ToolPrices.load().then(function(d){ if(d) renderHomeCards(
      Vận hôm nay là nội dung chính của màn hình này và không được chờ một lượt
      mạng khác. Hoãn 1,2 giây để `Auth` kịp khôi phục phiên — hỏi token quá sớm
      thì người đã đăng nhập lại bị coi là khách. */
-  setTimeout(syncTasks,1200);
+  setTimeout(function(){ syncTasks(); maybeUpgradeToReturning(); },1200);
+  }
+
+  /* Ca duy nhất `_returning` có thể sai lúc quyết định lần đầu: đăng nhập
+     rồi nhưng Auth CHƯA khôi phục xong phiên tại thời điểm `run()` chạy (cùng
+     bẫy comment trên `syncTasks` đã ghi). Re-check trên CÙNG nhịp hoãn — nếu
+     giờ xác nhận đã đăng nhập thì chuyển từ khối chào sang thẻ Vận Hôm Nay.
+     Nội dung thẻ đã render sẵn từ nhánh !hasBirth (vận CHUNG, không phải vận
+     riêng — đúng và hợp lý cho người CHƯA lưu lá số), chỉ đổi khối nào hiện. */
+  function maybeUpgradeToReturning(){
+    if(_returning||!isLoggedIn()) return;
+    _returning=true;
+    var w=el('welcomeCard'), t=el('todayCard');
+    if(w) w.style.display='none';
+    if(t&&t.getAttribute('data-rendered')) t.style.display='';
   }
 
   /* Chuyển thẻ sang một ngày khác trong dải. Vẫn MIỄN PHÍ, vẫn deterministic —
@@ -432,6 +513,21 @@ if(window.ToolPrices) ToolPrices.load().then(function(d){ if(d) renderHomeCards(
         if(p.length===3) goDay({y:+p[0],mo:+p[1],d:+p[2]});
       };
     });
+  }
+
+  /* Chỉ MỘT trong hai khối được thấy: thẻ Vận Hôm Nay (đã quay lại) hay lời
+     chào lần đầu. Đánh dấu `data-rendered` để `maybeUpgradeToReturning()` biết
+     nội dung thẻ đã có sẵn thật hay chưa trước khi lật sang hiện nó. */
+  function showTodayOrWelcome(){
+    var card=el('todayCard'), w=el('welcomeCard');
+    if(card) card.setAttribute('data-rendered','1');
+    if(_returning){
+      if(card) card.style.display='';
+      if(w) w.style.display='none';
+    } else {
+      if(card) card.style.display='none';
+      if(w) w.style.display='';
+    }
   }
 
   /* ── Vẽ thẻ đầy đủ ─────────────────────────────────────────────────────── */
@@ -531,7 +627,7 @@ if(window.ToolPrices) ToolPrices.load().then(function(d){ if(d) renderHomeCards(
     }).join('');
 
     renderWeek(td);
-    card.style.display='';
+    showTodayOrWelcome();
     wire(v,td,birth,hasBirth,hours);
     try{ _canChiNam=(v&&v.caNhan&&v.caNhan.canChiNam)||_canChiNam; }catch(e){}
     maybeAskPush(v,isToday,birth);
@@ -637,7 +733,7 @@ if(window.ToolPrices) ToolPrices.load().then(function(d){ if(d) renderHomeCards(
     el('todayHanh').textContent='Hành '+r.data.canHanh;
     el('todayHours').innerHTML=hours.map(function(h){
       return '<span class="th-chip">'+esc(h.chi)+(h.range?' · '+esc(h.range):'')+'</span>'; }).join('');
-    el('todayCard').style.display='';
+    showTodayOrWelcome();
     wire({ngay:{canChi:r.data.canChiNgay,canHanh:r.data.canHanh},_flat:r.data},td,birth,hasBirth,hours);
   }
 
@@ -752,6 +848,13 @@ if(window.ToolPrices) ToolPrices.load().then(function(d){ if(d) renderHomeCards(
         else Shell.ask('Hôm nay là ngày gì, tôi nên làm gì và tránh gì?');
       }catch(e){}
     };
+
+    // Nút "Hỏi trợ lý" của khối chào lần đầu — CHỈ mở rail, không tự gửi gì.
+    // `Shell.setContext` phía trên đã mồi sẵn câu chào + chip gợi ý (kịch bản
+    // hoang-dao khi chưa có lá số) → mở ra là thấy ngay một menu để chọn, đúng
+    // vai một tiếp tân, không phải một cái máy tự hỏi thay người dùng.
+    var welcomeAsk=el('welcomeAsk');
+    if(welcomeAsk) welcomeAsk.onclick=function(){ try{ Shell.openRail(); }catch(e){} };
 
     // Chia sẻ vận (vòng khám phá): điện thoại mở share sheet native; desktop chép link.
     var shareBtn=el('todayShare');
