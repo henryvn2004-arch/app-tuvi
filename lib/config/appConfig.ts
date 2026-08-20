@@ -61,22 +61,28 @@ export interface ChatConfig {
 export const DEFAULTS: ChatConfig = {
   systemPrompt: '', // rỗng = dùng template chung lib/agent/prompts
 
-  model: 'claude-sonnet-4-6',
+  // Chốt Henry 2026-08-20: "Kimi K3 primary, back up 1 là opus 5, back up 2
+  // là gemini flash". Kimi K3 (lib/agent/providers/kimi.ts) thử TRƯỚC MỌI
+  // kịch bản trong run.ts — KHÔNG đọc providerRoutes (model hỗ trợ native cả
+  // vision lẫn tool-calling nên không cần eligibility gate). Model dưới đây
+  // là backup-1 (Opus 5, qua Anthropic Messages API).
+  model: 'claude-opus-5',
   maxRounds: 4,
   maxTokens: 3000, // đủ cho câu luận sâu 1 phần (24-phần cho tới 3000); DB app_config 'chat.max_tokens' override được. Câu ngắn không tốn thêm (chỉ trả token thực sinh).
   cost: 5, // 5 Lượng / lượt — giá chuẩn; DB app_config 'chat.cost' override được (không cần deploy)
-  standaloneProvider: 'gemini', // route standalone dùng Gemini, Anthropic tự backup
-  // Gemini (2.5 Flash) cho MỌI kịch bản đủ điều kiện (prose + vision + bát tự)
-  // qua '_default'. Các tool KHÔNG đủ điều kiện — laso (luận-giải/lá-số, dùng
-  // function-calling cho vận hạn) — KHÔNG thuộc GEMINI_PROSE/VISION_SCENARIOS
-  // nên tự động giữ Sonnet (chất cao nhất + paywall). Đổi route từng tool qua
-  // app_config 'chat.provider_routes' — không deploy, revert tức thì.
+  // Route STANDALONE (lib/llm/complete.ts: cron, /api/lasotuvi, tuong-mat,
+  // phong-thuy, tubinh, xem-tuoi). 'anthropic' làm primary CHỈ khi Kimi chưa
+  // cấu hình hoặc bị admin ép qua giá trị này — bình thường Kimi luôn đi
+  // trước (complete.ts tự chèn 'kimi' lên đầu chuỗi bất kể giá trị ở đây).
+  standaloneProvider: 'anthropic',
+  // Chuỗi backup SAU KHI Kimi lỗi (rail chat, run.ts): '_default'='anthropic'
+  // → mọi kịch bản (kể cả 'laso' — vương miện có paywall) rơi vào loop
+  // Anthropic/Opus 5 TRƯỚC, Gemini chỉ còn là lưới đỡ khẩn cấp bên trong loop
+  // đó (geminiProseCapable/geminiToolsCapable, backup-2) — đúng thứ tự Henry
+  // chốt. Đổi 'gemini' ở đây để bật lại Gemini làm backup-1 cho một scenario
+  // cụ thể (qua app_config 'chat.provider_routes', không deploy).
   providerRoutes: {
-    _default: 'gemini',
-    // VƯƠNG MIỆN có paywall — MẶC ĐỊNH giữ Sonnet (chất cao nhất). Adapter
-    // Gemini function-calling ĐÃ có nhưng NGỦ: flip 'laso'='gemini' qua
-    // app_config để bật thử (revert 1 dòng, không deploy). Bao gồm cả luận-giải
-    // lẫn lá-số (đều đi path 'laso').
+    _default: 'anthropic',
     laso: 'anthropic',
   },
   companion: COMPANION_DEFAULTS,
