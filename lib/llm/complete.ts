@@ -1,12 +1,13 @@
 // lib/llm/complete.ts
 // ============================================================
 // Helper LLM DÙNG CHUNG cho các route STANDALONE (không qua runAgent):
-// cron, tuong-mat, phong-thuy, tubinh, xem-tuoi, lasotuvi...
+// cron, tuong-mat, phong-thuy, tubinh, xem-tuoi, lasotuvi, van-han-nam...
 //
-// Gemini-PRIMARY + Anthropic-BACKUP: provider chính đọc từ app_config
-// 'chat.standalone_provider' (mặc định 'gemini'); nếu provider chính lỗi
-// → tự thử provider kia. Giữ Anthropic làm backup switch-được (đổi config
-// 'anthropic' để đảo lại khi đã nạp credit).
+// Kimi K3 PRIMARY → Opus 5 backup-1 → Gemini Flash backup-2 (chốt Henry
+// 2026-08-20). Provider ĐỨNG ĐẦU đọc từ app_config 'chat.standalone_provider'
+// (mặc định 'kimi' — DEFAULTS.standaloneProvider trong appConfig.ts); provider
+// đứng đầu lỗi → tự rơi xuống 2 provider còn lại theo CANONICAL_ORDER. Đổi
+// khoá đó qua DB để ép một provider cụ thể lên đầu (không cần deploy).
 //
 // Hỗ trợ:
 //   - llmText           : non-stream text (+ ảnh vision, + hội thoại nhiều lượt)

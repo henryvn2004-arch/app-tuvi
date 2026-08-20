@@ -74,7 +74,15 @@ export const DEFAULTS: ChatConfig = {
   // phong-thuy, tubinh, xem-tuoi). 'anthropic' làm primary CHỈ khi Kimi chưa
   // cấu hình hoặc bị admin ép qua giá trị này — bình thường Kimi luôn đi
   // trước (complete.ts tự chèn 'kimi' lên đầu chuỗi bất kể giá trị ở đây).
-  standaloneProvider: 'anthropic',
+  // 🐞 ĐÃ VÁ 2026-08-20: hằng số này TỪNG là 'anthropic', và đó là lỗi thật —
+  // complete.ts đọc THẲNG giá trị này làm primary (không có nhánh "bỏ qua nếu
+  // là default"), nên standalone route (van-han-nam, lasotuvi, tuong-mat,
+  // phong-thuy, tubinh, xem-tuoi, cron...) chưa từng thử Kimi trước khi DB
+  // chưa có dòng `chat.standalone_provider` — Anthropic luôn đi trước, đúng lúc
+  // Henry check dashboard Kimi thấy 0đ. Nay khớp DB (đã set 'kimi' qua Supabase
+  // MCP, không cần deploy) — đổi 'anthropic'/'gemini' ở đây (hoặc DB) để ép một
+  // provider cụ thể lên đầu khi cần né Kimi.
+  standaloneProvider: 'kimi',
   // Chuỗi backup SAU KHI Kimi lỗi (rail chat, run.ts): '_default'='anthropic'
   // → mọi kịch bản (kể cả 'laso' — vương miện có paywall) rơi vào loop
   // Anthropic/Opus 5 TRƯỚC, Gemini chỉ còn là lưới đỡ khẩn cấp bên trong loop
