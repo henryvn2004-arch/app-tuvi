@@ -1255,6 +1255,32 @@
       '<span>tuviminhbao.com</span>';
   }
 
+  // ── PDF phải MỞ HẾT phần "cơ sở tính toán" đang gấp lại ──────────────
+  // Nhiều tool (Luận Giải · Dạy Con · Duyên Nợ Tiền Kiếp · Người Khác…) gói
+  // phần deterministic (cách cục/điểm số/quy tắc — bằng chứng lá số đọc
+  // đúng) trong <details> ĐÓNG mặc định để đỡ chiếm chỗ trên màn hình. Nhưng
+  // <details> đóng thì trình duyệt KHÔNG render nội dung con dù `@media
+  // print` có ép display:block — trình duyệt ẩn nó ở tầng khác `display`,
+  // không cách nào ép bằng CSS. Người đọc bản PDF/bản in phải thấy TRỌN vẹn
+  // cơ sở đó (đó chính là bằng chứng công cụ không bịa số) nên phải tự MỞ
+  // bằng thuộc tính `open` ngay trước khi in, rồi trả lại đúng trạng thái cũ
+  // sau khi hộp thoại in đóng — người dùng trên màn hình không mất thói quen
+  // gấp/mở của họ. Đặt ở SHELL (không phải từng tool) vì đây là luật CHUNG,
+  // và `beforeprint`/`afterprint` bắt được cả nút "Lưu PDF" lẫn Ctrl+P tay.
+  var _pdfReopenedDetails = null;
+  window.addEventListener('beforeprint', function () {
+    _pdfReopenedDetails = [];
+    document.querySelectorAll('details:not([open])').forEach(function (d) {
+      d.open = true;
+      _pdfReopenedDetails.push(d);
+    });
+  });
+  window.addEventListener('afterprint', function () {
+    if (!_pdfReopenedDetails) return;
+    _pdfReopenedDetails.forEach(function (d) { d.open = false; });
+    _pdfReopenedDetails = null;
+  });
+
   // ══════════════════════════════════════════════════════════════════════
   // ORB TRÊN NÚT HỎI — lời mời, không phải đồ trang trí
   // ══════════════════════════════════════════════════════════════════════

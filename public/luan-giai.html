@@ -1017,6 +1017,29 @@ select.form-input { cursor: pointer; }
     if (el && !el.value) el.value = new Date().getFullYear();
   })();
 
+  // In / Lưu PDF phải MỞ HẾT khối "Xem cơ sở tính toán" (.lg-calc) — nó gấp
+  // lại mặc định trên màn hình, nhưng <details> đóng thì trình duyệt KHÔNG
+  // render nội dung con dù @media print có ép display:block (trình duyệt ẩn
+  // nó ở tầng khác, không ép được bằng CSS). Người đọc bản PDF phải thấy
+  // TRỌN cơ sở đó — đó là bằng chứng công cụ không bịa số. Tự mở bằng thuộc
+  // tính `open` ngay trước khi in, trả lại đúng trạng thái cũ sau khi hộp
+  // thoại in đóng — trang không có shell.js nên phải tự làm riêng ở đây.
+  (function() {
+    let _reopened = null;
+    window.addEventListener('beforeprint', function() {
+      _reopened = [];
+      document.querySelectorAll('details:not([open])').forEach(function(d) {
+        d.open = true;
+        _reopened.push(d);
+      });
+    });
+    window.addEventListener('afterprint', function() {
+      if (!_reopened) return;
+      _reopened.forEach(function(d) { d.open = false; });
+      _reopened = null;
+    });
+  })();
+
   let _laSoText = null;
   let _luanGiaiStore = {};  // accumulate luận giải per phan
   let _engineResult_global = null;
