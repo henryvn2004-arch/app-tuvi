@@ -10,7 +10,9 @@
 // lượt LLM (~vài chục đồng), xong trong vài giây — không cần tách pha để giấu
 // thời gian chờ.
 
-export const maxDuration = 120;
+// 120 → 300 (2026-08-20): llmTextFull nay chuỗi 3 provider (Kimi K3 → Opus 5
+// → Gemini Flash) + trần token đã nâng 50% — cùng lý do lasotuvi/route.ts.
+export const maxDuration = 300;
 export const runtime = 'nodejs';
 
 import { NextRequest } from 'next/server';

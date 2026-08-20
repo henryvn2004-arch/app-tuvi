@@ -1,5 +1,7 @@
 // app/api/tubinh/route.ts
-export const maxDuration = 60;
+// 60 → 300: cùng lý do lasotuvi/route.ts — chuỗi fallback 3 provider tuần tự
+// (Kimi → Opus 5 → Gemini Flash) + trần token đã nâng 50% dễ vượt 60s.
+export const maxDuration = 300;
 
 import { NextRequest } from 'next/server';
 import { ok, err, options, parseBody } from '@/lib/cors';

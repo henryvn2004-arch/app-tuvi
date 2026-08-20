@@ -1,5 +1,11 @@
 // app/api/lasotuvi/route.ts
-export const maxDuration = 60;
+// 60 → 300: Kimi K3 primary + Opus 5 backup-1 + Gemini Flash backup-2 (chốt
+// Henry 2026-08-20) nghĩa là MỘT lượt có thể thử tới 3 provider TUẦN TỰ
+// (mỗi provider tự retry lỗi tạm thời trước khi coi là hỏng), cộng thêm trần
+// token vừa nâng 50% cùng đợt → 60s không còn đủ, dễ ăn timeout của Vercel
+// (trả về trang lỗi nền tảng "An error occurred..." — KHÔNG PHẢI JSON, làm
+// client vỡ khi JSON.parse). Đồng bộ với các route LLM nặng khác đã ở 300.
+export const maxDuration = 300;
 
 import { NextRequest } from 'next/server';
 import { ok, err, options, parseBody, CORS_HEADERS } from '@/lib/cors';

@@ -40,7 +40,14 @@ import { railFreeRemaining, railFreeConsume } from '@/lib/billing/viral-budget';
 import { anonTrialConsume, clientIpHash } from '@/lib/billing/anon-trial';
 
 export const runtime = 'nodejs';
-export const maxDuration = 60;
+// 🔴 60 → 300 (2026-08-20, vá "chat rail bị cắt giữa chừng" Henry báo). Kimi K3
+// primary → Opus 5 backup-1 → Gemini Flash backup-2 (lib/agent/run.ts) có thể
+// thử TỚI 3 PROVIDER TUẦN TỰ trong một lượt trước khi trả lời xong, mỗi
+// provider tự retry lỗi tạm thời — cộng thêm trần token vừa nâng 50%, một lượt
+// rail nhiều vòng tool-use dễ vượt 60s. Hàm bị Vercel cắt ngang giữa chừng
+// stream là đúng triệu chứng "cắt giữa chừng" — SSE chết ngang, không có
+// event 'error' hay 'done' nào kịp gửi để client biết mà báo lỗi tử tế.
+export const maxDuration = 300;
 
 const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY!;
 

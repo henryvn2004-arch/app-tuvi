@@ -1,5 +1,14 @@
 // app/api/van-han-nam/route.ts
-export const maxDuration = 60;
+// 🔴 60 → 300 (2026-08-20, vá lỗi Henry báo: "chạy hơn 60s xong báo Lỗi phần 1:
+// Unexpected token 'A', "An error o"... is not valid JSON"). Chuỗi Kimi K3
+// primary → Opus 5 backup-1 → Gemini Flash backup-2 (llmTextFull) có thể thử
+// TỚI 3 PROVIDER TUẦN TỰ trong một lượt (mỗi provider tự retry lỗi tạm thời
+// trước khi coi là hỏng), cộng thêm trần token của phần 1/2 vừa nâng 50%
+// (3000/4500) → tổng thời gian dễ vượt 60s. Vercel timeout ở mức hàm thì trả
+// về trang lỗi NỀN TẢNG dạng text ("An error occurred with your deployment"),
+// KHÔNG PHẢI JSON — client `JSON.parse` vỡ ngay chữ "A" đầu tiên, đúng thông
+// điệp Henry dán lại. Đồng bộ với các route LLM nặng khác (300).
+export const maxDuration = 300;
 
 import { NextRequest } from 'next/server';
 import { ok, err, options, parseBody } from '@/lib/cors';
