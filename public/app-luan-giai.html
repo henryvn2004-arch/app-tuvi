@@ -84,6 +84,14 @@
 .rules-group{margin:4px 0}
 .rules-canh-bao{background:#fff0f0;border-radius:4px;padding:4px 6px;margin:4px 0;border-left:2px solid #f87171}
 .phan-empty{font-size:12.5px;color:var(--text-lt);font-style:italic;padding:4px 0}
+/* Gấp phần TÍNH TOÁN (deterministic) — mặc định ĐÓNG, xem chú thích tại
+   buildPhanSection(). Không đụng thứ tự hiển thị, chỉ thu gọn nội dung bên
+   trong. Marker tam giác mặc định của trình duyệt GIỮ NGUYÊN — đủ để đọc là
+   "bấm để mở", không cần icon riêng. */
+.lg-calc{margin-bottom:2px}
+.lg-calc summary{cursor:pointer;font-size:12px;color:var(--text-lt);font-weight:600;padding:2px 0}
+.lg-calc summary:hover{color:var(--gold-soft)}
+.lg-calc[open] summary{margin-bottom:8px}
 /* ── Luận giải chuyên sâu bằng AI (paid, port từ luan-giai.html — gate+RAG+stream+PDF) ── */
 .claude-content{margin-top:10px;padding-top:10px;border-top:1px dashed var(--line-2)}
 .claude-content p{color:var(--text-mid);line-height:1.75;margin-bottom:12px;font-size:13.5px}
@@ -284,7 +292,15 @@ function _lgLoggedIn(){ return !!(window.Auth&&window.Auth.isLoggedIn&&window.Au
 // `_paintSecLocks`, không phụ thuộc `locked` ở đây).
 function buildPhanSection(phan,label,ls,locked){
   var pre=LuanGiaiCore.buildPreGenHtml(phan,ls);
-  var body=pre||'<div class="phan-empty">Phần này luận theo tổng thể lá số — bấm nút dưới để trợ lý luận sâu.</div>';
+  var raw=pre||'<div class="phan-empty">Phần này luận theo tổng thể lá số — bấm nút dưới để trợ lý luận sâu.</div>';
+  // Khối TÍNH TOÁN (deterministic — cách cục/điểm số/quy tắc) GẤP LẠI mặc định.
+  // Nó luôn dựng xong TRƯỚC (đồng bộ, lúc lập lá số) trong khi phần LUẬN THẬT
+  // (AI, `claude-content` dưới) tới sau — user chạy tool xong đọc ngay khối này
+  // rồi tưởng ĐÓ là luận giải. Henry chốt: giữ NGUYÊN thứ tự hiện có, chỉ thu
+  // gọn — ai muốn soi cơ sở/giải thích thuật học thì tự bấm mở. CHỈ áp cho phần
+  // KHÔNG bị khoá (`pre` có nội dung thật) — phần đang teaser-blur cho khách
+  // chưa đăng ký (`locked`) giữ nguyên như cũ, đừng chồng hai cơ chế ẩn lên nhau.
+  var body=(pre&&!locked)?('<details class="lg-calc"><summary>Xem cơ sở tính toán</summary>'+raw+'</details>'):raw;
   var bodyHtml=locked?'<div class="tpw-real-lock">'+body+'</div>':body;
   var tag=locked?TuviPaywall.lockBadge('Khoá'):'';
   // Khoá-mini (ẨN mặc định) — mỗi phần trong 24 phần đều CÓ một đoạn luận
