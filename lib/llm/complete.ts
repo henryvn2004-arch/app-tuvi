@@ -1,12 +1,13 @@
 // lib/llm/complete.ts
 // ============================================================
 // Helper LLM DÙNG CHUNG cho các route STANDALONE (không qua runAgent):
-// cron, tuong-mat, phong-thuy, tubinh, xem-tuoi, lasotuvi...
+// cron, tuong-mat, phong-thuy, tubinh, xem-tuoi, lasotuvi, van-han-nam...
 //
-// Gemini-PRIMARY + Anthropic-BACKUP: provider chính đọc từ app_config
-// 'chat.standalone_provider' (mặc định 'gemini'); nếu provider chính lỗi
-// → tự thử provider kia. Giữ Anthropic làm backup switch-được (đổi config
-// 'anthropic' để đảo lại khi đã nạp credit).
+// Kimi K3 PRIMARY → Opus 5 backup-1 → Gemini Flash backup-2 (chốt Henry
+// 2026-08-20). Provider ĐỨNG ĐẦU đọc từ app_config 'chat.standalone_provider'
+// (mặc định 'kimi' — DEFAULTS.standaloneProvider trong appConfig.ts); provider
+// đứng đầu lỗi → tự rơi xuống 2 provider còn lại theo CANONICAL_ORDER. Đổi
+// khoá đó qua DB để ép một provider cụ thể lên đầu (không cần deploy).
 //
 // Hỗ trợ:
 //   - llmText           : non-stream text (+ ảnh vision, + hội thoại nhiều lượt)
@@ -175,7 +176,13 @@ async function kimiText(o: LlmTextOpts, maxTokens: number): Promise<RawLlmResult
     model: KIMI_MODEL,
     messages: buildKimiMessages(o),
     max_tokens: maxTokens,
-    temperature: o.temperature ?? 0.7,
+    // 🔴 ĐÃ VÁ 2026-08-20 — Kimi K3 (Moonshot) CHỈ nhận temperature=1; giá trị
+    // khác (kể cả `o.temperature` do caller đặt, vd 0 cho JSON xác định) bị
+    // Moonshot từ chối NGAY với `400 invalid temperature: only 1 is allowed
+    // for this model` — mọi lượt Kimi ở CẢ 3 hàm trong file này lẫn
+    // lib/agent/providers/kimi.ts đều dính, đúng lý do Kimi 0đ trên dashboard
+    // dù đã set 'kimi' làm primary. KHÔNG dùng `o.temperature` ở đây được nữa.
+    temperature: 1,
   };
   if (o.json) body.response_format = { type: 'json_object' };
   const r = await fetch(KIMI_URL, {
@@ -203,7 +210,8 @@ async function openKimiStream(o: LlmTextOpts, maxTokens: number): Promise<Respon
     model: KIMI_MODEL,
     messages: buildKimiMessages(o),
     max_tokens: maxTokens,
-    temperature: o.temperature ?? 0.7,
+    // Xem chú thích ở kimiText() phía trên — Kimi K3 chỉ nhận temperature=1.
+    temperature: 1,
     stream: true,
   };
   return fetch(KIMI_URL, {
@@ -630,7 +638,10 @@ async function kimiCallTools(
   maxTokens: number,
 ): Promise<any> {
   if (!KIMI_KEY) throw new Error('kimi: thiếu KIMIK3_API_KEY');
-  const body: any = { model: KIMI_MODEL, messages: convoToKimiMessages(system, convo), max_tokens: maxTokens };
+  // temperature:1 bắt buộc — xem chú thích ở kimiText() phía trên. Hàm này
+  // trước đây KHÔNG gửi field temperature (mặc định phía Moonshot có thể khác
+  // 1) — thêm tường minh cho chắc, cùng bệnh với 2 hàm kia trong file này.
+  const body: any = { model: KIMI_MODEL, messages: convoToKimiMessages(system, convo), max_tokens: maxTokens, temperature: 1 };
   if (tools?.length) {
     body.tools = toKimiTools(tools);
     if (toolChoiceNone) body.tool_choice = 'none';
@@ -683,7 +694,7 @@ export async function callLLMTools(
   convo: any[],
   tools: any[],
   toolChoiceNone = false,
-  maxTokens = 1500,
+  maxTokens = 2250, // Nâng 50% (Henry chốt 2026-08-20, chống cắt ngang giữa lượt)
 ): Promise<any> {
   const order = await providerOrder();
   let lastErr: unknown;

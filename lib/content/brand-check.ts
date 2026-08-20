@@ -508,7 +508,7 @@ Trả JSON thuần một dòng, KHÔNG backtick:
 {"pass":true|false,"violations":[{"rule":"nuoc-di|thanh-ngu|vi-du|gioi-tinh|ket-chu-dong|bia-dan|sao-that","detail":"nêu ngắn gọn chỗ sai"}]}`;
 
   try {
-    const raw = (await llmText({ prompt, maxTokens: 700 }))
+    const raw = (await llmText({ prompt, maxTokens: 1050 })) // Nâng 50% (Henry chốt 2026-08-20)
       .trim()
       .replace(/^```(?:json)?\s*/i, '')
       .replace(/```\s*$/, '')
@@ -566,7 +566,7 @@ ${content}
 Chỉ trả về nội dung markdown đã sửa. KHÔNG giải thích, KHÔNG bọc JSON, KHÔNG backtick ngoài.`;
 
   try {
-    const raw = (await llmText({ prompt, maxTokens: 6000 })).trim();
+    const raw = (await llmText({ prompt, maxTokens: 9000 })).trim(); // Nâng 50% (Henry chốt 2026-08-20)
     const cleaned = raw.startsWith('```')
       ? raw
           .replace(/^```(?:markdown)?\s*/i, '')

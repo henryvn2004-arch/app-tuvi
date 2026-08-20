@@ -40,3 +40,33 @@ update app_config set value = '{"_default":"anthropic","laso":"anthropic"}'::jso
 -- Verify: SELECT key, value FROM app_config WHERE key LIKE 'chat.%' ORDER BY key;
 --   chat.model            → "claude-opus-5"
 --   chat.provider_routes  → {"_default":"anthropic","laso":"anthropic"}
+
+-- ── VÁ 2026-08-20 — bug thật, không phải phần "đã tính từ đầu" ─────────────
+-- Henry test tool Vận Hạn 12 Tháng Tới trên prod ngay sau khi deploy #577:
+-- 1 phần "Load failed" giữa chừng, và Moonshot dashboard cho thấy Kimi K3
+-- KHÔNG hề bị trừ tiền cho lượt đó. Lý do: `lib/llm/complete.ts` (đường
+-- STANDALONE — cron/lasotuvi/tuong-mat/phong-thuy/tubinh/xem-tuoi/van-han-nam)
+-- lấy provider ĐỨNG ĐẦU thẳng từ app_config['chat.standalone_provider'], mà
+-- khoá đó CHƯA TỪNG được set — DEFAULTS.standaloneProvider trong code khi đó
+-- vẫn là 'anthropic' (tàn dư từ chốt trước "Opus 5 primary, Gemini backup").
+-- Kết quả: standalone route thử Anthropic (Opus 5) TRƯỚC, Kimi chỉ là backup-1
+-- ngầm — ngược hẳn chốt "Kimi K3 primary" áp cho CẢ hai đường. Đây CHÍNH XÁC
+-- là cái bẫy mà comment cũ trong appConfig.ts đã tự cảnh báo rồi vẫn để hằng
+-- số sai ("bình thường Kimi luôn đi trước… bất kể giá trị ở đây" — SAI, code
+-- đọc thẳng giá trị đó, không có nhánh bỏ qua).
+--
+-- run.ts (đường RAIL CHAT) KHÔNG dính bug này — nó gọi kimiConfigured() trực
+-- tiếp, không qua app_config, nên rail chat/api/v1/chat đã đúng Kimi-primary
+-- từ lúc #577 deploy.
+update app_config set value = to_jsonb('kimi'::text)
+ where key = 'chat.standalone_provider';
+insert into app_config(key, value)
+  select 'chat.standalone_provider', to_jsonb('kimi'::text)
+ where not exists (select 1 from app_config where key = 'chat.standalone_provider');
+
+-- DEFAULTS.standaloneProvider trong lib/config/appConfig.ts đổi song song
+-- 'anthropic' → 'kimi' (cho lượt CHƯA đọc được DB / cache TTL chưa hết) —
+-- xem PR vá lỗi này.
+--
+-- Verify: SELECT key, value FROM app_config WHERE key = 'chat.standalone_provider';
+--   → "kimi"

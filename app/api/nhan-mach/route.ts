@@ -168,8 +168,9 @@ async function buildReport(p: NhanMachProfile, userId: string, key: string, coLa
         json: true,
         jsonSchema: NHAN_MACH_SCHEMA,
         // Nhiều người ⇒ phần `tungNguoi` dài theo số người. Trần rộng hơn tool
-        // một-người để bản 8 người không bị cắt giữa chừng.
-        maxTokens: 4200,
+        // một-người để bản 8 người không bị cắt giữa chừng. Nâng 50% cùng đợt
+        // (Henry chốt 2026-08-20, retest thấy cắt ngang giữa câu ở nhiều route).
+        maxTokens: 6300,
       });
       void logLlmUsage(TOOL_ID, r.model, {
         input_tokens: r.usage.input_tokens,

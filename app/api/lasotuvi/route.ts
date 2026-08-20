@@ -22,7 +22,7 @@ import { withToolOutcome } from '@/lib/ops/tool-outcome';
 // Trả shape Anthropic ({content, stop_reason, usage}) dù provider nào → vòng
 // lặp tool phía dưới KHÔNG đổi.
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-async function callLLM(system: any, convo: any[], tools: any[], toolChoiceNone = false, maxTokens = 1500): Promise<any> {
+async function callLLM(system: any, convo: any[], tools: any[], toolChoiceNone = false, maxTokens = 2250): Promise<any> {
   return callLLMTools(system, convo, tools, toolChoiceNone, maxTokens);
 }
 
@@ -251,8 +251,11 @@ async function runPost(request: NextRequest) {
   catch (e: unknown) { return err('buildPrompt error: ' + (e as Error).message); }
 
   try {
-    const maxTok = phan === 1 ? 2000 : phan === 14 ? 3000 : phan === 24 ? 1400
-      : (phan >= 2 && phan <= 13) ? 1100 : (phan >= 15 && phan <= 23) ? 1100 : 1000;
+    // Henry chốt 2026-08-20: nâng ĐỀU 50% mọi trần token trong repo — retest
+    // sau khi bật Kimi K3 primary bắt được bản luận giải bị CẮT NGANG giữa
+    // câu (model sinh vượt trần rồi API cắt sạch, không phải lỗi mạng).
+    const maxTok = phan === 1 ? 3000 : phan === 14 ? 4500 : phan === 24 ? 2100
+      : (phan >= 2 && phan <= 13) ? 1650 : (phan >= 15 && phan <= 23) ? 1650 : 1500;
 
     // Prompt + dữ liệu GIỮ NGUYÊN; chỉ đổi backend provider (Gemini-primary,
     // Anthropic-backup). Bỏ cache_control (tối ưu riêng Anthropic; Gemini cache ngầm).

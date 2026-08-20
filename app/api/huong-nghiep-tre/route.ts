@@ -137,7 +137,7 @@ async function buildReport(
             : ''),
         json: true,
         jsonSchema: HUONG_NGHIEP_TRE_SCHEMA,
-        maxTokens: 3200,
+        maxTokens: 4800, // nâng 50% cùng đợt (Henry chốt 2026-08-20)
       });
       void logLlmUsage(
         TOOL_ID,

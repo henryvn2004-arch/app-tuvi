@@ -188,7 +188,7 @@ Lưu ý đặc biệt: Đây là chế độ so sánh tương hợp 2 lá số. 
   const trimmed = messages.slice(-10).map((m: any) => ({ role: m.role, content: String(m.content).slice(0, 2000) }));
 
   try {
-    const answer = await llmText({ system: systemPrompt, messages: trimmed, maxTokens: 800 });
+    const answer = await llmText({ system: systemPrompt, messages: trimmed, maxTokens: 1200 });
     return ok({ answer, scenario: hasLaso ? 'laso' : 'general' });
   } catch (e: unknown) {
     return err('API error: ' + (e as Error).message);
@@ -332,7 +332,7 @@ async function runPost(request: NextRequest) {
     const luanGiai = await llmText({
       system: LUAN_GIAI_TUONG_HOP_SYSTEM,
       prompt: userPrompt,
-      maxTokens: 1200,
+      maxTokens: 1800,
     });
     return ok({ luanGiai });
   } catch (e: unknown) {

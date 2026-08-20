@@ -18,7 +18,7 @@ import { withToolOutcome } from '@/lib/ops/tool-outcome';
 // Nhận messages theo shape Anthropic (content = string | [{type:'image'|'text'}])
 // như các call site cũ, tự tách text + ảnh → llmText (giữ nguyên vision).
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-async function claude(messages: any[], system: string, maxTokens = 1800): Promise<string> {
+async function claude(messages: any[], system: string, maxTokens = 2700): Promise<string> {
   const content = messages?.[0]?.content;
   let prompt = '';
   const images: LlmImage[] = [];
@@ -691,7 +691,8 @@ Trả về JSON thuần túy:
 
   let raw: string;
   try {
-    raw = await llmText({ system: ARC_GIONG_NGU_HANH, prompt, maxTokens: 1000 });
+    // Nâng 50% cùng đợt (Henry chốt 2026-08-20).
+    raw = await llmText({ system: ARC_GIONG_NGU_HANH, prompt, maxTokens: 1500 });
   } catch {
     return err('Lỗi AI.', 500);
   }

@@ -68,13 +68,26 @@ export const DEFAULTS: ChatConfig = {
   // là backup-1 (Opus 5, qua Anthropic Messages API).
   model: 'claude-opus-5',
   maxRounds: 4,
-  maxTokens: 3000, // đủ cho câu luận sâu 1 phần (24-phần cho tới 3000); DB app_config 'chat.max_tokens' override được. Câu ngắn không tốn thêm (chỉ trả token thực sinh).
+  // 🔴 Henry chốt 2026-08-20 (retest sau khi bật Kimi K3): nhiều lượt bị CẮT
+  // NGANG (rail chat lẫn Luận Giải) — nghi trần token của TỪNG PHẦN quá sát so
+  // với độ dài Opus 5/Kimi K3 thực sinh. Nâng ĐỀU 50% mọi trần trong repo (đây
+  // là trần MẶC ĐỊNH khi DB app_config 'chat.max_tokens' chưa override; 3000
+  // cũ → 4500). Trần chỉ chặn phần SINH DƯ, không phải mục tiêu — nâng trần
+  // không tốn thêm đồng nào cho các lượt vốn đã sinh ngắn hơn trần cũ.
+  maxTokens: 4500,
   cost: 5, // 5 Lượng / lượt — giá chuẩn; DB app_config 'chat.cost' override được (không cần deploy)
   // Route STANDALONE (lib/llm/complete.ts: cron, /api/lasotuvi, tuong-mat,
   // phong-thuy, tubinh, xem-tuoi). 'anthropic' làm primary CHỈ khi Kimi chưa
-  // cấu hình hoặc bị admin ép qua giá trị này — bình thường Kimi luôn đi
-  // trước (complete.ts tự chèn 'kimi' lên đầu chuỗi bất kể giá trị ở đây).
-  standaloneProvider: 'anthropic',
+  // cấu hình hoặc bị admin ép qua giá trị này.
+  // 🐞 ĐÃ VÁ 2026-08-20: hằng số này TỪNG là 'anthropic', và đó là lỗi thật —
+  // complete.ts đọc THẲNG giá trị này làm primary (không có nhánh "bỏ qua nếu
+  // là default"), nên standalone route (van-han-nam, lasotuvi, tuong-mat,
+  // phong-thuy, tubinh, xem-tuoi, cron...) chưa từng thử Kimi trước khi DB
+  // chưa có dòng `chat.standalone_provider` — Anthropic luôn đi trước, đúng lúc
+  // Henry check dashboard Kimi thấy 0đ. Nay khớp DB (đã set 'kimi' qua Supabase
+  // MCP, không cần deploy) — đổi 'anthropic'/'gemini' ở đây (hoặc DB) để ép một
+  // provider cụ thể lên đầu khi cần né Kimi.
+  standaloneProvider: 'kimi',
   // Chuỗi backup SAU KHI Kimi lỗi (rail chat, run.ts): '_default'='anthropic'
   // → mọi kịch bản (kể cả 'laso' — vương miện có paywall) rơi vào loop
   // Anthropic/Opus 5 TRƯỚC, Gemini chỉ còn là lưới đỡ khẩn cấp bên trong loop

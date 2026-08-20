@@ -152,7 +152,7 @@ export async function generateContentPackText(days = 7, limit = 5): Promise<stri
   const body = await llmText({
     system: SYSTEM_PROMPT,
     prompt: JSON.stringify(payload),
-    maxTokens: 3000,
+    maxTokens: 4500, // Nâng 50% (Henry chốt 2026-08-20)
   });
 
   const header =

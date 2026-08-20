@@ -197,7 +197,7 @@ async function rewriteSpec(
       `\nTrả về hook mới, và CHỈ những cảnh bạn sửa (kèm số cảnh).`,
     json: true,
     jsonSchema: REWRITE_SCHEMA,
-    maxTokens: 1600,
+    maxTokens: 2400, // Nâng 50% (Henry chốt 2026-08-20)
     temperature: 0.8,
   });
 
