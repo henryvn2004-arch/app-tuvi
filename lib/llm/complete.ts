@@ -176,7 +176,13 @@ async function kimiText(o: LlmTextOpts, maxTokens: number): Promise<RawLlmResult
     model: KIMI_MODEL,
     messages: buildKimiMessages(o),
     max_tokens: maxTokens,
-    temperature: o.temperature ?? 0.7,
+    // 🔴 ĐÃ VÁ 2026-08-20 — Kimi K3 (Moonshot) CHỈ nhận temperature=1; giá trị
+    // khác (kể cả `o.temperature` do caller đặt, vd 0 cho JSON xác định) bị
+    // Moonshot từ chối NGAY với `400 invalid temperature: only 1 is allowed
+    // for this model` — mọi lượt Kimi ở CẢ 3 hàm trong file này lẫn
+    // lib/agent/providers/kimi.ts đều dính, đúng lý do Kimi 0đ trên dashboard
+    // dù đã set 'kimi' làm primary. KHÔNG dùng `o.temperature` ở đây được nữa.
+    temperature: 1,
   };
   if (o.json) body.response_format = { type: 'json_object' };
   const r = await fetch(KIMI_URL, {
@@ -204,7 +210,8 @@ async function openKimiStream(o: LlmTextOpts, maxTokens: number): Promise<Respon
     model: KIMI_MODEL,
     messages: buildKimiMessages(o),
     max_tokens: maxTokens,
-    temperature: o.temperature ?? 0.7,
+    // Xem chú thích ở kimiText() phía trên — Kimi K3 chỉ nhận temperature=1.
+    temperature: 1,
     stream: true,
   };
   return fetch(KIMI_URL, {
@@ -631,7 +638,10 @@ async function kimiCallTools(
   maxTokens: number,
 ): Promise<any> {
   if (!KIMI_KEY) throw new Error('kimi: thiếu KIMIK3_API_KEY');
-  const body: any = { model: KIMI_MODEL, messages: convoToKimiMessages(system, convo), max_tokens: maxTokens };
+  // temperature:1 bắt buộc — xem chú thích ở kimiText() phía trên. Hàm này
+  // trước đây KHÔNG gửi field temperature (mặc định phía Moonshot có thể khác
+  // 1) — thêm tường minh cho chắc, cùng bệnh với 2 hàm kia trong file này.
+  const body: any = { model: KIMI_MODEL, messages: convoToKimiMessages(system, convo), max_tokens: maxTokens, temperature: 1 };
   if (tools?.length) {
     body.tools = toKimiTools(tools);
     if (toolChoiceNone) body.tool_choice = 'none';

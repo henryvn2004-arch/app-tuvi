@@ -79,7 +79,14 @@ export async function streamKimi(
     model: KIMI_MODEL,
     messages,
     max_tokens: cfg.maxTokens,
-    temperature: 0.7,
+    // 🔴 ĐÃ VÁ 2026-08-20 — Kimi K3 (Moonshot) CHỈ nhận temperature=1, mọi giá
+    // trị khác (kể cả 0.7 vốn ở đây) bị từ chối NGAY ở request-time với
+    // `400 invalid_request_error: "invalid temperature: only 1 is allowed for
+    // this model"`. Đây là lý do THẬT khiến Kimi 100% lỗi từ lúc #577 deploy —
+    // Moonshot dashboard 0đ không phải vì key/route sai, mà vì MỌI lượt gọi bị
+    // chặn ở tầng tham số trước khi kịp tính phí. Xem `lib/llm/complete.ts`
+    // (đường standalone) — cùng bệnh, cùng giờ vá.
+    temperature: 1,
     stream: true,
     stream_options: { include_usage: true },
   };
@@ -185,7 +192,8 @@ export async function streamKimiTurn(
     model: KIMI_MODEL,
     messages,
     max_tokens: cfg.maxTokens,
-    temperature: 0.7,
+    // Xem chú thích ở streamKimi() phía trên — Kimi K3 chỉ nhận temperature=1.
+    temperature: 1,
     stream: true,
     stream_options: { include_usage: true },
   };
