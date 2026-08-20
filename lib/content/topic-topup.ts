@@ -560,7 +560,7 @@ Trả tối đa ${target['nghien-cuu']} tiêu đề [nghien-cuu] và ${target['k
   const raw = await llmText({
     system,
     prompt: `Danh sách cụm từ khoá:\n${list}`,
-    maxTokens: 4000,
+    maxTokens: 6000, // Nâng 50% (Henry chốt 2026-08-20)
     json: true,
     temperature: 0.4,
   });

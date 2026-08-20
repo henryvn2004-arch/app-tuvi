@@ -172,7 +172,8 @@ async function runPost(request: NextRequest) {
   try {
     // Trần token mượn đúng mức của phần tương ứng bên Luận Giải; phần tháng
     // (140–180 từ) dùng chung mức của phần cung/đại vận.
-    const maxTok = phan === 1 ? 2000 : phan === 2 ? 3000 : phan === 4 ? 1400 : 1200;
+    // Nâng 50% cùng đợt với lasotuvi/route.ts (Henry chốt 2026-08-20).
+    const maxTok = phan === 1 ? 3000 : phan === 2 ? 4500 : phan === 4 ? 2100 : 1800;
     const rr = await llmTextFull({ system: SYSTEM_PROMPT, prompt, maxTokens: maxTok });
     // tool_id = ĐÚNG `tool_pricing.tool_id` để bucket chi phí ghép được với
     // bucket doanh thu (xem tool_canon() trong CLAUDE.md).

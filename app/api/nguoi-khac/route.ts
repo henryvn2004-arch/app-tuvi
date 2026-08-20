@@ -158,7 +158,7 @@ async function buildReport(
             : ''),
         json: true,
         jsonSchema: NGUOI_KHAC_SCHEMA,
-        maxTokens: 3000,
+        maxTokens: 4500, // nâng 50% cùng đợt (Henry chốt 2026-08-20)
       });
       void logLlmUsage(TOOL_ID, r.model, {
         input_tokens: r.usage.input_tokens,

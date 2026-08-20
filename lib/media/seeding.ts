@@ -171,7 +171,7 @@ async function writeSeedCaption(
         chu_de_nhom: group.topic || '(không ghi rõ)',
         goc_tiep_can: group.angle || '(không ghi rõ — viết chung, bám sát câu trích)',
       }),
-      maxTokens: 800,
+      maxTokens: 1200, // Nâng 50% (Henry chốt 2026-08-20)
     });
     const m = raw.match(/\{[\s\S]*\}/);
     if (!m) return null;

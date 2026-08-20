@@ -694,7 +694,7 @@ export async function callLLMTools(
   convo: any[],
   tools: any[],
   toolChoiceNone = false,
-  maxTokens = 1500,
+  maxTokens = 2250, // Nâng 50% (Henry chốt 2026-08-20, chống cắt ngang giữa lượt)
 ): Promise<any> {
   const order = await providerOrder();
   let lastErr: unknown;
