@@ -175,12 +175,19 @@
   // ⚠️ MIN_SAMPLES = 2 vì PHẦN ĐẦU luôn chậm bất thường: nó nạp 10 tài liệu
   // RAG trong khi các phần sau chỉ 7 (`matchCount: p===1?10:7`). Lấy một mẫu
   // duy nhất đó nhân lên 23 phần là hứa sai ngay từ dòng đầu.
+  //
+  // 🔴 begin/end NHẬN THÊM `key` TUỲ CHỌN (2026-08-20, vá "Kimi K3 chậm, gộp
+  // nhiều phần chạy song song để đỡ chờ"): `PhanPool` (tools-shared/phan-pool.js)
+  // chạy NHIỀU phần cùng lúc, mỗi phần tự begin()/end() quanh lượt gọi của nó —
+  // dùng chung MỘT `t0` (bản cũ) thì lượt sau ghi đè mốc bắt đầu của lượt trước,
+  // ra thời lượng bịa. `key` (số phần) tách mốc bắt đầu của từng phần; không
+  // truyền key vẫn chạy đúng như cũ (key mặc định '').
   // ============================================================
   function pacer(opts) {
     opts = opts || {};
     var minSamples = opts.minSamples || 2;
     var samples = [];
-    var t0 = 0;
+    var starts = {};
 
     function perPartSec() {
       if (samples.length < minSamples) return null;
@@ -192,15 +199,16 @@
     }
 
     return {
-      begin: function () { t0 = Date.now(); },
+      begin: function (key) { starts[key == null ? '' : key] = Date.now(); },
       // CỐ Ý chỉ gọi ở nhánh THÀNH CÔNG: một phần chết giữa chừng có thời lượng
       // thật nhưng không đại diện cho phần chạy được.
-      end: function () {
-        if (!t0) return;
-        samples.push((Date.now() - t0) / 1000);
-        t0 = 0;
+      end: function (key) {
+        var k = key == null ? '' : key;
+        if (!starts[k]) return;
+        samples.push((Date.now() - starts[k]) / 1000);
+        delete starts[k];
       },
-      reset: function () { samples = []; t0 = 0; },
+      reset: function () { samples = []; starts = {}; },
       perPartSec: perPartSec,
       // Cách viết thời lượng MỘT phần — gom ở đây để hai trang không tự chế hai
       // kiểu, và để không bao giờ in ra "khoảng 0 giây" vì làm tròn.
@@ -208,10 +216,16 @@
         var per = perPartSec();
         return per ? 'khoảng ' + Math.max(1, Math.round(per)) + ' giây' : '';
       },
-      remainText: function (remaining) {
+      // `concurrency` (mặc định 1, tương thích ngược): chạy N phần song song thì
+      // thời gian còn lại là theo LÔ — ceil(remaining/N) lô, không phải cộng dồn
+      // từng phần một. Thiếu tham số này thì tool chạy pool 3-song-song vẫn báo
+      // ETA dài gấp 3 lần thật.
+      remainText: function (remaining, concurrency) {
         var per = perPartSec();
         if (!per || !(remaining > 0)) return '';
-        var s = per * remaining;
+        var c = concurrency > 0 ? concurrency : 1;
+        var batches = Math.ceil(remaining / c);
+        var s = per * batches;
         if (s < 45) return 'còn khoảng ' + (Math.round(s / 5) * 5 || 5) + ' giây';
         if (s < 90) return 'còn khoảng 1 phút';
         return 'còn khoảng ' + Math.round(s / 60) + ' phút';
