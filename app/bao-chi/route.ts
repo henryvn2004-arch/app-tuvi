@@ -207,6 +207,12 @@ ul{margin:0 0 12px 20px;color:var(--text-mid)}li{margin-bottom:6px}
   </section>
 
   <section>
+    <h2>Dữ liệu mở cho nhà báo</h2>
+    <p>Chúng tôi phát hành công khai một bộ dữ liệu thống kê tử vi theo giấy phép <b>CC BY 4.0</b> — dùng lại được cho bài báo, đồ hoạ, nghiên cứu, chỉ cần ghi nguồn. Tải CSV/JSON tại <a href="/du-lieu">trang dữ liệu mở</a>.</p>
+    <p class="tiny">⚠️ Đọc kỹ phần cảnh báo trên trang đó: đây là phân bố trên KHÔNG GIAN THỜI ĐIỂM SINH, <b>không phải</b> phân bố dân số Việt Nam. Viết "X% người Việt có mệnh Tử Vi" là sai.</p>
+  </section>
+
+  <section>
     <h2>Logo &amp; màu thương hiệu</h2>
     <div class="assets">
       <div class="asset"><img src="/seal.webp" alt="Triện Tử Vi Minh Bảo"><a href="/seal.webp" download>Tải triện (.webp)</a></div>

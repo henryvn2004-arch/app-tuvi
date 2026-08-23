@@ -180,6 +180,7 @@ th{background:var(--bg-soft);font-weight:600;color:var(--navy)}
     <ul>
       <li><a href="/mcp-server">MCP server tử vi miễn phí</a> — cắm thẳng vào Claude, Cursor, VS Code.</li>
       <li><a href="/nhung">Nhúng công cụ miễn phí vào website của bạn</a> — không cần code.</li>
+      <li><a href="/du-lieu">Dữ liệu tử vi mở (CC BY 4.0)</a> — thống kê phân bố sao mệnh, cục, nạp âm; tải CSV/JSON.</li>
       <li><a href="/ngay-tot">Tra ngày tốt xấu</a> · <a href="/kim-lau">Xem tuổi làm nhà</a> · <a href="/bao-chi">Thông tin báo chí</a></li>
     </ul>
   </section>

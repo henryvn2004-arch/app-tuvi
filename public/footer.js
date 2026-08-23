@@ -68,6 +68,7 @@
     '<a href="/bao-chi">B\u00e1o Ch\u00ed</a>',
     '<a href="/api-docs">API Mi\u1ec5n Ph\u00ed</a>',
     '<a href="/mcp-server">MCP Server</a>',
+    '<a href="/du-lieu">D\u1eef Li\u1ec7u M\u1edf</a>',
     '<a href="/nguon-du-lieu.html">Ngu\u1ed3n D\u1eef Li\u1ec7u</a>',
     '<a href="/huong-dan-thanh-toan.html">H\u01b0\u1edbng D\u1eabn Thanh To\u00e1n</a>',
     '<a href="/chinh-sach-bao-mat.html">Ch\u00ednh S\u00e1ch B\u1ea3o M\u1eadt</a>',

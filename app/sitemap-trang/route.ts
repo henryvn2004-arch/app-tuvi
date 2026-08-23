@@ -73,6 +73,7 @@ const STATIC_PAGES = [
     '/nhung',
     '/api-docs',
     '/mcp-server',
+    '/du-lieu',
     '/tools/kinh-dich.html',
     '/tools/luc-nham.html',
     '/tools/mau-sac-hop-menh.html',
