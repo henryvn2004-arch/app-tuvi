@@ -10418,6 +10418,21 @@ ca phản chứng, nếu không nó tự lên đời thành luật.**
   hết hạn vì chính hạ tầng nó neo vào đã đổi — xem lại mục *CI đo BẢN CŨ* ngay
   dưới trước khi viện dẫn lập luận này.
 
+🪤 **PHẢN CHỨNG THỨ HAI cho bảng `opened`/`synchronize` ở trên (2026-08-23,
+PR #585)**: PR mở lần đầu (event `opened` thật, không phải reset-nhánh-rồi-mở),
+head là commit thường (không phải merge commit) — đúng ô bảng trên ghi *"chưa
+thấy lượt nào hụt"*. Vẫn hụt: chỉ 3 job `deployment_status` (Vercel comment ·
+smoke · lighthouse, cả 3 xanh) chạy; `Lint & Format` · `Next Build` ·
+`Unit Tests` (cả 3 job trigger bằng `pull_request`) **0 run nào được tạo**, dù
+đợi hơn 3 phút. ⇒ **`opened` KHÔNG miễn nhiễm** — bảng trên chỉ đúng "chưa
+thấy", không phải "không xảy ra". Mẫu vẫn quá nhỏ để tìm quy luật khác ngoài
+"GitHub thỉnh thoảng không phát event, không phân biệt loại event". Vá bằng
+cách chạy tại chỗ đúng 3 job thiếu (đã có sẵn `.github/workflows/next-build.yml`
+làm khuôn: `node scripts/stub-postgrest.mjs 54321 &` rồi
+`SUPABASE_URL=http://127.0.0.1:54321 SUPABASE_SERVICE_KEY=stub-service-key
+SUPABASE_ANON_KEY=stub-anon-key npm run build`) + `npm run lint` +
+`cd tuvi-engine && npm test` — cả ba local đều xanh, nói thẳng trên PR.
+
 ### ⚠️ (ghi chép cũ) CI: workflow `pull_request` có lúc KHÔNG fire
 2 commit liên tiếp chỉ có Vercel + `smoke` chạy; lint/typecheck/test/lighthouse **không hề
 được tạo run** (10 workflow đều `active`, không có path filter). `smoke` vẫn chạy vì nó
