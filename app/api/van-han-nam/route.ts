@@ -13,7 +13,7 @@ export const maxDuration = 300;
 import { NextRequest } from 'next/server';
 import { ok, err, options, parseBody } from '@/lib/cors';
 import { computeLaso, formatLaSoV2, makeLasoSlug, CHI_NAMES, type Laso } from '@/lib/engine/laso';
-import { SYSTEM_PROMPT, buildPromptCached, laSoContextFor } from '@/lib/agent/luan-giai-doc';
+import { SYSTEM_PROMPT, buildPromptCached, laSoContextFull } from '@/lib/agent/luan-giai-doc';
 import { nguoiXemLine } from '@/lib/agent/prompts';
 import {
   buildKhung12Thang, describeThangForLLM, spans12, nhanThangAL, nhanThangALDay, dmy, SO_THANG,
@@ -81,10 +81,13 @@ function buildPromptThang(
   const luatNhuan = span.isLeap
     ? `\n- ⚠️ Đây là THÁNG NHUẬN: cung nguyệt hạn TRÙNG với tháng ${span.thangAL} ÂL ngay trước. ĐỪNG viết lại bản luận của tháng trước — hãy nói về phần TIẾP NỐI: việc dở dang của tháng trước nay có thêm một tháng nữa để xử lý, và điều gì đã khác đi so với đầu chu kỳ.`
     : '';
-  // Lá số cắt theo khuôn phần 24 (tiểu vận & năm xem): đầu lá số + khối 9 đại
-  // vận + cách cục — đúng thứ cần để đặt tháng vào khung năm, không kéo cả 12
-  // cung vào cho loãng.
-  const laSoCat = laSoContextFor(24, formatLaSoV2(ls));
+  // TOÀN VĂN lá số, KHÔNG cắt (xem lib/agent/luan-giai-doc.ts, laSoContextFull).
+  // Trước đây cắt theo khuôn phần 24 (bỏ hẳn khối 12 CUNG) để tiết kiệm token;
+  // đo lại 2026-08-23 thấy phần tiết kiệm đó nhỏ (~200-7.000đ/lượt tuỳ provider
+  // đang primary) trong khi đổi lại là model mất khả năng đối chiếu cung đang
+  // luận với Mệnh/11 cung còn lại. Cùng hướng đã chọn cho 4 phần đầu +
+  // buildPromptCached của Luận Giải: đừng cắt lá số chỉ để tiết kiệm vài trăm đồng.
+  const laSoCat = laSoContextFull(formatLaSoV2(ls));
   const docsSection = docs ? '\n\n=== TÀI LIỆU THAM KHẢO ===\n' + docs : '';
 
   return `${laSoCat}

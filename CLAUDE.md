@@ -1,5 +1,75 @@
 # CLAUDE.md — Context cho Claude Code
 
+## ✂️ Audit `trim_la_so` — chỉ CÒN 1 chỗ cắt thật, đã bỏ (2026-08-23)
+
+Henry hỏi thẳng: *"trim_la_so có thiếu dữ liệu so với engine gốc không? Trước
+kia trim nhiều quá từng làm luận giải sai/thiếu — lý do trim là để tối ưu
+token, nhưng đừng cắt nhiều quá dẫn đến sai/thiếu. Giờ dùng Opus context rộng
+thì có cần trim nữa không?"*
+
+### 🔑 Trả lời câu cuối trước: KHÔNG PHẢI CHUYỆN CONTEXT — LUÔN LÀ CHUYỆN GIÁ
+Lá số dài nhất đo được trên mẫu thật: **~26.745 ký tự** (~20-25K token) — chưa
+từng và sẽ không bao giờ chạm ngưỡng context của bất kỳ provider nào đang dùng
+(Gemini/Kimi/Opus đều hàng trăm nghìn tới 1M token). Trim không tồn tại vì
+"không vừa context" — nó tồn tại vì mỗi ký tự thừa nhân với SỐ LƯỢT gọi cùng
+một lá số (24 phần Luận Giải, 12 phần Vận Hạn Tháng) thành tiền thật.
+
+### Kiểm 4 nơi dùng lá số cho LLM — chỉ 1 chỗ còn cắt
+| Chỗ | Trạng thái |
+|---|---|
+| Luận Giải 24 phần (`/api/lasotuvi`) | **0 trim** — đã dùng `buildPromptCached` (gửi TOÀN VĂN, có cache) từ Code #1, PR #585 |
+| Vận Hạn 12 Tháng — 4 phần đầu (trùng Luận Giải) | **0 trim** — cùng `buildPromptCached` |
+| Vận Hạn 12 Tháng — 12 phần THÁNG (nội dung riêng của tool) | 🔴 **CÓ trim** — `laSoContextFor(24,…)` gọi `trimLaSo`, bỏ NGUYÊN khối `=== 12 CUNG ===` |
+| Chân Dung Vợ Chồng (`chan-dung-vo-chong`) | Cắt còn 1 cung (Phu Thê) — **CỐ Ý**, thiết kế sản phẩm hẹp, không cache, ngoài phạm vi câu hỏi này |
+
+### Đo thật trên 3 lá số mẫu (script scratchpad, nạp CHÍNH engine + formatter)
+Khối bị cắt (`=== 12 CUNG ===`) chiếm **32–38% toàn văn** (~8.241–10.206 ký tự
+trên lá số dài nhất). Phần này KHÔNG được bù đủ bởi `describeThangForLLM` —
+hàm đó chỉ đưa chi tiết sao của ĐÚNG cung hạn đang luận trong tháng, không
+phải cả 12 cung — nên model mất khả năng tự đối chiếu với Mệnh/11 cung còn lại
+khi cần. Đúng loại lỗi Henry mô tả ("trim nhiều quá thiếu dữ liệu để phân
+tích"), chỉ là ở MỘT tool, không phải toàn hệ thống.
+
+### Kinh tế: giữ trim ở đây tiết kiệm được BAO NHIÊU?
+Provider primary hiện tại (`chat.standalone_provider`) là **Gemini Flash**
+($0.15/1M input) — rẻ hơn Kimi/Opus 20–33 lần. Giữ trim tiết kiệm ~200–400đ
+cho cả 12 tháng; nếu route rơi về Kimi/Opus (đang xếp backup, và thứ tự đó đã
+đổi NGAY TRONG NGÀY hôm nay) thì tiết kiệm ~4.000–7.000đ/lượt. Đổi lấy đúng
+priority Henry vừa chốt lại — bỏ hẳn trim ở tool này.
+
+### Đã làm
+- **`laSoContextFull(laSoText)`** (mới, `lib/agent/luan-giai-doc.ts`) — gửi
+  toàn văn, không cắt. `laSoContextFor` (bản trim theo `phan`) GIỮ NGUYÊN làm
+  đường lùi có sẵn, ghi rõ trong comment là hiện KHÔNG còn chỗ nào gọi.
+- **`app/api/van-han-nam/route.ts`** — `buildPromptThang` (12 phần tháng) đổi
+  từ `laSoContextFor(24, formatLaSoV2(ls))` sang `laSoContextFull(…)`.
+- `trimLaSo`/`buildPrompt`/`promptCtx` (bản KHÔNG cache cũ, xác nhận bằng grep
+  không route sống nào gọi) GIỮ NGUYÊN, không xoá — ngoài phạm vi câu hỏi này.
+
+### 🐞 Bắt kèm khi verify: `check:laso` đang canh SAI FILE
+`CONSUMERS` trong `scripts/check-laso-markers.mjs` liệt `app/api/lasotuvi/
+route.ts` — nhưng logic `findMark`/`trimLaSo` đã DỜI sang `lib/agent/
+luan-giai-doc.ts` từ một lượt refactor TRƯỚC đó. Route.ts giờ 0 mốc literal
+nào ⇒ Luật 3 đang tick xanh mà KHÔNG kiểm gì — đúng lớp lỗi chính bộ dò này
+sinh ra để chặn (mốc trôi mà không ai biết). Sửa `CONSUMERS` trỏ đúng file
+đang sống logic.
+
+### Verify
+`tsc --noEmit` 0 lỗi · `lint` 0 lỗi/77 warning = mốc nền · `prettier --check`
+sạch · `check:laso` xanh (nay MỚI thật sự kiểm `luan-giai-doc.ts`) ·
+`check:prompt` không đổi (`SYSTEM_PROMPT` không đụng, 11.396/11.800) · engine
+test 185 pass.
+
+### CÒN LẠI
+- `trimLaSo`/`buildPrompt` (bản không cache) là code CHẾT — không route nào
+  gọi. Không xoá trong lượt này (ngoài phạm vi câu hỏi), để dành dọn sau.
+- `phu-the-luan-giai.ts` (Chân Dung Vợ Chồng) vẫn cắt còn 1 cung — quyết định
+  sản phẩm cố ý, không phải tối ưu token, không đụng.
+- **Đã commit, PR RIÊNG** — PR #585 (dưới) đã merge trước khi lượt audit này
+  xong nên không gộp lại được; lượt fix trim này đi PR mới, cùng branch
+  `claude/opus-cost-optimization-1qnab6` (branch được reset lên `origin/main`
+  rồi cherry-pick đúng 1 commit lên trên, tránh rebase lại 5 commit đã merge).
+
 ## 📣 TRACK DIGITAL MARKETING — 14/14 mục, và 3 giả định của tôi bị SỐ ĐO bác (2026-08-23, PR #588)
 
 Henry duyệt workplan 14 mục rồi *"làm tuần tự cả 14 mục đi"*, kèm ba ràng buộc
@@ -138,7 +208,6 @@ của `next-build.yml` vì job đó lúc ấy chưa fire).
    admin nên MỌI action admin trả 500 ở tầng xác thực; đối chứng `op=delete` (đã
    ship từ trước, PR này không đụng) trả **y hệt 500** ⇒ hiện tượng MÔI TRƯỜNG,
    không phải lỗi mã.
-
 
 ## 💰 Track Tối Ưu Chi Phí Opus — Code #1 + #2 đã push lên PR #585 (chờ merge+deploy), #3 vẫn chặn (2026-08-23)
 

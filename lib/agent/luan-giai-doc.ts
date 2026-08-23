@@ -200,14 +200,44 @@ function trimLaSo(text: string, phan: number): string {
 /**
  * Phần "=== LÁ SỐ ===" mà `buildPrompt(phan)` đặt trước câu lệnh luận — tức
  * ĐÚNG lát lá số hợp với phần đó (phần 24 lấy đầu lá số + khối 9 đại vận +
- * cách cục). Tool "Vận Hạn 12 Tháng Tới" dùng nó làm nền cho 12 phần tháng.
+ * cách cục).
  *
- * 🔑 Có hàm này để chỗ gọi KHỎI phải cắt chuỗi kết quả của `buildPrompt`
- * (`split('\n\nPHẦN 24')`) — cắt chuỗi thì đổi một chữ trong prompt là bộ cắt
- * câm rồi nhét CẢ prompt phần 24 vào prompt phần tháng, không lỗi nào bắn ra.
+ * ⚠️ KHÔNG còn chỗ gọi nào (2026-08-23) — tool "Vận Hạn 12 Tháng Tới" đã
+ * chuyển sang `laSoContextFull` (gửi toàn văn, không cắt) sau khi đo thấy phần
+ * tiết kiệm token của `trimLaSo(24)` nhỏ mà đổi lại mất khả năng đối chiếu
+ * Mệnh/11 cung còn lại. GIỮ hàm này (không xoá) làm đường lùi có sẵn nếu sau
+ * này cần trim lại theo `phan` — `buildPrompt` (dùng chung `trimLaSo`) cũng
+ * đang ở tình trạng tương tự, xem chú thích tại đó.
  */
 export function laSoContextFor(phan: number, laSoText: string): string {
   return '=== LÁ SỐ ===\n' + trimLaSo(laSoText, phan);
+}
+
+/**
+ * Bản KHÔNG CẮT của `laSoContextFor` — gửi TOÀN VĂN lá số thay vì trimLaSo.
+ *
+ * 🔑 Đo thật trên lá số mẫu (2026-08-23, Henry hỏi lại "trim còn thiếu dữ liệu
+ * không, giờ dùng model context rộng thì có cần trim nữa"): `trimLaSo(text,24)`
+ * — nhánh 12 phần THÁNG của "Vận Hạn 12 Tháng Tới" đang dùng qua
+ * `laSoContextFor` — chỉ bỏ ĐÚNG khối `=== 12 CUNG ===` (32–38% toàn văn,
+ * ~8-10K ký tự trên lá số thật), giữ nguyên header + toàn bộ 9 đại vận + cách
+ * cục. Không phải bug (mỗi tháng vẫn nhận chi tiết sao của ĐÚNG cung nguyệt
+ * hạn/tiểu hạn/lưu niên qua `describeThangForLLM`), nhưng cắt bỏ 11 cung còn
+ * lại là bỏ khả năng model tự đối chiếu với Mệnh khi cần.
+ * Ba lý do đủ để bỏ hẳn trim ở đây, khớp đúng hướng buildPromptCached đã chọn
+ * cho 4 phần đầu + toàn bộ Luận Giải 24 phần: (1) toàn văn dài nhất đo được
+ * ~27K ký tự — vẫn chỉ vài % context của MỌI provider đang dùng (Gemini/Kimi/
+ * Opus, thấp nhất cũng hàng trăm nghìn token) — trim CHƯA BAO GIỜ là chuyện
+ * "vừa context", luôn là chuyện GIÁ; (2) header+đại vận+cách cục vốn đã
+ * chiếm ~62-68% toàn văn nên phần trim còn tiết kiệm được không nhiều; (3)
+ * provider ĐANG primary (`chat.standalone_provider`) là Gemini Flash
+ * $0.15/1M input — phần thêm vào tốn ~200-400đ cho cả 12 tháng; rơi về
+ * Kimi/Opus (đang xếp backup) cũng chỉ ~4.000-7.000đ/lượt. Đổi lấy bỏ hẳn một
+ * nguy cơ thiếu dữ liệu — đúng chiều Henry chốt: "đừng cắt nhiều quá dẫn đến
+ * luận giải sai/thiếu".
+ */
+export function laSoContextFull(laSoText: string): string {
+  return '=== LÁ SỐ (ĐẦY ĐỦ, KHÔNG CẮT) ===\n' + laSoText;
 }
 
 /**

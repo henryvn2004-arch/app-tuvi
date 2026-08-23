@@ -109,7 +109,12 @@ if (!MARKERS || typeof MARKERS !== 'object') {
 }
 
 // ── Luật 3: chuỗi mốc mà server đi dò phải khớp output ───────
-const CONSUMERS = ['app/api/lasotuvi/route.ts', 'lib/agent/phu-the-luan-giai.ts'];
+// 🔴 VÁ 2026-08-23: trước đây liệt `app/api/lasotuvi/route.ts`, nhưng logic
+// `findMark`/`trimLaSo` đã DỜI sang `lib/agent/luan-giai-doc.ts` từ trước (xem
+// chú thích đầu file đó) — route.ts giờ 0 mốc literal nào, nên entry cũ trở
+// thành một cái tick xanh KHÔNG kiểm gì (đúng lớp lỗi luật này sinh ra để
+// chặn: một mốc trôi đi mà không ai biết). Đổi sang đúng file đang sống logic.
+const CONSUMERS = ['lib/agent/luan-giai-doc.ts', 'lib/agent/phu-the-luan-giai.ts'];
 // Mốc do CHÍNH route chèn vào prompt (không phải formatter dựng) → miễn trừ,
 // kèm lý do ngay tại chỗ để lần sau khỏi phải đi tra.
 const ROUTE_OWNED = new Set([
