@@ -156,7 +156,7 @@ async function handleGenerate(request: NextRequest, body: Record<string, unknown
     const llmRes = await llmTextFull({
       system: PHU_THE_LUAN_GIAI_SYSTEM_PROMPT,
       prompt: buildPhuTheLuanGiaiPrompt(laSoText, undefined, userGender),
-      maxTokens: 900,
+      maxTokens: 1350, // nâng 50% cùng đợt (Henry chốt 2026-08-20)
     });
     phuTheLuanGiai = llmRes.text.trim();
     void logLlmUsage('chan-dung-vo-chong', llmRes.model, {
@@ -260,7 +260,7 @@ async function handleGenerate(request: NextRequest, body: Record<string, unknown
 
   let raw: string;
   try {
-    const llmRes = await llmTextFull({ system: sys, prompt: userMsg, maxTokens: 1100 });
+    const llmRes = await llmTextFull({ system: sys, prompt: userMsg, maxTokens: 1650 }); // nâng 50% (Henry chốt 2026-08-20)
     raw = llmRes.text;
     void logLlmUsage('chan-dung-vo-chong', llmRes.model, {
       input_tokens: llmRes.usage.input_tokens,

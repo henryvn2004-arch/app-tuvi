@@ -157,9 +157,16 @@ export const JOBS: JobSpec[] = [
   { key: 'keyword-suggest', label: 'Quét từ khoá (Google Suggest)', source: 'vercel', everyMinutes: 7 * D,
     schedule: 'T3 hằng tuần', sink: 'keyword_ideas', path: '/api/cron/keyword-suggest',
     since: '2026-08-01' },
-  { key: 'topic-topup', label: 'Nạp chủ đề tuần (2 bề mặt)', source: 'vercel', everyMinutes: 7 * D,
+  { key: 'topic-topup', label: 'Nạp chủ đề tuần (3 bề mặt)', source: 'vercel', everyMinutes: 7 * D,
     schedule: 'T4 hằng tuần', sink: 'topic_queue', path: '/api/cron/topic-topup',
     since: '2026-08-01' },
+  // Tiêu thụ đúng hàng đợi job trên vừa đổ vào — CHẠY SAU nó cùng ngày (T4) rồi
+  // lại T7 (còn dư trước lượt gieo tuần sau). Khoảng trống LỚN NHẤT giữa hai
+  // lượt là T7→T4 tuần sau = 4 ngày ⇒ `everyMinutes` lấy mốc đó, không phải
+  // khoảng T4→T7 (3 ngày) — đúng luật đã ghi ở đầu file.
+  { key: 'cron-khao-luan-tamly', label: 'Viết Vấn Đáp tâm lý (Kimi, 1→3-5 bài)',
+    source: 'vercel', everyMinutes: 4 * D, schedule: 'T4 · T7, 12:00 VN', sink: 'khao_luan',
+    path: '/api/cron-khao-luan-tamly', since: '2026-08-23' },
   // Nối lại khâu CUỐI của pipeline media, vốn đứt âm thầm từ 16/07: 86 bài
   // `van_dap` render xong mà `yt_status='error'`, 84 trong số đó cùng một
   // `invalid_grant`. Trước đây lỗi chỉ nằm trong một cột DB nên không job nào

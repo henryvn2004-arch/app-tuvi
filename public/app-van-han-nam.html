@@ -73,7 +73,6 @@
 .vh-stars{font-size:12.5px;color:var(--text-mid);line-height:1.65;margin-top:3px}
 .vh-stars .cat{color:#1a6b3a}.vh-stars .sat{color:#C0392B}.vh-stars .bai{color:#9B2020}
 .vh-nen{font-size:11.5px;color:var(--text-lt);margin-top:4px}
-.vh-cut{font-size:11.5px;color:#9B2020;background:#fff0f0;border-radius:4px;padding:4px 7px;margin:6px 0}
 .vh-overview{display:grid;grid-template-columns:repeat(auto-fit,minmax(118px,1fr));gap:7px;margin:10px 0 2px}
 .vh-ov{background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:7px 9px}
 .vh-ov b{display:block;font-family:var(--serif);font-size:12.5px}
@@ -143,8 +142,9 @@ window.SHELL_INTRO={key:'van-han-nam',title:'Vận Hạn 12 Tháng Tới',desc:'
 <script src="/auth.js?v=2"></script>
 <script src="/tuvi-paywall.js?v=21"></script>
 <script src="/nav.js?v=22" data-icons-only></script>
-<script src="/shell.js?v=72"></script>
-<script src="/tools-shared/ai-loading-steps.js?v=8"></script>
+<script src="/shell.js?v=74"></script>
+<script src="/tools-shared/ai-loading-steps.js?v=9"></script>
+<script src="/tools-shared/phan-pool.js?v=1"></script>
 <script>
 TuviForm.render('tuviFormHost', {mode:'compact', gioitinh:'nam'});
 TuviPaywall.init({product:'van-han-nam'});
@@ -159,11 +159,14 @@ function vnNow(){
   return {d:+p.day, m:+p.month, y:+p.year};
 }
 var NOW = vnNow();
-var TU_THANG = NOW.m, TU_NAM = NOW.y;
-// toolType = tiền tố slug. CÓ mốc tháng bắt đầu vì kết quả neo theo cửa sổ 12
-// tháng: cùng lá số nhưng mở tháng khác là một sản phẩm khác, dùng chung slug
-// thì tháng sau mở ra vẫn nhận bản luận của cửa sổ CŨ mà không gì báo.
-var TOOL_TYPE = 'van-han-nam-' + TU_NAM + '-' + String(TU_THANG).padStart(2,'0');
+var TU_NGAY = NOW.d, TU_THANG = NOW.m, TU_NAM = NOW.y;
+// toolType = tiền tố slug, MANG mốc THÁNG ÂM bắt đầu — gán sau khi server trả
+// khung (chỉ server biết ranh giới tháng âm). Cùng lá số nhưng mở ở tháng âm
+// khác là một sản phẩm khác; dùng chung slug thì tháng sau mở ra vẫn nhận bản
+// luận của cửa sổ CŨ mà không gì báo.
+// ⚠️ Mốc phải là tháng ÂM chứ không phải tháng dương: tháng âm đổi ở GIỮA tháng
+// dương, nên neo theo tháng dương là hai cửa sổ khác nhau dùng chung một slug.
+var TOOL_TYPE = '';
 
 var CUNG_ORDER=['Mệnh','Phụ Mẫu','Phúc Đức','Điền Trạch','Quan Lộc','Nô Bộc','Thiên Di','Tật Ách','Tài Bạch','Tử Tức','Phu Thê','Huynh Đệ'];
 var SC_DIMS=['thienVan','canCo','mayMan','phuTro','binhYen','benVung'];
@@ -172,8 +175,10 @@ function scoreColor(t){ return t>=7?'var(--green)':t>=5?'var(--gold-soft)':'var(
 function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
 var _astrolabe=null,_hoTen='',_ngay=0,_thang=0,_nam=0,_gioitinh='nam',_laSoText=null;
-var _khung=null,_labels=null,_tongPhan=0,_pendingSlug=null,_currentPhan=0,_store={};
+var _khung=null,_labels=null,_tongPhan=0,_pendingSlug=null,_store={};
 var _pace=(window.AiLoadingSteps&&AiLoadingSteps.pacer)?AiLoadingSteps.pacer():null;
+// Số phần chạy song song — xem lý do chọn 3 trong tools-shared/phan-pool.js.
+var PHAN_CONCURRENCY=3;
 var SB_URL_VH='https://dciwkfdqhhddeymlisey.supabase.co';
 var SB_ANON_VH='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRjaXdrZmRxaGhkZGV5bWxpc2V5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyMzQ2MzksImV4cCI6MjA4ODgxMDYzOX0._3aXoe0hO-46J1gASUiNv__tWjSzLZFTL0M3-47L26I';
 
@@ -202,10 +207,12 @@ async function doXem(){
     // Khung 12 tháng tính ở SERVER (nguồn duy nhất của phép nguyệt hạn — dùng
     // chung với rail chat và thẻ Vận Ngày). 0 lượt LLM, 0đ, không cần đăng nhập.
     var kr=await fetch('/api/van-han-nam?action=khung',{method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({birth:_birthPayload(),tuThang:TU_THANG,tuNam:TU_NAM})});
+      body:JSON.stringify({birth:_birthPayload(),tuNgay:TU_NGAY,tuThang:TU_THANG,tuNam:TU_NAM})});
     var kd=await kr.json();
     if(!kd||!kd.khung) throw new Error((kd&&kd.error)||'Không dựng được khung 12 tháng.');
     _khung=kd.khung;_labels=kd.labels;_tongPhan=kd.tongPhan;
+    var t0=_khung.thangs[0];
+    TOOL_TYPE='van-han-nam-al'+t0.namAL+'-'+String(t0.thangAL).padStart(2,'0')+(t0.isLeap?'n':'');
 
     render(ls);
     document.getElementById('miniChart').innerHTML=renderGrid(ls,{name:name,gioitinh:gioitinh,dd:dd,mm:mm,yyyy:yyyy,hh:hh,gioChi:CHI[gioAmIdx],amLich:conv.amLich});
@@ -219,8 +226,8 @@ async function doXem(){
     if(window.SHELL_INTRO)Shell.dismissIntro(window.SHELL_INTRO.key);
     Shell.setContext({
       birth:{day:dd,month:mm,year:yyyy,hourBranch:gioAmIdx,gender:gioitinh,name:name||undefined},
-      label:'Vận hạn 12 tháng · '+(name||'lá số')+' · từ '+TU_THANG+'/'+TU_NAM,
-      greeting:'Khung **12 tháng tới** (từ '+TU_THANG+'/'+TU_NAM+' đến '+_khung.denThang+'/'+_khung.denNam+') đã sẵn sàng. Hỏi tôi về bất kỳ tháng nào.',
+      label:'Vận hạn 12 tháng · '+(name||'lá số')+' · từ '+_khung.tuNhan,
+      greeting:'Khung **12 tháng âm lịch tới** ('+_khung.tuNhan+' → '+_khung.denNhan+', tức '+_khung.duongTu+' – '+_khung.duongDen+' dương lịch) đã sẵn sàng. Hỏi tôi về bất kỳ tháng nào.',
       chips:buildChips()
     });
     Shell.setShareable({kind:'text',toolId:'van-han-nam',title:'Vận hạn 12 tháng của '+(name||'tôi'),text:shareLines()});
@@ -243,21 +250,22 @@ function _birthPayload(){
 
 function shareLines(){
   var L=[(_hoTen||'Lá số')+' · '+_ngay+'/'+_thang+'/'+_nam+' · '+(_gioitinh==='nam'?'Nam':'Nữ')];
-  L.push('Vận hạn 12 tháng: '+TU_THANG+'/'+TU_NAM+' → '+_khung.denThang+'/'+_khung.denNam);
+  L.push('Vận hạn 12 tháng âm: '+_khung.tuNhan+' → '+_khung.denNhan+' ('+_khung.duongTu+' – '+_khung.duongDen+')');
   var dv=_astrolabe.daiVanHienTai;
   if(dv) L.push('Đại vận hiện tại: '+dv.diaChi+' ('+dv.tuoiStart+'–'+dv.tuoiEnd+'t)'+(dv.scoring&&dv.scoring.tong!=null?' · '+dv.scoring.tong+'/10':''));
   L.push('');
   _khung.thangs.forEach(function(t){
-    if(t.loi){ L.push(t.nhan+': '+t.loi); return; }
-    L.push(t.nhan+': '+t.doan.map(function(d){return d.cungNguyetHan;}).join(' → '));
+    L.push(t.nhanDay+': '+(t.loi?t.loi:('nguyệt hạn cung '+t.cungNguyetHan)));
   });
   return L.join('\n');
 }
 
+// Chip LUÔN kèm quãng ngày DƯƠNG: rail tra nguyệt vận theo tháng dương, đưa
+// mỗi "tháng 7 ÂL" là nó tra nhầm sang tháng 7 dương lịch.
 function buildChips(){
   var c=[], t0=_khung.thangs[0], t1=_khung.thangs[1];
-  if(t0&&!t0.loi) c.push('Tháng '+t0.nhan+' nên tập trung việc gì?');
-  if(t1&&!t1.loi) c.push('Tháng '+t1.nhan+' có gì cần né?');
+  if(t0&&!t0.loi) c.push(t0.nhanDay+' tôi nên tập trung việc gì?');
+  if(t1&&!t1.loi) c.push(t1.nhanDay+' có gì cần né?');
   c.push('Trong 12 tháng tới, tháng nào thuận nhất?');
   c.push('Tiểu vận năm nay nói lên điều gì?');
   return c;
@@ -273,7 +281,9 @@ function render(ls){
   function card(lb,t){ var col=t!=null?scoreColor(t):'var(--text-lt)'; return '<div class="sc"><div class="lb">'+esc(lb)+'</div><div class="vl" style="color:'+col+'">'+(t!=null?t:'—')+'<small>/10</small></div><div class="pbar"><i style="width:'+(t!=null?t*10:0)+'%;background:'+col+'"></i></div></div>'; }
   document.getElementById('vhScores').innerHTML=
     card('Tổng quan lá số',overall) + card('Đại vận '+(dvHT?dvHT.tuoiStart+'–'+dvHT.tuoiEnd+'t':''),dvTong) +
-    '<div class="sc"><div class="lb">Khung 12 tháng</div><div class="vl" style="font-size:17px;color:var(--heading)">'+TU_THANG+'/'+TU_NAM+' → '+_khung.denThang+'/'+_khung.denNam+'</div><div class="pbar"><i style="width:100%;background:var(--gold-soft)"></i></div></div>';
+    '<div class="sc"><div class="lb">Khung 12 tháng âm</div><div class="vl" style="font-size:15px;color:var(--heading)">'+esc(_khung.tuNhan)+' → '+esc(_khung.denNhan)+'</div>'+
+    '<div style="font-size:11px;color:var(--text-lt);margin-top:3px">'+esc(_khung.duongTu)+' – '+esc(_khung.duongDen)+' dương lịch</div>'+
+    '<div class="pbar"><i style="width:100%;background:var(--gold-soft)"></i></div></div>';
 
   var dvSo=_dvHienTaiSo(ls);
   var PRE=[null,1,14,14+dvSo,24];   // phần 1–4 → phần tương ứng bên Luận Giải
@@ -285,7 +295,7 @@ function render(ls){
     var lock=TuviPaywall.sectionLockHtml({id:'sec-ai-lock-'+p,product:'van-han-nam'});
     S.push('<section class="sec" id="sec-'+p+'"><div class="sec-h"><div class="sec-n">'+p+'</div><h3>'+esc(_labels[p]||('Phần '+p))+'</h3></div>'+
       '<div class="card">'+body+lock+'<div class="claude-content" id="claude-content-'+p+'" style="display:none"></div>'+
-      ask(p<=4?('Luận sâu phần: '+_labels[p]):('Tháng '+_khung.thangs[p-5].nhan+' của tôi thế nào?'))+'</div></section>');
+      ask(p<=4?('Luận sâu phần: '+_labels[p]):(_khung.thangs[p-5].nhanDay+' của tôi thế nào?'))+'</div></section>');
   }
   document.getElementById('vhBody').innerHTML=S.join('');
   if(window.mountIcons) window.mountIcons(document.getElementById('vhBody'));
@@ -308,25 +318,17 @@ function _dvHienTaiSo(ls){
 function renderThang(t){
   if(!t) return '<div class="phan-empty">Không có dữ liệu tháng này.</div>';
   if(t.loi) return '<div class="phan-empty">'+esc(t.loi)+'</div>';
-  var h='';
-  var doiTieuHan = t.doan.length>1 && t.doan[0].cungTieuHan!==t.doan[1].cungTieuHan;
-  if(t.doan.length>1){
-    h+='<div class="vh-cut">Tháng dương lịch này bị <b>2 tháng âm lịch</b> cắt ngang — hai đoạn dưới đây là hai hạn KHÁC nhau, đọc theo đúng khoảng ngày.'+
-      (doiTieuHan?' Giao thừa cũng rơi vào tháng này nên <b>nền tiểu hạn đổi giữa chừng</b>.':'')+'</div>';
-  }
-  t.doan.forEach(function(d){
-    h+='<div class="vh-doan">';
-    h+='<div class="vh-doan-hd"><b>'+(t.doan.length>1?('Ngày '+d.tuNgay+'–'+d.denNgay+'/'+t.thang):('Cả tháng '+t.nhan))+'</b> · ÂL tháng '+d.thangAL+(d.isLeap?' nhuận':'')+'/'+d.namAL+(d.dangDienRa?' · <b>đang diễn ra</b>':'')+'</div>';
-    h+='<div class="vh-cung">Nguyệt hạn: cung '+esc(d.cungNguyetHan)+'</div>';
-    var st=[];
-    st.push('Chính tinh: '+(d.chinhTinh.length?esc(d.chinhTinh.join(', ')):'vô chính diệu (mượn cung xung chiếu)'));
-    if(d.catTinh.length) st.push('<span class="cat">Cát tinh: '+esc(d.catTinh.join(', '))+'</span>');
-    if(d.satTinh.length) st.push('<span class="sat">Sát tinh: '+esc(d.satTinh.join(', '))+'</span>');
-    if(d.baiTinh.length) st.push('<span class="bai">Bại tinh: '+esc(d.baiTinh.join(', '))+'</span>');
-    h+='<div class="vh-stars">'+st.join('<br>')+'</div>';
-    h+='<div class="vh-nen">Nền năm: tiểu hạn cung '+esc(d.cungTieuHan)+' · lưu niên đại hạn cung '+esc(d.cungLuuNien)+'</div>';
-    h+='</div>';
-  });
+  var h='<div class="vh-doan">';
+  h+='<div class="vh-doan-hd"><b>'+esc(t.duongTu)+' – '+esc(t.duongDen)+'</b> dương lịch · '+t.soNgay+' ngày'+(t.dangDienRa?' · <b>đang diễn ra</b>':'')+'</div>';
+  h+='<div class="vh-cung">Nguyệt hạn: cung '+esc(t.cungNguyetHan)+'</div>';
+  var st=[];
+  st.push('Chính tinh: '+(t.chinhTinh.length?esc(t.chinhTinh.join(', ')):'vô chính diệu (mượn cung xung chiếu)'));
+  if(t.catTinh.length) st.push('<span class="cat">Cát tinh: '+esc(t.catTinh.join(', '))+'</span>');
+  if(t.satTinh.length) st.push('<span class="sat">Sát tinh: '+esc(t.satTinh.join(', '))+'</span>');
+  if(t.baiTinh.length) st.push('<span class="bai">Bại tinh: '+esc(t.baiTinh.join(', '))+'</span>');
+  h+='<div class="vh-stars">'+st.join('<br>')+'</div>';
+  h+='<div class="vh-nen">Nền năm ÂL '+t.namAL+(t.tuoi?' (tuổi '+t.tuoi+')':'')+': tiểu hạn cung '+esc(t.cungTieuHan)+' · lưu niên đại hạn cung '+esc(t.cungLuuNien)+'</div>';
+  h+='</div>';
   if(t.toHop&&t.toHop.length){
     h+='<div class="pregen-block"><div class="pregen-title"><span class="ic-inline" data-icon-emoji="🔮" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">🔮</span> Tổ hợp sao trong các cung hạn</div>';
     t.toHop.forEach(function(c){
@@ -349,7 +351,10 @@ function wireAsk(root){
 }
 function renderJump(){
   var h='';
-  for(var i=1;i<=_tongPhan;i++) h+='<a data-i="'+i+'"'+(i===1?' class="on"':'')+'>'+esc(_labels[i]||('Phần '+i))+'</a>';
+  for(var i=1;i<=_tongPhan;i++){
+    var lb = i>=5 && _khung.thangs[i-5] ? _khung.thangs[i-5].nhan : (_labels[i]||('Phần '+i));
+    h+='<a data-i="'+i+'"'+(i===1?' class="on"':'')+'>'+esc(lb)+'</a>';
+  }
   document.getElementById('vhJump').innerHTML=h;
   var ws=document.getElementById('ws');
   document.querySelectorAll('#vhJump a').forEach(function(a){
@@ -440,9 +445,40 @@ async function _startAI(){
   document.getElementById('vhUnlock').style.display='none';
   document.getElementById('vhProgress').style.display='block';
   _paintSecLocks(false);
-  _currentPhan=0;_store={};
+  _store={};
   _pace&&_pace.reset();
-  await _loadNext();
+  // Kimi K3 (primary) ~120 giây/phần — chạy tuần tự 12+ phần có thể chờ rất
+  // lâu. Bể PhanPool chạy PHAN_CONCURRENCY phần song song (mỗi phần độc lập,
+  // không đọc kết quả phần khác) ⇒ giảm tổng thời gian chờ ~PHAN_CONCURRENCY
+  // lần mà không đụng gì tới model. Xem tools-shared/phan-pool.js.
+  //
+  // 🔑 BẮT BUỘC bắn PHẦN 1 RIÊNG LẺ trước khi mở bể song song — cùng lý do đã
+  // ghi ở app-luan-giai.html (Code #1, CLAUDE.md track tối ưu chi phí Opus).
+  // /api/van-han-nam nay cache `system` cho phần 1-4 (trùng 4 phần đầu của
+  // Luận Giải); mở PHAN_CONCURRENCY song song ngay từ đầu thì 3 lượt đầu tiên
+  // bắn gần như đồng thời (staggerMs 400ms, ngắn hơn nhiều so với thời gian
+  // một lượt LLM ghi xong cache) ⇒ cache-miss cả 3, tốn thêm phí ghi thay vì
+  // tiết kiệm. Phần 5+ (nguyệt vận) không cache nên không bị ảnh hưởng dù
+  // trước/sau lượt mồi này.
+  document.getElementById('vhProgress').textContent='Đang luận phần 1 / '+_tongPhan+'...';
+  var primeOk=await _runPhanVanHan(1);
+  var result=await PhanPool.run({
+    total:_tongPhan,
+    concurrency:PHAN_CONCURRENCY,
+    progressEl:'vhProgress',
+    progressPrefix:'Đang luận phần',
+    pace:_pace,
+    // Phần 1 đã chạy ở lượt mồi trên — bể chỉ cần TRẢ LẠI kết quả đó, không
+    // gọi lại API (gọi lại là tốn thêm một lượt model vô ích).
+    runPart:function(p){ return p===1?Promise.resolve(primeOk):_runPhanVanHan(p); },
+  });
+  if(result.ok){
+    document.getElementById('vhProgress').textContent='✓ Luận vận hạn hoàn tất';
+    _saveResult();
+  }else{
+    document.getElementById('vhProgress').textContent=
+      '⚠ '+result.failed.length+' phần lỗi (phần '+result.failed.join(', ')+') — bấm ↻ Thử lại ở từng phần rồi tải lại trang.';
+  }
 }
 // Truy vấn RAG theo từng phần — phần tháng bám cung nguyệt hạn + sao của đúng
 // tháng đó (không phải một truy vấn chung cho cả 12 tháng).
@@ -453,20 +489,10 @@ function ragQuery(p){
   if(p===4) return 'tiểu hạn lưu niên '+(_astrolabe.chiNamXem||'')+' vận năm hiện tại';
   var t=_khung.thangs[p-5];
   if(!t||t.loi) return 'lưu nguyệt hạn vận tháng';
-  var d=t.doan.find(function(x){return x.dangDienRa;})||t.doan[0];
-  return 'lưu nguyệt hạn cung '+(d?d.cungNguyetHan:'')+' '+(d?d.chinhTinh.join(' '):'')+' vận tháng';
+  return 'lưu nguyệt hạn cung '+t.cungNguyetHan+' '+t.chinhTinh.join(' ')+' vận tháng';
 }
-async function _loadNext(){
-  if(_currentPhan>=_tongPhan){
-    document.getElementById('vhProgress').textContent='✓ Luận vận hạn hoàn tất';
-    _saveResult();
-    return;
-  }
-  _currentPhan++;
-  var p=_currentPhan;
-  var _eta=_pace?_pace.remainText(_tongPhan-p+1):'';
-  document.getElementById('vhProgress').textContent='Đang luận phần '+p+' / '+_tongPhan+(_eta?' · '+_eta:'...');
-  _pace&&_pace.begin();
+// Chạy MỘT phần — gọi từ trong bể (PhanPool) và trực tiếp từ nút "↻ Thử lại".
+async function _runPhanVanHan(p){
   var box=document.getElementById('claude-content-'+p);
   var w=null;
   if(box){
@@ -479,35 +505,41 @@ async function _loadNext(){
     }
   }
   var doneWait=function(){ if(w){ w.stop(); w=null; } };
-  var secEl=document.getElementById('sec-'+p);
-  if(secEl)secEl.scrollIntoView({behavior:'smooth',block:'start'});
   try{
     var docs='';
     try{
       var sr=await fetch('/api/search',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({query:ragQuery(p),matchCount:p===1?10:7})});
       docs=(await sr.json()).docs||'';
     }catch(e){}
-    if(p>1)await new Promise(function(r){setTimeout(r,600);});
     var resp=await fetch('/api/van-han-nam',{method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({birth:_birthPayload(),tuThang:TU_THANG,tuNam:TU_NAM,phan:p,docs:docs})});
+      body:JSON.stringify({birth:_birthPayload(),tuNgay:TU_NGAY,tuThang:TU_THANG,tuNam:TU_NAM,phan:p,docs:docs})});
     var data=await resp.json();
     if(data.error||!data.luanGiai){
       doneWait();
-      if(box)box.innerHTML='<div class="laso-error">Lỗi khi luận phần '+p+'. <button class="btn" onclick="window._vhRetry()">↻ Thử lại</button></div>';
-      return;
+      if(box)box.innerHTML='<div class="laso-error">Lỗi khi luận phần '+p+'. <button class="btn" onclick="window._vhRetry('+p+')">↻ Thử lại</button></div>';
+      return false;
     }
     _store[p]=data.luanGiai;
-    _pace&&_pace.end();
     doneWait();
     if(box)box.innerHTML=renderMarkdown(data.luanGiai);
+    return true;
   }catch(e){
     doneWait();
-    if(box)box.innerHTML='<div class="laso-error">Lỗi phần '+p+': '+esc(e.message)+' <button class="btn" onclick="window._vhRetry()">↻ Thử lại</button></div>';
-    return;
+    if(box)box.innerHTML='<div class="laso-error">Lỗi phần '+p+': '+esc(e.message)+' <button class="btn" onclick="window._vhRetry('+p+')">↻ Thử lại</button></div>';
+    return false;
   }
-  await _loadNext();
 }
-window._vhRetry=function(){ _currentPhan--; _loadNext(); };
+window._vhRetry=function(p){
+  _runPhanVanHan(p).then(function(ok){
+    if(ok){
+      var n=0; for(var k=1;k<=_tongPhan;k++)if(_store[k])n++;
+      if(n>=_tongPhan){
+        document.getElementById('vhProgress').textContent='✓ Luận vận hạn hoàn tất';
+        _saveResult();
+      }
+    }
+  });
+};
 
 function renderMarkdown(text){
   var lines=String(text||'').split('\n'),out='';
@@ -551,7 +583,7 @@ function showForm(){
 
 function _pageInit(){
   document.getElementById('fmSub').textContent=
-    'Lập lá số theo cổ pháp rồi soi tiểu vận năm và nguyệt vận từng tháng — cung hạn, sao, cách cục vận của 12 tháng từ '+TU_THANG+'/'+TU_NAM+' đến hết.';
+    'Lập lá số theo cổ pháp rồi soi tiểu vận năm và nguyệt vận từng tháng — 12 tháng ÂM LỊCH kể từ tháng âm đang sống, mỗi tháng ghi rõ quãng ngày dương lịch tương ứng.';
   Shell.prefillForm();
   if(Shell.autoRun()&&document.getElementById('ngay').value)doXem();
 }

@@ -14,14 +14,21 @@ import {
   type ActivityKey,
 } from '../../tuvi-engine/dist/ngay-tot/index.js';
 import { matchVanHanCombos, formatComboLines, type LayerCung } from './vanHanCombos';
-import { resolveNhatHanIdx, resolveNguyetHanSegments } from '../engine/van-ngay';
+import {
+  resolveNhatHanIdx,
+  lunarMonthsFrom,
+  resolveNguyetHanForLunarMonth,
+  dmy,
+  nhanThangAL,
+  type LunarMonthSpan,
+} from '../engine/van-ngay';
 
 // ─── Hướng dẫn dùng tool (chèn vào system prompt) ──────────────
 export const TOOLS_INSTRUCTION = (hasLaso: boolean, hasProfiles = false) => `
 
 CÔNG CỤ (tool) — DÙNG ĐÚNG LÚC, TUYỆT ĐỐI KHÔNG bịa số liệu thời gian:
 KHÔNG BAO GIỜ TRÌ HOÃN: tuyệt đối CẤM trả lời bằng lời hứa sẽ làm ("để tôi tra", "để tôi gọi tool", "chờ tôi xem", "tra xong sẽ trả lời", "xin lỗi để tôi tra ngay"). Cần dữ liệu tool → GỌI tool NGAY trong CHÍNH lượt này rồi luận trong cùng câu trả lời. Thông tin CẤU TRÚC ĐÃ có trong DỮ LIỆU LÁ SỐ (12 cung, sao, cách cục) → luận THẲNG, KHÔNG gọi tool. Đặc biệt: hỏi về một CÁCH CỤC/cung/sao đã nêu trong lá số (vd cách cục cung Phu Thê) thì luận ngay từ dữ liệu, KHÔNG cần tra vận. LƯU Ý: bản kê lá số CỐ Ý không chứa đại vận (đại vận là tầng thời gian, chỉ mượn cung đứng) — hỏi về ĐẠI VẬN / vận hạn / một năm/giai đoạn thì PHẢI gọi tra_tieu_van (trả về đại vận kèm cung nó đóng + điểm), không tự bịa. Mỗi câu trả lời gửi người dùng PHẢI là luận giải hoàn chỉnh, không phải thông báo ý định.
-${hasLaso ? '- NGÀY SINH MỚI: nếu tin nhắn người dùng cung cấp một NGÀY SINH (ngày+tháng+năm) KHÁC với lá số đang nêu ở trên → GỌI lap_la_so với ngày mới và CHỈ luận trên kết quả tool mới đó; TUYỆT ĐỐI không trộn với lá số cũ và KHÔNG tự an cung/sao bằng tay (engine là nguồn lá số duy nhất).\n' : ''}${hasLaso ? '- Câu hỏi gắn với MỘT NĂM cụ thể (năm nay, năm sau, "bao giờ", một năm/tuổi nhất định) → GỌI tra_tieu_van để lấy cung tiểu hạn/lưu niên của năm + sao tại các cung đó (kèm tam hợp xung chiếu) + nền điểm ĐẠI VẬN. Tiểu vận KHÔNG có điểm riêng — luận ĐỦ CẢ HAI cung tool trả về: cung TIỂU HẠN và cung LƯU NIÊN ĐẠI HẠN, MỖI cung đọc cả tọa thủ + tam hợp xung chiếu, GỌI TÊN & luận cả hai (bỏ tầng lưu niên hay tiểu hạn đều là THIẾU), giữ đúng tốt/xấu của nó, rồi giới hạn BIÊN ĐỘ theo điểm đại vận, KHÔNG tự gán "điểm/10" cho năm. Không tự đoán cung/sao khi chưa gọi tool.\n' : ''}${hasLaso ? '- NHIỀU NĂM / BẢNG SO SÁNH: cung tiểu hạn & lưu niên đại hạn của MỖI năm PHẢI lấy từ tra_tieu_van cho CHÍNH năm đó — so sánh N năm thì gọi tool ĐỦ N lần (mỗi năm một lần), lấy Y NGUYÊN cung tool trả về. TUYỆT ĐỐI CẤM tự tính, tự nhớ, hay suy cung tiểu hạn/lưu niên của một năm từ năm khác (kể cả suy theo chu kỳ 12 năm — vẫn phải gọi tool cho từng năm để xác nhận). Năm nào CHƯA có kết quả tra_tieu_van thì KHÔNG được nêu tiểu hạn/lưu niên của năm đó. Đây là lỗi đã gặp: model tự nhẩm cung qua nhiều năm → sai lệch năm được năm không, các mốc cách 12 năm ra khác cung dù đáng lẽ trùng.\n' : ''}${hasLaso ? '- Câu hỏi về HẠN THÁNG / nguyệt hạn ("tháng X/YYYY", "tháng này thế nào"...) → GỌI tra_nguyet_van với ĐÚNG tháng/năm DƯƠNG LỊCH đang hỏi (hỏi "tháng này" thì dùng tháng/năm dương lịch của HÔM NAY đã nêu ở trên). Một tháng dương lịch thường bị CẮT NGANG bởi 2 tháng ÂM lịch — nếu tool trả về 2 ĐOẠN thì PHẢI phân biệt rõ theo ngày khi luận (KHÔNG gộp chung một hạn cho cả tháng); đoạn được đánh dấu "ĐANG DIỄN RA" là hạn đang áp dụng NGAY LÚC NÀY, luận theo đoạn đó khi hỏi về hiện tại/"tháng này".\n' : ''}${hasLaso ? '- Câu hỏi về HẠN NGÀY / nhật hạn ("ngày X tháng Y", "hôm nay"...) → GỌI tra_nhat_van; kết quả trả về cung nhật hạn theo Cách 1.\n' : ''}- Câu hỏi NGÀY TỐT để làm việc trọng đại (cưới hỏi, nhập trạch, khai trương, mua/bán nhà, khởi công, xuất hành...) trong một tháng → GỌI xem_ngay_tot.
+${hasLaso ? '- NGÀY SINH MỚI: nếu tin nhắn người dùng cung cấp một NGÀY SINH (ngày+tháng+năm) KHÁC với lá số đang nêu ở trên → GỌI lap_la_so với ngày mới và CHỈ luận trên kết quả tool mới đó; TUYỆT ĐỐI không trộn với lá số cũ và KHÔNG tự an cung/sao bằng tay (engine là nguồn lá số duy nhất).\n' : ''}${hasLaso ? '- Câu hỏi gắn với MỘT NĂM cụ thể (năm nay, năm sau, "bao giờ", một năm/tuổi nhất định) → GỌI tra_tieu_van để lấy cung tiểu hạn/lưu niên của năm + sao tại các cung đó (kèm tam hợp xung chiếu) + nền điểm ĐẠI VẬN. Tiểu vận KHÔNG có điểm riêng — luận ĐỦ CẢ HAI cung tool trả về: cung TIỂU HẠN và cung LƯU NIÊN ĐẠI HẠN, MỖI cung đọc cả tọa thủ + tam hợp xung chiếu, GỌI TÊN & luận cả hai (bỏ tầng lưu niên hay tiểu hạn đều là THIẾU), giữ đúng tốt/xấu của nó, rồi giới hạn BIÊN ĐỘ theo điểm đại vận, KHÔNG tự gán "điểm/10" cho năm. Không tự đoán cung/sao khi chưa gọi tool.\n' : ''}${hasLaso ? '- NHIỀU NĂM / BẢNG SO SÁNH: cung tiểu hạn & lưu niên đại hạn của MỖI năm PHẢI lấy từ tra_tieu_van cho CHÍNH năm đó — so sánh N năm thì gọi tool ĐỦ N lần (mỗi năm một lần), lấy Y NGUYÊN cung tool trả về. TUYỆT ĐỐI CẤM tự tính, tự nhớ, hay suy cung tiểu hạn/lưu niên của một năm từ năm khác (kể cả suy theo chu kỳ 12 năm — vẫn phải gọi tool cho từng năm để xác nhận). Năm nào CHƯA có kết quả tra_tieu_van thì KHÔNG được nêu tiểu hạn/lưu niên của năm đó. Đây là lỗi đã gặp: model tự nhẩm cung qua nhiều năm → sai lệch năm được năm không, các mốc cách 12 năm ra khác cung dù đáng lẽ trùng.\n' : ''}${hasLaso ? '- Câu hỏi về HẠN THÁNG / nguyệt hạn ("tháng X/YYYY", "tháng này", "tháng sau", "tháng Giêng", "tháng 7 âm"...) → GỌI tra_nguyet_van. Tool LUÔN chốt theo THÁNG ÂM LỊCH và trả về MỘT khối duy nhất — không còn chia đoạn "nửa đầu/nửa sau". Truyền tháng/năm DƯƠNG LỊCH làm mốc: hỏi "tháng này"/hiện tại → dùng ĐÚNG ngày/tháng/năm dương lịch của HÔM NAY (đã nêu ở trên); hỏi một tháng khác không rõ ngày (vd "tháng 3/2027", "tháng sau") → chỉ cần tháng/năm dương lịch gần đúng, để trống ngày (tool tự lấy giữa tháng làm mốc an toàn); hỏi theo THÁNG ÂM trực tiếp (vd "tháng Giêng", "tháng 7 âm lịch", "tháng Chạp") → quy đổi XẤP XỈ sang tháng dương lịch tương ứng dựa vào tháng ÂM hôm nay (đã nêu ở trên), tool sẽ tự chốt lại đúng ranh giới tháng âm dù mốc hơi lệch. Khi luận, LUÔN nêu nhãn tháng ÂM LỊCH kèm khoảng ngày dương tool trả về (vd "tháng 2 ÂL (15/3/2026 – 13/4/2026)"), CẤM gọi nó là "tháng X dương lịch".\n' : ''}${hasLaso ? '- Câu hỏi về HẠN NGÀY / nhật hạn ("ngày X tháng Y", "hôm nay"...) → GỌI tra_nhat_van; kết quả trả về cung nhật hạn theo Cách 1.\n' : ''}- Câu hỏi NGÀY TỐT để làm việc trọng đại (cưới hỏi, nhập trạch, khai trương, mua/bán nhà, khởi công, xuất hành...) trong một tháng → GỌI xem_ngay_tot.
 ${hasProfiles ? 'SỔ LÁ SỐ (một người chat có thể xem nhiều lá số — anh Tony, con gái…): mỗi lá số có TÊN riêng, không được lẫn.\n- Sau khi LẬP một lá số MỚI từ ngày sinh, hãy MỜI người dùng đặt tên để lưu (vd: "Bạn muốn lưu lá số này với tên gì — như anh Tony — để lần sau gọi nhanh không?"). Họ cho tên → GỌI luu_la_so(ten). Họ không muốn đặt → tự GỌI luu_la_so với tên gợi ý ngắn gọn (vd "Nam 2019").\n- Người dùng nhắc tới một lá số đã lưu ("xem lá số Tony", "lá số con gái thế nào") → GỌI mo_la_so(ten), rồi CHỈ luận trên lá số vừa mở, TUYỆT ĐỐI không trộn với lá số/giọng của người khác trong lịch sử.\n- Hỏi "có những lá số nào / danh sách lá số" → GỌI liet_ke_la_so.\n' : ''}Sau khi có kết quả tool, luận giải dứt khoát và neo vào đúng các con số tool trả về (đại vận điểm thấp / nhiều sát tinh phải cảnh báo rõ). Câu nào không cần tool thì trả lời thẳng.
 VẬN HẠN: áp ĐÚNG luật VẬN HẠN đã nêu trong system prompt ở trên (đại vận là tầng duy nhất có điểm/10 thật; tiểu/nguyệt/nhật vận không có điểm riêng, luận theo cách cục+sao của cung hạn; vận năm phải xét đủ cả cung tiểu hạn lẫn cung lưu niên đại hạn) — không lặp lại quy tắc ở đây, chỉ nhắc để không bỏ sót khi có kết quả tool.
 TỔ HỢP SAO CHÉO TẦNG: nếu kết quả tool có mục "TỔ HỢP SAO trong các cung hạn (cách cục vận)", ƯU TIÊN luận theo các tổ hợp đó — đây là cách cục hình thành khi đủ bộ sao rải qua nhiều tầng vận (vd Mã Khốc Khách), ý nghĩa rõ ràng và đáng tin hơn từng sao lẻ — tổ hợp tốt thì luận vận tốt, tổ hợp xấu thì luận xấu; sau đó điều chỉnh BIÊN ĐỘ theo điểm đại vận (KHÔNG để đại vận đảo ngược tốt/xấu của tổ hợp).`;
@@ -45,12 +52,13 @@ export function buildTools(hasLaso: boolean): any[] {
   if (hasLaso) {
     tools.push({
       name: 'tra_nguyet_van',
-      description: 'Tra lưu nguyệt hạn (hạn tháng) của lá số cho một tháng dương lịch cụ thể: cung nguyệt hạn + sao chính tại cung đó. Một tháng dương lịch thường trải qua 2 tháng âm lịch — khi đó tool trả về 2 đoạn hạn khác nhau kèm khoảng ngày dương của từng đoạn, và đánh dấu đoạn nào đang diễn ra ngay lúc này. Dùng khi user hỏi về một tháng cụ thể.',
+      description: 'Tra nguyệt hạn (hạn tháng) của lá số cho THÁNG ÂM LỊCH chứa một ngày dương lịch mốc — trả về MỘT khối hạn duy nhất (cung nguyệt hạn + sao, kèm nhãn tháng ÂM và khoảng ngày dương trọn tháng âm đó), KHÔNG chia đoạn. Dùng khi user hỏi về một tháng cụ thể ("tháng này", "tháng sau", "tháng 3/2027", hoặc theo tháng âm như "tháng Giêng", "tháng 7 âm lịch").',
       input_schema: {
         type: 'object',
         properties: {
-          thang: { type: 'integer', description: 'Tháng dương lịch (1–12)' },
-          nam:   { type: 'integer', description: 'Năm dương lịch, ví dụ 2027' },
+          thang: { type: 'integer', description: 'Tháng DƯƠNG LỊCH mốc (1–12). Nếu user hỏi theo tháng ÂM, quy đổi xấp xỉ sang tháng dương tương ứng dựa vào tháng ÂM hôm nay — tool sẽ tự chốt lại đúng ranh giới tháng âm.' },
+          nam:   { type: 'integer', description: 'Năm dương lịch tương ứng với thang, ví dụ 2027' },
+          ngay:  { type: 'integer', description: 'Ngày dương lịch mốc trong tháng đó (1–31), tùy chọn. Hỏi "tháng này"/hiện tại → truyền NGÀY HÔM NAY. Hỏi tháng khác không rõ ngày → để trống, tool tự lấy ngày 15 làm mốc an toàn.' },
         },
         required: ['thang', 'nam'],
       },
@@ -151,6 +159,48 @@ export function hanClusterLayers(palaces: any[], idx: number, label: string): La
   return out;
 }
 
+/**
+ * Khối dữ liệu MỘT THÁNG ÂM cho prompt — nguồn DUY NHẤT dựng câu chuyện
+ * "tháng âm này ra sao" cho LLM đọc. Dùng bởi CẢ tool `tra_nguyet_van` của
+ * rail (execTraNguyetVan ngay dưới) LẪN tool đứng riêng "Vận Hạn 12 Tháng
+ * Tới" (`lib/engine/van-han-12.ts`, re-export hàm này) — hai bề mặt phải nói
+ * CÙNG một thứ về cùng một tháng, chép bản thứ hai là hai bản trôi khỏi nhau.
+ *
+ * EXPORT vì đặt ở đây (không phải van-han-12.ts) để tránh vòng lặp import:
+ * hàm cần `describeHanCungRich` (định nghĩa ngay trên), mà van-han-12.ts đã
+ * import NGƯỢC từ file này — nó không thể là nơi định nghĩa hàm dùng chung.
+ */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function describeThangForLLM(lasoData: any, s: LunarMonthSpan): string {
+  const rs = resolveNguyetHanForLunarMonth(lasoData, s.thangAL, s.namAL);
+  const head = `=== ${nhanThangAL(s)} năm ${s.namAL} — dương lịch ${dmy(s.tu)} đến ${dmy(s.den)} (${s.soNgay} ngày) ===\n`;
+  if (!rs.ok) return head + rs.error;
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const palaces: any[] = lasoData.palaces || [];
+  let out = head;
+  out += `Nguyệt hạn KHÔNG có điểm riêng — luận theo CÁCH CỤC + sao (tọa thủ + tam hợp xung chiếu) của cung hạn, đại vận chỉ giới hạn biên độ.\n`;
+  out += `Tháng âm này nằm TRỌN trong năm ÂL ${s.namAL} ⇒ chỉ MỘT nền tiểu hạn, MỘT cung nguyệt hạn cho cả tháng — không chia nửa đầu / nửa sau.\n`;
+
+  const dv = (lasoData.daiVans || [])[rs.tv?.dvIdx];
+  if (dv) {
+    const dvP = palaces[dv.cungIdx];
+    out += `- KHUNG ĐẠI VẬN ${dv.diaChi} (${dv.tuoiStart}–${dv.tuoiEnd} tuổi)${dvP?.cungName ? `, đóng tại cung ${dvP.cungName}` : ''}` +
+      `${dv.scoring?.tong != null ? `: điểm ${dv.scoring.tong}/10 ${dv.scoring.flag || ''}` : ''} — chỉ GIỚI HẠN BIÊN ĐỘ, KHÔNG quyết định tốt/xấu của tháng.\n`;
+  }
+  out += `- Nền năm (ÂL ${s.namAL}, tuổi ${rs.tv.tuoi}): tiểu hạn cung ${rs.tv.tieuHanCung}, lưu niên đại hạn cung ${rs.tv.luuNienCung}.\n`;
+  out += `- Nguyệt hạn cung ${palaces[rs.nguyetHanIdx]?.cungName || '?'}:\n    ${describeHanCungRich(palaces, rs.nguyetHanIdx)}\n`;
+
+  const layers: LayerCung[] = [
+    { label: 'đại vận', palace: dv ? palaces[dv.cungIdx] : null },
+    ...hanClusterLayers(palaces, rs.tieuHanIdx, 'tiểu hạn'),
+    ...hanClusterLayers(palaces, rs.luuNienIdx, 'lưu niên'),
+    ...hanClusterLayers(palaces, rs.nguyetHanIdx, 'nguyệt hạn'),
+  ];
+  out += formatComboLines(matchVanHanCombos(layers));
+  return out;
+}
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function execTraVanHan(lasoData: any, input: any): string {
   const nam = Number(input?.nam);
@@ -201,49 +251,20 @@ function _tieuHanIdxOf(palaces: any[], tieuHanCung: string): number {
 export function execTraNguyetVan(lasoData: any, input: any): string {
   const thang = Number(input?.thang), nam = Number(input?.nam);
   if (!thang || !nam) return 'Thiếu tham số tháng hoặc năm.';
+  // `ngay` là mốc XÁC ĐỊNH tháng âm nào trong hai tháng âm mà tháng dương này
+  // có thể cắt ngang. Model không truyền (hoặc hỏi mơ hồ "tháng X") thì lấy 15
+  // — giữa tháng, tránh rơi đúng đầu/cuối tháng nơi hay có ranh giới âm lịch.
+  const ngayRaw = Number(input?.ngay);
+  const ngay = ngayRaw >= 1 && ngayRaw <= 31 ? ngayRaw : 15;
 
-  // Một tháng DƯƠNG lịch hầu như luôn bị cắt ngang bởi 2 tháng ÂM lịch (tháng
-  // âm ~29,5 ngày, không khớp ranh giới tháng dương) → hàm dùng chung trả về
-  // 1 hoặc 2 ĐOẠN, mỗi đoạn đúng MỘT tháng âm, kèm khoảng ngày dương của nó và
-  // đánh dấu đoạn nào đang diễn ra NGAY LÚC NÀY (nếu đang hỏi đúng tháng hiện
-  // tại). Xem chú thích ở `resolveNguyetHanSegments` (lib/engine/van-ngay.ts).
-  const rs = resolveNguyetHanSegments(lasoData, thang, nam);
-  if (!rs.ok) return rs.error;
-  const { tv, tieuHanIdx, luuNienIdx, segments } = rs;
-
-  const palaces = lasoData.palaces || [];
-  // Hai đoạn của một tháng dương có thể thuộc HAI năm âm khác nhau (tháng chứa
-  // Tết) ⇒ tiểu hạn khác nhau. Chỉ in một dòng tiểu hạn chung khi cả tháng
-  // thật sự nằm trong MỘT năm âm; không thì nêu theo từng đoạn.
-  const cungTieuHan = [...new Set(segments.map((x) => String(x.tv.tieuHanCung)))];
-  let out = `NGUYỆT HẠN THÁNG ${thang}/${nam} DƯƠNG LỊCH (tuổi ${tv.tuoi}) — đọc CẢ tọa thủ + tam hợp xung chiếu (tọa thủ nặng nhất → xung → tam hợp):\n`;
-  if (cungTieuHan.length === 1) out += `- Tiểu hạn năm ÂL ${segments[0]!.namAL}: cung ${cungTieuHan[0]}.\n`;
-  if (segments.length > 1) {
-    out += `⚠️ Tháng dương lịch này CẮT NGANG 2 tháng âm lịch — dưới đây là 2 ĐOẠN HẠN KHÁC NHAU, PHẢI phân biệt rõ theo ngày khi luận, KHÔNG được gộp chung một hạn cho cả tháng.\n`;
-    if (cungTieuHan.length > 1) {
-      out += `⚠️ Hai đoạn còn thuộc HAI NĂM ÂM khác nhau (giao thừa nằm trong tháng dương này) nên TIỂU HẠN cũng đổi giữa chừng — mỗi đoạn có nền tiểu hạn riêng, nêu rõ khi luận.\n`;
-    }
-  }
-  for (const seg of segments) {
-    const nhanNgay = segments.length > 1 ? `ngày ${seg.tuNgay}–${seg.denNgay}/${thang}` : `cả tháng ${thang}/${nam}`;
-    const nowMark = seg.isCurrent ? ' — ĐANG DIỄN RA (hôm nay rơi vào đoạn này)' : '';
-    const nenTH = cungTieuHan.length > 1 ? `, nền tiểu hạn năm ÂL ${seg.namAL}: cung ${seg.tv.tieuHanCung}` : '';
-    out += `- Đoạn ${nhanNgay} (ÂL tháng ${seg.thangAL}${seg.isLeap ? ' nhuận' : ''})${nowMark}${nenTH}, cung ${_cungNameOf(palaces, seg.nguyetHanIdx)}:\n    ${describeHanCungRich(palaces, seg.nguyetHanIdx)}\n`;
-  }
-
-  // Tổ hợp sao chéo tầng (mức THÁNG): đại vận (tọa) + tiểu hạn/lưu niên/nguyệt
-  // hạn KÈM tam hợp xung chiếu. Dùng đoạn ĐANG DIỄN RA nếu có (hỏi tháng hiện
-  // tại), không thì đoạn đầu tiên (tháng không cắt ngang chỉ có 1 đoạn).
-  const activeSeg = segments.find((s) => s.isCurrent) || segments[0]!;
-  const _dvM = (lasoData.daiVans || [])[tv.dvIdx];
-  const monthLayers: LayerCung[] = [
-    { label: 'đại vận', palace: _dvM ? palaces[_dvM.cungIdx] : null },
-    ...hanClusterLayers(palaces, tieuHanIdx, 'tiểu hạn'),
-    ...hanClusterLayers(palaces, luuNienIdx, 'lưu niên'),
-    ...hanClusterLayers(palaces, activeSeg.nguyetHanIdx, 'nguyệt hạn'),
-  ];
-  out += formatComboLines(matchVanHanCombos(monthLayers));
-  return out;
+  // 2026-08-19: đổi khung sang THÁNG ÂM (bỏ hẳn kiểu trả "2 đoạn" của tháng
+  // dương cắt ngang) — cùng lý do và cùng hàm với tool đứng riêng "Vận Hạn 12
+  // Tháng Tới" (van-han-12.ts). `lunarMonthsFrom` cho ĐÚNG MỘT tháng âm chứa
+  // ngày dương mốc; `describeThangForLLM` (định nghĩa ngay trên) là nguồn
+  // DUY NHẤT dựng khối chữ cho LLM đọc, dùng chung giữa rail và tool đó.
+  const span = lunarMonthsFrom(ngay, thang, nam, 1)[0];
+  if (!span) return 'Không xác định được tháng âm lịch tương ứng.';
+  return describeThangForLLM(lasoData, span);
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

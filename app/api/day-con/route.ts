@@ -6,7 +6,9 @@
 // Tool "Dạy Con Theo Lá Số" (T2). Một pha: không sinh ảnh nên cả lượt chỉ tốn
 // ĐÚNG một lượt LLM.
 
-export const maxDuration = 120;
+// 120 → 300 (2026-08-20): llmTextFull nay chuỗi 3 provider (Kimi K3 → Opus 5
+// → Gemini Flash) + trần token đã nâng 50% — cùng lý do lasotuvi/route.ts.
+export const maxDuration = 300;
 export const runtime = 'nodejs';
 
 import { NextRequest } from 'next/server';
@@ -166,7 +168,8 @@ async function buildReport(
         jsonSchema: DAY_CON_SCHEMA,
         // 3.200 đủ cho 9 khoá; khung mới thêm `chatNoi`/`dinhHuong`/`hoatDong`
         // nên nới lên — chạm trần là JSON cụt và cả lượt rơi vào nhánh thử lại.
-        maxTokens: 4400,
+        // Nâng thêm 50% cùng đợt (Henry chốt 2026-08-20).
+        maxTokens: 6600,
       });
       void logLlmUsage(TOOL_ID, r.model, {
         input_tokens: r.usage.input_tokens,

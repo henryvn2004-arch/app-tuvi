@@ -44,6 +44,23 @@ function buildHTML(article: any, slug: string, related: any[], master?: any) {
   const body  = renderMarkdown(article.content||'');
   const cat   = escHtml(article.category||'');
 
+  // QAPage/FAQPage: bài khảo luận VỐN ĐÃ đúng hình dạng hỏi-đáp (title = câu
+  // hỏi, excerpt = câu trả lời ngắn tự đứng được — theo đúng HOOK_RULES), chỉ
+  // chưa khai schema. Dùng THẲNG `article.title`/`article.excerpt` — hai giá
+  // trị NÀY đang render y hệt trong <h1>/.article-excerpt bên dưới — để đảm
+  // bảo verbatim TUYỆT ĐỐI, không qua bước rút trích/thêm dấu hỏi nào.
+  //
+  // 🔑 Đây chính là bài học #361 đã ghi: "FAQ schema mà nội dung không nhìn
+  // thấy được — Google phạt đúng chỗ đó". Không dùng cách rút trích H2/H3 +
+  // fallback bịa câu hỏi chung chung như `nghien-cuu/[slug]` đang làm — cách
+  // đó có thể phát schema cho chữ KHÔNG xuất hiện trên trang.
+  const faqSchema = article.excerpt ? {
+    '@context':'https://schema.org','@type':'FAQPage', mainEntity:[
+      { '@type':'Question', name: article.title,
+        acceptedAnswer: { '@type':'Answer', text: article.excerpt } },
+    ],
+  } : null;
+
   const schemas = JSON.stringify([
     { '@context':'https://schema.org','@type':'Article', headline:article.title, description:article.excerpt||'', url, datePublished:article.created_at, inLanguage:'vi',
       author: master
@@ -51,6 +68,7 @@ function buildHTML(article: any, slug: string, related: any[], master?: any) {
         : {'@type':'Organization', '@id': ORG_ID,name:'Tử Vi Minh Bảo',url:BASE_URL},
       publisher:{'@type':'Organization', '@id': ORG_ID,name:'Tử Vi Minh Bảo',url:BASE_URL,logo:{'@type':'ImageObject',url:BASE_URL+'/seal.webp'}},
       image:{'@type':'ImageObject',url:img} },
+    ...(faqSchema ? [faqSchema] : []),
     { '@context':'https://schema.org','@type':'BreadcrumbList', itemListElement:[
       {'@type':'ListItem',position:1,name:'Trang Chủ',item:BASE_URL+'/'},
       {'@type':'ListItem',position:2,name:'Khảo Luận',item:BASE_URL+'/blog.html'},

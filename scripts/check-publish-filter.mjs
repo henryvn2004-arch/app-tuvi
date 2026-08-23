@@ -27,6 +27,10 @@ const EXEMPT = {
   'app/api/payment/route.ts': 'đường admin — Kho và dashboard phải thấy cả bài đã gỡ',
   'app/api/cron-khao-luan/route.ts': 'cron GHI — chính nó tạo ra bài',
   'app/api/cron-master-write/route.ts': 'cron GHI — chính nó tạo ra bài',
+  // Kiểm trùng slug TRƯỚC khi ghi — bài đã gỡ (draft/hidden) vẫn phải tính là
+  // "slug đã dùng", đúng lý do topic-topup.ts được miễn ở trên. Lọc theo
+  // published ở đây sẽ SAI: cho phép ghi trùng slug với một bài đã gỡ.
+  'app/api/cron-khao-luan-tamly/logic.ts': 'cron GHI — chính nó tạo ra bài',
   'app/kim-lau/route.ts': 'chỉ nhắc tên bảng trong chú thích, không truy vấn',
   'lib/ops/jobs.ts': 'sổ job — chỉ nhắc tên bảng làm nhãn',
   // Đọc TIÊU ĐỀ đã có để không giao máy viết trùng chủ đề. Bài đã gỡ xuống

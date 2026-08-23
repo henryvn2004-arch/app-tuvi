@@ -243,6 +243,13 @@ export async function streamGemini(
     send(sse.text({ delta: full }));
     return [];
   }
+  // 🔴 Gemini trả 200 hợp lệ mà KHÔNG một chữ nào tới người dùng (completion
+  // rỗng thật, hoặc toàn bộ nằm ở phần bị chặn/lọc) — TRƯỚC ĐÂY hàm trả về []
+  // êm re, run.ts coi là THÀNH CÔNG và trả thẳng, người dùng nhận màn hình
+  // trống. Ném lỗi để caller coi đây là hỏng, cùng đợt vá với Kimi
+  // (2026-08-20) — chuỗi fallback phải giữ được lời hứa "hỏng thì rơi xuống
+  // provider kế", không phải chỉ đúng khi hỏng dạng exception mạng.
+  if (sentLen === 0) throw new Error('gemini: trả lời rỗng (0 chữ)');
 
   if (markerAt < 0) return [];
   return full

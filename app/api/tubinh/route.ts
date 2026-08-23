@@ -1,5 +1,7 @@
 // app/api/tubinh/route.ts
-export const maxDuration = 60;
+// 60 → 300: cùng lý do lasotuvi/route.ts — chuỗi fallback 3 provider tuần tự
+// (Kimi → Opus 5 → Gemini Flash) + trần token đã nâng 50% dễ vượt 60s.
+export const maxDuration = 300;
 
 import { NextRequest } from 'next/server';
 import { ok, err, options, parseBody } from '@/lib/cors';
@@ -276,7 +278,7 @@ async function handleChat(body: any): Promise<Response> {
   if (!trimmed.length) return err('Empty messages after filter', 400);
 
   try {
-    const answer = await llmText({ system: systemPrompt, messages: trimmed, maxTokens: 800 });
+    const answer = await llmText({ system: systemPrompt, messages: trimmed, maxTokens: 1200 });
     return ok({ answer, scenario: hasBatTu ? 'batTu' : 'general' });
   } catch (e: unknown) {
     console.error('[handleChat] exception', e);
@@ -336,23 +338,24 @@ async function handleSearch(body: any): Promise<Response> {
 }
 
 // ─── 16 PHẦN definitions ───────────────────────────────────────
+// Nâng ĐỀU 50% mọi trần (Henry chốt 2026-08-20, cùng đợt lasotuvi/van-han-nam).
 const PHAN_INFO: Record<number, { ten: string; maxTokens: number }> = {
-  1:  { ten: 'Tổng quan Bát Tự',           maxTokens: 2000 },
-  2:  { ten: 'Cách Cục',                    maxTokens: 1500 },
-  3:  { ten: 'Quan Sát — Sự nghiệp',        maxTokens: 1200 },
-  4:  { ten: 'Tài',                          maxTokens: 1200 },
-  5:  { ten: 'Thực Thương',                 maxTokens: 1200 },
-  6:  { ten: 'Ấn',                           maxTokens: 1200 },
-  7:  { ten: 'Tỷ Kiếp',                     maxTokens: 1200 },
-  8:  { ten: 'Tình duyên',                  maxTokens: 1200 },
-  9:  { ten: 'Sức khỏe',                    maxTokens: 1200 },
-  10: { ten: 'Hình Xung Hại Hợp',           maxTokens: 1200 },
-  11: { ten: 'Thần Sát',                    maxTokens: 1200 },
-  12: { ten: 'Tổng quan Đại Vận',           maxTokens: 3000 },
-  13: { ten: 'Đại Vận hiện tại',            maxTokens: 1200 },
-  14: { ten: 'Đại Vận kế tiếp',             maxTokens: 1200 },
-  15: { ten: 'Lưu Niên',                    maxTokens: 1400 },
-  16: { ten: 'Tổng kết',                    maxTokens: 1500 },
+  1:  { ten: 'Tổng quan Bát Tự',           maxTokens: 3000 },
+  2:  { ten: 'Cách Cục',                    maxTokens: 2250 },
+  3:  { ten: 'Quan Sát — Sự nghiệp',        maxTokens: 1800 },
+  4:  { ten: 'Tài',                          maxTokens: 1800 },
+  5:  { ten: 'Thực Thương',                 maxTokens: 1800 },
+  6:  { ten: 'Ấn',                           maxTokens: 1800 },
+  7:  { ten: 'Tỷ Kiếp',                     maxTokens: 1800 },
+  8:  { ten: 'Tình duyên',                  maxTokens: 1800 },
+  9:  { ten: 'Sức khỏe',                    maxTokens: 1800 },
+  10: { ten: 'Hình Xung Hại Hợp',           maxTokens: 1800 },
+  11: { ten: 'Thần Sát',                    maxTokens: 1800 },
+  12: { ten: 'Tổng quan Đại Vận',           maxTokens: 4500 },
+  13: { ten: 'Đại Vận hiện tại',            maxTokens: 1800 },
+  14: { ten: 'Đại Vận kế tiếp',             maxTokens: 1800 },
+  15: { ten: 'Lưu Niên',                    maxTokens: 2100 },
+  16: { ten: 'Tổng kết',                    maxTokens: 2250 },
 };
 
 // ─── Prompt builder ────────────────────────────────────────────

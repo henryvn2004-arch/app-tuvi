@@ -519,7 +519,7 @@ export async function runAudienceGate(
         : ''),
     json: true,
     jsonSchema: SCHEMA,
-    maxTokens: 2600,
+    maxTokens: 3900, // Nâng 50% (Henry chốt 2026-08-20)
     temperature: 0.7,
   });
 

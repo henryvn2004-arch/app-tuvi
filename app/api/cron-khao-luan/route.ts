@@ -143,7 +143,8 @@ Trả về JSON thuần (KHÔNG backtick):
   //
   // `json: true` ép JSON hợp lệ ở TẦNG API (Gemini responseMimeType) — chặn tận
   // gốc; `parseLlmJson` là lưới cho nhánh backup Anthropic (không có JSON mode).
-  const r = await llmTextFull({ prompt, maxTokens: 2000, json: true });
+  // Nâng 50% (Henry chốt 2026-08-20, cùng đợt chống cắt ngang toàn repo).
+  const r = await llmTextFull({ prompt, maxTokens: 3000, json: true });
   // best-effort: ghi sổ hỏng thì đừng làm hỏng lượt viết bài.
   void logLlmUsage('cron-khao-luan', r.model, {
     input_tokens: r.usage.input_tokens,

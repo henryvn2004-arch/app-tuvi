@@ -1175,6 +1175,60 @@ async function handleAdminNghienCuuTopics(request: NextRequest, body: Record<str
   } catch (e: unknown) { return err((e as Error).message); }
 }
 
+// ── GET: admin-topic-queue (giám sát hàng đợi — list, KHÔNG có bảng này
+// trước PR khao-luan-tamly) ──
+// Dùng CHUNG filter `type` với `queueCounts()` của từng bề mặt — số dòng trả
+// về vì thế khớp đúng con số "Đang Chờ Viết"/"Lỗi" trên thẻ stat phía trên.
+// Trả cả pending/processing/error (không chỉ pending): dòng lỗi cũng cần
+// thấy được để xoá hoặc để nguyên chờ cron thử lại — không có retry tự động.
+// Gộp CẢ chủ đề Gemini tự sinh (có bằng chứng nhu cầu) LẪN chủ đề admin gõ
+// tay vào cùng một danh sách vì `topic_queue` không phân biệt nguồn gốc ở
+// cột nào — đúng ý Henry: "vừa do gemini auto gen ra, mà tao cũng vừa add
+// thêm vào dc".
+async function handleAdminTopicQueueList(request: NextRequest): Promise<Response> {
+  const token = (request.headers.get('Authorization') || '').replace('Bearer ', '').trim();
+  const admin = await verifyAdmin(token);
+  if (!admin) return err('Unauthorized', 403);
+
+  const surface = (new URL(request.url).searchParams.get('surface') || 'khao-luan').trim();
+  const typeFilter = surface === 'nghien-cuu' ? 'type=eq.master-article' : 'type=not.in.(master-article,tai-lieu)';
+
+  try {
+    const res = await fetch(
+      `${SUPABASE_URL}/rest/v1/topic_queue?${typeFilter}&status=in.(pending,processing,error)&select=id,topic,type,priority,status,master_id,article_type,created_at,used_at&order=priority.asc,created_at.asc&limit=200`,
+      { cache: 'no-store', headers: SB_HEADERS },
+    );
+    if (!res.ok) throw new Error(await res.text());
+    const rows = await res.json();
+    return ok({ rows });
+  } catch (e: unknown) { return err((e as Error).message); }
+}
+
+// ── POST: admin-topic-queue-delete (xoá 1 dòng khỏi hàng đợi) ──
+// Chỉ xoá dòng CHƯA xong (pending/processing/error) — dòng `done` là bằng
+// chứng bài đã viết, xoá nó chỉ mất dấu vết đối soát chứ không rút được bài
+// đã đăng. FAIL-CLOSED: id không khớp dòng hợp lệ nào → báo lỗi rõ, không im
+// lặng — PostgREST DELETE không tự báo lỗi khi 0 dòng khớp bộ lọc.
+async function handleAdminTopicQueueDelete(request: NextRequest, body: Record<string, unknown>): Promise<Response> {
+  const token = (request.headers.get('Authorization') || '').replace('Bearer ', '').trim();
+  const admin = await verifyAdmin(token);
+  if (!admin) return err('Unauthorized — admin only', 403);
+
+  const id = Number(body.id);
+  if (!Number.isFinite(id) || id <= 0) return err('id không hợp lệ', 400);
+
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/topic_queue?id=eq.${id}&status=in.(pending,processing,error)`, {
+      method: 'DELETE',
+      headers: { ...SB_HEADERS, Prefer: 'return=representation' },
+    });
+    if (!res.ok) throw new Error(await res.text());
+    const deleted = await res.json();
+    if (!Array.isArray(deleted) || deleted.length === 0) return err('Không tìm thấy dòng hợp lệ (đã xong hoặc đã xoá)', 404);
+    return ok({ deleted: deleted.length });
+  } catch (e: unknown) { return err((e as Error).message); }
+}
+
 // ── API & KEYS (Command Center) ────────────────────────────────
 // MCP self-serve keys/usage (mcp_keys/mcp_usage — RLS chỉ service_role,
 // KHÔNG có admin_read policy như app_config → phải qua route này, không
@@ -1331,6 +1385,7 @@ export async function GET(request: NextRequest) {
   if (action === 'admin-content-board') return handleAdminContentBoard(request);
   if (action === 'admin-khao-luan') return handleAdminKhaoLuan(request);
   if (action === 'admin-nghien-cuu') return handleAdminNghienCuu(request);
+  if (action === 'admin-topic-queue') return handleAdminTopicQueueList(request);
   if (action === 'admin-mcp') return handleAdminMcp(request);
   if (action === 'admin-env-status') return handleAdminEnvStatus(request);
   if (action === 'my-referral') return handleMyReferral(request, searchParams);
@@ -2429,9 +2484,11 @@ async function handleAdminAutopilotLog(request: NextRequest): Promise<Response> 
 }
 
 // ── GET: admin-dashboard-v2 (Engagement + Content Revenue + At-risk + Content Production) ──
-// Đọc 3 RPC mới (dashboard_engagement/dashboard_content_revenue/dashboard_at_risk,
-// migration-dashboard-v2.sql) + đếm nhanh 3 pipeline nội dung (count=exact, không
-// tải nguyên bảng — khác handleAdminContentBoard vốn tải hàng để dựng "recent").
+// Đọc RPC dashboard_engagement/dashboard_content_revenue/dashboard_at_risk
+// (migration-dashboard-v2.sql) + đếm nhanh 3 pipeline nội dung (count=exact,
+// không tải nguyên bảng — khác handleAdminContentBoard vốn tải hàng để dựng
+// "recent") + channel_error_rate + dashboard_margin + js_error_top (lỗi JS
+// client, migration-js-error.sql — thay phần Sentry đang gỡ dần).
 async function handleAdminDashboardV2(request: NextRequest): Promise<Response> {
   const token = (request.headers.get('Authorization') || '').replace('Bearer ', '').trim();
   const admin = await verifyAdmin(token);
@@ -2450,7 +2507,7 @@ async function handleAdminDashboardV2(request: NextRequest): Promise<Response> {
   };
 
   try {
-    const [engagement, contentRevenue, atRisk, khTotal, kh7d, ncTotal, nc7d, ytTotal, yt7d, channelHealth, margin] = await Promise.all([
+    const [engagement, contentRevenue, atRisk, khTotal, kh7d, ncTotal, nc7d, ytTotal, yt7d, channelHealth, margin, jsErrors] = await Promise.all([
       callRpc('dashboard_engagement', { p_days: 30 }),
       callRpc('dashboard_content_revenue', { p_from: from.toISOString(), p_to: to.toISOString() }),
       callRpc('dashboard_at_risk', { p_idle_days: 14, p_min_events: 3, p_limit: 20 }),
@@ -2462,6 +2519,7 @@ async function handleAdminDashboardV2(request: NextRequest): Promise<Response> {
       countExact(`van_dap?select=id&limit=1&publish_status=eq.published&created_at=gte.${sevenDaysAgo}`),
       callRpc('channel_error_rate', { p_hours: 24 }),
       callRpc('dashboard_margin', { p_from: from.toISOString(), p_to: to.toISOString() }),
+      callRpc('js_error_top', { p_hours: 24, p_limit: 30 }),
     ]);
 
     return ok({
@@ -2470,6 +2528,7 @@ async function handleAdminDashboardV2(request: NextRequest): Promise<Response> {
       atRisk,
       channelHealth,
       margin,
+      jsErrors,
       content: {
         khaoLuan:  { total: khTotal, last7d: kh7d },
         nghienCuu: { total: ncTotal, last7d: nc7d },
@@ -2951,6 +3010,7 @@ export async function POST(request: NextRequest) {
   if (action === 'admin-growth-account') return handleAdminGrowthAccount(request, body);
   if (action === 'admin-khao-luan-topics') return handleAdminKhaoLuanTopics(request, body);
   if (action === 'admin-nghien-cuu-topics') return handleAdminNghienCuuTopics(request, body);
+  if (action === 'admin-topic-queue-delete') return handleAdminTopicQueueDelete(request, body);
   if (action === 'admin-mcp-update') return handleAdminMcpUpdate(request, body);
   if (action === 'admin-users-upsert') return handleAdminUsersUpsert(request, body);
   if (action === 'admin-users-set-active') return handleAdminUsersSetActive(request, body);

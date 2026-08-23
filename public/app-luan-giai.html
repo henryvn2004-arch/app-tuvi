@@ -84,6 +84,22 @@
 .rules-group{margin:4px 0}
 .rules-canh-bao{background:#fff0f0;border-radius:4px;padding:4px 6px;margin:4px 0;border-left:2px solid #f87171}
 .phan-empty{font-size:12.5px;color:var(--text-lt);font-style:italic;padding:4px 0}
+/* Gấp phần TÍNH TOÁN (deterministic) — mặc định ĐÓNG, xem chú thích tại
+   buildPhanSection(). Không đụng thứ tự hiển thị, chỉ thu gọn nội dung bên
+   trong. Marker tam giác mặc định của trình duyệt GIỮ NGUYÊN — đủ để đọc là
+   "bấm để mở", không cần icon riêng. */
+.lg-calc{margin-bottom:2px}
+.lg-calc summary{cursor:pointer;font-size:12px;color:var(--text-lt);font-weight:600;padding:2px 0}
+.lg-calc summary:hover{color:var(--gold-soft)}
+.lg-calc[open] summary{margin-bottom:8px}
+/* Gợi ý tool khác — chỉ hiện cho cung có mối liên hệ thật xác nhận, xem
+   CUNG_TOOL_LINKS/cungRelatedHtml(). */
+.lg-related{margin-top:12px;display:flex;flex-direction:column;gap:6px}
+.lg-related-h{font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--text-lt);font-weight:700;margin-bottom:2px}
+.lg-related-link{display:block;padding:9px 12px;border:1px solid var(--line-2);border-radius:9px;text-decoration:none;color:inherit;background:var(--paper)}
+.lg-related-link:hover{border-color:var(--gold-soft)}
+.lg-related-link b{display:block;font-size:12.5px;color:var(--heading);font-family:var(--serif);font-weight:600}
+.lg-related-link span{display:block;font-size:11.5px;color:var(--text-lt);margin-top:2px}
 /* ── Luận giải chuyên sâu bằng AI (paid, port từ luan-giai.html — gate+RAG+stream+PDF) ── */
 .claude-content{margin-top:10px;padding-top:10px;border-top:1px dashed var(--line-2)}
 .claude-content p{color:var(--text-mid);line-height:1.75;margin-bottom:12px;font-size:13.5px}
@@ -159,8 +175,9 @@ window.SHELL_INTRO={key:'luan-giai',title:'Luận giải Tử Vi',desc:'Lập l�
 <script src="/auth.js?v=2"></script>
 <script src="/tuvi-paywall.js?v=21"></script>
   <script src="/nav.js?v=22" data-icons-only></script>
-<script src="/shell.js?v=72"></script>
-<script src="/tools-shared/ai-loading-steps.js?v=8"></script>
+<script src="/shell.js?v=74"></script>
+<script src="/tools-shared/ai-loading-steps.js?v=9"></script>
+<script src="/tools-shared/phan-pool.js?v=1"></script>
 <script>
 // ── Form nhập (dùng chung TuviForm — có "Sinh ở ngoài Việt Nam?" + parity giờ
 // sinh lịch sử với standalone) ──
@@ -274,6 +291,44 @@ function renderLuan(ls,fd,namxem){
 }
 
 function _lgLoggedIn(){ return !!(window.Auth&&window.Auth.isLoggedIn&&window.Auth.isLoggedIn()); }
+// ── Liên kết sang tool khác — CHỈ áp cho cung có MỘT MỐI LIÊN HỆ THẬT, xác
+// nhận qua chính mô tả/tiêu đề của tool đó (không đoán bừa bằng từ khoá). Henry:
+// "đọc luận giải cung tử tức thì phải giới thiệu tool dạy con để xem sâu thêm,
+// xem cung phu thê xong có thể điều hướng xem tuổi vợ chồng, xem tiền kiếp".
+// CỐ Ý không phủ đủ 12 cung — 7 cung còn lại (Phụ Mẫu, Phúc Đức, Nô Bộc, Thiên
+// Di, Tật Ách, Tài Bạch, Huynh Đệ) chưa có tool nào thật sự đọc đúng chúng.
+// Riêng Cung Tật Ách: TUYỆT ĐỐI không gắn gợi ý nào ở đây — trang này (và cả
+// site) đã có luật cấm ngụ ý chẩn đoán/tiên lượng bệnh tật, đừng lách qua cửa
+// "gợi ý tool khác".
+var CUNG_TOOL_LINKS={
+  'Cung Mệnh':[
+    {path:'/app/bat-trach',label:'Hướng Bát Trạch',note:'Soi thêm 8 hướng tốt xấu từ chính cung Mệnh này'}
+  ],
+  'Cung Điền Trạch':[
+    {path:'/app/phong-thuy',label:'Phong Thủy Nội Thất',note:'Chụp ảnh phòng để AI chấm điểm bố trí'}
+  ],
+  'Cung Quan Lộc':[
+    {path:'/app/cong-so',label:'Tử Vi Công Sở',note:'Đọc lại đúng lá số này bằng ngôn ngữ công việc'}
+  ],
+  'Cung Tử Tức':[
+    {path:'/app/day-con',label:'Dạy Con Theo Lá Số',note:'Con hợp cách dạy nào, nên thúc hay nên để yên'},
+    {path:'/app/huong-nghiep-tre',label:'Hướng Nghiệp Sớm Cho Con',note:'Nên cho con làm quen với thứ gì từ bây giờ'}
+  ],
+  'Cung Phu Thê':[
+    {path:'/app/xem-tuoi',label:'Xem Tuổi Vợ Chồng',note:'Đối chiếu với lá số người kia'},
+    {path:'/app/chan-dung-vo-chong',label:'Chân Dung Vợ Chồng',note:'Vẽ chân dung người phối ngẫu từ chính cung này'},
+    {path:'/app/duyen-no-tien-kiep',label:'Duyên Nợ Tiền Kiếp',note:'Kiếp trước hai người là gì của nhau'}
+  ]
+};
+function cungRelatedHtml(label){
+  var links=CUNG_TOOL_LINKS[label];
+  if(!links||!links.length) return '';
+  return '<div class="lg-related"><div class="lg-related-h">Đọc sâu hơn</div>'
+    +links.map(function(l){
+      return '<a class="lg-related-link" href="'+l.path+'"><b>'+esc(l.label)+'</b><span>'+esc(l.note)+'</span></a>';
+    }).join('')
+    +'</div>';
+}
 // `locked` = khách chưa đăng ký + không phải phần 1 → nội dung DETERMINISTIC
 // thật vẫn dựng vào DOM như bình thường (tiêu đề luôn thấy được, đủ 24 phần),
 // chỉ CHÍNH `body` bị bọc trong .tpw-real-lock để CSS làm mờ + gắn badge 🔒
@@ -284,7 +339,15 @@ function _lgLoggedIn(){ return !!(window.Auth&&window.Auth.isLoggedIn&&window.Au
 // `_paintSecLocks`, không phụ thuộc `locked` ở đây).
 function buildPhanSection(phan,label,ls,locked){
   var pre=LuanGiaiCore.buildPreGenHtml(phan,ls);
-  var body=pre||'<div class="phan-empty">Phần này luận theo tổng thể lá số — bấm nút dưới để trợ lý luận sâu.</div>';
+  var raw=pre||'<div class="phan-empty">Phần này luận theo tổng thể lá số — bấm nút dưới để trợ lý luận sâu.</div>';
+  // Khối TÍNH TOÁN (deterministic — cách cục/điểm số/quy tắc) GẤP LẠI mặc định.
+  // Nó luôn dựng xong TRƯỚC (đồng bộ, lúc lập lá số) trong khi phần LUẬN THẬT
+  // (AI, `claude-content` dưới) tới sau — user chạy tool xong đọc ngay khối này
+  // rồi tưởng ĐÓ là luận giải. Henry chốt: giữ NGUYÊN thứ tự hiện có, chỉ thu
+  // gọn — ai muốn soi cơ sở/giải thích thuật học thì tự bấm mở. CHỈ áp cho phần
+  // KHÔNG bị khoá (`pre` có nội dung thật) — phần đang teaser-blur cho khách
+  // chưa đăng ký (`locked`) giữ nguyên như cũ, đừng chồng hai cơ chế ẩn lên nhau.
+  var body=(pre&&!locked)?('<details class="lg-calc"><summary>Xem cơ sở tính toán</summary>'+raw+'</details>'):raw;
   var bodyHtml=locked?'<div class="tpw-real-lock">'+body+'</div>':body;
   var tag=locked?TuviPaywall.lockBadge('Khoá'):'';
   // Khoá-mini (ẨN mặc định) — mỗi phần trong 24 phần đều CÓ một đoạn luận
@@ -294,7 +357,11 @@ function buildPhanSection(phan,label,ls,locked){
   // trang, chỉ khác chỗ đứng: banner đó cuộn qua là mất, khối này lặp lại ở
   // MỌI phần nên luôn nằm trong tầm mắt.
   var lock=TuviPaywall.sectionLockHtml({id:'sec-ai-lock-'+phan,product:'laso'});
-  return sec(phan,label,tag,'<div class="card">'+bodyHtml+lock+'<div class="claude-content" id="claude-content-'+phan+'" style="display:none"></div>'+ask('Luận sâu phần: '+label)+'</div>');
+  // Gợi ý tool khác CHỈ hiện khi phần này KHÔNG bị khoá — chưa đăng ký thì
+  // luận giải của chính cung đó còn chưa đọc được, mời sang tool khác lúc này
+  // là điều hướng vào chỗ rỗng.
+  var related=locked?'':cungRelatedHtml(label);
+  return sec(phan,label,tag,'<div class="card">'+bodyHtml+lock+'<div class="claude-content" id="claude-content-'+phan+'" style="display:none"></div>'+related+ask('Luận sâu phần: '+label)+'</div>');
 }
 // Bật/tắt ĐỒNG LOẠT khoá-mini cho CẢ 24 phần (luôn nằm trong DOM ngay từ đầu,
 // không còn khái niệm "backfill dần" như bản trước). Gọi khi biết chắc trạng
@@ -360,7 +427,9 @@ function toggleMini(){
 // RAG/phần khác nhau, tách sớm rủi ro hơn lợi).
 // ══════════════════════════════════════════════════════════════════════
 var _astrolabe=null, _hoTen='', _ngay=0, _thang=0, _nam=0, _gioitinh='nam', _namXem=0, _laSoText=null;
-var _pendingSlug=null, _currentPhan=0, _luanGiaiStore={};
+var _pendingSlug=null, _luanGiaiStore={};
+// Số phần chạy song song — xem lý do chọn 3 trong tools-shared/phan-pool.js.
+var PHAN_CONCURRENCY=3;
 // ETA tự hiệu chỉnh: đo nhịp NGAY TRONG phiên này thay vì hứa theo một con
 // số chép cứng (số chép cứng nói dối vào đúng ngày đổi model).
 var _pace=(window.AiLoadingSteps&&AiLoadingSteps.pacer)?AiLoadingSteps.pacer():null;
@@ -554,27 +623,51 @@ async function _startLuanGiaiAI(){
   document.getElementById('lgUnlock').style.display='none';
   document.getElementById('lgProgress').style.display='block';
   // Đã trả tiền — tắt hết khoá-mini NGAY, kể cả những phần chưa tới lượt sinh
-  // chữ (sinh tuần tự từ phần 1). Để chúng sáng đèn "chưa mở" trong lúc đang
-  // luận là mời bấm lại một lượt mua đã xảy ra rồi.
+  // chữ (nay sinh SONG SONG 3 phần/đợt, không còn theo đúng thứ tự 1→24). Để
+  // chúng sáng đèn "chưa mở" trong lúc đang luận là mời bấm lại một lượt mua
+  // đã xảy ra rồi.
   _paintSecLocks(false);
-  _currentPhan=0; _luanGiaiStore={};
+  _luanGiaiStore={};
   _pace&&_pace.reset();
-  await _loadNextPhanAI();
-}
-async function _loadNextPhanAI(){
-  if(_currentPhan>=LuanGiaiCore.TONG_PHAN){
+  // Kimi K3 (primary) ~120 giây/phần — chạy tuần tự 24 phần có thể tới 48
+  // phút. Bể PhanPool chạy PHAN_CONCURRENCY phần song song (mỗi phần độc lập,
+  // không đọc kết quả phần khác) ⇒ giảm tổng thời gian chờ ~PHAN_CONCURRENCY
+  // lần mà không đụng gì tới model. Xem tools-shared/phan-pool.js.
+  //
+  // 🔑 BẮT BUỘC bắn PHẦN 1 RIÊNG LẺ trước khi mở bể song song (Code #1, xem
+  // CLAUDE.md track tối ưu chi phí Opus). /api/lasotuvi nay cache `system`
+  // (SYSTEM_PROMPT + lá số đầy đủ) theo breakpoint Anthropic — lượt ĐẦU TIÊN
+  // ghi cache, các lượt SAU đọc cache nếu bắn SAU khi lượt đầu ghi xong. Mở
+  // PHAN_CONCURRENCY=3 lượt song song ngay từ đầu thì cả 3 lượt đầu tiên đều
+  // bắn gần như đồng thời (staggerMs của PhanPool chỉ 400ms, ngắn hơn nhiều so
+  // với thời gian một lượt LLM ghi xong cache) ⇒ CẢ 3 đều cache-miss, tốn thêm
+  // phí ghi (×1,25) thay vì tiết kiệm. Mồi phần 1 xong rồi mới mở bể cho các
+  // phần còn lại thì phần 2/3/4 (song song đầu tiên của bể) chắc chắn cache-hit.
+  document.getElementById('lgProgress').textContent='Đang luận giải phần 1 / '+LuanGiaiCore.TONG_PHAN+'...';
+  var primeOk=await _runPhanLuanGiai(1);
+  var result=await PhanPool.run({
+    total:LuanGiaiCore.TONG_PHAN,
+    concurrency:PHAN_CONCURRENCY,
+    progressEl:'lgProgress',
+    progressPrefix:'Đang luận giải phần',
+    pace:_pace,
+    // Phần 1 đã chạy ở lượt mồi trên — bể chỉ cần TRẢ LẠI kết quả đó, không
+    // gọi lại API (gọi lại là tốn thêm một lượt model vô ích).
+    runPart:function(p){ return p===1?Promise.resolve(primeOk):_runPhanLuanGiai(p); },
+  });
+  if(result.ok){
     document.getElementById('lgProgress').textContent='✓ Luận giải hoàn tất';
     _saveLuanGiaiResult();
-    return;
+  }else{
+    document.getElementById('lgProgress').textContent=
+      '⚠ '+result.failed.length+' phần lỗi (phần '+result.failed.join(', ')+') — bấm ↻ Thử lại ở từng phần rồi tải lại trang.';
   }
-  _currentPhan++;
-  var p=_currentPhan;
-  // Còn LẠI tính từ phần này trở đi. Chưa đủ mẫu thì remainText trả '' —
-  // im lặng, không hứa.
-  var _eta=_pace?_pace.remainText(LuanGiaiCore.TONG_PHAN-p+1):'';
-  document.getElementById('lgProgress').textContent=
-    'Đang luận giải phần '+p+' / '+LuanGiaiCore.TONG_PHAN+(_eta?' · '+_eta:'...');
-  _pace&&_pace.begin();
+}
+// Chạy MỘT phần — gọi từ trong bể (PhanPool) và trực tiếp từ nút "↻ Thử lại"
+// (retry chỉ cần làm lại đúng phần lỗi, không cần chạy lại cả bể). Trả
+// true/false, KHÔNG throw ra ngoài — bể tự bọc try/catch nhưng lượt gọi trực
+// tiếp từ nút Thử lại thì không, nên hàm này tự nuốt lỗi ở nhánh catch.
+async function _runPhanLuanGiai(p){
   var box=document.getElementById('claude-content-'+p);
   // Chờ MỘT CỤC (không stream) và tốn hơn 10 giây ⇒ orb, theo luật ở đầu
   // ai-loading-steps.js. Trước đây chỗ này chỉ có một dòng chữ TĨNH nên người
@@ -593,36 +686,42 @@ async function _loadNextPhanAI(){
   }
   // PHẢI stop trước mọi lượt ghi đè `box`, nếu không đồng hồ chạy ngầm.
   var doneWait=function(){ if(w){ w.stop(); w=null; } };
-  // Cuộn tới đúng phần đang stream — không thì user tưởng trang đứng im (đã fix
-  // theo phản hồi Henry). .sec đã có scroll-margin-top neo theo --ws-top-h (bù header + .jump sticky).
-  var secEl=document.getElementById('sec-'+p);
-  if(secEl)secEl.scrollIntoView({behavior:'smooth',block:'start'});
   try{
     var docs='';
     try{
       var sr=await fetch('/api/search',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({query:QUERIES[p](),matchCount:p===1?10:7})});
       docs=(await sr.json()).docs||'';
     }catch(e){}
-    if(p>1)await new Promise(function(r){setTimeout(r,600);});
     var resp=await fetch('/api/lasotuvi',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({hoTen:_hoTen,ngay:_ngay,thang:_thang,nam:_nam,gioiTinh:_gioitinh,namXem:_namXem,laSoText:_laSoText,phan:p,docs:docs})});
     var data=await resp.json();
     if(data.error||!data.luanGiai){
       doneWait();
-      if(box)box.innerHTML='<div class="laso-error">Lỗi khi luận giải phần '+p+'. <button class="btn" onclick="window._lgRetryPhan()">↻ Thử lại</button></div>';
-      return;
+      if(box)box.innerHTML='<div class="laso-error">Lỗi khi luận giải phần '+p+'. <button class="btn" onclick="window._lgRetryPhan('+p+')">↻ Thử lại</button></div>';
+      return false;
     }
     _luanGiaiStore[p]=data.luanGiai;
-    _pace&&_pace.end();   // chỉ ghi nhịp ở nhánh THÀNH CÔNG
     doneWait();
     if(box)box.innerHTML=renderMarkdown(data.luanGiai);
+    return true;
   }catch(e){
     doneWait();
-    if(box)box.innerHTML='<div class="laso-error">Lỗi phần '+p+': '+esc(e.message)+' <button class="btn" onclick="window._lgRetryPhan()">↻ Thử lại</button></div>';
-    return;
+    if(box)box.innerHTML='<div class="laso-error">Lỗi phần '+p+': '+esc(e.message)+' <button class="btn" onclick="window._lgRetryPhan('+p+')">↻ Thử lại</button></div>';
+    return false;
   }
-  await _loadNextPhanAI();
 }
-window._lgRetryPhan=function(){ _currentPhan--; _loadNextPhanAI(); };
+window._lgRetryPhan=function(p){
+  _runPhanLuanGiai(p).then(function(ok){
+    if(ok){
+      // Lưu lại NẾU lúc này store đã đủ cả 24 phần — retry một phần lẻ có thể
+      // là phần LỖI CUỐI CÙNG còn thiếu để hoàn tất cả lượt.
+      var n=0; for(var k=1;k<=LuanGiaiCore.TONG_PHAN;k++)if(_luanGiaiStore[k])n++;
+      if(n>=LuanGiaiCore.TONG_PHAN){
+        document.getElementById('lgProgress').textContent='✓ Luận giải hoàn tất';
+        _saveLuanGiaiResult();
+      }
+    }
+  });
+};
 
 // Lưu như standalone — POST /api/save-laso (bảng laso_public, cùng slug) →
 // tự động vào "Lịch sử" ở Tài khoản (đã đọc laso_public qua /api/history)
