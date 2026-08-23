@@ -2,6 +2,13 @@
 
 ## 💰 Track Tối Ưu Chi Phí Opus — Code #1 + #2 đã push lên PR #585 (chờ merge+deploy), #3 vẫn chặn (2026-08-23)
 
+> ⚠️ **Hai phiên song song từng cùng làm track này.** Một phiên khác
+> (`claude/optimize-opus-cost-tarot-d50dma`, PR #582, đã merge) đo/lập plan
+> ĐỘC LẬP và ra kết luận giống hệt (bảng số đo dưới đây khớp 1:1), nhưng dừng
+> lại ở "audit + duyệt plan, chưa code". Bản này (`claude/opus-cost-
+> optimization-1qnab6`, PR #585) tiếp tục viết Code #1+#2 thật — mục dưới đây
+> là bản HIỆN HÀNH.
+
 ### 🔖 RESUME HERE
 Henry test nhiều provider (Opus 5 / Kimi K3 / Sonnet / Gemini Flash) rồi chốt
 **Opus 5 ổn định + chính xác nhất** cho luận giải LLM, nhưng đắt. Ý đầu Henry
@@ -233,7 +240,11 @@ Cần Henry xác nhận lại chỗ đã đặt; KHÔNG tự đoán mù `effort`
    tiếp đều `ANTHROPIC_API_KEY=false`. Verify trước tiên ở phiên sau:
    `node -e "console.log(!!process.env.ANTHROPIC_API_KEY)"`. Còn `false` thì
    hỏi thẳng Henry đã đặt ở ĐÂU (không đoán mù effort, không code theo
-   phỏng đoán).
+   phỏng đoán). Có key rồi thì gọi Anthropic Messages API trực tiếp (hoặc qua
+   `llmTextFull` sau khi thêm tham số `effort`) cho 1 phần Luận Giải với lần
+   lượt `effort: low/medium/high/xhigh`, so `usage.output_tokens` + đọc chất
+   lượng văn bản từng mức → quyết định effort mặc định. Đây là bước ĐO, làm
+   TRƯỚC khi code (không sửa `complete.ts` theo phỏng đoán).
 3. Nếu #1+#2 đủ tốt sau khi đo số thật (biên Luận Giải >65%, `van-han-nam`
    hết lỗ) → DỪNG, không làm #4/#5 (rủi ro cao hơn lợi thêm). Chỉ làm #4
    (gộp 5 cụm) nếu vẫn cần giảm sâu hơn. #5 (tách tool) là quyết định SẢN
