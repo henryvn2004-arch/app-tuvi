@@ -41,6 +41,15 @@ và **bắt buộc đi kèm MỌI móc dữ liệu** (`CAVEAT` của `lib/backli
 - Lưới **phủ trọn một vòng 60 năm (1950–2009)** — không phải chọn cho đẹp: can chi
   năm lặp chu kỳ 60 nên ảnh hưởng thiên can/địa chi năm được cân bằng **theo cấu
   trúc**, không cần trọng số. Lấy 50 hay 61 năm là tự tạo lệch rồi phải giải thích.
+- ✅ **Đã kiểm nỗi lo ISR: dataset CÓ trong file trace của function.** `/du-lieu`
+  prerender lúc build nhưng `revalidate` 1 ngày ⇒ lượt dựng lại chạy trong
+  lambda, nơi `process.cwd()` có thể không thấy `public/`. Đo thật:
+  `.next/server/app/du-lieu/route.js.nft.json` **có**
+  `../../../../public/data/tuvi-dataset-v1.json` — Next tracer bắt được đường
+  dẫn ghép từ chuỗi literal. Không phải vá gì; ghi lại để khỏi đi khám phá lại.
+  (⚠️ Đừng suy rộng thành *"Vercel luôn ship `public/`"* — route `/menh-kho`
+  đọc `public/tuvi-ansao-engine.js` thì **KHÔNG** có file đó trong trace mà vẫn
+  chạy prod, tức hai đường sống được vì hai lý do khác nhau, chưa truy tới cùng.)
 - Sinh bằng **CHÍNH `computeLaso` đã biên dịch** (`ENGINE_OUT`), không dựng lại
   engine song song: con số công bố ra ngoài phải là con số người dùng thấy.
 
