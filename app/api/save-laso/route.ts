@@ -67,13 +67,28 @@ export async function POST(request: NextRequest) {
 
     // Check slug đã tồn tại chưa
     const { data: ex } = await sb.from('laso_public')
-      .select('slug, user_id').eq('slug', slug).maybeSingle();
+      .select('slug, user_id, luan_giai').eq('slug', slug).maybeSingle();
 
     let finalSlug = slug;
 
     if (ex) {
-      // Slug đã tồn tại — UPDATE tại chỗ, không tạo slug mới
-      const updatePayload = { ...payload };
+      // Slug đã tồn tại — UPDATE tại chỗ, không tạo slug mới.
+      // 🔴 `luan_giai` khoá theo SỐ PHẦN (vd Chu Trình Cuộc Đời khoá theo ĐÚNG
+      // engine phan 14-24 để van-han-nam đọc lại được, xem readCachedLuanGiaiPhan)
+      // — GHI ĐÈ CẢ CỤC ở đây xoá sạch phần đã lưu TRƯỚC ĐÓ mỗi khi một lượt lưu
+      // MỚI chỉ mang một TẬP CON phần (vd một phần lỗi rồi retry ở phiên sau chỉ
+      // gửi lại đúng phần vừa xong, hoặc caller nào đó lưu thông tin cơ bản mà
+      // không kèm luận giải). MERGE nông theo khoá phần, không REPLACE cả cục.
+      const existingLuanGiai = (ex.luan_giai as Record<string, unknown> | null) || {};
+      const incomingLuanGiai = (payload.luan_giai as Record<string, unknown> | null) || {};
+      // Ép kiểu `Record<string, unknown>` tường minh: spread `payload` (vốn
+      // đã là Record<string,unknown>) CÙNG với một property tường minh
+      // (`luan_giai`) làm TypeScript đánh mất index signature của object kết
+      // quả — nó suy ra type CHỈ CÓ đúng `luan_giai`, khiến `delete
+      // updatePayload.user_id` ngay dưới báo lỗi dù `payload` có `user_id`
+      // thật. Không annotate thì spread ĐƠN (không kèm property khác) như bản
+      // cũ vẫn giữ được index signature — quirk chỉ lộ ra khi thêm property.
+      const updatePayload: Record<string, unknown> = { ...payload, luan_giai: { ...existingLuanGiai, ...incomingLuanGiai } };
       if (ex.user_id) delete updatePayload.user_id; // giữ owner cũ nếu đã có
       const { error } = await sb.from('laso_public').update(updatePayload).eq('slug', slug);
       if (error) throw error;

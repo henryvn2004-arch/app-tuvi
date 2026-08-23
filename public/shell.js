@@ -1448,18 +1448,20 @@
   //   3. Tường hết-lượt liệt kê CỤ THỂ mục chưa đọc trong 24 mục.
   //   4. Câu chữ nói bằng lá số, không bằng tiền.
 
-  // 24 mục của Luận Giải — KHỚP `PHAN_LABELS` trong luan-giai.html. Dùng để nói
-  // CỤ THỂ người ta đang bỏ lỡ cái gì; "nạp Lượng để xem thêm" thì không ai biết
-  // thêm là thêm gì.
+  // 13 mục của Luận Giải Tử Vi (tổng quan + 12 cung) — KHỚP `TONG_PHAN`/`QUERIES`
+  // trong app-luan-giai.html. Dùng để nói CỤ THỂ người ta đang bỏ lỡ cái gì;
+  // "nạp Lượng để xem thêm" thì không ai biết thêm là thêm gì.
+  // 🔴 Trước đây mảng này có 24 mục (gồm cả "Tổng quan đại vận" + Đại Vận 1-9 +
+  // "Tiểu Vận năm nay") vì Luận Giải khi đó luận trọn 24 phần. Từ lúc tách tool
+  // "Chu Trình Cuộc Đời" (đại vận + tiểu vận, xem app-chu-trinh-cuoc-doi.html),
+  // Luận Giải chỉ còn 13 mục — mảng KHÔNG được liệt thêm 11 mục đã dời đi, nếu
+  // không CTA ở đây ("Xem trọn N mục") sẽ hứa nội dung mà /app/luan-giai không
+  // còn có.
   var LG_PHAN = [
     'Tổng Quan Lá Số',
     'Cung Mệnh', 'Cung Phụ Mẫu', 'Cung Phúc Đức', 'Cung Điền Trạch',
     'Cung Quan Lộc', 'Cung Nô Bộc', 'Cung Thiên Di', 'Cung Tật Ách',
     'Cung Tài Bạch', 'Cung Tử Tức', 'Cung Phu Thê', 'Cung Huynh Đệ',
-    'Tổng quan đại vận',
-    'Đại Vận 1', 'Đại Vận 2', 'Đại Vận 3', 'Đại Vận 4', 'Đại Vận 5',
-    'Đại Vận 6', 'Đại Vận 7', 'Đại Vận 8', 'Đại Vận 9',
-    'Tiểu Vận năm nay',
   ];
 
   // Chủ đề câu hỏi → cung. Tra bằng TỪ KHOÁ, deterministic, 0 đồng — cố ý không

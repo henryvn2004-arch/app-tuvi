@@ -122,15 +122,21 @@ const SUPABASE_URL = process.env.SUPABASE_URL!;
 const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY!;
 
 /**
- * Tra `laso_public` theo ĐÚNG slug lá số này (không tiền tố, tool 'laso') +
- * ĐÚNG năm xem (`nam_xem`) — một số phần (đặc biệt phần 24 "Tiểu vận & năm
- * xem") phụ thuộc năm xem nên KHÔNG được đoán, phải khớp tuyệt đối. Trả về
- * đúng văn bản của `phanLaso` (khoá số trong object `luan_giai`, 1..24) nếu
+ * Tra `laso_public` theo ĐÚNG slug lá số này + ĐÚNG năm xem (`nam_xem`) — một
+ * số phần (đặc biệt phần 24 "Tiểu vận & năm xem") phụ thuộc năm xem nên KHÔNG
+ * được đoán, phải khớp tuyệt đối. `toolType` chọn TOOL nào đang giữ phần đó:
+ * 🔴 phần 1 (tổng quan) thuộc "Luận Giải Tử Vi" (`laso`, slug KHÔNG tiền tố);
+ * phần 14/14+n/24 (đại vận + tiểu vận) đã TÁCH sang "Chu Trình Cuộc Đời"
+ * (`chu-trinh-cuoc-doi`, slug CÓ tiền tố) — xem CLAUDE.md track tách tool.
+ * Tra sai slug là cache-miss VĨNH VIỄN cho lá số tính từ lúc tách, không phải
+ * lỗi ồn ào gì — chỉ âm thầm mất tối ưu, nên dễ bỏ sót.
+ * Trả về đúng văn bản của `phanLaso` (khoá số trong object `luan_giai`, khoá
+ * theo ĐÚNG engine phan 1..24 — không phải số thứ tự nội bộ của tool nào) nếu
  * có; không có/không khớp/lỗi mạng → trả `null` (rơi về gọi LLM như cũ, KHÔNG
  * chặn lượt của người dùng vì bước này chỉ là tối ưu chi phí).
  */
 async function readCachedLuanGiaiPhan(
-  ls: Laso, birth: BirthParams, tuNam: number, phanLaso: number,
+  ls: Laso, birth: BirthParams, tuNam: number, phanLaso: number, toolType: string,
 ): Promise<string | null> {
   try {
     const gioChi = birth.hourBranch != null ? (CHI_NAMES[birth.hourBranch] || '') : '';
@@ -138,7 +144,7 @@ async function readCachedLuanGiaiPhan(
       String((ls as AnyRec).canChiNam || ''),
       birth.gender === 'nu' ? 'nu' : 'nam',
       String(birth.day), String(birth.month), String(birth.year),
-      gioChi,
+      gioChi, toolType,
     );
     const r = await fetch(
       `${SUPABASE_URL}/rest/v1/laso_public?slug=eq.${encodeURIComponent(slug)}` +
@@ -211,10 +217,15 @@ async function runPost(request: NextRequest) {
   if (!(phan >= 1 && phan <= TONG_PHAN)) return err('Phần không hợp lệ.', 400);
   const docs = body.docs ? String(body.docs) : undefined;
 
-  // Phần 1-4 trùng Y HỆT 4 phần của Luận Giải — thử đọc lại trước khi gọi LLM.
+  // Phần 1-4 trùng Y HỆT 4 phần của Luận Giải/Chu Trình Cuộc Đời — thử đọc lại
+  // trước khi gọi LLM. Phần 1 (tổng quan) tra slug 'laso'; phần 2-4 (đại vận +
+  // tiểu vận, đã tách khỏi Luận Giải) tra slug 'chu-trinh-cuoc-doi' — 2 tool
+  // KHÁC slug nhau nên phải tra ĐÚNG bên đang giữ nội dung, xem
+  // readCachedLuanGiaiPhan().
   const laSoPhanMap: Record<number, number> = { 1: 1, 2: 14, 3: 14 + dvHienTaiSo(ls), 4: 24 };
+  const laSoToolMap: Record<number, string> = { 1: 'laso', 2: 'chu-trinh-cuoc-doi', 3: 'chu-trinh-cuoc-doi', 4: 'chu-trinh-cuoc-doi' };
   if (phan <= 4) {
-    const cached = await readCachedLuanGiaiPhan(ls, birth, tuNam, laSoPhanMap[phan]!);
+    const cached = await readCachedLuanGiaiPhan(ls, birth, tuNam, laSoPhanMap[phan]!, laSoToolMap[phan]!);
     if (cached) return ok({ luanGiai: cached, phan });
   }
 
