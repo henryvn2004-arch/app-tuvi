@@ -451,13 +451,26 @@ async function _startAI(){
   // lâu. Bể PhanPool chạy PHAN_CONCURRENCY phần song song (mỗi phần độc lập,
   // không đọc kết quả phần khác) ⇒ giảm tổng thời gian chờ ~PHAN_CONCURRENCY
   // lần mà không đụng gì tới model. Xem tools-shared/phan-pool.js.
+  //
+  // 🔑 BẮT BUỘC bắn PHẦN 1 RIÊNG LẺ trước khi mở bể song song — cùng lý do đã
+  // ghi ở app-luan-giai.html (Code #1, CLAUDE.md track tối ưu chi phí Opus).
+  // /api/van-han-nam nay cache `system` cho phần 1-4 (trùng 4 phần đầu của
+  // Luận Giải); mở PHAN_CONCURRENCY song song ngay từ đầu thì 3 lượt đầu tiên
+  // bắn gần như đồng thời (staggerMs 400ms, ngắn hơn nhiều so với thời gian
+  // một lượt LLM ghi xong cache) ⇒ cache-miss cả 3, tốn thêm phí ghi thay vì
+  // tiết kiệm. Phần 5+ (nguyệt vận) không cache nên không bị ảnh hưởng dù
+  // trước/sau lượt mồi này.
+  document.getElementById('vhProgress').textContent='Đang luận phần 1 / '+_tongPhan+'...';
+  var primeOk=await _runPhanVanHan(1);
   var result=await PhanPool.run({
     total:_tongPhan,
     concurrency:PHAN_CONCURRENCY,
     progressEl:'vhProgress',
     progressPrefix:'Đang luận phần',
     pace:_pace,
-    runPart:_runPhanVanHan,
+    // Phần 1 đã chạy ở lượt mồi trên — bể chỉ cần TRẢ LẠI kết quả đó, không
+    // gọi lại API (gọi lại là tốn thêm một lượt model vô ích).
+    runPart:function(p){ return p===1?Promise.resolve(primeOk):_runPhanVanHan(p); },
   });
   if(result.ok){
     document.getElementById('vhProgress').textContent='✓ Luận vận hạn hoàn tất';

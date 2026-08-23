@@ -1,14 +1,34 @@
 # CLAUDE.md — Context cho Claude Code
 
-## 💰 Track Tối Ưu Chi Phí Opus — audit + brainstorm XONG, CHƯA CODE DÒNG NÀO (2026-08-23)
+## 💰 Track Tối Ưu Chi Phí Opus — Code #1 + #2 đã push lên PR #585 (chờ merge+deploy), #3 vẫn chặn (2026-08-23)
+
+> ⚠️ **Hai phiên song song từng cùng làm track này.** Một phiên khác
+> (`claude/optimize-opus-cost-tarot-d50dma`, PR #582, đã merge) đo/lập plan
+> ĐỘC LẬP và ra kết luận giống hệt (bảng số đo dưới đây khớp 1:1), nhưng dừng
+> lại ở "audit + duyệt plan, chưa code". Bản này (`claude/opus-cost-
+> optimization-1qnab6`, PR #585) tiếp tục viết Code #1+#2 thật — mục dưới đây
+> là bản HIỆN HÀNH.
 
 ### 🔖 RESUME HERE
 Henry test nhiều provider (Opus 5 / Kimi K3 / Sonnet / Gemini Flash) rồi chốt
 **Opus 5 ổn định + chính xác nhất** cho luận giải LLM, nhưng đắt. Ý đầu Henry
 đưa ra (*"gộp cả lá số vào 1 prompt"*) **bị bác bằng số đo** (xem dưới), nhưng
 chẩn đoán đúng hướng: hạ tầng hiện đang lãng phí ~95% input mỗi lượt vào thứ
-lặp lại. Đã đo xong + brainstorm xong + **Henry đã duyệt cả plan** — nhưng
-**0 dòng code đã viết**. Việc tiếp theo nằm ở mục "▶️ Việc tiếp theo" cuối track.
+lặp lại. Plan 5 bước **Henry đã duyệt**.
+
+**CẢ Code #1 lẫn Code #2 nay đã VIẾT XONG + VERIFY XONG + COMMIT + PUSH**, nằm
+CÙNG một branch (`claude/opus-cost-optimization-1qnab6`) và **CÙNG PR #585**
+(đang mở, CI xanh — 2 check_suite trên head `f5d94e4` lẫn `d61d5d3` đều báo
+"no third-party check suite still running or failed", Vercel preview build
+"Ready"). Code #2 commit trước (`f5d94e4`, mục "✅ Code #2 XONG" dưới); Code #1
+commit sau, TRONG CÙNG phiên vừa viết xong (mục "✅ Code #1 XONG" dưới) — gộp
+vào PR đang mở thay vì mở PR riêng vì hai bước không đụng logic nhau (đã A/B
+xác nhận: Code #2 chỉ thêm một nhánh `return` SỚM trước khi chạm dòng Code #1
+sửa) và cùng một track đã duyệt.
+
+`ANTHROPIC_API_KEY` **vẫn không đọc được trong container — LẦN THỨ BA liên
+tiếp** (mục "🔴 ANTHROPIC_API_KEY" dưới) → bước đo A/B `effort` (#3) tiếp tục
+bị chặn, KHÔNG đoán mù effort. Việc tiếp theo: mục "▶️ Việc tiếp theo" cuối track.
 
 ### 🔴 Số đo THẬT trên prod (bảng `events.llm_usage`, không phải ước lượng)
 | | |
@@ -45,11 +65,11 @@ Cấu trúc input thật của Luận Giải 24 phần (đo bằng harness biên
 | day-con/nguoi-khac/nhan-mach/huong-nghiep-tre | 1 | 15–20 L | — |
 | cong-so/gio-sinh | 0 (tra bảng) | — | — |
 
-🐞 **Phát hiện kèm, CHƯA vá:** `van-han-nam` phần 1–4 gọi lại CHÍNH
-`buildPrompt(1/14/ĐV hiện tại/24)` của Luận Giải (`app/api/van-han-nam/route.ts`
-dòng ~169). Ai mua CẢ HAI tool đang trả tiền 2 lần cho 4 phần y hệt nhau. Sửa
-bằng cách đọc `laso_public.luan_giai` thay vì gọi LLM lại — **0đ**, không đụng
-một chữ prompt.
+🐞 **Phát hiện kèm — ĐÃ VÁ (Code #2, xem mục dưới):** `van-han-nam` phần 1–4 gọi
+lại CHÍNH `buildPrompt(1/14/ĐV hiện tại/24)` của Luận Giải
+(`app/api/van-han-nam/route.ts` dòng ~169). Ai mua CẢ HAI tool đang trả tiền 2
+lần cho 4 phần y hệt nhau. Sửa bằng cách đọc `laso_public.luan_giai` thay vì
+gọi LLM lại — **0đ**, không đụng một chữ prompt.
 
 ### ✅ Henry ĐÃ DUYỆT plan, thứ tự ưu tiên
 | # | Việc | Giảm | Rủi ro | Đụng gì |
@@ -66,40 +86,171 @@ lượt write ×1,25 = **ĐẮT HƠN** thay vì rẻ hơn. Phải bắn 1 lượ
 trước rồi mới mở song song. Cache TTL mặc định 5 phút — 24 phần chạy hiện
 ~11 phút nên cần `ttl:"1h"` HOẶC rút thời gian tổng bằng #4 trước khi tính TTL 5 phút.
 
-### 🔴 BỊ CHẶN LÚC ĐO — ANTHROPIC_API_KEY set nhưng phiên đó không thấy
-Henry đã set `ANTHROPIC_API_KEY` vào environment Claude Code container ở phiên
-trước (`env` không thấy nó dù `GEMINI_API_KEY`/`OPENAI_API_KEY` cùng chỗ ĐỌC
-được) — đúng bài học lặp lại nhiều lần trong file này: **biến môi trường chỉ
-nạp vào container ở lần khởi động MỚI**, phiên đang chạy lúc set không thấy.
+### ✅ Code #2 XONG — `van-han-nam` phần 1-4 đọc lại `laso_public` trước khi gọi LLM
+Vá đúng lỗ ở mục 🐞 trên. `computeLaso`+`readBirth` đã tính lá số/`birth`/năm
+xem trước khi build prompt nên chỗ chèn rất rẻ: **thử tra cache TRƯỚC bước
+build prompt**, tra trượt thì rơi thẳng vào code cũ, KHÔNG đổi một chữ nào của
+đường LLM đang chạy.
 
-### ▶️ Việc tiếp theo (đúng thứ tự, làm ở PHIÊN MỚI)
-1. **Verify trước tiên**: `node -e "console.log(!!process.env.ANTHROPIC_API_KEY)"`
-   — nếu vẫn `false` thì báo Henry set SAI CHỖ (phải là environment của Claude
-   Code container, KHÔNG phải Vercel env — Vercel chỉ chảy vào app production).
-2. **Đo A/B effort thật** (mục #3 bảng trên): gọi Anthropic Messages API trực
-   tiếp (hoặc qua `llmTextFull` sau khi thêm tham số) cho 1 phần Luận Giải với
-   `effort: low/medium/high/xhigh`, so `usage.output_tokens` + đọc chất lượng
-   văn bản → quyết định effort mặc định. Đây là bước ĐO, làm TRƯỚC khi code.
-3. **Code #1** (prompt caching): sửa `lib/llm/complete.ts`
-   (`buildAnthropicBody`/`anthropicText`/`llmTextFull`) thêm `cache_control:
-   {type:"ephemeral", ttl:"1h"}` trên khối system+lá-số-đầy-đủ; sửa
-   `lib/agent/luan-giai-doc.ts` (`buildPrompt`/`laSoContextFor`) để phần LÁ SỐ
-   không còn cắt theo `trimLaSo` (giữ nguyên toàn văn cho mọi phần, chỉ câu
-   lệnh riêng từng phần mới đổi) — bắt buộc để 24 lượt có CHUNG một prefix.
-   Cần né bẫy song-song đã ghi ở trên.
-4. **Code #2** (`van-han-nam` phần 1–4 đọc lại từ `laso_public.luan_giai`).
-5. Deploy, đo lại `events.llm_usage.cost_vnd` THẬT trên 24 lượt trước/sau — so
-   với số ước ở bảng trên (query mẫu: `select tool_id, avg((meta->>'cost_vnd')
-   ::numeric) from events where event_type='llm_usage' and tool_id='laso' and
-   ts>now()-interval '1 day' group by 1`).
-6. Nếu #1+#2 đủ tốt (biên Luận Giải >65%, `van-han-nam` hết lỗ) → DỪNG, không
-   làm #4/#5 (rủi ro cao hơn lợi thêm). Chỉ làm #4 nếu vẫn cần giảm sâu hơn.
-   #5 (tách tool) là quyết định SẢN PHẨM riêng, bàn lại với Henry sau khi có
-   số thật của #1+#2, không tự ý làm.
+- **`makeLasoSlug`+`CHI_NAMES` dời sang `lib/engine/laso.ts` (export), KHÔNG
+  chép lại.** Hàm dựng slug lá số trước đó CHỈ sống được trong
+  `app/api/save-laso/route.ts` (Next chặn `route.ts` export tên lạ ngoài
+  HTTP handler) — mà `van-han-nam` cần ĐÚNG công thức đó để tra lại đúng dòng.
+  Chép tay là hẹn ngày 2 route ra 2 slug khác nhau cho cùng một lá số — đúng
+  bệnh đã ghi nhiều lần trong file này. Port nguyên văn, 0 đổi hành vi.
+- **`readCachedLuanGiaiPhan(ls, birth, tuNam, phanLaso)`** — dựng lại `gioChi`
+  từ `CHI_NAMES[birth.hourBranch]` (đại vận/tứ trụ không tự mang trường này),
+  tra `GET laso_public?slug=eq.<slug>&select=nam_xem,luan_giai` bằng ANON key
+  (bảng cho đọc công khai, chỉ ghi mới cần service key), **CHỈ nhận khi
+  `nam_xem` KHỚP TUYỆT ĐỐI** — phần 24 ("Tiểu vận & năm xem") phụ thuộc năm
+  xem, khớp gần đúng là bịa. `fail-open` triệt để: bất kỳ lỗi nào (không có
+  dòng, sai năm, thiếu đúng khoá phần, mạng lỗi, Supabase lỗi) đều trả `null`
+  → rơi về gọi LLM y hệt trước đây, KHÔNG BAO GIỜ chặn lượt của người dùng vì
+  đây thuần là tối ưu chi phí.
+- Cả 4 phần đều đi qua CHÍNH regex strip-chartdata mà `/api/lasotuvi` dùng
+  trước khi lưu vào `laso_public.luan_giai` → chữ cache và chữ LLM sinh mới
+  **giống định dạng tuyệt đối**, không có rủi ro lệch hiển thị.
 
-Branch: `claude/optimize-opus-cost-tarot-d50dma` (đứng trên `origin/main`,
-HEAD `0a06e53` — 3 commit gần nhất của branch là việc KHÁC, không liên quan
-track này; track này chưa code gì cả).
+**Verify:** `npm run typecheck` 0 lỗi (fix 1 lỗi type thật: `birth.gender` là
+`'nam'|'nu'|undefined`, coerce giống `readBirth()` đã làm) · `npm run lint`
+0 lỗi/77 warning = mốc nền · `npx prettier --check` sạch cả 3 file · `npm run
+check:nostore` sạch (fetch mới có `cache:'no-store'`) · **harness biên dịch
+route thật + stub `global.fetch`, 9 kịch bản/32 assertion, 0 fail**: cache hit
+→ **0 lượt gọi LLM** cho cả phần 1/2/4 và phần 3 (khoá `14+dvHienTaiSo`, không
+phải hằng số) · năm xem lệch / không có dòng / thiếu đúng khoá / Supabase lỗi
+mạng → đều rơi về gọi LLM đúng như code cũ · phần THÁNG (phan≥5) và
+`action=khung` **0 lượt tra `laso_public`**, hoàn toàn không đụng.
+
+✅ **Đã commit (`f5d94e4`) + push + PR #585 mở, CI xanh** (xác nhận qua 2 event
+`check_suite.completed` — không job nào failed — cộng Vercel preview "Ready").
+⚠️ **Vẫn chưa MERGE + chưa deploy prod, nên vẫn chưa đo `events.llm_usage.
+cost_vnd` thật.** `laso_public` hiện thưa dữ liệu (đa số bản test) nên lợi ích
+thật chỉ hiện rõ khi có người dùng thật mua cả 2 tool cùng lá số/năm — cần
+theo dõi sau khi merge.
+
+### ✅ Code #1 XONG — bật prompt caching Anthropic + gửi lá số ĐẦY ĐỦ (chưa deploy)
+Trước khi sửa: **load skill `claude-api`** (Task #3), đọc kỹ mục cURL —
+xác nhận **caching là GA, KHÔNG cần header `anthropic-beta`** (khác trí nhớ
+training) — chỉ cần `content` dạng mảng với 1 khối
+`{type:'text', text, cache_control:{type:'ephemeral', ttl:'1h'}}`. Dùng
+`ttl:"1h"` (không phải mặc định 5 phút) đúng như bảng plan đã ghim — 24 phần
+Luận Giải chạy hiện ~11 phút, ngắn hơn 5 phút thì cache hết hạn giữa chừng.
+
+**Ba lớp thay đổi, đúng phạm vi plan đã duyệt (mục #1 bảng trên):**
+
+1. **`lib/llm/complete.ts`** — thêm `LlmTextOpts.cacheSystem?: boolean`
+   (OPT-IN, mặc định TẮT — chỉ bật khi caller CHẮC `system` lặp lại y hệt ở
+   nhiều lượt gọi kế; bật tràn lan cho lượt 1-shot chỉ tốn thêm phí ghi ×1,25
+   mà không có lượt đọc nào bù). `buildAnthropicBody`: `cacheSystem:true` →
+   bọc `body.system` thành mảng 1 khối kèm `cache_control`; tắt/thiếu → giữ
+   nguyên chuỗi thường như cũ (0 hồi quy cho MỌI caller khác đang gọi
+   `llmTextFull` — đã audit, không ai khác truyền cờ này). `RawLlmResult`/
+   `LlmTextFullResult.usage` nới từ 2 trường lên 4 (`cache_creation_input_
+   tokens`/`cache_read_input_tokens`), threading thật từ response Anthropic
+   (`geminiText`/`kimiText` luôn trả 0 — hai provider này không hỗ trợ cache
+   kiểu Anthropic trong repo). **CỐ Ý KHÔNG đụng** `geminiCallTools`/
+   `anthropicCallTools`/`kimiCallTools` (nhánh agentic tool-calling của
+   `/api/v1/chat`, ngoài phạm vi Code #1) — kể cả header `anthropic-beta` thừa
+   đang nằm sẵn trong `anthropicCallTools` (đã đọc, xác nhận vô hại nhưng
+   không đụng vì nó thuộc một tính năng KHÁC đã sống trên prod từ trước).
+2. **`lib/agent/luan-giai-doc.ts`** — tách `instructionFor(phan)` (câu lệnh
+   riêng từng phần, y NGUYÊN VĂN nội dung cũ, chỉ bỏ tiền tố `ctx +`) khỏi
+   `promptCtx(phan, laSoText, docs)` (khối `=== LÁ SỐ ===` đã CẮT theo
+   `trimLaSo` + docs — phần ĐỔI theo `phan`). `buildPrompt` = composed lại từ
+   hai hàm đó (byte-identical, xem Verify). Thêm `buildPromptCached(phan,
+   laSoText, docs): {system, prompt}` — `system = SYSTEM_PROMPT + lá số ĐẦY
+   ĐỦ KHÔNG CẮT` (bất biến theo NGƯỜI, không theo `phan` ⇒ 24 lượt share đúng
+   MỘT prefix); `prompt = docs (đổi mỗi phan, KHÔNG cache được) +
+   instructionFor(phan)`. `laSoContextFor`/`trimLaSo` giữ nguyên — vẫn phục vụ
+   nhánh nguyệt vận của `van-han-nam` (ngoài phạm vi).
+3. **2 route** — `app/api/lasotuvi/route.ts` (KHÔNG điều kiện — route này chỉ
+   chạy đúng luồng 24 phần) và `app/api/van-han-nam/route.ts` (CÓ điều kiện —
+   `cacheSystem=true` CHỈ cho `phan<=4`, phần trùng Luận Giải; `phan>4` là
+   nhánh nguyệt vận `buildPromptThang`, giữ nguyên `system=SYSTEM_PROMPT` chuỗi
+   thường như cũ). Cả hai đổi `llmTextFull({...})` sang truyền
+   `cacheSystem:true/false` và thôi hardcode `cache_creation_input_tokens:0,
+   cache_read_input_tokens:0` khi ghi `logLlmUsage` — trước đây route KHÔNG
+   BAO GIỜ đo được cache dù có bật, vì luôn ghi cứng 0.
+4. **`public/app-luan-giai.html` + `public/app-van-han-nam.html`** — vá đúng
+   **"bẫy đã lường cho #1"** ghi sẵn ở bảng plan: `PhanPool` mở
+   `PHAN_CONCURRENCY=3` song song với `staggerMs=400ms` — ngắn hơn nhiều một
+   lượt LLM ghi xong cache, nên 3 lượt đầu bắn gần đồng thời sẽ CẢ 3 cache-miss
+   (đắt hơn, không rẻ hơn). Vá bằng cách bắn **phần 1 riêng lẻ** (mồi, ghi
+   cache) TRƯỚC khi mở bể song song; bể chạy các phần còn lại + trả lại kết
+   quả phần 1 đã có (không gọi lại API, tránh tốn thêm một lượt model).
+
+**Verify (module thật, không tin bịa):**
+- `npm run typecheck` 0 lỗi · `npm run lint` 0 lỗi/77 warning = đúng mốc nền ·
+  `npx prettier --check` sạch cả 4 file `.ts` · `node --check` cả 2 khối
+  script trích từ HTML.
+- **A/B `buildPrompt`** (biên dịch CẢ bản `git show HEAD:...` [cũ] LẪN bản
+  working-tree [mới], stub 1 import ngoài) trên 5 mẫu lá số × 24 phan = 120
+  ca, **0 mismatch** (byte-identical tuyệt đối). `laSoContextFor` cùng 120 ca,
+  **0 mismatch**.
+- **`buildPromptCached` — kiểm cấu trúc** trên cùng 120 ca: `system` luôn bắt
+  đầu bằng `SYSTEM_PROMPT` + chứa TOÀN VĂN `laSoText` (không phải bản cắt) ·
+  `system` **GIỐNG HỆT NHAU** ở mọi `phan` cho cùng một lá số (thuộc tính cốt
+  lõi khiến cache chạy được) · `prompt` KHÔNG rò rỉ lá số · thay đổi `docs`
+  chỉ đổi `prompt`, KHÔNG đổi `system` (docs không lọt vào prefix cache) — 0
+  ca sai.
+- **Test hành vi `complete.ts`** (biên dịch thật + `Module._resolveFilename`
+  hook cho `@/...`, stub `global.fetch` bắt request thật gửi tới
+  `api.anthropic.com`, đi qua ĐÚNG chuỗi fallback `kimiText(throw)→
+  anthropicText`, không mock hàm nào): 19/19 check — request có đúng shape
+  `[{type:'text', text, cache_control:{ephemeral, ttl:'1h'}}]` khi
+  `cacheSystem:true` · **0 header `anthropic-beta`**, đúng 3 header chuẩn ·
+  `usage.cache_creation_input_tokens`/`cache_read_input_tokens` threading đúng
+  cho cả lượt GHI (9.821 token, response thật) lẫn lượt ĐỌC (9.821 token) ·
+  **regression: `cacheSystem` bỏ trống hoặc `false` → `system` vẫn là chuỗi
+  thường, không `cache_control`** (mọi caller cũ không đổi hành vi) · parsing
+  usage luôn trung thực với response thật, không phụ thuộc cờ request.
+
+⚠️ **Chưa deploy, chưa đo `cache_creation_input_tokens`/`cache_read_input_
+tokens` thật trên prod.** Số ước ở bảng plan (−35%, 44.300→29.100đ/lượt) là
+TÍNH TRƯỚC — cần merge + chờ vài lượt Luận Giải thật rồi đọc lại
+`events.llm_usage.meta` mới biết số thật.
+
+### 🔴 ANTHROPIC_API_KEY — LẦN THỨ BA, vẫn `false`, đo lại ở CHÍNH phiên viết Code #1
+Hai phiên trước: `env` không thấy `ANTHROPIC_API_KEY` dù `GEMINI_API_KEY`/
+`OPENAI_API_KEY` ĐỌC được; phiên thứ hai loại được giả thuyết "phiên cũ chưa
+restart" (xác nhận qua `get_session` là phiên mới tinh). **Phiên NÀY — đúng
+phiên vừa viết xong Code #1 — đo lại lần nữa TRƯỚC khi cập nhật doc này**:
+`node -e "console.log(!!process.env.ANTHROPIC_API_KEY)"` → vẫn **`false`**,
+trong khi `GEMINI_API_KEY`/`OPENAI_API_KEY` vẫn `true` y hệt hai lần trước.
+Ba lần liên tiếp cùng một kết quả (2 key kia luôn có, key này luôn không) ⇒
+giả thuyết mạnh nhất giữ nguyên: **đặt SAI CHỖ** (nhiều khả năng đặt ở env
+Vercel — chỉ chảy vào app production, KHÔNG BAO GIỜ chảy vào container Claude
+Code — chứ không phải ở đúng ô cấu hình environment/session của Claude Code).
+Cần Henry xác nhận lại chỗ đã đặt; KHÔNG tự đoán mù `effort` khi chưa đo được.
+
+### ▶️ Việc tiếp theo (đúng thứ tự)
+1. **Đợi CI xanh trên PR #585** (đã xanh tại thời điểm viết dòng này — xem
+   RESUME HERE) rồi **merge → deploy**. Sau vài ngày đọc lại
+   `events.llm_usage.cost_vnd`/`meta` cho CẢ HAI:
+   - `tool_id='laso'` (Luận Giải, Code #1) — so trung bình `cost_vnd`/lượt
+     trước/sau deploy, và soi `meta->>'cache_read_input_tokens'` có > 0 không
+     (0 nghĩa là cache không hit — có thể do lượt mồi bị bỏ qua ở client, hoặc
+     TTL 1h vẫn hết hạn nếu 24 phần chạy chậm bất thường).
+   - `tool_id='van-han-nam'` (Code #2, đọc `laso_public` trước khi gọi LLM) —
+     xem đã có lượt cache-hit ở TẦNG DB nào chưa (query mẫu:
+     `select tool_id, avg((meta->>'cost_vnd')::numeric) from events where
+     event_type='llm_usage' and tool_id='van-han-nam' and ts>now()-interval
+     '7 day' group by 1`).
+2. **Đo A/B effort thật** (mục #3 bảng trên) — VẪN BỊ CHẶN, ba lần đo liên
+   tiếp đều `ANTHROPIC_API_KEY=false`. Verify trước tiên ở phiên sau:
+   `node -e "console.log(!!process.env.ANTHROPIC_API_KEY)"`. Còn `false` thì
+   hỏi thẳng Henry đã đặt ở ĐÂU (không đoán mù effort, không code theo
+   phỏng đoán). Có key rồi thì gọi Anthropic Messages API trực tiếp (hoặc qua
+   `llmTextFull` sau khi thêm tham số `effort`) cho 1 phần Luận Giải với lần
+   lượt `effort: low/medium/high/xhigh`, so `usage.output_tokens` + đọc chất
+   lượng văn bản từng mức → quyết định effort mặc định. Đây là bước ĐO, làm
+   TRƯỚC khi code (không sửa `complete.ts` theo phỏng đoán).
+3. Nếu #1+#2 đủ tốt sau khi đo số thật (biên Luận Giải >65%, `van-han-nam`
+   hết lỗ) → DỪNG, không làm #4/#5 (rủi ro cao hơn lợi thêm). Chỉ làm #4
+   (gộp 5 cụm) nếu vẫn cần giảm sâu hơn. #5 (tách tool) là quyết định SẢN
+   PHẨM riêng, bàn lại với Henry sau khi có số thật của #1+#2, không tự ý làm.
+
+Branch: `claude/opus-cost-optimization-1qnab6` (đứng trên `origin/main`, PR #585).
 
 ---
 
@@ -10365,6 +10516,21 @@ ca phản chứng, nếu không nó tự lên đời thành luật.**
   nhánh**, không còn là "đo prod". Đây là lần thứ ba trong repo một ĐỐI CHỨNG
   hết hạn vì chính hạ tầng nó neo vào đã đổi — xem lại mục *CI đo BẢN CŨ* ngay
   dưới trước khi viện dẫn lập luận này.
+
+🪤 **PHẢN CHỨNG THỨ HAI cho bảng `opened`/`synchronize` ở trên (2026-08-23,
+PR #585)**: PR mở lần đầu (event `opened` thật, không phải reset-nhánh-rồi-mở),
+head là commit thường (không phải merge commit) — đúng ô bảng trên ghi *"chưa
+thấy lượt nào hụt"*. Vẫn hụt: chỉ 3 job `deployment_status` (Vercel comment ·
+smoke · lighthouse, cả 3 xanh) chạy; `Lint & Format` · `Next Build` ·
+`Unit Tests` (cả 3 job trigger bằng `pull_request`) **0 run nào được tạo**, dù
+đợi hơn 3 phút. ⇒ **`opened` KHÔNG miễn nhiễm** — bảng trên chỉ đúng "chưa
+thấy", không phải "không xảy ra". Mẫu vẫn quá nhỏ để tìm quy luật khác ngoài
+"GitHub thỉnh thoảng không phát event, không phân biệt loại event". Vá bằng
+cách chạy tại chỗ đúng 3 job thiếu (đã có sẵn `.github/workflows/next-build.yml`
+làm khuôn: `node scripts/stub-postgrest.mjs 54321 &` rồi
+`SUPABASE_URL=http://127.0.0.1:54321 SUPABASE_SERVICE_KEY=stub-service-key
+SUPABASE_ANON_KEY=stub-anon-key npm run build`) + `npm run lint` +
+`cd tuvi-engine && npm test` — cả ba local đều xanh, nói thẳng trên PR.
 
 ### ⚠️ (ghi chép cũ) CI: workflow `pull_request` có lúc KHÔNG fire
 2 commit liên tiếp chỉ có Vercel + `smoke` chạy; lint/typecheck/test/lighthouse **không hề

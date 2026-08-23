@@ -67,6 +67,14 @@ export interface LlmTextOpts {
    * không chỉ đúng cú pháp. Bỏ qua với Anthropic (API không có). */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   jsonSchema?: any;
+  /** OPT-IN — chỉ bật khi CHÍNH caller biết `system` sẽ được gửi LẶP LẠI với
+   * nội dung GIỐNG HỆT ở nhiều lượt gọi kế tiếp (vd 24 phần Luận Giải cùng
+   * một lá số). Chỉ tác dụng ở nhánh Anthropic (`buildAnthropicBody` bọc
+   * `system` thành 1 khối `cache_control:{type:'ephemeral',ttl:'1h'}`) —
+   * Gemini/Kimi không đọc field này, tự bỏ qua. Mặc định TẮT: gắn tràn lan
+   * cho các lượt gọi 1-shot không lặp lại (đa số route đang dùng module này)
+   * chỉ tốn thêm phí GHI cache (×1,25) mà không có lượt ĐỌC nào bù lại. */
+  cacheSystem?: boolean;
   /** Ép provider ĐỨNG ĐẦU cho ĐÚNG LƯỢT NÀY, bỏ qua `chat.standalone_provider`
    * trong DB (khoá đó là cấu hình GLOBAL, dùng chung mọi route standalone —
    * ép ở đây không đổi hành vi của route khác). Vẫn giữ NGUYÊN chuỗi fallback
@@ -118,7 +126,16 @@ function buildGeminiBody(o: LlmTextOpts, maxTokens: number) {
 
 interface RawLlmResult {
   text: string;
-  usage: { input_tokens: number; output_tokens: number };
+  usage: {
+    input_tokens: number;
+    output_tokens: number;
+    /** Chỉ Anthropic có ý nghĩa (đọc thật từ response khi `cacheSystem` bật);
+     * Gemini/Kimi luôn 0. Cần cho `logLlmUsage` tính đúng `cost_vnd` (write
+     * ×1,25 / read ×0,1) — thiếu 2 trường này thì cache có chạy thật cũng
+     * không đo được tiết kiệm, số liệu vẫn tính như chưa cache. */
+    cache_creation_input_tokens: number;
+    cache_read_input_tokens: number;
+  };
 }
 
 async function geminiText(o: LlmTextOpts, maxTokens: number): Promise<RawLlmResult> {
@@ -139,6 +156,8 @@ async function geminiText(o: LlmTextOpts, maxTokens: number): Promise<RawLlmResu
     usage: {
       input_tokens: j?.usageMetadata?.promptTokenCount || 0,
       output_tokens: j?.usageMetadata?.candidatesTokenCount || 0,
+      cache_creation_input_tokens: 0,
+      cache_read_input_tokens: 0,
     },
   };
 }
@@ -215,6 +234,8 @@ async function kimiText(o: LlmTextOpts, maxTokens: number): Promise<RawLlmResult
     usage: {
       input_tokens: j?.usage?.prompt_tokens || 0,
       output_tokens: j?.usage?.completion_tokens || 0,
+      cache_creation_input_tokens: 0,
+      cache_read_input_tokens: 0,
     },
   };
 }
@@ -269,7 +290,17 @@ function buildAnthropicBody(o: LlmTextOpts, maxTokens: number, stream: boolean) 
   if (o.json && !stream) messages = [...messages, { role: 'assistant', content: '{' }];
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const body: any = { model: ANTHROPIC_MODEL, max_tokens: maxTokens, messages };
-  if (o.system) body.system = o.system;
+  if (o.system) {
+    // cacheSystem opt-in (xem LlmTextOpts): bọc `system` thành 1 khối content
+    // với breakpoint TTL 1h — 5' mặc định KHÔNG đủ cho lượt chạy dài (24 phần
+    // Luận Giải tốn tới ~11 phút, xem CLAUDE.md track tối ưu chi phí Opus).
+    // Prefix match TUYỆT ĐỐI: caller phải tự đảm bảo `o.system` giống hệt
+    // byte-for-byte ở mọi lượt muốn dùng chung cache (không tự trộn thêm gì
+    // biến thiên vào field này khi đã bật cờ).
+    body.system = o.cacheSystem
+      ? [{ type: 'text', text: o.system, cache_control: { type: 'ephemeral', ttl: '1h' } }]
+      : o.system;
+  }
   if (stream) body.stream = true;
   return body;
 }
@@ -293,6 +324,10 @@ async function anthropicText(o: LlmTextOpts, maxTokens: number): Promise<RawLlmR
     usage: {
       input_tokens: j?.usage?.input_tokens || 0,
       output_tokens: j?.usage?.output_tokens || 0,
+      // Chỉ có giá trị thật khi `cacheSystem` bật (xem buildAnthropicBody) —
+      // Anthropic vẫn trả 2 trường này bằng 0 khi lượt gọi không cache.
+      cache_creation_input_tokens: j?.usage?.cache_creation_input_tokens || 0,
+      cache_read_input_tokens: j?.usage?.cache_read_input_tokens || 0,
     },
   };
 }
@@ -346,7 +381,12 @@ export interface LlmTextFullResult {
   text: string;
   provider: 'gemini' | 'anthropic' | 'kimi';
   model: string;
-  usage: { input_tokens: number; output_tokens: number };
+  usage: {
+    input_tokens: number;
+    output_tokens: number;
+    cache_creation_input_tokens: number;
+    cache_read_input_tokens: number;
+  };
   /** Thời lượng THẬT của lượt gọi (ms), tính cả lượt fallback provider nếu có.
    * Đo tại đây để mọi route chỉ việc chuyển tiếp — bắt 10 chỗ gọi tự bấm giờ
    * thì sớm muộn có chỗ quên, mà chỗ quên đó im lặng. */

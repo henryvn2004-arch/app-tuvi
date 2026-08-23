@@ -12,8 +12,8 @@ export const maxDuration = 300;
 
 import { NextRequest } from 'next/server';
 import { ok, err, options, parseBody } from '@/lib/cors';
-import { computeLaso, formatLaSoV2, type Laso } from '@/lib/engine/laso';
-import { SYSTEM_PROMPT, buildPrompt, laSoContextFor } from '@/lib/agent/luan-giai-doc';
+import { computeLaso, formatLaSoV2, makeLasoSlug, CHI_NAMES, type Laso } from '@/lib/engine/laso';
+import { SYSTEM_PROMPT, buildPromptCached, laSoContextFor } from '@/lib/agent/luan-giai-doc';
 import { nguoiXemLine } from '@/lib/agent/prompts';
 import {
   buildKhung12Thang, describeThangForLLM, spans12, nhanThangAL, nhanThangALDay, dmy, SO_THANG,
@@ -110,6 +110,53 @@ Xuống dòng rồi viết 1-2 đoạn ngắn, ngôn ngữ đời thường:
 KHÔNG lặp lại phần tổng quan lá số hay đại vận (đã có phần riêng). Chỉ nói về THÁNG này.`;
 }
 
+// ─── Vá lỗ trùng: phần 1-4 = ĐÚNG 4 phần của Luận Giải 24 phần ──
+// Đo được (CLAUDE.md, track Tối Ưu Chi Phí Opus): ai đã mua/xem bản Luận Giải
+// cho CHÍNH lá số này ở CHÍNH năm xem này thì 4 phần đó ĐÃ NẰM SẴN trong
+// `laso_public.luan_giai` — gọi LLM lại là trả tiền lần thứ hai cho một thứ
+// đã có. Đọc lại thay vì gọi LLM: 0đ, không đụng một chữ prompt.
+const SUPABASE_URL = process.env.SUPABASE_URL!;
+const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY!;
+
+/**
+ * Tra `laso_public` theo ĐÚNG slug lá số này (không tiền tố, tool 'laso') +
+ * ĐÚNG năm xem (`nam_xem`) — một số phần (đặc biệt phần 24 "Tiểu vận & năm
+ * xem") phụ thuộc năm xem nên KHÔNG được đoán, phải khớp tuyệt đối. Trả về
+ * đúng văn bản của `phanLaso` (khoá số trong object `luan_giai`, 1..24) nếu
+ * có; không có/không khớp/lỗi mạng → trả `null` (rơi về gọi LLM như cũ, KHÔNG
+ * chặn lượt của người dùng vì bước này chỉ là tối ưu chi phí).
+ */
+async function readCachedLuanGiaiPhan(
+  ls: Laso, birth: BirthParams, tuNam: number, phanLaso: number,
+): Promise<string | null> {
+  try {
+    const gioChi = birth.hourBranch != null ? (CHI_NAMES[birth.hourBranch] || '') : '';
+    const slug = makeLasoSlug(
+      String((ls as AnyRec).canChiNam || ''),
+      birth.gender === 'nu' ? 'nu' : 'nam',
+      String(birth.day), String(birth.month), String(birth.year),
+      gioChi,
+    );
+    const r = await fetch(
+      `${SUPABASE_URL}/rest/v1/laso_public?slug=eq.${encodeURIComponent(slug)}` +
+        '&select=nam_xem,luan_giai&limit=1',
+      {
+        headers: { apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${SUPABASE_ANON_KEY}` },
+        cache: 'no-store',
+      },
+    );
+    if (!r.ok) return null;
+    const rows = (await r.json()) as AnyRec[];
+    const row = rows?.[0];
+    if (!row || row.nam_xem !== tuNam) return null;
+    const store = row.luan_giai as Record<string, unknown> | null;
+    const text = store ? store[String(phanLaso)] : null;
+    return typeof text === 'string' && text.trim() ? text : null;
+  } catch {
+    return null;
+  }
+}
+
 // ─── Handlers ─────────────────────────────────────────────────
 export async function OPTIONS() { return options(); }
 
@@ -161,12 +208,31 @@ async function runPost(request: NextRequest) {
   if (!(phan >= 1 && phan <= TONG_PHAN)) return err('Phần không hợp lệ.', 400);
   const docs = body.docs ? String(body.docs) : undefined;
 
+  // Phần 1-4 trùng Y HỆT 4 phần của Luận Giải — thử đọc lại trước khi gọi LLM.
+  const laSoPhanMap: Record<number, number> = { 1: 1, 2: 14, 3: 14 + dvHienTaiSo(ls), 4: 24 };
+  if (phan <= 4) {
+    const cached = await readCachedLuanGiaiPhan(ls, birth, tuNam, laSoPhanMap[phan]!);
+    if (cached) return ok({ luanGiai: cached, phan });
+  }
+
+  let systemForLLM: string = SYSTEM_PROMPT;
+  // Chỉ TRUE cho phan<=4 (buildPromptCached) — phần nguyệt vận (buildPromptThang)
+  // là prompt cấu trúc khác hẳn, không chia sẻ prefix với 4 phần đầu nên giữ
+  // nguyên đường CŨ (system=SYSTEM_PROMPT trần, không cache_control).
+  let cacheSystem = false;
   let prompt: string;
   try {
     const nx = nguoiXemLine(birth.name, birth.gender);
     if (phan <= 4) {
-      const map: Record<number, number> = { 1: 1, 2: 14, 3: 14 + dvHienTaiSo(ls), 4: 24 };
-      prompt = (nx ? nx + '\n' : '') + buildPrompt(map[phan]!, formatLaSoV2(ls), docs);
+      // Prompt caching (Code #1, xem CLAUDE.md track tối ưu chi phí Opus):
+      // buildPromptCached đưa TOÀN VĂN lá số vào `system` (không cắt theo
+      // trimLaSo) — cả 4 phần này của MỘT lá số/năm xem chia đúng MỘT prefix.
+      // Chỉ chạm nhánh LLM này khi readCachedLuanGiaiPhan (Code #2) cache-miss
+      // ở trên; đa số lượt đã được DB cache chặn từ trước, không tới đây.
+      const cached = buildPromptCached(laSoPhanMap[phan]!, formatLaSoV2(ls), docs);
+      systemForLLM = cached.system;
+      prompt = (nx ? nx + '\n' : '') + cached.prompt;
+      cacheSystem = true;
     } else {
       const stt = phan - PHAN_THANG_DAU + 1;
       // Chỉ cần bảng LỊCH để biết tháng âm thứ stt — không dựng cả khung (khớp
@@ -183,7 +249,7 @@ async function runPost(request: NextRequest) {
     // (140–180 từ) dùng chung mức của phần cung/đại vận.
     // Nâng 50% cùng đợt với lasotuvi/route.ts (Henry chốt 2026-08-20).
     const maxTok = phan === 1 ? 3000 : phan === 2 ? 4500 : phan === 4 ? 2100 : 1800;
-    const rr = await llmTextFull({ system: SYSTEM_PROMPT, prompt, maxTokens: maxTok });
+    const rr = await llmTextFull({ system: systemForLLM, prompt, maxTokens: maxTok, cacheSystem });
     // tool_id = ĐÚNG `tool_pricing.tool_id` để bucket chi phí ghép được với
     // bucket doanh thu (xem tool_canon() trong CLAUDE.md).
     void logLlmUsage(
@@ -191,8 +257,8 @@ async function runPost(request: NextRequest) {
       rr.model,
       {
         input_tokens: rr.usage.input_tokens,
-        cache_creation_input_tokens: 0,
-        cache_read_input_tokens: 0,
+        cache_creation_input_tokens: rr.usage.cache_creation_input_tokens,
+        cache_read_input_tokens: rr.usage.cache_read_input_tokens,
         output_tokens: rr.usage.output_tokens,
       },
       rr.durationMs,

@@ -633,13 +633,27 @@ async function _startLuanGiaiAI(){
   // phút. Bể PhanPool chạy PHAN_CONCURRENCY phần song song (mỗi phần độc lập,
   // không đọc kết quả phần khác) ⇒ giảm tổng thời gian chờ ~PHAN_CONCURRENCY
   // lần mà không đụng gì tới model. Xem tools-shared/phan-pool.js.
+  //
+  // 🔑 BẮT BUỘC bắn PHẦN 1 RIÊNG LẺ trước khi mở bể song song (Code #1, xem
+  // CLAUDE.md track tối ưu chi phí Opus). /api/lasotuvi nay cache `system`
+  // (SYSTEM_PROMPT + lá số đầy đủ) theo breakpoint Anthropic — lượt ĐẦU TIÊN
+  // ghi cache, các lượt SAU đọc cache nếu bắn SAU khi lượt đầu ghi xong. Mở
+  // PHAN_CONCURRENCY=3 lượt song song ngay từ đầu thì cả 3 lượt đầu tiên đều
+  // bắn gần như đồng thời (staggerMs của PhanPool chỉ 400ms, ngắn hơn nhiều so
+  // với thời gian một lượt LLM ghi xong cache) ⇒ CẢ 3 đều cache-miss, tốn thêm
+  // phí ghi (×1,25) thay vì tiết kiệm. Mồi phần 1 xong rồi mới mở bể cho các
+  // phần còn lại thì phần 2/3/4 (song song đầu tiên của bể) chắc chắn cache-hit.
+  document.getElementById('lgProgress').textContent='Đang luận giải phần 1 / '+LuanGiaiCore.TONG_PHAN+'...';
+  var primeOk=await _runPhanLuanGiai(1);
   var result=await PhanPool.run({
     total:LuanGiaiCore.TONG_PHAN,
     concurrency:PHAN_CONCURRENCY,
     progressEl:'lgProgress',
     progressPrefix:'Đang luận giải phần',
     pace:_pace,
-    runPart:_runPhanLuanGiai,
+    // Phần 1 đã chạy ở lượt mồi trên — bể chỉ cần TRẢ LẠI kết quả đó, không
+    // gọi lại API (gọi lại là tốn thêm một lượt model vô ích).
+    runPart:function(p){ return p===1?Promise.resolve(primeOk):_runPhanLuanGiai(p); },
   });
   if(result.ok){
     document.getElementById('lgProgress').textContent='✓ Luận giải hoàn tất';

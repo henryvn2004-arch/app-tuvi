@@ -210,13 +210,15 @@ export function laSoContextFor(phan: number, laSoText: string): string {
   return '=== LÁ SỐ ===\n' + trimLaSo(laSoText, phan);
 }
 
-export function buildPrompt(phan: number, laSoText: string, docs?: string): string {
-
-  const trimmedLaSo = trimLaSo(laSoText, phan);
-  const docsSection = docs ? '\n\n=== TÀI LIỆU THAM KHẢO ===\n' + docs : '';
-  const ctx = '=== LÁ SỐ ===\n' + trimmedLaSo + docsSection;
-
-  if (phan === 1) return ctx + `
+/**
+ * Câu lệnh riêng cho MỘT phần (không mang lá số) — tách khỏi `buildPrompt` để
+ * `buildPromptCached` dùng lại được mà không phải nhét lá số vào phần ĐỔI mỗi
+ * lượt gọi (xem CLAUDE.md track tối ưu chi phí Opus, "Code #1"). Nội dung mỗi
+ * nhánh GIỮ NGUYÊN VĂN so với `buildPrompt` cũ — chỉ khác ở chỗ không còn
+ * `ctx +` đứng trước mỗi `return`.
+ */
+function instructionFor(phan: number): string {
+  if (phan === 1) return `
 
 PHẦN 1 — TỔNG QUAN LÁ SỐ (220-280 từ)
 Viết văn xuôi liền mạch, không dùng bullet, không đề cập đại vận trong phần này.
@@ -231,7 +233,7 @@ Xuống dòng rồi mới giải thích — cấu trúc gợi ý cho phần thâ
 
 Lưu ý: Dựa trên [CÁCH CỤC] và [Ý NGHĨA] đã có — diễn giải, không liệt kê lại.`;
 
-  if (phan === 2) return ctx + `
+  if (phan === 2) return `
 
 PHẦN 2 — CUNG MỆNH (220-280 từ)
 ${CUNG_DESC['Mệnh']}
@@ -248,7 +250,7 @@ Xét thêm cung Thiên Di (xung chiếu Mệnh) — ảnh hưởng gì đến t�
   if (phan >= 3 && phan <= 13) {
     const cung = CUNG_BY_PHAN[phan] || '';
     const cungDesc = CUNG_DESC[cung] || '';
-    return ctx + `
+    return `
 
 PHẦN ${phan} — CUNG ${cung.toUpperCase()} (120-160 từ)
 ${cungDesc}
@@ -262,7 +264,7 @@ Xuống dòng rồi viết 1-2 đoạn giải thích ngắn, dễ hiểu — kh�
 Không liệt kê lại tên sao, không mô tả lại dữ liệu thô. Nếu cung vô chính diệu thì nói rõ phải mượn cung xung chiếu để luận (không cần nhắc chữ "xung chiếu" nếu diễn được bằng câu thường).`;
   }
 
-  if (phan === 14) return ctx + `
+  if (phan === 14) return `
 
 PHẦN 14 — TỔNG QUAN CÁC ĐẠI VẬN
 
@@ -282,7 +284,7 @@ Nhận xét tổng (120-160 từ), viết bằng ngôn ngữ đời thường, �
 
   if (phan >= 15 && phan <= 23) {
     const dvNum = phan - 14;
-    return ctx + `
+    return `
 
 PHẦN ${phan} — ĐẠI VẬN ${dvNum} (120-160 từ)
 Khối "ĐV${dvNum}:" trong === 9 ĐẠI VẬN === là dữ liệu DUY NHẤT được dùng cho phần này —
@@ -308,7 +310,7 @@ Xuống dòng rồi viết 1-2 đoạn giải thích ngắn, dễ hiểu, bằng
 ② Kết luận thực tế: 1-2 câu tác động cụ thể + gợi ý nhẹ nếu cần.`;
   }
 
-  if (phan === 24) return ctx + `
+  if (phan === 24) return `
 
 PHẦN 24 — TIỂU VẬN & NĂM XEM (180-220 từ)
 Quan sát 3 lớp hạn cùng lúc (căn cứ nội bộ, không phải thứ phải liệt kê tên cho
@@ -327,5 +329,51 @@ lại đại hạn xấu thì cái tốt của tiểu hạn cũng giảm bớt �
 
 Không giải thích lý thuyết. Đi thẳng vào tác động với người này.`;
 
-  return ctx + `\nPhần ${phan}: Luận giải theo lá số.`;
+  return `\nPhần ${phan}: Luận giải theo lá số.`;
+}
+
+/**
+ * Preamble "=== LÁ SỐ ===" (đã cắt theo `phan`) + tài liệu tham khảo. ĐÂY là
+ * phần đổi CHỮ theo từng `phan` (mỗi phan một lát cắt lá số khác nhau) — vì
+ * thế KHÔNG dùng được làm breakpoint cache của `buildPromptCached` (breakpoint
+ * cache đòi prefix giống hệt byte-for-byte giữa các lượt gọi).
+ */
+function promptCtx(phan: number, laSoText: string, docs?: string): string {
+  const trimmedLaSo = trimLaSo(laSoText, phan);
+  const docsSection = docs ? '\n\n=== TÀI LIỆU THAM KHẢO ===\n' + docs : '';
+  return '=== LÁ SỐ ===\n' + trimmedLaSo + docsSection;
+}
+
+export function buildPrompt(phan: number, laSoText: string, docs?: string): string {
+  return promptCtx(phan, laSoText, docs) + instructionFor(phan);
+}
+
+/**
+ * Bản DÙNG CHUNG CACHE của `buildPrompt` — xem CLAUDE.md track tối ưu chi phí
+ * Opus, "Code #1". Khác `buildPrompt` ở HAI chỗ:
+ *   1. Lá số KHÔNG cắt theo `trimLaSo` — gửi TOÀN VĂN cho mọi phần, để nhiều
+ *      lượt gọi (24 phần Luận Giải, hoặc 4 phần đầu của Vận Hạn 12 Tháng) chia
+ *      đúng MỘT prefix giống hệt nhau. Cắt khác nhau theo từng `phan` (như
+ *      `buildPrompt`) là phá cache ngay từ lượt thứ hai — Anthropic khớp
+ *      prefix TUYỆT ĐỐI, lệch một byte là cache miss cả khối.
+ *   2. Lá số dời sang `system` (bất biến theo NGƯỜI, không theo `phan`) — chỉ
+ *      `system` mới được đóng dấu `cache_control` (xem `buildAnthropicBody`
+ *      trong `lib/llm/complete.ts`). `prompt` trả về CHỈ còn phần đổi theo
+ *      từng lượt gọi: tài liệu RAG (khác nhau mỗi `phan`, không cache được)
+ *      + câu lệnh riêng của phần đó.
+ * Caller PHẢI gọi `llmTextFull({..., cacheSystem:true})` với `system` lấy từ
+ * đây — thiếu cờ đó thì Anthropic nhận `system` dạng chuỗi thường (không có
+ * `cache_control`) và vẫn tính tiền y như không cache (không hỏng, chỉ không
+ * tiết kiệm được gì).
+ */
+export function buildPromptCached(
+  phan: number,
+  laSoText: string,
+  docs?: string,
+): { system: string; prompt: string } {
+  const docsSection = docs ? '=== TÀI LIỆU THAM KHẢO ===\n' + docs + '\n\n' : '';
+  return {
+    system: SYSTEM_PROMPT + '\n\n=== LÁ SỐ (ĐẦY ĐỦ, KHÔNG CẮT) ===\n' + laSoText,
+    prompt: docsSection + instructionFor(phan),
+  };
 }

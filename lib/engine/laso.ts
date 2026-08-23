@@ -37,8 +37,10 @@ type Rec = Record<string, unknown>;
 // Giờ sinh: index địa chi (0=Tý..11=Hợi) → giờ đại diện
 const GIO_HOURS = [23, 1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21];
 
-// Tên 12 địa chi theo index (cho nhãn giờ trong thẻ lá số).
-const CHI_NAMES = ['Tý', 'Sửu', 'Dần', 'Mão', 'Thìn', 'Tỵ', 'Ngọ', 'Mùi', 'Thân', 'Dậu', 'Tuất', 'Hợi'];
+// Tên 12 địa chi theo index (cho nhãn giờ trong thẻ lá số). EXPORT để các route
+// khác cần gán nhãn giờ (vd tra `laso_public` theo slug) dùng CHUNG, không tự
+// chép một bảng thứ hai rồi trôi khỏi nhau.
+export const CHI_NAMES = ['Tý', 'Sửu', 'Dần', 'Mão', 'Thìn', 'Tỵ', 'Ngọ', 'Mùi', 'Thân', 'Dậu', 'Tuất', 'Hợi'];
 const CAN_NAMES = ['Giáp', 'Ất', 'Bính', 'Đinh', 'Mậu', 'Kỷ', 'Canh', 'Tân', 'Nhâm', 'Quý'];
 
 // Năm ÂM lịch → Can/Chi (parity với engine đã verify 96/96, 1940–2035). Dùng khi
@@ -382,4 +384,51 @@ export function lasoSummary(ls: Laso): string {
   ]
     .filter(Boolean)
     .join(' · ');
+}
+
+/**
+ * Slug NHẬN DIỆN một lá số trong bảng `laso_public` — NGUỒN DUY NHẤT (port từ
+ * `app/api/save-laso/route.ts`, nguyên văn, không đổi một ký tự nào). Trước đây
+ * hàm này CHỈ sống trong route đó (không export được — Next chặn export lạ
+ * trong file `route.ts`); nay `app/api/van-han-nam/route.ts` cũng cần đúng
+ * công thức này để tra lại lá số đã có sẵn Luận Giải. Hai route tự chép hàm
+ * này thì slug sẽ trôi khỏi nhau lúc nào không biết — đúng bệnh CLAUDE.md đã
+ * ghi nhiều lần.
+ *
+ * `toolType` (vd 'tu-binh') thêm TIỀN TỐ để mỗi sản phẩm lưu vào slug RIÊNG,
+ * tránh đè lẫn nhau khi CÙNG một lá số (canChiNam+ngày sinh+giờ) được dùng cho
+ * nhiều tool khác nhau (`laso_public` dùng chung 1 bảng cho mọi tool). Bỏ
+ * trống hoặc `'laso'` = KHÔNG tiền tố — tương thích ngược với slug/link Luận
+ * Giải 24 phần đang chia sẻ ngoài kia.
+ */
+export function makeLasoSlug(
+  canChiNam: string,
+  gioiTinh: string,
+  ngaySinh: string,
+  thangSinh: string,
+  namSinh: string,
+  gioChi: string,
+  toolType?: string,
+): string {
+  const rm = (s: string) =>
+    s
+      .normalize('NFD')
+      .replace(/[̀-ͯ]/g, '')
+      .replace(/[đĐ]/g, 'd')
+      .toLowerCase()
+      .replace(/\s+/g, '-');
+  const dd = ngaySinh ? String(ngaySinh).padStart(2, '0') : '';
+  const mm = thangSinh ? String(thangSinh).padStart(2, '0') : '';
+  const base = [
+    rm(canChiNam || ''),
+    dd,
+    mm,
+    namSinh || '',
+    gioiTinh === 'nu' ? 'nu' : 'nam',
+    gioChi ? 'gio-' + rm(gioChi) : '',
+  ]
+    .filter(Boolean)
+    .join('-');
+  if (toolType && toolType !== 'laso') return rm(toolType) + '-' + base;
+  return base;
 }
