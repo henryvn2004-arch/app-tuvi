@@ -35,12 +35,19 @@ const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY;
 /**
  * Bề mặt nội dung. MỖI bề mặt một profile vì chúng là hai định dạng KHÁC HẲN
  * nhau, không phải hai mức độ nghiêm khắc của cùng một luật:
- *  - `khao-luan`  → bài Vấn Đáp ~1.400 ký tự, ngôi thứ BA, không tự xưng.
- *  - `nghien-cuu` → tùy bút 1.200–1.500 TỪ của persona thầy, ngôi thứ NHẤT,
- *    ký tên cuối bài. Đo trên prod: 300/306 bài dùng "tôi" — đó là ĐỊNH DẠNG,
- *    không phải lỗi trôi. Áp luật `khao-luan` sang đây sẽ chặn ~100% output.
+ *  - `khao-luan`       → bài Vấn Đáp ~1.400 ký tự, ngôi thứ BA, không tự xưng.
+ *  - `khao-luan-tamly` → CÙNG định dạng `khao-luan` (Vấn Đáp, ngôi 3, cùng
+ *    bảng `khao_luan`), khác ở ĐỀ TÀI: tâm lý/xã hội (tinh-cach/quan-he/
+ *    benh-tat) — chạm tới cảm xúc/quan hệ/áp lực sống nên thêm 2 luật an
+ *    toàn riêng (xem `checkLlm`) và MẶC ĐỊNH `mode:'block'` bất kể cấu hình
+ *    chung — nội dung MỚI, chưa ai đọc qua, và rủi ro (chẩn đoán tâm lý qua
+ *    lá số, framing khủng hoảng) nặng hơn hẳn 2 bề mặt kia.
+ *  - `nghien-cuu`      → tùy bút 1.200–1.500 TỪ của persona thầy, ngôi thứ
+ *    NHẤT, ký tên cuối bài. Đo trên prod: 300/306 bài dùng "tôi" — đó là
+ *    ĐỊNH DẠNG, không phải lỗi trôi. Áp luật `khao-luan` sang đây sẽ chặn
+ *    ~100% output.
  */
-export type BrandProfile = 'khao-luan' | 'nghien-cuu';
+export type BrandProfile = 'khao-luan' | 'khao-luan-tamly' | 'nghien-cuu';
 
 export interface BrandViolation {
   /** slug luật, để lọc/thống kê về sau */
@@ -87,6 +94,14 @@ interface ProfileRules {
   requireBold: boolean;
   /** cấm emoji trong prose */
   banEmoji: boolean;
+  /**
+   * Ghi đè `BrandCheckConfig.mode` CHUNG cho riêng profile này. Không khai
+   * → dùng mode chung. Dùng khi một bề mặt cần khác hẳn mức nghiêm khắc so
+   * với phần còn lại — vd `khao-luan-tamly` phải chặn cứng ngay từ đầu,
+   * không thể chờ "đọc log vài ngày rồi mới siết" như 2 bề mặt kia đã làm,
+   * vì rủi ro nội dung (chẩn đoán tâm lý, framing khủng hoảng) nặng hơn.
+   */
+  mode?: GateMode;
 }
 
 interface BrandCheckConfig {
@@ -117,6 +132,19 @@ const DEFAULT_CONFIG: BrandCheckConfig = {
       allowSelfRef: false,
       requireBold: true,
       banEmoji: true,
+    },
+    'khao-luan-tamly': {
+      // Cùng hình dạng `khao-luan` — cùng bảng, cùng độ dài, cùng ngôi. Chỉ
+      // khác `mode`: chặn cứng ngay từ đầu (xem giải thích ở `ProfileRules.mode`
+      // và `BrandProfile`), không đợi Henry đọc log vài ngày như 2 bề mặt kia.
+      minLen: 1200,
+      maxLen: 1600,
+      lengthUnit: 'chars',
+      readerAddress: 'free',
+      allowSelfRef: false,
+      requireBold: true,
+      banEmoji: true,
+      mode: 'block',
     },
     'nghien-cuu': {
       // Prompt cron-master-write nhắm 1.200–1.500 từ; nới hai đầu để một bài
@@ -467,14 +495,37 @@ interface LlmVerdict {
 }
 
 /**
- * Bảy mục "cần người/LLM đọc" ở checklist §8 của brand voice doc.
+ * Bảy mục "cần người/LLM đọc" ở checklist §8 của brand voice doc, cộng thêm
+ * HAI mục an toàn RIÊNG cho `khao-luan-tamly` (xem `BrandProfile`).
  * FAIL-OPEN: mọi lỗi (mạng, JSON hỏng, LLM chết) đều trả rỗng = coi như đạt.
  */
 async function checkLlm(content: string, profile: BrandProfile, doc: string): Promise<BrandViolation[]> {
   const surface =
-    profile === 'khao-luan'
-      ? 'bài Khảo Luận/Vấn Đáp (ngôi thứ ba, không tự xưng, ~1.400 ký tự)'
-      : 'tùy bút Nghiên Cứu do một persona thầy viết (ngôi thứ nhất "tôi" LÀ ĐÚNG định dạng, ký tên cuối bài, 1.200–1.500 từ)';
+    profile === 'nghien-cuu'
+      ? 'tùy bút Nghiên Cứu do một persona thầy viết (ngôi thứ nhất "tôi" LÀ ĐÚNG định dạng, ký tên cuối bài, 1.200–1.500 từ)'
+      : profile === 'khao-luan-tamly'
+        ? 'bài Khảo Luận/Vấn Đáp nhánh TÂM LÝ/XÃ HỘI (ngôi thứ ba, không tự xưng, ~1.400 ký tự) — đề tài chạm cảm xúc/quan hệ/áp lực sống, cần soi thêm 2 mục an toàn'
+        : 'bài Khảo Luận/Vấn Đáp (ngôi thứ ba, không tự xưng, ~1.400 ký tự)';
+
+  const isTamLy = profile === 'khao-luan-tamly';
+  // 🔴 Hai mục này KHÔNG phải luật văn phong — chúng gác một rủi ro có hại
+  // thật: bài phán một chẩn đoán tâm thần y khoa qua lá số, hoặc nhắc một
+  // khủng hoảng thật (ý định tự hại) mà không chỉ đường ra. Chỉ thêm cho
+  // đúng profile này; 2 bề mặt kia không chạm đề tài này nên không cần.
+  const sensitiveItems = isTamLy
+    ? `
+8. chan-doan-y-khoa: bài có GÁN một chẩn đoán tâm thần/y khoa CỤ THỂ (trầm cảm,
+   rối loạn lo âu, rối loạn lưỡng cực, PTSD, tâm thần phân liệt...) cho người
+   đọc/đương số NHƯ MỘT SỰ THẬT rút ra từ lá số không? Nói "cung X dễ mang tâm
+   trạng nặng nề, dễ suy nghĩ nhiều" là NGÔN NGỮ TỬ VI BÌNH THƯỜNG, ĐƯỢC. Gán
+   thẳng TÊN một bệnh cụ thể làm chẩn đoán ("bạn đang bị trầm cảm") là SAI.
+9. khung-hoang-that: bài có nhắc ý định tự hại/tự tử, hoặc một khủng hoảng
+   ĐANG diễn ra, mà KHÔNG kèm câu hướng người đọc tới chỗ cần đến (người
+   thân, chuyên gia tâm lý, số 115) — hoặc tệ hơn, NGẦM Ý rằng lá số/tử vi
+   thay được sự giúp đỡ đó? Bàn về nỗi buồn, mất mát, áp lực sống, xung đột
+   gia đình như đề tài đời thường thì KHÔNG sai — đó CHÍNH LÀ mảng bài này
+   viết. Chỉ sai khi có DẤU HIỆU KHỦNG HOẢNG THẬT mà bài không hề chỉ đường ra.`
+    : '';
 
   const prompt = `Bạn là biên tập viên kiểm tra bài trước khi xuất bản, đối chiếu với tài liệu brand voice dưới đây.
 
@@ -487,7 +538,7 @@ BÀI CẦN KIỂM (bề mặt: ${surface}):
 ${content.slice(0, 8000)}
 ---
 
-Chỉ kiểm ĐÚNG 7 mục sau (mục khác đã có máy kiểm bằng regex, bỏ qua):
+Chỉ kiểm ĐÚNG ${isTamLy ? 9 : 7} mục sau (mục khác đã có máy kiểm bằng regex, bỏ qua):
 1. nuoc-di: có nước đi "vấn đề đương đại × lăng kính cổ pháp" không?
 2. thanh-ngu: thành ngữ / chữ Hán-Việt cổ — 0–2 lần là ĐẠT, >2 là sai. Và nếu có,
    nó CHỈ được nằm ở phần GIẢI THÍCH: xuất hiện trong 1–2 câu MỞ ĐẦU là sai (mở bài
@@ -500,12 +551,13 @@ Chỉ kiểm ĐÚNG 7 mục sau (mục khác đã có máy kiểm bằng regex, 
    tĩnh") đều là sai.
 6. bia-dan: có bịa trích dẫn cổ thư (gán tên sách/tác giả cụ thể) không?
 7. sao-that: mọi tên sao nhắc tới có THẬT trong Tử Vi Đẩu Số không?
+${sensitiveItems}
 
 QUAN TRỌNG: chỉ báo lỗi khi CHẮC CHẮN. Nghi ngờ thì cho qua — chặn nhầm một bài đạt
-tệ hơn lọt một bài hơi yếu.
+tệ hơn lọt một bài hơi yếu.${isTamLy ? ' NGOẠI LỆ: với mục 8 và 9, nghi ngờ thì BÁO — an toàn người đọc quan trọng hơn một lượt chặn nhầm.' : ''}
 
 Trả JSON thuần một dòng, KHÔNG backtick:
-{"pass":true|false,"violations":[{"rule":"nuoc-di|thanh-ngu|vi-du|gioi-tinh|ket-chu-dong|bia-dan|sao-that","detail":"nêu ngắn gọn chỗ sai"}]}`;
+{"pass":true|false,"violations":[{"rule":"nuoc-di|thanh-ngu|vi-du|gioi-tinh|ket-chu-dong|bia-dan|sao-that${isTamLy ? '|chan-doan-y-khoa|khung-hoang-that' : ''}","detail":"nêu ngắn gọn chỗ sai"}]}`;
 
   try {
     const raw = (await llmText({ prompt, maxTokens: 1050 })) // Nâng 50% (Henry chốt 2026-08-20)
@@ -536,8 +588,11 @@ Trả JSON thuần một dòng, KHÔNG backtick:
 /** Nhờ LLM sửa đúng những lỗi đã nêu, giữ nguyên nội dung. Hỏng → trả bản cũ. */
 async function repair(content: string, violations: BrandViolation[], profile: BrandProfile): Promise<string> {
   const list = violations.map((v, i) => `${i + 1}. [${v.rule}] ${v.detail}`).join('\n');
+  // 'nghien-cuu' là bề mặt DUY NHẤT khác — 'khao-luan' và 'khao-luan-tamly'
+  // cùng định dạng (Vấn Đáp ngôi 3, không tự xưng) nên chia theo phủ định
+  // của bề mặt lẻ loi, không liệt kê từng profile giống nhau.
   const surfaceRule =
-    profile === 'khao-luan'
+    profile !== 'nghien-cuu'
       ? `- KHÔNG tự xưng "tôi" (đây là bài ghi chép, không phải tùy bút ký tên).
   - Cách gọi người đọc: giữ NGUYÊN lối bài đang dùng, chỉ sửa nếu bài TRỘN hai lối
     ("bạn" lẫn "quý vị") — lúc đó chọn một lối và thống nhất cả bài.`
@@ -649,8 +704,12 @@ export interface BrandCheckInput {
 export async function brandCheck(input: BrandCheckInput): Promise<BrandCheckResult> {
   const cfg = await loadConfig();
   const rules = cfg.profiles[input.profile];
+  // Mode HIỆU LỰC cho lượt này: profile tự khai `mode` riêng thì dùng nó,
+  // không thì rơi về mode CHUNG. `!cfg.enabled` vẫn là công tắc tổng, tắt
+  // được TẤT CẢ kể cả profile đã tự ghim 'block'.
+  const mode: GateMode = rules.mode ?? cfg.mode;
 
-  if (!cfg.enabled || cfg.mode === 'off') {
+  if (!cfg.enabled || mode === 'off') {
     return { pass: true, content: input.content, fixed: [], violations: [], repaired: false, mode: 'off' };
   }
 
@@ -673,9 +732,18 @@ export async function brandCheck(input: BrandCheckInput): Promise<BrandCheckResu
   let violations = [...autoV, ...llmV];
   let repaired = false;
 
-  // 3. Còn lỗi chặn → MỘT vòng viết lại rồi soi lại bằng tầng auto.
-  //    Cố ý không gọi lại tầng LLM: tốn thêm một lượt nữa cho mức lợi mỏng.
-  if (cfg.mode === 'block' && violations.some((v) => v.severity === 'block')) {
+  // 3. Còn lỗi chặn → MỘT vòng viết lại rồi soi lại.
+  //    Bình thường CHỈ soi lại tầng auto (cố ý không gọi lại tầng LLM: tốn
+  //    thêm một lượt cho mức lợi mỏng — 7 mục chất lượng văn phong sai sót
+  //    không nguy hiểm, đếm hụt vài lần cũng không sao).
+  //
+  //    🔴 `khao-luan-tamly` PHẢI soi lại CẢ tầng LLM: 2 luật an toàn của nó
+  //    (chan-doan-y-khoa, khung-hoang-that) CHỈ tầng LLM phát hiện được —
+  //    `checkAuto` không bao giờ sinh ra 2 rule đó nên phép đếm dưới đây sẽ
+  //    LUÔN đọc ra "giảm" (0 < ≥1) dù bản viết lại vẫn còn nguyên nội dung
+  //    nguy hiểm. Tốn thêm một lượt LLM cho profile này là cái giá chấp nhận
+  //    được — batch cron, không phải rail tương tác nhạy độ trễ.
+  if (mode === 'block' && violations.some((v) => v.severity === 'block')) {
     const rewritten = await repair(content, violations, input.profile);
     if (rewritten !== content) {
       repaired = true;
@@ -686,7 +754,10 @@ export async function brandCheck(input: BrandCheckInput): Promise<BrandCheckResu
         c2 = b2.content;
         fx2.fixed.push(...b2.fixed);
       }
-      const after = checkAuto(c2, rules);
+      const after =
+        input.profile === 'khao-luan-tamly' && cfg.llmTier && doc
+          ? [...checkAuto(c2, rules), ...(await checkLlm(c2, input.profile, doc))]
+          : checkAuto(c2, rules);
       // Chỉ nhận bản viết lại nếu nó THỰC SỰ đỡ hơn — LLM sửa lỗi này đẻ lỗi kia
       // là chuyện có thật, giữ bản xấu hơn thì vòng sửa thành phản tác dụng.
       if (after.filter((x) => x.severity === 'block').length < violations.filter((x) => x.severity === 'block').length) {
@@ -698,19 +769,19 @@ export async function brandCheck(input: BrandCheckInput): Promise<BrandCheckResu
   }
 
   const blocking = violations.filter((v) => v.severity === 'block');
-  const pass = cfg.mode !== 'block' || blocking.length === 0;
+  const pass = mode !== 'block' || blocking.length === 0;
 
   await logQc({
     surface: input.profile,
     slug: input.slug || null,
     title: input.title || null,
     passed: pass,
-    mode: cfg.mode,
+    mode,
     violations,
     fixed,
     repaired,
     payload: input.payload ?? { content },
   });
 
-  return { pass, content, fixed, violations, repaired, mode: cfg.mode };
+  return { pass, content, fixed, violations, repaired, mode };
 }
