@@ -67,6 +67,15 @@ export interface LlmTextOpts {
    * không chỉ đúng cú pháp. Bỏ qua với Anthropic (API không có). */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   jsonSchema?: any;
+  /** Ép provider ĐỨNG ĐẦU cho ĐÚNG LƯỢT NÀY, bỏ qua `chat.standalone_provider`
+   * trong DB (khoá đó là cấu hình GLOBAL, dùng chung mọi route standalone —
+   * ép ở đây không đổi hành vi của route khác). Vẫn giữ NGUYÊN chuỗi fallback
+   * (2 provider còn lại của `CANONICAL_ORDER`, đúng thứ tự cũ) nếu provider
+   * bị ép lỗi/timeout — chỉ khác PRIMARY, không phải "chỉ dùng đúng provider
+   * này". Chỉ dùng khi có lý do THẬT SỰ cần ĐÚNG provider đó cho lượt này
+   * (vd cron viết bài muốn Kimi dù DB đang ưu tiên Gemini cho toàn site).
+   */
+  provider?: 'kimi' | 'anthropic' | 'gemini';
 }
 
 // ─── Gemini ────────────────────────────────────────────────────
@@ -315,7 +324,14 @@ function anthropicChunkText(raw: string): string {
 // `kimiText`/`openKimiStream` tự ném lỗi ngay, vòng thử-provider-kế-tiếp bên
 // dưới xử lý y như mọi lỗi khác.
 const CANONICAL_ORDER = ['kimi', 'anthropic', 'gemini'];
-async function providerOrder(): Promise<string[]> {
+// `override` (từ `LlmTextOpts.provider`) đặt LÊN ĐẦU cho ĐÚNG LƯỢT gọi này,
+// KHÔNG đụng đến `chat.standalone_provider` trong DB — cấu hình đó vẫn quyết
+// định primary cho mọi lượt KHÔNG truyền override. Có override → bỏ qua hẳn
+// bước đọc DB (đỡ một round-trip Supabase không cần thiết).
+async function providerOrder(override?: string): Promise<string[]> {
+  if (override && CANONICAL_ORDER.includes(override)) {
+    return [override, ...CANONICAL_ORDER.filter((p) => p !== override)];
+  }
   let primary = 'kimi';
   try {
     primary = (await getChatConfig()).standaloneProvider || 'kimi';
@@ -344,7 +360,7 @@ export interface LlmTextFullResult {
  */
 export async function llmTextFull(o: LlmTextOpts): Promise<LlmTextFullResult> {
   const maxTokens = o.maxTokens ?? 2000;
-  const order = await providerOrder();
+  const order = await providerOrder(o.provider);
   const t0 = Date.now();
   let lastErr: unknown;
   for (const p of order) {
