@@ -102,7 +102,7 @@
       <div id="shellRecent"></div>
       <div class="form-card" id="birthPanel">
         <h2 id="fH2">Nhập ngày sinh hai người (dương lịch)</h2>
-        <p class="sub" id="fSub">So hòa hợp trên hai lá số theo cổ pháp: xét tuổi, ngũ hành, tư tưởng, quan hệ, con cái, tài chính. Có kết quả rồi, hỏi trợ lý luận sâu ở khung bên phải.</p>
+        <p class="sub" id="fSub">Chấm 8 yếu tố tương hợp giữa hai lá số của hai bạn. Bạn nghe hai bên gia đình bàn ra tán vào chuyện tuổi tác. Dùng khi đang tính chuyện cưới xin và cần một câu trả lời rõ.</p>
         <div class="two">
           <div class="person">
             <h3 id="pA"><span class="dotA"></span> Người thứ nhất</h3>
@@ -138,9 +138,9 @@
   var p=location.pathname;
   var key=p.indexOf('lam-an')>=0?'xem-lam-an':(p.indexOf('tuong-hop')>=0?'tuong-hop':'xem-tuoi');
   var INTRO={
-    'xem-lam-an':{key:'xem-lam-an',title:'Xem tuổi làm ăn',desc:'So hợp hai người khi bắt tay hợp tác theo <b>8 chiều</b> cổ pháp. Ra điểm hòa hợp rồi hỏi <b>trợ lý AI</b> ai nên nắm gì, dễ xung khắc ở đâu.'},
-    'tuong-hop':{key:'tuong-hop',title:'Tương hợp tuổi',desc:'So hợp <b>hai người bất kỳ</b> (bạn bè, người thân, đối tác, đôi lứa) theo <b>8 chiều</b> cổ pháp. Ra điểm rồi hỏi <b>trợ lý AI</b> hợp ở mặt nào, dễ va ở đâu.'},
-    'xem-tuoi':{key:'xem-tuoi',title:'Xem tuổi vợ chồng',desc:'So hòa hợp hai lá số theo <b>8 chiều</b> cổ pháp (tuổi, ngũ hành, tư tưởng, quan hệ, con cái, tài chính). Ra điểm rồi hỏi <b>trợ lý AI</b> luận sâu.'}
+    'xem-lam-an':{key:'xem-lam-an',title:'Xem tuổi làm ăn',desc:'Chấm 8 yếu tố hợp tác giữa bạn và người sắp làm ăn chung. Bạn sắp góp vốn với ai đó, vẫn còn chút lấn cấn. Dùng khi cần một góc nhìn khách quan trước khi ký kết.'},
+    'tuong-hop':{key:'tuong-hop',title:'Tương hợp tuổi',desc:'Xét nhanh hai tuổi có hợp nhau hay không, chỉ cần năm sinh. Bạn mới quen ai đó và tiện tay tra thử cho vui. Dùng khi cần một câu trả lời nhanh, chưa cần xem sâu.'},
+    'xem-tuoi':{key:'xem-tuoi',title:'Xem tuổi vợ chồng',desc:'Chấm 8 yếu tố tương hợp giữa hai lá số của hai bạn. Bạn nghe hai bên gia đình bàn ra tán vào chuyện tuổi tác. Dùng khi đang tính chuyện cưới xin và cần một câu trả lời rõ.'}
   };
   window.SHELL_ACTIVE=key;
   window.SHELL_HISTORY=true;
@@ -167,7 +167,7 @@ var MODES={
   title:'Xem tuổi làm ăn', sub:'So hợp hai người khi bắt tay hợp tác',
   docTitle:'Xem tuổi làm ăn — Tử Vi Minh Bảo',
   h2:'Nhập ngày sinh hai đối tác (dương lịch)',
-  formSub:'So hòa hợp hợp tác trên hai lá số theo cổ pháp: xét tuổi, ngũ hành, tư tưởng, quan hệ, tài chính, vận hành. Có kết quả rồi, hỏi trợ lý luận sâu ở khung bên phải.',
+  formSub:'Chấm 8 yếu tố hợp tác giữa bạn và người sắp làm ăn chung. Bạn sắp góp vốn với ai đó, vẫn còn chút lấn cấn. Dùng khi cần một góc nhìn khách quan trước khi ký kết.',
   pA:'Đối tác thứ nhất', pB:'Đối tác thứ hai', phA:'Đối tác A', phB:'Đối tác B',
   btn:'Xem hợp tác →', btnBusy:'Đang xét hợp tác…', verb:'Xét hợp tác',
   chips:['Hai người hợp làm ăn chung không?','Ai nên nắm tài chính?','Chiều nào dễ xung đột khi hợp tác?','Nên góp vốn hay chia việc?'],
@@ -178,7 +178,7 @@ var MODES={
   title:'Tương hợp tuổi', sub:'So hợp hai người bất kỳ theo cổ pháp',
   docTitle:'Tương hợp tuổi — Tử Vi Minh Bảo',
   h2:'Nhập ngày sinh hai người (dương lịch)',
-  formSub:'So hòa hợp hai người bất kỳ (bạn bè, người thân, đối tác, đôi lứa) trên hai lá số theo cổ pháp: tuổi, ngũ hành, tư tưởng, quan hệ, tài chính. Có kết quả rồi, hỏi trợ lý luận sâu ở khung bên phải.',
+  formSub:'Xét nhanh hai tuổi có hợp nhau hay không, chỉ cần năm sinh. Bạn mới quen ai đó và tiện tay tra thử cho vui. Dùng khi cần một câu trả lời nhanh, chưa cần xem sâu.',
   pA:'Người thứ nhất', pB:'Người thứ hai', phA:'Người A', phB:'Người B',
   btn:'So tương hợp →', btnBusy:'Đang so tương hợp…', verb:'So tương hợp',
   chips:['Hai người này có hợp nhau không?','Hợp nhau ở mặt nào?','Dễ va chạm ở đâu?','Nên giữ khoảng cách hay gắn bó?'],
@@ -189,7 +189,7 @@ var MODES={
   title:'Xem tuổi vợ chồng', sub:'So hòa hợp hai lá số theo cổ pháp',
   docTitle:'Xem tuổi vợ chồng — Tử Vi Minh Bảo',
   h2:'Nhập ngày sinh hai người (dương lịch)',
-  formSub:'So hòa hợp trên hai lá số theo cổ pháp: xét tuổi, ngũ hành, tư tưởng, quan hệ, con cái, tài chính. Có kết quả rồi, hỏi trợ lý luận sâu ở khung bên phải.',
+  formSub:'Chấm 8 yếu tố tương hợp giữa hai lá số của hai bạn. Bạn nghe hai bên gia đình bàn ra tán vào chuyện tuổi tác. Dùng khi đang tính chuyện cưới xin và cần một câu trả lời rõ.',
   pA:'Người thứ nhất', pB:'Người thứ hai', phA:'Chồng / Người A', phB:'Vợ / Người B',
   btn:'So tuổi →', btnBusy:'Đang so tuổi…', verb:'So tuổi',
   chips:['Hai người có hợp làm vợ chồng không?','Chiều nào đáng lo nhất?','Cách hóa giải điểm khắc?','Đường con cái của hai người thế nào?'],

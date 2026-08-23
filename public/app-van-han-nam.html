@@ -109,7 +109,7 @@
       <div id="shellRecent"></div>
       <div class="form-card" id="birthPanel">
         <h2>Nhập ngày sinh để xem vận hạn 12 tháng tới</h2>
-        <p class="sub" id="fmSub">Lập lá số theo cổ pháp rồi soi tiểu vận năm và nguyệt vận từng tháng — cung hạn, sao, cách cục vận của đúng 12 tháng kể từ hôm nay.</p>
+        <p class="sub" id="fmSub">Xem đúng 12 tháng tới: cung hạn, sao, cách cục của từng tháng. Bạn muốn biết trước tháng nào nên cẩn thận, tháng nào nên tiến. Dùng khi cần một lịch vận hạn cụ thể cho năm sắp tới — tính theo tháng ÂM LỊCH, mỗi tháng ghi rõ quãng ngày dương lịch tương ứng.</p>
         <div id="tuviFormHost"></div>
         <div class="frow" style="margin-bottom:0">
           <button class="btn-go" id="btnGo" onclick="doXem()">Xem vận hạn →</button>
@@ -132,7 +132,7 @@
 </div>
 
 <script>window.SHELL_ACTIVE='van-han-nam';window.SHELL_HISTORY=true;
-window.SHELL_INTRO={key:'van-han-nam',title:'Vận Hạn 12 Tháng Tới',desc:'Lát cắt sâu của bản Luận Giải: chỉ nhìn <b>tiểu vận năm</b> và <b>nguyệt vận từng tháng</b> của đúng 12 tháng kể từ hôm nay. Mỗi tháng một phần riêng, kèm nút <b>✦ Hỏi trợ lý</b> để đào sâu.'};</script>
+window.SHELL_INTRO={key:'van-han-nam',title:'Vận Hạn 12 Tháng Tới',desc:'Xem đúng 12 tháng tới: cung hạn, sao, cách cục của từng tháng. Bạn muốn biết trước tháng nào nên cẩn thận, tháng nào nên tiến. Dùng khi cần một lịch vận hạn cụ thể cho năm sắp tới.'};</script>
 <script src="/tuvi-ansao-engine.js"></script>
 <script src="/laso-chart.js?v=3"></script>
 <script src="/luan-giai-core.js?v=3"></script>
@@ -583,7 +583,7 @@ function showForm(){
 
 function _pageInit(){
   document.getElementById('fmSub').textContent=
-    'Lập lá số theo cổ pháp rồi soi tiểu vận năm và nguyệt vận từng tháng — 12 tháng ÂM LỊCH kể từ tháng âm đang sống, mỗi tháng ghi rõ quãng ngày dương lịch tương ứng.';
+    'Xem đúng 12 tháng tới: cung hạn, sao, cách cục của từng tháng. Bạn muốn biết trước tháng nào nên cẩn thận, tháng nào nên tiến. Dùng khi cần một lịch vận hạn cụ thể cho năm sắp tới — tính theo tháng ÂM LỊCH, mỗi tháng ghi rõ quãng ngày dương lịch tương ứng.';
   Shell.prefillForm();
   if(Shell.autoRun()&&document.getElementById('ngay').value)doXem();
 }
