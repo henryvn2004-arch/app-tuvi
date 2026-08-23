@@ -91,6 +91,11 @@ body{font-family:var(--sans);background:var(--paper-2);color:var(--text);font-si
 .btn.pri{background:var(--red);border-color:var(--red);color:#fff}
 .btn:disabled{opacity:.5;cursor:not-allowed}
 .ws-body{padding:18px 22px 44px}
+/* Dòng giá ngay dưới mô tả mỗi công cụ — điền bằng `tool-prices.js` qua
+   `data-tvp-price-label="<tool_id>"`, nguồn DUY NHẤT là `tool_pricing`. Admin
+   sửa giá thì dòng này tự đổi theo, không cần deploy. Margin âm để dính sát
+   dòng mô tả phía trên (vốn đã tự chừa khoảng cách bên dưới nó). */
+.price-note{font-size:12px;color:var(--gold-soft);font-weight:600;margin:-8px 0 14px}
 /* Liên kết chưa được trang nào tạo kiểu: mặc định #0000EE của trình duyệt
    chìm trên nền tối. Chỉ áp ở dark, và chỉ cho <a> KHÔNG có class, để không
    đè lên màu liên kết mà trang cố ý đặt. */
