@@ -507,22 +507,89 @@ export async function runAgent(
 
   send(sse.status({ text: hasImages ? 'Đang xem ảnh...' : 'Đang suy xét...' }));
 
-  // ── PROVIDER ROUTING: kịch bản prose-thuần nhẹ có thể đi GEMINI (rẻ ~97%,
-  // nhanh hơn) thay vì Sonnet. Bật/tắt từng tool qua app_config
-  // `chat.provider_routes` (không deploy). geminiEligible đã guard cứng: chỉ
-  // các kịch bản data-driven KHÔNG tool + KHÔNG ảnh mới vào đây; laso/luận-giải/
-  // bát-tự (tool-call) và vision LUÔN dùng Sonnet. Lỗi Gemini ở request-time →
-  // fallback SẠCH xuống loop Anthropic bên dưới (chưa gửi byte nào).
+  // ── PROVIDER ROUTING — chốt Henry 2026-08-20 (tối, ĐẢO NGƯỢC chốt buổi
+  // sáng cùng ngày): "Trước mắt switch lại gemini flash làm primary, kimi k3
+  // secondary 1, opus secondary 2 để user xài dc". Kimi vẫn native vision +
+  // function-calling như trước, nhưng độ trễ thực tế (có phần vượt 120s) đang
+  // làm rail khó dùng cho người thật → tạm lùi nó xuống secondary-1. Đây là
+  // quyết định TẠM THỜI, lật ngược được không cần deploy: `chat.standalone_
+  // provider` (lib/llm/complete.ts, luồng /api/lasotuvi) và `chat.
+  // provider_routes` (_default + laso, dưới đây) đều đọc từ app_config — đổi
+  // các khoá đó là đổi thứ tự, KHÔNG cần sửa lại 3 khối bên dưới.
   const scenarioType = scenario?.type || 'laso';
 
-  // ── PROVIDER ROUTING — KIMI K3 LÀ PRIMARY (chốt Henry 2026-08-20: "Kimi K3
-  // primary, back up 1 là opus 5, back up 2 là gemini flash"). Model hỗ trợ
-  // NATIVE cả vision lẫn function-calling nên KHÔNG cần eligibility gate theo
-  // scenario như Gemini (giới hạn đó là của Gemini, không phải của Kimi) —
-  // thử cho MỌI kịch bản, kể cả 'laso' (vương miện) và vision. Lỗi ở
-  // request-time (chưa gửi byte nào) → rơi SẠCH xuống chuỗi cũ bên dưới
-  // (Anthropic/Opus 5 rồi Gemini) — chuỗi đó GIỮ NGUYÊN, không đụng, nên nó
-  // tự động trở thành backup-1/backup-2 đúng thứ tự Henry chốt.
+  // Cả hai closure Gemini + Kimi khai TRƯỚC mọi lượt thử — thứ tự KHAI ở đây
+  // không quyết định gì, thứ tự GỌI (3 khối 1/2/3 bên dưới) mới là ưu tiên
+  // thật. `runGeminiTools` còn được nhánh "Anthropic chết → fallback Gemini"
+  // gọi lại ở cuối hàm (trong loop streamTurn).
+  const runGeminiTools = async (): Promise<ProviderOutcome> => {
+    const gTools = toGeminiTools(tools);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const gContents: any[] = toGeminiContents(convo);
+    // 🔴 CHỈ chữ đã hiện ra màn hình mới cấm thử provider khác — tool call
+    // không tính (đọc thuần, idempotent). Cùng đợt vá với Kimi (2026-08-20),
+    // xem chú thích đầy đủ ở `runKimiTools`.
+    let anyTextSent = false;
+    try {
+      for (let round = 0; round <= cfg.maxRounds; round++) {
+        const forceAnswer = round === cfg.maxRounds; // vòng cuối: bỏ tool để ép trả lời
+        const turn = await streamGeminiTurn(system, gContents, forceAnswer ? null : gTools, cfg, send);
+        anyTextSent = anyTextSent || turn.sentText;
+
+        if (!forceAnswer && turn.functionCalls.length) {
+          gContents.push({ role: 'model', parts: turn.modelParts });
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const respParts: any[] = [];
+          for (const fc of turn.functionCalls) {
+            toolsUsed.push(fc.name);
+            if (fc.name === 'lap_la_so' && fc.args) {
+              const b = buildBirthFromInput(fc.args);
+              if (b) capturedBirth = b;
+            }
+            const run = await executeTool(fc.name, (fc.args || {}) as Record<string, unknown>, ctx);
+            send(sse.toolCall({ name: fc.name, args: safeArgs(fc.args) }));
+            send(sse.status({ text: run.label }));
+            const rc = typeof run.content === 'string' ? run.content : JSON.stringify(run.content);
+            respParts.push({ functionResponse: { name: fc.name, response: { result: rc } } });
+          }
+          gContents.push({ role: 'user', parts: respParts });
+          continue;
+        }
+        suggestions = turn.suggestions;
+        break;
+      }
+      // 🔴 Gemini hoàn tất mọi vòng (0 exception) mà KHÔNG một chữ nào tới
+      // người dùng → coi như hỏng để rơi xuống Kimi rồi Anthropic, cùng lý do
+      // đã vá cho Kimi (2026-08-20): "thành công nhưng rỗng" trước đây vẫn trả
+      // ok:true, người dùng nhận màn hình trống không có đường cứu.
+      if (!anyTextSent) {
+        console.error('[runAgent] Gemini-tools trả rỗng (0 chữ, 0 lỗi) → coi như hỏng, thử backup');
+        return { ok: false, midStream: false };
+      }
+      const justBuilt = toolsUsed.includes('lap_la_so') || toolsUsed.includes('mo_la_so');
+      const lasoCard = justBuilt && ctx.ls ? renderLasoCard(ctx.ls, ctx.birth) : null;
+      return {
+        ok: true,
+        result: {
+          toolsUsed,
+          birth: ctx.birth ?? capturedBirth,
+          activeProfile: ctx.activeProfile,
+          subjectSwitched: ctx.subjectSwitched,
+          lasoCard,
+          suggestions,
+          toolSuggest: ctx.toolSuggestion,
+        },
+      };
+    } catch (e) {
+      console.error('[runAgent] Gemini-tools lỗi:', (e as Error)?.message);
+      // anyTextSent = đã stream CHỮ dở → caller không được thử lại.
+      return { ok: false, midStream: anyTextSent };
+    }
+    // Vòng lặp kết thúc mà không return (không thể xảy ra — vòng cuối luôn ép
+    // trả lời rồi break) → coi như hỏng sạch, caller thử provider khác.
+    return { ok: false, midStream: false };
+  };
+
   const runKimiTools = async (): Promise<ProviderOutcome> => {
     const kTools = toKimiTools(tools);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -562,9 +629,9 @@ export async function runAgent(
       // 🔴 Kimi hoàn tất mọi vòng (0 exception) mà KHÔNG một chữ nào tới người
       // dùng (K3 hết token vào "suy nghĩ ẩn" trước khi kịp trả lời, hoặc model
       // trả rỗng thật) — TRƯỚC ĐÂY vẫn coi là ok:true và trả thẳng, người dùng
-      // nhận màn hình trống, KHÔNG CÒN đường sang Anthropic/Gemini. Coi đây là
-      // hỏng, y như một exception mạng thật, để rơi xuống chuỗi backup (đúng
-      // ca Henry báo "chat rail không có nội dung gì", 2026-08-20).
+      // nhận màn hình trống, KHÔNG CÒN đường sang provider khác. Coi đây là
+      // hỏng, y như một exception mạng thật, để rơi xuống Anthropic (đúng ca
+      // Henry báo "chat rail không có nội dung gì", 2026-08-20).
       if (!anyTextSent) {
         console.error('[runAgent] Kimi-tools trả rỗng (0 chữ, 0 lỗi) → coi như hỏng, thử backup');
         return { ok: false, midStream: false };
@@ -591,6 +658,61 @@ export async function runAgent(
     }
   };
 
+  // 1) GEMINI PROSE — kịch bản data-driven KHÔNG tool + KHÔNG ảnh. Route qua
+  // `chat.provider_routes` (_default hoặc theo scenarioType); admin đổi khoá
+  // đó là đổi ngay, không deploy. Lỗi ở request-time (chưa gửi byte nào) →
+  // rơi SẠCH xuống Gemini-tools rồi Kimi rồi Anthropic bên dưới.
+  if (geminiEligible(scenarioType, hasImages, cfg.providerRoutes)) {
+    try {
+      suggestions = await streamGemini(system, convo, cfg, send);
+      return {
+        toolsUsed,
+        birth: capturedBirth,
+        activeProfile: ctx.activeProfile,
+        subjectSwitched: ctx.subjectSwitched,
+        lasoCard: null,
+        suggestions,
+        toolSuggest: ctx.toolSuggestion,
+      };
+    } catch (e) {
+      console.error('[runAgent] Gemini lỗi → fallback Kimi rồi Opus 5:', (e as Error)?.message);
+      // rơi xuống Gemini-tools rồi Kimi rồi loop Anthropic bên dưới.
+    }
+  }
+
+  // 2) GEMINI TOOLS — kịch bản có function-calling THẬT (lap_la_so,
+  // tra_tieu_van, ...), gồm cả 'laso' (vương miện có paywall). Route qua
+  // CHÍNH key scenarioType trong `chat.provider_routes` — KHÔNG rơi về
+  // _default (xem geminiToolsEligible), nên admin vẫn bật/tắt riêng được cho
+  // từng kịch bản dù _default đã chỉnh sang 'gemini'. Fallback SẠCH xuống
+  // Kimi rồi Anthropic nếu Gemini lỗi lúc chưa stream chữ nào.
+  let geminiToolsTried = false;
+  if (geminiToolsEligible(scenarioType, hasImages, cfg.providerRoutes)) {
+    geminiToolsTried = true;
+    const r = await runGeminiTools();
+    if (r.ok) return r.result;
+    if (r.midStream) {
+      // Đã stream dở → báo lỗi và đóng lượt, KHÔNG thử provider khác (tránh trả trùng).
+      send(sse.error({ code: 'internal', message: 'Gemini error mid-stream' }));
+      const justBuilt = toolsUsed.includes('lap_la_so') || toolsUsed.includes('mo_la_so');
+      return {
+        toolsUsed,
+        birth: ctx.birth ?? capturedBirth,
+        activeProfile: ctx.activeProfile,
+        subjectSwitched: ctx.subjectSwitched,
+        lasoCard: justBuilt && ctx.ls ? renderLasoCard(ctx.ls, ctx.birth) : null,
+        suggestions,
+        toolSuggest: ctx.toolSuggestion,
+      };
+    }
+    // Hỏng sạch (chưa stream gì) → rơi xuống Kimi rồi loop Anthropic bên dưới.
+  }
+
+  // 3) KIMI — secondary-1. Model hỗ trợ NATIVE cả vision lẫn function-calling
+  // nên KHÔNG cần eligibility gate theo scenario như Gemini (giới hạn đó là
+  // của Gemini, không phải của Kimi) — thử cho MỌI kịch bản Gemini chưa nhận
+  // hoặc vừa hỏng, kể cả 'laso' (vương miện) và vision. Lỗi ở request-time
+  // (chưa gửi byte nào) → rơi SẠCH xuống loop Anthropic bên dưới (secondary-2).
   if (kimiConfigured()) {
     if (tools.length) {
       const r = await runKimiTools();
@@ -609,7 +731,7 @@ export async function runAgent(
           toolSuggest: ctx.toolSuggestion,
         };
       }
-      // Hỏng sạch (chưa stream gì) → rơi xuống chuỗi cũ (Opus 5 rồi Gemini).
+      // Hỏng sạch (chưa stream gì) → rơi xuống loop Anthropic bên dưới.
     } else {
       try {
         suggestions = await streamKimi(system, convo, cfg, send);
@@ -623,134 +745,11 @@ export async function runAgent(
           toolSuggest: ctx.toolSuggestion,
         };
       } catch (e) {
-        console.error('[runAgent] Kimi lỗi → fallback chuỗi cũ (Opus 5 rồi Gemini):', (e as Error)?.message);
-        // rơi xuống chuỗi cũ bên dưới (an toàn: chưa stream text nào)
+        console.error('[runAgent] Kimi lỗi → fallback Opus 5:', (e as Error)?.message);
+        // rơi xuống loop Anthropic bên dưới (an toàn: chưa stream text nào)
       }
     }
   }
-
-  if (geminiEligible(scenarioType, hasImages, cfg.providerRoutes)) {
-    try {
-      suggestions = await streamGemini(system, convo, cfg, send);
-      return {
-        toolsUsed,
-        birth: capturedBirth,
-        activeProfile: ctx.activeProfile,
-        subjectSwitched: ctx.subjectSwitched,
-        lasoCard: null,
-        suggestions,
-        toolSuggest: ctx.toolSuggestion,
-      };
-    } catch (e) {
-      console.error('[runAgent] Gemini lỗi → fallback Sonnet:', (e as Error)?.message);
-      // rơi xuống loop Anthropic bên dưới (an toàn: chưa stream text nào)
-    }
-  }
-
-  // ── PROVIDER ROUTING (LÁ SỐ có TOOL): luận-giải/lá-số ('laso') có thể đi
-  // GEMINI với function-calling THẬT (lap_la_so, tra_tieu_van, ...). Đây là
-  // nhóm VƯƠNG MIỆN có paywall → MẶC ĐỊNH giữ Sonnet (providerRoutes
-  // 'laso'='anthropic'); admin flip 'laso'='gemini' qua app_config để bật,
-  // revert 1 dòng không deploy. Fallback SẠCH về Sonnet nếu Gemini lỗi lúc
-  // chưa stream chữ nào (progressed=false). Prompt/data/tool/loop y hệt bản
-  // Sonnet — chỉ khác nơi gọi model.
-  // Đường Gemini function-calling, gói thành closure vì được gọi ở HAI chỗ:
-  //   1) route chỉ định Gemini  → chạy trước, lỗi thì rơi xuống Anthropic;
-  //   2) Anthropic chết sạch    → fallback ngược lên đây (xem cuối hàm).
-  // Trả về kết quả khi xong; trả null khi hỏng mà CHƯA stream chữ nào (caller
-  // được phép thử provider khác); trả {failedMidStream:true} khi đã stream dở
-  // (caller KHÔNG được thử lại — sẽ ra hai câu trả lời chồng nhau).
-  const runGeminiTools = async (): Promise<ProviderOutcome> => {
-    const gTools = toGeminiTools(tools);
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const gContents: any[] = toGeminiContents(convo);
-    // 🔴 CHỈ chữ đã hiện ra màn hình mới cấm thử provider khác — tool call
-    // không tính (đọc thuần, idempotent). Cùng đợt vá với Kimi (2026-08-20),
-    // xem chú thích đầy đủ ở `runKimiTools`.
-    let anyTextSent = false;
-    try {
-      for (let round = 0; round <= cfg.maxRounds; round++) {
-        const forceAnswer = round === cfg.maxRounds; // vòng cuối: bỏ tool để ép trả lời
-        const turn = await streamGeminiTurn(system, gContents, forceAnswer ? null : gTools, cfg, send);
-        anyTextSent = anyTextSent || turn.sentText;
-
-        if (!forceAnswer && turn.functionCalls.length) {
-          gContents.push({ role: 'model', parts: turn.modelParts });
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          const respParts: any[] = [];
-          for (const fc of turn.functionCalls) {
-            toolsUsed.push(fc.name);
-            if (fc.name === 'lap_la_so' && fc.args) {
-              const b = buildBirthFromInput(fc.args);
-              if (b) capturedBirth = b;
-            }
-            const run = await executeTool(fc.name, (fc.args || {}) as Record<string, unknown>, ctx);
-            send(sse.toolCall({ name: fc.name, args: safeArgs(fc.args) }));
-            send(sse.status({ text: run.label }));
-            const rc = typeof run.content === 'string' ? run.content : JSON.stringify(run.content);
-            respParts.push({ functionResponse: { name: fc.name, response: { result: rc } } });
-          }
-          gContents.push({ role: 'user', parts: respParts });
-          continue;
-        }
-        suggestions = turn.suggestions;
-        break;
-      }
-      // 🔴 Gemini hoàn tất mọi vòng (0 exception) mà KHÔNG một chữ nào tới
-      // người dùng → coi như hỏng để rơi xuống Anthropic, cùng lý do đã vá
-      // cho Kimi (2026-08-20): "thành công nhưng rỗng" trước đây vẫn trả
-      // ok:true, người dùng nhận màn hình trống không có đường cứu.
-      if (!anyTextSent) {
-        console.error('[runAgent] Gemini-tools trả rỗng (0 chữ, 0 lỗi) → coi như hỏng, thử backup');
-        return { ok: false, midStream: false };
-      }
-      const justBuilt = toolsUsed.includes('lap_la_so') || toolsUsed.includes('mo_la_so');
-      const lasoCard = justBuilt && ctx.ls ? renderLasoCard(ctx.ls, ctx.birth) : null;
-      return {
-        ok: true,
-        result: {
-          toolsUsed,
-          birth: ctx.birth ?? capturedBirth,
-          activeProfile: ctx.activeProfile,
-          subjectSwitched: ctx.subjectSwitched,
-          lasoCard,
-          suggestions,
-          toolSuggest: ctx.toolSuggestion,
-        },
-      };
-    } catch (e) {
-      console.error('[runAgent] Gemini-tools lỗi:', (e as Error)?.message);
-      // anyTextSent = đã stream CHỮ dở → caller không được thử lại.
-      return { ok: false, midStream: anyTextSent };
-    }
-    // Vòng lặp kết thúc mà không return (không thể xảy ra — vòng cuối luôn ép
-    // trả lời rồi break) → coi như hỏng sạch, caller thử provider khác.
-    return { ok: false, midStream: false };
-  };
-
-  // Gọi lượt 1: route chỉ định Gemini cho nhóm lá số → chạy Gemini trước.
-  let geminiToolsTried = false;
-  if (geminiToolsEligible(scenarioType, hasImages, cfg.providerRoutes)) {
-    geminiToolsTried = true;
-    const r = await runGeminiTools();
-    if (r.ok) return r.result;
-    if (r.midStream) {
-      // Đã stream dở → báo lỗi và đóng lượt, KHÔNG thử Anthropic (tránh trả trùng).
-      send(sse.error({ code: 'internal', message: 'Gemini error mid-stream' }));
-      const justBuilt = toolsUsed.includes('lap_la_so') || toolsUsed.includes('mo_la_so');
-      return {
-        toolsUsed,
-        birth: ctx.birth ?? capturedBirth,
-        activeProfile: ctx.activeProfile,
-        subjectSwitched: ctx.subjectSwitched,
-        lasoCard: justBuilt && ctx.ls ? renderLasoCard(ctx.ls, ctx.birth) : null,
-        suggestions,
-        toolSuggest: ctx.toolSuggestion,
-      };
-    }
-    // Hỏng sạch → rơi xuống loop Anthropic bên dưới.
-  }
-
 
   // Mỗi vòng = 1 lượt STREAM DUY NHẤT (gộp "quyết định tool" + "trả lời"). Trước
   // đây lượt KHÔNG dùng tool tốn 2 lần gọi model — 1 lần non-stream để quyết
@@ -773,13 +772,14 @@ export async function runAgent(
     totalUsage.cache_read_input_tokens += turn.usage.cache_read_input_tokens;
     totalUsage.output_tokens += turn.usage.output_tokens;
 
-    // ── FALLBACK NGƯỢC: Anthropic chết (hết credit, 5xx kéo dài) → thử Gemini.
-    // Trước đây streamTurn bắn thẳng sse.error tại chỗ, nên một mình Anthropic
-    // hết tiền là kéo sập cả rail dù Gemini vẫn sống — đúng ca Henry gặp. Chỉ
-    // fallback khi CHƯA stream gì (round 0, chưa tool nào) để không trả trùng,
-    // và chỉ sang đường Gemini mà kịch bản này thật sự đi được (guard prose/
-    // vision/tools giữ nguyên; route bị bỏ qua vì đây là cứu hộ, không phải
-    // lựa chọn ưu tiên).
+    // ── FALLBACK NGƯỢC: Anthropic (secondary-2) chết (hết credit, 5xx kéo
+    // dài) sau khi Gemini (primary) VÀ Kimi (secondary-1) đều đã hỏng hoặc
+    // không đủ điều kiện → thử lại Gemini một lần nữa, bỏ qua route (guard
+    // prose/vision/tools giữ nguyên; route bị bỏ qua vì đây là cứu hộ cuối
+    // cùng, không phải lựa chọn ưu tiên). Trước đây streamTurn bắn thẳng
+    // sse.error tại chỗ, nên một mình Anthropic hết tiền là kéo sập cả rail
+    // dù Gemini vẫn sống — đúng ca Henry gặp. Chỉ fallback khi CHƯA stream gì
+    // (round 0, chưa tool nào) để không trả trùng.
     if (turn.stopReason === 'error') {
       const cleanSoFar = round === 0 && toolsUsed.length === toolsBeforeAnthropic;
       if (cleanSoFar && !geminiToolsTried && geminiToolsCapable(scenarioType, hasImages)) {

@@ -3,11 +3,16 @@
 // Helper LLM DÙNG CHUNG cho các route STANDALONE (không qua runAgent):
 // cron, tuong-mat, phong-thuy, tubinh, xem-tuoi, lasotuvi, van-han-nam...
 //
-// Kimi K3 PRIMARY → Opus 5 backup-1 → Gemini Flash backup-2 (chốt Henry
-// 2026-08-20). Provider ĐỨNG ĐẦU đọc từ app_config 'chat.standalone_provider'
-// (mặc định 'kimi' — DEFAULTS.standaloneProvider trong appConfig.ts); provider
-// đứng đầu lỗi → tự rơi xuống 2 provider còn lại theo CANONICAL_ORDER. Đổi
-// khoá đó qua DB để ép một provider cụ thể lên đầu (không cần deploy).
+// Provider ĐỨNG ĐẦU đọc từ app_config 'chat.standalone_provider' (mặc định
+// 'kimi' — DEFAULTS.standaloneProvider trong appConfig.ts, chỉ dùng khi DB
+// không đọc được); provider đứng đầu lỗi → tự rơi xuống 2 provider còn lại
+// theo CANONICAL_ORDER. Đổi khoá đó qua DB để ép một provider cụ thể lên đầu
+// (không cần deploy).
+// 🔴 LIVE 2026-08-20 tối (chốt Henry, "trước mắt"): DB đang set 'gemini' —
+// Gemini Flash PRIMARY → Kimi K3 secondary-1 → Opus 5 secondary-2. Đảo lại
+// đúng buổi sáng cùng ngày ("Kimi K3 PRIMARY") vì Kimi thực tế chạy quá chậm
+// (>120s/phần) khiến rail khó dùng thật. Đổi DB về 'kimi' để quay lại thứ tự
+// sáng, không cần sửa code — xem `providerOrder()` cuối file.
 //
 // Hỗ trợ:
 //   - llmText           : non-stream text (+ ảnh vision, + hội thoại nhiều lượt)
@@ -24,12 +29,14 @@ const GEMINI_KEY = process.env.GEMINI_API_KEY || '';
 const GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-2.5-flash';
 const GEMINI_BASE = 'https://generativelanguage.googleapis.com/v1beta/models';
 const ANTHROPIC_KEY = process.env.ANTHROPIC_API_KEY || '';
-// Backup-1 (chốt Henry 2026-08-20: Kimi K3 primary → Opus 5 backup-1 → Gemini
-// Flash backup-2). Hằng số này KHÔNG đọc được từ app_config — đổi model thì
-// phải sửa trực tiếp ở đây rồi deploy.
+// Opus 5. Đứng thứ 2 hoặc thứ 3 tùy `chat.standalone_provider` trong DB (xem
+// header file + `providerOrder()` cuối file) — hằng số này KHÔNG đọc được từ
+// app_config, đổi MODEL thì phải sửa trực tiếp ở đây rồi deploy; đổi THỨ TỰ
+// thì không, chỉ cần đổi DB.
 const ANTHROPIC_MODEL = 'claude-opus-5';
 const ANTHROPIC_URL = 'https://api.anthropic.com/v1/messages';
-// Primary — Kimi K3 (Moonshot AI), endpoint OpenAI-compatible Chat Completions.
+// Kimi K3 (Moonshot AI), endpoint OpenAI-compatible Chat Completions. Đứng
+// thứ mấy trong chuỗi cũng tùy `chat.standalone_provider` — xem trên.
 const KIMI_KEY = process.env.KIMIK3_API_KEY || '';
 const KIMI_MODEL = process.env.KIMI_MODEL || 'kimi-k3';
 const KIMI_URL = 'https://api.moonshot.ai/v1/chat/completions';
@@ -298,12 +305,15 @@ function anthropicChunkText(raw: string): string {
 }
 
 // ─── Chọn provider (chính + 2 backup) ───────────────────────────
-// Chốt Henry 2026-08-20: Kimi K3 primary → Opus 5 (anthropic) backup-1 →
-// Gemini Flash backup-2. `standaloneProvider` (app_config
-// 'chat.standalone_provider') vẫn giữ được vai trò ĐẶT LÊN ĐẦU một provider
-// cụ thể (vd ép 'gemini' để né Kimi/Opus khi cần) — còn lại xếp theo thứ tự
-// chuẩn phía sau. Kimi thiếu key thì `kimiText`/`openKimiStream` tự ném lỗi
-// ngay, vòng thử-provider-kế-tiếp bên dưới xử lý y như mọi lỗi khác.
+// `standaloneProvider` (app_config 'chat.standalone_provider') giữ vai trò
+// ĐẶT LÊN ĐẦU một provider cụ thể — còn lại xếp theo `CANONICAL_ORDER` phía
+// sau (KHÔNG cần đụng mảng đó để đổi primary). LIVE 2026-08-20 tối (chốt
+// Henry, "trước mắt"): DB = 'gemini' → Gemini Flash primary, Kimi K3
+// secondary-1, Opus 5 secondary-2 — thứ tự Kimi/anthropic trong mảng dưới đây
+// vốn đã đúng thứ tự secondary-1/secondary-2 Henry muốn, nên đặt primary =
+// 'gemini' là đủ, không cần sửa mảng. Kimi thiếu key thì
+// `kimiText`/`openKimiStream` tự ném lỗi ngay, vòng thử-provider-kế-tiếp bên
+// dưới xử lý y như mọi lỗi khác.
 const CANONICAL_ORDER = ['kimi', 'anthropic', 'gemini'];
 async function providerOrder(): Promise<string[]> {
   let primary = 'kimi';
