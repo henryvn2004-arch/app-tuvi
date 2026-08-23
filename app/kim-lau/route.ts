@@ -19,6 +19,7 @@ export const revalidate = 86400;
 
 import { NextResponse } from 'next/server';
 import { kimLauLoai, kimLauNamHienTai, KIM_LAU_HAI, KIM_LAU_DU, type KimLauLoai } from '@/lib/engine/kim-lau';
+import { ORG_ID } from '@/lib/seo/entity';
 
 const BASE = 'https://www.tuviminhbao.com';
 const URL_SELF = `${BASE}/kim-lau`;
@@ -117,7 +118,7 @@ export async function GET() {
       description: `Cách tính tuổi Kim Lâu theo tuổi âm chia 9, bốn loại Thân Thê Tử Lục Súc, bảng tra đầy đủ theo năm sinh cho năm ${namXem} và cách hóa giải.`,
       inLanguage: 'vi',
       mainEntityOfPage: URL_SELF,
-      publisher: { '@type': 'Organization', name: 'Tử Vi Minh Bảo', url: BASE },
+      publisher: { '@type': 'Organization', '@id': ORG_ID, name: 'Tử Vi Minh Bảo', url: BASE },
     },
     {
       '@context': 'https://schema.org',

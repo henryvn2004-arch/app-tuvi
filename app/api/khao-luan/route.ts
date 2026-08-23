@@ -3,6 +3,7 @@
 export const maxDuration = 15;
 import { NextRequest, NextResponse } from 'next/server';
 import { PUBLISHED_ONLY } from '@/lib/content/publish-filter';
+import { ORG_ID } from '@/lib/seo/entity';
 
 const SUPABASE_URL = process.env.SUPABASE_URL!;
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY!;
@@ -47,8 +48,8 @@ function buildHTML(article: any, slug: string, related: any[], master?: any) {
     { '@context':'https://schema.org','@type':'Article', headline:article.title, description:article.excerpt||'', url, datePublished:article.created_at, inLanguage:'vi',
       author: master
         ? {'@type':'Person',name:master.display_name,url:`${BASE_URL}/tac-gia/${master.id}`}
-        : {'@type':'Organization',name:'Tử Vi Minh Bảo',url:BASE_URL},
-      publisher:{'@type':'Organization',name:'Tử Vi Minh Bảo',url:BASE_URL,logo:{'@type':'ImageObject',url:BASE_URL+'/seal.webp'}},
+        : {'@type':'Organization', '@id': ORG_ID,name:'Tử Vi Minh Bảo',url:BASE_URL},
+      publisher:{'@type':'Organization', '@id': ORG_ID,name:'Tử Vi Minh Bảo',url:BASE_URL,logo:{'@type':'ImageObject',url:BASE_URL+'/seal.webp'}},
       image:{'@type':'ImageObject',url:img} },
     { '@context':'https://schema.org','@type':'BreadcrumbList', itemListElement:[
       {'@type':'ListItem',position:1,name:'Trang Chủ',item:BASE_URL+'/'},

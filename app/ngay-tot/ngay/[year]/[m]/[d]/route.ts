@@ -9,6 +9,7 @@ import {
 import {
   BASE, YEARS, esc, renderPage, CACHE_HEADERS, daysInMonth,
 } from '../../../../_shared';
+import { ORG_ID } from '@/lib/seo/entity';
 
 export async function GET(
   _req: NextRequest,
@@ -151,7 +152,7 @@ export async function GET(
       '@context': 'https://schema.org', '@type': 'Article',
       headline: title, description: desc, datePublished: new Date(year, month-1, day).toISOString(),
       url, inLanguage: 'vi',
-      publisher: { '@type': 'Organization', name: 'Tử Vi Minh Bảo', url: BASE },
+      publisher: { '@type': 'Organization', '@id': ORG_ID, name: 'Tử Vi Minh Bảo', url: BASE },
       breadcrumb: { '@type': 'BreadcrumbList', itemListElement: [
         { '@type': 'ListItem', position: 1, name: 'Trang Chủ', item: BASE },
         { '@type': 'ListItem', position: 2, name: 'Xem Ngày Tốt', item: `${BASE}/ngay-tot` },
