@@ -26,6 +26,8 @@ export type ProspectKind =
   | 'guest_post'
   | 'guest_blog'
   | 'press'
+  | 'kol'
+  | 'partner'
   | 'web2'
   | 'social_profile'
   | 'unlinked_mention'
@@ -37,6 +39,7 @@ export type ContentKind =
   | 'guest_pitch'
   | 'blog_pitch'
   | 'press_pitch'
+  | 'kol_pitch'
   | 'outreach_email'
   | 'broken_link_pitch';
 
@@ -52,6 +55,10 @@ export interface Prospect {
   priority: number;
   source: string;
   created_at: string;
+  /** CRM-lite (#14) — nhịp theo dõi, do NGƯỜI đánh dấu chứ máy không gửi gì. */
+  last_contacted_at?: string | null;
+  follow_up_at?: string | null;
+  reply?: 'none' | 'positive' | 'negative' | 'later';
 }
 
 export interface DraftedContent {
@@ -71,6 +78,13 @@ export function pickContentKind(kind: ProspectKind): ContentKind {
       return 'blog_pitch';
     case 'press':
       return 'press_pitch';
+    case 'kol':
+      return 'kol_pitch';
+    // `partner` (đổi giá trị qua lại giữa hai site) dùng lại `outreach_email`:
+    // nó ĐÚNG là "chào hỏi làm quen, giới thiệu một công cụ có thể hữu ích cho
+    // độc giả của họ" — thêm một prompt thứ hai nói cùng một việc là hai bản
+    // trôi khỏi nhau. KOL thì tách RIÊNG vì đó là thư gửi MỘT NGƯỜI có khán
+    // giả, giọng khác hẳn thư gửi một website.
     case 'web2':
       return 'web2_article';
     case 'guest_post':
@@ -301,6 +315,50 @@ LUẬT:
   return { kind: 'press_pitch', title: STR(out.subject) || null, body, meta: { angles, dataset: 'tuvi-dataset-v1' } };
 }
 
+/**
+ * Thư gửi KOL / người có khán giả — mục #14/14.
+ *
+ * ⛔ CHỈ SOẠN, KHÔNG GỬI. Không có đường tự nhắn tin nào trong file này, và đó
+ * là ràng buộc đã chốt của cả track: nhắn tin hàng loạt cho KOL là spam, mà
+ * spam từ một tài khoản thương hiệu thì mất luôn tài khoản đó.
+ *
+ * 🔑 Khác `outreach_email` ở chỗ người nhận là MỘT NGƯỜI CÓ KHÁN GIẢ, không
+ * phải quản trị một website. Hai thứ họ cân nhắc khác hẳn nhau: chủ site hỏi
+ * "cái này có ích cho độc giả của tôi không", KOL hỏi "cái này có ra được một
+ * nội dung tôi muốn đăng không". Thư nào không trả lời câu đó thì bị lướt qua.
+ *
+ * Nên thư này đưa MỘT Ý TƯỞNG NỘI DUNG cụ thể, không đưa lời mời hợp tác
+ * chung chung — và nói thẳng là dùng miễn phí, không ràng buộc, vì thứ mình
+ * thật sự muốn là họ thử rồi tự thấy đáng kể lại.
+ */
+async function draftKolPitch(p: Prospect): Promise<DraftedContent | null> {
+  const system = `Bạn soạn MỘT TIN NHẮN NGẮN gửi cho "${p.name}" (${p.url}) — một người sáng tạo nội dung / người có khán giả (TikToker, YouTuber, admin group, chủ kênh).
+
+Bối cảnh bên gửi:
+${SITE_FACTS}
+
+${JSON_RULE}
+{"subject":"...", "body":"tin nhắn 60-110 từ", "contentIdeas":["2-3 ý nội dung CỤ THỂ họ có thể làm, mỗi ý 1 câu"]}
+
+LUẬT:
+- RẤT NGẮN. Đây là tin nhắn, không phải email doanh nghiệp. Dài là bị lướt.
+- Xưng hô với MỘT NGƯỜI, giọng bình thường như người nhắn cho người.
+- Nêu MỘT chi tiết CÓ THẬT về kênh của họ lấy từ "chu_de"/"ghi_chu". Không có thông tin cụ thể thì nói thẳng là mới biết tới kênh — ĐỪNG giả vờ đã theo dõi lâu.
+- Trọng tâm là Ý TƯỞNG NỘI DUNG cho HỌ, không phải lời khen sản phẩm của mình. Gợi ý 2-3 ý cụ thể (vd: quay thử một lá số rồi phản ứng, so kết quả hai người, thử công cụ đoán tính cách).
+- Nói rõ: dùng miễn phí, không cần đăng gì, không ràng buộc. KHÔNG nhắc tiền, KHÔNG đề nghị trả phí quảng cáo, KHÔNG đòi gắn link.
+- CẤM chữ "hợp tác truyền thông"/"booking"/"KOL"/"campaign"/"SEO"/"backlink".
+- Kết bằng một câu hỏi mở, không giục, chấp nhận họ có thể không trả lời.`;
+
+  const out = await ask(system, p, 800);
+  if (!out) return null;
+  const body = STR(out.body);
+  if (!body) return null;
+  const ideas = Array.isArray(out.contentIdeas)
+    ? (out.contentIdeas as unknown[]).map((s) => STR(s)).filter(Boolean).slice(0, 3)
+    : [];
+  return { kind: 'kol_pitch', title: STR(out.subject) || null, body, meta: { contentIdeas: ideas } };
+}
+
 async function draftOutreachEmail(p: Prospect): Promise<DraftedContent | null> {
   const isMention = p.kind === 'unlinked_mention';
   const system = `Bạn soạn MỘT EMAIL ngắn gửi cho "${p.name}" (${p.url}).
@@ -361,6 +419,8 @@ export async function draftContentForProspect(p: Prospect): Promise<DraftedConte
       return draftBlogPitch(p);
     case 'press_pitch':
       return draftPressPitch(p);
+    case 'kol_pitch':
+      return draftKolPitch(p);
     case 'broken_link_pitch':
       return draftBrokenLinkPitch(p);
     default:

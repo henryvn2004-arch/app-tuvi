@@ -610,6 +610,19 @@
 
         <div class="panel">
           <div class="panel-header">
+            <div class="panel-title">Cần Theo Dõi (CRM-lite)</div>
+            <div class="panel-actions"><span class="badge badge-grey" id="bl-crm-badge">…</span></div>
+          </div>
+          <div class="panel-body" style="font-size:.76rem;color:var(--text-lt);padding-bottom:.5rem">
+            Ai đã gửi thư mà chưa hồi âm, ai hẹn nhắc lại tới ngày. <b>Máy không gửi gì</b> — đây là dấu vết của việc tay, để danh sách outreach khỏi mục đi mà không ai biết ai đáng nhắc lại. Đánh dấu "đã liên hệ" ngay sau khi bạn tự tay gửi.
+          </div>
+          <div id="bl-crm" style="padding:0 1rem 1rem">
+            <div class="loading"><span class="spin"></span>Đang tải...</div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
             <div class="panel-title"><svg class="pt-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z"/><path d="M4 9h16"/><path d="M9 4v16"/></svg>Nội Dung Cần Duyệt</div>
             <div class="panel-actions">
               <span class="badge badge-grey" id="bl-c-badge">…</span>
@@ -4623,13 +4636,14 @@ const BL_KIND_LABELS = {
   directory: 'Danh bạ / Directory', resource_page: 'Trang tài nguyên',
   broken_link: 'Link chết cần thay', guest_post: 'Bài khách (có toà soạn)',
   guest_blog: 'Bài khách (blog nhỏ)', press: 'Báo chí / toà soạn',
+  kol: 'KOL / người có khán giả', partner: 'Đối tác đổi giá trị',
   web2: 'Web2.0 (Medium/Blog)', social_profile: 'Hồ sơ mạng xã hội',
   unlinked_mention: 'Đã nhắc tên, chưa gắn link', other: 'Khác',
 };
 const BL_CONTENT_KIND_LABELS = {
   directory_listing: 'Mô tả nộp directory', web2_article: 'Bài web2.0',
   guest_pitch: 'Email pitch guest post', blog_pitch: 'Thư ngắn gửi blog nhỏ',
-  press_pitch: 'Thư gửi toà soạn (kèm số liệu)',
+  press_pitch: 'Thư gửi toà soạn (kèm số liệu)', kol_pitch: 'Tin nhắn gửi KOL',
   outreach_email: 'Email liên hệ',
   broken_link_pitch: 'Email link chết/tài nguyên',
 };
@@ -4685,6 +4699,7 @@ async function loadBacklinks() {
     if (gaBadge) { gaBadge.className = 'badge ' + (gaDone ? 'badge-green' : 'badge-grey'); gaBadge.textContent = accounts.length ? gaDone + ' đã có / ' + accounts.length + ' nền tảng' : 'Sổ trống — bấm Nạp sổ'; }
 
     renderBlProspects(_blProspects);
+    renderBlCrm(_blProspects);
     renderBlContent(content);
     renderBlLinks(links);
     renderGaAccounts(accounts);
@@ -4818,6 +4833,86 @@ function blKindOptions(selected) {
     `<option value="${k}" ${k === selected ? 'selected' : ''}>${escHtmlLocal(BL_KIND_LABELS[k])}</option>`).join('');
 }
 
+
+// ── CRM-lite (#14): ai cần nhắc lại hôm nay ──────────────────────────────────
+// Chỉ đọc lại `_blProspects` đã tải — KHÔNG gọi thêm lượt API. Đây là một CÁCH
+// NHÌN khác của cùng dữ liệu, không phải một nguồn thứ hai.
+const BL_REPLY = {
+  none: ['badge-grey', 'Chưa hồi âm'],
+  positive: ['badge-green', 'Đồng ý / quan tâm'],
+  negative: ['badge-red', 'Từ chối'],
+  later: ['badge-blue', 'Hẹn dịp khác'],
+};
+
+function renderBlCrm(prospects) {
+  const host = document.getElementById('bl-crm');
+  const badge = document.getElementById('bl-crm-badge');
+  if (!host) return;
+  const today = new Date().toISOString().slice(0, 10);
+
+  // Đáng theo dõi = đã tự tay gửi rồi (có last_contacted_at) HOẶC có hẹn nhắc.
+  // Cơ hội chưa gửi gì thì thuộc sổ trên, không phải việc của bảng này.
+  const rows = (prospects || []).filter((p) => p.last_contacted_at || p.follow_up_at);
+  const due = rows.filter((p) => p.follow_up_at && p.follow_up_at <= today);
+  if (badge) {
+    badge.textContent = due.length ? due.length + ' tới hạn' : rows.length + ' đang theo dõi';
+    badge.className = 'badge ' + (due.length ? 'badge-red' : rows.length ? 'badge-blue' : 'badge-grey');
+  }
+  if (!rows.length) {
+    host.innerHTML = '<div class="empty">Chưa có cơ hội nào được đánh dấu đã liên hệ. Gửi thư xong thì bấm "Đã liên hệ" ở sổ cơ hội bên trên.</div>';
+    return;
+  }
+  // Tới hạn lên đầu, rồi tới hẹn gần nhất.
+  rows.sort((a, b) => {
+    const ad = a.follow_up_at || '9999-99-99', bd = b.follow_up_at || '9999-99-99';
+    return ad < bd ? -1 : ad > bd ? 1 : 0;
+  });
+
+  host.innerHTML =
+    '<div class="table-wrap"><table><thead><tr>' +
+    '<th>Cơ hội</th><th>Loại</th><th>Đã liên hệ</th><th>Nhắc lại</th><th>Họ nói gì</th><th></th>' +
+    '</tr></thead><tbody>' +
+    rows.map((p, i) => {
+      const rp = BL_REPLY[p.reply || 'none'] || BL_REPLY.none;
+      const overdue = p.follow_up_at && p.follow_up_at <= today;
+      return '<tr' + (overdue ? ' style="background:var(--bg-soft)"' : '') + '>' +
+        '<td><a href="' + escHtmlLocal(blSafeUrl(p.url)) + '" target="_blank" rel="noopener">' + escHtmlLocal(p.name) + '</a></td>' +
+        '<td>' + escHtmlLocal(BL_KIND_LABELS[p.kind] || p.kind) + '</td>' +
+        '<td>' + (p.last_contacted_at ? escHtmlLocal(p.last_contacted_at.slice(0, 10)) : '—') + '</td>' +
+        '<td>' + (p.follow_up_at ? (overdue ? '<b style="color:var(--red)">' + escHtmlLocal(p.follow_up_at) + '</b>' : escHtmlLocal(p.follow_up_at)) : '—') + '</td>' +
+        '<td><span class="badge ' + rp[0] + '">' + rp[1] + '</span></td>' +
+        '<td><button class="btn btn-outline btn-sm" onclick="blCrmEdit(' + i + ')">Cập nhật</button></td>' +
+        '</tr>';
+    }).join('') +
+    '</tbody></table></div>';
+  host._rows = rows;
+}
+
+function blCrmEdit(i) {
+  const rows = (document.getElementById('bl-crm') || {})._rows || [];
+  const p = rows[i];
+  if (!p) return;
+  const reply = prompt(
+    'Họ trả lời thế nào? Gõ một trong: none / positive / negative / later\n\n' +
+      '(none = chưa hồi âm, later = hẹn dịp khác)',
+    p.reply || 'none',
+  );
+  if (reply === null) return;
+  const fu = prompt('Nhắc lại vào ngày nào? (YYYY-MM-DD, để trống = bỏ hẹn)', p.follow_up_at || '');
+  if (fu === null) return;
+  apiPost('admin-backlink-prospect', { op: 'followup', id: p.id, reply: reply.trim(), followUpAt: fu.trim() })
+    .then(function () { toast('Đã cập nhật'); loadBacklinks(); })
+    .catch(function (e) { toast('Lỗi: ' + (e.message || e), true); });
+}
+
+/** Đánh dấu vừa tự tay gửi — hẹn nhắc lại mặc định 7 ngày sau. */
+function blMarkContacted(id) {
+  const d = new Date(Date.now() + 7 * 86400000).toISOString().slice(0, 10);
+  apiPost('admin-backlink-prospect', { op: 'followup', id: id, markContacted: true, followUpAt: d })
+    .then(function () { toast('Đã ghi nhận — hẹn nhắc lại ' + d); loadBacklinks(); })
+    .catch(function (e) { toast('Lỗi: ' + (e.message || e), true); });
+}
+
 function renderBlProspects(prospects) {
   const host = document.getElementById('bl-prospects');
   if (!host) return;
@@ -4859,6 +4954,7 @@ function renderBlProspects(prospects) {
         <td style="font-size:.72rem;color:var(--text-lt)">${escHtmlLocal(p.topic || '—')}</td>
         <td><span class="badge ${cls}">${escHtmlLocal(label)}</span></td>
         <td style="white-space:nowrap">
+          <button class="btn-mini" onclick="blMarkContacted('${p.id}')" title="Bấm SAU KHI bạn đã tự tay gửi — máy không gửi gì">Đã liên hệ</button>
           <button class="btn-mini" onclick="blProspectEdit('${p.id}')">Sửa</button>
           <button class="btn-mini" onclick="blProspectDelete('${p.id}')">Xoá</button>
         </td>

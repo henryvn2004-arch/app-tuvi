@@ -2065,7 +2065,7 @@ async function handleAdminSeedingDraft(request: NextRequest, body: Record<string
 
 const BL_PROSPECT_KINDS: BlKind[] = [
   'directory', 'resource_page', 'broken_link', 'guest_post', 'guest_blog',
-  'press', 'web2', 'social_profile', 'unlinked_mention', 'other',
+  'press', 'kol', 'partner', 'web2', 'social_profile', 'unlinked_mention', 'other',
 ];
 
 // ── GET: admin-backlinks — toàn bộ dữ liệu cho panel Backlink. ──
@@ -2077,7 +2077,7 @@ async function handleAdminBacklinks(request: NextRequest): Promise<Response> {
   try {
     const [prospects, content, links, accounts, embeds] = await Promise.all([
       blGet<BlProspect>(
-        'backlink_prospects?select=id,kind,name,url,topic,contact_email,notes,status,priority,source,created_at,updated_at' +
+        'backlink_prospects?select=id,kind,name,url,topic,contact_email,notes,status,priority,source,created_at,updated_at,last_contacted_at,follow_up_at,reply' +
           '&order=status.asc,priority.desc,created_at.desc&limit=300',
       ),
       blGet<Record<string, unknown>>(
@@ -2118,6 +2118,28 @@ async function handleAdminBacklinkProspect(request: NextRequest, body: Record<st
   const op = String(body.op || 'save').trim();
   const id = String(body.id || '').trim();
   if (id && !/^[0-9a-f-]{36}$/i.test(id)) return err('id không hợp lệ', 400);
+
+  // CRM-lite (#14): đánh dấu đã liên hệ + hẹn nhắc lại + ghi họ trả lời gì.
+  // TÁCH khỏi form sửa, cùng lý do `status` có action riêng — đây là việc làm
+  // hằng ngày trên một hàng, không phải sửa hồ sơ.
+  if (op === 'followup') {
+    if (!id) return err('Thiếu id', 400);
+    const reply = String(body.reply || '').trim();
+    if (reply && !['none', 'positive', 'negative', 'later'].includes(reply)) {
+      return err('reply không hợp lệ', 400);
+    }
+    const fu = String(body.followUpAt || '').trim();
+    if (fu && !/^\d{4}-\d{2}-\d{2}$/.test(fu)) return err('Ngày nhắc lại phải dạng YYYY-MM-DD', 400);
+    const patch: Record<string, unknown> = { updated_at: new Date().toISOString() };
+    if (body.markContacted) patch.last_contacted_at = new Date().toISOString();
+    if (reply) patch.reply = reply;
+    // Chuỗi rỗng = XOÁ hẹn (người dùng bỏ trống ô ngày), khác với không gửi
+    // trường này — không phân biệt hai ca thì không bao giờ gỡ được cái hẹn.
+    if (Object.prototype.hasOwnProperty.call(body, 'followUpAt')) patch.follow_up_at = fu || null;
+    const okP = await blPatch('backlink_prospects', `id=eq.${id}`, patch);
+    if (!okP) return err('Không lưu được');
+    return ok({ saved: true });
+  }
 
   if (op === 'delete') {
     if (!id) return err('Thiếu id', 400);
