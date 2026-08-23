@@ -58,6 +58,14 @@ const inPair = (pairs: number[][], a: number, b: number) =>
 const inGroup = (groups: number[][], a: number, b: number) =>
   groups.some((g) => g.indexOf(a) > -1 && g.indexOf(b) > -1);
 
+/**
+ * TỰ HÌNH (自刑) — bốn chi hình chính nó: Thìn(4) Ngọ(6) Dậu(9) Hợi(11).
+ * ⚠️ KHÔNG suy từ `TAM_HINH` của `diachi.ts`: bảng đó đang gộp cả chi hình
+ * chính nó lẫn chi hình nhau nên `inGroup(TAM_HINH, a, a)` đúng với MỌI chi có
+ * trong bảng — dùng nó ở đây là bịa tự hình cho cả Tý/Dần/Mão/Sửu/Mùi/Thân.
+ */
+const TU_HINH = new Set([4, 6, 9, 11]);
+
 /** Ngũ hành tương sinh: A sinh B. */
 const SINH: Record<string, string> = { Kim: 'Thủy', Thủy: 'Mộc', Mộc: 'Hỏa', Hỏa: 'Thổ', Thổ: 'Kim' };
 /** Ngũ hành tương khắc: A khắc B. */
@@ -111,7 +119,26 @@ function evalCandidate(namSinh: number, chuChiIdx: number, chuHanh: string, namC
   const warnings: string[] = [];
 
   // ── Tầng 1: hợp với CHỦ NHÀ (nặng nhất — người ta mời khách vào nhà MÌNH) ──
-  if (inPair(LUC_HOP, cc.chiIdx, chuChiIdx)) {
+  //
+  // 🐞 NHÁNH `cùng chi` PHẢI ĐỨNG TRƯỚC tam hợp, không được bỏ. Mỗi địa chi nằm
+  // trong ĐÚNG một nhóm tam hợp, nên `inGroup(TAM_HOP, a, a)` LUÔN đúng ⇒ khách
+  // cùng tuổi con giáp với chủ nhà bị dán nhãn "Tam Hợp" và cộng 3 điểm. Sai cổ
+  // pháp (cùng chi là TỊ HOÀ, không phải tam hợp) và sai ngay ở dòng LÝ DO —
+  // thứ tồn tại để chứng minh mình không bịa. Đúng lớp lỗi `chiRelation` của
+  // track Duyên Nợ đã trả giá; tầng 2 bên dưới xét `cc.chiIdx === namChiIdx`
+  // trước nên không dính, tầng này thì tôi bỏ sót.
+  if (cc.chiIdx === chuChiIdx) {
+    // TỰ HÌNH — cổ pháp rành mạch, chỉ bốn chi: Thìn Ngọ Dậu Hợi.
+    if (TU_HINH.has(cc.chiIdx)) {
+      score -= 2;
+      warnings.push(`Cùng tuổi ${CHI[cc.chiIdx]} với chủ nhà — phạm Tự Hình`);
+    } else {
+      // Tị hoà: cùng loại, cổ pháp đọc là hoà thuận chứ không phải hợp cách.
+      // +1 là con số CHỌN (nhẹ hơn hẳn tam hợp +3), không phải cổ pháp cho số.
+      score += 1;
+      reasons.push(`Cùng tuổi ${CHI[cc.chiIdx]} với chủ nhà (tị hoà)`);
+    }
+  } else if (inPair(LUC_HOP, cc.chiIdx, chuChiIdx)) {
     score += 4;
     reasons.push(`Lục Hợp với tuổi chủ nhà (${CHI[cc.chiIdx]} hợp ${CHI[chuChiIdx]})`);
   } else if (inGroup(TAM_HOP, cc.chiIdx, chuChiIdx)) {

@@ -55,6 +55,16 @@ và **bắt buộc đi kèm MỌI móc dữ liệu** (`CAVEAT` của `lib/backli
   đừng bật dữ liệu trước khi route tồn tại; ca này nói **đừng phát giá trị mới
   trước khi constraint biết nó**. Vá ở #14 (`migration-backlinks-crm.sql`), có
   đối chứng giá trị rác vẫn bị chặn.
+- 🔴 **Cùng địa chi bị dán nhãn "Tam Hợp" — LẶP LẠI lỗi `chiRelation` của track
+  Duyên Nợ.** Mỗi địa chi nằm trong ĐÚNG một nhóm tam hợp ⇒ `inGroup(TAM_HOP,
+  a, a)` **luôn đúng** ⇒ khách cùng tuổi con giáp với chủ nhà được +3 kèm dòng
+  lý do *"Tam Hợp với tuổi chủ nhà"*. Sai cổ pháp (cùng chi là **tị hoà**) và
+  sai **ngay ở dòng LÝ DO** — thứ tồn tại để chứng minh mình không bịa. Đo được:
+  chủ nhà 1990 Canh Ngọ thì 1978 Mậu Ngọ leo lên **#1 "rất hợp" (7đ)**; sau khi
+  vá nó rớt khỏi top-3, chỗ đó trả về cho Dần/Tuất — tam hợp THẬT của Ngọ.
+  🔑 Nhánh `cùng chi` phải đứng **TRƯỚC** tam hợp. Tầng 2 (Thái Tuế) vốn đã xét
+  `=== namChiIdx` trước nên không dính — chính sự bất đối xứng đó cho thấy tầng
+  1 là bỏ sót chứ không phải lựa chọn.
 - **Cùng dấu chấm, hai nghĩa.** `/du-lieu` in `96.480` (chấm = hàng nghìn) cạnh
   `16.5` (chấm = thập phân) trong hai cột kề nhau — người đọc Việt hiểu nhầm ngay.
   ⇒ `pct()` dùng **dấu PHẨY**.
@@ -107,6 +117,14 @@ của `next-build.yml` vì job đó lúc ấy chưa fire).
    vào public-apis · APIs.guru · MCP registry.
 3. **Đăng ký tài khoản** theo panel *Hồ Sơ Nền Tảng* (Medium, Reddit…) — chỉ tạo
    hồ sơ, KHÔNG tự đăng bài.
+5. ⚠️ **NGHI `TAM_HINH` trong `lib/engine/diachi.ts` SAI — chưa đụng, cố ý.**
+   Bảng đang là `[[Dần,Hợi,Thân],[Tý,Mão,Ngọ],[Sửu,Thìn,Mùi]]`, trong khi tam
+   hình cổ điển là `寅巳申` (Dần-**Tị**-Thân) · `丑戌未` (Sửu-**Tuất**-Mùi) ·
+   `子卯` (Tý-Mão). Đáng ngờ nhất: **Dần–Hợi là LỤC HỢP**, xếp chung một nhóm
+   hình là tự mâu thuẫn. Bảng này dùng chung với `computeSinhCon` (tool ĐANG
+   CHẠY) nên sửa là đổi kết quả một tool live — đúng tiền lệ `isHoangOc`: ghi
+   lại nghi vấn, KHÔNG sửa mò một công thức cổ pháp. `xong-dat.ts` vì thế khai
+   `TU_HINH` RIÊNG (Thìn Ngọ Dậu Hợi) thay vì suy từ bảng đó.
 4. `op=followup` chưa chạy được đầu-cuối: container không có thông tin đăng nhập
    admin nên MỌI action admin trả 500 ở tầng xác thực; đối chứng `op=delete` (đã
    ship từ trước, PR này không đụng) trả **y hệt 500** ⇒ hiện tượng MÔI TRƯỜNG,
