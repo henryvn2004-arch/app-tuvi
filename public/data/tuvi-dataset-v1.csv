@@ -1,0 +1,160 @@
+distribution,value,count,percent
+menhMajorStar,Thiên Cơ,8126,8.422
+menhMajorStar,Tham Lang,8072,8.367
+menhMajorStar,Cự Môn,8066,8.36
+menhMajorStar,Phá Quân,8064,8.358
+menhMajorStar,Thiên Phủ,8052,8.346
+menhMajorStar,Thiên Đồng,8048,8.342
+menhMajorStar,Liêm Trinh,8036,8.329
+menhMajorStar,Tử Vi,8026,8.319
+menhMajorStar,Thái Dương,7998,8.29
+menhMajorStar,Thái Âm,7992,8.284
+menhMajorStar,Thiên Lương,7974,8.265
+menhMajorStar,Vũ Khúc,7964,8.255
+menhMajorStar,Thiên Tướng,7958,8.248
+menhMajorStar,Thất Sát,7944,8.234
+menhMajorStarCount,1,48764,50.543
+menhMajorStarCount,2,31778,32.937
+menhMajorStarCount,0,15938,16.519
+menhBranch,Tý,8040,8.333
+menhBranch,Hợi,8040,8.333
+menhBranch,Tuất,8040,8.333
+menhBranch,Dậu,8040,8.333
+menhBranch,Thân,8040,8.333
+menhBranch,Mùi,8040,8.333
+menhBranch,Ngọ,8040,8.333
+menhBranch,Tỵ,8040,8.333
+menhBranch,Thìn,8040,8.333
+menhBranch,Mão,8040,8.333
+menhBranch,Dần,8040,8.333
+menhBranch,Sửu,8040,8.333
+cuc,Hỏa Lục Cục,19308,20.012
+cuc,Mộc Tam Cục,19308,20.012
+cuc,Thủy Nhị Cục,19300,20.004
+cuc,Kim Tứ Cục,19284,19.988
+cuc,Thổ Ngũ Cục,19280,19.983
+napAm,Thổ,19584,20.299
+napAm,Kim,19464,20.174
+napAm,Thủy,19392,20.1
+napAm,Hỏa,19368,20.075
+napAm,Mộc,18672,19.353
+napAmElement,Thổ,19584,20.299
+napAmElement,Kim,19464,20.174
+napAmElement,Thủy,19392,20.1
+napAmElement,Hỏa,19368,20.075
+napAmElement,Mộc,18672,19.353
+thanPalace,Mệnh,16080,16.667
+thanPalace,Phúc Đức,16080,16.667
+thanPalace,Quan Lộc,16080,16.667
+thanPalace,Thiên Di,16080,16.667
+thanPalace,Tài Bạch,16080,16.667
+thanPalace,Phu Thê,16080,16.667
+cachCucType,menh_co_ban,291226,301.851
+cachCucType,phu_cuc,178228,184.731
+cachCucType,ban_tien_cuc,158401,164.18
+cachCucType,quy_cuc,144586,149.861
+cachCucType,than_cu,33285,34.499
+cachCucType,tap_cuc,19489,20.2
+cachCuc,Nghịch Lý — Dương cư Âm vị / Âm cư Dương vị,48240,50
+cachCuc,Thuận Lý — Dương cư Dương vị / Âm cư Âm vị,48240,50
+cachCuc,Tuần Triệt Giải Tật Ách,26984,27.968
+cachCuc,Tuần Triệt Phụ Mẫu,26984,27.968
+cachCuc,Tuần Triệt Nô Bộc,26984,27.968
+cachCuc,Tuần Lâm Hỏa Địa,26064,27.015
+cachCuc,Phủ Tướng Triều Viên,24160,25.041
+cachCuc,Phủ Ấn Củng Thân,24058,24.936
+cachCuc,Tài Ấm Giáp Ấn,20110,20.844
+cachCuc,Triệt Đáo Kim Cung,16272,16.866
+cachCuc,Mệnh Vô Chính Diệu,15938,16.519
+cachCuc,Cẩm Thượng Thiêm Hoa,14983,15.53
+cachCuc,Mệnh Thân Đồng Cung,14966,15.512
+cachCuc,Tài Tinh Nhập Mệnh,14860,15.402
+cachCuc,Tả Hữu Huynh Đệ,14752,15.29
+cachCuc,Triệt Án Cung Mệnh,11274,11.685
+cachCuc,Tuần Án Cung Mệnh,11274,11.685
+cachCuc,Thân Cư Phúc Đức — Phúc Thọ,9538,9.886
+cachCuc,Kình Đà Phá Phu Thê,8840,9.163
+cachCuc,Hóa Kỵ Nhập Mệnh,8294,8.597
+cachCuc,Hóa Kỵ Huynh Đệ,8246,8.547
+cachCuc,Hóa Kỵ Phụ Mẫu,8212,8.512
+cachCuc,Hóa Lộc Thủ Phúc Đức,8194,8.493
+cachCuc,Hóa Quyền Tại Quan Lộc,8182,8.481
+cachCuc,Hóa Kỵ Phu Thê,8146,8.443
+cachCuc,Hóa Lộc Điền Trạch,8098,8.393
+cachCuc,Hóa Kỵ Điền Trạch,8090,8.385
+cachCuc,Hóa Kỵ Tử Tức,8078,8.373
+cachCuc,Đào Hoa Nhập Phu Thê,8040,8.333
+cachCuc,Thiên Mã Thủ Quan Lộc,8040,8.333
+cachCuc,Vượng Địa,8040,8.333
+cachCuc,Đào Hoa Nhập Nô Bộc,8040,8.333
+cachCuc,Thiên Mã Thủ Thiên Di,8040,8.333
+cachCuc,Bại Địa,8040,8.333
+cachCuc,Sinh Địa,8040,8.333
+cachCuc,Thiên Mã Phu Thê,8040,8.333
+cachCuc,Hóa Khoa Thủ Mệnh,8024,8.317
+cachCuc,Kình Dương Nhập Mệnh,8016,8.308
+cachCuc,Quan Tinh Nhập Mệnh,7982,8.273
+cachCuc,Hóa Lộc Thiên Di,7900,8.188
+cachCuc,Hóa Quyền Tử Tức,7888,8.176
+cachCuc,Hóa Lộc Tử Tức,7868,8.155
+cachCuc,Hóa Kỵ Tật Ách,7834,8.12
+cachCuc,Hóa Kỵ Phá Tài Bạch,7826,8.112
+cachCuc,Hóa Lộc Tại Tài Bạch,7820,8.105
+cachCuc,Hóa Kỵ Thiên Di,7774,8.058
+cachCuc,Hóa Lộc Tại Quan Lộc,7772,8.056
+cachCuc,Hóa Kỵ Phá Quan Lộc,7710,7.991
+cachCuc,Hóa Kỵ Nhập Nô Bộc,7622,7.9
+cachCuc,Mệnh Không Thân Kiếp,7488,7.761
+cachCuc,Sát Tinh Hội Tật Ách,7448,7.72
+cachCuc,Hóa Kỵ Hội Sát,7433,7.704
+cachCuc,Sát Tinh Hội Tử Tức,7407,7.677
+cachCuc,Phúc Tinh Thủ Mệnh,7210,7.473
+cachCuc,Vũ Khúc Minh Tài Bạch,6680,6.924
+cachCuc,Thân Cư Phúc Đức — Giảm Thọ,6542,6.781
+cachCuc,Tọa Quý Hưởng Quý,6472,6.708
+cachCuc,Tuyệt Địa,6426,6.66
+cachCuc,Thân Cư Thiên Di — Lập Nghiệp Phương Xa,6385,6.618
+cachCuc,Nhật Nguyệt Tàng Hung,6332,6.563
+cachCuc,Thiên Lương Minh Phúc Đức,6256,6.484
+cachCuc,Khoa Quyền Lộc Củng,6002,6.221
+cachCuc,Thiên Phủ Minh Điền Trạch,5870,6.084
+cachCuc,Văn Tinh Ám Củng,5300,5.493
+cachCuc,Thân Cư Thiên Di — Chết Xa Nhà,5002,5.184
+cachCuc,Thái Âm Minh Điền Trạch,4914,5.093
+cachCuc,Thân Cư Phu Thê — Trắc Trở Hôn Phối,4466,4.629
+cachCuc,Quan Lộc Vô Chính Phùng Tuần Triệt,4412,4.573
+cachCuc,Tử Phủ Triều Viên,4314,4.471
+cachCuc,Nhật Nguyệt Chiếu Bích,4112,4.262
+cachCuc,Nhật Nguyệt Giáp Tài,4048,4.196
+cachCuc,Âm Phần Kết Phát,4020,4.167
+cachCuc,Kim Dư Phù Giá,3728,3.864
+cachCuc,Phụ Bật Củng Chủ,3384,3.507
+cachCuc,Lộc Xung Mã Khổn,2969,3.077
+cachCuc,Cự Cơ Mão Dậu,2854,2.958
+cachCuc,Thất Sát Triều Đẩu,2838,2.942
+cachCuc,Mệnh Kiếp Thân Không,2656,2.753
+cachCuc,Minh Lộc Ám Lộc,2436,2.525
+cachCuc,Mã Lạc Không Vong,2302,2.386
+cachCuc,Mệnh Triệt Thân Tuần,2218,2.299
+cachCuc,Mệnh Tuần Thân Triệt,2218,2.299
+cachCuc,Nguyệt Sinh Thương Hải,1640,1.7
+cachCuc,Nguyệt Lãng Thiên Môn,1626,1.685
+cachCuc,Tuyệt Xứ Phùng Sinh,1614,1.673
+cachCuc,Nhật Xuất Phù Tang,1588,1.646
+cachCuc,Kim Sán Quang Huy,1582,1.64
+cachCuc,Phong Vân Tế Hội,1537,1.593
+cachCuc,Tài Dữ Tù Cừu,1419,1.471
+cachCuc,Vô Chính Vô Phò,1354,1.403
+cachCuc,Thân Cư Phu Thê — Sợ Vợ,1352,1.401
+cachCuc,Mệnh Thân Đồng Cung — Tứ Mộ Vô Chính Diệu,888,0.92
+cachCuc,Vũ Khúc Thủ Viên,728,0.755
+cachCuc,Mã Đầu Đới Kiếm,656,0.68
+cachCuc,Tham Hỏa Tương Phùng,496,0.514
+cachCuc,Sinh Bất Phùng Thời,454,0.471
+cachCuc,Nhất Sinh Cô Bần,412,0.427
+cachCuc,Nhật Nguyệt Hóa Kỵ Giao Huy,282,0.292
+cachCuc,Liêm Tham Phùng Kỵ,278,0.288
+cachCuc,Mệnh Thân Đồng Cung — Tý/Ngọ Vô Chính Diệu,226,0.234
+cachCuc,Tài Lộc Giáp Mã,196,0.203
+cachCuc,Lộc Phùng Lưỡng Sát,184,0.191
+cachCuc,Lộc Mã Bội Ấn,144,0.149

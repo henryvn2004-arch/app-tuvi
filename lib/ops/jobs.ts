@@ -217,12 +217,17 @@ export const JOBS: JobSpec[] = [
   { key: 'backlink-content', label: 'Backlink — soạn nội dung', source: 'vercel', everyMinutes: D,
     schedule: '09:15 VN hằng ngày', sink: 'backlink_content', path: '/api/cron/backlink-content',
     since: '2026-08-19' },
-  { key: 'backlink-check', label: 'Backlink — kiểm link sống', source: 'vercel', everyMinutes: D,
+  { key: 'backlink-check', label: 'Backlink — kiểm link sống + ghi nguồn widget', source: 'vercel', everyMinutes: D,
     schedule: '09:45 VN hằng ngày', sink: 'backlink_links', path: '/api/cron/backlink-check',
     since: '2026-08-19' },
   { key: 'backlink-broken-links', label: 'Backlink — quét link chết', source: 'vercel', everyMinutes: 7 * D,
     schedule: 'T5 08:45 VN hằng tuần', sink: 'backlink_prospects', path: '/api/cron/backlink-broken-links',
     since: '2026-08-19' },
+  // Track Digital Marketing — sổ Tài Khoản & Entity (xem đầu
+  // _patches/migration-growth-accounts.sql). `since` = ngày merge.
+  { key: 'growth-accounts', label: 'Entity — nạp sổ + kiểm hồ sơ sống', source: 'vercel', everyMinutes: 7 * D,
+    schedule: 'T7 08:15 VN hằng tuần', sink: 'growth_accounts', path: '/api/cron/growth-accounts',
+    since: '2026-08-23' },
 ];
 
 export interface CronRun {

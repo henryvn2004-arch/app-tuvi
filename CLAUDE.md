@@ -70,6 +70,145 @@ test 185 pass.
   `claude/opus-cost-optimization-1qnab6` (branch được reset lên `origin/main`
   rồi cherry-pick đúng 1 commit lên trên, tránh rebase lại 5 commit đã merge).
 
+## 📣 TRACK DIGITAL MARKETING — 14/14 mục, và 3 giả định của tôi bị SỐ ĐO bác (2026-08-23, PR #588)
+
+Henry duyệt workplan 14 mục rồi *"làm tuần tự cả 14 mục đi"*, kèm ba ràng buộc
+định hình mọi thứ: **mở rộng phạm vi + monitor được trong admin** · **tự động
+hoá là ưu tiên hàng đầu, rủi ro chấp nhận được** · **growth hack, đừng bám lối
+mòn digital marketing**.
+
+### 🔴 Ranh giới CỨNG của cả track — đừng nới
+Máy **KHÔNG tự đăng, KHÔNG tự gửi** cho bất kỳ bên thứ ba nào; mọi nội dung là
+BẢN NHÁP, người tự tay gửi. ⛔ Không tự động hoá Reddit/forum, không giải
+captcha, không nhắn KOL hàng loạt, không mua link PBN. *"Máy làm phần tốn sức,
+người bấm nút cuối."*
+
+### 🔑 Ba chỗ ĐỔI HƯỚNG vì đo xong thấy ngược giả định
+1. **IFRAME KHÔNG PHẢI BACKLINK.** `docs/GROWTH-BRAINSTORM.md` (Cược B) viết
+   *"mỗi widget là một backlink thật"* — sai về SEO: link BÊN TRONG iframe thuộc
+   miền của chính mình. Thứ tính là backlink là **thẻ `<a>` ghi nguồn nằm NGOÀI
+   iframe** trong HTML của đối tác. Nên `runEmbedCheck()` đi soi đúng thẻ đó, và
+   ai nhúng mà bỏ dòng ghi nguồn thì thành **cơ hội ẤM NHẤT** (họ đã chủ động
+   dùng đồ của mình rồi) chứ không bị đếm là đã có link.
+2. **Bộ dữ liệu 96.480 lá số PHẢN TRỰC GIÁC.** Bản đầu `buildDataHooks` giả định
+   *"chắc có sao hiếm, cục hiếm"*, câu mẫu *"chênh nhau N lần"*. Đo thật thì
+   NGƯỢC: 14 chính tinh trải **8,23–8,42%**, năm cục đều **~20%**, cung an Thân
+   **đúng 16,67% mỗi cung**. Ép câu *"không hề chia đều"* vào bộ số đó là nói dối
+   **ngay trong thư gửi nhà báo** — thứ hỏng nặng nhất track này gây được. Đổi
+   hướng: chính sự ĐỀU ĐẶN mới đáng kể; số lệch rõ duy nhất là **mệnh vô chính
+   diệu 16,5% (~1/6)**. Hàm hook giữ CẢ HAI nhánh (`spread < 2` → câu "đều",
+   ngược lại → câu "lệch") để lượt đổi dữ liệu sau tự đổi câu chữ.
+3. **Định vị MCP của tôi sai.** Bản nháp viết *"registry gần như trống cho lịch
+   pháp/tử vi Á đông"*; đo thật thì `com.am-lich/vietnamese-calendar` đã có. Thu
+   định vị về đúng TỬ VI, và ghi cả phép đo lẫn cái sai vào mã.
+
+### 🔑 Bất biến trung thực của bộ dữ liệu — đọc trước khi trích
+**Đây là phân bố trên KHÔNG GIAN THỜI ĐIỂM SINH, KHÔNG phải phân bố dân số.**
+Không có dữ liệu giờ sinh thật của người Việt (mùa sinh và giờ sinh đều lệch
+ngoài đời) ⇒ **CẤM** đọc thành *"X% người Việt có …"*. Câu đúng: *"trong các
+thời điểm sinh có thể có, X% cho ra …"*. Câu này in trong `/du-lieu`, trong JSON,
+và **bắt buộc đi kèm MỌI móc dữ liệu** (`CAVEAT` của `lib/backlinks/data-hook.ts`).
+- Lưới **phủ trọn một vòng 60 năm (1950–2009)** — không phải chọn cho đẹp: can chi
+  năm lặp chu kỳ 60 nên ảnh hưởng thiên can/địa chi năm được cân bằng **theo cấu
+  trúc**, không cần trọng số. Lấy 50 hay 61 năm là tự tạo lệch rồi phải giải thích.
+- ✅ **Đã kiểm nỗi lo ISR: dataset CÓ trong file trace của function.** `/du-lieu`
+  prerender lúc build nhưng `revalidate` 1 ngày ⇒ lượt dựng lại chạy trong
+  lambda, nơi `process.cwd()` có thể không thấy `public/`. Đo thật:
+  `.next/server/app/du-lieu/route.js.nft.json` **có**
+  `../../../../public/data/tuvi-dataset-v1.json` — Next tracer bắt được đường
+  dẫn ghép từ chuỗi literal. Không phải vá gì; ghi lại để khỏi đi khám phá lại.
+  (⚠️ Đừng suy rộng thành *"Vercel luôn ship `public/`"* — route `/menh-kho`
+  đọc `public/tuvi-ansao-engine.js` thì **KHÔNG** có file đó trong trace mà vẫn
+  chạy prod, tức hai đường sống được vì hai lý do khác nhau, chưa truy tới cùng.)
+- Sinh bằng **CHÍNH `computeLaso` đã biên dịch** (`ENGINE_OUT`), không dựng lại
+  engine song song: con số công bố ra ngoài phải là con số người dùng thấy.
+
+### 🐞 Bốn lỗi bắt được khi ĐO, không phải khi đọc code
+- **Trang Tết quảng cáo cái Tết VỪA ĐI QUA.** `nextTetYear` bản đầu so theo NĂM
+  nên từ 18/02/2026 tới hết năm vẫn nói Tết 2026. Với trang mùa vụ thì hỏng đúng
+  chỗ nó tồn tại, mà hỏng **IM LẶNG** — trang vẫn dựng bình thường. Nay so theo
+  **NGÀY** (`tetIso(y) >= today`), 7 ca canh mốc.
+- **`press` bị DB TỪ CHỐI.** Mục #11 ship code phát `kind='press'` trong khi
+  `backlink_prospects_kind_check` chưa biết giá trị đó ⇒ mọi lượt chèn hỏng tại
+  DB. 🔑 Đây là **mặt NGƯỢC của bài học "dữ liệu đi SAU giao diện"**: cái đó nói
+  đừng bật dữ liệu trước khi route tồn tại; ca này nói **đừng phát giá trị mới
+  trước khi constraint biết nó**. Vá ở #14 (`migration-backlinks-crm.sql`), có
+  đối chứng giá trị rác vẫn bị chặn.
+- 🔴 **Cùng địa chi bị dán nhãn "Tam Hợp" — LẶP LẠI lỗi `chiRelation` của track
+  Duyên Nợ.** Mỗi địa chi nằm trong ĐÚNG một nhóm tam hợp ⇒ `inGroup(TAM_HOP,
+  a, a)` **luôn đúng** ⇒ khách cùng tuổi con giáp với chủ nhà được +3 kèm dòng
+  lý do *"Tam Hợp với tuổi chủ nhà"*. Sai cổ pháp (cùng chi là **tị hoà**) và
+  sai **ngay ở dòng LÝ DO** — thứ tồn tại để chứng minh mình không bịa. Đo được:
+  chủ nhà 1990 Canh Ngọ thì 1978 Mậu Ngọ leo lên **#1 "rất hợp" (7đ)**; sau khi
+  vá nó rớt khỏi top-3, chỗ đó trả về cho Dần/Tuất — tam hợp THẬT của Ngọ.
+  🔑 Nhánh `cùng chi` phải đứng **TRƯỚC** tam hợp. Tầng 2 (Thái Tuế) vốn đã xét
+  `=== namChiIdx` trước nên không dính — chính sự bất đối xứng đó cho thấy tầng
+  1 là bỏ sót chứ không phải lựa chọn.
+- **Cùng dấu chấm, hai nghĩa.** `/du-lieu` in `96.480` (chấm = hàng nghìn) cạnh
+  `16.5` (chấm = thập phân) trong hai cột kề nhau — người đọc Việt hiểu nhầm ngay.
+  ⇒ `pct()` dùng **dấu PHẨY**.
+- **`Cache-Control` suýt giết vòng phát hiện.** Route nhúng ban đầu để
+  `public, s-maxage` ⇒ CDN trả lời, domain nhúng MỚI không bao giờ chạm origin,
+  mất sạch `Referer` — tức mất đúng cơ chế tự-phát-hiện là cả điểm của mục #7.
+  Đổi `private`.
+
+### 🪤 Merge base: add/add vì main ĐÃ SQUASH chính mấy commit của mình
+Gộp `origin/main` (23 commit) ra **7 file xung đột**, trong đó 3 file là
+`add/add` (`lib/backlinks/content.ts` · `prospecting.ts` · `cron/backlink-check`)
+— vì PR #565 đã squash-merge đúng 3 commit đầu của nhánh này vào main, nên với
+merge-base thì cả hai bên đều "thêm mới" cùng một file.
+- **Đường chứng minh `--ours` an toàn (đừng bỏ bước này):** so bản của main với
+  bản của nhánh tại commit CHUNG cuối cùng → **trùng khít**, và `git log
+  <squash>..origin/main -- <file>` → **0 commit** ⇒ main không đụng chúng sau
+  lượt squash ⇒ bên mình là SIÊU TẬP. Có hai phép đo đó mới được `--ours`; nếu
+  không thì đúng bài học *"`git checkout --ours` là con dao cụt"*.
+- Sau khi giải: **đếm lại dấu hiệu của CẢ HAI bên** (bên mình `runGrowthAccounts`
+  /`op === 'followup'`/`renderBlCrm`… · bên main `admin-topic-queue-delete`/
+  `topic_queue`/`khao-luan-tamly`/`cache_control`…). Hết `<<<<<<<` **không**
+  nghĩa là xong.
+
+### 📊 CI: lượt push có HEAD là COMMIT MERGE đã kích ĐỦ BỘ
+8 commit liên tiếp trên nhánh này **không** kích được `lint`/`unit-test`/
+`next-build` (chỉ có Vercel + `smoke`). Ngay lượt push mà HEAD là **commit
+merge**, GitHub dựng đủ: lint · typecheck · test · next-build · rồi
+deployment_status kéo thêm smoke · lighthouse · E2E.
+- ⚠️ **Đây là MỘT DATA POINT, không phải luật** — #471 từng có HEAD là commit
+  thường mà vẫn đủ 7 check. Khác biệt thật nhiều khả năng ở LOẠI EVENT
+  (`opened` vs `synchronize`), chưa đủ mẫu để chốt. Ghi cả hai ca để giả thuyết
+  đừng tự lên đời thành luật.
+- 🔑 Trong lúc CI vắng mặt thì **chạy tại chỗ rồi NÓI THẲNG trên PR là CI thiếu**
+  — đừng để 4 check xanh bị đọc thành "CI xanh".
+
+### Verify
+`tsc` 0 · `lint` **0 lỗi / 77 warning = mốc nền** · `prettier --check .` (cả cây)
+sạch · 5 bộ dò `prices|groups|nostore|share|jobs` OK · engine **185 pass** ·
+**`next build` với stub PostgREST: exit 0, 74/74 trang** (chạy đúng chuỗi lệnh
+của `next-build.yml` vì job đó lúc ấy chưa fire).
+
+### CÒN LẠI — việc tay Henry, không code thay được
+1. **Pinterest**: tài khoản Business + board + token OAuth (`boards:read` +
+   `pins:write`) → `PINTEREST_ACCESS_TOKEN`/`PINTEREST_BOARD_ID` + thêm
+   `pinterest` vào `social.channels`. ⚠️ Token ~30 ngày, **chưa có khâu tự làm
+   mới**. Và `api.pinterest.com` bị proxy container chặn (`403 CONNECT`, chưa
+   chạm server) nên tên trường phản hồi THẬT chưa chứng minh được — cùng tình
+   trạng đã ghi cho TikTok.
+2. **Nộp registry**: `server.json` đã validate 10/10 với schema live; còn nộp PR
+   vào public-apis · APIs.guru · MCP registry.
+3. **Đăng ký tài khoản** theo panel *Hồ Sơ Nền Tảng* (Medium, Reddit…) — chỉ tạo
+   hồ sơ, KHÔNG tự đăng bài.
+5. ⚠️ **NGHI `TAM_HINH` trong `lib/engine/diachi.ts` SAI — chưa đụng, cố ý.**
+   Bảng đang là `[[Dần,Hợi,Thân],[Tý,Mão,Ngọ],[Sửu,Thìn,Mùi]]`, trong khi tam
+   hình cổ điển là `寅巳申` (Dần-**Tị**-Thân) · `丑戌未` (Sửu-**Tuất**-Mùi) ·
+   `子卯` (Tý-Mão). Đáng ngờ nhất: **Dần–Hợi là LỤC HỢP**, xếp chung một nhóm
+   hình là tự mâu thuẫn. Bảng này dùng chung với `computeSinhCon` (tool ĐANG
+   CHẠY) nên sửa là đổi kết quả một tool live — đúng tiền lệ `isHoangOc`: ghi
+   lại nghi vấn, KHÔNG sửa mò một công thức cổ pháp. `xong-dat.ts` vì thế khai
+   `TU_HINH` RIÊNG (Thìn Ngọ Dậu Hợi) thay vì suy từ bảng đó.
+4. `op=followup` chưa chạy được đầu-cuối: container không có thông tin đăng nhập
+   admin nên MỌI action admin trả 500 ở tầng xác thực; đối chứng `op=delete` (đã
+   ship từ trước, PR này không đụng) trả **y hệt 500** ⇒ hiện tượng MÔI TRƯỜNG,
+   không phải lỗi mã.
+
 ## 💰 Track Tối Ưu Chi Phí Opus — Code #1 + #2 đã push lên PR #585 (chờ merge+deploy), #3 vẫn chặn (2026-08-23)
 
 > ⚠️ **Hai phiên song song từng cùng làm track này.** Một phiên khác

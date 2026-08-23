@@ -12,6 +12,7 @@ import { readFileSync } from 'fs';
 import { join } from 'path';
 import { NOINDEX_FOLLOW } from '@/lib/seo/index-policy';
 import { PUBLISHED_ONLY } from '@/lib/content/publish-filter';
+import { ORG_ID } from '@/lib/seo/entity';
 
 // ⚠️ Module-level: must run before any request so that if loadEngine() sets
 // globalThis.window = globalThis, Next.js URL parsing (getLocationOrigin)
@@ -129,8 +130,8 @@ function buildPregenHTML(row: Record<string,unknown>, slug: string): string {
   const img   = ogImg(BASE, title, 'Lá Số Tử Vi · Cổ Pháp');
   const schema = JSON.stringify([
     {'@context':'https://schema.org','@type':'Article',headline:title,description:desc,url,inLanguage:'vi',
-     author:{'@type':'Organization',name:'Tử Vi Minh Bảo',url:BASE},
-     publisher:{'@type':'Organization',name:'Tử Vi Minh Bảo',url:BASE,logo:{'@type':'ImageObject',url:`${BASE}/seal.webp`}},
+     author:{'@type':'Organization', '@id': ORG_ID,name:'Tử Vi Minh Bảo',url:BASE},
+     publisher:{'@type':'Organization', '@id': ORG_ID,name:'Tử Vi Minh Bảo',url:BASE,logo:{'@type':'ImageObject',url:`${BASE}/seal.webp`}},
      image:{'@type':'ImageObject',url:img}},
     {'@context':'https://schema.org','@type':'BreadcrumbList',itemListElement:[
       {'@type':'ListItem',position:1,name:'Trang Chủ',item:`${BASE}/`},
@@ -275,8 +276,8 @@ function buildPublicHTML(row: Record<string,unknown>, slug: string): string {
   const schema = JSON.stringify([
     {'@context':'https://schema.org','@type':'Article',headline:title,description:desc,url,inLanguage:'vi',
      datePublished:(row.created_at as string||'').slice(0,10)||undefined,
-     author:{'@type':'Organization',name:'Tử Vi Minh Bảo',url:BASE},
-     publisher:{'@type':'Organization',name:'Tử Vi Minh Bảo',url:BASE,logo:{'@type':'ImageObject',url:`${BASE}/seal.webp`}},
+     author:{'@type':'Organization', '@id': ORG_ID,name:'Tử Vi Minh Bảo',url:BASE},
+     publisher:{'@type':'Organization', '@id': ORG_ID,name:'Tử Vi Minh Bảo',url:BASE,logo:{'@type':'ImageObject',url:`${BASE}/seal.webp`}},
      image:{'@type':'ImageObject',url:img}},
     {'@context':'https://schema.org','@type':'BreadcrumbList',itemListElement:[
       {'@type':'ListItem',position:1,name:'Trang Chủ',item:`${BASE}/`},
@@ -1306,8 +1307,8 @@ function buildIsrHTML(ls: Rec, params: IsrParams, slug: string, relatedArticles:
   const schema = JSON.stringify([
     { '@context':'https://schema.org','@type':'Article',
       headline: title, description: desc, url, inLanguage:'vi',
-      author: {'@type':'Organization',name:'Tử Vi Minh Bảo',url:BASE},
-      publisher: {'@type':'Organization',name:'Tử Vi Minh Bảo',url:BASE,logo:{'@type':'ImageObject',url:`${BASE}/seal.webp`}},
+      author: {'@type':'Organization', '@id': ORG_ID,name:'Tử Vi Minh Bảo',url:BASE},
+      publisher: {'@type':'Organization', '@id': ORG_ID,name:'Tử Vi Minh Bảo',url:BASE,logo:{'@type':'ImageObject',url:`${BASE}/seal.webp`}},
       image: {'@type':'ImageObject',url:ogUrl,width:1200,height:630} },
     { '@context':'https://schema.org','@type':'BreadcrumbList',itemListElement:[
       {'@type':'ListItem',position:1,name:'Trang Chủ',item:`${BASE}/`},

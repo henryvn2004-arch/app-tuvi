@@ -1,6 +1,7 @@
 // app/tu-dien/[slug]/route.ts
 export const revalidate = 86400;
 import { NextRequest, NextResponse } from 'next/server';
+import { ORG_ID } from '@/lib/seo/entity';
 
 const SB_URL = process.env.SUPABASE_URL!;
 const SB_KEY = process.env.SUPABASE_SERVICE_KEY!;
@@ -127,8 +128,8 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ slu
   const schema = JSON.stringify([
     {'@context':'https://schema.org','@type':'Article',headline:esc(row.ten),description:desc,url,inLanguage:'vi',
      datePublished: row.created_at ? String(row.created_at).slice(0,10) : undefined,
-     author:{'@type':'Organization',name:'Tử Vi Minh Bảo',url:BASE},
-     publisher:{'@type':'Organization',name:'Tử Vi Minh Bảo',url:BASE,logo:{'@type':'ImageObject',url:`${BASE}/seal.webp`}},
+     author:{'@type':'Organization', '@id': ORG_ID,name:'Tử Vi Minh Bảo',url:BASE},
+     publisher:{'@type':'Organization', '@id': ORG_ID,name:'Tử Vi Minh Bảo',url:BASE,logo:{'@type':'ImageObject',url:`${BASE}/seal.webp`}},
      image:{'@type':'ImageObject',url:img}},
     {'@context':'https://schema.org','@type':'BreadcrumbList',itemListElement:[
       {'@type':'ListItem',position:1,name:'Trang Chủ',item:`${BASE}/`},

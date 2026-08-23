@@ -2,6 +2,7 @@
 export const revalidate = 86400;
 import { NextRequest, NextResponse } from 'next/server';
 import { PUBLISHED_ONLY } from '@/lib/content/publish-filter';
+import { ORG_ID } from '@/lib/seo/entity';
 
 const SB_URL = process.env.SUPABASE_URL!;
 const SB_KEY = process.env.SUPABASE_SERVICE_KEY!;
@@ -114,8 +115,8 @@ function buildHTML(article: any, master: any, related: any[], slug: string) {
       wordCount: article.word_count || 0,
       author: masterName
         ? { '@type': 'Person', name: masterName, url: masterUrl, description: master?.bio || '' }
-        : { '@type': 'Organization', name: 'Tử Vi Minh Bảo', url: BASE },
-      publisher: { '@type': 'Organization', name: 'Tử Vi Minh Bảo', url: BASE, logo: { '@type': 'ImageObject', url: BASE + '/seal.webp' } },
+        : { '@type': 'Organization', '@id': ORG_ID, name: 'Tử Vi Minh Bảo', url: BASE },
+      publisher: { '@type': 'Organization', '@id': ORG_ID, name: 'Tử Vi Minh Bảo', url: BASE, logo: { '@type': 'ImageObject', url: BASE + '/seal.webp' } },
       image: { '@type': 'ImageObject', url: img },
       about: { '@type': 'Thing', name: 'Tử Vi Đẩu Số' },
       isPartOf: { '@type': 'Blog', name: 'Nghiên Cứu Tử Vi', url: BASE + '/nghien-cuu' },
