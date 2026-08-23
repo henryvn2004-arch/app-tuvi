@@ -99,8 +99,15 @@ const SEED_ACCOUNTS: SeedAccount[] = [
     submit_url: 'https://www.tiktok.com/', automation: 'Adapter ĐÃ có; cần quyền video.publish + verify miền.' },
   { platform: 'pinterest', label: 'Pinterest', category: 'social', priority: 3, same_as: true,
     submit_url: 'https://www.pinterest.com/business/create/',
-    automation: 'CÓ API tạo pin → tự động được (mục #12).',
-    notes: 'Pinterest là CÔNG CỤ TÌM KIẾM, nội dung tử vi/tarot sống khoẻ, tiếng Việt gần như trống.' },
+    automation: '✅ Adapter ĐÃ có (#12) — chờ tài khoản Business + board + token OAuth.',
+    notes:
+      'Pinterest là CÔNG CỤ TÌM KIẾM (pin sống nhiều tháng, không trôi như feed), và là kênh ' +
+      'DUY NHẤT trong nhóm social có TRƯỜNG LINK RIÊNG bấm được — đó mới là lý do nó nằm trong ' +
+      'track backlink. Nội dung tử vi/tarot sống khoẻ, tiếng Việt gần như trống. ' +
+      'Việc tay: đổi sang tài khoản Business (miễn phí) → tạo board → app ở developers.pinterest.com ' +
+      '(Trial access đủ để ghim lên board của chính mình) → token scope `boards:read`+`pins:write` → ' +
+      'đặt PINTEREST_ACCESS_TOKEN + PINTEREST_BOARD_ID trên Vercel → thêm "pinterest" vào social.channels. ' +
+      '⚠️ Token có hạn (~30 ngày), CHƯA có khâu tự làm mới.' },
   { platform: 'x-twitter', label: 'X (Twitter)', category: 'social', priority: 2, same_as: true,
     submit_url: 'https://x.com/', automation: 'API ghi nay TRẢ PHÍ — coi như đăng tay.' },
   { platform: 'zalo-oa', label: 'Zalo Official Account', category: 'social', priority: 2, same_as: true,
