@@ -13,7 +13,7 @@ export const maxDuration = 300;
 import { NextRequest } from 'next/server';
 import { ok, err, options, parseBody } from '@/lib/cors';
 import { computeLaso, formatLaSoV2, makeLasoSlug, CHI_NAMES, type Laso } from '@/lib/engine/laso';
-import { SYSTEM_PROMPT, buildPrompt, laSoContextFor } from '@/lib/agent/luan-giai-doc';
+import { SYSTEM_PROMPT, buildPromptCached, laSoContextFor } from '@/lib/agent/luan-giai-doc';
 import { nguoiXemLine } from '@/lib/agent/prompts';
 import {
   buildKhung12Thang, describeThangForLLM, spans12, nhanThangAL, nhanThangALDay, dmy, SO_THANG,
@@ -215,11 +215,24 @@ async function runPost(request: NextRequest) {
     if (cached) return ok({ luanGiai: cached, phan });
   }
 
+  let systemForLLM: string = SYSTEM_PROMPT;
+  // Chỉ TRUE cho phan<=4 (buildPromptCached) — phần nguyệt vận (buildPromptThang)
+  // là prompt cấu trúc khác hẳn, không chia sẻ prefix với 4 phần đầu nên giữ
+  // nguyên đường CŨ (system=SYSTEM_PROMPT trần, không cache_control).
+  let cacheSystem = false;
   let prompt: string;
   try {
     const nx = nguoiXemLine(birth.name, birth.gender);
     if (phan <= 4) {
-      prompt = (nx ? nx + '\n' : '') + buildPrompt(laSoPhanMap[phan]!, formatLaSoV2(ls), docs);
+      // Prompt caching (Code #1, xem CLAUDE.md track tối ưu chi phí Opus):
+      // buildPromptCached đưa TOÀN VĂN lá số vào `system` (không cắt theo
+      // trimLaSo) — cả 4 phần này của MỘT lá số/năm xem chia đúng MỘT prefix.
+      // Chỉ chạm nhánh LLM này khi readCachedLuanGiaiPhan (Code #2) cache-miss
+      // ở trên; đa số lượt đã được DB cache chặn từ trước, không tới đây.
+      const cached = buildPromptCached(laSoPhanMap[phan]!, formatLaSoV2(ls), docs);
+      systemForLLM = cached.system;
+      prompt = (nx ? nx + '\n' : '') + cached.prompt;
+      cacheSystem = true;
     } else {
       const stt = phan - PHAN_THANG_DAU + 1;
       // Chỉ cần bảng LỊCH để biết tháng âm thứ stt — không dựng cả khung (khớp
@@ -236,7 +249,7 @@ async function runPost(request: NextRequest) {
     // (140–180 từ) dùng chung mức của phần cung/đại vận.
     // Nâng 50% cùng đợt với lasotuvi/route.ts (Henry chốt 2026-08-20).
     const maxTok = phan === 1 ? 3000 : phan === 2 ? 4500 : phan === 4 ? 2100 : 1800;
-    const rr = await llmTextFull({ system: SYSTEM_PROMPT, prompt, maxTokens: maxTok });
+    const rr = await llmTextFull({ system: systemForLLM, prompt, maxTokens: maxTok, cacheSystem });
     // tool_id = ĐÚNG `tool_pricing.tool_id` để bucket chi phí ghép được với
     // bucket doanh thu (xem tool_canon() trong CLAUDE.md).
     void logLlmUsage(
@@ -244,8 +257,8 @@ async function runPost(request: NextRequest) {
       rr.model,
       {
         input_tokens: rr.usage.input_tokens,
-        cache_creation_input_tokens: 0,
-        cache_read_input_tokens: 0,
+        cache_creation_input_tokens: rr.usage.cache_creation_input_tokens,
+        cache_read_input_tokens: rr.usage.cache_read_input_tokens,
         output_tokens: rr.usage.output_tokens,
       },
       rr.durationMs,

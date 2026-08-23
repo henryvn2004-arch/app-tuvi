@@ -15,7 +15,7 @@ import { buildChatContext, nguoiXemLine } from '@/lib/agent/prompts';
 // Prompt bản luận giải 24 phần — DỜI sang lib để tool "Vận Hạn 12 Tháng
 // Tới" dùng lại đúng 4 phần đầu mà không chép bản thứ hai (Next chặn export
 // lạ trong route file). Xem lib/agent/luan-giai-doc.ts.
-import { SYSTEM_PROMPT, buildPrompt } from '@/lib/agent/luan-giai-doc';
+import { buildPromptCached } from '@/lib/agent/luan-giai-doc';
 // LLM Gemini-primary + Anthropic-backup (provider từ app_config
 // 'chat.standalone_provider'). callLLMTools trả shape Anthropic → giữ nguyên
 // vòng lặp tool bên dưới; llmTextFull cho luận 24 phần (phan) — bản `Full` để
@@ -248,11 +248,14 @@ async function runPost(request: NextRequest) {
   const { laSoText, phan, docs, hoTen, gioiTinh } = body as { laSoText?: string; phan?: number; docs?: string; hoTen?: string; gioiTinh?: string };
   if (!laSoText || !phan) return err('Thiếu dữ liệu', 400);
 
+  let systemForLLM: string;
   let prompt: string;
   try {
     // "Người xem: <tên> (giới tính)" lên đầu prompt → xưng hô đúng (client gửi hoTen/gioiTinh).
     const nx = nguoiXemLine(hoTen, gioiTinh);
-    prompt = (nx ? nx + '\n' : '') + buildPrompt(Number(phan), laSoText, docs);
+    const cached = buildPromptCached(Number(phan), laSoText, docs);
+    systemForLLM = cached.system;
+    prompt = (nx ? nx + '\n' : '') + cached.prompt;
   }
   catch (e: unknown) { return err('buildPrompt error: ' + (e as Error).message); }
 
@@ -263,14 +266,22 @@ async function runPost(request: NextRequest) {
     const maxTok = phan === 1 ? 3000 : phan === 14 ? 4500 : phan === 24 ? 2100
       : (phan >= 2 && phan <= 13) ? 1650 : (phan >= 15 && phan <= 23) ? 1650 : 1500;
 
-    // Prompt + dữ liệu GIỮ NGUYÊN; chỉ đổi backend provider (Gemini-primary,
-    // Anthropic-backup). Bỏ cache_control (tối ưu riêng Anthropic; Gemini cache ngầm).
+    // Prompt caching (Code #1, xem CLAUDE.md track tối ưu chi phí Opus):
+    // `systemForLLM` = SYSTEM_PROMPT + TOÀN VĂN lá số (buildPromptCached),
+    // GIỐNG HỆT NHAU byte-for-byte ở cả 24 lượt của MỘT người xem → bật
+    // `cacheSystem:true` để nhánh Anthropic đóng breakpoint `cache_control`
+    // TTL 1h lên khối đó (Gemini/Kimi bỏ qua cờ này, không cache). Lượt đầu
+    // ghi cache (đắt hơn ~1,25×), các lượt sau chỉ đọc (~0,1×) — điều kiện là
+    // lượt mồi phải ghi cache XONG trước khi mở song song (xem
+    // public/app-luan-giai.html `_startLuanGiaiAI`: chạy phần 1 riêng lẻ rồi
+    // mới mở pool song song cho phần còn lại — né bẫy "3 lượt song song đầu
+    // đều cache-miss").
     //
     // Dùng llmTextFull thay llmText để LẤY ĐƯỢC usage + thời lượng: trước đây
     // route này KHÔNG ghi một dòng `llm_usage` nào, nên Luận Giải — tool bán
     // chạy nhất (1.500 Lượng / 3 người) — hoàn toàn vô hình trong panel Biên
     // Lợi Nhuận, và cũng không có số nào để đặt ETA cho 24 phần.
-    const r = await llmTextFull({ system: SYSTEM_PROMPT, prompt, maxTokens: maxTok });
+    const r = await llmTextFull({ system: systemForLLM, prompt, maxTokens: maxTok, cacheSystem: true });
     const text = r.text;
     // tool_id 'laso' = ĐÚNG `tool_pricing.tool_id` của Luận Giải (events dùng
     // 'luan-giai', giao dịch dùng 'use_laso' — ba hệ tên lệch nhau, xem
@@ -281,8 +292,8 @@ async function runPost(request: NextRequest) {
       r.model,
       {
         input_tokens: r.usage.input_tokens,
-        cache_creation_input_tokens: 0,
-        cache_read_input_tokens: 0,
+        cache_creation_input_tokens: r.usage.cache_creation_input_tokens,
+        cache_read_input_tokens: r.usage.cache_read_input_tokens,
         output_tokens: r.usage.output_tokens,
       },
       r.durationMs,
