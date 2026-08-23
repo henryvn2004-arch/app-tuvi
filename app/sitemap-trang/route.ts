@@ -71,6 +71,7 @@ const STATIC_PAGES = [
     '/kim-lau',
     '/bao-chi',
     '/nhung',
+    '/api-docs',
     '/tools/kinh-dich.html',
     '/tools/luc-nham.html',
     '/tools/mau-sac-hop-menh.html',

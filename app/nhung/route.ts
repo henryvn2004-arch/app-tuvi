@@ -84,6 +84,7 @@ ul{margin:0 0 10px 20px;color:var(--text-mid)}li{margin-bottom:5px}
     <ul style="margin-top:14px">
       <li>Không chèn quảng cáo, không đòi người đọc đăng nhập.</li>
       <li>Chạy hoàn toàn trong khung, không đụng gì tới trang của bạn.</li>
+      <li>Muốn tự dựng giao diện riêng? Có <a href="/api-docs">API âm lịch miễn phí, không cần key</a>.</li>
       <li>Cần widget cho công cụ khác? Viết cho <a href="mailto:contact@tuviminhbao.com">contact@tuviminhbao.com</a>.</li>
     </ul>
   </section>
