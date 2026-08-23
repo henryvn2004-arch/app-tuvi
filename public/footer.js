@@ -48,6 +48,7 @@
     '<a href="/ngay-tot">Ng\u00e0y T\u1ed1t Theo Vi\u1ec7c</a>',
     '<a href="/ngay-tot/lich/2026">L\u1ecbch Ng\u00e0y T\u1ed1t 2026</a>',
     '<a href="/chon-ngay.html">Ch\u1ecdn Ng\u00e0y</a>',
+    '<a href="/xong-dat">Tu\u1ed5i X\u00f4ng \u0110\u1ea5t</a>',
     '<a href="/dat-ten.html">\u0110\u1eb7t T\u00ean</a>',
     '</div>',
 
