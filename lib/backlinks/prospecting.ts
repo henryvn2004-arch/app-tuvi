@@ -32,6 +32,7 @@ import { sbConfigured, sbInsert } from './db';
 import type { Prospect, ProspectKind } from './content';
 import { runSeedListProspecting, type SeedListResult } from './seed-list';
 import { runAlertsRssProspecting, type AlertsRssResult } from './alerts-rss';
+import { getConfigValue } from '@/lib/config/appConfig';
 
 const BRAVE_KEY = process.env.BRAVE_SEARCH_API_KEY || '';
 const BRAVE_URL = 'https://api.search.brave.com/res/v1/web/search';
@@ -99,6 +100,44 @@ const MENTION_QUERIES: QuerySpec[] = [
   { q: `"tử vi minh bảo" -site:tuviminhbao.com`, guessKind: 'unlinked_mention' },
 ];
 
+// ── Đào ROUNDUP thay vì tìm mù ─────────────────────────────────────────────
+// Truy vấn kiểu "submit AI tool directory" là mò: phần lớn kết quả là trang
+// chẳng liên quan gì tới ngách tử vi tiếng Việt. Hai họ truy vấn dưới đây
+// nhắm thẳng vào trang ĐÃ SẴN LÒNG liệt kê công cụ cùng ngách — cùng số lượt
+// gọi API, tỉ lệ trúng khác hẳn.
+//
+//  (a) ROUNDUP_QUERIES — bài "tổng hợp/top/danh sách web xem tử vi".
+//  (b) đồng-nhắc ĐỐI THỦ — trang nhắc từ HAI đối thủ trở lên gần như chắc
+//      chắn là bài roundup, vì không ai vô cớ nhắc hai đối thủ cùng lúc.
+//
+// Danh sách đối thủ để ở `app_config['backlinks.competitors']` — Henry thêm
+// bớt bằng một câu SQL, không cần deploy. Mặc định dưới đây CỐ Ý ngắn: chỉ
+// gồm tên miền đã thấy nhắc trong chính repo này, không bịa thêm cho dài.
+const DEFAULT_COMPETITORS = ['lichngaytot.com', 'xemtuong.net'];
+
+const ROUNDUP_QUERIES: QuerySpec[] = [
+  { q: 'tổng hợp website xem tử vi online miễn phí uy tín', guessKind: 'resource_page' },
+  { q: '"top" trang web xem bói tử vi tướng số tốt nhất', guessKind: 'resource_page' },
+  { q: 'danh sách app xem tử vi lá số điện thoại nên dùng', guessKind: 'resource_page' },
+  { q: 'review công cụ lập lá số tử vi trực tuyến', guessKind: 'resource_page' },
+];
+
+/**
+ * Truy vấn đồng-nhắc: ghép từng CẶP đối thủ, loại chính tên miền của họ.
+ * Ghép cặp chứ không liệt kê cả danh sách trong một truy vấn — càng nhiều
+ * điều kiện AND thì kết quả càng về 0.
+ */
+function competitorQueries(domains: string[]): QuerySpec[] {
+  const out: QuerySpec[] = [];
+  for (let i = 0; i < domains.length; i++) {
+    for (let j = i + 1; j < domains.length; j++) {
+      const excl = `-site:${domains[i]} -site:${domains[j]}`;
+      out.push({ q: `"${domains[i]}" "${domains[j]}" ${excl}`, guessKind: 'resource_page' });
+    }
+  }
+  return out;
+}
+
 /** Domain không đáng lưu làm cơ hội — nền tảng lớn, kết quả gần như luôn là noise. */
 const SKIP_HOSTS = new Set([
   'google.com', 'facebook.com', 'twitter.com', 'x.com', 'youtube.com',
@@ -146,11 +185,13 @@ async function runBraveProspecting(limitPerRun = 15): Promise<BraveProspectingRe
   // Xoay: 4/8 truy vấn directory/resource mỗi tuần + cả 2 truy vấn mention
   // (mention rẻ, chạy đều đặn để bắt sớm những nhắc-tên-mới).
   const wk = weekOfYear();
+  const competitors = (await getConfigValue<string[]>('backlinks.competitors', DEFAULT_COMPETITORS)) || DEFAULT_COMPETITORS;
+  const compQueries = competitorQueries(competitors.slice(0, 6));
   const dQueries = DIRECTORY_QUERIES.filter((_, i) => i % 2 === wk % 2);
   // Guest post cũng xoay nửa/tuần, cùng lý do: 8 truy vấn chạy hết mỗi tuần
   // là đốt lượt gọi API cho những kết quả gần như y hệt tuần trước.
   const gQueries = GUEST_QUERIES.filter((_, i) => i % 2 === wk % 2);
-  const specs = [...dQueries, ...gQueries, ...MENTION_QUERIES];
+  const specs = [...dQueries, ...gQueries, ...ROUNDUP_QUERIES, ...compQueries, ...MENTION_QUERIES];
 
   let found = 0;
   let inserted = 0;
@@ -171,7 +212,9 @@ async function runBraveProspecting(limitPerRun = 15): Promise<BraveProspectingRe
       const url = (r.url || '').trim();
       if (!url || !/^https?:\/\//i.test(url)) continue;
       const host = hostOf(url);
-      if (!host || SKIP_HOSTS.has(host)) continue;
+      // Trang của CHÍNH đối thủ không phải cơ hội — họ sẽ không gắn link cho
+      // mình. Chặn ở đây thay vì để lọt vào sổ rồi người phải tự loại tay.
+      if (!host || SKIP_HOSTS.has(host) || competitors.some((c) => host === c || host.endsWith('.' + c))) continue;
       found++;
 
       const title = (r.title || host).trim().slice(0, 200);
