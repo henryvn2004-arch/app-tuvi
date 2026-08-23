@@ -57,6 +57,43 @@ const DIRECTORY_QUERIES: QuerySpec[] = [
   { q: 'best astrology tools resources useful links blog', guessKind: 'resource_page' },
 ];
 
+// ── Guest post: tầng đắt nhất của cả module ────────────────────────────────
+// Đây là chỗ hạ tầng ĐÃ CÓ SẴN từ trước mà chưa nguồn nào nuôi: `content.ts`
+// vốn đã có `draftGuestPitch`/`draftBlogPitch` và các `kind` tương ứng, chỉ
+// thiếu đúng bước TÌM RA cơ hội. Thêm mấy truy vấn dưới đây là nối nốt một
+// nửa đã dựng, không phải làm mới từ đầu.
+//
+// `guessKind` để 'guest_post', nhưng loại THẬT quyết ở `refineGuestKind()`
+// theo dấu hiệu trong chính trang — blog cá nhân và toà soạn cần hai kiểu thư
+// khác hẳn nhau (xem đầu _patches/migration-backlinks-guest.sql).
+const GUEST_QUERIES: QuerySpec[] = [
+  { q: '"viết bài cộng tác" tử vi OR phong thủy OR tâm linh', guessKind: 'guest_post' },
+  { q: '"nhận bài viết" OR "đóng góp bài viết" blog tử vi tướng số', guessKind: 'guest_post' },
+  { q: '"cộng tác viên viết bài" website tâm linh phong thủy', guessKind: 'guest_post' },
+  { q: '"gửi bài" blog chiêm tinh tử vi hướng dẫn', guessKind: 'guest_post' },
+  { q: 'intitle:"write for us" astrology OR horoscope', guessKind: 'guest_post' },
+  { q: '"guest post" astrology blog submit guidelines', guessKind: 'guest_post' },
+  { q: '"contribute" spirituality blog submission guidelines', guessKind: 'guest_post' },
+  { q: 'blog cá nhân tử vi tướng số chia sẻ kinh nghiệm', guessKind: 'guest_blog' },
+];
+
+/**
+ * Toà soạn hay blog cá nhân? Đọc dấu hiệu trong tiêu đề + mô tả.
+ *
+ * ⚠️ Không rõ thì trả 'guest_blog' — CỐ Ý nghiêng về tầng NHẸ. Gửi thư ngắn
+ * cho một toà soạn thì tệ nhất là bị bỏ qua; gửi thư trang trọng "kính gửi
+ * ban biên tập" cho một người viết blog cá nhân thì đọc ra ngay là thư hàng
+ * loạt, và mất luôn cơ hội đó.
+ */
+function refineGuestKind(host: string, title: string, desc: string): ProspectKind {
+  const t = `${title} ${desc}`.toLowerCase();
+  const bienTap = /ban biên tập|toà soạn|tòa soạn|editorial team|our editors|editorial guidelines|submission guidelines|tạp chí|chuyên trang/;
+  if (bienTap.test(t)) return 'guest_post';
+  // Tên miền con của nền tảng blog miễn phí ⇒ gần như chắc chắn là blog cá nhân.
+  if (/\.(blogspot|wordpress|tumblr|medium|substack|hashnode|blogger)\.[a-z.]+$/.test(host)) return 'guest_blog';
+  return 'guest_blog';
+}
+
 const MENTION_QUERIES: QuerySpec[] = [
   { q: `"tuviminhbao.com" -site:tuviminhbao.com`, guessKind: 'unlinked_mention' },
   { q: `"tử vi minh bảo" -site:tuviminhbao.com`, guessKind: 'unlinked_mention' },
@@ -110,7 +147,10 @@ async function runBraveProspecting(limitPerRun = 15): Promise<BraveProspectingRe
   // (mention rẻ, chạy đều đặn để bắt sớm những nhắc-tên-mới).
   const wk = weekOfYear();
   const dQueries = DIRECTORY_QUERIES.filter((_, i) => i % 2 === wk % 2);
-  const specs = [...dQueries, ...MENTION_QUERIES];
+  // Guest post cũng xoay nửa/tuần, cùng lý do: 8 truy vấn chạy hết mỗi tuần
+  // là đốt lượt gọi API cho những kết quả gần như y hệt tuần trước.
+  const gQueries = GUEST_QUERIES.filter((_, i) => i % 2 === wk % 2);
+  const specs = [...dQueries, ...gQueries, ...MENTION_QUERIES];
 
   let found = 0;
   let inserted = 0;
@@ -142,6 +182,8 @@ async function runBraveProspecting(limitPerRun = 15): Promise<BraveProspectingRe
       if (spec.guessKind === 'directory' || spec.guessKind === 'resource_page') {
         if (/submit|add your|add a listing|directory|nộp|đăng ký công cụ/.test(desc)) kind = 'directory';
         else if (/resource|useful link|recommended|tài nguyên|công cụ hữu ích/.test(desc)) kind = 'resource_page';
+      } else if (spec.guessKind === 'guest_post' || spec.guessKind === 'guest_blog') {
+        kind = refineGuestKind(host, title, r.description || '');
       }
 
       // POST thuần (không upsert): trùng `url` (unique) → 409 → sbInsert trả

@@ -23,6 +23,7 @@ export type ProspectKind =
   | 'resource_page'
   | 'broken_link'
   | 'guest_post'
+  | 'guest_blog'
   | 'web2'
   | 'social_profile'
   | 'unlinked_mention'
@@ -32,6 +33,7 @@ export type ContentKind =
   | 'directory_listing'
   | 'web2_article'
   | 'guest_pitch'
+  | 'blog_pitch'
   | 'outreach_email'
   | 'broken_link_pitch';
 
@@ -62,6 +64,8 @@ export function pickContentKind(kind: ProspectKind): ContentKind {
     case 'directory':
     case 'social_profile':
       return 'directory_listing';
+    case 'guest_blog':
+      return 'blog_pitch';
     case 'web2':
       return 'web2_article';
     case 'guest_post':
@@ -206,6 +210,41 @@ LUẬT:
   return { kind: 'guest_pitch', title: STR(out.subject) || null, body, meta: { articleOutline: outline } };
 }
 
+/**
+ * Thư gửi BLOG NHỎ / blog cá nhân — tầng nhẹ hơn `draftGuestPitch`.
+ *
+ * Vì sao tách hẳn một hàm thay vì nới prompt của guest pitch: hai bên đọc thư
+ * bằng hai tư cách khác nhau. Toà soạn cần biết bài sẽ có dàn ý gì, đúng
+ * chuyên mục nào; chủ một blog cá nhân đọc email dài dòng kiểu đó là đóng
+ * ngay vì nó nghe như thư hàng loạt. Gộp một prompt thì phải viết "nếu là
+ * blog nhỏ thì..." — model chọn nhánh tuỳ hứng, không kiểm được.
+ */
+async function draftBlogPitch(p: Prospect): Promise<DraftedContent | null> {
+  const system = `Bạn soạn MỘT THƯ NGẮN gửi cho chủ blog "${p.name}" (${p.url}) — đây là BLOG CÁ NHÂN / blog nhỏ, người nhận là MỘT NGƯỜI chứ không phải ban biên tập.
+
+Bối cảnh người gửi:
+${SITE_FACTS}
+
+${JSON_RULE}
+{"subject":"...", "body":"thư 70-120 từ", "ideas":["2-3 ý bài, mỗi ý 1 câu"]}
+
+LUẬT:
+- NGẮN. Blog cá nhân đọc thư dài là đóng ngay vì nghe như thư hàng loạt.
+- Xưng hô với MỘT NGƯỜI (anh/chị/bạn tuỳ giọng blog), KHÔNG "kính gửi ban biên tập".
+- Mở bằng một chi tiết CÓ THẬT về blog của họ lấy từ "chu_de"/"ghi_chu" — không có thông tin cụ thể thì nói thẳng là mới biết tới blog, ĐỪNG giả vờ đã đọc lâu.
+- Đề nghị viết một bài kiến thức, nói rõ là gửi miễn phí, họ toàn quyền biên tập hoặc từ chối.
+- CẤM chữ "SEO"/"backlink"/"trao đổi link"/"hợp tác truyền thông".
+- Kết bằng một câu hỏi mở, không giục.`;
+  const out = await ask(system, p, 700);
+  if (!out) return null;
+  const body = STR(out.body);
+  if (!body) return null;
+  const ideas = Array.isArray(out.ideas)
+    ? (out.ideas as unknown[]).map((s) => STR(s)).filter(Boolean).slice(0, 3)
+    : [];
+  return { kind: 'blog_pitch', title: STR(out.subject) || null, body, meta: { ideas } };
+}
+
 async function draftOutreachEmail(p: Prospect): Promise<DraftedContent | null> {
   const isMention = p.kind === 'unlinked_mention';
   const system = `Bạn soạn MỘT EMAIL ngắn gửi cho "${p.name}" (${p.url}).
@@ -262,6 +301,8 @@ export async function draftContentForProspect(p: Prospect): Promise<DraftedConte
       return draftWeb2Article(p);
     case 'guest_pitch':
       return draftGuestPitch(p);
+    case 'blog_pitch':
+      return draftBlogPitch(p);
     case 'broken_link_pitch':
       return draftBrokenLinkPitch(p);
     default:

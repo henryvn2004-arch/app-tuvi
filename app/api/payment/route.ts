@@ -2063,7 +2063,7 @@ async function handleAdminSeedingDraft(request: NextRequest, body: Record<string
 // ============================================================
 
 const BL_PROSPECT_KINDS: BlKind[] = [
-  'directory', 'resource_page', 'broken_link', 'guest_post',
+  'directory', 'resource_page', 'broken_link', 'guest_post', 'guest_blog',
   'web2', 'social_profile', 'unlinked_mention', 'other',
 ];
 
