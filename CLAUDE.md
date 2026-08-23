@@ -1,5 +1,108 @@
 # CLAUDE.md — Context cho Claude Code
 
+## 💰 Track Tối Ưu Chi Phí Opus — audit + brainstorm XONG, CHƯA CODE DÒNG NÀO (2026-08-23)
+
+### 🔖 RESUME HERE
+Henry test nhiều provider (Opus 5 / Kimi K3 / Sonnet / Gemini Flash) rồi chốt
+**Opus 5 ổn định + chính xác nhất** cho luận giải LLM, nhưng đắt. Ý đầu Henry
+đưa ra (*"gộp cả lá số vào 1 prompt"*) **bị bác bằng số đo** (xem dưới), nhưng
+chẩn đoán đúng hướng: hạ tầng hiện đang lãng phí ~95% input mỗi lượt vào thứ
+lặp lại. Đã đo xong + brainstorm xong + **Henry đã duyệt cả plan** — nhưng
+**0 dòng code đã viết**. Việc tiếp theo nằm ở mục "▶️ Việc tiếp theo" cuối track.
+
+### 🔴 Số đo THẬT trên prod (bảng `events.llm_usage`, không phải ước lượng)
+| | |
+|---|---:|
+| Tốc độ sinh Opus thật (30 lượt liên tiếp) | ~43 token/giây |
+| Output cần cho 24 phần Luận Giải | 16.500–28.800 token |
+| ⇒ thời gian 1 lượt nếu gộp HẾT 24 phần | 6–11 phút |
+| `maxDuration` route trên Vercel | 300 giây |
+
+⇒ **"1 prompt cho cả 24 phần" KHÔNG chạy được** — chặn cứng bởi trần thời gian
+Vercel, không phải bởi model (Opus context 1M/output 128K dư sức). Gộp cũng
+KHÔNG giảm output (vẫn ngần ấy chữ phải viết), chỉ giảm INPUT.
+
+Cấu trúc input thật của Luận Giải 24 phần (đo bằng harness biên dịch
+`lib/agent/luan-giai-doc.ts` + `lib/engine/laso.ts`, lá số thật 9/5/1984):
+| Khối | chars | % |
+|---|---:|---:|
+| `SYSTEM_PROMPT` gửi lại **24 lần** | 273.456 | **49%** |
+| Lá số (đã cắt theo `trimLaSo`) | 174.881 | 31% |
+| RAG docs × 24 lượt | 81.396 | 15% |
+| Câu lệnh riêng từng phần | 29.949 | 5% |
+
+⇒ **95% input là lặp lại/nền chung**, chỉ 5% khác biệt thật giữa 24 lượt.
+
+### 📋 Rà soát tool nhiều-prompt (đo/ước trên prod)
+| Tool | Lượt LLM | Giá bán | Biên |
+|---|---:|---:|---:|
+| Luận Giải Lá Số (`laso`) | 24 | 100 L | ~+47% |
+| **Vận Hạn 12 Tháng** (`van-han-nam`) | 16 | 50 L | **−34% LỖ** (đo thật 30 lượt: TB input 21.811/output 1.211/**3.483đ**/phần) |
+| Tử Bình Bát Tự (`tu-binh`) | 16 | 50 L | ~+28% |
+| Xem Tuổi VC/Làm Ăn | 9 | 15 L | ~+11% |
+| Phong Thủy | 3 (**chuỗi phụ thuộc**, KHÔNG gộp được) | 50 L | — |
+| Chân Dung/Duyên Nợ ×3 | 2 song song | 20–30 L | — |
+| day-con/nguoi-khac/nhan-mach/huong-nghiep-tre | 1 | 15–20 L | — |
+| cong-so/gio-sinh | 0 (tra bảng) | — | — |
+
+🐞 **Phát hiện kèm, CHƯA vá:** `van-han-nam` phần 1–4 gọi lại CHÍNH
+`buildPrompt(1/14/ĐV hiện tại/24)` của Luận Giải (`app/api/van-han-nam/route.ts`
+dòng ~169). Ai mua CẢ HAI tool đang trả tiền 2 lần cho 4 phần y hệt nhau. Sửa
+bằng cách đọc `laso_public.luan_giai` thay vì gọi LLM lại — **0đ**, không đụng
+một chữ prompt.
+
+### ✅ Henry ĐÃ DUYỆT plan, thứ tự ưu tiên
+| # | Việc | Giảm | Rủi ro | Đụng gì |
+|---|---|---:|---|---|
+| **1** | Bật **prompt caching** Anthropic (`cache_control`) + gửi lá số ĐẦY ĐỦ (bỏ `trimLaSo` cho phần lá số, giữ cắt cho câu lệnh riêng) để prefix `system+lasố` GIỐNG HỆT ở cả 24 lượt → 1 lượt write (1,25×) + 23 lượt read (0,1×) | −35% (44.300→29.100đ/lượt Luận Giải) | Thấp | `lib/llm/complete.ts` — `buildAnthropicBody()` HIỆN KHÔNG có `cache_control` nào |
+| **2** | `van-han-nam` phần 1–4 đọc lại `laso_public.luan_giai` thay vì gọi LLM | −25% riêng tool đó | Thấp | 1 route |
+| **3** | **Đo A/B `effort`** (`output_config.effort: low/medium/high/xhigh`) — Opus 5 mặc định BẬT thinking + effort=high, repo gọi bằng `fetch` thô, CHƯA từng truyền `effort`/`thinking`. Dấu hiệu nghi vấn: cùng khuôn prompt, Opus ra 1.211 output-tok, Gemini chỉ 466 (lệch 2,6× trong khi tokenizer tiếng Việt chỉ giải thích 1,85×) → nghi phần dư là thinking token ($25/1M output) | ? — **CHƯA ĐO ĐƯỢC** (không có `ANTHROPIC_API_KEY` trong container lúc đo) | Thấp | 1 tham số |
+| **4** | Gộp 24 phần → **5 CỤM** theo ĐÚNG ranh giới `trimLaSo` đã cắt sẵn (A:1-2 · B1:3-8 · B2:9-13 · C1:14+15-19 · C2:20-23+24). Output có cấu trúc bằng **MỐC DÒNG** (`### PHẦN 7`), **KHÔNG JSON** (đã trả giá 1 lần với `parseLlmJson` hỏng trên output dài+tiếng Việt) | −55% (kèm #1: ~19.500đ/lượt, biên 76%) | **Trung bình** | prompt (`lib/agent/luan-giai-doc.ts`) + 2 trang client (`app-luan-giai.html`/`luan-giai.html`) |
+| 5 | Tách tool (ý gốc Henry: 24 phần → "Luận Giải Tử Vi" 1-14 + "Chu Trình Cuộc Đời" đại vận, và làm tương tự cho Tử Bình/Xem Tuổi) | doanh thu, không phải chi phí | **Cao** | schema/giá/SEO/slug đã index + `laso_public` KHÔNG có cơ chế SHAPE version → đổi cấu trúc là bản đã mua hiển thị thiếu, IM LẶNG |
+
+⚠️ **Bẫy đã lường cho #1**: track hiện tại (`d9f20d2`, đã merge) chạy **3 phần
+song song mỗi đợt**. Nếu 3 lượt đầu bắn cùng lúc thì CẢ 3 đều cache-miss → 3
+lượt write ×1,25 = **ĐẮT HƠN** thay vì rẻ hơn. Phải bắn 1 lượt mồi (warm cache)
+trước rồi mới mở song song. Cache TTL mặc định 5 phút — 24 phần chạy hiện
+~11 phút nên cần `ttl:"1h"` HOẶC rút thời gian tổng bằng #4 trước khi tính TTL 5 phút.
+
+### 🔴 BỊ CHẶN LÚC ĐO — ANTHROPIC_API_KEY set nhưng phiên đó không thấy
+Henry đã set `ANTHROPIC_API_KEY` vào environment Claude Code container ở phiên
+trước (`env` không thấy nó dù `GEMINI_API_KEY`/`OPENAI_API_KEY` cùng chỗ ĐỌC
+được) — đúng bài học lặp lại nhiều lần trong file này: **biến môi trường chỉ
+nạp vào container ở lần khởi động MỚI**, phiên đang chạy lúc set không thấy.
+
+### ▶️ Việc tiếp theo (đúng thứ tự, làm ở PHIÊN MỚI)
+1. **Verify trước tiên**: `node -e "console.log(!!process.env.ANTHROPIC_API_KEY)"`
+   — nếu vẫn `false` thì báo Henry set SAI CHỖ (phải là environment của Claude
+   Code container, KHÔNG phải Vercel env — Vercel chỉ chảy vào app production).
+2. **Đo A/B effort thật** (mục #3 bảng trên): gọi Anthropic Messages API trực
+   tiếp (hoặc qua `llmTextFull` sau khi thêm tham số) cho 1 phần Luận Giải với
+   `effort: low/medium/high/xhigh`, so `usage.output_tokens` + đọc chất lượng
+   văn bản → quyết định effort mặc định. Đây là bước ĐO, làm TRƯỚC khi code.
+3. **Code #1** (prompt caching): sửa `lib/llm/complete.ts`
+   (`buildAnthropicBody`/`anthropicText`/`llmTextFull`) thêm `cache_control:
+   {type:"ephemeral", ttl:"1h"}` trên khối system+lá-số-đầy-đủ; sửa
+   `lib/agent/luan-giai-doc.ts` (`buildPrompt`/`laSoContextFor`) để phần LÁ SỐ
+   không còn cắt theo `trimLaSo` (giữ nguyên toàn văn cho mọi phần, chỉ câu
+   lệnh riêng từng phần mới đổi) — bắt buộc để 24 lượt có CHUNG một prefix.
+   Cần né bẫy song-song đã ghi ở trên.
+4. **Code #2** (`van-han-nam` phần 1–4 đọc lại từ `laso_public.luan_giai`).
+5. Deploy, đo lại `events.llm_usage.cost_vnd` THẬT trên 24 lượt trước/sau — so
+   với số ước ở bảng trên (query mẫu: `select tool_id, avg((meta->>'cost_vnd')
+   ::numeric) from events where event_type='llm_usage' and tool_id='laso' and
+   ts>now()-interval '1 day' group by 1`).
+6. Nếu #1+#2 đủ tốt (biên Luận Giải >65%, `van-han-nam` hết lỗ) → DỪNG, không
+   làm #4/#5 (rủi ro cao hơn lợi thêm). Chỉ làm #4 nếu vẫn cần giảm sâu hơn.
+   #5 (tách tool) là quyết định SẢN PHẨM riêng, bàn lại với Henry sau khi có
+   số thật của #1+#2, không tự ý làm.
+
+Branch: `claude/optimize-opus-cost-tarot-d50dma` (đứng trên `origin/main`,
+HEAD `0a06e53` — 3 commit gần nhất của branch là việc KHÁC, không liên quan
+track này; track này chưa code gì cả).
+
+---
+
 ## 🌙 Vận Hạn 12 Tháng đổi sang KHUNG THÁNG ÂM — hết cảnh "nửa đầu / nửa sau" (2026-08-19, PR sau)
 
 Henry: *"nó bị sẻ nằm giữa 2 tháng âm lịch. Đâm ra luận giải cũng bị sẻ nên có
