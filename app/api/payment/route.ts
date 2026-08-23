@@ -32,6 +32,7 @@ import { runProspecting } from '@/lib/backlinks/prospecting';
 import { runLinkCheck } from '@/lib/backlinks/tracker';
 import { runBrokenLinkScan } from '@/lib/backlinks/broken-links';
 import { discoverBingBacklinks } from '@/lib/backlinks/bing-webmaster';
+import { runGrowthAccounts, type GrowthAccount } from '@/lib/growth/accounts';
 import {
   listMemory, rememberFact, forgetFact, editFact,
   MEMORY_KIND_LABELS, MAX_MEMORY_ITEMS, MAX_MEMORY_LEN,
@@ -2073,7 +2074,7 @@ async function handleAdminBacklinks(request: NextRequest): Promise<Response> {
   if (!admin) return err('Unauthorized', 403);
 
   try {
-    const [prospects, content, links] = await Promise.all([
+    const [prospects, content, links, accounts] = await Promise.all([
       blGet<BlProspect>(
         'backlink_prospects?select=id,kind,name,url,topic,contact_email,notes,status,priority,source,created_at,updated_at' +
           '&order=status.asc,priority.desc,created_at.desc&limit=300',
@@ -2086,8 +2087,14 @@ async function handleAdminBacklinks(request: NextRequest): Promise<Response> {
         'backlink_links?select=id,prospect_id,source_url,target_url,anchor_text,rel,status,first_seen_at,last_checked_at,notes' +
           '&order=status.asc,last_checked_at.asc.nullsfirst&limit=300',
       ),
+      // Sổ Tài Khoản & Entity — cùng trang admin nên gộp vào MỘT lượt gọi,
+      // không mở endpoint thứ hai cho một bảng nhỏ.
+      blGet<GrowthAccount>(
+        'growth_accounts?select=id,platform,label,category,url,submit_url,handle,status,priority,same_as,automation,notes,last_checked_at,last_ok,check_note' +
+          '&order=category.asc,priority.desc,label.asc&limit=200',
+      ),
     ]);
-    return ok({ prospects, content, links });
+    return ok({ prospects, content, links, accounts });
   } catch (e: unknown) {
     return err((e as Error).message);
   }
@@ -2268,7 +2275,90 @@ async function handleAdminBacklinkRun(request: NextRequest, body: Record<string,
       return ok({ bing, ...r });
     }
     if (kind === 'brokenlinks') return ok(await runBrokenLinkScan());
-    return err('kind phải là prospect, content, check hoặc brokenlinks', 400);
+    if (kind === 'accounts') return ok(await runGrowthAccounts());
+    return err('kind phải là prospect, content, check, brokenlinks hoặc accounts', 400);
+  } catch (e: unknown) {
+    return err((e as Error).message);
+  }
+}
+
+// ── POST: admin-growth-account — sửa/thêm/xoá một dòng sổ Tài Khoản & Entity.
+// ⚠️ `url` ở đây KHÔNG chỉ hiện trong admin — nó đổ thẳng vào JSON-LD
+// `sameAs` của trang công khai (lib/seo/same-as.ts). Nên chỉ nhận http(s),
+// chặn cứng mọi scheme khác. ──
+const GA_CATEGORIES = ['entity', 'social', 'web2', 'community', 'registry'];
+const GA_STATUSES = ['todo', 'registered', 'verified', 'rejected', 'skip'];
+
+async function handleAdminGrowthAccount(request: NextRequest, body: Record<string, unknown>): Promise<Response> {
+  const token = (request.headers.get('Authorization') || '').replace('Bearer ', '').trim();
+  const admin = await verifyAdmin(token);
+  if (!admin) return err('Unauthorized', 403);
+
+  const op = String(body.op || 'save').trim();
+  const id = String(body.id || '').trim();
+  if (id && !/^[0-9a-f-]{36}$/i.test(id)) return err('id không hợp lệ', 400);
+
+  if (op === 'delete') {
+    if (!id) return err('Thiếu id', 400);
+    const okDel = await blDelete('growth_accounts', `id=eq.${id}`);
+    if (!okDel) return err('Không xoá được');
+    return ok({ deleted: true });
+  }
+
+  const url = String(body.url || '').trim();
+  if (url && !/^https?:\/\/[^\s<>"']+$/i.test(url)) {
+    return err('URL phải bắt đầu bằng http:// hoặc https:// và không chứa ký tự lạ', 400);
+  }
+  const status = String(body.status || 'todo').trim();
+  if (!GA_STATUSES.includes(status)) return err('status không hợp lệ', 400);
+  const priorityRaw = Number(body.priority);
+  const priority = Number.isFinite(priorityRaw) ? Math.min(3, Math.max(1, Math.round(priorityRaw))) : 2;
+
+  const row: Record<string, unknown> = {
+    url: url || null,
+    handle: String(body.handle || '').trim() || null,
+    status,
+    priority,
+    same_as: body.sameAs === true,
+    notes: String(body.notes || '').trim() || null,
+    updated_at: new Date().toISOString(),
+  };
+
+  // Tạo mới: cần thêm platform/label/category. Cho phép Henry tự thêm nền
+  // tảng ngoài danh sách seed mà không phải sửa code.
+  if (!id) {
+    const platform = String(body.platform || '').trim().toLowerCase();
+    const label = String(body.label || '').trim();
+    const category = String(body.category || '').trim();
+    if (!/^[a-z0-9-]{2,40}$/.test(platform)) return err('platform chỉ gồm a-z, 0-9, gạch ngang (2-40 ký tự)', 400);
+    if (!label) return err('Thiếu tên hiển thị', 400);
+    if (!GA_CATEGORIES.includes(category)) return err('category không hợp lệ', 400);
+    const submitUrl = String(body.submitUrl || '').trim();
+    if (submitUrl && !/^https?:\/\/[^\s<>"']+$/i.test(submitUrl)) return err('URL đăng ký không hợp lệ', 400);
+    row.platform = platform;
+    row.label = label;
+    row.category = category;
+    row.submit_url = submitUrl || null;
+  }
+
+  try {
+    const res = await fetch(
+      id ? `${SUPABASE_URL}/rest/v1/growth_accounts?id=eq.${id}` : `${SUPABASE_URL}/rest/v1/growth_accounts`,
+      {
+        method: id ? 'PATCH' : 'POST',
+        headers: { ...SB_HEADERS, Prefer: 'return=representation' },
+        body: JSON.stringify(row),
+        cache: 'no-store',
+      },
+    );
+    if (!res.ok) {
+      const t = await res.text();
+      if (t.includes('growth_accounts_platform_uniq')) return err('Nền tảng này đã có trong sổ rồi', 409);
+      return err(t);
+    }
+    const rows = (await res.json()) as unknown[];
+    if (id && !rows.length) return err('Không tìm thấy dòng với id đó', 404);
+    return ok({ saved: true });
   } catch (e: unknown) {
     return err((e as Error).message);
   }
@@ -2826,6 +2916,7 @@ export async function POST(request: NextRequest) {
   if (action === 'admin-backlink-content') return handleAdminBacklinkContent(request, body);
   if (action === 'admin-backlink-link') return handleAdminBacklinkLink(request, body);
   if (action === 'admin-backlink-run') return handleAdminBacklinkRun(request, body);
+  if (action === 'admin-growth-account') return handleAdminGrowthAccount(request, body);
   if (action === 'admin-khao-luan-topics') return handleAdminKhaoLuanTopics(request, body);
   if (action === 'admin-nghien-cuu-topics') return handleAdminNghienCuuTopics(request, body);
   if (action === 'admin-mcp-update') return handleAdminMcpUpdate(request, body);

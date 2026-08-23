@@ -113,7 +113,7 @@
         _patches/migration-backlinks.sql.
       -->
       <button class="nav-item" onclick="goTo('backlinks')">
-        <span class="ni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></span><span>Backlink</span>
+        <span class="ni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></span><span>Backlink &amp; Entity</span>
       </button>
       <button class="nav-item" onclick="goTo('channels')">
         <span class="ni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1.5"/></svg></span><span>Kênh &amp; Kết Nối</span>
@@ -573,6 +573,23 @@
 
       <!-- ── BACKLINK ── -->
       <div class="page" id="page-backlinks">
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title"><svg class="pt-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41 13.42 20.6a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82Z"/><path d="M7 7h.01"/></svg>Tài Khoản &amp; Entity</div>
+            <div class="panel-actions">
+              <span class="badge badge-grey" id="ga-badge">…</span>
+              <button class="btn btn-outline btn-sm" id="ga-run-btn" onclick="blRunNow('accounts', this)">🔄 Nạp sổ + kiểm hồ sơ</button>
+              <button class="btn btn-primary btn-sm" onclick="loadBacklinks()">↻</button>
+            </div>
+          </div>
+          <div class="panel-body" style="font-size:.76rem;color:var(--text-lt);padding-bottom:.5rem">
+            Sổ tài khoản của <b>chính mình</b> trên các nền tảng — khác với "Cơ Hội Backlink" bên dưới (nơi <i>người khác</i> sở hữu). Đây là <b>nguồn DUY NHẤT</b> sinh trường <code>sameAs</code> trong JSON-LD của cả site: đánh dấu một dòng thành <b>Đã xác minh</b> + bật <b>sameAs</b> là schema toàn site cập nhật, <b>không cần deploy</b>. Cron <code>growth-accounts</code> mỗi T7 nạp nền tảng mới vào sổ và ghé lại từng hồ sơ đã đăng ký xem còn sống không — hồ sơ chết sẽ tự bị loại khỏi <code>sameAs</code> và báo về Telegram. <b>Không có nút đăng ký nào</b> — tạo tài khoản là việc tay (captcha, xác minh, điều khoản từng nền tảng).
+          </div>
+          <div id="ga-list" style="padding:0 1rem 1rem">
+            <div class="loading"><span class="spin"></span>Đang tải...</div>
+          </div>
+        </div>
+
         <div class="panel">
           <div class="panel-header">
             <div class="panel-title"><svg class="pt-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>Cơ Hội Backlink</div>
@@ -1250,7 +1267,7 @@
         <div class="stats" id="cron-stats" style="grid-template-columns:repeat(4,1fr)">
           <div class="stat"><div class="stat-label">Tổng Job</div><div class="stat-value" id="cron-k-total">…</div><div class="stat-sub">Vercel · pg_cron · edge</div></div>
           <div class="stat green"><div class="stat-label">OK (24h)</div><div class="stat-value" id="cron-k-ok">…</div><div class="stat-sub">lượt chạy thành công</div></div>
-          <div class="stat" style="--x:1"><div class="stat-label">Lỗi (24h)</div><div class="stat-value" id="cron-k-err" style="color:var(--red)">…</div><div class="stat-sub">cần để mắt</div></div>
+          <div class="stat" style="--x:1"><div class="stat-label">Lỗi (24h)</div><div class="stat-value" id="cron-k-err" style="color:var(--tx-red)">…</div><div class="stat-sub">cần để mắt</div></div>
           <div class="stat blue"><div class="stat-label">Lượt chạy</div><div class="stat-value" id="cron-k-runs">…</div><div class="stat-sub">đã ghi log</div></div>
         </div>
         <div class="panel">
@@ -1357,7 +1374,7 @@
           <div class="panel-header"><div class="panel-title"><svg class="pt-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Trạng Thái API Keys &amp; Secrets</div></div>
           <div class="panel-body" id="env-status">
             <div class="loading"><span class="spin"></span>Đang tải...</div>
-            <div style="font-size:.72rem;color:var(--text-lt);margin-top:.6rem">Token 3 kênh chat (Telegram/Messenger/WhatsApp) xem ở <a href="#" onclick="goTo('channels');return false" style="color:var(--blue)">Channels &amp; Push</a>. Chỉ hiện đã cấu hình hay chưa — KHÔNG bao giờ hiện giá trị thật.</div>
+            <div style="font-size:.72rem;color:var(--text-lt);margin-top:.6rem">Token 3 kênh chat (Telegram/Messenger/WhatsApp) xem ở <a href="#" onclick="goTo('channels');return false" style="color:var(--tx-blue)">Channels &amp; Push</a>. Chỉ hiện đã cấu hình hay chưa — KHÔNG bao giờ hiện giá trị thật.</div>
           </div>
         </div>
       </div>
@@ -1542,13 +1559,13 @@
           <div class="stat"><div class="stat-label">Tổng Bài</div><div class="stat-value" id="kl-k-total">…</div><div class="stat-sub">khao_luan</div></div>
           <div class="stat green"><div class="stat-label">+7 Ngày</div><div class="stat-value" id="kl-k-7d">…</div><div class="stat-sub">bài mới</div></div>
           <div class="stat blue"><div class="stat-label">Đang Chờ Viết</div><div class="stat-value" id="kl-k-pending">…</div><div class="stat-sub">hàng đợi</div></div>
-          <div class="stat" style="--x:1"><div class="stat-label">Lỗi</div><div class="stat-value" id="kl-k-error" style="color:var(--red)">…</div><div class="stat-sub">cần để mắt</div></div>
+          <div class="stat" style="--x:1"><div class="stat-label">Lỗi</div><div class="stat-value" id="kl-k-error" style="color:var(--tx-red)">…</div><div class="stat-sub">cần để mắt</div></div>
         </div>
 
         <div class="panel">
           <div class="panel-header">
             <div class="panel-title"><svg class="pt-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>Theo Danh Mục</div>
-            <span style="font-size:.72rem;color:var(--text-lt)">Trigger cron thủ công ở <a href="#" onclick="goTo('cron');return false" style="color:var(--blue)">Cron &amp; Jobs</a></span>
+            <span style="font-size:.72rem;color:var(--text-lt)">Trigger cron thủ công ở <a href="#" onclick="goTo('cron');return false" style="color:var(--tx-blue)">Cron &amp; Jobs</a></span>
           </div>
           <div class="panel-body" id="kl-categories"><div class="loading"><span class="spin"></span>Đang tải...</div></div>
         </div>
@@ -1582,7 +1599,7 @@
         <div class="panel">
           <div class="panel-header">
             <div class="panel-title"><svg class="pt-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5z"/><line x1="16" y1="8" x2="2" y2="22"/><line x1="17.5" y1="15" x2="9" y2="15"/></svg>15 Tác Giả</div>
-            <span style="font-size:.72rem;color:var(--text-lt)">Trigger cron thủ công ở <a href="#" onclick="goTo('cron');return false" style="color:var(--blue)">Cron &amp; Jobs</a></span>
+            <span style="font-size:.72rem;color:var(--text-lt)">Trigger cron thủ công ở <a href="#" onclick="goTo('cron');return false" style="color:var(--tx-blue)">Cron &amp; Jobs</a></span>
           </div>
           <div class="table-wrap" id="nc-authors"><div class="loading"><span class="spin"></span>Đang tải...</div></div>
         </div>
@@ -1652,7 +1669,7 @@ const PAGE_TITLES = {
   marketing: 'Funnel & Nguồn', cron: 'Vận Hành — Sức Khỏe & Jobs',
   channels: 'Nội Dung — Kênh & Kết Nối', seo: 'SEO',
   warehouse: 'Nội Dung — Kho',
-  backlinks: 'Nội Dung — Backlink',
+  backlinks: 'Nội Dung — Backlink & Entity',
   content: 'Sản Xuất — YouTube Studio', cboard: 'Sản Xuất — Content Board',
   khaoluan: 'Sản Xuất — Khảo Luận', nghiencuu: 'Sản Xuất — Nghiên Cứu',
   sysconfig: 'System Config', apikeys: 'API & Keys', registry: 'Tools Registry',
@@ -2070,14 +2087,14 @@ function renderEnvPreflight(envs) {
       </div>
       ${missCrit.length ? `
         <div style="margin:.6rem 1rem;padding:.6rem .8rem;border:1px solid var(--red);border-radius:var(--radius);background:color-mix(in srgb,var(--red) 8%,transparent)">
-          <div style="font-weight:700;color:var(--red);font-size:.8rem;margin-bottom:.3rem">
+          <div style="font-weight:700;color:var(--tx-red);font-size:.8rem;margin-bottom:.3rem">
             ⚠ ${missCrit.length} biến BẮT BUỘC đang thiếu — tính năng dưới đây KHÔNG chạy
           </div>
           ${missCrit.map(e => `<div style="font-size:.75rem;color:var(--text);margin:.15rem 0">
             <code>${escHtmlLocal(e.key)}</code> — ${escHtmlLocal(e.feature)}
           </div>`).join('')}
         </div>` : `
-        <div style="margin:.6rem 1rem;font-size:.78rem;color:var(--green);font-weight:600">
+        <div style="margin:.6rem 1rem;font-size:.78rem;color:var(--tx-green);font-weight:600">
           ✓ Đủ toàn bộ biến bắt buộc
         </div>`}
       ${missing.filter(e => !e.critical).length ? `
@@ -2138,7 +2155,7 @@ function renderSecurityAudit(a) {
           </div>`).join('')}
           ${g.hint ? `<div style="font-size:.7rem;color:var(--text-lt);margin-top:.35rem">${g.hint}</div>` : ''}
         </div>`).join('') : `
-        <div style="margin:.6rem 1rem;font-size:.78rem;color:var(--green);font-weight:600">
+        <div style="margin:.6rem 1rem;font-size:.78rem;color:var(--tx-green);font-weight:600">
           ✓ Không phát hiện dấu hiệu bất thường
         </div>`}
       <div style="padding:0 1rem .7rem;font-size:.7rem;color:var(--text-lt);line-height:1.6">
@@ -2163,14 +2180,14 @@ function renderReconcile(rows) {
       <div style="font-size:.76rem;font-weight:700;color:var(--text);margin-bottom:.45rem">
         💰 Đối soát trừ Lượng ↔ giao hàng (30 ngày)
         ${atRisk
-          ? `<span style="color:var(--red);font-weight:700"> — ${atRisk} Lượng đang treo</span>`
-          : `<span style="color:var(--green);font-weight:600"> — cân đối</span>`}
+          ? `<span style="color:var(--tx-red);font-weight:700"> — ${atRisk} Lượng đang treo</span>`
+          : `<span style="color:var(--tx-green);font-weight:600"> — cân đối</span>`}
       </div>
       ${rows.map(r => `
         <div style="font-size:.74rem;color:var(--text-lt);margin:.18rem 0">
           <b style="color:var(--text)">${escHtmlLocal(r.tool_id)}</b>:
           ${r.charges} lượt thu · ${r.delivered} giao
-          ${Number(r.undelivered) ? `· <span style="color:var(--red)">${r.undelivered} CHƯA GIAO (${r.credits_at_risk} Lượng)</span>` : ''}
+          ${Number(r.undelivered) ? `· <span style="color:var(--tx-red)">${r.undelivered} CHƯA GIAO (${r.credits_at_risk} Lượng)</span>` : ''}
           ${Number(r.refunded) ? `· ${r.refunded} đã hoàn` : ''}
         </div>`).join('')}
     </div>`;
@@ -2195,7 +2212,7 @@ function renderOpsAlerts(alerts) {
 
   host.innerHTML = `
     <div style="border:1px solid var(--red);border-radius:var(--radius);background:color-mix(in srgb,var(--red) 8%,transparent);padding:.7rem .9rem">
-      <div style="font-weight:700;color:var(--red);font-size:.82rem;margin-bottom:.4rem">
+      <div style="font-weight:700;color:var(--tx-red);font-size:.82rem;margin-bottom:.4rem">
         🚨 ${rows.length} cảnh báo vận hành (48h qua)
       </div>
       ${rows.map(a => `
@@ -2319,7 +2336,7 @@ async function loadCron() {
       <td><span class="badge ${SRC_BADGE[j.source]||'badge-grey'}">${j.source}</span></td>
       <td style="font-size:.74rem">${escHtmlLocal(j.schedule)}</td>
       <td style="font-size:.74rem;color:var(--text-lt)">${escHtmlLocal(j.sink)}</td>
-      <td style="font-size:.74rem">${r ? relTime(r.started_at) : '<span style="color:var(--red)">chưa có log</span>'}${r&&r.duration_ms!=null?` · ${fmtDur(r.duration_ms)}`:''}</td>
+      <td style="font-size:.74rem">${r ? relTime(r.started_at) : '<span style="color:var(--tx-red)">chưa có log</span>'}${r&&r.duration_ms!=null?` · ${fmtDur(r.duration_ms)}`:''}</td>
       <td>${r ? cronStatusBadge(r.status) : '<span class="badge badge-grey">—</span>'}</td>
       <td>${
         j.trigger
@@ -2389,7 +2406,7 @@ async function loadChannels() {
       <div><div class="stat-label">Web Push</div><div style="font-family:'Noto Serif',serif;font-size:1.3rem;color:var(--navy);font-weight:700">${(push.webSubscriptions || 0).toLocaleString()}</div><div class="stat-sub">subscription đang bật</div></div>
       <div><div class="stat-label">App / FCM</div><div style="font-family:'Noto Serif',serif;font-size:1.3rem;color:var(--navy);font-weight:700">${(push.nativeTokensEnabled || 0).toLocaleString()} / ${(push.nativeTokensTotal || 0).toLocaleString()}</div><div class="stat-sub">token đang bật / tổng</div></div>
     </div>
-    <div style="margin-top:.75rem;font-size:.72rem;color:var(--text-lt)">Job gửi push chạy tự động 07:00 hằng ngày (giờ VN) — xem lịch sử ở <a href="#" onclick="goTo('cron');return false" style="color:var(--blue)">Cron &amp; Jobs</a>.</div>`;
+    <div style="margin-top:.75rem;font-size:.72rem;color:var(--text-lt)">Job gửi push chạy tự động 07:00 hằng ngày (giờ VN) — xem lịch sử ở <a href="#" onclick="goTo('cron');return false" style="color:var(--tx-blue)">Cron &amp; Jobs</a>.</div>`;
 }
 
 async function sendBroadcast(btn) {
@@ -2803,7 +2820,7 @@ async function loadSysConfig() {
       <div class="form-group">
         <label class="form-label">Giá Lượng / lượt chat — DỰ PHÒNG (0 = miễn phí)</label>
         <input type="number" class="form-control" id="sc-cost" value="${jv(cfg['chat.cost'], 5)}" style="max-width:200px">
-        <div style="font-size:.72rem;color:var(--text-lt);margin-top:.4rem">Giá rail THẬT (web + Telegram/Messenger/WhatsApp) nằm ở tool <b>rail-message</b> trong <a href="#" onclick="goTo('registry');return false" style="color:var(--blue)">Tools Registry</a>. Ô này chỉ dùng khi đọc bảng đó hụt — giữ khớp để lúc lỗi không thu sai giá.</div>
+        <div style="font-size:.72rem;color:var(--text-lt);margin-top:.4rem">Giá rail THẬT (web + Telegram/Messenger/WhatsApp) nằm ở tool <b>rail-message</b> trong <a href="#" onclick="goTo('registry');return false" style="color:var(--tx-blue)">Tools Registry</a>. Ô này chỉ dùng khi đọc bảng đó hụt — giữ khớp để lúc lỗi không thu sai giá.</div>
       </div>
     </div>
     <div class="form-group">
@@ -2811,7 +2828,7 @@ async function loadSysConfig() {
       <textarea class="form-control mono" id="sc-routes" rows="2">${escHtmlLocal(jv(cfg['chat.provider_routes'], '{}'))}</textarea>
     </div>
     <button class="btn btn-gold btn-sm" onclick="saveSysConfig()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg> Lưu Cấu Hình Chat</button>
-    <div style="font-size:.72rem;color:var(--text-lt);margin-top:.6rem">Khuyến mãi/Referral sửa ở <a href="#" onclick="goTo('pricing');return false" style="color:var(--blue)">Gói Nạp &amp; Pricing</a>.</div>`;
+    <div style="font-size:.72rem;color:var(--text-lt);margin-top:.6rem">Khuyến mãi/Referral sửa ở <a href="#" onclick="goTo('pricing');return false" style="color:var(--tx-blue)">Gói Nạp &amp; Pricing</a>.</div>`;
 
   const known = new Set(SC_CHAT_KEYS.concat(SC_OTHER_KNOWN_KEYS));
   rawHost.innerHTML = rows.length ? `<table>
@@ -2835,7 +2852,7 @@ async function loadSysConfig() {
       <tbody>${errs.map((r) => `<tr>
           <td style="font-size:.74rem;white-space:nowrap">${new Date(r.started_at).toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh', hour: '2-digit', minute: '2-digit', day: '2-digit', month: '2-digit' })}</td>
           <td class="mono" style="font-size:.72rem">${escHtmlLocal(r.job_key)}</td>
-          <td style="font-size:.72rem;color:var(--red)">${escHtmlLocal(r.note || '—')}</td>
+          <td style="font-size:.72rem;color:var(--tx-red)">${escHtmlLocal(r.note || '—')}</td>
         </tr>`).join('')}</tbody>
     </table>` : '<div class="empty">Không có lỗi cron gần đây</div>';
   } catch (e) { errHost.innerHTML = `<div class="empty">Lỗi tải: ${e.message}</div>`; }
@@ -2942,7 +2959,7 @@ async function loadApiKeys() {
         <div style="display:flex;flex-wrap:wrap;gap:.5rem">
           ${g.items.map((it) => `<span class="badge ${it.configured ? 'badge-green' : 'badge-error'}" title="${escHtmlLocal(it.key)}">${it.configured ? '✓' : '✗'} ${escHtmlLocal(it.label)}</span>`).join('')}
         </div>
-      </div>`).join('') + '<div style="font-size:.72rem;color:var(--text-lt);margin-top:.6rem">Token 3 kênh chat (Telegram/Messenger/WhatsApp) xem ở <a href="#" onclick="goTo(\'channels\');return false" style="color:var(--blue)">Channels &amp; Push</a>. Chỉ hiện đã cấu hình hay chưa — KHÔNG bao giờ hiện giá trị thật.</div>';
+      </div>`).join('') + '<div style="font-size:.72rem;color:var(--text-lt);margin-top:.6rem">Token 3 kênh chat (Telegram/Messenger/WhatsApp) xem ở <a href="#" onclick="goTo(\'channels\');return false" style="color:var(--tx-blue)">Channels &amp; Push</a>. Chỉ hiện đã cấu hình hay chưa — KHÔNG bao giờ hiện giá trị thật.</div>';
   } catch (e) {
     envHost.innerHTML = `<div class="empty">Lỗi: ${e.message}</div>`;
   }
@@ -3388,7 +3405,7 @@ async function loadStatsAndRecent() {
       }).join('')}</tbody>
     </table>`;
   } catch(e) {
-    document.getElementById('stats-grid').innerHTML = `<div style="padding:1rem;color:var(--red);font-size:.8rem">Lỗi: ${e.message}</div>`;
+    document.getElementById('stats-grid').innerHTML = `<div style="padding:1rem;color:var(--tx-red);font-size:.8rem">Lỗi: ${e.message}</div>`;
     document.getElementById('dash-recent-users').innerHTML = `<div class="empty">Lỗi: ${e.message}</div>`;
   }
 }
@@ -4275,7 +4292,7 @@ function renderMediaQueue(posts, orphanChannels, cfg) {
   const host = document.getElementById('mq-list');
   if (!host) return;
   let warn = (orphanChannels && orphanChannels.length)
-    ? `<div class="empty" style="color:var(--red);margin-bottom:.75rem">⚠️ Kênh <b>${escHtmlLocal(orphanChannels.join(', '))}</b> có trong <code>social.channels</code> nhưng CHƯA có adapter đăng — bài của kênh đó sẽ báo lỗi chứ không lên được.</div>`
+    ? `<div class="empty" style="color:var(--tx-red);margin-bottom:.75rem">⚠️ Kênh <b>${escHtmlLocal(orphanChannels.join(', '))}</b> có trong <code>social.channels</code> nhưng CHƯA có adapter đăng — bài của kênh đó sẽ báo lỗi chứ không lên được.</div>`
     : '';
   // Trần đăng tính theo DÒNG (mỗi kênh một dòng), còn trần dựng tính theo BÀI.
   // Bật thêm kênh mà quên nới `publish_daily` là hàng đợi phình lên mỗi ngày
@@ -4284,7 +4301,7 @@ function renderMediaQueue(posts, orphanChannels, cfg) {
   const need = (Number(cfg && cfg.buildDaily) || 0) * nCh;
   const pub = Number(cfg && cfg.publishDaily) || 0;
   if (nCh > 1 && pub && need > pub) {
-    warn += `<div class="empty" style="color:var(--red);margin-bottom:.75rem">⚠️ <code>social.publish_daily=${pub}</code> nhưng mỗi ngày dựng <b>${cfg.buildDaily} bài × ${nCh} kênh = ${need} lượt đăng</b> — hàng đợi sẽ dồn lại. Nâng lên ${need}: <code>update app_config set value='${need}'::jsonb where key='social.publish_daily';</code></div>`;
+    warn += `<div class="empty" style="color:var(--tx-red);margin-bottom:.75rem">⚠️ <code>social.publish_daily=${pub}</code> nhưng mỗi ngày dựng <b>${cfg.buildDaily} bài × ${nCh} kênh = ${need} lượt đăng</b> — hàng đợi sẽ dồn lại. Nâng lên ${need}: <code>update app_config set value='${need}'::jsonb where key='social.publish_daily';</code></div>`;
   }
   if (!posts.length) {
     host.innerHTML = warn + '<div class="empty">Chưa có bài nào. Cron <code>media-build</code> chạy 09:30 mỗi sáng: dựng bài rồi đăng luôn.</div>';
@@ -4319,7 +4336,7 @@ function renderMediaQueue(posts, orphanChannels, cfg) {
           <button class="btn btn-outline btn-sm" onclick="mediaDecide('${p.id}','skip')">Bỏ hẳn</button>
         </div>` : ''}
         ${p.external_url ? `<a href="${escHtmlLocal(p.external_url)}" target="_blank" rel="noopener" style="font-size:.7rem;display:inline-block;margin-top:.35rem">Xem bài đã đăng →</a>` : ''}
-        ${p.error ? `<div style="font-size:.7rem;color:var(--red);margin-top:.35rem">${escHtmlLocal(p.error)}</div>` : ''}
+        ${p.error ? `<div style="font-size:.7rem;color:var(--tx-red);margin-top:.35rem">${escHtmlLocal(p.error)}</div>` : ''}
       </div>
     </div>`;
   }).join('');
@@ -4629,14 +4646,136 @@ async function loadBacklinks() {
     const lBadge = document.getElementById('bl-l-badge');
     if (lBadge) { lBadge.className = 'badge ' + (links.length ? 'badge-green' : 'badge-grey'); lBadge.textContent = links.length ? alive + ' sống / ' + links.length + ' tổng' : 'Chưa theo dõi link nào'; }
 
+    const accounts = d.accounts || [];
+    const gaDone = accounts.filter((a) => a.status === 'verified' || a.status === 'registered').length;
+    const gaBadge = document.getElementById('ga-badge');
+    if (gaBadge) { gaBadge.className = 'badge ' + (gaDone ? 'badge-green' : 'badge-grey'); gaBadge.textContent = accounts.length ? gaDone + ' đã có / ' + accounts.length + ' nền tảng' : 'Sổ trống — bấm Nạp sổ'; }
+
     renderBlProspects(_blProspects);
     renderBlContent(content);
     renderBlLinks(links);
+    renderGaAccounts(accounts);
   } catch (e) {
-    ['bl-prospects', 'bl-content', 'bl-links'].forEach((id) => {
+    ['bl-prospects', 'bl-content', 'bl-links', 'ga-list'].forEach((id) => {
       const el = document.getElementById(id);
       if (el) el.innerHTML = `<div class="empty">Lỗi: ${escHtmlLocal(e.message)}</div>`;
     });
+  }
+}
+
+// ── Tài Khoản & Entity ───────────────────────────────────────────────────────
+// Sổ tài khoản CỦA MÌNH trên các nền tảng. Nguồn duy nhất sinh JSON-LD sameAs
+// (lib/seo/same-as.ts) — nên cột "sameAs" ở đây là công tắc thật, không phải ghi chú.
+const GA_CAT = {
+  entity:    ['Entity — neo thực thể', 'Google Knowledge Graph đọc trực tiếp'],
+  social:    ['Mạng xã hội', 'hồ sơ định danh + kênh phân phối'],
+  web2:      ['Tự xuất bản', 'Medium/Blogger/Dev.to — vừa backlink vừa phân phối'],
+  community: ['Cộng đồng', 'nơi có sẵn người — KHÔNG tự đăng, trả lời tay'],
+  registry:  ['Danh bạ sản phẩm/API/MCP', 'vùng gần như không cạnh tranh'],
+};
+const GA_STATUS = {
+  todo:       ['badge-grey',  'Chưa làm'],
+  registered: ['badge-blue',  'Đã đăng ký'],
+  verified:   ['badge-green', 'Đã xác minh'],
+  rejected:   ['badge-red',   'Bị từ chối'],
+  skip:       ['badge-grey',  'Bỏ qua'],
+};
+let _gaAccounts = [];
+
+function renderGaAccounts(accounts) {
+  const host = document.getElementById('ga-list');
+  if (!host) return;
+  _gaAccounts = accounts || [];
+  if (!_gaAccounts.length) {
+    host.innerHTML = '<div class="empty">Sổ trống. Bấm <b>🔄 Nạp sổ + kiểm hồ sơ</b> để nạp danh sách nền tảng vào đây.</div>';
+    return;
+  }
+
+  let html = '';
+  for (const cat of Object.keys(GA_CAT)) {
+    const rows = _gaAccounts.filter((a) => a.category === cat);
+    if (!rows.length) continue;
+    const done = rows.filter((a) => a.status === 'verified' || a.status === 'registered').length;
+    html += `<div style="margin:.9rem 0 .35rem;font-size:.78rem;font-weight:600">${escHtmlLocal(GA_CAT[cat][0])}
+      <span style="font-weight:400;color:var(--text-lt)">— ${escHtmlLocal(GA_CAT[cat][1])} · ${done}/${rows.length}</span></div>`;
+    html += '<div class="table-wrap"><table><thead><tr>' +
+      '<th>Nền tảng</th><th>Trạng thái</th><th>Ưu tiên</th><th>sameAs</th><th>Hồ sơ</th><th>Sống</th><th>Tự động</th><th></th>' +
+      '</tr></thead><tbody>';
+    for (const a of rows) {
+      const st = GA_STATUS[a.status] || GA_STATUS.todo;
+      const prio = '★'.repeat(a.priority || 1);
+      const link = a.url
+        ? `<a href="${escHtmlLocal(a.url)}" target="_blank" rel="noopener nofollow">mở ↗</a>`
+        : (a.submit_url ? `<a href="${escHtmlLocal(a.submit_url)}" target="_blank" rel="noopener nofollow" style="color:var(--text-lt)">đăng ký ↗</a>` : '—');
+      let alive = '—';
+      if (a.last_ok === true) alive = '<span class="badge badge-green">OK</span>';
+      else if (a.last_ok === false) alive = `<span class="badge badge-red" title="${escHtmlLocal(a.check_note || '')}">chết</span>`;
+      const note = escHtmlLocal(a.automation || '');
+      html += `<tr>
+        <td><b>${escHtmlLocal(a.label)}</b>${a.notes ? `<div style="font-size:.7rem;color:var(--text-lt);max-width:340px">${escHtmlLocal(a.notes)}</div>` : ''}</td>
+        <td><span class="badge ${st[0]}">${escHtmlLocal(st[1])}</span></td>
+        <td style="color:var(--gold-soft)">${prio}</td>
+        <td>${a.same_as ? '✓' : ''}</td>
+        <td>${link}</td>
+        <td>${alive}</td>
+        <td style="font-size:.7rem;color:var(--text-lt);max-width:280px">${note}</td>
+        <td><button class="btn btn-outline btn-sm" onclick="gaEdit('${a.id}')">Sửa</button></td>
+      </tr>`;
+    }
+    html += '</tbody></table></div>';
+  }
+  host.innerHTML = html + '<div id="ga-form"></div>';
+}
+
+function gaEdit(id) {
+  const a = _gaAccounts.find((x) => x.id === id);
+  const host = document.getElementById('ga-form');
+  if (!a || !host) return;
+  const opt = (v, label) => `<option value="${v}" ${a.status === v ? 'selected' : ''}>${label}</option>`;
+  host.innerHTML = `
+    <div style="border:1px solid var(--border);border-radius:8px;padding:.75rem;margin-top:.9rem">
+      <div style="font-size:.78rem;font-weight:600;margin-bottom:.5rem">Sửa: ${escHtmlLocal(a.label)}</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:.5rem">
+        <select id="ga-f-status" style="padding:.45rem;border:1px solid var(--border);border-radius:6px;background:var(--bg);color:var(--text);font-size:.78rem">
+          ${opt('todo', 'Chưa làm')}${opt('registered', 'Đã đăng ký')}${opt('verified', 'Đã xác minh')}${opt('rejected', 'Bị từ chối')}${opt('skip', 'Bỏ qua')}
+        </select>
+        <input id="ga-f-url" value="${escHtmlLocal(a.url || '')}" placeholder="URL hồ sơ https://..." style="padding:.45rem;border:1px solid var(--border);border-radius:6px;background:var(--bg);color:var(--text);font-size:.78rem">
+        <input id="ga-f-handle" value="${escHtmlLocal(a.handle || '')}" placeholder="Tên tài khoản (tuỳ chọn)" style="padding:.45rem;border:1px solid var(--border);border-radius:6px;background:var(--bg);color:var(--text);font-size:.78rem">
+        <select id="ga-f-prio" style="padding:.45rem;border:1px solid var(--border);border-radius:6px;background:var(--bg);color:var(--text);font-size:.78rem">
+          <option value="3" ${a.priority === 3 ? 'selected' : ''}>★★★ cao</option>
+          <option value="2" ${a.priority === 2 ? 'selected' : ''}>★★ vừa</option>
+          <option value="1" ${a.priority === 1 ? 'selected' : ''}>★ thấp</option>
+        </select>
+      </div>
+      <label style="display:flex;align-items:center;gap:.4rem;font-size:.76rem;margin-top:.5rem">
+        <input type="checkbox" id="ga-f-sameas" ${a.same_as ? 'checked' : ''}> Đưa vào <code>sameAs</code> của JSON-LD (chỉ ăn khi đã có URL và trạng thái Đã đăng ký/Đã xác minh)
+      </label>
+      <textarea id="ga-f-notes" rows="2" placeholder="Ghi chú" style="width:100%;margin-top:.5rem;padding:.45rem;border:1px solid var(--border);border-radius:6px;background:var(--bg);color:var(--text);font-size:.78rem">${escHtmlLocal(a.notes || '')}</textarea>
+      <div style="display:flex;gap:.4rem;margin-top:.5rem">
+        <button class="btn btn-primary btn-sm" onclick="gaSave('${a.id}')">Lưu</button>
+        <button class="btn btn-outline btn-sm" onclick="document.getElementById('ga-form').innerHTML=''">Huỷ</button>
+      </div>
+    </div>`;
+  host.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+async function gaSave(id) {
+  try {
+    const d = await apiPost('admin-growth-account', {
+      op: 'save',
+      id,
+      status: document.getElementById('ga-f-status').value,
+      url: document.getElementById('ga-f-url').value.trim(),
+      handle: document.getElementById('ga-f-handle').value.trim(),
+      priority: Number(document.getElementById('ga-f-prio').value),
+      sameAs: document.getElementById('ga-f-sameas').checked,
+      notes: document.getElementById('ga-f-notes').value.trim(),
+    });
+    if (d.error) throw new Error(d.error);
+    toast('Đã lưu');
+    loadBacklinks();
+  } catch (e) {
+    toast('Lỗi: ' + e.message, true);
   }
 }
 
@@ -5036,7 +5175,7 @@ function renderMktFunnel(f, tq) {
   // Chỉ số phụ (không nằm thẳng trên trục funnel).
   const secondary = `<div style="display:flex;gap:1rem;margin-top:1rem;padding-top:1rem;border-top:1px solid var(--border-lt)">
     <div><div class="stat-label">Ý định nạp</div><div style="font-family:'Noto Serif',serif;font-size:1.2rem;color:var(--gold)">${(f.topup_intent||0).toLocaleString()}</div></div>
-    <div><div class="stat-label">Quay lại (≥2 ngày)</div><div style="font-family:'Noto Serif',serif;font-size:1.2rem;color:var(--green)">${(f.returned||0).toLocaleString()}</div></div>
+    <div><div class="stat-label">Quay lại (≥2 ngày)</div><div style="font-family:'Noto Serif',serif;font-size:1.2rem;color:var(--tx-green)">${(f.returned||0).toLocaleString()}</div></div>
   </div>`;
   const overall = (f.visitors > 0) ? ((f.paid || 0) / f.visitors * 100).toFixed(2) + '%' : '—';
   document.getElementById('mkt-funnel').innerHTML = rows + secondary +
@@ -5080,7 +5219,7 @@ function renderTrafficQuality(tq, paid) {
       ${seg(eng, 'var(--green)', 'Tương tác thật')}${seg(brow, 'var(--blue)', 'Xem vài trang')}${seg(drive, 'var(--text-lt)', 'Ghé 1 lượt rồi đi')}${seg(bot, 'var(--red)', 'Máy (UA tự khai + đội máy nhận qua hành vi)')}
     </div>
     <div style="margin-top:.45rem;font-size:.7rem;color:var(--text-lt);line-height:1.55">
-      <strong style="color:var(--green)">${eng.toLocaleString()}</strong> tương tác thật
+      <strong style="color:var(--tx-green)">${eng.toLocaleString()}</strong> tương tác thật
       · <strong style="color:var(--text-mid)">${brow.toLocaleString()}</strong> xem vài trang
       · <strong style="color:var(--text-mid)">${drive.toLocaleString()}</strong> ghé 1 lượt rồi đi
       · <strong style="color:var(--text-mid)">${bot.toLocaleString()}</strong> máy${(tq.fleet_bot || 0) > 0 ? ` <span style="opacity:.75">(${(tq.known_bot || 0).toLocaleString()} tự khai + ${(tq.fleet_bot || 0).toLocaleString()} đội máy)</span>` : ''}${botNote}
@@ -5102,9 +5241,9 @@ function renderMktSources(rows) {
         <td><strong>${SRC_LABEL[r.source] || r.source}</strong></td>
         <td style="text-align:right">${(r.signups||0).toLocaleString()}</td>
         <td style="text-align:right">${(r.paid||0).toLocaleString()}</td>
-        <td style="text-align:right;color:var(--blue);font-weight:700">${conv}</td>
+        <td style="text-align:right;color:var(--tx-blue);font-weight:700">${conv}</td>
         <td style="text-align:right;color:var(--gold);font-weight:700">⊙ ${(r.revenue_credits||0).toLocaleString()}</td>
-        <td style="text-align:right;color:var(--green)">${mktVnd(r.revenue_credits)}</td>
+        <td style="text-align:right;color:var(--tx-green)">${mktVnd(r.revenue_credits)}</td>
         <td style="text-align:right;color:var(--navy);font-weight:700" title="Doanh thu / số đăng ký">${mktVnd(ltv)}</td>
       </tr>`;
     }).join('')}</tbody>
@@ -5152,8 +5291,8 @@ function renderMktCampaigns(rows) {
         <td style="color:var(--text-lt)">${r.source}</td>
         <td style="text-align:right">${(r.signups||0).toLocaleString()}</td>
         <td style="text-align:right">${(r.paid||0).toLocaleString()}</td>
-        <td style="text-align:right;color:var(--blue);font-weight:700">${conv}</td>
-        <td style="text-align:right;color:var(--green)">${mktVnd(r.revenue_credits)}</td>
+        <td style="text-align:right;color:var(--tx-blue);font-weight:700">${conv}</td>
+        <td style="text-align:right;color:var(--tx-green)">${mktVnd(r.revenue_credits)}</td>
       </tr>`;
     }).join('')}</tbody>
   </table>`;
@@ -5261,7 +5400,7 @@ function renderMktRevenue(r) {
   const rate = r.vnd_per_credit || 0;
   host.innerHTML = `
     <div style="display:flex;gap:1.5rem;align-items:baseline;margin-bottom:1rem;flex-wrap:wrap">
-      <div><div class="stat-label">Tổng doanh thu</div><div style="font-family:'Noto Serif',serif;font-size:1.9rem;color:var(--green);font-weight:700;line-height:1">${fmtVndFull(total)}</div></div>
+      <div><div class="stat-label">Tổng doanh thu</div><div style="font-family:'Noto Serif',serif;font-size:1.9rem;color:var(--tx-green);font-weight:700;line-height:1">${fmtVndFull(total)}</div></div>
       <div><div class="stat-label">Tiền thật đã đối chiếu</div><div style="font-family:'Noto Serif',serif;font-size:1.2rem;color:var(--navy);font-weight:700">${fmtVndFull(real)}</div></div>
       ${estN ? `<div><div class="stat-label">Ước lượng · ${estN} giao dịch</div><div style="font-family:'Noto Serif',serif;font-size:1.2rem;color:var(--text-lt);font-weight:700">${fmtVndFull(est)}</div></div>` : ''}
     </div>
@@ -5917,7 +6056,7 @@ async function init() {
     document.getElementById('stat-published').textContent = stats.published ?? 0;
     document.getElementById('stat-yt').textContent = stats.yt_live ?? 0;
     const dbStatusOk = document.getElementById('db-status');
-    if (dbStatusOk) dbStatusOk.innerHTML = '<span class="dot-status" style="color:var(--green)"></span>Đã kết nối DB';
+    if (dbStatusOk) dbStatusOk.innerHTML = '<span class="dot-status" style="color:var(--tx-green)"></span>Đã kết nối DB';
 
     allItems = await getItems();
     renderRecentTable(allItems.slice(0, 10));
@@ -5926,7 +6065,7 @@ async function init() {
     renderYTQueue();
   } catch (e) {
     const dbStatusEl = document.getElementById('db-status');
-    if (dbStatusEl) dbStatusEl.innerHTML = '<span class="dot-status" style="color:var(--red)"></span>Lỗi kết nối DB';
+    if (dbStatusEl) dbStatusEl.innerHTML = '<span class="dot-status" style="color:var(--tx-red)"></span>Lỗi kết nối DB';
     console.error(e);
     // Show sample data if DB not ready yet
     renderRecentTable([]);
@@ -6402,7 +6541,7 @@ function updateTTSTab(item) {
 
   } else if (item.tts_status === 'error') {
     progressEl.style.display = 'none';
-    previewArea.innerHTML = `<div style="color:var(--red);font-size:13px;padding:12px">Lỗi TTS: ${escHtml(item.tts_error || 'unknown')}</div>`;
+    previewArea.innerHTML = `<div style="color:var(--tx-red);font-size:13px;padding:12px">Lỗi TTS: ${escHtml(item.tts_error || 'unknown')}</div>`;
   }
 }
 
@@ -6634,7 +6773,7 @@ async function uploadToYT(id) {
     const data = await resp.json();
     if (data.success) {
       toast('Đã upload YouTube! ' + data.url, 'success');
-      if (statusEl) statusEl.innerHTML = 'Live: <a href="' + data.url + '" target="_blank" style="color:var(--blue)">' + data.url + '</a>';
+      if (statusEl) statusEl.innerHTML = 'Live: <a href="' + data.url + '" target="_blank" style="color:var(--tx-blue)">' + data.url + '</a>';
       // Refresh list
       allItems = await getItems();
       renderRecentTable(allItems.slice(0, 10));
