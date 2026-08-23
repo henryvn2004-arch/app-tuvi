@@ -1573,6 +1573,14 @@
         </div>
 
         <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title"><svg class="pt-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6h13"/><path d="M8 12h13"/><path d="M8 18h13"/><path d="M3 6h.01"/><path d="M3 12h.01"/><path d="M3 18h.01"/></svg>Hàng Đợi Chủ Đề (giám sát)</div>
+            <span style="font-size:.72rem;color:var(--text-lt)">Gồm cả chủ đề Gemini tự sinh lẫn chủ đề thêm tay ở trên</span>
+          </div>
+          <div class="table-wrap" id="kl-queue"><div class="loading"><span class="spin"></span>Đang tải...</div></div>
+        </div>
+
+        <div class="panel">
           <div class="panel-header"><div class="panel-title"><svg class="pt-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>Bài Gần Đây</div></div>
           <div class="table-wrap" id="kl-recent"><div class="loading"><span class="spin"></span>Đang tải...</div></div>
         </div>
@@ -1620,6 +1628,14 @@
               <button class="btn btn-gold btn-sm" onclick="submitNcTopics(this)">Thêm Vào Hàng Đợi →</button>
             </div>
           </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title"><svg class="pt-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6h13"/><path d="M8 12h13"/><path d="M8 18h13"/><path d="M3 6h.01"/><path d="M3 12h.01"/><path d="M3 18h.01"/></svg>Hàng Đợi Chủ Đề (giám sát)</div>
+            <span style="font-size:.72rem;color:var(--text-lt)">Gồm cả chủ đề Gemini tự sinh lẫn chủ đề thêm tay ở trên</span>
+          </div>
+          <div class="table-wrap" id="nc-queue"><div class="loading"><span class="spin"></span>Đang tải...</div></div>
         </div>
 
         <div class="panel">
@@ -3077,6 +3093,8 @@ async function loadKhaoLuan() {
         <td style="font-size:.74rem;color:var(--text-lt);white-space:nowrap">${relTime(r.created_at)}</td>
       </tr>`).join('')}</tbody>
   </table>` : '<div class="empty">Chưa có bài</div>';
+
+  loadTopicQueue('khao-luan');
 }
 
 async function submitKlTopics(btn) {
@@ -3138,6 +3156,8 @@ async function loadNghienCuu() {
         <td style="font-size:.74rem;color:var(--text-lt);white-space:nowrap">${relTime(r.created_at)}</td>
       </tr>`).join('')}</tbody>
   </table>` : '<div class="empty">Chưa có bài</div>';
+
+  loadTopicQueue('nghien-cuu');
 }
 
 async function submitNcTopics(btn) {
@@ -3156,6 +3176,62 @@ async function submitNcTopics(btn) {
     } else { toast('Lỗi: ' + (res.error || 'không rõ'), 'error'); }
   } catch (e) { toast('Lỗi: ' + e.message, 'error'); }
   btn.disabled = false; btn.innerHTML = old;
+}
+
+// ── HÀNG ĐỢI CHỦ ĐỀ (giám sát topic_queue: list + xoá) ──
+// Dùng CHUNG cho cả 2 bề mặt (khao-luan/nghien-cuu) — gộp chủ đề Gemini tự
+// sinh (có bằng chứng nhu cầu, xem lib/content/topic-topup.ts) lẫn chủ đề
+// admin gõ tay ở panel phía trên, vì `topic_queue` không tách nguồn ở cột nào.
+let _tqRows = { 'khao-luan': [], 'nghien-cuu': [] };
+
+function topicQueueStatusBadge(s) {
+  const map = { pending: 'badge-pending', processing: 'badge-processing', error: 'badge-red' };
+  const lbl = { pending: 'Chờ viết', processing: 'Đang viết', error: 'Lỗi' };
+  return `<span class="badge ${map[s] || 'badge-grey'}">${lbl[s] || s || '—'}</span>`;
+}
+
+async function loadTopicQueue(surface) {
+  const host = document.getElementById(surface === 'nghien-cuu' ? 'nc-queue' : 'kl-queue');
+  if (!host) return;
+  host.innerHTML = `<div class="loading"><span class="spin"></span>Đang tải...</div>`;
+  let data;
+  try { data = await apiGet('admin-topic-queue', `&surface=${surface}`); }
+  catch (e) { host.innerHTML = `<div class="empty">Lỗi: ${e.message}</div>`; return; }
+  if (data && data.error) { host.innerHTML = `<div class="empty">Lỗi: ${data.error}</div>`; return; }
+
+  const rows = data.rows || [];
+  _tqRows[surface] = rows;
+  // `type` chỉ đáng hiện khi nó KHÁC loại mặc định của bề mặt (vd nhánh
+  // khao-luan-tamly lẫn vào cùng danh sách khao-luan) — bằng mặc định thì im
+  // lặng, tránh nhắc lại điều đã rõ từ chính trang đang đứng.
+  const defaultType = surface === 'nghien-cuu' ? 'master-article' : 'khao-luan';
+  host.innerHTML = rows.length ? `<table>
+    <thead><tr><th>Chủ Đề</th><th>Ưu Tiên</th><th>Trạng Thái</th><th>Thời Điểm</th><th></th></tr></thead>
+    <tbody>${rows.map(r => {
+      const sub = [r.type && r.type !== defaultType ? r.type : '', r.master_id, r.article_type].filter(Boolean).join(' · ');
+      return `<tr>
+        <td>${escHtmlLocal(r.topic)}${sub ? `<div class="td-sub">${escHtmlLocal(sub)}</div>` : ''}</td>
+        <td style="text-align:center;font-size:.74rem">${r.priority ?? '—'}</td>
+        <td>${topicQueueStatusBadge(r.status)}</td>
+        <td style="font-size:.74rem;color:var(--text-lt);white-space:nowrap">${relTime(r.created_at)}</td>
+        <td><button class="btn btn-ghost btn-sm" style="color:var(--red)" onclick="deleteTopicQueueRow(${r.id},'${surface}')">Xoá</button></td>
+      </tr>`;
+    }).join('')}</tbody>
+  </table>` : '<div class="empty">Hàng đợi rỗng</div>';
+}
+
+async function deleteTopicQueueRow(id, surface) {
+  const row = (_tqRows[surface] || []).find(r => r.id === id);
+  if (!confirm('Xoá chủ đề "' + (row ? row.topic : id) + '" khỏi hàng đợi?')) return;
+  try {
+    const res = await apiPost('admin-topic-queue-delete', { id });
+    if (res && !res.error) {
+      toast('Đã xoá', 'success');
+      // Gọi lại loader của TRANG (không chỉ loadTopicQueue) để thẻ stat
+      // "Đang Chờ Viết"/"Lỗi" cũng cập nhật theo — chúng đọc từ cùng bảng.
+      if (surface === 'nghien-cuu') loadNghienCuu(); else loadKhaoLuan();
+    } else { toast('Lỗi: ' + (res.error || 'không rõ'), 'error'); }
+  } catch (e) { toast('Lỗi: ' + e.message, 'error'); }
 }
 
 // ── SUPABASE HELPERS ──
