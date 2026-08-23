@@ -2,6 +2,7 @@
 // Category hub pages: /phong-thuy, /xem-tuong, /chon-ngay, /lam-dep, /dat-ten, /kien-thuc-tuvi
 export const maxDuration = 15;
 import { NextRequest, NextResponse } from 'next/server';
+import { ORG_ID } from '@/lib/seo/entity';
 
 const SUPABASE_URL = process.env.SUPABASE_URL!;
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY!;
@@ -138,7 +139,7 @@ function buildHub(cat: string, meta: typeof CAT_META[string], pages: any[], pagi
     name: meta.title,
     description: meta.desc,
     url,
-    publisher: { '@type': 'Organization', name: 'Tử Vi Minh Bảo', url: BASE_URL },
+    publisher: { '@type': 'Organization', '@id': ORG_ID, name: 'Tử Vi Minh Bảo', url: BASE_URL },
   });
 
   return `<!DOCTYPE html><html lang="vi"><head>

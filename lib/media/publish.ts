@@ -137,7 +137,7 @@ interface AdapterOut {
  */
 interface CaptionStyle {
   maxLen: number;
-  linkStyle: 'full' | 'bare';
+  linkStyle: 'full' | 'bare' | 'none';
 }
 
 const CAPTION_STYLE: Record<string, CaptionStyle> = {
@@ -147,6 +147,10 @@ const CAPTION_STYLE: Record<string, CaptionStyle> = {
   telegram: { maxLen: 1024, linkStyle: 'full' }, // trần caption của sendPhoto
   // TikTok không có link bấm được trong caption ⇒ dạng trần để người xem gõ lại.
   tiktok: { maxLen: 2200, linkStyle: 'bare' },
+  // 🔑 Pinterest là kênh DUY NHẤT có TRƯỜNG LINK RIÊNG, bấm được. Nên chữ mô tả
+  // KHÔNG nhồi URL vào nữa — dán link vào cả hai chỗ vừa thừa vừa làm mô tả bớt
+  // chỗ cho từ khoá, mà từ khoá mới là thứ Pinterest đem đi tìm kiếm.
+  pinterest: { maxLen: 800, linkStyle: 'none' },
 };
 
 /** Bỏ query UTM, giữ host + đường dẫn — dạng người ta gõ lại được bằng tay. */
@@ -170,7 +174,7 @@ function bareLink(url: string): string {
 function composeCaption(row: QueueRow, channel: string): string {
   const style = CAPTION_STYLE[channel] || { maxLen: 2000, linkStyle: 'full' as const };
   const rawLink = (row.link_url || '').trim();
-  const link = style.linkStyle === 'bare' ? bareLink(rawLink) : rawLink;
+  const link = style.linkStyle === 'none' ? '' : style.linkStyle === 'bare' ? bareLink(rawLink) : rawLink;
   const tags = (row.hashtags || []).filter(Boolean).map((h) => '#' + String(h).replace(/^#/, ''));
 
   const tail = [link, tags.join(' ')].filter(Boolean).join('\n\n');
@@ -598,12 +602,83 @@ async function publishTiktok(row: QueueRow): Promise<AdapterOut> {
   }
 }
 
+const PIN_BASE = 'https://api.pinterest.com/v5';
+const PIN_TOKEN = process.env.PINTEREST_ACCESS_TOKEN || '';
+const PIN_BOARD_ID = process.env.PINTEREST_BOARD_ID || '';
+
+/**
+ * Pinterest — mục #12/14. Đây KHÔNG phải "thêm một mạng xã hội nữa".
+ *
+ * 🔑 Vì sao nó đáng có mặt trong track backlink còn Facebook/TikTok thì không:
+ * pin có một TRƯỜNG LINK RIÊNG, bấm được, đứng ngoài phần chữ. Bốn kênh kia
+ * chỉ có caption — nơi link hoặc không bấm được (Instagram, TikTok) hoặc bị
+ * nền tảng dìm. Cộng thêm: Pinterest hành xử như một CÔNG CỤ TÌM KIẾM, pin
+ * sống nhiều tháng thay vì trôi trong vài giờ như một bài feed.
+ *
+ * ⇒ Hệ quả thiết kế: `link` là ĐIỀU KIỆN, không phải tuỳ chọn. Không có link
+ * thì pin đó không mang lại gì mà vẫn tốn một lượt đăng ⇒ từ chối thẳng.
+ *
+ * 🔴 CHƯA GỌI ĐƯỢC API THẬT LƯỢT NÀO — container phiên này chặn egress tới
+ * `api.pinterest.com` (`403 CONNECT` = proxy từ chối, CHƯA chạm tới server
+ * Pinterest; phân biệt với 400/401/404 là đã tới nơi). Nên tên trường trong
+ * phản hồi thật chưa chứng minh được, y hệt tình trạng đã ghi cho TikTok.
+ * Ghi rõ ở đây thay vì để người sau tưởng đã kiểm.
+ *
+ * ⚠️ Ảnh THÔI. Pinterest v5 có đăng video nhưng đi đường khác hẳn (upload
+ * nhiều phần, không phải đưa URL) — nhận bừa video rồi gửi vào `image_url` là
+ * hỏng im lặng. Từ chối kèm lý do đọc ra được.
+ */
+async function publishPinterest(row: QueueRow): Promise<AdapterOut> {
+  if (!PIN_TOKEN || !PIN_BOARD_ID) return { error: 'Thiếu env PINTEREST_ACCESS_TOKEN / PINTEREST_BOARD_ID' };
+  const imageUrl = row.media_assets?.url || '';
+  if (!imageUrl) return { error: 'Asset không có URL' };
+  if (isVideoAsset(imageUrl)) return { error: 'Pinterest (đường này) chỉ nhận ảnh, asset này là video' };
+
+  const link = (row.link_url || '').trim();
+  if (!link) return { error: 'Pin không có link đích — bỏ qua, vì link CHÍNH LÀ lý do đăng Pinterest' };
+
+  // Tiêu đề pin: Pinterest cắt ~100 ký tự và đây là thứ đi vào tìm kiếm, nên
+  // lấy câu ĐẦU của caption chứ không cắt cụt giữa chừng một đoạn dài.
+  const capt = composeCaption(row, 'pinterest');
+  const firstLine = capt.split('\n').find((l) => l.trim()) || 'Tử Vi Minh Bảo';
+  const title = firstLine.length > 100 ? firstLine.slice(0, 99).trimEnd() + '…' : firstLine;
+
+  try {
+    const res = await fetch(`${PIN_BASE}/pins`, {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${PIN_TOKEN}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        board_id: PIN_BOARD_ID,
+        title,
+        description: capt,
+        link,
+        media_source: { source_type: 'image_url', url: imageUrl },
+      }),
+    }).catch(() => null);
+
+    if (!res) return { error: 'Không gọi được Pinterest API' };
+    const body = (await res.json().catch(() => ({}))) as Record<string, unknown>;
+    if (!res.ok) {
+      const msg = String((body as { message?: string }).message || '') || `HTTP ${res.status}`;
+      // 401 là CỬA của kênh (token hết hạn/sai) chứ không phải lỗi của bài —
+      // gắn tiền tố dùng chung để `isBlocking` dừng cả kênh thay vì đốt từng bài.
+      return { error: res.status === 401 ? `cửa chưa mở — Pinterest: ${msg}` : msg };
+    }
+    const id = String((body as { id?: string }).id || '');
+    if (!id) return { error: 'Pinterest không trả pin id' };
+    return { externalId: id, externalUrl: `https://www.pinterest.com/pin/${id}/` };
+  } catch (e) {
+    return { error: (e as Error).message };
+  }
+}
+
 const ADAPTERS: Record<string, (row: QueueRow) => Promise<AdapterOut>> = {
   facebook: publishFacebook,
   instagram: publishInstagram,
   threads: publishThreads,
   telegram: publishTelegram,
   tiktok: publishTiktok,
+  pinterest: publishPinterest,
 };
 
 /** Kênh đã có adapter thật — dùng để cảnh báo cấu hình trỏ vào chỗ chưa có. */
@@ -871,4 +946,11 @@ const CHANNEL_SETUP: Record<string, string> = {
     'bucket `clips` đã verify sở hữu trong Developer Portal (URL properties); (3) token — đặt ' +
     'TIKTOK_CLIENT_KEY + TIKTOK_CLIENT_SECRET + TIKTOK_REFRESH_TOKEN trên Vercel, xem ' +
     'docs/TIKTOK-TOKEN.md.',
+  pinterest:
+    'cần (1) tài khoản Pinterest **Business** (đổi từ tài khoản thường được, miễn phí) và một ' +
+    'BOARD để ghim vào; (2) app tại developers.pinterest.com — app mới ở Trial access, đủ để ' +
+    'đăng lên board của CHÍNH mình, muốn hơn thì phải xin Standard access; (3) token OAuth có ' +
+    'scope `boards:read` + `pins:write`. Đặt PINTEREST_ACCESS_TOKEN + PINTEREST_BOARD_ID trên ' +
+    'Vercel rồi Redeploy. ⚠️ Token Pinterest có HẠN (access token ~30 ngày, refresh token ~1 năm) ' +
+    '— chưa dựng khâu tự làm mới, nên hết hạn là kênh đóng cửa và phải cấp lại tay.',
 };

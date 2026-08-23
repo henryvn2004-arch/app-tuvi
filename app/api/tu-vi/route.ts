@@ -2,6 +2,7 @@
 // SSR: /tu-vi/:slug → HTML đầy đủ cho SEO
 export const maxDuration = 15;
 import { NextRequest, NextResponse } from 'next/server';
+import { ORG_ID } from '@/lib/seo/entity';
 
 const SUPABASE_URL = process.env.SUPABASE_URL!;
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY!;
@@ -106,8 +107,8 @@ function buildHTML(page: any, slug: string, relatedHtml = '') {
       headline: page.title, description: page.meta_description||'', url,
       inLanguage:'vi',
       datePublished: page.created_at ? String(page.created_at).slice(0,10) : undefined,
-      author:{'@type':'Organization',name:'Tử Vi Minh Bảo',url:BASE_URL},
-      publisher:{'@type':'Organization',name:'Tử Vi Minh Bảo',url:BASE_URL,
+      author:{'@type':'Organization', '@id': ORG_ID,name:'Tử Vi Minh Bảo',url:BASE_URL},
+      publisher:{'@type':'Organization', '@id': ORG_ID,name:'Tử Vi Minh Bảo',url:BASE_URL,
         logo:{'@type':'ImageObject',url:BASE_URL+'/seal.webp'}},
       image:{'@type':'ImageObject',url:img} },
     { '@context':'https://schema.org','@type':'BreadcrumbList', itemListElement:[

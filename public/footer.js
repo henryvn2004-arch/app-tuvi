@@ -48,6 +48,7 @@
     '<a href="/ngay-tot">Ng\u00e0y T\u1ed1t Theo Vi\u1ec7c</a>',
     '<a href="/ngay-tot/lich/2026">L\u1ecbch Ng\u00e0y T\u1ed1t 2026</a>',
     '<a href="/chon-ngay.html">Ch\u1ecdn Ng\u00e0y</a>',
+    '<a href="/xong-dat">Tu\u1ed5i X\u00f4ng \u0110\u1ea5t</a>',
     '<a href="/dat-ten.html">\u0110\u1eb7t T\u00ean</a>',
     '</div>',
 
@@ -65,6 +66,10 @@
     '<a href="/about.html">Gi\u1edbi Thi\u1ec7u</a>',
     '<a href="/contact.html">Li\u00ean H\u1ec7</a>',
     '<a href="/faqs.html">FAQs</a>',
+    '<a href="/bao-chi">B\u00e1o Ch\u00ed</a>',
+    '<a href="/api-docs">API Mi\u1ec5n Ph\u00ed</a>',
+    '<a href="/mcp-server">MCP Server</a>',
+    '<a href="/du-lieu">D\u1eef Li\u1ec7u M\u1edf</a>',
     '<a href="/nguon-du-lieu.html">Ngu\u1ed3n D\u1eef Li\u1ec7u</a>',
     '<a href="/huong-dan-thanh-toan.html">H\u01b0\u1edbng D\u1eabn Thanh To\u00e1n</a>',
     '<a href="/chinh-sach-bao-mat.html">Ch\u00ednh S\u00e1ch B\u1ea3o M\u1eadt</a>',

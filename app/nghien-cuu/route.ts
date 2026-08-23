@@ -2,6 +2,7 @@
 export const revalidate = 3600;
 import { NextRequest, NextResponse } from 'next/server';
 import { PUBLISHED_ONLY } from '@/lib/content/publish-filter';
+import { ORG_ID } from '@/lib/seo/entity';
 
 const SB_URL = process.env.SUPABASE_URL!;
 const SB_KEY = process.env.SUPABASE_SERVICE_KEY!;
@@ -35,7 +36,7 @@ function buildHTML(articles: any[], masters: Record<string, any>, cat: string, p
       name: 'Nghiên Cứu Tử Vi Đẩu Số', url,
       description: 'Tập hợp các bài nghiên cứu học thuật về Tử Vi Đẩu Số từ các học giả uyên thâm',
       inLanguage: 'vi',
-      publisher: { '@type': 'Organization', name: 'Tử Vi Minh Bảo', url: BASE },
+      publisher: { '@type': 'Organization', '@id': ORG_ID, name: 'Tử Vi Minh Bảo', url: BASE },
     },
     {
       '@context': 'https://schema.org', '@type': 'BreadcrumbList',

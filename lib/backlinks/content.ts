@@ -17,12 +17,17 @@
 import { llmText } from '@/lib/llm/complete';
 import { sbGet, sbInsert, sbPatch } from './db';
 import { getConfigValue } from '@/lib/config/appConfig';
+import { dataHookBlock } from './data-hook';
 
 export type ProspectKind =
   | 'directory'
   | 'resource_page'
   | 'broken_link'
   | 'guest_post'
+  | 'guest_blog'
+  | 'press'
+  | 'kol'
+  | 'partner'
   | 'web2'
   | 'social_profile'
   | 'unlinked_mention'
@@ -32,6 +37,9 @@ export type ContentKind =
   | 'directory_listing'
   | 'web2_article'
   | 'guest_pitch'
+  | 'blog_pitch'
+  | 'press_pitch'
+  | 'kol_pitch'
   | 'outreach_email'
   | 'broken_link_pitch';
 
@@ -47,6 +55,10 @@ export interface Prospect {
   priority: number;
   source: string;
   created_at: string;
+  /** CRM-lite (#14) — nhịp theo dõi, do NGƯỜI đánh dấu chứ máy không gửi gì. */
+  last_contacted_at?: string | null;
+  follow_up_at?: string | null;
+  reply?: 'none' | 'positive' | 'negative' | 'later';
 }
 
 export interface DraftedContent {
@@ -62,6 +74,17 @@ export function pickContentKind(kind: ProspectKind): ContentKind {
     case 'directory':
     case 'social_profile':
       return 'directory_listing';
+    case 'guest_blog':
+      return 'blog_pitch';
+    case 'press':
+      return 'press_pitch';
+    case 'kol':
+      return 'kol_pitch';
+    // `partner` (đổi giá trị qua lại giữa hai site) dùng lại `outreach_email`:
+    // nó ĐÚNG là "chào hỏi làm quen, giới thiệu một công cụ có thể hữu ích cho
+    // độc giả của họ" — thêm một prompt thứ hai nói cùng một việc là hai bản
+    // trôi khỏi nhau. KOL thì tách RIÊNG vì đó là thư gửi MỘT NGƯỜI có khán
+    // giả, giọng khác hẳn thư gửi một website.
     case 'web2':
       return 'web2_article';
     case 'guest_post':
@@ -83,6 +106,10 @@ export function pickContentKind(kind: ProspectKind): ContentKind {
  */
 export function contentReady(p: Prospect): boolean {
   if ((p.kind === 'resource_page' || p.kind === 'broken_link') && !(p.notes || '').trim()) return false;
+  // Pitch báo chí KHÔNG soạn được khi chưa có bộ dữ liệu: bỏ móc số liệu đi thì
+  // nó tụt xuống thành thư quảng cáo, mà thư quảng cáo gửi toà soạn vừa vô ích
+  // vừa đốt đúng một lần liên hệ. Thà không soạn.
+  if (p.kind === 'press' && !dataHookBlock()) return false;
   return true;
 }
 
@@ -206,6 +233,132 @@ LUẬT:
   return { kind: 'guest_pitch', title: STR(out.subject) || null, body, meta: { articleOutline: outline } };
 }
 
+/**
+ * Thư gửi BLOG NHỎ / blog cá nhân — tầng nhẹ hơn `draftGuestPitch`.
+ *
+ * Vì sao tách hẳn một hàm thay vì nới prompt của guest pitch: hai bên đọc thư
+ * bằng hai tư cách khác nhau. Toà soạn cần biết bài sẽ có dàn ý gì, đúng
+ * chuyên mục nào; chủ một blog cá nhân đọc email dài dòng kiểu đó là đóng
+ * ngay vì nó nghe như thư hàng loạt. Gộp một prompt thì phải viết "nếu là
+ * blog nhỏ thì..." — model chọn nhánh tuỳ hứng, không kiểm được.
+ */
+async function draftBlogPitch(p: Prospect): Promise<DraftedContent | null> {
+  const system = `Bạn soạn MỘT THƯ NGẮN gửi cho chủ blog "${p.name}" (${p.url}) — đây là BLOG CÁ NHÂN / blog nhỏ, người nhận là MỘT NGƯỜI chứ không phải ban biên tập.
+
+Bối cảnh người gửi:
+${SITE_FACTS}
+
+${JSON_RULE}
+{"subject":"...", "body":"thư 70-120 từ", "ideas":["2-3 ý bài, mỗi ý 1 câu"]}
+
+LUẬT:
+- NGẮN. Blog cá nhân đọc thư dài là đóng ngay vì nghe như thư hàng loạt.
+- Xưng hô với MỘT NGƯỜI (anh/chị/bạn tuỳ giọng blog), KHÔNG "kính gửi ban biên tập".
+- Mở bằng một chi tiết CÓ THẬT về blog của họ lấy từ "chu_de"/"ghi_chu" — không có thông tin cụ thể thì nói thẳng là mới biết tới blog, ĐỪNG giả vờ đã đọc lâu.
+- Đề nghị viết một bài kiến thức, nói rõ là gửi miễn phí, họ toàn quyền biên tập hoặc từ chối.
+- CẤM chữ "SEO"/"backlink"/"trao đổi link"/"hợp tác truyền thông".
+- Kết bằng một câu hỏi mở, không giục.`;
+  const out = await ask(system, p, 700);
+  if (!out) return null;
+  const body = STR(out.body);
+  if (!body) return null;
+  const ideas = Array.isArray(out.ideas)
+    ? (out.ideas as unknown[]).map((s) => STR(s)).filter(Boolean).slice(0, 3)
+    : [];
+  return { kind: 'blog_pitch', title: STR(out.subject) || null, body, meta: { ideas } };
+}
+
+/**
+ * Thư gửi TOÀ SOẠN / nhà báo — mục #11/14.
+ *
+ * 🔑 Khác `draftGuestPitch` ở chỗ căn bản, không phải ở độ dài: guest pitch
+ * bán CÔNG SỨC VIẾT ("để tôi viết cho anh một bài"), press pitch bán MỘT TIN
+ * ("có chuyện này, anh muốn viết thì đây là số liệu"). Toà soạn không cần ai
+ * viết hộ — họ có phóng viên; thứ họ thiếu là đề tài có số liệu tra lại được.
+ * Gộp hai cái vào một prompt thì model tự chọn nhánh tuỳ hứng, và nhánh nó hay
+ * chọn là nhánh xin-viết-bài — đúng cái toà soạn bỏ qua.
+ *
+ * Vì thế thư này KHÔNG xin đăng bài, KHÔNG xin link. Nó đưa số + đưa nguồn +
+ * mời hỏi thêm. Link về site đến từ việc nhà báo dẫn nguồn dữ liệu, tức từ
+ * ĐIỀU KIỆN CỦA GIẤY PHÉP chứ không từ việc đi xin.
+ */
+async function draftPressPitch(p: Prospect): Promise<DraftedContent | null> {
+  const hooks = dataHookBlock();
+  if (!hooks) return null;
+
+  const system = `Bạn soạn MỘT THƯ GỬI TOÀ SOẠN/nhà báo của "${p.name}" (${p.url}) để giới thiệu một bộ dữ liệu vừa công bố.
+
+${hooks}
+
+Bối cảnh bên gửi:
+${SITE_FACTS}
+
+${JSON_RULE}
+{"subject":"...", "body":"thư 110-170 từ", "angles":["2-3 góc bài gợi ý, mỗi góc 1 câu"]}
+
+LUẬT:
+- Đây KHÔNG phải thư xin đăng bài và KHÔNG phải thư quảng cáo sản phẩm. Nó đưa một đề tài kèm số liệu; họ viết hay không là quyền họ.
+- Mở bằng CON SỐ, không mở bằng lời tự giới thiệu. Nhà báo đọc 2 dòng đầu rồi quyết.
+- Chỉ được dùng số có trong phần "SỐ LIỆU CÓ THẬT" ở trên. TUYỆT ĐỐI không thêm, không làm tròn khác đi, không suy ra số mới.
+- BẮT BUỘC nêu cách đọc đúng (phân bố trên thời điểm sinh, không phải phân bố dân số) — nêu số mà bỏ ý này là sai nghiêm trọng, vì nhà báo sẽ viết thành "X% người Việt".
+- Nói rõ dữ liệu miễn phí, giấy phép CC BY 4.0, tải được JSON/CSV, và dẫn trang nguồn.
+- CẤM chữ "SEO"/"backlink"/"truyền thông"/"PR"/"booking bài"/"hợp tác".
+- Đề nghị sẵn sàng cắt số theo chiều khác nếu toà soạn cần, và kết bằng câu hỏi mở.`;
+
+  const out = await ask(system, p, 1000);
+  if (!out) return null;
+  const body = STR(out.body);
+  if (!body) return null;
+  const angles = Array.isArray(out.angles)
+    ? (out.angles as unknown[]).map((s) => STR(s)).filter(Boolean).slice(0, 3)
+    : [];
+  return { kind: 'press_pitch', title: STR(out.subject) || null, body, meta: { angles, dataset: 'tuvi-dataset-v1' } };
+}
+
+/**
+ * Thư gửi KOL / người có khán giả — mục #14/14.
+ *
+ * ⛔ CHỈ SOẠN, KHÔNG GỬI. Không có đường tự nhắn tin nào trong file này, và đó
+ * là ràng buộc đã chốt của cả track: nhắn tin hàng loạt cho KOL là spam, mà
+ * spam từ một tài khoản thương hiệu thì mất luôn tài khoản đó.
+ *
+ * 🔑 Khác `outreach_email` ở chỗ người nhận là MỘT NGƯỜI CÓ KHÁN GIẢ, không
+ * phải quản trị một website. Hai thứ họ cân nhắc khác hẳn nhau: chủ site hỏi
+ * "cái này có ích cho độc giả của tôi không", KOL hỏi "cái này có ra được một
+ * nội dung tôi muốn đăng không". Thư nào không trả lời câu đó thì bị lướt qua.
+ *
+ * Nên thư này đưa MỘT Ý TƯỞNG NỘI DUNG cụ thể, không đưa lời mời hợp tác
+ * chung chung — và nói thẳng là dùng miễn phí, không ràng buộc, vì thứ mình
+ * thật sự muốn là họ thử rồi tự thấy đáng kể lại.
+ */
+async function draftKolPitch(p: Prospect): Promise<DraftedContent | null> {
+  const system = `Bạn soạn MỘT TIN NHẮN NGẮN gửi cho "${p.name}" (${p.url}) — một người sáng tạo nội dung / người có khán giả (TikToker, YouTuber, admin group, chủ kênh).
+
+Bối cảnh bên gửi:
+${SITE_FACTS}
+
+${JSON_RULE}
+{"subject":"...", "body":"tin nhắn 60-110 từ", "contentIdeas":["2-3 ý nội dung CỤ THỂ họ có thể làm, mỗi ý 1 câu"]}
+
+LUẬT:
+- RẤT NGẮN. Đây là tin nhắn, không phải email doanh nghiệp. Dài là bị lướt.
+- Xưng hô với MỘT NGƯỜI, giọng bình thường như người nhắn cho người.
+- Nêu MỘT chi tiết CÓ THẬT về kênh của họ lấy từ "chu_de"/"ghi_chu". Không có thông tin cụ thể thì nói thẳng là mới biết tới kênh — ĐỪNG giả vờ đã theo dõi lâu.
+- Trọng tâm là Ý TƯỞNG NỘI DUNG cho HỌ, không phải lời khen sản phẩm của mình. Gợi ý 2-3 ý cụ thể (vd: quay thử một lá số rồi phản ứng, so kết quả hai người, thử công cụ đoán tính cách).
+- Nói rõ: dùng miễn phí, không cần đăng gì, không ràng buộc. KHÔNG nhắc tiền, KHÔNG đề nghị trả phí quảng cáo, KHÔNG đòi gắn link.
+- CẤM chữ "hợp tác truyền thông"/"booking"/"KOL"/"campaign"/"SEO"/"backlink".
+- Kết bằng một câu hỏi mở, không giục, chấp nhận họ có thể không trả lời.`;
+
+  const out = await ask(system, p, 800);
+  if (!out) return null;
+  const body = STR(out.body);
+  if (!body) return null;
+  const ideas = Array.isArray(out.contentIdeas)
+    ? (out.contentIdeas as unknown[]).map((s) => STR(s)).filter(Boolean).slice(0, 3)
+    : [];
+  return { kind: 'kol_pitch', title: STR(out.subject) || null, body, meta: { contentIdeas: ideas } };
+}
+
 async function draftOutreachEmail(p: Prospect): Promise<DraftedContent | null> {
   const isMention = p.kind === 'unlinked_mention';
   const system = `Bạn soạn MỘT EMAIL ngắn gửi cho "${p.name}" (${p.url}).
@@ -262,6 +415,12 @@ export async function draftContentForProspect(p: Prospect): Promise<DraftedConte
       return draftWeb2Article(p);
     case 'guest_pitch':
       return draftGuestPitch(p);
+    case 'blog_pitch':
+      return draftBlogPitch(p);
+    case 'press_pitch':
+      return draftPressPitch(p);
+    case 'kol_pitch':
+      return draftKolPitch(p);
     case 'broken_link_pitch':
       return draftBrokenLinkPitch(p);
     default:
@@ -342,7 +501,13 @@ export async function buildContentDrafts(limit?: number): Promise<BuildContentRe
       break;
     }
     if (!contentReady(p)) {
-      result.skipped.push({ name: p.name, reason: 'thiếu "ghi chú" mô tả cụ thể chỗ cần chèn/thay link — điền tay rồi soạn lại' });
+      result.skipped.push({
+        name: p.name,
+        reason:
+          p.kind === 'press'
+            ? 'chưa đọc được bộ dữ liệu mở — pitch báo chí phải có số liệu thật mới soạn'
+            : 'thiếu "ghi chú" mô tả cụ thể chỗ cần chèn/thay link — điền tay rồi soạn lại',
+      });
       continue;
     }
     const draft = await draftContentForProspect(p);
