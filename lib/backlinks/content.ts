@@ -17,6 +17,7 @@
 import { llmText } from '@/lib/llm/complete';
 import { sbGet, sbInsert, sbPatch } from './db';
 import { getConfigValue } from '@/lib/config/appConfig';
+import { dataHookBlock } from './data-hook';
 
 export type ProspectKind =
   | 'directory'
@@ -24,6 +25,7 @@ export type ProspectKind =
   | 'broken_link'
   | 'guest_post'
   | 'guest_blog'
+  | 'press'
   | 'web2'
   | 'social_profile'
   | 'unlinked_mention'
@@ -34,6 +36,7 @@ export type ContentKind =
   | 'web2_article'
   | 'guest_pitch'
   | 'blog_pitch'
+  | 'press_pitch'
   | 'outreach_email'
   | 'broken_link_pitch';
 
@@ -66,6 +69,8 @@ export function pickContentKind(kind: ProspectKind): ContentKind {
       return 'directory_listing';
     case 'guest_blog':
       return 'blog_pitch';
+    case 'press':
+      return 'press_pitch';
     case 'web2':
       return 'web2_article';
     case 'guest_post':
@@ -87,6 +92,10 @@ export function pickContentKind(kind: ProspectKind): ContentKind {
  */
 export function contentReady(p: Prospect): boolean {
   if ((p.kind === 'resource_page' || p.kind === 'broken_link') && !(p.notes || '').trim()) return false;
+  // Pitch báo chí KHÔNG soạn được khi chưa có bộ dữ liệu: bỏ móc số liệu đi thì
+  // nó tụt xuống thành thư quảng cáo, mà thư quảng cáo gửi toà soạn vừa vô ích
+  // vừa đốt đúng một lần liên hệ. Thà không soạn.
+  if (p.kind === 'press' && !dataHookBlock()) return false;
   return true;
 }
 
@@ -245,6 +254,53 @@ LUẬT:
   return { kind: 'blog_pitch', title: STR(out.subject) || null, body, meta: { ideas } };
 }
 
+/**
+ * Thư gửi TOÀ SOẠN / nhà báo — mục #11/14.
+ *
+ * 🔑 Khác `draftGuestPitch` ở chỗ căn bản, không phải ở độ dài: guest pitch
+ * bán CÔNG SỨC VIẾT ("để tôi viết cho anh một bài"), press pitch bán MỘT TIN
+ * ("có chuyện này, anh muốn viết thì đây là số liệu"). Toà soạn không cần ai
+ * viết hộ — họ có phóng viên; thứ họ thiếu là đề tài có số liệu tra lại được.
+ * Gộp hai cái vào một prompt thì model tự chọn nhánh tuỳ hứng, và nhánh nó hay
+ * chọn là nhánh xin-viết-bài — đúng cái toà soạn bỏ qua.
+ *
+ * Vì thế thư này KHÔNG xin đăng bài, KHÔNG xin link. Nó đưa số + đưa nguồn +
+ * mời hỏi thêm. Link về site đến từ việc nhà báo dẫn nguồn dữ liệu, tức từ
+ * ĐIỀU KIỆN CỦA GIẤY PHÉP chứ không từ việc đi xin.
+ */
+async function draftPressPitch(p: Prospect): Promise<DraftedContent | null> {
+  const hooks = dataHookBlock();
+  if (!hooks) return null;
+
+  const system = `Bạn soạn MỘT THƯ GỬI TOÀ SOẠN/nhà báo của "${p.name}" (${p.url}) để giới thiệu một bộ dữ liệu vừa công bố.
+
+${hooks}
+
+Bối cảnh bên gửi:
+${SITE_FACTS}
+
+${JSON_RULE}
+{"subject":"...", "body":"thư 110-170 từ", "angles":["2-3 góc bài gợi ý, mỗi góc 1 câu"]}
+
+LUẬT:
+- Đây KHÔNG phải thư xin đăng bài và KHÔNG phải thư quảng cáo sản phẩm. Nó đưa một đề tài kèm số liệu; họ viết hay không là quyền họ.
+- Mở bằng CON SỐ, không mở bằng lời tự giới thiệu. Nhà báo đọc 2 dòng đầu rồi quyết.
+- Chỉ được dùng số có trong phần "SỐ LIỆU CÓ THẬT" ở trên. TUYỆT ĐỐI không thêm, không làm tròn khác đi, không suy ra số mới.
+- BẮT BUỘC nêu cách đọc đúng (phân bố trên thời điểm sinh, không phải phân bố dân số) — nêu số mà bỏ ý này là sai nghiêm trọng, vì nhà báo sẽ viết thành "X% người Việt".
+- Nói rõ dữ liệu miễn phí, giấy phép CC BY 4.0, tải được JSON/CSV, và dẫn trang nguồn.
+- CẤM chữ "SEO"/"backlink"/"truyền thông"/"PR"/"booking bài"/"hợp tác".
+- Đề nghị sẵn sàng cắt số theo chiều khác nếu toà soạn cần, và kết bằng câu hỏi mở.`;
+
+  const out = await ask(system, p, 1000);
+  if (!out) return null;
+  const body = STR(out.body);
+  if (!body) return null;
+  const angles = Array.isArray(out.angles)
+    ? (out.angles as unknown[]).map((s) => STR(s)).filter(Boolean).slice(0, 3)
+    : [];
+  return { kind: 'press_pitch', title: STR(out.subject) || null, body, meta: { angles, dataset: 'tuvi-dataset-v1' } };
+}
+
 async function draftOutreachEmail(p: Prospect): Promise<DraftedContent | null> {
   const isMention = p.kind === 'unlinked_mention';
   const system = `Bạn soạn MỘT EMAIL ngắn gửi cho "${p.name}" (${p.url}).
@@ -303,6 +359,8 @@ export async function draftContentForProspect(p: Prospect): Promise<DraftedConte
       return draftGuestPitch(p);
     case 'blog_pitch':
       return draftBlogPitch(p);
+    case 'press_pitch':
+      return draftPressPitch(p);
     case 'broken_link_pitch':
       return draftBrokenLinkPitch(p);
     default:
@@ -383,7 +441,13 @@ export async function buildContentDrafts(limit?: number): Promise<BuildContentRe
       break;
     }
     if (!contentReady(p)) {
-      result.skipped.push({ name: p.name, reason: 'thiếu "ghi chú" mô tả cụ thể chỗ cần chèn/thay link — điền tay rồi soạn lại' });
+      result.skipped.push({
+        name: p.name,
+        reason:
+          p.kind === 'press'
+            ? 'chưa đọc được bộ dữ liệu mở — pitch báo chí phải có số liệu thật mới soạn'
+            : 'thiếu "ghi chú" mô tả cụ thể chỗ cần chèn/thay link — điền tay rồi soạn lại',
+      });
       continue;
     }
     const draft = await draftContentForProspect(p);
