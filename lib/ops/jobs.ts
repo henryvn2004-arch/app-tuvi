@@ -210,7 +210,7 @@ export const JOBS: JobSpec[] = [
   { key: 'backlink-content', label: 'Backlink — soạn nội dung', source: 'vercel', everyMinutes: D,
     schedule: '09:15 VN hằng ngày', sink: 'backlink_content', path: '/api/cron/backlink-content',
     since: '2026-08-19' },
-  { key: 'backlink-check', label: 'Backlink — kiểm link sống', source: 'vercel', everyMinutes: D,
+  { key: 'backlink-check', label: 'Backlink — kiểm link sống + ghi nguồn widget', source: 'vercel', everyMinutes: D,
     schedule: '09:45 VN hằng ngày', sink: 'backlink_links', path: '/api/cron/backlink-check',
     since: '2026-08-19' },
   { key: 'backlink-broken-links', label: 'Backlink — quét link chết', source: 'vercel', everyMinutes: 7 * D,

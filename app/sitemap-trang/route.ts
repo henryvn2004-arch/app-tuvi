@@ -70,6 +70,7 @@ const STATIC_PAGES = [
     // GSC nên để ngang các hub chuyên mục.
     '/kim-lau',
     '/bao-chi',
+    '/nhung',
     '/tools/kinh-dich.html',
     '/tools/luc-nham.html',
     '/tools/mau-sac-hop-menh.html',

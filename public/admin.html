@@ -638,6 +638,24 @@
             <div class="loading"><span class="spin"></span>Đang tải...</div>
           </div>
         </div>
+
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title"><svg class="pt-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 9h20"/><path d="M7 14h6"/></svg>Widget Nhúng</div>
+            <div class="panel-actions">
+              <span class="badge badge-grey" id="bl-e-badge">…</span>
+              <a class="btn btn-outline btn-sm" href="/nhung" target="_blank" rel="noopener">↗ Trang lấy mã</a>
+              <button class="btn btn-outline btn-sm" id="bl-e-run-btn" onclick="blRunNow('embedcheck', this)">🔎 Soi dòng ghi nguồn</button>
+              <button class="btn btn-primary btn-sm" onclick="loadBacklinks()">↻</button>
+            </div>
+          </div>
+          <div class="panel-body" style="font-size:.76rem;color:var(--text-lt);padding-bottom:.5rem">
+            Vòng TỰ NUÔI duy nhất của cả track: ai nhúng công cụ của mình thì hệ thống <b>tự biết</b> (đọc <code>Referer</code> lúc widget tải), không cần ai khai báo. <b>⚠️ Bản thân iframe KHÔNG phải backlink</b> — link bên trong nó thuộc domain của mình. Thứ tính là backlink là <b>dòng ghi nguồn <code>&lt;a&gt;</code> nằm ngoài iframe</b>, nên cron <code>backlink-check</code> mỗi sáng ghé lại xem họ có giữ dòng đó không: <b>còn</b> → tự vào "Liên Kết Đang Theo Dõi"; <b>mất</b> → tự thành cơ hội <i>ấm nhất có thể</i> ở "Cơ Hội Backlink" (họ đã chủ động dùng đồ của mình rồi, xin thêm một dòng credit là lời đề nghị dễ nhất).
+          </div>
+          <div id="bl-embeds" style="padding:0 1rem 1rem">
+            <div class="loading"><span class="spin"></span>Đang tải...</div>
+          </div>
+        </div>
       </div>
 
       <!-- ── LÁ SỐ ── -->
@@ -4648,6 +4666,18 @@ async function loadBacklinks() {
     const lBadge = document.getElementById('bl-l-badge');
     if (lBadge) { lBadge.className = 'badge ' + (links.length ? 'badge-green' : 'badge-grey'); lBadge.textContent = links.length ? alive + ' sống / ' + links.length + ' tổng' : 'Chưa theo dõi link nào'; }
 
+    const embeds = d.embeds || [];
+    const noCredit = embeds.filter((e) => e.attribution_ok === false).length;
+    const eBadge = document.getElementById('bl-e-badge');
+    if (eBadge) {
+      // Đỏ khi có trang dùng widget mà KHÔNG ghi nguồn — đó là việc CẦN LÀM,
+      // không phải một con số thống kê. Xanh khi mọi trang đều giữ credit.
+      eBadge.className = 'badge ' + (noCredit ? 'badge-red' : embeds.length ? 'badge-green' : 'badge-grey');
+      eBadge.textContent = embeds.length
+        ? (noCredit ? noCredit + ' chưa ghi nguồn / ' + embeds.length + ' trang' : embeds.length + ' trang đang nhúng')
+        : 'Chưa ai nhúng';
+    }
+
     const accounts = d.accounts || [];
     const gaDone = accounts.filter((a) => a.status === 'verified' || a.status === 'registered').length;
     const gaBadge = document.getElementById('ga-badge');
@@ -4657,8 +4687,9 @@ async function loadBacklinks() {
     renderBlContent(content);
     renderBlLinks(links);
     renderGaAccounts(accounts);
+    renderBlEmbeds(embeds);
   } catch (e) {
-    ['bl-prospects', 'bl-content', 'bl-links', 'ga-list'].forEach((id) => {
+    ['bl-prospects', 'bl-content', 'bl-links', 'ga-list', 'bl-embeds'].forEach((id) => {
       const el = document.getElementById(id);
       if (el) el.innerHTML = `<div class="empty">Lỗi: ${escHtmlLocal(e.message)}</div>`;
     });
@@ -5027,6 +5058,39 @@ async function blLinkDelete(id) {
   }
 }
 
+// ── Widget nhúng ─────────────────────────────────────────────────────────────
+// Bảng này trả lời đúng MỘT câu hỏi: ai đang dùng đồ của mình, và họ có giữ
+// dòng ghi nguồn không. Xếp trang CHƯA ghi nguồn lên đầu (server đã order),
+// vì đó là hàng cần hành động chứ không phải hàng để ngắm.
+function renderBlEmbeds(rows) {
+  const host = document.getElementById('bl-embeds');
+  if (!host) return;
+  if (!rows.length) {
+    host.innerHTML = '<div class="empty">Chưa có trang nào nhúng widget. Mã nhúng lấy ở <a href="/nhung" target="_blank" rel="noopener">/nhung</a> — hệ thống tự ghi nhận khi có người dùng thật.</div>';
+    return;
+  }
+  host.innerHTML = `
+    <div class="table-wrap"><table><thead><tr>
+      <th>Tên miền</th><th>Công cụ</th><th>Lượt tải</th><th>Ghi nguồn</th><th>Soi gần nhất</th>
+    </tr></thead><tbody>` + rows.map((e) => {
+      let credit = '<span class="badge badge-grey" title="Chưa soi lần nào, hoặc lượt soi gần nhất không đọc được trang">chưa rõ</span>';
+      if (e.attribution_ok === true) {
+        credit = `<span class="badge badge-green">có</span>` +
+          (e.attribution_url ? ` <a href="${escHtmlLocal(blSafeUrl(e.attribution_url))}" target="_blank" rel="noopener" style="font-size:.7rem">link ↗</a>` : '');
+      } else if (e.attribution_ok === false) {
+        credit = '<span class="badge badge-red">KHÔNG — xin credit</span>';
+      }
+      const checked = e.last_checked_at ? new Date(e.last_checked_at).toLocaleDateString('vi-VN') : '—';
+      return `<tr>
+        <td><a href="${escHtmlLocal(blSafeUrl('https://' + e.domain + '/'))}" target="_blank" rel="noopener nofollow">${escHtmlLocal(e.domain)}</a></td>
+        <td style="font-size:.72rem;color:var(--text-lt)">${escHtmlLocal(e.tool)}</td>
+        <td class="mono">${Number(e.hits) || 0}</td>
+        <td>${credit}</td>
+        <td style="font-size:.72rem;color:var(--text-lt)" title="${escHtmlLocal(e.check_note || '')}">${checked}</td>
+      </tr>`;
+    }).join('') + '</tbody></table></div>';
+}
+
 const BL_RUN_LABELS = {
   // prospect nay gộp BỐN nguồn — đọc đúng shape lồng ProspectingResult
   // (lib/backlinks/prospecting.ts), không còn phẳng d.found/d.inserted.
@@ -5042,11 +5106,18 @@ const BL_RUN_LABELS = {
   check: (d) => `Đã kiểm ${d.checked || 0} — ${d.alive || 0} sống, ${d.dead || 0} mất` +
     ((d.bing || {}).newLinks ? ` · Bing phát hiện ${d.bing.newLinks} backlink mới` : ''),
   brokenlinks: (d) => `Soi ${d.pagesScanned || 0} trang, thấy ${d.deadFound || 0} link chết đúng ngách (mới ${d.inserted || 0}, bổ sung ghi chú ${d.enriched || 0})`,
+  accounts: (d) => `Nạp sổ +${(d.seed || {}).inserted || 0} nền tảng · kiểm ${(d.health || {}).checked || 0} hồ sơ` +
+    ((d.health || {}).newlyDead ? `, ${d.health.newlyDead} hồ sơ vừa chết` : ''),
+  embedcheck: (d) => `Soi ${d.checked || 0} trang nhúng — ${d.withLink || 0} còn ghi nguồn, ${d.withoutLink || 0} không` +
+    (d.newLinks ? ` · +${d.newLinks} backlink mới` : '') + (d.newProspects ? ` · +${d.newProspects} cơ hội ấm` : ''),
 };
 
+// Thiếu một khoá ở đây thì nút bấm xong bị đổi nhãn thành "Chạy" — mất luôn
+// cả emoji lẫn nghĩa. Thêm nút mới thì thêm nhãn ở CẢ HAI bảng trên/dưới.
 const BL_RUN_BTN_LABELS = {
   prospect: '🔍 Tìm cơ hội mới', content: '✍️ Soạn ngay', check: '🔎 Kiểm tra ngay',
-  brokenlinks: '🔗💀 Quét link chết',
+  brokenlinks: '🔗💀 Quét link chết', accounts: '🔄 Nạp sổ + kiểm hồ sơ',
+  embedcheck: '🔎 Soi dòng ghi nguồn',
 };
 
 async function blRunNow(kind, btn) {

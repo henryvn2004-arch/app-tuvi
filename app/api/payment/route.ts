@@ -33,6 +33,7 @@ import { runLinkCheck } from '@/lib/backlinks/tracker';
 import { runBrokenLinkScan } from '@/lib/backlinks/broken-links';
 import { discoverBingBacklinks } from '@/lib/backlinks/bing-webmaster';
 import { runGrowthAccounts, type GrowthAccount } from '@/lib/growth/accounts';
+import { runEmbedCheck, type EmbedHit } from '@/lib/growth/embeds';
 import {
   listMemory, rememberFact, forgetFact, editFact,
   MEMORY_KIND_LABELS, MAX_MEMORY_ITEMS, MAX_MEMORY_LEN,
@@ -2074,7 +2075,7 @@ async function handleAdminBacklinks(request: NextRequest): Promise<Response> {
   if (!admin) return err('Unauthorized', 403);
 
   try {
-    const [prospects, content, links, accounts] = await Promise.all([
+    const [prospects, content, links, accounts, embeds] = await Promise.all([
       blGet<BlProspect>(
         'backlink_prospects?select=id,kind,name,url,topic,contact_email,notes,status,priority,source,created_at,updated_at' +
           '&order=status.asc,priority.desc,created_at.desc&limit=300',
@@ -2093,8 +2094,16 @@ async function handleAdminBacklinks(request: NextRequest): Promise<Response> {
         'growth_accounts?select=id,platform,label,category,url,submit_url,handle,status,priority,same_as,automation,notes,last_checked_at,last_ok,check_note' +
           '&order=category.asc,priority.desc,label.asc&limit=200',
       ),
+      // Widget nhúng — ai đang dùng đồ của mình, và họ có giữ dòng ghi nguồn
+      // không. Xếp `attribution_ok` LÊN ĐẦU theo chiều false-trước: trang
+      // đang dùng widget mà KHÔNG ghi nguồn chính là cơ hội ấm nhất, phải
+      // đập vào mắt trước, không nằm cuối bảng.
+      blGet<EmbedHit>(
+        'embed_hits?select=id,domain,tool,hits,attribution_ok,attribution_url,last_checked_at,check_note,first_seen_at,last_seen_at' +
+          '&order=attribution_ok.asc.nullslast,hits.desc&limit=200',
+      ),
     ]);
-    return ok({ prospects, content, links, accounts });
+    return ok({ prospects, content, links, accounts, embeds });
   } catch (e: unknown) {
     return err((e as Error).message);
   }
@@ -2276,7 +2285,8 @@ async function handleAdminBacklinkRun(request: NextRequest, body: Record<string,
     }
     if (kind === 'brokenlinks') return ok(await runBrokenLinkScan());
     if (kind === 'accounts') return ok(await runGrowthAccounts());
-    return err('kind phải là prospect, content, check, brokenlinks hoặc accounts', 400);
+    if (kind === 'embedcheck') return ok(await runEmbedCheck());
+    return err('kind phải là prospect, content, check, brokenlinks, accounts hoặc embedcheck', 400);
   } catch (e: unknown) {
     return err((e as Error).message);
   }
