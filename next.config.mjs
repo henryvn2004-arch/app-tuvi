@@ -29,6 +29,7 @@ const nextConfig = {
       { source: '/app/cua-hang-phong-thuy', destination: '/app-cua-hang-phong-thuy.html' },
       { source: '/app/bat-trach',       destination: '/app-bat-trach.html'   },
       { source: '/app/nap-am',          destination: '/app-nap-am.html'      },
+      { source: '/app/so-dep',          destination: '/app-so-dep.html'      },
       { source: '/app/than-so-hoc',     destination: '/app-than-so-hoc.html' },
       { source: '/app/kinh-dich',       destination: '/app-kinh-dich.html'   },
       { source: '/app/mai-hoa',         destination: '/app-mai-hoa.html'     },

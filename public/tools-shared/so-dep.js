@@ -438,9 +438,115 @@
     };
   }
 
+  // ── Render HTML — TEMPLATE THUẦN, không LLM ─────────────────────────────
+  // Toàn bộ văn bản giải thích đã có sẵn trong DATA của engine (STAR_DESC,
+  // QUE[].g/m từ kinh-dich.js, DAN_GIAN_*) — hàm này chỉ LẮP vào khung, không
+  // tự sinh câu chữ mới. Vì vậy tool chạy 100% client-side, 0 lượt gọi mạng,
+  // 0đ — đúng yêu cầu "free cho tìm kiếm tự nhiên, không tốn API LLM".
+  var DIR_TAG = { tot: 'sd-tot', xau: 'sd-xau', trung: 'sd-trung' };
+  var DIR_LABEL = { tot: 'Tốt', xau: 'Xấu', trung: 'Trung bình' };
+
+  function _esc(s) {
+    return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c];
+    });
+  }
+
+  function ketQuaHTML(data) {
+    var d = data;
+    var dt = d.dongThuan;
+    var dtTag = dt.tongPhieu === 0 ? 'sd-trung' : dt.tot > dt.xau ? 'sd-tot' : dt.xau > dt.tot ? 'sd-xau' : 'sd-trung';
+    var html = '';
+
+    html += '<div class="sd-head">';
+    html += '<div class="sd-so">' + _esc(d.soSach) + '</div>';
+    html += '<div class="sd-dongthuan ' + dtTag + '">' + (dt.tongPhieu ? dt.tot + '/' + dt.tongPhieu + ' trường phái cổ pháp nói tốt' : 'Dãy quá ngắn để tính đồng thuận') + '</div>';
+    html += '</div>';
+
+    // T1 Bát Tinh
+    html += '<div class="sd-section"><div class="sd-section-head">Bát Tinh <span class="sd-eyebrow">Bát Trạch</span></div>';
+    if (d.t1.diem100 != null) {
+      html += '<div class="sd-chuoi">';
+      d.t1.capSao.forEach(function (c) {
+        var cls = c.catHung === 'cat' ? 'sd-cap-cat' : c.catHung === 'hung' ? 'sd-cap-hung' : 'sd-cap-trung';
+        var nhan = c.sao || (c.a === 0 || c.b === 0 ? '0' : '—');
+        html += '<span class="sd-cap ' + cls + '" title="' + _esc(c.ghiChu || c.y || '') + '">' + c.a + c.b + '<b>' + _esc(nhan) + '</b></span>';
+      });
+      html += '</div>';
+      html += '<div class="sd-diem">Điểm cát: <b>' + d.t1.diem100 + '/100</b>' + (d.t1.noiBat.length ? ' · Sao nổi bật: ' + _esc(d.t1.noiBat.slice(0, 2).join(', ')) : '') + '</div>';
+      var topStar = d.t1.noiBat[0];
+      if (topStar && STAR_DESC[topStar]) html += '<p class="sd-p">' + _esc(STAR_DESC[topStar].y) + '</p>';
+    } else {
+      html += '<p class="sd-p">Dãy chưa đủ cặp số hợp lệ để xét Bát Tinh (toàn số 0/5, hoặc quá ngắn).</p>';
+    }
+    html += '</div>';
+
+    // T2 Quẻ Dịch
+    html += '<div class="sd-section"><div class="sd-section-head">Quẻ Dịch <span class="sd-eyebrow">Mai Hoa Dịch Số</span></div>';
+    if (d.t2.ok) {
+      html += '<div class="sd-que-ten">' + _esc(d.t2.que.ten) + ' <span class="sd-zh">' + _esc(d.t2.que.zh) + '</span></div>';
+      html += '<div class="sd-que-meta">' + _esc(d.t2.thuongQuai.n) + ' trên · ' + _esc(d.t2.haQuai.n) + ' dưới · hào ' + d.t2.haoDong + ' động</div>';
+      html += '<p class="sd-p">' + _esc(d.t2.que.chiTiet || d.t2.que.y) + '</p>';
+      html += '<div class="sd-p sd-quebien">Biến sang quẻ <b>' + _esc(d.t2.queBien.ten) + '</b> — ' + _esc(d.t2.queBien.y) + '</div>';
+    } else {
+      html += '<p class="sd-p">' + _esc(d.t2.error) + '</p>';
+    }
+    html += '</div>';
+
+    // T3 Ngũ Hành
+    html += '<div class="sd-section"><div class="sd-section-head">Ngũ Hành <span class="sd-eyebrow">Lạc Thư</span></div>';
+    html += '<div class="sd-phanbo">';
+    ['Kim', 'Mộc', 'Thủy', 'Hỏa', 'Thổ'].forEach(function (h) {
+      html += '<span class="sd-hanh">' + h + ' <b>' + (d.t3.phanBo[h] || 0) + '</b></span>';
+    });
+    html += '</div>';
+    if (d.t3.hanhThieu.length) html += '<div class="sd-p sd-thieu">Thiếu hành: ' + _esc(d.t3.hanhThieu.join(', ')) + '</div>';
+    if (d.t3.banMenh) {
+      var bm = d.t3.banMenh;
+      html += '<p class="sd-p">Bản mệnh nạp âm <b>' + _esc(bm.napAm) + '</b> (hành ' + _esc(bm.hanhNapAm) + '), cung phi hành ' + _esc(bm.hanhCungPhi) + '. ' +
+        (bm.hopMenh.length ? 'Dãy số có chứa hành hợp mệnh: ' + _esc(bm.hopMenh.join(', ')) + '.' : 'Dãy số CHƯA chứa hành hợp bản mệnh.') + '</p>';
+    }
+    html += '</div>';
+
+    // T5 Âm Dương
+    html += '<div class="sd-section"><div class="sd-section-head">Âm Dương <span class="sd-eyebrow">Số học — không phải cổ pháp</span></div>';
+    var t5bits = [d.t5.soLe + ' số lẻ / ' + d.t5.soChan + ' số chẵn', 'số chủ đạo ' + d.t5.soChuDao];
+    if (d.t5.doiXung) t5bits.push('dãy đối xứng (soi gương)');
+    if (d.t5.tienDan) t5bits.push('có đoạn 3 số liên tiếp tăng dần');
+    if (d.t5.soDoiLapLai.length) t5bits.push('số đôi lặp: ' + d.t5.soDoiLapLai.join(', '));
+    html += '<p class="sd-p">' + _esc(t5bits.join(' · ')) + '</p></div>';
+
+    // T6 Dân gian
+    if (d.t6.diem.length || d.t6.canhBao.length) {
+      html += '<div class="sd-section sd-dangian"><div class="sd-section-head">Theo dân gian <span class="sd-eyebrow">KHÔNG phải cổ pháp</span></div>';
+      d.t6.diem.forEach(function (x) { html += '<div class="sd-p sd-dg-tot">+ "' + _esc(x.mau) + '" — ' + _esc(x.y) + '</div>'; });
+      d.t6.canhBao.forEach(function (x) { html += '<div class="sd-p sd-dg-xau">△ "' + _esc(x.mau) + '" — ' + _esc(x.y) + '</div>'; });
+      html += '</div>';
+    }
+
+    return html;
+  }
+
+  function goiYHTML(data) {
+    var html = '<div class="sd-goiy-list">';
+    data.danhSach.forEach(function (item) {
+      var dt = item.dongThuan;
+      var tag = dt.tongPhieu === 0 ? 'sd-trung' : dt.tot > dt.xau ? 'sd-tot' : dt.xau > dt.tot ? 'sd-xau' : 'sd-trung';
+      html += '<div class="sd-goiy-item">';
+      html += '<div class="sd-goiy-so">' + _esc(item.soSach) + '</div>';
+      html += '<div class="sd-goiy-dt ' + tag + '">' + (dt.tongPhieu ? dt.tot + '/' + dt.tongPhieu + ' tốt' : '—') + '</div>';
+      if (item.t1.noiBat.length) html += '<div class="sd-goiy-sao">' + _esc(item.t1.noiBat.slice(0, 2).join(', ')) + '</div>';
+      html += '</div>';
+    });
+    html += '</div>';
+    return html;
+  }
+
   var API = {
     danhGia: danhGia,
     goiY: goiY,
+    ketQuaHTML: ketQuaHTML,
+    goiYHTML: goiYHTML,
     STAR_DESC: STAR_DESC,
   };
   if (typeof module !== 'undefined' && module.exports) module.exports = API;
