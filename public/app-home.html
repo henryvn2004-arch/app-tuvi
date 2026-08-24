@@ -232,9 +232,9 @@
   .ch-row{flex-wrap:wrap}
   .ch-pay{flex-direction:row;align-items:center;width:100%;justify-content:space-between;margin-left:27px}
 }
-/* ── CHÀO DẪN 3 ĐIỂM — coachmark một lần, KHÔNG chặn thao tác của trang (nền
-   mờ chỉ để mắt tập trung, click xuyên qua vẫn được ở phần còn lại của trang
-   vì backdrop không bắt sự kiện — xem pointer-events trong JS). */
+/* ── CHÀO DẪN — coachmark một lần, KHÔNG chặn thao tác của trang (nền mờ chỉ
+   để mắt tập trung, click xuyên qua vẫn được ở phần còn lại của trang vì
+   backdrop không bắt sự kiện — xem pointer-events trong JS). */
 .tour-spot{position:fixed;border-radius:14px;box-shadow:0 0 0 4px rgba(201,168,76,.6),0 0 0 3000px rgba(6,26,46,.46);z-index:901;pointer-events:none;transition:top .25s,left .25s,width .25s,height .25s;animation:tourPulse 1.8s ease-in-out infinite}
 @keyframes tourPulse{0%,100%{box-shadow:0 0 0 4px rgba(201,168,76,.6),0 0 0 3000px rgba(6,26,46,.46)}50%{box-shadow:0 0 0 7px rgba(201,168,76,.35),0 0 0 3000px rgba(6,26,46,.46)}}
 .tour-pop{position:fixed;z-index:902;background:var(--white);border:1px solid var(--gold-soft);border-radius:14px;padding:15px 17px;width:290px;max-width:calc(100vw - 24px);box-shadow:0 14px 34px rgba(6,26,46,.24);transition:top .25s,left .25s}
@@ -1487,40 +1487,74 @@ if(window.ToolPrices) ToolPrices.load().then(function(d){ if(d) renderWelcomeCar
 </script>
 
 <script>
-/* ══ CHÀO DẪN 3 ĐIỂM — coachmark một lần cho Tổng Quan ═════════════════════
+/* ══ CHÀO DẪN — coachmark một lần cho Tổng Quan ═════════════════════════════
    KHÔNG phải modal ép xem: 90% người chạy tool là khách vô danh, phần lớn chỉ
-   có ĐÚNG một lượt (docs/QUEST-PLAN.md §2.1/§2.2) — ép xem 3-4 bước giải thích
-   UI trước khi cho thấy giá trị là đốt đúng vài giây quý giá đó vào thứ không
-   ai cần đọc hai lần. Ba điểm dừng, bỏ qua được bất cứ lúc nào, hiện ĐÚNG MỘT
-   LẦN (localStorage). KHÔNG chặn thao tác khác của trang — không có lớp phủ
-   riêng, độ tối quanh điểm sáng là một CHIÊU CSS (box-shadow lan ra hết màn
-   hình của `.tour-spot`, xem shell CSS phía trên) chứ không phải một phần tử
-   `pointer-events` chặn click; `.tour-spot` tự đặt `pointer-events:none`. */
+   có ĐÚNG một lượt (docs/QUEST-PLAN.md §2.1/§2.2) — ép xem nhiều bước giải
+   thích UI trước khi cho thấy giá trị là đốt đúng vài giây quý giá đó vào thứ
+   không ai cần đọc hai lần. Từng điểm dừng bỏ qua được bất cứ lúc nào, cả
+   chuỗi hiện ĐÚNG MỘT LẦN (localStorage). KHÔNG chặn thao tác khác của trang —
+   không có lớp phủ riêng, độ tối quanh điểm sáng là một CHIÊU CSS (box-shadow
+   lan ra hết màn hình của `.tour-spot`, xem shell CSS phía trên) chứ không
+   phải một phần tử `pointer-events` chặn click; `.tour-spot` tự đặt
+   `pointer-events:none`.
+
+   🔑 Đi hết một lượt các mặt của sản phẩm (không chỉ Khởi Hành): hỏi Thầy ở
+   rail, tìm công cụ qua Ctrl K, chia sẻ, Ví Lượng — tất cả đều là CHROME CỐ
+   ĐỊNH của shell.js nên có mặt trên mọi trang /app/*, script này chỉ cần nạp
+   Ở Tổng Quan là đủ chỉ hết. Bước "Đăng ký" CHỈ thêm cho khách vô danh — ép nó
+   vào cho người đã có tài khoản là một bước rỗng, không trỏ tới gì thật. */
 (function(){
   'use strict';
   if(navigator.webdriver) return; // đừng dựng overlay khi Playwright/CI lái trang
 
-  var TOUR_KEY='tvp_tour_seen';
+  // v2: đổi từ 3 điểm (Khởi Hành/Ví/gợi ý tiếp) sang đi hết các mặt chính của
+  // sản phẩm — bump khoá để người đã tắt bản v1 vẫn thấy bản đầy đủ một lần.
+  var TOUR_KEY='tvp_tour_seen_v2';
+
+  function isLoggedIn(){
+    try{ var s=window.Auth&&Auth.getSession&&Auth.getSession(); return !!(s&&s.access_token); }
+    catch(e){ return false; }
+  }
+
   var STEPS=[
     {
       sel:'#khoiHanhCard',
-      label:'1/3',
       t:'Đây là nơi bạn mở khoá Lượng',
       d:'Làm 3 việc nhỏ — lập lá số, hỏi Thầy một câu, thử một công cụ — nhận thẳng 15 Lượng, đủ cho lượt luận tiếp theo.'
     },
     {
-      sel:'a.item[href="/app/tai-khoan#credits"]',
-      label:'2/3',
-      t:'Đây là Ví Lượng của bạn',
-      d:'Mỗi lượt hỏi Thầy hay mở khoá một bản luận đều dùng Lượng ở đây. Số dư hiện ngay cạnh tên bạn, bấm vào xem chi tiết.'
+      sel:'#railInput',
+      t:'Hỏi Thầy ngay tại đây',
+      d:'Gõ bất kỳ điều gì đang canh cánh — tình duyên, sự nghiệp, hôm nay nên làm gì — rồi Enter là gửi. Cần lập lá số (bước trước) để mở khoá ô này.'
     },
     {
-      sel:'#nextCard .nx-main',
-      label:'3/3',
-      t:'Thầy đã chọn sẵn cho bạn',
-      d:'Dựa trên những gì bạn vừa xem, đây là công cụ hợp để thử tiếp theo. Bấm vào xem Thầy nói gì.'
+      sel:'.kbtn[data-act="cmd"]',
+      t:'58 công cụ chỉ cách một phím',
+      d:'Bấm vào đây hoặc gõ Ctrl K để tìm nhanh: xem tuổi, hợp hôn nhân, vận từng tháng… Mỗi công cụ soi lá số của bạn theo một góc khác.'
+    },
+    {
+      sel:'[data-act="share"]',
+      t:'Thấy hay thì rủ bạn xem cùng',
+      d:'Chia sẻ nguyên phiên luận qua link, Facebook hay Zalo — bạn bè bấm vào đọc được ngay, không cần đăng nhập.'
+    },
+    {
+      sel:'a.item[href="/app/tai-khoan#credits"]',
+      t:'Đây là Ví Lượng của bạn',
+      d:'Mỗi lượt hỏi Thầy hay mở khoá một bản luận đều dùng Lượng ở đây. Số dư hiện ngay cạnh tên bạn — hết thì bấm vào, có nút Nạp Lượng ngay trong đó.'
     }
   ];
+  if(!isLoggedIn()){
+    STEPS.push({
+      sel:'a.sb-foot',
+      t:'Đăng ký miễn phí, nhận Lượng ngay',
+      d:'Không cần thẻ, không cần chờ — có tài khoản là được tặng Lượng để hỏi tiếp, và mọi lá số/lượt hỏi hôm nay được lưu lại đúng chỗ.'
+    });
+  }
+  STEPS.push({
+    sel:'#nextCard .nx-main',
+    t:'Thầy đã chọn sẵn cho bạn',
+    d:'Dựa trên những gì bạn vừa xem, đây là công cụ hợp để thử tiếp theo. Bấm vào xem Thầy nói gì.'
+  });
 
   function seen(){ try{ return localStorage.getItem(TOUR_KEY)==='1'; }catch(e){ return true; } }
   function markSeen(){ try{ localStorage.setItem(TOUR_KEY,'1'); }catch(e){} }
@@ -1544,7 +1578,7 @@ if(window.ToolPrices) ToolPrices.load().then(function(d){ if(d) renderWelcomeCar
     _spot.style.width=(r.width+pad*2)+'px';
     _spot.style.height=(r.height+pad*2)+'px';
 
-    _pop.innerHTML='<div class="tour-step">Bước '+esc2(data.label)+'</div>'
+    _pop.innerHTML='<div class="tour-step">Bước '+(_i+1)+'/'+STEPS.length+'</div>'
       +'<div class="tour-t">'+esc2(data.t)+'</div>'
       +'<div class="tour-d">'+esc2(data.d)+'</div>'
       +'<div class="tour-row"><button class="tour-skip" type="button" id="tourSkip">Bỏ qua</button>'
@@ -1586,7 +1620,7 @@ if(window.ToolPrices) ToolPrices.load().then(function(d){ if(d) renderWelcomeCar
 
   function start(){
     if(seen()) return;
-    // Không bước nào có điểm neo (trang lỗi, hoặc cả 3 khối cùng chưa kịp
+    // Không bước nào có điểm neo (trang lỗi, hoặc các khối cùng chưa kịp
     // dựng) → đừng tạo một overlay không trỏ vào đâu cả.
     var any=false;
     for(var k=0;k<STEPS.length;k++) if(findTarget(STEPS[k].sel)){ any=true; break; }
