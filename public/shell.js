@@ -1002,184 +1002,6 @@
     });
   }
 
-  // Copy chuỗi bất kỳ (không nằm sẵn trong một <input>) — Clipboard API trước,
-  // rơi về ô <textarea> ẩn + execCommand khi trình duyệt cũ/không có quyền.
-  function copyPlainText(txt, onDone) {
-    var legacy = function () {
-      try {
-        var ta = document.createElement('textarea');
-        ta.value = txt; ta.style.position = 'fixed'; ta.style.opacity = '0'; ta.style.top = '0';
-        document.body.appendChild(ta); ta.focus(); ta.select();
-        document.execCommand('copy'); ta.remove();
-      } catch (e) { /* ignore */ }
-      onDone();
-    };
-    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(txt).then(onDone, legacy);
-    else legacy();
-  }
-
-  // ══════════════════════════════════════════════════════════════════════
-  // "Sao chép caption" — giảm ma sát lớn nhất khi đăng: KHÔNG phải "có muốn
-  // khoe không" mà là "viết gì bây giờ" (docs/QUEST-PLAN.md §3.5.3). Vài mẫu
-  // xoay vòng, giọng đời thường, kèm link chia sẻ THẬT (cùng URL nút Chia sẻ
-  // dựng — mang sẵn ?ref= của người bấm) + hashtag cố định.
-  // ══════════════════════════════════════════════════════════════════════
-  var CAPTION_TEMPLATES = [
-    'Vừa xem "{t}" trên Tử Vi Minh Bảo, đọc mà giật cả mình 😳 Thử xem lá số của bạn ra sao nè',
-    'Tò mò "{t}" nói gì về mình mà đọc xong ngồi ngẫm nguyên buổi 🤔',
-    '"{t}" — đọc xong thấy đúng thiệt. Ai tò mò thì bấm thử luôn nha 👇'
-  ];
-  function buildCaptionText(title, url) {
-    var tpl = CAPTION_TEMPLATES[Math.floor(Math.random() * CAPTION_TEMPLATES.length)];
-    return tpl.replace('{t}', title) + '\n' + url + '\n\n#TuViMinhBao #TuVi #LaSo';
-  }
-  function renderCaptionBtn(visible) {
-    // fabHost() — cùng cụm sticky với Chia sẻ/PDF/Facebook (#595), không còn
-    // phụ thuộc `.ws-actions` (trang không khai vùng đó thì nút này trước
-    // đây im lặng không hiện — đúng bug #595 đã vá cho 3 nút kia).
-    var host = fabHost();
-    var btn = document.getElementById('wsCaptionBtn');
-    if (!visible || !currentShare()) { if (btn) btn.remove(); return; }
-    if (btn) return;
-    btn = document.createElement('button');
-    btn.type = 'button'; btn.className = 'btn'; btn.id = 'wsCaptionBtn';
-    btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" style="width:14px;height:14px;vertical-align:-2px;margin-right:4px"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg>Sao chép caption';
-    btn.addEventListener('click', copyCaption);
-    host.appendChild(btn);
-  }
-  function copyCaption() {
-    var s = currentShare(); if (!s) return;
-    var btn = document.getElementById('wsCaptionBtn'); if (btn) btn.disabled = true;
-    var reEnable = function () { if (btn) btn.disabled = false; };
-    var headers = { 'Content-Type': 'application/json' };
-    var tk0 = getToken(); if (tk0) headers['Authorization'] = 'Bearer ' + tk0;
-    fetch('/api/share-result', {
-      method: 'POST', headers: headers,
-      body: JSON.stringify({ toolId: s.toolId, kind: s.kind, title: s.title, imageUrl: s.imageUrl, text: s.text, blocks: s.blocks }),
-    })
-      .then(function (r) { return r.json(); })
-      .then(function (j) {
-        reEnable();
-        if (!j || !j.url) { alert('Không tạo được caption, thử lại sau.'); return; }
-        var url = withViralParams(location.origin + j.url, s.toolId);
-        var txt = buildCaptionText(s.title, url);
-        copyPlainText(txt, function () {
-          if (btn) { btn.textContent = 'Đã chép ✓'; setTimeout(function () { btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" style="width:14px;height:14px;vertical-align:-2px;margin-right:4px"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg>Sao chép caption'; }, 1800); }
-          track('cta_click', { tool_id: s.toolId, meta: { from: 'caption_copy' } });
-        });
-      })
-      .catch(function () { reEnable(); alert('Lỗi mạng khi tạo caption.'); });
-  }
-
-  // ══════════════════════════════════════════════════════════════════════
-  // "Khoe Kết Quả" — nộp bằng chứng đã đăng FB/IG/TikTok để nhận Lượng
-  // (docs/QUEST-PLAN.md §3.5.1). KHÔNG có cách xác minh tự động một lượt
-  // đăng — luôn là: user tự nộp (link công khai hoặc ảnh chụp Story) → admin
-  // duyệt bằng mắt trong panel admin → cộng Lượng SAU khi duyệt, không phải
-  // lúc nộp. Xem app/api/payment/route.ts handleSocialProofSubmit.
-  // ══════════════════════════════════════════════════════════════════════
-  function renderKhoeBtn(visible) {
-    // fabHost() — cùng cụm sticky với Chia sẻ/PDF/Facebook/Caption (#595),
-    // không còn phụ thuộc `.ws-actions`.
-    var host = fabHost();
-    var btn = document.getElementById('wsKhoeBtn');
-    if (!visible || !currentShare()) { if (btn) btn.remove(); return; }
-    if (btn) return;
-    btn = document.createElement('button');
-    btn.type = 'button'; btn.className = 'btn'; btn.id = 'wsKhoeBtn';
-    btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" style="width:14px;height:14px;vertical-align:-2px;margin-right:4px"><path d="M12 2 14.5 8.5 21 9l-5 4.3L17.5 20 12 16.3 6.5 20 8 13.3 3 9l6.5-.5Z"/></svg>Khoe kết quả';
-    btn.addEventListener('click', function () {
-      if (!getToken()) {
-        if (window.Auth && Auth.require) { Auth.require(openKhoeModal); return; }
-      }
-      openKhoeModal();
-    });
-    host.appendChild(btn);
-  }
-  function openKhoeModal() {
-    var s = currentShare(); if (!s) return;
-    if (document.querySelector('.tvmb-khoe-modal')) return;
-    var wrap = document.createElement('div');
-    wrap.className = 'sh-share-modal tvmb-khoe-modal';
-    wrap.innerHTML =
-      '<div class="ssm-card">' +
-        '<button class="ssm-x" aria-label="Đóng">✕</button>' +
-        '<div class="ssm-t">Khoe Kết Quả — nhận Lượng</div>' +
-        '<div class="ssm-d" id="khoeDesc">Bạn vừa đăng ' + esc(s.title) + ' lên Facebook/Instagram/TikTok? Dán link (bài thường), hoặc gửi ảnh chụp nếu là Story — mình duyệt xong sẽ cộng Lượng.</div>' +
-        '<div class="ssm-field"><label class="ssm-label">Đăng ở đâu</label>' +
-          '<select class="ssm-in full" id="khoePlatform">' +
-            '<option value="facebook">Facebook</option>' +
-            '<option value="instagram">Instagram</option>' +
-            '<option value="tiktok">TikTok</option>' +
-            '<option value="other">Khác</option>' +
-          '</select></div>' +
-        '<div class="ssm-field"><label class="ssm-label">Link bài đăng (nếu có)</label>' +
-          '<input class="ssm-in full" id="khoeUrl" type="url" placeholder="https://facebook.com/..." /></div>' +
-        '<div class="ssm-field"><label class="ssm-label">Hoặc ảnh chụp màn hình (bắt buộc nếu là Story — Story tự xoá sau 24h, không có link)</label>' +
-          '<input class="ssm-in full" id="khoeFile" type="file" accept="image/png,image/jpeg,image/webp" /></div>' +
-        '<div class="ssm-field"><label class="ssm-label">Ghi chú (tuỳ chọn)</label>' +
-          '<textarea class="ssm-in full" id="khoeNote" rows="2" maxlength="300"></textarea></div>' +
-        '<div class="ssm-row" style="margin-top:2px"><button class="ssm-copy" id="khoeSubmit" style="width:100%">Nộp</button></div>' +
-      '</div>';
-    document.body.appendChild(wrap);
-    var close = function () { wrap.remove(); };
-    wrap.addEventListener('click', function (e) { if (e.target === wrap) close(); });
-    wrap.querySelector('.ssm-x').addEventListener('click', close);
-    // Con số thưởng lấy từ server — chỉnh được bằng SQL, không viết cứng.
-    fetch('/api/payment?action=social-proof-info').then(function (r) { return r.json(); }).then(function (j) {
-      if (j && j.rewardCredits && wrap.isConnected) {
-        var d = wrap.querySelector('#khoeDesc');
-        d.textContent = d.textContent + ' Mỗi lượt duyệt: +' + j.rewardCredits + ' Lượng.';
-      }
-    }).catch(function () { /* thiếu con số cũng không chặn form */ });
-    wrap.querySelector('#khoeSubmit').addEventListener('click', function () { submitKhoe(wrap, s, close); });
-  }
-  function submitKhoe(wrap, s, close) {
-    var platform = wrap.querySelector('#khoePlatform').value;
-    var url = wrap.querySelector('#khoeUrl').value.trim();
-    var note = wrap.querySelector('#khoeNote').value.trim();
-    var file = wrap.querySelector('#khoeFile').files[0];
-    if (!url && !file) { alert('Cần dán link, hoặc chọn một ảnh chụp màn hình.'); return; }
-    var btn = wrap.querySelector('#khoeSubmit'); btn.disabled = true; btn.textContent = 'Đang nộp…';
-    var send = function (screenshotBase64, mediaType) {
-      freshToken().then(function (tk) {
-        var headers = { 'Content-Type': 'application/json' };
-        if (tk) headers['Authorization'] = 'Bearer ' + tk;
-        fetch('/api/payment?action=social-proof-submit', {
-          method: 'POST', headers: headers,
-          body: JSON.stringify({
-            platform: platform, url: url || null, note: note || null, toolId: s.toolId,
-            screenshotBase64: screenshotBase64 || null, mediaType: mediaType || null,
-          }),
-        })
-          .then(function (r) { return r.json().then(function (j) { return { ok: r.ok, j: j }; }); })
-          .then(function (res) {
-            if (!res.ok || !res.j || res.j.error) {
-              btn.disabled = false; btn.textContent = 'Nộp';
-              alert((res.j && res.j.error) || 'Nộp hỏng, thử lại sau.');
-              return;
-            }
-            track('cta_click', { tool_id: s.toolId, meta: { from: 'social_proof_submit', platform: platform } });
-            close();
-            alert('Đã nộp! Mình sẽ duyệt trong vài ngày, Lượng cộng ngay sau khi duyệt xong.');
-          })
-          .catch(function () { btn.disabled = false; btn.textContent = 'Nộp'; alert('Lỗi mạng khi nộp.'); });
-      });
-    };
-    if (file) {
-      if (file.size > 8 * 1024 * 1024) { btn.disabled = false; btn.textContent = 'Nộp'; alert('Ảnh vượt quá 8MB.'); return; }
-      var fr = new FileReader();
-      fr.onload = function () {
-        var b64 = String(fr.result || '').split(',')[1] || '';
-        send(b64, file.type);
-      };
-      fr.onerror = function () { btn.disabled = false; btn.textContent = 'Nộp'; alert('Đọc ảnh hỏng, thử lại.'); };
-      fr.readAsDataURL(file);
-    } else {
-      send(null, null);
-    }
-  }
-
   // ── CHIA SẺ KẾT QUẢ KHUNG GIỮA (workspace) — dùng chung cho MỌI tool ──
   // ── Tóm tắt lá số cho trang chia sẻ ──────────────────────────────────
   // Người nhận link /ket-qua không có ngữ cảnh gì: không nói rõ lá số nào thì
@@ -1382,8 +1204,6 @@
     renderShareBtn();
     renderFbBtn();
     renderPdfBtn(vis);
-    renderCaptionBtn(vis);
-    renderKhoeBtn(vis);
     maybeAppendSrcNote(host);
   }
 
@@ -1424,7 +1244,13 @@
   // sống trong MỘT cụm `position:fixed` (`shell.css`), luôn ở đúng góc phải
   // dưới bất kể cuộn tới đâu — và KHÔNG phụ thuộc trang có khai `.ws-actions`
   // hay không (trước đây thiếu `.ws-actions` là nút Chia sẻ/PDF im lặng
-  // không hiện gì cả).
+  // không hiện gì cả). Neo theo `--rail-w` (`shell.css`), KHÔNG neo thẳng mép
+  // viewport — nếu không cụm nút tràn đè lên cột rail trên desktop.
+  //
+  // Icon-only, tròn, cỡ đều (`shell.css` .ws-fab .btn) — chữ dồn hết vào
+  // `data-tip`/`aria-label`, hiện thành tooltip khi hover/focus (CSS thuần,
+  // không JS). Mỗi hàm render CHỈ set 2 thuộc tính đó + innerHTML là SVG trơn
+  // (không còn chữ + `margin-right` kèm theo trong chuỗi).
   function fabHost() {
     var host = document.getElementById('wsFab');
     if (host) return host;
@@ -1451,7 +1277,8 @@
     if (btn) return;
     btn = document.createElement('button');
     btn.type = 'button'; btn.className = 'btn'; btn.id = 'wsPdfBtn';
-    btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" style="width:14px;height:14px;vertical-align:-2px;margin-right:4px"><path d="M12 3v11m0 0 4-4m-4 4-4-4"/><path d="M4 17v2.5A1.5 1.5 0 0 0 5.5 21h13a1.5 1.5 0 0 0 1.5-1.5V17"/></svg>Lưu PDF';
+    btn.setAttribute('data-tip', 'Lưu PDF'); btn.setAttribute('aria-label', 'Lưu PDF');
+    btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M12 3v11m0 0 4-4m-4 4-4-4"/><path d="M4 17v2.5A1.5 1.5 0 0 0 5.5 21h13a1.5 1.5 0 0 0 1.5-1.5V17"/></svg>';
     btn.addEventListener('click', printWorkspace);
     host.appendChild(btn);
   }
@@ -1522,7 +1349,16 @@
   //     viễn thì thành nhiễu — người ta học cách bỏ qua nó — và một animation
   //     chạy suốt trên mobile là ăn pin thật.
   //  3. Nạp module theo lối LƯỜI: `ai-loading-steps.js` mới có ở 24/33 trang.
-  //     Thiếu nó thì nút giữ nguyên chữ `✦ Hỏi` như cũ, không vỡ gì.
+  //     Thiếu nó thì nút giữ icon tĩnh, không vỡ gì.
+  //
+  // 🐞 Bug đã bắt: bản trước gán `el.style.display='inline-flex'` mỗi khi orb
+  // BẬT — inline style thắng mọi rule trong stylesheet nên nó ĐÈ LUÔN
+  // `.mobile-only{display:none}`, ép nút hiện ra cả trên desktop (rail đã
+  // hiện sẵn ở đó, nút thành thừa). `.btn` vốn đã tự `display:inline-flex;
+  // align-items:center` qua class nên hai dòng đó chưa từng cần — bỏ hẳn,
+  // để đúng CSS lớp `.mobile-only` quyết định hiện/ẩn theo bề ngang màn hình.
+  var ASK_ICON_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9">' +
+    '<path d="M12 3.5c-4.7 0-8.5 3-8.5 6.8 0 2.1 1.15 4 3 5.3-.15 1-.65 2.1-1.5 3 1.4-.05 2.7-.55 3.7-1.35A11 11 0 0 0 12 17.1c4.7 0 8.5-3 8.5-6.8S16.7 3.5 12 3.5Z"/></svg>';
   var _railOpened = false, _orbOn = false;
   function ensureOrbJs(cb) {
     if (window.AiLoadingSteps && window.AiLoadingSteps.orbHtml) { cb(); return; }
@@ -1557,22 +1393,24 @@
     var b = askBtnEl();
     var host = fabHost();
     if (b && b.parentNode !== host) host.appendChild(b);
+    if (b) {
+      // Icon-only đồng bộ với 3 nút kia — chữ "Hỏi" dồn vào tooltip.
+      b.setAttribute('data-tip', 'Hỏi'); b.setAttribute('aria-label', 'Hỏi');
+      if (!_orbOn) b.innerHTML = ASK_ICON_SVG;
+    }
   }
   function syncAskOrb() {
     var b = askBtnEl();
     if (!b) return;
     var want = !!ctx && !_railOpened;
     if (want === _orbOn) return;
-    if (!want) { // tắt: trả lại đúng chữ cũ, không để lại dấu vết
-      b.innerHTML = '✦ Hỏi'; _orbOn = false; return;
+    if (!want) { // tắt: về icon tĩnh, không để lại dấu vết
+      b.innerHTML = ASK_ICON_SVG; _orbOn = false; return;
     }
     ensureOrbJs(function () {
       if (!ctx || _railOpened) return; // trạng thái đã đổi trong lúc chờ nạp
       var el = askBtnEl(); if (!el) return;
-      el.innerHTML = window.AiLoadingSteps.orbHtml({ size: 18, variant: 'a' }) +
-        '<span style="margin-left:6px">Hỏi</span>';
-      el.style.display = 'inline-flex';
-      el.style.alignItems = 'center';
+      el.innerHTML = window.AiLoadingSteps.orbHtml({ size: 18, variant: 'a' });
       _orbOn = true;
     });
   }
@@ -1585,7 +1423,8 @@
     if (!btn) {
       btn = document.createElement('button');
       btn.type = 'button'; btn.className = 'btn'; btn.id = 'wsShareBtn';
-      btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" style="width:14px;height:14px;vertical-align:-2px;margin-right:4px"><circle cx="18" cy="5" r="2.6"/><circle cx="6" cy="12" r="2.6"/><circle cx="18" cy="19" r="2.6"/><path d="m8.3 10.7 7.4-4.4M8.3 13.3l7.4 4.4"/></svg>Chia sẻ';
+      btn.setAttribute('data-tip', 'Chia sẻ'); btn.setAttribute('aria-label', 'Chia sẻ');
+      btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><circle cx="18" cy="5" r="2.6"/><circle cx="6" cy="12" r="2.6"/><circle cx="18" cy="19" r="2.6"/><path d="m8.3 10.7 7.4-4.4M8.3 13.3l7.4 4.4"/></svg>';
       btn.addEventListener('click', shareWorkspace);
       host.appendChild(btn);
     }
@@ -1641,7 +1480,8 @@
     if (btn) return;
     btn = document.createElement('button');
     btn.type = 'button'; btn.className = 'btn fbtn-fb'; btn.id = 'wsFbBtn';
-    btn.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor" style="width:14px;height:14px;vertical-align:-2px;margin-right:4px"><path d="M22 12.06C22 6.53 17.52 2.04 12 2.04S2 6.53 2 12.06c0 5 3.66 9.13 8.44 9.88v-6.99H7.9v-2.89h2.54V9.85c0-2.5 1.49-3.9 3.77-3.9 1.09 0 2.24.2 2.24.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56v1.88h2.78l-.45 2.89h-2.33v6.99c4.78-.75 8.44-4.88 8.44-9.88z"/></svg>Đăng Facebook';
+    btn.setAttribute('data-tip', 'Đăng Facebook'); btn.setAttribute('aria-label', 'Đăng Facebook');
+    btn.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 12.06C22 6.53 17.52 2.04 12 2.04S2 6.53 2 12.06c0 5 3.66 9.13 8.44 9.88v-6.99H7.9v-2.89h2.54V9.85c0-2.5 1.49-3.9 3.77-3.9 1.09 0 2.24.2 2.24.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56v1.88h2.78l-.45 2.89h-2.33v6.99c4.78-.75 8.44-4.88 8.44-9.88z"/></svg>';
     btn.addEventListener('click', postFacebook);
     host.appendChild(btn);
   }
