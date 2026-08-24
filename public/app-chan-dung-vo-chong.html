@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"></noscript>
-<link rel="stylesheet" href="/shell.css?v=20">
+<link rel="stylesheet" href="/shell.css?v=22">
 <style>
 .form-card{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);max-width:640px}
 .form-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:3px}
@@ -133,6 +133,10 @@
               <div style="width:100%;margin-top:6px;background:#FBF3DE;border:1px solid #e8d9b0;border-radius:8px;padding:12px 14px;font-size:12.5px;line-height:1.6;color:#5a5145">
                 💡 Chân dung này chỉ mang tính minh hoạ và tham khảo, được AI mô phỏng từ đặc điểm hình dáng gắn với chính tinh, phụ tinh tại cung Phu Thê trong lá số của bạn — không phải ảnh chụp hay dự đoán chính xác diện mạo người bạn đời ngoài đời thực. Để có kết quả sát thực hơn, cần đối chiếu thêm với lá số thật của người đó.
               </div>
+              <div class="compat-invite" id="cdvcInviteBlock" style="width:100%;display:none">
+                <div class="ci-t" id="cdvcInviteText"></div>
+                <button type="button" class="btn" onclick="Shell.shareNow()">Chia sẻ cho bạn bè xem →</button>
+              </div>
             </div>
           </div>
         </div>
@@ -158,7 +162,7 @@ window.SHELL_INTRO={key:'chan-dung-vo-chong',title:'Chân Dung Vợ Chồng',des
 <script src="/tuvi-paywall.js?v=21"></script>
 <script src="/auth.js?v=2"></script>
   <script src="/nav.js?v=22" data-icons-only></script>
-<script src="/shell.js?v=75"></script>
+<script src="/shell.js?v=76"></script>
 <script src="/tools-shared/ai-loading-steps.js?v=9"></script>
 <script src="/tools-shared/portrait-recover.js?v=2"></script>
 <script>
@@ -456,6 +460,13 @@ function renderProse(data) {
   } else { luanGiaiBlock.style.display = 'none'; }
   document.getElementById('portraitBlock').style.display = 'block';
   document.getElementById('card').style.display = 'flex';
+  // Tool này KHÔNG có "người thứ hai" thật để rủ xem chung (khác tuong-hop/
+  // duyen-no-tien-kiep) — chân dung là suy ra từ MỘT MÌNH lá số người dùng.
+  // Nên CTA đổi hướng: xin xác nhận "đúng gu chưa" + rủ bạn TỰ vẽ chân dung
+  // của họ, thay vì "gửi cho người B trong kết quả này xem".
+  document.getElementById('cdvcInviteText').innerHTML =
+    'Đúng gu bạn chưa? Gửi ảnh này cho hội bạn xem, rồi rủ họ vẽ thử <b>người bạn đời tương lai của chính họ</b> luôn.';
+  document.getElementById('cdvcInviteBlock').style.display = 'flex';
 }
 
 function renderPhuThe(pt) {

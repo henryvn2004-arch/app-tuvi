@@ -196,6 +196,16 @@ async function handleSignupBonus(): Promise<Response> {
   return ok({ bonus: variants.length ? Math.min(...variants) : null });
 }
 
+// ── GET: social-proof-info — CÔNG KHAI, cùng lý do handleSignupBonus: modal
+// "Khoe Kết Quả" phải nói ĐÚNG con số trước khi người dùng bấm nộp (luật V2.3
+// đã chốt, không hứa lửng lơ), và con số đó chỉnh được bằng SQL nên không được
+// viết cứng ở client. ──
+async function handleSocialProofInfo(): Promise<Response> {
+  const rewardCredits = await getConfigValue('social_proof.reward_credits', 20);
+  const cooldownDays  = await getConfigValue('social_proof.cooldown_days', 7);
+  return ok({ rewardCredits, cooldownDays });
+}
+
 // ── GET: check slug access ────────────────────────────────────
 async function handleCheck(sp: URLSearchParams): Promise<Response> {
   const slug   = sp.get('slug')   || '';
@@ -1369,6 +1379,7 @@ export async function GET(request: NextRequest) {
   if (action === 'balance')      return handleBalance(searchParams);
   if (action === 'check')        return handleCheck(searchParams);
   if (action === 'signup-bonus') return handleSignupBonus();
+  if (action === 'social-proof-info') return handleSocialProofInfo();
   if (action === 'promo-info')   return handlePromoInfo(searchParams);
   if (action === 'admin-promo-list') return handleAdminPromoList(request);
   if (action === 'admin-users')  return handleAdminUsers(request, searchParams);
@@ -1399,6 +1410,7 @@ export async function GET(request: NextRequest) {
   if (action === 'admin-content-pack') return handleAdminContentPack(request, searchParams);
   if (action === 'admin-media-queue') return handleAdminMediaQueue(request, searchParams);
   if (action === 'admin-seeding') return handleAdminSeeding(request);
+  if (action === 'admin-social-proof') return handleAdminSocialProofList(request, searchParams);
   if (action === 'admin-backlinks') return handleAdminBacklinks(request);
   if (action === 'check-bank')  return handleCheckBank(searchParams);
   return err('Invalid action.', 400);
@@ -2983,6 +2995,190 @@ async function handleAdminPromoCode(request: NextRequest, body: Record<string, u
   return ok({ success: true, code });
 }
 
+// ── "Khoe Kết Quả" — nộp bằng chứng đã đăng FB/IG/TikTok (docs/QUEST-PLAN.md
+// §3.5.1). KHÔNG có cách nào xác minh tự động một lượt đăng — Instagram không
+// lộ dữ liệu screenshot/story qua API cho bên thứ ba (đã nghiên cứu trước khi
+// thiết kế) — nên đây LUÔN là: user tự nộp → admin xác nhận bằng mắt → duyệt
+// mới cộng Lượng. Bảng `social_post_submissions` không có policy cho
+// anon/authenticated, chỉ đi qua 2 route dưới đây (service key, tự gắn
+// user_id từ token — KHÔNG tin user_id do client khai). ──
+
+const SOCIAL_PROOF_PLATFORMS = ['facebook', 'instagram', 'tiktok', 'other'];
+const SOCIAL_PROOF_MEDIA_EXT: Record<string, string> = {
+  'image/png': 'png',
+  'image/jpeg': 'jpg',
+  'image/webp': 'webp',
+};
+
+async function handleSocialProofSubmit(
+  request: NextRequest,
+  body: Record<string, unknown>
+): Promise<Response> {
+  const token = (request.headers.get('Authorization') || '').replace('Bearer ', '').trim();
+  const user = await getUserFromToken(token);
+  if (!user) return err('Cần đăng nhập', 401);
+
+  const platform = String(body.platform || '').trim().toLowerCase();
+  if (!SOCIAL_PROOF_PLATFORMS.includes(platform)) return err('platform không hợp lệ', 400);
+
+  const url = typeof body.url === 'string' ? body.url.trim().slice(0, 500) : '';
+  const mediaType = typeof body.mediaType === 'string' ? body.mediaType : '';
+  const screenshotBase64 = typeof body.screenshotBase64 === 'string' ? body.screenshotBase64 : '';
+  const toolId = typeof body.toolId === 'string' ? body.toolId.trim().slice(0, 80) : null;
+  const note = typeof body.note === 'string' ? body.note.trim().slice(0, 300) : null;
+
+  if (url && !/^https?:\/\//i.test(url)) return err('Link phải bắt đầu bằng http(s)://', 400);
+  const ext = SOCIAL_PROOF_MEDIA_EXT[mediaType];
+  if (!url && !(screenshotBase64 && ext)) {
+    return err('Cần dán link công khai, hoặc gửi ảnh chụp màn hình (PNG/JPEG/WebP)', 400);
+  }
+
+  // Cooldown: chặn nộp lại mỗi tuần (nghỉ 10 giây thì vẫn nộp được — chặn TẦN
+  // SUẤT, không chặn hành vi thật). Đọc từ app_config để chỉnh không cần deploy.
+  const cooldownDays = await getConfigValue('social_proof.cooldown_days', 7);
+  if (cooldownDays > 0) {
+    const sinceIso = new Date(Date.now() - cooldownDays * 86400000).toISOString();
+    const dupRes = await fetch(
+      `${SUPABASE_URL}/rest/v1/social_post_submissions?user_id=eq.${user.id}&platform=eq.${platform}` +
+        `&submitted_at=gte.${sinceIso}&select=id&limit=1`,
+      { headers: SB_HEADERS, cache: 'no-store' }
+    );
+    if (dupRes.ok) {
+      const dup = (await dupRes.json()) as unknown[];
+      if (dup.length) {
+        return err(`Bạn vừa nộp một lượt ${platform} gần đây — thử lại sau ${cooldownDays} ngày kể từ lượt trước.`, 429);
+      }
+    }
+  }
+
+  let screenshotUrl: string | null = null;
+  if (!url && screenshotBase64 && ext) {
+    let bytes: Buffer;
+    try {
+      bytes = Buffer.from(screenshotBase64, 'base64');
+    } catch {
+      return err('Ảnh không đọc được', 400);
+    }
+    if (!bytes.length || bytes.length > 8 * 1024 * 1024) return err('Ảnh trống hoặc quá 8MB', 400);
+    const path = `${user.id}/${Date.now()}.${ext}`;
+    const upRes = await fetch(`${SUPABASE_URL}/storage/v1/object/social-proof/${path}`, {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${SUPABASE_KEY}`, apikey: SUPABASE_KEY, 'Content-Type': mediaType },
+      body: new Uint8Array(bytes),
+    });
+    if (!upRes.ok) return err('Lỗi lưu ảnh: ' + (await upRes.text()).slice(0, 200), 500);
+    screenshotUrl = `${SUPABASE_URL}/storage/v1/object/public/social-proof/${path}`;
+  }
+
+  const insRes = await fetch(`${SUPABASE_URL}/rest/v1/social_post_submissions`, {
+    method: 'POST',
+    headers: { ...SB_HEADERS, Prefer: 'return=representation' },
+    body: JSON.stringify({
+      user_id: user.id,
+      platform,
+      url: url || null,
+      screenshot_url: screenshotUrl,
+      tool_id: toolId,
+      note,
+      status: 'pending',
+    }),
+  });
+  if (!insRes.ok) {
+    const t = await insRes.text();
+    // UNIQUE(url) trùng → 23505, đọc thành "link này đã nộp rồi" thay vì lỗi kỹ thuật.
+    if (t.includes('23505')) return err('Link này đã được nộp trước đó (bởi bạn hoặc người khác).', 409);
+    return err('Nộp hỏng: ' + t.slice(0, 200), 400);
+  }
+  const rows = (await insRes.json()) as { id: string }[];
+  return ok({ submitted: true, id: rows[0]?.id || null });
+}
+
+// GET: admin-social-proof — hàng đợi duyệt. Mặc định chỉ `pending` (đúng khuôn
+// Media Queue/Seeding — admin nhìn thấy việc cần làm, không phải toàn bộ lịch sử).
+async function handleAdminSocialProofList(request: NextRequest, sp: URLSearchParams): Promise<Response> {
+  const token = (request.headers.get('Authorization') || '').replace('Bearer ', '').trim();
+  const admin = await verifyAdmin(token);
+  if (!admin) return err('Unauthorized', 403);
+
+  const status = (sp.get('status') || 'pending').trim();
+  const statusFilter = /^[a-z]+$/.test(status) ? `&status=eq.${status}` : '';
+  try {
+    const rowsRes = await fetch(
+      `${SUPABASE_URL}/rest/v1/social_post_submissions?select=*${statusFilter}&order=submitted_at.desc&limit=60`,
+      { headers: SB_HEADERS, cache: 'no-store' }
+    );
+    const rows = rowsRes.ok ? await rowsRes.json() : [];
+
+    const userIds = Array.from(new Set((rows as { user_id?: string }[]).map((r) => r.user_id).filter((v): v is string => !!v)));
+    const emailMap: Record<string, string> = {};
+    await Promise.all(userIds.map(async (uid) => {
+      try {
+        const r = await fetch(`${SUPABASE_URL}/auth/v1/admin/users/${uid}`, { cache: 'no-store',
+          headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` },
+        });
+        if (r.ok) { const u = await r.json(); if (u?.email) emailMap[uid] = u.email; }
+      } catch { /* bỏ qua, hiện user_id thô */ }
+    }));
+
+    const defaultCredits = await getConfigValue('social_proof.reward_credits', 20);
+    return ok({
+      submissions: (rows as { user_id?: string }[]).map((r) => ({ ...r, email: r.user_id ? emailMap[r.user_id] || null : null })),
+      defaultCredits,
+    });
+  } catch (e: unknown) {
+    return err((e as Error).message);
+  }
+}
+
+// POST: admin-social-proof-decide — approve qua RPC nguyên tử (cộng Lượng +
+// ghi sổ trong CÙNG transaction, xem migration), reject chỉ đổi trạng thái.
+async function handleAdminSocialProofDecide(
+  request: NextRequest,
+  body: Record<string, unknown>
+): Promise<Response> {
+  const token = (request.headers.get('Authorization') || '').replace('Bearer ', '').trim();
+  const admin = await verifyAdmin(token);
+  if (!admin) return err('Unauthorized', 403);
+
+  const submissionId = String(body.submissionId || '').trim();
+  const decision = String(body.decision || '').trim();
+  if (!/^[0-9a-f-]{36}$/i.test(submissionId)) return err('submissionId không hợp lệ', 400);
+  if (decision !== 'approve' && decision !== 'reject') return err('decision phải là approve hoặc reject', 400);
+
+  try {
+    if (decision === 'reject') {
+      const reason = typeof body.reason === 'string' ? body.reason.trim().slice(0, 300) : null;
+      const res = await fetch(
+        `${SUPABASE_URL}/rest/v1/social_post_submissions?id=eq.${submissionId}&status=eq.pending`,
+        {
+          method: 'PATCH',
+          headers: { ...SB_HEADERS, Prefer: 'return=representation' },
+          body: JSON.stringify({
+            status: 'rejected', reviewed_at: new Date().toISOString(),
+            reviewed_by: admin.email, reject_reason: reason,
+          }),
+        }
+      );
+      if (!res.ok) return err(await res.text());
+      const rows = (await res.json()) as unknown[];
+      if (!rows.length) return err('Không tìm thấy lượt nộp đang chờ với id đó', 404);
+      return ok({ decided: true, status: 'rejected' });
+    }
+
+    const defaultCredits = await getConfigValue('social_proof.reward_credits', 20);
+    const credits = body.credits === undefined || body.credits === null
+      ? defaultCredits
+      : Math.max(0, Math.min(200, Math.round(Number(body.credits) || 0)));
+    const credited = await rpc('social_proof_approve', {
+      p_submission_id: submissionId, p_credits: credits, p_reviewer: admin.email,
+    });
+    if (credited === 0) return err('Lượt nộp này không còn ở trạng thái chờ duyệt (đã duyệt/từ chối trước đó)', 409);
+    return ok({ decided: true, status: 'approved', credited });
+  } catch (e: unknown) {
+    return err((e as Error).message);
+  }
+}
+
 export async function POST(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const action = searchParams.get('action');
@@ -3000,6 +3196,8 @@ export async function POST(request: NextRequest) {
   if (action === 'admin-channel-broadcast') return handleAdminChannelBroadcast(request, body);
   if (action === 'admin-nudge-user') return handleAdminNudgeUser(request, body);
   if (action === 'admin-media-decide') return handleAdminMediaDecide(request, body);
+  if (action === 'social-proof-submit') return handleSocialProofSubmit(request, body);
+  if (action === 'admin-social-proof-decide') return handleAdminSocialProofDecide(request, body);
   if (action === 'admin-content-edit') return handleAdminContentEdit(request, body);
   if (action === 'admin-seeding-group') return handleAdminSeedingGroup(request, body);
   if (action === 'admin-seeding-draft') return handleAdminSeedingDraft(request, body);

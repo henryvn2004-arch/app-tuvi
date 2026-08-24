@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"></noscript>
-<link rel="stylesheet" href="/shell.css?v=20">
+<link rel="stylesheet" href="/shell.css?v=22">
 <link rel="stylesheet" href="/laso-chart.css?v=3">
 <style>
 .form-card{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);max-width:720px}
@@ -39,6 +39,7 @@
 .verdict .lbl{font-family:var(--serif);font-size:17px;font-weight:600;margin-top:4px}
 .meter{height:9px;border-radius:9px;background:var(--paper-2);margin:14px auto 0;max-width:420px;overflow:hidden}
 .meter i{display:block;height:100%;border-radius:9px;transition:width .5s}
+/* .compat-invite/.ci-t nay ở shell.css (dùng chung nhiều tool kết quả) */
 /* factor rows */
 .sec{margin-bottom:22px}
 .sec-h{display:flex;align-items:center;gap:11px;margin-bottom:11px}
@@ -155,7 +156,7 @@
 <script src="/auth.js?v=2"></script>
 <script src="/tuvi-paywall.js?v=21"></script>
   <script src="/nav.js?v=22" data-icons-only></script>
-<script src="/shell.js?v=75"></script>
+<script src="/shell.js?v=76"></script>
 <script src="/tools-shared/ai-loading-steps.js?v=9"></script>
 <script>
 // ── MODE: 1 trang phục vụ 3 route — /app/xem-tuoi (vợ chồng), /app/xem-lam-an
@@ -292,7 +293,13 @@ function renderCompat(r,nameA,nameB,fdA,fdB){
     '<div class="who"><b>'+esc(nameA)+'</b> <span style="color:var(--text-lt)">×</span> <b>'+esc(nameB)+'</b></div>'+
     '<div class="big" style="color:'+col+'">'+r.total+'<small>/100</small></div>'+
     '<div class="lbl" style="color:'+col+'">'+verdictLabel(r.total)+'</div>'+
-    '<div class="meter"><i style="width:'+r.total+'%;background:'+col+'"></i></div>';
+    '<div class="meter"><i style="width:'+r.total+'%;background:'+col+'"></i></div>'+
+    // "Rủ so lá số" — Co-Star nổi lên nhờ đúng cơ chế này (thêm bạn, so biểu
+    // đồ). Đặt NGAY dưới điểm số, đúng lúc tò mò cao nhất — không chờ tới lúc
+    // hết Lượng như invite-cta. Gọi Shell.shareNow() = CHÍNH luồng Chia sẻ
+    // (native share sheet/modal), chỉ khác chỗ đặt + câu chữ đích danh.
+    '<div class="compat-invite"><div class="ci-t">Gửi kết quả này cho <b>'+esc(nameB)+'</b> xem — họ tò mò là muốn tự tra lá số của mình luôn.</div>'+
+    '<button type="button" class="btn" onclick="Shell.shareNow()">Rủ '+esc(nameB)+' xem ngay →</button></div>';
 
   // per-person summary
   function who(ls,name,cls){

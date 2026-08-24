@@ -1002,6 +1002,179 @@
     });
   }
 
+  // Copy chuỗi bất kỳ (không nằm sẵn trong một <input>) — Clipboard API trước,
+  // rơi về ô <textarea> ẩn + execCommand khi trình duyệt cũ/không có quyền.
+  function copyPlainText(txt, onDone) {
+    var legacy = function () {
+      try {
+        var ta = document.createElement('textarea');
+        ta.value = txt; ta.style.position = 'fixed'; ta.style.opacity = '0'; ta.style.top = '0';
+        document.body.appendChild(ta); ta.focus(); ta.select();
+        document.execCommand('copy'); ta.remove();
+      } catch (e) { /* ignore */ }
+      onDone();
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(txt).then(onDone, legacy);
+    else legacy();
+  }
+
+  // ══════════════════════════════════════════════════════════════════════
+  // "Sao chép caption" — giảm ma sát lớn nhất khi đăng: KHÔNG phải "có muốn
+  // khoe không" mà là "viết gì bây giờ" (docs/QUEST-PLAN.md §3.5.3). Vài mẫu
+  // xoay vòng, giọng đời thường, kèm link chia sẻ THẬT (cùng URL nút Chia sẻ
+  // dựng — mang sẵn ?ref= của người bấm) + hashtag cố định.
+  // ══════════════════════════════════════════════════════════════════════
+  var CAPTION_TEMPLATES = [
+    'Vừa xem "{t}" trên Tử Vi Minh Bảo, đọc mà giật cả mình 😳 Thử xem lá số của bạn ra sao nè',
+    'Tò mò "{t}" nói gì về mình mà đọc xong ngồi ngẫm nguyên buổi 🤔',
+    '"{t}" — đọc xong thấy đúng thiệt. Ai tò mò thì bấm thử luôn nha 👇'
+  ];
+  function buildCaptionText(title, url) {
+    var tpl = CAPTION_TEMPLATES[Math.floor(Math.random() * CAPTION_TEMPLATES.length)];
+    return tpl.replace('{t}', title) + '\n' + url + '\n\n#TuViMinhBao #TuVi #LaSo';
+  }
+  function renderCaptionBtn(visible) {
+    var host = document.querySelector('.ws-actions');
+    var btn = document.getElementById('wsCaptionBtn');
+    if (!visible || !currentShare()) { if (btn) btn.remove(); return; }
+    if (!host || btn) return;
+    btn = document.createElement('button');
+    btn.type = 'button'; btn.className = 'btn'; btn.id = 'wsCaptionBtn';
+    btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" style="width:14px;height:14px;vertical-align:-2px;margin-right:4px"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg>Sao chép caption';
+    btn.addEventListener('click', copyCaption);
+    host.appendChild(btn);
+  }
+  function copyCaption() {
+    var s = currentShare(); if (!s) return;
+    var btn = document.getElementById('wsCaptionBtn'); if (btn) btn.disabled = true;
+    var reEnable = function () { if (btn) btn.disabled = false; };
+    var headers = { 'Content-Type': 'application/json' };
+    var tk0 = getToken(); if (tk0) headers['Authorization'] = 'Bearer ' + tk0;
+    fetch('/api/share-result', {
+      method: 'POST', headers: headers,
+      body: JSON.stringify({ toolId: s.toolId, kind: s.kind, title: s.title, imageUrl: s.imageUrl, text: s.text, blocks: s.blocks }),
+    })
+      .then(function (r) { return r.json(); })
+      .then(function (j) {
+        reEnable();
+        if (!j || !j.url) { alert('Không tạo được caption, thử lại sau.'); return; }
+        var url = withViralParams(location.origin + j.url, s.toolId);
+        var txt = buildCaptionText(s.title, url);
+        copyPlainText(txt, function () {
+          if (btn) { btn.textContent = 'Đã chép ✓'; setTimeout(function () { btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" style="width:14px;height:14px;vertical-align:-2px;margin-right:4px"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg>Sao chép caption'; }, 1800); }
+          track('cta_click', { tool_id: s.toolId, meta: { from: 'caption_copy' } });
+        });
+      })
+      .catch(function () { reEnable(); alert('Lỗi mạng khi tạo caption.'); });
+  }
+
+  // ══════════════════════════════════════════════════════════════════════
+  // "Khoe Kết Quả" — nộp bằng chứng đã đăng FB/IG/TikTok để nhận Lượng
+  // (docs/QUEST-PLAN.md §3.5.1). KHÔNG có cách xác minh tự động một lượt
+  // đăng — luôn là: user tự nộp (link công khai hoặc ảnh chụp Story) → admin
+  // duyệt bằng mắt trong panel admin → cộng Lượng SAU khi duyệt, không phải
+  // lúc nộp. Xem app/api/payment/route.ts handleSocialProofSubmit.
+  // ══════════════════════════════════════════════════════════════════════
+  function renderKhoeBtn(visible) {
+    var host = document.querySelector('.ws-actions');
+    var btn = document.getElementById('wsKhoeBtn');
+    if (!visible || !currentShare()) { if (btn) btn.remove(); return; }
+    if (!host || btn) return;
+    btn = document.createElement('button');
+    btn.type = 'button'; btn.className = 'btn'; btn.id = 'wsKhoeBtn';
+    btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" style="width:14px;height:14px;vertical-align:-2px;margin-right:4px"><path d="M12 2 14.5 8.5 21 9l-5 4.3L17.5 20 12 16.3 6.5 20 8 13.3 3 9l6.5-.5Z"/></svg>Khoe kết quả';
+    btn.addEventListener('click', function () {
+      if (!getToken()) {
+        if (window.Auth && Auth.require) { Auth.require(openKhoeModal); return; }
+      }
+      openKhoeModal();
+    });
+    host.appendChild(btn);
+  }
+  function openKhoeModal() {
+    var s = currentShare(); if (!s) return;
+    if (document.querySelector('.tvmb-khoe-modal')) return;
+    var wrap = document.createElement('div');
+    wrap.className = 'sh-share-modal tvmb-khoe-modal';
+    wrap.innerHTML =
+      '<div class="ssm-card">' +
+        '<button class="ssm-x" aria-label="Đóng">✕</button>' +
+        '<div class="ssm-t">Khoe Kết Quả — nhận Lượng</div>' +
+        '<div class="ssm-d" id="khoeDesc">Bạn vừa đăng ' + esc(s.title) + ' lên Facebook/Instagram/TikTok? Dán link (bài thường), hoặc gửi ảnh chụp nếu là Story — mình duyệt xong sẽ cộng Lượng.</div>' +
+        '<div class="ssm-field"><label class="ssm-label">Đăng ở đâu</label>' +
+          '<select class="ssm-in full" id="khoePlatform">' +
+            '<option value="facebook">Facebook</option>' +
+            '<option value="instagram">Instagram</option>' +
+            '<option value="tiktok">TikTok</option>' +
+            '<option value="other">Khác</option>' +
+          '</select></div>' +
+        '<div class="ssm-field"><label class="ssm-label">Link bài đăng (nếu có)</label>' +
+          '<input class="ssm-in full" id="khoeUrl" type="url" placeholder="https://facebook.com/..." /></div>' +
+        '<div class="ssm-field"><label class="ssm-label">Hoặc ảnh chụp màn hình (bắt buộc nếu là Story — Story tự xoá sau 24h, không có link)</label>' +
+          '<input class="ssm-in full" id="khoeFile" type="file" accept="image/png,image/jpeg,image/webp" /></div>' +
+        '<div class="ssm-field"><label class="ssm-label">Ghi chú (tuỳ chọn)</label>' +
+          '<textarea class="ssm-in full" id="khoeNote" rows="2" maxlength="300"></textarea></div>' +
+        '<div class="ssm-row" style="margin-top:2px"><button class="ssm-copy" id="khoeSubmit" style="width:100%">Nộp</button></div>' +
+      '</div>';
+    document.body.appendChild(wrap);
+    var close = function () { wrap.remove(); };
+    wrap.addEventListener('click', function (e) { if (e.target === wrap) close(); });
+    wrap.querySelector('.ssm-x').addEventListener('click', close);
+    // Con số thưởng lấy từ server — chỉnh được bằng SQL, không viết cứng.
+    fetch('/api/payment?action=social-proof-info').then(function (r) { return r.json(); }).then(function (j) {
+      if (j && j.rewardCredits && wrap.isConnected) {
+        var d = wrap.querySelector('#khoeDesc');
+        d.textContent = d.textContent + ' Mỗi lượt duyệt: +' + j.rewardCredits + ' Lượng.';
+      }
+    }).catch(function () { /* thiếu con số cũng không chặn form */ });
+    wrap.querySelector('#khoeSubmit').addEventListener('click', function () { submitKhoe(wrap, s, close); });
+  }
+  function submitKhoe(wrap, s, close) {
+    var platform = wrap.querySelector('#khoePlatform').value;
+    var url = wrap.querySelector('#khoeUrl').value.trim();
+    var note = wrap.querySelector('#khoeNote').value.trim();
+    var file = wrap.querySelector('#khoeFile').files[0];
+    if (!url && !file) { alert('Cần dán link, hoặc chọn một ảnh chụp màn hình.'); return; }
+    var btn = wrap.querySelector('#khoeSubmit'); btn.disabled = true; btn.textContent = 'Đang nộp…';
+    var send = function (screenshotBase64, mediaType) {
+      freshToken().then(function (tk) {
+        var headers = { 'Content-Type': 'application/json' };
+        if (tk) headers['Authorization'] = 'Bearer ' + tk;
+        fetch('/api/payment?action=social-proof-submit', {
+          method: 'POST', headers: headers,
+          body: JSON.stringify({
+            platform: platform, url: url || null, note: note || null, toolId: s.toolId,
+            screenshotBase64: screenshotBase64 || null, mediaType: mediaType || null,
+          }),
+        })
+          .then(function (r) { return r.json().then(function (j) { return { ok: r.ok, j: j }; }); })
+          .then(function (res) {
+            if (!res.ok || !res.j || res.j.error) {
+              btn.disabled = false; btn.textContent = 'Nộp';
+              alert((res.j && res.j.error) || 'Nộp hỏng, thử lại sau.');
+              return;
+            }
+            track('cta_click', { tool_id: s.toolId, meta: { from: 'social_proof_submit', platform: platform } });
+            close();
+            alert('Đã nộp! Mình sẽ duyệt trong vài ngày, Lượng cộng ngay sau khi duyệt xong.');
+          })
+          .catch(function () { btn.disabled = false; btn.textContent = 'Nộp'; alert('Lỗi mạng khi nộp.'); });
+      });
+    };
+    if (file) {
+      if (file.size > 8 * 1024 * 1024) { btn.disabled = false; btn.textContent = 'Nộp'; alert('Ảnh vượt quá 8MB.'); return; }
+      var fr = new FileReader();
+      fr.onload = function () {
+        var b64 = String(fr.result || '').split(',')[1] || '';
+        send(b64, file.type);
+      };
+      fr.onerror = function () { btn.disabled = false; btn.textContent = 'Nộp'; alert('Đọc ảnh hỏng, thử lại.'); };
+      fr.readAsDataURL(file);
+    } else {
+      send(null, null);
+    }
+  }
+
   // ── CHIA SẺ KẾT QUẢ KHUNG GIỮA (workspace) — dùng chung cho MỌI tool ──
   // ── Tóm tắt lá số cho trang chia sẻ ──────────────────────────────────
   // Người nhận link /ket-qua không có ngữ cảnh gì: không nói rõ lá số nào thì
@@ -1203,6 +1376,8 @@
     autoShare = vis && !_shareMuted ? deriveShareable(host) : null;
     renderShareBtn();
     renderPdfBtn(vis);
+    renderCaptionBtn(vis);
+    renderKhoeBtn(vis);
     maybeAppendSrcNote(host);
   }
 
@@ -2070,6 +2245,12 @@
       shareable = normalizeShare(o); _shareMuted = false;
       renderShareBtn();
     },
+    // Kích hoạt CHÍNH luồng "Chia sẻ" của toolbar (native share sheet trên di
+    // động, modal Facebook/Zalo/WhatsApp trên desktop) từ một nút do TRANG tự
+    // vẽ — dùng cho CTA "Rủ [tên] so lá số" đặt ngay dưới kết quả tương hợp,
+    // đúng khoảnh khắc tò mò cao nhất thay vì chờ tới thanh công cụ chung.
+    // No-op nếu chưa có `currentShare()` (shareWorkspace tự kiểm).
+    shareNow: function () { shareWorkspace(); },
   };
   window.Shell = Shell;
 

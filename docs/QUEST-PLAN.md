@@ -236,6 +236,49 @@ Queue đã có trong admin.
    mời. Không chặn 4 mục trên (chúng không phụ thuộc Trang) — chỉ đừng thêm quest
    loại "ghé Trang" tới khi token được cấp lại.
 
+### 3.5.5. ✅ Mục 1 + 2 ĐÃ LÀM (Henry: "ok, làm luôn đi", 24/08) — mục 3 THU HẸP, mục 4 chưa đụng
+- **Mục 1 (Khoe Kết Quả) — đúng như thiết kế**: bảng `social_post_submissions`
+  (`_patches/migration-social-proof.sql`, đã chạy prod, verify RLS bật/0 policy,
+  bucket `social-proof` public 8MB, RPC `social_proof_approve` chỉ
+  `service_role` gọi được, cap 200 Lượng/lượt duyệt) + 2 route
+  (`social-proof-submit` công khai cho user đã đăng nhập,
+  `admin-social-proof`/`admin-social-proof-decide` cho admin) + nút "Khoe kết
+  quả" trong `.ws-actions` (`shell.js`, mở modal chọn nền tảng/dán link/gửi
+  ảnh) + panel duyệt trong `admin.html` (trang Phân Phối Nội Dung, cạnh Media
+  Queue/Seeding Group). **Đã test RPC live trên prod bằng transaction-rồi-
+  rollback**: duyệt cộng đúng số Lượng + ghi đúng 1 dòng `credit_transactions`
+  · duyệt lại một lượt đã duyệt trả về 0 (không cộng đôi) · vượt trần 200 bị
+  chặn kèm lý do, không đụng ví. 0 dữ liệu test còn sót lại trên prod.
+- **Mục 2 (Rủ so lá số)** — CTA `.compat-invite` (dọn về `shell.css` dùng
+  chung, không còn 2 bản) gắn ở **cả 3 tool compat**: `app-xem-tuoi.html`
+  (phủ cả `xem-tuoi`/`xem-lam-an`/`tuong-hop`, "Rủ [tên người kia] xem ngay"),
+  `app-duyen-no-tien-kiep.html` (nhóm 2–5 người → liệt kê đúng những người
+  CÒN LẠI trong nhóm cần mời), và `app-chan-dung-vo-chong.html` (đổi khung:
+  tool này KHÔNG có "người thứ hai" thật — CTA đổi hướng thành "đúng gu chưa,
+  gửi cho bạn bè xem rồi rủ họ tự vẽ chân dung của họ" thay vì rủ đúng một
+  người có tên trong kết quả).
+- **Mục 3 (caption + deep-link) — CỐ Ý CHỈ LÀM NỬA ĐẦU.** Có nút "Sao chép
+  caption" trong `.ws-actions` (3 mẫu câu xoay vòng, mang link chia sẻ THẬT có
+  sẵn `?ref=`, kèm hashtag cố định). **KHÔNG làm `instagram-stories://share`**
+  — deep-link kiểu này phải chạy trên một trang gọi mở app + đẩy ảnh vào
+  pasteboard theo đúng định dạng iOS/Android cho từng trang có nút Tải Ảnh
+  (~20 trang khác nhau), không kiểm được trong môi trường CI/agent hiện có, và
+  giá trị tăng thêm (bớt 2–3 bước thao tác) không cân với rủi ro hỏng ở một cơ
+  chế không test được. Nút Sao chép caption đã đủ giải quyết đúng thứ mục 3
+  gọi tên là friction lớn nhất ("viết gì bây giờ", không phải "mở app thế
+  nào"). Cần deep-link thật thì làm PR riêng, có máy thật để bấm thử.
+- **Mục 4 (hạn Tết 2027) — chưa đụng.** Vẫn còn ~5 tháng theo mốc đã ghi ở
+  trên; không phải phần của lượt này.
+- **Verify chung**: `tsc --noEmit` 0 lỗi · `eslint` 0 lỗi/77 warning (mốc nền
+  có sẵn, không tăng) · `prettier --check .` sạch cả cây · `node --check` toàn
+  bộ 50 khối script HTML đụng tới. Bump `shell.css?v=22` + giữ `shell.js?v=76`
+  (không đổi lại vì shell.js không sửa thêm ở lượt gộp version cuối) trên đủ
+  50 trang tham chiếu — không sót bản cũ.
+- **CÒN LẠI:** deploy rồi Henry tự thử 1 lượt Khoe Kết Quả thật (nộp → duyệt
+  trong admin → xem Lượng cộng đúng) trước khi tin panel đã đúng trên máy
+  thật, không chỉ trên transaction test. Chưa có cơ chế THU HỒI (§7.2) — mục
+  đó vẫn treo như đã ghi.
+
 ## 🖥️ 5. TỔNG QUAN MỚI (`/app`)
 
 Bỏ list 58 công cụ. Thứ tự đọc (mobile 390px trước):
@@ -294,12 +337,12 @@ Vận hôm nay (giữ) + thẻ gợi ý theo luật + mã mời + link `/cong-cu
 - RPC `quest_share_claim`: chỉ nhận `share_view` của link mình tạo, người mở ≠ mình,
   cap 3/ngày, cửa sổ 7 ngày.
 - Mốc mời 3 người → +50 (đọc `referrals` đã thưởng, không đếm signup suông).
-- **Khoe Kết Quả** (§3.5.1): bảng `social_post_submissions` + hàng đợi duyệt tay
-  trong admin (mẫu Seeding Group/Media Queue) + `+20 Lượng` khi Duyệt
-  (`meta.source='social_proof'`), UNIQUE url + trần 1/nền tảng/7 ngày.
-- **Rủ so lá số** (§3.5.2): đổi copy CTA của 3 tool compat — 0đ, không migration,
-  làm CÙNG PR vì rẻ và độc lập.
-- **Caption soạn sẵn + `instagram-stories://share`** (§3.5.3): nút mới cạnh Ảnh.
+- ✅ **Khoe Kết Quả** (§3.5.1) — XONG, xem §3.5.5: bảng `social_post_submissions`
+  + hàng đợi duyệt tay trong admin (mẫu Seeding Group/Media Queue) + `+20 Lượng`
+  qua RPC nguyên tử khi Duyệt, UNIQUE url + trần 1/nền tảng/7 ngày.
+- ✅ **Rủ so lá số** (§3.5.2) — XONG, xem §3.5.5: đổi copy CTA của 3 tool compat.
+- 🔶 **Caption soạn sẵn** (§3.5.3) — nút "Sao chép caption" XONG; nhánh
+  `instagram-stories://share` CỐ Ý CHƯA làm, xem lý do ở §3.5.5.
 - ⏰ Ưu tiên trước Q5–Q7 nếu muốn kịp mùa Tết 2027 (§3.5.4, hạn ~tháng 11).
 
 ### Q5 — "Tổng Kết Vận Mệnh" (phần thưởng 8/8)
