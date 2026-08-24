@@ -283,12 +283,14 @@ async function runPost(request: NextRequest) {
     // Lợi Nhuận, và cũng không có số nào để đặt ETA cho 24 phần.
     const r = await llmTextFull({ system: systemForLLM, prompt, maxTokens: maxTok, cacheSystem: true });
     const text = r.text;
-    // tool_id 'laso' = ĐÚNG `tool_pricing.tool_id` của Luận Giải (events dùng
-    // 'luan-giai', giao dịch dùng 'use_laso' — ba hệ tên lệch nhau, xem
-    // tool_canon() trong CLAUDE.md). Ghi theo id mà GIÁ treo vào thì bucket chi
-    // phí mới ghép được với bucket doanh thu.
+    // tool_id ĐÚNG `tool_pricing.tool_id` để bucket chi phí ghép được với bucket
+    // doanh thu (xem tool_canon() trong CLAUDE.md). Phần 1-13 (tổng quan + 12
+    // cung) thuộc "Luận Giải Tử Vi" (laso); phần 14-24 (đại vận + tiểu vận) đã
+    // TÁCH sang tool RIÊNG "Chu Trình Cuộc Đời" (chu-trinh-cuoc-doi) — route này
+    // phục vụ CẢ HAI tool (client gửi đúng số phan engine của tool đang gọi) nên
+    // phải chọn bucket theo SỐ PHẦN, không còn chép cứng 'laso' cho mọi lượt.
     void logLlmUsage(
-      'laso',
+      Number(phan) <= 13 ? 'laso' : 'chu-trinh-cuoc-doi',
       r.model,
       {
         input_tokens: r.usage.input_tokens,
