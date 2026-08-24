@@ -179,6 +179,11 @@ jobs:
       - name: Bộ dò chủ đề câu hỏi (mẫu phải là cụm đủ nghĩa, không âm tiết đơn)
         run: npm run check:topics
 
+      # Bảng Du Niên Bát Trạch (Sinh Khí…Tuyệt Mệnh) SINH bằng thuật toán, không
+      # còn chép tay — 3 bản chép tay cũ tự mâu thuẫn, sai 12-15/64 ô mỗi bản.
+      - name: Bảng Du Niên đối xứng, không còn bảng chép tay
+        run: npm run check:batrach
+
   typecheck:
     runs-on: ubuntu-latest
     timeout-minutes: 10

@@ -13,6 +13,7 @@ import { ok, err, options, parseBody } from '@/lib/cors';
 import { llmText, type LlmImage } from '@/lib/llm/complete';
 import { authUserFromRequest, parseLlmJson } from '@/lib/api/tool-helpers';
 import { withToolOutcome } from '@/lib/ops/tool-outcome';
+import { guaOf } from '@/lib/engine/bat-trach';
 
 // ── LLM helper (Gemini-primary + Anthropic-backup qua lib/llm/complete) ──────
 // Nhận messages theo shape Anthropic (content = string | [{type:'image'|'text'}])
@@ -34,17 +35,10 @@ async function claude(messages: any[], system: string, maxTokens = 2700): Promis
 }
 
 // ── Gua reference ────────────────────────────────────────────────
-
-const GUA: Record<number, { name: string; elem: string; good: Record<string,string>; bad: Record<string,string> }> = {
-  1:{name:'Khảm',elem:'Thủy',good:{SE:'Sinh Khí',E:'Thiên Y',S:'Diên Niên',N:'Phục Vị'},bad:{W:'Họa Hại',NE:'Ngũ Quỷ',NW:'Lục Sát',SW:'Tuyệt Mệnh'}},
-  2:{name:'Khôn',elem:'Thổ', good:{NE:'Sinh Khí',W:'Thiên Y',NW:'Diên Niên',SW:'Phục Vị'},bad:{E:'Họa Hại',SE:'Ngũ Quỷ',S:'Lục Sát',N:'Tuyệt Mệnh'}},
-  3:{name:'Chấn',elem:'Mộc', good:{S:'Sinh Khí',N:'Thiên Y',SE:'Diên Niên',E:'Phục Vị'}, bad:{SW:'Họa Hại',W:'Ngũ Quỷ',NE:'Lục Sát',NW:'Tuyệt Mệnh'}},
-  4:{name:'Tốn', elem:'Mộc', good:{N:'Sinh Khí',S:'Thiên Y',E:'Diên Niên',SE:'Phục Vị'}, bad:{NW:'Họa Hại',SW:'Ngũ Quỷ',W:'Lục Sát',NE:'Tuyệt Mệnh'}},
-  6:{name:'Càn', elem:'Kim', good:{W:'Sinh Khí',NE:'Thiên Y',SW:'Diên Niên',NW:'Phục Vị'},bad:{SE:'Họa Hại',S:'Ngũ Quỷ',E:'Lục Sát',N:'Tuyệt Mệnh'}},
-  7:{name:'Đoài',elem:'Kim', good:{NW:'Sinh Khí',SW:'Thiên Y',NE:'Diên Niên',W:'Phục Vị'}, bad:{E:'Họa Hại',N:'Ngũ Quỷ',SE:'Lục Sát',S:'Tuyệt Mệnh'}},
-  8:{name:'Cấn', elem:'Thổ', good:{SW:'Sinh Khí',NW:'Thiên Y',W:'Diên Niên',NE:'Phục Vị'}, bad:{S:'Họa Hại',E:'Ngũ Quỷ',N:'Lục Sát',SE:'Tuyệt Mệnh'}},
-  9:{name:'Ly',  elem:'Hỏa', good:{E:'Sinh Khí',SE:'Thiên Y',N:'Diên Niên',S:'Phục Vị'},  bad:{NE:'Họa Hại',NW:'Ngũ Quỷ',SW:'Lục Sát',W:'Tuyệt Mệnh'}},
-};
+// Bảng Du Niên KHÔNG còn chép tay ở đây — `guaOf()` (lib/engine/bat-trach.ts)
+// nạp thẳng public/tools-shared/bat-trach.js, cùng nguồn với client. Bản chép
+// tay cũ sai 12/64 ô (Lục Sát/Ngũ Quỷ/Tuyệt Mệnh hoán vị ở cung 3,6,7,8,9) —
+// xem ghi chú đầu file .js.
 
 // Ngũ Hành color data
 const NH_COLORS: Record<string, { primary: string[]; secondary: string[]; avoid: string[]; hex: Record<string,string> }> = {
@@ -177,7 +171,7 @@ async function handleVisionTool(
   if (!imageBase64) return err('Missing image');
 
   const guaNum = parseInt(String(guaNumber || 0));
-  const guaData = GUA[guaNum];
+  const guaData = guaNum ? guaOf(guaNum) : null;
   const guaCtx = guaData
     ? `Quái ${guaNum} — ${guaData.name} (${guaData.elem})\nTốt: ${Object.entries(guaData.good).map(([d,v])=>`${d}=${v}`).join(', ')}\nXấu: ${Object.entries(guaData.bad).map(([d,v])=>`${d}=${v}`).join(', ')}`
     : `Quái ${guaNum}`;
@@ -282,7 +276,7 @@ async function handleMauSac(request: NextRequest, body: Record<string, unknown>)
   }
 
   const guaNum = calcGua(year, gioiTinh || 'male');
-  const guaData = GUA[guaNum];
+  const guaData = guaNum ? guaOf(guaNum) : null;
   const napAmHanh = getNapAmHanh(year);
   const napAmFull = getNapAmFull(year);
   const canChi = yearToCanChi(year);

@@ -255,6 +255,13 @@ Mỗi luật dưới đây sinh ra từ một lần cắn thật. Cột cuối l
   chính danh sách của nguồn (4.392 khoá mẫu vẫn bỏ lọt 10 tên).
 - **Bảng dịch dựng từ MỘT nguồn thì chỉ phủ nguồn đó** — đã cắn 3 lần (chữ Hán,
   tên hành tinh). Cắm bộ dò rò rỉ mỗi lần đấu vào nguồn chữ mới.
+- **Bảng có tính ĐỐI XỨNG (Du Niên, quan hệ 2 chiều bất kỳ) tự kiểm được KHÔNG
+  cần nguồn ngoài** — cung A nhìn cung B ra sao X thì B nhìn A cũng phải ra X;
+  lệch là sai chắc chắn. `BatTrachTool.duNienStars()`/`getCungMenh()`
+  (`tools-shared/bat-trach.js`) là nguồn DUY NHẤT cho cung mệnh + 8 sao Bát
+  Trạch — 3 bản chép tay cũ (bản này + `route.ts` + 7 trang Vision) đều tự
+  mâu thuẫn, sai 12-15/64 ô mỗi bản. `npm run check:batrach`.
+  `nhat-ky/2026-08.md` "Bảng Du Niên Bát Trạch".
 
 ### 🚦 Thứ tự deploy
 - **Dữ liệu đi SAU giao diện.** `tool_pricing.enabled=true` chỉ được bật **sau khi

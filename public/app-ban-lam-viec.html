@@ -269,6 +269,7 @@ window.SHELL_INTRO={key:'ban-lam-viec',title:'Phong Thủy Bàn Làm Việc',des
   <script src="/nav.js?v=22" data-icons-only></script>
 <script src="/shell.js?v=77"></script>
 <script src="/tools-shared/ai-loading-steps.js?v=9"></script>
+<script src="/tools-shared/bat-trach.js?v=2"></script>
 <script>
 function initBanLamViec(){
   Shell.setContext({
@@ -284,10 +285,14 @@ if (document.readyState === 'loading') document.addEventListener('DOMContentLoad
 // Port từ public/tools/ban-lam-viec.html — giữ nguyên Bát Trạch calc +
 // gate Lượng qua TuviPaywall (product 'ban-lam-viec' + 'phong-thuy-render').
 // ══════════════════════════════════════════════════════════════════════
-const GUA_DATA={1:{name:'Khảm',elem:'Thủy',icon:'☵',good:{SE:'Sinh Khí',E:'Thiên Y',S:'Diên Niên',N:'Phục Vị'},bad:{W:'Họa Hại',NE:'Ngũ Quỷ',NW:'Lục Sát',SW:'Tuyệt Mệnh'}},2:{name:'Khôn',elem:'Thổ',icon:'☷',good:{NE:'Sinh Khí',W:'Thiên Y',NW:'Diên Niên',SW:'Phục Vị'},bad:{E:'Họa Hại',SE:'Ngũ Quỷ',S:'Lục Sát',N:'Tuyệt Mệnh'}},3:{name:'Chấn',elem:'Mộc',icon:'☳',good:{S:'Sinh Khí',N:'Thiên Y',SE:'Diên Niên',E:'Phục Vị'},bad:{SW:'Họa Hại',W:'Ngũ Quỷ',NE:'Lục Sát',NW:'Tuyệt Mệnh'}},4:{name:'Tốn',elem:'Mộc',icon:'☴',good:{N:'Sinh Khí',S:'Thiên Y',E:'Diên Niên',SE:'Phục Vị'},bad:{NW:'Họa Hại',SW:'Ngũ Quỷ',W:'Lục Sát',NE:'Tuyệt Mệnh'}},6:{name:'Càn',elem:'Kim',icon:'☰',good:{W:'Sinh Khí',NE:'Thiên Y',SW:'Diên Niên',NW:'Phục Vị'},bad:{SE:'Họa Hại',S:'Ngũ Quỷ',E:'Lục Sát',N:'Tuyệt Mệnh'}},7:{name:'Đoài',elem:'Kim',icon:'☱',good:{NW:'Sinh Khí',SW:'Thiên Y',NE:'Diên Niên',W:'Phục Vị'},bad:{E:'Họa Hại',N:'Ngũ Quỷ',SE:'Lục Sát',S:'Tuyệt Mệnh'}},8:{name:'Cấn',elem:'Thổ',icon:'☶',good:{SW:'Sinh Khí',NW:'Thiên Y',W:'Diên Niên',NE:'Phục Vị'},bad:{S:'Họa Hại',E:'Ngũ Quỷ',N:'Lục Sát',SE:'Tuyệt Mệnh'}},9:{name:'Ly',elem:'Hỏa',icon:'☲',good:{E:'Sinh Khí',SE:'Thiên Y',N:'Diên Niên',S:'Phục Vị'},bad:{NE:'Họa Hại',NW:'Ngũ Quỷ',SW:'Lục Sát',W:'Tuyệt Mệnh'}}};
+// GUA_DATA + calcGua KHÔNG còn chép tay — nạp từ /tools-shared/bat-trach.js
+// (nguồn DUY NHẤT, dùng chung với /tools/bat-trach.html). Bản chép tay cũ ở
+// đây sai 12/64 ô Du Niên + dùng công thức cung mệnh SAI (tổng 4 chữ số năm
+// thay vì 2 chữ số cuối — xem ghi chú đầu file bat-trach.js).
+const GUA_DATA=BatTrachTool.guaDataLegacy();
 const DIR_VN={N:'Bắc',NE:'Đông Bắc',E:'Đông',SE:'Đông Nam',S:'Nam',SW:'Tây Nam',W:'Tây',NW:'Tây Bắc',C:'Trung Tâm'};
 
-function calcGua(y,g){let s=String(y).split('').reduce((a,c)=>a+parseInt(c),0);while(s>=10)s=String(s).split('').reduce((a,c)=>a+parseInt(c),0);let r;if(g==='male'){r=y>=2000?9-s:10-s;if(r<=0)r+=9;if(r===5)r=2;}else{r=y>=2000?s+6:s+5;while(r>=10)r=String(r).split('').reduce((a,c)=>a+parseInt(c),0);if(r===5)r=8;}return r;}
+function calcGua(y,g){return BatTrachTool.getCungMenh(y,g==='male'?'nam':'nu');}
 
 let _gua=null,_img64=null,_imgType='image/jpeg';
 const ANALYSIS_STEPS=[
