@@ -48,6 +48,7 @@ const TuviPaywall = (() => {
     'gio-sinh': { title: 'Xác Định Giờ Sinh' },
     'nhan-mach': { title: 'Sổ Nhân Mạch' },
     'van-han-nam': { title: 'Vận Hạn 12 Tháng Tới' },
+    'chu-trinh-cuoc-doi': { title: 'Chu Trình Cuộc Đời' },
   };
 
   const TOOL_TYPE = {
@@ -79,6 +80,7 @@ const TuviPaywall = (() => {
     'gio-sinh': 'use_gio_sinh',
     'nhan-mach': 'use_nhan_mach',
     'van-han-nam': 'use_van_han_nam',
+    'chu-trinh-cuoc-doi': 'use_chu_trinh_cuoc_doi',
   };
 
   let _cfg        = null;
