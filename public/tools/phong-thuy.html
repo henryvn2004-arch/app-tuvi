@@ -22,6 +22,7 @@
 <script src="/auth.js"></script>
 <script src="/tuvi-paywall.js?v=21"></script>
 <script src="/tools-shared/ai-loading-steps.js?v=9"></script>
+<link rel="stylesheet" href="/tools/tools.css">
 <style>
 :root{--navy:#061A2E;--navy-mid:#0D3B5E;--blue:#1455A4;--gold:#9A7B3A;--gold-lt:#F9F4EB;--gold-bright:#D4A843;--text:#1a1a1a;--text-mid:#444;--text-lt:#777;--border:#CCCCCC;--border-lt:#E8E8E8;--bg:#FFFFFF;--bg-soft:#F5F4F0;--red:#C0392B;--green:#1E6B3C;}
 *{box-sizing:border-box;margin:0;padding:0;}
@@ -37,8 +38,8 @@ h1,h2,h3{font-family:'Noto Serif',serif;}
 .card-num{width:22px;height:22px;background:var(--navy);color:var(--gold-bright);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;}
 .form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;}
 @media(max-width:500px){.form-row{grid-template-columns:1fr;}}
-.form-group{display:flex;flex-direction:column;gap:5px;}
-.form-label{font-size:12px;color:var(--text-mid);font-weight:600;}
+.form-group{display:flex;flex-direction:column;gap:5px;margin-bottom:0;}
+.form-label{font-size:12px;color:var(--text-mid);font-weight:600;text-transform:none;letter-spacing:normal;margin-bottom:0;}
 .form-control{padding:9px 11px;border:1.5px solid var(--border);border-radius:7px;font-size:13px;color:var(--text);background:var(--bg);outline:none;font-family:Arial,sans-serif;transition:border-color .2s;}
 .form-control:focus{border-color:var(--blue);}
 .form-hint{font-size:11px;color:var(--text-lt);margin-top:2px;}
@@ -73,7 +74,7 @@ h1,h2,h3{font-family:'Noto Serif',serif;}
 /* Score */
 .score-compare{display:grid;grid-template-columns:1fr auto 1fr;gap:14px;align-items:center;margin-bottom:6px;}
 .score-label{font-size:10px;color:var(--text-lt);font-weight:700;letter-spacing:.5px;text-transform:uppercase;margin-bottom:5px;}
-.score-num{font-size:34px;font-weight:700;font-family:'Noto Serif',serif;}
+.score-num{font-size:34px;font-weight:700;font-family:'Noto Serif',serif;width:auto;text-align:left;}
 .score-before .score-num{color:var(--red);} .score-after .score-num{color:var(--green);}
 .score-bar-wrap{height:6px;background:var(--border-lt);border-radius:3px;overflow:hidden;margin-top:6px;}
 .score-bar{height:100%;border-radius:3px;width:0;transition:width 1s ease;}

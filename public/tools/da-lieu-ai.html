@@ -14,6 +14,7 @@
 <script src="/tuvi-paywall.js?v=21"></script>
 <script src="/tools-shared/ai-loading-steps.js?v=9"></script>
 <script src="/nav.js?v=20" defer></script>
+<link rel="stylesheet" href="/tools/tools.css">
 <style>
 :root{
   --navy:#061A2E;--navy-mid:#0D3B5E;--blue:#1455A4;
@@ -71,8 +72,8 @@ h1,h2,h3{font-family:'Noto Serif',serif;}
 
 .form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px;}
 @media(max-width:480px){.form-row{grid-template-columns:1fr;}}
-.form-group{display:flex;flex-direction:column;gap:5px;}
-.form-label{font-size:12px;color:var(--text-mid);font-weight:600;}
+.form-group{display:flex;flex-direction:column;gap:5px;margin-bottom:0;}
+.form-label{font-size:12px;color:var(--text-mid);font-weight:600;text-transform:none;letter-spacing:normal;margin-bottom:0;}
 .form-control{padding:9px 11px;border:1.5px solid var(--border);border-radius:8px;
   font-size:13px;color:var(--text);background:var(--bg);outline:none;
   font-family:'DM Sans',sans-serif;transition:border-color .2s;}
