@@ -264,6 +264,14 @@ body{font-family:var(--sans);background:var(--paper-2);color:var(--text);font-si
 .ssm-b{flex:1;text-align:center;text-decoration:none;font-size:12.5px;border:1px solid var(--line-2);border-radius:8px;padding:8px 10px;color:var(--text-mid);background:var(--paper)}
 .ssm-b:hover{border-color:var(--gold-soft);color:var(--text)}
 .ssm-b.fb{border-color:#1877F2;color:#1877F2}.ssm-b.zl{border-color:#0068FF;color:#0068FF}.ssm-b.wa{border-color:#25D366;color:#128C7E}
+.ssm-field{margin-bottom:11px}
+.ssm-label{display:block;font-size:11.5px;color:var(--text-lt);margin-bottom:4px}
+.ssm-in.full{width:100%;box-sizing:border-box;resize:vertical}
+
+/* ── CTA "rủ người khác xem/thử" (dùng chung nhiều tool kết quả) ── */
+.compat-invite{margin:16px auto 0;max-width:420px;padding:12px 14px;border:1px solid var(--gold-soft);border-radius:10px;background:var(--paper-2);display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:center;text-align:left}
+.compat-invite .ci-t{flex:1;min-width:180px;font-size:12.6px;color:var(--text-mid);line-height:1.5}
+
 .sam-card{position:relative;width:min(420px,94vw);max-height:82vh;display:flex;flex-direction:column;background:var(--white);border:1px solid var(--line-2);border-radius:14px;box-shadow:var(--shadow-lg);padding:20px 20px 14px}
 .sam-rand{border:1px dashed var(--line-2);background:var(--paper);border-radius:9px;padding:9px 12px;font-size:12.5px;color:var(--text-mid);cursor:pointer;font-family:inherit;margin-bottom:12px;text-align:center}
 .sam-rand:hover{border-color:var(--gold-soft);color:var(--text)}

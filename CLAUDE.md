@@ -1,5 +1,104 @@
 # CLAUDE.md — Context cho Claude Code
 
+## 📣 Track Quest/Gamification — "Khoe Kết Quả" + "Rủ so lá số" (2026-08-24)
+
+Henry, sau khi Q1 (Tổng Quan mới, PR #593) đã merge: *"mày đừng quá phụ thuộc
+vào con số thực để đánh giá, vì hiện tại website mới launch… hiện tại tao thấy
+vẫn thiếu activity (quest) để user làm, như đăng facebook, instagram,… mày thử
+research xem còn cách nào để motivate users lan tỏa website, gửi đến bạn bè
+không?"* rồi *"ok, làm luôn đi"*. Chi tiết đầy đủ (số đo, nghiên cứu, workplan
+cả track) nằm trong **`docs/QUEST-PLAN.md` §3.5 + §3.5.5** — mục này chỉ tóm
+tắt phần đã CODE trong lượt này (Q4 một phần, xem §6 của doc đó).
+
+### 🔑 Giới hạn quyết định cả thiết kế: không API nào lộ dữ liệu Story
+Nghiên cứu (WebSearch) trước khi viết dòng nào: Instagram/Facebook **không lộ
+dữ liệu screenshot/lượt xem Story qua bất kỳ API nào cho bên thứ ba** — mọi
+dịch vụ "báo ai xem story bạn" đều là lừa đảo. Toàn ngành growth loop vì thế
+dừng ở đúng một mức: **user tự nộp bằng chứng, admin xác nhận bằng mắt**. Đây
+là lý do "Khoe Kết Quả" là một hàng đợi duyệt tay, không phải một cơ chế xác
+minh tự động — không có cách nào khác.
+
+### ✅ 1. "Khoe Kết Quả" — nộp bằng chứng, admin duyệt, +20 Lượng
+- **`_patches/migration-social-proof.sql`** (đã chạy prod qua Supabase MCP):
+  bảng `social_post_submissions` (RLS bật, **0 policy** — chỉ service key chạm
+  được, client luôn đi qua route có auth) · bucket `social-proof` (public,
+  8MB, chỉ nhận png/jpeg/webp — cùng mức rủi ro đã chấp nhận cho bucket
+  `portraits`: đường dẫn có user_id + mốc mili-giây, không đoán được) · RPC
+  `social_proof_approve` (`security definer`, `set search_path = public`,
+  **REVOKE ALL FROM public,anon,authenticated; GRANT service_role**) · 2 dòng
+  `app_config` (`social_proof.reward_credits=20`, `social_proof.cooldown_days=7`
+  — chỉnh bằng SQL, không cần deploy).
+- **RPC nguyên tử** đúng khuôn `onboarding_task_claim`: `UPDATE …WHERE
+  status='pending' RETURNING` là chốt chống duyệt hai lần (ăn 0 dòng thì trả
+  về 0, không cộng lần nữa), cộng Lượng + ghi `credit_transactions` trong
+  CÙNG transaction. Trần **200 Lượng/lượt duyệt** ngay trong hàm — tay admin
+  gõ nhầm số 0 thì lỗi dừng ở đây, không đi thẳng vào ví.
+- **`app/api/payment/route.ts`**: `social-proof-info` (GET công khai, trả
+  đúng mức thưởng hiện hành cho modal đọc trước khi nộp) · `social-proof-
+  submit` (POST, cần đăng nhập, cooldown 7 ngày/nền tảng, chấp nhận link
+  công khai HOẶC ảnh base64 upload lên bucket) · `admin-social-proof` (GET,
+  hàng đợi theo status) · `admin-social-proof-decide` (POST, approve gọi RPC
+  ở trên / reject chỉ đổi trạng thái).
+- **`public/shell.js`**: nút "Khoe kết quả" trong `.ws-actions` (cùng hàng với
+  Chia sẻ/PDF), mở modal chọn nền tảng + dán link + gửi ảnh + ghi chú.
+- **`public/admin.html`**: panel "Khoe Kết Quả — Chờ Duyệt" trong trang Phân
+  Phối Nội Dung (cạnh Media Queue/Seeding Group, cùng UX list+Duyệt/Từ chối).
+- 🔑 **Verify RPC LIVE trên prod bằng transaction-rồi-rollback** (không để lại
+  dữ liệu test): duyệt cộng đúng số Lượng yêu cầu + đúng 1 dòng
+  `credit_transactions` · **duyệt lại một lượt đã duyệt → trả về 0, không
+  cộng đôi** (đã đo bằng số dư trước/sau) · vượt trần 200 → bị chặn, ví không
+  đụng. Sau rollback: 0 dòng còn sót trên `social_post_submissions` lẫn
+  `credit_transactions`.
+
+### ✅ 2. "Rủ so lá số" — CTA đích danh thay vì share chung chung
+Co-Star (WebSearch xác nhận) nổi lên nhờ đúng một cơ chế: *thêm bạn, so biểu
+đồ với nhau*. 3 tool đã có sẵn dữ liệu đó nhưng CTA hiện đọc như "khoe kết quả
+của TÔI" — đổi thành lời mời đích danh:
+- **`.compat-invite`/`.ci-t`** dọn về `shell.css` làm CSS DÙNG CHUNG (trước có
+  nguy cơ chép 2-3 bản rồi trôi khỏi nhau — đã gộp lại thành một định nghĩa).
+- `app-xem-tuoi.html` (phủ cả `xem-tuoi`/`xem-lam-an`/`tuong-hop`): "Rủ [tên
+  người kia] xem ngay →", gọi `Shell.shareNow()`.
+- `app-duyen-no-tien-kiep.html` (nhóm 2–5 người): liệt kê đúng những người
+  **CÒN LẠI** trong nhóm (bỏ người đầu — slot 1 luôn là "thường là bạn").
+- `app-chan-dung-vo-chong.html`: **đổi hướng CTA**, không rập khuôn 2 tool
+  trên — tool này vẽ vợ/chồng TƯƠNG LAI từ MỘT MÌNH lá số người dùng, không có
+  "người thứ hai" thật để rủ xem chung. CTA thành "đúng gu bạn chưa? gửi cho
+  bạn bè xem, rủ họ vẽ thử người bạn đời tương lai của chính họ".
+- **`Shell.shareNow()`** (mới, `shell.js`) — export hàm kích hoạt chính luồng
+  Chia sẻ có sẵn (native share sheet di động / modal desktop) từ một nút do
+  TRANG tự vẽ, để dùng đúng lúc tò mò cao nhất thay vì chờ thanh công cụ chung.
+
+### 🔶 3. Caption soạn sẵn — làm NỬA, cố ý bỏ nửa kia
+Nút **"Sao chép caption"** (`shell.js`, cạnh Chia sẻ/PDF/Khoe): 3 mẫu câu xoay
+vòng bằng `Math.random()`, mang **link chia sẻ THẬT** (gọi `/api/share-result`
+lấy URL rồi gắn `?ref=` qua `withViralParams`, không phải URL trang hiện tại)
++ hashtag cố định.
+- **CỐ Ý KHÔNG làm `instagram-stories://share`** (đã ghi trong workplan gốc).
+  Deep-link này cần chạy trên ~20 trang có nút Tải Ảnh khác nhau, đẩy ảnh vào
+  pasteboard đúng định dạng iOS/Android, và không kiểm được trong môi trường
+  agent hiện có (không có thiết bị thật để bấm thử). Giá trị tăng thêm (bớt
+  2–3 thao tác thủ công) không cân với việc ship một cơ chế chưa từng chạy
+  thử. Nút Sao chép caption đã giải quyết đúng phần friction chính ("viết gì
+  bây giờ"), phần "mở app thế nào" để lại cho PR riêng có máy thật.
+
+### Verify chung
+`tsc --noEmit` 0 lỗi · `eslint` 0 lỗi / 77 warning (đúng mốc nền pre-existing,
+không tăng) · `prettier --check .` sạch toàn repo · `node --check` cả 50 khối
+script HTML bị đụng tới (bump `shell.css?v=22`, không sót bản cũ trên trang
+nào). Migration + RPC verify trực tiếp trên prod qua Supabase MCP (xem mục 1).
+
+### CÒN LẠI
+- Deploy rồi Henry tự thử 1 lượt Khoe Kết Quả thật trên máy thật (nộp → duyệt
+  trong admin → xem Lượng cộng đúng) — verify ở trên mới chứng minh được RPC
+  đúng, chưa chứng minh được UI thật (modal/upload/panel) chạy mượt trên
+  trình duyệt thật.
+- **Chưa có cơ chế THU HỒI Lượng** khi phát hiện abuse — Henry đã chốt hướng
+  ("phát Lượng thoải mái, chống abuse bằng thu hồi chứ không chặn", xem
+  `docs/QUEST-PLAN.md` §7.2) nhưng cơ chế đó vẫn treo, không phải phạm vi PR
+  này.
+- Q4 còn 3 mục workplan gốc chưa đụng: chỉ số hiếm (đọc `tuvi-dataset-v1.json`),
+  thưởng `share_view` qua RPC `quest_share_claim`, mốc mời 3 người → +50.
+
 ## ✂️ Audit `trim_la_so` — chỉ CÒN 1 chỗ cắt thật, đã bỏ (2026-08-23)
 
 Henry hỏi thẳng: *"trim_la_so có thiếu dữ liệu so với engine gốc không? Trước

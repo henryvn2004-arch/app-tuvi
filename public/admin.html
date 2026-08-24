@@ -542,6 +542,27 @@
 
         <div class="panel">
           <div class="panel-header">
+            <div class="panel-title"><svg class="pt-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2Z"/><circle cx="12" cy="13" r="4"/></svg>Khoe Kết Quả — Chờ Duyệt</div>
+            <div class="panel-actions">
+              <select id="sp-status" class="search-input" style="width:auto" onchange="loadSocialProof()">
+                <option value="pending" selected>Chờ duyệt</option>
+                <option value="approved">Đã duyệt</option>
+                <option value="rejected">Đã từ chối</option>
+              </select>
+              <span class="badge badge-grey" id="sp-badge">…</span>
+              <button class="btn btn-primary btn-sm" onclick="loadSocialProof()">↻</button>
+            </div>
+          </div>
+          <div class="panel-body" style="font-size:.76rem;color:var(--text-lt);padding-bottom:.5rem">
+            User tự nộp link bài đăng (feed) hoặc ảnh chụp (Story, tự xoá sau 24h) đã đăng Facebook/Instagram/TikTok — <b>không có cách nào xác minh tự động</b> (Instagram không lộ dữ liệu lượt xem Story cho bên thứ ba, đã kiểm chắc trước khi thiết kế). Bấm mở link/ảnh, đối chiếu xong mới Duyệt — cộng Lượng chạy qua RPC nguyên tử nên duyệt hai lần vẫn chỉ cộng một lần.
+          </div>
+          <div id="sp-list" style="padding:0 1rem 1rem">
+            <div class="loading"><span class="spin"></span>Đang tải...</div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
             <div class="panel-title"><svg class="pt-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m22 8-6 4 6 4V8z"/><rect x="2" y="6" width="14" height="12" rx="2"/></svg>Content Pack TikTok (mồi phân phối)</div>
             <div class="panel-actions">
               <select id="cpack-days" class="search-input" style="width:auto">
@@ -4243,6 +4264,7 @@ async function loadMarketing() {
   loadAutopilotLog();
   loadMediaQueue();
   loadSeeding();
+  loadSocialProof();
   utmRenderSaved();
   _mktLoadedKey = fromEl.value + '|' + toEl.value;
 }
@@ -4492,6 +4514,105 @@ async function mediaDecide(postId, decision) {
     if (d.error) throw new Error(d.error);
     toast(decision === 'retry' ? 'Đã xếp lại hàng — cron sẽ đăng ở lượt tới' : 'Đã bỏ bài', 'success');
     loadMediaQueue();
+  } catch (e) {
+    toast('Lỗi: ' + e.message, 'error');
+  }
+}
+
+// ── "Khoe Kết Quả" — nộp bằng chứng đã đăng FB/IG/TikTok, admin xác nhận
+// bằng mắt (không có API nào lộ dữ liệu Story/screenshot cho bên thứ ba —
+// đã kiểm chắc trước khi thiết kế cả bảng lẫn panel này). ──
+const SP_PLATFORM_LABEL = { facebook: 'Facebook', instagram: 'Instagram', tiktok: 'TikTok', other: 'Khác' };
+const SP_STATUS = {
+  pending:  ['badge-pending', 'Chờ duyệt'],
+  approved: ['badge-green',   'Đã duyệt'],
+  rejected: ['badge-red',     'Đã từ chối'],
+};
+let _spDefaultCredits = 20;
+
+async function loadSocialProof() {
+  const badge = document.getElementById('sp-badge');
+  const host = document.getElementById('sp-list');
+  const statusEl = document.getElementById('sp-status');
+  const status = (statusEl && statusEl.value) || 'pending';
+  try {
+    const d = await apiGet('admin-social-proof', `&status=${status}`);
+    if (d.error) throw new Error(d.error);
+    _spDefaultCredits = Number(d.defaultCredits) || 20;
+    const rows = d.submissions || [];
+    if (badge) {
+      badge.className = 'badge ' + (status === 'pending' && rows.length ? 'badge-gold' : 'badge-grey');
+      badge.textContent = rows.length + (status === 'pending' ? ' chờ duyệt' : ' dòng');
+    }
+    renderSocialProof(rows);
+  } catch (e) {
+    if (badge) { badge.className = 'badge badge-red'; badge.textContent = 'Lỗi'; }
+    if (host) host.innerHTML = `<div class="empty">Lỗi: ${escHtmlLocal(e.message)}</div>`;
+  }
+}
+
+function renderSocialProof(rows) {
+  const host = document.getElementById('sp-list');
+  if (!host) return;
+  if (!rows.length) {
+    host.innerHTML = '<div class="empty">Không có lượt nộp nào ở trạng thái này.</div>';
+    return;
+  }
+  host.innerHTML = rows.map((r) => {
+    const [cls, label] = SP_STATUS[r.status] || ['badge-grey', r.status];
+    const platform = SP_PLATFORM_LABEL[r.platform] || r.platform;
+    // Chỉ mở link/ảnh khi ĐÚNG http(s) — dữ liệu do người dùng tự khai, cùng
+    // chốt chặn `sdSafeUrl` đã dùng cho Seeding Group.
+    const shot = sdSafeUrl(r.screenshot_url);
+    const link = sdSafeUrl(r.url);
+    const proof = shot
+      ? `<a href="${shot}" target="_blank" rel="noopener"><img src="${shot}" alt="" loading="lazy" style="width:120px;height:150px;object-fit:cover;border-radius:8px;background:var(--bg-alt);display:block"></a>`
+      : link
+        ? `<a href="${link}" target="_blank" rel="noopener" style="font-size:.76rem;word-break:break-all;color:var(--navy);font-weight:600">${escHtmlLocal(r.url)} ↗</a>`
+        : '<span style="font-size:.72rem;color:var(--text-lt)">(không có bằng chứng hợp lệ)</span>';
+    const isPending = r.status === 'pending';
+    return `
+    <div style="display:flex;gap:1rem;padding:.9rem 0;border-bottom:1px solid var(--border)">
+      <div style="width:120px;flex:none">${proof}</div>
+      <div style="flex:1;min-width:0">
+        <div style="display:flex;gap:.5rem;align-items:center;flex-wrap:wrap;margin-bottom:.35rem">
+          <span class="badge ${cls}">${escHtmlLocal(label)}</span>
+          <span class="badge badge-blue">${escHtmlLocal(platform)}</span>
+          <span style="font-size:.72rem;color:var(--text-lt)">${escHtmlLocal(r.email || r.user_id || '')}</span>
+          <span style="font-size:.7rem;color:var(--text-lt)">${relTime(r.submitted_at)}</span>
+        </div>
+        ${r.tool_id ? `<div style="font-size:.72rem;color:var(--text-lt);margin-bottom:.2rem">Đang khoe: <b>${escHtmlLocal(r.tool_id)}</b></div>` : ''}
+        ${r.note ? `<div style="font-size:.78rem;color:var(--text);margin-bottom:.35rem">${escHtmlLocal(r.note)}</div>` : ''}
+        ${r.status === 'approved' ? `<div style="font-size:.72rem;color:var(--text-lt)">Đã cộng <b>${escHtmlLocal(String(r.reward_credits))}</b> Lượng · duyệt bởi ${escHtmlLocal(r.reviewed_by || '')}</div>` : ''}
+        ${r.status === 'rejected' && r.reject_reason ? `<div style="font-size:.72rem;color:var(--tx-red)">Lý do từ chối: ${escHtmlLocal(r.reject_reason)}</div>` : ''}
+        ${isPending ? `
+        <div style="display:flex;gap:.5rem;align-items:center;margin-top:.5rem;flex-wrap:wrap">
+          <input type="number" id="sp-credits-${r.id}" value="${_spDefaultCredits}" min="0" max="200" step="1"
+                 style="width:70px;padding:.3rem .5rem;border:1px solid var(--border);border-radius:6px;background:var(--bg);color:var(--text);font-size:.78rem">
+          <span style="font-size:.72rem;color:var(--text-lt)">Lượng</span>
+          <button class="btn btn-primary btn-sm" onclick="socialProofDecide('${r.id}','approve')">Duyệt</button>
+          <button class="btn btn-outline btn-sm" onclick="socialProofDecide('${r.id}','reject')">Từ chối</button>
+        </div>` : ''}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+async function socialProofDecide(id, decision) {
+  const body = { submissionId: id, decision };
+  if (decision === 'approve') {
+    const el = document.getElementById('sp-credits-' + id);
+    const v = el ? Number(el.value) : NaN;
+    if (Number.isFinite(v)) body.credits = v;
+  } else {
+    const reason = prompt('Lý do từ chối (tuỳ chọn, hiện lại cho user khi họ hỏi):') || '';
+    body.reason = reason.trim();
+  }
+  try {
+    const d = await apiPost('admin-social-proof-decide', body);
+    if (d.error) throw new Error(d.error);
+    toast(decision === 'approve' ? `Đã duyệt — cộng ${d.credited} Lượng` : 'Đã từ chối', 'success');
+    loadSocialProof();
   } catch (e) {
     toast('Lỗi: ' + e.message, 'error');
   }
