@@ -409,6 +409,32 @@
   var ctxCalls = 0;   // số lần tool đã gọi setContext (0 = trang chưa dựng được gì)
   // Tool đã gộp: đọc kèm phiên lịch sử của tool cũ (la-so đã gộp vào luan-giai).
   var HIST_ALIAS = { 'luan-giai': ['la-so'] };
+  /* ── DẤU "ĐÃ DÙNG TOOL" (theo MÁY, không theo tài khoản) ──────────────────
+     Ghi ở `setContext` — chokepoint DUY NHẤT báo "tool đã tính ra kết quả",
+     cùng chỗ bắn event `tool_run`. Vì sao không đọc `events` từ server: 86/95
+     người chạy tool là KHÁCH VÔ DANH (đo prod 23/08), họ không có tài khoản để
+     mà tra; đọc ở máy thì gợi ý chạy được cho cả nhóm đó, 0 lượt mạng.
+
+     ⚠️ Đây là tín hiệu GỢI Ý, không phải quyền sở hữu — đừng bao giờ dùng nó
+     để quyết định ai được xem gì (xoá localStorage là mất). Quyền vẫn ở
+     `credit_transactions` / `portrait_cache` phía server. */
+  var USED_KEY = 'app_used_v1', USED_CAP = 60;
+  function usedTools() {
+    try { var o = JSON.parse(localStorage.getItem(USED_KEY) || '{}'); return (o && typeof o === 'object') ? o : {}; }
+    catch (e) { return {}; }
+  }
+  function markToolUsed(id) {
+    if (!id || id === 'home' || id === 'tai-khoan') return;
+    try {
+      var m = usedTools(); m[id] = Date.now();
+      var ks = Object.keys(m);
+      if (ks.length > USED_CAP) {
+        ks.sort(function (a, b) { return m[b] - m[a]; }).slice(USED_CAP).forEach(function (k) { delete m[k]; });
+      }
+      localStorage.setItem(USED_KEY, JSON.stringify(m));
+    } catch (e) { /* quota / private mode — gợi ý mất đi thì thôi, không được ném */ }
+  }
+
   function histKey(t) { return 'app_hist_v1_' + t; }
   function histLocal(t) { try { return JSON.parse(localStorage.getItem(histKey(t)) || '[]') || []; } catch (e) { return []; } }
   function histWrite(t, arr) { try { localStorage.setItem(histKey(t), JSON.stringify(arr.slice(0, HIST_CAP))); } catch (e) { /* quota */ } }
@@ -1819,6 +1845,10 @@
 
   // ── PUBLIC API cho trang tool ──
   var Shell = {
+    /* Bản đồ tool đã dùng trên MÁY này: {tool_id: timestamp}. Dùng cho gợi ý
+       ở Tổng Quan; xem chú thích `markToolUsed`. */
+    usedTools: usedTools,
+    markToolUsed: markToolUsed,
     // Gắn ngữ cảnh (lá số / kịch bản) để bật rail chat.
     setContext: function (o) {
       // birth và scenario có thể đi CÙNG nhau: birth để engine server lập lá
@@ -1835,6 +1865,7 @@
       ctxCalls++;
       // Funnel: tool đã tính ra kết quả + gắn ngữ cảnh = "đã dùng tool" (activation).
       try { track('tool_run', { tool_id: ACTIVE, slug: (o.scenario && o.scenario.type) || null }); } catch (e) { /* ignore */ }
+      markToolUsed(ACTIVE);
       messages = [];
       sessionId = newId();
       // Meta cho thread mới: restore payload đủ để dựng lại center (mặc định =

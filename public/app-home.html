@@ -43,6 +43,40 @@
 .tcard .cost{position:absolute;top:11px;right:12px;font-size:10.5px;font-weight:600;color:var(--gold-soft);background:var(--gold-lt);border:1px solid var(--gold-soft);border-radius:20px;padding:1px 8px}
 .tcard .cost.free{color:#fff;background:var(--green);border-color:var(--green)}
 .tcard.ext .tx b::after{content:"↗";font-size:11px;color:var(--text-lt);margin-left:5px;font-family:var(--sans)}
+/* ── Q1: GỢI Ý THEO HÀNH VI ────────────────────────────────────────────────
+   `.nx-why` là lý do — phần đáng giá nhất của khối này. Một thẻ gợi ý không
+   nói được VÌ SAO thì đọc như quảng cáo mù (xem lib/tools/suggest-tool.ts). */
+.next-wrap{margin-bottom:22px}
+.nx-main{display:flex;gap:13px;align-items:flex-start;background:var(--white);border:1px solid var(--gold-soft);border-radius:14px;padding:16px 17px;box-shadow:var(--shadow);text-decoration:none;transition:.15s}
+.nx-main:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(6,26,46,.09)}
+.nx-main .ic{width:44px;height:44px;flex:0 0 auto;border-radius:11px;background:var(--navy);color:var(--gold);display:flex;align-items:center;justify-content:center}
+.nx-main .ic svg{width:23px;height:23px}
+.nx-tx{min-width:0}
+.nx-tx b{display:block;font-family:var(--serif);font-size:16px;font-weight:600;color:var(--heading);margin-bottom:4px}
+.nx-why{font-size:12.5px;color:var(--text-mid);line-height:1.55}
+.nx-go{margin-left:auto;flex:0 0 auto;align-self:center;font-size:18px;color:var(--gold-soft)}
+.nx-more{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;margin-top:10px}
+.nx-item{display:flex;gap:10px;align-items:flex-start;background:var(--paper-2);border:1px solid var(--line);border-radius:11px;padding:11px 12px;text-decoration:none;transition:.15s}
+.nx-item:hover{border-color:var(--gold-soft);background:var(--white)}
+.nx-item .ic{width:30px;height:30px;flex:0 0 auto;border-radius:8px;background:var(--navy);color:var(--gold);display:flex;align-items:center;justify-content:center}
+.nx-item .ic svg{width:16px;height:16px}
+.nx-item b{display:block;font-family:var(--serif);font-size:13px;font-weight:600;color:var(--text);margin-bottom:2px}
+.nx-item span{font-size:11.5px;color:var(--text-lt);line-height:1.45}
+/* ── Q1: MỜI BẠN ──────────────────────────────────────────────────────────
+   Khác `invite-cta.js` (chỉ hiện khi HẾT Lượng): ở Tổng Quan nó hiện LUÔN —
+   46 link chia sẻ đã tạo mà chỉ 3 người từng bấm nút, nút thắt là chỗ đặt
+   chứ không phải mức thưởng. */
+.inv-card{background:var(--white);border:1px solid var(--line);border-radius:14px;padding:16px 17px;margin-bottom:16px;box-shadow:var(--shadow)}
+.inv-t{font-family:var(--serif);font-size:15px;font-weight:600;color:var(--heading);margin-bottom:5px}
+.inv-d{font-size:12.5px;color:var(--text-mid);line-height:1.55;margin-bottom:12px}
+.inv-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.inv-code{flex:1 1 190px;min-width:0;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.5px;color:var(--text);background:var(--paper-2);border:1px dashed var(--gold-soft);border-radius:9px;padding:9px 11px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.inv-btn{flex:0 0 auto;background:linear-gradient(135deg,var(--gold-soft),var(--gold));color:#2a1e05;border:none;border-radius:9px;padding:9px 15px;font-size:12.5px;font-weight:700;cursor:pointer;font-family:inherit}
+.inv-btn:hover{filter:brightness(1.06)}
+.inv-btn.ghost{background:none;color:var(--text-mid);border:1px solid var(--line);font-weight:600}
+.inv-note{font-size:11.5px;color:var(--text-lt);margin-top:9px;line-height:1.5}
+.all-tools{display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:600;color:var(--text-mid);text-decoration:none;border:1px solid var(--line);border-radius:10px;padding:10px 15px;background:var(--white)}
+.all-tools:hover{border-color:var(--gold-soft);color:var(--heading)}
 /* ── VẬN HÔM NAY — thẻ hero theo ngày (deterministic, miễn phí) → mồi vào rail luận riêng ── */
 .today-card{position:relative;overflow:hidden;background:linear-gradient(135deg,var(--navy),#0d2a49);border-radius:16px;padding:20px 22px;margin-bottom:22px;color:#fff}
 .today-card .glow{position:absolute;right:-34px;top:-46px;width:190px;height:190px;background:radial-gradient(circle,rgba(201,168,76,.22),transparent 70%);pointer-events:none}
@@ -231,7 +265,14 @@
              nhập + còn việc chưa làm; khách vãng lai không bao giờ thấy khối
              này (họ chưa có ví để mà cộng vào). -->
         <div class="task-card" id="taskCard" style="display:none"></div>
-        <div id="homeCards"></div>
+        <!-- Q1 — Tổng Quan mới. Trước đây chỗ này là lưới 58 công cụ
+             (`renderHomeCards`). Henry: "ko cần list lại nguyên đống tools nữa".
+             Thay bằng: gợi ý theo HÀNH VI (có lý do) + mã mời + một đường dẫn
+             sang danh mục đầy đủ. Sidebar và /cong-cu vẫn là đường vào của cả
+             58 công cụ — khối này chỉ trả lời "tiếp theo nên xem gì". -->
+        <div id="nextCard"></div>
+        <div id="inviteCard"></div>
+        <a class="all-tools" href="/cong-cu">Xem tất cả công cụ <span aria-hidden="true">→</span></a>
       </div>
     </div>
   </main>
@@ -246,7 +287,7 @@
 <script src="/tool-prices.js?v=5"></script>
 <script src="/auth.js?v=2"></script>
   <script src="/nav.js?v=22" data-icons-only></script>
-<script src="/shell.js?v=74"></script>
+<script src="/shell.js?v=75"></script>
 <script>
 function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 var IC={
@@ -273,64 +314,219 @@ var IC={
   temple:'<path d="m12 3 8 5H4z"/><path d="M3 8h18"/><path d="M6 8v9M18 8v9"/><path d="M10 17v-5h4v5"/><path d="M3 21h18"/>',
   briefcase:'<rect x="2.5" y="7" width="19" height="13" rx="2"/><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/><path d="M2.5 12.5h19"/>'
 };
-/* ── DANH MỤC CÔNG CỤ — dựng TỪ DỮ LIỆU, không còn mảng chép tay ──────────
-   Trước đây chỗ này là mảng `GROUPS` 34 dòng xếp theo BỘ MÔN, trong khi
-   `/cong-cu` xếp theo NHU CẦU với 58 công cụ — cùng một sản phẩm nói hai kiểu
-   với cùng một người, và thêm công cụ mới là phải sửa tay cả hai.
+/* ── Q1: GỢI Ý "TIẾP THEO NÊN XEM GÌ" ─────────────────────────────────────
+   Thay cho lưới 58 công cụ dựng từ `tool_groups` trước đây.
 
-   Nay: nhóm lấy từ bảng `tool_groups`, công cụ lấy từ `tool_pricing`, đường dẫn
-   lấy từ cột `app_path`. Công cụ CHƯA có trang trong Luận Đường thì `app_path`
-   NULL ⇒ không hiện ở đây (đúng thiết kế, không phải sót) nhưng vẫn hiện ở
-   `/cong-cu` qua `page_path`.
+   🔑 LUẬT, KHÔNG LLM: 0đ, tất định, và quan trọng nhất là NÓI ĐƯỢC LÝ DO.
+   Một thẻ gợi ý không giải thích được vì sao thì đọc như quảng cáo mù — cùng
+   nguyên tắc đã ghi trong lib/tools/suggest-tool.ts.
 
-   ⚠️ KHÔNG chép số giá vào đây. Chưa đọc được thì thẻ hiện "…" — xem
-   public/tool-prices.js. */
-function svg(n){ return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">'+(IC[n]||IC.grid)+'</svg>'; }
-/* Dựng thẻ từ danh mục đã đọc. `d` = kết quả ToolPrices.load(), hoặc bản
-   navFallback (danh mục đọc được lần gần nhất, KHÔNG kèm giá) khi mạng hỏng —
-   dashboard trống thì người dùng mất đường vào mọi công cụ. */
-function renderHomeCards(d){
-  var host=document.getElementById('homeCards');
-  if(!host) return;
-  var groups=(d && d.groups)||[];
-  var rows=(d && d.rows)||[];
-  var prices=(d && d.tools)||null;
-  /* Chỉ công cụ CÓ trang trong Luận Đường mới lên dashboard. */
-  var inApp=rows.filter(function(r){ return r && r.app_path; });
-  if(!groups.length || !inApp.length){
-    host.innerHTML='<div class="grp-title">Đang tải danh mục…</div>';
-    return;
-  }
-  var seen={}, html='';
-  function block(title, items){
-    if(!items.length) return '';
-    var cards=items.map(function(it){
-      var cost=(prices && prices[it.tool_id]!=null) ? prices[it.tool_id] : null;
-      return '<a class="tcard" href="'+esc(it.app_path)+'">'+
-        '<div class="ic">'+(window.iconHtml?window.iconHtml(it.icon):svg('grid'))+'</div>'+
-        '<div class="tx"><b>'+esc(it.label)+'</b><span>'+esc(it.question||it.description||'')+'</span></div>'+
-        (cost==null?'<span class="cost">…</span>'
-          :cost>0?'<span class="cost">'+cost+' Lượng</span>'
-          :'<span class="cost free">Miễn Phí</span>')+
-        '</a>';
-    }).join('');
-    return '<div class="grp-title">'+esc(title)+'</div><div class="cards">'+cards+'</div>';
-  }
-  groups.forEach(function(g){
-    var items=inApp.filter(function(r){
-      return window.ToolPrices && ToolPrices.groupsOf(r, groups).indexOf(g.key)>=0;
-    });
-    items.forEach(function(r){ seen[r.tool_id]=1; });
-    html+=block(g.title, items);
-  });
-  /* Công cụ không rơi vào nhóm nào vẫn phải NHÌN THẤY — tàng hình thì không ai
-     phát hiện ra là đã gán sai nhóm. */
-  html+=block('Khác', inApp.filter(function(r){ return !seen[r.tool_id]; }));
-  host.innerHTML=html;
-  if(window.mountIcons) window.mountIcons(host);
+   ⛔ KHÔNG in giá lên thẻ (khác `.tcard` cũ): dán giá vào đúng lúc đang chỉ
+   đường biến lời chỉ đường thành lời chào hàng. Cũng nhờ vậy khối này không có
+   ô giá nào để mà lệch — `npm run check:prices` không phải canh.
+
+   🪤 BA HỆ TÊN TOOL (bài học D1 trong CLAUDE.md): `SHELL_ACTIVE` dùng
+   'luan-giai' trong khi `tool_pricing.tool_id` là 'laso'; 'bat-tu' vs
+   'tu-binh'; 'sinh-con' vs 'xem-tuoi-sinh-con'. Cầu nối DUY NHẤT không chép
+   tay là `app_path` — '/app/luan-giai' → khoá shell 'luan-giai'. Đừng bao giờ
+   ghép '/app/' + tool_id. */
+function shellKeyOf(row) {
+  var p = row && row.app_path;
+  if (typeof p !== 'string' || p.indexOf('/app/') !== 0) return null;
+  return p.slice(5) || null;
 }
-renderHomeCards(window.ToolPrices ? ToolPrices.navFallback() : null);
-if(window.ToolPrices) ToolPrices.load().then(function(d){ if(d) renderHomeCards(d); });
+
+/* Chuỗi "bước tiếp theo" — chép tay CÓ CHỦ ĐÍCH vì phần đáng giá là câu LÝ DO,
+   không suy được từ dữ liệu. Khoá là khoá SHELL (xem shellKeyOf).
+   `after` = chỉ gợi khi đã dùng tool đó; thiếu `after` = gợi được bất cứ lúc nào.
+   Mục nào trỏ tới công cụ đang TẮT sẽ tự rơi ra khi đối chiếu danh mục. */
+var FLOW = [
+  { key: 'luan-giai', why: 'Lập lá số một lần — 24 phần luận giải, và gần như mọi công cụ khác đều đọc từ đây.' },
+  { key: 'van-han-nam', after: 'luan-giai', why: 'Đã đọc lá số tổng quan rồi thì bước tiếp là 12 tháng sắp tới, từng tháng một.' },
+  { key: 'cong-so', after: 'luan-giai', why: 'Cùng lá số đó, đọc theo hướng nghề nghiệp: hợp kiểu làm việc nào, ghép đội ra sao.' },
+  { key: 'gio-sinh', after: 'luan-giai', why: 'Không chắc giờ sinh? Sai giờ là lệch gần hết lá số — đối chiếu lại một lượt cho yên tâm.' },
+  { key: 'chan-dung-vo-chong', after: 'luan-giai', why: 'Cung Phu Thê tả người bạn đời — công cụ này dựng hẳn chân dung đó thành tranh.' },
+  { key: 'bat-tu', after: 'luan-giai', why: 'Cùng ngày sinh, đọc bằng một bộ môn khác (Tử Bình) để đối chiếu hai bên có nói giống nhau không.' },
+  { key: 'chan-dung-tien-kiep', why: 'Lá số của bạn đặt vào một bối cảnh xưa — một bức chân dung và một câu chuyện để đọc.' },
+  { key: 'duyen-no-tien-kiep', after: 'chan-dung-tien-kiep', why: 'Thêm lá số người thứ hai: kiếp trước hai người từng là gì của nhau.' },
+  { key: 'day-con', why: 'Có con nhỏ? Đọc lá số của bé theo hướng tính khí và cách dạy nào vào được.' },
+  { key: 'huong-nghiep-tre', after: 'day-con', why: 'Đã đọc tính khí của bé — xem bé hợp làm quen với loại việc gì.' },
+  { key: 'nhan-mach', after: 'cong-so', why: 'Đọc cả đội 2–8 người một lượt: ai giẫm chân ai, đội đang thiếu kiểu người nào.' }
+];
+/* Đệm khi hết mục trong FLOW — toàn công cụ MIỄN PHÍ, dùng thử không tốn Lượng. */
+var FREE_PICKS = ['than-so-hoc', 'tuong-hop', 'nap-am', 'kinh-dich', 'ngu-hanh-ten', 'ban-do-sao'];
+var FREE_WHY = 'Miễn phí — thử ngay, không tốn Lượng nào.';
+
+function hasBirthLocal() {
+  try {
+    var b = window.Shell && Shell.getRememberedBirth && Shell.getRememberedBirth();
+    return !!(b && (b.nam || b.year));
+  } catch (e) { return false; }
+}
+function usedMap() {
+  try { return (window.Shell && Shell.usedTools) ? Shell.usedTools() : {}; } catch (e) { return {}; }
+}
+
+/* Trả tối đa 3 gợi ý [{row, why}]. Không có dữ liệu danh mục → mảng rỗng và
+   khối tự ẩn: thà không gợi còn hơn dẫn người ta tới một trang không tồn tại. */
+function pickNext(d) {
+  var rows = (d && d.rows) || [];
+  if (!rows.length) return [];
+  var byKey = {};
+  rows.forEach(function (r) { var k = shellKeyOf(r); if (k && !byKey[k]) byKey[k] = r; });
+
+  var used = usedMap(), out = [], taken = {};
+  function add(key, why) {
+    if (out.length >= 3 || taken[key] || used[key] || !byKey[key]) return;
+    taken[key] = 1; out.push({ row: byKey[key], why: why });
+  }
+
+  /* Chưa có lá số: mọi thứ khác đều chờ nó, nên đó là gợi ý số một. */
+  if (!hasBirthLocal()) {
+    add('luan-giai', FLOW[0].why);
+    FREE_PICKS.forEach(function (k) { add(k, FREE_WHY); });
+    return out;
+  }
+  FLOW.forEach(function (f) {
+    if (f.after && !used[f.after]) return;
+    add(f.key, f.why);
+  });
+  FREE_PICKS.forEach(function (k) { add(k, FREE_WHY); });
+  return out;
+}
+
+function cardIcon(row) { return window.iconHtml ? window.iconHtml(row.icon) : svg('grid'); }
+
+function renderNext(d) {
+  var host = document.getElementById('nextCard'); if (!host) return;
+  var picks = pickNext(d);
+  if (!picks.length) { host.innerHTML = ''; return; }
+  var first = picks[0], rest = picks.slice(1);
+  var html = '<div class="next-wrap">' +
+    '<div class="grp-title">Tiếp theo nên xem gì</div>' +
+    '<a class="nx-main" href="' + esc(first.row.app_path) + '">' +
+      '<div class="ic">' + cardIcon(first.row) + '</div>' +
+      '<div class="nx-tx"><b>' + esc(first.row.label) + '</b>' +
+        '<div class="nx-why">' + esc(first.why) + '</div></div>' +
+      '<div class="nx-go" aria-hidden="true">›</div>' +
+    '</a>';
+  if (rest.length) {
+    html += '<div class="nx-more">' + rest.map(function (p) {
+      return '<a class="nx-item" href="' + esc(p.row.app_path) + '">' +
+        '<div class="ic">' + cardIcon(p.row) + '</div>' +
+        '<div><b>' + esc(p.row.label) + '</b><span>' + esc(p.why) + '</span></div></a>';
+    }).join('') + '</div>';
+  }
+  host.innerHTML = html + '</div>';
+  if (window.mountIcons) window.mountIcons(host);
+}
+renderNext(window.ToolPrices ? ToolPrices.navFallback() : null);
+if (window.ToolPrices) ToolPrices.load().then(function (d) { if (d) renderNext(d); });
+
+/* ── Q1: KHỐI MỜI BẠN ─────────────────────────────────────────────────────
+   Số đo 24/08: 46 link chia sẻ đã tạo, mỗi link kéo TB 1,7 người mở — nhưng
+   chỉ 3 người từng bấm nút Share. Nút thắt là CHỖ ĐẶT, không phải mức thưởng,
+   nên khối này hiện LUÔN ở Tổng Quan (khác invite-cta.js — chỉ hiện lúc hết
+   Lượng, tức lúc người ta đang bực).
+
+   Mọi con số lấy từ SERVER (`my-referral`), không viết cứng: mức thưởng và
+   trần đều chỉnh được bằng một câu SQL. Đọc hụt → khối tự ẩn, KHÔNG đoán. */
+(function () {
+  var host = document.getElementById('inviteCard'); if (!host) return;
+  /* Lấy token qua `getFreshToken()`, KHÔNG qua `getSession().access_token`:
+     cái sau là ẢNH CHỤP, trả token kể cả khi đã hết hạn → server 401 trong khi
+     người dùng vẫn đang đăng nhập (chú thích ngay trong auth.js). */
+  function freshToken() {
+    try {
+      if (window.Auth && Auth.getFreshToken) return Auth.getFreshToken();
+    } catch (e) { /* rơi xuống */ }
+    return Promise.resolve(null);
+  }
+  /* Khách chưa đăng nhập vẫn thấy khối — nhưng phần thưởng khoá sau nút tạo
+     tài khoản. 86/95 người chạy tool đang là khách vô danh; giấu hẳn khối này
+     với họ là bỏ đúng nhóm đông nhất. */
+  function renderGuest() {
+    host.innerHTML = '<div class="inv-card">' +
+      '<div class="inv-t">✦ Mời bạn — cả hai cùng có Lượng</div>' +
+      '<div class="inv-d">Tạo tài khoản để nhận Lượng chào mừng và lấy mã mời của riêng bạn. ' +
+        'Mỗi người đăng ký qua mã của bạn thì bạn được cộng thêm.</div>' +
+      '<div class="inv-row"><button class="inv-btn" type="button" id="invSignup">Tạo tài khoản</button></div>' +
+      '</div>';
+    var b = document.getElementById('invSignup');
+    if (b) b.onclick = function () {
+      // `Auth.require` mở modal đăng nhập/đăng ký rồi gọi callback khi xong.
+      try {
+        if (window.Auth && Auth.require) { Auth.require(function () { location.reload(); }); return; }
+      } catch (e) { /* rơi xuống dưới */ }
+      location.href = '/topup.html';
+    };
+  }
+  function renderMember(d) {
+    var code = d.code;
+    var reward = Number(d.rewardPerInvite) || 0;
+    var cap = Number(d.cap) || 0;
+    var capLeft = Math.max(0, cap - (Number(d.rewardedRecent) || 0));
+    var rewarded = Number(d.rewarded) || 0;
+    var earned = Number(d.creditsEarned) || 0;
+    var url = location.origin + '/app?ref=' + encodeURIComponent(code) +
+      '&utm_source=invite&utm_medium=referral&utm_campaign=home';
+
+    var line = capLeft > 0
+      ? 'Mỗi người đăng ký qua link của bạn: <b>+' + reward + ' Lượng</b> cho bạn' +
+        (capLeft < cap ? ' (còn ' + capLeft + ' lượt được thưởng trong 30 ngày)' : '') + '.'
+      : 'Bạn đã dùng hết lượt mời được thưởng trong 30 ngày qua — quay lại tháng sau nhé.';
+
+    host.innerHTML = '<div class="inv-card">' +
+      '<div class="inv-t">✦ Mời bạn — cả hai cùng có Lượng</div>' +
+      '<div class="inv-d">' + line + '</div>' +
+      '<div class="inv-row">' +
+        '<div class="inv-code" id="invUrl">' + esc(url) + '</div>' +
+        '<button class="inv-btn" type="button" id="invCopy">Chép link</button>' +
+      '</div>' +
+      (rewarded > 0
+        ? '<div class="inv-note">Đã mời được <b>' + rewarded + '</b> người · nhận <b>' + earned + ' Lượng</b>.</div>'
+        : '') +
+      '</div>';
+    var btn = document.getElementById('invCopy');
+    if (btn) btn.onclick = function () {
+      var done = function () { btn.textContent = 'Đã chép ✓'; setTimeout(function () { btn.textContent = 'Chép link'; }, 1800); };
+      try {
+        if (navigator.clipboard && navigator.clipboard.writeText) { navigator.clipboard.writeText(url).then(done, fallback); return; }
+      } catch (e) { /* rơi xuống */ }
+      fallback();
+      function fallback() {
+        // Clipboard API bị chặn (http, quyền) — chọn sẵn chữ để người ta tự Ctrl+C,
+        // đừng im lặng như thể đã chép xong.
+        try {
+          var n = document.getElementById('invUrl'), r = document.createRange();
+          r.selectNodeContents(n); var sel = window.getSelection(); sel.removeAllRanges(); sel.addRange(r);
+          btn.textContent = 'Nhấn Ctrl+C';
+        } catch (e2) { /* thôi */ }
+      }
+    };
+  }
+  /* Đợi `Auth` khôi phục phiên xong rồi mới quyết dựng thẻ nào — hỏi quá sớm
+     thì người ĐANG đăng nhập bị dựng nhầm thẻ khách (đúng bẫy đã ghi ở
+     `loadRailStatus`: token chưa xuất hiện ≠ chưa đăng nhập). Trần 8 giây để
+     máy không có phiên vẫn dựng được thẻ khách thay vì chờ mãi. */
+  function whenAuthReady(cb) {
+    var n = 0;
+    (function tick() {
+      var restoring = false;
+      try { restoring = !!(window.Auth && Auth.isRestoring && Auth.isRestoring()); } catch (e) { /* coi như xong */ }
+      if (!restoring || ++n > 80) { cb(); return; }
+      setTimeout(tick, 100);
+    })();
+  }
+  whenAuthReady(function () {
+    freshToken().then(function (tk) {
+      if (!tk) { renderGuest(); return; }
+      return fetch('/api/payment?action=my-referral', { headers: { Authorization: 'Bearer ' + tk } })
+        .then(function (r) { return r.ok ? r.json() : null; })
+        .then(function (d) { if (d && d.code) renderMember(d); else renderGuest(); });
+    }).catch(function () { /* đọc hụt → không đoán, để trống */ });
+  });
+})();
 
 /* ── 4 công cụ gợi ý cho khối "Chào lần đầu" ──────────────────────────────
    Chọn CÓ CHỦ ĐÍCH, không phải 4 tool đầu bảng: laso (sản phẩm chính) ·
