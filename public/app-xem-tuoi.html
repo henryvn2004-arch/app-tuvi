@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"></noscript>
-<link rel="stylesheet" href="/shell.css?v=19">
+<link rel="stylesheet" href="/shell.css?v=20">
 <link rel="stylesheet" href="/laso-chart.css?v=3">
 <style>
 .form-card{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);max-width:720px}
@@ -103,6 +103,7 @@
       <div class="form-card" id="birthPanel">
         <h2 id="fH2">Nhập ngày sinh hai người (dương lịch)</h2>
         <p class="sub" id="fSub">Chấm 8 yếu tố tương hợp giữa hai lá số của hai bạn. Bạn nghe hai bên gia đình bàn ra tán vào chuyện tuổi tác. Dùng khi đang tính chuyện cưới xin và cần một câu trả lời rõ.</p>
+        <p class="price-note" id="fSubPrice" data-tvp-price-label="xem-tuoi">…</p>
         <div class="two">
           <div class="person">
             <h3 id="pA"><span class="dotA"></span> Người thứ nhất</h3>
@@ -612,6 +613,14 @@ function applyMode(){
   document.title=MODE.docTitle;
   var set=function(id,txt){var el=document.getElementById(id);if(el)el.textContent=txt;};
   set('wsTitle',MODE.title); set('wsSub',MODE.sub); set('fH2',MODE.h2); set('fSub',MODE.formSub);
+  var priceEl=document.getElementById('fSubPrice');
+  if(priceEl){
+    priceEl.setAttribute('data-tvp-price-label',MODE.active);
+    priceEl.textContent='…';
+    // fillSlots(root) chỉ tìm CON của root, không tự tính root — truyền cả
+    // trang thay vì truyền đúng thẻ price vừa đổi thuộc tính.
+    if(window.ToolPrices)ToolPrices.fillSlots();
+  }
   document.getElementById('pA').innerHTML='<span class="dotA"></span> '+MODE.pA;
   document.getElementById('pB').innerHTML='<span class="dotB"></span> '+MODE.pB;
   document.getElementById('a-hoten').placeholder=MODE.phA;
