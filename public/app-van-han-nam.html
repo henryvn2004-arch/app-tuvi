@@ -455,12 +455,19 @@ async function _startAI(){
   //
   // 🔑 BẮT BUỘC bắn PHẦN 1 RIÊNG LẺ trước khi mở bể song song — cùng lý do đã
   // ghi ở app-luan-giai.html (Code #1, CLAUDE.md track tối ưu chi phí Opus).
-  // /api/van-han-nam nay cache `system` cho phần 1-4 (trùng 4 phần đầu của
-  // Luận Giải); mở PHAN_CONCURRENCY song song ngay từ đầu thì 3 lượt đầu tiên
-  // bắn gần như đồng thời (staggerMs 400ms, ngắn hơn nhiều so với thời gian
-  // một lượt LLM ghi xong cache) ⇒ cache-miss cả 3, tốn thêm phí ghi thay vì
-  // tiết kiệm. Phần 5+ (nguyệt vận) không cache nên không bị ảnh hưởng dù
-  // trước/sau lượt mồi này.
+  // /api/van-han-nam nay cache `system` cho CẢ 16 PHẦN (phần 1-4, trùng 4
+  // phần đầu của Luận Giải, QUA `buildPromptCached`; phần 5-16, tức 12 tháng
+  // riêng của tool này, QUA `buildPromptThang` — cả hai gọi chung
+  // `cachedSystemFor(formatLaSoV2(ls))` nên `system` byte-for-byte GIỐNG HỆT
+  // nhau ở mọi phần, xem lib/agent/luan-giai-doc.ts). Mở PHAN_CONCURRENCY
+  // song song ngay từ đầu thì 3 lượt đầu tiên bắn gần như đồng thời
+  // (staggerMs 400ms, ngắn hơn nhiều so với thời gian một lượt LLM ghi xong
+  // cache) ⇒ cache-miss cả 3, tốn thêm phí ghi thay vì tiết kiệm — đúng cho
+  // TOÀN BỘ 16 phần, không riêng gì 4 phần đầu. Lượt mồi này vẫn đủ để chặn:
+  // phần 1 LUÔN chạy xong (và do đó lượt ghi cache, nếu có, LUÔN hoàn tất)
+  // TRƯỚC KHI bể mở cho phần 2-16 — không cần sửa gì thêm ở đây khi phần
+  // tháng bắt đầu ăn chung cache, cơ chế mồi vốn đã bảo vệ đúng mọi phần sau
+  // phần 1, bất kể phần đó có cache hay không.
   document.getElementById('vhProgress').textContent='Đang luận phần 1 / '+_tongPhan+'...';
   var primeOk=await _runPhanVanHan(1);
   var result=await PhanPool.run({

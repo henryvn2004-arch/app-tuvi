@@ -64,7 +64,12 @@ grep mò — repo có file 400 KB+ (`public/tuvi-ansao-engine.js`, `public/admin
   `arcCore` / `arcDoc` / `arcGiong` (ba họ prompt KHÁC nhau, xem luật bên dưới).
 - **`lib/agent/run.ts`** — `runAgent`, vòng lặp tool-use, ghi `llm_usage`.
 - **`lib/agent/tools.ts`** — định nghĩa tool + `TOOLS_INSTRUCTION`.
-- **`lib/agent/luan-giai-doc.ts`** — prompt Luận Giải 24 phần (`buildPromptCached`).
+- **`lib/agent/luan-giai-doc.ts`** — prompt Luận Giải 24 phần (`buildPromptCached`,
+  qua `cachedSystemFor`). **`cachedSystemFor` là nguồn DUY NHẤT cho `system` khi
+  bật `cacheSystem`** — Luận Giải 24 phần LẪN Vận Hạn 12 Tháng (cả 16 phần, kể
+  từ `nhat-ky/2026-08.md` mục "Vận Hạn 12 Tháng Tới ăn theo Code #1") đều gọi
+  hàm này để chia CHUNG một breakpoint Anthropic; tự ghép chuỗi tay ở nơi khác
+  là cache miss ngay lượt đầu.
 - **`lib/agent/usage.ts`** — bảng giá model → `cost_vnd`.
 
 ### Kênh & hợp đồng
