@@ -13,7 +13,7 @@ export const maxDuration = 300;
 import { NextRequest } from 'next/server';
 import { ok, err, options, parseBody } from '@/lib/cors';
 import { computeLaso, formatLaSoV2, makeLasoSlug, CHI_NAMES, type Laso } from '@/lib/engine/laso';
-import { SYSTEM_PROMPT, buildPromptCached, laSoContextFull } from '@/lib/agent/luan-giai-doc';
+import { buildPromptCached, cachedSystemFor } from '@/lib/agent/luan-giai-doc';
 import { nguoiXemLine } from '@/lib/agent/prompts';
 import {
   buildKhung12Thang, describeThangForLLM, spans12, nhanThangAL, nhanThangALDay, dmy, SO_THANG,
@@ -66,12 +66,24 @@ function phanLabels(ls: Laso | null, spans: LunarMonthSpan[]): string[] {
 }
 
 // ─── Prompt phần THÁNG (phần MỚI duy nhất của tool này) ────────
+// Trả `{system, prompt}` DÙNG CHUNG CACHE với 4 phần đầu (xem CLAUDE.md track
+// tối ưu chi phí Opus, mục vá "Vận Hạn 12 Tháng Tới"): `system` =
+// `cachedSystemFor(formatLaSoV2(ls))` — KHÔNG phụ thuộc `span`/`stt`/`docs`,
+// nên byte-for-byte GIỐNG HỆT `buildPromptCached(...)` của 4 phần đầu CÙNG
+// lá số này. Nhờ vậy cả 16 lượt gọi của một báo cáo (4 phần đầu + 12 tháng)
+// chia đúng MỘT breakpoint Anthropic thay vì hai cụm cache tách rời (hoặc
+// như trước đây, phần tháng KHÔNG cache gì cả). Toàn văn lá số vẫn KHÔNG cắt
+// (xem lib/agent/luan-giai-doc.ts, laSoContextFull/cachedSystemFor) — trước
+// đây cắt theo khuôn phần 24 (bỏ hẳn khối 12 CUNG) để tiết kiệm token; đo lại
+// 2026-08-23 thấy phần tiết kiệm đó nhỏ trong khi đổi lại là model mất khả
+// năng đối chiếu cung đang luận với Mệnh/11 cung còn lại — đừng trim lại chỉ
+// để tiết kiệm vài trăm đồng, cache mới là đòn bẩy thật.
 function buildPromptThang(
   ls: Laso,
   span: LunarMonthSpan,
   stt: number,
   docs?: string,
-): string {
+): { system: string; prompt: string } {
   const khoiThang = describeThangForLLM(ls as AnyRec, span);
   const nhan = nhanThangAL(span);
   const dmyTu = dmy(span.tu), dmyDen = dmy(span.den);
@@ -81,18 +93,9 @@ function buildPromptThang(
   const luatNhuan = span.isLeap
     ? `\n- ⚠️ Đây là THÁNG NHUẬN: cung nguyệt hạn TRÙNG với tháng ${span.thangAL} ÂL ngay trước. ĐỪNG viết lại bản luận của tháng trước — hãy nói về phần TIẾP NỐI: việc dở dang của tháng trước nay có thêm một tháng nữa để xử lý, và điều gì đã khác đi so với đầu chu kỳ.`
     : '';
-  // TOÀN VĂN lá số, KHÔNG cắt (xem lib/agent/luan-giai-doc.ts, laSoContextFull).
-  // Trước đây cắt theo khuôn phần 24 (bỏ hẳn khối 12 CUNG) để tiết kiệm token;
-  // đo lại 2026-08-23 thấy phần tiết kiệm đó nhỏ (~200-7.000đ/lượt tuỳ provider
-  // đang primary) trong khi đổi lại là model mất khả năng đối chiếu cung đang
-  // luận với Mệnh/11 cung còn lại. Cùng hướng đã chọn cho 4 phần đầu +
-  // buildPromptCached của Luận Giải: đừng cắt lá số chỉ để tiết kiệm vài trăm đồng.
-  const laSoCat = laSoContextFull(formatLaSoV2(ls));
   const docsSection = docs ? '\n\n=== TÀI LIỆU THAM KHẢO ===\n' + docs : '';
 
-  return `${laSoCat}
-
-${khoiThang}${docsSection}
+  const prompt = `${khoiThang}${docsSection}
 
 PHẦN ${4 + stt} — NGUYỆT VẬN ${nhanThangALDay(span)} (140-180 từ)
 Đây là tháng thứ ${stt} trong 12 tháng tới. Người đọc đang xem một bản riêng về VẬN HẠN — họ cần biết tháng này NÊN LÀM GÌ và NÉ GÌ, không cần học lại lý thuyết.
@@ -111,6 +114,8 @@ Xuống dòng rồi viết 1-2 đoạn ngắn, ngôn ngữ đời thường:
 ② Việc nên làm và việc nên hoãn trong tháng này — cụ thể, làm được ngay, không nói chung chung kiểu "hãy cẩn thận".
 
 KHÔNG lặp lại phần tổng quan lá số hay đại vận (đã có phần riêng). Chỉ nói về THÁNG này.`;
+
+  return { system: cachedSystemFor(formatLaSoV2(ls)), prompt };
 }
 
 // ─── Vá lỗ trùng: phần 1-4 = ĐÚNG 4 phần của Luận Giải 24 phần ──
@@ -229,30 +234,39 @@ async function runPost(request: NextRequest) {
     if (cached) return ok({ luanGiai: cached, phan });
   }
 
-  let systemForLLM: string = SYSTEM_PROMPT;
-  // Chỉ TRUE cho phan<=4 (buildPromptCached) — phần nguyệt vận (buildPromptThang)
-  // là prompt cấu trúc khác hẳn, không chia sẻ prefix với 4 phần đầu nên giữ
-  // nguyên đường CŨ (system=SYSTEM_PROMPT trần, không cache_control).
-  let cacheSystem = false;
+  // Prompt caching (Code #1, xem CLAUDE.md track tối ưu chi phí Opus — mục vá
+  // "Vận Hạn 12 Tháng Tới"): mọi `phan` (1-16) của MỘT lá số/năm xem đều dùng
+  // chung `cachedSystemFor(...)` làm `system` — byte-for-byte GIỐNG NHAU dù là
+  // 1 trong 4 phần đầu (trùng Luận Giải, qua `buildPromptCached`) hay 1 trong
+  // 12 phần THÁNG (riêng của tool này, qua `buildPromptThang`). TRƯỚC ĐÂY chỉ
+  // phan<=4 cache; 12 phần tháng gửi lá số trần bên trong `prompt` nên KHÔNG
+  // chia sẻ được prefix với 4 phần đầu lẫn với NHAU — mỗi lượt trả tiền y hệt
+  // như không cache dù cả 16 lượt cùng lặp lại đúng một lá số 15-27K ký tự.
+  // Nay cả 16 lượt chia đúng MỘT breakpoint: khi Anthropic phục vụ (primary
+  // hay fallback), lượt ĐẦU TIÊN ghi cache (~1,25×), 15 lượt sau chỉ đọc
+  // (~0,1×). Gemini/Kimi (`buildGeminiBody`/`buildKimiMessages` trong
+  // lib/llm/complete.ts) BỎ QUA cờ `cacheSystem` — tổng nội dung gửi đi với
+  // hai provider đó vẫn y hệt trước, chỉ khác CHỖ ĐẶT (system vs prompt) nên
+  // 0 rủi ro hồi quy khi Gemini đang primary.
+  let systemForLLM: string;
+  const cacheSystem = true;
   let prompt: string;
   try {
     const nx = nguoiXemLine(birth.name, birth.gender);
     if (phan <= 4) {
-      // Prompt caching (Code #1, xem CLAUDE.md track tối ưu chi phí Opus):
-      // buildPromptCached đưa TOÀN VĂN lá số vào `system` (không cắt theo
-      // trimLaSo) — cả 4 phần này của MỘT lá số/năm xem chia đúng MỘT prefix.
       // Chỉ chạm nhánh LLM này khi readCachedLuanGiaiPhan (Code #2) cache-miss
       // ở trên; đa số lượt đã được DB cache chặn từ trước, không tới đây.
       const cached = buildPromptCached(laSoPhanMap[phan]!, formatLaSoV2(ls), docs);
       systemForLLM = cached.system;
       prompt = (nx ? nx + '\n' : '') + cached.prompt;
-      cacheSystem = true;
     } else {
       const stt = phan - PHAN_THANG_DAU + 1;
       // Chỉ cần bảng LỊCH để biết tháng âm thứ stt — không dựng cả khung (khớp
       // 958 cách cục × 12 tháng) chỉ để lấy một mốc.
       const span = spans12(tuNgay, tuThang, tuNam)[stt - 1]!;
-      prompt = (nx ? nx + '\n' : '') + buildPromptThang(ls, span, stt, docs);
+      const built = buildPromptThang(ls, span, stt, docs);
+      systemForLLM = built.system;
+      prompt = (nx ? nx + '\n' : '') + built.prompt;
     }
   } catch (e: unknown) {
     return err('buildPrompt error: ' + (e as Error).message);

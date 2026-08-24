@@ -379,10 +379,26 @@ export function buildPrompt(phan: number, laSoText: string, docs?: string): stri
 }
 
 /**
+ * `system` DÙNG CHUNG CACHE — SYSTEM_PROMPT + TOÀN VĂN lá số, KHÔNG phụ thuộc
+ * `phan`/`docs`. Đây là phần BẤT BIẾN THEO NGƯỜI (không theo phần đang luận)
+ * nên MỌI lượt gọi của CÙNG một lá số — 24 phần Luận Giải LẪN 16 phần "Vận
+ * Hạn 12 Tháng Tới" (4 phần đầu QUA `buildPromptCached`, 12 phần tháng qua
+ * `buildPromptThang` ở `app/api/van-han-nam/route.ts`) — PHẢI dùng
+ * đúng chuỗi này làm `system` khi bật `cacheSystem`. Tách hàm riêng để hai
+ * nơi gọi không tự tay ghép lại chuỗi hai lần rồi trôi khỏi nhau — lệch một
+ * byte là Anthropic coi là prefix khác, cache miss, mất hết lợi ích chia sẻ
+ * (xem CLAUDE.md track tối ưu chi phí Opus, "Code #1" + phần vá "Vận Hạn 12
+ * Tháng Tới").
+ */
+export function cachedSystemFor(laSoText: string): string {
+  return SYSTEM_PROMPT + '\n\n' + laSoContextFull(laSoText);
+}
+
+/**
  * Bản DÙNG CHUNG CACHE của `buildPrompt` — xem CLAUDE.md track tối ưu chi phí
  * Opus, "Code #1". Khác `buildPrompt` ở HAI chỗ:
  *   1. Lá số KHÔNG cắt theo `trimLaSo` — gửi TOÀN VĂN cho mọi phần, để nhiều
- *      lượt gọi (24 phần Luận Giải, hoặc 4 phần đầu của Vận Hạn 12 Tháng) chia
+ *      lượt gọi (24 phần Luận Giải, hoặc 16 phần của Vận Hạn 12 Tháng) chia
  *      đúng MỘT prefix giống hệt nhau. Cắt khác nhau theo từng `phan` (như
  *      `buildPrompt`) là phá cache ngay từ lượt thứ hai — Anthropic khớp
  *      prefix TUYỆT ĐỐI, lệch một byte là cache miss cả khối.
@@ -403,7 +419,7 @@ export function buildPromptCached(
 ): { system: string; prompt: string } {
   const docsSection = docs ? '=== TÀI LIỆU THAM KHẢO ===\n' + docs + '\n\n' : '';
   return {
-    system: SYSTEM_PROMPT + '\n\n=== LÁ SỐ (ĐẦY ĐỦ, KHÔNG CẮT) ===\n' + laSoText,
+    system: cachedSystemFor(laSoText),
     prompt: docsSection + instructionFor(phan),
   };
 }
