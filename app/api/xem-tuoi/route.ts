@@ -190,7 +190,11 @@ Lưu ý đặc biệt: Đây là chế độ so sánh tương hợp 2 lá số. 
   const trimmed = messages.slice(-10).map((m: any) => ({ role: m.role, content: String(m.content).slice(0, 2000) }));
 
   try {
-    const answer = await llmText({ system: systemPrompt, messages: trimmed, maxTokens: 1200 });
+    // provider:'anthropic' (chốt Henry 2026-08-24): Xem Tuổi Vợ Chồng / Xem
+    // Tuổi Làm Ăn (trang này phục vụ cả hai — xem chú thích ở handleChat)
+    // thuộc nhóm tool "luận giải" quan trọng → Opus 5 primary, không dùng mặc
+    // định Gemini Flash toàn site (xem lib/llm/complete.ts CANONICAL_ORDER).
+    const answer = await llmText({ system: systemPrompt, messages: trimmed, maxTokens: 1200, provider: 'anthropic' });
     return ok({ answer, scenario: hasLaso ? 'laso' : 'general' });
   } catch (e: unknown) {
     return err('API error: ' + (e as Error).message);
@@ -331,10 +335,14 @@ async function runPost(request: NextRequest) {
   const userPrompt = docs ? prompt + '\n\n=== TÀI LIỆU THAM KHẢO ===\n' + docs : prompt;
 
   try {
+    // provider:'anthropic' (chốt Henry 2026-08-24): bản luận giải 9 phần Xem
+    // Tuổi Vợ Chồng / Xem Tuổi Làm Ăn thuộc nhóm tool quan trọng → Opus 5
+    // primary (xem lib/llm/complete.ts CANONICAL_ORDER).
     const luanGiai = await llmText({
       system: LUAN_GIAI_TUONG_HOP_SYSTEM,
       prompt: userPrompt,
       maxTokens: 1800,
+      provider: 'anthropic',
     });
     return ok({ luanGiai });
   } catch (e: unknown) {
