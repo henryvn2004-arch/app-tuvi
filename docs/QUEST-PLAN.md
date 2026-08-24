@@ -131,20 +131,41 @@ Thay daily quest. **8 mảng đời**, mỗi mảng gắn 1–2 công cụ (lấ
   nó chỉ đòi họ ở lại lâu hơn trong lượt đang có.
 
 ### Tầng 3 — LAN TOẢ (mục tiêu 3: share/mời)
-- **Chỉ số hiếm** — lý do để khoe, tính từ engine, **0đ, tất định**. Mỏ có sẵn:
-  `public/data/tuvi-dataset-v1.json` (96.480 lá số) đã đo phân bố thật.
-  ⚠️ **BẤT BIẾN TRUNG THỰC (CLAUDE.md)**: đây là phân bố trên KHÔNG GIAN THỜI ĐIỂM
-  SINH, **không phải phân bố dân số** ⇒ câu đúng là *"trong các thời điểm sinh có
-  thể có, 16,5% cho ra mệnh vô chính diệu"*, **CẤM** viết *"16,5% người Việt"*.
-  Câu caveat phải đi kèm mọi nơi khoe, kể cả poster.
-- **Thưởng share theo `share_view`**, không theo cú bấm. +5 Lượng/lượt mở, cap
-  3/ngày, không tính lượt tự mở (so `anon_id` người mở ≠ người chia sẻ).
-- **Mời bạn**: giữ 15 Lượng/lượt + cap 15 như hiện tại; thêm mốc **3 người → +50**
-  (đủ đúng 1 tool 50 Lượng — con số nói thẳng được, không hứa lửng lơ).
-- ⛔ Không hứa "mời 5 người mở tool ảnh free": trần ảnh 6/ngày toàn hệ thống
-  không gánh nổi lời hứa đó.
 
----
+**🔴 Đo lại 24/08 — nút thắt KHÔNG phải mức thưởng:**
+| | |
+|---|---:|
+| Link chia sẻ đã tạo | 46 |
+| ↳ **số người từng bấm nút Share** | **3** |
+| Link có người mở | 28/46 |
+| **Lượt mở TB mỗi link** | **1,7** |
+| `chan-dung-vo-chong` (tool có ảnh) | 18 link · **2,2 lượt mở/link** |
+| **Tải poster 9:16** (dựng xong từ V3, có QR) | **2 lượt** |
+
+Link chia sẻ **ăn thật** — mỗi link kéo TB 1,7 người mở. Cái chết nằm ở chỗ **không
+ai bấm nút**. Đổ Lượng vào đây là trả tiền cho một hành vi vốn không xảy ra.
+⇒ Thứ tự sửa: **(a) chỗ ĐẶT nút → (b) LÝ DO khoe → (c) mới tới thưởng.**
+
+**(a) Chỗ đặt** — nút Chia sẻ/Ảnh hiện nằm trên thanh `.ws-actions` của shell, đọc
+như chrome của trang chứ không như một lời mời (đúng lỗi đã ghi ở track nút "Sửa"
+của `ngu-hanh-ten`). Đặt thêm một lời mời **ngay cuối phần kết quả**, đúng lúc vừa
+đọc xong — không phải lúc hết Lượng như `invite-cta` hiện tại.
+
+**(b) Lý do khoe** — hai mỏ đã có sẵn, chưa dùng đúng:
+- **Chỉ số hiếm** từ `public/data/tuvi-dataset-v1.json` (96.480 lá số), 0đ, tất định.
+  ⚠️ **BẤT BIẾN TRUNG THỰC (CLAUDE.md)**: đây là phân bố trên KHÔNG GIAN THỜI ĐIỂM
+  SINH, **không phải phân bố dân số** ⇒ *"trong các thời điểm sinh có thể có, 16,5%
+  cho ra mệnh vô chính diệu"*, **CẤM** viết *"16,5% người Việt"*. Caveat đi kèm mọi
+  nơi khoe, kể cả poster.
+- **Ảnh chân dung** — tool có ảnh đang lan gấp ~1,5 lần tool chữ (2,2 vs 1,5 lượt mở).
+
+**(c) Thưởng** — chỉ sau khi (a)(b) xong:
+- Thưởng theo **`share_view`** (link được mở), KHÔNG theo cú bấm: bấm không verify
+  được, farm 10 giây. Người mở ≠ người chia sẻ. Chín sau 24h (§7.3).
+- **Mời bạn**: giữ 15 Lượng/lượt + cap 15; thêm mốc **3 người → +50**.
+- **Đăng bài/review** (Henry nêu): không verify tự động được ⇒ form nộp link +
+  admin duyệt tay. Ở quy mô hiện tại (14 user hoạt động) duyệt tay là khả thi, và
+  nó chặn được đúng thứ mà thưởng-tự-động không chặn nổi.
 
 ## 🖥️ 5. TỔNG QUAN MỚI (`/app`)
 
@@ -217,22 +238,54 @@ Vận hôm nay (giữ) + thẻ gợi ý theo luật + mã mời + link `/cong-cu
 
 ---
 
-## ⚖️ 7. KINH TẾ REWARD — cầu dao bắt buộc (làm ở Q2, trước khi phát đồng nào)
+## ⚖️ 7. KINH TẾ REWARD — Henry chốt: KHÔNG chặn, chống abuse bằng THU HỒI (2026-08-24)
 
-| Chốt | Giá trị | Nơi chỉnh |
-|---|---|---|
-| Trần Lượng quest/user/ngày | **20** | `app_config['quest.daily_user_cap']` |
-| Trần Lượng quest/toàn hệ thống/ngày | **300** | `app_config['quest.daily_global_cap']` |
-| Reward lặp lại theo ngày | **KHÔNG bằng Lượng** — dùng `rail_free_grant` | luật thiết kế |
-| Đặt trần = 0 | **TẮT HẲN** quest reward | `app_config` |
-| Hướng fail | **FAIL-CLOSED** (đọc hụt → không phát) | mẫu `lib/onboarding/tasks.ts` |
+Henry bác hai trần tao đề xuất: *"tao đang muốn dùng chính cái product để làm viral
+marketing… tính ra còn rẻ hơn chi phí marketing chạy paid ads, ko nên chặn, nhưng
+phải làm cơ chế chống abuse rõ ràng… nếu phát hiện user abuse thì mình có cơ chế
+thu hồi lượng lại được."*
 
-Ước chi ở mức xấu nhất hiện tại (14 user hoạt động × 20 Lượng/ngày) = 280 Lượng/ngày
-≈ **232.000đ/ngày giá bán**, nhưng chi phí THẬT chỉ phát sinh khi tiêu vào tool ảnh
-(trần 6/ngày đã gác) — tool chữ chỉ vài chục đến vài trăm đồng/lượt. Trần toàn hệ
-thống 300 là con số CHỌN, hiệu chỉnh sau 2 tuần theo `credit_transactions`.
+**Chốt lại:**
+| | |
+|---|---|
+| ~~Trần 20 Lượng/user/ngày~~ | **BỎ** |
+| ~~Trần 300 Lượng/ngày toàn hệ thống~~ | **BỎ** |
+| `viral.free_gen_daily_cap` (2 tool ảnh) | **GIỮ**, nới 6 → **10** |
+| Luật *reward lặp lại ≠ Lượng* | **NỚI** thành *reward lặp lại có ĐỘ TRỄ 24h* |
 
----
+### 7.1 — Vì sao vẫn giữ đúng MỘT cầu dao, và nó không phải trần Lượng
+Nó gác **chi phí model thật**, không gác Lượng. Chi phí thật lệch nhau rất xa:
+| Tool | Chi phí model/lượt | Giá bán |
+|---|---:|---:|
+| Luận Giải 24 phần | ~840đ | 100 Lượng (82.900đ) |
+| Chân dung (có ảnh) | ~1.100–1.700đ | 20–30 Lượng |
+| **Vận Hạn 12 Tháng** | **~24.000đ** (16 lượt LLM) | 50 Lượng (41.450đ) |
+
+Phát Lượng thoải mái đúng với tool chữ. Nhưng Lượng tiêu được vào **mọi thứ** nên
+nó cũng chảy vào Vận Hạn — chỗ biên mỏng nhất. Cầu dao này do chính Henry chốt ở
+track V2.2 ($15/tháng); nới lên 10 vì gpt-image-2 rẻ hơn 34%.
+
+### 7.2 — 🔴 THU HỒI: chưa có, và có giới hạn phải nói trước
+Repo hiện chỉ có `add_credits` / `deduct_credits`. **Không có `revoke`, không có nhãn
+nguồn gốc trên từng dòng Lượng, không có bộ dò abuse.** Phải dựng ở Q4.
+
+> ⚠️ **Lượng đã TIÊU thì không thu hồi được.** Thu hồi chỉ lấy lại phần còn trong ví.
+> Kẻ farm 300 Lượng rồi đốt ngay vào tool ảnh trong một giờ — lúc phát hiện thì tiền
+> model đã cháy. Thu hồi chỉ có răng khi reward có ĐỘ TRỄ.
+
+### 7.3 — Bộ chống abuse KHÔNG CHẶN (thay cho trần)
+1. **Nhãn nguồn gốc** — `credit_transactions.meta.source` (`quest` · `referral` ·
+   `share` · `signup`) để thu hồi đúng phần đã phát, không đụng Lượng người ta mua.
+2. **Độ trễ 24h cho reward rủi ro cao** (chính brief mục 12 đã ghi): share + referral
+   ghi `pending`, chín sau 24h. UI nói thẳng *"+15 Lượng — nhận sau 24 giờ"*.
+   Reward **một-lần-đời** (Khởi Hành) cộng ngay, không trễ.
+3. **Bộ dò abuse** đi ké cron `anomaly-alerts` (3h/lượt, đã có): nhiều tài khoản cùng
+   `device_id` · referral cùng IP/khung giờ · `share_view` tự mở (người mở = người
+   chia sẻ) · tốc độ bất thường. Bắn Telegram admin, **không tự chặn**.
+4. **RPC `revoke_credits`** + nút trong user drawer của Admin (đã có nút +Credits).
+   Ghi `credit_transactions type='revoke'`, soát số dòng, không cho âm ví quá mức đã phát.
+5. **Ràng buộc đã có, giữ nguyên:** `credits.signup_bonus_device_cap=5` ·
+   `blocked_email_domains` · UNIQUE `referee_user_id` · cấm tự refer.
 
 ## 📏 8. MỐC ĐO — đặt trước để khỏi tự lừa mình
 
