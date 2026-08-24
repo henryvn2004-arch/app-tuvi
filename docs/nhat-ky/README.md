@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-126 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+128 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 **Ba file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
 ```bash
@@ -11,7 +11,7 @@ sed -n '120,190p' docs/nhat-ky/2026-08.md    # đọc đúng đoạn, đừng ca
 
 | file | số mục | dung lượng |
 |---|---:|---:|
-| `2026-08.md` | 109 | 856,044 B |
+| `2026-08.md` | 111 | 864,664 B |
 | `2026-07.md` | 12 | 154,531 B |
 | `track-cu.md` | 5 | 89,354 B |
 
@@ -24,129 +24,131 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
-| 1 | 2026-08 | `2026-08.md` | 🔢 Engine "Số Đẹp" — Bát Tinh + Quẻ Dịch + Ngũ Hành + Âm Dương, 0đ |
-| 2 | 2026-08 | `2026-08.md` | 🀄 Bảng Du Niên Bát Trạch — 3 bản chép tay tự mâu thuẫn, nay SINH bằng thuật toán |
-| 3 | 2026-08 | `2026-08.md` | 💸 Rail chat gỡ carve-out Opus primary — quay về Gemini Flash toàn bộ |
-| 4 | 2026-08 | `2026-08.md` | 🔀 Kimi K3 xuống lưới đỡ cuối cùng, Opus 5 primary cho 7 tool "luận giải" |
-| 5 | 2026-08 | `2026-08.md` | 🧭 Coachmark 3 điểm → 6–7 điểm — đi hết các mặt chính của sản phẩm |
-| 6 | 2026-08 | `2026-08.md` | 🚀 "Khởi Hành" thay M3 + coachmark 3 điểm — onboarding cho web |
-| 7 | 2026-08 | `2026-08.md` | 🔄 Card "Khoe Kết Quả" trong Nhiệm Vụ → "Chia Sẻ" — #599 đã gỡ nút, câu hỏi đo click |
-| 8 | 2026-08 | `2026-08.md` | 🏆 Tab "Nhiệm Vụ" trong Tài Khoản — gom Khởi Hành, Mời Bạn, lịch sử Khoe Kết Quả |
-| 9 | 2026-08 | `2026-08.md` | 📣 Track Quest/Gamification — "Khoe Kết Quả" + "Rủ so lá số" |
-| 10 | 2026-08 | `2026-08.md` | ✂️ Audit `trim_la_so` — chỉ CÒN 1 chỗ cắt thật, đã bỏ |
-| 11 | 2026-08 | `2026-08.md` | 📣 TRACK DIGITAL MARKETING — 14/14 mục, và 3 giả định của tôi bị SỐ ĐO bác |
-| 12 | 2026-08 | `2026-08.md` | 💰 Track Tối Ưu Chi Phí Opus — Code #1 + #2 đã push lên PR #585 (chờ merge+deploy), #3 vẫn chặn |
-| 13 | 2026-08 | `2026-08.md` | 🌙 Vận Hạn 12 Tháng đổi sang KHUNG THÁNG ÂM — hết cảnh "nửa đầu / nửa sau" |
-| 14 | 2026-08 | `2026-08.md` | 🌙 Rail `tra_nguyet_van` đổi sang tháng ÂM — nốt "đường dùng chung" đã né ở PR trước |
-| 15 | 2026-08 | `2026-08.md` | ⏱️ Timeout 30 giây: KHÔNG phải đường tiền, và engine vô can |
-| 16 | 2026-08 | `2026-08.md` | 🔤 Ảnh OG: chẩn đoán vòng 1 SAI, bản vá của tôi đẻ ra lỗi MỚI |
-| 17 | 2026-08 | `2026-08.md` | 📡 BẢN ĐỒ 8 KÊNH SOCIAL — audit trước khi ráp Telegram + vá Facebook |
-| 18 | 2026-08 | `2026-08.md` | 🔮 Thêm lớp DỰ BÁO vào arc ô GIỮA — và arc ô giữa KHÔNG phải 5 lớp |
-| 19 | 2026-08 | `2026-08.md` | 🖼️ Ảnh preview link chia sẻ HỎNG 108 lượt/tuần — và chẩn đoán ĐẦU của tôi SAI |
-| 21 | 2026-08 | `2026-08.md` | 📅 Tool MỚI "Vận Hạn 12 Tháng Tới" — và một lỗi CỔ PHÁP sai 11,4% số ngày |
-| 22 | 2026-08 | `2026-08.md` | 🪝 VIRAL CORE cho 2 cron viết bài SEO — và nó ĐÃ CÓ SẴN trong repo |
-| 23 | 2026-08 | `2026-08.md` | 🧱 Lượt render THẬT đầu tiên TRƯỢT — kho nền nằm ngoài git |
-| 24 | 2026-08 | `2026-08.md` | 🔁 Vòng lặp trả bản CUỐI chứ không phải bản TỐT NHẤT · token TikTok · và pipeline CHƯA CHẠY THẬT lượt nào |
-| 25 | 2026-08 | `2026-08.md` | 🏭 RÁP PIPELINE ĐĂNG CLIP — và cổng 2 KHÔNG chặn như tôi tưởng |
-| 26 | 2026-08 | `2026-08.md` | 🎬 GỠ nhân vật, thay bằng NỀN VIDEO — nhân vật sai VAI chứ không chỉ xấu |
-| 27 | 2026-08 | `2026-08.md` | 🏃 Nhịp ĐO ĐƯỢC là quá chậm · 14 tư thế · cảnh HAI người |
-| 28 | 2026-08 | `2026-08.md` | 🕺 Nhân vật BIẾT CỬ ĐỘNG + 20 đạo cụ — và 4 lỗi chỉ lộ khi SOI KHUNG HÌNH |
-| 29 | 2026-08 | `2026-08.md` | ✍️ ARC RA TỚI BẢN LUẬN GIẢI — `arcDoc` KHÁC `LUAN_ARC`, đừng dùng lẫn |
-| 30 | 2026-08 | `2026-08.md` | 💸 Đường trả thưởng giới thiệu CHẾT TỪ LÚC VIẾT RA — `catch {}` giấu 6 ngày |
-| 31 | 2026-08 | `2026-08.md` | 🤖 ĐỌC SỐ TRAFFIC: luôn dùng bản `_human` |
-| 32 | 2026-08 | `2026-08.md` | 🩺 "sức khoẻ" gõ lối CŨ thì TRƯỢT bộ dò chủ đề — 3 bản chép tay cùng dính |
-| 33 | 2026-08 | `2026-08.md` | 🔤 BIÊN TỪ KHÔNG CỨU ĐƯỢC TIẾNG VIỆT — mẫu phải là CỤM |
-| 34 | 2026-08 | `2026-08.md` | 🔐 7 hàm SECURITY DEFINER hở `search_path` — và BỘ DÒ KHÔNG HỀ CANH NÓ |
-| 35 | 2026-08 | `2026-08.md` | 🔐 Vá nốt 44 hàm SECDEF — và BỘ DÒ CỦA CHÍNH TÔI vẫn mù với lớp lỗi này |
-| 36 | 2026-08 | `2026-08.md` | ✍️ 75% PROMPT LÀ LUẬT GIỌNG — arc 5 lớp THAY 3 bản bố cục chồng nhau |
-| 37 | 2026-08 | `2026-08.md` | 🖼️ Hội đồng CHẤM HÌNH mà KHÔNG NHÌN THẤY HÌNH — và kho ảnh thật |
-| 38 | 2026-08 | `2026-08.md` | 🧺 Kho ảnh THẬT + vá `buildTimeline`: hội đồng cuối cùng cũng nhìn thấy hình |
-| 39 | 2026-08 | `2026-08.md` | 🎞️ Tuyển lại kho theo BRIEF + một-ảnh-một-clip |
-| 40 | 2026-08 | `2026-08.md` | 🏭 Khâu dựng clip lên GitHub Actions — và một phép kiểm TÔI ĐẶT TÊN SAI |
-| 41 | 2026-08 | `2026-08.md` | 📤 Đường clip ra kho — và KHÔNG đưa service key vào Actions |
-| 42 | 2026-08 | `2026-08.md` | 🎬 18/18 công cụ miễn phí có kịch bản clip + công thức quay |
-| 43 | 2026-08 | `2026-08.md` | 🎟️ Câu kết clip đọc TÊN MIỀN + MÃ, và bảng mã khuyến mãi |
-| 44 | 2026-08 | `2026-08.md` | 🫂 Rail thành "Trò chuyện với Thầy" — 4 tầng, và vòng vá NHỊP HỘI THOẠI |
-| 45 | 2026-08 | `2026-08.md` | 📺 3 video CÔNG KHAI lên NHẦM KÊNH — và không dòng code nào sai |
-| 46 | 2026-08 | `2026-08.md` | 📘 Facebook: 33 bài, **0 bài từng đăng được** — lời khuyên chung chung |
-| 47 | 2026-08 | `2026-08.md` | ▶️ "Chạy ngay" trả *Unknown job* — cùng một lỗi, lần thứ BA |
-| 48 | 2026-08 | `2026-08.md` | ✏️ Kho hết CHỈ ĐỌC: sửa bài + trạng thái xuất bản |
-| 49 | 2026-08 | `2026-08.md` | 📚 Kho Nội Dung: 1.140 tác phẩm, **15 từng ra khỏi website** |
-| 50 | 2026-08 | `2026-08.md` | 📊 Số liệu nền tảng: YouTube đi bằng API KEY, KHÔNG dùng OAuth |
-| 51 | 2026-08 | `2026-08.md` | 🕰️ Xác Định Giờ Sinh VỨT ĐI dữ kiện nó vừa bán — và sổ lá số dò form theo TÊN |
-| 52 | 2026-08 | `2026-08.md` | 🔘 "Ko thấy nút Sửa ở đâu?" — NÚT CÓ, LỜI CHỈ ĐƯỜNG MỚI LÀ THỨ HỎNG |
-| 53 | 2026-08 | `2026-08.md` | 🔌 `mcp-handler` 1 → 2: gỡ đúng cái workaround của chính mình |
-| 54 | 2026-08 | `2026-08.md` | 🀄 Lục Nhâm CŨNG liệt kê được từ vựng — và lộ 3 chỗ rò |
-| 55 | 2026-08 | `2026-08.md` | 🧷 Máy canh cho nhóm `wrap` — và nó lòi ra 13 trường + 1 lỗi #475 sót |
-| 56 | 2026-08 | `2026-08.md` | 🧹 "2 tool mỏng quá" — CẦU CÓ THẬT, mình dựng SAI HÌNH DẠNG |
-| 57 | 2026-08 | `2026-08.md` | 💾 "Chạy lại vẫn ra lá số cũ" — TÔI QUÊN BUMP `SHAPE` ở #475 |
-| 58 | 2026-08 | `2026-08.md` | 🀄 QUÉT MẪU chỉ chứng minh được thứ mẫu CHẠM TỚI |
-| 59 | 2026-08 | `2026-08.md` | 🔁 "Đã check hết chưa?" — CHƯA, và 4 tool nữa dính |
-| 60 | 2026-08 | `2026-08.md` | 🀄 Rà tool khác cùng họ lỗi → Bát Tự: rail KHÔNG hề nhận Thập Thần |
-| 61 | 2026-08 | `2026-08.md` | 🔴 `tsc --noEmit` XANH KHÔNG CHỨNG MINH `next build` CHẠY |
-| 62 | 2026-08 | `2026-08.md` | 🔗 Luận Giải 24 phần bỏ qua data engine — MỐC SECTION HỎNG, bộ cắt CÂM |
-| 63 | 2026-08 | `2026-08.md` | 🧭 Tool MỚI: Hướng Nghiệp Sớm Cho Con |
-| 64 | 2026-08 | `2026-08.md` | 🧱 TypeScript 7 GỠ HẲN API BIÊN DỊCH — bump là vỡ bản dựng prod |
-| 65 | 2026-08 | `2026-08.md` | 🧪 CI đo BẢN CŨ chứ không đo PR — cả 3 workflow sang preview |
-| 66 | 2026-08 | `2026-08.md` | 🔐 Rail đòi ĐĂNG NHẬP với người ĐANG đăng nhập — đồng hồ ví chốt quá sớm |
-| 67 | 2026-08 | `2026-08.md` | 🐞 Dạy Con: khung mới KHÔNG hiện — vì `portrait_cache` không có phiên bản SHAPE |
-| 68 | 2026-08 | `2026-08.md` | 🧹 Vá nốt hai món nợ: rail cũ vô hình + `animation` trỏ vào keyframe ma |
-| 69 | 2026-08 | `2026-08.md` | 🧒 Dạy Con: khung "5 TRỤC · 8 CHẤT" — bản luận có xương sống |
-| 70 | 2026-08 | `2026-08.md` | 🖨️✦ Lưu PDF + orb mời hỏi — cùng đưa lên tầng SHELL |
-| 71 | 2026-08 | `2026-08.md` | ⏱️ ETA TỰ HIỆU CHỈNH + `llm_usage` cuối cùng cũng có THỜI LƯỢNG |
-| 72 | 2026-08 | `2026-08.md` | 🔗 Chia sẻ workspace: tính năng của SHELL, không phải của từng tool |
-| 73 | 2026-08 | `2026-08.md` | 📏 LUẬT CHỈ BÁO CHỜ + mở orb ra toàn site |
-| 74 | 2026-08 | `2026-08.md` | 🧭 Tử Vi Công Sở: thêm TẦNG NHÁNH NGHỀ |
-| 75 | 2026-08 | `2026-08.md` | ✨ Orb chờ AI + `innerHTML` mỗi giây PHÁ animation |
-| 76 | 2026-08 | `2026-08.md` | 🗺️ Sitemap: `lastmod` đang NÓI DỐI 647 URL mỗi ngày |
-| 77 | 2026-08 | `2026-08.md` | 🕘 7 tool KHÔNG HỀ có lịch sử — và nhãn phiên suýt nói sai người |
-| 78 | 2026-08 | `2026-08.md` | 🌓 Dark mode cho trang Tài khoản — gỡ nốt cái đảo sáng |
-| 79 | 2026-08 | `2026-08.md` | 🌗 Dark mode: MÀU THƯƠNG HIỆU LÀ MẶT NỀN, đừng dùng làm chữ |
-| 80 | 2026-08 | `2026-08.md` | 🕘 "Phiên gần đây": nhãn mô tả LÁ SỐ trong khi cái phân biệt là HỘI THOẠI |
-| 81 | 2026-08 | `2026-08.md` | 🎯 M3 — Nhiệm vụ onboarding: đổi CÙNG khoản tiền lấy được gì |
-| 82 | 2026-08 | `2026-08.md` | 🔤 Font lạc bầy + nhãn radar bị cắt ở Công Sở |
-| 83 | 2026-08 | `2026-08.md` | 🧩 `npm run dev` thiếu bước dựng engine — và nó hỏng theo kiểu ĐÁNH LỪA |
-| 84 | 2026-08 | `2026-08.md` | 🔒 Tấm khoá tính thử CẮT MẤT NÚT MỞ |
-| 85 | 2026-08 | `2026-08.md` | 🧩 CSS CỦA TRANG ĐÈ VỠ FORM DÙNG CHUNG |
-| 86 | 2026-08 | `2026-08.md` | 🔔 R1a — NỐI LẠI kênh nhắc hằng ngày |
-| 87 | 2026-08 | `2026-08.md` | 🗂️ Ba bề mặt đọc chung MỘT cách xếp công cụ |
-| 88 | 2026-08 | `2026-08.md` | 👥 Duyên Nợ Tiền Kiếp: 2 → tối đa 5 lá số |
-| 89 | 2026-08 | `2026-08.md` | 🖼️ W1b — TÍNH THỬ MIỄN PHÍ cho 2 TOOL CHÂN DUNG |
-| 90 | 2026-08 | `2026-08.md` | 🧑‍🤝‍🧑 Duyên Nợ Tiền Kiếp: nhân vật nào là lá số nào |
-| 91 | 2026-08 | `2026-08.md` | 🔒 Trả nợ kỹ thuật: parser LLM giòn · `no-store` · 4 trang SEO |
-| 92 | 2026-08 | `2026-08.md` | 📉 D1 — Phễu theo tool, và 🔴 BA HỆ TÊN TOOL ĐANG LỆCH NHAU |
-| 93 | 2026-08 | `2026-08.md` | 🔓 W1 — TÍNH THỬ MIỄN PHÍ: bấm nút là tool CHẠY THẬT |
-| 94 | 2026-08 | `2026-08.md` | 👶👥 T2 "Dạy Con" + T3 "Sổ Nhân Mạch" |
-| 95 | 2026-08 | `2026-08.md` | 💸 Duyên Nợ Tiền Kiếp trừ tiền HAI LẦN — 3 lỗi chồng nhau |
-| 96 | 2026-08 | `2026-08.md` | ⏳ Ảnh chậm gấp đôi vì ĐỔI MODEL, không phải hồi quy |
-| 97 | 2026-08 | `2026-08.md` | 💼 Track click108 → tool MỚI "Tử Vi Công Sở" |
-| 98 | 2026-08 | `2026-08.md` | 📸 Vận hôm nay: poster đủ thông tin · QR đo được · nhập lá số tại chỗ |
-| 99 | 2026-08 | `2026-08.md` | 🔢 Track repo thần số học → vá 3 lỗi + mở 4→11 chỉ số |
-| 100 | 2026-08 | `2026-08.md` | 🀄 Track repo Trung Quốc → Mai Hoa + Kỳ Môn + ảnh 9:16 |
-| 101 | 2026-08 | `2026-08.md` | 🌌 Nâng 4 tool bằng mingyu-core + tool chiêm tinh Tây |
-| 102 | 2026-08 | `2026-08.md` | 📅 Thẻ "Vận hôm nay" — và 🔴 3 công cụ đang tính SAI CAN CHI NGÀY |
-| 103 | 2026-08 | `2026-08.md` | 🎴 Quẻ Phục Hy bằng hình — 64 tranh + cổ pháp đọc quẻ |
-| 104 | 2026-08 | `2026-08.md` | 🧰 Admin: tách trang · mobile · GIỮ PHIÊN đăng nhập |
-| 105 | 2026-08 | `2026-08.md` | 📡 M3b — 3 kênh auto THẬT: Instagram · Threads · Telegram channel |
-| 106 | 2026-08 | `2026-08.md` | 🌱 Trợ lý seeding group — máy soạn, NGƯỜI dán |
-| 107 | 2026-08 | `2026-08.md` | 📹 Track Media Pipeline — kênh phân phối, KHÔNG phải SEO |
-| 108 | 2026-08 | `2026-08.md` | 🧭 Track CMO skills — brand-check, từ khoá, SEO |
-| 109 | 2026-07 | `2026-07.md` | 🎙️ CMO SKILLS — B1 Brand Voice XONG, và 2 tiền đề của brief là SAI |
-| 110 | 2026-07 | `2026-07.md` | 💸 ĐO DOANH THU ĐANG BỊA 78% |
-| 111 | 2026-07 | `2026-07.md` | 🎨 Trang topup dựng lại + ĐƯỜNG ICON DÙNG CHUNG BỊ HỎNG |
-| 112 | 2026-08 | `2026-08.md` | 🖼️ Sinh ảnh: gpt-image-1 → gpt-image-2 |
-| 114 | 2026-07 | `2026-07.md` | 🚨 Vá cảnh báo 10:00 VN 30/07 — BỘ DÒ ĐANG NÓI DỐI |
-| 115 | — | `track-cu.md` | 🧭 Marketing Autopilot + CMO Orchestrator Quân Sư |
-| 116 | 2026-07 | `2026-07.md` | 🔌 Đọc GA4 từ terminal — `scripts/ga4.mjs` |
-| 117 | 2026-07 | `2026-07.md` | 🧭 Ba lớp danh xưng: Quan Lộc × Mệnh × Thân — 194 → 566 |
-| 118 | 2026-07 | `2026-07.md` | 🎭 Chức phận theo CẶP chính tinh — 82 → 194 danh xưng |
-| 119 | 2026-07 | `2026-07.md` | 💾 Cache kết quả 2 tool chân dung theo lá số |
-| 120 | 2026-07 | `2026-07.md` | 🔁 TRACK MỚI — Viral Loop cho 2 tool chân dung |
-| 121 | 2026-07 | `2026-07.md` | 🏯 Tool mới — "Chân Dung Tiền Kiếp" |
-| 122 | 2026-07 | `2026-07.md` | 🔀 Provider routing rail — fallback HAI CHIỀU |
-| 123 | 2026-07 | `2026-07.md` | 🆕 Tool mới — "Chân Dung Vợ Chồng" |
-| 124 | — | `track-cu.md` | 🟣 ĐANG LÀM — Admin Revamp + Marketing/Conversion Tracking |
-| 125 | — | `track-cu.md` | 🟢 ĐANG LÀM — App-shell "/app" (không gian làm việc đa công cụ) |
-| 126 | — | `track-cu.md` | 🗂️ Track cũ — Chat-first / Contract v1 (đa nền tảng) |
-| 127 | — | `track-cu.md` | 🗄️ Track cũ (song song) — ISR Lá Số SEO (438K pages) |
-| 128 | 2026-08 | `2026-08.md` | 💰 "Vận Hạn 12 Tháng Tới" ăn theo Code #1 — cache chia sẻ CẢ 16 lượt, không riêng 4 |
+| 1 | 2026-08 | `2026-08.md` | 🆓 UI "Số Đẹp" — 100% client-side, KHÔNG chạm LLM/route/paywall |
+| 2 | 2026-08 | `2026-08.md` | 🎲 Generator "Số Đẹp" — gợi ý số bằng random-walk có seed, 0đ |
+| 3 | 2026-08 | `2026-08.md` | 🔢 Engine "Số Đẹp" — Bát Tinh + Quẻ Dịch + Ngũ Hành + Âm Dương, 0đ |
+| 4 | 2026-08 | `2026-08.md` | 🀄 Bảng Du Niên Bát Trạch — 3 bản chép tay tự mâu thuẫn, nay SINH bằng thuật toán |
+| 5 | 2026-08 | `2026-08.md` | 💸 Rail chat gỡ carve-out Opus primary — quay về Gemini Flash toàn bộ |
+| 6 | 2026-08 | `2026-08.md` | 🔀 Kimi K3 xuống lưới đỡ cuối cùng, Opus 5 primary cho 7 tool "luận giải" |
+| 7 | 2026-08 | `2026-08.md` | 🧭 Coachmark 3 điểm → 6–7 điểm — đi hết các mặt chính của sản phẩm |
+| 8 | 2026-08 | `2026-08.md` | 🚀 "Khởi Hành" thay M3 + coachmark 3 điểm — onboarding cho web |
+| 9 | 2026-08 | `2026-08.md` | 🔄 Card "Khoe Kết Quả" trong Nhiệm Vụ → "Chia Sẻ" — #599 đã gỡ nút, câu hỏi đo click |
+| 10 | 2026-08 | `2026-08.md` | 🏆 Tab "Nhiệm Vụ" trong Tài Khoản — gom Khởi Hành, Mời Bạn, lịch sử Khoe Kết Quả |
+| 11 | 2026-08 | `2026-08.md` | 📣 Track Quest/Gamification — "Khoe Kết Quả" + "Rủ so lá số" |
+| 12 | 2026-08 | `2026-08.md` | ✂️ Audit `trim_la_so` — chỉ CÒN 1 chỗ cắt thật, đã bỏ |
+| 13 | 2026-08 | `2026-08.md` | 📣 TRACK DIGITAL MARKETING — 14/14 mục, và 3 giả định của tôi bị SỐ ĐO bác |
+| 14 | 2026-08 | `2026-08.md` | 💰 Track Tối Ưu Chi Phí Opus — Code #1 + #2 đã push lên PR #585 (chờ merge+deploy), #3 vẫn chặn |
+| 15 | 2026-08 | `2026-08.md` | 🌙 Vận Hạn 12 Tháng đổi sang KHUNG THÁNG ÂM — hết cảnh "nửa đầu / nửa sau" |
+| 16 | 2026-08 | `2026-08.md` | 🌙 Rail `tra_nguyet_van` đổi sang tháng ÂM — nốt "đường dùng chung" đã né ở PR trước |
+| 17 | 2026-08 | `2026-08.md` | ⏱️ Timeout 30 giây: KHÔNG phải đường tiền, và engine vô can |
+| 18 | 2026-08 | `2026-08.md` | 🔤 Ảnh OG: chẩn đoán vòng 1 SAI, bản vá của tôi đẻ ra lỗi MỚI |
+| 19 | 2026-08 | `2026-08.md` | 📡 BẢN ĐỒ 8 KÊNH SOCIAL — audit trước khi ráp Telegram + vá Facebook |
+| 20 | 2026-08 | `2026-08.md` | 🔮 Thêm lớp DỰ BÁO vào arc ô GIỮA — và arc ô giữa KHÔNG phải 5 lớp |
+| 21 | 2026-08 | `2026-08.md` | 🖼️ Ảnh preview link chia sẻ HỎNG 108 lượt/tuần — và chẩn đoán ĐẦU của tôi SAI |
+| 23 | 2026-08 | `2026-08.md` | 📅 Tool MỚI "Vận Hạn 12 Tháng Tới" — và một lỗi CỔ PHÁP sai 11,4% số ngày |
+| 24 | 2026-08 | `2026-08.md` | 🪝 VIRAL CORE cho 2 cron viết bài SEO — và nó ĐÃ CÓ SẴN trong repo |
+| 25 | 2026-08 | `2026-08.md` | 🧱 Lượt render THẬT đầu tiên TRƯỢT — kho nền nằm ngoài git |
+| 26 | 2026-08 | `2026-08.md` | 🔁 Vòng lặp trả bản CUỐI chứ không phải bản TỐT NHẤT · token TikTok · và pipeline CHƯA CHẠY THẬT lượt nào |
+| 27 | 2026-08 | `2026-08.md` | 🏭 RÁP PIPELINE ĐĂNG CLIP — và cổng 2 KHÔNG chặn như tôi tưởng |
+| 28 | 2026-08 | `2026-08.md` | 🎬 GỠ nhân vật, thay bằng NỀN VIDEO — nhân vật sai VAI chứ không chỉ xấu |
+| 29 | 2026-08 | `2026-08.md` | 🏃 Nhịp ĐO ĐƯỢC là quá chậm · 14 tư thế · cảnh HAI người |
+| 30 | 2026-08 | `2026-08.md` | 🕺 Nhân vật BIẾT CỬ ĐỘNG + 20 đạo cụ — và 4 lỗi chỉ lộ khi SOI KHUNG HÌNH |
+| 31 | 2026-08 | `2026-08.md` | ✍️ ARC RA TỚI BẢN LUẬN GIẢI — `arcDoc` KHÁC `LUAN_ARC`, đừng dùng lẫn |
+| 32 | 2026-08 | `2026-08.md` | 💸 Đường trả thưởng giới thiệu CHẾT TỪ LÚC VIẾT RA — `catch {}` giấu 6 ngày |
+| 33 | 2026-08 | `2026-08.md` | 🤖 ĐỌC SỐ TRAFFIC: luôn dùng bản `_human` |
+| 34 | 2026-08 | `2026-08.md` | 🩺 "sức khoẻ" gõ lối CŨ thì TRƯỢT bộ dò chủ đề — 3 bản chép tay cùng dính |
+| 35 | 2026-08 | `2026-08.md` | 🔤 BIÊN TỪ KHÔNG CỨU ĐƯỢC TIẾNG VIỆT — mẫu phải là CỤM |
+| 36 | 2026-08 | `2026-08.md` | 🔐 7 hàm SECURITY DEFINER hở `search_path` — và BỘ DÒ KHÔNG HỀ CANH NÓ |
+| 37 | 2026-08 | `2026-08.md` | 🔐 Vá nốt 44 hàm SECDEF — và BỘ DÒ CỦA CHÍNH TÔI vẫn mù với lớp lỗi này |
+| 38 | 2026-08 | `2026-08.md` | ✍️ 75% PROMPT LÀ LUẬT GIỌNG — arc 5 lớp THAY 3 bản bố cục chồng nhau |
+| 39 | 2026-08 | `2026-08.md` | 🖼️ Hội đồng CHẤM HÌNH mà KHÔNG NHÌN THẤY HÌNH — và kho ảnh thật |
+| 40 | 2026-08 | `2026-08.md` | 🧺 Kho ảnh THẬT + vá `buildTimeline`: hội đồng cuối cùng cũng nhìn thấy hình |
+| 41 | 2026-08 | `2026-08.md` | 🎞️ Tuyển lại kho theo BRIEF + một-ảnh-một-clip |
+| 42 | 2026-08 | `2026-08.md` | 🏭 Khâu dựng clip lên GitHub Actions — và một phép kiểm TÔI ĐẶT TÊN SAI |
+| 43 | 2026-08 | `2026-08.md` | 📤 Đường clip ra kho — và KHÔNG đưa service key vào Actions |
+| 44 | 2026-08 | `2026-08.md` | 🎬 18/18 công cụ miễn phí có kịch bản clip + công thức quay |
+| 45 | 2026-08 | `2026-08.md` | 🎟️ Câu kết clip đọc TÊN MIỀN + MÃ, và bảng mã khuyến mãi |
+| 46 | 2026-08 | `2026-08.md` | 🫂 Rail thành "Trò chuyện với Thầy" — 4 tầng, và vòng vá NHỊP HỘI THOẠI |
+| 47 | 2026-08 | `2026-08.md` | 📺 3 video CÔNG KHAI lên NHẦM KÊNH — và không dòng code nào sai |
+| 48 | 2026-08 | `2026-08.md` | 📘 Facebook: 33 bài, **0 bài từng đăng được** — lời khuyên chung chung |
+| 49 | 2026-08 | `2026-08.md` | ▶️ "Chạy ngay" trả *Unknown job* — cùng một lỗi, lần thứ BA |
+| 50 | 2026-08 | `2026-08.md` | ✏️ Kho hết CHỈ ĐỌC: sửa bài + trạng thái xuất bản |
+| 51 | 2026-08 | `2026-08.md` | 📚 Kho Nội Dung: 1.140 tác phẩm, **15 từng ra khỏi website** |
+| 52 | 2026-08 | `2026-08.md` | 📊 Số liệu nền tảng: YouTube đi bằng API KEY, KHÔNG dùng OAuth |
+| 53 | 2026-08 | `2026-08.md` | 🕰️ Xác Định Giờ Sinh VỨT ĐI dữ kiện nó vừa bán — và sổ lá số dò form theo TÊN |
+| 54 | 2026-08 | `2026-08.md` | 🔘 "Ko thấy nút Sửa ở đâu?" — NÚT CÓ, LỜI CHỈ ĐƯỜNG MỚI LÀ THỨ HỎNG |
+| 55 | 2026-08 | `2026-08.md` | 🔌 `mcp-handler` 1 → 2: gỡ đúng cái workaround của chính mình |
+| 56 | 2026-08 | `2026-08.md` | 🀄 Lục Nhâm CŨNG liệt kê được từ vựng — và lộ 3 chỗ rò |
+| 57 | 2026-08 | `2026-08.md` | 🧷 Máy canh cho nhóm `wrap` — và nó lòi ra 13 trường + 1 lỗi #475 sót |
+| 58 | 2026-08 | `2026-08.md` | 🧹 "2 tool mỏng quá" — CẦU CÓ THẬT, mình dựng SAI HÌNH DẠNG |
+| 59 | 2026-08 | `2026-08.md` | 💾 "Chạy lại vẫn ra lá số cũ" — TÔI QUÊN BUMP `SHAPE` ở #475 |
+| 60 | 2026-08 | `2026-08.md` | 🀄 QUÉT MẪU chỉ chứng minh được thứ mẫu CHẠM TỚI |
+| 61 | 2026-08 | `2026-08.md` | 🔁 "Đã check hết chưa?" — CHƯA, và 4 tool nữa dính |
+| 62 | 2026-08 | `2026-08.md` | 🀄 Rà tool khác cùng họ lỗi → Bát Tự: rail KHÔNG hề nhận Thập Thần |
+| 63 | 2026-08 | `2026-08.md` | 🔴 `tsc --noEmit` XANH KHÔNG CHỨNG MINH `next build` CHẠY |
+| 64 | 2026-08 | `2026-08.md` | 🔗 Luận Giải 24 phần bỏ qua data engine — MỐC SECTION HỎNG, bộ cắt CÂM |
+| 65 | 2026-08 | `2026-08.md` | 🧭 Tool MỚI: Hướng Nghiệp Sớm Cho Con |
+| 66 | 2026-08 | `2026-08.md` | 🧱 TypeScript 7 GỠ HẲN API BIÊN DỊCH — bump là vỡ bản dựng prod |
+| 67 | 2026-08 | `2026-08.md` | 🧪 CI đo BẢN CŨ chứ không đo PR — cả 3 workflow sang preview |
+| 68 | 2026-08 | `2026-08.md` | 🔐 Rail đòi ĐĂNG NHẬP với người ĐANG đăng nhập — đồng hồ ví chốt quá sớm |
+| 69 | 2026-08 | `2026-08.md` | 🐞 Dạy Con: khung mới KHÔNG hiện — vì `portrait_cache` không có phiên bản SHAPE |
+| 70 | 2026-08 | `2026-08.md` | 🧹 Vá nốt hai món nợ: rail cũ vô hình + `animation` trỏ vào keyframe ma |
+| 71 | 2026-08 | `2026-08.md` | 🧒 Dạy Con: khung "5 TRỤC · 8 CHẤT" — bản luận có xương sống |
+| 72 | 2026-08 | `2026-08.md` | 🖨️✦ Lưu PDF + orb mời hỏi — cùng đưa lên tầng SHELL |
+| 73 | 2026-08 | `2026-08.md` | ⏱️ ETA TỰ HIỆU CHỈNH + `llm_usage` cuối cùng cũng có THỜI LƯỢNG |
+| 74 | 2026-08 | `2026-08.md` | 🔗 Chia sẻ workspace: tính năng của SHELL, không phải của từng tool |
+| 75 | 2026-08 | `2026-08.md` | 📏 LUẬT CHỈ BÁO CHỜ + mở orb ra toàn site |
+| 76 | 2026-08 | `2026-08.md` | 🧭 Tử Vi Công Sở: thêm TẦNG NHÁNH NGHỀ |
+| 77 | 2026-08 | `2026-08.md` | ✨ Orb chờ AI + `innerHTML` mỗi giây PHÁ animation |
+| 78 | 2026-08 | `2026-08.md` | 🗺️ Sitemap: `lastmod` đang NÓI DỐI 647 URL mỗi ngày |
+| 79 | 2026-08 | `2026-08.md` | 🕘 7 tool KHÔNG HỀ có lịch sử — và nhãn phiên suýt nói sai người |
+| 80 | 2026-08 | `2026-08.md` | 🌓 Dark mode cho trang Tài khoản — gỡ nốt cái đảo sáng |
+| 81 | 2026-08 | `2026-08.md` | 🌗 Dark mode: MÀU THƯƠNG HIỆU LÀ MẶT NỀN, đừng dùng làm chữ |
+| 82 | 2026-08 | `2026-08.md` | 🕘 "Phiên gần đây": nhãn mô tả LÁ SỐ trong khi cái phân biệt là HỘI THOẠI |
+| 83 | 2026-08 | `2026-08.md` | 🎯 M3 — Nhiệm vụ onboarding: đổi CÙNG khoản tiền lấy được gì |
+| 84 | 2026-08 | `2026-08.md` | 🔤 Font lạc bầy + nhãn radar bị cắt ở Công Sở |
+| 85 | 2026-08 | `2026-08.md` | 🧩 `npm run dev` thiếu bước dựng engine — và nó hỏng theo kiểu ĐÁNH LỪA |
+| 86 | 2026-08 | `2026-08.md` | 🔒 Tấm khoá tính thử CẮT MẤT NÚT MỞ |
+| 87 | 2026-08 | `2026-08.md` | 🧩 CSS CỦA TRANG ĐÈ VỠ FORM DÙNG CHUNG |
+| 88 | 2026-08 | `2026-08.md` | 🔔 R1a — NỐI LẠI kênh nhắc hằng ngày |
+| 89 | 2026-08 | `2026-08.md` | 🗂️ Ba bề mặt đọc chung MỘT cách xếp công cụ |
+| 90 | 2026-08 | `2026-08.md` | 👥 Duyên Nợ Tiền Kiếp: 2 → tối đa 5 lá số |
+| 91 | 2026-08 | `2026-08.md` | 🖼️ W1b — TÍNH THỬ MIỄN PHÍ cho 2 TOOL CHÂN DUNG |
+| 92 | 2026-08 | `2026-08.md` | 🧑‍🤝‍🧑 Duyên Nợ Tiền Kiếp: nhân vật nào là lá số nào |
+| 93 | 2026-08 | `2026-08.md` | 🔒 Trả nợ kỹ thuật: parser LLM giòn · `no-store` · 4 trang SEO |
+| 94 | 2026-08 | `2026-08.md` | 📉 D1 — Phễu theo tool, và 🔴 BA HỆ TÊN TOOL ĐANG LỆCH NHAU |
+| 95 | 2026-08 | `2026-08.md` | 🔓 W1 — TÍNH THỬ MIỄN PHÍ: bấm nút là tool CHẠY THẬT |
+| 96 | 2026-08 | `2026-08.md` | 👶👥 T2 "Dạy Con" + T3 "Sổ Nhân Mạch" |
+| 97 | 2026-08 | `2026-08.md` | 💸 Duyên Nợ Tiền Kiếp trừ tiền HAI LẦN — 3 lỗi chồng nhau |
+| 98 | 2026-08 | `2026-08.md` | ⏳ Ảnh chậm gấp đôi vì ĐỔI MODEL, không phải hồi quy |
+| 99 | 2026-08 | `2026-08.md` | 💼 Track click108 → tool MỚI "Tử Vi Công Sở" |
+| 100 | 2026-08 | `2026-08.md` | 📸 Vận hôm nay: poster đủ thông tin · QR đo được · nhập lá số tại chỗ |
+| 101 | 2026-08 | `2026-08.md` | 🔢 Track repo thần số học → vá 3 lỗi + mở 4→11 chỉ số |
+| 102 | 2026-08 | `2026-08.md` | 🀄 Track repo Trung Quốc → Mai Hoa + Kỳ Môn + ảnh 9:16 |
+| 103 | 2026-08 | `2026-08.md` | 🌌 Nâng 4 tool bằng mingyu-core + tool chiêm tinh Tây |
+| 104 | 2026-08 | `2026-08.md` | 📅 Thẻ "Vận hôm nay" — và 🔴 3 công cụ đang tính SAI CAN CHI NGÀY |
+| 105 | 2026-08 | `2026-08.md` | 🎴 Quẻ Phục Hy bằng hình — 64 tranh + cổ pháp đọc quẻ |
+| 106 | 2026-08 | `2026-08.md` | 🧰 Admin: tách trang · mobile · GIỮ PHIÊN đăng nhập |
+| 107 | 2026-08 | `2026-08.md` | 📡 M3b — 3 kênh auto THẬT: Instagram · Threads · Telegram channel |
+| 108 | 2026-08 | `2026-08.md` | 🌱 Trợ lý seeding group — máy soạn, NGƯỜI dán |
+| 109 | 2026-08 | `2026-08.md` | 📹 Track Media Pipeline — kênh phân phối, KHÔNG phải SEO |
+| 110 | 2026-08 | `2026-08.md` | 🧭 Track CMO skills — brand-check, từ khoá, SEO |
+| 111 | 2026-07 | `2026-07.md` | 🎙️ CMO SKILLS — B1 Brand Voice XONG, và 2 tiền đề của brief là SAI |
+| 112 | 2026-07 | `2026-07.md` | 💸 ĐO DOANH THU ĐANG BỊA 78% |
+| 113 | 2026-07 | `2026-07.md` | 🎨 Trang topup dựng lại + ĐƯỜNG ICON DÙNG CHUNG BỊ HỎNG |
+| 114 | 2026-08 | `2026-08.md` | 🖼️ Sinh ảnh: gpt-image-1 → gpt-image-2 |
+| 116 | 2026-07 | `2026-07.md` | 🚨 Vá cảnh báo 10:00 VN 30/07 — BỘ DÒ ĐANG NÓI DỐI |
+| 117 | — | `track-cu.md` | 🧭 Marketing Autopilot + CMO Orchestrator Quân Sư |
+| 118 | 2026-07 | `2026-07.md` | 🔌 Đọc GA4 từ terminal — `scripts/ga4.mjs` |
+| 119 | 2026-07 | `2026-07.md` | 🧭 Ba lớp danh xưng: Quan Lộc × Mệnh × Thân — 194 → 566 |
+| 120 | 2026-07 | `2026-07.md` | 🎭 Chức phận theo CẶP chính tinh — 82 → 194 danh xưng |
+| 121 | 2026-07 | `2026-07.md` | 💾 Cache kết quả 2 tool chân dung theo lá số |
+| 122 | 2026-07 | `2026-07.md` | 🔁 TRACK MỚI — Viral Loop cho 2 tool chân dung |
+| 123 | 2026-07 | `2026-07.md` | 🏯 Tool mới — "Chân Dung Tiền Kiếp" |
+| 124 | 2026-07 | `2026-07.md` | 🔀 Provider routing rail — fallback HAI CHIỀU |
+| 125 | 2026-07 | `2026-07.md` | 🆕 Tool mới — "Chân Dung Vợ Chồng" |
+| 126 | — | `track-cu.md` | 🟣 ĐANG LÀM — Admin Revamp + Marketing/Conversion Tracking |
+| 127 | — | `track-cu.md` | 🟢 ĐANG LÀM — App-shell "/app" (không gian làm việc đa công cụ) |
+| 128 | — | `track-cu.md` | 🗂️ Track cũ — Chat-first / Contract v1 (đa nền tảng) |
+| 129 | — | `track-cu.md` | 🗄️ Track cũ (song song) — ISR Lá Số SEO (438K pages) |
+| 130 | 2026-08 | `2026-08.md` | 💰 "Vận Hạn 12 Tháng Tới" ăn theo Code #1 — cache chia sẻ CẢ 16 lượt, không riêng 4 |

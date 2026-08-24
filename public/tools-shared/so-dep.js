@@ -1,7 +1,16 @@
 /* tools-shared/so-dep.js — Module DÙNG CHUNG tool "Số Đẹp" (đánh giá SĐT/số
    nhà/biển số theo cổ pháp — Bát Trạch, Mai Hoa Dịch Số, Ngũ Hành, Âm Dương).
    Nguồn DUY NHẤT cho /tools/so-dep.html + shell /app/so-dep.
-   window.SoDepTool = { danhGia, STAR_DESC, DIGIT_NOTE }
+   window.SoDepTool = { danhGia, goiY, STAR_DESC }
+
+   ── goiY() — GỢI Ý SỐ, thêm ở PR #2b ────────────────────────────────────
+   Không chép bảng cặp số ra lần thứ ba: đồ thị cạnh cho từng "mục tiêu" dựng
+   TRỰC TIẾP từ `BatTrachTool.starBetween()` (quét mọi cặp 1-9\{5}, giữ cặp
+   nào ra đúng sao mục tiêu). Random-walk trên đồ thị đó SINH ứng viên, rồi
+   ứng viên được CHẤM LẠI bằng chính `danhGia()` — generator không tự phát
+   minh thang điểm riêng, tránh 2 nguồn "thế nào là tốt" trôi khỏi nhau.
+   DETERMINISTIC: seed = hash(tham số đầu vào) qua PRNG mulberry32, không
+   dùng `Math.random()` — bấm lại cùng tham số ra cùng danh sách.
 
    ── VÌ SAO ENGINE NÀY TỒN TẠI — đọc trước khi sửa ──────────────────────────
    Thị trường "xem số đẹp" ở VN gần như 100% chấm một điểm số DUY NHẤT (vd.
@@ -281,8 +290,263 @@
     };
   }
 
+  // ── Generator gợi ý số ───────────────────────────────────────────────────
+  var MUC_TIEU_SAO = {
+    'tai-loc': 'Sinh Khí',
+    'suc-khoe': 'Thiên Y',
+    'ben-vung': 'Diên Niên',
+    'on-dinh': 'Phục Vị',
+  };
+  var CAT_SET_GEN = { 'Sinh Khí': 1, 'Thiên Y': 1, 'Diên Niên': 1, 'Phục Vị': 1 };
+  var CUNGS_ALL = [1, 2, 3, 4, 6, 7, 8, 9];
+
+  // PRNG seed từ chuỗi (FNV-1a) — KHÔNG dùng Math.random(), để cùng tham số
+  // luôn ra cùng danh sách gợi ý (bấm lại không đổi, cache được).
+  function _fnv1a(str) {
+    var h = 0x811c9dc5;
+    for (var i = 0; i < str.length; i++) {
+      h ^= str.charCodeAt(i);
+      h = Math.imul(h, 0x01000193);
+    }
+    return h >>> 0;
+  }
+  function _mulberry32(seed) {
+    var s = seed >>> 0;
+    return function () {
+      s = (s + 0x6d2b79f5) | 0;
+      var t = Math.imul(s ^ (s >>> 15), 1 | s);
+      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+
+  // Đồ thị cạnh: a→b hợp lệ nếu starBetween(a,b) ra ĐÚNG sao mục tiêu (hoặc
+  // BẤT KỲ sao cát nào, khi không chọn mục tiêu cụ thể — 'tu-do'). Tự bao
+  // gồm cạnh a→a khi mục tiêu là Phục Vị, vì starBetween(a,a)='Phục Vị'.
+  function _dungDoThi(target) {
+    var BT = root.BatTrachTool;
+    var adj = {};
+    CUNGS_ALL.forEach(function (a) {
+      adj[a] = [];
+      CUNGS_ALL.forEach(function (b) {
+        var s = BT.starBetween(a, b);
+        var hop = target ? s === target : !!CAT_SET_GEN[s];
+        if (hop) adj[a].push(b);
+      });
+    });
+    return adj;
+  }
+
+  /**
+   * Sinh danh sách số gợi ý theo độ dài + mục tiêu tuỳ chọn.
+   * @param {{doDai:number, mucTieu?:string, namSinh?:number, gioiTinh?:string,
+   *   tienTo?:string, loaiTru?:Array<number|string>, soLuong?:number}} opts
+   *   mucTieu: 'tai-loc'|'suc-khoe'|'ben-vung'|'on-dinh'|'tu-do' (mặc định).
+   */
+  function goiY(opts) {
+    opts = opts || {};
+    var BT = root.BatTrachTool;
+    if (!BT) return { ok: false, error: 'Chưa nạp được BatTrachTool.' };
+
+    var doDai = Math.floor(Number(opts.doDai));
+    if (!isFinite(doDai) || doDai < 4 || doDai > 20) {
+      return { ok: false, error: 'Độ dài phải là số nguyên từ 4 đến 20.' };
+    }
+    var mucTieu = opts.mucTieu || 'tu-do';
+    var targetSao = MUC_TIEU_SAO[mucTieu];
+    if (mucTieu !== 'tu-do' && !targetSao) {
+      return { ok: false, error: 'Mục tiêu không hợp lệ — chỉ nhận: tai-loc, suc-khoe, ben-vung, on-dinh, tu-do.' };
+    }
+    var tienTo = chuanHoa(opts.tienTo);
+    if (tienTo.length >= doDai) {
+      return { ok: false, error: 'Tiền tố (' + tienTo.length + ' số) phải NGẮN HƠN độ dài mong muốn (' + doDai + ').' };
+    }
+    var loaiTruSet = {};
+    (opts.loaiTru || []).forEach(function (d) {
+      var n = Number(d);
+      if (n >= 0 && n <= 9) loaiTruSet[n] = true;
+    });
+    var soLuong = Math.max(1, Math.min(10, Math.floor(Number(opts.soLuong)) || 5));
+
+    var CUNGS = CUNGS_ALL.filter(function (d) { return !loaiTruSet[d]; });
+    if (!CUNGS.length) {
+      return { ok: false, error: 'Đã loại trừ hết chữ số 1-9 (trừ 5) — không còn gì để sinh số.' };
+    }
+    var adj = _dungDoThi(targetSao);
+    CUNGS.forEach(function (a) {
+      adj[a] = (adj[a] || []).filter(function (b) { return !loaiTruSet[b]; });
+    });
+    var chen0 = !loaiTruSet[0];
+
+    var seedStr = JSON.stringify({
+      doDai: doDai, mucTieu: mucTieu, namSinh: opts.namSinh || null,
+      gioiTinh: opts.gioiTinh || null, tienTo: tienTo, loaiTru: Object.keys(loaiTruSet).sort(),
+    });
+    var baseSeed = _fnv1a(seedStr);
+    var tienToDigits = tienTo.split('').map(Number);
+    var lanThu = Math.max(soLuong * 8, 40);
+    var dedupe = {};
+    var candidates = [];
+
+    for (var attempt = 0; attempt < lanThu && candidates.length < soLuong * 4; attempt++) {
+      var rng = _mulberry32((baseSeed + attempt * 2654435761) >>> 0);
+      var out = tienToDigits.slice();
+      var cur = tienToDigits.length ? tienToDigits[tienToDigits.length - 1] : null;
+      if (cur === 0 || cur === 5 || loaiTruSet[cur]) cur = null;
+      if (cur == null) { cur = CUNGS[Math.floor(rng() * CUNGS.length)]; out.push(cur); }
+      var need = doDai - out.length;
+      for (var k = 0; k < need; k++) {
+        if (chen0 && k > 0 && k < need - 1 && rng() < 0.1) { out.push(0); continue; }
+        var tuyChon = (adj[cur] && adj[cur].length) ? adj[cur] : CUNGS;
+        var next = tuyChon[Math.floor(rng() * tuyChon.length)];
+        out.push(next);
+        cur = next;
+      }
+      var soSach = out.slice(0, doDai).join('');
+      if (soSach.length !== doDai || dedupe[soSach]) continue;
+      dedupe[soSach] = true;
+      candidates.push(soSach);
+    }
+    if (!candidates.length) {
+      return { ok: false, error: 'Không sinh được số nào — thử nới độ dài hoặc bớt loại trừ.' };
+    }
+
+    // Chấm lại bằng CHÍNH danhGia() — generator không tự bịa thang điểm riêng.
+    var danhSach = candidates
+      .map(function (soSach) {
+        var r = danhGia(soSach, { namSinh: opts.namSinh, gioiTinh: opts.gioiTinh });
+        return r.ok ? r.data : null;
+      })
+      .filter(Boolean);
+
+    danhSach.sort(function (x, y) {
+      if (y.dongThuan.tot !== x.dongThuan.tot) return y.dongThuan.tot - x.dongThuan.tot;
+      if (x.dongThuan.xau !== y.dongThuan.xau) return x.dongThuan.xau - y.dongThuan.xau;
+      var dx = x.t1.diem100 == null ? -1 : x.t1.diem100;
+      var dy = y.t1.diem100 == null ? -1 : y.t1.diem100;
+      if (dy !== dx) return dy - dx;
+      return x.soSach < y.soSach ? -1 : x.soSach > y.soSach ? 1 : 0;
+    });
+
+    return {
+      ok: true,
+      data: {
+        doDai: doDai, mucTieu: mucTieu, targetSao: targetSao || null, tienTo: tienTo,
+        soLuongYeuCau: soLuong, soUngVienDaXet: candidates.length,
+        danhSach: danhSach.slice(0, soLuong),
+      },
+    };
+  }
+
+  // ── Render HTML — TEMPLATE THUẦN, không LLM ─────────────────────────────
+  // Toàn bộ văn bản giải thích đã có sẵn trong DATA của engine (STAR_DESC,
+  // QUE[].g/m từ kinh-dich.js, DAN_GIAN_*) — hàm này chỉ LẮP vào khung, không
+  // tự sinh câu chữ mới. Vì vậy tool chạy 100% client-side, 0 lượt gọi mạng,
+  // 0đ — đúng yêu cầu "free cho tìm kiếm tự nhiên, không tốn API LLM".
+  var DIR_TAG = { tot: 'sd-tot', xau: 'sd-xau', trung: 'sd-trung' };
+  var DIR_LABEL = { tot: 'Tốt', xau: 'Xấu', trung: 'Trung bình' };
+
+  function _esc(s) {
+    return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c];
+    });
+  }
+
+  function ketQuaHTML(data) {
+    var d = data;
+    var dt = d.dongThuan;
+    var dtTag = dt.tongPhieu === 0 ? 'sd-trung' : dt.tot > dt.xau ? 'sd-tot' : dt.xau > dt.tot ? 'sd-xau' : 'sd-trung';
+    var html = '';
+
+    html += '<div class="sd-head">';
+    html += '<div class="sd-so">' + _esc(d.soSach) + '</div>';
+    html += '<div class="sd-dongthuan ' + dtTag + '">' + (dt.tongPhieu ? dt.tot + '/' + dt.tongPhieu + ' trường phái cổ pháp nói tốt' : 'Dãy quá ngắn để tính đồng thuận') + '</div>';
+    html += '</div>';
+
+    // T1 Bát Tinh
+    html += '<div class="sd-section"><div class="sd-section-head">Bát Tinh <span class="sd-eyebrow">Bát Trạch</span></div>';
+    if (d.t1.diem100 != null) {
+      html += '<div class="sd-chuoi">';
+      d.t1.capSao.forEach(function (c) {
+        var cls = c.catHung === 'cat' ? 'sd-cap-cat' : c.catHung === 'hung' ? 'sd-cap-hung' : 'sd-cap-trung';
+        var nhan = c.sao || (c.a === 0 || c.b === 0 ? '0' : '—');
+        html += '<span class="sd-cap ' + cls + '" title="' + _esc(c.ghiChu || c.y || '') + '">' + c.a + c.b + '<b>' + _esc(nhan) + '</b></span>';
+      });
+      html += '</div>';
+      html += '<div class="sd-diem">Điểm cát: <b>' + d.t1.diem100 + '/100</b>' + (d.t1.noiBat.length ? ' · Sao nổi bật: ' + _esc(d.t1.noiBat.slice(0, 2).join(', ')) : '') + '</div>';
+      var topStar = d.t1.noiBat[0];
+      if (topStar && STAR_DESC[topStar]) html += '<p class="sd-p">' + _esc(STAR_DESC[topStar].y) + '</p>';
+    } else {
+      html += '<p class="sd-p">Dãy chưa đủ cặp số hợp lệ để xét Bát Tinh (toàn số 0/5, hoặc quá ngắn).</p>';
+    }
+    html += '</div>';
+
+    // T2 Quẻ Dịch
+    html += '<div class="sd-section"><div class="sd-section-head">Quẻ Dịch <span class="sd-eyebrow">Mai Hoa Dịch Số</span></div>';
+    if (d.t2.ok) {
+      html += '<div class="sd-que-ten">' + _esc(d.t2.que.ten) + ' <span class="sd-zh">' + _esc(d.t2.que.zh) + '</span></div>';
+      html += '<div class="sd-que-meta">' + _esc(d.t2.thuongQuai.n) + ' trên · ' + _esc(d.t2.haQuai.n) + ' dưới · hào ' + d.t2.haoDong + ' động</div>';
+      html += '<p class="sd-p">' + _esc(d.t2.que.chiTiet || d.t2.que.y) + '</p>';
+      html += '<div class="sd-p sd-quebien">Biến sang quẻ <b>' + _esc(d.t2.queBien.ten) + '</b> — ' + _esc(d.t2.queBien.y) + '</div>';
+    } else {
+      html += '<p class="sd-p">' + _esc(d.t2.error) + '</p>';
+    }
+    html += '</div>';
+
+    // T3 Ngũ Hành
+    html += '<div class="sd-section"><div class="sd-section-head">Ngũ Hành <span class="sd-eyebrow">Lạc Thư</span></div>';
+    html += '<div class="sd-phanbo">';
+    ['Kim', 'Mộc', 'Thủy', 'Hỏa', 'Thổ'].forEach(function (h) {
+      html += '<span class="sd-hanh">' + h + ' <b>' + (d.t3.phanBo[h] || 0) + '</b></span>';
+    });
+    html += '</div>';
+    if (d.t3.hanhThieu.length) html += '<div class="sd-p sd-thieu">Thiếu hành: ' + _esc(d.t3.hanhThieu.join(', ')) + '</div>';
+    if (d.t3.banMenh) {
+      var bm = d.t3.banMenh;
+      html += '<p class="sd-p">Bản mệnh nạp âm <b>' + _esc(bm.napAm) + '</b> (hành ' + _esc(bm.hanhNapAm) + '), cung phi hành ' + _esc(bm.hanhCungPhi) + '. ' +
+        (bm.hopMenh.length ? 'Dãy số có chứa hành hợp mệnh: ' + _esc(bm.hopMenh.join(', ')) + '.' : 'Dãy số CHƯA chứa hành hợp bản mệnh.') + '</p>';
+    }
+    html += '</div>';
+
+    // T5 Âm Dương
+    html += '<div class="sd-section"><div class="sd-section-head">Âm Dương <span class="sd-eyebrow">Số học — không phải cổ pháp</span></div>';
+    var t5bits = [d.t5.soLe + ' số lẻ / ' + d.t5.soChan + ' số chẵn', 'số chủ đạo ' + d.t5.soChuDao];
+    if (d.t5.doiXung) t5bits.push('dãy đối xứng (soi gương)');
+    if (d.t5.tienDan) t5bits.push('có đoạn 3 số liên tiếp tăng dần');
+    if (d.t5.soDoiLapLai.length) t5bits.push('số đôi lặp: ' + d.t5.soDoiLapLai.join(', '));
+    html += '<p class="sd-p">' + _esc(t5bits.join(' · ')) + '</p></div>';
+
+    // T6 Dân gian
+    if (d.t6.diem.length || d.t6.canhBao.length) {
+      html += '<div class="sd-section sd-dangian"><div class="sd-section-head">Theo dân gian <span class="sd-eyebrow">KHÔNG phải cổ pháp</span></div>';
+      d.t6.diem.forEach(function (x) { html += '<div class="sd-p sd-dg-tot">+ "' + _esc(x.mau) + '" — ' + _esc(x.y) + '</div>'; });
+      d.t6.canhBao.forEach(function (x) { html += '<div class="sd-p sd-dg-xau">△ "' + _esc(x.mau) + '" — ' + _esc(x.y) + '</div>'; });
+      html += '</div>';
+    }
+
+    return html;
+  }
+
+  function goiYHTML(data) {
+    var html = '<div class="sd-goiy-list">';
+    data.danhSach.forEach(function (item) {
+      var dt = item.dongThuan;
+      var tag = dt.tongPhieu === 0 ? 'sd-trung' : dt.tot > dt.xau ? 'sd-tot' : dt.xau > dt.tot ? 'sd-xau' : 'sd-trung';
+      html += '<div class="sd-goiy-item">';
+      html += '<div class="sd-goiy-so">' + _esc(item.soSach) + '</div>';
+      html += '<div class="sd-goiy-dt ' + tag + '">' + (dt.tongPhieu ? dt.tot + '/' + dt.tongPhieu + ' tốt' : '—') + '</div>';
+      if (item.t1.noiBat.length) html += '<div class="sd-goiy-sao">' + _esc(item.t1.noiBat.slice(0, 2).join(', ')) + '</div>';
+      html += '</div>';
+    });
+    html += '</div>';
+    return html;
+  }
+
   var API = {
     danhGia: danhGia,
+    goiY: goiY,
+    ketQuaHTML: ketQuaHTML,
+    goiYHTML: goiYHTML,
     STAR_DESC: STAR_DESC,
   };
   if (typeof module !== 'undefined' && module.exports) module.exports = API;

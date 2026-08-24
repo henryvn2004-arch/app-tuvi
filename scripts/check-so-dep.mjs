@@ -21,6 +21,14 @@
  *   - T5 Âm Dương: soLe + soChan = độ dài dãy
  *   - T6 dân gian: mẫu chỉ khớp khi CÓ mặt trong dãy (không dương tính giả)
  *   - Input rác/quá dài/rỗng bị từ chối rõ ràng, không throw
+ *   - goiY(): DETERMINISTIC (seed từ tham số, không Math.random) — bấm lại
+ *     cùng tham số ra cùng danh sách
+ *   - goiY(): mọi cặp trong số sinh ra (trừ điểm nối tienTo/fallback) khớp
+ *     ĐÚNG sao mục tiêu qua chính starBetween() — generator không tự vẽ đồ
+ *     thị cạnh sai khỏi nguồn
+ *   - goiY(): loaiTru được tôn trọng tuyệt đối (không digit nào trong dãy
+ *     ra ngoài tienTo lọt qua)
+ *   - goiY(): danh sách trả về ĐÃ được xếp hạng đúng thứ tự tot desc/xau asc
  *
  * Chạy: node scripts/check-so-dep.mjs
  */
@@ -179,9 +187,98 @@ for (const so of SAMPLES) {
   }
 }
 
+// ── 9. goiY(): deterministic — bấm lại cùng tham số ra cùng danh sách ──────
+const GOIY_CASES = [
+  { doDai: 10, mucTieu: 'tai-loc', tienTo: '090', soLuong: 5 },
+  { doDai: 6, mucTieu: 'on-dinh', soLuong: 3 },
+  { doDai: 8, mucTieu: 'tai-loc', loaiTru: [3, 9], soLuong: 3 },
+  { doDai: 8, mucTieu: 'suc-khoe', namSinh: 1995, gioiTinh: 'nu', soLuong: 4 },
+  { doDai: 7, mucTieu: 'tu-do', soLuong: 3 },
+];
+for (const opts of GOIY_CASES) {
+  const a = JSON.stringify(SD.goiY(opts));
+  const b = JSON.stringify(SD.goiY(opts));
+  if (a !== b) fail(`goiY(${JSON.stringify(opts)}) KHÔNG deterministic.`);
+}
+
+// ── 10. goiY(): mọi cặp trong số sinh ra khớp ĐÚNG sao mục tiêu qua chính
+// starBetween() (bỏ qua cặp có 0/5, và bỏ qua điểm nối tienTo↔phần sinh vì
+// đó là biên có thể fallback không theo mục tiêu) ──────────────────────────
+const MUC_TIEU_SAO = {
+  'tai-loc': 'Sinh Khí',
+  'suc-khoe': 'Thiên Y',
+  'ben-vung': 'Diên Niên',
+  'on-dinh': 'Phục Vị',
+};
+const CAT4 = new Set(['Sinh Khí', 'Thiên Y', 'Diên Niên', 'Phục Vị']);
+for (const opts of GOIY_CASES) {
+  const r = SD.goiY(opts);
+  if (!r.ok) {
+    fail(`goiY(${JSON.stringify(opts)}) phải ok:true, lỗi: ${r.error}`);
+    continue;
+  }
+  const target = MUC_TIEU_SAO[opts.mucTieu] || null;
+  const bienNoi = (opts.tienTo || '').length; // vị trí cặp nối tienTo↔phần sinh, bỏ qua khi kiểm
+  for (const item of r.data.danhSach) {
+    const digits = item.soSach.split('').map(Number);
+    for (let i = 0; i < digits.length - 1; i++) {
+      const a = digits[i],
+        b = digits[i + 1];
+      if (a === 0 || b === 0 || a === 5 || b === 5) continue;
+      if (i === bienNoi - 1) continue; // biên nối tienTo, có thể fallback
+      const sao = BT.starBetween(a, b);
+      const hopLe = target ? sao === target : CAT4.has(sao);
+      if (!hopLe) {
+        fail(
+          `goiY mucTieu=${opts.mucTieu}: "${item.soSach}" cặp vị trí ${i} (${a}${b}) ra sao "${sao}", không khớp mục tiêu.`
+        );
+      }
+    }
+  }
+}
+
+// ── 11. goiY(): loaiTru được tôn trọng tuyệt đối ngoài phần tienTo ─────────
+{
+  const r = SD.goiY({ doDai: 10, mucTieu: 'tai-loc', loaiTru: [3, 9], soLuong: 5 });
+  if (r.ok) {
+    for (const item of r.data.danhSach) {
+      if (/[39]/.test(item.soSach)) fail(`goiY loaiTru=[3,9]: "${item.soSach}" vẫn chứa 3 hoặc 9.`);
+    }
+  }
+}
+
+// ── 12. goiY(): danh sách trả về ĐÃ xếp hạng đúng (tot desc, xau asc) ──────
+for (const opts of GOIY_CASES) {
+  const r = SD.goiY(opts);
+  if (!r.ok) continue;
+  for (let i = 0; i < r.data.danhSach.length - 1; i++) {
+    const x = r.data.danhSach[i],
+      y = r.data.danhSach[i + 1];
+    if (x.dongThuan.tot < y.dongThuan.tot) {
+      fail(
+        `goiY(${JSON.stringify(opts)}): danh sách không xếp hạng đúng (tot giảm dần) ở vị trí ${i}.`
+      );
+    }
+  }
+}
+
+// ── 13. goiY(): input sai bị từ chối rõ ràng ───────────────────────────────
+const GOIY_BAD = [
+  { doDai: 2 },
+  { doDai: 25 },
+  { doDai: 6, mucTieu: 'khong-ton-tai' },
+  { doDai: 4, tienTo: '12345' },
+  { doDai: 6, loaiTru: [1, 2, 3, 4, 6, 7, 8, 9] },
+];
+for (const opts of GOIY_BAD) {
+  const r = SD.goiY(opts);
+  if (r.ok)
+    fail(`goiY(${JSON.stringify(opts)}) phải ok:false — input không hợp lệ nhưng lại chạy được.`);
+}
+
 if (bad === 0) {
   console.log(
-    '✅ Engine Số Đẹp: deterministic, T1 khớp starBetween(), T2 tra đúng quẻ, T3/T5 tổng khớp, T6 không dương tính giả, đồng thuận không lẫn T5/T6.'
+    '✅ Engine Số Đẹp: deterministic, T1 khớp starBetween(), T2 tra đúng quẻ, T3/T5 tổng khớp, T6 không dương tính giả, đồng thuận không lẫn T5/T6, goiY() deterministic + khớp đồ thị mục tiêu + tôn trọng loaiTru + xếp hạng đúng.'
   );
 } else {
   console.error(`\n${bad} lỗi trong engine so-dep.js.`);
