@@ -142,7 +142,16 @@ export const CHANNEL_TASK_DEFS: OnboardingTaskDef[] = [
     title: 'Liên kết một kênh chat',
     desc: 'Hỏi tử vi thẳng trong Telegram · Messenger · WhatsApp, không cần mở web. Đây cũng là đường nhắc duy nhất không phụ thuộc quyền thông báo của trình duyệt.',
     cta: 'Liên kết',
-    href: '/profile.html#ketnoi',
+    // `#ketnoi` mở thẳng tab Kết Nối — bước mở-tab-theo-hash vừa thêm vào
+    // `account-core.js`. Trước đó tab chỉ đổi được bằng cú bấm, nên mọi liên
+    // kết từ nơi khác đều đổ người ta xuống tab Lịch Sử rồi để tự đi tìm.
+    //
+    // Trỏ `/app/tai-khoan` (trang shell hiện hành) chứ không phải
+    // `/profile.html` (bản standalone cũ) — nhánh `href` không rỗng trong
+    // `questTaskGo()` (account-core.js) còn nhận diện đúng dạng
+    // `/app/tai-khoan#<tab>` để chuyển tab TẠI CHỖ thay vì tải lại trang khi
+    // người dùng đang đứng sẵn ở đó (tab Nhiệm Vụ).
+    href: '/app/tai-khoan#ketnoi',
     table: 'chat_links',
   },
 ];

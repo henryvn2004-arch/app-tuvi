@@ -30,6 +30,11 @@
      Giá trị ở đây chỉ là mức dự phòng trước khi JS chạy. Thanh phụ dính
      (.jump) neo theo biến này thay vì chép số cứng. */
   --ws-top-h:69px;
+  /* Bề rộng cột rail ở desktop — MỘT nguồn dùng ở CẢ `.shell` (grid-template-
+     columns) LẪN `.ws-fab` (neo cụm nút sát mép phải WORKSPACE, không phải
+     mép phải viewport). Hai chỗ chép cùng một số 336px là hẹn ngày trôi khỏi
+     nhau; đổi bề rộng rail thì chỉ sửa đúng một dòng này. */
+  --rail-w:336px;
   --shadow:0 1px 2px rgba(6,26,46,.04),0 4px 16px rgba(6,26,46,.06);
   --shadow-lg:0 24px 60px rgba(6,26,46,.28),0 6px 18px rgba(6,26,46,.16);
 }
@@ -48,7 +53,7 @@
 }
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:var(--sans);background:var(--paper-2);color:var(--text);font-size:14px;line-height:1.55;-webkit-font-smoothing:antialiased}
-.shell{display:grid;grid-template-columns:246px 1fr 336px;height:100vh;min-height:600px}
+.shell{display:grid;grid-template-columns:246px 1fr var(--rail-w);height:100vh;min-height:600px}
 
 /* ── SIDEBAR ── */
 .sb{background:linear-gradient(180deg,var(--navy),var(--navy-2));color:var(--sb-txt);display:flex;flex-direction:column;overflow:hidden}
@@ -104,11 +109,33 @@ body{font-family:var(--sans);background:var(--paper-2);color:var(--text);font-si
    Dựng bởi `fabHost()` trong shell.js. Luật ẨN khi có drawer (sidebar/rail)
    mở nằm TRONG khối responsive dưới cùng, cạnh `.tabbar` — trên desktop
    rail luôn hiện sẵn (không phải drawer che màn hình) nên KHÔNG được ẩn ở
-   đây, chỉ ẩn trên di động nơi rail phủ kín màn hình khi mở. */
-.ws-fab{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom));z-index:40;display:flex;flex-direction:column;align-items:flex-end;gap:8px}
-.ws-fab .btn{background:var(--white);box-shadow:var(--shadow-lg);white-space:nowrap}
+   đây, chỉ ẩn trên di động nơi rail phủ kín màn hình khi mở.
+
+   🐞 `right:16px` SUÔNG là bug đã bắt: `position:fixed` neo theo VIEWPORT,
+   không theo `.ws` (workspace) — trên desktop rail luôn chiếm `--rail-w`
+   (336px) sát mép phải viewport, nên cụm nút tràn ĐÈ LÊN rail thay vì đứng
+   trong workspace. Trừ đúng `--rail-w` (cùng biến `.shell` dùng để chia cột)
+   thì cụm nút mới hạ cánh sát mép phải WORKSPACE. Ở ≤900px rail là drawer
+   NẰM NGOÀI luồng (không chiếm cột) nên khối responsive bên dưới ghi đè lại
+   `right:14px` — không trừ `--rail-w` nữa. */
+.ws-fab{position:fixed;right:calc(var(--rail-w) + 16px);bottom:calc(16px + env(safe-area-inset-bottom));z-index:40;display:flex;flex-direction:column;align-items:center;gap:8px}
+/* Icon-only, tròn, đều cỡ — chữ dồn hết vào tooltip (`data-tip`, hiện khi
+   hover/focus) thay vì nằm cạnh icon. Đặt tooltip bên TRÁI vì cụm đứng sát
+   mép phải: bên phải chỉ còn 16px rồi tới rail/viền màn hình, chữ dài sẽ bị
+   cắt hoặc tràn ra ngoài. */
+.ws-fab .btn{width:44px;height:44px;padding:0;justify-content:center;border-radius:50%;background:var(--white);box-shadow:var(--shadow-lg);position:relative}
+.ws-fab .btn svg{width:19px;height:19px;flex:0 0 auto}
 .ws-fab .fbtn-fb{background:#1877F2;border-color:#1877F2;color:#fff}
 .ws-fab .fbtn-fb:hover{background:#1466d6;border-color:#1466d6;color:#fff}
+.ws-fab .btn[data-tip]::after{
+  content:attr(data-tip);position:absolute;right:calc(100% + 10px);top:50%;transform:translateY(-50%);
+  background:var(--navy);color:#fff;font-size:12px;line-height:1;white-space:nowrap;
+  padding:6px 10px;border-radius:6px;box-shadow:var(--shadow-lg);
+  opacity:0;pointer-events:none;transition:opacity .12s ease;
+}
+.ws-fab .btn[data-tip]:hover::after,.ws-fab .btn[data-tip]:focus-visible::after{opacity:1}
+/* Chạm màn hình không có "hover" — tooltip chỉ tổ che ngón tay, không ai đọc kịp. */
+@media(hover:none){.ws-fab .btn[data-tip]::after{display:none}}
 /* Dòng giá ngay dưới mô tả mỗi công cụ — điền bằng `tool-prices.js` qua
    `data-tvp-price-label="<tool_id>"`, nguồn DUY NHẤT là `tool_pricing`. Admin
    sửa giá thì dòng này tự đổi theo, không cần deploy. Margin âm để dính sát
