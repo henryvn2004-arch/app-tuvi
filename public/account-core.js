@@ -116,7 +116,7 @@ function setupTabs() {
       if (btn.dataset.tab === 'credits') loadCredits();
       if (btn.dataset.tab === 'ketnoi') loadKetnoi();
       if (btn.dataset.tab === 'thaynho') loadMemory();
-      if (btn.dataset.tab === 'nhiemvu') { loadReferralPanel(); loadQuestTasks(); loadMySocialProof(); }
+      if (btn.dataset.tab === 'nhiemvu') { loadReferralPanel(); loadQuestTasks(); loadMyShares(); }
     });
   });
   // Mở thẳng một tab qua địa chỉ: `/profile.html#ketnoi`. Trước đây tab chỉ đổi
@@ -671,45 +671,41 @@ function questTaskGo() {
   location.href = href;
 }
 
-// ── TAB NHIỆM VỤ — lịch sử "Khoe Kết Quả" ───────────────────────────────
-// Trước đây nộp xong (nút "Khoe kết quả" ở `.ws-actions`/fabHost) là mất dấu
-// hoàn toàn phía người dùng — đường đọc lại DUY NHẤT là hàng đợi ADMIN. Đây
-// là chỗ ĐẦU TIÊN chính chủ tự xem lại được trạng thái lượt mình đã nộp.
-var SP_PLATFORM_LABELS = { facebook: 'Facebook', instagram: 'Instagram', tiktok: 'TikTok', other: 'Khác' };
-var SP_STATUS_LABELS = { pending: 'Đang chờ duyệt', approved: 'Đã duyệt', rejected: 'Từ chối' };
-
-async function loadMySocialProof() {
+// ── TAB NHIỆM VỤ — lịch sử "Chia Sẻ" ─────────────────────────────────────
+// #599 gỡ nút "Khoe kết quả" (nộp bằng chứng + chờ admin duyệt) — quest này
+// đổi sang đọc lại `shared_results` (mỗi lần bấm "Chia sẻ" trong workspace
+// ghi 1 dòng, `view_count` +1 mỗi lượt `/ket-qua/<id>` được mở). Chưa gắn
+// thưởng vào số lượt xem này — `view_count` cộng cả bot xem-trước của
+// Facebook/Zalo/WhatsApp lẫn chính chủ tự mở lại, nên chỉ HIỆN cho biết,
+// không dùng để tính Lượng.
+async function loadMyShares() {
   const host = document.getElementById('spBody');
   if (!host || !(await _tok())) return;
   try {
-    const res = await fetch('/api/payment?action=my-social-proof', {
+    const res = await fetch('/api/payment?action=my-shares', {
       headers: { Authorization: 'Bearer ' + (await _tok()) },
     });
     const d = await res.json();
-    renderMySocialProof((d && d.submissions) || []);
+    renderMyShares((d && d.shares) || []);
   } catch (e) {
     host.innerHTML = '<div style="color:var(--text-lt);font-size:.85rem">Không đọc được lịch sử.</div>';
   }
 }
 
-function renderMySocialProof(list) {
+function renderMyShares(list) {
   const host = document.getElementById('spBody');
   if (!host) return;
   if (!list.length) {
-    host.innerHTML = '<div style="color:var(--text-lt);font-size:.85rem">Bạn chưa nộp lượt nào.</div>';
+    host.innerHTML = '<div style="color:var(--text-lt);font-size:.85rem">Bạn chưa chia sẻ lượt nào.</div>';
     return;
   }
   host.innerHTML = list.map(function (s) {
-    const date = new Date(s.submitted_at).toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' });
-    const plat = SP_PLATFORM_LABELS[s.platform] || s.platform;
-    const cls = s.status || 'pending';
-    const label = SP_STATUS_LABELS[cls] || cls;
-    const extra = cls === 'approved' && s.reward_credits ? (' · +' + s.reward_credits + ' Lượng') : '';
-    const reject = cls === 'rejected' && s.reject_reason ? ('<div class="sp-meta">Lý do: ' + escHtml(s.reject_reason) + '</div>') : '';
+    const date = new Date(s.created_at).toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' });
+    const views = Number(s.view_count) || 0;
     return '<div class="sp-row"><div style="flex:1;min-width:0">'
-      + '<div class="sp-plat">' + escHtml(plat) + '</div>'
-      + '<div class="sp-meta">' + date + extra + '</div>' + reject + '</div>'
-      + '<span class="sp-status ' + cls + '">' + escHtml(label) + '</span></div>';
+      + '<div class="sp-plat">' + escHtml(s.title || 'Kết quả') + '</div>'
+      + '<div class="sp-meta">' + date + '</div></div>'
+      + '<span class="sp-status approved">' + views + ' lượt xem</span></div>';
   }).join('');
 }
 

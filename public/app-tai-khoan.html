@@ -421,13 +421,15 @@
       </div>
     </div>
 
-    <!-- Tab: Nhiệm Vụ — Khởi Hành (M3) + Mời Bạn + Khoe Kết Quả dồn về MỘT
-         chỗ để theo dõi khi cần. Henry: "phải có 1 tab để users click vào
-         theo dõi khi cần". Trang Tổng Quan (`/app`) VẪN giữ nguyên các khối
-         Khởi Hành + Mời Bạn làm lời mời LUÔN HIỆN (đúng thiết kế
-         docs/QUEST-PLAN.md §5) — tab này KHÔNG thay thế lời mời ở đó, nó là
-         nơi TRA CỨU trạng thái, và là nơi DUY NHẤT xem lại lịch sử "Khoe Kết
-         Quả" (trước đây nộp xong là mất dấu, không đọc lại được). -->
+    <!-- Tab: Nhiệm Vụ — Khởi Hành (M3) + Mời Bạn + Chia Sẻ dồn về MỘT chỗ để
+         theo dõi khi cần. Henry: "phải có 1 tab để users click vào theo dõi
+         khi cần". Trang Tổng Quan (`/app`) VẪN giữ nguyên các khối Khởi Hành
+         + Mời Bạn làm lời mời LUÔN HIỆN (đúng thiết kế docs/QUEST-PLAN.md
+         §5) — tab này KHÔNG thay thế lời mời ở đó, nó là nơi TRA CỨU trạng
+         thái. Khối "Chia Sẻ" (#spCard) thay cho quest "Khoe Kết Quả" cũ —
+         #599 gỡ nút nộp bằng chứng, nay đọc lại `shared_results` thay vì
+         `social_post_submissions`; xem `handleMyShares` trong
+         `app/api/payment/route.ts` về vì sao CHƯA gắn thưởng vào lượt xem. -->
     <div class="tab-content" id="tab-nhiemvu">
       <style>
         #tab-nhiemvu .qt-top{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem;margin-bottom:.65rem}
@@ -448,7 +450,7 @@
         #tab-nhiemvu .sp-intro{font-size:.82rem;color:var(--text-mid);line-height:1.6;margin-bottom:1rem}
         #tab-nhiemvu .sp-row{display:flex;align-items:center;gap:.75rem;padding:.65rem 0;border-bottom:1px solid var(--border-lt)}
         #tab-nhiemvu .sp-row:last-child{border-bottom:none}
-        #tab-nhiemvu .sp-plat{font-size:.85rem;font-weight:700;color:var(--heading);text-transform:capitalize}
+        #tab-nhiemvu .sp-plat{font-size:.85rem;font-weight:700;color:var(--heading)}
         #tab-nhiemvu .sp-meta{font-size:.76rem;color:var(--text-lt);margin-top:.15rem}
         #tab-nhiemvu .sp-status{font-size:.72rem;font-weight:700;padding:.2rem .6rem;border-radius:20px;white-space:nowrap;flex:none}
         #tab-nhiemvu .sp-status.pending{background:var(--chip-amber);color:var(--tx-amber)}
@@ -487,8 +489,8 @@
       </div>
 
       <div class="account-section" id="spCard">
-        <h3><span data-icon="image" style="width:15px;height:15px;vertical-align:-2px;color:var(--tx-gold)"></span> Khoe Kết Quả — Lịch Sử Nộp</h3>
-        <p class="sp-intro">Bấm nút <strong>"Khoe kết quả"</strong> ở góc dưới bất kỳ trang kết quả nào (cạnh nút Chia sẻ/Ảnh) để nộp link hoặc ảnh chụp đã đăng lên Facebook/Instagram/TikTok — quản trị viên duyệt xong thì Lượng vào ví. Lịch sử các lượt đã nộp hiện ở đây.</p>
+        <h3><span data-icon="share-2" style="width:15px;height:15px;vertical-align:-2px;color:var(--tx-gold)"></span> Chia Sẻ — Lịch Sử</h3>
+        <p class="sp-intro">Bấm nút <strong>"Chia sẻ"</strong> ở góc dưới bất kỳ trang kết quả nào để lấy link — gửi cho ai đó hoặc đăng lên Facebook/Zalo/WhatsApp. Các lượt bạn đã chia sẻ và số lượt xem hiện ở đây.</p>
         <div id="spBody"><div style="color:var(--text-lt);font-size:.85rem">Đang tải...</div></div>
       </div>
     </div>
