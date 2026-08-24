@@ -167,6 +167,75 @@ của `ngu-hanh-ten`). Đặt thêm một lời mời **ngay cuối phần kết
   admin duyệt tay. Ở quy mô hiện tại (14 user hoạt động) duyệt tay là khả thi, và
   nó chặn được đúng thứ mà thưởng-tự-động không chặn nổi.
 
+### 3.5. 🔴 Henry hỏi thêm (24/08): "vẫn thiếu activity để user ĐĂNG facebook/
+instagram" — nghiên cứu + 4 mục mới, đè lên đúng dòng "Đăng bài/review" ở trên
+
+**Đã kiểm tra trước khi thiết kế (đừng đọc rộng hơn số hiện có):** con số §1 là
+n=14–66, chưa đủ để kết luận gì — Henry đúng, không nên đóng khung theo baseline
+đó. Bốn mục dưới đây bổ sung THÊM hành động cụ thể vào tầng Lan Toả, không thay
+thế mấy mục đã có.
+
+**Nghiên cứu (WebSearch, 24/08) — một giới hạn phải nói thẳng trước khi thiết kế
+bất cứ gì:** không có cách nào xác minh tự động một lượt đăng Story lên Instagram/
+Facebook — Instagram **không phát lộ dữ liệu screenshot/lượt xem qua API cho bất
+kỳ ứng dụng thứ ba nào**, và mọi dịch vụ quảng cáo "báo ai đã xem/chụp story bạn"
+đều là lừa đảo (đánh cắp mật khẩu). Đây **không phải giới hạn riêng của app này**
+— toàn ngành growth loop đều dừng ở đúng một mức: **người dùng TỰ NỘP bằng chứng
+(link công khai hoặc ảnh chụp), admin xác nhận bằng mắt**. Ở quy mô hiện tại (một
+mình Henry duyệt), việc này khả thi — cùng khuôn với hàng đợi Seeding Group/Media
+Queue đã có trong admin.
+
+1. **"Khoe Kết Quả" — nộp bằng chứng đã đăng, cụ thể hoá dòng "Đăng bài/review"
+   ở trên thành một luồng dựng được:**
+   - Nút mới cạnh Chia sẻ/Ảnh: *"Đã đăng lên Facebook/Instagram? Dán link hoặc
+     gửi ảnh chụp — nhận +20 Lượng"*.
+   - Bài đăng THƯỜNG (FB post/IG feed) → dán **link công khai**. Story (FB/IG,
+     tự xoá sau 24h, KHÔNG có link bền) → **tải ảnh chụp màn hình** — đây là
+     đường DUY NHẤT chứng minh được Story, đúng giới hạn vừa nêu ở trên.
+   - Bảng mới `social_post_submissions(user_id, platform, url, screenshot_path,
+     status:pending|approved|rejected, submitted_at, reviewed_at)`. UNIQUE trên
+     `url` khi có (chặn 2 tài khoản cùng nộp 1 link) + trần **1 lượt/nền tảng/7
+     ngày/user** (chặn nộp lại ảnh cũ mỗi tuần).
+   - Admin: một hàng đợi duyệt (mở link/ảnh → Duyệt/Từ chối), đúng UX các hàng
+     đợi duyệt tay đã có. Duyệt xong mới cộng Lượng qua `credit_transactions`
+     (`meta.source='social_proof'`) — **không auto-cộng lúc nộp**.
+   - ⚠️ Không thay được bằng "đăng thẳng lên trang" — CLAUDE.md đã chốt ranh giới
+     cứng: máy **không tự đăng, không tự gửi**; ở đây máy chỉ soạn sẵn (mục 3) và
+     ghi nhận, người tự tay đăng và tự tay dán link/ảnh.
+
+2. **Rủ người kia so lá số — CTA đi thẳng, không chờ hết Lượng như `invite-cta`:**
+   3 tool đã có sẵn đúng cơ chế viral mạnh nhất của ngành tử vi (Co-Star nổi lên
+   nhờ đúng một tính năng: *thêm bạn, so biểu đồ với nhau* — WebSearch 24/08 xác
+   nhận đây là công cụ giữ chân/lan truyền chủ lực của họ, không phải nội dung
+   hằng ngày). `tuong-hop` / `chan-dung-vo-chong` / `duyen-no-tien-kiep` đang có
+   sẵn nhưng nút Chia sẻ hiện đọc như "khoe kết quả của TÔI" chung chung. Đổi câu
+   CTA ngay dưới kết quả thành lời **RỦ ĐÍCH DANH**: *"Rủ [đối tác/crush/bạn
+   thân] nhập ngày sinh xem có hợp không →"* — người mời phải tự đẩy bạn mình mở
+   link (khác hẳn share thụ động), và đúng khoảnh khắc vừa đọc xong là lúc tò mò
+   cao nhất. 0đ, chỉ đổi 1 dòng copy + 1 chỗ đặt, không cần migration.
+
+3. **Caption soạn sẵn + share-thẳng-vào-Story trên di động** — friction lớn nhất
+   khi đăng không phải "có muốn khoe không" mà là "viết gì bây giờ". Thêm nút
+   **"Sao chép caption"** cạnh nút Ảnh: 2–3 câu xoay vòng, giọng đời thường, kèm
+   hashtag cố định — copy dán thẳng vào status/story. Trên di động, dùng
+   `instagram-stories://share` (URL scheme có thật của Instagram) để mở thẳng
+   màn "thêm vào Story" với ảnh poster đã nạp sẵn, bớt 2–3 bước lưu-ảnh-mở-app-
+   đính-ảnh. Không xác minh được lượt Story đó (xem giới hạn ở trên) — đây là
+   bước GIẢM MA SÁT lúc đăng, thưởng vẫn đi qua mục 1.
+
+4. **⏰ Có hạn chót, không phải "làm khi nào cũng được":** `docs/GROWTH-
+   BRAINSTORM.md` §4 đã cảnh báo Tết 2027 cần nội dung SEO chuẩn bị trước ~6
+   tháng; hôm nay còn **~5 tháng**. Cùng logic đó áp cho quest: *"xem tuổi xông
+   đất"* / *"vận năm Đinh Mùi 2027"* là loại kết quả người Việt vốn đã có thói
+   quen khoe trên Facebook mỗi dịp Tết — dựng card kèm CTA khoe **trước tháng
+   11** thì mới kịp mùa cao điểm; dựng sau Tết là lỡ trọn một năm.
+
+5. **⚠️ Một mỏ KHÔNG dùng được ngay:** "mời follow/like Trang Facebook" nghe hợp
+   lý nhưng Trang hiện **0 bài live** (token chết, 54 bài kẹt hàng đợi — xem mục
+   BẢN ĐỒ 8 KÊNH trong CLAUDE.md). Trỏ user vào một Trang im lặng là phí một lời
+   mời. Không chặn 4 mục trên (chúng không phụ thuộc Trang) — chỉ đừng thêm quest
+   loại "ghé Trang" tới khi token được cấp lại.
+
 ## 🖥️ 5. TỔNG QUAN MỚI (`/app`)
 
 Bỏ list 58 công cụ. Thứ tự đọc (mobile 390px trước):
@@ -225,6 +294,13 @@ Vận hôm nay (giữ) + thẻ gợi ý theo luật + mã mời + link `/cong-cu
 - RPC `quest_share_claim`: chỉ nhận `share_view` của link mình tạo, người mở ≠ mình,
   cap 3/ngày, cửa sổ 7 ngày.
 - Mốc mời 3 người → +50 (đọc `referrals` đã thưởng, không đếm signup suông).
+- **Khoe Kết Quả** (§3.5.1): bảng `social_post_submissions` + hàng đợi duyệt tay
+  trong admin (mẫu Seeding Group/Media Queue) + `+20 Lượng` khi Duyệt
+  (`meta.source='social_proof'`), UNIQUE url + trần 1/nền tảng/7 ngày.
+- **Rủ so lá số** (§3.5.2): đổi copy CTA của 3 tool compat — 0đ, không migration,
+  làm CÙNG PR vì rẻ và độc lập.
+- **Caption soạn sẵn + `instagram-stories://share`** (§3.5.3): nút mới cạnh Ảnh.
+- ⏰ Ưu tiên trước Q5–Q7 nếu muốn kịp mùa Tết 2027 (§3.5.4, hạn ~tháng 11).
 
 ### Q5 — "Tổng Kết Vận Mệnh" (phần thưởng 8/8)
 - 1 lượt LLM (~35đ) dựng từ dữ liệu đã tính. Cache theo lá số (`portrait_cache`
@@ -288,6 +364,13 @@ nguồn gốc trên từng dòng Lượng, không có bộ dò abuse.** Phải d
    `blocked_email_domains` · UNIQUE `referee_user_id` · cấm tự refer.
 
 ## 📏 8. MỐC ĐO — đặt trước để khỏi tự lừa mình
+
+⚠️ **Henry nhắc (24/08): đừng đọc n nhỏ này thành kết luận chắc.** Site mới ra
+mắt, mẫu còn quá mỏng để "tỉ lệ % đạt/hỏng" có ý nghĩa thống kê thật. Bảng dưới
+vẫn giữ làm ĐIỂM NEO (đo lại thấy gì thì ghi lại thấy đó), **không phải phán
+quyết cuối cùng về việc gamification có tác dụng hay không** — 3 tuần đầu chủ
+yếu để phát hiện lỗi thiết kế rõ ràng (0 ai bấm nút vì đặt sai chỗ, câu chữ hứa
+hụt…), không phải để đóng track lại nếu %  chưa đạt.
 
 Baseline hôm nay: **14 user hoạt động · 11 người chỉ 1 ngày · 1 referral · 0 promo ·
 4 lượt nhiệm vụ · 86 khách vô danh chạy tool.**
