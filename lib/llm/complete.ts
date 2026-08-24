@@ -4,15 +4,15 @@
 // cron, tuong-mat, phong-thuy, tubinh, xem-tuoi, lasotuvi, van-han-nam...
 //
 // Provider ĐỨNG ĐẦU đọc từ app_config 'chat.standalone_provider' (mặc định
-// 'kimi' — DEFAULTS.standaloneProvider trong appConfig.ts, chỉ dùng khi DB
+// 'gemini' — DEFAULTS.standaloneProvider trong appConfig.ts, chỉ dùng khi DB
 // không đọc được); provider đứng đầu lỗi → tự rơi xuống 2 provider còn lại
 // theo CANONICAL_ORDER. Đổi khoá đó qua DB để ép một provider cụ thể lên đầu
 // (không cần deploy).
-// 🔴 LIVE 2026-08-20 tối (chốt Henry, "trước mắt"): DB đang set 'gemini' —
-// Gemini Flash PRIMARY → Kimi K3 secondary-1 → Opus 5 secondary-2. Đảo lại
-// đúng buổi sáng cùng ngày ("Kimi K3 PRIMARY") vì Kimi thực tế chạy quá chậm
-// (>120s/phần) khiến rail khó dùng thật. Đổi DB về 'kimi' để quay lại thứ tự
-// sáng, không cần sửa code — xem `providerOrder()` cuối file.
+// 🔴 LIVE 2026-08-24 (chốt Henry): Kimi K3 chạy KHÔNG ỔN ĐỊNH (hay chậm/
+// timeout) → CANONICAL_ORDER đặt Kimi CỐ ĐỊNH ở cuối chuỗi, bất kể ai làm
+// primary. Mặc định toàn site: Gemini Flash primary → Opus 5 → Kimi K3.
+// Vài tool "luận giải" quan trọng (xem `providerOrder`) ép primary='anthropic'
+// qua `LlmTextOpts.provider` ở đúng route đó → Opus 5 → Gemini Flash → Kimi K3.
 //
 // Hỗ trợ:
 //   - llmText           : non-stream text (+ ảnh vision, + hội thoại nhiều lượt)
@@ -29,14 +29,17 @@ const GEMINI_KEY = process.env.GEMINI_API_KEY || '';
 const GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-2.5-flash';
 const GEMINI_BASE = 'https://generativelanguage.googleapis.com/v1beta/models';
 const ANTHROPIC_KEY = process.env.ANTHROPIC_API_KEY || '';
-// Opus 5. Đứng thứ 2 hoặc thứ 3 tùy `chat.standalone_provider` trong DB (xem
-// header file + `providerOrder()` cuối file) — hằng số này KHÔNG đọc được từ
-// app_config, đổi MODEL thì phải sửa trực tiếp ở đây rồi deploy; đổi THỨ TỰ
-// thì không, chỉ cần đổi DB.
+// Opus 5. Đứng thứ 1 (primary, các tool "luận giải" quan trọng) hoặc thứ 2
+// (mặc định, sau Gemini) tùy `chat.standalone_provider` trong DB / override
+// per-call (xem header file + `providerOrder()` cuối file) — hằng số này
+// KHÔNG đọc được từ app_config, đổi MODEL thì phải sửa trực tiếp ở đây rồi
+// deploy; đổi THỨ TỰ thì không, chỉ cần đổi DB hoặc override `provider` ở
+// chỗ gọi.
 const ANTHROPIC_MODEL = 'claude-opus-5';
 const ANTHROPIC_URL = 'https://api.anthropic.com/v1/messages';
-// Kimi K3 (Moonshot AI), endpoint OpenAI-compatible Chat Completions. Đứng
-// thứ mấy trong chuỗi cũng tùy `chat.standalone_provider` — xem trên.
+// Kimi K3 (Moonshot AI), endpoint OpenAI-compatible Chat Completions. LUÔN
+// đứng CUỐI chuỗi (xem CANONICAL_ORDER) — không ổn định, chỉ dùng làm lưới đỡ
+// cuối cùng khi cả Gemini lẫn Opus đều hỏng.
 const KIMI_KEY = process.env.KIMIK3_API_KEY || '';
 const KIMI_MODEL = process.env.KIMI_MODEL || 'kimi-k3';
 const KIMI_URL = 'https://api.moonshot.ai/v1/chat/completions';
@@ -351,14 +354,17 @@ function anthropicChunkText(raw: string): string {
 // ─── Chọn provider (chính + 2 backup) ───────────────────────────
 // `standaloneProvider` (app_config 'chat.standalone_provider') giữ vai trò
 // ĐẶT LÊN ĐẦU một provider cụ thể — còn lại xếp theo `CANONICAL_ORDER` phía
-// sau (KHÔNG cần đụng mảng đó để đổi primary). LIVE 2026-08-20 tối (chốt
-// Henry, "trước mắt"): DB = 'gemini' → Gemini Flash primary, Kimi K3
-// secondary-1, Opus 5 secondary-2 — thứ tự Kimi/anthropic trong mảng dưới đây
-// vốn đã đúng thứ tự secondary-1/secondary-2 Henry muốn, nên đặt primary =
-// 'gemini' là đủ, không cần sửa mảng. Kimi thiếu key thì
-// `kimiText`/`openKimiStream` tự ném lỗi ngay, vòng thử-provider-kế-tiếp bên
-// dưới xử lý y như mọi lỗi khác.
-const CANONICAL_ORDER = ['kimi', 'anthropic', 'gemini'];
+// sau (KHÔNG cần đụng mảng đó để đổi primary).
+// 🔴 LIVE 2026-08-24 (chốt Henry): Kimi K3 không ổn định (hay chậm/timeout) →
+// CỐ Ý đặt Kimi CUỐI mảng này, cách DUY NHẤT để nó luôn là lưới đỡ CUỐI CÙNG
+// dù primary là ai. Với DB `chat.standalone_provider='gemini'` (mặc định toàn
+// site) → Gemini Flash primary, Opus 5 secondary-1, Kimi K3 secondary-2. Vài
+// route "luận giải" quan trọng tự ép `provider:'anthropic'` ở lệnh gọi (xem
+// `LlmTextOpts.provider`) → Opus 5 primary, Gemini Flash secondary-1, Kimi K3
+// vẫn secondary-2 (không cần đụng mảng, override chỉ đẩy 1 phần tử lên đầu).
+// Kimi thiếu key thì `kimiText`/`openKimiStream` tự ném lỗi ngay, vòng
+// thử-provider-kế-tiếp bên dưới xử lý y như mọi lỗi khác.
+const CANONICAL_ORDER = ['anthropic', 'gemini', 'kimi'];
 // `override` (từ `LlmTextOpts.provider`) đặt LÊN ĐẦU cho ĐÚNG LƯỢT gọi này,
 // KHÔNG đụng đến `chat.standalone_provider` trong DB — cấu hình đó vẫn quyết
 // định primary cho mọi lượt KHÔNG truyền override. Có override → bỏ qua hẳn
@@ -367,13 +373,14 @@ async function providerOrder(override?: string): Promise<string[]> {
   if (override && CANONICAL_ORDER.includes(override)) {
     return [override, ...CANONICAL_ORDER.filter((p) => p !== override)];
   }
-  let primary = 'kimi';
+  let primary = 'gemini';
   try {
-    primary = (await getChatConfig()).standaloneProvider || 'kimi';
+    primary = (await getChatConfig()).standaloneProvider || 'gemini';
   } catch {
-    /* getChatConfig không throw; phòng hờ → kimi */
+    /* getChatConfig không throw; phòng hờ → gemini (Kimi không ổn định, không
+     * làm fallback-của-fallback được — xem CANONICAL_ORDER phía trên). */
   }
-  if (!CANONICAL_ORDER.includes(primary)) primary = 'kimi';
+  if (!CANONICAL_ORDER.includes(primary)) primary = 'gemini';
   return [primary, ...CANONICAL_ORDER.filter((p) => p !== primary)];
 }
 
@@ -457,7 +464,11 @@ export async function llmStreamResponse(
   extraHeaders?: Record<string, string>,
 ): Promise<Response> {
   const maxTokens = o.maxTokens ?? 2000;
-  const order = await providerOrder();
+  // 🔴 VÁ 2026-08-24: trước đây gọi `providerOrder()` KHÔNG kèm `o.provider` —
+  // override provider ở caller (vd tubinh/route.ts luồng 16 phần) bị ÂM THẦM
+  // bỏ qua, vẫn chạy đúng thứ tự mặc định dù đã truyền `provider:'anthropic'`.
+  // llmTextFull/callLLMTools không dính bệnh này (đã truyền đúng từ đầu).
+  const order = await providerOrder(o.provider);
   const enc = new TextEncoder();
 
   const emitDelta = (t: string) =>

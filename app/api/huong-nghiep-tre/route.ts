@@ -140,6 +140,12 @@ async function buildReport(
         json: true,
         jsonSchema: HUONG_NGHIEP_TRE_SCHEMA,
         maxTokens: 4800, // nâng 50% cùng đợt (Henry chốt 2026-08-20)
+        // provider:'anthropic' (chốt Henry 2026-08-24): Hướng Nghiệp Sớm Cho
+        // Con thuộc nhóm tool "luận giải" quan trọng → Opus 5 primary (xem
+        // lib/llm/complete.ts CANONICAL_ORDER). `jsonSchema` không ép được ở
+        // nhánh Anthropic (chỉ Gemini đọc) — cơ chế `nudge` retry sẵn có ở hàm
+        // này vẫn bắt được JSON sai định dạng.
+        provider: 'anthropic',
       });
       void logLlmUsage(
         TOOL_ID,

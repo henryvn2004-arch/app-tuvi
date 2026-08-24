@@ -278,7 +278,10 @@ async function handleChat(body: any): Promise<Response> {
   if (!trimmed.length) return err('Empty messages after filter', 400);
 
   try {
-    const answer = await llmText({ system: systemPrompt, messages: trimmed, maxTokens: 1200 });
+    // provider:'anthropic' (chốt Henry 2026-08-24): Tử Bình Bát Tự thuộc nhóm
+    // tool "luận giải" quan trọng → Opus 5 primary, KHÔNG dùng mặc định Gemini
+    // Flash toàn site (xem lib/llm/complete.ts CANONICAL_ORDER).
+    const answer = await llmText({ system: systemPrompt, messages: trimmed, maxTokens: 1200, provider: 'anthropic' });
     return ok({ answer, scenario: hasBatTu ? 'batTu' : 'general' });
   } catch (e: unknown) {
     console.error('[handleChat] exception', e);
@@ -675,8 +678,14 @@ async function runPost(request: NextRequest) {
     .join('\n\n');
 
   try {
+    // provider:'anthropic' (chốt Henry 2026-08-24): bản luận giải 16 phần Tử
+    // Bình Bát Tự thuộc nhóm tool quan trọng → Opus 5 primary (xem
+    // lib/llm/complete.ts CANONICAL_ORDER). Lưu ý: đây là override PROVIDER
+    // (llmStreamResponse opts), khác `'anthropic'` truyền làm THAM SỐ THỨ HAI
+    // (`format`, chọn byte-shape SSE tu-binh.html parse) — hai chữ 'anthropic'
+    // trùng tên nhưng khác vai trò.
     return await llmStreamResponse(
-      { system: SYSTEM_PROMPT_TUBINH, prompt: userPrompt, maxTokens: phanInfo.maxTokens },
+      { system: SYSTEM_PROMPT_TUBINH, prompt: userPrompt, maxTokens: phanInfo.maxTokens, provider: 'anthropic' },
       'anthropic',
       { 'X-Phan': String(phanNum), 'X-Phan-Ten': encodeURIComponent(phanInfo.ten) },
     );
