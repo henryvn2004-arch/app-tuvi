@@ -1,10 +1,9 @@
 // app/api/lasotuvi/route.ts
-// 60 → 300: Kimi K3 primary + Opus 5 backup-1 + Gemini Flash backup-2 (chốt
-// Henry 2026-08-20) nghĩa là MỘT lượt có thể thử tới 3 provider TUẦN TỰ
-// (mỗi provider tự retry lỗi tạm thời trước khi coi là hỏng), cộng thêm trần
-// token vừa nâng 50% cùng đợt → 60s không còn đủ, dễ ăn timeout của Vercel
-// (trả về trang lỗi nền tảng "An error occurred..." — KHÔNG PHẢI JSON, làm
-// client vỡ khi JSON.parse). Đồng bộ với các route LLM nặng khác đã ở 300.
+// 60 → 300: MỘT lượt có thể thử tới 3 provider TUẦN TỰ (mỗi provider tự retry
+// lỗi tạm thời trước khi coi là hỏng — xem lib/llm/complete.ts), cộng thêm
+// trần token nâng 50% (2026-08-20) → 60s không còn đủ, dễ ăn timeout của
+// Vercel (trả về trang lỗi nền tảng "An error occurred..." — KHÔNG PHẢI JSON,
+// làm client vỡ khi JSON.parse). Đồng bộ với các route LLM nặng khác đã ở 300.
 export const maxDuration = 300;
 
 import { NextRequest } from 'next/server';
@@ -281,7 +280,14 @@ async function runPost(request: NextRequest) {
     // route này KHÔNG ghi một dòng `llm_usage` nào, nên Luận Giải — tool bán
     // chạy nhất (1.500 Lượng / 3 người) — hoàn toàn vô hình trong panel Biên
     // Lợi Nhuận, và cũng không có số nào để đặt ETA cho 24 phần.
-    const r = await llmTextFull({ system: systemForLLM, prompt, maxTokens: maxTok, cacheSystem: true });
+    // `provider:'anthropic'` (chốt Henry 2026-08-24): Luận Giải Lá Số + Chu
+    // Trình Cuộc Đời (phan>13, cùng route) nằm trong nhóm tool "luận giải"
+    // quan trọng → Opus 5 primary thay vì Gemini Flash mặc định toàn site (xem
+    // lib/llm/complete.ts). Ép ở ĐÚNG lệnh gọi này, KHÔNG đụng
+    // `chat.standalone_provider` — khoá đó vẫn quyết định primary cho mọi
+    // route standalone khác. Cũng giữ nguyên hiệu quả `cacheSystem` (breakpoint
+    // Anthropic) vì nhánh Anthropic giờ LUÔN được gọi ở lượt đầu.
+    const r = await llmTextFull({ system: systemForLLM, prompt, maxTokens: maxTok, cacheSystem: true, provider: 'anthropic' });
     const text = r.text;
     // tool_id ĐÚNG `tool_pricing.tool_id` để bucket chi phí ghép được với bucket
     // doanh thu (xem tool_canon() trong CLAUDE.md). Phần 1-13 (tổng quan + 12
