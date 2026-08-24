@@ -23,6 +23,12 @@
 --     lỗi giữa chừng rail (xem lib/agent/run.ts "FALLBACK NGƯỢC"), Kimi K3
 --     luôn đứng cuối cùng.
 --
+-- CŨNG gỡ Opus (cùng quyết định, xác nhận với Henry): hai hàm `handleChat`
+-- embedded trong tubinh/route.ts và xem-tuoi/route.ts (action=chat) — vốn
+-- GIỐNG rail về hành vi (hỏi-đáp lặp lại) dù không đi qua runAgent(). Đây là
+-- override CODE-LEVEL (llmText(...provider:'anthropic')), không đọc
+-- app_config, nên KHÔNG có gì để chạy SQL cho chúng — chỉ cần deploy code.
+--
 -- CODE ĐI KÈM (đổi cùng đợt, deploy TRƯỚC khi chạy SQL — nếu không rail vẫn
 -- ép Opus primary cho 7 kịch bản đó vì DEFAULTS trong code fallback về giá
 -- trị cũ khi Supabase không đọc được, dù hiếm khi xảy ra):
