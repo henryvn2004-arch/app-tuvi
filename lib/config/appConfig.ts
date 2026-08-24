@@ -52,8 +52,12 @@ export interface ChatConfig {
    * toàn (xem GEMINI_PROSE_SCENARIOS) — nếu route = 'gemini' và kịch bản
    * không nằm trong whitelist đó thì vẫn KHÔNG đi Gemini. Kimi K3 không đọc
    * khoá này (luôn chạy cuối, xem run.ts) — khoá này chỉ chọn giữa
-   * Gemini-đứng-đầu và Opus-đứng-đầu. Sửa `chat.provider_routes` trong
-   * app_config để bật/tắt từng tool — KHÔNG cần deploy.
+   * Gemini-đứng-đầu và Opus-đứng-đầu.
+   * 🔴 CHỐT HENRY 2026-08-24: rail chat lưu lượng cao + Opus API mắc → TOÀN
+   * BỘ kịch bản mặc định 'gemini' (không còn ngoại lệ 'anthropic' nào ở đây).
+   * Opus vẫn là lưới đỡ khi Gemini lỗi, không bị gỡ khỏi hệ thống. Sửa
+   * `chat.provider_routes` trong app_config để bật/tắt từng tool — KHÔNG cần
+   * deploy.
    */
   providerRoutes: Record<string, string>;
   /**
@@ -88,24 +92,28 @@ export const DEFAULTS: ChatConfig = {
   // Giá trị dưới đây chỉ là fallback-khi-Supabase-không-đọc-được — DB LIVE
   // `chat.standalone_provider` mới là thứ quyết định thật lúc chạy.
   standaloneProvider: 'gemini',
-  // Chuỗi provider cho rail chat (run.ts): '_default'='gemini' → kịch bản
-  // prose-thuần (whitelist GEMINI_PROSE_SCENARIOS) đi Gemini trước, Opus 5
-  // sau, Kimi K3 luôn cuối cùng (lưới đỡ, không đọc khoá này). Vài kịch bản
-  // "luận giải" quan trọng ép sẵn 'anthropic' — Opus 5 đứng đầu, Gemini vẫn
-  // là lưới đỡ NGAY SAU nếu Opus chết (xem lib/agent/run.ts "FALLBACK
-  // NGƯỢC"), Kimi vẫn cuối cùng. Giá trị dưới đây chỉ là fallback-khi-
-  // Supabase-không-đọc-được — DB LIVE `chat.provider_routes` mới là thứ
-  // quyết định thật lúc chạy (đổi qua Admin, KHÔNG cần deploy).
+  // 🔴 CHỐT HENRY 2026-08-24 (vá cùng ngày, sau lượt Opus-primary ở trên):
+  // "Toàn bộ chat rail dùng gemini flash hết. Ko có opus luôn. Vì phần chat
+  // nó user dùng nhiều. Mà opus api thì mắc lắm" — rail chat (lượt hỏi-đáp
+  // lặp lại nhiều lần/phiên qua /api/v1/chat) có LƯU LƯỢNG cao hơn hẳn các
+  // route luận giải một-lần (lasotuvi/tubinh/xem-tuoi/van-han-nam/day-con/
+  // huong-nghiep-tre — các route ĐÓ vẫn giữ `provider:'anthropic'` ép tại
+  // lệnh gọi, KHÔNG đụng, vì đó không phải "chat"). Opus 5 vẫn còn — chỉ
+  // không còn là PRIMARY cho bất kỳ kịch bản rail nào; nó vẫn là lưới đỡ nếu
+  // Gemini lỗi (xem lib/agent/run.ts "FALLBACK NGƯỢC"), Kimi K3 luôn cuối
+  // cùng. Giá trị dưới đây chỉ là fallback-khi-Supabase-không-đọc-được — DB
+  // LIVE `chat.provider_routes` mới là thứ quyết định thật lúc chạy (đổi qua
+  // Admin, KHÔNG cần deploy).
   providerRoutes: {
     _default: 'gemini',
     laso: 'gemini',
-    'cong-so': 'anthropic',
-    'day-con': 'anthropic',
-    'huong-nghiep-tre': 'anthropic',
-    'than-so-hoc': 'anthropic',
-    'tu-binh': 'anthropic',
-    'xem-tuoi': 'anthropic',
-    'xem-lam-an': 'anthropic',
+    'cong-so': 'gemini',
+    'day-con': 'gemini',
+    'huong-nghiep-tre': 'gemini',
+    'than-so-hoc': 'gemini',
+    'tu-binh': 'gemini',
+    'xem-tuoi': 'gemini',
+    'xem-lam-an': 'gemini',
   },
   companion: COMPANION_DEFAULTS,
 };
