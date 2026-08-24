@@ -75,6 +75,15 @@
     return { good: good, bad: bad };
   }
 
+  // Sao Du Niên giữa HAI CUNG bất kỳ (1-4, 6-9), không cần đi qua hướng —
+  // dùng cho `tools-shared/so-dep.js` (quét cặp chữ số liền kề, mỗi cặp là
+  // một cặp "cung" theo Lạc Thư, không phải một hướng cố định). Trả về null
+  // nếu a hoặc b không phải cung hợp lệ (0 và 5/trung cung không có mã quái).
+  function starBetween(a, b) {
+    if (!GUA_BIN.hasOwnProperty(a) || !GUA_BIN.hasOwnProperty(b)) return null;
+    return STAR_BY_XOR[GUA_BIN[a] ^ GUA_BIN[b]];
+  }
+
   // Mảng thứ tự cũ [Sinh Khí, Thiên Y, Diên Niên, Phục Vị, Họa Hại, Lục Sát,
   // Ngũ Quỷ, Tuyệt Mệnh] — giữ để compute() bên dưới không phải viết lại.
   function duNienArr(cung) {
@@ -167,6 +176,7 @@
     getCungMenh: getCungMenh,
     duNienStars: duNienStars,
     duNienArr: duNienArr,
+    starBetween: starBetween,
     guaDataLegacy: guaDataLegacy,
     TRIGRAM_ICON: TRIGRAM_ICON,
     CUNG_NAME: CUNG_NAME,
