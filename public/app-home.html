@@ -75,8 +75,12 @@
 .inv-btn:hover{filter:brightness(1.06)}
 .inv-btn.ghost{background:none;color:var(--text-mid);border:1px solid var(--line);font-weight:600}
 .inv-note{font-size:11.5px;color:var(--text-lt);margin-top:9px;line-height:1.5}
-.all-tools{display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:600;color:var(--text-mid);text-decoration:none;border:1px solid var(--line);border-radius:10px;padding:10px 15px;background:var(--white)}
+.all-tools{display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:600;color:var(--text-mid);text-decoration:none;border:1px solid var(--line);border-radius:10px;padding:10px 15px;background:var(--white);cursor:pointer;font-family:inherit}
 .all-tools:hover{border-color:var(--gold-soft);color:var(--heading)}
+.all-tools-chev{display:inline-block;transition:transform .2s}
+.all-tools[aria-expanded="true"] .all-tools-chev{transform:rotate(90deg)}
+.all-tools-panel{margin-top:14px}
+.all-tools-panel .grp-title:first-child{margin-top:0}
 /* ── VẬN HÔM NAY — thẻ hero theo ngày (deterministic, miễn phí) → mồi vào rail luận riêng ── */
 .today-card{position:relative;overflow:hidden;background:linear-gradient(135deg,var(--navy),#0d2a49);border-radius:16px;padding:20px 22px;margin-bottom:22px;color:#fff}
 .today-card .glow{position:absolute;right:-34px;top:-46px;width:190px;height:190px;background:radial-gradient(circle,rgba(201,168,76,.22),transparent 70%);pointer-events:none}
@@ -319,12 +323,16 @@
         <div id="channelCard" style="display:none"></div>
         <!-- Q1 — Tổng Quan mới. Trước đây chỗ này là lưới 58 công cụ
              (`renderHomeCards`). Henry: "ko cần list lại nguyên đống tools nữa".
-             Thay bằng: gợi ý theo HÀNH VI (có lý do) + mã mời + một đường dẫn
-             sang danh mục đầy đủ. Sidebar và /cong-cu vẫn là đường vào của cả
-             58 công cụ — khối này chỉ trả lời "tiếp theo nên xem gì". -->
+             Thay bằng: gợi ý theo HÀNH VI (có lý do) + mã mời + một khối xổ ra
+             tại chỗ cho danh mục đầy đủ — khối này chỉ trả lời "tiếp theo nên
+             xem gì", còn "Xem tất cả công cụ" GIỮ NGƯỜI TRONG SHELL (không còn
+             trỏ ra /cong-cu ở ngoài shell), collapse mặc định, bấm mới dựng. -->
         <div id="nextCard"></div>
         <div id="inviteCard"></div>
-        <a class="all-tools" href="/cong-cu">Xem tất cả công cụ <span aria-hidden="true">→</span></a>
+        <div class="all-tools-wrap">
+          <button class="all-tools" id="allToolsBtn" type="button" aria-expanded="false" aria-controls="allToolsPanel">Xem tất cả công cụ <span class="all-tools-chev" aria-hidden="true">→</span></button>
+          <div class="all-tools-panel" id="allToolsPanel" hidden></div>
+        </div>
       </div>
     </div>
   </main>
@@ -608,6 +616,57 @@ function renderWelcomeCards(d){
 }
 renderWelcomeCards(window.ToolPrices ? ToolPrices.navFallback() : null);
 if(window.ToolPrices) ToolPrices.load().then(function(d){ if(d) renderWelcomeCards(d); });
+
+/* ── "Xem tất cả công cụ" — XỔ TẠI CHỖ, không còn trỏ ra /cong-cu ────────
+   Henry (24/08): thao tác trong shell thì phải giữ người dùng TRONG shell.
+   Sidebar đã có sẵn đúng danh sách này (nhóm theo `tool_groups`, lọc
+   `app_path`) nên dựng lại ở đây bằng CHÍNH nguồn đó (`ToolPrices` +
+   `groupsOf` — cùng hàm shell.js dùng cho sidebar) thay vì chép một mảng
+   riêng — tránh lặp lại bài học "ba mảng tool chép tay trôi khỏi nhau". */
+function allToolCardHtml(row) {
+  var credits = window.ToolPrices ? ToolPrices.get(row.tool_id) : null;
+  var costHtml = row.is_free
+    ? '<span class="cost free">Miễn phí</span>'
+    : (typeof credits === 'number' && credits > 0 ? '<span class="cost">' + credits + ' L</span>' : '');
+  return '<a class="tcard" href="' + esc(row.app_path) + '">' + costHtml +
+    '<div class="ic">' + cardIcon(row) + '</div>' +
+    '<div class="tx"><b>' + esc(row.label) + '</b><span>' + esc(row.question || row.description || '') + '</span></div>' +
+    '</a>';
+}
+function renderAllTools(d) {
+  var host = document.getElementById('allToolsPanel'); if (!host) return;
+  var rows = (d && d.rows) || [];
+  var groups = (d && d.groups) || [];
+  var inApp = rows.filter(function (r) { return r && r.app_path; });
+  if (!inApp.length) { host.innerHTML = '<p style="font-size:12.5px;color:var(--text-lt);padding:8px 2px 0;">Chưa tải được danh mục — thử lại sau.</p>'; return; }
+  var seen = {}, html = '';
+  groups.forEach(function (g) {
+    var items = inApp.filter(function (r) { return ToolPrices.groupsOf(r, groups).indexOf(g.key) >= 0; });
+    if (!items.length) return;
+    items.forEach(function (r) { seen[r.tool_id] = 1; });
+    html += '<div class="grp-title">' + esc(g.title) + '</div><div class="cards">' + items.map(allToolCardHtml).join('') + '</div>';
+  });
+  var rest = inApp.filter(function (r) { return !seen[r.tool_id]; });
+  if (rest.length) html += '<div class="grp-title">Khác</div><div class="cards">' + rest.map(allToolCardHtml).join('') + '</div>';
+  host.innerHTML = html;
+  if (window.mountIcons) window.mountIcons(host);
+}
+(function () {
+  var btn = document.getElementById('allToolsBtn'), panel = document.getElementById('allToolsPanel');
+  if (!btn || !panel) return;
+  var loaded = false;
+  btn.addEventListener('click', function () {
+    var open = btn.getAttribute('aria-expanded') !== 'true';
+    btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    panel.hidden = !open;
+    if (!open || loaded) return;
+    loaded = true;
+    panel.innerHTML = '<p style="font-size:12.5px;color:var(--text-lt);padding:8px 2px 0;">Đang tải…</p>';
+    var cached = window.ToolPrices ? ToolPrices.navFallback() : null;
+    if (cached) renderAllTools(cached);
+    if (window.ToolPrices) ToolPrices.load().then(function (d) { if (d) renderAllTools(d); });
+  });
+})();
 </script>
 
 <script>
