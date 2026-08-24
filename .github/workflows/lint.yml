@@ -184,6 +184,12 @@ jobs:
       - name: Bảng Du Niên đối xứng, không còn bảng chép tay
         run: npm run check:batrach
 
+      # Engine "Số Đẹp" (T1-T3-T5-T6) — không vitest phủ public/tools-shared/*.js
+      # nên đây là lưới an toàn: deterministic, T1 khớp starBetween(), T2 tra
+      # đúng quẻ, đồng thuận không lẫn tầng dân gian/số học vào điểm cổ pháp.
+      - name: Engine Số Đẹp — deterministic, khớp nguồn, không lẫn tầng
+        run: npm run check:sodep
+
   typecheck:
     runs-on: ubuntu-latest
     timeout-minutes: 10
