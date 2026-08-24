@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-117 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+118 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 **Ba file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
 ```bash
@@ -11,7 +11,7 @@ sed -n '120,190p' docs/nhat-ky/2026-08.md    # đọc đúng đoạn, đừng ca
 
 | file | số mục | dung lượng |
 |---|---:|---:|
-| `2026-08.md` | 100 | 802,667 B |
+| `2026-08.md` | 101 | 809,571 B |
 | `2026-07.md` | 12 | 154,531 B |
 | `track-cu.md` | 5 | 89,354 B |
 
@@ -24,6 +24,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
+| 120 | 2026-08 | `2026-08.md` | 🚀 "Khởi Hành" thay M3 + coachmark 3 điểm — onboarding cho web |
 | 1 | 2026-08 | `2026-08.md` | 📣 Track Quest/Gamification — "Khoe Kết Quả" + "Rủ so lá số" |
 | 2 | 2026-08 | `2026-08.md` | ✂️ Audit `trim_la_so` — chỉ CÒN 1 chỗ cắt thật, đã bỏ |
 | 3 | 2026-08 | `2026-08.md` | 📣 TRACK DIGITAL MARKETING — 14/14 mục, và 3 giả định của tôi bị SỐ ĐO bác |

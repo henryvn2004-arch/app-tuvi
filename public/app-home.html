@@ -24,7 +24,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"></noscript>
-<link rel="stylesheet" href="/shell.css?v=23">
+<link rel="stylesheet" href="/shell.css?v=24">
 <style>
 .home-body{max-width:920px}
 .hero{background:linear-gradient(135deg,var(--navy),#0d2a49);border-radius:16px;padding:26px 28px;margin-bottom:24px;color:#fff;position:relative;overflow:hidden}
@@ -163,41 +163,88 @@
    đây là màn chào đầu tiên, chưa phải lúc nói tới Lượng. */
 .wc-ask{background:var(--red);color:#fff;border:none;border-radius:10px;padding:12px 18px;font-size:13.5px;font-weight:600;font-family:var(--serif);cursor:pointer;display:inline-flex;align-items:center;gap:8px}
 .wc-ask:hover{filter:brightness(1.08)}
-/* ── NHIỆM VỤ MỞ KHOÁ LƯỢNG (M3) ───────────────────────────────────────────
-   CỐ Ý để nền SÁNG, ngược hẳn thẻ Vận hôm nay (navy): hai khối nằm sát nhau,
-   cùng tông là đọc thành một khối dài và mắt trượt qua. */
-.task-card{background:#fff;border:1px solid var(--gold-soft);border-radius:14px;padding:16px 18px;margin-bottom:22px}
-.tsk-top{display:flex;align-items:baseline;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:4px}
-.tsk-h{font-family:var(--serif);font-size:15.5px;font-weight:600;color:var(--heading)}
-.tsk-count{font-size:11.5px;font-weight:700;color:var(--gold-soft);white-space:nowrap}
-.tsk-sub{font-size:12.5px;color:var(--text-mid);line-height:1.5;margin-bottom:12px}
-.tsk-sub b{color:var(--heading)}
-.tsk-got{font-size:12.5px;font-weight:600;color:#2f7a4d;background:#e8f7ee;border:1px solid #a9dcbd;border-radius:8px;padding:8px 11px;margin-bottom:12px;line-height:1.45}
-.tsk-list{display:flex;flex-direction:column;gap:9px}
-.tsk-row{display:flex;align-items:flex-start;gap:11px;padding:10px 12px;border:1px solid var(--border-lt);border-radius:10px}
-.tsk-row.done{border-color:#cfe8da;background:#f6fbf8}
-.tsk-tick{flex:0 0 auto;width:19px;height:19px;border-radius:50%;border:2px solid var(--border-lt);margin-top:1px}
-.tsk-row.done .tsk-tick{border-color:#2f7a4d;background:#2f7a4d;position:relative}
-.tsk-row.done .tsk-tick::after{content:"✓";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;font-weight:700;line-height:1}
-.tsk-body{flex:1;min-width:0}
-.tsk-t{font-size:13.5px;font-weight:600;color:var(--heading);line-height:1.35}
-.tsk-row.done .tsk-t{color:var(--text-mid)}
-.tsk-d{font-size:12px;color:var(--text-mid);line-height:1.5;margin-top:3px}
-/* Câu trả lời sau khi bấm nút nhiệm vụ. Nằm TRONG hàng chứ không phải toast:
-   hướng dẫn iOS dài ba bước, người ta cần đọc lại được trong lúc thao tác. */
-.tsk-note{font-size:12px;line-height:1.55;margin-top:7px;padding:8px 10px;border-radius:8px}
-.tsk-note.ok{color:#2f7a4d;background:#e8f7ee;border:1px solid #a9dcbd}
-.tsk-note.err{color:#8a4b2a;background:#fdf1e7;border:1px solid #e8c9ae}
-.tsk-note.wait{color:var(--text-mid);background:var(--paper-2);border:1px solid var(--border-lt)}
-.tsk-pay{flex:0 0 auto;display:flex;flex-direction:column;align-items:flex-end;gap:6px}
-.tsk-amt{font-size:11.5px;font-weight:700;color:var(--gold-soft);white-space:nowrap}
-.tsk-row.done .tsk-amt{color:#2f7a4d}
-.tsk-go{background:linear-gradient(135deg,var(--gold-soft),var(--gold));color:#2a1e05;border:none;border-radius:8px;padding:6px 13px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap}
-.tsk-go:hover{filter:brightness(1.06)}
+/* ── KHỞI HÀNH — 3 bước, thay M3 ────────────────────────────────────────────
+   CỐ Ý để nền SÁNG + viền vàng, ngược hẳn thẻ Vận hôm nay (navy): hai khối
+   nằm sát nhau, cùng tông là đọc thành một khối dài và mắt trượt qua.
+   `::before` là dấu ấn thương hiệu nhẹ (✦ mờ ở góc) — gợi "cổng vào" chứ
+   không phải một form hành chính. */
+.kh-card{position:relative;overflow:hidden;background:linear-gradient(135deg,#fff,var(--gold-lt));border:1px solid var(--gold-soft);border-radius:16px;padding:18px 20px;margin-bottom:22px}
+.kh-card::before{content:"✦";position:absolute;right:-8px;top:-18px;font-size:96px;line-height:1;color:rgba(201,168,76,.10);font-family:var(--serif);pointer-events:none}
+.kh-eyebrow{font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold-soft);font-weight:700;margin-bottom:6px}
+.kh-h{font-family:var(--serif);font-size:17px;font-weight:600;color:var(--heading);margin-bottom:5px;line-height:1.3}
+.kh-sub{font-size:12.5px;color:var(--text-mid);line-height:1.55;margin-bottom:14px;max-width:480px}
+.kh-sub b{color:var(--heading)}
+/* Thanh 3 đoạn thay cho "1/3" khô khan — nhìn một giây biết còn xa hay gần. */
+.kh-bar{display:flex;gap:5px;margin-bottom:14px}
+.kh-seg{flex:1;height:5px;border-radius:3px;background:rgba(201,168,76,.16)}
+.kh-seg.on{background:linear-gradient(90deg,var(--gold-soft),var(--gold))}
+.kh-got{font-size:12.5px;font-weight:600;color:#2f7a4d;background:#e8f7ee;border:1px solid #a9dcbd;border-radius:8px;padding:8px 11px;margin-bottom:12px;line-height:1.45}
+.kh-steps{display:flex;flex-direction:column;gap:9px}
+.kh-step{display:flex;align-items:flex-start;gap:11px;padding:11px 12px;border:1px solid var(--border-lt);border-radius:11px;background:var(--white)}
+.kh-step.done{border-color:#cfe8da;background:#f6fbf8}
+/* Bước KẾ TIẾP nổi bật bằng viền vàng — trả lời thẳng câu "vậy giờ bấm gì". */
+.kh-step.next{border-color:var(--gold-soft);box-shadow:0 0 0 3px rgba(201,168,76,.14)}
+.kh-num{flex:0 0 auto;width:23px;height:23px;border-radius:50%;border:2px solid var(--border-lt);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--text-lt);margin-top:1px}
+.kh-step.done .kh-num{border-color:#2f7a4d;background:#2f7a4d;color:#fff}
+.kh-step.next .kh-num{border-color:var(--gold-soft);color:var(--gold-soft)}
+.kh-body{flex:1;min-width:0}
+.kh-t{font-size:13.5px;font-weight:600;color:var(--heading);line-height:1.35}
+.kh-step.done .kh-t{color:var(--text-mid)}
+.kh-d{font-size:12px;color:var(--text-mid);line-height:1.5;margin-top:3px}
+.kh-go{flex:0 0 auto;background:linear-gradient(135deg,var(--gold-soft),var(--gold));color:#2a1e05;border:none;border-radius:8px;padding:7px 13px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap;margin-top:1px}
+.kh-go:hover{filter:brightness(1.06)}
+/* Bậc 0 (khách vô danh): tiến độ tính ở máy, thưởng khoá sau nút này —
+   viền đứt để đọc như một ranh giới "còn một bước nữa mới lấy được". */
+.kh-guest{margin-top:13px;padding-top:13px;border-top:1px dashed var(--gold-soft);display:flex;flex-wrap:wrap;align-items:center;gap:10px;justify-content:space-between}
+.kh-guest-txt{font-size:12.5px;color:var(--text-mid);line-height:1.5;flex:1;min-width:200px}
+.kh-guest-txt b{color:var(--heading)}
+.kh-guest-btn{flex:0 0 auto;background:var(--red);color:#fff;border:none;border-radius:9px;padding:10px 16px;font-size:12.5px;font-weight:700;font-family:var(--serif);cursor:pointer}
+.kh-guest-btn:hover{filter:brightness(1.08)}
 @media(max-width:520px){
-  .tsk-row{flex-wrap:wrap}
-  .tsk-pay{flex-direction:row;align-items:center;width:100%;justify-content:space-between;margin-left:30px}
+  .kh-step{flex-wrap:wrap}
+  .kh-go{margin-left:34px}
 }
+/* ── KÊNH LIÊN LẠC — 2 nhiệm vụ cũ của M3, tầng riêng nhẹ hơn hẳn Khởi Hành:
+   đây là kênh nhắc, không phải bước làm quen, nên không đáng chiếm cùng mức
+   nổi bật. CHỈ hiện khi đã đăng nhập (xem renderChannels). */
+.ch-card{background:var(--white);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin-bottom:22px}
+.ch-h{font-family:var(--serif);font-size:13.5px;font-weight:600;color:var(--heading);margin-bottom:9px}
+.ch-list{display:flex;flex-direction:column;gap:8px}
+.ch-row{display:flex;align-items:flex-start;gap:10px;padding:9px 11px;border:1px solid var(--border-lt);border-radius:9px}
+.ch-row.done{border-color:#cfe8da;background:#f6fbf8}
+.ch-tick{flex:0 0 auto;width:17px;height:17px;border-radius:50%;border:2px solid var(--border-lt);margin-top:2px}
+.ch-row.done .ch-tick{border-color:#2f7a4d;background:#2f7a4d;position:relative}
+.ch-row.done .ch-tick::after{content:"✓";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:700;line-height:1}
+.ch-body{flex:1;min-width:0}
+.ch-t{font-size:12.5px;font-weight:600;color:var(--heading)}
+.ch-row.done .ch-t{color:var(--text-mid)}
+.ch-d{font-size:11.5px;color:var(--text-lt);line-height:1.45;margin-top:2px}
+.ch-note{font-size:11.5px;line-height:1.5;margin-top:6px;padding:7px 9px;border-radius:7px}
+.ch-note.ok{color:#2f7a4d;background:#e8f7ee;border:1px solid #a9dcbd}
+.ch-note.err{color:#8a4b2a;background:#fdf1e7;border:1px solid #e8c9ae}
+.ch-note.wait{color:var(--text-mid);background:var(--paper-2);border:1px solid var(--border-lt)}
+.ch-pay{flex:0 0 auto;display:flex;flex-direction:column;align-items:flex-end;gap:5px}
+.ch-amt{font-size:11px;font-weight:700;color:var(--gold-soft);white-space:nowrap}
+.ch-row.done .ch-amt{color:#2f7a4d}
+.ch-go{background:none;border:1px solid var(--line);color:var(--text-mid);border-radius:7px;padding:5px 11px;font-size:11.5px;font-weight:600;cursor:pointer;font-family:inherit;white-space:nowrap}
+.ch-go:hover{border-color:var(--gold-soft);color:var(--heading)}
+@media(max-width:520px){
+  .ch-row{flex-wrap:wrap}
+  .ch-pay{flex-direction:row;align-items:center;width:100%;justify-content:space-between;margin-left:27px}
+}
+/* ── CHÀO DẪN 3 ĐIỂM — coachmark một lần, KHÔNG chặn thao tác của trang (nền
+   mờ chỉ để mắt tập trung, click xuyên qua vẫn được ở phần còn lại của trang
+   vì backdrop không bắt sự kiện — xem pointer-events trong JS). */
+.tour-spot{position:fixed;border-radius:14px;box-shadow:0 0 0 4px rgba(201,168,76,.6),0 0 0 3000px rgba(6,26,46,.46);z-index:901;pointer-events:none;transition:top .25s,left .25s,width .25s,height .25s;animation:tourPulse 1.8s ease-in-out infinite}
+@keyframes tourPulse{0%,100%{box-shadow:0 0 0 4px rgba(201,168,76,.6),0 0 0 3000px rgba(6,26,46,.46)}50%{box-shadow:0 0 0 7px rgba(201,168,76,.35),0 0 0 3000px rgba(6,26,46,.46)}}
+.tour-pop{position:fixed;z-index:902;background:var(--white);border:1px solid var(--gold-soft);border-radius:14px;padding:15px 17px;width:290px;max-width:calc(100vw - 24px);box-shadow:0 14px 34px rgba(6,26,46,.24);transition:top .25s,left .25s}
+.tour-step{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-soft);font-weight:700;margin-bottom:6px}
+.tour-t{font-family:var(--serif);font-size:14.5px;font-weight:600;color:var(--heading);margin-bottom:5px;line-height:1.35}
+.tour-d{font-size:12px;color:var(--text-mid);line-height:1.55;margin-bottom:13px}
+.tour-row{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.tour-skip{background:none;border:none;color:var(--text-lt);font-size:11.5px;cursor:pointer;font-family:inherit;text-decoration:underline;padding:4px 0}
+.tour-next{background:linear-gradient(135deg,var(--gold-soft),var(--gold));color:#2a1e05;border:none;border-radius:8px;padding:7px 15px;font-size:12.5px;font-weight:700;cursor:pointer;font-family:inherit}
+.tour-next:hover{filter:brightness(1.06)}
 </style>
 </head>
 <body>
@@ -261,10 +308,15 @@
             <button class="today-share" id="todayPoster" type="button">⤓ Ảnh</button>
           </div>
         </div>
-        <!-- M3 — nhiệm vụ onboarding. Dựng hoàn toàn bằng JS và CHỈ khi đã đăng
-             nhập + còn việc chưa làm; khách vãng lai không bao giờ thấy khối
-             này (họ chưa có ví để mà cộng vào). -->
-        <div class="task-card" id="taskCard" style="display:none"></div>
+        <!-- KHỞI HÀNH — 3 bước làm quen sản phẩm, thay M3. Dựng bằng JS, hiện
+             CHO CẢ khách vô danh (bậc 0 — tiến độ tính ở máy, xem
+             localKhoiHanhSteps) lẫn người đã đăng nhập (server tự kiểm, xem
+             lib/onboarding/tasks.ts). Ẩn hẳn khi phần thưởng đã vào ví. -->
+        <div id="khoiHanhCard" style="display:none"></div>
+        <!-- Kênh liên lạc — 2 nhiệm vụ CŨ của M3 (bật thông báo/liên kết chat),
+             tách tầng riêng: đây là kênh nhắc, không phải bước làm quen. CHỈ
+             hiện khi đã đăng nhập — khách vãng lai chưa có ví để mà cộng vào. -->
+        <div id="channelCard" style="display:none"></div>
         <!-- Q1 — Tổng Quan mới. Trước đây chỗ này là lưới 58 công cụ
              (`renderHomeCards`). Henry: "ko cần list lại nguyên đống tools nữa".
              Thay bằng: gợi ý theo HÀNH VI (có lý do) + mã mời + một đường dẫn
@@ -287,7 +339,7 @@
 <script src="/tool-prices.js?v=5"></script>
 <script src="/auth.js?v=2"></script>
   <script src="/nav.js?v=22" data-icons-only></script>
-<script src="/shell.js?v=76"></script>
+<script src="/shell.js?v=77"></script>
 <script>
 function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 var IC={
@@ -594,7 +646,7 @@ if(window.ToolPrices) ToolPrices.load().then(function(d){ if(d) renderWelcomeCar
   // hiện đầu trang: thẻ Vận Hôm Nay (returning) hay lời chào + gợi ý tool
   // (lần đầu). `_hasBirth` là tín hiệu ĐỒNG BỘ, đáng tin ngay từ đầu; đăng nhập
   // thì KHÔNG — Auth có thể chưa khôi phục phiên xong lúc `run()` chạy (đúng
-  // bẫy `syncTasks` đã ghi bên dưới), nên nhánh đó được RE-CHECK ở
+  // bẫy `khSync` đã ghi bên dưới), nên nhánh đó được RE-CHECK ở
   // `maybeUpgradeToReturning()` trên cùng nhịp hoãn 1,2 giây thay vì tin ngay.
   var _returning=false;
   function isLoggedIn(){
@@ -665,12 +717,12 @@ if(window.ToolPrices) ToolPrices.load().then(function(d){ if(d) renderWelcomeCar
      Vận hôm nay là nội dung chính của màn hình này và không được chờ một lượt
      mạng khác. Hoãn 1,2 giây để `Auth` kịp khôi phục phiên — hỏi token quá sớm
      thì người đã đăng nhập lại bị coi là khách. */
-  setTimeout(function(){ syncTasks(); maybeUpgradeToReturning(); },1200);
+  setTimeout(function(){ khSync(); maybeUpgradeToReturning(); },1200);
   }
 
   /* Ca duy nhất `_returning` có thể sai lúc quyết định lần đầu: đăng nhập
      rồi nhưng Auth CHƯA khôi phục xong phiên tại thời điểm `run()` chạy (cùng
-     bẫy comment trên `syncTasks` đã ghi). Re-check trên CÙNG nhịp hoãn — nếu
+     bẫy comment trên `khSync` đã ghi). Re-check trên CÙNG nhịp hoãn — nếu
      giờ xác nhận đã đăng nhập thì chuyển từ khối chào sang thẻ Vận Hôm Nay.
      Nội dung thẻ đã render sẵn từ nhánh !hasBirth (vận CHUNG, không phải vận
      riêng — đúng và hợp lý cho người CHƯA lưu lá số), chỉ đổi khối nào hiện. */
@@ -905,10 +957,10 @@ if(window.ToolPrices) ToolPrices.load().then(function(d){ if(d) renderWelcomeCar
           if(v&&v.ok){ if(v.tuan)_week=v.tuan; render(v,_today,_birth,_hasBirth); }
           else { host.innerHTML=''; btn.style.display=''; }
           try{ window.Track&&Track.event('tool_run',{tool_id:'van-ngay',meta:{from:'today_card_birth'}}); }catch(e){}
-          // Vừa lưu lá số → nhiệm vụ `luu_la_so` xong. `Shell.rememberBirth`
+          // Vừa lưu lá số → bước 1 của Khởi Hành xong. `Shell.rememberBirth`
           // ghi lên sổ tài khoản theo lối BẮN-VÀ-QUÊN nên phải chờ một nhịp,
           // không thì server hỏi `user_charts` trước khi dòng kịp vào.
-          setTimeout(function(){ _tskLast=0; syncTasks(); },1800);
+          setTimeout(function(){ _khLast=0; khSync(); },1800);
         }).catch(function(){
           el('tmeSave').disabled=false; el('tmeSave').textContent='Xem vận riêng của tôi →';
           el('tmeErr').textContent='Không lập được, thử lại sau.';
@@ -1120,109 +1172,249 @@ if(window.ToolPrices) ToolPrices.load().then(function(d){ if(d) renderWelcomeCar
       });
     };
   }
-  /* ══ M3 — NHIỆM VỤ MỞ KHOÁ LƯỢNG ═══════════════════════════════════════════
-     Đo prod 07/08: 48 người đã nhận 25 Lượng quà đăng ký, đổi lại có 3 liên kết
-     kênh chat · 2 lượt bật thông báo · 2 dòng sổ lá số của ĐÚNG một người · 0
-     lượt mời bạn. Phát tiền mà không hỏi lại gì thì không nhận lại gì.
+  /* ══ KHỞI HÀNH — 3 bước, thay M3 ═════════════════════════════════════════
+     Đo prod 07/08 (M3): 48 người nhận 25 Lượng quà đăng ký, đổi lại 3 liên kết
+     kênh chat · 2 lượt bật thông báo · 2 dòng lá số của ĐÚNG một người · 0 lượt
+     mời bạn — 4 lượt nhận nhiệm vụ / 2 người trong 66 tài khoản. Ba việc hành
+     chính đó (lưu lá số/bật push/liên kết kênh) không việc nào cho thấy SẢN
+     PHẨM hay hơn, nên gần như không ai làm hết cả ba.
 
-     🔑 Quà đăng ký 25 Lượng GIỮ NGUYÊN, nhiệm vụ là phần CỘNG THÊM. Cắt 25 ra
-     chia nhỏ thì người mới cầm 5 Lượng và không chạy nổi tool nào (rẻ nhất 5,
-     phần lớn 15–30) — đó là siết đúng đầu phễu vốn đã hỏng.
+     Khởi Hành đổi sang BA VIỆC MỞ RA THỨ ĐỌC ĐƯỢC (lập lá số → hỏi Thầy → thử
+     một công cụ), thưởng THEO CHUỖI — chỉ cộng khi đủ CẢ BA (+15 Lượng, một
+     lần/đời, một dòng `onboarding_tasks` khoá `khoi_hanh`). Thưởng lẻ từng
+     bước thì người ta nhặt bước rẻ nhất rồi bỏ — đúng thứ M3 vừa cho thấy.
 
-     Server tự kiểm và tự cộng (lib/onboarding/tasks.ts). Trang này chỉ VẼ và
-     dẫn người ta tới đúng chỗ làm — không tự quyết ai xong việc gì. */
-  var _tskBusy=false, _tskLast=0, _tskGot=0, _tskDefs=[];
+     BẬC 0 (khách vô danh, 90% người chạy tool — xem docs/QUEST-PLAN.md §2.1):
+     tiến độ tính hoàn toàn ở MÁY (renderKhoiHanhGuest), thưởng khoá tới khi
+     tạo tài khoản. Lúc đó bằng chứng server cần (user_charts/events) đã nằm
+     sẵn — họ dùng đúng những nút này trước khi đăng ký — nên không cần đường
+     "chuyển bậc" riêng, `khSync()` xử đúng ngay lượt gọi đầu sau khi có token.
 
-  function tskToken(){
+     Server tự kiểm và tự cộng cho người đã đăng nhập (lib/onboarding/tasks.ts,
+     action=onboarding-sync). Trang này chỉ VẼ và dẫn người ta tới đúng chỗ
+     làm — không tự quyết ai xong việc gì. */
+  var _khBusy=false, _khLast=0, _khGot=0, _khSteps=[], _khActiveDefs=[];
+  var _khGuestDefs=null, _khGuestCredits=15, _khDefsRetried=false, _signupBonusTxt='';
+
+  function khToken(){
     try{ var s=window.Auth&&Auth.getSession&&Auth.getSession(); return s?s.access_token:''; }catch(e){ return ''; }
   }
 
-  function syncTasks(){
-    var tk=tskToken();
-    // Chưa đăng nhập → im lặng tuyệt đối. Họ chưa có ví để mà cộng vào, và mời
-    // làm nhiệm vụ trước khi có tài khoản là dựng thêm một bức tường.
-    if(!tk||_tskBusy) return;
-    _tskBusy=true; _tskLast=Date.now();
-    fetch('/api/payment?action=onboarding-sync',{method:'POST',headers:{Authorization:'Bearer '+tk}})
+  /* Định nghĩa 3 bước cho khách VÔ DANH — đọc từ server (action=khoi-hanh-defs,
+     công khai, không cần token) thay vì chép tay lần hai ở client: câu chữ chỉ
+     có MỘT nguồn (lib/onboarding/tasks.ts), tránh đúng bẫy "bảng dịch dựng từ
+     một nguồn thì chỉ phủ nguồn đó" đã cắn repo này 3 lần. */
+  function loadKhoiHanhDefs(){
+    return fetch('/api/payment?action=khoi-hanh-defs')
       .then(function(r){ return r.ok?r.json():null; })
-      .then(function(d){ if(d&&d.tasks) renderTasks(d); })
-      .catch(function(){ /* hỏng thì thẻ không hiện — không chặn gì của trang */ })
-      .then(function(){ _tskBusy=false; });
+      .then(function(d){
+        if(d&&Array.isArray(d.steps)&&d.steps.length){ _khGuestDefs=d.steps; _khGuestCredits=(+d.credits)||15; }
+      })
+      .catch(function(){ /* hỏng thì khối khách vãng lai không hiện — không bịa nội dung */ });
+  }
+  // Câu "+N Lượng chào mừng" đi kèm nút Tạo tài khoản — cùng nguồn công khai
+  // đang phục vụ `topup.html`/thẻ mời bạn, KHÔNG viết cứng số (giá đổi theo
+  // A/B `credits.signup_bonus_variants`).
+  function loadSignupBonusTxt(){
+    fetch('/api/payment?action=signup-bonus')
+      .then(function(r){ return r.ok?r.json():null; })
+      .then(function(d){ if(d&&d.bonus) _signupBonusTxt=(+d.bonus)+' Lượng chào mừng'; })
+      .catch(function(){});
   }
 
-  function renderTasks(d){
-    var host=el('taskCard'); if(!host) return;
-    // Xong cả ba → biến mất hẳn. Giữ lại một thẻ toàn dấu tích là chiếm chỗ
-    // vĩnh viễn trên màn hình đầu để khoe một việc đã cũ.
-    if(d.allDone){ host.style.display='none'; return; }
-
-    var done=0; for(var i=0;i<d.tasks.length;i++) if(d.tasks[i].done) done++;
-    _tskGot+=(+d.granted||0);
-
-    var h='<div class="tsk-top"><div class="tsk-h">Mở khoá thêm Lượng</div>'
-      + '<div class="tsk-count">'+done+'/'+d.tasks.length+' · còn +'+(+d.pending||0)+' Lượng</div></div>'
-      // Nói THẲNG con số và quy ra thứ mua được. Hứa lửng lơ kiểu "làm nhiệm vụ
-      // để nhận thưởng" là mất niềm tin ngay lần đầu.
-      + '<div class="tsk-sub">Làm nốt là được cộng thẳng vào ví — <b>+'+(+d.pending||0)
-      + ' Lượng</b>, đủ thêm một lượt luận.</div>';
-
-    if(_tskGot>0) h+='<div class="tsk-got">✓ Vừa cộng <b>+'+_tskGot+' Lượng</b> vào ví bạn.</div>';
-
-    // 🪤 `esc()` của trang chỉ thoát `& < >`, KHÔNG thoát dấu nháy — nên tuyệt
-    // đối không nhét chuỗi từ server vào GIÁ TRỊ THUỘC TÍNH ở đây. Gắn nút theo
-    // CHỈ SỐ (số do chính mình sinh ra, không cần thoát gì) rồi tra ngược trong
-    // `_tskDefs`. An toàn kể cả khi sau này nhãn nhiệm vụ sửa được từ Admin.
-    _tskDefs=d.tasks;
-    h+='<div class="tsk-list">';
-    for(var j=0;j<d.tasks.length;j++){
-      var t=d.tasks[j];
-      h+='<div class="tsk-row'+(t.done?' done':'')+'" data-row="'+j+'"><div class="tsk-tick"></div>'
-       + '<div class="tsk-body"><div class="tsk-t">'+esc(t.title)+'</div>'
-       + (t.done?'':'<div class="tsk-d">'+esc(t.desc)+'</div>')+'</div>'
-       + '<div class="tsk-pay"><div class="tsk-amt">'+(t.done?'+':'')+(+t.credits||0)+' Lượng</div>'
-       + (t.done?'':'<button class="tsk-go" type="button" data-i="'+j+'">'+esc(t.cta)+'</button>')
-       + '</div></div>';
-    }
-    h+='</div>';
-    host.innerHTML=h;
-    host.style.display='';
-
-    var btns=host.querySelectorAll('.tsk-go');
-    for(var k=0;k<btns.length;k++) btns[k].onclick=tskGo;
+  /* Tiến độ BẬC 0 — tính hoàn toàn ở máy, KHÔNG gọi server:
+     1. đã lập lá số     → hasBirthLocal() (đã dùng ở khối "Tiếp theo nên xem
+        gì" phía trên — một nguồn duy nhất, không tự hỏi lại Shell lần hai).
+     2. đã hỏi Thầy      → cờ 'tvp_kh_hoi', shell.js ghi ngay khi gửi câu hỏi
+        đầu tiên trong rail (cùng lúc bắn track('chat_msg', …)).
+     3. đã thử 1 công cụ → Shell.usedTools() — map {tool_id:mốc giờ} đã có sẵn
+        cho khối gợi ý, dùng lại chứ không tự đếm lần hai. */
+  function localKhoiHanhFlags(){
+    var s1=false, s2=false, s3=false;
+    try{ s1=hasBirthLocal(); }catch(e){}
+    try{ s2=localStorage.getItem('tvp_kh_hoi')==='1'; }catch(e){}
+    try{ var u=(window.Shell&&Shell.usedTools)?Shell.usedTools():{}; s3=!!Object.keys(u).length; }catch(e){}
+    return [s1,s2,s3];
   }
 
-  function tskGo(){
-    var t=_tskDefs[+this.getAttribute('data-i')]; if(!t) return;
-    var key=t.key, href=t.href||'';
-    // `href` rỗng = việc làm được NGAY TẠI TRANG NÀY. Đá người ta sang trang
-    // khác để làm đúng việc đang có sẵn ở đây là tự thêm một chỗ rơi.
-    if(href){ try{ location.href=href; }catch(e){} return; }
-    if(key==='luu_la_so'){
+  function khBarHtml(done,total){
+    var h='<div class="kh-bar">';
+    for(var i=0;i<total;i++) h+='<div class="kh-seg'+(i<done?' on':'')+'"></div>';
+    return h+'</div>';
+  }
+
+  // 🪤 `esc()` của trang chỉ thoát `& < >`, KHÔNG thoát dấu nháy — nên tuyệt
+  // đối không nhét chuỗi từ server vào GIÁ TRỊ THUỘC TÍNH. Gắn nút theo CHỈ SỐ
+  // (số do chính mình sinh ra, không cần thoát gì) rồi tra ngược trong
+  // `_khActiveDefs` — cùng khuôn đã dùng cho nhiệm vụ kênh liên lạc bên dưới.
+  function khStepRow(step,idx,done,isNext){
+    return '<div class="kh-step'+(done?' done':isNext?' next':'')+'">'
+      +'<div class="kh-num">'+(done?'✓':(idx+1))+'</div>'
+      +'<div class="kh-body"><div class="kh-t">'+esc(step.title)+'</div>'
+      +(done?'':'<div class="kh-d">'+esc(step.desc)+'</div>')+'</div>'
+      +(done?'':'<button class="kh-go" type="button" data-i="'+idx+'">'+esc(step.cta)+'</button>')
+      +'</div>';
+  }
+
+  function wireKhSteps(host){
+    var btns=host.querySelectorAll('.kh-go');
+    for(var i=0;i<btns.length;i++) btns[i].onclick=khStepClick;
+  }
+
+  /* Bấm bước nào làm đúng việc đó NGAY TẠI TRANG — không đá người ta sang nơi
+     khác để làm đúng việc đang có sẵn ở đây (chỗ rơi rẻ nhất). Dùng chung cho
+     CẢ khách vô danh lẫn thành viên: hành vi bấm giống hệt nhau, chỉ khác ai
+     đang tra bằng chứng (máy hay server). */
+  function khStepClick(){
+    var s=_khActiveDefs[+this.getAttribute('data-i')]; if(!s) return;
+    if(s.key==='lap_la_so'){
       var b=el('tmeEdit');
       if(b){ try{ b.scrollIntoView({behavior:'smooth',block:'center'}); }catch(e){} b.click(); }
       return;
     }
+    if(s.key==='hoi_thay'){
+      try{
+        // Có lá số → mở rail để họ tự gõ câu hỏi (đúng cta "Hỏi ngay"). Chưa có
+        // lá số thì rail im lặng không có gì để bắt chuyện — mồi bằng
+        // `Shell.ask`, cùng lối `todayAsk` đã dùng phía trên.
+        if(_hasBirth){ Shell.openRail(); var ta=document.getElementById('railInput'); if(ta) ta.focus(); }
+        else Shell.ask('Hôm nay là ngày gì, tôi nên làm gì và tránh gì?');
+      }catch(e){}
+      return;
+    }
+    if(s.key==='mo_thu_cong_cu'){ try{ location.href=s.href||'/cong-cu'; }catch(e){} }
+  }
+
+  function renderKhoiHanh(d){
+    var host=el('khoiHanhCard'); if(!host) return;
+    var kh=d.khoiHanh; if(!kh) return;
+    if(kh.justGranted) _khGot+=(+kh.credits||0);
+    // Badge nhắc trên sidebar (public/shell.js) đọc đúng cờ này — không gọi
+    // riêng một API cho mọi trang /app, chỉ đọc lại thứ trang chủ vừa biết.
+    try{ localStorage.setItem('tvp_kh_pending', kh.claimed?'0':'1'); }catch(e){}
+    // Thưởng đã vào ví → biến mất hẳn. Giữ lại một thẻ toàn dấu tích là chiếm
+    // chỗ vĩnh viễn trên màn hình đầu để khoe một việc đã cũ.
+    if(kh.claimed){ host.style.display='none'; return; }
+
+    _khSteps=kh.steps||[]; _khActiveDefs=_khSteps;
+    var done=0; for(var i=0;i<_khSteps.length;i++) if(_khSteps[i].done) done++;
+
+    var h='<div class="kh-card"><div class="kh-eyebrow">Khởi Hành</div>'
+      +'<div class="kh-h">3 bước đầu tiên trên Luận Đường</div>'
+      +'<div class="kh-sub">Làm xong cả ba, nhận thẳng <b>+'+(+kh.credits||15)+' Lượng</b> vào ví — đủ cho một lượt luận tiếp theo.</div>'
+      +khBarHtml(done,_khSteps.length);
+    if(_khGot>0) h+='<div class="kh-got">✓ Vừa cộng <b>+'+_khGot+' Lượng</b> vào ví bạn.</div>';
+    h+='<div class="kh-steps">';
+    var seenNext=false;
+    for(var j=0;j<_khSteps.length;j++){
+      var s=_khSteps[j], isNext=!s.done&&!seenNext; if(isNext) seenNext=true;
+      h+=khStepRow(s,j,s.done,isNext);
+    }
+    h+='</div></div>';
+    host.innerHTML=h;
+    host.style.display='';
+    wireKhSteps(host);
+  }
+
+  /* Bản KHÁCH VÔ DANH — không gọi `onboarding-sync` (chưa có token để gọi),
+     dựng từ `_khGuestDefs` (tĩnh, tải một lần) + tiến độ máy. */
+  function renderKhoiHanhGuest(){
+    var host=el('khoiHanhCard'); if(!host) return;
+    if(!_khGuestDefs||!_khGuestDefs.length){
+      if(!_khDefsRetried){ _khDefsRetried=true; loadKhoiHanhDefs().then(renderKhoiHanhGuest); }
+      return;
+    }
+    _khActiveDefs=_khGuestDefs;
+    var flags=localKhoiHanhFlags();
+    var done=0; for(var i=0;i<flags.length;i++) if(flags[i]) done++;
+    var allDone=done===_khGuestDefs.length;
+
+    var h='<div class="kh-card"><div class="kh-eyebrow">Khởi Hành</div>'
+      +'<div class="kh-h">3 bước đầu tiên trên Luận Đường</div>'
+      +'<div class="kh-sub">Làm xong cả ba, mở khoá <b>+'+_khGuestCredits+' Lượng</b> — nhận được ngay khi bạn tạo tài khoản.</div>'
+      +khBarHtml(done,_khGuestDefs.length)+'<div class="kh-steps">';
+    var seenNext=false;
+    for(var j=0;j<_khGuestDefs.length;j++){
+      var d2=_khGuestDefs[j], done2=flags[j], isNext=!done2&&!seenNext; if(isNext) seenNext=true;
+      h+=khStepRow(d2,j,done2,isNext);
+    }
+    h+='</div>';
+
+    var guestTxt=allDone
+      ? 'Bạn đã xong <b>cả 3 bước</b> — tạo tài khoản để nhận ngay <b>+'+_khGuestCredits+' Lượng</b>'+(_signupBonusTxt?(' + '+esc(_signupBonusTxt)):'')+'.'
+      : 'Đã xong <b>'+done+'/'+_khGuestDefs.length+'</b> bước. Tạo tài khoản để giữ tiến độ này và nhận Lượng khi làm xong.';
+    h+='<div class="kh-guest"><div class="kh-guest-txt">'+guestTxt+'</div>'
+      +'<button class="kh-guest-btn" type="button" id="khGuestSignup">Tạo tài khoản</button></div></div>';
+    host.innerHTML=h;
+    host.style.display='';
+    wireKhSteps(host);
+    var b=el('khGuestSignup');
+    if(b) b.onclick=function(){
+      try{ window.Track&&Track.event('cta_click',{tool_id:'home',meta:{from:'khoi_hanh_guest'}}); }catch(e){}
+      try{ if(window.Auth&&Auth.require){ Auth.require(function(){ location.reload(); }); return; } }catch(e){}
+      location.href='/topup.html';
+    };
+  }
+
+  /* ══ KÊNH LIÊN LẠC — 2 nhiệm vụ cũ của M3, tầng riêng ═══════════════════
+     Bật thông báo · liên kết chat: KHÔNG đổi bằng chứng/mức thưởng, chỉ tách
+     ra khỏi Khởi Hành (đây là kênh nhắc, không phải bước làm quen sản phẩm) và
+     CHỈ hiện cho người đã đăng nhập — khách vãng lai chưa có ví để mà cộng. */
+  var _chGot=0, _chDefs=[];
+
+  function renderChannels(d){
+    var host=el('channelCard'); if(!host) return;
+    var ch=d.channels;
+    if(!ch||!ch.tasks||!ch.tasks.length||ch.tasks.every(function(t){return t.done;})){
+      host.style.display='none'; return;
+    }
+    _chDefs=ch.tasks;
+    var got=0; for(var i=0;i<ch.tasks.length;i++) if(ch.tasks[i].justGranted) got+=(+ch.tasks[i].credits||0);
+    _chGot+=got;
+
+    var h='<div class="ch-card"><div class="ch-h">Kênh liên lạc — nhận thêm Lượng</div>';
+    if(_chGot>0) h+='<div class="kh-got">✓ Vừa cộng <b>+'+_chGot+' Lượng</b> vào ví bạn.</div>';
+    h+='<div class="ch-list">';
+    for(var j=0;j<ch.tasks.length;j++){
+      var t=ch.tasks[j];
+      h+='<div class="ch-row'+(t.done?' done':'')+'" data-row="'+j+'"><div class="ch-tick"></div>'
+       + '<div class="ch-body"><div class="ch-t">'+esc(t.title)+'</div>'
+       + (t.done?'':'<div class="ch-d">'+esc(t.desc)+'</div>')+'</div>'
+       + '<div class="ch-pay"><div class="ch-amt">'+(t.done?'+':'')+(+t.credits||0)+' Lượng</div>'
+       + (t.done?'':'<button class="ch-go" type="button" data-i="'+j+'">'+esc(t.cta)+'</button>')
+       + '</div></div>';
+    }
+    h+='</div></div>';
+    host.innerHTML=h;
+    host.style.display='';
+
+    var btns=host.querySelectorAll('.ch-go');
+    for(var k=0;k<btns.length;k++) btns[k].onclick=chGo;
+  }
+
+  function chGo(){
+    var t=_chDefs[+this.getAttribute('data-i')]; if(!t) return;
+    var key=t.key, href=t.href||'';
+    if(href){ try{ location.href=href; }catch(e){} return; }
     if(key==='bat_thong_bao'){
       var nam=(_birth&&+_birth.year)||0, cc=_canChiNam;
       // 🔴 Bản trước gọi `askPushPermission` — hàm của ĐƯỜNG TỰ MỜI, trả
       // `undefined` ở mọi nhánh và im lặng bỏ qua khi iOS tab thường / vừa hỏi
-      // trong 30 ngày / đã bị chặn. Chú thích tại chỗ ghi "nên báo lại một câu
-      // khi nó im" nhưng KHÔNG có dòng nào làm việc đó ⇒ trên iPhone bấm nút
-      // không ra gì, không lỗi, không dấu vết. Nay gọi `enablePushNow` (trả
-      // trạng thái) và bắt buộc nói lại một câu cho MỌI ngả.
+      // trong 30 ngày / đã bị chặn. Nay gọi `enablePushNow` (trả trạng thái) và
+      // bắt buộc nói lại một câu cho MỌI ngả.
       function ask(){
-        if(!window.enablePushNow) return tskNote(this_i,'err','Chưa nạp được phần thông báo. Tải lại trang rồi thử lại giúp tôi.');
-        tskNote(this_i,'wait','Đang bật…');
+        if(!window.enablePushNow) return chNote(this_i,'err','Chưa nạp được phần thông báo. Tải lại trang rồi thử lại giúp tôi.');
+        chNote(this_i,'wait','Đang bật…');
         window.enablePushNow(nam,cc).then(function(st){
-          tskNote(this_i,PUSH_NOTE[st]?PUSH_NOTE[st][0]:'err',(PUSH_NOTE[st]||PUSH_NOTE.error)[1]);
-          if(st==='granted'||st==='already') setTimeout(function(){ syncTasks(); },1200);
-        }).catch(function(){ tskNote(this_i,'err',PUSH_NOTE.error[1]); });
+          chNote(this_i,PUSH_NOTE[st]?PUSH_NOTE[st][0]:'err',(PUSH_NOTE[st]||PUSH_NOTE.error)[1]);
+          if(st==='granted'||st==='already') setTimeout(function(){ khSync(); },1200);
+        }).catch(function(){ chNote(this_i,'err',PUSH_NOTE.error[1]); });
       }
       var this_i=+this.getAttribute('data-i');
       if(window.enablePushNow) return ask();
       var s=document.createElement('script');
       s.src='/pwa-push.js?v=3'; s.onload=ask;
-      s.onerror=function(){ tskNote(this_i,'err','Không tải được phần thông báo. Thử lại sau giúp tôi.'); };
+      s.onerror=function(){ chNote(this_i,'err','Không tải được phần thông báo. Thử lại sau giúp tôi.'); };
       document.head.appendChild(s);
     }
   }
@@ -1249,13 +1441,31 @@ if(window.ToolPrices) ToolPrices.load().then(function(d){ if(d) renderWelcomeCar
   /* Dán câu trả lời vào ĐÚNG hàng nhiệm vụ vừa bấm — không dùng alert (chặn cả
      trang) cũng không dùng toast (trôi mất trong khi câu hướng dẫn iOS dài 3
      bước, người ta cần đọc lại được trong lúc thao tác). */
-  function tskNote(i,kind,msg){
-    var host=el('taskCard'); if(!host) return;
-    var row=host.querySelector('.tsk-row[data-row="'+i+'"]'); if(!row) return;
-    var n=row.querySelector('.tsk-note');
-    if(!n){ n=document.createElement('div'); n.className='tsk-note'; (row.querySelector('.tsk-body')||row).appendChild(n); }
-    n.className='tsk-note '+kind;
+  function chNote(i,kind,msg){
+    var host=el('channelCard'); if(!host) return;
+    var row=host.querySelector('.ch-row[data-row="'+i+'"]'); if(!row) return;
+    var n=row.querySelector('.ch-note');
+    if(!n){ n=document.createElement('div'); n.className='ch-note'; (row.querySelector('.ch-body')||row).appendChild(n); }
+    n.className='ch-note '+kind;
     n.textContent=msg;
+  }
+
+  /* Điểm vào DUY NHẤT: quyết định vẽ bản khách vô danh hay hỏi server, tuỳ có
+     token hay không. Gọi lại được nhiều lần (đổi tab, vừa lưu lá số…). */
+  function khSync(){
+    var tk=khToken();
+    if(!tk){
+      renderKhoiHanhGuest();
+      var ch=el('channelCard'); if(ch) ch.style.display='none'; // chưa có ví, chưa có gì để cộng
+      return;
+    }
+    if(_khBusy) return;
+    _khBusy=true; _khLast=Date.now();
+    fetch('/api/payment?action=onboarding-sync',{method:'POST',headers:{Authorization:'Bearer '+tk}})
+      .then(function(r){ return r.ok?r.json():null; })
+      .then(function(d){ if(d){ renderKhoiHanh(d); renderChannels(d); } })
+      .catch(function(){ /* hỏng thì thẻ không hiện — không chặn gì của trang */ })
+      .then(function(){ _khBusy=false; });
   }
 
   /* Quay lại tab thì đồng bộ lại — đây mới là ca thường gặp nhất: bấm "Liên
@@ -1263,11 +1473,137 @@ if(window.ToolPrices) ToolPrices.load().then(function(d){ if(d) renderWelcomeCar
      vụ vẫn hiện là chưa làm cho tới lần tải trang sau. Chặn 20 giây để đổi tab
      qua lại không thành một tràng gọi API. */
   document.addEventListener('visibilitychange',function(){
-    if(document.visibilityState==='visible'&&Date.now()-_tskLast>20000) syncTasks();
+    if(document.visibilityState==='visible'&&Date.now()-_khLast>20000) khSync();
   });
+
+  // Định nghĩa bậc 0 + câu quà đăng ký không cần chờ auth — tải song song ngay
+  // từ đầu để có sẵn khi `khSync()` chạy lượt đầu (1200ms, xem run()).
+  loadKhoiHanhDefs();
+  loadSignupBonusTxt();
 
   // Chạy SAU khi shell.boot() render rail (boot hoãn tới DOMContentLoaded).
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',run); else run();
+})();
+</script>
+
+<script>
+/* ══ CHÀO DẪN 3 ĐIỂM — coachmark một lần cho Tổng Quan ═════════════════════
+   KHÔNG phải modal ép xem: 90% người chạy tool là khách vô danh, phần lớn chỉ
+   có ĐÚNG một lượt (docs/QUEST-PLAN.md §2.1/§2.2) — ép xem 3-4 bước giải thích
+   UI trước khi cho thấy giá trị là đốt đúng vài giây quý giá đó vào thứ không
+   ai cần đọc hai lần. Ba điểm dừng, bỏ qua được bất cứ lúc nào, hiện ĐÚNG MỘT
+   LẦN (localStorage). KHÔNG chặn thao tác khác của trang — không có lớp phủ
+   riêng, độ tối quanh điểm sáng là một CHIÊU CSS (box-shadow lan ra hết màn
+   hình của `.tour-spot`, xem shell CSS phía trên) chứ không phải một phần tử
+   `pointer-events` chặn click; `.tour-spot` tự đặt `pointer-events:none`. */
+(function(){
+  'use strict';
+  if(navigator.webdriver) return; // đừng dựng overlay khi Playwright/CI lái trang
+
+  var TOUR_KEY='tvp_tour_seen';
+  var STEPS=[
+    {
+      sel:'#khoiHanhCard',
+      label:'1/3',
+      t:'Đây là nơi bạn mở khoá Lượng',
+      d:'Làm 3 việc nhỏ — lập lá số, hỏi Thầy một câu, thử một công cụ — nhận thẳng 15 Lượng, đủ cho lượt luận tiếp theo.'
+    },
+    {
+      sel:'a.item[href="/app/tai-khoan#credits"]',
+      label:'2/3',
+      t:'Đây là Ví Lượng của bạn',
+      d:'Mỗi lượt hỏi Thầy hay mở khoá một bản luận đều dùng Lượng ở đây. Số dư hiện ngay cạnh tên bạn, bấm vào xem chi tiết.'
+    },
+    {
+      sel:'#nextCard .nx-main',
+      label:'3/3',
+      t:'Thầy đã chọn sẵn cho bạn',
+      d:'Dựa trên những gì bạn vừa xem, đây là công cụ hợp để thử tiếp theo. Bấm vào xem Thầy nói gì.'
+    }
+  ];
+
+  function seen(){ try{ return localStorage.getItem(TOUR_KEY)==='1'; }catch(e){ return true; } }
+  function markSeen(){ try{ localStorage.setItem(TOUR_KEY,'1'); }catch(e){} }
+  function esc2(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+  // `offsetParent===null` bắt cả "không tồn tại" lẫn "tồn tại nhưng
+  // display:none" (Khởi Hành chưa kịp dựng, hoặc bị ẩn vì đã xong) — coi cả
+  // hai là CHƯA CÓ, đừng chỉ vào một khối vô hình.
+  function findTarget(sel){
+    var e=document.querySelector(sel);
+    return (e && e.offsetParent!==null) ? e : null;
+  }
+
+  var _i=-1, _spot=null, _pop=null;
+
+  function place(target,data,isLast){
+    var r=target.getBoundingClientRect();
+    var pad=6;
+    _spot.style.left=(r.left-pad)+'px';
+    _spot.style.top=(r.top-pad)+'px';
+    _spot.style.width=(r.width+pad*2)+'px';
+    _spot.style.height=(r.height+pad*2)+'px';
+
+    _pop.innerHTML='<div class="tour-step">Bước '+esc2(data.label)+'</div>'
+      +'<div class="tour-t">'+esc2(data.t)+'</div>'
+      +'<div class="tour-d">'+esc2(data.d)+'</div>'
+      +'<div class="tour-row"><button class="tour-skip" type="button" id="tourSkip">Bỏ qua</button>'
+      +'<button class="tour-next" type="button" id="tourNext">'+(isLast?'Đã hiểu, khám phá thôi':'Tiếp →')+'</button></div>';
+
+    // Đặt popup DƯỚI phần tử đích; hết chỗ dưới thì đặt LÊN trên — luôn kẹp
+    // trong viewport để không tràn ra ngoài màn hình nhỏ.
+    var popH=_pop.offsetHeight||160, popW=_pop.offsetWidth||290;
+    var top=r.bottom+14;
+    if(top+popH>window.innerHeight-10) top=Math.max(10,r.top-14-popH);
+    var left=Math.min(Math.max(12,r.left), window.innerWidth-popW-12);
+    _pop.style.top=top+'px';
+    _pop.style.left=left+'px';
+
+    document.getElementById('tourSkip').onclick=finish;
+    document.getElementById('tourNext').onclick=function(){ step(_i+1); };
+  }
+
+  function step(i){
+    if(i>=STEPS.length){ finish(); return; }
+    var data=STEPS[i], target=findTarget(data.sel);
+    if(!target){ step(i+1); return; } // phần tử chưa có lúc này → bỏ qua bước đó, đừng đứng khựng
+    _i=i;
+    place(target,data,i===STEPS.length-1);
+  }
+
+  function finish(){
+    markSeen();
+    if(_spot){ _spot.remove(); _spot=null; }
+    if(_pop){ _pop.remove(); _pop=null; }
+    window.removeEventListener('resize',onResize);
+  }
+
+  function onResize(){
+    if(_i<0||_i>=STEPS.length) return;
+    var data=STEPS[_i], target=findTarget(data.sel);
+    if(target) place(target,data,_i===STEPS.length-1); else finish();
+  }
+
+  function start(){
+    if(seen()) return;
+    // Không bước nào có điểm neo (trang lỗi, hoặc cả 3 khối cùng chưa kịp
+    // dựng) → đừng tạo một overlay không trỏ vào đâu cả.
+    var any=false;
+    for(var k=0;k<STEPS.length;k++) if(findTarget(STEPS[k].sel)){ any=true; break; }
+    if(!any) return;
+
+    _spot=document.createElement('div'); _spot.className='tour-spot';
+    _pop=document.createElement('div'); _pop.className='tour-pop';
+    document.body.appendChild(_spot);
+    document.body.appendChild(_pop);
+    window.addEventListener('resize',onResize);
+    step(0);
+  }
+
+  // Chờ các khối khác dựng xong (Khởi Hành ~1200ms sau boot, nextCard cần
+  // ToolPrices tải xong) trước khi tìm điểm neo — đủ trễ để phần tử đích tồn
+  // tại, đủ sớm để không lỡ mất khoảnh khắc tò mò đầu tiên của trang.
+  setTimeout(start,2400);
 })();
 </script>
 </body>
