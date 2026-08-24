@@ -116,6 +116,7 @@ function setupTabs() {
       if (btn.dataset.tab === 'credits') loadCredits();
       if (btn.dataset.tab === 'ketnoi') loadKetnoi();
       if (btn.dataset.tab === 'thaynho') loadMemory();
+      if (btn.dataset.tab === 'nhiemvu') { loadReferralPanel(); loadQuestTasks(); loadMySocialProof(); }
     });
   });
   // Mở thẳng một tab qua địa chỉ: `/profile.html#ketnoi`. Trước đây tab chỉ đổi
@@ -596,6 +597,120 @@ async function loadReferralPanel() {
     });
   }
   sec.style.display = '';
+}
+
+// ── TAB NHIỆM VỤ — Khởi Hành (M3) ──────────────────────────────────────────
+// Cùng nguồn dữ liệu với thẻ "Mở khoá thêm Lượng" trên Tổng Quan
+// (`/api/payment?action=onboarding-sync`, lib/onboarding/tasks.ts) — server
+// tự kiểm bằng chứng và tự cộng, trang này CHỈ vẽ. Khác Tổng Quan ở chỗ KHÔNG
+// ẩn thẻ khi xong cả ba: đây là nơi TRA CỨU, ẩn đi sau khi hoàn tất thì mất
+// luôn bằng chứng đã làm — đúng cái người ta bấm vào tab này để xem.
+var _qtDefs = [];
+
+async function loadQuestTasks() {
+  var host = document.getElementById('qtBody');
+  if (!host || !(await _tok())) return;
+  try {
+    const res = await fetch('/api/payment?action=onboarding-sync', {
+      method: 'POST',
+      headers: { Authorization: 'Bearer ' + (await _tok()) },
+    });
+    const d = await res.json();
+    if (d && d.tasks) renderQuestTasks(d);
+    else host.innerHTML = '<div style="color:var(--text-lt);font-size:.85rem">Không đọc được tiến độ. Thử tải lại trang.</div>';
+  } catch (e) {
+    host.innerHTML = '<div style="color:var(--text-lt);font-size:.85rem">Không đọc được tiến độ. Thử tải lại trang.</div>';
+  }
+}
+
+function renderQuestTasks(d) {
+  const host = document.getElementById('qtBody');
+  if (!host) return;
+  let done = 0;
+  for (let i = 0; i < d.tasks.length; i++) if (d.tasks[i].done) done++;
+
+  let h = d.allDone
+    ? '<div class="qt-top"><div class="qt-count" style="color:var(--green)">✓ Đã hoàn tất cả ' + d.tasks.length + ' bước.</div></div>'
+    : '<div class="qt-top"><div style="font-size:.85rem;color:var(--text-mid)">' + done + '/' + d.tasks.length + ' bước</div>'
+      + '<div class="qt-count">còn +' + (+d.pending || 0) + ' Lượng</div></div>';
+  if (d.granted > 0) h += '<div class="qt-note ok">✓ Vừa cộng <b>+' + d.granted + ' Lượng</b> vào ví bạn.</div>';
+
+  // Nút bấm gắn theo CHỈ SỐ (tra ngược `_qtDefs`), KHÔNG nội suy chuỗi từ
+  // server vào thuộc tính onclick — cùng lý do đã ghi ở phần Thầy Nhớ bên
+  // dưới: dấu nháy trong chuỗi là vỡ thẻ.
+  _qtDefs = d.tasks;
+  h += '<div>' + d.tasks.map(function (t, i) {
+    return '<div class="qt-row' + (t.done ? ' done' : '') + '"><div class="qt-tick"></div>'
+      + '<div class="qt-body"><div class="qt-t">' + escHtml(t.title) + '</div>'
+      + (t.done ? '' : '<div class="qt-d">' + escHtml(t.desc) + '</div>') + '</div>'
+      + '<div class="qt-pay"><div class="qt-amt">' + (t.done ? '+' : '') + (+t.credits || 0) + ' Lượng</div>'
+      + (t.done ? '' : '<button class="qt-go" type="button" data-i="' + i + '">' + escHtml(t.cta) + '</button>')
+      + '</div></div>';
+  }).join('') + '</div>';
+
+  host.innerHTML = h;
+  host.querySelectorAll('.qt-go').forEach(function (b) { b.onclick = questTaskGo; });
+  if (window.mountIcons) window.mountIcons(host);
+}
+
+function questTaskGo() {
+  const t = _qtDefs[+this.getAttribute('data-i')];
+  if (!t) return;
+  const href = t.href || '';
+  // `href` rỗng = việc chỉ làm được TẠI Tổng Quan (ô lá số của thẻ "Vận hôm
+  // nay", hoặc quyền thông báo trình duyệt) — tab này không có UI đó, đưa
+  // người ta tới đúng chỗ có thay vì cố dựng lại một bản thứ hai ở đây.
+  if (!href) { location.href = '/app'; return; }
+  // Trỏ VÀO CHÍNH trang đang đứng (`/app/tai-khoan#<tab>`) thì chuyển tab TẠI
+  // CHỖ thay vì tải lại cả trang.
+  const m = /^\/app\/tai-khoan#(.+)$/.exec(href);
+  if (m) {
+    const b = document.querySelector('.tab-btn[data-tab="' + CSS.escape(m[1]) + '"]');
+    if (b) { b.click(); return; }
+  }
+  location.href = href;
+}
+
+// ── TAB NHIỆM VỤ — lịch sử "Khoe Kết Quả" ───────────────────────────────
+// Trước đây nộp xong (nút "Khoe kết quả" ở `.ws-actions`/fabHost) là mất dấu
+// hoàn toàn phía người dùng — đường đọc lại DUY NHẤT là hàng đợi ADMIN. Đây
+// là chỗ ĐẦU TIÊN chính chủ tự xem lại được trạng thái lượt mình đã nộp.
+var SP_PLATFORM_LABELS = { facebook: 'Facebook', instagram: 'Instagram', tiktok: 'TikTok', other: 'Khác' };
+var SP_STATUS_LABELS = { pending: 'Đang chờ duyệt', approved: 'Đã duyệt', rejected: 'Từ chối' };
+
+async function loadMySocialProof() {
+  const host = document.getElementById('spBody');
+  if (!host || !(await _tok())) return;
+  try {
+    const res = await fetch('/api/payment?action=my-social-proof', {
+      headers: { Authorization: 'Bearer ' + (await _tok()) },
+    });
+    const d = await res.json();
+    renderMySocialProof((d && d.submissions) || []);
+  } catch (e) {
+    host.innerHTML = '<div style="color:var(--text-lt);font-size:.85rem">Không đọc được lịch sử.</div>';
+  }
+}
+
+function renderMySocialProof(list) {
+  const host = document.getElementById('spBody');
+  if (!host) return;
+  if (!list.length) {
+    host.innerHTML = '<div style="color:var(--text-lt);font-size:.85rem">Bạn chưa nộp lượt nào.</div>';
+    return;
+  }
+  host.innerHTML = list.map(function (s) {
+    const date = new Date(s.submitted_at).toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' });
+    const plat = SP_PLATFORM_LABELS[s.platform] || s.platform;
+    const cls = s.status || 'pending';
+    const label = SP_STATUS_LABELS[cls] || cls;
+    const extra = cls === 'approved' && s.reward_credits ? (' · +' + s.reward_credits + ' Lượng') : '';
+    const reject = cls === 'rejected' && s.reject_reason ? ('<div class="sp-meta">Lý do: ' + escHtml(s.reject_reason) + '</div>') : '';
+    return '<div class="sp-row"><div style="flex:1;min-width:0">'
+      + '<div class="sp-plat">' + escHtml(plat) + '</div>'
+      + '<div class="sp-meta">' + date + extra + '</div>' + reject + '</div>'
+      + '<span class="sp-status ' + cls + '">' + escHtml(label) + '</span></div>';
+  }).join('');
 }
 
 async function loadCredits() {

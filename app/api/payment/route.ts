@@ -1400,6 +1400,7 @@ export async function GET(request: NextRequest) {
   if (action === 'admin-mcp') return handleAdminMcp(request);
   if (action === 'admin-env-status') return handleAdminEnvStatus(request);
   if (action === 'my-referral') return handleMyReferral(request, searchParams);
+  if (action === 'my-social-proof') return handleMySocialProof(request);
   if (action === 'my-memory')   return handleMyMemory(request);
   if (action === 'rail-status') return handleRailStatus(request, searchParams);
   if (action === 'signup-bonus') return handleSignupBonus();
@@ -3128,6 +3129,30 @@ async function handleAdminSocialProofList(request: NextRequest, sp: URLSearchPar
   } catch (e: unknown) {
     return err((e as Error).message);
   }
+}
+
+// ── GET: my-social-proof (lịch sử "Khoe Kết Quả" của CHÍNH mình) ────
+// Tab Nhiệm Vụ (`/app/tai-khoan`) cần một nơi đọc lại trạng thái các lượt đã
+// nộp — trước đây nộp xong (`social-proof-submit`) là mất dấu hoàn toàn phía
+// người dùng, đường đọc lại DUY NHẤT là hàng đợi ADMIN
+// (`handleAdminSocialProofList`, chỉ `verifyAdmin` gọi được). Endpoint này
+// CÙNG khuôn `handleMyReferral`/`handleMyMemory`: tự giải user_id TỪ TOKEN,
+// KHÔNG nhận qua query — đọc lịch sử của người khác là lỗi thiết kế.
+async function handleMySocialProof(request: NextRequest): Promise<Response> {
+  const token = (request.headers.get('Authorization') || '').replace('Bearer ', '').trim();
+  if (!token) return err('Missing Authorization token', 401);
+  try {
+    const user = await getUserFromToken(token);
+    if (!user) return err('Invalid token', 401);
+    const res = await fetch(
+      `${SUPABASE_URL}/rest/v1/social_post_submissions?user_id=eq.${user.id}` +
+        `&select=id,platform,url,screenshot_url,tool_id,note,status,reward_credits,submitted_at,reviewed_at,reject_reason` +
+        `&order=submitted_at.desc&limit=30`,
+      { headers: SB_HEADERS, cache: 'no-store' }
+    );
+    const submissions = res.ok ? await res.json() : [];
+    return ok({ submissions });
+  } catch (e: unknown) { return err((e as Error).message); }
 }
 
 // POST: admin-social-proof-decide — approve qua RPC nguyên tử (cộng Lượng +
