@@ -190,11 +190,11 @@ Lưu ý đặc biệt: Đây là chế độ so sánh tương hợp 2 lá số. 
   const trimmed = messages.slice(-10).map((m: any) => ({ role: m.role, content: String(m.content).slice(0, 2000) }));
 
   try {
-    // provider:'anthropic' (chốt Henry 2026-08-24): Xem Tuổi Vợ Chồng / Xem
-    // Tuổi Làm Ăn (trang này phục vụ cả hai — xem chú thích ở handleChat)
-    // thuộc nhóm tool "luận giải" quan trọng → Opus 5 primary, không dùng mặc
-    // định Gemini Flash toàn site (xem lib/llm/complete.ts CANONICAL_ORDER).
-    const answer = await llmText({ system: systemPrompt, messages: trimmed, maxTokens: 1200, provider: 'anthropic' });
+    // 🔴 VÁ Henry 2026-08-24: handleChat là hỏi-đáp LẶP LẠI nhiều lượt/phiên —
+    // cùng tính chất lưu lượng cao/tốn Opus như rail chat (/api/v1/chat), nên
+    // gộp chung quyết định "gỡ Opus primary" — Gemini Flash mặc định toàn
+    // site (bỏ `provider:'anthropic'`, xem lib/llm/complete.ts CANONICAL_ORDER).
+    const answer = await llmText({ system: systemPrompt, messages: trimmed, maxTokens: 1200 });
     return ok({ answer, scenario: hasLaso ? 'laso' : 'general' });
   } catch (e: unknown) {
     return err('API error: ' + (e as Error).message);
