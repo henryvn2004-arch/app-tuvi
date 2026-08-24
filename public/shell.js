@@ -1195,13 +1195,14 @@
   //   3. vẽ lại nút.
   function refreshWsShare() {
     var host = wsResultHost();
-    if (!host) { renderShareBtn(); return; } // trang chưa khai vùng kết quả → giữ lối cũ
+    if (!host) { renderShareBtn(); renderFbBtn(); return; } // trang chưa khai vùng kết quả → giữ lối cũ
     var vis = shownEl(host);
     if (_wsResVisible && !vis) shareable = null; // kết quả biến mất → payload lượt trước hết hiệu lực
     if (!_wsResVisible && vis) _shareMuted = false; // lượt chạy mới → mở lại lưới đỡ
     _wsResVisible = vis;
     autoShare = vis && !_shareMuted ? deriveShareable(host) : null;
     renderShareBtn();
+    renderFbBtn();
     renderPdfBtn(vis);
     maybeAppendSrcNote(host);
   }
@@ -1236,6 +1237,23 @@
     refreshWsShare();
   }
 
+  // ── CỤM NÚT STICKY GÓC PHẢI DƯỚI ──────────────────────────────────────
+  // Chia sẻ · Hỏi · Lưu PDF · Đăng Facebook trước đây nằm trong `.ws-top`,
+  // một thanh CUỘN THEO trang — đọc xong một khối luận dài trên di động là
+  // thanh đó đã trôi khỏi màn hình từ lâu, không ai bấm được nữa. Nay cả bốn
+  // sống trong MỘT cụm `position:fixed` (`shell.css`), luôn ở đúng góc phải
+  // dưới bất kể cuộn tới đâu — và KHÔNG phụ thuộc trang có khai `.ws-actions`
+  // hay không (trước đây thiếu `.ws-actions` là nút Chia sẻ/PDF im lặng
+  // không hiện gì cả).
+  function fabHost() {
+    var host = document.getElementById('wsFab');
+    if (host) return host;
+    host = document.createElement('div');
+    host.className = 'ws-fab'; host.id = 'wsFab';
+    document.body.appendChild(host);
+    return host;
+  }
+
   // ── LƯU PDF — cùng vòng đời với nút Chia sẻ ──────────────────────────
   // Trước đây đúng 3/33 tool có nút PDF, mỗi tool tự dựng một thanh riêng
   // trong nội dung + tự chép một khối @media print. Nay shell lo cả hai:
@@ -1247,10 +1265,10 @@
   // (chọn/tìm/copy được) và không thêm một byte JS nào. Bản dựng bằng canvas
   // chỉ ra ảnh, nặng hơn mà đọc kém hơn.
   function renderPdfBtn(visible) {
-    var host = document.querySelector('.ws-actions');
+    var host = fabHost();
     var btn = document.getElementById('wsPdfBtn');
     if (!visible) { if (btn) btn.remove(); return; }
-    if (!host || btn) return;
+    if (btn) return;
     btn = document.createElement('button');
     btn.type = 'button'; btn.className = 'btn'; btn.id = 'wsPdfBtn';
     btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" style="width:14px;height:14px;vertical-align:-2px;margin-right:4px"><path d="M12 3v11m0 0 4-4m-4 4-4-4"/><path d="M4 17v2.5A1.5 1.5 0 0 0 5.5 21h13a1.5 1.5 0 0 0 1.5-1.5V17"/></svg>Lưu PDF';
@@ -1339,15 +1357,26 @@
       if (window.AiLoadingSteps && window.AiLoadingSteps.orbHtml) cb();
     });
   }
+  // Nút "✦ Hỏi" mobile-only nằm cứng trong HTML của 51 trang, trong
+  // `.ws-actions`. Nay `moveAskToFab()` (gọi lúc boot) DI CHUYỂN đúng node đó
+  // (không nhân bản) sang cụm sticky — nên phải tìm ở CẢ hai chỗ: trước khi
+  // dời (còn trong `.ws-actions`) và sau khi dời (đã trong `.ws-fab`).
   function askBtnEl() {
-    var host = document.querySelector('.ws-actions');
-    if (!host) return null;
-    var bs = host.querySelectorAll('button');
-    for (var i = 0; i < bs.length; i++) {
-      var oc = bs[i].getAttribute('onclick') || '';
-      if (oc.indexOf('openRail') >= 0) return bs[i];
+    var hosts = [document.getElementById('wsFab'), document.querySelector('.ws-actions')];
+    for (var h = 0; h < hosts.length; h++) {
+      var host = hosts[h]; if (!host) continue;
+      var bs = host.querySelectorAll('button');
+      for (var i = 0; i < bs.length; i++) {
+        var oc = bs[i].getAttribute('onclick') || '';
+        if (oc.indexOf('openRail') >= 0) return bs[i];
+      }
     }
     return null;
+  }
+  function moveAskToFab() {
+    var b = askBtnEl();
+    var host = fabHost();
+    if (b && b.parentNode !== host) host.appendChild(b);
   }
   function syncAskOrb() {
     var b = askBtnEl();
@@ -1369,24 +1398,26 @@
   }
 
   function renderShareBtn() {
-    var host = document.querySelector('.ws-actions');
+    var host = fabHost();
     var btn = document.getElementById('wsShareBtn');
     if (!currentShare()) { if (btn) btn.remove(); return; }
-    if (!host) return; // trang chưa có toolbar .ws-actions → bỏ qua, không vỡ gì
     loadRefCode(); // lúc boot có thể chưa đăng nhập; thử lại khi sắp có nút Chia sẻ
     if (!btn) {
       btn = document.createElement('button');
       btn.type = 'button'; btn.className = 'btn'; btn.id = 'wsShareBtn';
       btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" style="width:14px;height:14px;vertical-align:-2px;margin-right:4px"><circle cx="18" cy="5" r="2.6"/><circle cx="6" cy="12" r="2.6"/><circle cx="18" cy="19" r="2.6"/><path d="m8.3 10.7 7.4-4.4M8.3 13.3l7.4 4.4"/></svg>Chia sẻ';
       btn.addEventListener('click', shareWorkspace);
-      host.insertBefore(btn, host.firstChild);
+      host.appendChild(btn);
     }
   }
-  function shareWorkspace() {
+  // Dựng link chia sẻ cho lượt kết quả HIỆN TẠI — dùng CHUNG cho nút Chia sẻ
+  // và nút Đăng Facebook, cả hai đều cần đúng một bước này trước khi mở kênh
+  // phát tán. Viết hai lần thì hai bản `fetch` sớm muộn trôi khỏi nhau.
+  function fetchShareUrl(btnEl, cb) {
     if (!currentShare()) return;
-    var btn = document.getElementById('wsShareBtn'); if (btn) btn.disabled = true;
+    if (btnEl) btnEl.disabled = true;
     var s = currentShare();
-    var reEnable = function () { if (btn) btn.disabled = false; };
+    var reEnable = function () { if (btnEl) btnEl.disabled = false; };
     // Gửi kèm token: server ghi shared_results.owner_user_id → panel Vòng Lặp
     // Viral đếm được SỐ NGƯỜI chia sẻ (mẫu số của K-factor), không chỉ số link.
     var headers = { 'Content-Type': 'application/json' };
@@ -1399,17 +1430,47 @@
       .then(function (j) {
         reEnable();
         if (!j || !j.url) { alert('Không tạo được link chia sẻ, thử lại sau.'); return; }
-        var url = withViralParams(location.origin + j.url, s.toolId);
-        var onMedium = function (m) { track('share', { tool_id: s.toolId, meta: { medium: m, kind: 'workspace', with_ref: !!_refCode } }); };
-        var shareTxt = 'Xem kết quả này trên Tử Vi Minh Bảo:';
-        var modalOpts = { title: 'Chia sẻ ' + s.title, desc: 'Ai có link đều xem được kết quả này.', shareText: shareTxt + ' ' };
-        // LUÔN share dạng LINK (giống hệt shareSession ở rail) — KHÔNG share
-        // file ảnh thô qua Web Share API level 2: nhiều app nhận file (Messenger,
-        // Zalo…) BỎ LUÔN url đi kèm, người nhận chỉ thấy ảnh, không bấm vào đâu
-        // được. Ảnh vẫn hiện đẹp nhờ OG:image khi link được unfurl.
-        shareLink(url, { title: s.title + ' — Tử Vi Minh Bảo', text: shareTxt, url: url }, modalOpts, onMedium);
+        cb(withViralParams(location.origin + j.url, s.toolId), s);
       })
       .catch(function () { reEnable(); alert('Lỗi mạng khi tạo link chia sẻ.'); });
+  }
+  function shareWorkspace() {
+    var btn = document.getElementById('wsShareBtn');
+    fetchShareUrl(btn, function (url, s) {
+      var onMedium = function (m) { track('share', { tool_id: s.toolId, meta: { medium: m, kind: 'workspace', with_ref: !!_refCode } }); };
+      var shareTxt = 'Xem kết quả này trên Tử Vi Minh Bảo:';
+      var modalOpts = { title: 'Chia sẻ ' + s.title, desc: 'Ai có link đều xem được kết quả này.', shareText: shareTxt + ' ' };
+      // LUÔN share dạng LINK (giống hệt shareSession ở rail) — KHÔNG share
+      // file ảnh thô qua Web Share API level 2: nhiều app nhận file (Messenger,
+      // Zalo…) BỎ LUÔN url đi kèm, người nhận chỉ thấy ảnh, không bấm vào đâu
+      // được. Ảnh vẫn hiện đẹp nhờ OG:image khi link được unfurl.
+      shareLink(url, { title: s.title + ' — Tử Vi Minh Bảo', text: shareTxt, url: url }, modalOpts, onMedium);
+    });
+  }
+
+  // ── ĐĂNG FACEBOOK — đi thẳng vào hộp thoại chia sẻ của Facebook ─────
+  // Trước đây Facebook chỉ là MỘT trong 4 lựa chọn nằm trong modal "Chia sẻ"
+  // (openShareModal). Henry muốn một nút riêng, luôn thấy, để bấm PHÁT là
+  // ra ngay hộp thoại đăng — bớt một lượt bấm cho đúng kênh nhiều người dùng
+  // nhất. Cùng link, cùng cơ chế `sharer.php` đã dùng trong modal, chỉ khác
+  // là bỏ qua bước chọn kênh.
+  function renderFbBtn() {
+    var host = fabHost();
+    var btn = document.getElementById('wsFbBtn');
+    if (!currentShare()) { if (btn) btn.remove(); return; }
+    if (btn) return;
+    btn = document.createElement('button');
+    btn.type = 'button'; btn.className = 'btn fbtn-fb'; btn.id = 'wsFbBtn';
+    btn.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor" style="width:14px;height:14px;vertical-align:-2px;margin-right:4px"><path d="M22 12.06C22 6.53 17.52 2.04 12 2.04S2 6.53 2 12.06c0 5 3.66 9.13 8.44 9.88v-6.99H7.9v-2.89h2.54V9.85c0-2.5 1.49-3.9 3.77-3.9 1.09 0 2.24.2 2.24.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56v1.88h2.78l-.45 2.89h-2.33v6.99c4.78-.75 8.44-4.88 8.44-9.88z"/></svg>Đăng Facebook';
+    btn.addEventListener('click', postFacebook);
+    host.appendChild(btn);
+  }
+  function postFacebook() {
+    var btn = document.getElementById('wsFbBtn');
+    fetchShareUrl(btn, function (url, s) {
+      track('share', { tool_id: s.toolId, meta: { medium: 'facebook', kind: 'workspace', with_ref: !!_refCode } });
+      window.open('https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(url), '_blank', 'noopener');
+    });
   }
 
   // ── NỐI PHIÊN từ link chia sẻ (?fromshare=<id>) ──
@@ -2068,9 +2129,10 @@
       // Chốt trạng thái hiện/ẩn TRƯỚC rồi mới tắt tiếng: gọi ngược lại thì cạnh
       // lên "lượt chạy mới" của chính lượt này gỡ luôn cờ vừa đặt (tool báo lỗi
       // khi khung kết quả đang hiện → shell vẫn tự đỡ đè lên lời khai của tool).
-      if (!o) { shareable = null; refreshWsShare(); _shareMuted = true; autoShare = null; renderShareBtn(); return; }
+      if (!o) { shareable = null; refreshWsShare(); _shareMuted = true; autoShare = null; renderShareBtn(); renderFbBtn(); return; }
       shareable = normalizeShare(o); _shareMuted = false;
       renderShareBtn();
+      renderFbBtn();
     },
   };
   window.Shell = Shell;
@@ -2555,6 +2617,10 @@
     // Empty-state intro (hướng B): trang khai window.SHELL_INTRO={key,title,desc}
     // + có #introHost → shell tự hiện cho người mới, ẩn sau lần dùng đầu.
     if (window.SHELL_INTRO && window.SHELL_INTRO.key) Shell.introOnce(window.SHELL_INTRO.key, window.SHELL_INTRO);
+    // Cụm nút sticky góc phải dưới: dời nút "✦ Hỏi" (mobile-only, hardcode
+    // trong HTML từng trang) vào đó TRƯỚC — để nó đứng trên cùng trong cụm.
+    // Chia sẻ/PDF/Facebook tự nối vào bên dưới khi có kết quả (xem dưới).
+    moveAskToFab();
     // Nút Chia sẻ của khung giữa: shell tự theo dõi vùng kết quả, tool không
     // phải khai báo gì. Xem khối "CHIA SẺ WORKSPACE" ở trên.
     watchWsResult();
