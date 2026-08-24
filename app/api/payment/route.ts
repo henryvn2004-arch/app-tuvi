@@ -14,7 +14,7 @@ import { getToolPrice } from '@/lib/billing/pricing';
 import { hasSlugAccess } from '@/lib/billing/credits';
 import { freeGenGate, FREE_GEN_CAP_MESSAGE, railFreeRemaining } from '@/lib/billing/viral-budget';
 import { anonTrialStatus } from '@/lib/billing/anon-trial';
-import { syncOnboardingTasks } from '@/lib/onboarding/tasks';
+import { syncOnboardingTasks, KHOI_HANH_STEPS } from '@/lib/onboarding/tasks';
 import { getConfigValue } from '@/lib/config/appConfig';
 import { CRON_RUNS_LIMIT, JOBS, evaluateJobs, fetchPgcronRuns, syncJobFirstSeen } from '@/lib/ops/jobs';
 import { checkEnv } from '@/lib/ops/preflight';
@@ -194,6 +194,30 @@ async function handleSignupBonus(): Promise<Response> {
     .filter((n) => Number.isFinite(n) && n > 0);
   // Không đọc được → null, để giao diện lùi về câu chung chung thay vì hứa sai.
   return ok({ bonus: variants.length ? Math.min(...variants) : null });
+}
+
+// ── GET: khoi-hanh-defs — CÔNG KHAI, cùng lý do handleSignupBonus. Khách VÔ
+// DANH (bậc 0) chưa có token nên không gọi được `onboarding-sync`, nhưng thẻ
+// "Khởi Hành" ở public/app-home.html vẫn phải hiện 3 bước cho họ (tiến độ tính
+// ở máy — xem localKhoiHanhSteps trong app-home.html). Tiêu đề/mô tả lấy từ
+// ĐÚNG một nguồn (`KHOI_HANH_STEPS`, lib/onboarding/tasks.ts) thay vì chép tay
+// lần hai ở client — bài học "bảng dịch dựng từ một nguồn chỉ phủ nguồn đó" đã
+// cắn repo này 3 lần (xem CLAUDE.md).
+async function handleKhoiHanhDefs(): Promise<Response> {
+  const rewards = await getConfigValue<Record<string, number>>('onboarding.task_rewards', {
+    khoi_hanh: 15,
+  });
+  const credits = Number(rewards?.khoi_hanh) || 15;
+  return ok({
+    steps: KHOI_HANH_STEPS.map((s) => ({
+      key: s.key,
+      title: s.title,
+      desc: s.desc,
+      cta: s.cta,
+      href: s.href,
+    })),
+    credits,
+  });
 }
 
 // ── GET: social-proof-info — CÔNG KHAI, cùng lý do handleSignupBonus: modal
@@ -1379,6 +1403,7 @@ export async function GET(request: NextRequest) {
   if (action === 'balance')      return handleBalance(searchParams);
   if (action === 'check')        return handleCheck(searchParams);
   if (action === 'signup-bonus') return handleSignupBonus();
+  if (action === 'khoi-hanh-defs') return handleKhoiHanhDefs();
   if (action === 'social-proof-info') return handleSocialProofInfo();
   if (action === 'promo-info')   return handlePromoInfo(searchParams);
   if (action === 'admin-promo-list') return handleAdminPromoList(request);

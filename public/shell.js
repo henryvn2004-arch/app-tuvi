@@ -281,6 +281,15 @@
     });
   }
 
+  // Chấm nhắc "Khởi Hành" chưa xong (public/app-home.html ghi cờ này mỗi lần
+  // đồng bộ ở trang chủ). Đọc localStorage thay vì gọi API riêng ở ĐÂY: sidebar
+  // dựng trên MỌI trang /app, thêm một lượt mạng vào đó là chậm cho cả site chỉ
+  // để phục vụ một chấm nhắc — thà chấp nhận độ trễ (chỉ cập nhật sau lượt ghé
+  // trang chủ gần nhất) còn hơn cả site chậm đi.
+  function khoiHanhPending() {
+    try { return localStorage.getItem('tvp_kh_pending') === '1'; } catch (e) { return false; }
+  }
+
   // ── RENDER SIDEBAR ──
   function renderSidebar() {
     var host = document.getElementById('shell-sidebar');
@@ -291,6 +300,7 @@
          '<svg class="ic" style="opacity:.7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4-4"/></svg>' +
          ' Tìm công cụ, lệnh… <kbd>Ctrl K</kbd></button>';
     h += '<nav class="sb-nav">';
+    var khPending = khoiHanhPending();
     TOOLS.forEach(function (g) {
       var hasActive = g.items.some(function (it) { return it.id === ACTIVE; });
       var closed = !(g.open || hasActive);
@@ -298,7 +308,8 @@
       g.items.forEach(function (it) {
         var active = it.id === ACTIVE ? ' active' : '';
         var pill = it.balance ? '<span class="pill" id="sbBalance">—</span>' : '';
-        h += '<a class="item' + active + '" href="' + it.href + '">' + (it.icon ? svg(it.icon) : '') + ' ' + esc(it.label) + ' ' + pill + '</a>';
+        var dot = (it.id === 'home' && khPending) ? '<span class="sb-dot" title="Còn việc chưa xong ở Khởi Hành"></span>' : '';
+        h += '<a class="item' + active + '" href="' + it.href + '">' + (it.icon ? svg(it.icon) : '') + ' ' + esc(it.label) + ' ' + pill + dot + '</a>';
       });
       h += '</div>';
     });
@@ -2196,6 +2207,12 @@
     var imgs = pendingImages.slice();
     if (!text && !imgs.length) return;
     try { track('chat_msg', { tool_id: ACTIVE, slug: (ctx && ctx.scenario && ctx.scenario.type) || null, meta: { has_img: imgs.length > 0 } }); } catch (e) { /* ignore */ }
+    // Bước 2 của "Khởi Hành" (public/app-home.html) cho KHÁCH VÔ DANH: server
+    // không có user_id để tra `events.chat_msg`, nên bậc 0 tự đếm ở máy. Cờ này
+    // là NGUỒN DUY NHẤT cho bậc 0 — sau khi đăng ký, bằng chứng thật lấy từ
+    // chính dòng `events` mà `track('chat_msg', …)` ở trên vừa ghi (user_id gắn
+    // được ngay nếu đã đăng nhập lúc bấm gửi), không cần đồng bộ cờ này lên server.
+    try { localStorage.setItem('tvp_kh_hoi', '1'); } catch (e) { /* ignore */ }
     // Đếm câu + ghi nhận chủ đề (cho thẻ mời) TRƯỚC khi gọi API — chủ đề suy từ
     // chính câu hỏi, không cần đợi câu trả lời.
     _askCount++;

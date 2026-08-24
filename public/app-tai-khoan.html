@@ -463,6 +463,15 @@
         <div id="qtBody"><div style="color:var(--text-lt);font-size:.85rem">Đang tải...</div></div>
       </div>
 
+      <!-- Kênh liên lạc (bật thông báo/liên kết chat) — tách khỏi Khởi Hành:
+           đây là 2 nhiệm vụ ĐỘC LẬP (thưởng riêng từng cái), không theo chuỗi
+           như 3 bước Khởi Hành. Ẩn hẳn khi cả hai đã xong (account-core.js
+           `renderChannelTasks`) — khác #qtCard vốn luôn hiện để TRA CỨU. -->
+      <div class="account-section" id="chCard" style="display:none">
+        <h3><span data-icon="message-circle" style="width:15px;height:15px;vertical-align:-2px;color:var(--tx-gold)"></span> Kênh liên lạc</h3>
+        <div id="chBody"></div>
+      </div>
+
       <!-- Mời bạn — CÙNG markup/id với bản đã có ở profile.html
            (account-core.js `loadReferralPanel()` render thẳng vào #refSection,
            dùng chung, không viết logic mới). -->
