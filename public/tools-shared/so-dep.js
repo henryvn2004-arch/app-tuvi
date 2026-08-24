@@ -1,7 +1,16 @@
 /* tools-shared/so-dep.js — Module DÙNG CHUNG tool "Số Đẹp" (đánh giá SĐT/số
    nhà/biển số theo cổ pháp — Bát Trạch, Mai Hoa Dịch Số, Ngũ Hành, Âm Dương).
    Nguồn DUY NHẤT cho /tools/so-dep.html + shell /app/so-dep.
-   window.SoDepTool = { danhGia, STAR_DESC, DIGIT_NOTE }
+   window.SoDepTool = { danhGia, goiY, STAR_DESC }
+
+   ── goiY() — GỢI Ý SỐ, thêm ở PR #2b ────────────────────────────────────
+   Không chép bảng cặp số ra lần thứ ba: đồ thị cạnh cho từng "mục tiêu" dựng
+   TRỰC TIẾP từ `BatTrachTool.starBetween()` (quét mọi cặp 1-9\{5}, giữ cặp
+   nào ra đúng sao mục tiêu). Random-walk trên đồ thị đó SINH ứng viên, rồi
+   ứng viên được CHẤM LẠI bằng chính `danhGia()` — generator không tự phát
+   minh thang điểm riêng, tránh 2 nguồn "thế nào là tốt" trôi khỏi nhau.
+   DETERMINISTIC: seed = hash(tham số đầu vào) qua PRNG mulberry32, không
+   dùng `Math.random()` — bấm lại cùng tham số ra cùng danh sách.
 
    ── VÌ SAO ENGINE NÀY TỒN TẠI — đọc trước khi sửa ──────────────────────────
    Thị trường "xem số đẹp" ở VN gần như 100% chấm một điểm số DUY NHẤT (vd.
@@ -281,8 +290,157 @@
     };
   }
 
+  // ── Generator gợi ý số ───────────────────────────────────────────────────
+  var MUC_TIEU_SAO = {
+    'tai-loc': 'Sinh Khí',
+    'suc-khoe': 'Thiên Y',
+    'ben-vung': 'Diên Niên',
+    'on-dinh': 'Phục Vị',
+  };
+  var CAT_SET_GEN = { 'Sinh Khí': 1, 'Thiên Y': 1, 'Diên Niên': 1, 'Phục Vị': 1 };
+  var CUNGS_ALL = [1, 2, 3, 4, 6, 7, 8, 9];
+
+  // PRNG seed từ chuỗi (FNV-1a) — KHÔNG dùng Math.random(), để cùng tham số
+  // luôn ra cùng danh sách gợi ý (bấm lại không đổi, cache được).
+  function _fnv1a(str) {
+    var h = 0x811c9dc5;
+    for (var i = 0; i < str.length; i++) {
+      h ^= str.charCodeAt(i);
+      h = Math.imul(h, 0x01000193);
+    }
+    return h >>> 0;
+  }
+  function _mulberry32(seed) {
+    var s = seed >>> 0;
+    return function () {
+      s = (s + 0x6d2b79f5) | 0;
+      var t = Math.imul(s ^ (s >>> 15), 1 | s);
+      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+
+  // Đồ thị cạnh: a→b hợp lệ nếu starBetween(a,b) ra ĐÚNG sao mục tiêu (hoặc
+  // BẤT KỲ sao cát nào, khi không chọn mục tiêu cụ thể — 'tu-do'). Tự bao
+  // gồm cạnh a→a khi mục tiêu là Phục Vị, vì starBetween(a,a)='Phục Vị'.
+  function _dungDoThi(target) {
+    var BT = root.BatTrachTool;
+    var adj = {};
+    CUNGS_ALL.forEach(function (a) {
+      adj[a] = [];
+      CUNGS_ALL.forEach(function (b) {
+        var s = BT.starBetween(a, b);
+        var hop = target ? s === target : !!CAT_SET_GEN[s];
+        if (hop) adj[a].push(b);
+      });
+    });
+    return adj;
+  }
+
+  /**
+   * Sinh danh sách số gợi ý theo độ dài + mục tiêu tuỳ chọn.
+   * @param {{doDai:number, mucTieu?:string, namSinh?:number, gioiTinh?:string,
+   *   tienTo?:string, loaiTru?:Array<number|string>, soLuong?:number}} opts
+   *   mucTieu: 'tai-loc'|'suc-khoe'|'ben-vung'|'on-dinh'|'tu-do' (mặc định).
+   */
+  function goiY(opts) {
+    opts = opts || {};
+    var BT = root.BatTrachTool;
+    if (!BT) return { ok: false, error: 'Chưa nạp được BatTrachTool.' };
+
+    var doDai = Math.floor(Number(opts.doDai));
+    if (!isFinite(doDai) || doDai < 4 || doDai > 20) {
+      return { ok: false, error: 'Độ dài phải là số nguyên từ 4 đến 20.' };
+    }
+    var mucTieu = opts.mucTieu || 'tu-do';
+    var targetSao = MUC_TIEU_SAO[mucTieu];
+    if (mucTieu !== 'tu-do' && !targetSao) {
+      return { ok: false, error: 'Mục tiêu không hợp lệ — chỉ nhận: tai-loc, suc-khoe, ben-vung, on-dinh, tu-do.' };
+    }
+    var tienTo = chuanHoa(opts.tienTo);
+    if (tienTo.length >= doDai) {
+      return { ok: false, error: 'Tiền tố (' + tienTo.length + ' số) phải NGẮN HƠN độ dài mong muốn (' + doDai + ').' };
+    }
+    var loaiTruSet = {};
+    (opts.loaiTru || []).forEach(function (d) {
+      var n = Number(d);
+      if (n >= 0 && n <= 9) loaiTruSet[n] = true;
+    });
+    var soLuong = Math.max(1, Math.min(10, Math.floor(Number(opts.soLuong)) || 5));
+
+    var CUNGS = CUNGS_ALL.filter(function (d) { return !loaiTruSet[d]; });
+    if (!CUNGS.length) {
+      return { ok: false, error: 'Đã loại trừ hết chữ số 1-9 (trừ 5) — không còn gì để sinh số.' };
+    }
+    var adj = _dungDoThi(targetSao);
+    CUNGS.forEach(function (a) {
+      adj[a] = (adj[a] || []).filter(function (b) { return !loaiTruSet[b]; });
+    });
+    var chen0 = !loaiTruSet[0];
+
+    var seedStr = JSON.stringify({
+      doDai: doDai, mucTieu: mucTieu, namSinh: opts.namSinh || null,
+      gioiTinh: opts.gioiTinh || null, tienTo: tienTo, loaiTru: Object.keys(loaiTruSet).sort(),
+    });
+    var baseSeed = _fnv1a(seedStr);
+    var tienToDigits = tienTo.split('').map(Number);
+    var lanThu = Math.max(soLuong * 8, 40);
+    var dedupe = {};
+    var candidates = [];
+
+    for (var attempt = 0; attempt < lanThu && candidates.length < soLuong * 4; attempt++) {
+      var rng = _mulberry32((baseSeed + attempt * 2654435761) >>> 0);
+      var out = tienToDigits.slice();
+      var cur = tienToDigits.length ? tienToDigits[tienToDigits.length - 1] : null;
+      if (cur === 0 || cur === 5 || loaiTruSet[cur]) cur = null;
+      if (cur == null) { cur = CUNGS[Math.floor(rng() * CUNGS.length)]; out.push(cur); }
+      var need = doDai - out.length;
+      for (var k = 0; k < need; k++) {
+        if (chen0 && k > 0 && k < need - 1 && rng() < 0.1) { out.push(0); continue; }
+        var tuyChon = (adj[cur] && adj[cur].length) ? adj[cur] : CUNGS;
+        var next = tuyChon[Math.floor(rng() * tuyChon.length)];
+        out.push(next);
+        cur = next;
+      }
+      var soSach = out.slice(0, doDai).join('');
+      if (soSach.length !== doDai || dedupe[soSach]) continue;
+      dedupe[soSach] = true;
+      candidates.push(soSach);
+    }
+    if (!candidates.length) {
+      return { ok: false, error: 'Không sinh được số nào — thử nới độ dài hoặc bớt loại trừ.' };
+    }
+
+    // Chấm lại bằng CHÍNH danhGia() — generator không tự bịa thang điểm riêng.
+    var danhSach = candidates
+      .map(function (soSach) {
+        var r = danhGia(soSach, { namSinh: opts.namSinh, gioiTinh: opts.gioiTinh });
+        return r.ok ? r.data : null;
+      })
+      .filter(Boolean);
+
+    danhSach.sort(function (x, y) {
+      if (y.dongThuan.tot !== x.dongThuan.tot) return y.dongThuan.tot - x.dongThuan.tot;
+      if (x.dongThuan.xau !== y.dongThuan.xau) return x.dongThuan.xau - y.dongThuan.xau;
+      var dx = x.t1.diem100 == null ? -1 : x.t1.diem100;
+      var dy = y.t1.diem100 == null ? -1 : y.t1.diem100;
+      if (dy !== dx) return dy - dx;
+      return x.soSach < y.soSach ? -1 : x.soSach > y.soSach ? 1 : 0;
+    });
+
+    return {
+      ok: true,
+      data: {
+        doDai: doDai, mucTieu: mucTieu, targetSao: targetSao || null, tienTo: tienTo,
+        soLuongYeuCau: soLuong, soUngVienDaXet: candidates.length,
+        danhSach: danhSach.slice(0, soLuong),
+      },
+    };
+  }
+
   var API = {
     danhGia: danhGia,
+    goiY: goiY,
     STAR_DESC: STAR_DESC,
   };
   if (typeof module !== 'undefined' && module.exports) module.exports = API;
