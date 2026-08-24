@@ -91,6 +91,19 @@ body{font-family:var(--sans);background:var(--paper-2);color:var(--text);font-si
 .btn.pri{background:var(--red);border-color:var(--red);color:#fff}
 .btn:disabled{opacity:.5;cursor:not-allowed}
 .ws-body{padding:18px 22px 44px}
+/* ── CỤM NÚT STICKY GÓC PHẢI DƯỚI ─────────────────────────────────────
+   Chia sẻ · Hỏi · Lưu PDF · Đăng Facebook. Trước đây cả bốn nằm trong
+   `.ws-top` — một thanh CUỘN THEO trang, nên đọc xong một khối luận dài
+   trên di động là thanh đó đã trôi khỏi màn hình từ lâu, không ai thấy để
+   bấm. Nay `position:fixed`, luôn đứng đúng một chỗ bất kể cuộn tới đâu.
+   Dựng bởi `fabHost()` trong shell.js. Luật ẨN khi có drawer (sidebar/rail)
+   mở nằm TRONG khối responsive dưới cùng, cạnh `.tabbar` — trên desktop
+   rail luôn hiện sẵn (không phải drawer che màn hình) nên KHÔNG được ẩn ở
+   đây, chỉ ẩn trên di động nơi rail phủ kín màn hình khi mở. */
+.ws-fab{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom));z-index:40;display:flex;flex-direction:column;align-items:flex-end;gap:8px}
+.ws-fab .btn{background:var(--white);box-shadow:var(--shadow-lg);white-space:nowrap}
+.ws-fab .fbtn-fb{background:#1877F2;border-color:#1877F2;color:#fff}
+.ws-fab .fbtn-fb:hover{background:#1466d6;border-color:#1466d6;color:#fff}
 /* Dòng giá ngay dưới mô tả mỗi công cụ — điền bằng `tool-prices.js` qua
    `data-tvp-price-label="<tool_id>"`, nguồn DUY NHẤT là `tool_pricing`. Admin
    sửa giá thì dòng này tự đổi theo, không cần deploy. Margin âm để dính sát
@@ -363,6 +376,11 @@ body{font-family:var(--sans);background:var(--paper-2);color:var(--text);font-si
   .tabbar{display:grid}
   .ws-body{padding-bottom:76px}
   body.drawer-open .tabbar{display:none}
+  /* Cụm sticky phải leo lên TRÊN tabbar (~64px + safe-area), và tự ẩn cùng
+     lúc với nó khi sidebar/rail đang mở toàn màn — rail phủ kín thì cụm nút
+     nổi bên trên chỉ còn là chướng ngại vật. */
+  .ws-fab{bottom:calc(78px + env(safe-area-inset-bottom));right:14px}
+  body.drawer-open .ws-fab{display:none}
 }
 
 /* ══════════════════════════════════════════════════════════════════════
