@@ -24,6 +24,11 @@
   ] };
   var FIXED_BOTTOM = { group: 'Tài khoản', open: true, items: [
     { id: 'vi-luong', label: 'Ví Lượng', href: '/app/tai-khoan#credits', icon: 'wallet', balance: true },
+    // Trang Tổng quan (`app-home.html`) vẫn giữ nguyên các thẻ Mời bạn/Nhiệm vụ
+    // luôn hiện — đó là chỗ nhắc CHỦ ĐỘNG. Mục này là chỗ NGƯỜI DÙNG tự tìm tới
+    // khi cần soát lại: đã làm xong Khởi Hành chưa, link mời bạn đâu, mấy lượt
+    // "Khoe kết quả" đã nộp tới đâu rồi.
+    { id: 'nhiem-vu', label: 'Nhiệm Vụ', href: '/app/tai-khoan#nhiemvu', icon: 'trophy' },
     { id: 'ho-so',    label: 'Hồ sơ của tôi', href: '/app/tai-khoan', icon: 'user' },
   ] };
 

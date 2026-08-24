@@ -95,7 +95,13 @@ export const TASK_DEFS: OnboardingTaskDef[] = [
     // `#ketnoi` mở thẳng tab Kết Nối — bước mở-tab-theo-hash vừa thêm vào
     // `account-core.js`. Trước đó tab chỉ đổi được bằng cú bấm, nên mọi liên
     // kết từ nơi khác đều đổ người ta xuống tab Lịch Sử rồi để tự đi tìm.
-    href: '/profile.html#ketnoi',
+    //
+    // Trỏ `/app/tai-khoan` (trang shell hiện hành) chứ không phải
+    // `/profile.html` (bản standalone cũ) — nhánh `href` không rỗng trong
+    // `questTaskGo()` (account-core.js) còn nhận diện đúng dạng
+    // `/app/tai-khoan#<tab>` để chuyển tab TẠI CHỖ thay vì tải lại trang khi
+    // người dùng đang đứng sẵn ở đó (tab Nhiệm Vụ).
+    href: '/app/tai-khoan#ketnoi',
     table: 'chat_links',
   },
 ];

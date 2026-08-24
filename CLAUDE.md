@@ -1,5 +1,63 @@
 # CLAUDE.md — Context cho Claude Code
 
+## 🏆 Tab "Nhiệm Vụ" trong Tài Khoản — gom 3 thứ đang RẢI RÁC/MẤT DẤU (2026-08-24, sau PR #596)
+
+Henry gửi ảnh `/app` Luận Đường - Tổng quan (thẻ "✦ Mời bạn"), hỏi thẳng:
+*"mấy cái này mày để đâu? sao tao ko thấy trong luận đường - tổng quát, với
+lại, phải có 1 tab để users click vào theo dõi khi cần, mày thêm 1 tab under
+Tài khoản đi, để mấy cái quest này vào đó"*.
+
+### 🔑 KHÔNG dọn Tổng Quan — thêm một chỗ TRA CỨU, không phải chỗ thay thế
+`docs/QUEST-PLAN.md` §5 đã chốt card Mời Bạn + card Khởi Hành trên `/app` là
+lời mời LUÔN HIỆN, có chủ đích. Câu hỏi của Henry không đòi bỏ nó — đòi thêm
+một nơi NGƯỜI DÙNG TỰ TÌM TỚI khi muốn soát lại tiến độ. Hai việc khác nhau,
+giữ cả hai: card ở `/app` không đụng một dòng nào trong lượt này.
+
+### Tab mới gom BA thứ — hai trong ba là DÙNG LẠI, không viết mới
+1. **Khởi Hành (M3)** — cùng `action=onboarding-sync` mà card Tổng Quan đang
+   gọi (`lib/onboarding/tasks.ts`), chỉ khác cách xử nút bấm: 2/3 việc
+   (`luu_la_so`/`bat_thong_bao`) chỉ làm được TẠI Tổng Quan (ô sửa lá số của
+   thẻ "Vận hôm nay", quyền thông báo trình duyệt) — tab này không dựng lại UI
+   đó, đưa thẳng về `/app`. Việc còn lại (`lien_ket_kenh`) đổi `href` từ
+   `/profile.html` (bản standalone cũ) sang `/app/tai-khoan#ketnoi`, và
+   `questTaskGo()` nhận diện đúng dạng `/app/tai-khoan#<tab>` để CHUYỂN TAB TẠI
+   CHỖ thay vì tải lại trang khi người dùng đang đứng sẵn ở tab Nhiệm Vụ.
+2. **🐛 Mời Bạn — hàm ĐÃ CÓ SẴN, đã CHẾT vì thiếu markup.** `account-core.js`
+   có `loadReferralPanel()` viết đủ (link + copy + progress bar 30 ngày), gọi
+   đúng `my-referral`, nhưng lâu nay KHÔNG CHỖ NÀO gọi vì `#refSection` chỉ
+   tồn tại trên `profile.html` (bản standalone cũ, đã bị `app-tai-khoan.html`
+   thay thế). Chép nguyên markup (cùng id con) vào tab mới — 0 dòng logic mới.
+3. **Khoe Kết Quả — CHƯA TỪNG có đường đọc lại phía người dùng.** Nộp xong
+   (nút "Khoe kết quả" cạnh Chia sẻ/Ảnh) là mất dấu hoàn toàn; đường đọc duy
+   nhất trước đây là hàng đợi ADMIN (`handleAdminSocialProofList`, chỉ
+   `verifyAdmin` gọi được). Thêm `GET action=my-social-proof`
+   (`app/api/payment/route.ts`) — CÙNG khuôn `handleMyReferral`/
+   `handleMyMemory`: tự giải `user_id` TỪ TOKEN, không nhận qua query. Trả 30
+   dòng gần nhất từ `social_post_submissions`: platform/ngày/trạng thái (chờ
+   duyệt · đã duyệt kèm số Lượng · từ chối kèm lý do).
+
+### Sidebar
+`FIXED_BOTTOM` (`shell.js`) thêm mục `nhiem-vu` → `/app/tai-khoan#nhiemvu`,
+icon `trophy` (đã có sẵn trong ngân hàng 88 icon của `nav.js`, `shell.js` chỉ
+việc trỏ tới qua nhánh dự phòng `iconInner`). ⚠️ Cùng tính chất ĐÃ CÓ với
+`vi-luong`: `SHELL_ACTIVE='ho-so'` cho CẢ trang tài khoản nên mục này không tự
+sáng khi đang đứng ở đó — đúng hành vi hiện có, không phải hồi quy.
+
+### Verify
+`tsc` 0 lỗi (root + engine) · `lint` 0 lỗi/77 warning = đúng mốc nền (đối
+chứng bằng `git stash`) · `prettier --check .` sạch · engine test 185 pass ·
+**22/22 bộ dò `check:*`** (prices/nostore/groups/share/history/shellboot/
+authapi/token/keyframes/hoatdong/hexagrams/terms/hao/motifs/laso/railfields/
+railwrap/cacheshape/publish/jobs/prompt/topics) · `next build` qua stub
+PostgREST: exit 0, không lỗi tầng TypeScript hay Supabase. Bump
+`shell.js?v=76→77` trên 51 trang.
+
+### CÒN LẠI
+- Chưa chạy Playwright cho tab mới — verify dừng ở tầng mã nguồn + build.
+  Đáng soi khi có trình duyệt: 3 khối (Khởi Hành/Mời Bạn/Khoe Kết Quả) render
+  đúng ở cả 3 trạng thái (đang tải/có dữ liệu/rỗng), dark mode, 390px.
+- Chưa mở PR — nhánh vẫn đang commit tại chỗ.
+
 ## 📣 Track Quest/Gamification — "Khoe Kết Quả" + "Rủ so lá số" (2026-08-24)
 
 Henry, sau khi Q1 (Tổng Quan mới, PR #593) đã merge: *"mày đừng quá phụ thuộc
