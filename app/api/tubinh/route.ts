@@ -278,10 +278,11 @@ async function handleChat(body: any): Promise<Response> {
   if (!trimmed.length) return err('Empty messages after filter', 400);
 
   try {
-    // provider:'anthropic' (chốt Henry 2026-08-24): Tử Bình Bát Tự thuộc nhóm
-    // tool "luận giải" quan trọng → Opus 5 primary, KHÔNG dùng mặc định Gemini
-    // Flash toàn site (xem lib/llm/complete.ts CANONICAL_ORDER).
-    const answer = await llmText({ system: systemPrompt, messages: trimmed, maxTokens: 1200, provider: 'anthropic' });
+    // 🔴 VÁ Henry 2026-08-24: handleChat là hỏi-đáp LẶP LẠI nhiều lượt/phiên —
+    // cùng tính chất lưu lượng cao/tốn Opus như rail chat (/api/v1/chat), nên
+    // gộp chung quyết định "gỡ Opus primary" — Gemini Flash mặc định toàn
+    // site (bỏ `provider:'anthropic'`, xem lib/llm/complete.ts CANONICAL_ORDER).
+    const answer = await llmText({ system: systemPrompt, messages: trimmed, maxTokens: 1200 });
     return ok({ answer, scenario: hasBatTu ? 'batTu' : 'general' });
   } catch (e: unknown) {
     console.error('[handleChat] exception', e);

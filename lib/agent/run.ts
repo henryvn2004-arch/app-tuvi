@@ -509,14 +509,20 @@ export async function runAgent(
 
   // ── PROVIDER ROUTING — chốt Henry 2026-08-24: Kimi K3 không ổn định (hay
   // chậm/timeout) → đẩy xuống LƯỚI ĐỠ CUỐI CÙNG cho MỌI kịch bản, không còn
-  // đứng trước Anthropic. Mặc định toàn site: Gemini Flash (nếu route cho
-  // phép, xem `chat.provider_routes`) → Opus 5 → Kimi K3. Vài kịch bản "luận
-  // giải" quan trọng (cong-so, day-con, huong-nghiep-tre, than-so-hoc,
-  // tu-binh, xem-tuoi, xem-lam-an — đặt qua `chat.provider_routes` từng khoá
-  // = 'anthropic' thay vì rơi về `_default`) bỏ qua bước Gemini-đầu, đi thẳng
-  // Opus trước — Gemini vẫn là lưới đỡ NGAY SAU nếu Opus chết (xem khối
-  // "FALLBACK NGƯỢC" bên dưới), Kimi vẫn luôn cuối cùng. Lật ngược được không
-  // cần deploy: `chat.standalone_provider` (lib/llm/complete.ts, luồng
+  // đứng trước Anthropic. Mặc định toàn site rail chat: Gemini Flash (nếu
+  // route cho phép, xem `chat.provider_routes`) → Opus 5 → Kimi K3.
+  // ⚠️ VÁ CÙNG NGÀY (sau lượt "Opus primary cho 7 tool luận giải" ở trên):
+  // "Toàn bộ chat rail dùng gemini flash hết. Ko có opus luôn. Vì phần chat
+  // nó user dùng nhiều. Mà opus api thì mắc lắm" — carve-out 'anthropic' cho
+  // cong-so/day-con/huong-nghiep-tre/than-so-hoc/tu-binh/xem-tuoi/xem-lam-an
+  // đã bị GỠ khỏi `chat.provider_routes`; TẤT CẢ kịch bản rail giờ mặc định
+  // 'gemini'. Các route luận giải MỘT-LẦN (lasotuvi/tubinh/xem-tuoi 9-phần/
+  // van-han-nam/day-con/huong-nghiep-tre) không đụng — chúng ép
+  // `provider:'anthropic'` NGAY TẠI lệnh gọi (lib/llm/complete.ts), không đọc
+  // `chat.provider_routes`, không phải "chat" nên không nằm trong lượt gỡ
+  // này. Opus 5 vẫn là lưới đỡ NGAY SAU nếu Gemini chết (xem khối "FALLBACK
+  // NGƯỢC" bên dưới), Kimi vẫn luôn cuối cùng. Lật ngược được không cần
+  // deploy: `chat.standalone_provider` (lib/llm/complete.ts, luồng
   // /api/lasotuvi) và `chat.provider_routes` (dưới đây) đều đọc từ
   // app_config — đổi các khoá đó là đổi thứ tự, KHÔNG cần sửa lại các khối
   // bên dưới.
