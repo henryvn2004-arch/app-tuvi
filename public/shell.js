@@ -1297,16 +1297,41 @@
     btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M12 3v11m0 0 4-4m-4 4-4-4"/><path d="M4 17v2.5A1.5 1.5 0 0 0 5.5 21h13a1.5 1.5 0 0 0 1.5-1.5V17"/></svg>';
     btn.addEventListener('click', printWorkspace);
     host.appendChild(btn);
+    ensureQrJs(function () {}); // nạp trước lặng lẽ — lúc bấm in thường đã sẵn
+  }
+  // Nạp `/tools-shared/qr.js` (window.QR) ĐỘNG, cùng lối `ensureToolSourcesJs`
+  // ở trên — chỉ tool có nút "Lưu PDF" mới cần, không kéo vào mọi trang.
+  function ensureQrJs(cb) {
+    if (window.QR) { cb(); return; }
+    var id = 'tvmb-qr-js';
+    var s = document.getElementById(id);
+    if (!s) {
+      s = document.createElement('script');
+      s.id = id; s.src = '/tools-shared/qr.js?v=1'; s.async = true;
+      (document.head || document.documentElement).appendChild(s);
+    }
+    s.addEventListener('load', function () { if (window.QR) cb(); });
   }
   function printWorkspace() {
     try { track('pdf_download', { tool_id: ACTIVE }); } catch (e) { /* ignore */ }
     ensurePrintHead();
-    window.print();
+    var done = false;
+    var go = function () {
+      if (done) return; done = true;
+      ensurePrintFoot();
+      window.print();
+    };
+    ensureQrJs(go);
+    // Mạng chậm và qr.js chưa kịp tải thì đừng giữ người dùng chờ vô hạn —
+    // in luôn sau 800ms, chân trang khi đó thiếu QR (còn seal + ngày) chứ
+    // không phải không in được gì.
+    setTimeout(go, 800);
   }
   // Bản in không có `.ws-top` (đã ẩn) nên tự nó không nói được đây là kết quả
   // gì của ai. Dựng một khối CHỈ hiện lúc in, lấy đúng chữ đang có trên màn
   // hình + dòng lá số của chính lượt này — cùng nguồn với bản chia sẻ, nên hai
-  // bản không nói khác nhau.
+  // bản không nói khác nhau. Avatar là ẢNH ĐẠI DIỆN của chính tool (xem
+  // `lib/media/tool-avatar-prompt.ts`), cùng nguồn với avatar trên `.ws-top`.
   function ensurePrintHead() {
     var host = wsResultHost();
     if (!host) return;
@@ -1317,9 +1342,40 @@
       host.insertBefore(head, host.firstChild);
     }
     var sub = shareBirthLines({ birth: (ctx && ctx.birth) || null });
-    head.innerHTML = '<b>' + esc(wsTitleText()) + '</b>' +
+    var avKey = (window.SHELL_INTRO && window.SHELL_INTRO.key) || ACTIVE;
+    var avUrl = avKey ? Shell.avatarUrl(avKey) : '';
+    head.innerHTML =
+      (avUrl ? '<img class="ws-print-avatar" src="' + avUrl + '" alt="">' : '') +
+      '<div class="ws-print-head-text"><b>' + esc(wsTitleText()) + '</b>' +
       (sub ? '<span>' + esc(sub) + '</span>' : '') +
-      '<span>tuviminhbao.com</span>';
+      '<span>tuviminhbao.com</span></div>';
+  }
+  // Chân trang PDF: triện website + tên miền + ngày xuất bên trái, QR quét
+  // về trang bên phải — cùng bố cục "triện + QR" đã dùng ở poster ảnh viral
+  // (`poster.js`), giữ nhận diện nhất quán giữa ảnh chia sẻ và bản PDF.
+  function ensurePrintFoot() {
+    var host = wsResultHost();
+    if (!host) return;
+    var foot = document.getElementById('wsPrintFoot');
+    if (!foot) {
+      foot = document.createElement('div');
+      foot.className = 'ws-print-foot'; foot.id = 'wsPrintFoot';
+      host.appendChild(foot);
+    }
+    var d = new Date();
+    var ngay = ('0' + d.getDate()).slice(-2) + '/' + ('0' + (d.getMonth() + 1)).slice(-2) + '/' + d.getFullYear();
+    foot.innerHTML =
+      '<div class="ws-print-foot-l"><img src="/seal.webp" alt="" class="ws-print-seal">' +
+      '<div><b>Tử Vi Minh Bảo</b><span>紫微明寶 · tuviminhbao.com</span>' +
+      '<span>In ngày ' + esc(ngay) + '</span></div></div>' +
+      '<canvas class="ws-print-qr" id="wsPrintQrCv" width="120" height="120"></canvas>';
+    var cv = document.getElementById('wsPrintQrCv');
+    if (cv && window.QR) {
+      var link = Shell.viralUrl('https://tuviminhbao.com/app', ACTIVE, { source: 'pdf', medium: 'print' });
+      var cctx = cv.getContext('2d');
+      cctx.clearRect(0, 0, 120, 120);
+      window.QR.draw(cctx, link, 0, 0, 120);
+    }
   }
 
   // ── PDF phải MỞ HẾT phần "cơ sở tính toán" đang gấp lại ──────────────

@@ -466,10 +466,23 @@ body{font-family:var(--sans);background:var(--paper-2);color:var(--text);font-si
   .sec, .card, .res-block, .cs-sec { page-break-inside: avoid; break-inside: avoid; }
 
   /* Đầu trang in: trên màn hình `.ws-top` mang tên tool, mà nó bị ẩn khi in
-     ⇒ bản in không có gì nói nó là cái gì của ai. Shell dựng khối này. */
-  .ws-print-head { display: block !important; margin: 0 0 14px; padding: 0 0 10px; border-bottom: 1px solid #ccc; }
-  .ws-print-head b { display: block; font-family: var(--serif); font-size: 16pt; }
-  .ws-print-head span { display: block; font-size: 10pt; color: #444; margin-top: 3px; }
+     ⇒ bản in không có gì nói nó là cái gì của ai. Shell dựng khối này, kèm
+     avatar của chính tool (ảnh trái, tên+dòng lá số phải — cùng bố cục với
+     box giới thiệu trên web). */
+  .ws-print-head { display: flex !important; align-items: center; gap: 14px; margin: 0 0 14px; padding: 0 0 12px; border-bottom: 1px solid #ccc; }
+  .ws-print-avatar { width: 48px; height: 48px; border-radius: 10px; object-fit: cover; flex-shrink: 0; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .ws-print-head-text b { display: block; font-family: var(--serif); font-size: 16pt; }
+  .ws-print-head-text span { display: block; font-size: 10pt; color: #444; margin-top: 3px; }
+
+  /* Chân trang in: triện + tên miền + ngày xuất (trái), QR quét về trang
+     (phải) — một lần ở cuối tài liệu, không lặp mỗi trang giấy (`window.print`
+     không có chỗ móc "mỗi trang" đáng tin cậy qua mọi engine). */
+  .ws-print-foot { display: flex !important; align-items: center; justify-content: space-between; gap: 16px; margin: 24px 0 0; padding: 14px 0 0; border-top: 1px solid #ccc; }
+  .ws-print-foot-l { display: flex; align-items: center; gap: 10px; }
+  .ws-print-seal { width: 34px; height: 34px; object-fit: contain; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .ws-print-foot-l b { display: block; font-family: var(--serif); font-size: 11pt; }
+  .ws-print-foot-l span { display: block; font-size: 8.5pt; color: #666; margin-top: 1px; }
+  .ws-print-qr { width: 60px; height: 60px; flex-shrink: 0; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
 }
-/* Ngoài lúc in thì khối đầu trang in KHÔNG tồn tại trên màn hình. */
-.ws-print-head { display: none; }
+/* Ngoài lúc in thì khối đầu/chân trang in KHÔNG tồn tại trên màn hình. */
+.ws-print-head, .ws-print-foot { display: none; }
