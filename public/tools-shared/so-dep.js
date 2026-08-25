@@ -532,7 +532,7 @@
     data.danhSach.forEach(function (item) {
       var dt = item.dongThuan;
       var tag = dt.tongPhieu === 0 ? 'sd-trung' : dt.tot > dt.xau ? 'sd-tot' : dt.xau > dt.tot ? 'sd-xau' : 'sd-trung';
-      html += '<div class="sd-goiy-item">';
+      html += '<div class="sd-goiy-item" data-so="' + _esc(item.soSach) + '" role="button" tabindex="0">';
       html += '<div class="sd-goiy-so">' + _esc(item.soSach) + '</div>';
       html += '<div class="sd-goiy-dt ' + tag + '">' + (dt.tongPhieu ? dt.tot + '/' + dt.tongPhieu + ' tốt' : '—') + '</div>';
       if (item.t1.noiBat.length) html += '<div class="sd-goiy-sao">' + _esc(item.t1.noiBat.slice(0, 2).join(', ')) + '</div>';
