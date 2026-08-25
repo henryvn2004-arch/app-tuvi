@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<link rel="preload" href="/nav.js?v=20" as="script">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Bút Tướng — Xem Chữ Ký Bằng AI | Tử Vi Minh Bảo</title>
+<meta property="og:title" content="Bút Tướng — Xem Chữ Ký Bằng AI | Tử Vi Minh Bảo"/>
+<meta property="og:description" content="Ký trực tiếp trên màn hình hoặc tải ảnh chữ ký lên — AI đo 6 trục Thần·Khí·Cốt·Nhục·Huyết·Thế theo cổ pháp thư pháp Trung Hoa, đối chiếu ngũ hành nét với dụng thần bát tự."/>
+<meta property="og:url" content="https://www.tuviminhbao.com/tools/but-tuong-ai.html"/>
+<meta property="og:image" content="https://www.tuviminhbao.com/og-image.webp"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:title" content="Bút Tướng — Xem Chữ Ký Bằng AI | Tử Vi Minh Bảo"/>
+<meta name="twitter:description" content="Ký trực tiếp trên màn hình — AI đo 6 trục cổ pháp thư pháp và luận chữ ký của bạn."/>
+<meta name="twitter:image" content="https://www.tuviminhbao.com/og-image.webp"/>
+<meta name="keywords" content="xem chữ ký, bút tướng, chấm điểm chữ ký, chữ ký phong thủy, phân tích chữ ký AI"/>
+<meta name="description" content="Ký trực tiếp trên màn hình hoặc tải ảnh chữ ký lên — AI đo 6 trục Thần·Khí·Cốt·Nhục·Huyết·Thế theo cổ pháp thư pháp, đối chiếu ngũ hành nét với dụng thần bát tự.">
+<link rel="canonical" href="https://www.tuviminhbao.com/tools/but-tuong-ai.html">
+<link rel="icon" type="image/webp" href="/seal.webp">
+<link rel="stylesheet" href="/tools/tools.css">
+<style>
+.input-tabs{display:flex;gap:0;border-bottom:2px solid var(--border-lt);margin-bottom:20px}
+.input-tab{padding:10px 20px;font-size:13px;font-weight:600;cursor:pointer;color:var(--text-lt);border-bottom:2px solid transparent;margin-bottom:-2px;font-family:inherit;background:none;border-top:none;border-left:none;border-right:none;transition:all .15s}
+.input-tab.active{color:var(--navy);border-bottom-color:#c9a84c}
+.input-pane{display:none}
+.input-pane.active{display:block}
+.sign-wrap{text-align:center}
+.sign-canvas{width:100%;max-width:420px;height:200px;border:2px dashed var(--border);border-radius:12px;background:#fffdf7;touch-action:none;cursor:crosshair;display:block;margin:0 auto}
+.sign-canvas.has-ink{border-style:solid;border-color:#c9a84c}
+.sign-hint{font-size:12px;color:var(--text-lt);margin-top:8px}
+.sign-btns{display:flex;gap:8px;justify-content:center;margin-top:12px;flex-wrap:wrap}
+.sign-pass-tags{display:flex;gap:6px;justify-content:center;margin-top:10px;flex-wrap:wrap}
+.sign-pass-tag{font-size:11px;padding:3px 10px;border-radius:20px;background:#E6F1FB;color:#1455A4;border:1px solid #B5D4F4}
+.upload-area{border:2px dashed var(--border);border-radius:12px;padding:32px 24px;text-align:center;cursor:pointer;transition:all .2s;background:var(--bg-soft);position:relative;margin-top:8px}
+.upload-area:hover,.upload-area.dragover{border-color:#c9a84c;background:#c9a84c08}
+.upload-area input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.upload-title{font-size:14px;font-weight:700;color:var(--navy);margin-bottom:4px}
+.upload-sub{font-size:12px;color:var(--text-lt)}
+.preview-wrap{position:relative;display:inline-block;margin:12px auto 0}
+.preview-img{max-width:340px;max-height:220px;width:auto;border-radius:10px;display:block;border:1px solid var(--border-lt)}
+.remove-btn{display:block;margin:10px auto 0;background:none;border:1px solid var(--border);border-radius:4px;padding:6px 16px;font-size:12px;color:var(--text-mid);cursor:pointer;font-family:inherit}
+.privacy-notice{display:flex;align-items:flex-start;gap:10px;padding:12px 16px;background:#e8f0fe;border-radius:8px;border-left:3px solid #1455A4;font-size:12px;color:#1455A4;margin-top:16px}
+.bt-report{margin-top:22px}
+.bt-total{text-align:center;margin-bottom:18px}
+.bt-total-num{font-size:40px;font-weight:800;color:var(--navy);line-height:1}
+.bt-total-lbl{font-size:12px;color:var(--text-lt);margin-top:2px}
+.bt-thieu{font-size:11.5px;color:#9A7B3A;background:#fdf8f0;border-radius:6px;padding:6px 10px;margin-top:10px;text-align:center}
+.bt-han{font-size:11px;color:var(--text-lt);margin-left:4px}
+.bt-hanh-row{display:flex;align-items:center;gap:10px;margin-bottom:6px;font-size:12px}
+.bt-hanh-name{width:52px;flex-shrink:0;font-weight:600;color:var(--navy)}
+.bt-hanh-bg{flex:1;height:8px;background:var(--border-lt);border-radius:4px;overflow:hidden}
+.bt-hanh-fill{height:100%;border-radius:4px;transition:width .6s}
+.bt-hanh-pct{width:38px;text-align:right;color:var(--text-lt);flex-shrink:0}
+.bt-goiy{margin-top:16px;padding:12px 16px;background:#fdf8f0;border-left:3px solid #c9a84c;border-radius:0 8px 8px 0;font-size:13px;color:#5F4B1E}
+.bt-birth{margin-top:16px}
+.bt-birth summary{cursor:pointer;font-size:12.5px;color:var(--text-mid);font-weight:600}
+.bt-birth-form{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;align-items:center}
+.bt-birth-form input,.bt-birth-form select{font-family:inherit;font-size:12.5px;padding:6px 8px;border:1px solid var(--border);border-radius:6px}
+.md-result{font-size:14px;line-height:1.85;color:var(--text-mid)}
+.md-result h2{font-size:16px;font-weight:700;color:var(--navy);margin:20px 0 8px;padding-bottom:6px;border-bottom:1px solid var(--border-lt)}
+.md-result h3{font-size:14px;font-weight:700;color:var(--navy);margin:14px 0 6px}
+.md-result strong{color:var(--navy);font-weight:700}
+.md-result em{color:#9A7B3A}
+.md-result ul{padding-left:20px;margin:8px 0}
+.md-result li{margin:4px 0}
+.md-result p{margin:0 0 10px}
+.md-result blockquote{border-left:3px solid #c9a84c;padding:8px 16px;margin:12px 0;background:#fdf8f0;border-radius:0 6px 6px 0;color:#9A7B3A;font-style:italic}
+.ai-loading{display:flex;flex-direction:column;align-items:center;gap:16px;padding:40px 0}
+.ai-loading-text{font-size:14px;color:var(--text-lt);text-align:center}
+</style>
+</head>
+<body>
+<div id="nav-ph" style="height:60px;background:#061A2E"></div>
+
+<div class="hero-tool">
+  <div class="page">
+    <div class="eyebrow">Công Cụ Miễn Phí · Bút Tướng Học</div>
+    <h1>Xem Chữ Ký<br><em>Bút Tướng AI</em></h1>
+    <p>Ký trực tiếp trên màn hình — AI đo 6 trục Thần · Khí · Cốt · Nhục · Huyết · Thế theo cổ pháp thư pháp, không cần chỉnh sửa gì thêm.</p>
+  </div>
+</div>
+
+<div class="page">
+  <div class="tool-intro">
+    <div class="xt-section">
+      <div class="xt-eyebrow">Bút Tướng Học (筆相學)</div>
+      <div class="xt-grid-2">
+        <div class="xt-intro-row"><img class="xt-avatar" src="/tool-avatars/but-tuong.webp" alt="" loading="lazy" onerror="this.remove()"><div class="xt-intro-text">
+          <h2 class="xt-h2">Chữ Ký — Hoạ Đồ<br>Của Tâm Lúc Ký</h2>
+          <p class="xt-body">Cổ pháp <strong>花押 (hoa áp)</strong> — chữ ký cách điệu dùng trên văn thư từ đời Đường–Tống — đòi ba điều: một mạch liền (一筆連成), không ai nhái được (不可摹), giấu mũi nhọn (藏鋒). Tô Đông Pha viết: <em>"書必有神、氣、骨、肉、血,五者闕一,不為成書也"</em> — chữ phải có Thần, Khí, Cốt, Nhục, Huyết, thiếu một thì không thành chữ.</p>
+          <p class="xt-body">Engine đo hình học nét bút NGAY TRÊN TRÌNH DUYỆT của bạn — tốc độ, góc, độ cong, số lần nhấc bút — ra đúng 6 trục đó. AI chỉ diễn giải số đã đo, không tự chấm điểm lại.</p></div></div>
+        <div class="xt-factors">
+          <div class="xt-factor-title">6 Trục Đo Được</div>
+          <div class="xt-factor-item"><span class="xt-factor-num">神</span><span class="xt-factor-label">Thần</span><span class="xt-factor-desc">Sinh khí, độ nhất quán</span></div>
+          <div class="xt-factor-item"><span class="xt-factor-num">氣</span><span class="xt-factor-label">Khí</span><span class="xt-factor-desc">Mạch bút liền lạc</span></div>
+          <div class="xt-factor-item"><span class="xt-factor-num">骨</span><span class="xt-factor-label">Cốt</span><span class="xt-factor-desc">Khung xương, dứt khoát</span></div>
+          <div class="xt-factor-item"><span class="xt-factor-num">肉</span><span class="xt-factor-label">Nhục</span><span class="xt-factor-desc">Đầy đặn, có lực</span></div>
+          <div class="xt-factor-item"><span class="xt-factor-num">血</span><span class="xt-factor-label">Huyết</span><span class="xt-factor-desc">Lưu chuyển, đều tay</span></div>
+          <div class="xt-factor-item"><span class="xt-factor-num">勢</span><span class="xt-factor-label">Thế</span><span class="xt-factor-desc">Xu hướng đường chân chữ</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-section" id="inputSection">
+    <div class="section-eyebrow">Ký Chữ Ký</div>
+    <div class="privacy-notice">
+      <span><span class="ic" data-icon="lock"></span></span>
+      <div><strong>Quyền riêng tư:</strong> Chữ ký của bạn KHÔNG được lưu — nét vẽ chỉ ở trong trình duyệt, chỉ các CHỈ SỐ đo được (không phải hình chữ ký) mới gửi lên để AI luận giải.</div>
+    </div>
+
+    <div class="input-tabs" style="margin-top:20px">
+      <button class="input-tab active" onclick="switchTab('sign',this)"><span class="ic" data-icon="pen-line"></span> Ký Trực Tiếp</button>
+      <button class="input-tab" onclick="switchTab('upload',this)"><span class="ic" data-icon="folder"></span> Ảnh Chữ Ký</button>
+    </div>
+
+    <div class="input-pane active" id="pane-sign">
+      <div class="sign-wrap">
+        <canvas id="signCanvas" class="sign-canvas" width="420" height="200"></canvas>
+        <div class="sign-hint">Ký như bình thường, đủ tốc độ thật — đừng ký chậm cố ý, engine cần tốc độ thật để đo Thần/Khí/Huyết.</div>
+        <div class="sign-btns">
+          <button class="btn-secondary" onclick="clearSign()" style="padding:8px 18px;font-size:12.5px">Xoá</button>
+          <button class="btn-secondary" onclick="addSignPass()" style="padding:8px 18px;font-size:12.5px" id="addPassBtn" disabled>+ Ký lại lần nữa (đo độ ổn định)</button>
+          <button class="btn-submit" onclick="measureSign()" style="padding:10px 26px;font-size:13.5px" id="measureBtn" disabled>Đo Chữ Ký →</button>
+        </div>
+        <div class="sign-pass-tags" id="passTags"></div>
+      </div>
+    </div>
+
+    <div class="input-pane" id="pane-upload">
+      <div id="uploadArea" class="upload-area" ondragover="onDragOver(event)" ondragleave="onDragLeave(event)" ondrop="onDrop(event)">
+        <input type="file" id="fileInput" accept="image/*" onchange="onFileSelect(event)">
+        <div class="upload-title">Kéo thả ảnh chữ ký hoặc click để chọn</div>
+        <div class="upload-sub">JPG, PNG, WebP — tối đa 5MB · Mực sẫm trên nền sáng, chụp thẳng góc</div>
+      </div>
+      <div style="text-align:center;font-size:11.5px;color:var(--text-lt);margin-top:10px">⚠ Ảnh tĩnh chỉ đo được Cốt/Nhục/Thế (3/6 trục) — Thần/Khí/Huyết cần trục thời gian, chỉ có ở tab "Ký Trực Tiếp".</div>
+      <div id="previewSection" style="display:none;text-align:center">
+        <div class="preview-wrap"><img id="previewImg" class="preview-img" alt="Ảnh chữ ký đã chọn"></div>
+        <button class="remove-btn" onclick="removeImage()">✕ Xoá ảnh</button>
+      </div>
+    </div>
+
+    <details class="bt-birth">
+      <summary>+ Đối chiếu với dụng thần bát tự (không bắt buộc)</summary>
+      <div class="bt-birth-form">
+        <input type="date" id="btBirthDate" min="1900-01-01" max="2100-12-31">
+        <select id="btBirthHour">
+          <option value="">Giờ sinh (không rõ thì để trống)</option>
+          <option value="0">23h–1h (Tý)</option><option value="2">1h–3h (Sửu)</option>
+          <option value="4">3h–5h (Dần)</option><option value="6">5h–7h (Mão)</option>
+          <option value="8">7h–9h (Thìn)</option><option value="10">9h–11h (Tỵ)</option>
+          <option value="12">11h–13h (Ngọ)</option><option value="14">13h–15h (Mùi)</option>
+          <option value="16">15h–17h (Thân)</option><option value="18">17h–19h (Dậu)</option>
+          <option value="20">19h–21h (Tuất)</option><option value="22">21h–23h (Hợi)</option>
+        </select>
+        <select id="btGioiTinh"><option value="nam">Nam</option><option value="nu">Nữ</option></select>
+      </div>
+    </details>
+
+    <div class="error-msg" id="error-msg"></div>
+
+    <div class="bt-report" id="btReport" style="display:none"></div>
+  </div>
+
+  <div class="result-section" id="result-section">
+    <div class="res-block" style="margin-bottom:16px">
+      <div class="res-block-header">
+        <span class="res-block-title">Luận Giải Bút Tướng</span>
+        <span style="font-size:11px;color:var(--text-lt)">Claude AI · Cổ Pháp Thư Pháp Trung Hoa</span>
+      </div>
+      <div class="res-block-body">
+        <div id="aiResult" class="md-result"></div>
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:8px">
+      <button class="btn-secondary" onclick="reset()" style="padding:10px 24px">Đo Chữ Ký Khác</button>
+    </div>
+  </div>
+
+  <div class="tool-cta">
+    <div class="tool-cta-eyebrow">Chữ Ký + Bát Tự</div>
+    <div class="tool-cta-title">Xem Bát Tự Đầy Đủ</div>
+    <div class="tool-cta-desc">Bút tướng đối chiếu ngũ hành nét với dụng thần — muốn hiểu đầy đủ cả tứ trụ, cách cục, đại vận thì xem Bát Tự chi tiết.</div>
+    <div style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center">
+        <a class="tool-cta-btn" href="/tu-binh.html" style="background:var(--navy);border-color:var(--gold)">
+          Xem Bát Tự <span style="opacity:.75;font-size:.85em">(<span data-tvp-price="tu-binh">…</span> lượng)</span> →
+        </a>
+        <a class="tool-cta-btn" href="/luan-giai.html" style="background:transparent;color:var(--navy);border:2px solid var(--navy)">
+          Luận Giải Lá Số <span style="opacity:.65;font-size:.85em">(<span data-tvp-price="laso">…</span> lượng)</span> →
+        </a>
+      </div>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="footer-top"><div><div class="footer-brand"><img src="/seal.webp" alt=""><div class="footer-brand-text"><div class="name">Tử Vi Minh Bảo</div><div class="zh">紫微明寶</div></div></div><p class="footer-tagline">Tri mệnh lý – Thuận thế hành</p></div></div>
+  <div class="footer-bottom"><span>© 2026 tuviminhbao.com</span><img src="/seal.webp" alt=""></div>
+</footer>
+
+<script src="/tools-shared/but-tuong.js"></script>
+<script>
+// ── Tabs ─────────────────────────────────
+function switchTab(id, btn) {
+  document.querySelectorAll('.input-tab').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.input-pane').forEach(p=>p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('pane-'+id).classList.add('active');
+}
+
+// ── Ký trực tiếp: pointer events → strokes ────────────────
+let _strokeSets = [];      // các LẦN KÝ đã chốt (mỗi lần = mảng strokes)
+let _curStrokes = [];      // strokes của LẦN KÝ hiện tại (có thể nhiều nét trong 1 lần)
+let _curStroke = null;
+let _drawing = false;
+let _t0 = null;
+let _metrics = null;
+let _birth = null;
+
+const canvas = document.getElementById('signCanvas');
+const ctx = canvas.getContext('2d');
+ctx.lineWidth = 2.2; ctx.lineCap = 'round'; ctx.lineJoin = 'round'; ctx.strokeStyle = '#1a1a1a';
+
+function ptFromEvent(e) {
+  const rect = canvas.getBoundingClientRect();
+  const scaleX = canvas.width / rect.width, scaleY = canvas.height / rect.height;
+  const x = (e.clientX - rect.left) * scaleX, y = (e.clientY - rect.top) * scaleY;
+  if (_t0 == null) _t0 = performance.now();
+  const t = performance.now() - _t0;
+  const p = (typeof e.pressure === 'number' && e.pressure > 0) ? e.pressure : 0.5;
+  return { x, y, t, p };
+}
+
+function refreshButtons() {
+  const hasInk = _curStrokes.length > 0 || (_curStroke && _curStroke.length > 1);
+  document.getElementById('measureBtn').disabled = !(hasInk || _strokeSets.length > 0);
+  document.getElementById('addPassBtn').disabled = !hasInk || _strokeSets.length >= 2;
+  canvas.classList.toggle('has-ink', hasInk || _strokeSets.length > 0);
+}
+
+canvas.addEventListener('pointerdown', (e) => {
+  e.preventDefault();
+  canvas.setPointerCapture(e.pointerId);
+  _curStroke = [ptFromEvent(e)];
+  _drawing = true;
+  ctx.beginPath();
+  ctx.moveTo(_curStroke[0].x, _curStroke[0].y);
+});
+canvas.addEventListener('pointermove', (e) => {
+  if (!_drawing) return;
+  const pt = ptFromEvent(e);
+  _curStroke.push(pt);
+  ctx.lineTo(pt.x, pt.y);
+  ctx.stroke();
+});
+function endStroke() {
+  if (!_drawing) return;
+  _drawing = false;
+  if (_curStroke && _curStroke.length > 1) _curStrokes.push(_curStroke);
+  _curStroke = null;
+  refreshButtons();
+}
+canvas.addEventListener('pointerup', endStroke);
+canvas.addEventListener('pointercancel', endStroke);
+canvas.addEventListener('pointerleave', () => { if (_drawing) endStroke(); });
+
+function clearSign() {
+  _strokeSets = []; _curStrokes = []; _curStroke = null; _t0 = null;
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  document.getElementById('passTags').innerHTML = '';
+  document.getElementById('btReport').style.display = 'none';
+  refreshButtons();
+}
+
+function addSignPass() {
+  if (!_curStrokes.length) return;
+  _strokeSets.push(_curStrokes);
+  _curStrokes = []; _t0 = null;
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  const tags = document.getElementById('passTags');
+  tags.innerHTML = _strokeSets.map((_, i) => `<span class="sign-pass-tag">Lần ${i+1} ✓</span>`).join('') +
+    '<span class="sign-pass-tag" style="background:#fdf8f0;border-color:#e6d5a8;color:#9A7B3A">Ký thêm lần nữa</span>';
+  refreshButtons();
+}
+
+function measureSign() {
+  if (_curStrokes.length || (_curStroke && _curStroke.length > 1)) {
+    _strokeSets.push(_curStrokes.concat(_curStroke && _curStroke.length > 1 ? [_curStroke] : []));
+  }
+  if (!_strokeSets.length) return;
+  _metrics = window.BuTuongTool.analyzeStrokes(_strokeSets);
+  renderReport(_metrics);
+}
+
+// ── Ảnh chữ ký ─────────────────────────
+let _uploadedImg = null;
+let _previewObjUrl = null;
+function onDragOver(e){e.preventDefault();document.getElementById('uploadArea').classList.add('dragover');}
+function onDragLeave(){document.getElementById('uploadArea').classList.remove('dragover');}
+function onDrop(e){e.preventDefault();document.getElementById('uploadArea').classList.remove('dragover');const f=e.dataTransfer.files[0];if(f)processFile(f);}
+function onFileSelect(e){const f=e.target.files[0];if(f)processFile(f);}
+
+function processFile(file) {
+  const err = document.getElementById('error-msg'); err.classList.remove('active');
+  if (!file.type.startsWith('image/')) { err.textContent='Vui lòng chọn file ảnh.'; err.classList.add('active'); return; }
+  if (file.size > 5*1024*1024) { err.textContent='Ảnh quá lớn.'; err.classList.add('active'); return; }
+  const img = new Image();
+  const ou = URL.createObjectURL(file);
+  img.onload = () => {
+    _uploadedImg = img;
+    _previewObjUrl = ou;
+    document.getElementById('previewImg').src = ou;
+    document.getElementById('previewSection').style.display = 'block';
+    document.getElementById('uploadArea').style.display = 'none';
+    const cv = document.createElement('canvas');
+    const MAX = 500;
+    let w = img.naturalWidth, h = img.naturalHeight;
+    if (w > MAX || h > MAX) { if (w > h) { h = Math.round(h*MAX/w); w = MAX; } else { w = Math.round(w*MAX/h); h = MAX; } }
+    cv.width = w; cv.height = h;
+    cv.getContext('2d').drawImage(img, 0, 0, w, h);
+    const imageData = cv.getContext('2d').getImageData(0, 0, w, h);
+    _metrics = window.BuTuongTool.analyzeImageData(imageData);
+    if (!_metrics) { err.textContent = 'Không đọc được nét mực từ ảnh này — thử ảnh nét hơn, mực sẫm trên nền sáng.'; err.classList.add('active'); return; }
+    renderReport(_metrics);
+  };
+  img.src = ou;
+}
+function removeImage() {
+  _uploadedImg = null; _metrics = null;
+  if (_previewObjUrl) { URL.revokeObjectURL(_previewObjUrl); _previewObjUrl = null; }
+  document.getElementById('previewSection').style.display = 'none';
+  document.getElementById('uploadArea').style.display = 'block';
+  document.getElementById('fileInput').value = '';
+  document.getElementById('btReport').style.display = 'none';
+}
+
+// ── Render báo cáo ĐO (miễn phí) ─────────────────────────
+function scoreColor(v) {
+  if (v >= 75) return 'var(--green)';
+  if (v >= 50) return '#c9a84c';
+  return 'var(--red)';
+}
+
+function renderReport(m) {
+  if (!m) return;
+  const T = window.BuTuongTool.TRUC_META;
+  const H = window.BuTuongTool.NGU_HANH_META;
+  const order = window.BuTuongTool.HANH_ORDER;
+  let html = '<div class="bt-total"><div class="bt-total-num">' + m.tongDiem + '</div><div class="bt-total-lbl">/ 100 · điểm tổng ' + (m.nguon === 'anh-tinh' ? '(3 trục đo được từ ảnh)' : '') + '</div></div>';
+  html += '<div class="score-wrap">';
+  Object.keys(T).forEach((k) => {
+    const t = m.truc[k];
+    const label = T[k].ten + '<span class="bt-han">' + T[k].han + '</span>';
+    if (!t) { html += '<div class="score-row"><span class="score-name">' + label + '</span><span style="flex:1;font-size:11px;color:var(--text-lt)">không đo được từ ảnh tĩnh</span></div>'; return; }
+    html += '<div class="score-row"><span class="score-name">' + label + '</span><div class="score-bar-bg"><div class="score-bar-fill" style="width:' + t.score + '%;background:' + scoreColor(t.score) + '"></div></div><span class="score-num">' + t.score + '</span></div>';
+  });
+  html += '</div>';
+  if (m.thieu && m.thieu.length) {
+    html += '<div class="bt-thieu">Ảnh tĩnh chưa đo được: ' + m.thieu.map((k) => T[k].ten).join(', ') + ' — ký trực tiếp để đủ cả 6 trục.</div>';
+  }
+  html += '<div style="margin-top:18px;font-size:12px;font-weight:700;color:var(--navy);text-align:center">Ngũ Hành Nét</div><div style="margin-top:8px">';
+  order.forEach((k) => {
+    html += '<div class="bt-hanh-row"><span class="bt-hanh-name">' + H[k].ten + '</span><div class="bt-hanh-bg"><div class="bt-hanh-fill" style="width:' + m.nguHanh[k] + '%;background:' + H[k].mau + '"></div></div><span class="bt-hanh-pct">' + m.nguHanh[k] + '%</span></div>';
+  });
+  html += '</div>';
+  if (m.goiY) html += '<div class="bt-goiy"><strong>Gợi ý:</strong> ' + m.goiY.loi + '</div>';
+  html += '<div style="text-align:center;margin-top:20px"><button class="btn-submit" onclick="analyze()" style="padding:12px 32px;font-size:14px">Luận Giải Đầy Đủ Theo Cổ Pháp →</button></div>';
+  document.getElementById('btReport').innerHTML = html;
+  document.getElementById('btReport').style.display = 'block';
+  document.getElementById('btReport').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function readBirth() {
+  const d = document.getElementById('btBirthDate').value;
+  const hourVal = document.getElementById('btBirthHour').value;
+  const gt = document.getElementById('btGioiTinh').value;
+  if (!d || hourVal === '') return null;
+  const [y, m, day] = d.split('-').map(Number);
+  return { ngay: day, thang: m, nam: y, gio: Number(hourVal), gioiTinh: gt };
+}
+
+// ── Luận Giải Đầy Đủ (trả phí) ─────────────────────────
+let _currentSlug = '';
+async function analyze() {
+  if (!_metrics) return;
+  _currentSlug = TuviPaywall.generateToolSlug('but-tuong');
+  _birth = readBirth();
+  await TuviPaywall.requireCredits(_currentSlug, async () => { await _doAnalyze(); });
+}
+
+async function _doAnalyze() {
+  document.getElementById('aiResult').innerHTML = '<div class="ai-loading"><div class="ai-loading-text">AI đang luận bút tướng...<br><span style="font-size:12px;opacity:.7">Thường mất 10–20 giây</span></div></div>';
+  document.getElementById('result-section').classList.add('active');
+  document.getElementById('result-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  const err = document.getElementById('error-msg'); err.classList.remove('active');
+
+  try {
+    const res = await fetch('/api/but-tuong', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ metrics: _metrics, birth: _birth }),
+    });
+    if (!res.ok) { const d = await res.json().catch(()=>({})); throw new Error(d.error || 'Lỗi ' + res.status); }
+
+    const reader = res.body.getReader(); const dec = new TextDecoder();
+    let full = '', buf = '';
+    const el = document.getElementById('aiResult'); el.innerHTML = '';
+    while (true) {
+      const { done, value } = await reader.read(); if (done) break;
+      buf += dec.decode(value, { stream: true });
+      const lines = buf.split('\n'); buf = lines.pop() || '';
+      for (const line of lines) {
+        if (!line.startsWith('data: ')) continue;
+        const raw = line.slice(6).trim(); if (raw === '[DONE]') break;
+        try { const j = JSON.parse(raw); if (j.err) throw new Error(j.err); if (j.t) { full += j.t; el.innerHTML = renderMd(full); } } catch (e) { if (e.message && !e.message.includes('JSON')) throw e; }
+      }
+    }
+    if (!full) throw new Error('Không có kết quả.');
+    el.innerHTML = renderMd(full);
+    _saveButTuongReading(full);
+  } catch (e) {
+    document.getElementById('aiResult').innerHTML = '';
+    document.getElementById('result-section').classList.remove('active');
+    err.textContent = 'Lỗi: ' + (e.message || 'Không thể kết nối.'); err.classList.add('active');
+  }
+}
+
+function reset() {
+  clearSign(); removeImage();
+  document.getElementById('result-section').classList.remove('active');
+  document.getElementById('aiResult').innerHTML = '';
+  document.getElementById('inputSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function renderMd(md){
+  return md
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/^## (.+)$/gm,'<h2>$1</h2>')
+    .replace(/^### (.+)$/gm,'<h3>$1</h3>')
+    .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
+    .replace(/\*(.+?)\*/g,'<em>$1</em>')
+    .replace(/^> (.+)$/gm,'<blockquote>$1</blockquote>')
+    .replace(/^- (.+)$/gm,'<li>$1</li>')
+    .replace(/(<li>[^]*?<\/li>\n?)+/g,s=>'<ul>'+s+'</ul>')
+    .replace(/\n\n+/g,'</p><p>')
+    .replace(/^(?!<[hublp])(.+)$/gm,'<p>$1</p>')
+    .replace(/<p><\/p>/g,'')
+    .replace(/<p>(<[hul])/g,'$1')
+    .replace(/(<\/[hul][^>]*>)<\/p>/g,'$1');
+}
+
+refreshButtons();
+</script>
+<script src="/tuvi-paywall.js?v=21"></script>
+<script>
+TuviPaywall.init({ product: 'but-tuong', slug: () => _currentSlug, onUnlock: () => {} });
+
+// Lưu lịch sử — CHỈ text luận giải, KHÔNG kèm thumbnail (khác các tool
+// tướng khác): but-tuong cố ý không giữ hình chữ ký, xem docs/COPHAP-BUT-TUONG.md §9.
+async function _saveButTuongReading(resultText) {
+  try {
+    const token = window.Auth?.getSession()?.access_token;
+    if (!token || !resultText) return;
+    fetch('/api/history?action=save_tuong', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+      body: JSON.stringify({ tool: 'but-tuong', result_text: resultText, thumbnail: null }),
+    }).catch(() => {});
+  } catch (e) {}
+}
+</script>
+<section class="kb-section">
+  <div class="page">
+    <div class="kb-inner">
+      <div class="kb-eyebrow">Kiến Thức Cổ Pháp</div>
+      <h2 class="kb-title">Bút Tướng — Chữ Ký Là Hoạ Đồ Của Tâm</h2>
+      <div class="kb-body">
+        <p>Cổ pháp chữ ký khởi từ <strong>花押 (hoa áp)</strong> đời Đường–Tống — quan lại ký trên văn thư bằng nét cách điệu tới mức không đọc ra chữ gốc, Nhật Bản gọi là <em>kaō</em>, dùng liên tục tới hết thời Edo. Ba yêu cầu cổ: một mạch liền (一筆連成), người khác không nhái được (不可摹), giấu mũi nhọn không phô trương (藏鋒).</p>
+        <p>Tô Đông Pha (蘇軾) trong 《論書》 viết: <em>"書必有神、氣、骨、肉、血,五者闕一,不為成書也"</em> — chữ phải có Thần, Khí, Cốt, Nhục, Huyết, thiếu một thì không thành chữ. Đây là 5 trong 6 trục công cụ này đo — thêm Thế (勢), xu hướng đường chân chữ, theo lý luận bút thế cổ pháp.</p>
+        <p>Tôn Quá Đình (孫過庭) trong 《書譜》 nói tới <strong>五合五乖</strong>: cùng một người, lúc thư thái hứng khởi viết chữ đẹp, lúc bức bối gượng ép viết chữ xấu. Nên chữ ký chỉ phản ánh trạng thái LÚC KÝ, không phải một bản án cố định cho cả đời.</p>
+        <p class="kb-links">Xem thêm: <a href="/tools/thu-tuong-ai.html">Thủ Tướng — Xem Chỉ Tay</a>, <a href="/tools/tuong-mat-ai.html">Xem Tướng Mặt</a>, <a href="/tu-binh.html">Xem Bát Tự</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+<script src="/testimonials.js"></script>
+<script src="/related-tools.js?v=2"></script>
+<script src="/nav.js?v=20" defer></script>
+</body>
+</html>
