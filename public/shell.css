@@ -93,10 +93,11 @@ body{font-family:var(--sans);background:var(--paper-2);color:var(--text);font-si
 /* ── WORKSPACE FRAME ── */
 .ws{background:var(--paper);overflow-y:auto;display:flex;flex-direction:column;position:relative}
 .ws-top{position:sticky;top:0;z-index:5;background:var(--paper);border-bottom:1px solid var(--line);padding:12px 22px;display:flex;align-items:center;gap:14px}
-/* Avatar cố định cạnh tên tool trên `.ws-top` — xem `Shell.mountToolAvatar`
-   trong shell.js. KHÔNG đụng vòng đời intro-card (`.intro-avatar`), luôn
-   hiện kể cả sau khi đóng box giới thiệu. */
-.ws-avatar{width:40px;height:40px;border-radius:9px;flex-shrink:0;object-fit:cover;background:var(--navy)}
+/* Icon cố định cạnh tên tool trên `.ws-top` — xem `mountToolIcon()` trong
+   shell.js. Icon (không phải ảnh minh hoạ .intro-avatar): ở cỡ 32-40px một
+   icon đơn sắc đọc rõ hơn hẳn ảnh 1024×1024 thu nhỏ hết chi tiết. */
+.ws-avatar{width:40px;height:40px;border-radius:9px;flex-shrink:0;background:radial-gradient(circle at 30% 25%,var(--navy-3),var(--navy));border:1px solid rgba(201,168,76,.4);display:flex;align-items:center;justify-content:center;color:var(--gold)}
+.ws-avatar svg{width:22px;height:22px}
 .ws-title b{font-family:var(--serif);font-size:17px;font-weight:600;display:block}
 .ws-title span{font-size:12px;color:var(--text-lt)}
 .ws-actions{margin-left:auto;display:flex;gap:8px}
@@ -238,22 +239,21 @@ body{font-family:var(--sans);background:var(--paper-2);color:var(--text);font-si
 .tabbar .tab.active{color:var(--gold)}
 .tabbar .tab:active{background:rgba(255,255,255,.05)}
 
-/* ── EMPTY-STATE INTRO (giới thiệu ngắn 1 lần, ẩn sau lần dùng đầu) ──
-   Bố cục: avatar [trái] — tên tool + mô tả [phải]. `.intro-body` là hàng
-   flex; avatar tự nạp từ `/tool-avatars/<key>.webp` (xem `Shell.introOnce`
-   trong shell.js), lỗi 404 (chưa sinh ảnh cho tool đó) thì tự ẩn qua onerror
-   — không để lại ô vỡ ảnh. */
-.intro-card{position:relative;background:linear-gradient(180deg,var(--gold-lt),var(--white));border:1px solid var(--gold-soft);border-radius:12px;padding:14px 40px 14px 16px;box-shadow:var(--shadow);margin-bottom:16px;max-width:720px}
-.intro-card .intro-body{display:flex;align-items:flex-start;gap:14px}
-.intro-card .intro-avatar{width:60px;height:60px;border-radius:12px;flex-shrink:0;object-fit:cover;background:var(--navy)}
+/* ── EMPTY-STATE INTRO (danh thiếp CỐ ĐỊNH của tool — KHÔNG tự ẩn vĩnh viễn,
+   không có nút đóng) ── Bố cục: avatar [trái] — tên tool + mô tả [phải].
+   `.intro-body` là hàng flex; avatar tự nạp từ `/tool-avatars/<key>.webp`
+   (xem `Shell.introOnce` trong shell.js), lỗi 404 (chưa sinh ảnh cho tool đó)
+   thì tự ẩn qua onerror — không để lại ô vỡ ảnh. Avatar cỡ lớn (96/72px) để
+   thấy rõ chi tiết nét vẽ — ảnh gốc 1024×1024 nên phóng cỡ này không vỡ nét. */
+.intro-card{position:relative;background:linear-gradient(180deg,var(--gold-lt),var(--white));border:1px solid var(--gold-soft);border-radius:12px;padding:16px;box-shadow:var(--shadow);margin-bottom:16px;max-width:720px}
+.intro-card .intro-body{display:flex;align-items:flex-start;gap:16px}
+.intro-card .intro-avatar{width:96px;height:96px;border-radius:14px;flex-shrink:0;object-fit:cover;background:var(--navy)}
 .intro-card .intro-text{flex:1;min-width:0}
 .intro-card .intro-t{font-family:var(--serif);font-size:15px;font-weight:600;color:var(--text);margin-bottom:5px;display:flex;align-items:center;gap:8px}
 .intro-card .intro-t .spark{color:var(--gold-soft)}
 .intro-card .intro-d{font-size:13px;color:var(--text-mid);line-height:1.65}
 .intro-card .intro-d b{color:var(--text)}
-.intro-card .intro-x{position:absolute;top:9px;right:9px;width:24px;height:24px;border:none;background:transparent;color:var(--text-lt);font-size:19px;line-height:1;cursor:pointer;border-radius:6px}
-.intro-card .intro-x:hover{background:var(--paper-2);color:var(--text)}
-@media(max-width:480px){.intro-card .intro-avatar{width:48px;height:48px;border-radius:10px}}
+@media(max-width:480px){.intro-card .intro-avatar{width:72px;height:72px;border-radius:12px}}
 
 /* ── HÀNG GỢI Ý CÂU HỎI (chip cố định trên ô nhập rail, cuộn ngang) ── */
 .rail-sugg{padding:8px 13px 0}
@@ -412,6 +412,7 @@ body{font-family:var(--sans);background:var(--paper-2);color:var(--text);font-si
      hàng riêng, bỏ nút ☰ đứng trơ một hàng → header thành 3 hàng. */
   .ws-title{flex:1 1 0;min-width:0}
   .ws-avatar{width:32px;height:32px;border-radius:7px}
+  .ws-avatar svg{width:18px;height:18px}
   /* CHỈ con trực tiếp: phụ đề vài trang có <span data-tvp-price> lồng bên
      trong — cho nó display:block là nó tự xuống dòng, header lại cao thêm. */
   .ws-title>b,.ws-title>span{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
