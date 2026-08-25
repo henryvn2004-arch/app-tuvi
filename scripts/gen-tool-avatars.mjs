@@ -49,7 +49,9 @@ execFileSync(
 );
 const { TOOL_AVATARS, buildToolAvatarPrompt } = require(join(outDir, 'tool-avatar-prompt.js'));
 if (!Array.isArray(TOOL_AVATARS) || typeof buildToolAvatarPrompt !== 'function') {
-  console.error('❌ không nạp được TOOL_AVATARS/buildToolAvatarPrompt từ bản dịch — dừng trước khi đốt tiền vẽ.');
+  console.error(
+    '❌ không nạp được TOOL_AVATARS/buildToolAvatarPrompt từ bản dịch — dừng trước khi đốt tiền vẽ.'
+  );
   process.exit(1);
 }
 
@@ -69,7 +71,14 @@ const FORCE = has('--force');
 // Trải đủ sắc thái để duyệt phong cách: Tarot (bài) · Kinh Dịch (hào) ·
 // Bát Trạch (la bàn) · Chân Dung Vợ Chồng (hai người) · Phong Thủy Bàn Làm Việc
 // (đồ vật) · Bản Đồ Sao (chiêm tinh Tây, khác hẳn cổ pháp Trung Hoa).
-const SAMPLE = ['tarot', 'kinh-dich', 'bat-trach', 'chan-dung-vo-chong', 'ban-lam-viec', 'ban-do-sao'];
+const SAMPLE = [
+  'tarot',
+  'kinh-dich',
+  'bat-trach',
+  'chan-dung-vo-chong',
+  'ban-lam-viec',
+  'ban-do-sao',
+];
 
 let pick;
 if (has('--all')) pick = TOOL_AVATARS.map((t) => t.id);
@@ -89,7 +98,9 @@ if (bad.length) {
 
 const KEY = process.env.OPENAI_API_KEY || '';
 if (!KEY && !DRY) {
-  console.error('Thiếu OPENAI_API_KEY. Đặt biến môi trường rồi chạy lại, hoặc dùng --dry-run để chỉ xem prompt.');
+  console.error(
+    'Thiếu OPENAI_API_KEY. Đặt biến môi trường rồi chạy lại, hoặc dùng --dry-run để chỉ xem prompt.'
+  );
   process.exit(1);
 }
 
@@ -148,6 +159,8 @@ for (const id of pick) {
 if (!DRY) {
   console.log(`\nVẽ mới ${daVe} · bỏ qua ${boQua} · lỗi ${loi}`);
   const GIA_VND = { low: 500, medium: 1300, high: 5000 }; // ước tính ở 1024×1024, xem que-images route cho bảng đối chiếu
-  console.log(`Chi phí ước tính lượt này: ~${(daVe * (GIA_VND[QUALITY] || 1300)).toLocaleString('vi-VN')}đ`);
+  console.log(
+    `Chi phí ước tính lượt này: ~${(daVe * (GIA_VND[QUALITY] || 1300)).toLocaleString('vi-VN')}đ`
+  );
   if (loi) process.exitCode = 1;
 }
