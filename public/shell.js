@@ -2216,7 +2216,7 @@
         '<div class="intro-body">' +
         '<img class="intro-avatar" src="' + this.avatarUrl(key) + '" alt="" loading="lazy" onerror="this.remove()">' +
         '<div class="intro-text">' +
-        '<div class="intro-t"><span class="spark">✦</span> ' + esc(opts.title || '') + '</div>' +
+        '<div class="intro-t">' + esc(opts.title || '') + '</div>' +
         '<div class="intro-d">' + (opts.desc || '') + '</div>' +
         '<div id="introSrc"></div>' +
         '</div></div></div>';
