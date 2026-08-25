@@ -257,7 +257,7 @@ function pageShell(opts: {
   <div class="faq-block"><h2>Câu Hỏi Thường Gặp</h2>${faqHTML}</div>
   <div class="rel-block"><div class="rel-title">Xem thêm</div><div class="rel-grid">${relLinks.join('')}</div></div>
 </div>
-<script src="/footer.js"></script><script src="/track.js?v=3" defer></script><script src="/nav.js?v=20" defer></script>
+<script src="/footer.js"></script><script src="/track.js?v=3" defer></script><script src="/nav.js?v=23" defer></script>
 </body></html>`;
 }
 
