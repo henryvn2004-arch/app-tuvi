@@ -125,7 +125,7 @@ body{font-family:Arial,sans-serif;background:var(--bg);color:var(--text);min-hei
 </style>
 <script src="/auth.js"></script>
 </head><body>
-<script src="/track.js?v=3" defer></script><script src="/nav.js?v=20"></script>
+<script src="/track.js?v=3" defer></script><script src="/nav.js?v=23"></script>
 <div class="bc"><a href="/">Trang Chủ</a><span>›</span><span>Từ Điển</span></div>
 
 <div class="td-hero">

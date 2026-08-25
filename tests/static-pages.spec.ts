@@ -9,6 +9,8 @@ const STATIC_PAGES: { path: string; name: string; selector: string }[] = [
   { path: '/chinh-sach-bao-mat.html',     name: 'Chính Sách Bảo Mật',  selector: 'h1, h2, .page, main' },
   { path: '/dieu-khoan-dich-vu.html',     name: 'Điều Khoản Dịch Vụ',  selector: 'h1, h2, .page, main' },
   { path: '/huong-dan-thanh-toan.html',   name: 'Hướng Dẫn Thanh Toán',selector: 'h1, h2, .page, main' },
+  { path: '/san-pham-dich-vu.html',       name: 'Sản Phẩm & Dịch Vụ',  selector: 'h1, h2, .page, main' },
+  { path: '/mien-tru-trach-nhiem.html',   name: 'Miễn Trừ Trách Nhiệm',selector: 'h1, h2, .page, main' },
   { path: '/payment-success.html',        name: 'Payment Success',      selector: 'h1, h2, .page, main, body' },
 ];
 
