@@ -554,6 +554,19 @@ export const DOC_ARC_TUONG_HOP = arcDoc({
 · [Xét tuổi] Tam Hợp → ✅ câu lật: "Hợp nhau tới mức chẳng ai chịu nói thẳng — chỗ dễ chịu nhất lại đúng là chỗ hai người hay né việc khó." ❌ "Hai tuổi thuộc Tam Hợp, chủ hòa hợp."`,
 });
 
+// Bản cho BÚT TƯỚNG (chữ ký). Khác 4 bản trên ở CĂN CỨ: không phải sao/can
+// chi mà là 6 trục hình học đã đo (`but-tuong.js`) + % ngũ hành nét — engine
+// SỐ, không phải bảng tra cổ pháp, nên "mốc" ở đây là NGƯỠNG ĐIỂM chứ không
+// phải nhãn Tốt/Xấu có sẵn.
+export const DOC_ARC_BUT_TUONG = arcDoc({
+  duBao:
+    'Chữ ký KHÔNG có trục thời gian (không có đại vận/tuổi) → CHỈ đoán theo ĐIỀU KIỆN ("nếu vẫn ký vội như vầy thì…"), cấm nêu tuổi, năm, hay mốc lịch nào.',
+  moc: 'trục điểm THẤP (dưới ~50) → chỉ ra chỗ yếu ấy vẫn dùng được vào việc gì; trục điểm CAO (trên ~80) → chỉ ra cái giá đi kèm của sự "quá chuẩn" đó.',
+  canCu: 'trục Thần/Khí/Cốt/Nhục/Huyết/Thế đã đo hoặc tỉ lệ ngũ hành nét',
+  phepDich: `· [Khí thấp — nhấc bút nhiều lần] → ✅ hành vi: "Việc gì cũng hay dừng giữa chừng rồi quay lại sau, ít khi làm một mạch tới hết." ❌ "Khí đứt đoạn cho thấy sự thiếu kiên định trong tính cách."
+· [Thế đi xuống — đường chân chữ chúc] → ✅ câu lật: "Cái chững lại ở cuối chữ ký nhìn tưởng đuối sức, nhưng lại đúng là chỗ biết dừng đúng lúc, không đâm lao theo lao." ❌ "Thế hạ chủ vận suy, tài lộc đi xuống."`,
+});
+
 // ─── GIỌNG cho BẢN CÓ CẤU TRÚC (họ 2 — JSON schema trả tiền · phong thuỷ · đặt tên · chọn ngày) ───
 //
 // 🔴 KHÔNG dùng `LUAN_ARC` lẫn `arcDoc` ở đây. Cả hai đều khai HÌNH DẠNG (nhịp
