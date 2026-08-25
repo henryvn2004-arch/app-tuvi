@@ -73,9 +73,11 @@
     '<a href="/mcp-server">MCP Server</a>',
     '<a href="/du-lieu">D\u1eef Li\u1ec7u M\u1edf</a>',
     '<a href="/nguon-du-lieu.html">Ngu\u1ed3n D\u1eef Li\u1ec7u</a>',
+    '<a href="/san-pham-dich-vu.html">S\u1ea3n Ph\u1ea9m &amp; D\u1ecbch V\u1ee5</a>',
     '<a href="/huong-dan-thanh-toan.html">H\u01b0\u1edbng D\u1eabn Thanh To\u00e1n</a>',
     '<a href="/chinh-sach-bao-mat.html">Ch\u00ednh S\u00e1ch B\u1ea3o M\u1eadt</a>',
     '<a href="/dieu-khoan-dich-vu.html">\u0110i\u1ec1u Kho\u1ea3n D\u1ecbch V\u1ee5</a>',
+    '<a href="/mien-tru-trach-nhiem.html">Mi\u1ec5n Tr\u1eeb Tr\u00e1ch Nhi\u1ec7m</a>',
     '</div>',
 
     '</div>',
@@ -94,7 +96,7 @@
     '\u0110\u1ecba ch\u1ec9: 901 L\u00ea \u0110\u1ee9c Th\u1ecd, Ph\u01b0\u1eddng An H\u1ed9i \u0110\u00f4ng, Th\u00e0nh ph\u1ed1 H\u1ed3 Ch\u00ed Minh, Vi\u1ec7t Nam \u2014 ',
     '\u0110i\u1ec7n tho\u1ea1i: 0343.848.795 \u2014 Email: contact@tuviminhbao.com',
     '</div>',
-    '<div class="ft-disclaimer">N\u1ed9i dung lu\u1eadn gi\u1ea3i mang t\u00ednh tham kh\u1ea3o, kh\u00f4ng th\u1ea3y th\u1ebf t\u01b0 v\u1ea5n chuy\u00ean m\u00f4n.</div>',
+    '<div class="ft-disclaimer">N\u1ed9i dung lu\u1eadn gi\u1ea3i mang t\u00ednh tham kh\u1ea3o, kh\u00f4ng thay th\u1ebf t\u01b0 v\u1ea5n chuy\u00ean m\u00f4n. <a href="/mien-tru-trach-nhiem.html" style="color:inherit;text-decoration:underline">Xem chi ti\u1ebft</a>.</div>',
     '</div></footer>'
   ].join('');
 

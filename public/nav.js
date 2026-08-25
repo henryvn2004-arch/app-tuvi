@@ -478,9 +478,11 @@
       + '<a href="/resources.html">Tài Liệu</a>'
       + '<a href="/menh-kho.html">Mệnh Khố</a>'
       + '<a href="/contact.html">Liên Hệ</a>'
+      + '<a href="/san-pham-dich-vu.html">Sản Phẩm &amp; Dịch Vụ</a>'
       + '<a href="/huong-dan-thanh-toan.html">Hướng Dẫn Thanh Toán</a>'
       + '<a href="/chinh-sach-bao-mat.html">Chính Sách Bảo Mật</a>'
-      + '<a href="/dieu-khoan-dich-vu.html">Điều Khoản Sử Dụng</a></div>'
+      + '<a href="/dieu-khoan-dich-vu.html">Điều Khoản Sử Dụng</a>'
+      + '<a href="/mien-tru-trach-nhiem.html">Miễn Trừ Trách Nhiệm</a></div>'
       + '</div>'
       + '<div class="ft-bottom"><span>© 2026 Tử Vi Minh Bảo — tuviminhbao.com</span>'
       + '<div style="display:flex;gap:16px;align-items:center">'
@@ -494,7 +496,7 @@
       + '<div class="ft-legal"><strong>Công ty TNHH Kira Tech</strong> (Kira Tech Company Limited) — '
       + 'Địa chỉ: 901 Lê Đức Thọ, Phường An Hội Đông, Thành phố Hồ Chí Minh, Việt Nam — '
       + 'Điện thoại: 0343.848.795 — Email: contact@tuviminhbao.com</div>'
-      + '<div class="ft-disclaimer">Nội dung luận giải mang tính tham khảo, không thảy thế tư vấn chuyên môn.</div>'
+      + '<div class="ft-disclaimer">Nội dung luận giải mang tính tham khảo, không thay thế tư vấn chuyên môn. <a href="/mien-tru-trach-nhiem.html" style="color:inherit;text-decoration:underline">Xem chi tiết</a>.</div>'
       + '</div></footer>';
     var ft=document.createElement('div'); ft.innerHTML=f; document.body.appendChild(ft.firstChild);
   }
