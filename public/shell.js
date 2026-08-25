@@ -290,6 +290,26 @@
     try { return localStorage.getItem('tvp_kh_pending') === '1'; } catch (e) { return false; }
   }
 
+  // Icon cố định cạnh tên tool trên `.ws-top` (thanh tiêu đề sticky) — DÙNG
+  // LẠI icon sẵn có của mỗi công cụ trong TOOLS (`tool_pricing.icon`, cùng
+  // nguồn với sidebar/Cmd+K), không phải ảnh minh hoạ. Ảnh 1024×1024 thu nhỏ
+  // xuống 32-40px thì mờ, không đọc được chi tiết — icon đơn sắc thì rõ ở mọi
+  // cỡ. Gọi lại mỗi lần TOOLS cập nhật (renderSidebar) nên luôn khớp icon mới
+  // nhất; không gắn với vòng đời ẩn/hiện của #introHost.
+  function mountToolIcon() {
+    var titleEl = document.querySelector('.ws-title');
+    if (!titleEl || !titleEl.parentNode) return;
+    var it = null;
+    TOOLS.forEach(function (g) { g.items.forEach(function (x) { if (x.id === ACTIVE) it = x; }); });
+    if (!it) return;
+    var old = titleEl.parentNode.querySelector('.ws-avatar');
+    if (old) old.remove();
+    var box = document.createElement('div');
+    box.className = 'ws-avatar';
+    box.innerHTML = svg(it.icon || 'grid', 'ic');
+    titleEl.parentNode.insertBefore(box, titleEl);
+  }
+
   // ── RENDER SIDEBAR ──
   function renderSidebar() {
     var host = document.getElementById('shell-sidebar');
@@ -317,6 +337,7 @@
     h += '<button class="sb-theme" type="button" data-act="theme" title="Đổi nền sáng/tối">◐ Đổi nền</button>';
     h += '<a class="sb-foot" href="/profile"><div class="ava" id="sbAva">?</div><div><div class="nm" id="sbName">Khách</div><div class="sub" id="sbSub">Đăng nhập →</div></div></a>';
     host.innerHTML = h;
+    mountToolIcon();
     var themeBtn = host.querySelector('[data-act="theme"]');
     if (themeBtn) themeBtn.addEventListener('click', toggleTheme);
     // group collapse
@@ -2173,12 +2194,13 @@
     },
     // true nếu URL có ?auto=1 (đến từ nút chuyển tay giữa tool) → trang tự chạy.
     autoRun: function () { return /[?&]auto=1\b/.test(window.location.search); },
-    // ── Empty-state intro (hướng B): hiện giới thiệu ngắn cho người MỚI, tự
-    // ẩn sau lần dùng đầu (nhớ qua localStorage) + nút ✕ tắt luôn. Gọi ở
-    // init: introOnce('bat-tu', {title, desc}); gọi markIntroSeen sau lần chạy
-    // đầu. Cần 1 phần tử #introHost trên trang (đặt trên form).
-    introSeen: function (key) { try { return !!localStorage.getItem('app_intro_' + key); } catch (e) { return false; } },
-    markIntroSeen: function (key) { try { localStorage.setItem('app_intro_' + key, '1'); } catch (e) { /* ignore */ } },
+    // ── Empty-state intro (hướng B): giới thiệu CỐ ĐỊNH cho tool — không còn
+    // ẩn-vĩnh-viễn-sau-lần-đầu (từng qua localStorage) hay nút ✕ tự đóng: box
+    // này là danh thiếp của tool, không phải tip dùng một lần, nên luôn hiện
+    // lại mỗi lần mở trang. Gọi ở init: introOnce('bat-tu', {title, desc}).
+    // Cần 1 phần tử #introHost trên trang (đặt trên form). `dismissIntro` vẫn
+    // ẩn box khi trang ĐÃ có kết quả trong lượt xem hiện tại (đỡ chiếm chỗ
+    // phía trên kết quả) — chỉ ẩn cho lượt xem này, mở lại trang thì box về.
     // Lệch tên giữa SHELL_INTRO.key và tool_id thật (nguồn chính là
     // `TOOL_AVATAR_ALIAS` trong lib/media/tool-avatar-prompt.ts — chép tay
     // sang đây vì shell.js là script thường, không import được TS).
@@ -2187,27 +2209,10 @@
       'luan-giai': 'laso', 'sinh-con': 'xem-tuoi-sinh-con', 'thanh-tuong-pro': 'thanh-tuong',
     },
     avatarUrl: function (key) { return '/tool-avatars/' + (this._AVATAR_ALIAS[key] || key) + '.webp'; },
-    // Avatar CỐ ĐỊNH trên `.ws-top` (thanh tiêu đề sticky) — khác với avatar
-    // trong `introOnce`, cái này KHÔNG gắn với vòng đời ẩn/hiện của intro:
-    // đóng box giới thiệu (nút ×) hay đã dùng tool rồi (introSeen) thì hình
-    // trong intro biến mất, nhưng hình ở đây vẫn còn mỗi lần mở lại trang —
-    // avatar là nhận diện của tool, không phải một tip dùng một lần.
-    mountToolAvatar: function (key) {
-      var titleEl = document.querySelector('.ws-title');
-      if (!titleEl || !titleEl.parentNode || titleEl.parentNode.querySelector('.ws-avatar')) return;
-      var img = document.createElement('img');
-      img.className = 'ws-avatar';
-      img.src = this.avatarUrl(key);
-      img.alt = '';
-      img.loading = 'lazy';
-      img.onerror = function () { img.remove(); };
-      titleEl.parentNode.insertBefore(img, titleEl);
-    },
     introOnce: function (key, opts) {
       var host = document.getElementById('introHost');
       if (!host) return;
-      if (this.introSeen(key)) { host.innerHTML = ''; return; }
-      host.innerHTML = '<div class="intro-card"><button class="intro-x" type="button" aria-label="Ẩn giới thiệu">×</button>' +
+      host.innerHTML = '<div class="intro-card">' +
         '<div class="intro-body">' +
         '<img class="intro-avatar" src="' + this.avatarUrl(key) + '" alt="" loading="lazy" onerror="this.remove()">' +
         '<div class="intro-text">' +
@@ -2215,9 +2220,6 @@
         '<div class="intro-d">' + (opts.desc || '') + '</div>' +
         '<div id="introSrc"></div>' +
         '</div></div></div>';
-      var self = this;
-      var x = host.querySelector('.intro-x');
-      if (x) x.addEventListener('click', function () { self.markIntroSeen(key); host.innerHTML = ''; });
       // Dòng "Theo <cổ pháp> · phương pháp Tử Vi Minh Bảo" — nạp động, điền
       // sau khi kịp tải; nếu khối intro đã bị đóng trước đó thì bỏ qua.
       ensureToolSourcesJs(function () {
@@ -2225,8 +2227,9 @@
         if (slot) slot.innerHTML = window.ToolSources.introHtml(key);
       });
     },
-    // Gọi khi trang đã chạy (có kết quả): nhớ đã xem + ẩn intro.
-    dismissIntro: function (key) { this.markIntroSeen(key); var h = document.getElementById('introHost'); if (h) h.innerHTML = ''; },
+    // Gọi khi trang đã chạy (có kết quả): ẩn intro cho LƯỢT XEM này (không
+    // nhớ qua localStorage) — box quay lại mỗi khi mở trang mới.
+    dismissIntro: function () { var h = document.getElementById('introHost'); if (h) h.innerHTML = ''; },
     // Chia sẻ kết quả khung giữa (workspace).
     //
     // ⚠️ KHÔNG BẮT BUỘC nữa. Shell tự bật nút Chia sẻ cho mọi tool có khai
@@ -2747,9 +2750,8 @@
       if (tok || ++tries > 60) clearInterval(t);
     }, 300);
     // Empty-state intro (hướng B): trang khai window.SHELL_INTRO={key,title,desc}
-    // + có #introHost → shell tự hiện cho người mới, ẩn sau lần dùng đầu.
+    // + có #introHost → shell tự hiện box giới thiệu CỐ ĐỊNH (không tự ẩn).
     if (window.SHELL_INTRO && window.SHELL_INTRO.key) {
-      Shell.mountToolAvatar(window.SHELL_INTRO.key);
       Shell.introOnce(window.SHELL_INTRO.key, window.SHELL_INTRO);
     }
     // Cụm nút sticky góc phải dưới: dời nút "✦ Hỏi" (mobile-only, hardcode
