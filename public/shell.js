@@ -1297,16 +1297,41 @@
     btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M12 3v11m0 0 4-4m-4 4-4-4"/><path d="M4 17v2.5A1.5 1.5 0 0 0 5.5 21h13a1.5 1.5 0 0 0 1.5-1.5V17"/></svg>';
     btn.addEventListener('click', printWorkspace);
     host.appendChild(btn);
+    ensureQrJs(function () {}); // nạp trước lặng lẽ — lúc bấm in thường đã sẵn
+  }
+  // Nạp `/tools-shared/qr.js` (window.QR) ĐỘNG, cùng lối `ensureToolSourcesJs`
+  // ở trên — chỉ tool có nút "Lưu PDF" mới cần, không kéo vào mọi trang.
+  function ensureQrJs(cb) {
+    if (window.QR) { cb(); return; }
+    var id = 'tvmb-qr-js';
+    var s = document.getElementById(id);
+    if (!s) {
+      s = document.createElement('script');
+      s.id = id; s.src = '/tools-shared/qr.js?v=1'; s.async = true;
+      (document.head || document.documentElement).appendChild(s);
+    }
+    s.addEventListener('load', function () { if (window.QR) cb(); });
   }
   function printWorkspace() {
     try { track('pdf_download', { tool_id: ACTIVE }); } catch (e) { /* ignore */ }
     ensurePrintHead();
-    window.print();
+    var done = false;
+    var go = function () {
+      if (done) return; done = true;
+      ensurePrintFoot();
+      window.print();
+    };
+    ensureQrJs(go);
+    // Mạng chậm và qr.js chưa kịp tải thì đừng giữ người dùng chờ vô hạn —
+    // in luôn sau 800ms, chân trang khi đó thiếu QR (còn seal + ngày) chứ
+    // không phải không in được gì.
+    setTimeout(go, 800);
   }
   // Bản in không có `.ws-top` (đã ẩn) nên tự nó không nói được đây là kết quả
   // gì của ai. Dựng một khối CHỈ hiện lúc in, lấy đúng chữ đang có trên màn
   // hình + dòng lá số của chính lượt này — cùng nguồn với bản chia sẻ, nên hai
-  // bản không nói khác nhau.
+  // bản không nói khác nhau. Avatar là ẢNH ĐẠI DIỆN của chính tool (xem
+  // `lib/media/tool-avatar-prompt.ts`), cùng nguồn với avatar trên `.ws-top`.
   function ensurePrintHead() {
     var host = wsResultHost();
     if (!host) return;
@@ -1317,9 +1342,40 @@
       host.insertBefore(head, host.firstChild);
     }
     var sub = shareBirthLines({ birth: (ctx && ctx.birth) || null });
-    head.innerHTML = '<b>' + esc(wsTitleText()) + '</b>' +
+    var avKey = (window.SHELL_INTRO && window.SHELL_INTRO.key) || ACTIVE;
+    var avUrl = avKey ? Shell.avatarUrl(avKey) : '';
+    head.innerHTML =
+      (avUrl ? '<img class="ws-print-avatar" src="' + avUrl + '" alt="">' : '') +
+      '<div class="ws-print-head-text"><b>' + esc(wsTitleText()) + '</b>' +
       (sub ? '<span>' + esc(sub) + '</span>' : '') +
-      '<span>tuviminhbao.com</span>';
+      '<span>tuviminhbao.com</span></div>';
+  }
+  // Chân trang PDF: triện website + tên miền + ngày xuất bên trái, QR quét
+  // về trang bên phải — cùng bố cục "triện + QR" đã dùng ở poster ảnh viral
+  // (`poster.js`), giữ nhận diện nhất quán giữa ảnh chia sẻ và bản PDF.
+  function ensurePrintFoot() {
+    var host = wsResultHost();
+    if (!host) return;
+    var foot = document.getElementById('wsPrintFoot');
+    if (!foot) {
+      foot = document.createElement('div');
+      foot.className = 'ws-print-foot'; foot.id = 'wsPrintFoot';
+      host.appendChild(foot);
+    }
+    var d = new Date();
+    var ngay = ('0' + d.getDate()).slice(-2) + '/' + ('0' + (d.getMonth() + 1)).slice(-2) + '/' + d.getFullYear();
+    foot.innerHTML =
+      '<div class="ws-print-foot-l"><img src="/seal.webp" alt="" class="ws-print-seal">' +
+      '<div><b>Tử Vi Minh Bảo</b><span>紫微明寶 · tuviminhbao.com</span>' +
+      '<span>In ngày ' + esc(ngay) + '</span></div></div>' +
+      '<canvas class="ws-print-qr" id="wsPrintQrCv" width="120" height="120"></canvas>';
+    var cv = document.getElementById('wsPrintQrCv');
+    if (cv && window.QR) {
+      var link = Shell.viralUrl('https://tuviminhbao.com/app', ACTIVE, { source: 'pdf', medium: 'print' });
+      var cctx = cv.getContext('2d');
+      cctx.clearRect(0, 0, 120, 120);
+      window.QR.draw(cctx, link, 0, 0, 120);
+    }
   }
 
   // ── PDF phải MỞ HẾT phần "cơ sở tính toán" đang gấp lại ──────────────
@@ -2123,14 +2179,42 @@
     // đầu. Cần 1 phần tử #introHost trên trang (đặt trên form).
     introSeen: function (key) { try { return !!localStorage.getItem('app_intro_' + key); } catch (e) { return false; } },
     markIntroSeen: function (key) { try { localStorage.setItem('app_intro_' + key, '1'); } catch (e) { /* ignore */ } },
+    // Lệch tên giữa SHELL_INTRO.key và tool_id thật (nguồn chính là
+    // `TOOL_AVATAR_ALIAS` trong lib/media/tool-avatar-prompt.ts — chép tay
+    // sang đây vì shell.js là script thường, không import được TS).
+    _AVATAR_ALIAS: {
+      'bat-tu': 'tu-binh', 'chon-ngay': 'chon-ngay-tot', 'dat-ten': 'dat-ten-con',
+      'luan-giai': 'laso', 'sinh-con': 'xem-tuoi-sinh-con', 'thanh-tuong-pro': 'thanh-tuong',
+    },
+    avatarUrl: function (key) { return '/tool-avatars/' + (this._AVATAR_ALIAS[key] || key) + '.webp'; },
+    // Avatar CỐ ĐỊNH trên `.ws-top` (thanh tiêu đề sticky) — khác với avatar
+    // trong `introOnce`, cái này KHÔNG gắn với vòng đời ẩn/hiện của intro:
+    // đóng box giới thiệu (nút ×) hay đã dùng tool rồi (introSeen) thì hình
+    // trong intro biến mất, nhưng hình ở đây vẫn còn mỗi lần mở lại trang —
+    // avatar là nhận diện của tool, không phải một tip dùng một lần.
+    mountToolAvatar: function (key) {
+      var titleEl = document.querySelector('.ws-title');
+      if (!titleEl || !titleEl.parentNode || titleEl.parentNode.querySelector('.ws-avatar')) return;
+      var img = document.createElement('img');
+      img.className = 'ws-avatar';
+      img.src = this.avatarUrl(key);
+      img.alt = '';
+      img.loading = 'lazy';
+      img.onerror = function () { img.remove(); };
+      titleEl.parentNode.insertBefore(img, titleEl);
+    },
     introOnce: function (key, opts) {
       var host = document.getElementById('introHost');
       if (!host) return;
       if (this.introSeen(key)) { host.innerHTML = ''; return; }
       host.innerHTML = '<div class="intro-card"><button class="intro-x" type="button" aria-label="Ẩn giới thiệu">×</button>' +
+        '<div class="intro-body">' +
+        '<img class="intro-avatar" src="' + this.avatarUrl(key) + '" alt="" loading="lazy" onerror="this.remove()">' +
+        '<div class="intro-text">' +
         '<div class="intro-t"><span class="spark">✦</span> ' + esc(opts.title || '') + '</div>' +
         '<div class="intro-d">' + (opts.desc || '') + '</div>' +
-        '<div id="introSrc"></div></div>';
+        '<div id="introSrc"></div>' +
+        '</div></div></div>';
       var self = this;
       var x = host.querySelector('.intro-x');
       if (x) x.addEventListener('click', function () { self.markIntroSeen(key); host.innerHTML = ''; });
@@ -2664,7 +2748,10 @@
     }, 300);
     // Empty-state intro (hướng B): trang khai window.SHELL_INTRO={key,title,desc}
     // + có #introHost → shell tự hiện cho người mới, ẩn sau lần dùng đầu.
-    if (window.SHELL_INTRO && window.SHELL_INTRO.key) Shell.introOnce(window.SHELL_INTRO.key, window.SHELL_INTRO);
+    if (window.SHELL_INTRO && window.SHELL_INTRO.key) {
+      Shell.mountToolAvatar(window.SHELL_INTRO.key);
+      Shell.introOnce(window.SHELL_INTRO.key, window.SHELL_INTRO);
+    }
     // Cụm nút sticky góc phải dưới: dời nút "✦ Hỏi" (mobile-only, hardcode
     // trong HTML từng trang) vào đó TRƯỚC — để nó đứng trên cùng trong cụm.
     // Chia sẻ/PDF/Facebook tự nối vào bên dưới khi có kết quả (xem dưới).

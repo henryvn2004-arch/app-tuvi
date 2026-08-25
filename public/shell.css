@@ -93,6 +93,10 @@ body{font-family:var(--sans);background:var(--paper-2);color:var(--text);font-si
 /* ── WORKSPACE FRAME ── */
 .ws{background:var(--paper);overflow-y:auto;display:flex;flex-direction:column;position:relative}
 .ws-top{position:sticky;top:0;z-index:5;background:var(--paper);border-bottom:1px solid var(--line);padding:12px 22px;display:flex;align-items:center;gap:14px}
+/* Avatar cố định cạnh tên tool trên `.ws-top` — xem `Shell.mountToolAvatar`
+   trong shell.js. KHÔNG đụng vòng đời intro-card (`.intro-avatar`), luôn
+   hiện kể cả sau khi đóng box giới thiệu. */
+.ws-avatar{width:40px;height:40px;border-radius:9px;flex-shrink:0;object-fit:cover;background:var(--navy)}
 .ws-title b{font-family:var(--serif);font-size:17px;font-weight:600;display:block}
 .ws-title span{font-size:12px;color:var(--text-lt)}
 .ws-actions{margin-left:auto;display:flex;gap:8px}
@@ -234,14 +238,22 @@ body{font-family:var(--sans);background:var(--paper-2);color:var(--text);font-si
 .tabbar .tab.active{color:var(--gold)}
 .tabbar .tab:active{background:rgba(255,255,255,.05)}
 
-/* ── EMPTY-STATE INTRO (giới thiệu ngắn 1 lần, ẩn sau lần dùng đầu) ── */
+/* ── EMPTY-STATE INTRO (giới thiệu ngắn 1 lần, ẩn sau lần dùng đầu) ──
+   Bố cục: avatar [trái] — tên tool + mô tả [phải]. `.intro-body` là hàng
+   flex; avatar tự nạp từ `/tool-avatars/<key>.webp` (xem `Shell.introOnce`
+   trong shell.js), lỗi 404 (chưa sinh ảnh cho tool đó) thì tự ẩn qua onerror
+   — không để lại ô vỡ ảnh. */
 .intro-card{position:relative;background:linear-gradient(180deg,var(--gold-lt),var(--white));border:1px solid var(--gold-soft);border-radius:12px;padding:14px 40px 14px 16px;box-shadow:var(--shadow);margin-bottom:16px;max-width:720px}
+.intro-card .intro-body{display:flex;align-items:flex-start;gap:14px}
+.intro-card .intro-avatar{width:60px;height:60px;border-radius:12px;flex-shrink:0;object-fit:cover;background:var(--navy)}
+.intro-card .intro-text{flex:1;min-width:0}
 .intro-card .intro-t{font-family:var(--serif);font-size:15px;font-weight:600;color:var(--text);margin-bottom:5px;display:flex;align-items:center;gap:8px}
 .intro-card .intro-t .spark{color:var(--gold-soft)}
 .intro-card .intro-d{font-size:13px;color:var(--text-mid);line-height:1.65}
 .intro-card .intro-d b{color:var(--text)}
 .intro-card .intro-x{position:absolute;top:9px;right:9px;width:24px;height:24px;border:none;background:transparent;color:var(--text-lt);font-size:19px;line-height:1;cursor:pointer;border-radius:6px}
 .intro-card .intro-x:hover{background:var(--paper-2);color:var(--text)}
+@media(max-width:480px){.intro-card .intro-avatar{width:48px;height:48px;border-radius:10px}}
 
 /* ── HÀNG GỢI Ý CÂU HỎI (chip cố định trên ô nhập rail, cuộn ngang) ── */
 .rail-sugg{padding:8px 13px 0}
@@ -399,6 +411,7 @@ body{font-family:var(--sans);background:var(--paper-2);color:var(--text);font-si
      là max-content của phụ đề (~300px) nên ở máy hẹp (≤360px) NÓ tự rớt xuống
      hàng riêng, bỏ nút ☰ đứng trơ một hàng → header thành 3 hàng. */
   .ws-title{flex:1 1 0;min-width:0}
+  .ws-avatar{width:32px;height:32px;border-radius:7px}
   /* CHỈ con trực tiếp: phụ đề vài trang có <span data-tvp-price> lồng bên
      trong — cho nó display:block là nó tự xuống dòng, header lại cao thêm. */
   .ws-title>b,.ws-title>span{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -453,10 +466,23 @@ body{font-family:var(--sans);background:var(--paper-2);color:var(--text);font-si
   .sec, .card, .res-block, .cs-sec { page-break-inside: avoid; break-inside: avoid; }
 
   /* Đầu trang in: trên màn hình `.ws-top` mang tên tool, mà nó bị ẩn khi in
-     ⇒ bản in không có gì nói nó là cái gì của ai. Shell dựng khối này. */
-  .ws-print-head { display: block !important; margin: 0 0 14px; padding: 0 0 10px; border-bottom: 1px solid #ccc; }
-  .ws-print-head b { display: block; font-family: var(--serif); font-size: 16pt; }
-  .ws-print-head span { display: block; font-size: 10pt; color: #444; margin-top: 3px; }
+     ⇒ bản in không có gì nói nó là cái gì của ai. Shell dựng khối này, kèm
+     avatar của chính tool (ảnh trái, tên+dòng lá số phải — cùng bố cục với
+     box giới thiệu trên web). */
+  .ws-print-head { display: flex !important; align-items: center; gap: 14px; margin: 0 0 14px; padding: 0 0 12px; border-bottom: 1px solid #ccc; }
+  .ws-print-avatar { width: 48px; height: 48px; border-radius: 10px; object-fit: cover; flex-shrink: 0; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .ws-print-head-text b { display: block; font-family: var(--serif); font-size: 16pt; }
+  .ws-print-head-text span { display: block; font-size: 10pt; color: #444; margin-top: 3px; }
+
+  /* Chân trang in: triện + tên miền + ngày xuất (trái), QR quét về trang
+     (phải) — một lần ở cuối tài liệu, không lặp mỗi trang giấy (`window.print`
+     không có chỗ móc "mỗi trang" đáng tin cậy qua mọi engine). */
+  .ws-print-foot { display: flex !important; align-items: center; justify-content: space-between; gap: 16px; margin: 24px 0 0; padding: 14px 0 0; border-top: 1px solid #ccc; }
+  .ws-print-foot-l { display: flex; align-items: center; gap: 10px; }
+  .ws-print-seal { width: 34px; height: 34px; object-fit: contain; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .ws-print-foot-l b { display: block; font-family: var(--serif); font-size: 11pt; }
+  .ws-print-foot-l span { display: block; font-size: 8.5pt; color: #666; margin-top: 1px; }
+  .ws-print-qr { width: 60px; height: 60px; flex-shrink: 0; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
 }
-/* Ngoài lúc in thì khối đầu trang in KHÔNG tồn tại trên màn hình. */
-.ws-print-head { display: none; }
+/* Ngoài lúc in thì khối đầu/chân trang in KHÔNG tồn tại trên màn hình. */
+.ws-print-head, .ws-print-foot { display: none; }
