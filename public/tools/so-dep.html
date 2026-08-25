@@ -48,7 +48,8 @@
 .sd-dg-tot { color: #1E6B3C; }
 .sd-dg-xau { color: #C0392B; }
 .sd-goiy-list { display: flex; flex-direction: column; gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
-.sd-goiy-item { background: #fff; padding: 14px 18px; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.sd-goiy-item { background: #fff; padding: 14px 18px; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; cursor: pointer; transition: background .12s; }
+.sd-goiy-item:hover, .sd-goiy-item:focus-visible { background: var(--bg-soft, #F7F9FC); outline: none; }
 .sd-goiy-so { font-size: 18px; letter-spacing: 1px; color: var(--navy); }
 .sd-goiy-dt { font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 14px; }
 .sd-goiy-sao { font-size: 12px; color: var(--text-lt); }
@@ -227,6 +228,21 @@ function goiYSo(){
   document.getElementById('gy-result-section').scrollIntoView({behavior:'smooth',block:'start'});
 }
 document.getElementById('dg-so').addEventListener('keydown',function(e){if(e.key==='Enter')chamDiem();});
+// Bấm vào một số gợi ý → chấm điểm chi tiết luôn cho số đó, khỏi phải chép tay sang ô trên.
+document.getElementById('gy-result').addEventListener('click',function(e){
+  var item=e.target.closest('.sd-goiy-item');
+  if(!item)return;
+  document.getElementById('dg-so').value=item.getAttribute('data-so');
+  chamDiem();
+});
+document.getElementById('gy-result').addEventListener('keydown',function(e){
+  if(e.key!=='Enter'&&e.key!==' ')return;
+  var item=e.target.closest('.sd-goiy-item');
+  if(!item)return;
+  e.preventDefault();
+  document.getElementById('dg-so').value=item.getAttribute('data-so');
+  chamDiem();
+});
 </script>
 <section class="kb-section">
   <div class="page">
