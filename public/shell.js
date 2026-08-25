@@ -2123,14 +2123,26 @@
     // đầu. Cần 1 phần tử #introHost trên trang (đặt trên form).
     introSeen: function (key) { try { return !!localStorage.getItem('app_intro_' + key); } catch (e) { return false; } },
     markIntroSeen: function (key) { try { localStorage.setItem('app_intro_' + key, '1'); } catch (e) { /* ignore */ } },
+    // Lệch tên giữa SHELL_INTRO.key và tool_id thật (nguồn chính là
+    // `TOOL_AVATAR_ALIAS` trong lib/media/tool-avatar-prompt.ts — chép tay
+    // sang đây vì shell.js là script thường, không import được TS).
+    _AVATAR_ALIAS: {
+      'bat-tu': 'tu-binh', 'chon-ngay': 'chon-ngay-tot', 'dat-ten': 'dat-ten-con',
+      'luan-giai': 'laso', 'sinh-con': 'xem-tuoi-sinh-con', 'thanh-tuong-pro': 'thanh-tuong',
+    },
+    avatarUrl: function (key) { return '/tool-avatars/' + (this._AVATAR_ALIAS[key] || key) + '.webp'; },
     introOnce: function (key, opts) {
       var host = document.getElementById('introHost');
       if (!host) return;
       if (this.introSeen(key)) { host.innerHTML = ''; return; }
       host.innerHTML = '<div class="intro-card"><button class="intro-x" type="button" aria-label="Ẩn giới thiệu">×</button>' +
+        '<div class="intro-body">' +
+        '<img class="intro-avatar" src="' + this.avatarUrl(key) + '" alt="" loading="lazy" onerror="this.remove()">' +
+        '<div class="intro-text">' +
         '<div class="intro-t"><span class="spark">✦</span> ' + esc(opts.title || '') + '</div>' +
         '<div class="intro-d">' + (opts.desc || '') + '</div>' +
-        '<div id="introSrc"></div></div>';
+        '<div id="introSrc"></div>' +
+        '</div></div></div>';
       var self = this;
       var x = host.querySelector('.intro-x');
       if (x) x.addEventListener('click', function () { self.markIntroSeen(key); host.innerHTML = ''; });

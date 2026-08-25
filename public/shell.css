@@ -234,14 +234,22 @@ body{font-family:var(--sans);background:var(--paper-2);color:var(--text);font-si
 .tabbar .tab.active{color:var(--gold)}
 .tabbar .tab:active{background:rgba(255,255,255,.05)}
 
-/* ── EMPTY-STATE INTRO (giới thiệu ngắn 1 lần, ẩn sau lần dùng đầu) ── */
+/* ── EMPTY-STATE INTRO (giới thiệu ngắn 1 lần, ẩn sau lần dùng đầu) ──
+   Bố cục: avatar [trái] — tên tool + mô tả [phải]. `.intro-body` là hàng
+   flex; avatar tự nạp từ `/tool-avatars/<key>.webp` (xem `Shell.introOnce`
+   trong shell.js), lỗi 404 (chưa sinh ảnh cho tool đó) thì tự ẩn qua onerror
+   — không để lại ô vỡ ảnh. */
 .intro-card{position:relative;background:linear-gradient(180deg,var(--gold-lt),var(--white));border:1px solid var(--gold-soft);border-radius:12px;padding:14px 40px 14px 16px;box-shadow:var(--shadow);margin-bottom:16px;max-width:720px}
+.intro-card .intro-body{display:flex;align-items:flex-start;gap:14px}
+.intro-card .intro-avatar{width:60px;height:60px;border-radius:12px;flex-shrink:0;object-fit:cover;background:var(--navy)}
+.intro-card .intro-text{flex:1;min-width:0}
 .intro-card .intro-t{font-family:var(--serif);font-size:15px;font-weight:600;color:var(--text);margin-bottom:5px;display:flex;align-items:center;gap:8px}
 .intro-card .intro-t .spark{color:var(--gold-soft)}
 .intro-card .intro-d{font-size:13px;color:var(--text-mid);line-height:1.65}
 .intro-card .intro-d b{color:var(--text)}
 .intro-card .intro-x{position:absolute;top:9px;right:9px;width:24px;height:24px;border:none;background:transparent;color:var(--text-lt);font-size:19px;line-height:1;cursor:pointer;border-radius:6px}
 .intro-card .intro-x:hover{background:var(--paper-2);color:var(--text)}
+@media(max-width:480px){.intro-card .intro-avatar{width:48px;height:48px;border-radius:10px}}
 
 /* ── HÀNG GỢI Ý CÂU HỎI (chip cố định trên ô nhập rail, cuộn ngang) ── */
 .rail-sugg{padding:8px 13px 0}
