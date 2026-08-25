@@ -192,7 +192,7 @@ th{background:var(--soft);font-weight:600;color:var(--navy);font-size:13px;posit
 <script src="/auth.js"></script>
 </head>
 <body>
-<script src="/track.js?v=3" defer></script><script src="/nav.js?v=19"></script>
+<script src="/track.js?v=3" defer></script><script src="/nav.js?v=23"></script>
 <div class="breadcrumb"><a href="/">Trang Chủ</a> › <a href="/chon-ngay">Chọn Ngày</a> › <span>Kim Lâu</span></div>
 
 <div class="hero">
