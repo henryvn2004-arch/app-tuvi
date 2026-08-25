@@ -2131,6 +2131,22 @@
       'luan-giai': 'laso', 'sinh-con': 'xem-tuoi-sinh-con', 'thanh-tuong-pro': 'thanh-tuong',
     },
     avatarUrl: function (key) { return '/tool-avatars/' + (this._AVATAR_ALIAS[key] || key) + '.webp'; },
+    // Avatar CỐ ĐỊNH trên `.ws-top` (thanh tiêu đề sticky) — khác với avatar
+    // trong `introOnce`, cái này KHÔNG gắn với vòng đời ẩn/hiện của intro:
+    // đóng box giới thiệu (nút ×) hay đã dùng tool rồi (introSeen) thì hình
+    // trong intro biến mất, nhưng hình ở đây vẫn còn mỗi lần mở lại trang —
+    // avatar là nhận diện của tool, không phải một tip dùng một lần.
+    mountToolAvatar: function (key) {
+      var titleEl = document.querySelector('.ws-title');
+      if (!titleEl || !titleEl.parentNode || titleEl.parentNode.querySelector('.ws-avatar')) return;
+      var img = document.createElement('img');
+      img.className = 'ws-avatar';
+      img.src = this.avatarUrl(key);
+      img.alt = '';
+      img.loading = 'lazy';
+      img.onerror = function () { img.remove(); };
+      titleEl.parentNode.insertBefore(img, titleEl);
+    },
     introOnce: function (key, opts) {
       var host = document.getElementById('introHost');
       if (!host) return;
@@ -2676,7 +2692,10 @@
     }, 300);
     // Empty-state intro (hướng B): trang khai window.SHELL_INTRO={key,title,desc}
     // + có #introHost → shell tự hiện cho người mới, ẩn sau lần dùng đầu.
-    if (window.SHELL_INTRO && window.SHELL_INTRO.key) Shell.introOnce(window.SHELL_INTRO.key, window.SHELL_INTRO);
+    if (window.SHELL_INTRO && window.SHELL_INTRO.key) {
+      Shell.mountToolAvatar(window.SHELL_INTRO.key);
+      Shell.introOnce(window.SHELL_INTRO.key, window.SHELL_INTRO);
+    }
     // Cụm nút sticky góc phải dưới: dời nút "✦ Hỏi" (mobile-only, hardcode
     // trong HTML từng trang) vào đó TRƯỚC — để nó đứng trên cùng trong cụm.
     // Chia sẻ/PDF/Facebook tự nối vào bên dưới khi có kết quả (xem dưới).

@@ -93,6 +93,10 @@ body{font-family:var(--sans);background:var(--paper-2);color:var(--text);font-si
 /* ── WORKSPACE FRAME ── */
 .ws{background:var(--paper);overflow-y:auto;display:flex;flex-direction:column;position:relative}
 .ws-top{position:sticky;top:0;z-index:5;background:var(--paper);border-bottom:1px solid var(--line);padding:12px 22px;display:flex;align-items:center;gap:14px}
+/* Avatar cố định cạnh tên tool trên `.ws-top` — xem `Shell.mountToolAvatar`
+   trong shell.js. KHÔNG đụng vòng đời intro-card (`.intro-avatar`), luôn
+   hiện kể cả sau khi đóng box giới thiệu. */
+.ws-avatar{width:40px;height:40px;border-radius:9px;flex-shrink:0;object-fit:cover;background:var(--navy)}
 .ws-title b{font-family:var(--serif);font-size:17px;font-weight:600;display:block}
 .ws-title span{font-size:12px;color:var(--text-lt)}
 .ws-actions{margin-left:auto;display:flex;gap:8px}
@@ -407,6 +411,7 @@ body{font-family:var(--sans);background:var(--paper-2);color:var(--text);font-si
      là max-content của phụ đề (~300px) nên ở máy hẹp (≤360px) NÓ tự rớt xuống
      hàng riêng, bỏ nút ☰ đứng trơ một hàng → header thành 3 hàng. */
   .ws-title{flex:1 1 0;min-width:0}
+  .ws-avatar{width:32px;height:32px;border-radius:7px}
   /* CHỈ con trực tiếp: phụ đề vài trang có <span data-tvp-price> lồng bên
      trong — cho nó display:block là nó tự xuống dòng, header lại cao thêm. */
   .ws-title>b,.ws-title>span{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
