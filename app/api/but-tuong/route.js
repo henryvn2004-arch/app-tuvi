@@ -15,6 +15,7 @@ import { llmStreamResponse } from '@/lib/llm/complete';
 import { withToolOutcome } from '@/lib/ops/tool-outcome';
 import { phanTich, railData as baziRailData } from '@/lib/bazi/phan-tich';
 import { computeTuBinh } from '@/lib/engine/tubinh';
+import { DOC_ARC_BUT_TUONG } from '@/lib/agent/prompts';
 
 export const dynamic = 'force-dynamic';
 export const maxDuration = 120;
@@ -72,11 +73,17 @@ Nhắc rằng chữ ký phản ánh trạng thái tâm lý lúc ký — thư th�
 ### 5. Tổng Hợp
 Điểm mạnh, điểm cần luyện (PHẢI CÓ, dùng đúng gợi ý đã cho nếu có), kết bằng "Thư giả, tâm hoạ dã" (chữ là hoạ đồ của tâm).
 
+PHÁN QUYẾT BẮT BUỘC — NEO VÀO SỐ ĐÃ ĐO:
+- MỞ ĐẦU mỗi phần bằng MỘT câu chốt in đậm neo vào con số đã đo (điểm tổng, điểm trục /100, hay tỉ lệ ngũ hành nét): phần này mạnh hay yếu, đáng chú ý ở đâu. Rồi mới giải thích vì sao.
+- Phần thân KHÔNG được mâu thuẫn với con số: trục dưới 50 hay ngũ hành lệch nặng thì cấm viết như thể mọi thứ đều ổn.
+
+${DOC_ARC_BUT_TUONG}
+
 ## Nguyên Tắc — VI PHẠM LÀ HỎNG BÀI
 - KHÔNG tự chấm điểm mới cho bất kỳ trục nào — chỉ dùng số đã đưa.
 - KHÔNG hứa tài lộc cụ thể, KHÔNG dự đoán tai hoạ, KHÔNG phán bệnh.
 - KHÔNG nhận dạng danh tính người ký, KHÔNG giám định thật/giả so với chữ ký khác.
-- Viết tiếng Việt tự nhiên, ~1500–2200 chữ.`;
+- Viết tiếng Việt tự nhiên, ~1000–1500 chữ TOÀN BÀI — súc tích, mỗi câu phải ĐÁNG đọc, không kéo dài cho đủ đô.`;
 
 function hourToChi(h) {
   // Giờ Tý 23h–1h = chi 0, mỗi chi cách nhau 2 giờ. Công thức chuẩn can chi giờ.

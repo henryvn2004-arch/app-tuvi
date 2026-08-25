@@ -299,11 +299,25 @@ const DOC_FILES = {
     cap: 3100,
     arc: 'DOC_ARC_TUONG_HOP',
   },
+  // Thêm 2026-08-25: bút tướng (SP_BUT_TUONG) từng thiếu HẲN lớp hook/twist —
+  // Henry đọc thấy dài mà nhạt, đúng bệnh 4 bản kia từng có trước khi gắn arc.
+  // Cap 6900 = mức thực đo lúc thêm `DOC_ARC_BUT_TUONG` (6272) + biên ~10%.
+  'app/api/but-tuong/route.js': {
+    name: 'SP_BUT_TUONG',
+    cap: 6900,
+    arc: 'DOC_ARC_BUT_TUONG',
+  },
 };
 // Khối bố cục của VĂN LUẬN DÀI. Một bản luận giải chỉ được dùng ĐÚNG MỘT —
 // và tuyệt đối không được kéo thêm arc CHAT vào (nó mang bối cảnh "vừa đọc xong
 // bản luận đầy đủ" + ngân sách 120–180 từ, tức tự mâu thuẫn với chính nó).
-const DOC_BLOCKS = ['DOC_ARC_LASO', 'DOC_ARC_TUBINH', 'DOC_ARC_PHU_THE', 'DOC_ARC_TUONG_HOP'];
+const DOC_BLOCKS = [
+  'DOC_ARC_LASO',
+  'DOC_ARC_TUBINH',
+  'DOC_ARC_PHU_THE',
+  'DOC_ARC_TUONG_HOP',
+  'DOC_ARC_BUT_TUONG',
+];
 const CHAT_BLOCKS = [
   'LUAN_ARC',
   'LUAN_ARC_CHUNG',
