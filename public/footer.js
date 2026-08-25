@@ -21,7 +21,7 @@
       '.ft-bottom a{font-size:11px;color:rgba(255,255,255,0.2)!important;text-decoration:none!important}',
       '.ft-bottom a:hover{color:rgba(255,255,255,0.5)!important}',
       '.ft-bottom img{width:20px;height:20px;object-fit:contain;opacity:0.25;border-radius:3px}',
-      '.ft-legal{font-size:11px;color:rgba(255,255,255,0.3);line-height:1.9;margin-top:12px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.05)}',
+      '.ft-legal{font-size:11px;color:rgba(255,255,255,0.3);line-height:1.7;max-width:260px;margin-top:14px;padding-top:14px;border-top:1px solid rgba(255,255,255,0.05)}',
       '.ft-legal strong{color:rgba(255,255,255,0.5);font-weight:600}',
       '.ft-disclaimer{font-size:10px;color:rgba(255,255,255,0.15);line-height:1.6;margin-top:12px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.05);text-align:center}',
       '@media(max-width:960px){.ft-top{grid-template-columns:1fr 1fr;gap:28px}.ft-brand{grid-column:1/-1}}',
@@ -39,6 +39,12 @@
     '<div><div class="ft-brand-name">T\u1eed Vi Minh B\u1ea3o</div>',
     '<div class="ft-brand-zh">Tri m\u1ec7nh l\u00fd \u2013 Thu\u1eadn th\u1ebf h\u00e0nh</div></div></div>',
     '<div class="ft-tagline">Tri m\u1ec7nh nhi h\u00e0nh \u2014 v\u00f4 \u01b0u v\u00f4 ho\u1eb7c.</div>',
+    // M\u00e3 s\u1ed1 doanh nghi\u1ec7p CH\u01afA c\u00f3 trong h\u1ed3 s\u01a1 \u0111\u01b0\u1ee3c cung c\u1ea5p \u2014 KH\u00d4NG b\u1ecba s\u1ed1.
+    // B\u1ed5 sung d\u00f2ng "MST: ..." ngay khi c\u00f3, theo Ngh\u1ecb \u0111\u1ecbnh 52/2013.
+    '<div class="ft-legal"><strong>C\u00f4ng ty TNHH Kira Tech</strong><br>(Kira Tech Company Limited)<br>',
+    '\u0110i\u1ec7n tho\u1ea1i: 0343.848.795<br>',
+    'Email: contact@tuviminhbao.com<br>',
+    '\u0110\u1ecba ch\u1ec9: 901 L\u00ea \u0110\u1ee9c Th\u1ecd, Ph\u01b0\u1eddng An H\u1ed9i \u0110\u00f4ng, Th\u00e0nh ph\u1ed1 H\u1ed3 Ch\u00ed Minh, Vi\u1ec7t Nam</div>',
     '</div>',
 
     // Col 2 — Công Cụ (hub pages)
@@ -73,29 +79,19 @@
     '<a href="/mcp-server">MCP Server</a>',
     '<a href="/du-lieu">D\u1eef Li\u1ec7u M\u1edf</a>',
     '<a href="/nguon-du-lieu.html">Ngu\u1ed3n D\u1eef Li\u1ec7u</a>',
-    '<a href="/san-pham-dich-vu.html">S\u1ea3n Ph\u1ea9m &amp; D\u1ecbch V\u1ee5</a>',
-    '<a href="/huong-dan-thanh-toan.html">H\u01b0\u1edbng D\u1eabn Thanh To\u00e1n</a>',
-    '<a href="/chinh-sach-bao-mat.html">Ch\u00ednh S\u00e1ch B\u1ea3o M\u1eadt</a>',
-    '<a href="/dieu-khoan-dich-vu.html">\u0110i\u1ec1u Kho\u1ea3n D\u1ecbch V\u1ee5</a>',
-    '<a href="/mien-tru-trach-nhiem.html">Mi\u1ec5n Tr\u1eeb Tr\u00e1ch Nhi\u1ec7m</a>',
     '</div>',
 
     '</div>',
     '<div class="ft-bottom">',
     '<span>\u00a9 2026 T\u1eed Vi Minh B\u1ea3o \u2014 tuviminhbao.com</span>',
-    '<div style="display:flex;gap:16px;align-items:center">',
+    '<div style="display:flex;gap:16px;align-items:center;flex-wrap:wrap">',
+    '<a href="/san-pham-dich-vu.html">S\u1ea3n Ph\u1ea9m &amp; D\u1ecbch V\u1ee5</a>',
     '<a href="/chinh-sach-bao-mat.html">Ch\u00ednh S\u00e1ch B\u1ea3o M\u1eadt</a>',
     '<a href="/dieu-khoan-dich-vu.html">\u0110i\u1ec1u Kho\u1ea3n S\u1eed D\u1ee5ng</a>',
     '<a href="/huong-dan-thanh-toan.html">H\u01b0\u1edbng D\u1eabn Thanh To\u00e1n</a>',
+    '<a href="/mien-tru-trach-nhiem.html">Mi\u1ec5n Tr\u1eeb Tr\u00e1ch Nhi\u1ec7m</a>',
     '<img src="/seal.webp" alt="">',
     '</div></div>',
-    // M\u00e3 s\u1ed1 doanh nghi\u1ec7p CH\u01afA c\u00f3 trong h\u1ed3 s\u01a1 \u0111\u01b0\u1ee3c cung c\u1ea5p \u2014 KH\u00d4NG b\u1ecba s\u1ed1.
-    // B\u1ed5 sung d\u00f2ng "MST: ..." ngay khi c\u00f3, theo Ngh\u1ecb \u0111\u1ecbnh 52/2013.
-    '<div class="ft-legal">',
-    '<strong>C\u00f4ng ty TNHH Kira Tech</strong> (Kira Tech Company Limited) \u2014 ',
-    '\u0110\u1ecba ch\u1ec9: 901 L\u00ea \u0110\u1ee9c Th\u1ecd, Ph\u01b0\u1eddng An H\u1ed9i \u0110\u00f4ng, Th\u00e0nh ph\u1ed1 H\u1ed3 Ch\u00ed Minh, Vi\u1ec7t Nam \u2014 ',
-    '\u0110i\u1ec7n tho\u1ea1i: 0343.848.795 \u2014 Email: contact@tuviminhbao.com',
-    '</div>',
     '<div class="ft-disclaimer">N\u1ed9i dung lu\u1eadn gi\u1ea3i mang t\u00ednh tham kh\u1ea3o, kh\u00f4ng thay th\u1ebf t\u01b0 v\u1ea5n chuy\u00ean m\u00f4n. <a href="/mien-tru-trach-nhiem.html" style="color:inherit;text-decoration:underline">Xem chi ti\u1ebft</a>.</div>',
     '</div></footer>'
   ].join('');
