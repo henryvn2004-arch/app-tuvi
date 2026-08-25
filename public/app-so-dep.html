@@ -23,11 +23,8 @@
 .btn-go:disabled{opacity:.6;cursor:not-allowed}
 .err{color:var(--tx-red);font-size:13px;margin-top:8px;display:none}
 .err.active{display:block}
-.sd-tabs{display:flex;gap:6px;margin-bottom:14px}
-.sd-tab-btn{background:var(--paper);border:1px solid var(--line-2);border-radius:8px;padding:8px 16px;font-size:13px;font-weight:600;color:var(--text-lt);cursor:pointer;font-family:inherit}
-.sd-tab-btn.active{background:var(--navy,#061A2E);color:#fff;border-color:var(--navy,#061A2E)}
-.sd-tab-panel{display:none}
-.sd-tab-panel.active{display:block}
+.sd-box{margin-bottom:22px}
+.sd-box+.sd-box{padding-top:4px;border-top:1px dashed var(--line-2)}
 .sd-tuychon{margin-top:10px}
 .sd-tuychon summary{cursor:pointer;font-size:12px;color:var(--blue)}
 .sd-tuychon-body{display:flex;gap:11px;flex-wrap:wrap;margin-top:10px}
@@ -90,12 +87,7 @@
       <div id="shellRecent"></div>
 
       <div id="formPanel">
-        <div class="sd-tabs">
-          <button class="sd-tab-btn active" id="tabBtnDg" onclick="switchTab('dg')">Chấm điểm</button>
-          <button class="sd-tab-btn" id="tabBtnGy" onclick="switchTab('gy')">Gợi ý số</button>
-        </div>
-
-        <div class="sd-tab-panel active" id="tabDg">
+        <div class="sd-box">
           <div class="form-card">
             <h2>Chấm điểm một dãy số</h2>
             <p class="sub">Nhập số điện thoại, số nhà hoặc biển số — xem ngay theo Bát Tinh, Quẻ Dịch, Ngũ Hành, Âm Dương và dân gian, mỗi tầng chấm riêng, không gộp điểm bịa.</p>
@@ -114,7 +106,7 @@
           </div>
         </div>
 
-        <div class="sd-tab-panel" id="tabGy">
+        <div class="sd-box">
           <div class="form-card">
             <h2>Gợi ý số theo mục tiêu</h2>
             <p class="sub">Chọn độ dài và mục tiêu — engine sinh và tự chấm điểm lại chính nó để xếp hạng, không dùng danh sách "số đẹp" chép sẵn.</p>
@@ -170,12 +162,6 @@ window.SHELL_INTRO={key:'so-dep',title:'Xem số đẹp',desc:'Chấm điểm s�
 <script>
 // Ô giữa dùng CHUNG module /tools-shared/so-dep.js với trang standalone
 // /tools/so-dep.html → kết quả y hệt, tính 100% client-side, 0 lượt gọi LLM.
-function switchTab(id){
-  document.getElementById('tabDg').classList.toggle('active', id==='dg');
-  document.getElementById('tabGy').classList.toggle('active', id==='gy');
-  document.getElementById('tabBtnDg').classList.toggle('active', id==='dg');
-  document.getElementById('tabBtnGy').classList.toggle('active', id==='gy');
-}
 function chamDiem(){
   var so=document.getElementById('dg-so').value;
   var namSinh=parseInt(document.getElementById('dg-namsinh').value)||undefined;
