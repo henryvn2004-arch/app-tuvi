@@ -282,22 +282,83 @@
   }
 
   // Tracker "đang online / lượt hỏi hôm nay" (ngay trên ô "Tìm công cụ, lệnh…").
-  // _pulseData sống qua nhiều lượt renderSidebar() để không nháy về "…" mỗi
-  // lần sidebar dựng lại (đổi trang trong /app, loadCatalog cập nhật giá…).
-  // Đọc hụt → GIỮ NGUYÊN state cũ, không ẩn lại, không đoán số 0 — cùng luật
-  // "không bịa số" áp cho Giá Lượng (xem migration-pulse-tracker.sql).
+  //
+  // ⚠️ MÔ PHỎNG THEO YÊU CẦU HENRY (chốt 2026-08-26, sau khi xem số THẬT trên
+  // prod ra "0 đang online · 0 lượt hỏi hôm nay" — đúng vì traffic thật lúc đó
+  // gần như bằng 0, nhưng nhìn "chết"): "hiển thị số ảo đi, nhìn cho nó sôi
+  // động, cho số nó nhảy nhảy đi, khi nào có traffic thật thì tính sau".
+  //
+  // /api/pulse + RPC pulse_stats() (SỐ THẬT, xem migration-pulse-tracker.sql)
+  // VẪN CÒN NGUYÊN, không đụng tới — khi nào traffic thật đủ lớn để hiện tử
+  // tế, đổi lại bằng cách gọi _loadPulseReal() thay simulatePulse() ở startPulse()
+  // dưới đây, không cần sửa gì khác.
   var _pulseData = null;
-  function loadPulse() {
+  var _pulseDayKey = null; // yyyy-mm-dd theo giờ VN — qua nửa đêm thì reset "hôm nay"
+
+  function vnNow() {
+    var d = new Date();
+    return new Date(d.getTime() + (7 * 60 - d.getTimezoneOffset()) * 60000);
+  }
+
+  // Đường cong "giờ cao điểm" trong ngày (0h–23h giờ VN) — sáng/tối đông hơn
+  // trưa/khuya, cho baseline trông giống app có người dùng thật thay vì phẳng lì.
+  var PULSE_HOUR_CURVE = [
+    0.22, 0.18, 0.15, 0.14, 0.16, 0.22, 0.35, 0.5, 0.62, 0.7, 0.75, 0.72,
+    0.68, 0.72, 0.8, 0.88, 0.9, 0.86, 0.92, 0.88, 0.8, 0.65, 0.5, 0.34,
+  ];
+
+  function pulseDayKey(d) {
+    return d.getFullYear() + '-' + d.getMonth() + '-' + d.getDate();
+  }
+
+  /** Bước mô phỏng: seed lần đầu theo giờ VN hiện tại, sau đó random-walk nhẹ
+   * quanh baseline. `online` dao động cả hai chiều; `promptsToday` CHỈ TĂNG
+   * trong ngày (giống một bộ đếm thật) và tự reset khi qua ngày mới giờ VN. */
+  function simulatePulse() {
+    var now = vnNow();
+    var dayKey = pulseDayKey(now);
+    var factor = PULSE_HOUR_CURVE[now.getHours()];
+    if (!_pulseData || _pulseDayKey !== dayKey) {
+      _pulseDayKey = dayKey;
+      _pulseData = {
+        online: Math.round(70 + factor * 210 + Math.random() * 20),
+        promptsToday: Math.round(factor * 140 + Math.random() * 40),
+      };
+    } else {
+      var driftOnline = Math.round((Math.random() - 0.42) * 7); // lệch nhẹ về tăng
+      var target = Math.round(70 + factor * 210);
+      // Kéo nhẹ về baseline của giờ hiện tại (tránh trôi dạt quá xa qua nhiều giờ) + nhiễu ngẫu nhiên.
+      _pulseData.online = Math.max(35, Math.min(340, Math.round(_pulseData.online * 0.9 + target * 0.1 + driftOnline)));
+      if (Math.random() < 0.55) {
+        _pulseData.promptsToday += Math.round(Math.random() * 3) + (Math.random() < 0.12 ? 5 : 0);
+      }
+    }
+    return _pulseData;
+  }
+
+  function paintPulse(d) {
+    var host = document.getElementById('sbPulse');
+    if (!host) return;
+    host.hidden = false;
+    var o = document.getElementById('sbpOnline'); if (o) o.textContent = d.online.toLocaleString('vi-VN');
+    var p = document.getElementById('sbpPrompts'); if (p) p.textContent = d.promptsToday.toLocaleString('vi-VN');
+  }
+
+  var _pulseTimer = null;
+  function startPulse() {
+    paintPulse(simulatePulse());
+    if (_pulseTimer) clearInterval(_pulseTimer);
+    _pulseTimer = setInterval(function () { paintPulse(simulatePulse()); }, 4000);
+  }
+
+  // Đường SỐ THẬT — giữ nguyên, chưa gọi (xem ghi chú ⚠️ ở trên).
+  function _loadPulseReal() {
     fetch('/api/pulse', { cache: 'no-store' })
       .then(function (r) { return r.ok ? r.json() : null; })
       .then(function (d) {
         if (!d || typeof d.online !== 'number' || typeof d.promptsToday !== 'number') return;
         _pulseData = d;
-        var host = document.getElementById('sbPulse');
-        if (!host) return;
-        host.hidden = false;
-        var o = document.getElementById('sbpOnline'); if (o) o.textContent = d.online.toLocaleString('vi-VN');
-        var p = document.getElementById('sbpPrompts'); if (p) p.textContent = d.promptsToday.toLocaleString('vi-VN');
+        paintPulse(d);
       })
       .catch(function () { /* best-effort — giữ nguyên số cũ (nếu có), không rơi về giả */ });
   }
@@ -337,11 +398,10 @@
     if (!host) return;
     var h = '';
     h += '<a class="sb-brand" href="/"><img class="seal" src="/seal.webp" alt="Tử Vi Minh Bảo"><div class="brand-txt"><b>Tử Vi Minh Bảo</b><span>Mệnh Lý AI</span></div></a>';
-    // Tracker "đang online / lượt hỏi hôm nay" — số THẬT qua /api/pulse (RPC
-    // pulse_stats(), xem migration-pulse-tracker.sql), KHÔNG mô phỏng. Render
-    // ẩn (`hidden`) cho tới khi loadPulse() có số thật; nếu đã có từ lượt gọi
-    // trước (_pulseData, sống qua nhiều lần renderSidebar) thì hiện luôn, khỏi
-    // nháy về rỗng mỗi lần sidebar dựng lại.
+    // Tracker "đang online / lượt hỏi hôm nay" — MÔ PHỎNG (xem ghi chú ⚠️ ở
+    // simulatePulse()). `_pulseData` được seed TRƯỚC lần renderSidebar() đầu
+    // (boot()) nên luôn có số ngay từ khung hình đầu; fallback "…" chỉ phòng
+    // hờ trường hợp gọi renderSidebar() sớm bất thường.
     h += '<div class="sb-pulse" id="sbPulse"' + (_pulseData ? '' : ' hidden') + '>' +
          '<span class="sbp-row"><span class="sbp-dot"></span><b id="sbpOnline">' + (_pulseData ? esc(_pulseData.online.toLocaleString('vi-VN')) : '…') + '</b> đang online</span>' +
          '<span class="sbp-row">' + svg('bolt', 'sbp-ic') + '<b id="sbpPrompts">' + (_pulseData ? esc(_pulseData.promptsToday.toLocaleString('vi-VN')) : '…') + '</b> lượt hỏi hôm nay</span>' +
@@ -364,7 +424,7 @@
       h += '</div>';
     });
     h += '</nav>';
-    h += '<button class="sb-theme" type="button" data-act="theme" title="Đổi nền sáng/tối">◐ Đổi nền</button>';
+    h += '<button class="sb-theme" type="button" data-act="theme">◐ Đổi nền</button>';
     h += '<a class="sb-foot" href="/profile"><div class="ava" id="sbAva">?</div><div><div class="nm" id="sbName">Khách</div><div class="sub" id="sbSub">Đăng nhập →</div></div></a>';
     host.innerHTML = h;
     mountToolIcon();
@@ -387,13 +447,13 @@
     var host = document.getElementById('shell-rail');
     if (!host) return;
     host.innerHTML =
-      '<div class="rail-h"><img class="rail-ava" src="' + authorAva() + '" alt="Trợ lý Luận Đường" title="Đổi thầy luận giải">' +
+      '<div class="rail-h"><img class="rail-ava" src="' + authorAva() + '" alt="Trợ lý Luận Đường" data-tip="Đổi thầy luận giải">' +
       '<div><b>Trợ lý Luận Đường</b><span>' + esc(authorLabel()) + '</span></div>' +
       '<div class="tools">' +
-        '<button class="rh-btn mobile-only" title="Đóng" data-act="rail-close">✕</button>' +
-        (HIST_ON ? '<button class="rh-btn" title="Lịch sử hội thoại" data-act="history"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" style="width:15px;height:15px"><path d="M12 7v5l3 2"/><circle cx="12" cy="12" r="9"/></svg></button>' : '') +
-        '<button class="rh-btn" title="Chia sẻ phiên" data-act="share"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" style="width:15px;height:15px"><circle cx="18" cy="5" r="2.6"/><circle cx="6" cy="12" r="2.6"/><circle cx="18" cy="19" r="2.6"/><path d="m8.3 10.7 7.4-4.4M8.3 13.3l7.4 4.4"/></svg></button>' +
-        '<button class="rh-btn" title="Hội thoại mới" data-act="newchat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" style="width:15px;height:15px"><path d="M12 5v14M5 12h14"/></svg></button>' +
+        '<button class="rh-btn mobile-only" data-tip="Đóng" aria-label="Đóng" data-act="rail-close">✕</button>' +
+        (HIST_ON ? '<button class="rh-btn" data-tip="Lịch sử hội thoại" aria-label="Lịch sử hội thoại" data-act="history"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" style="width:15px;height:15px"><path d="M12 7v5l3 2"/><circle cx="12" cy="12" r="9"/></svg></button>' : '') +
+        '<button class="rh-btn" data-tip="Chia sẻ phiên" aria-label="Chia sẻ phiên" data-act="share"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" style="width:15px;height:15px"><circle cx="18" cy="5" r="2.6"/><circle cx="6" cy="12" r="2.6"/><circle cx="18" cy="19" r="2.6"/><path d="m8.3 10.7 7.4-4.4M8.3 13.3l7.4 4.4"/></svg></button>' +
+        '<button class="rh-btn" data-tip="Hội thoại mới" aria-label="Hội thoại mới" data-act="newchat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" style="width:15px;height:15px"><path d="M12 5v14M5 12h14"/></svg></button>' +
       '</div></div>' +
       (HIST_ON ? '<div class="rail-hist" id="railHist" style="display:none"></div>' : '') +
       '<div class="ctx" id="railCtx" style="display:none"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="width:13px;height:13px;flex:0 0 auto"><path d="M13 2 3 14h7l-1 8 10-12h-7z"/></svg> <span id="railCtxTxt"></span></div>' +
@@ -405,7 +465,7 @@
       '<div class="rail-sugg" id="railSugg" style="display:none"></div>' +
       '<div class="rail-thumbs" id="railThumbs" style="display:none"></div>' +
       '<div class="rail-in">' +
-        '<button class="rail-attach" id="railAttach" data-act="attach" title="Gửi ảnh" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:17px;height:17px"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="1.6"/><path d="m21 15-5-5L5 21"/></svg></button>' +
+        '<button class="rail-attach" id="railAttach" data-act="attach" data-tip="Lập lá số trước đã" aria-label="Gửi ảnh" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:17px;height:17px"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="1.6"/><path d="m21 15-5-5L5 21"/></svg></button>' +
         '<input type="file" id="railFile" accept="image/*" multiple hidden>' +
         '<textarea id="railInput" rows="1" placeholder="Lập lá số để bắt đầu hỏi…" disabled></textarea>' +
         '<button class="send" id="railSend" disabled data-act="send"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px"><path d="M22 2 11 13M22 2l-7 20-4-9-9-4z"/></svg></button></div>';
@@ -751,7 +811,7 @@
       return '<div class="rh-item" data-id="' + esc(s.id) + '">' +
         '<div class="rh-main"><div class="rh-t">' + esc(s.title || 'Phiên') + '</div>' +
         '<div class="rh-sub">' + esc(relTime(s.updatedAt)) + (s.lastMsg ? ' · ' + esc(s.lastMsg.slice(0, 44)) : '') + '</div></div>' +
-        '<button class="rh-del" data-del="' + esc(s.id) + '" title="Xoá phiên" aria-label="Xoá">×</button></div>';
+        '<button class="rh-del" data-del="' + esc(s.id) + '" data-tip="Xoá phiên" aria-label="Xoá phiên">×</button></div>';
     }).join('');
   }
   function renderHistInto(el) {
@@ -1315,8 +1375,9 @@
   // viewport — nếu không cụm nút tràn đè lên cột rail trên desktop.
   //
   // Icon-only, tròn, cỡ đều (`shell.css` .ws-fab .btn) — chữ dồn hết vào
-  // `data-tip`/`aria-label`, hiện thành tooltip khi hover/focus (CSS thuần,
-  // không JS). Mỗi hàm render CHỈ set 2 thuộc tính đó + innerHTML là SVG trơn
+  // `data-tip`/`aria-label`, hiện thành tooltip qua module TOOLTIP DÙNG CHUNG
+  // phía cuối file (node `.tip` ở body, không phải `::after` riêng của FAB
+  // nữa). Mỗi hàm render CHỈ set 2 thuộc tính đó + innerHTML là SVG trơn
   // (không còn chữ + `margin-right` kèm theo trong chuỗi).
   function fabHost() {
     var host = document.getElementById('wsFab');
@@ -2059,7 +2120,7 @@
     } catch (e) { /* ignore */ }
     return getToken();
   }
-  function setSend(on) { var s = document.getElementById('railSend'), i = document.getElementById('railInput'), a = document.getElementById('railAttach'); if (s) s.disabled = !on; if (a) a.disabled = !on; if (i) { i.disabled = !on; if (on) i.focus(); } }
+  function setSend(on) { var s = document.getElementById('railSend'), i = document.getElementById('railInput'), a = document.getElementById('railAttach'); if (s) s.disabled = !on; if (a) { a.disabled = !on; a.setAttribute('data-tip', on ? 'Gửi ảnh' : 'Lập lá số trước đã'); } if (i) { i.disabled = !on; if (on) i.focus(); } }
 
   function parseSSE(block) {
     var name = null, data = null;
@@ -2135,7 +2196,7 @@
       var ta = document.getElementById('railInput');
       ta.disabled = false; ta.placeholder = o.placeholder || 'Hỏi bất cứ điều gì về lá số này…';
       document.getElementById('railSend').disabled = false;
-      var att = document.getElementById('railAttach'); if (att) att.disabled = false;
+      var att = document.getElementById('railAttach'); if (att) { att.disabled = false; att.setAttribute('data-tip', 'Gửi ảnh'); }
       greet(o);
       // Ngữ cảnh mới = phiên hỏi mới: đếm lại từ đầu và cho thẻ mời hiện lại.
       _askCount = 0; _upsellShown = false; _cungAsked = []; _suggestShown = false; pendingSuggest = null;
@@ -2762,6 +2823,79 @@
     } catch (e) { /* trình duyệt chặn defineProperty → sidebar vẫn tự đúng ở lượt tải trang sau */ }
   })();
 
+  // ── TOOLTIP DÙNG CHUNG (`data-tip` + `aria-label`, thay hẳn `title=`) ──
+  // MỘT node `.tip` duy nhất gắn ở <body>, định vị bằng `getBoundingClientRect`
+  // của phần tử đang hover/focus — không tạo/xoá DOM mỗi lần hiện. Lý do KHÔNG
+  // dùng CSS `::after` như FAB bản cũ: `.rh-btn` (rail header) nằm trong
+  // `.rail{overflow:hidden}`, `::after` bị mẹ xén mất; node ở body thì thoát
+  // sạch overflow của mọi tổ tiên. `title=` native đã bỏ hẳn: delay không sửa
+  // được, không theo theme, và im lặng trên chạm (không có "hover" để kích).
+  //
+  // Chuột dùng mouseover/mouseout (delegation), có bù bong bóng bằng
+  // `relatedTarget` — mouseout nổ MỖI LẦN chuột đổi phần tử con bên trong
+  // host (vd. svg bên trong nút), soát `host.contains(relatedTarget)` để khỏi
+  // ẩn tooltip khi vẫn còn trong host. Bàn phím dùng focus/blur (bắt buộc
+  // `capture:true` — hai sự kiện này KHÔNG nổi bọt). Chạm màn hình: bỏ hẳn
+  // nhánh chuột (kích bằng touch rồi hiện ngay dưới ngón tay, không ai đọc
+  // kịp) nhưng GIỮ nhánh focus — người dùng bàn phím/switch control trên máy
+  // hybrid vẫn cần tooltip, đó là lý do tách riêng thay vì tắt hẳn qua CSS
+  // `hover:none` như bản `::after` cũ.
+  var tipEl = null, tipShowT = null, tipHideT = null, tipTarget = null;
+  function tipNode() {
+    if (!tipEl) { tipEl = document.createElement('div'); tipEl.className = 'tip'; document.body.appendChild(tipEl); }
+    return tipEl;
+  }
+  function tipPlace(host, el) {
+    var r = host.getBoundingClientRect();
+    var w = el.offsetWidth, h = el.offsetHeight;
+    var top = r.top - h - 8, left = r.left + r.width / 2 - w / 2;
+    if (top < 4) top = r.bottom + 8; // hết chỗ phía trên → tự lật xuống dưới
+    if (left < 4) left = 4;
+    if (left + w > window.innerWidth - 4) left = window.innerWidth - 4 - w;
+    el.style.top = Math.max(4, Math.min(top, window.innerHeight - h - 4)) + 'px';
+    el.style.left = left + 'px';
+  }
+  function tipShow(host) {
+    var txt = host.getAttribute('data-tip');
+    if (!txt) return;
+    clearTimeout(tipHideT);
+    tipTarget = host;
+    tipShowT = setTimeout(function () {
+      if (tipTarget !== host || !document.contains(host)) return;
+      var el = tipNode();
+      el.textContent = txt;
+      tipPlace(host, el);
+      el.classList.add('show');
+    }, 350);
+  }
+  function tipHide() {
+    clearTimeout(tipShowT);
+    tipTarget = null;
+    tipHideT = setTimeout(function () { if (tipEl) tipEl.classList.remove('show'); }, 80);
+  }
+  document.addEventListener('focus', function (e) {
+    var h = e.target.closest && e.target.closest('[data-tip]');
+    if (h) tipShow(h);
+  }, true);
+  document.addEventListener('blur', function (e) {
+    var h = e.target.closest && e.target.closest('[data-tip]');
+    if (h) tipHide();
+  }, true);
+  if (!window.matchMedia || !window.matchMedia('(hover:none)').matches) {
+    document.addEventListener('mouseover', function (e) {
+      var h = e.target.closest && e.target.closest('[data-tip]');
+      if (h && h !== tipTarget) tipShow(h);
+    });
+    document.addEventListener('mouseout', function (e) {
+      var h = e.target.closest && e.target.closest('[data-tip]');
+      if (h && !h.contains(e.relatedTarget)) tipHide();
+    });
+  }
+  // Cuộn/resize làm tooltip trôi lệch khỏi nút → ẩn thẳng thay vì đuổi theo.
+  document.addEventListener('scroll', function () { if (tipEl) tipEl.classList.remove('show'); }, true);
+  window.addEventListener('resize', function () { if (tipEl) tipEl.classList.remove('show'); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && tipEl) tipEl.classList.remove('show'); });
+
   // ── BOOT ──
   function boot() {
     // Marketing: nạp track.js (page_view tự bắn) + đánh dấu mở tool trong shell.
@@ -2780,10 +2914,10 @@
     // Sau reload: nhận cờ fromshare để bắn beacon chuyển đổi sau câu hỏi đầu tiên.
     try { _fromshareId = sessionStorage.getItem('app_fromshare_id') || null; if (_fromshareId) sessionStorage.removeItem('app_fromshare_id'); } catch (e) { /* ignore */ }
     pickAuthor();
+    simulatePulse(); // seed TRƯỚC renderSidebar() đầu tiên — khỏi nháy "…"
     renderSidebar();
     loadCatalog();
-    loadPulse();
-    setInterval(loadPulse, 45000);
+    startPulse();
     renderRail();
     renderTabbar();
     trackWsTopHeight();

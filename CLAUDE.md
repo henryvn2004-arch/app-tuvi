@@ -85,7 +85,9 @@ grep mò — repo có file 400 KB+ (`public/tuvi-ansao-engine.js`, `public/admin
 ### Tiền
 `lib/billing/credits.ts` (trừ/hoàn/kiểm sở hữu) · `packages.ts` + `pricing.ts`
 (giá) · `viral-budget.ts` (trần ảnh free) · `anon-trial.ts` (khách vô danh) ·
-`lib/portraits/cache.ts` `cacheFor()` (cửa DUY NHẤT vào `portrait_cache`).
+`lib/portraits/cache.ts` `cacheFor()` (cửa DUY NHẤT vào `portrait_cache`) ·
+`lib/billing/paypal.ts` (nguồn DUY NHẤT chạm PayPal — `settlePayPalTopup` là
+cửa chung cho CẢ trình duyệt lẫn `app/api/paypal-webhook`, chịu được gọi trùng).
 
 ### Vận hành
 `lib/ops/jobs.ts` (**sổ job** — thêm cron phải ghi vào đây) · `lib/cron/log.ts`
@@ -97,11 +99,11 @@ sửa bằng SQL không cần deploy) · `lib/marketing/*` (digest · cảnh bá
 (tường trả phí) · `tool-prices.js` (giá) · `poster.js` (ảnh 9:16 + QR) ·
 `nav.js` (icon dùng chung) · `track.js` (đo) · `referral.js`.
 
-### 27 bộ dò (chạy trong CI lint) — `npm run check:*`
+### 29 bộ dò (chạy trong CI lint) — `npm run check:*`
 `prices` `nostore` `groups` `viec` `share` `history` `shellboot` `authapi`
 `giosinh` `keyframes` `hoatdong` `hexagrams` `laso` `railfields` `railwrap`
 `cacheshape` `hao` `motifs` `terms` `publish` `jobs` `token` `prompt` `topics`
-`batrach` `sodep` `lunar`.
+`batrach` `sodep` `lunar` `vntz` `tooltip`.
 **Bộ dò kêu oan là bộ dò bị tắt đi** — thà thu hẹp còn hơn để nó báo bừa.
 
 ## 📐 QUY ƯỚC BẮT BUỘC (đọc trước khi viết UI mới)
@@ -205,6 +207,7 @@ Mỗi luật dưới đây sinh ra từ một lần cắn thật. Cột cuối l
 | **Hoàn tiền qua RPC `add_credits`, KHÔNG sửa thẳng `user_credits.balance`** | Sổ giao dịch phải giải thích được số dư | mục "Vận Hạn 12 Tháng" |
 | **Giá Lượng: client KHÔNG chép số** — hiện bằng `data-tvp-price`, đọc hụt thì để `…` và **từ chối chạy** | Số CŨ nguy hiểm hơn ô đang tải: ô đang tải thì người ta chờ, số cũ thì người ta tin | `npm run check:prices` |
 | **Trần/cầu dao ngân sách hướng fail phải ngược nhau tuỳ vai** | Gác NGÂN SÁCH → fail-**open** (`viral-budget.ts`); PHÁT tiền → fail-**closed** (`onboarding/tasks.ts`) | mục "M3 — Nhiệm vụ onboarding" |
+| **Chống trùng đường tiền: dòng SỔ đi TRƯỚC làm mutex, cộng tiền SAU** — và mutex chỉ có thật khi có UNIQUE đỡ bên dưới | `Prefer: resolution=ignore-duplicates` KHÔNG làm gì nếu thiếu ràng buộc UNIQUE — đã im lặng vô hiệu từ đầu trên `paypal_order_id`. Và cộng tiền trước rồi ghi sổ sau thì lượt thua cuộc VẪN kịp cộng, chỉ trượt ở bước ghi ⇒ ví tăng hai lần, sổ một dòng | `paypal_settle_topup` · `nhat-ky/2026-08.md` "Chuyển PayPal sang account công ty" |
 
 ### 💾 Cache kết quả
 - **Đổi CẤU TRÚC payload ⇒ BẮT BUỘC bump `SHAPE`.** `portrait_cache` khoá theo
