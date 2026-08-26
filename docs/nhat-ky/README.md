@@ -160,3 +160,8 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 | 134 | 2026-08 | `2026-08.md` | 🎭 Tracker "đang online" — đảo ngược sang MÔ PHỎNG theo Henry, sau khi số thật ra 0/0 |
 | 135 | 2026-08 | `2026-08.md` | 💳 Chuyển PayPal sang account công ty — rà đường tiền lộ 4 lỗi, `ignore-duplicates` chưa từng có tác dụng |
 | 136 | 2026-08 | `2026-08.md` | 💳 PayPal live lượt đầu: thẻ hết tiền, câu báo lỗi vô dụng, webhook câm — và bẫy top-25 của log Vercel |
+| 137 | 2026-08 | `2026-08.md` | 🕰️ Xác Định Giờ Sinh: hỏi trẻ em thứ chúng CÓ, thôi hỏi thứ chúng chưa có (PR #506) |
+| 138 | 2026-08 | `2026-08.md` | 🔭 "Ai Sinh Cùng Ngày Với Bạn" — ĐO trước khi xây |
+| 139 | 2026-08 | `2026-08.md` | 🌒 `solarToLunar` BỊA lá số cho mọi ngày trước 1900 — im lặng |
+| 140 | 2026-08 | `2026-08.md` | 🎂 Cắm khối "Ai Sinh Cùng Ngày Với Bạn" vào Luận Giải + Bát Tự |
+| 141 | 2026-08 | `2026-08.md` | 🖼️ Kéo ảnh người nổi tiếng về Supabase Storage — thôi hotlink Wikimedia Commons |
