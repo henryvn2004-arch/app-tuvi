@@ -192,6 +192,91 @@ export const CUNG_NET: Record<string, Record<string, string>> = {
   },
 };
 
+/**
+ * ── BẢN TRẺ EM của cung MỆNH và PHÚC ĐỨC ────────────────────
+ *
+ * 🔴 VÌ SAO PHẢI CÓ BẢNG RIÊNG, KHÔNG DÙNG LẠI BẢNG NGƯỜI LỚN:
+ * Nhãn đáp án cung Mệnh trước đây mượn `MENH_ROLE` của tool **Chân Dung Tiền
+ * Kiếp** — bảng đó tả VAI TRÒ XÃ HỘI của người trưởng thành: *"bày mưu tính kế
+ * cho người khác"*, *"sống bằng tay nghề và sức phá cách"*, *"ở vị trí trên
+ * người khác"*. Dán nguyên vào câu *"Người ngoài hay nhận xét cháu là đứa thế
+ * nào?"* thì phụ huynh không có cách nào chọn. Cung Phúc Đức cũng vậy: `CUNG_NET`
+ * có *"ít phải lo chuyện cơm áo"*, *"quy ra tiền bạc việc gì cũng được"*.
+ *
+ * 🔑 Đây là tầng SÂU NHẤT của lỗi "tool không biết đang nói chuyện với ai": gác
+ * câu hỏi và đổi tiêu đề mới chữa được phần vỏ; nếu ĐÁP ÁN vẫn là chữ người lớn
+ * thì câu hỏi vẫn không trả lời được. Ai sửa tiếp nhớ: đổi tiêu đề mà quên đổi
+ * `CUNG_NET`/`MENH_ROLE` là vá nửa vời.
+ *
+ * ⚠️ NỢ NỘI DUNG: 28 dòng dưới đây do tôi tự viết, suy từ tính chất chuẩn của
+ * 14 chính tinh, **CHƯA AI REVIEW** — cùng dạng nợ với `KIEU_HOC` (Dạy Con) và
+ * `DOMAIN_NGANH` (Công Sở). Cổ thư luận tính chất sao cho người trưởng thành,
+ * không có mục "sao này ở trẻ con thì biểu hiện thế nào"; đây là phần DIỄN
+ * SANG lứa tuổi, không phải trích dẫn. Sửa là sửa data thuần, không đụng logic.
+ */
+export const MENH_TRE_EM: Record<string, string> = {
+  'Tử Vi': 'chững chạc hơn tuổi, thích được coi trọng, hay đứng ra cầm đầu nhóm bạn',
+  'Thiên Cơ': 'nghĩ nhiều, hỏi vặn đủ thứ, thích cái gì cũng chóng chán rồi đổi',
+  'Thái Dương': 'hoạt bát, thích chỗ đông người, ngồi yên lâu là bứt rứt',
+  'Vũ Khúc': 'cứng cỏi, nói ít làm nhiều, bị ép là lì ra',
+  'Thiên Đồng': 'hiền, dễ chịu, ngại tranh giành, hay ỷ vào người lớn',
+  'Liêm Trinh': 'nguyên tắc, thấy bất công là cãi tới cùng',
+  'Thiên Phủ': 'điềm đạm, giữ đồ cẩn thận, thích mọi thứ theo nếp quen',
+  'Thái Âm': 'kín tiếng, tình cảm, để ý người khác, buồn vui hay giữ trong lòng',
+  'Tham Lang': 'ham vui, bắt chuyện dễ, học cái gì cũng nhanh nhưng mau chán',
+  'Cự Môn': 'nói nhiều, hay hỏi "vì sao", dễ lời qua tiếng lại với bạn',
+  'Thiên Tướng': 'chu đáo, hay giúp bạn, cần có người bên cạnh mới yên tâm',
+  'Thiên Lương': 'già trước tuổi, hay đứng ra can, người lớn tin giao việc',
+  'Thất Sát': 'gan, chơi mạnh tay, không chịu thua, thích tự làm theo ý mình',
+  'Phá Quân': 'khác các bạn cùng lứa, hay tháo đồ ra xem, chán chuyện nề nếp',
+};
+
+export const PHUC_DUC_TRE_EM: Record<string, string> = {
+  'Tử Vi': 'ăn ngủ đều, ít quấy, được chiều mà không hư quá',
+  'Thiên Cơ': 'khó ngủ, hay nghĩ ngợi, lo cả những chuyện vặt',
+  'Thái Dương': 'ngủ ít mà vẫn khoẻ, luôn tay luôn chân',
+  'Vũ Khúc': 'nếp cứng, quen giờ nào giờ ấy, đổi nếp là khó chịu',
+  'Thiên Đồng': 'dễ nuôi, ăn ngủ ngon, ít đòi hỏi',
+  'Liêm Trinh': 'bị ép là căng, phải nói rõ lý do mới chịu',
+  'Thiên Phủ': 'nề nếp, ăn ngủ ổn định, ít xáo trộn',
+  'Thái Âm': 'hay mơ, ngủ dễ giật mình, nhạy với không khí trong nhà',
+  'Tham Lang': 'hay đòi cái mới, mải chơi nên ăn ngủ thất thường',
+  'Cự Môn': 'hay lo vặt, khó yên tâm, hỏi đi hỏi lại một chuyện',
+  'Thiên Tướng': 'bám hơi, cần có người bên cạnh mới yên',
+  'Thiên Lương': 'bình thản, ít khóc lóc, tự dỗ được mình',
+  'Thất Sát': 'không chịu ngồi yên, nghịch tới lúc mệt mới thôi',
+  'Phá Quân': 'nếp thất thường, lúc rất ngoan lúc rất bướng',
+};
+
+/**
+ * Cung PHỤ MẪU, bản trẻ em.
+ *
+ * 🪤 Bản người lớn ở `CUNG_NET` viết theo ngôi ĐỨA CON nói về cha mẹ mình:
+ * *"cha mẹ có vị thế, **mình** được nể theo"*, *"cha mẹ lo được cho **mình**
+ * đầy đủ"*. Khi người trả lời LÀ cha mẹ thì chữ "mình" trỏ vào ai không còn rõ
+ * — và *"sớm phải tự lập, xa cha mẹ"* là một quỹ đạo cả đời, không phải thứ
+ * quan sát được ở đứa 5 tuổi. Bản này giữ nguyên NGHĨA của từng sao, chỉ đổi
+ * ngôi kể sang phía người đang gõ.
+ *
+ * ⚠️ Cùng nợ nội dung với hai bảng trên: tự viết, chưa ai review.
+ */
+export const PHU_MAU_TRE_EM: Record<string, string> = {
+  'Tử Vi': 'bố mẹ có vị thế, được người ta nể — cháu cũng thơm lây',
+  'Thiên Phủ': 'bố mẹ lo được cho cháu đầy đủ, nhà không thiếu thốn',
+  'Thiên Cơ': 'nhà hay thay đổi — chuyển chỗ, đổi việc, nếp sinh hoạt không cố định',
+  'Thái Dương': 'bố (hoặc người đàn ông trong nhà) là người ảnh hưởng tới cháu nhiều nhất',
+  'Vũ Khúc': 'bố mẹ nghiêm, ít nói lời tình cảm',
+  'Thiên Đồng': 'bố mẹ hiền, ít khi ép cháu',
+  'Liêm Trinh': 'bố mẹ khắt khe về nguyên tắc, sai là phải sửa cho bằng được',
+  'Thái Âm': 'mẹ (hoặc người phụ nữ trong nhà) là người gần cháu nhất',
+  'Tham Lang': 'nhà giao thiệp rộng, hay có khách, cháu quen chỗ đông người',
+  'Cự Môn': 'trong nhà hay có lời ra tiếng vào',
+  'Thiên Tướng': 'bố mẹ chu đáo, lo cho cháu từng việc nhỏ',
+  'Thiên Lương': 'có ông bà hoặc người lớn trong họ che chở cháu',
+  'Thất Sát': 'cháu phải tự lập sớm, hoặc có quãng xa bố mẹ',
+  'Phá Quân': 'quan hệ trong nhà có đoạn đứt gãy rõ — ly tán hoặc xa cách hẳn một thời gian',
+};
+
 /** Nhãn cực ngắn khi một cung có 2 chính tinh — ghép hai vế bằng " · ". */
 export function netCua(cung: string, sao: string[]): string {
   const bang = CUNG_NET[cung];
