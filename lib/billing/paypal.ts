@@ -249,8 +249,32 @@ export async function verifyPayPalWebhook(h: Headers, rawBody: string): Promise<
     return false;
   }
 
-  let event: unknown;
-  try { event = JSON.parse(rawBody); } catch { return false; }
+  // Chỉ soát tính hợp lệ của JSON. KHÔNG dùng kết quả parse để dựng lại gói tin
+  // gửi đi — xem lý do ngay dưới.
+  try { JSON.parse(rawBody); } catch {
+    console.error('[paypal-webhook] thân gói tin không phải JSON hợp lệ');
+    return false;
+  }
+
+  // ⚠️ `webhook_event` phải là ĐÚNG CHUỖI BYTE PayPal đã ký, nên nó được nối
+  // thẳng vào đây thay vì `JSON.stringify` một object đã parse.
+  //
+  // VÌ SAO: PayPal ký trên thân gói tin GỐC. Parse rồi tuần tự hoá lại là một
+  // phép biến đổi CÓ MẤT MÁT với mục đích này — thứ tự khoá, cách viết số, và
+  // nhất là cách escape unicode đều có thể đổi. Mô tả đơn của mình
+  // ("Tử Vi Minh Bảo – Nạp N Credits") đầy dấu tiếng Việt và gạch ngang dài;
+  // PayPal gửi chúng dạng `\uXXXX` còn `JSON.stringify` của Node bung ra UTF-8
+  // thô ⇒ khác byte ⇒ chữ ký sai ⇒ `FAILURE` đều đặn MỌI lần, dù webhook id
+  // hoàn toàn đúng. Đã trả giá bằng một buổi truy tìm.
+  const verifyBody =
+    '{"auth_algo":' + JSON.stringify(authAlgo) +
+    ',"cert_url":' + JSON.stringify(certUrl) +
+    ',"transmission_id":' + JSON.stringify(transmissionId) +
+    ',"transmission_sig":' + JSON.stringify(transmissionSig) +
+    ',"transmission_time":' + JSON.stringify(transmissionTime) +
+    ',"webhook_id":' + JSON.stringify(webhookId) +
+    ',"webhook_event":' + rawBody +
+    '}';
 
   try {
     const token = await getPayPalToken();
@@ -258,21 +282,26 @@ export async function verifyPayPalWebhook(h: Headers, rawBody: string): Promise<
       method: 'POST',
       headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
       cache: 'no-store',
-      body: JSON.stringify({
-        auth_algo:         authAlgo,
-        cert_url:          certUrl,
-        transmission_id:   transmissionId,
-        transmission_sig:  transmissionSig,
-        transmission_time: transmissionTime,
-        webhook_id:        webhookId,
-        webhook_event:     event,
-      }),
+      body: verifyBody,
     });
     if (!res.ok) {
       console.error('[paypal-webhook] verify API trả', res.status, await res.text());
       return false;
     }
-    return (await res.json()).verification_status === 'SUCCESS';
+    const out = await res.json();
+    if (out?.verification_status !== 'SUCCESS') {
+      // ⚠️ Nhánh này TRƯỚC ĐÂY trả `false` mà không ghi gì — nên lúc webhook
+      // câm, log trống trơn và không ai biết nó trượt ở cửa nào. Cùng lớp lỗi
+      // "nuốt thông tin chẩn đoán trên đường tiền" đã vá hai chỗ khác hôm nay.
+      console.error(
+        '[paypal-webhook] chữ ký KHÔNG hợp lệ —',
+        `verification_status=${out?.verification_status}`,
+        `transmission_id=${transmissionId}`,
+        `webhook_id_dài=${webhookId.length}`
+      );
+      return false;
+    }
+    return true;
   } catch (e) {
     console.error('[paypal-webhook] verify lỗi:', e);
     return false;

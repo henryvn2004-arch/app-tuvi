@@ -239,6 +239,12 @@ jobs:
       - name: Ảnh celeb — chuỗi rơi một nguồn + có ghi công
         run: npm run check:celebanh
 
+      # Luật ghi chép bảo "thêm mục vào <tháng>.md RỒI thêm dòng vào mục lục".
+      # Bước hai là bước người ta quên, và quên thì không có gì kêu — cả hai
+      # file vẫn hợp lệ. Đo 26/08: 141 mục nhưng mục lục chỉ 136 dòng.
+      - name: Mục lục nhật ký khai đủ số mục có thật
+        run: npm run check:nhatky
+
   typecheck:
     runs-on: ubuntu-latest
     timeout-minutes: 10
