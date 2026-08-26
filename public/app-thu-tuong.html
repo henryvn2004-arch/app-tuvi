@@ -75,17 +75,17 @@
         <h2>Tải ảnh lòng bàn tay</h2>
         <p class="sub">Đọc chỉ tay theo Ngũ Hành Hình Tướng từ ảnh bàn tay bạn. Bạn từng nghe xem chỉ tay nhưng chưa thử với đúng đường chỉ tay mình. Dùng khi tò mò bàn tay mình đang báo trước điều gì.</p>
         <p class="price-note" data-tvp-price-label="thu-tuong">…</p>
-        <div class="dt-privacy"><span>🔒</span><div>Ảnh chỉ gửi tới AI để phân tích, không lưu trên server. Xòe bàn tay phẳng, lòng bàn tay hướng lên, đủ sáng.</div></div>
+        <div class="dt-privacy"><span class="ic" data-icon="lock"></span><div>Ảnh chỉ gửi tới AI để phân tích, không lưu trên server. Xòe bàn tay phẳng, lòng bàn tay hướng lên, đủ sáng.</div></div>
 
         <div class="dt-input-tabs">
-          <button class="dt-input-tab active" onclick="switchTab('upload',this)">📁 Tải Ảnh Lên</button>
-          <button class="dt-input-tab" onclick="switchTab('camera',this)">📷 Chụp Ảnh</button>
+          <button class="dt-input-tab active" onclick="switchTab('upload',this)"><span class="ic" data-icon="folder"></span> Tải Ảnh Lên</button>
+          <button class="dt-input-tab" onclick="switchTab('camera',this)"><span class="ic" data-icon="camera"></span> Chụp Ảnh</button>
         </div>
 
         <div class="dt-input-pane active" id="pane-upload">
           <div id="uploadArea" class="upload-area" ondragover="onDragOver(event)" ondragleave="onDragLeave(event)" ondrop="onDrop(event)">
             <input type="file" id="fileInput" accept="image/*" onchange="onFileSelect(event)">
-            <span class="upload-icon">✋</span>
+            <span class="upload-icon"><span class="ic" data-icon="hand"></span></span>
             <div class="upload-title">Kéo thả ảnh lòng bàn tay hoặc click để chọn</div>
             <div class="upload-sub">JPG, PNG, WebP — tối đa 5MB · Chụp lòng bàn tay, thấy rõ đường chỉ</div>
           </div>
@@ -97,13 +97,13 @@
         <div class="dt-input-pane" id="pane-camera">
           <div style="text-align:center;padding:12px 0 16px">
             <div id="preCamTips">
-              <button class="camera-btn" id="openCamBtn" onclick="openCamera()"><span>📷</span> Mở Camera</button>
+              <button class="camera-btn" id="openCamBtn" onclick="openCamera()"><span class="ic" data-icon="camera"></span> Mở Camera</button>
             </div>
             <div id="camWrap" style="display:none;position:relative;width:280px;margin:0 auto">
               <video id="camVideo" style="width:280px;border-radius:12px;display:block" autoplay playsinline></video>
             </div>
             <div id="camBtns" style="display:none;margin-top:14px;gap:10px;justify-content:center;flex-wrap:wrap">
-              <button class="btn-go" onclick="capturePhoto()" style="margin:0">📸 Chụp</button>
+              <button class="btn-go" onclick="capturePhoto()" style="margin:0"><span class="ic" data-icon="camera"></span> Chụp</button>
               <button class="btn-cancel" onclick="stopCamera()">✕ Huỷ</button>
             </div>
             <canvas id="camCanvas" style="display:none"></canvas>
@@ -115,17 +115,17 @@
             <img id="previewImg" class="preview-img" alt="Ảnh đã chọn">
             <canvas id="overlayCanvas" class="overlay-canvas"></canvas>
             <div class="preview-badge">✓ Ảnh đã chọn</div>
-            <div class="mp-badge" id="mpBadge">✋ Bàn tay đã xác định</div>
+            <div class="mp-badge" id="mpBadge"><span class="ic" data-icon="hand"></span> Bàn tay đã xác định</div>
           </div>
           <div id="handGeomPanel" style="display:none;margin-top:10px;padding:10px 14px;background:var(--paper);border-radius:8px;border:1px solid var(--border-lt);font-size:12px;text-align:left;max-width:340px;margin-left:auto;margin-right:auto">
-            <div style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text-lt);margin-bottom:6px">📐 Đo lường MediaPipe</div>
+            <div style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text-lt);margin-bottom:6px"><span class="ic" data-icon="bar-chart-3"></span> Đo lường MediaPipe</div>
             <div id="handGeomText" style="color:var(--text-mid);line-height:1.8"></div>
           </div>
           <button class="remove-btn" onclick="removePhoto()">✕ Xoá ảnh</button>
         </div>
 
         <div style="text-align:center;margin-top:18px">
-          <button class="btn-go" id="analyzeBtn" onclick="analyze()" disabled>✋ Phân Tích Thủ Tướng — <span data-tvp-price="thu-tuong">…</span> Lượng</button>
+          <button class="btn-go" id="analyzeBtn" onclick="analyze()" disabled><span class="ic" data-icon="hand"></span> Phân Tích Thủ Tướng — <span data-tvp-price="thu-tuong">…</span> Lượng</button>
         </div>
         <div class="dt-error" id="error-msg"></div>
       </div>
@@ -393,7 +393,9 @@ async function analyze() {
 
 async function _doAnalyze() {
   document.getElementById('resultCard').style.display='block';
-  document.getElementById('aiResult').innerHTML='<div class="dt-loading"><span class="dt-loading-icon">✋</span><div class="dt-loading-text">AI đang đọc chỉ tay...<br><span style="font-size:12px;opacity:.7">Thường mất 15–20 giây</span></div></div>';
+  const aiResultEl = document.getElementById('aiResult');
+  aiResultEl.innerHTML='<div class="dt-loading"><span class="dt-loading-icon ic" data-icon="hand"></span><div class="dt-loading-text">AI đang đọc chỉ tay...<br><span style="font-size:12px;opacity:.7">Thường mất 15–20 giây</span></div></div>';
+  window.mountIcons && window.mountIcons(aiResultEl);
   document.getElementById('resultCard').scrollIntoView({behavior:'smooth',block:'start'});
 
   try {

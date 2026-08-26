@@ -17,7 +17,7 @@
 
 import type { NhanMachProfile } from '@/lib/engine/nhan-mach';
 import { ARC_GIONG_NGUOI } from '@/lib/agent/prompts';
-import { vanNamLine, LUAT_VAN_NAM } from '@/lib/engine/cong-so';
+import { vanNamLine, LUAT_VAN_NAM_AN_CUNG } from '@/lib/engine/cong-so';
 
 export const NHAN_MACH_SYSTEM_PROMPT = `Bạn là một người xem tử vi lâu năm, đang giúp một người sắp xếp CÔNG VIỆC với một nhóm người quanh họ — đội của họ, hoặc danh sách khách hàng.
 
@@ -73,7 +73,8 @@ export function buildNhanMachPrompt(p: NhanMachProfile): string {
     );
     L.push(`   Điều người hỏi cần ở hạng người này: ${t.vai.nhuCau}`);
     if (t.vanNam) {
-      L.push(`   Vận năm ${vanNamLine(t.vanNam)}`);
+      // 🔒 `anCung` — người trong sổ KHÔNG có mặt để đồng ý.
+      L.push(`   Vận năm ${vanNamLine(t.vanNam, { anCung: true })}`);
     }
     if (t.voiBan) {
       L.push(
@@ -130,7 +131,7 @@ export function buildNhanMachPrompt(p: NhanMachProfile): string {
       'KHÔNG được đọc thành "người này đáng ưu tiên hơn người kia". ' +
       'Con số trong ngoặc là điểm KHUNG ĐẠI VẬN chứa năm nay, KHÔNG phải điểm của năm.',
   );
-  L.push(LUAT_VAN_NAM);
+  L.push(LUAT_VAN_NAM_AN_CUNG);
   L.push('');
 
   L.push('— VIỆC CỦA BẠN —');

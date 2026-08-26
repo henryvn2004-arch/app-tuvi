@@ -248,9 +248,9 @@ h1,h2,h3{font-family:'Noto Serif',serif;}
     </div>
 
     <div class="tips-row">
-      <span class="tip-badge">☀️ Ánh sáng tự nhiên tốt nhất</span>
+      <span class="tip-badge"><span class="ic" data-icon="sun"></span> Ánh sáng tự nhiên tốt nhất</span>
       <span class="tip-badge"><span class="ic" data-icon="x-circle"></span> Không filter màu</span>
-      <span class="tip-badge">💆 Mặt không trang điểm</span>
+      <span class="tip-badge"><span class="ic" data-icon="smile"></span> Mặt không trang điểm</span>
       <span class="tip-badge"><span class="ic" data-icon="camera"></span> Chụp gần, rõ da mặt</span>
     </div>
 
@@ -338,7 +338,7 @@ h1,h2,h3{font-family:'Noto Serif',serif;}
       <div class="card-title"><span class="ic-inline" data-icon-emoji="💍" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">💍</span> Kim Loại & Phụ Kiện</div>
       <div class="accessory-row">
         <div class="acc-item">
-          <div class="acc-icon">⌚</div>
+          <div class="acc-icon"><span class="ic" data-icon="gem"></span></div>
           <div class="acc-label">Kim Loại</div>
           <div class="acc-val" id="accKimLoai">—</div>
         </div>
@@ -361,7 +361,7 @@ h1,h2,h3{font-family:'Noto Serif',serif;}
       <div class="outfit-tabs">
         <button class="outfit-tab active" onclick="showOutfit('hang_ngay',this)"><span class="ic" data-icon="leaf"></span> Hàng Ngày</button>
         <button class="outfit-tab" onclick="showOutfit('cong_so',this)"><span class="ic" data-icon="briefcase"></span> Công Sở</button>
-        <button class="outfit-tab" onclick="showOutfit('su_kien',this)">✨ Sự Kiện</button>
+        <button class="outfit-tab" onclick="showOutfit('su_kien',this)"><span class="ic" data-icon="sparkles"></span> Sự Kiện</button>
       </div>
       <div class="outfit-panel show" id="outfit-hang_ngay"></div>
       <div class="outfit-panel" id="outfit-cong_so"></div>
@@ -382,7 +382,7 @@ h1,h2,h3{font-family:'Noto Serif',serif;}
           <div style="display:flex;flex-direction:column;gap:6px;">
             <button class="outfit-tab active" id="tryonTabCasual" style="border-radius:8px;justify-content:flex-start;" onclick="setTryonType('casual',this)"><span class="ic" data-icon="leaf"></span> Hàng ngày</button>
             <button class="outfit-tab" id="tryonTabFormal" style="border-radius:8px;justify-content:flex-start;" onclick="setTryonType('formal',this)"><span class="ic" data-icon="briefcase"></span> Công sở</button>
-            <button class="outfit-tab" id="tryonTabEvening" style="border-radius:8px;justify-content:flex-start;" onclick="setTryonType('evening',this)">✨ Sự kiện</button>
+            <button class="outfit-tab" id="tryonTabEvening" style="border-radius:8px;justify-content:flex-start;" onclick="setTryonType('evening',this)"><span class="ic" data-icon="sparkles"></span> Sự kiện</button>
           </div>
         </div>
         <div>
@@ -413,7 +413,7 @@ h1,h2,h3{font-family:'Noto Serif',serif;}
           <div><div class="ba-label" id="tryonAfterLabel">Sau khi thử</div><img id="tryonAfter" class="ba-img" src="" alt=""></div>
         </div>
         <div style="display:flex;gap:8px;margin-top:10px;">
-          <button onclick="downloadTryon()" style="flex:1;padding:10px;background:var(--green);color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;">⬇ Tải Ảnh</button>
+          <button onclick="downloadTryon()" style="flex:1;padding:10px;background:var(--green);color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;"><span class="ic" data-icon="chevron-down"></span> Tải Ảnh</button>
           <button onclick="resetTryon()" style="flex:1;padding:10px;background:transparent;border:1.5px solid var(--border);border-radius:8px;font-size:12px;cursor:pointer;color:var(--text-mid);"><span class="ic" data-icon="rotate-cw"></span> Thử Lại</button>
         </div>
       </div>
@@ -561,7 +561,7 @@ function renderResults(d) {
   const season = d.season || 'spring_warm';
   const meta = SEASON_META[season] || SEASON_META.spring_warm;
   document.getElementById('seasonResult').style.background = meta.color;
-  document.getElementById('seasonIcon').textContent = meta.icon;
+  document.getElementById('seasonIcon').innerHTML = window.iconHtml ? window.iconHtml(meta.icon) : meta.icon;
   document.getElementById('seasonType').textContent = meta.name;
   document.getElementById('seasonVn').textContent = d.season_vn || meta.vn;
   document.getElementById('seasonDesc').textContent = SEASON_DESC[season] || '';
@@ -655,7 +655,7 @@ function renderOutfit(key, data) {
   const labels = { ao:'Áo', quan_vay:'Quần / Váy', layer:'Layer ngoài', giay:'Giày' };
   const items = ['ao','quan_vay','layer','giay'].filter(k => data[k]).map(k => `
     <div class="outfit-item">
-      <div class="outfit-item-icon">${icons[k]}</div>
+      <div class="outfit-item-icon">${window.iconHtml ? window.iconHtml(icons[k]) : icons[k]}</div>
       <div class="outfit-item-cat">${labels[k]}</div>
       <div class="outfit-item-val">${data[k]}</div>
     </div>`).join('');

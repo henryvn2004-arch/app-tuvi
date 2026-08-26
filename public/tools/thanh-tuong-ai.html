@@ -305,18 +305,18 @@ function updateRecordUI(recording, processing = false) {
   btn.classList.remove('recording', 'processing');
   if (recording) {
     btn.classList.add('recording');
-    icon.textContent = '⏹';
+    icon.textContent = '⏹'; // không có icon "dừng" trong bộ Lucide đang dùng — giữ nguyên
     label.textContent = 'Dừng Lại';
     timerWrap.classList.add('visible');
     waveWrap.classList.add('visible');
     document.getElementById('statusMsg').textContent = 'Đang thu âm — hãy đọc đoạn thơ trên...';
   } else if (processing) {
     btn.classList.add('processing');
-    icon.textContent = '⏳';
+    icon.innerHTML = window.iconHtml ? window.iconHtml('hourglass') : '⏳';
     label.textContent = 'Đang xử lý...';
     timerWrap.classList.remove('visible');
   } else {
-    icon.textContent = '🎙';
+    icon.innerHTML = window.iconHtml ? window.iconHtml('mic') : '🎙';
     label.textContent = 'Thu Âm Lại';
     timerWrap.classList.remove('visible');
     waveWrap.classList.remove('visible');
@@ -714,7 +714,7 @@ function resetTool() {
   document.getElementById('waveWrap').classList.remove('visible');
   document.getElementById('timerBarWrap').classList.remove('visible');
   document.getElementById('recordBtn').classList.remove('recording', 'processing');
-  document.getElementById('recordIcon').textContent = '🎙';
+  document.getElementById('recordIcon').innerHTML = window.iconHtml ? window.iconHtml('mic') : '🎙';
   document.getElementById('recordLabel').textContent = 'Bắt Đầu Thu Âm';
   document.getElementById('inputSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }

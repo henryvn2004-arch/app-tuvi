@@ -45,6 +45,13 @@ jobs:
       - name: Không có nhóm/đường dẫn công cụ chép cứng
         run: npm run check:groups
 
+      # Danh sách "việc cần làm" của tool Lá Số Người Khác buộc phải có BẢN SAO
+      # ở client (ô chọn dựng trước mọi lượt gọi API). Trôi khỏi bản engine thì
+      # hỏng IM LẶNG trên đường tiền: `resolveViec` rơi về 'hieu-them', người
+      # dùng trả tiền cho đúng bản chung chung mà họ vừa đọc miễn phí.
+      - name: Danh sách việc cần làm khớp giữa engine và trang
+        run: npm run check:viec
+
       # Chặn tái phát tool trong Luận Đường KHÔNG chia sẻ được. Chia sẻ khung
       # giữa từng là opt-in của từng tool nên `day-con` không có nút Chia sẻ
       # suốt từ lúc ra mắt, còn `thanh-tuong-pro`/`phong-thuy` thì không bao giờ
@@ -152,6 +159,16 @@ jobs:
       # mang lứa của bản kẹp tuổi cũ). Lời dặn trong mã không đủ; cần máy canh.
       - name: Vân tay cấu trúc payload ↔ SHAPE cache
         run: npm run check:cacheshape
+
+      # Chặn bộ khảo sát "Xác Định Giờ Sinh" hỏi trẻ em thứ chỉ người lớn mới
+      # có dữ liệu mà trả lời — đo được: một đứa 8 tuổi bị hỏi "về công việc",
+      # "về tiền bạc" và "khoảng bao nhiêu tuổi thì cuộc sống ĐỔI HƯỚNG" ở 100%
+      # số ca. Lỗi IM LẶNG với người sửa mã (tsc xanh, trang vẫn chạy), chỉ phụ
+      # huynh đang trả 50 Lượng mới thấy.
+      # ⚠️ PHẢI đứng SAU bước "Build engine" ở trên — bộ dò gọi engine THẬT nên
+      # cần `tuvi-engine/dist`. Đặt trước là đỏ ngay lượt CI đầu (đã vấp).
+      - name: Khảo sát Giờ Sinh khớp tuổi
+        run: npm run check:giosinh
 
       # `khao_luan`/`master_articles` nay có `publish_status`, nhưng cột đó chỉ
       # có nghĩa nếu MỌI bề mặt công khai lọc theo nó — đo được 12 chỗ đọc rải
