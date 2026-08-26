@@ -50,6 +50,43 @@ export async function getPayPalToken(): Promise<string> {
   return (await res.json()).access_token;
 }
 
+// ── Dịch mã lỗi PayPal sang câu người dùng LÀM ĐƯỢC gì đó ─────
+//
+// VÌ SAO CẦN: mã `issue` của PayPal đủ để lập trình viên chẩn đoán, nhưng đưa
+// nguyên `INSTRUMENT_DECLINED` cho khách thì cũng vô dụng ngang câu chung chung
+// cũ. Đã trả giá thật: một lượt nạp hỏng vì thẻ không đủ số dư, mà chính chủ
+// site — người biết rõ hệ thống — phải đi dò số dư thẻ mới hiểu. Khách thì
+// không dò gì cả, họ chỉ bỏ đi.
+//
+// Nguyên tắc mỗi câu dưới đây: nói HỎNG Ở ĐÂU và LÀM GÌ TIẾP, bằng tiếng Việt,
+// không có mã lỗi. Mã lỗi vẫn đi vào `console.error` cho mình đọc.
+const PAYPAL_ISSUE_MESSAGES: Record<string, string> = {
+  INSTRUMENT_DECLINED:
+    'Thẻ của bạn bị từ chối. Thường gặp nhất là thẻ không đủ số dư, hoặc ngân hàng chặn thanh toán quốc tế. Bạn thử lại bằng thẻ khác, hoặc trả bằng số dư trong tài khoản PayPal.',
+  PAYER_CANNOT_PAY:
+    'Nguồn tiền này không dùng để thanh toán được. Bạn thử lại bằng thẻ khác hoặc bằng số dư trong tài khoản PayPal.',
+  PAYER_ACTION_REQUIRED:
+    'Ngân hàng cần bạn xác nhận thêm một bước cho giao dịch này. Bạn quay lại PayPal hoàn tất bước xác thực rồi thử lại.',
+  TRANSACTION_REFUSED:
+    'PayPal từ chối giao dịch này. Bạn thử lại bằng nguồn tiền khác; nếu vẫn không được, liên hệ PayPal để biết lý do cụ thể.',
+  // Nhóm dưới là hỏng ở PHÍA MÌNH — khách có làm gì cũng không xong, nên đừng
+  // bảo họ thử lại, mà nhận lỗi và chỉ họ sang kênh khác.
+  PAYEE_ACCOUNT_RESTRICTED:
+    'Cổng thanh toán của chúng tôi đang gặp sự cố, không phải lỗi từ phía bạn. Bạn dùng cách chuyển khoản ngân hàng, hoặc liên hệ hỗ trợ để được xử lý.',
+  PAYEE_ACCOUNT_INVALID:
+    'Cổng thanh toán của chúng tôi đang gặp sự cố, không phải lỗi từ phía bạn. Bạn dùng cách chuyển khoản ngân hàng, hoặc liên hệ hỗ trợ để được xử lý.',
+  CURRENCY_NOT_SUPPORTED:
+    'Cổng thanh toán của chúng tôi đang gặp sự cố, không phải lỗi từ phía bạn. Bạn dùng cách chuyển khoản ngân hàng, hoặc liên hệ hỗ trợ để được xử lý.',
+};
+
+/** Câu cho khách đọc. Không kèm mã lỗi — mã đã nằm trong log của server. */
+export function humanIssueMessage(issue: string): string {
+  return (
+    PAYPAL_ISSUE_MESSAGES[issue] ||
+    'Thanh toán chưa hoàn tất. Bạn thử lại bằng nguồn tiền khác, hoặc dùng cách chuyển khoản ngân hàng. Nếu vẫn không được, liên hệ hỗ trợ giúp chúng tôi.'
+  );
+}
+
 // ── Chốt một đơn topup ────────────────────────────────────────
 export type SettleOutcome =
   | { ok: true; credits: number; balance: number; credited: boolean }
@@ -134,15 +171,10 @@ export async function settlePayPalTopup(
         // về mỗi `message` là tự bịt mắt đúng lúc cần nhìn nhất — đã trả giá
         // bằng một lượt nạp tiền thật hỏng mà không ai đọc ra được vì sao.
         console.error('[paypal] capture bị từ chối', orderId, 'HTTP', capRes.status, JSON.stringify(e));
-        const detail = e?.details?.[0]?.description || '';
-        const debugId = e?.debug_id ? ` [debug_id ${e.debug_id}]` : '';
-        return {
-          ok: false,
-          status: 502,
-          error: issue
-            ? `PayPal từ chối: ${issue}${detail ? ` — ${detail}` : ''}${debugId}`
-            : `${e?.message || 'Capture failed'}${debugId}`,
-        };
+        // Khách đọc câu tiếng Việt nói rõ làm gì tiếp; mã `issue` và `debug_id`
+        // ở lại trong log cho mình. Đưa mã lỗi ra màn hình chỉ đổi một câu khó
+        // hiểu bằng một câu khó hiểu khác.
+        return { ok: false, status: 502, error: humanIssueMessage(issue) };
       }
       const reread = await fetch(`${PAYPAL_BASE}/v2/checkout/orders/${encodeURIComponent(orderId)}`, {
         headers: { 'Authorization': `Bearer ${ppToken}` },
@@ -217,8 +249,32 @@ export async function verifyPayPalWebhook(h: Headers, rawBody: string): Promise<
     return false;
   }
 
-  let event: unknown;
-  try { event = JSON.parse(rawBody); } catch { return false; }
+  // Chỉ soát tính hợp lệ của JSON. KHÔNG dùng kết quả parse để dựng lại gói tin
+  // gửi đi — xem lý do ngay dưới.
+  try { JSON.parse(rawBody); } catch {
+    console.error('[paypal-webhook] thân gói tin không phải JSON hợp lệ');
+    return false;
+  }
+
+  // ⚠️ `webhook_event` phải là ĐÚNG CHUỖI BYTE PayPal đã ký, nên nó được nối
+  // thẳng vào đây thay vì `JSON.stringify` một object đã parse.
+  //
+  // VÌ SAO: PayPal ký trên thân gói tin GỐC. Parse rồi tuần tự hoá lại là một
+  // phép biến đổi CÓ MẤT MÁT với mục đích này — thứ tự khoá, cách viết số, và
+  // nhất là cách escape unicode đều có thể đổi. Mô tả đơn của mình
+  // ("Tử Vi Minh Bảo – Nạp N Credits") đầy dấu tiếng Việt và gạch ngang dài;
+  // PayPal gửi chúng dạng `\uXXXX` còn `JSON.stringify` của Node bung ra UTF-8
+  // thô ⇒ khác byte ⇒ chữ ký sai ⇒ `FAILURE` đều đặn MỌI lần, dù webhook id
+  // hoàn toàn đúng. Đã trả giá bằng một buổi truy tìm.
+  const verifyBody =
+    '{"auth_algo":' + JSON.stringify(authAlgo) +
+    ',"cert_url":' + JSON.stringify(certUrl) +
+    ',"transmission_id":' + JSON.stringify(transmissionId) +
+    ',"transmission_sig":' + JSON.stringify(transmissionSig) +
+    ',"transmission_time":' + JSON.stringify(transmissionTime) +
+    ',"webhook_id":' + JSON.stringify(webhookId) +
+    ',"webhook_event":' + rawBody +
+    '}';
 
   try {
     const token = await getPayPalToken();
@@ -226,21 +282,26 @@ export async function verifyPayPalWebhook(h: Headers, rawBody: string): Promise<
       method: 'POST',
       headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
       cache: 'no-store',
-      body: JSON.stringify({
-        auth_algo:         authAlgo,
-        cert_url:          certUrl,
-        transmission_id:   transmissionId,
-        transmission_sig:  transmissionSig,
-        transmission_time: transmissionTime,
-        webhook_id:        webhookId,
-        webhook_event:     event,
-      }),
+      body: verifyBody,
     });
     if (!res.ok) {
       console.error('[paypal-webhook] verify API trả', res.status, await res.text());
       return false;
     }
-    return (await res.json()).verification_status === 'SUCCESS';
+    const out = await res.json();
+    if (out?.verification_status !== 'SUCCESS') {
+      // ⚠️ Nhánh này TRƯỚC ĐÂY trả `false` mà không ghi gì — nên lúc webhook
+      // câm, log trống trơn và không ai biết nó trượt ở cửa nào. Cùng lớp lỗi
+      // "nuốt thông tin chẩn đoán trên đường tiền" đã vá hai chỗ khác hôm nay.
+      console.error(
+        '[paypal-webhook] chữ ký KHÔNG hợp lệ —',
+        `verification_status=${out?.verification_status}`,
+        `transmission_id=${transmissionId}`,
+        `webhook_id_dài=${webhookId.length}`
+      );
+      return false;
+    }
+    return true;
   } catch (e) {
     console.error('[paypal-webhook] verify lỗi:', e);
     return false;

@@ -12,7 +12,7 @@ import { ok, err, options, parseBody } from '@/lib/cors';
 import { getPackages, quoteCustomVnd, vndPerCredit } from '@/lib/billing/packages';
 // Mọi thứ chạm PayPal ở MỘT chỗ (lib/billing/paypal) — webhook dùng chung bản
 // đó, nên không có hai đường tiền song song để mà trôi lệch.
-import { PAYPAL_BASE, PAYPAL_CURRENCY, VND_PER_USD, getPayPalToken, settlePayPalTopup } from '@/lib/billing/paypal';
+import { PAYPAL_BASE, PAYPAL_CURRENCY, VND_PER_USD, getPayPalToken, humanIssueMessage, settlePayPalTopup } from '@/lib/billing/paypal';
 import { getToolPrice } from '@/lib/billing/pricing';
 import { hasSlugAccess } from '@/lib/billing/credits';
 import { freeGenGate, FREE_GEN_CAP_MESSAGE, railFreeRemaining } from '@/lib/billing/viral-budget';
@@ -282,16 +282,10 @@ async function handleTopup(body: Record<string, unknown>): Promise<Response> {
     if (!orderRes.ok) {
       // Cùng lý do như ở bước capture (lib/billing/paypal.ts): `message` của
       // PayPal là câu chung chung, lý do thật ở `details[0].issue` + `debug_id`.
-      const e = await orderRes.json().catch(() => ({} as Record<string, any>));
+      const e = await orderRes.json().catch(() => ({}) as Record<string, any>);
       console.error('[paypal] tạo đơn thất bại', 'HTTP', orderRes.status, JSON.stringify(e));
-      const issue = e.details?.[0]?.issue || '';
-      const detail = e.details?.[0]?.description || '';
-      const debugId = e.debug_id ? ` [debug_id ${e.debug_id}]` : '';
-      throw new Error(
-        issue
-          ? `PayPal từ chối: ${issue}${detail ? ` — ${detail}` : ''}${debugId}`
-          : `${detail || e.message || 'PayPal order failed'}${debugId}`
-      );
+      // Mã lỗi ở lại log; khách nhận câu nói rõ phải làm gì tiếp.
+      throw new Error(humanIssueMessage(e.details?.[0]?.issue || ''));
     }
     const order = await orderRes.json();
     const approvalUrl = order.links?.find((l: { rel: string }) => l.rel === 'approve')?.href;
