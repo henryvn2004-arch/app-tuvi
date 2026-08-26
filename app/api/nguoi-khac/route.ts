@@ -63,10 +63,10 @@ const TOOL_ID = 'nguoi-khac';
  * ⚠️ Cố ý KHÔNG nhét vào `lasoKey`: đổi khoá là mồ côi cả cache LẪN
  * `userOwnsLaso` ⇒ người đã trả tiền bị tính lại.
  */
-const SHAPE = 1;
+const SHAPE = 2;
 
 /** Vân tay CẤU TRÚC — `npm run check:cacheshape` canh khớp với `SHAPE` ở trên. */
-const SHAPE_FINGERPRINT = '5ca3e50e1109';
+const SHAPE_FINGERPRINT = 'f61088b7da86';
 
 /** Cửa DUY NHẤT vào cache của tool này; `shape` khai một lần tại đây. */
 const CACHE = cacheFor(TOOL_ID, SHAPE);
