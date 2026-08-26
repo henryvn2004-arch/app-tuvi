@@ -307,7 +307,7 @@ function analyze() {
   const catName  = catEntry?.cat || '';
   const banner   = document.getElementById('verdict-banner');
   banner.className = 'verdict-banner ' + (isGood ? 'good' : 'bad');
-  document.getElementById('verdict-icon').textContent = isGood ? '✅' : '⚠️';
+  document.getElementById('verdict-icon').innerHTML = window.iconHtml ? window.iconHtml(isGood ? '✅' : '⚠️') : (isGood ? '✅' : '⚠️');
   document.getElementById('verdict-title').textContent = isGood
     ? `Hướng ${DIR_LABELS[selectedDoor]} hợp mệnh — ${catName}`
     : `Hướng ${DIR_LABELS[selectedDoor]} không hợp mệnh — ${catName}`;

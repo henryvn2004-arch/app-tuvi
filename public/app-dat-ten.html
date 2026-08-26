@@ -190,7 +190,7 @@ async function _doDatTenAI(){
   var btn=document.getElementById('btnUnlock');
   if(btn)btn.disabled=true;
   var el=document.getElementById('dtResult');
-  el.innerHTML='<div class="phan-empty">✨ AI đang gợi ý tên con… thường mất 15–25 giây</div>';
+  el.innerHTML='<div class="phan-empty">'+(window.iconHtml?window.iconHtml('sparkles'):'')+' AI đang gợi ý tên con… thường mất 15–25 giây</div>';
   el.scrollIntoView({behavior:'smooth',block:'nearest'});
   try{
     var res=await fetch('/api/xem-tuoi?action=dat-ten-con',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({

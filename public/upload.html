@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Tử Vi RAG — Upload Tài Liệu</title>
+<script src="/nav.js?v=22" data-icons-only></script>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&family=JetBrains+Mono:wght@400;500&display=swap');
   :root {
@@ -80,7 +81,7 @@
     <div class="card-title">Chọn tài liệu</div>
     <div class="drop-zone" id="dropZone">
       <input type="file" id="fileInput" multiple accept=".pdf,.json,.txt" />
-      <div class="drop-icon">⭐</div>
+      <div class="drop-icon"><span class="ic" data-icon="star"></span></div>
       <div class="drop-text">Kéo thả hoặc click để chọn file</div>
       <div class="drop-sub">.pdf · .json · .txt</div>
     </div>
@@ -134,7 +135,7 @@ function renderFileList() {
   if (!selectedFiles.length) { list.innerHTML = ''; return; }
   list.innerHTML = selectedFiles.map((f, i) => `
     <div class="file-item" id="file-${i}">
-      <span>${f.name.endsWith('.pdf') ? '📄' : f.name.endsWith('.json') ? '📋' : '📝'}</span>
+      <span>${window.iconHtml ? window.iconHtml(f.name.endsWith('.pdf') ? '📄' : f.name.endsWith('.json') ? '📋' : '📝') : ''}</span>
       <span class="fname">${f.name}</span>
       <span class="fsize">${(f.size/1024).toFixed(0)}KB</span>
       <span class="fstatus" id="status-${i}" style="color:var(--text-dim)">—</span>
@@ -256,13 +257,13 @@ async function startUpload() {
   }
 
   if (errors === 0) {
-    log(`\n✅ HOÀN TẤT! ${success} chunks đã upload lên Supabase.`, 'done');
+    log(`\nHOÀN TẤT! ${success} chunks đã upload lên Supabase.`, 'done');
     log(`App Tử Vi giờ sẽ tra cứu tài liệu này khi luận giải.`, 'done');
-    btn.textContent = '✅ Hoàn tất';
+    btn.innerHTML = `${window.iconHtml ? window.iconHtml('check-circle') : ''} Hoàn tất`;
     btn.style.borderColor = 'var(--green)'; btn.style.color = 'var(--green)';
   } else {
     log(`\n⚠ Xong với ${errors} lỗi. ${success} chunks OK.`, 'info');
-    btn.disabled = false; btn.textContent = '↺ Chạy lại';
+    btn.disabled = false; btn.innerHTML = `${window.iconHtml ? window.iconHtml('rotate-cw') : ''} Chạy lại`;
   }
 }
 </script>

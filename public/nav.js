@@ -135,7 +135,7 @@
   // Map common emoji → Lucide key for runtime translation of legacy data
   var EMOJI_TO_ICON = {
     '🔮':'sparkles','✨':'sparkles','🔯':'sparkles','💑':'heart-handshake','🤝':'handshake',
-    '📊':'bar-chart-3','📈':'trending-up','📉':'trending-up','☀':'sun','☀️':'sun','⚡':'zap',
+    '📊':'bar-chart-3','📈':'trending-up','📉':'trending-up','☀':'sun','☀️':'sun','⚡':'zap','📡':'zap',
     '⚗':'gem','💎':'gem','🗓':'calendar-days','📅':'calendar','📌':'pin','🔄':'rotate-cw','🌀':'tornado',
     '😊':'smile','🙂':'smile','😀':'smile','👁':'eye','👁️':'eye','✋':'hand','🎤':'mic','🎙':'mic','🌅':'sunrise',
     '🧭':'compass','🧿':'compass','🖥':'monitor','🖥️':'monitor','💻':'monitor','🏪':'store','🏠':'home','🏢':'building-2',
@@ -157,7 +157,7 @@
     '🌟':'star','⭐':'star','🌸':'flower','🌺':'flower','🌹':'flower','🌷':'flower','🌻':'flower','🌼':'flower',
     '🌿':'leaf','🍀':'leaf','🌱':'leaf','🌲':'leaf','🌳':'leaf','🍃':'leaf',
     '🔥':'flame','📷':'camera','📸':'camera','🎥':'camera',
-    '🚪':'door-open','🌊':'waves','📦':'package','🛍':'package','🛍️':'package','📤':'package','📥':'package',
+    '🚪':'door-open','🌊':'waves','📦':'package','🛍':'package','🛍️':'package','📤':'package','📥':'package','🛏':'package','🛏️':'package','🛋':'package','🛋️':'package',
     '🏮':'lamp','🏆':'trophy','🥇':'trophy','🏅':'award','🎖':'award','🎖️':'award',
     '👑':'crown','🌙':'moon','🌐':'globe','✉':'mail','✉️':'mail','👓':'glasses','💪':'dumbbell','🌈':'rainbow','⚓':'anchor',
     '🎵':'music','🎶':'music','🎼':'music',
@@ -166,11 +166,11 @@
     // Bổ sung cho đợt quét admin. 🧧 (lì xì) không có icon Lucide tương đương
     // nên dùng chung 'gift' — cùng nghĩa quà tặng.
     '🔊':'volume-2','🔉':'volume-2','🔈':'volume-2','📭':'inbox','📬':'inbox','📪':'inbox',
-    '✏️':'pencil','✏':'pencil','💾':'save','🎬':'film','🚨':'siren',
+    '✏️':'pencil','✏':'pencil','💾':'save','🎬':'film','🚨':'siren','▶':'film','▶️':'film','📹':'film','📼':'film',
     '🗑':'trash-2','🗑️':'trash-2','🩺':'stethoscope','🤖':'bot','🧪':'flask-conical','🧧':'gift',
     '⏳':'hourglass','⌛':'hourglass','⏰':'hourglass','⏱':'hourglass',
     '👥':'users','👪':'users','👨‍👩‍👧':'users','ℹ':'info','ℹ️':'info','💠':'info',
-    '👤':'user','👦':'user','👧':'user','👕':'shirt','🎽':'shirt','🪄':'sparkles',
+    '👤':'user','👦':'user','👧':'user','⚧':'user','⚧️':'user','👕':'shirt','🎽':'shirt','🪄':'sparkles',
     '🚫':'x-circle','📁':'folder','🗂':'folder','📂':'folder','📍':'pin','📺':'monitor',
     '📱':'monitor','🖱':'monitor','📒':'book-open','🚿':'droplet',
     // CỐ Ý KHÔNG map 🔴 🟡 🔵 (và các chấm màu khác): ở đó MÀU chính là thông
@@ -184,7 +184,16 @@
     '⚔':'zap','⚔️':'zap','🔲':'layout-grid','📗':'book-open','📕':'book-open','📘':'book-open',
     '🪑':'briefcase','🎯':'circle-dot','🔧':'settings','🛠':'settings','🛠️':'settings','🛒':'store',
     '🔬':'search','🪴':'leaf','✗':'x','✘':'x','🪮':'scissors','🗺':'compass','🗺️':'compass',
-    '💍':'gem','🪞':'aperture','🎭':'palette'
+    '💍':'gem','🪞':'aperture','🎭':'palette',
+    // Bổ sung cho bộ icon hình dạng khuôn mặt/gọng kính (tools/kieu-toc-ai.html,
+    // trang-diem-ai.html…) — dùng qua data-icon-emoji nên THIẾU mục nào là
+    // mountIcons() rơi thẳng về textContent=emoji (không có fallback sparkles
+    // như iconHtml()), tức lọt nguyên emoji thô ra màn hình.
+    '⭕':'circle-dot','⬜':'layout-grid','🫀':'heart','📏':'scroll-text','🥚':'aperture',
+    '🫧':'aperture','🕶':'glasses','🕶️':'glasses','😺':'eye','✈':'glasses','✈️':'glasses',
+    '🌍':'globe','🌎':'globe','👖':'shirt','👜':'package',
+    '🍂':'leaf','🍁':'leaf','🌑':'moon','💆':'smile','⌚':'gem','🍵':'leaf',
+    '🔑':'lock','🧹':'trash-2',
   };
 
   function iconHtml(raw, fallback) {

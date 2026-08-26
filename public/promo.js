@@ -145,7 +145,7 @@
       // Chỉ báo ca THÀNH CÔNG và ca "đã dùng rồi" — hai ca người dùng cần biết.
       // Mấy ca còn lại (mã sai/hết hạn) ở luồng TỰ ĐỘNG thì im lặng: người ta
       // không chủ động gõ mã lúc này, bật một banner đỏ là doạ người vô cớ.
-      if (d && d.success) banner('🎉 ' + d.message, true);
+      if (d && d.success) banner(d.message, true);
       else if (d && d.reason === 'already_redeemed') banner(d.message, false);
       return d;
     });

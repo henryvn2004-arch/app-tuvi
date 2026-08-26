@@ -68,10 +68,10 @@ window.ShareButtons = {
     const fbUrl = 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(utmUrl('facebook'));
     const zaloUrl = 'https://zalo.me/share/?' + new URLSearchParams({ url: utmUrl('zalo'), title: title }).toString();
 
-    const shareBtn = canShare ? '<button class="sw-btn sw-share" id="sw-native">&#8679; Chia sẻ</button>' : '';
-    const copyBtn  = '<button class="sw-btn sw-copy" id="sw-copy">&#128279; Sao chép link</button>';
+    const shareBtn = canShare ? '<button class="sw-btn sw-share" id="sw-native">' + (window.iconHtml ? window.iconHtml('share-2') : '') + ' Chia sẻ</button>' : '';
+    const copyBtn  = '<button class="sw-btn sw-copy" id="sw-copy">' + (window.iconHtml ? window.iconHtml('link') : '') + ' Sao chép link</button>';
     const fbBtn    = '<a class="sw-btn sw-fb" href="' + fbUrl + '" target="_blank" rel="noopener" id="sw-fb">f Facebook</a>';
-    const zaloBtn  = '<a class="sw-btn sw-zalo" href="' + zaloUrl + '" target="_blank" rel="noopener" id="sw-zalo">&#9993; Zalo</a>';
+    const zaloBtn  = '<a class="sw-btn sw-zalo" href="' + zaloUrl + '" target="_blank" rel="noopener" id="sw-zalo">' + (window.iconHtml ? window.iconHtml('mail') : '') + ' Zalo</a>';
 
     el.innerHTML =
       '<div class="sw-bar">' +
@@ -93,7 +93,7 @@ window.ShareButtons = {
       const done = () => {
         btn.textContent = '✓ Đã sao chép!';
         btn.classList.add('sw-copied');
-        setTimeout(() => { btn.textContent = '🔗 Sao chép link'; btn.classList.remove('sw-copied'); }, 2500);
+        setTimeout(() => { btn.innerHTML = (window.iconHtml ? window.iconHtml('link') : '') + ' Sao chép link'; btn.classList.remove('sw-copied'); }, 2500);
       };
       if (navigator.clipboard) {
         navigator.clipboard.writeText(link).then(done).catch(() => {});

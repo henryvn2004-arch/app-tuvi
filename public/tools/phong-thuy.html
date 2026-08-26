@@ -321,7 +321,7 @@ h1,h2,h3{font-family:'Noto Serif',serif;}
 
       <!-- Idle state -->
       <div id="renderIdle">
-        <button class="render-btn" id="btnRender" onclick="doRoomRender()">✨ Render Phòng Theo Phong Thủy</button>
+        <button class="render-btn" id="btnRender" onclick="doRoomRender()"><span class="ic-inline" data-icon-emoji="✨" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">✨</span> Render Phòng Theo Phong Thủy</button>
       </div>
 
       <!-- Loading -->
@@ -372,7 +372,7 @@ function calcGua(y,g){return BatTrachTool.getCungMenh(y,g==='male'?'nam':'nu');}
 
 function cellQuality(dir,gua){if(!gua||dir==='C')return'neutral';const g=GUA_DATA[gua];if(!g)return'neutral';if(g.good[dir]){const v=g.good[dir];return v.includes('Sinh')?'best':v.includes('Thiên')?'good':'ok';}if(g.bad[dir]){const v=g.bad[dir];return v.includes('Tuyệt')?'worst':v.includes('Ngũ')?'bad':'warn';}return'neutral';}
 function getQLabel(dir,gua){if(!gua)return'';const g=GUA_DATA[gua];return(g?.good[dir]||g?.bad[dir]||'');}
-function getFIcon(id){return({bed:'🛏',desk:'🖥',sofa:'🛋',altar:'🏮',stove:'🔥',plant:'🌿',mirror:'🪞',door:'🚪',toilet:'🚿',water:'💧',wardrobe:'🚪',tv:'📺',table:'🪑'})[id]||'📦';}
+function getFIcon(id){var e=({bed:'🛏',desk:'🖥',sofa:'🛋',altar:'🏮',stove:'🔥',plant:'🌿',mirror:'🪞',door:'🚪',toilet:'🚿',water:'💧',wardrobe:'🚪',tv:'📺',table:'🪑'})[id]||'📦';return window.iconHtml?window.iconHtml(e):e;}
 
 let _gua=null,_img64=null,_imgType='image/jpeg';
 const ANALYSIS_STEPS=[
@@ -489,7 +489,7 @@ function renderResults(data){
     rl.innerHTML+='<div class="rec-item priority-'+(r.priority||'medium')+'"><div><span class="rec-badge">'+pl+'</span></div><div class="rec-body"><div class="rec-title">'+getFIcon(r.furnitureId)+' '+r.furnitureName+'</div><div class="rec-move">'+mv+'</div><div class="rec-reason">'+(r.reason||'')+'</div>'+(r.improvement?'<div class="rec-impr">↑ ~'+r.improvement+' điểm</div>':'')+'</div></div>';
   });
   const sg=document.getElementById('shopGrid');sg.innerHTML='';
-  (analysis.shoppingList||[]).forEach(s=>{const uc=s.urgency==='nên có'?'urg-must':s.urgency==='tốt nếu có'?'urg-good':'urg-opt';const ul=s.urgency==='nên có'?'Nên Có':s.urgency==='tốt nếu có'?'Tốt Nếu Có':'Tuỳ Ý';sg.innerHTML+='<div class="shop-item"><div class="shop-hdr"><span class="shop-icon">'+(s.icon||'✨')+'</span><span class="shop-name">'+s.item+'</span><span class="shop-urg '+uc+'">'+ul+'</span></div><div class="shop-pos">📍 '+(DIR_VN[s.position]||s.position||'')+'</div><div class="shop-reason">'+(s.reason||'')+'</div><div class="shop-price">💰 '+(s.priceRange||'')+'</div></div>';});
+  (analysis.shoppingList||[]).forEach(s=>{const uc=s.urgency==='nên có'?'urg-must':s.urgency==='tốt nếu có'?'urg-good':'urg-opt';const ul=s.urgency==='nên có'?'Nên Có':s.urgency==='tốt nếu có'?'Tốt Nếu Có':'Tuỳ Ý';const sIc=window.iconHtml?window.iconHtml(s.icon,window.ICONS&&window.ICONS.sparkles):(s.icon||'✨');sg.innerHTML+='<div class="shop-item"><div class="shop-hdr"><span class="shop-icon">'+sIc+'</span><span class="shop-name">'+s.item+'</span><span class="shop-urg '+uc+'">'+ul+'</span></div><div class="shop-pos">'+(window.iconHtml?window.iconHtml('pin'):'📍')+' '+(DIR_VN[s.position]||s.position||'')+'</div><div class="shop-reason">'+(s.reason||'')+'</div><div class="shop-price">'+(window.iconHtml?window.iconHtml('dollar-sign'):'💰')+' '+(s.priceRange||'')+'</div></div>';});
   if(!(analysis.shoppingList||[]).length)sg.innerHTML='<p style="color:var(--text-lt);font-size:12px;">Không có đề xuất thêm vật phẩm.</p>';
   document.getElementById('adviceText').textContent=analysis.generalAdvice||'';
 

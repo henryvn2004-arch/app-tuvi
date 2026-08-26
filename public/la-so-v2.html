@@ -100,7 +100,7 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg-soft);color:var
   <div id="laso-grid-container"></div>
   <div id="grid-actions" style="display:none;gap:10px;margin:10px 0;flex-wrap:wrap">
     <button onclick="exportPNG()" id="btn-export" style="background:var(--navy);color:#fff;border:none;border-radius:6px;padding:8px 18px;font-size:12px;font-weight:600;font-family:inherit;cursor:pointer;display:flex;align-items:center;gap:6px">⬇ Tải PNG</button>
-    <button onclick="window.print()" style="background:transparent;color:var(--navy);border:1px solid var(--border);border-radius:6px;padding:8px 18px;font-size:12px;font-weight:600;font-family:inherit;cursor:pointer">🖨 In lá số</button>
+    <button onclick="window.print()" style="background:transparent;color:var(--navy);border:1px solid var(--border);border-radius:6px;padding:8px 18px;font-size:12px;font-weight:600;font-family:inherit;cursor:pointer">In lá số</button>
   </div>
   <div class="legend">
     <strong style="color:#555">Ngũ Hành:</strong>
@@ -181,10 +181,10 @@ function renderCenter(ls, fd) {
   return `<div class="cell-center"><div class="cung-center">
     <div class="center-title">✦ ${esc((fd.name||'—').toUpperCase())} ✦</div>
     <hr class="center-divider">
-    <div class="center-row">📅 ${fd.dd}/${fd.mm}/${fd.yyyy} (Dương Lịch) · giờ ${fd.gioChi}</div>
-    <div class="center-row">📅 ${fd.amLich?fd.amLich.day+'/'+fd.amLich.month+'/'+fd.amLich.year:''} (Âm Lịch) · giờ ${fd.gioChi}</div>
-    <div class="center-row">🎂 ${ls.tuoiXem} tuổi (âm lịch)</div>
-    <div class="center-row">⚧ Giới tính: ${fd.gioitinh==='nam'?'Nam':'Nữ'}</div>
+    <div class="center-row"><span class="ic-inline" data-icon="calendar" data-icon-emoji="📅" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">📅</span> ${fd.dd}/${fd.mm}/${fd.yyyy} (Dương Lịch) · giờ ${fd.gioChi}</div>
+    <div class="center-row"><span class="ic-inline" data-icon="calendar" data-icon-emoji="📅" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">📅</span> ${fd.amLich?fd.amLich.day+'/'+fd.amLich.month+'/'+fd.amLich.year:''} (Âm Lịch) · giờ ${fd.gioChi}</div>
+    <div class="center-row"><span class="ic-inline" data-icon="cake" data-icon-emoji="🎂" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">🎂</span> ${ls.tuoiXem} tuổi (âm lịch)</div>
+    <div class="center-row"><span class="ic-inline" data-icon="user" data-icon-emoji="⚧" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">⚧</span> Giới tính: ${fd.gioitinh==='nam'?'Nam':'Nữ'}</div>
     <hr class="center-divider">
     <div class="center-row">Năm: <b style="color:var(--navy)">${ls.canChiNam}</b> &nbsp;·&nbsp; Mệnh: <b style="color:var(--navy)">${NAP_AM_FULL[ls.canChiNam]||ls.napAm}</b></div>
     <div class="center-row">Cục: <b style="color:var(--navy)">${ls.cuc}</b> &nbsp;·&nbsp; Mệnh: <b style="color:var(--navy)">${ls.menhDC}</b> · Thân: <b style="color:var(--navy)">${(()=>{const p=ls.palaces.find(p=>p.diaChi===ls.thanDC);return p?'cư '+p.cungName:ls.thanDC;})()}</b></div>
@@ -194,9 +194,9 @@ function renderCenter(ls, fd) {
     <div class="center-row">Tiểu hạn: <b style="color:#1E6B3C">${tvCung?.diaChi||'?'}</b> · ${tvCung?.cungName||''}</div>
     <div class="center-row">Lưu đại hạn: <b style="color:var(--gold)">${ldh?.diaChi||'?'}</b> · ${ldh?.cungName||''}</div>
     <hr class="center-divider">
-    <div class="center-row" style="font-size:10px;color:var(--text-lt)">🗓 Lập lá số: ${nowStr}</div>
+    <div class="center-row" style="font-size:10px;color:var(--text-lt)"><span class="ic-inline" data-icon="calendar-days" data-icon-emoji="🗓" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">🗓</span> Lập lá số: ${nowStr}</div>
     <div class="center-row" style="font-size:10px;color:var(--text-lt)">© 2026 紫微明寶 | Tử Vi Minh Bảo</div>
-    <div style="text-align:center;margin-top:6px"><a href="javascript:window.print()" style="font-size:10px;color:var(--blue);text-decoration:none">🖨 In lá số</a></div>
+    <div style="text-align:center;margin-top:6px"><a href="javascript:window.print()" style="font-size:10px;color:var(--blue);text-decoration:none">In lá số</a></div>
   </div></div>`;
 }
 
@@ -249,6 +249,7 @@ function doAnSao(){
     const ls=anSaoLaSo({ngayAL:amLich.day,thangAL:amLich.month,namAL:amLich.year,canNam,chiNam,gioIdx:gioAmIdx,gioitinh,namXem:namxem});
     const fd={name,gioitinh,dd,mm,yyyy,hh,pp,gioChi,amLich,canChi};
     document.getElementById('laso-grid-container').innerHTML=renderGrid(ls,fd);
+    if(window.mountIcons)window.mountIcons(document.getElementById('laso-grid-container'));
     document.getElementById('grid-title').textContent=`Lá Số: ${name||'—'} — ${dd}/${mm}/${yyyy} ${String(hh).padStart(2,'0')}:${String(pp).padStart(2,'0')} (Giờ ${gioChi})`;
     document.getElementById('grid-wrap').style.display='block';
     document.getElementById('grid-wrap').scrollIntoView({behavior:'smooth',block:'start'});
@@ -265,7 +266,7 @@ async function exportPNG(){
   const btn=document.getElementById('btn-export');
   const grid=document.querySelector('#laso-grid-container .laso-grid');
   if(!grid)return;
-  btn.disabled=true;btn.textContent='⏳ Đang xuất...';
+  btn.disabled=true;btn.innerHTML=(window.iconHtml?window.iconHtml('hourglass'):'')+' Đang xuất...';
   try{
     const canvas=await html2canvas(grid,{scale:2,useCORS:true,backgroundColor:'#ffffff',logging:false});
     const link=document.createElement('a');
@@ -278,5 +279,6 @@ async function exportPNG(){
 buildDropdowns();updateGioAm();
 document.addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.tagName!=='BUTTON')doAnSao();});
 </script>
+<script src="/nav.js?v=22" data-icons-only></script>
 </body>
 </html>
