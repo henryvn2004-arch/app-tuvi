@@ -33,15 +33,48 @@ function _dateDiff(y1:number,m1:number,d1:number, y2:number,m2:number,d2:number)
 }
 
 // ─── Solar → Lunar ────────────────────────────────────────────
+// Biên hợp lệ SUY TỪ CHÍNH BẢNG (không gõ tay) — phải khớp từng số với bản
+// vanilla `public/tuvi-ansao-engine.js`. `npm run check:lunar` canh hai bên.
+export const LUNAR_MIN_YMD = _LUNAR_TABLE[0]![0];
+export const LUNAR_MAX_YMD = _LUNAR_TABLE[_LUNAR_TABLE.length - 1]![0];
+
+/** Ngày dương này có nằm trong tầm bảng âm lịch không (1900-01-31 → 2100-12-31). */
+export function isLunarSupported(dd: number, mm: number, yy: number): boolean {
+  const target = yy*10000 + mm*100 + dd;
+  return target >= LUNAR_MIN_YMD && target <= LUNAR_MAX_YMD;
+}
+
+/**
+ * Dương → âm. NÉM `RangeError` khi ngoài tầm bảng.
+ *
+ * 🔴 Bản cũ có `if (idx < 0) return {day:1, month:1, year:yy, isLeap:false}` —
+ * tìm nhị phân trượt khỏi đầu bảng thì BỊA ra mùng 1 tháng 1, im lặng. Mọi ngày
+ * dương của một năm trước 1900 quy về CÙNG một ngày âm ⇒ cả năm gộp vào một lá
+ * số sai mà không gì báo.
+ *
+ * ⚠️ VÌ SAO BẢN NÀY *NÉM* CÒN BẢN VANILLA *TRẢ null* — cố ý, theo nơi gọi:
+ *   • vanilla: `lib/engine/laso.ts` + `app/luan-giai/[slug]/route.ts` đã sẵn
+ *     nhánh `if (!conv?.amLich)` → trả null là rơi vào thông báo lỗi tử tế.
+ *   • bản này: 11 nơi gọi (`van-ngay.ts`, `ngay-tot/engine.ts`) đều truyền ngày
+ *     LUÔN trong tầm (hôm nay / tháng đang xem / lá số đã qua validate). Đổi
+ *     kiểu trả về sang `| null` chỉ rải 11 cái `!` vào đường nóng vận ngày —
+ *     thêm rủi ro mà không thêm an toàn. Ném thì hành vi trong tầm y NGUYÊN.
+ * Cái BẮT BUỘC giống nhau giữa hai bản là BIÊN, và đó là thứ `check:lunar` canh.
+ */
 export function solarToLunar(dd: number, mm: number, yy: number): { day: number; month: number; year: number; isLeap: boolean } {
   const target = yy*10000 + mm*100 + dd;
+  if (target < LUNAR_MIN_YMD || target > LUNAR_MAX_YMD) {
+    throw new RangeError(`solarToLunar: ${dd}/${mm}/${yy} ngoài tầm bảng âm lịch (${LUNAR_MIN_YMD}–${LUNAR_MAX_YMD})`);
+  }
   let lo=0, hi=_LUNAR_TABLE.length-1, idx=-1;
   while (lo <= hi) {
     const mid = (lo+hi)>>1;
     if (_LUNAR_TABLE[mid]![0] <= target) { idx=mid; lo=mid+1; }
     else hi=mid-1;
   }
-  if (idx < 0) return { day:1, month:1, year:yy, isLeap:false };
+  if (idx < 0) {
+    throw new RangeError(`solarToLunar: ${dd}/${mm}/${yy} không tra được trong bảng âm lịch`);
+  }
   const [sk,lm,leap,ly] = _LUNAR_TABLE[idx]!;
   const sy=Math.floor(sk/10000), sm=Math.floor(sk/100)%100, sd=sk%100;
   const lunarDay = _dateDiff(sy,sm,sd, yy,mm,dd) + 1;
