@@ -435,6 +435,17 @@ body{font-family:var(--sans);background:var(--paper-2);color:var(--text);font-si
   body.drawer-open .ws-fab{display:none}
 }
 
+/* C3 — dòng báo "bản này cũng hiện trong Thư viện chung" + nút Ẩn đi, dựng sau
+   mỗi lượt tạo link chia sẻ (xem `galleryNotice` trong shell.js). */
+.sh-gal-note{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:8px 0 0;
+padding:8px 12px;background:var(--gold-lt);border:1px solid var(--gold-soft);border-radius:9px;
+font-size:12.5px;line-height:1.6;color:var(--text-mid)}
+.sh-gal-note a{color:var(--gold);font-weight:600}
+.sh-gal-note button{margin-left:auto;background:transparent;border:1px solid var(--gold-soft);
+color:var(--gold);border-radius:7px;padding:4px 12px;font-size:12px;font-weight:600;cursor:pointer;
+font-family:inherit}
+.sh-gal-note button:disabled{opacity:.6;cursor:default}
+
 /* ══════════════════════════════════════════════════════════════════════
    IN / LƯU PDF — LUẬT CỦA SHELL, KHÔNG PHẢI CỦA TỪNG TOOL
    ══════════════════════════════════════════════════════════════════════

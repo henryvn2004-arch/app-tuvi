@@ -20,6 +20,7 @@ import { logLlmUsage, logLlmParseFail } from '@/lib/agent/usage';
 import { railFreeGrant, railFreeTurnsPerGen } from '@/lib/billing/viral-budget';
 import { computeLaso, type Laso } from '@/lib/engine/laso';
 import { computeDayCon, resolveMoiLo, type DayConProfile } from '@/lib/engine/day-con';
+import { coSoDoc } from '@/lib/engine/nguoi-khac';
 import { DAY_CON_SYSTEM_PROMPT, DAY_CON_SCHEMA, buildDayConPrompt } from '@/lib/agent/day-con-prompt';
 import type { BirthParams } from '@/lib/contract/v1';
 import { withToolOutcome } from '@/lib/ops/tool-outcome';
@@ -274,6 +275,11 @@ async function runPreview(request: NextRequest) {
     success: true,
     preview: true,
     ...meta(p, String(body.name || '').trim().slice(0, 60)),
+    // C1 — CHỈ ở lượt tính thử: lá chắn cho phản đối "AI nó bịa thôi", đúng chỗ
+    // người ta chưa tin gì và đang cân xem có đáng trả tiền không. Hàm dùng
+    // CHUNG với `nguoi-khac`, và câu trích cũng đi qua chính `locCachCuc` nên
+    // không nói về thọ mệnh/bệnh tật của một đứa trẻ.
+    coSo: coSoDoc(r.ls, p),
   });
 }
 

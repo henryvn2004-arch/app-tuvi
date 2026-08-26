@@ -15,6 +15,7 @@
     "check:prices": "node scripts/check-no-hardcoded-prices.mjs",
     "check:nostore": "node scripts/check-supabase-no-store.mjs",
     "check:groups": "node scripts/check-no-hardcoded-groups.mjs",
+    "check:viec": "node scripts/check-viec-sync.mjs",
     "check:share": "node scripts/check-shell-share.mjs",
     "check:history": "node scripts/check-shell-history.mjs",
     "check:shellboot": "node scripts/check-shell-boot.mjs",

@@ -45,6 +45,13 @@ jobs:
       - name: Không có nhóm/đường dẫn công cụ chép cứng
         run: npm run check:groups
 
+      # Danh sách "việc cần làm" của tool Lá Số Người Khác buộc phải có BẢN SAO
+      # ở client (ô chọn dựng trước mọi lượt gọi API). Trôi khỏi bản engine thì
+      # hỏng IM LẶNG trên đường tiền: `resolveViec` rơi về 'hieu-them', người
+      # dùng trả tiền cho đúng bản chung chung mà họ vừa đọc miễn phí.
+      - name: Danh sách việc cần làm khớp giữa engine và trang
+        run: npm run check:viec
+
       # Chặn tái phát tool trong Luận Đường KHÔNG chia sẻ được. Chia sẻ khung
       # giữa từng là opt-in của từng tool nên `day-con` không có nút Chia sẻ
       # suốt từ lúc ra mắt, còn `thanh-tuong-pro`/`phong-thuy` thì không bao giờ

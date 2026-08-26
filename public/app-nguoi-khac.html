@@ -59,7 +59,12 @@
 .nk-item:last-child{padding-bottom:0}
 .nk-item .viec{font-size:13px;line-height:1.7;color:#2a2118}
 .nk-item .vidu{font-size:12.5px;line-height:1.7;color:#5a5145;font-style:italic;margin-top:4px}
-.nk-motcau{margin-top:16px;padding:14px 16px;background:#FBF8F1;border:1px solid #EADFC8;border-radius:10px;font-family:var(--serif);font-size:15px;line-height:1.75;color:#061A2E;font-weight:700}
+.nk-motcau{margin-top:0;padding:14px 16px;background:#FBF8F1;border:1px solid #EADFC8;border-radius:10px;font-family:var(--serif);font-size:15px;line-height:1.75;color:#061A2E;font-weight:700}
+/* C1 — dòng "đọc từ N dữ kiện" + câu cổ thư nguyên văn. */
+.nk-coso{font-size:12.3px;line-height:1.75;color:#5a5145;margin:0 0 11px;padding-bottom:10px;border-bottom:1px dashed #E8DFC8}
+.nk-coso b{color:#2a2118}
+.nk-quote{margin-top:8px;padding:9px 12px;background:#FBF8F1;border-left:3px solid #C9AE6A;border-radius:0 8px 8px 0;font-size:12.4px;line-height:1.72;color:#4a4034}
+.nk-quote .src{display:block;margin-top:4px;font-size:11px;color:#7A5F26;font-weight:600}
 .nk-basis-list{margin:0 0 0 18px;color:#5a5145;line-height:1.9;font-size:12.8px}
 .nk-basis-list li{margin-bottom:3px}
 .nk-basis-list b{color:#2a2118}
@@ -108,6 +113,17 @@
         </div>
         <p class="sub" id="qhHint" style="margin-top:-4px"></p>
 
+        <!-- Ô này là dữ kiện DUY NHẤT trong cả tool không suy được từ lá số.
+             Nhờ nó bản trả tiền mới có thứ để nói mà bản tính thử không có —
+             xem chú thích `VIEC_CAN_LAM` trong lib/engine/nguoi-khac.ts. -->
+        <div class="frow nk-qh">
+          <div class="fg" style="flex:1">
+            <label for="viecCanLam">Bạn đang cần làm gì với người này</label>
+            <select id="viecCanLam" onchange="onViecChange()"></select>
+          </div>
+        </div>
+        <p class="sub" id="viecHint" style="margin-top:-4px"></p>
+
         <!-- data-uc-noseed: ô này là lá số NGƯỜI KHÁC. Sổ lá số (user-charts.js)
              vẫn cho BẤM chọn vào đây, nhưng KHÔNG được tự mồi lá số của chính
              người dùng — mồi vào rồi họ bấm luôn là ra cẩm nang ứng xử với
@@ -142,6 +158,13 @@
               </div>
               <div class="nk-sub">Câu hỏi chạy ngầm trong đầu họ</div>
               <div class="nk-chips" id="cauHoiChips"></div>
+              <!-- Khối của việc người hỏi đang vướng. Đứng TRƯỚC phần mô tả
+                   tính cách: đó là thứ họ trả tiền để lấy, và là thứ duy nhất
+                   bản tính thử không thể có (nó cần dữ kiện do chính họ cấp). -->
+              <div id="keHoachBlock" style="display:none">
+                <div class="nk-sub" id="keHoachTitle"></div>
+                <p class="nk-para" id="keHoach"></p>
+              </div>
               <div id="proseTop" style="display:none">
                 <div class="nk-sub">Con người này vận hành thế nào</div>
                 <p class="nk-para" id="tinhKhi"></p>
@@ -179,12 +202,6 @@
           </div>
         </div>
 
-        <div class="res-block" id="endBlock" style="display:none">
-          <div class="res-block-body">
-            <div class="nk-motcau" id="motCau"></div>
-          </div>
-        </div>
-
         <!-- Cơ sở trong lá số — trước đây nằm nép trong <details> ở cuối, sau
              phần chữ. W1 đổi vai của nó: đây LÀ phần tính thử miễn phí, tức là
              bằng chứng duy nhất người chưa trả tiền có để đánh giá tool. Bày
@@ -192,12 +209,38 @@
         <div class="res-block" id="basisBlock" style="display:none">
           <div class="res-block-header"><span class="res-block-title">Cơ Sở Trong Lá Số</span></div>
           <div class="res-block-body">
+            <div class="nk-coso" id="coSoDoc" style="display:none"></div>
             <ul class="nk-basis-list" id="basisList"></ul>
             <details class="nk-basis-more" id="basisMore" style="display:none"></details>
           </div>
         </div>
 
-        <div class="res-block" style="background:#FBF3DE;border-color:#e8d9b0">
+        <!-- B3 — PEAK-END. Đo trên trang thật (bản trước): câu chốt là một div
+             KHÔNG tiêu đề, 110px, đứng TRƯỚC bảng kỹ thuật 301px, và thứ CUỐI
+             CÙNG người trả tiền đọc là tờ miễn trừ trách nhiệm. Người ta nhớ
+             ĐỈNH và nhớ ĐOẠN KẾT — kết bằng một lời rào là vứt đi đúng chỗ đáng
+             nhớ nhất. Nay câu chốt có tiêu đề riêng và đứng SAU phần cơ sở, để
+             bản đọc kết bằng câu dùng được chứ không kết bằng bảng tra. -->
+        <div class="res-block" id="endBlock" style="display:none">
+          <div class="res-block-header"><span class="res-block-title">Nếu Chỉ Nhớ Một Câu</span></div>
+          <div class="res-block-body">
+            <div class="nk-motcau" id="motCau"></div>
+          </div>
+        </div>
+
+        <!-- W1 — tường "đã tính thử". Phần trên đã chạy THẬT và miễn phí; tấm
+             khoá này chỉ đứng trên phần chữ. `data-tvp-lock` để lượt từ chối
+             (thiếu Lượng) của paywall cũng rơi đúng vào đây thay vì nhảy lên
+             cạnh nút chạy tool ở màn hình trước. -->
+        <div class="res-block" id="lockBlock" style="display:none">
+          <div class="res-block-header"><span class="res-block-title">Phần Luận Chưa Mở</span></div>
+          <div class="res-block-body" id="lockHost" data-tvp-lock style="padding-top:6px"></div>
+        </div>
+
+        <!-- Khối LỜI HỨA. Có id để bộ kiểm "chữ cấm lọt màn hình" trừ nó ra:
+             chính nó buộc phải nhắc "sức khoẻ / tiền bạc riêng / hôn nhân" thì
+             mới nói được là KHÔNG đọc mấy thứ đó. -->
+        <div class="res-block" id="ethicsNote" style="background:#FBF3DE;border-color:#e8d9b0">
           <div class="res-block-body" style="font-size:12.5px;line-height:1.68;color:#5a5145">
             💡 Bản cẩm nang này phác hoạ từ các dữ liệu trong lá số Tử Vi, kết hợp kinh nghiệm nghiên cứu của tiền nhân để lại. Mang tính tham khảo.<br><br>
             ⚖️ Đây là khung <b>hiểu để sống chung</b>, không phải để điều khiển ai. Người được xem không có mặt ở đây, nên bản luận cố ý <b>không đọc sức khoẻ, tiền bạc riêng hay chuyện hôn nhân</b> của họ. Tính cách không tốt cũng không xấu — chỉ hợp hoặc không hợp bối cảnh.
@@ -229,6 +272,7 @@ window.SHELL_INTRO={key:'nguoi-khac',title:'Lá Số Người Khác',desc:'Nhậ
 var _currentSlug = '';
 var _last = null;
 var _lastSelf = null;
+var _lastViec = 'hieu-them';
 var _lastData = null;
 var NK_STEPS = [
   { label: 'Lập lá số & phân kiểu người', ms: 1300 },
@@ -248,9 +292,52 @@ var QH_HINT = {
   'ban-be': 'Bạn sẽ nhận: trông cậy được ở việc gì, và đừng trông cậy ở việc gì.',
 };
 
+// ⚠️ BẢN SAO CÓ KIỂM SOÁT của `VIEC_CAN_LAM` (lib/engine/nguoi-khac.ts).
+// Phải có bản client vì ô chọn dựng TRƯỚC mọi lượt gọi API — bắt người dùng đợi
+// một vòng mạng mới thấy được ô chọn là thêm một chỗ rơi ngay đầu phễu.
+// Trôi khỏi bản engine thì hỏng IM LẶNG trên ĐƯỜNG TIỀN: người ta chọn "thương
+// lượng lương", server `resolveViec` không nhận ra id lạ → rơi về 'hieu-them' →
+// họ trả tiền cho một bản chung chung. `npm run check:viec` (chạy trong CI lint)
+// canh đúng chỗ này — sửa một bên thì phải sửa cả hai.
+var NK_VIEC = [
+  { id: 'nho-viec', label: 'Sắp nhờ họ một việc / trình một đề xuất', hop: ['sep', 'dong-nghiep', 'doi-tac', 'cha-me', 'ban-doi', 'ban-be'] },
+  { id: 'thuong-luong', label: 'Sắp thương lượng quyền lợi (lương, chia phần)', hop: ['sep', 'dong-nghiep', 'doi-tac'] },
+  { id: 'bao-tin-xau', label: 'Sắp phải báo một tin họ không muốn nghe', hop: [] },
+  { id: 'tu-choi', label: 'Phải từ chối họ mà không muốn mất quan hệ', hop: [] },
+  { id: 'bat-dong', label: 'Đang có bất đồng chưa gỡ được', hop: [] },
+  { id: 'giao-viec', label: 'Cần giao việc / nhắc việc cho họ', hop: ['dong-nghiep', 'cap-duoi', 'doi-tac', 'con-cai'] },
+  { id: 'ru-hop-tac', label: 'Muốn rủ họ làm chung một việc lớn', hop: ['dong-nghiep', 'cap-duoi', 'doi-tac', 'ban-be', 'ban-doi'] },
+  { id: 'gan-lai', label: 'Muốn gần lại sau một thời gian xa cách', hop: ['cha-me', 'con-cai', 'ban-doi', 'ban-be', 'dong-nghiep'] },
+  { id: 'lan-dau', label: 'Sắp gặp / làm việc lần đầu, chưa biết gì về họ', hop: [] },
+  { id: 'hieu-them', label: 'Không có gì gấp, chỉ muốn hiểu người này hơn', hop: [] },
+];
+
+function _fillViec() {
+  var qh = document.getElementById('quanHe').value;
+  var sel = document.getElementById('viecCanLam');
+  var giu = sel.value;
+  var hop = NK_VIEC.filter(function (v) { return !v.hop.length || v.hop.indexOf(qh) >= 0; });
+  sel.innerHTML = hop.map(function (v) {
+    return '<option value="' + v.id + '">' + esc(v.label) + '</option>';
+  }).join('');
+  // Giữ lựa chọn cũ nếu nó còn hợp với quan hệ mới; không thì về mặc định.
+  // Không giữ thì mỗi lần đổi quan hệ là người dùng phải chọn lại từ đầu.
+  if (giu && hop.some(function (v) { return v.id === giu; })) sel.value = giu;
+  onViecChange();
+}
+
+function onViecChange() {
+  var v = document.getElementById('viecCanLam').value;
+  document.getElementById('viecHint').textContent =
+    v === 'hieu-them'
+      ? 'Chọn một việc cụ thể thì bản luận sẽ có thêm phần “cách đi” cho riêng việc đó.'
+      : 'Bản đầy đủ sẽ có một mục riêng chỉ để giải quyết đúng việc này.';
+}
+
 function onQuanHeChange() {
   var v = document.getElementById('quanHe').value;
   document.getElementById('qhHint').textContent = QH_HINT[v] || '';
+  _fillViec();
 }
 
 // Form NGƯỜI ĐƯỢC XEM dùng prefix mặc định; form của chính người dùng dùng
@@ -293,11 +380,14 @@ function _birthOf(prefix) {
 }
 
 /** Query cho `action=cache-status` — đúng tên tham số route đọc. */
-function _cacheQuery(b, self, qh) {
+function _cacheQuery(b, self, qh, viec) {
   var q = 'd=' + (b.day || 0) + '&m=' + (b.month || 0) + '&y=' + (b.year || 0) +
     '&h=' + (b.hourBranch == null ? -1 : b.hourBranch) +
     '&g=' + (b.gender === 'nu' ? 'nu' : 'nam') +
-    '&lunar=' + (b.isLunar ? '1' : '0') + '&qh=' + encodeURIComponent(qh);
+    '&lunar=' + (b.isLunar ? '1' : '0') + '&qh=' + encodeURIComponent(qh) +
+    // Phải khớp ĐÚNG `cacheExtra` bên server, nếu không câu hỏi "lượt này có
+    // miễn phí không" tra nhầm dòng cache.
+    '&viec=' + encodeURIComponent(viec || 'hieu-them');
   if (self) {
     q += '&sd=' + (self.day || 0) + '&sm=' + (self.month || 0) + '&sy=' + (self.year || 0) +
       '&sh=' + (self.hourBranch == null ? -1 : self.hourBranch) +
@@ -307,48 +397,69 @@ function _cacheQuery(b, self, qh) {
   return q;
 }
 
+// ── W1 (khách chưa đăng nhập): xem trước MIỄN PHÍ trước khi trả Lượng ──────
+//
+// Đăng nhập rồi → bấm nút là CHẠY THẬT ngay: trừ Lượng (0đ nếu free) rồi chạy
+// trọn bản cẩm nang, không có màn xem trước nào chen giữa. Chưa đăng nhập →
+// dựng tầng đầu (tên/kiểu người) MỞ + phần "Cơ sở lá số" dựng THẬT nhưng LÀM
+// MỜ (deterministic/0đ, không phải ẩn hẳn khỏi DOM); phần AI viết riêng (Nói
+// thế nào/Lúc này họ ở đâu/Người này với bạn) chưa có nội dung nào để mờ nên
+// vẫn đứng sau tấm khoá `lockPreview`, CTA đăng ký Lượng miễn phí.
+//
+// Tường khoá nêu ĐÍCH DANH từng khối chưa mở khi server trả `khoa` (sinh từ
+// chính lá số vừa tính, `khoiKhoa` trong lib/engine/nguoi-khac.ts) — danh sách
+// chung chung giống nhau cho mọi người thì không mở được vòng tò mò nào.
+// Mảng dưới chỉ là đường lùi khi payload cũ (còn trong cache trình duyệt)
+// không mang `khoa`.
+var NK_KHOA_FALLBACK = [
+  'Con người này vận hành thế nào',
+  'Điều họ coi trọng · điều làm họ khó chịu',
+  'Nên nói gì — 3 việc kèm câu nói thật',
+  'Tránh nói gì — 3 việc kèm câu nói thật',
+  'Lúc nào nên đưa việc lớn tới',
+  'Một câu chốt',
+];
+
 function _nkLoggedIn() { return !!(window.Auth && window.Auth.isLoggedIn && window.Auth.isLoggedIn()); }
 
-// Đăng nhập rồi → bấm nút là CHẠY THẬT ngay (case 1): trừ Lượng (0đ nếu free)
-// rồi chạy trọn bản cẩm nang, không có màn xem trước nào chen giữa. Chưa đăng
-// nhập (case 2) → dựng tầng đầu (tên/kiểu người) MỞ + phần "Cơ sở lá số" dựng
-// THẬT nhưng LÀM MỜ (deterministic/0đ, không phải ẩn hẳn khỏi DOM); phần AI
-// viết riêng (Nói thế nào/Lúc này họ ở đâu/Người này với bạn) chưa có nội
-// dung nào để mờ nên vẫn đứng sau tấm khoá `lockPreview`, CTA đăng ký Lượng
-// miễn phí.
 async function analyze() {
   showError('');
   var b = _birthOf('');
   if (!b) { showError('Vui lòng nhập đầy đủ ngày tháng năm sinh của người cần xem.'); return; }
   var qh = document.getElementById('quanHe').value;
+  var viec = document.getElementById('viecCanLam').value;
   var self = _birthOf('self');
-  _last = b; _lastSelf = self;
-  _currentSlug = TuviPaywall.generateToolSlug('nguoi-khac-' + qh + '-' + b.day + b.month + b.year);
+  _last = b; _lastSelf = self; _lastViec = viec;
+  // 🔑 `viec` vào slug: slug là thứ `hasRecentToolPayment` dò để biết lượt này
+  // đã trả tiền chưa. Hai việc khác nhau là hai món hàng khác nhau — dùng chung
+  // slug thì mở bản thứ hai không mất Lượng.
+  // ⚠️ Slug PHẢI bắt đầu bằng ĐÚNG `tool_id` (luật đã trả giá ở Duyên Nợ).
+  _currentSlug = TuviPaywall.generateToolSlug('nguoi-khac-' + qh + '-' + viec + '-' + b.day + b.month + b.year);
 
-  if (!_nkLoggedIn()) { return _runAnonPreview(b, self, qh); }
+  if (!_nkLoggedIn()) { return _runAnonPreview(b, self, qh, viec); }
 
   // Đã trả tiền cho đúng lá số này từ trước → mở thẳng, không trừ lại.
   var free = false;
-  try { free = await TuviPaywall.isFreeRerun('/api/nguoi-khac', _cacheQuery(b, self, qh)); } catch (e) { free = false; }
+  try { free = await TuviPaywall.isFreeRerun('/api/nguoi-khac', _cacheQuery(b, self, qh, viec)); } catch (e) { free = false; }
   if (free) {
     TuviPaywall._banner('✓ Bạn đã xem bản này rồi — mở lại, không trừ Lượng');
-    await _doGenerate(true, qh);
+    await _doGenerate(true, qh, viec);
     return;
   }
-  await TuviPaywall.requireCredits(_currentSlug, function () { return _doGenerate(false, qh); });
+  await TuviPaywall.requireCredits(_currentSlug, function () { return _doGenerate(false, qh, viec); });
 }
 
 // Khách chưa đăng nhập: gọi thẳng tầng deterministic (0đ, không cần đăng nhập
 // — server route `?preview=1` không đòi auth), dựng phần đầu MỞ + cơ sở lá số
 // LÀM MỜ. Phần AI viết riêng đứng sau tấm khoá (không có gì để mờ, chưa sinh).
-async function _runAnonPreview(b, self, qh) {
+async function _runAnonPreview(b, self, qh, viec) {
   _openPanel();
   document.getElementById('loading').style.display = 'none';
   try {
     var res = await fetch('/api/nguoi-khac?preview=1', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ birth: b, birthSelf: self || undefined, name: b.name || '', quanHe: qh }),
+      body: JSON.stringify({ birth: b, birthSelf: self || undefined, name: b.name || '', quanHe: qh, viec: viec }),
     });
     var data = await res.json();
     if (!res.ok || !data.success) throw new Error(data.error || 'Lỗi ' + res.status);
@@ -360,28 +471,26 @@ async function _runAnonPreview(b, self, qh) {
     document.getElementById('card').style.display = 'block';
     document.getElementById('btnEdit').style.display = '';
     if (window.SHELL_INTRO) Shell.dismissIntro(window.SHELL_INTRO.key);
-    _renderLockWall(qh);
+    _renderLockWall(qh, viec, data.khoa);
   } catch (e) {
     _closePanel();
     showError('Lỗi: ' + (e.message || 'Không thể kết nối. Vui lòng thử lại.'));
   }
 }
 
-function _renderLockWall(qh) {
+function _renderLockWall(qh, viec, khoaRaw) {
+  var khoa = (khoaRaw || []).map(function (k) { return k.tieuDe; });
+  if (!khoa.length) khoa = NK_KHOA_FALLBACK;
   var host = document.getElementById('nkLockHost');
   host.style.display = 'block';
   host.innerHTML = '';
   TuviPaywall.lockPreview({
     host: host,
-    title: '⊙ Cẩm nang đầy đủ chưa mở',
-    items: [
-      'Nói thế nào — điều nên nói và điều nên tránh',
-      'Lúc này họ đang ở đâu trong đại vận',
-      'Người này với bạn (khi có lá số của bạn)',
-    ],
+    title: 'Còn ' + khoa.length + ' phần chưa mở về người này',
+    items: khoa,
     cta: 'Đăng ký để mở cẩm nang đầy đủ',
     slug: function () { return _currentSlug; },
-    onUnlock: function () { return _doGenerate(false, qh); },
+    onUnlock: function () { return _doGenerate(false, qh, viec); },
   });
 }
 
@@ -391,7 +500,7 @@ function _openPanel() {
   document.getElementById('loading').style.display = 'block';
   document.getElementById('card').style.display = 'none';
   document.getElementById('nkLockHost').style.display = 'none';
-  ['sayBlock', 'timeBlock', 'withBlock', 'endBlock', 'basisBlock'].forEach(function (id) {
+  ['keHoachBlock', 'sayBlock', 'timeBlock', 'withBlock', 'endBlock', 'basisBlock', 'lockBlock'].forEach(function (id) {
     document.getElementById(id).style.display = 'none';
   });
   document.getElementById('proseTop').style.display = 'none';
@@ -403,7 +512,8 @@ function _closePanel() {
   document.getElementById('birthPanel').style.display = 'block';
 }
 
-async function _doGenerate(freeRerun, qh) {
+async function _doGenerate(freeRerun, qh, viec) {
+  viec = viec || _lastViec || 'hieu-them';
   _openPanel();
   _loadingCtl = AiLoadingSteps.mount('loadingSteps', NK_STEPS);
   _loadingCtl.start();
@@ -421,6 +531,7 @@ async function _doGenerate(freeRerun, qh) {
         birthSelf: _lastSelf || undefined,
         name: _last.name || '',
         quanHe: qh,
+        viec: viec,
         slug: _currentSlug,
       }),
     });
@@ -430,7 +541,7 @@ async function _doGenerate(freeRerun, qh) {
     if (res.status === 402 && freeRerun) {
       _loadingCtl && _loadingCtl.stop();
       _closePanel();
-      await TuviPaywall.requireCredits(_currentSlug, function () { return _doGenerate(false, qh); });
+      await TuviPaywall.requireCredits(_currentSlug, function () { return _doGenerate(false, qh, viec); });
       return;
     }
     if (!res.ok || !data.success) throw new Error(data.error || 'Lỗi ' + res.status);
@@ -443,6 +554,13 @@ async function _doGenerate(freeRerun, qh) {
     document.getElementById('btnEdit').style.display = '';
     if (window.SHELL_INTRO) Shell.dismissIntro(window.SHELL_INTRO.key);
     _loadHistory();
+
+    // B1 — khoảnh khắc VỪA ĐỌC XONG mà số dư đã hụt: vừa thích vừa tiếc, đúng
+    // chỗ lời mời có sức nhất. Widget tự ẩn nếu còn đủ Lượng cho một lượt nữa
+    // (còn tiền thì để người ta mua, chen lời mời vào chỉ làm chậm một lượt đã
+    // bán được). Trước đây chỉ 3 tool ẢNH có chỗ xin này — 3 tool cẩm nang thì
+    // không, nên người đọc xong bản cuối cùng của mình rời đi mà không ai hỏi.
+    _mountInviteCta();
 
     // Rail nạp lá số CỦA NGƯỜI ĐƯỢC XEM (để hỏi sâu về họ) + lá số của chính
     // người dùng qua `wrapBirthB` nếu có. Lớp vỏ phía server có luật ĐÈ lên
@@ -535,6 +653,10 @@ function renderMetaHead(data) {
 // 0đ, đã có sẵn trong payload preview) nhưng bọc trong .tpw-real-lock để CSS
 // làm mờ + badge 🔒 cạnh tiêu đề — không phải ẩn hẳn khối này như bản trước.
 function renderMetaBasis(data, locked) {
+  // ⚠️ HÀM NÀY CHẠY TRÊN CẢ HAI ĐƯỜNG và payload hai bên KHÁC NHAU (A1):
+  // lượt tính thử chỉ có 2/5 mặt đọc, mỗi mặt CHỈ CÓ TÊN SAO, và KHÔNG có
+  // `than`/`daiVan`/`vanNam`. Mọi chỗ dưới đây phải giữ nguyên lối canh `if` —
+  // bỏ canh đi là lượt tính thử ném lỗi ngay bậc đầu phễu.
   var rows = [];
   (data.matDoc || []).forEach(function (m) {
     rows.push('<li><b>' + esc(m.nhan) + '</b> — cung ' + esc(m.cung) +
@@ -565,6 +687,25 @@ function renderMetaBasis(data, locked) {
     else if (v.huong) bit.push('đà ' + esc(v.huong));
     rows.push('<li><b>Vận năm ' + v.nam + '</b> — ' + (bit.join(' · ') || 'chưa chấm') + '</li>');
   }
+  // C1 — bày engine ra. Chỉ có ở payload TÍNH THỬ; bản đã trả tiền không gửi
+  // `coSo` nên khối này tự ẩn, không phải canh thêm điều kiện nào.
+  var cs = data.coSo, csEl = document.getElementById('coSoDoc');
+  if (cs && cs.tong > 0) {
+    var h = 'Bản này đọc từ <b>' + cs.tong + ' dữ kiện</b> lập ra từ chính ngày giờ sinh bạn nhập — ' +
+      cs.soSao + ' sao an trên 12 cung, ' + cs.soCachCuc + ' cách cục, ' + cs.soDaiVan + ' chặng đại vận. ' +
+      'Không có bước nào đoán mò: đổi một chi tiết trong ngày sinh là cả bảng trên đổi theo.';
+    // ⚠️ Câu trích là NGUYÊN VĂN cổ thư kèm nguồn — `esc()` cả cụm, tuyệt đối
+    // không nội suy vào HTML thô.
+    if (cs.trichDan) {
+      h += '<div class="nk-quote">' + esc(cs.trichDan.cau) +
+        '<span class="src">— sách dẫn về sao ' + esc(cs.trichDan.sao) + ' tại cung Mệnh</span></div>';
+    }
+    csEl.innerHTML = h;
+    csEl.style.display = 'block';
+  } else {
+    csEl.style.display = 'none';
+  }
+
   // Bày đủ ĐỂ CHỨNG MINH máy đọc đúng lá số — không bày HẾT để đọc xong là no.
   // 2 mục đầu (Mệnh + Phúc Đức, luôn xuất hiện trước trong `matDoc`) đứng mở
   // sẵn làm bằng chứng; phần còn lại gói trong <details> đóng — vẫn một cú
@@ -596,9 +737,33 @@ function renderMetaBasis(data, locked) {
   }
 }
 
+/** Nạp `invite-cta.js` theo yêu cầu — trang không cần nó cho tới lúc này. */
+function _mountInviteCta() {
+  var host = document.getElementById('resPanel');
+  if (!host) return;
+  var go = function () {
+    if (window.InviteCta) window.InviteCta.mount(host, { toolId: 'nguoi-khac', toolLabel: 'bản cẩm nang' });
+  };
+  if (window.InviteCta) return go();
+  if (document.getElementById('_ivc_js')) return;
+  var s = document.createElement('script');
+  s.id = '_ivc_js'; s.src = '/invite-cta.js?v=1'; s.async = true; s.onload = go;
+  document.head.appendChild(s);
+}
+
 function renderMeta(data) { renderMetaHead(data); renderMetaBasis(data); }
 
 function renderProse(data) {
+  // Chỉ hiện khi người hỏi có nêu việc cụ thể — server đã bỏ mục này ở ca
+  // 'hieu-them', không có thì ẩn hẳn chứ không lấp bằng câu chung chung.
+  var kh = data.keHoach || '';
+  if (kh) {
+    document.getElementById('keHoachTitle').textContent =
+      'Cách đi cho việc: ' + ((data.viec || {}).label || 'bạn đang cần làm');
+    document.getElementById('keHoach').textContent = kh;
+    document.getElementById('keHoachBlock').style.display = 'block';
+  }
+
   document.getElementById('tinhKhi').textContent = data.tinhKhi || '';
   document.getElementById('coiTrong').textContent = data.coiTrong || '';
   document.getElementById('chamNoc').textContent = data.chamNoc || '';
