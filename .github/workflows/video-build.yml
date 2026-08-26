@@ -96,7 +96,7 @@ jobs:
       # Khoá gắn `run_id` để lượt lưu không bao giờ đụng khoá đã tồn tại (lưu
       # trùng khoá là cảnh báo rồi bỏ qua, tức mất phần vừa làm thêm).
       - name: Khôi phục cache giọng đọc
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@v6
         with:
           path: remotion/public/audio
           # ⚠️ Băm CẢ HAI nguồn kịch bản. Thiếu `insight.ts` thì sửa lời đọc của
@@ -137,7 +137,7 @@ jobs:
       # restore/save riêng vì cùng lý do với cache giọng đọc: job trượt ở khâu
       # sau thì `actions/cache` gộp KHÔNG lưu, và lượt sau tải lại trắng 80MB.
       - name: Khôi phục cache kho nền video
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@v6
         with:
           path: remotion/public/stock-video
           key: stock-video-${{ hashFiles('lib/video/stock-video-manifest.json') }}-${{ github.run_id }}
@@ -211,14 +211,14 @@ jobs:
       # sau làm lại từ số không, mà khâu TTS thì tốn tiền thật mỗi lượt.
       - name: Lưu cache giọng đọc
         if: always()
-        uses: actions/cache/save@v4
+        uses: actions/cache/save@v6
         with:
           path: remotion/public/audio
           key: clip-tts-${{ hashFiles('lib/video/sources/tool-demo.ts', 'lib/video/sources/insight.ts') }}-${{ github.run_id }}
 
       - name: Lưu cache kho nền video
         if: always()
-        uses: actions/cache/save@v4
+        uses: actions/cache/save@v6
         with:
           path: remotion/public/stock-video
           key: stock-video-${{ hashFiles('lib/video/stock-video-manifest.json') }}-${{ github.run_id }}
