@@ -282,22 +282,83 @@
   }
 
   // Tracker "đang online / lượt hỏi hôm nay" (ngay trên ô "Tìm công cụ, lệnh…").
-  // _pulseData sống qua nhiều lượt renderSidebar() để không nháy về "…" mỗi
-  // lần sidebar dựng lại (đổi trang trong /app, loadCatalog cập nhật giá…).
-  // Đọc hụt → GIỮ NGUYÊN state cũ, không ẩn lại, không đoán số 0 — cùng luật
-  // "không bịa số" áp cho Giá Lượng (xem migration-pulse-tracker.sql).
+  //
+  // ⚠️ MÔ PHỎNG THEO YÊU CẦU HENRY (chốt 2026-08-26, sau khi xem số THẬT trên
+  // prod ra "0 đang online · 0 lượt hỏi hôm nay" — đúng vì traffic thật lúc đó
+  // gần như bằng 0, nhưng nhìn "chết"): "hiển thị số ảo đi, nhìn cho nó sôi
+  // động, cho số nó nhảy nhảy đi, khi nào có traffic thật thì tính sau".
+  //
+  // /api/pulse + RPC pulse_stats() (SỐ THẬT, xem migration-pulse-tracker.sql)
+  // VẪN CÒN NGUYÊN, không đụng tới — khi nào traffic thật đủ lớn để hiện tử
+  // tế, đổi lại bằng cách gọi _loadPulseReal() thay simulatePulse() ở startPulse()
+  // dưới đây, không cần sửa gì khác.
   var _pulseData = null;
-  function loadPulse() {
+  var _pulseDayKey = null; // yyyy-mm-dd theo giờ VN — qua nửa đêm thì reset "hôm nay"
+
+  function vnNow() {
+    var d = new Date();
+    return new Date(d.getTime() + (7 * 60 - d.getTimezoneOffset()) * 60000);
+  }
+
+  // Đường cong "giờ cao điểm" trong ngày (0h–23h giờ VN) — sáng/tối đông hơn
+  // trưa/khuya, cho baseline trông giống app có người dùng thật thay vì phẳng lì.
+  var PULSE_HOUR_CURVE = [
+    0.22, 0.18, 0.15, 0.14, 0.16, 0.22, 0.35, 0.5, 0.62, 0.7, 0.75, 0.72,
+    0.68, 0.72, 0.8, 0.88, 0.9, 0.86, 0.92, 0.88, 0.8, 0.65, 0.5, 0.34,
+  ];
+
+  function pulseDayKey(d) {
+    return d.getFullYear() + '-' + d.getMonth() + '-' + d.getDate();
+  }
+
+  /** Bước mô phỏng: seed lần đầu theo giờ VN hiện tại, sau đó random-walk nhẹ
+   * quanh baseline. `online` dao động cả hai chiều; `promptsToday` CHỈ TĂNG
+   * trong ngày (giống một bộ đếm thật) và tự reset khi qua ngày mới giờ VN. */
+  function simulatePulse() {
+    var now = vnNow();
+    var dayKey = pulseDayKey(now);
+    var factor = PULSE_HOUR_CURVE[now.getHours()];
+    if (!_pulseData || _pulseDayKey !== dayKey) {
+      _pulseDayKey = dayKey;
+      _pulseData = {
+        online: Math.round(70 + factor * 210 + Math.random() * 20),
+        promptsToday: Math.round(factor * 140 + Math.random() * 40),
+      };
+    } else {
+      var driftOnline = Math.round((Math.random() - 0.42) * 7); // lệch nhẹ về tăng
+      var target = Math.round(70 + factor * 210);
+      // Kéo nhẹ về baseline của giờ hiện tại (tránh trôi dạt quá xa qua nhiều giờ) + nhiễu ngẫu nhiên.
+      _pulseData.online = Math.max(35, Math.min(340, Math.round(_pulseData.online * 0.9 + target * 0.1 + driftOnline)));
+      if (Math.random() < 0.55) {
+        _pulseData.promptsToday += Math.round(Math.random() * 3) + (Math.random() < 0.12 ? 5 : 0);
+      }
+    }
+    return _pulseData;
+  }
+
+  function paintPulse(d) {
+    var host = document.getElementById('sbPulse');
+    if (!host) return;
+    host.hidden = false;
+    var o = document.getElementById('sbpOnline'); if (o) o.textContent = d.online.toLocaleString('vi-VN');
+    var p = document.getElementById('sbpPrompts'); if (p) p.textContent = d.promptsToday.toLocaleString('vi-VN');
+  }
+
+  var _pulseTimer = null;
+  function startPulse() {
+    paintPulse(simulatePulse());
+    if (_pulseTimer) clearInterval(_pulseTimer);
+    _pulseTimer = setInterval(function () { paintPulse(simulatePulse()); }, 4000);
+  }
+
+  // Đường SỐ THẬT — giữ nguyên, chưa gọi (xem ghi chú ⚠️ ở trên).
+  function _loadPulseReal() {
     fetch('/api/pulse', { cache: 'no-store' })
       .then(function (r) { return r.ok ? r.json() : null; })
       .then(function (d) {
         if (!d || typeof d.online !== 'number' || typeof d.promptsToday !== 'number') return;
         _pulseData = d;
-        var host = document.getElementById('sbPulse');
-        if (!host) return;
-        host.hidden = false;
-        var o = document.getElementById('sbpOnline'); if (o) o.textContent = d.online.toLocaleString('vi-VN');
-        var p = document.getElementById('sbpPrompts'); if (p) p.textContent = d.promptsToday.toLocaleString('vi-VN');
+        paintPulse(d);
       })
       .catch(function () { /* best-effort — giữ nguyên số cũ (nếu có), không rơi về giả */ });
   }
@@ -337,11 +398,10 @@
     if (!host) return;
     var h = '';
     h += '<a class="sb-brand" href="/"><img class="seal" src="/seal.webp" alt="Tử Vi Minh Bảo"><div class="brand-txt"><b>Tử Vi Minh Bảo</b><span>Mệnh Lý AI</span></div></a>';
-    // Tracker "đang online / lượt hỏi hôm nay" — số THẬT qua /api/pulse (RPC
-    // pulse_stats(), xem migration-pulse-tracker.sql), KHÔNG mô phỏng. Render
-    // ẩn (`hidden`) cho tới khi loadPulse() có số thật; nếu đã có từ lượt gọi
-    // trước (_pulseData, sống qua nhiều lần renderSidebar) thì hiện luôn, khỏi
-    // nháy về rỗng mỗi lần sidebar dựng lại.
+    // Tracker "đang online / lượt hỏi hôm nay" — MÔ PHỎNG (xem ghi chú ⚠️ ở
+    // simulatePulse()). `_pulseData` được seed TRƯỚC lần renderSidebar() đầu
+    // (boot()) nên luôn có số ngay từ khung hình đầu; fallback "…" chỉ phòng
+    // hờ trường hợp gọi renderSidebar() sớm bất thường.
     h += '<div class="sb-pulse" id="sbPulse"' + (_pulseData ? '' : ' hidden') + '>' +
          '<span class="sbp-row"><span class="sbp-dot"></span><b id="sbpOnline">' + (_pulseData ? esc(_pulseData.online.toLocaleString('vi-VN')) : '…') + '</b> đang online</span>' +
          '<span class="sbp-row">' + svg('bolt', 'sbp-ic') + '<b id="sbpPrompts">' + (_pulseData ? esc(_pulseData.promptsToday.toLocaleString('vi-VN')) : '…') + '</b> lượt hỏi hôm nay</span>' +
@@ -2780,10 +2840,10 @@
     // Sau reload: nhận cờ fromshare để bắn beacon chuyển đổi sau câu hỏi đầu tiên.
     try { _fromshareId = sessionStorage.getItem('app_fromshare_id') || null; if (_fromshareId) sessionStorage.removeItem('app_fromshare_id'); } catch (e) { /* ignore */ }
     pickAuthor();
+    simulatePulse(); // seed TRƯỚC renderSidebar() đầu tiên — khỏi nháy "…"
     renderSidebar();
     loadCatalog();
-    loadPulse();
-    setInterval(loadPulse, 45000);
+    startPulse();
     renderRail();
     renderTabbar();
     trackWsTopHeight();
