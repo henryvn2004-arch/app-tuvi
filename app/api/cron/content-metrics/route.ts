@@ -41,7 +41,20 @@ async function handle(request: NextRequest) {
     await tgSendMessage(TG_CHAT_ID, `${report}\n\n— ${day}`);
   }
 
+  // `note` hiện thẳng trong `cron_runs`/panel "Cron & Jobs" — `withCronLog`
+  // chỉ nhặt được nó qua khoá `note` (cùng quy ước với keyword-suggest). Đổi
+  // tên `skipped`→`unsupportedChannels` (vá lỗi status luôn báo 'skip', xem
+  // lib/metrics/collect.ts) làm mất luôn tín hiệu "kênh chưa có bộ đọc" khỏi
+  // dòng log nếu không viết lại note ở đây — mất một cách IM LẶNG là đúng
+  // kiểu hỏng repo này tự dặn tránh.
+  const note = result.perChannel.length
+    ? result.perChannel.map(c => `${c.channel}: ${c.saved}/${c.targets}${c.blocked ? ` (${c.blocked})` : ''}`).join(' · ') +
+      (result.unsupportedChannels.length ? ` · chưa có bộ đọc: ${result.unsupportedChannels.join(', ')}` : '')
+    : result.unsupportedChannels.length
+      ? `chưa có bộ đọc: ${result.unsupportedChannels.join(', ')}`
+      : 'không có nội dung nào cần cập nhật';
+
   // `result` đã mang `ok` — spread sau một khoá `ok` viết tay là nó ghi đè im
   // lặng (tsc bắt được: TS2783).
-  return NextResponse.json(result);
+  return NextResponse.json({ ...result, note });
 }

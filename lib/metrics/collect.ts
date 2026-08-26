@@ -78,7 +78,12 @@ export type CollectReport = {
   ok: boolean;
   perChannel: { channel: string; targets: number; saved: number; blocked?: string }[];
   channelStats: number;
-  skipped: string[];
+  // CỐ Ý không đặt tên `skipped` — đó là khoá HỢP ĐỒNG CHUNG mà `runOnce`
+  // (lib/cron/log.ts) đọc để phán "cả lượt này không làm gì". Danh sách này là
+  // "kênh chưa có bộ đọc" (khác nghĩa hẳn) nhưng LUÔN có mặt dưới dạng mảng —
+  // kể cả rỗng — nên trùng tên từng làm mọi lượt chạy bị báo 'skip' vĩnh viễn
+  // (đo trên prod: 9/9 lượt 'skip' dù content_metrics vẫn ghi đủ dữ liệu).
+  unsupportedChannels: string[];
   ms: number;
 };
 
@@ -313,7 +318,7 @@ export async function collectContentMetrics(): Promise<CollectReport> {
     ok: perChannel.every(c => !c.blocked),
     perChannel,
     channelStats,
-    skipped,
+    unsupportedChannels: skipped,
     ms: Date.now() - t0,
   };
 }
@@ -329,7 +334,7 @@ export function formatCollectReport(r: CollectReport): string | null {
     );
   }
   if (r.channelStats) lines.push(`📡 ${r.channelStats} kênh cập nhật follower/subscriber`);
-  if (r.skipped.length) lines.push(`⏭️ Chưa có bộ đọc: ${r.skipped.join(', ')}`);
+  if (r.unsupportedChannels.length) lines.push(`⏭️ Chưa có bộ đọc: ${r.unsupportedChannels.join(', ')}`);
   if (!lines.length) return null;
   return `📊 Số liệu nội dung\n\n${lines.join('\n')}\n\n(${Math.round(r.ms / 1000)}s)`;
 }
