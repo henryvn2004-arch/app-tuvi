@@ -200,6 +200,7 @@ select.form-input { cursor: pointer; }
 .footer-links a:hover { color: rgba(255,255,255,.7); }
 .footer-legal { font-size: 11px; color: rgba(255,255,255,.28); line-height: 1.7; max-width: 260px; margin-top: 10px; }
 .footer-legal strong { color: rgba(255,255,255,.5); font-weight: 600; }
+.footer-legal-name { font-size: 1.5em; line-height: 1.4; margin-bottom: 6px; }
 
 /* ── RESPONSIVE ─────────────────────────────────────────────── */
 @media (max-width: 900px) {
