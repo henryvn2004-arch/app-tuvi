@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-140 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+141 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 **Ba file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
 ```bash
@@ -11,7 +11,7 @@ sed -n '120,190p' docs/nhat-ky/2026-08.md    # đọc đúng đoạn, đừng ca
 
 | file | số mục | dung lượng |
 |---|---:|---:|
-| `2026-08.md` | 123 | 920,720 B |
+| `2026-08.md` | 124 | 926,807 B |
 | `2026-07.md` | 12 | 154,531 B |
 | `track-cu.md` | 5 | 89,354 B |
 
@@ -159,3 +159,4 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 | 133 | 2026-08 | `2026-08.md` | 📡 Tracker "đang online" trên shell — SỐ THẬT qua RPC `pulse_stats()`, không mô phỏng |
 | 134 | 2026-08 | `2026-08.md` | 🎭 Tracker "đang online" — đảo ngược sang MÔ PHỎNG theo Henry, sau khi số thật ra 0/0 |
 | 135 | 2026-08 | `2026-08.md` | 💳 Chuyển PayPal sang account công ty — rà đường tiền lộ 4 lỗi, `ignore-duplicates` chưa từng có tác dụng |
+| 136 | 2026-08 | `2026-08.md` | 💳 PayPal live lượt đầu: thẻ hết tiền, câu báo lỗi vô dụng, webhook câm — và bẫy top-25 của log Vercel |

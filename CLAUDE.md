@@ -208,6 +208,7 @@ Mỗi luật dưới đây sinh ra từ một lần cắn thật. Cột cuối l
 | **Giá Lượng: client KHÔNG chép số** — hiện bằng `data-tvp-price`, đọc hụt thì để `…` và **từ chối chạy** | Số CŨ nguy hiểm hơn ô đang tải: ô đang tải thì người ta chờ, số cũ thì người ta tin | `npm run check:prices` |
 | **Trần/cầu dao ngân sách hướng fail phải ngược nhau tuỳ vai** | Gác NGÂN SÁCH → fail-**open** (`viral-budget.ts`); PHÁT tiền → fail-**closed** (`onboarding/tasks.ts`) | mục "M3 — Nhiệm vụ onboarding" |
 | **Chống trùng đường tiền: dòng SỔ đi TRƯỚC làm mutex, cộng tiền SAU** — và mutex chỉ có thật khi có UNIQUE đỡ bên dưới | `Prefer: resolution=ignore-duplicates` KHÔNG làm gì nếu thiếu ràng buộc UNIQUE — đã im lặng vô hiệu từ đầu trên `paypal_order_id`. Và cộng tiền trước rồi ghi sổ sau thì lượt thua cuộc VẪN kịp cộng, chỉ trượt ở bước ghi ⇒ ví tăng hai lần, sổ một dòng | `paypal_settle_topup` · `nhat-ky/2026-08.md` "Chuyển PayPal sang account công ty" |
+| **Lỗi cổng thanh toán có HAI người đọc — đừng đưa cùng một chuỗi cho cả hai** | `message` của PayPal là MỘT câu chung chung cho mọi lỗi 422; lý do thật ở `details[0].issue` (+ `debug_id`). Nhưng trả thẳng `INSTRUMENT_DECLINED` cho khách cũng vô dụng ngang. Khách → câu tiếng Việt nói làm gì tiếp; mình → mã lỗi trong `console.error`. Đã trả giá: một lượt nạp hỏng vì thẻ hết tiền mà chính chủ site phải đi dò số dư mới hiểu | `humanIssueMessage()` · `nhat-ky/2026-08.md` "PayPal live lượt đầu" |
 
 ### 💾 Cache kết quả
 - **Đổi CẤU TRÚC payload ⇒ BẮT BUỘC bump `SHAPE`.** `portrait_cache` khoá theo
@@ -311,6 +312,12 @@ Mỗi luật dưới đây sinh ra từ một lần cắn thật. Cột cuối l
   toán tử HOẶC trong BRE) → dùng `grep -F`.
 - **Red-team bộ dò: assert đột biến ĐÃ ăn rồi mới đọc kết quả.** Nhiều lần "pass"
   chỉ vì lệnh thay chuỗi không khớp nên chẳng sửa gì.
+- **Bảng thống kê CẮT TOP-N đọc thành "chưa từng xảy ra".** Log Vercel
+  `group_by requestPath` cắt ở 25 mà repo có ~3.000 đường dẫn phân biệt (mỗi
+  `/la-so/*` một cái) — route bị gọi 1–2 lần RƠI KHỎI BẢNG. Dùng `group_by route`
+  (gộp `[slug]`, còn ~20 dòng), rồi lấy mốc giờ bằng `statusCode` + cửa sổ hẹp;
+  tìm kiếm toàn văn hay hết giờ, đừng dựa vào. `nhat-ky/2026-08.md` "PayPal live
+  lượt đầu".
 - **Đối chứng `origin/main` HẾT HẠN** khi chính PR đó vào main, hoặc khi hạ tầng nó
   neo vào đã đổi. Neo đúng `origin/main` chưa đủ — phải neo đúng cái mình đang so.
 - **Bài kiểm đặt tên theo điều nó THỰC SỰ đo**, không theo điều mình muốn nó đo.
