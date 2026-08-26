@@ -50,6 +50,7 @@
     "check:lunar": "node scripts/check-lunar-range.mjs",
     "check:vntz": "node scripts/check-vn-timezone.mjs",
     "check:tooltip": "node scripts/check-tooltip.mjs",
+    "check:celebanh": "node scripts/check-celeb-anh.mjs",
     "check:cns": "node scripts/check-cns.mjs"
   },
   "dependencies": {

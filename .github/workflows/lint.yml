@@ -232,6 +232,13 @@ jobs:
       - name: Khối "Ai Sinh Cùng Ngày" cắm đúng trên mọi trang đã bật
         run: npm run check:cns
 
+      # Ảnh người nổi tiếng đi qua BA chặng (Storage → Commons → avatar chữ) và
+      # cả ba đều "trông vẫn chạy" khi hỏng. Thêm nữa: kéo ảnh về kho của mình
+      # nghĩa là mình PHÂN PHỐI tác phẩm, nên ghi công CC BY-SA là bắt buộc —
+      # mà bỏ dòng ghi công đi thì trang vẫn chạy hoàn hảo.
+      - name: Ảnh celeb — chuỗi rơi một nguồn + có ghi công
+        run: npm run check:celebanh
+
   typecheck:
     runs-on: ubuntu-latest
     timeout-minutes: 10
