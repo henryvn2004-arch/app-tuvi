@@ -207,6 +207,13 @@ jobs:
       - name: Engine Số Đẹp — deterministic, khớp nguồn, không lẫn tầng
         run: npm run check:sodep
 
+      # shell.js chỉ được dùng MỘT cơ chế tooltip (`data-tip` + `aria-label`/
+      # `alt`, hiện qua node `.tip` dùng chung ở body) — không còn `title=`
+      # native (delay không sửa được, im lặng trên chạm) và không tự viết CSS
+      # `::after` riêng cho từng cụm nút (bị mẹ `overflow:hidden/auto` xén mất).
+      - name: shell.js — đúng một cơ chế tooltip
+        run: npm run check:tooltip
+
   typecheck:
     runs-on: ubuntu-latest
     timeout-minutes: 10

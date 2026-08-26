@@ -46,7 +46,8 @@
     "check:prompt": "node scripts/check-prompt-budget.mjs",
     "check:topics": "node scripts/check-topic-patterns.mjs",
     "check:batrach": "node scripts/check-bat-trach.mjs",
-    "check:sodep": "node scripts/check-so-dep.mjs"
+    "check:sodep": "node scripts/check-so-dep.mjs",
+    "check:tooltip": "node scripts/check-tooltip.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.112.3",

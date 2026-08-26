@@ -124,23 +124,22 @@ body{font-family:var(--sans);background:var(--paper-2);color:var(--text);font-si
    NẰM NGOÀI luồng (không chiếm cột) nên khối responsive bên dưới ghi đè lại
    `right:14px` — không trừ `--rail-w` nữa. */
 .ws-fab{position:fixed;right:calc(var(--rail-w) + 16px);bottom:calc(16px + env(safe-area-inset-bottom));z-index:40;display:flex;flex-direction:column;align-items:center;gap:8px}
-/* Icon-only, tròn, đều cỡ — chữ dồn hết vào tooltip (`data-tip`, hiện khi
-   hover/focus) thay vì nằm cạnh icon. Đặt tooltip bên TRÁI vì cụm đứng sát
-   mép phải: bên phải chỉ còn 16px rồi tới rail/viền màn hình, chữ dài sẽ bị
-   cắt hoặc tràn ra ngoài. */
+/* Icon-only, tròn, đều cỡ — chữ dồn hết vào tooltip (`data-tip`, xem khối
+   `.tip` bên dưới) thay vì nằm cạnh icon. */
 .ws-fab .btn{width:44px;height:44px;padding:0;justify-content:center;border-radius:50%;background:var(--white);box-shadow:var(--shadow-lg);position:relative}
 .ws-fab .btn svg{width:19px;height:19px;flex:0 0 auto}
 .ws-fab .fbtn-fb{background:#1877F2;border-color:#1877F2;color:#fff}
 .ws-fab .fbtn-fb:hover{background:#1466d6;border-color:#1466d6;color:#fff}
-.ws-fab .btn[data-tip]::after{
-  content:attr(data-tip);position:absolute;right:calc(100% + 10px);top:50%;transform:translateY(-50%);
-  background:var(--navy);color:#fff;font-size:12px;line-height:1;white-space:nowrap;
-  padding:6px 10px;border-radius:6px;box-shadow:var(--shadow-lg);
-  opacity:0;pointer-events:none;transition:opacity .12s ease;
-}
-.ws-fab .btn[data-tip]:hover::after,.ws-fab .btn[data-tip]:focus-visible::after{opacity:1}
-/* Chạm màn hình không có "hover" — tooltip chỉ tổ che ngón tay, không ai đọc kịp. */
-@media(hover:none){.ws-fab .btn[data-tip]::after{display:none}}
+/* Tooltip DÙNG CHUNG cho mọi `[data-tip]` trong shell — MỘT node `.tip` gắn
+   ở <body>, `shell.js` định vị bằng `getBoundingClientRect()` rồi set left/
+   top trực tiếp (không dùng `::after` + `position:absolute` như bản cũ, vì
+   `::after` bị mẹ đầu tiên có `overflow:hidden/auto` xén mất — đúng bệnh của
+   `.rail`/`.sb-nav`, những nơi cần tooltip nhất). `position:fixed` + gắn ở
+   body thoát được overflow của MỌI mẹ. Ẩn/hiện bằng class `.show`, không tạo
+   lại DOM mỗi lần — rẻ hơn và tránh nhấp nháy khi rê chuột nhanh qua nhiều nút. */
+.tip{position:fixed;z-index:1000;max-width:240px;background:var(--navy);color:#fff;font-size:12px;line-height:1.35;padding:6px 10px;border-radius:6px;box-shadow:var(--shadow-lg);opacity:0;pointer-events:none;transform:translateY(2px);transition:opacity .12s ease,transform .12s ease}
+.tip.show{opacity:1;transform:translateY(0)}
+@media(prefers-reduced-motion:reduce){.tip{transition:none}}
 /* Dòng giá ngay dưới mô tả mỗi công cụ — điền bằng `tool-prices.js` qua
    `data-tvp-price-label="<tool_id>"`, nguồn DUY NHẤT là `tool_pricing`. Admin
    sửa giá thì dòng này tự đổi theo, không cần deploy. Margin âm để dính sát
