@@ -39,7 +39,13 @@ import {
   MEMORY_KIND_LABELS, MAX_MEMORY_ITEMS, MAX_MEMORY_LEN,
 } from '@/lib/memory/store';
 
-const PAYPAL_BASE = process.env.PAYPAL_MODE === 'live'
+// ⚠️ Mặc định là SANDBOX. Chỉ `PAYPAL_MODE=live` mới đập vào tiền thật — và
+// nhầm chiều nào cũng hỏng IM LẶNG: quên set thì khoá LIVE bắn vào sandbox
+// (401, mọi lượt nạp báo "Lỗi kết nối PayPal"); set nhầm thì khoá sandbox bắn
+// vào live. `.trim().toLowerCase()` vì một dấu cách thừa hay chữ `Live` dán từ
+// bảng env cũng đủ rơi ngược về sandbox mà không có gì kêu.
+const PAYPAL_MODE = (process.env.PAYPAL_MODE || '').trim().toLowerCase();
+const PAYPAL_BASE = PAYPAL_MODE === 'live'
   ? 'https://api-m.paypal.com'
   : 'https://api-m.sandbox.paypal.com';
 
@@ -49,6 +55,9 @@ const SUPABASE_URL  = process.env.SUPABASE_URL!;
 const SUPABASE_KEY  = process.env.SUPABASE_SERVICE_KEY!;
 const SITE_URL      = 'https://www.tuviminhbao.com';
 const CURRENCY      = 'USD';
+/** Tỷ giá quy đổi VND → USD cho PayPal. Dùng CHUNG cho lượt tạo đơn và lượt
+ *  capture — hai nơi lệch nhau là số Lượng cộng không khớp số tiền đã thu. */
+const VND_PER_USD   = 25_000;
 
 // ── Gói nạp ───────────────────────────────────────────────────
 // Nguồn thật = bảng credit_packages (lib/billing/packages), admin sửa được;
@@ -258,8 +267,8 @@ async function handleTopup(body: Record<string, unknown>): Promise<Response> {
     // Đơn giá suy từ bậc gói (xem quoteCustomVnd) — KHÔNG chia cứng nữa.
     const { credits } = await quoteCustomVnd(customAmountVnd);
     if (credits <= 0) return err('Không quy đổi được số Lượng cho số tiền này', 500);
-    // PayPal cần USD: convert VND → USD ở rate 25.000
-    const usdAmount = Math.round((customAmountVnd / 25_000) * 100) / 100;
+    // PayPal cần USD: convert VND → USD ở rate VND_PER_USD
+    const usdAmount = Math.round((customAmountVnd / VND_PER_USD) * 100) / 100;
     pkg  = { amount: usdAmount.toFixed(2), credits, label: `Nap Tuy Chinh – ${credits} Luong` };
     slug = `topup-custom-${Math.round(customAmountVnd / 1000)}k`;
   } else {
@@ -315,10 +324,21 @@ async function handleCapture(body: Record<string, unknown>): Promise<Response> {
   if (!orderId || !slug) return err('Missing orderId or slug', 400);
   if (!slug.startsWith('topup-')) return err('Only topup orders handled here', 400);
 
+  // ⚠️ Nạp TUỲ CHỌN không có dòng nào trong `credit_packages` — slug của nó là
+  // `topup-custom-<N>k`, nên `getPackage()` luôn trả null. Cửa "Invalid package
+  // in slug" cũ vì thế CHẶN ĐÚNG luồng khách vừa bấm trả tiền xong: đơn đã
+  // APPROVED bên PayPal mà route từ chối capture ⇒ không cộng Lượng, không báo
+  // được lý do. Số Lượng cho lượt custom phải suy lại SAU khi đọc đơn, từ chính
+  // số tiền PayPal ghi nhận (xem dưới), chứ không lấy từ slug — slug đã làm
+  // tròn về đơn vị nghìn.
   const packageId = slug.replace('topup-', '');
-  const foundPkg = await getPackage(packageId);
-  if (!foundPkg) return err('Invalid package in slug', 400);
-  const pkg = { amount: foundPkg.amountUsd, credits: foundPkg.credits, label: `${foundPkg.label} – ${foundPkg.credits} Luong` };
+  const isCustom  = packageId.startsWith('custom-');
+  let pkg: { credits: number; label: string; amountVnd: number } | null = null;
+  if (!isCustom) {
+    const foundPkg = await getPackage(packageId);
+    if (!foundPkg) return err('Invalid package in slug', 400);
+    pkg = { credits: foundPkg.credits, label: `${foundPkg.label} – ${foundPkg.credits} Luong`, amountVnd: foundPkg.amountVnd };
+  }
 
   try {
     const ppToken = await getPayPalToken();
@@ -334,6 +354,19 @@ async function handleCapture(body: Record<string, unknown>): Promise<Response> {
     }
     if (!userId) return err('Cannot determine userId', 400);
 
+    // Lượt nạp tuỳ chọn: quy đổi lại từ SỐ TIỀN THẬT trên đơn PayPal, không từ
+    // slug. USD hai chữ số thập phân ↔ VND ở rate 25.000 round-trip khớp với
+    // mọi số tiền là bội của 250đ (ô nhập bước 1.000đ), nên đây là con số khách
+    // thực sự trả. Đơn giá vẫn do `quoteCustomVnd` suy từ bảng gói — một nguồn.
+    if (!pkg) {
+      const usd = Number(order.purchase_units?.[0]?.amount?.value || 0);
+      const vnd = Math.round(usd * VND_PER_USD);
+      if (!(vnd > 0)) return err('Không đọc được số tiền của đơn PayPal', 400);
+      const { credits } = await quoteCustomVnd(vnd);
+      if (credits <= 0) return err('Không quy đổi được số Lượng cho đơn này', 500);
+      pkg = { credits, label: `Nap Tuy Chinh – ${credits} Luong`, amountVnd: vnd };
+    }
+
     if (order.status === 'COMPLETED') {
       const dupRes = await fetch(
         `${SUPABASE_URL}/rest/v1/credit_transactions?paypal_order_id=eq.${encodeURIComponent(orderId)}&limit=1&select=id`,
@@ -343,7 +376,7 @@ async function handleCapture(body: Record<string, unknown>): Promise<Response> {
         return ok({ success: true, status: 'already_completed', credits: pkg.credits });
       }
       const newBal = await rpc('add_credits', { p_user_id: userId, p_amount: pkg.credits });
-      await logTransaction({ userId, amount: pkg.credits, type: 'topup', description: pkg.label, paypalOrderId: orderId, amountVnd: foundPkg.amountVnd, gateway: 'paypal' });
+      await logTransaction({ userId, amount: pkg.credits, type: 'topup', description: pkg.label, paypalOrderId: orderId, amountVnd: pkg.amountVnd, gateway: 'paypal' });
       // Referral reward fire tự động qua Postgres trigger trg_referral_check_on_topup
       return ok({ success: true, credits: pkg.credits, balance: newBal });
     }
@@ -362,7 +395,13 @@ async function handleCapture(body: Record<string, unknown>): Promise<Response> {
     if (captured.status !== 'COMPLETED') throw new Error(`Capture incomplete: ${captured.status}`);
 
     const newBal = await rpc('add_credits', { p_user_id: userId, p_amount: pkg.credits });
-    await logTransaction({ userId, amount: pkg.credits, type: 'topup', description: pkg.label, paypalOrderId: orderId });
+    // ⚠️ `amountVnd` + `gateway` BẮT BUỘC ở đây — đây là đường capture THƯỜNG,
+    // tức gần như MỌI giao dịch PayPal đi qua lối này (nhánh COMPLETED phía
+    // trên chỉ chạy khi capture lại một đơn đã xong). Thiếu hai trường đó thì
+    // dòng tiền vào `credit_transactions` với `amount_vnd = null` và
+    // `gateway = null` ⇒ báo cáo doanh thu trong Admin phải ƯỚC LƯỢNG bằng một
+    // hằng số. Chính là vết "5 giao dịch PayPal cũ chưa từng lưu số".
+    await logTransaction({ userId, amount: pkg.credits, type: 'topup', description: pkg.label, paypalOrderId: orderId, amountVnd: pkg.amountVnd, gateway: 'paypal' });
     // Referral reward fire tự động qua Postgres trigger trg_referral_check_on_topup
     return ok({ success: true, credits: pkg.credits, balance: newBal });
 
@@ -1278,6 +1317,7 @@ const ENV_KEY_GROUPS: { label: string; items: { key: string; label: string }[] }
   { label: 'Thanh Toán', items: [
     { key: 'PAYPAL_CLIENT_ID', label: 'PayPal Client ID' },
     { key: 'PAYPAL_CLIENT_SECRET', label: 'PayPal Client Secret' },
+    { key: 'PAYPAL_MODE', label: 'PayPal Mode (thiếu = sandbox)' },
     { key: 'PAYOS_CLIENT_ID', label: 'PayOS Client ID' },
     { key: 'PAYOS_API_KEY', label: 'PayOS API Key' },
     { key: 'PAYOS_CHECKSUM_KEY', label: 'PayOS Checksum Key' },

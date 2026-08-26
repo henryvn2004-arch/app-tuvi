@@ -46,6 +46,10 @@ export const REQUIRED_ENV: EnvSpec[] = [
   { key: 'PAYOS_CHECKSUM_KEY', feature: 'Xác thực webhook PayOS', critical: false },
   { key: 'PAYPAL_CLIENT_ID', feature: 'Nạp Lượng qua PayPal', critical: false },
   { key: 'PAYPAL_CLIENT_SECRET', feature: 'Nạp Lượng qua PayPal', critical: false },
+  // Thiếu khoá này KHÔNG ném lỗi — route im lặng rơi về endpoint sandbox, nên
+  // khoá LIVE sẽ bị PayPal trả 401 và mọi lượt nạp báo "Lỗi kết nối PayPal"
+  // mà không có gì chỉ ra nguyên nhân. Phải nhìn thấy được là nó đã set hay chưa.
+  { key: 'PAYPAL_MODE', feature: 'Chọn PayPal live hay sandbox (thiếu = sandbox)', critical: false },
 
   // ── Kênh phụ ──
   { key: 'FIREBASE_SERVICE_ACCOUNT', feature: 'Push app (FCM)', critical: false },
