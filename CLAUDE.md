@@ -99,11 +99,11 @@ sửa bằng SQL không cần deploy) · `lib/marketing/*` (digest · cảnh bá
 (tường trả phí) · `tool-prices.js` (giá) · `poster.js` (ảnh 9:16 + QR) ·
 `nav.js` (icon dùng chung) · `track.js` (đo) · `referral.js`.
 
-### 29 bộ dò (chạy trong CI lint) — `npm run check:*`
+### 30 bộ dò (chạy trong CI lint) — `npm run check:*`
 `prices` `nostore` `groups` `viec` `share` `history` `shellboot` `authapi`
 `giosinh` `keyframes` `hoatdong` `hexagrams` `laso` `railfields` `railwrap`
 `cacheshape` `hao` `motifs` `terms` `publish` `jobs` `token` `prompt` `topics`
-`batrach` `sodep` `lunar` `vntz` `tooltip`.
+`batrach` `sodep` `lunar` `vntz` `tooltip` `cns`.
 **Bộ dò kêu oan là bộ dò bị tắt đi** — thà thu hẹp còn hơn để nó báo bừa.
 
 ## 📐 QUY ƯỚC BẮT BUỘC (đọc trước khi viết UI mới)

@@ -226,6 +226,12 @@ jobs:
       - name: shell.js — đúng một cơ chế tooltip
         run: npm run check:tooltip
 
+      # Khối "Ai Sinh Cùng Ngày Với Bạn" là best-effort: hỏng thì tự ẩn, KHÔNG
+      # báo lỗi. Nên cắm sai (gỡ container, nạp script trước tuvi-form.js, mất
+      # lời gọi mount) trông hệt như lỗi mạng — im lặng hoàn toàn.
+      - name: Khối "Ai Sinh Cùng Ngày" cắm đúng trên mọi trang đã bật
+        run: npm run check:cns
+
   typecheck:
     runs-on: ubuntu-latest
     timeout-minutes: 10
