@@ -2425,6 +2425,18 @@
     // đúng khoảnh khắc tò mò cao nhất thay vì chờ tới thanh công cụ chung.
     // No-op nếu chưa có `currentShare()` (shareWorkspace tự kiểm).
     shareNow: function () { shareWorkspace(); },
+    /**
+     * Khung giữa ĐANG có một kết quả thật hay chưa — CÙNG ngưỡng mà nút Chia
+     * sẻ / Lưu PDF / dòng ghi nguồn đã dùng (`currentShare()`).
+     *
+     * Có để `feedback.js` khỏi tự chế phép đo thứ hai. Bản đầu nó đếm
+     * `innerText` TRẦN của vùng kết quả và vượt ngưỡng ở 18/36 trang NGAY KHI
+     * TẢI — vì `innerText` đếm cả nút, ô nhập, thẻ giới thiệu và tường trả
+     * phí. Hậu quả: mời người ta chấm điểm một bản luận giải chưa hề tồn tại.
+     * `domShareText()` bỏ đúng những thứ đó (SHARE_SKIP_SEL) nên nó mới là
+     * phép đo đúng — và đã được nút Chia sẻ dùng thật từ trước.
+     */
+    hasResult: function () { return !!currentShare(); },
   };
   window.Shell = Shell;
 

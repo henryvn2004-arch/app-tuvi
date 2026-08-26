@@ -41,7 +41,7 @@
 (function () {
   'use strict';
 
-  var MIN_CHARS = 200;   // dưới ngưỡng này thì đó là spinner/thông báo lỗi, không phải bản luận giải
+  var MIN_CHARS = 200;   // CHỈ dùng cho đường lùi khi không có shell — xem hasReading()
   var DEBOUNCE = 400;
   var _cssDone = false;
 
@@ -150,7 +150,28 @@
     return resolveWatch((anchor.getAttribute('data-tvfb-watch') || '').trim());
   }
 
+  /**
+   * Vùng kết quả đã có một bản luận giải THẬT chưa.
+   *
+   * Nguồn CHÍNH là `Shell.hasResult()` — cùng ngưỡng nút Chia sẻ / Lưu PDF đã
+   * dùng, tức `domShareText()` đã bỏ nút, ô nhập, thẻ giới thiệu, tường trả
+   * phí và mọi thứ đang ẩn.
+   *
+   * 🪤 Bản đầu của hàm này đếm `innerText` TRẦN và đo được là hỏng ở 18/36
+   * trang: widget hiện NGAY KHI TẢI, mời người ta chấm điểm một bản luận giải
+   * chưa hề tồn tại. Nguyên nhân: `innerText` đếm luôn chữ trên nút và trong
+   * thẻ giới thiệu, mà nhiều trang để khung kết quả HIỆN SẴN (`#resPanel`
+   * không có `display:none`). Ngưỡng ký tự không cứu được — vấn đề là đếm
+   * NHẦM THỨ, không phải đếm sai mức.
+   *
+   * Đường lùi `innerText` chỉ dùng khi KHÔNG có shell (feedback.js nạp ngoài
+   * trang shell). Giữ nguyên bẫy cũ ở đó là chấp nhận được: đường đó hiện
+   * không có người dùng, và thà hiện thừa còn hơn câm hẳn nếu sau này có.
+   */
   function hasReading(node) {
+    try {
+      if (window.Shell && typeof window.Shell.hasResult === 'function') return !!window.Shell.hasResult();
+    } catch (e) { console.error('[tvfb] Shell.hasResult', e); }
     if (!node) return false;
     try { return (node.innerText || '').trim().length >= MIN_CHARS; }
     catch (e) { return false; }

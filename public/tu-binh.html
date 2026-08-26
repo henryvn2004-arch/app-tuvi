@@ -385,6 +385,10 @@ select.form-input { cursor: pointer; }
       </div>
 
       <div class="result-body" id="result-body"></div>
+
+      <!-- "Ai Sinh Cùng Ngày Với Bạn" — miễn phí, 0 token LLM. Hỏng mạng/API
+           thì tự ẩn, không làm hỏng bản luận phía trên. -->
+      <div id="cnsHost"></div>
     </div>
 
     <!-- Chatbot section: visible always, paywall overlay locked until paid -->
@@ -425,6 +429,7 @@ select.form-input { cursor: pointer; }
 <script src="/tubinh-domain-scores.js?v=2"></script>
 <script src="/tools-shared/vn-timezone.js?v=1"></script>
 <script src="/tuvi-form.js?v=2"></script>
+<script src="/tools-shared/cung-ngay-sinh.js?v=1"></script>
 <script src="/tuvi-paywall.js?v=21"></script>
 <script src="/chatbot.js"></script>
 <script src="/nav.js?v=24"></script>
@@ -1564,6 +1569,22 @@ select.form-input { cursor: pointer; }
   function displayResult() {
     const sec = document.getElementById('result-section');
     sec.classList.add('show');
+
+    // "Ai Sinh Cùng Ngày Với Bạn" — phần phụ, không được chặn hay làm hỏng bản
+    // luận phía trên. `TuviForm.getData().gioIdx` đã quy về giờ VN (qua
+    // tools-shared/vn-timezone.js), cùng hệ quy chiếu với dữ liệu người nổi
+    // tiếng; lệch hệ quy chiếu thì phép so "trùng giờ sinh" vô nghĩa.
+    try {
+      if (window.CungNgaySinh && typeof TuviForm !== 'undefined') {
+        const _d = TuviForm.getData();
+        if (_d && _d.ngay) {
+          CungNgaySinh.mount('cnsHost', {
+            ngay: _d.ngay, thang: _d.thang, nam: _d.nam,
+            gioIdx: _d.gioIdx, gioitinh: _d.gioitinh,
+          });
+        }
+      }
+    } catch (e) { /* phần phụ — nuốt lỗi, đừng chặn khung kết quả */ }
 
     document.getElementById('result-toolbar').style.display = '';
 
