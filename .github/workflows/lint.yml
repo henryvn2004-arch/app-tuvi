@@ -213,6 +213,12 @@ jobs:
       - name: Biên âm lịch — ngoài tầm phải trả null/ném, không bịa lá số
         run: npm run check:lunar
 
+      # Giờ sinh người DÙNG và giờ sinh người NỔI TIẾNG phải đi qua CÙNG một
+      # phép quy về giờ VN. Lệch hệ quy chiếu thì canh giờ vẫn ra số trông hợp
+      # lệ — không gì bắt được ngoài bộ dò này.
+      - name: Múi giờ VN một nguồn duy nhất (form + script import)
+        run: npm run check:vntz
+
       # shell.js chỉ được dùng MỘT cơ chế tooltip (`data-tip` + `aria-label`/
       # `alt`, hiện qua node `.tip` dùng chung ở body) — không còn `title=`
       # native (delay không sửa được, im lặng trên chạm) và không tự viết CSS
