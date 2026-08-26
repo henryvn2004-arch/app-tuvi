@@ -97,10 +97,11 @@ sửa bằng SQL không cần deploy) · `lib/marketing/*` (digest · cảnh bá
 (tường trả phí) · `tool-prices.js` (giá) · `poster.js` (ảnh 9:16 + QR) ·
 `nav.js` (icon dùng chung) · `track.js` (đo) · `referral.js`.
 
-### 25 bộ dò (chạy trong CI lint) — `npm run check:*`
-`prices` `nostore` `groups` `share` `history` `shellboot` `authapi` `keyframes`
-`hoatdong` `hexagrams` `laso` `railfields` `railwrap` `cacheshape` `hao` `motifs`
-`terms` `publish` `jobs` `token` `prompt` `topics` `batrach` `sodep` `giosinh`.
+### 27 bộ dò (chạy trong CI lint) — `npm run check:*`
+`prices` `nostore` `groups` `viec` `share` `history` `shellboot` `authapi`
+`giosinh` `keyframes` `hoatdong` `hexagrams` `laso` `railfields` `railwrap`
+`cacheshape` `hao` `motifs` `terms` `publish` `jobs` `token` `prompt` `topics`
+`batrach` `sodep` `lunar`.
 **Bộ dò kêu oan là bộ dò bị tắt đi** — thà thu hẹp còn hơn để nó báo bừa.
 
 ## 📐 QUY ƯỚC BẮT BUỘC (đọc trước khi viết UI mới)
@@ -259,6 +260,22 @@ Mỗi luật dưới đây sinh ra từ một lần cắn thật. Cột cuối l
   chính danh sách của nguồn (4.392 khoá mẫu vẫn bỏ lọt 10 tên).
 - **Bảng dịch dựng từ MỘT nguồn thì chỉ phủ nguồn đó** — đã cắn 3 lần (chữ Hán,
   tên hành tinh). Cắm bộ dò rò rỉ mỗi lần đấu vào nguồn chữ mới.
+- **Bảng âm lịch chỉ phủ `1900-01-31 → 2100-12-31`.** Ngoài tầm: bản vanilla
+  (`public/tuvi-ansao-engine.js`) trả **`null`**, bản TS (`tuvi-engine`) **ném
+  `RangeError`** — cố ý khác nhau theo nơi gọi, nhưng BIÊN phải khớp. Bản cũ
+  `return {day:1,month:1,year:yy}` làm MỌI ngày dương của một năm trước 1900 ra
+  CÙNG một lá số, im lặng. **Mọi lượt import ngày sinh từ nguồn NGOÀI phải gọi
+  `isLunarSupported()` trước.** `npm run check:lunar` ·
+  `nhat-ky/2026-08.md` "solarToLunar BỊA lá số".
+- **Bản vanilla BỎ cờ `isLeap`** ⇒ ngày trong tháng nhuận đụng khoá với tháng
+  thường (đo được: 336/365 ngày phân biệt ở năm có nhuận). **Nợ CỐ Ý, đừng sửa
+  mò** — tháng nhuận là chuyện cổ pháp. `check:lunar` ghim hiện trạng: đổi là đỏ.
+- **Khoá "cùng lá số" là ÂM LỊCH, không phải ngày dương** — an sao chỉ phụ thuộc
+  (can chi năm · tháng ÂL · ngày ÂL · giờ · giới); số năm âm KHÔNG vào an sao, nên
+  lá số lặp đúng chu kỳ **60 năm** (đo: 0/48 khác biệt giữa 1884/1944/2004). Giới
+  tính thì PHẢI vào khoá (phụ tinh khác 100%, chính tinh khác 0%).
+  ⚠️ `lasoKey()` của `lib/portraits/cache.ts` băm ngày **DƯƠNG** — không tái dùng
+  cho việc gom theo lá số. `nhat-ky/2026-08.md` "Ai Sinh Cùng Ngày Với Bạn".
 - **Bảng có tính ĐỐI XỨNG (Du Niên, quan hệ 2 chiều bất kỳ) tự kiểm được KHÔNG
   cần nguồn ngoài** — cung A nhìn cung B ra sao X thì B nhìn A cũng phải ra X;
   lệch là sai chắc chắn. `BatTrachTool.duNienStars()`/`getCungMenh()`

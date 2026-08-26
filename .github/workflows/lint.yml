@@ -207,6 +207,12 @@ jobs:
       - name: Engine Số Đẹp — deterministic, khớp nguồn, không lẫn tầng
         run: npm run check:sodep
 
+      # Biên bảng âm lịch (1900-01-31 → 2100-12-31). Bản cũ của `solarToLunar`
+      # BỊA ra {day:1,month:1,year:yy} khi ra ngoài biên — im lặng, không lỗi —
+      # nên MỌI ngày dương của một năm trước 1900 quy về CÙNG một lá số.
+      - name: Biên âm lịch — ngoài tầm phải trả null/ném, không bịa lá số
+        run: npm run check:lunar
+
   typecheck:
     runs-on: ubuntu-latest
     timeout-minutes: 10
