@@ -29,5 +29,5 @@
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts"
   ],
-  "exclude": ["node_modules", "tuvi-engine", "**/*.deno.ts"]
+  "exclude": ["node_modules", "tuvi-engine", "remotion", "**/*.deno.ts"]
 }

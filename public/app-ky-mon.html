@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"></noscript>
-<link rel="stylesheet" href="/shell.css?v=18">
+<link rel="stylesheet" href="/shell.css?v=29">
 <style>
 .form-card{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);max-width:640px}
 .form-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:3px}
@@ -78,7 +78,8 @@
       <div id="shellRecent"></div>
       <div class="form-card" id="birthPanel">
         <h2>Lập bàn cho một thời điểm</h2>
-        <p class="sub">Bàn Kỳ Môn đổi theo từng canh giờ (hai tiếng một bàn). Để trống là lập cho chính lúc này. Nhận bàn chín cung với bát môn, cửu tinh, bát thần và tam kỳ, rồi hỏi trợ lý luận theo việc của bạn.</p>
+        <p class="sub">Dựng bàn 9 cung theo đúng giờ hiện tại, chỉ hướng nên đi. Bạn sắp ra ngoài gặp việc quan trọng, chưa biết chọn hướng nào. Dùng khi cần biết hôm nay giờ nào tốt, đi hướng nào lợi.</p>
+        <p class="price-note" data-tvp-price-label="ky-mon">…</p>
         <div class="fg">
           <label>Việc muốn hỏi (tuỳ chọn)</label>
           <input type="text" id="cauHoi" placeholder="VD: Chiều nay đi gặp đối tác nên đi hướng nào?" maxlength="100">
@@ -109,12 +110,12 @@
 </div>
 
 <script>window.SHELL_ACTIVE='ky-mon';window.SHELL_HISTORY=true;
-window.SHELL_INTRO={key:'ky-mon',title:'Kỳ Môn Độn Giáp',desc:'Đứng đầu <b>Tam Thức</b>. Lập bàn <b>chín cung</b> cho một canh giờ — bát môn, cửu tinh, bát thần, tam kỳ — để biết <b>nên đi hướng nào, hợp làm việc gì</b>, rồi hỏi <b>trợ lý AI</b> luận theo việc của bạn.'};</script>
+window.SHELL_INTRO={key:'ky-mon',title:'Kỳ Môn Độn Giáp',desc:'Dựng bàn 9 cung theo đúng giờ hiện tại, chỉ hướng nên đi. Bạn sắp ra ngoài gặp việc quan trọng, chưa biết chọn hướng nào. Dùng khi cần biết hôm nay giờ nào tốt, đi hướng nào lợi.'};</script>
 <script src="/tools-shared/ky-mon.js?v=1"></script>
 <script src="/poster.js?v=5"></script>
 <script src="/auth.js?v=2"></script>
-  <script src="/nav.js?v=22" data-icons-only></script>
-<script src="/shell.js?v=68"></script>
+  <script src="/nav.js?v=23" data-icons-only></script>
+<script src="/shell.js?v=82"></script>
 <script>
 // Bàn dựng ở SERVER (/api/qimen). Trang chỉ gọi + vẽ, dùng chung module
 // /tools-shared/ky-mon.js với trang standalone /tools/ky-mon.html.

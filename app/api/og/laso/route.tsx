@@ -5,21 +5,7 @@ export const runtime = 'edge';
 
 import { ImageResponse } from 'next/og';
 import { NextRequest } from 'next/server';
-
-let fontCache: ArrayBuffer | null = null;
-async function loadFont(): Promise<ArrayBuffer | null> {
-  if (fontCache) return fontCache;
-  try {
-    const css = await fetch(
-      'https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600;700&subset=vietnamese',
-      { headers: { 'User-Agent': 'Mozilla/5.0' } }
-    ).then(r => r.text());
-    const match = css.match(/url\((https:\/\/fonts\.gstatic\.com\/[^)]+\.woff2)\)/);
-    if (!match) return null;
-    fontCache = await fetch(match[1]).then(r => r.arrayBuffer());
-    return fontCache;
-  } catch { return null; }
-}
+import { loadOgFonts, ogFallbackRedirect } from '@/lib/og/font';
 
 function diemColor(d: number) {
   if (d >= 7) return '#4ade80';
@@ -39,10 +25,10 @@ export async function GET(req: NextRequest) {
   const canChi = sp.get('cc_nam') || '';       // can chi năm (e.g. Canh Ngọ)
 
   const cachCucList = cc.split(',').filter(Boolean).slice(0, 3);
-  const fontData = await loadFont();
-  const fonts = fontData
-    ? [{ name: 'BeVN', data: fontData, weight: 700 as const, style: 'normal' as const }]
-    : [];
+  const fonts = await loadOgFonts([700], req);
+  // Không font nào ⇒ Satori ném "No fonts are loaded" (500). Trả ảnh tĩnh thay vì
+  // để link chia sẻ mất sạch preview.
+  if (!fonts.length) return ogFallbackRedirect(req);
 
   const col = diemColor(diem);
 

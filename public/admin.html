@@ -7,7 +7,7 @@
 <link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;600;700&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;600;700&display=swap" rel="stylesheet"></noscript>
 <link rel="stylesheet" href="/admin.css?v=4"/>
 <script>(function(){try{var t=localStorage.getItem('tva_theme');if(t==='dark'||(!t&&window.matchMedia&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
-  <script src="/nav.js?v=22" data-icons-only></script>
+  <script src="/nav.js?v=23" data-icons-only></script>
   <script>
     /* Admin dựng lại DOM ở 200+ chỗ bằng innerHTML. mountIcons() chỉ tự quét lúc
        nạp trang, nên gọi tay từng chỗ vừa dễ sót vừa không kiểm nổi. Quan sát DOM
@@ -69,34 +69,54 @@
       </button>
     </div>
 
+    <!--
+      Tách Marketing ↔ Nội Dung (2026-08-11).
+      Trước đây một mục "Marketing & Nội Dung" gánh 9 nav, trong đó 6 là việc
+      NỘI DUNG. Nay Marketing chỉ còn đo TIỀN & NGƯỜI (landing → đăng ký → trả
+      tiền → quay lại → giới thiệu), còn mọi thứ thuộc vòng đời một tác phẩm
+      nằm ở mục Nội Dung bên dưới.
+    -->
     <div class="sidebar-section" data-team="marketing">
-      <div class="sidebar-section-label">Marketing &amp; Nội Dung</div>
+      <div class="sidebar-section-label">Marketing</div>
       <button class="nav-item" onclick="goTo('marketing')">
         <span class="ni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 16.5 8.5 11.5 1 19"/><polyline points="17 6 23 6 23 12"/></svg></span><span>Funnel &amp; Nguồn</span>
       </button>
       <button class="nav-item" onclick="goTo('retention')">
         <span class="ni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></span><span>Giữ Chân &amp; Doanh Thu</span>
       </button>
-      <button class="nav-item" onclick="goTo('distribution')">
-        <span class="ni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></span><span>Phân Phối Nội Dung</span>
-      </button>
-      <button class="nav-item" onclick="goTo('content')">
-        <span class="ni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg></span><span>YouTube Studio</span>
-      </button>
-      <button class="nav-item" onclick="goTo('cboard')">
-        <span class="ni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3h6v18H3z"/><path d="M15 3h6v11h-6z"/></svg></span><span>Content Board</span>
-      </button>
-      <button class="nav-item" onclick="goTo('khaoluan')">
-        <span class="ni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></span><span>Khảo Luận</span>
-      </button>
-      <button class="nav-item" onclick="goTo('nghiencuu')">
-        <span class="ni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></span><span>Nghiên Cứu</span>
-      </button>
-      <button class="nav-item" onclick="goTo('channels')">
-        <span class="ni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></span><span>Channels &amp; Push</span>
-      </button>
       <button class="nav-item" onclick="goTo('seo')">
         <span class="ni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span><span>SEO</span>
+      </button>
+    </div>
+
+    <div class="sidebar-section" data-team="marketing">
+      <div class="sidebar-section-label">Nội Dung</div>
+      <button class="nav-item" onclick="goTo('warehouse')">
+        <span class="ni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-6 9 6v11a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z"/><path d="M8 21V12h8v9"/></svg></span><span>Kho Nội Dung</span>
+      </button>
+      <!--
+        "Sản Xuất" KHÔNG phải một page mới: nó là nút mở nhóm 4 trang sản xuất
+        đã có (Content Board · Khảo Luận · Nghiên Cứu · YouTube Studio) qua một
+        thanh tab. Giữ nguyên 4 khối DOM + 4 loader cũ ⇒ 0 rủi ro hồi quy, mà
+        sidebar vẫn gọn. Xem `PROD_TABS` / `goToProd()` phía dưới.
+      -->
+      <button class="nav-item" id="nav-production" onclick="goToProd()">
+        <span class="ni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></span><span>Sản Xuất</span>
+      </button>
+      <button class="nav-item" onclick="goTo('distribution')">
+        <span class="ni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></span><span>Phân Phối</span>
+      </button>
+      <!--
+        Backlink — máy tìm cơ hội + soạn nội dung, người tự tay dán/gửi rồi
+        đánh dấu "Đã dùng". CÙNG TRIẾT LÝ Seeding Group (Groups API bị Meta gỡ
+        hồi 2024): không có nút đăng/gửi nào trong toàn bộ trang này. Xem đầu
+        _patches/migration-backlinks.sql.
+      -->
+      <button class="nav-item" onclick="goTo('backlinks')">
+        <span class="ni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></span><span>Backlink &amp; Entity</span>
+      </button>
+      <button class="nav-item" onclick="goTo('channels')">
+        <span class="ni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1.5"/></svg></span><span>Kênh &amp; Kết Nối</span>
       </button>
     </div>
 
@@ -184,6 +204,16 @@
               <button class="btn btn-gold btn-sm" onclick="mktExportCSV()">⬇ CSV</button>
       </div>
 
+      <!-- Thanh tab của mục "Sản Xuất" — cùng khuôn mkt-filterbar: một dải
+           dính dưới topbar, chỉ hiện ở đúng nhóm trang của nó. Bốn trang bên
+           dưới giữ nguyên DOM + loader cũ, đây chỉ là đường đi tới chúng. -->
+      <div class="mkt-filterbar" id="prod-tabbar" style="display:none">
+              <button class="btn btn-ghost btn-sm" data-prod-tab="cboard" onclick="goToProd('cboard')">Content Board</button>
+              <button class="btn btn-ghost btn-sm" data-prod-tab="khaoluan" onclick="goToProd('khaoluan')">Khảo Luận</button>
+              <button class="btn btn-ghost btn-sm" data-prod-tab="nghiencuu" onclick="goToProd('nghiencuu')">Nghiên Cứu</button>
+              <button class="btn btn-ghost btn-sm" data-prod-tab="content" onclick="goToProd('content')">YouTube Studio</button>
+      </div>
+
     <div class="content">
 
       <!-- ── DASHBOARD ── -->
@@ -196,6 +226,14 @@
             <span style="font-size:.72rem;color:var(--text-lt)">tỷ lệ lượt lỗi / tổng lượt</span>
           </div>
           <div class="panel-body" id="dash-channel-health"><div class="loading"><span class="spin"></span>Đang tải...</div></div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title"><svg class="pt-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/><path d="m14.31 8-2.31 4h4"/><path d="M12 12v6"/></svg>Lỗi JS Client (24h)</div>
+            <span style="font-size:.72rem;color:var(--text-lt)">bắt từ track.js — thay Sentry ở tầng client</span>
+          </div>
+          <div class="table-wrap" id="dash-js-errors"><div class="loading"><span class="spin"></span>Đang tải...</div></div>
         </div>
 
         <div class="stats" id="stats-grid">
@@ -504,6 +542,27 @@
 
         <div class="panel">
           <div class="panel-header">
+            <div class="panel-title"><svg class="pt-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2Z"/><circle cx="12" cy="13" r="4"/></svg>Khoe Kết Quả — Chờ Duyệt</div>
+            <div class="panel-actions">
+              <select id="sp-status" class="search-input" style="width:auto" onchange="loadSocialProof()">
+                <option value="pending" selected>Chờ duyệt</option>
+                <option value="approved">Đã duyệt</option>
+                <option value="rejected">Đã từ chối</option>
+              </select>
+              <span class="badge badge-grey" id="sp-badge">…</span>
+              <button class="btn btn-primary btn-sm" onclick="loadSocialProof()">↻</button>
+            </div>
+          </div>
+          <div class="panel-body" style="font-size:.76rem;color:var(--text-lt);padding-bottom:.5rem">
+            User tự nộp link bài đăng (feed) hoặc ảnh chụp (Story, tự xoá sau 24h) đã đăng Facebook/Instagram/TikTok — <b>không có cách nào xác minh tự động</b> (Instagram không lộ dữ liệu lượt xem Story cho bên thứ ba, đã kiểm chắc trước khi thiết kế). Bấm mở link/ảnh, đối chiếu xong mới Duyệt — cộng Lượng chạy qua RPC nguyên tử nên duyệt hai lần vẫn chỉ cộng một lần.
+          </div>
+          <div id="sp-list" style="padding:0 1rem 1rem">
+            <div class="loading"><span class="spin"></span>Đang tải...</div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
             <div class="panel-title"><svg class="pt-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m22 8-6 4 6 4V8z"/><rect x="2" y="6" width="14" height="12" rx="2"/></svg>Content Pack TikTok (mồi phân phối)</div>
             <div class="panel-actions">
               <select id="cpack-days" class="search-input" style="width:auto">
@@ -539,6 +598,106 @@
           </div>
         </div>
 
+      </div>
+
+      <!-- ── BACKLINK ── -->
+      <div class="page" id="page-backlinks">
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title"><svg class="pt-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41 13.42 20.6a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82Z"/><path d="M7 7h.01"/></svg>Tài Khoản &amp; Entity</div>
+            <div class="panel-actions">
+              <span class="badge badge-grey" id="ga-badge">…</span>
+              <button class="btn btn-outline btn-sm" id="ga-run-btn" onclick="blRunNow('accounts', this)">🔄 Nạp sổ + kiểm hồ sơ</button>
+              <button class="btn btn-primary btn-sm" onclick="loadBacklinks()">↻</button>
+            </div>
+          </div>
+          <div class="panel-body" style="font-size:.76rem;color:var(--text-lt);padding-bottom:.5rem">
+            Sổ tài khoản của <b>chính mình</b> trên các nền tảng — khác với "Cơ Hội Backlink" bên dưới (nơi <i>người khác</i> sở hữu). Đây là <b>nguồn DUY NHẤT</b> sinh trường <code>sameAs</code> trong JSON-LD của cả site: đánh dấu một dòng thành <b>Đã xác minh</b> + bật <b>sameAs</b> là schema toàn site cập nhật, <b>không cần deploy</b>. Cron <code>growth-accounts</code> mỗi T7 nạp nền tảng mới vào sổ và ghé lại từng hồ sơ đã đăng ký xem còn sống không — hồ sơ chết sẽ tự bị loại khỏi <code>sameAs</code> và báo về Telegram. <b>Không có nút đăng ký nào</b> — tạo tài khoản là việc tay (captcha, xác minh, điều khoản từng nền tảng).
+          </div>
+          <div id="ga-list" style="padding:0 1rem 1rem">
+            <div class="loading"><span class="spin"></span>Đang tải...</div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title"><svg class="pt-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>Cơ Hội Backlink</div>
+            <div class="panel-actions">
+              <span class="badge badge-grey" id="bl-p-badge">…</span>
+              <button class="btn btn-outline btn-sm" id="bl-p-run-btn" onclick="blRunNow('prospect', this)">🔍 Tìm cơ hội mới</button>
+              <button class="btn btn-outline btn-sm" id="bl-bl-run-btn" onclick="blRunNow('brokenlinks', this)">🔗💀 Quét link chết</button>
+              <button class="btn btn-primary btn-sm" onclick="loadBacklinks()">↻</button>
+            </div>
+          </div>
+          <div class="panel-body" style="font-size:.76rem;color:var(--text-lt);padding-bottom:.5rem">
+            Cron <code>backlink-prospect</code> tìm cơ hội mới mỗi T3 qua <b>BỐN nguồn độc lập</b>, ba nguồn đầu 0 API key: danh sách tĩnh đã vét tay · <a href="https://www.google.com/alerts" target="_blank" rel="noopener">Google Alerts</a> RSS (nhắc tên chưa gắn link — cần Henry tạo alert một lần, dán URL feed vào <code>GOOGLE_ALERTS_RSS_URLS</code>) · quét link chết trên trang tài nguyên đúng ngách (nút "🔗💀" ở trên, chạy riêng mỗi T5) · Brave Search API (<b>tuỳ chọn</b>, cần <code>BRAVE_SEARCH_API_KEY</code>). Thiếu nguồn nào thì các nguồn còn lại vẫn chạy đều. Cron <code>backlink-content</code> mỗi sáng soạn sẵn nội dung cho cơ hội <b>chưa soạn</b>, qua brand-safety trước khi lưu. <b>Không có nút đăng/gửi nào</b> — soạn xong đợi ở tab "Nội Dung Cần Duyệt", người tự tay dán/gửi rồi đánh dấu Đã dùng.
+          </div>
+          <div id="bl-prospects" style="padding:0 1rem 1rem">
+            <div class="loading"><span class="spin"></span>Đang tải...</div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title">Cần Theo Dõi (CRM-lite)</div>
+            <div class="panel-actions"><span class="badge badge-grey" id="bl-crm-badge">…</span></div>
+          </div>
+          <div class="panel-body" style="font-size:.76rem;color:var(--text-lt);padding-bottom:.5rem">
+            Ai đã gửi thư mà chưa hồi âm, ai hẹn nhắc lại tới ngày. <b>Máy không gửi gì</b> — đây là dấu vết của việc tay, để danh sách outreach khỏi mục đi mà không ai biết ai đáng nhắc lại. Đánh dấu "đã liên hệ" ngay sau khi bạn tự tay gửi.
+          </div>
+          <div id="bl-crm" style="padding:0 1rem 1rem">
+            <div class="loading"><span class="spin"></span>Đang tải...</div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title"><svg class="pt-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z"/><path d="M4 9h16"/><path d="M9 4v16"/></svg>Nội Dung Cần Duyệt</div>
+            <div class="panel-actions">
+              <span class="badge badge-grey" id="bl-c-badge">…</span>
+              <button class="btn btn-outline btn-sm" id="bl-c-run-btn" onclick="blRunNow('content', this)">✍️ Soạn ngay</button>
+            </div>
+          </div>
+          <div class="panel-body" style="font-size:.76rem;color:var(--text-lt);padding-bottom:.5rem">
+            Bản nháp do AI soạn theo đúng loại cơ hội (mô tả nộp directory / bài web2.0 / email pitch guest post / email cho link chết-tài nguyên). Sửa tay nếu muốn, bấm <b>Copy</b> rồi tự dán/gửi, xong bấm <b>Đã dùng</b> — lúc đó nhịp mới tính là xong.
+          </div>
+          <div id="bl-content" style="padding:0 1rem 1rem"></div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title"><svg class="pt-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>Liên Kết Đang Theo Dõi</div>
+            <div class="panel-actions">
+              <span class="badge badge-grey" id="bl-l-badge">…</span>
+              <button class="btn btn-outline btn-sm" id="bl-l-run-btn" onclick="blRunNow('check', this)">🔎 Kiểm tra ngay</button>
+              <button class="btn btn-primary btn-sm" onclick="loadBacklinks()">↻</button>
+            </div>
+          </div>
+          <div class="panel-body" style="font-size:.76rem;color:var(--text-lt);padding-bottom:.5rem">
+            Sau khi tự tay dán/gửi và link đã LÊN THẬT, thêm nó vào đây — cron <code>backlink-check</code> mỗi sáng ghé lại trang đó (User-Agent tự nhận là bot, chỉ đọc HTML công khai) để xác nhận link còn sống, đọc lại dofollow/nofollow. Link biến mất sẽ báo về Telegram. Cùng lượt, cron còn hỏi <a href="https://www.bing.com/webmasters" target="_blank" rel="noopener">Bing Webmaster Tools</a> (miễn phí — cần Henry xác minh site một lần rồi dán API key vào <code>BING_WEBMASTER_API_KEY</code>) xem có backlink MỚI nào hệ thống chưa từng biết không, tự thêm vào bảng này.
+          </div>
+          <div id="bl-links" style="padding:0 1rem 1rem">
+            <div class="loading"><span class="spin"></span>Đang tải...</div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title"><svg class="pt-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 9h20"/><path d="M7 14h6"/></svg>Widget Nhúng</div>
+            <div class="panel-actions">
+              <span class="badge badge-grey" id="bl-e-badge">…</span>
+              <a class="btn btn-outline btn-sm" href="/nhung" target="_blank" rel="noopener">↗ Trang lấy mã</a>
+              <button class="btn btn-outline btn-sm" id="bl-e-run-btn" onclick="blRunNow('embedcheck', this)">🔎 Soi dòng ghi nguồn</button>
+              <button class="btn btn-primary btn-sm" onclick="loadBacklinks()">↻</button>
+            </div>
+          </div>
+          <div class="panel-body" style="font-size:.76rem;color:var(--text-lt);padding-bottom:.5rem">
+            Vòng TỰ NUÔI duy nhất của cả track: ai nhúng công cụ của mình thì hệ thống <b>tự biết</b> (đọc <code>Referer</code> lúc widget tải), không cần ai khai báo. <b>⚠️ Bản thân iframe KHÔNG phải backlink</b> — link bên trong nó thuộc domain của mình. Thứ tính là backlink là <b>dòng ghi nguồn <code>&lt;a&gt;</code> nằm ngoài iframe</b>, nên cron <code>backlink-check</code> mỗi sáng ghé lại xem họ có giữ dòng đó không: <b>còn</b> → tự vào "Liên Kết Đang Theo Dõi"; <b>mất</b> → tự thành cơ hội <i>ấm nhất có thể</i> ở "Cơ Hội Backlink" (họ đã chủ động dùng đồ của mình rồi, xin thêm một dòng credit là lời đề nghị dễ nhất).
+          </div>
+          <div id="bl-embeds" style="padding:0 1rem 1rem">
+            <div class="loading"><span class="spin"></span>Đang tải...</div>
+          </div>
+        </div>
       </div>
 
       <!-- ── LÁ SỐ ── -->
@@ -634,6 +793,35 @@
           </div>
         </div>
       </div>
+
+        <!-- KHỐI 4 · MÃ KHUYẾN MÃI -->
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title"><svg class="pt-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10V6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v4a2 2 0 0 0 0 4v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4a2 2 0 0 0 0-4z"/><line x1="13" y1="5" x2="13" y2="19" stroke-dasharray="2 3"/></svg>Mã Khuyến Mãi</div>
+            <div class="panel-actions">
+              <span style="font-size:.72rem;color:var(--text-lt)" id="promocode-note">—</span>
+              <button class="btn btn-gold btn-sm" onclick="promoCodeNew()">+ Mã mới</button>
+              <button class="btn btn-primary btn-sm" onclick="loadPromoCodes()">↻</button>
+            </div>
+          </div>
+          <div id="promocode-alert" style="padding:0 .9rem"></div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Mã</th><th>Lượng</th><th>Đã dùng</th><th>Trần lượt</th><th>Chỉ TK mới (ngày)</th><th>Bắt buộc OAuth</th><th>Hết hạn</th><th>Bật</th><th>Ghi chú</th><th></th></tr></thead>
+              <tbody id="promocode-body"><tr><td colspan="10" class="loading"><span class="spin"></span>Đang tải...</td></tr></tbody>
+            </table>
+          </div>
+          <div class="panel-body" style="font-size:.72rem;color:var(--text-lt);line-height:1.7">
+            <b>Trần lượt</b> để trống = không giới hạn — đây là cần gạt ngân sách chính, đặt số rồi mới yên tâm phát mã ra ngoài.
+            <b>Chỉ TK mới</b> để trống = mọi tài khoản đổi được; đặt 30 nghĩa là chỉ tài khoản đăng ký trong 30 ngày gần đây.
+            <b>Bắt buộc OAuth</b> = chỉ tài khoản đăng nhập bằng Google/Facebook mới đổi được — đây là chốt chống lạm dụng CHÍNH.
+            Đo trên 62 tài khoản thật: 56 OAuth, 6 email (lượt cuối cách 3 tháng) ⇒ chốt này gần như không chặn người thật,
+            mà đẩy giá một tài khoản giả lên rất cao. Tắt nó là mở đường farm bằng email rác.
+            Mỗi tài khoản đổi được <b>đúng một mã trọn đời</b> (khoá ở tầng DB, không phải ở mã ứng dụng).
+            Số Lượng tối đa mỗi mã là <b>1.000</b> — chốt cứng trong RPC để một lần gõ thừa số 0 không phát cả gia tài.
+            Mã đã có người đổi thì <b>không xoá được</b>, hãy TẮT nó.
+          </div>
+        </div>
 
       <!-- ── CONTENT MANAGER ── -->
       <div class="page" id="page-content">
@@ -1139,7 +1327,7 @@
         <div class="stats" id="cron-stats" style="grid-template-columns:repeat(4,1fr)">
           <div class="stat"><div class="stat-label">Tổng Job</div><div class="stat-value" id="cron-k-total">…</div><div class="stat-sub">Vercel · pg_cron · edge</div></div>
           <div class="stat green"><div class="stat-label">OK (24h)</div><div class="stat-value" id="cron-k-ok">…</div><div class="stat-sub">lượt chạy thành công</div></div>
-          <div class="stat" style="--x:1"><div class="stat-label">Lỗi (24h)</div><div class="stat-value" id="cron-k-err" style="color:var(--red)">…</div><div class="stat-sub">cần để mắt</div></div>
+          <div class="stat" style="--x:1"><div class="stat-label">Lỗi (24h)</div><div class="stat-value" id="cron-k-err" style="color:var(--tx-red)">…</div><div class="stat-sub">cần để mắt</div></div>
           <div class="stat blue"><div class="stat-label">Lượt chạy</div><div class="stat-value" id="cron-k-runs">…</div><div class="stat-sub">đã ghi log</div></div>
         </div>
         <div class="panel">
@@ -1246,7 +1434,7 @@
           <div class="panel-header"><div class="panel-title"><svg class="pt-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Trạng Thái API Keys &amp; Secrets</div></div>
           <div class="panel-body" id="env-status">
             <div class="loading"><span class="spin"></span>Đang tải...</div>
-            <div style="font-size:.72rem;color:var(--text-lt);margin-top:.6rem">Token 3 kênh chat (Telegram/Messenger/WhatsApp) xem ở <a href="#" onclick="goTo('channels');return false" style="color:var(--blue)">Channels &amp; Push</a>. Chỉ hiện đã cấu hình hay chưa — KHÔNG bao giờ hiện giá trị thật.</div>
+            <div style="font-size:.72rem;color:var(--text-lt);margin-top:.6rem">Token 3 kênh chat (Telegram/Messenger/WhatsApp) xem ở <a href="#" onclick="goTo('channels');return false" style="color:var(--tx-blue)">Channels &amp; Push</a>. Chỉ hiện đã cấu hình hay chưa — KHÔNG bao giờ hiện giá trị thật.</div>
           </div>
         </div>
       </div>
@@ -1322,7 +1510,91 @@
         </div>
       </div>
 
-      <!-- ── CONTENT BOARD (Marketing & Nội Dung) ── -->
+      <!-- ── KHO NỘI DUNG ──
+           Gom 6 bảng nội dung về một bảng đọc, kèm cột "đã ra kênh nào".
+           CHỈ ĐỌC: sửa nội dung vẫn ở trang Sản Xuất của từng pipeline. -->
+      <div class="page" id="page-warehouse">
+        <!-- `auto-fit` chứ không phải `repeat(4,1fr)` cứng: ở 390px bốn ô cố
+             định làm tràn ngang cả trang (đo được trên `nghiencuu`/`seo` là
+             21–25px — nợ có sẵn, cố ý không trộn vào PR này, nhưng cũng không
+             chép lại cho trang mới). -->
+        <div class="stats" id="wh-stats" style="grid-template-columns:repeat(auto-fit,minmax(190px,1fr))">
+          <div class="stat"><div class="stat-label">Tổng Tác Phẩm</div><div class="stat-value" id="wh-k-total">…</div><div class="stat-sub">6 nguồn nội dung</div></div>
+          <div class="stat green"><div class="stat-label">Đã Ra Kênh</div><div class="stat-value" id="wh-k-pub">…</div><div class="stat-sub" id="wh-k-pub-sub">…</div></div>
+          <div class="stat"><div class="stat-label">Đang Xếp Hàng</div><div class="stat-value" id="wh-k-queue">…</div><div class="stat-sub">chờ đăng</div></div>
+          <div class="stat"><div class="stat-label">Chưa Ra Kênh Nào</div><div class="stat-value" id="wh-k-idle">…</div><div class="stat-sub">nằm kho</div></div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title"><svg class="pt-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-6 9 6v11a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z"/><path d="M8 21V12h8v9"/></svg>Kho Theo Loại</div>
+          </div>
+          <div class="panel-body" id="wh-bykind"><div class="empty">Đang tải…</div></div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title"><svg class="pt-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>Đã Đăng Theo Kênh</div>
+          </div>
+          <div class="panel-body" id="wh-bychan"><div class="empty">Đang tải…</div></div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title"><svg class="pt-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><polyline points="7 14 11 9 15 12 21 5"/></svg>Hiệu Suất Kênh</div>
+            <div class="panel-actions" style="font-size:.72rem;color:var(--text-lt)" id="wh-met-when"></div>
+          </div>
+          <div class="panel-body" id="wh-metrics"><div class="empty">Đang tải…</div></div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title"><svg class="pt-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>Danh Sách</div>
+            <div class="panel-actions" style="display:flex;gap:8px;flex-wrap:wrap">
+              <input class="search-input" id="wh-q" placeholder="Tìm tiêu đề…" style="width:190px" onkeydown="if(event.key==='Enter'){whGo(0)}">
+              <select class="search-input" id="wh-kind" style="width:150px" onchange="whGo(0)">
+                <option value="">Mọi loại</option>
+                <option value="khao-luan">Khảo luận</option>
+                <option value="nghien-cuu">Nghiên cứu</option>
+                <option value="video-hoi-dap">Video hỏi-đáp</option>
+                <option value="tu-dien">Từ điển</option>
+                <option value="tai-lieu">Tài liệu</option>
+                <option value="sach">Sách</option>
+              </select>
+              <select class="search-input" id="wh-status" style="width:160px" onchange="whGo(0)">
+                <option value="">Mọi trạng thái</option>
+                <option value="published">Đã ra kênh</option>
+                <option value="queued">Đang xếp hàng</option>
+                <option value="unpublished">Chưa ra kênh</option>
+              </select>
+              <select class="search-input" id="wh-pub" style="width:150px" onchange="whGo(0)">
+                <option value="">Mọi bài</option>
+                <option value="draft">Chờ duyệt</option>
+                <option value="hidden">Đã gỡ</option>
+              </select>
+              <select class="search-input" id="wh-channel" style="width:140px" onchange="whGo(0)">
+                <option value="">Mọi kênh</option>
+                <option value="youtube">YouTube</option>
+                <option value="facebook">Facebook</option>
+                <option value="instagram">Instagram</option>
+                <option value="threads">Threads</option>
+                <option value="telegram">Telegram</option>
+                <option value="tiktok">TikTok</option>
+                <option value="fb-group">FB Group</option>
+              </select>
+              <select class="search-input" id="wh-sort" style="width:150px" onchange="whGo(0)">
+                <option value="">Mới nhất trước</option>
+                <option value="views">Nhiều view nhất</option>
+              </select>
+              <button class="btn btn-primary btn-sm" onclick="whGo(0)">↻</button>
+            </div>
+          </div>
+          <div class="table-wrap"><table class="table" id="wh-table"><tbody><tr><td class="empty">Đang tải…</td></tr></tbody></table></div>
+          <div class="panel-body" id="wh-pager" style="display:flex;gap:10px;align-items:center;justify-content:flex-end"></div>
+        </div>
+      </div>
+
+      <!-- ── CONTENT BOARD (Sản Xuất) ── -->
       <div class="page" id="page-cboard">
         <div class="panel">
           <div class="panel-header">
@@ -1347,13 +1619,13 @@
           <div class="stat"><div class="stat-label">Tổng Bài</div><div class="stat-value" id="kl-k-total">…</div><div class="stat-sub">khao_luan</div></div>
           <div class="stat green"><div class="stat-label">+7 Ngày</div><div class="stat-value" id="kl-k-7d">…</div><div class="stat-sub">bài mới</div></div>
           <div class="stat blue"><div class="stat-label">Đang Chờ Viết</div><div class="stat-value" id="kl-k-pending">…</div><div class="stat-sub">hàng đợi</div></div>
-          <div class="stat" style="--x:1"><div class="stat-label">Lỗi</div><div class="stat-value" id="kl-k-error" style="color:var(--red)">…</div><div class="stat-sub">cần để mắt</div></div>
+          <div class="stat" style="--x:1"><div class="stat-label">Lỗi</div><div class="stat-value" id="kl-k-error" style="color:var(--tx-red)">…</div><div class="stat-sub">cần để mắt</div></div>
         </div>
 
         <div class="panel">
           <div class="panel-header">
             <div class="panel-title"><svg class="pt-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>Theo Danh Mục</div>
-            <span style="font-size:.72rem;color:var(--text-lt)">Trigger cron thủ công ở <a href="#" onclick="goTo('cron');return false" style="color:var(--blue)">Cron &amp; Jobs</a></span>
+            <span style="font-size:.72rem;color:var(--text-lt)">Trigger cron thủ công ở <a href="#" onclick="goTo('cron');return false" style="color:var(--tx-blue)">Cron &amp; Jobs</a></span>
           </div>
           <div class="panel-body" id="kl-categories"><div class="loading"><span class="spin"></span>Đang tải...</div></div>
         </div>
@@ -1367,6 +1639,14 @@
               <button class="btn btn-gold btn-sm" onclick="submitKlTopics(this)">Thêm Vào Hàng Đợi →</button>
             </div>
           </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title"><svg class="pt-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6h13"/><path d="M8 12h13"/><path d="M8 18h13"/><path d="M3 6h.01"/><path d="M3 12h.01"/><path d="M3 18h.01"/></svg>Hàng Đợi Chủ Đề (giám sát)</div>
+            <span style="font-size:.72rem;color:var(--text-lt)">Gồm cả chủ đề Gemini tự sinh lẫn chủ đề thêm tay ở trên</span>
+          </div>
+          <div class="table-wrap" id="kl-queue"><div class="loading"><span class="spin"></span>Đang tải...</div></div>
         </div>
 
         <div class="panel">
@@ -1387,7 +1667,7 @@
         <div class="panel">
           <div class="panel-header">
             <div class="panel-title"><svg class="pt-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5z"/><line x1="16" y1="8" x2="2" y2="22"/><line x1="17.5" y1="15" x2="9" y2="15"/></svg>15 Tác Giả</div>
-            <span style="font-size:.72rem;color:var(--text-lt)">Trigger cron thủ công ở <a href="#" onclick="goTo('cron');return false" style="color:var(--blue)">Cron &amp; Jobs</a></span>
+            <span style="font-size:.72rem;color:var(--text-lt)">Trigger cron thủ công ở <a href="#" onclick="goTo('cron');return false" style="color:var(--tx-blue)">Cron &amp; Jobs</a></span>
           </div>
           <div class="table-wrap" id="nc-authors"><div class="loading"><span class="spin"></span>Đang tải...</div></div>
         </div>
@@ -1417,6 +1697,14 @@
               <button class="btn btn-gold btn-sm" onclick="submitNcTopics(this)">Thêm Vào Hàng Đợi →</button>
             </div>
           </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title"><svg class="pt-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6h13"/><path d="M8 12h13"/><path d="M8 18h13"/><path d="M3 6h.01"/><path d="M3 12h.01"/><path d="M3 18h.01"/></svg>Hàng Đợi Chủ Đề (giám sát)</div>
+            <span style="font-size:.72rem;color:var(--text-lt)">Gồm cả chủ đề Gemini tự sinh lẫn chủ đề thêm tay ở trên</span>
+          </div>
+          <div class="table-wrap" id="nc-queue"><div class="loading"><span class="spin"></span>Đang tải...</div></div>
         </div>
 
         <div class="panel">
@@ -1451,15 +1739,31 @@ let _allUsers = [], _allCredits = [], _allLasos = [];
 let _currentPage = 'dashboard';
 
 const PAGE_TITLES = {
-  retention: 'Giữ Chân & Doanh Thu', distribution: 'Phân Phối Nội Dung',
+  retention: 'Giữ Chân & Doanh Thu', distribution: 'Nội Dung — Phân Phối',
   dashboard: 'Dashboard', users: 'Users', credits: 'Doanh Thu & Giao Dịch',
   lasos: 'Lá Số', pricing: 'Gói Nạp & Pricing', tools: 'Ví & Cấp Credits',
-  marketing: 'Funnel & Nguồn', content: 'YouTube Studio', cron: 'Vận Hành — Sức Khỏe & Jobs',
-  channels: 'Channels & Push', seo: 'SEO',
-  cboard: 'Content Board', khaoluan: 'Khảo Luận', nghiencuu: 'Nghiên Cứu',
+  marketing: 'Funnel & Nguồn', cron: 'Vận Hành — Sức Khỏe & Jobs',
+  channels: 'Nội Dung — Kênh & Kết Nối', seo: 'SEO',
+  warehouse: 'Nội Dung — Kho',
+  backlinks: 'Nội Dung — Backlink & Entity',
+  content: 'Sản Xuất — YouTube Studio', cboard: 'Sản Xuất — Content Board',
+  khaoluan: 'Sản Xuất — Khảo Luận', nghiencuu: 'Sản Xuất — Nghiên Cứu',
   sysconfig: 'System Config', apikeys: 'API & Keys', registry: 'Tools Registry',
   adminusers: 'Quản Trị Viên',
 };
+
+/**
+ * Bốn trang thuộc nhóm "Sản Xuất". Chúng vẫn là 4 page riêng (DOM + loader
+ * giữ nguyên), chỉ được gom lại sau MỘT nav item + một thanh tab.
+ */
+const PROD_TABS = ['cboard', 'khaoluan', 'nghiencuu', 'content'];
+let _prodTab = 'cboard';
+
+/** Mở nhóm Sản Xuất; không truyền tab thì quay lại tab đang xem dở. */
+function goToProd(tab) {
+  _prodTab = PROD_TABS.indexOf(tab) >= 0 ? tab : _prodTab;
+  goTo(_prodTab);
+}
 
 // ── AUTH ──
 //
@@ -1715,11 +2019,19 @@ function goTo(page) {
   // Thanh lọc ngày dùng chung: chỉ hiện ở 3 trang thật sự đọc from/to.
   const fb = document.getElementById('mkt-filterbar');
   if (fb) fb.style.display = MKT_PAGES.indexOf(page) >= 0 ? '' : 'none';
+  // Nhóm Sản Xuất: 4 trang con dùng chung MỘT nav item, nên nav phải được tô
+  // sáng bằng tay (không có `[onclick="goTo('cboard')"]` nào trong sidebar nữa)
+  // và thanh tab chỉ hiện khi đang ở trong nhóm.
+  const isProd = PROD_TABS.indexOf(page) >= 0;
+  const tb = document.getElementById('prod-tabbar');
+  if (tb) tb.style.display = isProd ? '' : 'none';
   // Lazy load
   const loaders = { users: loadUsers, credits: loadCredits, lasos: loadLasos,
                     pricing: loadPricingPage, tools: loadAdminUsers,
                     marketing: loadMarketingOnce, retention: loadMarketingOnce,
                     distribution: loadMarketingOnce,
+                    warehouse: loadWarehouse,
+                    backlinks: loadBacklinks,
                     cron: loadCron, channels: loadChannels, seo: loadSeo,
                     cboard: loadContentBoard, khaoluan: loadKhaoLuan, nghiencuu: loadNghienCuu,
                     sysconfig: loadSysConfig, apikeys: loadApiKeys, registry: loadRegistry,
@@ -1732,6 +2044,23 @@ function goTo(page) {
     }
   } };
   if (loaders[page]) loaders[page]();
+
+  // ⚠️ ĐẶT SAU LOADER CÓ CHỦ Ý: loader của YouTube Studio gọi `showView()`, mà
+  // hàm đó (module con, dòng ~5109) ghi đè `topbar-title` VÀ xoá `active` khỏi
+  // MỌI `.nav-item`. Đặt trước thì vào tab đó là mất sạch dấu vị trí — nợ có
+  // sẵn (nav "YouTube Studio" cũ chưa bao giờ sáng), chỉ là trước đây không ai
+  // để ý vì nó đứng một mình.
+  if (isProd) {
+    _prodTab = page;
+    document.getElementById('topbar-title').textContent = PAGE_TITLES[page] || page;
+    document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+    document.getElementById('nav-production')?.classList.add('active');
+    document.querySelectorAll('#prod-tabbar [data-prod-tab]').forEach(b => {
+      const on = b.getAttribute('data-prod-tab') === page;
+      b.classList.toggle('btn-primary', on);
+      b.classList.toggle('btn-ghost', !on);
+    });
+  }
 }
 
 // ── PLACEHOLDER (module chưa build) ──
@@ -1758,7 +2087,11 @@ const CRON_JOBS = [
   { key:'cron-daily-push',   label:'Push (app/FCM)',   source:'vercel', schedule:'00:00 hằng ngày',     sink:'push_tokens (FCM)',     trigger:true },
   { key:'auto-pipeline',     label:'Pipeline YouTube', source:'edge',   schedule:'00:00 (pg_cron)',     sink:'auto-pipeline (edge)',  trigger:true },
 ];
-const SRC_BADGE = { vercel:'badge-blue', edge:'badge-gold', pgcron:'badge-gold' };
+const SRC_BADGE = { vercel:'badge-blue', edge:'badge-gold', pgcron:'badge-gold', actions:'badge-green' };
+// Job chạy ngoài Vercel thì admin KHÔNG kích được — nút "Chạy ngay" sẽ là một
+// nút chết. Thay bằng link mở đúng workflow trên GitHub: người đọc vẫn tới được
+// chỗ bấm, mà không có nút nào hứa hão.
+const GH_REPO = 'henryvn2004-arch/app-tuvi';
 
 function relTime(iso) {
   if (!iso) return '—';
@@ -1830,14 +2163,14 @@ function renderEnvPreflight(envs) {
       </div>
       ${missCrit.length ? `
         <div style="margin:.6rem 1rem;padding:.6rem .8rem;border:1px solid var(--red);border-radius:var(--radius);background:color-mix(in srgb,var(--red) 8%,transparent)">
-          <div style="font-weight:700;color:var(--red);font-size:.8rem;margin-bottom:.3rem">
+          <div style="font-weight:700;color:var(--tx-red);font-size:.8rem;margin-bottom:.3rem">
             ⚠ ${missCrit.length} biến BẮT BUỘC đang thiếu — tính năng dưới đây KHÔNG chạy
           </div>
           ${missCrit.map(e => `<div style="font-size:.75rem;color:var(--text);margin:.15rem 0">
             <code>${escHtmlLocal(e.key)}</code> — ${escHtmlLocal(e.feature)}
           </div>`).join('')}
         </div>` : `
-        <div style="margin:.6rem 1rem;font-size:.78rem;color:var(--green);font-weight:600">
+        <div style="margin:.6rem 1rem;font-size:.78rem;color:var(--tx-green);font-weight:600">
           ✓ Đủ toàn bộ biến bắt buộc
         </div>`}
       ${missing.filter(e => !e.critical).length ? `
@@ -1863,6 +2196,9 @@ function renderSecurityAudit(a) {
       line: r => `${r.user_id} — số dư ${r.so_du} vs sổ ${r.tong_so}` },
     { key: 'ham_ho_cho_anon', icon: '🔓', label: 'Hàm RPC hở cho khách vãng lai', crit: true,
       hint: 'Vá: revoke execute on function &lt;tên&gt; from public, anon, authenticated;',
+      line: r => String(r) },
+    { key: 'ham_thieu_search_path', icon: '🔐', label: 'Hàm SECURITY DEFINER thiếu pg_temp trong search_path', crit: false,
+      hint: 'Chạy bằng quyền chủ hàm nhưng dùng search_path của người gọi. Bắt cả hàm chỉ khai &quot;public&quot; trần — Postgres tìm pg_temp TRƯỚC TIÊN trừ khi nó được nêu ở vị trí khác, nên vẫn còn cửa che bảng thật bằng bảng TẠM cùng tên. Mức độ tuỳ ACL — hở cho anon mới là gấp. Vá: alter function &lt;tên&gt;(&lt;kiểu&gt;) set search_path = public, pg_temp;',
       line: r => String(r) },
     { key: 'bom_su_kien', icon: '📈', label: 'Nguồn bơm sự kiện bất thường', crit: false,
       hint: 'Số liệu này nuôi autopilot M0.6 — bơm được là lái được hành động thật.',
@@ -1895,7 +2231,7 @@ function renderSecurityAudit(a) {
           </div>`).join('')}
           ${g.hint ? `<div style="font-size:.7rem;color:var(--text-lt);margin-top:.35rem">${g.hint}</div>` : ''}
         </div>`).join('') : `
-        <div style="margin:.6rem 1rem;font-size:.78rem;color:var(--green);font-weight:600">
+        <div style="margin:.6rem 1rem;font-size:.78rem;color:var(--tx-green);font-weight:600">
           ✓ Không phát hiện dấu hiệu bất thường
         </div>`}
       <div style="padding:0 1rem .7rem;font-size:.7rem;color:var(--text-lt);line-height:1.6">
@@ -1920,14 +2256,14 @@ function renderReconcile(rows) {
       <div style="font-size:.76rem;font-weight:700;color:var(--text);margin-bottom:.45rem">
         💰 Đối soát trừ Lượng ↔ giao hàng (30 ngày)
         ${atRisk
-          ? `<span style="color:var(--red);font-weight:700"> — ${atRisk} Lượng đang treo</span>`
-          : `<span style="color:var(--green);font-weight:600"> — cân đối</span>`}
+          ? `<span style="color:var(--tx-red);font-weight:700"> — ${atRisk} Lượng đang treo</span>`
+          : `<span style="color:var(--tx-green);font-weight:600"> — cân đối</span>`}
       </div>
       ${rows.map(r => `
         <div style="font-size:.74rem;color:var(--text-lt);margin:.18rem 0">
           <b style="color:var(--text)">${escHtmlLocal(r.tool_id)}</b>:
           ${r.charges} lượt thu · ${r.delivered} giao
-          ${Number(r.undelivered) ? `· <span style="color:var(--red)">${r.undelivered} CHƯA GIAO (${r.credits_at_risk} Lượng)</span>` : ''}
+          ${Number(r.undelivered) ? `· <span style="color:var(--tx-red)">${r.undelivered} CHƯA GIAO (${r.credits_at_risk} Lượng)</span>` : ''}
           ${Number(r.refunded) ? `· ${r.refunded} đã hoàn` : ''}
         </div>`).join('')}
     </div>`;
@@ -1952,7 +2288,7 @@ function renderOpsAlerts(alerts) {
 
   host.innerHTML = `
     <div style="border:1px solid var(--red);border-radius:var(--radius);background:color-mix(in srgb,var(--red) 8%,transparent);padding:.7rem .9rem">
-      <div style="font-weight:700;color:var(--red);font-size:.82rem;margin-bottom:.4rem">
+      <div style="font-weight:700;color:var(--tx-red);font-size:.82rem;margin-bottom:.4rem">
         🚨 ${rows.length} cảnh báo vận hành (48h qua)
       </div>
       ${rows.map(a => `
@@ -2076,9 +2412,15 @@ async function loadCron() {
       <td><span class="badge ${SRC_BADGE[j.source]||'badge-grey'}">${j.source}</span></td>
       <td style="font-size:.74rem">${escHtmlLocal(j.schedule)}</td>
       <td style="font-size:.74rem;color:var(--text-lt)">${escHtmlLocal(j.sink)}</td>
-      <td style="font-size:.74rem">${r ? relTime(r.started_at) : '<span style="color:var(--red)">chưa có log</span>'}${r&&r.duration_ms!=null?` · ${fmtDur(r.duration_ms)}`:''}</td>
+      <td style="font-size:.74rem">${r ? relTime(r.started_at) : '<span style="color:var(--tx-red)">chưa có log</span>'}${r&&r.duration_ms!=null?` · ${fmtDur(r.duration_ms)}`:''}</td>
       <td>${r ? cronStatusBadge(r.status) : '<span class="badge badge-grey">—</span>'}</td>
-      <td>${j.trigger ? `<button class="btn btn-ghost btn-sm" onclick="triggerCron('${j.key}',this)">▶ Chạy ngay</button>` : ''}</td>
+      <td>${
+        j.trigger
+          ? `<button class="btn btn-ghost btn-sm" onclick="triggerCron('${j.key}',this)">▶ Chạy ngay</button>`
+          : j.workflow
+            ? `<a class="btn btn-ghost btn-sm" target="_blank" rel="noopener" href="https://github.com/${GH_REPO}/actions/workflows/${encodeURIComponent(j.workflow)}">↗ Mở Actions</a>`
+            : ''
+      }</td>
     </tr>`;
   }).join('');
 
@@ -2140,7 +2482,7 @@ async function loadChannels() {
       <div><div class="stat-label">Web Push</div><div style="font-family:'Noto Serif',serif;font-size:1.3rem;color:var(--navy);font-weight:700">${(push.webSubscriptions || 0).toLocaleString()}</div><div class="stat-sub">subscription đang bật</div></div>
       <div><div class="stat-label">App / FCM</div><div style="font-family:'Noto Serif',serif;font-size:1.3rem;color:var(--navy);font-weight:700">${(push.nativeTokensEnabled || 0).toLocaleString()} / ${(push.nativeTokensTotal || 0).toLocaleString()}</div><div class="stat-sub">token đang bật / tổng</div></div>
     </div>
-    <div style="margin-top:.75rem;font-size:.72rem;color:var(--text-lt)">Job gửi push chạy tự động 07:00 hằng ngày (giờ VN) — xem lịch sử ở <a href="#" onclick="goTo('cron');return false" style="color:var(--blue)">Cron &amp; Jobs</a>.</div>`;
+    <div style="margin-top:.75rem;font-size:.72rem;color:var(--text-lt)">Job gửi push chạy tự động 07:00 hằng ngày (giờ VN) — xem lịch sử ở <a href="#" onclick="goTo('cron');return false" style="color:var(--tx-blue)">Cron &amp; Jobs</a>.</div>`;
 }
 
 async function sendBroadcast(btn) {
@@ -2161,6 +2503,301 @@ async function sendBroadcast(btn) {
     }
   } catch (e) { toast('Lỗi: ' + e.message, 'error'); }
   btn.disabled = false; btn.innerHTML = old;
+}
+
+// ── KHO NỘI DUNG ──
+//
+// Một bảng đọc gộp 6 nguồn (khảo luận · nghiên cứu · video hỏi-đáp · từ điển ·
+// tài liệu · sách) + cột "đã ra kênh nào". CHỈ ĐỌC — sửa nội dung vẫn ở trang
+// Sản Xuất của từng pipeline.
+//
+// ⚠️ Con số ở đây là ĐÃ ĐĂNG hay CHƯA, KHÔNG phải view/like/subscriber. Site
+// hiện chưa nạp một số liệu nào từ nền tảng (0 lượt gọi YouTube Analytics /
+// Meta Insights trong cả repo) — đó là việc riêng, đừng đọc bảng này rộng hơn
+// thứ nó thật sự đo.
+const WH_KIND_LABEL = {
+  'khao-luan': 'Khảo luận', 'nghien-cuu': 'Nghiên cứu', 'video-hoi-dap': 'Video hỏi-đáp',
+  'tu-dien': 'Từ điển', 'tai-lieu': 'Tài liệu', 'sach': 'Sách',
+};
+const WH_PAGE = 50;
+let _whOffset = 0;
+let _whRows = [];
+
+const WH_STATUS = {
+  published: { label: 'đang đăng', cls: 'badge-green' },
+  draft:     { label: 'chờ duyệt', cls: 'badge-warn' },
+  hidden:    { label: 'đã gỡ',     cls: 'badge-error' },
+};
+
+/** Trường sửa được của từng bảng — PHẢI khớp allowlist `EDITABLE` ở server.
+ *  Server mới là chốt chặn thật; bảng này chỉ để dựng form đúng ô. */
+const WH_FIELDS = {
+  khao_luan:       [['title', 'Tiêu đề'], ['excerpt', 'Tóm tắt'], ['category', 'Chuyên mục'], ['content', 'Nội dung']],
+  master_articles: [['title', 'Tiêu đề'], ['excerpt', 'Tóm tắt'], ['category', 'Chuyên mục'], ['content', 'Nội dung']],
+  tai_lieu:        [['title', 'Tiêu đề'], ['excerpt', 'Tóm tắt'], ['category', 'Chuyên mục'], ['content', 'Nội dung']],
+  tu_dien:         [['ten', 'Tên'], ['seo_title', 'Tiêu đề SEO'], ['seo_desc', 'Mô tả SEO'], ['content', 'Nội dung']],
+  sach_library:    [['title', 'Tiêu đề'], ['author', 'Tác giả'], ['excerpt', 'Tóm tắt'], ['content', 'Nội dung']],
+};
+
+function whParams(offset) {
+  const g = id => (document.getElementById(id)?.value || '').trim();
+  return `&limit=${WH_PAGE}&offset=${offset}` +
+    `&kind=${encodeURIComponent(g('wh-kind'))}` +
+    `&status=${encodeURIComponent(g('wh-status'))}` +
+    `&channel=${encodeURIComponent(g('wh-channel'))}` +
+    `&pub=${encodeURIComponent(g('wh-pub'))}` +
+    `&sort=${encodeURIComponent(g('wh-sort'))}` +
+    `&q=${encodeURIComponent(g('wh-q'))}`;
+}
+
+/**
+ * Hiệu suất kênh. Chưa kéo lượt nào thì nói THẲNG là chưa có số + chỉ đúng
+ * việc phải làm — hiện một bảng 0 view sẽ đọc thành "nội dung không ai xem",
+ * mà sự thật là mình chưa từng đo.
+ */
+function renderWhMetrics(m) {
+  const host = document.getElementById('wh-metrics');
+  const when = document.getElementById('wh-met-when');
+  if (!m || !m.has_data) {
+    when.textContent = '';
+    host.innerHTML = `<div class="empty" style="text-align:left;line-height:1.7">
+      <strong>Chưa kéo được số liệu nào từ nền tảng.</strong><br>
+      Cron <code>content-metrics</code> chạy 12:30 VN hằng ngày, nhưng cần
+      <code>YOUTUBE_API_KEY</code> trên Vercel mới đọc được view/like/subscriber
+      của YouTube (KHÔNG cần publish OAuth app cho việc này).<br>
+      Facebook cần <code>FB_PAGE_ACCESS_TOKEN</code> — cùng token đang cần cho đường đăng bài.
+    </div>`;
+    return;
+  }
+  when.textContent = m.last_run ? 'Đo lần cuối: ' + new Date(m.last_run).toLocaleString('vi-VN') : '';
+  const nf = n => (n === null || n === undefined) ? '—' : Number(n).toLocaleString('vi-VN');
+  const chans = (m.by_channel || []).map(c => `<tr>
+      <td>${escHtmlLocal(c.channel)}</td>
+      <td style="text-align:right">${nf(c.items)}</td>
+      <td style="text-align:right"><strong>${nf(c.views)}</strong></td>
+      <td style="text-align:right">${nf(c.likes)}</td>
+      <td style="text-align:right">${nf(c.comments)}</td>
+      <td style="text-align:right">${nf(c.followers)}</td>
+    </tr>`).join('');
+  const top = (m.top || []).map((t, i) => {
+    const url = /^https?:\/\//i.test(t.url || '') ? t.url : '';
+    const title = escHtmlLocal(t.title || t.external_id || '—');
+    return `<tr>
+      <td style="color:var(--text-lt)">${i + 1}</td>
+      <td>${url ? `<a href="${escHtmlLocal(url)}" target="_blank" rel="noopener" style="color:var(--text);text-decoration:underline">${title}</a>` : title}</td>
+      <td>${escHtmlLocal(t.channel)}</td>
+      <td style="text-align:right"><strong>${nf(t.views)}</strong></td>
+      <td style="text-align:right">${nf(t.likes)}</td>
+    </tr>`;
+  }).join('');
+  host.innerHTML = `
+    <table><thead><tr><th>Kênh</th><th style="text-align:right">Bài đo được</th>
+      <th style="text-align:right">Lượt xem</th><th style="text-align:right">Thích</th>
+      <th style="text-align:right">Bình luận</th><th style="text-align:right">Theo dõi</th></tr></thead>
+      <tbody>${chans || '<tr><td class="empty">—</td></tr>'}</tbody></table>
+    <div style="font-size:.72rem;color:var(--text-lt);margin:.5rem 0 1rem">
+      Số là <strong>tích luỹ từ lúc đăng</strong>, không phải theo ngày.
+      Nguồn: số công khai của nền tảng — chưa có watch-time / retention / nguồn traffic.
+    </div>
+    ${top ? `<div class="td-title" style="margin-bottom:.4rem">Xem nhiều nhất</div>
+      <table><thead><tr><th></th><th>Tác phẩm</th><th>Kênh</th>
+        <th style="text-align:right">Lượt xem</th><th style="text-align:right">Thích</th></tr></thead>
+        <tbody>${top}</tbody></table>` : ''}`;
+}
+
+function whGo(offset) { _whOffset = Math.max(0, offset || 0); loadWarehouse(); }
+
+/**
+ * Trình sửa bài — dựng bằng JS, không có markup sẵn trong trang.
+ *
+ * Nội dung nạp từ SERVER chứ không lấy từ dòng đang hiện: bảng kho chỉ có tiêu
+ * đề, còn thân bài mới là thứ người ta vào đây để sửa.
+ */
+async function whEdit(i) {
+  const r = _whRows[i];
+  if (!r || !r.editable) return;
+  const fields = WH_FIELDS[r.source_table];
+  if (!fields) { toast('Loại này chưa sửa được từ Kho'); return; }
+
+  const back = document.createElement('div');
+  back.className = 'modal-back';
+  back.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:2000;display:flex;align-items:center;justify-content:center;padding:16px';
+  back.innerHTML = `<div style="background:var(--surface);border-radius:12px;max-width:760px;width:100%;max-height:90vh;overflow:auto;padding:20px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.8rem">
+        <strong style="font-family:'Noto Serif',serif;font-size:1.05rem;color:var(--text)">Sửa nội dung</strong>
+        <button class="btn btn-ghost btn-sm" data-x>✕</button>
+      </div>
+      <div style="font-size:.72rem;color:var(--text-lt);margin-bottom:.9rem" data-meta></div>
+      <div data-form><div class="loading"><span class="spin"></span>Đang tải bài…</div></div>
+    </div>`;
+  back.addEventListener('click', e => { if (e.target === back || e.target.hasAttribute('data-x')) back.remove(); });
+  document.body.appendChild(back);
+
+  let row;
+  try {
+    row = await apiGet('admin-content-one', `&table=${encodeURIComponent(r.source_table)}&id=${encodeURIComponent(r.source_id)}`);
+  } catch (e) {
+    back.querySelector('[data-form]').innerHTML = `<div class="empty">Lỗi: ${escHtmlLocal(e.message)}</div>`;
+    return;
+  }
+  if (row && row.error) {
+    back.querySelector('[data-form]').innerHTML = `<div class="empty">Lỗi: ${escHtmlLocal(row.error)}</div>`;
+    return;
+  }
+  const data = (row && row.row) || {};
+  const canStatus = r.source_table === 'khao_luan' || r.source_table === 'master_articles';
+
+  back.querySelector('[data-meta]').textContent =
+    `${WH_KIND_LABEL[r.kind] || r.kind} · ${r.url || ''}` +
+    (data.updated_at ? ` · sửa lần cuối ${new Date(data.updated_at).toLocaleString('vi-VN')}${data.updated_by ? ' bởi ' + data.updated_by : ''}` : '');
+
+  back.querySelector('[data-form]').innerHTML =
+    fields.map(([k, label]) => {
+      const big = k === 'content';
+      return `<div style="margin-bottom:.8rem">
+        <div style="font-size:.74rem;color:var(--text-mid);margin-bottom:.25rem">${label}</div>
+        ${big
+          ? `<textarea class="search-input" data-f="${k}" style="width:100%;min-height:280px;font-family:ui-monospace,monospace;line-height:1.55"></textarea>`
+          : `<input class="search-input" data-f="${k}" style="width:100%">`}
+      </div>`;
+    }).join('') +
+    (canStatus ? `<div style="margin-bottom:.9rem">
+        <div style="font-size:.74rem;color:var(--text-mid);margin-bottom:.25rem">Trạng thái</div>
+        <select class="search-input" data-f="publish_status" style="width:220px">
+          <option value="published">Đang đăng (hiện trên web)</option>
+          <option value="draft">Chờ duyệt (ẩn khỏi web)</option>
+          <option value="hidden">Đã gỡ (ẩn khỏi web)</option>
+        </select>
+      </div>` : '')  +
+    `<div style="display:flex;gap:8px;justify-content:flex-end">
+        <button class="btn btn-ghost btn-sm" data-x>Huỷ</button>
+        <button class="btn btn-primary btn-sm" data-save>Lưu</button>
+     </div>`;
+
+  // Đổ giá trị bằng `.value` chứ KHÔNG nhét vào HTML: nội dung bài chứa đủ thứ
+  // dấu nháy và thẻ, ghép chuỗi là vỡ form (hoặc tệ hơn).
+  for (const [k] of fields) {
+    const el = back.querySelector(`[data-f="${k}"]`);
+    if (el) el.value = data[k] == null ? '' : String(data[k]);
+  }
+  if (canStatus) back.querySelector('[data-f="publish_status"]').value = data.publish_status || 'published';
+
+  back.querySelector('[data-save]').addEventListener('click', async ev => {
+    const btn = ev.currentTarget;
+    btn.disabled = true; btn.textContent = 'Đang lưu…';
+    const payload = { table: r.source_table, id: r.source_id };
+    for (const [k] of fields) {
+      const el = back.querySelector(`[data-f="${k}"]`);
+      if (el) payload[k] = el.value;
+    }
+    if (canStatus) payload.publish_status = back.querySelector('[data-f="publish_status"]').value;
+    try {
+      const res = await apiPost('admin-content-edit', payload);
+      if (res && res.error) throw new Error(res.error);
+      toast('Đã lưu');
+      back.remove();
+      loadWarehouse();
+    } catch (e) {
+      btn.disabled = false; btn.textContent = 'Lưu';
+      toast('Lỗi: ' + e.message);
+    }
+  });
+}
+
+async function loadWarehouse() {
+  const tbl = document.getElementById('wh-table');
+  tbl.innerHTML = `<tbody><tr><td class="empty"><span class="spin"></span> Đang tải…</td></tr></tbody>`;
+  let data;
+  try { data = await apiGet('admin-content-catalog', whParams(_whOffset)); }
+  catch (e) { tbl.innerHTML = `<tbody><tr><td class="empty">Lỗi: ${escHtmlLocal(e.message)}</td></tr></tbody>`; return; }
+  if (data && data.error) { tbl.innerHTML = `<tbody><tr><td class="empty">Lỗi: ${escHtmlLocal(data.error)}</td></tr></tbody>`; return; }
+
+  const st = (data && data.stats) || {};
+  const list = (data && data.list) || {};
+  const rows = list.rows || [];
+  const total = Number(st.total || 0);
+  const pub = Number(st.published_total || 0);
+  const byChan = st.by_channel || [];
+  const queued = byChan.filter(c => c.status !== 'live').reduce((s, c) => s + Number(c.n || 0), 0);
+
+  document.getElementById('wh-k-total').textContent = total.toLocaleString('vi-VN');
+  document.getElementById('wh-k-pub').textContent = pub.toLocaleString('vi-VN');
+  document.getElementById('wh-k-pub-sub').textContent =
+    total ? `${((pub / total) * 100).toFixed(1)}% kho` : '—';
+  document.getElementById('wh-k-queue').textContent = queued.toLocaleString('vi-VN');
+  document.getElementById('wh-k-idle').textContent = Math.max(0, total - pub).toLocaleString('vi-VN');
+
+  // Kho theo loại — thanh ngang, phần đã ra kênh tô đậm hơn phần còn nằm kho.
+  const kinds = st.by_kind || [];
+  const maxK = Math.max(1, ...kinds.map(k => Number(k.n || 0)));
+  document.getElementById('wh-bykind').innerHTML = kinds.length ? kinds.map(k => {
+    const n = Number(k.n || 0), p = Number(k.published || 0);
+    return `<div style="margin-bottom:.7rem">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:.25rem">
+        <span style="font-size:.8rem;color:var(--text-mid)">${escHtmlLocal(WH_KIND_LABEL[k.kind] || k.kind)}</span>
+        <strong style="font-family:'Noto Serif',serif;color:var(--text)">${n.toLocaleString('vi-VN')}
+          <span style="font-size:.68rem;color:var(--text-lt);font-family:inherit">(${p} đã ra kênh)</span></strong>
+      </div>
+      <div style="background:var(--border-lt);border-radius:5px;height:12px;overflow:hidden;display:flex">
+        <div style="width:${Math.round((p / maxK) * 100)}%;height:100%;background:var(--green)"></div>
+        <div style="width:${Math.round(((n - p) / maxK) * 100)}%;height:100%;background:var(--border)"></div>
+      </div>
+    </div>`;
+  }).join('') : '<div class="empty">Kho trống</div>';
+
+  document.getElementById('wh-bychan').innerHTML = byChan.length ? `<table>
+    <thead><tr><th>Kênh</th><th>Trạng thái</th><th style="text-align:right">Số bản</th></tr></thead>
+    <tbody>${byChan.map(c => `<tr>
+      <td>${escHtmlLocal(c.channel)}</td>
+      <td>${c.status === 'live'
+        ? '<span class="badge badge-green">đã đăng</span>'
+        : `<span class="badge badge-warn">${escHtmlLocal(c.status)}</span>`}</td>
+      <td style="text-align:right">${Number(c.n || 0).toLocaleString('vi-VN')}</td>
+    </tr>`).join('')}</tbody></table>`
+    : '<div class="empty">Chưa bản nào ra khỏi website</div>';
+
+  renderWhMetrics(data && data.metrics);
+
+  _whRows = rows;
+
+  tbl.innerHTML = `
+    <thead><tr><th>Tiêu đề</th><th>Loại</th><th>Trạng thái</th><th>Kênh</th>
+      <th style="text-align:right">Xem</th><th style="text-align:right">Ngày tạo</th><th></th></tr></thead>
+    <tbody>${rows.length ? rows.map((r, i) => {
+      const chans = (r.channels || []).map(c => {
+        const cls = c.status === 'live' ? 'badge-green' : (c.status === 'error' ? 'badge-error' : 'badge-warn');
+        const label = escHtmlLocal(c.channel) + (c.status === 'live' ? '' : ` · ${escHtmlLocal(c.status)}`);
+        // href chỉ nhận http(s) — chuỗi trong DB có thể là bất cứ gì.
+        const safe = /^https?:\/\//i.test(c.url || '') ? c.url : '';
+        return safe
+          ? `<a class="badge ${cls}" href="${escHtmlLocal(safe)}" target="_blank" rel="noopener">${label}</a>`
+          : `<span class="badge ${cls}">${label}</span>`;
+      }).join(' ') || '<span class="badge">chưa đăng</span>';
+      const url = /^(https?:\/\/|\/)/i.test(r.url || '') ? r.url : '';
+      const title = escHtmlLocal(r.title || '(không tiêu đề)');
+      const st = WH_STATUS[r.publish_status] || WH_STATUS.published;
+      // Khai màu chữ tường minh: thẻ <a> trần ăn màu link mặc định của trình
+      // duyệt (#0000EE) — trên nền tối đo được 1,8:1, gần như không đọc nổi.
+      return `<tr>
+        <td>${url ? `<a href="${escHtmlLocal(url)}" target="_blank" rel="noopener" style="color:var(--text);text-decoration:underline">${title}</a>` : title}</td>
+        <td><span class="badge">${escHtmlLocal(WH_KIND_LABEL[r.kind] || r.kind)}</span></td>
+        <td><span class="badge ${st.cls}">${st.label}</span></td>
+        <td>${chans}</td>
+        <td style="text-align:right;white-space:nowrap">${r.views === null || r.views === undefined ? '<span style="color:var(--text-lt)">—</span>' : Number(r.views).toLocaleString('vi-VN')}</td>
+        <td style="text-align:right;white-space:nowrap">${r.created_at ? new Date(r.created_at).toLocaleDateString('vi-VN') : '—'}</td>
+        <td style="text-align:right;white-space:nowrap">${r.editable
+          ? `<button class="btn btn-ghost btn-sm" onclick="whEdit(${i})">Sửa</button>`
+          : `<span style="font-size:.7rem;color:var(--text-lt)" title="Video có trang soạn riêng ở mục Sản Xuất">— Studio</span>`}</td>
+      </tr>`;
+    }).join('') : '<tr><td class="empty" colspan="7">Không có bản nào khớp bộ lọc</td></tr>'}</tbody>`;
+
+  const shown = Number(list.total || 0);
+  const from = shown ? _whOffset + 1 : 0;
+  const to = Math.min(_whOffset + WH_PAGE, shown);
+  document.getElementById('wh-pager').innerHTML = `
+    <span style="font-size:.78rem;color:var(--text-lt)">${from}–${to} / ${shown.toLocaleString('vi-VN')}</span>
+    <button class="btn btn-ghost btn-sm" ${_whOffset <= 0 ? 'disabled' : ''} onclick="whGo(${_whOffset - WH_PAGE})">←</button>
+    <button class="btn btn-ghost btn-sm" ${to >= shown ? 'disabled' : ''} onclick="whGo(${_whOffset + WH_PAGE})">→</button>`;
 }
 
 // ── SEO ──
@@ -2259,7 +2896,7 @@ async function loadSysConfig() {
       <div class="form-group">
         <label class="form-label">Giá Lượng / lượt chat — DỰ PHÒNG (0 = miễn phí)</label>
         <input type="number" class="form-control" id="sc-cost" value="${jv(cfg['chat.cost'], 5)}" style="max-width:200px">
-        <div style="font-size:.72rem;color:var(--text-lt);margin-top:.4rem">Giá rail THẬT (web + Telegram/Messenger/WhatsApp) nằm ở tool <b>rail-message</b> trong <a href="#" onclick="goTo('registry');return false" style="color:var(--blue)">Tools Registry</a>. Ô này chỉ dùng khi đọc bảng đó hụt — giữ khớp để lúc lỗi không thu sai giá.</div>
+        <div style="font-size:.72rem;color:var(--text-lt);margin-top:.4rem">Giá rail THẬT (web + Telegram/Messenger/WhatsApp) nằm ở tool <b>rail-message</b> trong <a href="#" onclick="goTo('registry');return false" style="color:var(--tx-blue)">Tools Registry</a>. Ô này chỉ dùng khi đọc bảng đó hụt — giữ khớp để lúc lỗi không thu sai giá.</div>
       </div>
     </div>
     <div class="form-group">
@@ -2267,7 +2904,7 @@ async function loadSysConfig() {
       <textarea class="form-control mono" id="sc-routes" rows="2">${escHtmlLocal(jv(cfg['chat.provider_routes'], '{}'))}</textarea>
     </div>
     <button class="btn btn-gold btn-sm" onclick="saveSysConfig()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg> Lưu Cấu Hình Chat</button>
-    <div style="font-size:.72rem;color:var(--text-lt);margin-top:.6rem">Khuyến mãi/Referral sửa ở <a href="#" onclick="goTo('pricing');return false" style="color:var(--blue)">Gói Nạp &amp; Pricing</a>.</div>`;
+    <div style="font-size:.72rem;color:var(--text-lt);margin-top:.6rem">Khuyến mãi/Referral sửa ở <a href="#" onclick="goTo('pricing');return false" style="color:var(--tx-blue)">Gói Nạp &amp; Pricing</a>.</div>`;
 
   const known = new Set(SC_CHAT_KEYS.concat(SC_OTHER_KNOWN_KEYS));
   rawHost.innerHTML = rows.length ? `<table>
@@ -2291,7 +2928,7 @@ async function loadSysConfig() {
       <tbody>${errs.map((r) => `<tr>
           <td style="font-size:.74rem;white-space:nowrap">${new Date(r.started_at).toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh', hour: '2-digit', minute: '2-digit', day: '2-digit', month: '2-digit' })}</td>
           <td class="mono" style="font-size:.72rem">${escHtmlLocal(r.job_key)}</td>
-          <td style="font-size:.72rem;color:var(--red)">${escHtmlLocal(r.note || '—')}</td>
+          <td style="font-size:.72rem;color:var(--tx-red)">${escHtmlLocal(r.note || '—')}</td>
         </tr>`).join('')}</tbody>
     </table>` : '<div class="empty">Không có lỗi cron gần đây</div>';
   } catch (e) { errHost.innerHTML = `<div class="empty">Lỗi tải: ${e.message}</div>`; }
@@ -2398,7 +3035,7 @@ async function loadApiKeys() {
         <div style="display:flex;flex-wrap:wrap;gap:.5rem">
           ${g.items.map((it) => `<span class="badge ${it.configured ? 'badge-green' : 'badge-error'}" title="${escHtmlLocal(it.key)}">${it.configured ? '✓' : '✗'} ${escHtmlLocal(it.label)}</span>`).join('')}
         </div>
-      </div>`).join('') + '<div style="font-size:.72rem;color:var(--text-lt);margin-top:.6rem">Token 3 kênh chat (Telegram/Messenger/WhatsApp) xem ở <a href="#" onclick="goTo(\'channels\');return false" style="color:var(--blue)">Channels &amp; Push</a>. Chỉ hiện đã cấu hình hay chưa — KHÔNG bao giờ hiện giá trị thật.</div>';
+      </div>`).join('') + '<div style="font-size:.72rem;color:var(--text-lt);margin-top:.6rem">Token 3 kênh chat (Telegram/Messenger/WhatsApp) xem ở <a href="#" onclick="goTo(\'channels\');return false" style="color:var(--tx-blue)">Channels &amp; Push</a>. Chỉ hiện đã cấu hình hay chưa — KHÔNG bao giờ hiện giá trị thật.</div>';
   } catch (e) {
     envHost.innerHTML = `<div class="empty">Lỗi: ${e.message}</div>`;
   }
@@ -2525,6 +3162,8 @@ async function loadKhaoLuan() {
         <td style="font-size:.74rem;color:var(--text-lt);white-space:nowrap">${relTime(r.created_at)}</td>
       </tr>`).join('')}</tbody>
   </table>` : '<div class="empty">Chưa có bài</div>';
+
+  loadTopicQueue('khao-luan');
 }
 
 async function submitKlTopics(btn) {
@@ -2586,6 +3225,8 @@ async function loadNghienCuu() {
         <td style="font-size:.74rem;color:var(--text-lt);white-space:nowrap">${relTime(r.created_at)}</td>
       </tr>`).join('')}</tbody>
   </table>` : '<div class="empty">Chưa có bài</div>';
+
+  loadTopicQueue('nghien-cuu');
 }
 
 async function submitNcTopics(btn) {
@@ -2604,6 +3245,62 @@ async function submitNcTopics(btn) {
     } else { toast('Lỗi: ' + (res.error || 'không rõ'), 'error'); }
   } catch (e) { toast('Lỗi: ' + e.message, 'error'); }
   btn.disabled = false; btn.innerHTML = old;
+}
+
+// ── HÀNG ĐỢI CHỦ ĐỀ (giám sát topic_queue: list + xoá) ──
+// Dùng CHUNG cho cả 2 bề mặt (khao-luan/nghien-cuu) — gộp chủ đề Gemini tự
+// sinh (có bằng chứng nhu cầu, xem lib/content/topic-topup.ts) lẫn chủ đề
+// admin gõ tay ở panel phía trên, vì `topic_queue` không tách nguồn ở cột nào.
+let _tqRows = { 'khao-luan': [], 'nghien-cuu': [] };
+
+function topicQueueStatusBadge(s) {
+  const map = { pending: 'badge-pending', processing: 'badge-processing', error: 'badge-red' };
+  const lbl = { pending: 'Chờ viết', processing: 'Đang viết', error: 'Lỗi' };
+  return `<span class="badge ${map[s] || 'badge-grey'}">${lbl[s] || s || '—'}</span>`;
+}
+
+async function loadTopicQueue(surface) {
+  const host = document.getElementById(surface === 'nghien-cuu' ? 'nc-queue' : 'kl-queue');
+  if (!host) return;
+  host.innerHTML = `<div class="loading"><span class="spin"></span>Đang tải...</div>`;
+  let data;
+  try { data = await apiGet('admin-topic-queue', `&surface=${surface}`); }
+  catch (e) { host.innerHTML = `<div class="empty">Lỗi: ${e.message}</div>`; return; }
+  if (data && data.error) { host.innerHTML = `<div class="empty">Lỗi: ${data.error}</div>`; return; }
+
+  const rows = data.rows || [];
+  _tqRows[surface] = rows;
+  // `type` chỉ đáng hiện khi nó KHÁC loại mặc định của bề mặt (vd nhánh
+  // khao-luan-tamly lẫn vào cùng danh sách khao-luan) — bằng mặc định thì im
+  // lặng, tránh nhắc lại điều đã rõ từ chính trang đang đứng.
+  const defaultType = surface === 'nghien-cuu' ? 'master-article' : 'khao-luan';
+  host.innerHTML = rows.length ? `<table>
+    <thead><tr><th>Chủ Đề</th><th>Ưu Tiên</th><th>Trạng Thái</th><th>Thời Điểm</th><th></th></tr></thead>
+    <tbody>${rows.map(r => {
+      const sub = [r.type && r.type !== defaultType ? r.type : '', r.master_id, r.article_type].filter(Boolean).join(' · ');
+      return `<tr>
+        <td>${escHtmlLocal(r.topic)}${sub ? `<div class="td-sub">${escHtmlLocal(sub)}</div>` : ''}</td>
+        <td style="text-align:center;font-size:.74rem">${r.priority ?? '—'}</td>
+        <td>${topicQueueStatusBadge(r.status)}</td>
+        <td style="font-size:.74rem;color:var(--text-lt);white-space:nowrap">${relTime(r.created_at)}</td>
+        <td><button class="btn btn-ghost btn-sm" style="color:var(--red)" onclick="deleteTopicQueueRow(${r.id},'${surface}')">Xoá</button></td>
+      </tr>`;
+    }).join('')}</tbody>
+  </table>` : '<div class="empty">Hàng đợi rỗng</div>';
+}
+
+async function deleteTopicQueueRow(id, surface) {
+  const row = (_tqRows[surface] || []).find(r => r.id === id);
+  if (!confirm('Xoá chủ đề "' + (row ? row.topic : id) + '" khỏi hàng đợi?')) return;
+  try {
+    const res = await apiPost('admin-topic-queue-delete', { id });
+    if (res && !res.error) {
+      toast('Đã xoá', 'success');
+      // Gọi lại loader của TRANG (không chỉ loadTopicQueue) để thẻ stat
+      // "Đang Chờ Viết"/"Lỗi" cũng cập nhật theo — chúng đọc từ cùng bảng.
+      if (surface === 'nghien-cuu') loadNghienCuu(); else loadKhaoLuan();
+    } else { toast('Lỗi: ' + (res.error || 'không rõ'), 'error'); }
+  } catch (e) { toast('Lỗi: ' + e.message, 'error'); }
 }
 
 // ── SUPABASE HELPERS ──
@@ -2844,7 +3541,7 @@ async function loadStatsAndRecent() {
       }).join('')}</tbody>
     </table>`;
   } catch(e) {
-    document.getElementById('stats-grid').innerHTML = `<div style="padding:1rem;color:var(--red);font-size:.8rem">Lỗi: ${e.message}</div>`;
+    document.getElementById('stats-grid').innerHTML = `<div style="padding:1rem;color:var(--tx-red);font-size:.8rem">Lỗi: ${e.message}</div>`;
     document.getElementById('dash-recent-users').innerHTML = `<div class="empty">Lỗi: ${e.message}</div>`;
   }
 }
@@ -2858,16 +3555,41 @@ async function loadDashboardV2() {
     // để ô "Doanh Thu" trên Dashboard và bảng LTV bên Marketing không lệch nhau.
     if (data.margin && Number(data.margin.vnd_per_credit) > 0) MKT_VND = Number(data.margin.vnd_per_credit);
     renderDashChannelHealth(data.channelHealth || []);
+    renderDashJsErrors(data.jsErrors || []);
     renderDashEngagement(data.engagement || {});
     renderDashContentProduction(data.content || {});
     renderDashContentRevenue(data.contentRevenue || []);
     renderDashMargin(data.margin || {});
     renderDashAtRisk(data.atRisk || []);
   } catch (e) {
-    ['dash-channel-health', 'dash-engagement', 'dash-content-production', 'dash-content-revenue', 'dash-margin', 'dash-at-risk'].forEach((id) => {
+    ['dash-channel-health', 'dash-js-errors', 'dash-engagement', 'dash-content-production', 'dash-content-revenue', 'dash-margin', 'dash-at-risk'].forEach((id) => {
       document.getElementById(id).innerHTML = `<div class="empty">Lỗi: ${e.message}</div>`;
     });
   }
+}
+
+// Lỗi JS client — thay Sentry ở tầng client (xem track.js + migration-js-error.sql).
+// Gộp theo (message, path, kind); rows đã sắp giảm dần theo occurrences từ RPC.
+function renderDashJsErrors(rows) {
+  const host = document.getElementById('dash-js-errors');
+  if (!rows.length) {
+    host.innerHTML = `<div class="empty">0 lỗi JS trong 24h qua — hoặc bản vá chưa deploy, chưa có dữ liệu nào để đọc.</div>`;
+    return;
+  }
+  host.innerHTML = `<table>
+    <thead><tr><th>Thông Điệp</th><th>Trang</th><th style="text-align:right">Số Lượt</th><th style="text-align:right">Người</th><th>Lần Cuối</th></tr></thead>
+    <tbody>${rows.map((r) => {
+      const kindBadge = r.kind === 'unhandledrejection' ? '<span class="badge badge-pending" style="margin-right:6px">promise</span>' : '';
+      return `<tr>
+        <td class="td-title" style="max-width:420px;white-space:normal;word-break:break-word">${kindBadge}${escHtmlLocal(r.message)}</td>
+        <td style="color:var(--text-lt);font-size:.72rem;max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${escHtmlLocal(r.path)}</td>
+        <td style="text-align:right"><strong class="tabular">${r.occurrences}</strong></td>
+        <td style="text-align:right;color:var(--text-lt)" class="tabular">${r.users}</td>
+        <td style="color:var(--text-lt);font-size:.72rem">${fmtDate(r.last_seen)}</td>
+      </tr>`;
+    }).join('')}</tbody>
+  </table>
+  <div class="panel-sub" style="padding:10px 20px;font-size:.68rem;color:var(--text-lt)">Đã lọc nhiễu ở client (ResizeObserver, extension trình duyệt, "Script error." không nguồn) + trần 8 lỗi/lượt tải trang. Gộp theo thông điệp+trang, sắp theo số lượt.</div>`;
 }
 
 const CHAN_META = {
@@ -2911,20 +3633,43 @@ function fmtPctChange(cur, prev, label) {
 function renderDashEngagement(eng) {
   const host = document.getElementById('dash-engagement');
   const days = eng.days || [];
-  const mau = eng.mau || 0;
-  const stickiness = mau > 0 ? ((eng.dau_today || 0) / mau) * 100 : 0;
+  // Con số LỚN là NGƯỜI THẬT, và ngay dưới nó là dòng máy + tổng. CỐ Ý hiện cả
+  // hai chứ không giấu số máy vào tooltip: mục đích của việc tách là để SO
+  // được, mà giấu một vế đi thì không so được.
+  //
+  // Vì sao người thật làm số chính: số thô nhảy theo lưu lượng bot chứ không
+  // theo người — ngày 18/08 nó báo WAU 477 vs 758 ("giảm 37%") trong khi người
+  // thật là 87 vs 88, đi ngang.
+  const pick = (h, raw) => (eng[h] != null ? eng[h] : (eng[raw] || 0));
+  const dauT = pick('dau_today_human', 'dau_today');
+  const dauY = pick('dau_yesterday_human', 'dau_yesterday');
+  const wau = pick('wau_human', 'wau'), wauP = pick('wau_prev_human', 'wau_prev');
+  const mau = pick('mau_human', 'mau'), mauP = pick('mau_prev_human', 'mau_prev');
+  // Dòng phụ "N máy · tổng M". Chỉ hiện khi ĐO ĐƯỢC phần máy — không có bản
+  // `_human` thì im, đừng bịa ra con số 0 máy nghe như đã lọc rồi.
+  const botLine = (h, raw) => {
+    if (eng[h] == null || eng[raw] == null) return '';
+    const bot = Math.max(0, eng[raw] - eng[h]);
+    if (bot <= 0) return '<div class="d" style="color:var(--text-lt)">0 máy</div>';
+    return `<div class="d" style="color:var(--text-lt)">${bot.toLocaleString()} máy · tổng ${(eng[raw]).toLocaleString()}</div>`;
+  };
+  const stickiness = mau > 0 ? (dauT / mau) * 100 : 0;
   host.innerHTML = `
     <div class="eng-tiles">
-      <div class="eng-tile"><div class="v tabular">${(eng.dau_today || 0).toLocaleString()}</div><div class="l">DAU hôm nay</div>${fmtPctChange(eng.dau_today || 0, eng.dau_yesterday || 0, 'so hôm qua')}</div>
-      <div class="eng-tile"><div class="v tabular">${(eng.wau || 0).toLocaleString()}</div><div class="l">WAU (7 ngày)</div>${fmtPctChange(eng.wau || 0, eng.wau_prev || 0, 'so 7N trước')}</div>
-      <div class="eng-tile"><div class="v tabular">${(eng.mau || 0).toLocaleString()}</div><div class="l">MAU (30 ngày)</div>${fmtPctChange(eng.mau || 0, eng.mau_prev || 0, 'so 30N trước')}</div>
+      <div class="eng-tile"><div class="v tabular">${dauT.toLocaleString()}</div><div class="l">DAU hôm nay · người thật</div>${fmtPctChange(dauT, dauY, 'so hôm qua')}${botLine('dau_today_human', 'dau_today')}</div>
+      <div class="eng-tile"><div class="v tabular">${wau.toLocaleString()}</div><div class="l">WAU 7 ngày · người thật</div>${fmtPctChange(wau, wauP, 'so 7N trước')}${botLine('wau_human', 'wau')}</div>
+      <div class="eng-tile"><div class="v tabular">${mau.toLocaleString()}</div><div class="l">MAU 30 ngày · người thật</div>${fmtPctChange(mau, mauP, 'so 30N trước')}${botLine('mau_human', 'mau')}</div>
       <div class="eng-tile"><div class="v tabular">${stickiness.toFixed(1).replace('.', ',')}%</div><div class="l">Stickiness (DAU/MAU)</div><div class="d" style="color:var(--text-lt)">trung bình ngành ~13%</div></div>
     </div>
     <div class="chart-wrap">
       <svg id="dashDauChart" viewBox="0 0 900 160" style="width:100%;height:160px;overflow:visible" preserveAspectRatio="none"></svg>
       <div class="chart-tip" id="dashDauTip"></div>
     </div>
-    <div class="panel-sub" style="margin-top:6px;font-size:.68rem;color:var(--text-lt)">Người dùng hoạt động mỗi ngày (page_view/tool_run/chat...)${days.length ? ` · ${fmtDate(days[0].day)} – ${fmtDate(days[days.length - 1].day)} (${days.length} ngày)` : ''} · di chuột để xem chi tiết</div>
+    <div class="panel-sub" style="margin-top:6px;font-size:.68rem;color:var(--text-lt);display:flex;flex-wrap:wrap;gap:.15rem .8rem;align-items:center">
+      <span style="display:inline-flex;align-items:center;gap:.3rem"><svg width="18" height="6"><line x1="0" y1="3" x2="18" y2="3" stroke="var(--gold-soft)" stroke-width="2"/></svg> Người thật</span>
+      <span style="display:inline-flex;align-items:center;gap:.3rem"><svg width="18" height="6"><line x1="0" y1="3" x2="18" y2="3" stroke="var(--text-lt)" stroke-width="1.5" stroke-dasharray="4 3"/></svg> Tổng, kể cả máy</span>
+      <span>Khoảng cách giữa hai đường = lưu lượng máy${days.length ? ` · ${fmtDate(days[0].day)} – ${fmtDate(days[days.length - 1].day)}` : ''}</span>
+    </div>
   `;
   initDashChart(days);
 }
@@ -2933,13 +3678,22 @@ function initDashChart(days) {
   const svg = document.getElementById('dashDauChart');
   const tip = document.getElementById('dashDauTip');
   if (!svg || !days.length) return;
-  const vals = days.map((d) => d.dau);
+  // HAI ĐƯỜNG, cố ý không thay nhau: `vals` = người thật (đường đậm), `valsTot`
+  // = TOÀN BỘ lưu lượng kể cả máy (đường mờ đứt nét). Khoảng cách giữa hai
+  // đường CHÍNH LÀ phần máy — vẽ một đường rồi nhét số kia vào tooltip thì
+  // không so được bằng mắt, mà so được mới là điểm của việc tách.
+  const vals = days.map((d) => (d.dau_human != null ? d.dau_human : d.dau));
+  const valsTot = days.map((d) => (d.dau != null ? d.dau : d.dau_human));
+  const hasBot = valsTot.some((v, i) => v > vals[i]);
   const W = 900, H = 160, PAD = 4;
-  const max = Math.max(1, ...vals), min = Math.min(...vals);
+  // Thang đo chung cho cả hai đường, nếu không thì hai đường không so được.
+  const max = Math.max(1, ...vals, ...valsTot), min = Math.min(...vals, ...valsTot);
   const range = Math.max(1, max - min);
   const n = vals.length;
   const xs = vals.map((v, i) => PAD + (i * (W - PAD * 2)) / Math.max(1, n - 1));
-  const ys = vals.map((v) => H - 22 - ((v - min) / range) * (H - 40));
+  const yOf = (v) => H - 22 - ((v - min) / range) * (H - 40);
+  const ys = vals.map(yOf);
+  const ysTot = valsTot.map(yOf);
 
   const NS = 'http://www.w3.org/2000/svg';
   function el(tag, attrs) {
@@ -2963,6 +3717,16 @@ function initDashChart(days) {
   defs.appendChild(grad);
   svg.appendChild(defs);
   svg.appendChild(el('path', { d: areaD, fill: 'url(#dashDauGrad)' }));
+
+  // Đường TỔNG (kể cả máy) vẽ TRƯỚC, mờ + đứt nét, để nó làm nền chứ không
+  // tranh chỗ với đường người thật.
+  if (hasBot) {
+    const totD = 'M' + xs.map((x, i) => x + ',' + ysTot[i]).join(' L');
+    svg.appendChild(el('path', {
+      d: totD, fill: 'none', stroke: 'var(--text-lt)', 'stroke-width': 1.5,
+      'stroke-dasharray': '4 3', opacity: 0.75, 'stroke-linejoin': 'round',
+    }));
+  }
 
   const lineD = 'M' + xs.map((x, i) => x + ',' + ys[i]).join(' L');
   svg.appendChild(el('path', { d: lineD, fill: 'none', stroke: 'var(--gold-soft)', 'stroke-width': 2, 'stroke-linejoin': 'round', 'stroke-linecap': 'round' }));
@@ -2998,7 +3762,11 @@ function initDashChart(days) {
     dot.setAttribute('cx', x); dot.setAttribute('cy', y); dot.setAttribute('opacity', 1);
     tip.style.left = (x / W) * rect.width + 'px';
     tip.style.top = (y / H) * rect.height + 'px';
-    tip.innerHTML = `<strong>${vals[idx]}</strong> DAU · ${fmtDate(days[idx].day)}`;
+    const bot = Math.max(0, valsTot[idx] - vals[idx]);
+    const botPart = bot > 0
+      ? ` · <span style="opacity:.7">${bot.toLocaleString()} máy</span> · tổng ${valsTot[idx].toLocaleString()}`
+      : '';
+    tip.innerHTML = `<strong>${vals[idx].toLocaleString()}</strong> người thật${botPart} · ${fmtDate(days[idx].day)}`;
     tip.style.opacity = 1;
   });
   hitArea.addEventListener('mouseleave', () => {
@@ -3496,6 +4264,7 @@ async function loadMarketing() {
   loadAutopilotLog();
   loadMediaQueue();
   loadSeeding();
+  loadSocialProof();
   utmRenderSaved();
   _mktLoadedKey = fromEl.value + '|' + toEl.value;
 }
@@ -3685,7 +4454,7 @@ function renderMediaQueue(posts, orphanChannels, cfg) {
   const host = document.getElementById('mq-list');
   if (!host) return;
   let warn = (orphanChannels && orphanChannels.length)
-    ? `<div class="empty" style="color:var(--red);margin-bottom:.75rem">⚠️ Kênh <b>${escHtmlLocal(orphanChannels.join(', '))}</b> có trong <code>social.channels</code> nhưng CHƯA có adapter đăng — bài của kênh đó sẽ báo lỗi chứ không lên được.</div>`
+    ? `<div class="empty" style="color:var(--tx-red);margin-bottom:.75rem">⚠️ Kênh <b>${escHtmlLocal(orphanChannels.join(', '))}</b> có trong <code>social.channels</code> nhưng CHƯA có adapter đăng — bài của kênh đó sẽ báo lỗi chứ không lên được.</div>`
     : '';
   // Trần đăng tính theo DÒNG (mỗi kênh một dòng), còn trần dựng tính theo BÀI.
   // Bật thêm kênh mà quên nới `publish_daily` là hàng đợi phình lên mỗi ngày
@@ -3694,7 +4463,7 @@ function renderMediaQueue(posts, orphanChannels, cfg) {
   const need = (Number(cfg && cfg.buildDaily) || 0) * nCh;
   const pub = Number(cfg && cfg.publishDaily) || 0;
   if (nCh > 1 && pub && need > pub) {
-    warn += `<div class="empty" style="color:var(--red);margin-bottom:.75rem">⚠️ <code>social.publish_daily=${pub}</code> nhưng mỗi ngày dựng <b>${cfg.buildDaily} bài × ${nCh} kênh = ${need} lượt đăng</b> — hàng đợi sẽ dồn lại. Nâng lên ${need}: <code>update app_config set value='${need}'::jsonb where key='social.publish_daily';</code></div>`;
+    warn += `<div class="empty" style="color:var(--tx-red);margin-bottom:.75rem">⚠️ <code>social.publish_daily=${pub}</code> nhưng mỗi ngày dựng <b>${cfg.buildDaily} bài × ${nCh} kênh = ${need} lượt đăng</b> — hàng đợi sẽ dồn lại. Nâng lên ${need}: <code>update app_config set value='${need}'::jsonb where key='social.publish_daily';</code></div>`;
   }
   if (!posts.length) {
     host.innerHTML = warn + '<div class="empty">Chưa có bài nào. Cron <code>media-build</code> chạy 09:30 mỗi sáng: dựng bài rồi đăng luôn.</div>';
@@ -3729,7 +4498,7 @@ function renderMediaQueue(posts, orphanChannels, cfg) {
           <button class="btn btn-outline btn-sm" onclick="mediaDecide('${p.id}','skip')">Bỏ hẳn</button>
         </div>` : ''}
         ${p.external_url ? `<a href="${escHtmlLocal(p.external_url)}" target="_blank" rel="noopener" style="font-size:.7rem;display:inline-block;margin-top:.35rem">Xem bài đã đăng →</a>` : ''}
-        ${p.error ? `<div style="font-size:.7rem;color:var(--red);margin-top:.35rem">${escHtmlLocal(p.error)}</div>` : ''}
+        ${p.error ? `<div style="font-size:.7rem;color:var(--tx-red);margin-top:.35rem">${escHtmlLocal(p.error)}</div>` : ''}
       </div>
     </div>`;
   }).join('');
@@ -3745,6 +4514,105 @@ async function mediaDecide(postId, decision) {
     if (d.error) throw new Error(d.error);
     toast(decision === 'retry' ? 'Đã xếp lại hàng — cron sẽ đăng ở lượt tới' : 'Đã bỏ bài', 'success');
     loadMediaQueue();
+  } catch (e) {
+    toast('Lỗi: ' + e.message, 'error');
+  }
+}
+
+// ── "Khoe Kết Quả" — nộp bằng chứng đã đăng FB/IG/TikTok, admin xác nhận
+// bằng mắt (không có API nào lộ dữ liệu Story/screenshot cho bên thứ ba —
+// đã kiểm chắc trước khi thiết kế cả bảng lẫn panel này). ──
+const SP_PLATFORM_LABEL = { facebook: 'Facebook', instagram: 'Instagram', tiktok: 'TikTok', other: 'Khác' };
+const SP_STATUS = {
+  pending:  ['badge-pending', 'Chờ duyệt'],
+  approved: ['badge-green',   'Đã duyệt'],
+  rejected: ['badge-red',     'Đã từ chối'],
+};
+let _spDefaultCredits = 20;
+
+async function loadSocialProof() {
+  const badge = document.getElementById('sp-badge');
+  const host = document.getElementById('sp-list');
+  const statusEl = document.getElementById('sp-status');
+  const status = (statusEl && statusEl.value) || 'pending';
+  try {
+    const d = await apiGet('admin-social-proof', `&status=${status}`);
+    if (d.error) throw new Error(d.error);
+    _spDefaultCredits = Number(d.defaultCredits) || 20;
+    const rows = d.submissions || [];
+    if (badge) {
+      badge.className = 'badge ' + (status === 'pending' && rows.length ? 'badge-gold' : 'badge-grey');
+      badge.textContent = rows.length + (status === 'pending' ? ' chờ duyệt' : ' dòng');
+    }
+    renderSocialProof(rows);
+  } catch (e) {
+    if (badge) { badge.className = 'badge badge-red'; badge.textContent = 'Lỗi'; }
+    if (host) host.innerHTML = `<div class="empty">Lỗi: ${escHtmlLocal(e.message)}</div>`;
+  }
+}
+
+function renderSocialProof(rows) {
+  const host = document.getElementById('sp-list');
+  if (!host) return;
+  if (!rows.length) {
+    host.innerHTML = '<div class="empty">Không có lượt nộp nào ở trạng thái này.</div>';
+    return;
+  }
+  host.innerHTML = rows.map((r) => {
+    const [cls, label] = SP_STATUS[r.status] || ['badge-grey', r.status];
+    const platform = SP_PLATFORM_LABEL[r.platform] || r.platform;
+    // Chỉ mở link/ảnh khi ĐÚNG http(s) — dữ liệu do người dùng tự khai, cùng
+    // chốt chặn `sdSafeUrl` đã dùng cho Seeding Group.
+    const shot = sdSafeUrl(r.screenshot_url);
+    const link = sdSafeUrl(r.url);
+    const proof = shot
+      ? `<a href="${shot}" target="_blank" rel="noopener"><img src="${shot}" alt="" loading="lazy" style="width:120px;height:150px;object-fit:cover;border-radius:8px;background:var(--bg-alt);display:block"></a>`
+      : link
+        ? `<a href="${link}" target="_blank" rel="noopener" style="font-size:.76rem;word-break:break-all;color:var(--navy);font-weight:600">${escHtmlLocal(r.url)} ↗</a>`
+        : '<span style="font-size:.72rem;color:var(--text-lt)">(không có bằng chứng hợp lệ)</span>';
+    const isPending = r.status === 'pending';
+    return `
+    <div style="display:flex;gap:1rem;padding:.9rem 0;border-bottom:1px solid var(--border)">
+      <div style="width:120px;flex:none">${proof}</div>
+      <div style="flex:1;min-width:0">
+        <div style="display:flex;gap:.5rem;align-items:center;flex-wrap:wrap;margin-bottom:.35rem">
+          <span class="badge ${cls}">${escHtmlLocal(label)}</span>
+          <span class="badge badge-blue">${escHtmlLocal(platform)}</span>
+          <span style="font-size:.72rem;color:var(--text-lt)">${escHtmlLocal(r.email || r.user_id || '')}</span>
+          <span style="font-size:.7rem;color:var(--text-lt)">${relTime(r.submitted_at)}</span>
+        </div>
+        ${r.tool_id ? `<div style="font-size:.72rem;color:var(--text-lt);margin-bottom:.2rem">Đang khoe: <b>${escHtmlLocal(r.tool_id)}</b></div>` : ''}
+        ${r.note ? `<div style="font-size:.78rem;color:var(--text);margin-bottom:.35rem">${escHtmlLocal(r.note)}</div>` : ''}
+        ${r.status === 'approved' ? `<div style="font-size:.72rem;color:var(--text-lt)">Đã cộng <b>${escHtmlLocal(String(r.reward_credits))}</b> Lượng · duyệt bởi ${escHtmlLocal(r.reviewed_by || '')}</div>` : ''}
+        ${r.status === 'rejected' && r.reject_reason ? `<div style="font-size:.72rem;color:var(--tx-red)">Lý do từ chối: ${escHtmlLocal(r.reject_reason)}</div>` : ''}
+        ${isPending ? `
+        <div style="display:flex;gap:.5rem;align-items:center;margin-top:.5rem;flex-wrap:wrap">
+          <input type="number" id="sp-credits-${r.id}" value="${_spDefaultCredits}" min="0" max="200" step="1"
+                 style="width:70px;padding:.3rem .5rem;border:1px solid var(--border);border-radius:6px;background:var(--bg);color:var(--text);font-size:.78rem">
+          <span style="font-size:.72rem;color:var(--text-lt)">Lượng</span>
+          <button class="btn btn-primary btn-sm" onclick="socialProofDecide('${r.id}','approve')">Duyệt</button>
+          <button class="btn btn-outline btn-sm" onclick="socialProofDecide('${r.id}','reject')">Từ chối</button>
+        </div>` : ''}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+async function socialProofDecide(id, decision) {
+  const body = { submissionId: id, decision };
+  if (decision === 'approve') {
+    const el = document.getElementById('sp-credits-' + id);
+    const v = el ? Number(el.value) : NaN;
+    if (Number.isFinite(v)) body.credits = v;
+  } else {
+    const reason = prompt('Lý do từ chối (tuỳ chọn, hiện lại cho user khi họ hỏi):') || '';
+    body.reason = reason.trim();
+  }
+  try {
+    const d = await apiPost('admin-social-proof-decide', body);
+    if (d.error) throw new Error(d.error);
+    toast(decision === 'approve' ? `Đã duyệt — cộng ${d.credited} Lượng` : 'Đã từ chối', 'success');
+    loadSocialProof();
   } catch (e) {
     toast('Lỗi: ' + e.message, 'error');
   }
@@ -3984,6 +4852,615 @@ async function seedDecide(draftId, decision) {
   }
 }
 
+// ── Backlink ─────────────────────────────────────────────────────────────────
+// Cùng triết lý Seeding Group: máy tìm + soạn, người bấm Copy rồi tự tay dán/
+// gửi. KHÔNG có nút nào gọi ra ngoài — xem đầu migration-backlinks.sql.
+let _blProspects = [];
+
+function blSafeUrl(u) {
+  const s = String(u || '').trim();
+  return /^https?:\/\//i.test(s) ? s : '';
+}
+
+const BL_KIND_LABELS = {
+  directory: 'Danh bạ / Directory', resource_page: 'Trang tài nguyên',
+  broken_link: 'Link chết cần thay', guest_post: 'Bài khách (có toà soạn)',
+  guest_blog: 'Bài khách (blog nhỏ)', press: 'Báo chí / toà soạn',
+  kol: 'KOL / người có khán giả', partner: 'Đối tác đổi giá trị',
+  web2: 'Web2.0 (Medium/Blog)', social_profile: 'Hồ sơ mạng xã hội',
+  unlinked_mention: 'Đã nhắc tên, chưa gắn link', other: 'Khác',
+};
+const BL_CONTENT_KIND_LABELS = {
+  directory_listing: 'Mô tả nộp directory', web2_article: 'Bài web2.0',
+  guest_pitch: 'Email pitch guest post', blog_pitch: 'Thư ngắn gửi blog nhỏ',
+  press_pitch: 'Thư gửi toà soạn (kèm số liệu)', kol_pitch: 'Tin nhắn gửi KOL',
+  outreach_email: 'Email liên hệ',
+  broken_link_pitch: 'Email link chết/tài nguyên',
+};
+const BL_PROSPECT_STATUS = {
+  new: ['badge-green', 'Mới'], content_ready: ['badge-blue', 'Đã soạn — chờ duyệt'],
+  submitted: ['badge-grey', 'Đã gửi/đăng'], skipped: ['badge-grey', 'Đã bỏ'],
+  dead: ['badge-red', 'Hết giá trị'],
+};
+const BL_PROSPECT_RANK = { new: 0, content_ready: 1, submitted: 2, skipped: 3, dead: 4 };
+const BL_SOURCE_LABELS = {
+  manual: 'Tay', search: 'Brave', seed_list: 'Danh sách tĩnh',
+  alert_rss: 'Google Alerts', broken_link_scan: 'Quét link chết',
+};
+const BL_LINK_STATUS = {
+  unchecked: ['badge-grey', 'Chưa kiểm'], alive: ['badge-green', 'Còn sống'], dead: ['badge-red', 'Đã mất'],
+};
+
+async function loadBacklinks() {
+  try {
+    const d = await apiGet('admin-backlinks');
+    if (d.error) throw new Error(d.error);
+    _blProspects = d.prospects || [];
+    const content = d.content || [];
+    const links = d.links || [];
+
+    const openProspects = _blProspects.filter((p) => p.status === 'new' || p.status === 'content_ready').length;
+    const pBadge = document.getElementById('bl-p-badge');
+    if (pBadge) { pBadge.className = 'badge ' + (openProspects ? 'badge-green' : 'badge-grey'); pBadge.textContent = openProspects ? openProspects + ' cơ hội mở' : 'Sổ trống'; }
+
+    const drafts = content.filter((c) => c.status === 'draft').length;
+    const cBadge = document.getElementById('bl-c-badge');
+    if (cBadge) { cBadge.className = 'badge ' + (drafts ? 'badge-green' : 'badge-grey'); cBadge.textContent = drafts ? drafts + ' chờ duyệt' : 'Không có bài chờ'; }
+
+    const alive = links.filter((l) => l.status === 'alive').length;
+    const lBadge = document.getElementById('bl-l-badge');
+    if (lBadge) { lBadge.className = 'badge ' + (links.length ? 'badge-green' : 'badge-grey'); lBadge.textContent = links.length ? alive + ' sống / ' + links.length + ' tổng' : 'Chưa theo dõi link nào'; }
+
+    const embeds = d.embeds || [];
+    const noCredit = embeds.filter((e) => e.attribution_ok === false).length;
+    const eBadge = document.getElementById('bl-e-badge');
+    if (eBadge) {
+      // Đỏ khi có trang dùng widget mà KHÔNG ghi nguồn — đó là việc CẦN LÀM,
+      // không phải một con số thống kê. Xanh khi mọi trang đều giữ credit.
+      eBadge.className = 'badge ' + (noCredit ? 'badge-red' : embeds.length ? 'badge-green' : 'badge-grey');
+      eBadge.textContent = embeds.length
+        ? (noCredit ? noCredit + ' chưa ghi nguồn / ' + embeds.length + ' trang' : embeds.length + ' trang đang nhúng')
+        : 'Chưa ai nhúng';
+    }
+
+    const accounts = d.accounts || [];
+    const gaDone = accounts.filter((a) => a.status === 'verified' || a.status === 'registered').length;
+    const gaBadge = document.getElementById('ga-badge');
+    if (gaBadge) { gaBadge.className = 'badge ' + (gaDone ? 'badge-green' : 'badge-grey'); gaBadge.textContent = accounts.length ? gaDone + ' đã có / ' + accounts.length + ' nền tảng' : 'Sổ trống — bấm Nạp sổ'; }
+
+    renderBlProspects(_blProspects);
+    renderBlCrm(_blProspects);
+    renderBlContent(content);
+    renderBlLinks(links);
+    renderGaAccounts(accounts);
+    renderBlEmbeds(embeds);
+  } catch (e) {
+    ['bl-prospects', 'bl-content', 'bl-links', 'ga-list', 'bl-embeds'].forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) el.innerHTML = `<div class="empty">Lỗi: ${escHtmlLocal(e.message)}</div>`;
+    });
+  }
+}
+
+// ── Tài Khoản & Entity ───────────────────────────────────────────────────────
+// Sổ tài khoản CỦA MÌNH trên các nền tảng. Nguồn duy nhất sinh JSON-LD sameAs
+// (lib/seo/same-as.ts) — nên cột "sameAs" ở đây là công tắc thật, không phải ghi chú.
+const GA_CAT = {
+  entity:    ['Entity — neo thực thể', 'Google Knowledge Graph đọc trực tiếp'],
+  social:    ['Mạng xã hội', 'hồ sơ định danh + kênh phân phối'],
+  web2:      ['Tự xuất bản', 'Medium/Blogger/Dev.to — vừa backlink vừa phân phối'],
+  community: ['Cộng đồng', 'nơi có sẵn người — KHÔNG tự đăng, trả lời tay'],
+  registry:  ['Danh bạ sản phẩm/API/MCP', 'vùng gần như không cạnh tranh'],
+};
+const GA_STATUS = {
+  todo:       ['badge-grey',  'Chưa làm'],
+  registered: ['badge-blue',  'Đã đăng ký'],
+  verified:   ['badge-green', 'Đã xác minh'],
+  rejected:   ['badge-red',   'Bị từ chối'],
+  skip:       ['badge-grey',  'Bỏ qua'],
+};
+let _gaAccounts = [];
+
+function renderGaAccounts(accounts) {
+  const host = document.getElementById('ga-list');
+  if (!host) return;
+  _gaAccounts = accounts || [];
+  if (!_gaAccounts.length) {
+    host.innerHTML = '<div class="empty">Sổ trống. Bấm <b>🔄 Nạp sổ + kiểm hồ sơ</b> để nạp danh sách nền tảng vào đây.</div>';
+    return;
+  }
+
+  let html = '';
+  for (const cat of Object.keys(GA_CAT)) {
+    const rows = _gaAccounts.filter((a) => a.category === cat);
+    if (!rows.length) continue;
+    const done = rows.filter((a) => a.status === 'verified' || a.status === 'registered').length;
+    html += `<div style="margin:.9rem 0 .35rem;font-size:.78rem;font-weight:600">${escHtmlLocal(GA_CAT[cat][0])}
+      <span style="font-weight:400;color:var(--text-lt)">— ${escHtmlLocal(GA_CAT[cat][1])} · ${done}/${rows.length}</span></div>`;
+    html += '<div class="table-wrap"><table><thead><tr>' +
+      '<th>Nền tảng</th><th>Trạng thái</th><th>Ưu tiên</th><th>sameAs</th><th>Hồ sơ</th><th>Sống</th><th>Tự động</th><th></th>' +
+      '</tr></thead><tbody>';
+    for (const a of rows) {
+      const st = GA_STATUS[a.status] || GA_STATUS.todo;
+      const prio = '★'.repeat(a.priority || 1);
+      const link = a.url
+        ? `<a href="${escHtmlLocal(a.url)}" target="_blank" rel="noopener nofollow">mở ↗</a>`
+        : (a.submit_url ? `<a href="${escHtmlLocal(a.submit_url)}" target="_blank" rel="noopener nofollow" style="color:var(--text-lt)">đăng ký ↗</a>` : '—');
+      let alive = '—';
+      if (a.last_ok === true) alive = '<span class="badge badge-green">OK</span>';
+      else if (a.last_ok === false) alive = `<span class="badge badge-red" title="${escHtmlLocal(a.check_note || '')}">chết</span>`;
+      const note = escHtmlLocal(a.automation || '');
+      html += `<tr>
+        <td><b>${escHtmlLocal(a.label)}</b>${a.notes ? `<div style="font-size:.7rem;color:var(--text-lt);max-width:340px">${escHtmlLocal(a.notes)}</div>` : ''}</td>
+        <td><span class="badge ${st[0]}">${escHtmlLocal(st[1])}</span></td>
+        <td style="color:var(--gold-soft)">${prio}</td>
+        <td>${a.same_as ? '✓' : ''}</td>
+        <td>${link}</td>
+        <td>${alive}</td>
+        <td style="font-size:.7rem;color:var(--text-lt);max-width:280px">${note}</td>
+        <td><button class="btn btn-outline btn-sm" onclick="gaEdit('${a.id}')">Sửa</button></td>
+      </tr>`;
+    }
+    html += '</tbody></table></div>';
+  }
+  host.innerHTML = html + '<div id="ga-form"></div>';
+}
+
+function gaEdit(id) {
+  const a = _gaAccounts.find((x) => x.id === id);
+  const host = document.getElementById('ga-form');
+  if (!a || !host) return;
+  const opt = (v, label) => `<option value="${v}" ${a.status === v ? 'selected' : ''}>${label}</option>`;
+  host.innerHTML = `
+    <div style="border:1px solid var(--border);border-radius:8px;padding:.75rem;margin-top:.9rem">
+      <div style="font-size:.78rem;font-weight:600;margin-bottom:.5rem">Sửa: ${escHtmlLocal(a.label)}</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:.5rem">
+        <select id="ga-f-status" style="padding:.45rem;border:1px solid var(--border);border-radius:6px;background:var(--bg);color:var(--text);font-size:.78rem">
+          ${opt('todo', 'Chưa làm')}${opt('registered', 'Đã đăng ký')}${opt('verified', 'Đã xác minh')}${opt('rejected', 'Bị từ chối')}${opt('skip', 'Bỏ qua')}
+        </select>
+        <input id="ga-f-url" value="${escHtmlLocal(a.url || '')}" placeholder="URL hồ sơ https://..." style="padding:.45rem;border:1px solid var(--border);border-radius:6px;background:var(--bg);color:var(--text);font-size:.78rem">
+        <input id="ga-f-handle" value="${escHtmlLocal(a.handle || '')}" placeholder="Tên tài khoản (tuỳ chọn)" style="padding:.45rem;border:1px solid var(--border);border-radius:6px;background:var(--bg);color:var(--text);font-size:.78rem">
+        <select id="ga-f-prio" style="padding:.45rem;border:1px solid var(--border);border-radius:6px;background:var(--bg);color:var(--text);font-size:.78rem">
+          <option value="3" ${a.priority === 3 ? 'selected' : ''}>★★★ cao</option>
+          <option value="2" ${a.priority === 2 ? 'selected' : ''}>★★ vừa</option>
+          <option value="1" ${a.priority === 1 ? 'selected' : ''}>★ thấp</option>
+        </select>
+      </div>
+      <label style="display:flex;align-items:center;gap:.4rem;font-size:.76rem;margin-top:.5rem">
+        <input type="checkbox" id="ga-f-sameas" ${a.same_as ? 'checked' : ''}> Đưa vào <code>sameAs</code> của JSON-LD (chỉ ăn khi đã có URL và trạng thái Đã đăng ký/Đã xác minh)
+      </label>
+      <textarea id="ga-f-notes" rows="2" placeholder="Ghi chú" style="width:100%;margin-top:.5rem;padding:.45rem;border:1px solid var(--border);border-radius:6px;background:var(--bg);color:var(--text);font-size:.78rem">${escHtmlLocal(a.notes || '')}</textarea>
+      <div style="display:flex;gap:.4rem;margin-top:.5rem">
+        <button class="btn btn-primary btn-sm" onclick="gaSave('${a.id}')">Lưu</button>
+        <button class="btn btn-outline btn-sm" onclick="document.getElementById('ga-form').innerHTML=''">Huỷ</button>
+      </div>
+    </div>`;
+  host.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+async function gaSave(id) {
+  try {
+    const d = await apiPost('admin-growth-account', {
+      op: 'save',
+      id,
+      status: document.getElementById('ga-f-status').value,
+      url: document.getElementById('ga-f-url').value.trim(),
+      handle: document.getElementById('ga-f-handle').value.trim(),
+      priority: Number(document.getElementById('ga-f-prio').value),
+      sameAs: document.getElementById('ga-f-sameas').checked,
+      notes: document.getElementById('ga-f-notes').value.trim(),
+    });
+    if (d.error) throw new Error(d.error);
+    toast('Đã lưu');
+    loadBacklinks();
+  } catch (e) {
+    toast('Lỗi: ' + e.message, true);
+  }
+}
+
+function blKindOptions(selected) {
+  return Object.keys(BL_KIND_LABELS).map((k) =>
+    `<option value="${k}" ${k === selected ? 'selected' : ''}>${escHtmlLocal(BL_KIND_LABELS[k])}</option>`).join('');
+}
+
+
+// ── CRM-lite (#14): ai cần nhắc lại hôm nay ──────────────────────────────────
+// Chỉ đọc lại `_blProspects` đã tải — KHÔNG gọi thêm lượt API. Đây là một CÁCH
+// NHÌN khác của cùng dữ liệu, không phải một nguồn thứ hai.
+const BL_REPLY = {
+  none: ['badge-grey', 'Chưa hồi âm'],
+  positive: ['badge-green', 'Đồng ý / quan tâm'],
+  negative: ['badge-red', 'Từ chối'],
+  later: ['badge-blue', 'Hẹn dịp khác'],
+};
+
+function renderBlCrm(prospects) {
+  const host = document.getElementById('bl-crm');
+  const badge = document.getElementById('bl-crm-badge');
+  if (!host) return;
+  const today = new Date().toISOString().slice(0, 10);
+
+  // Đáng theo dõi = đã tự tay gửi rồi (có last_contacted_at) HOẶC có hẹn nhắc.
+  // Cơ hội chưa gửi gì thì thuộc sổ trên, không phải việc của bảng này.
+  const rows = (prospects || []).filter((p) => p.last_contacted_at || p.follow_up_at);
+  const due = rows.filter((p) => p.follow_up_at && p.follow_up_at <= today);
+  if (badge) {
+    badge.textContent = due.length ? due.length + ' tới hạn' : rows.length + ' đang theo dõi';
+    badge.className = 'badge ' + (due.length ? 'badge-red' : rows.length ? 'badge-blue' : 'badge-grey');
+  }
+  if (!rows.length) {
+    host.innerHTML = '<div class="empty">Chưa có cơ hội nào được đánh dấu đã liên hệ. Gửi thư xong thì bấm "Đã liên hệ" ở sổ cơ hội bên trên.</div>';
+    return;
+  }
+  // Tới hạn lên đầu, rồi tới hẹn gần nhất.
+  rows.sort((a, b) => {
+    const ad = a.follow_up_at || '9999-99-99', bd = b.follow_up_at || '9999-99-99';
+    return ad < bd ? -1 : ad > bd ? 1 : 0;
+  });
+
+  host.innerHTML =
+    '<div class="table-wrap"><table><thead><tr>' +
+    '<th>Cơ hội</th><th>Loại</th><th>Đã liên hệ</th><th>Nhắc lại</th><th>Họ nói gì</th><th></th>' +
+    '</tr></thead><tbody>' +
+    rows.map((p, i) => {
+      const rp = BL_REPLY[p.reply || 'none'] || BL_REPLY.none;
+      const overdue = p.follow_up_at && p.follow_up_at <= today;
+      return '<tr' + (overdue ? ' style="background:var(--bg-soft)"' : '') + '>' +
+        '<td><a href="' + escHtmlLocal(blSafeUrl(p.url)) + '" target="_blank" rel="noopener">' + escHtmlLocal(p.name) + '</a></td>' +
+        '<td>' + escHtmlLocal(BL_KIND_LABELS[p.kind] || p.kind) + '</td>' +
+        '<td>' + (p.last_contacted_at ? escHtmlLocal(p.last_contacted_at.slice(0, 10)) : '—') + '</td>' +
+        '<td>' + (p.follow_up_at ? (overdue ? '<b style="color:var(--red)">' + escHtmlLocal(p.follow_up_at) + '</b>' : escHtmlLocal(p.follow_up_at)) : '—') + '</td>' +
+        '<td><span class="badge ' + rp[0] + '">' + rp[1] + '</span></td>' +
+        '<td><button class="btn btn-outline btn-sm" onclick="blCrmEdit(' + i + ')">Cập nhật</button></td>' +
+        '</tr>';
+    }).join('') +
+    '</tbody></table></div>';
+  host._rows = rows;
+}
+
+function blCrmEdit(i) {
+  const rows = (document.getElementById('bl-crm') || {})._rows || [];
+  const p = rows[i];
+  if (!p) return;
+  const reply = prompt(
+    'Họ trả lời thế nào? Gõ một trong: none / positive / negative / later\n\n' +
+      '(none = chưa hồi âm, later = hẹn dịp khác)',
+    p.reply || 'none',
+  );
+  if (reply === null) return;
+  const fu = prompt('Nhắc lại vào ngày nào? (YYYY-MM-DD, để trống = bỏ hẹn)', p.follow_up_at || '');
+  if (fu === null) return;
+  apiPost('admin-backlink-prospect', { op: 'followup', id: p.id, reply: reply.trim(), followUpAt: fu.trim() })
+    .then(function () { toast('Đã cập nhật'); loadBacklinks(); })
+    .catch(function (e) { toast('Lỗi: ' + (e.message || e), true); });
+}
+
+/** Đánh dấu vừa tự tay gửi — hẹn nhắc lại mặc định 7 ngày sau. */
+function blMarkContacted(id) {
+  const d = new Date(Date.now() + 7 * 86400000).toISOString().slice(0, 10);
+  apiPost('admin-backlink-prospect', { op: 'followup', id: id, markContacted: true, followUpAt: d })
+    .then(function () { toast('Đã ghi nhận — hẹn nhắc lại ' + d); loadBacklinks(); })
+    .catch(function (e) { toast('Lỗi: ' + (e.message || e), true); });
+}
+
+function renderBlProspects(prospects) {
+  const host = document.getElementById('bl-prospects');
+  if (!host) return;
+  const form = `
+    <div style="border:1px solid var(--border);border-radius:8px;padding:.75rem;margin-bottom:.9rem">
+      <div style="font-size:.78rem;font-weight:600;margin-bottom:.5rem" id="bl-p-form-title">Thêm cơ hội bằng tay</div>
+      <input type="hidden" id="bl-p-f-id">
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:.5rem">
+        <select id="bl-p-f-kind" style="padding:.45rem;border:1px solid var(--border);border-radius:6px;background:var(--bg);color:var(--text);font-size:.78rem">${blKindOptions('directory')}</select>
+        <input id="bl-p-f-name" placeholder="Tên (site/trang/người)" style="padding:.45rem;border:1px solid var(--border);border-radius:6px;background:var(--bg);color:var(--text);font-size:.78rem">
+        <input id="bl-p-f-url" placeholder="https://..." style="padding:.45rem;border:1px solid var(--border);border-radius:6px;background:var(--bg);color:var(--text);font-size:.78rem">
+        <input id="bl-p-f-topic" placeholder="Chủ đề/ngách (tuỳ chọn)" style="padding:.45rem;border:1px solid var(--border);border-radius:6px;background:var(--bg);color:var(--text);font-size:.78rem">
+        <input id="bl-p-f-email" placeholder="Email liên hệ (tuỳ chọn)" style="padding:.45rem;border:1px solid var(--border);border-radius:6px;background:var(--bg);color:var(--text);font-size:.78rem">
+        <input id="bl-p-f-priority" type="number" min="-9" max="9" placeholder="Ưu tiên (0 mặc định)" style="padding:.45rem;border:1px solid var(--border);border-radius:6px;background:var(--bg);color:var(--text);font-size:.78rem">
+      </div>
+      <textarea id="bl-p-f-notes" placeholder="Ghi chú — BẮT BUỘC cho 'link chết'/'trang tài nguyên': mô tả CỤ THỂ chỗ cần chèn/thay link, không có thì AI không soạn được" style="width:100%;margin-top:.5rem;padding:.45rem;min-height:52px;border:1px solid var(--border);border-radius:6px;background:var(--bg);color:var(--text);font-size:.78rem;resize:vertical"></textarea>
+      <div style="display:flex;gap:.5rem;margin-top:.5rem;align-items:center">
+        <button class="btn btn-primary btn-sm" onclick="blProspectSave()">Lưu cơ hội</button>
+        <button class="btn btn-outline btn-sm" onclick="blProspectReset()">Xoá form</button>
+      </div>
+    </div>`;
+
+  if (!prospects.length) {
+    host.innerHTML = form + '<div class="empty">Sổ cơ hội còn trống. Thêm bằng tay ở trên, hoặc bấm "🔍 Tìm cơ hội mới" (cần cấu hình BRAVE_SEARCH_API_KEY).</div>';
+    return;
+  }
+
+  const sorted = prospects.slice().sort((a, b) => (BL_PROSPECT_RANK[a.status] ?? 9) - (BL_PROSPECT_RANK[b.status] ?? 9) || b.priority - a.priority);
+  host.innerHTML = form + `
+    <div class="table-wrap"><table><thead><tr>
+      <th>Tên</th><th>Loại</th><th>Nguồn</th><th>Chủ đề</th><th>Trạng thái</th><th></th>
+    </tr></thead><tbody>` + sorted.map((p) => {
+      const [cls, label] = BL_PROSPECT_STATUS[p.status] || ['badge-grey', p.status];
+      return `<tr>
+        <td><a href="${escHtmlLocal(blSafeUrl(p.url))}" target="_blank" rel="noopener">${escHtmlLocal(p.name)}</a>
+            ${p.notes ? `<div style="font-size:.68rem;color:var(--text-lt)">${escHtmlLocal(p.notes.slice(0, 90))}</div>` : ''}</td>
+        <td style="font-size:.72rem;color:var(--text-lt)">${escHtmlLocal(BL_KIND_LABELS[p.kind] || p.kind)}</td>
+        <td style="font-size:.7rem;color:var(--text-lt)">${escHtmlLocal(BL_SOURCE_LABELS[p.source] || p.source || '—')}</td>
+        <td style="font-size:.72rem;color:var(--text-lt)">${escHtmlLocal(p.topic || '—')}</td>
+        <td><span class="badge ${cls}">${escHtmlLocal(label)}</span></td>
+        <td style="white-space:nowrap">
+          <button class="btn-mini" onclick="blMarkContacted('${p.id}')" title="Bấm SAU KHI bạn đã tự tay gửi — máy không gửi gì">Đã liên hệ</button>
+          <button class="btn-mini" onclick="blProspectEdit('${p.id}')">Sửa</button>
+          <button class="btn-mini" onclick="blProspectDelete('${p.id}')">Xoá</button>
+        </td>
+      </tr>`;
+    }).join('') + '</tbody></table></div>';
+}
+
+function blProspectReset() {
+  ['id', 'name', 'url', 'topic', 'email', 'priority', 'notes'].forEach((k) => {
+    const el = document.getElementById('bl-p-f-' + k);
+    if (el) el.value = '';
+  });
+  const k = document.getElementById('bl-p-f-kind'); if (k) k.value = 'directory';
+  const t = document.getElementById('bl-p-form-title'); if (t) t.textContent = 'Thêm cơ hội bằng tay';
+}
+
+function blProspectEdit(id) {
+  const p = _blProspects.find((x) => x.id === id);
+  if (!p) return;
+  const set = (k, v) => { const el = document.getElementById('bl-p-f-' + k); if (el) el.value = v == null ? '' : v; };
+  set('id', p.id); set('kind', p.kind); set('name', p.name); set('url', p.url);
+  set('topic', p.topic); set('email', p.contact_email); set('priority', p.priority); set('notes', p.notes);
+  const t = document.getElementById('bl-p-form-title'); if (t) t.textContent = 'Sửa: ' + p.name;
+  document.getElementById('bl-p-f-name').scrollIntoView({ block: 'center', behavior: 'smooth' });
+}
+
+async function blProspectSave() {
+  const val = (k) => (document.getElementById('bl-p-f-' + k) || {}).value || '';
+  try {
+    const d = await apiPost('admin-backlink-prospect', {
+      op: 'save', id: val('id'), kind: val('kind'), name: val('name').trim(), url: val('url').trim(),
+      topic: val('topic').trim(), contactEmail: val('email').trim(), priority: Number(val('priority')) || 0,
+      notes: val('notes').trim(),
+    });
+    if (d.error) throw new Error(d.error);
+    toast('Đã lưu', 'success');
+    blProspectReset();
+    loadBacklinks();
+  } catch (e) {
+    toast('Lỗi: ' + e.message, 'error');
+  }
+}
+
+async function blProspectDelete(id) {
+  const p = _blProspects.find((x) => x.id === id);
+  if (!confirm('Xoá "' + (p ? p.name : id) + '" khỏi sổ? Nội dung đã soạn cho cơ hội này cũng mất theo.')) return;
+  try {
+    const d = await apiPost('admin-backlink-prospect', { op: 'delete', id });
+    if (d.error) throw new Error(d.error);
+    toast('Đã xoá', 'success');
+    loadBacklinks();
+  } catch (e) {
+    toast('Lỗi: ' + e.message, 'error');
+  }
+}
+
+function renderBlContent(content) {
+  const host = document.getElementById('bl-content');
+  if (!host) return;
+  if (!content.length) {
+    host.innerHTML = '<div class="empty">Chưa có nội dung nào. Cron <code>backlink-content</code> chạy 09:15 mỗi sáng cho các cơ hội chưa soạn.</div>';
+    return;
+  }
+  const byId = {};
+  _blProspects.forEach((p) => { byId[p.id] = p; });
+
+  const ORDER = { draft: 0, used: 1, skipped: 2 };
+  const sorted = content.slice().sort((a, b) => (ORDER[a.status] ?? 9) - (ORDER[b.status] ?? 9) || new Date(b.created_at) - new Date(a.created_at));
+
+  host.innerHTML = sorted.map((c) => {
+    const p = byId[c.prospect_id] || {};
+    const open = c.status === 'draft';
+    const [cls, label] = { draft: ['badge-green', 'Chờ duyệt'], used: ['badge-grey', 'Đã dùng'], skipped: ['badge-grey', 'Đã bỏ'] }[c.status] || ['badge-grey', c.status];
+    return `
+    <div style="padding:.9rem 0;border-bottom:1px solid var(--border)">
+      <div style="display:flex;gap:.5rem;align-items:center;margin-bottom:.35rem;flex-wrap:wrap">
+        <span class="badge ${cls}">${escHtmlLocal(label)}</span>
+        <span class="badge badge-grey">${escHtmlLocal(BL_CONTENT_KIND_LABELS[c.kind] || c.kind)}</span>
+        <a href="${escHtmlLocal(blSafeUrl(p.url))}" target="_blank" rel="noopener" style="font-size:.72rem;color:var(--text-lt)">${escHtmlLocal(p.name || 'cơ hội đã xoá')}</a>
+      </div>
+      ${c.title ? `<input id="bl-cc-title-${c.id}" ${open ? '' : 'disabled'} value="${escHtmlLocal(c.title)}" placeholder="Tiêu đề / subject" style="width:100%;margin-bottom:.35rem;padding:.4rem;font-size:.76rem;font-weight:600;border:1px solid var(--border);border-radius:6px;background:var(--bg);color:var(--text)">` : ''}
+      <textarea id="bl-cc-body-${c.id}" ${open ? '' : 'disabled'}
+                style="width:100%;min-height:110px;font-size:.78rem;padding:.5rem;border:1px solid var(--border);border-radius:6px;background:var(--bg);color:var(--text);resize:vertical"
+      >${escHtmlLocal(c.body || '')}</textarea>
+      ${open ? `
+      <div style="display:flex;gap:.5rem;margin-top:.5rem;flex-wrap:wrap">
+        <button class="btn btn-primary btn-sm" onclick="blContentCopy('${c.id}')">Copy</button>
+        ${blSafeUrl(p.url) ? `<a class="btn btn-outline btn-sm" href="${escHtmlLocal(blSafeUrl(p.url))}" target="_blank" rel="noopener">Mở trang →</a>` : ''}
+        <button class="btn btn-outline btn-sm" onclick="blContentDecide('${c.id}','used')">Đã dùng</button>
+        <button class="btn btn-outline btn-sm" onclick="blContentDecide('${c.id}','skip')">Bỏ qua</button>
+      </div>` : ''}
+    </div>`;
+  }).join('');
+}
+
+async function blContentCopy(id) {
+  const titleEl = document.getElementById('bl-cc-title-' + id);
+  const bodyEl = document.getElementById('bl-cc-body-' + id);
+  const text = [(titleEl ? titleEl.value.trim() : ''), (bodyEl ? bodyEl.value.trim() : '')].filter(Boolean).join('\n\n');
+  try {
+    await navigator.clipboard.writeText(text);
+    toast('Đã copy', 'success');
+  } catch {
+    if (bodyEl) { bodyEl.focus(); bodyEl.select(); }
+    toast('Trình duyệt chặn clipboard — chữ đã được chọn sẵn, bấm Ctrl+C', 'error');
+  }
+}
+
+async function blContentDecide(id, decision) {
+  const titleEl = document.getElementById('bl-cc-title-' + id);
+  const bodyEl = document.getElementById('bl-cc-body-' + id);
+  try {
+    const d = await apiPost('admin-backlink-content', {
+      contentId: id, decision,
+      title: titleEl ? titleEl.value.trim() : '',
+      body: bodyEl ? bodyEl.value.trim() : '',
+    });
+    if (d.error) throw new Error(d.error);
+    toast(decision === 'used' ? 'Đã ghi nhận — cơ hội chuyển sang "Đã gửi/đăng"' : 'Đã bỏ — cơ hội quay lại "Mới" để soạn phương án khác', 'success');
+    loadBacklinks();
+  } catch (e) {
+    toast('Lỗi: ' + e.message, 'error');
+  }
+}
+
+function renderBlLinks(links) {
+  const host = document.getElementById('bl-links');
+  if (!host) return;
+  const prospectOpts = _blProspects.map((p) => `<option value="${p.id}">${escHtmlLocal(p.name)}</option>`).join('');
+  const form = `
+    <div style="border:1px solid var(--border);border-radius:8px;padding:.75rem;margin-bottom:.9rem">
+      <div style="font-size:.78rem;font-weight:600;margin-bottom:.5rem">Thêm link đang theo dõi</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:.5rem">
+        <input id="bl-l-f-source" placeholder="URL trang MANG link (https://...)" style="padding:.45rem;border:1px solid var(--border);border-radius:6px;background:var(--bg);color:var(--text);font-size:.78rem">
+        <input id="bl-l-f-target" placeholder="URL trên site mình" value="https://www.tuviminhbao.com/" style="padding:.45rem;border:1px solid var(--border);border-radius:6px;background:var(--bg);color:var(--text);font-size:.78rem">
+        <input id="bl-l-f-anchor" placeholder="Anchor text (tuỳ chọn)" style="padding:.45rem;border:1px solid var(--border);border-radius:6px;background:var(--bg);color:var(--text);font-size:.78rem">
+        <select id="bl-l-f-prospect" style="padding:.45rem;border:1px solid var(--border);border-radius:6px;background:var(--bg);color:var(--text);font-size:.78rem"><option value="">(không gắn cơ hội nào)</option>${prospectOpts}</select>
+      </div>
+      <div style="display:flex;gap:.5rem;margin-top:.5rem;align-items:center">
+        <button class="btn btn-primary btn-sm" onclick="blLinkSave()">Lưu link</button>
+        <button class="btn btn-outline btn-sm" onclick="blLinkReset()">Xoá form</button>
+        <span style="font-size:.7rem;color:var(--text-lt)">Cron sẽ tự kiểm lại mỗi sáng, cũ nhất trước.</span>
+      </div>
+    </div>`;
+
+  if (!links.length) {
+    host.innerHTML = form + '<div class="empty">Chưa theo dõi link nào.</div>';
+    return;
+  }
+
+  host.innerHTML = form + `
+    <div class="table-wrap"><table><thead><tr>
+      <th>Nguồn</th><th>Anchor</th><th>Rel</th><th>Trạng thái</th><th>Kiểm gần nhất</th><th></th>
+    </tr></thead><tbody>` + links.map((l) => {
+      const [cls, label] = BL_LINK_STATUS[l.status] || ['badge-grey', l.status];
+      const checked = l.last_checked_at ? new Date(l.last_checked_at).toLocaleDateString('vi-VN') : '—';
+      return `<tr>
+        <td><a href="${escHtmlLocal(blSafeUrl(l.source_url))}" target="_blank" rel="noopener">${escHtmlLocal(l.source_url)}</a></td>
+        <td style="font-size:.72rem;color:var(--text-lt)">${escHtmlLocal(l.anchor_text || '—')}</td>
+        <td><span class="badge ${l.rel === 'dofollow' ? 'badge-green' : 'badge-grey'}">${escHtmlLocal(l.rel)}</span></td>
+        <td><span class="badge ${cls}">${escHtmlLocal(label)}</span></td>
+        <td style="font-size:.72rem">${checked}</td>
+        <td><button class="btn-mini" onclick="blLinkDelete('${l.id}')">Xoá</button></td>
+      </tr>`;
+    }).join('') + '</tbody></table></div>';
+}
+
+function blLinkReset() {
+  ['source', 'target', 'anchor'].forEach((k) => { const el = document.getElementById('bl-l-f-' + k); if (el) el.value = k === 'target' ? 'https://www.tuviminhbao.com/' : ''; });
+  const p = document.getElementById('bl-l-f-prospect'); if (p) p.value = '';
+}
+
+async function blLinkSave() {
+  const val = (k) => (document.getElementById('bl-l-f-' + k) || {}).value || '';
+  try {
+    const d = await apiPost('admin-backlink-link', {
+      op: 'save', sourceUrl: val('source').trim(), targetUrl: val('target').trim(),
+      anchorText: val('anchor').trim(), prospectId: val('prospect'),
+    });
+    if (d.error) throw new Error(d.error);
+    toast('Đã lưu', 'success');
+    blLinkReset();
+    loadBacklinks();
+  } catch (e) {
+    toast('Lỗi: ' + e.message, 'error');
+  }
+}
+
+async function blLinkDelete(id) {
+  if (!confirm('Ngừng theo dõi link này?')) return;
+  try {
+    const d = await apiPost('admin-backlink-link', { op: 'delete', id });
+    if (d.error) throw new Error(d.error);
+    toast('Đã xoá', 'success');
+    loadBacklinks();
+  } catch (e) {
+    toast('Lỗi: ' + e.message, 'error');
+  }
+}
+
+// ── Widget nhúng ─────────────────────────────────────────────────────────────
+// Bảng này trả lời đúng MỘT câu hỏi: ai đang dùng đồ của mình, và họ có giữ
+// dòng ghi nguồn không. Xếp trang CHƯA ghi nguồn lên đầu (server đã order),
+// vì đó là hàng cần hành động chứ không phải hàng để ngắm.
+function renderBlEmbeds(rows) {
+  const host = document.getElementById('bl-embeds');
+  if (!host) return;
+  if (!rows.length) {
+    host.innerHTML = '<div class="empty">Chưa có trang nào nhúng widget. Mã nhúng lấy ở <a href="/nhung" target="_blank" rel="noopener">/nhung</a> — hệ thống tự ghi nhận khi có người dùng thật.</div>';
+    return;
+  }
+  host.innerHTML = `
+    <div class="table-wrap"><table><thead><tr>
+      <th>Tên miền</th><th>Công cụ</th><th>Lượt tải</th><th>Ghi nguồn</th><th>Soi gần nhất</th>
+    </tr></thead><tbody>` + rows.map((e) => {
+      let credit = '<span class="badge badge-grey" title="Chưa soi lần nào, hoặc lượt soi gần nhất không đọc được trang">chưa rõ</span>';
+      if (e.attribution_ok === true) {
+        credit = `<span class="badge badge-green">có</span>` +
+          (e.attribution_url ? ` <a href="${escHtmlLocal(blSafeUrl(e.attribution_url))}" target="_blank" rel="noopener" style="font-size:.7rem">link ↗</a>` : '');
+      } else if (e.attribution_ok === false) {
+        credit = '<span class="badge badge-red">KHÔNG — xin credit</span>';
+      }
+      const checked = e.last_checked_at ? new Date(e.last_checked_at).toLocaleDateString('vi-VN') : '—';
+      return `<tr>
+        <td><a href="${escHtmlLocal(blSafeUrl('https://' + e.domain + '/'))}" target="_blank" rel="noopener nofollow">${escHtmlLocal(e.domain)}</a></td>
+        <td style="font-size:.72rem;color:var(--text-lt)">${escHtmlLocal(e.tool)}</td>
+        <td class="mono">${Number(e.hits) || 0}</td>
+        <td>${credit}</td>
+        <td style="font-size:.72rem;color:var(--text-lt)" title="${escHtmlLocal(e.check_note || '')}">${checked}</td>
+      </tr>`;
+    }).join('') + '</tbody></table></div>';
+}
+
+const BL_RUN_LABELS = {
+  // prospect nay gộp BỐN nguồn — đọc đúng shape lồng ProspectingResult
+  // (lib/backlinks/prospecting.ts), không còn phẳng d.found/d.inserted.
+  prospect: (d) => {
+    const parts = [
+      `tĩnh +${(d.seedList || {}).inserted || 0}`,
+      `Alerts +${(d.alertsRss || {}).inserted || 0}`,
+      `Brave +${(d.brave || {}).inserted || 0}`,
+    ];
+    return `Tổng thêm mới ${d.totalInserted || 0} (${parts.join(' · ')})`;
+  },
+  content: (d) => `Đã soạn ${(d.built || []).length}` + (d.skipped && d.skipped.length ? `, bỏ qua ${d.skipped.length}` : ''),
+  check: (d) => `Đã kiểm ${d.checked || 0} — ${d.alive || 0} sống, ${d.dead || 0} mất` +
+    ((d.bing || {}).newLinks ? ` · Bing phát hiện ${d.bing.newLinks} backlink mới` : ''),
+  brokenlinks: (d) => `Soi ${d.pagesScanned || 0} trang, thấy ${d.deadFound || 0} link chết đúng ngách (mới ${d.inserted || 0}, bổ sung ghi chú ${d.enriched || 0})`,
+  accounts: (d) => `Nạp sổ +${(d.seed || {}).inserted || 0} nền tảng · kiểm ${(d.health || {}).checked || 0} hồ sơ` +
+    ((d.health || {}).newlyDead ? `, ${d.health.newlyDead} hồ sơ vừa chết` : ''),
+  embedcheck: (d) => `Soi ${d.checked || 0} trang nhúng — ${d.withLink || 0} còn ghi nguồn, ${d.withoutLink || 0} không` +
+    (d.newLinks ? ` · +${d.newLinks} backlink mới` : '') + (d.newProspects ? ` · +${d.newProspects} cơ hội ấm` : ''),
+};
+
+// Thiếu một khoá ở đây thì nút bấm xong bị đổi nhãn thành "Chạy" — mất luôn
+// cả emoji lẫn nghĩa. Thêm nút mới thì thêm nhãn ở CẢ HAI bảng trên/dưới.
+const BL_RUN_BTN_LABELS = {
+  prospect: '🔍 Tìm cơ hội mới', content: '✍️ Soạn ngay', check: '🔎 Kiểm tra ngay',
+  brokenlinks: '🔗💀 Quét link chết', accounts: '🔄 Nạp sổ + kiểm hồ sơ',
+  embedcheck: '🔎 Soi dòng ghi nguồn',
+};
+
+async function blRunNow(kind, btn) {
+  if (btn) { btn.disabled = true; btn.textContent = 'Đang chạy…'; }
+  try {
+    const d = await apiPost('admin-backlink-run', { kind });
+    if (d.error) throw new Error(d.error);
+    toast((BL_RUN_LABELS[kind] || (() => 'Xong'))(d), 'success');
+    loadBacklinks();
+  } catch (e) {
+    toast('Lỗi: ' + e.message, 'error');
+  } finally {
+    if (btn) { btn.disabled = false; btn.textContent = BL_RUN_BTN_LABELS[kind] || 'Chạy'; }
+  }
+}
+
 // M0.6 (track Marketing Autopilot) — nhật ký hành động autopilot, THUẦN ĐỌC.
 async function loadAutopilotLog() {
   const badge = document.getElementById('ap-state-badge');
@@ -4071,9 +5548,12 @@ function renderMktFunnel(f, tq) {
     { k: 'paid',      label: 'Trả tiền (paid)',      icon: svgIc('<rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/>') },
   ];
   const max = Math.max(1, f.visitors || 0);
-  const ga4Badge = f.visitorsSource === 'ga4'
-    ? `<span class="badge badge-green" style="margin-left:.4rem;vertical-align:1px" title="Số phiên (sessions) thật từ GA4 Data API">GA4</span>`
-    : `<span style="font-size:.62rem;margin-left:.4rem;vertical-align:1px;color:var(--text-lt)" title="Chưa nối GA4 (thiếu env GA4_PROPERTY_ID/GA4_SERVICE_ACCOUNT_JSON) — số suy từ page_view nội bộ, chỉ thấy traffic đã chạm track.js">nội bộ</span>`;
+  // Bậc "Khách ghé" là NGƯỜI THẬT (đã trừ đội máy). Badge nêu luôn số bị trừ —
+  // giấu nó đi thì người đọc tưởng site tụt traffic, mà thật ra là bớt rác.
+  const botCut = (f.visitors_bot || 0);
+  const ga4Badge = f.visitorsSource === 'human'
+    ? `<span class="badge badge-green" style="margin-left:.4rem;vertical-align:1px" title="Đã trừ ${botCut.toLocaleString()} khách là MÁY (bot tự khai + đội máy phát hiện qua hành vi). Số thô còn lẫn máy là ${(f.visitors_raw || 0).toLocaleString()}.">người thật${botCut ? ` · −${botCut.toLocaleString()} máy` : ''}</span>`
+    : `<span style="font-size:.62rem;margin-left:.4rem;vertical-align:1px;color:var(--text-lt)" title="Chưa lọc được máy — số suy từ page_view nội bộ thô">nội bộ</span>`;
   let prev = null;
   const rows = steps.map(s => {
     const v = f[s.k] || 0;
@@ -4095,7 +5575,7 @@ function renderMktFunnel(f, tq) {
   // Chỉ số phụ (không nằm thẳng trên trục funnel).
   const secondary = `<div style="display:flex;gap:1rem;margin-top:1rem;padding-top:1rem;border-top:1px solid var(--border-lt)">
     <div><div class="stat-label">Ý định nạp</div><div style="font-family:'Noto Serif',serif;font-size:1.2rem;color:var(--gold)">${(f.topup_intent||0).toLocaleString()}</div></div>
-    <div><div class="stat-label">Quay lại (≥2 ngày)</div><div style="font-family:'Noto Serif',serif;font-size:1.2rem;color:var(--green)">${(f.returned||0).toLocaleString()}</div></div>
+    <div><div class="stat-label">Quay lại (≥2 ngày)</div><div style="font-family:'Noto Serif',serif;font-size:1.2rem;color:var(--tx-green)">${(f.returned||0).toLocaleString()}</div></div>
   </div>`;
   const overall = (f.visitors > 0) ? ((f.paid || 0) / f.visitors * 100).toFixed(2) + '%' : '—';
   document.getElementById('mkt-funnel').innerHTML = rows + secondary +
@@ -4111,12 +5591,17 @@ function renderMktFunnel(f, tq) {
 // 0 đăng ký, 0 nạp tiền) và chỉ 83 có tương tác thật. Lấy 1.005 làm mẫu số rồi
 // đọc ra "chuyển đổi 0,10%" là một kết luận sai về sản phẩm dựa trên phép chia sai.
 //
-// ⚠️ Số nội bộ, KHÔNG phải tập con của thanh "Khách ghé" ở trên khi thanh đó
-// đang hiển thị GA4 — vì thế nó đứng thành dải riêng có nhãn nguồn, không nhét
-// chung dòng.
+// ⚠️ Số nội bộ. Thanh "Khách ghé" ở trên nay CŨNG là số nội bộ đã lọc máy
+// (`visitors_human`) chứ không còn là GA4 nữa, nên hai bên cùng một định nghĩa
+// "máy" — cả hai đi qua `bot_anon_ids()`. Vẫn để thành dải riêng vì nó chia
+// nhóm theo CHẤT hành vi, còn thanh trên đếm đầu người.
 function renderTrafficQuality(tq, paid) {
   if (!tq || tq.total == null) return '';
-  const eng = tq.engaged || 0, drive = tq.drive_by || 0, brow = tq.browsed || 0, bot = tq.known_bot || 0;
+  // `bot` gộp CẢ HAI cách nhận: `known_bot` (UA tự khai) + `fleet_bot` (đội máy,
+  // nhận qua hành vi). Bỏ `fleet_bot` ra là dải này nói "12 máy" ngay cạnh badge
+  // phễu nói "−489 máy" — hai con số cãi nhau trong cùng một màn hình.
+  const eng = tq.engaged || 0, drive = tq.drive_by || 0, brow = tq.browsed || 0;
+  const bot = (tq.known_bot || 0) + (tq.fleet_bot || 0);
   const tot = tq.total || 0;
   const pct = (n) => tot > 0 ? Math.round((n / tot) * 100) : 0;
   const seg = (n, color, label) => n <= 0 ? '' :
@@ -4131,13 +5616,13 @@ function renderTrafficQuality(tq, paid) {
   return `<div style="margin-top:.9rem;padding-top:.8rem;border-top:1px solid var(--border-lt)">
     <div class="stat-label" style="margin-bottom:.35rem" title="RPC traffic_quality — cùng nguồn với CMO digest gửi Telegram">Chất lượng lưu lượng (đo nội bộ, ${tot.toLocaleString()} danh tính)</div>
     <div style="display:flex;height:10px;border-radius:5px;overflow:hidden;background:var(--border-lt)">
-      ${seg(eng, 'var(--green)', 'Tương tác thật')}${seg(brow, 'var(--blue)', 'Xem vài trang')}${seg(drive, 'var(--text-lt)', 'Ghé 1 lượt rồi đi')}${seg(bot, 'var(--red)', 'Bot theo User-Agent')}
+      ${seg(eng, 'var(--green)', 'Tương tác thật')}${seg(brow, 'var(--blue)', 'Xem vài trang')}${seg(drive, 'var(--text-lt)', 'Ghé 1 lượt rồi đi')}${seg(bot, 'var(--red)', 'Máy (UA tự khai + đội máy nhận qua hành vi)')}
     </div>
     <div style="margin-top:.45rem;font-size:.7rem;color:var(--text-lt);line-height:1.55">
-      <strong style="color:var(--green)">${eng.toLocaleString()}</strong> tương tác thật
+      <strong style="color:var(--tx-green)">${eng.toLocaleString()}</strong> tương tác thật
       · <strong style="color:var(--text-mid)">${brow.toLocaleString()}</strong> xem vài trang
       · <strong style="color:var(--text-mid)">${drive.toLocaleString()}</strong> ghé 1 lượt rồi đi
-      · <strong style="color:var(--text-mid)">${bot.toLocaleString()}</strong> bot${botNote}
+      · <strong style="color:var(--text-mid)">${bot.toLocaleString()}</strong> máy${(tq.fleet_bot || 0) > 0 ? ` <span style="opacity:.75">(${(tq.known_bot || 0).toLocaleString()} tự khai + ${(tq.fleet_bot || 0).toLocaleString()} đội máy)</span>` : ''}${botNote}
       ${convEng ? `<br>Chuyển đổi trên mẫu số ĐÃ LỌC (paid ÷ tương tác thật): <strong style="color:var(--text)">${convEng}</strong>` : ''}
     </div>
   </div>`;
@@ -4156,9 +5641,9 @@ function renderMktSources(rows) {
         <td><strong>${SRC_LABEL[r.source] || r.source}</strong></td>
         <td style="text-align:right">${(r.signups||0).toLocaleString()}</td>
         <td style="text-align:right">${(r.paid||0).toLocaleString()}</td>
-        <td style="text-align:right;color:var(--blue);font-weight:700">${conv}</td>
+        <td style="text-align:right;color:var(--tx-blue);font-weight:700">${conv}</td>
         <td style="text-align:right;color:var(--gold);font-weight:700">⊙ ${(r.revenue_credits||0).toLocaleString()}</td>
-        <td style="text-align:right;color:var(--green)">${mktVnd(r.revenue_credits)}</td>
+        <td style="text-align:right;color:var(--tx-green)">${mktVnd(r.revenue_credits)}</td>
         <td style="text-align:right;color:var(--navy);font-weight:700" title="Doanh thu / số đăng ký">${mktVnd(ltv)}</td>
       </tr>`;
     }).join('')}</tbody>
@@ -4206,8 +5691,8 @@ function renderMktCampaigns(rows) {
         <td style="color:var(--text-lt)">${r.source}</td>
         <td style="text-align:right">${(r.signups||0).toLocaleString()}</td>
         <td style="text-align:right">${(r.paid||0).toLocaleString()}</td>
-        <td style="text-align:right;color:var(--blue);font-weight:700">${conv}</td>
-        <td style="text-align:right;color:var(--green)">${mktVnd(r.revenue_credits)}</td>
+        <td style="text-align:right;color:var(--tx-blue);font-weight:700">${conv}</td>
+        <td style="text-align:right;color:var(--tx-green)">${mktVnd(r.revenue_credits)}</td>
       </tr>`;
     }).join('')}</tbody>
   </table>`;
@@ -4315,7 +5800,7 @@ function renderMktRevenue(r) {
   const rate = r.vnd_per_credit || 0;
   host.innerHTML = `
     <div style="display:flex;gap:1.5rem;align-items:baseline;margin-bottom:1rem;flex-wrap:wrap">
-      <div><div class="stat-label">Tổng doanh thu</div><div style="font-family:'Noto Serif',serif;font-size:1.9rem;color:var(--green);font-weight:700;line-height:1">${fmtVndFull(total)}</div></div>
+      <div><div class="stat-label">Tổng doanh thu</div><div style="font-family:'Noto Serif',serif;font-size:1.9rem;color:var(--tx-green);font-weight:700;line-height:1">${fmtVndFull(total)}</div></div>
       <div><div class="stat-label">Tiền thật đã đối chiếu</div><div style="font-family:'Noto Serif',serif;font-size:1.2rem;color:var(--navy);font-weight:700">${fmtVndFull(real)}</div></div>
       ${estN ? `<div><div class="stat-label">Ước lượng · ${estN} giao dịch</div><div style="font-family:'Noto Serif',serif;font-size:1.2rem;color:var(--text-lt);font-weight:700">${fmtVndFull(est)}</div></div>` : ''}
     </div>
@@ -4507,7 +5992,7 @@ function fmtVnd(cr) { return (Math.max(0, cr || 0) * VND_PER_CREDIT).toLocaleStr
 // cụ, không thì bảng hiện bằng mức dự phòng rồi mới đúng.
 async function loadPricingPage() {
   await loadPackageRate();
-  loadPricing(); loadPackages(); loadPromo();
+  loadPricing(); loadPackages(); loadPromo(); loadPromoCodes();
 }
 
 async function loadPackageRate() {
@@ -4643,6 +6128,126 @@ async function savePackageRow(id) {
 
 // ── PROMO (khuyến mãi + referral, đọc/ghi app_config) ──
 const PROMO_KEYS = ['credits.signup_bonus_variants', 'credits.signup_bonus_device_cap', 'referral.signup_bonus_referrer', 'referral.signup_reward_cap'];
+
+// ── MÃ KHUYẾN MÃI (promo code) ──────────────────────────────────────────
+// Đây là bảng PHÁT TIỀN. Ba thứ cố ý KHÔNG cho sửa từ đây:
+//   · `used_count` — số đếm thật, sửa tay là mất khả năng đối soát ngân sách.
+//   · trần 1.000 Lượng/mã — chốt trong RPC, ô nhập chỉ chặn sớm cho dễ đọc lỗi.
+//   · xoá mã đã có người đổi — FK chặn; muốn dừng thì TẮT, để lại dấu vết.
+let _promoCodes = [];
+
+async function loadPromoCodes() {
+  const body = document.getElementById('promocode-body');
+  body.innerHTML = '<tr><td colspan="10" class="loading"><span class="spin"></span>Đang tải...</td></tr>';
+  try {
+    const d = await apiGet('admin-promo-list');
+    if (d.error) throw new Error(d.error);
+    _promoCodes = d.codes || [];
+    const note = document.getElementById('promocode-note');
+    if (note) {
+      note.textContent = `${_promoCodes.length} mã · đã phát ${Number(d.grantedCredits || 0).toLocaleString('vi-VN')} Lượng`;
+    }
+    if (!_promoCodes.length) {
+      body.innerHTML = '<tr><td colspan="10" class="empty">Chưa có mã nào. Bấm “+ Mã mới”.</td></tr>';
+      return;
+    }
+    body.innerHTML = _promoCodes.map(r => {
+      const id = encodeURIComponent(r.code);
+      const used = Number(r.used_count || 0);
+      const cap = r.max_uses == null ? null : Number(r.max_uses);
+      // Hết lượt là trạng thái đáng nhìn nhất — mã còn "bật" mà không ai đổi
+      // được nữa thì nhìn qua tưởng đang chạy.
+      const full = cap != null && used >= cap;
+      return `<tr>
+        <td><strong class="mono">${escHtmlLocal(r.code)}</strong></td>
+        <td><input type="number" class="price-input" style="width:68px" id="pc-credits-${id}" value="${Number(r.credits)}" min="0" max="1000"></td>
+        <td style="text-align:center;color:${full ? 'var(--red)' : 'var(--text-lt)'};font-weight:${full ? '700' : '400'}">${used}${full ? ' (hết)' : ''}</td>
+        <td><input type="number" class="price-input" style="width:68px" id="pc-max-${id}" value="${cap == null ? '' : cap}" min="0" placeholder="∞"></td>
+        <td><input type="number" class="price-input" style="width:68px" id="pc-days-${id}" value="${r.new_account_days == null ? '' : Number(r.new_account_days)}" min="1" placeholder="—"></td>
+        <td style="text-align:center"><input type="checkbox" id="pc-oauth-${id}" ${r.require_oauth !== false ? 'checked' : ''}></td>
+        <td><input type="date" class="price-input" style="width:118px" id="pc-exp-${id}" value="${r.expires_at ? String(r.expires_at).slice(0, 10) : ''}"></td>
+        <td style="text-align:center"><input type="checkbox" id="pc-en-${id}" ${r.enabled ? 'checked' : ''}></td>
+        <td><input class="price-input" style="width:120px;text-align:left" id="pc-note-${id}" value="${escHtmlLocal(r.note || '')}"></td>
+        <td style="white-space:nowrap">
+          <button class="btn btn-primary btn-sm" id="pc-btn-${id}" onclick="savePromoCode('${id}')">Lưu</button>
+          ${used === 0 ? `<button class="btn btn-ghost btn-sm" onclick="removePromoCode('${id}')">Xoá</button>` : ''}
+        </td>
+      </tr>`;
+    }).join('');
+  } catch (e) {
+    body.innerHTML = `<tr><td colspan="10" class="empty">Lỗi: ${escHtmlLocal(e.message)}</td></tr>`;
+  }
+}
+
+function promoCodeAlert(type, msg) {
+  const el = document.getElementById('promocode-alert');
+  if (!el) return;
+  el.innerHTML = `<div class="alert-box alert-${type === 'success' ? 'success' : 'error'}">${escHtmlLocal(msg)}</div>`;
+  setTimeout(() => { el.innerHTML = ''; }, 4000);
+}
+
+async function savePromoCode(idEnc) {
+  const code = decodeURIComponent(idEnc);
+  const btn = document.getElementById('pc-btn-' + idEnc);
+  const g = (p) => document.getElementById(`pc-${p}-${idEnc}`);
+  if (btn) { btn.disabled = true; btn.textContent = '...'; }
+  try {
+    const exp = g('exp').value;
+    const d = await apiPost('admin-promo-code', {
+      code,
+      credits: parseInt(g('credits').value, 10),
+      maxUses: g('max').value === '' ? null : parseInt(g('max').value, 10),
+      newAccountDays: g('days').value === '' ? null : parseInt(g('days').value, 10),
+      requireOauth: g('oauth').checked,
+      // Ô date cho NGÀY, quy về cuối ngày đó theo giờ VN — đặt hạn 20/08 mà mã
+      // chết từ 00:00 UTC (07:00 VN) là cắt mất gần trọn ngày cuối.
+      expiresAt: exp ? new Date(exp + 'T23:59:59+07:00').toISOString() : null,
+      enabled: g('en').checked,
+      note: g('note').value,
+    });
+    if (!d.success) throw new Error(d.error || 'Lưu hỏng');
+    promoCodeAlert('success', `Đã lưu mã ${code}`);
+    loadPromoCodes();
+  } catch (e) {
+    promoCodeAlert('error', e.message);
+  }
+  if (btn) { btn.disabled = false; btn.textContent = 'Lưu'; }
+}
+
+async function promoCodeNew() {
+  const code = prompt('Mã mới (chữ HOA, số, gạch ngang/dưới — 3–40 ký tự):', '');
+  if (!code) return;
+  const credits = prompt(`Mã "${code.toUpperCase().trim()}" tặng bao nhiêu Lượng? (0–1000)`, '100');
+  if (credits === null) return;
+  try {
+    const d = await apiPost('admin-promo-code', {
+      code,
+      credits: parseInt(credits, 10),
+      // Mặc định AN TOÀN, không phải mặc định tiện: chỉ tài khoản mới + bắt
+      // buộc OAuth. CỐ Ý không đặt trần lượt — trần chặn đúng phần tăng trưởng
+      // thật; chốt chống lạm dụng là OAuth (xem migration-promo-codes.sql).
+      maxUses: null,
+      newAccountDays: 30,
+      requireOauth: true,
+      enabled: true,
+      note: '',
+    });
+    if (!d.success) throw new Error(d.error || 'Tạo hỏng');
+    promoCodeAlert('success', `Đã tạo ${d.code} — mặc định trần 100 lượt, chỉ tài khoản mới ≤30 ngày. Sửa lại nếu cần.`);
+    loadPromoCodes();
+  } catch (e) { promoCodeAlert('error', e.message); }
+}
+
+async function removePromoCode(idEnc) {
+  const code = decodeURIComponent(idEnc);
+  if (!confirm(`Xoá hẳn mã "${code}"?\n\nMã đã có người đổi thì KHÔNG xoá được — hãy tắt nó thay vì xoá.`)) return;
+  try {
+    const d = await apiPost('admin-promo-code', { code, remove: true });
+    if (!d.success) throw new Error(d.error || 'Xoá hỏng');
+    promoCodeAlert('success', `Đã xoá ${code}`);
+    loadPromoCodes();
+  } catch (e) { promoCodeAlert('error', e.message); }
+}
 
 async function loadPromo() {
   const body = document.getElementById('promo-body');
@@ -4851,7 +6456,7 @@ async function init() {
     document.getElementById('stat-published').textContent = stats.published ?? 0;
     document.getElementById('stat-yt').textContent = stats.yt_live ?? 0;
     const dbStatusOk = document.getElementById('db-status');
-    if (dbStatusOk) dbStatusOk.innerHTML = '<span class="dot-status" style="color:var(--green)"></span>Đã kết nối DB';
+    if (dbStatusOk) dbStatusOk.innerHTML = '<span class="dot-status" style="color:var(--tx-green)"></span>Đã kết nối DB';
 
     allItems = await getItems();
     renderRecentTable(allItems.slice(0, 10));
@@ -4860,7 +6465,7 @@ async function init() {
     renderYTQueue();
   } catch (e) {
     const dbStatusEl = document.getElementById('db-status');
-    if (dbStatusEl) dbStatusEl.innerHTML = '<span class="dot-status" style="color:var(--red)"></span>Lỗi kết nối DB';
+    if (dbStatusEl) dbStatusEl.innerHTML = '<span class="dot-status" style="color:var(--tx-red)"></span>Lỗi kết nối DB';
     console.error(e);
     // Show sample data if DB not ready yet
     renderRecentTable([]);
@@ -5336,7 +6941,7 @@ function updateTTSTab(item) {
 
   } else if (item.tts_status === 'error') {
     progressEl.style.display = 'none';
-    previewArea.innerHTML = `<div style="color:var(--red);font-size:13px;padding:12px">Lỗi TTS: ${escHtml(item.tts_error || 'unknown')}</div>`;
+    previewArea.innerHTML = `<div style="color:var(--tx-red);font-size:13px;padding:12px">Lỗi TTS: ${escHtml(item.tts_error || 'unknown')}</div>`;
   }
 }
 
@@ -5568,7 +7173,7 @@ async function uploadToYT(id) {
     const data = await resp.json();
     if (data.success) {
       toast('Đã upload YouTube! ' + data.url, 'success');
-      if (statusEl) statusEl.innerHTML = 'Live: <a href="' + data.url + '" target="_blank" style="color:var(--blue)">' + data.url + '</a>';
+      if (statusEl) statusEl.innerHTML = 'Live: <a href="' + data.url + '" target="_blank" style="color:var(--tx-blue)">' + data.url + '</a>';
       // Refresh list
       allItems = await getItems();
       renderRecentTable(allItems.slice(0, 10));

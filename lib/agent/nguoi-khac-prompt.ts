@@ -16,7 +16,9 @@
 // ============================================================
 
 import type { NguoiKhacProfile } from '@/lib/engine/nguoi-khac';
+import { ARC_GIONG_NGUOI } from '@/lib/agent/prompts';
 import { vanNamLine, LUAT_VAN_NAM } from '@/lib/engine/cong-so';
+import { matDocBlock } from '@/lib/agent/rail-blocks';
 
 export const NGUOI_KHAC_SYSTEM_PROMPT = `Bạn là một người xem tử vi lâu năm, đang viết một BẢN CẨM NANG ỨNG XỬ cho người đến hỏi.
 
@@ -44,6 +46,7 @@ HIỂU ĐỂ SỐNG CHUNG. Không phải hiểu để điều khiển.
 
 == GIỌNG ==
 Viết cho người Việt đi làm đọc trong 3 phút. Câu ngắn, cụ thể, nói thẳng. Không rào đón "có thể / nhìn chung / tương đối". Không dùng "bạn" để gọi người được xem — gọi là "người này" hoặc theo vai (sếp, đồng nghiệp, con...). Người đọc thì xưng "bạn".
+${ARC_GIONG_NGUOI}
 
 Phần NÊN NÓI / TRÁNH NÓI là phần người ta trả tiền để lấy — mỗi mục phải là một việc LÀM ĐƯỢC NGAY, kèm một ví dụ câu nói thật, không phải lời khuyên chung chung kiểu "hãy tôn trọng họ".`;
 
@@ -226,6 +229,32 @@ function kieuBlock(k: {
   return s ? `--- CHI TIẾT KIỂU NGƯỜI (dùng đúng mấy dòng này, đừng tự nghĩ thêm) ---\n${s}` : '';
 }
 
+/**
+ * Mặt "với bạn" — cung trong lá số NGƯỜI XEM nói về hạng người này.
+ *
+ * 🔑 Đây là thứ rail KHÔNG có đường nào suy lại: nó bắc qua lá số THỨ HAI (của
+ * chính người đang chat), mà rail chỉ nạp được lá số đang xem. Trang thì hiện
+ * hẳn khối này. Không gửi ⇒ hỏi *"tôi với người này hợp nhau chỗ nào"* là model
+ * luận chay trên đúng câu hỏi tool sinh ra để trả lời.
+ */
+function voiBanBlock(v: NguoiKhacProfile['voiBan']): string {
+  if (!v) return '';
+  let s = `--- ĐỐI CHIẾU VỚI LÁ SỐ NGƯỜI ĐANG CHAT (họ có đưa lá số của mình) ---\n`;
+  s += `  Cung ${v.cung} trong lá số NGƯỜI ĐANG CHAT nói về hạng người này`;
+  s += v.muon ? ' (vô chính diệu — mượn xung chiếu)' : '';
+  s += v.sao && v.sao.length ? `: ${v.sao.join(', ')}` : '';
+  s += '\n';
+  if (v.kieuTen) s += `  Cung đó mô tả một người kiểu: ${v.kieuTen}\n`;
+  if (v.khop != null)
+    s += v.khop
+      ? '  → TRÙNG kiểu của người trong lá số: thứ họ mong gặp đúng là thứ người kia vốn có.\n'
+      : '  → KHÁC kiểu của người trong lá số: chỗ lệch giữa cái họ mong và người thật.\n';
+  s += v.cungTinh
+    ? '  Hai kiểu CÙNG tính âm/dương → phản ứng giống nhau nên dễ va nhau.\n'
+    : '  Hai kiểu KHÁC tính âm/dương → dễ bù cho nhau hơn là va nhau.\n';
+  return s;
+}
+
 export function nguoiKhacRailWrapper(p: NguoiKhacProfile, tenRaw: string): string {
   // Tên do người dùng gõ → chỉ đi vào system sau khi bóc hết ký tự có thể dùng
   // để bẻ prompt (xuống dòng, ngoặc nhọn, backtick) và cắt ngắn. Cùng lối phòng
@@ -248,7 +277,7 @@ Lá số ở trên KHÔNG phải của người đang chat. Đó là lá số c�
 - CẤM luận SỨC KHOẺ, BỆNH TẬT, TIỀN RIÊNG, HÔN NHÂN của người này${p.quanHe.id === 'ban-doi' ? ' (riêng chuyện hai người với nhau thì được, ở mức cách cư xử)' : ''}. Người đó không có mặt để đồng ý.
 - CẤM phán giá trị ("người này tệ/khó ưa"). Tính cách chỉ hợp hoặc không hợp bối cảnh.
 - Kiểu người theo khung này: ${p.kieu.ten} — ${p.kieu.motCau}${p.phan.lai && p.kieuPhu ? ` (SÁT RANH GIỚI với kiểu ${p.kieuPhu.ten}, phải nói rõ là pha, đừng ép nhãn)` : ''}.
-${kieuBlock(p.kieu)}
+${kieuBlock(p.kieu)}${matDocBlock(p.matDoc, 'CÁC MẶT TOOL NÀY ĐỌC (đúng mấy cung này, đúng vai này)')}${voiBanBlock(p.voiBan)}
 - CẤM gọi đây là trắc nghiệm/khoa học/đã kiểm định, CẤM đối chiếu DISC/MBTI.
 === HẾT KHỐI NGƯỜI KHÁC ===`;
 }

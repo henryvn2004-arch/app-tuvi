@@ -176,7 +176,15 @@ async function runOnce(handler: () => Promise<Response>): Promise<Attempt> {
         if (j.ok === false || j.error) {
           status = 'error';
           note = String(j.error ?? 'error');
-        } else if (j.skipped) {
+        } else if (Array.isArray(j.skipped) ? j.skipped.length > 0 : j.skipped) {
+          // `j.skipped` là hợp đồng CHUNG cho mọi route cron: string/`true` =
+          // "cả lượt này không làm gì" (đúng convention `{skipped:'no FIREBASE_...'}`
+          // ở daily-push, `{skipped:true}` ở keyword-suggest). Một route TRẢ VỀ
+          // MẢNG rỗng `[]` (vẫn có mặt trong body, khác nghĩa hẳn — ví dụ
+          // "kênh chưa có bộ đọc" ở content-metrics) thì KHÔNG được đọc thành
+          // skip: `[]` truthy trong JS đã làm route đó luôn báo 'skip' dù chạy
+          // đúng và ghi được dữ liệu (đo trên prod: 9/9 lượt 'skip', note rỗng,
+          // trong khi content_metrics vẫn có đủ 50 dòng youtube mỗi lần).
           status = 'skip';
           note = String(j.skipped);
         } else {

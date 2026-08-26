@@ -10,8 +10,13 @@ test.describe('Profile (profile.html) — logged in', () => {
 
   test.beforeEach(async ({ page }) => {
     await page.goto('/profile.html');
-    await page.waitForLoadState('networkidle');
-    // Chờ auth JS chạy xong — dashboard hoặc notLoggedIn hiện
+    // ⚠️ CỐ Ý KHÔNG `waitForLoadState('networkidle')` ở ĐÂY. Trang này là trang
+    // DUY NHẤT chạy đã-đăng-nhập: `auth.js` làm mới token, `loadRailStatus` hỏi
+    // ví, cộng beacon đo lường — tức nó gần như không bao giờ về "im mạng" đủ
+    // 500ms, và lượt chờ đó treo tới hết 30 giây rồi giết cả `beforeEach`
+    // (bắt được ở lượt CI 18/08, hỏng cả ở lần thử lại, trong khi diff của PR
+    // không đụng một byte nào của profile).
+    // Dòng dưới mới là phép chờ ĐÚNG: chờ chính thứ bài kiểm cần.
     await page.waitForSelector('#dashboard, #notLoggedIn', { timeout: 15000 }).catch(() => {});
   });
 

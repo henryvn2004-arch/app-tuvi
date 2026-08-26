@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"></noscript>
-<link rel="stylesheet" href="/shell.css?v=18">
+<link rel="stylesheet" href="/shell.css?v=29">
 <style>
 .form-card{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);max-width:860px}
 .form-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:3px}
@@ -87,6 +87,7 @@
         <div class="form-card">
           <h2>Xác Định Giờ Sinh</h2>
           <p class="sub">Chỉ cần <b>ngày tháng năm sinh</b> — giờ chính là thứ đi tìm. Máy lập cả <b>12 lá số khả nghi</b> rồi thu hẹp dần bằng vài câu hỏi về sức khoẻ, tính nết và các chặng đã sống qua. <b>Xem cho con nhỏ cũng được</b>: bộ câu hỏi tự đổi theo tuổi, chỉ hỏi những gì cha mẹ quan sát được.</p>
+          <p class="price-note" data-tvp-price-label="gio-sinh">…</p>
           <div class="frow">
             <div class="fg"><label for="gs-ngay">Ngày</label><select id="gs-ngay"></select></div>
             <div class="fg"><label for="gs-thang">Tháng</label><select id="gs-thang"></select></div>
@@ -141,6 +142,25 @@
               <p class="note" id="loiKhuyen" style="margin-top:14px"></p>
             </div>
           </div>
+
+          <!-- Cả tool này tồn tại để sinh ra ĐÚNG MỘT dữ kiện: giờ sinh. Thiếu
+               khối này thì người dùng trả Lượng, đọc ra "giờ Sửu", rồi phải tự
+               nhớ và gõ lại tay ở mọi tool khác — tức dữ kiện vừa mua bị vứt đi
+               ngay tại chỗ. -->
+          <div class="sec" id="chotBlock">
+            <div class="sec-h">Chốt giờ và dùng tiếp</div>
+            <div class="sec-b">
+              <p class="note" style="margin-bottom:11px">Chọn giờ anh/chị muốn dùng. Máy ghi vào <b>Sổ lá số</b> của tài khoản, nên mọi công cụ khác điền sẵn — khỏi gõ lại và khỏi nhớ.</p>
+              <div class="frow" id="chotRow">
+                <div class="fg"><label for="gs-chot">Giờ muốn dùng</label><select id="gs-chot"></select></div>
+                <button class="btn" id="btnLuu" onclick="luuVaoSo()">Lưu vào sổ lá số</button>
+                <button class="btn-go" id="btnLuan" onclick="sangLuanGiai()">Luận giải lá số này →</button>
+              </div>
+              <p class="note" id="chotMsg" style="margin-top:2px"></p>
+              <p class="note" id="chotAm" style="margin-top:2px;display:none">Anh/chị nhập ngày sinh theo <b>âm lịch</b>. Các công cụ khác nhận <b>dương lịch</b>, và hệ thống chưa có đường đổi ngược âm → dương, nên chưa bàn giao tự động được. Giờ vừa chốt ở trên vẫn dùng được — nhập tay khi mở công cụ khác.</p>
+            </div>
+          </div>
+
           <div class="sec">
             <div class="sec-h">Vì sao không phải một con số chắc nịch</div>
             <div class="sec-b">
@@ -168,16 +188,16 @@
 </div>
 
 <script>window.SHELL_ACTIVE='gio-sinh';window.SHELL_HISTORY=true;
-window.SHELL_INTRO={key:'gio-sinh',title:'Xác Định Giờ Sinh',desc:'Không nhớ giờ sinh thì gần như không dùng được tool tử vi nào. Ở đây máy lập <b>cả 12 lá số khả nghi</b> cho ngày sinh của anh/chị, rồi hỏi vài câu về <b>sức khoẻ</b> và <b>các giai đoạn đã sống qua</b> để thu hẹp lại. Kết quả là <b>2–3 giờ khả năng cao nhất kèm bằng chứng</b> — không phải một con số chắc nịch.'};</script>
+window.SHELL_INTRO={key:'gio-sinh',title:'Xác Định Giờ Sinh',desc:'Lập 12 lá số theo 12 giờ, thu hẹp dần về đúng giờ sinh. Bạn chỉ nhớ sinh buổi sáng, không ai trong nhà nhớ chính xác. Dùng khi không nhớ giờ sinh mà mọi công cụ khác đều cần nó.'};</script>
 
-<script src="/tuvi-paywall.js?v=18"></script>
+<script src="/tuvi-paywall.js?v=21"></script>
 <!-- ⚠️ BẮT BUỘC. `nav.js` ở chế độ `data-icons-only` RETURN SỚM nên KHÔNG chèn
      `auth.js` — trang shell phải tự khai. Thiếu nó thì `window.Auth` không tồn
      tại, paywall coi người ĐANG ĐĂNG NHẬP là khách và bắt đăng nhập lại.
      `check:shellboot` canh đúng chỗ này. -->
 <script src="/auth.js?v=2"></script>
-<script src="/nav.js?v=22" data-icons-only></script>
-<script src="/shell.js?v=68"></script>
+<script src="/nav.js?v=23" data-icons-only></script>
+<script src="/shell.js?v=82"></script>
 <script>
 const TOOL_ID='gio-sinh';
 let _birth=null,_answers=[],_pub=null,_lastResult=null,_slug='';
@@ -212,7 +232,7 @@ function _reset(){
   document.getElementById('freeBlock').style.display='none';
   document.getElementById('surveyBlock').style.display='none';
   document.getElementById('resultBlock').style.display='none';
-  _answers=[];_lastResult=null;
+  _answers=[];_lastResult=null;_lastPreview=null;
 }
 
 // ── Bước 1: TÍNH THỬ (miễn phí, không đăng nhập) ────────────
@@ -240,29 +260,55 @@ async function start(){
   finally{btn.disabled=false;btn.textContent='Xem 12 giờ khả nghi';}
 }
 
+let _lastPreview=null;
+
 function renderFree(j){
+  _lastPreview=j;
   document.getElementById('freeLine').textContent =
     _birth.day+'/'+_birth.month+'/'+_birth.year+(_birth.isLunar?' (âm lịch)':' (dương lịch)')+' · '+(_birth.gender==='nam'?'Nam':'Nữ');
-  document.getElementById('grid12').innerHTML = j.ungVien.map(u=>
-    '<div class="cand"><b>Giờ '+esc(u.chi)+'</b> <span class="k">'+esc(u.khung)+'</span>'+
-    '<div class="s"><span class="k">Mệnh:</span> '+esc(u.menhStars.join(' + ')||'vô chính diệu')+
-    '<br><span class="k">Tật Ách:</span> '+esc(u.tatStars.join(' + ')||'vô chính diệu')+'</div></div>').join('');
   document.getElementById('surveyPitch').innerHTML =
     'Với ngày sinh này máy dựng được <b>'+esc(j.soCauHoi)+' câu hỏi</b> riêng — đáp án là các nhóm giờ có dấu hiệu khác nhau của <b>chính ngày này</b>, nên mỗi người một bộ câu khác nhau. Trả lời xong sẽ ra <b>2–3 giờ khả năng cao nhất kèm bằng chứng từng câu</b>.';
   document.getElementById('freeBlock').style.display='';
   buildLock();
 }
 
+function _renderGrid(j){
+  document.getElementById('grid12').innerHTML = j.ungVien.map(u=>
+    '<div class="cand"><b>Giờ '+esc(u.chi)+'</b> <span class="k">'+esc(u.khung)+'</span>'+
+    '<div class="s"><span class="k">Mệnh:</span> '+esc(u.menhStars.join(' + ')||'vô chính diệu')+
+    '<br><span class="k">Tật Ách:</span> '+esc(u.tatStars.join(' + ')||'vô chính diệu')+'</div></div>').join('');
+  document.getElementById('grid12').style.display='';
+}
+
+// Đã đăng nhập → KHÔNG dựng tường xem trước nữa MÀ CŨNG không còn giới hạn
+// "phần đầu": thấy đủ 12 lá số khả nghi, rồi một nút bấm gate (trừ Lượng) mở
+// thẳng khảo sát — đúng luồng #512 đã áp cho 6 tool kia.
+//
+// Chưa đăng nhập → CHỈ chừa phần đầu (câu giới thiệu). Lưới 12 lá số khả nghi
+// — dù bản thân nó vẫn tính MIỄN PHÍ — cũng gộp vào tấm khoá cùng phần khảo
+// sát: tấm khoá là CTA đăng ký, không phải chỗ xin thêm Lượng của người đã có
+// ví, nên phải che HẾT phần "có cấu trúc" chứ không chỉ che phần trả tiền.
 function buildLock(){
   const host=document.getElementById('lockHost');
   if(!window.TuviPaywall||!TuviPaywall.lockPreview){
     host.innerHTML='<p class="note">Chưa đọc được bảng giá — tải lại trang giúp tôi.</p>';return;
   }
+  if(_daDangNhap()){
+    if(_lastPreview) _renderGrid(_lastPreview);
+    host.innerHTML='<button class="btn-go" id="btnKhaoSat">Bắt đầu khảo sát thu hẹp — <span data-tvp-price="'+TOOL_ID+'">…</span> Lượng →</button>';
+    TuviPaywall.fillPriceSlots(host);
+    document.getElementById('btnKhaoSat').addEventListener('click',function(){
+      TuviPaywall.requireCredits(_slug,function(){return runSurvey();});
+    });
+    return;
+  }
+  document.getElementById('grid12').innerHTML='';
+  document.getElementById('grid12').style.display='none';
   TuviPaywall.lockPreview({
     host:host,
-    title:'⊙ Còn phần khảo sát thu hẹp chưa mở',
-    items:['Bộ câu hỏi dựng riêng theo ngày sinh','Xếp hạng 12 giờ theo khả năng','Bằng chứng khớp/lệch từng câu','Mức tin cậy và lời khuyên chốt giờ'],
-    cta:'Mở phần khảo sát',
+    title:'⊙ Hồ sơ giờ sinh chưa mở',
+    items:['Đủ 12 lá số khả nghi (Mệnh + Tật Ách từng giờ)','Bộ câu hỏi dựng riêng theo ngày sinh','Xếp hạng 12 giờ theo khả năng','Bằng chứng khớp/lệch từng câu','Mức tin cậy và lời khuyên chốt giờ'],
+    cta:'Đăng ký để mở đủ 12 lá số + khảo sát',
     slug:function(){return _slug;},
     onUnlock:function(){return runSurvey();},
   });
@@ -350,12 +396,73 @@ function renderResult(j){
       ' · Tật Ách: '+esc(r.tatStars.join(' + ')||'vô chính diệu')+'</div>'+ev.join('')+'</div>';
   }).join('');
   document.getElementById('loiKhuyen').textContent=k.loiKhuyen;
+  renderChot(k);
 
   Shell.setShareable&&Shell.setShareable({
     toolId:TOOL_ID,title:'Giờ sinh khả năng cao nhất',birth:_birth,
     blocks:[{kind:'text',title:'Kết quả',text:k.shortlist.map((r,i)=>(i+1)+'. Giờ '+r.chi+' ('+r.khung+') — '+r.pct+'%').join('\n')},
             {kind:'text',title:'Lời khuyên',text:k.loiKhuyen}],
   });
+}
+
+// ── Chốt giờ → sổ lá số → luận giải ─────────────────────────
+// Xếp theo ĐÚNG thứ tự bảng xếp hạng, giờ đầu bảng chọn sẵn — nhưng vẫn cho
+// đổi: tool này xếp hạng khả năng chứ không chứng minh giờ nào đúng (xem mục
+// "Vì sao không phải một con số chắc nịch"), nên khoá cứng vào giờ #1 là nói
+// chắc hơn thứ máy biết. Ai đã tự soát bằng chứng và chọn giờ #2 thì phải theo họ.
+function renderChot(k){
+  const sel=document.getElementById('gs-chot');
+  sel.innerHTML=k.shortlist.map((r,i)=>
+    '<option value="'+r.gioIdx+'"'+(i===0?' selected':'')+'>Giờ '+esc(r.chi)+' · '+esc(r.khung)+' · '+esc(String(r.pct))+'%</option>').join('');
+  document.getElementById('chotMsg').textContent='';
+  // Âm lịch: không có đường bàn giao. KHÔNG ghi bừa ngày âm vào sổ như thể nó
+  // là ngày dương — tool đích sẽ lập một lá số KHÁC mà không có gì báo.
+  const am=!!(_birth&&_birth.isLunar);
+  document.getElementById('chotRow').style.display=am?'none':'';
+  document.getElementById('chotAm').style.display=am?'':'none';
+}
+
+// Birth theo shape TuviForm (dương lịch) để bàn giao. `gioHour = gioIdx*2` là
+// giờ giữa khung của địa chi đó (Tý=0h, Sửu=2h…) — khớp hourMinToGioIdx.
+function _birthChot(){
+  if(!_birth||_birth.isLunar) return null;
+  const idx=parseInt(document.getElementById('gs-chot').value,10);
+  if(!(idx>=0&&idx<=11)) return null;
+  return {hoten:'',ngay:_birth.day,thang:_birth.month,nam:_birth.year,
+    gioIdx:idx,gioHour:(idx*2)%24,gioPhut:0,
+    gioitinh:_birth.gender==='nu'?'nu':'nam',namXem:new Date().getFullYear()};
+}
+function _daDangNhap(){
+  try{ return !!(window.Auth&&Auth.getSession&&Auth.getSession().access_token); }catch(e){ return false; }
+}
+
+async function luuVaoSo(){
+  const b=_birthChot(); if(!b) return;
+  const msg=document.getElementById('chotMsg');
+  // localStorage là đường ghi ĐỒNG BỘ và luôn chạy (kể cả khách chưa đăng nhập).
+  Shell.rememberBirth(b);
+  if(!_daDangNhap()){
+    msg.textContent='Đã nhớ trên máy này — mở công cụ khác là có sẵn. Đăng nhập thì lá số vào sổ của tài khoản, đổi máy vẫn còn.';
+    return;
+  }
+  msg.textContent='Đang lưu…';
+  // Lượt ghi thứ hai, CHỈ để biết ghi được hay không: `rememberBirth` ghi sổ kiểu
+  // bắn-và-quên nên không nói được kết quả, mà báo "đã lưu" trong khi hỏng đúng
+  // là kiểu nói dối im lặng cần tránh. Cùng khoá (chart_key) + upsert
+  // merge-duplicates ⇒ hai lượt vẫn ra ĐÚNG MỘT dòng.
+  let it=null;
+  try{ it=window.UserCharts?await UserCharts.save(b,''):null; }catch(e){ it=null; }
+  msg.textContent = it
+    ? 'Đã lưu vào sổ lá số. Các công cụ khác sẽ điền sẵn giờ này.'
+    : 'Chưa ghi được vào sổ (mạng hoặc phiên đăng nhập). Giờ vừa chốt vẫn được nhớ trên máy này.';
+}
+
+function sangLuanGiai(){
+  const b=_birthChot(); if(!b) return;
+  Shell.rememberBirth(b);
+  // ⛔ KHÔNG gắn `?auto=1`: trang Luận Giải thấy cờ đó là TỰ CHẠY (`app-luan-giai`
+  // gọi doLuan()), mà đó là lượt TRỪ LƯỢNG. Điền sẵn form rồi để người ta tự bấm.
+  location.href='/app/luan-giai';
 }
 
 // ── Vòng hiệu chuẩn: thu ground truth ───────────────────────

@@ -1,0 +1,313 @@
+// clip-ingest v4 — CỬA HẸP cho GitHub Actions ghi vào DB. Hai việc:
+//   · nộp một clip 9:16 → Storage + `media_assets` + (sau một CÁI VAN) `media_posts`
+//   · `?job=1` → ghi nhịp tim lượt dựng vào `cron_runs` (panel Cron & Jobs)
+//
+// v3 → v4: thêm nhánh `?job=1`. Lượt dựng chạy trên Actions nên không đi qua
+// `withCronLog` ⇒ trước đây nó VẮNG MẶT hoàn toàn trên trang giám sát, muốn
+// xem phải mở tab Actions. Xem khối chú thích tại chỗ.
+//
+// v2 → v3: `source_type` do người nộp khai (mặc định giữ `tool-demo`) — bản
+// trước đóng cứng nên clip insight vào sổ dưới nhãn của loại khác.
+//
+// v1 → v2: nhận `width`/`height` do người nộp khai (clip nay giao ra 720×1280,
+// viết cứng 1080×1920 là sổ nói sai về chính file trong kho) và thêm bước xếp
+// hàng `media_posts` sau cờ `social.clip_autopost` — xem khối cuối file.
+//
+// 🔑 VÌ SAO LÀ MỘT HÀM EDGE chứ không để Actions tự ghi thẳng vào Supabase:
+// ghi thẳng thì runner phải cầm `SUPABASE_SERVICE_KEY` — khoá mở toang toàn bộ
+// DB, trong một môi trường CI mà bất kỳ workflow nào cũng đọc được biến môi
+// trường. Khoá đó đã phải XOAY MỘT LẦN vì lộ. Ở đây runner chỉ cầm
+// `CLIP_INGEST_SECRET`: làm được đúng một việc là nộp clip, xoay lại là một
+// dòng lệnh, và nếu lộ thì thiệt hại tối đa là vài clip rác trong kho.
+//
+// ⚠️ XẾP HÀNG ĐĂNG NẰM SAU MỘT CÁI VAN, mặc định ĐÓNG (`social.clip_autopost`
+// = false). Biến một clip thành bài đăng là quyết định NỘI DUNG — nên van do
+// người mở, không phải mặc định bật. Van đóng thì hàm này chỉ CẤT + GHI SỔ
+// (`media_assets`) đúng như bản v1.
+//
+// 🪤 Và kênh phải lấy từ `social.channels`, đừng khai một danh sách ở đây:
+// chèn `media_posts` với `channel` chưa có adapter thì `publishQueue` quét
+// trúng rồi đánh dấu `error` cho cả lô (nó lọc theo TRẠNG THÁI, không lọc theo
+// kênh) — tức tự tay làm hỏng hàng đợi của chính mình.
+//
+// 🧷 Nguồn nằm TRONG repo, không chỉ trên dashboard Supabase. Bài học đã trả
+// giá hai lần (`send-daily-push`, `youtube-upload`): bản đang chạy khác bản
+// trong repo thì lúc đi tìm nguyên nhân không ai đọc lại được.
+//
+// Deploy: Supabase → Edge Functions → clip-ingest (verify_jwt: FALSE — hàm tự
+// xác thực bằng `x-clip-secret`; bật verify_jwt là buộc runner cầm thêm anon
+// key mà chẳng thêm được lớp bảo vệ nào).
+//
+// Biến môi trường: SUPABASE_URL · SUPABASE_SERVICE_ROLE_KEY · CLIP_INGEST_SECRET
+
+const SB_URL = Deno.env.get('SUPABASE_URL') ?? '';
+const SB_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '';
+const SECRET = Deno.env.get('CLIP_INGEST_SECRET') ?? '';
+const BUCKET = 'clips';
+
+const H = {
+  apikey: SB_KEY,
+  Authorization: `Bearer ${SB_KEY}`,
+};
+
+const CORS = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Headers': 'content-type, x-clip-secret',
+  'Access-Control-Allow-Methods': 'POST, OPTIONS',
+};
+
+function json(body: unknown, status = 200) {
+  return new Response(JSON.stringify(body), {
+    status,
+    headers: { ...CORS, 'Content-Type': 'application/json' },
+  });
+}
+
+/** Chỉ nhận tên an toàn: đường dẫn Storage ghép thẳng từ đây. */
+const SLUG = /^[a-z0-9][a-z0-9-]{0,63}$/;
+
+Deno.serve(async (req) => {
+  if (req.method === 'OPTIONS') return new Response('ok', { headers: CORS });
+  if (req.method !== 'POST') return json({ error: 'method not allowed' }, 405);
+
+  // 🪤 ĐO ĐƯỢC, GHI ĐỂ KHỎI ĐI CHẨN LẠI: từ chối một request 100KB trả lời
+  // trong 0,7s, nhưng CÙNG nhánh từ chối đó với body 4MB thì **treo 150 giây
+  // rồi 504** — hàm trả lời xong mà cổng không đóng vòng lại được. Đã thử huỷ
+  // luồng body trước khi trả lời (`req.body.cancel()`): KHÔNG ăn thua, nên đây
+  // là hành vi của cổng chứ không sửa được từ trong hàm.
+  //
+  // ⇒ Chốt nằm ở PHÍA GỬI: `scripts/publish-clips.mjs` hỏi `?ping=1` (body
+  // rỗng) để soát khoá TRƯỚC, rồi mới nộp file. Sai khoá thì hỏng trong một
+  // giây kèm lý do, thay vì treo 150 giây rồi báo một con số 504 vô nghĩa.
+  if (!SECRET) return json({ error: 'missing_env: CLIP_INGEST_SECRET' }, 500);
+  if (req.headers.get('x-clip-secret') !== SECRET) return json({ error: 'unauthorized' }, 401);
+  if (!SB_URL || !SB_KEY) return json({ error: 'missing_env: SUPABASE_URL/SERVICE_ROLE_KEY' }, 500);
+
+  // Soát khoá mà không kèm file — xem chú thích ngay trên.
+  const qs = new URL(req.url).searchParams;
+  if (qs.get('ping')) return json({ ok: true });
+
+  /*
+   * ── NHỊP TIM CỦA LƯỢT DỰNG (`?job=1`) ─────────────────────────────────────
+   *
+   * 🔑 VÌ SAO NẰM TRONG HÀM NÀY chứ không phải một hàm riêng: đây CÙNG MỘT bài
+   * toán với việc nộp clip — runner cần ghi vào DB mà KHÔNG được cầm
+   * `SUPABASE_SERVICE_KEY`. Dựng hàm thứ hai là thêm một secret nữa phải phát,
+   * xoay và nhớ, để giải đúng bài toán đã giải. Hàm này vì thế là "cửa hẹp cho
+   * runner ghi vào DB", không chỉ là "cửa nộp clip".
+   *
+   * 🔴 VÀ VÌ SAO CẦN: lượt dựng clip chạy trên GitHub Actions nên KHÔNG đi qua
+   * `withCronLog` ⇒ không có dòng nào trong `cron_runs` ⇒ panel Cron & Jobs
+   * không bao giờ thấy nó. Đúng lớp lỗi đã đẻ ra cả track S4: job chạy thật mà
+   * vắng mặt trên trang giám sát thì chết bao lâu cũng không ai biết.
+   *
+   * HAI BƯỚC, cố ý: mở lượt (`running`) rồi chốt lượt. Lượt dựng chạy tới 150
+   * phút và bị giết giữa chừng là ca RẤT dễ xảy ra (hết ngân sách, runner bị
+   * thu hồi) — lúc đó bước chốt không bao giờ tới, dòng `running` nằm treo, và
+   * bộ dò `stuck` bắt được trong 90 phút. Ghi một dòng duy nhất lúc xong thì ca
+   * đó KHÔNG để lại dấu vết nào, và job TUẦN phải đợi cả tuần mới bị kêu.
+   */
+  if (qs.get('job')) {
+    let b: Record<string, unknown> = {};
+    try {
+      b = await req.json();
+    } catch {
+      return json({ error: 'cần JSON' }, 400);
+    }
+    const runId = Number(b.runId) || 0;
+    const jobKey = String(b.jobKey ?? '');
+    // `jobKey` chỉ bắt buộc khi MỞ lượt. Lúc chốt thì `runId` đã trỏ đúng dòng,
+    // đòi thêm jobKey là bắt phía gọi mang theo một giá trị không dùng tới —
+    // và chỗ nào phải mang một giá trị vô nghĩa thì chỗ đó sẽ bịa ra một giá trị.
+    if (!runId && !SLUG.test(jobKey)) return json({ error: 'jobKey không hợp lệ' }, 400);
+
+    const status = String(b.status ?? 'running');
+    if (!['running', 'ok', 'error', 'skip'].includes(status)) {
+      return json({ error: 'status không hợp lệ' }, 400);
+    }
+    // Cắt ghi chú: cột `note` đi thẳng lên panel, một bãi log dán vào đó làm
+    // bảng vỡ bố cục mà chẳng ai đọc hết.
+    const note = b.note == null ? null : String(b.note).slice(0, 500);
+
+    if (!runId) {
+      const ins = await fetch(`${SB_URL}/rest/v1/cron_runs`, {
+        method: 'POST',
+        headers: { ...H, 'Content-Type': 'application/json', Prefer: 'return=representation' },
+        body: JSON.stringify([{ job_key: jobKey, source: 'actions', status, note }]),
+      });
+      if (!ins.ok) return json({ error: `cron_runs: ${await ins.text()}` }, 502);
+      const rows = (await ins.json()) as Array<{ id: number; started_at: string }>;
+      return json({ ok: true, runId: rows[0]?.id ?? null, startedAt: rows[0]?.started_at ?? null });
+    }
+
+    // Chốt lượt. `duration_ms` tính từ `started_at` ĐÃ LƯU chứ không nhận từ
+    // runner: đồng hồ của runner là thứ mình không kiểm được, mà cột này đi
+    // thẳng vào phép đo "job chạy bao lâu".
+    const cur = await fetch(
+      `${SB_URL}/rest/v1/cron_runs?id=eq.${runId}&select=started_at`,
+      { headers: H }
+    );
+    const curRows = cur.ok ? ((await cur.json()) as Array<{ started_at: string }>) : [];
+    const t0 = curRows[0]?.started_at ? Date.parse(curRows[0].started_at) : 0;
+
+    const patch = await fetch(`${SB_URL}/rest/v1/cron_runs?id=eq.${runId}`, {
+      method: 'PATCH',
+      headers: { ...H, 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        status,
+        note,
+        finished_at: new Date().toISOString(),
+        ...(t0 ? { duration_ms: Date.now() - t0 } : {}),
+      }),
+    });
+    if (!patch.ok) return json({ error: `cron_runs: ${await patch.text()}` }, 502);
+    return json({ ok: true, runId });
+  }
+
+  let form: FormData;
+  try {
+    form = await req.formData();
+  } catch {
+    return json({ error: 'cần multipart/form-data' }, 400);
+  }
+
+  const toolId = String(form.get('tool_id') ?? '');
+  const file = form.get('file');
+  if (!SLUG.test(toolId)) return json({ error: 'tool_id không hợp lệ' }, 400);
+  if (!(file instanceof File)) return json({ error: 'thiếu file' }, 400);
+
+  let meta: Record<string, unknown> = {};
+  try {
+    meta = JSON.parse(String(form.get('meta') ?? '{}'));
+  } catch {
+    return json({ error: 'meta không phải JSON' }, 400);
+  }
+
+  const variant = String(form.get('variant') ?? 'clip-9x16');
+  if (!SLUG.test(variant)) return json({ error: 'variant không hợp lệ' }, 400);
+
+  // Tên file mang DẤU THỜI GIAN, không ghi đè bản cũ: đổi kịch bản rồi dựng lại
+  // thì hai bản cùng tồn tại và so được với nhau. Kho video vốn rẻ.
+  const stamp = new Date().toISOString().replace(/[-:T]/g, '').slice(0, 14);
+  const path = `${toolId}/${stamp}.mp4`;
+
+  const up = await fetch(`${SB_URL}/storage/v1/object/${BUCKET}/${path}`, {
+    method: 'POST',
+    headers: { ...H, 'Content-Type': 'video/mp4', 'x-upsert': 'true' },
+    body: await file.arrayBuffer(),
+  });
+  if (!up.ok) return json({ error: `storage: ${await up.text()}` }, 502);
+
+  const url = `${SB_URL}/storage/v1/object/public/${BUCKET}/${path}`;
+
+  // `media_assets` có UNIQUE (source_type, source_id, variant) ⇒ nộp lại cùng
+  // một công cụ thì CẬP NHẬT dòng cũ, trỏ sang file mới. Sổ luôn chỉ vào bản
+  // mới nhất, còn file cũ vẫn nằm trong kho để đối chiếu.
+  // Khổ do NGƯỜI NỘP khai — clip nay giao ra 720×1280 (xem `--scale` trong
+  // `gen-insight.mjs`), viết cứng 1080×1920 là sổ nói sai về chính file trong kho.
+  const width = Number(form.get('width')) || 1080;
+  const height = Number(form.get('height')) || 1920;
+
+  // 🔑 LOẠI NGUỒN do NGƯỜI NỘP khai, không đóng cứng. Bản trước gán
+  // `'tool-demo'` cho MỌI clip nên clip insight vào sổ dưới nhãn của loại
+  // khác. Chưa va vào gì (ảnh dùng `khao_luan`), nhưng hai loại này qua cổng 2
+  // rất khác nhau — insight 4/6 (67%) · demo công cụ 3/18 (17%) — nên sổ không
+  // phân biệt được thì mọi phép đo theo loại đều sai.
+  // Mặc định giữ `tool-demo` để clip demo công cụ (chưa khai trường này) không
+  // đổi hành vi; và `SLUG` gác vì giá trị này vào UNIQUE key.
+  const srcType = String(form.get('source_type') ?? 'tool-demo');
+  if (!SLUG.test(srcType)) return json({ error: 'source_type không hợp lệ' }, 400);
+
+  const row = {
+    source_type: srcType,
+    source_id: toolId,
+    variant,
+    url,
+    width,
+    height,
+    meta: { ...meta, path, bytes: file.size, ingested_at: new Date().toISOString() },
+  };
+
+  const ins = await fetch(
+    `${SB_URL}/rest/v1/media_assets?on_conflict=source_type,source_id,variant`,
+    {
+      method: 'POST',
+      headers: {
+        ...H,
+        'Content-Type': 'application/json',
+        Prefer: 'resolution=merge-duplicates,return=representation',
+      },
+      body: JSON.stringify(row),
+    }
+  );
+  if (!ins.ok) return json({ error: `media_assets: ${await ins.text()}` }, 502);
+
+  const saved = (await ins.json())[0] ?? {};
+
+  /*
+   * ── XẾP HÀNG ĐĂNG — SAU MỘT CÁI VAN, mặc định ĐÓNG ───────────────────────
+   *
+   * 🔴 VÌ SAO PHẢI CÓ VAN RIÊNG chứ không dùng luôn `social.autopost_enabled`:
+   * cờ đó đang BẬT trên prod cho đường ẢNH (bài trích từ `khao_luan`, có
+   * brand-check gác trước khi vào kho). Clip video KHÔNG đi qua brand-check —
+   * nó qua cổng 1 + hội đồng cổng 2. Hai cổng đó gác CHỮ và nhịp, **không ai
+   * gác phần HÌNH**: chưa phép đo nào nói được đoạn phim nền có ăn nhập với lời
+   * đọc không. Dùng chung cờ nghĩa là một clip CHƯA AI NHÌN tự lên trang công
+   * khai ngay lượt cron kế tiếp.
+   * ⇒ `social.clip_autopost` mặc định **false**: đường nối xong, van do người mở.
+   *
+   * 🔑 Và CỐ Ý không giữ danh sách kênh ở đây. Chép `SUPPORTED_CHANNELS` sang
+   * Deno là dựng bản thứ hai rồi trôi khỏi nhau — đúng lớp lỗi repo đã trả giá
+   * nhiều lần. Kênh lấy TRỌN từ `social.channels`; kênh nào chưa có adapter thì
+   * `publishQueue` báo lỗi và panel admin đã có sẵn cảnh báo cho đúng ca đó.
+   */
+  const queued: string[] = [];
+  if (saved.id) {
+    const cfg = await fetch(
+      `${SB_URL}/rest/v1/app_config?key=in.("social.clip_autopost","social.channels")&select=key,value`,
+      { headers: H }
+    )
+      .then((r) => (r.ok ? r.json() : []))
+      .catch(() => []);
+    const byKey: Record<string, unknown> = {};
+    for (const r of cfg as { key: string; value: unknown }[]) byKey[r.key] = r.value;
+
+    if (byKey['social.clip_autopost'] === true) {
+      const channels = Array.isArray(byKey['social.channels'])
+        ? (byKey['social.channels'] as string[])
+        : [];
+      const caption = String(form.get('caption') ?? '').slice(0, 5000);
+      const hashtags = String(form.get('hashtags') ?? '')
+        .split(',')
+        .map((s) => s.trim())
+        .filter(Boolean)
+        .slice(0, 12);
+      const linkUrl = String(form.get('link') ?? '') || null;
+
+      for (const ch of channels) {
+        // UNIQUE (asset_id, channel) ⇒ nộp lại cùng clip KHÔNG đẻ dòng trùng,
+        // và `ignore-duplicates` giữ nguyên dòng cũ (kể cả dòng đã `live`) —
+        // đè lên là đăng lại một bài đã lên trang.
+        const q = await fetch(`${SB_URL}/rest/v1/media_posts?on_conflict=asset_id,channel`, {
+          method: 'POST',
+          headers: {
+            ...H,
+            'Content-Type': 'application/json',
+            Prefer: 'resolution=ignore-duplicates,return=minimal',
+          },
+          body: JSON.stringify({
+            asset_id: saved.id,
+            channel: ch,
+            caption,
+            hashtags,
+            link_url: linkUrl,
+            status: 'queued',
+          }),
+        });
+        if (q.ok) queued.push(ch);
+      }
+    }
+  }
+
+  return json({ success: true, asset_id: saved.id, url, path, queued });
+});

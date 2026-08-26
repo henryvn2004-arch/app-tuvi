@@ -36,6 +36,7 @@ import { llmText } from '@/lib/llm/complete';
 import { brandCheck, type BrandProfile } from '@/lib/content/brand-check';
 import { getConfigValue } from '@/lib/config/appConfig';
 import { pickQuote, assetUrl } from '@/lib/media/build';
+import { PUBLISHED_ONLY } from '../content/publish-filter';
 
 const SUPABASE_URL = process.env.SUPABASE_URL || '';
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY || '';
@@ -170,7 +171,7 @@ async function writeSeedCaption(
         chu_de_nhom: group.topic || '(không ghi rõ)',
         goc_tiep_can: group.angle || '(không ghi rõ — viết chung, bám sát câu trích)',
       }),
-      maxTokens: 800,
+      maxTokens: 1200, // Nâng 50% (Henry chốt 2026-08-20)
     });
     const m = raw.match(/\{[\s\S]*\}/);
     if (!m) return null;
@@ -242,7 +243,7 @@ export async function buildSeedingDrafts(opts: { limit?: number } = {}): Promise
   for (const spec of SOURCES) {
     pool.set(
       spec.type,
-      await sbGet<ArticleRow>(`${spec.table}?select=id,slug,title,excerpt,content&order=created_at.desc&limit=120`),
+      await sbGet<ArticleRow>(`${spec.table}?select=id,slug,title,excerpt,content&${PUBLISHED_ONLY}&order=created_at.desc&limit=120`),
     );
   }
 

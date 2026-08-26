@@ -257,7 +257,7 @@ function pageShell(opts: {
   <div class="faq-block"><h2>Câu Hỏi Thường Gặp</h2>${faqHTML}</div>
   <div class="rel-block"><div class="rel-title">Xem thêm</div><div class="rel-grid">${relLinks.join('')}</div></div>
 </div>
-<script src="/footer.js"></script><script src="/track.js?v=3" defer></script><script src="/nav.js?v=20" defer></script>
+<script src="/footer.js"></script><script src="/track.js?v=3" defer></script><script src="/nav.js?v=23" defer></script>
 </body></html>`;
 }
 
@@ -292,7 +292,7 @@ function buildL1(chiIdx: number, namXem: number): string {
     `<div class="cta-box">
       <h2>Xem Chính Xác Theo Ngày Giờ Sinh</h2>
       <p>Nhập đầy đủ ngày tháng năm và giờ sinh để nhận lá số cá nhân hoá.</p>
-      <a class="cta-btn" href="/luan-giai.html">Xem Lá Số Miễn Phí →</a>
+      <a class="cta-btn" href="/luan-giai.html">Xem Lá Số →</a>
     </div>`,
     // Cach cuc
     topCC.length > 0 ? `<div class="cc-block">
@@ -326,7 +326,7 @@ function buildL1(chiIdx: number, namXem: number): string {
     // Hạn" lên đầu và có chữ "Tuổi" — khớp cách gõ thật hơn bản cũ "Tuổi X Vận
     // Hạn Năm Y". Gộp mà để rơi mất title tốt hơn thì gộp xong lại kém đi.
     title: `Vận Hạn Tuổi ${chiName} Năm ${namXem} — Tử Vi Đẩu Số`,
-    desc:  `Vận hạn năm ${namXem} cho người tuổi ${chiName} — phân tích cung mệnh, đại vận, cách cục theo từng giờ sinh và năm sinh. Miễn phí.`,
+    desc:  `Vận hạn năm ${namXem} cho người tuổi ${chiName} — phân tích cung mệnh, đại vận, cách cục theo từng giờ sinh và năm sinh.`,
     url:   `${BASE}/van-han/tuoi-${chiSlug}-nam-${namXem}`,
     bc:    `<a href="/">Trang Chủ</a><span>›</span><a href="/van-han/">Vận Hạn</a><span>›</span><span>Tuổi ${esc(chiName)} Năm ${namXem}</span>`,
     h1:    `Tuổi <em>${esc(chiName)}</em> Vận Hạn Năm ${namXem}`,
@@ -364,7 +364,7 @@ function buildL2(canIdx: number, chiIdx: number, namXem: number): string {
     `<div class="cta-box">
       <h2>Xem Lá Số Cá Nhân Hoá</h2>
       <p>Nhập đầy đủ ngày tháng năm và giờ sinh để xem chính xác cung Mệnh, đại vận và tiểu vận năm ${namXem}.</p>
-      <a class="cta-btn" href="/luan-giai.html">Xem Lá Số Miễn Phí →</a>
+      <a class="cta-btn" href="/luan-giai.html">Xem Lá Số →</a>
     </div>`,
     topCC.length > 0 ? `<div class="cc-block">
       <h2>Cách Cục Của Tuổi ${esc(canChi)}</h2>

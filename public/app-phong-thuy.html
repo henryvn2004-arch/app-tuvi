@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"></noscript>
-<link rel="stylesheet" href="/shell.css?v=18">
+<link rel="stylesheet" href="/shell.css?v=29">
 <style>
 .pt-card{background:var(--white);border:1px solid var(--line);border-radius:14px;padding:20px 22px;box-shadow:var(--shadow);max-width:680px;margin-bottom:16px}
 .pt-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:4px;display:flex;align-items:center;gap:8px}
@@ -171,7 +171,8 @@
 
       <div class="pt-card">
         <h2><span class="pt-num">2</span> Chụp / Tải Ảnh Phòng</h2>
-        <p class="sub">Chụp ảnh toàn cảnh phòng, bao gồm cửa chính và các đồ vật chính. Ảnh càng rõ, phân tích càng chính xác.</p>
+        <p class="sub">Chụp ảnh phòng, nhận phân tích phong thủy theo Bát Trạch và Ngũ Hành. Bạn kê đồ theo cảm tính rồi tự hỏi sao trong nhà cứ bất ổn. Dùng khi muốn sắp xếp lại phòng và có căn cứ rõ ràng hơn.</p>
+        <p class="price-note" data-tvp-price-label="phong-thuy">…</p>
         <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click()" ondragover="onDrag(event,1)" ondragleave="onDrag(event,0)" ondrop="onDrop(event)">
           <input type="file" id="fileInput" accept="image/*" onchange="onFile(event)">
           <span class="upload-icon">📷</span>
@@ -277,12 +278,13 @@
 </div>
 
 <script>window.SHELL_ACTIVE='phong-thuy';window.SHELL_HISTORY=true;
-window.SHELL_INTRO={key:'phong-thuy',title:'Phong Thủy Nội Thất',desc:'Chụp ảnh phòng — <b>AI</b> chấm điểm Bát Trạch trước/sau, sơ đồ bố trí, đề xuất và render phòng bằng AI.'};</script>
+window.SHELL_INTRO={key:'phong-thuy',title:'Phong Thủy Nội Thất',desc:'Chụp ảnh phòng, nhận phân tích phong thủy theo Bát Trạch và Ngũ Hành. Bạn kê đồ theo cảm tính rồi tự hỏi sao trong nhà cứ bất ổn. Dùng khi muốn sắp xếp lại phòng và có căn cứ rõ ràng hơn.'};</script>
 <script src="/auth.js?v=2"></script>
-<script src="/tuvi-paywall.js?v=18"></script>
-  <script src="/nav.js?v=22" data-icons-only></script>
-<script src="/shell.js?v=68"></script>
-<script src="/tools-shared/ai-loading-steps.js?v=5"></script>
+<script src="/tuvi-paywall.js?v=21"></script>
+  <script src="/nav.js?v=23" data-icons-only></script>
+<script src="/shell.js?v=82"></script>
+<script src="/tools-shared/ai-loading-steps.js?v=9"></script>
+<script src="/tools-shared/bat-trach.js?v=2"></script>
 <script>
 function initPhongThuy(){
   Shell.setContext({
@@ -301,13 +303,17 @@ if (document.readyState === 'loading') document.addEventListener('DOMContentLoad
 // cần ảnh + kết quả chấm điểm của bước 1 làm input — giữ nguyên trải
 // nghiệm standalone thay vì tách 2 trang rời rạc không liên kết được.
 // ══════════════════════════════════════════════════════════════════════
-const GUA_DATA={1:{name:'Khảm',elem:'Thủy',icon:'☵',good:{SE:'Sinh Khí',E:'Thiên Y',S:'Diên Niên',N:'Phục Vị'},bad:{W:'Họa Hại',NE:'Ngũ Quỷ',NW:'Lục Sát',SW:'Tuyệt Mệnh'}},2:{name:'Khôn',elem:'Thổ',icon:'☷',good:{NE:'Sinh Khí',W:'Thiên Y',NW:'Diên Niên',SW:'Phục Vị'},bad:{E:'Họa Hại',SE:'Ngũ Quỷ',S:'Lục Sát',N:'Tuyệt Mệnh'}},3:{name:'Chấn',elem:'Mộc',icon:'☳',good:{S:'Sinh Khí',N:'Thiên Y',SE:'Diên Niên',E:'Phục Vị'},bad:{SW:'Họa Hại',W:'Ngũ Quỷ',NE:'Lục Sát',NW:'Tuyệt Mệnh'}},4:{name:'Tốn',elem:'Mộc',icon:'☴',good:{N:'Sinh Khí',S:'Thiên Y',E:'Diên Niên',SE:'Phục Vị'},bad:{NW:'Họa Hại',SW:'Ngũ Quỷ',W:'Lục Sát',NE:'Tuyệt Mệnh'}},6:{name:'Càn',elem:'Kim',icon:'☰',good:{W:'Sinh Khí',NE:'Thiên Y',SW:'Diên Niên',NW:'Phục Vị'},bad:{SE:'Họa Hại',S:'Ngũ Quỷ',E:'Lục Sát',N:'Tuyệt Mệnh'}},7:{name:'Đoài',elem:'Kim',icon:'☱',good:{NW:'Sinh Khí',SW:'Thiên Y',NE:'Diên Niên',W:'Phục Vị'},bad:{E:'Họa Hại',N:'Ngũ Quỷ',SE:'Lục Sát',S:'Tuyệt Mệnh'}},8:{name:'Cấn',elem:'Thổ',icon:'☶',good:{SW:'Sinh Khí',NW:'Thiên Y',W:'Diên Niên',NE:'Phục Vị'},bad:{S:'Họa Hại',E:'Ngũ Quỷ',N:'Lục Sát',SE:'Tuyệt Mệnh'}},9:{name:'Ly',elem:'Hỏa',icon:'☲',good:{E:'Sinh Khí',SE:'Thiên Y',N:'Diên Niên',S:'Phục Vị'},bad:{NE:'Họa Hại',NW:'Ngũ Quỷ',SW:'Lục Sát',W:'Tuyệt Mệnh'}}};
+// GUA_DATA + calcGua KHÔNG còn chép tay — nạp từ /tools-shared/bat-trach.js
+// (nguồn DUY NHẤT, dùng chung với /tools/bat-trach.html). Bản chép tay cũ ở
+// đây sai 12/64 ô Du Niên + dùng công thức cung mệnh SAI (tổng 4 chữ số năm
+// thay vì 2 chữ số cuối — xem ghi chú đầu file bat-trach.js).
+const GUA_DATA=BatTrachTool.guaDataLegacy();
 const DIR_VN={N:'Bắc',NE:'Đông Bắc',E:'Đông',SE:'Đông Nam',S:'Nam',SW:'Tây Nam',W:'Tây',NW:'Tây Bắc',C:'Trung Tâm'};
 const BAGUA=[['SE','S','SW'],['E','C','W'],['NE','N','NW']];
 const TIER_BG={best:'#1E6B3C',good:'#2D8E52',ok:'#5B8A3C',neutral:'#6B7280',warn:'#B45309',bad:'#B91C1C',worst:'#7F1D1D'};
 const TIER_CLR={best:'#86EFAC',good:'#BBF7D0',ok:'#D9F99D',neutral:'#E5E7EB',warn:'#FCD34D',bad:'#FCA5A5',worst:'#FECACA'};
 
-function calcGua(y,g){let s=String(y).split('').reduce((a,c)=>a+parseInt(c),0);while(s>=10)s=String(s).split('').reduce((a,c)=>a+parseInt(c),0);let r;if(g==='male'){r=y>=2000?9-s:10-s;if(r<=0)r+=9;if(r===5)r=2;}else{r=y>=2000?s+6:s+5;while(r>=10)r=String(r).split('').reduce((a,c)=>a+parseInt(c),0);if(r===5)r=8;}return r;}
+function calcGua(y,g){return BatTrachTool.getCungMenh(y,g==='male'?'nam':'nu');}
 
 function cellQuality(dir,gua){if(!gua||dir==='C')return'neutral';const g=GUA_DATA[gua];if(!g)return'neutral';if(g.good[dir]){const v=g.good[dir];return v.includes('Sinh')?'best':v.includes('Thiên')?'good':'ok';}if(g.bad[dir]){const v=g.bad[dir];return v.includes('Tuyệt')?'worst':v.includes('Ngũ')?'bad':'warn';}return'neutral';}
 function getQLabel(dir,gua){if(!gua)return'';const g=GUA_DATA[gua];return(g?.good[dir]||g?.bad[dir]||'');}

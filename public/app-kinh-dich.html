@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"></noscript>
-<link rel="stylesheet" href="/shell.css?v=18">
+<link rel="stylesheet" href="/shell.css?v=29">
 <style>
 .form-card{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);max-width:640px}
 .form-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:3px}
@@ -103,7 +103,8 @@
       <div id="shellRecent"></div>
       <div class="form-card" id="birthPanel">
         <h2>Thành tâm nghĩ về việc muốn hỏi</h2>
-        <p class="sub">Nhập câu hỏi (một việc cụ thể đang phân vân), giữ tâm tĩnh rồi bấm gieo — 6 lần gieo 3 đồng xu, mỗi lần xác định 1 hào. Nhận quẻ chính, hào động và quẻ biến, rồi hỏi trợ lý luận theo Chu Dịch.</p>
+        <p class="sub">Gieo một quẻ trong 64 quẻ, đọc đúng hào đang động của bạn. Bạn phân vân nên tiến hay nên lùi trước một việc. Dùng khi cần một lời khuyên cổ xưa cho quyết định hiện tại.</p>
+        <p class="price-note" data-tvp-price-label="kinh-dich">…</p>
         <div class="fg">
           <label>Câu hỏi (tuỳ chọn)</label>
           <input type="text" id="cauHoi" placeholder="VD: Công việc sắp tới của tôi thế nào?" maxlength="100">
@@ -136,13 +137,13 @@
 </div>
 
 <script>window.SHELL_ACTIVE='kinh-dich';window.SHELL_HISTORY=true;
-window.SHELL_INTRO={key:'kinh-dich',title:'Kinh Dịch — Gieo quẻ',desc:'Nhập câu hỏi, giữ tâm tĩnh rồi gieo quẻ (3 đồng xu × 6 lần). Nhận <b>quẻ chính, hào động và quẻ biến</b> trong 64 quẻ Chu Dịch, rồi hỏi <b>trợ lý AI</b> luận theo câu hỏi.'};</script>
+window.SHELL_INTRO={key:'kinh-dich',title:'Kinh Dịch — Gieo quẻ',desc:'Gieo một quẻ trong 64 quẻ, đọc đúng hào đang động của bạn. Bạn phân vân nên tiến hay nên lùi trước một việc. Dùng khi cần một lời khuyên cổ xưa cho quyết định hiện tại.'};</script>
 <script src="/tools-shared/kinh-dich-doc.js?v=1"></script>
 <script src="/tools-shared/kinh-dich-hao.js?v=1"></script>
 <script src="/tools-shared/kinh-dich.js?v=5"></script>
 <script src="/auth.js?v=2"></script>
-  <script src="/nav.js?v=22" data-icons-only></script>
-<script src="/shell.js?v=68"></script>
+  <script src="/nav.js?v=23" data-icons-only></script>
+<script src="/shell.js?v=82"></script>
 <script>
 // Ô giữa dùng CHUNG module /tools-shared/kinh-dich.js (bảng 64 quẻ + tra quẻ) với
 // trang standalone. Gieo/animation ở đây (DOM-specific), showResult gọi module.

@@ -7,6 +7,7 @@ export const maxDuration = 30;
 import { NextRequest, NextResponse } from 'next/server';
 import { readFileSync } from 'fs';
 import { join } from 'path';
+import { ORG_ID } from '@/lib/seo/entity';
 
 {
   const _g = globalThis as Record<string, unknown>;
@@ -222,8 +223,8 @@ function buildLuanGiaiHTML(ls: Rec, params: IsrParams, slug: string): string {
     {
       '@context':'https://schema.org','@type':'Article',
       headline: title, description: desc, url, inLanguage:'vi',
-      author:{'@type':'Organization',name:'Tử Vi Minh Bảo',url:BASE},
-      publisher:{'@type':'Organization',name:'Tử Vi Minh Bảo',url:BASE,logo:{'@type':'ImageObject',url:`${BASE}/seal.webp`}},
+      author:{'@type':'Organization', '@id': ORG_ID,name:'Tử Vi Minh Bảo',url:BASE},
+      publisher:{'@type':'Organization', '@id': ORG_ID,name:'Tử Vi Minh Bảo',url:BASE,logo:{'@type':'ImageObject',url:`${BASE}/seal.webp`}},
       image:{'@type':'ImageObject',url:ogImg},
     },
     {
@@ -423,7 +424,7 @@ h2.sec-title{font-family:'Noto Serif',serif;font-size:16px;text-transform:none;l
 </div>
 
 <script src="/footer.js"></script>
-<script src="/track.js?v=3" defer></script><script src="/nav.js?v=20" defer></script>
+<script src="/track.js?v=3" defer></script><script src="/nav.js?v=23" defer></script>
 </body>
 </html>`;
 }

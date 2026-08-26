@@ -149,6 +149,30 @@ window.ToolPrices = (function () {
     return (_data && _data.rows) || [];
   }
 
+  function _rowFor(toolId) {
+    var rs = rows();
+    for (var i = 0; i < rs.length; i++) {
+      if (rs[i] && rs[i].tool_id === toolId) return rs[i];
+    }
+    return null;
+  }
+
+  /**
+   * Câu giá đọc được ngay, ví dụ "15 Lượng mỗi lượt" hoặc "Miễn phí" — dùng cho
+   * dòng mô tả dưới mỗi công cụ trong Luận Đường. Đọc `is_free` từ chính dòng
+   * `tool_pricing`, KHÔNG suy từ `credits<=0` — hai thứ đang trùng nhau ở dữ
+   * liệu hiện có, nhưng suy như vậy là đoán, không phải đọc nguồn.
+   * `null` khi chưa nạp được hoặc không có công cụ đó — nơi gọi giữ nguyên chữ
+   * đang có (mặc định `…`), KHÔNG đoán.
+   */
+  function priceLabel(toolId) {
+    var row = _rowFor(toolId);
+    if (!row) return null;
+    if (row.is_free) return 'Miễn phí';
+    var v = Number(row.credits);
+    return isFinite(v) && v > 0 ? v + ' Lượng mỗi lượt' : null;
+  }
+
   /** Danh sách gói nạp (mảng rỗng nếu chưa nạp được). */
   function packages() {
     return (_data && _data.packages) || [];
@@ -261,17 +285,24 @@ window.ToolPrices = (function () {
   }
 
   /**
-   * Điền mọi <span data-tvp-price="<tool_id>"> trong `root`.
-   * Chưa biết giá → để nguyên chữ đang có (mặc định trong markup là `…`), KHÔNG
+   * Điền mọi <span data-tvp-price="<tool_id>"> (chỉ con số) và mọi
+   * <p data-tvp-price-label="<tool_id>"> (câu "N Lượng mỗi lượt" / "Miễn phí")
+   * trong `root`. Chưa biết giá → để nguyên chữ đang có (mặc định `…`), KHÔNG
    * điền số phỏng đoán.
    */
   function fillSlots(root) {
-    var els = (root || document).querySelectorAll('[data-tvp-price]');
-    if (!els.length) return Promise.resolve();
+    var scope = root || document;
+    var els = scope.querySelectorAll('[data-tvp-price]');
+    var labelEls = scope.querySelectorAll('[data-tvp-price-label]');
+    if (!els.length && !labelEls.length) return Promise.resolve();
     return load().then(function () {
       els.forEach(function (el) {
         var v = get(el.getAttribute('data-tvp-price'));
         if (v != null) el.textContent = v;
+      });
+      labelEls.forEach(function (el) {
+        var lbl = priceLabel(el.getAttribute('data-tvp-price-label'));
+        if (lbl != null) el.textContent = lbl;
       });
     });
   }

@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"></noscript>
-<link rel="stylesheet" href="/shell.css?v=18">
+<link rel="stylesheet" href="/shell.css?v=29">
 <style>
 .form-card{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);max-width:640px}
 .form-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:3px}
@@ -71,7 +71,8 @@
       <div id="shellRecent"></div>
       <div class="form-card" id="birthPanel">
         <h2>Nhập ngày sinh của bạn (dương lịch)</h2>
-        <p class="sub">AI sẽ lập lá số, phân tích cung Phu Thê rồi vẽ chân dung người bạn đời.</p>
+        <p class="sub">Vẽ chân dung người bạn đời tương lai từ cung Phu Thê của bạn. Bạn tò mò người ấy sẽ trông ra sao, tính khí thế nào. Dùng khi muốn một hình ảnh cụ thể, không chỉ vài dòng luận chữ.</p>
+        <p class="price-note" data-tvp-price-label="chan-dung-vo-chong">…</p>
         <div id="tuviFormHost"></div>
         <div class="frow" style="margin-bottom:0">
           <button class="btn-go" id="btnGo" onclick="analyze()">Vẽ Chân Dung — <span data-tvp-price="chan-dung-vo-chong">…</span> Lượng →</button>
@@ -96,6 +97,11 @@
             </div>
           </div>
         </div>
+        <!-- Khách chưa đăng nhập: khoá LUÔN cả phần "miễn phí" phía dưới (bảng
+             hình thể) — chỉ cung Phu Thê (khối ngay trên) là phần đầu được
+             xem. -->
+        <div id="cdvcLockHost" style="display:none;margin-bottom:16px"></div>
+
         <div class="res-block" id="morphBlock" style="display:none">
           <div class="res-block-header"><span class="res-block-title">Hình Thể Suy Từ Sao Tại Phu Thê</span></div>
           <div class="res-block-body">
@@ -127,17 +133,16 @@
               <div style="width:100%;margin-top:6px;background:#FBF3DE;border:1px solid #e8d9b0;border-radius:8px;padding:12px 14px;font-size:12.5px;line-height:1.6;color:#5a5145">
                 💡 Chân dung này chỉ mang tính minh hoạ và tham khảo, được AI mô phỏng từ đặc điểm hình dáng gắn với chính tinh, phụ tinh tại cung Phu Thê trong lá số của bạn — không phải ảnh chụp hay dự đoán chính xác diện mạo người bạn đời ngoài đời thực. Để có kết quả sát thực hơn, cần đối chiếu thêm với lá số thật của người đó.
               </div>
+              <div class="compat-invite" id="cdvcInviteBlock" style="width:100%;display:none">
+                <div class="ci-t" id="cdvcInviteText"></div>
+                <button type="button" class="btn" onclick="Shell.shareNow()">Chia sẻ cho bạn bè xem →</button>
+              </div>
             </div>
           </div>
         </div>
         <div class="res-block" id="luanGiaiBlock" style="display:none">
           <div class="res-block-header"><span class="res-block-title">Luận Giải Cung Phu Thê</span></div>
           <div class="res-block-body" id="luanGiaiText" style="font-size:13.5px;line-height:1.85;color:#2a2118"></div>
-        </div>
-        <!-- W1b — tường đứng ở CUỐI: hai khối chữ + ảnh phía trên đang ẩn ở
-             lượt tính thử, mở xong tường biến mất và mọi thứ về đúng chỗ. -->
-        <div class="res-block" id="lockBlock" style="display:none">
-          <div class="res-block-body" id="lockHost" data-tvp-lock style="padding-top:6px"></div>
         </div>
         <div class="res-block" id="histBlock" style="display:none">
           <div class="res-block-header"><span class="res-block-title">Đã Vẽ Trước Đó</span></div>
@@ -151,15 +156,15 @@
 </div>
 
 <script>window.SHELL_ACTIVE='chan-dung-vo-chong';window.SHELL_HISTORY=true;
-window.SHELL_INTRO={key:'chan-dung-vo-chong',title:'Chân Dung Vợ Chồng',desc:'AI phân tích cung <b>Phu Thê</b> trong lá số rồi vẽ <b>chân dung</b> người bạn đời kèm mô tả tính cách, phong thái.'};</script>
+window.SHELL_INTRO={key:'chan-dung-vo-chong',title:'Chân Dung Vợ Chồng',desc:'Vẽ chân dung người bạn đời tương lai từ cung Phu Thê của bạn. Bạn tò mò người ấy sẽ trông ra sao, tính khí thế nào. Dùng khi muốn một hình ảnh cụ thể, không chỉ vài dòng luận chữ.'};</script>
 <script src="/laso-chart.js?v=3"></script>
-<script src="/tuvi-form.js?v=1"></script>
-<script src="/tuvi-paywall.js?v=18"></script>
+<script src="/tuvi-form.js?v=2"></script>
+<script src="/tuvi-paywall.js?v=21"></script>
 <script src="/auth.js?v=2"></script>
-  <script src="/nav.js?v=22" data-icons-only></script>
-<script src="/shell.js?v=68"></script>
-<script src="/tools-shared/ai-loading-steps.js?v=5"></script>
-<script src="/tools-shared/portrait-recover.js?v=1"></script>
+  <script src="/nav.js?v=23" data-icons-only></script>
+<script src="/shell.js?v=82"></script>
+<script src="/tools-shared/ai-loading-steps.js?v=9"></script>
+<script src="/tools-shared/portrait-recover.js?v=2"></script>
 <script>
 var _currentSlug = '';
 var _resultImgUrl = '';
@@ -213,21 +218,13 @@ function showError(msg) {
   if (msg) { e.textContent = msg; e.classList.add('active'); } else { e.classList.remove('active'); }
 }
 
-// ── W1b: bấm nút là CHẠY THẬT, miễn phí ────────────────────────────────────
-//
-// Trước đây bấm nút là gặp paywall ngay — tức phải trả 20 Lượng mới biết engine
-// có thật sự đọc lá số của mình hay không. Đo được trên prod (panel Phễu Theo
-// Tool): 10 người mở tool, 1 người bấm chạy. Rơi 90% TRƯỚC cả paywall.
-//
-// Nay: chạy tầng deterministic (0 lượt LLM, 0 lượt sinh ảnh, 0đ), bày cung Phu
-// Thê + bảng hình thể suy từ sao, rồi mới dựng tường trên đúng phần tốn tiền.
-var CDVC_KHOA = [
-  'Bức chân dung người phối ngẫu',
-  'Mô tả ngoại hình & phong thái, diễn giải theo từng sao',
-  'Hoàn cảnh gặp gỡ nhiều khả năng nhất',
-  'Luận giải cung Phu Thê đầy đủ',
-];
+function _cdvcLoggedIn() { return !!(window.Auth && window.Auth.isLoggedIn && window.Auth.isLoggedIn()); }
 
+// Đăng nhập rồi → bấm nút là CHẠY THẬT ngay (case 1); thiếu/không đủ Lượng
+// thì `requireCredits` tự bật popup. Chưa đăng nhập (case 2) → dựng cung Phu
+// Thê MỞ + bảng hình thể MỞ (deterministic, 0đ, đúng thiết kế sẵn có của
+// `renderMeta` — xem chú thích tại đó). Chỉ tranh + luận giải (AI viết/vẽ
+// riêng) đứng sau tấm khoá.
 async function analyze() {
   showError('');
   var fdIn = TuviForm.getData();
@@ -237,35 +234,9 @@ async function analyze() {
   _lastBirth = { day: dd, month: mm, year: yyyy, hourBranch: gioAmIdx, gender: gender, isLunar: false };
   _currentSlug = TuviPaywall.generateToolSlug('chan-dung-vo-chong-' + dd + '-' + mm + '-' + yyyy);
 
-  _openPanel();
-  _loadingCtl = AiLoadingSteps.mount('loadingSteps', CDVC_STEPS.slice(0, 1));
-  _loadingCtl.start();
-  var prev;
-  try {
-    var r = await fetch('/api/chan-dung-vo-chong?preview=1', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ birth: _lastBirth }),
-    });
-    prev = await r.json();
-    if (!r.ok || !prev.success) throw new Error(prev.error || 'Lỗi ' + r.status);
-  } catch (e) {
-    _loadingCtl && _loadingCtl.stop();
-    _closePanel();
-    showError('Lỗi: ' + (e.message || 'Không thể kết nối. Vui lòng thử lại.'));
-    return;
-  }
-  _loadingCtl && _loadingCtl.finish();
-  document.getElementById('loading').style.display = 'none';
-  document.getElementById('btnEdit').style.display = '';
-  renderMeta(prev);
-  // D1 — bậc "đã tính thử" của phễu theo tool. Bắn ở ĐÂY chứ không ở lúc bấm
-  // nút: bấm rồi mà lá số hỏng thì không có gì để xem, tính vào phễu là thổi
-  // mẫu số lên rồi tỉ lệ mở nhìn tệ hơn thực tế.
-  try { if (window.Track) window.Track.event('preview_shown', { tool_id: 'chan-dung-vo-chong' }); } catch (e) { /* đo hỏng không chặn gì */ }
-  if (window.SHELL_INTRO) Shell.dismissIntro(window.SHELL_INTRO.key);
+  if (!_cdvcLoggedIn()) { return _runAnonPreview(); }
 
-  // Đã trả tiền cho đúng lá số này từ trước → mở thẳng, không dựng tường.
+  // Đã trả tiền cho đúng lá số này từ trước → mở thẳng, không trừ lại.
   var free = false;
   try {
     free = await TuviPaywall.isFreeRerun('/api/chan-dung-vo-chong', PortraitRecover.birthQuery(_lastBirth));
@@ -275,12 +246,46 @@ async function analyze() {
     await _doGenerate(true);
     return;
   }
-  document.getElementById('lockBlock').style.display = 'block';
-  await TuviPaywall.lockPreview({
-    host: document.getElementById('lockHost'),
-    title: '⊙ Còn bức chân dung và phần luận chưa mở',
-    items: CDVC_KHOA,
-    cta: 'Vẽ chân dung & mở bản đầy đủ',
+  await TuviPaywall.requireCredits(_currentSlug, function () { return _doGenerate(false); });
+}
+
+// Khách chưa đăng nhập: gọi tầng deterministic (0đ, không cần đăng nhập, KHÔNG
+// sinh ảnh) rồi dựng cung Phu Thê + bảng hình thể — cả hai `renderMeta` đã tự
+// biết vẽ khi có `data.morph` (đúng payload preview trả về). Ảnh + luận giải
+// đứng sau tấm khoá.
+async function _runAnonPreview() {
+  _openPanel();
+  document.getElementById('loading').style.display = 'none';
+  try {
+    var res = await fetch('/api/chan-dung-vo-chong?preview=1', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ birth: _lastBirth }),
+    });
+    var data = await res.json();
+    if (!res.ok || !data.success) throw new Error(data.error || 'Lỗi ' + res.status);
+    renderMeta(data);
+    document.getElementById('btnEdit').style.display = '';
+    if (window.SHELL_INTRO) Shell.dismissIntro(window.SHELL_INTRO.key);
+    _renderLockWall();
+  } catch (e) {
+    _closePanel();
+    showError('Lỗi: ' + (e.message || 'Không thể kết nối. Vui lòng thử lại.'));
+  }
+}
+
+function _renderLockWall() {
+  var host = document.getElementById('cdvcLockHost');
+  host.style.display = 'block';
+  host.innerHTML = '';
+  TuviPaywall.lockPreview({
+    host: host,
+    title: '⊙ Chân dung người phối ngẫu chưa mở',
+    items: [
+      'Bức tranh chân dung — vẽ riêng theo lá số của bạn',
+      'Luận giải cung Phu Thê + hoàn cảnh gặp gỡ',
+    ],
+    cta: 'Đăng ký để mở chân dung đầy đủ',
     slug: function () { return _currentSlug; },
     onUnlock: function () { return _doGenerate(false); },
   });
@@ -290,7 +295,8 @@ function _openPanel() {
   document.getElementById('birthPanel').style.display = 'none';
   document.getElementById('resPanel').style.display = 'block';
   document.getElementById('loading').style.display = 'block';
-  ['phuTheBlock', 'morphBlock', 'portraitBlock', 'luanGiaiBlock', 'lockBlock'].forEach(function (id) {
+  document.getElementById('cdvcLockHost').style.display = 'none';
+  ['phuTheBlock', 'morphBlock', 'portraitBlock', 'luanGiaiBlock'].forEach(function (id) {
     document.getElementById(id).style.display = 'none';
   });
   document.getElementById('card').style.display = 'none';
@@ -304,11 +310,10 @@ function _closePanel() {
 }
 
 async function _doGenerate(freeRerun) {
-  document.getElementById('lockBlock').style.display = 'none';
-  TuviPaywall._closeLock();
-  document.getElementById('loading').style.display = 'block';
-  _loadingCtl = AiLoadingSteps.mount('loadingSteps', CDVC_STEPS.slice(1));
+  _openPanel();
+  _loadingCtl = AiLoadingSteps.mount('loadingSteps', CDVC_STEPS);
   _loadingCtl.start();
+  if (AiLoadingSteps.scrollToResult) AiLoadingSteps.scrollToResult('loading');
 
   try {
     var token = window.Auth?.getSession()?.access_token || '';
@@ -343,9 +348,8 @@ async function _doGenerate(freeRerun) {
     // lần hỏi) → quay lại đường trả phí thay vì ném một lỗi khó hiểu.
     if (res.status === 402 && freeRerun) {
       _loadingCtl && _loadingCtl.stop();
-      document.getElementById('loading').style.display = 'none';
-      document.getElementById('lockBlock').style.display = 'block';
-      await TuviPaywall.requireCredits(_currentSlug, async function () { await _doGenerate(false); });
+      _closePanel();
+      await TuviPaywall.requireCredits(_currentSlug, function () { return _doGenerate(false); });
       return;
     }
     if (!res.ok || !data.success) throw new Error(data.error || 'Lỗi ' + res.status);
@@ -400,13 +404,9 @@ async function _doGenerate(freeRerun) {
     // Xem xong mà hết Lượng → chỗ xin mời bạn (V2.3). Tự ẩn nếu còn đủ Lượng.
     _mountInviteCta();
   } catch (e) {
-    // 🔑 KHÔNG quẳng người ta về form trống như bản trước. Họ đang nhìn phần
-    // tính thử — thứ vừa xem xong và có thể vừa trả tiền cho phần sau — xoá đi
-    // là xoá luôn cái đó. Giữ nguyên màn hình, dựng lại tường, báo bằng banner.
     _loadingCtl && _loadingCtl.stop();
-    document.getElementById('loading').style.display = 'none';
-    document.getElementById('lockBlock').style.display = 'block';
-    TuviPaywall._banner('Chưa vẽ được lần này: ' + (e.message || 'lỗi kết nối') + '. Bạn thử lại giúp.');
+    _closePanel();
+    showError('Lỗi: ' + (e.message || 'Không thể kết nối. Vui lòng thử lại.'));
   }
 }
 
@@ -460,6 +460,13 @@ function renderProse(data) {
   } else { luanGiaiBlock.style.display = 'none'; }
   document.getElementById('portraitBlock').style.display = 'block';
   document.getElementById('card').style.display = 'flex';
+  // Tool này KHÔNG có "người thứ hai" thật để rủ xem chung (khác tuong-hop/
+  // duyen-no-tien-kiep) — chân dung là suy ra từ MỘT MÌNH lá số người dùng.
+  // Nên CTA đổi hướng: xin xác nhận "đúng gu chưa" + rủ bạn TỰ vẽ chân dung
+  // của họ, thay vì "gửi cho người B trong kết quả này xem".
+  document.getElementById('cdvcInviteText').innerHTML =
+    'Đúng gu bạn chưa? Gửi ảnh này cho hội bạn xem, rồi rủ họ vẽ thử <b>người bạn đời tương lai của chính họ</b> luôn.';
+  document.getElementById('cdvcInviteBlock').style.display = 'flex';
 }
 
 function renderPhuThe(pt) {
@@ -553,10 +560,6 @@ function showForm() {
   document.getElementById('resPanel').style.display = 'none';
   document.getElementById('birthPanel').style.display = 'block';
   document.getElementById('btnEdit').style.display = 'none';
-  // Gỡ tường của lượt trước: bấm "Vẽ Lại" mà để nó nằm lại thì lá số mới hiện
-  // ra kèm bức tường tính theo lá số cũ.
-  document.getElementById('lockBlock').style.display = 'none';
-  TuviPaywall._closeLock();
   Shell.setShareable(null);
 }
 

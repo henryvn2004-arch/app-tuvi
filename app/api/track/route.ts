@@ -51,6 +51,11 @@ const ALLOWED = new Set([
   // không mở (nội dung tin nhắc rỗng — đúng bệnh vừa vá). Gộp lại thì cả ba
   // trông giống nhau: một con số 0.
   'push_optin_shown', 'push_optin_result', 'push_open',
+  // Bắt lỗi JS phía client — thay phần Sentry đang gỡ dần (7/89 trang, 0 trang
+  // /app/*, và không đo được lỗi CHẠY TRONG TRÌNH DUYỆT). Bắn từ track.js qua
+  // window.onerror/unhandledrejection, đã lọc nhiễu + chặn lũ ở CLIENT trước
+  // khi tới đây; server không cần xử gì thêm ngoài cho nó qua allowlist.
+  'js_error',
 ]);
 
 // Coi là "vừa đăng ký" nếu tài khoản tạo trong 15 phút gần đây (né tính nhầm

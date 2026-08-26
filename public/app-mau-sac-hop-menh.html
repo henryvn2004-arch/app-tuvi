@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Màu Sắc Hợp Mệnh — Tử Vi Minh Bảo</title>
+<meta name="description" content="Tư vấn màu sắc trang phục hợp bản mệnh theo Ngũ Hành Nạp Âm — màu áo, quần, giày, túi, phụ kiện. Gợi ý phối đồ hoàn chỉnh cho từng dịp.">
+<link rel="icon" type="image/webp" href="/seal.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"></noscript>
+<link rel="stylesheet" href="/shell.css?v=29">
+<style>
+.ms-card{background:var(--white);border:1px solid var(--line);border-radius:14px;padding:20px 22px;box-shadow:var(--shadow);max-width:760px;margin-bottom:16px}
+.ms-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:4px;display:flex;align-items:center;gap:8px}
+.ms-card p.sub{font-size:12.5px;color:var(--text-lt);margin-bottom:14px}
+.pt-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+@media(max-width:500px){.pt-row{grid-template-columns:1fr}}
+.pt-fg{display:flex;flex-direction:column;gap:5px}
+.pt-fg label{font-size:10.5px;font-weight:600;color:var(--text-lt);letter-spacing:.04em;text-transform:uppercase}
+.pt-fg input,.pt-fg select{border:1px solid var(--line-2);border-radius:7px;padding:8px 10px;font-size:13.5px;font-family:inherit;color:var(--text);background:var(--paper);outline:none}
+.pt-fg input:focus,.pt-fg select:focus{border-color:var(--blue)}
+.gua-row{display:none;background:var(--paper);border:1.5px solid var(--border-lt);border-radius:9px;padding:11px 14px;margin-top:4px;gap:12px;align-items:center}
+.gua-row.show{display:flex;flex-wrap:wrap}
+.gua-icon{font-size:26px}
+.gua-info-text{font-size:12px;color:var(--text-mid);line-height:1.65}
+.cost-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;font-size:12px;color:var(--text-mid);flex-wrap:wrap;gap:6px}
+.cost-row strong{color:var(--heading)}
+.btn-analyze{width:100%;padding:13px;background:var(--navy);color:var(--gold);border:none;border-radius:9px;font-size:14px;font-weight:700;cursor:pointer;font-family:var(--serif);display:flex;align-items:center;justify-content:center;gap:7px}
+.btn-analyze:hover{opacity:.88} .btn-analyze:disabled{opacity:.5;cursor:not-allowed}
+.error-box{background:#FFF5F5;border:1px solid #FECACA;border-radius:7px;padding:10px;font-size:12px;color:var(--red);display:none;margin-bottom:10px}
+.error-box.show{display:block}
+.loading-overlay{display:none;text-align:center;padding:20px 0}
+.loading-overlay.show{display:block}
+#results-section{display:none}
+.menh-banner{border-radius:12px;padding:18px 20px;display:flex;align-items:center;gap:16px;margin-bottom:4px;flex-wrap:wrap}
+.menh-icon{font-size:44px}
+.menh-info{flex:1}
+.menh-title{font-size:16px;font-weight:700;font-family:var(--serif);margin-bottom:4px}
+.menh-sub{font-size:12px;opacity:.8;line-height:1.6}
+.menh-summary{font-size:13px;line-height:1.7;margin-top:10px;padding:10px 14px;background:rgba(255,255,255,.2);border-radius:8px}
+.palette-label{font-size:10px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--text-lt);margin-bottom:8px}
+.palette-row{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:14px}
+.color-chip{display:flex;flex-direction:column;align-items:center;gap:4px;cursor:default}
+.color-swatch{width:44px;height:44px;border-radius:8px;border:2px solid rgba(0,0,0,.1);box-shadow:0 1px 4px rgba(0,0,0,.12)}
+.color-name{font-size:9px;color:var(--text-mid);text-align:center;max-width:50px;line-height:1.3}
+.avoid-chip .color-swatch{opacity:.55;border-style:dashed}
+.avoid-chip .color-name{color:var(--tx-red)}
+.clothing-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px}
+.clothing-item{background:var(--paper);border:1px solid var(--border-lt);border-radius:9px;padding:12px}
+.clothing-header{display:flex;align-items:center;gap:7px;margin-bottom:8px}
+.clothing-icon{font-size:20px} .clothing-cat{font-size:12px;font-weight:700;color:var(--heading)}
+.clothing-colors{display:flex;flex-wrap:wrap;gap:4px}
+.clothing-color-tag{font-size:10px;padding:2px 8px;border-radius:10px;border:1px solid;font-weight:600}
+.clothing-avoid{font-size:10px;color:var(--tx-red);margin-top:6px;padding-top:6px;border-top:1px solid var(--border-lt)}
+.occasion-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px}
+.occasion-item{border:1px solid var(--border-lt);border-radius:9px;padding:13px;background:var(--paper)}
+.occasion-header{display:flex;align-items:center;gap:7px;margin-bottom:7px}
+.occasion-icon{font-size:18px} .occasion-name{font-size:12px;font-weight:700;color:var(--heading)}
+.occasion-colors{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:6px}
+.occasion-tip{font-size:11px;color:var(--text-mid);line-height:1.5}
+.combo-list{display:flex;flex-direction:column;gap:10px}
+.combo-item{border:1px solid var(--border-lt);border-radius:10px;padding:14px;display:flex;gap:12px;align-items:flex-start}
+.combo-score-circle{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;flex-shrink:0}
+.combo-body{flex:1}
+.combo-name{font-size:13px;font-weight:700;color:var(--heading);font-family:var(--serif);margin-bottom:4px}
+.combo-items{font-size:12px;color:var(--text-mid);margin-bottom:4px;line-height:1.6}
+.combo-vibe{font-size:11px;color:var(--text-lt);font-style:italic}
+.avoid-explain{font-size:13px;color:var(--text-mid);line-height:1.7;background:#FFF5F5;border-left:3px solid var(--red);padding:12px 14px;border-radius:0 7px 7px 0}
+.bonus-tip{font-size:13px;color:var(--text-mid);line-height:1.7;background:var(--gold-lt);border-left:3px solid var(--gold-soft);padding:12px 14px;border-radius:0 7px 7px 0}
+.tryon-upload-zone{border:2px dashed var(--line-2);border-radius:10px;padding:28px 16px;text-align:center;cursor:pointer;background:var(--paper);position:relative;transition:all .2s}
+.tryon-upload-zone:hover,.tryon-upload-zone.drag{border-color:var(--gold);background:var(--gold-lt)}
+.tryon-upload-zone input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.tryon-preview{max-width:220px;border-radius:9px;display:block;margin:10px auto 0;object-fit:cover}
+.style-btns{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:14px 0}
+.style-btn{padding:10px;border:1.5px solid var(--line-2);border-radius:8px;background:var(--white);font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;color:var(--text-mid);transition:all .15s;text-align:center}
+.style-btn.active{background:var(--navy);color:var(--gold);border-color:var(--navy)}
+.style-btn:hover:not(.active){border-color:var(--gold);background:var(--gold-lt)}
+.btn-tryon{width:100%;padding:12px;background:linear-gradient(135deg,var(--gold-soft),var(--gold));color:#fff;border:none;border-radius:9px;font-size:14px;font-weight:700;cursor:pointer;font-family:var(--serif)}
+.btn-tryon:hover{opacity:.88} .btn-tryon:disabled{opacity:.45;cursor:not-allowed}
+.ba-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.ba-col{text-align:center}
+.ba-label{font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--text-lt);margin-bottom:6px}
+.ba-img{width:100%;border-radius:9px;aspect-ratio:3/4;object-fit:cover;display:block}
+.tryon-error{font-size:12px;color:var(--red);background:#fff5f5;border:1px solid #fcc;border-radius:7px;padding:9px 12px;display:none;margin-top:10px}
+.btn-cancel{background:none;border:1px solid var(--line-2);border-radius:8px;padding:10px 18px;font-size:13px;color:var(--text-mid);cursor:pointer;font-family:inherit}
+</style>
+</head>
+<body>
+
+<div class="shell">
+  <aside class="sb" id="shell-sidebar"></aside>
+
+  <main class="ws" id="ws">
+    <div class="ws-top">
+      <button class="btn mobile-only" onclick="document.getElementById('shell-sidebar').classList.toggle('open');window.shellSyncBackdrop&&shellSyncBackdrop()" aria-label="Menu">☰</button>
+      <div class="ws-title"><b>Màu Sắc Hợp Mệnh</b><span>Tư vấn màu trang phục theo Ngũ Hành Nạp Âm + Bát Trạch, thử ngay trên ảnh</span></div>
+      <div class="ws-actions">
+        <button class="btn mobile-only" onclick="Shell.openRail()">✦ Hỏi</button>
+      </div>
+    </div>
+    <div class="ws-body">
+      <div id="introHost"></div>
+      <div id="shellRecent"></div>
+
+      <div class="ms-card">
+        <h2><span class="ic" data-icon="sparkles"></span> Thông Tin Bản Mệnh</h2>
+        <p class="sub">Gợi ý những màu hợp mệnh của bạn theo ngũ hành. Bạn mua đồ theo sở thích mà không để ý có hợp mình không. Dùng khi sắm đồ, sơn nhà hay chọn màu cho việc quan trọng.</p>
+        <p class="price-note" data-tvp-price-label="mau-sac-hop-menh">…</p>
+        <div class="pt-row">
+          <div class="pt-fg"><label>Năm sinh dương lịch</label><input type="number" id="namSinh" placeholder="VD: 1990" min="1900" max="2025" oninput="onYearChange()"></div>
+          <div class="pt-fg"><label>Giới tính</label>
+            <select id="gioiTinh" onchange="onYearChange()">
+              <option value="male">Nam</option>
+              <option value="female">Nữ</option>
+            </select>
+          </div>
+        </div>
+        <div class="gua-row" id="guaRow">
+          <div class="gua-icon" id="guaIcon">☵</div>
+          <div class="gua-info-text">
+            <div style="font-weight:700;font-size:13px;color:var(--heading);font-family:var(--serif)" id="guaLine"></div>
+            <div id="napAmLine" style="margin-top:2px"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="ms-card">
+        <div class="cost-row"><span>Chi phí: <strong><span data-tvp-price="mau-sac-hop-menh">…</span> Lượng</strong></span></div>
+        <div class="error-box" id="errorBox"></div>
+        <button class="btn-analyze" id="btnAnalyze" onclick="doAnalyze()"><span class="ic" data-icon="palette"></span> Xem Màu Sắc Hợp Mệnh — <span data-tvp-price="mau-sac-hop-menh">…</span> Lượng</button>
+      </div>
+
+      <div class="ms-card loading-overlay" id="loadingOverlay">
+        <div id="analysisStepsHost"></div>
+      </div>
+
+      <div id="results-section" data-ws-result>
+
+        <div class="ms-card">
+          <div class="menh-banner" id="menhBanner">
+            <div class="menh-icon ic" id="menhIcon" data-icon="star"></div>
+            <div class="menh-info">
+              <div class="menh-title" id="menhTitle"></div>
+              <div class="menh-sub" id="menhSub"></div>
+              <div class="menh-summary" id="menhSummary"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="ms-card">
+          <h2><span class="ic" data-icon="palette"></span> Bảng Màu Theo Mệnh</h2>
+          <div class="palette-label">✓ Màu Chính — Tốt Nhất</div>
+          <div class="palette-row" id="primaryPalette"></div>
+          <div class="palette-label">◎ Màu Phụ — Chấp Nhận Được</div>
+          <div class="palette-row" id="secondaryPalette"></div>
+          <div class="palette-label">✗ Màu Nên Tránh</div>
+          <div class="palette-row" id="avoidPalette"></div>
+        </div>
+
+        <div class="ms-card">
+          <h2><span class="ic" data-icon="shirt"></span> Hướng Dẫn Trang Phục Chi Tiết</h2>
+          <div class="clothing-grid" id="clothingGrid"></div>
+        </div>
+
+        <div class="ms-card">
+          <h2><span class="ic" data-icon="calendar"></span> Màu Theo Dịp</h2>
+          <div class="occasion-grid" id="occasionGrid"></div>
+        </div>
+
+        <div class="ms-card">
+          <h2><span class="ic" data-icon="sparkles"></span> Gợi Ý Phối Đồ Hoàn Chỉnh</h2>
+          <div class="combo-list" id="comboList"></div>
+        </div>
+
+        <div class="ms-card">
+          <h2>⚠ Tại Sao Nên Tránh Những Màu Này?</h2>
+          <div class="avoid-explain" id="avoidExplain"></div>
+        </div>
+
+        <div class="ms-card" id="bonusCard" style="display:none">
+          <h2><span class="ic" data-icon="lightbulb"></span> Mẹo Đặc Biệt Theo Bản Mệnh</h2>
+          <div class="bonus-tip" id="bonusTip"></div>
+        </div>
+
+        <div class="ms-card" id="tryonCard">
+          <h2><span class="ic" data-icon="shirt"></span> Thử Trang Phục Theo Mệnh
+            <span style="font-size:10px;background:var(--gold-lt);color:var(--tx-blue);padding:2px 8px;border-radius:10px;font-weight:600"><span data-tvp-price="trang-phuc-tryon">…</span> Lượng/lần</span>
+          </h2>
+
+          <div id="tryonStep1">
+            <div class="tryon-upload-zone" id="tryonUploadZone"
+              ondragover="event.preventDefault();document.getElementById('tryonUploadZone').classList.add('drag')"
+              ondragleave="document.getElementById('tryonUploadZone').classList.remove('drag')"
+              ondrop="event.preventDefault();document.getElementById('tryonUploadZone').classList.remove('drag');handleTryonDrop(event)">
+              <input type="file" accept="image/*" onchange="onTryonFile(event)" id="tryonFileInput">
+              <div id="tryonUploadPrompt">
+                <div class="ic" data-icon="user" style="font-size:36px;margin-bottom:8px;display:block"></div>
+                <div style="font-size:14px;font-weight:600;color:var(--heading);margin-bottom:4px">Tải ảnh của bạn lên</div>
+                <div style="font-size:12px;color:var(--text-lt)">Ảnh chụp thẳng người, đủ sáng · JPG/PNG</div>
+              </div>
+              <img id="tryonPreviewImg" class="tryon-preview" src="" alt="" style="display:none;max-height:220px;width:auto">
+            </div>
+            <div style="display:flex;justify-content:center;margin-top:8px">
+              <button id="tryonChangeBtn" onclick="clearTryonPhoto()" style="display:none;background:none;border:1px solid var(--line-2);border-radius:4px;padding:5px 14px;font-size:11px;color:var(--text-mid);cursor:pointer;font-family:inherit">✕ Đổi ảnh</button>
+            </div>
+          </div>
+
+          <div id="tryonStep2" style="display:none;margin-top:14px">
+            <div style="font-size:12px;font-weight:600;color:var(--text-mid);margin-bottom:8px">Chọn phong cách trang phục:</div>
+            <div class="style-btns">
+              <button class="style-btn active" id="sbCongSo" onclick="setStyle('cong-so',this)"><span class="ic" data-icon="briefcase"></span> Công Sở</button>
+              <button class="style-btn" id="sbCasual"  onclick="setStyle('casual',this)"><span class="ic" data-icon="shirt"></span> Casual</button>
+              <button class="style-btn" id="sbSangTrong" onclick="setStyle('sang-trong',this)"><span class="ic" data-icon="sparkles"></span> Sang Trọng</button>
+              <button class="style-btn" id="sbDaoPho" onclick="setStyle('dao-pho',this)"><span class="ic" data-icon="compass"></span> Dạo Phố</button>
+            </div>
+            <button class="btn-tryon" id="btnTryon" onclick="doTryon()"><span class="ic" data-icon="sparkles"></span> Thử Trang Phục Ngay</button>
+          </div>
+
+          <div id="tryonLoading" style="display:none;text-align:center;padding:24px 0">
+            <div id="tryonStepsHost"></div>
+          </div>
+
+          <div id="tryonResult" style="display:none;margin-top:14px">
+            <div class="ba-grid">
+              <div class="ba-col"><div class="ba-label">Ảnh gốc</div><img id="tryonBefore" class="ba-img" src="" alt="Trước"></div>
+              <div class="ba-col"><div class="ba-label" id="tryonAfterLabel">Sau khi thử</div><img id="tryonAfter" class="ba-img" src="" alt="Sau"></div>
+            </div>
+            <div style="display:flex;gap:8px">
+              <button onclick="downloadTryonResult()" style="flex:1;padding:10px;background:var(--green);color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit"><span class="ic" data-icon="chevron-down"></span> Tải Ảnh</button>
+              <button onclick="resetTryon()" class="btn-cancel" style="flex:1"><span class="ic" data-icon="rotate-cw"></span> Thử Lại</button>
+            </div>
+          </div>
+
+          <div class="tryon-error" id="tryonError"></div>
+        </div>
+
+        <div style="text-align:center;padding:14px 0 6px">
+          <button onclick="resetAll()" class="btn-cancel">← Xem Lại</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <aside class="rail" id="shell-rail"></aside>
+</div>
+
+<script>window.SHELL_ACTIVE='mau-sac-hop-menh';window.SHELL_HISTORY=true;
+window.SHELL_INTRO={key:'mau-sac-hop-menh',title:'Màu Sắc Hợp Mệnh',desc:'Gợi ý những màu hợp mệnh của bạn theo ngũ hành. Bạn mua đồ theo sở thích mà không để ý có hợp mình không. Dùng khi sắm đồ, sơn nhà hay chọn màu cho việc quan trọng.'};</script>
+<script src="/auth.js?v=2"></script>
+<script src="/tuvi-paywall.js?v=20"></script>
+  <script src="/nav.js?v=23" data-icons-only></script>
+<script src="/shell.js?v=82"></script>
+<script src="/tools-shared/ai-loading-steps.js?v=9"></script>
+<script>
+function initMauSac(){
+  Shell.setContext({
+    label:'Màu Sắc Hợp Mệnh',
+    placeholder:'Hỏi thầy về màu sắc hợp mệnh…',
+    greeting:'Chào bạn. Điền năm sinh và giới tính ở khung bên trái, tôi sẽ tư vấn màu sắc trang phục theo Ngũ Hành Nạp Âm. Sau khi có kết quả, cứ hỏi tôi thêm.',
+    chips:['Vì sao mệnh tôi hợp màu này?','Màu nào nên tránh khi phỏng vấn?','Cách phối đồ theo màu mệnh?']
+  });
+}
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initMauSac); else initMauSac();
+
+// ══════════════════════════════════════════════════════════════════════
+// Port từ public/tools/mau-sac-hop-menh.html — giữ nguyên Bát Trạch +
+// Nạp Âm calc + gate Lượng (mau-sac-hop-menh + trang-phuc-tryon).
+// ══════════════════════════════════════════════════════════════════════
+const GUA_DATA={1:{name:'Khảm',elem:'Thủy',icon:'☵'},2:{name:'Khôn',elem:'Thổ',icon:'☷'},3:{name:'Chấn',elem:'Mộc',icon:'☳'},4:{name:'Tốn',elem:'Mộc',icon:'☴'},6:{name:'Càn',elem:'Kim',icon:'☰'},7:{name:'Đoài',elem:'Kim',icon:'☱'},8:{name:'Cấn',elem:'Thổ',icon:'☶'},9:{name:'Ly',elem:'Hỏa',icon:'☲'}};
+
+const COLOR_HEX={
+  'Trắng':'#FFFFFF','Bạc':'#C0C0C0','Xám nhạt':'#D3D3D3','Vàng kim':'#D4AF37',
+  'Vàng đất':'#C8973A','Be':'#D4B896','Kem':'#FFF8DC','Be đậm':'#D2B48C',
+  'Xanh lá':'#2E8B57','Xanh ngọc':'#40E0D0','Xanh lam nhạt':'#87CEEB','Nâu gỗ':'#8B4513',
+  'Xanh mint':'#98FF98','Xanh rêu':'#6B8E23','Xanh olive':'#808000',
+  'Đen':'#111111','Navy':'#000080','Xanh dương đậm':'#00008B','Xanh biển':'#1E90FF',
+  'Xám đậm':'#696969','Tím than':'#4B0082','Xanh rêu đậm':'#355E3B',
+  'Đỏ':'#CC0000','Cam':'#FF6600','Hồng tươi':'#FF69B4','Tím đỏ':'#800040',
+  'Vàng tươi':'#FFD700','Hồng phấn':'#FFB6C1','Nâu đỏ':'#8B2500',
+  'Nâu ấm':'#8B6914','Cam đất':'#CC7722','Vàng nhạt':'#F5DEB3','Nâu vàng':'#DAA520',
+  'Kem đậm':'#FAEBD7','Xám kim loại':'#A8A9AD','Tím':'#800080','Xanh tím':'#6A0DAD',
+};
+const NH_BG={Kim:'linear-gradient(135deg,#C0C0C0,#D4AF37)',Mộc:'linear-gradient(135deg,#2E8B57,#40E0D0)',Thủy:'linear-gradient(135deg,#000080,#1E90FF)',Hỏa:'linear-gradient(135deg,#CC0000,#FF6600)',Thổ:'linear-gradient(135deg,#C8973A,#8B6914)'};
+const NH_ICON={Kim:'settings',Mộc:'leaf',Thủy:'droplet',Hỏa:'flame',Thổ:'globe'};
+
+const NAP_AM_MAP={};
+const base=[[1924,'Hỏa'],[1926,'Thổ'],[1928,'Mộc'],[1930,'Kim'],[1932,'Thủy'],[1934,'Hỏa'],[1936,'Thổ'],[1938,'Mộc'],[1940,'Kim'],[1942,'Thủy'],[1944,'Hỏa'],[1946,'Thổ'],[1948,'Mộc'],[1950,'Kim'],[1952,'Thủy'],[1954,'Hỏa'],[1956,'Thổ'],[1958,'Mộc'],[1960,'Kim'],[1962,'Thủy'],[1964,'Hỏa'],[1966,'Thổ'],[1968,'Mộc'],[1970,'Kim'],[1972,'Thủy'],[1974,'Hỏa'],[1976,'Thổ'],[1978,'Mộc'],[1980,'Kim'],[1982,'Thủy'],[1984,'Hỏa'],[1986,'Thổ'],[1988,'Mộc'],[1990,'Kim'],[1992,'Thủy'],[1994,'Hỏa'],[1996,'Thổ'],[1998,'Mộc'],[2000,'Kim'],[2002,'Thủy'],[2004,'Hỏa'],[2006,'Thổ'],[2008,'Mộc'],[2010,'Kim'],[2012,'Thủy'],[2014,'Hỏa'],[2016,'Thổ'],[2018,'Mộc'],[2020,'Kim'],[2022,'Thủy'],[2024,'Hỏa']];
+base.forEach(([y,h])=>{NAP_AM_MAP[y]=h;NAP_AM_MAP[y+1]=h;});
+
+function calcGua(y,g){let s=String(y).split('').reduce((a,c)=>a+parseInt(c),0);while(s>=10)s=String(s).split('').reduce((a,c)=>a+parseInt(c),0);let r;if(g==='male'){r=y>=2000?9-s:10-s;if(r<=0)r+=9;if(r===5)r=2;}else{r=y>=2000?s+6:s+5;while(r>=10)r=String(r).split('').reduce((a,c)=>a+parseInt(c),0);if(r===5)r=8;}return r;}
+
+let _gua=null;
+const ANALYSIS_STEPS=[
+  {label:'Tính quái số & nạp âm bản mệnh',ms:900},
+  {label:'AI tư vấn màu sắc & phối đồ',ms:0},
+];
+const TRYON_STEPS=[
+  {label:'Chuẩn bị trang phục theo mệnh',ms:1200},
+  {label:'AI đang tạo ảnh trang phục',ms:0},
+];
+let _analysisLoadingCtl=null;
+let _tryonLoadingCtl=null;
+
+function onYearChange(){
+  const y=parseInt(document.getElementById('namSinh').value);
+  const g=document.getElementById('gioiTinh').value;
+  if(!y||y<1900||y>2025){document.getElementById('guaRow').classList.remove('show');return;}
+  _gua=calcGua(y,g);
+  const d=GUA_DATA[_gua];const na=NAP_AM_MAP[y]||'Hỏa';
+  if(!d)return;
+  document.getElementById('guaIcon').textContent=d.icon;
+  document.getElementById('guaLine').textContent=`Quái ${_gua} — ${d.name} (${d.elem})`;
+  document.getElementById('napAmLine').textContent=`Nạp Âm: ${na} · Màu chủ đạo theo hành ${na}`;
+  document.getElementById('guaRow').classList.add('show');
+}
+
+function resetAll(){document.getElementById('results-section').style.display='none';document.getElementById('ws').scrollTo({top:0,behavior:'smooth'});Shell.setShareable(null);}
+
+async function doAnalyze(){
+  document.getElementById('errorBox').classList.remove('show');
+  const y=parseInt(document.getElementById('namSinh').value);
+  const g=document.getElementById('gioiTinh').value;
+  if(!y||y<1900||y>2025){showErr('Vui lòng nhập năm sinh hợp lệ (1900–2025)');return;}
+  if(!window.Auth?.isLoggedIn()){window.Auth?.require?.(()=>doAnalyze());return;}
+  _gua=calcGua(y,g);
+  const token=window.Auth.getSession()?.access_token;
+
+  document.getElementById('btnAnalyze').disabled=true;
+  document.getElementById('loadingOverlay').classList.add('show');
+  document.getElementById('results-section').style.display='none';
+  _analysisLoadingCtl=AiLoadingSteps.mount('analysisStepsHost',ANALYSIS_STEPS);
+  _analysisLoadingCtl.start();
+
+  const _slug=TuviPaywall.generateToolSlug('mau-sac-hop-menh');
+  TuviPaywall.init({ product: 'mau-sac-hop-menh' });
+  try{
+    await new Promise((resolve,reject)=>{
+      TuviPaywall.requireCredits(_slug,async()=>{
+        try{
+          const res=await fetch('/api/phong-thuy?action=mau-sac',{
+            method:'POST',
+            headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},
+            body:JSON.stringify({namSinh:y,gioiTinh:g,guaNumber:_gua}),
+          });
+          const data=await res.json();
+          if(!data.success)throw new Error(data.error||'Phân tích thất bại');
+          window.refreshNavCredits&&window.refreshNavCredits();
+          _analysisLoadingCtl&&_analysisLoadingCtl.finish();
+          renderResults(data);
+          resolve();
+        }catch(e){reject(e);}
+      });
+    });
+  }catch(e){_analysisLoadingCtl&&_analysisLoadingCtl.stop();showErr('Lỗi: '+e.message);}
+  finally{document.getElementById('loadingOverlay').classList.remove('show');document.getElementById('btnAnalyze').disabled=false;}
+}
+
+function showErr(m){const b=document.getElementById('errorBox');b.textContent=m;b.classList.add('show');}
+
+function colorChip(name,avoid=false){
+  const hex=COLOR_HEX[name]||'#888888';
+  return `<div class="color-chip${avoid?' avoid-chip':''}">
+    <div class="color-swatch" style="background:${hex};"></div>
+    <div class="color-name">${name}</div>
+  </div>`;
+}
+
+function clothingTag(color){
+  const hex=COLOR_HEX[color]||'#888';
+  const isDark=['#000080','#111111','#00008B','#4B0082','#8B2500','#355E3B'].includes(hex);
+  return `<span class="clothing-color-tag" style="background:${hex};color:${isDark?'#fff':'#1a1a1a'};border-color:${hex};">${color}</span>`;
+}
+
+function renderResults(data){
+  const{napAmHanh,colorData,styleGuide:s}=data;
+
+  const bg=NH_BG[napAmHanh]||'linear-gradient(135deg,#888,#aaa)';
+  const banner=document.getElementById('menhBanner');
+  banner.style.background=bg;banner.style.color='#fff';
+  document.getElementById('menhIcon').innerHTML=window.iconHtml?window.iconHtml(NH_ICON[napAmHanh]||'star'):'';
+  document.getElementById('menhTitle').textContent=`Mệnh ${napAmHanh} · Quái ${s.guaNum} ${s.guaName}`;
+  document.getElementById('menhSub').textContent=`Màu chủ: ${(colorData.primary||[]).slice(0,3).join(', ')}`;
+  document.getElementById('menhSummary').textContent=s.summary||'';
+
+  const pp=document.getElementById('primaryPalette');
+  pp.innerHTML=(colorData.primary||[]).map(c=>colorChip(c)).join('');
+  document.getElementById('secondaryPalette').innerHTML=(colorData.secondary||[]).map(c=>colorChip(c)).join('');
+  document.getElementById('avoidPalette').innerHTML=(colorData.avoid||[]).map(c=>colorChip(c,true)).join('');
+
+  const cl=s.clothing||{};
+  const cats=[
+    {id:'topColors',icon:'shirt',name:'Áo / Áo Khoác'},
+    {id:'bottomColors',icon:'shirt',name:'Quần / Chân Váy'},
+    {id:'outerColors',icon:'shirt',name:'Áo Khoác Ngoài'},
+    {id:'shoeColors',icon:'package',name:'Giày / Dép'},
+    {id:'bagColors',icon:'wallet',name:'Túi / Ba Lô'},
+    {id:'accessoryColors',icon:'gem',name:'Phụ Kiện'},
+  ];
+  const cg=document.getElementById('clothingGrid');cg.innerHTML='';
+  cats.forEach(cat=>{
+    const colors=cl[cat.id]||[];
+    if(!colors.length)return;
+    cg.innerHTML+=`<div class="clothing-item">
+      <div class="clothing-header"><span class="clothing-icon ic" data-icon="${cat.icon}"></span><span class="clothing-cat">${cat.name}</span></div>
+      <div class="clothing-colors">${colors.map(c=>clothingTag(c)).join('')}</div>
+      ${(cl.avoidColors||[]).length?`<div class="clothing-avoid">✗ Tránh: ${(cl.avoidColors||[]).slice(0,3).join(', ')}</div>`:''}
+    </div>`;
+  });
+  window.mountIcons && window.mountIcons(cg);
+
+  const occs={interview:{icon:'briefcase',name:'Phỏng Vấn'},date:{icon:'heart',name:'Hẹn Hò'},business:{icon:'handshake',name:'Gặp Đối Tác'},daily:{icon:'sun',name:'Hàng Ngày'}};
+  const og=document.getElementById('occasionGrid');og.innerHTML='';
+  Object.entries(s.occasions||{}).forEach(([k,v])=>{
+    const oc=occs[k]||{icon:'calendar',name:k};
+    og.innerHTML+=`<div class="occasion-item">
+      <div class="occasion-header"><span class="occasion-icon ic" data-icon="${oc.icon}"></span><span class="occasion-name">${oc.name}</span></div>
+      <div class="occasion-colors">${(v.colors||[]).map(c=>clothingTag(c)).join('')}</div>
+      <div class="occasion-tip">${v.tip||''}</div>
+    </div>`;
+  });
+  window.mountIcons && window.mountIcons(og);
+  if(!Object.keys(s.occasions||{}).length)og.innerHTML='<p style="color:var(--text-lt);font-size:12px;">Xem màu chính bên trên để áp dụng.</p>';
+
+  const cl2=document.getElementById('comboList');cl2.innerHTML='';
+  (s.colorCombos||[]).forEach(combo=>{
+    const sc=combo.score||80;
+    const bg2=sc>=90?'#1E6B3C':sc>=80?'#9A7B3A':'#1455A4';
+    cl2.innerHTML+=`<div class="combo-item">
+      <div class="combo-score-circle" style="background:${bg2};">${sc}</div>
+      <div class="combo-body">
+        <div class="combo-name">${combo.name||'Combo '+sc}</div>
+        <div class="combo-items"><span class="ic" data-icon="shirt"></span> ${(combo.items||[]).join(' · ')}</div>
+        <div class="combo-vibe">${combo.vibe||''}</div>
+      </div>
+    </div>`;
+  });
+  window.mountIcons && window.mountIcons(cl2);
+  if(!(s.colorCombos||[]).length)cl2.innerHTML='<p style="color:var(--text-lt);font-size:12px;">Phối màu dựa trên bảng màu phù hợp bên trên.</p>';
+
+  document.getElementById('avoidExplain').textContent=s.avoidExplanation||'';
+  if(s.bonusTip){document.getElementById('bonusCard').style.display='block';document.getElementById('bonusTip').textContent=s.bonusTip;}
+
+  _napAmHanh = napAmHanh;
+  _tryonGender = document.getElementById('gioiTinh').value;
+  resetTryon();
+
+  const sec=document.getElementById('results-section');sec.style.display='block';
+  setTimeout(()=>sec.scrollIntoView({behavior:'smooth',block:'start'}),200);
+
+  if(window.SHELL_INTRO)Shell.dismissIntro(window.SHELL_INTRO.key);
+  Shell.setContext({
+    label:'Màu Sắc Hợp Mệnh — Mệnh '+napAmHanh,
+    greeting:'Bạn thuộc **mệnh '+napAmHanh+'**. Màu chủ đạo: '+(colorData.primary||[]).slice(0,3).join(', ')+'. Bạn muốn hỏi thêm về màu sắc hay phối đồ?',
+    chips:['Vì sao mệnh tôi hợp màu này?','Màu nào nên tránh khi phỏng vấn?','Cách phối đồ theo màu mệnh?']
+  });
+  Shell.setShareable({
+    kind:'text', toolId:'mau-sac-hop-menh', title:'Màu sắc hợp mệnh của tôi',
+    text:'Mệnh '+napAmHanh+' · Màu chủ: '+(colorData.primary||[]).slice(0,3).join(', ')+(s.summary?'\n\n'+s.summary:'')
+  });
+}
+
+let _napAmHanh = null;
+let _tryonGender = 'male';
+let _tryonImageData = null;
+let _tryonMediaType = 'image/jpeg';
+let _tryonStyle = 'cong-so';
+let _tryonResultUrl = null;
+let _tryonCurrentSlug = null;
+
+function onTryonFile(e) { if (e.target.files[0]) loadTryonFile(e.target.files[0]); }
+function handleTryonDrop(e) { const f = e.dataTransfer.files[0]; if (f) loadTryonFile(f); }
+
+function loadTryonFile(file) {
+  if (!file.type.startsWith('image/')) return;
+  if (file.size > 5 * 1024 * 1024) { showTryonErr('Ảnh quá lớn (tối đa 5MB)'); return; }
+  const reader = new FileReader();
+  reader.onload = e => {
+    _tryonMediaType = file.type || 'image/jpeg';
+    _tryonImageData = e.target.result.split(',')[1];
+    const img = document.getElementById('tryonPreviewImg');
+    img.src = e.target.result; img.style.display = 'block';
+    document.getElementById('tryonUploadPrompt').style.display = 'none';
+    document.getElementById('tryonChangeBtn').style.display = 'inline-block';
+    document.getElementById('tryonStep2').style.display = 'block';
+    document.getElementById('tryonError').style.display = 'none';
+  };
+  reader.readAsDataURL(file);
+}
+
+function clearTryonPhoto() {
+  _tryonImageData = null;
+  document.getElementById('tryonPreviewImg').style.display = 'none';
+  document.getElementById('tryonPreviewImg').src = '';
+  document.getElementById('tryonUploadPrompt').style.display = 'block';
+  document.getElementById('tryonChangeBtn').style.display = 'none';
+  document.getElementById('tryonStep2').style.display = 'none';
+  document.getElementById('tryonResult').style.display = 'none';
+  document.getElementById('tryonFileInput').value = '';
+}
+
+function setStyle(s, btn) {
+  _tryonStyle = s;
+  document.querySelectorAll('.style-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+function showTryonErr(msg) {
+  const el = document.getElementById('tryonError');
+  el.textContent = '⚠ ' + msg; el.style.display = 'block';
+}
+
+function resetTryon() {
+  clearTryonPhoto();
+  document.getElementById('tryonLoading').style.display = 'none';
+  document.getElementById('tryonResult').style.display = 'none';
+  document.getElementById('tryonError').style.display = 'none';
+  _tryonResultUrl = null;
+}
+
+async function doTryon() {
+  if (!_tryonImageData) { showTryonErr('Vui lòng tải ảnh lên trước.'); return; }
+  if (!_napAmHanh) { showTryonErr('Vui lòng phân tích màu sắc trước.'); return; }
+
+  TuviPaywall.init({ product: 'trang-phuc-tryon', slug: () => _tryonCurrentSlug, onUnlock: () => {} });
+  _tryonCurrentSlug = TuviPaywall.generateToolSlug('trang-phuc-tryon');
+
+  await TuviPaywall.requireCredits(_tryonCurrentSlug, async () => {
+    await _doTryonCall();
+  });
+}
+
+async function _doTryonCall() {
+  document.getElementById('tryonError').style.display = 'none';
+  document.getElementById('tryonStep2').style.display = 'none';
+  document.getElementById('tryonLoading').style.display = 'block';
+  document.getElementById('tryonResult').style.display = 'none';
+  document.getElementById('btnTryon').disabled = true;
+  _tryonLoadingCtl = AiLoadingSteps.mount('tryonStepsHost', TRYON_STEPS);
+  _tryonLoadingCtl.start();
+
+  const token = window.Auth?.getSession()?.access_token;
+  const styleLabels = { 'cong-so':'Công Sở', 'casual':'Casual', 'sang-trong':'Sang Trọng', 'dao-pho':'Dạo Phố' };
+
+  try {
+    const res = await fetch('/api/phong-thuy?action=trang-phuc-tryon', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + (token || '') },
+      body: JSON.stringify({
+        imageBase64: _tryonImageData,
+        imageType: _tryonMediaType,
+        napAmHanh: _napAmHanh,
+        gioiTinh: _tryonGender,
+        style: _tryonStyle,
+      }),
+    });
+    const data = await res.json();
+    if (!data.imageUrl) throw new Error(data.error || 'Không nhận được ảnh kết quả.');
+
+    _tryonResultUrl = data.imageUrl;
+    document.getElementById('tryonBefore').src = 'data:' + _tryonMediaType + ';base64,' + _tryonImageData;
+    document.getElementById('tryonAfter').src = data.imageUrl;
+    document.getElementById('tryonAfterLabel').textContent = (styleLabels[_tryonStyle] || _tryonStyle) + ' · Mệnh ' + _napAmHanh;
+    _tryonLoadingCtl && _tryonLoadingCtl.finish();
+    document.getElementById('tryonLoading').style.display = 'none';
+    document.getElementById('tryonResult').style.display = 'block';
+    document.getElementById('tryonStep2').style.display = 'block';
+    Shell.setShareable({
+      kind:'image', title:'Trang phục hợp mệnh của tôi (AI try-on)',
+      imageUrl:data.imageUrl, text:(styleLabels[_tryonStyle]||_tryonStyle)+' · Mệnh '+_napAmHanh
+    });
+  } catch(e) {
+    _tryonLoadingCtl && _tryonLoadingCtl.stop();
+    document.getElementById('tryonLoading').style.display = 'none';
+    document.getElementById('tryonStep2').style.display = 'block';
+    showTryonErr('Lỗi: ' + (e.message || 'Vui lòng thử lại.'));
+  } finally {
+    document.getElementById('btnTryon').disabled = false;
+  }
+}
+
+async function downloadTryonResult() {
+  if (!_tryonResultUrl) return;
+  try {
+    const res = await fetch(_tryonResultUrl);
+    const blob = await res.blob();
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a'); a.href = url;
+    a.download = 'trang-phuc-menh-' + (_napAmHanh || '') + '.png';
+    a.click(); URL.revokeObjectURL(url);
+  } catch(e) { window.open(_tryonResultUrl, '_blank'); }
+}
+
+TuviPaywall.init({ product: 'mau-sac-hop-menh' });
+</script>
+</body>
+</html>

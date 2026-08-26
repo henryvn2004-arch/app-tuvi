@@ -244,6 +244,17 @@ export interface DoneEvent {
   };
   /** gợi ý câu hỏi tiếp theo do LLM sinh, bám câu trả lời vừa rồi (chip động) */
   suggestions?: string[];
+  /**
+   * Thẻ "công cụ này giúp được" khi model thấy câu hỏi cần một phép tính rail
+   * không làm được. Vắng mặt ở hầu hết lượt — model được dặn mặc định là IM.
+   *
+   * Gắn vào `done` chứ KHÔNG thêm một loại SSE event mới: adapter bot
+   * (createSSECollector) chỉ gom event `text`, thêm event lạ là rủi ro không
+   * đổi lấy gì — và thẻ hiện SAU câu trả lời mới đúng nhịp.
+   *
+   * ⛔ KHÔNG có trường giá, cố ý. Xem lib/tools/suggest-tool.ts.
+   */
+  toolSuggest?: { toolId: string; label: string; path: string; lyDo: string };
 }
 
 /** event: error — lỗi có mã để client xử lý */

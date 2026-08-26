@@ -25,6 +25,7 @@
     "check:hexagrams": "node scripts/check-hexagram-table.mjs",
     "check:laso": "node scripts/check-laso-markers.mjs",
     "check:railfields": "node scripts/check-rail-fields.mjs",
+    "check:railwrap": "node scripts/check-rail-wrap.mjs",
     "check:cacheshape": "node scripts/check-cache-shape.mjs",
     "check:hao": "node scripts/check-hao-data.mjs",
     "lint:fix": "eslint . --fix",
@@ -37,19 +38,26 @@
     "test:smoke:ui": "playwright test --config=playwright.smoke.config.ts --ui",
     "lhci": "lhci autorun",
     "check:motifs": "node scripts/check-que-motifs.mjs",
-    "check:terms": "node scripts/check-terms.mjs"
+    "check:terms": "node scripts/check-terms.mjs",
+    "check:publish": "node scripts/check-publish-filter.mjs",
+    "check:jobs": "node scripts/check-cron-jobs.mjs",
+    "check:token": "node scripts/check-token-freshness.mjs",
+    "check:prompt": "node scripts/check-prompt-budget.mjs",
+    "check:topics": "node scripts/check-topic-patterns.mjs",
+    "check:batrach": "node scripts/check-bat-trach.mjs",
+    "check:sodep": "node scripts/check-so-dep.mjs"
   },
   "dependencies": {
-    "@supabase/supabase-js": "^2.111.0",
-    "@vercel/functions": "^3.7.6",
+    "@supabase/supabase-js": "^2.112.2",
+    "@vercel/functions": "^3.8.0",
     "celestine": "^0.2.1",
-    "mcp-handler": "^1.1.0",
-    "mingyu-core": "^0.1.23",
-    "next": "^16.2.12",
+    "mcp-handler": "^2.1.0",
+    "mingyu-core": "^0.1.25",
+    "next": "^16.3.0",
     "pdf-parse": "^1.1.1",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
-    "sharp": "^0.34.5",
+    "sharp": "^0.35.3",
     "zod": "^4.4.3"
   },
   "devDependencies": {
@@ -61,7 +69,7 @@
     "@types/react-dom": "^19.2.4",
     "eslint": "^10.8.0",
     "eslint-config-prettier": "^10.1.8",
-    "globals": "^17.8.0",
+    "globals": "^17.9.0",
     "prettier": "^3.9.6",
     "typescript": "^6.0.3"
   }

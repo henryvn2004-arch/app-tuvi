@@ -1,0 +1,230 @@
+// scripts/video-lib.mjs
+// ============================================================
+// Nạp phần TypeScript của khâu dựng clip (`lib/video/**` và những gì nó kéo
+// theo) vào một script Node thuần, rồi chạy cổng 2.
+//
+// 🪤 VÌ SAO PHẢI HOOK `Module._resolveFilename`:
+// `tsc` KHÔNG viết lại alias `@/` khi emit — bài học đã ghi trong CLAUDE.md và
+// vấp thật một lần ở harness khác. `viral-loop.ts` import `@/lib/llm/complete`
+// nên bản JS emit ra vẫn `require('@/lib/llm/complete')`, Node không hiểu.
+// Cách sửa ĐÚNG là hook lúc chạy, KHÔNG phải sửa alias trong file nguồn: sửa
+// nguồn thì mã chạy ở đây khác mã chạy trên web, tức lại đẻ ra hai bản.
+//
+// Cây phụ thuộc đo được là 10 file (viral-loop → gate-audience → llm/complete →
+// config/appConfig → agent/companion · agent/providers/gemini → contract/v1 →
+// api/tool-helpers). `tsc` tự đi theo import nên chỉ cần nêu điểm vào.
+// ============================================================
+
+import { execFileSync } from 'node:child_process';
+import { mkdtempSync, writeFileSync } from 'node:fs';
+import Module from 'node:module';
+import { createRequire } from 'node:module';
+import { tmpdir } from 'node:os';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
+const require_ = createRequire(import.meta.url);
+
+/**
+ * Mã thoát riêng cho "CỔNG NỘI DUNG TỪ CHỐI KỊCH BẢN".
+ *
+ * 🔑 VÌ SAO PHẢI TÁCH KHỎI MÃ 1: hai chuyện này khác hẳn nhau về nghĩa.
+ *   · cổng chặn  = cổng ĐANG LÀM ĐÚNG VIỆC. Kịch bản chưa đủ hay, không dựng.
+ *     Đây là kết quả THƯỜNG XUYÊN và dự đoán được (đo trên chính kho hiện có:
+ *     clip demo công cụ qua cổng 2 đúng 3/18).
+ *   · mã 1       = HỎNG. TTS chết, render vỡ, mạng đứt, thiếu khoá model.
+ *
+ * Gộp hai thứ vào một mã thì lượt dựng hằng tuần ĐỎ VĨNH VIỄN — không phải vì
+ * có gì hỏng mà vì mấy kịch bản yếu vẫn nằm trong danh sách. Mà một cảnh báo
+ * tuần nào cũng kêu là một cảnh báo đã bị tắt: đúng hôm pipeline hỏng thật thì
+ * không ai phân biệt được với mọi hôm khác.
+ *
+ * ⚠️ 20 chứ không phải 2/3/…: Node dành riêng dải 1–12 cho lỗi nội bộ của nó
+ * (3 = "Internal JavaScript Parse Error", 9 = "Invalid Argument"…). Chọn trong
+ * dải đó là mở đường cho một lỗi thật của Node đọc thành "cổng chặn".
+ */
+export const EXIT_GATE = 20;
+
+/** Điểm vào luôn cần, bất kể loại clip. */
+const CORE = ['lib/video/script-spec.ts', 'lib/video/gate-machine.ts', 'lib/video/viral-loop.ts'];
+
+/**
+ * Biên dịch cây TS rồi trả về hàm nạp module.
+ *
+ * 🪤 Vì sao SINH tsconfig tạm chứ không nêu file trên dòng lệnh như hai script
+ * trước vẫn làm: nêu file thì phải kèm `--ignoreConfig` (nếu không tsc báo
+ * TS5112), mà `--ignoreConfig` cũng vứt luôn `paths` — nên `@/lib/llm/complete`
+ * hỏng NGAY TỪ LÚC BIÊN DỊCH, không đợi tới lúc chạy. Đã vấp thật ở lượt đầu.
+ * Một tsconfig riêng giải cả hai: không TS5112, và có `paths`.
+ *
+ * ⚠️ `rootDir` trỏ GỐC REPO là cố ý: không khai thì `tsc` tự suy thư mục chung
+ * của mọi file (kể cả file nó kéo theo), nên chỉ cần thêm một import mới là bố
+ * cục đầu ra đổi và mọi đường dẫn `load()` gãy im lặng. Neo cứng thì đầu ra
+ * luôn soi gương repo: `<outDir>/lib/video/...`.
+ *
+ * @param {string[]} extra đường dẫn TS thêm, tương đối gốc repo.
+ */
+export function compileVideoLib(extra = []) {
+  const outDir = mkdtempSync(join(tmpdir(), 'videolib-'));
+  const cfg = join(outDir, 'tsconfig.json');
+  writeFileSync(
+    cfg,
+    JSON.stringify({
+      compilerOptions: {
+        // ⚠️ `node16` chứ không phải `node`: TS 6 đã khai tử `moduleResolution:
+        // node10` VÀ `baseUrl` (TS5107 / TS5101, lỗi chứ không phải cảnh báo).
+        // Nên `paths` ở đây ghi ĐƯỜNG TUYỆT ĐỐI — không có `baseUrl` thì nó
+        // neo theo vị trí tsconfig, mà tsconfig này nằm trong thư mục tạm.
+        module: 'node16',
+        moduleResolution: 'node16',
+        target: 'es2022',
+        lib: ['es2022', 'dom'],
+        skipLibCheck: true,
+        esModuleInterop: true,
+        resolveJsonModule: true,
+        paths: { '@/*': [join(ROOT, '*')] },
+        rootDir: ROOT,
+        outDir,
+      },
+      files: [...CORE, ...extra].map((f) => join(ROOT, f)),
+    })
+  );
+  execFileSync(join(ROOT, 'node_modules/.bin/tsc'), ['-p', cfg], { stdio: 'inherit' });
+
+  // Đặt SAU khi emit xong, và chỉ bắt đúng tiền tố `@/` — đừng đụng lượt
+  // resolve nào khác, node_modules vẫn phải đi đường của nó.
+  const truoc = Module._resolveFilename;
+  Module._resolveFilename = function (request, ...rest) {
+    if (typeof request === 'string' && request.startsWith('@/')) {
+      return truoc.call(this, join(outDir, request.slice(2)), ...rest);
+    }
+    return truoc.call(this, request, ...rest);
+  };
+
+  return { outDir, load: (rel) => require_(join(outDir, 'lib', rel)) };
+}
+
+/**
+ * In kết quả từng vòng của vòng lặp.
+ *
+ * Tách ra vì HAI nhánh cùng cần in y hệt (chế độ chặn và chế độ cảnh báo). Chép
+ * hai bản là hai bản sẽ trôi khỏi nhau — đúng lớp lỗi repo này đã trả giá nhiều
+ * lần, và ở đây nó còn tệ hơn: hai chế độ in khác nhau thì đọc log không so được.
+ */
+function inKetQuaVong(kq) {
+  for (const r of kq.rounds) {
+    const a = r.audience;
+    if (!a) {
+      // Vòng này trượt ngay cổng 1 ⇒ chưa tốn lượt LLM nào cho hội đồng.
+      const block = r.machine.issues.filter((i) => i.level === 'block');
+      console.log(`   vòng ${r.round}: cổng 1 trượt — ${block.map((i) => i.code).join(', ')}`);
+      continue;
+    }
+    // In CẢ HAI mẫu số: phần chấm điểm là `trong tệp`, còn `/7` giữ lại để đối
+    // chiếu — nhìn hai số cạnh nhau là biết ngay clip trượt vì DỞ hay vì CHỦ ĐỀ
+    // hẹp, hai chuyện cần hai cách sửa khác hẳn nhau.
+    console.log(
+      `   vòng ${r.round}: ${a.pass ? '✅ QUA' : '❌ TRƯỢT'}  ·  xem hết ${a.soXemHetTrongTep}/${a.soTrongTep} trong tệp` +
+        ` (thô ${Math.round(a.tiLeXemHetDuBao * 100)}%) · lưu ${Math.round(a.tiLeMuonLuu * 100)}% · gửi ${Math.round(a.tiLeMuonChiaSe * 100)}%` +
+        (a.giayRoiRungNang != null ? ` · rơi nặng ở ${a.giayRoiRungNang}s` : '')
+    );
+    for (const i of a.issues) console.log(`      [${i.level}] ${i.code}: ${i.message}`);
+    if (r.rewriteHint) console.log(`      → viết lại theo: ${r.rewriteHint}`);
+  }
+}
+
+/**
+ * Chạy cổng 2 (hội đồng người xem) và in kết quả.
+ *
+ * Trả về `{ pass, spec, reason }` — `spec` có thể là BẢN ĐÃ VIẾT LẠI, nên phía
+ * gọi PHẢI dùng giá trị trả về cho các bước sau (giọng đọc, render). Dùng lại
+ * bản cũ thì vòng lặp chạy cho vui: clip vẫn mang đúng câu chữ vừa bị chấm trượt.
+ *
+ * ⚠️ `reason` phân biệt HAI ca trượt khác hẳn nhau, và phía gọi phải dùng nó để
+ * chọn mã thoát (xem `EXIT_GATE`):
+ *   · `'gate'`   — hội đồng chấm trượt. Cổng làm đúng việc.
+ *   · `'config'` — THIẾU KHOÁ MODEL. Hội đồng chưa hề chạy. Coi đây là "cổng
+ *     chặn" là báo cáo sai: nó nói kịch bản dở trong khi thật ra máy chưa chấm.
+ *
+ * @param {(spec: object, opts: object) => Promise<object>} runViralLoop
+ * @param {object} spec
+ * @param {{ skip?: boolean, gate?: object, maxRounds?: number, chiCanhBao?: boolean }} opts
+ *   `chiCanhBao` — hội đồng VẪN CHẤM nhưng KHÔNG CHẶN. Xem chú thích dưới.
+ */
+export async function chayCong2(runViralLoop, spec, opts = {}) {
+  if (opts.skip) {
+    console.log('\n── CỔNG 2 · BỎ QUA (--no-audience) ──────────');
+    console.log('   ⚠️ Clip chưa qua hội đồng người xem — chỉ dùng để duyệt bố cục.');
+    return { pass: true, spec };
+  }
+
+  /*
+   * ── CHẾ ĐỘ CẢNH BÁO ───────────────────────────────────────────────────────
+   *
+   * Hội đồng vẫn chấm và vẫn in đủ, nhưng kết quả KHÔNG chặn lượt dựng.
+   *
+   * 🔑 Vì sao chỉ chạy MỘT vòng, không viết lại: vòng viết lại tồn tại để ĐI QUA
+   * cổng. Cổng không chặn thì không có gì để đi qua — ba vòng rồi bỏ kết quả là
+   * đốt sáu lượt LLM cho một con số mình không hành động theo.
+   *
+   * Và với clip demo công cụ thì viết lại vốn KHÔNG phải cần gạt: lời chê đo
+   * được nhất quán là *"chỉ quay màn hình công cụ"* · *"không có cơ sở khoa
+   * học"* — chê CÁI CLIP LÀ GÌ, không chê câu chữ. Cùng lớp với `visual.format`.
+   *
+   * ⚠️ VẪN CHẤM chứ không bỏ hẳn: bỏ đi là mất luôn phép đo. Con số 3/18 chỉ có
+   * nghĩa nếu còn tiếp tục đo được — im lặng cho qua thì lần sau không ai biết
+   * nhóm này đang khá lên hay tệ đi.
+   */
+  if (opts.chiCanhBao) {
+    if (!process.env.GEMINI_API_KEY && !process.env.ANTHROPIC_API_KEY) {
+      console.log('\n── CỔNG 2 · CẢNH BÁO · bỏ qua (thiếu khoá model) ──');
+      console.log('   Không chặn — clip demo công cụ vẫn dựng.');
+      return { pass: true, spec };
+    }
+    console.log('\n── CỔNG 2 · CHẾ ĐỘ CẢNH BÁO (không chặn) ────');
+    const kq = await runViralLoop(spec, { skipAudience: false, gate: opts.gate, maxRounds: 1 });
+    inKetQuaVong(kq);
+    if (!kq.pass) {
+      console.log('\n⚠️  HỘI ĐỒNG CHẤM TRƯỢT — nhưng KHÔNG chặn (clip demo công cụ).');
+      for (const i of kq.remainingIssues) console.log(`   [${i.level}] ${i.code}: ${i.message}`);
+      console.log('   Vẫn dựng tiếp. Xem CLAUDE.md, mục cổng 2 với nhóm demo công cụ.');
+    }
+    // Giữ NGUYÊN spec gốc: chế độ này không chạy vòng viết lại nào.
+    return { pass: true, spec, canhBao: !kq.pass };
+  }
+
+  if (!process.env.GEMINI_API_KEY && !process.env.ANTHROPIC_API_KEY) {
+    console.error('\n── CỔNG 2 · hội đồng người xem ──────────────');
+    console.error('   ❌ Thiếu GEMINI_API_KEY và ANTHROPIC_API_KEY trong môi trường chạy.');
+    console.error('   Đặt một trong hai, hoặc --no-audience để bỏ qua CÓ CHỦ ĐÍCH.');
+    return { pass: false, spec, reason: 'config' };
+  }
+
+  console.log('\n── CỔNG 2 · hội đồng người xem ──────────────');
+  const kq = await runViralLoop(spec, { skipAudience: false, gate: opts.gate });
+  inKetQuaVong(kq);
+
+  if (!kq.pass) {
+    // ⚠️ Nói ĐÚNG số vòng đã chạy, đừng nói "đã thử viết lại" cho oai. Lượt
+    // chạy thật đầu tiên dừng sau 1/3 vòng vì bản viết lại bị từ chối, mà câu
+    // báo cũ khiến người đọc tưởng đã thử đủ ba lần.
+    console.error(`\n❌ Dừng: kịch bản không qua cổng 2 sau ${kq.rounds.length} vòng.`);
+    if (opts.maxRounds && kq.rounds.length < opts.maxRounds) {
+      console.error(
+        `   (dừng sớm — trần là ${opts.maxRounds} vòng. Bản viết lại bị từ chối; lý do in ở dòng [viral-loop] phía trên.)`
+      );
+    }
+    for (const i of kq.remainingIssues) console.error(`   [${i.level}] ${i.code}: ${i.message}`);
+    console.error('   Sửa kịch bản trong lib/video/sources/ rồi chạy lại.');
+    return { pass: false, spec: kq.spec, reason: 'gate' };
+  }
+
+  // Chỉ báo khi THỰC SỰ có sửa — im lặng đổi chữ rồi render là kiểu thay đổi
+  // không ai biết mà rà.
+  if (kq.rounds.length > 1 || kq.spec.hook !== spec.hook) {
+    console.log(`   ✏️  kịch bản ĐÃ ĐƯỢC VIẾT LẠI qua ${kq.rounds.length} vòng.`);
+    console.log(`      hook: "${kq.spec.hook}"`);
+  }
+  return { pass: true, spec: kq.spec };
+}

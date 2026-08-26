@@ -2,6 +2,8 @@
 // SSR: /khao-luan/:slug → HTML đầy đủ cho SEO
 export const maxDuration = 15;
 import { NextRequest, NextResponse } from 'next/server';
+import { PUBLISHED_ONLY } from '@/lib/content/publish-filter';
+import { ORG_ID } from '@/lib/seo/entity';
 
 const SUPABASE_URL = process.env.SUPABASE_URL!;
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY!;
@@ -42,13 +44,31 @@ function buildHTML(article: any, slug: string, related: any[], master?: any) {
   const body  = renderMarkdown(article.content||'');
   const cat   = escHtml(article.category||'');
 
+  // QAPage/FAQPage: bài khảo luận VỐN ĐÃ đúng hình dạng hỏi-đáp (title = câu
+  // hỏi, excerpt = câu trả lời ngắn tự đứng được — theo đúng HOOK_RULES), chỉ
+  // chưa khai schema. Dùng THẲNG `article.title`/`article.excerpt` — hai giá
+  // trị NÀY đang render y hệt trong <h1>/.article-excerpt bên dưới — để đảm
+  // bảo verbatim TUYỆT ĐỐI, không qua bước rút trích/thêm dấu hỏi nào.
+  //
+  // 🔑 Đây chính là bài học #361 đã ghi: "FAQ schema mà nội dung không nhìn
+  // thấy được — Google phạt đúng chỗ đó". Không dùng cách rút trích H2/H3 +
+  // fallback bịa câu hỏi chung chung như `nghien-cuu/[slug]` đang làm — cách
+  // đó có thể phát schema cho chữ KHÔNG xuất hiện trên trang.
+  const faqSchema = article.excerpt ? {
+    '@context':'https://schema.org','@type':'FAQPage', mainEntity:[
+      { '@type':'Question', name: article.title,
+        acceptedAnswer: { '@type':'Answer', text: article.excerpt } },
+    ],
+  } : null;
+
   const schemas = JSON.stringify([
     { '@context':'https://schema.org','@type':'Article', headline:article.title, description:article.excerpt||'', url, datePublished:article.created_at, inLanguage:'vi',
       author: master
         ? {'@type':'Person',name:master.display_name,url:`${BASE_URL}/tac-gia/${master.id}`}
-        : {'@type':'Organization',name:'Tử Vi Minh Bảo',url:BASE_URL},
-      publisher:{'@type':'Organization',name:'Tử Vi Minh Bảo',url:BASE_URL,logo:{'@type':'ImageObject',url:BASE_URL+'/seal.webp'}},
+        : {'@type':'Organization', '@id': ORG_ID,name:'Tử Vi Minh Bảo',url:BASE_URL},
+      publisher:{'@type':'Organization', '@id': ORG_ID,name:'Tử Vi Minh Bảo',url:BASE_URL,logo:{'@type':'ImageObject',url:BASE_URL+'/seal.webp'}},
       image:{'@type':'ImageObject',url:img} },
+    ...(faqSchema ? [faqSchema] : []),
     { '@context':'https://schema.org','@type':'BreadcrumbList', itemListElement:[
       {'@type':'ListItem',position:1,name:'Trang Chủ',item:BASE_URL+'/'},
       {'@type':'ListItem',position:2,name:'Khảo Luận',item:BASE_URL+'/blog.html'},
@@ -159,7 +179,7 @@ window._articleData = { category: ${JSON.stringify(article.category||'')}, tags:
 </script>
 <script src="/related-tools.js"></script>
 <script src="/testimonials.js"></script>
-<script src="/track.js?v=3" defer></script><script src="/nav.js?v=20" defer></script>
+<script src="/track.js?v=3" defer></script><script src="/nav.js?v=23" defer></script>
 </body></html>`;
 }
 
@@ -173,7 +193,7 @@ function buildNotFound() {
 <h1 style="color:#061A2E;font-family:Georgia,serif;margin-bottom:16px">Không tìm thấy bài viết</h1>
 <p style="color:#777;margin-bottom:24px">Bài viết không tồn tại hoặc đã bị xóa.</p>
 <a href="/blog.html" style="color:#1455A4">← Về Khảo Luận</a>
-<script src="/track.js?v=3" defer></script><script src="/nav.js?v=20" defer></script>
+<script src="/track.js?v=3" defer></script><script src="/nav.js?v=23" defer></script>
 </body></html>`;
 }
 
@@ -186,7 +206,7 @@ export async function GET(request: NextRequest) {
 
   try {
     const r = await fetch(
-      `${SUPABASE_URL}/rest/v1/khao_luan?slug=eq.${encodeURIComponent(slug)}&select=*&limit=1`,
+      `${SUPABASE_URL}/rest/v1/khao_luan?slug=eq.${encodeURIComponent(slug)}&select=*&${PUBLISHED_ONLY}&limit=1`,
       { headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` } }
     );
     const rows = await r.json() as any[];
@@ -201,7 +221,7 @@ export async function GET(request: NextRequest) {
     let master: any = null;
     try {
       const promises: Promise<any>[] = [
-        fetch(`${SUPABASE_URL}/rest/v1/khao_luan?slug=neq.${encodeURIComponent(slug)}&category=eq.${encodeURIComponent(cat)}&select=slug,title,category&order=created_at.desc&limit=5`, { headers: sbHeaders })
+        fetch(`${SUPABASE_URL}/rest/v1/khao_luan?slug=neq.${encodeURIComponent(slug)}&category=eq.${encodeURIComponent(cat)}&select=slug,title,category&${PUBLISHED_ONLY}&order=created_at.desc&limit=5`, { headers: sbHeaders })
           .then(r => r.ok ? r.json() : []),
       ];
       if (masterId) {
@@ -215,7 +235,7 @@ export async function GET(request: NextRequest) {
       if (sameCat.length < 5) {
         const needed = 5 - sameCat.length;
         const otherRes = await fetch(
-          `${SUPABASE_URL}/rest/v1/khao_luan?slug=neq.${encodeURIComponent(slug)}&category=neq.${encodeURIComponent(cat)}&select=slug,title,category&order=created_at.desc&limit=${needed}`,
+          `${SUPABASE_URL}/rest/v1/khao_luan?slug=neq.${encodeURIComponent(slug)}&category=neq.${encodeURIComponent(cat)}&select=slug,title,category&${PUBLISHED_ONLY}&order=created_at.desc&limit=${needed}`,
           { headers: sbHeaders }
         );
         const other = otherRes.ok ? await otherRes.json() as any[] : [];

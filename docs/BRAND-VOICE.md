@@ -42,14 +42,57 @@ Giữ nước đi này. Nó là thứ khiến `khao_luan` không giống mọi t
 
 ---
 
+## 1.5 VIRAL CORE — luật NỘI DUNG cho bài SEO (Henry chốt 2026-08-18)
+
+Áp cho: bài **Khảo Luận/Vấn Đáp** (`cron-khao-luan`) và **Nghiên Cứu** (`cron-master-write`).
+KHÔNG áp cho phần kiến thức/thuật học thuần (ý nghĩa sao, từ điển, tài liệu, thư viện sách).
+
+**Vai trò:** chuyên gia Tử Vi nhưng VIẾT như một content creator tâm lý học.
+**Đích:** người đọc thấy "đúng mình", nhận được một góc nhìn mới, hiểu được mà không cần
+biết một thuật ngữ nào.
+
+Nhịp 5 lớp — viết liền mạch, không in tên lớp ra:
+
+1. **MỞ** 1–2 câu đánh thẳng vào vấn đề nội tâm. Không giới thiệu bộ môn.
+2. **HÀNH VI** 2–3 việc rất cụ thể ngoài đời.
+3. **TWIST** 1–2 câu lật góc nhìn.
+4. **VÌ SAO** giải thích ngắn bằng ngôn ngữ đời thường.
+5. **CHỐT** 1–2 việc làm được ngay, thực tế.
+
+Nguyên tắc: hạn dùng thuật ngữ (có thì giải nghĩa ngay) · không nói chung chung ·
+**ưu tiên HÀNH VI hơn TÍNH CÁCH** · giọng gợi cảm xúc hơn là logic.
+
+> ⚠️ Nhịp này KHÔNG được chép ra prompt lần thứ hai. Nguồn duy nhất là `arcCore`
+> (`lib/agent/prompts.ts`); `lib/content/viral-core.ts` chỉ truyền tham số vào đó.
+> Bản cho rail chat (`LUAN_ARC`) và bản cho bài SEO khác nhau đúng ba chỗ: bối cảnh,
+> ngân sách, và cách chốt (chat được hỏi ngược, bài viết thì không).
+
+**⚠️ `cron-master-write` chỉ nhận 3/5 lớp** (② hành vi · ③ twist · ⑤ chốt cầm được).
+Lớp ① của nó vẫn là *mở in medias res bằng một cảnh*, và persona thầy người Hoa +
+bối cảnh Trung/Đài/Hồng Kông **giữ nguyên** — Henry đã chốt. Dán trọn arc lên đó là
+dựng hai mô tả bố cục chồng nhau trong cùng một prompt.
+
+---
+
 ## 2. Năm đặc trưng giọng
 
-### 2.1 Ngôi thứ ba, phi cá nhân
-Không xưng "tôi". Không gọi người đọc là "bạn" trong bài khảo luận.
-Chủ ngữ dùng: *người ta · con người · ta · đương số · người trí · cha mẹ · song thân*.
+### 2.1 Xưng hô: chọn MỘT lối, giữ nguyên cả bài
+
+> **Sửa 2026-08-18.** Bản 1.0 ghi "không gọi người đọc là bạn" và gate cấm cứng chữ đó.
+> Luật ấy đối đầu trực diện với viral core (§1.5) — muốn người đọc thấy "đúng mình" thì
+> thường phải nói với họ. Henry chốt: viral core là luật về NỘI DUNG, không chi tiết tới
+> mức cấm đại từ. Nên **nới**, không đảo: không ép ngôi nào cả.
+
+Bài viết được chọn **một** trong hai lối, và phải giữ nguyên từ đầu đến cuối:
+- **Ngôi thứ ba** — *người ta · con người · ta · đương số · người trí · cha mẹ · song thân*.
+- **Gọi thẳng người đọc** — "bạn" hoặc "quý vị", nhất quán một chữ.
 
 ✅ "Người trí biết giữ căn bản, không vay mượn lung tung khiến gia đạo bất an."
-❌ "Bạn nên giữ căn bản và đừng vay mượn lung tung nhé."
+✅ "Bạn hay gật trước khi kịp tính — rồi tối về mới thấy mình ôm phần của ba người."
+❌ Nửa bài gọi "bạn", nửa sau đổi sang "quý vị". **Trộn hai lối vẫn là lỗi chặn.**
+
+Tự xưng "tôi": chỉ tùy bút Nghiên Cứu (có ký tên). Bài Khảo Luận vẫn không tự xưng —
+viral core không đòi điều đó, nên luật này giữ nguyên.
 
 ### 2.2 Ngữ vực Hán-Việt cổ
 Đây là chữ ký của thương hiệu. Dùng thành ngữ, dẫn lời người xưa, đặt trong ngoặc kép.
@@ -58,7 +101,11 @@ Mẫu thật trong corpus: *"đối cảnh sinh tâm, nhân thời chế nghi"* 
 *"cầu đồng tồn dị"* · *"vô sự đãi hữu sự"* · *"họa vô đơn chí"* · *"khí tán thần ly"* ·
 *"gia hòa vạn sự hưng"*.
 
-Quy tắc: **mỗi bài ít nhất 1, nhiều nhất 3.** Quá 3 thành sáo, đọc như văn dịch.
+Quy tắc (**sửa 2026-08-18**): **0–2 lần mỗi bài, và CHỈ ở lớp ④ — phần giải thích.**
+Trước đây là "ít nhất 1, nhiều nhất 3" — tức bài nào cũng BẮT BUỘC có, kể cả ở câu mở.
+Mở bài bằng chữ cổ làm mất người đọc trước khi họ kịp thấy mình trong bài, nên nay:
+**TUYỆT ĐỐI không đặt thành ngữ ở 1–2 câu mở đầu.** Dùng thì giải nghĩa ngay bằng lời
+thường. Quá 2 thành sáo, đọc như văn dịch. (Lời thoại của nhân vật không tính.)
 Dẫn thành ngữ phải kèm nguồn mờ — "người xưa dạy", "cổ ngữ" — không bịa tên tác giả cụ thể.
 
 ### 2.3 Thuật ngữ luôn viết hoa và đứng đúng chỗ
@@ -90,14 +137,19 @@ Tử Vi ở đây để người ta hành động sớm hơn, không phải đ�
 
 | Bối cảnh | Gọi người đọc | Tự xưng |
 |---|---|---|
-| Bài Khảo Luận / Vấn Đáp | **không gọi** (ngôi 3: *đương số, người ta, ta*) | không tự xưng |
+| Bài Khảo Luận / Vấn Đáp | **tự chọn** — ngôi 3, "bạn", hoặc "quý vị" (§2.1) | không tự xưng |
 | Prose kết quả tool (lá số, luận giải) | **quý vị** | không tự xưng |
 | Rail chat (có persona thầy) | **quý vị** | **tôi** |
 | Kịch bản video / TikTok | **quý vị** | không tự xưng |
 
+> Gate `brand-check` nay khai `readerAddress: 'free'` cho CẢ HAI bề mặt bài viết —
+> chỉ còn luật `mixed-address` (cấm trộn) có hiệu lực.
+
 **Cấm tuyệt đối:**
 - Trộn 2 cách gọi trong cùng một bài/một lượt trả lời.
-- "bạn" ở bất cứ bề mặt nào — quá suồng sã so với ngữ vực Hán-Việt đã chọn.
+- ~~"bạn" ở bất cứ bề mặt nào~~ — **bỏ luật này 2026-08-18** cho hai bề mặt BÀI VIẾT
+  (xem §2.1). Prose kết quả tool và rail chat thì KHÔNG đổi: chúng có `XUNG_HO_RULE`
+  riêng ở `lib/agent/prompts.ts`, soi gương theo chính lời người dùng.
 - "mình", "anh/chị", "con", "cụ", "gia chủ" làm đại từ gọi người đọc.
 - Mở bài bằng "Kính thưa quý vị" — sáo, và hiện đang lệch hẳn giọng phần còn lại của corpus
   (chỉ 1 bài dùng, đọc như văn tế).

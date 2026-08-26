@@ -157,6 +157,7 @@ try {
 
   const kich = `
 import { createRequire } from 'node:module';
+import { readFileSync } from 'node:fs';
 const { TimeManager } = await import('mingyu-core/calendar');
 TimeManager.setTimezoneOffsetMinutesOverride(420);
 const out = {};
@@ -217,6 +218,47 @@ try {
   out['tuvung-hoang-lich'] = { n: 0, sot: [], loi: String(e && e.message || e) };
 }
 
+/* Lục Nhâm — nguồn KHÔNG export danh sách tên, chỉ export CON SỐ
+   \`REGISTERED_LIUREN_GUA_TI_COUNT\`. Nên rút tên từ chính khối luật rồi
+   ĐỐI CHIẾU số rút được với con số nguồn khai: bố cục đổi ⇒ hai số lệch ⇒
+   đỏ kèm hướng dẫn, thay vì lặng lẽ kiểm một danh sách cụt.
+   Cộng thêm bộ pháp thủ truyền CỬU TÔNG MÔN — tập ĐÓNG của cổ pháp, không nở
+   theo lượt bump, nên khai thẳng tại đây. Chính \`遥克\`/\`昴星\` đứng một mình
+   và \`铸印卦\` đã lọt qua 4.392 khóa mẫu mà không lá nào sinh ra. */
+try {
+  const { docKhoaThe: lnDoc, docPhap: lnPhap } = await import('./lib/liuren/terms.js');
+  const nguon = ${JSON.stringify(
+    'file://' +
+      join(
+        process.cwd(),
+        'node_modules/mingyu-core/dist/divination/algorithms/liuren/helpers/transmission.js'
+      )
+  )};
+  const { REGISTERED_LIUREN_GUA_TI_COUNT: soKhai } = await import(nguon);
+  const src = readFileSync(new URL(nguon), 'utf8');
+  const khoi = src.slice(
+    src.indexOf('const REGISTERED_GUA_TI_RULES'),
+    src.indexOf('export const REGISTERED_LIUREN_GUA_TI_COUNT')
+  );
+  const quai = [...khoi.matchAll(/name:\\s*'([^']+)'/g)].map(m => m[1]);
+  // Tên PHÁP rút thẳng từ nguồn, KHÔNG suy bằng cách chắp đuôi \`法\` vào mọi
+  // khóa thể: \`蒿矢\` là biến thể CỦA \`遥克法\` chứ không phải một pháp riêng,
+  // chắp bừa là bộ dò kêu oan — mà kêu oan thì người ta tắt nó đi.
+  const lessons = readFileSync(new URL(nguon.replace('transmission.js', 'lessons.js')), 'utf8');
+  const phap = [...new Set([...lessons.matchAll(/'([\\u4e00-\\u9fff]{1,6}法)'/g)].map(m => m[1]))];
+  // Nhãn khóa thể đứng MỘT MÌNH trong \`patternTags\` (tập đóng của cổ pháp).
+  const NHAN = ['元首','重审','比用','涉害','遥克','蒿矢','弹射','伏吟','自任',
+    '自信','返吟','反吟','无依','八专','昴星','虎视','冬蛇掩目','别责','递传','回环'];
+  const sot = [
+    ...quai.filter(s => HANR.test(lnDoc(s))),
+    ...NHAN.filter(s => HANR.test(lnDoc(s))),
+    ...phap.filter(s => HANR.test(lnPhap(s).ten)),
+  ];
+  out['tuvung-luc-nham'] = { n: quai.length, soKhai, soPhap: phap.length, sot };
+} catch (e) {
+  out['tuvung-luc-nham'] = { n: 0, sot: [], loi: String(e && e.message || e) };
+}
+
 console.log('__KQ__' + JSON.stringify(out));
 `;
   writeFileSync(join(build, 'check.mjs'), kich);
@@ -259,9 +301,26 @@ console.log('__KQ__' + JSON.stringify(out));
   }
 
   console.log('\nĐối chiếu TRỌN danh sách tên của nguồn:\n');
+  // 🔑 Lục Nhâm có thêm một chốt mà hai mục kia không có: nguồn EXPORT con số
+  // luật đã đăng ký, nên rút tên xong phải khớp đúng con số đó. Lệch = bố cục
+  // nguồn đã đổi ⇒ danh sách rút ra không còn đáng tin, phải sửa bộ dò chứ
+  // không phải nới nó.
+  {
+    const r = kq['tuvung-luc-nham'];
+    if (r && r.n && r.soKhai != null && r.n !== r.soKhai) {
+      console.error(
+        `❌ tuvung-luc-nham — rút được ${r.n} khóa thể nhưng nguồn khai ${r.soKhai}.\n` +
+          '   Khối `REGISTERED_GUA_TI_RULES` đã đổi bố cục ⇒ PHẢI sửa cách rút ' +
+          'tên trong bộ dò. Bỏ qua là kiểm một danh sách cụt mà vẫn báo xanh.'
+      );
+      loi++;
+    }
+  }
+
   for (const [ten, nguong] of [
     ['tuvung-bat-tu', 150],
     ['tuvung-hoang-lich', 120],
+    ['tuvung-luc-nham', 10],
   ]) {
     const r = kq[ten];
     // Đọc ra danh sách RỖNG rồi báo xanh còn tệ hơn báo đỏ — cùng chốt đã dựng
@@ -280,7 +339,8 @@ console.log('__KQ__' + JSON.stringify(out));
     }
     bao(
       r.sot.length === 0,
-      `${ten.padEnd(18)} — ${r.n} tên, còn chữ Hán: ${r.sot.join(', ') || 'không'}`
+      `${ten.padEnd(18)} — ${r.n} tên${r.soPhap ? ` + ${r.soPhap} pháp` : ''}` +
+        `, còn chữ Hán: ${r.sot.join(', ') || 'không'}`
     );
   }
 } finally {

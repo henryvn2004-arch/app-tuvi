@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Da Liệu AI — Tử Vi Minh Bảo</title>
+<meta name="description" content="Phân tích da mặt bằng AI — kết hợp Đông y, Tây y và cổ pháp ngũ hành. Tư vấn ăn uống, mỹ phẩm và chăm sóc da theo bản mệnh.">
+<link rel="icon" type="image/webp" href="/seal.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"></noscript>
+<link rel="stylesheet" href="/shell.css?v=29">
+<style>
+.dl-card{background:var(--white);border:1px solid var(--line);border-radius:14px;padding:20px 22px;box-shadow:var(--shadow);max-width:760px;margin-bottom:16px}
+.dl-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:4px;display:flex;align-items:center;gap:8px}
+.dl-card p.sub{font-size:12.5px;color:var(--text-lt);margin-bottom:14px}
+.upload-zone{border:2px dashed var(--line-2);border-radius:12px;padding:36px 20px;text-align:center;cursor:pointer;background:var(--paper);position:relative;transition:all .2s}
+.upload-zone:hover,.upload-zone.drag{border-color:#2E8B57;background:#f0fff4}
+.upload-zone input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.upload-icon{font-size:36px;margin-bottom:10px}
+.upload-text{font-size:14px;color:var(--text-mid);font-weight:500}
+.upload-hint{font-size:12px;color:var(--text-lt);margin-top:5px;line-height:1.5}
+.preview-box{text-align:center;margin-top:12px}
+.preview-box img{max-width:260px;max-height:300px;border-radius:10px;display:block;margin:0 auto}
+.btn-change{background:none;border:1px solid var(--line-2);border-radius:6px;padding:4px 13px;font-size:11px;color:var(--text-mid);cursor:pointer;margin-top:8px}
+.pt-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+@media(max-width:480px){.pt-row{grid-template-columns:1fr}}
+.pt-fg{display:flex;flex-direction:column;gap:5px}
+.pt-fg label{font-size:10.5px;font-weight:600;color:var(--text-lt);letter-spacing:.04em;text-transform:uppercase}
+.pt-fg input,.pt-fg select{border:1px solid var(--line-2);border-radius:7px;padding:8px 10px;font-size:13.5px;font-family:inherit;color:var(--text);background:var(--paper);outline:none}
+.pt-fg input:focus,.pt-fg select:focus{border-color:#2E8B57}
+.tips-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.tip-badge{font-size:11px;padding:4px 10px;border-radius:12px;background:#f0fff4;border:1px solid #c6e8d0;color:#2E8B57}
+.btn-analyze{width:100%;padding:13px;background:linear-gradient(135deg,#1a4a2a,#2E8B57);color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:var(--serif);display:flex;align-items:center;justify-content:center;gap:7px;transition:opacity .2s;margin-top:14px}
+.btn-analyze:hover{opacity:.88} .btn-analyze:disabled{opacity:.45;cursor:not-allowed}
+.loading{display:none;text-align:center;padding:20px 0}
+.loading.show{display:block}
+#results{display:none}
+.summary-header{background:linear-gradient(135deg,#0f2a18,#1a4a2a);border-radius:14px;padding:20px 22px;margin-bottom:14px;color:#fff}
+.summary-top{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:12px}
+.skin-badge{width:56px;height:56px;border-radius:50%;background:rgba(255,255,255,.12);display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0}
+.skin-emoji{font-size:24px}
+.skin-label{font-size:9px;color:rgba(255,255,255,.6);margin-top:2px}
+.summary-info{flex:1}
+.summary-title{font-size:17px;font-weight:700;font-family:var(--serif);margin-bottom:4px}
+.summary-sub{font-size:12px;opacity:.7;line-height:1.5}
+.menh-badge{margin-left:auto;background:rgba(212,168,67,.2);border:1px solid rgba(212,168,67,.4);border-radius:9px;padding:7px 12px;text-align:center;flex-shrink:0}
+.menh-hanh{font-size:16px;font-weight:700;color:var(--gold)}
+.menh-label{font-size:10px;color:rgba(255,255,255,.55);margin-top:2px}
+.condition-tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.condition-tag{font-size:11px;padding:3px 10px;border-radius:12px;background:rgba(255,255,255,.12);color:rgba(255,255,255,.85)}
+.condition-tag.alert{background:rgba(192,57,43,.3);color:#ffb3a8}
+.summary-mo-ta{font-size:13px;opacity:.75;line-height:1.65;background:rgba(255,255,255,.08);border-radius:8px;padding:10px 13px}
+.section-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.tab-btn{padding:8px 14px;border-radius:20px;border:1.5px solid var(--line-2);background:var(--white);font-size:12px;font-weight:600;cursor:pointer;color:var(--text-mid);transition:all .15s;display:flex;align-items:center;gap:5px}
+.tab-btn.active{background:#1a4a2a;color:#fff;border-color:#1a4a2a}
+.tab-btn:hover:not(.active){border-color:#2E8B57;color:#2E8B57}
+.tab-panel{display:none} .tab-panel.show{display:block}
+.dongy-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:560px){.dongy-grid{grid-template-columns:1fr}}
+.dongy-item{background:var(--paper);border:1px solid var(--border-lt);border-radius:10px;padding:13px}
+.dongy-label{font-size:10px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--text-lt);margin-bottom:6px}
+.dongy-val{font-size:13px;color:var(--text-mid);line-height:1.6}
+.dongy-val strong{color:var(--heading)}
+.dongy-full{grid-column:1/-1;background:var(--gold-lt);border-color:#e8d080}
+.dongy-full .dongy-val{color:var(--text-mid)}
+.food-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:560px){.food-grid{grid-template-columns:1fr}}
+.food-col-title{font-size:11px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.food-col-title.good{color:#2E8B57} .food-col-title.bad{color:var(--red)}
+.food-list{display:flex;flex-direction:column;gap:8px}
+.food-item{background:var(--paper);border-radius:8px;padding:10px 12px;border-left:3px solid}
+.food-item.good{border-left-color:#2E8B57} .food-item.bad{border-left-color:var(--red)}
+.food-name{font-size:13px;font-weight:600;color:var(--heading);margin-bottom:3px}
+.food-reason{font-size:11px;color:var(--text-mid);line-height:1.5}
+.nuoc-uong{background:#f0fff8;border:1px solid #c6e8d0;border-radius:9px;padding:11px 14px;margin-top:10px;font-size:13px;color:var(--text-mid);line-height:1.65;grid-column:1/-1}
+.nuoc-uong strong{color:#2E8B57;font-size:11px;display:block;margin-bottom:4px}
+.thuc-duong-box{background:var(--gold-lt);border:1px solid #e8d080;border-radius:9px;padding:11px 14px;margin-top:10px;font-size:13px;color:var(--text-mid);line-height:1.65;grid-column:1/-1}
+.thuc-duong-box strong{color:var(--gold-soft);font-size:11px;display:block;margin-bottom:4px}
+.ingredient-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:12px}
+@media(max-width:560px){.ingredient-grid{grid-template-columns:1fr}}
+.ing-title{font-size:11px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;margin-bottom:8px;display:flex;align-items:center;gap:5px}
+.ing-title.good{color:#2E8B57} .ing-title.bad{color:var(--red)}
+.ing-list{display:flex;flex-direction:column;gap:7px}
+.ing-item{background:var(--paper);border-radius:8px;padding:9px 11px;border-left:3px solid}
+.ing-item.good{border-left-color:#2E8B57} .ing-item.bad{border-left-color:var(--red)}
+.ing-name{font-size:12px;font-weight:700;color:var(--heading);margin-bottom:2px}
+.ing-desc{font-size:11px;color:var(--text-mid);line-height:1.45}
+.ing-hanh{display:inline-block;font-size:9px;padding:1px 7px;border-radius:8px;background:#e8f5e9;color:#2E8B57;border:1px solid #c6e8d0;margin-top:3px;font-weight:600}
+.routine-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+@media(max-width:560px){.routine-grid{grid-template-columns:1fr}}
+.routine-item{background:var(--paper);border-radius:9px;padding:12px}
+.routine-time{font-size:11px;font-weight:700;color:var(--heading);margin-bottom:5px;display:flex;align-items:center;gap:5px}
+.routine-steps{font-size:12px;color:var(--text-mid);line-height:1.6}
+.luu-y-box{background:#fff8f0;border-left:3px solid var(--gold-soft);border-radius:0 8px 8px 0;padding:11px 14px;margin-top:10px;font-size:13px;color:var(--text-mid);line-height:1.65}
+.luu-y-box strong{color:var(--gold-soft);font-size:11px;display:block;margin-bottom:4px}
+.disclaimer{background:var(--paper-2);border:1px solid var(--border-lt);border-radius:9px;padding:11px 14px;font-size:11px;color:var(--text-lt);line-height:1.6;margin-top:4px}
+.btn-cancel{background:none;border:1px solid var(--line-2);border-radius:8px;padding:10px 18px;font-size:13px;color:var(--text-mid);cursor:pointer;font-family:inherit}
+</style>
+</head>
+<body>
+
+<div class="shell">
+  <aside class="sb" id="shell-sidebar"></aside>
+
+  <main class="ws" id="ws">
+    <div class="ws-top">
+      <button class="btn mobile-only" onclick="document.getElementById('shell-sidebar').classList.toggle('open');window.shellSyncBackdrop&&shellSyncBackdrop()" aria-label="Menu">☰</button>
+      <div class="ws-title"><b>Da Liệu AI Toàn Diện</b><span>Chụp ảnh da mặt — Đông y, Tây y và cổ pháp ngũ hành</span></div>
+      <div class="ws-actions">
+        <button class="btn mobile-only" onclick="Shell.openRail()">✦ Hỏi</button>
+      </div>
+    </div>
+    <div class="ws-body">
+      <div id="introHost"></div>
+      <div id="shellRecent"></div>
+
+      <div class="dl-card">
+        <h2><span class="ic" data-icon="camera"></span> Ảnh Da Mặt</h2>
+        <p class="sub">Soi ảnh da, chỉ ra những vùng đang có vấn đề cần chú ý. Bạn nhìn gương mỗi ngày mà không chắc da mình đang ổn hay không. Dùng khi muốn một góc nhìn khách quan trước lúc mua mỹ phẩm.</p>
+        <p class="price-note" data-tvp-price-label="da-lieu-ai">…</p>
+
+        <div class="upload-zone" id="uploadZone"
+          ondragover="event.preventDefault();this.classList.add('drag')"
+          ondragleave="this.classList.remove('drag')"
+          ondrop="event.preventDefault();this.classList.remove('drag');loadFile(event.dataTransfer.files[0])">
+          <input type="file" accept="image/*" id="fileInput" onchange="loadFile(this.files[0])">
+          <div id="uploadPrompt">
+            <div class="upload-icon ic" data-icon="camera" style="font-size:36px;display:block"></div>
+            <div class="upload-text">Chụp hoặc chọn ảnh khuôn mặt</div>
+            <div class="upload-hint">Ánh sáng tự nhiên · Không filter · Chụp gần rõ mặt<br>JPG/PNG tối đa 5MB</div>
+          </div>
+          <div id="previewBox" class="preview-box" style="display:none">
+            <img id="previewImg" alt="preview">
+            <button class="btn-change" onclick="clearPhoto()">✕ Đổi ảnh</button>
+          </div>
+        </div>
+
+        <div class="tips-row">
+          <span class="tip-badge"><span class="ic" data-icon="lightbulb"></span> Chụp nơi có ánh sáng tự nhiên</span>
+          <span class="tip-badge"><span class="ic" data-icon="x-circle"></span> Không dùng flash</span>
+          <span class="tip-badge"><span class="ic" data-icon="smile"></span> Mặt sạch, không trang điểm</span>
+        </div>
+
+        <div class="pt-row">
+          <div class="pt-fg"><label>Năm sinh (tùy chọn — tư vấn theo mệnh)</label><input type="number" id="namSinh" placeholder="VD: 1990" min="1920" max="2010"></div>
+          <div class="pt-fg"><label>Giới tính</label>
+            <select id="gioiTinh">
+              <option value="nu">Nữ</option>
+              <option value="nam">Nam</option>
+            </select>
+          </div>
+        </div>
+
+        <button class="btn-analyze" id="btnAnalyze" onclick="analyze()" disabled>
+          <span class="ic" data-icon="leaf"></span> Phân Tích Da Toàn Diện — <span data-tvp-price="da-lieu-ai">…</span> Lượng
+        </button>
+      </div>
+
+      <div class="dl-card loading" id="loading">
+        <div id="analysisStepsHost"></div>
+      </div>
+
+      <div id="results" data-ws-result>
+
+        <div class="summary-header">
+          <div class="summary-top">
+            <div class="skin-badge">
+              <div class="skin-emoji ic" id="skinEmoji" data-icon="leaf"></div>
+              <div class="skin-label" id="skinLabel">Da</div>
+            </div>
+            <div class="summary-info">
+              <div class="summary-title" id="summaryTitle">—</div>
+              <div class="summary-sub" id="summarySub">—</div>
+            </div>
+            <div class="menh-badge" id="menhBadge" style="display:none">
+              <div class="menh-hanh" id="menhHanh">—</div>
+              <div class="menh-label" id="menhLabel">—</div>
+            </div>
+          </div>
+          <div class="condition-tags" id="conditionTags"></div>
+          <div class="summary-mo-ta" id="summaryMoTa">—</div>
+        </div>
+
+        <div class="section-tabs">
+          <button class="tab-btn active" onclick="showTab('dongy',this)"><span class="ic" data-icon="scale"></span> Đông Y</button>
+          <button class="tab-btn" onclick="showTab('anuong',this)"><span class="ic" data-icon="leaf"></span> Ăn Uống</button>
+          <button class="tab-btn" onclick="showTab('mypham',this)"><span class="ic" data-icon="sparkles"></span> Mỹ Phẩm</button>
+        </div>
+
+        <div class="tab-panel show dl-card" id="tab-dongy">
+          <h2><span class="ic" data-icon="scale"></span> Luận Giải Đông Y</h2>
+          <div class="dongy-grid" id="dongyGrid"></div>
+        </div>
+
+        <div class="tab-panel dl-card" id="tab-anuong">
+          <h2><span class="ic" data-icon="leaf"></span> Thực Dưỡng & Ăn Uống</h2>
+          <div class="food-grid" id="foodGrid"></div>
+        </div>
+
+        <div class="tab-panel dl-card" id="tab-mypham">
+          <h2><span class="ic" data-icon="sparkles"></span> Mỹ Phẩm & Routine</h2>
+          <div class="ingredient-grid" id="ingredientGrid"></div>
+          <div class="routine-grid" id="routineGrid"></div>
+          <div class="luu-y-box" id="luuYBox" style="display:none">
+            <strong>✦ Lưu Ý Theo Bản Mệnh</strong>
+            <span id="luuYText">—</span>
+          </div>
+        </div>
+
+        <div class="dl-card">
+          <div style="font-size:13px;color:var(--text-mid);line-height:1.75;font-style:italic;text-align:center;padding:4px 0" id="tongKet">—</div>
+        </div>
+
+        <div class="disclaimer">
+          <span class="ic" data-icon="alert-triangle"></span> Đây là tư vấn tham khảo kết hợp Đông Tây y, không thay thế chẩn đoán và điều trị của bác sĩ da liễu. Nếu có tình trạng da nghiêm trọng, vui lòng tham khảo chuyên gia.
+        </div>
+
+        <div style="text-align:center;padding:14px 0 4px">
+          <button onclick="resetAll()" class="btn-cancel">← Phân Tích Lại</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <aside class="rail" id="shell-rail"></aside>
+</div>
+
+<script>window.SHELL_ACTIVE='da-lieu-ai';window.SHELL_HISTORY=true;
+window.SHELL_INTRO={key:'da-lieu-ai',title:'Da Liệu AI Toàn Diện',desc:'Soi ảnh da, chỉ ra những vùng đang có vấn đề cần chú ý. Bạn nhìn gương mỗi ngày mà không chắc da mình đang ổn hay không. Dùng khi muốn một góc nhìn khách quan trước lúc mua mỹ phẩm.'};</script>
+<script src="/auth.js?v=2"></script>
+<script src="/tuvi-paywall.js?v=20"></script>
+  <script src="/nav.js?v=23" data-icons-only></script>
+<script src="/shell.js?v=82"></script>
+<script src="/tools-shared/ai-loading-steps.js?v=9"></script>
+<script>
+function initDaLieuAi(){
+  Shell.setContext({
+    label:'Da Liệu AI Toàn Diện',
+    placeholder:'Hỏi thầy về da liễu…',
+    greeting:'Chào bạn. Tải ảnh da mặt ở khung bên trái, tôi sẽ phân tích kết hợp Đông Tây y và bản mệnh ngũ hành. Sau khi có kết quả, cứ hỏi tôi thêm.',
+    chips:['Da tôi hợp mệnh gì?','Thành phần mỹ phẩm nên tránh?','Cách chăm da theo Đông y?']
+  });
+}
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initDaLieuAi); else initDaLieuAi();
+
+// ══════════════════════════════════════════════════════════════════════
+// Port từ public/tools/da-lieu-ai.html — giữ nguyên luồng nén ảnh (EXIF
+// fix qua createImageBitmap) + gate Lượng qua TuviPaywall.
+// ══════════════════════════════════════════════════════════════════════
+const SKIN_TYPE_ICON = {
+  'da dầu':'droplet','da khô':'sun','da hỗn hợp':'scale','da thường':'leaf','da nhạy cảm':'flower'
+};
+const MENH_COLOR = {Kim:'#888',Mộc:'#2E8B57',Thủy:'#1455A4',Hỏa:'#C0392B',Thổ:'#9A7B3A'};
+
+let _imgData = null, _mediaType = 'image/jpeg';
+const ANALYSIS_STEPS = [
+  { label: '<span class="ic" data-icon="flask-conical"></span> Tây y: nhận diện loại da & tình trạng', ms: 2600 },
+  { label: '<span class="ic" data-icon="scale"></span> Đông y: luận giải tạng phủ & bản mệnh', ms: 2600 },
+  { label: '<span class="ic" data-icon="leaf"></span> Lập kế hoạch ăn uống thực dưỡng', ms: 2600 },
+  { label: '<span class="ic" data-icon="sparkles"></span> Gợi ý mỹ phẩm & routine', ms: 0 },
+];
+let _analysisLoadingCtl = null;
+
+function loadFile(file) {
+  if (!file?.type?.startsWith('image/')) return;
+  const reader = new FileReader();
+  reader.onload = async e => {
+    // EXIF fix
+    try {
+      const bitmap = await createImageBitmap(await fetch(e.target.result).then(r => r.blob()));
+      const canvas = document.createElement('canvas');
+      canvas.width = bitmap.width; canvas.height = bitmap.height;
+      canvas.getContext('2d').drawImage(bitmap, 0, 0);
+      canvas.toBlob(b => {
+        const r2 = new FileReader();
+        r2.onload = x => {
+          _imgData = x.target.result.split(',')[1];
+          _mediaType = 'image/jpeg';
+          document.getElementById('previewImg').src = x.target.result;
+          document.getElementById('uploadPrompt').style.display = 'none';
+          document.getElementById('previewBox').style.display = 'block';
+          document.getElementById('btnAnalyze').disabled = false;
+        };
+        r2.readAsDataURL(b);
+      }, 'image/jpeg', 0.88);
+    } catch(_) {
+      _imgData = e.target.result.split(',')[1];
+      _mediaType = file.type;
+      document.getElementById('previewImg').src = e.target.result;
+      document.getElementById('uploadPrompt').style.display = 'none';
+      document.getElementById('previewBox').style.display = 'block';
+      document.getElementById('btnAnalyze').disabled = false;
+    }
+  };
+  reader.readAsDataURL(file);
+}
+
+function clearPhoto() {
+  _imgData = null;
+  document.getElementById('previewBox').style.display = 'none';
+  document.getElementById('uploadPrompt').style.display = 'block';
+  document.getElementById('fileInput').value = '';
+  document.getElementById('btnAnalyze').disabled = true;
+  document.getElementById('results').style.display = 'none';
+}
+
+function resetAll() {
+  clearPhoto();
+  document.getElementById('ws').scrollTo({ top: 0, behavior: 'smooth' });
+  Shell.setShareable(null);
+}
+
+async function analyze() {
+  if (!_imgData) return;
+  const namSinh = parseInt(document.getElementById('namSinh').value) || null;
+  const token = window.Auth?.getSession()?.access_token;
+
+  document.getElementById('btnAnalyze').disabled = true;
+  document.getElementById('loading').classList.add('show');
+  document.getElementById('results').style.display = 'none';
+  _analysisLoadingCtl = AiLoadingSteps.mount('analysisStepsHost', ANALYSIS_STEPS);
+  _analysisLoadingCtl.start();
+
+  const slug = TuviPaywall.generateToolSlug('da-lieu-ai');
+  TuviPaywall.init({ product: 'da-lieu-ai' });
+
+  try {
+    await new Promise((resolve, reject) => {
+      TuviPaywall.requireCredits(slug, async () => {
+        try {
+          const res = await fetch('/api/tuong-mat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+            body: JSON.stringify({ action: 'da-lieu-ai', image: _imgData, mediaType: _mediaType, namSinh }),
+          });
+          const data = await res.json();
+          if (!res.ok || data.error) throw new Error(data.error || 'Lỗi phân tích');
+          window.refreshNavCredits?.();
+          _analysisLoadingCtl && _analysisLoadingCtl.finish();
+          renderResults(data);
+          resolve();
+        } catch(e) { reject(e); }
+      });
+    });
+  } catch(e) {
+    _analysisLoadingCtl && _analysisLoadingCtl.stop();
+    alert('Lỗi: ' + (e.message || 'Vui lòng thử lại.'));
+  } finally {
+    document.getElementById('btnAnalyze').disabled = false;
+    document.getElementById('loading').classList.remove('show');
+  }
+}
+
+function renderResults(d) {
+  document.getElementById('results').style.display = 'block';
+  const da = d.phan_tich_da || {};
+  const dongy = d.dong_y || {};
+  const anuong = d.an_uong || {};
+  const mypham = d.my_pham || {};
+
+  const loaiDa = da.loai_da || 'da thường';
+  const skinIconKey = SKIN_TYPE_ICON[loaiDa] || 'leaf';
+  document.getElementById('skinEmoji').innerHTML = window.iconHtml ? window.iconHtml(skinIconKey) : '';
+  document.getElementById('skinLabel').textContent = loaiDa;
+  document.getElementById('summaryTitle').textContent = `${loaiDa.charAt(0).toUpperCase() + loaiDa.slice(1)} · ${da.muc_do || ''}`;
+  document.getElementById('summarySub').textContent = da.vung_can_chu_y || '';
+  document.getElementById('summaryMoTa').textContent = da.mo_ta || '';
+
+  const tagsEl = document.getElementById('conditionTags');
+  tagsEl.innerHTML = '';
+  (da.tinh_trang || []).forEach(t => {
+    const isAlert = t.includes('mụn') || t.includes('viêm') || t.includes('nhạy');
+    tagsEl.innerHTML += `<span class="condition-tag${isAlert ? ' alert' : ''}">${t}</span>`;
+  });
+
+  if (d.menhHanh) {
+    document.getElementById('menhHanh').textContent = 'Mệnh ' + d.menhHanh;
+    document.getElementById('menhLabel').textContent = d.menhFull || d.canChi || '';
+    const badge = document.getElementById('menhBadge');
+    badge.style.display = 'block';
+    badge.style.borderColor = (MENH_COLOR[d.menhHanh] || '#888') + '66';
+  }
+
+  const dg = document.getElementById('dongyGrid');
+  dg.innerHTML = `
+    <div class="dongy-item"><div class="dongy-label">Tạng Phủ Liên Quan</div><div class="dongy-val"><strong>${dongy.tang_phu || '—'}</strong></div></div>
+    <div class="dongy-item"><div class="dongy-label">Cân Bằng Âm Dương</div><div class="dongy-val">${dongy.can_bang || '—'}</div></div>
+    <div class="dongy-item dongy-full"><div class="dongy-label">Lý Giải Đông Y</div><div class="dongy-val">${dongy.ly_giai || '—'}</div></div>
+    ${dongy.menh_lien_quan ? `<div class="dongy-item dongy-full"><div class="dongy-label">✦ Ảnh Hưởng Của Bản Mệnh</div><div class="dongy-val">${dongy.menh_lien_quan}</div></div>` : ''}
+  `;
+
+  const fg = document.getElementById('foodGrid');
+  const nenAnHTML = (anuong.nen_an || []).map(f => `
+    <div class="food-item good">
+      <div class="food-name"><span class="ic" data-icon="leaf"></span> ${f.ten}</div>
+      <div class="food-reason">${f.ly_do}</div>
+    </div>`).join('');
+  const tranhAnHTML = (anuong.nen_tranh || []).map(f => `
+    <div class="food-item bad">
+      <div class="food-name"><span class="ic" data-icon="alert-triangle"></span> ${f.ten}</div>
+      <div class="food-reason">${f.ly_do}</div>
+    </div>`).join('');
+  fg.innerHTML = `
+    <div>
+      <div class="food-col-title good">✓ Nên Ăn</div>
+      <div class="food-list">${nenAnHTML}</div>
+    </div>
+    <div>
+      <div class="food-col-title bad">✗ Nên Tránh</div>
+      <div class="food-list">${tranhAnHTML}</div>
+    </div>
+    ${anuong.thuc_duong ? `<div class="thuc-duong-box"><strong>✦ Thực Dưỡng Theo Mệnh</strong>${anuong.thuc_duong}</div>` : ''}
+    ${anuong.nuoc_uong ? `<div class="nuoc-uong"><strong><span class="ic" data-icon="droplet"></span> Nước Uống & Trà Dược Liệu</strong>${anuong.nuoc_uong}</div>` : ''}
+  `;
+  window.mountIcons && window.mountIcons(fg);
+
+  const ig = document.getElementById('ingredientGrid');
+  const nenIngHTML = (mypham.ingredients_nen || []).map(i => `
+    <div class="ing-item good">
+      <div class="ing-name">${i.ten}</div>
+      <div class="ing-desc">${i.cong_dung}</div>
+      ${i.phu_hop_hanh ? `<span class="ing-hanh">Hành ${i.phu_hop_hanh}</span>` : ''}
+    </div>`).join('');
+  const tranhIngHTML = (mypham.ingredients_tranh || []).map(i => `
+    <div class="ing-item bad">
+      <div class="ing-name">${i.ten}</div>
+      <div class="ing-desc">${i.ly_do}</div>
+    </div>`).join('');
+  ig.innerHTML = `
+    <div>
+      <div class="ing-title good">✓ Thành Phần Nên Dùng</div>
+      <div class="ing-list">${nenIngHTML}</div>
+    </div>
+    <div>
+      <div class="ing-title bad">✗ Thành Phần Nên Tránh</div>
+      <div class="ing-list">${tranhIngHTML}</div>
+    </div>
+  `;
+
+  const rg = document.getElementById('routineGrid');
+  rg.innerHTML = `
+    <div class="routine-item">
+      <div class="routine-time"><span class="ic" data-icon="sun"></span> Buổi Sáng</div>
+      <div class="routine-steps">${mypham.routine_sang || '—'}</div>
+    </div>
+    <div class="routine-item">
+      <div class="routine-time"><span class="ic" data-icon="moon"></span> Buổi Tối</div>
+      <div class="routine-steps">${mypham.routine_toi || '—'}</div>
+    </div>
+  `;
+  window.mountIcons && window.mountIcons(rg);
+
+  if (mypham.luu_y) {
+    document.getElementById('luuYText').textContent = mypham.luu_y;
+    document.getElementById('luuYBox').style.display = 'block';
+  }
+
+  if (d.tong_ket) document.getElementById('tongKet').textContent = '✦ ' + d.tong_ket;
+
+  showTab('dongy', document.querySelector('.tab-btn'));
+  setTimeout(() => document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'start' }), 200);
+
+  if (window.SHELL_INTRO) Shell.dismissIntro(window.SHELL_INTRO.key);
+  Shell.setContext({
+    label: 'Da Liệu — ' + loaiDa,
+    greeting: 'Kết quả phân tích da: **' + loaiDa + '**' + (da.muc_do ? ' — ' + da.muc_do : '') + '. Bạn muốn hỏi thêm về Đông y, ăn uống hay mỹ phẩm?',
+    chips: ['Vì sao da tôi thuộc loại này?', 'Nên dùng sản phẩm nào trước?', 'Cách cải thiện theo Đông y?']
+  });
+  Shell.setShareable({
+    kind: 'text', toolId: 'da-lieu-ai', title: 'Kết quả Da Liệu AI của tôi',
+    text: 'Loại da: ' + loaiDa + (da.muc_do ? ' — ' + da.muc_do : '') + (d.tong_ket ? '\n\n' + d.tong_ket : '')
+  });
+}
+
+function showTab(id, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('show'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id)?.classList.add('show');
+  if (btn) btn.classList.add('active');
+}
+
+TuviPaywall.init({ product: 'da-lieu-ai' });
+</script>
+</body>
+</html>

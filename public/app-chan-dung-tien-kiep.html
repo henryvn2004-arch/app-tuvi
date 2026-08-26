@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"></noscript>
-<link rel="stylesheet" href="/shell.css?v=18">
+<link rel="stylesheet" href="/shell.css?v=29">
 <style>
 .form-card{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);max-width:640px}
 .form-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:3px}
@@ -84,7 +84,8 @@
       <div id="shellRecent"></div>
       <div class="form-card" id="birthPanel">
         <h2>Nhập ngày sinh của bạn (dương lịch)</h2>
-        <p class="sub">AI lập lá số, suy chức phận từ cung Quan Lộc rồi kể lại một đời người qua 9 đại vận.</p>
+        <p class="sub">Nhận một chân dung và câu chuyện một đời từ chính lá số bạn. Bạn từng tự hỏi kiếp trước mình là ai, sống ra sao. Dùng khi muốn một câu chuyện để đọc, không chỉ vài dòng luận.</p>
+        <p class="price-note" data-tvp-price-label="chan-dung-tien-kiep">…</p>
         <div id="tuviFormHost"></div>
 
         <div class="frow" style="margin-bottom:0">
@@ -123,6 +124,11 @@
           </div>
         </div>
 
+        <!-- Khách chưa đăng nhập: khoá LUÔN cả phần "miễn phí" phía dưới (5
+             hồi + cơ sở lá số) — chỉ hero (danh xưng/tên/nền văn minh) là
+             phần đầu được xem. -->
+        <div id="cdtkLockHost" style="display:none;margin-bottom:16px"></div>
+
         <!-- W1b — CƠ SỞ TRONG LÁ SỐ, chỉ hiện ở lượt tính thử.
              Khối này từng bị gỡ khỏi bản trả tiền (Henry: thuật ngữ tử vi lẫn
              vào phần đọc chính khiến nó nghe như bản luận giải chứ không phải
@@ -145,12 +151,6 @@
           </div>
         </div>
 
-        <!-- Tường đứng ở CUỐI ở lượt tính thử: khối chữ phía trên đang ẩn, mở
-             xong tường biến mất và mọi thứ về đúng chỗ. -->
-        <div class="res-block" id="lockBlock" style="display:none">
-          <div class="res-block-body" id="lockHost" data-tvp-lock style="padding-top:6px"></div>
-        </div>
-
         <div class="res-block" style="background:#FBF3DE;border-color:#e8d9b0">
           <div class="res-block-body" style="font-size:12.5px;line-height:1.6;color:#5a5145">
             💡 Chân dung và câu chuyện phía trên được phác hoạ dựa trên các dữ liệu trong lá số Tử Vi của bạn, kết hợp với kinh nghiệm nghiên cứu của tiền nhân để lại. Mang tính tham khảo và giải trí.
@@ -169,15 +169,15 @@
 </div>
 
 <script>window.SHELL_ACTIVE='chan-dung-tien-kiep';window.SHELL_HISTORY=true;
-window.SHELL_INTRO={key:'chan-dung-tien-kiep',title:'Chân Dung Tiền Kiếp',desc:'Đặt <b>chính lá số của bạn</b> vào <b>một trong 5 nền văn minh Á Đông cổ</b> (Trung Hoa · Việt Nam · Nhật Bản · Hàn Quốc · Thái Lan, do chính lá số quyết định) — chức phận suy từ cung <b>Quan Lộc</b>, dung mạo từ cung <b>Mệnh</b>, cả một đời người kể qua <b>9 đại vận</b>.'};</script>
+window.SHELL_INTRO={key:'chan-dung-tien-kiep',title:'Chân Dung Tiền Kiếp',desc:'Nhận một chân dung và câu chuyện một đời từ chính lá số bạn. Bạn từng tự hỏi kiếp trước mình là ai, sống ra sao. Dùng khi muốn một câu chuyện để đọc, không chỉ vài dòng luận.'};</script>
 <script src="/laso-chart.js?v=3"></script>
-<script src="/tuvi-form.js?v=1"></script>
-<script src="/tuvi-paywall.js?v=18"></script>
+<script src="/tuvi-form.js?v=2"></script>
+<script src="/tuvi-paywall.js?v=21"></script>
 <script src="/auth.js?v=2"></script>
-  <script src="/nav.js?v=22" data-icons-only></script>
-<script src="/shell.js?v=68"></script>
-<script src="/tools-shared/ai-loading-steps.js?v=5"></script>
-<script src="/tools-shared/portrait-recover.js?v=1"></script>
+  <script src="/nav.js?v=23" data-icons-only></script>
+<script src="/shell.js?v=82"></script>
+<script src="/tools-shared/ai-loading-steps.js?v=9"></script>
+<script src="/tools-shared/portrait-recover.js?v=2"></script>
 <script>
 
 var _currentSlug = '';
@@ -234,22 +234,14 @@ function showError(msg) {
   if (msg) { e.textContent = msg; e.classList.add('active'); } else { e.classList.remove('active'); }
 }
 
-// ── W1b: bấm nút là CHẠY THẬT, miễn phí ────────────────────────────────────
-//
-// Trước đây bấm nút là gặp paywall ngay — tức phải trả 25 Lượng mới biết engine
-// có thật sự đọc lá số của mình hay không. Đo được trên prod (panel Phễu Theo
-// Tool): 5 người mở tool, 1 người bấm chạy.
-//
-// Nay: chạy tầng deterministic (0 lượt LLM, 0 lượt sinh ảnh, 0đ) — danh xưng,
-// nền văn minh, khung 5 hồi, cơ sở trong lá số — rồi mới dựng tường trên đúng
-// phần tốn tiền.
-var CDTK_KHOA = [
-  'Bức chân dung nhân vật',
-  'Mô tả khí chất & cốt cách',
-  'Chữ của cả 5 hồi truyện',
-  'Lời kết',
-];
+function _cdtkLoggedIn() { return !!(window.Auth && window.Auth.isLoggedIn && window.Auth.isLoggedIn()); }
 
+// Đăng nhập rồi → bấm nút là CHẠY THẬT ngay (case 1, cả truyện lẫn tranh
+// trong cùng một lượt), thiếu/không đủ Lượng thì `requireCredits` tự bật
+// popup. Chưa đăng nhập (case 2) → dựng tầng đầu MỞ + khung 5 hồi/cơ sở lá số
+// (deterministic, 0đ) dựng THẬT — khung 5 hồi tự hiện đúng dạng "khoá" (chỉ có
+// stage/role, chưa có chữ) vì title/text vốn dĩ CHƯA TỒN TẠI ở lượt này, không
+// phải bị ẩn đi. Chỉ tranh + chữ từng hồi đứng sau tấm khoá.
 async function analyze() {
   showError('');
   var fdIn = TuviForm.getData();
@@ -263,36 +255,9 @@ async function analyze() {
     name: (fdIn.hoten || '').trim() || undefined };
   _currentSlug = TuviPaywall.generateToolSlug('chan-dung-tien-kiep-' + dd + '-' + mm + '-' + yyyy);
 
-  _openPanel();
-  _loadingCtl = AiLoadingSteps.mount('loadingSteps', CDTK_STEPS.slice(0, 2));
-  _loadingCtl.start();
-  var prev;
-  try {
-    var r = await fetch('/api/chan-dung-tien-kiep?preview=1', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ birth: _lastBirth }),
-    });
-    prev = await r.json();
-    if (!r.ok || !prev.success) throw new Error(prev.error || 'Lỗi ' + r.status);
-  } catch (e) {
-    _loadingCtl && _loadingCtl.stop();
-    _closePanel();
-    showError('Lỗi: ' + (e.message || 'Không thể kết nối. Vui lòng thử lại.'));
-    return;
-  }
-  _loadingCtl && _loadingCtl.finish();
-  document.getElementById('loading').style.display = 'none';
-  document.getElementById('card').style.display = 'block';
-  document.getElementById('btnEdit').style.display = '';
-  renderMeta(prev);
-  // D1 — bậc "đã tính thử" của phễu theo tool. Bắn ở ĐÂY chứ không ở lúc bấm
-  // nút: bấm rồi mà lá số hỏng thì không có gì để xem, tính vào phễu là thổi
-  // mẫu số lên rồi tỉ lệ mở nhìn tệ hơn thực tế.
-  try { if (window.Track) window.Track.event('preview_shown', { tool_id: 'chan-dung-tien-kiep' }); } catch (e) { /* đo hỏng không chặn gì */ }
-  if (window.SHELL_INTRO) Shell.dismissIntro(window.SHELL_INTRO.key);
+  if (!_cdtkLoggedIn()) { return _runAnonPreview(); }
 
-  // Đã trả tiền cho đúng lá số này từ trước → mở thẳng, không dựng tường.
+  // Đã trả tiền cho đúng lá số này từ trước → mở thẳng, không trừ lại.
   var free = false;
   try {
     free = await TuviPaywall.isFreeRerun('/api/chan-dung-tien-kiep', PortraitRecover.birthQuery(_lastBirth));
@@ -302,12 +267,51 @@ async function analyze() {
     await _doGenerate(true);
     return;
   }
-  document.getElementById('lockBlock').style.display = 'block';
-  await TuviPaywall.lockPreview({
-    host: document.getElementById('lockHost'),
-    title: '⊙ Còn bức chân dung và câu chuyện chưa mở',
-    items: CDTK_KHOA,
-    cta: 'Mở chân dung & trọn câu chuyện',
+  await TuviPaywall.requireCredits(_currentSlug, function () { return _doGenerate(false); });
+}
+
+// Khách chưa đăng nhập: gọi tầng deterministic (0đ, không cần đăng nhập, và
+// KHÔNG sinh ảnh — route xem chú thích `runPreview`) rồi dựng phần đầu MỞ +
+// `renderMetaRest` (khung 5 hồi — engine chốt stage/role, chưa có title/text
+// vì đó là LLM viết nên KHÔNG có gì để mờ, hiện đúng khung + ghi chú như
+// `renderMetaRest` đã tự làm sẵn — + cơ sở lá số, deterministic, hiện MỞ theo
+// đúng thiết kế cũ của `renderBasis`). Chỉ tranh + chữ từng hồi + kết luận
+// (toàn bộ AI viết/vẽ riêng) đứng sau tấm khoá.
+async function _runAnonPreview() {
+  _openPanel();
+  document.getElementById('loading').style.display = 'none';
+  try {
+    var res = await fetch('/api/chan-dung-tien-kiep?preview=1', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ birth: _lastBirth }),
+    });
+    var data = await res.json();
+    if (!res.ok || !data.success) throw new Error(data.error || 'Lỗi ' + res.status);
+    renderMetaHead(data);
+    renderMetaRest(data);
+    document.getElementById('card').style.display = 'block';
+    document.getElementById('btnEdit').style.display = '';
+    if (window.SHELL_INTRO) Shell.dismissIntro(window.SHELL_INTRO.key);
+    _renderLockWall();
+  } catch (e) {
+    _closePanel();
+    showError('Lỗi: ' + (e.message || 'Không thể kết nối. Vui lòng thử lại.'));
+  }
+}
+
+function _renderLockWall() {
+  var host = document.getElementById('cdtkLockHost');
+  host.style.display = 'block';
+  host.innerHTML = '';
+  TuviPaywall.lockPreview({
+    host: host,
+    title: '⊙ Chân dung & câu chuyện chưa mở',
+    items: [
+      'Bức tranh chân dung — vẽ riêng theo lá số của bạn',
+      'Mô tả nhân vật + chữ viết cho từng hồi trong khung 5 hồi',
+    ],
+    cta: 'Đăng ký để mở chân dung đầy đủ',
     slug: function () { return _currentSlug; },
     onUnlock: function () { return _doGenerate(false); },
   });
@@ -318,7 +322,8 @@ function _openPanel() {
   document.getElementById('resPanel').style.display = 'block';
   document.getElementById('loading').style.display = 'block';
   document.getElementById('card').style.display = 'none';
-  ['storyBlock', 'basisBlock', 'lockBlock', 'imgWrap', 'moTaBlock', 'eraLine', 'birthLine',
+  document.getElementById('cdtkLockHost').style.display = 'none';
+  ['storyBlock', 'basisBlock', 'imgWrap', 'moTaBlock', 'eraLine', 'birthLine',
    'imgLoadStatus', 'imgActions', 'resultImg'].forEach(function (id) {
     document.getElementById(id).style.display = 'none';
   });
@@ -331,27 +336,16 @@ function _closePanel() {
 }
 
 async function _doGenerate(freeRerun) {
-  // CỐ Ý giữ nguyên phần đã bày ở lượt tính thử (#card, #basisBlock) — xoá nó
-  // đi để hiện spinner là bắt người vừa trả tiền nhìn màn hình trắng lại từ
-  // đầu, đúng thứ W1 sinh ra để bỏ.
-  document.getElementById('lockBlock').style.display = 'none';
-  TuviPaywall._closeLock();
-  document.getElementById('loading').style.display = 'block';
-  document.getElementById('imgLoadStatus').style.display = 'none';
-  document.getElementById('imgActions').style.display = 'none';
-  document.getElementById('resultImg').style.display = 'none';
+  _openPanel();
   document.getElementById('imgWrap').style.display = '';
   document.getElementById('imgPlaceholder').style.display = 'flex';
-  // Pha ảnh chạy tiếp ~50 giây SAU khi truyện đã hiện và bảng bước đã tắt.
-  // Bọc `if` phòng bản ai-loading-steps.js cũ còn trong cache trình duyệt.
   _imgWait = AiLoadingSteps.mountWait
     ? AiLoadingSteps.mountWait('imgPlaceholder', { label: 'Đang vẽ chân dung…' })
     : null;
   _imgWait && _imgWait.start();
-  // Hai bước đầu (lập lá số · chia 5 hồi) ĐÃ chạy ở lượt tính thử — chiếu lại
-  // là nói dối về việc máy đang làm gì.
-  _loadingCtl = AiLoadingSteps.mount('loadingSteps', CDTK_STEPS.slice(2));
+  _loadingCtl = AiLoadingSteps.mount('loadingSteps', CDTK_STEPS);
   _loadingCtl.start();
+  if (AiLoadingSteps.scrollToResult) AiLoadingSteps.scrollToResult('loading');
 
   var token = window.Auth?.getSession()?.access_token || '';
   var birth = _lastBirth;
@@ -385,10 +379,8 @@ async function _doGenerate(freeRerun) {
       imageP.catch(function () {});
       _loadingCtl && _loadingCtl.stop();
       _imgWait && _imgWait.stop();
-      document.getElementById('loading').style.display = 'none';
-      document.getElementById('imgWrap').style.display = 'none';
-      document.getElementById('lockBlock').style.display = 'block';
-      await TuviPaywall.requireCredits(_currentSlug, async function () { await _doGenerate(false); });
+      _closePanel();
+      await TuviPaywall.requireCredits(_currentSlug, function () { return _doGenerate(false); });
       return;
     }
     if (!res.ok || !data.success) throw new Error(data.error || 'Lỗi ' + res.status);
@@ -422,16 +414,11 @@ async function _doGenerate(freeRerun) {
       ],
     });
   } catch (e) {
-    // 🔑 KHÔNG quẳng người ta về form trống như bản trước. Họ đang nhìn phần
-    // tính thử — thứ vừa xem xong và có thể vừa trả tiền cho phần sau — xoá đi
-    // là xoá luôn cái đó. Giữ nguyên màn hình, dựng lại tường, báo bằng banner.
     _loadingCtl && _loadingCtl.stop();
     _imgWait && _imgWait.stop();   // truyện hỏng → ẩn cả khung ảnh, đừng để đồng hồ chạy ngầm
-    document.getElementById('loading').style.display = 'none';
-    document.getElementById('imgWrap').style.display = 'none';
-    document.getElementById('lockBlock').style.display = 'block';
-    TuviPaywall._banner('Chưa mở được lần này: ' + (e.message || 'lỗi kết nối') + '. Bạn thử lại giúp.');
+    _closePanel();
     imageP.catch(function () {});
+    showError('Lỗi: ' + (e.message || 'Không thể kết nối. Vui lòng thử lại.'));
     return;
   }
 
@@ -485,11 +472,13 @@ function renderEraLine(data) {
 }
 
 // ── Tách render theo ĐƯỜNG TIỀN, không theo bố cục (W1b) ────────────────────
-//   renderMeta  = thứ engine tra bảng ra, 0đ  → vẽ ngay ở lượt tính thử
-//   renderProse = thứ model viết/vẽ, tốn tiền → chỉ vẽ sau khi đã trả
-// Gộp một hàm là sớm muộn có một khối chữ lọt vào lượt miễn phí mà không ai
-// để ý.
-function renderMeta(data) {
+//   renderMetaHead = phần đầu (danh xưng + tên nhân vật + nền văn minh + lá
+//                    số) — thứ khách CHƯA đăng ký cũng được xem
+//   renderMetaRest = khung 5 hồi (chỉ nhãn, chưa có chữ) + cơ sở lá số — dù
+//                    0đ, vẫn đứng SAU tấm khoá cho khách chưa đăng ký
+//   renderMeta     = cả hai, dùng cho đường đã đăng nhập/đã trả
+//   renderProse    = thứ model viết/vẽ, tốn tiền → chỉ vẽ sau khi đã trả
+function renderMetaHead(data) {
   document.getElementById('danhXung').textContent = data.danhXung || '';
   // Hero CỐ Ý chỉ còn: chức phận (to) + tên nhân vật & vế bí danh (nhỏ).
   // Phần "chính tinh nào tại cung nào" nằm ở khối "Cơ Sở Trong Lá Số" — Henry
@@ -507,7 +496,9 @@ function renderMeta(data) {
   var bs = (window.Shell && Shell.birthSummary) ? Shell.birthSummary(_lastBirth) : '';
   if (bs) { bl.textContent = 'Lá số: ' + bs; bl.style.display = 'block'; }
   else { bl.style.display = 'none'; }
+}
 
+function renderMetaRest(data) {
   // Khung 5 hồi: nhãn giai đoạn + vai trò kịch do ENGINE chốt. Ở lượt tính thử
   // chưa có `title`/`text` (LLM viết) nên hiện đúng khung, không bịa chữ thay.
   var acts = data.acts || [];
@@ -527,6 +518,8 @@ function renderMeta(data) {
   document.getElementById('storyBlock').style.display = 'block';
   renderBasis(data);
 }
+
+function renderMeta(data) { renderMetaHead(data); renderMetaRest(data); }
 
 function renderProse(data) {
   document.getElementById('moTaTitle').textContent =
@@ -688,10 +681,6 @@ function showForm() {
   document.getElementById('resPanel').style.display = 'none';
   document.getElementById('birthPanel').style.display = 'block';
   document.getElementById('btnEdit').style.display = 'none';
-  // Gỡ tường của lượt trước: bấm "Làm Lại" mà để nó nằm lại thì lá số mới hiện
-  // ra kèm bức tường tính theo lá số cũ.
-  document.getElementById('lockBlock').style.display = 'none';
-  TuviPaywall._closeLock();
   Shell.setShareable(null);
 }
 
