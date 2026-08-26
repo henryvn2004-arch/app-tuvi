@@ -65,6 +65,9 @@
 .bt-birth summary{cursor:pointer;font-size:12px;color:var(--text-mid);font-weight:600}
 .bt-birth-form{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;align-items:center}
 .bt-birth-form input,.bt-birth-form select{font-family:inherit;font-size:12px;padding:6px 8px;border:1px solid var(--line);border-radius:6px}
+.bt-word{margin-top:14px;font-size:12px;color:var(--text-mid)}
+.bt-word label{display:block;font-weight:600;margin-bottom:6px}
+.bt-word input{font-family:inherit;font-size:12px;padding:6px 8px;border:1px solid var(--line);border-radius:6px;width:220px;max-width:100%}
 .score-wrap{margin-top:8px}
 .score-row{display:flex;align-items:center;gap:12px;margin-bottom:8px}
 .score-name{font-size:11px;color:var(--text-mid);width:110px;flex-shrink:0}
@@ -121,6 +124,11 @@
             <div class="preview-wrap"><img id="previewImg" class="preview-img" alt="Ảnh chữ ký"></div>
             <button class="remove-btn" onclick="removeImage()">✕ Xoá ảnh</button>
           </div>
+        </div>
+
+        <div class="bt-word">
+          <label for="btSignedWord">Bạn ký dựa theo chữ nào trong tên? (không bắt buộc)</label>
+          <input type="text" id="btSignedWord" maxlength="24" placeholder="VD: Khoa, Đăng Khoa...">
         </div>
 
         <details class="bt-birth">
@@ -188,6 +196,7 @@ let _drawing = false;
 let _t0 = null;
 let _metrics = null;
 let _birth = null;
+let _signedWord = '';
 let _currentSlug = '';
 
 const canvas = document.getElementById('signCanvas');
@@ -354,10 +363,15 @@ function readBirth() {
   return { ngay: day, thang: m, nam: y, gio: Number(hourVal), gioiTinh: gt };
 }
 
+function readSignedWord() {
+  return document.getElementById('btSignedWord').value.trim().slice(0, 24);
+}
+
 async function analyze() {
   if (!_metrics) return;
   _currentSlug = TuviPaywall.generateToolSlug('but-tuong');
   _birth = readBirth();
+  _signedWord = readSignedWord();
   await TuviPaywall.requireCredits(_currentSlug, async () => { await _doAnalyze(); });
 }
 
@@ -370,7 +384,7 @@ async function _doAnalyze() {
   try {
     const res = await fetch('/api/but-tuong', {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ metrics: _metrics, birth: _birth }),
+      body: JSON.stringify({ metrics: _metrics, birth: _birth, signedWord: _signedWord }),
     });
     if (!res.ok) { const d = await res.json().catch(()=>({})); throw new Error(d.error || 'Lỗi ' + res.status); }
 

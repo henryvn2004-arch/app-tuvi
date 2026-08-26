@@ -563,7 +563,8 @@ function showPreview(dataUrl) {
     const iris = analyzeIris(lm);
     const badge = document.getElementById('mpBadge');
     if (iris && iris.type) {
-      badge.textContent = '👁 ' + iris.label;
+      badge.innerHTML = '<span class="ic-inline" data-icon-emoji="👁" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">👁</span> ' + iris.label;
+      window.mountIcons && window.mountIcons(badge);
       badge.style.background = iris.color + 'cc';
     } else {
       badge.textContent = '✦ Tam Đình đã xác định';

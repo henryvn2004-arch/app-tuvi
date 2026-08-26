@@ -76,6 +76,8 @@
 .style-name{font-size:14px;font-weight:700;color:var(--navy);margin-bottom:3px}
 .style-sub{font-size:12px;color:var(--text-lt);margin-bottom:6px}
 .style-reason{font-size:12px;color:var(--text-mid);font-style:italic;line-height:1.5}
+/* CSS content: không nhúng được <span data-icon> — giữ emoji thô, đây là ràng
+   buộc cấu trúc của thuộc tính content, không phải chỗ bỏ sót. */
 .style-reason::before{content:'💡 '}
 .try-btn{background:var(--navy);color:#fff;border:none;border-radius:6px;padding:8px 14px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;flex-shrink:0;white-space:nowrap;align-self:center;transition:opacity .15s}
 .try-btn:hover{opacity:.85}
@@ -223,7 +225,7 @@
       border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;
       font-family:inherit;letter-spacing:.3px;transition:opacity .15s
     " onmouseover="this.style.opacity='.88'" onmouseout="this.style.opacity='1'">
-      ✨ Phân Tích Khuôn Mặt & Gợi Ý Phong Cách
+      <span class="ic" data-icon="sparkles"></span> Phân Tích Khuôn Mặt & Gợi Ý Phong Cách
     </button>
     <div style="font-size:11px;color:var(--text-lt);text-align:center;margin-top:8px">
       Phân tích ~5s · Thử kiểu ~25s
@@ -241,7 +243,7 @@
 
     <!-- Face shape + age group card -->
     <div id="faceShapeCard" class="face-shape-card" style="display:none">
-      <div class="shape-emoji" id="shapeEmoji">🥚</div>
+      <div class="shape-emoji" id="shapeEmoji"><span class="ic" data-icon="aperture"></span></div>
       <div style="flex:1">
         <div style="display:flex;align-items:center;gap:8px;margin-bottom:2px">
           <div class="shape-label" style="margin:0">Hình dạng khuôn mặt</div>
@@ -256,13 +258,13 @@
     <!-- Result tabs -->
     <div id="resultTabsWrap" style="display:none">
       <div style="display:flex;gap:0;border-bottom:2px solid var(--border-lt);margin-bottom:16px">
-        <button class="result-tab active" id="tab-hair" onclick="switchResultTab('hair',this)">✂️ Kiểu Tóc</button>
+        <button class="result-tab active" id="tab-hair" onclick="switchResultTab('hair',this)"><span class="ic" data-icon="scissors"></span> Kiểu Tóc</button>
         <button class="result-tab" id="tab-glasses" onclick="switchResultTab('glasses',this)"><span class="ic" data-icon="glasses"></span> Kính Mắt</button>
       </div>
 
       <!-- HAIR TAB -->
       <div id="pane-hair" class="result-pane active">
-        <div class="styles-title"><span class="ic-inline" data-icon-emoji="✨" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">✨</span> Tất cả kiểu tóc — ⭐ là phù hợp nhất theo tướng mặt của bạn</div>
+        <div class="styles-title"><span class="ic-inline" data-icon-emoji="✨" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">✨</span> Tất cả kiểu tóc — <span class="ic-inline" data-icon-emoji="⭐" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">⭐</span> là phù hợp nhất theo tướng mặt của bạn</div>
         <div class="style-cards" id="styleCardsList"></div>
       </div>
 
@@ -295,7 +297,7 @@
           </div>
         </div>
         <div class="tryon-actions">
-          <button class="btn-download" onclick="downloadResult()">⬇ Tải Ảnh Kết Quả</button>
+          <button class="btn-download" onclick="downloadResult()"><span class="ic" data-icon="chevron-down"></span> Tải Ảnh Kết Quả</button>
           <button class="btn-retry" onclick="clearTryon()"><span class="ic" data-icon="rotate-cw"></span> Thử Kiểu Khác</button>
         </div>
       </div>
@@ -351,9 +353,9 @@ function _hairThumb(id, gender) {
       style="width:52px;height:64px;object-fit:cover;border-radius:7px;border:1px solid var(--border-lt);display:block;flex-shrink:0"
       loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"
       alt="${id}"/>
-    <div style="width:52px;height:64px;display:none;align-items:center;justify-content:center;background:var(--bg-soft);border:1px solid var(--border-lt);border-radius:7px;font-size:22px">✂️</div>`;
+    <div style="width:52px;height:64px;display:none;align-items:center;justify-content:center;background:var(--bg-soft);border:1px solid var(--border-lt);border-radius:7px;font-size:22px">${window.iconHtml?window.iconHtml('scissors'):''}</div>`;
   }
-  return `<div style="width:52px;height:64px;display:flex;align-items:center;justify-content:center;background:var(--bg-soft);border:1px solid var(--border-lt);border-radius:7px;font-size:22px">✂️</div>`;
+  return `<div style="width:52px;height:64px;display:flex;align-items:center;justify-content:center;background:var(--bg-soft);border:1px solid var(--border-lt);border-radius:7px;font-size:22px">${window.iconHtml?window.iconHtml('scissors'):''}</div>`;
 }
 
 const STYLE_META = {
@@ -659,7 +661,7 @@ function renderAnalysis(data) {
   document.getElementById('analysisLoading').style.display = 'none';
 
   // Face shape + age group
-  document.getElementById('shapeEmoji').textContent = SHAPE_EMOJI[data.faceShape] || '🫧';
+  document.getElementById('shapeEmoji').innerHTML = window.iconHtml ? window.iconHtml(SHAPE_EMOJI[data.faceShape] || '🫧') : (SHAPE_EMOJI[data.faceShape] || '🫧');
   document.getElementById('shapeName').textContent = data.faceShapeVN || '—';
   document.getElementById('shapeDesc').textContent = data.desc || '';
   if (data.ageGroup) {
@@ -669,7 +671,7 @@ function renderAnalysis(data) {
   }
   if (data.tuongHocInsight) {
     const el = document.getElementById('tuongHocInsight');
-    el.textContent = '📖 ' + data.tuongHocInsight;
+    el.innerHTML = (window.iconHtml ? window.iconHtml('book-open') : '') + ' ' + data.tuongHocInsight;
     el.style.display = 'block';
   }
   document.getElementById('faceShapeCard').style.display = 'flex';
@@ -692,8 +694,8 @@ function renderAnalysis(data) {
     const card = document.createElement('div');
     card.className = 'style-card'; card.id = 'sc_' + id;
     const rankBadge = rank
-      ? `<span class="style-rank" style="background:#fff8e7;color:#9a7b3a">⭐ #${rank}</span>`
-      : `<span class="style-rank" style="background:var(--bg-soft);color:var(--text-lt)">✂️</span>`;
+      ? `<span class="style-rank" style="background:#fff8e7;color:#9a7b3a">${window.iconHtml?window.iconHtml('star'):''} #${rank}</span>`
+      : `<span class="style-rank" style="background:var(--bg-soft);color:var(--text-lt)">${window.iconHtml?window.iconHtml('scissors'):''}</span>`;
     card.innerHTML = `
       ${_hairThumb(id, _gender)}
       <div class="style-info" style="flex:1">
@@ -767,8 +769,8 @@ async function _doTryOn(styleId, meta, type = 'hair') {
   clearTryonError();
   const tryonSec = document.getElementById('tryonSection');
   tryonSec.style.display = 'block';
-  const typeLabel = type === 'glasses' ? '👓' : '✂️';
-  document.getElementById('tryonTitle').textContent = `${typeLabel} Thử: ${meta?.name || styleId}`;
+  const typeLabel = window.iconHtml ? window.iconHtml(type === 'glasses' ? 'glasses' : 'scissors') : '';
+  document.getElementById('tryonTitle').innerHTML = `${typeLabel} Thử: ${meta?.name || styleId}`;
   document.getElementById('tryonLoading').style.display = 'block';
   document.getElementById('tryonResult').style.display = 'none';
   tryonSec.scrollIntoView({ behavior: 'smooth', block: 'start' });

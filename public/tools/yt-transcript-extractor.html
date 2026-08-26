@@ -118,7 +118,7 @@
 
 <header>
   <div>
-    <h1>📼 YouTube Transcript Extractor v2</h1>
+    <h1><span class="ic" data-icon="film"></span> YouTube Transcript Extractor v2</h1>
     <small>Tử Vi Minh Bảo · Pipeline RAG · Bước 1/2: extract → upload chat → tìm cách cục mới</small>
   </div>
 </header>
@@ -144,7 +144,7 @@
       3. Credentials → Create Credentials → API Key → Copy
     </div>
 
-    <label>🔑 YouTube Data API v3 Key</label>
+    <label><span class="ic" data-icon="lock"></span> YouTube Data API v3 Key</label>
     <input type="password" id="yt-key" placeholder="AIza..." autocomplete="off">
 
     <label><span class="ic" data-icon="monitor"></span> Channel URL</label>
@@ -153,7 +153,7 @@
     <label><span class="ic" data-icon="package"></span> Số video tối đa <span style="font-weight:400;color:var(--text-lt)">(để trống = tất cả)</span></label>
     <input type="text" id="max-videos" placeholder="Ví dụ: 30">
 
-    <label>⏱ Lọc thời lượng <span style="font-weight:400;color:var(--text-lt)">(giây — bỏ shorts &amp; livestream lê thê)</span></label>
+    <label><span class="ic" data-icon="hourglass"></span> Lọc thời lượng <span style="font-weight:400;color:var(--text-lt)">(giây — bỏ shorts &amp; livestream lê thê)</span></label>
     <div class="filter-row">
       <input type="number" id="min-dur" placeholder="Min (180 = 3 phút)" value="180">
       <input type="number" id="max-dur" placeholder="Max (vd 7200 = 2 giờ)">
@@ -171,7 +171,7 @@
     <div class="panel-sub">Tìm theo tiêu đề, sort, chọn checkbox để lấy transcript.</div>
 
     <div class="filter-row" style="margin-bottom:10px">
-      <input type="text" id="vid-search" placeholder="🔍 Tìm theo tiêu đề (vd: cách cục, sát phá, tử vi)" oninput="renderVideoTable()">
+      <input type="text" id="vid-search" placeholder="Tìm theo tiêu đề (vd: cách cục, sát phá, tử vi)" oninput="renderVideoTable()">
       <select id="vid-sort" onchange="renderVideoTable()" style="flex:0 0 160px">
         <option value="newest">Mới nhất</option>
         <option value="oldest">Cũ nhất</option>
@@ -209,7 +209,7 @@
     <div class="switch-row">
       <label>
         <input type="checkbox" id="noise-filter" checked onchange="recleanAll()">
-        🧹 Lọc noise (intro / outro / "đăng ký kênh" / "like share" / "[Nhạc]"…)
+        <span class="ic" data-icon="trash-2"></span> Lọc noise (intro / outro / "đăng ký kênh" / "like share" / "[Nhạc]"…)
       </label>
       <span id="noise-stat" style="font-size:.75rem;color:var(--text-lt)"></span>
     </div>
@@ -247,8 +247,8 @@
     <div id="alert-4" class="alert"></div>
     <div class="btn-row">
       <button class="btn btn-outline" onclick="goStep(3)">← Quay lại</button>
-      <button class="btn btn-gold" onclick="downloadTxt()">⬇ Download TXT (recommend)</button>
-      <button class="btn btn-outline" onclick="downloadJson()">⬇ Download JSON</button>
+      <button class="btn btn-gold" onclick="downloadTxt()"><span class="ic" data-icon="chevron-down"></span> Download TXT (recommend)</button>
+      <button class="btn btn-outline" onclick="downloadJson()"><span class="ic" data-icon="chevron-down"></span> Download JSON</button>
     </div>
   </div>
 
@@ -338,7 +338,7 @@ async function fetchVideoList(){
   const maxD=parseInt(document.getElementById('max-dur').value)||Infinity;
   if(!state.ytKey||!url) return showAlert(1,'Điền đủ API Key và Channel URL.');
 
-  showAlert(1,'⏳ Đang lấy thông tin kênh…','info');
+  showAlert(1,'Đang lấy thông tin kênh…','info');
   try{
     let chanId='',chanName='';
     const handleM=url.match(/@([^/?\s]+)/);
@@ -376,7 +376,7 @@ async function fetchVideoList(){
 
     // Paginate playlistItems
     let videos=[],pageToken='',fetched=0;
-    showAlert(1,'⏳ Đang lấy danh sách video…','info');
+    showAlert(1,'Đang lấy danh sách video…','info');
     do{
       const r=await fetch(`https://www.googleapis.com/youtube/v3/playlistItems?playlistId=${uploadPl}&part=snippet&maxResults=50&pageToken=${pageToken}&key=${state.ytKey}`);
       const d=await r.json();
@@ -393,7 +393,7 @@ async function fetchVideoList(){
     if(!videos.length) throw new Error('Kênh không có video nào.');
 
     // Fetch durations in batches of 50
-    showAlert(1,`⏳ Đang lấy thời lượng cho ${videos.length} videos…`,'info');
+    showAlert(1,`Đang lấy thời lượng cho ${videos.length} videos…`,'info');
     const idMap={};
     for(let i=0;i<videos.length;i+=50){
       const batch=videos.slice(i,i+50).map(v=>v.id).join(',');
@@ -418,7 +418,7 @@ async function fetchVideoList(){
     renderVideoTable();
     showAlert(1,`✓ Lấy ${before} videos · sau lọc thời lượng còn ${videos.length}${filtered>0?` (bỏ ${filtered} video ngắn/dài quá)`:''}.`,'ok');
     setTimeout(()=>{clearAlert(1);goStep(2);},700);
-  }catch(e){ showAlert(1,'❌ '+e.message); }
+  }catch(e){ showAlert(1,e.message); }
 }
 
 // ── STEP 2: VIDEO TABLE WITH SEARCH/SORT ──
@@ -509,7 +509,7 @@ async function startTranscriptFetch(){
 
   let done=0;
   for(const v of sel){
-    setBadge(`badge-${v.id}`,'fetch','<span class="spin">⏳</span>');
+    setBadge(`badge-${v.id}`,'fetch',`<span class="spin">${window.iconHtml?window.iconHtml('rotate-cw'):''}</span>`);
     const text=await fetchTranscript(v.id);
     if(text){
       state.transcripts[v.id].raw=text;
@@ -519,7 +519,7 @@ async function startTranscriptFetch(){
       updateCharsCell(v.id);
     } else {
       state.transcripts[v.id].status='manual';
-      setBadge(`badge-${v.id}`,'manual','✍ Manual');
+      setBadge(`badge-${v.id}`,'manual',`${window.iconHtml?window.iconHtml('pen-line'):''} Manual`);
       document.getElementById(`manual-${v.id}`).classList.add('open');
     }
     done++;
@@ -654,7 +654,7 @@ function renderExport(){
   container.innerHTML=ok.map(([id,t])=>`
     <details class="preview">
       <summary>
-        📹 ${escapeHtml(truncate(t.title,68))}
+        ${window.iconHtml?window.iconHtml('film'):''} ${escapeHtml(truncate(t.title,68))}
         <span class="dur-pill">${formatDur(t.duration)}</span>
         <span style="color:var(--text-lt);font-weight:400;margin-left:auto;font-size:.74rem">${t.cleaned.length.toLocaleString()} ký tự</span>
       </summary>

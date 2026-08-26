@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-130 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+133 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 **Ba file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
 ```bash
@@ -11,7 +11,7 @@ sed -n '120,190p' docs/nhat-ky/2026-08.md    # đọc đúng đoạn, đừng ca
 
 | file | số mục | dung lượng |
 |---|---:|---:|
-| `2026-08.md` | 113 | 873,295 B |
+| `2026-08.md` | 116 | 887,638 B |
 | `2026-07.md` | 12 | 154,531 B |
 | `track-cu.md` | 5 | 89,354 B |
 
@@ -24,29 +24,30 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
-| 1 | 2026-08 | `2026-08.md` | 🪝 Bút Tướng — gắn `arcDoc` (họ 3) vào bài luận, đã thiếu HẲN lớp hook |
-| 2 | 2026-08 | `2026-08.md` | ✍️ Bút Tướng — tool xem chữ ký, engine đo 6 trục chạy Ở CLIENT |
-| 3 | 2026-08 | `2026-08.md` | 🆓 UI "Số Đẹp" — 100% client-side, KHÔNG chạm LLM/route/paywall |
-| 4 | 2026-08 | `2026-08.md` | 🎲 Generator "Số Đẹp" — gợi ý số bằng random-walk có seed, 0đ |
-| 5 | 2026-08 | `2026-08.md` | 🔢 Engine "Số Đẹp" — Bát Tinh + Quẻ Dịch + Ngũ Hành + Âm Dương, 0đ |
-| 6 | 2026-08 | `2026-08.md` | 🀄 Bảng Du Niên Bát Trạch — 3 bản chép tay tự mâu thuẫn, nay SINH bằng thuật toán |
-| 7 | 2026-08 | `2026-08.md` | 💸 Rail chat gỡ carve-out Opus primary — quay về Gemini Flash toàn bộ |
-| 8 | 2026-08 | `2026-08.md` | 🔀 Kimi K3 xuống lưới đỡ cuối cùng, Opus 5 primary cho 7 tool "luận giải" |
-| 9 | 2026-08 | `2026-08.md` | 🧭 Coachmark 3 điểm → 6–7 điểm — đi hết các mặt chính của sản phẩm |
-| 10 | 2026-08 | `2026-08.md` | 🚀 "Khởi Hành" thay M3 + coachmark 3 điểm — onboarding cho web |
-| 11 | 2026-08 | `2026-08.md` | 🔄 Card "Khoe Kết Quả" trong Nhiệm Vụ → "Chia Sẻ" — #599 đã gỡ nút, câu hỏi đo click |
-| 12 | 2026-08 | `2026-08.md` | 🏆 Tab "Nhiệm Vụ" trong Tài Khoản — gom Khởi Hành, Mời Bạn, lịch sử Khoe Kết Quả |
-| 13 | 2026-08 | `2026-08.md` | 📣 Track Quest/Gamification — "Khoe Kết Quả" + "Rủ so lá số" |
-| 14 | 2026-08 | `2026-08.md` | ✂️ Audit `trim_la_so` — chỉ CÒN 1 chỗ cắt thật, đã bỏ |
-| 15 | 2026-08 | `2026-08.md` | 📣 TRACK DIGITAL MARKETING — 14/14 mục, và 3 giả định của tôi bị SỐ ĐO bác |
-| 16 | 2026-08 | `2026-08.md` | 💰 Track Tối Ưu Chi Phí Opus — Code #1 + #2 đã push lên PR #585 (chờ merge+deploy), #3 vẫn chặn |
-| 17 | 2026-08 | `2026-08.md` | 🌙 Vận Hạn 12 Tháng đổi sang KHUNG THÁNG ÂM — hết cảnh "nửa đầu / nửa sau" |
-| 18 | 2026-08 | `2026-08.md` | 🌙 Rail `tra_nguyet_van` đổi sang tháng ÂM — nốt "đường dùng chung" đã né ở PR trước |
-| 19 | 2026-08 | `2026-08.md` | ⏱️ Timeout 30 giây: KHÔNG phải đường tiền, và engine vô can |
-| 20 | 2026-08 | `2026-08.md` | 🔤 Ảnh OG: chẩn đoán vòng 1 SAI, bản vá của tôi đẻ ra lỗi MỚI |
-| 21 | 2026-08 | `2026-08.md` | 📡 BẢN ĐỒ 8 KÊNH SOCIAL — audit trước khi ráp Telegram + vá Facebook |
-| 22 | 2026-08 | `2026-08.md` | 🔮 Thêm lớp DỰ BÁO vào arc ô GIỮA — và arc ô giữa KHÔNG phải 5 lớp |
-| 23 | 2026-08 | `2026-08.md` | 🖼️ Ảnh preview link chia sẻ HỎNG 108 lượt/tuần — và chẩn đoán ĐẦU của tôi SAI |
+| 1 | 2026-08 | `2026-08.md` | ✍️ Bút Tướng — thêm "ký theo chữ nào trong tên?", CHỈ để narrate |
+| 2 | 2026-08 | `2026-08.md` | 🪝 Bút Tướng — gắn `arcDoc` (họ 3) vào bài luận, đã thiếu HẲN lớp hook |
+| 3 | 2026-08 | `2026-08.md` | ✍️ Bút Tướng — tool xem chữ ký, engine đo 6 trục chạy Ở CLIENT |
+| 4 | 2026-08 | `2026-08.md` | 🆓 UI "Số Đẹp" — 100% client-side, KHÔNG chạm LLM/route/paywall |
+| 5 | 2026-08 | `2026-08.md` | 🎲 Generator "Số Đẹp" — gợi ý số bằng random-walk có seed, 0đ |
+| 6 | 2026-08 | `2026-08.md` | 🔢 Engine "Số Đẹp" — Bát Tinh + Quẻ Dịch + Ngũ Hành + Âm Dương, 0đ |
+| 7 | 2026-08 | `2026-08.md` | 🀄 Bảng Du Niên Bát Trạch — 3 bản chép tay tự mâu thuẫn, nay SINH bằng thuật toán |
+| 8 | 2026-08 | `2026-08.md` | 💸 Rail chat gỡ carve-out Opus primary — quay về Gemini Flash toàn bộ |
+| 9 | 2026-08 | `2026-08.md` | 🔀 Kimi K3 xuống lưới đỡ cuối cùng, Opus 5 primary cho 7 tool "luận giải" |
+| 10 | 2026-08 | `2026-08.md` | 🧭 Coachmark 3 điểm → 6–7 điểm — đi hết các mặt chính của sản phẩm |
+| 11 | 2026-08 | `2026-08.md` | 🚀 "Khởi Hành" thay M3 + coachmark 3 điểm — onboarding cho web |
+| 12 | 2026-08 | `2026-08.md` | 🔄 Card "Khoe Kết Quả" trong Nhiệm Vụ → "Chia Sẻ" — #599 đã gỡ nút, câu hỏi đo click |
+| 13 | 2026-08 | `2026-08.md` | 🏆 Tab "Nhiệm Vụ" trong Tài Khoản — gom Khởi Hành, Mời Bạn, lịch sử Khoe Kết Quả |
+| 14 | 2026-08 | `2026-08.md` | 📣 Track Quest/Gamification — "Khoe Kết Quả" + "Rủ so lá số" |
+| 15 | 2026-08 | `2026-08.md` | ✂️ Audit `trim_la_so` — chỉ CÒN 1 chỗ cắt thật, đã bỏ |
+| 16 | 2026-08 | `2026-08.md` | 📣 TRACK DIGITAL MARKETING — 14/14 mục, và 3 giả định của tôi bị SỐ ĐO bác |
+| 17 | 2026-08 | `2026-08.md` | 💰 Track Tối Ưu Chi Phí Opus — Code #1 + #2 đã push lên PR #585 (chờ merge+deploy), #3 vẫn chặn |
+| 18 | 2026-08 | `2026-08.md` | 🌙 Vận Hạn 12 Tháng đổi sang KHUNG THÁNG ÂM — hết cảnh "nửa đầu / nửa sau" |
+| 19 | 2026-08 | `2026-08.md` | 🌙 Rail `tra_nguyet_van` đổi sang tháng ÂM — nốt "đường dùng chung" đã né ở PR trước |
+| 20 | 2026-08 | `2026-08.md` | ⏱️ Timeout 30 giây: KHÔNG phải đường tiền, và engine vô can |
+| 21 | 2026-08 | `2026-08.md` | 🔤 Ảnh OG: chẩn đoán vòng 1 SAI, bản vá của tôi đẻ ra lỗi MỚI |
+| 22 | 2026-08 | `2026-08.md` | 📡 BẢN ĐỒ 8 KÊNH SOCIAL — audit trước khi ráp Telegram + vá Facebook |
+| 23 | 2026-08 | `2026-08.md` | 🔮 Thêm lớp DỰ BÁO vào arc ô GIỮA — và arc ô giữa KHÔNG phải 5 lớp |
+| 24 | 2026-08 | `2026-08.md` | 🖼️ Ảnh preview link chia sẻ HỎNG 108 lượt/tuần — và chẩn đoán ĐẦU của tôi SAI |
 | 25 | 2026-08 | `2026-08.md` | 📅 Tool MỚI "Vận Hạn 12 Tháng Tới" — và một lỗi CỔ PHÁP sai 11,4% số ngày |
 | 26 | 2026-08 | `2026-08.md` | 🪝 VIRAL CORE cho 2 cron viết bài SEO — và nó ĐÃ CÓ SẴN trong repo |
 | 27 | 2026-08 | `2026-08.md` | 🧱 Lượt render THẬT đầu tiên TRƯỢT — kho nền nằm ngoài git |
@@ -139,18 +140,19 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 | 114 | 2026-07 | `2026-07.md` | 💸 ĐO DOANH THU ĐANG BỊA 78% |
 | 115 | 2026-07 | `2026-07.md` | 🎨 Trang topup dựng lại + ĐƯỜNG ICON DÙNG CHUNG BỊ HỎNG |
 | 116 | 2026-08 | `2026-08.md` | 🖼️ Sinh ảnh: gpt-image-1 → gpt-image-2 |
-| 118 | 2026-07 | `2026-07.md` | 🚨 Vá cảnh báo 10:00 VN 30/07 — BỘ DÒ ĐANG NÓI DỐI |
-| 119 | — | `track-cu.md` | 🧭 Marketing Autopilot + CMO Orchestrator Quân Sư |
-| 120 | 2026-07 | `2026-07.md` | 🔌 Đọc GA4 từ terminal — `scripts/ga4.mjs` |
-| 121 | 2026-07 | `2026-07.md` | 🧭 Ba lớp danh xưng: Quan Lộc × Mệnh × Thân — 194 → 566 |
-| 122 | 2026-07 | `2026-07.md` | 🎭 Chức phận theo CẶP chính tinh — 82 → 194 danh xưng |
-| 123 | 2026-07 | `2026-07.md` | 💾 Cache kết quả 2 tool chân dung theo lá số |
-| 124 | 2026-07 | `2026-07.md` | 🔁 TRACK MỚI — Viral Loop cho 2 tool chân dung |
-| 125 | 2026-07 | `2026-07.md` | 🏯 Tool mới — "Chân Dung Tiền Kiếp" |
-| 126 | 2026-07 | `2026-07.md` | 🔀 Provider routing rail — fallback HAI CHIỀU |
-| 127 | 2026-07 | `2026-07.md` | 🆕 Tool mới — "Chân Dung Vợ Chồng" |
-| 128 | — | `track-cu.md` | 🟣 ĐANG LÀM — Admin Revamp + Marketing/Conversion Tracking |
-| 129 | — | `track-cu.md` | 🟢 ĐANG LÀM — App-shell "/app" (không gian làm việc đa công cụ) |
-| 130 | — | `track-cu.md` | 🗂️ Track cũ — Chat-first / Contract v1 (đa nền tảng) |
-| 131 | — | `track-cu.md` | 🗄️ Track cũ (song song) — ISR Lá Số SEO (438K pages) |
-| 132 | 2026-08 | `2026-08.md` | 💰 "Vận Hạn 12 Tháng Tới" ăn theo Code #1 — cache chia sẻ CẢ 16 lượt, không riêng 4 |
+| 117 | 2026-07 | `2026-07.md` | 🚨 Vá cảnh báo 10:00 VN 30/07 — BỘ DÒ ĐANG NÓI DỐI |
+| 118 | — | `track-cu.md` | 🧭 Marketing Autopilot + CMO Orchestrator Quân Sư |
+| 119 | 2026-07 | `2026-07.md` | 🔌 Đọc GA4 từ terminal — `scripts/ga4.mjs` |
+| 120 | 2026-07 | `2026-07.md` | 🧭 Ba lớp danh xưng: Quan Lộc × Mệnh × Thân — 194 → 566 |
+| 121 | 2026-07 | `2026-07.md` | 🎭 Chức phận theo CẶP chính tinh — 82 → 194 danh xưng |
+| 122 | 2026-07 | `2026-07.md` | 💾 Cache kết quả 2 tool chân dung theo lá số |
+| 123 | 2026-07 | `2026-07.md` | 🔁 TRACK MỚI — Viral Loop cho 2 tool chân dung |
+| 124 | 2026-07 | `2026-07.md` | 🏯 Tool mới — "Chân Dung Tiền Kiếp" |
+| 125 | 2026-07 | `2026-07.md` | 🔀 Provider routing rail — fallback HAI CHIỀU |
+| 126 | 2026-07 | `2026-07.md` | 🆕 Tool mới — "Chân Dung Vợ Chồng" |
+| 127 | — | `track-cu.md` | 🟣 ĐANG LÀM — Admin Revamp + Marketing/Conversion Tracking |
+| 128 | — | `track-cu.md` | 🟢 ĐANG LÀM — App-shell "/app" (không gian làm việc đa công cụ) |
+| 129 | — | `track-cu.md` | 🗂️ Track cũ — Chat-first / Contract v1 (đa nền tảng) |
+| 130 | — | `track-cu.md` | 🗄️ Track cũ (song song) — ISR Lá Số SEO (438K pages) |
+| 131 | 2026-08 | `2026-08.md` | 💰 "Vận Hạn 12 Tháng Tới" ăn theo Code #1 — cache chia sẻ CẢ 16 lượt, không riêng 4 |
+| 132 | 2026-08 | `2026-08.md` | 🗞️ Hàng đợi đề tài cạn — `topic-topup` vẫn dùng `JSON.parse` trần trong khi repo đã có bản chắc hơn |

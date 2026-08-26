@@ -382,7 +382,7 @@ function renderResult() {
         </div>
         <div style="font-size:12px;color:var(--text-lt);margin-bottom:10px;font-style:italic">${spread[i].desc}</div>
         <div class="om-body">${c.msg}</div>
-        <div class="om-guidance">💡 <strong>Hướng dẫn thực hành:</strong> ${c.guide}</div>
+        <div class="om-guidance">${window.iconHtml?window.iconHtml('lightbulb'):''} <strong>Hướng dẫn thực hành:</strong> ${c.guide}</div>
         <div class="om-kw">${c.kw.map(k => `<span class="kw-tag">${k}</span>`).join('')}</div>
       </div>`;
     }).join('');

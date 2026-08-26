@@ -56,6 +56,9 @@
 .bt-birth summary{cursor:pointer;font-size:12.5px;color:var(--text-mid);font-weight:600}
 .bt-birth-form{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;align-items:center}
 .bt-birth-form input,.bt-birth-form select{font-family:inherit;font-size:12.5px;padding:6px 8px;border:1px solid var(--border);border-radius:6px}
+.bt-word{margin-top:16px;font-size:12.5px;color:var(--text-mid)}
+.bt-word label{display:block;font-weight:600;margin-bottom:6px}
+.bt-word input{font-family:inherit;font-size:12.5px;padding:6px 8px;border:1px solid var(--border);border-radius:6px;width:220px;max-width:100%}
 .md-result{font-size:14px;line-height:1.85;color:var(--text-mid)}
 .md-result h2{font-size:16px;font-weight:700;color:var(--navy);margin:20px 0 8px;padding-bottom:6px;border-bottom:1px solid var(--border-lt)}
 .md-result h3{font-size:14px;font-weight:700;color:var(--navy);margin:14px 0 6px}
@@ -140,6 +143,11 @@
       </div>
     </div>
 
+    <div class="bt-word">
+      <label for="btSignedWord">Bạn ký dựa theo chữ nào trong tên? (không bắt buộc)</label>
+      <input type="text" id="btSignedWord" maxlength="24" placeholder="VD: Khoa, Đăng Khoa...">
+    </div>
+
     <details class="bt-birth">
       <summary>+ Đối chiếu với dụng thần bát tự (không bắt buộc)</summary>
       <div class="bt-birth-form">
@@ -216,6 +224,7 @@ let _drawing = false;
 let _t0 = null;
 let _metrics = null;
 let _birth = null;
+let _signedWord = '';
 
 const canvas = document.getElementById('signCanvas');
 const ctx = canvas.getContext('2d');
@@ -381,10 +390,15 @@ function readBirth() {
 
 // ── Luận Giải Đầy Đủ (trả phí) ─────────────────────────
 let _currentSlug = '';
+function readSignedWord() {
+  return document.getElementById('btSignedWord').value.trim().slice(0, 24);
+}
+
 async function analyze() {
   if (!_metrics) return;
   _currentSlug = TuviPaywall.generateToolSlug('but-tuong');
   _birth = readBirth();
+  _signedWord = readSignedWord();
   await TuviPaywall.requireCredits(_currentSlug, async () => { await _doAnalyze(); });
 }
 
@@ -397,7 +411,7 @@ async function _doAnalyze() {
   try {
     const res = await fetch('/api/but-tuong', {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ metrics: _metrics, birth: _birth }),
+      body: JSON.stringify({ metrics: _metrics, birth: _birth, signedWord: _signedWord }),
     });
     if (!res.ok) { const d = await res.json().catch(()=>({})); throw new Error(d.error || 'Lỗi ' + res.status); }
 

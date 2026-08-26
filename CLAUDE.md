@@ -71,6 +71,10 @@ grep mò — repo có file 400 KB+ (`public/tuvi-ansao-engine.js`, `public/admin
   hàm này để chia CHUNG một breakpoint Anthropic; tự ghép chuỗi tay ở nơi khác
   là cache miss ngay lượt đầu.
 - **`lib/agent/usage.ts`** — bảng giá model → `cost_vnd`.
+- **`lib/llm/json.ts` `parseLlmJson()`** — NGUỒN DUY NHẤT để bóc JSON từ output
+  LLM. `JSON.parse` trần đã hỏng cả lượt (15–35%/tháng, xem `nhat-ky/2026-08.md`
+  mục "topic-topup") mỗi khi model chèn câu dẫn/ghi chú/fence quanh JSON. Mọi
+  chỗ gọi LLM với `json:true` phải qua đây, không tự viết `JSON.parse(raw)`.
 
 ### Kênh & hợp đồng
 - **`lib/channels/core.ts`** `runConversation` + `ChannelIO` + `SessionStore` —
@@ -93,10 +97,10 @@ sửa bằng SQL không cần deploy) · `lib/marketing/*` (digest · cảnh bá
 (tường trả phí) · `tool-prices.js` (giá) · `poster.js` (ảnh 9:16 + QR) ·
 `nav.js` (icon dùng chung) · `track.js` (đo) · `referral.js`.
 
-### 22 bộ dò (chạy trong CI lint) — `npm run check:*`
+### 25 bộ dò (chạy trong CI lint) — `npm run check:*`
 `prices` `nostore` `groups` `share` `history` `shellboot` `authapi` `keyframes`
 `hoatdong` `hexagrams` `laso` `railfields` `railwrap` `cacheshape` `hao` `motifs`
-`terms` `publish` `jobs` `token` `prompt` `topics`.
+`terms` `publish` `jobs` `token` `prompt` `topics` `batrach` `sodep` `giosinh`.
 **Bộ dò kêu oan là bộ dò bị tắt đi** — thà thu hẹp còn hơn để nó báo bừa.
 
 ## 📐 QUY ƯỚC BẮT BUỘC (đọc trước khi viết UI mới)

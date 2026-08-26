@@ -56,6 +56,8 @@ Nếu nguồn là ẢNH TĨNH (không phải ký trực tiếp trên màn hình)
 Mộc = nét dựng đứng thẳng · Hỏa = nét hất nhọn đổi hướng gấp · Thổ = nét ngang vuông chậm · Kim = nét khép vòng tròn · Thủy = nét cong lượn liền mạch. Đây là quy ước công cụ (gán theo hình dạng), không phải trích từ một bộ kinh cụ thể — đừng gán cho nó một nguồn cổ giả.
 Nếu có DỤNG THẦN (tứ trụ người ký): so % ngũ hành nét với dụng thần NÊN/KỴ, chỉ NÊU hành nào đang thiếu so với dụng thần — không tự chế thêm quy tắc hợp khắc ngoài ngũ hành tương sinh tương khắc chuẩn.
 
+Nếu dữ liệu có dòng "Chữ ký dựa theo chữ": chỉ dùng để gọi tên tự nhiên hơn (VD "chữ Khoa bạn ký..."), TUYỆT ĐỐI không suy diễn riêng cho từng ký tự trong đó — sáu trục vẫn đo trên TOÀN BỘ chữ ký, không tách theo từng con chữ, không bịa "nếu ký chữ này khác đi thì...".
+
 ## Cấu Trúc Bài Phân Tích (bắt buộc đủ 5 phần)
 
 ### 1. Tổng Quan
@@ -84,6 +86,16 @@ ${DOC_ARC_BUT_TUONG}
 - KHÔNG hứa tài lộc cụ thể, KHÔNG dự đoán tai hoạ, KHÔNG phán bệnh.
 - KHÔNG nhận dạng danh tính người ký, KHÔNG giám định thật/giả so với chữ ký khác.
 - Viết tiếng Việt tự nhiên, ~1000–1500 chữ TOÀN BÀI — súc tích, mỗi câu phải ĐÁNG đọc, không kéo dài cho đủ đô.`;
+
+// Chỉ để LLM narrate tự nhiên hơn ("chữ Khoa bạn ký..."), không lưu, không
+// đưa vào phép đo. Chặn charset để tránh chèn chỉ thị vào prompt — không khớp
+// thì coi như không cung cấp, không báo lỗi (đây là field phụ, không phải lõi).
+const SIGNED_WORD_RE = /^[\p{L}\s'-]{1,24}$/u;
+function sanitizeSignedWord(w) {
+  if (typeof w !== 'string') return '';
+  const t = w.trim();
+  return SIGNED_WORD_RE.test(t) ? t : '';
+}
 
 function hourToChi(h) {
   // Giờ Tý 23h–1h = chi 0, mỗi chi cách nhau 2 giờ. Công thức chuẩn can chi giờ.
@@ -119,10 +131,11 @@ function dungThanContext(birth) {
 async function runPost(request) {
   try {
     const body = await request.json();
-    const { metrics, birth = null } = body;
+    const { metrics, birth = null, signedWord: signedWordRaw } = body;
     if (!metrics || !metrics.truc) {
       return Response.json({ error: 'Thiếu số đo chữ ký.' }, { status: 400 });
     }
+    const signedWord = sanitizeSignedWord(signedWordRaw);
 
     const engine = loadEngine();
     const flat = engine.railData(metrics);
@@ -140,6 +153,7 @@ async function runPost(request) {
     ];
     if (flat.the) lines.push(`Thế: ${flat.the}`);
     if (metrics.goiY) lines.push(`Gợi ý đã tính sẵn (trục yếu nhất — ${metrics.goiY.ten}): ${metrics.goiY.loi}`);
+    if (signedWord) lines.push(`Chữ ký dựa theo chữ: "${signedWord}"`);
 
     const userText = `Hãy luận bút tướng cho chữ ký sau đây theo cổ pháp, đủ 5 phần.\n\n${lines.join('\n')}${dungThanContext(birth)}`;
 

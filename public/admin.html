@@ -418,8 +418,8 @@
             </div>
             <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:10px">
               <button class="btn btn-gold btn-sm" onclick="utmBuild()">Tạo link</button>
-              <button class="btn btn-outline btn-sm" onclick="utmCopy()">📋 Copy</button>
-              <button class="btn btn-outline btn-sm" onclick="utmSave()">💾 Lưu để dành</button>
+              <button class="btn btn-outline btn-sm" onclick="utmCopy()"><span class="ic-inline" data-icon="clipboard" data-icon-emoji="📋" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">📋</span> Copy</button>
+              <button class="btn btn-outline btn-sm" onclick="utmSave()"><span class="ic-inline" data-icon="save" data-icon-emoji="💾" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">💾</span> Lưu để dành</button>
             </div>
             <input class="search-input" id="utm-out" readonly placeholder="Link gắn UTM sẽ hiện ở đây…" style="width:100%;font-family:monospace;font-size:.74rem" onclick="this.select()">
             <div style="margin-top:14px">
@@ -607,7 +607,7 @@
             <div class="panel-title"><svg class="pt-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41 13.42 20.6a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82Z"/><path d="M7 7h.01"/></svg>Tài Khoản &amp; Entity</div>
             <div class="panel-actions">
               <span class="badge badge-grey" id="ga-badge">…</span>
-              <button class="btn btn-outline btn-sm" id="ga-run-btn" onclick="blRunNow('accounts', this)">🔄 Nạp sổ + kiểm hồ sơ</button>
+              <button class="btn btn-outline btn-sm" id="ga-run-btn" onclick="blRunNow('accounts', this)"><span class="ic-inline" data-icon="rotate-cw" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px"></span> Nạp sổ + kiểm hồ sơ</button>
               <button class="btn btn-primary btn-sm" onclick="loadBacklinks()">↻</button>
             </div>
           </div>
@@ -624,13 +624,13 @@
             <div class="panel-title"><svg class="pt-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>Cơ Hội Backlink</div>
             <div class="panel-actions">
               <span class="badge badge-grey" id="bl-p-badge">…</span>
-              <button class="btn btn-outline btn-sm" id="bl-p-run-btn" onclick="blRunNow('prospect', this)">🔍 Tìm cơ hội mới</button>
-              <button class="btn btn-outline btn-sm" id="bl-bl-run-btn" onclick="blRunNow('brokenlinks', this)">🔗💀 Quét link chết</button>
+              <button class="btn btn-outline btn-sm" id="bl-p-run-btn" onclick="blRunNow('prospect', this)"><span class="ic-inline" data-icon="search" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px"></span> Tìm cơ hội mới</button>
+              <button class="btn btn-outline btn-sm" id="bl-bl-run-btn" onclick="blRunNow('brokenlinks', this)"><span class="ic-inline" data-icon="link" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px"></span> Quét link chết</button>
               <button class="btn btn-primary btn-sm" onclick="loadBacklinks()">↻</button>
             </div>
           </div>
           <div class="panel-body" style="font-size:.76rem;color:var(--text-lt);padding-bottom:.5rem">
-            Cron <code>backlink-prospect</code> tìm cơ hội mới mỗi T3 qua <b>BỐN nguồn độc lập</b>, ba nguồn đầu 0 API key: danh sách tĩnh đã vét tay · <a href="https://www.google.com/alerts" target="_blank" rel="noopener">Google Alerts</a> RSS (nhắc tên chưa gắn link — cần Henry tạo alert một lần, dán URL feed vào <code>GOOGLE_ALERTS_RSS_URLS</code>) · quét link chết trên trang tài nguyên đúng ngách (nút "🔗💀" ở trên, chạy riêng mỗi T5) · Brave Search API (<b>tuỳ chọn</b>, cần <code>BRAVE_SEARCH_API_KEY</code>). Thiếu nguồn nào thì các nguồn còn lại vẫn chạy đều. Cron <code>backlink-content</code> mỗi sáng soạn sẵn nội dung cho cơ hội <b>chưa soạn</b>, qua brand-safety trước khi lưu. <b>Không có nút đăng/gửi nào</b> — soạn xong đợi ở tab "Nội Dung Cần Duyệt", người tự tay dán/gửi rồi đánh dấu Đã dùng.
+            Cron <code>backlink-prospect</code> tìm cơ hội mới mỗi T3 qua <b>BỐN nguồn độc lập</b>, ba nguồn đầu 0 API key: danh sách tĩnh đã vét tay · <a href="https://www.google.com/alerts" target="_blank" rel="noopener">Google Alerts</a> RSS (nhắc tên chưa gắn link — cần Henry tạo alert một lần, dán URL feed vào <code>GOOGLE_ALERTS_RSS_URLS</code>) · quét link chết trên trang tài nguyên đúng ngách (nút "Quét link chết" ở trên, chạy riêng mỗi T5) · Brave Search API (<b>tuỳ chọn</b>, cần <code>BRAVE_SEARCH_API_KEY</code>). Thiếu nguồn nào thì các nguồn còn lại vẫn chạy đều. Cron <code>backlink-content</code> mỗi sáng soạn sẵn nội dung cho cơ hội <b>chưa soạn</b>, qua brand-safety trước khi lưu. <b>Không có nút đăng/gửi nào</b> — soạn xong đợi ở tab "Nội Dung Cần Duyệt", người tự tay dán/gửi rồi đánh dấu Đã dùng.
           </div>
           <div id="bl-prospects" style="padding:0 1rem 1rem">
             <div class="loading"><span class="spin"></span>Đang tải...</div>
@@ -655,7 +655,7 @@
             <div class="panel-title"><svg class="pt-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z"/><path d="M4 9h16"/><path d="M9 4v16"/></svg>Nội Dung Cần Duyệt</div>
             <div class="panel-actions">
               <span class="badge badge-grey" id="bl-c-badge">…</span>
-              <button class="btn btn-outline btn-sm" id="bl-c-run-btn" onclick="blRunNow('content', this)">✍️ Soạn ngay</button>
+              <button class="btn btn-outline btn-sm" id="bl-c-run-btn" onclick="blRunNow('content', this)"><span class="ic-inline" data-icon="pen-line" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px"></span> Soạn ngay</button>
             </div>
           </div>
           <div class="panel-body" style="font-size:.76rem;color:var(--text-lt);padding-bottom:.5rem">
@@ -669,7 +669,7 @@
             <div class="panel-title"><svg class="pt-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>Liên Kết Đang Theo Dõi</div>
             <div class="panel-actions">
               <span class="badge badge-grey" id="bl-l-badge">…</span>
-              <button class="btn btn-outline btn-sm" id="bl-l-run-btn" onclick="blRunNow('check', this)">🔎 Kiểm tra ngay</button>
+              <button class="btn btn-outline btn-sm" id="bl-l-run-btn" onclick="blRunNow('check', this)"><span class="ic-inline" data-icon="search" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px"></span> Kiểm tra ngay</button>
               <button class="btn btn-primary btn-sm" onclick="loadBacklinks()">↻</button>
             </div>
           </div>
@@ -687,7 +687,7 @@
             <div class="panel-actions">
               <span class="badge badge-grey" id="bl-e-badge">…</span>
               <a class="btn btn-outline btn-sm" href="/nhung" target="_blank" rel="noopener">↗ Trang lấy mã</a>
-              <button class="btn btn-outline btn-sm" id="bl-e-run-btn" onclick="blRunNow('embedcheck', this)">🔎 Soi dòng ghi nguồn</button>
+              <button class="btn btn-outline btn-sm" id="bl-e-run-btn" onclick="blRunNow('embedcheck', this)"><span class="ic-inline" data-icon="search" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px"></span> Soi dòng ghi nguồn</button>
               <button class="btn btn-primary btn-sm" onclick="loadBacklinks()">↻</button>
             </div>
           </div>
@@ -1332,7 +1332,7 @@
         </div>
         <div class="panel">
           <div class="panel-header">
-            <div class="panel-title">⏱ Lịch & Trạng Thái Job</div>
+            <div class="panel-title"><span class="ic-inline" data-icon="hourglass" data-icon-emoji="⏱" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">⏱</span> Lịch & Trạng Thái Job</div>
             <div class="panel-actions">
               <span style="font-size:.72rem;color:var(--text-lt)">Log ghi vào <code>cron_runs</code> · giờ VN</span>
               <button class="btn btn-primary btn-sm" onclick="loadCron()">↻</button>
@@ -2190,23 +2190,24 @@ function renderSecurityAudit(a) {
   if (!host) return;
   if (!a) { host.innerHTML = ''; return; }
 
+  const gIc = (name, emoji) => `<span class="ic-inline" data-icon="${name}" data-icon-emoji="${emoji}" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">${emoji}</span>`;
   const groups = [
-    { key: 'lech_so_du', icon: '🚨', label: 'Ví lệch số dư so với sổ giao dịch', crit: true,
+    { key: 'lech_so_du', icon: gIc('siren', '🚨'), label: 'Ví lệch số dư so với sổ giao dịch', crit: true,
       hint: 'Tiền tự sinh ra mà không có giao dịch nào giải thích — điều tra ngay.',
       line: r => `${r.user_id} — số dư ${r.so_du} vs sổ ${r.tong_so}` },
-    { key: 'ham_ho_cho_anon', icon: '🔓', label: 'Hàm RPC hở cho khách vãng lai', crit: true,
+    { key: 'ham_ho_cho_anon', icon: gIc('lock', '🔓'), label: 'Hàm RPC hở cho khách vãng lai', crit: true,
       hint: 'Vá: revoke execute on function &lt;tên&gt; from public, anon, authenticated;',
       line: r => String(r) },
-    { key: 'ham_thieu_search_path', icon: '🔐', label: 'Hàm SECURITY DEFINER thiếu pg_temp trong search_path', crit: false,
+    { key: 'ham_thieu_search_path', icon: gIc('lock', '🔐'), label: 'Hàm SECURITY DEFINER thiếu pg_temp trong search_path', crit: false,
       hint: 'Chạy bằng quyền chủ hàm nhưng dùng search_path của người gọi. Bắt cả hàm chỉ khai &quot;public&quot; trần — Postgres tìm pg_temp TRƯỚC TIÊN trừ khi nó được nêu ở vị trí khác, nên vẫn còn cửa che bảng thật bằng bảng TẠM cùng tên. Mức độ tuỳ ACL — hở cho anon mới là gấp. Vá: alter function &lt;tên&gt;(&lt;kiểu&gt;) set search_path = public, pg_temp;',
       line: r => String(r) },
-    { key: 'bom_su_kien', icon: '📈', label: 'Nguồn bơm sự kiện bất thường', crit: false,
+    { key: 'bom_su_kien', icon: gIc('trending-up', '📈'), label: 'Nguồn bơm sự kiện bất thường', crit: false,
       hint: 'Số liệu này nuôi autopilot M0.6 — bơm được là lái được hành động thật.',
       line: r => `${r.anon_id} — ${r.events_24h} event/24h` },
-    { key: 'thiet_bi_cay', icon: '👥', label: 'Thiết bị gắn nhiều tài khoản', crit: false,
+    { key: 'thiet_bi_cay', icon: gIc('users', '👥'), label: 'Thiết bị gắn nhiều tài khoản', crit: false,
       hint: 'Nghi cày quà đăng ký. anon_id nằm localStorage nên chỉ bắt được loại lười.',
       line: r => `${r.anon_id} — ${r.so_tai_khoan} tài khoản` },
-    { key: 'referral_bat_thuong', icon: '🎁', label: 'Lượt mời tăng vọt (7 ngày)', crit: false,
+    { key: 'referral_bat_thuong', icon: gIc('gift', '🎁'), label: 'Lượt mời tăng vọt (7 ngày)', crit: false,
       hint: '', line: r => `${r.referrer} — ${r.so_nguoi_7d} người` },
   ];
 
@@ -2254,7 +2255,7 @@ function renderReconcile(rows) {
   host.innerHTML = `
     <div style="padding:.7rem 1rem;border-top:1px solid var(--line)">
       <div style="font-size:.76rem;font-weight:700;color:var(--text);margin-bottom:.45rem">
-        💰 Đối soát trừ Lượng ↔ giao hàng (30 ngày)
+        <span class="ic-inline" data-icon="dollar-sign" data-icon-emoji="💰" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">💰</span> Đối soát trừ Lượng ↔ giao hàng (30 ngày)
         ${atRisk
           ? `<span style="color:var(--tx-red);font-weight:700"> — ${atRisk} Lượng đang treo</span>`
           : `<span style="color:var(--tx-green);font-weight:600"> — cân đối</span>`}
@@ -2288,8 +2289,8 @@ function renderOpsAlerts(alerts) {
 
   host.innerHTML = `
     <div style="border:1px solid var(--red);border-radius:var(--radius);background:color-mix(in srgb,var(--red) 8%,transparent);padding:.7rem .9rem">
-      <div style="font-weight:700;color:var(--tx-red);font-size:.82rem;margin-bottom:.4rem">
-        🚨 ${rows.length} cảnh báo vận hành (48h qua)
+      <div style="font-weight:700;color:var(--red);font-size:.82rem;margin-bottom:.4rem">
+        <span class="ic-inline" data-icon="siren" data-icon-emoji="🚨" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">🚨</span> ${rows.length} cảnh báo vận hành (48h qua)
       </div>
       ${rows.map(a => `
         <div style="font-size:.76rem;color:var(--text);margin:.25rem 0;white-space:pre-wrap">
@@ -4966,7 +4967,7 @@ function renderGaAccounts(accounts) {
   if (!host) return;
   _gaAccounts = accounts || [];
   if (!_gaAccounts.length) {
-    host.innerHTML = '<div class="empty">Sổ trống. Bấm <b>🔄 Nạp sổ + kiểm hồ sơ</b> để nạp danh sách nền tảng vào đây.</div>';
+    host.innerHTML = '<div class="empty">Sổ trống. Bấm <b>Nạp sổ + kiểm hồ sơ</b> để nạp danh sách nền tảng vào đây.</div>';
     return;
   }
 
@@ -5166,7 +5167,7 @@ function renderBlProspects(prospects) {
     </div>`;
 
   if (!prospects.length) {
-    host.innerHTML = form + '<div class="empty">Sổ cơ hội còn trống. Thêm bằng tay ở trên, hoặc bấm "🔍 Tìm cơ hội mới" (cần cấu hình BRAVE_SEARCH_API_KEY).</div>';
+    host.innerHTML = form + '<div class="empty">Sổ cơ hội còn trống. Thêm bằng tay ở trên, hoặc bấm "Tìm cơ hội mới" (cần cấu hình BRAVE_SEARCH_API_KEY).</div>';
     return;
   }
 
@@ -5440,11 +5441,16 @@ const BL_RUN_LABELS = {
 };
 
 // Thiếu một khoá ở đây thì nút bấm xong bị đổi nhãn thành "Chạy" — mất luôn
-// cả emoji lẫn nghĩa. Thêm nút mới thì thêm nhãn ở CẢ HAI bảng trên/dưới.
+// cả icon lẫn nghĩa. Thêm nút mới thì thêm nhãn ở CẢ HAI bảng trên/dưới.
+// Gán qua .innerHTML (không phải .textContent) vì nhãn mang icon span —
+// khớp đúng markup ban đầu của từng nút để icon không biến mất sau lượt chạy đầu.
 const BL_RUN_BTN_LABELS = {
-  prospect: '🔍 Tìm cơ hội mới', content: '✍️ Soạn ngay', check: '🔎 Kiểm tra ngay',
-  brokenlinks: '🔗💀 Quét link chết', accounts: '🔄 Nạp sổ + kiểm hồ sơ',
-  embedcheck: '🔎 Soi dòng ghi nguồn',
+  prospect: '<span class="ic-inline" data-icon="search" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px"></span> Tìm cơ hội mới',
+  content: '<span class="ic-inline" data-icon="pen-line" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px"></span> Soạn ngay',
+  check: '<span class="ic-inline" data-icon="search" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px"></span> Kiểm tra ngay',
+  brokenlinks: '<span class="ic-inline" data-icon="link" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px"></span> Quét link chết',
+  accounts: '<span class="ic-inline" data-icon="rotate-cw" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px"></span> Nạp sổ + kiểm hồ sơ',
+  embedcheck: '<span class="ic-inline" data-icon="search" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px"></span> Soi dòng ghi nguồn',
 };
 
 async function blRunNow(kind, btn) {
@@ -5457,7 +5463,7 @@ async function blRunNow(kind, btn) {
   } catch (e) {
     toast('Lỗi: ' + e.message, 'error');
   } finally {
-    if (btn) { btn.disabled = false; btn.textContent = BL_RUN_BTN_LABELS[kind] || 'Chạy'; }
+    if (btn) { btn.disabled = false; btn.innerHTML = BL_RUN_BTN_LABELS[kind] || 'Chạy'; }
   }
 }
 
@@ -7159,7 +7165,7 @@ async function uploadToYT(id) {
   const btn = document.getElementById('btn-yt-upload');
   const statusEl = document.getElementById('yt-upload-status');
   if (btn) btn.disabled = true;
-  if (statusEl) statusEl.textContent = '⏳ Đang upload...';
+  if (statusEl) statusEl.innerHTML = '<span class="ic-inline" data-icon="hourglass" data-icon-emoji="⏳" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">⏳</span> Đang upload...';
 
   try {
     const resp = await fetch(

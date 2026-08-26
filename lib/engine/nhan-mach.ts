@@ -39,10 +39,17 @@ import {
   kieuCuaCung,
   resolveVanNam,
   vanNamLine,
-  LUAT_VAN_NAM,
+  LUAT_VAN_NAM_AN_CUNG,
   type VanNam,
 } from './cong-so';
-import { QUAN_HE, type QuanHeDef, type QuanHeId, resolveQuanHe, KHONG_DOC } from './nguoi-khac';
+import {
+  QUAN_HE,
+  type QuanHeDef,
+  type QuanHeId,
+  resolveQuanHe,
+  KHONG_DOC,
+  demDuKien,
+} from './nguoi-khac';
 
 type Rec = Record<string, unknown>;
 
@@ -249,7 +256,8 @@ export function computeNhanMach(
       ten: t.ten,
       khungDiem: t.vanNam?.khung?.diem ?? null,
       canCan: t.vanNam?.catSat ? t.vanNam.catSat.cat - t.vanNam.catSat.sat : null,
-      moTa: t.vanNam ? vanNamLine(t.vanNam) : null,
+      // 🔒 `anCung` — cả nhóm này đều là người KHÔNG có mặt (xem `KHONG_DOC`).
+      moTa: t.vanNam ? vanNamLine(t.vanNam, { anCung: true }) : null,
     }))
     .sort(
       (x, y) =>
@@ -293,6 +301,36 @@ export const VAI_UU_TIEN: QuanHeId[] = [
 ];
 
 /**
+ * C1 — "đọc từ N dữ kiện" cho CẢ NHÓM: cộng dồn phép đếm của từng lá số.
+ *
+ * ⚠️ **KHÔNG có câu cổ thư ở đây, và đó là cố ý.** `trichDanMenh` trích ở cung
+ * Mệnh của MỘT người; tool này đọc cả nhóm nên không có "cung Mệnh của ai" để
+ * trích. Bốc đại một thành viên rồi trích cho họ là gán một câu cổ thư cho nhầm
+ * người — đúng loại sai mà C1 sinh ra để tránh.
+ *
+ * Đếm dùng CHUNG `demDuKien` của `nguoi-khac` thay vì chép phép đếm thứ hai:
+ * hai bản thì sớm muộn cũng ra hai con số cho cùng một lá số.
+ */
+export function coSoNhom(list: readonly { ls: Laso }[]): {
+  soNguoi: number;
+  soSao: number;
+  soCachCuc: number;
+  soDaiVan: number;
+  tong: number;
+} {
+  let soSao = 0;
+  let soCachCuc = 0;
+  let soDaiVan = 0;
+  for (const n of list) {
+    const d = demDuKien(n.ls);
+    soSao += d.soSao;
+    soCachCuc += d.soCachCuc;
+    soDaiVan += d.soDaiVan;
+  }
+  return { soNguoi: list.length, soSao, soCachCuc, soDaiVan, tong: soSao + soCachCuc + soDaiVan };
+}
+
+/**
  * Dữ liệu PHẲNG gửi rail.
  *
  * ⚠️ `extractGenericContext` bỏ IM LẶNG mọi giá trị là object.
@@ -304,12 +342,12 @@ export function railData(p: NhanMachProfile): Record<string, string | number | b
       .map(
         (t) =>
           `${t.ten} (${t.vai.label}) — kiểu ${t.kieu.ten}${t.lai && t.kieuPhu ? ` pha ${t.kieuPhu.ten}` : ''}` +
-          (t.vanNam ? `, vận năm ${vanNamLine(t.vanNam)}` : ''),
+          (t.vanNam ? `, vận năm ${vanNamLine(t.vanNam, { anCung: true })}` : ''),
       )
       .join(' | '),
     // Danh sách trên mang vận năm của TỪNG người ⇒ phải kèm luật, không thì rail
     // đọc con số khung đại vận thành "điểm vận năm nay" của người đó.
-    luatVanNam: LUAT_VAN_NAM,
+    luatVanNam: LUAT_VAN_NAM_AN_CUNG,
     phanBoKieu: p.phanBo
       .filter((x) => x.soNguoi > 0)
       .map((x) => `${x.ten}: ${x.soNguoi} (${x.ten_nguoi.join(', ')})`)

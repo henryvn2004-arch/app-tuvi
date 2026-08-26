@@ -225,7 +225,7 @@ h1,h2,h3{font-family:'Noto Serif',serif;}
 
   <!-- Permission button (shown on iOS) -->
   <button class="btn-perm" id="btn-perm" style="display:none" onclick="requestPermission()">
-    📡 Cấp quyền truy cập cảm biến
+    <span class="ic" data-icon="zap"></span> Cấp quyền truy cập cảm biến
   </button>
 
   <!-- Info card -->
@@ -346,7 +346,7 @@ function showDirMeaning(d) {
 function setStatus(type, icon, text) {
   const bar = document.getElementById('status-bar');
   bar.className = 'status-bar ' + type;
-  document.getElementById('status-icon').textContent = icon;
+  document.getElementById('status-icon').innerHTML = window.iconHtml ? window.iconHtml(icon) : icon;
   document.getElementById('status-text').textContent = text;
 }
 

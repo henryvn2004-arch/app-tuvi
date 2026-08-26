@@ -153,7 +153,7 @@
 
         <div class="res-block" style="background:#FBF3DE;border-color:#e8d9b0">
           <div class="res-block-body" style="font-size:12.5px;line-height:1.6;color:#5a5145">
-            💡 Chân dung và câu chuyện phía trên được phác hoạ dựa trên các dữ liệu trong lá số Tử Vi của bạn, kết hợp với kinh nghiệm nghiên cứu của tiền nhân để lại. Mang tính tham khảo và giải trí.
+            <span class="ic" data-icon="lightbulb"></span> Chân dung và câu chuyện phía trên được phác hoạ dựa trên các dữ liệu trong lá số Tử Vi của bạn, kết hợp với kinh nghiệm nghiên cứu của tiền nhân để lại. Mang tính tham khảo và giải trí.
           </div>
         </div>
 
@@ -699,6 +699,24 @@ async function _loadHistory() {
 }
 
 TuviPaywall.init({ product: 'chan-dung-tien-kiep', slug: function () { return _currentSlug; } });
+
+// ── B2 — nhận hand-off từ trang chia sẻ `/ket-qua` ───────────────────────────
+// Người mở link của bạn bè nhập ngày sinh NGAY TẠI trang chia sẻ rồi được đưa
+// sang đây kèm `?ngay=&thang=&nam=&gio=&gioitinh=&auto=1`. `Shell.prefillForm()`
+// đọc query TRƯỚC localStorage nên lá số trong link luôn thắng.
+//
+// 🔑 Tự chạy được vì `analyze()` mở đầu bằng lượt TÍNH THỬ: không đăng nhập,
+// không trừ Lượng, không gọi model ảnh. Tường khoá dựng sau đó như thường.
+// Chạy SAU khi `shell.js` boot (DOMContentLoaded) để `Shell.setContext` không lỗi.
+function _pageInitB2() {
+  try {
+    if (!window.Shell || !Shell.prefillForm) return;
+    var co = Shell.prefillForm();
+    if (co && Shell.autoRun() && document.getElementById('nam') && document.getElementById('nam').value) analyze();
+  } catch (e) { /* hand-off hỏng KHÔNG được chặn người dùng tự nhập tay */ }
+}
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', _pageInitB2);
+else _pageInitB2();
 </script>
 </body>
 </html>

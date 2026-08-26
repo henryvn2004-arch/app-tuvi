@@ -177,11 +177,11 @@
         <img id="previewImg" class="preview-img" alt="Ảnh đã chọn">
         <canvas id="overlayCanvas" class="overlay-canvas"></canvas>
         <div class="preview-badge">✓ Ảnh đã chọn</div>
-        <div class="mp-badge" id="mpBadge">✋ Bàn tay đã xác định — AI đọc chỉ tay từ ảnh</div>
+        <div class="mp-badge" id="mpBadge"><span class="ic-inline" data-icon-emoji="✋" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">✋</span> Bàn tay đã xác định — AI đọc chỉ tay từ ảnh</div>
       </div>
       <!-- Hand geometry summary -->
       <div id="handGeomPanel" style="display:none;margin-top:10px;padding:10px 14px;background:var(--bg-soft);border-radius:8px;border:1px solid var(--border-lt);font-size:12px;text-align:left;max-width:340px;margin-left:auto;margin-right:auto">
-        <div style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text-lt);margin-bottom:6px">📐 Đo lường MediaPipe</div>
+        <div style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text-lt);margin-bottom:6px"><span class="ic-inline" data-icon-emoji="📐" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">📐</span> Đo lường MediaPipe</div>
         <div id="handGeomText" style="color:var(--text-mid);line-height:1.8"></div>
       </div>
       <button class="remove-btn" onclick="removePhoto()">✕ Xoá ảnh</button>
@@ -193,7 +193,7 @@
 
     <div style="text-align:center;margin-top:20px">
       <button class="btn-submit" id="analyzeBtn" onclick="analyze()" disabled style="padding:14px 40px;font-size:15px">
-        ✋ Phân Tích Thủ Tướng
+        <span class="ic-inline" data-icon-emoji="✋" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">✋</span> Phân Tích Thủ Tướng
       </button>
     </div>
     <div class="error-msg" id="error-msg"></div>

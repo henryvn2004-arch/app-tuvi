@@ -784,7 +784,7 @@ select.form-input { cursor: pointer; }
       <p style="font-size:14px;color:var(--text-lt);line-height:1.7;margin-bottom:28px;font-style:italic">
         Điền thông tin cả hai đối tác rồi bấm phân tích tương quan.
       </p>
-      <button class="btn-submit" id="btn-analyze" onclick="analyze()">&#9878; Phân Tích Tương Quan</button>
+      <button class="btn-submit" id="btn-analyze" onclick="analyze()"><span class="ic" data-icon="scale"></span> Phân Tích Tương Quan</button>
       <div style="font-size:11px;color:var(--text-lt);text-align:center;margin-top:10px">9 phần · Luận giải hợp tác kinh doanh bằng AI</div>
     </div>
   </div>
@@ -796,7 +796,7 @@ select.form-input { cursor: pointer; }
     <div id="compact-laso-wrap" style="margin-bottom:16px"></div>
     <!-- Download button -->
     <div style="margin-bottom:16px">
-      <button onclick="window.print()" style="padding:10px 20px;background:#061A2E;color:#fff;border:none;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit">⬇ Tải PDF</button>
+      <button onclick="window.print()" style="padding:10px 20px;background:#061A2E;color:#fff;border:none;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit"><span class="ic" data-icon="chevron-down"></span> Tải PDF</button>
     </div>
     <div id="result-header-tuoi" class="result-header-tuoi"></div>
     <div class="result-layout">
@@ -1285,7 +1285,7 @@ function buildTongQuan(result){
   });
   html+=`</table>
     <div style="margin-bottom:20px">
-      <div style="font-size:11px;font-weight:700;color:var(--text-lt);letter-spacing:1px;text-transform:uppercase;margin-bottom:10px">📊 So Sánh 6 Chiều — 12 Cung</div>
+      <div style="font-size:11px;font-weight:700;color:var(--text-lt);letter-spacing:1px;text-transform:uppercase;margin-bottom:10px">${window.iconHtml?window.iconHtml('bar-chart-3'):''} So Sánh 6 Chiều — 12 Cung</div>
       <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px" id="radar-btns"></div>
       <canvas id="chart-radar-overlay" style="max-height:400px"></canvas>
     </div>
@@ -1328,7 +1328,7 @@ function buildYeuTo(idx,m,nameA,nameB,lsA,lsB){
     const dvUid='dv-idx8-'+Date.now();
     setTimeout(()=>renderDvOverlay2(lsA,lsB,nameA,nameB,dvUid),500);
     html+=`<div style="margin-top:20px">
-      <div style="font-size:11px;font-weight:700;color:#6699dd;letter-spacing:1px;text-transform:uppercase;margin-bottom:10px">📊 Vận Trình Toàn Đời — Đối Chiếu</div>
+      <div style="font-size:11px;font-weight:700;color:#6699dd;letter-spacing:1px;text-transform:uppercase;margin-bottom:10px">${window.iconHtml?window.iconHtml('bar-chart-3'):''} Vận Trình Toàn Đời — Đối Chiếu</div>
       <canvas id="${dvUid}"></canvas>
     </div>`;
   }
@@ -1419,7 +1419,7 @@ function buildCungRadar(m,lsA,lsB,nameA,nameB){
     });
   },200);
   return `<div style="max-width:360px;margin:16px 0">
-    <div style="font-size:11px;font-weight:600;color:#6699dd;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:8px">📊 6 Chiều Đánh Giá</div>
+    <div style="font-size:11px;font-weight:600;color:#6699dd;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:8px">${window.iconHtml?window.iconHtml('bar-chart-3'):''} 6 Chiều Đánh Giá</div>
     <canvas id="${uid}" style="max-height:320px"></canvas>
   </div>`;
 }
@@ -1453,7 +1453,7 @@ function renderAllSections(result){
   // Bottom download button
   const dlBottom=document.createElement('div');
   dlBottom.style.cssText='text-align:center;margin:32px 0 8px';
-  dlBottom.innerHTML='<button onclick="window.print()" style="padding:10px 24px;background:#061A2E;color:#fff;border:none;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit">⬇ Tải PDF</button>';
+  dlBottom.innerHTML='<button onclick="window.print()" style="padding:10px 24px;background:#061A2E;color:#fff;border:none;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit">'+(window.iconHtml?window.iconHtml('chevron-down'):'')+' Tải PDF</button>';
   body.appendChild(dlBottom);
   document.getElementById('result-sidebar').classList.add('visible');
   // luanGiaiAll called after payment check
@@ -1469,7 +1469,7 @@ function renderTeasers(result) {
     </div>
     <div style="text-align:center;margin-top:16px">
       <button class="btn-paywall" onclick="initiatePaymentTuoi(_savedResult,'${product}')"><span>Mở Khóa Luận Giải →</span></button>
-      <div class="paywall-secure" style="margin-top:8px">🔒 Trừ thẳng từ số dư · <span data-tvp-price="xem-lam-an">…</span> lượng</div>
+      <div class="paywall-secure" style="margin-top:8px"><span class="ic" data-icon="lock"></span> Trừ thẳng từ số dư · <span data-tvp-price="xem-lam-an">…</span> lượng</div>
     </div>`;
   items.forEach((m, i) => {
     const idx = i + 1;

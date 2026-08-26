@@ -349,10 +349,10 @@ const MENH_COLOR = {Kim:'#888',Mộc:'#2E8B57',Thủy:'#1455A4',Hỏa:'#C0392B',
 
 let _imgData = null, _mediaType = 'image/jpeg';
 const ANALYSIS_STEPS = [
-  { label: '🔬 Tây y: nhận diện loại da & tình trạng', ms: 2600 },
-  { label: '☯️ Đông y: luận giải tạng phủ & bản mệnh', ms: 2600 },
-  { label: '🌿 Lập kế hoạch ăn uống thực dưỡng', ms: 2600 },
-  { label: '✨ Gợi ý mỹ phẩm & routine', ms: 0 },
+  { label: '<span class="ic-inline" data-icon="flask-conical" data-icon-emoji="🔬" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">🔬</span> Tây y: nhận diện loại da & tình trạng', ms: 2600 },
+  { label: '<span class="ic-inline" data-icon="aperture" data-icon-emoji="☯️" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">☯️</span> Đông y: luận giải tạng phủ & bản mệnh', ms: 2600 },
+  { label: '<span class="ic-inline" data-icon="leaf" data-icon-emoji="🌿" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">🌿</span> Lập kế hoạch ăn uống thực dưỡng', ms: 2600 },
+  { label: '<span class="ic-inline" data-icon="sparkles" data-icon-emoji="✨" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">✨</span> Gợi ý mỹ phẩm & routine', ms: 0 },
 ];
 let _analysisLoadingCtl = null;
 
@@ -449,7 +449,7 @@ function renderResults(d) {
 
   // Summary
   const loaiDa = da.loai_da || 'da thường';
-  document.getElementById('skinEmoji').textContent = SKIN_TYPE_EMOJI[loaiDa] || '🌿';
+  document.getElementById('skinEmoji').innerHTML = window.iconHtml ? window.iconHtml(SKIN_TYPE_EMOJI[loaiDa] || '🌿') : (SKIN_TYPE_EMOJI[loaiDa] || '🌿');
   document.getElementById('skinLabel').textContent = loaiDa;
   document.getElementById('summaryTitle').textContent = `${loaiDa.charAt(0).toUpperCase() + loaiDa.slice(1)} · ${da.muc_do || ''}`;
   document.getElementById('summarySub').textContent = da.vung_can_chu_y || '';
@@ -485,7 +485,7 @@ function renderResults(d) {
   const fg = document.getElementById('foodGrid');
   const nenAnHTML = (anuong.nen_an || []).map(f => `
     <div class="food-item good">
-      <div class="food-name">🌱 ${f.ten}</div>
+      <div class="food-name">${window.iconHtml?window.iconHtml('leaf'):''} ${f.ten}</div>
       <div class="food-reason">${f.ly_do}</div>
     </div>`).join('');
   const tranhAnHTML = (anuong.nen_tranh || []).map(f => `
@@ -503,7 +503,7 @@ function renderResults(d) {
       <div class="food-list">${tranhAnHTML}</div>
     </div>
     ${anuong.thuc_duong ? `<div class="thuc-duong-box"><strong>✦ Thực Dưỡng Theo Mệnh</strong>${anuong.thuc_duong}</div>` : ''}
-    ${anuong.nuoc_uong ? `<div class="nuoc-uong"><strong>🍵 Nước Uống & Trà Dược Liệu</strong>${anuong.nuoc_uong}</div>` : ''}
+    ${anuong.nuoc_uong ? `<div class="nuoc-uong"><strong>${window.iconHtml?window.iconHtml('leaf'):''} Nước Uống & Trà Dược Liệu</strong>${anuong.nuoc_uong}</div>` : ''}
   `;
 
   // Mỹ phẩm
@@ -533,11 +533,11 @@ function renderResults(d) {
   const rg = document.getElementById('routineGrid');
   rg.innerHTML = `
     <div class="routine-item">
-      <div class="routine-time">☀️ Buổi Sáng</div>
+      <div class="routine-time">${window.iconHtml?window.iconHtml('sun'):''} Buổi Sáng</div>
       <div class="routine-steps">${mypham.routine_sang || '—'}</div>
     </div>
     <div class="routine-item">
-      <div class="routine-time">🌙 Buổi Tối</div>
+      <div class="routine-time">${window.iconHtml?window.iconHtml('moon'):''} Buổi Tối</div>
       <div class="routine-steps">${mypham.routine_toi || '—'}</div>
     </div>
   `;

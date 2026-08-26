@@ -1384,14 +1384,14 @@ select.form-input { cursor: pointer; }
           <div id="radar-legend" style="margin-top:16px;display:grid;grid-template-columns:repeat(3,1fr);gap:8px;font-size:12px"></div>
         </div>
         <div style="margin:24px 0 16px">
-          <div style="font-size:11px;font-weight:600;color:#6699dd;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:10px">📊 Wheel of Life — 8 Lĩnh Vực</div>
+          <div style="font-size:11px;font-weight:600;color:#6699dd;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:10px"><span class="ic" data-icon="bar-chart-3" style="display:inline-flex;width:11px;height:11px;vertical-align:-1px"></span> Wheel of Life — 8 Lĩnh Vực</div>
           <div style="display:grid;grid-template-columns:260px 1fr;gap:24px;align-items:center">
             <canvas id="chart-wheel-life" width="260" height="260"></canvas>
             <div id="wheel-life-stats" style="display:flex;flex-direction:column;gap:7px;font-size:12px"></div>
           </div>
         </div>
         <div style="margin:24px 0 16px">
-          <div style="font-size:11px;font-weight:600;color:#6699dd;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:10px">📊 Xếp hạng 12 Cung</div>
+          <div style="font-size:11px;font-weight:600;color:#6699dd;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:10px"><span class="ic" data-icon="bar-chart-3" style="display:inline-flex;width:11px;height:11px;vertical-align:-1px"></span> Xếp hạng 12 Cung</div>
           <div id="chart-bar-12cung" style="display:flex;flex-direction:column;gap:5px"></div>
         </div>`;
 
@@ -1407,11 +1407,11 @@ select.form-input { cursor: pointer; }
         // Line chart đại vận + timeline
         chartHtml = `
         <div style="margin:16px 0 8px">
-          <div style="font-size:11px;font-weight:600;color:#6699dd;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:10px">📊 Vận Trình Toàn Đời</div>
+          <div style="font-size:11px;font-weight:600;color:#6699dd;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:10px"><span class="ic" data-icon="bar-chart-3" style="display:inline-flex;width:11px;height:11px;vertical-align:-1px"></span> Vận Trình Toàn Đời</div>
           <div style="max-width:700px"><canvas id="chart-daivan"></canvas></div>
         </div>
         <div style="margin:16px 0 8px">
-          <div style="font-size:11px;font-weight:600;color:#6699dd;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:10px">📊 Timeline Cuộc Đời</div>
+          <div style="font-size:11px;font-weight:600;color:#6699dd;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:10px"><span class="ic" data-icon="bar-chart-3" style="display:inline-flex;width:11px;height:11px;vertical-align:-1px"></span> Timeline Cuộc Đời</div>
           <div id="chart-timeline-wrap" style="position:relative;padding-top:32px">
             <div id="chart-timeline-blocks" style="display:flex;gap:2px;align-items:flex-end;height:160px"></div>
             <div id="chart-timeline-labels" style="display:flex;margin-top:6px;border-top:1px solid #eee;padding-top:6px"></div>
@@ -1427,7 +1427,7 @@ select.form-input { cursor: pointer; }
         // Vận trình toàn đời, highlight đại vận này
         chartHtml = `
         <div style="margin:16px 0 8px">
-          <div style="font-size:11px;font-weight:600;color:#6699dd;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:8px">📊 Đại Vận 10 Năm</div>
+          <div style="font-size:11px;font-weight:600;color:#6699dd;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:8px"><span class="ic" data-icon="bar-chart-3" style="display:inline-flex;width:11px;height:11px;vertical-align:-1px"></span> Đại Vận 10 Năm</div>
           <div style="font-size:11px;color:#666;margin-bottom:8px">Vận trình toàn đời — chấm nổi bật là đại vận đang xem</div>
           <div class="candle-wrap"><div id="candle-dv${phan-14}"></div></div>
         </div>`;
@@ -1436,7 +1436,7 @@ select.form-input { cursor: pointer; }
         // Candlestick 3 năm kế tiếp
         chartHtml = `
         <div style="margin:16px 0 8px">
-          <div style="font-size:11px;font-weight:600;color:#6699dd;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:8px">📊 3 Năm Kế Tiếp — Tiểu Vận</div>
+          <div style="font-size:11px;font-weight:600;color:#6699dd;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:8px"><span class="ic" data-icon="bar-chart-3" style="display:inline-flex;width:11px;height:11px;vertical-align:-1px"></span> 3 Năm Kế Tiếp — Tiểu Vận</div>
           <div class="candle-wrap"><div id="candle-3yr"></div></div>
         </div>`;
       }
@@ -1515,7 +1515,7 @@ select.form-input { cursor: pointer; }
 
             </div>
 
-            <div class="paywall-secure">🔒 Trừ thẳng từ số dư · Truy cập vĩnh viễn</div>
+            <div class="paywall-secure"><span class="ic" data-icon="lock"></span> Trừ thẳng từ số dư · Truy cập vĩnh viễn</div>
 
           </div>
 
@@ -1684,7 +1684,7 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
       // Show full P1 với streaming animation, ẩn lock box
       claudeBox.style.display = '';
       lockBox.style.display = 'none';
-      streamIntoEl(claudeBox, renderMarkdown(data.luanGiai) + `<div class="ux-share-bar"><button onclick="uxCopySection(this, 1)" class="ux-share-btn">📋 Sao chép phần này</button></div>` + cungRelatedHtml(PHAN_LABELS[1]), () => {});
+      streamIntoEl(claudeBox, renderMarkdown(data.luanGiai) + `<div class="ux-share-bar"><button onclick="uxCopySection(this, 1)" class="ux-share-btn">${window.iconHtml?window.iconHtml('clipboard'):''} Sao chép phần này</button></div>` + cungRelatedHtml(PHAN_LABELS[1]), () => {});
       updateMucLuc(1, 'done');
 
     } catch(e) { /* silent fail — lock box vẫn hiện như cũ */ }
@@ -1891,7 +1891,7 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
       // Điền content với streaming animation, ẩn lock box
       if (claudeBox) {
         claudeBox.style.display = '';
-        const shareBar = `<div class="ux-share-bar"><button onclick="uxCopySection(this, ${_currentPhan})" class="ux-share-btn">📋 Sao chép phần này</button></div>`;
+        const shareBar = `<div class="ux-share-bar"><button onclick="uxCopySection(this, ${_currentPhan})" class="ux-share-btn">${window.iconHtml?window.iconHtml('clipboard'):''} Sao chép phần này</button></div>`;
         streamIntoEl(claudeBox, renderMarkdown(data.luanGiai) + shareBar + cungRelatedHtml(PHAN_LABELS[_currentPhan]), () => {});
       }
       if (lockBox) lockBox.style.display = 'none';
@@ -2044,7 +2044,7 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
 </div>
 
 <div style="margin:20px 0 8px">
-  <div style="font-size:11px;font-weight:600;color:#6699dd;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:10px">📊 Timeline Cuộc Đời</div>
+  <div style="font-size:11px;font-weight:600;color:#6699dd;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:10px">${window.iconHtml?window.iconHtml('bar-chart-3'):''} Timeline Cuộc Đời</div>
   <div id="chart-timeline-wrap" style="position:relative;padding-top:32px">
     <div id="chart-timeline-blocks" style="display:flex;gap:2px;align-items:flex-end;height:160px"></div>
     <div id="chart-timeline-labels" style="display:flex;margin-top:6px;border-top:1px solid #1e2d42;padding-top:6px"></div>
@@ -2072,14 +2072,14 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
   <div id="radar-legend" style="margin-top:16px;display:grid;grid-template-columns:repeat(3,1fr);gap:8px;font-size:12px"></div>
 </div>
 <div style="margin:24px 0 16px">
-  <div style="font-size:11px;font-weight:600;color:#6699dd;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:10px">📊 Wheel of Life — 8 Lĩnh Vực</div>
+  <div style="font-size:11px;font-weight:600;color:#6699dd;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:10px">${window.iconHtml?window.iconHtml('bar-chart-3'):''} Wheel of Life — 8 Lĩnh Vực</div>
   <div style="display:grid;grid-template-columns:260px 1fr;gap:24px;align-items:center">
     <canvas id="chart-wheel-life" width="260" height="260"></canvas>
     <div id="wheel-life-stats" style="display:flex;flex-direction:column;gap:7px;font-size:12px"></div>
   </div>
 </div>
 <div style="margin:24px 0 16px">
-  <div style="font-size:11px;font-weight:600;color:#6699dd;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:10px">📊 Xếp hạng 12 Cung</div>
+  <div style="font-size:11px;font-weight:600;color:#6699dd;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:10px">${window.iconHtml?window.iconHtml('bar-chart-3'):''} Xếp hạng 12 Cung</div>
   <div id="chart-bar-12cung" style="display:flex;flex-direction:column;gap:5px"></div>
 </div>`;
       } else if (_currentPhan >= 2 && _currentPhan <= 13 && _astrolabe?.cungScores) {
@@ -2091,14 +2091,14 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
       } else if (_currentPhan >= 15 && _currentPhan <= 23 && _astrolabe) {
           chartHtml = `
 <div style="margin:16px 0 8px">
-  <div style="font-size:11px;font-weight:600;color:#6699dd;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:8px">📊 Đại Vận 10 Năm</div>
+  <div style="font-size:11px;font-weight:600;color:#6699dd;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:8px">${window.iconHtml?window.iconHtml('bar-chart-3'):''} Đại Vận 10 Năm</div>
   <div style="font-size:11px;color:#666;margin-bottom:8px">Vận trình toàn đời — chấm nổi bật là đại vận đang xem</div>
   <div class="candle-wrap"><div id="candle-dv${_currentPhan - 14}"></div></div>
 </div>`;
       } else if (_currentPhan === 24 && _astrolabe) {
           chartHtml = `
 <div style="margin:16px 0 8px">
-  <div style="font-size:11px;font-weight:600;color:#6699dd;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:8px">📊 3 Năm Kế Tiếp — Tiểu Vận</div>
+  <div style="font-size:11px;font-weight:600;color:#6699dd;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:8px">${window.iconHtml?window.iconHtml('bar-chart-3'):''} 3 Năm Kế Tiếp — Tiểu Vận</div>
   <div class="candle-wrap"><div id="candle-3yr"></div></div>
 </div>`;
       }
@@ -2819,7 +2819,7 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
               const shareUrl = `https://www.tuviminhbao.com/la-so.html?slug=${d.slug}`;
               const shareEl = document.createElement('div');
               shareEl.style.cssText = 'margin:16px 0;padding:14px 18px;background:#f0f7ff;border:1px solid #c0d8f0;border-radius:8px;font-size:13px';
-              shareEl.innerHTML = `🔗 <b>Link lá số của bạn:</b> <a href="${shareUrl}" target="_blank" style="color:#1455A4">${shareUrl}</a>`;
+              shareEl.innerHTML = `${window.iconHtml?window.iconHtml('link'):''} <b>Link lá số của bạn:</b> <a href="${shareUrl}" target="_blank" style="color:#1455A4">${shareUrl}</a>`;
               document.getElementById('result-body')?.appendChild(shareEl);
 
               // Capture lá số grid as image
@@ -3081,10 +3081,10 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
       <div class="center-la-so">
         <div class="center-title">✦ ${hoten.toUpperCase()} ✦</div>
         <hr class="center-divider">
-        ${conv._dl ? `<div class="center-row">📅 ${conv._dl.day}/${conv._dl.month}/${conv._dl.year} (Dương Lịch) · giờ ${conv.gioChi||''}</div>` : ''}
-        <div class="center-row">📅 ${conv.amLich ? conv.amLich.day+'/'+conv.amLich.month+'/'+conv.amLich.year : ''} (Âm Lịch) · giờ ${conv.gioChi||''}</div>
-        <div class="center-row">🎂 ${ls.tuoiXem} tuổi (âm lịch)</div>
-        <div class="center-row">⚧ Giới tính: ${gioitinh === 'nam' ? 'Nam' : 'Nữ'}</div>
+        ${conv._dl ? `<div class="center-row"><span class="ic-inline" data-icon="calendar" data-icon-emoji="📅" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">📅</span> ${conv._dl.day}/${conv._dl.month}/${conv._dl.year} (Dương Lịch) · giờ ${conv.gioChi||''}</div>` : ''}
+        <div class="center-row"><span class="ic-inline" data-icon="calendar" data-icon-emoji="📅" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">📅</span> ${conv.amLich ? conv.amLich.day+'/'+conv.amLich.month+'/'+conv.amLich.year : ''} (Âm Lịch) · giờ ${conv.gioChi||''}</div>
+        <div class="center-row"><span class="ic-inline" data-icon="cake" data-icon-emoji="🎂" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">🎂</span> ${ls.tuoiXem} tuổi (âm lịch)</div>
+        <div class="center-row"><span class="ic-inline" data-icon="user" data-icon-emoji="⚧" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">⚧</span> Giới tính: ${gioitinh === 'nam' ? 'Nam' : 'Nữ'}</div>
         <hr class="center-divider">
         <div class="center-row">Năm: <b style="color:var(--navy)">${ls.canChiNam}</b> &nbsp;·&nbsp; Mệnh: <b style="color:var(--navy)">${NAP_AM_FULL[ls.canChiNam] || ls.napAm}</b></div>
         <div class="center-row">Cục: <b style="color:var(--navy)">${ls.cuc}</b> &nbsp;·&nbsp; Mệnh: <b style="color:var(--navy)">${ls.menhDC}</b> · Thân: <b style="color:var(--navy)">${ls.thanDC}</b></div>
@@ -3094,7 +3094,7 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
         <div class="center-row">Tiểu hạn: <b style="color:#1E6B3C">${tvCung?.diaChi||'?'}</b> · ${tvCung?.cungName||''}</div>
         <div class="center-row">Lưu đại hạn: <b style="color:var(--gold)">${ldh?.diaChi||'?'}</b> · ${ldh?.cungName||''}</div>
         <hr class="center-divider">
-        <div class="center-row" style="font-size:10px;color:var(--text-lt)">🗓 Lập lá số: ${(()=>{const n=new Date(),p=x=>String(x).padStart(2,'0');return p(n.getDate())+'/'+p(n.getMonth()+1)+'/'+n.getFullYear()+' '+p(n.getHours())+':'+p(n.getMinutes());})()}</div>
+        <div class="center-row" style="font-size:10px;color:var(--text-lt)"><span class="ic-inline" data-icon="calendar-days" data-icon-emoji="🗓" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">🗓</span> Lập lá số: ${(()=>{const n=new Date(),p=x=>String(x).padStart(2,'0');return p(n.getDate())+'/'+p(n.getMonth()+1)+'/'+n.getFullYear()+' '+p(n.getHours())+':'+p(n.getMinutes());})()}</div>
         <div class="center-row" style="font-size:10px;color:var(--text-lt)">© 2026 紫微明寶 | Tử Vi Minh Bảo</div>
       </div>
     </div>`;
@@ -3672,7 +3672,7 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
       section.className = 'phan-section';
       const divider = preGenHtml ? `<div class="pregen-divider"><span>Luận giải</span></div>` : '';
       section.innerHTML = `
-        <div class="phan-num nhanh-badge">${cfg.icon} ${cfg.label} — Luận giải nhanh</div>
+        <div class="phan-num nhanh-badge">${window.iconHtml?window.iconHtml(cfg.icon):cfg.icon} ${cfg.label} — Luận giải nhanh</div>
         ${preGenHtml}${chartHtml}${divider}
         <div id="nhanh-luangiai" class="nhanh-loading">Đang luận giải...</div>`;
       body.appendChild(section);
@@ -4036,7 +4036,7 @@ TuviPaywall.init({
       <div style="position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px">
         <div style="background:#fff;border-radius:12px;padding:36px 40px;max-width:420px;width:100%;text-align:center;position:relative">
           <button onclick="document.getElementById('ux-exit-modal').remove()" style="position:absolute;top:12px;right:16px;background:none;border:none;font-size:20px;cursor:pointer;color:#999">×</button>
-          <div style="font-size:32px;margin-bottom:12px">🔮</div>
+          <div class="ic" style="font-size:32px;width:1em;height:1em;margin:0 auto 12px">${window.iconHtml?window.iconHtml('sparkles'):''}</div>
           <div style="font-family:'Noto Serif',serif;font-size:20px;color:#061A2E;margin-bottom:10px">Lá số của bạn đã sẵn sàng</div>
           <div style="font-size:14px;color:#666;line-height:1.6;margin-bottom:24px">Luận giải 24 phần đang chờ — bao gồm vận hạn năm ${new Date().getFullYear()} và các đại vận quan trọng nhất.</div>
           <button onclick="initiatePayment();document.getElementById('ux-exit-modal').remove()" style="width:100%;padding:14px;background:#061A2E;color:#c9a84c;border:2px solid #c9a84c;border-radius:4px;font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase;cursor:pointer;font-family:inherit">Mở Khóa — 150 Lượng →</button>
@@ -4049,11 +4049,16 @@ TuviPaywall.init({
   // ── UX helpers ───────────────────────────────────────────────
   window.uxCopySection = function(btn, phan) {
     const box = document.getElementById('claude-content-' + phan);
-    const text = box ? box.innerText.replace(/📋.*$/, '').trim() : '';
+    let text = '';
+    if (box) {
+      const clone = box.cloneNode(true);
+      clone.querySelectorAll('.ux-share-bar').forEach(function(el) { el.remove(); });
+      text = clone.innerText.trim();
+    }
     navigator.clipboard.writeText(text).then(() => {
       btn.textContent = '✓ Đã sao chép';
       btn.classList.add('copied');
-      setTimeout(() => { btn.textContent = '📋 Sao chép phần này'; btn.classList.remove('copied'); }, 2000);
+      setTimeout(() => { btn.innerHTML = (window.iconHtml ? window.iconHtml('clipboard') : '') + ' Sao chép phần này'; btn.classList.remove('copied'); }, 2000);
     });
   };
   window.luanGiai = luanGiai;

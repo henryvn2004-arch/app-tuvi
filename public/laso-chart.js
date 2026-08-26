@@ -87,7 +87,7 @@ function renderCenter(ls, fd) {
     <div class="center-row"><span class="ic-inline" data-icon="calendar" data-icon-emoji="📅" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">📅</span> ${fd.dd}/${fd.mm}/${fd.yyyy} (Dương Lịch) · giờ ${esc(fd.gioChi || '')}</div>
     <div class="center-row"><span class="ic-inline" data-icon="calendar" data-icon-emoji="📅" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">📅</span> ${fd.amLich ? fd.amLich.day + '/' + fd.amLich.month + '/' + fd.amLich.year : ''} (Âm Lịch) · giờ ${esc(fd.gioChi || '')}</div>
     <div class="center-row"><span class="ic-inline" data-icon="cake" data-icon-emoji="🎂" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">🎂</span> ${ls.tuoiXem} tuổi (âm lịch)</div>
-    <div class="center-row">⚧ Giới tính: ${fd.gioitinh === 'nam' ? 'Nam' : 'Nữ'}</div>
+    <div class="center-row"><span class="ic-inline" data-icon="user" data-icon-emoji="⚧" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">⚧</span> Giới tính: ${fd.gioitinh === 'nam' ? 'Nam' : 'Nữ'}</div>
     <hr class="center-divider">
     <div class="center-row">Năm: <b style="color:var(--navy)">${esc(ls.canChiNam)}</b> &nbsp;·&nbsp; Mệnh: <b style="color:var(--navy)">${esc(NAP_AM_FULL[ls.canChiNam] || ls.napAm || '')}</b></div>
     <div class="center-row">Cục: <b style="color:var(--navy)">${esc(ls.cuc || '')}</b> &nbsp;·&nbsp; Mệnh: <b style="color:var(--navy)">${esc(ls.menhDC || '')}</b> · Thân: <b style="color:var(--navy)">${esc(ls.thanDC || '')}</b></div>

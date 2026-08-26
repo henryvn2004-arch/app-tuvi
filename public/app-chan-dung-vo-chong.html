@@ -131,7 +131,7 @@
                 </div>
               </div>
               <div style="width:100%;margin-top:6px;background:#FBF3DE;border:1px solid #e8d9b0;border-radius:8px;padding:12px 14px;font-size:12.5px;line-height:1.6;color:#5a5145">
-                💡 Chân dung này chỉ mang tính minh hoạ và tham khảo, được AI mô phỏng từ đặc điểm hình dáng gắn với chính tinh, phụ tinh tại cung Phu Thê trong lá số của bạn — không phải ảnh chụp hay dự đoán chính xác diện mạo người bạn đời ngoài đời thực. Để có kết quả sát thực hơn, cần đối chiếu thêm với lá số thật của người đó.
+                <span class="ic" data-icon="lightbulb"></span> Chân dung này chỉ mang tính minh hoạ và tham khảo, được AI mô phỏng từ đặc điểm hình dáng gắn với chính tinh, phụ tinh tại cung Phu Thê trong lá số của bạn — không phải ảnh chụp hay dự đoán chính xác diện mạo người bạn đời ngoài đời thực. Để có kết quả sát thực hơn, cần đối chiếu thêm với lá số thật của người đó.
               </div>
               <div class="compat-invite" id="cdvcInviteBlock" style="width:100%;display:none">
                 <div class="ci-t" id="cdvcInviteText"></div>
@@ -592,6 +592,24 @@ function _mountInviteCta() {
   document.head.appendChild(s);
 }
 
+
+// ── B2 — nhận hand-off từ trang chia sẻ `/ket-qua` ───────────────────────────
+// Người mở link của bạn bè nhập ngày sinh NGAY TẠI trang chia sẻ rồi được đưa
+// sang đây kèm `?ngay=&thang=&nam=&gio=&gioitinh=&auto=1`. `Shell.prefillForm()`
+// đọc query TRƯỚC localStorage nên lá số trong link luôn thắng.
+//
+// 🔑 Tự chạy được vì `analyze()` mở đầu bằng lượt TÍNH THỬ: không đăng nhập,
+// không trừ Lượng, không gọi model ảnh. Tường khoá dựng sau đó như thường.
+// Chạy SAU khi `shell.js` boot (DOMContentLoaded) để `Shell.setContext` không lỗi.
+function _pageInitB2() {
+  try {
+    if (!window.Shell || !Shell.prefillForm) return;
+    var co = Shell.prefillForm();
+    if (co && Shell.autoRun() && document.getElementById('nam') && document.getElementById('nam').value) analyze();
+  } catch (e) { /* hand-off hỏng KHÔNG được chặn người dùng tự nhập tay */ }
+}
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', _pageInitB2);
+else _pageInitB2();
 </script>
 </body>
 </html>

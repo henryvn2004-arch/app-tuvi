@@ -26,6 +26,7 @@ import {
   computeNhanMach,
   railData,
   cleanTen,
+  coSoNhom,
   MIN_NGUOI,
   MAX_NGUOI,
   type NguoiVao,
@@ -282,7 +283,14 @@ async function runPreview(request: NextRequest) {
     const rb = computeLaso(body.birthSelf as BirthParams);
     if (rb.ok && rb.ls) lsBan = rb.ls;
   }
-  return ok({ success: true, preview: true, ...meta(computeNhanMach(list, lsBan)) });
+  return ok({
+    success: true,
+    preview: true,
+    ...meta(computeNhanMach(list, lsBan)),
+    // C1 — CHỈ ở lượt tính thử. Nhóm thì cộng dồn dữ kiện của mọi lá số và
+    // KHÔNG có câu cổ thư (xem `coSoNhom`).
+    coSo: coSoNhom(list),
+  });
 }
 
 async function runPost(request: NextRequest) {
