@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"></noscript>
-<link rel="stylesheet" href="/shell.css?v=19">
+<link rel="stylesheet" href="/shell.css?v=29">
 <script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh@0.4/face_mesh.js" crossorigin="anonymous"></script>
 <style>
 .kt-card{background:var(--white);border:1px solid var(--line);border-radius:14px;padding:20px 22px;box-shadow:var(--shadow);max-width:760px;margin-bottom:16px}
@@ -97,7 +97,8 @@
 
       <div class="kt-card" id="inputSection">
         <h2><span class="ic" data-icon="camera"></span> Tải Ảnh Lên</h2>
-        <p class="sub">AI phân tích hình khuôn mặt và gợi ý kiểu tóc + kính mắt phù hợp theo nhân tướng học.</p>
+        <p class="sub">Chấm khuôn mặt hợp kiểu tóc nào, rồi ghép thử ngay lên ảnh thật của bạn. Bạn sợ cắt xong mới biết không hợp, lúc đó đã muộn. Dùng khi định đổi tóc mà chưa dám thử ngay ngoài tiệm.</p>
+        <p class="price-note" data-tvp-price-label="kieu-toc-phan-tich">…</p>
 
         <div style="margin-bottom:20px">
           <div style="font-size:13px;font-weight:600;color:var(--text-mid);margin-bottom:8px">Giới tính</div>
@@ -240,12 +241,12 @@
 </div>
 
 <script>window.SHELL_ACTIVE='kieu-toc-phan-tich';window.SHELL_HISTORY=true;
-window.SHELL_INTRO={key:'kieu-toc-phan-tich',title:'Kiểu Tóc & Kính Mắt Hợp Tướng Mặt',desc:'Chụp ảnh khuôn mặt — <b>AI</b> phân tích hình dạng và gợi ý kiểu tóc + kính mắt theo nhân tướng học, thử ngay trên ảnh.'};</script>
+window.SHELL_INTRO={key:'kieu-toc-phan-tich',title:'Kiểu Tóc & Kính Mắt Hợp Tướng Mặt',desc:'Chấm khuôn mặt hợp kiểu tóc nào, rồi ghép thử ngay lên ảnh thật của bạn. Bạn sợ cắt xong mới biết không hợp, lúc đó đã muộn. Dùng khi định đổi tóc mà chưa dám thử ngay ngoài tiệm.'};</script>
 <script src="/auth.js?v=2"></script>
 <script src="/tuvi-paywall.js?v=20"></script>
-  <script src="/nav.js?v=22" data-icons-only></script>
-<script src="/shell.js?v=73"></script>
-<script src="/tools-shared/ai-loading-steps.js?v=8"></script>
+  <script src="/nav.js?v=23" data-icons-only></script>
+<script src="/shell.js?v=82"></script>
+<script src="/tools-shared/ai-loading-steps.js?v=9"></script>
 <script>
 function initKieuToc(){
   Shell.setContext({

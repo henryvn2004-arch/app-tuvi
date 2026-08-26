@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"></noscript>
-<link rel="stylesheet" href="/shell.css?v=19">
+<link rel="stylesheet" href="/shell.css?v=29">
 <style>
 .form-card{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);max-width:880px}
 .form-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:3px}
@@ -53,6 +53,8 @@
 .nm-bar{display:flex;gap:3px;margin:10px 0 4px;border-radius:6px;overflow:hidden;height:26px}
 .nm-seg{display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;min-width:26px}
 .nm-legend{display:flex;gap:12px;flex-wrap:wrap;font-size:11.5px;color:#5a5145;margin-top:7px}
+.nm-coso{font-size:12.3px;line-height:1.75;color:#5a5145;margin-top:12px;padding-top:10px;border-top:1px dashed #E8DFC8}
+.nm-coso b{color:#2a2118}
 .nm-legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px}
 .nm-person{border-left:2px solid #E0D6C0;padding:0 0 14px 13px}
 .nm-person:last-child{padding-bottom:0}
@@ -68,7 +70,7 @@
 .nm-cap .tag.bu{background:#EDF5EF;color:#1E6B3C}
 .nm-todo{border-left:2px solid #BFD9C7;padding:0 0 11px 13px;font-size:13px;line-height:1.72}
 .nm-todo:last-child{padding-bottom:0}
-.nm-motcau{margin-top:16px;padding:14px 16px;background:#FBF8F1;border:1px solid #EADFC8;border-radius:10px;font-family:var(--serif);font-size:15px;line-height:1.75;color:#061A2E;font-weight:700}
+.nm-motcau{margin-top:0;padding:14px 16px;background:#FBF8F1;border:1px solid #EADFC8;border-radius:10px;font-family:var(--serif);font-size:15px;line-height:1.75;color:#061A2E;font-weight:700}
 .nm-order{font-size:13px;line-height:1.8;color:#2a2118}
 #histList{display:flex;flex-direction:column;gap:6px;margin-top:4px;font-size:12.5px;color:#5a5145}
 </style>
@@ -92,7 +94,8 @@
       <div id="shellRecent"></div>
       <div class="form-card" id="birthPanel">
         <h2>Chọn người trong sổ</h2>
-        <p class="sub">Chọn từ <b>2 đến 8</b> người, gán vai cho từng người. Sổ lá số dùng chung với các công cụ khác — thêm một lần, dùng mãi.</p>
+        <p class="sub">Xem cả đội đang thiếu kiểu người nào, ai với ai dễ va chạm. Bạn quản một nhóm mà vẫn thấy có gì đó lệch pha. Dùng khi cần sắp xếp lại đội hoặc chọn ai gặp trước.</p>
+        <p class="price-note" data-tvp-price-label="nhan-mach">…</p>
 
         <div class="nm-list" id="soList"></div>
         <div class="nm-count" id="soCount"></div>
@@ -140,6 +143,11 @@
               <p class="nm-para" id="tongQuan" style="display:none"></p>
               <div class="nm-bar" id="phanBoBar"></div>
               <div class="nm-legend" id="phanBoLegend"></div>
+              <!-- C1 — bày engine ra. Tool này KHÔNG có khối "Cơ Sở Trong Lá
+                   Số" riêng (nó đọc cả nhóm, phần cơ sở nằm rải trong "Từng
+                   Người"), nên dòng dữ kiện đứng ngay dưới thanh phân bố — đúng
+                   thứ nó đang chứng thực. -->
+              <div class="nm-coso" id="coSoDoc" style="display:none"></div>
             </div>
           </div>
         </div>
@@ -185,7 +193,14 @@
           <div class="res-block-body"><p class="nm-para" id="voiBan"></p></div>
         </div>
 
+        <!-- B3 — PEAK-END. Đo trên trang thật (bản trước): câu chốt là một div
+             KHÔNG tiêu đề, 110px, đứng TRƯỚC bảng kỹ thuật 301px, và thứ CUỐI
+             CÙNG người trả tiền đọc là tờ miễn trừ trách nhiệm. Người ta nhớ
+             ĐỈNH và nhớ ĐOẠN KẾT — kết bằng một lời rào là vứt đi đúng chỗ đáng
+             nhớ nhất. Nay câu chốt có tiêu đề riêng và đứng SAU phần cơ sở, để
+             bản đọc kết bằng câu dùng được chứ không kết bằng bảng tra. -->
         <div class="res-block" id="endBlock" style="display:none">
+          <div class="res-block-header"><span class="res-block-title">Nếu Chỉ Nhớ Một Câu</span></div>
           <div class="res-block-body"><div class="nm-motcau" id="motCau"></div></div>
         </div>
 
@@ -208,15 +223,15 @@
 </div>
 
 <script>window.SHELL_ACTIVE='nhan-mach';window.SHELL_HISTORY=true;
-window.SHELL_INTRO={key:'nhan-mach',title:'Sổ Nhân Mạch',desc:'Đưa <b>cả đội</b> hoặc <b>danh sách khách</b> vào một chỗ để biết <b>nhóm thiếu kiểu người nào</b>, <b>ai với ai dễ giẫm chân</b>, và <b>tuần này nên gặp ai trước</b>. Khác công cụ Lá Số Người Khác ở chỗ nó đọc cả nhóm cùng lúc.'};</script>
+window.SHELL_INTRO={key:'nhan-mach',title:'Sổ Nhân Mạch',desc:'Xem cả đội đang thiếu kiểu người nào, ai với ai dễ va chạm. Bạn quản một nhóm mà vẫn thấy có gì đó lệch pha. Dùng khi cần sắp xếp lại đội hoặc chọn ai gặp trước.'};</script>
 <script src="/laso-chart.js?v=3"></script>
 <script src="/tuvi-form.js?v=2"></script>
 <script src="/tuvi-paywall.js?v=21"></script>
 <script src="/auth.js?v=2"></script>
-  <script src="/nav.js?v=22" data-icons-only></script>
-<script src="/shell.js?v=73"></script>
+  <script src="/nav.js?v=23" data-icons-only></script>
+<script src="/shell.js?v=82"></script>
 <script src="/user-charts.js?v=2"></script>
-<script src="/tools-shared/ai-loading-steps.js?v=8"></script>
+<script src="/tools-shared/ai-loading-steps.js?v=9"></script>
 <script>
 
 var _currentSlug = '';
@@ -464,6 +479,13 @@ async function _doGenerate() {
     if (window.SHELL_INTRO) Shell.dismissIntro(window.SHELL_INTRO.key);
     _loadHistory();
 
+    // B1 — khoảnh khắc VỪA ĐỌC XONG mà số dư đã hụt: vừa thích vừa tiếc, đúng
+    // chỗ lời mời có sức nhất. Widget tự ẩn nếu còn đủ Lượng cho một lượt nữa
+    // (còn tiền thì để người ta mua, chen lời mời vào chỉ làm chậm một lượt đã
+    // bán được). Trước đây chỉ 3 tool ẢNH có chỗ xin này — 3 tool cẩm nang thì
+    // không, nên người đọc xong bản cuối cùng của mình rời đi mà không ai hỏi.
+    _mountInviteCta();
+
     // Rail đi đường SCENARIO (không phải birth): nhóm này có nhiều lá số nên
     // không có một `birth` nào đại diện được. Dữ liệu gửi rail là bản PHẲNG do
     // chính route trả về.
@@ -520,6 +542,20 @@ function renderMeta(data) {
     return '<span><i style="background:' + (KIEU_MAU[x.kieu] || '#888') + '"></i>' + esc(x.ten) + ' · ' +
       Math.round(x.soNguoi * 100 / tong) + '%</span>';
   }).join('');
+
+  // C1 — bày engine ra. Chỉ có ở payload TÍNH THỬ; bản đã trả tiền không gửi
+  // `coSo` nên khối này tự ẩn. Nhóm thì CỘNG DỒN dữ kiện của mọi lá số và
+  // KHÔNG có câu cổ thư — không có "cung Mệnh của ai" để trích.
+  var cs = data.coSo, csEl = document.getElementById('coSoDoc');
+  if (cs && cs.tong > 0) {
+    csEl.innerHTML = 'Bản này đọc từ <b>' + cs.tong + ' dữ kiện</b> lập ra từ ' + cs.soNguoi +
+      ' lá số bạn nhập — ' + cs.soSao + ' sao an trên các cung, ' + cs.soCachCuc + ' cách cục, ' +
+      cs.soDaiVan + ' chặng đại vận. Không có bước nào đoán mò: đổi một chi tiết trong ngày sinh ' +
+      'của bất kỳ ai là cả bảng trên đổi theo.';
+    csEl.style.display = 'block';
+  } else {
+    csEl.style.display = 'none';
+  }
 
   if ((data.thieuKieu || []).length || data.duaKieu || data.nenTimThem) {
     var chips = (data.thieuKieu || []).map(function (k) {
@@ -580,6 +616,20 @@ function renderMeta(data) {
     document.getElementById('orderBlock').style.display = 'block';
   }
 
+}
+
+/** Nạp `invite-cta.js` theo yêu cầu — trang không cần nó cho tới lúc này. */
+function _mountInviteCta() {
+  var host = document.getElementById('resPanel');
+  if (!host) return;
+  var go = function () {
+    if (window.InviteCta) window.InviteCta.mount(host, { toolId: 'nhan-mach', toolLabel: 'bản đọc nhóm' });
+  };
+  if (window.InviteCta) return go();
+  if (document.getElementById('_ivc_js')) return;
+  var s = document.createElement('script');
+  s.id = '_ivc_js'; s.src = '/invite-cta.js?v=1'; s.async = true; s.onload = go;
+  document.head.appendChild(s);
 }
 
 function renderProse(data) {

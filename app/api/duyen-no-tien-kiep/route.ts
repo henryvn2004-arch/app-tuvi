@@ -251,7 +251,8 @@ async function handleStory(grp: BondGroup, userId: string) {
         jsonSchema: STORY_SCHEMA,
         // 4 hồi × 110–170 từ tiếng Việt + mô tả mối duyên + lời kết. Nhóm
         // đông thì mỗi hồi dài hơn và có thêm khối mô tả — nới theo số người.
-        maxTokens: 4200 + (n - 2) * 900,
+        // Cả hai số hạng nâng 50% cùng đợt (Henry chốt 2026-08-20).
+        maxTokens: 6300 + (n - 2) * 1350,
       });
       void logLlmUsage(TOOL_ID, llmRes.model, {
         input_tokens: llmRes.usage.input_tokens,
@@ -354,7 +355,7 @@ async function handleImage(grp: BondGroup, userId: string) {
               properties: { faces: { type: 'ARRAY', items: { type: 'STRING' } } },
               required: ['faces'],
             },
-      maxTokens: 900 + (n - 2) * 420,
+      maxTokens: 1350 + (n - 2) * 630, // nâng 50% cùng đợt (Henry chốt 2026-08-20)
     });
     void logLlmUsage(TOOL_ID, llmRes.model, {
       input_tokens: llmRes.usage.input_tokens,

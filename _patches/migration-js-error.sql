@@ -43,4 +43,11 @@ as $$
   limit p_limit;
 $$;
 
+-- `grant ... to service_role` KHÔNG tự gỡ quyền PUBLIC — Postgres cấp EXECUTE
+-- cho PUBLIC ngay lúc CREATE FUNCTION, và grant thêm chỉ CỘNG chứ không THAY.
+-- Thiếu dòng revoke này thì anon/authenticated vẫn gọi được hàm qua
+-- /rest/v1/rpc/js_error_top — đúng lớp lỗi đã cắn `marketing_signup_truth` và
+-- `anon_rail_*`. Đã vá trực tiếp trên prod (2026-08-19); dòng này để lần chạy
+-- lại migration không tái mở lỗ hổng.
+revoke execute on function public.js_error_top(int, int) from public, anon, authenticated;
 grant execute on function public.js_error_top(int, int) to service_role;

@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"></noscript>
-<link rel="stylesheet" href="/shell.css?v=19">
+<link rel="stylesheet" href="/shell.css?v=29">
 <style>
 .form-card{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);max-width:860px}
 .form-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:3px}
@@ -58,7 +58,11 @@
 .dc-item:last-child{padding-bottom:0}
 .dc-item .viec{font-size:13px;line-height:1.7;color:#2a2118}
 .dc-item .vidu{font-size:12.5px;line-height:1.7;color:#5a5145;font-style:italic;margin-top:4px}
-.dc-motcau{margin-top:16px;padding:14px 16px;background:#FBF8F1;border:1px solid #EADFC8;border-radius:10px;font-family:var(--serif);font-size:15px;line-height:1.75;color:#061A2E;font-weight:700}
+.dc-motcau{margin-top:0;padding:14px 16px;background:#FBF8F1;border:1px solid #EADFC8;border-radius:10px;font-family:var(--serif);font-size:15px;line-height:1.75;color:#061A2E;font-weight:700}
+.dc-coso{font-size:12.3px;line-height:1.75;color:#5a5145;margin:0 0 11px;padding-bottom:10px;border-bottom:1px dashed #E8DFC8}
+.dc-coso b{color:#2a2118}
+.dc-quote{margin-top:8px;padding:9px 12px;background:#FBF8F1;border-left:3px solid #C9AE6A;border-radius:0 8px 8px 0;font-size:12.4px;line-height:1.72;color:#4a4034}
+.dc-quote .src{display:block;margin-top:4px;font-size:11px;color:#7A5F26;font-weight:600}
 .dc-basis-list{margin:0 0 0 18px;color:#5a5145;line-height:1.9;font-size:12.8px}
 .dc-basis-list li{margin-bottom:3px}
 .dc-basis-list b{color:#2a2118}
@@ -185,7 +189,8 @@
       <div id="shellRecent"></div>
       <div class="form-card" id="birthPanel">
         <h2>Ngày sinh của con</h2>
-        <p class="sub">Không phải để xem đời con sau này ra sao — mà để biết dạy đứa này kiểu nào thì vào.</p>
+        <p class="sub">Đọc con tiếp thu kiểu nào, kỷ luật nào phản tác dụng với con. Bạn dạy mãi một cách mà con vẫn không nghe theo. Dùng khi cách dạy cũ không còn hiệu quả với con nữa.</p>
+        <p class="price-note" data-tvp-price-label="day-con">…</p>
 
         <div class="frow dc-lo">
           <div class="fg" style="flex:1">
@@ -335,18 +340,32 @@
           </div>
         </div>
 
+        <div class="res-block" id="basisBlock" style="display:none">
+          <div class="res-block-header"><span class="res-block-title">Cơ Sở Trong Lá Số</span></div>
+          <div class="res-block-body">
+            <div class="dc-coso" id="coSoDoc" style="display:none"></div>
+            <ul class="dc-basis-list" id="basisList"></ul>
+            <details class="dc-basis-more" id="basisMore" style="display:none"></details>
+          </div>
+        </div>
+
+        <!-- B3 — PEAK-END. Đo trên trang thật (bản trước): câu chốt là một div
+             KHÔNG tiêu đề, 110px, đứng TRƯỚC bảng kỹ thuật 301px, và thứ CUỐI
+             CÙNG người trả tiền đọc là tờ miễn trừ trách nhiệm. Người ta nhớ
+             ĐỈNH và nhớ ĐOẠN KẾT — kết bằng một lời rào là vứt đi đúng chỗ đáng
+             nhớ nhất. Nay câu chốt có tiêu đề riêng và đứng SAU phần cơ sở, để
+             bản đọc kết bằng câu dùng được chứ không kết bằng bảng tra. -->
         <div class="res-block" id="endBlock" style="display:none">
+          <div class="res-block-header"><span class="res-block-title">Nếu Chỉ Nhớ Một Câu</span></div>
           <div class="res-block-body">
             <div class="dc-motcau" id="motCau"></div>
           </div>
         </div>
 
-        <div class="res-block" id="basisBlock" style="display:none">
-          <div class="res-block-header"><span class="res-block-title">Cơ Sở Trong Lá Số</span></div>
-          <div class="res-block-body">
-            <ul class="dc-basis-list" id="basisList"></ul>
-            <details class="dc-basis-more" id="basisMore" style="display:none"></details>
-          </div>
+        <!-- W1 — tường "đã tính thử": phần trên đã chạy THẬT và miễn phí. -->
+        <div class="res-block" id="lockBlock" style="display:none">
+          <div class="res-block-header"><span class="res-block-title">Phần Luận Chưa Mở</span></div>
+          <div class="res-block-body" id="lockHost" data-tvp-lock style="padding-top:6px"></div>
         </div>
 
         <div class="res-block tvmb-src-note" data-share-skip style="background:#FBF3DE;border-color:#e8d9b0">
@@ -369,14 +388,14 @@
 </div>
 
 <script>window.SHELL_ACTIVE='day-con';window.SHELL_HISTORY=true;
-window.SHELL_INTRO={key:'day-con',title:'Dạy Con Theo Lá Số',desc:'Đưa lá số của con vào đây, bản đọc đi theo năm bậc: <b>đo 5 trục tính khí và 8 chất năng khiếu</b> → <b>định hướng môi trường học</b> → <b>phương pháp dạy</b> → <b>hoạt động nên cho con thử</b>. Đọc theo cung Mệnh, Phúc Đức, Phụ Mẫu, Thiên Di, Quan Lộc, Huynh Đệ, Nô Bộc.'};</script>
+window.SHELL_INTRO={key:'day-con',title:'Dạy Con Theo Lá Số',desc:'Đọc con tiếp thu kiểu nào, kỷ luật nào phản tác dụng với con. Bạn dạy mãi một cách mà con vẫn không nghe theo. Dùng khi cách dạy cũ không còn hiệu quả với con nữa.'};</script>
 <script src="/laso-chart.js?v=3"></script>
 <script src="/tuvi-form.js?v=2"></script>
 <script src="/tuvi-paywall.js?v=21"></script>
 <script src="/auth.js?v=2"></script>
-  <script src="/nav.js?v=22" data-icons-only></script>
-<script src="/shell.js?v=73"></script>
-<script src="/tools-shared/ai-loading-steps.js?v=8"></script>
+  <script src="/nav.js?v=23" data-icons-only></script>
+<script src="/shell.js?v=82"></script>
+<script src="/tools-shared/ai-loading-steps.js?v=9"></script>
 <script>
 
 var _currentSlug = '';
@@ -618,6 +637,13 @@ async function _doGenerate(freeRerun, lo) {
     document.getElementById('btnEdit').style.display = '';
     if (window.SHELL_INTRO) Shell.dismissIntro(window.SHELL_INTRO.key);
     _loadHistory();
+
+    // B1 — khoảnh khắc VỪA ĐỌC XONG mà số dư đã hụt: vừa thích vừa tiếc, đúng
+    // chỗ lời mời có sức nhất. Widget tự ẩn nếu còn đủ Lượng cho một lượt nữa
+    // (còn tiền thì để người ta mua, chen lời mời vào chỉ làm chậm một lượt đã
+    // bán được). Trước đây chỉ 3 tool ẢNH có chỗ xin này — 3 tool cẩm nang thì
+    // không, nên người đọc xong bản cuối cùng của mình rời đi mà không ai hỏi.
+    _mountInviteCta();
 
     // Rail nạp lá số CỦA CON (để hỏi sâu về bé) + lá số cha/mẹ qua `wrapBirthB`
     // nếu có. Lớp vỏ phía server có luật ĐÈ lên luật xưng hô — nếu không, rail
@@ -947,6 +973,25 @@ function renderMetaRest(data) {
     else if (v.huong) bit.push('đà ' + esc(v.huong));
     rows.push('<li><b>Vận năm ' + v.nam + '</b> — ' + (bit.join(' · ') || 'chưa chấm') + '</li>');
   }
+  // C1 — bày engine ra. Chỉ có ở payload TÍNH THỬ; bản đã trả tiền không gửi
+  // `coSo` nên khối này tự ẩn, không phải canh thêm điều kiện nào.
+  var cs = data.coSo, csEl = document.getElementById('coSoDoc');
+  if (cs && cs.tong > 0) {
+    var h = 'Bản này đọc từ <b>' + cs.tong + ' dữ kiện</b> lập ra từ chính ngày giờ sinh bạn nhập — ' +
+      cs.soSao + ' sao an trên 12 cung, ' + cs.soCachCuc + ' cách cục, ' + cs.soDaiVan + ' chặng đại vận. ' +
+      'Không có bước nào đoán mò: đổi một chi tiết trong ngày sinh là cả bảng trên đổi theo.';
+    // ⚠️ Câu trích là NGUYÊN VĂN cổ thư kèm nguồn — `esc()` cả cụm, tuyệt đối
+    // không nội suy vào HTML thô.
+    if (cs.trichDan) {
+      h += '<div class="dc-quote">' + esc(cs.trichDan.cau) +
+        '<span class="src">— sách dẫn về sao ' + esc(cs.trichDan.sao) + ' tại cung Mệnh</span></div>';
+    }
+    csEl.innerHTML = h;
+    csEl.style.display = 'block';
+  } else {
+    csEl.style.display = 'none';
+  }
+
   // Bày đủ ĐỂ CHỨNG MINH máy đọc đúng lá số — không bày HẾT để đọc xong là no.
   // 2 mục đầu đứng mở sẵn làm bằng chứng; phần còn lại gói trong <details>
   // đóng — vẫn một cú bấm là thấy, chỉ đổi thứ ĐẬP VÀO MẮT đầu tiên.
@@ -983,6 +1028,20 @@ function _syncSections() {
     });
     document.getElementById(s[0]).style.display = on ? 'flex' : 'none';
   });
+}
+
+/** Nạp `invite-cta.js` theo yêu cầu — trang không cần nó cho tới lúc này. */
+function _mountInviteCta() {
+  var host = document.getElementById('resPanel');
+  if (!host) return;
+  var go = function () {
+    if (window.InviteCta) window.InviteCta.mount(host, { toolId: 'day-con', toolLabel: 'bản luận' });
+  };
+  if (window.InviteCta) return go();
+  if (document.getElementById('_ivc_js')) return;
+  var s = document.createElement('script');
+  s.id = '_ivc_js'; s.src = '/invite-cta.js?v=1'; s.async = true; s.onload = go;
+  document.head.appendChild(s);
 }
 
 function renderProse(data) {

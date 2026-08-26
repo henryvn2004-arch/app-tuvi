@@ -1,10 +1,19 @@
 // app/api/van-han-nam/route.ts
-export const maxDuration = 60;
+// 🔴 60 → 300 (2026-08-20, vá lỗi Henry báo: "chạy hơn 60s xong báo Lỗi phần 1:
+// Unexpected token 'A', "An error o"... is not valid JSON"). Chuỗi Kimi K3
+// primary → Opus 5 backup-1 → Gemini Flash backup-2 (llmTextFull) có thể thử
+// TỚI 3 PROVIDER TUẦN TỰ trong một lượt (mỗi provider tự retry lỗi tạm thời
+// trước khi coi là hỏng), cộng thêm trần token của phần 1/2 vừa nâng 50%
+// (3000/4500) → tổng thời gian dễ vượt 60s. Vercel timeout ở mức hàm thì trả
+// về trang lỗi NỀN TẢNG dạng text ("An error occurred with your deployment"),
+// KHÔNG PHẢI JSON — client `JSON.parse` vỡ ngay chữ "A" đầu tiên, đúng thông
+// điệp Henry dán lại. Đồng bộ với các route LLM nặng khác (300).
+export const maxDuration = 300;
 
 import { NextRequest } from 'next/server';
 import { ok, err, options, parseBody } from '@/lib/cors';
-import { computeLaso, formatLaSoV2, type Laso } from '@/lib/engine/laso';
-import { SYSTEM_PROMPT, buildPrompt, laSoContextFor } from '@/lib/agent/luan-giai-doc';
+import { computeLaso, formatLaSoV2, makeLasoSlug, CHI_NAMES, type Laso } from '@/lib/engine/laso';
+import { buildPromptCached, cachedSystemFor } from '@/lib/agent/luan-giai-doc';
 import { nguoiXemLine } from '@/lib/agent/prompts';
 import {
   buildKhung12Thang, describeThangForLLM, spans12, nhanThangAL, nhanThangALDay, dmy, SO_THANG,
@@ -57,12 +66,24 @@ function phanLabels(ls: Laso | null, spans: LunarMonthSpan[]): string[] {
 }
 
 // ─── Prompt phần THÁNG (phần MỚI duy nhất của tool này) ────────
+// Trả `{system, prompt}` DÙNG CHUNG CACHE với 4 phần đầu (xem CLAUDE.md track
+// tối ưu chi phí Opus, mục vá "Vận Hạn 12 Tháng Tới"): `system` =
+// `cachedSystemFor(formatLaSoV2(ls))` — KHÔNG phụ thuộc `span`/`stt`/`docs`,
+// nên byte-for-byte GIỐNG HỆT `buildPromptCached(...)` của 4 phần đầu CÙNG
+// lá số này. Nhờ vậy cả 16 lượt gọi của một báo cáo (4 phần đầu + 12 tháng)
+// chia đúng MỘT breakpoint Anthropic thay vì hai cụm cache tách rời (hoặc
+// như trước đây, phần tháng KHÔNG cache gì cả). Toàn văn lá số vẫn KHÔNG cắt
+// (xem lib/agent/luan-giai-doc.ts, laSoContextFull/cachedSystemFor) — trước
+// đây cắt theo khuôn phần 24 (bỏ hẳn khối 12 CUNG) để tiết kiệm token; đo lại
+// 2026-08-23 thấy phần tiết kiệm đó nhỏ trong khi đổi lại là model mất khả
+// năng đối chiếu cung đang luận với Mệnh/11 cung còn lại — đừng trim lại chỉ
+// để tiết kiệm vài trăm đồng, cache mới là đòn bẩy thật.
 function buildPromptThang(
   ls: Laso,
   span: LunarMonthSpan,
   stt: number,
   docs?: string,
-): string {
+): { system: string; prompt: string } {
   const khoiThang = describeThangForLLM(ls as AnyRec, span);
   const nhan = nhanThangAL(span);
   const dmyTu = dmy(span.tu), dmyDen = dmy(span.den);
@@ -72,15 +93,9 @@ function buildPromptThang(
   const luatNhuan = span.isLeap
     ? `\n- ⚠️ Đây là THÁNG NHUẬN: cung nguyệt hạn TRÙNG với tháng ${span.thangAL} ÂL ngay trước. ĐỪNG viết lại bản luận của tháng trước — hãy nói về phần TIẾP NỐI: việc dở dang của tháng trước nay có thêm một tháng nữa để xử lý, và điều gì đã khác đi so với đầu chu kỳ.`
     : '';
-  // Lá số cắt theo khuôn phần 24 (tiểu vận & năm xem): đầu lá số + khối 9 đại
-  // vận + cách cục — đúng thứ cần để đặt tháng vào khung năm, không kéo cả 12
-  // cung vào cho loãng.
-  const laSoCat = laSoContextFor(24, formatLaSoV2(ls));
   const docsSection = docs ? '\n\n=== TÀI LIỆU THAM KHẢO ===\n' + docs : '';
 
-  return `${laSoCat}
-
-${khoiThang}${docsSection}
+  const prompt = `${khoiThang}${docsSection}
 
 PHẦN ${4 + stt} — NGUYỆT VẬN ${nhanThangALDay(span)} (140-180 từ)
 Đây là tháng thứ ${stt} trong 12 tháng tới. Người đọc đang xem một bản riêng về VẬN HẠN — họ cần biết tháng này NÊN LÀM GÌ và NÉ GÌ, không cần học lại lý thuyết.
@@ -99,6 +114,61 @@ Xuống dòng rồi viết 1-2 đoạn ngắn, ngôn ngữ đời thường:
 ② Việc nên làm và việc nên hoãn trong tháng này — cụ thể, làm được ngay, không nói chung chung kiểu "hãy cẩn thận".
 
 KHÔNG lặp lại phần tổng quan lá số hay đại vận (đã có phần riêng). Chỉ nói về THÁNG này.`;
+
+  return { system: cachedSystemFor(formatLaSoV2(ls)), prompt };
+}
+
+// ─── Vá lỗ trùng: phần 1-4 = ĐÚNG 4 phần của Luận Giải 24 phần ──
+// Đo được (CLAUDE.md, track Tối Ưu Chi Phí Opus): ai đã mua/xem bản Luận Giải
+// cho CHÍNH lá số này ở CHÍNH năm xem này thì 4 phần đó ĐÃ NẰM SẴN trong
+// `laso_public.luan_giai` — gọi LLM lại là trả tiền lần thứ hai cho một thứ
+// đã có. Đọc lại thay vì gọi LLM: 0đ, không đụng một chữ prompt.
+const SUPABASE_URL = process.env.SUPABASE_URL!;
+const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY!;
+
+/**
+ * Tra `laso_public` theo ĐÚNG slug lá số này + ĐÚNG năm xem (`nam_xem`) — một
+ * số phần (đặc biệt phần 24 "Tiểu vận & năm xem") phụ thuộc năm xem nên KHÔNG
+ * được đoán, phải khớp tuyệt đối. `toolType` chọn TOOL nào đang giữ phần đó:
+ * 🔴 phần 1 (tổng quan) thuộc "Luận Giải Tử Vi" (`laso`, slug KHÔNG tiền tố);
+ * phần 14/14+n/24 (đại vận + tiểu vận) đã TÁCH sang "Chu Trình Cuộc Đời"
+ * (`chu-trinh-cuoc-doi`, slug CÓ tiền tố) — xem CLAUDE.md track tách tool.
+ * Tra sai slug là cache-miss VĨNH VIỄN cho lá số tính từ lúc tách, không phải
+ * lỗi ồn ào gì — chỉ âm thầm mất tối ưu, nên dễ bỏ sót.
+ * Trả về đúng văn bản của `phanLaso` (khoá số trong object `luan_giai`, khoá
+ * theo ĐÚNG engine phan 1..24 — không phải số thứ tự nội bộ của tool nào) nếu
+ * có; không có/không khớp/lỗi mạng → trả `null` (rơi về gọi LLM như cũ, KHÔNG
+ * chặn lượt của người dùng vì bước này chỉ là tối ưu chi phí).
+ */
+async function readCachedLuanGiaiPhan(
+  ls: Laso, birth: BirthParams, tuNam: number, phanLaso: number, toolType: string,
+): Promise<string | null> {
+  try {
+    const gioChi = birth.hourBranch != null ? (CHI_NAMES[birth.hourBranch] || '') : '';
+    const slug = makeLasoSlug(
+      String((ls as AnyRec).canChiNam || ''),
+      birth.gender === 'nu' ? 'nu' : 'nam',
+      String(birth.day), String(birth.month), String(birth.year),
+      gioChi, toolType,
+    );
+    const r = await fetch(
+      `${SUPABASE_URL}/rest/v1/laso_public?slug=eq.${encodeURIComponent(slug)}` +
+        '&select=nam_xem,luan_giai&limit=1',
+      {
+        headers: { apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${SUPABASE_ANON_KEY}` },
+        cache: 'no-store',
+      },
+    );
+    if (!r.ok) return null;
+    const rows = (await r.json()) as AnyRec[];
+    const row = rows?.[0];
+    if (!row || row.nam_xem !== tuNam) return null;
+    const store = row.luan_giai as Record<string, unknown> | null;
+    const text = store ? store[String(phanLaso)] : null;
+    return typeof text === 'string' && text.trim() ? text : null;
+  } catch {
+    return null;
+  }
 }
 
 // ─── Handlers ─────────────────────────────────────────────────
@@ -152,18 +222,51 @@ async function runPost(request: NextRequest) {
   if (!(phan >= 1 && phan <= TONG_PHAN)) return err('Phần không hợp lệ.', 400);
   const docs = body.docs ? String(body.docs) : undefined;
 
+  // Phần 1-4 trùng Y HỆT 4 phần của Luận Giải/Chu Trình Cuộc Đời — thử đọc lại
+  // trước khi gọi LLM. Phần 1 (tổng quan) tra slug 'laso'; phần 2-4 (đại vận +
+  // tiểu vận, đã tách khỏi Luận Giải) tra slug 'chu-trinh-cuoc-doi' — 2 tool
+  // KHÁC slug nhau nên phải tra ĐÚNG bên đang giữ nội dung, xem
+  // readCachedLuanGiaiPhan().
+  const laSoPhanMap: Record<number, number> = { 1: 1, 2: 14, 3: 14 + dvHienTaiSo(ls), 4: 24 };
+  const laSoToolMap: Record<number, string> = { 1: 'laso', 2: 'chu-trinh-cuoc-doi', 3: 'chu-trinh-cuoc-doi', 4: 'chu-trinh-cuoc-doi' };
+  if (phan <= 4) {
+    const cached = await readCachedLuanGiaiPhan(ls, birth, tuNam, laSoPhanMap[phan]!, laSoToolMap[phan]!);
+    if (cached) return ok({ luanGiai: cached, phan });
+  }
+
+  // Prompt caching (Code #1, xem CLAUDE.md track tối ưu chi phí Opus — mục vá
+  // "Vận Hạn 12 Tháng Tới"): mọi `phan` (1-16) của MỘT lá số/năm xem đều dùng
+  // chung `cachedSystemFor(...)` làm `system` — byte-for-byte GIỐNG NHAU dù là
+  // 1 trong 4 phần đầu (trùng Luận Giải, qua `buildPromptCached`) hay 1 trong
+  // 12 phần THÁNG (riêng của tool này, qua `buildPromptThang`). TRƯỚC ĐÂY chỉ
+  // phan<=4 cache; 12 phần tháng gửi lá số trần bên trong `prompt` nên KHÔNG
+  // chia sẻ được prefix với 4 phần đầu lẫn với NHAU — mỗi lượt trả tiền y hệt
+  // như không cache dù cả 16 lượt cùng lặp lại đúng một lá số 15-27K ký tự.
+  // Nay cả 16 lượt chia đúng MỘT breakpoint: khi Anthropic phục vụ (primary
+  // hay fallback), lượt ĐẦU TIÊN ghi cache (~1,25×), 15 lượt sau chỉ đọc
+  // (~0,1×). Gemini/Kimi (`buildGeminiBody`/`buildKimiMessages` trong
+  // lib/llm/complete.ts) BỎ QUA cờ `cacheSystem` — tổng nội dung gửi đi với
+  // hai provider đó vẫn y hệt trước, chỉ khác CHỖ ĐẶT (system vs prompt) nên
+  // 0 rủi ro hồi quy khi Gemini đang primary.
+  let systemForLLM: string;
+  const cacheSystem = true;
   let prompt: string;
   try {
     const nx = nguoiXemLine(birth.name, birth.gender);
     if (phan <= 4) {
-      const map: Record<number, number> = { 1: 1, 2: 14, 3: 14 + dvHienTaiSo(ls), 4: 24 };
-      prompt = (nx ? nx + '\n' : '') + buildPrompt(map[phan]!, formatLaSoV2(ls), docs);
+      // Chỉ chạm nhánh LLM này khi readCachedLuanGiaiPhan (Code #2) cache-miss
+      // ở trên; đa số lượt đã được DB cache chặn từ trước, không tới đây.
+      const cached = buildPromptCached(laSoPhanMap[phan]!, formatLaSoV2(ls), docs);
+      systemForLLM = cached.system;
+      prompt = (nx ? nx + '\n' : '') + cached.prompt;
     } else {
       const stt = phan - PHAN_THANG_DAU + 1;
       // Chỉ cần bảng LỊCH để biết tháng âm thứ stt — không dựng cả khung (khớp
       // 958 cách cục × 12 tháng) chỉ để lấy một mốc.
       const span = spans12(tuNgay, tuThang, tuNam)[stt - 1]!;
-      prompt = (nx ? nx + '\n' : '') + buildPromptThang(ls, span, stt, docs);
+      const built = buildPromptThang(ls, span, stt, docs);
+      systemForLLM = built.system;
+      prompt = (nx ? nx + '\n' : '') + built.prompt;
     }
   } catch (e: unknown) {
     return err('buildPrompt error: ' + (e as Error).message);
@@ -172,8 +275,12 @@ async function runPost(request: NextRequest) {
   try {
     // Trần token mượn đúng mức của phần tương ứng bên Luận Giải; phần tháng
     // (140–180 từ) dùng chung mức của phần cung/đại vận.
-    const maxTok = phan === 1 ? 2000 : phan === 2 ? 3000 : phan === 4 ? 1400 : 1200;
-    const rr = await llmTextFull({ system: SYSTEM_PROMPT, prompt, maxTokens: maxTok });
+    // Nâng 50% cùng đợt với lasotuvi/route.ts (Henry chốt 2026-08-20).
+    const maxTok = phan === 1 ? 3000 : phan === 2 ? 4500 : phan === 4 ? 2100 : 1800;
+    // provider:'anthropic' (chốt Henry 2026-08-24): Vận Hạn 12 Tháng Tới thuộc
+    // nhóm tool "luận giải" quan trọng → Opus 5 primary thay vì Gemini Flash
+    // mặc định toàn site (xem lib/llm/complete.ts CANONICAL_ORDER).
+    const rr = await llmTextFull({ system: systemForLLM, prompt, maxTokens: maxTok, cacheSystem, provider: 'anthropic' });
     // tool_id = ĐÚNG `tool_pricing.tool_id` để bucket chi phí ghép được với
     // bucket doanh thu (xem tool_canon() trong CLAUDE.md).
     void logLlmUsage(
@@ -181,8 +288,8 @@ async function runPost(request: NextRequest) {
       rr.model,
       {
         input_tokens: rr.usage.input_tokens,
-        cache_creation_input_tokens: 0,
-        cache_read_input_tokens: 0,
+        cache_creation_input_tokens: rr.usage.cache_creation_input_tokens,
+        cache_read_input_tokens: rr.usage.cache_read_input_tokens,
         output_tokens: rr.usage.output_tokens,
       },
       rr.durationMs,

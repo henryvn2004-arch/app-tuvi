@@ -2,6 +2,7 @@
 export const revalidate = 86400;
 import { NextRequest, NextResponse } from 'next/server';
 import { PUBLISHED_ONLY } from '@/lib/content/publish-filter';
+import { ORG_ID } from '@/lib/seo/entity';
 
 const SB_URL = process.env.SUPABASE_URL!;
 const SB_KEY = process.env.SUPABASE_SERVICE_KEY!;
@@ -114,8 +115,8 @@ function buildHTML(article: any, master: any, related: any[], slug: string) {
       wordCount: article.word_count || 0,
       author: masterName
         ? { '@type': 'Person', name: masterName, url: masterUrl, description: master?.bio || '' }
-        : { '@type': 'Organization', name: 'Tử Vi Minh Bảo', url: BASE },
-      publisher: { '@type': 'Organization', name: 'Tử Vi Minh Bảo', url: BASE, logo: { '@type': 'ImageObject', url: BASE + '/seal.webp' } },
+        : { '@type': 'Organization', '@id': ORG_ID, name: 'Tử Vi Minh Bảo', url: BASE },
+      publisher: { '@type': 'Organization', '@id': ORG_ID, name: 'Tử Vi Minh Bảo', url: BASE, logo: { '@type': 'ImageObject', url: BASE + '/seal.webp' } },
       image: { '@type': 'ImageObject', url: img },
       about: { '@type': 'Thing', name: 'Tử Vi Đẩu Số' },
       isPartOf: { '@type': 'Blog', name: 'Nghiên Cứu Tử Vi', url: BASE + '/nghien-cuu' },
@@ -256,7 +257,7 @@ body{font-family:'Be Vietnam Pro',Arial,sans-serif;background:var(--bg);color:va
 </article>
 <script src="/related-tools.js"></script>
 <script src="/testimonials.js"></script>
-<script src="/track.js?v=3" defer></script><script src="/nav.js?v=20" defer></script>
+<script src="/track.js?v=3" defer></script><script src="/nav.js?v=23" defer></script>
 <script src="/share.js" defer></script>
 <script>
 window.addEventListener('load', function () {
@@ -282,7 +283,7 @@ function buildNotFound() {
 <h1 style="color:#061A2E;font-family:Georgia,serif;margin-bottom:16px">Không tìm thấy bài viết</h1>
 <p style="color:#777;margin-bottom:24px">Bài viết không tồn tại hoặc đã bị xóa.</p>
 <a href="/nghien-cuu" style="color:#1455A4">← Về Nghiên Cứu</a>
-<script src="/track.js?v=3" defer></script><script src="/nav.js?v=20" defer></script>
+<script src="/track.js?v=3" defer></script><script src="/nav.js?v=23" defer></script>
 </body></html>`;
 }
 

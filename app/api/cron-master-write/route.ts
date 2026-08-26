@@ -146,7 +146,7 @@ async function ragTuviDocs(embedding: number[]): Promise<string> {
 // những lượt âm thầm rơi sang Sonnet — đắt hơn ~13 lần — không ai thấy.
 async function callLlm(
   prompt: string,
-  maxTokens = 2000,
+  maxTokens = 3000, // Nâng 50% (Henry chốt 2026-08-20, cùng đợt chống cắt ngang toàn repo)
   opts: { json?: boolean } = {},
 ): Promise<string> {
   const r = await llmTextFull({ prompt, maxTokens, json: opts.json });
@@ -203,13 +203,14 @@ Cần đúng 4 sections.`;
   // Ba lớp vá, theo thứ tự rẻ → đắt:
   //   1. `json: true` — ép JSON hợp lệ ở TẦNG API (Gemini responseMimeType),
   //      chặn tận gốc thay vì đi dọn chuỗi.
-  //   2. maxTokens 500 → 1200. 4 section × key_points + hook + closing bằng
-  //      tiếng Việt (~2,5 token/từ) chạm sát 500; hết chỗ là JSON CỤT, mà JSON
-  //      cụt thì không lớp bóc nào cứu được. Output chỉ tính token thực dùng
-  //      nên nới trần gần như không tốn thêm.
+  //   2. maxTokens 500 → 1200 → 1800 (nâng 50% thêm, Henry chốt 2026-08-20).
+  //      4 section × key_points + hook + closing bằng tiếng Việt (~2,5 token/
+  //      từ) chạm sát trần cũ; hết chỗ là JSON CỤT, mà JSON cụt thì không lớp
+  //      bóc nào cứu được. Output chỉ tính token thực dùng nên nới trần gần
+  //      như không tốn thêm.
   //   3. `parseLlmJson` + thử lại 1 lượt kèm nhắc định dạng — lưới cho nhánh
   //      backup Anthropic (API không có JSON mode).
-  const raw = await callLlm(prompt, 1200, { json: true });
+  const raw = await callLlm(prompt, 1800, { json: true });
   const parsed = parseLlmJson(raw);
   if (parsed && Array.isArray((parsed as Storyboard).sections)) return parsed as Storyboard;
 
@@ -218,7 +219,7 @@ Cần đúng 4 sections.`;
   );
   const retry = await callLlm(
     `${prompt}\n\nCHỈ trả về đúng một object JSON hợp lệ, không lời dẫn, không backtick.`,
-    1200,
+    1800,
     { json: true },
   );
   const parsed2 = parseLlmJson(retry);
@@ -283,7 +284,7 @@ ${BRAND_FORMAT_RULES}
 
 Chỉ trả về nội dung markdown, không bọc JSON, không backtick ngoài.`;
 
-  return callLlm(prompt, 5000);
+  return callLlm(prompt, 7500); // Nâng 50% (Henry chốt 2026-08-20)
 }
 
 // ── Stage 2b: Extract metadata ─────────────────────────────────────────────────
@@ -309,10 +310,11 @@ Tạo metadata JSON một dòng duy nhất (KHÔNG backtick, KHÔNG xuống dòn
 {"title":"tiêu đề ≤60 ký tự theo luật ở trên","slug":"slug-ascii","excerpt":"tóm tắt ≤155 ký tự theo luật ở trên","category":"chiem-nghiem hoặc luan-la-so hoặc hoc-thuat","tags":["tag1","tag2","tag3"]}`;
 
   // 250 token cho title + slug + excerpt 155 ký tự + 3 tag bằng tiếng Việt là
-  // rất sát — nới lên 500. Chỗ này ĐÃ có nhánh dự phòng ở caller nên hỏng không
-  // mất chủ đề, nhưng rơi về dự phòng nghĩa là title thành chính chuỗi chủ đề,
-  // tức mất luôn cái tiêu đề tối ưu cho tìm kiếm.
-  const raw = await callLlm(prompt, 500, { json: true });
+  // rất sát — nới lên 500 → 750 (nâng 50% thêm, Henry chốt 2026-08-20). Chỗ
+  // này ĐÃ có nhánh dự phòng ở caller nên hỏng không mất chủ đề, nhưng rơi về
+  // dự phòng nghĩa là title thành chính chuỗi chủ đề, tức mất luôn cái tiêu
+  // đề tối ưu cho tìm kiếm.
+  const raw = await callLlm(prompt, 750, { json: true });
   const parsed = parseLlmJson(raw);
   if (!parsed) throw new Error('metadata: không parse được JSON');
   return parsed as Omit<MasterArticleOutput, 'content'>;

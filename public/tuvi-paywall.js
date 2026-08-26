@@ -48,6 +48,7 @@ const TuviPaywall = (() => {
     'gio-sinh': { title: 'Xác Định Giờ Sinh' },
     'nhan-mach': { title: 'Sổ Nhân Mạch' },
     'van-han-nam': { title: 'Vận Hạn 12 Tháng Tới' },
+    'chu-trinh-cuoc-doi': { title: 'Chu Trình Cuộc Đời' },
   };
 
   const TOOL_TYPE = {
@@ -79,6 +80,7 @@ const TuviPaywall = (() => {
     'gio-sinh': 'use_gio_sinh',
     'nhan-mach': 'use_nhan_mach',
     'van-han-nam': 'use_van_han_nam',
+    'chu-trinh-cuoc-doi': 'use_chu_trinh_cuoc_doi',
   };
 
   let _cfg        = null;
@@ -154,6 +156,16 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
 .tpw-prev-list li::before{content:'⊙';position:absolute;left:0;color:#C9A84C;font-size:11px}
 .tpw-prev .tpw-btn{min-width:240px;padding-left:26px;padding-right:26px}
 @media(max-width:520px){.tpw-prev .tpw-btn{min-width:0;width:100%}}
+/* B1 — đường mời bạn, chèn NGAY DƯỚI nút mở. Nằm TRONG luồng như lớp chữ (xem
+   chú thích bố cục ở trên), nên nó chỉ làm khung cao thêm chứ không đè lên nút. */
+.tpw-inv{margin:14px auto 0;padding-top:13px;border-top:1px dashed #E0DBCC;max-width:420px;width:100%}
+.tpw-inv-d{font-size:12.5px;color:#4a4a4a;line-height:1.6;margin-bottom:9px}
+.tpw-inv-d b{color:#8a6d2f}
+.tpw-inv-row{display:flex;gap:7px;flex-wrap:wrap;align-items:center;justify-content:center}
+.tpw-inv-in{flex:1;min-width:150px;font-size:11.5px;padding:7px 9px;border:1px solid #E6E3DC;border-radius:7px;background:#fff;color:#1a1a1a;font-family:ui-monospace,Menlo,monospace}
+.tpw-inv-b{border:1.5px solid #061A2E;background:#fff;color:#061A2E;cursor:pointer;font-weight:700;font-size:12.5px;padding:7px 14px;border-radius:7px;font-family:inherit}
+.tpw-inv-b:hover{background:#F9F4EB}
+@media(max-width:520px){.tpw-inv-in{min-width:0;flex-basis:100%}.tpw-inv-b{flex:1}}
 /* ── Khoá NỘI DUNG THẬT đã dựng (khác .tpw-lock-blur — cái đó là vạch giả
    trang trí bên trong tấm khoá quảng cáo). Dùng khi trang đã tính xong phần
    deterministic cho khách chưa đăng ký, muốn cho THẤY CÓ CẤU TRÚC (tiêu đề,
@@ -211,7 +223,7 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
       if (!el) {
         el = document.createElement('script');
         el.id = '_tvmb_prices_js';
-        el.src = '/tool-prices.js?v=4';
+        el.src = '/tool-prices.js?v=5';
         document.head.appendChild(el);
       }
       el.addEventListener('load', () => resolve());
@@ -394,6 +406,98 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
   //
   // Fail-closed y như mọi đường khác: đọc hụt bảng giá → KHÔNG dựng tường, báo
   // "chưa đọc được giá". Dựng một cái tường ghi giá đoán còn tệ hơn không dựng.
+  /**
+   * B1 — ĐƯỜNG MỜI ngay trên tấm tường, chèn SAU khi tường đã dựng.
+   *
+   * 🔑 VÌ SAO ĐẶT Ở ĐÂY chứ không ở cuối trang: đây là khoảnh khắc DUY NHẤT
+   * người ta đang nhìn thẳng vào danh sách những thứ mình chưa được đọc, nêu
+   * đích danh. Vòng tò mò đang mở to nhất thì lời mời mới có sức.
+   *
+   * 🔑 VÌ SAO KHÔNG DỰNG CƠ CHẾ THƯỞNG MỚI: đo trên prod, thưởng mời (15 Lượng)
+   * ĐÃ BẰNG ĐÚNG giá tool này (15) ⇒ **mời 1 người = đúng 1 lượt**. Phần thưởng
+   * vốn đã đủ; cái thiếu là không ai biết, và nó chưa bao giờ xuất hiện đúng
+   * lúc người ta thèm. Thêm một loại voucher nữa chỉ là dựng lại thứ đã có.
+   *
+   * ⚠️ CÂU CHỮ PHẢI ĐÚNG SỰ THẬT: thưởng chỉ về khi người được mời **ĐĂNG KÝ**,
+   * không phải khi bấm gửi link. CẤM viết "mời 1 người → mở NGAY" — đó là hứa
+   * hụt, và hứa hụt ở đúng bậc cuối phễu là chỗ đắt nhất để mất niềm tin.
+   *
+   * KHÔNG hiện gì khi: chưa đăng nhập (không có mã) · thưởng = 0 · đã chạm trần
+   * mời trong 30 ngày · **hoặc số dư đã đủ trả** (còn tiền thì để người ta mua,
+   * chen lời mời vào đó chỉ làm chậm một lượt đã bán được).
+   */
+  async function _inviteRow(veil, product, cost, balance) {
+    try {
+      if (!veil || !document.body.contains(veil)) return;
+      if (balance == null || (cost > 0 && balance >= cost)) return;
+
+      const s = window.Auth && window.Auth.getSession && window.Auth.getSession();
+      const tk = (s && s.access_token) || null;
+      if (!tk) return;
+
+      const r = await fetch('/api/payment?action=my-referral&tool=' + encodeURIComponent(product), {
+        headers: { Authorization: 'Bearer ' + tk },
+      });
+      const d = await r.json();
+      if (!d || !d.code) return;
+      // Tường có thể đã bị gỡ trong lúc chờ mạng (người dùng bấm mở, hoặc quay
+      // về form) — chèn vào một node mồ côi là hiện một thẻ trôi nổi.
+      if (!document.body.contains(veil)) return;
+
+      const reward = Number(d.rewardPerInvite) || 0;
+      const capLeft = Math.max(0, (Number(d.cap) || 0) - (Number(d.rewardedRecent) || 0));
+      if (reward <= 0 || capLeft <= 0) return;
+
+      const need = Math.max(0, cost - balance);
+      const invites = Math.ceil(need / reward);
+      // Cần nhiều lượt hơn trần còn lại thì KHÔNG hứa — nói con số không với tới
+      // được cũng là một kiểu hứa hụt.
+      if (invites > capLeft) return;
+
+      const url = window.location.origin + '/app/' + product +
+        '?ref=' + encodeURIComponent(d.code) +
+        '&utm_source=invite&utm_medium=referral&utm_campaign=' + encodeURIComponent(product);
+
+      const box = document.createElement('div');
+      box.className = 'tpw-inv';
+      box.innerHTML =
+        '<div class="tpw-inv-d">Chưa muốn nạp? <b>Mời ' + invites + ' người</b> — ' +
+          'bạn ấy <b>đăng ký</b> là bạn được <b>+' + invites * reward + ' Lượng</b>, ' +
+          'vừa đủ mở đúng bản này.</div>' +
+        '<div class="tpw-inv-row">' +
+          '<input class="tpw-inv-in" readonly value="' + _esc(url) + '">' +
+          '<button class="tpw-inv-b" type="button">Chép link mời</button>' +
+        '</div>';
+      veil.appendChild(box);
+
+      try {
+        if (window.Track) window.Track.event('invite_shown', { tool_id: product, meta: { from: 'lock', invites: invites } });
+      } catch (e) { /* đo hỏng không được chặn gì */ }
+
+      const inp = box.querySelector('.tpw-inv-in');
+      box.querySelector('.tpw-inv-b').addEventListener('click', function (e) {
+        const b = e.currentTarget;
+        const done = function () {
+          b.textContent = 'Đã chép ✓';
+          setTimeout(function () { b.textContent = 'Chép link mời'; }, 1600);
+        };
+        try { inp.select(); } catch (e2) { /* ignore */ }
+        if (navigator.clipboard) {
+          navigator.clipboard.writeText(url).then(done, function () {
+            try { document.execCommand('copy'); done(); } catch (e3) { /* ignore */ }
+          });
+        } else {
+          try { document.execCommand('copy'); done(); } catch (e3) { /* ignore */ }
+        }
+        try {
+          if (window.Track) window.Track.event('cta_click', { tool_id: product, meta: { from: 'lock_invite' } });
+        } catch (e4) { /* ignore */ }
+      });
+    } catch (e) {
+      // Lời mời hỏng KHÔNG được kéo theo tấm tường — tường là đường bán hàng.
+    }
+  }
+
   async function lockPreview(o) {
     const host = o && o.host;
     if (!host) return false;
@@ -455,6 +559,11 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
         requireCredits(slug, function () { return o.onUnlock(); });
       });
     }
+
+    // B1 — chèn SAU khi tường đã dựng và KHÔNG `await`: lời mời phải là phần
+    // cộng thêm, không được đứng chắn giữa người dùng và tấm tường. Mạng chậm
+    // hay `my-referral` hỏng thì tường vẫn hiện đủ và đúng như cũ.
+    void _inviteRow(_lockEl.querySelector('.tpw-lock-veil'), product, cost, balance);
     return true;
   }
 

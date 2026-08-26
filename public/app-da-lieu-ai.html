@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"></noscript>
-<link rel="stylesheet" href="/shell.css?v=19">
+<link rel="stylesheet" href="/shell.css?v=29">
 <style>
 .dl-card{background:var(--white);border:1px solid var(--line);border-radius:14px;padding:20px 22px;box-shadow:var(--shadow);max-width:760px;margin-bottom:16px}
 .dl-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:4px;display:flex;align-items:center;gap:8px}
@@ -117,7 +117,8 @@
 
       <div class="dl-card">
         <h2><span class="ic" data-icon="camera"></span> Ảnh Da Mặt</h2>
-        <p class="sub">Chụp ảnh khuôn mặt dưới ánh sáng tự nhiên — AI phân tích kết hợp Đông Tây y và bản mệnh ngũ hành.</p>
+        <p class="sub">Soi ảnh da, chỉ ra những vùng đang có vấn đề cần chú ý. Bạn nhìn gương mỗi ngày mà không chắc da mình đang ổn hay không. Dùng khi muốn một góc nhìn khách quan trước lúc mua mỹ phẩm.</p>
+        <p class="price-note" data-tvp-price-label="da-lieu-ai">…</p>
 
         <div class="upload-zone" id="uploadZone"
           ondragover="event.preventDefault();this.classList.add('drag')"
@@ -226,12 +227,12 @@
 </div>
 
 <script>window.SHELL_ACTIVE='da-lieu-ai';window.SHELL_HISTORY=true;
-window.SHELL_INTRO={key:'da-lieu-ai',title:'Da Liệu AI Toàn Diện',desc:'Chụp ảnh da mặt — <b>AI</b> phân tích kết hợp Đông y, Tây y và cổ pháp ngũ hành, tư vấn ăn uống + mỹ phẩm theo bản mệnh.'};</script>
+window.SHELL_INTRO={key:'da-lieu-ai',title:'Da Liệu AI Toàn Diện',desc:'Soi ảnh da, chỉ ra những vùng đang có vấn đề cần chú ý. Bạn nhìn gương mỗi ngày mà không chắc da mình đang ổn hay không. Dùng khi muốn một góc nhìn khách quan trước lúc mua mỹ phẩm.'};</script>
 <script src="/auth.js?v=2"></script>
 <script src="/tuvi-paywall.js?v=20"></script>
-  <script src="/nav.js?v=22" data-icons-only></script>
-<script src="/shell.js?v=73"></script>
-<script src="/tools-shared/ai-loading-steps.js?v=8"></script>
+  <script src="/nav.js?v=23" data-icons-only></script>
+<script src="/shell.js?v=82"></script>
+<script src="/tools-shared/ai-loading-steps.js?v=9"></script>
 <script>
 function initDaLieuAi(){
   Shell.setContext({

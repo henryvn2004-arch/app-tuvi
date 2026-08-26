@@ -157,9 +157,16 @@ export const JOBS: JobSpec[] = [
   { key: 'keyword-suggest', label: 'Quét từ khoá (Google Suggest)', source: 'vercel', everyMinutes: 7 * D,
     schedule: 'T3 hằng tuần', sink: 'keyword_ideas', path: '/api/cron/keyword-suggest',
     since: '2026-08-01' },
-  { key: 'topic-topup', label: 'Nạp chủ đề tuần (2 bề mặt)', source: 'vercel', everyMinutes: 7 * D,
+  { key: 'topic-topup', label: 'Nạp chủ đề tuần (3 bề mặt)', source: 'vercel', everyMinutes: 7 * D,
     schedule: 'T4 hằng tuần', sink: 'topic_queue', path: '/api/cron/topic-topup',
     since: '2026-08-01' },
+  // Tiêu thụ đúng hàng đợi job trên vừa đổ vào — CHẠY SAU nó cùng ngày (T4) rồi
+  // lại T7 (còn dư trước lượt gieo tuần sau). Khoảng trống LỚN NHẤT giữa hai
+  // lượt là T7→T4 tuần sau = 4 ngày ⇒ `everyMinutes` lấy mốc đó, không phải
+  // khoảng T4→T7 (3 ngày) — đúng luật đã ghi ở đầu file.
+  { key: 'cron-khao-luan-tamly', label: 'Viết Vấn Đáp tâm lý (Kimi, 1→3-5 bài)',
+    source: 'vercel', everyMinutes: 4 * D, schedule: 'T4 · T7, 12:00 VN', sink: 'khao_luan',
+    path: '/api/cron-khao-luan-tamly', since: '2026-08-23' },
   // Nối lại khâu CUỐI của pipeline media, vốn đứt âm thầm từ 16/07: 86 bài
   // `van_dap` render xong mà `yt_status='error'`, 84 trong số đó cùng một
   // `invalid_grant`. Trước đây lỗi chỉ nằm trong một cột DB nên không job nào
@@ -201,6 +208,26 @@ export const JOBS: JobSpec[] = [
   { key: 'video-build', label: 'Dựng clip 9:16', source: 'actions', everyMinutes: 7 * D,
     schedule: 'T2 08:00 VN hằng tuần', sink: 'clips (Storage) + media_assets',
     workflow: 'video-build.yml', since: '2026-08-18' },
+  // Track Backlink — máy soạn, người tự tay dán/gửi (xem đầu
+  // _patches/migration-backlinks.sql). `since` = ngày merge: cả ba job chưa
+  // từng chạy nên cron_runs trống, thiếu mốc này bộ dò kêu ngay "CHƯA HỀ chạy".
+  { key: 'backlink-prospect', label: 'Backlink — tìm cơ hội', source: 'vercel', everyMinutes: 7 * D,
+    schedule: 'T3 08:45 VN hằng tuần', sink: 'backlink_prospects', path: '/api/cron/backlink-prospect',
+    since: '2026-08-19' },
+  { key: 'backlink-content', label: 'Backlink — soạn nội dung', source: 'vercel', everyMinutes: D,
+    schedule: '09:15 VN hằng ngày', sink: 'backlink_content', path: '/api/cron/backlink-content',
+    since: '2026-08-19' },
+  { key: 'backlink-check', label: 'Backlink — kiểm link sống + ghi nguồn widget', source: 'vercel', everyMinutes: D,
+    schedule: '09:45 VN hằng ngày', sink: 'backlink_links', path: '/api/cron/backlink-check',
+    since: '2026-08-19' },
+  { key: 'backlink-broken-links', label: 'Backlink — quét link chết', source: 'vercel', everyMinutes: 7 * D,
+    schedule: 'T5 08:45 VN hằng tuần', sink: 'backlink_prospects', path: '/api/cron/backlink-broken-links',
+    since: '2026-08-19' },
+  // Track Digital Marketing — sổ Tài Khoản & Entity (xem đầu
+  // _patches/migration-growth-accounts.sql). `since` = ngày merge.
+  { key: 'growth-accounts', label: 'Entity — nạp sổ + kiểm hồ sơ sống', source: 'vercel', everyMinutes: 7 * D,
+    schedule: 'T7 08:15 VN hằng tuần', sink: 'growth_accounts', path: '/api/cron/growth-accounts',
+    since: '2026-08-23' },
 ];
 
 export interface CronRun {

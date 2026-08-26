@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"></noscript>
-<link rel="stylesheet" href="/shell.css?v=19">
+<link rel="stylesheet" href="/shell.css?v=29">
 <style>
 .form-card{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);max-width:760px}
 .form-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:3px}
@@ -114,7 +114,8 @@
 
       <div class="form-card" id="birthPanel">
         <h2>Ngày giờ sinh và chỗ đứng hiện tại</h2>
-        <p class="sub">Lá số nói thiên hướng của bạn; nó <b>không biết</b> hôm nay bạn đang làm thuê hay đã ra riêng — mà lời khuyên cho hai người đó khác hẳn nhau. Nên có thêm một ô để bạn tự khai.</p>
+        <p class="sub">Đọc kiểu người của bạn ở chỗ làm và cả chặng đường sự nghiệp. Bạn giỏi việc nhưng chưa chắc mình đang đi đúng hướng. Dùng khi cần định hướng nghề nghiệp cụ thể hơn là cứ cố gắng.</p>
+        <p class="price-note" data-tvp-price-label="cong-so">…</p>
         <div id="tuviFormHost"></div>
         <div class="frow">
           <div class="fg"><label>Bạn đang ở vị trí nào</label>
@@ -161,14 +162,14 @@
 </div>
 
 <script>window.SHELL_ACTIVE='cong-so';window.SHELL_HISTORY=true;
-window.SHELL_INTRO={key:'cong-so',title:'Tử Vi Công Sở',desc:'Đọc lá số bằng <b>ngôn ngữ công việc</b>: bạn thuộc kiểu người nào ở chỗ làm, mạnh yếu ở <b>mười hai mặt</b> của đời đi làm, <b>bốn chặng bốn mươi năm</b>, và nên ghép đội với ai. Miễn phí, không trừ Lượng.'};</script>
+window.SHELL_INTRO={key:'cong-so',title:'Tử Vi Công Sở',desc:'Đọc kiểu người của bạn ở chỗ làm và cả chặng đường sự nghiệp. Bạn giỏi việc nhưng chưa chắc mình đang đi đúng hướng. Dùng khi cần định hướng nghề nghiệp cụ thể hơn là cứ cố gắng.'};</script>
 <script src="/tools-shared/cong-so.js?v=4"></script>
 <script src="/tuvi-form.js?v=2"></script>
 <script src="/tuvi-paywall.js?v=21"></script>
 <script src="/poster.js?v=4"></script>
 <script src="/auth.js?v=2"></script>
-  <script src="/nav.js?v=22" data-icons-only></script>
-<script src="/shell.js?v=73"></script>
+  <script src="/nav.js?v=23" data-icons-only></script>
+<script src="/shell.js?v=82"></script>
 <script>
 var _ho=null,_birth=null;
 TuviForm.render('tuviFormHost', {mode:'compact', gioitinh:'nam'});

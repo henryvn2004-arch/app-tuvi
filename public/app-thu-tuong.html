@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"></noscript>
-<link rel="stylesheet" href="/shell.css?v=19">
+<link rel="stylesheet" href="/shell.css?v=29">
 <style>
 .dt-card{background:var(--white);border:1px solid var(--line);border-radius:14px;padding:20px 22px;box-shadow:var(--shadow);max-width:640px}
 .dt-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:4px}
@@ -73,7 +73,8 @@
 
       <div class="dt-card" id="inputCard">
         <h2>Tải ảnh lòng bàn tay</h2>
-        <p class="sub">AI phân tích Tam Đại Chỉ (Sinh Mệnh, Trí Tuệ, Tình Cảm), đường vận mệnh và các gò tay theo thủ tướng học cổ pháp Đông Tây.</p>
+        <p class="sub">Đọc chỉ tay theo Ngũ Hành Hình Tướng từ ảnh bàn tay bạn. Bạn từng nghe xem chỉ tay nhưng chưa thử với đúng đường chỉ tay mình. Dùng khi tò mò bàn tay mình đang báo trước điều gì.</p>
+        <p class="price-note" data-tvp-price-label="thu-tuong">…</p>
         <div class="dt-privacy"><span class="ic" data-icon="lock"></span><div>Ảnh chỉ gửi tới AI để phân tích, không lưu trên server. Xòe bàn tay phẳng, lòng bàn tay hướng lên, đủ sáng.</div></div>
 
         <div class="dt-input-tabs">
@@ -144,11 +145,11 @@
 </div>
 
 <script>window.SHELL_ACTIVE='thu-tuong';window.SHELL_HISTORY=true;
-window.SHELL_INTRO={key:'thu-tuong',title:'Thủ Tướng AI',desc:'Tải hoặc chụp ảnh lòng bàn tay — <b>AI</b> phân tích Tam Đại Chỉ, đường vận mệnh và các gò tay theo cổ pháp Đông Tây.'};</script>
+window.SHELL_INTRO={key:'thu-tuong',title:'Thủ Tướng AI',desc:'Đọc chỉ tay theo Ngũ Hành Hình Tướng từ ảnh bàn tay bạn. Bạn từng nghe xem chỉ tay nhưng chưa thử với đúng đường chỉ tay mình. Dùng khi tò mò bàn tay mình đang báo trước điều gì.'};</script>
 <script src="/auth.js?v=2"></script>
 <script src="/tuvi-paywall.js?v=21"></script>
-  <script src="/nav.js?v=22" data-icons-only></script>
-<script src="/shell.js?v=73"></script>
+  <script src="/nav.js?v=23" data-icons-only></script>
+<script src="/shell.js?v=82"></script>
 <script>
 function initThuTuong(){
   Shell.setContext({

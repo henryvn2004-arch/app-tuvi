@@ -4,7 +4,9 @@
 // POST /api/xem-tuoi?action=dat-ten-con    → đặt tên con
 // POST /api/xem-tuoi?action=dat-ten-doanh-nghiep → đặt tên DN
 // POST /api/xem-tuoi?action=chon-ngay-tot  → chọn ngày tốt
-export const maxDuration = 60;
+// 60 → 300: cùng lý do lasotuvi/route.ts — chuỗi fallback 3 provider tuần tự
+// (Kimi → Opus 5 → Gemini Flash) + trần token đã nâng 50% dễ vượt 60s.
+export const maxDuration = 300;
 
 import { NextRequest } from 'next/server';
 import { ok, err, options, parseBody } from '@/lib/cors';
@@ -188,7 +190,11 @@ Lưu ý đặc biệt: Đây là chế độ so sánh tương hợp 2 lá số. 
   const trimmed = messages.slice(-10).map((m: any) => ({ role: m.role, content: String(m.content).slice(0, 2000) }));
 
   try {
-    const answer = await llmText({ system: systemPrompt, messages: trimmed, maxTokens: 800 });
+    // 🔴 VÁ Henry 2026-08-24: handleChat là hỏi-đáp LẶP LẠI nhiều lượt/phiên —
+    // cùng tính chất lưu lượng cao/tốn Opus như rail chat (/api/v1/chat), nên
+    // gộp chung quyết định "gỡ Opus primary" — Gemini Flash mặc định toàn
+    // site (bỏ `provider:'anthropic'`, xem lib/llm/complete.ts CANONICAL_ORDER).
+    const answer = await llmText({ system: systemPrompt, messages: trimmed, maxTokens: 1200 });
     return ok({ answer, scenario: hasLaso ? 'laso' : 'general' });
   } catch (e: unknown) {
     return err('API error: ' + (e as Error).message);
@@ -329,10 +335,14 @@ async function runPost(request: NextRequest) {
   const userPrompt = docs ? prompt + '\n\n=== TÀI LIỆU THAM KHẢO ===\n' + docs : prompt;
 
   try {
+    // provider:'anthropic' (chốt Henry 2026-08-24): bản luận giải 9 phần Xem
+    // Tuổi Vợ Chồng / Xem Tuổi Làm Ăn thuộc nhóm tool quan trọng → Opus 5
+    // primary (xem lib/llm/complete.ts CANONICAL_ORDER).
     const luanGiai = await llmText({
       system: LUAN_GIAI_TUONG_HOP_SYSTEM,
       prompt: userPrompt,
-      maxTokens: 1200,
+      maxTokens: 1800,
+      provider: 'anthropic',
     });
     return ok({ luanGiai });
   } catch (e: unknown) {

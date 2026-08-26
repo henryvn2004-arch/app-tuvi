@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"></noscript>
-<link rel="stylesheet" href="/shell.css?v=19">
+<link rel="stylesheet" href="/shell.css?v=29">
 <style>
 .ks-card{background:var(--white);border:1px solid var(--line);border-radius:14px;padding:20px 22px;box-shadow:var(--shadow);max-width:640px}
 .ks-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:4px}
@@ -64,7 +64,8 @@
 
       <div class="ks-card" id="inputCard">
         <h2>Xem Khí Sắc</h2>
-        <p class="sub">Ảnh mới trong 24h, ánh sáng tự nhiên, mặt mộc, thẳng, thấy rõ trán và toàn mặt.</p>
+        <p class="sub">Đọc khí sắc trên khuôn mặt, luận vận khí 1 đến 3 tháng tới. Bạn gần đây trông mệt mỏi hoặc lại thấy tươi tắn hẳn lên. Dùng khi muốn biết trước xu hướng vận khí ngắn hạn sắp tới.</p>
+        <p class="price-note" data-tvp-price-label="khi-sac">…</p>
         <div class="ks-privacy"><span class="ic" data-icon="lock" style="font-size:16px"></span><div>Ảnh chỉ gửi tới AI để phân tích, không lưu trên server. Chụp buổi sáng hoặc chiều, không makeup, không filter.</div></div>
 
         <label class="upload-area" id="upload-area" for="file-input">
@@ -107,11 +108,11 @@
 </div>
 
 <script>window.SHELL_ACTIVE='khi-sac';window.SHELL_HISTORY=true;
-window.SHELL_INTRO={key:'khi-sac',title:'Khí Sắc AI',desc:'Chụp ảnh khuôn mặt — <b>AI</b> luận khí sắc theo Ma Y Thần Tướng: Ấn Đường, Ngũ Nhạc, dự báo vận khí 1–3 tháng tới.'};</script>
+window.SHELL_INTRO={key:'khi-sac',title:'Khí Sắc AI',desc:'Đọc khí sắc trên khuôn mặt, luận vận khí 1 đến 3 tháng tới. Bạn gần đây trông mệt mỏi hoặc lại thấy tươi tắn hẳn lên. Dùng khi muốn biết trước xu hướng vận khí ngắn hạn sắp tới.'};</script>
 <script src="/auth.js?v=2"></script>
 <script src="/tuvi-paywall.js?v=20"></script>
-  <script src="/nav.js?v=22" data-icons-only></script>
-<script src="/shell.js?v=73"></script>
+  <script src="/nav.js?v=23" data-icons-only></script>
+<script src="/shell.js?v=82"></script>
 <script>
 function initKhiSac(){
   Shell.setContext({

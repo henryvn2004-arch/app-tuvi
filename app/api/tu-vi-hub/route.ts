@@ -2,6 +2,7 @@
 // Category hub pages: /phong-thuy, /xem-tuong, /chon-ngay, /lam-dep, /dat-ten, /kien-thuc-tuvi
 export const maxDuration = 15;
 import { NextRequest, NextResponse } from 'next/server';
+import { ORG_ID } from '@/lib/seo/entity';
 
 const SUPABASE_URL = process.env.SUPABASE_URL!;
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY!;
@@ -138,7 +139,7 @@ function buildHub(cat: string, meta: typeof CAT_META[string], pages: any[], pagi
     name: meta.title,
     description: meta.desc,
     url,
-    publisher: { '@type': 'Organization', name: 'Tử Vi Minh Bảo', url: BASE_URL },
+    publisher: { '@type': 'Organization', '@id': ORG_ID, name: 'Tử Vi Minh Bảo', url: BASE_URL },
   });
 
   return `<!DOCTYPE html><html lang="vi"><head>
@@ -185,7 +186,7 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--te
 <script src="/auth.js"></script>
 </head>
 <body>
-<script src="/track.js?v=3" defer></script><script src="/nav.js?v=20"></script>
+<script src="/track.js?v=3" defer></script><script src="/nav.js?v=23"></script>
 <div class="breadcrumb"><a href="/">Trang Chủ</a> › <span>${esc(meta.h1)}</span></div>
 <div class="hub-hero">
   <div class="hub-hero-icon"><span class="ic-inline" data-icon-emoji="${meta.icon}" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">${meta.icon}</span></div>

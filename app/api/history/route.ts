@@ -156,7 +156,7 @@ export async function POST(req: NextRequest) {
     // -- save_tuong --
     if (action === 'save_tuong') {
       const { tool, result_text, thumbnail } = body;
-      const VALID_TOOLS = ['dien-tuong', 'nhan-tuong', 'thu-tuong', 'thanh-tuong', 'thanh-tuong-pro'];
+      const VALID_TOOLS = ['dien-tuong', 'nhan-tuong', 'thu-tuong', 'thanh-tuong', 'thanh-tuong-pro', 'but-tuong'];
       if (!tool || !VALID_TOOLS.includes(tool)) return cors(NextResponse.json({ error: 'Invalid tool' }, { status: 400 }));
       if (!result_text) return cors(NextResponse.json({ error: 'Missing result_text' }, { status: 400 }));
       const { error } = await supabase.from('tuong_readings').insert({

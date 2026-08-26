@@ -9,7 +9,9 @@
 // cả sổ vào URL. Trang vì thế đi thẳng paywall thường (`requireCredits`) —
 // lượt xem lại vẫn miễn phí, chỉ là biết sau khi POST chứ không biết trước.
 
-export const maxDuration = 120;
+// 120 → 300 (2026-08-20): llmTextFull nay chuỗi 3 provider (Kimi K3 → Opus 5
+// → Gemini Flash) + trần token đã nâng 50% — cùng lý do lasotuvi/route.ts.
+export const maxDuration = 300;
 export const runtime = 'nodejs';
 
 import { NextRequest } from 'next/server';
@@ -24,6 +26,7 @@ import {
   computeNhanMach,
   railData,
   cleanTen,
+  coSoNhom,
   MIN_NGUOI,
   MAX_NGUOI,
   type NguoiVao,
@@ -168,8 +171,9 @@ async function buildReport(p: NhanMachProfile, userId: string, key: string, coLa
         json: true,
         jsonSchema: NHAN_MACH_SCHEMA,
         // Nhiều người ⇒ phần `tungNguoi` dài theo số người. Trần rộng hơn tool
-        // một-người để bản 8 người không bị cắt giữa chừng.
-        maxTokens: 4200,
+        // một-người để bản 8 người không bị cắt giữa chừng. Nâng 50% cùng đợt
+        // (Henry chốt 2026-08-20, retest thấy cắt ngang giữa câu ở nhiều route).
+        maxTokens: 6300,
       });
       void logLlmUsage(TOOL_ID, r.model, {
         input_tokens: r.usage.input_tokens,
@@ -279,7 +283,14 @@ async function runPreview(request: NextRequest) {
     const rb = computeLaso(body.birthSelf as BirthParams);
     if (rb.ok && rb.ls) lsBan = rb.ls;
   }
-  return ok({ success: true, preview: true, ...meta(computeNhanMach(list, lsBan)) });
+  return ok({
+    success: true,
+    preview: true,
+    ...meta(computeNhanMach(list, lsBan)),
+    // C1 — CHỈ ở lượt tính thử. Nhóm thì cộng dồn dữ kiện của mọi lá số và
+    // KHÔNG có câu cổ thư (xem `coSoNhom`).
+    coSo: coSoNhom(list),
+  });
 }
 
 async function runPost(request: NextRequest) {

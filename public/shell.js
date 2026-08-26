@@ -24,6 +24,11 @@
   ] };
   var FIXED_BOTTOM = { group: 'Tài khoản', open: true, items: [
     { id: 'vi-luong', label: 'Ví Lượng', href: '/app/tai-khoan#credits', icon: 'wallet', balance: true },
+    // Trang Tổng quan (`app-home.html`) vẫn giữ nguyên các thẻ Mời bạn/Nhiệm vụ
+    // luôn hiện — đó là chỗ nhắc CHỦ ĐỘNG. Mục này là chỗ NGƯỜI DÙNG tự tìm tới
+    // khi cần soát lại: đã làm xong Khởi Hành chưa, link mời bạn đâu, mấy lượt
+    // "Khoe kết quả" đã nộp tới đâu rồi.
+    { id: 'nhiem-vu', label: 'Nhiệm Vụ', href: '/app/tai-khoan#nhiemvu', icon: 'trophy' },
     { id: 'ho-so',    label: 'Hồ sơ của tôi', href: '/app/tai-khoan', icon: 'user' },
   ] };
 
@@ -254,7 +259,7 @@
       if (!el) {
         el = document.createElement('script');
         el.id = '_tvmb_prices_js';
-        el.src = '/tool-prices.js?v=4';
+        el.src = '/tool-prices.js?v=5';
         document.head.appendChild(el);
       }
       el.addEventListener('load', function () { resolve(); });
@@ -276,6 +281,35 @@
     });
   }
 
+  // Chấm nhắc "Khởi Hành" chưa xong (public/app-home.html ghi cờ này mỗi lần
+  // đồng bộ ở trang chủ). Đọc localStorage thay vì gọi API riêng ở ĐÂY: sidebar
+  // dựng trên MỌI trang /app, thêm một lượt mạng vào đó là chậm cho cả site chỉ
+  // để phục vụ một chấm nhắc — thà chấp nhận độ trễ (chỉ cập nhật sau lượt ghé
+  // trang chủ gần nhất) còn hơn cả site chậm đi.
+  function khoiHanhPending() {
+    try { return localStorage.getItem('tvp_kh_pending') === '1'; } catch (e) { return false; }
+  }
+
+  // Icon cố định cạnh tên tool trên `.ws-top` (thanh tiêu đề sticky) — DÙNG
+  // LẠI icon sẵn có của mỗi công cụ trong TOOLS (`tool_pricing.icon`, cùng
+  // nguồn với sidebar/Cmd+K), không phải ảnh minh hoạ. Ảnh 1024×1024 thu nhỏ
+  // xuống 32-40px thì mờ, không đọc được chi tiết — icon đơn sắc thì rõ ở mọi
+  // cỡ. Gọi lại mỗi lần TOOLS cập nhật (renderSidebar) nên luôn khớp icon mới
+  // nhất; không gắn với vòng đời ẩn/hiện của #introHost.
+  function mountToolIcon() {
+    var titleEl = document.querySelector('.ws-title');
+    if (!titleEl || !titleEl.parentNode) return;
+    var it = null;
+    TOOLS.forEach(function (g) { g.items.forEach(function (x) { if (x.id === ACTIVE) it = x; }); });
+    if (!it) return;
+    var old = titleEl.parentNode.querySelector('.ws-avatar');
+    if (old) old.remove();
+    var box = document.createElement('div');
+    box.className = 'ws-avatar';
+    box.innerHTML = svg(it.icon || 'grid', 'ic');
+    titleEl.parentNode.insertBefore(box, titleEl);
+  }
+
   // ── RENDER SIDEBAR ──
   function renderSidebar() {
     var host = document.getElementById('shell-sidebar');
@@ -286,6 +320,7 @@
          '<svg class="ic" style="opacity:.7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4-4"/></svg>' +
          ' Tìm công cụ, lệnh… <kbd>Ctrl K</kbd></button>';
     h += '<nav class="sb-nav">';
+    var khPending = khoiHanhPending();
     TOOLS.forEach(function (g) {
       var hasActive = g.items.some(function (it) { return it.id === ACTIVE; });
       var closed = !(g.open || hasActive);
@@ -293,7 +328,8 @@
       g.items.forEach(function (it) {
         var active = it.id === ACTIVE ? ' active' : '';
         var pill = it.balance ? '<span class="pill" id="sbBalance">—</span>' : '';
-        h += '<a class="item' + active + '" href="' + it.href + '">' + (it.icon ? svg(it.icon) : '') + ' ' + esc(it.label) + ' ' + pill + '</a>';
+        var dot = (it.id === 'home' && khPending) ? '<span class="sb-dot" title="Còn việc chưa xong ở Khởi Hành"></span>' : '';
+        h += '<a class="item' + active + '" href="' + it.href + '">' + (it.icon ? svg(it.icon) : '') + ' ' + esc(it.label) + ' ' + pill + dot + '</a>';
       });
       h += '</div>';
     });
@@ -301,6 +337,7 @@
     h += '<button class="sb-theme" type="button" data-act="theme" title="Đổi nền sáng/tối">◐ Đổi nền</button>';
     h += '<a class="sb-foot" href="/profile"><div class="ava" id="sbAva">?</div><div><div class="nm" id="sbName">Khách</div><div class="sub" id="sbSub">Đăng nhập →</div></div></a>';
     host.innerHTML = h;
+    mountToolIcon();
     var themeBtn = host.querySelector('[data-act="theme"]');
     if (themeBtn) themeBtn.addEventListener('click', toggleTheme);
     // group collapse
@@ -409,6 +446,32 @@
   var ctxCalls = 0;   // số lần tool đã gọi setContext (0 = trang chưa dựng được gì)
   // Tool đã gộp: đọc kèm phiên lịch sử của tool cũ (la-so đã gộp vào luan-giai).
   var HIST_ALIAS = { 'luan-giai': ['la-so'] };
+  /* ── DẤU "ĐÃ DÙNG TOOL" (theo MÁY, không theo tài khoản) ──────────────────
+     Ghi ở `setContext` — chokepoint DUY NHẤT báo "tool đã tính ra kết quả",
+     cùng chỗ bắn event `tool_run`. Vì sao không đọc `events` từ server: 86/95
+     người chạy tool là KHÁCH VÔ DANH (đo prod 23/08), họ không có tài khoản để
+     mà tra; đọc ở máy thì gợi ý chạy được cho cả nhóm đó, 0 lượt mạng.
+
+     ⚠️ Đây là tín hiệu GỢI Ý, không phải quyền sở hữu — đừng bao giờ dùng nó
+     để quyết định ai được xem gì (xoá localStorage là mất). Quyền vẫn ở
+     `credit_transactions` / `portrait_cache` phía server. */
+  var USED_KEY = 'app_used_v1', USED_CAP = 60;
+  function usedTools() {
+    try { var o = JSON.parse(localStorage.getItem(USED_KEY) || '{}'); return (o && typeof o === 'object') ? o : {}; }
+    catch (e) { return {}; }
+  }
+  function markToolUsed(id) {
+    if (!id || id === 'home' || id === 'tai-khoan') return;
+    try {
+      var m = usedTools(); m[id] = Date.now();
+      var ks = Object.keys(m);
+      if (ks.length > USED_CAP) {
+        ks.sort(function (a, b) { return m[b] - m[a]; }).slice(USED_CAP).forEach(function (k) { delete m[k]; });
+      }
+      localStorage.setItem(USED_KEY, JSON.stringify(m));
+    } catch (e) { /* quota / private mode — gợi ý mất đi thì thôi, không được ném */ }
+  }
+
   function histKey(t) { return 'app_hist_v1_' + t; }
   function histLocal(t) { try { return JSON.parse(localStorage.getItem(histKey(t)) || '[]') || []; } catch (e) { return []; } }
   function histWrite(t, arr) { try { localStorage.setItem(histKey(t), JSON.stringify(arr.slice(0, HIST_CAP))); } catch (e) { /* quota */ } }
@@ -1169,13 +1232,14 @@
   //   3. vẽ lại nút.
   function refreshWsShare() {
     var host = wsResultHost();
-    if (!host) { renderShareBtn(); return; } // trang chưa khai vùng kết quả → giữ lối cũ
+    if (!host) { renderShareBtn(); renderFbBtn(); return; } // trang chưa khai vùng kết quả → giữ lối cũ
     var vis = shownEl(host);
     if (_wsResVisible && !vis) shareable = null; // kết quả biến mất → payload lượt trước hết hiệu lực
     if (!_wsResVisible && vis) _shareMuted = false; // lượt chạy mới → mở lại lưới đỡ
     _wsResVisible = vis;
     autoShare = vis && !_shareMuted ? deriveShareable(host) : null;
     renderShareBtn();
+    renderFbBtn();
     renderPdfBtn(vis);
     maybeAppendSrcNote(host);
   }
@@ -1210,6 +1274,29 @@
     refreshWsShare();
   }
 
+  // ── CỤM NÚT STICKY GÓC PHẢI DƯỚI ──────────────────────────────────────
+  // Chia sẻ · Hỏi · Lưu PDF · Đăng Facebook trước đây nằm trong `.ws-top`,
+  // một thanh CUỘN THEO trang — đọc xong một khối luận dài trên di động là
+  // thanh đó đã trôi khỏi màn hình từ lâu, không ai bấm được nữa. Nay cả bốn
+  // sống trong MỘT cụm `position:fixed` (`shell.css`), luôn ở đúng góc phải
+  // dưới bất kể cuộn tới đâu — và KHÔNG phụ thuộc trang có khai `.ws-actions`
+  // hay không (trước đây thiếu `.ws-actions` là nút Chia sẻ/PDF im lặng
+  // không hiện gì cả). Neo theo `--rail-w` (`shell.css`), KHÔNG neo thẳng mép
+  // viewport — nếu không cụm nút tràn đè lên cột rail trên desktop.
+  //
+  // Icon-only, tròn, cỡ đều (`shell.css` .ws-fab .btn) — chữ dồn hết vào
+  // `data-tip`/`aria-label`, hiện thành tooltip khi hover/focus (CSS thuần,
+  // không JS). Mỗi hàm render CHỈ set 2 thuộc tính đó + innerHTML là SVG trơn
+  // (không còn chữ + `margin-right` kèm theo trong chuỗi).
+  function fabHost() {
+    var host = document.getElementById('wsFab');
+    if (host) return host;
+    host = document.createElement('div');
+    host.className = 'ws-fab'; host.id = 'wsFab';
+    document.body.appendChild(host);
+    return host;
+  }
+
   // ── LƯU PDF — cùng vòng đời với nút Chia sẻ ──────────────────────────
   // Trước đây đúng 3/33 tool có nút PDF, mỗi tool tự dựng một thanh riêng
   // trong nội dung + tự chép một khối @media print. Nay shell lo cả hai:
@@ -1221,25 +1308,51 @@
   // (chọn/tìm/copy được) và không thêm một byte JS nào. Bản dựng bằng canvas
   // chỉ ra ảnh, nặng hơn mà đọc kém hơn.
   function renderPdfBtn(visible) {
-    var host = document.querySelector('.ws-actions');
+    var host = fabHost();
     var btn = document.getElementById('wsPdfBtn');
     if (!visible) { if (btn) btn.remove(); return; }
-    if (!host || btn) return;
+    if (btn) return;
     btn = document.createElement('button');
     btn.type = 'button'; btn.className = 'btn'; btn.id = 'wsPdfBtn';
-    btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" style="width:14px;height:14px;vertical-align:-2px;margin-right:4px"><path d="M12 3v11m0 0 4-4m-4 4-4-4"/><path d="M4 17v2.5A1.5 1.5 0 0 0 5.5 21h13a1.5 1.5 0 0 0 1.5-1.5V17"/></svg>Lưu PDF';
+    btn.setAttribute('data-tip', 'Lưu PDF'); btn.setAttribute('aria-label', 'Lưu PDF');
+    btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M12 3v11m0 0 4-4m-4 4-4-4"/><path d="M4 17v2.5A1.5 1.5 0 0 0 5.5 21h13a1.5 1.5 0 0 0 1.5-1.5V17"/></svg>';
     btn.addEventListener('click', printWorkspace);
     host.appendChild(btn);
+    ensureQrJs(function () {}); // nạp trước lặng lẽ — lúc bấm in thường đã sẵn
+  }
+  // Nạp `/tools-shared/qr.js` (window.QR) ĐỘNG, cùng lối `ensureToolSourcesJs`
+  // ở trên — chỉ tool có nút "Lưu PDF" mới cần, không kéo vào mọi trang.
+  function ensureQrJs(cb) {
+    if (window.QR) { cb(); return; }
+    var id = 'tvmb-qr-js';
+    var s = document.getElementById(id);
+    if (!s) {
+      s = document.createElement('script');
+      s.id = id; s.src = '/tools-shared/qr.js?v=1'; s.async = true;
+      (document.head || document.documentElement).appendChild(s);
+    }
+    s.addEventListener('load', function () { if (window.QR) cb(); });
   }
   function printWorkspace() {
     try { track('pdf_download', { tool_id: ACTIVE }); } catch (e) { /* ignore */ }
     ensurePrintHead();
-    window.print();
+    var done = false;
+    var go = function () {
+      if (done) return; done = true;
+      ensurePrintFoot();
+      window.print();
+    };
+    ensureQrJs(go);
+    // Mạng chậm và qr.js chưa kịp tải thì đừng giữ người dùng chờ vô hạn —
+    // in luôn sau 800ms, chân trang khi đó thiếu QR (còn seal + ngày) chứ
+    // không phải không in được gì.
+    setTimeout(go, 800);
   }
   // Bản in không có `.ws-top` (đã ẩn) nên tự nó không nói được đây là kết quả
   // gì của ai. Dựng một khối CHỈ hiện lúc in, lấy đúng chữ đang có trên màn
   // hình + dòng lá số của chính lượt này — cùng nguồn với bản chia sẻ, nên hai
-  // bản không nói khác nhau.
+  // bản không nói khác nhau. Avatar là ẢNH ĐẠI DIỆN của chính tool (xem
+  // `lib/media/tool-avatar-prompt.ts`), cùng nguồn với avatar trên `.ws-top`.
   function ensurePrintHead() {
     var host = wsResultHost();
     if (!host) return;
@@ -1250,10 +1363,67 @@
       host.insertBefore(head, host.firstChild);
     }
     var sub = shareBirthLines({ birth: (ctx && ctx.birth) || null });
-    head.innerHTML = '<b>' + esc(wsTitleText()) + '</b>' +
+    var avKey = (window.SHELL_INTRO && window.SHELL_INTRO.key) || ACTIVE;
+    var avUrl = avKey ? Shell.avatarUrl(avKey) : '';
+    head.innerHTML =
+      (avUrl ? '<img class="ws-print-avatar" src="' + avUrl + '" alt="">' : '') +
+      '<div class="ws-print-head-text"><b>' + esc(wsTitleText()) + '</b>' +
       (sub ? '<span>' + esc(sub) + '</span>' : '') +
-      '<span>tuviminhbao.com</span>';
+      '<span>tuviminhbao.com</span></div>';
   }
+  // Chân trang PDF: triện website + tên miền + ngày xuất bên trái, QR quét
+  // về trang bên phải — cùng bố cục "triện + QR" đã dùng ở poster ảnh viral
+  // (`poster.js`), giữ nhận diện nhất quán giữa ảnh chia sẻ và bản PDF.
+  function ensurePrintFoot() {
+    var host = wsResultHost();
+    if (!host) return;
+    var foot = document.getElementById('wsPrintFoot');
+    if (!foot) {
+      foot = document.createElement('div');
+      foot.className = 'ws-print-foot'; foot.id = 'wsPrintFoot';
+      host.appendChild(foot);
+    }
+    var d = new Date();
+    var ngay = ('0' + d.getDate()).slice(-2) + '/' + ('0' + (d.getMonth() + 1)).slice(-2) + '/' + d.getFullYear();
+    foot.innerHTML =
+      '<div class="ws-print-foot-l"><img src="/seal.webp" alt="" class="ws-print-seal">' +
+      '<div><b>Tử Vi Minh Bảo</b><span>紫微明寶 · tuviminhbao.com</span>' +
+      '<span>In ngày ' + esc(ngay) + '</span></div></div>' +
+      '<canvas class="ws-print-qr" id="wsPrintQrCv" width="120" height="120"></canvas>';
+    var cv = document.getElementById('wsPrintQrCv');
+    if (cv && window.QR) {
+      var link = Shell.viralUrl('https://tuviminhbao.com/app', ACTIVE, { source: 'pdf', medium: 'print' });
+      var cctx = cv.getContext('2d');
+      cctx.clearRect(0, 0, 120, 120);
+      window.QR.draw(cctx, link, 0, 0, 120);
+    }
+  }
+
+  // ── PDF phải MỞ HẾT phần "cơ sở tính toán" đang gấp lại ──────────────
+  // Nhiều tool (Luận Giải · Dạy Con · Duyên Nợ Tiền Kiếp · Người Khác…) gói
+  // phần deterministic (cách cục/điểm số/quy tắc — bằng chứng lá số đọc
+  // đúng) trong <details> ĐÓNG mặc định để đỡ chiếm chỗ trên màn hình. Nhưng
+  // <details> đóng thì trình duyệt KHÔNG render nội dung con dù `@media
+  // print` có ép display:block — trình duyệt ẩn nó ở tầng khác `display`,
+  // không cách nào ép bằng CSS. Người đọc bản PDF/bản in phải thấy TRỌN vẹn
+  // cơ sở đó (đó chính là bằng chứng công cụ không bịa số) nên phải tự MỞ
+  // bằng thuộc tính `open` ngay trước khi in, rồi trả lại đúng trạng thái cũ
+  // sau khi hộp thoại in đóng — người dùng trên màn hình không mất thói quen
+  // gấp/mở của họ. Đặt ở SHELL (không phải từng tool) vì đây là luật CHUNG,
+  // và `beforeprint`/`afterprint` bắt được cả nút "Lưu PDF" lẫn Ctrl+P tay.
+  var _pdfReopenedDetails = null;
+  window.addEventListener('beforeprint', function () {
+    _pdfReopenedDetails = [];
+    document.querySelectorAll('details:not([open])').forEach(function (d) {
+      d.open = true;
+      _pdfReopenedDetails.push(d);
+    });
+  });
+  window.addEventListener('afterprint', function () {
+    if (!_pdfReopenedDetails) return;
+    _pdfReopenedDetails.forEach(function (d) { d.open = false; });
+    _pdfReopenedDetails = null;
+  });
 
   // ══════════════════════════════════════════════════════════════════════
   // ORB TRÊN NÚT HỎI — lời mời, không phải đồ trang trí
@@ -1272,7 +1442,16 @@
   //     viễn thì thành nhiễu — người ta học cách bỏ qua nó — và một animation
   //     chạy suốt trên mobile là ăn pin thật.
   //  3. Nạp module theo lối LƯỜI: `ai-loading-steps.js` mới có ở 24/33 trang.
-  //     Thiếu nó thì nút giữ nguyên chữ `✦ Hỏi` như cũ, không vỡ gì.
+  //     Thiếu nó thì nút giữ icon tĩnh, không vỡ gì.
+  //
+  // 🐞 Bug đã bắt: bản trước gán `el.style.display='inline-flex'` mỗi khi orb
+  // BẬT — inline style thắng mọi rule trong stylesheet nên nó ĐÈ LUÔN
+  // `.mobile-only{display:none}`, ép nút hiện ra cả trên desktop (rail đã
+  // hiện sẵn ở đó, nút thành thừa). `.btn` vốn đã tự `display:inline-flex;
+  // align-items:center` qua class nên hai dòng đó chưa từng cần — bỏ hẳn,
+  // để đúng CSS lớp `.mobile-only` quyết định hiện/ẩn theo bề ngang màn hình.
+  var ASK_ICON_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9">' +
+    '<path d="M12 3.5c-4.7 0-8.5 3-8.5 6.8 0 2.1 1.15 4 3 5.3-.15 1-.65 2.1-1.5 3 1.4-.05 2.7-.55 3.7-1.35A11 11 0 0 0 12 17.1c4.7 0 8.5-3 8.5-6.8S16.7 3.5 12 3.5Z"/></svg>';
   var _railOpened = false, _orbOn = false;
   function ensureOrbJs(cb) {
     if (window.AiLoadingSteps && window.AiLoadingSteps.orbHtml) { cb(); return; }
@@ -1280,61 +1459,125 @@
     var s = document.getElementById(id);
     if (!s) {
       s = document.createElement('script');
-      s.id = id; s.src = '/tools-shared/ai-loading-steps.js?v=7'; s.async = true;
+      s.id = id; s.src = '/tools-shared/ai-loading-steps.js?v=9'; s.async = true;
       (document.head || document.documentElement).appendChild(s);
     }
     s.addEventListener('load', function () {
       if (window.AiLoadingSteps && window.AiLoadingSteps.orbHtml) cb();
     });
   }
+  // Nút "✦ Hỏi" mobile-only nằm cứng trong HTML của 51 trang, trong
+  // `.ws-actions`. Nay `moveAskToFab()` (gọi lúc boot) DI CHUYỂN đúng node đó
+  // (không nhân bản) sang cụm sticky — nên phải tìm ở CẢ hai chỗ: trước khi
+  // dời (còn trong `.ws-actions`) và sau khi dời (đã trong `.ws-fab`).
   function askBtnEl() {
-    var host = document.querySelector('.ws-actions');
-    if (!host) return null;
-    var bs = host.querySelectorAll('button');
-    for (var i = 0; i < bs.length; i++) {
-      var oc = bs[i].getAttribute('onclick') || '';
-      if (oc.indexOf('openRail') >= 0) return bs[i];
+    var hosts = [document.getElementById('wsFab'), document.querySelector('.ws-actions')];
+    for (var h = 0; h < hosts.length; h++) {
+      var host = hosts[h]; if (!host) continue;
+      var bs = host.querySelectorAll('button');
+      for (var i = 0; i < bs.length; i++) {
+        var oc = bs[i].getAttribute('onclick') || '';
+        if (oc.indexOf('openRail') >= 0) return bs[i];
+      }
     }
     return null;
+  }
+  function moveAskToFab() {
+    var b = askBtnEl();
+    var host = fabHost();
+    if (b && b.parentNode !== host) host.appendChild(b);
+    if (b) {
+      // Icon-only đồng bộ với 3 nút kia — chữ "Hỏi" dồn vào tooltip.
+      b.setAttribute('data-tip', 'Hỏi'); b.setAttribute('aria-label', 'Hỏi');
+      if (!_orbOn) b.innerHTML = ASK_ICON_SVG;
+    }
   }
   function syncAskOrb() {
     var b = askBtnEl();
     if (!b) return;
     var want = !!ctx && !_railOpened;
     if (want === _orbOn) return;
-    if (!want) { // tắt: trả lại đúng chữ cũ, không để lại dấu vết
-      b.innerHTML = '✦ Hỏi'; _orbOn = false; return;
+    if (!want) { // tắt: về icon tĩnh, không để lại dấu vết
+      b.innerHTML = ASK_ICON_SVG; _orbOn = false; return;
     }
     ensureOrbJs(function () {
       if (!ctx || _railOpened) return; // trạng thái đã đổi trong lúc chờ nạp
       var el = askBtnEl(); if (!el) return;
-      el.innerHTML = window.AiLoadingSteps.orbHtml({ size: 18, variant: 'a' }) +
-        '<span style="margin-left:6px">Hỏi</span>';
-      el.style.display = 'inline-flex';
-      el.style.alignItems = 'center';
+      el.innerHTML = window.AiLoadingSteps.orbHtml({ size: 18, variant: 'a' });
       _orbOn = true;
     });
   }
 
   function renderShareBtn() {
-    var host = document.querySelector('.ws-actions');
+    var host = fabHost();
     var btn = document.getElementById('wsShareBtn');
     if (!currentShare()) { if (btn) btn.remove(); return; }
-    if (!host) return; // trang chưa có toolbar .ws-actions → bỏ qua, không vỡ gì
     loadRefCode(); // lúc boot có thể chưa đăng nhập; thử lại khi sắp có nút Chia sẻ
     if (!btn) {
       btn = document.createElement('button');
       btn.type = 'button'; btn.className = 'btn'; btn.id = 'wsShareBtn';
-      btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" style="width:14px;height:14px;vertical-align:-2px;margin-right:4px"><circle cx="18" cy="5" r="2.6"/><circle cx="6" cy="12" r="2.6"/><circle cx="18" cy="19" r="2.6"/><path d="m8.3 10.7 7.4-4.4M8.3 13.3l7.4 4.4"/></svg>Chia sẻ';
+      btn.setAttribute('data-tip', 'Chia sẻ'); btn.setAttribute('aria-label', 'Chia sẻ');
+      btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><circle cx="18" cy="5" r="2.6"/><circle cx="6" cy="12" r="2.6"/><circle cx="18" cy="19" r="2.6"/><path d="m8.3 10.7 7.4-4.4M8.3 13.3l7.4 4.4"/></svg>';
       btn.addEventListener('click', shareWorkspace);
-      host.insertBefore(btn, host.firstChild);
+      host.appendChild(btn);
     }
   }
-  function shareWorkspace() {
+  // ── C3 — BÁO CHO NGƯỜI CHIA SẺ BIẾT, VÀ CHO HỌ ĐƯỜNG ẨN ─────────────────
+  //
+  // Henry chốt **auto opt-in**: mọi bản chia sẻ mặc định có mặt trong Thư viện
+  // chung `/thu-vien`. Auto opt-in mà KHÔNG NÓI mới là phần không đỡ được —
+  // nên dòng này BẮT BUỘC hiện mỗi lần tạo link.
+  //
+  // ⚠️ Đặt ở đây chứ KHÔNG đặt trong modal chia sẻ: trên máy cảm ứng
+  // `shareLink` đi thẳng `navigator.share` và **modal không bao giờ mở**, tức
+  // nút ẩn đặt trong đó là không với tới phần lớn người dùng.
+  //
+  // Chỉ dựng khi ĐÃ ĐĂNG NHẬP: endpoint PATCH đối chiếu `owner_user_id`, link
+  // tạo lúc ẩn danh không ai sửa được nên hứa một nút bấm không ăn là hứa hụt.
+  function galleryNotice(shareId) {
+    try {
+      var host = document.querySelector('.ws-actions');
+      if (!host || !getToken() || !shareId) return;
+      var old = document.getElementById('shGalNote'); if (old) old.remove();
+      var box = document.createElement('div');
+      box.id = 'shGalNote';
+      box.className = 'sh-gal-note';
+      box.innerHTML = '<span>Đã tạo link · bản này cũng hiện trong ' +
+        '<a href="/thu-vien" target="_blank" rel="noopener">Thư viện chung</a></span>' +
+        '<button type="button">Ẩn đi</button>';
+      host.parentNode.insertBefore(box, host.nextSibling);
+      var btn = box.querySelector('button');
+      btn.addEventListener('click', function () {
+        btn.disabled = true; btn.textContent = 'Đang ẩn…';
+        fetch('/api/share-result', {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + getToken() },
+          body: JSON.stringify({ id: shareId, galleryOptOut: true }),
+        })
+          .then(function (r) { return r.json(); })
+          .then(function (j) {
+            if (j && j.gallery_opt_out) {
+              box.innerHTML = '<span>✓ Đã ẩn khỏi Thư viện chung. Link vẫn dùng được như thường.</span>';
+            } else { btn.disabled = false; btn.textContent = 'Thử lại'; }
+          })
+          .catch(function () { btn.disabled = false; btn.textContent = 'Thử lại'; });
+      });
+      // 🪤 KHÔNG tự dọn theo hẹn giờ. Bản đầu xoá sau 30 giây, nhưng trên
+      // desktop `openShareModal` phủ kín trang NGAY SAU đó — ai ngồi trong modal
+      // quá 30 giây thì dòng báo đã biến mất trước khi họ nhìn thấy nó, tức
+      // auto opt-in lại thành im lặng. Để nó ở lại tới khi người dùng tự xử lý
+      // hoặc tạo link mới (lượt sau `old.remove()` ở trên dọn giúp).
+    } catch (e) { /* lời báo hỏng KHÔNG được chặn lượt chia sẻ */ }
+  }
+
+  // Dựng link chia sẻ cho lượt kết quả HIỆN TẠI — dùng CHUNG cho nút Chia sẻ
+  // và nút Đăng Facebook, cả hai đều cần đúng một bước này trước khi mở kênh
+  // phát tán. Viết hai lần thì hai bản `fetch` sớm muộn trôi khỏi nhau.
+  function fetchShareUrl(btnEl, cb) {
     if (!currentShare()) return;
-    var btn = document.getElementById('wsShareBtn'); if (btn) btn.disabled = true;
+    if (btnEl) btnEl.disabled = true;
     var s = currentShare();
-    var reEnable = function () { if (btn) btn.disabled = false; };
+    var reEnable = function () { if (btnEl) btnEl.disabled = false; };
     // Gửi kèm token: server ghi shared_results.owner_user_id → panel Vòng Lặp
     // Viral đếm được SỐ NGƯỜI chia sẻ (mẫu số của K-factor), không chỉ số link.
     var headers = { 'Content-Type': 'application/json' };
@@ -1347,17 +1590,49 @@
       .then(function (j) {
         reEnable();
         if (!j || !j.url) { alert('Không tạo được link chia sẻ, thử lại sau.'); return; }
-        var url = withViralParams(location.origin + j.url, s.toolId);
-        var onMedium = function (m) { track('share', { tool_id: s.toolId, meta: { medium: m, kind: 'workspace', with_ref: !!_refCode } }); };
-        var shareTxt = 'Xem kết quả này trên Tử Vi Minh Bảo:';
-        var modalOpts = { title: 'Chia sẻ ' + s.title, desc: 'Ai có link đều xem được kết quả này.', shareText: shareTxt + ' ' };
-        // LUÔN share dạng LINK (giống hệt shareSession ở rail) — KHÔNG share
-        // file ảnh thô qua Web Share API level 2: nhiều app nhận file (Messenger,
-        // Zalo…) BỎ LUÔN url đi kèm, người nhận chỉ thấy ảnh, không bấm vào đâu
-        // được. Ảnh vẫn hiện đẹp nhờ OG:image khi link được unfurl.
-        shareLink(url, { title: s.title + ' — Tử Vi Minh Bảo', text: shareTxt, url: url }, modalOpts, onMedium);
+        cb(withViralParams(location.origin + j.url, s.toolId), s, j.id);
       })
       .catch(function () { reEnable(); alert('Lỗi mạng khi tạo link chia sẻ.'); });
+  }
+  function shareWorkspace() {
+    var btn = document.getElementById('wsShareBtn');
+    fetchShareUrl(btn, function (url, s, shareId) {
+      var onMedium = function (m) { track('share', { tool_id: s.toolId, meta: { medium: m, kind: 'workspace', with_ref: !!_refCode } }); };
+      var shareTxt = 'Xem kết quả này trên Tử Vi Minh Bảo:';
+      var modalOpts = { title: 'Chia sẻ ' + s.title, desc: 'Ai có link đều xem được kết quả này.', shareText: shareTxt + ' ' };
+      // LUÔN share dạng LINK (giống hệt shareSession ở rail) — KHÔNG share
+      // file ảnh thô qua Web Share API level 2: nhiều app nhận file (Messenger,
+      // Zalo…) BỎ LUÔN url đi kèm, người nhận chỉ thấy ảnh, không bấm vào đâu
+      // được. Ảnh vẫn hiện đẹp nhờ OG:image khi link được unfurl.
+      shareLink(url, { title: s.title + ' — Tử Vi Minh Bảo', text: shareTxt, url: url }, modalOpts, onMedium);
+      galleryNotice(shareId);
+    });
+  }
+
+  // ── ĐĂNG FACEBOOK — đi thẳng vào hộp thoại chia sẻ của Facebook ─────
+  // Trước đây Facebook chỉ là MỘT trong 4 lựa chọn nằm trong modal "Chia sẻ"
+  // (openShareModal). Henry muốn một nút riêng, luôn thấy, để bấm PHÁT là
+  // ra ngay hộp thoại đăng — bớt một lượt bấm cho đúng kênh nhiều người dùng
+  // nhất. Cùng link, cùng cơ chế `sharer.php` đã dùng trong modal, chỉ khác
+  // là bỏ qua bước chọn kênh.
+  function renderFbBtn() {
+    var host = fabHost();
+    var btn = document.getElementById('wsFbBtn');
+    if (!currentShare()) { if (btn) btn.remove(); return; }
+    if (btn) return;
+    btn = document.createElement('button');
+    btn.type = 'button'; btn.className = 'btn fbtn-fb'; btn.id = 'wsFbBtn';
+    btn.setAttribute('data-tip', 'Đăng Facebook'); btn.setAttribute('aria-label', 'Đăng Facebook');
+    btn.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 12.06C22 6.53 17.52 2.04 12 2.04S2 6.53 2 12.06c0 5 3.66 9.13 8.44 9.88v-6.99H7.9v-2.89h2.54V9.85c0-2.5 1.49-3.9 3.77-3.9 1.09 0 2.24.2 2.24.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56v1.88h2.78l-.45 2.89h-2.33v6.99c4.78-.75 8.44-4.88 8.44-9.88z"/></svg>';
+    btn.addEventListener('click', postFacebook);
+    host.appendChild(btn);
+  }
+  function postFacebook() {
+    var btn = document.getElementById('wsFbBtn');
+    fetchShareUrl(btn, function (url, s) {
+      track('share', { tool_id: s.toolId, meta: { medium: 'facebook', kind: 'workspace', with_ref: !!_refCode } });
+      window.open('https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(url), '_blank', 'noopener');
+    });
   }
 
   // ── NỐI PHIÊN từ link chia sẻ (?fromshare=<id>) ──
@@ -1422,18 +1697,20 @@
   //   3. Tường hết-lượt liệt kê CỤ THỂ mục chưa đọc trong 24 mục.
   //   4. Câu chữ nói bằng lá số, không bằng tiền.
 
-  // 24 mục của Luận Giải — KHỚP `PHAN_LABELS` trong luan-giai.html. Dùng để nói
-  // CỤ THỂ người ta đang bỏ lỡ cái gì; "nạp Lượng để xem thêm" thì không ai biết
-  // thêm là thêm gì.
+  // 13 mục của Luận Giải Tử Vi (tổng quan + 12 cung) — KHỚP `TONG_PHAN`/`QUERIES`
+  // trong app-luan-giai.html. Dùng để nói CỤ THỂ người ta đang bỏ lỡ cái gì;
+  // "nạp Lượng để xem thêm" thì không ai biết thêm là thêm gì.
+  // 🔴 Trước đây mảng này có 24 mục (gồm cả "Tổng quan đại vận" + Đại Vận 1-9 +
+  // "Tiểu Vận năm nay") vì Luận Giải khi đó luận trọn 24 phần. Từ lúc tách tool
+  // "Chu Trình Cuộc Đời" (đại vận + tiểu vận, xem app-chu-trinh-cuoc-doi.html),
+  // Luận Giải chỉ còn 13 mục — mảng KHÔNG được liệt thêm 11 mục đã dời đi, nếu
+  // không CTA ở đây ("Xem trọn N mục") sẽ hứa nội dung mà /app/luan-giai không
+  // còn có.
   var LG_PHAN = [
     'Tổng Quan Lá Số',
     'Cung Mệnh', 'Cung Phụ Mẫu', 'Cung Phúc Đức', 'Cung Điền Trạch',
     'Cung Quan Lộc', 'Cung Nô Bộc', 'Cung Thiên Di', 'Cung Tật Ách',
     'Cung Tài Bạch', 'Cung Tử Tức', 'Cung Phu Thê', 'Cung Huynh Đệ',
-    'Tổng quan đại vận',
-    'Đại Vận 1', 'Đại Vận 2', 'Đại Vận 3', 'Đại Vận 4', 'Đại Vận 5',
-    'Đại Vận 6', 'Đại Vận 7', 'Đại Vận 8', 'Đại Vận 9',
-    'Tiểu Vận năm nay',
   ];
 
   // Chủ đề câu hỏi → cung. Tra bằng TỪ KHOÁ, deterministic, 0 đồng — cố ý không
@@ -1793,6 +2070,10 @@
 
   // ── PUBLIC API cho trang tool ──
   var Shell = {
+    /* Bản đồ tool đã dùng trên MÁY này: {tool_id: timestamp}. Dùng cho gợi ý
+       ở Tổng Quan; xem chú thích `markToolUsed`. */
+    usedTools: usedTools,
+    markToolUsed: markToolUsed,
     // Gắn ngữ cảnh (lá số / kịch bản) để bật rail chat.
     setContext: function (o) {
       // birth và scenario có thể đi CÙNG nhau: birth để engine server lập lá
@@ -1809,6 +2090,7 @@
       ctxCalls++;
       // Funnel: tool đã tính ra kết quả + gắn ngữ cảnh = "đã dùng tool" (activation).
       try { track('tool_run', { tool_id: ACTIVE, slug: (o.scenario && o.scenario.type) || null }); } catch (e) { /* ignore */ }
+      markToolUsed(ACTIVE);
       messages = [];
       sessionId = newId();
       // Meta cho thread mới: restore payload đủ để dựng lại center (mặc định =
@@ -1961,23 +2243,32 @@
     },
     // true nếu URL có ?auto=1 (đến từ nút chuyển tay giữa tool) → trang tự chạy.
     autoRun: function () { return /[?&]auto=1\b/.test(window.location.search); },
-    // ── Empty-state intro (hướng B): hiện giới thiệu ngắn cho người MỚI, tự
-    // ẩn sau lần dùng đầu (nhớ qua localStorage) + nút ✕ tắt luôn. Gọi ở
-    // init: introOnce('bat-tu', {title, desc}); gọi markIntroSeen sau lần chạy
-    // đầu. Cần 1 phần tử #introHost trên trang (đặt trên form).
-    introSeen: function (key) { try { return !!localStorage.getItem('app_intro_' + key); } catch (e) { return false; } },
-    markIntroSeen: function (key) { try { localStorage.setItem('app_intro_' + key, '1'); } catch (e) { /* ignore */ } },
+    // ── Empty-state intro (hướng B): giới thiệu CỐ ĐỊNH cho tool — không còn
+    // ẩn-vĩnh-viễn-sau-lần-đầu (từng qua localStorage) hay nút ✕ tự đóng: box
+    // này là danh thiếp của tool, không phải tip dùng một lần, nên luôn hiện
+    // lại mỗi lần mở trang. Gọi ở init: introOnce('bat-tu', {title, desc}).
+    // Cần 1 phần tử #introHost trên trang (đặt trên form). `dismissIntro` vẫn
+    // ẩn box khi trang ĐÃ có kết quả trong lượt xem hiện tại (đỡ chiếm chỗ
+    // phía trên kết quả) — chỉ ẩn cho lượt xem này, mở lại trang thì box về.
+    // Lệch tên giữa SHELL_INTRO.key và tool_id thật (nguồn chính là
+    // `TOOL_AVATAR_ALIAS` trong lib/media/tool-avatar-prompt.ts — chép tay
+    // sang đây vì shell.js là script thường, không import được TS).
+    _AVATAR_ALIAS: {
+      'bat-tu': 'tu-binh', 'chon-ngay': 'chon-ngay-tot', 'dat-ten': 'dat-ten-con',
+      'luan-giai': 'laso', 'sinh-con': 'xem-tuoi-sinh-con', 'thanh-tuong-pro': 'thanh-tuong',
+    },
+    avatarUrl: function (key) { return '/tool-avatars/' + (this._AVATAR_ALIAS[key] || key) + '.webp'; },
     introOnce: function (key, opts) {
       var host = document.getElementById('introHost');
       if (!host) return;
-      if (this.introSeen(key)) { host.innerHTML = ''; return; }
-      host.innerHTML = '<div class="intro-card"><button class="intro-x" type="button" aria-label="Ẩn giới thiệu">×</button>' +
-        '<div class="intro-t"><span class="spark">✦</span> ' + esc(opts.title || '') + '</div>' +
+      host.innerHTML = '<div class="intro-card">' +
+        '<div class="intro-body">' +
+        '<img class="intro-avatar" src="' + this.avatarUrl(key) + '" alt="" loading="lazy" onerror="this.remove()">' +
+        '<div class="intro-text">' +
+        '<div class="intro-t">' + esc(opts.title || '') + '</div>' +
         '<div class="intro-d">' + (opts.desc || '') + '</div>' +
-        '<div id="introSrc"></div></div>';
-      var self = this;
-      var x = host.querySelector('.intro-x');
-      if (x) x.addEventListener('click', function () { self.markIntroSeen(key); host.innerHTML = ''; });
+        '<div id="introSrc"></div>' +
+        '</div></div></div>';
       // Dòng "Theo <cổ pháp> · phương pháp Tử Vi Minh Bảo" — nạp động, điền
       // sau khi kịp tải; nếu khối intro đã bị đóng trước đó thì bỏ qua.
       ensureToolSourcesJs(function () {
@@ -1985,8 +2276,9 @@
         if (slot) slot.innerHTML = window.ToolSources.introHtml(key);
       });
     },
-    // Gọi khi trang đã chạy (có kết quả): nhớ đã xem + ẩn intro.
-    dismissIntro: function (key) { this.markIntroSeen(key); var h = document.getElementById('introHost'); if (h) h.innerHTML = ''; },
+    // Gọi khi trang đã chạy (có kết quả): ẩn intro cho LƯỢT XEM này (không
+    // nhớ qua localStorage) — box quay lại mỗi khi mở trang mới.
+    dismissIntro: function () { var h = document.getElementById('introHost'); if (h) h.innerHTML = ''; },
     // Chia sẻ kết quả khung giữa (workspace).
     //
     // ⚠️ KHÔNG BẮT BUỘC nữa. Shell tự bật nút Chia sẻ cho mọi tool có khai
@@ -2009,10 +2301,17 @@
       // Chốt trạng thái hiện/ẩn TRƯỚC rồi mới tắt tiếng: gọi ngược lại thì cạnh
       // lên "lượt chạy mới" của chính lượt này gỡ luôn cờ vừa đặt (tool báo lỗi
       // khi khung kết quả đang hiện → shell vẫn tự đỡ đè lên lời khai của tool).
-      if (!o) { shareable = null; refreshWsShare(); _shareMuted = true; autoShare = null; renderShareBtn(); return; }
+      if (!o) { shareable = null; refreshWsShare(); _shareMuted = true; autoShare = null; renderShareBtn(); renderFbBtn(); return; }
       shareable = normalizeShare(o); _shareMuted = false;
       renderShareBtn();
+      renderFbBtn();
     },
+    // Kích hoạt CHÍNH luồng "Chia sẻ" của toolbar (native share sheet trên di
+    // động, modal Facebook/Zalo/WhatsApp trên desktop) từ một nút do TRANG tự
+    // vẽ — dùng cho CTA "Rủ [tên] so lá số" đặt ngay dưới kết quả tương hợp,
+    // đúng khoảnh khắc tò mò cao nhất thay vì chờ tới thanh công cụ chung.
+    // No-op nếu chưa có `currentShare()` (shareWorkspace tự kiểm).
+    shareNow: function () { shareWorkspace(); },
   };
   window.Shell = Shell;
 
@@ -2044,6 +2343,12 @@
     var imgs = pendingImages.slice();
     if (!text && !imgs.length) return;
     try { track('chat_msg', { tool_id: ACTIVE, slug: (ctx && ctx.scenario && ctx.scenario.type) || null, meta: { has_img: imgs.length > 0 } }); } catch (e) { /* ignore */ }
+    // Bước 2 của "Khởi Hành" (public/app-home.html) cho KHÁCH VÔ DANH: server
+    // không có user_id để tra `events.chat_msg`, nên bậc 0 tự đếm ở máy. Cờ này
+    // là NGUỒN DUY NHẤT cho bậc 0 — sau khi đăng ký, bằng chứng thật lấy từ
+    // chính dòng `events` mà `track('chat_msg', …)` ở trên vừa ghi (user_id gắn
+    // được ngay nếu đã đăng nhập lúc bấm gửi), không cần đồng bộ cờ này lên server.
+    try { localStorage.setItem('tvp_kh_hoi', '1'); } catch (e) { /* ignore */ }
     // Đếm câu + ghi nhận chủ đề (cho thẻ mời) TRƯỚC khi gọi API — chủ đề suy từ
     // chính câu hỏi, không cần đợi câu trả lời.
     _askCount++;
@@ -2494,8 +2799,14 @@
       if (tok || ++tries > 60) clearInterval(t);
     }, 300);
     // Empty-state intro (hướng B): trang khai window.SHELL_INTRO={key,title,desc}
-    // + có #introHost → shell tự hiện cho người mới, ẩn sau lần dùng đầu.
-    if (window.SHELL_INTRO && window.SHELL_INTRO.key) Shell.introOnce(window.SHELL_INTRO.key, window.SHELL_INTRO);
+    // + có #introHost → shell tự hiện box giới thiệu CỐ ĐỊNH (không tự ẩn).
+    if (window.SHELL_INTRO && window.SHELL_INTRO.key) {
+      Shell.introOnce(window.SHELL_INTRO.key, window.SHELL_INTRO);
+    }
+    // Cụm nút sticky góc phải dưới: dời nút "✦ Hỏi" (mobile-only, hardcode
+    // trong HTML từng trang) vào đó TRƯỚC — để nó đứng trên cùng trong cụm.
+    // Chia sẻ/PDF/Facebook tự nối vào bên dưới khi có kết quả (xem dưới).
+    moveAskToFab();
     // Nút Chia sẻ của khung giữa: shell tự theo dõi vùng kết quả, tool không
     // phải khai báo gì. Xem khối "CHIA SẺ WORKSPACE" ở trên.
     watchWsResult();

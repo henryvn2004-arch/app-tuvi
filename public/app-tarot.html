@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"></noscript>
-<link rel="stylesheet" href="/shell.css?v=19">
+<link rel="stylesheet" href="/shell.css?v=29">
 <style>
 .tr-card{background:var(--white);border:1px solid var(--line);border-radius:14px;padding:20px 22px;box-shadow:var(--shadow);max-width:760px}
 .tr-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:4px}
@@ -94,7 +94,8 @@ gap:8px;width:fit-content;margin:24px auto}
 
       <div class="tr-card" id="inputCard">
         <h2>Chọn Kiểu Trải Bài</h2>
-        <p class="sub">78 lá đầy đủ — 22 Major Arcana và 56 Minor Arcana, ý nghĩa xuôi và ngược bằng tiếng Việt.</p>
+        <p class="sub">Rút một lá, nghe một câu trả lời rõ cho chuyện đang rối. Bạn cứ hỏi vòng vo bạn bè mà vẫn chưa yên tâm. Dùng khi cần một góc nhìn khác trước khi quyết định.</p>
+        <p class="price-note" data-tvp-price-label="tarot">…</p>
         <div class="spread-btns">
           <button class="spread-btn active" onclick="setSpread(1,this)"><span class="ic" data-icon="sparkles"></span> 1 Lá — Thông Điệp Hôm Nay</button>
           <button class="spread-btn" onclick="setSpread(3,this)"><span class="ic" data-icon="sparkles"></span> 3 Lá — Quá Khứ · Hiện Tại · Tương Lai</button>
@@ -122,11 +123,11 @@ gap:8px;width:fit-content;margin:24px auto}
 </div>
 
 <script>window.SHELL_ACTIVE='tarot';window.SHELL_HISTORY=true;
-window.SHELL_INTRO={key:'tarot',title:'Tarot 78 Lá',desc:'Rút 1 lá, trải 3 lá hoặc Celtic Cross 10 lá — ý nghĩa xuôi và ngược bằng tiếng Việt, đầy đủ 22 Major Arcana và 56 Minor Arcana.'};</script>
+window.SHELL_INTRO={key:'tarot',title:'Tarot 78 Lá',desc:'Rút một lá, nghe một câu trả lời rõ cho chuyện đang rối. Bạn cứ hỏi vòng vo bạn bè mà vẫn chưa yên tâm. Dùng khi cần một góc nhìn khác trước khi quyết định.'};</script>
 <script src="/auth.js?v=2"></script>
 <script src="/tuvi-paywall.js?v=20"></script>
-  <script src="/nav.js?v=22" data-icons-only></script>
-<script src="/shell.js?v=73"></script>
+  <script src="/nav.js?v=23" data-icons-only></script>
+<script src="/shell.js?v=82"></script>
 <script>
 function initTarot(){
   Shell.setContext({

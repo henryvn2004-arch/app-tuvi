@@ -35,18 +35,29 @@ export interface ChatConfig {
   /** Giá Lượng trừ cho 1 lượt trả lời thành công (0 = miễn phí) */
   cost: number;
   /**
-   * Provider cho các route STANDALONE (không qua runAgent): cron, /api/lasotuvi,
-   * tuong-mat, phong-thuy, tubinh, xem-tuoi. 'gemini' (mặc định) hoặc 'anthropic'.
-   * Đây là provider CHÍNH; helper llm luôn thử provider kia làm BACKUP nếu lỗi.
-   * Đổi qua app_config 'chat.standalone_provider' — không deploy.
+   * Provider ĐỨNG ĐẦU cho các route STANDALONE (không qua runAgent): cron,
+   * /api/lasotuvi, tuong-mat, phong-thuy, tubinh, xem-tuoi, van-han-nam,
+   * day-con, huong-nghiep-tre. 'gemini' hoặc 'anthropic'. Còn lại xếp theo
+   * `CANONICAL_ORDER` của lib/llm/complete.ts — Kimi K3 LUÔN đứng cuối (không
+   * ổn định, chỉ làm lưới đỡ cuối cùng, xem chốt Henry 2026-08-24). Một số
+   * route "luận giải" quan trọng tự ép `provider:'anthropic'` NGAY TẠI lệnh
+   * gọi (LlmTextOpts.provider), bỏ qua khoá này cho ĐÚNG lượt đó. Đổi khoá
+   * này qua app_config 'chat.standalone_provider' — không deploy.
    */
   standaloneProvider: string;
   /**
-   * Định tuyến provider LLM theo từng kịch bản (toolType) → 'gemini' | 'anthropic'.
-   * Key '_default' áp cho kịch bản không liệt kê. Chỉ có tác dụng cho các kịch
-   * bản prose-thuần an toàn (xem GEMINI_PROSE_SCENARIOS); laso/luận-giải/bát-tự
-   * và vision LUÔN dùng Anthropic bất kể cấu hình. Sửa `chat.provider_routes`
-   * trong app_config để bật/tắt từng tool — KHÔNG cần deploy.
+   * Định tuyến provider LLM theo từng kịch bản (toolType) → 'gemini' |
+   * 'anthropic', dùng bởi rail chat (lib/agent/run.ts). Key '_default' áp cho
+   * kịch bản không liệt kê. Chỉ có tác dụng cho các kịch bản prose-thuần an
+   * toàn (xem GEMINI_PROSE_SCENARIOS) — nếu route = 'gemini' và kịch bản
+   * không nằm trong whitelist đó thì vẫn KHÔNG đi Gemini. Kimi K3 không đọc
+   * khoá này (luôn chạy cuối, xem run.ts) — khoá này chỉ chọn giữa
+   * Gemini-đứng-đầu và Opus-đứng-đầu.
+   * 🔴 CHỐT HENRY 2026-08-24: rail chat lưu lượng cao + Opus API mắc → TOÀN
+   * BỘ kịch bản mặc định 'gemini' (không còn ngoại lệ 'anthropic' nào ở đây).
+   * Opus vẫn là lưới đỡ khi Gemini lỗi, không bị gỡ khỏi hệ thống. Sửa
+   * `chat.provider_routes` trong app_config để bật/tắt từng tool — KHÔNG cần
+   * deploy.
    */
   providerRoutes: Record<string, string>;
   /**
@@ -61,23 +72,48 @@ export interface ChatConfig {
 export const DEFAULTS: ChatConfig = {
   systemPrompt: '', // rỗng = dùng template chung lib/agent/prompts
 
-  model: 'claude-sonnet-4-6',
+  // Model Anthropic dùng ở NHÁNH ANTHROPIC (dù nó đứng đầu hay đứng sau
+  // Gemini — xem `standaloneProvider`/`providerRoutes` bên dưới).
+  model: 'claude-opus-5',
   maxRounds: 4,
-  maxTokens: 3000, // đủ cho câu luận sâu 1 phần (24-phần cho tới 3000); DB app_config 'chat.max_tokens' override được. Câu ngắn không tốn thêm (chỉ trả token thực sinh).
+  // 🔴 Henry chốt 2026-08-20 (retest sau khi bật Kimi K3): nhiều lượt bị CẮT
+  // NGANG (rail chat lẫn Luận Giải) — nghi trần token của TỪNG PHẦN quá sát so
+  // với độ dài model thực sinh. Nâng ĐỀU 50% mọi trần trong repo (đây
+  // là trần MẶC ĐỊNH khi DB app_config 'chat.max_tokens' chưa override; 3000
+  // cũ → 4500). Trần chỉ chặn phần SINH DƯ, không phải mục tiêu — nâng trần
+  // không tốn thêm đồng nào cho các lượt vốn đã sinh ngắn hơn trần cũ.
+  maxTokens: 4500,
   cost: 5, // 5 Lượng / lượt — giá chuẩn; DB app_config 'chat.cost' override được (không cần deploy)
-  standaloneProvider: 'gemini', // route standalone dùng Gemini, Anthropic tự backup
-  // Gemini (2.5 Flash) cho MỌI kịch bản đủ điều kiện (prose + vision + bát tự)
-  // qua '_default'. Các tool KHÔNG đủ điều kiện — laso (luận-giải/lá-số, dùng
-  // function-calling cho vận hạn) — KHÔNG thuộc GEMINI_PROSE/VISION_SCENARIOS
-  // nên tự động giữ Sonnet (chất cao nhất + paywall). Đổi route từng tool qua
-  // app_config 'chat.provider_routes' — không deploy, revert tức thì.
+  // 🔴 CHỐT HENRY 2026-08-24: Kimi K3 không ổn định (hay chậm/timeout) → LUÔN
+  // đứng CUỐI chuỗi provider (CANONICAL_ORDER trong lib/llm/complete.ts),
+  // không còn là lựa chọn primary/fallback ở đây nữa. Mặc định toàn site cho
+  // route STANDALONE (cron, /api/lasotuvi, tuong-mat, phong-thuy, tubinh,
+  // xem-tuoi, van-han-nam, day-con, huong-nghiep-tre): Gemini Flash primary.
+  // Giá trị dưới đây chỉ là fallback-khi-Supabase-không-đọc-được — DB LIVE
+  // `chat.standalone_provider` mới là thứ quyết định thật lúc chạy.
+  standaloneProvider: 'gemini',
+  // 🔴 CHỐT HENRY 2026-08-24 (vá cùng ngày, sau lượt Opus-primary ở trên):
+  // "Toàn bộ chat rail dùng gemini flash hết. Ko có opus luôn. Vì phần chat
+  // nó user dùng nhiều. Mà opus api thì mắc lắm" — rail chat (lượt hỏi-đáp
+  // lặp lại nhiều lần/phiên qua /api/v1/chat) có LƯU LƯỢNG cao hơn hẳn các
+  // route luận giải một-lần (lasotuvi/tubinh/xem-tuoi/van-han-nam/day-con/
+  // huong-nghiep-tre — các route ĐÓ vẫn giữ `provider:'anthropic'` ép tại
+  // lệnh gọi, KHÔNG đụng, vì đó không phải "chat"). Opus 5 vẫn còn — chỉ
+  // không còn là PRIMARY cho bất kỳ kịch bản rail nào; nó vẫn là lưới đỡ nếu
+  // Gemini lỗi (xem lib/agent/run.ts "FALLBACK NGƯỢC"), Kimi K3 luôn cuối
+  // cùng. Giá trị dưới đây chỉ là fallback-khi-Supabase-không-đọc-được — DB
+  // LIVE `chat.provider_routes` mới là thứ quyết định thật lúc chạy (đổi qua
+  // Admin, KHÔNG cần deploy).
   providerRoutes: {
     _default: 'gemini',
-    // VƯƠNG MIỆN có paywall — MẶC ĐỊNH giữ Sonnet (chất cao nhất). Adapter
-    // Gemini function-calling ĐÃ có nhưng NGỦ: flip 'laso'='gemini' qua
-    // app_config để bật thử (revert 1 dòng, không deploy). Bao gồm cả luận-giải
-    // lẫn lá-số (đều đi path 'laso').
-    laso: 'anthropic',
+    laso: 'gemini',
+    'cong-so': 'gemini',
+    'day-con': 'gemini',
+    'huong-nghiep-tre': 'gemini',
+    'than-so-hoc': 'gemini',
+    'tu-binh': 'gemini',
+    'xem-tuoi': 'gemini',
+    'xem-lam-an': 'gemini',
   },
   companion: COMPANION_DEFAULTS,
 };

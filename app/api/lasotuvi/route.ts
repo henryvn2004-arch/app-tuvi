@@ -1,5 +1,10 @@
 // app/api/lasotuvi/route.ts
-export const maxDuration = 60;
+// 60 → 300: MỘT lượt có thể thử tới 3 provider TUẦN TỰ (mỗi provider tự retry
+// lỗi tạm thời trước khi coi là hỏng — xem lib/llm/complete.ts), cộng thêm
+// trần token nâng 50% (2026-08-20) → 60s không còn đủ, dễ ăn timeout của
+// Vercel (trả về trang lỗi nền tảng "An error occurred..." — KHÔNG PHẢI JSON,
+// làm client vỡ khi JSON.parse). Đồng bộ với các route LLM nặng khác đã ở 300.
+export const maxDuration = 300;
 
 import { NextRequest } from 'next/server';
 import { ok, err, options, parseBody, CORS_HEADERS } from '@/lib/cors';
@@ -9,7 +14,7 @@ import { buildChatContext, nguoiXemLine } from '@/lib/agent/prompts';
 // Prompt bản luận giải 24 phần — DỜI sang lib để tool "Vận Hạn 12 Tháng
 // Tới" dùng lại đúng 4 phần đầu mà không chép bản thứ hai (Next chặn export
 // lạ trong route file). Xem lib/agent/luan-giai-doc.ts.
-import { SYSTEM_PROMPT, buildPrompt } from '@/lib/agent/luan-giai-doc';
+import { buildPromptCached } from '@/lib/agent/luan-giai-doc';
 // LLM Gemini-primary + Anthropic-backup (provider từ app_config
 // 'chat.standalone_provider'). callLLMTools trả shape Anthropic → giữ nguyên
 // vòng lặp tool bên dưới; llmTextFull cho luận 24 phần (phan) — bản `Full` để
@@ -22,7 +27,7 @@ import { withToolOutcome } from '@/lib/ops/tool-outcome';
 // Trả shape Anthropic ({content, stop_reason, usage}) dù provider nào → vòng
 // lặp tool phía dưới KHÔNG đổi.
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-async function callLLM(system: any, convo: any[], tools: any[], toolChoiceNone = false, maxTokens = 1500): Promise<any> {
+async function callLLM(system: any, convo: any[], tools: any[], toolChoiceNone = false, maxTokens = 2250): Promise<any> {
   return callLLMTools(system, convo, tools, toolChoiceNone, maxTokens);
 }
 
@@ -242,38 +247,61 @@ async function runPost(request: NextRequest) {
   const { laSoText, phan, docs, hoTen, gioiTinh } = body as { laSoText?: string; phan?: number; docs?: string; hoTen?: string; gioiTinh?: string };
   if (!laSoText || !phan) return err('Thiếu dữ liệu', 400);
 
+  let systemForLLM: string;
   let prompt: string;
   try {
     // "Người xem: <tên> (giới tính)" lên đầu prompt → xưng hô đúng (client gửi hoTen/gioiTinh).
     const nx = nguoiXemLine(hoTen, gioiTinh);
-    prompt = (nx ? nx + '\n' : '') + buildPrompt(Number(phan), laSoText, docs);
+    const cached = buildPromptCached(Number(phan), laSoText, docs);
+    systemForLLM = cached.system;
+    prompt = (nx ? nx + '\n' : '') + cached.prompt;
   }
   catch (e: unknown) { return err('buildPrompt error: ' + (e as Error).message); }
 
   try {
-    const maxTok = phan === 1 ? 2000 : phan === 14 ? 3000 : phan === 24 ? 1400
-      : (phan >= 2 && phan <= 13) ? 1100 : (phan >= 15 && phan <= 23) ? 1100 : 1000;
+    // Henry chốt 2026-08-20: nâng ĐỀU 50% mọi trần token trong repo — retest
+    // sau khi bật Kimi K3 primary bắt được bản luận giải bị CẮT NGANG giữa
+    // câu (model sinh vượt trần rồi API cắt sạch, không phải lỗi mạng).
+    const maxTok = phan === 1 ? 3000 : phan === 14 ? 4500 : phan === 24 ? 2100
+      : (phan >= 2 && phan <= 13) ? 1650 : (phan >= 15 && phan <= 23) ? 1650 : 1500;
 
-    // Prompt + dữ liệu GIỮ NGUYÊN; chỉ đổi backend provider (Gemini-primary,
-    // Anthropic-backup). Bỏ cache_control (tối ưu riêng Anthropic; Gemini cache ngầm).
+    // Prompt caching (Code #1, xem CLAUDE.md track tối ưu chi phí Opus):
+    // `systemForLLM` = SYSTEM_PROMPT + TOÀN VĂN lá số (buildPromptCached),
+    // GIỐNG HỆT NHAU byte-for-byte ở cả 24 lượt của MỘT người xem → bật
+    // `cacheSystem:true` để nhánh Anthropic đóng breakpoint `cache_control`
+    // TTL 1h lên khối đó (Gemini/Kimi bỏ qua cờ này, không cache). Lượt đầu
+    // ghi cache (đắt hơn ~1,25×), các lượt sau chỉ đọc (~0,1×) — điều kiện là
+    // lượt mồi phải ghi cache XONG trước khi mở song song (xem
+    // public/app-luan-giai.html `_startLuanGiaiAI`: chạy phần 1 riêng lẻ rồi
+    // mới mở pool song song cho phần còn lại — né bẫy "3 lượt song song đầu
+    // đều cache-miss").
     //
     // Dùng llmTextFull thay llmText để LẤY ĐƯỢC usage + thời lượng: trước đây
     // route này KHÔNG ghi một dòng `llm_usage` nào, nên Luận Giải — tool bán
     // chạy nhất (1.500 Lượng / 3 người) — hoàn toàn vô hình trong panel Biên
     // Lợi Nhuận, và cũng không có số nào để đặt ETA cho 24 phần.
-    const r = await llmTextFull({ system: SYSTEM_PROMPT, prompt, maxTokens: maxTok });
+    // `provider:'anthropic'` (chốt Henry 2026-08-24): Luận Giải Lá Số + Chu
+    // Trình Cuộc Đời (phan>13, cùng route) nằm trong nhóm tool "luận giải"
+    // quan trọng → Opus 5 primary thay vì Gemini Flash mặc định toàn site (xem
+    // lib/llm/complete.ts). Ép ở ĐÚNG lệnh gọi này, KHÔNG đụng
+    // `chat.standalone_provider` — khoá đó vẫn quyết định primary cho mọi
+    // route standalone khác. Cũng giữ nguyên hiệu quả `cacheSystem` (breakpoint
+    // Anthropic) vì nhánh Anthropic giờ LUÔN được gọi ở lượt đầu.
+    const r = await llmTextFull({ system: systemForLLM, prompt, maxTokens: maxTok, cacheSystem: true, provider: 'anthropic' });
     const text = r.text;
-    // tool_id 'laso' = ĐÚNG `tool_pricing.tool_id` của Luận Giải (events dùng
-    // 'luan-giai', giao dịch dùng 'use_laso' — ba hệ tên lệch nhau, xem
-    // tool_canon() trong CLAUDE.md). Ghi theo id mà GIÁ treo vào thì bucket chi
-    // phí mới ghép được với bucket doanh thu.
+    // tool_id ĐÚNG `tool_pricing.tool_id` để bucket chi phí ghép được với bucket
+    // doanh thu (xem tool_canon() trong CLAUDE.md). Phần 1-13 (tổng quan + 12
+    // cung) thuộc "Luận Giải Tử Vi" (laso); phần 14-24 (đại vận + tiểu vận) đã
+    // TÁCH sang tool RIÊNG "Chu Trình Cuộc Đời" (chu-trinh-cuoc-doi) — route này
+    // phục vụ CẢ HAI tool (client gửi đúng số phan engine của tool đang gọi) nên
+    // phải chọn bucket theo SỐ PHẦN, không còn chép cứng 'laso' cho mọi lượt.
     void logLlmUsage(
-      'laso',
+      Number(phan) <= 13 ? 'laso' : 'chu-trinh-cuoc-doi',
       r.model,
       {
         input_tokens: r.usage.input_tokens,
-        cache_creation_input_tokens: 0,
-        cache_read_input_tokens: 0,
+        cache_creation_input_tokens: r.usage.cache_creation_input_tokens,
+        cache_read_input_tokens: r.usage.cache_read_input_tokens,
         output_tokens: r.usage.output_tokens,
       },
       r.durationMs,

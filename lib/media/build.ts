@@ -159,7 +159,7 @@ async function writeCaption(title: string, quote: string): Promise<CaptionOut | 
     const raw = await llmText({
       system: CAPTION_SYSTEM,
       prompt: JSON.stringify({ tieu_de: title, cau_trich: quote }),
-      maxTokens: 700,
+      maxTokens: 1050, // Nâng 50% (Henry chốt 2026-08-20)
     });
     const m = raw.match(/\{[\s\S]*\}/);
     if (!m) return null;

@@ -116,6 +116,7 @@ function setupTabs() {
       if (btn.dataset.tab === 'credits') loadCredits();
       if (btn.dataset.tab === 'ketnoi') loadKetnoi();
       if (btn.dataset.tab === 'thaynho') loadMemory();
+      if (btn.dataset.tab === 'nhiemvu') { loadReferralPanel(); loadQuestTasks(); loadMyShares(); }
     });
   });
   // Mở thẳng một tab qua địa chỉ: `/profile.html#ketnoi`. Trước đây tab chỉ đổi
@@ -596,6 +597,143 @@ async function loadReferralPanel() {
     });
   }
   sec.style.display = '';
+}
+
+// ── TAB NHIỆM VỤ — Khởi Hành + Kênh liên lạc ────────────────────────────────
+// Cùng nguồn dữ liệu với thẻ Khởi Hành trên Tổng Quan
+// (`/api/payment?action=onboarding-sync`, lib/onboarding/tasks.ts) — server
+// tự kiểm bằng chứng và tự cộng, trang này CHỈ vẽ. Khác Tổng Quan ở chỗ:
+//   • #qtCard KHÔNG ẩn khi xong cả ba bước — đây là nơi TRA CỨU, ẩn đi sau khi
+//     hoàn tất thì mất luôn bằng chứng đã làm.
+//   • #chCard (kênh liên lạc) VẪN ẩn khi cả hai đã xong — không có gì để tra
+//     cứu thêm, giữ nó là chiếm chỗ một khối toàn dấu tích.
+// `d.khoiHanh` (3 bước, thưởng CHUỖI) và `d.channels.tasks` (2 nhiệm vụ độc
+// lập) dùng CHUNG mảng `_qtDefs` để nút bấm tra ngược theo chỉ số — xem
+// questTaskGo(). Không nội suy chuỗi từ server vào thuộc tính onclick: dấu
+// nháy trong chuỗi là vỡ thẻ (cùng lý do đã ghi ở phần Thầy Nhớ bên dưới).
+var _qtDefs = [];
+
+async function loadQuestTasks() {
+  var host = document.getElementById('qtBody');
+  if (!host || !(await _tok())) return;
+  try {
+    const res = await fetch('/api/payment?action=onboarding-sync', {
+      method: 'POST',
+      headers: { Authorization: 'Bearer ' + (await _tok()) },
+    });
+    const d = await res.json();
+    if (d && d.khoiHanh) { renderQuestTasks(d.khoiHanh); renderChannelTasks(d.khoiHanh.steps.length, (d.channels && d.channels.tasks) || []); }
+    else host.innerHTML = '<div style="color:var(--text-lt);font-size:.85rem">Không đọc được tiến độ. Thử tải lại trang.</div>';
+  } catch (e) {
+    host.innerHTML = '<div style="color:var(--text-lt);font-size:.85rem">Không đọc được tiến độ. Thử tải lại trang.</div>';
+  }
+}
+
+function questRowHtml(t, i) {
+  return '<div class="qt-row' + (t.done ? ' done' : '') + '"><div class="qt-tick"></div>'
+    + '<div class="qt-body"><div class="qt-t">' + escHtml(t.title) + '</div>'
+    + (t.done ? '' : '<div class="qt-d">' + escHtml(t.desc) + '</div>') + '</div>'
+    + '<div class="qt-pay"><div class="qt-amt">' + (t.done ? '+' : '') + (+t.credits || 0) + ' Lượng</div>'
+    + (t.done ? '' : '<button class="qt-go" type="button" data-i="' + i + '">' + escHtml(t.cta) + '</button>')
+    + '</div></div>';
+}
+
+function renderQuestTasks(kh) {
+  const host = document.getElementById('qtBody');
+  if (!host) return;
+  let done = 0;
+  for (let i = 0; i < kh.steps.length; i++) if (kh.steps[i].done) done++;
+
+  let h = kh.claimed
+    ? '<div class="qt-top"><div class="qt-count" style="color:var(--green)">✓ Đã hoàn tất — +' + (+kh.credits || 0) + ' Lượng đã vào ví.</div></div>'
+    : '<div class="qt-top"><div style="font-size:.85rem;color:var(--text-mid)">' + done + '/' + kh.steps.length + ' bước</div>'
+      + '<div class="qt-count">+' + (+kh.credits || 0) + ' Lượng khi xong cả ' + kh.steps.length + '</div></div>';
+  if (kh.justGranted) h += '<div class="qt-note ok">✓ Vừa cộng <b>+' + (+kh.credits || 0) + ' Lượng</b> vào ví bạn.</div>';
+
+  // Bước Khởi Hành chiếm CHỈ SỐ 0..N-1 của `_qtDefs`; renderChannelTasks nối
+  // tiếp từ đó — thứ tự gọi PHẢI là render Khởi Hành trước rồi mới tới kênh
+  // liên lạc (loadQuestTasks() đã gọi đúng thứ tự này).
+  _qtDefs = kh.steps.slice();
+  h += '<div>' + kh.steps.map(function (t, i) { return questRowHtml(t, i); }).join('') + '</div>';
+
+  host.innerHTML = h;
+  host.querySelectorAll('.qt-go').forEach(function (b) { b.onclick = questTaskGo; });
+  if (window.mountIcons) window.mountIcons(host);
+}
+
+function renderChannelTasks(indexOffset, tasks) {
+  const card = document.getElementById('chCard');
+  const host = document.getElementById('chBody');
+  if (!card || !host) return;
+  if (!tasks.length || tasks.every(function (t) { return t.done; })) { card.style.display = 'none'; return; }
+
+  const granted = tasks.filter(function (t) { return t.justGranted; })
+    .reduce(function (s, t) { return s + (+t.credits || 0); }, 0);
+  let h = granted > 0 ? '<div class="qt-note ok">✓ Vừa cộng <b>+' + granted + ' Lượng</b> vào ví bạn.</div>' : '';
+
+  _qtDefs = _qtDefs.concat(tasks);
+  h += '<div>' + tasks.map(function (t, i) { return questRowHtml(t, indexOffset + i); }).join('') + '</div>';
+
+  host.innerHTML = h;
+  card.style.display = '';
+  host.querySelectorAll('.qt-go').forEach(function (b) { b.onclick = questTaskGo; });
+  if (window.mountIcons) window.mountIcons(host);
+}
+
+function questTaskGo() {
+  const t = _qtDefs[+this.getAttribute('data-i')];
+  if (!t) return;
+  const href = t.href || '';
+  // `href` rỗng = việc chỉ làm được TẠI Tổng Quan (ô lá số/rail của thẻ "Vận
+  // hôm nay", hoặc quyền thông báo trình duyệt) — tab này không có UI đó, đưa
+  // người ta tới đúng chỗ có thay vì cố dựng lại một bản thứ hai ở đây.
+  if (!href) { location.href = '/app'; return; }
+  // Trỏ VÀO CHÍNH trang đang đứng (`/app/tai-khoan#<tab>`) thì chuyển tab TẠI
+  // CHỖ thay vì tải lại cả trang.
+  const m = /^\/app\/tai-khoan#(.+)$/.exec(href);
+  if (m) {
+    const b = document.querySelector('.tab-btn[data-tab="' + CSS.escape(m[1]) + '"]');
+    if (b) { b.click(); return; }
+  }
+  location.href = href;
+}
+
+// ── TAB NHIỆM VỤ — lịch sử "Chia Sẻ" ─────────────────────────────────────
+// #599 gỡ nút "Khoe kết quả" (nộp bằng chứng + chờ admin duyệt) — quest này
+// đổi sang đọc lại `shared_results` (mỗi lần bấm "Chia sẻ" trong workspace
+// ghi 1 dòng, `view_count` +1 mỗi lượt `/ket-qua/<id>` được mở). Chưa gắn
+// thưởng vào số lượt xem này — `view_count` cộng cả bot xem-trước của
+// Facebook/Zalo/WhatsApp lẫn chính chủ tự mở lại, nên chỉ HIỆN cho biết,
+// không dùng để tính Lượng.
+async function loadMyShares() {
+  const host = document.getElementById('spBody');
+  if (!host || !(await _tok())) return;
+  try {
+    const res = await fetch('/api/payment?action=my-shares', {
+      headers: { Authorization: 'Bearer ' + (await _tok()) },
+    });
+    const d = await res.json();
+    renderMyShares((d && d.shares) || []);
+  } catch (e) {
+    host.innerHTML = '<div style="color:var(--text-lt);font-size:.85rem">Không đọc được lịch sử.</div>';
+  }
+}
+
+function renderMyShares(list) {
+  const host = document.getElementById('spBody');
+  if (!host) return;
+  if (!list.length) {
+    host.innerHTML = '<div style="color:var(--text-lt);font-size:.85rem">Bạn chưa chia sẻ lượt nào.</div>';
+    return;
+  }
+  host.innerHTML = list.map(function (s) {
+    const date = new Date(s.created_at).toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' });
+    const views = Number(s.view_count) || 0;
+    return '<div class="sp-row"><div style="flex:1;min-width:0">'
+      + '<div class="sp-plat">' + escHtml(s.title || 'Kết quả') + '</div>'
+      + '<div class="sp-meta">' + date + '</div></div>'
+      + '<span class="sp-status approved">' + views + ' lượt xem</span></div>';
+  }).join('');
 }
 
 async function loadCredits() {

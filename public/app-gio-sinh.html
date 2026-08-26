@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"></noscript>
-<link rel="stylesheet" href="/shell.css?v=19">
+<link rel="stylesheet" href="/shell.css?v=29">
 <style>
 .form-card{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);max-width:860px}
 .form-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:3px}
@@ -86,7 +86,8 @@
       <div id="birthPanel">
         <div class="form-card">
           <h2>Xác Định Giờ Sinh</h2>
-          <p class="sub">Chỉ cần <b>ngày tháng năm sinh</b> — giờ chính là thứ đi tìm. Máy lập cả <b>12 lá số khả nghi</b> rồi thu hẹp dần bằng vài câu hỏi về sức khoẻ và các giai đoạn anh/chị đã sống qua.</p>
+          <p class="sub">Lập 12 lá số theo 12 giờ, thu hẹp dần về đúng giờ sinh. Bạn chỉ nhớ sinh buổi sáng, không ai trong nhà nhớ chính xác. Dùng khi không nhớ giờ sinh mà mọi công cụ khác đều cần nó.</p>
+          <p class="price-note" data-tvp-price-label="gio-sinh">…</p>
           <div class="frow">
             <div class="fg"><label for="gs-ngay">Ngày</label><select id="gs-ngay"></select></div>
             <div class="fg"><label for="gs-thang">Tháng</label><select id="gs-thang"></select></div>
@@ -187,7 +188,7 @@
 </div>
 
 <script>window.SHELL_ACTIVE='gio-sinh';window.SHELL_HISTORY=true;
-window.SHELL_INTRO={key:'gio-sinh',title:'Xác Định Giờ Sinh',desc:'Không nhớ giờ sinh thì gần như không dùng được tool tử vi nào. Ở đây máy lập <b>cả 12 lá số khả nghi</b> cho ngày sinh của anh/chị, rồi hỏi vài câu về <b>sức khoẻ</b> và <b>các giai đoạn đã sống qua</b> để thu hẹp lại. Kết quả là <b>2–3 giờ khả năng cao nhất kèm bằng chứng</b> — không phải một con số chắc nịch.'};</script>
+window.SHELL_INTRO={key:'gio-sinh',title:'Xác Định Giờ Sinh',desc:'Lập 12 lá số theo 12 giờ, thu hẹp dần về đúng giờ sinh. Bạn chỉ nhớ sinh buổi sáng, không ai trong nhà nhớ chính xác. Dùng khi không nhớ giờ sinh mà mọi công cụ khác đều cần nó.'};</script>
 
 <script src="/tuvi-paywall.js?v=21"></script>
 <!-- ⚠️ BẮT BUỘC. `nav.js` ở chế độ `data-icons-only` RETURN SỚM nên KHÔNG chèn
@@ -195,8 +196,8 @@ window.SHELL_INTRO={key:'gio-sinh',title:'Xác Định Giờ Sinh',desc:'Không 
      tại, paywall coi người ĐANG ĐĂNG NHẬP là khách và bắt đăng nhập lại.
      `check:shellboot` canh đúng chỗ này. -->
 <script src="/auth.js?v=2"></script>
-<script src="/nav.js?v=22" data-icons-only></script>
-<script src="/shell.js?v=73"></script>
+<script src="/nav.js?v=23" data-icons-only></script>
+<script src="/shell.js?v=82"></script>
 <script>
 const TOOL_ID='gio-sinh';
 let _birth=null,_answers=[],_pub=null,_lastResult=null,_slug='';

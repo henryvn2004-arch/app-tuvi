@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<link rel="preload" href="/nav.js?v=20" as="script">
+<link rel="preload" href="/nav.js?v=23" as="script">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Personal Color AI — Tông Màu Cá Nhân | Tử Vi Minh Bảo</title>
 <meta name="description" content="AI phân tích undertone và Personal Color Season — gợi ý màu áo, màu tóc và phụ kiện làm sáng gương mặt nhất. Kết hợp cổ pháp ngũ hành.">
@@ -12,8 +12,9 @@
 <link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;600;700&family=DM+Sans:wght@300;400;500&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"></noscript>
 <script src="/auth.js"></script>
 <script src="/tuvi-paywall.js?v=21"></script>
-<script src="/tools-shared/ai-loading-steps.js?v=7"></script>
-<script src="/nav.js?v=20" defer></script>
+<script src="/tools-shared/ai-loading-steps.js?v=9"></script>
+<script src="/nav.js?v=23" defer></script>
+<link rel="stylesheet" href="/tools/tools.css">
 <style>
 :root{
   --navy:#061A2E;--navy-mid:#0D3B5E;--blue:#1455A4;
@@ -70,8 +71,8 @@ h1,h2,h3{font-family:'Noto Serif',serif;}
 
 .form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px;}
 @media(max-width:480px){.form-row{grid-template-columns:1fr;}}
-.form-group{display:flex;flex-direction:column;gap:5px;}
-.form-label{font-size:12px;color:var(--text-mid);font-weight:600;}
+.form-group{display:flex;flex-direction:column;gap:5px;margin-bottom:0;}
+.form-label{font-size:12px;color:var(--text-mid);font-weight:600;text-transform:none;letter-spacing:normal;margin-bottom:0;}
 .form-control{padding:9px 11px;border:1.5px solid var(--border);border-radius:8px;
   font-size:13px;color:var(--text);background:var(--bg);outline:none;transition:border-color .2s;}
 .form-control:focus{border-color:#9b59b6;}
@@ -209,6 +210,7 @@ h1,h2,h3{font-family:'Noto Serif',serif;}
 
 <div class="hero">
   <div class="hero-badge">✦ Personal Color × Cổ Pháp Ngũ Hành</div>
+  <img class="hero-avatar" src="/tool-avatars/personal-color.webp" alt="" loading="lazy" onerror="this.remove()">
   <h1>Tông Màu <span>Cá Nhân</span></h1>
   <p>AI phân tích undertone và season type từ ảnh mặt — gợi ý màu áo, màu tóc và phụ kiện làm sáng gương mặt nhất. Kết hợp cổ pháp bản mệnh.</p>
   <div class="season-strip">
@@ -755,7 +757,7 @@ async function downloadTryon() {
     </div>
   </div>
 </section>
-<script src="/nav.js?v=20" defer></script>
+<script src="/nav.js?v=23" defer></script>
 <script src="/tool-sources.js?v=1"></script>
 <script>
   if (window.ToolSources) {

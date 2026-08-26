@@ -1,6 +1,7 @@
 // app/tu-dien/route.ts — Từ Điển Index Page
 export const revalidate = 86400;
 import { NextResponse } from 'next/server';
+import { ORG_ID } from '@/lib/seo/entity';
 
 const SB_URL = process.env.SUPABASE_URL!;
 const SB_KEY = process.env.SUPABASE_SERVICE_KEY!;
@@ -83,7 +84,7 @@ export async function GET() {
   name:'Từ Điển Tử Vi Minh Bảo',
   description:`Từ điển tử vi cổ pháp ${totalCount} mục`,
   url:`${BASE}/tu-dien`,
-  publisher:{'@type':'Organization',name:'Tử Vi Minh Bảo',url:BASE}
+  publisher:{'@type':'Organization', '@id': ORG_ID,name:'Tử Vi Minh Bảo',url:BASE}
 })}</script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -124,7 +125,7 @@ body{font-family:Arial,sans-serif;background:var(--bg);color:var(--text);min-hei
 </style>
 <script src="/auth.js"></script>
 </head><body>
-<script src="/track.js?v=3" defer></script><script src="/nav.js?v=20"></script>
+<script src="/track.js?v=3" defer></script><script src="/nav.js?v=23"></script>
 <div class="bc"><a href="/">Trang Chủ</a><span>›</span><span>Từ Điển</span></div>
 
 <div class="td-hero">

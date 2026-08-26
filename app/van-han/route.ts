@@ -4,6 +4,7 @@ export const revalidate = false;
 
 import { NextResponse } from 'next/server';
 import { currentNamXem } from '@/lib/engine/namxem';
+import { ORG_ID } from '@/lib/seo/entity';
 
 const BASE      = 'https://www.tuviminhbao.com';
 const CHI_NAMES = ['Tý','Sửu','Dần','Mão','Thìn','Tỵ','Ngọ','Mùi','Thân','Dậu','Tuất','Hợi'];
@@ -62,7 +63,7 @@ export async function GET() {
   '@context':'https://schema.org','@type':'CollectionPage',
   name: title, description: desc, url: `${BASE}/van-han`,
   inLanguage: 'vi',
-  publisher: { '@type':'Organization', name:'Tử Vi Minh Bảo', url: BASE },
+  publisher: { '@type':'Organization', '@id': ORG_ID, name:'Tử Vi Minh Bảo', url: BASE },
 })}</script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -99,7 +100,7 @@ h1 em{font-style:italic;color:var(--gold)}
   ${yearBlocks}
 </div>
 <script src="/footer.js"></script>
-<script src="/track.js?v=3" defer></script><script src="/nav.js?v=20" defer></script>
+<script src="/track.js?v=3" defer></script><script src="/nav.js?v=23" defer></script>
 </body>
 </html>`;
 

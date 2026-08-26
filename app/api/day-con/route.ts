@@ -6,7 +6,9 @@
 // Tool "Dạy Con Theo Lá Số" (T2). Một pha: không sinh ảnh nên cả lượt chỉ tốn
 // ĐÚNG một lượt LLM.
 
-export const maxDuration = 120;
+// 120 → 300 (2026-08-20): llmTextFull nay chuỗi 3 provider (Kimi K3 → Opus 5
+// → Gemini Flash) + trần token đã nâng 50% — cùng lý do lasotuvi/route.ts.
+export const maxDuration = 300;
 export const runtime = 'nodejs';
 
 import { NextRequest } from 'next/server';
@@ -18,6 +20,7 @@ import { logLlmUsage, logLlmParseFail } from '@/lib/agent/usage';
 import { railFreeGrant, railFreeTurnsPerGen } from '@/lib/billing/viral-budget';
 import { computeLaso, type Laso } from '@/lib/engine/laso';
 import { computeDayCon, resolveMoiLo, type DayConProfile } from '@/lib/engine/day-con';
+import { coSoDoc } from '@/lib/engine/nguoi-khac';
 import { DAY_CON_SYSTEM_PROMPT, DAY_CON_SCHEMA, buildDayConPrompt } from '@/lib/agent/day-con-prompt';
 import type { BirthParams } from '@/lib/contract/v1';
 import { withToolOutcome } from '@/lib/ops/tool-outcome';
@@ -166,7 +169,15 @@ async function buildReport(
         jsonSchema: DAY_CON_SCHEMA,
         // 3.200 đủ cho 9 khoá; khung mới thêm `chatNoi`/`dinhHuong`/`hoatDong`
         // nên nới lên — chạm trần là JSON cụt và cả lượt rơi vào nhánh thử lại.
-        maxTokens: 4400,
+        // Nâng thêm 50% cùng đợt (Henry chốt 2026-08-20).
+        maxTokens: 6600,
+        // provider:'anthropic' (chốt Henry 2026-08-24): Dạy Con Theo Lá Số
+        // thuộc nhóm tool "luận giải" quan trọng → Opus 5 primary (xem
+        // lib/llm/complete.ts CANONICAL_ORDER). Lưu ý: `jsonSchema` KHÔNG có
+        // tác dụng ép shape ở nhánh Anthropic (chỉ Gemini đọc field này) — vẫn
+        // an toàn nhờ cơ chế `nudge` retry sẵn có ở hàm này khi JSON sai định
+        // dạng.
+        provider: 'anthropic',
       });
       void logLlmUsage(TOOL_ID, r.model, {
         input_tokens: r.usage.input_tokens,
@@ -264,6 +275,11 @@ async function runPreview(request: NextRequest) {
     success: true,
     preview: true,
     ...meta(p, String(body.name || '').trim().slice(0, 60)),
+    // C1 — CHỈ ở lượt tính thử: lá chắn cho phản đối "AI nó bịa thôi", đúng chỗ
+    // người ta chưa tin gì và đang cân xem có đáng trả tiền không. Hàm dùng
+    // CHUNG với `nguoi-khac`, và câu trích cũng đi qua chính `locCachCuc` nên
+    // không nói về thọ mệnh/bệnh tật của một đứa trẻ.
+    coSo: coSoDoc(r.ls, p),
   });
 }
 

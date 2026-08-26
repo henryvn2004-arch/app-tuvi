@@ -112,3 +112,63 @@ export async function POST(request: NextRequest) {
     return err((e as Error).message || 'Lỗi tạo link chia sẻ', 500);
   }
 }
+
+/**
+ * PATCH — chủ nhân của link tự đổi hai cờ hiển thị.
+ *
+ * `{ id, galleryOptOut?: boolean, revoked?: boolean }`
+ *
+ * 🔑 C3 — Henry chốt **auto opt-in**: mọi bản chia sẻ mặc định có mặt trong Thư
+ * viện chung (`/thu-vien`), ai không muốn thì tự ẩn. Đây là đường "tự ẩn" đó.
+ *
+ * Nhân tiện mở luôn `revoked`: cột này có từ đầu và `/ket-qua` đã đọc nó để trả
+ * 404, nhưng **CHƯA CÓ MỘT DÒNG CODE NÀO GHI VÀO** — tức người dùng chưa từng
+ * có cách gỡ một link đã lỡ chia sẻ. Ẩn khỏi thư viện mà vẫn không gỡ được link
+ * thì mới đi được nửa đường.
+ *
+ * ⚠️ Đòi Bearer token và chỉ sửa dòng có `owner_user_id` KHỚP. Link cũ tạo lúc
+ * chưa đăng nhập có `owner_user_id = null` → không ai sửa được, kể cả chính họ:
+ * đó là đánh đổi cố ý, vì cho phép sửa dòng vô chủ nghĩa là ai đoán được id thì
+ * gỡ được link của người khác.
+ */
+export async function PATCH(request: NextRequest) {
+  const token = (request.headers.get('authorization') || '').replace('Bearer ', '').trim();
+  if (!token) return err('Cần đăng nhập', 401);
+
+  const b = (await parseBody(request)) as Record<string, unknown>;
+  const id = String(b.id || '').trim();
+  if (!/^[A-Za-z0-9]{6,16}$/.test(id)) return err('Mã chia sẻ không hợp lệ', 400);
+
+  const patch: Record<string, boolean> = {};
+  if (typeof b.galleryOptOut === 'boolean') patch.gallery_opt_out = b.galleryOptOut;
+  if (b.revoked === true) patch.revoked = true; // chỉ cho GỠ, không cho bật lại
+  if (!Object.keys(patch).length) return err('Không có gì để đổi', 400);
+
+  try {
+    const sb = createClient(SUPABASE_URL, SUPABASE_KEY);
+    const { data: auth } = await sb.auth.getUser(token);
+    const uid = auth?.user?.id;
+    if (!uid) return err('Phiên đăng nhập không hợp lệ', 401);
+
+    const admin = createClient(SUPABASE_URL, process.env.SUPABASE_SERVICE_KEY!, {
+      global: { fetch: (input, init) => fetch(input, { ...init, cache: 'no-store' }) },
+    });
+    const { data, error } = await admin
+      .from('shared_results')
+      .update(patch)
+      .eq('id', id)
+      .eq('owner_user_id', uid)
+      .select('id');
+    if (error) {
+      console.error('[share-result] patch error', error.message);
+      return err('Không đổi được thiết lập chia sẻ', 500);
+    }
+    // Không khớp chủ → nói "không tìm thấy", KHÔNG nói "không phải của bạn":
+    // câu sau xác nhận cho người đoán id rằng id đó có thật.
+    if (!data || !data.length) return err('Không tìm thấy bản chia sẻ này', 404);
+    return ok({ id, ...patch });
+  } catch (e: unknown) {
+    console.error('[share-result] patch exception', e);
+    return err((e as Error).message || 'Lỗi đổi thiết lập chia sẻ', 500);
+  }
+}

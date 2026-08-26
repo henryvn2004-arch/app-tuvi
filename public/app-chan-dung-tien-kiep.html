@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"></noscript>
-<link rel="stylesheet" href="/shell.css?v=19">
+<link rel="stylesheet" href="/shell.css?v=29">
 <style>
 .form-card{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);max-width:640px}
 .form-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:3px}
@@ -84,7 +84,8 @@
       <div id="shellRecent"></div>
       <div class="form-card" id="birthPanel">
         <h2>Nhập ngày sinh của bạn (dương lịch)</h2>
-        <p class="sub">AI lập lá số, suy chức phận từ cung Quan Lộc rồi kể lại một đời người qua 9 đại vận.</p>
+        <p class="sub">Nhận một chân dung và câu chuyện một đời từ chính lá số bạn. Bạn từng tự hỏi kiếp trước mình là ai, sống ra sao. Dùng khi muốn một câu chuyện để đọc, không chỉ vài dòng luận.</p>
+        <p class="price-note" data-tvp-price-label="chan-dung-tien-kiep">…</p>
         <div id="tuviFormHost"></div>
 
         <div class="frow" style="margin-bottom:0">
@@ -168,14 +169,14 @@
 </div>
 
 <script>window.SHELL_ACTIVE='chan-dung-tien-kiep';window.SHELL_HISTORY=true;
-window.SHELL_INTRO={key:'chan-dung-tien-kiep',title:'Chân Dung Tiền Kiếp',desc:'Đặt <b>chính lá số của bạn</b> vào <b>một trong 5 nền văn minh Á Đông cổ</b> (Trung Hoa · Việt Nam · Nhật Bản · Hàn Quốc · Thái Lan, do chính lá số quyết định) — chức phận suy từ cung <b>Quan Lộc</b>, dung mạo từ cung <b>Mệnh</b>, cả một đời người kể qua <b>9 đại vận</b>.'};</script>
+window.SHELL_INTRO={key:'chan-dung-tien-kiep',title:'Chân Dung Tiền Kiếp',desc:'Nhận một chân dung và câu chuyện một đời từ chính lá số bạn. Bạn từng tự hỏi kiếp trước mình là ai, sống ra sao. Dùng khi muốn một câu chuyện để đọc, không chỉ vài dòng luận.'};</script>
 <script src="/laso-chart.js?v=3"></script>
 <script src="/tuvi-form.js?v=2"></script>
 <script src="/tuvi-paywall.js?v=21"></script>
 <script src="/auth.js?v=2"></script>
-  <script src="/nav.js?v=22" data-icons-only></script>
-<script src="/shell.js?v=73"></script>
-<script src="/tools-shared/ai-loading-steps.js?v=8"></script>
+  <script src="/nav.js?v=23" data-icons-only></script>
+<script src="/shell.js?v=82"></script>
+<script src="/tools-shared/ai-loading-steps.js?v=9"></script>
 <script src="/tools-shared/portrait-recover.js?v=2"></script>
 <script>
 
@@ -698,6 +699,24 @@ async function _loadHistory() {
 }
 
 TuviPaywall.init({ product: 'chan-dung-tien-kiep', slug: function () { return _currentSlug; } });
+
+// ── B2 — nhận hand-off từ trang chia sẻ `/ket-qua` ───────────────────────────
+// Người mở link của bạn bè nhập ngày sinh NGAY TẠI trang chia sẻ rồi được đưa
+// sang đây kèm `?ngay=&thang=&nam=&gio=&gioitinh=&auto=1`. `Shell.prefillForm()`
+// đọc query TRƯỚC localStorage nên lá số trong link luôn thắng.
+//
+// 🔑 Tự chạy được vì `analyze()` mở đầu bằng lượt TÍNH THỬ: không đăng nhập,
+// không trừ Lượng, không gọi model ảnh. Tường khoá dựng sau đó như thường.
+// Chạy SAU khi `shell.js` boot (DOMContentLoaded) để `Shell.setContext` không lỗi.
+function _pageInitB2() {
+  try {
+    if (!window.Shell || !Shell.prefillForm) return;
+    var co = Shell.prefillForm();
+    if (co && Shell.autoRun() && document.getElementById('nam') && document.getElementById('nam').value) analyze();
+  } catch (e) { /* hand-off hỏng KHÔNG được chặn người dùng tự nhập tay */ }
+}
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', _pageInitB2);
+else _pageInitB2();
 </script>
 </body>
 </html>

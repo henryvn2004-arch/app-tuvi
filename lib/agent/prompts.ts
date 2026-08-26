@@ -15,7 +15,7 @@
 import { buildTools, TOOLS_INSTRUCTION } from "@/lib/agent/tools";
 import { LASO_AUTHORITY_RULE, daiVanLines, type Laso } from "@/lib/engine/laso";
 import { currentNamXem } from "@/lib/engine/namxem";
-import { todayVN } from "@/lib/engine/van-ngay";
+import { todayVN, todayVNLunar } from "@/lib/engine/van-ngay";
 import { tuongHopScores } from "@/lib/engine/tuong-hop";
 import { matchVanHanCombos, formatComboLines, type LayerCung } from "@/lib/agent/vanHanCombos";
 import { chuanHoaDauThanh } from "@/lib/vn-text";
@@ -48,13 +48,21 @@ interface ChatContext {
  *
  * ⚠️ Vì sao phải có: `runAgent` (đường của rail) XƯA NAY BỎ QUA `maxTokens` mà
  * `buildChatContext` trả về — nó dùng `cfg.maxTokens` đọc từ `app_config`
- * ['chat.max_tokens'], prod đang để **3000**. Tức mọi con số 1500/1800 ở dưới
- * chỉ có tác dụng cho route legacy `/api/lasotuvi`, còn rail thật sự chạy tới
- * 3000 token. Đo trên `events`: một lượt rail `cong-so` THẬT trả về **1.982
- * token output** (~1.200 chữ) cho một câu hỏi. Nay `run.ts` lấy
- * `min(cfg.maxTokens, bc.maxTokens)` nên con số này mới thật sự chặn.
+ * ['chat.max_tokens'], prod đang để **4500** (nâng 50% cùng đợt, xem dưới).
+ * Tức mọi con số 1500/1800 ở dưới chỉ có tác dụng cho route legacy
+ * `/api/lasotuvi`, còn rail thật sự chạy tới trần DB đó. Đo trên `events`:
+ * một lượt rail `cong-so` THẬT trả về **1.982 token output** (~1.200 chữ)
+ * cho một câu hỏi. Nay `run.ts` lấy `min(cfg.maxTokens, bc.maxTokens)` nên
+ * con số này mới thật sự chặn.
+ *
+ * 🔴 Henry chốt 2026-08-20 — nâng ĐỀU 50%: retest sau khi bật Kimi K3 primary
+ * bắt được cả rail chat lẫn Luận Giải bị CẮT NGANG giữa câu (không phải lỗi
+ * mạng — model sinh vượt trần rồi API cắt sạch, đúng cơ chế mà khối chú thích
+ * của `LASO_MAX_TOKENS` ngay dưới đây đã đo và cảnh báo từ trước). Trần chỉ
+ * chặn phần sinh DƯ, không phải mục tiêu độ dài — nâng không tốn thêm cho các
+ * lượt vốn đã ngắn hơn trần cũ.
  */
-export const RAIL_MAX_TOKENS = 1000;
+export const RAIL_MAX_TOKENS = 1500;
 
 /**
  * Trần token cho 3 shape LÁ SỐ (`CHAT_SYSTEM_LASO` · `CHAT_SYSTEM_GENERAL` ·
@@ -95,11 +103,18 @@ export const RAIL_MAX_TOKENS = 1000;
  * tiếng Việt vụn hơn và CHƯA đo được ở đây — chấp nhận vì 900 chỉ thấp hơn trần
  * cũ 10%, không phải mức siết mạnh đến độ phải tách nhánh riêng cho nó.
  *
- * ⚠️ CỐ Ý không siết ~22 prompt kịch bản (vẫn `RAIL_MAX_TOKENS = 1000`): chúng
- * chạy dưới trần đó tới giờ và CHƯA đo, siết mù là hẹn một lượt cắt giữa câu
- * trên 22 tool cùng lúc.
+ * ⚠️ CỐ Ý không siết ~22 prompt kịch bản (vẫn `RAIL_MAX_TOKENS`): chúng chạy
+ * dưới trần đó tới giờ và CHƯA đo, siết mù là hẹn một lượt cắt giữa câu trên
+ * 22 tool cùng lúc.
+ *
+ * 🔴 Henry chốt 2026-08-20 — nâng ĐỀU 50% (900 → 1350), CÙNG lý do với
+ * `RAIL_MAX_TOKENS` ở trên: retest sau khi bật Kimi K3 bắt được lượt cắt
+ * ngang giữa câu thật, đúng cơ chế "max_tokens không ép được ngân sách"
+ * mà khối chú thích trên đã đo kỹ. 1350 vẫn chưa chắc dứt điểm (chú thích trên
+ * đã chỉ ra câu hỏi liệt kê không có trần tự nhiên) — nhưng nới thêm 50% giảm
+ * hẳn tần suất chạm mép so với 900.
  */
-export const LASO_MAX_TOKENS = 900;
+export const LASO_MAX_TOKENS = 1350;
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function buildChatContext(body: any): ChatContext {
@@ -539,6 +554,19 @@ export const DOC_ARC_TUONG_HOP = arcDoc({
 · [Xét tuổi] Tam Hợp → ✅ câu lật: "Hợp nhau tới mức chẳng ai chịu nói thẳng — chỗ dễ chịu nhất lại đúng là chỗ hai người hay né việc khó." ❌ "Hai tuổi thuộc Tam Hợp, chủ hòa hợp."`,
 });
 
+// Bản cho BÚT TƯỚNG (chữ ký). Khác 4 bản trên ở CĂN CỨ: không phải sao/can
+// chi mà là 6 trục hình học đã đo (`but-tuong.js`) + % ngũ hành nét — engine
+// SỐ, không phải bảng tra cổ pháp, nên "mốc" ở đây là NGƯỠNG ĐIỂM chứ không
+// phải nhãn Tốt/Xấu có sẵn.
+export const DOC_ARC_BUT_TUONG = arcDoc({
+  duBao:
+    'Chữ ký KHÔNG có trục thời gian (không có đại vận/tuổi) → CHỈ đoán theo ĐIỀU KIỆN ("nếu vẫn ký vội như vầy thì…"), cấm nêu tuổi, năm, hay mốc lịch nào.',
+  moc: 'trục điểm THẤP (dưới ~50) → chỉ ra chỗ yếu ấy vẫn dùng được vào việc gì; trục điểm CAO (trên ~80) → chỉ ra cái giá đi kèm của sự "quá chuẩn" đó.',
+  canCu: 'trục Thần/Khí/Cốt/Nhục/Huyết/Thế đã đo hoặc tỉ lệ ngũ hành nét',
+  phepDich: `· [Khí thấp — nhấc bút nhiều lần] → ✅ hành vi: "Việc gì cũng hay dừng giữa chừng rồi quay lại sau, ít khi làm một mạch tới hết." ❌ "Khí đứt đoạn cho thấy sự thiếu kiên định trong tính cách."
+· [Thế đi xuống — đường chân chữ chúc] → ✅ câu lật: "Cái chững lại ở cuối chữ ký nhìn tưởng đuối sức, nhưng lại đúng là chỗ biết dừng đúng lúc, không đâm lao theo lao." ❌ "Thế hạ chủ vận suy, tài lộc đi xuống."`,
+});
+
 // ─── GIỌNG cho BẢN CÓ CẤU TRÚC (họ 2 — JSON schema trả tiền · phong thuỷ · đặt tên · chọn ngày) ───
 //
 // 🔴 KHÔNG dùng `LUAN_ARC` lẫn `arcDoc` ở đây. Cả hai đều khai HÌNH DẠNG (nhịp
@@ -603,7 +631,7 @@ ${MAU_ARC_CHUNG}`;
 
 export const CHAT_SYSTEM_LASO = (ctx: string, docs?: string, persona?: string) => `Bạn là chuyên gia Tử Vi Đẩu Số. Phụng sự trang Tử Vi Minh Bảo.${persona ? '\n' + persona : ''}
 
-THÔNG TIN THỜI GIAN (do server cung cấp, chính xác): Hôm nay là ngày ${todayVNStr()}, năm ${todayVN().y}. Khi user hỏi "năm nay là năm mấy", "hôm nay là ngày mấy", hoặc tương tự — trả lời thẳng dựa vào thông tin này, KHÔNG nói "tôi không biết ngày hiện tại".
+THÔNG TIN THỜI GIAN (do server cung cấp): Hôm nay ${todayVNStr()}, năm ${todayVN().y} (ÂL ${todayVNLunar().thangAL}${todayVNLunar().isLeap ? ' nhuận' : ''}/${todayVNLunar().namAL}). Khi user hỏi "năm nay là năm mấy", "hôm nay là ngày mấy", hoặc tương tự — trả lời thẳng dựa vào thông tin này, KHÔNG nói "tôi không biết ngày hiện tại".
 
 ${LUAN_ARC}
 

@@ -252,7 +252,7 @@ export async function generateCmoDigestText(): Promise<CmoDigestResult> {
   const text = await llmText({
     system: SYSTEM_PROMPT,
     prompt: JSON.stringify(snapshot),
-    maxTokens: 1200,
+    maxTokens: 1800, // Nâng 50% (Henry chốt 2026-08-20)
   });
   return { text, ga4: snapshot.ga4, gsc: snapshot.gsc };
 }

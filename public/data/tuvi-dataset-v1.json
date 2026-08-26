@@ -1,0 +1,873 @@
+{
+  "$schema": "https://www.tuviminhbao.com/data/tuvi-dataset.schema.json",
+  "name": "Bộ dữ liệu thống kê Tử Vi Đẩu Số",
+  "nameEn": "Zi Wei Dou Shu (Vietnamese astrology) statistics dataset",
+  "version": "1.0.0",
+  "license": "CC BY 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+  "attribution": "Tử Vi Minh Bảo — https://www.tuviminhbao.com/du-lieu",
+  "generatedAt": "2026-08-23",
+  "method": {
+    "vi": "Lập 96.480 lá số bằng engine cổ pháp của tuviminhbao.com, phủ trọn một vòng can chi 60 năm (1950–2009), lấy mẫu mỗi 6 ngày dương lịch, đủ 12 giờ sinh và cả hai giới.",
+    "en": "96480 charts cast with the tuviminhbao.com engine, covering one complete 60-year sexagenary cycle (1950–2009), sampled every 6 solar days, all 12 birth hours and both genders."
+  },
+  "caveat": {
+    "vi": "Đây là phân bố trên KHÔNG GIAN THỜI ĐIỂM SINH, không phải phân bố dân số. Không có dữ liệu giờ sinh thật của người Việt, nên KHÔNG được đọc thành \"X% người Việt có …\". Câu đúng: \"trong các thời điểm sinh có thể có, X% cho ra …\".",
+    "en": "This is a distribution over the SPACE OF POSSIBLE BIRTH TIMES, not over a population. Real births are not uniform across dates and hours, so these figures must not be read as \"X% of Vietnamese people have …\"."
+  },
+  "totals": {
+    "charts": 96480,
+    "yearsCovered": 60,
+    "dayStep": 6
+  },
+  "distributions": {
+    "menhMajorStar": {
+      "label": "Chính tinh đóng cung Mệnh",
+      "note": "Một cung Mệnh có thể có 0, 1 hoặc 2 chính tinh — nên tổng phần trăm KHÔNG bằng 100.",
+      "items": [
+        {
+          "value": "Thiên Cơ",
+          "count": 8126,
+          "percent": 8.422
+        },
+        {
+          "value": "Tham Lang",
+          "count": 8072,
+          "percent": 8.367
+        },
+        {
+          "value": "Cự Môn",
+          "count": 8066,
+          "percent": 8.36
+        },
+        {
+          "value": "Phá Quân",
+          "count": 8064,
+          "percent": 8.358
+        },
+        {
+          "value": "Thiên Phủ",
+          "count": 8052,
+          "percent": 8.346
+        },
+        {
+          "value": "Thiên Đồng",
+          "count": 8048,
+          "percent": 8.342
+        },
+        {
+          "value": "Liêm Trinh",
+          "count": 8036,
+          "percent": 8.329
+        },
+        {
+          "value": "Tử Vi",
+          "count": 8026,
+          "percent": 8.319
+        },
+        {
+          "value": "Thái Dương",
+          "count": 7998,
+          "percent": 8.29
+        },
+        {
+          "value": "Thái Âm",
+          "count": 7992,
+          "percent": 8.284
+        },
+        {
+          "value": "Thiên Lương",
+          "count": 7974,
+          "percent": 8.265
+        },
+        {
+          "value": "Vũ Khúc",
+          "count": 7964,
+          "percent": 8.255
+        },
+        {
+          "value": "Thiên Tướng",
+          "count": 7958,
+          "percent": 8.248
+        },
+        {
+          "value": "Thất Sát",
+          "count": 7944,
+          "percent": 8.234
+        }
+      ]
+    },
+    "menhMajorStarCount": {
+      "label": "Số chính tinh tại cung Mệnh",
+      "items": [
+        {
+          "value": "1",
+          "count": 48764,
+          "percent": 50.543
+        },
+        {
+          "value": "2",
+          "count": 31778,
+          "percent": 32.937
+        },
+        {
+          "value": "0",
+          "count": 15938,
+          "percent": 16.519
+        }
+      ]
+    },
+    "menhVoChinhDieu": {
+      "label": "Mệnh vô chính diệu",
+      "count": 15938,
+      "percent": 16.519
+    },
+    "menhBranch": {
+      "label": "Địa chi cung Mệnh",
+      "items": [
+        {
+          "value": "Tý",
+          "count": 8040,
+          "percent": 8.333
+        },
+        {
+          "value": "Hợi",
+          "count": 8040,
+          "percent": 8.333
+        },
+        {
+          "value": "Tuất",
+          "count": 8040,
+          "percent": 8.333
+        },
+        {
+          "value": "Dậu",
+          "count": 8040,
+          "percent": 8.333
+        },
+        {
+          "value": "Thân",
+          "count": 8040,
+          "percent": 8.333
+        },
+        {
+          "value": "Mùi",
+          "count": 8040,
+          "percent": 8.333
+        },
+        {
+          "value": "Ngọ",
+          "count": 8040,
+          "percent": 8.333
+        },
+        {
+          "value": "Tỵ",
+          "count": 8040,
+          "percent": 8.333
+        },
+        {
+          "value": "Thìn",
+          "count": 8040,
+          "percent": 8.333
+        },
+        {
+          "value": "Mão",
+          "count": 8040,
+          "percent": 8.333
+        },
+        {
+          "value": "Dần",
+          "count": 8040,
+          "percent": 8.333
+        },
+        {
+          "value": "Sửu",
+          "count": 8040,
+          "percent": 8.333
+        }
+      ]
+    },
+    "cuc": {
+      "label": "Cục",
+      "items": [
+        {
+          "value": "Hỏa Lục Cục",
+          "count": 19308,
+          "percent": 20.012
+        },
+        {
+          "value": "Mộc Tam Cục",
+          "count": 19308,
+          "percent": 20.012
+        },
+        {
+          "value": "Thủy Nhị Cục",
+          "count": 19300,
+          "percent": 20.004
+        },
+        {
+          "value": "Kim Tứ Cục",
+          "count": 19284,
+          "percent": 19.988
+        },
+        {
+          "value": "Thổ Ngũ Cục",
+          "count": 19280,
+          "percent": 19.983
+        }
+      ]
+    },
+    "napAm": {
+      "label": "Nạp âm mệnh (60 hoa giáp)",
+      "items": [
+        {
+          "value": "Thổ",
+          "count": 19584,
+          "percent": 20.299
+        },
+        {
+          "value": "Kim",
+          "count": 19464,
+          "percent": 20.174
+        },
+        {
+          "value": "Thủy",
+          "count": 19392,
+          "percent": 20.1
+        },
+        {
+          "value": "Hỏa",
+          "count": 19368,
+          "percent": 20.075
+        },
+        {
+          "value": "Mộc",
+          "count": 18672,
+          "percent": 19.353
+        }
+      ]
+    },
+    "napAmElement": {
+      "label": "Ngũ hành nạp âm",
+      "items": [
+        {
+          "value": "Thổ",
+          "count": 19584,
+          "percent": 20.299
+        },
+        {
+          "value": "Kim",
+          "count": 19464,
+          "percent": 20.174
+        },
+        {
+          "value": "Thủy",
+          "count": 19392,
+          "percent": 20.1
+        },
+        {
+          "value": "Hỏa",
+          "count": 19368,
+          "percent": 20.075
+        },
+        {
+          "value": "Mộc",
+          "count": 18672,
+          "percent": 19.353
+        }
+      ]
+    },
+    "thanPalace": {
+      "label": "Cung an Thân",
+      "items": [
+        {
+          "value": "Mệnh",
+          "count": 16080,
+          "percent": 16.667
+        },
+        {
+          "value": "Phúc Đức",
+          "count": 16080,
+          "percent": 16.667
+        },
+        {
+          "value": "Quan Lộc",
+          "count": 16080,
+          "percent": 16.667
+        },
+        {
+          "value": "Thiên Di",
+          "count": 16080,
+          "percent": 16.667
+        },
+        {
+          "value": "Tài Bạch",
+          "count": 16080,
+          "percent": 16.667
+        },
+        {
+          "value": "Phu Thê",
+          "count": 16080,
+          "percent": 16.667
+        }
+      ]
+    },
+    "cachCucType": {
+      "label": "Nhóm cách cục",
+      "note": "Một lá số thường thuộc nhiều nhóm cách cục — tổng phần trăm KHÔNG bằng 100.",
+      "items": [
+        {
+          "value": "menh_co_ban",
+          "count": 291226,
+          "percent": 301.851
+        },
+        {
+          "value": "phu_cuc",
+          "count": 178228,
+          "percent": 184.731
+        },
+        {
+          "value": "ban_tien_cuc",
+          "count": 158401,
+          "percent": 164.18
+        },
+        {
+          "value": "quy_cuc",
+          "count": 144586,
+          "percent": 149.861
+        },
+        {
+          "value": "than_cu",
+          "count": 33285,
+          "percent": 34.499
+        },
+        {
+          "value": "tap_cuc",
+          "count": 19489,
+          "percent": 20.2
+        }
+      ]
+    },
+    "cachCuc": {
+      "label": "Cách cục",
+      "note": "Một lá số thường có nhiều cách cục — tổng phần trăm KHÔNG bằng 100.",
+      "items": [
+        {
+          "value": "Nghịch Lý — Dương cư Âm vị / Âm cư Dương vị",
+          "count": 48240,
+          "percent": 50
+        },
+        {
+          "value": "Thuận Lý — Dương cư Dương vị / Âm cư Âm vị",
+          "count": 48240,
+          "percent": 50
+        },
+        {
+          "value": "Tuần Triệt Giải Tật Ách",
+          "count": 26984,
+          "percent": 27.968
+        },
+        {
+          "value": "Tuần Triệt Phụ Mẫu",
+          "count": 26984,
+          "percent": 27.968
+        },
+        {
+          "value": "Tuần Triệt Nô Bộc",
+          "count": 26984,
+          "percent": 27.968
+        },
+        {
+          "value": "Tuần Lâm Hỏa Địa",
+          "count": 26064,
+          "percent": 27.015
+        },
+        {
+          "value": "Phủ Tướng Triều Viên",
+          "count": 24160,
+          "percent": 25.041
+        },
+        {
+          "value": "Phủ Ấn Củng Thân",
+          "count": 24058,
+          "percent": 24.936
+        },
+        {
+          "value": "Tài Ấm Giáp Ấn",
+          "count": 20110,
+          "percent": 20.844
+        },
+        {
+          "value": "Triệt Đáo Kim Cung",
+          "count": 16272,
+          "percent": 16.866
+        },
+        {
+          "value": "Mệnh Vô Chính Diệu",
+          "count": 15938,
+          "percent": 16.519
+        },
+        {
+          "value": "Cẩm Thượng Thiêm Hoa",
+          "count": 14983,
+          "percent": 15.53
+        },
+        {
+          "value": "Mệnh Thân Đồng Cung",
+          "count": 14966,
+          "percent": 15.512
+        },
+        {
+          "value": "Tài Tinh Nhập Mệnh",
+          "count": 14860,
+          "percent": 15.402
+        },
+        {
+          "value": "Tả Hữu Huynh Đệ",
+          "count": 14752,
+          "percent": 15.29
+        },
+        {
+          "value": "Triệt Án Cung Mệnh",
+          "count": 11274,
+          "percent": 11.685
+        },
+        {
+          "value": "Tuần Án Cung Mệnh",
+          "count": 11274,
+          "percent": 11.685
+        },
+        {
+          "value": "Thân Cư Phúc Đức — Phúc Thọ",
+          "count": 9538,
+          "percent": 9.886
+        },
+        {
+          "value": "Kình Đà Phá Phu Thê",
+          "count": 8840,
+          "percent": 9.163
+        },
+        {
+          "value": "Hóa Kỵ Nhập Mệnh",
+          "count": 8294,
+          "percent": 8.597
+        },
+        {
+          "value": "Hóa Kỵ Huynh Đệ",
+          "count": 8246,
+          "percent": 8.547
+        },
+        {
+          "value": "Hóa Kỵ Phụ Mẫu",
+          "count": 8212,
+          "percent": 8.512
+        },
+        {
+          "value": "Hóa Lộc Thủ Phúc Đức",
+          "count": 8194,
+          "percent": 8.493
+        },
+        {
+          "value": "Hóa Quyền Tại Quan Lộc",
+          "count": 8182,
+          "percent": 8.481
+        },
+        {
+          "value": "Hóa Kỵ Phu Thê",
+          "count": 8146,
+          "percent": 8.443
+        },
+        {
+          "value": "Hóa Lộc Điền Trạch",
+          "count": 8098,
+          "percent": 8.393
+        },
+        {
+          "value": "Hóa Kỵ Điền Trạch",
+          "count": 8090,
+          "percent": 8.385
+        },
+        {
+          "value": "Hóa Kỵ Tử Tức",
+          "count": 8078,
+          "percent": 8.373
+        },
+        {
+          "value": "Đào Hoa Nhập Phu Thê",
+          "count": 8040,
+          "percent": 8.333
+        },
+        {
+          "value": "Thiên Mã Thủ Quan Lộc",
+          "count": 8040,
+          "percent": 8.333
+        },
+        {
+          "value": "Vượng Địa",
+          "count": 8040,
+          "percent": 8.333
+        },
+        {
+          "value": "Đào Hoa Nhập Nô Bộc",
+          "count": 8040,
+          "percent": 8.333
+        },
+        {
+          "value": "Thiên Mã Thủ Thiên Di",
+          "count": 8040,
+          "percent": 8.333
+        },
+        {
+          "value": "Bại Địa",
+          "count": 8040,
+          "percent": 8.333
+        },
+        {
+          "value": "Sinh Địa",
+          "count": 8040,
+          "percent": 8.333
+        },
+        {
+          "value": "Thiên Mã Phu Thê",
+          "count": 8040,
+          "percent": 8.333
+        },
+        {
+          "value": "Hóa Khoa Thủ Mệnh",
+          "count": 8024,
+          "percent": 8.317
+        },
+        {
+          "value": "Kình Dương Nhập Mệnh",
+          "count": 8016,
+          "percent": 8.308
+        },
+        {
+          "value": "Quan Tinh Nhập Mệnh",
+          "count": 7982,
+          "percent": 8.273
+        },
+        {
+          "value": "Hóa Lộc Thiên Di",
+          "count": 7900,
+          "percent": 8.188
+        },
+        {
+          "value": "Hóa Quyền Tử Tức",
+          "count": 7888,
+          "percent": 8.176
+        },
+        {
+          "value": "Hóa Lộc Tử Tức",
+          "count": 7868,
+          "percent": 8.155
+        },
+        {
+          "value": "Hóa Kỵ Tật Ách",
+          "count": 7834,
+          "percent": 8.12
+        },
+        {
+          "value": "Hóa Kỵ Phá Tài Bạch",
+          "count": 7826,
+          "percent": 8.112
+        },
+        {
+          "value": "Hóa Lộc Tại Tài Bạch",
+          "count": 7820,
+          "percent": 8.105
+        },
+        {
+          "value": "Hóa Kỵ Thiên Di",
+          "count": 7774,
+          "percent": 8.058
+        },
+        {
+          "value": "Hóa Lộc Tại Quan Lộc",
+          "count": 7772,
+          "percent": 8.056
+        },
+        {
+          "value": "Hóa Kỵ Phá Quan Lộc",
+          "count": 7710,
+          "percent": 7.991
+        },
+        {
+          "value": "Hóa Kỵ Nhập Nô Bộc",
+          "count": 7622,
+          "percent": 7.9
+        },
+        {
+          "value": "Mệnh Không Thân Kiếp",
+          "count": 7488,
+          "percent": 7.761
+        },
+        {
+          "value": "Sát Tinh Hội Tật Ách",
+          "count": 7448,
+          "percent": 7.72
+        },
+        {
+          "value": "Hóa Kỵ Hội Sát",
+          "count": 7433,
+          "percent": 7.704
+        },
+        {
+          "value": "Sát Tinh Hội Tử Tức",
+          "count": 7407,
+          "percent": 7.677
+        },
+        {
+          "value": "Phúc Tinh Thủ Mệnh",
+          "count": 7210,
+          "percent": 7.473
+        },
+        {
+          "value": "Vũ Khúc Minh Tài Bạch",
+          "count": 6680,
+          "percent": 6.924
+        },
+        {
+          "value": "Thân Cư Phúc Đức — Giảm Thọ",
+          "count": 6542,
+          "percent": 6.781
+        },
+        {
+          "value": "Tọa Quý Hưởng Quý",
+          "count": 6472,
+          "percent": 6.708
+        },
+        {
+          "value": "Tuyệt Địa",
+          "count": 6426,
+          "percent": 6.66
+        },
+        {
+          "value": "Thân Cư Thiên Di — Lập Nghiệp Phương Xa",
+          "count": 6385,
+          "percent": 6.618
+        },
+        {
+          "value": "Nhật Nguyệt Tàng Hung",
+          "count": 6332,
+          "percent": 6.563
+        },
+        {
+          "value": "Thiên Lương Minh Phúc Đức",
+          "count": 6256,
+          "percent": 6.484
+        },
+        {
+          "value": "Khoa Quyền Lộc Củng",
+          "count": 6002,
+          "percent": 6.221
+        },
+        {
+          "value": "Thiên Phủ Minh Điền Trạch",
+          "count": 5870,
+          "percent": 6.084
+        },
+        {
+          "value": "Văn Tinh Ám Củng",
+          "count": 5300,
+          "percent": 5.493
+        },
+        {
+          "value": "Thân Cư Thiên Di — Chết Xa Nhà",
+          "count": 5002,
+          "percent": 5.184
+        },
+        {
+          "value": "Thái Âm Minh Điền Trạch",
+          "count": 4914,
+          "percent": 5.093
+        },
+        {
+          "value": "Thân Cư Phu Thê — Trắc Trở Hôn Phối",
+          "count": 4466,
+          "percent": 4.629
+        },
+        {
+          "value": "Quan Lộc Vô Chính Phùng Tuần Triệt",
+          "count": 4412,
+          "percent": 4.573
+        },
+        {
+          "value": "Tử Phủ Triều Viên",
+          "count": 4314,
+          "percent": 4.471
+        },
+        {
+          "value": "Nhật Nguyệt Chiếu Bích",
+          "count": 4112,
+          "percent": 4.262
+        },
+        {
+          "value": "Nhật Nguyệt Giáp Tài",
+          "count": 4048,
+          "percent": 4.196
+        },
+        {
+          "value": "Âm Phần Kết Phát",
+          "count": 4020,
+          "percent": 4.167
+        },
+        {
+          "value": "Kim Dư Phù Giá",
+          "count": 3728,
+          "percent": 3.864
+        },
+        {
+          "value": "Phụ Bật Củng Chủ",
+          "count": 3384,
+          "percent": 3.507
+        },
+        {
+          "value": "Lộc Xung Mã Khổn",
+          "count": 2969,
+          "percent": 3.077
+        },
+        {
+          "value": "Cự Cơ Mão Dậu",
+          "count": 2854,
+          "percent": 2.958
+        },
+        {
+          "value": "Thất Sát Triều Đẩu",
+          "count": 2838,
+          "percent": 2.942
+        },
+        {
+          "value": "Mệnh Kiếp Thân Không",
+          "count": 2656,
+          "percent": 2.753
+        },
+        {
+          "value": "Minh Lộc Ám Lộc",
+          "count": 2436,
+          "percent": 2.525
+        },
+        {
+          "value": "Mã Lạc Không Vong",
+          "count": 2302,
+          "percent": 2.386
+        },
+        {
+          "value": "Mệnh Triệt Thân Tuần",
+          "count": 2218,
+          "percent": 2.299
+        },
+        {
+          "value": "Mệnh Tuần Thân Triệt",
+          "count": 2218,
+          "percent": 2.299
+        },
+        {
+          "value": "Nguyệt Sinh Thương Hải",
+          "count": 1640,
+          "percent": 1.7
+        },
+        {
+          "value": "Nguyệt Lãng Thiên Môn",
+          "count": 1626,
+          "percent": 1.685
+        },
+        {
+          "value": "Tuyệt Xứ Phùng Sinh",
+          "count": 1614,
+          "percent": 1.673
+        },
+        {
+          "value": "Nhật Xuất Phù Tang",
+          "count": 1588,
+          "percent": 1.646
+        },
+        {
+          "value": "Kim Sán Quang Huy",
+          "count": 1582,
+          "percent": 1.64
+        },
+        {
+          "value": "Phong Vân Tế Hội",
+          "count": 1537,
+          "percent": 1.593
+        },
+        {
+          "value": "Tài Dữ Tù Cừu",
+          "count": 1419,
+          "percent": 1.471
+        },
+        {
+          "value": "Vô Chính Vô Phò",
+          "count": 1354,
+          "percent": 1.403
+        },
+        {
+          "value": "Thân Cư Phu Thê — Sợ Vợ",
+          "count": 1352,
+          "percent": 1.401
+        },
+        {
+          "value": "Mệnh Thân Đồng Cung — Tứ Mộ Vô Chính Diệu",
+          "count": 888,
+          "percent": 0.92
+        },
+        {
+          "value": "Vũ Khúc Thủ Viên",
+          "count": 728,
+          "percent": 0.755
+        },
+        {
+          "value": "Mã Đầu Đới Kiếm",
+          "count": 656,
+          "percent": 0.68
+        },
+        {
+          "value": "Tham Hỏa Tương Phùng",
+          "count": 496,
+          "percent": 0.514
+        },
+        {
+          "value": "Sinh Bất Phùng Thời",
+          "count": 454,
+          "percent": 0.471
+        },
+        {
+          "value": "Nhất Sinh Cô Bần",
+          "count": 412,
+          "percent": 0.427
+        },
+        {
+          "value": "Nhật Nguyệt Hóa Kỵ Giao Huy",
+          "count": 282,
+          "percent": 0.292
+        },
+        {
+          "value": "Liêm Tham Phùng Kỵ",
+          "count": 278,
+          "percent": 0.288
+        },
+        {
+          "value": "Mệnh Thân Đồng Cung — Tý/Ngọ Vô Chính Diệu",
+          "count": 226,
+          "percent": 0.234
+        },
+        {
+          "value": "Tài Lộc Giáp Mã",
+          "count": 196,
+          "percent": 0.203
+        },
+        {
+          "value": "Lộc Phùng Lưỡng Sát",
+          "count": 184,
+          "percent": 0.191
+        },
+        {
+          "value": "Lộc Mã Bội Ấn",
+          "count": 144,
+          "percent": 0.149
+        }
+      ]
+    }
+  }
+}

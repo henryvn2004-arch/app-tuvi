@@ -43,6 +43,7 @@
 {
   "@context": "https://schema.org",
   "@type": "Organization",
+  "@id": "https://www.tuviminhbao.com/bao-chi#organization",
   "name": "Tử Vi Minh Bảo",
   "alternateName": "紫微明寶",
   "url": "https://www.tuviminhbao.com",
@@ -77,6 +78,7 @@
   },
   "provider": {
     "@type": "Organization",
+    "@id": "https://www.tuviminhbao.com/bao-chi#organization",
     "name": "Tử Vi Minh Bảo",
     "url": "https://www.tuviminhbao.com"
   }
@@ -578,9 +580,9 @@ a { color: var(--blue); text-decoration: none; }
 
 <!-- ─── SCRIPTS ──────────────────────────────────────────── -->
 <script src="/auth.js?v=2"></script>
-<script src="/tool-prices.js?v=4"></script>
+<script src="/tool-prices.js?v=5"></script>
 <script src="/tuvi-paywall.js?v=21"></script>
-<script src="/nav.js?v=22"></script>
+<script src="/nav.js?v=23"></script>
 <script src="/referral.js?v=1"></script>
 <script src="/footer.js"></script>
 
@@ -810,9 +812,15 @@ function toolCardHtml(t, byNeed) {
         (_vndPerCredit ? '<div class="tool-price-vnd">' + formatVnd(Math.ceil((t.credits * _vndPerCredit) / 1000) * 1000) + '</div>' : '') +
       '</div>';
   // Chưa gán `question` thì lùi về nhãn cũ — thiếu dữ liệu không được làm mất thẻ.
+  // Ở lối nhu cầu, câu hỏi làm tiêu đề GIỮ NGUYÊN vai trò của nó (câu bắt sự tò
+  // mò), nhưng bỏ description đi thì thẻ chỉ có câu hỏi + tên môn — chưa nói
+  // được TOOL NÀY LÀM RA CÁI GÌ. Ghép thêm dòng description NGAY DƯỚI câu hỏi
+  // để một thẻ trả lời được cả hai: "sao tôi phải bấm vào" (câu hỏi) và "bấm
+  // vào thì tôi nhận được gì" (description) — thiếu vế nào thẻ cũng yếu hơn.
   const head = byNeed && t.question
     ? '<div class="tool-q">' + esc(t.question) + '</div>' +
-      '<div class="tool-src">' + esc(t.label) + '</div>'
+      '<div class="tool-src">' + esc(t.label) + '</div>' +
+      (t.description ? '<div class="tool-desc">' + esc(t.description) + '</div>' : '')
     : '<div class="tool-name">' + esc(t.label) + '</div>' +
       '<div class="tool-desc">' + esc(t.description || '') + '</div>';
   return '<a href="' + url + '" class="tool-card' + featured + '">' +

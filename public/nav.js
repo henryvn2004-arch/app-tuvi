@@ -238,7 +238,7 @@
   var NGAY_PATHS   = ['/ngay-tot','/tools/hoang-dao.html','/tools/ngay-tot.html','/tools/luc-nham.html','/tools/han-nam.html','/tools/chon-ngay-tot.html'];
   var TENCHU_PATHS  = ['/tools/dat-ten-con.html','/tools/dat-ten-doanh-nghiep.html'];
   var BAIVIET_PATHS = ['/blog.html','/nghien-cuu','/tac-gia'];
-  var KP_PATHS = ['/cong-cu','/menh-kho','/ngay-tot'].concat(TUONG_PATHS, PHONG_PATHS, NGAY_PATHS, TENCHU_PATHS, LAM_DEP_PATHS);
+  var KP_PATHS = ['/cong-cu','/menh-kho','/ngay-tot','/thu-vien'].concat(TUONG_PATHS, PHONG_PATHS, NGAY_PATHS, TENCHU_PATHS, LAM_DEP_PATHS);
 
   function anyActive(arr) { return arr.some(function(p){ return path === p || path.startsWith(p + '/') || path.startsWith(p); }); }
 
@@ -303,7 +303,7 @@
   // Thay vì đẻ bảng icon thứ hai trong shell.js (28 icon, tên khác hẳn, thiếu
   // 11/15 icon cần dùng — đúng cái "hai bảng trôi khỏi nhau" đã cảnh báo),
   // mấy trang đó nạp CHÍNH file này kèm `data-icons-only`:
-  //     <script src="/nav.js?v=22" data-icons-only></script>
+  //     <script src="/nav.js?v=23" data-icons-only></script>
   // Lúc đó nav.js CHỈ cấp ICONS/iconHtml/mountIcons/EMOJI_TO_ICON + CSS icon,
   // rồi dừng — KHÔNG dựng thanh nav, KHÔNG chèn GA4, KHÔNG chèn conversion.js,
   // KHÔNG chèn auth.js. Một nguồn icon duy nhất cho cả site.
@@ -368,6 +368,10 @@
     + ddSection('Tra cứu')
     + ddItem('/menh-kho.html', 'gem',           'Mệnh Khố — 438K lá số')
     + ddItem('/ngay-tot',      'calendar-days', 'Ngày Tốt — Lịch vạn niên')
+    // C3 — đường vào thư viện. Trước đó `/thu-vien` chỉ tới được từ CHÂN TRANG
+    // `/ket-qua`, tức chỉ ai đã mở một link chia sẻ mới thấy — gần như không ai
+    // tìm ra. Đặt ở nav là bề mặt duy nhất phủ được toàn site.
+    + ddItem('/thu-vien',      'image',         'Thư Viện — bản luận đã chia sẻ')
     + '</div></div>';
 
   // Cẩm nang — nghiên cứu, tác giả, khảo luận
@@ -383,7 +387,7 @@
     + '<a class="nav-logo" href="/"><img src="/seal.webp" alt="">'
     + '<div><div class="name">Tử Vi Minh Bảo</div><div class="url">Tri mệnh lý – Thuận thế hành</div></div></a>'
     + '<div class="nav-links" id="nav-links">'
-    + '<a class="nav-link nav-cta-ld' + (isActive('/app')?' active':'') + '" href="/app">✦ Luận Đường</a>'
+    + '<a class="nav-link nav-cta-ld' + (isActive('/app')?' active':'') + '" href="/app" title="Lập lá số và hỏi trợ lý AI — vào đây để dùng công cụ">✦ Luận Đường</a>'
     + dd_kp
     + dd_cn
     + '</div>'
@@ -453,6 +457,8 @@
     '.ft-col a:hover{color:rgba(255,255,255,0.85)!important}',
     '.ft-bottom{display:flex;justify-content:space-between;align-items:center;font-size:11px;color:rgba(255,255,255,0.2);gap:16px;flex-wrap:wrap}',
     '.ft-bottom img{width:20px;height:20px;object-fit:contain;opacity:0.25;border-radius:3px}',
+    '.ft-legal{font-size:11px;color:rgba(255,255,255,0.3);line-height:1.7;max-width:260px;margin-top:14px;padding-top:14px;border-top:1px solid rgba(255,255,255,0.05)}',
+    '.ft-legal strong{color:rgba(255,255,255,0.5);font-weight:600}',
     '.ft-disclaimer{font-size:10px;color:rgba(255,255,255,0.15);line-height:1.6;margin-top:12px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.05);text-align:center}',
     '@media(max-width:900px){.ft-top{grid-template-columns:1fr 1fr;gap:28px}.ft-brand{grid-column:1/-1}}',
     '@media(max-width:600px){.site-footer{padding:40px 20px 20px}.ft-top{grid-template-columns:1fr 1fr;gap:24px}.ft-brand{grid-column:1/-1}.ft-bottom{flex-direction:column;align-items:flex-start;gap:4px}}'
@@ -464,7 +470,14 @@
 
   function injectFooter() {
     var f = '<footer class="site-footer"><div class="ft-body"><div class="ft-top">'
-      + '<div class="ft-brand"><div class="ft-brand-row"><img src="/seal.webp" alt=""><div><div class="ft-brand-name">Tử Vi Minh Bảo</div><div class="ft-brand-zh">Tri mệnh lý – Thuận thế hành</div></div></div><div class="ft-tagline">Tử vi đẩu số theo cổ pháp, luận giải bằng AI.</div></div>'
+      + '<div class="ft-brand"><div class="ft-brand-row"><img src="/seal.webp" alt=""><div><div class="ft-brand-name">Tử Vi Minh Bảo</div><div class="ft-brand-zh">Tri mệnh lý – Thuận thế hành</div></div></div><div class="ft-tagline">Tử vi đẩu số theo cổ pháp, luận giải bằng AI.</div>'
+      // Mã số doanh nghiệp CHƯA có trong hồ sơ được cung cấp — KHÔNG bịa số.
+      // Bổ sung dòng "MST: ..." ngay khi có, theo Nghị định 52/2013.
+      + '<div class="ft-legal"><strong>Công ty TNHH Kira Tech</strong><br>(Kira Tech Company Limited)<br>'
+      + 'Điện thoại: 0343.848.795<br>'
+      + 'Email: contact@tuviminhbao.com<br>'
+      + 'Địa chỉ: 901 Lê Đức Thọ, Phường An Hội Đông, Thành phố Hồ Chí Minh, Việt Nam</div>'
+      + '</div>'
       + '<div class="ft-col"><div class="ft-col-title">Tử Vi</div>'
       + '<a href="/tuvi-chat.html">Tử Vi Chat</a>'
       + '<a href="/luan-giai.html">Luận Giải Lá Số</a>'
@@ -486,8 +499,16 @@
       + '<a href="/menh-kho.html">Mệnh Khố</a>'
       + '<a href="/contact.html">Liên Hệ</a></div>'
       + '</div>'
-      + '<div class="ft-bottom"><span>© 2025 Tử Vi Minh Bảo — tuviminhbao.com</span><img src="/seal.webp" alt=""></div>'
-      + '<div class="ft-disclaimer">Nội dung luận giải mang tính tham khảo, không thảy thế tư vấn chuyên môn.</div>'
+      + '<div class="ft-bottom"><span>© 2026 Tử Vi Minh Bảo — tuviminhbao.com</span>'
+      + '<div style="display:flex;gap:16px;align-items:center;flex-wrap:wrap">'
+      + '<a href="/san-pham-dich-vu.html">Sản Phẩm &amp; Dịch Vụ</a>'
+      + '<a href="/chinh-sach-bao-mat.html">Chính Sách Bảo Mật</a>'
+      + '<a href="/dieu-khoan-dich-vu.html">Điều Khoản Sử Dụng</a>'
+      + '<a href="/huong-dan-thanh-toan.html">Hướng Dẫn Thanh Toán</a>'
+      + '<a href="/mien-tru-trach-nhiem.html">Miễn Trừ Trách Nhiệm</a>'
+      + '<img src="/seal.webp" alt="">'
+      + '</div></div>'
+      + '<div class="ft-disclaimer">Nội dung luận giải mang tính tham khảo, không thay thế tư vấn chuyên môn. <a href="/mien-tru-trach-nhiem.html" style="color:inherit;text-decoration:underline">Xem chi tiết</a>.</div>'
       + '</div></footer>';
     var ft=document.createElement('div'); ft.innerHTML=f; document.body.appendChild(ft.firstChild);
   }

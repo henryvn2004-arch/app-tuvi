@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bút Tướng AI — Tử Vi Minh Bảo</title>
+<meta name="description" content="Ký trực tiếp trên màn hình — AI đo 6 trục Thần·Khí·Cốt·Nhục·Huyết·Thế theo cổ pháp thư pháp và luận chữ ký của bạn.">
+<link rel="icon" type="image/webp" href="/seal.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"></noscript>
+<link rel="stylesheet" href="/shell.css?v=27">
+<style>
+.dt-card{background:var(--white);border:1px solid var(--line);border-radius:14px;padding:20px 22px;box-shadow:var(--shadow);max-width:640px}
+.dt-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:4px}
+.dt-card p.sub{font-size:12.5px;color:var(--text-lt);margin-bottom:14px}
+.dt-input-tabs{display:flex;gap:0;border-bottom:2px solid var(--border-lt);margin-bottom:16px}
+.dt-input-tab{padding:9px 18px;font-size:12.5px;font-weight:600;cursor:pointer;color:var(--text-lt);border-bottom:2px solid transparent;margin-bottom:-2px;font-family:inherit;background:none;border-top:none;border-left:none;border-right:none;transition:all .15s}
+.dt-input-tab.active{color:var(--heading);border-bottom-color:var(--gold)}
+.dt-input-pane{display:none}
+.dt-input-pane.active{display:block}
+.btn-go{background:var(--red);color:#fff;border:none;border-radius:8px;padding:10px 22px;font-size:14px;font-weight:600;cursor:pointer;font-family:var(--serif)}
+.btn-go:disabled{opacity:.55;cursor:not-allowed}
+.btn-cancel{background:none;border:1px solid var(--line-2);border-radius:8px;padding:10px 18px;font-size:13px;color:var(--text-mid);cursor:pointer;font-family:inherit}
+.dt-privacy{display:flex;align-items:flex-start;gap:10px;padding:11px 15px;background:var(--gold-lt);border-radius:8px;border-left:3px solid var(--blue);font-size:12px;color:var(--tx-blue);margin-bottom:16px}
+.dt-error{color:var(--tx-red);padding:10px 14px;border:1px solid var(--red);border-radius:8px;background:var(--white);margin-top:12px;display:none;font-size:13px}
+.dt-error.active{display:block}
+.dt-loading{display:flex;flex-direction:column;align-items:center;gap:14px;padding:36px 0}
+.dt-loading-text{font-size:13.5px;color:var(--text-lt);text-align:center}
+.dt-result{margin-top:18px}
+.dt-result h2{font-family:var(--serif);font-size:17px;font-weight:600;margin:18px 0 10px;color:var(--heading)}
+.dt-result h3{font-family:var(--serif);font-size:14.5px;font-weight:600;margin:14px 0 8px;color:var(--heading)}
+.dt-result p{color:var(--text-mid);line-height:1.75;margin-bottom:12px;font-size:13.5px}
+.dt-result strong{color:var(--text)}
+.dt-result em{color:var(--gold-soft);font-style:italic}
+.dt-result ul{margin:0 0 12px 18px}
+.dt-result li{color:var(--text-mid);line-height:1.7;font-size:13.5px;margin-bottom:4px}
+.dt-result blockquote{border-left:3px solid var(--gold-soft);padding-left:12px;color:var(--text-lt);font-style:italic;margin:0 0 12px}
+.sign-canvas{width:100%;max-width:400px;height:180px;border:2px dashed var(--line-2);border-radius:12px;background:var(--paper);touch-action:none;cursor:crosshair;display:block;margin:0 auto}
+.sign-canvas.has-ink{border-style:solid;border-color:var(--gold)}
+.sign-hint{font-size:11.5px;color:var(--text-lt);margin-top:8px;text-align:center}
+.sign-btns{display:flex;gap:8px;justify-content:center;margin-top:12px;flex-wrap:wrap}
+.sign-pass-tags{display:flex;gap:6px;justify-content:center;margin-top:10px;flex-wrap:wrap}
+.sign-pass-tag{font-size:11px;padding:3px 10px;border-radius:20px;background:var(--gold-lt);color:var(--heading);border:1px solid var(--line-2)}
+.upload-area{border:2px dashed var(--line-2);border-radius:12px;padding:28px 20px;text-align:center;cursor:pointer;transition:all .2s;background:var(--paper);position:relative;margin-top:8px}
+.upload-area:hover,.upload-area.dragover{border-color:var(--gold);background:var(--gold-lt)}
+.upload-area input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.upload-title{font-size:13.5px;font-weight:700;color:var(--heading);margin-bottom:4px}
+.upload-sub{font-size:12px;color:var(--text-lt)}
+.preview-wrap{position:relative;display:inline-block;margin:12px auto 0}
+.preview-img{max-width:300px;max-height:200px;width:auto;border-radius:10px;display:block;border:1px solid var(--line)}
+.remove-btn{display:block;margin:10px auto 0;background:none;border:1px solid var(--line);border-radius:4px;padding:6px 16px;font-size:12px;color:var(--text-mid);cursor:pointer;font-family:inherit}
+.bt-total{text-align:center;margin-bottom:16px}
+.bt-total-num{font-size:36px;font-weight:800;color:var(--heading);line-height:1}
+.bt-total-lbl{font-size:11.5px;color:var(--text-lt);margin-top:2px}
+.bt-thieu{font-size:11px;color:var(--gold-soft);background:var(--gold-lt);border-radius:6px;padding:6px 10px;margin-top:10px;text-align:center}
+.bt-han{font-size:10.5px;color:var(--text-lt);margin-left:3px}
+.bt-hanh-row{display:flex;align-items:center;gap:10px;margin-bottom:6px;font-size:12px}
+.bt-hanh-name{width:50px;flex-shrink:0;font-weight:600;color:var(--heading)}
+.bt-hanh-bg{flex:1;height:8px;background:var(--line);border-radius:4px;overflow:hidden}
+.bt-hanh-fill{height:100%;border-radius:4px;transition:width .6s}
+.bt-hanh-pct{width:36px;text-align:right;color:var(--text-lt);flex-shrink:0}
+.bt-goiy{margin-top:14px;padding:11px 14px;background:var(--gold-lt);border-left:3px solid var(--gold);border-radius:0 8px 8px 0;font-size:12.5px;color:var(--heading)}
+.bt-birth{margin-top:14px}
+.bt-birth summary{cursor:pointer;font-size:12px;color:var(--text-mid);font-weight:600}
+.bt-birth-form{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;align-items:center}
+.bt-birth-form input,.bt-birth-form select{font-family:inherit;font-size:12px;padding:6px 8px;border:1px solid var(--line);border-radius:6px}
+.bt-word{margin-top:14px;font-size:12px;color:var(--text-mid)}
+.bt-word label{display:block;font-weight:600;margin-bottom:6px}
+.bt-word input{font-family:inherit;font-size:12px;padding:6px 8px;border:1px solid var(--line);border-radius:6px;width:220px;max-width:100%}
+.score-wrap{margin-top:8px}
+.score-row{display:flex;align-items:center;gap:12px;margin-bottom:8px}
+.score-name{font-size:11px;color:var(--text-mid);width:110px;flex-shrink:0}
+.score-bar-bg{flex:1;height:6px;background:var(--line);border-radius:3px;overflow:hidden}
+.score-bar-fill{height:100%;border-radius:3px;transition:width .6s}
+.score-num{font-size:11px;color:var(--text-lt);width:28px;text-align:right;flex-shrink:0}
+</style>
+</head>
+<body>
+
+<div class="shell">
+  <aside class="sb" id="shell-sidebar"></aside>
+
+  <main class="ws" id="ws">
+    <div class="ws-top">
+      <button class="btn mobile-only" onclick="document.getElementById('shell-sidebar').classList.toggle('open');window.shellSyncBackdrop&&shellSyncBackdrop()" aria-label="Menu">☰</button>
+      <div class="ws-title"><b>Bút Tướng AI</b><span>Xem chữ ký theo cổ pháp — <span data-tvp-price="but-tuong">…</span> Lượng</span></div>
+      <div class="ws-actions">
+        <button class="btn mobile-only" onclick="Shell.openRail()">✦ Hỏi</button>
+      </div>
+    </div>
+    <div class="ws-body">
+      <div id="introHost"></div>
+      <div id="shellRecent"></div>
+
+      <div class="dt-card" id="inputCard">
+        <h2>Ký chữ ký</h2>
+        <p class="sub">Đo 6 trục Thần·Khí·Cốt·Nhục·Huyết·Thế theo cổ pháp thư pháp — miễn phí. Luận giải đầy đủ theo cổ pháp tốn <span data-tvp-price-label="but-tuong">…</span> Lượng.</p>
+        <div class="dt-privacy"><span>🔒</span><div>Chữ ký KHÔNG được lưu — chỉ các chỉ số đo được mới gửi đi luận giải.</div></div>
+
+        <div class="dt-input-tabs">
+          <button class="dt-input-tab active" onclick="switchTab('sign',this)">✍ Ký Trực Tiếp</button>
+          <button class="dt-input-tab" onclick="switchTab('upload',this)">📁 Ảnh Chữ Ký</button>
+        </div>
+
+        <div class="dt-input-pane active" id="pane-sign">
+          <canvas id="signCanvas" class="sign-canvas" width="400" height="180"></canvas>
+          <div class="sign-hint">Ký với tốc độ thật — đừng cố ý ký chậm.</div>
+          <div class="sign-btns">
+            <button class="btn-cancel" onclick="clearSign()">Xoá</button>
+            <button class="btn-cancel" id="addPassBtn" onclick="addSignPass()" disabled>+ Ký lại lần nữa</button>
+            <button class="btn-go" id="measureBtn" onclick="measureSign()" disabled>Đo Chữ Ký →</button>
+          </div>
+          <div class="sign-pass-tags" id="passTags"></div>
+        </div>
+
+        <div class="dt-input-pane" id="pane-upload">
+          <div id="uploadArea" class="upload-area" ondragover="onDragOver(event)" ondragleave="onDragLeave(event)" ondrop="onDrop(event)">
+            <input type="file" id="fileInput" accept="image/*" onchange="onFileSelect(event)">
+            <div class="upload-title">Kéo thả ảnh chữ ký hoặc click để chọn</div>
+            <div class="upload-sub">Mực sẫm trên nền sáng · tối đa 5MB — chỉ đo được Cốt/Nhục/Thế</div>
+          </div>
+          <div id="previewSection" style="display:none;text-align:center">
+            <div class="preview-wrap"><img id="previewImg" class="preview-img" alt="Ảnh chữ ký"></div>
+            <button class="remove-btn" onclick="removeImage()">✕ Xoá ảnh</button>
+          </div>
+        </div>
+
+        <div class="bt-word">
+          <label for="btSignedWord">Bạn ký dựa theo chữ nào trong tên? (không bắt buộc)</label>
+          <input type="text" id="btSignedWord" maxlength="24" placeholder="VD: Khoa, Đăng Khoa...">
+        </div>
+
+        <details class="bt-birth">
+          <summary>+ Đối chiếu với dụng thần bát tự (không bắt buộc)</summary>
+          <div class="bt-birth-form">
+            <input type="date" id="btBirthDate" min="1900-01-01" max="2100-12-31">
+            <select id="btBirthHour">
+              <option value="">Giờ sinh (bỏ trống nếu không rõ)</option>
+              <option value="0">23h–1h (Tý)</option><option value="2">1h–3h (Sửu)</option>
+              <option value="4">3h–5h (Dần)</option><option value="6">5h–7h (Mão)</option>
+              <option value="8">7h–9h (Thìn)</option><option value="10">9h–11h (Tỵ)</option>
+              <option value="12">11h–13h (Ngọ)</option><option value="14">13h–15h (Mùi)</option>
+              <option value="16">15h–17h (Thân)</option><option value="18">17h–19h (Dậu)</option>
+              <option value="20">19h–21h (Tuất)</option><option value="22">21h–23h (Hợi)</option>
+            </select>
+            <select id="btGioiTinh"><option value="nam">Nam</option><option value="nu">Nữ</option></select>
+          </div>
+        </details>
+
+        <div class="dt-error" id="error-msg"></div>
+        <div id="btReport" style="display:none"></div>
+      </div>
+
+      <div class="dt-card" id="resultCard" data-ws-result style="display:none;margin-top:16px">
+        <h2>Luận Giải Bút Tướng</h2>
+        <p class="sub">AI · Cổ Pháp Thư Pháp Trung Hoa</p>
+        <div id="aiResult" class="dt-result"></div>
+        <div style="text-align:center;margin-top:8px">
+          <button class="btn-cancel" onclick="resetTool()">Đo Chữ Ký Khác</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <aside class="rail" id="shell-rail"></aside>
+</div>
+
+<script>window.SHELL_ACTIVE='but-tuong';window.SHELL_HISTORY=true;
+window.SHELL_INTRO={key:'but-tuong',title:'Bút Tướng AI',desc:'Ký trực tiếp trên màn hình — AI đo 6 trục cổ pháp thư pháp (Thần·Khí·Cốt·Nhục·Huyết·Thế) và luận chữ ký của bạn.'};</script>
+<script src="/auth.js?v=2"></script>
+<script src="/tools-shared/but-tuong.js"></script>
+<script src="/tuvi-paywall.js?v=21"></script>
+  <script src="/nav.js?v=23" data-icons-only></script>
+<script src="/shell.js?v=80"></script>
+<script>
+function initButTuong(){
+  Shell.setContext({
+    label:'Bút Tướng AI',
+    placeholder:'Hỏi thầy về bút tướng…',
+    greeting:'Chào bạn. Ký chữ ký ở khung bên trái (ký với tốc độ thật, đừng cố ý ký chậm), tôi sẽ đo 6 trục cổ pháp và luận giúp bạn. Sau khi có kết quả, cứ hỏi tôi thêm.',
+    chips:['Trục Thần là gì?','Vì sao ký nhiều lần lại đo được độ ổn định?','Ngũ hành nét liên quan gì tới dụng thần?']
+  });
+}
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initButTuong); else initButTuong();
+
+// ══════════════════════════════════════════════════════════════════════
+// Port từ public/tools/but-tuong-ai.html — canvas ký + gate Lượng + SSE
+// 'delta' stream tới /api/but-tuong. Engine đo dùng chung ở
+// /tools-shared/but-tuong.js (window.BuTuongTool).
+// ══════════════════════════════════════════════════════════════════════
+let _strokeSets = [];
+let _curStrokes = [];
+let _curStroke = null;
+let _drawing = false;
+let _t0 = null;
+let _metrics = null;
+let _birth = null;
+let _signedWord = '';
+let _currentSlug = '';
+
+const canvas = document.getElementById('signCanvas');
+const ctx = canvas.getContext('2d');
+ctx.lineWidth = 2.2; ctx.lineCap = 'round'; ctx.lineJoin = 'round'; ctx.strokeStyle = '#1a1a1a';
+
+function ptFromEvent(e) {
+  const rect = canvas.getBoundingClientRect();
+  const scaleX = canvas.width / rect.width, scaleY = canvas.height / rect.height;
+  const x = (e.clientX - rect.left) * scaleX, y = (e.clientY - rect.top) * scaleY;
+  if (_t0 == null) _t0 = performance.now();
+  const t = performance.now() - _t0;
+  const p = (typeof e.pressure === 'number' && e.pressure > 0) ? e.pressure : 0.5;
+  return { x, y, t, p };
+}
+
+function refreshButtons() {
+  const hasInk = _curStrokes.length > 0 || (_curStroke && _curStroke.length > 1);
+  document.getElementById('measureBtn').disabled = !(hasInk || _strokeSets.length > 0);
+  document.getElementById('addPassBtn').disabled = !hasInk || _strokeSets.length >= 2;
+  canvas.classList.toggle('has-ink', hasInk || _strokeSets.length > 0);
+}
+
+canvas.addEventListener('pointerdown', (e) => {
+  e.preventDefault();
+  canvas.setPointerCapture(e.pointerId);
+  _curStroke = [ptFromEvent(e)];
+  _drawing = true;
+  ctx.beginPath();
+  ctx.moveTo(_curStroke[0].x, _curStroke[0].y);
+});
+canvas.addEventListener('pointermove', (e) => {
+  if (!_drawing) return;
+  const pt = ptFromEvent(e);
+  _curStroke.push(pt);
+  ctx.lineTo(pt.x, pt.y);
+  ctx.stroke();
+});
+function endStroke() {
+  if (!_drawing) return;
+  _drawing = false;
+  if (_curStroke && _curStroke.length > 1) _curStrokes.push(_curStroke);
+  _curStroke = null;
+  refreshButtons();
+}
+canvas.addEventListener('pointerup', endStroke);
+canvas.addEventListener('pointercancel', endStroke);
+canvas.addEventListener('pointerleave', () => { if (_drawing) endStroke(); });
+
+function clearSign() {
+  _strokeSets = []; _curStrokes = []; _curStroke = null; _t0 = null;
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  document.getElementById('passTags').innerHTML = '';
+  document.getElementById('btReport').style.display = 'none';
+  refreshButtons();
+}
+
+function addSignPass() {
+  if (!_curStrokes.length) return;
+  _strokeSets.push(_curStrokes);
+  _curStrokes = []; _t0 = null;
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  document.getElementById('passTags').innerHTML = _strokeSets.map((_, i) => `<span class="sign-pass-tag">Lần ${i+1} ✓</span>`).join('');
+  refreshButtons();
+}
+
+function measureSign() {
+  if (_curStrokes.length || (_curStroke && _curStroke.length > 1)) {
+    _strokeSets.push(_curStrokes.concat(_curStroke && _curStroke.length > 1 ? [_curStroke] : []));
+  }
+  if (!_strokeSets.length) return;
+  _metrics = window.BuTuongTool.analyzeStrokes(_strokeSets);
+  renderReport(_metrics);
+}
+
+function switchTab(id, btn) {
+  document.querySelectorAll('.dt-input-tab').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.dt-input-pane').forEach(p=>p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('pane-'+id).classList.add('active');
+}
+
+let _uploadedImg = null;
+let _previewObjUrl = null;
+function onDragOver(e){e.preventDefault();document.getElementById('uploadArea').classList.add('dragover');}
+function onDragLeave(){document.getElementById('uploadArea').classList.remove('dragover');}
+function onDrop(e){e.preventDefault();document.getElementById('uploadArea').classList.remove('dragover');const f=e.dataTransfer.files[0];if(f)processFile(f);}
+function onFileSelect(e){const f=e.target.files[0];if(f)processFile(f);}
+
+function processFile(file) {
+  const err = document.getElementById('error-msg'); err.classList.remove('active');
+  if (!file.type.startsWith('image/')) { err.textContent='Vui lòng chọn file ảnh.'; err.classList.add('active'); return; }
+  if (file.size > 5*1024*1024) { err.textContent='Ảnh quá lớn.'; err.classList.add('active'); return; }
+  const img = new Image();
+  const ou = URL.createObjectURL(file);
+  img.onload = () => {
+    _uploadedImg = img; _previewObjUrl = ou;
+    document.getElementById('previewImg').src = ou;
+    document.getElementById('previewSection').style.display = 'block';
+    document.getElementById('uploadArea').style.display = 'none';
+    const cv = document.createElement('canvas');
+    const MAX = 500;
+    let w = img.naturalWidth, h = img.naturalHeight;
+    if (w > MAX || h > MAX) { if (w > h) { h = Math.round(h*MAX/w); w = MAX; } else { w = Math.round(w*MAX/h); h = MAX; } }
+    cv.width = w; cv.height = h;
+    cv.getContext('2d').drawImage(img, 0, 0, w, h);
+    const imageData = cv.getContext('2d').getImageData(0, 0, w, h);
+    _metrics = window.BuTuongTool.analyzeImageData(imageData);
+    if (!_metrics) { err.textContent = 'Không đọc được nét mực từ ảnh này.'; err.classList.add('active'); return; }
+    renderReport(_metrics);
+  };
+  img.src = ou;
+}
+function removeImage() {
+  _uploadedImg = null; _metrics = null;
+  if (_previewObjUrl) { URL.revokeObjectURL(_previewObjUrl); _previewObjUrl = null; }
+  document.getElementById('previewSection').style.display = 'none';
+  document.getElementById('uploadArea').style.display = 'block';
+  document.getElementById('fileInput').value = '';
+  document.getElementById('btReport').style.display = 'none';
+}
+
+function scoreColor(v) {
+  if (v >= 75) return 'var(--gold-soft)';
+  if (v >= 50) return 'var(--gold)';
+  return 'var(--red)';
+}
+
+function renderReport(m) {
+  if (!m) return;
+  const T = window.BuTuongTool.TRUC_META;
+  const H = window.BuTuongTool.NGU_HANH_META;
+  const order = window.BuTuongTool.HANH_ORDER;
+  let html = '<div class="bt-total"><div class="bt-total-num">' + m.tongDiem + '</div><div class="bt-total-lbl">/ 100 · điểm tổng ' + (m.nguon === 'anh-tinh' ? '(3 trục đo được từ ảnh)' : '') + '</div></div>';
+  html += '<div class="score-wrap">';
+  Object.keys(T).forEach((k) => {
+    const t = m.truc[k];
+    const label = T[k].ten + '<span class="bt-han">' + T[k].han + '</span>';
+    if (!t) { html += '<div class="score-row"><span class="score-name">' + label + '</span><span style="flex:1;font-size:11px;color:var(--text-lt)">không đo được</span></div>'; return; }
+    html += '<div class="score-row"><span class="score-name">' + label + '</span><div class="score-bar-bg"><div class="score-bar-fill" style="width:' + t.score + '%;background:' + scoreColor(t.score) + '"></div></div><span class="score-num">' + t.score + '</span></div>';
+  });
+  html += '</div>';
+  if (m.thieu && m.thieu.length) {
+    html += '<div class="bt-thieu">Ảnh tĩnh chưa đo được: ' + m.thieu.map((k) => T[k].ten).join(', ') + ' — ký trực tiếp để đủ cả 6 trục.</div>';
+  }
+  html += '<div style="margin-top:16px;font-size:12px;font-weight:700;color:var(--heading);text-align:center">Ngũ Hành Nét</div><div style="margin-top:8px">';
+  order.forEach((k) => {
+    html += '<div class="bt-hanh-row"><span class="bt-hanh-name">' + H[k].ten + '</span><div class="bt-hanh-bg"><div class="bt-hanh-fill" style="width:' + m.nguHanh[k] + '%;background:' + H[k].mau + '"></div></div><span class="bt-hanh-pct">' + m.nguHanh[k] + '%</span></div>';
+  });
+  html += '</div>';
+  if (m.goiY) html += '<div class="bt-goiy"><strong>Gợi ý:</strong> ' + m.goiY.loi + '</div>';
+  html += '<div style="text-align:center;margin-top:18px"><button class="btn-go" onclick="analyze()">Luận Giải Đầy Đủ — <span data-tvp-price="but-tuong">…</span> Lượng →</button></div>';
+  document.getElementById('btReport').innerHTML = html;
+  document.getElementById('btReport').style.display = 'block';
+  if (window.TuviPaywall && window.TuviPaywall.fillPriceSlots) window.TuviPaywall.fillPriceSlots(document.getElementById('btReport'));
+}
+
+function readBirth() {
+  const d = document.getElementById('btBirthDate').value;
+  const hourVal = document.getElementById('btBirthHour').value;
+  const gt = document.getElementById('btGioiTinh').value;
+  if (!d || hourVal === '') return null;
+  const [y, m, day] = d.split('-').map(Number);
+  return { ngay: day, thang: m, nam: y, gio: Number(hourVal), gioiTinh: gt };
+}
+
+function readSignedWord() {
+  return document.getElementById('btSignedWord').value.trim().slice(0, 24);
+}
+
+async function analyze() {
+  if (!_metrics) return;
+  _currentSlug = TuviPaywall.generateToolSlug('but-tuong');
+  _birth = readBirth();
+  _signedWord = readSignedWord();
+  await TuviPaywall.requireCredits(_currentSlug, async () => { await _doAnalyze(); });
+}
+
+async function _doAnalyze() {
+  document.getElementById('resultCard').style.display = 'block';
+  document.getElementById('aiResult').innerHTML = '<div class="dt-loading"><div class="dt-loading-text">AI đang luận bút tướng...<br><span style="font-size:12px;opacity:.7">Thường mất 10–20 giây</span></div></div>';
+  document.getElementById('resultCard').scrollIntoView({behavior:'smooth',block:'start'});
+  const err = document.getElementById('error-msg'); err.classList.remove('active');
+
+  try {
+    const res = await fetch('/api/but-tuong', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ metrics: _metrics, birth: _birth, signedWord: _signedWord }),
+    });
+    if (!res.ok) { const d = await res.json().catch(()=>({})); throw new Error(d.error || 'Lỗi ' + res.status); }
+
+    const reader = res.body.getReader(); const dec = new TextDecoder();
+    let full = '', buf = '';
+    const el = document.getElementById('aiResult'); el.innerHTML = '';
+    while (true) {
+      const { done, value } = await reader.read(); if (done) break;
+      buf += dec.decode(value, { stream: true });
+      const lines = buf.split('\n'); buf = lines.pop() || '';
+      for (const line of lines) {
+        if (!line.startsWith('data: ')) continue;
+        const raw = line.slice(6).trim(); if (raw === '[DONE]') break;
+        try { const j = JSON.parse(raw); if (j.err) throw new Error(j.err); if (j.t) { full += j.t; el.innerHTML = renderMd(full); } } catch (e) { if (e.message && !e.message.includes('JSON')) throw e; }
+      }
+    }
+    if (!full) throw new Error('Không có kết quả.');
+    el.innerHTML = renderMd(full);
+    _saveButTuongReading(full);
+    Shell.setShareable({ kind:'text', toolId:'but-tuong', title:'Bút Tướng của tôi', text: full });
+  } catch (e) {
+    document.getElementById('aiResult').innerHTML = '';
+    document.getElementById('resultCard').style.display = 'none';
+    err.textContent = 'Lỗi: ' + (e.message || 'Không thể kết nối.'); err.classList.add('active');
+  }
+}
+
+function resetTool() {
+  clearSign(); removeImage();
+  document.getElementById('resultCard').style.display = 'none';
+  document.getElementById('aiResult').innerHTML = '';
+  document.getElementById('inputCard').scrollIntoView({behavior:'smooth',block:'start'});
+  Shell.setShareable(null);
+}
+
+function renderMd(md){
+  return md
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/^## (.+)$/gm,'<h2>$1</h2>')
+    .replace(/^### (.+)$/gm,'<h3>$1</h3>')
+    .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
+    .replace(/\*(.+?)\*/g,'<em>$1</em>')
+    .replace(/^> (.+)$/gm,'<blockquote>$1</blockquote>')
+    .replace(/^- (.+)$/gm,'<li>$1</li>')
+    .replace(/(<li>[^]*?<\/li>\n?)+/g,s=>'<ul>'+s+'</ul>')
+    .replace(/\n\n+/g,'</p><p>')
+    .replace(/^(?!<[hublp])(.+)$/gm,'<p>$1</p>')
+    .replace(/<p><\/p>/g,'')
+    .replace(/<p>(<[hul])/g,'$1')
+    .replace(/(<\/[hul][^>]*>)<\/p>/g,'$1');
+}
+
+TuviPaywall.init({ product: 'but-tuong', slug: () => _currentSlug, onUnlock: () => {} });
+
+// Lưu lịch sử — CHỈ text luận giải, KHÔNG kèm thumbnail: but-tuong cố ý
+// không giữ hình chữ ký, xem docs/COPHAP-BUT-TUONG.md §9.
+async function _saveButTuongReading(resultText) {
+  try {
+    const token = window.Auth?.getSession()?.access_token;
+    if (!token || !resultText) return;
+    fetch('/api/history?action=save_tuong', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+      body: JSON.stringify({ tool: 'but-tuong', result_text: resultText, thumbnail: null }),
+    }).catch(() => {});
+  } catch (e) {}
+}
+
+refreshButtons();
+</script>
+</body>
+</html>

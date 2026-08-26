@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"></noscript>
-<link rel="stylesheet" href="/shell.css?v=19">
+<link rel="stylesheet" href="/shell.css?v=29">
 <style>
 .form-card{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);max-width:640px}
 .form-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:3px}
@@ -71,7 +71,8 @@
       <div id="shellRecent"></div>
       <div class="form-card" id="birthPanel">
         <h2>Nhập ngày sinh của bạn (dương lịch)</h2>
-        <p class="sub">AI sẽ lập lá số, phân tích cung Phu Thê rồi vẽ chân dung người bạn đời.</p>
+        <p class="sub">Vẽ chân dung người bạn đời tương lai từ cung Phu Thê của bạn. Bạn tò mò người ấy sẽ trông ra sao, tính khí thế nào. Dùng khi muốn một hình ảnh cụ thể, không chỉ vài dòng luận chữ.</p>
+        <p class="price-note" data-tvp-price-label="chan-dung-vo-chong">…</p>
         <div id="tuviFormHost"></div>
         <div class="frow" style="margin-bottom:0">
           <button class="btn-go" id="btnGo" onclick="analyze()">Vẽ Chân Dung — <span data-tvp-price="chan-dung-vo-chong">…</span> Lượng →</button>
@@ -132,6 +133,10 @@
               <div style="width:100%;margin-top:6px;background:#FBF3DE;border:1px solid #e8d9b0;border-radius:8px;padding:12px 14px;font-size:12.5px;line-height:1.6;color:#5a5145">
                 <span class="ic" data-icon="lightbulb"></span> Chân dung này chỉ mang tính minh hoạ và tham khảo, được AI mô phỏng từ đặc điểm hình dáng gắn với chính tinh, phụ tinh tại cung Phu Thê trong lá số của bạn — không phải ảnh chụp hay dự đoán chính xác diện mạo người bạn đời ngoài đời thực. Để có kết quả sát thực hơn, cần đối chiếu thêm với lá số thật của người đó.
               </div>
+              <div class="compat-invite" id="cdvcInviteBlock" style="width:100%;display:none">
+                <div class="ci-t" id="cdvcInviteText"></div>
+                <button type="button" class="btn" onclick="Shell.shareNow()">Chia sẻ cho bạn bè xem →</button>
+              </div>
             </div>
           </div>
         </div>
@@ -151,14 +156,14 @@
 </div>
 
 <script>window.SHELL_ACTIVE='chan-dung-vo-chong';window.SHELL_HISTORY=true;
-window.SHELL_INTRO={key:'chan-dung-vo-chong',title:'Chân Dung Vợ Chồng',desc:'AI phân tích cung <b>Phu Thê</b> trong lá số rồi vẽ <b>chân dung</b> người bạn đời kèm mô tả tính cách, phong thái.'};</script>
+window.SHELL_INTRO={key:'chan-dung-vo-chong',title:'Chân Dung Vợ Chồng',desc:'Vẽ chân dung người bạn đời tương lai từ cung Phu Thê của bạn. Bạn tò mò người ấy sẽ trông ra sao, tính khí thế nào. Dùng khi muốn một hình ảnh cụ thể, không chỉ vài dòng luận chữ.'};</script>
 <script src="/laso-chart.js?v=3"></script>
 <script src="/tuvi-form.js?v=2"></script>
 <script src="/tuvi-paywall.js?v=21"></script>
 <script src="/auth.js?v=2"></script>
-  <script src="/nav.js?v=22" data-icons-only></script>
-<script src="/shell.js?v=73"></script>
-<script src="/tools-shared/ai-loading-steps.js?v=8"></script>
+  <script src="/nav.js?v=23" data-icons-only></script>
+<script src="/shell.js?v=82"></script>
+<script src="/tools-shared/ai-loading-steps.js?v=9"></script>
 <script src="/tools-shared/portrait-recover.js?v=2"></script>
 <script>
 var _currentSlug = '';
@@ -455,6 +460,13 @@ function renderProse(data) {
   } else { luanGiaiBlock.style.display = 'none'; }
   document.getElementById('portraitBlock').style.display = 'block';
   document.getElementById('card').style.display = 'flex';
+  // Tool này KHÔNG có "người thứ hai" thật để rủ xem chung (khác tuong-hop/
+  // duyen-no-tien-kiep) — chân dung là suy ra từ MỘT MÌNH lá số người dùng.
+  // Nên CTA đổi hướng: xin xác nhận "đúng gu chưa" + rủ bạn TỰ vẽ chân dung
+  // của họ, thay vì "gửi cho người B trong kết quả này xem".
+  document.getElementById('cdvcInviteText').innerHTML =
+    'Đúng gu bạn chưa? Gửi ảnh này cho hội bạn xem, rồi rủ họ vẽ thử <b>người bạn đời tương lai của chính họ</b> luôn.';
+  document.getElementById('cdvcInviteBlock').style.display = 'flex';
 }
 
 function renderPhuThe(pt) {
@@ -580,6 +592,24 @@ function _mountInviteCta() {
   document.head.appendChild(s);
 }
 
+
+// ── B2 — nhận hand-off từ trang chia sẻ `/ket-qua` ───────────────────────────
+// Người mở link của bạn bè nhập ngày sinh NGAY TẠI trang chia sẻ rồi được đưa
+// sang đây kèm `?ngay=&thang=&nam=&gio=&gioitinh=&auto=1`. `Shell.prefillForm()`
+// đọc query TRƯỚC localStorage nên lá số trong link luôn thắng.
+//
+// 🔑 Tự chạy được vì `analyze()` mở đầu bằng lượt TÍNH THỬ: không đăng nhập,
+// không trừ Lượng, không gọi model ảnh. Tường khoá dựng sau đó như thường.
+// Chạy SAU khi `shell.js` boot (DOMContentLoaded) để `Shell.setContext` không lỗi.
+function _pageInitB2() {
+  try {
+    if (!window.Shell || !Shell.prefillForm) return;
+    var co = Shell.prefillForm();
+    if (co && Shell.autoRun() && document.getElementById('nam') && document.getElementById('nam').value) analyze();
+  } catch (e) { /* hand-off hỏng KHÔNG được chặn người dùng tự nhập tay */ }
+}
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', _pageInitB2);
+else _pageInitB2();
 </script>
 </body>
 </html>

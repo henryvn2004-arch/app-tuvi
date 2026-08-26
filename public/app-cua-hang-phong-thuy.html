@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"></noscript>
-<link rel="stylesheet" href="/shell.css?v=19">
+<link rel="stylesheet" href="/shell.css?v=29">
 <style>
 .pt-card{background:var(--white);border:1px solid var(--line);border-radius:14px;padding:20px 22px;box-shadow:var(--shadow);max-width:680px;margin-bottom:16px}
 .pt-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:4px;display:flex;align-items:center;gap:8px}
@@ -155,7 +155,8 @@
 
       <div class="pt-card">
         <h2><span class="pt-num">2</span> Chụp / Tải Ảnh</h2>
-        <p class="sub">Chụp ảnh toàn cảnh, bao gồm cửa và các vật dụng chính. Ảnh càng rõ nét, phân tích càng chính xác.</p>
+        <p class="sub">Chụp ảnh cửa hàng, xem cách bày biện có đang cản khách vào. Bạn thấy cửa hàng vắng khách mà chưa rõ vì đâu. Dùng khi mở cửa hàng mới hoặc muốn sắp lại không gian bán.</p>
+        <p class="price-note" data-tvp-price-label="cua-hang-phong-thuy">…</p>
         <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click()" ondragover="onDrag(event,1)" ondragleave="onDrag(event,0)" ondrop="onDrop(event)">
           <input type="file" id="fileInput" accept="image/*" onchange="onFile(event)">
           <span class="upload-icon ic" data-icon="store" style="font-size:36px;display:block"></span>
@@ -257,12 +258,13 @@
 </div>
 
 <script>window.SHELL_ACTIVE='cua-hang-phong-thuy';window.SHELL_HISTORY=true;
-window.SHELL_INTRO={key:'cua-hang-phong-thuy',title:'Phong Thủy Cửa Hàng & Văn Phòng',desc:'Chụp ảnh cửa hàng / văn phòng — <b>AI</b> chấm điểm bố trí thu ngân, cửa chính, két sắt theo Bát Trạch để tối ưu tài lộc.'};</script>
+window.SHELL_INTRO={key:'cua-hang-phong-thuy',title:'Phong Thủy Cửa Hàng & Văn Phòng',desc:'Chụp ảnh cửa hàng, xem cách bày biện có đang cản khách vào. Bạn thấy cửa hàng vắng khách mà chưa rõ vì đâu. Dùng khi mở cửa hàng mới hoặc muốn sắp lại không gian bán.'};</script>
 <script src="/auth.js?v=2"></script>
 <script src="/tuvi-paywall.js?v=20"></script>
-  <script src="/nav.js?v=22" data-icons-only></script>
-<script src="/shell.js?v=73"></script>
-<script src="/tools-shared/ai-loading-steps.js?v=8"></script>
+  <script src="/nav.js?v=23" data-icons-only></script>
+<script src="/shell.js?v=82"></script>
+<script src="/tools-shared/ai-loading-steps.js?v=9"></script>
+<script src="/tools-shared/bat-trach.js?v=2"></script>
 <script>
 function initCuaHangPhongThuy(){
   Shell.setContext({
@@ -279,10 +281,14 @@ if (document.readyState === 'loading') document.addEventListener('DOMContentLoad
 // calc + gate Lượng qua TuviPaywall (product 'cua-hang-phong-thuy' +
 // 'phong-thuy-render'). Vá sẵn lỗi cú pháp `$_{_gua}` của bản gốc.
 // ══════════════════════════════════════════════════════════════════════
-const GUA_DATA={1:{name:'Khảm',elem:'Thủy',icon:'☵',good:{SE:'Sinh Khí',E:'Thiên Y',S:'Diên Niên',N:'Phục Vị'},bad:{W:'Họa Hại',NE:'Ngũ Quỷ',NW:'Lục Sát',SW:'Tuyệt Mệnh'}},2:{name:'Khôn',elem:'Thổ',icon:'☷',good:{NE:'Sinh Khí',W:'Thiên Y',NW:'Diên Niên',SW:'Phục Vị'},bad:{E:'Họa Hại',SE:'Ngũ Quỷ',S:'Lục Sát',N:'Tuyệt Mệnh'}},3:{name:'Chấn',elem:'Mộc',icon:'☳',good:{S:'Sinh Khí',N:'Thiên Y',SE:'Diên Niên',E:'Phục Vị'},bad:{SW:'Họa Hại',W:'Ngũ Quỷ',NE:'Lục Sát',NW:'Tuyệt Mệnh'}},4:{name:'Tốn',elem:'Mộc',icon:'☴',good:{N:'Sinh Khí',S:'Thiên Y',E:'Diên Niên',SE:'Phục Vị'},bad:{NW:'Họa Hại',SW:'Ngũ Quỷ',W:'Lục Sát',NE:'Tuyệt Mệnh'}},6:{name:'Càn',elem:'Kim',icon:'☰',good:{W:'Sinh Khí',NE:'Thiên Y',SW:'Diên Niên',NW:'Phục Vị'},bad:{SE:'Họa Hại',S:'Ngũ Quỷ',E:'Lục Sát',N:'Tuyệt Mệnh'}},7:{name:'Đoài',elem:'Kim',icon:'☱',good:{NW:'Sinh Khí',SW:'Thiên Y',NE:'Diên Niên',W:'Phục Vị'},bad:{E:'Họa Hại',N:'Ngũ Quỷ',SE:'Lục Sát',S:'Tuyệt Mệnh'}},8:{name:'Cấn',elem:'Thổ',icon:'☶',good:{SW:'Sinh Khí',NW:'Thiên Y',W:'Diên Niên',NE:'Phục Vị'},bad:{S:'Họa Hại',E:'Ngũ Quỷ',N:'Lục Sát',SE:'Tuyệt Mệnh'}},9:{name:'Ly',elem:'Hỏa',icon:'☲',good:{E:'Sinh Khí',SE:'Thiên Y',N:'Diên Niên',S:'Phục Vị'},bad:{NE:'Họa Hại',NW:'Ngũ Quỷ',SW:'Lục Sát',W:'Tuyệt Mệnh'}}};
+// GUA_DATA + calcGua KHÔNG còn chép tay — nạp từ /tools-shared/bat-trach.js
+// (nguồn DUY NHẤT, dùng chung với /tools/bat-trach.html). Bản chép tay cũ ở
+// đây sai 12/64 ô Du Niên + dùng công thức cung mệnh SAI (tổng 4 chữ số năm
+// thay vì 2 chữ số cuối — xem ghi chú đầu file bat-trach.js).
+const GUA_DATA=BatTrachTool.guaDataLegacy();
 const DIR_VN={N:'Bắc',NE:'Đông Bắc',E:'Đông',SE:'Đông Nam',S:'Nam',SW:'Tây Nam',W:'Tây',NW:'Tây Bắc',C:'Trung Tâm'};
 
-function calcGua(y,g){let s=String(y).split('').reduce((a,c)=>a+parseInt(c),0);while(s>=10)s=String(s).split('').reduce((a,c)=>a+parseInt(c),0);let r;if(g==='male'){r=y>=2000?9-s:10-s;if(r<=0)r+=9;if(r===5)r=2;}else{r=y>=2000?s+6:s+5;while(r>=10)r=String(r).split('').reduce((a,c)=>a+parseInt(c),0);if(r===5)r=8;}return r;}
+function calcGua(y,g){return BatTrachTool.getCungMenh(y,g==='male'?'nam':'nu');}
 
 let _gua=null,_img64=null,_imgType='image/jpeg';
 const ANALYSIS_STEPS=[

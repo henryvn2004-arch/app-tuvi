@@ -108,6 +108,9 @@ export const HAN_VIET: Record<string, string> = {
   狡: 'Giảo', 挂: 'Quải', 颠: 'Điên', 倒: 'Đảo', 平: 'Bình', 悬: 'Huyền',
   针: 'Châm', 字: 'Tự', 杖: 'Trượng', 阙: 'Khuyết', 曲: 'Khúc', 脚: 'Cước',
   聋: 'Lung', 哑: 'Á',
+  // 🐞 `拱` (拱禄 — Củng Lộc) do `mingyu-core` 0.1.30 thêm thần sát mới vào
+  // `shenShaTypes`, bắt được bởi `check:terms` khi PR #534 nâng phiên bản.
+  拱: 'Củng',
 };
 
 /**

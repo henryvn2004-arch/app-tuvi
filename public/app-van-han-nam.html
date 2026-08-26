@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"></noscript>
-<link rel="stylesheet" href="/shell.css?v=19">
+<link rel="stylesheet" href="/shell.css?v=29">
 <link rel="stylesheet" href="/laso-chart.css?v=3">
 <style>
 /* Center riêng của trang Vận Hạn 12 Tháng — mượn khuôn app-luan-giai.html */
@@ -109,7 +109,8 @@
       <div id="shellRecent"></div>
       <div class="form-card" id="birthPanel">
         <h2>Nhập ngày sinh để xem vận hạn 12 tháng tới</h2>
-        <p class="sub" id="fmSub">Lập lá số theo cổ pháp rồi soi tiểu vận năm và nguyệt vận từng tháng — cung hạn, sao, cách cục vận của đúng 12 tháng kể từ hôm nay.</p>
+        <p class="sub" id="fmSub">Xem đúng 12 tháng tới: cung hạn, sao, cách cục của từng tháng. Bạn muốn biết trước tháng nào nên cẩn thận, tháng nào nên tiến. Dùng khi cần một lịch vận hạn cụ thể cho năm sắp tới — tính theo tháng ÂM LỊCH, mỗi tháng ghi rõ quãng ngày dương lịch tương ứng.</p>
+        <p class="price-note" data-tvp-price-label="van-han-nam">…</p>
         <div id="tuviFormHost"></div>
         <div class="frow" style="margin-bottom:0">
           <button class="btn-go" id="btnGo" onclick="doXem()">Xem vận hạn →</button>
@@ -132,7 +133,7 @@
 </div>
 
 <script>window.SHELL_ACTIVE='van-han-nam';window.SHELL_HISTORY=true;
-window.SHELL_INTRO={key:'van-han-nam',title:'Vận Hạn 12 Tháng Tới',desc:'Lát cắt sâu của bản Luận Giải: chỉ nhìn <b>tiểu vận năm</b> và <b>nguyệt vận từng tháng</b> của đúng 12 tháng kể từ hôm nay. Mỗi tháng một phần riêng, kèm nút <b>✦ Hỏi trợ lý</b> để đào sâu.'};</script>
+window.SHELL_INTRO={key:'van-han-nam',title:'Vận Hạn 12 Tháng Tới',desc:'Xem đúng 12 tháng tới: cung hạn, sao, cách cục của từng tháng. Bạn muốn biết trước tháng nào nên cẩn thận, tháng nào nên tiến. Dùng khi cần một lịch vận hạn cụ thể cho năm sắp tới.'};</script>
 <script src="/tuvi-ansao-engine.js"></script>
 <script src="/laso-chart.js?v=3"></script>
 <script src="/luan-giai-core.js?v=3"></script>
@@ -141,9 +142,10 @@ window.SHELL_INTRO={key:'van-han-nam',title:'Vận Hạn 12 Tháng Tới',desc:'
 <script src="/tuvi-form.js?v=2"></script>
 <script src="/auth.js?v=2"></script>
 <script src="/tuvi-paywall.js?v=21"></script>
-<script src="/nav.js?v=22" data-icons-only></script>
-<script src="/shell.js?v=73"></script>
-<script src="/tools-shared/ai-loading-steps.js?v=8"></script>
+<script src="/nav.js?v=23" data-icons-only></script>
+<script src="/shell.js?v=82"></script>
+<script src="/tools-shared/ai-loading-steps.js?v=9"></script>
+<script src="/tools-shared/phan-pool.js?v=1"></script>
 <script>
 TuviForm.render('tuviFormHost', {mode:'compact', gioitinh:'nam'});
 TuviPaywall.init({product:'van-han-nam'});
@@ -174,8 +176,10 @@ function scoreColor(t){ return t>=7?'var(--green)':t>=5?'var(--gold-soft)':'var(
 function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
 var _astrolabe=null,_hoTen='',_ngay=0,_thang=0,_nam=0,_gioitinh='nam',_laSoText=null;
-var _khung=null,_labels=null,_tongPhan=0,_pendingSlug=null,_currentPhan=0,_store={};
+var _khung=null,_labels=null,_tongPhan=0,_pendingSlug=null,_store={};
 var _pace=(window.AiLoadingSteps&&AiLoadingSteps.pacer)?AiLoadingSteps.pacer():null;
+// Số phần chạy song song — xem lý do chọn 3 trong tools-shared/phan-pool.js.
+var PHAN_CONCURRENCY=3;
 var SB_URL_VH='https://dciwkfdqhhddeymlisey.supabase.co';
 var SB_ANON_VH='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRjaXdrZmRxaGhkZGV5bWxpc2V5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyMzQ2MzksImV4cCI6MjA4ODgxMDYzOX0._3aXoe0hO-46J1gASUiNv__tWjSzLZFTL0M3-47L26I';
 
@@ -442,9 +446,47 @@ async function _startAI(){
   document.getElementById('vhUnlock').style.display='none';
   document.getElementById('vhProgress').style.display='block';
   _paintSecLocks(false);
-  _currentPhan=0;_store={};
+  _store={};
   _pace&&_pace.reset();
-  await _loadNext();
+  // Kimi K3 (primary) ~120 giây/phần — chạy tuần tự 12+ phần có thể chờ rất
+  // lâu. Bể PhanPool chạy PHAN_CONCURRENCY phần song song (mỗi phần độc lập,
+  // không đọc kết quả phần khác) ⇒ giảm tổng thời gian chờ ~PHAN_CONCURRENCY
+  // lần mà không đụng gì tới model. Xem tools-shared/phan-pool.js.
+  //
+  // 🔑 BẮT BUỘC bắn PHẦN 1 RIÊNG LẺ trước khi mở bể song song — cùng lý do đã
+  // ghi ở app-luan-giai.html (Code #1, CLAUDE.md track tối ưu chi phí Opus).
+  // /api/van-han-nam nay cache `system` cho CẢ 16 PHẦN (phần 1-4, trùng 4
+  // phần đầu của Luận Giải, QUA `buildPromptCached`; phần 5-16, tức 12 tháng
+  // riêng của tool này, QUA `buildPromptThang` — cả hai gọi chung
+  // `cachedSystemFor(formatLaSoV2(ls))` nên `system` byte-for-byte GIỐNG HỆT
+  // nhau ở mọi phần, xem lib/agent/luan-giai-doc.ts). Mở PHAN_CONCURRENCY
+  // song song ngay từ đầu thì 3 lượt đầu tiên bắn gần như đồng thời
+  // (staggerMs 400ms, ngắn hơn nhiều so với thời gian một lượt LLM ghi xong
+  // cache) ⇒ cache-miss cả 3, tốn thêm phí ghi thay vì tiết kiệm — đúng cho
+  // TOÀN BỘ 16 phần, không riêng gì 4 phần đầu. Lượt mồi này vẫn đủ để chặn:
+  // phần 1 LUÔN chạy xong (và do đó lượt ghi cache, nếu có, LUÔN hoàn tất)
+  // TRƯỚC KHI bể mở cho phần 2-16 — không cần sửa gì thêm ở đây khi phần
+  // tháng bắt đầu ăn chung cache, cơ chế mồi vốn đã bảo vệ đúng mọi phần sau
+  // phần 1, bất kể phần đó có cache hay không.
+  document.getElementById('vhProgress').textContent='Đang luận phần 1 / '+_tongPhan+'...';
+  var primeOk=await _runPhanVanHan(1);
+  var result=await PhanPool.run({
+    total:_tongPhan,
+    concurrency:PHAN_CONCURRENCY,
+    progressEl:'vhProgress',
+    progressPrefix:'Đang luận phần',
+    pace:_pace,
+    // Phần 1 đã chạy ở lượt mồi trên — bể chỉ cần TRẢ LẠI kết quả đó, không
+    // gọi lại API (gọi lại là tốn thêm một lượt model vô ích).
+    runPart:function(p){ return p===1?Promise.resolve(primeOk):_runPhanVanHan(p); },
+  });
+  if(result.ok){
+    document.getElementById('vhProgress').textContent='✓ Luận vận hạn hoàn tất';
+    _saveResult();
+  }else{
+    document.getElementById('vhProgress').textContent=
+      '⚠ '+result.failed.length+' phần lỗi (phần '+result.failed.join(', ')+') — bấm ↻ Thử lại ở từng phần rồi tải lại trang.';
+  }
 }
 // Truy vấn RAG theo từng phần — phần tháng bám cung nguyệt hạn + sao của đúng
 // tháng đó (không phải một truy vấn chung cho cả 12 tháng).
@@ -457,17 +499,8 @@ function ragQuery(p){
   if(!t||t.loi) return 'lưu nguyệt hạn vận tháng';
   return 'lưu nguyệt hạn cung '+t.cungNguyetHan+' '+t.chinhTinh.join(' ')+' vận tháng';
 }
-async function _loadNext(){
-  if(_currentPhan>=_tongPhan){
-    document.getElementById('vhProgress').textContent='✓ Luận vận hạn hoàn tất';
-    _saveResult();
-    return;
-  }
-  _currentPhan++;
-  var p=_currentPhan;
-  var _eta=_pace?_pace.remainText(_tongPhan-p+1):'';
-  document.getElementById('vhProgress').textContent='Đang luận phần '+p+' / '+_tongPhan+(_eta?' · '+_eta:'...');
-  _pace&&_pace.begin();
+// Chạy MỘT phần — gọi từ trong bể (PhanPool) và trực tiếp từ nút "↻ Thử lại".
+async function _runPhanVanHan(p){
   var box=document.getElementById('claude-content-'+p);
   var w=null;
   if(box){
@@ -480,35 +513,41 @@ async function _loadNext(){
     }
   }
   var doneWait=function(){ if(w){ w.stop(); w=null; } };
-  var secEl=document.getElementById('sec-'+p);
-  if(secEl)secEl.scrollIntoView({behavior:'smooth',block:'start'});
   try{
     var docs='';
     try{
       var sr=await fetch('/api/search',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({query:ragQuery(p),matchCount:p===1?10:7})});
       docs=(await sr.json()).docs||'';
     }catch(e){}
-    if(p>1)await new Promise(function(r){setTimeout(r,600);});
     var resp=await fetch('/api/van-han-nam',{method:'POST',headers:{'Content-Type':'application/json'},
       body:JSON.stringify({birth:_birthPayload(),tuNgay:TU_NGAY,tuThang:TU_THANG,tuNam:TU_NAM,phan:p,docs:docs})});
     var data=await resp.json();
     if(data.error||!data.luanGiai){
       doneWait();
-      if(box)box.innerHTML='<div class="laso-error">Lỗi khi luận phần '+p+'. <button class="btn" onclick="window._vhRetry()">↻ Thử lại</button></div>';
-      return;
+      if(box)box.innerHTML='<div class="laso-error">Lỗi khi luận phần '+p+'. <button class="btn" onclick="window._vhRetry('+p+')">↻ Thử lại</button></div>';
+      return false;
     }
     _store[p]=data.luanGiai;
-    _pace&&_pace.end();
     doneWait();
     if(box)box.innerHTML=renderMarkdown(data.luanGiai);
+    return true;
   }catch(e){
     doneWait();
-    if(box)box.innerHTML='<div class="laso-error">Lỗi phần '+p+': '+esc(e.message)+' <button class="btn" onclick="window._vhRetry()">↻ Thử lại</button></div>';
-    return;
+    if(box)box.innerHTML='<div class="laso-error">Lỗi phần '+p+': '+esc(e.message)+' <button class="btn" onclick="window._vhRetry('+p+')">↻ Thử lại</button></div>';
+    return false;
   }
-  await _loadNext();
 }
-window._vhRetry=function(){ _currentPhan--; _loadNext(); };
+window._vhRetry=function(p){
+  _runPhanVanHan(p).then(function(ok){
+    if(ok){
+      var n=0; for(var k=1;k<=_tongPhan;k++)if(_store[k])n++;
+      if(n>=_tongPhan){
+        document.getElementById('vhProgress').textContent='✓ Luận vận hạn hoàn tất';
+        _saveResult();
+      }
+    }
+  });
+};
 
 function renderMarkdown(text){
   var lines=String(text||'').split('\n'),out='';
@@ -552,7 +591,7 @@ function showForm(){
 
 function _pageInit(){
   document.getElementById('fmSub').textContent=
-    'Lập lá số theo cổ pháp rồi soi tiểu vận năm và nguyệt vận từng tháng — 12 tháng ÂM LỊCH kể từ tháng âm đang sống, mỗi tháng ghi rõ quãng ngày dương lịch tương ứng.';
+    'Xem đúng 12 tháng tới: cung hạn, sao, cách cục của từng tháng. Bạn muốn biết trước tháng nào nên cẩn thận, tháng nào nên tiến. Dùng khi cần một lịch vận hạn cụ thể cho năm sắp tới — tính theo tháng ÂM LỊCH, mỗi tháng ghi rõ quãng ngày dương lịch tương ứng.';
   Shell.prefillForm();
   if(Shell.autoRun()&&document.getElementById('ngay').value)doXem();
 }

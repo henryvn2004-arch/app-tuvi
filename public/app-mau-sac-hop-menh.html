@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"></noscript>
-<link rel="stylesheet" href="/shell.css?v=19">
+<link rel="stylesheet" href="/shell.css?v=29">
 <style>
 .ms-card{background:var(--white);border:1px solid var(--line);border-radius:14px;padding:20px 22px;box-shadow:var(--shadow);max-width:760px;margin-bottom:16px}
 .ms-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:4px;display:flex;align-items:center;gap:8px}
@@ -105,6 +105,8 @@
 
       <div class="ms-card">
         <h2><span class="ic" data-icon="sparkles"></span> Thông Tin Bản Mệnh</h2>
+        <p class="sub">Gợi ý những màu hợp mệnh của bạn theo ngũ hành. Bạn mua đồ theo sở thích mà không để ý có hợp mình không. Dùng khi sắm đồ, sơn nhà hay chọn màu cho việc quan trọng.</p>
+        <p class="price-note" data-tvp-price-label="mau-sac-hop-menh">…</p>
         <div class="pt-row">
           <div class="pt-fg"><label>Năm sinh dương lịch</label><input type="number" id="namSinh" placeholder="VD: 1990" min="1900" max="2025" oninput="onYearChange()"></div>
           <div class="pt-fg"><label>Giới tính</label>
@@ -244,12 +246,12 @@
 </div>
 
 <script>window.SHELL_ACTIVE='mau-sac-hop-menh';window.SHELL_HISTORY=true;
-window.SHELL_INTRO={key:'mau-sac-hop-menh',title:'Màu Sắc Hợp Mệnh',desc:'Tư vấn màu trang phục theo <b>Ngũ Hành Nạp Âm</b> và Bát Trạch — áo, quần, giày, phụ kiện, kèm thử ngay trên ảnh.'};</script>
+window.SHELL_INTRO={key:'mau-sac-hop-menh',title:'Màu Sắc Hợp Mệnh',desc:'Gợi ý những màu hợp mệnh của bạn theo ngũ hành. Bạn mua đồ theo sở thích mà không để ý có hợp mình không. Dùng khi sắm đồ, sơn nhà hay chọn màu cho việc quan trọng.'};</script>
 <script src="/auth.js?v=2"></script>
 <script src="/tuvi-paywall.js?v=20"></script>
-  <script src="/nav.js?v=22" data-icons-only></script>
-<script src="/shell.js?v=73"></script>
-<script src="/tools-shared/ai-loading-steps.js?v=8"></script>
+  <script src="/nav.js?v=23" data-icons-only></script>
+<script src="/shell.js?v=82"></script>
+<script src="/tools-shared/ai-loading-steps.js?v=9"></script>
 <script>
 function initMauSac(){
   Shell.setContext({
