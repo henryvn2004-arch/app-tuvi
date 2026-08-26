@@ -24,6 +24,8 @@ const SB_HEADERS = {
 
 const STATUSES = ['moi', 'dang_xu_ly', 'da_xu_ly', 'bo_qua'] as const;
 const KINDS = new Set(['bug', 'noi_dung', 'tinh_nang', 'thanh_toan', 'khac']);
+const SOURCES = new Set(['account', 'reading']);
+const RATINGS = new Set(['up', 'down']);
 
 async function requireAdmin(req: NextRequest) {
   const token = (req.headers.get('authorization') || '').replace('Bearer ', '').trim();
@@ -51,20 +53,32 @@ export async function GET(req: NextRequest) {
   const sp = new URL(req.url).searchParams;
   const status = sp.get('status') || '';
   const kind = sp.get('kind') || '';
+  const source = sp.get('source') || '';
+  const rating = sp.get('rating') || '';
   const limit = Math.min(Math.max(Number(sp.get('limit')) || 50, 1), 200);
   const offset = Math.max(Number(sp.get('offset')) || 0, 0);
 
   let q =
     `${SUPABASE_URL}/rest/v1/user_feedback` +
     `?select=id,user_id,email,kind,message,page_url,user_agent,tool_id,meta,` +
-    `status,admin_reply,admin_email,replied_at,created_at,updated_at` +
+    `rating,source,status,admin_reply,admin_email,replied_at,created_at,updated_at` +
     `&order=created_at.desc&limit=${limit}&offset=${offset}`;
   if ((STATUSES as readonly string[]).includes(status)) q += `&status=eq.${status}`;
   if (KINDS.has(kind)) q += `&kind=eq.${kind}`;
+  if (SOURCES.has(source)) q += `&source=eq.${source}`;
+  if (RATINGS.has(rating)) q += `&rating=eq.${rating}`;
 
   try {
-    const [listRes, ...counts] = await Promise.all([
+    const [listRes, statsRes, ...counts] = await Promise.all([
       fetch(q, { cache: 'no-store', headers: SB_HEADERS }),
+      // Bảng "tool nào đang bị chê nhất" — con số mà cả lớp 👍/👎 sinh ra để
+      // có. PostgREST không gộp nhóm được nên phải qua RPC.
+      fetch(`${SUPABASE_URL}/rest/v1/rpc/feedback_tool_stats`, {
+        method: 'POST',
+        cache: 'no-store',
+        headers: SB_HEADERS,
+        body: JSON.stringify({ p_min_votes: 1 }),
+      }),
       ...STATUSES.map((s) => countBy(`&status=eq.${s}`)),
     ]);
     if (!listRes.ok) {
@@ -73,7 +87,13 @@ export async function GET(req: NextRequest) {
     }
     const byStatus: Record<string, number> = {};
     STATUSES.forEach((s, i) => (byStatus[s] = counts[i] as number));
-    return NextResponse.json({ items: await listRes.json(), counts: byStatus });
+    // Bảng xếp hạng hỏng KHÔNG được kéo cả panel xuống theo — danh sách góp ý
+    // mới là thứ chính. Migration lớp 1 chưa chạy thì RPC 404, panel vẫn dùng
+    // được, chỉ thiếu một khối.
+    let toolStats: unknown[] = [];
+    if (statsRes.ok) toolStats = await statsRes.json();
+    else console.error('[admin/feedback GET] tool stats', statsRes.status, await statsRes.text());
+    return NextResponse.json({ items: await listRes.json(), counts: byStatus, toolStats });
   } catch (e) {
     console.error('[admin/feedback GET] exception', e);
     return NextResponse.json({ error: 'Lỗi máy chủ.' }, { status: 500 });

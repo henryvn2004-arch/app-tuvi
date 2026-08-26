@@ -41,6 +41,10 @@ export async function alertNewFeedback(opts: {
   kind: string;
   message: string;
   pageUrl?: string | null;
+  /** 'up' | 'down' khi góp ý đến kèm một lá phiếu dưới bản luận giải. */
+  rating?: string | null;
+  /** Công cụ bị nhắc tới, nếu suy được từ nơi gửi. */
+  toolId?: string | null;
 }): Promise<void> {
   if (!TG_CHAT_ID && !WA_NUMBER) return;
   const KIND_LABEL: Record<string, string> = {
@@ -54,9 +58,13 @@ export async function alertNewFeedback(opts: {
   // Cắt bớt: tin Telegram dài bị chia nhiều mảnh, mà đây chỉ là tin BÁO —
   // đọc đủ ý rồi mở panel Góp Ý xem nguyên văn.
   const body = (opts.message || '').slice(0, 600);
+  // Emoji giữ nguyên ở đây: Telegram không render SVG (ngoại lệ đã ghi trong
+  // luật icon của CLAUDE.md).
+  const vote = opts.rating === 'down' ? '👎 ' : opts.rating === 'up' ? '👍 ' : '';
   const text =
-    `💬 GÓP Ý MỚI\n` +
+    `${vote}💬 GÓP Ý MỚI\n` +
     `Loại: ${KIND_LABEL[opts.kind] || opts.kind}\n` +
+    (opts.toolId ? `Công cụ: ${opts.toolId}\n` : '') +
     `Người gửi: ${opts.email || '(không rõ)'}\n` +
     (opts.pageUrl ? `Trang: ${opts.pageUrl}\n` : '') +
     `Lúc: ${time}\n\n` +

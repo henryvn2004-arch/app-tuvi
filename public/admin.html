@@ -1439,10 +1439,30 @@
                 <option value="thanh_toan">Thanh toán · Lượng</option>
                 <option value="khac">Khác</option>
               </select>
+              <select class="form-control" id="fb-f-source" style="width:auto;padding:.35rem .6rem" onchange="loadFeedbackAdmin()">
+                <option value="">Mọi nguồn</option>
+                <option value="reading">Dưới bản luận giải</option>
+                <option value="account">Hộp thư Tài khoản</option>
+              </select>
+              <select class="form-control" id="fb-f-rating" style="width:auto;padding:.35rem .6rem" onchange="loadFeedbackAdmin()">
+                <option value="">Mọi lá phiếu</option>
+                <option value="down">Chỉ 👎</option>
+                <option value="up">Chỉ 👍</option>
+              </select>
               <button class="btn btn-ghost btn-sm" onclick="loadFeedbackAdmin()">↻</button>
             </div>
           </div>
           <div id="fb-body" style="padding:1rem 1.25rem"><div class="loading"><span class="spin"></span>Đang tải...</div></div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title"><svg class="pt-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg>Tool Bị Chê Nhiều Nhất</div>
+            <div class="panel-actions">
+              <span style="font-size:.72rem;color:var(--text-lt)">Xếp theo TỈ LỆ 👎, không theo số tuyệt đối — nếu không thì tool đông người dùng luôn đứng đầu</span>
+            </div>
+          </div>
+          <div class="table-wrap" id="fb-stats-body"><div class="loading"><span class="spin"></span>Đang tải...</div></div>
         </div>
       </div>
 
@@ -2142,10 +2162,14 @@ async function loadFeedbackAdmin() {
   host.innerHTML = '<div class="loading"><span class="spin"></span>Đang tải...</div>';
   const status = (document.getElementById('fb-f-status') || {}).value || '';
   const kind   = (document.getElementById('fb-f-kind')   || {}).value || '';
+  const source = (document.getElementById('fb-f-source') || {}).value || '';
+  const rating = (document.getElementById('fb-f-rating') || {}).value || '';
   try {
-    const data = await fbAdminFetch({ qs: `?limit=100&status=${encodeURIComponent(status)}&kind=${encodeURIComponent(kind)}` });
+    const data = await fbAdminFetch({ qs: `?limit=100&status=${encodeURIComponent(status)}`
+      + `&kind=${encodeURIComponent(kind)}&source=${encodeURIComponent(source)}&rating=${encodeURIComponent(rating)}` });
     fbAdminPaintCounts(data.counts || {});
     fbAdminRender(data.items || []);
+    fbAdminRenderStats(data.toolStats || []);
   } catch (e) {
     console.error('[loadFeedbackAdmin]', e);
     host.innerHTML = `<div class="alert-box alert-error">Không tải được góp ý: ${escHtml(e.message)}</div>`;
@@ -2194,11 +2218,16 @@ function fbAdminRender(items) {
       <div style="border:1px solid var(--line);border-radius:var(--radius);padding:.9rem 1.1rem;margin-bottom:.9rem;background:var(--paper)">
         <div style="display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;margin-bottom:.55rem">
           <span class="badge ${st[1]}">${st[0]}</span>
+          ${f.rating === 'down' ? '<span class="badge badge-red">👎 Chưa đúng</span>'
+            : f.rating === 'up' ? '<span class="badge badge-green">👍 Đúng</span>' : ''}
+          ${f.source === 'reading' ? `<span class="badge badge-grey">${escHtml(f.tool_id || 'dưới bản luận giải')}</span>` : ''}
           <span style="font-size:.75rem;color:var(--text-mid);font-weight:600">${escHtml(FB_KIND_LABEL[f.kind] || f.kind)}</span>
           <span style="font-size:.75rem;color:var(--text-lt)">${escHtml(f.email || f.user_id)}</span>
           <span style="font-size:.72rem;color:var(--text-lt);margin-left:auto">#${f.id} · ${escHtml(when)}</span>
         </div>
-        <div style="font-size:.88rem;color:var(--text);line-height:1.65;white-space:pre-wrap;margin-bottom:.6rem">${escHtml(f.message)}</div>
+        ${f.message
+          ? `<div style="font-size:.88rem;color:var(--text);line-height:1.65;white-space:pre-wrap;margin-bottom:.6rem">${escHtml(f.message)}</div>`
+          : '<div style="font-size:.82rem;color:var(--text-lt);font-style:italic;margin-bottom:.6rem">Lá phiếu trần — người dùng không viết thêm.</div>'}
         <details style="margin-bottom:.6rem">
           <summary style="font-size:.72rem;color:var(--text-lt);cursor:pointer">Ngữ cảnh tự đính kèm</summary>
           <div style="font-size:.72rem;color:var(--text-lt);line-height:1.7;margin-top:.35rem;font-family:var(--mono);word-break:break-all">
@@ -2222,6 +2251,30 @@ function fbAdminRender(items) {
         </div>
       </div>`;
   }).join('');
+}
+
+function fbAdminRenderStats(rows) {
+  const host = document.getElementById('fb-stats-body');
+  if (!host) return;
+  if (!rows.length) {
+    host.innerHTML = '<div class="empty-state"><p>Chưa có lá phiếu nào. Bảng này sống dậy khi người dùng bắt đầu bấm 👍/👎 dưới bản luận giải.</p></div>';
+    return;
+  }
+  host.innerHTML = '<table><thead><tr><th>Tool</th><th style="text-align:right">👍</th>'
+    + '<th style="text-align:right">👎</th><th style="text-align:right">Tổng</th>'
+    + '<th style="text-align:right">Tỉ lệ chê</th></tr></thead><tbody>'
+    + rows.map(r => {
+        const rate = Number(r.down_rate) || 0;
+        // Tô đỏ từ 40% trở lên: dưới mức đó thì chê là chuyện thường của một
+        // sản phẩm luận giải, tô hết thành đỏ là bảng mất khả năng chỉ điểm.
+        const col = rate >= 40 ? 'var(--tx-red)' : rate >= 20 ? 'var(--orange)' : 'var(--text-mid)';
+        return `<tr><td><b>${escHtml(r.tool_id)}</b></td>`
+          + `<td style="text-align:right">${r.up}</td>`
+          + `<td style="text-align:right">${r.down}</td>`
+          + `<td style="text-align:right;color:var(--text-lt)">${r.total}</td>`
+          + `<td style="text-align:right;font-weight:700;color:${col}">${rate}%</td></tr>`;
+      }).join('')
+    + '</tbody></table>';
 }
 
 async function fbAdminSetStatus(id, status) {

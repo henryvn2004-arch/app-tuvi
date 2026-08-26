@@ -1383,6 +1383,12 @@ function fbRenderList(list) {
   el.innerHTML = list.map(f => {
     const st = FB_STATUS[f.status] || FB_STATUS.moi;
     const date = new Date(f.created_at).toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' });
+    // Góp ý gửi kèm lá phiếu từ nút dưới bản luận giải — nhắc lại để người ta
+    // nhớ mình đã nói về bản nào.
+    const vote = f.rating === 'down' ? ic('x-circle', 13) + ' Chưa đúng'
+               : f.rating === 'up'   ? ic('check-circle', 13) + ' Đúng' : '';
+    const from = (f.source === 'reading' && f.tool_id)
+      ? '<span style="font-size:.74rem;color:var(--text-lt)">· ' + escHtml(f.tool_id) + '</span>' : '';
     const reply = f.admin_reply
       ? '<div style="margin-top:.7rem;padding:.65rem .8rem;background:var(--gold-lt);border-left:3px solid var(--tx-gold);border-radius:0 6px 6px 0">'
         + '<div style="font-size:.72rem;font-weight:700;color:var(--tx-gold);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.3rem">Hồi đáp từ Tử Vi Minh Bảo</div>'
@@ -1394,6 +1400,8 @@ function fbRenderList(list) {
       +   '<span style="display:inline-flex;align-items:center;font-size:.72rem;font-weight:700;padding:.2rem .6rem;border-radius:999px;'
       +     'background:var(--' + st[1] + ');border:1px solid var(--' + st[2] + ');color:var(--' + st[3] + ')">' + st[0] + '</span>'
       +   '<span style="font-size:.78rem;color:var(--text-mid)">' + escHtml(KIND[f.kind] || f.kind) + '</span>'
+      +   (vote ? '<span style="display:inline-flex;align-items:center;gap:.25rem;font-size:.74rem;color:var(--text-mid)">' + vote + '</span>' : '')
+      +   from
       +   '<span style="font-size:.75rem;color:var(--text-lt);margin-left:auto">' + date + '</span>'
       + '</div>'
       + '<div style="font-size:.88rem;color:var(--text);line-height:1.65;white-space:pre-wrap">' + escHtml(f.message) + '</div>'

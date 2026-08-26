@@ -963,8 +963,14 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
     return '<span class="tpw-lock-badge"><span class="ic-inline" data-icon="lock"></span>' + (text || 'Khoá') + '</span>';
   }
 
+  /** Tool id của trang này (`init({product})`). null = chưa init.
+   *  Có để feedback.js gắn lá phiếu 👍/👎 vào ĐÚNG tool mà paywall vừa tính
+   *  tiền — một nguồn, nên không thể lệch giữa "trừ Lượng của tool A" và
+   *  "chê tool B". */
+  function getProduct() { return (_cfg && _cfg.product) || null; }
+
   return {
-    init, requireCredits, requireCreditsCached, requireCreditsCachedQuery,
+    init, getProduct, requireCredits, requireCreditsCached, requireCreditsCachedQuery,
     generateToolSlug, ensureCredits, deductSilent, getBalance, fillPriceSlots,
     mountCostHints, refreshCostHints, lockPreview, isFreeRerun, lockBadge,
     sectionLockHtml, wireSectionLocks,
