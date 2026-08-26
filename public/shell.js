@@ -281,6 +281,27 @@
     });
   }
 
+  // Tracker "đang online / lượt hỏi hôm nay" (ngay trên ô "Tìm công cụ, lệnh…").
+  // _pulseData sống qua nhiều lượt renderSidebar() để không nháy về "…" mỗi
+  // lần sidebar dựng lại (đổi trang trong /app, loadCatalog cập nhật giá…).
+  // Đọc hụt → GIỮ NGUYÊN state cũ, không ẩn lại, không đoán số 0 — cùng luật
+  // "không bịa số" áp cho Giá Lượng (xem migration-pulse-tracker.sql).
+  var _pulseData = null;
+  function loadPulse() {
+    fetch('/api/pulse', { cache: 'no-store' })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (d) {
+        if (!d || typeof d.online !== 'number' || typeof d.promptsToday !== 'number') return;
+        _pulseData = d;
+        var host = document.getElementById('sbPulse');
+        if (!host) return;
+        host.hidden = false;
+        var o = document.getElementById('sbpOnline'); if (o) o.textContent = d.online.toLocaleString('vi-VN');
+        var p = document.getElementById('sbpPrompts'); if (p) p.textContent = d.promptsToday.toLocaleString('vi-VN');
+      })
+      .catch(function () { /* best-effort — giữ nguyên số cũ (nếu có), không rơi về giả */ });
+  }
+
   // Chấm nhắc "Khởi Hành" chưa xong (public/app-home.html ghi cờ này mỗi lần
   // đồng bộ ở trang chủ). Đọc localStorage thay vì gọi API riêng ở ĐÂY: sidebar
   // dựng trên MỌI trang /app, thêm một lượt mạng vào đó là chậm cho cả site chỉ
@@ -316,6 +337,15 @@
     if (!host) return;
     var h = '';
     h += '<a class="sb-brand" href="/"><img class="seal" src="/seal.webp" alt="Tử Vi Minh Bảo"><div class="brand-txt"><b>Tử Vi Minh Bảo</b><span>Mệnh Lý AI</span></div></a>';
+    // Tracker "đang online / lượt hỏi hôm nay" — số THẬT qua /api/pulse (RPC
+    // pulse_stats(), xem migration-pulse-tracker.sql), KHÔNG mô phỏng. Render
+    // ẩn (`hidden`) cho tới khi loadPulse() có số thật; nếu đã có từ lượt gọi
+    // trước (_pulseData, sống qua nhiều lần renderSidebar) thì hiện luôn, khỏi
+    // nháy về rỗng mỗi lần sidebar dựng lại.
+    h += '<div class="sb-pulse" id="sbPulse"' + (_pulseData ? '' : ' hidden') + '>' +
+         '<span class="sbp-row"><span class="sbp-dot"></span><b id="sbpOnline">' + (_pulseData ? esc(_pulseData.online.toLocaleString('vi-VN')) : '…') + '</b> đang online</span>' +
+         '<span class="sbp-row">' + svg('bolt', 'sbp-ic') + '<b id="sbpPrompts">' + (_pulseData ? esc(_pulseData.promptsToday.toLocaleString('vi-VN')) : '…') + '</b> lượt hỏi hôm nay</span>' +
+         '</div>';
     h += '<button class="kbtn" type="button" data-act="cmd">' +
          '<svg class="ic" style="opacity:.7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4-4"/></svg>' +
          ' Tìm công cụ, lệnh… <kbd>Ctrl K</kbd></button>';
@@ -2826,6 +2856,8 @@
     pickAuthor();
     renderSidebar();
     loadCatalog();
+    loadPulse();
+    setInterval(loadPulse, 45000);
     renderRail();
     renderTabbar();
     trackWsTopHeight();
