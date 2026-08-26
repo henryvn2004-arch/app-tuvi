@@ -4306,6 +4306,7 @@ function renderToolFunnel(host, rows, lac) {
       <td style="text-align:right">${r.chay}<div style="font-size:.68rem;color:var(--text-lt)">${pct(r.chay, r.mo)}</div></td>
       <td style="text-align:right">${coThu ? r.thu : '—'}</td>
       <td style="text-align:right">${coThu ? r.bam_mo + '<div style="font-size:.68rem;color:var(--text-lt)">' + pct(r.bam_mo, r.thu) + '</div>' : '—'}</td>
+      <td style="text-align:right">${free ? '—' : Number(r.loi_moi) || 0}</td>
       <td style="text-align:right">${free ? '—' : r.mua + '<div style="font-size:.68rem;color:var(--text-lt)">' + pct(r.mua, r.mo) + '</div>'}</td>
       <td style="text-align:right">${free ? '—' : Number(r.luong).toLocaleString('vi-VN')}</td>
     </tr>`;
@@ -4322,12 +4323,17 @@ function renderToolFunnel(host, rows, lac) {
       <thead><tr>
         <th>Tool</th><th style="text-align:right">Mở</th><th style="text-align:right">Chạy</th>
         <th style="text-align:right">Tính thử</th><th style="text-align:right">Bấm mở</th>
+        <th style="text-align:right">Lời mời</th>
         <th style="text-align:right">Mua</th><th style="text-align:right">Lượng</th>
       </tr></thead><tbody>${body}</tbody></table></div>
     <div style="margin-top:10px;font-size:.72rem;color:var(--text-lt);line-height:1.7">
       Mọi cột đếm <b>người</b> (đã đăng nhập tính theo tài khoản, chưa thì theo trình duyệt) — trừ cột Lượng.
       Cột <b>Tính thử</b> / <b>Bấm mở</b> chỉ có ở tool đã làm W1; tool khác để gạch ngang chứ không phải 0.
       Dòng tô đỏ = tool trả phí có <b>≥${NGUONG} người mở mà chưa ai mua</b>.
+      <br><b>Lời mời</b> = số người ĐÃ THẤY lời mời giới thiệu trên tường khoá.
+      Đọc nó khác hẳn mấy cột kia: <b>0 nghĩa là lời mời chưa bao giờ đủ điều kiện hiện ra</b>
+      (chưa đăng nhập · thưởng = 0 · chạm trần mời · số dư còn đủ trả) —
+      tức phải nới điều kiện, KHÔNG phải câu chữ dở. Hiện ra mà không ai bấm mới là lỗi câu chữ.
     </div>${lacHtml}`;
 }
 
@@ -4351,22 +4357,38 @@ const VIRAL_STEPS = [
   { k: 'share_links', label: 'Tạo link chia sẻ', hint: 'dòng shared_results' },
   { k: 'share_acts',  label: 'Chia sẻ thật',  hint: 'đã chọn kênh phát tán' },
   { k: 'share_views', label: 'Mở link',       hint: 'người nhận xem /ket-qua' },
-  { k: 'cta_clicks',  label: 'Bấm CTA',       hint: 'từ trang chia sẻ' },
+  // 🔴 Bậc này TRƯỚC ĐÂY chỉ đếm `meta.from='share'` (nút đăng ký cũ) nên nó
+  // ĐẾM HỤT: B2 đã thay nút đó bằng ô nhập ngày sinh (`share_form`) trên mấy
+  // tool chính, tức đúng những tool đó đọc ra 0 trong khi người dùng vẫn đi qua.
+  //
+  // Bậc phễu phải cộng CẢ HAI — chúng là hai đường SONG SONG của cùng một hành
+  // động "người nhận làm gì đó trên trang chia sẻ", không phải hai bậc nối
+  // tiếp. Nhưng số vẫn tách ra ngay dưới nhãn: gộp hẳn thì lúc nó nhúc nhích
+  // không biết đường nào ra người thật — mà đó là câu hỏi B2 sinh ra để trả lời.
+  {
+    k: 'cta_clicks', label: 'Bấm CTA', hint: 'từ trang chia sẻ',
+    calc: (t) => (Number(t.cta_clicks) || 0) + (Number(t.cta_form) || 0),
+    split: (t) => `nút cũ ${Number(t.cta_clicks) || 0} · ô nhập ngày sinh ${Number(t.cta_form) || 0}`,
+  },
   { k: 'ref_signups', label: 'Đăng ký qua mã', hint: 'referral ăn được' },
 ];
 
 function renderMktViral(v) {
   const host = document.getElementById('mkt-viral');
   const t = v.totals || {}, rows = v.by_tool || [], ref = v.referral || {};
-  const max = Math.max(1, ...VIRAL_STEPS.map(s => t[s.k] || 0));
+  // Bậc nào tự khai `calc` thì lấy theo nó (xem `cta_clicks`) — đọc thẳng
+  // `t[s.k]` là bỏ mất nửa số ở đúng bậc đó.
+  const val = (s) => (s.calc ? s.calc(t) : Number(t[s.k]) || 0);
+  const max = Math.max(1, ...VIRAL_STEPS.map(val));
 
   const bars = VIRAL_STEPS.map((s, i) => {
-    const n = t[s.k] || 0;
-    const prev = i === 0 ? null : (t[VIRAL_STEPS[i - 1].k] || 0);
+    const n = val(s);
+    const prev = i === 0 ? null : val(VIRAL_STEPS[i - 1]);
     const conv = prev ? Math.round(n / prev * 100) : null;
+    const chiTiet = s.split ? ' · ' + s.split(t) : '';
     return `<div style="margin-bottom:.55rem">
       <div style="display:flex;justify-content:space-between;align-items:baseline;font-size:.78rem;margin-bottom:.2rem">
-        <span>${s.label} <span style="color:var(--text-lt);font-size:.68rem">· ${s.hint}</span></span>
+        <span>${s.label} <span style="color:var(--text-lt);font-size:.68rem">· ${s.hint}${escHtmlLocal(chiTiet)}</span></span>
         <span><b style="color:var(--text)">${n.toLocaleString('vi-VN')}</b>${conv != null ? ` <span style="color:var(--text-lt);font-size:.7rem">(${conv}%)</span>` : ''}</span>
       </div>
       <div style="height:9px;background:var(--border-lt);border-radius:5px;overflow:hidden">
@@ -4396,6 +4418,7 @@ function renderMktViral(v) {
       <td style="text-align:right">${r.share_acts}</td>
       <td style="text-align:right">${r.share_views}</td>
       <td style="text-align:right">${r.cta_clicks}</td>
+      <td style="text-align:right">${Number(r.cta_form) || 0}</td>
       <td style="text-align:right;font-weight:700">${r.ref_signups}</td>
       <td style="text-align:right;font-weight:700;color:${c}">${rk == null ? '—' : Number(rk).toFixed(2)}</td>
       <td style="text-align:right;color:var(--text-mid)">${fmtVndFull(r.cost_vnd || 0)}</td>
@@ -4407,13 +4430,17 @@ function renderMktViral(v) {
       <table><thead><tr>
         <th>Tool</th><th style="text-align:right">Gen</th><th style="text-align:right">Người gen</th>
         <th style="text-align:right">Link</th><th style="text-align:right">Share</th><th style="text-align:right">Mở link</th>
-        <th style="text-align:right">CTA</th><th style="text-align:right">Đăng ký</th><th style="text-align:right">K</th>
+        <th style="text-align:right">CTA</th><th style="text-align:right">Ô nhập</th>
+        <th style="text-align:right">Đăng ký</th><th style="text-align:right">K</th>
         <th style="text-align:right">Chi phí</th>
-      </tr></thead><tbody>${body || '<tr><td colspan="10" class="empty">Chưa có dữ liệu</td></tr>'}</tbody></table>
+      </tr></thead><tbody>${body || '<tr><td colspan="11" class="empty">Chưa có dữ liệu</td></tr>'}</tbody></table>
     </div>
     <div style="font-size:.68rem;color:var(--text-lt);margin-top:.6rem;line-height:1.5">
       · <b>Người gen</b> là mẫu số của K (một người vẽ nhiều bức vẫn là một người có thể đi mời bạn).<br>
       · <b>Link</b> đếm từ <code>shared_results</code>, <b>Share</b> chỉ tính khi người dùng đã chọn kênh phát tán — chênh nhau = tạo link rồi bỏ.<br>
+      · <b>CTA</b> = nút đăng ký cũ trên trang chia sẻ · <b>Ô nhập</b> = ô nhập ngày sinh tại chỗ (B2).
+        Hai đường SONG SONG, cố ý không cộng chung ở bảng này: <code>Ô nhập</code> = 0 nghĩa là ô nhập không ai dùng
+        (câu chữ dở), còn <code>Ô nhập</code> cao mà <b>Đăng ký</b> vẫn 0 thì chỗ nghẽn nằm ở bậc đăng ký.<br>
       · <b>Chi phí</b> là tiền LLM + ảnh của chính tool đó (<code>events.llm_usage</code>), chưa gồm chi phí hạ tầng.<br>
       · Ngưỡng tham chiếu đã chốt: K ≥ 0,5 và chi phí/user ≤ 6.000đ trong 2 tuần liên tiếp → cân nhắc nâng trần ngân sách; K &lt; 0,3 sau 3–4 tuần → 2 tool này không lan tự nhiên.
     </div>`;
