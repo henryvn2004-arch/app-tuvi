@@ -48,12 +48,12 @@
     "check:sodep": "node scripts/check-so-dep.mjs"
   },
   "dependencies": {
-    "@supabase/supabase-js": "^2.112.2",
-    "@vercel/functions": "^3.8.0",
+    "@supabase/supabase-js": "^2.112.3",
+    "@vercel/functions": "^3.9.5",
     "celestine": "^0.2.1",
-    "mcp-handler": "^2.1.0",
-    "mingyu-core": "^0.1.25",
-    "next": "^16.3.0",
+    "mcp-handler": "^2.1.1",
+    "mingyu-core": "^0.1.30",
+    "next": "^16.3.2",
     "pdf-parse": "^1.1.1",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
@@ -64,12 +64,12 @@
     "@eslint/js": "^10.0.1",
     "@lhci/cli": "^0.15.1",
     "@playwright/test": "^1.62.1",
-    "@types/node": "^26.1.2",
+    "@types/node": "^26.2.0",
     "@types/react": "^19.2.18",
     "@types/react-dom": "^19.2.4",
-    "eslint": "^10.8.0",
+    "eslint": "^10.9.0",
     "eslint-config-prettier": "^10.1.8",
-    "globals": "^17.9.0",
+    "globals": "^17.11.0",
     "prettier": "^3.9.6",
     "typescript": "^6.0.3"
   }
