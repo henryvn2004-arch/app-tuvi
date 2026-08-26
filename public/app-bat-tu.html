@@ -165,6 +165,9 @@ table.tutru td.row-label{font-size:10.5px;color:#9a8a6a;text-transform:uppercase
         </div>
         <div class="bt-progress" id="btProgress" style="display:none"></div>
         <div class="bt-body" id="btBody"></div>
+        <!-- "Ai Sinh Cùng Ngày Với Bạn" — miễn phí, 0 token LLM. Hỏng thì tự
+             ẩn, không làm hỏng bản luận phía trên. -->
+        <div id="cnsHost"></div>
       </div>
     </div>
   </main>
@@ -182,6 +185,7 @@ window.SHELL_INTRO={key:'bat-tu',title:'Lá số Bát Tự (Tứ Trụ)',desc:'L
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
 <script src="/tools-shared/vn-timezone.js?v=1"></script>
 <script src="/tuvi-form.js?v=2"></script>
+<script src="/tools-shared/cung-ngay-sinh.js?v=1"></script>
 <script src="/auth.js?v=2"></script>
 <script src="/tuvi-paywall.js?v=21"></script>
   <script src="/nav.js?v=24" data-icons-only></script>
@@ -224,6 +228,10 @@ function doBatTu(){
     document.getElementById('btPanel').style.display='block';
     document.getElementById('btnEdit').style.display='';
     document.getElementById('btnLuan').style.display='';
+    // Mục "Ai Sinh Cùng Ngày Với Bạn" — phần phụ, đặt sau khi tứ trụ đã dựng.
+    // `fdIn.gioIdx` đã quy về giờ VN (TuviForm qua tools-shared/vn-timezone.js),
+    // cùng hệ quy chiếu với dữ liệu người nổi tiếng.
+    if(window.CungNgaySinh)CungNgaySinh.mount('cnsHost',{ngay:dd,thang:mm,nam:yyyy,gioIdx:gioAmIdx,gioitinh:gioitinh});
     Shell.rememberBirth(Object.assign({}, fdIn, {namxem:namxem}));
     // Rail: gửi CẢ birth (server lập bát tự) + scenario tu-binh (chọn đúng bộ não).
     if(window.SHELL_INTRO)Shell.dismissIntro(window.SHELL_INTRO.key);

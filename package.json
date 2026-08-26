@@ -49,7 +49,8 @@
     "check:sodep": "node scripts/check-so-dep.mjs",
     "check:lunar": "node scripts/check-lunar-range.mjs",
     "check:vntz": "node scripts/check-vn-timezone.mjs",
-    "check:tooltip": "node scripts/check-tooltip.mjs"
+    "check:tooltip": "node scripts/check-tooltip.mjs",
+    "check:cns": "node scripts/check-cns.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.112.3",
