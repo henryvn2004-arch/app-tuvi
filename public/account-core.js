@@ -116,6 +116,7 @@ function setupTabs() {
       if (btn.dataset.tab === 'credits') loadCredits();
       if (btn.dataset.tab === 'ketnoi') loadKetnoi();
       if (btn.dataset.tab === 'thaynho') loadMemory();
+      if (btn.dataset.tab === 'gopy') loadFeedback();
       if (btn.dataset.tab === 'nhiemvu') { loadReferralPanel(); loadQuestTasks(); loadMyShares(); }
     });
   });
@@ -1215,3 +1216,188 @@ if (window.location.hash === '#credits') {
 }
 // ── BOOT ──
 initProfile();
+
+// ═══════════════════════════════════════════════════════════
+// TAB GÓP Ý — hộp thư một chiều rưỡi
+// ═══════════════════════════════════════════════════════════
+// Vì sao đặt ở đây chứ không làm chatbot sản phẩm: bot trả lời tự động là kênh
+// DẬP tín hiệu — người dùng vấp ở đâu thì bot đáp cho xong, còn người vận hành
+// không bao giờ biết. Hộp thư ghi nguyên văn + ngữ cảnh máy tự đính kèm, tốn 0
+// token. Đặt trong Tài khoản để không ai nhầm nó với rail chat hỏi Thầy.
+//
+// "Một chiều RƯỠI": người gửi thấy lại góp ý của mình, trạng thái xử lý và lời
+// hồi đáp của admin. Đó là lý do duy nhất khiến ai đó chịu góp ý lần thứ hai —
+// mà vẫn không phải dựng hạ tầng email hay hội thoại thời gian thực.
+//
+// TOÀN BỘ khung được dựng TỪ ĐÂY (không phải trong HTML) vì trang có tab này
+// là HAI (/profile.html và /app/tai-khoan) — chép markup sang cả hai là mở
+// đường cho chúng trôi lệch nhau. Trang chỉ khai nút tab + một khung rỗng.
+
+const FB_KINDS = [
+  ['noi_dung',  'Nội dung luận giải'],
+  ['bug',       'Lỗi kỹ thuật'],
+  ['tinh_nang', 'Đề xuất tính năng'],
+  ['thanh_toan','Thanh toán · Lượng'],
+  ['khac',      'Khác'],
+];
+// Nhãn hiện cho NGƯỜI GÓP Ý — cố ý khác nhãn trong admin: 'bo_qua' ở đây là
+// "Đã xem", không phải "Bỏ qua". Người ta bỏ công viết, đừng trả về mặt chữ
+// nói rằng công đó bị vứt.
+const FB_STATUS = {
+  moi:        ['Đã nhận',    'chip-blue',  'chip-blue-line',  'blue'],
+  dang_xu_ly: ['Đang xử lý', 'chip-amber', 'chip-amber-line', 'tx-amber'],
+  da_xu_ly:   ['Đã xử lý',   'chip-green', 'chip-green-line', 'green'],
+  bo_qua:     ['Đã xem',     'chip-blue',  'chip-blue-line',  'text-lt'],
+};
+const FB_MAX = 2000;
+let _fbBusy = false;
+
+async function loadFeedback() {
+  const host = document.getElementById('tab-gopy');
+  if (!host) return;
+  if (!host.dataset.built) {
+    host.innerHTML = fbFormHtml();
+    host.dataset.built = '1';
+    const ta = document.getElementById('fbMessage');
+    if (ta) ta.addEventListener('input', fbCount);
+  }
+  await fbLoadList();
+}
+
+function fbFormHtml() {
+  const opts = FB_KINDS.map(k => '<option value="' + k[0] + '">' + k[1] + '</option>').join('');
+  return ''
+    + '<div class="account-section">'
+    +   '<h3>' + ic('inbox', 16) + ' Gửi góp ý</h3>'
+    +   '<p style="font-size:.85rem;color:var(--text-mid);margin:-.35rem 0 1rem;line-height:1.6">'
+    +     'Đây là hộp thư tới thẳng người vận hành — không phải chỗ hỏi Thầy. '
+    +     'Mọi ý kiến về nội dung luận giải, lỗi kỹ thuật, giá Lượng hay tính năng bạn muốn có, '
+    +     'viết vào đây. Chúng tôi đọc hết và trả lời ngay trong trang này.'
+    +   '</p>'
+    +   '<div class="form-row">'
+    +     '<label for="fbKind">Nội dung góp ý về</label>'
+    +     '<select id="fbKind">' + opts + '</select>'
+    +   '</div>'
+    +   '<div class="form-row">'
+    +     '<label for="fbMessage">Bạn muốn nói gì?</label>'
+    +     '<textarea id="fbMessage" rows="6" maxlength="' + FB_MAX + '" '
+    +       'placeholder="Càng cụ thể càng dễ sửa. Ví dụ: &quot;Mục Tài Vận trong bản Luận Giải của lá số sinh 1990 nói ngược với mục Đại Vận&quot; — hơn hẳn &quot;luận giải chưa hay&quot;." '
+    +       'style="font-family:inherit;line-height:1.6;resize:vertical"></textarea>'
+    +     '<div id="fbCount" style="font-size:.74rem;color:var(--text-lt);text-align:right;margin-top:.25rem">0 / ' + FB_MAX + '</div>'
+    +   '</div>'
+    +   '<button class="btn-primary" id="fbSubmit" onclick="submitFeedback()">Gửi Góp Ý</button>'
+    +   '<div id="fbAlert"></div>'
+    +   '<p style="font-size:.78rem;color:var(--text-lt);margin-top:.9rem;line-height:1.6">'
+    +     ic('info', 12) + ' Trang / thiết bị bạn đang dùng được đính kèm tự động để chúng tôi lần được lỗi — bạn không cần mô tả. '
+    +     'Việc gấp về thanh toán: xem <a href="/huong-dan-thanh-toan.html" style="color:var(--tx-gold)">Hướng dẫn thanh toán</a> '
+    +     'hoặc <a href="/contact.html" style="color:var(--tx-gold)">Liên hệ</a>.'
+    +   '</p>'
+    + '</div>'
+    + '<div class="account-section">'
+    +   '<h3>Góp ý đã gửi</h3>'
+    +   '<div id="fbList"><div style="color:var(--text-lt);font-size:.85rem">Đang tải…</div></div>'
+    + '</div>';
+}
+
+function fbCount() {
+  const ta = document.getElementById('fbMessage');
+  const el = document.getElementById('fbCount');
+  if (ta && el) el.textContent = ta.value.length + ' / ' + FB_MAX;
+}
+
+function fbAlert(msg, type) {
+  const el = document.getElementById('fbAlert');
+  if (el) el.innerHTML = '<div class="alert ' + type + '" style="margin-top:.75rem">' + escHtml(msg) + '</div>';
+}
+
+/** Ngữ cảnh máy tự đính kèm. PHẲNG có chủ ý — dễ đọc trong panel admin, và
+ *  không có gì ở đây dùng cho quyền hạn hay tính phí nên không cần xác thực. */
+function fbMeta() {
+  const m = {};
+  try {
+    m.screen = window.innerWidth + 'x' + window.innerHeight;
+    m.theme = document.documentElement.getAttribute('data-theme') || 'light';
+    const bal = document.getElementById('headerCreditBalance');
+    if (bal) m.balance = (bal.textContent || '').trim();
+    // Ba lá số gần nhất: gần như mọi góp ý về NỘI DUNG đều nói về một trong số
+    // chúng, mà người gửi thì không bao giờ chép slug vào.
+    const lasos = (_pHistoryData && _pHistoryData.lasos) || [];
+    if (lasos.length) m.laso_gan_day = lasos.slice(0, 3).map(l => l.slug).join(', ');
+  } catch (e) { console.error('[fbMeta]', e); }
+  return m;
+}
+
+async function submitFeedback() {
+  if (_fbBusy) return;
+  const btn = document.getElementById('fbSubmit');
+  const ta = document.getElementById('fbMessage');
+  const kind = (document.getElementById('fbKind') || {}).value || 'khac';
+  const message = (ta && ta.value || '').trim();
+  if (message.length < 5) { fbAlert('Viết giúp vài dòng để chúng tôi hiểu ý nhé.', 'error'); return; }
+
+  _fbBusy = true;
+  if (btn) { btn.disabled = true; btn.textContent = 'Đang gửi…'; }
+  try {
+    const res = await fetch('/api/feedback', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + (await _tok()) },
+      body: JSON.stringify({ kind, message, page_url: location.href, meta: fbMeta() }),
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) { fbAlert(data.error || 'Không gửi được. Xin thử lại.', 'error'); return; }
+    if (ta) ta.value = '';
+    fbCount();
+    fbAlert('Đã nhận — cảm ơn bạn. Trạng thái xử lý hiện ngay bên dưới.', 'success');
+    await fbLoadList();
+  } catch (e) {
+    console.error('[submitFeedback]', e);
+    fbAlert('Lỗi mạng — xin thử lại.', 'error');
+  } finally {
+    _fbBusy = false;
+    if (btn) { btn.disabled = false; btn.textContent = 'Gửi Góp Ý'; }
+  }
+}
+
+async function fbLoadList() {
+  const el = document.getElementById('fbList');
+  if (!el) return;
+  try {
+    const res = await fetch('/api/feedback', { headers: { Authorization: 'Bearer ' + (await _tok()) } });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(data.error || res.status);
+    fbRenderList(data.items || []);
+  } catch (e) {
+    console.error('[fbLoadList]', e);
+    el.innerHTML = '<div style="color:var(--text-lt);font-size:.85rem">Không tải được danh sách góp ý.</div>';
+  }
+}
+
+function fbRenderList(list) {
+  const el = document.getElementById('fbList');
+  if (!el) return;
+  if (!list.length) {
+    el.innerHTML = '<div style="color:var(--text-lt);font-size:.85rem">Bạn chưa gửi góp ý nào.</div>';
+    return;
+  }
+  const KIND = Object.fromEntries(FB_KINDS);
+  el.innerHTML = list.map(f => {
+    const st = FB_STATUS[f.status] || FB_STATUS.moi;
+    const date = new Date(f.created_at).toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' });
+    const reply = f.admin_reply
+      ? '<div style="margin-top:.7rem;padding:.65rem .8rem;background:var(--gold-lt);border-left:3px solid var(--tx-gold);border-radius:0 6px 6px 0">'
+        + '<div style="font-size:.72rem;font-weight:700;color:var(--tx-gold);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.3rem">Hồi đáp từ Tử Vi Minh Bảo</div>'
+        + '<div style="font-size:.86rem;color:var(--text);line-height:1.65;white-space:pre-wrap">' + escHtml(f.admin_reply) + '</div>'
+        + '</div>'
+      : '';
+    return '<div style="border:1px solid var(--border-lt);border-radius:var(--radius);padding:.9rem 1rem;margin-bottom:.75rem;background:var(--surface)">'
+      + '<div style="display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;margin-bottom:.5rem">'
+      +   '<span style="display:inline-flex;align-items:center;font-size:.72rem;font-weight:700;padding:.2rem .6rem;border-radius:999px;'
+      +     'background:var(--' + st[1] + ');border:1px solid var(--' + st[2] + ');color:var(--' + st[3] + ')">' + st[0] + '</span>'
+      +   '<span style="font-size:.78rem;color:var(--text-mid)">' + escHtml(KIND[f.kind] || f.kind) + '</span>'
+      +   '<span style="font-size:.75rem;color:var(--text-lt);margin-left:auto">' + date + '</span>'
+      + '</div>'
+      + '<div style="font-size:.88rem;color:var(--text);line-height:1.65;white-space:pre-wrap">' + escHtml(f.message) + '</div>'
+      + reply
+      + '</div>';
+  }).join('');
+}

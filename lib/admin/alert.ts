@@ -24,3 +24,45 @@ export async function alertAdminLogin(
     WA_NUMBER ? waSendText(WA_NUMBER, text) : Promise.resolve(),
   ]);
 }
+
+/**
+ * Bắn tin Telegram cho admin mỗi khi có góp ý mới — best-effort, không chặn
+ * việc lưu góp ý.
+ *
+ * Vì sao có: panel Góp Ý trong admin chỉ hữu ích nếu người ta MỞ nó. Góp ý
+ * đến rải rác vài cái một tuần, không ai ngồi canh — không có tin đẩy thì
+ * mục "mới" nằm đó cả tháng, và người góp ý học được rằng góp ý là vô ích.
+ *
+ * KHÔNG đổi emoji ở đây sang icon SVG: Telegram không render SVG (ngoại lệ
+ * đã ghi trong luật icon của CLAUDE.md).
+ */
+export async function alertNewFeedback(opts: {
+  email: string;
+  kind: string;
+  message: string;
+  pageUrl?: string | null;
+}): Promise<void> {
+  if (!TG_CHAT_ID && !WA_NUMBER) return;
+  const KIND_LABEL: Record<string, string> = {
+    bug: 'Lỗi kỹ thuật',
+    noi_dung: 'Nội dung luận giải',
+    tinh_nang: 'Đề xuất tính năng',
+    thanh_toan: 'Thanh toán · Lượng',
+    khac: 'Khác',
+  };
+  const time = new Date().toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' });
+  // Cắt bớt: tin Telegram dài bị chia nhiều mảnh, mà đây chỉ là tin BÁO —
+  // đọc đủ ý rồi mở panel Góp Ý xem nguyên văn.
+  const body = (opts.message || '').slice(0, 600);
+  const text =
+    `💬 GÓP Ý MỚI\n` +
+    `Loại: ${KIND_LABEL[opts.kind] || opts.kind}\n` +
+    `Người gửi: ${opts.email || '(không rõ)'}\n` +
+    (opts.pageUrl ? `Trang: ${opts.pageUrl}\n` : '') +
+    `Lúc: ${time}\n\n` +
+    `${body}${(opts.message || '').length > 600 ? '…' : ''}`;
+  await Promise.allSettled([
+    TG_CHAT_ID ? tgSendMessage(TG_CHAT_ID, text) : Promise.resolve(),
+    WA_NUMBER ? waSendText(WA_NUMBER, text) : Promise.resolve(),
+  ]);
+}
