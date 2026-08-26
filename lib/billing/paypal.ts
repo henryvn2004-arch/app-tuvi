@@ -77,7 +77,10 @@ export async function settlePayPalTopup(
     headers: { 'Authorization': `Bearer ${ppToken}` },
     cache: 'no-store',
   });
-  if (!orderRes.ok) return { ok: false, status: 502, error: 'Cannot verify PayPal order' };
+  if (!orderRes.ok) {
+    console.error('[paypal] không đọc được đơn', orderId, 'HTTP', orderRes.status, await orderRes.text().catch(() => ''));
+    return { ok: false, status: 502, error: `Không đọc được đơn PayPal (HTTP ${orderRes.status})` };
+  }
   let order = await orderRes.json();
 
   const unit     = order.purchase_units?.[0] || {};
@@ -123,7 +126,23 @@ export async function settlePayPalTopup(
       const e = await capRes.json().catch(() => ({}));
       const issue = e?.details?.[0]?.issue || '';
       if (issue !== 'ORDER_ALREADY_CAPTURED') {
-        return { ok: false, status: 502, error: e?.message || 'Capture failed' };
+        // ⚠️ `e.message` của PayPal LUÔN là một câu chung chung ("The requested
+        // action could not be performed, semantically incorrect, or failed
+        // business validation") — nó KHÔNG phân biệt được "tài khoản nhận bị
+        // hạn chế" với "thẻ người mua bị từ chối". Lý do thật nằm ở
+        // `details[0].issue`, và `debug_id` là thứ hỗ trợ PayPal hỏi tới. Trả
+        // về mỗi `message` là tự bịt mắt đúng lúc cần nhìn nhất — đã trả giá
+        // bằng một lượt nạp tiền thật hỏng mà không ai đọc ra được vì sao.
+        console.error('[paypal] capture bị từ chối', orderId, 'HTTP', capRes.status, JSON.stringify(e));
+        const detail = e?.details?.[0]?.description || '';
+        const debugId = e?.debug_id ? ` [debug_id ${e.debug_id}]` : '';
+        return {
+          ok: false,
+          status: 502,
+          error: issue
+            ? `PayPal từ chối: ${issue}${detail ? ` — ${detail}` : ''}${debugId}`
+            : `${e?.message || 'Capture failed'}${debugId}`,
+        };
       }
       const reread = await fetch(`${PAYPAL_BASE}/v2/checkout/orders/${encodeURIComponent(orderId)}`, {
         headers: { 'Authorization': `Bearer ${ppToken}` },
