@@ -14,6 +14,7 @@
 import { computeLaso, formatLasoContext, lasoSummary, clockToBranch, type Laso } from '@/lib/engine/laso';
 import { buildTools, execLasoTool, toolLabel } from '@/lib/agent/tools';
 import type { BirthParams } from '@/lib/contract/v1';
+import { SUGGEST_TOOL_DEF, resolveToolSuggestion, type ToolSuggestion } from '@/lib/tools/suggest-tool';
 
 type Rec = Record<string, unknown>;
 
@@ -27,6 +28,20 @@ export interface ProfilePort {
   save(name: string, birth: BirthParams): Promise<boolean>;
 }
 
+/**
+ * Cửa ghi hồ sơ "Thầy nhớ gì về con" (TẦNG 2). Cùng khuôn `ProfilePort`: lõi
+ * tool KHÔNG biết Supabase, chỉ gọi qua port — nên test được và kênh nào chưa
+ * có danh tính thì truyền null là tool tự tắt.
+ *
+ * ⚠️ Port LUÔN bind sẵn userId ở phía tạo (server). TUYỆT ĐỐI không nhận
+ * userId qua tham số tool: model sẽ bịa ra id và một người ghi được vào hồ sơ
+ * người khác.
+ */
+export interface MemoryPort {
+  remember(loai: string, noiDung: string): Promise<boolean>;
+  forget(idPrefix: string): Promise<boolean>;
+}
+
 // Trạng thái dùng chung trong MỘT request (lá số đã lập được
 // chia sẻ cho các tool sau như tra_tieu_van).
 export interface ToolContext {
@@ -35,6 +50,14 @@ export interface ToolContext {
   // mo_la_so set) → để luu_la_so biết lưu cái gì.
   birth: BirthParams | null;
   profiles: ProfilePort | null;
+  // Cửa ghi hồ sơ người dùng (TẦNG 2). null = lượt anon / kênh chưa nối danh
+  // tính → 2 tool ghi_nho/quen_di không được đăng ký.
+  memory: MemoryPort | null;
+  // Tool người dùng ĐANG mở — để không gợi ý lại chính nó.
+  activeTool: string | null;
+  // Thẻ gợi ý công cụ model vừa chọn trong lượt này (tối đa 1). runAgent đọc
+  // rồi gắn vào event `done`.
+  toolSuggestion: ToolSuggestion | null;
   // Tên lá số vừa mở/lưu trong lượt (để kênh hiển thị/ghi nhớ).
   activeProfile: string | null;
   // mo_la_so mở một lá số KHÁC → đổi chủ thể → kênh reset thread hội thoại.
@@ -43,12 +66,20 @@ export interface ToolContext {
 
 export function newToolContext(
   seedLs: Laso | null = null,
-  opts?: { profiles?: ProfilePort | null; birth?: BirthParams | null },
+  opts?: {
+    profiles?: ProfilePort | null;
+    birth?: BirthParams | null;
+    memory?: MemoryPort | null;
+    activeTool?: string | null;
+  },
 ): ToolContext {
   return {
     ls: seedLs,
     birth: opts?.birth ?? null,
     profiles: opts?.profiles ?? null,
+    memory: opts?.memory ?? null,
+    activeTool: opts?.activeTool ?? null,
+    toolSuggestion: null,
     activeProfile: null,
     subjectSwitched: false,
   };
@@ -66,7 +97,47 @@ function currentYearVN(): number {
 // ── Định nghĩa tool (Anthropic tool-use schema) ─────────────
 // hasProfiles=true (kênh chat có sổ lá số) → thêm 3 tool quản lý sổ.
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function buildToolDefs(hasProfiles = false): any[] {
+export function buildToolDefs(hasProfiles = false, hasMemory = false): any[] {
+  // TẦNG 2 — chỉ đăng ký khi có danh tính (đã đăng nhập). Lượt anon không có
+  // hồ sơ để ghi, mà `client.anon_id` do client tự khai nên KHÔNG phải danh tính.
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const memoryTools: any[] = hasMemory
+    ? [
+        {
+          name: 'ghi_nho',
+          description:
+            'Ghi vào hồ sơ riêng của người này MỘT điều đáng nhớ về HOÀN CẢNH SỐNG của họ, để những lần trò chuyện sau còn biết mà hỏi thăm cho trúng. ' +
+            'CHỈ ghi thứ CÒN ĐÚNG SAU MỘT THÁNG: nghề nghiệp, tình trạng gia đình, con cái, mối lo đang đeo đẳng, điều họ đang tránh, tín ngưỡng nếu họ tự nói. ' +
+            'TUYỆT ĐỐI KHÔNG ghi: tâm trạng nhất thời ("hôm nay buồn"), nội dung câu hỏi tử vi, thông tin lá số (hệ thống đã có), hay suy đoán của bạn về họ. ' +
+            'Viết ngắn gọn ngôi thứ ba, một ý một mục (vd "Đang thất nghiệp từ tháng 6, tìm việc ngành xây dựng"). ' +
+            'Gọi lặng lẽ trong lúc trò chuyện — KHÔNG thông báo "tôi đã ghi nhớ" trừ khi họ hỏi.',
+          input_schema: {
+            type: 'object',
+            properties: {
+              loai: {
+                type: 'string',
+                enum: ['hoan_canh', 'moi_lo', 'tinh_cach', 'tin_nguong', 'khac'],
+                description:
+                  'hoan_canh = nghề/gia đình/nơi ở · moi_lo = điều đang bận tâm · tinh_cach = tính nết, thói quen · tin_nguong = đạo họ theo · khac',
+              },
+              noi_dung: { type: 'string', description: 'Điều cần nhớ, tối đa 200 ký tự' },
+            },
+            required: ['loai', 'noi_dung'],
+          },
+        },
+        {
+          name: 'quen_di',
+          description:
+            'Xoá MỘT mục khỏi hồ sơ khi người dùng bảo quên đi, hoặc khi điều đó đã không còn đúng (vd đã tìm được việc thì mục "đang thất nghiệp" phải bỏ). ' +
+            'Truyền đúng mã trong ngoặc vuông ở khối "THẦY ĐANG NHỚ GÌ VỀ NGƯỜI NÀY".',
+          input_schema: {
+            type: 'object',
+            properties: { ma: { type: 'string', description: 'Mã 8 ký tự của mục, vd "a1b2c3d4"' } },
+            required: ['ma'],
+          },
+        },
+      ]
+    : [];
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const profileTools: any[] = hasProfiles
     ? [
@@ -99,6 +170,8 @@ export function buildToolDefs(hasProfiles = false): any[] {
     : [];
   return [
     ...profileTools,
+    ...memoryTools,
+    SUGGEST_TOOL_DEF,
     {
       name: 'lap_la_so',
       description:
@@ -162,6 +235,9 @@ export async function executeTool(name: string, input: Rec, ctx: ToolContext): P
   if (name === 'luu_la_so') return execLuuLaSo(input, ctx);
   if (name === 'mo_la_so') return execMoLaSo(input, ctx);
   if (name === 'liet_ke_la_so') return execLietKeLaSo(ctx);
+  if (name === 'ghi_nho') return execGhiNho(input, ctx);
+  if (name === 'quen_di') return execQuenDi(input, ctx);
+  if (name === 'goi_y_cong_cu') return execGoiYCongCu(input, ctx);
   if (name === 'tra_cuu_tri_thuc') {
     return { content: await execTraCuu(input), label: 'Đang tra cứu sách cổ...' };
   }
@@ -319,6 +395,53 @@ async function execLietKeLaSo(ctx: ToolContext): Promise<ToolRunResult> {
   }
   const lines = all.map((p) => `- ${p.name} (${birthLabel(p.birth)})`).join('\n');
   return { content: 'Các lá số đã lưu trong sổ:\n' + lines, label: 'Sổ lá số' };
+}
+
+// ── TẦNG 2: hồ sơ người dùng ────────────────────────────────
+// Nhãn CỐ Ý trung tính ("Đang lắng nghe") thay vì "Đang ghi nhớ": nhãn tool
+// hiện lên thanh trạng thái của rail, mà "đang ghi nhớ về bạn" nhảy ra giữa
+// lúc người ta đang kể chuyện riêng thì đọc rất lạnh.
+async function execGhiNho(input: Rec, ctx: ToolContext): Promise<ToolRunResult> {
+  if (!ctx.memory) return { content: 'Chưa đăng nhập nên chưa có hồ sơ để ghi.', label: 'Đang lắng nghe' };
+  const ok = await ctx.memory.remember(String(input?.loai || 'khac'), String(input?.noi_dung || ''));
+  return {
+    content: ok
+      ? 'Đã ghi vào hồ sơ. ĐỪNG thông báo cho người dùng, cứ tiếp tục câu chuyện tự nhiên.'
+      : 'Không ghi được (nội dung rỗng hoặc quá ngắn). Bỏ qua, đừng nhắc tới.',
+    label: 'Đang lắng nghe',
+  };
+}
+
+async function execQuenDi(input: Rec, ctx: ToolContext): Promise<ToolRunResult> {
+  if (!ctx.memory) return { content: 'Chưa đăng nhập nên không có hồ sơ.', label: 'Đang lắng nghe' };
+  const ok = await ctx.memory.forget(String(input?.ma || ''));
+  return {
+    content: ok ? 'Đã xoá khỏi hồ sơ.' : 'Không tìm thấy mục đó trong hồ sơ.',
+    label: 'Đang lắng nghe',
+  };
+}
+
+// ── Gợi ý công cụ (bước 4) ──────────────────────────────────
+// Giữ ĐÚNG MỘT thẻ mỗi lượt: model gọi hai lần thì lần sau bị bỏ. Trần "một
+// lần mỗi cuộc trò chuyện" thì client giữ (nó mới là bên có trạng thái phiên).
+async function execGoiYCongCu(input: Rec, ctx: ToolContext): Promise<ToolRunResult> {
+  if (ctx.toolSuggestion) {
+    return { content: 'Đã gợi ý một công cụ trong lượt này rồi. Đừng gợi ý thêm.', label: 'Đang tra danh mục' };
+  }
+  const s = await resolveToolSuggestion(input?.tool_id, input?.ly_do, ctx.activeTool);
+  if (!s) {
+    // Nói rõ là ĐÃ BỎ để model không tưởng thẻ đã hiện rồi viết "bạn bấm vào
+    // thẻ bên dưới nhé" — câu đó trỏ vào một thứ không tồn tại.
+    return {
+      content: 'Không tìm thấy công cụ đó (mã sai, đang tắt, hoặc chính là công cụ đang mở). KHÔNG có thẻ nào hiện ra — đừng nhắc tới nó trong câu trả lời.',
+      label: 'Đang tra danh mục',
+    };
+  }
+  ctx.toolSuggestion = s;
+  return {
+    content: `Đã hiện thẻ "${s.label}" cho người dùng. Đừng nhắc lại trong lời văn, đừng nói giá, cứ trả lời tiếp tự nhiên.`,
+    label: 'Đang tra danh mục',
+  };
 }
 
 // RAG: OpenAI embeddings + Supabase pgvector rpc (port từ app/api/search)

@@ -187,6 +187,19 @@ export function todayVN(): { y: number; m: number; d: number } {
   return { y: t.getUTCFullYear(), m: t.getUTCMonth() + 1, d: t.getUTCDate() };
 }
 
+/**
+ * Tháng/năm ÂM LỊCH của HÔM NAY (giờ VN) — mốc cho rail chat quy đổi câu hỏi
+ * kiểu "tháng Giêng", "tháng 7 âm lịch": model không có phép đổi ÂM→DƯƠNG
+ * (repo không có hàm đó — xem `lunarMonthsFrom`), nhưng biết hôm nay đang ở
+ * tháng ÂM nào thì suy được XẤP XỈ tháng dương tương ứng để gọi `tra_nguyet_van`,
+ * và tool sẽ tự chốt lại đúng ranh giới tháng âm dù mốc đưa vào hơi lệch.
+ */
+export function todayVNLunar(): { thangAL: number; namAL: number; isLeap: boolean } {
+  const t = todayVN();
+  const l = solarToLunar(t.d, t.m, t.y);
+  return { thangAL: l.month, namAL: l.year, isLeap: !!l.isLeap };
+}
+
 function canIdxOfDay(canChiNgay: string): number {
   const i = CAN.indexOf(canChiNgay.split(' ')[0] || '');
   return i < 0 ? 0 : i;
@@ -354,12 +367,64 @@ export function computeTuan(
 type AnyRec = Record<string, any>;
 
 /**
+ * Cung nguyệt hạn cho MỘT THÁNG ÂM LỊCH cụ thể (`namAL` = năm ÂM LỊCH dùng để
+ * tra `nguyetVanScores` — CÙNG quy ước với `tieuVanScores[].nam`, xem `findTieuVan`).
+ * Ưu tiên bảng `nguyetVanScores` pre-computed; fallback tính trực tiếp qua
+ * `tinhNguyetHan` khi lá số có mang `thangSinhAL`/`gioSinhIdx`.
+ *
+ * Tách riêng để DÙNG CHUNG giữa `resolveNhatHanIdx` (đọc lunar theo NGÀY cụ
+ * thể) và `resolveNguyetHanSegments` (đọc lunar theo ĐOẠN trong tháng dương)
+ * — cả hai chỉ khác nhau ở chỗ lấy `thangAL` từ đâu, phần tra cứu là một.
+ */
+function nguyetHanIdxForThangAL(
+  lasoData: AnyRec,
+  namAL: number,
+  tieuHanIdx: number,
+  thangAL: number,
+): number | null {
+  const preMonths = (lasoData.nguyetVanScores || []).find((e: AnyRec) => Number(e.nam) === namAL)?.months;
+  if (Array.isArray(preMonths) && preMonths[thangAL - 1] != null) {
+    return Number(preMonths[thangAL - 1]);
+  }
+  const thangSinhAL = Number(lasoData.thangSinhAL);
+  const gioSinhIdx = lasoData.gioSinhIdx != null ? Number(lasoData.gioSinhIdx) : -1;
+  if (!thangSinhAL || gioSinhIdx === -1) return null;
+  return ((tinhNguyetHan(tieuHanIdx, thangSinhAL, gioSinhIdx).cach1 + thangAL - 1) % 12 + 12) % 12;
+}
+
+/**
+ * Tra dòng tiểu vận của MỘT NĂM ÂM LỊCH.
+ *
+ * 🔴 Vì sao phải là năm ÂM chứ không phải năm dương (vá 2026-08-19): engine đặt
+ * `tieuVanScores[].nam = namAL_sinh + tuoiMu - 1` — tức trường `nam` đó là NĂM
+ * ÂM, vì tuổi mụ nhảy ở Tết chứ không nhảy ở 1/1. Bản cũ tra bằng năm DƯƠNG của
+ * ngày được hỏi nên mọi ngày từ 1/1 tới trước Tết (~37 ngày/năm ≈ 10%) lấy nhầm
+ * tiểu hạn của năm ÂM SAU, lệch đúng một cung.
+ * Đo được trên lá số Nam 3/6/1998 giờ Sửu: 15/1/2027 dương = ÂL 8/12/2026 →
+ * tiểu hạn đúng là Điền Trạch (năm ÂL 2026); bản cũ tra nam=2027 ra Quan Lộc.
+ */
+function findTieuVan(lasoData: AnyRec, namAL: number): { ok: true; tv: AnyRec } | { ok: false; error: string } {
+  const tvs = lasoData?.tieuVanScores;
+  if (!Array.isArray(tvs) || !tvs.length) return { ok: false, error: 'Lá số này chưa có dữ liệu tiểu vận theo năm.' };
+  const tv = tvs.find((t: AnyRec) => Number(t.nam) === namAL);
+  if (!tv) {
+    const yrs = tvs.map((t: AnyRec) => Number(t.nam));
+    return { ok: false, error: `Năm ${namAL} ngoài phạm vi lá số (chỉ có ${Math.min(...yrs)}–${Math.max(...yrs)}).` };
+  }
+  return { ok: true, tv };
+}
+
+/**
  * Cung nhật hạn của MỘT lá số cho MỘT ngày dương lịch.
  *
  * 🔑 Đây là NGUỒN DUY NHẤT của phép "ngày này rơi vào cung nào" — `execTraNhatVan`
  * (đường của rail chat) gọi chính hàm này. Trước đây phép tính nằm gọn trong
  * tools.ts; tách ra vì thẻ Vận Ngày cần KẾT QUẢ CÓ CẤU TRÚC chứ không phải
  * chuỗi text cho model đọc, và hai bản tính song song thì sớm muộn trôi khỏi nhau.
+ *
+ * Quy đổi lunar bằng ĐÚNG ngày được hỏi (không neo ngày 1) → luôn ra đúng
+ * tháng âm mà ngày đó thật sự thuộc về, kể cả khi tháng dương lịch chứa ngày
+ * đó bị một tháng âm khác "cắt ngang" ở giữa.
  */
 export function resolveNhatHanIdx(
   lasoData: AnyRec,
@@ -369,31 +434,253 @@ export function resolveNhatHanIdx(
 ): { ok: true; nhatHanIdx: number; nguyetHanIdx: number; tieuHanIdx: number; tv: AnyRec; ngayAL: number; thangAL: number }
   | { ok: false; error: string } {
   const lunar = solarToLunar(ngay, thang, nam);
-  const ngayAL = lunar.day, thangAL = lunar.month;
+  const ngayAL = lunar.day, thangAL = lunar.month, namAL = lunar.year;
 
-  const tvs = lasoData?.tieuVanScores;
-  if (!Array.isArray(tvs) || !tvs.length) return { ok: false, error: 'Lá số này chưa có dữ liệu tiểu vận theo năm.' };
-  const tv = tvs.find((t: AnyRec) => Number(t.nam) === nam);
-  if (!tv) {
-    const yrs = tvs.map((t: AnyRec) => Number(t.nam));
-    return { ok: false, error: `Năm ${nam} ngoài phạm vi lá số (chỉ có ${Math.min(...yrs)}–${Math.max(...yrs)}).` };
-  }
+  // Tra theo năm ÂM của CHÍNH ngày được hỏi — xem `findTieuVan`.
+  const rt = findTieuVan(lasoData, namAL);
+  if (!rt.ok) return rt;
+  const tv = rt.tv;
 
   const palaces: AnyRec[] = lasoData.palaces || [];
   const tieuHanIdx = palaces.findIndex((p) => p.cungName === tv.tieuHanCung);
   if (tieuHanIdx === -1) return { ok: false, error: `Không tìm thấy cung tiểu hạn "${tv.tieuHanCung}" trong lá số.` };
 
-  const preMonths = (lasoData.nguyetVanScores || []).find((e: AnyRec) => Number(e.nam) === nam)?.months;
-  let nguyetHanIdx: number;
-  if (Array.isArray(preMonths) && preMonths[thangAL - 1] != null) {
-    nguyetHanIdx = Number(preMonths[thangAL - 1]);
-  } else {
-    const thangSinhAL = Number(lasoData.thangSinhAL);
-    const gioSinhIdx = lasoData.gioSinhIdx != null ? Number(lasoData.gioSinhIdx) : -1;
-    if (!thangSinhAL || gioSinhIdx === -1) return { ok: false, error: 'Lá số thiếu dữ liệu tháng sinh / giờ sinh.' };
-    nguyetHanIdx = ((tinhNguyetHan(tieuHanIdx, thangSinhAL, gioSinhIdx).cach1 + thangAL - 1) % 12 + 12) % 12;
-  }
+  const nguyetHanIdx = nguyetHanIdxForThangAL(lasoData, namAL, tieuHanIdx, thangAL);
+  if (nguyetHanIdx == null) return { ok: false, error: 'Lá số thiếu dữ liệu tháng sinh / giờ sinh.' };
   return { ok: true, nhatHanIdx: tinhNhatHan(nguyetHanIdx, ngayAL), nguyetHanIdx, tieuHanIdx, tv, ngayAL, thangAL };
+}
+
+/** Số ngày của một tháng DƯƠNG lịch (28–31). */
+function daysInSolarMonth(thang: number, nam: number): number {
+  return new Date(Date.UTC(nam, thang, 0)).getUTCDate();
+}
+
+/** Cộng n ngày (UTC) — tránh lệch múi giờ / giờ mùa hè. */
+function addDaysUTC(dt: Date, n: number): Date {
+  const x = new Date(dt.getTime());
+  x.setUTCDate(x.getUTCDate() + n);
+  return x;
+}
+function ymdOf(dt: Date): { d: number; m: number; y: number } {
+  return { d: dt.getUTCDate(), m: dt.getUTCMonth() + 1, y: dt.getUTCFullYear() };
+}
+function lunarOf(dt: Date) {
+  const q = ymdOf(dt);
+  return solarToLunar(q.d, q.m, q.y);
+}
+
+/**
+ * Mùng 1 của tháng âm KẾ TIẾP, tính từ mùng 1 của tháng âm hiện tại.
+ *
+ * Tháng âm là tháng sóc vọng nên chỉ dài 29 hoặc 30 ngày — hỏi đúng hai mốc đó
+ * là xong. Vòng dò 27–32 chỉ là lưới đỡ: thà ném lỗi còn hơn trả một ngày sai
+ * rồi cả khung 12 tháng lệch mà không gì báo.
+ */
+function nextLunarMonthStart(mung1: Date): Date {
+  for (const len of [29, 30, 27, 28, 31, 32]) {
+    const c = addDaysUTC(mung1, len);
+    if (lunarOf(c).day === 1) return c;
+  }
+  throw new Error('Không dò được mùng 1 của tháng âm kế tiếp.');
+}
+
+/** MỘT tháng âm lịch, kèm khoảng ngày DƯƠNG mà nó phủ. */
+export interface LunarMonthSpan {
+  thangAL: number;
+  namAL: number;
+  isLeap: boolean;
+  /** Ngày dương của mùng 1 âm. */
+  tu: { d: number; m: number; y: number };
+  /** Ngày dương của ngày cuối tháng âm. */
+  den: { d: number; m: number; y: number };
+  /** 29 hoặc 30. */
+  soNgay: number;
+  /** Tháng âm này đang chứa "hôm nay" (giờ VN). */
+  dangDienRa: boolean;
+}
+
+/**
+ * `count` tháng ÂM LỊCH liên tiếp, bắt đầu từ tháng âm CHỨA ngày dương dd/mm/yy.
+ *
+ * 🔑 Vì sao duyệt bằng NGÀY DƯƠNG chứ không cộng số tháng: lịch âm có tháng
+ * NHUẬN (năm nhuận 13 tháng) và mỗi tháng dài 29 hoặc 30 ngày — không có phép
+ * cộng nào đúng cho cả hai. `solarToLunar` là nguồn DUY NHẤT biết ranh giới đó,
+ * nên hỏi thẳng nó thay vì tự dựng bản lịch âm thứ hai.
+ */
+export function lunarMonthsFrom(dd: number, mm: number, yy: number, count: number): LunarMonthSpan[] {
+  const l0 = solarToLunar(dd, mm, yy);
+  // Lùi về mùng 1 của chính tháng âm đang chứa ngày này.
+  let cur = addDaysUTC(new Date(Date.UTC(yy, mm - 1, dd)), -(l0.day - 1));
+  const t = todayVN();
+  const todayMs = Date.UTC(t.y, t.m - 1, t.d);
+
+  const out: LunarMonthSpan[] = [];
+  for (let i = 0; i < count; i++) {
+    const lc = lunarOf(cur);
+    const nxt = nextLunarMonthStart(cur);
+    const den = addDaysUTC(nxt, -1);
+    out.push({
+      thangAL: lc.month,
+      namAL: lc.year,
+      isLeap: !!lc.isLeap,
+      tu: ymdOf(cur),
+      den: ymdOf(den),
+      soNgay: Math.round((nxt.getTime() - cur.getTime()) / 86400000),
+      dangDienRa: todayMs >= cur.getTime() && todayMs <= den.getTime(),
+    });
+    cur = nxt;
+  }
+  return out;
+}
+
+/**
+ * '15/2/2026' — dạng ngày người Việt đọc, KHÔNG pad số 0.
+ *
+ * Dời từ `van-han-12.ts` sang đây (2026-08-19, vá `tra_nguyet_van` của rail):
+ * cả `tools.ts` lẫn `van-han-12.ts` đều cần nhãn này mà `tools.ts` không được
+ * import ngược `van-han-12.ts` (nó vốn đã import `describeHanCungRich` FROM
+ * `tools.ts` — import ngược lại là vòng lặp). `van-ngay.ts` không phụ thuộc
+ * cả hai nên là chỗ đứng chung an toàn duy nhất.
+ */
+export function dmy(x: { d: number; m: number; y: number }): string {
+  return `${x.d}/${x.m}/${x.y}`;
+}
+
+/** 'Tháng 6 nhuận ÂL' — nhãn ngắn. */
+export function nhanThangAL(s: Pick<LunarMonthSpan, 'thangAL' | 'isLeap'>): string {
+  return `Tháng ${s.thangAL}${s.isLeap ? ' nhuận' : ''} ÂL`;
+}
+
+/**
+ * 'Tháng 1 ÂL (15/2/2026 – 13/3/2026)'.
+ *
+ * 🔑 Khoảng ngày dương KHÔNG phải trang trí: người đọc sống theo lịch dương, nói
+ * "tháng 1 âm" trơ trọi là bắt họ tự đi tra. Đây là nguồn DUY NHẤT dựng nhãn —
+ * trang, mục lục, prompt của tool 12 tháng LẪN câu trả lời rail đều đọc nó nên
+ * không bề mặt nào nói lệch nhau.
+ */
+export function nhanThangALDay(s: LunarMonthSpan): string {
+  return `${nhanThangAL(s)} (${dmy(s.tu)} – ${dmy(s.den)})`;
+}
+
+/**
+ * Nguyệt hạn + nền năm cho MỘT THÁNG ÂM LỊCH.
+ *
+ * Khác `resolveNguyetHanSegments` (hỏi theo tháng DƯƠNG nên phải cắt đoạn): một
+ * tháng âm nằm TRỌN trong một năm âm ⇒ đúng MỘT tiểu hạn, MỘT nguyệt hạn, không
+ * có gì để chẻ. Cả hai đường đi qua cùng `findTieuVan` + `nguyetHanIdxForThangAL`
+ * nên không thể nói khác nhau về cùng một tháng.
+ */
+export function resolveNguyetHanForLunarMonth(
+  lasoData: AnyRec,
+  thangAL: number,
+  namAL: number,
+): { ok: true; nguyetHanIdx: number; tieuHanIdx: number; luuNienIdx: number; tv: AnyRec }
+  | { ok: false; error: string } {
+  const palaces: AnyRec[] = lasoData.palaces || [];
+  const rt = findTieuVan(lasoData, namAL);
+  if (!rt.ok) return rt;
+  const tv = rt.tv;
+  const tieuHanIdx = palaces.findIndex((p) => p.cungName === tv.tieuHanCung);
+  if (tieuHanIdx === -1) return { ok: false, error: `Không tìm thấy cung tiểu hạn "${tv.tieuHanCung}" trong lá số.` };
+  const idx = nguyetHanIdxForThangAL(lasoData, namAL, tieuHanIdx, thangAL);
+  if (idx == null) return { ok: false, error: 'Lá số thiếu dữ liệu tháng sinh / giờ sinh để tính nguyệt hạn.' };
+  return {
+    ok: true,
+    nguyetHanIdx: idx,
+    tieuHanIdx,
+    luuNienIdx: palaces.findIndex((p) => p.cungName === tv.luuNienCung),
+    tv,
+  };
+}
+
+export interface NguyetHanSegment {
+  /** Ngày dương lịch bắt đầu đoạn (trong tháng đang tra). */
+  tuNgay: number;
+  /** Ngày dương lịch kết thúc đoạn. */
+  denNgay: number;
+  thangAL: number;
+  isLeap: boolean;
+  nguyetHanIdx: number;
+  /** Đoạn có chứa "hôm nay" không — chỉ có ý nghĩa khi tra đúng tháng/năm hiện tại. */
+  isCurrent: boolean;
+  /**
+   * Năm ÂM LỊCH của đoạn — và vì thế cả tiểu hạn/lưu niên đi kèm. Tháng dương
+   * chứa Tết bị cắt thành HAI đoạn thuộc HAI năm âm khác nhau ⇒ hai đoạn đó có
+   * tiểu hạn KHÁC nhau. Gộp một tiểu hạn cho cả tháng là sai đúng chỗ giao thừa.
+   */
+  namAL: number;
+  tv: AnyRec;
+  tieuHanIdx: number;
+  luuNienIdx: number;
+}
+
+/**
+ * Nguyệt hạn cho MỘT THÁNG DƯƠNG LỊCH — trả về 1 hoặc 2 ĐOẠN.
+ *
+ * 🔴 Bài học vá 2026-08-13 (Henry test 13/8 dương = 1/7 âm): tháng âm lịch dài
+ * ~29,5 ngày nên KHÔNG khớp ranh giới tháng dương lịch — hầu hết một tháng
+ * dương bị CẮT NGANG bởi 2 tháng âm khác nhau (vd 8/2026: ngày 1–12 còn tháng
+ * 6 ÂL, từ ngày 13 đã sang tháng 7 ÂL — chiếm 19/31 ngày, tức ĐA SỐ). Bản cũ
+ * neo cứng vào NGÀY 1 để suy "tháng âm của cả tháng dương" → với các tháng bị
+ * cắt ngang, ngày 1 hay rơi vào ĐOẠN THIỂU SỐ/đã hết hạn, nên hỏi "tháng này"
+ * đúng lúc vừa bước sang tháng âm mới lại ra kết quả của tháng âm CŨ.
+ *
+ * ⇒ Hàm này dò MỌI điểm chuyển giao trong tháng dương, trả đủ các đoạn kèm
+ * khoảng ngày dương + tháng âm của từng đoạn, và đánh dấu đoạn nào đang chứa
+ * "hôm nay" (theo giờ VN) để caller ưu tiên luận đúng hạn đang áp dụng.
+ */
+export function resolveNguyetHanSegments(
+  lasoData: AnyRec,
+  thang: number,
+  nam: number,
+): { ok: true; tieuHanIdx: number; luuNienIdx: number; tv: AnyRec; segments: NguyetHanSegment[] }
+  | { ok: false; error: string } {
+  const palaces: AnyRec[] = lasoData.palaces || [];
+  const lastDay = daysInSolarMonth(thang, nam);
+  const l1 = solarToLunar(1, thang, nam);
+  const lEnd = solarToLunar(lastDay, thang, nam);
+
+  const today = todayVN();
+  const isCurrentMonth = today.m === thang && today.y === nam;
+
+  // Điểm chuyển giao xét CẢ tháng âm LẪN năm âm: tháng dương chứa Tết đổi năm
+  // âm (12 → 1) nên nếu chỉ so tháng thì vẫn bắt được, nhưng so cả hai cho rõ ý.
+  const sameLunarBlock = l1.month === lEnd.month && !!l1.isLeap === !!lEnd.isLeap && l1.year === lEnd.year;
+  const bounds: { tuNgay: number; denNgay: number; thangAL: number; isLeap: boolean; namAL: number }[] = [];
+  if (sameLunarBlock) {
+    bounds.push({ tuNgay: 1, denNgay: lastDay, thangAL: l1.month, isLeap: !!l1.isLeap, namAL: l1.year });
+  } else {
+    // Dò NGÀY ĐẦU TIÊN mà tháng âm khác ngày 1 — đó là điểm chuyển giao.
+    let cut = lastDay;
+    for (let d = 2; d <= lastDay; d++) {
+      const l = solarToLunar(d, thang, nam);
+      if (l.month !== l1.month || !!l.isLeap !== !!l1.isLeap || l.year !== l1.year) { cut = d; break; }
+    }
+    bounds.push({ tuNgay: 1, denNgay: cut - 1, thangAL: l1.month, isLeap: !!l1.isLeap, namAL: l1.year });
+    bounds.push({ tuNgay: cut, denNgay: lastDay, thangAL: lEnd.month, isLeap: !!lEnd.isLeap, namAL: lEnd.year });
+  }
+
+  // Mỗi đoạn tra tiểu hạn theo NĂM ÂM CỦA CHÍNH NÓ. Tháng dương chứa Tết có hai
+  // đoạn thuộc hai năm âm ⇒ hai tiểu hạn khác nhau; dùng chung một tv là sai.
+  const segments: NguyetHanSegment[] = [];
+  for (const b of bounds) {
+    const rs = resolveNguyetHanForLunarMonth(lasoData, b.thangAL, b.namAL);
+    if (!rs.ok) return rs;
+    segments.push({
+      ...b,
+      nguyetHanIdx: rs.nguyetHanIdx,
+      isCurrent: isCurrentMonth && today.d >= b.tuNgay && today.d <= b.denNgay,
+      tv: rs.tv,
+      tieuHanIdx: rs.tieuHanIdx,
+      luuNienIdx: rs.luuNienIdx,
+    });
+  }
+
+  // Ba trường cấp 1 giữ lại cho caller cũ — lấy theo đoạn ĐANG DIỄN RA, không
+  // thì đoạn đầu. Caller nào luận theo TỪNG đoạn thì đọc `segments[].tv`.
+  const act = segments.find((x) => x.isCurrent) || segments[0]!;
+  return { ok: true, tieuHanIdx: act.tieuHanIdx, luuNienIdx: act.luuNienIdx, tv: act.tv, segments };
 }
 
 /**

@@ -17,13 +17,29 @@
 export interface JobSpec {
   key: string;
   label: string;
-  source: 'vercel' | 'edge' | 'pgcron';
+  source: 'vercel' | 'edge' | 'pgcron' | 'actions';
   /** Chu kỳ kỳ vọng (phút). Dùng để tính "đã trễ". */
   everyMinutes: number;
   /** Mô tả lịch cho người đọc. */
   schedule: string;
   sink: string;
-  trigger?: boolean;
+  /**
+   * Đường dẫn route Vercel để BẤM CHẠY TAY (`path`), hoặc tên edge function
+   * (`edge`). Có một trong hai thì panel hiện nút "▶ Chạy ngay".
+   *
+   * 🔑 VÌ SAO NẰM Ở ĐÂY chứ không phải một bảng riêng trong route admin: bản
+   * đầu để `trigger: true` ở sổ này còn đường dẫn ở `CRON_TRIGGERS` bên
+   * `app/api/payment/route.ts` — HAI danh sách chép tay cho cùng một thứ, và
+   * chúng đã trôi khỏi nhau đúng như mọi lần: sổ khai 20 job có nút, bảng kia
+   * chỉ biết 11, nên 9 job hiện nút bấm rồi trả về "Unknown job". Chính lớp
+   * lỗi mà cuốn sổ này sinh ra để chống, tái phát ở tầng dưới một bậc.
+   *
+   * Nay chỉ còn MỘT nguồn; `npm run check:jobs` canh cho mỗi đường dẫn phải
+   * có file route thật trên đĩa và mọi cron trong `vercel.json` phải có mặt ở
+   * đây.
+   */
+  path?: string;
+  edge?: string;
   /**
    * Ngày job được đưa vào sổ (YYYY-MM-DD, giờ VN). GHI CHÚ cho người đọc.
    *
@@ -48,6 +64,19 @@ export interface JobSpec {
    * `ops_pgcron_runs` (_patches/migration-ops-pgcron-runs.sql).
    */
   pgcronJob?: string;
+  /**
+   * Job chạy bằng GitHub Actions: tên file workflow trong `.github/workflows/`.
+   *
+   * 🔑 Job loại này KHÔNG đi qua `withCronLog` (nó chạy ngoài Vercel), nên nó
+   * chỉ có mặt trong `cron_runs` nhờ tự ghi nhịp tim qua hàm edge `clip-ingest`
+   * (`?job=1` — xem `scripts/job-heartbeat.mjs`). Không có nhịp tim đó thì cả
+   * mắt xích này VẮNG MẶT trên panel, đúng lỗi gốc của track S4.
+   *
+   * ⚠️ Và vì thế nó KHÔNG có `path`/`edge` ⇒ panel không hiện nút "Chạy ngay":
+   * bấm từ admin không kích được một workflow GitHub. Hiện nút rồi báo lỗi là
+   * đúng cái bẫy "9 job hiện nút bấm rồi trả về Unknown job" đã ghi ở trên.
+   */
+  workflow?: string;
 }
 
 const H = 60;
@@ -72,31 +101,31 @@ const D = 24 * 60;
 export const JOBS: JobSpec[] = [
   // 0/3/11/15 UTC → 10·18·22h VN. Gap lớn nhất là 22h→10h hôm sau = 12 tiếng.
   { key: 'cron-khao-luan', label: 'Viết Khảo Luận', source: 'vercel', everyMinutes: 12 * H,
-    schedule: '10·18·22h VN hằng ngày', sink: 'khao_luan → blog', trigger: true },
+    schedule: '10·18·22h VN hằng ngày', sink: 'khao_luan → blog', path: '/api/cron-khao-luan' },
   { key: 'cron-master-write', label: 'Viết Nghiên Cứu', source: 'vercel', everyMinutes: 6 * H,
-    schedule: '03·09·13·17·23h VN', sink: 'master_articles', trigger: true },
+    schedule: '03·09·13·17·23h VN', sink: 'master_articles', path: '/api/cron-master-write' },
   { key: 'cron-push', label: 'Push (web)', source: 'vercel', everyMinutes: D,
-    schedule: '07:00 VN hằng ngày', sink: 'edge send-daily-push', trigger: true },
+    schedule: '07:00 VN hằng ngày', sink: 'edge send-daily-push', path: '/api/cron-push' },
   { key: 'cron-daily-push', label: 'Push (app/FCM)', source: 'vercel', everyMinutes: D,
-    schedule: '07:00 VN hằng ngày', sink: 'push_tokens (FCM)', trigger: true },
+    schedule: '07:00 VN hằng ngày', sink: 'push_tokens (FCM)', path: '/api/cron/daily-push' },
   // pg_cron gọi thẳng edge function nên KHÔNG đi qua withCronLog → không có
   // dòng nào trong `cron_runs`. Phán qua đó thì nó "chưa hề chạy" vĩnh viễn,
   // trong khi cron.job_run_details cho thấy `succeeded` đều đặn mỗi 07:00 VN.
   { key: 'auto-pipeline', label: 'Pipeline YouTube', source: 'edge', everyMinutes: D,
-    schedule: '07:00 VN (pg_cron)', sink: 'auto-pipeline (edge)', trigger: true,
+    schedule: '07:00 VN (pg_cron)', sink: 'auto-pipeline (edge)', edge: 'auto-pipeline',
     pgcronJob: 'daily-auto-pipeline' },
   // ── 5 job dưới đây TRƯỚC ĐÂY KHÔNG có trong sổ admin ──
   { key: 'ops-digest', label: 'Digest Vận Hành', source: 'vercel', everyMinutes: D,
-    schedule: '07:30 VN hằng ngày', sink: 'Telegram admin + events', trigger: true,
+    schedule: '07:30 VN hằng ngày', sink: 'Telegram admin + events', path: '/api/cron/ops-digest',
     since: '2026-07-28' },
   { key: 'cmo-digest', label: 'CMO Digest', source: 'vercel', everyMinutes: D,
-    schedule: '08:00 VN hằng ngày', sink: 'Telegram admin', trigger: true },
+    schedule: '08:00 VN hằng ngày', sink: 'Telegram admin', path: '/api/cron/cmo-digest' },
   { key: 'anomaly-alerts', label: 'Cảnh báo bất thường', source: 'vercel', everyMinutes: 3 * H,
-    schedule: 'mỗi 3 giờ', sink: 'Telegram admin + events', trigger: true },
+    schedule: 'mỗi 3 giờ', sink: 'Telegram admin + events', path: '/api/cron/anomaly-alerts' },
   // Sinh ra sau sự cố 29/07 (Supabase bị hạ Pro→Free rồi pause, prod hỏng hơn
   // một ngày mà không ai được báo). Xem lib/ops/health-check.ts.
   { key: 'health-check', label: 'Canh prod còn sống', source: 'vercel', everyMinutes: 30,
-    schedule: 'mỗi 30 phút', sink: 'Telegram admin', trigger: true,
+    schedule: 'mỗi 30 phút', sink: 'Telegram admin', path: '/api/cron/health-check',
     since: '2026-07-29' },
   // `since` = ngày 3 cron này vào `vercel.json` (đo bằng dấu vết build đầu tiên
   // trong `cron_runs`: 2026-07-26 08:32Z). BẮT BUỘC với job TUẦN: sau khi dọn
@@ -106,47 +135,99 @@ export const JOBS: JobSpec[] = [
   // "CHƯA HỀ chạy" ngay, tức vừa gỡ một cảnh báo giả đã dựng lại cảnh báo giả
   // khác — đúng cái bẫy mà chú thích của trường `since` đã cảnh báo.
   { key: 'autopilot-price', label: 'Autopilot — giá', source: 'vercel', everyMinutes: 7 * D,
-    schedule: 'T2 hằng tuần', sink: 'autopilot_actions', trigger: true,
+    schedule: 'T2 hằng tuần', sink: 'autopilot_actions', path: '/api/cron/autopilot-price',
     since: '2026-07-26' },
   { key: 'autopilot-promo', label: 'Autopilot — khuyến mãi', source: 'vercel', everyMinutes: 7 * D,
-    schedule: 'T4 hằng tuần', sink: 'autopilot_actions', trigger: true,
+    schedule: 'T4 hằng tuần', sink: 'autopilot_actions', path: '/api/cron/autopilot-promo',
     since: '2026-07-26' },
   { key: 'autopilot-nudge', label: 'Autopilot — nhắc segment', source: 'vercel', everyMinutes: 7 * D,
-    schedule: 'T6 hằng tuần', sink: 'autopilot_actions', trigger: true,
+    schedule: 'T6 hằng tuần', sink: 'autopilot_actions', path: '/api/cron/autopilot-nudge',
     since: '2026-07-26' },
   { key: 'content-pack', label: 'Content Pack TikTok', source: 'vercel', everyMinutes: 7 * D,
-    schedule: 'CN hằng tuần', sink: 'Telegram admin', trigger: true,
+    schedule: 'CN hằng tuần', sink: 'Telegram admin', path: '/api/cron/content-pack',
     since: '2026-07-28' },
   // `since` từng ghi '2026-07-30' — SAI, code merge 01/08 21:57 VN (PR #347).
   // Chính dòng này đẻ ra cảnh báo giả lúc 22:00 cùng ngày; xem chú thích `since`.
   { key: 'prune-anon-trial', label: 'Dọn nhật ký dùng thử', source: 'vercel', everyMinutes: D,
-    schedule: '09:00 VN hằng ngày', sink: 'anon_rail_hits', trigger: true,
+    schedule: '09:00 VN hằng ngày', sink: 'anon_rail_hits', path: '/api/cron/prune-anon-trial',
     since: '2026-08-01' },
   // `since` = ngày merge: job chưa từng chạy nên không có dòng nào trong
   // cron_runs; thiếu mốc này thì bộ dò lập tức kêu "CHƯA HỀ chạy" — đúng loại
   // cảnh báo giả đã phải đi vá một lượt hôm 30/07.
   { key: 'keyword-suggest', label: 'Quét từ khoá (Google Suggest)', source: 'vercel', everyMinutes: 7 * D,
-    schedule: 'T3 hằng tuần', sink: 'keyword_ideas', trigger: true,
+    schedule: 'T3 hằng tuần', sink: 'keyword_ideas', path: '/api/cron/keyword-suggest',
     since: '2026-08-01' },
-  { key: 'topic-topup', label: 'Nạp chủ đề tuần (2 bề mặt)', source: 'vercel', everyMinutes: 7 * D,
-    schedule: 'T4 hằng tuần', sink: 'topic_queue', trigger: true,
+  { key: 'topic-topup', label: 'Nạp chủ đề tuần (3 bề mặt)', source: 'vercel', everyMinutes: 7 * D,
+    schedule: 'T4 hằng tuần', sink: 'topic_queue', path: '/api/cron/topic-topup',
     since: '2026-08-01' },
+  // Tiêu thụ đúng hàng đợi job trên vừa đổ vào — CHẠY SAU nó cùng ngày (T4) rồi
+  // lại T7 (còn dư trước lượt gieo tuần sau). Khoảng trống LỚN NHẤT giữa hai
+  // lượt là T7→T4 tuần sau = 4 ngày ⇒ `everyMinutes` lấy mốc đó, không phải
+  // khoảng T4→T7 (3 ngày) — đúng luật đã ghi ở đầu file.
+  { key: 'cron-khao-luan-tamly', label: 'Viết Vấn Đáp tâm lý (Kimi, 1→3-5 bài)',
+    source: 'vercel', everyMinutes: 4 * D, schedule: 'T4 · T7, 12:00 VN', sink: 'khao_luan',
+    path: '/api/cron-khao-luan-tamly', since: '2026-08-23' },
   // Nối lại khâu CUỐI của pipeline media, vốn đứt âm thầm từ 16/07: 86 bài
   // `van_dap` render xong mà `yt_status='error'`, 84 trong số đó cùng một
   // `invalid_grant`. Trước đây lỗi chỉ nằm trong một cột DB nên không job nào
   // canh — đúng loại hỏng mà sổ này sinh ra để bắt.
   { key: 'yt-drain', label: 'Xả kho YouTube', source: 'vercel', everyMinutes: D,
-    schedule: '11:00 VN hằng ngày', sink: 'van_dap → YouTube', trigger: true,
+    schedule: '11:00 VN hằng ngày', sink: 'van_dap → YouTube', path: '/api/cron/yt-drain',
     since: '2026-08-01' },
   { key: 'media-build', label: 'Dựng hàng đợi bài đăng', source: 'vercel', everyMinutes: D,
-    schedule: '09:30 VN hằng ngày', sink: 'media_assets + media_posts', trigger: true,
+    schedule: '09:30 VN hằng ngày', sink: 'media_assets + media_posts', path: '/api/cron/media-build',
     since: '2026-08-01' },
   // Soạn bài seeding cho group — KHÔNG đăng (Groups API bị Meta gỡ 22/04/2024).
   // `since` = ngày merge: job chưa từng chạy nên cron_runs trống, thiếu mốc này
   // là bộ dò lập tức kêu "CHƯA HỀ chạy".
   { key: 'seeding-build', label: 'Soạn bài seeding group', source: 'vercel', everyMinutes: D,
-    schedule: '08:30 VN hằng ngày', sink: 'seeding_drafts', trigger: true,
+    schedule: '08:30 VN hằng ngày', sink: 'seeding_drafts', path: '/api/cron/seeding-build',
     since: '2026-08-03' },
+  // Tầng dữ liệu còn thiếu của trang Kho: trước job này site không đo được một
+  // số liệu nào từ nền tảng. `since` = ngày merge — job chưa từng chạy nên
+  // `cron_runs` trống, thiếu mốc này là bộ dò kêu ngay "CHƯA HỀ chạy".
+  { key: 'content-metrics', label: 'Kéo số liệu nội dung', source: 'vercel', everyMinutes: D,
+    schedule: '12:30 VN hằng ngày', sink: 'content_metrics + channel_stats', path: '/api/cron/content-metrics',
+    since: '2026-08-11' },
+  /*
+   * Job ĐẦU TIÊN chạy ngoài Vercel/Supabase — nó ở GitHub Actions.
+   *
+   * 🔴 VÌ SAO PHẢI CÓ MẶT Ở ĐÂY: đây là mắt xích ĐẦU của đường ống clip (dựng
+   * ra file), mà nó lại là mắt duy nhất không đi qua `withCronLog`. Trước dòng
+   * này, panel Cron & Jobs chỉ thấy clip TỪ LÚC nó đã vào kho — khâu dựng chết
+   * thì nhìn vào panel không phân biệt được với "tuần này không có clip nào
+   * qua cổng". Muốn biết phải mở tab Actions, tức một phần của đường ống nằm
+   * ngoài chỗ người ta ngồi nhìn. Đúng lỗi gốc đã đẻ ra cả cuốn sổ này.
+   *
+   * Nhịp tim do `scripts/job-heartbeat.mjs` ghi qua hàm edge `clip-ingest`
+   * (`?job=1`) — runner CỐ Ý không cầm service key nên không ghi thẳng được.
+   *
+   * ⚠️ KHÔNG khai `path`: admin không kích được workflow GitHub, hiện nút "Chạy
+   * ngay" rồi báo lỗi là tái lập đúng cái bẫy 9-nút-chết đã ghi ở trên.
+   */
+  { key: 'video-build', label: 'Dựng clip 9:16', source: 'actions', everyMinutes: 7 * D,
+    schedule: 'T2 08:00 VN hằng tuần', sink: 'clips (Storage) + media_assets',
+    workflow: 'video-build.yml', since: '2026-08-18' },
+  // Track Backlink — máy soạn, người tự tay dán/gửi (xem đầu
+  // _patches/migration-backlinks.sql). `since` = ngày merge: cả ba job chưa
+  // từng chạy nên cron_runs trống, thiếu mốc này bộ dò kêu ngay "CHƯA HỀ chạy".
+  { key: 'backlink-prospect', label: 'Backlink — tìm cơ hội', source: 'vercel', everyMinutes: 7 * D,
+    schedule: 'T3 08:45 VN hằng tuần', sink: 'backlink_prospects', path: '/api/cron/backlink-prospect',
+    since: '2026-08-19' },
+  { key: 'backlink-content', label: 'Backlink — soạn nội dung', source: 'vercel', everyMinutes: D,
+    schedule: '09:15 VN hằng ngày', sink: 'backlink_content', path: '/api/cron/backlink-content',
+    since: '2026-08-19' },
+  { key: 'backlink-check', label: 'Backlink — kiểm link sống + ghi nguồn widget', source: 'vercel', everyMinutes: D,
+    schedule: '09:45 VN hằng ngày', sink: 'backlink_links', path: '/api/cron/backlink-check',
+    since: '2026-08-19' },
+  { key: 'backlink-broken-links', label: 'Backlink — quét link chết', source: 'vercel', everyMinutes: 7 * D,
+    schedule: 'T5 08:45 VN hằng tuần', sink: 'backlink_prospects', path: '/api/cron/backlink-broken-links',
+    since: '2026-08-19' },
+  // Track Digital Marketing — sổ Tài Khoản & Entity (xem đầu
+  // _patches/migration-growth-accounts.sql). `since` = ngày merge.
+  { key: 'growth-accounts', label: 'Entity — nạp sổ + kiểm hồ sơ sống', source: 'vercel', everyMinutes: 7 * D,
+    schedule: 'T7 08:15 VN hằng tuần', sink: 'growth_accounts', path: '/api/cron/growth-accounts',
+    since: '2026-08-23' },
 ];
 
 export interface CronRun {
@@ -261,6 +342,9 @@ export async function syncJobFirstSeen(): Promise<Record<string, string>> {
 }
 
 export interface JobHealth extends JobSpec {
+  /** Bấm chạy tay được — SUY TỪ `path`/`edge`, không phải một cờ khai riêng.
+   *  Khai riêng thì bật cờ mà quên đường dẫn là mọc ra một nút chết. */
+  trigger: boolean;
   lastRun: string | null;
   lastStatus: string | null;
   /** Quá HẠN vì trễ hơn 1.5× chu kỳ (đệm cho lệch giờ chạy). */
@@ -375,6 +459,7 @@ export function evaluateJobs(runs: CronRun[], firstSeen: Record<string, string> 
 
     return {
       ...spec,
+      trigger: Boolean(spec.path || spec.edge),
       lastRun: last?.started_at || null,
       lastStatus: last?.status || null,
       // Chưa từng có log cũng là quá hạn: job khai trong sổ mà không để lại vết

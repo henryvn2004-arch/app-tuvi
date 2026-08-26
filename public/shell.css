@@ -30,6 +30,11 @@
      Giá trị ở đây chỉ là mức dự phòng trước khi JS chạy. Thanh phụ dính
      (.jump) neo theo biến này thay vì chép số cứng. */
   --ws-top-h:69px;
+  /* Bề rộng cột rail ở desktop — MỘT nguồn dùng ở CẢ `.shell` (grid-template-
+     columns) LẪN `.ws-fab` (neo cụm nút sát mép phải WORKSPACE, không phải
+     mép phải viewport). Hai chỗ chép cùng một số 336px là hẹn ngày trôi khỏi
+     nhau; đổi bề rộng rail thì chỉ sửa đúng một dòng này. */
+  --rail-w:336px;
   --shadow:0 1px 2px rgba(6,26,46,.04),0 4px 16px rgba(6,26,46,.06);
   --shadow-lg:0 24px 60px rgba(6,26,46,.28),0 6px 18px rgba(6,26,46,.16);
 }
@@ -48,7 +53,7 @@
 }
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:var(--sans);background:var(--paper-2);color:var(--text);font-size:14px;line-height:1.55;-webkit-font-smoothing:antialiased}
-.shell{display:grid;grid-template-columns:246px 1fr 336px;height:100vh;min-height:600px}
+.shell{display:grid;grid-template-columns:246px 1fr var(--rail-w);height:100vh;min-height:600px}
 
 /* ── SIDEBAR ── */
 .sb{background:linear-gradient(180deg,var(--navy),var(--navy-2));color:var(--sb-txt);display:flex;flex-direction:column;overflow:hidden}
@@ -73,6 +78,11 @@ body{font-family:var(--sans);background:var(--paper-2);color:var(--text);font-si
 .item:hover .ic,.item.active .ic{opacity:.9}.item.active .ic{color:var(--gold)}
 .pill{margin-left:auto;font-size:9.5px;padding:1px 6px;border-radius:20px;background:rgba(30,107,60,.22);color:#6fce97}
 .pill.cost{background:rgba(201,168,76,.16);color:var(--gold)}
+/* Chấm nhắc "Khởi Hành" chưa xong cạnh mục Tổng quan — xem khoiHanhPending()
+   trong shell.js. Tự pulse nhẹ để bắt mắt mà không cần chữ, đứng gọn cạnh
+   nhãn nên không phá bố cục có/không có .pill. */
+.sb-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--gold);margin-left:6px;flex:0 0 auto;animation:sbDotPulse 1.8s ease-in-out infinite}
+@keyframes sbDotPulse{0%,100%{box-shadow:0 0 0 0 rgba(201,168,76,.45)}50%{box-shadow:0 0 0 4px rgba(201,168,76,0)}}
 .sb-theme{margin:6px 12px;padding:7px 12px;background:rgba(255,255,255,.04);border:1px solid var(--sb-line);color:var(--sb-txt,#a9bdd0);border-radius:8px;font-size:12px;font-family:inherit;cursor:pointer;text-align:left;transition:background .15s}
 .sb-theme:hover{background:rgba(255,255,255,.08);color:#fff}
 .sb-foot{border-top:1px solid var(--sb-line);padding:10px 14px;display:flex;align-items:center;gap:10px;cursor:pointer;text-decoration:none}
@@ -83,6 +93,11 @@ body{font-family:var(--sans);background:var(--paper-2);color:var(--text);font-si
 /* ── WORKSPACE FRAME ── */
 .ws{background:var(--paper);overflow-y:auto;display:flex;flex-direction:column;position:relative}
 .ws-top{position:sticky;top:0;z-index:5;background:var(--paper);border-bottom:1px solid var(--line);padding:12px 22px;display:flex;align-items:center;gap:14px}
+/* Icon cố định cạnh tên tool trên `.ws-top` — xem `mountToolIcon()` trong
+   shell.js. Icon (không phải ảnh minh hoạ .intro-avatar): ở cỡ 32-40px một
+   icon đơn sắc đọc rõ hơn hẳn ảnh 1024×1024 thu nhỏ hết chi tiết. */
+.ws-avatar{width:40px;height:40px;border-radius:9px;flex-shrink:0;background:radial-gradient(circle at 30% 25%,var(--navy-3),var(--navy));border:1px solid rgba(201,168,76,.4);display:flex;align-items:center;justify-content:center;color:var(--gold)}
+.ws-avatar svg{width:22px;height:22px}
 .ws-title b{font-family:var(--serif);font-size:17px;font-weight:600;display:block}
 .ws-title span{font-size:12px;color:var(--text-lt)}
 .ws-actions{margin-left:auto;display:flex;gap:8px}
@@ -91,6 +106,46 @@ body{font-family:var(--sans);background:var(--paper-2);color:var(--text);font-si
 .btn.pri{background:var(--red);border-color:var(--red);color:#fff}
 .btn:disabled{opacity:.5;cursor:not-allowed}
 .ws-body{padding:18px 22px 44px}
+/* ── CỤM NÚT STICKY GÓC PHẢI DƯỚI ─────────────────────────────────────
+   Chia sẻ · Hỏi · Lưu PDF · Đăng Facebook. Trước đây cả bốn nằm trong
+   `.ws-top` — một thanh CUỘN THEO trang, nên đọc xong một khối luận dài
+   trên di động là thanh đó đã trôi khỏi màn hình từ lâu, không ai thấy để
+   bấm. Nay `position:fixed`, luôn đứng đúng một chỗ bất kể cuộn tới đâu.
+   Dựng bởi `fabHost()` trong shell.js. Luật ẨN khi có drawer (sidebar/rail)
+   mở nằm TRONG khối responsive dưới cùng, cạnh `.tabbar` — trên desktop
+   rail luôn hiện sẵn (không phải drawer che màn hình) nên KHÔNG được ẩn ở
+   đây, chỉ ẩn trên di động nơi rail phủ kín màn hình khi mở.
+
+   🐞 `right:16px` SUÔNG là bug đã bắt: `position:fixed` neo theo VIEWPORT,
+   không theo `.ws` (workspace) — trên desktop rail luôn chiếm `--rail-w`
+   (336px) sát mép phải viewport, nên cụm nút tràn ĐÈ LÊN rail thay vì đứng
+   trong workspace. Trừ đúng `--rail-w` (cùng biến `.shell` dùng để chia cột)
+   thì cụm nút mới hạ cánh sát mép phải WORKSPACE. Ở ≤900px rail là drawer
+   NẰM NGOÀI luồng (không chiếm cột) nên khối responsive bên dưới ghi đè lại
+   `right:14px` — không trừ `--rail-w` nữa. */
+.ws-fab{position:fixed;right:calc(var(--rail-w) + 16px);bottom:calc(16px + env(safe-area-inset-bottom));z-index:40;display:flex;flex-direction:column;align-items:center;gap:8px}
+/* Icon-only, tròn, đều cỡ — chữ dồn hết vào tooltip (`data-tip`, hiện khi
+   hover/focus) thay vì nằm cạnh icon. Đặt tooltip bên TRÁI vì cụm đứng sát
+   mép phải: bên phải chỉ còn 16px rồi tới rail/viền màn hình, chữ dài sẽ bị
+   cắt hoặc tràn ra ngoài. */
+.ws-fab .btn{width:44px;height:44px;padding:0;justify-content:center;border-radius:50%;background:var(--white);box-shadow:var(--shadow-lg);position:relative}
+.ws-fab .btn svg{width:19px;height:19px;flex:0 0 auto}
+.ws-fab .fbtn-fb{background:#1877F2;border-color:#1877F2;color:#fff}
+.ws-fab .fbtn-fb:hover{background:#1466d6;border-color:#1466d6;color:#fff}
+.ws-fab .btn[data-tip]::after{
+  content:attr(data-tip);position:absolute;right:calc(100% + 10px);top:50%;transform:translateY(-50%);
+  background:var(--navy);color:#fff;font-size:12px;line-height:1;white-space:nowrap;
+  padding:6px 10px;border-radius:6px;box-shadow:var(--shadow-lg);
+  opacity:0;pointer-events:none;transition:opacity .12s ease;
+}
+.ws-fab .btn[data-tip]:hover::after,.ws-fab .btn[data-tip]:focus-visible::after{opacity:1}
+/* Chạm màn hình không có "hover" — tooltip chỉ tổ che ngón tay, không ai đọc kịp. */
+@media(hover:none){.ws-fab .btn[data-tip]::after{display:none}}
+/* Dòng giá ngay dưới mô tả mỗi công cụ — điền bằng `tool-prices.js` qua
+   `data-tvp-price-label="<tool_id>"`, nguồn DUY NHẤT là `tool_pricing`. Admin
+   sửa giá thì dòng này tự đổi theo, không cần deploy. Margin âm để dính sát
+   dòng mô tả phía trên (vốn đã tự chừa khoảng cách bên dưới nó). */
+.price-note{font-size:12px;color:var(--gold-soft);font-weight:600;margin:-8px 0 14px}
 /* Liên kết chưa được trang nào tạo kiểu: mặc định #0000EE của trình duyệt
    chìm trên nền tối. Chỉ áp ở dark, và chỉ cho <a> KHÔNG có class, để không
    đè lên màu liên kết mà trang cố ý đặt. */
@@ -99,7 +154,6 @@ body{font-family:var(--sans);background:var(--paper-2);color:var(--text);font-si
 /* ── RAIL ── */
 .rail{background:var(--white);border-left:1px solid var(--line);display:flex;flex-direction:column;overflow:hidden}
 .rail-h{padding:12px 14px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:10px}
-.spark{width:29px;height:29px;border-radius:8px;background:radial-gradient(circle at 30% 25%,var(--navy-3),var(--navy));border:1px solid rgba(201,168,76,.4);display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:14px;flex:0 0 auto}
 .rail-ava{width:32px;height:32px;border-radius:8px;object-fit:cover;border:1px solid rgba(201,168,76,.4);flex:0 0 auto;display:block;cursor:pointer}
 .rail-h b{font-size:13.5px;display:block;font-family:var(--serif)}
 .rail-h span{font-size:10.5px;color:var(--text-lt)}
@@ -184,14 +238,20 @@ body{font-family:var(--sans);background:var(--paper-2);color:var(--text);font-si
 .tabbar .tab.active{color:var(--gold)}
 .tabbar .tab:active{background:rgba(255,255,255,.05)}
 
-/* ── EMPTY-STATE INTRO (giới thiệu ngắn 1 lần, ẩn sau lần dùng đầu) ── */
-.intro-card{position:relative;background:linear-gradient(180deg,var(--gold-lt),var(--white));border:1px solid var(--gold-soft);border-radius:12px;padding:14px 40px 14px 16px;box-shadow:var(--shadow);margin-bottom:16px;max-width:720px}
-.intro-card .intro-t{font-family:var(--serif);font-size:15px;font-weight:600;color:var(--text);margin-bottom:5px;display:flex;align-items:center;gap:8px}
-.intro-card .intro-t .spark{color:var(--gold-soft)}
+/* ── EMPTY-STATE INTRO (danh thiếp CỐ ĐỊNH của tool — KHÔNG tự ẩn vĩnh viễn,
+   không có nút đóng) ── Bố cục: avatar [trái] — tên tool + mô tả [phải].
+   `.intro-body` là hàng flex; avatar tự nạp từ `/tool-avatars/<key>.webp`
+   (xem `Shell.introOnce` trong shell.js), lỗi 404 (chưa sinh ảnh cho tool đó)
+   thì tự ẩn qua onerror — không để lại ô vỡ ảnh. Avatar cỡ lớn (96/72px) để
+   thấy rõ chi tiết nét vẽ — ảnh gốc 1024×1024 nên phóng cỡ này không vỡ nét. */
+.intro-card{position:relative;background:linear-gradient(180deg,var(--gold-lt),var(--white));border:1px solid var(--gold-soft);border-radius:12px;padding:16px;box-shadow:var(--shadow);margin-bottom:16px;max-width:720px}
+.intro-card .intro-body{display:flex;align-items:flex-start;gap:16px}
+.intro-card .intro-avatar{width:96px;height:96px;border-radius:14px;flex-shrink:0;object-fit:cover;background:var(--navy)}
+.intro-card .intro-text{flex:1;min-width:0}
+.intro-card .intro-t{font-family:var(--serif);font-size:15px;font-weight:600;color:var(--text);margin-bottom:5px}
 .intro-card .intro-d{font-size:13px;color:var(--text-mid);line-height:1.65}
 .intro-card .intro-d b{color:var(--text)}
-.intro-card .intro-x{position:absolute;top:9px;right:9px;width:24px;height:24px;border:none;background:transparent;color:var(--text-lt);font-size:19px;line-height:1;cursor:pointer;border-radius:6px}
-.intro-card .intro-x:hover{background:var(--paper-2);color:var(--text)}
+@media(max-width:480px){.intro-card .intro-avatar{width:72px;height:72px;border-radius:12px}}
 
 /* ── HÀNG GỢI Ý CÂU HỎI (chip cố định trên ô nhập rail, cuộn ngang) ── */
 .rail-sugg{padding:8px 13px 0}
@@ -246,6 +306,14 @@ body{font-family:var(--sans);background:var(--paper-2);color:var(--text);font-si
 .ssm-b{flex:1;text-align:center;text-decoration:none;font-size:12.5px;border:1px solid var(--line-2);border-radius:8px;padding:8px 10px;color:var(--text-mid);background:var(--paper)}
 .ssm-b:hover{border-color:var(--gold-soft);color:var(--text)}
 .ssm-b.fb{border-color:#1877F2;color:#1877F2}.ssm-b.zl{border-color:#0068FF;color:#0068FF}.ssm-b.wa{border-color:#25D366;color:#128C7E}
+.ssm-field{margin-bottom:11px}
+.ssm-label{display:block;font-size:11.5px;color:var(--text-lt);margin-bottom:4px}
+.ssm-in.full{width:100%;box-sizing:border-box;resize:vertical}
+
+/* ── CTA "rủ người khác xem/thử" (dùng chung nhiều tool kết quả) ── */
+.compat-invite{margin:16px auto 0;max-width:420px;padding:12px 14px;border:1px solid var(--gold-soft);border-radius:10px;background:var(--paper-2);display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:center;text-align:left}
+.compat-invite .ci-t{flex:1;min-width:180px;font-size:12.6px;color:var(--text-mid);line-height:1.5}
+
 .sam-card{position:relative;width:min(420px,94vw);max-height:82vh;display:flex;flex-direction:column;background:var(--white);border:1px solid var(--line-2);border-radius:14px;box-shadow:var(--shadow-lg);padding:20px 20px 14px}
 .sam-rand{border:1px dashed var(--line-2);background:var(--paper);border-radius:9px;padding:9px 12px;font-size:12.5px;color:var(--text-mid);cursor:pointer;font-family:inherit;margin-bottom:12px;text-align:center}
 .sam-rand:hover{border-color:var(--gold-soft);color:var(--text)}
@@ -302,6 +370,19 @@ body{font-family:var(--sans);background:var(--paper-2);color:var(--text);font-si
 .rail-upsell .ru-btn:hover{background:var(--navy-mid,#0D3B5E)}
 .rail-upsell .ru-price{font-size:11.5px;color:var(--text-lt)}
 
+/* Thẻ gợi ý công cụ trong lúc trò chuyện (bước 4). CỐ Ý nhẹ hơn .rail-upsell:
+   nền giấy + viền mảnh thay vì khối vàng — đây là lời CHỈ ĐƯỜNG, không phải
+   lời mời mua, và nó xuất hiện đúng lúc người ta đang cần giúp. Không có ô
+   giá nào ở đây, xem lib/tools/suggest-tool.ts. */
+.tool-suggest{display:flex;align-items:center;gap:11px;margin:10px 0 4px;padding:11px 13px;
+  background:var(--paper-2,#fbf9f5);border:1px solid var(--line,#e6e2d8);border-radius:11px;animation:shFade .2s ease}
+.tool-suggest .ts-b{flex:1;min-width:0}
+.tool-suggest .ts-t{font-family:var(--serif);font-size:13.5px;font-weight:600;color:var(--heading);line-height:1.4}
+.tool-suggest .ts-d{font-size:12.5px;color:var(--text-mid);line-height:1.55;margin-top:2px}
+.tool-suggest .ts-go{flex-shrink:0;background:var(--navy);color:var(--gold-bright,#c9a84c);text-decoration:none;
+  font-family:var(--serif);font-weight:600;font-size:12.5px;padding:7px 14px;border-radius:8px;white-space:nowrap}
+.tool-suggest .ts-go:hover{background:var(--navy-mid,#0D3B5E)}
+
 /* ── RESPONSIVE (max-width:900px) — PHẢI để CUỐI file: các rule .rail/.sb đặt
    sau media query (vd .rail{position:relative} cho panel lịch sử) sẽ override
    mobile nếu media đứng trước → giữ khối này ở cuối để mobile thắng. ── */
@@ -328,6 +409,8 @@ body{font-family:var(--sans);background:var(--paper-2);color:var(--text);font-si
      là max-content của phụ đề (~300px) nên ở máy hẹp (≤360px) NÓ tự rớt xuống
      hàng riêng, bỏ nút ☰ đứng trơ một hàng → header thành 3 hàng. */
   .ws-title{flex:1 1 0;min-width:0}
+  .ws-avatar{width:32px;height:32px;border-radius:7px}
+  .ws-avatar svg{width:18px;height:18px}
   /* CHỈ con trực tiếp: phụ đề vài trang có <span data-tvp-price> lồng bên
      trong — cho nó display:block là nó tự xuống dòng, header lại cao thêm. */
   .ws-title>b,.ws-title>span{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -345,6 +428,11 @@ body{font-family:var(--sans);background:var(--paper-2);color:var(--text);font-si
   .tabbar{display:grid}
   .ws-body{padding-bottom:76px}
   body.drawer-open .tabbar{display:none}
+  /* Cụm sticky phải leo lên TRÊN tabbar (~64px + safe-area), và tự ẩn cùng
+     lúc với nó khi sidebar/rail đang mở toàn màn — rail phủ kín thì cụm nút
+     nổi bên trên chỉ còn là chướng ngại vật. */
+  .ws-fab{bottom:calc(78px + env(safe-area-inset-bottom));right:14px}
+  body.drawer-open .ws-fab{display:none}
 }
 
 /* ══════════════════════════════════════════════════════════════════════
@@ -377,10 +465,23 @@ body{font-family:var(--sans);background:var(--paper-2);color:var(--text);font-si
   .sec, .card, .res-block, .cs-sec { page-break-inside: avoid; break-inside: avoid; }
 
   /* Đầu trang in: trên màn hình `.ws-top` mang tên tool, mà nó bị ẩn khi in
-     ⇒ bản in không có gì nói nó là cái gì của ai. Shell dựng khối này. */
-  .ws-print-head { display: block !important; margin: 0 0 14px; padding: 0 0 10px; border-bottom: 1px solid #ccc; }
-  .ws-print-head b { display: block; font-family: var(--serif); font-size: 16pt; }
-  .ws-print-head span { display: block; font-size: 10pt; color: #444; margin-top: 3px; }
+     ⇒ bản in không có gì nói nó là cái gì của ai. Shell dựng khối này, kèm
+     avatar của chính tool (ảnh trái, tên+dòng lá số phải — cùng bố cục với
+     box giới thiệu trên web). */
+  .ws-print-head { display: flex !important; align-items: center; gap: 14px; margin: 0 0 14px; padding: 0 0 12px; border-bottom: 1px solid #ccc; }
+  .ws-print-avatar { width: 48px; height: 48px; border-radius: 10px; object-fit: cover; flex-shrink: 0; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .ws-print-head-text b { display: block; font-family: var(--serif); font-size: 16pt; }
+  .ws-print-head-text span { display: block; font-size: 10pt; color: #444; margin-top: 3px; }
+
+  /* Chân trang in: triện + tên miền + ngày xuất (trái), QR quét về trang
+     (phải) — một lần ở cuối tài liệu, không lặp mỗi trang giấy (`window.print`
+     không có chỗ móc "mỗi trang" đáng tin cậy qua mọi engine). */
+  .ws-print-foot { display: flex !important; align-items: center; justify-content: space-between; gap: 16px; margin: 24px 0 0; padding: 14px 0 0; border-top: 1px solid #ccc; }
+  .ws-print-foot-l { display: flex; align-items: center; gap: 10px; }
+  .ws-print-seal { width: 34px; height: 34px; object-fit: contain; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .ws-print-foot-l b { display: block; font-family: var(--serif); font-size: 11pt; }
+  .ws-print-foot-l span { display: block; font-size: 8.5pt; color: #666; margin-top: 1px; }
+  .ws-print-qr { width: 60px; height: 60px; flex-shrink: 0; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
 }
-/* Ngoài lúc in thì khối đầu trang in KHÔNG tồn tại trên màn hình. */
-.ws-print-head { display: none; }
+/* Ngoài lúc in thì khối đầu/chân trang in KHÔNG tồn tại trên màn hình. */
+.ws-print-head, .ws-print-foot { display: none; }

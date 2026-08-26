@@ -60,6 +60,55 @@ let _user    = null;
 // `getSession()` trả null nhưng người dùng VẪN đang đăng nhập — nơi nào đọc
 // token để quyết định hiển thị gì thì phải chờ, không được kết luận là khách.
 let _restoring = false;
+// Lượt refresh ĐANG BAY. Bắt buộc gộp về một promise: Supabase XOAY refresh
+// token mỗi lần đổi, nên hai lượt refresh chạy song song thì lượt sau cầm token
+// đã bị thu hồi → `invalid_grant` → mất phiên của người đang đăng nhập. Mà ~30
+// chỗ trong site cùng đọc token nên chạy song song là chuyện thường.
+let _refreshInFlight = null;
+// Hẹn giờ tự xoay token. Giữ id để không bao giờ chồng hai lịch lên nhau.
+let _refreshTimer = null;
+
+// Access token Supabase sống ~1 giờ. Coi là "sắp hết" khi còn dưới 60 giây —
+// đủ để một request đang bay không chết giữa đường.
+const TOKEN_MARGIN_SEC = 60;
+
+function _tokenFresh(s, marginSec) {
+  return !!(s && s.access_token && s.expires_at &&
+    s.expires_at - Date.now() / 1000 > (marginSec == null ? TOKEN_MARGIN_SEC : marginSec));
+}
+
+// ── Hẹn giờ xoay token TRƯỚC khi hết hạn ──────────────────────────────
+// 🔑 Phải gọi từ MỌI đường tạo phiên (đăng nhập, đăng ký, OAuth, khôi phục lúc
+// tải trang), không chỉ từ `_applySession`. Trước đây chỉ `_applySession` hẹn
+// giờ — mà hàm đó chỉ chạy SAU một lượt refresh, nên phiên vừa đăng nhập và
+// phiên khôi phục từ localStorage KHÔNG BAO GIỜ được hẹn: mở tab quá một tiếng
+// là token chết lặng, mọi API trả 401 trong khi nav vẫn hiện "đang đăng nhập".
+function _scheduleRefresh(data) {
+  if (_refreshTimer) { clearTimeout(_refreshTimer); _refreshTimer = null; }
+  if (!data || !data.refresh_token || !data.expires_at) return;
+  // Hẹn sớm 5 phút; token đã sát hạn thì xoay ngay ở nhịp sau.
+  const msLeft = Math.max(0, (data.expires_at - Date.now() / 1000 - 300) * 1000);
+  // ⚠️ setTimeout KHÔNG đáng tin một mình: tab chạy nền bị bóp nhịp, máy ngủ thì
+  // treo hẳn. Đây là lớp CHỦ ĐỘNG; lớp chắc chắn là `getFreshToken()` kiểm ngay
+  // trước lúc dùng, cộng lượt kiểm khi tab sáng lại ở cuối file.
+  _refreshTimer = setTimeout(() => { _refreshTimer = null; _ensureFreshToken(); }, msLeft);
+}
+
+// ── Bảo đảm có access token còn hạn, gộp mọi lượt gọi song song ───────
+// Trả về token dùng được, hoặc null nếu thật sự không còn phiên.
+async function _ensureFreshToken(force) {
+  // ⚠️ `force` KHÔNG được xoá `_session`: refresh_token nằm trong đó, xoá là tự
+  // cắt đường xoay và tụt xuống nhánh cookie.
+  if (!force && _tokenFresh(_session)) return _session.access_token;
+  if (!_refreshInFlight) {
+    const rt = (_session && _session.refresh_token) || _getCookie('tuvi_rt');
+    _refreshInFlight = (rt ? _refreshSession(rt) : _refreshViaServer())
+      .catch(() => {})
+      .then(() => { _refreshInFlight = null; });
+  }
+  await _refreshInFlight;
+  return _tokenFresh(_session, 0) ? _session.access_token : null;
+}
 
 // ── Init: restore session từ localStorage, fallback sang cookie (iOS ITP safe) ──
 (function initAuth() {
@@ -71,6 +120,9 @@ let _restoring = false;
         // Session còn hạn
         _session = s;
         _user = JSON.parse(localStorage.getItem(USER_KEY) || 'null');
+        // 🔑 Và PHẢI hẹn giờ xoay: phiên khôi phục từ localStorage trước đây
+        // không được hẹn, nên tab mở lâu là token hết hạn lặng lẽ.
+        _scheduleRefresh(s);
       } else {
         // Hết hạn — ưu tiên refresh_token từ localStorage, fallback cookie JS,
         // cuối cùng cookie server bền (HttpOnly, sống sót ITP khi mọi thứ JS bị xoá).
@@ -110,9 +162,7 @@ function _applySession(data) {
     _serverStoreRt(data.refresh_token);             // lớp bền HttpOnly (né ITP)
   }
   updateNavUI();
-  // Auto-refresh 5 min before next expiry
-  const msLeft = (data.expires_at - Date.now() / 1000 - 300) * 1000;
-  if (msLeft > 0) setTimeout(() => _refreshSession(data.refresh_token), msLeft);
+  _scheduleRefresh(data);
 }
 
 // ── Refresh session silently ──
@@ -161,6 +211,18 @@ window.Auth = {
   isRestoring: () => _restoring,
   getUser:     () => _user,
   getSession:  () => _session,
+
+  // ── Cách ĐÚNG để lấy Bearer token trước một lượt gọi API ────────────
+  // `getSession().access_token` là ẢNH CHỤP: nó trả token kể cả khi token ĐÃ
+  // HẾT HẠN, và server sẽ 401 trong khi người dùng vẫn đang đăng nhập. Hàm này
+  // kiểm hạn trước, tự xoay nếu cần, gộp mọi lượt gọi song song vào một lượt
+  // refresh. Trả null khi thật sự hết phiên.
+  getFreshToken: () => _ensureFreshToken(),
+
+  // Ép xoay token ngay (dùng khi server vừa trả 401 dù mình tưởng còn phiên —
+  // vd đồng hồ máy lệch nên token trông còn hạn mà server đã coi là hết).
+  // Trả token mới, hoặc null nếu phiên hết thật.
+  refresh: () => _ensureFreshToken(true),
 
   // Require login — show modal if not logged in, then run callback
   require: function(callback) {
@@ -220,15 +282,54 @@ function _rememberAuthReturn() {
   try { if (!localStorage.getItem('auth_return_to')) localStorage.setItem('auth_return_to', window.location.pathname + window.location.search); } catch (e) {}
 }
 
+/**
+ * Nạp `/promo.js` theo lối LƯỜI.
+ *
+ * `auth.js` nằm trên ~89 trang, còn ô nhập mã chỉ có nghĩa ở đúng hai lúc:
+ * modal đăng ký mở ra, hoặc URL mang sẵn `?promo=`. Nạp ở đây thay vì thêm
+ * thẻ script vào 89 file — 89 chỗ để quên là 89 chỗ mã lặng lẽ không ăn, đúng
+ * lỗi `referral.js` đã dính khi bị chép inline 2 bản.
+ */
+function _ensurePromoJs() {
+  if (window.Promo || document.getElementById('tvmb-promo-js')) return;
+  const s = document.createElement('script');
+  s.id = 'tvmb-promo-js';
+  s.src = '/promo.js?v=1';
+  s.async = true;
+  (document.head || document.documentElement).appendChild(s);
+}
+try {
+  // Đáp trang bằng link mang mã → nạp ngay để `capture()` nhặt được trước khi
+  // người dùng điều hướng đi chỗ khác (nhặt xong nó dọn luôn khỏi thanh địa chỉ).
+  if (typeof location !== 'undefined' && /[?&]promo=/i.test(location.search)) _ensurePromoJs();
+} catch (e) { /* ignore */ }
+
+/**
+ * Cất mã khuyến mãi đang gõ vào sessionStorage TRƯỚC khi rời trang.
+ *
+ * Phải gọi ở CẢ đường email lẫn đường OAuth: đổi mã cần Authorization token,
+ * mà lúc bấm nút thì chưa có token nào. `promo.js` sẽ đổi ngay khi bắt được
+ * `SIGNED_IN`. Đường OAuth đi qua `/auth-callback.html` — cùng tab, cùng
+ * origin, nên sessionStorage sống qua được lượt chuyển trang đó.
+ */
+function _stashPromoCode() {
+  try {
+    const el = document.getElementById('auth-promo');
+    if (el && el.value.trim() && window.Promo) window.Promo.setPending(el.value);
+  } catch (e) { /* ignore */ }
+}
+
 // ── Sign In with Google OAuth ──
 async function signInGoogle() {
   _rememberAuthReturn();
+  _stashPromoCode();
   const redirectTo = encodeURIComponent(window.location.origin + '/auth-callback.html');
   window.location.href = `${SUPA_URL}/auth/v1/authorize?provider=google&redirect_to=${redirectTo}`;
 }
 
 async function signInFacebook() {
   _rememberAuthReturn();
+  _stashPromoCode();
   const redirectTo = encodeURIComponent(window.location.origin + '/auth-callback.html');
   window.location.href = `${SUPA_URL}/auth/v1/authorize?provider=facebook&redirect_to=${redirectTo}`;
 }
@@ -244,6 +345,9 @@ function saveSession(data) {
     _serverStoreRt(data.refresh_token);             // lớp bền HttpOnly (né ITP)
   }
   updateNavUI();
+  // 🔑 Đăng nhập/đăng ký cũng phải hẹn giờ xoay token — thiếu dòng này thì phiên
+  // vừa tạo chết sau ~1 giờ mà không có gì gia hạn (lỗi rail đòi đăng nhập lại).
+  _scheduleRefresh(data);
   if (data.access_token) sendSignupSignal(data.access_token);
   // Marketing: gắn user_id + snapshot attribution (first-touch) lên tài khoản.
   // track.js đọc token vừa lưu trong localStorage; server phân biệt signup mới.
@@ -345,8 +449,10 @@ let _pendingCallback = null;
 
 function showAuthModal(callback) {
   _pendingCallback = callback;
+  _ensurePromoJs();
   if (document.getElementById('auth-modal')) {
     document.getElementById('auth-modal').style.display = 'flex';
+    _prefillPromo();
     return;
   }
 
@@ -389,6 +495,12 @@ function showAuthModal(callback) {
       <div id="auth-form">
         <input id="auth-email" type="email" placeholder="Email" style="width:100%;padding:10px 14px;border:1.5px solid #ddd;border-radius:8px;font-size:14px;font-family:inherit;margin-bottom:10px;outline:none;transition:border-color 0.15s" onfocus="this.style.borderColor='#061A2E'" onblur="this.style.borderColor='#ddd'">
         <input id="auth-password" type="password" placeholder="Mật khẩu (ít nhất 6 ký tự)" style="width:100%;padding:10px 14px;border:1.5px solid #ddd;border-radius:8px;font-size:14px;font-family:inherit;margin-bottom:10px;outline:none;transition:border-color 0.15s" onfocus="this.style.borderColor='#061A2E'" onblur="this.style.borderColor='#ddd'" onkeydown="if(event.key==='Enter')submitAuth()">
+        <!-- Ô mã khuyến mãi: CHỈ hiện ở tab Đăng ký (switchTab bật/tắt).
+             Ở tab Đăng nhập nó vô nghĩa và chỉ làm form dài thêm. -->
+        <div id="auth-promo-wrap" style="display:none;margin-bottom:10px">
+          <input id="auth-promo" type="text" placeholder="Mã khuyến mãi (nếu có)" autocapitalize="characters" autocomplete="off" spellcheck="false" style="width:100%;padding:10px 14px;border:1.5px dashed #c9a84c;border-radius:8px;font-size:14px;font-family:inherit;outline:none;text-transform:uppercase;transition:border-color 0.15s" onfocus="this.style.borderColor='#061A2E'" onblur="this.style.borderColor='#c9a84c'" oninput="_promoPeek()" onkeydown="if(event.key==='Enter')submitAuth()">
+          <div id="auth-promo-hint" style="font-size:11.5px;color:#1E6B3C;margin-top:5px;display:none"></div>
+        </div>
         <div id="auth-error" style="color:#C0392B;font-size:12px;margin-bottom:8px;display:none"></div>
         <button id="auth-submit" onclick="submitAuth()" style="width:100%;padding:11px;background:#061A2E;color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;transition:background 0.15s" onmouseover="this.style.background='#0D3B5E'" onmouseout="this.style.background='#061A2E'">Đăng nhập</button>
       </div>
@@ -399,6 +511,26 @@ function showAuthModal(callback) {
   document.body.appendChild(modal);
   modal.addEventListener('click', e => { if (e.target === modal) closeAuthModal(); });
   setTimeout(() => document.getElementById('auth-email')?.focus(), 100);
+  _prefillPromo();
+}
+
+/**
+ * Điền sẵn mã nếu người dùng đáp trang bằng link `?promo=…` — và MỞ THẲNG tab
+ * Đăng ký. Họ tới đây vì cái mã, bắt gõ lại là một bước rơi vô cớ.
+ * `promo.js` nạp bất đồng bộ nên thử lại một nhịp khi nó chưa kịp có mặt.
+ */
+function _prefillPromo(retry) {
+  if (!window.Promo) {
+    if (!retry) setTimeout(() => _prefillPromo(true), 400);
+    return;
+  }
+  const code = window.Promo.pendingCode();
+  if (!code) return;
+  const el = document.getElementById('auth-promo');
+  if (!el || el.value.trim()) return;   // đang gõ dở thì không đè lên
+  el.value = code;
+  if (_currentTab !== 'signup') switchTab('signup');
+  _promoPeek();
 }
 
 function closeAuthModal() {
@@ -422,7 +554,40 @@ function switchTab(tab) {
     si.style.cssText += ';color:#aaa;border-bottom:none';
     btn.textContent = 'Tạo tài khoản';
   }
+  const pw = document.getElementById('auth-promo-wrap');
+  if (pw) pw.style.display = tab === 'signup' ? 'block' : 'none';
   document.getElementById('auth-error').style.display = 'none';
+}
+
+// ── Mã khuyến mãi trong modal đăng ký ──
+// Người xem clip TikTok nghe "nhập mã TUVIMINHBAO" rồi gõ vào đây. Ô này KHÔNG
+// tự đổi mã — nó chỉ NHỚ mã lại; `promo.js` đổi sau khi phiên đăng nhập đã có
+// token thật (đổi mã cần Authorization, mà lúc bấm nút thì chưa có).
+let _promoPeekTimer = null;
+function _promoPeek() {
+  const el = document.getElementById('auth-promo');
+  const hint = document.getElementById('auth-promo-hint');
+  if (!el || !hint) return;
+  const code = el.value.toUpperCase().trim();
+  clearTimeout(_promoPeekTimer);
+  if (!window.Promo || !window.Promo.CODE_RE.test(code)) { hint.style.display = 'none'; return; }
+  // Chờ người ta gõ xong mới hỏi — gõ 11 ký tự mà bắn 11 lượt mạng là phí.
+  _promoPeekTimer = setTimeout(() => {
+    window.Promo.info(code).then((d) => {
+      // Số Lượng lấy TỪ SERVER, không viết cứng ở đây. Xem `promo.js#info`.
+      if (d && d.found && d.live) {
+        hint.textContent = `✓ Mã hợp lệ — tặng ${d.credits} Lượng khi tạo tài khoản.`;
+        hint.style.color = '#1E6B3C';
+      } else if (d && d.found) {
+        hint.textContent = 'Mã này đã hết hạn hoặc hết lượt.';
+        hint.style.color = '#C0392B';
+      } else {
+        hint.style.display = 'none';
+        return;
+      }
+      hint.style.display = 'block';
+    });
+  }, 450);
 }
 
 async function submitAuth() {
@@ -436,6 +601,10 @@ async function submitAuth() {
 
   btn.textContent = '...'; btn.disabled = true;
   errEl.style.display = 'none';
+
+  // Cất mã TRƯỚC khi gọi mạng: nếu đăng ký thành công thì `promo.js` bắt
+  // `SIGNED_IN` và đổi ngay; nếu hỏng thì mã vẫn còn đó cho lượt sau.
+  if (_currentTab === 'signup') _stashPromoCode();
 
   try {
     if (_currentTab === 'signin') {
@@ -513,3 +682,16 @@ window.switchTab      = switchTab;
 window.submitAuth     = submitAuth;
 window.signInGoogle   = signInGoogle;
 window.signInFacebook = signInFacebook;
+
+// ── Tab sáng lại → soát hạn token ─────────────────────────────────────
+// Hẹn giờ ở trên là lớp chủ động, nhưng trình duyệt bóp nhịp timer ở tab chạy
+// nền và treo hẳn khi máy ngủ — đúng ca hay gặp nhất: để tab qua đêm rồi sáng
+// mở ra bấm một cái là ăn 401. Soát ở đây để token được xoay TRƯỚC cú bấm đầu.
+if (typeof document !== 'undefined') {
+  document.addEventListener('visibilitychange', function () {
+    if (document.visibilityState !== 'visible') return;
+    if (!_session) return;                 // khách vãng lai: không có gì để xoay
+    if (_tokenFresh(_session, 300)) return; // còn >5 phút thì để hẹn giờ lo
+    _ensureFreshToken();
+  });
+}

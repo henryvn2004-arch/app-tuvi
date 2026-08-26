@@ -20,8 +20,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;600;700&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;600;700&display=swap" rel="stylesheet"></noscript>
 <script src="/auth.js"></script>
-<script src="/tuvi-paywall.js?v=18"></script>
-<script src="/tools-shared/ai-loading-steps.js?v=5"></script>
+<script src="/tuvi-paywall.js?v=21"></script>
+<script src="/tools-shared/ai-loading-steps.js?v=9"></script>
+<link rel="stylesheet" href="/tools/tools.css">
 <style>
 :root{--navy:#061A2E;--navy-mid:#0D3B5E;--blue:#1455A4;--gold:#9A7B3A;--gold-lt:#F9F4EB;--gold-bright:#D4A843;--text:#1a1a1a;--text-mid:#444;--text-lt:#777;--border:#CCCCCC;--border-lt:#E8E8E8;--bg:#FFFFFF;--bg-soft:#F5F4F0;--red:#C0392B;--green:#1E6B3C;}
 *{box-sizing:border-box;margin:0;padding:0;}
@@ -36,8 +37,8 @@ h1,h2,h3{font-family:'Noto Serif',serif;}
 .card-title{font-size:14px;font-weight:700;color:var(--navy);margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid var(--border-lt);display:flex;align-items:center;gap:8px;}
 .form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;}
 @media(max-width:500px){.form-row{grid-template-columns:1fr;}}
-.form-group{display:flex;flex-direction:column;gap:5px;}
-.form-label{font-size:12px;color:var(--text-mid);font-weight:600;}
+.form-group{display:flex;flex-direction:column;gap:5px;margin-bottom:0;}
+.form-label{font-size:12px;color:var(--text-mid);font-weight:600;text-transform:none;letter-spacing:normal;margin-bottom:0;}
 .form-control{padding:9px 11px;border:1.5px solid var(--border);border-radius:7px;font-size:13px;color:var(--text);background:var(--bg);outline:none;font-family:Arial,sans-serif;transition:border-color .2s;}
 .form-control:focus{border-color:var(--blue);}
 .gua-row{display:none;background:var(--bg-soft);border:1.5px solid var(--border-lt);border-radius:9px;padding:11px 14px;margin-top:4px;gap:12px;align-items:center;}
@@ -150,6 +151,7 @@ h1,h2,h3{font-family:'Noto Serif',serif;}
 
 <div class="hero">
   <span style="font-size:44px;display:block;margin-bottom:10px;"><span class="ic" data-icon="palette"></span></span>
+  <img class="hero-avatar" src="/tool-avatars/mau-sac-hop-menh.webp" alt="" loading="lazy" onerror="this.remove()">
   <h1>Màu Sắc Hợp Mệnh</h1>
   <p>Tư vấn màu sắc trang phục theo Ngũ Hành Nạp Âm và Bát Trạch. Quần, áo, giày, phụ kiện — đúng màu đúng mệnh, vận khí thăng tiến.</p>
   <div class="hero-cost">⟐ <span data-tvp-price="mau-sac-hop-menh">…</span> lượng · Ngũ Hành Nạp Âm + Bát Trạch</div>
@@ -674,6 +676,13 @@ TuviPaywall.init({ product: 'mau-sac-hop-menh' });
 </section>
 <script src="/testimonials.js"></script>
 <script src="/related-tools.js?v=2"></script>
-<script src="/nav.js?v=20" defer></script>
+<script src="/nav.js?v=23" defer></script>
+<script src="/tool-sources.js?v=1"></script>
+<script>
+  if (window.ToolSources) {
+    ToolSources.mountIntroAfterH1('mau-sac-hop-menh');
+    ToolSources.watchResults('mau-sac-hop-menh', '#results-section');
+  }
+</script>
 </body>
 </html>

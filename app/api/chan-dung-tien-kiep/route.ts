@@ -224,8 +224,9 @@ async function handleStory(birth: BirthParams, userId: string, key: string, eraI
         json: true,
         jsonSchema: STORY_SCHEMA,
         // 5 hồi × 100-160 từ tiếng Việt + mô tả nhân vật + lời kết — 2600 quá
-        // sát, hết chỗ là JSON cụt và parse hỏng.
-        maxTokens: 4200,
+        // sát, hết chỗ là JSON cụt và parse hỏng. Nâng 50% cùng đợt (Henry
+        // chốt 2026-08-20, retest thấy luận giải bị cắt ngang giữa câu).
+        maxTokens: 6300,
       });
       void logLlmUsage('chan-dung-tien-kiep', llmRes.model, {
         input_tokens: llmRes.usage.input_tokens,
@@ -322,7 +323,7 @@ async function handleImage(userId: string, birth: BirthParams, key: string, eraI
         properties: { imagePrompt: { type: 'STRING' } },
         required: ['imagePrompt'],
       },
-      maxTokens: 600,
+      maxTokens: 900, // nâng 50% cùng đợt (Henry chốt 2026-08-20)
     });
     void logLlmUsage('chan-dung-tien-kiep', llmRes.model, {
       input_tokens: llmRes.usage.input_tokens,

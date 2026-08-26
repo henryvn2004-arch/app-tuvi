@@ -36,17 +36,20 @@ const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY!;
 /**
  * Số chủ đề nạp cho mỗi bề mặt mỗi tuần = (số lịch cron/ngày) × 1 bài/lượt × 7.
  *
- * ⚠️ HAI BỀ MẶT TIÊU KHÁC NHAU, đừng gộp về một con số. Cả hai cron đều lấy
- * `ARTICLES_PER_RUN = 1`, nhưng `vercel.json` khai:
- *   cron-khao-luan    3 lịch/ngày → 3 bài/ngày → 21/tuần
- *   cron-master-write 5 lịch/ngày → 5 bài/ngày → 35/tuần
- * Nạp đều 21 cho cả hai (bản đầu) thì bề mặt nghiên cứu cạn sau 4,2 ngày rồi
- * chạy rỗng gần 3 ngày mỗi tuần — đúng sự cố hàng đợi khảo luận vừa dính suốt
- * tuần trước. Sửa lịch cron thì phải sửa luôn con số ở đây.
+ * ⚠️ BA BỀ MẶT TIÊU KHÁC NHAU, đừng gộp về một con số. `vercel.json` khai:
+ *   cron-khao-luan       3 lịch/ngày → 3 bài/ngày → 21/tuần
+ *   cron-master-write    5 lịch/ngày → 5 bài/ngày → 35/tuần
+ *   cron-khao-luan-tamly 2 lịch/TUẦN (T3+T6, KHÔNG phải mỗi ngày) → 2/tuần —
+ *     mỗi lượt chỉ pop ĐÚNG 1 chủ đề (nó tự nở thành 3–5 bài ở tầng viết, xem
+ *     route đó), nên đơn vị ở ĐÂY vẫn là CHỦ ĐỀ, không phải bài.
+ * Nạp đều một con số cho cả ba (bản đầu chỉ có 2 bên đã dính) thì bề mặt tiêu
+ * nhanh hơn cạn trước rồi chạy rỗng nhiều ngày mỗi tuần — đúng sự cố hàng đợi
+ * khảo luận từng dính. Sửa lịch cron thì phải sửa luôn con số ở đây.
  */
 const PER_WEEK: Record<Surface, number> = {
   'nghien-cuu': 35,
   'khao-luan': 21,
+  'khao-luan-tamly': 2,
 };
 
 /** Giữ lại cho chỗ gọi cũ / hiển thị; nay chỉ là mức của bề mặt khảo luận. */
@@ -60,7 +63,7 @@ export const DEFAULT_PER_SURFACE = PER_WEEK['khao-luan'];
 // khi người gõ truy vấn đó muốn MỘT DANH SÁCH TUỔI. Nội dung đúng, dạng sai,
 // vẫn không lên hạng.
 
-export type Surface = 'nghien-cuu' | 'khao-luan';
+export type Surface = 'nghien-cuu' | 'khao-luan' | 'khao-luan-tamly';
 
 interface SurfaceSpec {
   /** `topic_queue.type` tương ứng. */
@@ -88,6 +91,21 @@ const SURFACES: Record<Surface, SurfaceSpec> = {
     intent:
       'Truy vấn TRA CỨU: hỏi thẳng, đáp gọn trong 1–2 đoạn — hợp đoạn trích nổi bật và AI Overview. ' +
       'Ví dụ dạng: "Kim Lâu là gì", "tuổi nào phạm Thái Tuế năm 2027", "cách tính Tam Tai".',
+  },
+  // → CÙNG bảng `khao_luan`, khác `type` trong topic_queue để cron riêng
+  // (cron-khao-luan-tamly) nhặt đúng hàng của mình. KHÔNG phải bề mặt thứ ba
+  // để nhận cầu KHÔNG-phân-loại-được — chỉ dành cho chủ đề THỰC SỰ mang khung
+  // tâm lý/xã hội trong 3 danh mục hẹp (tinh-cach/quan-he/benh-tat).
+  'khao-luan-tamly': {
+    queueType: 'khao-luan-tamly',
+    brief:
+      'Cùng định dạng Vấn Đáp (~1.400 ký tự, ngôi thứ BA) nhưng đây là một CHỦ ĐỀ RỘNG, ' +
+      'sẽ được một cron RIÊNG nở thành 3–5 bài Vấn Đáp góc khác nhau, không phải một câu hỏi đơn.',
+    intent:
+      'CHỈ chọn bề mặt này khi cụm từ khoá thực sự là một khung TÂM LÝ/CẢM XÚC/QUAN HỆ CON NGƯỜI ' +
+      '(ghen tuông, cô đơn, áp lực gia đình, xung đột mẹ chồng nàng dâu, lo âu kéo dài...), KHÔNG PHẢI ' +
+      'khi nó chỉ nhắc chung chung tới lá số/vận hạn/ngày tốt. Nghi ngờ thì KHÔNG chọn bề mặt này — ' +
+      'rơi về [khao-luan] hoặc [nghien-cuu] tuỳ ý định.',
   },
 };
 
@@ -248,6 +266,55 @@ const LIFE_QUESTIONS = [
   'Không nhớ chính xác giờ sinh thì lá số còn dùng được không',
 ];
 
+/**
+ * Khung TÂM LÝ/XÃ HỘI cho bề mặt /khao-luan-tamly.
+ *
+ * Đây là danh sách chủ đề DUY NHẤT của bề mặt này — cố ý KHÔNG cho GSC/Suggest
+ * góp vào (xem ghi chú tại `SURFACES['khao-luan-tamly'].intent`): đo trực tiếp
+ * `keyword_ideas` lúc viết mục này ra 0 cụm khớp mẫu tâm lý (ghen/cô đơn/áp
+ * lực/lo âu/mất ngủ/tự ti/xung đột/mẹ chồng nàng dâu/bỏ rơi...) — bộ gốc của
+ * `keyword-suggest.ts` toàn thuật ngữ tử vi (kim lâu, bát tự, ngày tốt...), chưa
+ * hề gieo hạt sang miền này. Nguồn cầu ở đây là AGGREGATE, không phải từng cụm:
+ * `tinh-cach` đang là danh mục LỚN NHẤT trong `khao_luan` (75 bài, hơn hẳn mọi
+ * danh mục khác), còn `quan-he` (11) và `benh-tat` (7) là hai danh mục MỎNG
+ * NHẤT — tức có cầu đã chứng minh nhưng đang thiếu cung, không phải chưa ai hỏi.
+ *
+ * Mỗi mục là một CHỦ ĐỀ RỘNG (không phải một câu hỏi đơn) — `cron-khao-luan-
+ * tamly` nở nó thành 3–5 bài Vấn Đáp góc khác nhau, mỗi góc neo vào một
+ * cung/sao riêng lấy từ RAG. Viết theo TRẢI NGHIỆM đời thường có thể quan sát
+ * được, KHÔNG viết theo tên bệnh/hội chứng — đó là việc của luật an toàn ở
+ * tầng viết (`app/api/cron-khao-luan-tamly/route.ts`), danh sách này chỉ nêu
+ * CHỦ ĐỀ, không nêu chẩn đoán.
+ */
+const TAMLY_THEMES = [
+  // Tính cách
+  'Người hướng nội hay bị hiểu lầm là lạnh lùng, khó gần',
+  'Người luôn ôm hết việc vào mình, không dám nhờ ai giúp',
+  'Người hay tự trách bản thân dù không phải lỗi của mình',
+  'Người sợ làm phật lòng người khác nên hay nhịn',
+  'Người ngoài mặt mạnh mẽ, trong lòng dễ tổn thương',
+  'Người khó mở lòng, quen giữ cảm xúc cho riêng mình',
+  'Người luôn phải tỏ ra ổn trước mặt người khác',
+  // Quan hệ
+  'Ghen tuông trong tình yêu — ranh giới giữa quan tâm và kiểm soát',
+  'Xung đột mẹ chồng nàng dâu — vì sao khó hoà giải',
+  'Sợ bị bỏ rơi trong một mối quan hệ',
+  'Áp lực làm con cả — được kỳ vọng nhiều, ít ai hỏi có mệt không',
+  'Anh em ruột thịt xa cách nhau vì chuyện tiền bạc',
+  'Bạn bè thân thiết rồi dần xa nhau không rõ vì sao',
+  'Cảm giác cô đơn dù xung quanh có nhiều người',
+  'Yêu một người luôn phải đoán ý, không nói thẳng được với nhau',
+  'Cha mẹ và con cái nói chuyện với nhau như hai người xa lạ',
+  'Bị người thân so sánh với anh chị em từ nhỏ tới lớn',
+  // Sức khoẻ tinh thần (đời thường — KHÔNG gọi tên bệnh)
+  'Mất ngủ, lo âu kéo dài không rõ nguyên nhân',
+  'Áp lực đồng trang lứa — nhìn người khác rồi tự ti về chính mình',
+  'Cảm giác kiệt sức dù không làm gì nặng nhọc',
+  'Tâm trạng lên xuống thất thường không kiểm soát được',
+  'Sợ hãi mơ hồ không gọi tên được là sợ điều gì',
+  'Cảm giác mất phương hướng sau một biến cố lớn trong đời',
+];
+
 interface Spoke {
   /** Khung câu, `{x}` thay bằng thực thể, `{year}` thay bằng năm. */
   pattern: string;
@@ -284,6 +351,10 @@ const SEASONAL_SPOKES: Spoke[] = [
 
   // Bề mặt /nghien-cuu ăn TOÀN BỘ từ LIFE_QUESTIONS bên dưới.
   { pattern: '{x}', entities: LIFE_QUESTIONS, surface: 'nghien-cuu' },
+
+  // Bề mặt /khao-luan-tamly ăn TOÀN BỘ từ TAMLY_THEMES — nguồn DUY NHẤT của
+  // nó (xem ghi chú tại khai báo TAMLY_THEMES).
+  { pattern: '{x}', entities: TAMLY_THEMES, surface: 'khao-luan-tamly' },
 ];
 
 // ── Kiểu dữ liệu ──────────────────────────────────────────────────────────────
@@ -540,13 +611,21 @@ Nhiệm vụ DUY NHẤT: đặt lại tên mỗi cụm từ khoá bên dưới t
 TUYỆT ĐỐI KHÔNG được nghĩ ra chủ đề mới ngoài danh sách. Mỗi tiêu đề bạn trả về
 phải bám vào đúng một cụm trong danh sách.
 
-Có hai bề mặt, chọn bề mặt phù hợp với Ý ĐỊNH TÌM KIẾM của cụm từ khoá:
+Có ba bề mặt, chọn bề mặt phù hợp với Ý ĐỊNH TÌM KIẾM của cụm từ khoá:
 
 [nghien-cuu] ${SURFACES['nghien-cuu'].brief}
   → ${SURFACES['nghien-cuu'].intent}
 
 [khao-luan] ${SURFACES['khao-luan'].brief}
   → ${SURFACES['khao-luan'].intent}
+
+[khao-luan-tamly] ${SURFACES['khao-luan-tamly'].brief}
+  → ${SURFACES['khao-luan-tamly'].intent}
+  ⚠️ RÀNG BUỘC CỨNG: CHỈ được gán [khao-luan-tamly] cho dòng có ghi ĐÚNG
+  "gợi ý bề mặt: khao-luan-tamly" trong ngoặc vuông. Dòng có [nguồn: gsc] hoặc
+  [nguồn: suggest] — KỂ CẢ khi nội dung nghe có vẻ liên quan tâm lý — TUYỆT
+  ĐỐI KHÔNG được gán vào bề mặt này; chỉ chọn giữa [khao-luan]/[nghien-cuu]
+  cho chúng.
 
 LUẬT ĐẶT TIÊU ĐỀ:
 - Giữ nguyên cụm từ khoá chính trong tiêu đề (đó là thứ người ta gõ).
@@ -555,8 +634,9 @@ LUẬT ĐẶT TIÊU ĐỀ:
 - Không nêu tên người thật, doanh nghiệp thật, sự kiện thời sự.
 - Nếu cụm từ khoá có năm, giữ nguyên năm đó.
 
-Trả JSON: {"topics":[{"topic":"...","surface":"nghien-cuu|khao-luan"}]}
-Trả tối đa ${target['nghien-cuu']} tiêu đề [nghien-cuu] và ${target['khao-luan']} tiêu đề [khao-luan].`;
+Trả JSON: {"topics":[{"topic":"...","surface":"nghien-cuu|khao-luan|khao-luan-tamly"}]}
+Trả tối đa ${target['nghien-cuu']} tiêu đề [nghien-cuu], ${target['khao-luan']} tiêu đề
+[khao-luan], và ${target['khao-luan-tamly']} tiêu đề [khao-luan-tamly].`;
 
   const raw = await llmText({
     system,
@@ -564,6 +644,7 @@ Trả tối đa ${target['nghien-cuu']} tiêu đề [nghien-cuu] và ${target['k
     // Lên tới 56 tiêu đề (35+21) trong một lượt JSON — nới trần để đề phòng
     // cắt cụt, nhưng nguyên nhân THẬT của lỗi "LLM không trả được tiêu đề nào"
     // là `JSON.parse` trần trụi bên dưới (đã vá), không phải trần token.
+    // Nâng 50% (Henry chốt 2026-08-20).
     maxTokens: 6000,
     json: true,
     temperature: 0.4,
@@ -575,7 +656,9 @@ Trả tối đa ${target['nghien-cuu']} tiêu đề [nghien-cuu] và ${target['k
   // ghi nhận tỉ lệ lỗi 15–35%/tháng ở đúng loại lỗi này trên chỗ khác của repo.
   const parsed = parseLlmJson(raw) as { topics?: ShapedTopic[] } | null;
   return (parsed?.topics || []).filter(
-    t => t?.topic && (t.surface === 'nghien-cuu' || t.surface === 'khao-luan'),
+    t =>
+      t?.topic &&
+      (t.surface === 'nghien-cuu' || t.surface === 'khao-luan' || t.surface === 'khao-luan-tamly'),
   );
 }
 
@@ -607,11 +690,11 @@ async function pickMasters(count: number): Promise<string[]> {
 export async function runTopicTopup(
   opts: { perSurface?: number; dryRun?: boolean; now?: Date } = {},
 ): Promise<TopupResult> {
-  // `opts.perSurface` là mức ÉP CHUNG cho cả hai bề mặt (dùng cho test và cho
+  // `opts.perSurface` là mức ÉP CHUNG cho cả ba bề mặt (dùng cho test và cho
   // tham số `?per=` khi chạy tay). Không truyền thì mỗi bề mặt lấy mức riêng
   // theo nhịp cron của nó.
   const target: Record<Surface, number> = opts.perSurface
-    ? { 'nghien-cuu': opts.perSurface, 'khao-luan': opts.perSurface }
+    ? { 'nghien-cuu': opts.perSurface, 'khao-luan': opts.perSurface, 'khao-luan-tamly': opts.perSurface }
     : { ...PER_WEEK };
   const now = opts.now ?? new Date();
   const empty: TopupResult = { inserted: 0, bySurface: {}, sources: {}, deduped: 0 };
@@ -640,12 +723,12 @@ export async function runTopicTopup(
     seen.add(k);
     if (isDuplicate(it.keyword, existing)) { deduped++; continue; }
     fresh.push(it);
-    // Trần gom là CHUNG cho cả hai bề mặt, mà số khung mỗi bên không cân: hiện
-    // có 6 khung khảo luận đấu 1 khung nghiên cứu. Trần chật thì bên ít khung
-    // bị lấn, không đủ chỉ tiêu (đo được: trần ×4 chỉ ra 18/21 bài nghiên cứu).
-    // ×8 TỔNG chỉ tiêu cho cả hai bên đủ chỗ; danh sách vẫn chỉ là chuỗi ngắn
-    // nên prompt không phình đáng kể.
-    if (fresh.length >= (target['nghien-cuu'] + target['khao-luan']) * 4) break;
+    // Trần gom là CHUNG cho cả ba bề mặt, mà số khung mỗi bên không cân: hiện
+    // có 6 khung khảo luận đấu 1 khung nghiên cứu đấu 1 khung tâm lý. Trần
+    // chật thì bên ít khung bị lấn, không đủ chỉ tiêu (đo được: trần ×4 chỉ ra
+    // 18/21 bài nghiên cứu). ×4 TỔNG chỉ tiêu cho cả ba bên đủ chỗ; danh sách
+    // vẫn chỉ là chuỗi ngắn nên prompt không phình đáng kể.
+    if (fresh.length >= (target['nghien-cuu'] + target['khao-luan'] + target['khao-luan-tamly']) * 4) break;
   }
   if (!fresh.length) {
     return { ...empty, deduped, note: 'mọi cụm gom được đều trùng bài đã có' };
@@ -656,7 +739,7 @@ export async function runTopicTopup(
 
   // Chống trùng LẦN HAI trên chính tiêu đề model vừa đặt: hai cụm khác nhau
   // ("kim lâu là gì" / "cách tính kim lâu") rất dễ bị đặt tên về cùng một câu.
-  const picked: Record<Surface, string[]> = { 'nghien-cuu': [], 'khao-luan': [] };
+  const picked: Record<Surface, string[]> = { 'nghien-cuu': [], 'khao-luan': [], 'khao-luan-tamly': [] };
   const running = [...existing];
   for (const s of shaped) {
     if (picked[s.surface].length >= target[s.surface]) continue;
@@ -667,13 +750,18 @@ export async function runTopicTopup(
 
   const nghienCuu = picked['nghien-cuu'];
   const khaoLuan = picked['khao-luan'];
+  const khaoLuanTamly = picked['khao-luan-tamly'];
   const sources: Record<string, number> = {};
   for (const it of fresh) sources[it.source] = (sources[it.source] || 0) + 1;
 
   if (opts.dryRun) {
     return {
       inserted: 0,
-      bySurface: { 'nghien-cuu': nghienCuu.length, 'khao-luan': khaoLuan.length },
+      bySurface: {
+        'nghien-cuu': nghienCuu.length,
+        'khao-luan': khaoLuan.length,
+        'khao-luan-tamly': khaoLuanTamly.length,
+      },
       sources,
       deduped,
       note: 'dry-run — không ghi gì',
@@ -697,6 +785,13 @@ export async function runTopicTopup(
       priority: 3,
       status: 'pending',
     })),
+    ...khaoLuanTamly.map(topic => ({
+      topic,
+      type: SURFACES['khao-luan-tamly'].queueType,
+      article_type: 'hoc-thuat',
+      priority: 3,
+      status: 'pending',
+    })),
   ];
   // Roster thầy rỗng → `masters` rỗng → dòng nghiên cứu không có `master_id`.
   // Ghi xuống thì `cron-master-write` chỉ chốt lỗi ở lượt sau, nên chặn ở đây.
@@ -709,7 +804,11 @@ export async function runTopicTopup(
 
   return {
     inserted: rows.length,
-    bySurface: { 'nghien-cuu': nghienCuu.length, 'khao-luan': khaoLuan.length },
+    bySurface: {
+      'nghien-cuu': nghienCuu.length,
+      'khao-luan': khaoLuan.length,
+      'khao-luan-tamly': khaoLuanTamly.length,
+    },
     sources,
     deduped,
   };

@@ -10,7 +10,16 @@ const SUPABASE_URL  = 'https://dciwkfdqhhddeymlisey.supabase.co';
 const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRjaXdrZmRxaGhkZGV5bWxpc2V5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyMzQ2MzksImV4cCI6MjA4ODgxMDYzOX0._3aXoe0hO-46J1gASUiNv__tWjSzLZFTL0M3-47L26I';
 
 let _pUser = null;
-let _pToken = null;
+// 🔑 KHÔNG chụp token vào biến rồi dùng cả phiên trang: access token Supabase
+// sống ~1 giờ, mà trang Tài khoản hay bị để mở rất lâu → mọi lượt gọi sau đó
+// ăn 401 với đúng người đang đăng nhập. Đọc SỐNG mỗi lần dùng; auth.js lo
+// phần xoay token (hẹn giờ + soát lúc tab sáng lại).
+async function _tok() {
+  try {
+    if (window.Auth?.getFreshToken) return (await window.Auth.getFreshToken()) || null;
+    return window.Auth?.getSession()?.access_token || null; // đường lùi: auth.js bản cũ còn trong cache
+  } catch (e) { return null; }
+}
 let _pHistoryData = null;
 let _pChatState = { slug: null, product: 'laso', messages: [], lasoContext: null };
 
@@ -30,7 +39,6 @@ async function initProfile() {
   }
 
   _pUser  = window.Auth.getUser();
-  _pToken = window.Auth.getSession()?.access_token || null;
 
   renderProfileHeader();
   document.getElementById('dashboard').style.display = 'block';
@@ -107,6 +115,8 @@ function setupTabs() {
       document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
       if (btn.dataset.tab === 'credits') loadCredits();
       if (btn.dataset.tab === 'ketnoi') loadKetnoi();
+      if (btn.dataset.tab === 'thaynho') loadMemory();
+      if (btn.dataset.tab === 'nhiemvu') { loadReferralPanel(); loadQuestTasks(); loadMyShares(); }
     });
   });
   // Mở thẳng một tab qua địa chỉ: `/profile.html#ketnoi`. Trước đây tab chỉ đổi
@@ -127,7 +137,7 @@ function openTabFromHash() {
 // ── LOAD HISTORY ──
 async function loadHistory() {
   const resp = await fetch('/api/history?action=list', {
-    headers: { Authorization: `Bearer ${_pToken}` }
+    headers: { Authorization: `Bearer ${await _tok()}` }
   });
   if (!resp.ok) { console.error('history load failed'); return; }
   _pHistoryData = await resp.json();
@@ -313,10 +323,10 @@ function _mcpShow(state) { // 'checking' | 'nokey' | 'ready'
   r.style.display = state === 'ready' ? 'block' : 'none';
 }
 async function loadMcpKey() {
-  if (!_pToken) return;
+  if (!(await _tok())) return;
   _mcpShow('checking');
   try {
-    const res = await fetch('/api/mcp/key', { headers: { Authorization: `Bearer ${_pToken}` } });
+    const res = await fetch('/api/mcp/key', { headers: { Authorization: `Bearer ${await _tok()}` } });
     const d = res.ok ? await res.json() : {};
     if (d && d.url) { document.getElementById('mcpUrl').value = d.url; _mcpShow('ready'); }
     else _mcpShow('nokey');
@@ -326,7 +336,7 @@ async function genMcpKey() {
   const btn = document.getElementById('btnMcpGen');
   btn.disabled = true; btn.textContent = 'Đang tạo…';
   try {
-    const res = await fetch('/api/mcp/key', { method: 'POST', headers: { Authorization: `Bearer ${_pToken}` } });
+    const res = await fetch('/api/mcp/key', { method: 'POST', headers: { Authorization: `Bearer ${await _tok()}` } });
     const d = await res.json();
     if (d && d.url) { document.getElementById('mcpUrl').value = d.url; _mcpShow('ready'); }
     else alert('Không tạo được key, thử lại sau nhé.');
@@ -345,8 +355,8 @@ async function revokeMcpKey() {
   if (!confirm('Thu hồi key hiện tại? Kết nối AI đang dùng key cũ sẽ ngừng — bạn sẽ có key mới ngay sau đó.')) return;
   _mcpShow('checking');
   try {
-    await fetch('/api/mcp/key', { method: 'DELETE', headers: { Authorization: `Bearer ${_pToken}` } });
-    await fetch('/api/mcp/key', { method: 'POST', headers: { Authorization: `Bearer ${_pToken}` } });
+    await fetch('/api/mcp/key', { method: 'DELETE', headers: { Authorization: `Bearer ${await _tok()}` } });
+    await fetch('/api/mcp/key', { method: 'POST', headers: { Authorization: `Bearer ${await _tok()}` } });
   } catch {}
   loadMcpKey();
 }
@@ -362,7 +372,7 @@ async function loadTelegramLink() {
   if (!statusEl) return;
   try {
     const res = await fetch('/api/channels/telegram/link', {
-      headers: { Authorization: `Bearer ${_pToken}` }
+      headers: { Authorization: `Bearer ${await _tok()}` }
     });
     const d = res.ok ? await res.json() : { linked: false };
     if (d.linked) {
@@ -385,7 +395,7 @@ document.getElementById('btnTgLink').onclick = async () => {
   try {
     const res = await fetch('/api/channels/telegram/link', {
       method: 'POST',
-      headers: { Authorization: `Bearer ${_pToken}` }
+      headers: { Authorization: `Bearer ${await _tok()}` }
     });
     const d = await res.json();
     if (d.url) {
@@ -408,7 +418,7 @@ document.getElementById('btnTgUnlink').onclick = async () => {
   try {
     await fetch('/api/channels/telegram/link', {
       method: 'DELETE',
-      headers: { Authorization: `Bearer ${_pToken}` }
+      headers: { Authorization: `Bearer ${await _tok()}` }
     });
   } catch {}
   loadTelegramLink();
@@ -422,7 +432,7 @@ async function loadWhatsappLink() {
   if (!statusEl) return;
   try {
     const res = await fetch('/api/channels/whatsapp/link', {
-      headers: { Authorization: `Bearer ${_pToken}` }
+      headers: { Authorization: `Bearer ${await _tok()}` }
     });
     const d = res.ok ? await res.json() : { linked: false };
     if (d.linked) {
@@ -445,7 +455,7 @@ document.getElementById('btnWaLink').onclick = async () => {
   try {
     const res = await fetch('/api/channels/whatsapp/link', {
       method: 'POST',
-      headers: { Authorization: `Bearer ${_pToken}` }
+      headers: { Authorization: `Bearer ${await _tok()}` }
     });
     const d = await res.json();
     if (d.url) {
@@ -468,7 +478,7 @@ document.getElementById('btnWaUnlink').onclick = async () => {
   try {
     await fetch('/api/channels/whatsapp/link', {
       method: 'DELETE',
-      headers: { Authorization: `Bearer ${_pToken}` }
+      headers: { Authorization: `Bearer ${await _tok()}` }
     });
   } catch {}
   loadWhatsappLink();
@@ -482,7 +492,7 @@ async function loadMessengerLink() {
   if (!statusEl) return;
   try {
     const res = await fetch('/api/channels/messenger/link', {
-      headers: { Authorization: `Bearer ${_pToken}` }
+      headers: { Authorization: `Bearer ${await _tok()}` }
     });
     const d = res.ok ? await res.json() : { linked: false };
     if (d.linked) {
@@ -505,7 +515,7 @@ document.getElementById('btnMsgrLink').onclick = async () => {
   try {
     const res = await fetch('/api/channels/messenger/link', {
       method: 'POST',
-      headers: { Authorization: `Bearer ${_pToken}` }
+      headers: { Authorization: `Bearer ${await _tok()}` }
     });
     const d = await res.json();
     if (d.url) {
@@ -529,7 +539,7 @@ document.getElementById('btnMsgrUnlink').onclick = async () => {
   try {
     await fetch('/api/channels/messenger/link', {
       method: 'DELETE',
-      headers: { Authorization: `Bearer ${_pToken}` }
+      headers: { Authorization: `Bearer ${await _tok()}` }
     });
   } catch {}
   loadMessengerLink();
@@ -550,10 +560,10 @@ function loadKetnoi() {
 // dùng. Trần đếm theo CỬA SỔ 30 NGÀY, khớp process_referral_signup.
 async function loadReferralPanel() {
   const sec = document.getElementById('refSection');
-  if (!sec || !_pToken) return;
+  if (!sec || !(await _tok())) return;
   let d;
   try {
-    const r = await fetch('/api/payment?action=my-referral', { headers: { Authorization: 'Bearer ' + _pToken } });
+    const r = await fetch('/api/payment?action=my-referral', { headers: { Authorization: 'Bearer ' + (await _tok()) } });
     d = await r.json();
   } catch (e) { return; }
   if (!d || !d.code) return;
@@ -589,8 +599,145 @@ async function loadReferralPanel() {
   sec.style.display = '';
 }
 
+// ── TAB NHIỆM VỤ — Khởi Hành + Kênh liên lạc ────────────────────────────────
+// Cùng nguồn dữ liệu với thẻ Khởi Hành trên Tổng Quan
+// (`/api/payment?action=onboarding-sync`, lib/onboarding/tasks.ts) — server
+// tự kiểm bằng chứng và tự cộng, trang này CHỈ vẽ. Khác Tổng Quan ở chỗ:
+//   • #qtCard KHÔNG ẩn khi xong cả ba bước — đây là nơi TRA CỨU, ẩn đi sau khi
+//     hoàn tất thì mất luôn bằng chứng đã làm.
+//   • #chCard (kênh liên lạc) VẪN ẩn khi cả hai đã xong — không có gì để tra
+//     cứu thêm, giữ nó là chiếm chỗ một khối toàn dấu tích.
+// `d.khoiHanh` (3 bước, thưởng CHUỖI) và `d.channels.tasks` (2 nhiệm vụ độc
+// lập) dùng CHUNG mảng `_qtDefs` để nút bấm tra ngược theo chỉ số — xem
+// questTaskGo(). Không nội suy chuỗi từ server vào thuộc tính onclick: dấu
+// nháy trong chuỗi là vỡ thẻ (cùng lý do đã ghi ở phần Thầy Nhớ bên dưới).
+var _qtDefs = [];
+
+async function loadQuestTasks() {
+  var host = document.getElementById('qtBody');
+  if (!host || !(await _tok())) return;
+  try {
+    const res = await fetch('/api/payment?action=onboarding-sync', {
+      method: 'POST',
+      headers: { Authorization: 'Bearer ' + (await _tok()) },
+    });
+    const d = await res.json();
+    if (d && d.khoiHanh) { renderQuestTasks(d.khoiHanh); renderChannelTasks(d.khoiHanh.steps.length, (d.channels && d.channels.tasks) || []); }
+    else host.innerHTML = '<div style="color:var(--text-lt);font-size:.85rem">Không đọc được tiến độ. Thử tải lại trang.</div>';
+  } catch (e) {
+    host.innerHTML = '<div style="color:var(--text-lt);font-size:.85rem">Không đọc được tiến độ. Thử tải lại trang.</div>';
+  }
+}
+
+function questRowHtml(t, i) {
+  return '<div class="qt-row' + (t.done ? ' done' : '') + '"><div class="qt-tick"></div>'
+    + '<div class="qt-body"><div class="qt-t">' + escHtml(t.title) + '</div>'
+    + (t.done ? '' : '<div class="qt-d">' + escHtml(t.desc) + '</div>') + '</div>'
+    + '<div class="qt-pay"><div class="qt-amt">' + (t.done ? '+' : '') + (+t.credits || 0) + ' Lượng</div>'
+    + (t.done ? '' : '<button class="qt-go" type="button" data-i="' + i + '">' + escHtml(t.cta) + '</button>')
+    + '</div></div>';
+}
+
+function renderQuestTasks(kh) {
+  const host = document.getElementById('qtBody');
+  if (!host) return;
+  let done = 0;
+  for (let i = 0; i < kh.steps.length; i++) if (kh.steps[i].done) done++;
+
+  let h = kh.claimed
+    ? '<div class="qt-top"><div class="qt-count" style="color:var(--green)">✓ Đã hoàn tất — +' + (+kh.credits || 0) + ' Lượng đã vào ví.</div></div>'
+    : '<div class="qt-top"><div style="font-size:.85rem;color:var(--text-mid)">' + done + '/' + kh.steps.length + ' bước</div>'
+      + '<div class="qt-count">+' + (+kh.credits || 0) + ' Lượng khi xong cả ' + kh.steps.length + '</div></div>';
+  if (kh.justGranted) h += '<div class="qt-note ok">✓ Vừa cộng <b>+' + (+kh.credits || 0) + ' Lượng</b> vào ví bạn.</div>';
+
+  // Bước Khởi Hành chiếm CHỈ SỐ 0..N-1 của `_qtDefs`; renderChannelTasks nối
+  // tiếp từ đó — thứ tự gọi PHẢI là render Khởi Hành trước rồi mới tới kênh
+  // liên lạc (loadQuestTasks() đã gọi đúng thứ tự này).
+  _qtDefs = kh.steps.slice();
+  h += '<div>' + kh.steps.map(function (t, i) { return questRowHtml(t, i); }).join('') + '</div>';
+
+  host.innerHTML = h;
+  host.querySelectorAll('.qt-go').forEach(function (b) { b.onclick = questTaskGo; });
+  if (window.mountIcons) window.mountIcons(host);
+}
+
+function renderChannelTasks(indexOffset, tasks) {
+  const card = document.getElementById('chCard');
+  const host = document.getElementById('chBody');
+  if (!card || !host) return;
+  if (!tasks.length || tasks.every(function (t) { return t.done; })) { card.style.display = 'none'; return; }
+
+  const granted = tasks.filter(function (t) { return t.justGranted; })
+    .reduce(function (s, t) { return s + (+t.credits || 0); }, 0);
+  let h = granted > 0 ? '<div class="qt-note ok">✓ Vừa cộng <b>+' + granted + ' Lượng</b> vào ví bạn.</div>' : '';
+
+  _qtDefs = _qtDefs.concat(tasks);
+  h += '<div>' + tasks.map(function (t, i) { return questRowHtml(t, indexOffset + i); }).join('') + '</div>';
+
+  host.innerHTML = h;
+  card.style.display = '';
+  host.querySelectorAll('.qt-go').forEach(function (b) { b.onclick = questTaskGo; });
+  if (window.mountIcons) window.mountIcons(host);
+}
+
+function questTaskGo() {
+  const t = _qtDefs[+this.getAttribute('data-i')];
+  if (!t) return;
+  const href = t.href || '';
+  // `href` rỗng = việc chỉ làm được TẠI Tổng Quan (ô lá số/rail của thẻ "Vận
+  // hôm nay", hoặc quyền thông báo trình duyệt) — tab này không có UI đó, đưa
+  // người ta tới đúng chỗ có thay vì cố dựng lại một bản thứ hai ở đây.
+  if (!href) { location.href = '/app'; return; }
+  // Trỏ VÀO CHÍNH trang đang đứng (`/app/tai-khoan#<tab>`) thì chuyển tab TẠI
+  // CHỖ thay vì tải lại cả trang.
+  const m = /^\/app\/tai-khoan#(.+)$/.exec(href);
+  if (m) {
+    const b = document.querySelector('.tab-btn[data-tab="' + CSS.escape(m[1]) + '"]');
+    if (b) { b.click(); return; }
+  }
+  location.href = href;
+}
+
+// ── TAB NHIỆM VỤ — lịch sử "Chia Sẻ" ─────────────────────────────────────
+// #599 gỡ nút "Khoe kết quả" (nộp bằng chứng + chờ admin duyệt) — quest này
+// đổi sang đọc lại `shared_results` (mỗi lần bấm "Chia sẻ" trong workspace
+// ghi 1 dòng, `view_count` +1 mỗi lượt `/ket-qua/<id>` được mở). Chưa gắn
+// thưởng vào số lượt xem này — `view_count` cộng cả bot xem-trước của
+// Facebook/Zalo/WhatsApp lẫn chính chủ tự mở lại, nên chỉ HIỆN cho biết,
+// không dùng để tính Lượng.
+async function loadMyShares() {
+  const host = document.getElementById('spBody');
+  if (!host || !(await _tok())) return;
+  try {
+    const res = await fetch('/api/payment?action=my-shares', {
+      headers: { Authorization: 'Bearer ' + (await _tok()) },
+    });
+    const d = await res.json();
+    renderMyShares((d && d.shares) || []);
+  } catch (e) {
+    host.innerHTML = '<div style="color:var(--text-lt);font-size:.85rem">Không đọc được lịch sử.</div>';
+  }
+}
+
+function renderMyShares(list) {
+  const host = document.getElementById('spBody');
+  if (!host) return;
+  if (!list.length) {
+    host.innerHTML = '<div style="color:var(--text-lt);font-size:.85rem">Bạn chưa chia sẻ lượt nào.</div>';
+    return;
+  }
+  host.innerHTML = list.map(function (s) {
+    const date = new Date(s.created_at).toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' });
+    const views = Number(s.view_count) || 0;
+    return '<div class="sp-row"><div style="flex:1;min-width:0">'
+      + '<div class="sp-plat">' + escHtml(s.title || 'Kết quả') + '</div>'
+      + '<div class="sp-meta">' + date + '</div></div>'
+      + '<span class="sp-status approved">' + views + ' lượt xem</span></div>';
+  }).join('');
+}
+
 async function loadCredits() {
-  if (!_pUser || !_pToken) return;
+  if (!_pUser || !(await _tok())) return;
   // Balance
   await loadHeaderBalance();
   loadReferralPanel();
@@ -601,7 +748,7 @@ async function loadCredits() {
     const res = await fetch(
       SUPABASE_URL + '/rest/v1/credit_transactions?user_id=eq.' + encodeURIComponent(_pUser.id) +
       '&order=created_at.desc&limit=30&select=*',
-      { headers: { apikey: SUPABASE_ANON, Authorization: 'Bearer ' + _pToken } }
+      { headers: { apikey: SUPABASE_ANON, Authorization: 'Bearer ' + (await _tok()) } }
     );
     const txns = res.ok ? await res.json() : [];
     renderTransactions(txns);
@@ -733,7 +880,7 @@ async function openLuanModal(slug, name) {
   openModal('luanModal');
 
   const resp = await fetch(`/api/history?action=laso&slug=${encodeURIComponent(slug)}`, {
-    headers: { Authorization: `Bearer ${_pToken}` }
+    headers: { Authorization: `Bearer ${await _tok()}` }
   });
   const data = await resp.json();
   if (!data || !data.luan_giai) {
@@ -771,7 +918,7 @@ async function openXemTuoiModal(id, personA, personB) {
   openModal('luanModal');
 
   const resp = await fetch(`/api/history?action=xem_tuoi&id=${id}`, {
-    headers: { Authorization: `Bearer ${_pToken}` }
+    headers: { Authorization: `Bearer ${await _tok()}` }
   });
   const data = await resp.json();
   if (!data || !data.result_json) {
@@ -816,7 +963,7 @@ async function openChatModal(slug, name, product) {
 
   // Load existing chat history
   const resp = await fetch(`/api/history?action=chat&slug=${encodeURIComponent(slug)}`, {
-    headers: { Authorization: `Bearer ${_pToken}` }
+    headers: { Authorization: `Bearer ${await _tok()}` }
   });
   const data = await resp.json();
   _pChatState.messages = data.messages || [];
@@ -890,7 +1037,7 @@ async function sendChat() {
     // Save to DB
     await fetch('/api/history?action=save_chat', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${_pToken}` },
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${await _tok()}` },
       body: JSON.stringify({
         slug: _pChatState.slug,
         product: _pChatState.product,
@@ -911,7 +1058,7 @@ async function saveDisplayName() {
   try {
     const resp = await fetch(`${SUPABASE_URL}/auth/v1/user`, {
       method: 'PUT',
-      headers: { apikey: SUPABASE_ANON, Authorization: `Bearer ${_pToken}`, 'Content-Type':'application/json' },
+      headers: { apikey: SUPABASE_ANON, Authorization: `Bearer ${await _tok()}`, 'Content-Type':'application/json' },
       body: JSON.stringify({ data: { display_name: name } })
     });
     if (resp.ok) {
@@ -934,7 +1081,7 @@ async function changePassword() {
   try {
     const resp = await fetch(`${SUPABASE_URL}/auth/v1/user`, {
       method: 'PUT',
-      headers: { apikey: SUPABASE_ANON, Authorization: `Bearer ${_pToken}`, 'Content-Type':'application/json' },
+      headers: { apikey: SUPABASE_ANON, Authorization: `Bearer ${await _tok()}`, 'Content-Type':'application/json' },
       body: JSON.stringify({ password: pwd })
     });
     if (resp.ok) {
@@ -955,6 +1102,110 @@ document.querySelectorAll('.modal-overlay').forEach(m => m.addEventListener('cli
 
 // ── UTILS ──
 function escHtml(s) { return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
+
+// ── THẦY NHỚ (hồ sơ tầng 2) ──
+// Nội dung ở đây do MODEL sinh ra, nên mọi lượt vẽ đều phải thoát HTML. Nút
+// bấm gắn theo CHỈ SỐ (số do chính mình sinh ra) chứ KHÔNG nội suy nội dung
+// vào thuộc tính onclick — dấu nháy trong chuỗi là vỡ thẻ, bài học đã ghi.
+let _memItems = [];
+let _memKinds = {};
+let _memMax = 40;
+
+async function loadMemory() {
+  const box = document.getElementById('memList');
+  if (!box) return;
+  if (!(await _tok())) { box.innerHTML = '<div class="mem-empty">Đăng nhập để xem hồ sơ.</div>'; return; }
+  box.innerHTML = '<div class="mem-empty">Đang tải…</div>';
+  try {
+    const r = await fetch('/api/payment?action=my-memory', { headers: { Authorization: 'Bearer ' + (await _tok()) } });
+    const j = await r.json();
+    if (!r.ok) throw new Error(j && j.error);
+    _memItems = (j.items || []);
+    _memKinds = j.kinds || {};
+    _memMax = j.max || 40;
+    const sel = document.getElementById('memAddKind');
+    if (sel && !sel.options.length) {
+      sel.innerHTML = Object.keys(_memKinds)
+        .map(k => '<option value="' + escHtml(k) + '">' + escHtml(_memKinds[k]) + '</option>').join('');
+    }
+    memRender();
+  } catch (e) {
+    box.innerHTML = '<div class="mem-empty">Không đọc được hồ sơ. Thử tải lại trang.</div>';
+  }
+}
+
+function memRender() {
+  const box = document.getElementById('memList');
+  if (!box) return;
+  if (!_memItems.length) {
+    box.innerHTML = '<div class="mem-empty">Thầy chưa ghi lại điều gì về bạn.<br>'
+      + 'Cứ trò chuyện vài lần, Thầy sẽ tự nhớ những điều đáng nhớ.</div>';
+    return;
+  }
+  box.innerHTML = _memItems.map(function (it, i) {
+    return '<div class="mem-item">'
+      + '<div class="mem-body">'
+      +   '<div class="mem-kind">' + escHtml(_memKinds[it.loai] || 'Khác') + '</div>'
+      +   '<div class="mem-text" id="memTxt' + i + '">' + escHtml(it.noi_dung) + '</div>'
+      +   '<div class="mem-src">' + (it.nguon === 'nguoi' ? 'Bạn tự thêm' : 'Thầy tự ghi') + '</div>'
+      + '</div>'
+      + '<div class="mem-act">'
+      +   '<button class="mem-btn" onclick="memStartEdit(' + i + ')">Sửa</button>'
+      +   '<button class="mem-btn danger" onclick="memDelete(' + i + ')">Xoá</button>'
+      + '</div></div>';
+  }).join('') + '<div class="mem-src" style="margin-top:.5rem">Giữ tối đa ' + _memMax
+    + ' mục — quá thì Thầy tự bỏ mục cũ nhất.</div>';
+}
+
+function memStartEdit(i) {
+  const cell = document.getElementById('memTxt' + i);
+  if (!cell || !_memItems[i]) return;
+  const cur = _memItems[i].noi_dung;
+  cell.innerHTML = '<input class="mem-edit" id="memInp' + i + '" maxlength="200">'
+    + '<div style="margin-top:.4rem;display:flex;gap:.35rem">'
+    + '<button class="mem-btn" onclick="memSave(' + i + ')">Lưu</button>'
+    + '<button class="mem-btn" onclick="memRender()">Huỷ</button></div>';
+  const inp = document.getElementById('memInp' + i);
+  if (inp) { inp.value = cur; inp.focus(); }   // gán qua .value, không nội suy vào HTML
+}
+
+async function memSave(i) {
+  const inp = document.getElementById('memInp' + i);
+  if (!inp || !_memItems[i]) return;
+  const val = inp.value.trim();
+  if (!val) return;
+  await memPost('memory-edit', { id: _memItems[i].id, noi_dung: val, loai: _memItems[i].loai });
+}
+
+async function memDelete(i) {
+  if (!_memItems[i]) return;
+  if (!confirm('Xoá điều này khỏi hồ sơ? Thầy sẽ quên hẳn.')) return;
+  await memPost('memory-delete', { id: _memItems[i].id });
+}
+
+async function memAdd() {
+  const inp = document.getElementById('memAddText');
+  const sel = document.getElementById('memAddKind');
+  if (!inp) return;
+  const val = inp.value.trim();
+  if (val.length < 3) { alert('Viết dài hơn một chút nhé.'); return; }
+  const done = await memPost('memory-add', { noi_dung: val, loai: sel ? sel.value : 'khac' });
+  if (done) inp.value = '';
+}
+
+async function memPost(action, body) {
+  try {
+    const r = await fetch('/api/payment?action=' + action, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + (await _tok()) },
+      body: JSON.stringify(body),
+    });
+    const j = await r.json().catch(() => ({}));
+    if (!r.ok) { alert((j && j.error) || 'Không thực hiện được.'); return false; }
+    await loadMemory();
+    return true;
+  } catch (e) { alert('Lỗi mạng.'); return false; }
+}
 
 // ── Handle #credits anchor ──
 if (window.location.hash === '#credits') {

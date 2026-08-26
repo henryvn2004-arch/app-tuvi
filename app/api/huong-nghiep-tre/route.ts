@@ -7,7 +7,9 @@
 // Tool "Hướng Nghiệp Sớm Cho Con". Một pha: không sinh ảnh nên cả lượt chỉ tốn
 // ĐÚNG một lượt LLM.
 
-export const maxDuration = 120;
+// 120 → 300 (2026-08-20): llmTextFull nay chuỗi 3 provider (Kimi K3 → Opus 5
+// → Gemini Flash) + trần token đã nâng 50% — cùng lý do lasotuvi/route.ts.
+export const maxDuration = 300;
 export const runtime = 'nodejs';
 
 import { NextRequest } from 'next/server';
@@ -137,7 +139,13 @@ async function buildReport(
             : ''),
         json: true,
         jsonSchema: HUONG_NGHIEP_TRE_SCHEMA,
-        maxTokens: 3200,
+        maxTokens: 4800, // nâng 50% cùng đợt (Henry chốt 2026-08-20)
+        // provider:'anthropic' (chốt Henry 2026-08-24): Hướng Nghiệp Sớm Cho
+        // Con thuộc nhóm tool "luận giải" quan trọng → Opus 5 primary (xem
+        // lib/llm/complete.ts CANONICAL_ORDER). `jsonSchema` không ép được ở
+        // nhánh Anthropic (chỉ Gemini đọc) — cơ chế `nudge` retry sẵn có ở hàm
+        // này vẫn bắt được JSON sai định dạng.
+        provider: 'anthropic',
       });
       void logLlmUsage(
         TOOL_ID,

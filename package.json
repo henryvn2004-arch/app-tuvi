@@ -37,7 +37,14 @@
     "test:smoke:ui": "playwright test --config=playwright.smoke.config.ts --ui",
     "lhci": "lhci autorun",
     "check:motifs": "node scripts/check-que-motifs.mjs",
-    "check:terms": "node scripts/check-terms.mjs"
+    "check:terms": "node scripts/check-terms.mjs",
+    "check:publish": "node scripts/check-publish-filter.mjs",
+    "check:jobs": "node scripts/check-cron-jobs.mjs",
+    "check:token": "node scripts/check-token-freshness.mjs",
+    "check:prompt": "node scripts/check-prompt-budget.mjs",
+    "check:topics": "node scripts/check-topic-patterns.mjs",
+    "check:batrach": "node scripts/check-bat-trach.mjs",
+    "check:sodep": "node scripts/check-so-dep.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.112.2",

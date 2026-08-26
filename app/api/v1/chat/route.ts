@@ -40,7 +40,14 @@ import { railFreeRemaining, railFreeConsume } from '@/lib/billing/viral-budget';
 import { anonTrialConsume, clientIpHash } from '@/lib/billing/anon-trial';
 
 export const runtime = 'nodejs';
-export const maxDuration = 60;
+// 🔴 60 → 300 (2026-08-20, vá "chat rail bị cắt giữa chừng" Henry báo). Kimi K3
+// primary → Opus 5 backup-1 → Gemini Flash backup-2 (lib/agent/run.ts) có thể
+// thử TỚI 3 PROVIDER TUẦN TỰ trong một lượt trước khi trả lời xong, mỗi
+// provider tự retry lỗi tạm thời — cộng thêm trần token vừa nâng 50%, một lượt
+// rail nhiều vòng tool-use dễ vượt 60s. Hàm bị Vercel cắt ngang giữa chừng
+// stream là đúng triệu chứng "cắt giữa chừng" — SSE chết ngang, không có
+// event 'error' hay 'done' nào kịp gửi để client biết mà báo lỗi tử tế.
+export const maxDuration = 300;
 
 const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY!;
 
@@ -142,12 +149,24 @@ export async function POST(request: NextRequest) {
     }
   }
 
+  // ── Danh tính cho TẦNG 2 (hồ sơ "Thầy nhớ gì về con") ─────────
+  // 🔴 TÁCH KHỎI NHÁNH TÍNH PHÍ. `chargeUserId` chỉ được gán bên trong
+  // `if (!paywallDisabled() && cost > 0)`, nên hạ chat.cost về 0 (hoặc bật
+  // PAYWALL_DISABLED) là trí nhớ IM LẶNG chết theo — một cần gạt giá tự dưng
+  // tắt mất một tính năng chẳng liên quan. Giải lại ở đây khi nhánh kia bỏ qua.
+  // Vẫn LUÔN từ token đã xác thực; khách chưa đăng nhập → null (không hồ sơ).
+  let memoryUserId: string | null = chargeUserId;
+  if (!memoryUserId) {
+    const t = extractToken(request);
+    if (t) memoryUserId = (await getUserFromToken(t))?.id ?? null;
+  }
+
   const encoder = new TextEncoder();
   const stream = new ReadableStream({
     async start(controller) {
       const send = (chunk: string) => controller.enqueue(encoder.encode(chunk));
       try {
-        const { toolsUsed, suggestions } = await runAgent(req, cfg, send);
+        const { toolsUsed, suggestions, toolSuggest } = await runAgent(req, cfg, send, null, memoryUserId);
 
         // ── Trừ Lượng sau khi trả lời thành công ──────────────────
         let paywall: DoneEvent['paywall'] = { blocked: false };
@@ -185,7 +204,10 @@ export async function POST(request: NextRequest) {
           // không phải đoán.
           paywall = { blocked: false, price: cost };
         }
-        send(sse.done({ tools_used: toolsUsed, paywall, suggestions }));
+        send(sse.done({ tools_used: toolsUsed, paywall, suggestions,
+          // Thẻ gợi ý công cụ — vắng mặt ở hầu hết lượt. `?? undefined` để
+          // không bắn `toolSuggest: null` xuống client mỗi lượt cho tốn byte.
+          toolSuggest: toolSuggest ?? undefined }));
         void chatLogOutcome('web', req.session_id, true);
       } catch (e) {
         send(sse.error({ code: 'internal', message: e instanceof Error ? e.message : 'Lỗi không xác định' }));

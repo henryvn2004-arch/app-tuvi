@@ -30,6 +30,7 @@
 import { llmText } from '@/lib/llm/complete';
 import { brandCheck, type BrandProfile } from '@/lib/content/brand-check';
 import { getConfigValue } from '@/lib/config/appConfig';
+import { PUBLISHED_ONLY } from '../content/publish-filter';
 
 const SUPABASE_URL = process.env.SUPABASE_URL || '';
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY || '';
@@ -158,7 +159,7 @@ async function writeCaption(title: string, quote: string): Promise<CaptionOut | 
     const raw = await llmText({
       system: CAPTION_SYSTEM,
       prompt: JSON.stringify({ tieu_de: title, cau_trich: quote }),
-      maxTokens: 700,
+      maxTokens: 1050, // Nâng 50% (Henry chốt 2026-08-20)
     });
     const m = raw.match(/\{[\s\S]*\}/);
     if (!m) return null;
@@ -225,7 +226,7 @@ export async function buildMediaQueue(opts: { limit?: number } = {}): Promise<Bu
     const used = await usedSourceIds(spec.type);
     // Lấy dư rồi lọc trong bộ nhớ: nhét cả trăm id vào `not.in.(…)` sẽ phình URL.
     const rows = await sbGet<ArticleRow>(
-      `${spec.table}?select=id,slug,title,excerpt,content&order=created_at.desc&limit=60`,
+      `${spec.table}?select=id,slug,title,excerpt,content&${PUBLISHED_ONLY}&order=created_at.desc&limit=60`,
     );
 
     for (const row of rows) {

@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"></noscript>
-<link rel="stylesheet" href="/shell.css?v=18">
+<link rel="stylesheet" href="/shell.css?v=29">
 <style>
 .form-card{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);max-width:860px}
 .form-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:3px}
@@ -111,7 +111,8 @@
       <div id="shellRecent"></div>
       <div class="form-card" id="birthPanel">
         <h2>Nhập ngày sinh (dương lịch)</h2>
-        <p class="sub">Quan hệ giữa các lá số theo cổ pháp quyết định loại duyên nợ — không bốc thăm, và đổi thứ tự nhập vẫn ra đúng một kết quả.</p>
+        <p class="sub">Ghép hai lá số, tìm mối duyên kiếp trước giữa bạn và người ấy. Bạn cảm giác quen người này từ lâu dù mới gặp gần đây. Dùng khi muốn một câu chuyện chung cho cả hai người.</p>
+        <p class="price-note" data-tvp-price-label="duyen-no-tien-kiep">…</p>
 
         <div class="dn-two" id="personGrid"></div>
 
@@ -163,6 +164,10 @@
           <div class="res-block-body">
             <div id="actList"></div>
             <div class="dn-ketluan" id="ketLuan" style="display:none"></div>
+            <div class="compat-invite" id="dnInviteBlock" style="width:100%;display:none">
+              <div class="ci-t" id="dnInviteText"></div>
+              <button type="button" class="btn" onclick="Shell.shareNow()">Gửi kết quả này cho họ →</button>
+            </div>
           </div>
         </div>
 
@@ -184,15 +189,15 @@
 </div>
 
 <script>window.SHELL_ACTIVE='duyen-no-tien-kiep';window.SHELL_HISTORY=true;
-window.SHELL_INTRO={key:'duyen-no-tien-kiep',title:'Duyên Nợ Tiền Kiếp',desc:'Đưa <b>hai tới năm lá số</b> vào cùng một thế giới phong kiến Á Đông rồi xem <b>kiếp trước họ là gì của nhau</b> — loại duyên nợ suy từ <b>địa chi cung Mệnh</b>, <b>ngũ hành nạp âm</b> và <b>chính tinh</b>, kèm câu chuyện 4 hồi và một bức tranh vẽ cả nhóm.'};</script>
+window.SHELL_INTRO={key:'duyen-no-tien-kiep',title:'Duyên Nợ Tiền Kiếp',desc:'Ghép hai lá số, tìm mối duyên kiếp trước giữa bạn và người ấy. Bạn cảm giác quen người này từ lâu dù mới gặp gần đây. Dùng khi muốn một câu chuyện chung cho cả hai người.'};</script>
 <script src="/laso-chart.js?v=3"></script>
-<script src="/tuvi-form.js?v=1"></script>
-<script src="/tuvi-paywall.js?v=18"></script>
+<script src="/tuvi-form.js?v=2"></script>
+<script src="/tuvi-paywall.js?v=21"></script>
 <script src="/auth.js?v=2"></script>
-  <script src="/nav.js?v=22" data-icons-only></script>
-<script src="/shell.js?v=68"></script>
-<script src="/tools-shared/ai-loading-steps.js?v=5"></script>
-<script src="/tools-shared/portrait-recover.js?v=1"></script>
+  <script src="/nav.js?v=23" data-icons-only></script>
+<script src="/shell.js?v=82"></script>
+<script src="/tools-shared/ai-loading-steps.js?v=9"></script>
+<script src="/tools-shared/portrait-recover.js?v=2"></script>
 <script>
 
 var _currentSlug = '';
@@ -421,6 +426,9 @@ async function _doGenerate(freeRerun) {
   _imgWait && _imgWait.start();
   _loadingCtl = AiLoadingSteps.mount('loadingSteps', DN_STEPS);
   _loadingCtl.start();
+  // Sổ tới 5 người thì form rất dễ dài hơn màn hình — cuộn lên ngay để thấy có
+  // gì vừa chạy, không đứng im.
+  if (AiLoadingSteps.scrollToResult) AiLoadingSteps.scrollToResult('loading');
 
   var token = window.Auth?.getSession()?.access_token || '';
   var call = function (phase) {
@@ -644,6 +652,24 @@ function renderStory(data) {
   var kl = document.getElementById('ketLuan');
   if (data.ketLuan) { kl.textContent = data.ketLuan; kl.style.display = 'block'; }
   else { kl.style.display = 'none'; }
+
+  // "Người thứ nhất — Thường là bạn": nhân vật ĐẦU coi như người đang dùng
+  // tool, mấy người sau là "họ" — mời đúng người còn thiếu trong cuộc, không
+  // mời chung chung.
+  var others = nvs.slice(1).map(function (p) { return p.ten; }).filter(Boolean);
+  var inviteText = '';
+  if (others.length === 1) {
+    inviteText = 'Gửi kết quả này cho <b>' + esc(others[0]) + '</b> xem — họ tò mò là muốn tự tra lá số của mình luôn.';
+  } else if (others.length >= 2) {
+    inviteText = 'Gửi kết quả này cho cả nhóm (' + others.map(function (n) { return '<b>' + esc(n) + '</b>'; }).join(', ') +
+      ') xem — mỗi người tò mò vai của chính mình là muốn tự tra lá số luôn.';
+  }
+  var inviteBlock = document.getElementById('dnInviteBlock');
+  if (inviteText) {
+    document.getElementById('dnInviteText').innerHTML = inviteText;
+    inviteBlock.style.display = 'flex';
+  } else { inviteBlock.style.display = 'none'; }
+
   document.getElementById('storyBlock').style.display = 'block';
 }
 

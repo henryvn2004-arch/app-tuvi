@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"></noscript>
-<link rel="stylesheet" href="/shell.css?v=18">
+<link rel="stylesheet" href="/shell.css?v=29">
 <style>
 .form-card{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);max-width:860px}
 .form-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:3px}
@@ -105,7 +105,8 @@
       <div id="birthPanel">
         <div class="form-card">
           <h2>Hướng Nghiệp Sớm Cho Con</h2>
-          <p class="sub">Nhập lá số của con hoặc cháu. Bản đọc nói <b>thiên hướng</b>, <b>việc nên cho làm quen theo đúng lứa tuổi</b>, và <b>người lớn nên làm gì / nên thôi gì</b>.</p>
+          <p class="sub">Gợi ý hoạt động nên cho con làm quen theo đúng lứa tuổi. Bạn muốn định hướng sớm cho con nhưng chưa biết bắt đầu từ đâu. Dùng khi muốn tham khảo, không phải để chốt nghề cho con.</p>
+          <p class="price-note" data-tvp-price-label="huong-nghiep-tre">…</p>
           <div id="formHost"></div>
           <div class="frow">
             <div class="fg" style="flex:1">
@@ -226,9 +227,15 @@
             <div class="res-block-body" id="lockHost" data-tvp-lock style="padding-top:6px"></div>
           </div>
 
-          <div class="res-block" style="background:#FBF3DE;border-color:#e8d9b0">
+          <!-- Khách chưa đăng nhập: khoá LUÔN cả phần "miễn phí" phía trên
+               (thiên hướng / chất người / cơ sở) — chỉ hero là phần đầu được
+               xem. Tách riêng `lockHost` (dùng cho cảnh báo lá số người lớn +
+               softLock hết Lượng) để hai luồng không đá nhau. -->
+          <div id="hnLockHost" style="display:none;margin-bottom:16px"></div>
+
+          <div class="res-block tvmb-src-note" data-share-skip style="background:#FBF3DE;border-color:#e8d9b0">
             <div class="res-block-body" style="font-size:12.5px;line-height:1.68;color:#5a5145">
-              💡 Bản này phác hoạ từ các dữ liệu trong lá số Tử Vi, kết hợp kinh nghiệm nghiên cứu của tiền nhân để lại. Phần <b>thiên hướng và hoạt động</b> là quy chiếu của trang, không phải chữ trong cổ thư. Xem <a href="/nguon-du-lieu.html">nguồn dữ liệu</a>.<br><br>
+              💡 Bản này phác hoạ từ các dữ liệu trong lá số Tử Vi, lập theo <i>Tử Vi Đẩu Số Tân Biên</i> (Vân Đằng Thái Thứ Lang), kết hợp kinh nghiệm nghiên cứu của tiền nhân để lại. Phần <b>thiên hướng và hoạt động</b> là phương pháp riêng do <b>đội ngũ chuyên gia Tử Vi Minh Bảo</b> xây dựng, không phải chữ trong cổ thư. Xem <a href="/nguon-du-lieu.html">nguồn dữ liệu</a>.<br><br>
               ⚖️ Đây là bản <b>định hướng để tham khảo</b>, không phải để chốt đường cho con. Đứa trẻ chưa trưởng thành và không có mặt ở đây, nên bản đọc cố ý <b>không đoán đỗ trượt, không hứa thành công, không đọc sức khoẻ hay chuyện tình duyên</b> của con. Thiên hướng nói con <i>nên được cho thử gì</i>, không nói con <i>phải làm nghề gì</i>.
             </div>
           </div>
@@ -246,14 +253,14 @@
 </div>
 
 <script>window.SHELL_ACTIVE='huong-nghiep-tre';window.SHELL_HISTORY=true;
-window.SHELL_INTRO={key:'huong-nghiep-tre',title:'Hướng Nghiệp Sớm Cho Con',desc:'Đưa lá số của con vào đây để biết <b>con nghiêng về thiên hướng nào</b>, <b>nên cho con làm quen với việc gì ở đúng lứa tuổi này</b>, và <b>người lớn nên làm gì / nên thôi gì</b>. Đây là bản định hướng để tham khảo — không chốt nghề cho con.'};</script>
+window.SHELL_INTRO={key:'huong-nghiep-tre',title:'Hướng Nghiệp Sớm Cho Con',desc:'Gợi ý hoạt động nên cho con làm quen theo đúng lứa tuổi. Bạn muốn định hướng sớm cho con nhưng chưa biết bắt đầu từ đâu. Dùng khi muốn tham khảo, không phải để chốt nghề cho con.'};</script>
 <script src="/laso-chart.js?v=3"></script>
-<script src="/tuvi-form.js?v=1"></script>
-<script src="/tuvi-paywall.js?v=18"></script>
+<script src="/tuvi-form.js?v=2"></script>
+<script src="/tuvi-paywall.js?v=21"></script>
 <script src="/auth.js?v=2"></script>
-  <script src="/nav.js?v=22" data-icons-only></script>
-<script src="/shell.js?v=68"></script>
-<script src="/tools-shared/ai-loading-steps.js?v=5"></script>
+  <script src="/nav.js?v=23" data-icons-only></script>
+<script src="/shell.js?v=82"></script>
+<script src="/tools-shared/ai-loading-steps.js?v=9"></script>
 <script>
 
 var _currentSlug = '';
@@ -324,17 +331,7 @@ function _cacheQuery(b, lo) {
     '&lunar=' + (b.isLunar ? '1' : '0') + '&lo=' + encodeURIComponent(lo);
 }
 
-// ── W1: bấm nút là CHẠY THẬT, miễn phí ─────────────────────────────────────
-// Tầng deterministic (kiểu người · thiên hướng đứng đầu · dấu hiệu nhận biết ·
-// chất người · cơ sở lá số) là tra bảng + một phép cosine — 0 lượt LLM, 0đ.
-var HN_KHOA = [
-  'Trả lời thẳng vào điều bạn đang lo',
-  'Nhìn ra con — con vận hành thế nào',
-  'Ba hướng đáng cho con thử, kèm lý do từng hướng',
-  'Hoạt động nên cho làm quen, chọn theo đúng lứa tuổi',
-  'Ba việc làm được trong tháng này · hai việc nên thôi',
-  'Mở lời với con thế nào · sang lứa sau thì đổi gì'
-];
+function _hnLoggedIn() { return !!(window.Auth && window.Auth.isLoggedIn && window.Auth.isLoggedIn()); }
 
 async function analyze() {
   showError('');
@@ -344,9 +341,14 @@ async function analyze() {
   _last = b;
   _currentSlug = TuviPaywall.generateToolSlug('huong-nghiep-tre-' + lo + '-' + b.day + b.month + b.year);
 
+  // Luôn cần một lượt XEM TRƯỚC (0đ, không đăng nhập) để biết `laTreEm` —
+  // chốt "người lớn không bán, không trừ Lượng" phải đứng TRƯỚC mọi lượt gate
+  // credit.
   _openPanel();
-  _loadingCtl = AiLoadingSteps.mount('loadingSteps', HN_STEPS.slice(0, 2));
+  _loadingCtl = AiLoadingSteps.mount('loadingSteps', HN_STEPS);
   _loadingCtl.start();
+  // Cuộn lên ngay để thấy có gì vừa chạy, không đứng im.
+  AiLoadingSteps.scrollToResult('loading');
   var prev;
   try {
     var r = await fetch('/api/huong-nghiep-tre?preview=1', {
@@ -362,15 +364,35 @@ async function analyze() {
     showError('Lỗi: ' + (e.message || 'Không thể kết nối. Vui lòng thử lại.'));
     return;
   }
-  _loadingCtl && _loadingCtl.finish();
-  document.getElementById('loading').style.display = 'none';
-  document.getElementById('card').style.display = 'block';
-  document.getElementById('btnEdit').style.display = '';
-  renderMeta(prev);
-  // D1 — bậc "đã tính thử" của phễu theo tool. Bắn ở ĐÂY chứ không lúc bấm nút:
-  // bấm rồi mà lá số hỏng thì không có gì để xem, tính vào phễu là thổi mẫu số.
-  try { if (window.Track) window.Track.event('preview_shown', { tool_id: 'huong-nghiep-tre' }); } catch (e) { /* đo hỏng không chặn gì */ }
-  if (window.SHELL_INTRO) Shell.dismissIntro(window.SHELL_INTRO.key);
+
+  if (prev.laTreEm === false) {
+    _loadingCtl && _loadingCtl.finish();
+    document.getElementById('loading').style.display = 'none';
+    document.getElementById('card').style.display = 'block';
+    document.getElementById('btnEdit').style.display = '';
+    renderMeta(prev);
+    if (window.SHELL_INTRO) Shell.dismissIntro(window.SHELL_INTRO.key);
+    _banGiaoNguoiLon(prev);
+    return;
+  }
+
+  // Trẻ em: đây là đường có bán. Đăng nhập rồi → bấm nút là CHẠY THẬT ngay
+  // (case 1), bỏ hẳn bản xem trước — chốt Lượng rồi mới vẽ ĐẦY ĐỦ trong
+  // `_doGenerate`. Chưa đăng nhập (case 2) → dựng tầng đầu (hero) MỞ + thiên
+  // hướng/chất người/cơ sở lá số (0đ, có sẵn trong payload preview) dựng THẬT
+  // nhưng LÀM MỜ — không ẩn hẳn khỏi DOM. Phần AI viết riêng vẫn sau tấm khoá.
+  if (!_hnLoggedIn()) {
+    _loadingCtl && _loadingCtl.stop();
+    document.getElementById('loading').style.display = 'none';
+    document.getElementById('card').style.display = 'block';
+    document.getElementById('btnEdit').style.display = '';
+    renderMetaHead(prev);
+    renderMetaRest(prev);
+    _hnLockRestBlocks(true);
+    if (window.SHELL_INTRO) Shell.dismissIntro(window.SHELL_INTRO.key);
+    _renderLockWall(lo);
+    return;
+  }
 
   var free = false;
   try { free = await TuviPaywall.isFreeRerun('/api/huong-nghiep-tre', _cacheQuery(b, lo)); } catch (e) { free = false; }
@@ -379,15 +401,48 @@ async function analyze() {
     await _doGenerate(true, lo);
     return;
   }
-  if (prev.laTreEm === false) { _banGiaoNguoiLon(prev); return; }
-  document.getElementById('lockBlock').style.display = 'block';
-  await TuviPaywall.lockPreview({
-    host: document.getElementById('lockHost'),
-    title: '⊙ Còn phần định hướng chưa mở',
-    items: HN_KHOA,
-    cta: 'Mở bản định hướng đầy đủ',
+  _loadingCtl && _loadingCtl.stop();
+  _closePanel();
+  await TuviPaywall.requireCredits(_currentSlug, function () { return _doGenerate(false, lo); });
+}
+
+// Khối deterministic mà `renderMetaRest` quản (đã có sẵn trong payload
+// preview, 0đ) — khoá bằng cách làm mờ CHÍNH các khối này, không đụng khối chỉ
+// tồn tại sau khi có AI viết riêng (loBlock/doBlock/... không nằm trong danh
+// sách vì renderMetaRest không đụng tới chúng).
+var HN_REST_BLOCK_IDS = ['huongDauBlock', 'chatBlock', 'basisBlock'];
+function _hnLockRestBlocks(locked) {
+  HN_REST_BLOCK_IDS.forEach(function (id) {
+    var block = document.getElementById(id);
+    if (!block || block.style.display === 'none') return;
+    var body = block.querySelector('.res-block-body');
+    var oldBadge = block.querySelector('.tpw-lock-badge');
+    if (oldBadge) oldBadge.remove();
+    if (locked) {
+      body.classList.add('tpw-real-lock');
+      var titleEl = block.querySelector('.res-block-title');
+      if (titleEl) titleEl.insertAdjacentHTML('afterend', TuviPaywall.lockBadge('Khoá'));
+    } else {
+      body.classList.remove('tpw-real-lock');
+    }
+  });
+  if (window.mountIcons) window.mountIcons(document.getElementById('resPanel'));
+}
+
+function _renderLockWall(lo) {
+  var host = document.getElementById('hnLockHost');
+  host.style.display = 'block';
+  host.innerHTML = '';
+  TuviPaywall.lockPreview({
+    host: host,
+    title: '⊙ Bản định hướng đầy đủ chưa mở',
+    items: [
+      'Ba hướng đáng cho con thử, kèm hoạt động cụ thể theo lứa tuổi',
+      'Việc nên làm trong tháng này / nên thôi, và mở lời với con thế nào',
+    ],
+    cta: 'Đăng ký để mở bản định hướng đầy đủ',
     slug: function () { return _currentSlug; },
-    onUnlock: function () { return _doGenerate(false, lo); }
+    onUnlock: function () { return _doGenerate(false, lo); },
   });
 }
 
@@ -396,6 +451,7 @@ function _openPanel() {
   document.getElementById('resPanel').style.display = 'block';
   document.getElementById('loading').style.display = 'block';
   document.getElementById('card').style.display = 'none';
+  document.getElementById('hnLockHost').style.display = 'none';
   ['huongDauBlock', 'chatBlock', 'proseTopBlock', 'loBlock', 'baHuongBlock',
    'doBlock', 'noiBlock', 'mocBlock', 'endBlock', 'basisBlock', 'lockBlock']
     .forEach(function (id) { document.getElementById(id).style.display = 'none'; });
@@ -413,11 +469,11 @@ function _closePanel() {
 }
 
 async function _doGenerate(freeRerun, lo) {
-  document.getElementById('lockBlock').style.display = 'none';
-  TuviPaywall._closeLock();
-  _loadingCtl = AiLoadingSteps.mount('loadingSteps', HN_STEPS.slice(2));
-  document.getElementById('loading').style.display = 'block';
+  _openPanel();
+  _loadingCtl = AiLoadingSteps.mount('loadingSteps', HN_STEPS);
   _loadingCtl.start();
+  // Cuộn lên ngay để thấy có gì vừa chạy, không đứng im.
+  AiLoadingSteps.scrollToResult('loading');
 
   var token = (window.Auth && Auth.getSession && Auth.getSession()) ? Auth.getSession().access_token : '';
   try {
@@ -431,14 +487,14 @@ async function _doGenerate(freeRerun, lo) {
     // paywall thay vì ném một lỗi khó hiểu.
     if (res.status === 402 && freeRerun) {
       _loadingCtl && _loadingCtl.stop();
-      document.getElementById('loading').style.display = 'none';
-      document.getElementById('lockBlock').style.display = 'block';
-      await TuviPaywall.requireCredits(_currentSlug, async function () { await _doGenerate(false, lo); });
+      _closePanel();
+      await TuviPaywall.requireCredits(_currentSlug, function () { return _doGenerate(false, lo); });
       return;
     }
     if (!res.ok || !data.success) throw new Error(data.error || 'Lỗi ' + res.status);
     renderMeta(data);
     renderProse(data);
+    _hnLockRestBlocks(false); // mở khoá nếu trước đó đã mờ ở lượt xem trước
     _loadingCtl && _loadingCtl.finish();
     document.getElementById('loading').style.display = 'none';
     document.getElementById('card').style.display = 'block';
@@ -477,12 +533,9 @@ async function _doGenerate(freeRerun, lo) {
       ].filter(Boolean).join('\n')
     });
   } catch (e) {
-    // Giữ nguyên phần tính thử đang hiện — quẳng người ta về form trống là xoá
-    // luôn thứ họ vừa xem (và có thể vừa trả tiền cho phần sau).
     _loadingCtl && _loadingCtl.stop();
-    document.getElementById('loading').style.display = 'none';
-    document.getElementById('lockBlock').style.display = 'block';
-    TuviPaywall._banner('Chưa mở được phần định hướng: ' + (e.message || 'lỗi kết nối') + '. Bạn thử lại giúp.');
+    _closePanel();
+    showError('Lỗi: ' + (e.message || 'Không thể kết nối. Vui lòng thử lại.'));
   }
 }
 
@@ -525,7 +578,14 @@ function _banGiaoNguoiLon(data) {
   document.getElementById('lockBlock').style.display = 'block';
 }
 
-function renderMeta(data) {
+// Tách theo ĐƯỜNG TIỀN: `renderMetaHead` là phần đầu (hero — tên, tuổi, kiểu,
+// dòng lá số) — thứ khách CHƯA đăng ký cũng được xem MỞ. `renderMetaRest` là
+// mọi khối deterministic còn lại (thiên hướng nổi nhất, chất người, cơ sở lá
+// số) — LUÔN dựng thật vào DOM; khách chưa đăng ký chỉ khác ở chỗ
+// `_hnLockRestBlocks(true)` làm mờ chúng SAU khi dựng (xem analyze()).
+// `renderMeta` = cả hai, dùng cho đường đã đăng nhập/đã trả và cho lá số
+// người lớn (không bán, không gate).
+function renderMetaHead(data) {
   // Bỏ trống ô tên thì tiêu đề rơi về một cách gọi — mà "Con" dán lên một lá số
   // 43 tuổi thì vẫn đúng chỗ Henry báo, chỉ khác một dòng.
   var ten = data.ten || (data.laTreEm === false ? 'Lá số này' : 'Con');
@@ -551,7 +611,9 @@ function renderMeta(data) {
   document.getElementById('heroBirth').textContent = bSum ? 'Lá số: ' + bSum : '';
   document.getElementById('heroVai').textContent =
     data.lop && data.laTreEm !== false ? data.lop.vaiChaMe : '';
+}
 
+function renderMetaRest(data) {
   // Thiên hướng đứng đầu (miễn phí)
   var hd = data.huongDau;
   if (hd) {
@@ -609,6 +671,8 @@ function renderMeta(data) {
     document.getElementById('loTitle').textContent = data.moiLo.label;
   }
 }
+
+function renderMeta(data) { renderMetaHead(data); renderMetaRest(data); }
 
 /** Một thẻ thiên hướng. `full` = có hoạt động + việc nên/tránh (đã trả tiền). */
 function _huongHtml(h, full, showDiem) {

@@ -46,6 +46,6 @@ export async function generateContentSuggestions(from: string, to: string): Prom
   return llmText({
     system: SYSTEM_PROMPT,
     prompt: JSON.stringify({ sources, campaigns, traffic }),
-    maxTokens: 900,
+    maxTokens: 1350, // Nâng 50% (Henry chốt 2026-08-20)
   });
 }

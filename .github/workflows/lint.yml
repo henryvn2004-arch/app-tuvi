@@ -75,6 +75,13 @@ jobs:
       - name: Lời gọi Auth.* khớp API thật
         run: npm run check:authapi
 
+      # Chặn tái phát lỗi "đòi đăng nhập với người ĐANG đăng nhập": access token
+      # Supabase sống ~1 giờ, `getSession().access_token` là ẢNH CHỤP nên nó trả
+      # cả token đã hết hạn → server 401. Đã trả giá trên prod (rail Kỳ Môn), và
+      # ở paywall thì tệ hơn: 401 đọc thành "chưa trả tiền" → tính tiền lần hai.
+      - name: Đường tiền/đường hỏi dùng token còn hạn
+        run: npm run check:token
+
       # Chặn `animation:` trỏ tới @keyframes KHÔNG TỒN TẠI — trình duyệt không
       # báo gì cả, phần tử vẫn hiện, chỉ là đứng im. Bắt được ngay lượt chạy
       # đầu: banner "Chào mừng! Bạn đã nhận Lượng miễn phí" của `auth.js` mượn
@@ -145,6 +152,43 @@ jobs:
       # mang lứa của bản kẹp tuổi cũ). Lời dặn trong mã không đủ; cần máy canh.
       - name: Vân tay cấu trúc payload ↔ SHAPE cache
         run: npm run check:cacheshape
+
+      # `khao_luan`/`master_articles` nay có `publish_status`, nhưng cột đó chỉ
+      # có nghĩa nếu MỌI bề mặt công khai lọc theo nó — đo được 12 chỗ đọc rải
+      # khắp app/ và lib/. Quên một chỗ thì bài đã gỡ xuống vẫn hiện ra ngoài,
+      # hỏng im lặng và chỉ lộ khi có người tình cờ mở đúng URL đó.
+      - name: Truy vấn công khai phải lọc trạng thái xuất bản
+        run: npm run check:publish
+
+      # Sổ job ↔ vercel.json ↔ file route. Lớp lỗi này tái phát BA LẦN (sổ cũ
+      # trong admin.html khai 5/9 job ⇒ CMO Digest chết 14 ngày; rồi bảng
+      # CRON_TRIGGERS cũng 5 mục ⇒ nút Chạy ngay chết; rồi 11/20 ⇒ "Unknown
+      # job"). Cả ba đều hỏng IM LẶNG cho tới khi có người bấm hoặc đi tìm.
+      - name: Sổ job khớp lịch cron và route thật
+        run: npm run check:jobs
+
+      # Đo 2026-08-17: 75% luật của 25 prompt rail là GIỌNG + HÌNH DẠNG, nghiệp
+      # vụ tử vi chỉ 25% — và riêng 3 shape lá số có TỚI BA bản mô tả bố cục
+      # chồng nhau, mỗi bản tự nhận "ĐỨNG TRÊN mọi luật khác". Nguyên nhân là
+      # cộng dồn: thấy model viết chưa ưng thì thêm một khối nữa, khối cũ vẫn
+      # nằm đó. Càng thêm luật thì luật càng loãng. Bộ dò chặn cả hai vế: trần
+      # ký tự cho phần luật, và mỗi shape chỉ được MỘT nguồn bố cục.
+      - name: Ngân sách prompt lá số (chống phình + một nguồn bố cục)
+        run: npm run check:prompt
+
+      - name: Bộ dò chủ đề câu hỏi (mẫu phải là cụm đủ nghĩa, không âm tiết đơn)
+        run: npm run check:topics
+
+      # Bảng Du Niên Bát Trạch (Sinh Khí…Tuyệt Mệnh) SINH bằng thuật toán, không
+      # còn chép tay — 3 bản chép tay cũ tự mâu thuẫn, sai 12-15/64 ô mỗi bản.
+      - name: Bảng Du Niên đối xứng, không còn bảng chép tay
+        run: npm run check:batrach
+
+      # Engine "Số Đẹp" (T1-T3-T5-T6) — không vitest phủ public/tools-shared/*.js
+      # nên đây là lưới an toàn: deterministic, T1 khớp starBetween(), T2 tra
+      # đúng quẻ, đồng thuận không lẫn tầng dân gian/số học vào điểm cổ pháp.
+      - name: Engine Số Đẹp — deterministic, khớp nguồn, không lẫn tầng
+        run: npm run check:sodep
 
   typecheck:
     runs-on: ubuntu-latest
