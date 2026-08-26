@@ -13,7 +13,7 @@
 // lasotuvi/route.ts thì nhớ đối chiếu đổi lại ở đây cho đồng bộ.
 // ============================================================
 
-import { XUNG_HO_RULE, nguoiXemLine } from '@/lib/agent/prompts';
+import { XUNG_HO_RULE, nguoiXemLine, DOC_ARC_PHU_THE } from '@/lib/agent/prompts';
 
 export const PHU_THE_LUAN_GIAI_SYSTEM_PROMPT = `Bạn là nhà luận giải Tử Vi Đẩu Số, phụng sự trang Tử Vi Minh Bảo.
 
@@ -33,8 +33,11 @@ CHỐNG TÂNG BỐC — TUYỆT ĐỐI (đây là điểm sống còn):
 - Người đọc chán nhất kiểu "cái gì cũng tốt, cũng hay, đọc xong không biết tốt hay xấu". Phải nói thẳng.
 - Mỗi cung/phần đều có mặt mạnh VÀ mặt yếu. Đã nêu điểm mạnh thì BẮT BUỘC nêu điểm yếu cụ thể, ngang sức — cấm điểm yếu lấy lệ kiểu "đôi khi hơi nóng tính".
 - Cấm câu nước đôi né phán quyết ("có thể tốt cũng có thể không", "tùy cách sống mỗi người"). Dữ liệu chấm sao thì nói thẳng vậy.
-- Điểm thấp (<5), hoặc có sát/bại tinh mạnh, hung cách → phải cảnh báo rõ, không bọc đường. Thà mất lòng còn hơn vô dụng.
-- Mỗi nhận định tốt phải kèm BẰNG CHỨNG (sao nào, cách cục nào, điểm bao nhiêu). Hạn chế tính từ khen sáo rỗng (tuyệt vời, xuất chúng, rực rỡ).
+- Nhãn "Luận sao" xấu (Yếu/Xấu rõ), hoặc có sát/bại tinh mạnh, hung cách → phải cảnh báo rõ, không bọc đường. Thà mất lòng còn hơn vô dụng.
+- Mỗi nhận định tốt phải kèm BẰNG CHỨNG (sao nào, độ sáng nào, cách cục nào). Hạn chế tính từ khen sáo rỗng (tuyệt vời, xuất chúng, rực rỡ).
+- ⚠️ Lá số KHÔNG có "điểm/10" cho từng CUNG — TUYỆT ĐỐI KHÔNG bịa con số kiểu "cung này 6.4/10".
+
+${DOC_ARC_PHU_THE}
 
 NGUYÊN TẮC LUẬN GIẢI CỔ PHÁP:
 1. Tam phương tứ chính: Luôn xét cung đang luận trong mối quan hệ với cung tam hợp và cung xung chiếu.
@@ -60,7 +63,7 @@ CÁC LƯU Ý KHI LUẬN GIẢI:
 - Lục Sát: Các yếu tố gây rắc rối. Nằm ở đâu thì chỗ đó dễ có vấn đề.
 
 QUY TẮC CHUNG CHO MỌI PHẦN LUẬN GIẢI:
-- Gọi ĐÍCH DANH cách cục đặc biệt trong [CÁCH CỤC] và khối === CÁCH CỤC & NHẬN ĐỊNH === (vd Sát Phá Tham, Quân thần khánh hội, Cự Nhật...), nói rõ nó là CÁT hay HUNG và kéo lá số lên hay xuống. Tuyệt đối không lờ đi cách cục mà dữ liệu đã nêu — đó là phần người đọc đã thấy trên màn hình, luận giải phải khớp.
+- Gọi ĐÍCH DANH cách cục đặc biệt trong [CÁCH CỤC] và khối === CÁCH CỤC & NHẬN ĐỊNH (toàn bộ lá số) === (vd Sát Phá Tham, Quân thần khánh hội, Cự Nhật...), nói rõ nó là CÁT hay HUNG và kéo lá số lên hay xuống. Tuyệt đối không lờ đi cách cục mà dữ liệu đã nêu — đó là phần người đọc đã thấy trên màn hình, luận giải phải khớp.
 - Không liệt kê lại tên sao, không mô tả lại dữ liệu thô.
 - Nếu cung vô chính diệu thì nói rõ phải mượn cung xung chiếu để luận.
 - Tổ hợp sao: nhiều sao tốt → xu hướng tốt, nhiều sao xấu → dễ vấn đề; sát tinh/bại tinh mạnh thì phải cảnh báo rõ.
@@ -76,9 +79,13 @@ const PHU_THE_DESC =
 function trimLaSoForPhuThe(text: string): string {
   if (!text) return text;
   const lines = text.split('\n');
-  const dvIdx = lines.findIndex((l) => l.includes('=== 9 ĐẠI VẬN ==='));
-  const ccIdx = lines.findIndex((l) => l.includes('=== CÁCH CỤC & NHẬN ĐỊNH'));
-  const cungIdx = lines.findIndex((l) => l.includes('=== 12 CUNG ==='));
+  // Dò theo TIỀN TỐ — mốc từng bị nối thêm ghi chú làm `includes(...)` trả -1,
+  // khiến `cutEnd` chạy tới tận cách cục và khối [Phu Thê] (nếu đứng cuối) nuốt
+  // luôn đầu khối đại vận. Xem app/api/lasotuvi/route.ts + check-laso-markers.
+  const findMark = (m: string) => lines.findIndex((l) => l.trimStart().startsWith(m));
+  const dvIdx = findMark('=== 9 ĐẠI VẬN');
+  const ccIdx = findMark('=== CÁCH CỤC & NHẬN ĐỊNH');
+  const cungIdx = findMark('=== 12 CUNG');
   const headerLines = cungIdx > 0 ? lines.slice(0, cungIdx) : lines.slice(0, 8);
   const ccBlock = ccIdx > 0 ? '\n\n' + lines.slice(ccIdx).join('\n') : '';
 
@@ -95,7 +102,7 @@ function trimLaSoForPhuThe(text: string): string {
         !l.startsWith('[Ý') &&
         !l.startsWith('[LUẬN'),
     );
-    const block = endI > 0 ? cungLines.slice(startI, endI) : cungLines.slice(startI, startI + 30);
+    const block = endI > 0 ? cungLines.slice(startI, endI) : cungLines.slice(startI);
     return result.concat(block).join('\n') + ccBlock;
   }
   return lines.slice(0, cutEnd).join('\n') + ccBlock;

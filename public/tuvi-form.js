@@ -85,6 +85,24 @@ window.TuviForm = (() => {
     updateGioAmDisplay(prefix);
   }
 
+  // Chạm-để-mở tooltip "Giờ sinh" trên mobile — CSS chỉ có :hover, vô dụng trên
+  // cảm ứng. iconEl và hộp nội dung là hai con liền kề của .tvf-tooltip-wrap.
+  function toggleTip(iconEl) {
+    const box = iconEl && iconEl.nextElementSibling;
+    if (!box || !box.classList || !box.classList.contains('tvf-tooltip-box')) return;
+    const willOpen = !box.classList.contains('tvf-open');
+    // Đóng MỌI hộp khác đang mở — hai hộp chồng lên nhau trên màn hình hẹp là
+    // không đọc được cái nào.
+    document.querySelectorAll('.tvf-tooltip-box.tvf-open').forEach((b) => b.classList.remove('tvf-open'));
+    if (willOpen) box.classList.add('tvf-open');
+  }
+  if (!window.__tvfTipDocBound) {
+    window.__tvfTipDocBound = true;
+    document.addEventListener('click', () => {
+      document.querySelectorAll('.tvf-tooltip-box.tvf-open').forEach((b) => b.classList.remove('tvf-open'));
+    });
+  }
+
   // ── Option lists ─────────────────────────────────────────────
   const UTC_OPTIONS = [
     {v:-720,l:'UTC−12'},{v:-660,l:'UTC−11'},{v:-600,l:'UTC−10'},{v:-570,l:'UTC−9:30'},
@@ -113,6 +131,11 @@ window.TuviForm = (() => {
       <li><b>Từ 01/5/1975</b> (UTC+7): giờ Tý = 23:00–00:59</li>
     </ul>
     <p style="color:#888;font-size:11px;margin-top:8px">Hệ thống tự động điều chỉnh dựa trên ngày tháng năm sinh đã nhập.</p>
+    <p style="margin-top:10px;padding-top:10px;border-top:1px solid #eee">
+      <b>Không nhớ giờ sinh?</b> Rất nhiều người không nhớ chính xác — giờ sinh
+      lại quyết định đúng nhiều tool khác trên trang này.
+      <a href="/app/gio-sinh" target="_blank" style="color:#1455A4;font-weight:600">Xác định giờ sinh của bạn →</a>
+    </p>
   </div>`;
 
   // ── Shared CSS (injected once) ────────────────────────────────
@@ -134,6 +157,9 @@ window.TuviForm = (() => {
 .tvf-tooltip-box li { margin-bottom:3px; }
 .tvf-tooltip-title { font-weight:700; color:var(--navy); margin-bottom:8px; }
 .tvf-tooltip-wrap:hover .tvf-tooltip-box { display:block; }
+/* Chạm-để-mở cho mobile — hover không tồn tại trên cảm ứng, mà đa số lượt ghé
+   là mobile. Lớp .tvf-open do TuviForm._toggleTip() gắn/gỡ khi bấm vào icon. */
+.tvf-tooltip-box.tvf-open { display:block; }
 @media(max-width:700px){.tvf-tooltip-box{left:auto;right:0;width:280px;}}
 /* ── mode:'compact' (app-shell) — chỉ style phần KHÔNG có sẵn trong .frow/.fg của trang gọi ── */
 .tvf-compact-foreign { display:flex; align-items:center; gap:6px; font-size:12.5px; color:var(--text-mid); cursor:pointer; white-space:nowrap; padding-bottom:8px; }
@@ -193,7 +219,7 @@ window.TuviForm = (() => {
       <label class="form-label" style="display:flex;align-items:center;gap:4px">
         Giờ sinh
         <span class="tvf-tooltip-wrap">
-          <span class="tvf-tooltip-icon">?</span>
+          <span class="tvf-tooltip-icon" onclick="event.stopPropagation();TuviForm._toggleTip(this)">?</span>
           ${TOOLTIP_CONTENT}
         </span>
       </label>
@@ -228,7 +254,7 @@ window.TuviForm = (() => {
       <div class="fg" style="width:74px"><label>Ngày</label><select id="${pid('ngay',prefix)}" oninput="TuviForm._update(${pf})">${ngayOpts}</select></div>
       <div class="fg" style="width:82px"><label>Tháng</label><select id="${pid('thang',prefix)}" oninput="TuviForm._update(${pf})">${thangOpts}</select></div>
       <div class="fg" style="width:90px"><label>Năm</label><input type="number" id="${pid('nam',prefix)}" placeholder="1990" min="1900" max="2099" oninput="TuviForm._update(${pf})"></div>
-      <div class="fg" style="width:70px"><label style="display:flex;align-items:center;gap:3px">Giờ<span class="tvf-tooltip-wrap"><span class="tvf-tooltip-icon">?</span>${TOOLTIP_CONTENT}</span></label><select id="${pid('tvf-gio',prefix)}" oninput="TuviForm._update(${pf})">${gioOpts}</select></div>
+      <div class="fg" style="width:70px"><label style="display:flex;align-items:center;gap:3px">Giờ<span class="tvf-tooltip-wrap"><span class="tvf-tooltip-icon" onclick="event.stopPropagation();TuviForm._toggleTip(this)">?</span>${TOOLTIP_CONTENT}</span></label><select id="${pid('tvf-gio',prefix)}" oninput="TuviForm._update(${pf})">${gioOpts}</select></div>
       <div class="fg" style="width:70px"><label>Phút</label><select id="${pid('tvf-phut',prefix)}" oninput="TuviForm._update(${pf})">${phutOpts}</select></div>
       <div class="tvf-gio-am-wrap"><span class="tvf-gio-am" id="${pid('tvf-gio-am',prefix)}">Giờ âm: Tý</span><span class="tvf-gio-vn" id="${pid('tvf-gio-vn',prefix)}"></span></div>
     </div>
@@ -326,6 +352,17 @@ window.TuviForm = (() => {
     const container = document.getElementById(containerId);
     if (container) {
       container.innerHTML = html;
+      // 🔑 Form TỰ KHAI mình là form lá số, kèm prefix. `user-charts.js` dò theo
+      // dấu này để gắn thanh "Sổ lá số".
+      //
+      // Trước đây nó dò theo TÊN id (`/formhost/i`) — mà tên là thứ mỗi trang tự
+      // đặt, nên `app-xem-tuoi` (id `a-fields`/`b-fields`) dùng đúng khuôn
+      // TuviForm mà vẫn KHÔNG có sổ, và không có gì báo. Chú thích của chính bộ
+      // dò cũ đã lo đúng chuyện đó ("trang nào quên là trang đó âm thầm không có
+      // sổ") rồi lại dò theo tên — tức tái tạo đúng cái hố nó muốn tránh.
+      //
+      // Đặt SAU `innerHTML`: dấu chỉ xuất hiện khi các field đã tồn tại thật.
+      container.setAttribute('data-tvf-form', prefix);
       const btn = document.getElementById(pid('tvf-submit-btn', prefix));
       if (btn && onSubmit) btn.addEventListener('click', onSubmit);
       _updaters[prefix] = () => updateGioAmDisplay(prefix);
@@ -367,7 +404,13 @@ window.TuviForm = (() => {
       s('tvf-gio',  d.gioHour);
       s('tvf-phut', d.gioPhut ?? 0);
     } else if (d.gioIdx !== undefined) {
-      s('tvf-gio',  (d.gioIdx * 2 + 1) % 24);
+      // 🐞 Bản cũ dùng `gioIdx*2 + 1` → LỆCH ĐÚNG MỘT CHI, im lặng: địa chi k phủ
+      // khung giờ [2k−1, 2k+1) (Tý = 23–01, Sửu = 01–03), nên giờ đại diện là
+      // 2k, không phải 2k+1. Với k=0 nó điền 01:00 → hourMinToGioIdx trả 1 = Sửu.
+      // Nhánh này lâu nay KHÔNG có ai đi vào (mọi nơi gọi setData đều truyền
+      // gioHour) nên lỗi nằm im — `xem-tuoi.html` khi phải tự quy đổi cũng viết
+      // `gioA*2`, tức đúng công thức này.
+      s('tvf-gio',  (d.gioIdx * 2) % 24);
       s('tvf-phut', 0);
     }
     updateGioAmDisplay(prefix);
@@ -380,5 +423,6 @@ window.TuviForm = (() => {
     setData,
     _update:    (prefix = '') => { (_updaters[prefix] || _updaters[''] || (() => {}))(); },
     _toggleUtc: (prefix = '') => toggleUtc(prefix),
+    _toggleTip: (iconEl) => toggleTip(iconEl),
   };
 })();

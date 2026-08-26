@@ -1,6 +1,8 @@
 // app/tac-gia/[slug]/route.ts — Author profile page with JSON-LD Person schema (EEAT)
 export const revalidate = 86400;
 import { NextRequest, NextResponse } from 'next/server';
+import { PUBLISHED_ONLY } from '@/lib/content/publish-filter';
+import { orgNode } from '@/lib/seo/same-as';
 
 const SB_URL = process.env.SUPABASE_URL!;
 const SB_KEY = process.env.SUPABASE_SERVICE_KEY!;
@@ -38,7 +40,7 @@ const AUTHOR_SHORT_BIO: Record<string, string> = {
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function buildHTML(master: any, articles: any[], realArticleCount: number) {
+async function buildHTML(master: any, articles: any[], realArticleCount: number) {
   const masterId = master.id;
   const name     = master.display_name || '';
   const bio      = master.bio || '';
@@ -48,6 +50,10 @@ function buildHTML(master: any, articles: any[], realArticleCount: number) {
   const artCount = realArticleCount || articles.length;
   const authorBio = AUTHOR_SHORT_BIO[masterId] || '';
 
+  // Một lượt đọc DB thêm — chấp nhận được ở đây vì route này vốn đã đọc DB
+  // và chỉ có ~15 trang tác giả, KHÁC hẳn 438K trang /la-so/*.
+  const orgSchema = await orgNode();
+
   const schemas = JSON.stringify([
     {
       '@context': 'https://schema.org', '@type': 'Person',
@@ -55,8 +61,10 @@ function buildHTML(master: any, articles: any[], realArticleCount: number) {
       description: bio,
       url,
       knowsAbout: ['Tử Vi Đẩu Số', 'Khoa Học Huyền Bí', ...specialty],
-      sameAs: [],
-      worksFor: { '@type': 'Organization', name: 'Tử Vi Minh Bảo', url: BASE },
+      // `sameAs` CỐ Ý KHÔNG khai ở đây — xem lib/seo/same-as.ts: persona tác
+      // giả không sở hữu Facebook/YouTube của site, gán vào là khai sai thực
+      // thể. Mấy hồ sơ đó treo ở Organization dưới đây, đúng chỗ của chúng.
+      worksFor: orgSchema,
       jobTitle: 'Nhà Nghiên Cứu Tử Vi Đẩu Số',
       inLanguage: 'vi',
     },
@@ -217,8 +225,8 @@ export async function GET(
   try {
     const [masterRes, articlesRes, countRes] = await Promise.all([
       fetch(`${SB_URL}/rest/v1/master_profiles?id=eq.${encodeURIComponent(slug)}&select=*&limit=1`, { headers: sbHeaders }),
-      fetch(`${SB_URL}/rest/v1/master_articles?master_id=eq.${encodeURIComponent(slug)}&select=slug,title,excerpt,category,word_count,created_at&order=created_at.desc&limit=50`, { headers: sbHeaders }),
-      fetch(`${SB_URL}/rest/v1/master_articles?master_id=eq.${encodeURIComponent(slug)}&select=id`, { headers: { ...sbHeaders, 'Prefer': 'count=exact' } }),
+      fetch(`${SB_URL}/rest/v1/master_articles?master_id=eq.${encodeURIComponent(slug)}&select=slug,title,excerpt,category,word_count,created_at&${PUBLISHED_ONLY}&order=created_at.desc&limit=50`, { headers: sbHeaders }),
+      fetch(`${SB_URL}/rest/v1/master_articles?master_id=eq.${encodeURIComponent(slug)}&select=id&${PUBLISHED_ONLY}`, { headers: { ...sbHeaders, 'Prefer': 'count=exact' } }),
     ]);
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -232,7 +240,7 @@ export async function GET(
     const contentRange = countRes.headers.get('Content-Range') || '';
     const realArticleCount = parseInt(contentRange.split('/')[1] || '0', 10) || articles.length;
 
-    const html = buildHTML(masterRows[0], articles, realArticleCount);
+    const html = await buildHTML(masterRows[0], articles, realArticleCount);
     return new NextResponse(html, {
       status: 200,
       headers: {

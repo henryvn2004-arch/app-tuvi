@@ -41,6 +41,7 @@
 {
   "@context": "https://schema.org",
   "@type": "Organization",
+  "@id": "https://www.tuviminhbao.com/bao-chi#organization",
   "name": "Tử Vi Minh Bảo",
   "alternateName": "紫微明寶",
   "url": "https://www.tuviminhbao.com",
@@ -62,6 +63,7 @@
   "name": "Luận Giải Tử Vi Đẩu Số bằng AI",
   "provider": {
     "@type": "Organization",
+    "@id": "https://www.tuviminhbao.com/bao-chi#organization",
     "name": "Tử Vi Minh Bảo",
     "url": "https://www.tuviminhbao.com"
   },
@@ -413,6 +415,23 @@ select.form-input { cursor: pointer; }
 .pregen-divider { display:flex; align-items:center; gap:10px; margin:20px 0 12px; }
 .pregen-divider::before, .pregen-divider::after { content:''; flex:1; border-top:1px solid #383838; }
 .pregen-divider span { font-size:11px; color:#5588cc; font-weight:600; letter-spacing:0.8px; text-transform:uppercase; white-space:nowrap; }
+/* Gấp phần TÍNH TOÁN (deterministic) — mặc định ĐÓNG, xem chú thích tại
+   renderPreGenFree(). Khác app-luan-giai.html: ở ĐÂY preGenHtml luôn hiện
+   NGAY từ đầu cho MỌI phần (kể cả phần chưa trả tiền — trước cả lock box),
+   nên không cần điều kiện `!locked` nào, gấp thẳng luôn. Marker tam giác
+   mặc định của trình duyệt GIỮ NGUYÊN — đủ để đọc là "bấm để mở". */
+.lg-calc { margin-bottom: 2px; }
+.lg-calc summary { cursor: pointer; font-size: 12px; color: var(--text-lt); font-weight: 600; padding: 2px 0; }
+.lg-calc summary:hover { color: var(--gold); }
+.lg-calc[open] summary { margin-bottom: 8px; }
+/* Gợi ý tool khác — chỉ hiện cho cung có mối liên hệ thật xác nhận, xem
+   CUNG_TOOL_LINKS/cungRelatedHtml(). */
+.lg-related { margin-top: 16px; display: flex; flex-direction: column; gap: 6px; }
+.lg-related-h { font-size: 10.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--text-lt); font-weight: 700; margin-bottom: 2px; }
+.lg-related-link { display: block; padding: 9px 12px; border: 1px solid var(--border-lt); border-radius: 9px; text-decoration: none; color: inherit; background: var(--bg-soft); }
+.lg-related-link:hover { border-color: var(--gold); }
+.lg-related-link b { display: block; font-size: 12.5px; color: var(--navy); font-family: 'Noto Serif', Georgia, serif; font-weight: 600; }
+.lg-related-link span { display: block; font-size: 11.5px; color: var(--text-lt); margin-top: 2px; }
 .pregen-scores { }
 .score-bars { display:flex; flex-direction:column; gap:6px; margin-top:4px; }
 .score-bar-row { display:flex; align-items:center; gap:8px; }
@@ -956,8 +975,9 @@ select.form-input { cursor: pointer; }
 
 
 <script src="/tuvi-ansao-engine.js"></script>
-<script src="/tuvi-form.js?v=1"></script>
-<script src="/tuvi-paywall.js?v=18"></script>
+<script src="/tuvi-laso-format.js?v=2"></script>
+<script src="/tuvi-form.js?v=2"></script>
+<script src="/tuvi-paywall.js?v=21"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script>
   // Load cach cuc DB
@@ -999,12 +1019,37 @@ select.form-input { cursor: pointer; }
     if (el && !el.value) el.value = new Date().getFullYear();
   })();
 
+  // In / Lưu PDF phải MỞ HẾT khối "Xem cơ sở tính toán" (.lg-calc) — nó gấp
+  // lại mặc định trên màn hình, nhưng <details> đóng thì trình duyệt KHÔNG
+  // render nội dung con dù @media print có ép display:block (trình duyệt ẩn
+  // nó ở tầng khác, không ép được bằng CSS). Người đọc bản PDF phải thấy
+  // TRỌN cơ sở đó — đó là bằng chứng công cụ không bịa số. Tự mở bằng thuộc
+  // tính `open` ngay trước khi in, trả lại đúng trạng thái cũ sau khi hộp
+  // thoại in đóng — trang không có shell.js nên phải tự làm riêng ở đây.
+  (function() {
+    let _reopened = null;
+    window.addEventListener('beforeprint', function() {
+      _reopened = [];
+      document.querySelectorAll('details:not([open])').forEach(function(d) {
+        d.open = true;
+        _reopened.push(d);
+      });
+    });
+    window.addEventListener('afterprint', function() {
+      if (!_reopened) return;
+      _reopened.forEach(function(d) { d.open = false; });
+      _reopened = null;
+    });
+  })();
+
   let _laSoText = null;
   let _luanGiaiStore = {};  // accumulate luận giải per phan
   let _engineResult_global = null;
   let _hoTen = null, _ngay = null, _thang = null, _nam = null;
   let _gioitinh = null, _namXem = null, _astrolabe = null;
   let _currentPhan = 0;
+  // Bộ đo nhịp cho ETA tự hiệu chỉnh (xem AiLoadingSteps.pacer).
+  const _lgPace = (window.AiLoadingSteps && AiLoadingSteps.pacer) ? AiLoadingSteps.pacer() : null;
   let _pendingSlug = null;  // slug tạm trước khi save
 
   // Chuẩn hóa slug — strip dấu tiếng Việt, chỉ giữ ASCII (dùng nhất quán mọi chỗ)
@@ -1090,6 +1135,44 @@ select.form-input { cursor: pointer; }
     ['Tiểu vận năm xem là phân tích gần nhất với thực tế hiện tại — sao tiểu vận kết hợp với đại vận đang chạy tạo ra bức tranh cụ thể về những gì đang và sẽ diễn ra trong năm này...', 'Đây là phần quan trọng nhất cho những ai muốn hiểu năm hiện tại: lá số này có một cấu hình tiểu vận cho thấy những cơ hội và thách thức cụ thể — cùng cách hành động phù hợp nhất để tận dụng tốt giai đoạn này...'],
   ];
 
+  // File này không nạp laso-chart.js nên không có esc() sẵn — định nghĩa local,
+  // CÙNG luật escape với bản dùng chung site (& < >).
+  function esc(s) { return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+
+  // ── Liên kết sang tool khác — CHỈ áp cho cung có MỘT MỐI LIÊN HỆ THẬT, xác
+  // nhận qua chính mô tả/tiêu đề của tool đó (không đoán bừa bằng từ khoá).
+  // Cùng bảng với app-luan-giai.html — xem chú thích đầy đủ ở đó. CỐ Ý không
+  // phủ đủ 12 cung (7 cung còn lại chưa có tool nào thật sự đọc đúng chúng),
+  // và Cung Tật Ách TUYỆT ĐỐI không gắn gợi ý nào (luật cấm ngụ ý chẩn đoán/
+  // tiên lượng bệnh tật).
+  const CUNG_TOOL_LINKS = {
+    'Cung Mệnh': [
+      { path:'/app/bat-trach', label:'Hướng Bát Trạch', note:'Soi thêm 8 hướng tốt xấu từ chính cung Mệnh này' }
+    ],
+    'Cung Điền Trạch': [
+      { path:'/app/phong-thuy', label:'Phong Thủy Nội Thất', note:'Chụp ảnh phòng để AI chấm điểm bố trí' }
+    ],
+    'Cung Quan Lộc': [
+      { path:'/app/cong-so', label:'Tử Vi Công Sở', note:'Đọc lại đúng lá số này bằng ngôn ngữ công việc' }
+    ],
+    'Cung Tử Tức': [
+      { path:'/app/day-con', label:'Dạy Con Theo Lá Số', note:'Con hợp cách dạy nào, nên thúc hay nên để yên' },
+      { path:'/app/huong-nghiep-tre', label:'Hướng Nghiệp Sớm Cho Con', note:'Nên cho con làm quen với thứ gì từ bây giờ' }
+    ],
+    'Cung Phu Thê': [
+      { path:'/app/xem-tuoi', label:'Xem Tuổi Vợ Chồng', note:'Đối chiếu với lá số người kia' },
+      { path:'/app/chan-dung-vo-chong', label:'Chân Dung Vợ Chồng', note:'Vẽ chân dung người phối ngẫu từ chính cung này' },
+      { path:'/app/duyen-no-tien-kiep', label:'Duyên Nợ Tiền Kiếp', note:'Kiếp trước hai người là gì của nhau' }
+    ]
+  };
+  function cungRelatedHtml(label) {
+    const links = CUNG_TOOL_LINKS[label];
+    if (!links || !links.length) return '';
+    return '<div class="lg-related"><div class="lg-related-h">Đọc sâu hơn</div>'
+      + links.map(l => '<a class="lg-related-link" href="' + l.path + '"><b>' + esc(l.label) + '</b><span>' + esc(l.note) + '</span></a>').join('')
+      + '</div>';
+  }
+
   // QUERIES động — dùng dữ liệu lá số thực để RAG tìm tài liệu relevant hơn
   function _getStarNames(cungName) {
     if (!_astrolabe) return '';
@@ -1155,188 +1238,13 @@ select.form-input { cursor: pointer; }
     24: () => `tiểu hạn lưu niên ${_astrolabe?.chiNamXem||''} ${_astrolabe?.palaces[_astrolabe?.tieuHanIdx]?.cungName||''} vận hiện tại`,
   };
 
-  function formatLaSoV2(ls, conv) {
-    const lines = [];
-    lines.push(`=== LÁ SỐ TỬ VI ===`);
-    lines.push(`Năm sinh: ${ls.canChiNam} | Bản mệnh: ${ls.napAm} | Cục: ${ls.cuc}`);
-    lines.push(`Cung Mệnh: ${ls.menhDC} | Cung Thân: ${ls.thanDC}`);
-    lines.push(`Tuổi xem: ${ls.tuoiXem} | Năm xem: ${ls.chiNamXem}`);
-    const menhP = ls.palaces.find(p => p.isMenh);
-    if (menhP?.thaiTueNhom) {
-      const ttn = menhP.thaiTueNhom;
-      lines.push(`Vòng Thái Tuế tại Mệnh: ${ttn.sao} (${ttn.ten})`);
-      lines.push(`  → ${ttn.yNghia}`);
-    }
-    const thanP = ls.palaces.find(p => p.diaChi === ls.thanDC);
-    if (thanP?.thaiTueNhom) {
-      const ttn = thanP.thaiTueNhom;
-      lines.push(`Vòng Thái Tuế tại Thân (cung ${thanP.cungName}): ${ttn.sao} (${ttn.ten})`);
-      lines.push(`  → ${ttn.yNghia}`);
-    }
-    lines.push(`Tiểu hạn: ${ls.palaces[ls.tieuHanIdx]?.diaChi} (${ls.palaces[ls.tieuHanIdx]?.cungName}) | Lưu đại hạn: ${ls.palaces[ls.luuNienDaiHanIdx]?.diaChi} (${ls.palaces[ls.luuNienDaiHanIdx]?.cungName})`);
-    lines.push('');
-
-    // Điểm đánh giá JS (anchor cho AI — chống luận chung chung, neo phán quyết vào con số)
-    if (ls.cungScores) {
-      const SC_DIMS = [['thienVan','Thiên Vận'],['canCo','Căn Cơ'],['mayMan','May Mắn'],['phuTro','Phù Trợ'],['binhYen','Bình Yên'],['benVung','Bền Vững']];
-      const CUNG_ORDER = ['Mệnh','Phụ Mẫu','Phúc Đức','Điền Trạch','Quan Lộc','Nô Bộc','Thiên Di','Tật Ách','Tài Bạch','Tử Tức','Phu Thê','Huynh Đệ'];
-      const totals = [];
-      const scLines = [];
-      for (const cn of CUNG_ORDER) {
-        const sc = ls.cungScores[cn];
-        if (!sc) continue;
-        const dims = SC_DIMS.map(([k]) => sc[k]).filter(v => typeof v === 'number');
-        const tot = dims.length ? Math.round(dims.reduce((a,b)=>a+b,0) / dims.length * 10) / 10 : null;
-        if (tot != null) totals.push(tot);
-        const dimStr = SC_DIMS.map(([k,lbl]) => `${lbl} ${sc[k]}`).join(', ');
-        scLines.push(`[${cn}] Tổng ${tot}/10 — ${dimStr}`);
-      }
-      const overall = totals.length ? Math.round(totals.reduce((a,b)=>a+b,0) / totals.length * 10) / 10 : null;
-      lines.push('=== ĐIỂM ĐÁNH GIÁ (thang 0–10, hệ thống tính sẵn — BẮT BUỘC bám sát khi phán) ===');
-      if (overall != null) lines.push(`Tổng quan toàn lá số: ${overall}/10`);
-      lines.push('Quy ước: ≥7 = mạnh/tốt rõ · 5–6.9 = trung bình · <5 = yếu, phải nói thẳng điểm yếu.');
-      scLines.forEach(l => lines.push(l));
-      lines.push('');
-    }
-
-    // ── Helpers for pattern ranking + synthesis ──────────────────────────────
-    const _CT_SET = new Set(['Tử Vi','Thiên Cơ','Thái Dương','Vũ Khúc','Thiên Đồng','Liêm Trinh',
-      'Thiên Phủ','Thái Âm','Tham Lang','Cự Môn','Thiên Tướng','Thiên Lương','Thất Sát','Phá Quân']);
-    const _GOOD_KW = ['phú quý','giàu','tài lộc','quý nhân','sang','thành đạt','hiển','lộc','phúc',
-      'thọ','an khang','thịnh','vinh','sáng sủa','may mắn','thuận','hanh thông','tốt','được'];
-    const _BAD_KW  = ['vất vả','khổ','gian nan','khó khăn','hung','tai nạn','tai họa','tai ương',
-      'nguy','nghèo','túng','hao tài','tán','mất của','bệnh','tật','ốm','yếu','cô đơn',
-      'lẻ loi','yểu','chết','suy','bại','hao','tổn','thiệt','dâm','ngang trái'];
-    const _CC_W = { quy_cuc:3, phu_cuc:2, than_cu:1, tap_cuc:1, trung_cuc:0, hung_cuc:-3 };
-
-    function _hasChinhTinh(text) {
-      for (const s of _CT_SET) if (text.includes(s)) return true;
-      return false;
-    }
-    function _sentimentW(text) {
-      const t = (text||'').toLowerCase();
-      let w = 0;
-      _GOOD_KW.forEach(k => { if (t.includes(k)) w += 0.4; });
-      _BAD_KW.forEach(k  => { if (t.includes(k)) w -= 0.4; });
-      return Math.max(-2, Math.min(2, w));
-    }
-    function _sortYn(items) {
-      return [...items].sort((a, b) => (_hasChinhTinh(a)?0:1) - (_hasChinhTinh(b)?0:1));
-    }
-    function _xuHuong(ccItems, ynItems) {
-      let w = 0;
-      (ccItems||[]).forEach(c => { w += _CC_W[c.loai] || 0; });
-      (ynItems||[]).forEach(y => { w += _sentimentW(y) * 0.5; });
-      w = Math.round(w * 10) / 10;
-      const label = w >= 4 ? 'Tốt rõ' : w >= 2 ? 'Khá' : w >= 0 ? 'Trung bình' : w >= -2 ? 'Yếu' : 'Xấu rõ';
-      return `${label} (w:${w>0?'+':''}${w})`;
-    }
-
-    // 12 cung + tam phương tứ chính
-    lines.push('=== 12 CUNG ===');
-    for (const p of ls.palaces) {
-      const van = p.decadal ? `ĐV:${p.decadal.range[0]}-${p.decadal.range[1]}` : '';
-      const chinh = p.majorStars.map(s => s.ten + (s.brightness?`(${s.brightness})`:'') + (s.hoa?`[${s.hoa}]`:'')).join(' ');
-      const phu = p.stars.filter(s=>s.nhom!=='chinh').map(s => s.ten + (s.hoa?`[${s.hoa}]`:'')).join(' ');
-      // Cách cục + patterns cho cung này
-      const _ccThis = ls.cachCuc ? ls.cachCuc.filter(r => r.cung === p.cungName) : [];
-      const _ynRaw  = (ls.cachCucTungCung && ls.cachCucTungCung[p.cungName]) || [];
-      const _ynSorted = _sortYn(_ynRaw);
-      const _xh = _xuHuong(_ccThis, _ynRaw);
-      const _scRow = ls.cungScores?.[p.cungName];
-      const _scDims = _scRow ? ['thienVan','canCo','mayMan','phuTro','binhYen','benVung'].map(k=>_scRow[k]).filter(v=>typeof v==='number') : [];
-      const _scTot  = _scDims.length ? Math.round(_scDims.reduce((a,b)=>a+b,0)/_scDims.length*10)/10 : null;
-      lines.push(`[${p.cungName}] ${p.diaChi}${p.isThan?' THÂN':''}${p.isMenh?' MỆNH':''} ${van}${_scTot!=null?` | Điểm:${_scTot}`:''} | Luận sao: ${_xh}`);
-      // Priority 1: Cách cục đặc biệt (hiếm, sức ảnh hưởng mạnh nhất)
-      if (ls.cachCuc) {
-        const cc = ls.cachCuc.filter(r => r.cung === p.cungName || r.cung === '' || r.cung === 'Thân');
-        cc.forEach(r => lines.push(`  [CÁCH CỤC · ${String(r.loai||'').toUpperCase()}${r.doManh?` ·★${r.doManh}`:''}] ${r.ten}: ${r.moTa}${r.chiTiet?` — ${r.chiTiet}`:''}`));
-        // Priority 2+3: patterns sorted (chính tinh first, then phụ tinh)
-        _ynSorted.forEach(y => {
-          const tag = _hasChinhTinh(y) ? '[Ý NGHĨA · chính tinh]' : '[Ý NGHĨA]';
-          lines.push(`  ${tag} ${y}`);
-        });
-      }
-      if (p.majorStars.length === 0) {
-        // Vô chính diệu — mượn chính tinh cung xung chiếu để luận giải
-        const xung = p.xungChieuCung;
-        const muon = xung ? xung.majorStars.map(s => s.ten + (s.hoa?`[${s.hoa}]`:'')).join(' ') : '';
-        lines.push(`  Chính tinh: (vô chính diệu — mượn từ ${xung?.cungName||'?'}(${xung?.diaChi||'?'}): ${muon||'trống'})`);
-      } else {
-        lines.push(`  Chính tinh: ${chinh}`);
-      }
-      if (phu) lines.push(`  Phụ tinh: ${phu}`);
-      // Tam phương tứ chính — Tuần/Triệt chỉ ảnh hưởng cung đó, không ảnh hưởng sang cung khác
-      if (p.tamHopCungs && p.tamHopCungs.length) {
-        const hasTuanTriet = c => c.stars?.some(s => s.nhom === 'tuan_triet');
-        const tamHopStr = p.tamHopCungs.map(c => {
-          if (hasTuanTriet(c)) return `${c.cungName}(${c.diaChi}):(bị Tuần/Triệt)`;
-          const cs = c.majorStars.map(s=>s.ten+(s.hoa?`[${s.hoa}]`:'')).join(' ');
-          return `${c.cungName}(${c.diaChi}):${cs||'trống'}`;
-        }).join(' | ');
-        const xung = p.xungChieuCung;
-        const xungCs = xung
-          ? hasTuanTriet(xung)
-            ? '(bị Tuần/Triệt)'
-            : xung.majorStars.map(s=>s.ten+(s.hoa?`[${s.hoa}]`:'')).join(' ') || 'trống'
-          : 'trống';
-        lines.push(`  Tam hợp: ${tamHopStr}`);
-        lines.push(`  Xung chiếu: ${xung?.cungName}(${xung?.diaChi}):${xungCs}`);
-      }
-    }
-
-    // 9 đại vận với scoring JS thực tế
-    lines.push('');
-    lines.push('=== 9 ĐẠI VẬN ===');
-    const BAD_T = new Set(['sát tinh','hung tinh','bại tinh']);
-    const dvs = ls.daiVans.slice(0, 9);
-    dvs.forEach((dv, i) => {
-      const p = ls.palaces[dv.cungIdx];
-      const isCur = ls.daiVanHienTai?.cungIdx === dv.cungIdx;
-      const chinh = p.majorStars.map(s => s.ten + (s.brightness?`(${s.brightness})`:'') + (s.hoa?`[${s.hoa}]`:'')).join(' ');
-      const tot = p.stars.filter(s=>s.nhom!=='chinh'&&!BAD_T.has((STAR_DATA[s.ten]||{}).type)).map(s=>s.ten+(s.hoa?`[${s.hoa}]`:'')).join(' ');
-      const xau = p.stars.filter(s=>s.nhom!=='chinh'&&BAD_T.has((STAR_DATA[s.ten]||{}).type)).map(s=>s.ten).join(' ');
-      const sc = dv.scoring;
-      const scStr = sc ? `TT=${sc.thienThoi?.score??sc.thienThoi} ĐL=${sc.diaLoi?.score??sc.diaLoi} NH=${sc.nhanHoa?.score??sc.nhanHoa} Tổng=${sc.tong} ${sc.flag}` : '';
-      lines.push(`ĐV${i+1}: ${dv.diaChi} (${dv.tuoiStart}–${dv.tuoiEnd}t) cung=${p.cungName}${isCur?' ← ĐANG XEM':''}`);
-      if (scStr) lines.push(`  Scoring: ${scStr}`);
-      lines.push(`  Chính tinh: ${chinh||'(vô chính diệu)'}`);
-      if (tot) lines.push(`  Sao tốt: ${tot}`);
-      if (xau) lines.push(`  Sao xấu: ${xau}`);
-      if (dv.rules && dv.rules.length > 0) {
-        const rTot  = dv.rules.filter(r=>r.type==='tot').map(r=>r.text);
-        const rXau  = dv.rules.filter(r=>r.type==='xau').map(r=>r.text);
-        const rCB   = dv.rules.filter(r=>r.type==='canh_bao').map(r=>r.text);
-        const rTrung= dv.rules.filter(r=>r.type==='trung').map(r=>r.text);
-        if (rTot.length)  lines.push(`  [LUẬN ĐOÁN - TỐT]: ${rTot.join(' | ')}`);
-        if (rTrung.length)lines.push(`  [LUẬN ĐOÁN - TRUNG]: ${rTrung.join(' | ')}`);
-        if (rXau.length)  lines.push(`  [LUẬN ĐOÁN - XẤU]: ${rXau.join(' | ')}`);
-        if (rCB.length)   lines.push(`  [CẢNH BÁO]: ${rCB.join(' | ')}`);
-      }
-      // VH patterns (yNghia): chính tinh first, limit 6 per DV để tránh noise
-      if (dv.yNghia && dv.yNghia.length > 0) {
-        const _ynDV = _sortYn(dv.yNghia).slice(0, 6);
-        lines.push(`  [VẬN HẠN LUẬN]: ${_ynDV.join(' | ')}`);
-      }
-      // Tổ hợp sao (cách cục 965, đồng cung trong cung đại vận) — đồng nhất với chat
-      const _dvCombos = _vhCombosForCung(p);
-      if (_dvCombos.length) lines.push(`  [TỔ HỢP SAO (cách cục)]: ${_dvCombos.join(' | ')}`);
-    });
-
-    // Cách cục phân tích
-    if (ls.cachCuc && ls.cachCuc.length > 0) {
-      lines.push('');
-      lines.push('=== CÁCH CỤC & NHẬN ĐỊNH (toàn bộ lá số) ===');
-      ls.cachCuc.forEach(r => {
-        const cungStr = r.cung ? ` [Cung ${r.cung}]` : ' [Tổng quát]';
-        lines.push(`[${r.loai.toUpperCase()}]${cungStr} ${r.ten}`);
-        lines.push(`  ${r.moTa}`);
-        if (r.chiTiet) lines.push(`  Chi tiết: ${r.chiTiet}`);
-      });
-    }
-
-    return lines.join('\n');
-  }
+  // formatLaSoV2 KHÔNG còn bản riêng ở đây — dùng chung /tuvi-laso-format.js.
+  // Trước đây trang này giữ một bản inline, bản shared trôi khác đi (đổi mốc
+  // '=== 9 ĐẠI VẬN ===') và bộ cắt phía server câm trên /app/luan-giai.
+  // Hai bản = hai định dạng = một bên hỏng im lặng. Xem CLAUDE.md.
+  // `_vhCombosForCung` là của TRANG (nạp cach_cuc_all.json async) → truyền vào
+  // qua hook `combosForCung` thay vì để module đọc global.
+  const _FMT_OPTS = { combosForCung: _vhCombosForCung };
 
   async function luanGiai() {
     if (typeof Auth !== 'undefined' && !Auth.isLoggedIn()) {
@@ -1396,12 +1304,13 @@ select.form-input { cursor: pointer; }
       ls.thangSinhAL = conv.amLich.month;
       ls.gioSinhIdx  = conv.gioIdx;
 
-      _laSoText = formatLaSoV2(ls, conv);
+      _laSoText = formatLaSoV2(ls, conv, _FMT_OPTS);
       ls._laSoText = _laSoText;  // để ô chat (chatbot.js) gửi full text → luận sâu = chat đứng riêng
       _hoTen = hoten; _ngay = ngay; _thang = thang; _nam = nam;
       _gioitinh = gioitinh; _namXem = namXem; _astrolabe = ls;
       window._lasoResult = ls;  // feed chatbot
       _currentPhan = 0;
+      _lgPace && _lgPace.reset();
 
       document.getElementById('result-body').innerHTML = '';
       document.getElementById('progress-fill').style.width = '60%';
@@ -1535,6 +1444,15 @@ select.form-input { cursor: pointer; }
       // Pre-gen data (cách cục, scoring...)
       const preGenHtml = buildPreGenHtml(phan);
       const divider = preGenHtml ? `<div class="pregen-divider"><span>Luận giải</span></div>` : '';
+      // Khối TÍNH TOÁN (deterministic) GẤP LẠI mặc định — nó luôn dựng xong NGAY
+      // ở đây (renderPreGenFree chạy cho MỌI phần, kể cả phần chưa trả tiền, lúc
+      // lập lá số), trong khi phần LUẬN THẬT (AI, claude-content) chỉ tới sau khi
+      // stream/thanh toán xong. Không có khái niệm "locked" ở đây như bên
+      // app-luan-giai.html — preGenHtml luôn hiện với MỌI người, nên gấp thẳng,
+      // không cần điều kiện gì thêm.
+      const preGenHtmlWrapped = preGenHtml
+        ? `<details class="lg-calc"><summary>Xem cơ sở tính toán</summary>${preGenHtml}</details>`
+        : preGenHtml;
 
       // Lock box — paywall box đẹp cho mỗi phần
       const lockBox = `
@@ -1606,7 +1524,7 @@ select.form-input { cursor: pointer; }
         <div class="phan-claude-content" id="claude-content-${phan}" style="display:none"></div>`;
 
 
-      section.innerHTML = html + preGenHtml + chartHtml + divider + lockBox;
+      section.innerHTML = html + preGenHtmlWrapped + chartHtml + divider + lockBox;
       // preGenHtml mang span [data-icon-emoji]; mountIcons() của nav.js chỉ tự
       // chạy lúc nạp + khi DOM đóng, còn khối này chèn SAU đó → không quét tới,
       // span rơi về nội dung dự phòng và in EMOJI THÔ ra màn hình.
@@ -1766,7 +1684,7 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
       // Show full P1 với streaming animation, ẩn lock box
       claudeBox.style.display = '';
       lockBox.style.display = 'none';
-      streamIntoEl(claudeBox, renderMarkdown(data.luanGiai) + `<div class="ux-share-bar"><button onclick="uxCopySection(this, 1)" class="ux-share-btn">📋 Sao chép phần này</button></div>`, () => {});
+      streamIntoEl(claudeBox, renderMarkdown(data.luanGiai) + `<div class="ux-share-bar"><button onclick="uxCopySection(this, 1)" class="ux-share-btn">📋 Sao chép phần này</button></div>` + cungRelatedHtml(PHAN_LABELS[1]), () => {});
       updateMucLuc(1, 'done');
 
     } catch(e) { /* silent fail — lock box vẫn hiện như cũ */ }
@@ -1896,6 +1814,7 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
 
     // Load Claude lần lượt từng phần
     _currentPhan = 0;
+    _lgPace && _lgPace.reset();
     await loadNextPhanUnlocked();
   }
 
@@ -1973,7 +1892,7 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
       if (claudeBox) {
         claudeBox.style.display = '';
         const shareBar = `<div class="ux-share-bar"><button onclick="uxCopySection(this, ${_currentPhan})" class="ux-share-btn">📋 Sao chép phần này</button></div>`;
-        streamIntoEl(claudeBox, renderMarkdown(data.luanGiai) + shareBar, () => {});
+        streamIntoEl(claudeBox, renderMarkdown(data.luanGiai) + shareBar + cungRelatedHtml(PHAN_LABELS[_currentPhan]), () => {});
       }
       if (lockBox) lockBox.style.display = 'none';
 
@@ -2052,7 +1971,13 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
     phanLoading.classList.add('active');
     const _hints=['Đang đọc vị trí các sao...','Đang xét tam phương tứ chính...','Đang phân tích cách cục...','Đang luận đoán ý nghĩa...'];
     phanLoadingText.textContent = _hints[_currentPhan % _hints.length] + ' — ' + PHAN_LABELS[_currentPhan];
-    document.getElementById('phan-progress').textContent = `Phần ${_currentPhan} / ${TONG_PHAN}`;
+    // ETA tự hiệu chỉnh: đo nhịp NGAY TRONG phiên này. Chưa đủ mẫu thì
+    // remainText trả '' — im lặng, không hứa. (Phần 1 nạp nhiều tài liệu RAG
+    // hơn nên chậm bất thường, pacer đã yêu cầu tối thiểu 2 mẫu.)
+    const _lgEta = _lgPace ? _lgPace.remainText(TONG_PHAN - _currentPhan + 1) : '';
+    document.getElementById('phan-progress').textContent =
+      `Phần ${_currentPhan} / ${TONG_PHAN}` + (_lgEta ? ` · ${_lgEta}` : '');
+    _lgPace && _lgPace.begin();
     loader.classList.add('active');
     loader.classList.add('active');
     updateMucLuc(_currentPhan, 'loading');
@@ -2911,6 +2836,7 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
         document.getElementById('result-sidebar').classList.add('visible');
       }
 
+      _lgPace && _lgPace.end();   // chỉ ghi nhịp ở nhánh THÀNH CÔNG
       phanLoading.classList.remove('active');
       document.getElementById('result-actions').style.display = 'flex';
       if (_currentPhan < TONG_PHAN) {
@@ -3664,7 +3590,7 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
       ls.thangSinhAL = conv.amLich.month;
       ls.gioSinhIdx  = conv.gioIdx;
 
-      _laSoText = formatLaSoV2(ls, conv);
+      _laSoText = formatLaSoV2(ls, conv, _FMT_OPTS);
       ls._laSoText = _laSoText;  // để ô chat (chatbot.js) gửi full text → luận sâu = chat đứng riêng
       _hoTen = hoten; _ngay = ngay; _thang = thang; _nam = nam;
       _gioitinh = gioitinh; _namXem = namXem; _astrolabe = ls;
@@ -4062,9 +3988,10 @@ TuviPaywall.init({
       _gioitinh = gioitinh; _namXem = namXem || new Date().getFullYear();
       _astrolabe = ls;
       window._lasoResult = ls; _pendingSlug = slug;
-      _laSoText = formatLaSoV2(ls, conv);
+      _laSoText = formatLaSoV2(ls, conv, _FMT_OPTS);
       ls._laSoText = _laSoText;  // để ô chat (chatbot.js) gửi full text → luận sâu = chat đứng riêng
       _currentPhan = 0;
+      _lgPace && _lgPace.reset();
 
       // Clear result + render
       document.getElementById('result-body').innerHTML = '';
@@ -4188,7 +4115,7 @@ TuviPaywall.init({
 </div>
 
 <script src="/nav.js?v=23"></script>
-<script src="/tools-shared/ai-loading-steps.js?v=4"></script>
+<script src="/tools-shared/ai-loading-steps.js?v=9"></script>
 <script>
 /* Chờ luận giải 24 phần là quãng chờ MỘT CỤC ≥10 giây ⇒ orb, thay spinner 28px
    (luật ở đầu tools-shared/ai-loading-steps.js). Giữ nguyên cơ chế bật/tắt

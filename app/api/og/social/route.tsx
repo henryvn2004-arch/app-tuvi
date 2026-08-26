@@ -20,6 +20,7 @@
 // ============================================================
 import { ImageResponse } from 'next/og';
 import { NextRequest } from 'next/server';
+import { loadOgFonts, ogFallbackRedirect } from '@/lib/og/font';
 
 export const runtime = 'edge';
 
@@ -32,30 +33,6 @@ const SIZES = {
   story: { w: 1080, h: 1920 },
 } as const;
 type Variant = keyof typeof SIZES;
-
-// Cache font qua các lượt gọi edge. Hai độ đậm: câu trích cần 700, phần phụ 400.
-const fontCache: Record<number, ArrayBuffer | null> = {};
-
-async function loadFont(weight: 400 | 700): Promise<ArrayBuffer | null> {
-  if (fontCache[weight] !== undefined) return fontCache[weight];
-  try {
-    // Satori chỉ đọc được TTF — khai User-Agent cũ để Google Fonts trả TTF thay
-    // vì WOFF2 (cùng mẹo đã dùng ở /api/og).
-    const css = await fetch(`https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@${weight}&display=swap`, {
-      headers: { 'User-Agent': 'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1)' },
-    }).then((r) => r.text());
-    const m = css.match(/url\((https:\/\/fonts\.gstatic\.com\/[^)]+\.ttf)\)/);
-    if (!m) {
-      fontCache[weight] = null;
-      return null;
-    }
-    fontCache[weight] = await fetch(m[1]).then((r) => r.arrayBuffer());
-    return fontCache[weight];
-  } catch {
-    fontCache[weight] = null;
-    return null;
-  }
-}
 
 /** Câu trích dài thì chữ nhỏ lại — giữ cho khối chữ luôn vừa khung, không tràn. */
 function quoteSize(len: number, variant: Variant): number {
@@ -80,12 +57,10 @@ export async function GET(request: NextRequest) {
   const quote = clamp(p.get('q') || '', 190);
   const title = clamp(p.get('t') || '', 90);
 
-  const [f400, f700] = await Promise.all([loadFont(400), loadFont(700)]);
-  const fonts = [
-    ...(f700 ? [{ name: 'BeVN', data: f700, weight: 700 as const, style: 'normal' as const }] : []),
-    ...(f400 ? [{ name: 'BeVN', data: f400, weight: 400 as const, style: 'normal' as const }] : []),
-  ];
-  const fontFamily = fonts.length ? 'BeVN, sans-serif' : 'sans-serif';
+  const fonts = await loadOgFonts([700, 400], request);
+  // Không font nào ⇒ Satori ném "No fonts are loaded" (500). Ảnh tĩnh vẫn hơn.
+  if (!fonts.length) return ogFallbackRedirect(request);
+  const fontFamily = 'BeVN, sans-serif';
 
   // Story cao hơn feed 570px — dồn phần dư vào khoảng đệm trên/dưới để khối
   // chữ vẫn nằm giữa tầm mắt, thay vì kéo giãn chữ ra cho đầy.

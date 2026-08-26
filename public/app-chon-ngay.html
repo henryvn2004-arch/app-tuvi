@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"></noscript>
-<link rel="stylesheet" href="/shell.css?v=18">
+<link rel="stylesheet" href="/shell.css?v=29">
 <style>
 .form-card{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);max-width:600px}
 .form-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:3px}
@@ -65,7 +65,8 @@
       <div id="shellRecent"></div>
       <div class="form-card" id="birthPanel">
         <h2>Thông tin chọn ngày</h2>
-        <p class="sub">Lấy can chi tuổi người chủ sự và tháng/năm dự định làm nền, rồi hỏi trợ lý luận ngày đẹp, giờ hoàng đạo và ngày cần tránh.</p>
+        <p class="sub">Gợi ý ngày tốt cho cưới hỏi, làm nhà, khai trương của bạn. Bạn sợ chọn nhầm ngày rồi bị nói động thổ sai giờ. Dùng khi cần chốt một ngày quan trọng sắp tới.</p>
+        <p class="price-note" data-tvp-price-label="chon-ngay-tot">…</p>
         <div class="frow">
           <div class="fg" style="flex:2;min-width:160px"><label>Việc cần chọn ngày</label>
             <select id="inpSuKien">
@@ -107,12 +108,12 @@
 </div>
 
 <script>window.SHELL_ACTIVE='chon-ngay';window.SHELL_HISTORY=true;
-window.SHELL_INTRO={key:'chon-ngay',title:'Chọn ngày giờ tốt',desc:'Lấy can chi tuổi người chủ sự + tháng/năm dự định, rồi hỏi <b>trợ lý AI</b> ngày đẹp, giờ hoàng đạo và ngày cần tránh cho việc trọng đại.'};</script>
+window.SHELL_INTRO={key:'chon-ngay',title:'Chọn ngày giờ tốt',desc:'Gợi ý ngày tốt cho cưới hỏi, làm nhà, khai trương của bạn. Bạn sợ chọn nhầm ngày rồi bị nói động thổ sai giờ. Dùng khi cần chốt một ngày quan trọng sắp tới.'};</script>
 <script src="/can-chi.js?v=1"></script>
 <script src="/auth.js?v=2"></script>
-<script src="/tuvi-paywall.js?v=18"></script>
+<script src="/tuvi-paywall.js?v=21"></script>
   <script src="/nav.js?v=23" data-icons-only></script>
-<script src="/shell.js?v=66"></script>
+<script src="/shell.js?v=82"></script>
 <script>
 function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 (function(){ var t=document.getElementById('inpThang'); for(var i=1;i<=12;i++)t.innerHTML+='<option value="'+i+'">Tháng '+i+'</option>'; var now=new Date(); t.value=String(now.getMonth()+1); document.getElementById('inpNam').value=now.getFullYear(); })();

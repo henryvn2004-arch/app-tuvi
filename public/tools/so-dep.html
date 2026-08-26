@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<link rel="preload" href="/nav.js?v=23" as="script">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Xem Số Đẹp — SĐT, Số Nhà, Biển Số Theo Bát Trạch &amp; Kinh Dịch | Tử Vi Minh Bảo</title>
+<meta property="og:title" content="Xem Số Đẹp — SĐT, Số Nhà, Biển Số Theo Bát Trạch &amp; Kinh Dịch | Tử Vi Minh Bảo"/>
+<meta property="og:description" content="Chấm điểm số điện thoại, số nhà, biển số theo 5 trường phái tách bạch: Bát Tinh Bát Trạch, Quẻ Dịch, Ngũ Hành, Âm Dương và dân gian — miễn phí, không gộp điểm bịa."/>
+<meta property="og:url" content="https://www.tuviminhbao.com/tools/so-dep.html"/>
+<meta property="og:image" content="https://www.tuviminhbao.com/og-image.webp"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:title" content="Xem Số Đẹp — SĐT, Số Nhà, Biển Số Theo Bát Trạch &amp; Kinh Dịch | Tử Vi Minh Bảo"/>
+<meta name="twitter:description" content="Chấm điểm số điện thoại, số nhà, biển số theo 5 trường phái tách bạch — miễn phí, không gộp điểm bịa."/>
+<meta name="twitter:image" content="https://www.tuviminhbao.com/og-image.webp"/>
+<meta name="keywords" content="xem số đẹp, sim phong thủy, số điện thoại hợp tuổi, số nhà hợp mệnh, biển số đẹp, bát tinh bát trạch">
+<meta name="description" content="Chấm điểm số điện thoại, số nhà, biển số theo 5 trường phái tách bạch: Bát Tinh Bát Trạch, Quẻ Dịch, Ngũ Hành, Âm Dương và dân gian — miễn phí, không gộp điểm bịa.">
+<link rel="canonical" href="https://www.tuviminhbao.com/tools/so-dep.html">
+<link rel="icon" type="image/webp" href="/seal.webp">
+<link rel="stylesheet" href="/tools/tools.css">
+<style>
+.sd-head { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 24px; padding-bottom: 20px; border-bottom: 1px solid var(--border); }
+.sd-so { font-size: 32px; letter-spacing: 2px; color: var(--navy); font-weight: 400; }
+.sd-dongthuan { font-size: 13px; font-weight: 600; padding: 6px 14px; border-radius: 20px; }
+.sd-tot { background: #EAF7EE; color: #1E6B3C; }
+.sd-xau { background: #FDEEEC; color: #C0392B; }
+.sd-trung { background: #F3F3F3; color: #666; }
+.sd-section { margin-bottom: 32px; }
+.sd-section-head { font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--navy); margin-bottom: 12px; display: flex; align-items: center; gap: 10px; }
+.sd-eyebrow { font-size: 10px; font-weight: 500; letter-spacing: 1px; text-transform: none; color: var(--text-lt); }
+.sd-chuoi { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+.sd-cap { font-size: 13px; padding: 6px 10px; border-radius: 6px; display: inline-flex; align-items: center; gap: 5px; cursor: default; }
+.sd-cap b { font-weight: 600; font-size: 11.5px; }
+.sd-cap-cat { background: #EAF7EE; color: #1E6B3C; }
+.sd-cap-hung { background: #FDEEEC; color: #C0392B; }
+.sd-cap-trung { background: #F3F3F3; color: #888; }
+.sd-diem { font-size: 13.5px; color: var(--text-mid); margin-bottom: 8px; }
+.sd-p { font-size: 14px; color: var(--text-mid); line-height: 1.7; margin-bottom: 6px; }
+.sd-que-ten { font-size: 20px; color: var(--navy); margin-bottom: 4px; }
+.sd-zh { color: #c9a84c; font-weight: 400; }
+.sd-que-meta { font-size: 12.5px; color: var(--text-lt); margin-bottom: 10px; }
+.sd-quebien { padding-top: 8px; border-top: 1px solid var(--border-lt); }
+.sd-phanbo { display: flex; flex-wrap: wrap; gap: 14px; margin-bottom: 10px; }
+.sd-hanh { font-size: 13.5px; color: var(--text-mid); }
+.sd-hanh b { color: var(--navy); }
+.sd-thieu { color: #999; font-size: 13px; }
+.sd-dangian { background: var(--bg-soft, #F7F9FC); border-radius: 10px; padding: 18px 20px; }
+.sd-dg-tot { color: #1E6B3C; }
+.sd-dg-xau { color: #C0392B; }
+.sd-goiy-list { display: flex; flex-direction: column; gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+.sd-goiy-item { background: #fff; padding: 14px 18px; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; cursor: pointer; transition: background .12s; }
+.sd-goiy-item:hover, .sd-goiy-item:focus-visible { background: var(--bg-soft, #F7F9FC); outline: none; }
+.sd-goiy-so { font-size: 18px; letter-spacing: 1px; color: var(--navy); }
+.sd-goiy-dt { font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 14px; }
+.sd-goiy-sao { font-size: 12px; color: var(--text-lt); }
+.sd-tuychon { margin-top: 16px; }
+.sd-tuychon summary { cursor: pointer; font-size: 12.5px; color: var(--blue); }
+.sd-tuychon-body { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 14px; }
+@media(max-width:600px){ .sd-tuychon-body{grid-template-columns:1fr} }
+</style>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Xem số đẹp theo cách nào?","acceptedAnswer":{"@type":"Answer","text":"Công cụ chấm 5 tầng TÁCH BẠCH thay vì gộp một điểm số duy nhất: Bát Tinh (Bát Trạch — Sinh Khí, Thiên Y, Diên Niên...), Quẻ Dịch (Mai Hoa Dịch Số), Ngũ Hành (Lạc Thư, đối chiếu bản mệnh nếu có năm sinh), Âm Dương (số học) và kiêng kỵ dân gian (49, 53, 4, 13, 68, 39...) — có nhãn riêng, không lẫn vào điểm cổ pháp."}},{"@type":"Question","name":"Vì sao không có một điểm số tổng duy nhất?","acceptedAnswer":{"@type":"Answer","text":"Các trường phái cổ pháp thật sự mâu thuẫn nhau — ví dụ Hà Đồ và Lạc Thư gán ngũ hành khác nhau cho cùng một chữ số — nên gộp thành một điểm là bịa. Công cụ hiện điểm riêng từng trường phái và chỉ số đồng thuận (bao nhiêu trường phái nói tốt), để người xem tự đối chiếu."}},{"@type":"Question","name":"Công cụ này có tính phí không?","acceptedAnswer":{"@type":"Answer","text":"Miễn phí hoàn toàn — toàn bộ phép tính chạy ngay trên trình duyệt, không gọi AI, không giới hạn lượt xem."}}]}
+</script>
+</head>
+<body>
+<div id="nav-ph" style="height:60px;background:#061A2E"></div>
+
+<div class="hero-tool">
+  <div class="page">
+    <div class="eyebrow">Công Cụ Miễn Phí</div>
+    <h1>Xem <em>Số Đẹp</em> — SĐT, Số Nhà, Biển Số</h1>
+    <p>Nhập một dãy số — xem ngay theo 5 trường phái tách bạch: Bát Tinh, Quẻ Dịch, Ngũ Hành, Âm Dương, dân gian. Không cần đăng ký, không gộp điểm bịa.</p>
+  </div>
+</div>
+
+<div class="page">
+  <div class="tool-intro">
+    <div class="xt-section">
+      <div class="xt-eyebrow">Công cụ này khác gì các trang xem số khác?</div>
+      <div class="xt-grid-2">
+        <div class="xt-intro-row"><img class="xt-avatar" src="/tool-avatars/so-dep.webp" alt="" loading="lazy" onerror="this.remove()"><div class="xt-intro-text">
+          <h2 class="xt-h2">5 trường phái,<br>KHÔNG gộp một điểm bịa</h2>
+          <p class="xt-body">Hầu hết trang xem số đẹp chấm một điểm duy nhất kiểu "94.5/100" mà không nói rõ nguồn. Con số đó không có thật — vì các trường phái cổ pháp thật sự MÂU THUẪN nhau (Hà Đồ và Lạc Thư gán hành khác nhau cho cùng một chữ số), không có "trung bình" nào cứu được.</p>
+          <p class="xt-body">Công cụ này hiện điểm RIÊNG từng trường phái + chỉ số ĐỒNG THUẬN (bao nhiêu trường phái nói tốt), và tách bạch dân gian (không phải cổ pháp) khỏi phần suy được bằng toán học.</p></div></div>
+        <div class="xt-factors">
+          <div class="xt-factor-title">5 tầng đánh giá</div>
+          <div class="xt-factor-item"><span class="xt-factor-num">①</span><span class="xt-factor-label">Bát Tinh</span><span class="xt-factor-desc">Sinh Khí, Thiên Y... theo Bát Trạch</span></div>
+          <div class="xt-factor-item"><span class="xt-factor-num">②</span><span class="xt-factor-label">Quẻ Dịch</span><span class="xt-factor-desc">Lập quẻ theo Mai Hoa Dịch Số</span></div>
+          <div class="xt-factor-item"><span class="xt-factor-num">③</span><span class="xt-factor-label">Ngũ Hành</span><span class="xt-factor-desc">Đối chiếu bản mệnh nếu có năm sinh</span></div>
+          <div class="xt-factor-item"><span class="xt-factor-num">④</span><span class="xt-factor-label">Âm Dương</span><span class="xt-factor-desc">Tỉ lệ lẻ/chẵn, cấu trúc dãy số</span></div>
+          <div class="xt-factor-item"><span class="xt-factor-num">⑤</span><span class="xt-factor-label">Dân gian</span><span class="xt-factor-desc">49/53/4/13, 68/39/79 — dán nhãn riêng</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-section">
+    <div class="section-eyebrow">Chấm Điểm Một Dãy Số</div>
+    <div class="form-grid cols-1">
+      <div class="form-col">
+        <div class="form-col-title">Nhập Dãy Số</div>
+        <div class="form-group">
+          <label class="form-label">Số điện thoại / số nhà / biển số</label>
+          <input class="form-input" type="text" id="dg-so" placeholder="Ví dụ: 0987661234" inputmode="numeric" maxlength="24">
+        </div>
+        <details class="sd-tuychon">
+          <summary>Tuỳ chọn — cá nhân hoá theo năm sinh</summary>
+          <div class="sd-tuychon-body">
+            <div class="form-group">
+              <label class="form-label">Năm sinh (dương lịch)</label>
+              <input class="form-input" type="number" id="dg-namsinh" placeholder="1990" min="1900" max="2100">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Giới tính</label>
+              <select class="form-input" id="dg-gioitinh"><option value="nam">Nam</option><option value="nu">Nữ</option></select>
+            </div>
+          </div>
+        </details>
+        <button class="btn-submit" onclick="chamDiem()" style="margin-top:20px">Chấm Điểm Ngay</button>
+      </div>
+    </div>
+    <div class="error-msg" id="dg-err"></div>
+  </div>
+
+  <div class="result-section" id="dg-result-section">
+    <div class="result-eyebrow">Kết Quả</div>
+    <div id="dg-result"></div>
+  </div>
+
+  <div class="tool-cta">
+    <div class="tool-cta-eyebrow">Luận Giải Sâu Hơn</div>
+    <div class="tool-cta-title">Xem trọn đời qua lá số Tử Vi</div>
+    <div class="tool-cta-desc">Số đẹp chỉ là một góc nhìn nhanh. Lá số Tử Vi đầy đủ phân tích 12 cung, 9 đại vận và vận hạn năm nay — luận giải bằng AI theo cổ pháp.</div>
+    <a class="tool-cta-btn" href="/luan-giai.html">Luận Giải Lá Số →</a>
+  </div>
+
+  <div class="form-section">
+    <div class="section-eyebrow">Gợi Ý Số Theo Mục Tiêu</div>
+    <div class="form-grid cols-2">
+      <div class="form-col">
+        <div class="form-col-title">Yêu Cầu</div>
+        <div class="form-group">
+          <label class="form-label">Độ dài dãy số</label>
+          <input class="form-input" type="number" id="gy-dodai" value="10" min="4" max="20">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Đầu số cố định (tuỳ chọn)</label>
+          <input class="form-input" type="text" id="gy-tienTo" placeholder="Ví dụ: 090" inputmode="numeric" maxlength="10">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Mục tiêu</label>
+          <select class="form-input" id="gy-mucTieu">
+            <option value="tu-do">Tự do (mọi sao cát)</option>
+            <option value="tai-loc">Tài lộc (Sinh Khí)</option>
+            <option value="suc-khoe">Sức khoẻ (Thiên Y)</option>
+            <option value="ben-vung">Bền vững (Diên Niên)</option>
+            <option value="on-dinh">Ổn định (Phục Vị)</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-col">
+        <div class="form-col-title">Cá Nhân Hoá (tuỳ chọn)</div>
+        <div class="form-group">
+          <label class="form-label">Năm sinh</label>
+          <input class="form-input" type="number" id="gy-namsinh" placeholder="1990" min="1900" max="2100">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Giới tính</label>
+          <select class="form-input" id="gy-gioitinh"><option value="nam">Nam</option><option value="nu">Nữ</option></select>
+        </div>
+        <button class="btn-submit" onclick="goiYSo()" style="margin-top:4px">Gợi Ý 5 Số →</button>
+      </div>
+    </div>
+    <div class="error-msg" id="gy-err"></div>
+  </div>
+
+  <div class="result-section" id="gy-result-section">
+    <div class="result-eyebrow">Số Gợi Ý — Xếp Theo Đồng Thuận</div>
+    <div id="gy-result"></div>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="footer-top">
+    <div>
+      <div class="footer-brand"><img src="/seal.webp" alt=""><div class="footer-brand-text"><div class="name">Tử Vi Minh Bảo</div><div class="zh">紫微明寶</div></div></div>
+      <p class="footer-tagline">Tri mệnh lý – Thuận thế hành</p><div class="footer-legal"><strong>Công ty TNHH Kira Tech</strong><br>(Kira Tech Company Limited)<br>Điện thoại: 0343.848.795<br>Email: contact@tuviminhbao.com<br>Địa chỉ: 901 Lê Đức Thọ, Phường An Hội Đông, Thành phố Hồ Chí Minh, Việt Nam</div>
+    </div>
+  </div>
+  <div class="footer-bottom"><span>© 2026 tuviminhbao.com</span><img src="/seal.webp" alt=""></div>
+  <div class="footer-links"><a href="/san-pham-dich-vu.html">Sản Phẩm &amp; Dịch Vụ</a><a href="/chinh-sach-bao-mat.html">Chính Sách Bảo Mật</a><a href="/dieu-khoan-dich-vu.html">Điều Khoản Sử Dụng</a><a href="/huong-dan-thanh-toan.html">Hướng Dẫn Thanh Toán</a><a href="/mien-tru-trach-nhiem.html">Miễn Trừ Trách Nhiệm</a></div>
+</footer>
+
+<script src="/tools-shared/bat-trach.js?v=2"></script>
+<script src="/tools-shared/mai-hoa.js?v=1"></script>
+<script src="/tools-shared/kinh-dich.js?v=1"></script>
+<script src="/tools-shared/kinh-dich-hao.js?v=1"></script>
+<script src="/tools-shared/kinh-dich-doc.js?v=1"></script>
+<script src="/tools-shared/nap-am.js?v=2"></script>
+<script src="/tools-shared/so-dep.js?v=1"></script>
+<script>
+// Logic thuần client-side, KHÔNG gọi API — engine /tools-shared/so-dep.js
+// tính + dựng HTML luôn, dùng CHUNG với shell /app/so-dep.
+function chamDiem(){
+  var so=document.getElementById('dg-so').value;
+  var namSinh=parseInt(document.getElementById('dg-namsinh').value)||undefined;
+  var gioiTinh=document.getElementById('dg-gioitinh').value;
+  var err=document.getElementById('dg-err');
+  err.classList.remove('active');
+  var r=SoDepTool.danhGia(so,{namSinh:namSinh,gioiTinh:gioiTinh});
+  if(!r.ok){err.textContent=r.error;err.classList.add('active');return;}
+  document.getElementById('dg-result').innerHTML=SoDepTool.ketQuaHTML(r.data);
+  document.getElementById('dg-result-section').classList.add('active');
+  document.getElementById('dg-result-section').scrollIntoView({behavior:'smooth',block:'start'});
+}
+function goiYSo(){
+  var doDai=parseInt(document.getElementById('gy-dodai').value);
+  var tienTo=document.getElementById('gy-tienTo').value;
+  var mucTieu=document.getElementById('gy-mucTieu').value;
+  var namSinh=parseInt(document.getElementById('gy-namsinh').value)||undefined;
+  var gioiTinh=document.getElementById('gy-gioitinh').value;
+  var err=document.getElementById('gy-err');
+  err.classList.remove('active');
+  var r=SoDepTool.goiY({doDai:doDai,tienTo:tienTo,mucTieu:mucTieu,namSinh:namSinh,gioiTinh:gioiTinh,soLuong:5});
+  if(!r.ok){err.textContent=r.error;err.classList.add('active');return;}
+  document.getElementById('gy-result').innerHTML=SoDepTool.goiYHTML(r.data);
+  document.getElementById('gy-result-section').classList.add('active');
+  document.getElementById('gy-result-section').scrollIntoView({behavior:'smooth',block:'start'});
+}
+document.getElementById('dg-so').addEventListener('keydown',function(e){if(e.key==='Enter')chamDiem();});
+// Bấm vào một số gợi ý → chấm điểm chi tiết luôn cho số đó, khỏi phải chép tay sang ô trên.
+document.getElementById('gy-result').addEventListener('click',function(e){
+  var item=e.target.closest('.sd-goiy-item');
+  if(!item)return;
+  document.getElementById('dg-so').value=item.getAttribute('data-so');
+  chamDiem();
+});
+document.getElementById('gy-result').addEventListener('keydown',function(e){
+  if(e.key!=='Enter'&&e.key!==' ')return;
+  var item=e.target.closest('.sd-goiy-item');
+  if(!item)return;
+  e.preventDefault();
+  document.getElementById('dg-so').value=item.getAttribute('data-so');
+  chamDiem();
+});
+</script>
+<section class="kb-section">
+  <div class="page">
+    <div class="kb-inner">
+      <div class="kb-eyebrow">Kiến Thức Cổ Pháp</div>
+      <h2 class="kb-title">Bát Tinh Bát Trạch — Vì Sao Cùng Một Cặp Số Lại Có Sao Khác Nhau</h2>
+      <div class="kb-body">
+        <p>Trong Bát Trạch, mỗi cặp chữ số 1-9 (trừ 5, trung cung) ứng với một trong 8 quái theo Lạc Thư — ghép hai quái lại theo phép biến hào sẽ ra một trong 8 sao Du Niên: 4 sao cát (Sinh Khí, Thiên Y, Diên Niên, Phục Vị) và 4 sao hung (Họa Hại, Lục Sát, Ngũ Quỷ, Tuyệt Mệnh).</p>
+        <p>Số <strong>0</strong> không tự thành sao — nó khuếch đại ý nghĩa của cặp số đứng trước. Số <strong>5</strong> là trung cung, mang tính trung tính, cắt mạch giữa hai cặp. Đây là lý do một dãy số dài không phải lúc nào cũng "toàn sao tốt" — cần đọc theo TỪNG CẶP liền kề, không phải từng số riêng lẻ.</p>
+        <p>Công cụ đọc thêm quẻ Dịch (chia dãy số làm hai để lập thượng/hạ quái), ngũ hành từng chữ số, và cấu trúc âm dương — mỗi tầng độc lập, không gộp vào nhau.</p>
+        <p class="kb-links">Xem thêm: <a href="/tools/bat-trach.html">Hướng Bát Trạch</a>, <a href="/tools/mai-hoa.html">Mai Hoa Dịch Số</a>, <a href="/tools/nap-am.html">Nạp Âm Ngũ Hành</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+<script src="/testimonials.js"></script>
+<script src="/related-tools.js?v=2"></script>
+<script src="/nav.js?v=23" defer></script>
+</body>
+</html>

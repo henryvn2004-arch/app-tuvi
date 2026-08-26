@@ -10,8 +10,9 @@
 <link rel="stylesheet" href="/style.css">
 <script src="/nav.js?v=23" defer></script>
 <script src="/auth.js" defer></script>
-<script src="/tuvi-paywall.js?v=17" defer></script>
-<script src="/tools-shared/ai-loading-steps.js?v=4" defer></script>
+<script src="/tuvi-paywall.js?v=21" defer></script>
+<script src="/tools-shared/ai-loading-steps.js?v=9" defer></script>
+<link rel="stylesheet" href="/tools/tools.css">
 <style>
 :root {
   --navy:#061A2E; --navy-mid:#0D3B5E; --blue:#1455A4;
@@ -283,6 +284,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg-soft); color: va
 
 <div class="hero">
   <div class="hero-badge">✦ Công cụ làm đẹp AI</div>
+  <img class="hero-avatar" src="/tool-avatars/trang-diem-phan-tich.webp" alt="" loading="lazy" onerror="this.remove()">
   <h1>Trang Điểm <span>Hợp Tướng</span></h1>
   <p>Phân tích tướng mặt theo cổ pháp — gợi ý phong cách makeup châu Á phù hợp với mệnh và tướng số của bạn</p>
 </div>
@@ -717,5 +719,12 @@ window.addEventListener('load', () => {
   </div>
 </section>
 <script src="/nav.js?v=23" defer></script>
+<script src="/tool-sources.js?v=1"></script>
+<script>
+  if (window.ToolSources) {
+    ToolSources.mountIntroAfterH1('trang-diem-phan-tich');
+    ToolSources.watchResults('trang-diem-phan-tich', '#resultsSection');
+  }
+</script>
 </body>
 </html>

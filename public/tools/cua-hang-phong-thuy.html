@@ -20,8 +20,10 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;600;700&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;600;700&display=swap" rel="stylesheet"></noscript>
 <script src="/auth.js"></script>
-<script src="/tuvi-paywall.js?v=17"></script>
-<script src="/tools-shared/ai-loading-steps.js?v=4"></script>
+<script src="/tuvi-paywall.js?v=21"></script>
+<script src="/tools-shared/ai-loading-steps.js?v=9"></script>
+<script src="/tools-shared/bat-trach.js?v=2"></script>
+<link rel="stylesheet" href="/tools/tools.css">
 <style>
 :root{--navy:#061A2E;--navy-mid:#0D3B5E;--blue:#1455A4;--gold:#9A7B3A;--gold-lt:#F9F4EB;--gold-bright:#D4A843;--text:#1a1a1a;--text-mid:#444;--text-lt:#777;--border:#CCCCCC;--border-lt:#E8E8E8;--bg:#FFFFFF;--bg-soft:#F5F4F0;--red:#C0392B;--green:#1E6B3C;}
 *{box-sizing:border-box;margin:0;padding:0;}
@@ -38,8 +40,8 @@ h1,h2,h3,h4{font-family:'Noto Serif',serif;}
 .card-num{width:22px;height:22px;background:var(--navy);color:var(--gold-bright);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;}
 .form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;}
 @media(max-width:500px){.form-row{grid-template-columns:1fr;}}
-.form-group{display:flex;flex-direction:column;gap:5px;}
-.form-label{font-size:12px;color:var(--text-mid);font-weight:600;}
+.form-group{display:flex;flex-direction:column;gap:5px;margin-bottom:0;}
+.form-label{font-size:12px;color:var(--text-mid);font-weight:600;text-transform:none;letter-spacing:normal;margin-bottom:0;}
 .form-control{padding:9px 11px;border:1.5px solid var(--border);border-radius:7px;font-size:13px;color:var(--text);background:var(--bg);outline:none;font-family:Arial,sans-serif;transition:border-color .2s;}
 .form-control:focus{border-color:var(--blue);}
 .form-hint{font-size:11px;color:var(--text-lt);margin-top:2px;}
@@ -75,7 +77,7 @@ h1,h2,h3,h4{font-family:'Noto Serif',serif;}
 #results-section{display:none;}
 .score-compare{display:grid;grid-template-columns:1fr auto 1fr;gap:14px;align-items:center;margin-bottom:6px;}
 .score-label{font-size:10px;color:var(--text-lt);font-weight:700;letter-spacing:.5px;text-transform:uppercase;margin-bottom:5px;}
-.score-num{font-size:34px;font-weight:700;font-family:'Noto Serif',serif;}
+.score-num{font-size:34px;font-weight:700;font-family:'Noto Serif',serif;width:auto;text-align:left;}
 .score-before .score-num{color:var(--red);} .score-after .score-num{color:var(--green);}
 .score-bar-wrap{height:6px;background:var(--border-lt);border-radius:3px;overflow:hidden;margin-top:6px;}
 .score-bar{height:100%;border-radius:3px;width:0;transition:width 1s ease;}
@@ -147,6 +149,7 @@ h1,h2,h3,h4{font-family:'Noto Serif',serif;}
 
 <div class="hero">
   <span class="hero-icon"><span class="ic-inline" data-icon-emoji="🏪" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">🏪</span></span>
+  <img class="hero-avatar" src="/tool-avatars/cua-hang-phong-thuy.webp" alt="" loading="lazy" onerror="this.remove()">
   <h1>Phong Thủy Cửa Hàng & Văn Phòng</h1>
   <p>Chụp ảnh cửa hàng hoặc văn phòng, nhận tư vấn bố trí phong thủy để thu hút tài lộc và khách hàng.</p>
   <div class="hero-cost">⟐ <span data-tvp-price="cua-hang-phong-thuy">…</span> lượng · AI Vision + Bát Trạch + Ngũ Hành</div>
@@ -324,10 +327,14 @@ h1,h2,h3,h4{font-family:'Noto Serif',serif;}
 </div>
 
 <script>
-const GUA_DATA={1:{name:'Khảm',elem:'Thủy',icon:'☵',good:{SE:'Sinh Khí',E:'Thiên Y',S:'Diên Niên',N:'Phục Vị'},bad:{W:'Họa Hại',NE:'Ngũ Quỷ',NW:'Lục Sát',SW:'Tuyệt Mệnh'}},2:{name:'Khôn',elem:'Thổ',icon:'☷',good:{NE:'Sinh Khí',W:'Thiên Y',NW:'Diên Niên',SW:'Phục Vị'},bad:{E:'Họa Hại',SE:'Ngũ Quỷ',S:'Lục Sát',N:'Tuyệt Mệnh'}},3:{name:'Chấn',elem:'Mộc',icon:'☳',good:{S:'Sinh Khí',N:'Thiên Y',SE:'Diên Niên',E:'Phục Vị'},bad:{SW:'Họa Hại',W:'Ngũ Quỷ',NE:'Lục Sát',NW:'Tuyệt Mệnh'}},4:{name:'Tốn',elem:'Mộc',icon:'☴',good:{N:'Sinh Khí',S:'Thiên Y',E:'Diên Niên',SE:'Phục Vị'},bad:{NW:'Họa Hại',SW:'Ngũ Quỷ',W:'Lục Sát',NE:'Tuyệt Mệnh'}},6:{name:'Càn',elem:'Kim',icon:'☰',good:{W:'Sinh Khí',NE:'Thiên Y',SW:'Diên Niên',NW:'Phục Vị'},bad:{SE:'Họa Hại',S:'Ngũ Quỷ',E:'Lục Sát',N:'Tuyệt Mệnh'}},7:{name:'Đoài',elem:'Kim',icon:'☱',good:{NW:'Sinh Khí',SW:'Thiên Y',NE:'Diên Niên',W:'Phục Vị'},bad:{E:'Họa Hại',N:'Ngũ Quỷ',SE:'Lục Sát',S:'Tuyệt Mệnh'}},8:{name:'Cấn',elem:'Thổ',icon:'☶',good:{SW:'Sinh Khí',NW:'Thiên Y',W:'Diên Niên',NE:'Phục Vị'},bad:{S:'Họa Hại',E:'Ngũ Quỷ',N:'Lục Sát',SE:'Tuyệt Mệnh'}},9:{name:'Ly',elem:'Hỏa',icon:'☲',good:{E:'Sinh Khí',SE:'Thiên Y',N:'Diên Niên',S:'Phục Vị'},bad:{NE:'Họa Hại',NW:'Ngũ Quỷ',SW:'Lục Sát',W:'Tuyệt Mệnh'}}};
+// GUA_DATA + calcGua KHÔNG còn chép tay — nạp từ /tools-shared/bat-trach.js
+// (nguồn DUY NHẤT, dùng chung với /tools/bat-trach.html). Bản chép tay cũ ở
+// đây sai 12/64 ô Du Niên + dùng công thức cung mệnh SAI (tổng 4 chữ số năm
+// thay vì 2 chữ số cuối — xem ghi chú đầu file bat-trach.js).
+const GUA_DATA=BatTrachTool.guaDataLegacy();
 const DIR_VN={N:'Bắc',NE:'Đông Bắc',E:'Đông',SE:'Đông Nam',S:'Nam',SW:'Tây Nam',W:'Tây',NW:'Tây Bắc',C:'Trung Tâm'};
 
-function calcGua(y,g){let s=String(y).split('').reduce((a,c)=>a+parseInt(c),0);while(s>=10)s=String(s).split('').reduce((a,c)=>a+parseInt(c),0);let r;if(g==='male'){r=y>=2000?9-s:10-s;if(r<=0)r+=9;if(r===5)r=2;}else{r=y>=2000?s+6:s+5;while(r>=10)r=String(r).split('').reduce((a,c)=>a+parseInt(c),0);if(r===5)r=8;}return r;}
+function calcGua(y,g){return BatTrachTool.getCungMenh(y,g==='male'?'nam':'nu');}
 
 let _gua=null,_img64=null,_imgType='image/jpeg';
 const ANALYSIS_STEPS=[
@@ -527,5 +534,12 @@ TuviPaywall.init({ product: 'cua-hang-phong-thuy' });
 <script src="/testimonials.js"></script>
 <script src="/related-tools.js?v=2"></script>
 <script src="/nav.js?v=23" defer></script>
+<script src="/tool-sources.js?v=1"></script>
+<script>
+  if (window.ToolSources) {
+    ToolSources.mountIntroAfterH1('cua-hang-phong-thuy');
+    ToolSources.watchResults('cua-hang-phong-thuy', '#results-section');
+  }
+</script>
 </body>
 </html>

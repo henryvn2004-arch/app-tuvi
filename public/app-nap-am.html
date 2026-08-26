@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"></noscript>
-<link rel="stylesheet" href="/shell.css?v=18">
+<link rel="stylesheet" href="/shell.css?v=29">
 <style>
 .form-card{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);max-width:600px}
 .form-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:3px}
@@ -35,6 +35,18 @@
 .na-info{font-size:13px;color:#444;line-height:1.7;padding-top:8px;border-top:1px solid #E8E8E8;margin-top:12px}
 @media(max-width:700px){.nap-am-result{grid-template-columns:1fr 1fr}}
 @media(max-width:480px){.nap-am-result{grid-template-columns:1fr}}
+/* Khối "hành này thì làm gì" — cùng nền sáng cố định với bảng nạp âm trên nó */
+.na-use{background:#fff;border:1px solid #e6e0d4;border-radius:10px;padding:16px 18px;margin-top:14px}
+.na-use-head{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#9A7B3A;margin-bottom:12px}
+.na-use-row{display:flex;gap:14px;padding:9px 0;border-top:1px solid #F0EDE6}
+.na-use-row:first-of-type{border-top:none;padding-top:0}
+.na-use-k{flex:0 0 34%;font-size:12px;font-weight:600;color:#6b6355}
+.na-use-v{flex:1;font-size:13.5px;color:#1a1a1a;line-height:1.6}
+.na-use-note{display:block;font-size:11.5px;color:#8a8375;line-height:1.55;margin-top:4px}
+.na-use-links{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px;padding-top:13px;border-top:1px solid #E8E8E8}
+.na-use-link{font-size:12.5px;color:#1455A4;text-decoration:none;border:1px solid #dfe6ef;border-radius:7px;padding:6px 11px;background:#F7F9FC}
+.na-use-link:hover{background:#eef3f9}
+@media(max-width:520px){.na-use-row{flex-direction:column;gap:3px}.na-use-k{flex:none}}
 .ask{margin-top:12px;display:inline-flex;align-items:center;gap:7px;font-size:12.5px;color:var(--gold-soft);border:1px dashed var(--gold-soft);border-radius:8px;padding:7px 12px;cursor:pointer;background:var(--gold-lt);font-family:inherit}
 </style>
 </head>
@@ -57,7 +69,8 @@
       <div id="shellRecent"></div>
       <div class="form-card" id="birthPanel">
         <h2>Năm sinh (dương lịch)</h2>
-        <p class="sub">Tra Thiên Can, Địa Chi, nạp âm ngũ hành (tên hoa giáp) và hành bản mệnh theo năm sinh, rồi hỏi trợ lý luận hợp màu, hướng, tuổi.</p>
+        <p class="sub">Tra mệnh nạp âm, hành, màu và hướng hợp theo năm sinh của bạn. Bạn chỉ biết mình mệnh Kim mà chưa rõ nó hợp gì, kỵ gì. Dùng khi cần tra nhanh mệnh trước khi chọn màu, chọn hướng.</p>
+        <p class="price-note" data-tvp-price-label="nap-am">…</p>
         <div class="frow" style="margin-bottom:4px">
           <div class="fg" style="width:150px"><label>Năm sinh</label><input type="number" id="year" placeholder="1990" min="1900" max="2100"></div>
           <button class="btn-go" id="btnGo" onclick="calculate()">Tra nạp âm →</button>
@@ -68,6 +81,7 @@
       <div id="resPanel" data-ws-result>
         <div class="result-eyebrow" id="res-eyebrow"></div>
         <div class="nap-am-result" id="nap-am-result"></div>
+        <div id="nap-am-use"></div>
         <div class="ask" data-ask="Mệnh nạp âm này hợp màu gì, hướng nào, tuổi nào; kỵ gì? Luận giúp tôi.">✦ Hỏi trợ lý luận sâu nạp âm</div>
       </div>
     </div>
@@ -77,11 +91,11 @@
 </div>
 
 <script>window.SHELL_ACTIVE='nap-am';window.SHELL_HISTORY=true;
-window.SHELL_INTRO={key:'nap-am',title:'Nạp âm ngũ hành',desc:'Tra Thiên Can · Địa Chi · nạp âm (tên hoa giáp) và hành bản mệnh theo năm sinh, rồi hỏi <b>trợ lý AI</b> hợp màu, hướng, tuổi và điều nên tránh.'};</script>
-<script src="/tools-shared/nap-am.js?v=1"></script>
+window.SHELL_INTRO={key:'nap-am',title:'Nạp âm ngũ hành',desc:'Tra mệnh nạp âm, hành, màu và hướng hợp theo năm sinh của bạn. Bạn chỉ biết mình mệnh Kim mà chưa rõ nó hợp gì, kỵ gì. Dùng khi cần tra nhanh mệnh trước khi chọn màu, chọn hướng.'};</script>
+<script src="/tools-shared/nap-am.js?v=2"></script>
 <script src="/auth.js?v=2"></script>
   <script src="/nav.js?v=23" data-icons-only></script>
-<script src="/shell.js?v=66"></script>
+<script src="/shell.js?v=82"></script>
 <script>
 // Ô giữa dùng CHUNG module /tools-shared/nap-am.js với trang standalone
 // /tools/nap-am.html → kết quả y hệt. Rail nhận chính data module tính.
@@ -93,18 +107,32 @@ function calculate(){
   if(!r.ok){ err.textContent=r.error; err.classList.add('active'); return; }
   document.getElementById('res-eyebrow').textContent=r.eyebrowText;
   document.getElementById('nap-am-result').innerHTML=r.resultHTML;
+  document.getElementById('nap-am-use').innerHTML=NapAmTool.ungDungHTML(r.data,{shell:true});
   document.getElementById('birthPanel').style.display='none';
   document.getElementById('resPanel').style.display='block';
   document.getElementById('btnEdit').style.display='';
   if(window.SHELL_INTRO)Shell.dismissIntro(window.SHELL_INTRO.key);
+  // Rail nhận CẢ tầng ứng dụng. `extractGenericContext` bỏ IM LẶNG mọi giá trị
+  // là object nên phải trải phẳng, không lồng `ungDung` vào làm một khoá con.
+  var _u=NapAmTool.ungDung(r.data.hanh)||{};
+  var _ctx={};for(var k in r.data)_ctx[k]=r.data[k];
+  _ctx.mauHop=_u.mauHop;_ctx.mauKy=_u.mauKy;_ctx.phuongVi=_u.phuongVi;
+  _ctx.tuoiHop=_u.hanhHop;_ctx.tuoiKy=_u.hanhKy;_ctx.soHop=_u.so;_ctx.chatLieu=_u.chatLieu;
   Shell.setContext({
-    scenario:{type:'nap-am',data:r.data},
+    scenario:{type:'nap-am',data:_ctx},
     label:'Nạp âm '+r.data.canChi+' · '+r.data.napAm,
     greeting:'Năm **'+r.data.nam+'** — bản mệnh **'+r.data.napAm+'** (hành '+r.data.hanh+'). Bạn muốn tôi luận điều gì?',
     chips:['Hợp màu gì, kỵ màu gì?','Hướng nhà/bàn làm việc nào hợp?','Tuổi nào hợp, tuổi nào khắc?','Vật phẩm phong thủy nào nên đeo?']
   });
   var _naLines=['Nạp âm ngũ hành — năm '+r.data.nam+' ('+r.data.canChi+', năm '+r.data.conGiap+')'];
   _naLines.push('Bản mệnh: '+r.data.napAm+' — hành '+r.data.hanh);
+  if(_u.mauHop){
+    _naLines.push('Màu hợp: '+_u.mauHop);
+    _naLines.push('Màu nên hạn chế: '+_u.mauKy);
+    _naLines.push('Phương vị của hành: '+_u.phuongVi);
+    _naLines.push('Tuổi hợp theo nạp âm: mệnh '+_u.hanhHop+' · cần cân nhắc: mệnh '+_u.hanhKy);
+    _naLines.push('Số hợp: '+_u.so);
+  }
   Shell.setShareable({kind:'text',toolId:'nap-am',title:'Nạp âm '+r.data.napAm+' — năm '+r.data.nam,text:_naLines.join('\n')});
   document.querySelectorAll('#resPanel [data-ask]').forEach(function(el){ el.addEventListener('click',function(){ Shell.ask(el.getAttribute('data-ask')); }); });
 }

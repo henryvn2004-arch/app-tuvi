@@ -268,6 +268,9 @@ const H_COLOR = {Mộc:'#1E6B3C',Hỏa:'#C0392B',Thổ:'#9A7B3A',Kim:'#5a6a72',T
 const SINH = {Mộc:'Hỏa',Hỏa:'Thổ',Thổ:'Kim',Kim:'Thủy',Thủy:'Mộc'};
 const SINH_REV = {Hỏa:'Mộc',Thổ:'Hỏa',Kim:'Thổ',Thủy:'Kim',Mộc:'Thủy'};
 const KHAC = {Mộc:'Thổ',Thổ:'Thủy',Thủy:'Hỏa',Hỏa:'Kim',Kim:'Mộc'};
+// Thứ tự tương sinh Mộc→Hỏa→Thổ→Kim→Thủy, khớp ĐÚNG thứ tự ô <select> mệnh
+// trên cả hai trang — hai chỗ xếp khác nhau thì người dùng phải đọc lại từ đầu.
+const HANH_LIST = ['Mộc', 'Hỏa', 'Thổ', 'Kim', 'Thủy'];
 
 function netToHanh(n) {
   const d = n % 10 || 10;
@@ -390,12 +393,217 @@ function netToHanh(n) {
     return `<div class="rel-box ${cls}">${icon} ${rel}</div>`;
   }
 
+  // ───────────────────────────────────────────────────────────────────
+  // TẦNG CHẤM ĐIỂM + GỢI Ý
+  // ───────────────────────────────────────────────────────────────────
+  // ⚠️ THANG ĐIỂM NÀY DO TRANG TỰ ĐẶT, không phải cổ thư. Cổ thư nói về quan
+  // hệ sinh–khắc giữa hành của chữ và hành của mệnh; nó KHÔNG cho một con số
+  // trên thang 100. Bốn phần dưới đây là cách trang quy đổi quan hệ đó thành
+  // thứ đọc được, cùng dạng nợ dữ liệu với `KIEU_HOC` / `DOMAIN_NGANH`.
+  //
+  // Vì sao vẫn làm: bản cũ dừng ở "chữ này hành Mộc" rồi hết, trong khi chính
+  // meta description của trang hứa "gợi ý chỉnh sửa nếu cần" — và cả thị
+  // trường VN gọi món này là "chấm điểm tên" (tudienten, tracuuthansohoc…),
+  // tức người dùng tới đây là để nhận MỘT KẾT LUẬN, không phải một bảng tra.
+  //
+  // 🔴 LUẬT DIỄN ĐẠT — vi phạm là xúc phạm người đọc: đây là tên người ta ĐÃ
+  // MANG, phần lớn do cha mẹ đặt. Điểm thấp chỉ được đọc là "có chỗ đáng cân
+  // nhắc NẾU đang chọn tên mới", TUYỆT ĐỐI không đọc thành "tên bạn xấu" và
+  // không được giục ai đi đổi tên. Câu nhắc đó in thẳng lên trang.
+
+  // Chữ gợi ý theo hành — CỐ Ý là danh sách CHỌN TAY, không quét cả bảng DB:
+  // DB có ~848 âm tiết gồm cả `bạo` `cãi` `cấm` `cọp`, quét máy sẽ gợi ý
+  // chúng làm tên. Mỗi chữ dưới đây đã đối chiếu ngược qua `netToHanh(DB[x].n)`.
+  const GOI_Y = {
+    Mộc: ['Mai', 'Lan', 'Thanh', 'Vân', 'Hoàng', 'Cường', 'Tiến', 'Khang', 'Thịnh', 'Việt'],
+    Hỏa: ['Nhật', 'Tâm', 'Thiên', 'Nhân', 'Sơn', 'Tài', 'Phúc', 'Nguyên', 'Vinh', 'Dương'],
+    Thổ: ['An', 'Bình', 'Ngọc', 'Bảo', 'Duyên', 'Hiền', 'Quang', 'Đức', 'Long', 'Yến'],
+    Kim: ['Minh', 'Hoa', 'Hạnh', 'Phương', 'Quân', 'Tú', 'Thành', 'Lâm', 'Hân', 'Trung'],
+    Thủy: ['Anh', 'Linh', 'Thảo', 'Hải', 'Thu', 'Xuân', 'Tuấn', 'Dũng', 'Nam', 'Mỹ'],
+  };
+
+  // Hành KHẮC mệnh (mẹ của phép khắc): tìm h sao cho h khắc mệnh.
+  function hanhKhac(menh) {
+    return Object.keys(KHAC).find((h) => KHAC[h] === menh) || '';
+  }
+
+  // score(syls, menh) → null khi CHƯA chọn mệnh. Cố ý không đoán bừa một con
+  // số: không có mệnh thì ba trên bốn phần dưới đây không tính được, chấm đại
+  // là bịa đúng thứ người ta mang đi khoe.
+  function score(syls, menh) {
+    if (!menh || !SINH[menh]) return null;
+    const known = syls.filter((s) => s.n);
+    if (!known.length) return null;
+    const hanhs = known.map((s) => netToHanh(s.n));
+    const lastName = [...known].reverse()[0];
+    const tenHanh = netToHanh(lastName.n);
+    const parts = [];
+
+    // A. Chữ tên chính ↔ mệnh — trọng số lớn nhất vì đây là điều cổ pháp
+    //    THẬT SỰ nói tới; ba phần sau là cách trang mở rộng ra cả tên.
+    let a, aNote;
+    if (SINH_REV[menh] === tenHanh) {
+      a = 40;
+      aNote = `"${lastName.display}" hành ${tenHanh} sinh mệnh ${menh} — tên nuôi mệnh, tốt nhất`;
+    } else if (tenHanh === menh) {
+      a = 34;
+      aNote = `"${lastName.display}" cùng hành ${menh} với mệnh — củng cố khí mệnh`;
+    } else if (KHAC[tenHanh] === menh) {
+      a = 6;
+      aNote = `"${lastName.display}" hành ${tenHanh} khắc mệnh ${menh}`;
+    } else if (KHAC[menh] === tenHanh) {
+      a = 12;
+      aNote = `mệnh ${menh} khắc hành ${tenHanh} của "${lastName.display}"`;
+    } else if (SINH[menh] === tenHanh) {
+      a = 18;
+      aNote = `mệnh ${menh} sinh ra hành ${tenHanh} — mệnh bị tiết khí`;
+    } else {
+      a = 24;
+      aNote = `"${lastName.display}" hành ${tenHanh} — không sinh không khắc mệnh ${menh}`;
+    }
+    parts.push({ label: 'Chữ tên chính hợp mệnh', diem: a, max: 40, note: aNote });
+
+    // B. Cân bằng ngũ hành cả tên — tên dồn hết vào một hành thì đơn điệu.
+    const distinct = new Set(hanhs).size;
+    const b = Math.round((25 * distinct) / Math.min(known.length, 5));
+    parts.push({
+      label: 'Cân bằng ngũ hành',
+      diem: b,
+      max: 25,
+      note: `${distinct} hành khác nhau trên ${known.length} chữ`,
+    });
+
+    // C. Trong tên có hành BỒI mệnh không
+    let c, cNote;
+    if (hanhs.indexOf(SINH_REV[menh]) > -1) {
+      c = 20;
+      cNote = `có chữ hành ${SINH_REV[menh]} — sinh mệnh ${menh}`;
+    } else if (hanhs.indexOf(menh) > -1) {
+      c = 14;
+      cNote = `có chữ cùng hành ${menh}`;
+    } else {
+      c = 6;
+      cNote = `chưa có chữ nào sinh hoặc cùng hành với mệnh ${menh}`;
+    }
+    parts.push({ label: 'Tên có chữ bồi mệnh', diem: c, max: 20, note: cNote });
+
+    // D. Chữ khắc mệnh
+    const soKhac = hanhs.filter((h) => KHAC[h] === menh).length;
+    const d = Math.max(0, 15 - 7 * soKhac);
+    parts.push({
+      label: 'Không có chữ khắc mệnh',
+      diem: d,
+      max: 15,
+      note: soKhac ? `${soKhac} chữ mang hành ${hanhKhac(menh)} khắc mệnh` : 'không có chữ nào khắc mệnh',
+    });
+
+    const tong = a + b + c + d;
+    let verdict, cls;
+    if (tong >= 85) {
+      verdict = 'Rất hợp mệnh';
+      cls = 'tot';
+    } else if (tong >= 70) {
+      verdict = 'Hợp mệnh';
+      cls = 'tot';
+    } else if (tong >= 55) {
+      verdict = 'Tạm ổn';
+      cls = 'trun';
+    } else if (tong >= 40) {
+      verdict = 'Có chỗ đáng cân nhắc';
+      cls = 'trun';
+    } else {
+      verdict = 'Nhiều chỗ đáng cân nhắc';
+      cls = 'xau';
+    }
+
+    // Hành nên bổ: ưu tiên hành SINH mệnh (nuôi mệnh); tên đã có sẵn rồi thì
+    // chuyển sang hành của chính mệnh (củng cố) — nếu không sẽ gợi ý đúng thứ
+    // người ta đã có, đọc thành lời khuyên rỗng.
+    const daCoMe = hanhs.indexOf(SINH_REV[menh]) > -1;
+    const nenBoi = daCoMe ? menh : SINH_REV[menh];
+    return {
+      tong,
+      verdict,
+      cls,
+      parts,
+      menh,
+      tenChinh: lastName.display,
+      tenChinhHanh: tenHanh,
+      nenBoi,
+      nenBoiVi: daCoMe
+        ? `Tên đã có chữ hành ${SINH_REV[menh]} sinh mệnh. Muốn thêm thì chọn chữ hành ${menh} để củng cố.`
+        : `Hành ${SINH_REV[menh]} sinh mệnh ${menh} — chữ mang hành này nuôi mệnh cục.`,
+      nenTranh: hanhKhac(menh),
+      goiY: (GOI_Y[nenBoi] || []).slice(0, 8),
+    };
+  }
+
+  // scoreHTML(syls, menh, opts) — opts.shell chọn link /app/* hay /tools/*.html
+  function scoreHTML(syls, menh, opts) {
+    const shell = !!(opts && opts.shell);
+    const napAm = shell ? '/app/nap-am' : '/tools/nap-am.html';
+    const datTen = shell ? '/app/dat-ten' : '/tools/dat-ten-con.html';
+    const s = score(syls, menh);
+    if (!s) {
+      // Chưa chọn mệnh → CHỌN NGAY TẠI ĐÂY, không chỉ đường đi đâu cả.
+      // 🪤 Bản trước ghi "Bấm Sửa ở góc trên rồi chọn mệnh" — Henry nhìn thẳng
+      // vào nút Sửa mà không nhận ra, vì thanh đó là chrome của SHELL chứ không
+      // đọc như một phần của tool. Và kể cả tìm ra thì vẫn là 4 bước (cuộn lên
+      // → bấm Sửa, MẤT kết quả đang xem → chọn trong ô ghi "tùy chọn" → tra
+      // lại) cho một lựa chọn 5 giá trị.
+      // 🔑 Bài học: sửa CÂU CHỈ ĐƯỜNG là vá triệu chứng. Chỗ đúng để sửa là bỏ
+      // hẳn quãng đường — người dùng đang ở ngay khối cần mệnh, thì cho họ chọn
+      // ngay ở đó. Cùng luật với M3 ("mỗi lần chuyển trang ở đáy phễu là một
+      // lần rơi") và với ô nhập lá số ngay trong thẻ Vận hôm nay.
+      const nut = HANH_LIST.map(
+        (h) => `<button type="button" class="nh-menh-btn" data-nh-menh="${h}">${h}</button>`
+      ).join('');
+      return `<div class="nh-score nh-score-empty">
+      <div class="nh-score-head">Chấm điểm tên</div>
+      <p class="nh-score-empty-p">Chưa chấm được vì chưa biết <strong>mệnh cục</strong> của người mang tên. Chọn ngay tại đây:</p>
+      <div class="nh-menh-pick">${nut}</div>
+      <p class="nh-score-empty-sub">Không biết mệnh của mình?</p>
+      <a class="nh-link" href="${napAm}">Tra mệnh theo năm sinh →</a>
+    </div>`;
+    }
+    const bars = s.parts
+      .map(
+        (p) => `<div class="nh-part">
+        <div class="nh-part-top"><span class="nh-part-l">${p.label}</span><span class="nh-part-n">${p.diem}/${p.max}</span></div>
+        <div class="nh-part-track"><div class="nh-part-fill" style="width:${Math.round((p.diem / p.max) * 100)}%"></div></div>
+        <div class="nh-part-note">${p.note}</div>
+      </div>`
+      )
+      .join('');
+    const chips = s.goiY.map((g) => `<span class="nh-chip">${g}</span>`).join('');
+    return `<div class="nh-score nh-score-${s.cls}">
+      <div class="nh-score-head">Chấm điểm tên — mệnh ${s.menh}</div>
+      <div class="nh-score-top"><div class="nh-score-num">${s.tong}<span>/100</span></div><div class="nh-score-verdict">${s.verdict}</div></div>
+      <div class="nh-parts">${bars}</div>
+      <div class="nh-sug">
+        <div class="nh-sug-head">Nếu đang CHỌN tên</div>
+        <p class="nh-sug-p">Nên ưu tiên chữ hành <strong>${s.nenBoi}</strong>. ${s.nenBoiVi} Nên tránh chữ hành <strong>${s.nenTranh}</strong> (khắc mệnh ${s.menh}).</p>
+        <div class="nh-chips">${chips}</div>
+        <a class="nh-link" href="${datTen}">Gợi ý trọn bộ tên hợp mệnh →</a>
+      </div>
+      <p class="nh-caveat">Thang điểm này do trang quy ước để so sánh cho dễ, không phải con số của cổ thư. Với một cái tên đã dùng, điểm thấp <strong>không có nghĩa là tên xấu</strong> và không phải lý do để đổi tên — phần này chỉ hữu ích khi bạn đang chọn tên mới.</p>
+    </div>`;
+  }
+
   // ── Dữ liệu thô cho rail (trợ lý luận sâu) — chuỗi phẳng để prompt đọc ──
   function railData(syls, menh) {
     const b = balance(syls);
     const lastName = [...syls].reverse().find((s) => s.n);
+    const s = score(syls, menh);
     return {
       hoTen: syls.map((s) => s.display).join(' '),
+      // Tầng chấm điểm trải PHẲNG — `extractGenericContext` bỏ im lặng mọi
+      // giá trị là object, lồng `diem` vào một khoá con là rail không thấy gì.
+      diem: s ? s.tong + '/100 — ' + s.verdict : '',
+      diemChiTiet: s ? s.parts.map((p) => `${p.label} ${p.diem}/${p.max} (${p.note})`).join('; ') : '',
+      hanhNenBoi: s ? s.nenBoi : '',
+      hanhNenTranh: s ? s.nenTranh : '',
+      chuGoiY: s ? s.goiY.join(', ') : '',
       tenChinh: lastName ? lastName.display : '',
       tenChinhHanh: lastName ? netToHanh(lastName.n) : '',
       menh: menh || '',
@@ -417,6 +625,8 @@ function netToHanh(n) {
     unknownInputsHTML,
     balance,
     menhHTML,
+    score,
+    scoreHTML,
     railData,
   };
   if (typeof module !== 'undefined' && module.exports) module.exports = API;

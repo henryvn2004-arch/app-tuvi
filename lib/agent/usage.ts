@@ -35,21 +35,30 @@ export interface LlmUsage {
 const MODEL_PRICING: Record<string, { input: number; output: number }> = {
   'claude-sonnet-4-6': { input: 3, output: 15 },
   'claude-sonnet-5': { input: 3, output: 15 },
+  'claude-opus-5': { input: 5, output: 25 }, // backup-1 (chốt Henry 2026-08-20) — cùng bậc giá 4.8/4.7
   'claude-opus-4-8': { input: 5, output: 25 },
   'claude-opus-4-7': { input: 5, output: 25 },
   'claude-haiku-4-5': { input: 1, output: 5 },
-  'gemini-2.5-flash': { input: 0.15, output: 1.25 },
+  'gemini-2.5-flash': { input: 0.15, output: 1.25 }, // backup-2
+  // Primary (chốt Henry 2026-08-20). $3/$15 mỗi 1M cache-miss input/output —
+  // Moonshot còn có tầng cache-hit $0.30/1M nhưng LlmUsage không tách được
+  // hit/miss ở đây → tính bảo thủ theo giá cache-miss (không thổi phồng cache
+  // read của Anthropic vì cơ chế khác hẳn — không áp hệ số ×0.1).
+  'kimi-k3': { input: 3, output: 15 },
 };
 const DEFAULT_PRICING = MODEL_PRICING['claude-sonnet-4-6'];
 const DEFAULT_GEMINI_PRICING = MODEL_PRICING['gemini-2.5-flash'];
+const DEFAULT_KIMI_PRICING = MODEL_PRICING['kimi-k3'];
 const USD_TO_VND = 25_000; // khớp tỷ giá quy đổi topup hiện có trong hệ thống
 
-// model lạ (vd đổi GEMINI_MODEL env sang bản khác) → fallback theo HỌ model
-// (gemini-* dùng giá Flash, còn lại dùng giá Sonnet) thay vì luôn rơi về giá
-// Anthropic — tránh thổi phồng chi phí Gemini sai họ giá.
+// model lạ (vd đổi GEMINI_MODEL/KIMI_MODEL env sang bản khác) → fallback theo
+// HỌ model (gemini-* dùng giá Flash, kimi-* dùng giá K3, còn lại dùng giá
+// Sonnet) thay vì luôn rơi về giá Anthropic — tránh thổi phồng/hạ thấp sai họ giá.
 function pricingFor(model: string): { input: number; output: number } {
   if (MODEL_PRICING[model]) return MODEL_PRICING[model];
-  return model.startsWith('gemini') ? DEFAULT_GEMINI_PRICING : DEFAULT_PRICING;
+  if (model.startsWith('gemini')) return DEFAULT_GEMINI_PRICING;
+  if (model.startsWith('kimi')) return DEFAULT_KIMI_PRICING;
+  return DEFAULT_PRICING;
 }
 
 function calcCostVnd(model: string, u: LlmUsage): number {
@@ -92,7 +101,12 @@ function calcImageCostVnd(model: string, u: ImageUsage): number {
 /** Log chi phí sinh ảnh (gpt-image-*) — cùng bảng/event_type với logLlmUsage
  * nên gộp chung vào bucket tool_id trên dashboard_margin "by_tool" (không cần
  * RPC/panel riêng). Best-effort, không throw. */
-export async function logImageUsage(toolId: string, model: string, usage: ImageUsage): Promise<void> {
+export async function logImageUsage(
+  toolId: string,
+  model: string,
+  usage: ImageUsage,
+  durationMs?: number,
+): Promise<void> {
   if (!SUPABASE_URL || !SUPABASE_KEY) return;
   if (!usage.text_tokens && !usage.image_output_tokens) return;
   try {
@@ -107,7 +121,12 @@ export async function logImageUsage(toolId: string, model: string, usage: ImageU
       body: JSON.stringify({
         event_type: 'llm_usage',
         tool_id: toolId,
-        meta: { model, ...usage, cost_vnd: calcImageCostVnd(model, usage) },
+        meta: {
+          model,
+          ...usage,
+          cost_vnd: calcImageCostVnd(model, usage),
+          ...(durationMs != null ? { duration_ms: Math.round(durationMs) } : {}),
+        },
       }),
     });
   } catch {
@@ -149,7 +168,17 @@ export async function logLlmParseFail(
   }
 }
 
-export async function logLlmUsage(toolId: string, model: string, usage: LlmUsage): Promise<void> {
+/** `durationMs` — thời lượng THẬT của lượt gọi. Trước đây `llm_usage` chỉ có
+ * token và tiền, KHÔNG có trường thời lượng nào, nên không tool nào biết mình
+ * chạy bao lâu; con số "45–60 giây" duy nhất đang có là suy gián tiếp từ khoảng
+ * cách hai mốc log của hai pha chạy song song — mẹo chỉ dùng được cho đúng tool
+ * đó. Có trường này thì mới đặt ETA bằng SỐ ĐO thay vì bằng phỏng đoán. */
+export async function logLlmUsage(
+  toolId: string,
+  model: string,
+  usage: LlmUsage,
+  durationMs?: number,
+): Promise<void> {
   if (!SUPABASE_URL || !SUPABASE_KEY) return;
   if (!usage.input_tokens && !usage.output_tokens) return; // không có gì để ghi
   try {
@@ -164,7 +193,12 @@ export async function logLlmUsage(toolId: string, model: string, usage: LlmUsage
       body: JSON.stringify({
         event_type: 'llm_usage',
         tool_id: toolId,
-        meta: { model, ...usage, cost_vnd: calcCostVnd(model, usage) },
+        meta: {
+          model,
+          ...usage,
+          cost_vnd: calcCostVnd(model, usage),
+          ...(durationMs != null ? { duration_ms: Math.round(durationMs) } : {}),
+        },
       }),
     });
   } catch {

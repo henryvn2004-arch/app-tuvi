@@ -2,6 +2,7 @@
 // Format: resources.html (hero + search + tabs + list)
 export const revalidate = 86400;
 import { NextResponse } from 'next/server';
+import { ORG_ID } from '@/lib/seo/entity';
 
 const SB_URL = process.env.SUPABASE_URL!;
 const SB_KEY = process.env.SUPABASE_SERVICE_KEY!;
@@ -115,7 +116,7 @@ export async function GET() {
   name:'Tử Vi Minh Bảo — Tra Cứu Tử Vi Đẩu Số',
   description:`${totalCount} bài tra cứu tử vi đẩu số cổ pháp`,
   url:`${BASE}/tu-vi`,
-  publisher:{'@type':'Organization',name:'Tử Vi Minh Bảo',url:BASE}
+  publisher:{'@type':'Organization', '@id': ORG_ID,name:'Tử Vi Minh Bảo',url:BASE}
 })}</script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}

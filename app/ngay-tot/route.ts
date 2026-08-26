@@ -4,6 +4,7 @@ export const revalidate = false;
 import { NextResponse } from 'next/server';
 import { ACTIVITY_LIST, ACTIVITY_META } from '../../tuvi-engine/dist/ngay-tot/index.js';
 import { BASE, YEARS, esc, renderPage, CACHE_HEADERS } from './_shared';
+import { ORG_ID } from '@/lib/seo/entity';
 
 export async function GET() {
   const title = 'Xem Ngày Tốt — Lịch Vạn Niên 2020-2036 | Tử Vi Minh Bảo';
@@ -40,7 +41,7 @@ export async function GET() {
     schema: {
       '@context': 'https://schema.org', '@type': 'CollectionPage',
       name: title, description: desc, url, inLanguage: 'vi',
-      publisher: { '@type': 'Organization', name: 'Tử Vi Minh Bảo', url: BASE },
+      publisher: { '@type': 'Organization', '@id': ORG_ID, name: 'Tử Vi Minh Bảo', url: BASE },
     },
     breadcrumbs: [
       { name: 'Trang Chủ', url: '/' },

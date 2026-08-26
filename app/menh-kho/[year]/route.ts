@@ -4,6 +4,7 @@
 export const revalidate = false;
 
 import { NextRequest, NextResponse } from 'next/server';
+import { ORG_ID } from '@/lib/seo/entity';
 
 const BASE = 'https://www.tuviminhbao.com';
 const CAN_NAMES = ['Giáp','Ất','Bính','Đinh','Mậu','Kỷ','Canh','Tân','Nhâm','Quý'];
@@ -68,7 +69,7 @@ export async function GET(
     '@context': 'https://schema.org', '@type': 'CollectionPage',
     name: title, description: desc, url,
     inLanguage: 'vi',
-    publisher: { '@type': 'Organization', name: 'Tử Vi Minh Bảo', url: BASE },
+    publisher: { '@type': 'Organization', '@id': ORG_ID, name: 'Tử Vi Minh Bảo', url: BASE },
     breadcrumb: { '@type': 'BreadcrumbList', itemListElement: [
       { '@type': 'ListItem', position: 1, name: 'Trang Chủ', item: BASE },
       { '@type': 'ListItem', position: 2, name: 'Mệnh Khố', item: `${BASE}/menh-kho.html` },

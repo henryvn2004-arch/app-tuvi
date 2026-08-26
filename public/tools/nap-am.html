@@ -27,6 +27,19 @@
 .na-info { font-size: 13px; color: var(--text-mid); line-height: 1.7; padding-top: 8px; border-top: 1px solid var(--border-lt); margin-top: 12px; }
 @media(max-width:700px){ .nap-am-result{grid-template-columns:1fr 1fr} }
 @media(max-width:480px){ .nap-am-result{grid-template-columns:1fr} }
+/* Khối "hành này thì làm gì" — markup do /tools-shared/nap-am.js dựng, dùng
+   chung với shell /app/nap-am; chỉ phần CSS là riêng theo bảng màu mỗi trang. */
+.na-use { background: #fff; border: 1px solid var(--border); border-radius: 10px; padding: 20px 24px; margin-top: 16px; }
+.na-use-head { font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--gold, #9A7B3A); margin-bottom: 14px; }
+.na-use-row { display: flex; gap: 16px; padding: 10px 0; border-top: 1px solid var(--border-lt); }
+.na-use-row:first-of-type { border-top: none; padding-top: 0; }
+.na-use-k { flex: 0 0 32%; font-size: 12.5px; font-weight: 600; color: var(--text-lt); }
+.na-use-v { flex: 1; font-size: 14px; color: var(--text); line-height: 1.65; }
+.na-use-note { display: block; font-size: 12px; color: var(--text-lt); line-height: 1.6; margin-top: 5px; }
+.na-use-links { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--border-lt); }
+.na-use-link { font-size: 13px; color: var(--blue); text-decoration: none; border: 1px solid var(--border); border-radius: 7px; padding: 7px 12px; }
+.na-use-link:hover { background: var(--bg-soft, #F7F9FC); }
+@media(max-width:520px){ .na-use-row{flex-direction:column;gap:3px} .na-use-k{flex:none} }
 </style>
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Nạp Âm là gì?","acceptedAnswer":{"@type":"Answer","text":"Nạp Âm là hệ thống xác định hành của từng năm Can Chi theo chu kỳ 60 năm (lục thập hoa giáp). Mỗi cặp năm Can Chi thuộc một hành nạp âm có thể khác với hành của Can Chi thông thường."}},{"@type":"Question","name":"Nạp Âm khác ngũ hành Can Chi như thế nào?","acceptedAnswer":{"@type":"Answer","text":"Ngũ hành Can Chi xác định theo từng Can đơn lẻ (Giáp-Ất Mộc, Bính-Đinh Hỏa...). Nạp Âm là lớp ngũ hành thứ hai, được tính theo cặp năm trong chu kỳ 60 và có thể khác hoàn toàn với hành của Can."}},{"@type":"Question","name":"Nạp Âm dùng trong luận mệnh như thế nào?","acceptedAnswer":{"@type":"Answer","text":"Nạp Âm của năm sinh xác định mệnh cục (mệnh Kim, Mộc, Thủy, Hỏa, Thổ) trong hệ thống luận mệnh dân gian Việt Nam. Từ đó suy ra màu sắc, hướng, số và ngành nghề phù hợp."}}]}
@@ -48,11 +61,10 @@
     <div class="xt-section">
       <div class="xt-eyebrow">Công cụ này là gì?</div>
       <div class="xt-grid-2">
-        <div>
+        <div class="xt-intro-row"><img class="xt-avatar" src="/tool-avatars/nap-am.webp" alt="" loading="lazy" onerror="this.remove()"><div class="xt-intro-text">
           <h2 class="xt-h2">Nạp Âm & Can Chi<br>trong Tử Vi Đẩu Số</h2>
           <p class="xt-body">Mỗi năm trong chu kỳ 60 hoa giáp mang một cặp Can-Chi và một Nạp Âm riêng. Nạp Âm phản ánh Ngũ Hành tiềm ẩn của năm sinh — nó khác với Ngũ Hành bề mặt của Can hoặc Chi và có vai trò quan trọng trong nhiều luận đoán mệnh lý.</p>
-          <p class="xt-body">Ví dụ: năm Canh Ngọ 1990 có Nạp Âm là <strong>Lộ Bàng Thổ</strong> — hành Thổ, ngụ ý bền vững nhưng cần điều kiện để phát huy. Điều này ảnh hưởng trực tiếp đến cách xét tương sinh khắc trong xem tuổi kết hôn và hợp tác làm ăn.</p>
-        </div>
+          <p class="xt-body">Ví dụ: năm Canh Ngọ 1990 có Nạp Âm là <strong>Lộ Bàng Thổ</strong> — hành Thổ, ngụ ý bền vững nhưng cần điều kiện để phát huy. Điều này ảnh hưởng trực tiếp đến cách xét tương sinh khắc trong xem tuổi kết hôn và hợp tác làm ăn.</p></div></div>
         <div class="xt-factors">
           <div class="xt-factor-title">Thông tin bạn nhận được</div>
           <div class="xt-factor-item"><span class="xt-factor-num">①</span><span class="xt-factor-label">Thiên Can</span><span class="xt-factor-desc">Giáp, Ất, Bính... và ý nghĩa hành</span></div>
@@ -82,6 +94,7 @@
   <div class="result-section" id="result-section">
     <div class="result-eyebrow" id="res-eyebrow"></div>
     <div class="nap-am-result" id="nap-am-result"></div>
+    <div id="nap-am-use"></div>
   </div>
 
   <div class="tool-cta">
@@ -96,13 +109,14 @@
   <div class="footer-top">
     <div>
       <div class="footer-brand"><img src="/seal.webp" alt=""><div class="footer-brand-text"><div class="name">Tử Vi Minh Bảo</div><div class="zh">紫微明寶</div></div></div>
-      <p class="footer-tagline">Tri mệnh lý – Thuận thế hành</p>
+      <p class="footer-tagline">Tri mệnh lý – Thuận thế hành</p><div class="footer-legal"><strong>Công ty TNHH Kira Tech</strong><br>(Kira Tech Company Limited)<br>Điện thoại: 0343.848.795<br>Email: contact@tuviminhbao.com<br>Địa chỉ: 901 Lê Đức Thọ, Phường An Hội Đông, Thành phố Hồ Chí Minh, Việt Nam</div>
     </div>
   </div>
   <div class="footer-bottom"><span>© 2026 tuviminhbao.com</span><img src="/seal.webp" alt=""></div>
+  <div class="footer-links"><a href="/san-pham-dich-vu.html">Sản Phẩm &amp; Dịch Vụ</a><a href="/chinh-sach-bao-mat.html">Chính Sách Bảo Mật</a><a href="/dieu-khoan-dich-vu.html">Điều Khoản Sử Dụng</a><a href="/huong-dan-thanh-toan.html">Hướng Dẫn Thanh Toán</a><a href="/mien-tru-trach-nhiem.html">Miễn Trừ Trách Nhiệm</a></div>
 </footer>
 
-<script src="/tools-shared/nap-am.js?v=1"></script>
+<script src="/tools-shared/nap-am.js?v=2"></script>
 <script>
 // Logic + render chuyển vào module dùng chung /tools-shared/nap-am.js (dùng
 // CHUNG với shell /app/nap-am). Trang này chỉ wiring DOM — hành vi giữ y nguyên.
@@ -114,6 +128,7 @@ function calculate(){
   if(!r.ok){err.textContent=r.error;err.classList.add('active');return;}
   document.getElementById('res-eyebrow').textContent=r.eyebrowText;
   document.getElementById('nap-am-result').innerHTML=r.resultHTML;
+  document.getElementById('nap-am-use').innerHTML=NapAmTool.ungDungHTML(r.data,{shell:false});
   document.getElementById('result-section').classList.add('active');
   document.getElementById('result-section').scrollIntoView({behavior:'smooth',block:'start'});
 }

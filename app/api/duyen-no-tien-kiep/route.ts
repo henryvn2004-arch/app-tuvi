@@ -46,15 +46,34 @@ import { authUserFromRequest, parseLlmJson } from '@/lib/api/tool-helpers';
 import { withToolOutcome } from '@/lib/ops/tool-outcome';
 import { normalizeBondGroup, type BondGroup } from '@/lib/portraits/bond-key';
 import {
-  putCachedPortrait,
-  touchCache,
+  cacheFor,
   insertHistoryRow,
-  getCachedPortrait,
   userOwnsLaso,
   type PortraitPhase,
 } from '@/lib/portraits/cache';
 
+
+
 const TOOL_ID = 'duyen-no-tien-kiep';
+
+/**
+ * 🔴 PHIÊN BẢN CẤU TRÚC payload. BUMP mỗi khi thêm/đổi/bớt khoá mà TRANG cần để
+ * dựng đủ màn hình. Đổi CHỮ thì không bump (dòng cache cũ trả chữ cũ — khó
+ * chịu, không vỡ); đổi KHOÁ mà quên bump thì trang ẩn khối IM LẶNG.
+ *
+ * Mở màn ở 1: payload hiện tại CHÍNH LÀ phiên bản 1, và dòng cache ghi trước
+ * lượt cắm cơ chế (không có `_shape`) được đọc là 1 nên KHÔNG bị dựng lại oan.
+ *
+ * ⚠️ Cố ý KHÔNG nhét vào `lasoKey`: đổi khoá là mồ côi cả cache LẪN
+ * `userOwnsLaso` ⇒ người đã trả tiền bị tính lại.
+ */
+const SHAPE = 1;
+
+/** Vân tay CẤU TRÚC — `npm run check:cacheshape` canh khớp với `SHAPE` ở trên. */
+const SHAPE_FINGERPRINT = '7e1e42a5757a';
+
+/** Cửa DUY NHẤT vào cache của tool này; `shape` khai một lần tại đây. */
+const CACHE = cacheFor(TOOL_ID, SHAPE);
 
 const SUPABASE_URL = process.env.SUPABASE_URL!;
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY!;
@@ -232,14 +251,15 @@ async function handleStory(grp: BondGroup, userId: string) {
         jsonSchema: STORY_SCHEMA,
         // 4 hồi × 110–170 từ tiếng Việt + mô tả mối duyên + lời kết. Nhóm
         // đông thì mỗi hồi dài hơn và có thêm khối mô tả — nới theo số người.
-        maxTokens: 4200 + (n - 2) * 900,
+        // Cả hai số hạng nâng 50% cùng đợt (Henry chốt 2026-08-20).
+        maxTokens: 6300 + (n - 2) * 1350,
       });
       void logLlmUsage(TOOL_ID, llmRes.model, {
         input_tokens: llmRes.usage.input_tokens,
         output_tokens: llmRes.usage.output_tokens,
         cache_creation_input_tokens: 0,
         cache_read_input_tokens: 0,
-      });
+      }, llmRes.durationMs);
       return { raw: llmRes.text, model: llmRes.model };
     } catch (e) {
       console.error('[duyen-no-tien-kiep] LLM lỗi:', (e as Error)?.message);
@@ -291,7 +311,7 @@ async function handleStory(grp: BondGroup, userId: string) {
     grp,
   );
   // Pha `story` KHÔNG có dòng lịch sử riêng (chỉ pha `image` ghi) → `row: null`.
-  void putCachedPortrait(TOOL_ID, 'story', grp.key, { payload, row: null }, userId);
+  CACHE.put('story', grp.key, { payload, row: null }, userId);
   return ok(payload);
 }
 
@@ -335,14 +355,14 @@ async function handleImage(grp: BondGroup, userId: string) {
               properties: { faces: { type: 'ARRAY', items: { type: 'STRING' } } },
               required: ['faces'],
             },
-      maxTokens: 900 + (n - 2) * 420,
+      maxTokens: 1350 + (n - 2) * 630, // nâng 50% cùng đợt (Henry chốt 2026-08-20)
     });
     void logLlmUsage(TOOL_ID, llmRes.model, {
       input_tokens: llmRes.usage.input_tokens,
       output_tokens: llmRes.usage.output_tokens,
       cache_creation_input_tokens: 0,
       cache_read_input_tokens: 0,
-    });
+    }, llmRes.durationMs);
     const parsed = parseLlmJson(llmRes.text) as
       | { faceA?: string; faceB?: string; faces?: unknown[] }
       | null;
@@ -371,7 +391,7 @@ async function handleImage(grp: BondGroup, userId: string) {
     const imgRes = await generatePortraitImage({ prompt: finalPrompt, size: '1536x1024' });
     imageB64 = imgRes.b64;
     imgModel = imgRes.model;
-    void logImageUsage(TOOL_ID, imgRes.model, imgRes.usage);
+    void logImageUsage(TOOL_ID, imgRes.model, imgRes.usage, imgRes.durationMs);
   } catch (e) {
     return err('Lỗi sinh ảnh: ' + (e instanceof Error ? e.message : 'không rõ'), 500);
   }
@@ -413,7 +433,7 @@ async function handleImage(grp: BondGroup, userId: string) {
   void railFreeTurnsPerGen().then((k) => railFreeGrant(userId, k)).catch(() => {});
 
   const payload = withLaso({ success: true, imageUrl, ...bondMeta(group) }, grp);
-  void putCachedPortrait(TOOL_ID, 'image', grp.key, { payload, row: historyRow }, userId);
+  CACHE.put('image', grp.key, { payload, row: historyRow }, userId);
   return ok(payload);
 }
 
@@ -460,12 +480,15 @@ async function handleCacheStatus(request: NextRequest, sp: URLSearchParams) {
 
   const { key } = pairFromQuery(sp);
   const [story, image, owns] = await Promise.all([
-    getCachedPortrait(TOOL_ID, 'story', key),
-    getCachedPortrait(TOOL_ID, 'image', key),
+    CACHE.get('story', key),
+    CACHE.get('image', key),
     userOwnsLaso(TOOL_ID, auth.user.id, key),
   ]);
-  const cached = Boolean(story) && Boolean(image);
-  return ok({ success: true, cached, free: cached && owns });
+  // ⚠️ `story`/`image` là OBJECT `{cached, stale}` — đọc thẳng chúng như boolean
+  // thì lúc nào cũng "có cache" và client bỏ luôn bước trả tiền.
+  const cached = Boolean(story.cached) && Boolean(image.cached);
+  const coDong = (story.cached || story.stale) && (image.cached || image.stale);
+  return ok({ success: true, cached, free: Boolean(coDong) && owns });
 }
 
 // ── Routes ──────────────────────────────────────────────────────────────
@@ -508,11 +531,13 @@ async function runPost(request: NextRequest) {
   // Tra cache RIÊNG từng pha — hai pha chạy song song, lượt gốc có thể hỏng
   // giữa chừng và chỉ một pha kịp vào cache; coi cả hai là một khối thì nửa còn
   // thiếu được phát miễn phí.
-  const [cached, owns] = await Promise.all([
-    getCachedPortrait(TOOL_ID, phase, pair.key),
+  const [{ cached, stale }, owns] = await Promise.all([
+    CACHE.get(phase, pair.key),
     userOwnsLaso(TOOL_ID, auth.user.id, pair.key),
   ]);
-  const free = Boolean(cached) && owns;
+  // `free` xét cả dòng CŨ: đã trả tiền cho đúng cặp lá số đó rồi. `cached` thì
+  // `CACHE.get` đã lọc — dòng cũ không bao giờ được phục vụ.
+  const free = Boolean(cached || stale) && owns;
 
   if (!free) {
     // Chốt chặn thanh toán PHÍA SERVER — không có bước này thì gọi thẳng
@@ -522,7 +547,7 @@ async function runPost(request: NextRequest) {
   }
 
   if (cached) {
-    touchCache(TOOL_ID, phase, pair.key);
+    CACHE.touch(phase, pair.key);
     if (phase === 'image' && !owns && cached.row) {
       insertHistoryRow(TOOL_ID, { ...cached.row, user_id: auth.user.id, laso_key: pair.key });
       void railFreeTurnsPerGen().then((n) => railFreeGrant(auth.user.id, n)).catch(() => {});

@@ -82,6 +82,19 @@
       '.ai-orb-c .ai-orb-halo i:nth-child(1){background:var(--gold,#C9A84C);top:2%;left:4%;animation:ai-orb-f1 4.1s ease-in-out infinite}' +
       '.ai-orb-c .ai-orb-halo i:nth-child(2){background:var(--gold-soft,#9A7B3A);bottom:0;right:2%;animation:ai-orb-f2 3.4s ease-in-out infinite}' +
       '.ai-orb-c .ai-orb-halo i:nth-child(3){background:#F2DFA8;top:24%;right:20%;animation:ai-orb-f3 4.8s ease-in-out infinite}' +
+      // INVITE — LỜI MỜI, không phải lượt chờ. Cùng một cục sáng nhưng CHUYỂN
+      // ĐỘNG khác hẳn: thở chậm 3,6s và KHÔNG xoay. Đây là chỗ tách vai, theo
+      // đúng lối "token hai vai" của --navy/--gold: giữ chung HÌNH (để nó là một
+      // dấu thương hiệu), tách NGHĨA bằng nhịp. Quầng xoay = "máy đang chạy,
+      // đừng đụng"; quầng thở đứng yên = "đang đợi BẠN". Dùng chung một hình cho
+      // hai nghĩa mà không tách nhịp thì người ta học nghĩa từ lần gặp đầu rồi
+      // bấm vào cái orb đang chờ LLM.
+      // Nở nhanh lên khi rê chuột/focus — phản ứng là thứ phân biệt "bấm được"
+      // với "đồ trang trí"; trang gắn class .ai-orb-live lên phần tử bao ngoài.
+      '.ai-orb-invite .ai-orb-halo{inset:-17%;animation:ai-orb-breathe 3.6s ease-in-out infinite}' +
+      '.ai-orb-invite .ai-orb-halo i{display:block;width:100%;height:100%;border-radius:50%;opacity:.8;filter:blur(14px);background:radial-gradient(circle at 50% 50%,#F2DFA8 0%,var(--gold,#C9A84C) 45%,var(--gold-soft,#9A7B3A) 100%)}' +
+      '.ai-orb-live:hover .ai-orb-invite .ai-orb-halo,.ai-orb-live:focus-visible .ai-orb-invite .ai-orb-halo{animation-duration:1.5s}' +
+      '.ai-orb-live:hover .ai-orb-invite .ai-orb-halo i,.ai-orb-live:focus-visible .ai-orb-invite .ai-orb-halo i{opacity:1;filter:blur(11px)}' +
       // D — vệt sáng quét vành
       '.ai-orb-d .ai-orb-halo{inset:-8%;background:conic-gradient(from 0deg,transparent 0 62%,#F2DFA8 80%,var(--gold,#C9A84C) 90%,transparent 100%);-webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 7px),#000 calc(100% - 6px));mask:radial-gradient(farthest-side,transparent calc(100% - 7px),#000 calc(100% - 6px));animation:ai-orb-spin 1.5s linear infinite}' +
       '.ai-orb-d .ai-orb-soft{position:absolute;inset:-11%;border-radius:50%;box-shadow:0 0 22px 3px var(--gold,#C9A84C);opacity:.3}' +
@@ -109,7 +122,9 @@
   //   AiLoadingSteps.orbHtml({ size: 62, variant: 'a' })
   //
   // variant: 'a' khói xoay (mặc định) · 'b' nhịp thở · 'c' ba cụm khói ·
-  //          'd' vệt quét vành. Đổi biến thể = đổi đúng một chữ.
+  //          'd' vệt quét vành · 'invite' LỜI MỜI (thở chậm, không xoay — dùng
+  //          cho nút/avatar bấm được, KHÔNG dùng cho lượt chờ; xem khối CSS).
+  // Đổi biến thể = đổi đúng một chữ.
   // Không nhận dữ liệu người dùng nên an toàn khi nối chuỗi; `size` ép về số.
   // ============================================================
   var ORB_MARK =
@@ -124,9 +139,13 @@
     opts = opts || {};
     var size = Number(opts.size) || 62;
     var v = String(opts.variant || 'a').toLowerCase();
-    if (['a', 'b', 'c', 'd'].indexOf(v) < 0) v = 'a';
+    if (['a', 'b', 'c', 'd', 'invite'].indexOf(v) < 0) v = 'a';
     var inner =
-      v === 'a' ? '<i></i>' : v === 'c' ? '<i></i><i></i><i></i>' : '';
+      v === 'a' || v === 'invite'
+        ? '<i></i>'
+        : v === 'c'
+          ? '<i></i><i></i><i></i>'
+          : '';
     return (
       '<div class="ai-orb ai-orb-' + v + '" style="width:' + size + 'px;height:' + size + 'px">' +
       (v === 'd' ? '<div class="ai-orb-soft"></div>' : '') +
@@ -139,6 +158,81 @@
   // Chỉ dựng khung (head + hộp bước + dòng đếm giây) ở lượt ĐẦU, các lượt sau
   // chỉ thay ruột hộp bước. Nếu gán lại cả el.innerHTML mỗi lần đổi bước thì
   // orb ở `head` bị dựng lại và animation giật về đầu ngay giữa chừng.
+  // ============================================================
+  // pacer — ETA TỰ HIỆU CHỈNH cho tool chạy NHIỀU PHẦN tuần tự
+  // (luận giải 24 phần, xem tuổi 9 phần).
+  //
+  // Vì sao không dùng ETA tĩnh: một con số chép cứng nói dối vào đúng ngày đổi
+  // model — repo này đã dính (gpt-image-1 → gpt-image-2 làm thời gian vẽ gấp
+  // đôi, mà con số trong tài liệu vẫn đứng yên). Đo ngay TRONG phiên thì miễn
+  // nhiễm với đổi model, đổi máy, và tải server lúc đó.
+  //
+  //   var pace = AiLoadingSteps.pacer();
+  //   pace.begin();  ... pace.end();          // bọc quanh MỖI phần
+  //   pace.perPartSec()        → số giây/phần, null khi chưa đủ mẫu
+  //   pace.remainText(conLai)  → 'còn khoảng 3 phút' | '' khi chưa đủ mẫu
+  //
+  // ⚠️ MIN_SAMPLES = 2 vì PHẦN ĐẦU luôn chậm bất thường: nó nạp 10 tài liệu
+  // RAG trong khi các phần sau chỉ 7 (`matchCount: p===1?10:7`). Lấy một mẫu
+  // duy nhất đó nhân lên 23 phần là hứa sai ngay từ dòng đầu.
+  //
+  // 🔴 begin/end NHẬN THÊM `key` TUỲ CHỌN (2026-08-20, vá "Kimi K3 chậm, gộp
+  // nhiều phần chạy song song để đỡ chờ"): `PhanPool` (tools-shared/phan-pool.js)
+  // chạy NHIỀU phần cùng lúc, mỗi phần tự begin()/end() quanh lượt gọi của nó —
+  // dùng chung MỘT `t0` (bản cũ) thì lượt sau ghi đè mốc bắt đầu của lượt trước,
+  // ra thời lượng bịa. `key` (số phần) tách mốc bắt đầu của từng phần; không
+  // truyền key vẫn chạy đúng như cũ (key mặc định '').
+  // ============================================================
+  function pacer(opts) {
+    opts = opts || {};
+    var minSamples = opts.minSamples || 2;
+    var samples = [];
+    var starts = {};
+
+    function perPartSec() {
+      if (samples.length < minSamples) return null;
+      // TRUNG VỊ chứ không phải trung bình: một lượt chậm bất thường (mạng
+      // chớp, model nghẽn) không được kéo lệch cả dự đoán.
+      var s = samples.slice().sort(function (a, b) { return a - b; });
+      var m = s.length >> 1;
+      return s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2;
+    }
+
+    return {
+      begin: function (key) { starts[key == null ? '' : key] = Date.now(); },
+      // CỐ Ý chỉ gọi ở nhánh THÀNH CÔNG: một phần chết giữa chừng có thời lượng
+      // thật nhưng không đại diện cho phần chạy được.
+      end: function (key) {
+        var k = key == null ? '' : key;
+        if (!starts[k]) return;
+        samples.push((Date.now() - starts[k]) / 1000);
+        delete starts[k];
+      },
+      reset: function () { samples = []; starts = {}; },
+      perPartSec: perPartSec,
+      // Cách viết thời lượng MỘT phần — gom ở đây để hai trang không tự chế hai
+      // kiểu, và để không bao giờ in ra "khoảng 0 giây" vì làm tròn.
+      perPartText: function () {
+        var per = perPartSec();
+        return per ? 'khoảng ' + Math.max(1, Math.round(per)) + ' giây' : '';
+      },
+      // `concurrency` (mặc định 1, tương thích ngược): chạy N phần song song thì
+      // thời gian còn lại là theo LÔ — ceil(remaining/N) lô, không phải cộng dồn
+      // từng phần một. Thiếu tham số này thì tool chạy pool 3-song-song vẫn báo
+      // ETA dài gấp 3 lần thật.
+      remainText: function (remaining, concurrency) {
+        var per = perPartSec();
+        if (!per || !(remaining > 0)) return '';
+        var c = concurrency > 0 ? concurrency : 1;
+        var batches = Math.ceil(remaining / c);
+        var s = per * batches;
+        if (s < 45) return 'còn khoảng ' + (Math.round(s / 5) * 5 || 5) + ' giây';
+        if (s < 90) return 'còn khoảng 1 phút';
+        return 'còn khoảng ' + Math.round(s / 60) + ' phút';
+      },
+    };
+  }
+
   function render(el, rows, head) {
     var box = el.querySelector('.ai-steps-box');
     if (!box) {
@@ -159,6 +253,10 @@
         return '<div class="ai-step ' + r.state + '">' + icon + '<span>' + r.label + '</span></div>';
       })
       .join('');
+    // r.label có thể mang HTML icon (<span class="ic" data-icon="...">) —
+    // box được dựng lại MỚI mỗi lượt gọi nên mount lại ở đây luôn AN TOÀN,
+    // không có span nào đã có <svg> từ trước để mountIcons phải bỏ qua.
+    window.mountIcons && window.mountIcons(box);
   }
 
   // opts (tuỳ chọn): { orb: false, variant: 'a', orbSize: 54 }
@@ -342,5 +440,37 @@
     };
   }
 
-  window.AiLoadingSteps = { mount: mount, mountWait: mountWait, orbHtml: orbHtml };
+  // ============================================================
+  // scrollToResult — cuộn khung workspace tới khung kết quả/đang chờ NGAY sau
+  // khi bấm chạy. TÁCH KHỎI mount()/mountWait(): nhiều trang phải hiện panel
+  // (đổi display:none→block) TRƯỚC rồi mới biết cuộn tới đâu — nhét cuộn vào
+  // bên trong bộ đếm bước thì hàm đó phải biết luôn cấu trúc panel của từng
+  // trang, mỗi trang một kiểu khác nhau.
+  //
+  // Lỗi đang vá: bấm "chạy"/"luận giải" mà không cuộn ⇒ nếu form dài hơn màn
+  // hình (nhất là mobile), người dùng đang đứng ở nút bấm cuối form, panel kết
+  // quả/orb hiện ra NGOÀI khung nhìn, màn hình trông như đứng im suốt vài giây
+  // đầu — không biết có đang chạy hay không.
+  //
+  //   AiLoadingSteps.scrollToResult('resPanel')
+  //   AiLoadingSteps.scrollToResult(el, { delay: 30 })
+  //
+  // Gọi ngay sau dòng hiện panel, KHÔNG đợi kết quả xong — mục đích là cho
+  // thấy "đã có gì đó đang chạy", không phải cuộn tới kết quả CUỐI cùng.
+  // ============================================================
+  function scrollToResult(containerOrId, opts) {
+    var el = typeof containerOrId === 'string' ? document.getElementById(containerOrId) : containerOrId;
+    if (!el) return;
+    opts = opts || {};
+    var run = function () {
+      try { el.scrollIntoView({ behavior: 'smooth', block: 'start' }); } catch (e) { /* ignore */ }
+    };
+    // Mặc định cuộn NGAY — trình duyệt buộc phải tính lại layout khi đọc vị
+    // trí để cuộn nên panel vừa display:block trong CÙNG tick vẫn đo đúng.
+    // `delay` chỉ cần khi trang còn việc khác (vd render nội dung) phải xong
+    // trước đã.
+    if (opts.delay) setTimeout(run, opts.delay); else run();
+  }
+
+  window.AiLoadingSteps = { mount: mount, mountWait: mountWait, orbHtml: orbHtml, pacer: pacer, scrollToResult: scrollToResult };
 })();

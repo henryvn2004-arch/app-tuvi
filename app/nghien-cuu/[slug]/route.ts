@@ -1,6 +1,8 @@
 // app/nghien-cuu/[slug]/route.ts — Article detail page for master-written articles
 export const revalidate = 86400;
 import { NextRequest, NextResponse } from 'next/server';
+import { PUBLISHED_ONLY } from '@/lib/content/publish-filter';
+import { ORG_ID } from '@/lib/seo/entity';
 
 const SB_URL = process.env.SUPABASE_URL!;
 const SB_KEY = process.env.SUPABASE_SERVICE_KEY!;
@@ -113,8 +115,8 @@ function buildHTML(article: any, master: any, related: any[], slug: string) {
       wordCount: article.word_count || 0,
       author: masterName
         ? { '@type': 'Person', name: masterName, url: masterUrl, description: master?.bio || '' }
-        : { '@type': 'Organization', name: 'Tử Vi Minh Bảo', url: BASE },
-      publisher: { '@type': 'Organization', name: 'Tử Vi Minh Bảo', url: BASE, logo: { '@type': 'ImageObject', url: BASE + '/seal.webp' } },
+        : { '@type': 'Organization', '@id': ORG_ID, name: 'Tử Vi Minh Bảo', url: BASE },
+      publisher: { '@type': 'Organization', '@id': ORG_ID, name: 'Tử Vi Minh Bảo', url: BASE, logo: { '@type': 'ImageObject', url: BASE + '/seal.webp' } },
       image: { '@type': 'ImageObject', url: img },
       about: { '@type': 'Thing', name: 'Tử Vi Đẩu Số' },
       isPartOf: { '@type': 'Blog', name: 'Nghiên Cứu Tử Vi', url: BASE + '/nghien-cuu' },
@@ -296,7 +298,7 @@ export async function GET(
 
   try {
     const r = await fetch(
-      `${SB_URL}/rest/v1/master_articles?slug=eq.${encodeURIComponent(slug)}&select=*&limit=1`,
+      `${SB_URL}/rest/v1/master_articles?slug=eq.${encodeURIComponent(slug)}&select=*&${PUBLISHED_ONLY}&limit=1`,
       { headers: sbHeaders }
     );
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -313,7 +315,7 @@ export async function GET(
         ? fetch(`${SB_URL}/rest/v1/master_profiles?id=eq.${encodeURIComponent(article.master_id)}&select=id,display_name,bio&limit=1`, { headers: sbHeaders })
         : Promise.resolve(null),
       fetch(
-        `${SB_URL}/rest/v1/master_articles?slug=neq.${encodeURIComponent(slug)}&category=eq.${encodeURIComponent(article.category || '')}&select=slug,title,master_id&order=created_at.desc&limit=5`,
+        `${SB_URL}/rest/v1/master_articles?slug=neq.${encodeURIComponent(slug)}&category=eq.${encodeURIComponent(article.category || '')}&select=slug,title,master_id&${PUBLISHED_ONLY}&order=created_at.desc&limit=5`,
         { headers: sbHeaders }
       ),
     ]);

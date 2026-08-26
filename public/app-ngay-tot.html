@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"></noscript>
-<link rel="stylesheet" href="/shell.css?v=18">
+<link rel="stylesheet" href="/shell.css?v=29">
 <style>
 .form-card{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);max-width:600px}
 .form-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:3px}
@@ -65,7 +65,8 @@
       <div id="shellRecent"></div>
       <div class="form-card" id="birthPanel">
         <h2>Tháng cần xem (dương lịch)</h2>
-        <p class="sub">Xem lịch ngày tốt/xấu cả tháng theo âm lịch (Tam Nương, Nguyệt Kị, Dương Công Kị), rồi hỏi trợ lý chọn ngày đẹp cho việc trọng đại.</p>
+        <p class="sub">Liệt kê những ngày tốt trong tháng này, xếp theo từng ngày. Bạn cứ định làm việc lớn rồi phải dời vì gặp ngày xấu. Dùng khi lên kế hoạch cho cả tháng, không chỉ một ngày.</p>
+        <p class="price-note" data-tvp-price-label="ngay-tot">…</p>
         <div class="frow" style="margin-bottom:4px">
           <div class="fg"><label>Tháng</label><input type="number" id="thang" min="1" max="12" placeholder="1–12"></div>
           <div class="fg"><label>Năm</label><input type="number" id="nam" min="2020" max="2030" placeholder="2026"></div>
@@ -98,13 +99,13 @@
 </div>
 
 <script>window.SHELL_ACTIVE='ngay-tot';window.SHELL_HISTORY=true;
-window.SHELL_INTRO={key:'ngay-tot',title:'Ngày tốt trong tháng',desc:'Xem <b>lịch ngày tốt/xấu cả tháng</b> theo âm lịch (Tam Nương · Nguyệt Kị · Dương Công Kị), rồi hỏi <b>trợ lý AI</b> chọn ngày đẹp cho cưới hỏi, khởi công.'};</script>
+window.SHELL_INTRO={key:'ngay-tot',title:'Ngày tốt trong tháng',desc:'Liệt kê những ngày tốt trong tháng này, xếp theo từng ngày. Bạn cứ định làm việc lớn rồi phải dời vì gặp ngày xấu. Dùng khi lên kế hoạch cho cả tháng, không chỉ một ngày.'};</script>
 <script src="/tuvi-ansao-engine.js"></script>
 <script src="/tools-shared/ngay-tot.js?v=2"></script>
 <script src="/tools-shared/hoang-lich.js?v=1"></script>
 <script src="/auth.js?v=2"></script>
   <script src="/nav.js?v=23" data-icons-only></script>
-<script src="/shell.js?v=66"></script>
+<script src="/shell.js?v=82"></script>
 <script>
 // Ô giữa dùng CHUNG /tools-shared/ngay-tot.js với /tools/ngay-tot.html.
 function calculate(){

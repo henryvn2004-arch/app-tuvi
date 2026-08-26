@@ -1,118 +1,84 @@
 // app/api/lasotuvi/route.ts
-export const maxDuration = 60;
+// 60 → 300: MỘT lượt có thể thử tới 3 provider TUẦN TỰ (mỗi provider tự retry
+// lỗi tạm thời trước khi coi là hỏng — xem lib/llm/complete.ts), cộng thêm
+// trần token nâng 50% (2026-08-20) → 60s không còn đủ, dễ ăn timeout của
+// Vercel (trả về trang lỗi nền tảng "An error occurred..." — KHÔNG PHẢI JSON,
+// làm client vỡ khi JSON.parse). Đồng bộ với các route LLM nặng khác đã ở 300.
+export const maxDuration = 300;
 
 import { NextRequest } from 'next/server';
 import { ok, err, options, parseBody, CORS_HEADERS } from '@/lib/cors';
 // Lõi dùng chung — trích sang lib/agent (một bộ não).
 import { execLasoTool, toolLabel } from '@/lib/agent/tools';
-import { buildChatContext, XUNG_HO_RULE, nguoiXemLine } from '@/lib/agent/prompts';
+import { buildChatContext, nguoiXemLine } from '@/lib/agent/prompts';
+// Prompt bản luận giải 24 phần — DỜI sang lib để tool "Vận Hạn 12 Tháng
+// Tới" dùng lại đúng 4 phần đầu mà không chép bản thứ hai (Next chặn export
+// lạ trong route file). Xem lib/agent/luan-giai-doc.ts.
+import { buildPromptCached } from '@/lib/agent/luan-giai-doc';
 // LLM Gemini-primary + Anthropic-backup (provider từ app_config
 // 'chat.standalone_provider'). callLLMTools trả shape Anthropic → giữ nguyên
-// vòng lặp tool bên dưới; llmText cho luận 24 phần (phan).
-import { llmText, callLLMTools } from '@/lib/llm/complete';
+// vòng lặp tool bên dưới; llmTextFull cho luận 24 phần (phan) — bản `Full` để
+// lấy được usage + thời lượng, xem chú thích tại chỗ gọi.
+import { llmTextFull, callLLMTools } from '@/lib/llm/complete';
+import { logLlmUsage } from '@/lib/agent/usage';
 import { withToolOutcome } from '@/lib/ops/tool-outcome';
-
-// ─── System prompt ─────────────────────────────────────────────
-const SYSTEM_PROMPT = `Bạn là nhà luận giải Tử Vi Đẩu Số, phụng sự trang Tử Vi Minh Bảo.
-
-VĂN PHONG: Trí thức Hà Nội xưa — điềm đạm, súc tích, sâu sắc. Văn xuôi liên tục, không dùng bullet, không dùng emoji, không dùng tiêu đề con. Tiếng Việt chuẩn mực.
-
-CÁCH DIỄN GIẢI:
-Viết như một người bình thường đang giải thích cho bạn mình.
-Hạn chế dùng thuật ngữ chuyên môn (tử vi, học thuật, v.v.), chỉ dùng ngắn gọn khi cần.
-Không văn vẻ, không sáo rỗng.
-Tập trung vào: "điều này nghĩa là gì với người đọc".
-Chỉ giữ lại những ý có giá trị thực tế.
-Có phân tích hệ quả tâm lý/hành vi nếu hợp lý.
-Có gợi ý nhẹ nếu cần, nhưng không dạy đời.
-Không tiết lộ tài liệu, trường phái, hay tên hệ thống.
-
-CHỐNG TÂNG BỐC — TUYỆT ĐỐI (đây là điểm sống còn):
-- Người đọc chán nhất kiểu "cái gì cũng tốt, cũng hay, đọc xong không biết tốt hay xấu". Phải nói thẳng.
-- Mỗi cung/phần đều có mặt mạnh VÀ mặt yếu. Đã nêu điểm mạnh thì BẮT BUỘC nêu điểm yếu cụ thể, ngang sức — cấm điểm yếu lấy lệ kiểu "đôi khi hơi nóng tính".
-- Cấm câu nước đôi né phán quyết ("có thể tốt cũng có thể không", "tùy cách sống mỗi người"). Dữ liệu chấm sao thì nói thẳng vậy.
-- Điểm thấp (<5), hoặc có sát/bại tinh mạnh, hung cách → phải cảnh báo rõ, không bọc đường. Thà mất lòng còn hơn vô dụng.
-- Mỗi nhận định tốt phải kèm BẰNG CHỨNG (sao nào, cách cục nào, điểm bao nhiêu). Hạn chế tính từ khen sáo rỗng (tuyệt vời, xuất chúng, rực rỡ).
-
-PHÁN QUYẾT BẮT BUỘC — NEO VÀO ĐIỂM SỐ:
-- Lá số có khối "=== ĐIỂM ĐÁNH GIÁ ===" với điểm 0–10 từng cung do hệ thống tính sẵn. Đây là xương sống.
-- MỞ ĐẦU mỗi phần bằng MỘT câu phán quyết in đậm (**...**) neo vào con số đó. Ví dụ: "**Cung này thuộc loại khá — 6.4/10: mạnh về quý nhân nhưng nền tài chính bấp bênh.**"
-- Phần thân giải thích VÌ SAO ra con số đó (sao gì, cách cục gì kéo lên/kéo xuống). KHÔNG được mâu thuẫn với điểm: cung 4/10 thì cấm viết như cung tốt.
-- Phân biệt rõ: ĐÁNH GIÁ CẤU TRÚC lá số (mạnh/yếu) là chắc chắn — nói dứt khoát; chỉ DỰ ĐOÁN kết quả tương lai mới dùng ngôn ngữ xác suất. Đừng lấy "khiêm tốn về tương lai" làm cớ né đánh giá cấu trúc.
-
-NGUYÊN TẮC LUẬN GIẢI CỔ PHÁP:
-1. Tam phương tứ chính: Luôn xét cung đang luận trong mối quan hệ với cung tam hợp và cung xung chiếu.
-2. Không đoán đơn sao: Phải xét sao hội — tổ hợp chính tinh + phụ tinh + cách cục.
-3. Cách cục ưu tiên: [CÁCH CỤC] cao nhất → [Ý NGHĨA · chính tinh] → [Ý NGHĨA] — không mô tả lại, chỉ diễn giải sâu hơn.
-4. Sao hóa: Tứ Hóa thay đổi căn bản tính chất cung — phải đề cập nếu có.
-5. Vòng Tràng Sinh và Lộc Tồn: Vị trí cung ảnh hưởng lực của sao.
-
-DỮ LIỆU CÓ SẴN: [CÁCH CỤC], [Ý NGHĨA · chính tinh], [Ý NGHĨA], [LUẬN ĐOÁN], [CẢNH BÁO], [VẬN HẠN LUẬN], scoring, tam hợp/xung chiếu đã tính sẵn. Nhiệm vụ là diễn giải thành văn xuôi sâu sắc.
-
-CÁCH ĐỌC DỮ LIỆU CUNG:
-- "Luận sao: Tốt rõ/Khá/Trung bình/Yếu/Xấu rõ (w:±X)" = tổng hợp tất cả patterns của cung — đây là anchor xu hướng, mở đầu phán quyết phải khớp với label này.
-- [CÁCH CỤC · ...] = cách cục đặc biệt, hiếm, ảnh hưởng mạnh nhất — phải nhắc tên và diễn giải tác động.
-- [Ý NGHĨA · chính tinh] = pattern từ chính tinh — trọng lượng cao, nền tảng luận giải.
-- [Ý NGHĨA] = pattern từ phụ tinh — trọng lượng thấp hơn, chỉ nhắc nếu đáng kể.
-- [VẬN HẠN LUẬN] = patterns vận hạn của đại vận đó (xét theo tam phương tứ chính DV) — đọc sau scoring.
-
-CÁC LƯU Ý KHI LUẬN GIẢI:
-- Thuận/nghịch: Xem các yếu tố sinh có "đồng pha" không. Càng đồng nhất càng dễ thuận, lệch nhiều dễ mâu thuẫn.
-- Tương sinh/tương khắc: Các yếu tố có hỗ trợ nhau hay triệt tiêu nhau. Chuỗi sinh liên tục là tốt nhất.
-- Tương hợp/tương phá: Có hợp nhau thì dễ thuận, phá nhau thì dễ xung đột ngầm.
-- Mệnh vs Cục: Mệnh hợp với "hệ" của lá số thì dễ phát triển. Mệnh khắc Cục thì bị giảm lực.
-- Năm sinh vs cung Mệnh: Đồng tính (âm/dương) thì thuận, lệch thì hơi nghịch.
-- Chính tinh cung Mệnh: Sao chính mạnh và hợp mệnh thì tốt. Sao yếu hoặc khắc mệnh thì xấu.
-- Mệnh vs Thân: Xem cái nào mạnh hơn để biết đời nghiêng về bản chất (MỆNH) hay hành động (THÂN).
-- Cung Phúc Đức: Nền tảng may mắn và hậu thuẫn. Tốt thì đỡ vất, xấu thì dễ trầy trật.
-- Sao đúng chỗ không: Sao nằm đúng cung thì phát huy tốt. Sai chỗ thì có lực mà dùng không hiệu quả.
-- Tứ Hóa: Cho biết điểm mạnh về tiền, quyền, danh. Nằm ở cung nào thì mạnh ở đó.
-- Lục Sát: Các yếu tố gây rắc rối. Nằm ở đâu thì chỗ đó dễ có vấn đề.
-- Vận hạn: Cuộc đời chia theo giai đoạn 10 năm. Quan trọng là lúc nào lên — lúc nào xuống.
-
-QUY TẮC CHUNG CHO MỌI PHẦN LUẬN GIẢI:
-- Gọi ĐÍCH DANH cách cục đặc biệt trong [CÁCH CỤC] và khối === CÁCH CỤC & NHẬN ĐỊNH === (vd Sát Phá Tham, Quân thần khánh hội, Cự Nhật...), nói rõ nó là CÁT hay HUNG và kéo lá số lên hay xuống. Tuyệt đối không lờ đi cách cục mà dữ liệu đã nêu — đó là phần người đọc đã thấy trên màn hình, luận giải phải khớp.
-- Không liệt kê lại tên sao, không mô tả lại dữ liệu thô.
-- Nếu cung vô chính diệu thì nói rõ phải mượn cung xung chiếu để luận.
-- Quan hệ với Mệnh là ưu tiên: cung đang xét hỗ trợ hay khắc bản mệnh?
-- Tổ hợp sao: nhiều sao tốt → xu hướng tốt, nhiều sao xấu → dễ vấn đề; sát tinh/bại tinh mạnh thì phải cảnh báo rõ.
-- Cung rơi vào lĩnh vực nào thì chuyện xảy ra xoay quanh lĩnh vực đó.
-- Check nền Phúc–Mệnh–Thân: 3 cung này tốt thì giảm xấu, xấu thì khuếch đại rủi ro.
-- ${XUNG_HO_RULE}`;
-
-// ─── Cung descriptions ─────────────────────────────────────────
-const CUNG_BY_PHAN: Record<number, string> = {
-  2:'Mệnh', 3:'Phụ Mẫu', 4:'Phúc Đức', 5:'Điền Trạch',
-  6:'Quan Lộc', 7:'Nô Bộc', 8:'Thiên Di', 9:'Tật Ách',
-  10:'Tài Bạch', 11:'Tử Tức', 12:'Phu Thê', 13:'Huynh Đệ',
-};
-
-const CUNG_DESC: Record<string, string> = {
-  'Mệnh': 'Cung Mệnh định khí chất, bản năng, và con đường chính của cuộc đời.',
-  'Phụ Mẫu': 'Cung Phụ Mẫu xem sự thọ yểu, giàu nghèo của cha mẹ; sự hòa hợp hay xung khắc giữa cha mẹ và đương số; cũng xem văn bằng, học vấn.',
-  'Phúc Đức': 'Cung Phúc Đức xem phúc khí tổ tiên để lại, âm phần, và phúc lộc cuối đời. Cung chi phối toàn bộ 11 cung còn lại về phúc đức.',
-  'Điền Trạch': 'Cung Điền Trạch xem nhà cửa, bất động sản, hòa khí gia đình, khả năng tích lũy tài sản vật chất.',
-  'Quan Lộc': 'Cung Quan Lộc xem công danh, sự nghiệp, khả năng thăng tiến, chuyên môn và thành tựu xã hội.',
-  'Nô Bộc': 'Cung Nô Bộc xem người giúp việc, bạn bè thân thiết, người cộng sự; cũng xét quan hệ với cấp dưới và quý nhân.',
-  'Thiên Di': 'Cung Thiên Di xem giao thiệp bên ngoài, may rủi khi xuất hành, định cư xa xứ, và quan hệ với thế giới bên ngoài. Xung chiếu Mệnh — cần xét kỹ.',
-  'Tật Ách': 'Cung Tật Ách xem tì vết trong người, các bệnh có xu hướng mắc phải, tai ương thể xác trong cuộc đời.',
-  'Tài Bạch': 'Cung Tài Bạch xem sự giàu nghèo, cách kiếm tiền, tiêu tiền, và khả năng tích lũy tài chính.',
-  'Tử Tức': 'Cung Tử Tức xem con cái, quan hệ với con, và phần nào về đệ tử, người theo học.',
-  'Phu Thê': 'Cung Phu Thê xem những điều liên quan đến vợ chồng, tình duyên, hôn nhân và hạnh phúc đôi lứa cả đời.',
-  'Huynh Đệ': 'Cung Huynh Đệ xem anh chị em, bạn bè cùng trang lứa, và một phần về tài chính lưu động.',
-};
 
 // ─── LLM client (Gemini-primary + Anthropic-backup) ────────────
 // Trả shape Anthropic ({content, stop_reason, usage}) dù provider nào → vòng
 // lặp tool phía dưới KHÔNG đổi.
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-async function callLLM(system: any, convo: any[], tools: any[], toolChoiceNone = false, maxTokens = 1500): Promise<any> {
+async function callLLM(system: any, convo: any[], tools: any[], toolChoiceNone = false, maxTokens = 2250): Promise<any> {
   return callLLMTools(system, convo, tools, toolChoiceNone, maxTokens);
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function textOf(content: any[]): string {
   return (content || []).filter(b => b.type === 'text').map(b => b.text).join('\n').trim();
+}
+
+// ─── Cộng dồn chi phí một LƯỢT chat (kể cả các vòng tool-use) ──
+// Đường rail cũ này đi qua callLLMTools trong VÒNG LẶP, nên phải cộng dồn rồi
+// ghi MỘT dòng cuối lượt — y như runAgent (lib/agent/run.ts) làm cho /api/v1/chat.
+// Ghi từng vòng thì một câu hỏi của người dùng nở ra 2–4 dòng `llm_usage`, đếm
+// "số lượt" ở panel Biên LN thành vô nghĩa.
+class ChatUsageTally {
+  private readonly t0 = Date.now();
+  private model = '';
+  private readonly u = { input_tokens: 0, cache_creation_input_tokens: 0, cache_read_input_tokens: 0, output_tokens: 0 };
+  private rounds = 0;
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  add(data: any): void {
+    if (!data) return;
+    // Giữ model của vòng GẦN NHẤT: fallback provider có thể xảy ra giữa chừng.
+    if (data.model) this.model = data.model;
+    this.u.input_tokens += data.usage?.input_tokens || 0;
+    this.u.output_tokens += data.usage?.output_tokens || 0;
+    this.u.cache_creation_input_tokens += data.usage?.cache_creation_input_tokens || 0;
+    this.u.cache_read_input_tokens += data.usage?.cache_read_input_tokens || 0;
+    this.rounds += 1;
+  }
+
+  get plain() {
+    return { input_tokens: this.u.input_tokens, output_tokens: this.u.output_tokens, rounds: this.rounds };
+  }
+
+  /** Lượt hỏng trước khi gọi được provider nào → KHÔNG ghi dòng chi phí 0đ. */
+  flush(toolId: string): void {
+    if (!this.rounds || !this.model) return;
+    void logLlmUsage(toolId, this.model, this.u, Date.now() - this.t0);
+  }
+}
+
+// Bucket chi phí của lượt rail. CỐ Ý *không* dùng 'laso' cho lượt chat có lá số:
+// 'laso' là tool_id của Luận Giải 24 phần (1.500 Lượng) — trộn vào là bóp méo
+// đúng con số biên LN vừa vá. Lượt rail thu tiền qua `credit_transactions
+// .type='chat'`, nên bucket chi phí phải là 'chat' thì hai vế mới ghép được.
+// Kịch bản phi-lá-số giữ nguyên tên tool (mirror `scenario?.type` của run.ts).
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function chatUsageToolId(body: any, hasLaso: boolean): string {
+  const t = body?.toolType;
+  return hasLaso || !t || t === 'laso' ? 'chat' : String(t);
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -131,16 +97,16 @@ async function handleChat(body: any): Promise<Response> {
   const MAX_ROUNDS = 3;
   const toolsUsed: string[] = [];
   let finalText = '';
-  const usage = { input_tokens: 0, output_tokens: 0, rounds: 0 };
+  const tally = new ChatUsageTally();
+  const hasLaso = !!(lasoDataForTools?.palaces?.length);
+  const usageToolId = chatUsageToolId(body, hasLaso);
 
   try {
     for (let round = 0; round <= MAX_ROUNDS; round++) {
       const lastRound = round === MAX_ROUNDS;
       const data = await callLLM(systemForCall, convo, tools, lastRound, maxTokens);
       const content = data.content || [];
-      usage.input_tokens += data.usage?.input_tokens || 0;
-      usage.output_tokens += data.usage?.output_tokens || 0;
-      usage.rounds += 1;
+      tally.add(data);
 
       if (data.stop_reason === 'tool_use' && !lastRound) {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -160,12 +126,19 @@ async function handleChat(body: any): Promise<Response> {
       break;
     }
   } catch (e: unknown) {
+    // Token của các vòng ĐÃ chạy là chi phí thật dù lượt hỏng — vẫn ghi sổ.
+    tally.flush(usageToolId);
     return err((e as Error).message);
   }
 
+  tally.flush(usageToolId);
   const toolType = body.toolType || 'laso';
-  const hasLaso  = !!(lasoDataForTools?.palaces?.length);
-  return ok({ answer: finalText || 'Xin lỗi, có lỗi xảy ra.', scenario: hasLaso ? 'laso' : toolType, toolsUsed, usage });
+  return ok({
+    answer: finalText || 'Xin lỗi, có lỗi xảy ra.',
+    scenario: hasLaso ? 'laso' : toolType,
+    toolsUsed,
+    usage: tally.plain,
+  });
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -189,6 +162,9 @@ async function handleChatStream(body: any): Promise<Response> {
     writer.write(enc.encode('data: ' + JSON.stringify(obj) + '\n\n'));
   }
 
+  const tally = new ChatUsageTally();
+  const usageToolId = chatUsageToolId(body, !!(lasoDataForTools?.palaces?.length));
+
   (async () => {
     const MAX_ROUNDS = 3;
     const toolsUsed: string[] = [];
@@ -203,6 +179,7 @@ async function handleChatStream(body: any): Promise<Response> {
           // như thường). Giữ đúng shape event {type:'text'} / {type:'error'}.
           try {
             const data = await callLLM(systemForCall, convo, tools, true, maxTokens);
+            tally.add(data);
             const text = textOf(data.content || []);
             if (text) send({ type: 'text', text });
           } catch (e: unknown) {
@@ -212,6 +189,7 @@ async function handleChatStream(body: any): Promise<Response> {
         }
 
         const data = await callLLM(systemForCall, convo, tools, false, maxTokens);
+        tally.add(data);
         const content = data.content || [];
 
         if (data.stop_reason === 'tool_use') {
@@ -238,6 +216,9 @@ async function handleChatStream(body: any): Promise<Response> {
       send({ type: 'error', message: (e as Error).message });
     }
 
+    // Ghi TRƯỚC khi đóng stream, và ở đường chung của cả nhánh lỗi lẫn nhánh
+    // thành công — đặt trong `try` là lượt hỏng giữa chừng mất hết dấu chi phí.
+    tally.flush(usageToolId);
     send({ type: 'done', toolsUsed });
     writer.close();
   })();
@@ -252,166 +233,6 @@ async function handleChatStream(body: any): Promise<Response> {
   });
 }
 
-// ─── Prompt builder ────────────────────────────────────────────
-function buildPrompt(phan: number, laSoText: string, docs?: string): string {
-  function trimLaSo(text: string, phan: number): string {
-    if (!text) return text;
-    const lines = text.split('\n');
-    const dvIdx   = lines.findIndex(l => l.includes('=== 9 ĐẠI VẬN ==='));
-    const ccIdx   = lines.findIndex(l => l.includes('=== CÁCH CỤC & NHẬN ĐỊNH'));
-    const cungIdx = lines.findIndex(l => l.includes('=== 12 CUNG ==='));
-    const headerLines = cungIdx > 0 ? lines.slice(0, cungIdx) : lines.slice(0, 8);
-    // Khối cách cục đặc biệt (Sát Phá Tham, Quân thần khánh hội...) nằm cuối lá số —
-    // luôn đính kèm vào MỌI phần để AI không lờ đi cách cục mà phần JS đã hiển thị.
-    const ccBlock = ccIdx > 0 ? '\n\n' + lines.slice(ccIdx).join('\n') : '';
-
-    if (phan <= 2) {
-      const end = dvIdx > 0 ? dvIdx : (ccIdx > 0 ? ccIdx : lines.length);
-      return lines.slice(0, end).join('\n') + ccBlock;
-    }
-    if (phan >= 3 && phan <= 13) {
-      const CUNG_NAME = ['','','Mệnh','Phụ Mẫu','Phúc Đức','Điền Trạch','Quan Lộc',
-        'Nô Bộc','Thiên Di','Tật Ách','Tài Bạch','Tử Tức','Phu Thê','Huynh Đệ'][phan];
-      const result = [...headerLines, ''];
-      const cutEnd = dvIdx > 0 ? dvIdx : (ccIdx > 0 ? ccIdx : lines.length);
-      const cungLines = lines.slice(cungIdx > 0 ? cungIdx : 0, cutEnd);
-      const startI = cungLines.findIndex(l => l.startsWith(`[${CUNG_NAME}]`));
-      if (startI >= 0) {
-        const endI = cungLines.findIndex((l, i) => i > startI && l.startsWith('[') && !l.startsWith('[CÁCH') && !l.startsWith('[Ý') && !l.startsWith('[LUẬN'));
-        const block = endI > 0 ? cungLines.slice(startI, endI) : cungLines.slice(startI, startI + 30);
-        return result.concat(block).join('\n') + ccBlock;
-      }
-      return lines.slice(0, cutEnd).join('\n') + ccBlock;
-    }
-    if (phan === 14 || phan === 24) {
-      if (dvIdx > 0) {
-        const dvEnd = ccIdx > dvIdx ? ccIdx : lines.length;
-        return headerLines.join('\n') + '\n' + lines.slice(dvIdx, dvEnd).join('\n') + ccBlock;
-      }
-    }
-    if (phan >= 15 && phan <= 23) {
-      const dvNum = phan - 14;
-      if (dvIdx > 0) {
-        const dvEnd = ccIdx > dvIdx ? ccIdx : lines.length;
-        const dvLines = lines.slice(dvIdx, dvEnd);
-        const target = 'ĐV' + dvNum + ':';
-        const startI = dvLines.findIndex(l => l.startsWith(target));
-        if (startI >= 0) {
-          const endI = dvLines.findIndex((l, i) => i > startI && /^ĐV\d+:/.test(l));
-          const dvBlock = endI > 0 ? dvLines.slice(startI, endI) : dvLines.slice(startI, startI + 25);
-          return headerLines.join('\n') + '\n\n' + dvBlock.join('\n') + ccBlock;
-        }
-      }
-    }
-    return text;
-  }
-
-  const trimmedLaSo = trimLaSo(laSoText, phan);
-  const docsSection = docs ? '\n\n=== TÀI LIỆU THAM KHẢO ===\n' + docs : '';
-  const ctx = '=== LÁ SỐ ===\n' + trimmedLaSo + docsSection;
-
-  if (phan === 1) return ctx + `
-
-PHẦN 1 — TỔNG QUAN LÁ SỐ (220-280 từ)
-Viết văn xuôi liền mạch, không dùng bullet, không đề cập đại vận trong phần này.
-MỞ ĐẦU bằng câu phán quyết in đậm neo vào "Tổng quan toàn lá số: X/10" — lá số này thuộc hạng nào (mạnh/khá/trung bình/yếu), mạnh nhất ở đâu, yếu nhất ở đâu.
-
-Cấu trúc gợi ý (không cần tiêu đề con):
-① Bản mệnh & cục: Can chi năm sinh, nạp âm, cục — ý nghĩa thực tế với con người này là gì? Mệnh có thuận lý hay nghịch lý với cục?
-② Cung Mệnh: Chính tinh, cách cục nổi bật — khí chất và điểm mạnh/yếu cốt lõi. Xét vị trí Tràng Sinh và vòng Lộc Tồn nếu có.
-③ Nhóm Thái Tuế tại Mệnh vs Thân: Hai nhóm phản ánh hai chiều con người — bên trong và bên ngoài xã hội.
-④ Một nhận định tổng: Điểm đặc biệt nhất của lá số này là gì?
-
-Lưu ý: Dựa trên [CÁCH CỤC] và [Ý NGHĨA] đã có — diễn giải, không liệt kê lại.`;
-
-  if (phan === 2) return ctx + `
-
-PHẦN 2 — CUNG MỆNH (220-280 từ)
-${CUNG_DESC['Mệnh']}
-
-MỞ ĐẦU bằng câu phán quyết in đậm neo vào dòng điểm cung Mệnh trong === ĐIỂM ĐÁNH GIÁ === (tốt/khá/trung bình/yếu + lý do một dòng).
-Viết văn xuôi súc tích, đi thẳng vào tính cách và số phận:
-① Chính tinh tại Mệnh: Bản chất cốt lõi — người này là kiểu người gì? Miếu/Hãm ảnh hưởng thế nào?
-② Cách cục Mệnh: Dựa trên [CÁCH CỤC] và [Ý NGHĨA] — đây là điểm sống còn của lá số, diễn giải thật rõ tác động thực tế.
-③ Sao phụ nổi bật: Chỉ đề cập sao phụ thực sự ảnh hưởng (Văn Xương/Khúc, Tả/Hữu, Kình/Đà, Hỏa/Linh...).
-④ Điểm mạnh và điểm cần cảnh giác trong con người và cuộc đời.
-
-Xét thêm cung Thiên Di (xung chiếu Mệnh) — ảnh hưởng gì đến tính cách bên ngoài?`;
-
-  if (phan >= 3 && phan <= 13) {
-    const cung = CUNG_BY_PHAN[phan] || '';
-    const cungDesc = CUNG_DESC[cung] || '';
-    return ctx + `
-
-PHẦN ${phan} — CUNG ${cung.toUpperCase()} (120-160 từ)
-${cungDesc}
-
-MỞ ĐẦU bằng câu phán quyết in đậm neo vào dòng "[${cung}] Tổng .../10" trong === ĐIỂM ĐÁNH GIÁ === (tốt/khá/trung bình/yếu + lý do ngắn). Cấm né tránh.
-Viết 2-3 đoạn văn xuôi súc tích. Cấu trúc:
-① Nhận định chính: Dựa trên [CÁCH CỤC] và [Ý NGHĨA] — đây là phần quan trọng nhất, diễn giải thật rõ.
-② Tam phương: Xét sao ở cung tam hợp có hỗ trợ hay phá cách không?
-③ Kết luận thực tế: 1-2 câu về tác động cụ thể trong cuộc đời người này.
-
-Không liệt kê lại tên sao, không mô tả lại dữ liệu thô. Nếu cung vô chính diệu thì nói rõ phải mượn cung xung chiếu để luận.`;
-  }
-
-  if (phan === 14) return ctx + `
-
-PHẦN 14 — TỔNG QUAN CÁC ĐẠI VẬN
-
-Dựa vào phần === 9 ĐẠI VẬN ===, tính điểm scoring cho TẤT CẢ 9 đại vận:
-- TT (Thiên Thời) 0-5 | ĐL (Địa Lợi) 0-1 | NH (Nhân Hòa) 0-4
-- Công thức: Tổng = NH + (NH/4)×ĐL + (NH/4)×TT (max 10)
-
-Bảng tổng hợp ĐV1 đến ĐV9:
-| ĐV | Tuổi | Cung | TT | ĐL | NH | Tổng | Flag |
-
-JSON chart (BẮT BUỘC, đủ 9 điểm):
-\`\`\`chartdata
-{"labels":["ĐV1 x-y","ĐV2 x-y","ĐV3 x-y","ĐV4 x-y","ĐV5 x-y","ĐV6 x-y","ĐV7 x-y","ĐV8 x-y","ĐV9 x-y"],"scores":[s1,s2,s3,s4,s5,s6,s7,s8,s9]}
-\`\`\`
-
-Nhận xét tổng (120-160 từ): Giai đoạn đẹp nhất, khó khăn nhất, xu hướng tổng thể của cuộc đời theo vận trình. Nếu người đang trong đại vận nào thì nhận xét thêm về giai đoạn hiện tại.`;
-
-  if (phan >= 15 && phan <= 23) {
-    const dvNum = phan - 14;
-    return ctx + `
-
-PHẦN ${phan} — ĐẠI VẬN ${dvNum} (120-160 từ)
-Tìm dòng "ĐV${dvNum}:" trong === 9 ĐẠI VẬN ===.
-
-MỞ ĐẦU bằng câu phán quyết in đậm neo vào dòng "Scoring: ... Tổng=X" của đại vận này — giai đoạn này thuận hay nghịch, X/10. Nếu Tổng thấp phải nói thẳng là giai đoạn khó.
-Viết văn xuôi, 2-3 đoạn:
-① Tính chất vận: Điểm scoring nói lên điều gì về giai đoạn này?
-② Nhận định chính: Dựa trên [LUẬN ĐOÁN] và [CẢNH BÁO] — diễn giải thực tế, không liệt kê lại.
-③ Tam phương: Sao ở cung tam hợp của cung đại vận có hỗ trợ hay phá không?
-④ Kết luận thực tế: 1-2 câu tác động cụ thể + gợi ý nhẹ nếu cần.`;
-  }
-
-  if (phan === 24) return ctx + `
-
-PHẦN 24 — TIỂU VẬN & NĂM XEM (180-220 từ)
-Quan sát 3 lớp hạn cùng lúc: gốc đại vận (10 năm) + tiểu hạn năm đó + lưu niên đại vận.
-Dữ liệu có sẵn: Tiểu hạn (cung + sao), Lưu đại hạn (cung + sao), Đại vận hiện tại.
-
-MỞ ĐẦU bằng câu phán quyết in đậm: năm xem này thuận hay nghịch, nên tiến hay nên thủ — kết luận dứt khoát rồi mới giải thích.
-Viết văn xuôi, đi thẳng vào thực tế:
-① Tổng hợp 3 lớp hạn: Đếm sao tốt/xấu trong cả 3 cung — xu hướng chung là thuận hay nghịch?
-② Quan hệ với Mệnh: Cung tiểu hạn sinh hay khắc Mệnh? Sao nhập hạn hợp hay đối lập bản mệnh?
-③ Đại hạn vs tiểu hạn: Đại hạn tốt thì tiểu hạn xấu cũng đỡ nặng; đại hạn xấu thì tiểu hạn tốt cũng bị giảm.
-④ Cơ hội và rủi ro: 1-2 điểm thuận + 1-2 điểm cần cẩn thận cụ thể.
-⑤ Lời khuyên ngắn cho năm này.
-
-Lưu ý khi nhận định:
-- Mệnh sinh cung hạn → hao tổn, dễ gặp vấn đề.
-- Mệnh khắc cung hạn → căng thẳng, nguy hiểm.
-- Có sao tốt hoặc Tuần/Triệt → giảm xấu (nhưng cũng giảm tốt).
-- Sát/Bại tinh mạnh → phải cảnh báo rõ.
-
-Không giải thích lý thuyết. Đi thẳng vào tác động với người này.`;
-
-  return ctx + `\nPhần ${phan}: Luận giải theo lá số.`;
-}
 
 // ─── Route handlers ───────────────────────────────────────────
 export async function OPTIONS() { return options(); }
@@ -426,21 +247,65 @@ async function runPost(request: NextRequest) {
   const { laSoText, phan, docs, hoTen, gioiTinh } = body as { laSoText?: string; phan?: number; docs?: string; hoTen?: string; gioiTinh?: string };
   if (!laSoText || !phan) return err('Thiếu dữ liệu', 400);
 
+  let systemForLLM: string;
   let prompt: string;
   try {
     // "Người xem: <tên> (giới tính)" lên đầu prompt → xưng hô đúng (client gửi hoTen/gioiTinh).
     const nx = nguoiXemLine(hoTen, gioiTinh);
-    prompt = (nx ? nx + '\n' : '') + buildPrompt(Number(phan), laSoText, docs);
+    const cached = buildPromptCached(Number(phan), laSoText, docs);
+    systemForLLM = cached.system;
+    prompt = (nx ? nx + '\n' : '') + cached.prompt;
   }
   catch (e: unknown) { return err('buildPrompt error: ' + (e as Error).message); }
 
   try {
-    const maxTok = phan === 1 ? 2000 : phan === 14 ? 3000 : phan === 24 ? 1400
-      : (phan >= 2 && phan <= 13) ? 1100 : (phan >= 15 && phan <= 23) ? 1100 : 1000;
+    // Henry chốt 2026-08-20: nâng ĐỀU 50% mọi trần token trong repo — retest
+    // sau khi bật Kimi K3 primary bắt được bản luận giải bị CẮT NGANG giữa
+    // câu (model sinh vượt trần rồi API cắt sạch, không phải lỗi mạng).
+    const maxTok = phan === 1 ? 3000 : phan === 14 ? 4500 : phan === 24 ? 2100
+      : (phan >= 2 && phan <= 13) ? 1650 : (phan >= 15 && phan <= 23) ? 1650 : 1500;
 
-    // Prompt + dữ liệu GIỮ NGUYÊN; chỉ đổi backend provider (Gemini-primary,
-    // Anthropic-backup). Bỏ cache_control (tối ưu riêng Anthropic; Gemini cache ngầm).
-    const text = await llmText({ system: SYSTEM_PROMPT, prompt, maxTokens: maxTok });
+    // Prompt caching (Code #1, xem CLAUDE.md track tối ưu chi phí Opus):
+    // `systemForLLM` = SYSTEM_PROMPT + TOÀN VĂN lá số (buildPromptCached),
+    // GIỐNG HỆT NHAU byte-for-byte ở cả 24 lượt của MỘT người xem → bật
+    // `cacheSystem:true` để nhánh Anthropic đóng breakpoint `cache_control`
+    // TTL 1h lên khối đó (Gemini/Kimi bỏ qua cờ này, không cache). Lượt đầu
+    // ghi cache (đắt hơn ~1,25×), các lượt sau chỉ đọc (~0,1×) — điều kiện là
+    // lượt mồi phải ghi cache XONG trước khi mở song song (xem
+    // public/app-luan-giai.html `_startLuanGiaiAI`: chạy phần 1 riêng lẻ rồi
+    // mới mở pool song song cho phần còn lại — né bẫy "3 lượt song song đầu
+    // đều cache-miss").
+    //
+    // Dùng llmTextFull thay llmText để LẤY ĐƯỢC usage + thời lượng: trước đây
+    // route này KHÔNG ghi một dòng `llm_usage` nào, nên Luận Giải — tool bán
+    // chạy nhất (1.500 Lượng / 3 người) — hoàn toàn vô hình trong panel Biên
+    // Lợi Nhuận, và cũng không có số nào để đặt ETA cho 24 phần.
+    // `provider:'anthropic'` (chốt Henry 2026-08-24): Luận Giải Lá Số + Chu
+    // Trình Cuộc Đời (phan>13, cùng route) nằm trong nhóm tool "luận giải"
+    // quan trọng → Opus 5 primary thay vì Gemini Flash mặc định toàn site (xem
+    // lib/llm/complete.ts). Ép ở ĐÚNG lệnh gọi này, KHÔNG đụng
+    // `chat.standalone_provider` — khoá đó vẫn quyết định primary cho mọi
+    // route standalone khác. Cũng giữ nguyên hiệu quả `cacheSystem` (breakpoint
+    // Anthropic) vì nhánh Anthropic giờ LUÔN được gọi ở lượt đầu.
+    const r = await llmTextFull({ system: systemForLLM, prompt, maxTokens: maxTok, cacheSystem: true, provider: 'anthropic' });
+    const text = r.text;
+    // tool_id ĐÚNG `tool_pricing.tool_id` để bucket chi phí ghép được với bucket
+    // doanh thu (xem tool_canon() trong CLAUDE.md). Phần 1-13 (tổng quan + 12
+    // cung) thuộc "Luận Giải Tử Vi" (laso); phần 14-24 (đại vận + tiểu vận) đã
+    // TÁCH sang tool RIÊNG "Chu Trình Cuộc Đời" (chu-trinh-cuoc-doi) — route này
+    // phục vụ CẢ HAI tool (client gửi đúng số phan engine của tool đang gọi) nên
+    // phải chọn bucket theo SỐ PHẦN, không còn chép cứng 'laso' cho mọi lượt.
+    void logLlmUsage(
+      Number(phan) <= 13 ? 'laso' : 'chu-trinh-cuoc-doi',
+      r.model,
+      {
+        input_tokens: r.usage.input_tokens,
+        cache_creation_input_tokens: r.usage.cache_creation_input_tokens,
+        cache_read_input_tokens: r.usage.cache_read_input_tokens,
+        output_tokens: r.usage.output_tokens,
+      },
+      r.durationMs,
+    );
 
     let chartData = null;
     const chartMatch = text.match(/```chartdata\s*([\s\S]*?)```/);

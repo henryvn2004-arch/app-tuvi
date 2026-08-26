@@ -44,7 +44,11 @@ const TuviPaywall = (() => {
     'duyen-no-tien-kiep': { title: 'Duyên Nợ Tiền Kiếp' },
     'nguoi-khac': { title: 'Lá Số Người Khác' },
     'day-con': { title: 'Dạy Con Theo Lá Số' },
+    'huong-nghiep-tre': { title: 'Hướng Nghiệp Sớm Cho Con' },
+    'gio-sinh': { title: 'Xác Định Giờ Sinh' },
     'nhan-mach': { title: 'Sổ Nhân Mạch' },
+    'van-han-nam': { title: 'Vận Hạn 12 Tháng Tới' },
+    'chu-trinh-cuoc-doi': { title: 'Chu Trình Cuộc Đời' },
   };
 
   const TOOL_TYPE = {
@@ -72,7 +76,11 @@ const TuviPaywall = (() => {
     'duyen-no-tien-kiep': 'use_duyen_no_tien_kiep',
     'nguoi-khac': 'use_nguoi_khac',
     'day-con': 'use_day_con',
+    'huong-nghiep-tre': 'use_huong_nghiep_tre',
+    'gio-sinh': 'use_gio_sinh',
     'nhan-mach': 'use_nhan_mach',
+    'van-han-nam': 'use_van_han_nam',
+    'chu-trinh-cuoc-doi': 'use_chu_trinh_cuoc_doi',
   };
 
   let _cfg        = null;
@@ -157,7 +165,29 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
 .tpw-inv-in{flex:1;min-width:150px;font-size:11.5px;padding:7px 9px;border:1px solid #E6E3DC;border-radius:7px;background:#fff;color:#1a1a1a;font-family:ui-monospace,Menlo,monospace}
 .tpw-inv-b{border:1.5px solid #061A2E;background:#fff;color:#061A2E;cursor:pointer;font-weight:700;font-size:12.5px;padding:7px 14px;border-radius:7px;font-family:inherit}
 .tpw-inv-b:hover{background:#F9F4EB}
-@media(max-width:520px){.tpw-inv-in{min-width:0;flex-basis:100%}.tpw-inv-b{flex:1}}`;
+@media(max-width:520px){.tpw-inv-in{min-width:0;flex-basis:100%}.tpw-inv-b{flex:1}}
+/* ── Khoá NỘI DUNG THẬT đã dựng (khác .tpw-lock-blur — cái đó là vạch giả
+   trang trí bên trong tấm khoá quảng cáo). Dùng khi trang đã tính xong phần
+   deterministic cho khách chưa đăng ký, muốn cho THẤY CÓ CẤU TRÚC (tiêu đề,
+   hình dạng nội dung) nhưng làm mờ chữ thật — không được phép hiện ra chữ
+   đọc được. KHÔNG dùng .tpw-real-lock cho phần chưa có gì để làm mờ (ảnh/
+   truyện AI chưa sinh) — lúc đó dùng lockPreview() như cũ. */
+.tpw-real-lock{filter:blur(5px);opacity:.65;user-select:none;pointer-events:none}
+.tpw-lock-badge{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;color:#9A7B3A;border:1px solid #9A7B3A;border-radius:20px;padding:2px 9px}
+.tpw-lock-badge .ic-inline{width:.9em;height:.9em}
+/* ── Khoá NHỎ trong TỪNG PHẦN (tool nhiều mục: luận giải/bát tự/xem tuổi) ──
+   Khác lockPreview (một bức tường đứng MỘT chỗ, dễ bị cuộn qua khỏi màn
+   hình) — đây là một dòng gọn, lặp lại ở MỖI phần đang khoá, đứng cạnh đúng
+   khối chữ AI còn trống. Cùng ngôn ngữ "xác nhận" navy+vàng với .tpw-btn.ok,
+   cố ý KHÁC màu với .ask (viền vàng đứt, nền nhạt) của nút "Hỏi trợ lý" cạnh
+   nó — hai nút đứng sát nhau mà cùng màu thì không ai phân biệt được đâu là
+   miễn phí, đâu là trả tiền. */
+.tpw-seclock{display:none;align-items:center;gap:9px;margin-top:11px;padding:9px 13px;border-radius:8px;background:#061A2E;color:#F3E7C6;cursor:pointer;font-size:12.5px;line-height:1.4;transition:background .15s}
+.tpw-seclock:hover{background:#0D3B5E}
+.tpw-seclock-i{flex:0 0 auto;color:#C9A84C;font-size:13px}
+.tpw-seclock-t{flex:1;min-width:0}
+.tpw-seclock-p{flex:0 0 auto;font-weight:700;color:#C9A84C;white-space:nowrap}
+@media(max-width:480px){.tpw-seclock{flex-wrap:wrap}.tpw-seclock-p{width:100%;text-align:right}}`;
     document.head.appendChild(s);
   }
 
@@ -193,7 +223,7 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
       if (!el) {
         el = document.createElement('script');
         el.id = '_tvmb_prices_js';
-        el.src = '/tool-prices.js?v=4';
+        el.src = '/tool-prices.js?v=5';
         document.head.appendChild(el);
       }
       el.addEventListener('load', () => resolve());
@@ -483,8 +513,12 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
 
     let money;
     if (balance == null) {
-      money = 'Mở đầy đủ tốn <b>' + cost + ' Lượng</b> · ' +
-        '<a onclick="TuviPaywall._login()">đăng nhập</a> để xem số dư';
+      // Khách CHƯA đăng nhập: đây là lượt DUY NHẤT họ thấy phần có cấu trúc
+      // trước khi phải đăng ký — CTA nói thẳng cái họ nhận được (Lượng miễn
+      // phí), không chỉ nói "đăng nhập để xem số dư" (số dư của ai, họ chưa
+      // có tài khoản).
+      money = 'Đăng ký tài khoản để mở — được <b>tặng Lượng miễn phí</b>, dùng thử ngay. ' +
+        '<a onclick="TuviPaywall._login()">Đăng ký / đăng nhập</a>';
     } else if (balance < cost) {
       money = 'Bạn còn <b>' + balance + '</b> · cần <b>' + cost + '</b> — thiếu ' + (cost - balance) +
         ', <a href="/topup.html" onclick="' + _topupClick('preview', cost - balance) + '">nạp thêm →</a>';
@@ -531,6 +565,56 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
     // hay `my-referral` hỏng thì tường vẫn hiện đủ và đúng như cũ.
     void _inviteRow(_lockEl.querySelector('.tpw-lock-veil'), product, cost, balance);
     return true;
+  }
+
+  // ── Khoá theo TỪNG PHẦN — dùng cho tool nhiều mục (luận giải/bát tự/xem
+  // tuổi): mỗi phần free đã tính sẵn thường CÒN kèm một đoạn luận riêng do AI
+  // viết, nhưng đoạn đó nằm ẩn sau ĐÚNG MỘT banner mở khoá ở đầu trang. Cuộn
+  // qua khỏi banner là quên mất có phần trả tiền — người dùng chỉ còn thấy nút
+  // "Hỏi trợ lý" (rail, miễn phí) cạnh đó nên bấm nhầm sang đó.
+  //
+  // `sectionLockHtml` trả một khối NHỎ (một dòng, cỡ ngang nút `.ask` cạnh nó)
+  // để nhét vào MỖI phần đang khoá — không phải một bức tường như `lockPreview`.
+  // Mặc định `display:none`: trang tự biết lúc nào phần đó ĐÃ khoá (sau khi
+  // gọi API kiểm tra quyền truy cập) rồi mới bật hiện, tránh loé chữ "chưa mở"
+  // rồi biến mất ngay nếu hoá ra đã có cache.
+  function sectionLockHtml(o) {
+    o = o || {};
+    const id = o.id ? ' id="' + _esc(o.id) + '"' : '';
+    const label = o.label || 'AI luận sâu phần này';
+    const cta = o.cta || 'Mở bản đầy đủ';
+    const product = _esc(o.product || (_cfg && _cfg.product) || '');
+    return '<div class="tpw-seclock"' + id + ' data-tpw-seclock role="button" tabindex="0">' +
+      '<span class="tpw-seclock-i" aria-hidden="true">✦</span>' +
+      '<span class="tpw-seclock-t">' + _esc(label) + '</span>' +
+      '<span class="tpw-seclock-p">' + _esc(cta) +
+        (product ? ' · <span data-tvp-price="' + product + '">…</span> Lượng' : '') + ' →</span>' +
+    '</div>';
+  }
+
+  // Gắn ĐÚNG MỘT listener uỷ quyền cho mọi `[data-tpw-seclock]` trong `root`,
+  // kể cả phần chèn thêm SAU (ví dụ lúc mở khoá và render nốt các phần còn
+  // lại) — không phải tìm-và-gắn-tay từng khối mỗi lần `innerHTML` đổi.
+  // Gọi lại nhiều lần an toàn (trang có thể tính lại toàn bộ kết quả khi sửa
+  // ngày sinh) nhờ cờ `_tpwSecWired` neo vào chính `root`.
+  function wireSectionLocks(root, onUnlock) {
+    if (!root || root._tpwSecWired) return;
+    root._tpwSecWired = true;
+    const trigger = (e) => {
+      const box = e.target.closest('[data-tpw-seclock]');
+      if (!box || !root.contains(box)) return;
+      if (e.type === 'keydown' && e.key !== 'Enter' && e.key !== ' ') return;
+      if (e.type === 'keydown') e.preventDefault();
+      // Cùng bậc "bấm mở" của phễu theo tool như `lockPreview` — chỉ khác
+      // nguồn (`from:'section'`) để tách đếm được xem người ta bấm mở từ
+      // banner đầu trang hay từ chính trong lòng một phần.
+      try {
+        if (window.Track) window.Track.event('unlock_click', { tool_id: (_cfg && _cfg.product) || '', meta: { from: 'section' } });
+      } catch (err) { /* đo hỏng không được chặn lượt mua */ }
+      onUnlock();
+    };
+    root.addEventListener('click', trigger);
+    root.addEventListener('keydown', trigger);
   }
 
   // Chuỗi onclick dùng chung cho mọi nút nạp — trước đây chép tay ở 2 chỗ và
@@ -598,9 +682,8 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
       return;
     }
 
-    const session = window.Auth.getSession();
     const userId  = window.Auth.getUser()?.id || '';
-    const token   = session?.access_token || '';
+    const token   = await _freshToken();
 
     if (!token) {
       alert('Phiên đăng nhập hết hạn. Vui lòng đăng nhập lại.');
@@ -686,15 +769,38 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
   // Tách phần "gửi query" ra khỏi phần "dựng query" vì tool nhận HAI lá số
   // (Duyên Nợ Tiền Kiếp) không mô tả được bằng một object `birth`.
   //
+  // ── Token cho mọi lượt gọi có TIỀN ────────────────────────────────────
+  // `getSession().access_token` là ẢNH CHỤP: nó trả cả token ĐÃ HẾT HẠN (access
+  // token Supabase sống ~1 giờ) nên server 401 với đúng người đang đăng nhập —
+  // ở file này 401 nghĩa là trừ tiền hụt, hoặc tệ hơn là tính tiền lần hai.
+  // `Auth.getFreshToken()` kiểm hạn và tự xoay trước khi gửi.
+  // Rơi về ảnh chụp nếu trình duyệt còn cache bản auth.js cũ (chưa có hàm này).
+  async function _freshToken() {
+    try {
+      if (window.Auth?.getFreshToken) return (await window.Auth.getFreshToken()) || '';
+    } catch (e) { /* ignore */ }
+    return window.Auth?.getSession()?.access_token || '';
+  }
+
   // FAIL-CLOSED ở mọi nhánh: mạng lỗi / chưa đăng nhập / server trả lạ → coi
   // như PHẢI TRẢ. Đoán nhầm thành "đã trả" là phát không hàng.
   async function _isFreeRerunQ(endpoint, query) {
     try {
-      const token = window.Auth?.getSession()?.access_token || '';
+      let token = await _freshToken();
       if (!token || !query) return false;
-      const r = await fetch(endpoint + '?action=cache-status&' + query, {
-        headers: { Authorization: 'Bearer ' + token },
-      });
+      const url = endpoint + '?action=cache-status&' + query;
+      let r = await fetch(url, { headers: { Authorization: 'Bearer ' + token } });
+      // 🔴 401 ở ĐÂY là ca đắt nhất của cả file: fail-closed đọc thành "chưa
+      // trả" nên người đã mua bị TÍNH TIỀN LẦN HAI cho đúng thứ họ đang xem
+      // lại. Token hết hạn không phải câu trả lời "chưa trả" — xoay rồi hỏi lại
+      // một lượt trước khi chịu thua.
+      if (r.status === 401 && window.Auth?.refresh) {
+        const t2 = await window.Auth.refresh().catch(() => null);
+        if (t2 && t2 !== token) {
+          token = t2;
+          r = await fetch(url, { headers: { Authorization: 'Bearer ' + token } });
+        }
+      }
       if (!r.ok) return false;
       const d = await r.json();
       return !!(d && d.free);
@@ -797,7 +903,7 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
     _css();
     if (!window.Auth?.isLoggedIn()) return { ok: false, reason: 'login' };
     const userId = window.Auth.getUser()?.id || '';
-    const token  = window.Auth.getSession()?.access_token || '';
+    const token  = await _freshToken();
     if (!token) return { ok: false, reason: 'login' };
     const balance = await _balanceFor(userId);
     if (balance < cost) { _insufficient(cost, balance); return { ok: false, reason: 'insufficient', balance }; }
@@ -811,7 +917,7 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
     const cost = opts.cost != null ? opts.cost : await _priceOf(product);
     if (cost == null) return { ok: false, reason: 'price_unknown' };
     if (!window.Auth?.isLoggedIn()) return { ok: false, reason: 'login' };
-    const token = window.Auth.getSession()?.access_token || '';
+    const token = await _freshToken();
     if (!token) return { ok: false, reason: 'login' };
     try {
       const res = await fetch('/api/payment?action=deduct', {
@@ -848,10 +954,20 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
     setTimeout(() => { refreshCostHints().catch(() => {}); }, 1500);
   }
 
+  // Badge nhỏ "🔒 Khoá" gắn cạnh tiêu đề một khối đã dựng thật nhưng đang bị
+  // làm mờ bằng .tpw-real-lock — dùng chung để nhiều trang không tự vẽ mỗi
+  // nơi một kiểu. `mountIcons` (nav.js) phải chạy lại sau khi chèn (span
+  // data-icon chỉ tự dựng lúc nạp trang).
+  function lockBadge(text) {
+    _css();
+    return '<span class="tpw-lock-badge"><span class="ic-inline" data-icon="lock"></span>' + (text || 'Khoá') + '</span>';
+  }
+
   return {
     init, requireCredits, requireCreditsCached, requireCreditsCachedQuery,
     generateToolSlug, ensureCredits, deductSilent, getBalance, fillPriceSlots,
-    mountCostHints, refreshCostHints, lockPreview, isFreeRerun,
+    mountCostHints, refreshCostHints, lockPreview, isFreeRerun, lockBadge,
+    sectionLockHtml, wireSectionLocks,
     _banner, _close, _closeLock, _login,
   };
 })();

@@ -226,7 +226,7 @@ export async function GET(req: NextRequest) {
 
     try {
       const img = await generatePortraitImage({ prompt: p.prompt, size, quality, model });
-      void logImageUsage('que-phuc-hy', img.model, img.usage);
+      void logImageUsage('que-phuc-hy', img.model, img.usage, img.durationMs);
       const daDong = await dongTrien(img.b64);
 
       const up = await fetch(`${SUPABASE_URL}/storage/v1/object/${BUCKET}/${path}`, {

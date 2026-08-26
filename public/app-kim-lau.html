@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"></noscript>
-<link rel="stylesheet" href="/shell.css?v=18">
+<link rel="stylesheet" href="/shell.css?v=29">
 <style>
 .form-card{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);max-width:600px}
 .form-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:3px}
@@ -62,7 +62,8 @@
       <div id="shellRecent"></div>
       <div class="form-card" id="birthPanel">
         <h2>Năm sinh (dương lịch)</h2>
-        <p class="sub">Tra theo tuổi ta năm nào phạm Kim Lâu (tuổi ta chia 9 dư 1, 3, 6, 8), Hoang Ốc, Tam Tai — bảng 20 năm tới. Rồi hỏi trợ lý cách hóa giải, chọn năm đẹp làm nhà, cưới hỏi. <a href="/kim-lau">Xem cách tính Kim Lâu và bảng tra trọn năm sinh →</a></p>
+        <p class="sub">Kiểm tra tuổi bạn có phạm Kim Lâu hay Tam Tai hay không. Bạn định cưới, làm nhà nhưng sợ tuổi xung mà chưa tra kỹ. Dùng khi sắp làm việc lớn: cưới hỏi, động thổ, khai trương.</p>
+        <p class="price-note" data-tvp-price-label="kim-lau">…</p>
         <div class="frow" style="margin-bottom:4px">
           <div class="fg" style="width:150px"><label>Năm sinh dương lịch</label><input type="number" id="birthYear" placeholder="1990" min="1900" max="2010"></div>
           <button class="btn-go" id="btnGo" onclick="calculate()">Tra Cứu →</button>
@@ -88,11 +89,11 @@
 </div>
 
 <script>window.SHELL_ACTIVE='kim-lau';window.SHELL_HISTORY=true;
-window.SHELL_INTRO={key:'kim-lau',title:'Kim Lâu & Tam Tai',desc:'Tra theo tuổi ta năm nào phạm <b>Kim Lâu</b> / <b>Tam Tai</b> / <b>Hoang Ốc</b> — bảng 20 năm tới. Rồi hỏi <b>trợ lý AI</b> cách hóa giải, chọn năm đẹp làm nhà, cưới hỏi.'};</script>
+window.SHELL_INTRO={key:'kim-lau',title:'Kim Lâu & Tam Tai',desc:'Kiểm tra tuổi bạn có phạm Kim Lâu hay Tam Tai hay không. Bạn định cưới, làm nhà nhưng sợ tuổi xung mà chưa tra kỹ. Dùng khi sắp làm việc lớn: cưới hỏi, động thổ, khai trương.'};</script>
 <script src="/tools-shared/kim-lau.js?v=1"></script>
 <script src="/auth.js?v=2"></script>
   <script src="/nav.js?v=23" data-icons-only></script>
-<script src="/shell.js?v=66"></script>
+<script src="/shell.js?v=82"></script>
 <script>
 // Ô giữa dùng CHUNG module /tools-shared/kim-lau.js với trang standalone
 // /kim-lau → kết quả y hệt, sửa 1 chỗ 2 nơi cập nhật. Rail nhận

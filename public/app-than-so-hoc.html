@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"></noscript>
-<link rel="stylesheet" href="/shell.css?v=18">
+<link rel="stylesheet" href="/shell.css?v=29">
 <style>
 .form-card{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);max-width:600px}
 .form-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:3px}
@@ -57,7 +57,8 @@
       <div id="shellRecent"></div>
       <div class="form-card" id="birthPanel">
         <h2>Ngày sinh & tên đầy đủ</h2>
-        <p class="sub">Tính đầy đủ <b>11 chỉ số</b> theo hệ Pythagoras — 4 số cốt lõi, biểu đồ ngày sinh &amp; mũi tên, nợ nghiệp quật, năm cá nhân, đỉnh cao &amp; thử thách theo giai đoạn — rồi hỏi trợ lý luận sâu.</p>
+        <p class="sub">Đọc 11 con số từ ngày sinh: đường đời, đỉnh cao, năm cá nhân. Bạn hay lặp lại cùng một kiểu quyết định sai mà không để ý. Dùng khi muốn hiểu cách mình nghĩ trước khi chọn lại lần nữa.</p>
+        <p class="price-note" data-tvp-price-label="than-so-hoc">…</p>
         <div class="frow">
           <div class="fg" style="width:74px"><label>Ngày</label><input type="number" id="ngay" placeholder="15" min="1" max="31"></div>
           <div class="fg" style="width:74px"><label>Tháng</label><input type="number" id="thang" placeholder="6" min="1" max="12"></div>
@@ -80,11 +81,11 @@
 </div>
 
 <script>window.SHELL_ACTIVE='than-so-hoc';window.SHELL_HISTORY=true;
-window.SHELL_INTRO={key:'than-so-hoc',title:'Thần số học',desc:'Tính <b>11 chỉ số</b> theo hệ Pythagoras — 4 số cốt lõi, <b>biểu đồ ngày sinh</b> &amp; mũi tên, <b>nợ nghiệp quật</b>, <b>năm cá nhân</b>, đỉnh cao &amp; thử thách theo giai đoạn — rồi hỏi <b>trợ lý AI</b> luận sâu.'};</script>
+window.SHELL_INTRO={key:'than-so-hoc',title:'Thần số học',desc:'Đọc 11 con số từ ngày sinh: đường đời, đỉnh cao, năm cá nhân. Bạn hay lặp lại cùng một kiểu quyết định sai mà không để ý. Dùng khi muốn hiểu cách mình nghĩ trước khi chọn lại lần nữa.'};</script>
 <script src="/tools-shared/than-so-hoc.js?v=2"></script>
 <script src="/auth.js?v=2"></script>
   <script src="/nav.js?v=23" data-icons-only></script>
-<script src="/shell.js?v=66"></script>
+<script src="/shell.js?v=82"></script>
 <script>
 // Ô giữa dùng CHUNG module /tools-shared/than-so-hoc.js với trang standalone.
 function calculate(){

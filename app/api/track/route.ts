@@ -29,6 +29,11 @@ const ALLOWED = new Set([
   // tải về không mang link bấm được nên không bao giờ sinh ra share_view/
   // cta_click tương ứng — nhét chung vào chỉ làm K tụt giả.
   'poster_download',
+  // Lưu PDF cả khung giữa (tính năng master của workspace). TÁCH khỏi
+  // 'poster_download' vì hai thứ khác hẳn nhau về ý định: poster là ảnh 9:16
+  // để ĐĂNG cho người khác xem, PDF là bản LƯU cho chính mình đọc lại. Gộp
+  // vào một cột thì không đọc được cái nào đang thật sự có người dùng.
+  'pdf_download',
   // W1 + D1 — hai bậc còn thiếu của phễu THEO TOOL:
   //   preview_shown = lượt tính thử miễn phí đã ra kết quả
   //   unlock_click  = bấm nút "Mở bản đầy đủ" trên tấm tường
@@ -42,12 +47,21 @@ const ALLOWED = new Set([
   // không ai bấm là lỗi CÂU CHỮ. Gộp lại thì cả hai đọc thành một con số 0
   // giống nhau — mà `referrals` đang đúng bằng 0, nên phải phân biệt được.
   'invite_shown',
+  // Vòng hiệu chuẩn tool Xác Định Giờ Sinh: người dùng TỰ KHAI giờ sinh đúng để
+  // đối chiếu với kết quả máy đoán. Đây là nguồn ground truth DUY NHẤT của tool
+  // đó — không có nó thì độ chính xác mãi chỉ là con số mô phỏng.
+  'gio_sinh_doi_chieu',
   // R1a — phễu của kênh nhắc hằng ngày: thấy lời mời → bật/từ chối → mở từ
   // thông báo. Ba bậc phải TÁCH nhau vì mỗi bậc hỏng theo một kiểu khác hẳn:
   // không ai thấy lời mời (đặt sai chỗ) · thấy mà không bật (câu chữ) · bật mà
   // không mở (nội dung tin nhắc rỗng — đúng bệnh vừa vá). Gộp lại thì cả ba
   // trông giống nhau: một con số 0.
   'push_optin_shown', 'push_optin_result', 'push_open',
+  // Bắt lỗi JS phía client — thay phần Sentry đang gỡ dần (7/89 trang, 0 trang
+  // /app/*, và không đo được lỗi CHẠY TRONG TRÌNH DUYỆT). Bắn từ track.js qua
+  // window.onerror/unhandledrejection, đã lọc nhiễu + chặn lũ ở CLIENT trước
+  // khi tới đây; server không cần xử gì thêm ngoài cho nó qua allowlist.
+  'js_error',
 ]);
 
 // Coi là "vừa đăng ký" nếu tài khoản tạo trong 15 phút gần đây (né tính nhầm

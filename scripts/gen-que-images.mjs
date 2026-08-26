@@ -19,22 +19,45 @@
  * Bức đã có trong thư mục đích thì BỎ QUA — chạy lại sau khi đứt mạng không đốt
  * lại tiền cho phần đã xong.
  */
-import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'fs';
+import { readFileSync, writeFileSync, existsSync, mkdirSync, mkdtempSync } from 'fs';
+import { execFileSync } from 'child_process';
+import { tmpdir } from 'os';
 import { join } from 'path';
 import { createRequire } from 'module';
 
 const require = createRequire(import.meta.url);
 const ROOT = new URL('..', import.meta.url).pathname;
-const ts = require('typescript');
 
 // ── nạp module prompt (TS) bằng cách biên dịch tại chỗ ──
-const tsSrc = readFileSync(join(ROOT, 'lib/media/que-image-prompt.ts'), 'utf8');
-const js = ts.transpileModule(tsSrc, {
-  compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.CommonJS },
-}).outputText;
-const mod = { exports: {} };
-new Function('exports', 'module', 'require', js)(mod.exports, mod, require);
-const { buildQueImagePrompt } = mod.exports;
+// ⚠️ PHẢI gọi `tsc` CLI chứ KHÔNG dùng `ts.transpileModule` như trước: gói
+// `typescript@7` là bản port native, chỉ còn xuất `version`/`versionMajorMinor`
+// — API biên dịch trong JS đã biến mất hẳn. CLI thì vẫn emit bình thường.
+// Script này vốn chạy hàng phút mỗi bức nên thêm một lượt gọi tiến trình con
+// không đáng kể.
+const TSC = join(ROOT, 'node_modules/.bin/tsc');
+const outDir = mkdtempSync(join(tmpdir(), 'que-prompt-'));
+execFileSync(
+  TSC,
+  [
+    // BẮT BUỘC: nêu tên file trên dòng lệnh trong khi cwd có `tsconfig.json` thì
+    // tsc báo TS5112 rồi bỏ cuộc. Cờ này chạy trên cả TS 6 lẫn TS 7 (đã đo).
+    '--ignoreConfig',
+    '--module',
+    'commonjs',
+    '--target',
+    'es2022',
+    '--skipLibCheck',
+    '--outDir',
+    outDir,
+    join(ROOT, 'lib/media/que-image-prompt.ts'),
+  ],
+  { stdio: 'inherit' }
+);
+const { buildQueImagePrompt } = require(join(outDir, 'que-image-prompt.js'));
+if (typeof buildQueImagePrompt !== 'function') {
+  console.error('❌ không nạp được buildQueImagePrompt từ bản dịch — dừng trước khi đốt tiền vẽ.');
+  process.exit(1);
+}
 
 const { QUE } = require(join(ROOT, 'public/tools-shared/kinh-dich.js'));
 

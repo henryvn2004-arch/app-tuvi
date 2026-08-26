@@ -4,34 +4,54 @@
 // POST /api/xem-tuoi?action=dat-ten-con    → đặt tên con
 // POST /api/xem-tuoi?action=dat-ten-doanh-nghiep → đặt tên DN
 // POST /api/xem-tuoi?action=chon-ngay-tot  → chọn ngày tốt
-export const maxDuration = 60;
+// 60 → 300: cùng lý do lasotuvi/route.ts — chuỗi fallback 3 provider tuần tự
+// (Kimi → Opus 5 → Gemini Flash) + trần token đã nâng 50% dễ vượt 60s.
+export const maxDuration = 300;
 
 import { NextRequest } from 'next/server';
 import { ok, err, options, parseBody } from '@/lib/cors';
 import { llmText, llmStreamResponse } from '@/lib/llm/complete';
 import { withToolOutcome } from '@/lib/ops/tool-outcome';
+import { LUAN_ARC, MAU_ARC, DOC_ARC_TUONG_HOP, ARC_GIONG_NGU_HANH } from '@/lib/agent/prompts';
+import { chuanHoaDauThanh } from '@/lib/vn-text';
 
 // ─── Chat system prompts ──────────────────────────────────────
+// ⚠️ ĐÂY LÀ BẢN CHÉP TAY, đứng ngoài `buildChatContext`. Nó phục vụ khung chat
+// của HAI TRANG STANDALONE `xem-tuoi.html` + `xem-lam-an.html` (chúng gọi
+// `/api/xem-tuoi?action=chat`, không nạp `shell.js`).
+// 🔴 Luật cũ ở đây đã tự mâu thuẫn với phần còn lại của site: "120-250 từ" và
+// "Dẫn chứng sao tinh, cung vị, can chi cụ thể" — tức BẮT mở câu bằng thuật ngữ,
+// đúng thứ arc vừa bỏ. Sửa `prompts.ts` mà quên chỗ này thì hai trang đó vẫn
+// nói giọng cũ, và người dùng gặp hai giọng khác nhau trên cùng một site.
+// ⇒ Nay nội suy THẲNG `LUAN_ARC` + `MAU_ARC` dùng chung; chỉ giữ lại phần luật
+// riêng của route (không bullet/emoji, ngôn ngữ xác suất cho tương lai, không
+// lộ trường phái). Bộ trích context thì CỐ Ý giữ bản riêng: nó đọc thêm shape
+// tương hợp (`_lsA`, `_partnerLaso`) mà bản chung không có — gỡ nốt là một lượt
+// refactor khác, rủi ro hơn hẳn phần luật.
+const CHAT_RIENG_XEM_TUOI = `- Tiếng Việt, không dùng bullet, không dùng emoji
+- Riêng kết quả tương lai mới dùng ngôn ngữ xác suất, không hứa hẹn tuyệt đối
+- Không tiết lộ trường phái hay tài liệu`;
+
 const CHAT_SYSTEM_LASO = (ctx: string) => `Bạn là chuyên gia Tử Vi Đẩu Số theo cổ pháp, luận giải sâu sắc, văn phong trí thức Hà Nội xưa — điềm đạm, súc tích, sâu sắc. Bạn đang trả lời trên nền tảng Tử Vi Minh Bảo.
 
+${LUAN_ARC}
+
+${MAU_ARC}
+
 Nguyên tắc:
-- Tiếng Việt, không dùng bullet, không dùng emoji
-- 120-250 từ cho câu thông thường, tối đa 400 từ cho câu phức tạp
-- Dẫn chứng sao tinh, cung vị, can chi cụ thể từ lá số
-- Trả lời dứt khoát: cung/việc được hỏi tốt hay xấu, mạnh hay yếu — neo vào "Điểm cung X/10" và nhãn cách cục (TỐT/XẤU) nếu có. Cấm tâng bốc, cấm nước đôi né tránh; có điểm mạnh phải kèm điểm yếu cụ thể, ngang sức. Điểm thấp hoặc có sát tinh/hung cách phải cảnh báo thẳng.
-- Riêng kết quả tương lai mới dùng ngôn ngữ xác suất, không hứa hẹn tuyệt đối
-- Không tiết lộ trường phái hay tài liệu
+${CHAT_RIENG_XEM_TUOI}
 
 === DỮ LIỆU LÁ SỐ ===
 ${ctx}`;
 
 const CHAT_SYSTEM_GENERAL = `Bạn là chuyên gia Tử Vi Đẩu Số theo cổ pháp, luận giải sâu sắc, văn phong trí thức Hà Nội xưa — điềm đạm, súc tích, sâu sắc. Bạn đang trả lời trên nền tảng Tử Vi Minh Bảo.
 
+${LUAN_ARC}
+
+${MAU_ARC}
+
 Nguyên tắc:
-- Tiếng Việt, không dùng bullet, không dùng emoji
-- 120-250 từ cho câu thông thường, tối đa 400 từ cho câu phức tạp
-- Dẫn chiếu nguyên lý cổ pháp, nêu ví dụ sao tinh, cung vị cụ thể khi minh họa
-- Không hứa hẹn tuyệt đối, không tiết lộ trường phái`;
+${CHAT_RIENG_XEM_TUOI}`;
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function fmtLaso(ls: any, label: string, q: string): string {
@@ -50,9 +70,13 @@ function fmtLaso(ls: any, label: string, q: string): string {
     'cha mẹ|phụ mẫu':                                      ['Phụ Mẫu'],
     'đại vận|tiểu vận|vận hạn|vận trình':                 ['__daiVan__'],
   };
+  // Dò trên bản ĐÃ CHUẨN HOÁ VỊ TRÍ DẤU THANH (lib/vn-text.ts) — "sức khoẻ" và
+  // "sức khỏe" đều đúng chính tả, so chuỗi thô thì gõ lối kia là TRƯỢT IM LẶNG
+  // rồi rơi xuống nhánh mặc định, mất đúng cung câu hỏi nhắm tới.
+  const qn = chuanHoaDauThanh(q);
   const relevant = new Set(['Mệnh']);
   for (const [pattern, names] of Object.entries(topics)) {
-    if (new RegExp(pattern, 'i').test(q)) names.forEach(n => relevant.add(n));
+    if (new RegExp(chuanHoaDauThanh(pattern), 'i').test(qn)) names.forEach(n => relevant.add(n));
   }
   if (relevant.size === 1) ['Quan Lộc', 'Tài Bạch', 'Phu Thê'].forEach(n => relevant.add(n));
 
@@ -166,7 +190,11 @@ Lưu ý đặc biệt: Đây là chế độ so sánh tương hợp 2 lá số. 
   const trimmed = messages.slice(-10).map((m: any) => ({ role: m.role, content: String(m.content).slice(0, 2000) }));
 
   try {
-    const answer = await llmText({ system: systemPrompt, messages: trimmed, maxTokens: 800 });
+    // 🔴 VÁ Henry 2026-08-24: handleChat là hỏi-đáp LẶP LẠI nhiều lượt/phiên —
+    // cùng tính chất lưu lượng cao/tốn Opus như rail chat (/api/v1/chat), nên
+    // gộp chung quyết định "gỡ Opus primary" — Gemini Flash mặc định toàn
+    // site (bỏ `provider:'anthropic'`, xem lib/llm/complete.ts CANONICAL_ORDER).
+    const answer = await llmText({ system: systemPrompt, messages: trimmed, maxTokens: 1200 });
     return ok({ answer, scenario: hasLaso ? 'laso' : 'general' });
   } catch (e: unknown) {
     return err('API error: ' + (e as Error).message);
@@ -199,7 +227,9 @@ Ngũ hành sinh: Mộc→Hỏa→Thổ→Kim→Thủy→Mộc
 Ngũ hành khắc: Mộc→Thổ, Thổ→Thủy, Thủy→Hỏa, Hỏa→Kim, Kim→Mộc
 
 Format: Trả về 3 nhóm (mỗi nhóm 4 tên), tiêu đề nhóm theo mức ưu tiên ngũ hành. Mỗi tên:
-**[Họ + Tên đầy đủ]** — Chữ Hán: [chữ] · Âm HV: [âm] · Nghĩa: [nghĩa ngắn gọn] · Hành chữ: [hành] · Phù hợp vì: [1 câu lý do ngũ hành]`;
+**[Họ + Tên đầy đủ]** — Chữ Hán: [chữ] · Âm HV: [âm] · Nghĩa: [nghĩa ngắn gọn] · Hành chữ: [hành] · Phù hợp vì: [1 câu lý do ngũ hành]
+
+${ARC_GIONG_NGU_HANH}`;
 
   const user = `Đặt tên cho con:
 - Họ: ${ho} | Giới tính: ${gioiTinh}
@@ -229,7 +259,9 @@ Cơ sở tư vấn:
 KHÔNG dùng: số nét cát hung, phong thủy màu sắc mà không có cơ sở. Trung thực về giới hạn: đây là gợi ý tham khảo, không đảm bảo thành công kinh doanh.
 
 Format: 3 nhóm × 4 tên. Mỗi tên:
-**[Tên đề xuất]** — Ý nghĩa: [giải thích] · Hành: [hành tên] · Ngũ hành phù hợp: [lý do] · Ghi chú thực tiễn: [1 câu]`;
+**[Tên đề xuất]** — Ý nghĩa: [giải thích] · Hành: [hành tên] · Ngũ hành phù hợp: [lý do] · Ghi chú thực tiễn: [1 câu]
+
+${ARC_GIONG_NGU_HANH}`;
 
   const user = `Đặt tên doanh nghiệp:
 - Chủ: ${hoTen} | Năm sinh: ${namSinh} (${canChiChu}) — Nạp âm: ${napAmChu}
@@ -261,7 +293,9 @@ Giới hạn trung thực: Không có cơ sở dữ liệu Thông Thư thực t�
 Format: Gợi ý 4–5 khoảng thời gian tốt trong tháng, mỗi khoảng gồm:
 **[Ngày X–Y tháng Z]** — Can chi ngày: [...] · Lý do: [nguyên lý cụ thể] · Phù hợp vì: [liên hệ với ngũ hành người] · Lưu ý: [điều cần tránh nếu có]
 
-Cuối: 1 đoạn tổng hợp khuyến nghị và lưu ý thực tiễn.`;
+Cuối: 1 đoạn tổng hợp khuyến nghị và lưu ý thực tiễn.
+
+${ARC_GIONG_NGU_HANH}`;
 
   const user = `Chọn ngày tốt cho sự kiện:
 - Sự kiện: ${suKien}
@@ -275,6 +309,16 @@ Phân tích và gợi ý các khoảng ngày tốt trong tháng này cho sự ki
 
 // ─── Route handlers ───────────────────────────────────────────
 export async function OPTIONS() { return options(); }
+
+// System cho bản luận giải 9 phần của Xem Tuổi / Xem Làm Ăn (POST không kèm
+// `action`). Ngân sách từ + dữ kiện từng phần do CLIENT gửi trong `prompt`
+// (`xem-tuoi.html` · `xem-lam-an.html` · `app-xem-tuoi.html`) — ở đây CHỈ khai
+// hình dạng và giọng, để một chỗ này phủ cả ba bề mặt.
+const LUAN_GIAI_TUONG_HOP_SYSTEM = `Bạn là nhà luận giải Tử Vi Đẩu Số theo trường phái Tử Vi Minh Bảo. Văn phong: trí thức Hà Nội xưa — điềm đạm, súc tích, sâu sắc. Viết văn xuôi, không dùng bullet. Không tiết lộ trường phái hay tài liệu.
+
+MỞ ĐẦU mỗi phần bằng MỘT câu phán quyết NGẮN, in đậm (**...**), đứng riêng một dòng — nói bằng NGHĨA ĐỜI THƯỜNG trước (hai người hợp hay khắc ở CHỖ NÀO, ảnh hưởng ra sao tới sống chung, tiền bạc, con cái). Tên sao / can chi / ngũ hành nếu cần thì để gọn trong ngoặc theo SAU, KHÔNG mở đầu câu bằng tên. Rồi xuống dòng mới giải thích vì sao.
+
+${DOC_ARC_TUONG_HOP}`;
 
 async function runPost(request: NextRequest) {
   const { searchParams } = new URL(request.url);
@@ -291,10 +335,14 @@ async function runPost(request: NextRequest) {
   const userPrompt = docs ? prompt + '\n\n=== TÀI LIỆU THAM KHẢO ===\n' + docs : prompt;
 
   try {
+    // provider:'anthropic' (chốt Henry 2026-08-24): bản luận giải 9 phần Xem
+    // Tuổi Vợ Chồng / Xem Tuổi Làm Ăn thuộc nhóm tool quan trọng → Opus 5
+    // primary (xem lib/llm/complete.ts CANONICAL_ORDER).
     const luanGiai = await llmText({
-      system: 'Bạn là nhà luận giải Tử Vi Đẩu Số theo trường phái Tử Vi Minh Bảo. Văn phong: trí thức Hà Nội xưa — điềm đạm, súc tích, sâu sắc. Viết văn xuôi, không dùng bullet. Không tiết lộ trường phái hay tài liệu.',
+      system: LUAN_GIAI_TUONG_HOP_SYSTEM,
       prompt: userPrompt,
-      maxTokens: 1200,
+      maxTokens: 1800,
+      provider: 'anthropic',
     });
     return ok({ luanGiai });
   } catch (e: unknown) {

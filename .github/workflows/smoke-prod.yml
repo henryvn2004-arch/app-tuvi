@@ -1,7 +1,7 @@
-name: Smoke — Prod
+name: Smoke — Prod & Preview
 
 on:
-  # Sau khi Vercel post deployment_status thành công
+  # Sau khi Vercel post deployment_status thành công (CẢ production LẪN preview)
   deployment_status:
   # Cron fallback mỗi 6h (UTC) — phát hiện regression không qua deploy
   schedule:
@@ -20,19 +20,19 @@ permissions:
 
 jobs:
   smoke:
-    # Chỉ chạy khi deployment_status = success VÀ env = production
+    # Chạy khi deployment_status = success, KHÔNG phân biệt môi trường nữa:
+    # preview đã qua được cửa SSO nhờ secret bypass (xem bước "Set target URL").
+    # Trước đây preview bị chặn ở đây → check hiện "skipped" trên mọi PR.
     # (cron + dispatch luôn pass điều kiện này)
     if: >
       github.event_name != 'deployment_status' ||
-      (github.event.deployment_status.state == 'success' &&
-       (github.event.deployment.environment == 'production' ||
-        github.event.deployment.environment == 'Production'))
+      github.event.deployment_status.state == 'success'
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v7
 
-      - uses: actions/setup-node@v6
+      - uses: actions/setup-node@v7
         with:
           node-version: '20'
           cache: 'npm'
@@ -41,19 +41,36 @@ jobs:
 
       - run: npx playwright install chromium --with-deps
 
-      - name: Set PROD_URL
+      # Production đo THẲNG domain thật (gồm cả DNS + redirect apex→www + CDN);
+      # preview thì đo chính URL vừa deploy. Lấy qua env chứ không nội suy
+      # ${{ }} thẳng vào shell — target_url/input là chuỗi từ ngoài vào.
+      - name: Set target URL
         id: url
+        env:
+          INPUT_URL: ${{ github.event.inputs.prod_url }}
+          ENVIRONMENT: ${{ github.event.deployment.environment }}
+          TARGET_URL: ${{ github.event.deployment_status.target_url }}
         run: |
-          if [ -n "${{ github.event.inputs.prod_url }}" ]; then
-            echo "val=${{ github.event.inputs.prod_url }}" >> $GITHUB_OUTPUT
+          if [ -n "$INPUT_URL" ]; then
+            URL="$INPUT_URL"
+          elif [ "$ENVIRONMENT" = "production" ] || [ "$ENVIRONMENT" = "Production" ]; then
+            URL="https://tuviminhbao.com"
+          elif [ -n "$TARGET_URL" ]; then
+            URL="$TARGET_URL"
           else
-            echo "val=https://tuviminhbao.com" >> $GITHUB_OUTPUT
+            URL="https://tuviminhbao.com"
           fi
+          echo "val=$URL" >> "$GITHUB_OUTPUT"
+          echo "Smoke target: $URL"
 
       - name: Run smoke tests
         id: smoke
         env:
           PROD_URL: ${{ steps.url.outputs.val }}
+          # Chìa qua cửa Vercel Authentication trên preview. Thiếu secret thì
+          # config bỏ header đi — prod vẫn chạy bình thường (domain prod không bị gác),
+          # còn preview sẽ đỏ hàng loạt vì 401, đó là dấu hiệu secret chưa tới nơi.
+          VERCEL_BYPASS_SECRET: ${{ secrets.VERCEL_BYPASS_SECRET }}
           CI: true
         run: npm run test:smoke
 
@@ -65,9 +82,18 @@ jobs:
           path: playwright-report-smoke/
           retention-days: 14
 
+      # CHỈ mở issue "prod-down" cho lượt đo PROD. Preview đỏ thì để check đỏ
+      # trên PR là đủ — hô "prod chết" mỗi lần một PR hỏng thì vài hôm là
+      # không ai đọc nhãn đó nữa.
       - name: Create issue on failure
-        if: failure()
+        if: >
+          failure() &&
+          (github.event_name != 'deployment_status' ||
+           github.event.deployment.environment == 'production' ||
+           github.event.deployment.environment == 'Production')
         uses: actions/github-script@v9
+        env:
+          SMOKE_URL: ${{ steps.url.outputs.val }}
         with:
           script: |
             const runUrl = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
@@ -82,12 +108,12 @@ jobs:
               `## Prod smoke test thất bại`,
               ``,
               `**Trigger:** ${trigger}`,
-              `**URL:** https://tuviminhbao.com`,
+              `**URL:** ${process.env.SMOKE_URL}`,
               `**Run:** ${runUrl}`,
               ``,
               `### Cần làm`,
               `- [ ] Mở run trên để xem trace + screenshot`,
-              `- [ ] Verify thủ công https://tuviminhbao.com`,
+              `- [ ] Verify thủ công ${process.env.SMOKE_URL}`,
               `- [ ] Identify root cause + fix`,
               `- [ ] Close issue khi prod xanh lại`,
               ``,

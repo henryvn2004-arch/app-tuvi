@@ -34,18 +34,36 @@ import type { BirthParams } from '@/lib/contract/v1';
 import { authUserFromRequest, parseLlmJson } from '@/lib/api/tool-helpers';
 import { withToolOutcome } from '@/lib/ops/tool-outcome';
 import {
-  lookupPortraitCache,
-  putCachedPortrait,
-  touchCache,
+  cacheFor,
   insertHistoryRow,
   lasoKey,
-  getCachedPortrait,
   userOwnsLaso,
   birthFromQuery,
   type PortraitPhase,
 } from '@/lib/portraits/cache';
 
+
+
 const TOOL_ID = 'chan-dung-tien-kiep';
+
+/**
+ * 🔴 PHIÊN BẢN CẤU TRÚC payload. BUMP mỗi khi thêm/đổi/bớt khoá mà TRANG cần để
+ * dựng đủ màn hình. Đổi CHỮ thì không bump (dòng cache cũ trả chữ cũ — khó
+ * chịu, không vỡ); đổi KHOÁ mà quên bump thì trang ẩn khối IM LẶNG.
+ *
+ * Mở màn ở 1: payload hiện tại CHÍNH LÀ phiên bản 1, và dòng cache ghi trước
+ * lượt cắm cơ chế (không có `_shape`) được đọc là 1 nên KHÔNG bị dựng lại oan.
+ *
+ * ⚠️ Cố ý KHÔNG nhét vào `lasoKey`: đổi khoá là mồ côi cả cache LẪN
+ * `userOwnsLaso` ⇒ người đã trả tiền bị tính lại.
+ */
+const SHAPE = 1;
+
+/** Vân tay CẤU TRÚC — `npm run check:cacheshape` canh khớp với `SHAPE` ở trên. */
+const SHAPE_FINGERPRINT = 'f256a213cbd1';
+
+/** Cửa DUY NHẤT vào cache của tool này; `shape` khai một lần tại đây. */
+const CACHE = cacheFor(TOOL_ID, SHAPE);
 
 const SUPABASE_URL = process.env.SUPABASE_URL!;
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY!;
@@ -206,15 +224,16 @@ async function handleStory(birth: BirthParams, userId: string, key: string, eraI
         json: true,
         jsonSchema: STORY_SCHEMA,
         // 5 hồi × 100-160 từ tiếng Việt + mô tả nhân vật + lời kết — 2600 quá
-        // sát, hết chỗ là JSON cụt và parse hỏng.
-        maxTokens: 4200,
+        // sát, hết chỗ là JSON cụt và parse hỏng. Nâng 50% cùng đợt (Henry
+        // chốt 2026-08-20, retest thấy luận giải bị cắt ngang giữa câu).
+        maxTokens: 6300,
       });
       void logLlmUsage('chan-dung-tien-kiep', llmRes.model, {
         input_tokens: llmRes.usage.input_tokens,
         output_tokens: llmRes.usage.output_tokens,
         cache_creation_input_tokens: 0,
         cache_read_input_tokens: 0,
-      });
+      }, llmRes.durationMs);
       return { raw: llmRes.text, model: llmRes.model };
     } catch (e) {
       console.error('[chan-dung-tien-kiep] LLM lỗi:', (e as Error)?.message);
@@ -279,7 +298,7 @@ async function handleStory(birth: BirthParams, userId: string, key: string, eraI
   };
   // Pha `story` KHÔNG có dòng lịch sử riêng (`past_life_portraits` chỉ ghi ở
   // pha `image`) → `row: null`.
-  void putCachedPortrait(TOOL_ID, 'story', key, { payload, row: null }, userId);
+  CACHE.put('story', key, { payload, row: null }, userId);
   return ok(payload);
 }
 
@@ -304,14 +323,14 @@ async function handleImage(userId: string, birth: BirthParams, key: string, eraI
         properties: { imagePrompt: { type: 'STRING' } },
         required: ['imagePrompt'],
       },
-      maxTokens: 600,
+      maxTokens: 900, // nâng 50% cùng đợt (Henry chốt 2026-08-20)
     });
     void logLlmUsage('chan-dung-tien-kiep', llmRes.model, {
       input_tokens: llmRes.usage.input_tokens,
       output_tokens: llmRes.usage.output_tokens,
       cache_creation_input_tokens: 0,
       cache_read_input_tokens: 0,
-    });
+    }, llmRes.durationMs);
     const parsed = parseLlmJson(llmRes.text) as { imagePrompt?: string } | null;
     faceDescriptionEn = String(parsed?.imagePrompt || '').trim();
   } catch {
@@ -324,7 +343,7 @@ async function handleImage(userId: string, birth: BirthParams, key: string, eraI
   try {
     const imgRes = await generatePortraitImage({ prompt: finalPrompt, size: '1024x1536' });
     imageB64 = imgRes.b64;
-    void logImageUsage('chan-dung-tien-kiep', imgRes.model, imgRes.usage);
+    void logImageUsage('chan-dung-tien-kiep', imgRes.model, imgRes.usage, imgRes.durationMs);
   } catch (e) {
     return err('Lỗi sinh ảnh: ' + (e instanceof Error ? e.message : 'không rõ'), 500);
   }
@@ -372,7 +391,7 @@ async function handleImage(userId: string, birth: BirthParams, key: string, eraI
     portraitAge: profile.arc.portraitAge,
     era: { id: profile.era.id, label: profile.era.label, ageLabel: profile.era.ageLabel },
   };
-  void putCachedPortrait(TOOL_ID, 'image', key, { payload, row: historyRow }, userId);
+  CACHE.put('image', key, { payload, row: historyRow }, userId);
   return ok(payload);
 }
 
@@ -402,12 +421,15 @@ async function handleCacheStatus(request: NextRequest, sp: URLSearchParams) {
 
   const key = lasoKey(birthFromQuery(sp), sp.get('era') || undefined);
   const [story, image, owns] = await Promise.all([
-    getCachedPortrait(TOOL_ID, 'story', key),
-    getCachedPortrait(TOOL_ID, 'image', key),
+    CACHE.get('story', key),
+    CACHE.get('image', key),
     userOwnsLaso(TOOL_ID, auth.user.id, key),
   ]);
-  const cached = Boolean(story) && Boolean(image);
-  return ok({ success: true, cached, free: cached && owns });
+  // ⚠️ `story`/`image` là OBJECT `{cached, stale}` — đọc thẳng chúng như boolean
+  // thì lúc nào cũng "có cache" và client bỏ luôn bước trả tiền.
+  const cached = Boolean(story.cached) && Boolean(image.cached);
+  const coDong = (story.cached || story.stale) && (image.cached || image.stale);
+  return ok({ success: true, cached, free: Boolean(coDong) && owns });
 }
 
 // ── Routes ──────────────────────────────────────────────────────────────
@@ -431,7 +453,7 @@ async function runPost(request: NextRequest) {
   // Tra RIÊNG từng pha: hai pha chạy song song, lượt gốc có thể hỏng giữa
   // chừng và chỉ một pha kịp vào cache. Coi cả hai là một khối thì nửa còn
   // thiếu sẽ được phát miễn phí.
-  const look = await lookupPortraitCache(TOOL_ID, phase, auth.user.id, birth, eraId);
+  const look = await CACHE.lookup(phase, auth.user.id, birth, eraId);
 
   if (!look.free) {
     // Chốt chặn thanh toán PHÍA SERVER (S0 track COO). Trước đây route chỉ kiểm
@@ -444,7 +466,7 @@ async function runPost(request: NextRequest) {
   }
 
   if (look.cached) {
-    touchCache(TOOL_ID, phase, look.key);
+    CACHE.touch(phase, look.key);
     // Dòng lịch sử chỉ có ở pha `image` (đúng như luồng gen thật) — nên chỉ pha
     // đó mới ghi dòng cho người mới, và cũng chỉ pha đó tặng lượt rail, để một
     // lượt mua không tặng hai lần.

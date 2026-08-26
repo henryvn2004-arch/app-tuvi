@@ -37,8 +37,10 @@ type Rec = Record<string, unknown>;
 // Giờ sinh: index địa chi (0=Tý..11=Hợi) → giờ đại diện
 const GIO_HOURS = [23, 1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21];
 
-// Tên 12 địa chi theo index (cho nhãn giờ trong thẻ lá số).
-const CHI_NAMES = ['Tý', 'Sửu', 'Dần', 'Mão', 'Thìn', 'Tỵ', 'Ngọ', 'Mùi', 'Thân', 'Dậu', 'Tuất', 'Hợi'];
+// Tên 12 địa chi theo index (cho nhãn giờ trong thẻ lá số). EXPORT để các route
+// khác cần gán nhãn giờ (vd tra `laso_public` theo slug) dùng CHUNG, không tự
+// chép một bảng thứ hai rồi trôi khỏi nhau.
+export const CHI_NAMES = ['Tý', 'Sửu', 'Dần', 'Mão', 'Thìn', 'Tỵ', 'Ngọ', 'Mùi', 'Thân', 'Dậu', 'Tuất', 'Hợi'];
 const CAN_NAMES = ['Giáp', 'Ất', 'Bính', 'Đinh', 'Mậu', 'Kỷ', 'Canh', 'Tân', 'Nhâm', 'Quý'];
 
 // Năm ÂM lịch → Can/Chi (parity với engine đã verify 96/96, 1940–2035). Dùng khi
@@ -71,6 +73,7 @@ let engineCache: {
   convertDuongToAm: (...a: unknown[]) => unknown;
   anSaoLaSo: (...a: unknown[]) => unknown;
   formatLaSoV2: (...a: unknown[]) => unknown;
+  buildDaiVanLines: (...a: unknown[]) => unknown;
 } | null = null;
 
 function loadEngine() {
@@ -85,7 +88,8 @@ function loadEngine() {
   engineCache = (new Function(
     'window',
     'globalThis',
-    code + '\n' + formatCode + '\nreturn{convertDuongToAm,anSaoLaSo,formatLaSoV2:window.formatLaSoV2};',
+    code + '\n' + formatCode +
+      '\nreturn{convertDuongToAm,anSaoLaSo,formatLaSoV2:window.formatLaSoV2,buildDaiVanLines:window.buildDaiVanLines};',
   ))(g, g) as typeof engineCache;
   return engineCache!;
 }
@@ -157,6 +161,15 @@ export function computeLaso(birth: BirthParams, namXem?: number): ComputeLasoRes
       namXem: view,
     });
     if (!ls) return { ok: false, error: 'Engine không trả về lá số.' };
+    // `anSaoLaSo` KHÔNG re-expose `chiNam` ở cấp 1 (nó chỉ dùng nội bộ để an
+    // sao). Client vá tay đúng chỗ này — `app-xem-tuoi.html` có dòng
+    // `ls.chiNam = conv.chiNam` kèm chú thích y hệt — còn server thì chưa, nên
+    // bản server thiếu địa chi năm.
+    // 🔑 Hậu quả đo được: `chiRelation(chiNamA, chiNamB)` của `tuong-hop.js`
+    // nhận HAI CHUỖI RỖNG → `dc1 === dc2` → trả "Cùng chi" 8/10 cho MỌI cặp.
+    // Gắn lại ở đây để server và trình duyệt cùng một lá số; thêm trường là
+    // thay đổi CỘNG THÊM, không đụng consumer nào đang chạy.
+    if (!ls.chiNam) ls.chiNam = chiNam;
     return { ok: true, ls };
   } catch (e) {
     return { ok: false, error: e instanceof Error ? e.message : 'Lỗi engine' };
@@ -174,6 +187,30 @@ export function computeLaso(birth: BirthParams, namXem?: number): ComputeLasoRes
 export function formatLaSoV2(ls: Laso): string {
   const { formatLaSoV2: fn } = loadEngine();
   return String((fn as (o: unknown) => unknown)(ls) || '');
+}
+
+/**
+ * Khối text của MỘT đại vận (0-based) — CHÍNH hàm `buildDaiVanLines` mà
+ * `formatLaSoV2` dùng, không phải bản chép lại. Rail (`lib/agent/prompts.ts`)
+ * gọi cái này để nói cùng một thứ với trang luận giải.
+ *
+ * Trước đây rail tự dựng một dòng gọn `ĐVn: … sao=… điểm=…` → thiếu hẳn
+ * [LUẬN ĐOÁN]/[CẢNH BÁO]/[TAM PHƯƠNG TỨ CHÍNH]/Tuần-Triệt, nên hỏi rail về một
+ * giai đoạn thì nó luận chay theo tên chính tinh.
+ *
+ * FAIL-SOFT: engine nạp hụt → trả `[]`, chỗ gọi giữ nguyên bản gọn cũ. Rail là
+ * đường nóng, chết vì đọc file là đổi một bản luận nhạt lấy một lượt chat hỏng.
+ */
+export function daiVanLines(ls: Laso, index: number, opts?: { compact?: boolean }): string[] {
+  try {
+    const { buildDaiVanLines: fn } = loadEngine();
+    if (typeof fn !== 'function') return [];
+    const out = (fn as (a: unknown, b: number, c: unknown) => unknown)(ls, index, opts || {});
+    return Array.isArray(out) ? (out as string[]) : [];
+  } catch (e) {
+    console.error('[laso] daiVanLines lỗi — rail rơi về bản gọn:', e instanceof Error ? e.message : e);
+    return [];
+  }
 }
 
 // ── Format context lá số cho LLM (đầy đủ 12 cung) ───────────
@@ -347,4 +384,51 @@ export function lasoSummary(ls: Laso): string {
   ]
     .filter(Boolean)
     .join(' · ');
+}
+
+/**
+ * Slug NHẬN DIỆN một lá số trong bảng `laso_public` — NGUỒN DUY NHẤT (port từ
+ * `app/api/save-laso/route.ts`, nguyên văn, không đổi một ký tự nào). Trước đây
+ * hàm này CHỈ sống trong route đó (không export được — Next chặn export lạ
+ * trong file `route.ts`); nay `app/api/van-han-nam/route.ts` cũng cần đúng
+ * công thức này để tra lại lá số đã có sẵn Luận Giải. Hai route tự chép hàm
+ * này thì slug sẽ trôi khỏi nhau lúc nào không biết — đúng bệnh CLAUDE.md đã
+ * ghi nhiều lần.
+ *
+ * `toolType` (vd 'tu-binh') thêm TIỀN TỐ để mỗi sản phẩm lưu vào slug RIÊNG,
+ * tránh đè lẫn nhau khi CÙNG một lá số (canChiNam+ngày sinh+giờ) được dùng cho
+ * nhiều tool khác nhau (`laso_public` dùng chung 1 bảng cho mọi tool). Bỏ
+ * trống hoặc `'laso'` = KHÔNG tiền tố — tương thích ngược với slug/link Luận
+ * Giải 24 phần đang chia sẻ ngoài kia.
+ */
+export function makeLasoSlug(
+  canChiNam: string,
+  gioiTinh: string,
+  ngaySinh: string,
+  thangSinh: string,
+  namSinh: string,
+  gioChi: string,
+  toolType?: string,
+): string {
+  const rm = (s: string) =>
+    s
+      .normalize('NFD')
+      .replace(/[̀-ͯ]/g, '')
+      .replace(/[đĐ]/g, 'd')
+      .toLowerCase()
+      .replace(/\s+/g, '-');
+  const dd = ngaySinh ? String(ngaySinh).padStart(2, '0') : '';
+  const mm = thangSinh ? String(thangSinh).padStart(2, '0') : '';
+  const base = [
+    rm(canChiNam || ''),
+    dd,
+    mm,
+    namSinh || '',
+    gioiTinh === 'nu' ? 'nu' : 'nam',
+    gioChi ? 'gio-' + rm(gioChi) : '',
+  ]
+    .filter(Boolean)
+    .join('-');
+  if (toolType && toolType !== 'laso') return rm(toolType) + '-' + base;
+  return base;
 }

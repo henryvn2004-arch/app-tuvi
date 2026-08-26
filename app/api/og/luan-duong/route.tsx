@@ -8,27 +8,7 @@ export const runtime = 'edge';
 
 import { ImageResponse } from 'next/og';
 import { NextRequest } from 'next/server';
-
-const fontCache: Record<string, ArrayBuffer> = {};
-async function loadFont(weight: number): Promise<ArrayBuffer | null> {
-  const key = String(weight);
-  if (fontCache[key]) return fontCache[key];
-  try {
-    const css = await fetch(
-      `https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@${weight}&subset=vietnamese`,
-      { headers: { 'User-Agent': 'Mozilla/5.0' } },
-    ).then((r) => r.text());
-    // Chấp nhận woff2/ttf/otf: tuỳ User-Agent Google trả định dạng khác nhau
-    // (UA chung → .ttf). Satori đọc được cả ba → tránh 500 vì "no fonts loaded".
-    const m = css.match(/url\((https:\/\/fonts\.gstatic\.com\/[^)]+\.(?:woff2|ttf|otf))\)/);
-    if (!m) return null;
-    const buf = await fetch(m[1]).then((r) => r.arrayBuffer());
-    fontCache[key] = buf;
-    return buf;
-  } catch {
-    return null;
-  }
-}
+import { loadOgFonts, ogFallbackRedirect } from '@/lib/og/font';
 
 export async function GET(req: NextRequest) {
   const sp = req.nextUrl.searchParams;
@@ -36,11 +16,9 @@ export async function GET(req: NextRequest) {
   const thay = (sp.get('thay') || 'Thầy Luận Đường').slice(0, 40);
   const q = (sp.get('q') || '').replace(/\s+/g, ' ').trim().slice(0, 150);
 
-  const [f400, f700] = await Promise.all([loadFont(400), loadFont(700)]);
-  const fonts = [
-    ...(f400 ? [{ name: 'BeVN', data: f400, weight: 400 as const, style: 'normal' as const }] : []),
-    ...(f700 ? [{ name: 'BeVN', data: f700, weight: 700 as const, style: 'normal' as const }] : []),
-  ];
+  const fonts = await loadOgFonts([400, 700], req);
+  // Nới regex ở bản trước mới giảm TẦN SUẤT trượt; mảng rỗng vẫn ném 500. Chốt thật.
+  if (!fonts.length) return ogFallbackRedirect(req);
 
   return new ImageResponse(
     (

@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"></noscript>
-<link rel="stylesheet" href="/shell.css?v=18">
+<link rel="stylesheet" href="/shell.css?v=29">
 <style>
 .form-card{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);max-width:600px}
 .form-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:3px}
@@ -51,6 +51,39 @@
 .rel-tot{background:#eaf4ed;border-left:4px solid #1E6B3C;color:#1E6B3C}
 .rel-xau{background:#fef0ef;border-left:4px solid #C0392B;color:#C0392B}
 .rel-trun{background:#F5F4F0;border-left:4px solid #CCCCCC;color:#444}
+/* Chấm điểm tên — markup do /tools-shared/ngu-hanh-ten.js dựng (dùng chung
+   với trang standalone); chỉ CSS là riêng theo bảng màu từng trang. */
+.nh-score{margin-top:16px;padding:16px 18px;border-radius:10px;border:1px solid #E8E8E8;background:#FCFBF8}
+.nh-score-head{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#9A7B3A;margin-bottom:10px}
+.nh-score-top{display:flex;align-items:baseline;gap:12px;margin-bottom:14px}
+.nh-score-num{font-family:var(--serif);font-size:38px;line-height:1;font-weight:600;color:#444}
+.nh-score-num span{font-size:15px;font-weight:400;color:#999;margin-left:2px}
+.nh-score-verdict{font-size:14px;font-weight:600}
+.nh-score-tot .nh-score-num,.nh-score-tot .nh-score-verdict{color:#1E6B3C}
+.nh-score-xau .nh-score-num,.nh-score-xau .nh-score-verdict{color:#C0392B}
+.nh-score-trun .nh-score-num,.nh-score-trun .nh-score-verdict{color:#8a7a4a}
+.nh-part{margin-bottom:11px}
+.nh-part-top{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:4px}
+.nh-part-l{font-size:12.5px;color:#444}
+.nh-part-n{font-size:12px;font-weight:700;color:#666;font-variant-numeric:tabular-nums}
+.nh-part-track{height:6px;border-radius:3px;background:#EDEAE2;overflow:hidden}
+.nh-part-fill{height:100%;background:#9A7B3A;border-radius:3px}
+.nh-score-tot .nh-part-fill{background:#1E6B3C}
+.nh-score-xau .nh-part-fill{background:#C0392B}
+.nh-part-note{font-size:11.5px;color:#8a8375;margin-top:3px;line-height:1.5}
+.nh-sug{margin-top:14px;padding-top:13px;border-top:1px solid #E8E8E8}
+.nh-sug-head{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#777;margin-bottom:7px}
+.nh-sug-p{font-size:13px;color:#444;line-height:1.7;margin-bottom:10px}
+.nh-chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.nh-chip{font-size:12.5px;padding:4px 11px;border-radius:20px;background:#F5F4F0;border:1px solid #E4E0D6;color:#444}
+.nh-link{display:inline-block;font-size:12.5px;color:#1455A4;text-decoration:none;border:1px solid #dfe6ef;border-radius:7px;padding:6px 11px;background:#F7F9FC}
+.nh-link:hover{background:#eef3f9}
+.nh-caveat{font-size:11.5px;color:#8a8375;line-height:1.65;margin-top:13px;padding-top:11px;border-top:1px solid #F0EDE6}
+.nh-score-empty-p{font-size:13px;color:#444;line-height:1.7;margin-bottom:10px}
+.nh-menh-pick{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:13px}
+.nh-menh-btn{font-family:inherit;font-size:14px;font-weight:600;color:#061A2E;background:#fff;border:1px solid #dfe6ef;border-radius:8px;padding:9px 15px;cursor:pointer;min-width:62px}
+.nh-menh-btn:hover{background:#F9F4EB;border-color:#9A7B3A}
+.nh-score-empty-sub{font-size:12px;color:#6b6b6b;margin-bottom:6px}
 .unk-wrap{margin:8px 0 20px;padding:16px;background:#F5F4F0;border-radius:8px;border:1px solid #E8E8E8}
 .uphead{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#777;margin-bottom:4px}
 .form-input{border:1px solid #ccc;border-radius:6px;font-family:inherit}
@@ -76,7 +109,8 @@
       <div id="shellRecent"></div>
       <div class="form-card" id="birthPanel">
         <h2>Họ và tên đầy đủ</h2>
-        <p class="sub">Nhập tên tiếng Việt — hệ thống tra chữ Hán, số nét và ngũ hành từng chữ, tính cân bằng ngũ hành, đối chiếu mệnh cục. Sau đó hỏi trợ lý luận sâu.</p>
+        <p class="sub">Chấm điểm ngũ hành từng chữ trong tên, xem hợp hay khắc mệnh bạn. Bạn tự hỏi cái tên cha mẹ đặt có thật sự hợp mình không. Dùng khi tò mò về tên mình, không phải để đổi tên.</p>
+        <p class="price-note" data-tvp-price-label="ngu-hanh-ten">…</p>
         <div class="frow" style="margin-bottom:4px">
           <div class="fg" style="flex:1;min-width:200px"><label>Nhập đủ họ + tên, có dấu, cách nhau bằng dấu cách</label><input type="text" id="tenInput" placeholder="VD: Nguyễn Văn An" maxlength="60"></div>
           <div class="fg" style="width:150px"><label>Ngũ hành bản mệnh (tùy chọn)</label>
@@ -107,6 +141,7 @@
             <div class="nh-balance" id="nhBalance"></div>
             <div class="nh-legend" id="nhLegend"></div>
             <div id="menhResult"></div>
+            <div id="scoreResult"></div>
           </div>
         </div>
         <div class="ask" data-ask="Phân tích ngũ hành từng chữ trong tên tôi có hợp mệnh không, bồi hay khắc, và nên chỉnh thế nào?">✦ Hỏi trợ lý luận sâu ngũ hành tên</div>
@@ -118,11 +153,11 @@
 </div>
 
 <script>window.SHELL_ACTIVE='ngu-hanh-ten';window.SHELL_HISTORY=true;
-window.SHELL_INTRO={key:'ngu-hanh-ten',title:'Ngũ hành tên',desc:'Nhập tên tiếng Việt — tra <b>chữ Hán, số nét và ngũ hành từng chữ</b>, cân bằng ngũ hành, đối chiếu mệnh cục, rồi hỏi <b>trợ lý AI</b> luận sâu.'};</script>
-<script src="/tools-shared/ngu-hanh-ten.js?v=1"></script>
+window.SHELL_INTRO={key:'ngu-hanh-ten',title:'Ngũ hành tên',desc:'Chấm điểm ngũ hành từng chữ trong tên, xem hợp hay khắc mệnh bạn. Bạn tự hỏi cái tên cha mẹ đặt có thật sự hợp mình không. Dùng khi tò mò về tên mình, không phải để đổi tên.'};</script>
+<script src="/tools-shared/ngu-hanh-ten.js?v=3"></script>
 <script src="/auth.js?v=2"></script>
   <script src="/nav.js?v=23" data-icons-only></script>
-<script src="/shell.js?v=66"></script>
+<script src="/shell.js?v=82"></script>
 <script>
 // Ô giữa dùng CHUNG module /tools-shared/ngu-hanh-ten.js với trang standalone.
 let _syls = [];
@@ -139,19 +174,31 @@ function calculate() {
   document.getElementById('resPanel').style.display = 'block';
   document.getElementById('btnEdit').style.display = '';
   if (window.SHELL_INTRO) Shell.dismissIntro(window.SHELL_INTRO.key);
+  syncShell(menh);
+  document.querySelectorAll('#resPanel [data-ask]').forEach(function (el) { el.addEventListener('click', function () { Shell.ask(el.getAttribute('data-ask')); }); });
+}
+
+// Rail + bản chia sẻ dựng lại MỖI KHI mệnh đổi, không chỉ ở lượt bấm Tra.
+// Chọn mệnh ngay trong khối chấm điểm là một lượt đổi dữ liệu thật: thiếu bước
+// này thì chip "Vì sao tên tôi được điểm này?" mời người ta hỏi một con số rail
+// chưa hề nhận, và link chia sẻ vẫn là bản không có điểm.
+function syncShell(menh) {
   const d = NguHanhTenTool.railData(_syls, menh);
   Shell.setContext({
     scenario: { type: 'ngu-hanh-ten', data: d },
     label: 'Ngũ hành tên · ' + d.hoTen,
     greeting: 'Đã tra ngũ hành tên **' + d.hoTen + '** (' + d.tungChu + ').' + (menh ? ' Mệnh **' + menh + '**.' : '') + ' Bạn muốn tôi luận gì?',
-    chips: ['Tên tôi hợp hay khắc mệnh?', 'Ngũ hành có cân bằng không?', 'Nên thêm/đổi chữ nào?', 'Chữ tên chính bồi mệnh thế nào?']
+    chips: ['Vì sao tên tôi được điểm này?', 'Chữ nào trong tên đang kéo điểm xuống?', 'Gợi ý vài chữ hợp mệnh hơn', 'Chữ tên chính bồi mệnh thế nào?']
   });
   var _nhLines = ['Ngũ hành tên: ' + d.hoTen];
   _nhLines.push('Từng chữ: ' + d.tungChu);
   if (d.menh) _nhLines.push('Mệnh: ' + d.menh);
   _nhLines.push('Cân bằng ngũ hành: ' + d.canBang);
+  if (d.diem) {
+    _nhLines.push('Chấm điểm: ' + d.diem);
+    _nhLines.push('Nên ưu tiên chữ hành ' + d.hanhNenBoi + ', tránh hành ' + d.hanhNenTranh);
+  }
   Shell.setShareable({ kind: 'text', toolId: 'ngu-hanh-ten', title: 'Ngũ hành tên ' + d.hoTen, text: _nhLines.join('\n') });
-  document.querySelectorAll('#resPanel [data-ask]').forEach(function (el) { el.addEventListener('click', function () { Shell.ask(el.getAttribute('data-ask')); }); });
 }
 
 function render() {
@@ -190,7 +237,24 @@ function renderBalance(menh) {
   document.getElementById('nhBalance').innerHTML = b.balanceHTML;
   document.getElementById('nhLegend').innerHTML = b.legendHTML;
   document.getElementById('menhResult').innerHTML = NguHanhTenTool.menhHTML(_syls, menh);
+  // Chấm điểm dựng lại CÙNG nhịp với cân bằng: `applyManual` (nhập nét thủ
+  // công) đổi _syls nên điểm phải đổi theo, để trên trang không còn một con
+  // số tính từ bộ chữ CŨ.
+  document.getElementById('scoreResult').innerHTML = NguHanhTenTool.scoreHTML(_syls, menh, { shell: true });
 }
+
+// Chọn mệnh NGAY trong khối chấm điểm. Bắt theo ủy quyền vì khối này bị dựng
+// lại mỗi lượt render — gắn thẳng vào từng nút thì lượt sau mất bộ bắt.
+document.getElementById('scoreResult').addEventListener('click', function (e) {
+  const b = e.target.closest('[data-nh-menh]');
+  if (!b) return;
+  const menh = b.getAttribute('data-nh-menh');
+  // Đồng bộ ngược vào ô <select> để lượt bấm Sửa sau đó thấy đúng lựa chọn,
+  // và để mọi chỗ đọc mệnh vẫn còn MỘT nguồn duy nhất.
+  document.getElementById('menhInput').value = menh;
+  renderBalance(menh);
+  syncShell(menh);
+});
 
 function showForm() {
   document.getElementById('resPanel').style.display = 'none';

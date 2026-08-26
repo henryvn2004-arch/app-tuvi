@@ -1,10 +1,14 @@
 name: Playwright E2E
 
 on:
-  push:
-    branches: [main, dev]
-  pull_request:
-    branches: [main, dev]
+  # Chạy SAU khi Vercel deploy xong, KHÔNG phải lúc push.
+  #
+  # 🔑 Vì sao đổi: trigger cũ (`push`/`pull_request`) bắn ngay khi đẩy code, lúc
+  # bản deploy tương ứng còn chưa tồn tại — nên bộ E2E đi đo BẢN ĐANG CHẠY CŨ,
+  # tức đúng thứ mà PR chưa hề đụng tới. Một dấu xanh không nói gì về thay đổi
+  # trong PR, và một dấu đỏ cũng vậy. Đây là cùng lỗi đã vá cho smoke ở #463,
+  # nhưng ở đây nặng hơn vì 16 spec này có ĐĂNG NHẬP và chạy luồng thật.
+  deployment_status:
   workflow_dispatch:
     inputs:
       base_url:
@@ -14,15 +18,20 @@ on:
 
 jobs:
   test:
-    # Skip trên Dependabot PR — Dependabot không có quyền dùng secrets
-    # (PLAYWRIGHT_TEST_EMAIL/PASSWORD) → auth setup sẽ fail.
-    if: github.actor != 'dependabot[bot]'
+    # Skip trên nhánh Dependabot — Dependabot không có quyền dùng secrets
+    # (PLAYWRIGHT_TEST_EMAIL/PASSWORD) → auth setup sẽ fail. Với deployment_status
+    # thì `github.actor` là bên tạo deployment chứ không còn là dependabot, nên
+    # phải nhận diện qua REF của deployment.
+    if: >
+      github.event_name != 'deployment_status' ||
+      (github.event.deployment_status.state == 'success' &&
+       !startsWith(github.event.deployment.ref, 'dependabot/'))
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@v7
 
-      - uses: actions/setup-node@v6
+      - uses: actions/setup-node@v7
         with:
           node-version: '20'
           cache: 'npm'
@@ -31,22 +40,38 @@ jobs:
 
       - run: npx playwright install chromium --with-deps
 
+      # Production đo domain thật; mọi deploy khác (preview, kể cả nhánh `dev`)
+      # đo CHÍNH bản vừa deploy. Nhờ target_url mà URL preview của `dev` không
+      # còn phải chép cứng ở đây — chuỗi chép cứng đó sẽ mục mà không ai hay.
+      # Lấy qua env chứ không nội suy ${{ }} thẳng vào shell.
       - name: Set BASE_URL
         id: url
+        env:
+          INPUT_URL: ${{ github.event.inputs.base_url }}
+          ENVIRONMENT: ${{ github.event.deployment.environment }}
+          TARGET_URL: ${{ github.event.deployment_status.target_url }}
         run: |
-          if [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ -n "${{ github.event.inputs.base_url }}" ]; then
-            echo "val=${{ github.event.inputs.base_url }}" >> $GITHUB_OUTPUT
-          elif [ "${{ github.ref_name }}" = "dev" ]; then
-            echo "val=https://app-tuvi-git-dev-henryvn2004-5000s-projects.vercel.app" >> $GITHUB_OUTPUT
+          if [ -n "$INPUT_URL" ]; then
+            URL="$INPUT_URL"
+          elif [ "$ENVIRONMENT" = "production" ] || [ "$ENVIRONMENT" = "Production" ]; then
+            URL="https://www.tuviminhbao.com"
+          elif [ -n "$TARGET_URL" ]; then
+            URL="$TARGET_URL"
           else
-            echo "val=https://www.tuviminhbao.com" >> $GITHUB_OUTPUT
+            URL="https://www.tuviminhbao.com"
           fi
+          echo "val=$URL" >> "$GITHUB_OUTPUT"
+          echo "E2E target: $URL"
 
       - name: Run tests
         env:
           PLAYWRIGHT_BASE_URL: ${{ steps.url.outputs.val }}
           PLAYWRIGHT_TEST_EMAIL: ${{ secrets.PLAYWRIGHT_TEST_EMAIL }}
           PLAYWRIGHT_TEST_PASSWORD: ${{ secrets.PLAYWRIGHT_TEST_PASSWORD }}
+          # Chìa qua cửa SSO của preview. Thiếu secret thì config bỏ header đi —
+          # prod vẫn chạy, còn preview sẽ đỏ hàng loạt vì 401, đó là dấu hiệu
+          # secret chưa tới nơi chứ không phải code hỏng.
+          VERCEL_BYPASS_SECRET: ${{ secrets.VERCEL_BYPASS_SECRET }}
         run: npx playwright test
 
       - uses: actions/upload-artifact@v7

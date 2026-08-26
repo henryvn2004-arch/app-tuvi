@@ -34,6 +34,15 @@ export const GEMINI_PROSE_SCENARIOS = new Set<string>([
   // Tương hợp / tử bình / sinh con / đặt tên (data-driven, không tool)
   'xem-tuoi', 'xem-lam-an', 'tuong-hop', 'tu-binh',
   'xem-tuoi-sinh-con', 'chon-ngay-tot', 'dat-ten-con', 'dat-ten-dn',
+  // Công Sở / Dạy Con / Hướng Nghiệp Trẻ (chốt Henry 2026-08-24) — cùng dạng
+  // "data-driven qua wrapper text" như tu-binh/xem-tuoi ở trên (railData /
+  // dayConRailWrapper / huongNghiepTreRailWrapper chỉ NỐI text vào system,
+  // không khai tool), thêm vào để 3 tool này ĐI ĐƯỢC Gemini trong rail khi
+  // route cho phép — nếu không, khi Opus (primary của riêng chúng — xem
+  // chat.provider_routes) chết giữa chừng sẽ rơi thẳng xuống Kimi, bỏ qua hẳn
+  // Gemini. CHƯA TEST THỰC TẾ 3 kịch bản này qua Gemini — theo dõi chất lượng
+  // câu trả lời sau khi bật.
+  'cong-so', 'day-con', 'huong-nghiep-tre',
 ]);
 
 // Kịch bản VISION (đọc ảnh): nhân tướng qua ảnh mặt + phong thủy qua ảnh nhà.
@@ -243,6 +252,13 @@ export async function streamGemini(
     send(sse.text({ delta: full }));
     return [];
   }
+  // 🔴 Gemini trả 200 hợp lệ mà KHÔNG một chữ nào tới người dùng (completion
+  // rỗng thật, hoặc toàn bộ nằm ở phần bị chặn/lọc) — TRƯỚC ĐÂY hàm trả về []
+  // êm re, run.ts coi là THÀNH CÔNG và trả thẳng, người dùng nhận màn hình
+  // trống. Ném lỗi để caller coi đây là hỏng, cùng đợt vá với Kimi
+  // (2026-08-20) — chuỗi fallback phải giữ được lời hứa "hỏng thì rơi xuống
+  // provider kế", không phải chỉ đúng khi hỏng dạng exception mạng.
+  if (sentLen === 0) throw new Error('gemini: trả lời rỗng (0 chữ)');
 
   if (markerAt < 0) return [];
   return full

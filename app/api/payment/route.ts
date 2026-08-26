@@ -14,9 +14,9 @@ import { getToolPrice } from '@/lib/billing/pricing';
 import { hasSlugAccess } from '@/lib/billing/credits';
 import { freeGenGate, FREE_GEN_CAP_MESSAGE, railFreeRemaining } from '@/lib/billing/viral-budget';
 import { anonTrialStatus } from '@/lib/billing/anon-trial';
-import { syncOnboardingTasks } from '@/lib/onboarding/tasks';
+import { syncOnboardingTasks, KHOI_HANH_STEPS } from '@/lib/onboarding/tasks';
 import { getConfigValue } from '@/lib/config/appConfig';
-import { CRON_RUNS_LIMIT, evaluateJobs, fetchPgcronRuns, syncJobFirstSeen } from '@/lib/ops/jobs';
+import { CRON_RUNS_LIMIT, JOBS, evaluateJobs, fetchPgcronRuns, syncJobFirstSeen } from '@/lib/ops/jobs';
 import { checkEnv } from '@/lib/ops/preflight';
 import { logCronRun } from '@/lib/cron/log';
 import { tgSendMessage } from '@/lib/channels/telegram';
@@ -26,6 +26,18 @@ import { getAdminUser } from '@/lib/admin/auth';
 import { generateContentSuggestions } from '@/lib/marketing/content-suggestions';
 import { generateContentPackText } from '@/lib/marketing/content-pack';
 import { SUPPORTED_CHANNELS } from '@/lib/media/publish';
+import { sbGet as blGet, sbPatch as blPatch, sbDelete as blDelete } from '@/lib/backlinks/db';
+import { buildContentDrafts, type Prospect as BlProspect, type ProspectKind as BlKind } from '@/lib/backlinks/content';
+import { runProspecting } from '@/lib/backlinks/prospecting';
+import { runLinkCheck } from '@/lib/backlinks/tracker';
+import { runBrokenLinkScan } from '@/lib/backlinks/broken-links';
+import { discoverBingBacklinks } from '@/lib/backlinks/bing-webmaster';
+import { runGrowthAccounts, type GrowthAccount } from '@/lib/growth/accounts';
+import { runEmbedCheck, type EmbedHit } from '@/lib/growth/embeds';
+import {
+  listMemory, rememberFact, forgetFact, editFact,
+  MEMORY_KIND_LABELS, MAX_MEMORY_ITEMS, MAX_MEMORY_LEN,
+} from '@/lib/memory/store';
 
 const PAYPAL_BASE = process.env.PAYPAL_MODE === 'live'
   ? 'https://api-m.paypal.com'
@@ -182,6 +194,40 @@ async function handleSignupBonus(): Promise<Response> {
     .filter((n) => Number.isFinite(n) && n > 0);
   // Không đọc được → null, để giao diện lùi về câu chung chung thay vì hứa sai.
   return ok({ bonus: variants.length ? Math.min(...variants) : null });
+}
+
+// ── GET: khoi-hanh-defs — CÔNG KHAI, cùng lý do handleSignupBonus. Khách VÔ
+// DANH (bậc 0) chưa có token nên không gọi được `onboarding-sync`, nhưng thẻ
+// "Khởi Hành" ở public/app-home.html vẫn phải hiện 3 bước cho họ (tiến độ tính
+// ở máy — xem localKhoiHanhSteps trong app-home.html). Tiêu đề/mô tả lấy từ
+// ĐÚNG một nguồn (`KHOI_HANH_STEPS`, lib/onboarding/tasks.ts) thay vì chép tay
+// lần hai ở client — bài học "bảng dịch dựng từ một nguồn chỉ phủ nguồn đó" đã
+// cắn repo này 3 lần (xem CLAUDE.md).
+async function handleKhoiHanhDefs(): Promise<Response> {
+  const rewards = await getConfigValue<Record<string, number>>('onboarding.task_rewards', {
+    khoi_hanh: 15,
+  });
+  const credits = Number(rewards?.khoi_hanh) || 15;
+  return ok({
+    steps: KHOI_HANH_STEPS.map((s) => ({
+      key: s.key,
+      title: s.title,
+      desc: s.desc,
+      cta: s.cta,
+      href: s.href,
+    })),
+    credits,
+  });
+}
+
+// ── GET: social-proof-info — CÔNG KHAI, cùng lý do handleSignupBonus: modal
+// "Khoe Kết Quả" phải nói ĐÚNG con số trước khi người dùng bấm nộp (luật V2.3
+// đã chốt, không hứa lửng lơ), và con số đó chỉnh được bằng SQL nên không được
+// viết cứng ở client. ──
+async function handleSocialProofInfo(): Promise<Response> {
+  const rewardCredits = await getConfigValue('social_proof.reward_credits', 20);
+  const cooldownDays  = await getConfigValue('social_proof.cooldown_days', 7);
+  return ok({ rewardCredits, cooldownDays });
 }
 
 // ── GET: check slug access ────────────────────────────────────
@@ -671,22 +717,20 @@ async function handleCheckBank(sp: URLSearchParams): Promise<Response> {
 // chỉ đọc/ghi qua service key ở đây. Job Vercel tự log qua withCronLog;
 // edge (auto-pipeline) log tay trong trigger.
 const CRON_SECRET = process.env.CRON_SECRET || '';
-// Phải khớp với sổ job ở lib/ops/jobs.ts. Bảng này TRƯỚC ĐÂY cũng chỉ có 5
-// mục như sổ cũ trong admin.html, nên nút "Chạy ngay" của 5 job mới thêm không
-// hoạt động — cùng một kiểu trôi lệch giữa hai danh sách chép tay.
-const CRON_TRIGGERS: Record<string, { path?: string; edge?: string }> = {
-  'cron-khao-luan':    { path: '/api/cron-khao-luan' },
-  'cron-master-write': { path: '/api/cron-master-write' },
-  'cron-push':         { path: '/api/cron-push' },
-  'cron-daily-push':   { path: '/api/cron/daily-push' },
-  'auto-pipeline':     { edge: 'auto-pipeline' },
-  'ops-digest':        { path: '/api/cron/ops-digest' },
-  'cmo-digest':        { path: '/api/cron/cmo-digest' },
-  'anomaly-alerts':    { path: '/api/cron/anomaly-alerts' },
-  'autopilot-price':   { path: '/api/cron/autopilot-price' },
-  'autopilot-promo':   { path: '/api/cron/autopilot-promo' },
-  'autopilot-nudge':   { path: '/api/cron/autopilot-nudge' },
-};
+// 🔑 SUY TỪ SỔ JOB, không chép tay nữa.
+//
+// Bản trước là một bảng riêng ở đây, và chú thích của chính nó đã ghi: *"Bảng
+// này TRƯỚC ĐÂY cũng chỉ có 5 mục như sổ cũ trong admin.html, nên nút Chạy ngay
+// của 5 job mới thêm không hoạt động — cùng một kiểu trôi lệch giữa hai danh
+// sách chép tay."* Tức lỗi đã xảy ra một lần, được vá bằng cách CHÉP TAY lại
+// cho khớp — rồi trôi tiếp: tới 11/08 sổ khai 20 job có nút, bảng này biết 11,
+// nên `yt-drain`/`media-build`/`content-metrics`… bấm ra "Unknown job".
+//
+// Vá bằng cách chép tay lần thứ ba là hẹn lần trôi thứ ba. Đường dẫn nay nằm
+// TRONG sổ (`JobSpec.path`/`edge`), map này chỉ là phép chiếu.
+const CRON_TRIGGERS: Record<string, { path?: string; edge?: string }> = Object.fromEntries(
+  JOBS.filter((j) => j.path || j.edge).map((j) => [j.key, { path: j.path, edge: j.edge }]),
+);
 
 async function handleAdminCronRuns(request: NextRequest): Promise<Response> {
   const token = (request.headers.get('Authorization') || '').replace('Bearer ', '').trim();
@@ -1165,6 +1209,60 @@ async function handleAdminNghienCuuTopics(request: NextRequest, body: Record<str
   } catch (e: unknown) { return err((e as Error).message); }
 }
 
+// ── GET: admin-topic-queue (giám sát hàng đợi — list, KHÔNG có bảng này
+// trước PR khao-luan-tamly) ──
+// Dùng CHUNG filter `type` với `queueCounts()` của từng bề mặt — số dòng trả
+// về vì thế khớp đúng con số "Đang Chờ Viết"/"Lỗi" trên thẻ stat phía trên.
+// Trả cả pending/processing/error (không chỉ pending): dòng lỗi cũng cần
+// thấy được để xoá hoặc để nguyên chờ cron thử lại — không có retry tự động.
+// Gộp CẢ chủ đề Gemini tự sinh (có bằng chứng nhu cầu) LẪN chủ đề admin gõ
+// tay vào cùng một danh sách vì `topic_queue` không phân biệt nguồn gốc ở
+// cột nào — đúng ý Henry: "vừa do gemini auto gen ra, mà tao cũng vừa add
+// thêm vào dc".
+async function handleAdminTopicQueueList(request: NextRequest): Promise<Response> {
+  const token = (request.headers.get('Authorization') || '').replace('Bearer ', '').trim();
+  const admin = await verifyAdmin(token);
+  if (!admin) return err('Unauthorized', 403);
+
+  const surface = (new URL(request.url).searchParams.get('surface') || 'khao-luan').trim();
+  const typeFilter = surface === 'nghien-cuu' ? 'type=eq.master-article' : 'type=not.in.(master-article,tai-lieu)';
+
+  try {
+    const res = await fetch(
+      `${SUPABASE_URL}/rest/v1/topic_queue?${typeFilter}&status=in.(pending,processing,error)&select=id,topic,type,priority,status,master_id,article_type,created_at,used_at&order=priority.asc,created_at.asc&limit=200`,
+      { cache: 'no-store', headers: SB_HEADERS },
+    );
+    if (!res.ok) throw new Error(await res.text());
+    const rows = await res.json();
+    return ok({ rows });
+  } catch (e: unknown) { return err((e as Error).message); }
+}
+
+// ── POST: admin-topic-queue-delete (xoá 1 dòng khỏi hàng đợi) ──
+// Chỉ xoá dòng CHƯA xong (pending/processing/error) — dòng `done` là bằng
+// chứng bài đã viết, xoá nó chỉ mất dấu vết đối soát chứ không rút được bài
+// đã đăng. FAIL-CLOSED: id không khớp dòng hợp lệ nào → báo lỗi rõ, không im
+// lặng — PostgREST DELETE không tự báo lỗi khi 0 dòng khớp bộ lọc.
+async function handleAdminTopicQueueDelete(request: NextRequest, body: Record<string, unknown>): Promise<Response> {
+  const token = (request.headers.get('Authorization') || '').replace('Bearer ', '').trim();
+  const admin = await verifyAdmin(token);
+  if (!admin) return err('Unauthorized — admin only', 403);
+
+  const id = Number(body.id);
+  if (!Number.isFinite(id) || id <= 0) return err('id không hợp lệ', 400);
+
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/topic_queue?id=eq.${id}&status=in.(pending,processing,error)`, {
+      method: 'DELETE',
+      headers: { ...SB_HEADERS, Prefer: 'return=representation' },
+    });
+    if (!res.ok) throw new Error(await res.text());
+    const deleted = await res.json();
+    if (!Array.isArray(deleted) || deleted.length === 0) return err('Không tìm thấy dòng hợp lệ (đã xong hoặc đã xoá)', 404);
+    return ok({ deleted: deleted.length });
+  } catch (e: unknown) { return err((e as Error).message); }
+}
+
 // ── API & KEYS (Command Center) ────────────────────────────────
 // MCP self-serve keys/usage (mcp_keys/mcp_usage — RLS chỉ service_role,
 // KHÔNG có admin_read policy như app_config → phải qua route này, không
@@ -1305,6 +1403,10 @@ export async function GET(request: NextRequest) {
   if (action === 'balance')      return handleBalance(searchParams);
   if (action === 'check')        return handleCheck(searchParams);
   if (action === 'signup-bonus') return handleSignupBonus();
+  if (action === 'khoi-hanh-defs') return handleKhoiHanhDefs();
+  if (action === 'social-proof-info') return handleSocialProofInfo();
+  if (action === 'promo-info')   return handlePromoInfo(searchParams);
+  if (action === 'admin-promo-list') return handleAdminPromoList(request);
   if (action === 'admin-users')  return handleAdminUsers(request, searchParams);
   if (action === 'admin-users-list') return handleAdminUsersList(request);
   if (action === 'admin-login-attempts') return handleAdminLoginAttempts(request);
@@ -1319,16 +1421,24 @@ export async function GET(request: NextRequest) {
   if (action === 'admin-content-board') return handleAdminContentBoard(request);
   if (action === 'admin-khao-luan') return handleAdminKhaoLuan(request);
   if (action === 'admin-nghien-cuu') return handleAdminNghienCuu(request);
+  if (action === 'admin-topic-queue') return handleAdminTopicQueueList(request);
   if (action === 'admin-mcp') return handleAdminMcp(request);
   if (action === 'admin-env-status') return handleAdminEnvStatus(request);
   if (action === 'my-referral') return handleMyReferral(request, searchParams);
+  if (action === 'my-social-proof') return handleMySocialProof(request);
+  if (action === 'my-shares') return handleMyShares(request);
+  if (action === 'my-memory')   return handleMyMemory(request);
   if (action === 'rail-status') return handleRailStatus(request, searchParams);
   if (action === 'signup-bonus') return handleSignupBonus();
   if (action === 'admin-viral') return handleAdminViral(request, searchParams);
   if (action === 'admin-tool-funnel') return handleAdminToolFunnel(request, searchParams);
+  if (action === 'admin-content-catalog') return handleAdminContentCatalog(request, searchParams);
+  if (action === 'admin-content-one') return handleAdminContentOne(request, searchParams);
   if (action === 'admin-content-pack') return handleAdminContentPack(request, searchParams);
   if (action === 'admin-media-queue') return handleAdminMediaQueue(request, searchParams);
   if (action === 'admin-seeding') return handleAdminSeeding(request);
+  if (action === 'admin-social-proof') return handleAdminSocialProofList(request, searchParams);
+  if (action === 'admin-backlinks') return handleAdminBacklinks(request);
   if (action === 'check-bank')  return handleCheckBank(searchParams);
   return err('Invalid action.', 400);
 }
@@ -1510,29 +1620,51 @@ async function handleAdminMarketing(request: NextRequest, sp: URLSearchParams): 
   };
 
   try {
-    const [funnel, sources, acquisition, campaigns, traffic, revenue, cohorts, ga4] = await Promise.all([
-      callRpc('marketing_funnel'),
-      callRpc('marketing_sources'),
-      callRpc('marketing_acquisition'),
-      callRpc('marketing_campaigns'),
-      callRpc('marketing_traffic'),
-      callRpc('marketing_revenue'),
-      callCohorts(),
-      getGa4Breakdown(from.toISOString().slice(0, 10), to.toISOString().slice(0, 10)),
-    ]);
-    // GA4 sessions THẬT thay 'visitors' nội bộ (page_view) khi đã cấu hình env —
-    // nội bộ chỉ thấy traffic chạm track.js, thiếu organic/ads/social GA4 đo được.
-    // `internalVisitors` giữ lại số nội bộ để panel GA4 so hai bên (chênh lệch
-    // chính là phần track.js đo hụt).
+    const [funnel, sources, acquisition, campaigns, traffic, revenue, cohorts, ga4, trafficQuality] =
+      await Promise.all([
+        callRpc('marketing_funnel'),
+        callRpc('marketing_sources'),
+        callRpc('marketing_acquisition'),
+        callRpc('marketing_campaigns'),
+        callRpc('marketing_traffic'),
+        callRpc('marketing_revenue'),
+        callCohorts(),
+        getGa4Breakdown(from.toISOString().slice(0, 10), to.toISOString().slice(0, 10)),
+        // Phân loại chất lượng lưu lượng — CÙNG RPC mà CMO digest đã dùng, cố ý
+        // KHÔNG viết một phép đếm "khách thật" thứ hai ở đây: `traffic_quality`
+        // đã định nghĩa `engaged` và digest đang luận trên đó, hai định nghĩa
+        // song song thì sớm muộn cũng trôi khỏi nhau (bệnh đã trả giá ở #409).
+        //
+        // best-effort như GA4: đây là LỚP CHỒNG LÊN phễu, hỏng thì mất một dòng
+        // chú thích chứ không được kéo sập cả trang Marketing.
+        callRpc('traffic_quality').catch((e) => {
+          console.warn('[admin-marketing] traffic_quality lỗi:', (e as Error).message);
+          return null;
+        }),
+      ]);
+    // Bậc 'visitors' của phễu = NGƯỜI THẬT (`visitors_human`, đã trừ đội máy —
+    // xem _patches/migration-bot-filter.sql). Cùng một định nghĩa "máy" với
+    // `traffic_quality` ngay trên: cả hai đi qua `bot_anon_ids()`, không có bản
+    // luật thứ hai.
+    //
+    // 🔴 CỐ Ý KHÔNG lấy GA4 sessions làm bậc này nữa (trước đây có). GA4 đo ở
+    // phía Google nên KHÔNG lọc được bot lẫn CI Playwright, và không có bản
+    // `_human` nào để đối chiếu. Đo ngày 17/08/2026: GA4 báo 1.831 phiên trong
+    // khi người thật là 98 ⇒ mọi tỉ lệ chuyển đổi chia cho nó đều bị bóp nhỏ
+    // ~19 lần, tức panel càng nhiều traffic rác thì càng báo là mình càng kém.
+    // GA4 KHÔNG mất đi: nó vẫn nguyên trong panel "GA4 vs Nội Bộ" — đó mới là
+    // chỗ để so hai nguồn, và chính chênh lệch đó là thứ cần nhìn.
     const internalVisitors = funnel.visitors;
-    if (ga4?.sessions != null) {
-      funnel.visitors = ga4.sessions;
-      funnel.visitorsSource = 'ga4';
+    funnel.visitors_raw = internalVisitors; // số thô, để badge nói rõ đã trừ bao nhiêu
+    if (funnel.visitors_human != null) {
+      funnel.visitors = funnel.visitors_human;
+      funnel.visitorsSource = 'human';
     } else {
       funnel.visitorsSource = 'internal';
     }
     return ok({
       funnel, sources, acquisition, campaigns, traffic, revenue, cohorts, cohortWeeks,
+      trafficQuality,
       ga4: ga4 ? { ...ga4, internalVisitors } : null,
       from: from.toISOString(), to: to.toISOString(),
     });
@@ -1560,6 +1692,144 @@ async function handleAdminViral(request: NextRequest, sp: URLSearchParams): Prom
     });
     if (!res.ok) throw new Error(`viral_loop_funnel: ${await res.text()}`);
     return ok({ viral: await res.json(), from: from.toISOString(), to: to.toISOString() });
+  } catch (e: unknown) { return err((e as Error).message); }
+}
+
+// ── GET: admin-content-catalog (Kho Nội Dung) ────────────────────
+// Gom 6 bảng nội dung (khảo luận · nghiên cứu · video hỏi-đáp · từ điển · tài
+// liệu · sách) về MỘT bảng đọc, kèm cột "đã ra kênh nào".
+//
+// CHỈ ĐỌC — không có đường ghi ngược về 6 bảng nguồn. Sửa nội dung vẫn ở trang
+// Sản Xuất của từng pipeline; kho này để NHÌN, và để thấy phần lớn kho chưa
+// từng ra khỏi website.
+//
+// Action RIÊNG (không nhét vào `admin-marketing`) theo đúng tiền lệ
+// `admin-viral`/`admin-tool-funnel`: chỗ đó đã gánh 8 RPC + một lượt GA4.
+async function handleAdminContentCatalog(request: NextRequest, sp: URLSearchParams): Promise<Response> {
+  const token = (request.headers.get('Authorization') || '').replace('Bearer ', '').trim();
+  const admin = await verifyAdmin(token);
+  if (!admin) return err('Unauthorized', 403);
+
+  const limit = Math.min(Math.max(Number(sp.get('limit') || 50) || 50, 1), 200);
+  const offset = Math.max(Number(sp.get('offset') || 0) || 0, 0);
+
+  const rpc = async (fn: string, body: unknown) => {
+    const r = await fetch(`${SUPABASE_URL}/rest/v1/rpc/${fn}`, {
+      method: 'POST', headers: SB_HEADERS, body: JSON.stringify(body), cache: 'no-store',
+    });
+    if (!r.ok) throw new Error(`${fn}: ${await r.text()}`);
+    return r.json();
+  };
+
+  try {
+    const [stats, list, metrics] = await Promise.all([
+      rpc('content_catalog_stats', {}),
+      rpc('content_catalog_list', {
+        p_kind: sp.get('kind') || null,
+        p_channel: sp.get('channel') || null,
+        p_status: sp.get('status') || null,
+        p_q: sp.get('q') || null,
+        p_limit: limit,
+        p_offset: offset,
+        p_sort: sp.get('sort') || null,
+        p_pub: sp.get('pub') || null,
+      }),
+      rpc('content_metrics_overview', { p_days: 30 }),
+    ]);
+    return ok({ stats, list, metrics, limit, offset });
+  } catch (e: unknown) { return err((e as Error).message); }
+}
+
+// ── POST: admin-content-edit / admin-content-status ──────────────
+// Sửa nội dung + gỡ xuống / đăng lại, ngay trong Kho.
+//
+// 🔴 CHỖ NGUY HIỂM NHẤT của tính năng này: `table` do CLIENT gửi. Ghép thẳng
+// vào đường dẫn PostgREST là mở cửa cho phiên admin ghi vào BẤT KỲ bảng nào
+// (`user_credits`, `admin_users`…). Nên có ALLOWLIST cứng ở dưới, và cả tên
+// CỘT cũng phải nằm trong danh sách trắng — không nhận bừa khoá từ body.
+const EDITABLE: Record<string, { pk: string; cols: string[]; status?: boolean }> = {
+  khao_luan:       { pk: 'id', cols: ['title', 'excerpt', 'category', 'content'], status: true },
+  master_articles: { pk: 'id', cols: ['title', 'excerpt', 'category', 'content'], status: true },
+  tai_lieu:        { pk: 'id', cols: ['title', 'excerpt', 'category', 'content'] },
+  tu_dien:         { pk: 'id', cols: ['ten', 'seo_title', 'seo_desc', 'content'] },
+  sach_library:    { pk: 'id', cols: ['title', 'author', 'excerpt', 'content'] },
+  // ⛔ `van_dap` CỐ Ý không có ở đây: nó đã có trang soạn riêng (YouTube
+  // Studio) với kịch bản/TTS/mix. Dựng bộ sửa thứ hai cho cùng dữ liệu là hai
+  // bản trôi khỏi nhau.
+};
+const PUBLISH_STATES = ['published', 'draft', 'hidden'];
+
+/** Nạp NGUYÊN một bài để sửa. Kho chỉ có tiêu đề; thân bài mới là thứ người ta
+ *  vào đây để sửa, mà kéo `content` cho cả 50 dòng danh sách thì phí. */
+async function handleAdminContentOne(request: NextRequest, sp: URLSearchParams): Promise<Response> {
+  const token = (request.headers.get('Authorization') || '').replace('Bearer ', '').trim();
+  const admin = await verifyAdmin(token);
+  if (!admin) return err('Unauthorized', 403);
+
+  const table = sp.get('table') || '';
+  const id = sp.get('id') || '';
+  const spec = EDITABLE[table];
+  if (!spec) return err(`Không đọc được bảng "${table}" từ Kho`, 400);
+  if (!id) return err('Thiếu id', 400);
+
+  const cols = [spec.pk, ...spec.cols, ...(spec.status ? ['publish_status', 'updated_at', 'updated_by'] : [])];
+  try {
+    const r = await fetch(
+      `${SUPABASE_URL}/rest/v1/${table}?${encodeURIComponent(spec.pk)}=eq.${encodeURIComponent(id)}` +
+        `&select=${cols.join(',')}&limit=1`,
+      { headers: SB_HEADERS, cache: 'no-store' },
+    );
+    if (!r.ok) throw new Error(await r.text());
+    const rows = (await r.json()) as unknown[];
+    if (!rows.length) return err('Không tìm thấy bản ghi', 404);
+    return ok({ row: rows[0] });
+  } catch (e: unknown) { return err((e as Error).message); }
+}
+
+async function handleAdminContentEdit(request: NextRequest, body: Record<string, unknown>): Promise<Response> {
+  const token = (request.headers.get('Authorization') || '').replace('Bearer ', '').trim();
+  const admin = await verifyAdmin(token);
+  if (!admin) return err('Unauthorized', 403);
+
+  const table = String(body.table || '');
+  const id = String(body.id || '');
+  const spec = EDITABLE[table];
+  if (!spec) return err(`Không sửa được bảng "${table}" từ Kho`, 400);
+  if (!id) return err('Thiếu id', 400);
+
+  const patch: Record<string, unknown> = {};
+  for (const c of spec.cols) {
+    if (body[c] !== undefined) patch[c] = body[c] === null ? null : String(body[c]);
+  }
+  if (body.publish_status !== undefined) {
+    if (!spec.status) return err(`Bảng "${table}" không có trạng thái xuất bản`, 400);
+    const st = String(body.publish_status);
+    if (!PUBLISH_STATES.includes(st)) return err('Trạng thái không hợp lệ', 400);
+    patch.publish_status = st;
+  }
+  if (!Object.keys(patch).length) return err('Không có gì để sửa', 400);
+
+  // Chỉ hai bảng đó có `updated_at`/`updated_by` — hỏi cột không tồn tại là
+  // PostgREST trả 400 và lượt sửa hỏng nguyên.
+  if (spec.status) {
+    patch.updated_at = new Date().toISOString();
+    patch.updated_by = admin.email || 'admin';
+  }
+
+  try {
+    const r = await fetch(
+      `${SUPABASE_URL}/rest/v1/${table}?${encodeURIComponent(spec.pk)}=eq.${encodeURIComponent(id)}`,
+      {
+        method: 'PATCH',
+        headers: { ...SB_HEADERS, Prefer: 'return=representation' },
+        body: JSON.stringify(patch),
+        cache: 'no-store',
+      },
+    );
+    if (!r.ok) throw new Error(await r.text());
+    const rows = (await r.json()) as unknown[];
+    if (!rows.length) return err('Không tìm thấy bản ghi', 404);
+    return ok({ updated: Object.keys(patch), row: rows[0] });
   } catch (e: unknown) { return err((e as Error).message); }
 }
 
@@ -1876,6 +2146,350 @@ async function handleAdminSeedingDraft(request: NextRequest, body: Record<string
   }
 }
 
+// ============================================================
+// TRACK BACKLINK — admin đọc/ghi 3 bảng backlink_prospects/backlink_content/
+// backlink_links. Nguồn logic ở lib/backlinks/*; ở đây chỉ auth + validate +
+// CRUD mỏng, cùng khuôn với admin-seeding-* ngay phía trên.
+//
+// KHÔNG có action nào gọi ra ngoài (đăng/gửi) — xem đầu
+// _patches/migration-backlinks.sql. `admin-backlink-run` chỉ chạy LẠI đúng
+// những hàm cron 3 route /api/cron/backlink-* đã gọi, để Henry bấm thử ngay
+// thay vì đợi lịch, không phải một đường mới.
+// ============================================================
+
+const BL_PROSPECT_KINDS: BlKind[] = [
+  'directory', 'resource_page', 'broken_link', 'guest_post', 'guest_blog',
+  'press', 'kol', 'partner', 'web2', 'social_profile', 'unlinked_mention', 'other',
+];
+
+// ── GET: admin-backlinks — toàn bộ dữ liệu cho panel Backlink. ──
+async function handleAdminBacklinks(request: NextRequest): Promise<Response> {
+  const token = (request.headers.get('Authorization') || '').replace('Bearer ', '').trim();
+  const admin = await verifyAdmin(token);
+  if (!admin) return err('Unauthorized', 403);
+
+  try {
+    const [prospects, content, links, accounts, embeds] = await Promise.all([
+      blGet<BlProspect>(
+        'backlink_prospects?select=id,kind,name,url,topic,contact_email,notes,status,priority,source,created_at,updated_at,last_contacted_at,follow_up_at,reply' +
+          '&order=status.asc,priority.desc,created_at.desc&limit=300',
+      ),
+      blGet<Record<string, unknown>>(
+        'backlink_content?select=id,prospect_id,kind,title,body,meta,status,created_at' +
+          '&order=status.asc,created_at.desc&limit=150',
+      ),
+      blGet<Record<string, unknown>>(
+        'backlink_links?select=id,prospect_id,source_url,target_url,anchor_text,rel,status,first_seen_at,last_checked_at,notes' +
+          '&order=status.asc,last_checked_at.asc.nullsfirst&limit=300',
+      ),
+      // Sổ Tài Khoản & Entity — cùng trang admin nên gộp vào MỘT lượt gọi,
+      // không mở endpoint thứ hai cho một bảng nhỏ.
+      blGet<GrowthAccount>(
+        'growth_accounts?select=id,platform,label,category,url,submit_url,handle,status,priority,same_as,automation,notes,last_checked_at,last_ok,check_note' +
+          '&order=category.asc,priority.desc,label.asc&limit=200',
+      ),
+      // Widget nhúng — ai đang dùng đồ của mình, và họ có giữ dòng ghi nguồn
+      // không. Xếp `attribution_ok` LÊN ĐẦU theo chiều false-trước: trang
+      // đang dùng widget mà KHÔNG ghi nguồn chính là cơ hội ấm nhất, phải
+      // đập vào mắt trước, không nằm cuối bảng.
+      blGet<EmbedHit>(
+        'embed_hits?select=id,domain,tool,hits,attribution_ok,attribution_url,last_checked_at,check_note,first_seen_at,last_seen_at' +
+          '&order=attribution_ok.asc.nullslast,hits.desc&limit=200',
+      ),
+    ]);
+    return ok({ prospects, content, links, accounts, embeds });
+  } catch (e: unknown) {
+    return err((e as Error).message);
+  }
+}
+
+// ── POST: admin-backlink-prospect — thêm/sửa/xoá một cơ hội. ──
+async function handleAdminBacklinkProspect(request: NextRequest, body: Record<string, unknown>): Promise<Response> {
+  const token = (request.headers.get('Authorization') || '').replace('Bearer ', '').trim();
+  const admin = await verifyAdmin(token);
+  if (!admin) return err('Unauthorized', 403);
+
+  const op = String(body.op || 'save').trim();
+  const id = String(body.id || '').trim();
+  if (id && !/^[0-9a-f-]{36}$/i.test(id)) return err('id không hợp lệ', 400);
+
+  // CRM-lite (#14): đánh dấu đã liên hệ + hẹn nhắc lại + ghi họ trả lời gì.
+  // TÁCH khỏi form sửa, cùng lý do `status` có action riêng — đây là việc làm
+  // hằng ngày trên một hàng, không phải sửa hồ sơ.
+  if (op === 'followup') {
+    if (!id) return err('Thiếu id', 400);
+    const reply = String(body.reply || '').trim();
+    if (reply && !['none', 'positive', 'negative', 'later'].includes(reply)) {
+      return err('reply không hợp lệ', 400);
+    }
+    const fu = String(body.followUpAt || '').trim();
+    if (fu && !/^\d{4}-\d{2}-\d{2}$/.test(fu)) return err('Ngày nhắc lại phải dạng YYYY-MM-DD', 400);
+    const patch: Record<string, unknown> = { updated_at: new Date().toISOString() };
+    if (body.markContacted) patch.last_contacted_at = new Date().toISOString();
+    if (reply) patch.reply = reply;
+    // Chuỗi rỗng = XOÁ hẹn (người dùng bỏ trống ô ngày), khác với không gửi
+    // trường này — không phân biệt hai ca thì không bao giờ gỡ được cái hẹn.
+    if (Object.prototype.hasOwnProperty.call(body, 'followUpAt')) patch.follow_up_at = fu || null;
+    const okP = await blPatch('backlink_prospects', `id=eq.${id}`, patch);
+    if (!okP) return err('Không lưu được');
+    return ok({ saved: true });
+  }
+
+  if (op === 'delete') {
+    if (!id) return err('Thiếu id', 400);
+    const okDel = await blDelete('backlink_prospects', `id=eq.${id}`);
+    if (!okDel) return err('Không xoá được');
+    return ok({ deleted: true });
+  }
+
+  const name = String(body.name || '').trim();
+  const url = String(body.url || '').trim();
+  const kind = String(body.kind || '').trim() as BlKind;
+  if (!name) return err('Thiếu tên', 400);
+  // Chỉ nhận http(s) — URL này đổ thẳng vào <a href> trong admin.html.
+  if (!/^https?:\/\/[^\s]+$/i.test(url)) return err('URL phải bắt đầu bằng http:// hoặc https://', 400);
+  if (!BL_PROSPECT_KINDS.includes(kind)) return err('kind không hợp lệ', 400);
+
+  const priorityRaw = Number(body.priority);
+  const row: Record<string, unknown> = {
+    kind,
+    name,
+    url,
+    topic: String(body.topic || '').trim() || null,
+    contact_email: String(body.contactEmail || '').trim() || null,
+    notes: String(body.notes || '').trim() || null,
+    priority: Number.isFinite(priorityRaw) ? Math.round(priorityRaw) : 0,
+    updated_at: new Date().toISOString(),
+  };
+  // Tạo mới thêm status/source mặc định; sửa thì KHÔNG đụng status — đổi
+  // status có action riêng, tránh gộp hai việc khác nhau vào một form.
+  if (!id) {
+    row.status = 'new';
+    row.source = 'manual';
+  }
+
+  try {
+    const res = await fetch(
+      id ? `${SUPABASE_URL}/rest/v1/backlink_prospects?id=eq.${id}` : `${SUPABASE_URL}/rest/v1/backlink_prospects`,
+      {
+        method: id ? 'PATCH' : 'POST',
+        headers: { ...SB_HEADERS, Prefer: 'return=representation' },
+        body: JSON.stringify(row),
+        cache: 'no-store',
+      },
+    );
+    if (!res.ok) {
+      const t = await res.text();
+      if (t.includes('backlink_prospects_url_uniq')) return err('URL này đã có trong sổ rồi', 409);
+      return err(t);
+    }
+    const rows = (await res.json()) as unknown[];
+    if (id && !rows.length) return err('Không tìm thấy cơ hội với id đó', 404);
+    return ok({ saved: true });
+  } catch (e: unknown) {
+    return err((e as Error).message);
+  }
+}
+
+// ── POST: admin-backlink-content — chốt số phận một bản nháp (used/skip),
+// hoặc thêm 1 mục cho phép SỬA TAY nội dung trước khi Copy. ──
+async function handleAdminBacklinkContent(request: NextRequest, body: Record<string, unknown>): Promise<Response> {
+  const token = (request.headers.get('Authorization') || '').replace('Bearer ', '').trim();
+  const admin = await verifyAdmin(token);
+  if (!admin) return err('Unauthorized', 403);
+
+  const contentId = String(body.contentId || '').trim();
+  const decision = String(body.decision || '').trim();
+  if (!/^[0-9a-f-]{36}$/i.test(contentId)) return err('contentId không hợp lệ', 400);
+  if (decision !== 'used' && decision !== 'skip') return err('decision phải là used hoặc skip', 400);
+
+  const bodyText = typeof body.body === 'string' ? body.body.trim() : '';
+  const title = typeof body.title === 'string' ? body.title.trim() : '';
+  const patch: Record<string, unknown> = { status: decision === 'used' ? 'used' : 'skipped', updated_at: new Date().toISOString() };
+  // Giữ lại bản đã sửa tay — nhật ký phải nói đúng thứ THẬT SỰ được dùng.
+  if (bodyText) patch.body = bodyText;
+  if (title) patch.title = title;
+
+  const rows = await fetch(`${SUPABASE_URL}/rest/v1/backlink_content?id=eq.${contentId}&status=eq.draft`, {
+    method: 'PATCH',
+    headers: { ...SB_HEADERS, Prefer: 'return=representation' },
+    body: JSON.stringify(patch),
+  });
+  if (!rows.ok) return err(await rows.text());
+  const updated = (await rows.json()) as { prospect_id?: string }[];
+  if (!updated.length) return err('Không tìm thấy bản nháp đang chờ với id đó (có thể đã xử lý rồi)', 404);
+
+  // used → cơ hội coi như đã đi (Henry tự tay nộp/gửi rồi); skip → quay lại
+  // 'new' để lượt content sau soạn phương án khác, không kẹt mãi ở content_ready.
+  if (updated[0].prospect_id) {
+    await blPatch('backlink_prospects', `id=eq.${updated[0].prospect_id}`, {
+      status: decision === 'used' ? 'submitted' : 'new',
+      updated_at: new Date().toISOString(),
+    });
+  }
+  return ok({ updated: true, status: patch.status });
+}
+
+// ── POST: admin-backlink-link — thêm/xoá một link đang theo dõi bằng tay. ──
+async function handleAdminBacklinkLink(request: NextRequest, body: Record<string, unknown>): Promise<Response> {
+  const token = (request.headers.get('Authorization') || '').replace('Bearer ', '').trim();
+  const admin = await verifyAdmin(token);
+  if (!admin) return err('Unauthorized', 403);
+
+  const op = String(body.op || 'save').trim();
+  const id = String(body.id || '').trim();
+  if (id && !/^[0-9a-f-]{36}$/i.test(id)) return err('id không hợp lệ', 400);
+
+  if (op === 'delete') {
+    if (!id) return err('Thiếu id', 400);
+    const okDel = await blDelete('backlink_links', `id=eq.${id}`);
+    if (!okDel) return err('Không xoá được');
+    return ok({ deleted: true });
+  }
+
+  const sourceUrl = String(body.sourceUrl || '').trim();
+  const targetUrl = String(body.targetUrl || 'https://www.tuviminhbao.com/').trim();
+  if (!/^https?:\/\/[^\s]+$/i.test(sourceUrl)) return err('URL nguồn phải bắt đầu bằng http:// hoặc https://', 400);
+  if (!/^https?:\/\/[^\s]+$/i.test(targetUrl)) return err('URL đích không hợp lệ', 400);
+
+  const row: Record<string, unknown> = {
+    source_url: sourceUrl,
+    target_url: targetUrl,
+    anchor_text: String(body.anchorText || '').trim() || null,
+    notes: String(body.notes || '').trim() || null,
+  };
+  const prospectId = String(body.prospectId || '').trim();
+  if (prospectId && /^[0-9a-f-]{36}$/i.test(prospectId)) row.prospect_id = prospectId;
+
+  try {
+    const res = await fetch(id ? `${SUPABASE_URL}/rest/v1/backlink_links?id=eq.${id}` : `${SUPABASE_URL}/rest/v1/backlink_links`, {
+      method: id ? 'PATCH' : 'POST',
+      headers: { ...SB_HEADERS, Prefer: 'return=representation' },
+      body: JSON.stringify(row),
+      cache: 'no-store',
+    });
+    if (!res.ok) {
+      const t = await res.text();
+      if (t.includes('backlink_links_uniq')) return err('Link này đã được theo dõi rồi', 409);
+      return err(t);
+    }
+    const rows = (await res.json()) as unknown[];
+    if (id && !rows.length) return err('Không tìm thấy link với id đó', 404);
+    return ok({ saved: true });
+  } catch (e: unknown) {
+    return err((e as Error).message);
+  }
+}
+
+// ── POST: admin-backlink-run — bấm chạy tay MỘT trong bốn việc cron làm sẵn.
+// Dùng lại ĐÚNG hàm mà route cron gọi — không phải một đường thứ hai. `check`
+// gọi thêm discoverBingBacklinks() TRƯỚC runLinkCheck(), khớp đúng thứ tự
+// app/api/cron/backlink-check/route.ts đang làm. ──
+async function handleAdminBacklinkRun(request: NextRequest, body: Record<string, unknown>): Promise<Response> {
+  const token = (request.headers.get('Authorization') || '').replace('Bearer ', '').trim();
+  const admin = await verifyAdmin(token);
+  if (!admin) return err('Unauthorized', 403);
+
+  const kind = String(body.kind || '').trim();
+  try {
+    if (kind === 'prospect') return ok(await runProspecting());
+    if (kind === 'content') return ok(await buildContentDrafts());
+    if (kind === 'check') {
+      const bing = await discoverBingBacklinks();
+      const r = await runLinkCheck();
+      return ok({ bing, ...r });
+    }
+    if (kind === 'brokenlinks') return ok(await runBrokenLinkScan());
+    if (kind === 'accounts') return ok(await runGrowthAccounts());
+    if (kind === 'embedcheck') return ok(await runEmbedCheck());
+    return err('kind phải là prospect, content, check, brokenlinks, accounts hoặc embedcheck', 400);
+  } catch (e: unknown) {
+    return err((e as Error).message);
+  }
+}
+
+// ── POST: admin-growth-account — sửa/thêm/xoá một dòng sổ Tài Khoản & Entity.
+// ⚠️ `url` ở đây KHÔNG chỉ hiện trong admin — nó đổ thẳng vào JSON-LD
+// `sameAs` của trang công khai (lib/seo/same-as.ts). Nên chỉ nhận http(s),
+// chặn cứng mọi scheme khác. ──
+const GA_CATEGORIES = ['entity', 'social', 'web2', 'community', 'registry'];
+const GA_STATUSES = ['todo', 'registered', 'verified', 'rejected', 'skip'];
+
+async function handleAdminGrowthAccount(request: NextRequest, body: Record<string, unknown>): Promise<Response> {
+  const token = (request.headers.get('Authorization') || '').replace('Bearer ', '').trim();
+  const admin = await verifyAdmin(token);
+  if (!admin) return err('Unauthorized', 403);
+
+  const op = String(body.op || 'save').trim();
+  const id = String(body.id || '').trim();
+  if (id && !/^[0-9a-f-]{36}$/i.test(id)) return err('id không hợp lệ', 400);
+
+  if (op === 'delete') {
+    if (!id) return err('Thiếu id', 400);
+    const okDel = await blDelete('growth_accounts', `id=eq.${id}`);
+    if (!okDel) return err('Không xoá được');
+    return ok({ deleted: true });
+  }
+
+  const url = String(body.url || '').trim();
+  if (url && !/^https?:\/\/[^\s<>"']+$/i.test(url)) {
+    return err('URL phải bắt đầu bằng http:// hoặc https:// và không chứa ký tự lạ', 400);
+  }
+  const status = String(body.status || 'todo').trim();
+  if (!GA_STATUSES.includes(status)) return err('status không hợp lệ', 400);
+  const priorityRaw = Number(body.priority);
+  const priority = Number.isFinite(priorityRaw) ? Math.min(3, Math.max(1, Math.round(priorityRaw))) : 2;
+
+  const row: Record<string, unknown> = {
+    url: url || null,
+    handle: String(body.handle || '').trim() || null,
+    status,
+    priority,
+    same_as: body.sameAs === true,
+    notes: String(body.notes || '').trim() || null,
+    updated_at: new Date().toISOString(),
+  };
+
+  // Tạo mới: cần thêm platform/label/category. Cho phép Henry tự thêm nền
+  // tảng ngoài danh sách seed mà không phải sửa code.
+  if (!id) {
+    const platform = String(body.platform || '').trim().toLowerCase();
+    const label = String(body.label || '').trim();
+    const category = String(body.category || '').trim();
+    if (!/^[a-z0-9-]{2,40}$/.test(platform)) return err('platform chỉ gồm a-z, 0-9, gạch ngang (2-40 ký tự)', 400);
+    if (!label) return err('Thiếu tên hiển thị', 400);
+    if (!GA_CATEGORIES.includes(category)) return err('category không hợp lệ', 400);
+    const submitUrl = String(body.submitUrl || '').trim();
+    if (submitUrl && !/^https?:\/\/[^\s<>"']+$/i.test(submitUrl)) return err('URL đăng ký không hợp lệ', 400);
+    row.platform = platform;
+    row.label = label;
+    row.category = category;
+    row.submit_url = submitUrl || null;
+  }
+
+  try {
+    const res = await fetch(
+      id ? `${SUPABASE_URL}/rest/v1/growth_accounts?id=eq.${id}` : `${SUPABASE_URL}/rest/v1/growth_accounts`,
+      {
+        method: id ? 'PATCH' : 'POST',
+        headers: { ...SB_HEADERS, Prefer: 'return=representation' },
+        body: JSON.stringify(row),
+        cache: 'no-store',
+      },
+    );
+    if (!res.ok) {
+      const t = await res.text();
+      if (t.includes('growth_accounts_platform_uniq')) return err('Nền tảng này đã có trong sổ rồi', 409);
+      return err(t);
+    }
+    const rows = (await res.json()) as unknown[];
+    if (id && !rows.length) return err('Không tìm thấy dòng với id đó', 404);
+    return ok({ saved: true });
+  } catch (e: unknown) {
+    return err((e as Error).message);
+  }
+}
+
 // ── GET: admin-autopilot-log (M0.6, track Marketing Autopilot) — nhật ký
 // hành động autopilot (shadow/live) + trạng thái cấu hình hiện tại. THUẦN
 // ĐỌC — không có action bật/tắt qua API này có chủ đích (rủi ro cao, Henry
@@ -1909,9 +2523,11 @@ async function handleAdminAutopilotLog(request: NextRequest): Promise<Response> 
 }
 
 // ── GET: admin-dashboard-v2 (Engagement + Content Revenue + At-risk + Content Production) ──
-// Đọc 3 RPC mới (dashboard_engagement/dashboard_content_revenue/dashboard_at_risk,
-// migration-dashboard-v2.sql) + đếm nhanh 3 pipeline nội dung (count=exact, không
-// tải nguyên bảng — khác handleAdminContentBoard vốn tải hàng để dựng "recent").
+// Đọc RPC dashboard_engagement/dashboard_content_revenue/dashboard_at_risk
+// (migration-dashboard-v2.sql) + đếm nhanh 3 pipeline nội dung (count=exact,
+// không tải nguyên bảng — khác handleAdminContentBoard vốn tải hàng để dựng
+// "recent") + channel_error_rate + dashboard_margin + js_error_top (lỗi JS
+// client, migration-js-error.sql — thay phần Sentry đang gỡ dần).
 async function handleAdminDashboardV2(request: NextRequest): Promise<Response> {
   const token = (request.headers.get('Authorization') || '').replace('Bearer ', '').trim();
   const admin = await verifyAdmin(token);
@@ -1930,7 +2546,7 @@ async function handleAdminDashboardV2(request: NextRequest): Promise<Response> {
   };
 
   try {
-    const [engagement, contentRevenue, atRisk, khTotal, kh7d, ncTotal, nc7d, ytTotal, yt7d, channelHealth, margin] = await Promise.all([
+    const [engagement, contentRevenue, atRisk, khTotal, kh7d, ncTotal, nc7d, ytTotal, yt7d, channelHealth, margin, jsErrors] = await Promise.all([
       callRpc('dashboard_engagement', { p_days: 30 }),
       callRpc('dashboard_content_revenue', { p_from: from.toISOString(), p_to: to.toISOString() }),
       callRpc('dashboard_at_risk', { p_idle_days: 14, p_min_events: 3, p_limit: 20 }),
@@ -1942,6 +2558,7 @@ async function handleAdminDashboardV2(request: NextRequest): Promise<Response> {
       countExact(`van_dap?select=id&limit=1&publish_status=eq.published&created_at=gte.${sevenDaysAgo}`),
       callRpc('channel_error_rate', { p_hours: 24 }),
       callRpc('dashboard_margin', { p_from: from.toISOString(), p_to: to.toISOString() }),
+      callRpc('js_error_top', { p_hours: 24, p_limit: 30 }),
     ]);
 
     return ok({
@@ -1950,6 +2567,7 @@ async function handleAdminDashboardV2(request: NextRequest): Promise<Response> {
       atRisk,
       channelHealth,
       margin,
+      jsErrors,
       content: {
         khaoLuan:  { total: khTotal, last7d: kh7d },
         nghienCuu: { total: ncTotal, last7d: nc7d },
@@ -2018,6 +2636,46 @@ async function handleRailStatus(request: NextRequest, sp: URLSearchParams): Prom
   } catch (e) {
     return err(e instanceof Error ? e.message : 'rail-status failed', 500);
   }
+}
+
+// ── Hồ sơ "Thầy nhớ gì về con" (TẦNG 2) ──────────────────────────
+// Bốn action của CHÍNH CHỦ. Mọi lượt đều giải userId TỪ TOKEN rồi mới đụng DB
+// — không nhận userId trong body, vì đó là đường một người sửa hồ sơ người
+// khác. Tầng store cũng luôn kèm user_id trong bộ lọc (đai an toàn thứ hai).
+async function memoryUser(request: NextRequest): Promise<{ id: string } | null> {
+  const t = (request.headers.get('Authorization') || '').replace('Bearer ', '').trim();
+  if (!t) return null;
+  const u = await getUserFromToken(t);
+  return u ? { id: u.id } : null;
+}
+
+async function handleMyMemory(request: NextRequest): Promise<Response> {
+  const u = await memoryUser(request);
+  if (!u) return err('Invalid token', 401);
+  const items = await listMemory(u.id);
+  return ok({ items, kinds: MEMORY_KIND_LABELS, max: MAX_MEMORY_ITEMS, maxLen: MAX_MEMORY_LEN });
+}
+
+async function handleMemoryEdit(request: NextRequest, body: Record<string, unknown>): Promise<Response> {
+  const u = await memoryUser(request);
+  if (!u) return err('Invalid token', 401);
+  const done = await editFact(u.id, String(body?.id || ''), body?.noi_dung, body?.loai);
+  return done ? ok({ ok: true }) : err('Không sửa được mục này.', 400);
+}
+
+async function handleMemoryDelete(request: NextRequest, body: Record<string, unknown>): Promise<Response> {
+  const u = await memoryUser(request);
+  if (!u) return err('Invalid token', 401);
+  const done = await forgetFact(u.id, String(body?.id || ''));
+  return done ? ok({ ok: true }) : err('Không tìm thấy mục này.', 404);
+}
+
+async function handleMemoryAdd(request: NextRequest, body: Record<string, unknown>): Promise<Response> {
+  const u = await memoryUser(request);
+  if (!u) return err('Invalid token', 401);
+  // nguồn 'nguoi' — chính chủ tự khai thì không được lẫn với thứ máy đoán ra.
+  const r = await rememberFact(u.id, body?.loai, body?.noi_dung, 'nguoi');
+  return r.ok ? ok({ ok: true }) : err('Không thêm được (nội dung quá ngắn?).', 400);
 }
 
 async function handleMyReferral(request: NextRequest, sp: URLSearchParams): Promise<Response> {
@@ -2162,7 +2820,14 @@ async function handleReferralRegister(request: NextRequest, body: Record<string,
       const first = Array.isArray(r) ? (r[0] as Record<string, unknown> | undefined) : null;
       rewarded = first?.rewarded === true;
       creditsGranted = Number(first?.credits_granted) || 0;
-    } catch { /* best-effort */ }
+    } catch (e) {
+      // Best-effort: thưởng hỏng KHÔNG được chặn lượt đăng ký. Nhưng phải KÊU —
+      // `catch {}` rỗng ở đây đã giấu một hàm chết hẳn (42702 ambiguous column)
+      // suốt 6 ngày: referral vẫn ghi sổ, tiền thì không bao giờ tới tay ai, và
+      // không có dòng log nào để lần ra. Im lặng ở đường phát tiền là kiểu hỏng
+      // tệ nhất — nó trông y hệt lúc chạy đúng.
+      console.error('[referral-register] process_referral_signup thất bại:', e);
+    }
 
     // Mắt xích cuối của vòng lặp viral (V2.4): mã ĐÃ ăn. tool_id = tool của link
     // chia sẻ đưa người này tới → panel Vòng Lặp Viral tính được K-factor TỪNG
@@ -2180,10 +2845,426 @@ async function handleReferralRegister(request: NextRequest, body: Record<string,
   } catch (e: unknown) { return err((e as Error).message); }
 }
 
+// ── MÃ KHUYẾN MÃI ──────────────────────────────────────────────
+// Đường phát tiền, nên mọi chốt chặn nằm dưới DB (`promo_code_redeem`): trần
+// mỗi lượt, trần tổng lượt, hạn dùng, tuổi tài khoản, và chống-đổi-hai-lần
+// bằng KHOÁ CHÍNH. Tầng này chỉ làm hai việc: xác thực người gọi và dịch mã
+// lý do sang câu người đọc hiểu được.
+//
+// ⚠️ CỐ Ý không tự kiểm gì thêm ở đây. Kiểm ở hai tầng thì hai tầng sẽ trôi
+// khỏi nhau — đúng lớp lỗi đã trả giá nhiều lần trong repo này.
+
+/** Mã lý do từ RPC → câu cho người dùng. Không rò chi tiết cấu hình ra ngoài. */
+const PROMO_REASONS: Record<string, string> = {
+  not_found: 'Mã không đúng. Kiểm tra lại giúp bạn nhé.',
+  disabled: 'Mã này đã ngừng áp dụng.',
+  expired: 'Mã này đã hết hạn.',
+  exhausted: 'Mã đã hết lượt. Cảm ơn bạn đã quan tâm!',
+  already_redeemed: 'Tài khoản của bạn đã dùng mã khuyến mãi rồi — mỗi tài khoản chỉ dùng được một lần.',
+  account_too_old: 'Mã này chỉ dành cho tài khoản mới đăng ký.',
+  need_oauth: 'Mã này chỉ áp dụng cho tài khoản đăng nhập bằng Google hoặc Facebook.',
+  invalid_input: 'Mã không hợp lệ.',
+};
+
+/**
+ * Thông tin CÔNG KHAI của một mã: còn dùng được không, tặng bao nhiêu Lượng.
+ *
+ * Dùng để ô nhập mã nói được "mã này tặng 100 Lượng" TRƯỚC khi người ta bấm —
+ * và quan trọng hơn, để con số hiện ra luôn khớp DB. Viết cứng "100 Lượng"
+ * trên giao diện là đúng lớp lỗi `check:prices` sinh ra để chặn: một con số CŨ
+ * nguy hiểm hơn hẳn một ô đang tải, vì người ta TIN nó.
+ */
+async function handlePromoInfo(sp: URLSearchParams): Promise<Response> {
+  const code = (sp.get('code') || '').toUpperCase().trim();
+  if (!code || code.length > 40) return ok({ found: false });
+  try {
+    const res = await fetch(
+      `${SUPABASE_URL}/rest/v1/promo_codes?code=eq.${encodeURIComponent(code)}&select=code,credits,enabled,max_uses,used_count,expires_at&limit=1`,
+      { cache: 'no-store', headers: SB_HEADERS }
+    );
+    const rows = res.ok ? await res.json() : [];
+    const r = rows[0];
+    if (!r) return ok({ found: false });
+    const live =
+      r.enabled === true &&
+      (!r.expires_at || Date.parse(r.expires_at) > Date.now()) &&
+      (r.max_uses === null || r.used_count < r.max_uses);
+    // KHÔNG trả `used_count`/`max_uses` ra ngoài — đó là ngân sách nội bộ.
+    return ok({ found: true, code: r.code, credits: r.credits, live });
+  } catch { return ok({ found: false }); }
+}
+
+async function handleAdminPromoList(request: NextRequest): Promise<Response> {
+  const token = (request.headers.get('Authorization') || '').replace('Bearer ', '').trim();
+  const admin = await verifyAdmin(token);
+  if (!admin) return err('Unauthorized — admin only', 403);
+  try {
+    const [codesRes, redRes] = await Promise.all([
+      fetch(`${SUPABASE_URL}/rest/v1/promo_codes?select=*&order=created_at.desc`, {
+        cache: 'no-store', headers: SB_HEADERS,
+      }),
+      fetch(
+        `${SUPABASE_URL}/rest/v1/promo_redemptions?select=code,credits_granted,redeemed_at&order=redeemed_at.desc&limit=50`,
+        { cache: 'no-store', headers: SB_HEADERS }
+      ),
+    ]);
+    const codes = codesRes.ok ? await codesRes.json() : [];
+    const recent = redRes.ok ? await redRes.json() : [];
+    const granted = (codes as Array<{ credits: number; used_count: number }>).reduce(
+      (s, c) => s + (Number(c.credits) || 0) * (Number(c.used_count) || 0), 0
+    );
+    return ok({ codes, recent, grantedCredits: granted, maxCreditsPerCode: 1000 });
+  } catch (e: unknown) { return err((e as Error).message); }
+}
+
+async function handlePromoRedeem(request: NextRequest, body: Record<string, unknown>): Promise<Response> {
+  const token = (request.headers.get('Authorization') || '').replace('Bearer ', '').trim();
+  if (!token) return err('Missing Authorization token', 401);
+
+  // Chỉ chặn ca vô lý rõ ràng (rỗng / dài bất thường) để khỏi gửi rác xuống DB.
+  // KHÔNG kiểm độ dài cố định như referral (8 ký tự): mã khuyến mãi do người
+  // đặt tên, `TUVIMINHBAO` đã 11 ký tự.
+  const code = String(body.code || '').toUpperCase().trim();
+  if (!code || code.length > 40) return err('Mã không hợp lệ', 400);
+
+  try {
+    const user = await getUserFromToken(token);
+    if (!user) return err('Invalid token', 401);
+
+    const rows = (await rpcSafe('promo_code_redeem', { p_user_id: user.id, p_code: code })) as Array<{
+      ok: boolean; reason: string; credits: number; code: string;
+    }>;
+    // `rpcSafe` nuốt lỗi thành mảng rỗng. Ở đường phát tiền thì im lặng là tệ
+    // nhất: người dùng gõ đúng mã mà không có gì xảy ra. Nói thẳng là hỏng.
+    if (!rows.length) return err('Không đổi được mã lúc này, thử lại sau giúp bạn.', 503);
+
+    const r = rows[0];
+    if (!r.ok) {
+      return ok({
+        success: false,
+        reason: r.reason,
+        message: PROMO_REASONS[r.reason] || 'Không đổi được mã này.',
+        balance: await getBalance(user.id),
+      });
+    }
+
+    void logEvent({
+      event_type: 'promo_redeem',
+      user_id: user.id,
+      meta: { code: r.code, credits: r.credits },
+    });
+
+    return ok({
+      success: true,
+      code: r.code,
+      credits: r.credits,
+      balance: await getBalance(user.id),
+      message: `Đã cộng ${r.credits} Lượng vào tài khoản của bạn!`,
+    });
+  } catch (e: unknown) { return err((e as Error).message); }
+}
+
+/** Thêm/sửa một mã. Admin only. */
+async function handleAdminPromoCode(request: NextRequest, body: Record<string, unknown>): Promise<Response> {
+  const token = (request.headers.get('Authorization') || '').replace('Bearer ', '').trim();
+  const admin = await verifyAdmin(token);
+  if (!admin) return err('Unauthorized — admin only', 403);
+
+  const code = String(body.code || '').toUpperCase().trim();
+  if (!code || !/^[A-Z0-9_-]{3,40}$/.test(code)) {
+    return err('Mã chỉ gồm chữ HOA, số, gạch ngang/dưới; 3–40 ký tự', 400);
+  }
+  if (body.remove === true) {
+    // Xoá thì phải để FK của `promo_redemptions` (on delete restrict) chặn —
+    // mã đã có người đổi thì xoá là mất dấu vết một khoản đã phát.
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/promo_codes?code=eq.${encodeURIComponent(code)}`, {
+      method: 'DELETE', headers: SB_HEADERS,
+    });
+    if (!res.ok) {
+      return err('Không xoá được — nhiều khả năng mã đã có người đổi. Hãy TẮT mã thay vì xoá.', 400);
+    }
+    return ok({ success: true, removed: code });
+  }
+
+  const credits = Number(body.credits);
+  if (!Number.isInteger(credits) || credits < 0 || credits > 1000) {
+    // Cùng trần với `PROMO_MAX_CREDITS` trong RPC. Kiểm ở đây để admin nhận câu
+    // lỗi đọc được, thay vì một exception Postgres thô.
+    return err('Số Lượng phải là số nguyên 0–1000', 400);
+  }
+  const row: Record<string, unknown> = {
+    code,
+    credits,
+    enabled: body.enabled !== false,
+    max_uses: body.maxUses === null || body.maxUses === '' ? null : Number(body.maxUses),
+    new_account_days:
+      body.newAccountDays === null || body.newAccountDays === '' ? null : Number(body.newAccountDays),
+    // Mặc định BẬT khi client không gửi — đây là chốt chống lạm dụng chính,
+    // không được lặng lẽ tắt chỉ vì thiếu một trường trong payload.
+    require_oauth: body.requireOauth !== false,
+    expires_at: body.expiresAt ? String(body.expiresAt) : null,
+    note: String(body.note || '').slice(0, 300) || null,
+    updated_at: new Date().toISOString(),
+  };
+  if (row.max_uses !== null && !Number.isInteger(row.max_uses as number)) return err('Trần lượt không hợp lệ', 400);
+  if (row.new_account_days !== null && !Number.isInteger(row.new_account_days as number)) {
+    return err('Số ngày không hợp lệ', 400);
+  }
+
+  // ⚠️ KHÔNG đụng `used_count` — nó là số đếm THẬT, sửa tay là mất khả năng đối
+  // soát ngân sách đã phát.
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/promo_codes?on_conflict=code`, {
+    method: 'POST',
+    headers: { ...SB_HEADERS, Prefer: 'resolution=merge-duplicates,return=representation' },
+    body: JSON.stringify(row),
+  });
+  if (!res.ok) return err('Lưu hỏng: ' + (await res.text()).slice(0, 200), 400);
+  return ok({ success: true, code });
+}
+
+// ── "Khoe Kết Quả" — nộp bằng chứng đã đăng FB/IG/TikTok (docs/QUEST-PLAN.md
+// §3.5.1). KHÔNG có cách nào xác minh tự động một lượt đăng — Instagram không
+// lộ dữ liệu screenshot/story qua API cho bên thứ ba (đã nghiên cứu trước khi
+// thiết kế) — nên đây LUÔN là: user tự nộp → admin xác nhận bằng mắt → duyệt
+// mới cộng Lượng. Bảng `social_post_submissions` không có policy cho
+// anon/authenticated, chỉ đi qua 2 route dưới đây (service key, tự gắn
+// user_id từ token — KHÔNG tin user_id do client khai). ──
+
+const SOCIAL_PROOF_PLATFORMS = ['facebook', 'instagram', 'tiktok', 'other'];
+const SOCIAL_PROOF_MEDIA_EXT: Record<string, string> = {
+  'image/png': 'png',
+  'image/jpeg': 'jpg',
+  'image/webp': 'webp',
+};
+
+async function handleSocialProofSubmit(
+  request: NextRequest,
+  body: Record<string, unknown>
+): Promise<Response> {
+  const token = (request.headers.get('Authorization') || '').replace('Bearer ', '').trim();
+  const user = await getUserFromToken(token);
+  if (!user) return err('Cần đăng nhập', 401);
+
+  const platform = String(body.platform || '').trim().toLowerCase();
+  if (!SOCIAL_PROOF_PLATFORMS.includes(platform)) return err('platform không hợp lệ', 400);
+
+  const url = typeof body.url === 'string' ? body.url.trim().slice(0, 500) : '';
+  const mediaType = typeof body.mediaType === 'string' ? body.mediaType : '';
+  const screenshotBase64 = typeof body.screenshotBase64 === 'string' ? body.screenshotBase64 : '';
+  const toolId = typeof body.toolId === 'string' ? body.toolId.trim().slice(0, 80) : null;
+  const note = typeof body.note === 'string' ? body.note.trim().slice(0, 300) : null;
+
+  if (url && !/^https?:\/\//i.test(url)) return err('Link phải bắt đầu bằng http(s)://', 400);
+  const ext = SOCIAL_PROOF_MEDIA_EXT[mediaType];
+  if (!url && !(screenshotBase64 && ext)) {
+    return err('Cần dán link công khai, hoặc gửi ảnh chụp màn hình (PNG/JPEG/WebP)', 400);
+  }
+
+  // Cooldown: chặn nộp lại mỗi tuần (nghỉ 10 giây thì vẫn nộp được — chặn TẦN
+  // SUẤT, không chặn hành vi thật). Đọc từ app_config để chỉnh không cần deploy.
+  const cooldownDays = await getConfigValue('social_proof.cooldown_days', 7);
+  if (cooldownDays > 0) {
+    const sinceIso = new Date(Date.now() - cooldownDays * 86400000).toISOString();
+    const dupRes = await fetch(
+      `${SUPABASE_URL}/rest/v1/social_post_submissions?user_id=eq.${user.id}&platform=eq.${platform}` +
+        `&submitted_at=gte.${sinceIso}&select=id&limit=1`,
+      { headers: SB_HEADERS, cache: 'no-store' }
+    );
+    if (dupRes.ok) {
+      const dup = (await dupRes.json()) as unknown[];
+      if (dup.length) {
+        return err(`Bạn vừa nộp một lượt ${platform} gần đây — thử lại sau ${cooldownDays} ngày kể từ lượt trước.`, 429);
+      }
+    }
+  }
+
+  let screenshotUrl: string | null = null;
+  if (!url && screenshotBase64 && ext) {
+    let bytes: Buffer;
+    try {
+      bytes = Buffer.from(screenshotBase64, 'base64');
+    } catch {
+      return err('Ảnh không đọc được', 400);
+    }
+    if (!bytes.length || bytes.length > 8 * 1024 * 1024) return err('Ảnh trống hoặc quá 8MB', 400);
+    const path = `${user.id}/${Date.now()}.${ext}`;
+    const upRes = await fetch(`${SUPABASE_URL}/storage/v1/object/social-proof/${path}`, {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${SUPABASE_KEY}`, apikey: SUPABASE_KEY, 'Content-Type': mediaType },
+      body: new Uint8Array(bytes),
+    });
+    if (!upRes.ok) return err('Lỗi lưu ảnh: ' + (await upRes.text()).slice(0, 200), 500);
+    screenshotUrl = `${SUPABASE_URL}/storage/v1/object/public/social-proof/${path}`;
+  }
+
+  const insRes = await fetch(`${SUPABASE_URL}/rest/v1/social_post_submissions`, {
+    method: 'POST',
+    headers: { ...SB_HEADERS, Prefer: 'return=representation' },
+    body: JSON.stringify({
+      user_id: user.id,
+      platform,
+      url: url || null,
+      screenshot_url: screenshotUrl,
+      tool_id: toolId,
+      note,
+      status: 'pending',
+    }),
+  });
+  if (!insRes.ok) {
+    const t = await insRes.text();
+    // UNIQUE(url) trùng → 23505, đọc thành "link này đã nộp rồi" thay vì lỗi kỹ thuật.
+    if (t.includes('23505')) return err('Link này đã được nộp trước đó (bởi bạn hoặc người khác).', 409);
+    return err('Nộp hỏng: ' + t.slice(0, 200), 400);
+  }
+  const rows = (await insRes.json()) as { id: string }[];
+  return ok({ submitted: true, id: rows[0]?.id || null });
+}
+
+// GET: admin-social-proof — hàng đợi duyệt. Mặc định chỉ `pending` (đúng khuôn
+// Media Queue/Seeding — admin nhìn thấy việc cần làm, không phải toàn bộ lịch sử).
+async function handleAdminSocialProofList(request: NextRequest, sp: URLSearchParams): Promise<Response> {
+  const token = (request.headers.get('Authorization') || '').replace('Bearer ', '').trim();
+  const admin = await verifyAdmin(token);
+  if (!admin) return err('Unauthorized', 403);
+
+  const status = (sp.get('status') || 'pending').trim();
+  const statusFilter = /^[a-z]+$/.test(status) ? `&status=eq.${status}` : '';
+  try {
+    const rowsRes = await fetch(
+      `${SUPABASE_URL}/rest/v1/social_post_submissions?select=*${statusFilter}&order=submitted_at.desc&limit=60`,
+      { headers: SB_HEADERS, cache: 'no-store' }
+    );
+    const rows = rowsRes.ok ? await rowsRes.json() : [];
+
+    const userIds = Array.from(new Set((rows as { user_id?: string }[]).map((r) => r.user_id).filter((v): v is string => !!v)));
+    const emailMap: Record<string, string> = {};
+    await Promise.all(userIds.map(async (uid) => {
+      try {
+        const r = await fetch(`${SUPABASE_URL}/auth/v1/admin/users/${uid}`, { cache: 'no-store',
+          headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` },
+        });
+        if (r.ok) { const u = await r.json(); if (u?.email) emailMap[uid] = u.email; }
+      } catch { /* bỏ qua, hiện user_id thô */ }
+    }));
+
+    const defaultCredits = await getConfigValue('social_proof.reward_credits', 20);
+    return ok({
+      submissions: (rows as { user_id?: string }[]).map((r) => ({ ...r, email: r.user_id ? emailMap[r.user_id] || null : null })),
+      defaultCredits,
+    });
+  } catch (e: unknown) {
+    return err((e as Error).message);
+  }
+}
+
+// ── GET: my-social-proof (lịch sử "Khoe Kết Quả" của CHÍNH mình) ────
+// Tab Nhiệm Vụ (`/app/tai-khoan`) cần một nơi đọc lại trạng thái các lượt đã
+// nộp — trước đây nộp xong (`social-proof-submit`) là mất dấu hoàn toàn phía
+// người dùng, đường đọc lại DUY NHẤT là hàng đợi ADMIN
+// (`handleAdminSocialProofList`, chỉ `verifyAdmin` gọi được). Endpoint này
+// CÙNG khuôn `handleMyReferral`/`handleMyMemory`: tự giải user_id TỪ TOKEN,
+// KHÔNG nhận qua query — đọc lịch sử của người khác là lỗi thiết kế.
+async function handleMySocialProof(request: NextRequest): Promise<Response> {
+  const token = (request.headers.get('Authorization') || '').replace('Bearer ', '').trim();
+  if (!token) return err('Missing Authorization token', 401);
+  try {
+    const user = await getUserFromToken(token);
+    if (!user) return err('Invalid token', 401);
+    const res = await fetch(
+      `${SUPABASE_URL}/rest/v1/social_post_submissions?user_id=eq.${user.id}` +
+        `&select=id,platform,url,screenshot_url,tool_id,note,status,reward_credits,submitted_at,reviewed_at,reject_reason` +
+        `&order=submitted_at.desc&limit=30`,
+      { headers: SB_HEADERS, cache: 'no-store' }
+    );
+    const submissions = res.ok ? await res.json() : [];
+    return ok({ submissions });
+  } catch (e: unknown) { return err((e as Error).message); }
+}
+
+// ── GET: my-shares (lịch sử "Chia Sẻ" của CHÍNH mình) ────────────────
+// #599 gỡ nút "Khoe kết quả" (nộp bằng chứng + chờ admin duyệt) khỏi
+// `.ws-fab` — quest tương ứng trong tab Nhiệm Vụ đổi sang đọc lại
+// `shared_results` (bảng có sẵn từ #595, ghi `owner_user_id` mỗi lần bấm nút
+// "Chia sẻ" trong workspace, `view_count` +1 mỗi lượt `/ket-qua/<id>` được
+// mở). CÙNG khuôn `handleMyReferral`/`handleMySocialProof`: tự giải user_id
+// TỪ TOKEN, không nhận qua query.
+//
+// ⚠️ `view_count` là bộ đếm THÔ — cộng cả lượt owner tự mở lại link lẫn bot
+// xem trước của Facebook/Zalo/WhatsApp (chúng tự tải link để dựng preview
+// NGAY khi link được dán vào khung chat, trước khi có người thật bấm xem).
+// Vì vậy CHƯA dùng số này để phát thưởng — chỉ hiện cho người dùng biết
+// "đã chia sẻ gì, bao nhiêu lượt xem", đúng như wording ở dưới.
+async function handleMyShares(request: NextRequest): Promise<Response> {
+  const token = (request.headers.get('Authorization') || '').replace('Bearer ', '').trim();
+  if (!token) return err('Missing Authorization token', 401);
+  try {
+    const user = await getUserFromToken(token);
+    if (!user) return err('Invalid token', 401);
+    const res = await fetch(
+      `${SUPABASE_URL}/rest/v1/shared_results?owner_user_id=eq.${user.id}&revoked=eq.false` +
+        `&select=id,tool_id,title,kind,view_count,created_at&order=created_at.desc&limit=30`,
+      { headers: SB_HEADERS, cache: 'no-store' }
+    );
+    const shares = res.ok ? await res.json() : [];
+    return ok({ shares });
+  } catch (e: unknown) { return err((e as Error).message); }
+}
+
+// POST: admin-social-proof-decide — approve qua RPC nguyên tử (cộng Lượng +
+// ghi sổ trong CÙNG transaction, xem migration), reject chỉ đổi trạng thái.
+async function handleAdminSocialProofDecide(
+  request: NextRequest,
+  body: Record<string, unknown>
+): Promise<Response> {
+  const token = (request.headers.get('Authorization') || '').replace('Bearer ', '').trim();
+  const admin = await verifyAdmin(token);
+  if (!admin) return err('Unauthorized', 403);
+
+  const submissionId = String(body.submissionId || '').trim();
+  const decision = String(body.decision || '').trim();
+  if (!/^[0-9a-f-]{36}$/i.test(submissionId)) return err('submissionId không hợp lệ', 400);
+  if (decision !== 'approve' && decision !== 'reject') return err('decision phải là approve hoặc reject', 400);
+
+  try {
+    if (decision === 'reject') {
+      const reason = typeof body.reason === 'string' ? body.reason.trim().slice(0, 300) : null;
+      const res = await fetch(
+        `${SUPABASE_URL}/rest/v1/social_post_submissions?id=eq.${submissionId}&status=eq.pending`,
+        {
+          method: 'PATCH',
+          headers: { ...SB_HEADERS, Prefer: 'return=representation' },
+          body: JSON.stringify({
+            status: 'rejected', reviewed_at: new Date().toISOString(),
+            reviewed_by: admin.email, reject_reason: reason,
+          }),
+        }
+      );
+      if (!res.ok) return err(await res.text());
+      const rows = (await res.json()) as unknown[];
+      if (!rows.length) return err('Không tìm thấy lượt nộp đang chờ với id đó', 404);
+      return ok({ decided: true, status: 'rejected' });
+    }
+
+    const defaultCredits = await getConfigValue('social_proof.reward_credits', 20);
+    const credits = body.credits === undefined || body.credits === null
+      ? defaultCredits
+      : Math.max(0, Math.min(200, Math.round(Number(body.credits) || 0)));
+    const credited = await rpc('social_proof_approve', {
+      p_submission_id: submissionId, p_credits: credits, p_reviewer: admin.email,
+    });
+    if (credited === 0) return err('Lượt nộp này không còn ở trạng thái chờ duyệt (đã duyệt/từ chối trước đó)', 409);
+    return ok({ decided: true, status: 'approved', credited });
+  } catch (e: unknown) {
+    return err((e as Error).message);
+  }
+}
+
 export async function POST(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const action = searchParams.get('action');
   const body   = await parseBody(request);
+  if (action === 'promo-redeem')      return handlePromoRedeem(request, body);
+  if (action === 'admin-promo-code')  return handleAdminPromoCode(request, body);
   if (action === 'topup')             return handleTopup(body);
   if (action === 'capture')           return handleCapture(body);
   if (action === 'deduct')            return handleDeduct(request, body);
@@ -2195,15 +3276,27 @@ export async function POST(request: NextRequest) {
   if (action === 'admin-channel-broadcast') return handleAdminChannelBroadcast(request, body);
   if (action === 'admin-nudge-user') return handleAdminNudgeUser(request, body);
   if (action === 'admin-media-decide') return handleAdminMediaDecide(request, body);
+  if (action === 'social-proof-submit') return handleSocialProofSubmit(request, body);
+  if (action === 'admin-social-proof-decide') return handleAdminSocialProofDecide(request, body);
+  if (action === 'admin-content-edit') return handleAdminContentEdit(request, body);
   if (action === 'admin-seeding-group') return handleAdminSeedingGroup(request, body);
   if (action === 'admin-seeding-draft') return handleAdminSeedingDraft(request, body);
+  if (action === 'admin-backlink-prospect') return handleAdminBacklinkProspect(request, body);
+  if (action === 'admin-backlink-content') return handleAdminBacklinkContent(request, body);
+  if (action === 'admin-backlink-link') return handleAdminBacklinkLink(request, body);
+  if (action === 'admin-backlink-run') return handleAdminBacklinkRun(request, body);
+  if (action === 'admin-growth-account') return handleAdminGrowthAccount(request, body);
   if (action === 'admin-khao-luan-topics') return handleAdminKhaoLuanTopics(request, body);
   if (action === 'admin-nghien-cuu-topics') return handleAdminNghienCuuTopics(request, body);
+  if (action === 'admin-topic-queue-delete') return handleAdminTopicQueueDelete(request, body);
   if (action === 'admin-mcp-update') return handleAdminMcpUpdate(request, body);
   if (action === 'admin-users-upsert') return handleAdminUsersUpsert(request, body);
   if (action === 'admin-users-set-active') return handleAdminUsersSetActive(request, body);
   if (action === 'create-bank')       return handleCreateBank(body);
   if (action === 'referral-register') return handleReferralRegister(request, body);
   if (action === 'onboarding-sync')   return handleOnboardingSync(request);
+  if (action === 'memory-edit')       return handleMemoryEdit(request, body);
+  if (action === 'memory-delete')     return handleMemoryDelete(request, body);
+  if (action === 'memory-add')        return handleMemoryAdd(request, body);
   return err('Invalid action.', 400);
 }

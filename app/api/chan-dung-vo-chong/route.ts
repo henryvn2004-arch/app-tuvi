@@ -27,17 +27,35 @@ import type { BirthParams } from '@/lib/contract/v1';
 import { authUserFromRequest, parseLlmJson } from '@/lib/api/tool-helpers';
 import { withToolOutcome } from '@/lib/ops/tool-outcome';
 import {
-  lookupPortraitCache,
-  putCachedPortrait,
-  touchCache,
+  cacheFor,
   insertHistoryRow,
   lasoKey,
-  getCachedPortrait,
   userOwnsLaso,
   birthFromQuery,
 } from '@/lib/portraits/cache';
 
+
+
 const TOOL_ID = 'chan-dung-vo-chong';
+
+/**
+ * 🔴 PHIÊN BẢN CẤU TRÚC payload. BUMP mỗi khi thêm/đổi/bớt khoá mà TRANG cần để
+ * dựng đủ màn hình. Đổi CHỮ thì không bump (dòng cache cũ trả chữ cũ — khó
+ * chịu, không vỡ); đổi KHOÁ mà quên bump thì trang ẩn khối IM LẶNG.
+ *
+ * Mở màn ở 1: payload hiện tại CHÍNH LÀ phiên bản 1, và dòng cache ghi trước
+ * lượt cắm cơ chế (không có `_shape`) được đọc là 1 nên KHÔNG bị dựng lại oan.
+ *
+ * ⚠️ Cố ý KHÔNG nhét vào `lasoKey`: đổi khoá là mồ côi cả cache LẪN
+ * `userOwnsLaso` ⇒ người đã trả tiền bị tính lại.
+ */
+const SHAPE = 1;
+
+/** Vân tay CẤU TRÚC — `npm run check:cacheshape` canh khớp với `SHAPE` ở trên. */
+const SHAPE_FINGERPRINT = '8cfee3e40522';
+
+/** Cửa DUY NHẤT vào cache của tool này; `shape` khai một lần tại đây. */
+const CACHE = cacheFor(TOOL_ID, SHAPE);
 
 const SUPABASE_URL = process.env.SUPABASE_URL!;
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY!;
@@ -96,7 +114,7 @@ async function handleGenerate(request: NextRequest, body: Record<string, unknown
   // ── Cache theo lá số (xem lib/portraits/cache.ts) ─────────────────────
   // Tra TRƯỚC cả chốt thanh toán, vì kết quả tra quyết định luôn có phải trả
   // tiền hay không: người đã từng trả cho đúng lá số này thì xem lại miễn phí.
-  const look = await lookupPortraitCache(TOOL_ID, 'main', auth.user.id, birth);
+  const look = await CACHE.lookup('main', auth.user.id, birth);
 
   if (!look.free) {
     // Chốt chặn thanh toán PHÍA SERVER (S0 track COO) — xem chú thích cùng loại
@@ -106,7 +124,7 @@ async function handleGenerate(request: NextRequest, body: Record<string, unknown
   }
 
   if (look.cached) {
-    touchCache(TOOL_ID, 'main', look.key);
+    CACHE.touch('main', look.key);
     // Người mới (vừa trả đủ tiền) cần dòng lịch sử của RIÊNG họ: để thấy trong
     // mục Lịch sử, và để lần sau được nhận diện là đã trả cho lá số này.
     if (!look.owns && look.cached.row) {
@@ -138,7 +156,7 @@ async function handleGenerate(request: NextRequest, body: Record<string, unknown
     const llmRes = await llmTextFull({
       system: PHU_THE_LUAN_GIAI_SYSTEM_PROMPT,
       prompt: buildPhuTheLuanGiaiPrompt(laSoText, undefined, userGender),
-      maxTokens: 900,
+      maxTokens: 1350, // nâng 50% cùng đợt (Henry chốt 2026-08-20)
     });
     phuTheLuanGiai = llmRes.text.trim();
     void logLlmUsage('chan-dung-vo-chong', llmRes.model, {
@@ -146,7 +164,7 @@ async function handleGenerate(request: NextRequest, body: Record<string, unknown
       output_tokens: llmRes.usage.output_tokens,
       cache_creation_input_tokens: 0,
       cache_read_input_tokens: 0,
-    });
+    }, llmRes.durationMs);
   } catch {
     /* best-effort — không chặn vẽ ảnh nếu luận giải lỗi */
   }
@@ -242,14 +260,14 @@ async function handleGenerate(request: NextRequest, body: Record<string, unknown
 
   let raw: string;
   try {
-    const llmRes = await llmTextFull({ system: sys, prompt: userMsg, maxTokens: 1100 });
+    const llmRes = await llmTextFull({ system: sys, prompt: userMsg, maxTokens: 1650 }); // nâng 50% (Henry chốt 2026-08-20)
     raw = llmRes.text;
     void logLlmUsage('chan-dung-vo-chong', llmRes.model, {
       input_tokens: llmRes.usage.input_tokens,
       output_tokens: llmRes.usage.output_tokens,
       cache_creation_input_tokens: 0,
       cache_read_input_tokens: 0,
-    });
+    }, llmRes.durationMs);
   } catch {
     return err('Lỗi AI mô tả chân dung. Vui lòng thử lại.', 500);
   }
@@ -419,7 +437,7 @@ async function handleGenerate(request: NextRequest, body: Record<string, unknown
   try {
     const imgRes = await generatePortraitImage({ prompt: finalPrompt, size: '1024x1536' });
     imageB64 = imgRes.b64;
-    void logImageUsage('chan-dung-vo-chong', imgRes.model, imgRes.usage);
+    void logImageUsage('chan-dung-vo-chong', imgRes.model, imgRes.usage, imgRes.durationMs);
   } catch (e) {
     return err('Lỗi sinh ảnh: ' + (e instanceof Error ? e.message : 'không rõ'), 500);
   }
@@ -471,7 +489,7 @@ async function handleGenerate(request: NextRequest, body: Record<string, unknown
     spouseAge,
     phuThe,
   };
-  void putCachedPortrait(TOOL_ID, 'main', look.key, { payload, row: historyRow }, auth.user.id);
+  CACHE.put('main', look.key, { payload, row: historyRow }, auth.user.id);
   return ok(payload);
 }
 
@@ -499,11 +517,13 @@ async function handleCacheStatus(request: NextRequest, sp: URLSearchParams) {
   if ('error' in auth) return err(auth.error, auth.status);
 
   const key = lasoKey(birthFromQuery(sp));
-  const [cached, owns] = await Promise.all([
-    getCachedPortrait(TOOL_ID, 'main', key),
+  const [{ cached, stale }, owns] = await Promise.all([
+    CACHE.get('main', key),
     userOwnsLaso(TOOL_ID, auth.user.id, key),
   ]);
-  return ok({ success: true, cached: Boolean(cached), free: Boolean(cached) && owns });
+  // `cached` = có dòng DÙNG ĐƯỢC (dòng cũ đã bị lọc). `free` = đã trả tiền cho
+  // lá số này, kể cả khi dòng cũ và sắp phải dựng lại.
+  return ok({ success: true, cached: Boolean(cached), free: Boolean(cached || stale) && owns });
 }
 
 // ── Routes ────────────────────────────────────────────────────────────

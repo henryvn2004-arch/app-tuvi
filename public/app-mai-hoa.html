@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"></noscript>
-<link rel="stylesheet" href="/shell.css?v=18">
+<link rel="stylesheet" href="/shell.css?v=29">
 <style>
 .form-card{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);max-width:640px}
 .form-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:3px}
@@ -85,7 +85,8 @@
       <div id="shellRecent"></div>
       <div class="form-card" id="birthPanel">
         <h2>Thành tâm nghĩ về việc muốn hỏi</h2>
-        <p class="sub">Không cần ngày sinh. Nghĩ rõ một việc đang phân vân, rồi để một con số nảy ra trong đầu — hoặc gieo ngay theo thời điểm này. Nhận quẻ Thể, quẻ Dụng và ba chặng, rồi hỏi trợ lý luận theo Mai Hoa.</p>
+        <p class="sub">Gieo quẻ bằng số hoặc giờ, đọc Thể và Dụng cho việc bạn hỏi. Bạn có một việc đang phân vân, muốn một gợi ý thật nhanh. Dùng khi cần đáp án gọn cho một câu hỏi cụ thể.</p>
+        <p class="price-note" data-tvp-price-label="mai-hoa">…</p>
         <div class="fg">
           <label>Câu hỏi (tuỳ chọn)</label>
           <input type="text" id="cauHoi" placeholder="VD: Việc chuyển chỗ làm này có nên không?" maxlength="100">
@@ -123,7 +124,7 @@
 </div>
 
 <script>window.SHELL_ACTIVE='mai-hoa';window.SHELL_HISTORY=true;
-window.SHELL_INTRO={key:'mai-hoa',title:'Mai Hoa Dịch Số',desc:'Không cần ngày sinh — nhập <b>một con số</b> bất kỳ hoặc gieo theo <b>thời điểm này</b>. Nhận quẻ <b>Thể</b> và quẻ <b>Dụng</b>, xem ngũ hành sinh khắc qua ba chặng chính–hỗ–biến, rồi hỏi <b>trợ lý AI</b> luận theo câu hỏi.'};</script>
+window.SHELL_INTRO={key:'mai-hoa',title:'Mai Hoa Dịch Số',desc:'Gieo quẻ bằng số hoặc giờ, đọc Thể và Dụng cho việc bạn hỏi. Bạn có một việc đang phân vân, muốn một gợi ý thật nhanh. Dùng khi cần đáp án gọn cho một câu hỏi cụ thể.'};</script>
 <script src="/tuvi-ansao-engine.js"></script>
 <script src="/tools-shared/kinh-dich-hao.js?v=1"></script>
 <script src="/tools-shared/kinh-dich.js?v=5"></script>
@@ -131,7 +132,7 @@ window.SHELL_INTRO={key:'mai-hoa',title:'Mai Hoa Dịch Số',desc:'Không cần
 <script src="/poster.js?v=5"></script>
 <script src="/auth.js?v=2"></script>
   <script src="/nav.js?v=23" data-icons-only></script>
-<script src="/shell.js?v=66"></script>
+<script src="/shell.js?v=82"></script>
 <script>
 // Ô giữa dùng CHUNG module /tools-shared/mai-hoa.js với trang standalone
 // /tools/mai-hoa.html. Trang chỉ lo DOM + nối rail.

@@ -57,6 +57,7 @@ const STATIC_PAGES = [
     '/tools/cong-so.html',
     '/tools/da-lieu-ai.html',
     '/tools/day-con.html',
+    '/tools/huong-nghiep-tre.html',
     '/tools/kieu-toc-ai.html',
     '/tools/ky-mon.html',
     '/tools/mai-hoa.html',
@@ -68,6 +69,12 @@ const STATIC_PAGES = [
     // Trang trụ cụm kim lâu (không phải trang tool nữa) — cầu đã xác nhận qua
     // GSC nên để ngang các hub chuyên mục.
     '/kim-lau',
+    '/bao-chi',
+    '/nhung',
+    '/api-docs',
+    '/mcp-server',
+    '/du-lieu',
+    '/xong-dat',
     '/tools/kinh-dich.html',
     '/tools/luc-nham.html',
     '/tools/mau-sac-hop-menh.html',

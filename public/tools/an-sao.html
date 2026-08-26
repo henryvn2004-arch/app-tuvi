@@ -21,6 +21,7 @@
 <script src="/tuvi-form.js"></script>
 <script src="/tuvi-grid.js?v=3"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<link rel="stylesheet" href="/tools/tools.css">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{--navy:#061A2E;--navy-mid:#0D3B5E;--blue:#1455A4;--text:#1a1a1a;--text-mid:#444;--text-lt:#777;--border:#CCCCCC;--border-lt:#E8E8E8;--bg:#FFFFFF;--bg-soft:#F5F4F0;--gold:#9A7B3A;--gold-lt:#F9F4EB;--red:#C0392B;--green:#1E6B3C}
@@ -97,7 +98,7 @@ select.form-input{cursor:pointer}
 .error-msg.active{display:block}
 
 /* RESULT */
-.result-section{display:none}
+.result-section{display:none;padding:0}
 .result-section.active{display:block}
 .result-header{padding:60px 0 40px;border-bottom:1px solid var(--border);margin-bottom:48px}
 .result-eyebrow{font-size:10px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:var(--blue);margin-bottom:16px}
@@ -168,11 +169,10 @@ select.form-input{cursor:pointer}
     <div class="xt-section">
       <div class="xt-eyebrow">Công cụ này là gì?</div>
       <div class="xt-grid-2">
-        <div>
+        <div class="xt-intro-row"><img class="xt-avatar" src="/tool-avatars/an-sao.webp" alt="" loading="lazy" onerror="this.remove()"><div class="xt-intro-text">
           <h2 class="xt-h2">An Sao Tử Vi Đẩu Số<br>theo Cổ Pháp</h2>
           <p class="xt-body">Tử Vi Đẩu Số an sao dựa trên ngày giờ sinh âm lịch — mỗi lá số là bản đồ vận mệnh riêng, phản ánh bản chất và vận trình cuộc đời qua 12 cung.</p>
-          <p class="xt-body">Công cụ này an sao theo cổ pháp, hiển thị toàn bộ lá số 12 cung, đại vận hiện tại và cách cục — <strong>hoàn toàn miễn phí</strong>, không cần đăng ký. Muốn luận giải chuyên sâu thì mở khóa thêm.</p>
-        </div>
+          <p class="xt-body">Công cụ này an sao theo cổ pháp, hiển thị toàn bộ lá số 12 cung, đại vận hiện tại và cách cục — <strong>hoàn toàn miễn phí</strong>, không cần đăng ký. Muốn luận giải chuyên sâu thì mở khóa thêm.</p></div></div>
         <div class="xt-factors">
           <div class="xt-factor-title">Bạn sẽ thấy gì</div>
           <div class="xt-factor-item"><span class="xt-factor-num">①</span><span class="xt-factor-label">Lá số 12 cung</span><span class="xt-factor-desc">Chính tinh, phụ tinh, độ sáng và Tứ Hóa</span></div>
@@ -243,7 +243,7 @@ select.form-input{cursor:pointer}
   <div class="footer-top">
     <div>
       <div class="footer-brand"><img src="/seal.webp" alt=""><div class="footer-brand-text"><div class="name">Tử Vi Minh Bảo</div><div class="zh">紫微明寶</div></div></div>
-      <p class="footer-tagline">Tri mệnh lý – Thuận thế hành<br>Kết hợp kinh điển &amp; công nghệ hiện đại.</p>
+      <p class="footer-tagline">Tri mệnh lý – Thuận thế hành<br>Kết hợp kinh điển &amp; công nghệ hiện đại.</p><div class="footer-legal"><strong>Công ty TNHH Kira Tech</strong><br>(Kira Tech Company Limited)<br>Điện thoại: 0343.848.795<br>Email: contact@tuviminhbao.com<br>Địa chỉ: 901 Lê Đức Thọ, Phường An Hội Đông, Thành phố Hồ Chí Minh, Việt Nam</div>
     </div>
     <div style="display:flex;gap:48px;flex-wrap:wrap">
       <div>
@@ -258,6 +258,7 @@ select.form-input{cursor:pointer}
     </div>
   </div>
   <div class="footer-bottom"><span>© 2026 tuviminhbao.com — All rights reserved</span><img src="/seal.webp" alt=""></div>
+  <div class="footer-links"><a href="/san-pham-dich-vu.html">Sản Phẩm &amp; Dịch Vụ</a><a href="/chinh-sach-bao-mat.html">Chính Sách Bảo Mật</a><a href="/dieu-khoan-dich-vu.html">Điều Khoản Sử Dụng</a><a href="/huong-dan-thanh-toan.html">Hướng Dẫn Thanh Toán</a><a href="/mien-tru-trach-nhiem.html">Miễn Trừ Trách Nhiệm</a></div>
 </footer>
 
 <script>

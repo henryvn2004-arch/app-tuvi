@@ -1,0 +1,252 @@
+# Dựng clip dọc 9:16 cho TikTok/Reels/Shorts.
+#
+# 🔑 VÌ SAO Ở GITHUB ACTIONS chứ không phải Vercel cron hay session Claude Code:
+#   · Vercel: hàm trần 300 giây, mà một clip render mất ~4 phút — và ở đó không
+#     có Chromium để quay màn hình.
+#   · Session Claude Code: ephemeral, và container phát triển KHÔNG cho Chromium
+#     ra Internet (curl thì được) nên không quay được trang prod.
+#   · Actions: repo ĐÃ chạy Playwright + Chromium ở đây (playwright.yml), có CPU,
+#     có lịch, và artifact tải về được.
+#
+# Toàn bộ logic nằm ở `scripts/build-video-batch.mjs` chứ không nhét vào YAML —
+# cùng một lệnh phải chạy được ở máy Henry lúc cần dựng gấp một clip.
+name: Video Build
+
+on:
+  # ✅ ĐÃ BẬT LỊCH. Hai điều kiện chốt lúc dựng workflow này — "đủ kịch bản cho
+  # nhiều tool" và "đã nối được đường đăng bài" — nay đều thoả: 18 kịch bản demo
+  # tool + 6 kịch bản insight (5/6 qua cổng 2), và `lib/media/publish.ts` đã có
+  # đường đăng VIDEO cho 5 kênh.
+  #
+  # 🔑 TUẦN chứ không phải NGÀY, và đây là lý do: `build-video-batch.mjs` bỏ qua
+  # clip đã có file (chỉ `--force` mới dựng lại), nên chạy hằng ngày là 6 ngày
+  # no-op mỗi tuần. Giá trị của lịch nằm ở chỗ "thêm kịch bản mới thì tự dựng",
+  # mà nhịp thêm kịch bản là hàng tuần chứ không hàng ngày.
+  #
+  # ⚠️ Nhịp ĐĂNG thì độc lập và vốn đã hằng ngày: cron `media-build` (09:30 VN)
+  # gọi `publishQueue()` xả dần theo `social.publish_daily`. Dựng một lượt, đăng
+  # nhỏ giọt nhiều ngày — đừng gộp hai nhịp này làm một.
+  #
+  # 08:00 VN thứ Hai = 01:00 UTC, tức TRƯỚC lượt đăng 09:30 cùng ngày 1,5 giờ:
+  # clip dựng xong kịp vào hàng đợi ngay hôm đó thay vì chờ sang hôm sau.
+  schedule:
+    - cron: '0 1 * * 1'
+  workflow_dispatch:
+    inputs:
+      tools:
+        description: 'Clip TOOL-DEMO cần dựng (phẩy ngăn cách). Bỏ trống + insight trống = tất cả.'
+        required: false
+        default: ''
+      insight:
+        description: 'Clip INSIGHT cần dựng (phẩy ngăn cách), vd: vi-sao-hay-hoan-lai'
+        required: false
+        default: ''
+      gate_only:
+        description: 'KHẢO SÁT: chỉ chạy 2 cổng rồi dừng (không quay/TTS/render)'
+        type: boolean
+        default: false
+      force:
+        description: 'Quay + dựng lại kể cả khi đã có file'
+        type: boolean
+        default: false
+      base:
+        description: 'Trang để quay màn hình'
+        required: false
+        default: 'https://www.tuviminhbao.com'
+
+# Một lượt dựng tại một thời điểm. Hai lượt cùng lúc sẽ ghi đè file của nhau
+# trong `remotion/out/`.
+concurrency:
+  group: video-build
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    # Render là việc nặng: 18 clip × ~5 phút. Trần mặc định 6 giờ vẫn đủ, nhưng
+    # khai rõ để lượt hỏng không treo hết quota.
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+          # Hai lockfile: gốc và `remotion/`. Khai cả hai, nếu không thì lượt
+          # `npm ci` trong remotion/ không bao giờ trúng cache.
+          cache-dependency-path: |
+            package-lock.json
+            remotion/package-lock.json
+
+      # 💰 Giọng đọc là khoản chi phí BIẾN ĐỔI DUY NHẤT của cả pipeline (mọi thứ
+      # còn lại — nhạc, quay, render, cổng 1 — đều 0đ). Tên file mp3 chính là
+      # BĂM của (chữ + giọng + tốc độ), nên cache theo thư mục là an toàn tuyệt
+      # đối: sửa một câu thì chỉ câu đó sinh lại, mục cũ nằm im vô hại.
+      # Không có bước này thì mỗi lượt dựng 18 clip đốt lại 126 lượt TTS.
+      # 🔴 PHẢI LÀ restore/save RIÊNG, KHÔNG dùng `actions/cache` gộp: cái đó
+      # chỉ lưu khi job THÀNH CÔNG. Đo được ở lượt 32125541824 — TTS sinh trót
+      # lọt **19 câu** rồi nhà cung cấp chặn, job trượt, và **cả 19 file mp3 vừa
+      # tốn tiền bị vứt đi**. Lượt sau sinh lại từ đầu, tốn lại đúng ngần ấy,
+      # rồi nhiều khả năng chạm trần ở đúng chỗ cũ ⇒ **vòng lặp không bao giờ
+      # tiến thêm được câu nào.**
+      #
+      # Với restore/save + `if: always()` thì mỗi lượt chạy giữ lại phần đã làm
+      # được, nên lượt sau chỉ sinh phần còn thiếu — hỏng dần thành xong dần.
+      # Khoá gắn `run_id` để lượt lưu không bao giờ đụng khoá đã tồn tại (lưu
+      # trùng khoá là cảnh báo rồi bỏ qua, tức mất phần vừa làm thêm).
+      - name: Khôi phục cache giọng đọc
+        uses: actions/cache/restore@v6
+        with:
+          path: remotion/public/audio
+          # ⚠️ Băm CẢ HAI nguồn kịch bản. Thiếu `insight.ts` thì sửa lời đọc của
+          # một clip insight KHÔNG đổi khoá — cache cũ vẫn trúng, và vì tên mp3
+          # là băm của (chữ + giọng + tốc độ) nên câu mới vẫn sinh đúng. Không
+          # sai, nhưng khoá phải phản ánh đủ nguồn thì `restore-keys` mới rơi
+          # về đúng lớp khi có nhiều nhánh cùng chạy.
+          key: clip-tts-${{ hashFiles('lib/video/sources/tool-demo.ts', 'lib/video/sources/insight.ts') }}-${{ github.run_id }}
+          restore-keys: |
+            clip-tts-${{ hashFiles('lib/video/sources/tool-demo.ts', 'lib/video/sources/insight.ts') }}-
+            clip-tts-
+
+      - name: Cài gói gốc
+        run: npm ci
+
+      # `remotion/` là sub-package riêng (cùng lối `tuvi-engine/`), có
+      # package-lock riêng nên cài tách.
+      - name: Cài gói remotion
+        run: npm ci
+        working-directory: remotion
+
+      # Playwright cần Chromium để QUAY. Remotion tự tải chrome-headless-shell
+      # riêng của nó lúc render — đừng trỏ Remotion vào Chromium này, bản
+      # Playwright đã gỡ chế độ headless cũ (xem remotion.config.ts).
+      - name: Cài Chromium cho Playwright
+        run: npx playwright install chromium --with-deps
+
+      - name: Sinh nhạc nền
+        run: node scripts/gen-music-bed.mjs --all
+
+      # 🔴 KHO NỀN VIDEO NẰM NGOÀI GIT (97MB, `.gitignore`) — bản clone sạch
+      # không có byte nào, và `OffthreadVideo` gặp 404 rồi kéo sập cả lượt
+      # render. Đo được: lượt 32116193607 trượt cả hai clip đúng ở đây.
+      #
+      # Khoá cache băm CHÍNH manifest: đổi/thêm một đoạn là khoá đổi ⇒ tải lại;
+      # còn lại thì trúng cache và bước dưới thành no-op. `restore-keys` cho
+      # lượt sau rơi về kho cũ rồi chỉ tải phần chênh, thay vì tải trắng 97MB.
+      # restore/save riêng vì cùng lý do với cache giọng đọc: job trượt ở khâu
+      # sau thì `actions/cache` gộp KHÔNG lưu, và lượt sau tải lại trắng 80MB.
+      - name: Khôi phục cache kho nền video
+        uses: actions/cache/restore@v6
+        with:
+          path: remotion/public/stock-video
+          key: stock-video-${{ hashFiles('lib/video/stock-video-manifest.json') }}-${{ github.run_id }}
+          restore-keys: |
+            stock-video-${{ hashFiles('lib/video/stock-video-manifest.json') }}-
+            stock-video-
+
+      # Tải bằng HTTP TRẦN từ CDN Pixabay — CỐ Ý không qua Supabase Storage:
+      # đẩy lên đó cần `SUPABASE_SERVICE_KEY`, mà cả track này đã cố ý không
+      # đưa khoá đó vào Actions (xem `clip-ingest`). Runner vì thế không cần
+      # thêm một secret nào cho bước này.
+      - name: Dựng lại kho nền video
+        run: node scripts/restore-stock.mjs
+
+      - name: Dựng clip
+        env:
+          # Khoá gọi hàm edge TTS. Không khai thì script dùng anon key công khai
+          # nằm sẵn trong mã client (không phải bí mật) — vẫn chạy được.
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          CLIP_TTS_SECRET: ${{ secrets.CLIP_TTS_SECRET }}
+          # Cổng 2 cần một trong hai khoá. Chưa khai thì bước dưới tự chạy
+          # `--no-audience` VÀ NÓI RÕ trong tóm tắt — không bỏ qua im lặng.
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          # NHỊP TIM cho panel Cron & Jobs — cùng khoá đã dùng để nộp clip, hàm
+          # edge `clip-ingest?job=1` ghi hộ vào `cron_runs` (runner cố ý không
+          # cầm service key). Chưa khai thì lượt dựng vẫn chạy y như cũ, chỉ là
+          # panel không thấy nó: `scripts/job-heartbeat.mjs` fail-soft tuyệt đối.
+          CLIP_INGEST_SECRET: ${{ secrets.CLIP_INGEST_SECRET }}
+          # ⚠️ Ô nhập của người dùng đi qua ENV, KHÔNG nội suy `${{ }}` thẳng vào
+          # thân `run`. Nội suy thẳng thì một tên tool có dấu `;` chạy được lệnh
+          # tuỳ ý trong runner. Chỉ cộng tác viên mới bấm được workflow_dispatch
+          # nên mức độ thấp, nhưng đây là lối viết đúng và không tốn gì.
+          IN_TOOLS: ${{ inputs.tools }}
+          IN_INSIGHT: ${{ inputs.insight }}
+          IN_FORCE: ${{ inputs.force }}
+          IN_GATE_ONLY: ${{ inputs.gate_only }}
+          IN_BASE: ${{ inputs.base }}
+        run: |
+          set -euo pipefail
+          ARGS=()
+          if [ -n "$IN_TOOLS" ] || [ -n "$IN_INSIGHT" ]; then
+            [ -n "$IN_TOOLS" ] && ARGS+=(--tools "$IN_TOOLS")
+            [ -n "$IN_INSIGHT" ] && ARGS+=(--insight "$IN_INSIGHT")
+          else
+            ARGS+=(--all)
+          fi
+          if [ "$IN_FORCE" = "true" ]; then ARGS+=(--force); fi
+          if [ "$IN_GATE_ONLY" = "true" ]; then ARGS+=(--gate-only); fi
+          if [ -z "${GEMINI_API_KEY:-}" ] && [ -z "${ANTHROPIC_API_KEY:-}" ]; then
+            echo "::warning::Chưa khai GEMINI_API_KEY/ANTHROPIC_API_KEY — bỏ qua cổng 2 (hội đồng người xem). Clip chỉ qua cổng máy."
+            ARGS+=(--no-audience)
+          fi
+          # ⚠️ Ngân sách phải THẤP HƠN `timeout-minutes` của job. Mặc định của
+          # script là 300 phút, tức lớn hơn trần 180 của job ⇒ nó không bao giờ
+          # kịp dừng êm: GitHub giết job trước, mất luôn bảng tổng kết và lý do
+          # từng clip. 150 chừa ~30 phút cho cài gói + nộp kho + tải artifact.
+          # Bật cổng 2 làm mỗi clip lâu thêm, nên khoảng chừa này càng đáng giá.
+          node scripts/build-video-batch.mjs "${ARGS[@]}" --base "$IN_BASE" --budget-min 150
+
+      # 📤 Nộp clip lên kho (Storage + `media_assets`) để nó sống lâu hơn 14
+      # ngày artifact. Đi qua hàm edge `clip-ingest` nên runner chỉ cầm một
+      # khoá HẸP, KHÔNG cầm `SUPABASE_SERVICE_KEY` (khoá đó đã phải xoay một
+      # lần vì lộ) — xem `_patches/edge-clip-ingest.deno.ts`.
+      #
+      # `if: always()`: bước dựng trượt một tool vẫn còn mấy clip khác dùng
+      # được. Chưa khai secret thì script tự bỏ qua CÓ BÁO chứ không hỏng job.
+      # ⚠️ `if: always()` là CẢ ĐIỂM của hai bước này — xem chú thích ở khối
+      # khôi phục. Lưu chỉ-khi-thành-công nghĩa là mọi lượt trượt đều bắt lượt
+      # sau làm lại từ số không, mà khâu TTS thì tốn tiền thật mỗi lượt.
+      - name: Lưu cache giọng đọc
+        if: always()
+        uses: actions/cache/save@v6
+        with:
+          path: remotion/public/audio
+          key: clip-tts-${{ hashFiles('lib/video/sources/tool-demo.ts', 'lib/video/sources/insight.ts') }}-${{ github.run_id }}
+
+      - name: Lưu cache kho nền video
+        if: always()
+        uses: actions/cache/save@v6
+        with:
+          path: remotion/public/stock-video
+          key: stock-video-${{ hashFiles('lib/video/stock-video-manifest.json') }}-${{ github.run_id }}
+
+      - name: Nộp clip lên kho
+        if: always()
+        env:
+          CLIP_INGEST_SECRET: ${{ secrets.CLIP_INGEST_SECRET }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+        run: node scripts/publish-clips.mjs
+
+      # Luôn tải lên, kể cả khi có tool trượt — mấy clip đã dựng xong vẫn dùng được.
+      - name: Tải clip lên artifact
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: clips
+          path: remotion/out/*.mp4
+          if-no-files-found: warn
+          retention-days: 14
+
+      # Clip quay màn hình giữ lại để lượt sau khỏi quay lại (và để soi khi một
+      # clip trông sai). Nén sẵn nên nhẹ.
+      - name: Tải bản quay màn hình lên artifact
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: recordings
+          path: remotion/public/recordings/*.webm
+          if-no-files-found: ignore
+          retention-days: 7

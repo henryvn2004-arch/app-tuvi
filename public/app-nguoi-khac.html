@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"></noscript>
-<link rel="stylesheet" href="/shell.css?v=18">
+<link rel="stylesheet" href="/shell.css?v=29">
 <style>
 .form-card{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);max-width:860px}
 .form-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:3px}
@@ -68,6 +68,9 @@
 .nk-basis-list{margin:0 0 0 18px;color:#5a5145;line-height:1.9;font-size:12.8px}
 .nk-basis-list li{margin-bottom:3px}
 .nk-basis-list b{color:#2a2118}
+.nk-basis-more{margin-top:8px;font-size:12.5px}
+.nk-basis-more summary{cursor:pointer;color:#7A5F26;font-weight:600}
+.nk-basis-more ul{margin:8px 0 0 18px;color:#5a5145;line-height:1.9;font-size:12.8px}
 #histList{display:flex;flex-direction:column;gap:6px;margin-top:4px;font-size:12.5px;color:#5a5145}
 </style>
 </head>
@@ -87,9 +90,11 @@
     </div>
     <div class="ws-body">
       <div id="introHost"></div>
+      <div id="shellRecent"></div>
       <div class="form-card" id="birthPanel">
         <h2>Ngày sinh của người bạn muốn hiểu</h2>
-        <p class="sub">Không phải để xem đời họ sướng khổ — mà để biết nói chuyện và làm việc với họ thế nào cho êm.</p>
+        <p class="sub">Nhận cẩm nang ứng xử: nên nói gì, tránh gì với người đó. Bạn đoán già đoán non tính sếp mà vẫn hay đoán sai. Dùng khi cần hiểu nhanh một người trước cuộc gặp quan trọng.</p>
+        <p class="price-note" data-tvp-price-label="nguoi-khac">…</p>
 
         <div class="frow nk-qh">
           <div class="fg" style="flex:1">
@@ -172,6 +177,8 @@
           </div>
         </div>
 
+        <div id="nkLockHost" style="display:none;margin-bottom:16px"></div>
+
         <div class="res-block" id="sayBlock" style="display:none">
           <div class="res-block-header"><span class="res-block-title">Nói Thế Nào</span></div>
           <div class="res-block-body">
@@ -204,6 +211,7 @@
           <div class="res-block-body">
             <div class="nk-coso" id="coSoDoc" style="display:none"></div>
             <ul class="nk-basis-list" id="basisList"></ul>
+            <details class="nk-basis-more" id="basisMore" style="display:none"></details>
           </div>
         </div>
 
@@ -250,15 +258,15 @@
   <aside class="rail" id="shell-rail"></aside>
 </div>
 
-<script>window.SHELL_ACTIVE='nguoi-khac';
-window.SHELL_INTRO={key:'nguoi-khac',title:'Lá Số Người Khác',desc:'Đưa lá số của <b>sếp, đồng nghiệp, cấp dưới hay người thân</b> vào đây để biết họ <b>vận hành thế nào</b>, <b>nên nói gì</b>, <b>tránh nói gì</b> và <b>lúc nào nên đưa việc lớn tới</b>. Đọc theo cung Mệnh, Phúc Đức, Thiên Di, Quan Lộc, Nô Bộc.'};</script>
+<script>window.SHELL_ACTIVE='nguoi-khac';window.SHELL_HISTORY=true;
+window.SHELL_INTRO={key:'nguoi-khac',title:'Lá Số Người Khác',desc:'Nhận cẩm nang ứng xử: nên nói gì, tránh gì với người đó. Bạn đoán già đoán non tính sếp mà vẫn hay đoán sai. Dùng khi cần hiểu nhanh một người trước cuộc gặp quan trọng.'};</script>
 <script src="/laso-chart.js?v=3"></script>
-<script src="/tuvi-form.js?v=1"></script>
-<script src="/tuvi-paywall.js?v=18"></script>
+<script src="/tuvi-form.js?v=2"></script>
+<script src="/tuvi-paywall.js?v=21"></script>
 <script src="/auth.js?v=2"></script>
   <script src="/nav.js?v=23" data-icons-only></script>
-<script src="/shell.js?v=66"></script>
-<script src="/tools-shared/ai-loading-steps.js?v=4"></script>
+<script src="/shell.js?v=82"></script>
+<script src="/tools-shared/ai-loading-steps.js?v=9"></script>
 <script>
 
 var _currentSlug = '';
@@ -389,15 +397,20 @@ function _cacheQuery(b, self, qh, viec) {
   return q;
 }
 
-// ── W1: bấm nút là CHẠY THẬT, miễn phí ─────────────────────────────────────
+// ── W1 (khách chưa đăng nhập): xem trước MIỄN PHÍ trước khi trả Lượng ──────
 //
-// Trước đây bấm nút là gặp paywall ngay — tức phải trả tiền mới biết tool có
-// đúng không. Nay: chạy tầng deterministic (0 lượt LLM, 0đ), bày kiểu người +
-// 5 mặt đọc + đại vận + vận năm, rồi mới dựng tường trên đúng phần chữ.
-// Tên các khối đang khoá KHÔNG còn chép cứng ở đây — server sinh từ chính lá số
-// vừa tính (`khoiKhoa` trong lib/engine/nguoi-khac.ts) nên mỗi người đọc một
-// danh sách khác nhau, nêu đích danh thứ họ chưa được đọc. Mảng dưới chỉ là
-// đường lùi khi payload cũ (còn trong cache trình duyệt) không mang `khoa`.
+// Đăng nhập rồi → bấm nút là CHẠY THẬT ngay: trừ Lượng (0đ nếu free) rồi chạy
+// trọn bản cẩm nang, không có màn xem trước nào chen giữa. Chưa đăng nhập →
+// dựng tầng đầu (tên/kiểu người) MỞ + phần "Cơ sở lá số" dựng THẬT nhưng LÀM
+// MỜ (deterministic/0đ, không phải ẩn hẳn khỏi DOM); phần AI viết riêng (Nói
+// thế nào/Lúc này họ ở đâu/Người này với bạn) chưa có nội dung nào để mờ nên
+// vẫn đứng sau tấm khoá `lockPreview`, CTA đăng ký Lượng miễn phí.
+//
+// Tường khoá nêu ĐÍCH DANH từng khối chưa mở khi server trả `khoa` (sinh từ
+// chính lá số vừa tính, `khoiKhoa` trong lib/engine/nguoi-khac.ts) — danh sách
+// chung chung giống nhau cho mọi người thì không mở được vòng tò mò nào.
+// Mảng dưới chỉ là đường lùi khi payload cũ (còn trong cache trình duyệt)
+// không mang `khoa`.
 var NK_KHOA_FALLBACK = [
   'Con người này vận hành thế nào',
   'Điều họ coi trọng · điều làm họ khó chịu',
@@ -406,6 +419,8 @@ var NK_KHOA_FALLBACK = [
   'Lúc nào nên đưa việc lớn tới',
   'Một câu chốt',
 ];
+
+function _nkLoggedIn() { return !!(window.Auth && window.Auth.isLoggedIn && window.Auth.isLoggedIn()); }
 
 async function analyze() {
   showError('');
@@ -421,38 +436,9 @@ async function analyze() {
   // ⚠️ Slug PHẢI bắt đầu bằng ĐÚNG `tool_id` (luật đã trả giá ở Duyên Nợ).
   _currentSlug = TuviPaywall.generateToolSlug('nguoi-khac-' + qh + '-' + viec + '-' + b.day + b.month + b.year);
 
-  _openPanel();
-  _loadingCtl = AiLoadingSteps.mount('loadingSteps', NK_STEPS.slice(0, 2));
-  _loadingCtl.start();
-  var prev;
-  try {
-    var r = await fetch('/api/nguoi-khac?preview=1', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        birth: b, birthSelf: self || undefined, name: b.name || '', quanHe: qh, viec: viec,
-      }),
-    });
-    prev = await r.json();
-    if (!r.ok || !prev.success) throw new Error(prev.error || 'Lỗi ' + r.status);
-  } catch (e) {
-    _loadingCtl && _loadingCtl.stop();
-    _closePanel();
-    showError('Lỗi: ' + (e.message || 'Không thể kết nối. Vui lòng thử lại.'));
-    return;
-  }
-  _loadingCtl && _loadingCtl.finish();
-  document.getElementById('loading').style.display = 'none';
-  document.getElementById('card').style.display = 'block';
-  document.getElementById('btnEdit').style.display = '';
-  renderMeta(prev);
-  // D1 — bậc "đã tính thử" của phễu theo tool. Bắn ở ĐÂY chứ không ở lúc bấm
-  // nút: bấm rồi mà lá số hỏng thì không có gì để xem, tính vào phễu là thổi
-  // mẫu số lên rồi tỉ lệ mở nhìn tệ hơn thực tế.
-  try { if (window.Track) window.Track.event('preview_shown', { tool_id: 'nguoi-khac' }); } catch (e) { /* đo hỏng không chặn gì */ }
-  if (window.SHELL_INTRO) Shell.dismissIntro(window.SHELL_INTRO.key);
+  if (!_nkLoggedIn()) { return _runAnonPreview(b, self, qh, viec); }
 
-  // Đã trả tiền cho đúng lá số này từ trước → mở thẳng, không dựng tường.
+  // Đã trả tiền cho đúng lá số này từ trước → mở thẳng, không trừ lại.
   var free = false;
   try { free = await TuviPaywall.isFreeRerun('/api/nguoi-khac', _cacheQuery(b, self, qh, viec)); } catch (e) { free = false; }
   if (free) {
@@ -460,18 +446,49 @@ async function analyze() {
     await _doGenerate(true, qh, viec);
     return;
   }
+  await TuviPaywall.requireCredits(_currentSlug, function () { return _doGenerate(false, qh, viec); });
+}
 
-  // Tường khoá nêu ĐÍCH DANH từng khối chưa mở, sinh từ chính lá số vừa tính.
-  // Danh sách chung chung giống nhau cho mọi người thì không mở được vòng tò mò
-  // nào — người ta đọc lướt rồi đóng tab.
-  var khoa = (prev.khoa || []).map(function (k) { return k.tieuDe; });
+// Khách chưa đăng nhập: gọi thẳng tầng deterministic (0đ, không cần đăng nhập
+// — server route `?preview=1` không đòi auth), dựng phần đầu MỞ + cơ sở lá số
+// LÀM MỜ. Phần AI viết riêng đứng sau tấm khoá (không có gì để mờ, chưa sinh).
+async function _runAnonPreview(b, self, qh, viec) {
+  _openPanel();
+  document.getElementById('loading').style.display = 'none';
+  try {
+    var res = await fetch('/api/nguoi-khac?preview=1', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ birth: b, birthSelf: self || undefined, name: b.name || '', quanHe: qh, viec: viec }),
+    });
+    var data = await res.json();
+    if (!res.ok || !data.success) throw new Error(data.error || 'Lỗi ' + res.status);
+    _lastData = data;
+    renderMetaHead(data);
+    // Cơ sở lá số đã deterministic/0đ trong payload preview → dựng THẬT (không
+    // để trống), chỉ làm mờ. Xem comment trên renderMetaBasis.
+    renderMetaBasis(data, true);
+    document.getElementById('card').style.display = 'block';
+    document.getElementById('btnEdit').style.display = '';
+    if (window.SHELL_INTRO) Shell.dismissIntro(window.SHELL_INTRO.key);
+    _renderLockWall(qh, viec, data.khoa);
+  } catch (e) {
+    _closePanel();
+    showError('Lỗi: ' + (e.message || 'Không thể kết nối. Vui lòng thử lại.'));
+  }
+}
+
+function _renderLockWall(qh, viec, khoaRaw) {
+  var khoa = (khoaRaw || []).map(function (k) { return k.tieuDe; });
   if (!khoa.length) khoa = NK_KHOA_FALLBACK;
-  document.getElementById('lockBlock').style.display = 'block';
-  await TuviPaywall.lockPreview({
-    host: document.getElementById('lockHost'),
+  var host = document.getElementById('nkLockHost');
+  host.style.display = 'block';
+  host.innerHTML = '';
+  TuviPaywall.lockPreview({
+    host: host,
     title: 'Còn ' + khoa.length + ' phần chưa mở về người này',
     items: khoa,
-    cta: 'Mở bản cẩm nang đầy đủ',
+    cta: 'Đăng ký để mở cẩm nang đầy đủ',
     slug: function () { return _currentSlug; },
     onUnlock: function () { return _doGenerate(false, qh, viec); },
   });
@@ -482,6 +499,7 @@ function _openPanel() {
   document.getElementById('resPanel').style.display = 'block';
   document.getElementById('loading').style.display = 'block';
   document.getElementById('card').style.display = 'none';
+  document.getElementById('nkLockHost').style.display = 'none';
   ['keHoachBlock', 'sayBlock', 'timeBlock', 'withBlock', 'endBlock', 'basisBlock', 'lockBlock'].forEach(function (id) {
     document.getElementById(id).style.display = 'none';
   });
@@ -496,11 +514,12 @@ function _closePanel() {
 
 async function _doGenerate(freeRerun, qh, viec) {
   viec = viec || _lastViec || 'hieu-them';
-  document.getElementById('lockBlock').style.display = 'none';
-  TuviPaywall._closeLock();
-  _loadingCtl = AiLoadingSteps.mount('loadingSteps', NK_STEPS.slice(2));
-  document.getElementById('loading').style.display = 'block';
+  _openPanel();
+  _loadingCtl = AiLoadingSteps.mount('loadingSteps', NK_STEPS);
   _loadingCtl.start();
+  // Form dài (thêm lá số của bạn) thì bấm nút xong khung loading nằm ngoài
+  // khung nhìn — cuộn lên ngay để thấy có gì vừa chạy, không đứng im.
+  AiLoadingSteps.scrollToResult('loading');
 
   var token = window.Auth?.getSession()?.access_token || '';
   try {
@@ -521,9 +540,8 @@ async function _doGenerate(freeRerun, qh, viec) {
     // paywall thay vì ném một lỗi khó hiểu.
     if (res.status === 402 && freeRerun) {
       _loadingCtl && _loadingCtl.stop();
-      document.getElementById('loading').style.display = 'none';
-      document.getElementById('lockBlock').style.display = 'block';
-      await TuviPaywall.requireCredits(_currentSlug, async function () { await _doGenerate(false, qh, viec); });
+      _closePanel();
+      await TuviPaywall.requireCredits(_currentSlug, function () { return _doGenerate(false, qh, viec); });
       return;
     }
     if (!res.ok || !data.success) throw new Error(data.error || 'Lỗi ' + res.status);
@@ -581,13 +599,9 @@ async function _doGenerate(freeRerun, qh, viec) {
       ].filter(Boolean).join('\n'),
     });
   } catch (e) {
-    // 🔑 KHÔNG đóng cả bảng như bản trước. Người dùng đang nhìn phần tính thử
-    // (thứ họ vừa xem xong và có thể vừa trả tiền cho phần sau) — quẳng họ về
-    // form trống là xoá luôn cái đó. Giữ nguyên màn hình, dựng lại tường.
     _loadingCtl && _loadingCtl.stop();
-    document.getElementById('loading').style.display = 'none';
-    document.getElementById('lockBlock').style.display = 'block';
-    TuviPaywall._banner('Chưa mở được phần luận: ' + (e.message || 'lỗi kết nối') + '. Bạn thử lại giúp.');
+    _closePanel();
+    showError('Lỗi: ' + (e.message || 'Không thể kết nối. Vui lòng thử lại.'));
   }
 }
 
@@ -605,7 +619,12 @@ function _mucHtml(list) {
 //   renderProse = thứ model viết, tốn tiền    → chỉ vẽ sau khi đã trả
 // Gộp lại một hàm như bản trước là sớm muộn có một khối chữ lọt vào lượt miễn
 // phí mà không ai để ý.
-function renderMeta(data) {
+// Tách theo ĐƯỜNG TIỀN: `renderMetaHead` là phần đầu (tên + kiểu người) — thứ
+// khách CHƯA đăng ký cũng được xem. `renderMetaBasis` là phần "Cơ sở trong lá
+// số" chi tiết — dù bản thân nó cũng deterministic/0đ, nó vẫn đứng SAU tấm
+// khoá cho khách chưa đăng ký (đúng luật: khoá che hết phần có cấu trúc, chỉ
+// chừa phần đầu). `renderMeta` = cả hai, dùng cho đường đã đăng nhập/đã trả.
+function renderMetaHead(data) {
   var qh = data.quanHe || {};
   var kieu = data.kieu || {};
   document.getElementById('nkName').textContent = data.ten || qh.label || 'Người này';
@@ -628,7 +647,12 @@ function renderMeta(data) {
   document.getElementById('cauHoiChips').innerHTML = (kieu.cauHoi || []).map(function (c) {
     return '<span class="nk-chip">' + esc(c) + '</span>';
   }).join('');
+}
 
+// `locked` = khách chưa đăng ký → nội dung THẬT vẫn dựng vào DOM (deterministic,
+// 0đ, đã có sẵn trong payload preview) nhưng bọc trong .tpw-real-lock để CSS
+// làm mờ + badge 🔒 cạnh tiêu đề — không phải ẩn hẳn khối này như bản trước.
+function renderMetaBasis(data, locked) {
   // ⚠️ HÀM NÀY CHẠY TRÊN CẢ HAI ĐƯỜNG và payload hai bên KHÁC NHAU (A1):
   // lượt tính thử chỉ có 2/5 mặt đọc, mỗi mặt CHỈ CÓ TÊN SAO, và KHÔNG có
   // `than`/`daiVan`/`vanNam`. Mọi chỗ dưới đây phải giữ nguyên lối canh `if` —
@@ -682,9 +706,34 @@ function renderMeta(data) {
     csEl.style.display = 'none';
   }
 
+  // Bày đủ ĐỂ CHỨNG MINH máy đọc đúng lá số — không bày HẾT để đọc xong là no.
+  // 2 mục đầu (Mệnh + Phúc Đức, luôn xuất hiện trước trong `matDoc`) đứng mở
+  // sẵn làm bằng chứng; phần còn lại gói trong <details> đóng — vẫn một cú
+  // bấm là thấy, không mất thông tin, chỉ đổi thứ ĐẬP VÀO MẮT đầu tiên.
   if (rows.length) {
-    document.getElementById('basisList').innerHTML = rows.join('');
-    document.getElementById('basisBlock').style.display = 'block';
+    var VISIBLE = 2;
+    document.getElementById('basisList').innerHTML = rows.slice(0, VISIBLE).join('');
+    var rest = rows.slice(VISIBLE);
+    var moreHost = document.getElementById('basisMore');
+    if (rest.length) {
+      moreHost.innerHTML = '<summary>Xem thêm ' + rest.length + ' mục trong lá số</summary><ul class="nk-basis-list">' + rest.join('') + '</ul>';
+      moreHost.style.display = '';
+    } else {
+      moreHost.style.display = 'none';
+    }
+    var block = document.getElementById('basisBlock');
+    block.style.display = 'block';
+    var body = block.querySelector('.res-block-body');
+    var oldBadge = block.querySelector('.tpw-lock-badge');
+    if (oldBadge) oldBadge.remove();
+    if (locked) {
+      body.classList.add('tpw-real-lock');
+      var titleEl = block.querySelector('.res-block-title');
+      if (titleEl) titleEl.insertAdjacentHTML('afterend', TuviPaywall.lockBadge('Khoá'));
+      if (window.mountIcons) window.mountIcons(block);
+    } else {
+      body.classList.remove('tpw-real-lock');
+    }
   }
 }
 
@@ -701,6 +750,8 @@ function _mountInviteCta() {
   s.id = '_ivc_js'; s.src = '/invite-cta.js?v=1'; s.async = true; s.onload = go;
   document.head.appendChild(s);
 }
+
+function renderMeta(data) { renderMetaHead(data); renderMetaBasis(data); }
 
 function renderProse(data) {
   // Chỉ hiện khi người hỏi có nêu việc cụ thể — server đã bỏ mục này ở ca

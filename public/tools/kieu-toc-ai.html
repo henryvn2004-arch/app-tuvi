@@ -132,11 +132,10 @@
     <div class="xt-section">
       <div class="xt-eyebrow">Nhân Tướng Học Ứng Dụng</div>
       <div class="xt-grid-2">
-        <div>
+        <div class="xt-intro-row"><img class="xt-avatar" src="/tool-avatars/kieu-toc-phan-tich.webp" alt="" loading="lazy" onerror="this.remove()"><div class="xt-intro-text">
           <h2 class="xt-h2">Kiểu Tóc Đúng —<br>Tôn Lên Khí Chất Tướng Mặt</h2>
           <p class="xt-body">Trong nhân tướng học, tóc là "thiên bộ" bảo vệ thiên đình — ảnh hưởng đến khí trường và vận khí. Kiểu tóc phù hợp không chỉ đẹp hơn mà còn cân bằng và tôn lên hình dạng khuôn mặt theo cổ pháp.</p>
-          <p class="xt-body">Tải ảnh lên — AI phân tích hình khuôn mặt, xếp hạng kiểu tóc theo mức phù hợp, và <strong>thử ngay trên ảnh của bạn</strong> bằng AI tạo ảnh chuyên nghiệp.</p>
-        </div>
+          <p class="xt-body">Tải ảnh lên — AI phân tích hình khuôn mặt, xếp hạng kiểu tóc theo mức phù hợp, và <strong>thử ngay trên ảnh của bạn</strong> bằng AI tạo ảnh chuyên nghiệp.</p></div></div>
         <div class="xt-factors">
           <div class="xt-factor-title">3 Bước Đơn Giản</div>
           <div class="xt-factor-item"><span class="xt-factor-num">①</span><span class="xt-factor-label">Tải ảnh lên</span><span class="xt-factor-desc">Ảnh chụp thẳng mặt, đủ sáng, thấy rõ từ trán đến cằm</span></div>
@@ -905,8 +904,8 @@ async function _saveTryonReading(styleId, imageUrl) {
 
 (function() { _restoreStateAfterAuth(); })();
 </script>
-<script src="/tuvi-paywall.js?v=17"></script>
-<script src="/tools-shared/ai-loading-steps.js?v=4"></script>
+<script src="/tuvi-paywall.js?v=21"></script>
+<script src="/tools-shared/ai-loading-steps.js?v=9"></script>
 <script>
 // TuviPaywall được init per-action trong analyze() và selectStyle()
 // để dùng đúng product/cost cho từng loại (phan-tich vs tryon)
@@ -939,5 +938,12 @@ let _tryonLoadingCtl = null;
 <script src="/testimonials.js"></script>
 <script src="/related-tools.js?v=2"></script>
 <script src="/nav.js?v=23" defer></script>
+<script src="/tool-sources.js?v=1"></script>
+<script>
+  if (window.ToolSources) {
+    ToolSources.mountIntroAfterH1('kieu-toc-phan-tich');
+    ToolSources.watchResults('kieu-toc-phan-tich', '#resultSection');
+  }
+</script>
 </body>
 </html>

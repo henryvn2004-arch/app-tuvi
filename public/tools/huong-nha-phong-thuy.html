@@ -11,6 +11,7 @@
 <link rel="icon" type="image/webp" href="/seal.webp">
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;600;700&family=Be+Vietnam+Pro:wght@300;400;500;600&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;600;700&family=Be+Vietnam+Pro:wght@300;400;500;600&display=swap" rel="stylesheet"></noscript>
+<link rel="stylesheet" href="/tools/tools.css">
 <style>
 :root{
   --navy:#061A2E;--navy-mid:#0D3B5E;--blue:#1455A4;
@@ -209,6 +210,7 @@ h1,h2,h3{font-family:'Noto Serif',serif;}
 
 <div id="nav-ph" style="height:60px;background:#061A2E"></div>
 <script src="/footer.js"></script>
+<script src="/tools-shared/bat-trach.js?v=2"></script>
 <script>
 // ── Bát Trạch data ──────────────────────────────────────────────────────────
 
@@ -218,146 +220,45 @@ const DIR_LABELS = {
 };
 const DIR_ARROWS = { N:'⬆', NE:'↗', E:'➡', SE:'↘', S:'⬇', SW:'↙', W:'⬅', NW:'↖' };
 
-// Each gua: [Sinh Khí, Thiên Y, Diên Niên, Phục Vị, Họa Hại, Lục Sát, Ngũ Quỷ, Tuyệt Mệnh]
-const GUA_DATA = {
-  1: { name:'Khảm', hanh:'Thủy', type:'east', mệnh:'Đông Tứ Mệnh',
-    desc:'Người có quẻ số 1 (Khảm Thủy) thuộc Đông Tứ Mệnh — hợp với hướng Nam, Bắc, Đông, Đông Nam.',
-    good: [
-      {dir:'SE', cat:'Sinh Khí', desc:'Đại cát, tài lộc và cơ hội phát triển liên tục.'},
-      {dir:'E',  cat:'Thiên Y',  desc:'Sức khỏe, bình an và hạnh phúc gia đình.'},
-      {dir:'S',  cat:'Diên Niên',desc:'Ổn định dài lâu, hôn nhân bền vững, thọ.'},
-      {dir:'N',  cat:'Phục Vị',  desc:'Bình hòa, giữ nguyên trạng, ổn định nội tâm.'},
-    ],
-    bad: [
-      {dir:'W',  cat:'Họa Hại',  desc:'Tai nạn nhỏ, tranh chấp, thất thoát tiền bạc.'},
-      {dir:'NE', cat:'Lục Sát',  desc:'Phiền não, kiện tụng, hao tài tốn của.'},
-      {dir:'SW', cat:'Ngũ Quỷ',  desc:'Ma quái, bệnh tật khó lường, hao tổn.'},
-      {dir:'NW', cat:'Tuyệt Mệnh',desc:'Suy vong, tuyệt tự, hung hiểm nhất.'},
-    ]},
-  2: { name:'Khôn', hanh:'Thổ', type:'west', mệnh:'Tây Tứ Mệnh',
-    desc:'Người có quẻ số 2 (Khôn Thổ) thuộc Tây Tứ Mệnh — hợp với hướng Đông Bắc, Tây, Tây Bắc, Tây Nam.',
-    good: [
-      {dir:'NE', cat:'Sinh Khí', desc:'Đại cát, tài lộc và cơ hội phát triển liên tục.'},
-      {dir:'W',  cat:'Thiên Y',  desc:'Sức khỏe, bình an và hạnh phúc gia đình.'},
-      {dir:'NW', cat:'Diên Niên',desc:'Ổn định dài lâu, hôn nhân bền vững, thọ.'},
-      {dir:'SW', cat:'Phục Vị',  desc:'Bình hòa, giữ nguyên trạng, ổn định nội tâm.'},
-    ],
-    bad: [
-      {dir:'E',  cat:'Họa Hại',  desc:'Tai nạn nhỏ, tranh chấp, thất thoát tiền bạc.'},
-      {dir:'SE', cat:'Lục Sát',  desc:'Phiền não, kiện tụng, hao tài tốn của.'},
-      {dir:'S',  cat:'Ngũ Quỷ',  desc:'Ma quái, bệnh tật khó lường, hao tổn.'},
-      {dir:'N',  cat:'Tuyệt Mệnh',desc:'Suy vong, tuyệt tự, hung hiểm nhất.'},
-    ]},
-  3: { name:'Chấn', hanh:'Mộc', type:'east', mệnh:'Đông Tứ Mệnh',
-    desc:'Người có quẻ số 3 (Chấn Mộc) thuộc Đông Tứ Mệnh — hợp với hướng Nam, Bắc, Đông Nam, Đông.',
-    good: [
-      {dir:'S',  cat:'Sinh Khí', desc:'Đại cát, tài lộc và cơ hội phát triển liên tục.'},
-      {dir:'N',  cat:'Thiên Y',  desc:'Sức khỏe, bình an và hạnh phúc gia đình.'},
-      {dir:'SE', cat:'Diên Niên',desc:'Ổn định dài lâu, hôn nhân bền vững, thọ.'},
-      {dir:'E',  cat:'Phục Vị',  desc:'Bình hòa, giữ nguyên trạng, ổn định nội tâm.'},
-    ],
-    bad: [
-      {dir:'SW', cat:'Họa Hại',  desc:'Tai nạn nhỏ, tranh chấp, thất thoát tiền bạc.'},
-      {dir:'NW', cat:'Lục Sát',  desc:'Phiền não, kiện tụng, hao tài tốn của.'},
-      {dir:'NE', cat:'Ngũ Quỷ',  desc:'Ma quái, bệnh tật khó lường, hao tổn.'},
-      {dir:'W',  cat:'Tuyệt Mệnh',desc:'Suy vong, tuyệt tự, hung hiểm nhất.'},
-    ]},
-  4: { name:'Tốn', hanh:'Mộc', type:'east', mệnh:'Đông Tứ Mệnh',
-    desc:'Người có quẻ số 4 (Tốn Mộc) thuộc Đông Tứ Mệnh — hợp với hướng Bắc, Nam, Đông, Đông Nam.',
-    good: [
-      {dir:'N',  cat:'Sinh Khí', desc:'Đại cát, tài lộc và cơ hội phát triển liên tục.'},
-      {dir:'S',  cat:'Thiên Y',  desc:'Sức khỏe, bình an và hạnh phúc gia đình.'},
-      {dir:'E',  cat:'Diên Niên',desc:'Ổn định dài lâu, hôn nhân bền vững, thọ.'},
-      {dir:'SE', cat:'Phục Vị',  desc:'Bình hòa, giữ nguyên trạng, ổn định nội tâm.'},
-    ],
-    bad: [
-      {dir:'NW', cat:'Họa Hại',  desc:'Tai nạn nhỏ, tranh chấp, thất thoát tiền bạc.'},
-      {dir:'W',  cat:'Lục Sát',  desc:'Phiền não, kiện tụng, hao tài tốn của.'},
-      {dir:'SW', cat:'Ngũ Quỷ',  desc:'Ma quái, bệnh tật khó lường, hao tổn.'},
-      {dir:'NE', cat:'Tuyệt Mệnh',desc:'Suy vong, tuyệt tự, hung hiểm nhất.'},
-    ]},
-  6: { name:'Càn', hanh:'Kim', type:'west', mệnh:'Tây Tứ Mệnh',
-    desc:'Người có quẻ số 6 (Càn Kim) thuộc Tây Tứ Mệnh — hợp với hướng Tây, Đông Bắc, Tây Nam, Tây Bắc.',
-    good: [
-      {dir:'W',  cat:'Sinh Khí', desc:'Đại cát, tài lộc và cơ hội phát triển liên tục.'},
-      {dir:'NE', cat:'Thiên Y',  desc:'Sức khỏe, bình an và hạnh phúc gia đình.'},
-      {dir:'SW', cat:'Diên Niên',desc:'Ổn định dài lâu, hôn nhân bền vững, thọ.'},
-      {dir:'NW', cat:'Phục Vị',  desc:'Bình hòa, giữ nguyên trạng, ổn định nội tâm.'},
-    ],
-    bad: [
-      {dir:'SE', cat:'Họa Hại',  desc:'Tai nạn nhỏ, tranh chấp, thất thoát tiền bạc.'},
-      {dir:'S',  cat:'Lục Sát',  desc:'Phiền não, kiện tụng, hao tài tốn của.'},
-      {dir:'E',  cat:'Ngũ Quỷ',  desc:'Ma quái, bệnh tật khó lường, hao tổn.'},
-      {dir:'N',  cat:'Tuyệt Mệnh',desc:'Suy vong, tuyệt tự, hung hiểm nhất.'},
-    ]},
-  7: { name:'Đoài', hanh:'Kim', type:'west', mệnh:'Tây Tứ Mệnh',
-    desc:'Người có quẻ số 7 (Đoài Kim) thuộc Tây Tứ Mệnh — hợp với hướng Tây Bắc, Tây Nam, Đông Bắc, Tây.',
-    good: [
-      {dir:'NW', cat:'Sinh Khí', desc:'Đại cát, tài lộc và cơ hội phát triển liên tục.'},
-      {dir:'SW', cat:'Thiên Y',  desc:'Sức khỏe, bình an và hạnh phúc gia đình.'},
-      {dir:'NE', cat:'Diên Niên',desc:'Ổn định dài lâu, hôn nhân bền vững, thọ.'},
-      {dir:'W',  cat:'Phục Vị',  desc:'Bình hòa, giữ nguyên trạng, ổn định nội tâm.'},
-    ],
-    bad: [
-      {dir:'E',  cat:'Họa Hại',  desc:'Tai nạn nhỏ, tranh chấp, thất thoát tiền bạc.'},
-      {dir:'S',  cat:'Lục Sát',  desc:'Phiền não, kiện tụng, hao tài tốn của.'},
-      {dir:'N',  cat:'Ngũ Quỷ',  desc:'Ma quái, bệnh tật khó lường, hao tổn.'},
-      {dir:'SE', cat:'Tuyệt Mệnh',desc:'Suy vong, tuyệt tự, hung hiểm nhất.'},
-    ]},
-  8: { name:'Cấn', hanh:'Thổ', type:'west', mệnh:'Tây Tứ Mệnh',
-    desc:'Người có quẻ số 8 (Cấn Thổ) thuộc Tây Tứ Mệnh — hợp với hướng Tây Nam, Tây Bắc, Tây, Đông Bắc.',
-    good: [
-      {dir:'SW', cat:'Sinh Khí', desc:'Đại cát, tài lộc và cơ hội phát triển liên tục.'},
-      {dir:'NW', cat:'Thiên Y',  desc:'Sức khỏe, bình an và hạnh phúc gia đình.'},
-      {dir:'W',  cat:'Diên Niên',desc:'Ổn định dài lâu, hôn nhân bền vững, thọ.'},
-      {dir:'NE', cat:'Phục Vị',  desc:'Bình hòa, giữ nguyên trạng, ổn định nội tâm.'},
-    ],
-    bad: [
-      {dir:'N',  cat:'Họa Hại',  desc:'Tai nạn nhỏ, tranh chấp, thất thoát tiền bạc.'},
-      {dir:'E',  cat:'Lục Sát',  desc:'Phiền não, kiện tụng, hao tài tốn của.'},
-      {dir:'SE', cat:'Ngũ Quỷ',  desc:'Ma quái, bệnh tật khó lường, hao tổn.'},
-      {dir:'S',  cat:'Tuyệt Mệnh',desc:'Suy vong, tuyệt tự, hung hiểm nhất.'},
-    ]},
-  9: { name:'Ly', hanh:'Hỏa', type:'east', mệnh:'Đông Tứ Mệnh',
-    desc:'Người có quẻ số 9 (Ly Hỏa) thuộc Đông Tứ Mệnh — hợp với hướng Đông, Đông Nam, Bắc, Nam.',
-    good: [
-      {dir:'E',  cat:'Sinh Khí', desc:'Đại cát, tài lộc và cơ hội phát triển liên tục.'},
-      {dir:'SE', cat:'Thiên Y',  desc:'Sức khỏe, bình an và hạnh phúc gia đình.'},
-      {dir:'N',  cat:'Diên Niên',desc:'Ổn định dài lâu, hôn nhân bền vững, thọ.'},
-      {dir:'S',  cat:'Phục Vị',  desc:'Bình hòa, giữ nguyên trạng, ổn định nội tâm.'},
-    ],
-    bad: [
-      {dir:'NE', cat:'Họa Hại',  desc:'Tai nạn nhỏ, tranh chấp, thất thoát tiền bạc.'},
-      {dir:'SW', cat:'Lục Sát',  desc:'Phiền não, kiện tụng, hao tài tốn của.'},
-      {dir:'W',  cat:'Ngũ Quỷ',  desc:'Ma quái, bệnh tật khó lường, hao tổn.'},
-      {dir:'NW', cat:'Tuyệt Mệnh',desc:'Suy vong, tuyệt tự, hung hiểm nhất.'},
-    ]},
+// GUA_DATA KHÔNG còn chép tay — dựng từ /tools-shared/bat-trach.js (nguồn
+// DUY NHẤT). Bản chép tay cũ ở đây sai 15/64 ô Du Niên + `calcGua` bên dưới
+// dùng công thức cung mệnh SAI (tổng 4 chữ số năm thay vì 2 chữ số cuối) —
+// xem ghi chú đầu file bat-trach.js.
+const STAR_DESC = {
+  'Sinh Khí':  'Đại cát, tài lộc và cơ hội phát triển liên tục.',
+  'Thiên Y':   'Sức khỏe, bình an và hạnh phúc gia đình.',
+  'Diên Niên': 'Ổn định dài lâu, hôn nhân bền vững, thọ.',
+  'Phục Vị':   'Bình hòa, giữ nguyên trạng, ổn định nội tâm.',
+  'Họa Hại':   'Tai nạn nhỏ, tranh chấp, thất thoát tiền bạc.',
+  'Lục Sát':   'Phiền não, kiện tụng, hao tài tốn của.',
+  'Ngũ Quỷ':   'Ma quái, bệnh tật khó lường, hao tổn.',
+  'Tuyệt Mệnh':'Suy vong, tuyệt tự, hung hiểm nhất.',
 };
+const GUA_DATA = (function () {
+  var out = {};
+  [1,2,3,4,6,7,8,9].forEach(function (c) {
+    var t = BatTrachTool.duNienStars(c);
+    var mkRow = function (star) { return { dir: t.good[star] || t.bad[star], cat: star, desc: STAR_DESC[star] }; };
+    var good = BatTrachTool.CAT_NAMES.map(mkRow);
+    var bad = BatTrachTool.HUNG_NAMES.map(mkRow);
+    var nhom = BatTrachTool.NHOM[c];
+    var mệnh = nhom + ' Tứ Mệnh';
+    out[c] = {
+      name: BatTrachTool.CUNG_NAME[c], hanh: BatTrachTool.CUNG_HANH[c],
+      type: nhom === 'Đông' ? 'east' : 'west', mệnh: mệnh,
+      desc: 'Người có quẻ số ' + c + ' (' + BatTrachTool.CUNG_NAME[c] + ' ' + BatTrachTool.CUNG_HANH[c] + ') thuộc ' + mệnh +
+        ' — hợp với hướng ' + good.map(function (d) { return DIR_LABELS[d.dir]; }).join(', ') + '.',
+      good: good, bad: bad,
+    };
+  });
+  return out;
+})();
 
 // ── Gua calculation ──────────────────────────────────────────────────────────
-function digitSum(n) {
-  let s = 0;
-  String(Math.abs(n)).split('').forEach(c => s += parseInt(c));
-  return s;
-}
-function reducedSum(year) {
-  let s = digitSum(year);
-  while (s >= 10) s = digitSum(s);
-  return s;
-}
+// KHÔNG còn công thức riêng ở đây — dùng thẳng BatTrachTool.getCungMenh (nhận
+// đúng 'nam'/'nu', khớp giá trị <select id="gioi-tinh">).
 function calcGua(year, gender) {
-  const s = reducedSum(year);
-  let g;
-  if (gender === 'nam') {
-    g = year < 2000 ? (10 - s) : (9 - s);
-    g = ((g % 9) + 9) % 9 || 9;
-    if (g === 5) g = 2;
-  } else {
-    g = year < 2000 ? (5 + s) : (6 + s);
-    g = ((g % 9) + 9) % 9 || 9;
-    if (g === 5) g = 8;
-  }
-  return g;
+  return BatTrachTool.getCungMenh(year, gender);
 }
 
 // ── UI state ─────────────────────────────────────────────────────────────────

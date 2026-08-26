@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"></noscript>
-<link rel="stylesheet" href="/shell.css?v=18">
+<link rel="stylesheet" href="/shell.css?v=29">
 <link rel="stylesheet" href="/laso-chart.css?v=3">
 <style>
 .form-card{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);max-width:720px}
@@ -39,6 +39,7 @@
 .verdict .lbl{font-family:var(--serif);font-size:17px;font-weight:600;margin-top:4px}
 .meter{height:9px;border-radius:9px;background:var(--paper-2);margin:14px auto 0;max-width:420px;overflow:hidden}
 .meter i{display:block;height:100%;border-radius:9px;transition:width .5s}
+/* .compat-invite/.ci-t nay ở shell.css (dùng chung nhiều tool kết quả) */
 /* factor rows */
 .sec{margin-bottom:22px}
 .sec-h{display:flex;align-items:center;gap:11px;margin-bottom:11px}
@@ -81,16 +82,6 @@
 .xt-unlock{background:var(--white);border:1px solid var(--gold-soft);border-radius:11px;padding:18px 20px;margin-bottom:22px;text-align:center}
 .xt-unlock p{font-size:12.5px;color:var(--text-lt);margin-top:8px}
 .xt-progress{font-size:12.5px;color:var(--text-lt);margin-bottom:16px;padding:10px 0;border-bottom:1px solid var(--line)}
-.xt-pdf-bar{display:none;margin:24px 0;text-align:center}
-.xt-pdf-bar.visible{display:block}
-@media print{
-  .sb,.rail,.ws-top,#introHost,#shellRecent,.mobile-only,.jump,.xt-unlock,.xt-progress,.ask,.xt-pdf-bar,.tabbar{display:none!important}
-  .shell{display:block!important;height:auto!important}
-  .ws{overflow:visible!important}
-  .ws-body{padding:0!important}
-  .sec{page-break-inside:avoid;break-inside:avoid}
-  body{font-size:12pt}
-}
 </style>
 </head>
 <body>
@@ -112,7 +103,8 @@
       <div id="shellRecent"></div>
       <div class="form-card" id="birthPanel">
         <h2 id="fH2">Nhập ngày sinh hai người (dương lịch)</h2>
-        <p class="sub" id="fSub">So hòa hợp trên hai lá số theo cổ pháp: xét tuổi, ngũ hành, tư tưởng, quan hệ, con cái, tài chính. Có kết quả rồi, hỏi trợ lý luận sâu ở khung bên phải.</p>
+        <p class="sub" id="fSub">Chấm 8 yếu tố tương hợp giữa hai lá số của hai bạn. Bạn nghe hai bên gia đình bàn ra tán vào chuyện tuổi tác. Dùng khi đang tính chuyện cưới xin và cần một câu trả lời rõ.</p>
+        <p class="price-note" id="fSubPrice" data-tvp-price-label="xem-tuoi">…</p>
         <div class="two">
           <div class="person">
             <h3 id="pA"><span class="dotA"></span> Người thứ nhất</h3>
@@ -136,7 +128,6 @@
         </div>
         <div class="xt-progress" id="xtProgress" style="display:none"></div>
         <div class="xt-body" id="xtBody"></div>
-        <div class="xt-pdf-bar" id="xtPdfBar"><button class="btn" onclick="window.print()">⬇ Tải PDF</button></div>
       </div>
     </div>
   </main>
@@ -149,9 +140,9 @@
   var p=location.pathname;
   var key=p.indexOf('lam-an')>=0?'xem-lam-an':(p.indexOf('tuong-hop')>=0?'tuong-hop':'xem-tuoi');
   var INTRO={
-    'xem-lam-an':{key:'xem-lam-an',title:'Xem tuổi làm ăn',desc:'So hợp hai người khi bắt tay hợp tác theo <b>8 chiều</b> cổ pháp. Ra điểm hòa hợp rồi hỏi <b>trợ lý AI</b> ai nên nắm gì, dễ xung khắc ở đâu.'},
-    'tuong-hop':{key:'tuong-hop',title:'Tương hợp tuổi',desc:'So hợp <b>hai người bất kỳ</b> (bạn bè, người thân, đối tác, đôi lứa) theo <b>8 chiều</b> cổ pháp. Ra điểm rồi hỏi <b>trợ lý AI</b> hợp ở mặt nào, dễ va ở đâu.'},
-    'xem-tuoi':{key:'xem-tuoi',title:'Xem tuổi vợ chồng',desc:'So hòa hợp hai lá số theo <b>8 chiều</b> cổ pháp (tuổi, ngũ hành, tư tưởng, quan hệ, con cái, tài chính). Ra điểm rồi hỏi <b>trợ lý AI</b> luận sâu.'}
+    'xem-lam-an':{key:'xem-lam-an',title:'Xem tuổi làm ăn',desc:'Chấm 8 yếu tố hợp tác giữa bạn và người sắp làm ăn chung. Bạn sắp góp vốn với ai đó, vẫn còn chút lấn cấn. Dùng khi cần một góc nhìn khách quan trước khi ký kết.'},
+    'tuong-hop':{key:'tuong-hop',title:'Tương hợp tuổi',desc:'Xét nhanh hai tuổi có hợp nhau hay không, chỉ cần năm sinh. Bạn mới quen ai đó và tiện tay tra thử cho vui. Dùng khi cần một câu trả lời nhanh, chưa cần xem sâu.'},
+    'xem-tuoi':{key:'xem-tuoi',title:'Xem tuổi vợ chồng',desc:'Chấm 8 yếu tố tương hợp giữa hai lá số của hai bạn. Bạn nghe hai bên gia đình bàn ra tán vào chuyện tuổi tác. Dùng khi đang tính chuyện cưới xin và cần một câu trả lời rõ.'}
   };
   window.SHELL_ACTIVE=key;
   window.SHELL_HISTORY=true;
@@ -161,12 +152,12 @@
 <script src="/laso-chart.js?v=3"></script>
 <script src="/tuvi-ansao-engine.js"></script>
 <script src="/tuong-hop.js?v=1"></script>
-<script src="/tuvi-form.js?v=1"></script>
+<script src="/tuvi-form.js?v=2"></script>
 <script src="/auth.js?v=2"></script>
-<script src="/tuvi-paywall.js?v=18"></script>
+<script src="/tuvi-paywall.js?v=21"></script>
   <script src="/nav.js?v=23" data-icons-only></script>
-<script src="/shell.js?v=66"></script>
-<script src="/tools-shared/ai-loading-steps.js?v=4"></script>
+<script src="/shell.js?v=82"></script>
+<script src="/tools-shared/ai-loading-steps.js?v=9"></script>
 <script>
 // ── MODE: 1 trang phục vụ 3 route — /app/xem-tuoi (vợ chồng), /app/xem-lam-an
 // (hợp tác làm ăn), /app/tuong-hop (hai người bất kỳ). Cùng bộ máy calcTuongHop;
@@ -178,7 +169,7 @@ var MODES={
   title:'Xem tuổi làm ăn', sub:'So hợp hai người khi bắt tay hợp tác',
   docTitle:'Xem tuổi làm ăn — Tử Vi Minh Bảo',
   h2:'Nhập ngày sinh hai đối tác (dương lịch)',
-  formSub:'So hòa hợp hợp tác trên hai lá số theo cổ pháp: xét tuổi, ngũ hành, tư tưởng, quan hệ, tài chính, vận hành. Có kết quả rồi, hỏi trợ lý luận sâu ở khung bên phải.',
+  formSub:'Chấm 8 yếu tố hợp tác giữa bạn và người sắp làm ăn chung. Bạn sắp góp vốn với ai đó, vẫn còn chút lấn cấn. Dùng khi cần một góc nhìn khách quan trước khi ký kết.',
   pA:'Đối tác thứ nhất', pB:'Đối tác thứ hai', phA:'Đối tác A', phB:'Đối tác B',
   btn:'Xem hợp tác →', btnBusy:'Đang xét hợp tác…', verb:'Xét hợp tác',
   chips:['Hai người hợp làm ăn chung không?','Ai nên nắm tài chính?','Chiều nào dễ xung đột khi hợp tác?','Nên góp vốn hay chia việc?'],
@@ -189,7 +180,7 @@ var MODES={
   title:'Tương hợp tuổi', sub:'So hợp hai người bất kỳ theo cổ pháp',
   docTitle:'Tương hợp tuổi — Tử Vi Minh Bảo',
   h2:'Nhập ngày sinh hai người (dương lịch)',
-  formSub:'So hòa hợp hai người bất kỳ (bạn bè, người thân, đối tác, đôi lứa) trên hai lá số theo cổ pháp: tuổi, ngũ hành, tư tưởng, quan hệ, tài chính. Có kết quả rồi, hỏi trợ lý luận sâu ở khung bên phải.',
+  formSub:'Xét nhanh hai tuổi có hợp nhau hay không, chỉ cần năm sinh. Bạn mới quen ai đó và tiện tay tra thử cho vui. Dùng khi cần một câu trả lời nhanh, chưa cần xem sâu.',
   pA:'Người thứ nhất', pB:'Người thứ hai', phA:'Người A', phB:'Người B',
   btn:'So tương hợp →', btnBusy:'Đang so tương hợp…', verb:'So tương hợp',
   chips:['Hai người này có hợp nhau không?','Hợp nhau ở mặt nào?','Dễ va chạm ở đâu?','Nên giữ khoảng cách hay gắn bó?'],
@@ -200,7 +191,7 @@ var MODES={
   title:'Xem tuổi vợ chồng', sub:'So hòa hợp hai lá số theo cổ pháp',
   docTitle:'Xem tuổi vợ chồng — Tử Vi Minh Bảo',
   h2:'Nhập ngày sinh hai người (dương lịch)',
-  formSub:'So hòa hợp trên hai lá số theo cổ pháp: xét tuổi, ngũ hành, tư tưởng, quan hệ, con cái, tài chính. Có kết quả rồi, hỏi trợ lý luận sâu ở khung bên phải.',
+  formSub:'Chấm 8 yếu tố tương hợp giữa hai lá số của hai bạn. Bạn nghe hai bên gia đình bàn ra tán vào chuyện tuổi tác. Dùng khi đang tính chuyện cưới xin và cần một câu trả lời rõ.',
   pA:'Người thứ nhất', pB:'Người thứ hai', phA:'Chồng / Người A', phB:'Vợ / Người B',
   btn:'So tuổi →', btnBusy:'Đang so tuổi…', verb:'So tuổi',
   chips:['Hai người có hợp làm vợ chồng không?','Chiều nào đáng lo nhất?','Cách hóa giải điểm khắc?','Đường con cái của hai người thế nào?'],
@@ -302,7 +293,13 @@ function renderCompat(r,nameA,nameB,fdA,fdB){
     '<div class="who"><b>'+esc(nameA)+'</b> <span style="color:var(--text-lt)">×</span> <b>'+esc(nameB)+'</b></div>'+
     '<div class="big" style="color:'+col+'">'+r.total+'<small>/100</small></div>'+
     '<div class="lbl" style="color:'+col+'">'+verdictLabel(r.total)+'</div>'+
-    '<div class="meter"><i style="width:'+r.total+'%;background:'+col+'"></i></div>';
+    '<div class="meter"><i style="width:'+r.total+'%;background:'+col+'"></i></div>'+
+    // "Rủ so lá số" — Co-Star nổi lên nhờ đúng cơ chế này (thêm bạn, so biểu
+    // đồ). Đặt NGAY dưới điểm số, đúng lúc tò mò cao nhất — không chờ tới lúc
+    // hết Lượng như invite-cta. Gọi Shell.shareNow() = CHÍNH luồng Chia sẻ
+    // (native share sheet/modal), chỉ khác chỗ đặt + câu chữ đích danh.
+    '<div class="compat-invite"><div class="ci-t">Gửi kết quả này cho <b>'+esc(nameB)+'</b> xem — họ tò mò là muốn tự tra lá số của mình luôn.</div>'+
+    '<button type="button" class="btn" onclick="Shell.shareNow()">Rủ '+esc(nameB)+' xem ngay →</button></div>';
 
   // per-person summary
   function who(ls,name,cls){
@@ -335,19 +332,37 @@ function renderCompat(r,nameA,nameB,fdA,fdB){
   // của xem-tuoi.html/xem-lam-an.html, mỗi phần có slot claude-content cho AI + nút hỏi rail.
   var S=[];
   var overviewBody=r.items.map(factorRowHtml).join('');
-  S.push(sec(0,PHAN_LABELS[0],'','<div class="card">'+overviewBody+'</div><div class="claude-content" id="claude-content-0" style="display:none"></div>'+ask('Luận tổng quan mức độ hòa hợp của '+nameA+' và '+nameB)));
+  S.push(sec(0,PHAN_LABELS[0],'','<div class="card">'+overviewBody+'</div>'+secLock(0)+'<div class="claude-content" id="claude-content-0" style="display:none"></div>'+ask('Luận tổng quan mức độ hòa hợp của '+nameA+' và '+nameB)));
   r.items.forEach(function(m,i){
     var idx=i+1;
-    S.push(sec(idx,PHAN_LABELS[idx]||('Phần '+idx),'','<div class="card">'+factorRowHtml(m)+'</div><div class="claude-content" id="claude-content-'+idx+'" style="display:none"></div>'+ask('Luận sâu chiều "'+m.label+'" giữa '+nameA+' và '+nameB)));
+    S.push(sec(idx,PHAN_LABELS[idx]||('Phần '+idx),'','<div class="card">'+factorRowHtml(m)+'</div>'+secLock(idx)+'<div class="claude-content" id="claude-content-'+idx+'" style="display:none"></div>'+ask('Luận sâu chiều "'+m.label+'" giữa '+nameA+' và '+nameB)));
   });
   document.getElementById('xtBody').innerHTML=pairH+S.join('');
   if(window.mountIcons) window.mountIcons(document.getElementById('xtBody')); // ô giữa 2 lá số mang span [data-icon]
   document.getElementById('xtJump').innerHTML=PHAN_LABELS.map(function(l,i){return '<a data-i="'+i+'"'+(i===0?' class="on"':'')+'>'+esc(l)+'</a>'}).join('');
   bindJump();
   document.querySelectorAll('#xtBody [data-ask]').forEach(function(el){ el.addEventListener('click',function(){ Shell.ask(el.getAttribute('data-ask')); }); });
+  // Ô giá trong mỗi khoá-mini vừa chèn — trang chỉ tự điền giá LÚC TẢI, mấy ô
+  // này sinh ra SAU đó nên phải gọi lại; wireSectionLocks tự chặn gắn trùng.
+  // Rỗng cho mode 'tuong-hop' (miễn phí, secLock() không dựng gì) → no-op.
+  if(PAID_MODES[MODE_KEY]){
+    TuviPaywall.fillPriceSlots(document.getElementById('xtBody'));
+    TuviPaywall.wireSectionLocks(document.getElementById('xtBody'), initiateXemTuoiChuyenSau);
+  }
 }
 function sec(n,title,tag,inner){ return '<section class="sec" id="sec-'+n+'"><div class="sec-h"><div class="sec-n">'+(n+1)+'</div><h3>'+esc(title)+'</h3>'+(tag?'<span class="tag">'+esc(tag)+'</span>':'')+'</div>'+inner+'</section>'; }
 function ask(t){ return '<div class="ask" data-ask="'+esc(t)+'">✦ Hỏi trợ lý: "'+esc(t)+'"</div>'; }
+// Khoá-mini (ẨN mặc định, xem chú thích ở _paintSecLocksXt) — CHỈ dựng cho
+// xem-tuoi/xem-lam-an (tuong-hop hoàn toàn miễn phí, không có gì để mở khoá).
+function secLock(idx){ return PAID_MODES[MODE_KEY]?TuviPaywall.sectionLockHtml({id:'sec-ai-lock-'+idx,product:MODE_KEY}):''; }
+// Bật/tắt ĐỒNG LOẠT khoá-mini của cả 9 phần (0..8). `true` ngay khi
+// `initXemTuoiGate` xác nhận CHƯA mở; `false` ngay khi bắt đầu sinh AI.
+function _paintSecLocksXt(show){
+  for(var p=0;p<PHAN_LABELS.length;p++){
+    var el=document.getElementById('sec-ai-lock-'+p);
+    if(el) el.style.display=show?'flex':'none';
+  }
+}
 function bindJump(){
   var ws=document.getElementById('ws');
   var links=document.querySelectorAll('#xtJump a');
@@ -413,6 +428,7 @@ function buildSlug(result,product){
 }
 
 var _pendingSlug=null, _currentPhan=-1, _xemTuoiStore={}, _compatResult=null, _compatNameA='', _compatNameB='';
+var _xtPace=(window.AiLoadingSteps&&AiLoadingSteps.pacer)?AiLoadingSteps.pacer():null;
 
 // Xây prompt cho 1 phần (idx 0=Tổng Quan, 1-8=từng chiều) — port nguyên từ
 // xem-tuoi.html:luanGiaiSection, dùng chung cho cả xem-tuoi/xem-lam-an.
@@ -504,7 +520,9 @@ async function initXemTuoiGate(result,nameA,nameB){
   _xemTuoiStore={};
   document.getElementById('xtUnlock').style.display='block';
   document.getElementById('xtProgress').style.display='none';
-  document.getElementById('xtPdfBar').classList.remove('visible');
+  // Banner đầu trang cuộn qua là mất — bật luôn khoá-mini của cả 9 phần để
+  // vẫn còn chỗ mở dù đang đọc phần nào.
+  _paintSecLocksXt(true);
 }
 
 async function initiateXemTuoiChuyenSau(){
@@ -514,20 +532,26 @@ async function initiateXemTuoiChuyenSau(){
 async function _startXemTuoiAI(){
   document.getElementById('xtUnlock').style.display='none';
   document.getElementById('xtProgress').style.display='block';
+  // Đã trả tiền — tắt hết khoá-mini ngay, kể cả phần chưa tới lượt sinh chữ.
+  _paintSecLocksXt(false);
   _currentPhan=-1; _xemTuoiStore={};
+  _xtPace&&_xtPace.reset();
   await _loadNextPhanAI();
 }
 async function _loadNextPhanAI(){
   if(_currentPhan>=8){
     document.getElementById('xtProgress').textContent='✓ Luận giải hoàn tất';
-    document.getElementById('xtPdfBar').classList.add('visible');
     _saveXemTuoiResult();
     return;
   }
   _currentPhan++;
   var idx=_currentPhan;
   var m=idx===0?null:_compatResult.items[idx-1];
-  document.getElementById('xtProgress').textContent='Đang luận giải phần '+(idx+1)+' / 9...';
+  // ETA tự hiệu chỉnh — đo nhịp ngay trong phiên, không hứa theo số chép cứng.
+  var _eta=_xtPace?_xtPace.remainText(9-idx):'';
+  document.getElementById('xtProgress').textContent=
+    'Đang luận giải phần '+(idx+1)+' / 9'+(_eta?' · '+_eta:'...');
+  _xtPace&&_xtPace.begin();
   var box=document.getElementById('claude-content-'+idx);
   // Chờ MỘT CỤC ≥10 giây ⇒ orb (luật ở đầu ai-loading-steps.js). expectSec:0 vì
   // chưa đo được thời lượng một phần — chỉ đếm giây, không hứa bao giờ xong.
@@ -536,7 +560,8 @@ async function _loadNextPhanAI(){
     box.style.display='block';
     box.innerHTML='<div class="phan-empty">Đang luận giải…</div>';
     if(window.AiLoadingSteps&&AiLoadingSteps.mountWait){
-      w=AiLoadingSteps.mountWait(box,{label:'Đang luận giải phần '+(idx+1)+'…',expectSec:0});
+      w=AiLoadingSteps.mountWait(box,{label:'Đang luận giải phần '+(idx+1)+'…',
+        expectSec:(_xtPace&&_xtPace.perPartSec())||0,expectText:(_xtPace&&_xtPace.perPartText())||''});
       w.start();
     }
   }
@@ -556,6 +581,7 @@ async function _loadNextPhanAI(){
     var data=await resp.json();
     var text=data.luanGiai||'';
     _xemTuoiStore[idx]=text;
+    _xtPace&&_xtPace.end();   // chỉ ghi nhịp ở nhánh THÀNH CÔNG
     doneWait();
     if(box)box.innerHTML=text.split('\n\n').filter(Boolean).map(function(p){return '<p>'+p+'</p>';}).join('');
   }catch(e){
@@ -588,13 +614,20 @@ function showForm(){
   document.getElementById('btnEdit').style.display='none';
   document.getElementById('xtUnlock').style.display='none';
   document.getElementById('xtProgress').style.display='none';
-  document.getElementById('xtPdfBar').classList.remove('visible');
   Shell.setShareable(null);
 }
 function applyMode(){
   document.title=MODE.docTitle;
   var set=function(id,txt){var el=document.getElementById(id);if(el)el.textContent=txt;};
   set('wsTitle',MODE.title); set('wsSub',MODE.sub); set('fH2',MODE.h2); set('fSub',MODE.formSub);
+  var priceEl=document.getElementById('fSubPrice');
+  if(priceEl){
+    priceEl.setAttribute('data-tvp-price-label',MODE.active);
+    priceEl.textContent='…';
+    // fillSlots(root) chỉ tìm CON của root, không tự tính root — truyền cả
+    // trang thay vì truyền đúng thẻ price vừa đổi thuộc tính.
+    if(window.ToolPrices)ToolPrices.fillSlots();
+  }
   document.getElementById('pA').innerHTML='<span class="dotA"></span> '+MODE.pA;
   document.getElementById('pB').innerHTML='<span class="dotB"></span> '+MODE.pB;
   document.getElementById('a-hoten').placeholder=MODE.phA;

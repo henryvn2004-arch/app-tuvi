@@ -1,10 +1,14 @@
 // app/api/tubinh/route.ts
-export const maxDuration = 60;
+// 60 → 300: cùng lý do lasotuvi/route.ts — chuỗi fallback 3 provider tuần tự
+// (Kimi → Opus 5 → Gemini Flash) + trần token đã nâng 50% dễ vượt 60s.
+export const maxDuration = 300;
 
 import { NextRequest } from 'next/server';
 import { ok, err, options, parseBody } from '@/lib/cors';
 import { llmText, llmStreamResponse } from '@/lib/llm/complete';
 import { withToolOutcome } from '@/lib/ops/tool-outcome';
+import { chuanHoaDauThanh } from '@/lib/vn-text';
+import { LUAN_ARC_CHUNG, MAU_ARC_CHUNG, DOC_ARC_TUBINH } from '@/lib/agent/prompts';
 
 const SUPABASE_URL = process.env.SUPABASE_URL!;
 const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_KEY!;
@@ -47,10 +51,17 @@ CHỐNG TÂNG BỐC — TUYỆT ĐỐI (điểm sống còn):
 - Cách cục phá / cường nhược lệch nặng / đại vận nghịch điểm thấp → cảnh báo rõ, không bọc đường. Thà mất lòng còn hơn vô dụng.
 - Mỗi nhận định tốt phải kèm bằng chứng (thập thần nào, dụng thần gì, score bao nhiêu). Hạn chế tính từ khen sáo rỗng.
 
+CỤ THỂ HÓA — TUYỆT ĐỐI (đọc xong phải nhớ được MỘT VIỆC cụ thể, không chỉ một cảm nhận mơ hồ):
+- "Tài vận bấp bênh", "hôn nhân có phần trắc trở", "cần thận trọng trong quan hệ" — nghe có vẻ đúng nhưng KHÔNG dùng được vào việc gì, người đọc quên ngay. Phải dịch tiếp thành câu CỤ THỂ: nên/tránh làm ngành gì, nên kết hôn ở giai đoạn nào, bạn đời có xu hướng thuộc lĩnh vực gì, con cái cần lưu ý điều gì, giai đoạn (đại vận) nào nên tiến nên thủ.
+- Mỗi lần sắp viết một tính từ trừu tượng, tự hỏi: cụ thể là VIỆC GÌ, KHI NÀO, NÊN LÀM GÌ — rồi viết thẳng câu trả lời đó, đừng dừng ở tính từ.
+- Cụ thể hóa PHẢI suy từ chính thập thần/dụng thần/đại vận đã cho — không bịa thêm sự kiện dữ liệu không chỉ ra. Điều đọc thẳng từ cấu trúc (cường/nhược, thành/phá) thì nói dứt khoát; điều suy thêm một bước (nghề bạn đời, tính khí con cái...) thì giữ ngôn ngữ xác suất nhưng vẫn phải nêu ra cụ thể là gì, không né bằng câu chung chung.
+
 PHÁN QUYẾT BẮT BUỘC — NEO VÀO ĐIỂM SỐ:
 - MỞ ĐẦU mỗi phần bằng MỘT câu chốt in đậm neo vào con số đã tính (cường nhược .../10, score đại vận, thành/phá): phần này mạnh hay yếu, thuận hay nghịch. Rồi mới giải thích vì sao.
 - Phần thân KHÔNG được mâu thuẫn với con số: cường nhược 3/10 hay đại vận nghịch thì cấm viết như giai đoạn tốt.
 - Đánh giá CẤU TRÚC bát tự (mạnh/yếu) nói dứt khoát; chỉ DỰ ĐOÁN kết quả tương lai mới dùng ngôn ngữ xác suất.
+
+${DOC_ARC_TUBINH}
 
 NGUYÊN TẮC LUẬN GIẢI (không cần kể ra cho người đọc):
 - Mọi luận giải xoay quanh Nhật Can (bản thân đương số) và mùa sinh.
@@ -96,44 +107,38 @@ CÁCH CỤC ĐẶC BIỆT (khi pregen có [OVERRIDE] hoặc [ENHANCE]):
 - KHÔNG bao giờ liệt kê khô "lá số có cách A, B, C" — phải KỂ THÀNH CÂU CHUYỆN: cách A là khung chính, cách B làm sáng thêm điểm này, cách C cảnh báo điểm kia.`;
 
 // ─── Chat handler ──────────────────────────────────────────────
-const CHAT_SYSTEM_TUBINH = (ctx: string) => `Bạn là người luận giải Tử Bình Bát Tự, viết cho người đọc bình thường — KHÔNG phải chuyên gia.
+const CHAT_SYSTEM_TUBINH = (ctx: string) => `Bạn là người luận giải Tử Bình Bát Tự, viết cho người đọc bình thường — KHÔNG phải chuyên gia. Văn phong trí thức Hà Nội xưa: điềm đạm, súc tích, sâu sắc.
 
-NGUYÊN TẮC TRẢ LỜI:
-- Văn phong trí thức Hà Nội xưa: điềm đạm, súc tích, sâu sắc.
-- Văn xuôi liền mạch — KHÔNG bullet, KHÔNG emoji, KHÔNG tiêu đề.
-- 150-300 từ cho câu thông thường, tối đa 450 từ cho câu phức tạp.
-- Có thể in đậm 1-2 cụm chữ then chốt (dùng **chữ**) nhưng đừng lạm dụng.
-
-XỬ LÝ THUẬT NGỮ:
+XỬ LÝ THUẬT NGỮ CỦA BỘ MÔN (luật RIÊNG của Tử Bình, đứng cùng luật thuật ngữ chung ở khối CÁCH VIẾT bên dưới):
 - Tránh các từ "đắc lệnh", "đắc địa", "tàng can", "thấu can", "phù-ức", "tòng cách".
 - Khi buộc dùng thuật ngữ (Nhật Can, Dụng Thần, Chính Quan, Thực Thần…), GIẢI THÍCH NGAY bằng nghĩa đời thường ngay trong câu.
   Ví dụ: "Dụng thần là Hỏa — tức người này hợp với những gì ấm áp, năng động, sáng tạo".
 - Có thể nói "Nhật Can" kèm "tức bản thân anh/chị".
 
-TRỌNG TÂM:
-Mọi câu trả lời phải nói rõ:
-1. **Điều đó nghĩa là gì với cuộc sống thực tế** — không phải lý thuyết.
-2. **Hệ quả cụ thể** — tâm lý, hành vi, vận mệnh có khả năng xảy ra.
-3. **Lời khuyên thực tế** — nên làm gì, hóa giải thế nào (kết câu trả lời bằng gợi ý áp dụng được).
-
-KHÁC:
+NGUYÊN TẮC LUẬN (cổ pháp — KHÔNG đụng, khối CÁCH VIẾT bên dưới chỉ nói về hình dạng và giọng):
 - Dẫn chứng cụ thể từ tứ trụ và thập thần bên dưới — không nói chung chung.
 - Trả lời dứt khoát: việc được hỏi mạnh hay yếu, thuận hay nghịch — neo vào cường nhược score / score đại vận / cách cục thành-phá nếu có. Cấm tâng bốc, cấm nước đôi; có điểm mạnh phải kèm điểm yếu cụ thể ngang sức; cường nhược lệch nặng hoặc đại vận nghịch phải cảnh báo thẳng.
 - Riêng kết quả tương lai mới dùng ngôn ngữ xác suất ("dễ", "có khả năng"), không hứa hẹn tuyệt đối.
 - Không tiết lộ trường phái hay tài liệu.
 
+${LUAN_ARC_CHUNG}
+
+${MAU_ARC_CHUNG}
+
 === DỮ LIỆU BÁT TỰ ===
 ${ctx}`;
 
-const CHAT_SYSTEM_GENERAL = `Bạn là người luận giải Tử Bình Bát Tự, viết cho người đọc bình thường — không phải chuyên gia.
+const CHAT_SYSTEM_GENERAL = `Bạn là người luận giải Tử Bình Bát Tự, viết cho người đọc bình thường — không phải chuyên gia. Văn phong trí thức Hà Nội xưa: điềm đạm, súc tích, sâu sắc.
 
-Nguyên tắc:
-- Văn phong trí thức Hà Nội xưa: điềm đạm, súc tích, sâu sắc.
-- Văn xuôi liền mạch, không bullet, không emoji.
-- 150-300 từ cho câu thông thường, tối đa 450 từ cho câu phức tạp.
+XỬ LÝ THUẬT NGỮ CỦA BỘ MÔN (luật RIÊNG của Tử Bình):
 - Tránh thuật ngữ khô khan ("đắc lệnh", "tàng can", "phù-ức"…) — khi buộc dùng phải giải thích ngay bằng nghĩa đời thường.
-- Mỗi câu trả lời phải nói rõ ý nghĩa thực tế + lời khuyên áp dụng được.
-- Dùng ngôn ngữ xác suất, không hứa hẹn tuyệt đối, không tiết lộ trường phái.`;
+
+NGUYÊN TẮC LUẬN (cổ pháp — KHÔNG đụng):
+- Dùng ngôn ngữ xác suất, không hứa hẹn tuyệt đối, không tiết lộ trường phái.
+
+${LUAN_ARC_CHUNG}
+
+${MAU_ARC_CHUNG}`;
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function extractTuBinhContext(batTuData: any, question: string): string {
@@ -166,20 +171,36 @@ function extractTuBinhContext(batTuData: any, question: string): string {
   if (batTuData.tuoiXem) ctx += 'Tuổi xem: ' + batTuData.tuoiXem + '\n';
 
   // Topic-based augmentation
+  //
+  // 🔴 Mẫu phải là CỤM ĐỦ NGHĨA, tuyệt đối không để âm tiết đơn ('quan', 'sao',
+  // 'chức'). Tiếng Việt viết RỜI từng âm tiết nên 'quan' khớp luôn "tổng quan",
+  // "quan hệ", "quan tâm", "liên quan", "quan điểm"; 'sao' khớp "tại sao",
+  // "vì sao", "làm sao", "ra sao". Hậu quả KHÔNG phải thừa một mục — nó cướp
+  // mất nhánh mặc định: câu mở như "cho tôi xem tổng quan" đáng ra nhận đủ 4
+  // mục (quanSat · tai · phuThe · daiVan) thì chỉ nhận đúng 1 mục lạc đề, và
+  // model phải luận chay phần còn lại. Đo được 14/17 câu mở dính lỗi này.
+  //
+  // ⛔ Và ĐỪNG vá bằng cách thêm biên từ (\b): đo rồi, ra 0/20 — vì trong
+  // "tổng quan" thì "quan" THẬT SỰ là một âm tiết đứng riêng, biên từ vẫn
+  // khớp. Biên từ chỉ cứu được ngôn ngữ viết liền, không cứu tiếng Việt.
   const topicMap: Record<string, string[]> = {
     'tài chính|tiền|tài lộc|làm giàu|thu nhập': ['tai'],
-    'sự nghiệp|công việc|nghề|quan|chức': ['quanSat'],
+    'sự nghiệp|công việc|nghề nghiệp|quan lộc|thăng tiến|thăng chức|chức vụ|thất nghiệp': ['quanSat'],
     'tình duyên|hôn nhân|vợ chồng|tình cảm': ['phuThe'],
     'con cái|con cháu': ['tuTuc'],
     'sức khỏe|bệnh|thân thể': ['suckhoe'],
     'đại vận|tiểu vận|vận hạn|vận trình': ['daiVan'],
     'lưu niên|năm nay|năm tới': ['luuNien'],
-    'thần sát|sao': ['thanSat'],
+    'thần sát|sao xấu|sao tốt|hung tinh|cát tinh|sao chiếu|sao nào|sao gì': ['thanSat'],
   };
 
+  // Dò trên bản ĐÃ CHUẨN HOÁ VỊ TRÍ DẤU THANH (lib/vn-text.ts) — "sức khoẻ"
+  // và "sức khỏe" đều đúng chính tả, so chuỗi thô thì gõ lối kia là TRƯỢT IM
+  // LẶNG rồi rơi xuống nhánh mặc định, mất đúng mục câu hỏi nhắm tới.
+  const qn = chuanHoaDauThanh(q);
   const relevant = new Set<string>();
   for (const [pattern, keys] of Object.entries(topicMap)) {
-    if (new RegExp(pattern, 'i').test(q)) keys.forEach(k => relevant.add(k));
+    if (new RegExp(chuanHoaDauThanh(pattern), 'i').test(qn)) keys.forEach(k => relevant.add(k));
   }
   if (relevant.size === 0) ['quanSat', 'tai', 'phuThe', 'daiVan'].forEach(k => relevant.add(k));
 
@@ -257,7 +278,11 @@ async function handleChat(body: any): Promise<Response> {
   if (!trimmed.length) return err('Empty messages after filter', 400);
 
   try {
-    const answer = await llmText({ system: systemPrompt, messages: trimmed, maxTokens: 800 });
+    // 🔴 VÁ Henry 2026-08-24: handleChat là hỏi-đáp LẶP LẠI nhiều lượt/phiên —
+    // cùng tính chất lưu lượng cao/tốn Opus như rail chat (/api/v1/chat), nên
+    // gộp chung quyết định "gỡ Opus primary" — Gemini Flash mặc định toàn
+    // site (bỏ `provider:'anthropic'`, xem lib/llm/complete.ts CANONICAL_ORDER).
+    const answer = await llmText({ system: systemPrompt, messages: trimmed, maxTokens: 1200 });
     return ok({ answer, scenario: hasBatTu ? 'batTu' : 'general' });
   } catch (e: unknown) {
     console.error('[handleChat] exception', e);
@@ -317,23 +342,24 @@ async function handleSearch(body: any): Promise<Response> {
 }
 
 // ─── 16 PHẦN definitions ───────────────────────────────────────
+// Nâng ĐỀU 50% mọi trần (Henry chốt 2026-08-20, cùng đợt lasotuvi/van-han-nam).
 const PHAN_INFO: Record<number, { ten: string; maxTokens: number }> = {
-  1:  { ten: 'Tổng quan Bát Tự',           maxTokens: 2000 },
-  2:  { ten: 'Cách Cục',                    maxTokens: 1500 },
-  3:  { ten: 'Quan Sát — Sự nghiệp',        maxTokens: 1200 },
-  4:  { ten: 'Tài',                          maxTokens: 1200 },
-  5:  { ten: 'Thực Thương',                 maxTokens: 1200 },
-  6:  { ten: 'Ấn',                           maxTokens: 1200 },
-  7:  { ten: 'Tỷ Kiếp',                     maxTokens: 1200 },
-  8:  { ten: 'Tình duyên',                  maxTokens: 1200 },
-  9:  { ten: 'Sức khỏe',                    maxTokens: 1200 },
-  10: { ten: 'Hình Xung Hại Hợp',           maxTokens: 1200 },
-  11: { ten: 'Thần Sát',                    maxTokens: 1200 },
-  12: { ten: 'Tổng quan Đại Vận',           maxTokens: 3000 },
-  13: { ten: 'Đại Vận hiện tại',            maxTokens: 1200 },
-  14: { ten: 'Đại Vận kế tiếp',             maxTokens: 1200 },
-  15: { ten: 'Lưu Niên',                    maxTokens: 1400 },
-  16: { ten: 'Tổng kết',                    maxTokens: 1500 },
+  1:  { ten: 'Tổng quan Bát Tự',           maxTokens: 3000 },
+  2:  { ten: 'Cách Cục',                    maxTokens: 2250 },
+  3:  { ten: 'Quan Sát — Sự nghiệp',        maxTokens: 1800 },
+  4:  { ten: 'Tài',                          maxTokens: 1800 },
+  5:  { ten: 'Thực Thương',                 maxTokens: 1800 },
+  6:  { ten: 'Ấn',                           maxTokens: 1800 },
+  7:  { ten: 'Tỷ Kiếp',                     maxTokens: 1800 },
+  8:  { ten: 'Tình duyên',                  maxTokens: 1800 },
+  9:  { ten: 'Sức khỏe',                    maxTokens: 1800 },
+  10: { ten: 'Hình Xung Hại Hợp',           maxTokens: 1800 },
+  11: { ten: 'Thần Sát',                    maxTokens: 1800 },
+  12: { ten: 'Tổng quan Đại Vận',           maxTokens: 4500 },
+  13: { ten: 'Đại Vận hiện tại',            maxTokens: 1800 },
+  14: { ten: 'Đại Vận kế tiếp',             maxTokens: 1800 },
+  15: { ten: 'Lưu Niên',                    maxTokens: 2100 },
+  16: { ten: 'Tổng kết',                    maxTokens: 2250 },
 };
 
 // ─── Prompt builder ────────────────────────────────────────────
@@ -653,8 +679,14 @@ async function runPost(request: NextRequest) {
     .join('\n\n');
 
   try {
+    // provider:'anthropic' (chốt Henry 2026-08-24): bản luận giải 16 phần Tử
+    // Bình Bát Tự thuộc nhóm tool quan trọng → Opus 5 primary (xem
+    // lib/llm/complete.ts CANONICAL_ORDER). Lưu ý: đây là override PROVIDER
+    // (llmStreamResponse opts), khác `'anthropic'` truyền làm THAM SỐ THỨ HAI
+    // (`format`, chọn byte-shape SSE tu-binh.html parse) — hai chữ 'anthropic'
+    // trùng tên nhưng khác vai trò.
     return await llmStreamResponse(
-      { system: SYSTEM_PROMPT_TUBINH, prompt: userPrompt, maxTokens: phanInfo.maxTokens },
+      { system: SYSTEM_PROMPT_TUBINH, prompt: userPrompt, maxTokens: phanInfo.maxTokens, provider: 'anthropic' },
       'anthropic',
       { 'X-Phan': String(phanNum), 'X-Phan-Ten': encodeURIComponent(phanInfo.ten) },
     );
