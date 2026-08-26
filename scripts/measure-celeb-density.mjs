@@ -245,37 +245,76 @@ async function main() {
 
 // ── T2 — offline: chỉ cần CSV + engine, KHÔNG cần mạng ───────
 function measureT2() {
+  /**
+   * Tách một dòng CSV, TÔN TRỌNG dấu nháy kép.
+   * 🪤 `split(',')` trần đã cắn thật: tên ADB là "Họ, Tên" — dấu phẩy NẰM TRONG
+   * ô có nháy — nên mọi trường bị lệch một nấc và 50.803/51.827 dòng bị loại im
+   * lặng, trong khi script vẫn in ra một con số T2 trông rất hợp lý (0,40%).
+   * Đúng loại "xanh oan" mà cả đợt này đi chữa.
+   */
+  function csvFields(line) {
+    const out = [];
+    let cur = '',
+      q = false;
+    for (let i = 0; i < line.length; i++) {
+      const c = line[i];
+      if (q) {
+        if (c === '"') {
+          if (line[i + 1] === '"') {
+            cur += '"';
+            i++;
+          } else q = false;
+        } else cur += c;
+      } else if (c === '"') q = true;
+      else if (c === ',') {
+        out.push(cur);
+        cur = '';
+      } else cur += c;
+    }
+    out.push(cur);
+    return out.map((f) => f.trim());
+  }
+
   // ── T2: trùng cả giờ sinh ──────────────────────────────────
   const lines = readFileSync(ADB_CSV, 'utf-8').trim().split('\n').slice(1);
   const t2 = new Map();
+  // T2b (bỏ giới) phải đếm khoá PHÂN BIỆT của riêng nó — lấy `t2.size × 2` là
+  // ngầm giả định không hai người khác giới nào trùng ngày+giờ, tức CHẶN TRÊN
+  // chứ không phải số thật.
+  const t2b = new Set();
   let usable = 0,
     dropped = 0;
   for (const line of lines) {
-    const [, iso, hhmm, rating, off] = line.split(',').map((s) => s.trim());
+    const [, iso, hhmm, rating, off, gt] = csvFields(line);
     if (!/^(AA|A)$/i.test(rating || '')) {
       dropped++;
       continue;
     }
     const [Y, M, D] = (iso || '').split('-').map(Number);
     const [hh, mi] = (hhmm || '').split(':').map(Number);
-    if (!Y || !Number.isFinite(hh)) {
+    // Múi giờ TRỐNG là không quy được về giờ VN — bỏ, KHÔNG mặc định +7:
+    // đoán múi giờ là đoán luôn canh giờ ⇒ T2 cho ra "trùng lá số" GIẢ.
+    if (!Y || !Number.isFinite(hh) || off === '' || !Number.isFinite(Number(off))) {
       dropped++;
       continue;
     }
-    // Quy về giờ VN đúng như form người dùng làm (public/tools-shared/vn-timezone.js)
-    let mins = hh * 60 + (mi || 0) + (420 - Number(off || 420));
+    // Quy về giờ VN đúng như form người dùng làm (public/tuvi-form.js `toVnHour`)
+    let mins = hh * 60 + (mi || 0) + (420 - Number(off));
     mins = ((mins % 1440) + 1440) % 1440;
     const gioIdx = Math.floor(((mins + 60) % 1440) / 120) % 12;
-    // Ngoài tầm bảng âm lịch (trước 1900-01-31) thì KHÔNG tính là dùng được —
-    // đếm nó vào `usable` là tự thổi phồng mẫu.
     if (!anSaoKey(D, M, Y)) {
       dropped++;
       continue;
     }
-    for (const gt of ['nam', 'nu']) {
-      const k = anSaoKey(D, M, Y, gioIdx, gt);
+    // Dùng GIỚI TÍNH THẬT của hồ sơ. Đếm cả 'nam' lẫn 'nu' cho mỗi người là
+    // thổi phồng độ phủ gấp đôi — giới tính vào khoá thì mỗi người chỉ chiếm
+    // ĐÚNG một ô.
+    const genders = gt === 'nam' || gt === 'nu' ? [gt] : ['nam', 'nu'];
+    for (const g of genders) {
+      const k = anSaoKey(D, M, Y, gioIdx, g);
       if (k) t2.set(k, (t2.get(k) || 0) + 1);
     }
+    t2b.add(anSaoKey(D, M, Y, gioIdx));
     usable++;
   }
   // 🔴 Mẫu số phải là KHÔNG GIAN KHOÁ ĐẦY ĐỦ (suy từ engine), KHÔNG phải số khoá
@@ -287,7 +326,7 @@ function measureT2() {
   console.log(`  Không gian khoá đầy đủ: ${SPACE} ô  ·  đã phủ ${t2.size}`);
   console.log(`  ⇒ P(một lá số bất kỳ trúng T2) ≈ ${((100 * t2.size) / SPACE).toFixed(2)}%`);
   console.log(
-    `  ⇒ P(trúng T2b, bỏ giới)      ≈ ${((100 * t2.size) / (fullKeySpace() * 12)).toFixed(2)}%`
+    `  ⇒ P(trúng T2b, bỏ giới)      ≈ ${((100 * t2b.size) / (fullKeySpace() * 12)).toFixed(2)}%`
   );
 
   writeFileSync(
@@ -297,6 +336,7 @@ function measureT2() {
         minSitelinks: MIN_SITELINKS,
         keySpace: fullKeySpace(),
         t2Keys: t2.size,
+        t2bKeys: t2b.size,
         t2Space: SPACE,
         adbUsable: usable,
         adbDropped: dropped,
