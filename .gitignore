@@ -72,3 +72,6 @@ remotion/public/stock-video/
 
 # Kết quả đo Bước 0 của scripts/measure-celeb-density.mjs — số đo, không phải mã
 celeb-density.json
+
+# Mẻ dữ kiện kéo từ Astro-Databank (scripts/fetch-adb.mjs) — dữ liệu, không phải mã
+adb.csv

@@ -31,6 +31,25 @@
 import { readFileSync, writeFileSync } from 'fs';
 import { join } from 'path';
 
+// ── Node fetch KHÔNG tự đi qua proxy (curl thì có) ───────────
+// Đã cắn thật: `curl` trả JSON đúng trong khi `fetch` trần nhận
+// "Host not in allowlist" cho CÙNG một host — hai đường egress khác nhau.
+// Hai biến này đọc lúc KHỞI ĐỘNG nên không set được từ trong tiến trình đang
+// chạy ⇒ tự khởi động lại chính mình một lần với chúng đã bật.
+if (process.env.HTTPS_PROXY && process.env.NODE_USE_ENV_PROXY !== '1') {
+  const { spawnSync } = await import('child_process');
+  const r = spawnSync(process.execPath, [import.meta.filename, ...process.argv.slice(2)], {
+    stdio: 'inherit',
+    env: {
+      ...process.env,
+      NODE_USE_ENV_PROXY: '1',
+      NODE_EXTRA_CA_CERTS: '/root/.ccr/ca-bundle.crt',
+      NODE_NO_WARNINGS: '1',
+    },
+  });
+  process.exit(r.status ?? 1);
+}
+
 const ROOT = new URL('..', import.meta.url).pathname;
 const argv = process.argv.slice(2);
 const opt = (k, d) => {
@@ -41,10 +60,12 @@ const opt = (k, d) => {
 const MIN_SITELINKS = Number(opt('sitelinks', 15));
 const ADB_CSV = opt('adb', null);
 const [Y_FROM, Y_TO] = String(opt('years', '1900:2010')).split(':').map(Number);
+// Mặc định WDQS: `qlever.cs.uni-freiburg.de` nay 308 sang `qlever.dev` (host
+// KHÁC, phải allowlist riêng) — đã đo, không phải phỏng đoán.
 const ENDPOINT =
-  opt('endpoint', 'qlever') === 'wdqs'
-    ? 'https://query.wikidata.org/sparql'
-    : 'https://qlever.cs.uni-freiburg.de/api/wikidata';
+  opt('endpoint', 'wdqs') === 'qlever'
+    ? 'https://qlever.dev/api/wikidata'
+    : 'https://query.wikidata.org/sparql';
 const UA = 'tuviminhbao.com celeb-density research (henryvn2004@gmail.com)';
 
 // ── Engine của repo: nguồn DUY NHẤT cho khoá an sao ──────────
