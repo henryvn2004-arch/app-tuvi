@@ -160,6 +160,9 @@
         <div class="lg-unlock" id="lgUnlock" style="display:none"></div>
         <div class="lg-progress" id="lgProgress" style="display:none"></div>
         <div class="lg-body" id="lgBody"></div>
+        <!-- "Ai Sinh Cùng Ngày Với Bạn" — miễn phí, 0 token LLM. Hỏng mạng/API
+             thì tự ẩn, không làm hỏng bản luận phía trên. -->
+        <div id="cnsHost"></div>
       </div>
     </div>
   </main>
@@ -176,6 +179,7 @@ window.SHELL_INTRO={key:'chu-trinh-cuoc-doi',title:'Chu Trình Cuộc Đời',de
 <script src="/tuvi-laso-format.js?v=2"></script>
 <script src="/tools-shared/vn-timezone.js?v=1"></script>
 <script src="/tuvi-form.js?v=2"></script>
+<script src="/tools-shared/cung-ngay-sinh.js?v=1"></script>
 <script src="/auth.js?v=2"></script>
 <script src="/tuvi-paywall.js?v=21"></script>
   <script src="/nav.js?v=24" data-icons-only></script>
@@ -216,6 +220,8 @@ function doLuan(){
     // vừa hiện ra nằm ngoài khung nhìn — cuộn lên để thấy ngay có gì vừa chạy.
     if(window.AiLoadingSteps)AiLoadingSteps.scrollToResult('lgPanel');
     Shell.rememberBirth(Object.assign({}, fdIn, {namxem:namxem}));
+    // Mục "Ai Sinh Cùng Ngày Với Bạn" — phần phụ, đặt SAU khi bản luận đã dựng.
+    if(window.CungNgaySinh)CungNgaySinh.mount('cnsHost',{ngay:dd,thang:mm,nam:yyyy,gioIdx:gioAmIdx,gioitinh:gioitinh});
     if(window.SHELL_INTRO)Shell.dismissIntro(window.SHELL_INTRO.key);
     Shell.setContext({
       birth:{day:dd,month:mm,year:yyyy,hourBranch:gioAmIdx,gender:gioitinh,name:name||undefined},

@@ -499,17 +499,14 @@ async function main() {
     }
 
     allRows.push(...batch);
-    if (SQL_OUT) {
-      sqlRows.push(...batch);
-    } else if (!DRY) {
-      for (let i = 0; i < batch.length; i += 500) {
-        try {
-          await upsert(batch.slice(i, i + 500));
-        } catch (e) {
-          console.error(`\n  ${y}: ghi lỗi — ${e.message}`);
-        }
-      }
-    }
+    if (SQL_OUT) sqlRows.push(...batch);
+    // 🔴 KHÔNG upsert ở đây. `row.occupation`/`row.country` lúc này vẫn là
+    // Q-id thô — `resolveLabels()` chỉ chạy MỘT lần, SAU vòng lặp năm, để
+    // khỏi gánh lại nhãn mỗi năm. Ghi sớm ở đây từng đưa Q-id thẳng vào DB mà
+    // KHÔNG BAO GIỜ được sửa lại — không có upsert nào chạy lại sau khi nhãn
+    // đã dịch. Nhánh SQL_OUT không dính lỗi này vì nó chỉ ghép chuỗi SQL ở
+    // cuối hàm, sau khi `allRows` (cùng tham chiếu object với `sqlRows`) đã
+    // được `resolveLabels()` sửa tại chỗ.
     process.stdout.write(
       `\r  ${y} — ${stat.rows} dòng · ${stat.withTime} có giờ · ${stat.vi} có bài viwiki`
     );
@@ -522,6 +519,24 @@ async function main() {
     r.country = labels.get(r.country) || null;
   }
   console.log(`\n\nDịch nhãn: ${labels.size}/${needLabel.size} Q-id ra chữ đọc được`);
+
+  if (!DRY && !SQL_OUT) {
+    console.log(`Ghi ${allRows.length} dòng vào DB (mẻ 500, SAU khi đã dịch nhãn)...`);
+    let ghi = 0,
+      loiMe = 0;
+    for (let i = 0; i < allRows.length; i += 500) {
+      const mieng = allRows.slice(i, i + 500);
+      try {
+        await upsert(mieng);
+        ghi += mieng.length;
+      } catch (e) {
+        loiMe++;
+        console.error(`\n  mẻ ${i}-${i + mieng.length}: ghi lỗi — ${e.message}`);
+      }
+      process.stdout.write(`\r  đã ghi ${Math.min(i + 500, allRows.length)}/${allRows.length}`);
+    }
+    console.log(`\n✅ Ghi DB xong: ${ghi}/${allRows.length} dòng (${loiMe} mẻ lỗi).`);
+  }
   console.log(`Tổng           : ${stat.rows}`);
   console.log(
     `  có giờ sinh  : ${stat.withTime}  (${((100 * stat.withTime) / (stat.rows || 1)).toFixed(1)}%) ← nhiên liệu T2`

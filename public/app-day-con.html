@@ -380,6 +380,10 @@
           <div class="res-block-header"><span class="res-block-title">Đã Xem Trước Đó</span></div>
           <div class="res-block-body"><div id="histList"></div></div>
         </div>
+
+        <!-- "Ai Sinh Cùng Ngày Với Bạn" — miễn phí, 0 token LLM. Hỏng mạng/API
+             thì tự ẩn, không làm hỏng bản hướng dẫn phía trên. -->
+        <div id="cnsHost"></div>
       </div>
     </div>
   </main>
@@ -392,6 +396,7 @@ window.SHELL_INTRO={key:'day-con',title:'Dạy Con Theo Lá Số',desc:'Đọc c
 <script src="/laso-chart.js?v=3"></script>
 <script src="/tools-shared/vn-timezone.js?v=1"></script>
 <script src="/tuvi-form.js?v=2"></script>
+<script src="/tools-shared/cung-ngay-sinh.js?v=1"></script>
 <script src="/tuvi-paywall.js?v=21"></script>
 <script src="/auth.js?v=2"></script>
   <script src="/nav.js?v=24" data-icons-only></script>
@@ -459,6 +464,18 @@ function _birthOf(prefix) {
     hourBranch: f.gioIdx, gender: f.gioitinh, isLunar: false,
     name: (f.hoten || '').trim() || undefined,
   };
+}
+
+// "Ai Sinh Cùng Ngày Với Bạn" — chủ thể là LÁ SỐ CON (`b`, prefix rỗng), không
+// phải cha/mẹ. Gọi ở CẢ đường xem trước lẫn đường đầy đủ — phần phụ, không
+// đợi paywall. `b` ở dạng {day,month,year,hourBranch,gender} từ `_birthOf()`,
+// khác shape `{ngay,thang,nam,gioIdx,gioitinh}` mà module đòi — quy đổi tay.
+function _mountCnsDayCon(b) {
+  if (!window.CungNgaySinh || !b) return;
+  CungNgaySinh.mount('cnsHost', {
+    ngay: b.day, thang: b.month, nam: b.year,
+    gioIdx: b.hourBranch, gioitinh: b.gender,
+  });
 }
 
 /** Query cho `action=cache-status` — đúng tên tham số route đọc. */
@@ -551,6 +568,7 @@ async function _runAnonPreview(b, self, lo) {
     document.getElementById('btnEdit').style.display = '';
     if (window.SHELL_INTRO) Shell.dismissIntro(window.SHELL_INTRO.key);
     _renderLockWall(lo);
+    _mountCnsDayCon(b);
   } catch (e) {
     _closePanel();
     showError('Lỗi: ' + (e.message || 'Không thể kết nối. Vui lòng thử lại.'));
@@ -638,6 +656,7 @@ async function _doGenerate(freeRerun, lo) {
     document.getElementById('btnEdit').style.display = '';
     if (window.SHELL_INTRO) Shell.dismissIntro(window.SHELL_INTRO.key);
     _loadHistory();
+    _mountCnsDayCon(_last);
 
     // B1 — khoảnh khắc VỪA ĐỌC XONG mà số dư đã hụt: vừa thích vừa tiếc, đúng
     // chỗ lời mời có sức nhất. Widget tự ẩn nếu còn đủ Lượng cho một lượt nữa

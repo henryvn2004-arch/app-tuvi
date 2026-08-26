@@ -125,6 +125,9 @@
         <div class="vh-unlock" id="vhUnlock" style="display:none"></div>
         <div class="vh-progress" id="vhProgress" style="display:none"></div>
         <div class="vh-body" id="vhBody"></div>
+        <!-- "Ai Sinh Cùng Ngày Với Bạn" — miễn phí, 0 token LLM. Hỏng mạng/API
+             thì tự ẩn, không làm hỏng khung vận hạn phía trên. -->
+        <div id="cnsHost"></div>
       </div>
     </div>
   </main>
@@ -141,6 +144,7 @@ window.SHELL_INTRO={key:'van-han-nam',title:'Vận Hạn 12 Tháng Tới',desc:'
 <script src="/tuvi-laso-format.js?v=2"></script>
 <script src="/tools-shared/vn-timezone.js?v=1"></script>
 <script src="/tuvi-form.js?v=2"></script>
+<script src="/tools-shared/cung-ngay-sinh.js?v=1"></script>
 <script src="/auth.js?v=2"></script>
 <script src="/tuvi-paywall.js?v=21"></script>
 <script src="/nav.js?v=24" data-icons-only></script>
@@ -225,6 +229,8 @@ async function doXem(){
     document.getElementById('btnLuanGiai').style.display='';
     if(window.AiLoadingSteps)AiLoadingSteps.scrollToResult('vhPanel');
     Shell.rememberBirth(fdIn);
+    // Mục "Ai Sinh Cùng Ngày Với Bạn" — phần phụ, đặt SAU khi khung đã dựng.
+    if(window.CungNgaySinh)CungNgaySinh.mount('cnsHost',{ngay:dd,thang:mm,nam:yyyy,gioIdx:gioAmIdx,gioitinh:gioitinh});
     if(window.SHELL_INTRO)Shell.dismissIntro(window.SHELL_INTRO.key);
     Shell.setContext({
       birth:{day:dd,month:mm,year:yyyy,hourBranch:gioAmIdx,gender:gioitinh,name:name||undefined},
