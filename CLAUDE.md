@@ -71,6 +71,10 @@ grep mò — repo có file 400 KB+ (`public/tuvi-ansao-engine.js`, `public/admin
   hàm này để chia CHUNG một breakpoint Anthropic; tự ghép chuỗi tay ở nơi khác
   là cache miss ngay lượt đầu.
 - **`lib/agent/usage.ts`** — bảng giá model → `cost_vnd`.
+- **`lib/llm/json.ts` `parseLlmJson()`** — NGUỒN DUY NHẤT để bóc JSON từ output
+  LLM. `JSON.parse` trần đã hỏng cả lượt (15–35%/tháng, xem `nhat-ky/2026-08.md`
+  mục "topic-topup") mỗi khi model chèn câu dẫn/ghi chú/fence quanh JSON. Mọi
+  chỗ gọi LLM với `json:true` phải qua đây, không tự viết `JSON.parse(raw)`.
 
 ### Kênh & hợp đồng
 - **`lib/channels/core.ts`** `runConversation` + `ChannelIO` + `SessionStore` —
