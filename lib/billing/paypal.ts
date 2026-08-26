@@ -50,6 +50,43 @@ export async function getPayPalToken(): Promise<string> {
   return (await res.json()).access_token;
 }
 
+// ── Dịch mã lỗi PayPal sang câu người dùng LÀM ĐƯỢC gì đó ─────
+//
+// VÌ SAO CẦN: mã `issue` của PayPal đủ để lập trình viên chẩn đoán, nhưng đưa
+// nguyên `INSTRUMENT_DECLINED` cho khách thì cũng vô dụng ngang câu chung chung
+// cũ. Đã trả giá thật: một lượt nạp hỏng vì thẻ không đủ số dư, mà chính chủ
+// site — người biết rõ hệ thống — phải đi dò số dư thẻ mới hiểu. Khách thì
+// không dò gì cả, họ chỉ bỏ đi.
+//
+// Nguyên tắc mỗi câu dưới đây: nói HỎNG Ở ĐÂU và LÀM GÌ TIẾP, bằng tiếng Việt,
+// không có mã lỗi. Mã lỗi vẫn đi vào `console.error` cho mình đọc.
+const PAYPAL_ISSUE_MESSAGES: Record<string, string> = {
+  INSTRUMENT_DECLINED:
+    'Thẻ của bạn bị từ chối. Thường gặp nhất là thẻ không đủ số dư, hoặc ngân hàng chặn thanh toán quốc tế. Bạn thử lại bằng thẻ khác, hoặc trả bằng số dư trong tài khoản PayPal.',
+  PAYER_CANNOT_PAY:
+    'Nguồn tiền này không dùng để thanh toán được. Bạn thử lại bằng thẻ khác hoặc bằng số dư trong tài khoản PayPal.',
+  PAYER_ACTION_REQUIRED:
+    'Ngân hàng cần bạn xác nhận thêm một bước cho giao dịch này. Bạn quay lại PayPal hoàn tất bước xác thực rồi thử lại.',
+  TRANSACTION_REFUSED:
+    'PayPal từ chối giao dịch này. Bạn thử lại bằng nguồn tiền khác; nếu vẫn không được, liên hệ PayPal để biết lý do cụ thể.',
+  // Nhóm dưới là hỏng ở PHÍA MÌNH — khách có làm gì cũng không xong, nên đừng
+  // bảo họ thử lại, mà nhận lỗi và chỉ họ sang kênh khác.
+  PAYEE_ACCOUNT_RESTRICTED:
+    'Cổng thanh toán của chúng tôi đang gặp sự cố, không phải lỗi từ phía bạn. Bạn dùng cách chuyển khoản ngân hàng, hoặc liên hệ hỗ trợ để được xử lý.',
+  PAYEE_ACCOUNT_INVALID:
+    'Cổng thanh toán của chúng tôi đang gặp sự cố, không phải lỗi từ phía bạn. Bạn dùng cách chuyển khoản ngân hàng, hoặc liên hệ hỗ trợ để được xử lý.',
+  CURRENCY_NOT_SUPPORTED:
+    'Cổng thanh toán của chúng tôi đang gặp sự cố, không phải lỗi từ phía bạn. Bạn dùng cách chuyển khoản ngân hàng, hoặc liên hệ hỗ trợ để được xử lý.',
+};
+
+/** Câu cho khách đọc. Không kèm mã lỗi — mã đã nằm trong log của server. */
+export function humanIssueMessage(issue: string): string {
+  return (
+    PAYPAL_ISSUE_MESSAGES[issue] ||
+    'Thanh toán chưa hoàn tất. Bạn thử lại bằng nguồn tiền khác, hoặc dùng cách chuyển khoản ngân hàng. Nếu vẫn không được, liên hệ hỗ trợ giúp chúng tôi.'
+  );
+}
+
 // ── Chốt một đơn topup ────────────────────────────────────────
 export type SettleOutcome =
   | { ok: true; credits: number; balance: number; credited: boolean }
@@ -134,15 +171,10 @@ export async function settlePayPalTopup(
         // về mỗi `message` là tự bịt mắt đúng lúc cần nhìn nhất — đã trả giá
         // bằng một lượt nạp tiền thật hỏng mà không ai đọc ra được vì sao.
         console.error('[paypal] capture bị từ chối', orderId, 'HTTP', capRes.status, JSON.stringify(e));
-        const detail = e?.details?.[0]?.description || '';
-        const debugId = e?.debug_id ? ` [debug_id ${e.debug_id}]` : '';
-        return {
-          ok: false,
-          status: 502,
-          error: issue
-            ? `PayPal từ chối: ${issue}${detail ? ` — ${detail}` : ''}${debugId}`
-            : `${e?.message || 'Capture failed'}${debugId}`,
-        };
+        // Khách đọc câu tiếng Việt nói rõ làm gì tiếp; mã `issue` và `debug_id`
+        // ở lại trong log cho mình. Đưa mã lỗi ra màn hình chỉ đổi một câu khó
+        // hiểu bằng một câu khó hiểu khác.
+        return { ok: false, status: 502, error: humanIssueMessage(issue) };
       }
       const reread = await fetch(`${PAYPAL_BASE}/v2/checkout/orders/${encodeURIComponent(orderId)}`, {
         headers: { 'Authorization': `Bearer ${ppToken}` },
