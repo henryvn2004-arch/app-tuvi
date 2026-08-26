@@ -280,8 +280,18 @@ async function handleTopup(body: Record<string, unknown>): Promise<Response> {
       }),
     });
     if (!orderRes.ok) {
-      const e = await orderRes.json();
-      throw new Error(e.details?.[0]?.description || e.message || 'PayPal order failed');
+      // Cùng lý do như ở bước capture (lib/billing/paypal.ts): `message` của
+      // PayPal là câu chung chung, lý do thật ở `details[0].issue` + `debug_id`.
+      const e = await orderRes.json().catch(() => ({} as Record<string, any>));
+      console.error('[paypal] tạo đơn thất bại', 'HTTP', orderRes.status, JSON.stringify(e));
+      const issue = e.details?.[0]?.issue || '';
+      const detail = e.details?.[0]?.description || '';
+      const debugId = e.debug_id ? ` [debug_id ${e.debug_id}]` : '';
+      throw new Error(
+        issue
+          ? `PayPal từ chối: ${issue}${detail ? ` — ${detail}` : ''}${debugId}`
+          : `${detail || e.message || 'PayPal order failed'}${debugId}`
+      );
     }
     const order = await orderRes.json();
     const approvalUrl = order.links?.find((l: { rel: string }) => l.rel === 'approve')?.href;
