@@ -177,7 +177,7 @@ body{font-family:Arial,sans-serif;background:var(--bg);color:var(--text);min-hei
 <script src="/auth.js"></script>
 </head>
 <body>
-<script src="/nav.js?v=23"></script>
+<script src="/nav.js?v=24"></script>
 
 <div class="hero">
   <div class="hero-eyebrow">Tra Cứu</div>
