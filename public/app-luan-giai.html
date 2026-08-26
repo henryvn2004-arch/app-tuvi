@@ -158,6 +158,10 @@
         <div class="lg-unlock" id="lgUnlock" style="display:none"></div>
         <div class="lg-progress" id="lgProgress" style="display:none"></div>
         <div class="lg-body" id="lgBody"></div>
+        <!-- "Ai Sinh Cùng Ngày Với Bạn" — miễn phí, 0 token LLM. Rỗng cho tới
+             khi có kết quả; hỏng mạng/API thì tự ẩn, không làm hỏng bản luận
+             giải phía trên. -->
+        <div id="cnsHost"></div>
       </div>
     </div>
   </main>
@@ -174,6 +178,7 @@ window.SHELL_INTRO={key:'luan-giai',title:'Luận giải Tử Vi',desc:'Đọc t
 <script src="/tuvi-laso-format.js?v=2"></script>
 <script src="/tools-shared/vn-timezone.js?v=1"></script>
 <script src="/tuvi-form.js?v=2"></script>
+<script src="/tools-shared/cung-ngay-sinh.js?v=1"></script>
 <script src="/auth.js?v=2"></script>
 <script src="/tuvi-paywall.js?v=21"></script>
   <script src="/nav.js?v=24" data-icons-only></script>
@@ -237,6 +242,12 @@ function doLuan(){
       text:_shareLines.join('\n')
     });
     initLuanGiaiGate(ls);
+    // Mục "Ai Sinh Cùng Ngày Với Bạn". Đặt SAU khi bản luận đã dựng xong: nó
+    // là phần phụ, không được chặn hay làm chậm thứ người dùng vừa trả tiền.
+    // `fdIn.gioIdx` đã là canh giờ ĐÃ QUY VỀ GIỜ VN (TuviForm.getData làm việc
+    // đó qua tools-shared/vn-timezone.js) — cùng hệ quy chiếu với dữ liệu
+    // người nổi tiếng, nếu không thì phép so "trùng giờ sinh" vô nghĩa.
+    if(window.CungNgaySinh)CungNgaySinh.mount('cnsHost',{ngay:dd,thang:mm,nam:yyyy,gioIdx:gioAmIdx,gioitinh:gioitinh});
   }catch(e){
     document.getElementById('lgBody').innerHTML='<div class="laso-error">Lỗi khi luận giải: '+esc(e.message)+'</div>';
     document.getElementById('birthPanel').style.display='none';
