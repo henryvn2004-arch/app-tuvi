@@ -27,6 +27,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { CORS_HEADERS, options } from '@/lib/cors';
 import { lunarOf } from '@/lib/engine/laso';
+import { celebPhoto } from '@/lib/celeb/photo';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -59,6 +60,7 @@ interface Row {
   birth_date: string; birth_time: string | null; birth_tz_off: number | null;
   rodden: string | null; gio_idx: number | null; gender: string | null;
   fame_score: number;
+  image_url: string | null; image_credit: string | null; image_license: string | null;
 }
 
 const CHI = ['Tý', 'Sửu', 'Dần', 'Mão', 'Thìn', 'Tỵ', 'Ngọ', 'Mùi', 'Thân', 'Dậu', 'Tuất', 'Hợi'];
@@ -68,7 +70,7 @@ async function fetchTier(col: string, key: string, limit: number, needPhoto: boo
     `${SUPABASE_URL}/rest/v1/celeb_births` +
     `?${col}=eq.${encodeURIComponent(key)}&blocked=is.false` +
     (needPhoto ? '&image_file=not.is.null' : '') +
-    `&select=qid,name,occupation,country,region,wiki_url,image_file,birth_date,birth_time,birth_tz_off,rodden,gio_idx,gender,fame_score` +
+    `&select=qid,name,occupation,country,region,wiki_url,image_file,image_url,image_credit,image_license,birth_date,birth_time,birth_tz_off,rodden,gio_idx,gender,fame_score` +
     `&order=fame_score.desc&limit=${limit}`;
   // 🔴 `cache:'no-store'` BẮT BUỘC: Next bọc fetch toàn cục và nhớ kết quả kể
   // cả khi dynamic='force-dynamic'. Repo đã cắn 3 lần vì thiếu dòng này.
@@ -157,35 +159,45 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ ok: true, items: [] }, { headers: CORS_HEADERS });
   }
 
-  const items = pick(pool).map(({ row, tier }) => ({
-    ten: row.name,
-    nghe: row.occupation,
-    quocGia: row.country,
-    tang: tier,
-    nhan: TIER_LABEL[tier],
-    ghiChu: TIER_NOTE[tier],
-    ngaySinh: row.birth_date,
-    gioSinh: row.birth_time,
-    muiGio: row.birth_tz_off,
-    canhGio: row.gio_idx == null ? null : CHI[row.gio_idx],
-    doTinCayGio: row.rodden,
-    gioiTinh: row.gender,
-    // Ảnh Commons. `P18` của Wikidata LUÔN trỏ Commons, mà Commons chỉ nhận
-    // ảnh license tự do ⇒ khỏi xét license từng cái.
-    // Dùng `Special:FilePath?width=` — nó tự chuyển hướng sang bản thumb đúng
-    // kích thước. KHÔNG tự dựng URL `upload.wikimedia.org/.../thumb/...`: dạng
-    // đó cần băm MD5 của tên file, dựng tay là sai lặng lẽ (ảnh vỡ, không lỗi).
-    // KHÔNG copy ảnh về Supabase Storage: ~350k ảnh × 40KB ≈ 4GB.
-    anh: row.image_file
-      ? `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(row.image_file.replace(/ /g, '_'))}?width=240`
-      : null,
-    // Trang mô tả file — nơi có tác giả + license. Link tới đây là cách ghi
-    // công chuẩn và đủ cho CC BY-SA, khỏi phải kéo tên tác giả về cho 350k ảnh.
-    anhTrang: row.image_file
-      ? `https://commons.wikimedia.org/wiki/File:${encodeURIComponent(row.image_file.replace(/ /g, '_'))}`
-      : null,
-    lienKet: row.wiki_url,
-  }));
+  const { anhCho, commonsFilePage } = celebPhoto();
+
+  const items = pick(pool).map(({ row, tier }) => {
+    const anh = anhCho(row);
+    return {
+      ten: row.name,
+      nghe: row.occupation,
+      quocGia: row.country,
+      tang: tier,
+      nhan: TIER_LABEL[tier],
+      ghiChu: TIER_NOTE[tier],
+      ngaySinh: row.birth_date,
+      gioSinh: row.birth_time,
+      muiGio: row.birth_tz_off,
+      canhGio: row.gio_idx == null ? null : CHI[row.gio_idx],
+      doTinCayGio: row.rodden,
+      gioiTinh: row.gender,
+      // Ảnh: bản đã kéo về Supabase Storage TRƯỚC, chưa có thì rơi về Commons.
+      // Chuỗi rơi nằm trong `tools-shared/celeb-photo.js` — CÙNG file mà
+      // `scripts/sync-celeb-photos.mjs` chạy. Ghép URL riêng ở đây là hai bản
+      // trôi khỏi nhau, mà triệu chứng của "trôi" giống hệt "chưa đồng bộ".
+      //
+      // 🔢 Chú thích cũ ở đây viết "~350k ảnh × 40KB ≈ 4GB" để biện minh cho
+      // việc KHÔNG kéo ảnh về. Sai hai lần: 351.294 × 40KB là 14 GB, và mẫu số
+      // cũng sai — tập ảnh có thể BAO GIỜ lên hình bị chặn trên bởi số khoá T1
+      // (21.379) × ứng viên mỗi khoá, tức ~2 GB. Xem `WARM_PER_KEY`.
+      anh: anh.url,
+      // Nguồn ảnh, để ĐO được "đã kéo về bao nhiêu %". Không có trường này thì
+      // câu đó không trả lời được mà mọi thứ vẫn trông như đang chạy tốt.
+      anhNguon: anh.nguon,
+      // Ghi công. Hotlink thì mình chỉ DẪN tới tác phẩm; kéo về là mình PHÂN
+      // PHỐI nó, nên CC BY-SA đòi ghi tác giả + license ngay trên trang.
+      // Chưa đồng bộ ⇒ chưa có credit ⇒ UI lùi về link trang mô tả file.
+      anhTacGia: row.image_credit,
+      anhLicense: row.image_license,
+      anhTrang: commonsFilePage(row.image_file),
+      lienKet: row.wiki_url,
+    };
+  });
 
   return NextResponse.json(
     { ok: true, khoa: { t1, t2b, t2, t0 }, amLich: lunar, items },
