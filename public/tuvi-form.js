@@ -27,30 +27,19 @@ window.TuviForm = (() => {
   function pid(id, prefix) { return prefix ? `${prefix}-${id}` : id; }
   function gel(id, prefix) { return document.getElementById(pid(id, prefix)); }
 
-  function hourMinToGioIdx(h, m) {
-    return Math.floor(((h * 60 + m + 60) % (24 * 60)) / 120) % 12;
+  // ── Múi giờ: NGUỒN DUY NHẤT là tools-shared/vn-timezone.js ──
+  // Ba hàm này trước nằm ngay đây, trong closure, KHÔNG export ra
+  // `window.TuviForm` — nên `scripts/import-celeb-births.mjs` (nhập ngày giờ
+  // sinh người nổi tiếng) không gọi được, mà chép sang thì hai bản trôi khỏi
+  // nhau IM LẶNG: canh giờ vẫn ra một con số trông hợp lệ, chỉ là sai hệ quy
+  // chiếu. Người dùng và người nổi tiếng BẮT BUỘC đi qua cùng một phép quy đổi
+  // thì phép so "trùng giờ sinh" mới có nghĩa. `npm run check:vntz` canh.
+  // Thẻ <script src="/tools-shared/vn-timezone.js"> phải đứng TRƯỚC file này.
+  if (!window.VnTimezone) {
+    // Thà đỏ to tiếng còn hơn âm thầm tính sai canh giờ cho mọi lá số.
+    throw new Error('tuvi-form.js: thiếu /tools-shared/vn-timezone.js — nạp nó TRƯỚC file này.');
   }
-
-  function getVnUtcOffset(ngay, thang, nam) {
-    if (!nam) return 420;
-    const d = new Date(nam, thang - 1, ngay || 1);
-    const t = d.getTime();
-    const D = (y, m, d) => new Date(y, m - 1, d).getTime();
-    if (t >= D(1942,1,1)  && t < D(1944,3,9))   return 480;
-    if (t >= D(1944,3,9)  && t < D(1945,9,2))   return 540;
-    if (t >= D(1945,9,2)  && t < D(1946,12,19)) return 420;
-    if (t >= D(1946,12,19)&& t < D(1955,7,1))   return 480;
-    if (t >= D(1955,7,1)  && t < D(1960,1,1))   return 420;
-    if (t >= D(1960,1,1)  && t < D(1975,5,1))   return 480;
-    return 420;
-  }
-
-  function toVnHour(hh, mm, utcOffset, ngay, thang, nam) {
-    const vnOffset = getVnUtcOffset(ngay, thang, nam);
-    let totalMin = hh * 60 + mm + (vnOffset - utcOffset);
-    totalMin = ((totalMin % 1440) + 1440) % 1440;
-    return { h: Math.floor(totalMin / 60), m: totalMin % 60 };
-  }
+  const { toVnHour, hourMinToGioIdx } = window.VnTimezone;
 
   function updateGioAmDisplay(prefix = '') {
     const hh     = parseInt(gel('tvf-gio', prefix)?.value) || 0;

@@ -48,6 +48,7 @@
     "check:batrach": "node scripts/check-bat-trach.mjs",
     "check:sodep": "node scripts/check-so-dep.mjs",
     "check:lunar": "node scripts/check-lunar-range.mjs",
+    "check:vntz": "node scripts/check-vn-timezone.mjs",
     "check:tooltip": "node scripts/check-tooltip.mjs"
   },
   "dependencies": {

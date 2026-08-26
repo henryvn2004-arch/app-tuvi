@@ -94,6 +94,35 @@ function loadEngine() {
   return engineCache!;
 }
 
+/**
+ * Ngày dương → (can chi năm · tháng ÂL · ngày ÂL). `null` khi NGOÀI TẦM bảng
+ * âm lịch (1900-01-31 → 2100-12-31).
+ *
+ * Dùng cho feature "Ai Sinh Cùng Ngày Với Bạn": khoá gom lá số là ÂM LỊCH chứ
+ * không phải ngày dương — an sao chỉ phụ thuộc (can chi năm · tháng ÂL · ngày
+ * ÂL · giờ · giới), SỐ năm âm không vào an sao, nên lá số lặp đúng chu kỳ 60
+ * năm (đo: Giáp Thân 1884/1944/2004 khác nhau 0/48).
+ *
+ * ⚠️ KHÔNG tái dùng `lasoKey()` của `lib/portraits/cache.ts` cho việc này —
+ * nó băm ngày DƯƠNG nên không gom được chu kỳ 60 năm.
+ */
+export function lunarOf(
+  day: number,
+  month: number,
+  year: number
+): { canNam: string; chiNam: string; ngayAL: number; thangAL: number } | null {
+  const { convertDuongToAm } = loadEngine();
+  const conv = convertDuongToAm(day, month, year, 9) as Rec | null;
+  const al = conv?.amLich as Rec | undefined;
+  if (!al) return null; // ngoài tầm bảng — engine trả null từ PR #622
+  return {
+    canNam: conv!.canNam as string,
+    chiNam: conv!.chiNam as string,
+    ngayAL: al.day as number,
+    thangAL: al.month as number,
+  };
+}
+
 export type Laso = Rec;
 
 export interface ComputeLasoResult {
