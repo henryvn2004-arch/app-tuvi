@@ -69,3 +69,6 @@ remotion/public/stock/
 # là `lib/video/stock-video-manifest.json`; dựng lại bằng
 # `node scripts/stock-video.mjs --bucket tone`.
 remotion/public/stock-video/
+
+# Kết quả đo Bước 0 của scripts/measure-celeb-density.mjs — số đo, không phải mã
+celeb-density.json
