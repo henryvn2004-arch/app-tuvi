@@ -158,3 +158,4 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 | 132 | 2026-08 | `2026-08.md` | 🗞️ Hàng đợi đề tài cạn — `topic-topup` vẫn dùng `JSON.parse` trần trong khi repo đã có bản chắc hơn |
 | 133 | 2026-08 | `2026-08.md` | 📡 Tracker "đang online" trên shell — SỐ THẬT qua RPC `pulse_stats()`, không mô phỏng |
 | 134 | 2026-08 | `2026-08.md` | 🎭 Tracker "đang online" — đảo ngược sang MÔ PHỎNG theo Henry, sau khi số thật ra 0/0 |
+| 135 | 2026-08 | `2026-08.md` | 💳 Chuyển PayPal sang account công ty — rà đường tiền lộ 4 lỗi, `ignore-duplicates` chưa từng có tác dụng |
