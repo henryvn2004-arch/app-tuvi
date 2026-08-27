@@ -142,6 +142,13 @@
             <div class="cs-canvas-wrap"><canvas id="csToaDo"></canvas></div>
             <div class="err" id="taiErr"></div>
             <div id="ketQua"></div>
+            <!-- Khối hook (1 fact) — CHỈ dựng cho khách CHƯA đăng ký (xem
+                 `mountHookAnon`), đứng giữa HEAD và tấm khoá đăng ký. Không
+                 vẽ lại radar 12 mặt ở đây: nhãn 12 mặt "nhỏ li ti" trong một
+                 khung hẹp là bẫy đã ghi sẵn ở cong-so.js (lý do ảnh chia sẻ
+                 dùng biểu đồ toạ độ thay vì radar) — hook chỉ hé MỘT mặt
+                 mạnh nhất, không dựng lại cả bảng đang khoá. -->
+            <div id="hookHost"></div>
             <!-- Tầng NHÁNH: `nhanhHost` giữ phần đã mở, `lockHost` giữ tường.
                  Hai ô riêng vì tường phải biến mất mà phần miễn phí ở trên vẫn
                  nguyên — đúng khuôn W1. -->
@@ -171,6 +178,7 @@ window.SHELL_INTRO={key:'cong-so',title:'Tử Vi Công Sở',desc:'Đọc kiểu
 <script src="/tuvi-form.js?v=2"></script>
 <script src="/tools-shared/cung-ngay-sinh.js?v=1"></script>
 <script src="/tuvi-paywall.js?v=21"></script>
+<script src="/tools-shared/hook-layer.js?v=1"></script>
 <script src="/poster.js?v=4"></script>
 <script src="/auth.js?v=2"></script>
   <script src="/nav.js?v=24" data-icons-only></script>
@@ -290,6 +298,8 @@ var HO_SO_KHOA_ANON=[
 // che LUÔN cả phần thân vốn free — chỉ HEAD là còn hiện ngoài tường.
 function dungTuong(){
   document.getElementById('nhanhHost').innerHTML='';
+  var hookHost=document.getElementById('hookHost');
+  if(hookHost)hookHost.innerHTML='';
   // ⚠️ slug PHẢI bắt đầu bằng ĐÚNG tool_id `cong-so`, được dài hơn, cấm ngắn
   // hơn — `hasRecentToolPayment` lọc `slug=like.cong-so*`. Slug ngắn hơn thì
   // lưới đỡ "đã trả tiền mà vẫn ăn 402" chết im lặng (bài học Duyên Nợ).
@@ -297,6 +307,8 @@ function dungTuong(){
   const host=document.getElementById('lockHost');
   const loggedIn=window.Auth&&Auth.isLoggedIn&&Auth.isLoggedIn();
   if(loggedIn){
+    // Đã đăng nhập đã thấy TRỌN radar 12 mặt (bangHTML) — không hook lại nữa,
+    // hook chỉ có việc ở màn ĐĂNG KÝ (mountHookAnon dưới).
     host.innerHTML='<button class="btn-go" id="btnNhanh">Mở phần nhánh nghề — <span data-tvp-price="cong-so">…</span> Lượng →</button>';
     TuviPaywall.fillPriceSlots(host);
     document.getElementById('btnNhanh').addEventListener('click',function(){
@@ -304,6 +316,7 @@ function dungTuong(){
     });
     return;
   }
+  mountHookAnon();
   TuviPaywall.lockPreview({
     host:host,
     title:'⊙ Hồ sơ đầy đủ chưa mở',
@@ -311,6 +324,29 @@ function dungTuong(){
     cta:'Đăng ký để mở hồ sơ đầy đủ',
     slug:function(){return _slug;},
     onUnlock:moNhanh
+  });
+}
+
+// Hé đúng MỘT trong 12 mặt (mặt mạnh nhất) — không dựng lại cả radar (nhãn
+// nhỏ li ti trong khung hẹp, xem chú thích tại #hookHost) và không lộ "lý do"
+// (cung/sao/ý nghĩa của Mười Hai Mặt và Cơ Sở đều nằm trong `bodyHTML`, đúng
+// phần đang khoá — chỉ điểm số của MỘT mặt là tương đương "một câu ví dụ",
+// không phải "toàn bộ bảng"). `_ho.radar` đã tính xong ở client cho MỌI
+// người dùng (kể cả chưa đăng ký) — không cần gọi thêm gì.
+function mountHookAnon(){
+  var host=document.getElementById('hookHost');
+  if(!host||!window.HookLayer||!_ho||!_ho.radar||!_ho.radar.length)return;
+  var top=_ho.radar.slice().sort(function(a,b){return b.diem-a.diem;})[0];
+  window.HookLayer.mount(host,{
+    tool:'cong-so',
+    charts:[],
+    facts:[{
+      tone:'good',
+      title:'Mặt mạnh nhất trong 12 mặt: '+top.nhan,
+      value:top.diem,
+      body:'Trên thang 10 điểm — 11 mặt còn lại, lý do từng mặt, và bảng đầy đủ nằm trong hồ sơ đăng ký được xem miễn phí.',
+      source:'engine · ho.radar'
+    }]
   });
 }
 

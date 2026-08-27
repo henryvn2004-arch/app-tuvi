@@ -543,6 +543,11 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
       '</div>';
     host.appendChild(_lockEl);
 
+    // Đo lượt tường HIỆN — bậc trước cả "bấm mở" của phễu. Thiếu dòng này thì
+    // không tính được tỉ lệ tường-hiện → bấm-mở (0 chỗ nào bắn preview_shown
+    // trước khi có dòng này, dù type đã nằm sẵn trong allowlist api/track).
+    try { if (window.Track) window.Track.event('preview_shown', { tool_id: product, meta: { from: 'wall' } }); } catch (e) { /* đo hỏng không được chặn hiện tường */ }
+
     // Nút dùng listener chứ không phải chuỗi onclick: nó phải giữ được closure
     // `onUnlock` của trang. Đường trả tiền vẫn là `requireCredits` như cũ —
     // W1 KHÔNG mở thêm đường nào để lấy phần chữ.
@@ -592,6 +597,30 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
     '</div>';
   }
 
+  // Đo lượt khoá-mini THỰC SỰ HIỆN RA cho người dùng — khác `unlock_click`
+  // (bấm). CSS mặc định `.tpw-seclock{display:none}`, trang tự bật bằng
+  // `el.style.display='flex'` khi biết chắc phần đó chưa mở (`_paintSecLocks`
+  // ở luan-giai, tương tự ở các trang khác) — nên "đã dựng trong DOM" KHÔNG
+  // chứng minh "đã hiện"; phải đọc computed style. `MutationObserver` bắt cả
+  // lượt bật SAU (đổi ngày sinh → renderLuan tính lại, `innerHTML` thay mới)
+  // mà không cần trang nào gọi tay. Đếm 1 lần/phần tử qua `seen` — sửa ngày
+  // sinh dựng lại DOM thì các phần tử CŨ (đã tính) tự rụng khỏi WeakSet, phần
+  // tử MỚI được quét lại từ đầu, đúng ý "hiện lại thì tính lại lượt hiện".
+  function _watchSecShown(root) {
+    const seen = new WeakSet();
+    const scan = () => {
+      root.querySelectorAll('[data-tpw-seclock]').forEach((el) => {
+        if (seen.has(el) || getComputedStyle(el).display === 'none') return;
+        seen.add(el);
+        try {
+          if (window.Track) window.Track.event('preview_shown', { tool_id: (_cfg && _cfg.product) || '', meta: { from: 'section' } });
+        } catch (e) { /* đo hỏng không được chặn hiện tường */ }
+      });
+    };
+    scan();
+    new MutationObserver(scan).observe(root, { attributes: true, attributeFilter: ['style', 'class'], childList: true, subtree: true });
+  }
+
   // Gắn ĐÚNG MỘT listener uỷ quyền cho mọi `[data-tpw-seclock]` trong `root`,
   // kể cả phần chèn thêm SAU (ví dụ lúc mở khoá và render nốt các phần còn
   // lại) — không phải tìm-và-gắn-tay từng khối mỗi lần `innerHTML` đổi.
@@ -600,6 +629,7 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
   function wireSectionLocks(root, onUnlock) {
     if (!root || root._tpwSecWired) return;
     root._tpwSecWired = true;
+    _watchSecShown(root);
     const trigger = (e) => {
       const box = e.target.closest('[data-tpw-seclock]');
       if (!box || !root.contains(box)) return;

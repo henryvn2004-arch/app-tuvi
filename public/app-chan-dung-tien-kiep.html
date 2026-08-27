@@ -124,6 +124,12 @@
           </div>
         </div>
 
+        <!-- Khối hook (chart + fact) — CHỈ vẽ ở lượt tính thử khách chưa đăng
+             nhập (xem mountHook), đứng giữa hero và tấm khoá. Không mang gate
+             riêng (spec.gate bỏ trống) — CTA thật vẫn là
+             `_renderLockWall()`/`TuviPaywall.lockPreview` ngay dưới. -->
+        <div id="hookHost"></div>
+
         <!-- Khách chưa đăng nhập: khoá LUÔN cả phần "miễn phí" phía dưới (5
              hồi + cơ sở lá số) — chỉ hero (danh xưng/tên/nền văn minh) là
              phần đầu được xem. -->
@@ -174,6 +180,9 @@ window.SHELL_INTRO={key:'chan-dung-tien-kiep',title:'Chân Dung Tiền Kiếp',d
 <script src="/tools-shared/vn-timezone.js?v=1"></script>
 <script src="/tuvi-form.js?v=2"></script>
 <script src="/tuvi-paywall.js?v=21"></script>
+<script src="/tools-shared/hook-charts.js?v=1"></script>
+<script src="/tools-shared/hook-facts.js?v=1"></script>
+<script src="/tools-shared/hook-layer.js?v=1"></script>
 <script src="/auth.js?v=2"></script>
   <script src="/nav.js?v=24" data-icons-only></script>
 <script src="/shell.js?v=85"></script>
@@ -291,6 +300,7 @@ async function _runAnonPreview() {
     if (!res.ok || !data.success) throw new Error(data.error || 'Lỗi ' + res.status);
     renderMetaHead(data);
     renderMetaRest(data);
+    mountHook(data);
     document.getElementById('card').style.display = 'block';
     document.getElementById('btnEdit').style.display = '';
     if (window.SHELL_INTRO) Shell.dismissIntro(window.SHELL_INTRO.key);
@@ -299,6 +309,32 @@ async function _runAnonPreview() {
     _closePanel();
     showError('Lỗi: ' + (e.message || 'Không thể kết nối. Vui lòng thử lại.'));
   }
+}
+
+// Khối hook (chart Lục Giác + fact "cách cục hiếm") — CHỈ dùng dữ liệu ĐÃ
+// MIỄN PHÍ của chính lượt tính thử này (cungScoresMenh + menh.cachCuc, cùng
+// một `data.menh` mà "Cơ Sở Trong Lá Số" đã hiện), KHÔNG bịa thêm số nào.
+// Không dùng đại vận/tuổi (route.ts cố ý không trả tuổi từng hồi — nhóm hồi
+// cố định trên 9 đại vận cho ra CÙNG một dải tuổi ở mọi lá số, hồi cuối luôn
+// 82–95, xem chú thích `computeLifeArc`) — hook ở đây không được tự ý bày lại
+// đúng thứ route.ts đã cố tình giấu.
+function mountHook(data) {
+  var host = document.getElementById('hookHost');
+  if (!host || !window.HookLayer || !window.HookFacts) return;
+  var HF = window.HookFacts.tuvi;
+  window.HookLayer.loadCensus().then(function (census) {
+    var pseudoLs = {
+      cungScores: { 'Mệnh': data.cungScoresMenh },
+      cachCuc: (data.menh && data.menh.cachCuc) || [],
+    };
+    var hexDims = data.cungScoresMenh ? HF.hexDimsForCung(pseudoLs, 'Mệnh') : null;
+    var hiem = HF.cachCucHiem(pseudoLs, census);
+    window.HookLayer.mount(host, {
+      tool: 'chan-dung-tien-kiep',
+      charts: [hexDims ? { type: 'hexRadar', data: { dims: hexDims }, title: 'Lục Giác cung Mệnh' } : null].filter(Boolean),
+      facts: [hiem].filter(Boolean),
+    });
+  });
 }
 
 function _renderLockWall() {

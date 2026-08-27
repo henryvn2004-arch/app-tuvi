@@ -141,6 +141,11 @@
             </div>
           </div>
 
+          <!-- Khối hook (1 fact) — CHỈ dựng ở lượt xem trước khách chưa đăng
+               nhập (xem `mountHook`). Không dựng lại "Chất Người..." (khối đó
+               đã LÀM MỜ ngay bên dưới) — hé đúng MỘT chất nổi nhất. -->
+          <div id="hookHost"></div>
+
           <!-- MIỄN PHÍ: thiên hướng đứng đầu + dấu hiệu để cha mẹ đối chiếu -->
           <div class="res-block" id="huongDauBlock" style="display:none">
             <div class="res-block-header"><span class="res-block-title">Thiên Hướng Nổi Nhất</span></div>
@@ -263,6 +268,7 @@ window.SHELL_INTRO={key:'huong-nghiep-tre',title:'Hướng Nghiệp Sớm Cho Co
 <script src="/tuvi-form.js?v=2"></script>
 <script src="/tools-shared/cung-ngay-sinh.js?v=1"></script>
 <script src="/tuvi-paywall.js?v=21"></script>
+<script src="/tools-shared/hook-layer.js?v=1"></script>
 <script src="/auth.js?v=2"></script>
   <script src="/nav.js?v=24" data-icons-only></script>
 <script src="/shell.js?v=85"></script>
@@ -408,6 +414,7 @@ async function analyze() {
     renderMetaHead(prev);
     renderMetaRest(prev);
     _hnLockRestBlocks(true);
+    mountHook(prev);
     if (window.SHELL_INTRO) Shell.dismissIntro(window.SHELL_INTRO.key);
     _renderLockWall(lo);
     _mountCnsHuongNghiep(b);
@@ -447,6 +454,29 @@ function _hnLockRestBlocks(locked) {
     }
   });
   if (window.mountIcons) window.mountIcons(document.getElementById('resPanel'));
+}
+
+// Hé đúng MỘT trong danh sách "Chất Người Đọc Ra Từ Lá Số" (mục đầu, đã xếp
+// nổi bật nhất — xem `xepChieu` trong lib/engine/huong-nghiep-tre.ts) — không
+// dựng lại cả `chatBlock` (đã LÀM MỜ ngay bên dưới) và không lộ `huongDau`
+// đầy đủ (khối riêng, cũng đang mờ). Không có điểm số kèm — `chatNguoi[].cao`
+// là một câu mô tả, không phải con số; trang tự bỏ `diem` của `huongDau` ở
+// đúng chỗ này (`_huongHtml(hd,false,false)`), hook không tự ý thêm lại.
+function mountHook(data) {
+  var host = document.getElementById('hookHost');
+  if (!host || !window.HookLayer) return;
+  var top = (data.chatNguoi || [])[0];
+  if (!top) return;
+  window.HookLayer.mount(host, {
+    tool: 'huong-nghiep-tre',
+    charts: [],
+    facts: [{
+      tone: 'good',
+      title: 'Chất người nổi nhất: ' + top.ten,
+      body: (top.cao || '') + ' — thiên hướng nổi nhất và cách cho con làm quen nằm trong bản định hướng đầy đủ.',
+      source: 'engine · chatNguoi',
+    }],
+  });
 }
 
 function _renderLockWall(lo) {

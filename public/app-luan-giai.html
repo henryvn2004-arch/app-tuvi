@@ -49,6 +49,13 @@
 .card p{color:var(--text-mid);margin-bottom:9px;line-height:1.68}
 .card p:last-child{margin-bottom:0}
 .card b{color:var(--text)}
+/* Pha 3 — teaser 1 dòng thật thay cho khối mờ, khi phần bị khoá (xem
+   buildTeaserHtml). Điểm số + 1 câu thật, KHÔNG render chi tiết cách cục/quy
+   tắc — nội dung đó nằm hẳn sau tường, không phải mờ. */
+.lg-teaser{display:flex;gap:13px;align-items:flex-start;padding:2px 0}
+.lg-teaser-score{font-family:var(--serif);font-size:22px;font-weight:700;flex:0 0 auto;min-width:44px;text-align:center;line-height:1.25}
+.lg-teaser-score small{font-size:12px;color:var(--text-lt);font-family:var(--sans);font-weight:400}
+.lg-teaser-line{color:var(--text-mid);line-height:1.68;padding-top:2px}
 .em{color:var(--gold-soft);font-weight:600}
 .cung-row{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--line)}
 .cung-row:last-child{border-bottom:none}
@@ -151,6 +158,11 @@
       </div>
 
       <div id="lgPanel" data-ws-result>
+        <!-- Tầng hook (Pha 2 pilot) — đứng TRƯỚC lgScores, dựng bởi
+             mountHook() sau khi renderLuan() xong. Rỗng cho tới khi
+             HookLayer.mount() chạy; không có gì thì tự để trống, không
+             chặn/làm chậm phần lgScores/miniChart/lgBody phía dưới. -->
+        <div id="hookHost"></div>
         <div class="scores" id="lgScores"></div>
         <span class="fold-toggle" id="lgFold" onclick="toggleMini()">▾ Ẩn lá số</span>
         <div class="chart-wrap" id="miniChart"></div>
@@ -181,6 +193,9 @@ window.SHELL_INTRO={key:'luan-giai',title:'Luận giải Tử Vi',desc:'Đọc t
 <script src="/tools-shared/cung-ngay-sinh.js?v=1"></script>
 <script src="/auth.js?v=2"></script>
 <script src="/tuvi-paywall.js?v=21"></script>
+<script src="/tools-shared/hook-charts.js?v=1"></script>
+<script src="/tools-shared/hook-facts.js?v=1"></script>
+<script src="/tools-shared/hook-layer.js?v=1"></script>
   <script src="/nav.js?v=24" data-icons-only></script>
 <script src="/shell.js?v=85"></script>
 <script src="/tools-shared/ai-loading-steps.js?v=9"></script>
@@ -212,6 +227,7 @@ function doLuan(){
     _astrolabe=ls; _hoTen=name; _ngay=dd; _thang=mm; _nam=yyyy; _gioitinh=gioitinh; _namXem=namxem;
     _laSoText=formatLaSoV2(ls,conv); ls._laSoText=_laSoText;
     var _sum=renderLuan(ls,fd,namxem);
+    mountHook(ls);
     document.getElementById('miniChart').innerHTML=renderGrid(ls,fd);
     if(window.mountIcons) window.mountIcons(document.getElementById('miniChart')); // ô giữa mang span [data-icon]
     document.getElementById('birthPanel').style.display='none';
@@ -259,7 +275,15 @@ function doLuan(){
   }
 }
 
-function renderLuan(ls,fd,namxem){
+// `forceUnlocked` (Pha 3 — dời lằn ranh free/paid): mặc định falsy, tức phần
+// 2-TONG_PHAN LUÔN khoá bất kể đã đăng nhập hay chưa — trước đây chỉ khoá
+// với khách vô danh (`!loggedIn`), nên người đăng nhập đọc trọn phần
+// deterministic MIỄN PHÍ, không có lý do trả tiền cho lớp AI viết thêm ở
+// trên nó (đo được: unlock_click = 0 trên luan-giai suốt lịch sử events).
+// Chỉ truyền `true` từ `initLuanGiaiGate` SAU KHI xác nhận qua server rằng
+// đúng người này đã trả tiền cho ĐÚNG slug này — không suy từ trạng thái
+// đăng nhập nữa.
+function renderLuan(ls,fd,namxem,forceUnlocked){
   // totals per cung
   var totals={};var arr=[];
   CUNG_ORDER.forEach(function(cn){ var t=cungTotal(ls.cungScores&&ls.cungScores[cn]); totals[cn]=t; if(t!=null)arr.push({cn:cn,t:t}); });
@@ -283,9 +307,8 @@ function renderLuan(ls,fd,namxem){
   // KHÔNG bị ẩn hẳn khỏi DOM như bản trước — ẩn hẳn thì họ không biết có 24
   // phần, tưởng tool chỉ có một phần tổng quan rồi dừng.
   var LABELS=LuanGiaiCore.phanLabels(ls);
-  var loggedIn=_lgLoggedIn();
   var S=[];
-  for(var phan=1; phan<=TONG_PHAN; phan++) S.push(buildPhanSection(phan,LABELS[phan]||('Phần '+phan),ls,phan>1&&!loggedIn));
+  for(var phan=1; phan<=TONG_PHAN; phan++) S.push(buildPhanSection(phan,LABELS[phan]||('Phần '+phan),ls,phan>1&&!forceUnlocked));
   document.getElementById('lgBody').innerHTML=S.join('');
   // Khối pre-gen mang span [data-icon-emoji]/[data-icon]; nav.js ở chế độ
   // chỉ-icon chỉ quét lúc nạp trang, nên phần chèn sau đó phải gọi lại.
@@ -301,6 +324,48 @@ function renderLuan(ls,fd,namxem){
   renderJump(LABELS);
   wirePhanAsk(document.getElementById('lgBody'));
   return {overall:overall, dvTong:dvTong};
+}
+
+// ── Tầng hook (Pha 2 pilot — workplan tầng hook) ─────────────────────────
+// Đợi census TRƯỚC rồi mới mount MỘT lần — mount() bắn preview_shown mỗi lần
+// gọi, mount hai lượt (chưa có census → có census) sẽ đếm trùng lượt hiện.
+// `loadCensus()` tự rơi về `null` nếu mạng hỏng (xem hook-layer.js), nên
+// luồng này không bao giờ treo — chỉ mất khối Vành Hiếm nếu không tải được.
+// `tool:'laso'` khớp ĐÚNG `TuviPaywall.init({product:'laso'})` ở trên — dùng
+// tool_id khác sẽ tách funnel unlock_click/preview_shown của cùng một tool
+// ra hai chuỗi số, làm hỏng chính phép đo mà Pha 2 cần. Field đặt tên `tool`,
+// KHÔNG dùng tên field của Shell (viết hoa chữ Id) — bộ dò `check:share`
+// (`scripts/check-shell-share.mjs`) quét nguyên file tìm đúng cú pháp field
+// đó gán chuỗi, không phân biệt object nào; trùng tên báo oan "lệch
+// SHELL_ACTIVE" dù chẳng liên quan gì tới chia sẻ.
+// Tool này CHỈ còn luận 12 cung (TONG_PHAN=13: tổng quan + 12 cung) — đại vận
+// đã tách hẳn sang app-chu-trinh-cuoc-doi.html (Henry chốt 2026-08-27). Hook
+// PHẢI hứa đúng thứ trang này bán: bỏ hẳn `lifeArc`/`daiVanDinh`/`daiVanDay`
+// (đại vận, thuộc tool khác) — dùng `cungManhNhat`/`cungYeuNhat`/`cachCucHiem`,
+// cả ba đều là nội dung phần 2-13 thật sự giao khi mở khoá. Đường Đời (đại
+// vận) để dành cho hook của app-chu-trinh-cuoc-doi.html khi rải tới Pha 4.
+function mountHook(ls){
+  var host=document.getElementById('hookHost');
+  if(!host||!window.HookLayer||!window.HookFacts){return;}
+  var HF=window.HookFacts.tuvi;
+  window.HookLayer.loadCensus().then(function(census){
+    var facts=[HF.cungManhNhat(ls),HF.cungYeuNhat(ls)].filter(Boolean);
+    var hiem=HF.cachCucHiem(ls,census);
+    if(hiem)facts.push(hiem);
+    var hexDims=HF.hexDimsForCung(ls,'Mệnh');
+    window.HookLayer.mount(host,{
+      tool:'laso',
+      charts:[
+        hexDims?{type:'hexRadar',data:{dims:hexDims},title:'Lục Giác cung Mệnh'}:null
+      ].filter(Boolean),
+      facts:facts,
+      gate:{
+        tieuDe:'Bản đầy đủ trả lời làm gì với nó',
+        items:['12 phần còn lại — luận riêng từng cung trong 12 cung theo cổ pháp','Luận giải chuyên sâu viết riêng bằng AI theo cổ pháp'],
+        onUnlock:function(){ return initiateLuanGiaiChuyenSau(); }
+      }
+    });
+  });
 }
 
 function _lgLoggedIn(){ return !!(window.Auth&&window.Auth.isLoggedIn&&window.Auth.isLoggedIn()); }
@@ -356,31 +421,56 @@ function cungRelatedHtml(label){
 // hai ổ khoá ĐỘC LẬP nhau — .tpw-real-lock khoá phần deterministic theo đăng
 // nhập, khoá-mini khoá phần AI VIẾT RIÊNG theo đã-trả-tiền hay chưa (bật/tắt ở
 // `_paintSecLocks`, không phụ thuộc `locked` ở đây).
+//
+// Pha 3 (dời lằn ranh): `locked` giờ có nghĩa "chưa trả tiền cho ĐÚNG lá số
+// này" — KHÔNG còn suy từ trạng thái đăng nhập (`renderLuan` truyền
+// `phan>1&&!forceUnlocked`, xem đó). Trước đây `locked` khoá bằng CSS blur
+// (`.tpw-real-lock`) trong khi nội dung thật vẫn nằm nguyên trong DOM — đọc
+// view-source hay tắt CSS là thấy hết. Giờ ĐỔI SANG khoá cứng: phần bị khoá
+// KHÔNG render `LuanGiaiCore.buildPreGenHtml` (cách cục/6 chiều/quy tắc) vào
+// DOM luôn — chỉ hiện `buildTeaserHtml`, một dòng THẬT tính từ `cungScores`
+// (không bịa), đủ để tin nhưng không đủ để đọc thay bản trả phí.
 function buildPhanSection(phan,label,ls,locked){
-  var pre=LuanGiaiCore.buildPreGenHtml(phan,ls);
-  var raw=pre||'<div class="phan-empty">Phần này luận theo tổng thể lá số — bấm nút dưới để trợ lý luận sâu.</div>';
-  // Khối TÍNH TOÁN (deterministic — cách cục/điểm số/quy tắc) GẤP LẠI mặc định.
-  // Nó luôn dựng xong TRƯỚC (đồng bộ, lúc lập lá số) trong khi phần LUẬN THẬT
-  // (AI, `claude-content` dưới) tới sau — user chạy tool xong đọc ngay khối này
-  // rồi tưởng ĐÓ là luận giải. Henry chốt: giữ NGUYÊN thứ tự hiện có, chỉ thu
-  // gọn — ai muốn soi cơ sở/giải thích thuật học thì tự bấm mở. CHỈ áp cho phần
-  // KHÔNG bị khoá (`pre` có nội dung thật) — phần đang teaser-blur cho khách
-  // chưa đăng ký (`locked`) giữ nguyên như cũ, đừng chồng hai cơ chế ẩn lên nhau.
-  var body=(pre&&!locked)?('<details class="lg-calc"><summary>Xem cơ sở tính toán</summary>'+raw+'</details>'):raw;
-  var bodyHtml=locked?'<div class="tpw-real-lock">'+body+'</div>':body;
-  var tag=locked?TuviPaywall.lockBadge('Khoá'):'';
-  // Khoá-mini (ẨN mặc định) — mỗi phần trong 24 phần đều CÓ một đoạn luận
-  // riêng do AI viết, nhưng chỉ hiện khối này SAU khi biết chắc phần đó CHƯA
-  // mở (`_paintSecLocks`, gọi từ `_renderUnlockBlock`). Bấm vào là chạy đúng
-  // luồng mở bản đầy đủ — cùng luồng với nút "✦ Luận giải chuyên sâu…" ở đầu
-  // trang, chỉ khác chỗ đứng: banner đó cuộn qua là mất, khối này lặp lại ở
-  // MỌI phần nên luôn nằm trong tầm mắt.
+  var bodyHtml,tag;
+  if(locked){
+    bodyHtml=buildTeaserHtml(label,ls);
+    tag=TuviPaywall.lockBadge('Khoá');
+  }else{
+    var pre=LuanGiaiCore.buildPreGenHtml(phan,ls);
+    var raw=pre||'<div class="phan-empty">Phần này luận theo tổng thể lá số — bấm nút dưới để trợ lý luận sâu.</div>';
+    // Khối TÍNH TOÁN (cách cục/điểm số/quy tắc) GẤP LẠI mặc định — user chạy
+    // tool xong đọc ngay khối này rồi tưởng ĐÓ là luận giải, trong khi phần
+    // LUẬN THẬT (AI, `claude-content` dưới) tới sau. Henry chốt: giữ nguyên
+    // thứ tự, chỉ thu gọn; ai muốn soi cơ sở thì tự bấm mở.
+    bodyHtml=pre?('<details class="lg-calc"><summary>Xem cơ sở tính toán</summary>'+raw+'</details>'):raw;
+    tag='';
+  }
+  // Khoá-mini (ẨN mặc định) — mỗi phần đều CÓ một đoạn luận riêng do AI viết,
+  // nhưng chỉ hiện khối này SAU khi biết chắc phần đó CHƯA mở (`_paintSecLocks`,
+  // gọi từ `_renderUnlockBlock`). Bấm vào chạy đúng luồng mở bản đầy đủ — cùng
+  // luồng với nút "✦ Luận giải chuyên sâu…" ở đầu trang, chỉ khác chỗ đứng:
+  // banner đó cuộn qua là mất, khối này lặp lại ở MỌI phần nên luôn trong tầm mắt.
   var lock=TuviPaywall.sectionLockHtml({id:'sec-ai-lock-'+phan,product:'laso'});
-  // Gợi ý tool khác CHỈ hiện khi phần này KHÔNG bị khoá — chưa đăng ký thì
+  // Gợi ý tool khác CHỈ hiện khi phần này KHÔNG bị khoá — chưa trả tiền thì
   // luận giải của chính cung đó còn chưa đọc được, mời sang tool khác lúc này
   // là điều hướng vào chỗ rỗng.
   var related=locked?'':cungRelatedHtml(label);
   return sec(phan,label,tag,'<div class="card">'+bodyHtml+lock+'<div class="claude-content" id="claude-content-'+phan+'" style="display:none"></div>'+related+ask('Luận sâu phần: '+label)+'</div>');
+}
+// Teaser THẬT cho phần bị khoá — 1 con số + 1 câu, cả hai tính thẳng từ
+// `cungScores` (đúng công thức `cungTotal()` ở đầu file, khớp số hiện trên
+// `lgScores`/tầng hook, không phải một phép tính riêng có thể trôi khỏi
+// chúng). `label` luôn dạng "Cung X" cho phan 2-TONG_PHAN (PHAN_LABELS_BASE
+// trong luan-giai-core.js) — tách "Cung " để tra đúng khoá `cungScores`.
+function buildTeaserHtml(label,ls){
+  var cungTen=label.replace(/^Cung /,'');
+  var t=cungTotal(ls&&ls.cungScores&&ls.cungScores[cungTen]);
+  var col=t!=null?scoreColor(t):'var(--text-lt)';
+  var line=t!=null
+    ?('Cung '+esc(cungTen)+' chấm '+t+'/10 trên 6 chiều đánh giá.')
+    :'Phần này luận theo tổng thể lá số.';
+  return '<div class="lg-teaser"><div class="lg-teaser-score" style="color:'+col+'">'+(t!=null?t:'—')+'<small>/10</small></div>'+
+    '<div class="lg-teaser-line">'+line+' Cách cục, quy tắc và ý nghĩa từng sao của cung này nằm trong bản đầy đủ.</div></div>';
 }
 // Bật/tắt ĐỒNG LOẠT khoá-mini cho CẢ 24 phần (luôn nằm trong DOM ngay từ đầu,
 // không còn khái niệm "backfill dần" như bản trước). Gọi khi biết chắc trạng
@@ -563,8 +653,10 @@ async function _fetchCachedLuanGiai(slug){
   return null;
 }
 function _renderCachedLuanGiai(store){
-  // Chỉ tới nhánh này khi ĐÃ đăng nhập + đã trả tiền cho đúng slug → renderLuan
-  // (gọi trong doLuan() trước initLuanGiaiGate) đã dựng đủ 24 phần KHÔNG khoá.
+  // Chỉ tới nhánh này khi ĐÃ đăng nhập + đã trả tiền cho đúng slug — gọi SAU
+  // khi `initLuanGiaiGate` tự renderLuan(...,true) mở khoá phần deterministic
+  // (Pha 3: renderLuan lúc doLuan() KHÔNG còn mặc định mở cho người đăng nhập
+  // nữa, nên nhánh "đã trả tiền" phải tự mở lại, không ăn theo mặc định cũ).
   _luanGiaiStore=store;
   for(var p=1;p<=TONG_PHAN;p++){
     var box=document.getElementById('claude-content-'+p);
@@ -594,16 +686,18 @@ async function initLuanGiaiGate(ls){
   }catch(e){hasAccess=false;}
   if(hasAccess){
     var cached=await _fetchCachedLuanGiai(_pendingSlug);
-    if(cached){ _renderCachedLuanGiai(cached); return; }
+    if(cached){ renderLuan(ls,null,_namXem,true); _renderCachedLuanGiai(cached); return; }
   }
   _renderUnlockBlock();
 }
 
-// Đã đăng nhập → nút phẳng, gate credit rồi chạy thẳng (case 1, như 7 tool
-// kia); renderLuan() đã dựng đủ 24 phần KHÔNG khoá ngay từ đầu. Chưa đăng
-// nhập → CTA `lockPreview` đứng cạnh phần 2-24 đã bị LÀM MỜ (renderLuan gọi
-// buildPhanSection với locked=true), không phải THAY chỗ chúng. Đăng ký xong
-// (onUnlock) gọi lại renderLuan để mở khoá thật (loggedIn() lúc đó đã true).
+// Pha 3: đã đăng nhập nhưng CHƯA trả tiền cho lá số này cũng qua nhánh này —
+// nút phẳng, gate credit rồi chạy thẳng. Chưa đăng nhập → CTA `lockPreview`
+// đứng cạnh phần 2-TONG_PHAN đã khoá (renderLuan gọi buildPhanSection với
+// locked=true, mặc định của mọi lượt render đầu — xem renderLuan). Cả hai
+// nhánh cùng hội tụ về `_startLuanGiaiAI()`, nơi DUY NHẤT gọi lại
+// `renderLuan(...,true)` mở khoá — đúng lúc `requireCredits` đã xác nhận trả
+// tiền thành công, không sớm hơn.
 function _renderUnlockBlock(){
   var host=document.getElementById('lgUnlock');
   host.style.display='block';
@@ -623,7 +717,7 @@ function _renderUnlockBlock(){
     items:['12 phần còn lại — luận riêng từng cung trong 12 cung theo cổ pháp','Luận giải chuyên sâu viết riêng bằng AI theo cổ pháp'],
     cta:'Đăng ký để mở bản luận đầy đủ',
     slug:function(){return _pendingSlug;},
-    onUnlock:function(){ renderLuan(_astrolabe,{},_namXem); return _startLuanGiaiAI(); },
+    onUnlock:function(){ return _startLuanGiaiAI(); },
   });
 }
 
@@ -638,6 +732,12 @@ async function _startLuanGiaiAI(){
   // chúng sáng đèn "chưa mở" trong lúc đang luận là mời bấm lại một lượt mua
   // đã xảy ra rồi.
   _paintSecLocks(false);
+  // Dựng lại phần 2-TONG_PHAN ở trạng thái MỞ (Pha 3) — `requireCredits` ở
+  // trên đã trừ tiền thành công mới gọi tới đây, nên đây là đúng thời điểm
+  // duy nhất để mở khoá phần deterministic. CẢ HAI đường (khách vô danh vừa
+  // đăng ký-trả tiền, và người đã đăng nhập bấm nút) đều hội tụ về hàm này,
+  // nên chỉ cần MỘT chỗ gọi, không phải nhớ rải ở từng nhánh.
+  renderLuan(_astrolabe,null,_namXem,true);
   _luanGiaiStore={};
   _pace&&_pace.reset();
   // Kimi K3 (primary) ~120 giây/phần — chạy tuần tự 24 phần có thể tới 48
