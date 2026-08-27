@@ -59,8 +59,17 @@ interface Row {
   region: string; wiki_url: string | null; image_file: string | null;
   birth_date: string; birth_time: string | null; birth_tz_off: number | null;
   rodden: string | null; gio_idx: number | null; gender: string | null;
-  fame_score: number;
+  fame_score: number; key_t1: string;
   image_url: string | null; image_credit: string | null; image_license: string | null;
+}
+
+/** `key_t1` = "<canChi năm>|<tháng ÂL>|<ngày ÂL>" — đã tính sẵn lúc import,
+ * đọc lại để hiện NGÀY ÂM LỊCH thật của từng người lên thẻ. Không tính lại
+ * bằng engine ở đây: đọc field có sẵn rẻ hơn và không thể trôi khỏi khoá đã
+ * dùng để MATCH. */
+function parseT1(key: string) {
+  const [canChi, thang, ngay] = key.split('|');
+  return { canChi, thang: Number(thang), ngay: Number(ngay) };
 }
 
 const CHI = ['Tý', 'Sửu', 'Dần', 'Mão', 'Thìn', 'Tỵ', 'Ngọ', 'Mùi', 'Thân', 'Dậu', 'Tuất', 'Hợi'];
@@ -70,7 +79,7 @@ async function fetchTier(col: string, key: string, limit: number, needPhoto: boo
     `${SUPABASE_URL}/rest/v1/celeb_births` +
     `?${col}=eq.${encodeURIComponent(key)}&blocked=is.false` +
     (needPhoto ? '&image_file=not.is.null' : '') +
-    `&select=qid,name,occupation,country,region,wiki_url,image_file,image_url,image_credit,image_license,birth_date,birth_time,birth_tz_off,rodden,gio_idx,gender,fame_score` +
+    `&select=qid,name,occupation,country,region,wiki_url,image_file,image_url,image_credit,image_license,birth_date,birth_time,birth_tz_off,rodden,gio_idx,gender,fame_score,key_t1` +
     `&order=fame_score.desc&limit=${limit}`;
   // 🔴 `cache:'no-store'` BẮT BUỘC: Next bọc fetch toàn cục và nhớ kết quả kể
   // cả khi dynamic='force-dynamic'. Repo đã cắn 3 lần vì thiếu dòng này.
@@ -171,6 +180,9 @@ export async function GET(req: NextRequest) {
       nhan: TIER_LABEL[tier],
       ghiChu: TIER_NOTE[tier],
       ngaySinh: row.birth_date,
+      // Ngày ÂM LỊCH thật của người này — để hiện cạnh ngày dương, vì badge
+      // T1/T0 tự nó không đủ giải thích "sao dương lịch không trùng khít".
+      amLich: parseT1(row.key_t1),
       gioSinh: row.birth_time,
       muiGio: row.birth_tz_off,
       canhGio: row.gio_idx == null ? null : CHI[row.gio_idx],
