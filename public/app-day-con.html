@@ -249,6 +249,11 @@
           </div>
         </div>
 
+        <!-- Khối hook (1 fact) — CHỈ dựng ở lượt tính thử khách chưa đăng
+             nhập (xem `mountHook`), giữa hero và tấm khoá. Không dựng lại 5
+             trục/8 chất (khối đó đã LÀM MỜ ngay bên dưới, `_dcLockRestBlocks`)
+             — hook chỉ hé MỘT chất năng khiếu, không phải cả bảng đang mờ. -->
+        <div id="hookHost"></div>
         <div id="dcLockHost" style="display:none;margin-bottom:16px"></div>
 
         <!-- ── ĐO ĐƯỢC GÌ ─────────────────────────────────────────────── -->
@@ -398,6 +403,7 @@ window.SHELL_INTRO={key:'day-con',title:'Dạy Con Theo Lá Số',desc:'Đọc c
 <script src="/tuvi-form.js?v=2"></script>
 <script src="/tools-shared/cung-ngay-sinh.js?v=1"></script>
 <script src="/tuvi-paywall.js?v=21"></script>
+<script src="/tools-shared/hook-layer.js?v=1"></script>
 <script src="/auth.js?v=2"></script>
   <script src="/nav.js?v=24" data-icons-only></script>
 <script src="/shell.js?v=85"></script>
@@ -564,6 +570,7 @@ async function _runAnonPreview(b, self, lo) {
     renderMetaHead(data);
     renderMetaRest(data);
     _dcLockRestBlocks(true);
+    mountHook(data);
     document.getElementById('card').style.display = 'block';
     document.getElementById('btnEdit').style.display = '';
     if (window.SHELL_INTRO) Shell.dismissIntro(window.SHELL_INTRO.key);
@@ -573,6 +580,31 @@ async function _runAnonPreview(b, self, lo) {
     _closePanel();
     showError('Lỗi: ' + (e.message || 'Không thể kết nối. Vui lòng thử lại.'));
   }
+}
+
+// Hé đúng MỘT trong 8 chất năng khiếu (điểm cao nhất) — không dựng lại cả
+// bảng 8 chất (khối đó đã LÀM MỜ ngay bên dưới cho tới khi trả tiền) và không
+// lộ phần AI viết riêng (định hướng/lo lắng/nên-tránh — đúng phần đang bán).
+// `data.khieu` đã có sẵn trong payload tính thử (0 lượt LLM, xem `meta()`
+// trong route.ts) — không cần gọi thêm gì.
+function mountHook(data) {
+  var host = document.getElementById('hookHost');
+  if (!host || !window.HookLayer) return;
+  var ks = (data.khieu || []).slice().sort(function (a, b) { return b.diem - a.diem; });
+  var top = ks[0];
+  if (!top) return;
+  window.HookLayer.mount(host, {
+    tool: 'day-con',
+    charts: [],
+    facts: [{
+      tone: top.noiBat ? 'good' : 'neutral',
+      title: 'Chất năng khiếu cao nhất: ' + top.ten,
+      value: top.diem,
+      body: (top.noiBat ? 'Vượt ngưỡng “đáng cho thử”. ' : 'Chưa vượt ngưỡng, nhưng cao nhất trong 8 chất. ') +
+        '7 chất còn lại, 5 trục tính khí, và định hướng cách dạy nằm trong bản đầy đủ.',
+      source: 'engine · khieu',
+    }],
+  });
 }
 
 function _renderLockWall(lo) {
