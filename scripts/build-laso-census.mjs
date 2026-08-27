@@ -46,8 +46,8 @@ const CHI = ['Tý', 'Sửu', 'Dần', 'Mão', 'Thìn', 'Tỵ', 'Ngọ', 'Mùi', 
 // Cùng công thức `yearCan`/`yearChi` của lib/engine/laso.ts — 1984 = Giáp Tý
 // (mốc chuẩn), namAL tăng dần quét đủ 60 tổ hợp can-chi phân biệt, mỗi tổ hợp
 // đúng MỘT năm thật (không lặp, không bỏ sót — đã tự kiểm ở cuối file).
-const yearCan = (y) => CAN[((y - 4) % 10 + 10) % 10];
-const yearChi = (y) => CHI[((y - 4) % 12 + 12) % 12];
+const yearCan = (y) => CAN[(((y - 4) % 10) + 10) % 10];
+const yearChi = (y) => CHI[(((y - 4) % 12) + 12) % 12];
 const BASE_YEAR = 1984;
 const N_SLOT = 9; // 9 đại vận có `scoring` (6-15t .. 86-95t) — chặng >95t engine không chấm, xem probe.
 
@@ -55,7 +55,16 @@ function loadEngine() {
   const g = globalThis;
   g.window = g;
   if (!g.location) {
-    g.location = { protocol: 'https:', hostname: 'x', host: 'x', port: '', href: 'https://x/', pathname: '/', search: '', hash: '' };
+    g.location = {
+      protocol: 'https:',
+      hostname: 'x',
+      host: 'x',
+      port: '',
+      href: 'https://x/',
+      pathname: '/',
+      search: '',
+      hash: '',
+    };
   }
   const code = readFileSync(ENGINE_PATH, 'utf8');
   return new Function('window', 'globalThis', code + '\nreturn { anSaoLaSo };')(g, g);
@@ -70,12 +79,22 @@ function runShard(shardIndex, shardCount) {
   for (let ky = 0; ky < 60; ky++) {
     if (ky % shardCount !== shardIndex) continue;
     const namAL = BASE_YEAR + ky;
-    const canNam = yearCan(namAL), chiNam = yearChi(namAL);
+    const canNam = yearCan(namAL),
+      chiNam = yearChi(namAL);
     for (let thang = 1; thang <= 12; thang++) {
       for (let ngay = 1; ngay <= 30; ngay++) {
         for (let gioIdx = 0; gioIdx < 12; gioIdx++) {
           for (const gioitinh of ['nam', 'nu']) {
-            const ls = anSaoLaSo({ ngayAL: ngay, thangAL: thang, namAL, canNam, chiNam, gioIdx, gioitinh, namXem: 2026 });
+            const ls = anSaoLaSo({
+              ngayAL: ngay,
+              thangAL: thang,
+              namAL,
+              canNam,
+              chiNam,
+              gioIdx,
+              gioitinh,
+              namXem: 2026,
+            });
             if (!ls) continue;
             n++;
             const dv = ls.daiVans || [];
@@ -111,16 +130,22 @@ async function main() {
   console.log(`Tổng điều tra 518.400 lá số — ${shardCount} tiến trình song song...`);
   const t0 = Date.now();
   const results = await Promise.all(
-    Array.from({ length: shardCount }, (_, i) => new Promise((resolve, reject) => {
-      const child = fork(__filename, [], { env: { ...process.env, CENSUS_SHARD: String(i) } });
-      let result = null;
-      child.on('message', (m) => { result = m; });
-      child.on('error', reject);
-      child.on('exit', (code) => {
-        if (code === 0 && result) resolve(result);
-        else reject(new Error('Shard ' + i + ' lỗi (exit ' + code + ')'));
-      });
-    }))
+    Array.from(
+      { length: shardCount },
+      (_, i) =>
+        new Promise((resolve, reject) => {
+          const child = fork(__filename, [], { env: { ...process.env, CENSUS_SHARD: String(i) } });
+          let result = null;
+          child.on('message', (m) => {
+            result = m;
+          });
+          child.on('error', reject);
+          child.on('exit', (code) => {
+            if (code === 0 && result) resolve(result);
+            else reject(new Error('Shard ' + i + ' lỗi (exit ' + code + ')'));
+          });
+        })
+    )
   );
 
   let total = 0;
@@ -138,12 +163,19 @@ async function main() {
   const daiVanBreakpoints = daiVan.map((arr) => {
     arr.sort((a, b) => a - b);
     const n = arr.length;
-    return Array.from({ length: 101 }, (_, p) => arr[Math.min(n - 1, Math.floor((p / 100) * (n - 1)))]);
+    return Array.from(
+      { length: 101 },
+      (_, p) => arr[Math.min(n - 1, Math.floor((p / 100) * (n - 1)))]
+    );
   });
 
   const cachCuc = {};
   for (const [ten, count] of cachCucCount.entries()) {
-    cachCuc[ten] = { count, pct: Math.round((count / total) * 10000) / 100, oneIn: Math.round(total / count) };
+    cachCuc[ten] = {
+      count,
+      pct: Math.round((count / total) * 10000) / 100,
+      oneIn: Math.round(total / count),
+    };
   }
 
   const out = {
@@ -156,8 +188,11 @@ async function main() {
   writeFileSync(OUT_PATH, json);
   console.log(
     `Xong: ${total} lá số, ${Object.keys(cachCuc).length} cách cục phân biệt, ` +
-    `${((Date.now() - t0) / 1000).toFixed(0)}s. Ghi ${OUT_PATH} (${(json.length / 1024).toFixed(1)} KB).`
+      `${((Date.now() - t0) / 1000).toFixed(0)}s. Ghi ${OUT_PATH} (${(json.length / 1024).toFixed(1)} KB).`
   );
 }
 
-main().catch((e) => { console.error(e); process.exitCode = 1; });
+main().catch((e) => {
+  console.error(e);
+  process.exitCode = 1;
+});
