@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"></noscript>
-<link rel="stylesheet" href="/shell.css?v=29">
+<link rel="stylesheet" href="/shell.css?v=30">
 <style>
 .form-card{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);max-width:640px}
 .form-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:3px}
@@ -97,6 +97,13 @@
             </div>
           </div>
         </div>
+        <!-- Khối hook (chart + fact) — CHỈ vẽ ở lượt tính thử khách chưa đăng
+             nhập (xem mountHook), đứng giữa khối Phu Thê chữ ở trên và tấm
+             khoá bên dưới. Không mang gate riêng (spec.gate bỏ trống) — CTA
+             thật vẫn là `_renderLockWall()`/`TuviPaywall.lockPreview` ngay
+             dưới, tránh hai nút mở khoá chồng nhau. -->
+        <div id="hookHost"></div>
+
         <!-- Khách chưa đăng nhập: khoá LUÔN cả phần "miễn phí" phía dưới (bảng
              hình thể) — chỉ cung Phu Thê (khối ngay trên) là phần đầu được
              xem. -->
@@ -148,6 +155,10 @@
           <div class="res-block-header"><span class="res-block-title">Đã Vẽ Trước Đó</span></div>
           <div class="res-block-body"><div id="histList"></div></div>
         </div>
+
+        <!-- "Ai Sinh Cùng Ngày Với Bạn" — miễn phí, 0 token LLM. Hỏng mạng/API
+             thì tự ẩn, không làm hỏng chân dung phía trên. -->
+        <div id="cnsHost"></div>
       </div>
     </div>
   </main>
@@ -158,11 +169,16 @@
 <script>window.SHELL_ACTIVE='chan-dung-vo-chong';window.SHELL_HISTORY=true;
 window.SHELL_INTRO={key:'chan-dung-vo-chong',title:'Chân Dung Vợ Chồng',desc:'Vẽ chân dung người bạn đời tương lai từ cung Phu Thê của bạn. Bạn tò mò người ấy sẽ trông ra sao, tính khí thế nào. Dùng khi muốn một hình ảnh cụ thể, không chỉ vài dòng luận chữ.'};</script>
 <script src="/laso-chart.js?v=3"></script>
+<script src="/tools-shared/vn-timezone.js?v=1"></script>
 <script src="/tuvi-form.js?v=2"></script>
+<script src="/tools-shared/cung-ngay-sinh.js?v=1"></script>
 <script src="/tuvi-paywall.js?v=22"></script>
+<script src="/tools-shared/hook-charts.js?v=1"></script>
+<script src="/tools-shared/hook-facts.js?v=1"></script>
+<script src="/tools-shared/hook-layer.js?v=1"></script>
 <script src="/auth.js?v=2"></script>
-  <script src="/nav.js?v=23" data-icons-only></script>
-<script src="/shell.js?v=82"></script>
+  <script src="/nav.js?v=24" data-icons-only></script>
+<script src="/shell.js?v=85"></script>
 <script src="/tools-shared/ai-loading-steps.js?v=9"></script>
 <script src="/tools-shared/portrait-recover.js?v=2"></script>
 <script>
@@ -220,6 +236,18 @@ function showError(msg) {
 
 function _cdvcLoggedIn() { return !!(window.Auth && window.Auth.isLoggedIn && window.Auth.isLoggedIn()); }
 
+// "Ai Sinh Cùng Ngày Với Bạn" — chân dung suy ra từ MỘT MÌNH lá số người dùng
+// (không có "người thứ hai" thật), nên chủ thể luôn là `_lastBirth`. Gọi ở CẢ
+// đường xem trước lẫn đường đầy đủ — phần phụ, không đợi paywall. Shape
+// {day,month,year,hourBranch,gender} khác shape module đòi, quy đổi tay.
+function _mountCnsVoChong(b) {
+  if (!window.CungNgaySinh || !b) return;
+  CungNgaySinh.mount('cnsHost', {
+    ngay: b.day, thang: b.month, nam: b.year,
+    gioIdx: b.hourBranch, gioitinh: b.gender,
+  });
+}
+
 // Đăng nhập rồi → bấm nút là CHẠY THẬT ngay (case 1); thiếu/không đủ Lượng
 // thì `requireCredits` tự bật popup. Chưa đăng nhập (case 2) → dựng cung Phu
 // Thê MỞ + bảng hình thể MỞ (deterministic, 0đ, đúng thiết kế sẵn có của
@@ -265,13 +293,37 @@ async function _runAnonPreview() {
     var data = await res.json();
     if (!res.ok || !data.success) throw new Error(data.error || 'Lỗi ' + res.status);
     renderMeta(data);
+    mountHook(data);
     document.getElementById('btnEdit').style.display = '';
     if (window.SHELL_INTRO) Shell.dismissIntro(window.SHELL_INTRO.key);
     _renderLockWall();
+    _mountCnsVoChong(_lastBirth);
   } catch (e) {
     _closePanel();
     showError('Lỗi: ' + (e.message || 'Không thể kết nối. Vui lòng thử lại.'));
   }
+}
+
+// Khối hook (chart Lục Giác + fact "cách cục hiếm") — CHỈ dùng dữ liệu ĐÃ
+// MIỄN PHÍ của chính lượt tính thử này (cungScoresPhuThe + phuThe.cachCuc),
+// KHÔNG bịa thêm số nào. Không có `gate` riêng — xem chú thích tại #hookHost.
+function mountHook(data) {
+  var host = document.getElementById('hookHost');
+  if (!host || !window.HookLayer || !window.HookFacts) return;
+  var HF = window.HookFacts.tuvi;
+  window.HookLayer.loadCensus().then(function (census) {
+    var pseudoLs = {
+      cungScores: { 'Phu Thê': data.cungScoresPhuThe },
+      cachCuc: (data.phuThe && data.phuThe.cachCuc) || [],
+    };
+    var hexDims = data.cungScoresPhuThe ? HF.hexDimsForCung(pseudoLs, 'Phu Thê') : null;
+    var hiem = HF.cachCucHiem(pseudoLs, census);
+    window.HookLayer.mount(host, {
+      tool: 'chan-dung-vo-chong',
+      charts: [hexDims ? { type: 'hexRadar', data: { dims: hexDims }, title: 'Lục Giác cung Phu Thê' } : null].filter(Boolean),
+      facts: [hiem].filter(Boolean),
+    });
+  });
 }
 
 function _renderLockWall() {
@@ -467,6 +519,7 @@ function renderProse(data) {
   document.getElementById('cdvcInviteText').innerHTML =
     'Đúng gu bạn chưa? Gửi ảnh này cho hội bạn xem, rồi rủ họ vẽ thử <b>người bạn đời tương lai của chính họ</b> luôn.';
   document.getElementById('cdvcInviteBlock').style.display = 'flex';
+  _mountCnsVoChong(_lastBirth);
 }
 
 function renderPhuThe(pt) {

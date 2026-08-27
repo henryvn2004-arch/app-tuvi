@@ -7,7 +7,7 @@
 <link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;600;700&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;600;700&display=swap" rel="stylesheet"></noscript>
 <link rel="stylesheet" href="/admin.css?v=4"/>
 <script>(function(){try{var t=localStorage.getItem('tva_theme');if(t==='dark'||(!t&&window.matchMedia&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
-  <script src="/nav.js?v=23" data-icons-only></script>
+  <script src="/nav.js?v=24" data-icons-only></script>
   <script>
     /* Admin dựng lại DOM ở 200+ chỗ bằng innerHTML. mountIcons() chỉ tự quét lúc
        nạp trang, nên gọi tay từng chỗ vừa dễ sót vừa không kiểm nổi. Quan sát DOM
@@ -151,6 +151,9 @@
       </button>
       <button class="nav-item" onclick="goTo('sysconfig')">
         <span class="ni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg></span><span>System Config</span>
+      </button>
+      <button class="nav-item" onclick="goTo('feedback')">
+        <span class="ni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg></span><span>Góp Ý</span><span class="nav-badge" id="fb-nav-badge" style="display:none;margin-left:auto;background:var(--red,#C0392B);color:#fff;font-size:.62rem;font-weight:700;border-radius:999px;padding:.05rem .4rem"></span>
       </button>
       <button class="nav-item" onclick="goTo('adminusers')" id="nav-adminusers">
         <span class="ni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></span><span>Quản Trị Viên</span>
@@ -1405,6 +1408,64 @@
         </div>
       </div>
 
+      <!-- ── GÓP Ý NGƯỜI DÙNG (Vận Hành) ──
+           Hộp thư từ tab Tài khoản > Góp Ý của người dùng. Cố ý KHÔNG làm
+           chatbot sản phẩm: bot trả lời tự động là kênh DẬP tín hiệu — người
+           dùng vấp ở đâu thì bot đáp cho xong, còn đây thì không ai biết. -->
+      <div class="page" id="page-feedback">
+        <div class="stats" id="fb-stats" style="grid-template-columns:repeat(4,1fr)">
+          <div class="stat gold"><div class="stat-label">Mới</div><div class="stat-value" id="fb-c-moi">…</div><div class="stat-sub">chưa đụng tới</div></div>
+          <div class="stat blue"><div class="stat-label">Đang Xử Lý</div><div class="stat-value" id="fb-c-dang_xu_ly">…</div><div class="stat-sub">đã nhận việc</div></div>
+          <div class="stat green"><div class="stat-label">Đã Xử Lý</div><div class="stat-value" id="fb-c-da_xu_ly">…</div><div class="stat-sub">đã sửa/đã trả lời</div></div>
+          <div class="stat"><div class="stat-label">Bỏ Qua</div><div class="stat-value" id="fb-c-bo_qua">…</div><div class="stat-sub">người gửi thấy là "Đã xem"</div></div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title"><svg class="pt-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg>Hộp Thư Góp Ý</div>
+            <div class="panel-actions">
+              <select class="form-control" id="fb-f-status" style="width:auto;padding:.35rem .6rem" onchange="loadFeedbackAdmin()">
+                <option value="">Mọi trạng thái</option>
+                <option value="moi">Mới</option>
+                <option value="dang_xu_ly">Đang xử lý</option>
+                <option value="da_xu_ly">Đã xử lý</option>
+                <option value="bo_qua">Bỏ qua</option>
+              </select>
+              <select class="form-control" id="fb-f-kind" style="width:auto;padding:.35rem .6rem" onchange="loadFeedbackAdmin()">
+                <option value="">Mọi loại</option>
+                <option value="noi_dung">Nội dung luận giải</option>
+                <option value="bug">Lỗi kỹ thuật</option>
+                <option value="tinh_nang">Đề xuất tính năng</option>
+                <option value="thanh_toan">Thanh toán · Lượng</option>
+                <option value="khac">Khác</option>
+              </select>
+              <select class="form-control" id="fb-f-source" style="width:auto;padding:.35rem .6rem" onchange="loadFeedbackAdmin()">
+                <option value="">Mọi nguồn</option>
+                <option value="reading">Dưới bản luận giải</option>
+                <option value="account">Hộp thư Tài khoản</option>
+              </select>
+              <select class="form-control" id="fb-f-rating" style="width:auto;padding:.35rem .6rem" onchange="loadFeedbackAdmin()">
+                <option value="">Mọi lá phiếu</option>
+                <option value="down">Chỉ 👎</option>
+                <option value="up">Chỉ 👍</option>
+              </select>
+              <button class="btn btn-ghost btn-sm" onclick="loadFeedbackAdmin()">↻</button>
+            </div>
+          </div>
+          <div id="fb-body" style="padding:1rem 1.25rem"><div class="loading"><span class="spin"></span>Đang tải...</div></div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title"><svg class="pt-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg>Tool Bị Chê Nhiều Nhất</div>
+            <div class="panel-actions">
+              <span style="font-size:.72rem;color:var(--text-lt)">Xếp theo TỈ LỆ 👎, không theo số tuyệt đối — nếu không thì tool đông người dùng luôn đứng đầu</span>
+            </div>
+          </div>
+          <div class="table-wrap" id="fb-stats-body"><div class="loading"><span class="spin"></span>Đang tải...</div></div>
+        </div>
+      </div>
+
       <!-- ── API & KEYS (Vận Hành) ── -->
       <div class="page" id="page-apikeys">
         <div class="stats" id="mcp-stats" style="grid-template-columns:repeat(4,1fr)">
@@ -1750,6 +1811,7 @@ const PAGE_TITLES = {
   khaoluan: 'Sản Xuất — Khảo Luận', nghiencuu: 'Sản Xuất — Nghiên Cứu',
   sysconfig: 'System Config', apikeys: 'API & Keys', registry: 'Tools Registry',
   adminusers: 'Quản Trị Viên',
+  feedback: 'Góp Ý Người Dùng',
 };
 
 /**
@@ -1851,6 +1913,7 @@ function enterApp(email, role, team) {
   document.getElementById('app').style.display = 'block';
   applyAdminPermissions();
   loadAll();
+  fbRefreshBadge();   // huy hiệu "góp ý mới" trên sidebar — best-effort
 }
 
 async function doLogin() {
@@ -2036,6 +2099,7 @@ function goTo(page) {
                     cboard: loadContentBoard, khaoluan: loadKhaoLuan, nghiencuu: loadNghienCuu,
                     sysconfig: loadSysConfig, apikeys: loadApiKeys, registry: loadRegistry,
                     adminusers: () => { loadAdminRoster(); loadAdminLoginAttempts(); },
+                    feedback: loadFeedbackAdmin,
                     content: () => {
     if (showView) showView('dashboard');
     if (!window._contentInitialized) {
@@ -2061,6 +2125,176 @@ function goTo(page) {
       b.classList.toggle('btn-ghost', !on);
     });
   }
+}
+
+// ══════════════════════════════════════════════════════════════
+// GÓP Ý NGƯỜI DÙNG — panel "Góp Ý"
+// ══════════════════════════════════════════════════════════════
+// Đọc/ghi qua /api/admin/feedback (service key + tra admin_users), KHÔNG đọc
+// thẳng PostgREST: bảng user_feedback cố ý không có policy RLS nào, nên JWT của
+// admin một mình không chạm được — và đó là điều mong muốn.
+const FB_KIND_LABEL = {
+  noi_dung: 'Nội dung luận giải', bug: 'Lỗi kỹ thuật', tinh_nang: 'Đề xuất tính năng',
+  thanh_toan: 'Thanh toán · Lượng', khac: 'Khác',
+};
+// Nhãn PHÍA ADMIN — khác nhãn phía người dùng có chủ ý: 'bo_qua' ở đây gọi
+// đúng tên là "Bỏ qua", còn người gửi chỉ thấy "Đã xem".
+const FB_STATUS_ADMIN = {
+  moi: ['Mới', 'badge-gold'], dang_xu_ly: ['Đang xử lý', 'badge-blue'],
+  da_xu_ly: ['Đã xử lý', 'badge-green'], bo_qua: ['Bỏ qua', 'badge-grey'],
+};
+
+async function fbAdminFetch(opts) {
+  const res = await fetch('/api/admin/feedback' + (opts && opts.qs || ''), {
+    method: (opts && opts.method) || 'GET',
+    cache: 'no-store',
+    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${_token}` },
+    body: opts && opts.body ? JSON.stringify(opts.body) : undefined,
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(data.error || `HTTP ${res.status}`);
+  return data;
+}
+
+async function loadFeedbackAdmin() {
+  const host = document.getElementById('fb-body');
+  if (!host) return;
+  host.innerHTML = '<div class="loading"><span class="spin"></span>Đang tải...</div>';
+  const status = (document.getElementById('fb-f-status') || {}).value || '';
+  const kind   = (document.getElementById('fb-f-kind')   || {}).value || '';
+  const source = (document.getElementById('fb-f-source') || {}).value || '';
+  const rating = (document.getElementById('fb-f-rating') || {}).value || '';
+  try {
+    const data = await fbAdminFetch({ qs: `?limit=100&status=${encodeURIComponent(status)}`
+      + `&kind=${encodeURIComponent(kind)}&source=${encodeURIComponent(source)}&rating=${encodeURIComponent(rating)}` });
+    fbAdminPaintCounts(data.counts || {});
+    fbAdminRender(data.items || []);
+    fbAdminRenderStats(data.toolStats || []);
+  } catch (e) {
+    console.error('[loadFeedbackAdmin]', e);
+    host.innerHTML = `<div class="alert-box alert-error">Không tải được góp ý: ${escHtml(e.message)}</div>`;
+  }
+}
+
+function fbAdminPaintCounts(counts) {
+  ['moi', 'dang_xu_ly', 'da_xu_ly', 'bo_qua'].forEach(k => {
+    const el = document.getElementById('fb-c-' + k);
+    if (el) el.textContent = counts[k] != null ? counts[k] : '0';
+  });
+  const badge = document.getElementById('fb-nav-badge');
+  if (badge) {
+    const n = Number(counts.moi) || 0;
+    badge.textContent = n > 99 ? '99+' : String(n);
+    badge.style.display = n > 0 ? '' : 'none';
+  }
+}
+
+/** Đếm "Mới" cho huy hiệu sidebar mà KHÔNG cần mở panel — gọi lúc vào app.
+ *  Best-effort: hỏng thì huy hiệu không hiện, không làm phiền phần còn lại. */
+async function fbRefreshBadge() {
+  try {
+    const data = await fbAdminFetch({ qs: '?limit=1&status=moi' });
+    fbAdminPaintCounts(data.counts || {});
+  } catch (e) { console.error('[fbRefreshBadge]', e); }
+}
+
+function fbAdminRender(items) {
+  const host = document.getElementById('fb-body');
+  if (!host) return;
+  if (!items.length) {
+    host.innerHTML = '<div class="empty-state"><p>Không có góp ý nào khớp bộ lọc.</p></div>';
+    return;
+  }
+  host.innerHTML = items.map(f => {
+    const st = FB_STATUS_ADMIN[f.status] || FB_STATUS_ADMIN.moi;
+    const when = new Date(f.created_at).toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' });
+    // Ngữ cảnh máy tự đính kèm — đây là thứ biến "app lỗi" thành một báo lỗi
+    // lần được. Hiện gọn một dòng, mở rộng khi cần.
+    const meta = f.meta && typeof f.meta === 'object' ? f.meta : {};
+    const ctx = Object.keys(meta).map(k => `${escHtml(k)}: ${escHtml(String(meta[k]))}`).join(' · ');
+    const link = f.page_url
+      ? `<a href="${escHtml(f.page_url)}" target="_blank" rel="noopener" style="color:var(--gold-soft)">${escHtml(f.page_url)}</a>` : '—';
+    return `
+      <div style="border:1px solid var(--line);border-radius:var(--radius);padding:.9rem 1.1rem;margin-bottom:.9rem;background:var(--paper)">
+        <div style="display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;margin-bottom:.55rem">
+          <span class="badge ${st[1]}">${st[0]}</span>
+          ${f.rating === 'down' ? '<span class="badge badge-red">👎 Chưa đúng</span>'
+            : f.rating === 'up' ? '<span class="badge badge-green">👍 Đúng</span>' : ''}
+          ${f.source === 'reading' ? `<span class="badge badge-grey">${escHtml(f.tool_id || 'dưới bản luận giải')}</span>` : ''}
+          <span style="font-size:.75rem;color:var(--text-mid);font-weight:600">${escHtml(FB_KIND_LABEL[f.kind] || f.kind)}</span>
+          <span style="font-size:.75rem;color:var(--text-lt)">${escHtml(f.email || f.user_id)}</span>
+          <span style="font-size:.72rem;color:var(--text-lt);margin-left:auto">#${f.id} · ${escHtml(when)}</span>
+        </div>
+        ${f.message
+          ? `<div style="font-size:.88rem;color:var(--text);line-height:1.65;white-space:pre-wrap;margin-bottom:.6rem">${escHtml(f.message)}</div>`
+          : '<div style="font-size:.82rem;color:var(--text-lt);font-style:italic;margin-bottom:.6rem">Lá phiếu trần — người dùng không viết thêm.</div>'}
+        <details style="margin-bottom:.6rem">
+          <summary style="font-size:.72rem;color:var(--text-lt);cursor:pointer">Ngữ cảnh tự đính kèm</summary>
+          <div style="font-size:.72rem;color:var(--text-lt);line-height:1.7;margin-top:.35rem;font-family:var(--mono);word-break:break-all">
+            Trang: ${link}<br/>
+            ${f.tool_id ? `Công cụ: ${escHtml(f.tool_id)}<br/>` : ''}
+            ${ctx ? `${ctx}<br/>` : ''}
+            ${f.user_agent ? `UA: ${escHtml(f.user_agent)}` : ''}
+          </div>
+        </details>
+        <div style="display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:.6rem">
+          <button class="btn btn-sm" onclick="fbAdminSetStatus(${f.id},'moi')">Mới</button>
+          <button class="btn btn-sm" onclick="fbAdminSetStatus(${f.id},'dang_xu_ly')">Đang xử lý</button>
+          <button class="btn btn-sm" onclick="fbAdminSetStatus(${f.id},'da_xu_ly')">Đã xử lý</button>
+          <button class="btn btn-sm" onclick="fbAdminSetStatus(${f.id},'bo_qua')">Bỏ qua</button>
+        </div>
+        <textarea class="form-control" id="fb-reply-${f.id}" rows="2" maxlength="2000"
+          placeholder="Hồi đáp — người gửi thấy nguyên văn trong tab Góp Ý của họ.">${escHtml(f.admin_reply || '')}</textarea>
+        <div style="display:flex;align-items:center;gap:.6rem;margin-top:.45rem">
+          <button class="btn btn-primary btn-sm" onclick="fbAdminReply(${f.id})">Lưu hồi đáp</button>
+          <span style="font-size:.72rem;color:var(--text-lt)">${f.replied_at ? `Đã trả lời ${escHtml(new Date(f.replied_at).toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' }))} bởi ${escHtml(f.admin_email || '—')}` : 'Chưa trả lời'}</span>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+function fbAdminRenderStats(rows) {
+  const host = document.getElementById('fb-stats-body');
+  if (!host) return;
+  if (!rows.length) {
+    host.innerHTML = '<div class="empty-state"><p>Chưa có lá phiếu nào. Bảng này sống dậy khi người dùng bắt đầu bấm 👍/👎 dưới bản luận giải.</p></div>';
+    return;
+  }
+  host.innerHTML = '<table><thead><tr><th>Tool</th><th style="text-align:right">👍</th>'
+    + '<th style="text-align:right">👎</th><th style="text-align:right">Tổng</th>'
+    + '<th style="text-align:right">Tỉ lệ chê</th></tr></thead><tbody>'
+    + rows.map(r => {
+        const rate = Number(r.down_rate) || 0;
+        // Tô đỏ từ 40% trở lên: dưới mức đó thì chê là chuyện thường của một
+        // sản phẩm luận giải, tô hết thành đỏ là bảng mất khả năng chỉ điểm.
+        const col = rate >= 40 ? 'var(--tx-red)' : rate >= 20 ? 'var(--orange)' : 'var(--text-mid)';
+        return `<tr><td><b>${escHtml(r.tool_id)}</b></td>`
+          + `<td style="text-align:right">${r.up}</td>`
+          + `<td style="text-align:right">${r.down}</td>`
+          + `<td style="text-align:right;color:var(--text-lt)">${r.total}</td>`
+          + `<td style="text-align:right;font-weight:700;color:${col}">${rate}%</td></tr>`;
+      }).join('')
+    + '</tbody></table>';
+}
+
+async function fbAdminSetStatus(id, status) {
+  try {
+    await fbAdminFetch({ method: 'PATCH', body: { id, status } });
+    toast('Đã đổi trạng thái', 'success');
+    loadFeedbackAdmin();
+  } catch (e) { toast('Lỗi: ' + e.message, 'error'); }
+}
+
+async function fbAdminReply(id) {
+  const ta = document.getElementById('fb-reply-' + id);
+  if (!ta) return;
+  try {
+    // Trả lời XONG thì mặc nhiên là đã xử lý — đỡ một cú bấm, và tránh cảnh
+    // hộp thư đầy mục "Mới" đã trả lời từ đời nào.
+    await fbAdminFetch({ method: 'PATCH', body: { id, admin_reply: ta.value, status: 'da_xu_ly' } });
+    toast('Đã lưu hồi đáp', 'success');
+    loadFeedbackAdmin();
+  } catch (e) { toast('Lỗi: ' + e.message, 'error'); }
 }
 
 // ── PLACEHOLDER (module chưa build) ──

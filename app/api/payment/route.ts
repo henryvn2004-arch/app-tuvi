@@ -9,7 +9,10 @@ export const maxDuration = 15;
 
 import { NextRequest } from 'next/server';
 import { ok, err, options, parseBody } from '@/lib/cors';
-import { getPackage, getPackages, quoteCustomVnd, vndPerCredit } from '@/lib/billing/packages';
+import { getPackages, quoteCustomVnd, vndPerCredit } from '@/lib/billing/packages';
+// Mọi thứ chạm PayPal ở MỘT chỗ (lib/billing/paypal) — webhook dùng chung bản
+// đó, nên không có hai đường tiền song song để mà trôi lệch.
+import { PAYPAL_BASE, PAYPAL_CURRENCY, VND_PER_USD, getPayPalToken, humanIssueMessage, settlePayPalTopup } from '@/lib/billing/paypal';
 import { getToolPrice } from '@/lib/billing/pricing';
 import { hasSlugAccess } from '@/lib/billing/credits';
 import { freeGenGate, FREE_GEN_CAP_MESSAGE, railFreeRemaining } from '@/lib/billing/viral-budget';
@@ -39,20 +42,47 @@ import {
   MEMORY_KIND_LABELS, MAX_MEMORY_ITEMS, MAX_MEMORY_LEN,
 } from '@/lib/memory/store';
 
-const PAYPAL_BASE = process.env.PAYPAL_MODE === 'live'
-  ? 'https://api-m.paypal.com'
-  : 'https://api-m.sandbox.paypal.com';
-
-const CLIENT_ID     = process.env.PAYPAL_CLIENT_ID!;
-const CLIENT_SECRET = process.env.PAYPAL_CLIENT_SECRET!;
 const SUPABASE_URL  = process.env.SUPABASE_URL!;
 const SUPABASE_KEY  = process.env.SUPABASE_SERVICE_KEY!;
 const SITE_URL      = 'https://www.tuviminhbao.com';
-const CURRENCY      = 'USD';
 
 // ── Gói nạp ───────────────────────────────────────────────────
 // Nguồn thật = bảng credit_packages (lib/billing/packages), admin sửa được;
 // module tự fallback hardcode nếu DB hụt. Tỷ giá tham chiếu 1 USD = 25.000đ.
+
+// ── BIN ngân hàng → tên hiển thị ──────────────────────────────
+// PayOS KHÔNG trả tên ngân hàng, chỉ trả `bin` (mã Napas 6 số). Bản cũ vá
+// bằng cách in cứng "MB Bank" trong `topup.html` — đúng đúng MỘT lần, vì
+// tài khoản nhận lúc đó là MB. Đổi tài khoản nhận sang ngân hàng khác thì
+// dòng đó nói dối người đang cầm điện thoại chuyển tiền, mà KHÔNG có gì đỏ:
+// QR vẫn đúng (dựng từ `bin`), số TK vẫn đúng, chỉ mỗi tên ngân hàng sai.
+// Cùng họ bệnh với "client chép số giá" — số CŨ nguy hiểm hơn ô đang tải.
+// BIN lạ ⇒ trả `null`, client in thẳng mã BIN thay vì đoán một cái tên.
+const BANK_BY_BIN: Record<string, string> = {
+  '970400': 'Saigonbank',      '970403': 'Sacombank',
+  '970405': 'Agribank',        '970406': 'DongA Bank',
+  '970407': 'Techcombank',     '970408': 'GPBank',
+  '970409': 'BacA Bank',       '970410': 'Standard Chartered',
+  '970412': 'PVcomBank',       '970414': 'Oceanbank',
+  '970415': 'VietinBank',      '970416': 'ACB',
+  '970418': 'BIDV',            '970419': 'NCB',
+  '970422': 'MB Bank',         '970423': 'TPBank',
+  '970424': 'Shinhan Bank',    '970425': 'ABBANK',
+  '970426': 'MSB',             '970427': 'VietABank',
+  '970428': 'Nam A Bank',      '970429': 'SCB',
+  '970430': 'PGBank',          '970431': 'Eximbank',
+  '970432': 'VPBank',          '970433': 'VietBank',
+  '970434': 'Indovina Bank',   '970436': 'Vietcombank',
+  '970437': 'HDBank',          '970438': 'BaoViet Bank',
+  '970439': 'Public Bank',     '970440': 'SeABank',
+  '970441': 'VIB',             '970442': 'Hong Leong Bank',
+  '970443': 'SHB',             '970444': 'CBBank',
+  '970446': 'Co-opBank',       '970448': 'OCB',
+  '970449': 'LPBank',          '970452': 'KienlongBank',
+  '970454': 'BVBank',          '970457': 'Woori Bank',
+  '970458': 'UOB',             '546034': 'CAKE by VPBank',
+  '546035': 'Ubank by VPBank', '963388': 'TNEX',
+};
 
 function createPayOSSignature(data: Record<string, unknown>): string {
   const checksumKey = process.env.PAYOS_CHECKSUM_KEY!;
@@ -62,19 +92,6 @@ function createPayOSSignature(data: Record<string, unknown>): string {
 
 
 // ── Helpers ───────────────────────────────────────────────────
-async function getPayPalToken(): Promise<string> {
-  const res = await fetch(`${PAYPAL_BASE}/v1/oauth2/token`, {
-    method: 'POST',
-    headers: {
-      'Authorization': 'Basic ' + Buffer.from(`${CLIENT_ID}:${CLIENT_SECRET}`).toString('base64'),
-      'Content-Type': 'application/x-www-form-urlencoded',
-    },
-    body: 'grant_type=client_credentials',
-  });
-  if (!res.ok) throw new Error(`PayPal auth failed: ${res.status}`);
-  return (await res.json()).access_token;
-}
-
 const SB_HEADERS = {
   'Content-Type': 'application/json',
   'apikey': SUPABASE_KEY,
@@ -258,8 +275,8 @@ async function handleTopup(body: Record<string, unknown>): Promise<Response> {
     // Đơn giá suy từ bậc gói (xem quoteCustomVnd) — KHÔNG chia cứng nữa.
     const { credits } = await quoteCustomVnd(customAmountVnd);
     if (credits <= 0) return err('Không quy đổi được số Lượng cho số tiền này', 500);
-    // PayPal cần USD: convert VND → USD ở rate 25.000
-    const usdAmount = Math.round((customAmountVnd / 25_000) * 100) / 100;
+    // PayPal cần USD: convert VND → USD ở rate VND_PER_USD
+    const usdAmount = Math.round((customAmountVnd / VND_PER_USD) * 100) / 100;
     pkg  = { amount: usdAmount.toFixed(2), credits, label: `Nap Tuy Chinh – ${credits} Luong` };
     slug = `topup-custom-${Math.round(customAmountVnd / 1000)}k`;
   } else {
@@ -283,7 +300,7 @@ async function handleTopup(body: Record<string, unknown>): Promise<Response> {
         purchase_units: [{
           reference_id: slug,
           description:  `Tử Vi Minh Bảo – Nạp ${pkg.credits} Credits`,
-          amount: { currency_code: CURRENCY, value: pkg.amount },
+          amount: { currency_code: PAYPAL_CURRENCY, value: pkg.amount },
           custom_id: `${slug}|${userId}`,
         }],
         application_context: {
@@ -297,8 +314,12 @@ async function handleTopup(body: Record<string, unknown>): Promise<Response> {
       }),
     });
     if (!orderRes.ok) {
-      const e = await orderRes.json();
-      throw new Error(e.details?.[0]?.description || e.message || 'PayPal order failed');
+      // Cùng lý do như ở bước capture (lib/billing/paypal.ts): `message` của
+      // PayPal là câu chung chung, lý do thật ở `details[0].issue` + `debug_id`.
+      const e = await orderRes.json().catch(() => ({}) as Record<string, any>);
+      console.error('[paypal] tạo đơn thất bại', 'HTTP', orderRes.status, JSON.stringify(e));
+      // Mã lỗi ở lại log; khách nhận câu nói rõ phải làm gì tiếp.
+      throw new Error(humanIssueMessage(e.details?.[0]?.issue || ''));
     }
     const order = await orderRes.json();
     const approvalUrl = order.links?.find((l: { rel: string }) => l.rel === 'approve')?.href;
@@ -308,64 +329,31 @@ async function handleTopup(body: Record<string, unknown>): Promise<Response> {
 }
 
 // ── POST: capture ─────────────────────────────────────────────
+// Toàn bộ việc chốt đơn nằm ở `settlePayPalTopup` (lib/billing/paypal) — CÙNG
+// một cửa mà webhook đi qua. Route này chỉ còn là lớp vỏ HTTP: nhận gợi ý
+// slug/userId từ trình duyệt rồi trả về đúng hình dạng mà `payment-success.html`
+// đang đọc (`success` · `credits` · `balance`).
 async function handleCapture(body: Record<string, unknown>): Promise<Response> {
   const orderId = String(body.orderId || '');
   const slug    = String(body.slug    || '');
-  let   userId  = String(body.userId  || '');
   if (!orderId || !slug) return err('Missing orderId or slug', 400);
-  if (!slug.startsWith('topup-')) return err('Only topup orders handled here', 400);
-
-  const packageId = slug.replace('topup-', '');
-  const foundPkg = await getPackage(packageId);
-  if (!foundPkg) return err('Invalid package in slug', 400);
-  const pkg = { amount: foundPkg.amountUsd, credits: foundPkg.credits, label: `${foundPkg.label} – ${foundPkg.credits} Luong` };
 
   try {
-    const ppToken = await getPayPalToken();
-    const verifyRes = await fetch(`${PAYPAL_BASE}/v2/checkout/orders/${orderId}`, {
-      headers: { 'Authorization': `Bearer ${ppToken}` },
+    const out = await settlePayPalTopup(orderId, {
+      slug,
+      userId: String(body.userId || '') || undefined,
     });
-    if (!verifyRes.ok) throw new Error('Cannot verify PayPal order');
-    const order = await verifyRes.json();
-
-    if (!userId) {
-      const customId: string = order.purchase_units?.[0]?.custom_id || '';
-      userId = customId.split('|')[1] || '';
-    }
-    if (!userId) return err('Cannot determine userId', 400);
-
-    if (order.status === 'COMPLETED') {
-      const dupRes = await fetch(
-        `${SUPABASE_URL}/rest/v1/credit_transactions?paypal_order_id=eq.${encodeURIComponent(orderId)}&limit=1&select=id`,
-        { cache: 'no-store', headers: SB_HEADERS }
-      );
-      if (dupRes.ok && (await dupRes.json()).length > 0) {
-        return ok({ success: true, status: 'already_completed', credits: pkg.credits });
-      }
-      const newBal = await rpc('add_credits', { p_user_id: userId, p_amount: pkg.credits });
-      await logTransaction({ userId, amount: pkg.credits, type: 'topup', description: pkg.label, paypalOrderId: orderId, amountVnd: foundPkg.amountVnd, gateway: 'paypal' });
-      // Referral reward fire tự động qua Postgres trigger trg_referral_check_on_topup
-      return ok({ success: true, credits: pkg.credits, balance: newBal });
-    }
-
-    if (order.status !== 'APPROVED') return err(`Order status: ${order.status}`, 400);
-
-    const captureRes = await fetch(`${PAYPAL_BASE}/v2/checkout/orders/${orderId}/capture`, {
-      method: 'POST',
-      headers: { 'Authorization': `Bearer ${ppToken}`, 'Content-Type': 'application/json' },
+    if (!out.ok) return err(out.error, out.status);
+    // `credited=false` nghĩa là webhook (hoặc một tab khác) đã chốt trước —
+    // với người vừa trả tiền thì đó vẫn là THÀNH CÔNG, không phải lỗi. Khác
+    // nhánh `already_completed` cũ ở chỗ nay trả kèm số dư thật, nên trang cảm
+    // ơn không còn hiện "Số dư hiện tại: 0".
+    return ok({
+      success: true,
+      credits: out.credits,
+      balance: out.balance,
+      ...(out.credited ? {} : { status: 'already_completed' }),
     });
-    if (!captureRes.ok) {
-      const e = await captureRes.json();
-      throw new Error(e.message || 'Capture failed');
-    }
-    const captured = await captureRes.json();
-    if (captured.status !== 'COMPLETED') throw new Error(`Capture incomplete: ${captured.status}`);
-
-    const newBal = await rpc('add_credits', { p_user_id: userId, p_amount: pkg.credits });
-    await logTransaction({ userId, amount: pkg.credits, type: 'topup', description: pkg.label, paypalOrderId: orderId });
-    // Referral reward fire tự động qua Postgres trigger trg_referral_check_on_topup
-    return ok({ success: true, credits: pkg.credits, balance: newBal });
-
   } catch (e: unknown) { return err((e as Error).message); }
 }
 
@@ -692,8 +680,11 @@ async function handleCreateBank(body: Record<string, unknown>): Promise<Response
     });
 
     const d = payosData.data;
+    const bin = String(d.bin || '');
+    const bankName = BANK_BY_BIN[bin] || null;
+    if (bin && !bankName) console.warn('[create-bank] BIN chua co trong BANK_BY_BIN:', bin);
     return ok({ orderCode, checkoutUrl: d.checkoutUrl, accountNumber: d.accountNumber,
-      accountName: d.accountName, bin: d.bin, amountVND,
+      accountName: d.accountName, bin: d.bin, bankName, amountVND,
       credits, label });
   } catch (e: unknown) { return err((e as Error).message); }
 }
@@ -1278,6 +1269,8 @@ const ENV_KEY_GROUPS: { label: string; items: { key: string; label: string }[] }
   { label: 'Thanh Toán', items: [
     { key: 'PAYPAL_CLIENT_ID', label: 'PayPal Client ID' },
     { key: 'PAYPAL_CLIENT_SECRET', label: 'PayPal Client Secret' },
+    { key: 'PAYPAL_MODE', label: 'PayPal Mode (thiếu = sandbox)' },
+    { key: 'PAYPAL_WEBHOOK_ID', label: 'PayPal Webhook ID' },
     { key: 'PAYOS_CLIENT_ID', label: 'PayOS Client ID' },
     { key: 'PAYOS_API_KEY', label: 'PayOS API Key' },
     { key: 'PAYOS_CHECKSUM_KEY', label: 'PayOS Checksum Key' },

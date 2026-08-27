@@ -85,7 +85,9 @@ grep mò — repo có file 400 KB+ (`public/tuvi-ansao-engine.js`, `public/admin
 ### Tiền
 `lib/billing/credits.ts` (trừ/hoàn/kiểm sở hữu) · `packages.ts` + `pricing.ts`
 (giá) · `viral-budget.ts` (trần ảnh free) · `anon-trial.ts` (khách vô danh) ·
-`lib/portraits/cache.ts` `cacheFor()` (cửa DUY NHẤT vào `portrait_cache`).
+`lib/portraits/cache.ts` `cacheFor()` (cửa DUY NHẤT vào `portrait_cache`) ·
+`lib/billing/paypal.ts` (nguồn DUY NHẤT chạm PayPal — `settlePayPalTopup` là
+cửa chung cho CẢ trình duyệt lẫn `app/api/paypal-webhook`, chịu được gọi trùng).
 
 ### Vận hành
 `lib/ops/jobs.ts` (**sổ job** — thêm cron phải ghi vào đây) · `lib/cron/log.ts`
@@ -97,10 +99,11 @@ sửa bằng SQL không cần deploy) · `lib/marketing/*` (digest · cảnh bá
 (tường trả phí) · `tool-prices.js` (giá) · `poster.js` (ảnh 9:16 + QR) ·
 `nav.js` (icon dùng chung) · `track.js` (đo) · `referral.js`.
 
-### 25 bộ dò (chạy trong CI lint) — `npm run check:*`
-`prices` `nostore` `groups` `share` `history` `shellboot` `authapi` `keyframes`
-`hoatdong` `hexagrams` `laso` `railfields` `railwrap` `cacheshape` `hao` `motifs`
-`terms` `publish` `jobs` `token` `prompt` `topics` `batrach` `sodep` `giosinh`.
+### 32 bộ dò (chạy trong CI lint) — `npm run check:*`
+`prices` `nostore` `groups` `viec` `share` `history` `shellboot` `authapi`
+`giosinh` `keyframes` `hoatdong` `hexagrams` `laso` `railfields` `railwrap`
+`cacheshape` `hao` `motifs` `terms` `publish` `jobs` `token` `prompt` `topics`
+`batrach` `sodep` `lunar` `vntz` `tooltip` `cns` `celebanh` `nhatky`.
 **Bộ dò kêu oan là bộ dò bị tắt đi** — thà thu hẹp còn hơn để nó báo bừa.
 
 ## 📐 QUY ƯỚC BẮT BUỘC (đọc trước khi viết UI mới)
@@ -204,6 +207,8 @@ Mỗi luật dưới đây sinh ra từ một lần cắn thật. Cột cuối l
 | **Hoàn tiền qua RPC `add_credits`, KHÔNG sửa thẳng `user_credits.balance`** | Sổ giao dịch phải giải thích được số dư | mục "Vận Hạn 12 Tháng" |
 | **Giá Lượng: client KHÔNG chép số** — hiện bằng `data-tvp-price`, đọc hụt thì để `…` và **từ chối chạy** | Số CŨ nguy hiểm hơn ô đang tải: ô đang tải thì người ta chờ, số cũ thì người ta tin | `npm run check:prices` |
 | **Trần/cầu dao ngân sách hướng fail phải ngược nhau tuỳ vai** | Gác NGÂN SÁCH → fail-**open** (`viral-budget.ts`); PHÁT tiền → fail-**closed** (`onboarding/tasks.ts`) | mục "M3 — Nhiệm vụ onboarding" |
+| **Chống trùng đường tiền: dòng SỔ đi TRƯỚC làm mutex, cộng tiền SAU** — và mutex chỉ có thật khi có UNIQUE đỡ bên dưới | `Prefer: resolution=ignore-duplicates` KHÔNG làm gì nếu thiếu ràng buộc UNIQUE — đã im lặng vô hiệu từ đầu trên `paypal_order_id`. Và cộng tiền trước rồi ghi sổ sau thì lượt thua cuộc VẪN kịp cộng, chỉ trượt ở bước ghi ⇒ ví tăng hai lần, sổ một dòng | `paypal_settle_topup` · `nhat-ky/2026-08.md` "Chuyển PayPal sang account công ty" |
+| **Lỗi cổng thanh toán có HAI người đọc — đừng đưa cùng một chuỗi cho cả hai** | `message` của PayPal là MỘT câu chung chung cho mọi lỗi 422; lý do thật ở `details[0].issue` (+ `debug_id`). Nhưng trả thẳng `INSTRUMENT_DECLINED` cho khách cũng vô dụng ngang. Khách → câu tiếng Việt nói làm gì tiếp; mình → mã lỗi trong `console.error`. Đã trả giá: một lượt nạp hỏng vì thẻ hết tiền mà chính chủ site phải đi dò số dư mới hiểu | `humanIssueMessage()` · `nhat-ky/2026-08.md` "PayPal live lượt đầu" |
 
 ### 💾 Cache kết quả
 - **Đổi CẤU TRÚC payload ⇒ BẮT BUỘC bump `SHAPE`.** `portrait_cache` khoá theo
@@ -259,6 +264,22 @@ Mỗi luật dưới đây sinh ra từ một lần cắn thật. Cột cuối l
   chính danh sách của nguồn (4.392 khoá mẫu vẫn bỏ lọt 10 tên).
 - **Bảng dịch dựng từ MỘT nguồn thì chỉ phủ nguồn đó** — đã cắn 3 lần (chữ Hán,
   tên hành tinh). Cắm bộ dò rò rỉ mỗi lần đấu vào nguồn chữ mới.
+- **Bảng âm lịch chỉ phủ `1900-01-31 → 2100-12-31`.** Ngoài tầm: bản vanilla
+  (`public/tuvi-ansao-engine.js`) trả **`null`**, bản TS (`tuvi-engine`) **ném
+  `RangeError`** — cố ý khác nhau theo nơi gọi, nhưng BIÊN phải khớp. Bản cũ
+  `return {day:1,month:1,year:yy}` làm MỌI ngày dương của một năm trước 1900 ra
+  CÙNG một lá số, im lặng. **Mọi lượt import ngày sinh từ nguồn NGOÀI phải gọi
+  `isLunarSupported()` trước.** `npm run check:lunar` ·
+  `nhat-ky/2026-08.md` "solarToLunar BỊA lá số".
+- **Bản vanilla BỎ cờ `isLeap`** ⇒ ngày trong tháng nhuận đụng khoá với tháng
+  thường (đo được: 336/365 ngày phân biệt ở năm có nhuận). **Nợ CỐ Ý, đừng sửa
+  mò** — tháng nhuận là chuyện cổ pháp. `check:lunar` ghim hiện trạng: đổi là đỏ.
+- **Khoá "cùng lá số" là ÂM LỊCH, không phải ngày dương** — an sao chỉ phụ thuộc
+  (can chi năm · tháng ÂL · ngày ÂL · giờ · giới); số năm âm KHÔNG vào an sao, nên
+  lá số lặp đúng chu kỳ **60 năm** (đo: 0/48 khác biệt giữa 1884/1944/2004). Giới
+  tính thì PHẢI vào khoá (phụ tinh khác 100%, chính tinh khác 0%).
+  ⚠️ `lasoKey()` của `lib/portraits/cache.ts` băm ngày **DƯƠNG** — không tái dùng
+  cho việc gom theo lá số. `nhat-ky/2026-08.md` "Ai Sinh Cùng Ngày Với Bạn".
 - **Bảng có tính ĐỐI XỨNG (Du Niên, quan hệ 2 chiều bất kỳ) tự kiểm được KHÔNG
   cần nguồn ngoài** — cung A nhìn cung B ra sao X thì B nhìn A cũng phải ra X;
   lệch là sai chắc chắn. `BatTrachTool.duNienStars()`/`getCungMenh()`
@@ -298,6 +319,12 @@ Mỗi luật dưới đây sinh ra từ một lần cắn thật. Cột cuối l
   toán tử HOẶC trong BRE) → dùng `grep -F`.
 - **Red-team bộ dò: assert đột biến ĐÃ ăn rồi mới đọc kết quả.** Nhiều lần "pass"
   chỉ vì lệnh thay chuỗi không khớp nên chẳng sửa gì.
+- **Bảng thống kê CẮT TOP-N đọc thành "chưa từng xảy ra".** Log Vercel
+  `group_by requestPath` cắt ở 25 mà repo có ~3.000 đường dẫn phân biệt (mỗi
+  `/la-so/*` một cái) — route bị gọi 1–2 lần RƠI KHỎI BẢNG. Dùng `group_by route`
+  (gộp `[slug]`, còn ~20 dòng), rồi lấy mốc giờ bằng `statusCode` + cửa sổ hẹp;
+  tìm kiếm toàn văn hay hết giờ, đừng dựa vào. `nhat-ky/2026-08.md` "PayPal live
+  lượt đầu".
 - **Đối chứng `origin/main` HẾT HẠN** khi chính PR đó vào main, hoặc khi hạ tầng nó
   neo vào đã đổi. Neo đúng `origin/main` chưa đủ — phải neo đúng cái mình đang so.
 - **Bài kiểm đặt tên theo điều nó THỰC SỰ đo**, không theo điều mình muốn nó đo.

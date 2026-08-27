@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"></noscript>
-<link rel="stylesheet" href="/shell.css?v=29">
+<link rel="stylesheet" href="/shell.css?v=30">
 <style>
 .form-card{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);max-width:860px}
 .form-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:3px}
@@ -177,6 +177,12 @@
           </div>
         </div>
 
+        <!-- Khối hook (1 fact) — CHỈ dựng ở lượt xem trước khách chưa đăng
+             nhập (xem `mountHook`), giữa hero và tấm khoá. Không dựng lại
+             "Cơ Sở Trong Lá Số" (khối đó đã LÀM MỜ ngay bên dưới) — hé đúng
+             chính tinh cung Mệnh, đúng phần route.ts tự gọi là "bằng chứng
+             engine đọc thật" (không phải "hàng", xem chú thích `meta()`). -->
+        <div id="hookHost"></div>
         <div id="nkLockHost" style="display:none;margin-bottom:16px"></div>
 
         <div class="res-block" id="sayBlock" style="display:none">
@@ -251,6 +257,10 @@
           <div class="res-block-header"><span class="res-block-title">Đã Xem Trước Đó</span></div>
           <div class="res-block-body"><div id="histList"></div></div>
         </div>
+
+        <!-- "Ai Sinh Cùng Ngày Với Bạn" — miễn phí, 0 token LLM. Hỏng mạng/API
+             thì tự ẩn, không làm hỏng bản cẩm nang phía trên. -->
+        <div id="cnsHost"></div>
       </div>
     </div>
   </main>
@@ -261,11 +271,14 @@
 <script>window.SHELL_ACTIVE='nguoi-khac';window.SHELL_HISTORY=true;
 window.SHELL_INTRO={key:'nguoi-khac',title:'Lá Số Người Khác',desc:'Nhận cẩm nang ứng xử: nên nói gì, tránh gì với người đó. Bạn đoán già đoán non tính sếp mà vẫn hay đoán sai. Dùng khi cần hiểu nhanh một người trước cuộc gặp quan trọng.'};</script>
 <script src="/laso-chart.js?v=3"></script>
+<script src="/tools-shared/vn-timezone.js?v=1"></script>
 <script src="/tuvi-form.js?v=2"></script>
+<script src="/tools-shared/cung-ngay-sinh.js?v=1"></script>
 <script src="/tuvi-paywall.js?v=22"></script>
+<script src="/tools-shared/hook-layer.js?v=1"></script>
 <script src="/auth.js?v=2"></script>
-  <script src="/nav.js?v=23" data-icons-only></script>
-<script src="/shell.js?v=82"></script>
+  <script src="/nav.js?v=24" data-icons-only></script>
+<script src="/shell.js?v=85"></script>
 <script src="/tools-shared/ai-loading-steps.js?v=9"></script>
 <script>
 
@@ -379,6 +392,18 @@ function _birthOf(prefix) {
   };
 }
 
+// "Ai Sinh Cùng Ngày Với Bạn" — chủ thể là NGƯỜI ĐANG ĐƯỢC XEM (`b`, prefix
+// rỗng), không phải `self` (người đọc). Gọi ở CẢ đường xem trước lẫn đường đầy
+// đủ — phần phụ, không đợi paywall. `b` dạng {day,month,year,hourBranch,gender}
+// từ `_birthOf()`, khác shape module đòi.
+function _mountCnsNguoiKhac(b) {
+  if (!window.CungNgaySinh || !b) return;
+  CungNgaySinh.mount('cnsHost', {
+    ngay: b.day, thang: b.month, nam: b.year,
+    gioIdx: b.hourBranch, gioitinh: b.gender,
+  });
+}
+
 /** Query cho `action=cache-status` — đúng tên tham số route đọc. */
 function _cacheQuery(b, self, qh, viec) {
   var q = 'd=' + (b.day || 0) + '&m=' + (b.month || 0) + '&y=' + (b.year || 0) +
@@ -468,14 +493,39 @@ async function _runAnonPreview(b, self, qh, viec) {
     // Cơ sở lá số đã deterministic/0đ trong payload preview → dựng THẬT (không
     // để trống), chỉ làm mờ. Xem comment trên renderMetaBasis.
     renderMetaBasis(data, true);
+    mountHook(data);
     document.getElementById('card').style.display = 'block';
     document.getElementById('btnEdit').style.display = '';
     if (window.SHELL_INTRO) Shell.dismissIntro(window.SHELL_INTRO.key);
     _renderLockWall(qh, viec, data.khoa);
+    _mountCnsNguoiKhac(b);
   } catch (e) {
     _closePanel();
     showError('Lỗi: ' + (e.message || 'Không thể kết nối. Vui lòng thử lại.'));
   }
+}
+
+// Hé đúng chính tinh cung Mệnh — MỘT trong "2/5 mặt đọc" đã có trong payload
+// xem trước (chỉ tên sao, KHÔNG kèm cachCuc/diem — route.ts tự nói tên sao là
+// "bằng chứng engine đọc thật", cachCuc mới là "hàng"). Không dựng lại cả
+// basisBlock (đã LÀM MỜ ngay bên dưới) và không đụng tới matDoc[1] (Phúc
+// Đức) hay coSo/trichDan — cả hai vẫn nằm trong khối mờ.
+function mountHook(data) {
+  var host = document.getElementById('hookHost');
+  if (!host || !window.HookLayer) return;
+  var menh = (data.matDoc || []).filter(function (m) { return m.cung === 'Mệnh'; })[0];
+  if (!menh) return;
+  var saoText = (menh.sao || []).join(', ') || 'không có chính tinh';
+  window.HookLayer.mount(host, {
+    tool: 'nguoi-khac',
+    charts: [],
+    facts: [{
+      tone: 'neutral',
+      title: 'Chính tinh tại cung Mệnh: ' + saoText + (menh.muon ? ' (mượn xung chiếu)' : ''),
+      body: 'Cách cục, đại vận, vận năm, và cách ứng xử cụ thể với người này nằm trong cẩm nang đầy đủ.',
+      source: 'engine · matDoc',
+    }],
+  });
 }
 
 function _renderLockWall(qh, viec, khoaRaw) {
@@ -554,6 +604,7 @@ async function _doGenerate(freeRerun, qh, viec) {
     document.getElementById('btnEdit').style.display = '';
     if (window.SHELL_INTRO) Shell.dismissIntro(window.SHELL_INTRO.key);
     _loadHistory();
+    _mountCnsNguoiKhac(_last);
 
     // B1 — khoảnh khắc VỪA ĐỌC XONG mà số dư đã hụt: vừa thích vừa tiếc, đúng
     // chỗ lời mời có sức nhất. Widget tự ẩn nếu còn đủ Lượng cho một lượt nữa

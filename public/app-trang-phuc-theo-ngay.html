@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"></noscript>
-<link rel="stylesheet" href="/shell.css?v=29">
+<link rel="stylesheet" href="/shell.css?v=30">
 <style>
 .tn-card{background:var(--white);border:1px solid var(--line);border-radius:14px;padding:20px 22px;box-shadow:var(--shadow);max-width:760px;margin-bottom:16px}
 .tn-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:4px;display:flex;align-items:center;gap:8px}
@@ -129,6 +129,11 @@
           <div class="day-hanh" id="previewHanh">—</div>
           <div id="previewRelation" style="font-size:12px;color:var(--text-mid)"></div>
         </div>
+
+        <!-- Khối hook (1 fact) — nhấn lại đúng quan hệ ngũ hành Mệnh/Ngày vừa
+             tính thành một câu nổi bật ngay trước CTA. Trang này không có gì
+             đang khoá/mờ — hook không hé thêm dữ liệu mới. -->
+        <div id="hookHost"></div>
 
         <button class="btn-analyze" id="btnAnalyze" onclick="analyze()" disabled>
           <span class="ic" data-icon="shirt"></span> Xem Trang Phục Hợp Ngày — <span data-tvp-price="trang-phuc-theo-ngay">…</span> Lượng
@@ -254,8 +259,9 @@
 window.SHELL_INTRO={key:'trang-phuc-theo-ngay',title:'Trang Phục Theo Ngày',desc:'Gợi ý trang phục hôm nay hợp với vận của bạn. Bạn đứng trước tủ đồ mỗi sáng mà không biết nên mặc gì. Dùng khi có việc quan trọng và muốn chọn đồ có chủ đích.'};</script>
 <script src="/auth.js?v=2"></script>
 <script src="/tuvi-paywall.js?v=22"></script>
-  <script src="/nav.js?v=23" data-icons-only></script>
-<script src="/shell.js?v=82"></script>
+<script src="/tools-shared/hook-layer.js?v=1"></script>
+  <script src="/nav.js?v=24" data-icons-only></script>
+<script src="/shell.js?v=85"></script>
 <script src="/tools-shared/ai-loading-steps.js?v=9"></script>
 <script>
 function initTrangPhucNgay(){
@@ -371,6 +377,25 @@ function onFormChange(){
   document.getElementById('previewRelation').textContent=rel.text;
   preview.classList.add('show');
   document.getElementById('btnAnalyze').disabled=false;
+  mountHook(cc,hanh,rel);
+}
+
+// Trang này KHÔNG có gì đang mờ/khoá — quan hệ ngũ hành hiện rõ hết. Hook chỉ
+// nhấn lại đúng kết luận vừa tính thành một fact nổi bật ngay trước CTA.
+function mountHook(cc,hanh,rel){
+  var host=document.getElementById('hookHost');
+  if(!host||!window.HookLayer)return;
+  var tot=rel.code==='ngay_sinh_menh'||rel.code==='binh_hoa';
+  window.HookLayer.mount(host,{
+    tool:'trang-phuc-theo-ngay',
+    charts:[],
+    facts:[{
+      tone:tot?'good':(rel.code==='ngay_khac_menh'?'bad':'neutral'),
+      title:'Ngày '+cc+' — hành '+hanh,
+      body:rel.text+'. Màu nên mặc, phong cách gợi ý, và trang phục cụ thể theo đúng hành ngày nằm trong bản phân tích AI.',
+      source:'engine · dayCanChi/getRelation',
+    }],
+  });
 }
 
 function resetAll(){

@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"></noscript>
-<link rel="stylesheet" href="/shell.css?v=29">
+<link rel="stylesheet" href="/shell.css?v=30">
 <style>
 .form-card{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);max-width:860px}
 .form-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:3px}
@@ -141,6 +141,11 @@
             </div>
           </div>
 
+          <!-- Khối hook (1 fact) — CHỈ dựng ở lượt xem trước khách chưa đăng
+               nhập (xem `mountHook`). Không dựng lại "Chất Người..." (khối đó
+               đã LÀM MỜ ngay bên dưới) — hé đúng MỘT chất nổi nhất. -->
+          <div id="hookHost"></div>
+
           <!-- MIỄN PHÍ: thiên hướng đứng đầu + dấu hiệu để cha mẹ đối chiếu -->
           <div class="res-block" id="huongDauBlock" style="display:none">
             <div class="res-block-header"><span class="res-block-title">Thiên Hướng Nổi Nhất</span></div>
@@ -245,6 +250,10 @@
             <div class="res-block-body"><div id="histList"></div></div>
           </div>
         </div>
+
+        <!-- "Ai Sinh Cùng Ngày Với Bạn" — miễn phí, 0 token LLM. Hỏng mạng/API
+             thì tự ẩn, không làm hỏng bản đọc phía trên. -->
+        <div id="cnsHost"></div>
       </div>
     </div>
   </main>
@@ -255,11 +264,14 @@
 <script>window.SHELL_ACTIVE='huong-nghiep-tre';window.SHELL_HISTORY=true;
 window.SHELL_INTRO={key:'huong-nghiep-tre',title:'Hướng Nghiệp Sớm Cho Con',desc:'Gợi ý hoạt động nên cho con làm quen theo đúng lứa tuổi. Bạn muốn định hướng sớm cho con nhưng chưa biết bắt đầu từ đâu. Dùng khi muốn tham khảo, không phải để chốt nghề cho con.'};</script>
 <script src="/laso-chart.js?v=3"></script>
+<script src="/tools-shared/vn-timezone.js?v=1"></script>
 <script src="/tuvi-form.js?v=2"></script>
+<script src="/tools-shared/cung-ngay-sinh.js?v=1"></script>
 <script src="/tuvi-paywall.js?v=22"></script>
+<script src="/tools-shared/hook-layer.js?v=1"></script>
 <script src="/auth.js?v=2"></script>
-  <script src="/nav.js?v=23" data-icons-only></script>
-<script src="/shell.js?v=82"></script>
+  <script src="/nav.js?v=24" data-icons-only></script>
+<script src="/shell.js?v=85"></script>
 <script src="/tools-shared/ai-loading-steps.js?v=9"></script>
 <script>
 
@@ -323,6 +335,18 @@ function _birthOf(prefix) {
   };
 }
 
+// "Ai Sinh Cùng Ngày Với Bạn" — chủ thể là LÁ SỐ CON (`b`, prefix rỗng). Gọi ở
+// CẢ ba đường hiện `card` (người lớn không bán · trẻ em chưa đăng nhập · đã
+// tạo bản đầy đủ) — phần phụ, không đợi paywall. `b` dạng
+// {day,month,year,hourBranch,gender} từ `_birthOf()`, khác shape module đòi.
+function _mountCnsHuongNghiep(b) {
+  if (!window.CungNgaySinh || !b) return;
+  CungNgaySinh.mount('cnsHost', {
+    ngay: b.day, thang: b.month, nam: b.year,
+    gioIdx: b.hourBranch, gioitinh: b.gender,
+  });
+}
+
 /** Query cho `action=cache-status` — đúng tên tham số route đọc. */
 function _cacheQuery(b, lo) {
   return 'd=' + (b.day || 0) + '&m=' + (b.month || 0) + '&y=' + (b.year || 0) +
@@ -373,6 +397,7 @@ async function analyze() {
     renderMeta(prev);
     if (window.SHELL_INTRO) Shell.dismissIntro(window.SHELL_INTRO.key);
     _banGiaoNguoiLon(prev);
+    _mountCnsHuongNghiep(b);
     return;
   }
 
@@ -389,8 +414,10 @@ async function analyze() {
     renderMetaHead(prev);
     renderMetaRest(prev);
     _hnLockRestBlocks(true);
+    mountHook(prev);
     if (window.SHELL_INTRO) Shell.dismissIntro(window.SHELL_INTRO.key);
     _renderLockWall(lo);
+    _mountCnsHuongNghiep(b);
     return;
   }
 
@@ -427,6 +454,29 @@ function _hnLockRestBlocks(locked) {
     }
   });
   if (window.mountIcons) window.mountIcons(document.getElementById('resPanel'));
+}
+
+// Hé đúng MỘT trong danh sách "Chất Người Đọc Ra Từ Lá Số" (mục đầu, đã xếp
+// nổi bật nhất — xem `xepChieu` trong lib/engine/huong-nghiep-tre.ts) — không
+// dựng lại cả `chatBlock` (đã LÀM MỜ ngay bên dưới) và không lộ `huongDau`
+// đầy đủ (khối riêng, cũng đang mờ). Không có điểm số kèm — `chatNguoi[].cao`
+// là một câu mô tả, không phải con số; trang tự bỏ `diem` của `huongDau` ở
+// đúng chỗ này (`_huongHtml(hd,false,false)`), hook không tự ý thêm lại.
+function mountHook(data) {
+  var host = document.getElementById('hookHost');
+  if (!host || !window.HookLayer) return;
+  var top = (data.chatNguoi || [])[0];
+  if (!top) return;
+  window.HookLayer.mount(host, {
+    tool: 'huong-nghiep-tre',
+    charts: [],
+    facts: [{
+      tone: 'good',
+      title: 'Chất người nổi nhất: ' + top.ten,
+      body: (top.cao || '') + ' — thiên hướng nổi nhất và cách cho con làm quen nằm trong bản định hướng đầy đủ.',
+      source: 'engine · chatNguoi',
+    }],
+  });
 }
 
 function _renderLockWall(lo) {
@@ -501,6 +551,7 @@ async function _doGenerate(freeRerun, lo) {
     document.getElementById('btnEdit').style.display = '';
     if (window.SHELL_INTRO) Shell.dismissIntro(window.SHELL_INTRO.key);
     _loadHistory();
+    _mountCnsHuongNghiep(_last);
 
     var ten = data.ten || 'con';
     Shell.setContext({

@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"></noscript>
-<link rel="stylesheet" href="/shell.css?v=29">
+<link rel="stylesheet" href="/shell.css?v=30">
 <style>
 .form-card{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);max-width:860px}
 .form-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:3px}
@@ -249,6 +249,11 @@
           </div>
         </div>
 
+        <!-- Khối hook (1 fact) — CHỈ dựng ở lượt tính thử khách chưa đăng
+             nhập (xem `mountHook`), giữa hero và tấm khoá. Không dựng lại 5
+             trục/8 chất (khối đó đã LÀM MỜ ngay bên dưới, `_dcLockRestBlocks`)
+             — hook chỉ hé MỘT chất năng khiếu, không phải cả bảng đang mờ. -->
+        <div id="hookHost"></div>
         <div id="dcLockHost" style="display:none;margin-bottom:16px"></div>
 
         <!-- ── ĐO ĐƯỢC GÌ ─────────────────────────────────────────────── -->
@@ -380,6 +385,10 @@
           <div class="res-block-header"><span class="res-block-title">Đã Xem Trước Đó</span></div>
           <div class="res-block-body"><div id="histList"></div></div>
         </div>
+
+        <!-- "Ai Sinh Cùng Ngày Với Bạn" — miễn phí, 0 token LLM. Hỏng mạng/API
+             thì tự ẩn, không làm hỏng bản hướng dẫn phía trên. -->
+        <div id="cnsHost"></div>
       </div>
     </div>
   </main>
@@ -390,11 +399,14 @@
 <script>window.SHELL_ACTIVE='day-con';window.SHELL_HISTORY=true;
 window.SHELL_INTRO={key:'day-con',title:'Dạy Con Theo Lá Số',desc:'Đọc con tiếp thu kiểu nào, kỷ luật nào phản tác dụng với con. Bạn dạy mãi một cách mà con vẫn không nghe theo. Dùng khi cách dạy cũ không còn hiệu quả với con nữa.'};</script>
 <script src="/laso-chart.js?v=3"></script>
+<script src="/tools-shared/vn-timezone.js?v=1"></script>
 <script src="/tuvi-form.js?v=2"></script>
+<script src="/tools-shared/cung-ngay-sinh.js?v=1"></script>
 <script src="/tuvi-paywall.js?v=22"></script>
+<script src="/tools-shared/hook-layer.js?v=1"></script>
 <script src="/auth.js?v=2"></script>
-  <script src="/nav.js?v=23" data-icons-only></script>
-<script src="/shell.js?v=82"></script>
+  <script src="/nav.js?v=24" data-icons-only></script>
+<script src="/shell.js?v=85"></script>
 <script src="/tools-shared/ai-loading-steps.js?v=9"></script>
 <script>
 
@@ -458,6 +470,18 @@ function _birthOf(prefix) {
     hourBranch: f.gioIdx, gender: f.gioitinh, isLunar: false,
     name: (f.hoten || '').trim() || undefined,
   };
+}
+
+// "Ai Sinh Cùng Ngày Với Bạn" — chủ thể là LÁ SỐ CON (`b`, prefix rỗng), không
+// phải cha/mẹ. Gọi ở CẢ đường xem trước lẫn đường đầy đủ — phần phụ, không
+// đợi paywall. `b` ở dạng {day,month,year,hourBranch,gender} từ `_birthOf()`,
+// khác shape `{ngay,thang,nam,gioIdx,gioitinh}` mà module đòi — quy đổi tay.
+function _mountCnsDayCon(b) {
+  if (!window.CungNgaySinh || !b) return;
+  CungNgaySinh.mount('cnsHost', {
+    ngay: b.day, thang: b.month, nam: b.year,
+    gioIdx: b.hourBranch, gioitinh: b.gender,
+  });
 }
 
 /** Query cho `action=cache-status` — đúng tên tham số route đọc. */
@@ -546,14 +570,41 @@ async function _runAnonPreview(b, self, lo) {
     renderMetaHead(data);
     renderMetaRest(data);
     _dcLockRestBlocks(true);
+    mountHook(data);
     document.getElementById('card').style.display = 'block';
     document.getElementById('btnEdit').style.display = '';
     if (window.SHELL_INTRO) Shell.dismissIntro(window.SHELL_INTRO.key);
     _renderLockWall(lo);
+    _mountCnsDayCon(b);
   } catch (e) {
     _closePanel();
     showError('Lỗi: ' + (e.message || 'Không thể kết nối. Vui lòng thử lại.'));
   }
+}
+
+// Hé đúng MỘT trong 8 chất năng khiếu (điểm cao nhất) — không dựng lại cả
+// bảng 8 chất (khối đó đã LÀM MỜ ngay bên dưới cho tới khi trả tiền) và không
+// lộ phần AI viết riêng (định hướng/lo lắng/nên-tránh — đúng phần đang bán).
+// `data.khieu` đã có sẵn trong payload tính thử (0 lượt LLM, xem `meta()`
+// trong route.ts) — không cần gọi thêm gì.
+function mountHook(data) {
+  var host = document.getElementById('hookHost');
+  if (!host || !window.HookLayer) return;
+  var ks = (data.khieu || []).slice().sort(function (a, b) { return b.diem - a.diem; });
+  var top = ks[0];
+  if (!top) return;
+  window.HookLayer.mount(host, {
+    tool: 'day-con',
+    charts: [],
+    facts: [{
+      tone: top.noiBat ? 'good' : 'neutral',
+      title: 'Chất năng khiếu cao nhất: ' + top.ten,
+      value: top.diem,
+      body: (top.noiBat ? 'Vượt ngưỡng “đáng cho thử”. ' : 'Chưa vượt ngưỡng, nhưng cao nhất trong 8 chất. ') +
+        '7 chất còn lại, 5 trục tính khí, và định hướng cách dạy nằm trong bản đầy đủ.',
+      source: 'engine · khieu',
+    }],
+  });
 }
 
 function _renderLockWall(lo) {
@@ -637,6 +688,7 @@ async function _doGenerate(freeRerun, lo) {
     document.getElementById('btnEdit').style.display = '';
     if (window.SHELL_INTRO) Shell.dismissIntro(window.SHELL_INTRO.key);
     _loadHistory();
+    _mountCnsDayCon(_last);
 
     // B1 — khoảnh khắc VỪA ĐỌC XONG mà số dư đã hụt: vừa thích vừa tiếc, đúng
     // chỗ lời mời có sức nhất. Widget tự ẩn nếu còn đủ Lượng cho một lượt nữa

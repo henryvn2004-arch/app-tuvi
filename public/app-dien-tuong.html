@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"></noscript>
-<link rel="stylesheet" href="/shell.css?v=29">
+<link rel="stylesheet" href="/shell.css?v=30">
 <style>
 .dt-card{background:var(--white);border:1px solid var(--line);border-radius:14px;padding:20px 22px;box-shadow:var(--shadow);max-width:640px}
 .dt-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:4px}
@@ -116,6 +116,11 @@
           <button class="remove-btn" onclick="removePhoto()">✕ Xoá ảnh</button>
         </div>
 
+        <!-- Khối hook (1 fact) — hé dòng Tam Đình (window._geoNote, engine
+             MediaPipe đã tính, trước đây CHỈ gửi kèm AI chứ chưa từng hiện ra
+             DOM) ngay sau khi nhận diện khuôn mặt xong, trước nút phân tích. -->
+        <div id="hookHost"></div>
+
         <div style="text-align:center;margin-top:18px">
           <button class="btn-go" id="analyzeBtn" onclick="analyze()" disabled><span class="ic" data-icon="sparkles"></span> Phân Tích Tướng Mặt — <span data-tvp-price="dien-tuong">…</span> Lượng</button>
         </div>
@@ -140,8 +145,9 @@
 window.SHELL_INTRO={key:'dien-tuong',title:'Diện Tướng AI',desc:'Đọc nhân tướng học tổng thể từ ảnh khuôn mặt của bạn. Bạn tò mò gương mặt mình đang nói điều gì với người khác. Dùng khi muốn hiểu bản thân qua một góc nhìn khác lời nói.'};</script>
 <script src="/auth.js?v=2"></script>
 <script src="/tuvi-paywall.js?v=22"></script>
-  <script src="/nav.js?v=23" data-icons-only></script>
-<script src="/shell.js?v=82"></script>
+<script src="/tools-shared/hook-layer.js?v=1"></script>
+  <script src="/nav.js?v=24" data-icons-only></script>
+<script src="/shell.js?v=85"></script>
 <script>
 function initDienTuong(){
   Shell.setContext({
@@ -235,6 +241,28 @@ function analyzeGeometry(lm, w, h) {
     `Tỷ lệ cằm/mặt: ${chinRatio} (${parseFloat(chinRatio)>0.42?'cằm ngang rộng':parseFloat(chinRatio)<0.3?'cằm nhọn/thon':'trung bình'})`,
   ];
   return lines.join('\n');
+}
+
+// window._geoNote đã có sẵn (0đ, engine hình học MediaPipe FaceMesh) nhưng
+// TRƯỚC ĐÂY chưa từng hiện ra DOM — chỉ gửi kèm cho AI sau khi trả tiền (xem
+// `geoNote` trong body gửi /api/tuong-mat). Hé đúng dòng Tam Đình (câu đầu,
+// đối chiếu được ngay với ảnh cạnh bên) làm fact — giữ các dòng còn lại
+// (tỷ lệ mắt/mũi/miệng/trán/cằm) cho phần AI viết.
+function mountHook() {
+  var host = document.getElementById('hookHost');
+  if (!host || !window.HookLayer || !window._geoNote) return;
+  var m = window._geoNote.match(/Tam Đình:[^\n]+/);
+  if (!m) return;
+  window.HookLayer.mount(host, {
+    tool: 'dien-tuong',
+    charts: [],
+    facts: [{
+      tone: 'neutral',
+      title: m[0],
+      body: 'Đo trực tiếp từ ảnh bằng MediaPipe — Thượng/Trung/Hạ Đình chia đúng theo landmark khuôn mặt của bạn. Luận giải đầy đủ theo Ma Y Thần Tướng nằm trong bản phân tích AI.',
+      source: 'engine · MediaPipe FaceMesh',
+    }],
+  });
 }
 
 function checkHeadTilt(lm, w, h) {
@@ -429,6 +457,7 @@ function showPreview(dataUrl) {
 
     window._irisResult = iris;
     window._geoNote = analyzeGeometry(lm, w, h);
+    mountHook();
   });
   if (imgEl.complete && imgEl.naturalWidth) run();
   else imgEl.onload = run;

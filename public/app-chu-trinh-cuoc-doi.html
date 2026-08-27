@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"></noscript>
-<link rel="stylesheet" href="/shell.css?v=29">
+<link rel="stylesheet" href="/shell.css?v=30">
 <link rel="stylesheet" href="/laso-chart.css?v=3">
 <style>
 /* Center riêng của trang Chu Trình Cuộc Đời — CÙNG khuôn CSS với app-luan-giai.html
@@ -157,9 +157,17 @@
         <span class="fold-toggle" id="lgFold" onclick="toggleMini()">▾ Ẩn lá số</span>
         <div class="chart-wrap" id="miniChart"></div>
         <div class="jump" id="lgJump"></div>
+        <!-- Khối hook (fact, KHÔNG chart) — tool này đã có sẵn biểu đồ đại
+             vận (LuanGiaiCore.renderInlineDaiVanLineChart) trong Phần 1 (luôn
+             free), dựng lại lifeArc ở đây là trùng lặp. Chỉ hé đỉnh/đáy đời +
+             cách cục hiếm — chưa có chỗ nào gọi thẳng bằng chữ. -->
+        <div id="hookHost"></div>
         <div class="lg-unlock" id="lgUnlock" style="display:none"></div>
         <div class="lg-progress" id="lgProgress" style="display:none"></div>
         <div class="lg-body" id="lgBody"></div>
+        <!-- "Ai Sinh Cùng Ngày Với Bạn" — miễn phí, 0 token LLM. Hỏng mạng/API
+             thì tự ẩn, không làm hỏng bản luận phía trên. -->
+        <div id="cnsHost"></div>
       </div>
     </div>
   </main>
@@ -174,11 +182,16 @@ window.SHELL_INTRO={key:'chu-trinh-cuoc-doi',title:'Chu Trình Cuộc Đời',de
 <script src="/luan-giai-core.js?v=3"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
 <script src="/tuvi-laso-format.js?v=2"></script>
+<script src="/tools-shared/vn-timezone.js?v=1"></script>
 <script src="/tuvi-form.js?v=2"></script>
+<script src="/tools-shared/cung-ngay-sinh.js?v=1"></script>
 <script src="/auth.js?v=2"></script>
 <script src="/tuvi-paywall.js?v=22"></script>
-  <script src="/nav.js?v=23" data-icons-only></script>
-<script src="/shell.js?v=82"></script>
+<script src="/tools-shared/hook-charts.js?v=1"></script>
+<script src="/tools-shared/hook-facts.js?v=1"></script>
+<script src="/tools-shared/hook-layer.js?v=1"></script>
+  <script src="/nav.js?v=24" data-icons-only></script>
+<script src="/shell.js?v=85"></script>
 <script src="/tools-shared/ai-loading-steps.js?v=9"></script>
 <script src="/tools-shared/phan-pool.js?v=1"></script>
 <script>
@@ -215,6 +228,8 @@ function doLuan(){
     // vừa hiện ra nằm ngoài khung nhìn — cuộn lên để thấy ngay có gì vừa chạy.
     if(window.AiLoadingSteps)AiLoadingSteps.scrollToResult('lgPanel');
     Shell.rememberBirth(Object.assign({}, fdIn, {namxem:namxem}));
+    // Mục "Ai Sinh Cùng Ngày Với Bạn" — phần phụ, đặt SAU khi bản luận đã dựng.
+    if(window.CungNgaySinh)CungNgaySinh.mount('cnsHost',{ngay:dd,thang:mm,nam:yyyy,gioIdx:gioAmIdx,gioitinh:gioitinh});
     if(window.SHELL_INTRO)Shell.dismissIntro(window.SHELL_INTRO.key);
     Shell.setContext({
       birth:{day:dd,month:mm,year:yyyy,hourBranch:gioAmIdx,gender:gioitinh,name:name||undefined},
@@ -568,12 +583,29 @@ async function initLuanGiaiGate(ls){
 // cạnh phần 2-11 đã bị LÀM MỜ (renderLuan gọi buildPhanSection với
 // locked=true), không phải THAY chỗ chúng. Đăng ký xong (onUnlock) gọi lại
 // renderLuan để mở khoá thật (loggedIn() lúc đó đã true).
+// Chỉ facts, KHÔNG chart — Phần 1 (luôn free) đã tự vẽ biểu đồ đại vận riêng
+// (LuanGiaiCore.renderInlineDaiVanLineChart), dựng lại lifeArc ở đây là trùng.
+// Đỉnh/đáy đời gọi bằng CHỮ (kèm số) — thứ Phần 1 chỉ có ở dạng biểu đồ, chưa
+// có câu nào nói thẳng. Cách cục hiếm tra laso-census.json (Pha 1).
+function mountHook(ls){
+  var host=document.getElementById('hookHost');
+  if(!host||!window.HookLayer||!window.HookFacts){return;}
+  var HF=window.HookFacts.tuvi;
+  window.HookLayer.loadCensus().then(function(census){
+    var facts=[HF.daiVanDinh(ls),HF.daiVanDay(ls)].filter(Boolean);
+    var hiem=HF.cachCucHiem(ls,census);
+    if(hiem)facts.push(hiem);
+    window.HookLayer.mount(host,{tool:'chu-trinh-cuoc-doi',charts:[],facts:facts});
+  });
+}
+
 function _renderUnlockBlock(){
   var host=document.getElementById('lgUnlock');
   host.style.display='block';
   // Bấm được nay không chỉ ở banner đầu trang — cả 11 phần (luôn nằm trong
   // DOM) cũng bật khoá-mini của chính nó, để cuộn qua khỏi banner vẫn còn chỗ mở.
   _paintSecLocks(true);
+  mountHook(_astrolabe);
   if(_lgLoggedIn()){
     host.innerHTML='<button class="btn-go" id="btnUnlock" onclick="initiateLuanGiaiChuyenSau()">✦ Luận giải chuyên sâu bằng AI — <span data-tvp-price="chu-trinh-cuoc-doi">…</span> Lượng →</button>'+
       '<p>Viết riêng cho lá số này theo cổ pháp — 11 phần: tổng quan đại vận, luận riêng từng đại vận trong 9 đại vận, và tiểu vận năm xem.</p>';

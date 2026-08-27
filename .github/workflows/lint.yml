@@ -207,6 +207,44 @@ jobs:
       - name: Engine Số Đẹp — deterministic, khớp nguồn, không lẫn tầng
         run: npm run check:sodep
 
+      # Biên bảng âm lịch (1900-01-31 → 2100-12-31). Bản cũ của `solarToLunar`
+      # BỊA ra {day:1,month:1,year:yy} khi ra ngoài biên — im lặng, không lỗi —
+      # nên MỌI ngày dương của một năm trước 1900 quy về CÙNG một lá số.
+      - name: Biên âm lịch — ngoài tầm phải trả null/ném, không bịa lá số
+        run: npm run check:lunar
+
+      # Giờ sinh người DÙNG và giờ sinh người NỔI TIẾNG phải đi qua CÙNG một
+      # phép quy về giờ VN. Lệch hệ quy chiếu thì canh giờ vẫn ra số trông hợp
+      # lệ — không gì bắt được ngoài bộ dò này.
+      - name: Múi giờ VN một nguồn duy nhất (form + script import)
+        run: npm run check:vntz
+
+      # shell.js chỉ được dùng MỘT cơ chế tooltip (`data-tip` + `aria-label`/
+      # `alt`, hiện qua node `.tip` dùng chung ở body) — không còn `title=`
+      # native (delay không sửa được, im lặng trên chạm) và không tự viết CSS
+      # `::after` riêng cho từng cụm nút (bị mẹ `overflow:hidden/auto` xén mất).
+      - name: shell.js — đúng một cơ chế tooltip
+        run: npm run check:tooltip
+
+      # Khối "Ai Sinh Cùng Ngày Với Bạn" là best-effort: hỏng thì tự ẩn, KHÔNG
+      # báo lỗi. Nên cắm sai (gỡ container, nạp script trước tuvi-form.js, mất
+      # lời gọi mount) trông hệt như lỗi mạng — im lặng hoàn toàn.
+      - name: Khối "Ai Sinh Cùng Ngày" cắm đúng trên mọi trang đã bật
+        run: npm run check:cns
+
+      # Ảnh người nổi tiếng đi qua BA chặng (Storage → Commons → avatar chữ) và
+      # cả ba đều "trông vẫn chạy" khi hỏng. Thêm nữa: kéo ảnh về kho của mình
+      # nghĩa là mình PHÂN PHỐI tác phẩm, nên ghi công CC BY-SA là bắt buộc —
+      # mà bỏ dòng ghi công đi thì trang vẫn chạy hoàn hảo.
+      - name: Ảnh celeb — chuỗi rơi một nguồn + có ghi công
+        run: npm run check:celebanh
+
+      # Luật ghi chép bảo "thêm mục vào <tháng>.md RỒI thêm dòng vào mục lục".
+      # Bước hai là bước người ta quên, và quên thì không có gì kêu — cả hai
+      # file vẫn hợp lệ. Đo 26/08: 141 mục nhưng mục lục chỉ 136 dòng.
+      - name: Mục lục nhật ký khai đủ số mục có thật
+        run: npm run check:nhatky
+
   typecheck:
     runs-on: ubuntu-latest
     timeout-minutes: 10

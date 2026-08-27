@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { solarToLunar, hourToChi, yearCanChi, convertDuongToAm } from '../src/lunar/convert.js';
+import { solarToLunar, hourToChi, yearCanChi, convertDuongToAm, isLunarSupported, LUNAR_MIN_YMD, LUNAR_MAX_YMD } from '../src/lunar/convert.js';
 
 // NOTE: The full LUNAR_TABLE in convert.ts currently only has a few sample rows
 // for illustration. These tests will pass once the full table is integrated
@@ -54,6 +54,53 @@ describe('solarToLunar', () => {
     const r = solarToLunar(1, 7, 2023);
     expect(r.month).toBeGreaterThanOrEqual(1);
     expect(r.month).toBeLessThanOrEqual(12);
+  });
+});
+
+describe('solarToLunar — biên bảng âm lịch', () => {
+  // 🔴 Hồi quy cho bug ĐÃ ĐO: bản cũ có `if (idx < 0) return {day:1,month:1,
+  // year:yy}` nên MỌI ngày dương trước 1900 quy về CÙNG một ngày âm —
+  // 1/1/1898, 15/6/1898 và 31/12/1898 đều ra "AL 1/1/1898". Im lặng, không lỗi.
+  it('biên suy từ bảng, không gõ tay', () => {
+    expect(LUNAR_MIN_YMD).toBe(19000131);
+    expect(LUNAR_MAX_YMD).toBe(21001231);
+  });
+
+  it('ném RangeError khi TRƯỚC biên (không bịa mùng 1 tháng 1)', () => {
+    expect(() => solarToLunar(1, 1, 1898)).toThrow(RangeError);
+    expect(() => solarToLunar(15, 6, 1899)).toThrow(RangeError);
+    expect(() => solarToLunar(30, 1, 1900)).toThrow(RangeError); // ngay trước mốc đầu
+  });
+
+  it('ném RangeError khi SAU biên', () => {
+    expect(() => solarToLunar(1, 1, 2101)).toThrow(RangeError);
+  });
+
+  it('chạy bình thường ở đúng hai mốc biên', () => {
+    expect(solarToLunar(31, 1, 1900).day).toBe(1);
+    expect(() => solarToLunar(31, 12, 2100)).not.toThrow();
+  });
+
+  it('isLunarSupported khớp với biên', () => {
+    expect(isLunarSupported(30, 1, 1900)).toBe(false);
+    expect(isLunarSupported(31, 1, 1900)).toBe(true);
+    expect(isLunarSupported(31, 12, 2100)).toBe(true);
+    expect(isLunarSupported(1, 1, 2101)).toBe(false);
+  });
+
+  // Triệu chứng gốc: 365 ngày dương liên tiếp phải ra 365 ngày âm PHÂN BIỆT
+  // (tính cả cờ nhuận). Gộp lại là hàm đang bịa.
+  it('365 ngày dương → 365 ngày âm phân biệt (kể cả năm có tháng nhuận)', () => {
+    for (const year of [1950, 1990]) {          // 1950 không nhuận, 1990 có
+      const seen = new Set<string>();
+      const dt = new Date(Date.UTC(year, 0, 1));
+      while (dt.getUTCFullYear() === year) {
+        const r = solarToLunar(dt.getUTCDate(), dt.getUTCMonth() + 1, year);
+        seen.add(`${r.day}/${r.month}/${r.isLeap ? 'N' : ''}/${r.year}`);
+        dt.setUTCDate(dt.getUTCDate() + 1);
+      }
+      expect(seen.size).toBe(365);
+    }
   });
 });
 

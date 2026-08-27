@@ -459,6 +459,7 @@
     '.ft-bottom img{width:20px;height:20px;object-fit:contain;opacity:0.25;border-radius:3px}',
     '.ft-legal{font-size:11px;color:rgba(255,255,255,0.3);line-height:1.7;max-width:260px;margin-top:14px;padding-top:14px;border-top:1px solid rgba(255,255,255,0.05)}',
     '.ft-legal strong{color:rgba(255,255,255,0.5);font-weight:600}',
+    '.ft-legal-name{font-size:1.5em;line-height:1.4;margin-bottom:6px}',
     '.ft-disclaimer{font-size:10px;color:rgba(255,255,255,0.15);line-height:1.6;margin-top:12px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.05);text-align:center}',
     '@media(max-width:900px){.ft-top{grid-template-columns:1fr 1fr;gap:28px}.ft-brand{grid-column:1/-1}}',
     '@media(max-width:600px){.site-footer{padding:40px 20px 20px}.ft-top{grid-template-columns:1fr 1fr;gap:24px}.ft-brand{grid-column:1/-1}.ft-bottom{flex-direction:column;align-items:flex-start;gap:4px}}'
@@ -473,7 +474,7 @@
       + '<div class="ft-brand"><div class="ft-brand-row"><img src="/seal.webp" alt=""><div><div class="ft-brand-name">Tử Vi Minh Bảo</div><div class="ft-brand-zh">Tri mệnh lý – Thuận thế hành</div></div></div><div class="ft-tagline">Tử vi đẩu số theo cổ pháp, luận giải bằng AI.</div>'
       // Mã số doanh nghiệp CHƯA có trong hồ sơ được cung cấp — KHÔNG bịa số.
       // Bổ sung dòng "MST: ..." ngay khi có, theo Nghị định 52/2013.
-      + '<div class="ft-legal"><strong>Công ty TNHH Kira Tech</strong><br>(Kira Tech Company Limited)<br>'
+      + '<div class="ft-legal"><div class="ft-legal-name"><strong>Công ty TNHH Kira Tech</strong><br>(Kira Tech Company Limited)</div>'
       + 'Điện thoại: 0343.848.795<br>'
       + 'Email: contact@tuviminhbao.com<br>'
       + 'Địa chỉ: 901 Lê Đức Thọ, Phường An Hội Đông, Thành phố Hồ Chí Minh, Việt Nam</div>'

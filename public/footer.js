@@ -23,6 +23,7 @@
       '.ft-bottom img{width:20px;height:20px;object-fit:contain;opacity:0.25;border-radius:3px}',
       '.ft-legal{font-size:11px;color:rgba(255,255,255,0.3);line-height:1.7;max-width:260px;margin-top:14px;padding-top:14px;border-top:1px solid rgba(255,255,255,0.05)}',
       '.ft-legal strong{color:rgba(255,255,255,0.5);font-weight:600}',
+      '.ft-legal-name{font-size:1.5em;line-height:1.4;margin-bottom:6px}',
       '.ft-disclaimer{font-size:10px;color:rgba(255,255,255,0.15);line-height:1.6;margin-top:12px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.05);text-align:center}',
       '@media(max-width:960px){.ft-top{grid-template-columns:1fr 1fr;gap:28px}.ft-brand{grid-column:1/-1}}',
       '@media(max-width:600px){.site-footer{padding:40px 20px 20px}.ft-top{grid-template-columns:1fr 1fr;gap:24px}.ft-brand{grid-column:1/-1}.ft-bottom{flex-direction:column;align-items:flex-start;gap:8px}}'
@@ -41,7 +42,7 @@
     '<div class="ft-tagline">Tri m\u1ec7nh nhi h\u00e0nh \u2014 v\u00f4 \u01b0u v\u00f4 ho\u1eb7c.</div>',
     // M\u00e3 s\u1ed1 doanh nghi\u1ec7p CH\u01afA c\u00f3 trong h\u1ed3 s\u01a1 \u0111\u01b0\u1ee3c cung c\u1ea5p \u2014 KH\u00d4NG b\u1ecba s\u1ed1.
     // B\u1ed5 sung d\u00f2ng "MST: ..." ngay khi c\u00f3, theo Ngh\u1ecb \u0111\u1ecbnh 52/2013.
-    '<div class="ft-legal"><strong>C\u00f4ng ty TNHH Kira Tech</strong><br>(Kira Tech Company Limited)<br>',
+    '<div class="ft-legal"><div class="ft-legal-name"><strong>C\u00f4ng ty TNHH Kira Tech</strong><br>(Kira Tech Company Limited)</div>',
     '\u0110i\u1ec7n tho\u1ea1i: 0343.848.795<br>',
     'Email: contact@tuviminhbao.com<br>',
     '\u0110\u1ecba ch\u1ec9: 901 L\u00ea \u0110\u1ee9c Th\u1ecd, Ph\u01b0\u1eddng An H\u1ed9i \u0110\u00f4ng, Th\u00e0nh ph\u1ed1 H\u1ed3 Ch\u00ed Minh, Vi\u1ec7t Nam</div>',

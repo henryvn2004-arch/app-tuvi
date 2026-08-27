@@ -933,6 +933,10 @@ select.form-input { cursor: pointer; }
     </div><!-- end result-main -->
     </div><!-- end result-layout -->
 
+    <!-- "Ai Sinh Cùng Ngày Với Bạn" — miễn phí, 0 token LLM. Hỏng mạng/API
+         thì tự ẩn, không làm hỏng bản luận giải phía trên. -->
+    <div id="cnsHost"></div>
+
     <div class="result-actions" id="result-actions">
       <button class="btn-next-phan" id="btn-next" onclick="loadNextPhan()"><span class="spinner"></span><span id="btn-next-label">Tiếp theo →</span></button>
       <button class="btn-pdf" id="btn-pdf" onclick="window.print()">Tải PDF</button>
@@ -976,7 +980,9 @@ select.form-input { cursor: pointer; }
 
 <script src="/tuvi-ansao-engine.js"></script>
 <script src="/tuvi-laso-format.js?v=2"></script>
+<script src="/tools-shared/vn-timezone.js?v=1"></script>
 <script src="/tuvi-form.js?v=2"></script>
+<script src="/tools-shared/cung-ngay-sinh.js?v=1"></script>
 <script src="/tuvi-paywall.js?v=22"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script>
@@ -1628,6 +1634,25 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
     document.getElementById('muc-luc')?.classList.add('visible');
     document.getElementById('result-sidebar')?.classList.add('visible');
     document.getElementById('result-actions').style.display = 'flex';
+    _mountCns();
+  }
+
+  // ── "Ai Sinh Cùng Ngày Với Bạn" ────────────────────────────
+  // Trang này có HAI đường hiện khung kết quả (`renderPreGenFree` và
+  // `displayResult`), nên gọi qua một hàm chung thay vì chép lời gọi hai chỗ.
+  // `TuviForm.getData().gioIdx` đã là canh giờ ĐÃ QUY VỀ GIỜ VN (qua
+  // tools-shared/vn-timezone.js) — cùng hệ quy chiếu với dữ liệu người nổi
+  // tiếng; lệch hệ quy chiếu thì phép so "trùng giờ sinh" vô nghĩa.
+  function _mountCns() {
+    try {
+      if (!window.CungNgaySinh || typeof TuviForm === 'undefined') return;
+      const d = TuviForm.getData();
+      if (!d || !d.ngay) return;
+      CungNgaySinh.mount('cnsHost', {
+        ngay: d.ngay, thang: d.thang, nam: d.nam,
+        gioIdx: d.gioIdx, gioitinh: d.gioitinh,
+      });
+    } catch (e) { /* phần phụ — không được làm hỏng bản luận phía trên */ }
   }
 
   // ── Check payment — lock boxes đã render sẵn, chỉ cần unlock nếu đã mua ──
@@ -3126,6 +3151,7 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
     });
     document.getElementById("result-section").classList.add("active");
     const _leg=document.getElementById("laso-legend");if(_leg)_leg.style.display="block";
+    _mountCns();
   }
 
 
@@ -4119,7 +4145,7 @@ TuviPaywall.init({
 
 </div>
 
-<script src="/nav.js?v=23"></script>
+<script src="/nav.js?v=24"></script>
 <script src="/tools-shared/ai-loading-steps.js?v=9"></script>
 <script>
 /* Chờ luận giải 24 phần là quãng chờ MỘT CỤC ≥10 giây ⇒ orb, thay spinner 28px

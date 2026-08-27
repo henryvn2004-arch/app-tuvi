@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"></noscript>
-<link rel="stylesheet" href="/shell.css?v=29">
+<link rel="stylesheet" href="/shell.css?v=30">
 <style>
 .form-card{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);max-width:860px}
 .form-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:3px}
@@ -116,6 +116,11 @@
             <div class="sec-h">Bước tiếp theo — thu hẹp bằng khảo sát</div>
             <div class="sec-b">
               <p class="note" id="surveyPitch"></p>
+              <!-- Khối hook (1 fact) — hé ĐÚNG 1 trong 12 ứng viên (ungVien[0])
+                   làm ví dụ, chứng minh máy thật sự lập ra 12 lá số khác nhau
+                   — không dựng lại cả lưới 12 (đang gộp vào tường đăng ký cho
+                   khách chưa đăng nhập, xem chú thích `buildLock`). -->
+              <div id="hookHost"></div>
               <div id="lockHost" style="margin-top:12px"></div>
             </div>
           </div>
@@ -191,13 +196,14 @@
 window.SHELL_INTRO={key:'gio-sinh',title:'Xác Định Giờ Sinh',desc:'Lập 12 lá số theo 12 giờ, thu hẹp dần về đúng giờ sinh. Bạn chỉ nhớ sinh buổi sáng, không ai trong nhà nhớ chính xác. Dùng khi không nhớ giờ sinh mà mọi công cụ khác đều cần nó.'};</script>
 
 <script src="/tuvi-paywall.js?v=22"></script>
+<script src="/tools-shared/hook-layer.js?v=1"></script>
 <!-- ⚠️ BẮT BUỘC. `nav.js` ở chế độ `data-icons-only` RETURN SỚM nên KHÔNG chèn
      `auth.js` — trang shell phải tự khai. Thiếu nó thì `window.Auth` không tồn
      tại, paywall coi người ĐANG ĐĂNG NHẬP là khách và bắt đăng nhập lại.
      `check:shellboot` canh đúng chỗ này. -->
 <script src="/auth.js?v=2"></script>
-<script src="/nav.js?v=23" data-icons-only></script>
-<script src="/shell.js?v=82"></script>
+<script src="/nav.js?v=24" data-icons-only></script>
+<script src="/shell.js?v=85"></script>
 <script>
 const TOOL_ID='gio-sinh';
 let _birth=null,_answers=[],_pub=null,_lastResult=null,_slug='';
@@ -269,7 +275,27 @@ function renderFree(j){
   document.getElementById('surveyPitch').innerHTML =
     'Với ngày sinh này máy dựng được <b>'+esc(j.soCauHoi)+' câu hỏi</b> riêng — đáp án là các nhóm giờ có dấu hiệu khác nhau của <b>chính ngày này</b>, nên mỗi người một bộ câu khác nhau. Trả lời xong sẽ ra <b>2–3 giờ khả năng cao nhất kèm bằng chứng từng câu</b>.';
   document.getElementById('freeBlock').style.display='';
+  mountHook(j);
   buildLock();
+}
+
+// Hé ĐÚNG 1 trong 12 ứng viên (ungVien[0]) — chứng minh máy thật sự lập ra 12
+// lá số khác nhau cho cùng một ngày sinh, không dựng lại cả lưới 12 (đang gộp
+// vào tường đăng ký cho khách chưa đăng nhập, xem `buildLock`).
+function mountHook(j){
+  var host=document.getElementById('hookHost');
+  if(!host||!window.HookLayer||!j||!j.ungVien||!j.ungVien.length)return;
+  var u=j.ungVien[0];
+  window.HookLayer.mount(host,{
+    tool:'gio-sinh',
+    charts:[],
+    facts:[{
+      tone:'neutral',
+      title:'Ví dụ 1 trong 12: Giờ '+u.chi+' ('+u.khung+')',
+      body:'Mệnh: '+(u.menhStars.join(' + ')||'vô chính diệu')+' — Tật Ách: '+(u.tatStars.join(' + ')||'vô chính diệu')+'. 11 giờ còn lại và bộ câu hỏi thu hẹp riêng theo ngày sinh này nằm trong bản đầy đủ.',
+      source:'engine · ungVien[0]',
+    }],
+  });
 }
 
 function _renderGrid(j){

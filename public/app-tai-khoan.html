@@ -7,7 +7,7 @@
 <link rel="icon" type="image/webp" href="/seal.webp"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"></noscript>
-<link rel="stylesheet" href="/shell.css?v=29"/>
+<link rel="stylesheet" href="/shell.css?v=30"/>
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 <style>
 /* Trang Tài khoản trong shell: 2 cột (sidebar + nội dung, không rail) */
@@ -163,9 +163,9 @@
 .account-section h3{font-family:'Noto Serif',serif;font-size:1rem;color:var(--heading);margin-bottom:1.1rem;padding-bottom:.6rem;border-bottom:1px solid var(--border-lt)}
 .form-row{margin-bottom:1rem}
 .form-row label{display:block;font-size:.8rem;color:var(--text-mid);font-weight:600;margin-bottom:.35rem}
-.form-row input{width:100%;padding:.6rem .85rem;border:1px solid var(--border);border-radius:5px;font-size:.88rem;color:var(--text);background:var(--surface)}
-.form-row input:focus{outline:2px solid var(--tx-gold);border-color:var(--tx-gold)}
-.form-row input:disabled{background:var(--bg-soft);color:var(--text-lt)}
+.form-row input,.form-row select,.form-row textarea{width:100%;padding:.6rem .85rem;border:1px solid var(--border);border-radius:5px;font-size:.88rem;color:var(--text);background:var(--surface)}
+.form-row input:focus,.form-row select:focus,.form-row textarea:focus{outline:2px solid var(--tx-gold);border-color:var(--tx-gold)}
+.form-row input:disabled,.form-row select:disabled,.form-row textarea:disabled{background:var(--bg-soft);color:var(--text-lt)}
 .purchase-list{display:flex;flex-direction:column;gap:.5rem}
 .purchase-item{display:flex;align-items:center;gap:.75rem;font-size:.83rem;padding:.5rem 0;border-bottom:1px solid var(--border-lt)}
 .purchase-item:last-child{border-bottom:none}
@@ -311,6 +311,7 @@
       <button class="tab-btn" data-tab="credits"><span class="tab-ic" data-icon="wallet"></span> Ví Lượng</button>
       <button class="tab-btn" data-tab="nhiemvu"><span class="tab-ic" data-icon="trophy"></span> Nhiệm Vụ</button>
       <button class="tab-btn" data-tab="ketnoi"><span class="tab-ic" data-icon="link"></span> Kết Nối</button>
+      <button class="tab-btn" data-tab="gopy"><span class="tab-ic" data-icon="inbox"></span> Góp Ý</button>
       <button class="tab-btn" data-tab="account"><span class="tab-ic" data-icon="user"></span> Tài Khoản</button>
     </div>
 
@@ -652,6 +653,12 @@
     </div>
 
     <!-- Tab: Tài Khoản -->
+
+    <!-- Tab: Góp Ý — khung rỗng, account-core.js `loadFeedback()` dựng toàn bộ
+         nội dung vào đây. Cố ý KHÔNG chép markup sang cả hai trang: chép là
+         mở đường cho /profile.html và /app/tai-khoan trôi lệch nhau. -->
+    <div class="tab-content" id="tab-gopy"></div>
+
     <div class="tab-content" id="tab-account">
       <div id="accountContent">
         <div class="account-section">
@@ -757,8 +764,8 @@ window.mountIcons=window.mountIcons||function(root){var sc=root||document;sc.que
 window.iconHtml=window.iconHtml||function(k){return (window.ICONS&&window.ICONS[k])||'';};
 </script>
 <script src="/auth.js?v=2"></script>
-  <script src="/nav.js?v=23" data-icons-only></script>
-<script src="/shell.js?v=82"></script>
+  <script src="/nav.js?v=24" data-icons-only></script>
+<script src="/shell.js?v=85"></script>
 <script>
 // HỘI THOẠI (shell history) cho tab Lịch Sử của hub Tài khoản: gộp mọi công cụ
 // từ localStorage (app_hist_v1_*) + server (/api/tuvi-chats type app-*). Bấm 1
@@ -812,7 +819,7 @@ window.ACCOUNT_SHELL_CHAT = function () {
   } catch (e) { /* ignore */ }
 };
 </script>
-<script src="/account-core.js?v=3"></script>
+<script src="/account-core.js?v=4"></script>
 <script>
 // Mở đúng tab theo hash (#credits / #ketnoi / #account / #lichsu) khi vào từ sidebar.
 (function(){function openHash(){var h=(location.hash||'').replace('#','');if(h){var b=document.querySelector('[data-tab="'+h+'"]');if(b)b.click();}}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){setTimeout(openHash,300);});else setTimeout(openHash,300);})();

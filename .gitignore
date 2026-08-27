@@ -69,3 +69,12 @@ remotion/public/stock/
 # là `lib/video/stock-video-manifest.json`; dựng lại bằng
 # `node scripts/stock-video.mjs --bucket tone`.
 remotion/public/stock-video/
+
+# Kết quả đo Bước 0 của scripts/measure-celeb-density.mjs — số đo, không phải mã
+celeb-density.json
+
+# Mẻ dữ kiện kéo từ Astro-Databank (scripts/fetch-adb.mjs) — dữ liệu, không phải mã
+adb.csv
+
+# Ảnh chụp kiểm khối "Ai Sinh Cùng Ngày" — sinh lại khi cần
+cns.png

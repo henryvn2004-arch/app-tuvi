@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"></noscript>
-<link rel="stylesheet" href="/shell.css?v=29">
+<link rel="stylesheet" href="/shell.css?v=30">
 <link rel="stylesheet" href="/laso-chart.css?v=3">
 <style>
 /* Center riêng của trang Vận Hạn 12 Tháng — mượn khuôn app-luan-giai.html */
@@ -122,9 +122,17 @@
         <span class="fold-toggle" id="vhFold" onclick="toggleMini()">▾ Ẩn lá số</span>
         <div class="chart-wrap" id="miniChart"></div>
         <div class="jump" id="vhJump"></div>
+        <!-- Khối hook (chart Đường Đời + fact đỉnh/đáy đời + cách cục hiếm) —
+             đúng phạm vi tool này bán ("hành trình đại vận và tiểu vận năm
+             nay" nằm thẳng trong items của vhUnlock bên dưới), không có gate
+             riêng — CTA thật vẫn là vhUnlock/lockPreview ngay dưới. -->
+        <div id="hookHost"></div>
         <div class="vh-unlock" id="vhUnlock" style="display:none"></div>
         <div class="vh-progress" id="vhProgress" style="display:none"></div>
         <div class="vh-body" id="vhBody"></div>
+        <!-- "Ai Sinh Cùng Ngày Với Bạn" — miễn phí, 0 token LLM. Hỏng mạng/API
+             thì tự ẩn, không làm hỏng khung vận hạn phía trên. -->
+        <div id="cnsHost"></div>
       </div>
     </div>
   </main>
@@ -139,11 +147,16 @@ window.SHELL_INTRO={key:'van-han-nam',title:'Vận Hạn 12 Tháng Tới',desc:'
 <script src="/luan-giai-core.js?v=3"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
 <script src="/tuvi-laso-format.js?v=2"></script>
+<script src="/tools-shared/vn-timezone.js?v=1"></script>
 <script src="/tuvi-form.js?v=2"></script>
+<script src="/tools-shared/cung-ngay-sinh.js?v=1"></script>
 <script src="/auth.js?v=2"></script>
 <script src="/tuvi-paywall.js?v=22"></script>
-<script src="/nav.js?v=23" data-icons-only></script>
-<script src="/shell.js?v=82"></script>
+<script src="/tools-shared/hook-charts.js?v=1"></script>
+<script src="/tools-shared/hook-facts.js?v=1"></script>
+<script src="/tools-shared/hook-layer.js?v=1"></script>
+<script src="/nav.js?v=24" data-icons-only></script>
+<script src="/shell.js?v=85"></script>
 <script src="/tools-shared/ai-loading-steps.js?v=9"></script>
 <script src="/tools-shared/phan-pool.js?v=1"></script>
 <script>
@@ -216,6 +229,7 @@ async function doXem(){
     TOOL_TYPE='van-han-nam-al'+t0.namAL+'-'+String(t0.thangAL).padStart(2,'0')+(t0.isLeap?'n':'');
 
     render(ls);
+    mountHook(ls);
     document.getElementById('miniChart').innerHTML=renderGrid(ls,{name:name,gioitinh:gioitinh,dd:dd,mm:mm,yyyy:yyyy,hh:hh,gioChi:CHI[gioAmIdx],amLich:conv.amLich});
     if(window.mountIcons) window.mountIcons(document.getElementById('miniChart'));
     document.getElementById('birthPanel').style.display='none';
@@ -224,6 +238,8 @@ async function doXem(){
     document.getElementById('btnLuanGiai').style.display='';
     if(window.AiLoadingSteps)AiLoadingSteps.scrollToResult('vhPanel');
     Shell.rememberBirth(fdIn);
+    // Mục "Ai Sinh Cùng Ngày Với Bạn" — phần phụ, đặt SAU khi khung đã dựng.
+    if(window.CungNgaySinh)CungNgaySinh.mount('cnsHost',{ngay:dd,thang:mm,nam:yyyy,gioIdx:gioAmIdx,gioitinh:gioitinh});
     if(window.SHELL_INTRO)Shell.dismissIntro(window.SHELL_INTRO.key);
     Shell.setContext({
       birth:{day:dd,month:mm,year:yyyy,hourBranch:gioAmIdx,gender:gioitinh,name:name||undefined},
@@ -305,6 +321,25 @@ function render(ls){
   try{ LuanGiaiCore.renderInlineDaiVanLineChart(ls); }catch(e){ if(window.console)console.warn(e); }
   renderJump();
   wireAsk(document.getElementById('vhBody'));
+}
+// Khối hook: đúng phạm vi tool này bán (đại vận + tiểu vận năm nay, xem
+// items ở `_renderUnlockBlock`) — KHÁC luan-giai (chỉ luận 12 cung, KHÔNG bán
+// đại vận, xem bài học đã ghi trong nhat-ky), tool này BÁN thẳng "hành trình
+// đại vận" nên lifeArc/daiVanDinh/daiVanDay đúng chỗ của chúng ở đây.
+function mountHook(ls){
+  var host=document.getElementById('hookHost');
+  if(!host||!window.HookLayer||!window.HookFacts){return;}
+  var HF=window.HookFacts.tuvi;
+  window.HookLayer.loadCensus().then(function(census){
+    var facts=[HF.daiVanDinh(ls),HF.daiVanDay(ls)].filter(Boolean);
+    var hiem=HF.cachCucHiem(ls,census);
+    if(hiem)facts.push(hiem);
+    window.HookLayer.mount(host,{
+      tool:'van-han-nam',
+      charts:[{type:'lifeArc',data:{segments:HF.daiVanSegments(ls)},title:'Đường Đời Qua Các Đại Vận'}],
+      facts:facts
+    });
+  });
 }
 // Số thứ tự đại vận đang đi — CÙNG phép chọn với server (dvHienTaiSo trong
 // app/api/van-han-nam/route.ts): so cả cungIdx lẫn tuoiStart rồi kẹp ở 9, vì
