@@ -130,6 +130,11 @@
           <div id="previewRelation" style="font-size:12px;color:var(--text-mid)"></div>
         </div>
 
+        <!-- Khối hook (1 fact) — nhấn lại đúng quan hệ ngũ hành Mệnh/Ngày vừa
+             tính thành một câu nổi bật ngay trước CTA. Trang này không có gì
+             đang khoá/mờ — hook không hé thêm dữ liệu mới. -->
+        <div id="hookHost"></div>
+
         <button class="btn-analyze" id="btnAnalyze" onclick="analyze()" disabled>
           <span class="ic" data-icon="shirt"></span> Xem Trang Phục Hợp Ngày — <span data-tvp-price="trang-phuc-theo-ngay">…</span> Lượng
         </button>
@@ -254,6 +259,7 @@
 window.SHELL_INTRO={key:'trang-phuc-theo-ngay',title:'Trang Phục Theo Ngày',desc:'Gợi ý trang phục hôm nay hợp với vận của bạn. Bạn đứng trước tủ đồ mỗi sáng mà không biết nên mặc gì. Dùng khi có việc quan trọng và muốn chọn đồ có chủ đích.'};</script>
 <script src="/auth.js?v=2"></script>
 <script src="/tuvi-paywall.js?v=20"></script>
+<script src="/tools-shared/hook-layer.js?v=1"></script>
   <script src="/nav.js?v=24" data-icons-only></script>
 <script src="/shell.js?v=85"></script>
 <script src="/tools-shared/ai-loading-steps.js?v=9"></script>
@@ -371,6 +377,25 @@ function onFormChange(){
   document.getElementById('previewRelation').textContent=rel.text;
   preview.classList.add('show');
   document.getElementById('btnAnalyze').disabled=false;
+  mountHook(cc,hanh,rel);
+}
+
+// Trang này KHÔNG có gì đang mờ/khoá — quan hệ ngũ hành hiện rõ hết. Hook chỉ
+// nhấn lại đúng kết luận vừa tính thành một fact nổi bật ngay trước CTA.
+function mountHook(cc,hanh,rel){
+  var host=document.getElementById('hookHost');
+  if(!host||!window.HookLayer)return;
+  var tot=rel.code==='ngay_sinh_menh'||rel.code==='binh_hoa';
+  window.HookLayer.mount(host,{
+    tool:'trang-phuc-theo-ngay',
+    charts:[],
+    facts:[{
+      tone:tot?'good':(rel.code==='ngay_khac_menh'?'bad':'neutral'),
+      title:'Ngày '+cc+' — hành '+hanh,
+      body:rel.text+'. Màu nên mặc, phong cách gợi ý, và trang phục cụ thể theo đúng hành ngày nằm trong bản phân tích AI.',
+      source:'engine · dayCanChi/getRelation',
+    }],
+  });
 }
 
 function resetAll(){

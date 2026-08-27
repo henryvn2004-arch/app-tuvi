@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-155 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+156 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 **Ba file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
 ```bash
@@ -11,7 +11,7 @@ sed -n '120,190p' docs/nhat-ky/2026-08.md    # đọc đúng đoạn, đừng ca
 
 | file | số mục | dung lượng |
 |---|---:|---:|
-| `2026-08.md` | 138 | 976,440 B |
+| `2026-08.md` | 139 | 981,720 B |
 | `2026-07.md` | 12 | 154,531 B |
 | `track-cu.md` | 5 | 89,354 B |
 
@@ -24,7 +24,8 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
-| 1 | 2026-08 | `2026-08.md` | 🗂️ Pha 4 — hook nguoi-khac bằng chính tinh cung Mệnh — route.ts đã tự gọi tên đúng thứ được hé |
+| 1 | 2026-08 | `2026-08.md` | 🏁 Pha 4 — "Làm hết đi": 7 tool thêm hook, 7 tool skip vì ĐÃ hook sẵn, 10 tool loại |
+| 2 | 2026-08 | `2026-08.md` | 🗂️ Pha 4 — hook nguoi-khac bằng chính tinh cung Mệnh — route.ts đã tự gọi tên đúng thứ được hé |
 | 2 | 2026-08 | `2026-08.md` | 🧭 Pha 4 — hook huong-nghiep-tre, và ca ĐẦU TIÊN bị loại khỏi Pha 4 (nhan-mach) |
 | 3 | 2026-08 | `2026-08.md` | 👶 Pha 4 — hook day-con bằng MỘT chất năng khiếu, tường vốn là MỜ không phải ẨN |
 | 4 | 2026-08 | `2026-08.md` | 🌄 Pha 4 — hook van-han-nam bằng ĐÚNG cặp lifeArc/daiVanDinh/daiVanDay đã cất dành |
