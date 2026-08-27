@@ -177,6 +177,12 @@
           </div>
         </div>
 
+        <!-- Khối hook (1 fact) — CHỈ dựng ở lượt xem trước khách chưa đăng
+             nhập (xem `mountHook`), giữa hero và tấm khoá. Không dựng lại
+             "Cơ Sở Trong Lá Số" (khối đó đã LÀM MỜ ngay bên dưới) — hé đúng
+             chính tinh cung Mệnh, đúng phần route.ts tự gọi là "bằng chứng
+             engine đọc thật" (không phải "hàng", xem chú thích `meta()`). -->
+        <div id="hookHost"></div>
         <div id="nkLockHost" style="display:none;margin-bottom:16px"></div>
 
         <div class="res-block" id="sayBlock" style="display:none">
@@ -269,6 +275,7 @@ window.SHELL_INTRO={key:'nguoi-khac',title:'Lá Số Người Khác',desc:'Nhậ
 <script src="/tuvi-form.js?v=2"></script>
 <script src="/tools-shared/cung-ngay-sinh.js?v=1"></script>
 <script src="/tuvi-paywall.js?v=21"></script>
+<script src="/tools-shared/hook-layer.js?v=1"></script>
 <script src="/auth.js?v=2"></script>
   <script src="/nav.js?v=24" data-icons-only></script>
 <script src="/shell.js?v=85"></script>
@@ -486,6 +493,7 @@ async function _runAnonPreview(b, self, qh, viec) {
     // Cơ sở lá số đã deterministic/0đ trong payload preview → dựng THẬT (không
     // để trống), chỉ làm mờ. Xem comment trên renderMetaBasis.
     renderMetaBasis(data, true);
+    mountHook(data);
     document.getElementById('card').style.display = 'block';
     document.getElementById('btnEdit').style.display = '';
     if (window.SHELL_INTRO) Shell.dismissIntro(window.SHELL_INTRO.key);
@@ -495,6 +503,29 @@ async function _runAnonPreview(b, self, qh, viec) {
     _closePanel();
     showError('Lỗi: ' + (e.message || 'Không thể kết nối. Vui lòng thử lại.'));
   }
+}
+
+// Hé đúng chính tinh cung Mệnh — MỘT trong "2/5 mặt đọc" đã có trong payload
+// xem trước (chỉ tên sao, KHÔNG kèm cachCuc/diem — route.ts tự nói tên sao là
+// "bằng chứng engine đọc thật", cachCuc mới là "hàng"). Không dựng lại cả
+// basisBlock (đã LÀM MỜ ngay bên dưới) và không đụng tới matDoc[1] (Phúc
+// Đức) hay coSo/trichDan — cả hai vẫn nằm trong khối mờ.
+function mountHook(data) {
+  var host = document.getElementById('hookHost');
+  if (!host || !window.HookLayer) return;
+  var menh = (data.matDoc || []).filter(function (m) { return m.cung === 'Mệnh'; })[0];
+  if (!menh) return;
+  var saoText = (menh.sao || []).join(', ') || 'không có chính tinh';
+  window.HookLayer.mount(host, {
+    tool: 'nguoi-khac',
+    charts: [],
+    facts: [{
+      tone: 'neutral',
+      title: 'Chính tinh tại cung Mệnh: ' + saoText + (menh.muon ? ' (mượn xung chiếu)' : ''),
+      body: 'Cách cục, đại vận, vận năm, và cách ứng xử cụ thể với người này nằm trong cẩm nang đầy đủ.',
+      source: 'engine · matDoc',
+    }],
+  });
 }
 
 function _renderLockWall(qh, viec, khoaRaw) {
