@@ -215,6 +215,28 @@
     (document.head || document.documentElement).appendChild(s);
   }
 
+  // ── GÓP Ý 👍/👎 DƯỚI BẢN LUẬN GIẢI ──
+  // Nạp /feedback.js, CHỈ khi đã đăng nhập — cùng lý lẽ với sổ lá số ở trên:
+  // gần như mọi bản luận giải đều nằm sau tường trả phí nên người đọc đã đăng
+  // nhập sẵn, còn hiện nút cho khách vãng lai là mời họ bấm để ăn 401.
+  //
+  // Vì sao nạp TỪ ĐÂY chứ không thêm thẻ <script> vào 36 trang có tường trả
+  // phí: thêm tay thì sẽ sót, mà sót trang nào là trang đó âm thầm không thu
+  // được tín hiệu nào — đúng bài học đã ghi cho `ensureUserChartsJs`. Nạp một
+  // chỗ thì tool MỚI cũng có sẵn, không phải nhớ.
+  //
+  // Widget tự tìm vùng kết quả theo `wsResultHost()` (cùng khối nút Chia sẻ
+  // bám) và tự ẩn cho tới khi vùng đó thật sự có một bản luận giải, nên nạp
+  // sớm ở boot() không làm hiện gì sai.
+  function ensureFeedbackJs() {
+    if (!getToken()) return;
+    if (window.TuviFeedback) return;
+    if (document.getElementById('tvmb-feedback-js')) return;
+    var s = document.createElement('script');
+    s.id = 'tvmb-feedback-js'; s.src = '/feedback.js?v=1'; s.async = true;
+    (document.head || document.documentElement).appendChild(s);
+  }
+
   // Mã giới thiệu CỦA CHÍNH người đang đăng nhập — nạp sẵn để lúc bấm "Chia sẻ"
   // gắn được ?ref= vào link mà không phải chờ thêm một vòng mạng.
   var _refCode = null, _refCodeBusy = false;
@@ -2416,6 +2438,18 @@
     // đúng khoảnh khắc tò mò cao nhất thay vì chờ tới thanh công cụ chung.
     // No-op nếu chưa có `currentShare()` (shareWorkspace tự kiểm).
     shareNow: function () { shareWorkspace(); },
+    /**
+     * Khung giữa ĐANG có một kết quả thật hay chưa — CÙNG ngưỡng mà nút Chia
+     * sẻ / Lưu PDF / dòng ghi nguồn đã dùng (`currentShare()`).
+     *
+     * Có để `feedback.js` khỏi tự chế phép đo thứ hai. Bản đầu nó đếm
+     * `innerText` TRẦN của vùng kết quả và vượt ngưỡng ở 18/36 trang NGAY KHI
+     * TẢI — vì `innerText` đếm cả nút, ô nhập, thẻ giới thiệu và tường trả
+     * phí. Hậu quả: mời người ta chấm điểm một bản luận giải chưa hề tồn tại.
+     * `domShareText()` bỏ đúng những thứ đó (SHARE_SKIP_SEL) nên nó mới là
+     * phép đo đúng — và đã được nút Chia sẻ dùng thật từ trước.
+     */
+    hasResult: function () { return !!currentShare(); },
   };
   window.Shell = Shell;
 
@@ -2921,6 +2955,8 @@
     // Sổ lá số — đặt SAU prefillForm của trang (trang gọi ở init của chính nó,
     // đồng bộ) nên không có lượt nào đá nhau: sổ chỉ điền khi form còn trống.
     ensureUserChartsJs();
+    // Nút 👍/👎 dưới bản luận giải (tự ẩn tới khi có kết quả thật).
+    ensureFeedbackJs();
     try { track('tool_open', { tool_id: ACTIVE || 'app' }); } catch (e) { /* ignore */ }
     // Nối phiên từ link chia sẻ: tải snapshot rồi reload ?auto=1 (boot dừng ở đây).
     if (consumeFromShare()) return;
