@@ -50,6 +50,40 @@ const SITE_URL      = 'https://www.tuviminhbao.com';
 // Nguồn thật = bảng credit_packages (lib/billing/packages), admin sửa được;
 // module tự fallback hardcode nếu DB hụt. Tỷ giá tham chiếu 1 USD = 25.000đ.
 
+// ── BIN ngân hàng → tên hiển thị ──────────────────────────────
+// PayOS KHÔNG trả tên ngân hàng, chỉ trả `bin` (mã Napas 6 số). Bản cũ vá
+// bằng cách in cứng "MB Bank" trong `topup.html` — đúng đúng MỘT lần, vì
+// tài khoản nhận lúc đó là MB. Đổi tài khoản nhận sang ngân hàng khác thì
+// dòng đó nói dối người đang cầm điện thoại chuyển tiền, mà KHÔNG có gì đỏ:
+// QR vẫn đúng (dựng từ `bin`), số TK vẫn đúng, chỉ mỗi tên ngân hàng sai.
+// Cùng họ bệnh với "client chép số giá" — số CŨ nguy hiểm hơn ô đang tải.
+// BIN lạ ⇒ trả `null`, client in thẳng mã BIN thay vì đoán một cái tên.
+const BANK_BY_BIN: Record<string, string> = {
+  '970400': 'Saigonbank',      '970403': 'Sacombank',
+  '970405': 'Agribank',        '970406': 'DongA Bank',
+  '970407': 'Techcombank',     '970408': 'GPBank',
+  '970409': 'BacA Bank',       '970410': 'Standard Chartered',
+  '970412': 'PVcomBank',       '970414': 'Oceanbank',
+  '970415': 'VietinBank',      '970416': 'ACB',
+  '970418': 'BIDV',            '970419': 'NCB',
+  '970422': 'MB Bank',         '970423': 'TPBank',
+  '970424': 'Shinhan Bank',    '970425': 'ABBANK',
+  '970426': 'MSB',             '970427': 'VietABank',
+  '970428': 'Nam A Bank',      '970429': 'SCB',
+  '970430': 'PGBank',          '970431': 'Eximbank',
+  '970432': 'VPBank',          '970433': 'VietBank',
+  '970434': 'Indovina Bank',   '970436': 'Vietcombank',
+  '970437': 'HDBank',          '970438': 'BaoViet Bank',
+  '970439': 'Public Bank',     '970440': 'SeABank',
+  '970441': 'VIB',             '970442': 'Hong Leong Bank',
+  '970443': 'SHB',             '970444': 'CBBank',
+  '970446': 'Co-opBank',       '970448': 'OCB',
+  '970449': 'LPBank',          '970452': 'KienlongBank',
+  '970454': 'BVBank',          '970457': 'Woori Bank',
+  '970458': 'UOB',             '546034': 'CAKE by VPBank',
+  '546035': 'Ubank by VPBank', '963388': 'TNEX',
+};
+
 function createPayOSSignature(data: Record<string, unknown>): string {
   const checksumKey = process.env.PAYOS_CHECKSUM_KEY!;
   const str = Object.keys(data).sort().map(k => `${k}=${data[k]}`).join('&');
@@ -646,8 +680,11 @@ async function handleCreateBank(body: Record<string, unknown>): Promise<Response
     });
 
     const d = payosData.data;
+    const bin = String(d.bin || '');
+    const bankName = BANK_BY_BIN[bin] || null;
+    if (bin && !bankName) console.warn('[create-bank] BIN chua co trong BANK_BY_BIN:', bin);
     return ok({ orderCode, checkoutUrl: d.checkoutUrl, accountNumber: d.accountNumber,
-      accountName: d.accountName, bin: d.bin, amountVND,
+      accountName: d.accountName, bin: d.bin, bankName, amountVND,
       credits, label });
   } catch (e: unknown) { return err((e as Error).message); }
 }
