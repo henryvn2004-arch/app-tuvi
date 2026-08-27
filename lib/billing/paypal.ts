@@ -297,7 +297,12 @@ export async function verifyPayPalWebhook(h: Headers, rawBody: string): Promise<
         '[paypal-webhook] chữ ký KHÔNG hợp lệ —',
         `verification_status=${out?.verification_status}`,
         `transmission_id=${transmissionId}`,
-        `webhook_id_dài=${webhookId.length}`
+        // Vân tay chứ không phải độ dài: ID cũ và ID mới ĐỀU dài 17, nên
+        // `webhook_id_dài=17` không phân biệt được bản deploy đang đọc cái nào
+        // — đúng câu hỏi cần trả lời khi đang đổi webhook. Webhook id là mã
+        // định danh, không phải bí mật, nhưng vẫn chỉ ghi đầu-cuối cho gọn.
+        `webhook_id=${webhookId.slice(0, 4)}…${webhookId.slice(-4)}`,
+        `transmission_time=${transmissionTime}`
       );
       return false;
     }

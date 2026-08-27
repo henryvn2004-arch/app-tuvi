@@ -40,13 +40,40 @@ function orderIdOf(eventType: string, resource: Record<string, any>): string {
   return up.split('/checkout/orders/')[1]?.split('/')[0] || '';
 }
 
+/**
+ * Bóc vài trường ĐỊNH DANH ra khỏi thân gói tin CHƯA xác thực, để ghi log.
+ *
+ * ⚠️ Dữ liệu ở đây do phía gửi khai và CHƯA qua cửa chữ ký — chỉ được dùng để
+ * chẩn đoán, TUYỆT ĐỐI không dùng để quyết định gì. Mỗi giá trị phải khớp một
+ * mẫu hẹp mới được ghi, nếu không thì bỏ: log là thứ người ta đọc và grep, nên
+ * một chuỗi tuỳ ý từ Internet chèn được vào đó là chèn được cả dòng giả.
+ */
+function peekUnverified(raw: string): string {
+  let o: Record<string, any>;
+  try { o = JSON.parse(raw); } catch { return `(không phải JSON, dài ${raw.length})`; }
+  const safe = (v: unknown) => {
+    const t = String(v ?? '');
+    return /^[A-Za-z0-9._:+-]{1,64}$/.test(t) ? t : '(bỏ)';
+  };
+  return [
+    `event_type=${safe(o?.event_type)}`,
+    `event_id=${safe(o?.id)}`,
+    `create_time=${safe(o?.create_time)}`,
+  ].join(' ');
+}
+
 export async function POST(request: NextRequest) {
   // Chữ ký phải soát trên ĐÚNG chuỗi byte đã nhận. Đọc `.json()` rồi
   // `JSON.stringify` lại là đổi thứ tự khoá / khoảng trắng ⇒ chữ ký sai.
   const raw = await request.text();
 
   if (!(await verifyPayPalWebhook(request.headers, raw))) {
-    // Không nói rõ hỏng ở đâu — đây là cửa mở ra Internet.
+    // Phía TRẢ VỀ vẫn không nói gì — đây là cửa mở ra Internet. Phía LOG thì
+    // ngược lại: một gói tin trượt chữ ký là thứ khó chẩn nhất, và khi không
+    // biết nó là sự kiện gì thì không phân biệt nổi "code sai" với "gói tin cũ
+    // ký bằng webhook đã xoá, thử lại mãi mãi" — hai thứ đòi hai cách xử lý
+    // khác hẳn nhau.
+    console.error('[paypal-webhook] 401 —', peekUnverified(raw));
     return Response.json({ error: 'Invalid signature' }, { status: 401 });
   }
 
