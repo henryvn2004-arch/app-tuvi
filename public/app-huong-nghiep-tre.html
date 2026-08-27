@@ -245,6 +245,10 @@
             <div class="res-block-body"><div id="histList"></div></div>
           </div>
         </div>
+
+        <!-- "Ai Sinh Cùng Ngày Với Bạn" — miễn phí, 0 token LLM. Hỏng mạng/API
+             thì tự ẩn, không làm hỏng bản đọc phía trên. -->
+        <div id="cnsHost"></div>
       </div>
     </div>
   </main>
@@ -257,6 +261,7 @@ window.SHELL_INTRO={key:'huong-nghiep-tre',title:'Hướng Nghiệp Sớm Cho Co
 <script src="/laso-chart.js?v=3"></script>
 <script src="/tools-shared/vn-timezone.js?v=1"></script>
 <script src="/tuvi-form.js?v=2"></script>
+<script src="/tools-shared/cung-ngay-sinh.js?v=1"></script>
 <script src="/tuvi-paywall.js?v=21"></script>
 <script src="/auth.js?v=2"></script>
   <script src="/nav.js?v=24" data-icons-only></script>
@@ -324,6 +329,18 @@ function _birthOf(prefix) {
   };
 }
 
+// "Ai Sinh Cùng Ngày Với Bạn" — chủ thể là LÁ SỐ CON (`b`, prefix rỗng). Gọi ở
+// CẢ ba đường hiện `card` (người lớn không bán · trẻ em chưa đăng nhập · đã
+// tạo bản đầy đủ) — phần phụ, không đợi paywall. `b` dạng
+// {day,month,year,hourBranch,gender} từ `_birthOf()`, khác shape module đòi.
+function _mountCnsHuongNghiep(b) {
+  if (!window.CungNgaySinh || !b) return;
+  CungNgaySinh.mount('cnsHost', {
+    ngay: b.day, thang: b.month, nam: b.year,
+    gioIdx: b.hourBranch, gioitinh: b.gender,
+  });
+}
+
 /** Query cho `action=cache-status` — đúng tên tham số route đọc. */
 function _cacheQuery(b, lo) {
   return 'd=' + (b.day || 0) + '&m=' + (b.month || 0) + '&y=' + (b.year || 0) +
@@ -374,6 +391,7 @@ async function analyze() {
     renderMeta(prev);
     if (window.SHELL_INTRO) Shell.dismissIntro(window.SHELL_INTRO.key);
     _banGiaoNguoiLon(prev);
+    _mountCnsHuongNghiep(b);
     return;
   }
 
@@ -392,6 +410,7 @@ async function analyze() {
     _hnLockRestBlocks(true);
     if (window.SHELL_INTRO) Shell.dismissIntro(window.SHELL_INTRO.key);
     _renderLockWall(lo);
+    _mountCnsHuongNghiep(b);
     return;
   }
 
@@ -502,6 +521,7 @@ async function _doGenerate(freeRerun, lo) {
     document.getElementById('btnEdit').style.display = '';
     if (window.SHELL_INTRO) Shell.dismissIntro(window.SHELL_INTRO.key);
     _loadHistory();
+    _mountCnsHuongNghiep(_last);
 
     var ten = data.ten || 'con';
     Shell.setContext({

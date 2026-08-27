@@ -154,6 +154,9 @@
             <div class="ask" data-ask="Đọc kỹ giúp tôi hồ sơ công sở này: tôi hợp môi trường nào, đang vướng gì, và ba việc nên làm trong mười hai tháng tới?">✦ Hỏi trợ lý đọc kỹ hồ sơ này</div>
           </div>
         </div>
+        <!-- "Ai Sinh Cùng Ngày Với Bạn" — miễn phí, 0 token LLM. Hỏng mạng/API
+             thì tự ẩn, không làm hỏng hồ sơ phía trên. -->
+        <div id="cnsHost"></div>
       </div>
     </div>
   </main>
@@ -166,6 +169,7 @@ window.SHELL_INTRO={key:'cong-so',title:'Tử Vi Công Sở',desc:'Đọc kiểu
 <script src="/tools-shared/cong-so.js?v=4"></script>
 <script src="/tools-shared/vn-timezone.js?v=1"></script>
 <script src="/tuvi-form.js?v=2"></script>
+<script src="/tools-shared/cung-ngay-sinh.js?v=1"></script>
 <script src="/tuvi-paywall.js?v=21"></script>
 <script src="/poster.js?v=4"></script>
 <script src="/auth.js?v=2"></script>
@@ -207,6 +211,8 @@ function doCongSo(){
     document.getElementById('resPanel').style.display='block';
     document.getElementById('btnEdit').style.display='';
     document.getElementById('taiBtn').style.display=loggedIn?'':'none';
+    // Mục "Ai Sinh Cùng Ngày Với Bạn" — phần phụ, đặt SAU khi hồ sơ đã dựng.
+    if(window.CungNgaySinh)CungNgaySinh.mount('cnsHost',{ngay:fd.ngay,thang:fd.thang,nam:fd.nam,gioIdx:fd.gioIdx,gioitinh:fd.gioitinh});
     // Tool free chạy gần như tức thì (không cần orb/loading — luật đã ghi ở
     // ai-loading-steps.js) nhưng nếu form nằm dưới cuối màn hình thì kết quả
     // vẫn hiện NGOÀI khung nhìn. Cuộn lên để thấy nó vừa dựng xong.

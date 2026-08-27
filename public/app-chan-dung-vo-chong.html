@@ -148,6 +148,10 @@
           <div class="res-block-header"><span class="res-block-title">Đã Vẽ Trước Đó</span></div>
           <div class="res-block-body"><div id="histList"></div></div>
         </div>
+
+        <!-- "Ai Sinh Cùng Ngày Với Bạn" — miễn phí, 0 token LLM. Hỏng mạng/API
+             thì tự ẩn, không làm hỏng chân dung phía trên. -->
+        <div id="cnsHost"></div>
       </div>
     </div>
   </main>
@@ -160,6 +164,7 @@ window.SHELL_INTRO={key:'chan-dung-vo-chong',title:'Chân Dung Vợ Chồng',des
 <script src="/laso-chart.js?v=3"></script>
 <script src="/tools-shared/vn-timezone.js?v=1"></script>
 <script src="/tuvi-form.js?v=2"></script>
+<script src="/tools-shared/cung-ngay-sinh.js?v=1"></script>
 <script src="/tuvi-paywall.js?v=21"></script>
 <script src="/auth.js?v=2"></script>
   <script src="/nav.js?v=24" data-icons-only></script>
@@ -221,6 +226,18 @@ function showError(msg) {
 
 function _cdvcLoggedIn() { return !!(window.Auth && window.Auth.isLoggedIn && window.Auth.isLoggedIn()); }
 
+// "Ai Sinh Cùng Ngày Với Bạn" — chân dung suy ra từ MỘT MÌNH lá số người dùng
+// (không có "người thứ hai" thật), nên chủ thể luôn là `_lastBirth`. Gọi ở CẢ
+// đường xem trước lẫn đường đầy đủ — phần phụ, không đợi paywall. Shape
+// {day,month,year,hourBranch,gender} khác shape module đòi, quy đổi tay.
+function _mountCnsVoChong(b) {
+  if (!window.CungNgaySinh || !b) return;
+  CungNgaySinh.mount('cnsHost', {
+    ngay: b.day, thang: b.month, nam: b.year,
+    gioIdx: b.hourBranch, gioitinh: b.gender,
+  });
+}
+
 // Đăng nhập rồi → bấm nút là CHẠY THẬT ngay (case 1); thiếu/không đủ Lượng
 // thì `requireCredits` tự bật popup. Chưa đăng nhập (case 2) → dựng cung Phu
 // Thê MỞ + bảng hình thể MỞ (deterministic, 0đ, đúng thiết kế sẵn có của
@@ -269,6 +286,7 @@ async function _runAnonPreview() {
     document.getElementById('btnEdit').style.display = '';
     if (window.SHELL_INTRO) Shell.dismissIntro(window.SHELL_INTRO.key);
     _renderLockWall();
+    _mountCnsVoChong(_lastBirth);
   } catch (e) {
     _closePanel();
     showError('Lỗi: ' + (e.message || 'Không thể kết nối. Vui lòng thử lại.'));
@@ -468,6 +486,7 @@ function renderProse(data) {
   document.getElementById('cdvcInviteText').innerHTML =
     'Đúng gu bạn chưa? Gửi ảnh này cho hội bạn xem, rồi rủ họ vẽ thử <b>người bạn đời tương lai của chính họ</b> luôn.';
   document.getElementById('cdvcInviteBlock').style.display = 'flex';
+  _mountCnsVoChong(_lastBirth);
 }
 
 function renderPhuThe(pt) {

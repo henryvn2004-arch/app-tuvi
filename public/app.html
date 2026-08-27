@@ -65,6 +65,9 @@
       <div id="chartPanel" data-ws-result>
         <div class="birth-bar" id="birthBar"></div>
         <div class="chart-wrap"><div id="lasoContainer"></div></div>
+        <!-- "Ai Sinh Cùng Ngày Với Bạn" — miễn phí, 0 token LLM. Hỏng mạng/API
+             thì tự ẩn, không làm hỏng lá số phía trên. -->
+        <div id="cnsHost"></div>
       </div>
     </div>
   </main>
@@ -78,6 +81,7 @@ window.SHELL_INTRO={key:'la-so',title:'Lá số Tử Vi Đẩu Số',desc:'Nhậ
 <script src="/laso-chart.js?v=3"></script>
 <script src="/tools-shared/vn-timezone.js?v=1"></script>
 <script src="/tuvi-form.js?v=2"></script>
+<script src="/tools-shared/cung-ngay-sinh.js?v=1"></script>
 <script src="/auth.js?v=2"></script>
   <script src="/nav.js?v=24" data-icons-only></script>
 <script src="/shell.js?v=85"></script>
@@ -115,6 +119,8 @@ function doAnSao(){
     document.getElementById('btnBatTu').style.display='';
     // nhớ ngày sinh để chuyển tay sang Luận giải/Bát Tự không phải nhập lại
     Shell.rememberBirth(Object.assign({}, fdIn, {namxem:namxem}));
+    // Mục "Ai Sinh Cùng Ngày Với Bạn" — phần phụ, đặt SAU khi lá số đã dựng.
+    if(window.CungNgaySinh)CungNgaySinh.mount('cnsHost',{ngay:ngay,thang:thang,nam:nam,gioIdx:gioIdx,gioitinh:gioitinh});
     // gắn context để bật rail
     if(window.SHELL_INTRO)Shell.dismissIntro(window.SHELL_INTRO.key);
     Shell.setContext({

@@ -37,11 +37,26 @@ const fail = (m) => {
 
 const MODULE = 'public/tools-shared/cung-ngay-sinh.js';
 // Trang ĐÃ cắm khối — gỡ một dòng khỏi đây phải là quyết định có chủ ý.
+//
+// CỐ Ý KHÔNG có: các tool 2 người (xem-tuoi/app-xem-tuoi/xem-lam-an dùng
+// prefix a/b, app-duyen-no-tien-kiep lặp qua nhiều prefix) — không rõ nên
+// khớp "cùng ngày sinh" theo NGƯỜI NÀO. `app-nhan-mach` cũng bỏ: chủ thể
+// thật là một NHÓM 2–8 người, còn lá số `self` chỉ là ngữ cảnh tuỳ chọn,
+// không phải chủ thể chắc chắn có mặt. `app-chan-dung-tien-kiep` bỏ vì UI
+// nhiều tầng stream — để lại cho một lượt riêng thay vì cắm vội.
 const PAGES = [
   'public/luan-giai.html',
   'public/app-luan-giai.html',
   'public/tu-binh.html',
   'public/app-bat-tu.html',
+  'public/app.html',
+  'public/app-cong-so.html',
+  'public/app-chu-trinh-cuoc-doi.html',
+  'public/app-van-han-nam.html',
+  'public/app-day-con.html',
+  'public/app-huong-nghiep-tre.html',
+  'public/app-nguoi-khac.html',
+  'public/app-chan-dung-vo-chong.html',
 ];
 
 const SRC = /<script[^>]+src="\/tools-shared\/cung-ngay-sinh\.js/;
