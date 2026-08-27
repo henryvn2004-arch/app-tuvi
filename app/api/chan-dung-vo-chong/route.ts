@@ -100,6 +100,11 @@ async function runPreview(request: NextRequest) {
     coreIsSatTinh: morph.coreIsSatTinh,
     morph: morphRows(morph),
     phuThe: getPhuTheReadout(lasoRes.ls),
+    // 6 chiều điểm cung Phu Thê (engine đã tính sẵn trong computeLaso, 0đ thêm)
+    // — chỉ để vẽ biểu đồ hook ở client (HookFacts.tuvi.hexDimsForCung đọc
+    // đúng shape này), KHÔNG phải field mới cho luận giải trả tiền.
+    cungScoresPhuThe:
+      ((lasoRes.ls.cungScores as Record<string, Record<string, number>>) || {})['Phu Thê'] || null,
   });
 }
 
