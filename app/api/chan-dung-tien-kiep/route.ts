@@ -148,7 +148,7 @@ async function runPreview(request: NextRequest) {
 
   const built = buildProfile(birth, body.era ? String(body.era) : undefined);
   if (!built.ok) return err(built.error, 400);
-  const { profile } = built;
+  const { ls, profile } = built;
 
   return ok({
     success: true,
@@ -158,6 +158,10 @@ async function runPreview(request: NextRequest) {
     // biến cố rơi vào hồi nào là suy từ 9 đại vận). Cố ý KHÔNG kèm title/text —
     // đó là phần LLM viết, tức phần đang bán.
     acts: profile.arc.acts.map((a) => ({ index: a.index, stage: a.stage, role: a.role })),
+    // 6 chiều điểm cung Mệnh (engine đã tính sẵn trong computeLaso, 0đ thêm) —
+    // chỉ để vẽ hex radar hook ở client, KHÔNG phải field mới cho phần trả tiền.
+    cungScoresMenh:
+      ((ls.cungScores as Record<string, Record<string, number>>) || {})['Mệnh'] || null,
   });
 }
 
