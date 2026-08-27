@@ -121,6 +121,8 @@
           <span class="dn-addnote" id="addNote"></span>
         </div>
 
+        <div id="hookHost"></div>
+
         <div class="frow" style="margin-bottom:0;margin-top:14px">
           <button class="btn-go" id="btnGo" onclick="analyze()">Xem Duyên Nợ — <span data-tvp-price="duyen-no-tien-kiep">…</span> Lượng →</button>
         </div>
@@ -194,6 +196,7 @@ window.SHELL_INTRO={key:'duyen-no-tien-kiep',title:'Duyên Nợ Tiền Kiếp',d
 <script src="/tools-shared/vn-timezone.js?v=1"></script>
 <script src="/tuvi-form.js?v=2"></script>
 <script src="/tuvi-paywall.js?v=22"></script>
+<script src="/tools-shared/hook-layer.js?v=1"></script>
 <script src="/auth.js?v=2"></script>
   <script src="/nav.js?v=24" data-icons-only></script>
 <script src="/shell.js?v=85"></script>
@@ -378,6 +381,58 @@ function _cacheQuery(births) {
       '&' + p + 'l=' + (x.isLunar ? '1' : '0');
   };
   return births.map(function (b, i) { return one(SLOT_KEYS[i], b); }).join('&');
+}
+
+// Lượt tính thử — gọi `buildBond()` (0 lượt LLM, không cần đăng nhập) mỗi khi
+// đủ ≥2 lá số hợp lệ, hé mối duyên TRUNG TÂM (kind/label/gist) làm hook. Nghe
+// UỶ QUYỀN trên #personGrid (bubbling input/change) thay vì sửa tuvi-form.js
+// dùng chung — nó không có callback onChange riêng theo instance.
+var _hookQuery = null, _hookTimer = null;
+function _scheduleHookCheck() {
+  clearTimeout(_hookTimer);
+  _hookTimer = setTimeout(_maybeMountHook, 500);
+}
+document.getElementById('personGrid').addEventListener('input', _scheduleHookCheck);
+document.getElementById('personGrid').addEventListener('change', _scheduleHookCheck);
+
+async function _maybeMountHook() {
+  var births = [];
+  for (var i = 0; i < _slots.length; i++) {
+    var b = _birthOf(_slots[i]);
+    if (!b) { document.getElementById('hookHost').innerHTML = ''; _hookQuery = null; return; }
+    births.push(b);
+  }
+  if (births.length < 2) { document.getElementById('hookHost').innerHTML = ''; _hookQuery = null; return; }
+  var q = _cacheQuery(births);
+  if (q === _hookQuery) return;
+  _hookQuery = q;
+  try {
+    var res = await fetch('/api/duyen-no-tien-kiep?preview=1', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ births: births }),
+    });
+    var data = await res.json();
+    if (q !== _hookQuery) return; // đã đổi input trong lúc chờ, bỏ kết quả cũ
+    if (!res.ok || !data.success) { document.getElementById('hookHost').innerHTML = ''; return; }
+    mountHook(data);
+  } catch (e) { /* im lặng — đây là hook, không phải luồng chính */ }
+}
+
+function mountHook(data) {
+  var host = document.getElementById('hookHost');
+  if (!host || !window.HookLayer || !data.bond) return;
+  var a = data.nhanVats[data.bond.a], b = data.nhanVats[data.bond.b];
+  window.HookLayer.mount(host, {
+    tool: 'duyen-no-tien-kiep',
+    charts: [],
+    facts: [{
+      tone: 'neutral',
+      title: 'Loại duyên: ' + data.bond.label,
+      body: 'Giữa ' + esc(a.ten) + ' và ' + esc(b.ten) + ': ' + data.bond.gist + ' Câu chuyện 4 hồi + bức tranh chung nằm trong bản đầy đủ.',
+      source: 'engine · computeGroupBond',
+    }],
+  });
 }
 
 async function analyze() {

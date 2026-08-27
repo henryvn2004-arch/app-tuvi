@@ -161,6 +161,8 @@
 
         <div class="error-msg" id="error-msg"></div>
 
+        <div id="hookHost"></div>
+
         <button id="analyzeBtn" onclick="analyze()" disabled class="btn-analyze" style="width:100%;margin-top:20px;padding:14px;background:var(--navy);color:var(--gold);border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;font-family:var(--serif);letter-spacing:.3px;transition:opacity .15s">
           <span class="ic" data-icon="sparkles"></span> Phân Tích Khuôn Mặt &amp; Gợi Ý Phong Cách — <span data-tvp-price="kieu-toc-phan-tich">…</span> Lượng
         </button>
@@ -244,6 +246,7 @@
 window.SHELL_INTRO={key:'kieu-toc-phan-tich',title:'Kiểu Tóc & Kính Mắt Hợp Tướng Mặt',desc:'Chấm khuôn mặt hợp kiểu tóc nào, rồi ghép thử ngay lên ảnh thật của bạn. Bạn sợ cắt xong mới biết không hợp, lúc đó đã muộn. Dùng khi định đổi tóc mà chưa dám thử ngay ngoài tiệm.'};</script>
 <script src="/auth.js?v=2"></script>
 <script src="/tuvi-paywall.js?v=22"></script>
+<script src="/tools-shared/hook-layer.js?v=1"></script>
   <script src="/nav.js?v=24" data-icons-only></script>
 <script src="/shell.js?v=85"></script>
 <script src="/tools-shared/ai-loading-steps.js?v=9"></script>
@@ -350,6 +353,7 @@ const SHAPE_ICON = { oval: 'user', round: 'circle-dot', square: 'user', heart: '
 
 let _imageData = null;
 let _mediaType = 'image/jpeg';
+let _faceMeasurements = null;
 let _gender = 'nam';
 let _analysisResult = null;
 let _currentSlug = null;
@@ -431,10 +435,36 @@ function showPreview(dataUrl) {
   document.getElementById('previewSection').style.display = 'block';
   document.getElementById('analyzeBtn').disabled = false;
   clearError();
+  _faceMeasurements = null;
+  _measureFace(dataUrl).then(m => { _faceMeasurements = m; mountHook(m); });
+}
+
+// _measureFace() vốn chỉ chạy SAU requireCredits() (bên trong _doPhanTich) —
+// nay chạy NGAY khi có ảnh, kết quả cache vào _faceMeasurements để _doPhanTich
+// dùng lại (khỏi chạy FaceMesh hai lần). Ngưỡng phân loại lấy Y HỆT dòng
+// "ĐO LƯỜNG KHUÔN MẶT" trong prompt SP_NGOAI_HINH (route.js) — đổi ngưỡng ở
+// đó thì phải đổi ở đây theo.
+function mountHook(m) {
+  const host = document.getElementById('hookHost');
+  if (!host || !window.HookLayer || !m) return;
+  const r = m.widthToHeight;
+  const shape = r > 0.85 ? 'tròn/vuông' : r < 0.75 ? 'dài' : 'oval';
+  window.HookLayer.mount(host, {
+    tool: 'kieu-toc',
+    charts: [],
+    facts: [{
+      tone: 'neutral',
+      title: 'Tỷ lệ rộng/cao khuôn mặt: ' + r + ' — xu hướng ' + shape,
+      body: 'Đo trực tiếp từ ảnh bằng MediaPipe. Danh sách kiểu tóc & kính mắt xếp hạng theo khuôn mặt của bạn nằm trong bản phân tích AI.',
+      source: 'engine · MediaPipe FaceMesh',
+    }],
+  });
 }
 
 function removePhoto() {
   _imageData = null;
+  _faceMeasurements = null;
+  document.getElementById('hookHost').innerHTML = '';
   document.getElementById('previewSection').style.display = 'none';
   document.getElementById('uploadArea').style.display = 'block';
   document.getElementById('fileInput').value = '';
@@ -553,7 +583,7 @@ async function _doPhanTich() {
   _analysisLoadingCtl = AiLoadingSteps.mount('analysisStepsHost', ANALYSIS_STEPS);
   _analysisLoadingCtl.start();
 
-  const faceMeasurements = await _measureFace('data:' + _mediaType + ';base64,' + _imageData);
+  const faceMeasurements = _faceMeasurements || await _measureFace('data:' + _mediaType + ';base64,' + _imageData);
 
   try {
     const res = await fetch('/api/tuong-mat', {
