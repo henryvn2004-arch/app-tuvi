@@ -66,13 +66,23 @@
       ? '<img class="cns-anh" src="' + esc(it.anh) + '" alt="" loading="lazy" data-cns-chu="' + initial + '">'
       : '<div class="cns-anh cns-chu">' + initial + '</div>';
 
+    var GIOITINH_LABEL = { nam: 'Nam', nu: 'Nữ' };
     var dong = [];
-    if (it.nghe) dong.push(esc(it.nghe) + (it.quocGia ? ' · ' + esc(it.quocGia) : ''));
-    var sinh = esc(it.ngaySinh);
-    if (it.gioSinh) {
-      sinh += ' · ' + esc(it.gioSinh) + (it.muiGio != null ? ' (' + tzText(it.muiGio) + ')' : '');
+    var dong1 = [];
+    if (it.nghe) dong1.push(esc(it.nghe));
+    if (it.quocGia) dong1.push(esc(it.quocGia));
+    if (GIOITINH_LABEL[it.gioiTinh]) dong1.push(GIOITINH_LABEL[it.gioiTinh]);
+    if (dong1.length) dong.push(dong1.join(' · '));
+    dong.push('DL ' + esc(it.ngaySinh));
+    // Badge chỉ nói "T1/T0" thì không đủ — phải chỉ thẳng ngày ÂM LỊCH ra thì
+    // người đọc mới hiểu vì sao ngày DƯƠNG lịch không trùng khít (đúng khiếu
+    // nại: match theo âm lịch nhưng không hiện âm lịch ra).
+    if (it.amLich) {
+      dong.push('<span class="cns-am">ÂL ' + it.amLich.ngay + '/' + it.amLich.thang + ' (' + esc(it.amLich.canChi) + ')</span>');
     }
-    dong.push(sinh);
+    if (it.gioSinh) {
+      dong.push('giờ sinh ' + esc(it.gioSinh) + (it.muiGio != null ? ' (' + tzText(it.muiGio) + ')' : ''));
+    }
     if (it.canhGio) {
       dong.push(
         '<span class="cns-gio">giờ ' + esc(it.canhGio) +
@@ -85,7 +95,9 @@
       '<li class="cns-item' + (vang ? ' cns-vang' : bac ? ' cns-bac' : '') + '">' +
       anh +
       '<div class="cns-than">' +
-      (vang || bac ? '<span class="cns-badge">' + esc(it.nhan) + '</span>' : '') +
+      // Badge hiện cho MỌI tầng (trước chỉ t2/t2b) — t1/t0 không có nhãn thì
+      // người đọc tưởng đang so ngày dương lịch, trong khi t1 so ngày âm lịch.
+      '<span class="cns-badge' + (vang ? ' cns-badge-vang' : bac ? ' cns-badge-bac' : '') + '">' + esc(it.nhan) + '</span>' +
       '<div class="cns-ten">' + esc(it.ten) + '</div>' +
       '<div class="cns-meta">' + dong.join('<br>') + '</div>' +
       (it.lienKet
@@ -96,25 +108,30 @@
     );
   }
 
+  // Card grid (kiểu "thẻ bài") thay cho danh sách 1 cột full-width cũ — cột
+  // full-width khiến mỗi hàng có rất nhiều khoảng trắng thừa, đọc như bị
+  // "tràn". `auto-fill`+`minmax` tự co giãn số cột theo bề rộng khung.
   var CSS =
     '.cns{margin:28px 0 8px;border-top:1px solid var(--line,#e5e7eb);padding-top:20px}' +
     '.cns h3{font-size:17px;margin:0 0 4px;display:flex;align-items:center;gap:8px}' +
     '.cns-sub{font-size:13px;color:var(--muted,#6b7280);margin:0 0 14px}' +
-    '.cns-list{list-style:none;margin:0;padding:0;display:grid;gap:10px}' +
-    '.cns-item{display:flex;gap:12px;align-items:flex-start;padding:10px;border:1px solid var(--line,#e5e7eb);border-radius:12px}' +
+    '.cns-list{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:12px}' +
+    '.cns-item{display:flex;flex-direction:column;align-items:center;text-align:center;gap:2px;padding:14px 10px;border:1px solid var(--line,#e5e7eb);border-radius:14px;min-width:0}' +
     '.cns-vang{border-color:#d4a017;background:linear-gradient(180deg,rgba(212,160,23,.10),transparent)}' +
     '.cns-bac{border-color:#9ca3af;background:linear-gradient(180deg,rgba(156,163,175,.10),transparent)}' +
-    '.cns-anh{width:56px;height:56px;border-radius:10px;object-fit:cover;flex:0 0 56px;background:var(--bg2,#f3f4f6)}' +
+    '.cns-anh{width:64px;height:64px;border-radius:50%;object-fit:cover;background:var(--bg2,#f3f4f6);margin-bottom:6px}' +
     '.cns-chu{display:flex;align-items:center;justify-content:center;font-weight:700;font-size:22px;color:var(--muted,#6b7280)}' +
-    '.cns-than{min-width:0;flex:1}' +
-    '.cns-badge{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.02em;padding:2px 7px;border-radius:999px;background:#d4a017;color:#fff;margin-bottom:4px}' +
-    '.cns-bac .cns-badge{background:#6b7280}' +
-    '.cns-ten{font-weight:600;font-size:15px}' +
-    '.cns-meta{font-size:12.5px;color:var(--muted,#6b7280);line-height:1.55;margin-top:2px}' +
+    '.cns-than{min-width:0;width:100%}' +
+    '.cns-badge{display:inline-block;font-size:10.5px;font-weight:700;letter-spacing:.02em;padding:2px 7px;border-radius:999px;background:var(--bg2,#f3f4f6);color:var(--muted,#6b7280);margin-bottom:4px}' +
+    '.cns-badge-vang{background:#d4a017;color:#fff}' +
+    '.cns-badge-bac{background:#6b7280;color:#fff}' +
+    '.cns-ten{font-weight:600;font-size:14px;overflow-wrap:break-word}' +
+    '.cns-meta{font-size:12px;color:var(--muted,#6b7280);line-height:1.6;margin-top:2px}' +
+    '.cns-am{font-weight:600;color:var(--fg,#111827)}' +
     '.cns-gio{font-weight:600;color:var(--fg,#111827)}' +
-    '.cns-rodden{font-size:10.5px;border:1px solid var(--line,#e5e7eb);border-radius:4px;padding:0 4px}' +
-    '.cns-link{display:inline-block;margin-top:6px;font-size:12.5px;font-weight:600;color:#1455A4;text-decoration:none}' +
-    '.cns-anh-nguon{font-size:10.5px;color:var(--muted,#6b7280);opacity:.75;margin-top:4px;line-height:1.4}' +
+    '.cns-rodden{font-size:10px;border:1px solid var(--line,#e5e7eb);border-radius:4px;padding:0 4px}' +
+    '.cns-link{display:inline-block;margin-top:6px;font-size:12px;font-weight:600;color:#1455A4;text-decoration:none}' +
+    '.cns-anh-nguon{font-size:10px;color:var(--muted,#6b7280);opacity:.75;margin-top:4px;line-height:1.4}' +
     '.cns-anh-nguon a{color:inherit;text-decoration:underline}' +
     '.cns-ghi{font-size:11.5px;color:var(--muted,#6b7280);margin-top:12px;line-height:1.5}';
 
@@ -145,13 +162,21 @@
         if (!j || !j.ok || !j.items || !j.items.length) { el.innerHTML = ''; return; }
         injectCss();
         var coVang = j.items.some(function (i) { return i.tang === 't2'; });
+        // Ghi rõ ngày ÂM LỊCH của chính người dùng làm mốc — badge trên từng
+        // thẻ nói "trùng ngày âm lịch" thì phải có cái để so, nếu không câu
+        // đó vô nghĩa với người không nhớ ngày âm của mình.
+        var amBan = j.amLich
+          ? ' Ngày âm lịch của bạn: <b>' + j.amLich.ngayAL + '/' + j.amLich.thangAL +
+            ' (' + esc(j.amLich.canNam + j.amLich.chiNam) + ')</b>.'
+          : '';
         el.innerHTML =
           '<section class="cns">' +
           '<h3><span class="ic" data-icon="users"></span> Ai Sinh Cùng Ngày Với Bạn</h3>' +
           '<p class="cns-sub">' +
           (coVang
             ? 'Có người <b>trùng cả ngày lẫn canh giờ sinh</b> với bạn — an sao ra đúng một lá số.'
-            : 'Những người nổi tiếng có ngày sinh trùng với bạn.') +
+            : 'Những người nổi tiếng có ngày sinh trùng với bạn — xem nhãn trên mỗi thẻ để biết trùng theo ngày âm hay ngày dương lịch.') +
+          amBan +
           '</p>' +
           '<ul class="cns-list">' + j.items.map(card).join('') + '</ul>' +
           '<p class="cns-ghi">Chỉ hiển thị dữ kiện ngày–giờ sinh, không luận giải về người khác. ' +
