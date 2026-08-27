@@ -51,9 +51,20 @@ export async function POST(request: NextRequest) {
   }
 
   let event: Record<string, any>;
-  try { event = JSON.parse(raw); } catch { return Response.json({ error: 'Bad JSON' }, { status: 400 }); }
+  try {
+    event = JSON.parse(raw);
+  } catch {
+    console.error('[paypal-webhook] thân gói tin không phải JSON hợp lệ, dài', raw.length);
+    return Response.json({ error: 'Bad JSON' }, { status: 400 });
+  }
 
   const eventType = String(event.event_type || '');
+  // Ghi MỌI gói tin đã qua cửa chữ ký. Nhánh "bỏ qua" trước đây trả 200 lặng
+  // thinh, nên khi webhook đăng ký `All Events` thì gần như mọi lượt giao đều
+  // vô hình trong log — đúng lúc cần biết "PayPal có gửi không" thì không có
+  // gì để đọc. Một dòng cho mỗi gói tin là cái giá rẻ để câu hỏi đó trả lời
+  // được bằng log thay vì bằng suy đoán.
+  console.log('[paypal-webhook] nhận', eventType || '(không có event_type)');
   if (!HANDLED.has(eventType)) {
     return Response.json({ message: 'ignored', eventType });
   }
