@@ -115,9 +115,11 @@
         <div class="inputs-row">
           <div class="input-group">
             <label>Năm sinh (tùy chọn)</label>
-            <input type="number" id="namSinh" placeholder="VD: 1990" min="1920" max="2010">
+            <input type="number" id="namSinh" placeholder="VD: 1990" min="1920" max="2010" oninput="mountHook()">
           </div>
         </div>
+
+        <div id="hookHost"></div>
 
         <button class="btn-analyze" id="btnAnalyze" onclick="analyze()" disabled>
           <span class="ic" data-icon="palette"></span> Phân Tích Phong Cách — <span data-tvp-price="trang-diem-phan-tich">…</span> Lượng
@@ -197,7 +199,8 @@
 <script>window.SHELL_ACTIVE='trang-diem-phan-tich';window.SHELL_HISTORY=true;
 window.SHELL_INTRO={key:'trang-diem-phan-tich',title:'Trang Điểm AI',desc:'Gợi ý lối trang điểm hợp gương mặt, rồi ghép thử ngay lên ảnh thật của bạn. Bạn ngại thử trang điểm mới vì sợ không hợp lúc lên mặt. Dùng khi cần một hướng đi rõ trước khi mua mỹ phẩm.'};</script>
 <script src="/auth.js?v=2"></script>
-<script src="/tuvi-paywall.js?v=20"></script>
+<script src="/tuvi-paywall.js?v=22"></script>
+<script src="/tools-shared/hook-layer.js?v=1"></script>
   <script src="/nav.js?v=24" data-icons-only></script>
 <script src="/shell.js?v=85"></script>
 <script src="/tools-shared/ai-loading-steps.js?v=9"></script>
@@ -282,6 +285,7 @@ function loadFile(file) {
 
 function removePhoto() {
   _imageData = null; _faceMeasurements = null;
+  document.getElementById('hookHost').innerHTML = '';
   document.getElementById('previewWrap').style.display = 'none';
   uploadZone.style.display = 'block';
   fileInput.value = '';
@@ -318,7 +322,49 @@ async function runMediaPipe(imgSrc) {
     canvas.width = 640; canvas.height = 480;
     canvas.getContext('2d').drawImage(img, 0, 0, 640, 480);
     await fm.send({ image: canvas });
+    mountHook();
   } catch(_) {}
+}
+
+// Nạp Âm — bản sao NHỎ (giống app-mau-sac-hop-menh.html), chỉ để suy mệnh
+// hành khi có năm sinh, 0 lượt LLM.
+const NAP_AM_MAP_TD = {};
+(function () {
+  const base = [[1924,'Hỏa'],[1926,'Thổ'],[1928,'Mộc'],[1930,'Kim'],[1932,'Thủy'],[1934,'Hỏa'],[1936,'Thổ'],[1938,'Mộc'],[1940,'Kim'],[1942,'Thủy'],[1944,'Hỏa'],[1946,'Thổ'],[1948,'Mộc'],[1950,'Kim'],[1952,'Thủy'],[1954,'Hỏa'],[1956,'Thổ'],[1958,'Mộc'],[1960,'Kim'],[1962,'Thủy'],[1964,'Hỏa'],[1966,'Thổ'],[1968,'Mộc'],[1970,'Kim'],[1972,'Thủy'],[1974,'Hỏa'],[1976,'Thổ'],[1978,'Mộc'],[1980,'Kim'],[1982,'Thủy'],[1984,'Hỏa'],[1986,'Thổ'],[1988,'Mộc'],[1990,'Kim'],[1992,'Thủy'],[1994,'Hỏa'],[1996,'Thổ'],[1998,'Mộc'],[2000,'Kim'],[2002,'Thủy'],[2004,'Hỏa'],[2006,'Thổ'],[2008,'Mộc'],[2010,'Kim']];
+  base.forEach(([y,h])=>{NAP_AM_MAP_TD[y]=h;NAP_AM_MAP_TD[y+1]=h;});
+})();
+
+// _faceMeasurements đã có sẵn (0đ, MediaPipe FaceMesh) nhưng TRƯỚC ĐÂY chưa
+// từng hiện ra DOM — chỉ gửi kèm cho AI làm `measurementContext`. Ngưỡng
+// phân loại lấy Y HỆT prompt SP_NGOAI_HINH của kieu-toc (route.js) vì đây là
+// cùng một phép đo. Nếu có năm sinh, cộng thêm 1 fact mệnh (Nạp Âm).
+function mountHook() {
+  const host = document.getElementById('hookHost');
+  if (!host || !window.HookLayer) return;
+  const facts = [];
+  if (_faceMeasurements) {
+    const r = parseFloat(_faceMeasurements.widthToHeight);
+    const shape = r > 0.85 ? 'tròn/vuông' : r < 0.75 ? 'dài' : 'oval';
+    facts.push({
+      tone: 'neutral',
+      title: 'Tỷ lệ rộng/cao khuôn mặt: ' + _faceMeasurements.widthToHeight + ' — xu hướng ' + shape,
+      body: 'Đo trực tiếp từ ảnh bằng MediaPipe.',
+      source: 'engine · MediaPipe FaceMesh',
+    });
+  }
+  const y = parseInt(document.getElementById('namSinh').value);
+  if (y && y >= 1920 && y <= 2010) {
+    const na = NAP_AM_MAP_TD[y] || null;
+    if (na) facts.push({
+      tone: 'good',
+      title: 'Mệnh ' + na,
+      body: 'Gợi ý phong cách trang điểm sẽ ưu tiên tông màu hợp mệnh này.',
+      source: 'engine · Nạp Âm',
+    });
+  }
+  if (!facts.length) { host.innerHTML = ''; return; }
+  facts[facts.length - 1].body += ' 8 phong cách trang điểm xếp hạng + bảng màu + thử trực tiếp nằm trong bản phân tích AI.';
+  window.HookLayer.mount(host, { tool: 'trang-diem', charts: [], facts });
 }
 
 async function analyze() {

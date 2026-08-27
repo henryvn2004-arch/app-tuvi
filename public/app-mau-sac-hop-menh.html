@@ -123,6 +123,7 @@
             <div id="napAmLine" style="margin-top:2px"></div>
           </div>
         </div>
+        <div id="hookHost"></div>
       </div>
 
       <div class="ms-card">
@@ -248,7 +249,8 @@
 <script>window.SHELL_ACTIVE='mau-sac-hop-menh';window.SHELL_HISTORY=true;
 window.SHELL_INTRO={key:'mau-sac-hop-menh',title:'Màu Sắc Hợp Mệnh',desc:'Gợi ý những màu hợp mệnh của bạn theo ngũ hành. Bạn mua đồ theo sở thích mà không để ý có hợp mình không. Dùng khi sắm đồ, sơn nhà hay chọn màu cho việc quan trọng.'};</script>
 <script src="/auth.js?v=2"></script>
-<script src="/tuvi-paywall.js?v=20"></script>
+<script src="/tuvi-paywall.js?v=22"></script>
+<script src="/tools-shared/hook-layer.js?v=1"></script>
   <script src="/nav.js?v=24" data-icons-only></script>
 <script src="/shell.js?v=85"></script>
 <script src="/tools-shared/ai-loading-steps.js?v=9"></script>
@@ -302,10 +304,37 @@ const TRYON_STEPS=[
 let _analysisLoadingCtl=null;
 let _tryonLoadingCtl=null;
 
+// Bản sao NHỎ của NH_COLORS.primary (app/api/phong-thuy/route.ts) — CHỈ danh
+// sách màu CHÍNH, để hé làm hook. Bản đầy đủ (secondary/avoid + styleGuide AI)
+// vẫn nằm sau requireCredits().
+const PRIMARY_BY_HANH={
+  'Kim':['Trắng','Bạc','Xám nhạt','Vàng kim'],
+  'Mộc':['Xanh lá','Xanh ngọc','Xanh lam nhạt','Nâu gỗ'],
+  'Thủy':['Đen','Navy','Xanh dương đậm','Xanh biển'],
+  'Hỏa':['Đỏ','Cam','Hồng tươi','Tím đỏ'],
+  'Thổ':['Vàng đất','Nâu ấm','Be đậm','Cam đất'],
+};
+
+function mountHook(na){
+  const host=document.getElementById('hookHost');
+  if(!host||!window.HookLayer)return;
+  const mau=(PRIMARY_BY_HANH[na]||[]).slice(0,3).join(', ');
+  window.HookLayer.mount(host,{
+    tool:'mau-sac-hop-menh',
+    charts:[],
+    facts:[{
+      tone:'good',
+      title:'Mệnh '+na+' — màu chính nên mặc: '+mau,
+      body:'Bảng đủ (màu phụ, màu nên tránh) và hướng dẫn phối đồ theo dịp/vai trò nằm trong bản phân tích AI.',
+      source:'engine · NH_COLORS['+na+']',
+    }],
+  });
+}
+
 function onYearChange(){
   const y=parseInt(document.getElementById('namSinh').value);
   const g=document.getElementById('gioiTinh').value;
-  if(!y||y<1900||y>2025){document.getElementById('guaRow').classList.remove('show');return;}
+  if(!y||y<1900||y>2025){document.getElementById('guaRow').classList.remove('show');document.getElementById('hookHost').innerHTML='';return;}
   _gua=calcGua(y,g);
   const d=GUA_DATA[_gua];const na=NAP_AM_MAP[y]||'Hỏa';
   if(!d)return;
@@ -313,6 +342,7 @@ function onYearChange(){
   document.getElementById('guaLine').textContent=`Quái ${_gua} — ${d.name} (${d.elem})`;
   document.getElementById('napAmLine').textContent=`Nạp Âm: ${na} · Màu chủ đạo theo hành ${na}`;
   document.getElementById('guaRow').classList.add('show');
+  mountHook(na);
 }
 
 function resetAll(){document.getElementById('results-section').style.display='none';document.getElementById('ws').scrollTo({top:0,behavior:'smooth'});Shell.setShareable(null);}

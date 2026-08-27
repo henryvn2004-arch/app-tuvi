@@ -501,6 +501,46 @@ function validBirth(b: unknown): b is BirthParams {
   return Boolean(x && Number(x.year) > 0 && Number(x.month) > 0 && Number(x.day) > 0);
 }
 
+/**
+ * Lượt TÍNH THỬ — chạy `buildBond()` (thuần deterministic, `lib/engine/
+ * past-life-bond.ts`) rồi dừng. Cùng khuôn `runPreview` của
+ * app/api/chan-dung-vo-chong/route.ts: KHÔNG `toolPaymentDenied`, KHÔNG
+ * `llmTextFull`/`generatePortraitImage`, KHÔNG đòi đăng nhập.
+ *
+ * Chỉ trả `bond.kind/label/gist` (mối duyên TRUNG TÂM) + tên hai nhân vật đó
+ * để viết được câu "giữa X và Y" — KHÔNG trả `capDuyen` (lưới đủ N(N−1)/2 cặp)
+ * hay `era`: đó là nguyên liệu của khối "Cơ Sở Trong Lá Số" đang bán.
+ */
+async function runPreview(request: NextRequest) {
+  const body = await parseBody(request);
+  const rawBirths: unknown[] = Array.isArray(body.births)
+    ? (body.births as unknown[])
+    : [body.birthA, body.birthB];
+  const rawNames: unknown[] = Array.isArray(body.names)
+    ? (body.names as unknown[])
+    : [body.nameA, body.nameB];
+  if (rawBirths.length < 2) return err('Cần ít nhất hai lá số.', 400);
+  if (rawBirths.length > MAX_BOND_MEMBERS)
+    return err(`Tối đa ${MAX_BOND_MEMBERS} lá số một lượt.`, 400);
+  for (let i = 0; i < rawBirths.length; i++) {
+    if (!validBirth(rawBirths[i])) return err(`Thiếu thông tin ngày sinh của người thứ ${i + 1}.`, 400);
+  }
+
+  const grp = normalizeBondGroup(
+    rawBirths.map((b, i) => ({ birth: b as BirthParams, name: String(rawNames[i] || '') })),
+  );
+  const built = buildBond(grp);
+  if (!built.ok) return err(built.error, 400);
+
+  const meta = bondMeta(built.group);
+  return ok({
+    success: true,
+    preview: true,
+    bond: meta.bond,
+    nhanVats: meta.nhanVats,
+  });
+}
+
 async function runPost(request: NextRequest) {
   const auth = await authUserFromRequest(request);
   if ('error' in auth) return err(auth.error, auth.status);
@@ -573,5 +613,7 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
+  const url = new URL(request.url);
+  if (url.searchParams.get('preview') === '1') return runPreview(request);
   return withToolOutcome(TOOL_ID, () => runPost(request));
 }

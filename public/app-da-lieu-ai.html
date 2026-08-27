@@ -143,7 +143,7 @@
         </div>
 
         <div class="pt-row">
-          <div class="pt-fg"><label>Năm sinh (tùy chọn — tư vấn theo mệnh)</label><input type="number" id="namSinh" placeholder="VD: 1990" min="1920" max="2010"></div>
+          <div class="pt-fg"><label>Năm sinh (tùy chọn — tư vấn theo mệnh)</label><input type="number" id="namSinh" placeholder="VD: 1990" min="1920" max="2010" oninput="mountHook()"></div>
           <div class="pt-fg"><label>Giới tính</label>
             <select id="gioiTinh">
               <option value="nu">Nữ</option>
@@ -151,6 +151,8 @@
             </select>
           </div>
         </div>
+
+        <div id="hookHost"></div>
 
         <button class="btn-analyze" id="btnAnalyze" onclick="analyze()" disabled>
           <span class="ic" data-icon="leaf"></span> Phân Tích Da Toàn Diện — <span data-tvp-price="da-lieu-ai">…</span> Lượng
@@ -229,7 +231,8 @@
 <script>window.SHELL_ACTIVE='da-lieu-ai';window.SHELL_HISTORY=true;
 window.SHELL_INTRO={key:'da-lieu-ai',title:'Da Liệu AI Toàn Diện',desc:'Soi ảnh da, chỉ ra những vùng đang có vấn đề cần chú ý. Bạn nhìn gương mỗi ngày mà không chắc da mình đang ổn hay không. Dùng khi muốn một góc nhìn khách quan trước lúc mua mỹ phẩm.'};</script>
 <script src="/auth.js?v=2"></script>
-<script src="/tuvi-paywall.js?v=20"></script>
+<script src="/tuvi-paywall.js?v=22"></script>
+<script src="/tools-shared/hook-layer.js?v=1"></script>
   <script src="/nav.js?v=24" data-icons-only></script>
 <script src="/shell.js?v=85"></script>
 <script src="/tools-shared/ai-loading-steps.js?v=9"></script>
@@ -254,6 +257,33 @@ const SKIN_TYPE_ICON = {
 const MENH_COLOR = {Kim:'#888',Mộc:'#2E8B57',Thủy:'#1455A4',Hỏa:'#C0392B',Thổ:'#9A7B3A'};
 
 let _imgData = null, _mediaType = 'image/jpeg';
+
+// Nạp Âm — bản sao NHỎ (giống app-mau-sac-hop-menh.html), chỉ để suy mệnh
+// hành từ năm sinh, 0 lượt LLM. Lý do đủ da/tạng phủ vẫn nằm trong bản AI.
+const NAP_AM_MAP_DL = {};
+(function () {
+  const base = [[1924,'Hỏa'],[1926,'Thổ'],[1928,'Mộc'],[1930,'Kim'],[1932,'Thủy'],[1934,'Hỏa'],[1936,'Thổ'],[1938,'Mộc'],[1940,'Kim'],[1942,'Thủy'],[1944,'Hỏa'],[1946,'Thổ'],[1948,'Mộc'],[1950,'Kim'],[1952,'Thủy'],[1954,'Hỏa'],[1956,'Thổ'],[1958,'Mộc'],[1960,'Kim'],[1962,'Thủy'],[1964,'Hỏa'],[1966,'Thổ'],[1968,'Mộc'],[1970,'Kim'],[1972,'Thủy'],[1974,'Hỏa'],[1976,'Thổ'],[1978,'Mộc'],[1980,'Kim'],[1982,'Thủy'],[1984,'Hỏa'],[1986,'Thổ'],[1988,'Mộc'],[1990,'Kim'],[1992,'Thủy'],[1994,'Hỏa'],[1996,'Thổ'],[1998,'Mộc'],[2000,'Kim'],[2002,'Thủy'],[2004,'Hỏa'],[2006,'Thổ'],[2008,'Mộc'],[2010,'Kim']];
+  base.forEach(([y,h])=>{NAP_AM_MAP_DL[y]=h;NAP_AM_MAP_DL[y+1]=h;});
+})();
+
+function mountHook() {
+  const host = document.getElementById('hookHost');
+  if (!host || !window.HookLayer) return;
+  const y = parseInt(document.getElementById('namSinh').value);
+  if (!y || y < 1920 || y > 2010) { host.innerHTML = ''; return; }
+  const na = NAP_AM_MAP_DL[y];
+  if (!na) { host.innerHTML = ''; return; }
+  window.HookLayer.mount(host, {
+    tool: 'da-lieu-ai',
+    charts: [],
+    facts: [{
+      tone: 'good',
+      title: 'Mệnh ' + na,
+      body: 'Tạng phủ liên quan, xu hướng da theo mệnh, và phân tích da từ ảnh (loại da, tình trạng, mức độ) nằm trong bản phân tích AI.',
+      source: 'engine · Nạp Âm',
+    }],
+  });
+}
 const ANALYSIS_STEPS = [
   { label: '<span class="ic" data-icon="flask-conical"></span> Tây y: nhận diện loại da & tình trạng', ms: 2600 },
   { label: '<span class="ic" data-icon="scale"></span> Đông y: luận giải tạng phủ & bản mệnh', ms: 2600 },

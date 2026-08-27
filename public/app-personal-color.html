@@ -152,7 +152,7 @@
         </div>
 
         <div class="pt-row">
-          <div class="pt-fg"><label>Năm sinh (tùy chọn — kết hợp bản mệnh)</label><input type="number" id="namSinh" placeholder="VD: 1992" min="1920" max="2010"></div>
+          <div class="pt-fg"><label>Năm sinh (tùy chọn — kết hợp bản mệnh)</label><input type="number" id="namSinh" placeholder="VD: 1992" min="1920" max="2010" oninput="mountHook()"></div>
           <div class="pt-fg"><label>Giới tính</label>
             <select id="gioiTinh">
               <option value="nam">Nam</option>
@@ -160,6 +160,8 @@
             </select>
           </div>
         </div>
+
+        <div id="hookHost"></div>
 
         <button class="btn-analyze" id="btnAnalyze" onclick="analyze()" disabled>
           <span class="ic" data-icon="palette"></span> Phân Tích Personal Color — <span data-tvp-price="personal-color">…</span> Lượng
@@ -323,7 +325,8 @@
 <script>window.SHELL_ACTIVE='personal-color';window.SHELL_HISTORY=true;
 window.SHELL_INTRO={key:'personal-color',title:'Personal Color AI',desc:'Xác định tông da hợp mùa màu nào, rồi thử ngay tông đó lên ảnh của bạn. Bạn mặc một màu mà người khen tươi, người lại chê xỉn da. Dùng khi cần biết chắc tông màu nào thật sự hợp trước khi mua đồ.'};</script>
 <script src="/auth.js?v=2"></script>
-<script src="/tuvi-paywall.js?v=20"></script>
+<script src="/tuvi-paywall.js?v=22"></script>
+<script src="/tools-shared/hook-layer.js?v=1"></script>
   <script src="/nav.js?v=24" data-icons-only></script>
 <script src="/shell.js?v=85"></script>
 <script src="/tools-shared/ai-loading-steps.js?v=9"></script>
@@ -366,6 +369,38 @@ const UNDERTONE_VN = { warm:'Ấm (Warm)', cool:'Lạnh (Cool)', neutral:'Trung 
 const CONFIDENCE_COLOR = { cao:'#2E8B57', 'trung bình':'#9A7B3A', thấp:'#c0392b' };
 
 let _imgData = null, _mediaType = 'image/jpeg';
+
+// Nạp Âm — bản sao NHỎ (giống app-mau-sac-hop-menh.html), chỉ để suy mệnh
+// hành từ năm sinh, 0 lượt LLM. Season THẬT (đọc từ ảnh) vẫn nằm trong bản AI
+// — đây chỉ là gợi ý season theo CỔ PHÁP (MENH_SEASON, route.js), không phải
+// kết quả phân tích da/tông màu thật.
+const NAP_AM_MAP_PC = {};
+(function () {
+  const base = [[1924,'Hỏa'],[1926,'Thổ'],[1928,'Mộc'],[1930,'Kim'],[1932,'Thủy'],[1934,'Hỏa'],[1936,'Thổ'],[1938,'Mộc'],[1940,'Kim'],[1942,'Thủy'],[1944,'Hỏa'],[1946,'Thổ'],[1948,'Mộc'],[1950,'Kim'],[1952,'Thủy'],[1954,'Hỏa'],[1956,'Thổ'],[1958,'Mộc'],[1960,'Kim'],[1962,'Thủy'],[1964,'Hỏa'],[1966,'Thổ'],[1968,'Mộc'],[1970,'Kim'],[1972,'Thủy'],[1974,'Hỏa'],[1976,'Thổ'],[1978,'Mộc'],[1980,'Kim'],[1982,'Thủy'],[1984,'Hỏa'],[1986,'Thổ'],[1988,'Mộc'],[1990,'Kim'],[1992,'Thủy'],[1994,'Hỏa'],[1996,'Thổ'],[1998,'Mộc'],[2000,'Kim'],[2002,'Thủy'],[2004,'Hỏa'],[2006,'Thổ'],[2008,'Mộc'],[2010,'Kim']];
+  base.forEach(([y,h])=>{NAP_AM_MAP_PC[y]=h;NAP_AM_MAP_PC[y+1]=h;});
+})();
+const SEASON_VN_PC={spring_warm:'Xuân Ấm',spring_bright:'Xuân Sáng',summer_cool:'Hạ Lạnh',summer_soft:'Hạ Dịu',autumn_warm:'Thu Ấm',autumn_deep:'Thu Sâu',winter_cool:'Đông Lạnh',winter_deep:'Đông Sâu'};
+const MENH_SEASON_PC={Kim:['winter_cool','summer_cool'],Thủy:['winter_deep','summer_soft'],Mộc:['spring_warm','autumn_warm'],Hỏa:['spring_bright','autumn_deep'],Thổ:['autumn_warm','autumn_deep']};
+
+function mountHook() {
+  const host = document.getElementById('hookHost');
+  if (!host || !window.HookLayer) return;
+  const y = parseInt(document.getElementById('namSinh').value);
+  if (!y || y < 1920 || y > 2010) { host.innerHTML = ''; return; }
+  const na = NAP_AM_MAP_PC[y];
+  if (!na) { host.innerHTML = ''; return; }
+  const seasons = (MENH_SEASON_PC[na]||[]).map(s=>SEASON_VN_PC[s]||s).join(', ');
+  window.HookLayer.mount(host, {
+    tool: 'personal-color',
+    charts: [],
+    facts: [{
+      tone: 'neutral',
+      title: 'Mệnh ' + na + ' — cổ pháp gợi ý season: ' + seasons,
+      body: 'Đây là gợi ý theo Nạp Âm, chưa phải kết quả đọc tông da thật từ ảnh — season chính xác + bảng màu + gợi ý trang phục nằm trong bản phân tích AI.',
+      source: 'engine · Nạp Âm',
+    }],
+  });
+}
 const ANALYSIS_STEPS = [
   { label: 'Tính bản mệnh theo năm sinh', ms: 900 },
   { label: 'AI phân tích tông da & season màu', ms: 0 },

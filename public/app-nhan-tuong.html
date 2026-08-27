@@ -124,6 +124,8 @@
           <button class="remove-btn" onclick="removePhoto()">✕ Xoá ảnh</button>
         </div>
 
+        <div id="hookHost"></div>
+
         <div style="text-align:center;margin-top:18px">
           <button class="btn-go" id="analyzeBtn" onclick="analyze()" disabled><span class="ic" data-icon="eye"></span> Phân Tích Nhãn Tướng — <span data-tvp-price="nhan-tuong">…</span> Lượng</button>
         </div>
@@ -147,7 +149,8 @@
 <script>window.SHELL_ACTIVE='nhan-tuong';window.SHELL_HISTORY=true;
 window.SHELL_INTRO={key:'nhan-tuong',title:'Nhãn Tướng AI',desc:'Đọc tướng mắt theo Liễu Trang Thần Tướng từ ảnh của bạn. Bạn nghe đôi mắt biết nói mà chưa rõ mắt mình đang nói gì. Dùng khi muốn hiểu tính cách qua một chi tiết nhỏ trên gương mặt.'};</script>
 <script src="/auth.js?v=2"></script>
-<script src="/tuvi-paywall.js?v=21"></script>
+<script src="/tuvi-paywall.js?v=22"></script>
+<script src="/tools-shared/hook-layer.js?v=1"></script>
   <script src="/nav.js?v=24" data-icons-only></script>
 <script src="/shell.js?v=85"></script>
 <script>
@@ -269,6 +272,32 @@ function cropEye(imgEl, lm, side) {
   ctx.drawImage(imgEl, sx, sy, sw, sh, 0, 0, cv.width, cv.height);
 }
 
+// _irisNote đã có sẵn (0đ, engine hình học MediaPipe iris landmark) nhưng
+// TRƯỚC ĐÂY chưa từng hiện ra DOM — chỉ gửi kèm cho AI sau khi trả tiền (xem
+// `irisNote` trong body gửi /api/tuong-mat). Diễn lại thành câu người đọc
+// được (bản gốc là câu ghi chú kỹ thuật cho model), giữ luận giải đầy đủ cho
+// phần AI.
+function mountHook() {
+  const host = document.getElementById('hookHost');
+  if (!host || !window.HookLayer) return;
+  let title, body;
+  if (_irisNote && _irisNote.includes('lệch lên')) {
+    title = 'Tròng mắt hơi lệch lên — có thể Tam Bạch Nhãn Hạ';
+    body = 'Đo trực tiếp từ ảnh bằng MediaPipe (vị trí tròng mắt so với mí trên/dưới). Ý nghĩa đầy đủ theo Ma Y Thần Tướng nằm trong bản phân tích AI.';
+  } else if (_irisNote && _irisNote.includes('lệch xuống')) {
+    title = 'Tròng mắt hơi lệch xuống — có thể Tam Bạch Nhãn Thượng';
+    body = 'Đo trực tiếp từ ảnh bằng MediaPipe (vị trí tròng mắt so với mí trên/dưới). Ý nghĩa đầy đủ theo Ma Y Thần Tướng nằm trong bản phân tích AI.';
+  } else {
+    title = 'Vị trí tròng mắt: cân đối';
+    body = 'Đo trực tiếp từ ảnh bằng MediaPipe. Nhãn hình, thần khí và các chi tiết khác nằm trong bản phân tích AI.';
+  }
+  window.HookLayer.mount(host, {
+    tool: 'nhan-tuong',
+    charts: [],
+    facts: [{ tone: 'neutral', title, body, source: 'engine · MediaPipe iris landmark' }],
+  });
+}
+
 function analyzeIrisNote(lm) {
   if (!lm || !lm[468]) return null;
   const eyeL = { top:lm[159].y, bot:lm[145].y, iris:lm[468] };
@@ -334,6 +363,7 @@ function showPreview(dataUrl) {
       cropEye(imgEl, lm, 'right');
       document.getElementById('eyePanels').style.display='flex';
       _irisNote = analyzeIrisNote(lm);
+      mountHook();
     } else {
       const err=document.getElementById('error-msg');
       err.textContent='⚠ Không nhận diện được mặt rõ ràng. Vẫn có thể phân tích nhưng nên dùng ảnh thẳng mặt hơn.';
