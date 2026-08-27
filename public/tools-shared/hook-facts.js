@@ -145,18 +145,23 @@ window.HookFacts = (function () {
   }
 
   /**
-   * Cách cục HIẾM nhất trong lá số, tra theo `census.cachCuc` — bảng đếm hết
-   * 518.400 lá số (`laso_census_cachcuc`, xem Pha 1 workplan). `census` là
-   * object `{ [tenCachCuc]: { pct, oneIn } }`; thiếu census hoặc không khớp
-   * cách cục nào thì trả `null` — KHÔNG suy diễn tỉ lệ tạm.
+   * Cách cục HIẾM nhất trong lá số, tra theo `census.cachCuc` — kết quả quét
+   * hết 518.400 lá số (`public/laso-census.json`, do
+   * `scripts/build-laso-census.mjs` sinh ra, xem Pha 1 workplan). `census` là
+   * NGUYÊN file đó — `{ generatedAt, totalCharts, daiVan, cachCuc }` — cùng
+   * một object truyền cho `percentileOfDaiVan` bên dưới, không phải map con
+   * `cachCuc` tách riêng (hai hàm dùng CHUNG một biến `census` ở call site,
+   * lệch shape giữa hai hàm là tự bẫy chính mình). Thiếu census hoặc không
+   * khớp cách cục nào thì trả `null` — KHÔNG suy diễn tỉ lệ tạm.
    */
   function cachCucHiem(ls, census) {
     var list = (ls && ls.cachCuc) || [];
-    if (!list.length || !census) return null;
+    var table = census && census.cachCuc;
+    if (!list.length || !table) return null;
     var best = null;
     for (var i = 0; i < list.length; i++) {
       var c = list[i];
-      var stat = census[c.ten];
+      var stat = table[c.ten];
       if (!stat || typeof stat.pct !== 'number') continue;
       if (!best || stat.pct < best.stat.pct) best = { c: c, stat: stat };
     }
@@ -167,16 +172,16 @@ window.HookFacts = (function () {
       body: (best.c.moTa || '') + (best.c.cung ? ' — tại cung ' + best.c.cung + '.' : ''),
       pct: best.stat.pct, oneIn: best.stat.oneIn,
       caption: best.stat.oneIn ? '1 trong ' + best.stat.oneIn + ' lá số' : (best.stat.pct + '%'),
-      source: 'laso_census_cachcuc · đếm hết 518.400 lá số',
+      source: 'laso-census.json · đếm hết 518.400 lá số',
     };
   }
 
   /**
    * Bách phân vị của một đại vận trong bảng tổng điều tra, tra theo
-   * `census.daiVan[slotIndex]` (mảng bậc phân vị `laso_census_daivan`).
-   * `slotIndex` là vị trí đại vận trong đời (0 = 6–15t, 1 = 16–25t, …) —
-   * KHÔNG dùng index thô của `ls.daiVans` vì mảng đó còn kèm cả chặng
-   * >95 tuổi chưa được chấm.
+   * `census.daiVan[slotIndex]` (mảng 101 mốc phân vị p0..p100, xem
+   * `scripts/build-laso-census.mjs`). `slotIndex` là vị trí đại vận trong đời
+   * (0 = 6–15t, 1 = 16–25t, …) — KHÔNG dùng index thô của `ls.daiVans` vì
+   * mảng đó còn kèm cả chặng >95 tuổi chưa được chấm.
    */
   function percentileOfDaiVan(entry, census, slotIndex) {
     if (!entry || !census || !census.daiVan || !census.daiVan[slotIndex]) return null;

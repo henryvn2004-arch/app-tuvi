@@ -9,9 +9,32 @@
  * bên trong `onUnlock`, xem `initiateLuanGiaiChuyenSau` ở app-luan-giai.html).
  * `HookLayer` không tự gọi `TuviPaywall.requireCredits` để khỏi có HAI chỗ
  * cùng quyết định slug/giá — dễ trôi khỏi nhau như đã cắn với giá hiển thị.
+ *
+ * `HookLayer.loadCensus()` nạp `public/laso-census.json` (một lần, cache theo
+ * Promise) — trang tự gọi TRƯỚC khi tính `HookFacts.tuvi.cachCucHiem`/
+ * `percentileOfDaiVan`, rồi mới `mount()`. `mount()` không tự await census để
+ * giữ API đồng bộ và không ép mọi trang phải cần tới bảng này.
  */
 window.HookLayer = (function () {
   'use strict';
+
+  // ── Nạp public/laso-census.json (một lần, cache theo Promise) ──────────
+  // File TĨNH sinh bởi `scripts/build-laso-census.mjs` — quét hết 518.400 lá
+  // số có thể có, không phụ thuộc user nào, nên hợp browser HTTP cache như
+  // mọi asset tĩnh khác (`public/cach_cuc_all.json` cùng kiểu). ĐÂY LÀ
+  // `fetch()` CỦA TRÌNH DUYỆT cho một file public — KHÔNG phải fetch phía
+  // server tới Supabase, nên luật "mọi GET Supabase phải cache:'no-store'"
+  // của CLAUDE.md không áp ở đây; ngược lại, muốn trình duyệt TỰ cache lại
+  // đúng file này giữa các lượt xem trang.
+  var _censusPromise = null;
+  function loadCensus() {
+    if (!_censusPromise) {
+      _censusPromise = fetch('/laso-census.json')
+        .then(function (r) { return r.ok ? r.json() : null; })
+        .catch(function () { return null; }); // mạng hỏng → null, phía gọi tự ẩn khối cần census
+    }
+    return _censusPromise;
+  }
 
   function esc(s) {
     return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
@@ -134,5 +157,5 @@ window.HookLayer = (function () {
     document.head.appendChild(st);
   }
 
-  return { mount: mount };
+  return { mount: mount, loadCensus: loadCensus };
 })();
