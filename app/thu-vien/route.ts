@@ -28,7 +28,27 @@ const SITE = 'https://www.tuviminhbao.com';
 /** Đổi thành 'index, follow' nếu Henry chốt cho Google đọc. Xem chú thích đầu file. */
 const ROBOTS = 'noindex, follow';
 
-const LIMIT = 60;
+/**
+ * Số dòng ĐỌC lên. Phải lớn hơn hẳn `MAX_CARDS` vì hai bộ lọc bên dưới cắt đi
+ * rất nhiều: đo trên prod, 50 dòng chỉ còn 34 thẻ nhìn khác nhau, và sau khi
+ * chặn trần mỗi tool thì còn 23.
+ */
+const FETCH = 200;
+/** Trần số thẻ vẽ ra. */
+const MAX_CARDS = 60;
+/**
+ * Trần mỗi tool.
+ *
+ * 🔑 Đây là lá chắn CHÍNH, và nó phải theo TOOL chứ không theo NGƯỜI. Đo trên
+ * prod: **27/50 dòng là ẩn danh** (`owner_user_id` NULL) ⇒ cap theo người
+ * không với tới quá nửa dữ liệu. Mà người xem cũng không biết ai tạo thẻ nào —
+ * thứ họ thấy là *"lại Chân Dung Vợ Chồng nữa"*: sau khi gộp trùng, tool đó
+ * vẫn chiếm **12/34 = 35%** lưới.
+ *
+ * 4 là đủ để thấy một tool ra được nhiều kiểu kết quả khác nhau, mà không để
+ * tool nào chiếm quá ~1/5 lưới.
+ */
+const MAX_PER_TOOL = 4;
 
 interface Row {
   id: string;
@@ -130,7 +150,56 @@ const TOOL_NHAN: Record<string, string> = {
   'luan-giai': 'Luận Giải Lá Số',
   'cong-so': 'Tử Vi Công Sở',
   'kinh-dich': 'Gieo Quẻ Kinh Dịch',
+  // Ba cái dưới đây thiếu từ đầu nên vẫn đang hiện nhãn chung "Luận Đường" —
+  // phát hiện khi đếm phân bố tool trên prod, không phải khi đọc code.
+  // ⚠️ Bảng này là bản CHÉP TAY và sẽ trôi khỏi `tool_pricing.label`. Cố ý
+  // không đọc thẳng DB: `shared_results.tool_id` dùng id của shell
+  // (`luan-giai`) còn bảng giá dùng id khác (`laso`), nối được thì phải kéo
+  // theo `tool_canon()` — không đáng cho một cái nhãn.
+  'van-han-nam': 'Vận Hạn 12 Tháng Tới',
+  'hoang-dao': 'Giờ Hoàng Đạo',
+  'but-tuong': 'Bút Tướng — Xem Chữ Ký',
 };
+
+/**
+ * Ảnh đại diện của một thẻ. Dùng CHUNG cho khoá gộp trùng và cho thẻ vẽ ra —
+ * hai bên mà tính khác nhau thì gộp theo một đằng, hiện theo một nẻo.
+ */
+function anhCua(r: Row): string {
+  return (
+    r.image_url || (Array.isArray(r.blocks) ? r.blocks.find((b) => b && b.image)?.image : '') || ''
+  );
+}
+
+/**
+ * Gộp thẻ TRÙNG NHÌN + chặn trần mỗi tool.
+ *
+ * 🔑 Khoá gộp là thứ NGƯỜI XEM NHÌN THẤY (`tool_id` + ảnh, hoặc tiêu đề khi
+ * không có ảnh), KHÔNG phải chủ sở hữu. Hai thẻ trông y hệt thì thẻ thứ hai
+ * không nói thêm được gì cho người xem, bất kể ai tạo ra nó — mà người xem
+ * cũng không có cách nào biết ai tạo.
+ *
+ * Giữ bản MỚI NHẤT của mỗi khoá (`rows` đã sắp giảm dần theo `created_at`).
+ */
+function locThe(rows: Row[]): Row[] {
+  const daThay = new Set<string>();
+  const demTool = new Map<string, number>();
+  const ra: Row[] = [];
+  for (const r of rows) {
+    if (ra.length >= MAX_CARDS) break;
+    const nhinThay = anhCua(r) || (r.title || '').toLowerCase().replace(/\s+/g, ' ').trim();
+    // Không có cả ảnh lẫn tiêu đề thì không gộp được theo cái gì — lấy `id` để
+    // nó không bao giờ đụng khoá của dòng khác (thà thừa còn hơn nuốt nhầm).
+    const khoa = r.tool_id + '|' + (nhinThay || 'id:' + r.id);
+    if (daThay.has(khoa)) continue;
+    const n = demTool.get(r.tool_id) || 0;
+    if (n >= MAX_PER_TOOL) continue;
+    daThay.add(khoa);
+    demTool.set(r.tool_id, n + 1);
+    ra.push(r);
+  }
+  return ra;
+}
 
 export async function GET(): Promise<Response> {
   let rows: Row[] = [];
@@ -144,8 +213,8 @@ export async function GET(): Promise<Response> {
       .eq('revoked', false)
       .eq('gallery_opt_out', false)
       .order('created_at', { ascending: false })
-      .limit(LIMIT);
-    rows = (data as Row[]) || [];
+      .limit(FETCH);
+    rows = locThe((data as Row[]) || []);
   } catch (e) {
     console.error('[thu-vien] đọc hỏng', e);
     // Đọc hụt → trang vẫn dựng, chỉ là rỗng. KHÔNG 500: đây là trang công khai
@@ -161,10 +230,7 @@ export async function GET(): Promise<Response> {
 
   const cards = rows
     .map((r) => {
-      const img =
-        r.image_url ||
-        (Array.isArray(r.blocks) ? r.blocks.find((b) => b && b.image)?.image : '') ||
-        '';
+      const img = anhCua(r);
       const nhan = TOOL_NHAN[r.tool_id] || 'Luận Đường';
       // Thẻ không ảnh: lấy câu đầu làm nền chữ. Cắt sạch markdown + xuống dòng.
       const teaser =

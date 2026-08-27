@@ -303,6 +303,13 @@ Mỗi luật dưới đây sinh ra từ một lần cắn thật. Cột cuối l
   tháng trong khi `sw.js` không có handler `push`.
 - **Con số của CỔNG TUYỂN không phải con số NGƯỜI XEM NHẬN** — đo trên chính bản
   giao ra (mp4/PNG đã render), đừng tin số của khâu lọc đầu vào.
+- **Event = 0 thì phải hỏi "nó có được cắm ở MỌI đường tới chưa" TRƯỚC khi kết
+  luận người dùng không quan tâm.** `invite_shown` = 0 suốt 17 ngày hoá ra vì lời
+  mời chỉ cắm ở 1 trong 2 tấm tường mà người hết Lượng gặp
+  (`docs/nhat-ky/2026-08.md`, mục "Dọn thư viện").
+- **Bộ lọc của một bậc phễu phải theo kịp mọi đường mới thêm vào bậc đó** —
+  `viral_loop_funnel` lọc cứng `meta.from='share'` nên mù hẳn với đường B2
+  (`share_form`): số không sai công thức, nó ĐẾM HỤT.
 
 ## 🪤 BẪY ĐÃ VẤP THẬT — đọc trước khi mất một vòng chẩn đoán
 
@@ -353,6 +360,10 @@ Mỗi luật dưới đây sinh ra từ một lần cắn thật. Cột cuối l
   đừng bịa. `.single()` của supabase-js chờ MỘT object, trả mảng là phía gọi vỡ.
 - `addInitScript` chạy lại ở MỌI lượt điều hướng; stub `Auth` đặt ở đó bị `auth.js`
   ghi đè ⇒ chặn hẳn `auth.js` bằng `page.route`.
+- **`Track` thì NGƯỢC CHIỀU `Auth`**: `shell.js` nạp `/track.js` BẤT ĐỒNG BỘ
+  (`ensureTrackJs`) nên bản thật đáp xuống SAU và đè stub gán thường ⇒ khoá bằng
+  `defineProperty(..., {writable:false})`. Triệu chứng: DOM dựng đúng mà mảng
+  event vẫn rỗng.
 - Chạy spec từ scratchpad thì `playwright` không resolve — chạy trong cây repo.
 - `waitUntil:'networkidle'` treo vĩnh viễn vì container chặn Google Fonts.
 
