@@ -153,7 +153,10 @@ async function main() {
   const cachCucCount = new Map();
   for (const r of results) {
     total += r.n;
-    for (let i = 0; i < N_SLOT; i++) daiVan[i].push(...r.daiVan[i]);
+    // KHÔNG `push(...mảng)` — mỗi shard góp ~130.000 số, spread làm đối số
+    // hàm vượt giới hạn ngăn xếp (RangeError: Maximum call stack size
+    // exceeded, đã ăn đủ ở lượt chạy thật). `concat` không có giới hạn này.
+    for (let i = 0; i < N_SLOT; i++) daiVan[i] = daiVan[i].concat(r.daiVan[i]);
     for (const [ten, c] of r.cachCuc) cachCucCount.set(ten, (cachCucCount.get(ten) || 0) + c);
   }
 
