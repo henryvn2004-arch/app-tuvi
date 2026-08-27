@@ -426,7 +426,10 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
    * mời trong 30 ngày · **hoặc số dư đã đủ trả** (còn tiền thì để người ta mua,
    * chen lời mời vào đó chỉ làm chậm một lượt đã bán được).
    */
-  async function _inviteRow(veil, product, cost, balance) {
+  // `from`: 'lock' = tường tính thử (`lockPreview`) · 'thieu' = tường TỪ CHỐI
+  // ("Còn thiếu N Lượng"). Tách nguồn vì hai chỗ hỏng theo hai kiểu khác nhau —
+  // gộp lại thì lúc `invite_shown` ra số cũng không biết tường nào đang chạy.
+  async function _inviteRow(veil, product, cost, balance, from) {
     try {
       if (!veil || !document.body.contains(veil)) return;
       if (balance == null || (cost > 0 && balance >= cost)) return;
@@ -471,7 +474,7 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
       veil.appendChild(box);
 
       try {
-        if (window.Track) window.Track.event('invite_shown', { tool_id: product, meta: { from: 'lock', invites: invites } });
+        if (window.Track) window.Track.event('invite_shown', { tool_id: product, meta: { from: from || 'lock', invites: invites } });
       } catch (e) { /* đo hỏng không được chặn gì */ }
 
       const inp = box.querySelector('.tpw-inv-in');
@@ -568,7 +571,7 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
     // B1 — chèn SAU khi tường đã dựng và KHÔNG `await`: lời mời phải là phần
     // cộng thêm, không được đứng chắn giữa người dùng và tấm tường. Mạng chậm
     // hay `my-referral` hỏng thì tường vẫn hiện đủ và đúng như cũ.
-    void _inviteRow(_lockEl.querySelector('.tpw-lock-veil'), product, cost, balance);
+    void _inviteRow(_lockEl.querySelector('.tpw-lock-veil'), product, cost, balance, 'lock');
     return true;
   }
 
@@ -666,7 +669,28 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
         '<a class="tpw-btn topup" href="/topup.html" onclick="' + _topupClick('paywall', need) + '">Nạp Lượng →</a>' +
         '<button class="tpw-lock-x" onclick="TuviPaywall._closeLock()">Để sau</button>'
       );
-    if (shown) { refreshCostHints().catch(() => {}); return; }
+    if (shown) {
+      refreshCostHints().catch(() => {});
+      // B1 — lời mời phải có ở CẢ tấm tường TỪ CHỐI này, không riêng
+      // `lockPreview`.
+      //
+      // 🔴 Thiếu chỗ này là vì sao `invite_shown` = 0 suốt từ lúc ship: người
+      // hết Lượng gặp HAI tấm tường, mà lời mời chỉ nằm ở một. Đường
+      // khoá-theo-phần (`wireSectionLocks` → `onUnlock` → `requireCredits` →
+      // đây) KHÔNG bao giờ đi qua `lockPreview` — mà đó đúng là đường của
+      // `luan-giai`, tool đắt nhất và cũng là chỗ người ta hay hết Lượng nhất.
+      //
+      // Ở đây `balance < cost` là ĐỊNH NGHĨA của tấm tường, nên điều kiện im
+      // lặng "số dư đã đủ trả" tự thoả — không phải nới luật nào.
+      void _inviteRow(
+        _lockEl && _lockEl.querySelector('.tpw-lock-veil'),
+        (_cfg && _cfg.product) || '',
+        cost,
+        balance,
+        'thieu',
+      );
+      return;
+    }
     _open(
       '<div class="tpw-hd"><div class="tpw-hd-t">⊙ Không đủ Lượng</div><div class="tpw-hd-s">Cần thêm ' + need + ' lượng</div></div>' +
       '<div class="tpw-center">' +
