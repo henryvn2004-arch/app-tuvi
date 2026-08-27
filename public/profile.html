@@ -121,9 +121,9 @@ body{font-family:Arial,sans-serif;background:var(--bg-soft);color:var(--text);mi
 .account-section h3{font-family:'Noto Serif',serif;font-size:1rem;color:var(--navy);margin-bottom:1.1rem;padding-bottom:.6rem;border-bottom:1px solid var(--border-lt)}
 .form-row{margin-bottom:1rem}
 .form-row label{display:block;font-size:.8rem;color:var(--text-mid);font-weight:600;margin-bottom:.35rem}
-.form-row input{width:100%;padding:.6rem .85rem;border:1px solid var(--border);border-radius:5px;font-size:.88rem;color:var(--text)}
-.form-row input:focus{outline:2px solid var(--gold);border-color:var(--gold)}
-.form-row input:disabled{background:var(--bg-soft);color:var(--text-lt)}
+.form-row input,.form-row select,.form-row textarea{width:100%;padding:.6rem .85rem;border:1px solid var(--border);border-radius:5px;font-size:.88rem;color:var(--text)}
+.form-row input:focus,.form-row select:focus,.form-row textarea:focus{outline:2px solid var(--gold);border-color:var(--gold)}
+.form-row input:disabled,.form-row select:disabled,.form-row textarea:disabled{background:var(--bg-soft);color:var(--text-lt)}
 .purchase-list{display:flex;flex-direction:column;gap:.5rem}
 .purchase-item{display:flex;align-items:center;gap:.75rem;font-size:.83rem;padding:.5rem 0;border-bottom:1px solid var(--border-lt)}
 .purchase-item:last-child{border-bottom:none}
@@ -264,6 +264,7 @@ body{font-family:Arial,sans-serif;background:var(--bg-soft);color:var(--text);mi
       <button class="tab-btn" data-tab="credits"><span class="tab-ic" data-icon="wallet"></span> Ví Lượng</button>
       <button class="tab-btn" data-tab="ketnoi"><span class="tab-ic" data-icon="link"></span> Kết Nối</button>
       <button class="tab-btn" data-tab="thaynho"><span class="tab-ic" data-icon="scroll-text"></span> Thầy Nhớ</button>
+      <button class="tab-btn" data-tab="gopy"><span class="tab-ic" data-icon="inbox"></span> Góp Ý</button>
       <button class="tab-btn" data-tab="account"><span class="tab-ic" data-icon="user"></span> Tài Khoản</button>
     </div>
 
@@ -584,6 +585,12 @@ body{font-family:Arial,sans-serif;background:var(--bg-soft);color:var(--text);mi
     </div>
 
     <!-- Tab: Tài Khoản -->
+
+    <!-- Tab: Góp Ý — khung rỗng, account-core.js `loadFeedback()` dựng toàn bộ
+         nội dung vào đây. Cố ý KHÔNG chép markup sang cả hai trang: chép là
+         mở đường cho /profile.html và /app/tai-khoan trôi lệch nhau. -->
+    <div class="tab-content" id="tab-gopy"></div>
+
     <div class="tab-content" id="tab-account">
       <div id="accountContent">
         <div class="account-section">
@@ -681,6 +688,6 @@ body{font-family:Arial,sans-serif;background:var(--bg-soft);color:var(--text);mi
 
 <script src="/nav.js?v=24"></script>
 <script src="/auth.js?v=2"></script>
-<script src="/account-core.js?v=3"></script>
+<script src="/account-core.js?v=4"></script>
 </body>
 </html>
