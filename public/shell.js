@@ -333,6 +333,12 @@
     return d.getFullYear() + '-' + d.getMonth() + '-' + d.getDate();
   }
 
+  // Henry chốt tiếp (2026-08-26, cùng ngày): "cho con số nó to to lên tí, phải
+  // 2-3000 ah, rồi vài 5-10 giây cho nó nhảy, cho nó sinh động" — nới biên độ
+  // baseline lên hàng nghìn (khớp cỡ ảnh mẫu ban đầu "1123 PROMPTS TODAY", chỉ
+  // to hơn) + đổi nhịp tick từ CỐ ĐỊNH 4s sang NGẪU NHIÊN 5-10s (setTimeout đệ
+  // quy, không phải setInterval) cho nhịp trông tự nhiên hơn một máy đếm đều.
+
   /** Bước mô phỏng: seed lần đầu theo giờ VN hiện tại, sau đó random-walk nhẹ
    * quanh baseline. `online` dao động cả hai chiều; `promptsToday` CHỈ TĂNG
    * trong ngày (giống một bộ đếm thật) và tự reset khi qua ngày mới giờ VN. */
@@ -343,16 +349,16 @@
     if (!_pulseData || _pulseDayKey !== dayKey) {
       _pulseDayKey = dayKey;
       _pulseData = {
-        online: Math.round(70 + factor * 210 + Math.random() * 20),
-        promptsToday: Math.round(factor * 140 + Math.random() * 40),
+        online: Math.round(900 + factor * 1600 + Math.random() * 150),
+        promptsToday: Math.round(1800 + factor * 1400 + Math.random() * 200),
       };
     } else {
-      var driftOnline = Math.round((Math.random() - 0.42) * 7); // lệch nhẹ về tăng
-      var target = Math.round(70 + factor * 210);
+      var driftOnline = Math.round((Math.random() - 0.42) * 40); // lệch nhẹ về tăng
+      var target = Math.round(900 + factor * 1600);
       // Kéo nhẹ về baseline của giờ hiện tại (tránh trôi dạt quá xa qua nhiều giờ) + nhiễu ngẫu nhiên.
-      _pulseData.online = Math.max(35, Math.min(340, Math.round(_pulseData.online * 0.9 + target * 0.1 + driftOnline)));
+      _pulseData.online = Math.max(600, Math.min(3400, Math.round(_pulseData.online * 0.9 + target * 0.1 + driftOnline)));
       if (Math.random() < 0.55) {
-        _pulseData.promptsToday += Math.round(Math.random() * 3) + (Math.random() < 0.12 ? 5 : 0);
+        _pulseData.promptsToday += Math.round(Math.random() * 15) + (Math.random() < 0.12 ? 40 : 0);
       }
     }
     return _pulseData;
@@ -367,10 +373,17 @@
   }
 
   var _pulseTimer = null;
+  function schedulePulseTick() {
+    var delay = 5000 + Math.random() * 5000; // 5-10s, ngẫu nhiên mỗi lượt cho nhịp tự nhiên
+    _pulseTimer = setTimeout(function () {
+      paintPulse(simulatePulse());
+      schedulePulseTick();
+    }, delay);
+  }
   function startPulse() {
     paintPulse(simulatePulse());
-    if (_pulseTimer) clearInterval(_pulseTimer);
-    _pulseTimer = setInterval(function () { paintPulse(simulatePulse()); }, 4000);
+    if (_pulseTimer) clearTimeout(_pulseTimer);
+    schedulePulseTick();
   }
 
   // Đường SỐ THẬT — giữ nguyên, chưa gọi (xem ghi chú ⚠️ ở trên).
