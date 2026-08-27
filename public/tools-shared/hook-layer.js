@@ -57,6 +57,16 @@ window.HookLayer = (function () {
     );
   }
 
+  // `c.data` truyền THẲNG làm tham số duy nhất cho `HookCharts[c.type]()` —
+  // PHẢI đúng shape hàm đó đợi (đọc chữ ký từng hàm trong hook-charts.js),
+  // KHÔNG phải mảng/giá trị thô:
+  //   lifeArc:      { segments: [...] }
+  //   hexRadar:     { dims: [...] }
+  //   rarityDots:   { highlightIndex, caption }
+  //   percentileBar:{ value, caption }
+  // Bắt được đúng lỗi này khi test thật trên app-luan-giai.html: truyền
+  // mảng thô → hàm đọc `o.segments`/`o.dims` ra `undefined` → tự trả rỗng,
+  // KHÔNG throw — khối chart lặng lẽ biến mất mà không có lỗi console nào.
   function _chart(c) {
     if (!c || !c.data || !window.HookCharts || typeof window.HookCharts[c.type] !== 'function') return '';
     var svg = window.HookCharts[c.type](c.data);
@@ -86,7 +96,7 @@ window.HookLayer = (function () {
     if (!host || !spec) return;
     var facts = (Array.isArray(spec.facts) ? spec.facts : []).filter(Boolean);
     var charts = (Array.isArray(spec.charts) ? spec.charts : []).map(_chart).filter(Boolean);
-    var gateHtml = _gate(spec.gate, spec.toolId);
+    var gateHtml = _gate(spec.gate, spec.tool);
     if (!facts.length && !charts.length && !gateHtml) { host.innerHTML = ''; return; }
     _ensureCss();
     var kicker = facts.length ? 'Đã lập xong lá số · ' + facts.length + ' điều đáng chú ý nhất' : '';
@@ -105,7 +115,7 @@ window.HookLayer = (function () {
     if (btn && spec.gate && typeof spec.gate.onUnlock === 'function') {
       btn.addEventListener('click', function () {
         try {
-          if (window.Track) window.Track.event('unlock_click', { tool_id: spec.toolId || '', meta: { from: 'hook' } });
+          if (window.Track) window.Track.event('unlock_click', { tool_id: spec.tool || '', meta: { from: 'hook' } });
         } catch (e) { /* đo hỏng không được chặn lượt mua */ }
         spec.gate.onUnlock();
       });
@@ -113,7 +123,7 @@ window.HookLayer = (function () {
     // Khối hook dựng xong là hiện NGAY (không có trạng thái ẩn/hiện như
     // `sectionLockHtml`) — đúng thời điểm "tường đã hiện" để đo funnel.
     try {
-      if (window.Track) window.Track.event('preview_shown', { tool_id: spec.toolId || '', meta: { from: 'hook' } });
+      if (window.Track) window.Track.event('preview_shown', { tool_id: spec.tool || '', meta: { from: 'hook' } });
     } catch (e) { /* đo hỏng không được chặn hiện tường */ }
   }
 

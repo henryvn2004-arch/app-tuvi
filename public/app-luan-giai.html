@@ -151,6 +151,11 @@
       </div>
 
       <div id="lgPanel" data-ws-result>
+        <!-- Tầng hook (Pha 2 pilot) — đứng TRƯỚC lgScores, dựng bởi
+             mountHook() sau khi renderLuan() xong. Rỗng cho tới khi
+             HookLayer.mount() chạy; không có gì thì tự để trống, không
+             chặn/làm chậm phần lgScores/miniChart/lgBody phía dưới. -->
+        <div id="hookHost"></div>
         <div class="scores" id="lgScores"></div>
         <span class="fold-toggle" id="lgFold" onclick="toggleMini()">▾ Ẩn lá số</span>
         <div class="chart-wrap" id="miniChart"></div>
@@ -181,6 +186,9 @@ window.SHELL_INTRO={key:'luan-giai',title:'Luận giải Tử Vi',desc:'Đọc t
 <script src="/tools-shared/cung-ngay-sinh.js?v=1"></script>
 <script src="/auth.js?v=2"></script>
 <script src="/tuvi-paywall.js?v=21"></script>
+<script src="/tools-shared/hook-charts.js?v=1"></script>
+<script src="/tools-shared/hook-facts.js?v=1"></script>
+<script src="/tools-shared/hook-layer.js?v=1"></script>
   <script src="/nav.js?v=24" data-icons-only></script>
 <script src="/shell.js?v=85"></script>
 <script src="/tools-shared/ai-loading-steps.js?v=9"></script>
@@ -212,6 +220,7 @@ function doLuan(){
     _astrolabe=ls; _hoTen=name; _ngay=dd; _thang=mm; _nam=yyyy; _gioitinh=gioitinh; _namXem=namxem;
     _laSoText=formatLaSoV2(ls,conv); ls._laSoText=_laSoText;
     var _sum=renderLuan(ls,fd,namxem);
+    mountHook(ls);
     document.getElementById('miniChart').innerHTML=renderGrid(ls,fd);
     if(window.mountIcons) window.mountIcons(document.getElementById('miniChart')); // ô giữa mang span [data-icon]
     document.getElementById('birthPanel').style.display='none';
@@ -301,6 +310,43 @@ function renderLuan(ls,fd,namxem){
   renderJump(LABELS);
   wirePhanAsk(document.getElementById('lgBody'));
   return {overall:overall, dvTong:dvTong};
+}
+
+// ── Tầng hook (Pha 2 pilot — workplan tầng hook) ─────────────────────────
+// Đợi census TRƯỚC rồi mới mount MỘT lần — mount() bắn preview_shown mỗi lần
+// gọi, mount hai lượt (chưa có census → có census) sẽ đếm trùng lượt hiện.
+// `loadCensus()` tự rơi về `null` nếu mạng hỏng (xem hook-layer.js), nên
+// luồng này không bao giờ treo — chỉ mất khối Vành Hiếm nếu không tải được.
+// `tool:'laso'` khớp ĐÚNG `TuviPaywall.init({product:'laso'})` ở trên — dùng
+// tool_id khác sẽ tách funnel unlock_click/preview_shown của cùng một tool
+// ra hai chuỗi số, làm hỏng chính phép đo mà Pha 2 cần. Field đặt tên `tool`,
+// KHÔNG dùng tên field của Shell (viết hoa chữ Id) — bộ dò `check:share`
+// (`scripts/check-shell-share.mjs`) quét nguyên file tìm đúng cú pháp field
+// đó gán chuỗi, không phân biệt object nào; trùng tên báo oan "lệch
+// SHELL_ACTIVE" dù chẳng liên quan gì tới chia sẻ.
+function mountHook(ls){
+  var host=document.getElementById('hookHost');
+  if(!host||!window.HookLayer||!window.HookFacts){return;}
+  var HF=window.HookFacts.tuvi;
+  window.HookLayer.loadCensus().then(function(census){
+    var facts=HF.top3(ls);
+    var hiem=HF.cachCucHiem(ls,census);
+    if(hiem)facts.push(hiem);
+    var hexDims=HF.hexDimsForCung(ls,'Mệnh');
+    window.HookLayer.mount(host,{
+      tool:'laso',
+      charts:[
+        {type:'lifeArc',data:{segments:HF.daiVanSegments(ls)},title:'Đường Đời'},
+        hexDims?{type:'hexRadar',data:{dims:hexDims},title:'Lục Giác cung Mệnh'}:null
+      ].filter(Boolean),
+      facts:facts,
+      gate:{
+        tieuDe:'Bản đầy đủ trả lời làm gì với nó',
+        items:['12 phần còn lại — luận riêng từng cung trong 12 cung theo cổ pháp','Luận giải chuyên sâu viết riêng bằng AI theo cổ pháp'],
+        onUnlock:function(){ return initiateLuanGiaiChuyenSau(); }
+      }
+    });
+  });
 }
 
 function _lgLoggedIn(){ return !!(window.Auth&&window.Auth.isLoggedIn&&window.Auth.isLoggedIn()); }
