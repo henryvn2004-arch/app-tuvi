@@ -338,19 +338,24 @@ function renderLuan(ls,fd,namxem,forceUnlocked){
 // (`scripts/check-shell-share.mjs`) quét nguyên file tìm đúng cú pháp field
 // đó gán chuỗi, không phân biệt object nào; trùng tên báo oan "lệch
 // SHELL_ACTIVE" dù chẳng liên quan gì tới chia sẻ.
+// Tool này CHỈ còn luận 12 cung (TONG_PHAN=13: tổng quan + 12 cung) — đại vận
+// đã tách hẳn sang app-chu-trinh-cuoc-doi.html (Henry chốt 2026-08-27). Hook
+// PHẢI hứa đúng thứ trang này bán: bỏ hẳn `lifeArc`/`daiVanDinh`/`daiVanDay`
+// (đại vận, thuộc tool khác) — dùng `cungManhNhat`/`cungYeuNhat`/`cachCucHiem`,
+// cả ba đều là nội dung phần 2-13 thật sự giao khi mở khoá. Đường Đời (đại
+// vận) để dành cho hook của app-chu-trinh-cuoc-doi.html khi rải tới Pha 4.
 function mountHook(ls){
   var host=document.getElementById('hookHost');
   if(!host||!window.HookLayer||!window.HookFacts){return;}
   var HF=window.HookFacts.tuvi;
   window.HookLayer.loadCensus().then(function(census){
-    var facts=HF.top3(ls);
+    var facts=[HF.cungManhNhat(ls),HF.cungYeuNhat(ls)].filter(Boolean);
     var hiem=HF.cachCucHiem(ls,census);
     if(hiem)facts.push(hiem);
     var hexDims=HF.hexDimsForCung(ls,'Mệnh');
     window.HookLayer.mount(host,{
       tool:'laso',
       charts:[
-        {type:'lifeArc',data:{segments:HF.daiVanSegments(ls)},title:'Đường Đời'},
         hexDims?{type:'hexRadar',data:{dims:hexDims},title:'Lục Giác cung Mệnh'}:null
       ].filter(Boolean),
       facts:facts,
