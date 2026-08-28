@@ -665,7 +665,17 @@ async function handleCreateBank(body: Record<string, unknown>): Promise<Response
   }
 
   const orderCode   = Date.now() % 999_999_999;
-  const description = label.substring(0, 25);
+  // 🔑 MỘT chuỗi cho cả hai phía. Bản trước khai với PayOS là `label` cắt 25
+  // ký tự ("Phổ Thông – 240 Luong") trong khi modal lại bảo khách ghi nội dung
+  // CK là `TVMB<orderCode>` — hai chuỗi KHÁC nhau cho cùng một đơn. Hiện vô
+  // hại vì PayOS khớp bằng số tài khoản ảo chứ không bằng nội dung, nhưng đó
+  // là vô hại NHỜ MAY: rơi vào kênh nào khớp bằng nội dung CK là khách gõ
+  // đúng theo màn hình mà tiền không ai nhận.
+  // Chọn `TVMB<orderCode>` chứ không chọn label: ASCII (ô nội dung CK của
+  // ngân hàng hay chối dấu tiếng Việt và dấu –), ngắn (≤13 ký tự, PayOS trần
+  // 25), và tự nó là khoá đối soát. Nhãn đọc được vẫn còn nguyên ở
+  // `bank_orders.label` và ở `credit_transactions.description`.
+  const description = `TVMB${orderCode}`;
   const returnUrl   = `${SITE_URL}/topup.html?payment=success&method=bank&orderCode=${orderCode}`;
   const cancelUrl   = `${SITE_URL}/topup.html?payment=cancelled`;
   const sigData     = { amount: amountVND, cancelUrl, description, orderCode, returnUrl };
@@ -700,7 +710,7 @@ async function handleCreateBank(body: Record<string, unknown>): Promise<Response
     if (bin && !bankName) console.warn('[create-bank] BIN chua co trong BANK_BY_BIN:', bin);
     return ok({ orderCode, checkoutUrl: d.checkoutUrl, accountNumber: d.accountNumber,
       accountName: d.accountName, bin: d.bin, bankName, amountVND,
-      credits, label });
+      credits, label, description });
   } catch (e: unknown) { return err((e as Error).message); }
 }
 
