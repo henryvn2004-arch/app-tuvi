@@ -33,10 +33,13 @@
 .jump a{white-space:nowrap;font-size:12px;color:var(--text-mid);border:1px solid var(--line-2);border-radius:20px;padding:4px 11px;cursor:pointer;background:var(--white)}
 .jump a.on{background:var(--navy);color:#fff;border-color:var(--navy)}
 /* score cards */
-.scores{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:22px}
-.sc{flex:1;min-width:120px;background:var(--white);border:1px solid var(--line);border-radius:10px;padding:11px 13px;box-shadow:var(--shadow)}
-.sc .lb{font-size:11px;color:var(--text-lt);text-transform:uppercase;letter-spacing:.04em}
-.sc .vl{font-family:var(--serif);font-size:24px;font-weight:600;margin-top:2px;display:flex;align-items:baseline;gap:3px}
+/* Grid 3 cột cứng — flex-wrap cũ rớt thẻ thứ 3 xuống dòng riêng trên màn
+   hẹp (iPhone SE/mini), xem app-luan-giai.html (cùng bug, cùng khối CSS
+   chép tay ở 4 tool) và docs/nhat-ky/2026-08.md. */
+.scores{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:22px}
+.sc{min-width:0;background:var(--white);border:1px solid var(--line);border-radius:10px;padding:11px 10px;box-shadow:var(--shadow)}
+.sc .lb{font-size:10.5px;color:var(--text-lt);text-transform:uppercase;letter-spacing:.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sc .vl{font-family:var(--serif);font-size:clamp(17px,5.5vw,24px);font-weight:600;margin-top:2px;display:flex;align-items:baseline;gap:3px}
 .sc .vl small{font-size:12px;color:var(--text-lt);font-family:var(--sans)}
 .sc.good .vl{color:var(--tx-green)}.sc.warn .vl{color:var(--gold-soft)}.sc.pri .vl{color:var(--tx-red)}
 .pbar{height:5px;border-radius:5px;background:var(--paper-2);margin-top:7px;overflow:hidden}

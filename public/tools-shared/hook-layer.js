@@ -42,6 +42,13 @@ window.HookLayer = (function () {
 
   var TONE_CLASS = { good: 'hkl-good', bad: 'hkl-bad', neutral: 'hkl-neutral' };
 
+  // `f.source` (vd "engine · cungScores['Tử Tức'].tong") KHÔNG còn render —
+  // Henry chỉ ra 2026-08-28 nó đọc như code bị lộ ra ngoài chứ không như một
+  // trích dẫn đáng tin (nhiều chỗ còn tệ hơn, vd "NH_COLORS['+na+']" — lộ cả
+  // dấu nối chuỗi). ~20 file `mountHook()` khắp site vẫn truyền field này vào
+  // `facts` — CỐ Ý không dọn, vì field vô hại khi không ai đọc nó nữa (chỉ
+  // nằm trong object JS, không vào DOM); dọn hết 20 chỗ ngoài phạm vi việc
+  // đang sửa. Field mới thêm SAU NGÀY NÀY thì khỏi cần viết `source` nữa.
   function _fact(f) {
     var toneCls = TONE_CLASS[f.tone] || TONE_CLASS.neutral;
     var score = typeof f.value === 'number'
@@ -52,7 +59,6 @@ window.HookLayer = (function () {
       '<div class="hkl-fact-b">' +
         '<b>' + esc(f.title || '') + '</b>' +
         (f.body ? '<span>' + esc(f.body) + '</span>' : '') +
-        (f.source ? '<span class="hkl-src">' + esc(f.source) + '</span>' : '') +
       '</div></div>'
     );
   }
@@ -157,7 +163,6 @@ window.HookLayer = (function () {
       '.hkl-fact-b{display:flex;flex-direction:column;gap:3px;min-width:0}' +
       '.hkl-fact-b b{font-family:var(--serif);font-size:14.5px;font-weight:600;color:var(--text)}' +
       '.hkl-fact-b span{font-size:13px;color:var(--text-mid);line-height:1.6}' +
-      '.hkl-src{font-family:ui-monospace,monospace;font-size:10.5px;color:var(--text-lt)!important}' +
       '.hkl-gate{margin-top:14px;padding-top:14px;border-top:1px dashed var(--line-2)}' +
       '.hkl-gate b{font-family:var(--serif);font-size:14.5px;font-weight:600;display:block;margin-bottom:8px;color:var(--text)}' +
       '.hkl-gate-ul{margin:0 0 12px;padding-left:18px;font-size:13px;color:var(--text-mid);line-height:1.65}' +
