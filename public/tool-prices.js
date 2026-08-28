@@ -36,8 +36,9 @@ window.ToolPrices = (function () {
   // ⚠️ BUMP KHOÁ khi đổi tập cột lấy về — bản cache cũ nằm trong sessionStorage
   // của người đang mở tab, thiếu cột mới mà vẫn còn hạn ⇒ trang dựng ra bằng dữ
   // liệu cụt trong tối đa 2 phút mà không có gì báo. (v2: thêm need_tags/question
-  // · v3: thêm app_path/page_path + bảng tool_groups)
-  var CACHE_KEY = 'tvmb_prices_v3';
+  // · v3: thêm app_path/page_path + bảng tool_groups · v4: thêm parts/credits_per_part
+  // — giá theo phần cho tool chia nhỏ như laso)
+  var CACHE_KEY = 'tvmb_prices_v4';
   var TTL_MS = 120000; // 2 phút — đủ để đi hết một phiên duyệt, đủ ngắn để admin đổi giá thấy ngay
 
   // Bản đọc được LẦN GẦN NHẤT, sống qua phiên (localStorage, khác cache 2 phút
@@ -93,7 +94,7 @@ window.ToolPrices = (function () {
       // Lấy TRỌN dòng: trang Công Cụ, dashboard và sidebar đều cần nhãn / icon /
       // nhóm / đường dẫn. Một lượt fetch cho mọi nơi thay vì mỗi nơi một lượt.
       _get(
-        'tool_pricing?enabled=eq.true&select=tool_id,label,credits,icon,category,sort_order,is_free,description,need_tags,question,app_path,page_path&order=sort_order.asc'
+        'tool_pricing?enabled=eq.true&select=tool_id,label,credits,icon,category,sort_order,is_free,description,need_tags,question,app_path,page_path,parts,credits_per_part&order=sort_order.asc'
       ),
       _get('credit_packages?enabled=eq.true&select=package_id,credits,amount_vnd,label&order=sort_order.asc'),
       _get('tool_groups?enabled=eq.true&select=key,title,subtitle,icon,sort_order,default_categories&order=sort_order.asc'),
@@ -171,6 +172,20 @@ window.ToolPrices = (function () {
     if (row.is_free) return 'Miễn phí';
     var v = Number(row.credits);
     return isFinite(v) && v > 0 ? v + ' Lượng mỗi lượt' : null;
+  }
+
+  /**
+   * Giá MỘT PHẦN của tool chia nhỏ (laso: 12 Lượng/phần thay vì 150 Lượng
+   * trọn bó) — đọc `tool_pricing.credits_per_part`. `null` khi tool không
+   * chia phần (`parts<=1`), chưa đọc được, hoặc không có công cụ đó — nơi
+   * gọi giữ nguyên chữ đang có, TUYỆT ĐỐI không đoán bằng credits/parts.
+   */
+  function partPrice(toolId) {
+    var row = _rowFor(toolId);
+    if (!row) return null;
+    var parts = Number(row.parts);
+    var v = Number(row.credits_per_part);
+    return parts > 1 && isFinite(v) && v > 0 ? v : null;
   }
 
   /** Danh sách gói nạp (mảng rỗng nếu chưa nạp được). */
@@ -294,7 +309,8 @@ window.ToolPrices = (function () {
     var scope = root || document;
     var els = scope.querySelectorAll('[data-tvp-price]');
     var labelEls = scope.querySelectorAll('[data-tvp-price-label]');
-    if (!els.length && !labelEls.length) return Promise.resolve();
+    var partEls = scope.querySelectorAll('[data-tvp-price-part]');
+    if (!els.length && !labelEls.length && !partEls.length) return Promise.resolve();
     return load().then(function () {
       els.forEach(function (el) {
         var v = get(el.getAttribute('data-tvp-price'));
@@ -303,6 +319,10 @@ window.ToolPrices = (function () {
       labelEls.forEach(function (el) {
         var lbl = priceLabel(el.getAttribute('data-tvp-price-label'));
         if (lbl != null) el.textContent = lbl;
+      });
+      partEls.forEach(function (el) {
+        var v = partPrice(el.getAttribute('data-tvp-price-part'));
+        if (v != null) el.textContent = v;
       });
     });
   }
@@ -322,6 +342,7 @@ window.ToolPrices = (function () {
     rows: rows,
     packages: packages,
     fillSlots: fillSlots,
+    partPrice: partPrice,
     groups: groups,
     groupsOf: groupsOf,
     appPath: appPath,

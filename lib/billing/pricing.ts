@@ -14,6 +14,8 @@ const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY;
 interface PriceRow {
   credits: number;
   enabled: boolean;
+  parts: number;
+  creditsPerPart: number | null;
 }
 
 const TTL_MS = 60_000;
@@ -26,14 +28,24 @@ async function loadPricing(): Promise<Record<string, PriceRow>> {
   const map: Record<string, PriceRow> = {};
   if (SUPABASE_URL && SUPABASE_KEY) {
     try {
-      const res = await fetch(`${SUPABASE_URL}/rest/v1/tool_pricing?select=tool_id,credits,enabled`, { cache: 'no-store',
-        headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` },
-      });
+      const res = await fetch(
+        `${SUPABASE_URL}/rest/v1/tool_pricing?select=tool_id,credits,enabled,parts,credits_per_part`,
+        { cache: 'no-store',
+          headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` },
+        });
       if (res.ok) {
-        const rows = (await res.json()) as { tool_id: string; credits: number; enabled: boolean }[];
+        const rows = (await res.json()) as {
+          tool_id: string; credits: number; enabled: boolean;
+          parts: number | null; credits_per_part: number | null;
+        }[];
         for (const r of rows) {
           if (r && typeof r.tool_id === 'string') {
-            map[r.tool_id] = { credits: Number(r.credits) || 0, enabled: r.enabled !== false };
+            map[r.tool_id] = {
+              credits: Number(r.credits) || 0,
+              enabled: r.enabled !== false,
+              parts: Number(r.parts) || 1,
+              creditsPerPart: r.credits_per_part != null ? Number(r.credits_per_part) : null,
+            };
           }
         }
       }
@@ -55,6 +67,26 @@ export async function getToolPrice(toolId: string): Promise<number | null> {
   const row = (await loadPricing())[toolId];
   if (!row || row.enabled === false) return null;
   return row.credits;
+}
+
+export interface ToolParts {
+  /** Tổng số phần độc lập của tool (2+, luôn >1 — parts=1 nghĩa là KHÔNG chia). */
+  parts: number;
+  /** Giá 1 phần lẻ. Có thể LỚN HƠN credits/parts của giá trọn — cố ý, thành
+   *  chiết khấu gói tự nhiên (xem _patches/migration-tool-parts.sql). */
+  creditsPerPart: number;
+}
+
+/**
+ * Cấu trúc chia phần của một tool, đọc từ `tool_pricing.parts`/`credits_per_part`.
+ * Trả null nếu tool KHÔNG chia phần (parts<=1), chưa set giá phần, tắt, hoặc
+ * đọc hụt — nơi gọi coi như "bán nguyên bó", KHÔNG tự suy credits/parts.
+ */
+export async function getToolParts(toolId: string): Promise<ToolParts | null> {
+  const row = (await loadPricing())[toolId];
+  if (!row || row.enabled === false) return null;
+  if (row.parts <= 1 || row.creditsPerPart == null || row.creditsPerPart <= 0) return null;
+  return { parts: row.parts, creditsPerPart: row.creditsPerPart };
 }
 
 /**

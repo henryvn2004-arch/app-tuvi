@@ -126,6 +126,16 @@
 .laso-error{font-size:12.5px;color:var(--tx-red);padding:8px 0}
 .lg-unlock{background:var(--white);border:1px solid var(--gold-soft);border-radius:11px;padding:18px 20px;margin-bottom:22px;text-align:center}
 .lg-unlock p{font-size:12.5px;color:var(--text-lt);margin-top:8px}
+/* Lời mời LƯU lá số vừa lập (miễn phí, đã có ngay) — CỐ Ý tách khỏi .lg-unlock:
+   đó là tường trả phí (150 Lượng, 12 cung còn khoá), đây là một giá trị KHÁC,
+   không tốn gì, chỉ dành cho khách CHƯA đăng ký. Gộp chung hai lời mời thì
+   đăng ký lại đọc thành "bước đầu để mua", đúng thứ đang muốn tách ra. */
+.lg-save-prompt{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:12px 16px;margin-bottom:18px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.lg-save-prompt .lsp-txt{flex:1;min-width:200px;font-size:13px;color:var(--text-mid)}
+.lg-save-prompt .lsp-txt b{color:var(--navy)}
+.lg-save-prompt button{flex:0 0 auto;background:var(--navy);color:var(--gold);border:none;border-radius:8px;padding:8px 16px;font-size:13px;font-weight:600;cursor:pointer;font-family:var(--serif)}
+.lg-save-prompt.done{border-color:var(--tx-green)}
+.lg-save-prompt.done .lsp-txt{color:var(--tx-green)}
 .lg-progress{font-size:12.5px;color:var(--text-lt);margin-bottom:16px;padding:10px 0;border-bottom:1px solid var(--line)}
 /* Khách chưa đăng ký: phần 2-24 vẫn hiện ĐỦ cấu trúc (tiêu đề, để thấy có
    24 phần thật, đúng thứ Henry chốt) — chỉ NỘI DUNG bên trong bị làm mờ bằng
@@ -169,6 +179,7 @@
              chặn/làm chậm phần lgScores/miniChart/lgBody phía dưới. -->
         <div id="hookHost"></div>
         <div class="scores" id="lgScores"></div>
+        <div class="lg-save-prompt" id="lgSavePrompt" style="display:none"></div>
         <span class="fold-toggle" id="lgFold" onclick="toggleMini()">▾ Ẩn lá số</span>
         <div class="chart-wrap" id="miniChart"></div>
         <div class="jump" id="lgJump"></div>
@@ -209,6 +220,32 @@ window.SHELL_INTRO={key:'luan-giai',title:'Luận giải Tử Vi',desc:'Đọc t
 // ── Form nhập (dùng chung TuviForm — có "Sinh ở ngoài Việt Nam?" + parity giờ
 // sinh lịch sử với standalone) ──
 TuviForm.render('tuviFormHost', {mode:'compact', gioitinh:'nam'});
+
+// Nhận ngày sinh gửi từ form trên trang chủ (`heroBirthSubmit`, public/index.html)
+// — CÙNG mẫu sessionStorage handoff với `app_pending_ask` mà shell.js đọc,
+// khác ở chỗ đây là DỮ LIỆU SINH nên tự điền form + tự bấm luận NGAY, không
+// đợi người dùng nhập lại. Đây chính là lý do form trang chủ tồn tại: gõ
+// MỘT LẦN, thấy lá số miễn phí NGAY, không phải "vào tool rồi gõ lại từ đầu".
+(function(){
+  var raw;
+  try{ raw=sessionStorage.getItem('app_pending_birth'); sessionStorage.removeItem('app_pending_birth'); }catch(e){ return; }
+  if(!raw) return;
+  var pending;
+  try{ pending=JSON.parse(raw); }catch(e){ return; }
+  if(!pending||!pending.fd||!pending.fd.ngay||!pending.fd.thang||!pending.fd.nam) return;
+  TuviForm.setData(pending.fd);
+  // doLuan() gọi vào shell.js `setContext`, hàm đó đòi #railCtx đã có trong
+  // DOM — nhưng shell.js chỉ dựng rail lúc DOMContentLoaded NẾU trang còn
+  // đang tải (`document.readyState==='loading'` → shell.js tự defer
+  // `boot()`). Script này đứng SAU thẻ <script src="shell.js"> nên đăng ký
+  // listener SAU — hàng đợi sự kiện tôn trọng thứ tự đăng ký, shell.js's
+  // boot() luôn chạy trước, không cần đợi thêm. Gọi thẳng (không qua
+  // setTimeout) nếu trang đã tải xong (readyState khác 'loading') — lúc đó
+  // shell.js cũng đã boot() ngay rồi, chờ thêm chỉ trễ vô ích.
+  var runAutoLuan = function(){ if(typeof doLuan==='function') doLuan(); };
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', runAutoLuan);
+  else runAutoLuan();
+})();
 
 var CUNG_ORDER=['Mệnh','Phụ Mẫu','Phúc Đức','Điền Trạch','Quan Lộc','Nô Bộc','Thiên Di','Tật Ách','Tài Bạch','Tử Tức','Phu Thê','Huynh Đệ'];
 var SC_DIMS=['thienVan','canCo','mayMan','phuTro','binhYen','benVung'];
@@ -321,7 +358,12 @@ function renderLuan(ls,fd,namxem,forceUnlocked){
   // Ô giá `data-tvp-price` trong mỗi khoá-mini (sectionLockHtml) vừa được chèn
   // — trang chỉ tự điền giá LÚC TẢI, mấy ô này sinh ra SAU đó nên phải gọi lại.
   TuviPaywall.fillPriceSlots(document.getElementById('lgBody'));
-  TuviPaywall.wireSectionLocks(document.getElementById('lgBody'), initiateLuanGiaiChuyenSau);
+  // `part` có mặt (khoá-mini của MỘT cung, phan>1) → mở đúng phần đó (12 Lượng).
+  // `part` vắng mặt (banner đầu trang, hoặc khoá-mini của phần 1) → mở cả bó
+  // (150 Lượng), hành vi CŨ giữ nguyên.
+  TuviPaywall.wireSectionLocks(document.getElementById('lgBody'), function(part){
+    return part!=null ? _unlockOnePart(part) : initiateLuanGiaiChuyenSau();
+  });
   // Canvas #chart-daivan-overview là của phần 14 (Tổng quan đại vận) — tool
   // này dừng ở phần 13 nên KHÔNG còn gọi LuanGiaiCore.renderInlineDaiVanLineChart
   // ở đây nữa (phần 14 đã dời sang app-chu-trinh-cuoc-doi.html).
@@ -466,10 +508,13 @@ function buildPhanSection(phan,label,ls,locked){
   }
   // Khoá-mini (ẨN mặc định) — mỗi phần đều CÓ một đoạn luận riêng do AI viết,
   // nhưng chỉ hiện khối này SAU khi biết chắc phần đó CHƯA mở (`_paintSecLocks`,
-  // gọi từ `_renderUnlockBlock`). Bấm vào chạy đúng luồng mở bản đầy đủ — cùng
-  // luồng với nút "✦ Luận giải chuyên sâu…" ở đầu trang, chỉ khác chỗ đứng:
-  // banner đó cuộn qua là mất, khối này lặp lại ở MỌI phần nên luôn trong tầm mắt.
-  var lock=TuviPaywall.sectionLockHtml({id:'sec-ai-lock-'+phan,product:'laso'});
+  // gọi từ `_renderUnlockBlock`). `part:phan` (chỉ gắn khi phan>1, phần 1 luôn
+  // free nên không có khối này) → bấm chỉ mở ĐÚNG phần đó (12 Lượng), KHÔNG
+  // còn mở cả bó — khác nút "✦ Luận giải chuyên sâu…" ở banner đầu trang, nút
+  // đó VẪN mở trọn 150 Lượng cho ai muốn xem hết luôn. `wireSectionLocks` ở
+  // dưới đọc lại `part` để rẽ nhánh đúng hàm.
+  var lock=TuviPaywall.sectionLockHtml({id:'sec-ai-lock-'+phan,product:'laso',part:phan>1?phan:null,
+    cta:phan>1?'Mở phần này':'Mở bản đầy đủ'});
   // Gợi ý tool khác CHỈ hiện khi phần này KHÔNG bị khoá — chưa trả tiền thì
   // luận giải của chính cung đó còn chưa đọc được, mời sang tool khác lúc này
   // là điều hướng vào chỗ rỗng.
@@ -606,6 +651,15 @@ function toggleMini(){
 // ══════════════════════════════════════════════════════════════════════
 var _astrolabe=null, _hoTen='', _ngay=0, _thang=0, _nam=0, _gioitinh='nam', _namXem=0, _laSoText=null;
 var _pendingSlug=null, _luanGiaiStore={};
+// Slug PHẦN LẺ — CHỈ dùng cho mua/kiểm quyền một phần riêng (12 Lượng/phần),
+// KHÔNG đụng `_pendingSlug` (slug BÓ, giữ NGUYÊN định dạng cũ — đổi nó mồ côi
+// cache `laso_public` VÀ quyền sở hữu của người đã mua trước bản vá này, xem
+// `lasoKey` trong CLAUDE.md). Tiền tố "laso-p<NN>-" tuân luật slug phải bắt
+// đầu bằng tool_id — hợp lệ vì đây là dạng slug MỚI, chưa ai từng mua theo
+// phần trước khi tính năng này tồn tại nên không có gì phải giữ tương thích.
+function _partSlug(phan){
+  return _pendingSlug?('laso-p'+String(phan).padStart(2,'0')+'-'+_pendingSlug):null;
+}
 // Tool "Luận Giải Tử Vi" = tổng quan + 12 cung (engine phan 1-13). Đại vận
 // (tổng quan + 9 đại vận) + tiểu vận năm xem (engine phan 14-24) tách sang
 // tool RIÊNG "Chu Trình Cuộc Đời" (app-chu-trinh-cuoc-doi.html, tool_id
@@ -735,6 +789,34 @@ function _renderCachedLuanGiai(store){
   document.getElementById('lgUnlock').style.display='none';
   document.getElementById('lgProgress').style.display='none';
 }
+// Lời mời LƯU lá số — CHỈ cho khách chưa đăng ký (đã đăng nhập thì tài khoản
+// của họ đã là chỗ lưu). Tách khỏi paywall (`_renderUnlockBlock`) hoàn toàn:
+// không nói gì tới 12 cung/150 Lượng, chỉ nói tới cái họ VỪA CÓ (an sao, miễn
+// phí) — đây là quà đăng ký thật (giữ được lá số), không phải phiếu giảm giá.
+function _renderSavePrompt(){
+  var host=document.getElementById('lgSavePrompt');
+  if(!host) return;
+  if(_lgLoggedIn()){ host.style.display='none'; host.innerHTML=''; return; }
+  host.className='lg-save-prompt';
+  host.style.display='flex';
+  host.innerHTML='<div class="lsp-txt">✦ <b>Lưu lá số này</b> để xem lại bất cứ lúc nào — miễn phí, không cần trả gì.</div>'+
+    '<button type="button" id="lgSaveBtn">Đăng ký lưu →</button>';
+  document.getElementById('lgSaveBtn').addEventListener('click', function(){
+    if(window.showAuthModal){
+      window.showAuthModal(function(){
+        _saveLuanGiaiResult();
+        host.className='lg-save-prompt done';
+        // Nối sang hạ tầng NHẮC HẰNG NGÀY đã có sẵn (cron gửi "Vận hôm nay"
+        // thật, xem app/api/cron-push + lib/push/daily-message.ts) — KHÔNG
+        // tự bật push ở đây, chỉ dẫn sang /app nơi nhiệm vụ "Bật thông báo"
+        // (Khởi Hành, +10 Lượng, app-home.html) đã xử lý toàn bộ luồng xin
+        // quyền. Đây là chỗ NỐI, không phải xây lại.
+        host.innerHTML='<div class="lsp-txt">✓ Đã lưu lá số này vào tài khoản của bạn. <a href="/app" style="color:var(--navy);font-weight:600">Bật thông báo để nhận vận mỗi ngày →</a></div>';
+        window.refreshNavCredits&&window.refreshNavCredits();
+      });
+    }
+  });
+}
 // Đã đăng nhập + ĐÚNG người này từng trả tiền cho ĐÚNG slug này → xem lại cache
 // miễn phí. Mọi ca còn lại (chưa đăng nhập, hoặc đăng nhập nhưng chưa từng trả
 // cho lá số này) đều phải qua tấm khoá — `_renderUnlockBlock` tự phân case 1/2.
@@ -744,6 +826,7 @@ async function initLuanGiaiGate(ls){
   _luanGiaiStore={};
   document.getElementById('lgUnlock').style.display='none';
   document.getElementById('lgProgress').style.display='none';
+  _renderSavePrompt();
   var hasAccess=false;
   try{
     var uid=_lgLoggedIn()?(window.Auth.getUser()&&window.Auth.getUser().id):null;
@@ -788,6 +871,71 @@ function _renderUnlockBlock(){
     slug:function(){return _pendingSlug;},
     onUnlock:function(){ return _startLuanGiaiAI(); },
   });
+}
+
+// Thay khối MỘT section (locked→unlocked) bằng cách dựng lại ĐÚNG hàm
+// `buildPhanSection` (locked=false) rồi hoán outerHTML — không tự chép logic
+// "unlocked trông thế nào" ra một bản thứ hai (đã có SẴN, chỉ tái dùng).
+// `wireSectionLocks`/`fillPriceSlots` dùng uỷ quyền + querySelectorAll trên
+// CẢ `#lgBody` nên không cần gắn lại tay cho riêng node mới; `wirePhanAsk` có
+// cờ `_lgWired` nên gọi lại toàn bộ vẫn AN TOÀN (chỉ gắn node mới).
+function _paintPartUnlocked(phan){
+  var el=document.getElementById('sec-'+phan);
+  if(!el) return;
+  var labels=LuanGiaiCore.phanLabels(_astrolabe)||{};
+  var label=labels[phan]||('Phần '+phan);
+  var tmp=document.createElement('div');
+  tmp.innerHTML=buildPhanSection(phan,label,_astrolabe,false);
+  if(tmp.firstElementChild) el.replaceWith(tmp.firstElementChild);
+  var root=document.getElementById('lgBody');
+  if(window.mountIcons) window.mountIcons(root);
+  TuviPaywall.fillPriceSlots(root);
+  wirePhanAsk(root);
+}
+
+// Mua/mở MỘT phần lẻ (12 Lượng/phần) — KHÔNG dùng `TuviPaywall.requireCredits`
+// vì hàm đó gắn với giá TRỌN BÓ của cả tool (`ToolPrices.get('laso')`==150).
+// Ai đã mua cả bó rồi bấm nhầm khoá-mini của một phần thì mở THẲNG, không
+// tính tiền lần hai — kiểm quyền BÓ trước, vì `/api/payment?action=deduct`
+// chỉ soát ĐÚNG slug gửi lên (slug PHẦN), không tự biết bó đã mua.
+async function _unlockOnePart(phan){
+  if(!_lgLoggedIn()){
+    if(window.showAuthModal) window.showAuthModal(function(){ _unlockOnePart(phan); });
+    else if(window.Auth&&window.Auth.require) window.Auth.require(function(){ _unlockOnePart(phan); });
+    return;
+  }
+  var uid=window.Auth.getUser()&&window.Auth.getUser().id;
+  try{
+    var rc=await fetch('/api/payment?action=check&slug='+encodeURIComponent(_pendingSlug)+'&userId='+encodeURIComponent(uid||''));
+    var rd=await rc.json();
+    if(rd&&rd.hasAccess){ _paintPartUnlocked(phan); await _runPhanLuanGiai(phan); return; }
+  }catch(e){}
+
+  await (window.ToolPrices&&window.ToolPrices.load?window.ToolPrices.load():Promise.resolve());
+  var partPrice=window.ToolPrices?window.ToolPrices.partPrice('laso'):null;
+  // Đọc hụt giá → TỪ CHỐI chạy, không đoán (luật cứng CLAUDE.md — số cũ/bịa
+  // nguy hiểm hơn hẳn một lượt phải bấm lại).
+  if(partPrice==null){ alert('Chưa đọc được giá phần này, vui lòng thử lại.'); return; }
+
+  var gate=await TuviPaywall.ensureCredits({product:'laso', cost:partPrice});
+  if(!gate.ok) return; // ensureCredits đã tự hiện UI đăng nhập/thiếu Lượng/giá chưa đọc được
+
+  var token=window.Auth.getSession&&window.Auth.getSession()&&window.Auth.getSession().access_token;
+  var labelForDesc=(LuanGiaiCore.phanLabels(_astrolabe)||{})[phan]||('Phần '+phan);
+  try{
+    var res=await fetch('/api/payment?action=deduct',{method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+(token||'')},
+      body:JSON.stringify({toolType:'use_laso', product:'laso', part:phan, amount:partPrice,
+        slug:_partSlug(phan), description:'Luận Giải Lá Số — '+labelForDesc})});
+    var data=await res.json();
+    if(!data.success){
+      alert(data.insufficientBalance?'Không đủ Lượng — vui lòng nạp thêm.':'Có lỗi khi mở phần này, thử lại.');
+      return;
+    }
+    window.refreshNavCredits&&window.refreshNavCredits();
+    _paintPartUnlocked(phan);
+    await _runPhanLuanGiai(phan);
+  }catch(e){ alert('Có lỗi khi mở phần này, thử lại.'); }
 }
 
 async function initiateLuanGiaiChuyenSau(){
@@ -872,7 +1020,10 @@ async function _runPhanLuanGiai(p){
       var sr=await fetch('/api/search',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({query:QUERIES[p](),matchCount:p===1?10:7})});
       docs=(await sr.json()).docs||'';
     }catch(e){}
-    var resp=await fetch('/api/lasotuvi',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({hoTen:_hoTen,ngay:_ngay,thang:_thang,nam:_nam,gioiTinh:_gioitinh,namXem:_namXem,laSoText:_laSoText,phan:p,docs:docs})});
+    var _lgTk=(window.Auth&&window.Auth.isLoggedIn())?window.Auth.getSession().access_token:null;
+    var _lgHeaders={'Content-Type':'application/json'};
+    if(_lgTk)_lgHeaders['Authorization']='Bearer '+_lgTk;
+    var resp=await fetch('/api/lasotuvi',{method:'POST',headers:_lgHeaders,body:JSON.stringify({hoTen:_hoTen,ngay:_ngay,thang:_thang,nam:_nam,gioiTinh:_gioitinh,namXem:_namXem,laSoText:_laSoText,phan:p,docs:docs,slug:_partSlug(p),bundleSlug:_pendingSlug})});
     var data=await resp.json();
     if(data.error||!data.luanGiai){
       doneWait();

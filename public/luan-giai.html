@@ -1900,12 +1900,13 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
       if (_currentPhan > 1) await new Promise(r => setTimeout(r, _currentPhan>=15?2500:1000));
 
       // Gọi Claude
+      const _lgTk2 = window.Auth?.isLoggedIn() ? window.Auth.getSession()?.access_token : null;
       const resp = await fetch('/api/lasotuvi', {
-        method:'POST', headers:{'Content-Type':'application/json'},
+        method:'POST', headers:{'Content-Type':'application/json', ...(_lgTk2 ? {'Authorization':'Bearer '+_lgTk2} : {})},
         body: JSON.stringify({
           hoTen:_hoTen, ngay:_ngay, thang:_thang, nam:_nam,
           gioiTinh:_gioitinh, namXem:_namXem,
-          laSoText:_laSoText, phan:_currentPhan, docs
+          laSoText:_laSoText, phan:_currentPhan, docs, bundleSlug:_pendingSlug
         })
       });
       const data = await resp.json();
@@ -2029,12 +2030,13 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
         await new Promise(r => setTimeout(r, delay));
       }
 
+      const _lgTk3 = window.Auth?.isLoggedIn() ? window.Auth.getSession()?.access_token : null;
       const resp = await fetch('/api/lasotuvi', {
-        method: 'POST', headers: {'Content-Type':'application/json'},
+        method: 'POST', headers: {'Content-Type':'application/json', ...(_lgTk3 ? {'Authorization':'Bearer '+_lgTk3} : {})},
         body: JSON.stringify({
           hoTen: _hoTen, ngay: _ngay, thang: _thang, nam: _nam,
           gioiTinh: _gioitinh, namXem: _namXem,
-          laSoText: _laSoText, phan: _currentPhan, docs
+          laSoText: _laSoText, phan: _currentPhan, docs, bundleSlug: _pendingSlug
         })
       });
       const data = await resp.json();

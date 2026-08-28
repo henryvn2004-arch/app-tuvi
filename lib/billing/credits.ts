@@ -155,6 +155,32 @@ export async function hasSlugAccess(userId: string, slug: string): Promise<boole
   }
 }
 
+/**
+ * Như `hasSlugAccess` nhưng khớp CHÍNH XÁC bất kỳ slug nào trong danh sách —
+ * cho tool CHIA PHẦN: sở hữu qua slug PHẦN, slug BÓ (mua trọn), hoặc slug
+ * ĐỊNH DẠNG CŨ (trước khi tool_id được thêm tiền tố, xem migration slug laso)
+ * đều tính là đã trả tiền. Vẫn khớp CHÍNH XÁC từng slug — không dùng tiền tố
+ * `like`, nên không mở lại lỗ chéo-lá-số/chéo-phần mà `hasRecentToolPayment`
+ * có thể gây ra cho tool nhiều phần.
+ */
+export async function hasAnySlugAccess(userId: string, slugs: string[]): Promise<boolean> {
+  const clean = Array.from(new Set(slugs.filter(Boolean)));
+  if (!SUPABASE_URL || !SUPABASE_KEY || !userId || !clean.length) return false;
+  try {
+    const inList = clean.map((s) => `"${s.replace(/"/g, '\\"')}"`).join(',');
+    const res = await fetch(
+      `${SUPABASE_URL}/rest/v1/credit_transactions` +
+        `?user_id=eq.${encodeURIComponent(userId)}` +
+        `&slug=in.(${encodeURIComponent(inList)})&amount=lt.0&limit=1&select=id`,
+      { headers: SB_HEADERS, cache: 'no-store' },
+    );
+    if (!res.ok) return false;
+    return ((await res.json()) as unknown[]).length > 0;
+  } catch {
+    return false;
+  }
+}
+
 /** Cửa sổ (phút) cho đường lùi khi client chưa gửi slug — xem `toolPaymentDenied`. */
 const RECENT_PAYMENT_MIN = 20;
 

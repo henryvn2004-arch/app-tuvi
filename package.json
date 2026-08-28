@@ -52,7 +52,8 @@
     "check:tooltip": "node scripts/check-tooltip.mjs",
     "check:celebanh": "node scripts/check-celeb-anh.mjs",
     "check:cns": "node scripts/check-cns.mjs",
-    "check:nhatky": "node scripts/check-nhatky-index.mjs"
+    "check:nhatky": "node scripts/check-nhatky-index.mjs",
+    "check:slug": "node scripts/check-slug.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.112.3",
