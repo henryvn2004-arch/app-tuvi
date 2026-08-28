@@ -274,19 +274,10 @@ a { color: var(--blue); text-decoration: none; }
   transition: border-color 0.15s; overflow: hidden;
 }
 .hc-composer:focus-within { border-color: var(--gold-bright); }
-.hc-composer-top {
-  display: flex; align-items: flex-end; gap: 10px;
-  padding: 8px 8px 8px 14px;
-}
-.hc-composer textarea {
-  flex: 1; border: none; outline: none; resize: none; background: transparent;
-  font-family: Arial, sans-serif; font-size: 15px; color: var(--text);
-  line-height: 1.5; min-height: 72px; max-height: 160px; padding: 8px 0;
-}
+.hc-birth-form { padding: 14px 14px 12px; }
+.hc-chips-label { font-size: 11.5px; color: var(--text-lt); margin: 14px 0 8px; }
 .hc-chips-inner {
   display: flex; flex-wrap: wrap; gap: 6px;
-  padding: 8px 12px 10px 12px;
-  border-top: 1px solid var(--border-lt);
 }
 .hc-chip-inner {
   background: var(--bg-soft); border: 1px solid var(--border-lt);
@@ -295,12 +286,31 @@ a { color: var(--blue); text-decoration: none; }
   white-space: nowrap;
 }
 .hc-chip-inner:hover { background: var(--gold-lt); border-color: var(--gold-bright); color: var(--navy); }
-.hc-send {
-  flex-shrink: 0; width: 38px; height: 38px; border-radius: 50%; border: none; cursor: pointer;
-  background: var(--navy); color: var(--gold-bright); font-size: 18px; line-height: 1;
-  display: flex; align-items: center; justify-content: center; transition: background 0.15s;
+/* Form ngày sinh thay ô chat giả (Pha "vá lời hứa homepage") — widget cũ
+   MẶC ĐỊNH hứa một cuộc trò chuyện (avatar + bong bóng chào + ô soạn + nút
+   gửi ↑) nhưng chỉ điều hướng sang `/app/luan-giai` với `?q=` KHÔNG có gì trả
+   lời. Nay bấm gửi là NHẬN lá số miễn phí thật (an sao, 0đ) ngay lập tức —
+   `.frow`/`.fg` là tên class CỐ ĐỊNH mà tuvi-form.js (`mode:'compact'`) tự
+   sinh ra, trang app-shell định nghĩa sẵn trong shell.css; trang chủ không
+   nạp shell.css (né xung đột biến theme với CSS đã tinh chỉnh riêng) nên định
+   nghĩa lại ở đây, cùng khung nhìn nhưng dùng biến màu của CHÍNH trang chủ. */
+.hc-birth-form .frow { display: flex; gap: 8px; flex-wrap: wrap; align-items: flex-end; margin-bottom: 10px; }
+.hc-birth-form .frow:last-of-type { margin-bottom: 0; }
+.hc-birth-form .fg { display: flex; flex-direction: column; gap: 4px; }
+.hc-birth-form .fg label { font-size: 10px; font-weight: 600; color: var(--text-lt); letter-spacing: .03em; text-transform: uppercase; }
+.hc-birth-form .fg input, .hc-birth-form .fg select {
+  border: 1px solid var(--border); border-radius: 7px; padding: 7px 9px;
+  font-size: 13px; font-family: inherit; color: var(--text); background: var(--bg); outline: none;
 }
-.hc-send:hover { background: var(--navy-mid); }
+.hc-birth-form .fg input:focus, .hc-birth-form .fg select:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(20,85,164,.12); }
+.hc-birth-form .tvf-compact-foreign { font-size: 12px; color: var(--text-mid); display: flex; align-items: center; gap: 6px; cursor: pointer; }
+.hc-birth-form .tvf-compact-utc { min-width: 160px; }
+.hc-birth-submit {
+  width: 100%; margin-top: 4px; background: var(--navy); color: var(--gold-bright);
+  border: none; border-radius: 10px; padding: 11px 16px; font-size: 14.5px; font-weight: 600;
+  font-family: inherit; cursor: pointer; transition: background 0.15s;
+}
+.hc-birth-submit:hover { background: var(--navy-mid); }
 /* Nút vào thẳng Luận Đường — thay nút vàng đứng riêng ở cột trái. Trước đây nút
    đó và ô chat là HAI lời mời cùng dẫn về một đích, xếp dọc nhau trên điện thoại
    và cách nhau bởi dòng chữ Hán, nên người dùng phải chọn giữa hai thứ giống hệt
@@ -409,13 +419,17 @@ a { color: var(--blue); text-decoration: none; }
             <div class="hc-main">
               <div class="hc-greeting">
                 <div class="hc-avatar" id="hc-avatar">命</div>
-                <div class="hc-bubble">Anh/chị muốn hỏi gì về vận mệnh, tình duyên hay công việc?</div>
+                <div class="hc-bubble">Nhập ngày sinh — xem lá số Tử Vi miễn phí ngay, không cần đăng ký</div>
               </div>
-              <form class="hc-composer" action="/app/luan-giai" method="get">
-                <div class="hc-composer-top">
-                  <textarea name="q" rows="1" placeholder="Năm nay vận của tôi thế nào?" aria-label="Câu hỏi về lá số của bạn"></textarea>
-                  <button type="submit" class="hc-send" aria-label="Gửi câu hỏi">↑</button>
-                </div>
+              <!-- Form ngày sinh — KHÔNG còn giả dạng chat. Bấm gửi đưa thẳng
+                   sang /app/luan-giai và tự tính lá số miễn phí (an sao, 0đ),
+                   không phải một form trống chờ nhập lại (xem heroBirthSubmit
+                   ở khối script dưới + đầu app-luan-giai.html đọc
+                   `app_pending_birth`). -->
+              <div class="hc-composer hc-birth-form" id="heroBirthForm">
+                <div id="heroFormHost"></div>
+                <button type="button" class="hc-birth-submit" id="heroBirthSubmit">Xem lá số miễn phí →</button>
+              </div>
                 <!-- Chip dựng SẴN trong HTML, KHÔNG để JS render. Bản đầu để ô
                      rỗng rồi `renderChips()` đổ 5 chip vào sau khi tải — trên
                      điện thoại đó là 5 dòng nhảy ra, đẩy mọi thứ bên dưới xuống
@@ -425,6 +439,7 @@ a { color: var(--blue); text-decoration: none; }
                      ⚠️ Sửa/thêm chip: giữ ĐỒNG BỘ với `_TOOL_ROUTE` trong khối
                      script dưới, và kiểm tool còn `enabled=true` trong
                      `tool_pricing` — chip trỏ tool vừa tắt là link chết. -->
+                <div class="hc-chips-label">Hoặc hỏi thẳng một việc cụ thể:</div>
                 <div class="hc-chips-inner" id="hc-chips">
                   <a class="hc-chip-inner" data-tool="laso" href="/app/luan-giai">Năm nay công việc làm ăn thế nào?</a>
                   <a class="hc-chip-inner" data-tool="xem-tuoi" href="/app/xem-tuoi">Tôi và người yêu có hợp nhau không?</a>
@@ -432,7 +447,6 @@ a { color: var(--blue); text-decoration: none; }
                   <a class="hc-chip-inner" data-tool="chan-dung-vo-chong" href="/app/chan-dung-vo-chong">Chồng tương lai của tôi trông thế nào?</a>
                   <a class="hc-chip-inner" data-tool="xem-lam-an" href="/app/xem-lam-an">Tôi làm ăn với người này có hợp không?</a>
                 </div>
-              </form>
             </div>
           </div>
 
@@ -562,6 +576,8 @@ a { color: var(--blue); text-decoration: none; }
 <script src="/nav.js?v=24"></script>
 <script src="/referral.js?v=1"></script>
 <script src="/footer.js"></script>
+<script src="/tools-shared/vn-timezone.js?v=1"></script>
+<script src="/tuvi-form.js"></script>
 
 <script>
 // ─────────────────────────────────────────────────────────────
@@ -647,17 +663,29 @@ if (typeof TuviPaywall !== 'undefined') {
     });
   }
 
-  var form = document.querySelector('.hc-composer');
-  var ta   = form ? form.querySelector('textarea') : null;
-
-  if (form && ta) {
-    var submit = function () {
-      var v = (ta.value || '').trim() || ta.placeholder;
-      go(v, 'laso');
-    };
-    form.addEventListener('submit', function (e) { e.preventDefault(); submit(); });
-    ta.addEventListener('keydown', function (e) {
-      if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); submit(); }
+  // Form ngày sinh — thay ô chat giả. `TuviForm` (đã dùng ở /app/luan-giai)
+  // dựng sẵn field ngày/tháng/năm/giờ/giới tính; nạp hụt thì `heroFormHost`
+  // trống nhưng nút "Vào thẳng Luận Đường" và các chip vẫn còn lối vào khác.
+  if (window.TuviForm && document.getElementById('heroFormHost')) {
+    TuviForm.render('heroFormHost', { mode: 'compact', gioitinh: 'nam', showName: false });
+  }
+  var birthSubmit = document.getElementById('heroBirthSubmit');
+  if (birthSubmit) {
+    birthSubmit.addEventListener('click', function () {
+      var fd = window.TuviForm ? TuviForm.getData() : null;
+      if (!fd || !fd.ngay || !fd.thang || !fd.nam) {
+        alert('Vui lòng nhập đầy đủ ngày, tháng, năm sinh.');
+        return;
+      }
+      // Chuyển dữ liệu sinh sang /app/luan-giai qua sessionStorage — CÙNG mẫu
+      // với `app_pending_ask` (go() ở trên) mà shell.js đã đọc, chỉ khác khoá
+      // và phía đọc (app-luan-giai.html tự điền form + tự bấm luận thay vì
+      // rơi vào rail chat). Không dùng query string: object có nhiều field,
+      // và slug/token nhạy hơn một chút thì để trong sessionStorage vẫn hơn
+      // để lộ trên URL/lịch sử trình duyệt.
+      try { sessionStorage.setItem('app_pending_birth', JSON.stringify({ fd: fd, t: Date.now() })); } catch (e) { /* ignore */ }
+      try { window.Track && window.Track.event && window.Track.event('cta_click', { tool_id: 'laso', meta: { has_q: false, from: 'hero_birth' } }); } catch (e) { /* ignore */ }
+      window.location.href = '/app/luan-giai';
     });
   }
 
