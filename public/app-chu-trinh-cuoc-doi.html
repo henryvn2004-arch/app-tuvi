@@ -693,7 +693,10 @@ async function _runPhanLuanGiai(ep){
       var sr=await fetch('/api/search',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({query:QUERIES[ep](),matchCount:7})});
       docs=(await sr.json()).docs||'';
     }catch(e){}
-    var resp=await fetch('/api/lasotuvi',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({hoTen:_hoTen,ngay:_ngay,thang:_thang,nam:_nam,gioiTinh:_gioitinh,namXem:_namXem,laSoText:_laSoText,phan:ep,docs:docs})});
+    var _ccTk=(window.Auth&&window.Auth.isLoggedIn())?window.Auth.getSession().access_token:null;
+    var _ccHeaders={'Content-Type':'application/json'};
+    if(_ccTk)_ccHeaders['Authorization']='Bearer '+_ccTk;
+    var resp=await fetch('/api/lasotuvi',{method:'POST',headers:_ccHeaders,body:JSON.stringify({hoTen:_hoTen,ngay:_ngay,thang:_thang,nam:_nam,gioiTinh:_gioitinh,namXem:_namXem,laSoText:_laSoText,phan:ep,docs:docs,bundleSlug:_pendingSlug})});
     var data=await resp.json();
     if(data.error||!data.luanGiai){
       doneWait();

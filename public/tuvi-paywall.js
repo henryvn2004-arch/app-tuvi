@@ -586,17 +586,25 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
   // Mặc định `display:none`: trang tự biết lúc nào phần đó ĐÃ khoá (sau khi
   // gọi API kiểm tra quyền truy cập) rồi mới bật hiện, tránh loé chữ "chưa mở"
   // rồi biến mất ngay nếu hoá ra đã có cache.
+  // `o.part` (số) → khoá-mini này mở ĐÚNG MỘT phần, không phải cả tool. Giá
+  // hiện ra đọc `credits_per_part` (qua `data-tvp-price-part`) thay vì
+  // `credits` (`data-tvp-price`) — hai thuộc tính khác nhau, ToolPrices.fillSlots
+  // tự phân biệt. `wireSectionLocks` đọc lại `data-tpw-part` để biết gọi
+  // `onUnlock` cho phần nào; KHÔNG có `o.part` thì hành vi y hệt trước đây
+  // (mở cả tool), mọi tool đơn-phần đang dùng chung không đổi gì.
   function sectionLockHtml(o) {
     o = o || {};
     const id = o.id ? ' id="' + _esc(o.id) + '"' : '';
+    const part = o.part != null ? ' data-tpw-part="' + Number(o.part) + '"' : '';
     const label = o.label || 'AI luận sâu phần này';
     const cta = o.cta || 'Mở bản đầy đủ';
     const product = _esc(o.product || (_cfg && _cfg.product) || '');
-    return '<div class="tpw-seclock"' + id + ' data-tpw-seclock role="button" tabindex="0">' +
+    const priceAttr = o.part != null ? 'data-tvp-price-part' : 'data-tvp-price';
+    return '<div class="tpw-seclock"' + id + part + ' data-tpw-seclock role="button" tabindex="0">' +
       '<span class="tpw-seclock-i" aria-hidden="true">✦</span>' +
       '<span class="tpw-seclock-t">' + _esc(label) + '</span>' +
       '<span class="tpw-seclock-p">' + _esc(cta) +
-        (product ? ' · <span data-tvp-price="' + product + '">…</span> Lượng' : '') + ' →</span>' +
+        (product ? ' · <span ' + priceAttr + '="' + product + '">…</span> Lượng' : '') + ' →</span>' +
     '</div>';
   }
 
@@ -629,6 +637,10 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
   // lại) — không phải tìm-và-gắn-tay từng khối mỗi lần `innerHTML` đổi.
   // Gọi lại nhiều lần an toàn (trang có thể tính lại toàn bộ kết quả khi sửa
   // ngày sinh) nhờ cờ `_tpwSecWired` neo vào chính `root`.
+  // `onUnlock(part)` — `part` là số của khối vừa bấm nếu nó khai `o.part` lúc
+  // dựng (`sectionLockHtml`), hoặc `undefined` (mở cả tool, hành vi CŨ giữ
+  // nguyên) nếu không. Callback cũ khai `function(){...}` (0 tham số) không
+  // bị ảnh hưởng — JS bỏ qua tham số thừa.
   function wireSectionLocks(root, onUnlock) {
     if (!root || root._tpwSecWired) return;
     root._tpwSecWired = true;
@@ -638,13 +650,15 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
       if (!box || !root.contains(box)) return;
       if (e.type === 'keydown' && e.key !== 'Enter' && e.key !== ' ') return;
       if (e.type === 'keydown') e.preventDefault();
+      const partAttr = box.getAttribute('data-tpw-part');
+      const part = partAttr != null ? Number(partAttr) : undefined;
       // Cùng bậc "bấm mở" của phễu theo tool như `lockPreview` — chỉ khác
       // nguồn (`from:'section'`) để tách đếm được xem người ta bấm mở từ
       // banner đầu trang hay từ chính trong lòng một phần.
       try {
-        if (window.Track) window.Track.event('unlock_click', { tool_id: (_cfg && _cfg.product) || '', meta: { from: 'section' } });
+        if (window.Track) window.Track.event('unlock_click', { tool_id: (_cfg && _cfg.product) || '', meta: { from: 'section', part: part } });
       } catch (err) { /* đo hỏng không được chặn lượt mua */ }
-      onUnlock();
+      onUnlock(part);
     };
     root.addEventListener('click', trigger);
     root.addEventListener('keydown', trigger);

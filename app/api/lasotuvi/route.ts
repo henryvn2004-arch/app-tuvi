@@ -22,6 +22,8 @@ import { buildPromptCached } from '@/lib/agent/luan-giai-doc';
 import { llmTextFull, callLLMTools } from '@/lib/llm/complete';
 import { logLlmUsage } from '@/lib/agent/usage';
 import { withToolOutcome } from '@/lib/ops/tool-outcome';
+import { authUserFromRequest } from '@/lib/api/tool-helpers';
+import { hasAnySlugAccess, paywallDisabled } from '@/lib/billing/credits';
 
 // ─── LLM client (Gemini-primary + Anthropic-backup) ────────────
 // Trả shape Anthropic ({content, stop_reason, usage}) dù provider nào → vòng
@@ -244,8 +246,42 @@ async function runPost(request: NextRequest) {
 
   if (action === 'chat') return body.stream ? handleChatStream(body) : handleChat(body);
 
-  const { laSoText, phan, docs, hoTen, gioiTinh } = body as { laSoText?: string; phan?: number; docs?: string; hoTen?: string; gioiTinh?: string };
+  const { laSoText, phan, docs, hoTen, gioiTinh, slug, bundleSlug } = body as {
+    laSoText?: string; phan?: number; docs?: string; hoTen?: string; gioiTinh?: string;
+    slug?: string; bundleSlug?: string;
+  };
   if (!laSoText || !phan) return err('Thiếu dữ liệu', 400);
+  const phanNum = Number(phan);
+
+  // Chốt chặn thanh toán PHÍA SERVER — thiếu bước này thì gọi thẳng endpoint
+  // (biết laSoText, tự sinh miễn phí từ an sao) là dựng bản luận 13/11 phần
+  // KHÔNG GIỚI HẠN mà không cần trả tiền hay đăng nhập. Trước bản vá này route
+  // KHÔNG có gate nào — thanh toán chỉ tồn tại ở CLIENT (`requireCredits` gọi
+  // MỘT LẦN cho cả bó trước khi lặp fetch từng phần), server tin tuyệt đối.
+  //
+  // Phần 1 (tổng quan) CỐ Ý giữ MIỄN PHÍ, không đổi — đó là bản xem trước sản
+  // phẩm đã có từ đầu (client không khoá phần 1 trong UI). Phần 2+ (laso) và
+  // toàn bộ 14-24 (chu-trinh-cuoc-doi) đòi sở hữu MỘT trong hai slug: PHẦN vừa
+  // mua lẻ (`slug` — CHỈ laso có, tiền tố `laso-p<NN>-`, tool mới sinh sau bản
+  // vá này) hoặc cả BÓ (`bundleSlug` — slug ĐỊNH DẠNG CŨ, không tiền tố, giữ
+  // NGUYÊN như trước bản vá: đổi định dạng slug bó sẽ mồ côi cache nội dung
+  // `laso_public` VÀ quyền sở hữu của mọi người đã mua trước đây — xem
+  // `lasoKey` trong CLAUDE.md, cùng họ bẫy). Cả hai trường có thể trống tuỳ
+  // ngữ cảnh (mua lẻ chỉ có `slug`; mua bó/đã mở cả bó chỉ cần `bundleSlug`).
+  //
+  // Dùng `hasAnySlugAccess` (khớp CHÍNH XÁC từng slug), KHÔNG qua
+  // `toolPaymentDenied` — hàm đó còn có đường lùi khớp THEO TIỀN TỐ tool_id
+  // (`hasRecentToolPayment`, "vừa trả tiền cho tool này trong 20 phút"). Với
+  // tool CHIA PHẦN, "vừa trả cho laso" không có nghĩa là "đã trả cho ĐÚNG
+  // lá số/phần này" — bật đường lùi đó là cho qua mọi phần khác của MỌI lá số
+  // khác trong 20 phút sau một lượt mua bất kỳ, vì slug PHẦN giờ bắt đầu bằng
+  // "laso-" nên đường lùi kia SẼ khớp được nếu lỡ đi qua `toolPaymentDenied`.
+  if (phanNum !== 1 && !paywallDisabled()) {
+    const auth = await authUserFromRequest(request);
+    if ('error' in auth) return err(auth.error, auth.status);
+    const owns = await hasAnySlugAccess(auth.user.id, [slug, bundleSlug].filter((s): s is string => !!s));
+    if (!owns) return err('Lượt dùng này chưa được thanh toán.', 402);
+  }
 
   let systemForLLM: string;
   let prompt: string;

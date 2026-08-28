@@ -245,6 +245,14 @@ jobs:
       - name: Mục lục nhật ký khai đủ số mục có thật
         run: npm run check:nhatky
 
+      # Slug thanh toán phải bắt đầu bằng đúng tool_id — đường lùi
+      # `hasRecentToolPayment` (lib/billing/credits.ts) khớp THEO TIỀN TỐ, sai
+      # tiền tố thì đường lùi chết oan (trừ tiền xong vẫn 402 ⇒ bấm lại ⇒ trừ
+      # lần hai, xem docs/nhat-ky "Duyên Nợ trừ tiền HAI LẦN"). Phát hiện khi
+      # vá lỗ /api/lasotuvi (laso KHÔNG có gate thanh toán server-side).
+      - name: Slug thanh toán đúng tiền tố tool_id
+        run: npm run check:slug
+
   typecheck:
     runs-on: ubuntu-latest
     timeout-minutes: 10

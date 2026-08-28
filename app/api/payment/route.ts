@@ -13,7 +13,7 @@ import { getPackages, quoteCustomVnd, vndPerCredit } from '@/lib/billing/package
 // Mọi thứ chạm PayPal ở MỘT chỗ (lib/billing/paypal) — webhook dùng chung bản
 // đó, nên không có hai đường tiền song song để mà trôi lệch.
 import { PAYPAL_BASE, PAYPAL_CURRENCY, VND_PER_USD, getPayPalToken, humanIssueMessage, settlePayPalTopup } from '@/lib/billing/paypal';
-import { getToolPrice } from '@/lib/billing/pricing';
+import { getToolPrice, getToolParts } from '@/lib/billing/pricing';
 import { hasSlugAccess } from '@/lib/billing/credits';
 import { freeGenGate, FREE_GEN_CAP_MESSAGE, railFreeRemaining } from '@/lib/billing/viral-budget';
 import { anonTrialStatus } from '@/lib/billing/anon-trial';
@@ -368,15 +368,30 @@ async function handleDeduct(request: NextRequest, body: Record<string, unknown>)
   const product      = String(body.product     || ''); // tool_id để tra giá server-side
   const slug         = String(body.slug        || '');
   const description  = String(body.description || toolType);
+  // Mua MỘT PHẦN của tool chia nhỏ (vd laso: 1/13 phần thay vì trọn bó) —
+  // `part` VẮNG MẶT giữ NGUYÊN hành vi mua-trọn cũ, không đổi gì.
+  const partNum      = body.part != null ? parseInt(String(body.part), 10) : null;
 
   if (!toolType) return err('Missing toolType', 400);
 
-  // GIÁ THẬT do server quyết theo tool_pricing (KHÔNG tin amount client gửi).
-  // Tool không có trong bảng / bị tắt → fallback amount client (tương thích ngược).
-  const serverPrice = product ? await getToolPrice(product) : null;
-  const amount = serverPrice != null ? serverPrice : clientAmount;
-  if (amount < 0 || (serverPrice == null && (!clientAmount || clientAmount <= 0)))
-    return err('Invalid amount', 400);
+  let amount: number;
+  if (product && partNum != null && partNum > 0) {
+    // Giá PHẦN LẺ do server quyết theo `tool_pricing.credits_per_part` — tool
+    // không hỗ trợ chia phần thì từ chối THẲNG, KHÔNG rơi về tin `amount`
+    // client gửi (đó là đường dành riêng cho tool CHƯA có trong bảng giá,
+    // một tình huống khác hẳn "tool có giá nhưng không bán lẻ").
+    const parts = await getToolParts(product);
+    if (!parts) return err('Tool này không bán theo phần.', 400);
+    if (partNum > parts.parts) return err('Phần không hợp lệ.', 400);
+    amount = parts.creditsPerPart;
+  } else {
+    // GIÁ THẬT do server quyết theo tool_pricing (KHÔNG tin amount client gửi).
+    // Tool không có trong bảng / bị tắt → fallback amount client (tương thích ngược).
+    const serverPrice = product ? await getToolPrice(product) : null;
+    amount = serverPrice != null ? serverPrice : clientAmount;
+    if (amount < 0 || (serverPrice == null && (!clientAmount || clientAmount <= 0)))
+      return err('Invalid amount', 400);
+  }
 
   if (process.env.PAYWALL_DISABLED === 'true') {
     return ok({ success: true, balance: 99999, _dev: 'paywall_disabled' });
