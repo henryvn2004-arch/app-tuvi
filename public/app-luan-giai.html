@@ -30,11 +30,16 @@
 .jump::-webkit-scrollbar{display:none}
 .jump a{white-space:nowrap;font-size:12px;color:var(--text-mid);border:1px solid var(--line-2);border-radius:20px;padding:4px 11px;cursor:pointer;background:var(--white)}
 .jump a.on{background:var(--navy);color:#fff;border-color:var(--navy)}
-/* score cards */
-.scores{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:22px}
-.sc{flex:1;min-width:120px;background:var(--white);border:1px solid var(--line);border-radius:10px;padding:11px 13px;box-shadow:var(--shadow)}
-.sc .lb{font-size:11px;color:var(--text-lt);text-transform:uppercase;letter-spacing:.04em}
-.sc .vl{font-family:var(--serif);font-size:24px;font-weight:600;margin-top:2px;display:flex;align-items:baseline;gap:3px}
+/* score cards — LUÔN 3 cột đều nhau trên MỌI bề rộng màn hình. Bản cũ dùng
+   flex-wrap + min-width:120px: 3×120px > bề rộng iPhone SE/mini (375px) trừ
+   padding trang, thẻ thứ 3 rớt xuống dòng riêng rồi giãn full-width — nhìn
+   như vỡ layout (lỗi thật, thấy khi mở bằng trình duyệt hẹp, xem
+   docs/nhat-ky/2026-08.md). Grid 3 cột cứng + min-width:0 cho cột co được
+   dưới kích thước nội dung, chữ tự động nhỏ lại theo cột thay vì tràn dòng. */
+.scores{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:22px}
+.sc{min-width:0;background:var(--white);border:1px solid var(--line);border-radius:10px;padding:11px 10px;box-shadow:var(--shadow)}
+.sc .lb{font-size:10.5px;color:var(--text-lt);text-transform:uppercase;letter-spacing:.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sc .vl{font-family:var(--serif);font-size:clamp(17px,5.5vw,24px);font-weight:600;margin-top:2px;display:flex;align-items:baseline;gap:3px}
 .sc .vl small{font-size:12px;color:var(--text-lt);font-family:var(--sans)}
 .sc.good .vl{color:var(--tx-green)}.sc.warn .vl{color:var(--gold-soft)}.sc.pri .vl{color:var(--tx-red)}
 .pbar{height:5px;border-radius:5px;background:var(--paper-2);margin-top:7px;overflow:hidden}
@@ -457,20 +462,70 @@ function buildPhanSection(phan,label,ls,locked){
   var related=locked?'':cungRelatedHtml(label);
   return sec(phan,label,tag,'<div class="card">'+bodyHtml+lock+'<div class="claude-content" id="claude-content-'+phan+'" style="display:none"></div>'+related+ask('Luận sâu phần: '+label)+'</div>');
 }
-// Teaser THẬT cho phần bị khoá — 1 con số + 1 câu, cả hai tính thẳng từ
-// `cungScores` (đúng công thức `cungTotal()` ở đầu file, khớp số hiện trên
-// `lgScores`/tầng hook, không phải một phép tính riêng có thể trôi khỏi
-// chúng). `label` luôn dạng "Cung X" cho phan 2-TONG_PHAN (PHAN_LABELS_BASE
-// trong luan-giai-core.js) — tách "Cung " để tra đúng khoá `cungScores`.
+// Xếp hạng cách cục theo độ quyết đoán — CÙNG thang điểm với ccWeight() của
+// lib/engine/laso.ts (giữ 2 nơi khớp nhau, xem chú thích ở đó): cách "tốt"/
+// "xấu" (phán mạnh) > thân_cư/tạp_cục > còn lại. Tên cách cục [nặng ký] lên
+// đầu để hook chọn đúng cái đáng tò mò nhất khi cung có nhiều cách cục.
+function _teaserWeight(c){
+  var l=String((c&&c.loai)||'').toLowerCase();
+  if(l==='quy_cuc'||l==='phu_cuc'||l==='ban_tien_cuc'||l==='tốt'||l==='xấu') return 2;
+  if(l==='than_cu'||l==='tap_cuc'||l==='trung') return 1;
+  return 0;
+}
+// `ls.cachCuc[i].cung` có thể là "X/Y" cho cách cục phủ 2 cung (vd Triệt Đáo
+// Kim Cung = "Quan Lộc/Nô Bộc") — tách '/' rồi so thành viên, không so khớp
+// chính xác (byte-khớp cách laso.ts lọc per-cung, xem lib/engine/laso.ts).
+function _cachCucForCung(ls,cungTen){
+  var list=(ls&&ls.cachCuc)||[];
+  return list.filter(function(c){
+    return String(c.cung||'').split('/').indexOf(cungTen)!==-1;
+  }).sort(function(a,b){return _teaserWeight(b)-_teaserWeight(a);});
+}
+// Cắt ngắn RỒI chốt đúng 1 dấu câu cuối — nguồn (`cachCucTungCung`) đã tự có
+// câu kết bằng '.' ở nhiều mục (vd "...Năm con."), nối thêm '.' vô điều kiện
+// ở call site ra "..": lỗi thật đã thấy khi render. `sourceEndsSentence` cho
+// gọi site biết KHỎI tự thêm dấu câu khi hàm này đã tự lo.
+function _teaserTrunc(s,max){
+  s=String(s||'').trim();
+  if(s.length>max){
+    var cut=s.slice(0,max);
+    var sp=cut.lastIndexOf(' ');
+    if(sp>max*0.6) cut=cut.slice(0,sp);
+    return cut+'…';
+  }
+  return /[.!?…]$/.test(s)?s:s+'.';
+}
+// Teaser THẬT cho phần bị khoá — 1 con số (từ `cungScores`, khớp
+// `lgScores`/tầng hook) + MỘT dữ liệu THẬT đã tính sẵn cho đúng cung này:
+// tên cách cục đặc biệt (`ls.cachCuc`, lọc theo cung) nếu có, không thì 1 câu
+// ý nghĩa sao (`ls.cachCucTungCung[cungTen]`), không thì mới rơi về câu điểm
+// số chung chung. Trước đây LUÔN là câu điểm số — không có gì để tò mò vì
+// người đọc không biết CÁI GÌ tạo ra con số đó. Tên cách cục CHỈ hiện, không
+// kèm `moTa`/`chiTiet` — đúng mức lộ mà bản đã-trả-tiền cũng chỉ hiện ở khối
+// "cơ sở tính toán" thu gọn (xem buildPreGenHtml trong luan-giai-core.js),
+// không lộ nhiều hơn bản trả phí. `label` luôn dạng "Cung X" cho phan
+// 2-TONG_PHAN (PHAN_LABELS_BASE trong luan-giai-core.js) — tách "Cung " để
+// tra đúng khoá `cungScores`/`cachCuc`/`cachCucTungCung`.
 function buildTeaserHtml(label,ls){
   var cungTen=label.replace(/^Cung /,'');
   var t=cungTotal(ls&&ls.cungScores&&ls.cungScores[cungTen]);
   var col=t!=null?scoreColor(t):'var(--text-lt)';
-  var line=t!=null
-    ?('Cung '+esc(cungTen)+' chấm '+t+'/10 trên 6 chiều đánh giá.')
-    :'Phần này luận theo tổng thể lá số.';
+  var ccList=_cachCucForCung(ls,cungTen);
+  var ynItems=(ls&&ls.cachCucTungCung&&ls.cachCucTungCung[cungTen])||[];
+  var line;
+  if(ccList.length){
+    var names=ccList.slice(0,2).map(function(c){return '“'+esc(c.ten)+'”';});
+    line='Cung '+esc(cungTen)+' có cách cục '+names.join(', ')+'.';
+    if(ynItems.length) line+=' '+esc(_teaserTrunc(ynItems[0],110));
+  }else if(ynItems.length){
+    line='Cung '+esc(cungTen)+': '+esc(_teaserTrunc(ynItems[0],130));
+  }else if(t!=null){
+    line='Cung '+esc(cungTen)+' chấm '+t+'/10 trên 6 chiều đánh giá.';
+  }else{
+    line='Phần này luận theo tổng thể lá số.';
+  }
   return '<div class="lg-teaser"><div class="lg-teaser-score" style="color:'+col+'">'+(t!=null?t:'—')+'<small>/10</small></div>'+
-    '<div class="lg-teaser-line">'+line+' Cách cục, quy tắc và ý nghĩa từng sao của cung này nằm trong bản đầy đủ.</div></div>';
+    '<div class="lg-teaser-line">'+line+' Cách cục, quy tắc và ý nghĩa từng sao đầy đủ của cung này nằm trong bản đầy đủ.</div></div>';
 }
 // Bật/tắt ĐỒNG LOẠT khoá-mini cho CẢ 24 phần (luôn nằm trong DOM ngay từ đầu,
 // không còn khái niệm "backfill dần" như bản trước). Gọi khi biết chắc trạng
