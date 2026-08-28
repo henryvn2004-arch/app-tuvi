@@ -870,8 +870,14 @@ loadPackages().then(loadToolPricing);
       document.getElementById('bm-amount').textContent =
         new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(d.amountVND);
 
+      // Nội dung CK đến TỪ SERVER — đúng chuỗi server đã khai với PayOS.
+      // Bản cũ tự dựng 'TVMB'+orderCode ở client trong khi server khai một
+      // chuỗi KHÁC (label cắt 25 ký tự): hai nguồn cho cùng một đơn, và cái
+      // hiện cho khách không phải cái cổng thanh toán biết. Dự phòng giữ công
+      // thức cũ để cửa sổ deploy (client mới + server cũ) không mất dòng này.
+      const memo = d.description || ('TVMB' + _oc);
       const qrUrl = `https://api.vietqr.io/image/${d.bin}-${d.accountNumber}-compact2.jpg?amount=${d.amountVND}`
-        + `&addInfo=${encodeURIComponent('TVMB' + _oc)}&accountName=${encodeURIComponent(d.accountName || '')}`;
+        + `&addInfo=${encodeURIComponent(memo)}&accountName=${encodeURIComponent(d.accountName || '')}`;
       // Gắn onerror bằng JS thay vì nhồi vào thuộc tính HTML: bản cũ lồng nháy
       // đơn trong nháy đơn nên chuỗi dự phòng vỡ ngay khi QR lỗi — đúng lúc cần nó.
       const qrBox = document.getElementById('bm-qr');
@@ -893,7 +899,7 @@ loadPackages().then(loadToolPricing);
         '<b>Ngân hàng:</b> ' + esc(d.bankName || (d.bin ? 'BIN ' + d.bin : '—')) + '<br>'
         + '<b>Số TK:</b> ' + esc(d.accountNumber || '—') + '<br>'
         + '<b>Chủ TK:</b> ' + esc(d.accountName || '—') + '<br>'
-        + '<b>Nội dung CK:</b> <span style="font-weight:700;color:var(--navy)">TVMB' + esc(_oc) + '</span>';
+        + '<b>Nội dung CK:</b> <span style="font-weight:700;color:var(--navy)">' + esc(memo) + '</span>';
 
       status('clock', 'Đang chờ thanh toán…');
       clearInterval(_timer);

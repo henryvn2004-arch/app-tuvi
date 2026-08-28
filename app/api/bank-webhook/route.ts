@@ -23,13 +23,29 @@ function verifySignature(body: Record<string, unknown>): boolean {
   return expected === signature;
 }
 
-async function rpc(fn: string, params: Record<string, unknown>): Promise<number> {
-  const res = await fetch(`${SUPABASE_URL}/rest/v1/rpc/${fn}`, {
-    method: 'POST', headers: SB, body: JSON.stringify(params),
+type SettleRow = { credited: boolean; reason: string; balance: number; credits: number };
+
+/**
+ * Chốt đơn qua RPC `bank_settle_topup` — cửa DUY NHẤT, và là một transaction.
+ *
+ * Bản trước chốt bằng BỐN lượt gọi rời nhau (SELECT dòng `pending` → PATCH
+ * sang `paid` → `add_credits` → INSERT sổ). Giữa SELECT và PATCH là khe hở
+ * thật: PayOS CÓ gửi lại webhook, hai lượt gửi lại chạy song song thì cả hai
+ * đều thấy `status='pending'` ⇒ ví tăng HAI lần cho một lần trả tiền.
+ * Nay `UPDATE … WHERE status='pending'` trong RPC vừa là chốt vừa là mutex.
+ * Xem `_patches/migration-bank-settle.sql`.
+ */
+async function settle(orderCode: string, amountVnd: number): Promise<SettleRow | null> {
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/rpc/bank_settle_topup`, {
+    method: 'POST',
+    headers: SB,
+    cache: 'no-store',
+    body: JSON.stringify({ p_order_code: orderCode, p_amount_vnd: amountVnd }),
   });
   const text = await res.text();
   if (!res.ok) throw new Error(text);
-  return JSON.parse(text);
+  // RETURNS TABLE ⇒ PostgREST trả về MẢNG một phần tử.
+  return (JSON.parse(text) as SettleRow[])[0] ?? null;
 }
 
 export async function POST(request: NextRequest) {
@@ -48,54 +64,23 @@ export async function POST(request: NextRequest) {
 
     const data = body.data as Record<string, unknown>;
     const orderCode = String(data.orderCode);
+    const amountVnd = Number(data.amount) || 0;
 
-    // Tìm pending order
-    const findRes = await fetch(
-      `${SUPABASE_URL}/rest/v1/bank_orders?order_code=eq.${encodeURIComponent(orderCode)}&status=eq.pending&limit=1`,
-      { cache: 'no-store', headers: SB }
-    );
-    const rows: Record<string, unknown>[] = findRes.ok ? await findRes.json() : [];
-    if (!rows.length) {
-      console.warn('[bank-webhook] order not found:', orderCode);
-      return Response.json({ message: 'not found' });
+    const row = await settle(orderCode, amountVnd);
+    if (!row) {
+      console.error('[bank-webhook] settle RPC không trả dòng nào:', orderCode);
+      return Response.json({ error: 'settle failed' }, { status: 500 });
     }
 
-    const order = rows[0];
-
-    // Verify amount
-    if (Number(data.amount) < Number(order.amount_vnd)) {
-      console.warn('[bank-webhook] amount mismatch', data.amount, order.amount_vnd);
-      return Response.json({ message: 'amount mismatch' });
+    // `credited=false` KHÔNG phải lỗi — đơn đã có người chốt trước (gói tin
+    // gửi lại), hoặc không đủ điều kiện chốt. Trả 200 để PayOS thôi gửi lại;
+    // trả lỗi ở đây là tự chuốc thêm một vòng retry cho việc đã xong.
+    if (!row.credited) {
+      console.warn(`[bank-webhook] không chốt orderCode=${orderCode} reason=${row.reason} amount=${amountVnd}`);
+      return Response.json({ message: row.reason });
     }
 
-    // Mark paid
-    await fetch(`${SUPABASE_URL}/rest/v1/bank_orders?order_code=eq.${encodeURIComponent(orderCode)}`, {
-      method: 'PATCH',
-      headers: { ...SB, 'Prefer': 'return=minimal' },
-      body: JSON.stringify({ status: 'paid', paid_at: new Date().toISOString() }),
-    });
-
-    // Add credits
-    const userId  = String(order.user_id);
-    const credits = Number(order.credits);
-    const label   = String(order.label || 'Nạp credits chuyển khoản');
-
-    const newBal = await rpc('add_credits', { p_user_id: userId, p_amount: credits });
-
-    // Log transaction
-    await fetch(`${SUPABASE_URL}/rest/v1/credit_transactions`, {
-      method: 'POST',
-      headers: { ...SB, 'Prefer': 'resolution=ignore-duplicates' },
-      body: JSON.stringify({
-        user_id: userId, amount: credits, type: 'topup',
-        description: label,
-        amount_vnd: Number(data.amount) || Number(order.amount_vnd) || null,
-        gateway: 'bank',
-        created_at: new Date().toISOString(),
-      }),
-    });
-
-    console.log(`[bank-webhook] paid orderCode=${orderCode} userId=${userId} credits=${credits} newBal=${newBal}`);
+    console.log(`[bank-webhook] paid orderCode=${orderCode} credits=${row.credits} newBal=${row.balance}`);
     return Response.json({ success: true });
 
   } catch (e: unknown) {
