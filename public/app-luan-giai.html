@@ -388,7 +388,20 @@ var CUNG_TOOL_LINKS={
   // tool này chỉ luận tới phan 13 (hết 12 cung), đại vận + tiểu vận năm xem
   // tách sang tool khác dùng CHUNG lá số vừa lập ở đây.
   'Tổng Quan Lá Số':[
-    {path:'/app/chu-trinh-cuoc-doi',label:'Chu Trình Cuộc Đời',note:'Luận sâu 9 đại vận và tiểu vận năm xem — 11 phần riêng, tách khỏi 13 phần lá số này'}
+    // `noteFn(ls)` thay `note` tĩnh khi có — Henry 2026-08-28: card này trước
+    // chỉ mô tả suông (11 phần, tách khỏi 13 phần) không có gì để tò mò,
+    // trong khi `ls.daiVanHienTai` (đại vận đang chạy) đã tính sẵn ngay ở
+    // `renderLuan` phía trên. Hé đúng 1 con số thật (điểm đại vận hiện tại)
+    // rồi mới mời sang tool khác xem 8 đại vận còn lại — cùng triết lý hook
+    // như buildTeaserHtml(), không lộ thêm gì ngoài con số cũng thấy ở thẻ
+    // "Đại vận" phía trên đầu trang.
+    {path:'/app/chu-trinh-cuoc-doi',label:'Chu Trình Cuộc Đời',note:'Luận sâu 9 đại vận và tiểu vận năm xem — 11 phần riêng, tách khỏi 13 phần lá số này',
+      noteFn:function(ls){
+        var dv=ls&&ls.daiVanHienTai;
+        var t=dv&&dv.scoring?dv.scoring.tong:null;
+        if(!dv||t==null) return null;
+        return 'Đại vận hiện tại ('+dv.tuoiStart+'–'+dv.tuoiEnd+' tuổi) chấm '+t+'/10. 8 đại vận còn lại + tiểu vận từng năm nằm trong Chu Trình Cuộc Đời.';
+      }}
   ],
   'Cung Mệnh':[
     {path:'/app/bat-trach',label:'Hướng Bát Trạch',note:'Soi thêm 8 hướng tốt xấu từ chính cung Mệnh này'}
@@ -409,12 +422,13 @@ var CUNG_TOOL_LINKS={
     {path:'/app/duyen-no-tien-kiep',label:'Duyên Nợ Tiền Kiếp',note:'Kiếp trước hai người là gì của nhau'}
   ]
 };
-function cungRelatedHtml(label){
+function cungRelatedHtml(label,ls){
   var links=CUNG_TOOL_LINKS[label];
   if(!links||!links.length) return '';
   return '<div class="lg-related"><div class="lg-related-h">Đọc sâu hơn</div>'
     +links.map(function(l){
-      return '<a class="lg-related-link" href="'+l.path+'"><b>'+esc(l.label)+'</b><span>'+esc(l.note)+'</span></a>';
+      var note=(l.noteFn&&l.noteFn(ls))||l.note;
+      return '<a class="lg-related-link" href="'+l.path+'"><b>'+esc(l.label)+'</b><span>'+esc(note)+'</span></a>';
     }).join('')
     +'</div>';
 }
@@ -459,7 +473,7 @@ function buildPhanSection(phan,label,ls,locked){
   // Gợi ý tool khác CHỈ hiện khi phần này KHÔNG bị khoá — chưa trả tiền thì
   // luận giải của chính cung đó còn chưa đọc được, mời sang tool khác lúc này
   // là điều hướng vào chỗ rỗng.
-  var related=locked?'':cungRelatedHtml(label);
+  var related=locked?'':cungRelatedHtml(label,ls);
   return sec(phan,label,tag,'<div class="card">'+bodyHtml+lock+'<div class="claude-content" id="claude-content-'+phan+'" style="display:none"></div>'+related+ask('Luận sâu phần: '+label)+'</div>');
 }
 // Xếp hạng cách cục theo độ quyết đoán — CÙNG thang điểm với ccWeight() của
