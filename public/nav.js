@@ -339,6 +339,17 @@
     window.dataLayer=window.dataLayer||[]; function gtag(){dataLayer.push(arguments);} window.gtag=gtag;
     gtag('js',new Date()); gtag('config','G-F4XNRS2XT0');
   }
+  // Meta (Facebook) Pixel — cùng lý do bỏ qua navigator.webdriver như GA4 ở trên,
+  // tránh bộ E2E Playwright đổ traffic giả vào pixel quảng cáo.
+  if (!document.getElementById('fb-pixel-js') && !navigator.webdriver) {
+    (function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+    n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.id='fb-pixel-js';t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)})(window,
+    document,'script','https://connect.facebook.net/en_US/fbevents.js');
+    window.fbq('init', '1747342186469684');
+    window.fbq('track', 'PageView');
+  }
   // Conversion script — skip on chat page (social proof popup conflicts with chat UX)
   var _noConv = ['/tuvi-chat.html'];
   if (!document.getElementById('cv-script') && _noConv.indexOf(location.pathname) === -1) {
