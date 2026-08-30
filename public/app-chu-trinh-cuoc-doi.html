@@ -303,7 +303,12 @@ function renderLuan(ls,fd,namxem){
   // Ô giá `data-tvp-price` trong mỗi khoá-mini (sectionLockHtml) vừa được chèn
   // — trang chỉ tự điền giá LÚC TẢI, mấy ô này sinh ra SAU đó nên phải gọi lại.
   TuviPaywall.fillPriceSlots(document.getElementById('lgBody'));
-  TuviPaywall.wireSectionLocks(document.getElementById('lgBody'), initiateLuanGiaiChuyenSau);
+  // `part` có mặt (khoá-mini của MỘT đại vận/tiểu vận, p>1) → mở đúng phần đó
+  // (23 Lượng). `part` vắng mặt (banner đầu trang, hoặc khoá-mini phần 1) →
+  // mở cả bó (250 Lượng), hành vi CŨ giữ nguyên.
+  TuviPaywall.wireSectionLocks(document.getElementById('lgBody'), function(part){
+    return part!=null ? _unlockOnePart(part) : initiateLuanGiaiChuyenSau();
+  });
   // Phần 1 (local) = engine phan 14 "Tổng quan đại vận" — LuanGiaiCore chỉ dựng
   // HTML rỗng cho canvas #chart-daivan-overview; phải gọi RIÊNG hàm vẽ này SAU
   // khi canvas đã thật sự nằm trong DOM (đúng cái Tool "Luận giải Tử Vi" GỠ đi
@@ -360,8 +365,14 @@ function buildPhanSection(p,ep,label,ls,locked){
   var bodyHtml=locked?'<div class="tpw-real-lock">'+body+'</div>':body;
   var tag=locked?TuviPaywall.lockBadge('Khoá'):'';
   // Khoá-mini (ẨN mặc định) — id dùng LOCAL p (chỉ để `_paintSecLocks` bật/tắt
-  // đồng loạt, không cần khớp gì bên ngoài trang này).
-  var lock=TuviPaywall.sectionLockHtml({id:'sec-ai-lock-'+p,product:'chu-trinh-cuoc-doi'});
+  // đồng loạt, không cần khớp gì bên ngoài trang này). `part:p>1?p:null` →
+  // bấm chỉ mở ĐÚNG phần đó (23 Lượng/phần, tool_pricing.credits_per_part),
+  // KHÔNG mở cả bó — khác nút "✦ Luận giải chuyên sâu…" ở banner đầu trang,
+  // nút đó VẪN mở trọn 250 Lượng cho ai muốn xem hết luôn. Phần 1 (tổng quan
+  // đại vận) giữ CTA "Mở bản đầy đủ" như cũ — không bán lẻ tổng quan, bấm là
+  // mở cả bó. `wireSectionLocks` ở dưới đọc lại `part` để rẽ nhánh đúng hàm.
+  var lock=TuviPaywall.sectionLockHtml({id:'sec-ai-lock-'+p,product:'chu-trinh-cuoc-doi',part:p>1?p:null,
+    cta:p>1?'Mở phần này':'Mở bản đầy đủ'});
   // Gợi ý tool khác CHỈ hiện khi phần này KHÔNG bị khoá.
   var related=locked?'':phanRelatedHtml(ep);
   // `claude-content-`+ep (ENGINE phan) — khớp đúng khoá `_luanGiaiStore`/cache
@@ -627,6 +638,65 @@ function _renderUnlockBlock(){
     slug:function(){return _pendingSlug;},
     onUnlock:function(){ renderLuan(_astrolabe,{},_namXem); return _startLuanGiaiAI(); },
   });
+}
+
+// Slug PHẦN LẺ — CHỈ dùng cho mua/kiểm quyền một phần riêng (23 Lượng/phần),
+// KHÔNG đụng `_pendingSlug` (slug BÓ, giữ NGUYÊN định dạng cũ). `_pendingSlug`
+// TỰ NÓ không bắt đầu bằng tool_id (grandfathered — đổi là mồ côi quyền sở
+// hữu của người đã mua trọn bó trước bản vá này). Slug PHẦN là dạng MỚI, chưa
+// ai từng mua theo phần trước khi tính năng này tồn tại → dựng ĐÚNG luật "slug
+// phải bắt đầu bằng tool_id" ngay từ đầu, giống `_partSlug` của app-luan-giai.html.
+function _partSlug(p){
+  return _pendingSlug?('chu-trinh-cuoc-doi-p'+String(p).padStart(2,'0')+'-'+_pendingSlug):null;
+}
+function _hideSecLock(p){
+  var el=document.getElementById('sec-ai-lock-'+p);
+  if(el) el.style.display='none';
+}
+// Mở MỘT đại vận/tiểu vận riêng lẻ — port từ `_unlockOnePart` app-luan-giai.html.
+// Không cần vẽ lại section: `locked` của buildPhanSection chỉ khoá nội dung
+// DETERMINISTIC theo ĐĂNG NHẬP (p>1&&!loggedIn), đã mở sẵn cho MỌI phần một
+// khi đã đăng nhập — vào được hàm này nghĩa là đã đăng nhập, nên chỉ cần ẩn
+// khoá-mini rồi chạy AI cho đúng phần đó.
+async function _unlockOnePart(p){
+  if(!_lgLoggedIn()){
+    if(window.showAuthModal) window.showAuthModal(function(){ _unlockOnePart(p); });
+    else if(window.Auth&&window.Auth.require) window.Auth.require(function(){ _unlockOnePart(p); });
+    return;
+  }
+  var ep=13+p;
+  var uid=window.Auth.getUser()&&window.Auth.getUser().id;
+  var slug=_partSlug(p);
+  try{
+    var rc=await fetch('/api/payment?action=check&slug='+encodeURIComponent(slug)+'&userId='+encodeURIComponent(uid||''));
+    var rd=await rc.json();
+    if(rd&&rd.hasAccess){ _hideSecLock(p); await _runPhanLuanGiai(ep); return; }
+  }catch(e){}
+
+  await (window.ToolPrices&&window.ToolPrices.load?window.ToolPrices.load():Promise.resolve());
+  var partPrice=window.ToolPrices?window.ToolPrices.partPrice('chu-trinh-cuoc-doi'):null;
+  // Đọc hụt giá → TỪ CHỐI chạy, không đoán (luật cứng CLAUDE.md).
+  if(partPrice==null){ alert('Chưa đọc được giá phần này, vui lòng thử lại.'); return; }
+
+  var gate=await TuviPaywall.ensureCredits({product:'chu-trinh-cuoc-doi', cost:partPrice});
+  if(!gate.ok) return; // ensureCredits đã tự hiện UI thiếu Lượng/giá chưa đọc được
+
+  var token=window.Auth.getSession&&window.Auth.getSession()&&window.Auth.getSession().access_token;
+  var labelForDesc=(LuanGiaiCore.phanLabels(_astrolabe)||{})[ep]||('Phần '+p);
+  try{
+    var res=await fetch('/api/payment?action=deduct',{method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+(token||'')},
+      body:JSON.stringify({toolType:'use_chu_trinh_cuoc_doi', product:'chu-trinh-cuoc-doi', part:p, amount:partPrice,
+        slug:slug, description:'Chu Trình Cuộc Đời — '+labelForDesc})});
+    var data=await res.json();
+    if(!data.success){
+      alert(data.insufficientBalance?'Không đủ Lượng — vui lòng nạp thêm.':'Có lỗi khi mở phần này, thử lại.');
+      return;
+    }
+    window.refreshNavCredits&&window.refreshNavCredits();
+    _hideSecLock(p);
+    await _runPhanLuanGiai(ep);
+  }catch(e){ alert('Có lỗi khi mở phần này, thử lại.'); }
 }
 
 async function initiateLuanGiaiChuyenSau(){
