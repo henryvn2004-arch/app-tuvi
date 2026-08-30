@@ -312,7 +312,13 @@ function render(ls){
     var body = p<=4
       ? (LuanGiaiCore.buildPreGenHtml(PRE[p],ls) || '<div class="phan-empty">Phần này luận theo tổng thể lá số — bấm nút dưới để trợ lý luận sâu.</div>')
       : renderThang(_khung.thangs[p-5]);
-    var lock=TuviPaywall.sectionLockHtml({id:'sec-ai-lock-'+p,product:'van-han-nam'});
+    // `part:p>1?p:null` → bấm chỉ mở ĐÚNG phần đó (16 Lượng/phần,
+    // tool_pricing.credits_per_part), KHÔNG mở cả bó — khác nút banner đầu
+    // trang, nút đó VẪN mở trọn 250 Lượng. Phần 1 (tổng quan lá số) giữ CTA
+    // "Mở bản đầy đủ" như cũ — cùng quy ước với app-chu-trinh-cuoc-doi.html/
+    // app-luan-giai.html: không bán lẻ tổng quan, bấm là mở cả bó.
+    var lock=TuviPaywall.sectionLockHtml({id:'sec-ai-lock-'+p,product:'van-han-nam',part:p>1?p:null,
+      cta:p>1?'Mở phần này':'Mở bản đầy đủ'});
     S.push('<section class="sec" id="sec-'+p+'"><div class="sec-h"><div class="sec-n">'+p+'</div><h3>'+esc(_labels[p]||('Phần '+p))+'</h3></div>'+
       '<div class="card">'+body+lock+'<div class="claude-content" id="claude-content-'+p+'" style="display:none"></div>'+
       ask(p<=4?('Luận sâu phần: '+_labels[p]):(_khung.thangs[p-5].nhanDay+' của tôi thế nào?'))+'</div></section>');
@@ -320,7 +326,12 @@ function render(ls){
   document.getElementById('vhBody').innerHTML=S.join('');
   if(window.mountIcons) window.mountIcons(document.getElementById('vhBody'));
   TuviPaywall.fillPriceSlots(document.getElementById('vhBody'));
-  TuviPaywall.wireSectionLocks(document.getElementById('vhBody'), initiateAI);
+  // `part` có mặt (khoá-mini của MỘT tháng/đại vận, p>1) → mở đúng phần đó
+  // (16 Lượng). `part` vắng mặt (banner đầu trang, hoặc khoá-mini phần 1) →
+  // mở cả bó (250 Lượng), hành vi CŨ giữ nguyên.
+  TuviPaywall.wireSectionLocks(document.getElementById('vhBody'), function(part){
+    return part!=null ? _unlockOnePart(part) : initiateAI();
+  });
   try{ LuanGiaiCore.renderInlineDaiVanLineChart(ls); }catch(e){ if(window.console)console.warn(e); }
   renderJump();
   wireAsk(document.getElementById('vhBody'));
@@ -477,6 +488,64 @@ function _renderUnlockBlock(){
     onUnlock:function(){ return _startAI(); },
   });
 }
+
+// Slug PHẦN LẺ — CHỈ dùng cho mua/kiểm quyền một phần riêng (16 Lượng/phần),
+// KHÔNG đụng `_pendingSlug` (slug BÓ, đã mang TOOL_TYPE làm mốc tháng, giữ
+// NGUYÊN định dạng cũ — đổi là mồ côi quyền sở hữu của người đã mua trọn bó
+// trước bản vá này). Slug PHẦN là dạng MỚI, dựng ĐÚNG luật "slug phải bắt đầu
+// bằng tool_id" ngay từ đầu — cùng khuôn `_partSlug` của app-luan-giai.html/
+// app-chu-trinh-cuoc-doi.html.
+function _partSlug(p){
+  return _pendingSlug?('van-han-nam-p'+String(p).padStart(2,'0')+'-'+_pendingSlug):null;
+}
+function _hideSecLock(p){
+  var el=document.getElementById('sec-ai-lock-'+p);
+  if(el) el.style.display='none';
+}
+// Mở MỘT tháng/đại vận riêng lẻ — port từ `_unlockOnePart` app-luan-giai.html.
+// Trang này không khoá nội dung deterministic theo đăng nhập (khác laso/
+// chu-trinh) — vào được hàm này là đã đăng nhập, chỉ cần ẩn khoá-mini rồi
+// chạy AI cho đúng phần đó.
+async function _unlockOnePart(p){
+  if(!_loggedIn()){
+    if(window.showAuthModal) window.showAuthModal(function(){ _unlockOnePart(p); });
+    else if(window.Auth&&window.Auth.require) window.Auth.require(function(){ _unlockOnePart(p); });
+    return;
+  }
+  var uid=window.Auth.getUser()&&window.Auth.getUser().id;
+  var slug=_partSlug(p);
+  try{
+    var rc=await fetch('/api/payment?action=check&slug='+encodeURIComponent(slug)+'&userId='+encodeURIComponent(uid||''));
+    var rd=await rc.json();
+    if(rd&&rd.hasAccess){ _hideSecLock(p); await _runPhanVanHan(p); return; }
+  }catch(e){}
+
+  await (window.ToolPrices&&window.ToolPrices.load?window.ToolPrices.load():Promise.resolve());
+  var partPrice=window.ToolPrices?window.ToolPrices.partPrice('van-han-nam'):null;
+  // Đọc hụt giá → TỪ CHỐI chạy, không đoán (luật cứng CLAUDE.md).
+  if(partPrice==null){ alert('Chưa đọc được giá phần này, vui lòng thử lại.'); return; }
+
+  var gate=await TuviPaywall.ensureCredits({product:'van-han-nam', cost:partPrice});
+  if(!gate.ok) return; // ensureCredits đã tự hiện UI thiếu Lượng/giá chưa đọc được
+
+  var token=window.Auth.getSession&&window.Auth.getSession()&&window.Auth.getSession().access_token;
+  var labelForDesc=(_labels&&_labels[p])||('Phần '+p);
+  try{
+    var res=await fetch('/api/payment?action=deduct',{method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+(token||'')},
+      body:JSON.stringify({toolType:'use_van_han_nam', product:'van-han-nam', part:p, amount:partPrice,
+        slug:slug, description:'Vận Hạn 12 Tháng Tới — '+labelForDesc})});
+    var data=await res.json();
+    if(!data.success){
+      alert(data.insufficientBalance?'Không đủ Lượng — vui lòng nạp thêm.':'Có lỗi khi mở phần này, thử lại.');
+      return;
+    }
+    window.refreshNavCredits&&window.refreshNavCredits();
+    _hideSecLock(p);
+    await _runPhanVanHan(p);
+  }catch(e){ alert('Có lỗi khi mở phần này, thử lại.'); }
+}
+
 async function initiateAI(){
   await TuviPaywall.requireCredits(_pendingSlug, async function(){ await _startAI(); });
 }
