@@ -160,7 +160,33 @@ function getPackageLabel(slug) {
   return labels[id] || '? Credits';
 }
 
+// Ý định mở khoá quăng từ trang tool trước khi đi PayPal (xem `_insufficient`
+// trong tuvi-paywall.js — cùng khoá `tpw_pending_unlock`, cùng gốc site nên
+// sessionStorage sống qua được cả chuyến đi PayPal và quay về). Có ý định
+// khớp → đưa thẳng khách VỀ ĐÚNG tool thay vì tấm thẻ "dùng ngay" chung chung
+// rồi tự trôi về /profile.html — đó chính là chỗ khách phải tự nhớ đường
+// quay lại mà 100% không ai quay lại nổi.
+function pendingUnlock() {
+  let p = null;
+  try { p = JSON.parse(sessionStorage.getItem('tpw_pending_unlock') || 'null'); } catch (e) { return null; }
+  if (!p || !p.returnUrl) return null;
+  if (Date.now() - (Number(p.ts) || 0) > 30 * 60 * 1000) return null;
+  return p;
+}
+
 function showSuccess(slug, credits, balance) {
+  const pending = pendingUnlock();
+  if (pending) {
+    document.getElementById('card').innerHTML = `
+      <div class="icon ic" style="width:1em;height:1em;margin-left:auto;margin-right:auto">${window.iconHtml?window.iconHtml('gift'):''}</div>
+      <div class="title">Nạp credits thành công!</div>
+      <div class="credit-badge">+${credits} Credits<small>Số dư hiện tại: ${balance} credits</small></div>
+      <div class="subtitle">Đang quay lại để mở khoá tiếp…</div>
+    `;
+    const sep = pending.returnUrl.indexOf('?') >= 0 ? '&' : '?';
+    setTimeout(() => { window.location.href = pending.returnUrl + sep + 'tpwResume=1'; }, 1200);
+    return;
+  }
   const label = getPackageLabel(slug);
   document.getElementById('card').innerHTML = `
     <div class="icon ic" style="width:1em;height:1em;margin-left:auto;margin-right:auto">${window.iconHtml?window.iconHtml('gift'):''}</div>

@@ -613,6 +613,9 @@ function _renderUnlockBlock(){
     host.innerHTML='<button class="btn-go" id="btnUnlock" onclick="initiateLuanGiaiChuyenSau()">✦ Luận giải chuyên sâu bằng AI — <span data-tvp-price="chu-trinh-cuoc-doi">…</span> Lượng →</button>'+
       '<p>Viết riêng cho lá số này theo cổ pháp — 11 phần: tổng quan đại vận, luận riêng từng đại vận trong 9 đại vận, và tiểu vận năm xem.</p>';
     TuviPaywall.fillPriceSlots(host);
+    // Vừa quay về từ lượt nạp Lượng thành công (đã đăng nhập nên KHÔNG còn đi
+    // qua lockPreview nữa, nhánh này mới là nút thật) → tự chạy tiếp.
+    TuviPaywall.resumeIfPending(_pendingSlug, initiateLuanGiaiChuyenSau);
     return;
   }
   host.innerHTML='';

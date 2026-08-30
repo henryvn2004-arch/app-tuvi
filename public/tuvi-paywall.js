@@ -86,6 +86,44 @@ const TuviPaywall = (() => {
   let _cfg        = null;
   let _priceCache = null;
 
+  // ── Ý định mở khoá TRƯỚC khi rời trang đi nạp Lượng ─────────────
+  // Đo trên Chu Trình Cuộc Đời (2026-08-30): 12 lượt bấm mở khoá → 1 signup →
+  // 0 thanh toán. Đường cũ tới `/topup.html` không mang theo BIẾT đang mua gì
+  // (khách tự đoán gói) và không có đường VỀ (trả tiền xong phải tự nhớ quay
+  // lại trang cũ rồi bấm mở khoá LẦN NỮA). `sessionStorage` sống qua được cả
+  // lượt điều hướng sang PayPal/PayOS và quay về (cùng tab, cùng gốc site) nên
+  // dùng nó làm cầu nối thay vì cố nhét vào querystring qua domain thứ ba.
+  const PENDING_KEY = 'tpw_pending_unlock';
+  const PENDING_TTL_MS = 30 * 60 * 1000;
+
+  /**
+   * Gọi ở trang TOOL sau khi đã dựng lại nút/tường mở khoá — nếu vừa quay về
+   * từ một lượt nạp Lượng THÀNH CÔNG cho ĐÚNG sản phẩm này (`?tpwResume=1` +
+   * ý định còn khớp), tự gọi lại `requireCredits` thay vì bắt bấm nút lần nữa.
+   * An toàn kể cả đoán sai: `requireCredits` tự kiểm đăng nhập/giá/số dư lại
+   * từ đầu, đoán hụt thì chỉ hiện lại đúng tường cũ, không có gì để mất.
+   */
+  function resumeIfPending(slug, callback) {
+    let url;
+    try { url = new URL(location.href); } catch (e) { return false; }
+    const resume = url.searchParams.get('tpwResume') === '1';
+    let pending = null;
+    try { pending = JSON.parse(sessionStorage.getItem(PENDING_KEY) || 'null'); } catch (e) { /* ignore */ }
+    // Dọn NGAY — ý định chỉ dùng được một lần, kể cả khi hoá ra không khớp,
+    // để lỡ tải lại trang không tự bấm lại vô hạn.
+    try { sessionStorage.removeItem(PENDING_KEY); } catch (e) { /* ignore */ }
+    if (resume) {
+      url.searchParams.delete('tpwResume');
+      try { history.replaceState({}, '', url.pathname + url.search + url.hash); } catch (e) { /* ignore */ }
+    }
+    if (!resume || !pending) return false;
+    const product = (_cfg && _cfg.product) || '';
+    if (pending.product !== product) return false;
+    if (Date.now() - (Number(pending.ts) || 0) > PENDING_TTL_MS) return false;
+    requireCredits(slug, callback);
+    return true;
+  }
+
   // ── CSS injection ─────────────────────────────────────────────
   function _css() {
     if (document.getElementById('tpw-css')) return;
@@ -554,6 +592,8 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
     // Nút dùng listener chứ không phải chuỗi onclick: nó phải giữ được closure
     // `onUnlock` của trang. Đường trả tiền vẫn là `requireCredits` như cũ —
     // W1 KHÔNG mở thêm đường nào để lấy phần chữ.
+    const slug = typeof o.slug === 'function' ? o.slug() : o.slug || '';
+    const runUnlock = function () { return o.onUnlock(); };
     const btn = _lockEl.querySelector('button.tpw-btn');
     if (btn) {
       btn.addEventListener('click', function () {
@@ -563,10 +603,15 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
         try {
           if (window.Track) window.Track.event('unlock_click', { tool_id: product, meta: { cost: cost } });
         } catch (e) { /* đo hỏng không được chặn lượt mua */ }
-        const slug = typeof o.slug === 'function' ? o.slug() : o.slug || '';
-        requireCredits(slug, function () { return o.onUnlock(); });
+        requireCredits(slug, runUnlock);
       });
     }
+
+    // Vừa quay về từ một lượt nạp Lượng THÀNH CÔNG cho đúng sản phẩm này (xem
+    // `resumeIfPending`) → tự chạy tiếp, khách không phải bấm "Mở bản đầy đủ"
+    // lần thứ hai. Đặt SAU khi đã wire nút — nếu resume thất bại (đoán hụt,
+    // hết hạn) thì tường vẫn đứng nguyên, bấm tay vẫn hoạt động bình thường.
+    resumeIfPending(slug, runUnlock);
 
     // B1 — chèn SAU khi tường đã dựng và KHÔNG `await`: lời mời phải là phần
     // cộng thêm, không được đứng chắn giữa người dùng và tấm tường. Mạng chậm
@@ -688,8 +733,20 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
   }
 
   // ── Insufficient ──────────────────────────────────────────────
-  function _insufficient(cost, balance) {
+  function _insufficient(cost, balance, slug) {
     const need = cost - balance;
+    // Ghi Ý ĐỊNH trước khi khách rời trang đi nạp — xem `resumeIfPending`.
+    // `returnUrl` chụp CHÍNH XÁC url hiện tại (kể cả birth params trên URL nếu
+    // trang đó dùng) để quay lại đúng chỗ, không phải trang tool trần.
+    try {
+      sessionStorage.setItem(PENDING_KEY, JSON.stringify({
+        product: (_cfg && _cfg.product) || '',
+        slug: slug || '',
+        need, cost,
+        returnUrl: location.href,
+        ts: Date.now(),
+      }));
+    } catch (e) { /* sessionStorage đầy/bị chặn — vẫn hiện tường như cũ, chỉ mất phần tự-quay-lại */ }
     const shown =
       _softLock(
         '<div class="tpw-lock-t">⊙ Còn thiếu ' + need + ' Lượng</div>' +
@@ -797,7 +854,7 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
       balance = d.balance ?? 0;
     } catch(e) {}
 
-    if (balance < cost) { _insufficient(cost, balance); return; }
+    if (balance < cost) { _insufficient(cost, balance, slug); return; }
 
     // 5. Trừ → callback. KHÔNG hỏi xác nhận: giá đã ghi sẵn trên chính nút bấm
     // và trong danh sách công cụ (và cả hai nay đọc từ `tool_pricing`, xem
@@ -825,7 +882,7 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
         await callback();
         return;
       }
-      if (data.insufficientBalance) { _insufficient(cost, balance); return; }
+      if (data.insufficientBalance) { _insufficient(cost, balance, slug); return; }
       // Chạm trần lượt dùng thử miễn phí trong ngày (cầu dao ngân sách ảnh
       // free). KHÔNG phải lỗi và KHÔNG mất Lượng — server chặn trước khi trừ
       // — nên nói tử tế, đừng ném alert 'Lỗi:' làm người ta tưởng hỏng.
@@ -1056,7 +1113,7 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
     init, getProduct, requireCredits, requireCreditsCached, requireCreditsCachedQuery,
     generateToolSlug, ensureCredits, deductSilent, getBalance, fillPriceSlots,
     mountCostHints, refreshCostHints, lockPreview, isFreeRerun, lockBadge,
-    sectionLockHtml, wireSectionLocks,
+    sectionLockHtml, wireSectionLocks, resumeIfPending,
     _banner, _close, _closeLock, _login,
   };
 })();

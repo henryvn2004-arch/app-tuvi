@@ -178,15 +178,21 @@ dùng thử (`lib/billing/anon-trial.ts` + RPC `anon_rail_trial_consume`).
 ### Giá trị 1 Lượng: SUY TỪ BẢNG GÓI, không còn hằng số neo
 **⚠️ `app_config['credits.vnd_per_credit']` ĐÃ BỊ GỠ** — đừng viết code đọc lại
 khoá đó. Nguồn thật giờ là bảng `credit_packages`: đơn giá = **gói bậc hai**
-(theo `sort_order`, tức mức phổ thông) = 199.000/240 = **829đ**. Hai nơi cài
-CÙNG một quy tắc, phải sửa kèm nhau:
+(theo `sort_order`, tức mức phổ thông) = 399.000/600 = **665đ** (tăng giá
+2026-08-30, xem `_patches/migration-credit-packages-reprice-2026-08.sql` —
+trước đó là 199.000/240 = 829đ). Hai nơi cài CÙNG một quy tắc, phải sửa kèm
+nhau:
 - SQL `credit_vnd()` — cho các RPC báo cáo.
 - `lib/billing/packages.ts` `vndPerCredit()` — cho route/rail. **Tự tính, KHÔNG
   gọi RPC** (rail là đường nóng), đổi lại phải giữ đúng cùng quy tắc.
+- `lib/billing/packages.ts` `FALLBACK` — bản dự phòng khi DB đọc hụt, PHẢI
+  đổi theo `credit_packages` mỗi lần sửa giá gói, nếu không rơi về fallback
+  đúng lúc là tính tiền/cấp Lượng theo giá CŨ trong khi client đã hiện giá MỚI.
 
 **Vì sao ghi hẳn cảnh báo:** đọc khoá đã chết KHÔNG ném lỗi, nó im lặng rơi về
-mặc định `1000` trong khi giá thật là `829` — sai 20% trên đúng con số đang hiện
-cho người dùng, và không có gì báo. Đã dính đúng một lần.
+mặc định `1000` trong khi giá thật là 665 (hoặc 829 tuỳ đợt giá) — sai hàng
+chục % trên đúng con số đang hiện cho người dùng, và không có gì báo. Đã dính
+đúng một lần.
 
 **Ngoại lệ cố ý:** `coalesce(amount_vnd, amount * 2500)` cho dòng **topup lịch
 sử** giữ nguyên 2500 — các giao dịch đó thật sự đã bán ở giá cũ, đổi là viết lại
