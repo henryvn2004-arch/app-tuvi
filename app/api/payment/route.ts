@@ -102,7 +102,7 @@ const SB_HEADERS = {
 // cả trong route động. Đây là CỬA XÁC THỰC của toàn bộ /api/payment — gồm cả
 // nhánh admin — nên một phản hồi bị nhớ lại nghĩa là phiên đã huỷ / quyền vừa
 // bị gỡ vẫn qua cửa. Cùng bài học đã trả giá ở `hasSlugAccess`.
-async function getUserFromToken(token: string): Promise<{ id: string; email?: string; created_at?: string } | null> {
+async function getUserFromToken(token: string): Promise<{ id: string; email?: string; created_at?: string; is_anonymous?: boolean } | null> {
   const res = await fetch(`${SUPABASE_URL}/auth/v1/user`, {
     headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${token}` },
     cache: 'no-store',
@@ -2758,6 +2758,11 @@ async function handleOnboardingSync(request: NextRequest): Promise<Response> {
   try {
     const user = await getUserFromToken(userToken);
     if (!user) return err('Invalid token', 401);
+    // Phiên "guest checkout" (Supabase Anonymous, xem lib/billing/packages.ts
+    // hoặc public/auth.js signInAnonymously) chưa phải tài khoản thật — tạo
+    // được bằng cách xoá cookie, không tốn công gì, nên KHÔNG được ăn quà
+    // onboarding "Khởi Hành" (cày vô hạn nếu bỏ chốt này).
+    if (user.is_anonymous) return err('Lưu tài khoản (thêm email) trước khi nhận thưởng này.', 403);
     const state = await syncOnboardingTasks(user.id);
     return ok({ ...state, balance: await getBalance(user.id) });
   } catch (e) {
@@ -2784,6 +2789,10 @@ async function handleReferralRegister(request: NextRequest, body: Record<string,
   try {
     const user = await getUserFromToken(userToken);
     if (!user) return err('Invalid token', 401);
+    // Phiên ẩn danh (guest checkout) tạo được bằng xoá cookie — nếu cho đăng
+    // ký giới thiệu thì một script tạo N phiên rồi tự giới thiệu chéo nhau là
+    // đường farm thưởng referral rẻ nhất, không giới hạn.
+    if (user.is_anonymous) return err('Lưu tài khoản (thêm email) trước khi dùng mã giới thiệu.', 403);
 
     // Chỉ ghi nhận giới thiệu cho TÀI KHOẢN MỚI. Trước đây không có chốt này:
     // một người đã có tài khoản chỉ cần mở link ?ref= của bạn là referrer được
@@ -2948,6 +2957,10 @@ async function handlePromoRedeem(request: NextRequest, body: Record<string, unkn
   try {
     const user = await getUserFromToken(token);
     if (!user) return err('Invalid token', 401);
+    // Cùng lý do chặn ở onboarding-sync/referral-register: phiên ẩn danh tạo
+    // được bằng xoá cookie, không tốn công gì — cho đổi mã ở đây là mở đường
+    // cày quota mã khuyến mãi (mỗi mã thường có trần lượt dùng CHUNG).
+    if (user.is_anonymous) return err('Lưu tài khoản (thêm email) trước khi dùng mã khuyến mãi.', 403);
 
     const rows = (await rpcSafe('promo_code_redeem', { p_user_id: user.id, p_code: code })) as Array<{
       ok: boolean; reason: string; credits: number; code: string;
