@@ -108,6 +108,15 @@
   --green:     #1E6B3C;
 }
 body { font-family: Arial, sans-serif; background: var(--bg); color: var(--text); font-size: 16px; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+/* .marquee-viewport bên dưới bleed full-width bằng margin âm (kỹ thuật che-mờ
+   hai đầu) — margin âm đó kéo box rộng hơn viewport thật (đo được: +40px
+   desktop, +18px mobile qua tests/mobile.spec.ts), dù .marquee-viewport tự nó
+   overflow:hidden (chỉ cắt CON bên trong, không cắt chính nó). Bọc riêng
+   #homeWrap để clip — KHÔNG đặt overflow-x lên html/body: CSS quy định cặp
+   overflow-x/-y lệch nhau (một bên visible) thì bên visible tự tính thành
+   auto, biến html/body thành scroll-container mới và PHÁ sticky nav của
+   nav.js (đã đo thấy .topnav rớt sticky khi thử cách đó). */
+#homeWrap { overflow-x: hidden; }
 a { color: var(--blue); text-decoration: none; }
 .page { max-width: 1180px; margin: 0 auto; padding: 0 40px; }
 @media (max-width: 768px) { .page { padding: 0 18px; } }
@@ -354,6 +363,11 @@ a { color: var(--blue); text-decoration: none; }
 </head>
 <body>
 
+<!-- nav.js tự chèn <nav class="topnav"> làm CON ĐẦU TIÊN của body (không có
+     #nav-ph trên trang này) — #homeWrap chỉ bọc nội dung CỦA TRANG, đứng sau
+     nav trong DOM, nên không ảnh hưởng vị trí nav chèn vào. -->
+<div id="homeWrap">
+
 <!-- ─── HERO ─────────────────────────────────────────────── -->
 <section class="hero">
   <div class="page hero-grid">
@@ -540,6 +554,8 @@ a { color: var(--blue); text-decoration: none; }
     <button type="button" id="bottomCta">Hỏi ngay →</button>
   </div>
 </section>
+
+</div><!-- /#homeWrap -->
 
 <!-- ─── SCRIPTS ──────────────────────────────────────────── -->
 <script src="/track.js?v=3"></script>

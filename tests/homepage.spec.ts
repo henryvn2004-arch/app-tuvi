@@ -10,9 +10,11 @@ test.describe('Homepage', () => {
     await expect(page.locator('h1, .hero-title, .hero h2').first()).toBeVisible();
   });
 
-  test('band "Một không gian" render', async ({ page }) => {
+  test('band "Khám phá bản thân" render', async ({ page }) => {
     // Catalog tab đã dời sang /cong-cu; trang chủ giờ dẫn vào Luận Đường qua band.
-    await expect(page.locator('.space-card').first()).toBeVisible();
+    // .space-card (lưới tĩnh 4 ô) đã thay bằng .tool-card (marquee 8 tool) trong
+    // đợt redesign homepage — xem public/index.html.
+    await expect(page.locator('.tool-card').first()).toBeVisible();
   });
 
   test('tool links render (it nhat 5)', async ({ page }) => {
