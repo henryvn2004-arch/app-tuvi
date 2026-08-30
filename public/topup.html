@@ -67,6 +67,11 @@ body{font-family:Arial,sans-serif;background:var(--bg-soft);color:var(--text);mi
 .pay-method:hover{color:var(--navy)}
 .pay-method[aria-pressed="true"]{background:var(--navy);color:#fff}
 
+/* ── Ý ĐỊNH ĐANG MỞ KHOÁ (từ trang tool quăng sang, xem `_pendingUnlock`) ── */
+.pending-banner{display:flex;align-items:center;gap:.75rem;background:var(--gold-lt);border:1.5px solid var(--gold-br);border-radius:12px;padding:.9rem 1.1rem;margin-bottom:1.1rem;font-size:.86rem;color:var(--navy)}
+.pending-banner b{color:var(--gold)}
+.pending-banner .ic{color:var(--gold);flex-shrink:0}
+
 /* ── PACKAGES ── */
 .packages{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:1rem}
 @media(max-width:1100px){.packages{grid-template-columns:repeat(2,1fr);gap:1.5rem 1.25rem}}
@@ -218,6 +223,7 @@ body{font-family:Arial,sans-serif;background:var(--bg-soft);color:var(--text);mi
       </div>
     </div>
 
+    <div id="pendingBanner" style="display:none"></div>
     <div class="packages" id="packages"></div>
 
     <div class="custom-card">
@@ -352,6 +358,30 @@ function ic(key, cls) { return '<span data-icon="' + key + '"' + (cls ? ' class=
 function mount(el) { if (window.mountIcons) window.mountIcons(el || document); }
 function pkgList() { return State.packages.length ? State.packages : FALLBACK_PACKAGES; }
 
+// ── Ý định mở khoá quăng sang từ trang tool (xem `_insufficient` trong
+// tuvi-paywall.js) — cùng khoá `tpw_pending_unlock`, CHỈ ĐỌC (không xoá) ở
+// đây vì khách còn phải đi tiếp sang PayPal/PayOS rồi quay lại đúng trang này
+// hoặc `payment-success.html` một lần nữa trước khi việc "tiêu thụ" xảy ra.
+const PENDING_KEY = 'tpw_pending_unlock';
+const PENDING_TTL_MS = 30 * 60 * 1000;
+function pendingUnlock() {
+  let p = null;
+  try { p = JSON.parse(sessionStorage.getItem(PENDING_KEY) || 'null'); } catch (e) { return null; }
+  if (!p || !p.product || !p.returnUrl) return null;
+  if (Date.now() - (Number(p.ts) || 0) > PENDING_TTL_MS) return null;
+  return p;
+}
+/** Gói RẺ NHẤT đủ trả `need` Lượng; không cái nào đủ thì trả gói to nhất. */
+function pkgIndexFor(need) {
+  const list = pkgList();
+  if (!list.length || !need) return -1;
+  let best = -1;
+  list.forEach((p, i) => {
+    if (p.credits >= need && (best === -1 || p.credits < list[best].credits)) best = i;
+  });
+  return best === -1 ? list.length - 1 : best;
+}
+
 function showAlert(type, msg) {
   const el = document.getElementById('alertBox');
   el.className = 'alert ' + type;
@@ -396,12 +426,19 @@ function renderPackages() {
   const worst = Math.max.apply(null, rates);
   const isBank = State.method === 'bank';
 
+  // Đang mở khoá dở một tool cụ thể (xem `renderPendingBanner`) → nổi bật gói
+  // RẺ NHẤT đủ trả, không phải gói "phổ biến nhất" mặc định — khách tới đây
+  // với MỘT việc cần làm, không phải đi mua sắm gói.
+  const pending = pendingUnlock();
+  const suggestedIdx = pending ? pkgIndexFor(pending.need) : -1;
+
   document.getElementById('packages').innerHTML = list.map((p, i) => {
     const rate = rates[i];
     const save = worst > 0 ? Math.round((1 - rate / worst) * 100) : 0;
-    const featured = i === FEATURED_INDEX;
+    const featured = suggestedIdx >= 0 ? i === suggestedIdx : i === FEATURED_INDEX;
+    const badge = suggestedIdx >= 0 ? 'Đủ cho lượt này' : 'Phổ biến nhất';
     return '<div class="pkg-card' + (featured ? ' featured' : '') + '">'
-      + (featured ? '<div class="pkg-badge">Phổ biến nhất</div>' : '')
+      + (featured ? '<div class="pkg-badge">' + badge + '</div>' : '')
       + '<div class="pkg-icon">' + ic(PKG_ICONS[i] || 'sparkles') + '</div>'
       + '<div class="pkg-name">' + esc(p.label) + '</div>'
       + '<div class="pkg-price">' + vnd(p.amount_vnd) + '</div>'
@@ -499,12 +536,61 @@ async function loadStatus() {
   } catch (e) { /* không lấy được số dư thì thôi, đừng chặn cả trang */ }
 }
 
+// Vừa trả tiền xong cho ĐÚNG lượt mở khoá đã quăng khách sang đây (xem
+// `pendingUnlock`) → tự đưa khách VỀ trang tool đó thay vì bắt tự nhớ đường
+// quay lại + bấm mở khoá lần hai. `tpwResume=1` là cờ MỘT LẦN — trang tool tự
+// xoá nó khỏi URL ngay khi dùng xong (xem `resumeIfPending` ở tuvi-paywall.js).
+function resumeToTool(delayMs) {
+  const pending = pendingUnlock();
+  if (!pending) return false;
+  const sep = pending.returnUrl.indexOf('?') >= 0 ? '&' : '?';
+  setTimeout(() => { window.location.href = pending.returnUrl + sep + 'tpwResume=1'; }, delayMs || 1500);
+  return true;
+}
+
+// Banner ý định — hiện NGAY từ đầu, không đợi gói tải xong (chỉ cần nhãn tool).
+async function renderPendingBanner() {
+  const pending = pendingUnlock();
+  const host = document.getElementById('pendingBanner');
+  if (!pending || !host) return;
+  let label = 'công cụ bạn vừa xem';
+  try {
+    if (window.ToolPrices) {
+      await window.ToolPrices.load();
+      const row = window.ToolPrices.rows().find(r => r && r.tool_id === pending.product);
+      if (row && row.label) label = row.label;
+    }
+  } catch (e) { /* giữ nhãn chung chung */ }
+  host.innerHTML = ic('lock', 'ic') +
+    '<span>Bạn đang mở khoá <b>' + esc(label) + '</b> — còn thiếu <b>' + pending.need + ' Lượng</b>. '
+    + 'Gói được đánh dấu bên dưới vừa đủ cho lượt này.</span>';
+  host.className = 'pending-banner';
+  host.style.display = 'flex';
+  mount(host);
+}
+
 // Banner huỷ thanh toán — tách khỏi loadStatus để không phụ thuộc trạng thái đăng nhập.
 function checkCancelledPayment() {
   const p = new URLSearchParams(window.location.search);
   if (p.get('payment') === 'cancelled') {
     showAlert('error', 'Thanh toán đã bị hủy. Bạn có thể thử lại bất kỳ lúc nào.');
     window.history.replaceState({}, '', '/topup.html');
+    return;
+  }
+  // Đường dự phòng khi ảnh QR lỗi mở thẳng trang payOS — payOS trả khách về
+  // ĐÂY (qua `returnUrl` server khai) thay vì đường polling trong modal. Xác
+  // nhận lại rồi resume giống hệt đường QR, không phải khách tự bấm lại.
+  if (p.get('payment') === 'success' && p.get('method') === 'bank' && p.get('orderCode')) {
+    window.history.replaceState({}, '', '/topup.html');
+    fetch('/api/payment?action=check-bank&orderCode=' + encodeURIComponent(p.get('orderCode')))
+      .then(r => r.json())
+      .then(d => {
+        if (!d.paid) return;
+        loadStatus();
+        showAlert('success', `Nạp thành công ${d.credits} Lượng!`);
+        resumeToTool();
+      })
+      .catch(() => {});
   }
 }
 
@@ -797,6 +883,7 @@ else mount();
 
 setMethod('bank');
 checkCancelledPayment();
+renderPendingBanner();
 loadStatus().then(loadReferralInfo).then(showPromoSection);
 loadPackages().then(loadToolPricing);
 </script>
@@ -924,6 +1011,7 @@ loadPackages().then(loadToolPricing);
           closeBankModal();
           loadStatus();
           showAlert('success', `Nạp thành công ${d.credits} Lượng!`);
+          resumeToTool(400);
         }, 1500);
       } else if (manual) {
         status('clock', 'Chưa ghi nhận. Chờ thêm vài giây…');
