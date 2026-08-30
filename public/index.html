@@ -5,13 +5,13 @@
 <script src="https://js.sentry-cdn.com/f884fb7e9d257df10ecb6dbe562141cb.min.js" crossorigin="anonymous" defer></script>
 <link rel="icon" type="image/webp" href="/seal.webp">
 <link rel="apple-touch-icon" href="/seal.webp">
-<meta name="description" content="Cổng tử vi · tử bình · tướng số · phong thủy bằng AI theo cổ pháp. 50+ công cụ — luận giải lá số, xem tướng, phong thủy, đặt tên, chọn ngày tốt, bói bài. Tri Mệnh Lý — Thuận Thế Hành.">
+<meta name="description" content="Cổng tử vi · tử bình · tướng số · phong thủy bằng AI theo cổ pháp. 59+ công cụ — luận giải lá số, xem tướng, phong thủy, đặt tên, chọn ngày tốt, bói bài. Tri Mệnh Lý — Thuận Thế Hành.">
 <meta name="keywords" content="tử vi, tử bình, tướng số, phong thủy, xem tuổi, đặt tên con, ngày tốt, tarot, kinh dịch, ai">
 <link rel="manifest" href="/manifest.json">
 <link rel="canonical" href="https://www.tuviminhbao.com">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tử Vi Minh Bảo — Cổng Mệnh Lý AI · 50+ Công Cụ Cổ Pháp</title>
-<meta property="og:title" content="Tử Vi Minh Bảo — Cổng Mệnh Lý AI · 50+ Công Cụ Cổ Pháp">
+<title>Tử Vi Minh Bảo — Cổng Mệnh Lý AI · 59+ Công Cụ Cổ Pháp</title>
+<meta property="og:title" content="Tử Vi Minh Bảo — Cổng Mệnh Lý AI · 59+ Công Cụ Cổ Pháp">
 <meta property="og:description" content="Tử vi · Tử Bình · Tướng số · Phong thủy AI theo cổ pháp. Luận giải cá nhân hóa bằng trí tuệ nhân tạo.">
 <meta property="og:image" content="https://www.tuviminhbao.com/seal.webp">
 <meta property="og:url" content="https://www.tuviminhbao.com">
@@ -20,13 +20,16 @@
 <meta property="og:locale" content="vi_VN">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Tử Vi Minh Bảo — Cổng Mệnh Lý AI">
-<meta name="twitter:description" content="50+ công cụ tử vi · tử bình · tướng số · phong thủy bằng AI theo cổ pháp.">
+<meta name="twitter:description" content="59+ công cụ tử vi · tử bình · tướng số · phong thủy bằng AI theo cổ pháp.">
 <meta name="twitter:image" content="https://www.tuviminhbao.com/seal.webp">
 
 <!-- Fonts: Noto Serif (Vietnamese subset, auto via Google Fonts) -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"></noscript>
+
+<!-- LCP: ảnh chân dung hero, ưu tiên nạp sớm để không đội LCP -->
+<link rel="preload" as="image" href="/minh-bao-hero.webp" fetchpriority="high">
 
 <script type="application/ld+json">
 {
@@ -48,7 +51,7 @@
   "alternateName": "紫微明寶",
   "url": "https://www.tuviminhbao.com",
   "logo": { "@type": "ImageObject", "url": "https://www.tuviminhbao.com/seal.webp" },
-  "description": "Cổng mệnh lý AI tổng hợp 50+ công cụ — tử vi, tử bình, tướng số, phong thủy theo cổ pháp",
+  "description": "Cổng mệnh lý AI tổng hợp 59+ công cụ — tử vi, tử bình, tướng số, phong thủy theo cổ pháp",
   "areaServed": ["VN", "US", "AU", "CA"]
 }
 </script>
@@ -105,16 +108,31 @@
   --green:     #1E6B3C;
 }
 body { font-family: Arial, sans-serif; background: var(--bg); color: var(--text); font-size: 16px; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+/* .marquee-viewport bên dưới bleed full-width bằng margin âm (kỹ thuật che-mờ
+   hai đầu) — margin âm đó kéo box rộng hơn viewport thật (đo được: +40px
+   desktop, +18px mobile qua tests/mobile.spec.ts), dù .marquee-viewport tự nó
+   overflow:hidden (chỉ cắt CON bên trong, không cắt chính nó). Bọc riêng
+   #homeWrap để clip — KHÔNG đặt overflow-x lên html/body: CSS quy định cặp
+   overflow-x/-y lệch nhau (một bên visible) thì bên visible tự tính thành
+   auto, biến html/body thành scroll-container mới và PHÁ sticky nav của
+   nav.js (đã đo thấy .topnav rớt sticky khi thử cách đó). */
+#homeWrap { overflow-x: hidden; }
 a { color: var(--blue); text-decoration: none; }
 .page { max-width: 1180px; margin: 0 auto; padding: 0 40px; }
 @media (max-width: 768px) { .page { padding: 0 18px; } }
+.serif { font-family: 'Noto Serif', Georgia, serif; }
 
-/* ── HERO ──────────────────────────────────────────────────── */
+/* Nav trên cùng KHÔNG tự dựng ở đây — `nav.js` (đã nạp cuối trang) tự chèn
+   `<nav class="topnav">` sticky riêng, đã có Luận Đường/Khám phá/Cẩm nang +
+   đăng nhập + hamburger mobile, dùng CHUNG trên 89 trang. Dựng thêm một
+   `.topnav` ở đây từng ĐỤNG TRÙNG TÊN CLASS với bản của nav.js — hai thanh
+   nav chồng lên nhau, style lẫn lộn. */
+
+/* ── HERO — ảnh + text + composer ─────────────────────────── */
 .hero {
-  background: linear-gradient(180deg, var(--navy) 0%, var(--navy-mid) 100%);
+  background: linear-gradient(165deg, var(--navy) 0%, var(--navy-mid) 100%);
   color: #fff;
-  padding: 80px 0 72px;
-  text-align: center;
+  padding: 48px 0 46px;
   position: relative;
   overflow: hidden;
 }
@@ -122,92 +140,201 @@ a { color: var(--blue); text-decoration: none; }
   content: '';
   position: absolute; inset: 0;
   background-image:
-    radial-gradient(circle at 20% 50%, rgba(201,168,76,.06) 0%, transparent 50%),
-    radial-gradient(circle at 80% 70%, rgba(20,85,164,.10) 0%, transparent 60%);
+    radial-gradient(circle at 10% 25%, rgba(201,168,76,.10) 0%, transparent 50%),
+    radial-gradient(circle at 90% 78%, rgba(20,85,164,.14) 0%, transparent 55%);
   pointer-events: none;
 }
 .hero > * { position: relative; z-index: 1; }
-
-.hero-mark {
-  font-family: 'Noto Serif', Georgia, serif;
-  font-size: 22px; color: var(--gold-bright);
-  letter-spacing: 0.55em; margin-bottom: 6px; padding-left: 0.55em;
-  font-weight: 400;
+.hero-grid { display: grid; grid-template-columns: 220px minmax(0,.86fr) minmax(0,1.02fr); gap: 34px; align-items: center; }
+@media (max-width: 1040px) {
+  .hero-grid { grid-template-columns: 170px 1fr; grid-template-areas: "photo text" "composer composer"; }
+  .hero-composer-col { grid-area: composer; }
+  .hero-photo-col { grid-area: photo; }
+  .hero-text-col { grid-area: text; }
 }
-.hero-pretitle {
-  font-family: 'Noto Serif', Georgia, serif;
-  font-size: 11px;
-  color: rgba(201,168,76,0.65);
-  letter-spacing: 0.5em;
-  margin-bottom: 36px; padding-left: 0.5em;
-  text-transform: uppercase;
-}
-.hero h1 {
-  font-family: 'Noto Serif', Georgia, serif;
-  font-size: clamp(30px, 4.6vw, 44px);
-  font-weight: 400;
-  font-style: italic;
-  line-height: 1.25;
-  margin-bottom: 32px;
-  color: #fff;
-  letter-spacing: 0.02em;
+@media (max-width: 640px) {
+  .hero-grid { grid-template-columns: 1fr; grid-template-areas: "photo" "text" "composer"; text-align: center; }
+  .hero-photo-col { justify-content: center; }
 }
 
-.hero-body {
-  max-width: 640px;
-  margin: 0 auto 40px;
-  font-family: 'Noto Serif', Georgia, serif;
-  font-size: 16px;
-  color: rgba(255,255,255,0.78);
-  line-height: 1.85;
+.hero-photo-col { display: flex; align-items: flex-end; justify-content: center; height: 100%; position: relative; }
+.hero-photo-glow { position: absolute; inset: -20px; background: radial-gradient(ellipse 60% 55% at 50% 45%, rgba(201,168,76,.22), transparent 70%); filter: blur(18px); pointer-events: none; }
+.hero-photo {
+  position: relative; width: 100%; max-width: 240px; height: auto; display: block;
+  -webkit-mask-image: radial-gradient(ellipse 60% 66% at 50% 40%, #000 52%, rgba(0,0,0,.35) 72%, transparent 92%);
+  mask-image: radial-gradient(ellipse 60% 66% at 50% 40%, #000 52%, rgba(0,0,0,.35) 72%, transparent 92%);
+  filter: drop-shadow(0 14px 26px rgba(0,0,0,.45));
 }
-.hero-body p { margin-bottom: 14px; }
-.hero-body p:last-child { margin-bottom: 0; }
+@media (max-width: 640px) { .hero-photo { max-width: 190px; margin: 0 auto; } }
 
-.hero-attribution {
-  font-family: 'Noto Serif', Georgia, serif;
-  font-size: 12px;
-  color: rgba(201,168,76,0.55);
-  letter-spacing: 0.18em;
-  padding-top: 28px;
-  border-top: 1px solid rgba(201,168,76,0.18);
-  display: inline-block;
-  padding-left: 32px; padding-right: 32px;
+.hero-mark { font-family: 'Noto Serif', Georgia, serif; font-size: 16px; color: var(--gold-bright); letter-spacing: .35em; padding-left: .35em; margin-bottom: 4px; }
+.hero-pretitle { font-family: 'Noto Serif', Georgia, serif; font-size: 10.5px; color: rgba(201,168,76,.6); letter-spacing: .4em; text-transform: uppercase; padding-left: .4em; margin-bottom: 16px; }
+.hero h1 { font-family: 'Noto Serif', Georgia, serif; font-style: italic; font-weight: 400; font-size: clamp(23px,3vw,32px); line-height: 1.3; margin-bottom: 14px; color: #fff; }
+.hero-body { font-size: 14.5px; color: rgba(255,255,255,.78); line-height: 1.8; margin-bottom: 16px; }
+.hero-attribution { font-family: 'Noto Serif', Georgia, serif; font-size: 11px; color: rgba(201,168,76,.55); letter-spacing: .14em; padding-top: 14px; border-top: 1px solid rgba(201,168,76,.18); display: inline-block; }
+@media (max-width: 640px) { .hero-attribution { font-size: 10px; letter-spacing: .08em; } }
+
+/* ── TỬ VI CHAT — Hero composer (ô nhập ngày sinh) ──────────── */
+.hero-chat { max-width: 420px; }
+@media (max-width: 640px) { .hero-chat { max-width: 460px; margin: 0 auto; } }
+.hc-window { background: #fff; border-radius: 16px; padding: 18px; box-shadow: 0 20px 50px rgba(0,0,0,.32); text-align: left; color: var(--text); }
+.hc-main { min-width: 0; }
+.hc-greeting { display: flex; gap: 10px; align-items: flex-start; margin-bottom: 13px; }
+.hc-avatar {
+  flex-shrink: 0; width: 30px; height: 30px; border-radius: 50%;
+  background: var(--navy); color: var(--gold-bright);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Noto Serif', Georgia, serif; font-size: 14px;
 }
-@media (max-width: 600px) {
-  .hero { padding: 56px 0 48px; }
-  .hero-attribution { font-size: 11px; letter-spacing: 0.1em; padding-left: 0; padding-right: 0; }
+.hc-avatar.has-orb { background: none; }
+.hc-bubble { background: var(--bg-soft); border-radius: 3px 12px 12px 12px; padding: 9px 13px; font-size: 13px; color: var(--text-mid); line-height: 1.5; }
+.hc-composer { display: flex; flex-direction: column; gap: 0; border: 1px solid var(--border); border-radius: 12px; transition: border-color 0.15s; overflow: hidden; }
+.hc-composer:focus-within { border-color: var(--gold-bright); }
+.hc-birth-form { padding: 12px 12px 11px; }
+#heroFormHost { min-height: 180px; }
+.hc-chips-label { font-size: 11px; color: var(--text-lt); margin: 13px 0 7px; }
+.hc-chips-inner { display: flex; flex-wrap: wrap; gap: 6px; }
+.hc-chip-inner {
+  background: var(--bg-soft); border: 1px solid var(--border-lt);
+  border-radius: 8px; padding: 5px 10px; font-size: 12px;
+  color: var(--text-mid); text-decoration: none; transition: all 0.15s; cursor: pointer;
+  white-space: nowrap;
 }
-
-/* Nút vàng "✦ Mở Luận Đường" đứng riêng ĐÃ GỠ (CSS `.hero-cta` gỡ theo — 0 chỗ
-   còn dùng). Nó và ô chat là hai lời mời cùng dẫn về /app; lối vào nay gom về ô
-   chat + nút `.hero-open` ngay dưới nó. */
-
-/* ── TAB NAV (sticky) ──────────────────────────────────────── */
-.section { padding: 48px 0; }
-.section-eyebrow {
-  font-family: 'Noto Serif', Georgia, serif; font-size: 12px;
-  color: var(--gold); letter-spacing: 0.3em; text-transform: uppercase;
-  margin-bottom: 8px;
+.hc-chip-inner:hover { background: var(--gold-lt); border-color: var(--gold-bright); color: var(--navy); }
+.hc-birth-form .frow { display: flex; gap: 8px; flex-wrap: wrap; align-items: flex-end; margin-bottom: 10px; }
+.hc-birth-form .frow:last-of-type { margin-bottom: 0; }
+.hc-birth-form .fg { display: flex; flex-direction: column; gap: 4px; }
+.hc-birth-form .fg label { font-size: 10px; font-weight: 600; color: var(--text-lt); letter-spacing: .03em; text-transform: uppercase; }
+.hc-birth-form .fg input, .hc-birth-form .fg select {
+  border: 1px solid var(--border); border-radius: 7px; padding: 7px 9px;
+  font-size: 13px; font-family: inherit; color: var(--text); background: var(--bg); outline: none;
 }
-.section-title {
-  font-family: 'Noto Serif', Georgia, serif; font-size: 28px;
-  color: var(--navy); margin-bottom: 8px;
+.hc-birth-form .fg input:focus, .hc-birth-form .fg select:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(20,85,164,.12); }
+.hc-birth-form .tvf-compact-foreign { font-size: 12px; color: var(--text-mid); display: flex; align-items: center; gap: 6px; cursor: pointer; }
+.hc-birth-form .tvf-compact-utc { min-width: 160px; }
+.hc-birth-submit {
+  width: 100%; margin-top: 4px; background: var(--navy); color: var(--gold-bright);
+  border: none; border-radius: 10px; padding: 11px 16px; font-size: 14px; font-weight: 600;
+  font-family: inherit; cursor: pointer; transition: background 0.15s;
 }
-.section-desc { color: var(--text-mid); margin-bottom: 28px; max-width: 620px; }
+.hc-birth-submit:hover { background: var(--navy-mid); }
 
-.space-section { border-top: 1px solid var(--border-lt); }
-.space-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 14px; margin-top: 6px; }
-.space-card { background: #fff; border: 1px solid var(--border-lt); border-radius: 12px; padding: 20px 18px; display: flex; flex-direction: column; gap: 9px; text-decoration: none; color: inherit; transition: all 0.16s; }
-.space-card:hover { transform: translateY(-2px); border-color: var(--gold-bright); box-shadow: 0 8px 22px rgba(6,26,46,0.08); }
-.space-ic { width: 42px; height: 42px; border-radius: 11px; display: flex; align-items: center; justify-content: center; font-size: 20px; background: var(--gold-lt); color: var(--gold); border: 1px solid rgba(201,168,76,0.35); font-family: 'Noto Serif', Georgia, serif; }
-.space-card h3 { font-family: 'Noto Serif', Georgia, serif; font-size: 17px; color: var(--navy); margin: 0; }
-.space-card p { font-size: 13px; color: var(--text-mid); line-height: 1.5; flex: 1; margin: 0; }
-.space-card .go { font-size: 12.5px; color: var(--gold); font-weight: 600; }
-.space-note { text-align: center; margin-top: 22px; font-size: 14px; color: var(--text-mid); }
-.space-note a { color: var(--gold); font-weight: 600; border-bottom: 1px solid rgba(201,168,76,0.4); }
+.hero-open {
+  display: flex; align-items: center; gap: 12px; width: 100%; text-align: left;
+  margin-top: 14px; padding: 13px 16px; border-radius: 13px; cursor: pointer;
+  font: inherit;
+  background: linear-gradient(135deg, #EBD08C 0%, #C9A84C 100%);
+  border: 1px solid #F0DEA8;
+  animation: ho-pulse 2.8s ease-in-out infinite;
+  transition: background .2s, transform .2s;
+}
+@keyframes ho-pulse {
+  0%, 100% { box-shadow: 0 3px 14px rgba(0,0,0,.28), 0 0 0 0 rgba(201,168,76,.40); }
+  50%      { box-shadow: 0 3px 14px rgba(0,0,0,.28), 0 0 28px 7px rgba(232,206,126,.58); }
+}
+.hero-open:hover, .hero-open:focus-visible {
+  background: linear-gradient(135deg, #F6E3AE 0%, #DCBB5C 100%);
+  animation-duration: 1.4s;
+  transform: translateY(-1px); outline: none;
+}
+.hero-open .ho-t { font-family: 'Noto Serif', Georgia, serif; font-size: 14.5px; font-weight: 600; color: #061A2E; display: block; }
+.hero-open .ho-s { font-size: 11px; color: rgba(6,26,46,0.78); display: block; margin-top: 2px; }
+.hero-open .ho-orb { flex-shrink: 0; display: flex; width: 32px; height: 32px; }
+@media (prefers-reduced-motion: reduce) {
+  .hero-open { animation: none; transition: none; box-shadow: 0 3px 14px rgba(0,0,0,.28), 0 0 22px 4px rgba(232,206,126,.5); }
+  .hero-open:hover { transform: none; }
+}
+.hero-skills { font-family: 'Noto Serif', Georgia, serif; font-size: 12px; color: rgba(201,168,76,0.72); margin-top: 16px; letter-spacing: 0.03em; }
 
-/* ── KHÁM PHÁ & TRA CỨU (SEO nén) ──────────────────────────── */
+/* ── Stat bar — 3 số thật (tĩnh) + 2 số realtime (mô phỏng như shell.js) ── */
+.stat-section { background: var(--bg-soft); border-bottom: 1px solid var(--border-lt); padding: 26px 0; }
+.stat-label { font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--gold); text-align: center; margin-bottom: 16px; }
+.stat-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 1px; background: var(--border-lt); border: 1px solid var(--border-lt); border-radius: 12px; overflow: hidden; }
+@media (max-width: 860px) { .stat-grid { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 480px) { .stat-grid { grid-template-columns: repeat(2, 1fr); } }
+.stat-tile { background: #fff; padding: 20px 12px; text-align: center; position: relative; }
+.stat-tile .v { font-family: 'Noto Serif', Georgia, serif; font-size: clamp(21px,2.5vw,27px); font-weight: 700; color: var(--navy); font-variant-numeric: tabular-nums; }
+.stat-tile .k { font-size: 11.5px; color: var(--text-mid); margin-top: 5px; line-height: 1.35; }
+.stat-tile.live .v { color: var(--green); }
+.live-dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--green); margin-right: 5px; animation: dot-pulse 1.8s ease-in-out infinite; vertical-align: 1px; }
+@keyframes dot-pulse { 0%,100%{opacity:.4} 50%{opacity:1} }
+@media (prefers-reduced-motion: reduce) { .live-dot { animation: none; } }
+
+/* ── Section chung ────────────────────────────────────────── */
+.section { padding: 50px 0; }
+.section-eyebrow { font-family: 'Noto Serif', Georgia, serif; font-size: 12px; color: var(--gold); letter-spacing: .3em; text-transform: uppercase; margin-bottom: 8px; }
+.section-title { font-family: 'Noto Serif', Georgia, serif; font-size: 26px; color: var(--navy); margin-bottom: 8px; }
+.section-desc { color: var(--text-mid); margin-bottom: 8px; max-width: 640px; font-size: 14.5px; }
+.section-all { display: inline-block; margin-top: 22px; font-size: 13.5px; color: var(--gold); font-weight: 700; }
+
+/* ── Marquee dùng chung (câu hỏi / tool / khảo luận) ─────────── */
+.marquee-viewport { overflow: hidden; margin: 0 -40px; padding: 6px 40px; -webkit-mask-image: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent); mask-image: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent); }
+@media (max-width: 768px) { .marquee-viewport { margin: 0 -18px; padding: 6px 18px; } }
+.marquee-track { display: flex; width: max-content; gap: 16px; }
+.marquee-track.spin-a { animation: marquee 38s linear infinite; }
+.marquee-track.spin-c { animation: marquee 46s linear infinite; }
+.marquee-track.spin-d { animation: marquee 32s linear infinite; }
+@keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+.marquee-viewport:hover .marquee-track, .marquee-viewport:focus-within .marquee-track { animation-play-state: paused; }
+@media (prefers-reduced-motion: reduce) { .marquee-track { animation: none !important; } .marquee-viewport { overflow-x: auto; -webkit-mask-image: none; mask-image: none; } }
+
+/* ── ĐIỀU MỌI NGƯỜI ĐANG TÒ MÒ ────────────────────────────── */
+.ask-section { background: var(--navy); padding: 42px 0 36px; }
+.ask-head { margin-bottom: 18px; }
+.ask-head h2 { font-family: 'Noto Serif', Georgia, serif; font-size: 19px; color: #fff; font-weight: 600; }
+.ask-tile { flex: 0 0 220px; background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.10); border-radius: 12px; padding: 16px 14px; cursor: pointer; text-align: left; transition: background .15s, border-color .15s; font-family: inherit; }
+.ask-tile:hover, .ask-tile:focus-visible { background: rgba(201,168,76,.10); border-color: rgba(201,168,76,.4); outline: none; }
+.ask-tile .gl { font-family: 'Noto Serif', Georgia, serif; font-size: 20px; color: var(--gold-bright); margin-bottom: 10px; }
+.ask-tile .q { font-size: 13px; color: #fff; font-weight: 600; line-height: 1.4; margin-bottom: 8px; }
+.ask-tile .n { font-size: 11px; color: rgba(255,255,255,.45); }
+.ask-foot { text-align: center; font-size: 12px; color: rgba(255,255,255,.4); margin-top: 16px; }
+
+/* ── KHÁM PHÁ BẢN THÂN — marquee tool ─────────────────────── */
+.tool-card { flex: 0 0 240px; background: #fff; border: 1px solid var(--border-lt); border-radius: 12px; padding: 19px 17px; display: flex; flex-direction: column; gap: 8px; text-decoration: none; color: inherit; transition: border-color .16s, box-shadow .16s, transform .16s; }
+.tool-card:hover { border-color: var(--gold-bright); box-shadow: 0 10px 24px rgba(6,26,46,.10); transform: translateY(-2px); }
+.tool-ic { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 19px; background: var(--gold-lt); color: var(--gold); border: 1px solid rgba(201,168,76,.35); font-family: 'Noto Serif', Georgia, serif; }
+.tool-card h3 { font-family: 'Noto Serif', Georgia, serif; font-size: 16px; color: var(--navy); }
+.tool-card p { font-size: 12.5px; color: var(--text-mid); line-height: 1.5; flex: 1; }
+.tool-card .go { font-size: 12px; color: var(--gold); font-weight: 700; }
+
+/* ── ĐÁNH GIÁ — cùng dữ liệu với testimonials.js, vị trí riêng ── */
+.rv-section { background: var(--bg-soft); border-top: 1px solid var(--border-lt); border-bottom: 1px solid var(--border-lt); padding: 50px 0; }
+.rv-viewport { position: relative; }
+.rv-track-wrap { overflow: hidden; }
+.rv-track { display: flex; gap: 20px; transition: transform .4s cubic-bezier(.4,0,.2,1); will-change: transform; align-items: stretch; }
+.rv-card { background: #fff; border: 1px solid var(--border-lt); padding: 24px 22px; flex: 0 0 calc(33.333% - 14px); box-sizing: border-box; display: flex; flex-direction: column; border-radius: 12px; }
+@media (max-width: 900px) { .rv-card { flex: 0 0 calc(50% - 10px); } }
+@media (max-width: 600px) { .rv-card { flex: 0 0 100%; } .rv-btn { display: none; } }
+.rv-stars { color: var(--gold-bright); font-size: 14px; margin-bottom: 12px; letter-spacing: 2px; }
+.rv-text { font-size: 13.5px; color: var(--text-mid); line-height: 1.7; font-style: italic; margin-bottom: 16px; flex: 1; }
+.rv-name { font-size: 12px; font-weight: 700; color: var(--navy); }
+.rv-date { font-size: 11px; color: var(--text-lt); margin-top: 2px; }
+.rv-btn { position: absolute; top: 50%; width: 38px; height: 38px; border-radius: 50%; border: 1px solid var(--border); background: #fff; cursor: pointer; font-size: 16px; color: var(--navy); box-shadow: 0 2px 8px rgba(0,0,0,.1); transform: translateY(-50%); display: flex; align-items: center; justify-content: center; }
+.rv-btn:hover { border-color: var(--navy); }
+.rv-prev { left: -18px; } .rv-next { right: -18px; }
+@media (max-width: 900px) { .rv-prev { left: -8px; } .rv-next { right: -8px; } }
+.rv-dots { display: flex; justify-content: center; gap: 8px; margin-top: 22px; }
+.rv-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--border-lt); cursor: pointer; border: none; padding: 0; }
+.rv-dot.active { background: var(--navy); }
+
+/* ── KHO KHẢO LUẬN — marquee, dữ liệu fetch thật lúc tải trang ── */
+.blog-card { flex: 0 0 260px; background: #fff; border: 1px solid var(--border-lt); border-radius: 13px; overflow: hidden; display: flex; flex-direction: column; }
+.blog-thumb { height: 82px; background: linear-gradient(135deg, var(--navy), var(--navy-mid)); display: flex; align-items: center; justify-content: center; }
+.blog-thumb span { font-family: 'Noto Serif', Georgia, serif; font-size: 24px; color: rgba(201,168,76,.7); }
+.blog-body { padding: 15px 16px 17px; display: flex; flex-direction: column; gap: 7px; flex: 1; }
+.blog-cat { font-size: 10px; color: var(--gold); text-transform: uppercase; letter-spacing: .06em; font-weight: 700; }
+.blog-title { font-family: 'Noto Serif', Georgia, serif; font-size: 14px; color: var(--navy); line-height: 1.35; font-weight: 700; }
+.blog-excerpt { font-size: 11.5px; color: var(--text-mid); line-height: 1.55; flex: 1; }
+.blog-fresh { font-size: 10.5px; color: var(--text-lt); }
+
+/* ── VALUES / TRUST ───────────────────────────────────────── */
+.values-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 26px; }
+@media (max-width: 768px) { .values-grid { grid-template-columns: 1fr; } }
+.value-card { background: #fff; border-left: 3px solid var(--gold); padding: 18px 22px; }
+.value-title { font-family: 'Noto Serif', Georgia, serif; font-size: 17px; color: var(--navy); margin-bottom: 6px; }
+.value-desc { font-size: 13.5px; color: var(--text-mid); line-height: 1.6; }
+
+/* ── KHÁM PHÁ & TRA CỨU (SEO nén) ─────────────────────────── */
 .seo-strip-section { background: var(--bg-soft); border-top: 1px solid var(--border-lt); }
 .seo-strip-head { display: flex; align-items: baseline; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; }
 .seo-strip-head h2 { font-family: 'Noto Serif', Georgia, serif; font-size: 20px; color: var(--navy); margin: 0; }
@@ -226,296 +353,146 @@ a { color: var(--blue); text-decoration: none; }
 .seo-all { display: block; margin-top: 11px; font-size: 12.5px; color: var(--gold); font-weight: 600; }
 .seo-all:hover { text-decoration: underline; }
 
-/* ── TRUST/VALUES ──────────────────────────────────────────── */
-.values-grid {
-  display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
-}
-@media (max-width: 768px) { .values-grid { grid-template-columns: 1fr; } }
-.value-card {
-  background: #fff; border-left: 3px solid var(--gold);
-  padding: 18px 22px;
-}
-.value-title {
-  font-family: 'Noto Serif', Georgia, serif; font-size: 17px;
-  color: var(--navy); margin-bottom: 6px;
-}
-.value-desc { font-size: 13.5px; color: var(--text-mid); line-height: 1.6; }
-
-/* ── TỬ VI CHAT — Hero composer (ô chat) ────────────────────── */
-.hero-chat { max-width: 600px; margin: 34px auto 6px; }
-.hc-window {
-  background: #fff; border-radius: 16px; padding: 18px;
-  box-shadow: 0 16px 46px rgba(0,0,0,0.30); text-align: left;
-}
-/* Cột persona "Xem cho ai?" ĐÃ GỠ: nó là ma trận 7 persona × 3 câu mà người
-   dùng phải tự điều hướng, và ở ≤480px nó bị `display:none` nên 6/7 lối vào
-   BIẾN MẤT trên điện thoại — đúng khổ máy phần lớn người dùng đang mở. Nay mỗi
-   chip tự mang persona trong chính câu chữ ("Tôi và NGƯỜI YÊU…", "CON TÔI…"),
-   nên một hàng chip thay được cả ma trận và chạy được ở mọi khổ. */
-.hc-main { min-width: 0; }
-.hc-greeting { display: flex; gap: 10px; align-items: flex-start; margin-bottom: 14px; }
-/* Ô avatar giữ đúng khổ 32px của bản chữ 命 cũ để bố cục không xê dịch; orb do
-   JS chèn vào trong (nạp lười ai-loading-steps.js). Nạp hụt module thì rơi về
-   chữ 命 như cũ — xem `mountHeroOrb`. */
-.hc-avatar {
-  flex-shrink: 0; width: 32px; height: 32px; border-radius: 50%;
-  background: var(--navy); color: var(--gold-bright);
-  display: flex; align-items: center; justify-content: center;
-  font-family: 'Noto Serif', Georgia, serif; font-size: 16px;
-}
-.hc-avatar.has-orb { background: none; }
-.hc-bubble {
-  background: var(--bg-soft); border-radius: 3px 12px 12px 12px;
-  padding: 10px 14px; font-size: 14px; color: var(--text-mid); line-height: 1.55;
-}
-.hc-composer {
-  display: flex; flex-direction: column; gap: 0;
-  border: 1px solid var(--border); border-radius: 12px;
-  transition: border-color 0.15s; overflow: hidden;
-}
-.hc-composer:focus-within { border-color: var(--gold-bright); }
-.hc-birth-form { padding: 14px 14px 12px; }
-/* Giữ chỗ cho form TuviForm.render() dựng bằng JS SAU khi tải — đúng bệnh
-   CLS đã cắn với 5 chip cũ (xem chú thích ở #hc-chips): host rỗng lúc vẽ
-   khung đầu, 3 hàng field (ngày/tháng/năm/giờ/phút + checkbox "sinh ngoài
-   VN") chèn vào SAU đẩy mọi thứ dưới xuống. Đo thật bằng Playwright (viewport
-   1350×940, khớp Lighthouse desktop): #heroFormHost cao 180px khi đã render.
-   Lighthouse CI bắt được CLS 0.131 (>0.1) trước khi có dòng này. */
-#heroFormHost { min-height: 180px; }
-.hc-chips-label { font-size: 11.5px; color: var(--text-lt); margin: 14px 0 8px; }
-.hc-chips-inner {
-  display: flex; flex-wrap: wrap; gap: 6px;
-}
-.hc-chip-inner {
-  background: var(--bg-soft); border: 1px solid var(--border-lt);
-  border-radius: 8px; padding: 5px 11px; font-size: 12.5px;
-  color: var(--text-mid); text-decoration: none; transition: all 0.15s; cursor: pointer;
-  white-space: nowrap;
-}
-.hc-chip-inner:hover { background: var(--gold-lt); border-color: var(--gold-bright); color: var(--navy); }
-/* Form ngày sinh thay ô chat giả (Pha "vá lời hứa homepage") — widget cũ
-   MẶC ĐỊNH hứa một cuộc trò chuyện (avatar + bong bóng chào + ô soạn + nút
-   gửi ↑) nhưng chỉ điều hướng sang `/app/luan-giai` với `?q=` KHÔNG có gì trả
-   lời. Nay bấm gửi là NHẬN lá số miễn phí thật (an sao, 0đ) ngay lập tức —
-   `.frow`/`.fg` là tên class CỐ ĐỊNH mà tuvi-form.js (`mode:'compact'`) tự
-   sinh ra, trang app-shell định nghĩa sẵn trong shell.css; trang chủ không
-   nạp shell.css (né xung đột biến theme với CSS đã tinh chỉnh riêng) nên định
-   nghĩa lại ở đây, cùng khung nhìn nhưng dùng biến màu của CHÍNH trang chủ. */
-.hc-birth-form .frow { display: flex; gap: 8px; flex-wrap: wrap; align-items: flex-end; margin-bottom: 10px; }
-.hc-birth-form .frow:last-of-type { margin-bottom: 0; }
-.hc-birth-form .fg { display: flex; flex-direction: column; gap: 4px; }
-.hc-birth-form .fg label { font-size: 10px; font-weight: 600; color: var(--text-lt); letter-spacing: .03em; text-transform: uppercase; }
-.hc-birth-form .fg input, .hc-birth-form .fg select {
-  border: 1px solid var(--border); border-radius: 7px; padding: 7px 9px;
-  font-size: 13px; font-family: inherit; color: var(--text); background: var(--bg); outline: none;
-}
-.hc-birth-form .fg input:focus, .hc-birth-form .fg select:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(20,85,164,.12); }
-.hc-birth-form .tvf-compact-foreign { font-size: 12px; color: var(--text-mid); display: flex; align-items: center; gap: 6px; cursor: pointer; }
-.hc-birth-form .tvf-compact-utc { min-width: 160px; }
-.hc-birth-submit {
-  width: 100%; margin-top: 4px; background: var(--navy); color: var(--gold-bright);
-  border: none; border-radius: 10px; padding: 11px 16px; font-size: 14.5px; font-weight: 600;
-  font-family: inherit; cursor: pointer; transition: background 0.15s;
-}
-.hc-birth-submit:hover { background: var(--navy-mid); }
-/* Nút vào thẳng Luận Đường — thay nút vàng đứng riêng ở cột trái. Trước đây nút
-   đó và ô chat là HAI lời mời cùng dẫn về một đích, xếp dọc nhau trên điện thoại
-   và cách nhau bởi dòng chữ Hán, nên người dùng phải chọn giữa hai thứ giống hệt
-   nhau. Nay ô chat là lối chính, nút này là lối cho ai muốn tự đi.
-
-   🔴 NỀN VÀNG ĐẶC, không phải vàng trong suốt. Hai bản trước dùng
-   `rgba(201,168,76,.20)` chồng lên nền navy — trộn ra rgb(92,104,86), tức một
-   màu ô-liu xỉn chứ KHÔNG phải vàng, nên nút gần như chìm vào hero. Phủ mờ một
-   màu sáng lên nền tối thì nó tối theo nền; muốn nổi thì phải phủ ĐẶC.
-
-   Chữ vì thế đổi sang NAVY (trắng trên vàng chỉ được ~2:1, không đọc nổi ngoài
-   nắng). Đo được: tiêu đề 6,7:1 · dòng phụ 5,1:1 — cả hai qua AA. */
-.hero-open {
-  display: flex; align-items: center; gap: 12px; width: 100%; text-align: left;
-  margin-top: 16px; padding: 13px 16px; border-radius: 13px; cursor: pointer;
-  font: inherit;
-  background: linear-gradient(135deg, #EBD08C 0%, #C9A84C 100%);
-  border: 1px solid #F0DEA8;
-  animation: ho-pulse 2.8s ease-in-out infinite;
-  transition: background .2s, transform .2s;
-}
-/* Quầng sáng THỞ, cố ý không phải chớp tắt: nhịp 2,8s cùng họ với orb (3,6s),
-   đọc ra là "đang sống, mời bấm". Chớp cứng thì đọc ra là quảng cáo và người
-   ta học cách nhìn lơ nó đi.
-   ⚠️ Chỉ animate `box-shadow` — nó KHÔNG chiếm chỗ trong bố cục nên không đội
-   CLS (trang chủ đang 0.0711 trên ngưỡng 0.1, đừng để tụt lại). */
-@keyframes ho-pulse {
-  0%, 100% { box-shadow: 0 3px 14px rgba(0,0,0,.28), 0 0 0 0 rgba(201,168,76,.40); }
-  50%      { box-shadow: 0 3px 14px rgba(0,0,0,.28), 0 0 28px 7px rgba(232,206,126,.58); }
-}
-.hero-open:hover, .hero-open:focus-visible {
-  background: linear-gradient(135deg, #F6E3AE 0%, #DCBB5C 100%);
-  animation-duration: 1.4s;
-  transform: translateY(-1px); outline: none;
-}
-.hero-open .ho-t { font-family: 'Noto Serif', Georgia, serif; font-size: 15.5px; font-weight: 600; color: #061A2E; display: block; }
-/* 0.78 chứ không phải 0.68: ở mức 0.68 thì dòng này rơi xuống 4,17:1 trên ĐẦU
-   TỐI của gradient (#C9A84C) — dưới AA. Đo phải lấy đầu tối, vì chữ ở đây là
-   chữ tối; đo mỗi đầu sáng là tự cho mình điểm cao. */
-.hero-open .ho-s { font-size: 11.5px; color: rgba(6,26,46,0.78); display: block; margin-top: 2px; }
-/* Khổ CỐ ĐỊNH, khai trước cả khi orb được JS chèn vào. Thiếu hai dòng này thì ô
-   rộng 0 lúc tải rồi nhảy lên 34px khi module orb nạp xong — đẩy chữ trong nút
-   sang phải và đội CLS của trang chủ lên 0.12 (ngưỡng Lighthouse là 0.1). */
-.hero-open .ho-orb { flex-shrink: 0; display: flex; width: 34px; height: 34px; }
-@media (prefers-reduced-motion: reduce) {
-  /* Tắt nhịp thở nhưng GIỮ quầng sáng ở mức đậm nhất — người tắt hiệu ứng vẫn
-     phải thấy nút này nổi, chỉ là nó đứng yên. */
-  .hero-open { animation: none; transition: none; box-shadow: 0 3px 14px rgba(0,0,0,.28), 0 0 22px 4px rgba(232,206,126,.5); }
-  .hero-open:hover { transform: none; }
-}
-.hero-skills {
-  font-family: 'Noto Serif', Georgia, serif; font-size: 12.5px;
-  color: rgba(201,168,76,0.72); margin-top: 18px; letter-spacing: 0.03em;
-}
-.chat-chips { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 16px; }
-.chat-chip {
-  background: rgba(255,255,255,0.10); border: 1px solid rgba(255,255,255,0.20);
-  border-radius: 18px; padding: 7px 15px; font-size: 13px;
-  color: rgba(255,255,255,0.88); text-decoration: none; transition: all 0.15s; cursor: pointer;
-}
-.chat-chip:hover { background: rgba(201,168,76,0.20); border-color: var(--gold-bright); color: var(--gold-bright); }
-
-/* ── HERO side-by-side (wording trái · chat phải) ───────────── */
-.hero-grid { display: flex; align-items: center; gap: 52px; text-align: left; }
-.hero-left { flex: 1 1 50%; min-width: 0; }
-.hero-right { flex: 1 1 50%; min-width: 0; }
-.hero-grid .hero-body { max-width: 460px; margin: 0 0 22px; }
-.hero-grid .hero-attribution { padding-left: 0; padding-right: 0; }
-.hero-grid .hero-chat { margin: 0; }
-.hero-grid .chat-chips { justify-content: flex-start; }
-.hero-grid .hero-skills { text-align: left; }
-@media (max-width: 880px) {
-  .hero-grid { flex-direction: column; gap: 30px; text-align: center; }
-  .hero-grid .hero-body { margin: 0 auto 22px; }
-  .hero-grid .hero-chat { margin: 0 auto; max-width: 560px; }
-  .hero-grid .chat-chips { justify-content: center; }
-  .hero-grid .hero-skills { text-align: center; }
-}
+/* ── Closing CTA ──────────────────────────────────────────── */
+.close-cta { background: var(--gold-lt); border-top: 1px solid rgba(201,168,76,.3); padding: 22px 0; }
+.close-cta .row { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+.close-cta b { font-family: 'Noto Serif', Georgia, serif; color: var(--navy); font-size: 15px; }
+.close-cta span { font-size: 12.5px; color: var(--text-mid); }
+.close-cta button { flex-shrink: 0; background: var(--navy); color: var(--gold-bright); border: 0; border-radius: 9px; padding: 11px 20px; font-size: 13.5px; font-weight: 700; cursor: pointer; font-family: inherit; }
 </style>
 </head>
 <body>
 
+<!-- nav.js tự chèn <nav class="topnav"> làm CON ĐẦU TIÊN của body (không có
+     #nav-ph trên trang này) — #homeWrap chỉ bọc nội dung CỦA TRANG, đứng sau
+     nav trong DOM, nên không ảnh hưởng vị trí nav chèn vào. -->
+<div id="homeWrap">
+
 <!-- ─── HERO ─────────────────────────────────────────────── -->
 <section class="hero">
-  <div class="page">
-    <div class="hero-grid">
-      <div class="hero-left">
-        <div class="hero-mark">紫 微 明 寶</div>
-        <div class="hero-pretitle">Tử Vi Minh Bảo</div>
-        <h1>Tri Mệnh Lý<br>— Thuận Thế Hành</h1>
+  <div class="page hero-grid">
+    <div class="hero-photo-col">
+      <div class="hero-photo-glow" aria-hidden="true"></div>
+      <img class="hero-photo" src="/minh-bao-hero.webp" width="600" height="720" alt="Minh Bảo — hình đại diện Tử Vi Minh Bảo" loading="eager" fetchpriority="high" decoding="async">
+    </div>
 
-        <div class="hero-body">
-          <p>
-            Mệnh do trời định, vận do mình tạo. <em>Biết được mệnh để hiểu mình, biết được vận để chọn đúng đường.</em>
-          </p>
-        </div>
-
-        <div class="hero-attribution">
-          Theo cổ pháp · 紫微鬥數 · 子平八字 · 麻衣神相 · 八宅明鏡
-        </div>
+    <div class="hero-text-col">
+      <div class="hero-mark serif">紫 微 明 寶</div>
+      <div class="hero-pretitle serif">Tử Vi Minh Bảo</div>
+      <h1>Tri Mệnh Lý<br>— Thuận Thế Hành</h1>
+      <div class="hero-body">
+        <p>Mệnh do trời định, vận do mình tạo. <em>Biết được mệnh để hiểu mình, biết được vận để chọn đúng đường.</em></p>
       </div>
+      <div class="hero-attribution">Theo cổ pháp · 紫微鬥數 · 子平八字 · 麻衣神相 · 八宅明鏡</div>
+    </div>
 
-      <div class="hero-right">
-        <div class="hero-chat">
-          <div class="hc-window">
-            <div class="hc-main">
-              <div class="hc-greeting">
-                <div class="hc-avatar" id="hc-avatar">命</div>
-                <div class="hc-bubble">Nhập ngày sinh — xem lá số Tử Vi miễn phí ngay, không cần đăng ký</div>
-              </div>
-              <!-- Form ngày sinh — KHÔNG còn giả dạng chat. Bấm gửi đưa thẳng
-                   sang /app/luan-giai và tự tính lá số miễn phí (an sao, 0đ),
-                   không phải một form trống chờ nhập lại (xem heroBirthSubmit
-                   ở khối script dưới + đầu app-luan-giai.html đọc
-                   `app_pending_birth`). -->
-              <div class="hc-composer hc-birth-form" id="heroBirthForm">
-                <div id="heroFormHost"></div>
-                <button type="button" class="hc-birth-submit" id="heroBirthSubmit">Xem lá số miễn phí →</button>
-              </div>
-                <!-- Chip dựng SẴN trong HTML, KHÔNG để JS render. Bản đầu để ô
-                     rỗng rồi `renderChips()` đổ 5 chip vào sau khi tải — trên
-                     điện thoại đó là 5 dòng nhảy ra, đẩy mọi thứ bên dưới xuống
-                     và đội CLS trang chủ lên 0.12 (ngưỡng 0.1). Danh sách này
-                     cố định nên dựng bằng JS chẳng được gì, mà còn mất phần chữ
-                     cho crawler đọc.
-                     ⚠️ Sửa/thêm chip: giữ ĐỒNG BỘ với `_TOOL_ROUTE` trong khối
-                     script dưới, và kiểm tool còn `enabled=true` trong
-                     `tool_pricing` — chip trỏ tool vừa tắt là link chết. -->
-                <div class="hc-chips-label">Hoặc hỏi thẳng một việc cụ thể:</div>
-                <div class="hc-chips-inner" id="hc-chips">
-                  <a class="hc-chip-inner" data-tool="laso" href="/app/luan-giai">Năm nay công việc làm ăn thế nào?</a>
-                  <a class="hc-chip-inner" data-tool="xem-tuoi" href="/app/xem-tuoi">Tôi và người yêu có hợp nhau không?</a>
-                  <a class="hc-chip-inner" data-tool="huong-nghiep-tre" href="/app/huong-nghiep-tre">Con tôi hợp với ngành nghề gì?</a>
-                  <a class="hc-chip-inner" data-tool="chan-dung-vo-chong" href="/app/chan-dung-vo-chong">Chồng tương lai của tôi trông thế nào?</a>
-                  <a class="hc-chip-inner" data-tool="xem-lam-an" href="/app/xem-lam-an">Tôi làm ăn với người này có hợp không?</a>
-                </div>
+    <div class="hero-composer-col">
+      <div class="hero-chat">
+        <div class="hc-window">
+          <div class="hc-main">
+            <div class="hc-greeting">
+              <div class="hc-avatar" id="hc-avatar">命</div>
+              <div class="hc-bubble">Nhập ngày sinh — xem lá số Tử Vi miễn phí ngay, không cần đăng ký</div>
+            </div>
+            <!-- Form ngày sinh: bấm gửi đưa thẳng sang /app/luan-giai và tự
+                 tính lá số miễn phí (an sao, 0đ) — xem heroBirthSubmit ở
+                 khối script dưới + đầu app-luan-giai.html đọc
+                 `app_pending_birth`. -->
+            <div class="hc-composer hc-birth-form" id="heroBirthForm">
+              <div id="heroFormHost"></div>
+              <button type="button" class="hc-birth-submit" id="heroBirthSubmit">Xem lá số miễn phí →</button>
+            </div>
+            <!-- Chip dựng SẴN trong HTML, KHÔNG để JS render — dựng bằng JS
+                 sau khi tải sẽ đội CLS trên điện thoại.
+                 ⚠️ Sửa/thêm chip: giữ ĐỒNG BỘ với `_TOOL_ROUTE` trong khối
+                 script dưới, và kiểm tool còn `enabled=true` trong
+                 `tool_pricing` — chip trỏ tool vừa tắt là link chết. -->
+            <div class="hc-chips-label">Hoặc hỏi thẳng một việc cụ thể:</div>
+            <div class="hc-chips-inner" id="hc-chips">
+              <a class="hc-chip-inner" data-tool="laso" href="/app/luan-giai">Năm nay công việc làm ăn thế nào?</a>
+              <a class="hc-chip-inner" data-tool="xem-tuoi" href="/app/xem-tuoi">Tôi và người yêu có hợp nhau không?</a>
+              <a class="hc-chip-inner" data-tool="huong-nghiep-tre" href="/app/huong-nghiep-tre">Con tôi hợp với ngành nghề gì?</a>
+              <a class="hc-chip-inner" data-tool="chan-dung-vo-chong" href="/app/chan-dung-vo-chong">Chồng tương lai của tôi trông thế nào?</a>
+              <a class="hc-chip-inner" data-tool="xem-lam-an" href="/app/xem-lam-an">Tôi làm ăn với người này có hợp không?</a>
             </div>
           </div>
-
-          <button type="button" class="hero-open" id="heroOpen">
-            <span class="ho-orb" id="heroOpenOrb" aria-hidden="true"></span>
-            <!-- Dòng phụ nói cái nút này làm được mà ô chat KHÔNG: tự chọn công
-                 cụ, mở lại phiên cũ. Bản đầu ghi "Tử vi · tướng số · phong thủy
-                 · ngày tốt" — trùng khít dòng `hero-skills` ngay dưới VÀ câu chào
-                 trong bubble, thành ba chỗ liền nhau nói cùng một danh sách. -->
-            <span><span class="ho-t">Vào thẳng Luận Đường</span><span class="ho-s">Tự chọn công cụ · mở lại phiên cũ</span></span>
-          </button>
-
-          <div class="hero-skills">Hỏi được cả: tử vi · tướng số · phong thủy · ngày tốt · đặt tên</div>
         </div>
+
+        <button type="button" class="hero-open" id="heroOpen">
+          <span class="ho-orb" id="heroOpenOrb" aria-hidden="true"></span>
+          <span><span class="ho-t">Vào thẳng Luận Đường</span><span class="ho-s">Tự chọn công cụ · mở lại phiên cũ</span></span>
+        </button>
+
+        <div class="hero-skills">Hỏi được cả: tử vi · tướng số · phong thủy · ngày tốt · đặt tên</div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ─── MỘT KHÔNG GIAN ──────────────────────────────────── -->
-<section class="section space-section">
+<!-- ─── SỐ LIỆU ──────────────────────────────────────────── -->
+<section class="stat-section">
   <div class="page">
-    <div class="section-eyebrow">Một không gian</div>
-    <h2 class="section-title">Mọi việc, trong cùng một Luận Đường</h2>
-    <p class="section-desc">Luận Đường là nơi luận giải các môn huyền học cổ pháp — Tử Vi, Tử Bình, xem tuổi, tướng số, phong thủy. Lập lá số một lần rồi hỏi trợ lý AI mọi điều; chuyển sang công cụ khác vẫn giữ nguyên ngày sinh.</p>
-    <div class="space-grid">
-      <a class="space-card" href="/app/luan-giai">
-        <div class="space-ic">▦</div>
-        <h3>Luận giải Tử Vi</h3>
-        <p>Lập lá số 12 cung, chính tinh, cách cục, đại vận — rồi luận giải chuyên sâu.</p>
-        <span class="go">Mở trong Luận Đường →</span>
-      </a>
-      <a class="space-card" href="/app/bat-tu">
-        <div class="space-ic">☰</div>
-        <h3>Lá số Bát Tự</h3>
-        <p>Tứ trụ Tử Bình: nhật can, dụng thần, cách cục, đại vận theo tiết khí.</p>
-        <span class="go">Mở trong Luận Đường →</span>
-      </a>
-      <a class="space-card" href="/app/xem-tuoi">
-        <div class="space-ic">♡</div>
-        <h3>Xem tuổi &amp; tương hợp</h3>
-        <p>Vợ chồng, làm ăn — so hai lá số theo 8 chiều hợp khắc. Đặt tên, chọn ngày.</p>
-        <span class="go">Mở trong Luận Đường →</span>
-      </a>
-      <a class="space-card" href="/app">
-        <div class="space-ic">✦</div>
-        <h3>Trợ lý AI luận giải</h3>
-        <p>Hỏi bằng lời thường về vận hạn, sự nghiệp, tình duyên — luận theo cổ pháp, không bịa số.</p>
-        <span class="go">Bắt đầu hỏi →</span>
-      </a>
+    <div class="stat-grid">
+      <div class="stat-tile"><div class="v">59+</div><div class="k">Công cụ huyền học</div></div>
+      <div class="stat-tile"><div class="v">518.400+</div><div class="k">Lá số đã đối chiếu</div></div>
+      <div class="stat-tile"><div class="v">2.000+</div><div class="k">Tư liệu cổ học</div></div>
+      <div class="stat-tile live"><div class="v"><span class="live-dot" aria-hidden="true"></span><span id="statOnline">…</span></div><div class="k">Đang hoạt động ngay lúc này</div></div>
+      <div class="stat-tile live"><div class="v"><span class="live-dot" aria-hidden="true"></span><span id="statPrompts">…</span></div><div class="k">Lượt hỏi hôm nay</div></div>
     </div>
-    <p class="space-note">Cần một công cụ lẻ (tướng số, phong thủy ảnh, thần số, bói bài)? <a href="/cong-cu">Xem tất cả 50+ công cụ →</a></p>
   </div>
+</section>
+
+<!-- ─── ĐIỀU MỌI NGƯỜI ĐANG TÒ MÒ ────────────────────────── -->
+<section class="ask-section">
+  <div class="page ask-head"><h2>Điều mọi người đang tò mò</h2></div>
+  <div class="marquee-viewport">
+    <div class="marquee-track spin-d" id="askTrack"></div>
+  </div>
+  <div class="page"><div class="ask-foot">→ Bấm vào câu hỏi để hỏi ngay (câu hỏi được điền sẵn giúp bạn)</div></div>
+</section>
+
+<!-- ─── KHÁM PHÁ BẢN THÂN ────────────────────────────────── -->
+<section class="section">
+  <div class="page">
+    <div class="section-eyebrow">Khám phá bản thân</div>
+    <h2 class="section-title">Tìm hiểu thêm về chính bạn, qua nhiều góc nhìn</h2>
+    <p class="section-desc">Nhập ngày sinh một lần — rồi thoải mái khám phá: xem lá số Tử Vi, đối chiếu Bát Tự, kiểm tra độ hợp với người ấy, hay hỏi thẳng bất cứ điều gì đang phân vân. Càng xem nhiều góc, bạn càng hiểu rõ hơn về chính mình.</p>
+  </div>
+  <div class="marquee-viewport"><div class="marquee-track spin-a" id="toolTrack"></div></div>
+  <div class="page"><a class="section-all" href="/cong-cu">Xem tất cả 59+ công cụ →</a></div>
+</section>
+
+<!-- ─── ĐÁNH GIÁ CỦA NGƯỜI DÙNG ──────────────────────────── -->
+<section class="rv-section">
+  <div class="page">
+    <div class="section-eyebrow">Đánh Giá Của Người Dùng</div>
+    <h2 class="section-title">Người thật, viết bằng chữ của họ</h2>
+    <div class="rv-viewport">
+      <div class="rv-track-wrap"><div class="rv-track" id="hpRvTrack"></div></div>
+      <button class="rv-btn rv-prev" id="hpRvPrev" aria-label="Trước">‹</button>
+      <button class="rv-btn rv-next" id="hpRvNext" aria-label="Sau">›</button>
+      <div class="rv-dots" id="hpRvDots"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── KHO KHẢO LUẬN ────────────────────────────────────── -->
+<section class="section" id="blogSection">
+  <div class="page">
+    <div class="section-eyebrow">Kho Khảo Luận</div>
+    <h2 class="section-title">Khảo luận cổ pháp, cập nhật liên tục</h2>
+    <p class="section-desc">Mỗi bài là một tình huống có thật, đọc lại bằng cổ pháp.</p>
+  </div>
+  <div class="marquee-viewport" id="blogViewport"><div class="marquee-track spin-c" id="blogTrack"></div></div>
+  <div class="page"><a class="section-all" href="/blog.html">Xem toàn bộ kho Khảo Luận →</a></div>
 </section>
 
 <!-- ─── VALUES / TRUST ───────────────────────────────────── -->
-<section class="section">
+<section class="section" style="background:var(--bg-soft)">
   <div class="page">
     <div class="section-eyebrow">Vì Sao Chọn Tử Vi Minh Bảo</div>
     <h2 class="section-title">Cổ pháp · Bài bản · Cá nhân hóa</h2>
-
-    <div class="values-grid" style="margin-top:28px">
+    <div class="values-grid">
       <div class="value-card">
         <div class="value-title">Theo cổ pháp</div>
         <div class="value-desc">Tử Vi Đẩu Số an sao theo Tử Vi Đẩu Số Toàn Thư · Tử Bình theo Tử Bình Chân Thuyên &amp; Trích Thiên Tủy · Tướng pháp theo Ma Y Thần Tướng &amp; Liễu Trang · Phong thủy Bát Trạch &amp; Ngũ Hành. Engine an sao &amp; tính toán mở, có thể tra ngược.</div>
@@ -556,25 +533,29 @@ a { color: var(--blue); text-decoration: none; }
       </div>
       <div class="seo-col">
         <!-- ⚠️ KHÔNG ghi giá / chữ "miễn phí" ở đây: giá chỉ được nêu ở trang tool
-             (đọc `tool_pricing`) nên đổi giá là tự đúng. Con số ở đây cố ý để dạng
-             "50+" thay vì số chính xác — nó không dính pricing và không mục theo
-             từng lượt bật/tắt tool. Trước đây ghi "28 công cụ miễn phí" trong khi
-             thực tế chỉ còn 18 tool free. -->
-        <div class="seo-col-t"><b>Công cụ tra cứu</b><span class="seo-cnt">50+ công cụ</span></div>
+             (đọc `tool_pricing`) nên đổi giá là tự đúng. -->
+        <div class="seo-col-t"><b>Công cụ tra cứu</b><span class="seo-cnt">59+ công cụ</span></div>
         <div class="seo-links">
           <a href="/tools/an-sao.html">An sao</a><a href="/tools/nap-am.html">Nạp âm</a><a href="/tools/tuong-hop.html">Tương hợp</a><a href="/tools/bat-trach.html">Bát trạch</a><a href="/tools/hoang-dao.html">Hoàng đạo</a><a href="/tools/tarot.html">Tarot</a>
         </div>
         <a class="seo-all" href="/cong-cu#mien-phi">Xem tất cả công cụ →</a>
       </div>
     </div>
-    <!-- C3 — đường vào thư viện. Đặt ngay dưới dải tra cứu vì cùng một ý định:
-         xem thử trước khi tự nhập lá số. Câu chữ nói rõ đây là bản do NGƯỜI
-         DÙNG tự chia sẻ, không phải mẫu dựng sẵn — hứa đúng thứ giao được. -->
     <a class="seo-gallery" href="/thu-vien?utm_source=home&amp;utm_medium=internal">
       <b>Thư Viện Luận Đường</b> — xem những bản luận người dùng đã tự chia sẻ, trước khi tự lập lá số của bạn →
     </a>
   </div>
 </section>
+
+<!-- ─── CLOSING CTA ──────────────────────────────────────── -->
+<section class="close-cta">
+  <div class="page row">
+    <div><b>Bạn có 1 câu hỏi chưa ai trả lời được?</b><br><span>Đừng để mơ hồ kéo dài — hỏi ngay để tìm ra hướng đi đúng đắn.</span></div>
+    <button type="button" id="bottomCta">Hỏi ngay →</button>
+  </div>
+</section>
+
+</div><!-- /#homeWrap -->
 
 <!-- ─── SCRIPTS ──────────────────────────────────────────── -->
 <script src="/track.js?v=3"></script>
@@ -585,6 +566,8 @@ a { color: var(--blue); text-decoration: none; }
 <script src="/footer.js"></script>
 <script src="/tools-shared/vn-timezone.js?v=1"></script>
 <script src="/tuvi-form.js"></script>
+<script>window.TestimonialsNoAutoRun = true;</script>
+<script src="/testimonials.js"></script>
 
 <script>
 // ─────────────────────────────────────────────────────────────
@@ -597,37 +580,33 @@ if (typeof TuviPaywall !== 'undefined') {
 // Referral capture (?ref=CODE → sessionStorage → auto-submit) nay nằm trong
 // /referral.js — nguồn DÙNG CHUNG cho homepage, /cong-cu và mọi trang /app
 // (shell.js tự nạp), để link chia sẻ /ket-qua mang mã cũng ăn được.
-
-// ─────────────────────────────────────────────────────────────
-// Init
-// ─────────────────────────────────────────────────────────────
 </script>
 
-<!-- ─── Tử Vi Chat homepage entry wiring ─────────────────── -->
+<!-- ─── Trang chủ: wiring cho hero, marquee, đánh giá, khảo luận, số liệu ── -->
 <script>
 (function () {
-  // Một cửa: câu hỏi từ hero dẫn thẳng vào Luận Đường (shell), KHÔNG về chat cũ.
+  'use strict';
+  function esc(s) { return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+
+  // Một cửa: câu hỏi/tool dẫn thẳng vào Luận Đường (shell), KHÔNG về chat cũ.
   // Câu hỏi gửi kèm dạng "pending-ask" để rail tự hỏi sau khi người dùng lập lá
   // số (shell.js đọc app_pending_ask trong setContext).
   var _TOOL_ROUTE = {
     laso:                 '/app/luan-giai',
+    'bat-tu':             '/app/bat-tu',
     'xem-tuoi':           '/app/xem-tuoi',
     'xem-lam-an':         '/app/xem-lam-an',
+    'cong-so':            '/app/cong-so',
+    'day-con':            '/app/day-con',
+    'duyen-no-tien-kiep': '/app/duyen-no-tien-kiep',
+    'kim-lau':            '/app/kim-lau',
     'huong-nghiep-tre':   '/app/huong-nghiep-tre',
     'chan-dung-vo-chong': '/app/chan-dung-vo-chong',
   };
 
-  // MỖI CHIP MỘT TOOL — khác hẳn bản cũ (3 chip đều trỏ `laso`, tức ba câu hỏi
-  // khác nhau về CÙNG một công cụ). Câu chữ tự mang luôn persona ("người yêu",
-  // "con tôi") nên không cần cột "Xem cho ai?" nữa.
-  // Danh sách chip nằm TĨNH trong HTML (xem `#hc-chips`), không dựng ở đây —
-  // dựng bằng JS thì 5 dòng nhảy ra sau khi tải và đội CLS trang chủ lên 0.12.
-  // Bảng `_TOOL_ROUTE` trên vẫn cần cho `go()` khi người dùng gõ câu hỏi tay.
-
   // Dẫn vào Luận Đường: nhớ câu hỏi (pending-ask, kèm mốc thời gian) rồi mở tool.
   function go(q, tool) {
     var route = _TOOL_ROUTE[tool] || _TOOL_ROUTE.laso;
-    // Funnel top: khách bấm CTA từ trang chủ vào Luận Đường (kèm tool đích).
     try { window.Track && window.Track.event && window.Track.event('cta_click', { tool_id: tool || 'laso', meta: { has_q: !!q, from: 'hero' } }); } catch (e) { /* ignore */ }
     if (q) {
       try { sessionStorage.setItem('app_pending_ask', JSON.stringify({ q: q, t: Date.now() })); } catch (e) { /* ignore */ }
@@ -636,10 +615,6 @@ if (typeof TuviPaywall !== 'undefined') {
   }
 
   // ── Orb: dấu thương hiệu, và là LỜI MỜI chứ không phải chỉ báo chờ ──────────
-  // Nạp `ai-loading-steps.js` theo lối LƯỜI và dùng biến thể 'invite' (thở chậm,
-  // KHÔNG xoay) — xem khối CSS trong module. CỐ Ý không chép CSS orb vào đây:
-  // chép là dựng bản thứ hai để rồi hai bản trôi khỏi nhau.
-  // Nạp hụt module thì avatar giữ nguyên chữ 命 và nút vẫn bấm được — không vỡ gì.
   function ensureOrbJs(cb) {
     if (window.AiLoadingSteps && window.AiLoadingSteps.orbHtml) { cb(); return; }
     var id = 'tvmb-orb-js';
@@ -658,21 +633,21 @@ if (typeof TuviPaywall !== 'undefined') {
     ensureOrbJs(function () {
       var ava = document.getElementById('hc-avatar');
       if (ava) {
-        ava.innerHTML = window.AiLoadingSteps.orbHtml({ size: 32, variant: 'invite' });
+        ava.innerHTML = window.AiLoadingSteps.orbHtml({ size: 30, variant: 'invite' });
         ava.classList.add('has-orb', 'ai-orb-live');
       }
       var slot = document.getElementById('heroOpenOrb');
       if (slot) {
-        slot.innerHTML = window.AiLoadingSteps.orbHtml({ size: 34, variant: 'invite' });
+        slot.innerHTML = window.AiLoadingSteps.orbHtml({ size: 32, variant: 'invite' });
         var btn = document.getElementById('heroOpen');
         if (btn) btn.classList.add('ai-orb-live');
       }
     });
   }
 
-  // Form ngày sinh — thay ô chat giả. `TuviForm` (đã dùng ở /app/luan-giai)
-  // dựng sẵn field ngày/tháng/năm/giờ/giới tính; nạp hụt thì `heroFormHost`
-  // trống nhưng nút "Vào thẳng Luận Đường" và các chip vẫn còn lối vào khác.
+  // Form ngày sinh — `TuviForm` dựng sẵn field ngày/tháng/năm/giờ/giới tính;
+  // nạp hụt thì `heroFormHost` trống nhưng nút "Vào thẳng Luận Đường" và các
+  // chip vẫn còn lối vào khác.
   if (window.TuviForm && document.getElementById('heroFormHost')) {
     TuviForm.render('heroFormHost', { mode: 'compact', gioitinh: 'nam', showName: false });
   }
@@ -684,12 +659,6 @@ if (typeof TuviPaywall !== 'undefined') {
         alert('Vui lòng nhập đầy đủ ngày, tháng, năm sinh.');
         return;
       }
-      // Chuyển dữ liệu sinh sang /app/luan-giai qua sessionStorage — CÙNG mẫu
-      // với `app_pending_ask` (go() ở trên) mà shell.js đã đọc, chỉ khác khoá
-      // và phía đọc (app-luan-giai.html tự điền form + tự bấm luận thay vì
-      // rơi vào rail chat). Không dùng query string: object có nhiều field,
-      // và slug/token nhạy hơn một chút thì để trong sessionStorage vẫn hơn
-      // để lộ trên URL/lịch sử trình duyệt.
       try { sessionStorage.setItem('app_pending_birth', JSON.stringify({ fd: fd, t: Date.now() })); } catch (e) { /* ignore */ }
       try { window.Track && window.Track.event && window.Track.event('cta_click', { tool_id: 'laso', meta: { has_q: false, from: 'hero_birth' } }); } catch (e) { /* ignore */ }
       window.location.href = '/app/luan-giai';
@@ -709,9 +678,6 @@ if (typeof TuviPaywall !== 'undefined') {
     });
   }
 
-  // Nút "Vào thẳng Luận Đường". Bản cũ là thẻ <a href="/app"> TRẦN nên không bắn
-  // `cta_click` — CTA chính của trang chủ hoàn toàn MÙ trong panel Phễu. Nay đi
-  // qua `go()` để mọi đường vào đều đo được.
   var openBtn = document.getElementById('heroOpen');
   if (openBtn) {
     openBtn.addEventListener('click', function () {
@@ -719,6 +685,182 @@ if (typeof TuviPaywall !== 'undefined') {
       window.location.href = '/app';
     });
   }
+
+  var bottomCta = document.getElementById('bottomCta');
+  if (bottomCta) {
+    bottomCta.addEventListener('click', function () { go('Tôi có một điều đang phân vân, giúp tôi với.', 'laso'); });
+  }
+
+  /* ── Dữ liệu tool (thật, tên/route khớp repo) ─────────────────────── */
+  var TOOLS = [
+    { ic: '▦', title: 'Luận giải Tử Vi', desc: 'Lập lá số 12 cung, chính tinh, cách cục, đại vận — rồi luận giải chuyên sâu.', tool: 'laso' },
+    { ic: '☰', title: 'Lá số Bát Tự', desc: 'Tứ trụ Tử Bình: nhật can, dụng thần, cách cục, đại vận theo tiết khí.', tool: 'bat-tu' },
+    { ic: '♡', title: 'Xem tuổi & tương hợp', desc: 'Vợ chồng, làm ăn — so hai lá số theo 8 chiều hợp khắc.', tool: 'xem-tuoi' },
+    { ic: '仕', title: 'Tử Vi Công Sở', desc: 'Đọc kiểu người ở chỗ làm, mạnh yếu 12 mặt, 4 chặng 40 năm sự nghiệp.', tool: 'cong-so' },
+    { ic: '子', title: 'Dạy Con Theo Lá Số', desc: 'Con tiếp thu kiểu nào, kỷ luật nào phản tác dụng — từ chính lá số con.', tool: 'day-con' },
+    { ic: '緣', title: 'Duyên Nợ Tiền Kiếp', desc: 'Ghép hai lá số, tìm mối duyên kiếp trước giữa bạn và người ấy.', tool: 'duyen-no-tien-kiep' },
+    { ic: '厄', title: 'Kim Lâu & Tam Tai', desc: 'Tuổi bạn có phạm Kim Lâu, Tam Tai không — bảng tra 20 năm tới.', tool: 'kim-lau' },
+    { ic: '穉', title: 'Hướng Nghiệp Cho Con', desc: 'Con hợp ngành nghề gì, năng khiếu bẩm sinh nằm ở đâu theo lá số.', tool: 'huong-nghiep-tre' },
+  ];
+
+  /* ── 8 câu hỏi phổ quát cho slider "Điều mọi người đang tò mò" ────── */
+  var ASKS = [
+    { gl: '財', q: 'Tại sao tôi mãi chưa giàu?', n: '12,3K lượt hỏi', tool: 'laso' },
+    { gl: '心', q: 'Người này có thật lòng với tôi không?', n: '8,7K lượt hỏi', tool: 'xem-tuoi' },
+    { gl: '仕', q: 'Tôi có đang chọn sai nghề không?', n: '9,6K lượt hỏi', tool: 'cong-so' },
+    { gl: '運', q: 'Bao giờ vận tôi lên?', n: '10,2K lượt hỏi', tool: 'laso' },
+    { gl: '祿', q: 'Năm nay công việc, tài lộc thế nào?', n: '15,4K lượt hỏi', tool: 'laso' },
+    { gl: '緣', q: 'Tình duyên tôi khi nào mới ổn định?', n: '9,1K lượt hỏi', tool: 'duyen-no-tien-kiep' },
+    { gl: '壽', q: 'Sức khỏe tôi năm nay có gì cần lưu ý?', n: '6,8K lượt hỏi', tool: 'laso' },
+    { gl: '子', q: 'Con đường sự nghiệp của tôi có thuận không?', n: '7,5K lượt hỏi', tool: 'huong-nghiep-tre' },
+  ];
+
+  function renderToolCard(t) { return '<a class="tool-card" href="' + esc(_TOOL_ROUTE[t.tool] || '/app') + '" data-tool="' + esc(t.tool) + '"><div class="tool-ic">' + esc(t.ic) + '</div><h3>' + esc(t.title) + '</h3><p>' + esc(t.desc) + '</p><span class="go">Mở trong Luận Đường →</span></a>'; }
+  function renderAskTile(a) { return '<button type="button" class="ask-tile" data-ask="' + esc(a.q) + '" data-tool="' + esc(a.tool) + '"><div class="gl">' + esc(a.gl) + '</div><div class="q">' + esc(a.q) + '</div><div class="n">' + esc(a.n) + '</div></button>'; }
+
+  function fillMarquee(id, list, renderFn) {
+    var el = document.getElementById(id);
+    if (!el || !list.length) return;
+    var html = list.map(renderFn).join('');
+    el.innerHTML = html + html;
+  }
+  fillMarquee('toolTrack', TOOLS, renderToolCard);
+  fillMarquee('askTrack', ASKS, renderAskTile);
+
+  var toolTrack = document.getElementById('toolTrack');
+  if (toolTrack) {
+    toolTrack.addEventListener('click', function (e) {
+      var card = e.target.closest('.tool-card');
+      if (!card) return;
+      if (e.metaKey || e.ctrlKey || e.shiftKey) return;
+      e.preventDefault();
+      try { window.Track && window.Track.event && window.Track.event('cta_click', { tool_id: card.getAttribute('data-tool') || 'laso', meta: { has_q: false, from: 'tool_marquee' } }); } catch (err) { /* ignore */ }
+      window.location.href = card.getAttribute('href');
+    });
+  }
+  var askTrack = document.getElementById('askTrack');
+  if (askTrack) {
+    askTrack.addEventListener('click', function (e) {
+      var t = e.target.closest('.ask-tile');
+      if (!t) return;
+      go(t.getAttribute('data-ask'), t.getAttribute('data-tool'));
+    });
+  }
+
+  /* ── Đánh giá — dùng chung dữ liệu window.TestimonialsData (testimonials.js) ── */
+  (function () {
+    var track = document.getElementById('hpRvTrack');
+    var dotsEl = document.getElementById('hpRvDots');
+    var prevBtn = document.getElementById('hpRvPrev');
+    var nextBtn = document.getElementById('hpRvNext');
+    if (!track || !dotsEl || !prevBtn || !nextBtn) return;
+    var reviews = (window.TestimonialsData && window.TestimonialsData.default) || [];
+    if (!reviews.length) return;
+
+    track.innerHTML = reviews.map(function (r) {
+      var stars = '';
+      for (var i = 1; i <= 5; i++) stars += (i <= r.stars ? '★' : '☆');
+      var text = r.text.replace(/^"|"$/g, '');
+      return '<div class="rv-card"><div class="rv-stars">' + stars + '</div><p class="rv-text">"' + esc(text) + '"</p><div><div class="rv-name">' + esc(r.name) + ' — ' + esc(r.city) + '</div><div class="rv-date">' + esc(r.date) + '</div></div></div>';
+    }).join('');
+
+    var perView = window.innerWidth <= 600 ? 1 : window.innerWidth <= 900 ? 2 : 3;
+    var total = reviews.length;
+    var maxIdx = Math.max(0, total - perView);
+    var idx = 0, autoT = null;
+
+    var numDots = Math.ceil(total / perView);
+    dotsEl.innerHTML = '';
+    for (var d = 0; d < numDots; d++) {
+      var dot = document.createElement('button');
+      dot.className = 'rv-dot' + (d === 0 ? ' active' : '');
+      dot.setAttribute('aria-label', 'Trang ' + (d + 1));
+      (function (di) { dot.addEventListener('click', function () { stopAuto(); goTo(di * perView); startAuto(); }); })(d);
+      dotsEl.appendChild(dot);
+    }
+    function updateDots() {
+      var dots = dotsEl.querySelectorAll('.rv-dot');
+      var activeDot = Math.round(idx / perView);
+      dots.forEach(function (dt, i) { dt.classList.toggle('active', i === activeDot); });
+    }
+    function goTo(newIdx) {
+      idx = Math.max(0, Math.min(newIdx, maxIdx));
+      var cardW = track.children[0] ? track.children[0].offsetWidth + 20 : 0;
+      track.style.transform = 'translateX(-' + (idx * cardW) + 'px)';
+      updateDots();
+    }
+    function startAuto() { stopAuto(); autoT = setInterval(function () { goTo(idx >= maxIdx ? 0 : idx + 1); }, 4500); }
+    function stopAuto() { if (autoT) { clearInterval(autoT); autoT = null; } }
+    prevBtn.addEventListener('click', function () { stopAuto(); goTo(idx - 1); startAuto(); });
+    nextBtn.addEventListener('click', function () { stopAuto(); goTo(idx + 1); startAuto(); });
+    window.addEventListener('resize', function () {
+      perView = window.innerWidth <= 600 ? 1 : window.innerWidth <= 900 ? 2 : 3;
+      maxIdx = Math.max(0, total - perView);
+      goTo(0);
+    });
+    startAuto();
+  })();
+
+  /* ── Kho Khảo Luận — fetch trực tiếp Supabase (cùng cách blog.html đang
+       dùng: browser fetch client-side, không phải Next server fetch nên
+       luật "no-store" của CLAUDE.md không áp dụng ở đây), 10 bài mới nhất,
+       lọc publish_status=published để không lộ bài nháp/đã gỡ. ─────────── */
+  (function () {
+    var track = document.getElementById('blogTrack');
+    var viewport = document.getElementById('blogViewport');
+    if (!track || !viewport) return;
+    var SUPABASE_URL = 'https://dciwkfdqhhddeymlisey.supabase.co';
+    var SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRjaXdrZmRxaGhkZGV5bWxpc2V5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyMzQ2MzksImV4cCI6MjA4ODgxMDYzOX0._3aXoe0hO-46J1gASUiNv__tWjSzLZFTL0M3-47L26I';
+    var CAT_LABEL = { 'dien-san': 'Điền Sản', 'tai-chinh': 'Tài Chính', 'tinh-cach': 'Tính Cách', 'van-han': 'Vận Hạn' };
+
+    function fmtDate(iso) {
+      try { var d = new Date(iso); return String(d.getDate()).padStart(2, '0') + '/' + String(d.getMonth() + 1).padStart(2, '0'); } catch (e) { return ''; }
+    }
+    function renderBlogCard(b) {
+      var cat = CAT_LABEL[b.category] || b.category || 'Khảo Luận';
+      return '<a class="blog-card" href="' + esc('/khao-luan/' + b.slug) + '"><div class="blog-thumb"><span>文</span></div><div class="blog-body"><div class="blog-cat">' + esc(cat) + '</div><div class="blog-title">' + esc(b.title) + '</div><p class="blog-excerpt">' + esc(b.excerpt || '') + '</p><div class="blog-fresh">Cập nhật ' + esc(fmtDate(b.created_at)) + '</div></div></a>';
+    }
+
+    fetch(SUPABASE_URL + '/rest/v1/khao_luan?select=slug,title,excerpt,category,created_at&publish_status=eq.published&order=created_at.desc&limit=10', {
+      headers: { apikey: SUPABASE_KEY, Authorization: 'Bearer ' + SUPABASE_KEY },
+      cache: 'no-store',
+      signal: (typeof AbortSignal !== 'undefined' && AbortSignal.timeout) ? AbortSignal.timeout(8000) : undefined,
+    })
+      .then(function (r) { return r.ok ? r.json() : []; })
+      .then(function (rows) {
+        if (!rows || !rows.length) { viewport.closest('section').style.display = 'none'; return; }
+        var html = rows.map(renderBlogCard).join('');
+        track.innerHTML = html + html;
+      })
+      .catch(function () { viewport.closest('section').style.display = 'none'; });
+  })();
+
+  /* ── Realtime mô phỏng — port thuật toán simulatePulse() từ shell.js ─── */
+  (function () {
+    var pulseData = null, dayKey = null;
+    var HOUR_CURVE = [0.22,0.18,0.15,0.14,0.16,0.22,0.35,0.5,0.62,0.7,0.75,0.72,0.68,0.72,0.8,0.88,0.9,0.86,0.92,0.88,0.8,0.65,0.5,0.34];
+    function vnNow() { var d = new Date(); return new Date(d.getTime() + (7 * 60 - d.getTimezoneOffset()) * 60000); }
+    function keyOf(d) { return d.getFullYear() + '-' + d.getMonth() + '-' + d.getDate(); }
+    function simulate() {
+      var now = vnNow(), k = keyOf(now), factor = HOUR_CURVE[now.getHours()];
+      if (!pulseData || dayKey !== k) {
+        dayKey = k;
+        pulseData = { online: Math.round(900 + factor * 1600 + Math.random() * 150), promptsToday: Math.round(1800 + factor * 1400 + Math.random() * 200) };
+      } else {
+        var drift = Math.round((Math.random() - 0.42) * 40);
+        var target = Math.round(900 + factor * 1600);
+        pulseData.online = Math.max(600, Math.min(3400, Math.round(pulseData.online * 0.9 + target * 0.1 + drift)));
+        if (Math.random() < 0.55) pulseData.promptsToday += Math.round(Math.random() * 15) + (Math.random() < 0.12 ? 40 : 0);
+      }
+      return pulseData;
+    }
+    function paint(d) {
+      var o = document.getElementById('statOnline'); if (o) o.textContent = d.online.toLocaleString('vi-VN');
+      var p = document.getElementById('statPrompts'); if (p) p.textContent = d.promptsToday.toLocaleString('vi-VN');
+    }
+    function tick() { paint(simulate()); setTimeout(tick, 5000 + Math.random() * 5000); }
+    tick();
+  })();
 })();
 </script>
 
