@@ -10,6 +10,22 @@ const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsI
 const SESSION_KEY = 'tuvi_session';
 const USER_KEY    = 'tuvi_user';
 
+// Facebook (và Instagram) mở link quảng cáo trong WEBVIEW RIÊNG của nó, không
+// phải Chrome/Safari thật. Google CHỦ ĐỘNG chặn OAuth từ UA nhận diện được là
+// webview nhúng (trả về lỗi "This browser or app may not be secure" —
+// disallowed_useragent) — chặn cả redirect toàn trang, không riêng popup.
+// Đo trên traffic Facebook Ads thật (2026-08-30): 1.639/1.640 khách vào từ
+// utm_source=fb khớp UA này. Hệ quả đo được: 12 lượt bấm mở khoá trên Chu
+// Trình Cuộc Đời chỉ ra ĐÚNG 1 signup — 11 người bấm "Tiếp tục với Google"
+// (nút đầu tiên, nổi nhất) rồi kẹt ở trang cảnh báo của Google, không tự tìm
+// xuống form email bên dưới. KHÔNG sửa mò regex này — nó đã đối chiếu đúng
+// bằng số liệu, không phải suy đoán.
+function _isEmbeddedWebview() {
+  try {
+    return /FBAN|FBAV|FB_IAB|FBIOS|Instagram/i.test(navigator.userAgent || '');
+  } catch (e) { return false; }
+}
+
 // ── Cookie helpers — lưu refresh_token 6 tháng để sống sót ITP trên iOS Safari ──
 function _setCookie(name, value, days) {
   const d = new Date();
@@ -475,21 +491,27 @@ function showAuthModal(callback) {
         <div style="font-family:Georgia,serif;font-size:16px;font-weight:700;color:#CC2200">Tử Vi Minh Bảo</div><div style="font-size:11px;color:#999;margin-top:2px;font-style:italic">Tri mệnh lý – Thuận thế hành</div>
       </div>
 
-      <!-- Google OAuth -->
-      <button onclick="signInGoogle()" style="width:100%;padding:11px;border:1.5px solid #ddd;border-radius:8px;background:#fff;display:flex;align-items:center;justify-content:center;gap:10px;font-size:13px;cursor:pointer;font-family:inherit;margin-bottom:8px;transition:border-color 0.15s" onmouseover="this.style.borderColor='#4285f4'" onmouseout="this.style.borderColor='#ddd'">
-        <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z"/><path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z"/><path fill="#FBBC05" d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332z"/><path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z"/></svg>
-        Tiếp tục với Google
-      </button>
-      <button onclick="signInFacebook()" style="width:100%;padding:11px;border:1.5px solid #ddd;border-radius:8px;background:#fff;display:flex;align-items:center;justify-content:center;gap:10px;font-size:13px;cursor:pointer;font-family:inherit;margin-bottom:16px;transition:border-color 0.15s" onmouseover="this.style.borderColor='#1877F2'" onmouseout="this.style.borderColor='#ddd'">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="#1877F2"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
-        Tiếp tục với Facebook
-      </button>
+      <!-- Google/Facebook OAuth — ẨN khi mở trong webview nhúng của FB/IG, xem
+           _isEmbeddedWebview(). Cả hai nhà cung cấp đều không tin cậy được ở
+           đó (Google chặn hẳn UA webview), nên đường DUY NHẤT còn lại là form
+           email bên dưới — ẩn cả khối để khỏi mời bấm vào một nút chắc chắn kẹt. -->
+      <div id="auth-oauth-block">
+        <button onclick="signInGoogle()" style="width:100%;padding:11px;border:1.5px solid #ddd;border-radius:8px;background:#fff;display:flex;align-items:center;justify-content:center;gap:10px;font-size:13px;cursor:pointer;font-family:inherit;margin-bottom:8px;transition:border-color 0.15s" onmouseover="this.style.borderColor='#4285f4'" onmouseout="this.style.borderColor='#ddd'">
+          <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z"/><path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z"/><path fill="#FBBC05" d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332z"/><path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z"/></svg>
+          Tiếp tục với Google
+        </button>
+        <button onclick="signInFacebook()" style="width:100%;padding:11px;border:1.5px solid #ddd;border-radius:8px;background:#fff;display:flex;align-items:center;justify-content:center;gap:10px;font-size:13px;cursor:pointer;font-family:inherit;margin-bottom:16px;transition:border-color 0.15s" onmouseover="this.style.borderColor='#1877F2'" onmouseout="this.style.borderColor='#ddd'">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="#1877F2"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+          Tiếp tục với Facebook
+        </button>
 
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
-        <div style="flex:1;height:1px;background:#eee"></div>
-        <span style="font-size:12px;color:#aaa">hoặc</span>
-        <div style="flex:1;height:1px;background:#eee"></div>
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
+          <div style="flex:1;height:1px;background:#eee"></div>
+          <span style="font-size:12px;color:#aaa">hoặc</span>
+          <div style="flex:1;height:1px;background:#eee"></div>
+        </div>
       </div>
+      <p id="auth-webview-note" style="display:none;font-size:12px;color:#7A5F26;background:#FBF8F1;border:1px solid #EADFC8;border-radius:8px;padding:9px 12px;margin-bottom:14px;line-height:1.6">Bạn đang mở trong ứng dụng Facebook/Instagram nên đăng nhập Google/Facebook không dùng được ở đây — dùng email bên dưới, chỉ mất chưa tới 1 phút.</p>
 
       <!-- Email form -->
       <div id="auth-form">
@@ -510,6 +532,15 @@ function showAuthModal(callback) {
 
   document.body.appendChild(modal);
   modal.addEventListener('click', e => { if (e.target === modal) closeAuthModal(); });
+  if (_isEmbeddedWebview()) {
+    const oauthBlock = document.getElementById('auth-oauth-block');
+    if (oauthBlock) oauthBlock.style.display = 'none';
+    const note = document.getElementById('auth-webview-note');
+    if (note) note.style.display = 'block';
+    // Khách bấm quảng cáo hầu như luôn là người MỚI — mở thẳng tab Đăng ký để
+    // khỏi phải tự bấm qua, và để họ thấy ngay có Lượng tặng.
+    if (_currentTab !== 'signup') switchTab('signup');
+  }
   setTimeout(() => document.getElementById('auth-email')?.focus(), 100);
   _prefillPromo();
 }

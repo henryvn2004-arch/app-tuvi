@@ -617,16 +617,31 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
   // mà không cần trang nào gọi tay. Đếm 1 lần/phần tử qua `seen` — sửa ngày
   // sinh dựng lại DOM thì các phần tử CŨ (đã tính) tự rụng khỏi WeakSet, phần
   // tử MỚI được quét lại từ đầu, đúng ý "hiện lại thì tính lại lượt hiện".
+  //
+  // ⚠️ `_paintSecLocks(true)` (tool nhiều phần, vd Chu Trình Cuộc Đời) bật
+  // display CẢ 11 phần trong MỘT vòng lặp đồng bộ — không debounce thì mỗi
+  // phần tử bắn RIÊNG một preview_shown, biến MỘT lượt tường-hiện thành 11
+  // (đo được: 764 event / 47 người ở 48h đầu chạy ads). Gộp mọi phần tử mới
+  // lộ ra trong CÙNG một tick thành đúng MỘT event, giữ số lượng thật ở
+  // `meta.count` để không mất thông tin.
   function _watchSecShown(root) {
     const seen = new WeakSet();
+    let pending = 0, flushTimer = null;
+    const flush = () => {
+      flushTimer = null;
+      if (pending <= 0) return;
+      const n = pending; pending = 0;
+      try {
+        if (window.Track) window.Track.event('preview_shown', { tool_id: (_cfg && _cfg.product) || '', meta: { from: 'section', count: n } });
+      } catch (e) { /* đo hỏng không được chặn hiện tường */ }
+    };
     const scan = () => {
       root.querySelectorAll('[data-tpw-seclock]').forEach((el) => {
         if (seen.has(el) || getComputedStyle(el).display === 'none') return;
         seen.add(el);
-        try {
-          if (window.Track) window.Track.event('preview_shown', { tool_id: (_cfg && _cfg.product) || '', meta: { from: 'section' } });
-        } catch (e) { /* đo hỏng không được chặn hiện tường */ }
+        pending++;
       });
+      if (pending > 0 && !flushTimer) flushTimer = setTimeout(flush, 0);
     };
     scan();
     new MutationObserver(scan).observe(root, { attributes: true, attributeFilter: ['style', 'class'], childList: true, subtree: true });

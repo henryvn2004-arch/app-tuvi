@@ -2215,7 +2215,13 @@
       ctx = (o.birth || o.scenario) ? { birth: o.birth || null, scenario: o.scenario || null, wrap: o.wrap || null, wrapBirthB: o.wrapBirthB || null } : null;
       ctxCalls++;
       // Funnel: tool đã tính ra kết quả + gắn ngữ cảnh = "đã dùng tool" (activation).
-      try { track('tool_run', { tool_id: ACTIVE, slug: (o.scenario && o.scenario.type) || null }); } catch (e) { /* ignore */ }
+      // `o.passive` — trang tự mồi rail lúc BOOT (chưa ai bấm gì, vd Tổng Quan
+      // mồi câu chào bằng vận ngày hôm nay) KHÔNG được tính là activation. Thiếu
+      // cờ này thì MỌI lượt vào /app đều tự ghi tool_run='home' — đã đo được
+      // đúng 1-1 với số khách, thổi phồng toàn bộ phễu tool_run trên site.
+      if (!o.passive) {
+        try { track('tool_run', { tool_id: ACTIVE, slug: (o.scenario && o.scenario.type) || null }); } catch (e) { /* ignore */ }
+      }
       markToolUsed(ACTIVE);
       messages = [];
       sessionId = newId();
