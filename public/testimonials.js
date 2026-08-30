@@ -89,6 +89,10 @@
 
   };
 
+  // Export cho trang khác dùng lại đúng nội dung này (vd. trang chủ) thay vì
+  // chép tay — một nguồn duy nhất cho review, tránh trôi khỏi nhau.
+  window.TestimonialsData = DATA;
+
   // ── Map path → dataset key ────────────────────────────────────
 
   function detectKey() {
@@ -280,10 +284,15 @@
     initSlider(reviews);
   }
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', run);
-  } else {
-    run();
+  // window.TestimonialsNoAutoRun: trang chủ chỉ cần DATA để tự dựng slider ở
+  // VỊ TRÍ RIÊNG trong luồng trang, không cần section tự chèn cuối body như
+  // các trang tool. Mọi trang khác KHÔNG set cờ này nên hành vi giữ nguyên.
+  if (!window.TestimonialsNoAutoRun) {
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', run);
+    } else {
+      run();
+    }
   }
 
 })();
