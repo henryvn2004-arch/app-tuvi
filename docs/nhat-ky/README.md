@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-161 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+162 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 **Ba file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
 ```bash
@@ -11,7 +11,7 @@ sed -n '120,190p' docs/nhat-ky/2026-08.md    # đọc đúng đoạn, đừng ca
 
 | file | số mục | dung lượng |
 |---|---:|---:|
-| `2026-08.md` | 143 | 1,001,116 B |
+| `2026-08.md` | 145 | 1,009,508 B |
 | `2026-07.md` | 12 | 154,531 B |
 | `track-cu.md` | 5 | 89,354 B |
 
@@ -185,3 +185,4 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 | 154 | 2026-08 | `2026-08.md` | 📮 Hộp Thư Góp Ý trong Tài khoản — chọn KHÔNG làm chatbot sản phẩm |
 | 155 | 2026-08 | `2026-08.md` | 👍👎 Lớp 1 — nút góp ý gắn NGAY dưới bản luận giải |
 | 156 | 2026-08 | `2026-08.md` | 🔐 Chốt đơn chuyển khoản nguyên tử + một chuỗi nội dung CK duy nhất |
+| 157 | 2026-08 | `2026-08.md` | 🔐 Đợt 3 vá `search_path` SECDEF — 2/3 hàm là HỒI QUY, không phải hàm mới |

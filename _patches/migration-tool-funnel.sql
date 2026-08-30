@@ -57,7 +57,7 @@ returns table (
   luot_mua bigint,
   luong bigint
 )
-language sql security definer set search_path = public as $$
+language sql security definer set search_path = public, pg_temp as $$
   with ev as (
     select tool_canon(e.tool_id) as tool_id,
            e.event_type,
@@ -100,7 +100,7 @@ $$;
 -- hiện thẳng danh sách này thay vì để nó chìm.
 create or replace function public.tool_funnel_lac(p_from timestamptz, p_to timestamptz)
 returns table (tool_id text, nguon text, so_luot bigint)
-language sql security definer set search_path = public as $$
+language sql security definer set search_path = public, pg_temp as $$
   select tool_canon(e.tool_id), 'events'::text, count(*)
     from events e
    where e.ts >= p_from and e.ts < p_to and e.tool_id is not null

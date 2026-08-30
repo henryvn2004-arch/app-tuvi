@@ -232,6 +232,12 @@ Mỗi luật dưới đây sinh ra từ một lần cắn thật. Cột cuối l
   của Postgres. Phải `REVOKE ALL FROM public, anon, authenticated` +
   `SET search_path = public, pg_temp` (nêu `pg_temp` tường minh, nếu không nó
   đứng đầu và che được bảng thật bằng bảng TẠM cùng tên).
+  ⚠️ **Vá bằng `ALTER FUNCTION` chạy thẳng trên DB mà KHÔNG sửa lại
+  `CREATE OR REPLACE` trong file migration nguồn là vá NỬA VỜI** — nó thay
+  TOÀN BỘ `proconfig`, không cộng dồn với ALTER trước đó, nên deploy lại đúng
+  file migration là hồi quy về `search_path` trần mà không ai để ý. Đã cắn:
+  `tool_funnel`/`tool_funnel_lac` được vá ở đợt 2 rồi hồi quy, bắt lại ở đợt 3
+  (`_patches/migration-secdef-search-path-batch3.sql`).
 - **`} catch {}` rỗng trên đường tiền là cấm** — best-effort thì đúng, nhưng phải
   `console.error`, nếu không lỗi bay ra rồi bị nuốt trọn.
 
