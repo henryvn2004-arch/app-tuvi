@@ -268,15 +268,28 @@ a { color: var(--blue); text-decoration: none; }
 .section-all { display: inline-block; margin-top: 22px; font-size: 13.5px; color: var(--gold); font-weight: 700; }
 
 /* ── Marquee dùng chung (câu hỏi / tool / khảo luận) ─────────── */
-.marquee-viewport { overflow: hidden; margin: 0 -40px; padding: 6px 40px; -webkit-mask-image: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent); mask-image: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent); }
+/* Mờ hai đầu bằng pseudo-element phủ gradient, KHÔNG dùng CSS mask-image —
+   đã đo trên iPhone Safari thật: mask-image + animation + overflow:hidden
+   cùng lúc làm cả khối marquee render RỖNG (khoảng trắng đúng bằng chỗ nó
+   chiếm, JS vẫn chạy tới cuối vì 2 ô số liệu realtime bên dưới vẫn nhảy số)
+   — bug WebKit khá nổi tiếng với tổ hợp này. Gradient overlay không đụng gì
+   tới nội dung thật nên không dính bug tương tự. */
+.marquee-viewport { overflow: hidden; margin: 0 -40px; padding: 6px 40px; position: relative; }
 @media (max-width: 768px) { .marquee-viewport { margin: 0 -18px; padding: 6px 18px; } }
+.marquee-viewport::before, .marquee-viewport::after { content: ''; position: absolute; top: 0; bottom: 0; width: 40px; z-index: 2; pointer-events: none; }
+.marquee-viewport::before { left: 0; background: linear-gradient(90deg, #fff, rgba(255,255,255,0)); }
+.marquee-viewport::after { right: 0; background: linear-gradient(270deg, #fff, rgba(255,255,255,0)); }
+/* .ask-section nền navy — overlay phải theo màu nền cục bộ, không phải trắng */
+.ask-section .marquee-viewport::before { background: linear-gradient(90deg, var(--navy), rgba(6,26,46,0)); }
+.ask-section .marquee-viewport::after { background: linear-gradient(270deg, var(--navy), rgba(6,26,46,0)); }
+@media (max-width: 768px) { .marquee-viewport::before, .marquee-viewport::after { width: 18px; } }
 .marquee-track { display: flex; width: max-content; gap: 16px; }
 .marquee-track.spin-a { animation: marquee 38s linear infinite; }
 .marquee-track.spin-c { animation: marquee 46s linear infinite; }
 .marquee-track.spin-d { animation: marquee 32s linear infinite; }
 @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 .marquee-viewport:hover .marquee-track, .marquee-viewport:focus-within .marquee-track { animation-play-state: paused; }
-@media (prefers-reduced-motion: reduce) { .marquee-track { animation: none !important; } .marquee-viewport { overflow-x: auto; -webkit-mask-image: none; mask-image: none; } }
+@media (prefers-reduced-motion: reduce) { .marquee-track { animation: none !important; } .marquee-viewport { overflow-x: auto; } }
 
 /* ── ĐIỀU MỌI NGƯỜI ĐANG TÒ MÒ ────────────────────────────── */
 .ask-section { background: var(--navy); padding: 42px 0 36px; }
