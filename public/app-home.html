@@ -1112,7 +1112,8 @@ function renderAllTools(d) {
             label:'Trò chuyện với Thầy'+(nm?' · '+nm:''),
             placeholder:'Kể cho thầy nghe…',
             greeting:greetingFor(cc,nm,away,worry),
-            chips:CHIPS_TAM_SU
+            chips:CHIPS_TAM_SU,
+            passive:true
           });
         };
         prime(null);
@@ -1137,7 +1138,8 @@ function renderAllTools(d) {
           scenario:{type:'hoang-dao',data:flat},
           label:'Vận ngày '+td.d+'/'+td.mo,
           greeting:'Hôm nay là ngày **'+cc+'** (hành '+v.ngay.canHanh+'). Bạn định làm việc gì để tôi chọn giờ đẹp? Lập lá số để tôi luận vận riêng cho bạn.',
-          chips:['Hôm nay nên làm gì, tránh gì?','Giờ nào đẹp để xuất hành?','Lập lá số xem vận của tôi','Ngày mai có tốt không?']
+          chips:['Hôm nay nên làm gì, tránh gì?','Giờ nào đẹp để xuất hành?','Lập lá số xem vận của tôi','Ngày mai có tốt không?'],
+          passive:true
         });
       }
     }catch(e){ if(window.console)console.error('[today]',e); }
