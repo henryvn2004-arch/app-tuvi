@@ -175,6 +175,23 @@ dùng thử (`lib/billing/anon-trial.ts` + RPC `anon_rail_trial_consume`).
   LƯỢT) và **tiêu quota ngay khi cấp phép**, không đợi model xong — đếm sau khi
   thành công là mở đường gọi model rồi ngắt kết nối để khỏi bị tính.
 
+### Guest checkout (Supabase Anonymous Sign-ins) — MỌI thưởng phải chặn `is_anonymous`
+`requireCredits()` (`public/tuvi-paywall.js`) tự mở một phiên **ẩn danh** (âm
+thầm, không hỏi gì — `Auth.signInAnonymously()`) cho khách CHƯA đăng nhập bấm
+unlock, thay vì chặn bằng modal đăng ký. Phiên này là user **THẬT** trong
+`auth.users` (`is_anonymous=true`), dùng được với mọi RPC/route hiện có; "Lưu
+tài khoản" (`Auth.claimAccount()`) nâng cấp TẠI CHỖ cùng `user_id` — không
+phải hợp nhất 2 tài khoản. Đây KHÁC hẳn `anon-trial.ts` ở trên (đó là
+`anon_id` phía marketing cho vài câu chat miễn phí; đây là danh tính Auth thật
+dùng để mua hàng) — đừng lẫn hai khái niệm "ẩn danh".
+
+⚠️ **Vì tạo được bằng cách xoá cookie (không cần email/OTP), MỌI đường phát
+thưởng phải tự kiểm `user.is_anonymous` trước khi cấp — thiếu một chỗ là cày
+vô hạn.** Đã chặn ở `handle_new_user_signup()` (trigger quà chào mừng 20-40
+Lượng), `handleOnboardingSync`, `handleReferralRegister`, `handlePromoRedeem`
+(`app/api/payment/route.ts`). Thêm đường thưởng mới → nhớ thêm chốt này.
+Xem `_patches/migration-anon-checkout-no-signup-bonus.sql`.
+
 ### Giá trị 1 Lượng: SUY TỪ BẢNG GÓI, không còn hằng số neo
 **⚠️ `app_config['credits.vnd_per_credit']` ĐÃ BỊ GỠ** — đừng viết code đọc lại
 khoá đó. Nguồn thật giờ là bảng `credit_packages`: đơn giá = **gói bậc hai**

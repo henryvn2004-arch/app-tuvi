@@ -554,12 +554,13 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
 
     let money;
     if (balance == null) {
-      // Khách CHƯA đăng nhập: đây là lượt DUY NHẤT họ thấy phần có cấu trúc
-      // trước khi phải đăng ký — CTA nói thẳng cái họ nhận được (Lượng miễn
-      // phí), không chỉ nói "đăng nhập để xem số dư" (số dư của ai, họ chưa
-      // có tài khoản).
-      money = 'Đăng ký tài khoản để mở — được <b>tặng Lượng miễn phí</b>, dùng thử ngay. ' +
-        '<a onclick="TuviPaywall._login()">Đăng ký / đăng nhập</a>';
+      // Khách CHƯA đăng nhập: bấm nút là trả tiền và đọc luôn (guest checkout,
+      // xem `requireCredits` — tự mở một phiên ẩn danh, KHÔNG đăng ký, KHÔNG
+      // quà chào mừng vì chưa phải tài khoản thật). Đường lùi "Đăng nhập" dành
+      // riêng cho ai ĐÃ có tài khoản/số dư từ trước — thiếu link này thì họ bị
+      // đẩy vào một phiên ẩn danh MỚI (0 Lượng) thay vì số dư thật đang có.
+      money = 'Bấm mở là trả tiền và đọc ngay, không cần đăng ký trước. ' +
+        '<a onclick="TuviPaywall._login()">Đã có tài khoản? Đăng nhập</a>';
     } else if (balance < cost) {
       money = 'Bạn còn <b>' + balance + '</b> · cần <b>' + cost + '</b> — thiếu ' + (cost - balance) +
         ', <a href="/topup.html" onclick="' + _topupClick('preview', cost - balance) + '">nạp thêm →</a>';
@@ -812,6 +813,12 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
 
     // 1. Login check — use window.Auth from auth.js
     if (!window.Auth?.isLoggedIn()) {
+      // Guest checkout: thử mở một phiên ẨN DANH âm thầm trước — khách chỉ
+      // muốn trả tiền đọc MỘT lần không nên bị chặn bởi màn hình đăng ký. Chưa
+      // bật "Allow anonymous sign-ins" ở Supabase (hoặc lỗi mạng) thì hàm này
+      // trả `false`, rơi thẳng về đường cũ bên dưới — không có gì để hỏng.
+      const anon = window.Auth?.signInAnonymously ? await window.Auth.signInAnonymously() : false;
+      if (anon) { await requireCredits(slug, callback); return; }
       if (window.showAuthModal) {
         window.showAuthModal(async () => { await requireCredits(slug, callback); });
       } else if (window.Auth?.require) {
