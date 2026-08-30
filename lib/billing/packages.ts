@@ -17,14 +17,16 @@ export interface CreditPackage {
   label: string;
 }
 
-// Khớp seed migration-credit-packages.sql + migration-pricing-v2.sql.
 // Dùng khi DB đọc hụt — phải GIỮ KHỚP với DB, vì để lệch thì đúng lúc Supabase
-// chớp một nhịp người dùng trả 99.000đ mà chỉ nhận 50 Lượng thay vì 100.
+// chớp một nhịp người dùng trả 199.000đ mà chỉ nhận 240 Lượng thay vì 250 (bảng
+// giá cũ). Đợt tăng giá 2026-08-30 (Khởi Đầu 99k→199k, Phổ Thông 199k→399k,
+// Cao Cấp 499k→699k, VIP giữ 999k nhưng tăng Lượng) đã cập nhật `credit_packages`
+// — sửa NƠI NÀY theo, đừng để hai nguồn lệch nhau.
 const FALLBACK: Record<string, CreditPackage> = {
-  '50':  { packageId: '50',  credits: 100,  amountVnd: 99_000,  amountUsd: '4.00',  label: 'Khởi Đầu' },
-  '120': { packageId: '120', credits: 240,  amountVnd: 199_000, amountUsd: '8.00',  label: 'Phổ Thông' },
-  '350': { packageId: '350', credits: 700,  amountVnd: 499_000, amountUsd: '20.00', label: 'Cao Cấp' },
-  '800': { packageId: '800', credits: 1600, amountVnd: 999_000, amountUsd: '40.00', label: 'VIP' },
+  '50':  { packageId: '50',  credits: 250,  amountVnd: 199_000, amountUsd: '8.00',  label: 'Khởi Đầu' },
+  '120': { packageId: '120', credits: 600,  amountVnd: 399_000, amountUsd: '16.00', label: 'Phổ Thông' },
+  '350': { packageId: '350', credits: 1200, amountVnd: 699_000, amountUsd: '28.00', label: 'Cao Cấp' },
+  '800': { packageId: '800', credits: 2000, amountVnd: 999_000, amountUsd: '40.00', label: 'VIP' },
 };
 
 const TTL_MS = 60_000;
@@ -86,8 +88,8 @@ export interface CustomQuote {
  * Quy đổi SỐ TIỀN TỰ CHỌN ra Lượng.
  *
  * Trước đây chỗ này chia cứng 2.500đ/Lượng, trong khi bậc gói đã tụt xuống
- * 624–990đ/Lượng — nghĩa là nạp lẻ đắt hơn mua gói 2,5–4 lần (99.000đ mua gói
- * được 100 Lượng, nạp lẻ chỉ 39). Con số 2.500đ là tàn dư bảng giá cũ, và nó
+ * 499,5–796đ/Lượng — nghĩa là nạp lẻ đắt hơn mua gói 3–5 lần (199.000đ mua gói
+ * được 250 Lượng, nạp lẻ chỉ 79). Con số 2.500đ là tàn dư bảng giá cũ, và nó
  * lệch được chính vì nó là một hằng số RIÊNG, không dính gì tới bảng gói.
  *
  * Nay đơn giá SUY TỪ `credit_packages`: lấy bậc tốt nhất mà số tiền này với
@@ -126,7 +128,7 @@ export function invalidatePackages() {
 
 /**
  * Đơn giá quy đổi 1 Lượng ≈ VNĐ, dùng khi cần NÓI một con số tiền cho người
- * dùng (vd đồng hồ rail: "Luận Giải 100 Lượng ≈ 82.900đ").
+ * dùng (vd đồng hồ rail: "Luận Giải 100 Lượng ≈ 66.500đ").
  *
  * DÙNG CHUNG quy tắc với hàm SQL `credit_vnd()`: lấy đơn giá của **gói thứ
  * hai** theo thứ tự giá tăng dần — bậc phổ thông, mức đại diện nhất — rồi mới
