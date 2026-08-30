@@ -862,7 +862,13 @@ export function formatPublishReport(r: PublishResult): string {
  */
 function channelFix(ch: string, msgs: string[]): string {
   const hit = (p: string) => msgs.some((m) => m.includes(p));
-  if (ch === 'facebook' && (hit('session has expired') || hit('has expired'))) return FB_TOKEN_EXPIRED;
+  // Code 190 là NHÓM lỗi token chết/bị thu hồi (xem BLOCKING_PATTERNS phía trên),
+  // nhưng Graph API đổi chữ tuỳ nguyên nhân — "session has expired", "session is
+  // invalid because the user logged out", "...changed their password"... Khớp
+  // theo từng câu chữ là mất tác dụng ngay khi Facebook đổi câu (đã vấp thật:
+  // "the user logged out" rơi vào nhánh dưới, trả nhầm lời khuyên xin quyền).
+  // Khớp theo MÃ LỖI mới ổn định qua mọi biến thể câu chữ.
+  if (ch === 'facebook' && (hit('code 190') || hit('has expired') || hit('logged out'))) return FB_TOKEN_EXPIRED;
   if (ch === 'tiktok') {
     // 🔑 TikTok có BA cửa khác hẳn nhau, và nhầm cửa là đi sửa nhầm chỗ y hệt
     // ca Facebook: miền chưa verify KHÔNG phải chuyện token, mà lỗi của nó
