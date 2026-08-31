@@ -688,6 +688,7 @@ async function submitClaim() {
   try {
     await claimAccount(email, pass);
     closeClaimModal();
+    try { window.fbq && window.fbq('track', 'CompleteRegistration'); } catch (e) {}
     const msg = '✓ Đã lưu — kiểm tra email để xác nhận nếu được yêu cầu';
     if (window.TuviPaywall && window.TuviPaywall._banner) window.TuviPaywall._banner(msg);
     else alert(msg);
@@ -783,6 +784,7 @@ async function submitAuth() {
     }
     closeAuthModal();
     if (_currentTab === 'signup') {
+      try { window.fbq && window.fbq('track', 'CompleteRegistration'); } catch (e) {}
       // Show free credits welcome banner
       _showFreeCreditsWelcome();
     }

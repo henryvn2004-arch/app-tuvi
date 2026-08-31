@@ -89,7 +89,7 @@ export function humanIssueMessage(issue: string): string {
 
 // ── Chốt một đơn topup ────────────────────────────────────────
 export type SettleOutcome =
-  | { ok: true; credits: number; balance: number; credited: boolean }
+  | { ok: true; credits: number; balance: number; credited: boolean; amountVnd: number }
   | { ok: false; status: number; error: string };
 
 /**
@@ -211,7 +211,7 @@ export async function settlePayPalTopup(
   if (!row) return { ok: false, status: 500, error: 'Không ghi được giao dịch' };
 
   // Thưởng giới thiệu tự fire qua trigger trg_referral_check_on_topup.
-  return { ok: true, credits: pkg.credits, balance: row.balance, credited: row.credited };
+  return { ok: true, credits: pkg.credits, balance: row.balance, credited: row.credited, amountVnd: pkg.amountVnd };
 }
 
 // ── Xác thực webhook ──────────────────────────────────────────
