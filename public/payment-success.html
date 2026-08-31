@@ -125,6 +125,18 @@ if (!document.getElementById('fb-pixel-js') && !navigator.webdriver) {
   window.fbq('init', '1747342186469684');
   window.fbq('track', 'PageView');
 }
+// `nav.js?v=22` ở chế độ `data-icons-only` CŨNG bỏ qua GA4 (xem nav.js#336) —
+// cùng lý do như fbq ở trên: đây là trang XÁC NHẬN THANH TOÁN, đúng nơi phải
+// bắn sự kiện `purchase` để Google Ads (import Key Event từ GA4) đo được
+// conversion. Không nơi nào khác trong repo từng gọi gtag('event','purchase').
+if (!document.getElementById('gtag-js') && !navigator.webdriver) {
+  var ga = document.createElement('script'); ga.id = 'gtag-js'; ga.async = true;
+  ga.src = 'https://www.googletagmanager.com/gtag/js?id=G-F4XNRS2XT0'; document.head.appendChild(ga);
+  window.dataLayer = window.dataLayer || [];
+  window.gtag = function () { window.dataLayer.push(arguments); };
+  window.gtag('js', new Date());
+  window.gtag('config', 'G-F4XNRS2XT0');
+}
 </script>
 <script>
 const params  = new URLSearchParams(window.location.search);
@@ -166,6 +178,7 @@ async function capture() {
       // Ads Manager dù không có đồng nào mới về. Chỉ bắn ở lượt CHỐT THẬT.
       if (data.status !== 'already_completed') {
         try { window.fbq && window.fbq('track', 'Purchase', { value: data.amountVnd || 0, currency: 'VND' }); } catch (e) {}
+        try { window.gtag && window.gtag('event', 'purchase', { transaction_id: ppToken, value: data.amountVnd || 0, currency: 'VND' }); } catch (e) {}
       }
       showSuccess(slug, data.credits || 0, data.balance || 0);
     } else {
