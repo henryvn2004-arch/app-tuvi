@@ -111,6 +111,22 @@ body {
 <script src="/auth.js?v=2"></script>
 <script src="/nav.js?v=22" data-icons-only></script>
 <script>
+// `nav.js?v=22` ở chế độ `data-icons-only` CỐ Ý không nạp Meta Pixel (xem
+// nav.js#297). Nhưng đây là trang XÁC NHẬN THANH TOÁN — đúng nơi PHẢI bắn
+// Purchase, nên khởi tạo pixel riêng ở đây thay vì trông chờ nav.js. Cùng
+// pixel ID với nav.js, cùng lý do bỏ qua `navigator.webdriver` (bộ E2E chạy
+// thẳng vào trang này — xem tests/static-pages.spec.ts).
+if (!document.getElementById('fb-pixel-js') && !navigator.webdriver) {
+  (function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+  n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.id='fb-pixel-js';t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)})(window,
+  document,'script','https://connect.facebook.net/en_US/fbevents.js');
+  window.fbq('init', '1747342186469684');
+  window.fbq('track', 'PageView');
+}
+</script>
+<script>
 const params  = new URLSearchParams(window.location.search);
 const slug    = params.get('slug') || '';
 const token   = params.get('token') || params.get('orderID') || params.get('order_id');
@@ -145,6 +161,12 @@ async function capture() {
     const data = await res.json();
 
     if (data.success) {
+      // `status==='already_completed'` nghĩa là webhook (hoặc tab khác) đã chốt
+      // đơn này trước — bắn Purchase lần nữa ở đây là TÍNH TRÙNG doanh thu trong
+      // Ads Manager dù không có đồng nào mới về. Chỉ bắn ở lượt CHỐT THẬT.
+      if (data.status !== 'already_completed') {
+        try { window.fbq && window.fbq('track', 'Purchase', { value: data.amountVnd || 0, currency: 'VND' }); } catch (e) {}
+      }
       showSuccess(slug, data.credits || 0, data.balance || 0);
     } else {
       showError(data.error || 'Thanh toán thất bại. Vui lòng liên hệ hỗ trợ.');

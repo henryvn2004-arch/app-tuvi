@@ -352,6 +352,7 @@ async function handleCapture(body: Record<string, unknown>): Promise<Response> {
       success: true,
       credits: out.credits,
       balance: out.balance,
+      amountVnd: out.amountVnd,
       ...(out.credited ? {} : { status: 'already_completed' }),
     });
   } catch (e: unknown) { return err((e as Error).message); }
@@ -719,12 +720,12 @@ async function handleCheckBank(sp: URLSearchParams): Promise<Response> {
   const orderCode = sp.get('orderCode') || '';
   if (!orderCode) return err('Missing orderCode', 400);
   const res = await fetch(
-    `${SUPABASE_URL}/rest/v1/bank_orders?order_code=eq.${encodeURIComponent(orderCode)}&select=status,credits&limit=1`,
+    `${SUPABASE_URL}/rest/v1/bank_orders?order_code=eq.${encodeURIComponent(orderCode)}&select=status,credits,amount_vnd&limit=1`,
     { cache: 'no-store', headers: SB_HEADERS }
   );
-  const rows: { status: string; credits: number }[] = res.ok ? await res.json() : [];
+  const rows: { status: string; credits: number; amount_vnd: number }[] = res.ok ? await res.json() : [];
   if (!rows.length) return err('Order not found', 404);
-  return ok({ paid: rows[0].status === 'paid', credits: rows[0].credits });
+  return ok({ paid: rows[0].status === 'paid', credits: rows[0].credits, amountVND: rows[0].amount_vnd });
 }
 
 // ── Route handlers ────────────────────────────────────────────

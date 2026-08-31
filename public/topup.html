@@ -588,6 +588,7 @@ function checkCancelledPayment() {
         if (!d.paid) return;
         loadStatus();
         showAlert('success', `Nạp thành công ${d.credits} Lượng!`);
+        try { window.fbq && window.fbq('track', 'Purchase', { value: d.amountVND, currency: 'VND' }); } catch (e) {}
         resumeToTool();
       })
       .catch(() => {});
@@ -1007,6 +1008,7 @@ loadPackages().then(loadToolPricing);
       if (d.paid) {
         clearInterval(_timer);
         status('check-circle', 'Thanh toán thành công! Đang cập nhật…');
+        try { window.fbq && window.fbq('track', 'Purchase', { value: d.amountVND, currency: 'VND' }); } catch (e) {}
         setTimeout(() => {
           closeBankModal();
           loadStatus();
