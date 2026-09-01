@@ -548,9 +548,8 @@ function anPhuTinh(canNam, chiNam, thangAL, ngayAL, gioIdx, locTonIdx) {
   const duongPhu = mod12(locTonIdx - 7);  // Lộc Tồn=T1, đếm nghịch tới T8
   const bacSy    = locTonIdx;             // Bác Sỹ = cùng cung Lộc Tồn
 
-  // ── Sao cố định ──
-  const thienLa    = dcIdx('Thìn');  // cố định tại Thìn
-  const diaVong    = dcIdx('Tuất');  // cố định tại Tuất
+  // Thiên La/Địa Võng KHÔNG còn ở đây — P4 (2026-09): không phải sao cố định,
+  // xem laVong trong anSaoLaSo (phụ thuộc vị trí thật của Đà La từ anLucSat).
 
   return {
     'Tả Phụ':taPhu,'Hữu Bật':huuBat,'Văn Xương':vanXuong,'Văn Khúc':vanKhuc,
@@ -567,7 +566,6 @@ function anPhuTinh(canNam, chiNam, thangAL, ngayAL, gioIdx, locTonIdx) {
     'Thiên Hình':thienHinh,'Thiên Riêu':thienRieu,'Thiên Y':thienY,
     'Thai Phụ':thaiPhu,'Phong Cáo':phongCao,
     'Quốc Ấn':quocAn,'Đường Phù':duongPhu,'Bác Sỹ':bacSy,
-    'Thiên La':thienLa,'Địa Võng':diaVong,
   };
 }
 
@@ -2019,7 +2017,14 @@ function anSaoLaSo({ ngayAL, thangAL, namAL, canNam, chiNam, gioIdx, gioitinh, n
   const daiVanHienTai = daiVans.find(v => tuoiXem >= v.tuoiStart && tuoiXem <= v.tuoiEnd);
 
   // 8. Build palaces
-  const allStars = { ...chinhTinh, ...thaiTue, ...locTon, ...trangSinh, ...lucSat, ...phuTinh };
+  // La-Võng — P4 (2026-09): Thiên La/Địa Võng KHÔNG phải sao cố định, chỉ là
+  // NHÃN của Đà La khi rơi đúng Thìn (→"Thiên La") hoặc Tuất (→"Địa Võng"),
+  // theo trường phái Thiên Lương (trước đây cố định luôn hiện ở Thìn VÀ Tuất
+  // cho MỌI lá số, bất kể Đà La ở đâu).
+  const laVong = {};
+  if (lucSat['Đà La'] === dcIdx('Thìn')) laVong['Thiên La'] = lucSat['Đà La'];
+  else if (lucSat['Đà La'] === dcIdx('Tuất')) laVong['Địa Võng'] = lucSat['Đà La'];
+  const allStars = { ...chinhTinh, ...thaiTue, ...locTon, ...trangSinh, ...lucSat, ...phuTinh, ...laVong };
 
   // Apply tứ hóa labels
   const tuHoaMap = {}; // starName → hoa
@@ -2375,7 +2380,14 @@ function anSaoLaSo({ ngayAL, thangAL, namAL, canNam, chiNam, gioIdx, gioitinh, n
   const daiVanHienTai = daiVans.find(v => tuoiXem >= v.tuoiStart && tuoiXem <= v.tuoiEnd);
 
   // 8. Build palaces
-  const allStars = { ...chinhTinh, ...thaiTue, ...locTon, ...trangSinh, ...lucSat, ...phuTinh };
+  // La-Võng — P4 (2026-09): Thiên La/Địa Võng KHÔNG phải sao cố định, chỉ là
+  // NHÃN của Đà La khi rơi đúng Thìn (→"Thiên La") hoặc Tuất (→"Địa Võng"),
+  // theo trường phái Thiên Lương (trước đây cố định luôn hiện ở Thìn VÀ Tuất
+  // cho MỌI lá số, bất kể Đà La ở đâu).
+  const laVong = {};
+  if (lucSat['Đà La'] === dcIdx('Thìn')) laVong['Thiên La'] = lucSat['Đà La'];
+  else if (lucSat['Đà La'] === dcIdx('Tuất')) laVong['Địa Võng'] = lucSat['Đà La'];
+  const allStars = { ...chinhTinh, ...thaiTue, ...locTon, ...trangSinh, ...lucSat, ...phuTinh, ...laVong };
 
   // Apply tứ hóa labels
   const tuHoaMap = {}; // starName → hoa

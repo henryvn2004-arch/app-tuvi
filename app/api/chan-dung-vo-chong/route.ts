@@ -56,7 +56,9 @@ const TOOL_ID = 'chan-dung-vo-chong';
 // Thiên Trù/Thiên Quan/Thiên Phúc), cùng lý do GIÁ TRỊ đổi, không phải cấu trúc.
 // P3 (2026-09): bump tiếp — đổi Kình-Đà + Tứ Hóa can Canh sang trường phái
 // Thiên Lương, cùng lý do GIÁ TRỊ đổi, không phải cấu trúc.
-const SHAPE = 4;
+// P4 (2026-09): bump tiếp — La-Võng đổi từ 2 sao cố định Thìn/Tuất sang nhãn
+// theo Đà La, cùng lý do GIÁ TRỊ đổi, không phải cấu trúc.
+const SHAPE = 5;
 
 /** Vân tay CẤU TRÚC — `npm run check:cacheshape` canh khớp với `SHAPE` ở trên. */
 const SHAPE_FINGERPRINT = '8cfee3e40522';
