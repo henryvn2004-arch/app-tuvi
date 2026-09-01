@@ -83,6 +83,10 @@ export default [
       'payos-v2/',
       'run_embed.py',
       'setup_playwright.sh',
+      // Mã CỦA NGƯỜI KHÁC (xem scripts/oracle/vendor/README.md) — bản gốc,
+      // không sửa, không lint theo luật của repo mình. Cùng lý do với
+      // `tuvi-engine/`/`remotion/`.
+      'scripts/oracle/vendor/',
     ],
   },
 

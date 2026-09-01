@@ -253,6 +253,30 @@ jobs:
       - name: Slug thanh toán đúng tiền tố tool_id
         run: npm run check:slug
 
+      # Cổng hồi quy AN SAO — so lại 120 lá số cố định trong
+      # scripts/fixtures/laso-golden.json với engine hiện tại. Trước bộ dò
+      # này, không có gì trong repo so GIÁ TRỊ vị trí sao thật (check:laso
+      # chỉ so khung chữ, check:cacheshape chỉ so đường dẫn khoá) — đổi hết
+      # vị trí sao vẫn CI xanh 100%. Xem docs/nhat-ky mục tích hợp Thiên Lương.
+      - name: Lá số vàng — vị trí sao không trôi khỏi fixture
+        run: npm run check:lasogolden
+
+      # 3 ca lấy TRỰC TIẾP từ bộ tự-kiểm của tác giả bản Thiên Lương (không
+      # tính lại qua oracle loader — chép nguyên giá trị họ tự khẳng định).
+      # Xác nhận ĐỘC LẬP với check:lasogolden ở trên: golden fixture đóng
+      # băng từ CHÍNH engine mình nên không bắt được nếu công thức đã sai
+      # ngay từ đầu; 3 ca này thì có.
+      - name: 3 lá số vàng — xác nhận độc lập với tác giả bản Thiên Lương
+        run: npm run check:refbenchmarks
+
+      # Đối chiếu VÉT CẠN 518.400 tổ hợp an sao với oracle tham khảo (bản
+      # "An Sao - Tử Vi Thiên Lương", scripts/oracle/vendor/) — mọi lệch phải
+      # rơi đúng vào danh sách 9 điểm đã biết (Kình/Đà, Đào Hoa, Thiên
+      # Quan/Phúc, Thiên Trù, Lưu Hà, Tứ Hóa can Canh); lệch NGOÀI danh sách
+      # là bug thật. ~90-170s vì quét cả miền, không phải mẫu.
+      - name: Oracle — đối chiếu vét cạn an sao với bản Thiên Lương
+        run: npm run oracle:ansao
+
   typecheck:
     runs-on: ubuntu-latest
     timeout-minutes: 10
