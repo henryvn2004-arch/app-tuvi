@@ -89,7 +89,9 @@ interface HuongDan {
 // P1 (2026-09): bump vì `_LUNAR_TABLE` sinh lại theo oracle Thiên Lương — GIÁ
 // TRỊ lá số của người sinh vào ngày lệch bảng cũ đổi, không phải cấu trúc
 // payload (fingerprint giữ nguyên). Xem docs/nhat-ky/2026-09.md.
-const SHAPE = 3;
+// P2 (2026-09): bump tiếp — sửa 5 bảng tra sao lệch oracle (Đào Hoa/Lưu Hà/
+// Thiên Trù/Thiên Quan/Thiên Phúc), cùng lý do GIÁ TRỊ đổi, không phải cấu trúc.
+const SHAPE = 4;
 
 /**
  * Vân tay CẤU TRÚC hồ sơ engine (`computeDayCon`) — nguồn của `meta()` ở dưới.

@@ -79,7 +79,9 @@ function cacheExtra(moiLo: string, namXem: number): string {
 // P1 (2026-09): bump vì `_LUNAR_TABLE` sinh lại theo oracle Thiên Lương — GIÁ
 // TRỊ lá số của người sinh vào ngày lệch bảng cũ đổi, không phải cấu trúc
 // payload (fingerprint giữ nguyên). Xem docs/nhat-ky/2026-09.md.
-const SHAPE = 3;
+// P2 (2026-09): bump tiếp — sửa 5 bảng tra sao lệch oracle (Đào Hoa/Lưu Hà/
+// Thiên Trù/Thiên Quan/Thiên Phúc), cùng lý do GIÁ TRỊ đổi, không phải cấu trúc.
+const SHAPE = 4;
 /* Lịch sử bump:
    1 → 2 (lượt vá tuổi thật, #475): thêm khoá `laTreEm` mà trang đọc để ẩn nhãn
    lứa, thêm `xungHo` cho từng lứa, thêm hẳn lứa `vaodoi` (19–25) kèm 9 khối
