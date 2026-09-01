@@ -253,6 +253,14 @@ jobs:
       - name: Slug thanh toán đúng tiền tố tool_id
         run: npm run check:slug
 
+      # Cổng hồi quy AN SAO — so lại 120 lá số cố định trong
+      # scripts/fixtures/laso-golden.json với engine hiện tại. Trước bộ dò
+      # này, không có gì trong repo so GIÁ TRỊ vị trí sao thật (check:laso
+      # chỉ so khung chữ, check:cacheshape chỉ so đường dẫn khoá) — đổi hết
+      # vị trí sao vẫn CI xanh 100%. Xem docs/nhat-ky mục tích hợp Thiên Lương.
+      - name: Lá số vàng — vị trí sao không trôi khỏi fixture
+        run: npm run check:lasogolden
+
   typecheck:
     runs-on: ubuntu-latest
     timeout-minutes: 10
