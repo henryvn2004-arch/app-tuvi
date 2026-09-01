@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-169 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+170 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 **Bốn file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
 ```bash
@@ -11,7 +11,7 @@ sed -n '120,190p' docs/nhat-ky/2026-08.md    # đọc đúng đoạn, đừng ca
 
 | file | số mục | dung lượng |
 |---|---:|---:|
-| `2026-09.md` | 5 | 24,878 B |
+| `2026-09.md` | 6 | 30,543 B |
 | `2026-08.md` | 147 | 1,018,512 B |
 | `2026-07.md` | 12 | 154,531 B |
 | `track-cu.md` | 5 | 89,354 B |
@@ -194,3 +194,4 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 | 160 | 2026-09 | `2026-09.md` | ⭐ P2 — sửa 5 bảng tra sao lệch oracle: đúng 1-2 dòng sai/bảng, không phải công thức sai |
 | 161 | 2026-09 | `2026-09.md` | 🧭 P3 — Kình-Đà + Tiểu Hạn + Tứ Hóa can Canh sang trường phái Thiên Lương; La-Võng dời sang P4 |
 | 162 | 2026-09 | `2026-09.md` | 🕸️ P4 — La-Võng: từ 2 sao cố định Thìn/Tuất sang NHÃN của Đà La |
+| 163 | 2026-09 | `2026-09.md` | 🚀 Tứ Hóa Phi Tinh + 2 vá hiển thị mobile trên lá số |
