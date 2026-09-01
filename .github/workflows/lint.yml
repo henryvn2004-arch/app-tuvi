@@ -272,9 +272,10 @@ jobs:
 
       # Đối chiếu VÉT CẠN 518.400 tổ hợp an sao với oracle tham khảo (bản
       # "An Sao - Tử Vi Thiên Lương", scripts/oracle/vendor/) — mọi lệch phải
-      # rơi đúng vào danh sách 9 điểm đã biết (Kình/Đà, Đào Hoa, Thiên
-      # Quan/Phúc, Thiên Trù, Lưu Hà, Tứ Hóa can Canh); lệch NGOÀI danh sách
-      # là bug thật. ~90-170s vì quét cả miền, không phải mẫu.
+      # rơi đúng vào 4 điểm trường phái CÒN LẠI (Kình/Đà, Tứ Hóa can Canh —
+      # P3 chưa làm); 5 điểm bảng-tra-sai (Đào Hoa, Thiên Quan/Phúc, Thiên
+      # Trù, Lưu Hà) đã sửa ở P2, docs/nhat-ky/2026-09.md. Lệch NGOÀI danh
+      # sách là bug thật. ~90-170s vì quét cả miền, không phải mẫu.
       - name: Oracle — đối chiếu vét cạn an sao với bản Thiên Lương
         run: npm run oracle:ansao
 

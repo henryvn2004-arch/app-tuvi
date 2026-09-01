@@ -454,8 +454,9 @@ function anPhuTinh(canNam, chiNam, thangAL, ngayAL, gioIdx, locTonIdx) {
   const thienKhoi = dcIdx(KHOI[canNam]);
   const thienViet = dcIdx(VIET[canNam]);
 
-  // Đào Hoa
-  const DAO_HOA = {'Tý':'Dậu','Ngọ':'Mão','Mão':'Tý','Dậu':'Ngọ','Dần':'Mão','Thân':'Dậu','Tỵ':'Ngọ','Hợi':'Tý','Thìn':'Dậu','Tuất':'Mão','Sửu':'Tuất','Mùi':'Tý'};
+  // Đào Hoa — P2 (2026-09): Sửu Tuất→Ngọ, khớp oracle Thiên Lương (findThienMa+7).
+  // Cũ đo được: 43200/518400 (8,3%) lệch, đúng 1/12 chi — chỉ Sửu sai.
+  const DAO_HOA = {'Tý':'Dậu','Ngọ':'Mão','Mão':'Tý','Dậu':'Ngọ','Dần':'Mão','Thân':'Dậu','Tỵ':'Ngọ','Hợi':'Tý','Thìn':'Dậu','Tuất':'Mão','Sửu':'Ngọ','Mùi':'Tý'};
   const daoHoa = dcIdx(DAO_HOA[chiNam] || 'Tý');
 
   // Thiên Mã
@@ -474,12 +475,14 @@ function anPhuTinh(canNam, chiNam, thangAL, ngayAL, gioIdx, locTonIdx) {
   const HOA_CAI = {'Tý':'Thìn','Thân':'Thìn','Thìn':'Thìn','Ngọ':'Tuất','Dần':'Tuất','Tuất':'Tuất','Tỵ':'Sửu','Dậu':'Sửu','Sửu':'Sửu','Hợi':'Mùi','Mão':'Mùi','Mùi':'Mùi'};
   const hoaCai = dcIdx(HOA_CAI[chiNam] || 'Tý');
 
-  // Lưu Hà
-  const LUU_HA = {'Giáp':'Dậu','Ất':'Tuất','Bính':'Mùi','Đinh':'Thân','Mậu':'Tý','Kỷ':'Ngọ','Canh':'Mão','Tân':'Thìn','Nhâm':'Hợi','Quý':'Dần'};
+  // Lưu Hà — P2 (2026-09): Mậu Tý→Tỵ, khớp oracle Thiên Lương (findLuuHaThienTru).
+  // Cũ đo được: 51840/518400 (10,0%) lệch, đúng 1/10 can — chỉ Mậu sai.
+  const LUU_HA = {'Giáp':'Dậu','Ất':'Tuất','Bính':'Mùi','Đinh':'Thân','Mậu':'Tỵ','Kỷ':'Ngọ','Canh':'Mão','Tân':'Thìn','Nhâm':'Hợi','Quý':'Dần'};
   const luuHa = dcIdx(LUU_HA[canNam] || 'Tý');
 
-  // Thiên Trù
-  const THIEN_TRU = {'Giáp':'Tỵ','Đinh':'Tỵ','Canh':'Tỵ','Ất':'Ngọ','Mậu':'Ngọ','Tân':'Ngọ','Bính':'Tý','Kỷ':'Thân','Nhâm':'Dậu','Quý':'Tuất'};
+  // Thiên Trù — P2 (2026-09): Canh Tỵ→Dần, khớp oracle Thiên Lương (findLuuHaThienTru).
+  // Cũ đo được: 51840/518400 (10,0%) lệch, đúng 1/10 can — chỉ Canh sai.
+  const THIEN_TRU = {'Giáp':'Tỵ','Đinh':'Tỵ','Canh':'Dần','Ất':'Ngọ','Mậu':'Ngọ','Tân':'Ngọ','Bính':'Tý','Kỷ':'Thân','Nhâm':'Dậu','Quý':'Tuất'};
   const thienTru = dcIdx(THIEN_TRU[canNam] || 'Tý');
 
 
@@ -499,8 +502,11 @@ function anPhuTinh(canNam, chiNam, thangAL, ngayAL, gioIdx, locTonIdx) {
   const quaTu      = dcIdx(QUA_TU[chiNam]      || 'Tý');
 
   // ── Bổ sung sao theo can năm ──
-  const THIEN_QUAN = {'Giáp':'Mùi','Ất':'Mùi','Bính':'Thìn','Đinh':'Dần','Mậu':'Mão','Kỷ':'Dậu','Canh':'Hợi','Tân':'Dậu','Nhâm':'Tuất','Quý':'Ngọ'};
-  const THIEN_PHUC = {'Giáp':'Dậu','Ất':'Dậu','Bính':'Thân','Đinh':'Hợi','Mậu':'Mão','Kỷ':'Dần','Canh':'Ngọ','Tân':'Tỵ','Nhâm':'Ngọ','Quý':'Tỵ'};
+  // Thiên Quan/Thiên Phúc — P2 (2026-09): Ất/Bính sai (khớp oracle Thiên Lương
+  // findQuanPhuc). Cũ đo được: 103680/518400 (20,0%) lệch mỗi sao, đúng 2/10
+  // can — Ất+Bính sai (Ất từng lặp giá trị của Giáp; Bính chép nhầm giá trị khác).
+  const THIEN_QUAN = {'Giáp':'Mùi','Ất':'Thìn','Bính':'Tỵ','Đinh':'Dần','Mậu':'Mão','Kỷ':'Dậu','Canh':'Hợi','Tân':'Dậu','Nhâm':'Tuất','Quý':'Ngọ'};
+  const THIEN_PHUC = {'Giáp':'Dậu','Ất':'Thân','Bính':'Tý','Đinh':'Hợi','Mậu':'Mão','Kỷ':'Dần','Canh':'Ngọ','Tân':'Tỵ','Nhâm':'Ngọ','Quý':'Tỵ'};
   const thienQuan  = dcIdx(THIEN_QUAN[canNam] || 'Tý');
   const thienPhuc  = dcIdx(THIEN_PHUC[canNam] || 'Tý');
   // Thiên Không = cùng cung Thiếu Dương trong vòng Thái Tuế (offset 1 từ Thái Tuế)

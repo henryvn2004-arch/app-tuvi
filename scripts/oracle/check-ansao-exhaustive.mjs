@@ -5,9 +5,10 @@
 // 30 ngày ÂL × 12 giờ × 2 giới = 518.400 tổ hợp — so vị trí sao giữa engine
 // hiện tại (public/tuvi-ansao-engine.js) và oracle (scripts/oracle/vendor/).
 //
-// KHÔNG sửa engine. Đây là công cụ ĐO cho P1-P4, và là cổng kiểm cho P0:
-// mọi lệch NGOÀI 9 điểm đã biết (xem docs workplan) phải làm script này
-// THOÁT KHÁC 0 — im lặng bỏ sót một lệch mới là đúng thứ P0 tồn tại để chặn.
+// KHÔNG sửa engine. Cổng kiểm CI: mọi lệch NGOÀI danh sách trường phái còn lại
+// (KNOWN_DIVERGENT_STARS bên dưới — P3, chưa làm) phải làm script này THOÁT
+// KHÁC 0. P2 (2026-09) đã sửa 5 bảng tra sai (Đào Hoa/Thiên Quan/Thiên
+// Phúc/Thiên Trù/Lưu Hà) — xem docs/nhat-ky/2026-09.md.
 //
 // Cần scripts/oracle/vendor/ (không commit) — thiếu thì thoát 0 kèm cảnh
 // báo, không phải lỗi cứng (đây là công cụ tuỳ chọn với người không có file).
@@ -109,18 +110,14 @@ const norm = (name) => NAME_ALIAS.get(name) || name;
 const OURS_ONLY_EXPECTED = new Set(['Thiên La', 'Địa Võng']); // oracle: chỉ là NHÃN của Đà La ở Thìn/Tuất, không phải sao độc lập
 const ORACLE_ONLY_EXPECTED = new Set(['Bác Sỹ']); // ta an "Bác Sỹ" trong vòng Lộc Tồn cùng object với "Lộc Tồn" — kiểm riêng bên dưới, không qua vòng lặp tên
 
-// 9 điểm lệch ĐÃ GHI trong workplan (đối chiếu công thức trước đó) — lệch ở
-// đây là ĐÃ BIẾT, không phải regression. Bất kỳ tên nào NGOÀI danh sách này
-// mà lệch vị trí mới là điều P0 cần bắt.
+// Điểm lệch ĐÃ GHI trong workplan, còn lại sau khi P2 sửa xong 5 bảng tra
+// (Đào Hoa/Thiên Quan/Thiên Phúc/Thiên Trù/Lưu Hà — xem docs/nhat-ky/2026-09.md).
+// Lệch ở đây là TRƯỜNG PHÁI (P3, chưa làm), không phải regression. Bất kỳ tên
+// nào NGOÀI danh sách này mà lệch vị trí mới là điều bộ dò này cần bắt.
 const KNOWN_DIVERGENT_STARS = new Set([
   'Kình Dương', // trường phái: ta cố định, họ đảo theo âm-dương×giới (P3)
   'Đà La',
-  'Đào Hoa', // bảng tra sai ở tuổi Sửu (P2)
-  'Thiên Quan', // bảng tra trượt bậc ở can Ất/Bính (P2)
-  'Thiên Phúc',
-  'Thiên Trù', // bảng tra sai ở can Canh (P2)
-  'Lưu Hà', // bảng tra sai ở can Mậu (P2)
-  'Hóa Khoa', // can Canh: ta gán Thái Âm, họ gán Thiên Đồng — hoán vị với Hóa Kỵ (P2)
+  'Hóa Khoa', // can Canh: ta gán Thái Âm, họ gán Thiên Đồng — hoán vị với Hóa Kỵ (P3)
   'Hóa Kỵ', // can Canh: ta gán Thiên Đồng, họ gán Thái Âm
 ]);
 
@@ -259,7 +256,7 @@ const ms = Date.now() - t0;
 
 console.log(`\n=== Quét vét cạn an sao: ${total} tổ hợp trong ${(ms / 1000).toFixed(1)}s ===\n`);
 
-console.log('-- Lệch ĐÃ BIẾT (P2/P3 sẽ sửa, không phải regression) --');
+console.log('-- Lệch ĐÃ BIẾT (trường phái, P3 sẽ sửa, không phải regression) --');
 for (const [name, count] of [...knownDivergenceCount.entries()].sort()) {
   console.log(`  ${name}: ${count}/${total} (${((count / total) * 100).toFixed(1)}%)`);
 }
@@ -269,7 +266,7 @@ let failed = false;
 if (menhThanCucMismatch.length) {
   failed = true;
   console.error(
-    `\n✗ Mệnh/Thân/Cục lệch ở ${menhThanCucMismatch.length} tổ hợp (KHÔNG nằm trong 9 điểm đã biết):`
+    `\n✗ Mệnh/Thân/Cục lệch ở ${menhThanCucMismatch.length} tổ hợp (KHÔNG nằm trong 4 điểm trường phái còn lại):`
   );
   for (const m of menhThanCucMismatch.slice(0, 5)) console.error('   ', JSON.stringify(m));
 }
@@ -297,7 +294,7 @@ if (unexpected.length) {
   const byStar = new Map();
   for (const u of unexpected) byStar.set(u.star, (byStar.get(u.star) || 0) + 1);
   console.error(
-    `\n✗ LỆCH VỊ TRÍ NGOÀI danh sách 9 điểm đã biết — ${unexpected.length} tổ hợp, ${byStar.size} tên sao:`
+    `\n✗ LỆCH VỊ TRÍ NGOÀI danh sách 4 điểm trường phái còn lại — ${unexpected.length} tổ hợp, ${byStar.size} tên sao:`
   );
   for (const [name, count] of byStar) console.error(`   ${name}: ${count}/${total}`);
   console.error('  Ví dụ:');
@@ -311,5 +308,5 @@ if (failed) {
   process.exit(1);
 }
 console.log(
-  '\n✓ check-ansao-exhaustive: mọi lệch đều nằm trong 9 điểm đã biết. Không có regression bất ngờ.'
+  '\n✓ check-ansao-exhaustive: mọi lệch đều nằm trong 4 điểm trường phái còn lại. Không có regression bất ngờ.'
 );

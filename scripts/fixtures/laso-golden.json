@@ -132,12 +132,6 @@
               "brightness": ""
             },
             {
-              "ten": "Lưu Hà",
-              "hoa": null,
-              "nhom": "phu",
-              "brightness": ""
-            },
-            {
               "ten": "Thiên Giải",
               "hoa": null,
               "nhom": "phu",
@@ -422,6 +416,12 @@
             },
             {
               "ten": "Ân Quang",
+              "hoa": null,
+              "nhom": "phu",
+              "brightness": ""
+            },
+            {
+              "ten": "Lưu Hà",
               "hoa": null,
               "nhom": "phu",
               "brightness": ""
@@ -994,12 +994,6 @@
               "brightness": ""
             },
             {
-              "ten": "Lưu Hà",
-              "hoa": null,
-              "nhom": "phu",
-              "brightness": ""
-            },
-            {
               "ten": "Thiên Giải",
               "hoa": null,
               "nhom": "phu",
@@ -1284,6 +1278,12 @@
             },
             {
               "ten": "Ân Quang",
+              "hoa": null,
+              "nhom": "phu",
+              "brightness": ""
+            },
+            {
+              "ten": "Lưu Hà",
               "hoa": null,
               "nhom": "phu",
               "brightness": ""
@@ -1862,12 +1862,6 @@
               "brightness": "Hãm"
             },
             {
-              "ten": "Lưu Hà",
-              "hoa": null,
-              "nhom": "phu",
-              "brightness": ""
-            },
-            {
               "ten": "Thiên Sứ",
               "hoa": null,
               "nhom": "phu",
@@ -2167,6 +2161,12 @@
               "hoa": null,
               "nhom": "phu",
               "brightness": "Đắc"
+            },
+            {
+              "ten": "Lưu Hà",
+              "hoa": null,
+              "nhom": "phu",
+              "brightness": ""
             },
             {
               "ten": "Cô Thần",
@@ -2730,12 +2730,6 @@
               "brightness": "Hãm"
             },
             {
-              "ten": "Lưu Hà",
-              "hoa": null,
-              "nhom": "phu",
-              "brightness": ""
-            },
-            {
               "ten": "Thiên Sứ",
               "hoa": null,
               "nhom": "phu",
@@ -3029,6 +3023,12 @@
               "hoa": null,
               "nhom": "phu",
               "brightness": "Đắc"
+            },
+            {
+              "ten": "Lưu Hà",
+              "hoa": null,
+              "nhom": "phu",
+              "brightness": ""
             },
             {
               "ten": "Cô Thần",
@@ -3580,12 +3580,6 @@
               "brightness": ""
             },
             {
-              "ten": "Lưu Hà",
-              "hoa": null,
-              "nhom": "phu",
-              "brightness": ""
-            },
-            {
               "ten": "Đẩu Quân",
               "hoa": null,
               "nhom": "phu",
@@ -3884,6 +3878,12 @@
               "ten": "Tuyệt",
               "hoa": null,
               "nhom": "trang_sinh",
+              "brightness": ""
+            },
+            {
+              "ten": "Lưu Hà",
+              "hoa": null,
+              "nhom": "phu",
               "brightness": ""
             },
             {
@@ -4442,12 +4442,6 @@
               "brightness": ""
             },
             {
-              "ten": "Lưu Hà",
-              "hoa": null,
-              "nhom": "phu",
-              "brightness": ""
-            },
-            {
               "ten": "Đẩu Quân",
               "hoa": null,
               "nhom": "phu",
@@ -4741,6 +4735,12 @@
               "hoa": null,
               "nhom": "luc_sat",
               "brightness": "Đắc"
+            },
+            {
+              "ten": "Lưu Hà",
+              "hoa": null,
+              "nhom": "phu",
+              "brightness": ""
             },
             {
               "ten": "Cô Thần",
@@ -5322,12 +5322,6 @@
               "brightness": ""
             },
             {
-              "ten": "Lưu Hà",
-              "hoa": null,
-              "nhom": "phu",
-              "brightness": ""
-            },
-            {
               "ten": "Thiên Giải",
               "hoa": null,
               "nhom": "phu",
@@ -5632,6 +5626,12 @@
               "ten": "Tuyệt",
               "hoa": null,
               "nhom": "trang_sinh",
+              "brightness": ""
+            },
+            {
+              "ten": "Lưu Hà",
+              "hoa": null,
+              "nhom": "phu",
               "brightness": ""
             },
             {
@@ -6178,12 +6178,6 @@
               "brightness": ""
             },
             {
-              "ten": "Lưu Hà",
-              "hoa": null,
-              "nhom": "phu",
-              "brightness": ""
-            },
-            {
               "ten": "Thiên Giải",
               "hoa": null,
               "nhom": "phu",
@@ -6482,6 +6476,12 @@
               "ten": "Lâm Quan",
               "hoa": null,
               "nhom": "trang_sinh",
+              "brightness": ""
+            },
+            {
+              "ten": "Lưu Hà",
+              "hoa": null,
+              "nhom": "phu",
               "brightness": ""
             },
             {
@@ -7034,12 +7034,6 @@
               "brightness": ""
             },
             {
-              "ten": "Lưu Hà",
-              "hoa": null,
-              "nhom": "phu",
-              "brightness": ""
-            },
-            {
               "ten": "Thiên Thọ",
               "hoa": null,
               "nhom": "phu",
@@ -7363,6 +7357,12 @@
               "hoa": null,
               "nhom": "luc_sat",
               "brightness": "Đắc"
+            },
+            {
+              "ten": "Lưu Hà",
+              "hoa": null,
+              "nhom": "phu",
+              "brightness": ""
             },
             {
               "ten": "Cô Thần",
@@ -7896,12 +7896,6 @@
               "brightness": ""
             },
             {
-              "ten": "Lưu Hà",
-              "hoa": null,
-              "nhom": "phu",
-              "brightness": ""
-            },
-            {
               "ten": "Thiên Thọ",
               "hoa": null,
               "nhom": "phu",
@@ -8218,6 +8212,12 @@
               "ten": "Lâm Quan",
               "hoa": null,
               "nhom": "trang_sinh",
+              "brightness": ""
+            },
+            {
+              "ten": "Lưu Hà",
+              "hoa": null,
+              "nhom": "phu",
               "brightness": ""
             },
             {
@@ -8758,12 +8758,6 @@
               "brightness": ""
             },
             {
-              "ten": "Lưu Hà",
-              "hoa": null,
-              "nhom": "phu",
-              "brightness": ""
-            },
-            {
               "ten": "Thiên Giải",
               "hoa": null,
               "nhom": "phu",
@@ -9063,6 +9057,12 @@
               "hoa": null,
               "nhom": "phu",
               "brightness": "Đắc"
+            },
+            {
+              "ten": "Lưu Hà",
+              "hoa": null,
+              "nhom": "phu",
+              "brightness": ""
             },
             {
               "ten": "Cô Thần",
@@ -9620,12 +9620,6 @@
               "brightness": ""
             },
             {
-              "ten": "Lưu Hà",
-              "hoa": null,
-              "nhom": "phu",
-              "brightness": ""
-            },
-            {
               "ten": "Thiên Giải",
               "hoa": null,
               "nhom": "phu",
@@ -9925,6 +9919,12 @@
               "hoa": null,
               "nhom": "phu",
               "brightness": "Đắc"
+            },
+            {
+              "ten": "Lưu Hà",
+              "hoa": null,
+              "nhom": "phu",
+              "brightness": ""
             },
             {
               "ten": "Cô Thần",
@@ -10476,12 +10476,6 @@
               "brightness": ""
             },
             {
-              "ten": "Lưu Hà",
-              "hoa": null,
-              "nhom": "phu",
-              "brightness": ""
-            },
-            {
               "ten": "Thiên Giải",
               "hoa": null,
               "nhom": "phu",
@@ -10793,6 +10787,12 @@
               "hoa": null,
               "nhom": "luc_sat",
               "brightness": "Đắc"
+            },
+            {
+              "ten": "Lưu Hà",
+              "hoa": null,
+              "nhom": "phu",
+              "brightness": ""
             },
             {
               "ten": "Cô Thần",
@@ -11338,12 +11338,6 @@
               "brightness": ""
             },
             {
-              "ten": "Lưu Hà",
-              "hoa": null,
-              "nhom": "phu",
-              "brightness": ""
-            },
-            {
               "ten": "Thiên Giải",
               "hoa": null,
               "nhom": "phu",
@@ -11655,6 +11649,12 @@
               "hoa": null,
               "nhom": "luc_sat",
               "brightness": "Đắc"
+            },
+            {
+              "ten": "Lưu Hà",
+              "hoa": null,
+              "nhom": "phu",
+              "brightness": ""
             },
             {
               "ten": "Cô Thần",
@@ -12206,12 +12206,6 @@
               "brightness": ""
             },
             {
-              "ten": "Lưu Hà",
-              "hoa": null,
-              "nhom": "phu",
-              "brightness": ""
-            },
-            {
               "ten": "Thiên Giải",
               "hoa": null,
               "nhom": "phu",
@@ -12534,6 +12528,12 @@
               "ten": "Tuyệt",
               "hoa": null,
               "nhom": "trang_sinh",
+              "brightness": ""
+            },
+            {
+              "ten": "Lưu Hà",
+              "hoa": null,
+              "nhom": "phu",
               "brightness": ""
             },
             {
@@ -13068,12 +13068,6 @@
               "brightness": ""
             },
             {
-              "ten": "Lưu Hà",
-              "hoa": null,
-              "nhom": "phu",
-              "brightness": ""
-            },
-            {
               "ten": "Thiên Giải",
               "hoa": null,
               "nhom": "phu",
@@ -13396,6 +13390,12 @@
               "ten": "Lâm Quan",
               "hoa": null,
               "nhom": "trang_sinh",
+              "brightness": ""
+            },
+            {
+              "ten": "Lưu Hà",
+              "hoa": null,
+              "nhom": "phu",
               "brightness": ""
             },
             {
@@ -13936,12 +13936,6 @@
               "brightness": "Hãm"
             },
             {
-              "ten": "Lưu Hà",
-              "hoa": null,
-              "nhom": "phu",
-              "brightness": ""
-            },
-            {
               "ten": "Thiên Tài",
               "hoa": null,
               "nhom": "phu",
@@ -14262,6 +14256,12 @@
             },
             {
               "ten": "Thiên Quý",
+              "hoa": null,
+              "nhom": "phu",
+              "brightness": ""
+            },
+            {
+              "ten": "Lưu Hà",
               "hoa": null,
               "nhom": "phu",
               "brightness": ""
@@ -14798,12 +14798,6 @@
               "brightness": "Hãm"
             },
             {
-              "ten": "Lưu Hà",
-              "hoa": null,
-              "nhom": "phu",
-              "brightness": ""
-            },
-            {
               "ten": "Thiên Tài",
               "hoa": null,
               "nhom": "phu",
@@ -15130,6 +15124,12 @@
             },
             {
               "ten": "Thiên Quý",
+              "hoa": null,
+              "nhom": "phu",
+              "brightness": ""
+            },
+            {
+              "ten": "Lưu Hà",
               "hoa": null,
               "nhom": "phu",
               "brightness": ""
@@ -15654,12 +15654,6 @@
               "brightness": ""
             },
             {
-              "ten": "Lưu Hà",
-              "hoa": null,
-              "nhom": "phu",
-              "brightness": ""
-            },
-            {
               "ten": "Thiên Giải",
               "hoa": null,
               "nhom": "phu",
@@ -15970,6 +15964,12 @@
               "ten": "Bệnh",
               "hoa": null,
               "nhom": "trang_sinh",
+              "brightness": ""
+            },
+            {
+              "ten": "Lưu Hà",
+              "hoa": null,
+              "nhom": "phu",
               "brightness": ""
             },
             {
@@ -16522,12 +16522,6 @@
               "brightness": "Hãm"
             },
             {
-              "ten": "Lưu Hà",
-              "hoa": null,
-              "nhom": "phu",
-              "brightness": ""
-            },
-            {
               "ten": "Thiên Giải",
               "hoa": null,
               "nhom": "phu",
@@ -16844,6 +16838,12 @@
               "ten": "Bệnh",
               "hoa": null,
               "nhom": "trang_sinh",
+              "brightness": ""
+            },
+            {
+              "ten": "Lưu Hà",
+              "hoa": null,
+              "nhom": "phu",
               "brightness": ""
             },
             {
@@ -17384,12 +17384,6 @@
               "brightness": "Bình"
             },
             {
-              "ten": "Lưu Hà",
-              "hoa": null,
-              "nhom": "phu",
-              "brightness": ""
-            },
-            {
               "ten": "Thiên Giải",
               "hoa": null,
               "nhom": "phu",
@@ -17707,6 +17701,12 @@
               "hoa": null,
               "nhom": "luc_sat",
               "brightness": "Đắc"
+            },
+            {
+              "ten": "Lưu Hà",
+              "hoa": null,
+              "nhom": "phu",
+              "brightness": ""
             },
             {
               "ten": "Cô Thần",
@@ -18246,12 +18246,6 @@
               "brightness": "Bình"
             },
             {
-              "ten": "Lưu Hà",
-              "hoa": null,
-              "nhom": "phu",
-              "brightness": ""
-            },
-            {
               "ten": "Thiên Giải",
               "hoa": null,
               "nhom": "phu",
@@ -18574,6 +18568,12 @@
               "ten": "Bệnh",
               "hoa": null,
               "nhom": "trang_sinh",
+              "brightness": ""
+            },
+            {
+              "ten": "Lưu Hà",
+              "hoa": null,
+              "nhom": "phu",
               "brightness": ""
             },
             {
@@ -19108,12 +19108,6 @@
               "brightness": "Hãm"
             },
             {
-              "ten": "Lưu Hà",
-              "hoa": null,
-              "nhom": "phu",
-              "brightness": ""
-            },
-            {
               "ten": "Thiên Thương",
               "hoa": null,
               "nhom": "phu",
@@ -19394,6 +19388,12 @@
               "ten": "Lâm Quan",
               "hoa": null,
               "nhom": "trang_sinh",
+              "brightness": ""
+            },
+            {
+              "ten": "Lưu Hà",
+              "hoa": null,
+              "nhom": "phu",
               "brightness": ""
             },
             {
@@ -19964,12 +19964,6 @@
               "brightness": "Hãm"
             },
             {
-              "ten": "Lưu Hà",
-              "hoa": null,
-              "nhom": "phu",
-              "brightness": ""
-            },
-            {
               "ten": "Thiên Thương",
               "hoa": null,
               "nhom": "phu",
@@ -20256,6 +20250,12 @@
               "ten": "Tuyệt",
               "hoa": null,
               "nhom": "trang_sinh",
+              "brightness": ""
+            },
+            {
+              "ten": "Lưu Hà",
+              "hoa": null,
+              "nhom": "phu",
               "brightness": ""
             },
             {
@@ -82908,6 +82908,12 @@
               "brightness": ""
             },
             {
+              "ten": "Thiên Phúc",
+              "hoa": null,
+              "nhom": "phu",
+              "brightness": ""
+            },
+            {
               "ten": "Thiên Thương",
               "hoa": null,
               "nhom": "phu",
@@ -83164,12 +83170,6 @@
               "brightness": ""
             },
             {
-              "ten": "Thiên Quan",
-              "hoa": null,
-              "nhom": "phu",
-              "brightness": ""
-            },
-            {
               "ten": "Giải Thần",
               "hoa": null,
               "nhom": "phu",
@@ -83227,6 +83227,12 @@
             },
             {
               "ten": "Phá Toái",
+              "hoa": null,
+              "nhom": "phu",
+              "brightness": ""
+            },
+            {
+              "ten": "Thiên Quan",
               "hoa": null,
               "nhom": "phu",
               "brightness": ""
@@ -83403,12 +83409,6 @@
             },
             {
               "ten": "Cô Thần",
-              "hoa": null,
-              "nhom": "phu",
-              "brightness": ""
-            },
-            {
-              "ten": "Thiên Phúc",
               "hoa": null,
               "nhom": "phu",
               "brightness": ""
@@ -83770,6 +83770,12 @@
               "brightness": ""
             },
             {
+              "ten": "Thiên Phúc",
+              "hoa": null,
+              "nhom": "phu",
+              "brightness": ""
+            },
+            {
               "ten": "Thiên Thương",
               "hoa": null,
               "nhom": "phu",
@@ -84026,12 +84032,6 @@
               "brightness": ""
             },
             {
-              "ten": "Thiên Quan",
-              "hoa": null,
-              "nhom": "phu",
-              "brightness": ""
-            },
-            {
               "ten": "Giải Thần",
               "hoa": null,
               "nhom": "phu",
@@ -84089,6 +84089,12 @@
             },
             {
               "ten": "Phá Toái",
+              "hoa": null,
+              "nhom": "phu",
+              "brightness": ""
+            },
+            {
+              "ten": "Thiên Quan",
               "hoa": null,
               "nhom": "phu",
               "brightness": ""
@@ -84265,12 +84271,6 @@
             },
             {
               "ten": "Cô Thần",
-              "hoa": null,
-              "nhom": "phu",
-              "brightness": ""
-            },
-            {
-              "ten": "Thiên Phúc",
               "hoa": null,
               "nhom": "phu",
               "brightness": ""
@@ -84632,6 +84632,12 @@
               "brightness": ""
             },
             {
+              "ten": "Thiên Phúc",
+              "hoa": null,
+              "nhom": "phu",
+              "brightness": ""
+            },
+            {
               "ten": "Thiên Tài",
               "hoa": null,
               "nhom": "phu",
@@ -84882,12 +84888,6 @@
               "brightness": ""
             },
             {
-              "ten": "Thiên Quan",
-              "hoa": null,
-              "nhom": "phu",
-              "brightness": ""
-            },
-            {
               "ten": "Giải Thần",
               "hoa": null,
               "nhom": "phu",
@@ -84951,6 +84951,12 @@
             },
             {
               "ten": "Phá Toái",
+              "hoa": null,
+              "nhom": "phu",
+              "brightness": ""
+            },
+            {
+              "ten": "Thiên Quan",
               "hoa": null,
               "nhom": "phu",
               "brightness": ""
@@ -85127,12 +85133,6 @@
             },
             {
               "ten": "Cô Thần",
-              "hoa": null,
-              "nhom": "phu",
-              "brightness": ""
-            },
-            {
-              "ten": "Thiên Phúc",
               "hoa": null,
               "nhom": "phu",
               "brightness": ""
@@ -85500,6 +85500,12 @@
               "brightness": ""
             },
             {
+              "ten": "Thiên Phúc",
+              "hoa": null,
+              "nhom": "phu",
+              "brightness": ""
+            },
+            {
               "ten": "Thiên Tài",
               "hoa": null,
               "nhom": "phu",
@@ -85744,12 +85750,6 @@
               "brightness": ""
             },
             {
-              "ten": "Thiên Quan",
-              "hoa": null,
-              "nhom": "phu",
-              "brightness": ""
-            },
-            {
               "ten": "Giải Thần",
               "hoa": null,
               "nhom": "phu",
@@ -85813,6 +85813,12 @@
             },
             {
               "ten": "Phá Toái",
+              "hoa": null,
+              "nhom": "phu",
+              "brightness": ""
+            },
+            {
+              "ten": "Thiên Quan",
               "hoa": null,
               "nhom": "phu",
               "brightness": ""
@@ -85989,12 +85995,6 @@
             },
             {
               "ten": "Cô Thần",
-              "hoa": null,
-              "nhom": "phu",
-              "brightness": ""
-            },
-            {
-              "ten": "Thiên Phúc",
               "hoa": null,
               "nhom": "phu",
               "brightness": ""
@@ -86368,6 +86368,12 @@
               "brightness": ""
             },
             {
+              "ten": "Thiên Phúc",
+              "hoa": null,
+              "nhom": "phu",
+              "brightness": ""
+            },
+            {
               "ten": "Thiên Sứ",
               "hoa": null,
               "nhom": "phu",
@@ -86636,12 +86642,6 @@
               "brightness": ""
             },
             {
-              "ten": "Thiên Quan",
-              "hoa": null,
-              "nhom": "phu",
-              "brightness": ""
-            },
-            {
               "ten": "Giải Thần",
               "hoa": null,
               "nhom": "phu",
@@ -86705,6 +86705,12 @@
             },
             {
               "ten": "Phá Toái",
+              "hoa": null,
+              "nhom": "phu",
+              "brightness": ""
+            },
+            {
+              "ten": "Thiên Quan",
               "hoa": null,
               "nhom": "phu",
               "brightness": ""
@@ -86863,12 +86869,6 @@
             },
             {
               "ten": "Cô Thần",
-              "hoa": null,
-              "nhom": "phu",
-              "brightness": ""
-            },
-            {
-              "ten": "Thiên Phúc",
               "hoa": null,
               "nhom": "phu",
               "brightness": ""
@@ -87230,6 +87230,12 @@
               "brightness": ""
             },
             {
+              "ten": "Thiên Phúc",
+              "hoa": null,
+              "nhom": "phu",
+              "brightness": ""
+            },
+            {
               "ten": "Thiên Sứ",
               "hoa": null,
               "nhom": "phu",
@@ -87486,12 +87492,6 @@
               "brightness": ""
             },
             {
-              "ten": "Thiên Quan",
-              "hoa": null,
-              "nhom": "phu",
-              "brightness": ""
-            },
-            {
               "ten": "Giải Thần",
               "hoa": null,
               "nhom": "phu",
@@ -87561,6 +87561,12 @@
             },
             {
               "ten": "Phá Toái",
+              "hoa": null,
+              "nhom": "phu",
+              "brightness": ""
+            },
+            {
+              "ten": "Thiên Quan",
               "hoa": null,
               "nhom": "phu",
               "brightness": ""
@@ -87719,12 +87725,6 @@
             },
             {
               "ten": "Cô Thần",
-              "hoa": null,
-              "nhom": "phu",
-              "brightness": ""
-            },
-            {
-              "ten": "Thiên Phúc",
               "hoa": null,
               "nhom": "phu",
               "brightness": ""
@@ -88092,6 +88092,12 @@
               "brightness": ""
             },
             {
+              "ten": "Thiên Phúc",
+              "hoa": null,
+              "nhom": "phu",
+              "brightness": ""
+            },
+            {
               "ten": "Địa Giải",
               "hoa": null,
               "nhom": "phu",
@@ -88336,12 +88342,6 @@
               "brightness": ""
             },
             {
-              "ten": "Thiên Quan",
-              "hoa": null,
-              "nhom": "phu",
-              "brightness": ""
-            },
-            {
               "ten": "Đẩu Quân",
               "hoa": null,
               "nhom": "phu",
@@ -88411,6 +88411,12 @@
             },
             {
               "ten": "Phá Toái",
+              "hoa": null,
+              "nhom": "phu",
+              "brightness": ""
+            },
+            {
+              "ten": "Thiên Quan",
               "hoa": null,
               "nhom": "phu",
               "brightness": ""
@@ -88581,12 +88587,6 @@
             },
             {
               "ten": "Cô Thần",
-              "hoa": null,
-              "nhom": "phu",
-              "brightness": ""
-            },
-            {
-              "ten": "Thiên Phúc",
               "hoa": null,
               "nhom": "phu",
               "brightness": ""
@@ -88948,6 +88948,12 @@
               "brightness": ""
             },
             {
+              "ten": "Thiên Phúc",
+              "hoa": null,
+              "nhom": "phu",
+              "brightness": ""
+            },
+            {
               "ten": "Địa Giải",
               "hoa": null,
               "nhom": "phu",
@@ -89186,12 +89192,6 @@
               "brightness": ""
             },
             {
-              "ten": "Thiên Quan",
-              "hoa": null,
-              "nhom": "phu",
-              "brightness": ""
-            },
-            {
               "ten": "Đẩu Quân",
               "hoa": null,
               "nhom": "phu",
@@ -89261,6 +89261,12 @@
             },
             {
               "ten": "Phá Toái",
+              "hoa": null,
+              "nhom": "phu",
+              "brightness": ""
+            },
+            {
+              "ten": "Thiên Quan",
               "hoa": null,
               "nhom": "phu",
               "brightness": ""
@@ -89437,12 +89443,6 @@
             },
             {
               "ten": "Cô Thần",
-              "hoa": null,
-              "nhom": "phu",
-              "brightness": ""
-            },
-            {
-              "ten": "Thiên Phúc",
               "hoa": null,
               "nhom": "phu",
               "brightness": ""
@@ -89798,6 +89798,12 @@
               "brightness": ""
             },
             {
+              "ten": "Thiên Phúc",
+              "hoa": null,
+              "nhom": "phu",
+              "brightness": ""
+            },
+            {
               "ten": "Địa Giải",
               "hoa": null,
               "nhom": "phu",
@@ -90006,12 +90012,6 @@
               "brightness": ""
             },
             {
-              "ten": "Thiên Quan",
-              "hoa": null,
-              "nhom": "phu",
-              "brightness": ""
-            },
-            {
               "ten": "Giải Thần",
               "hoa": null,
               "nhom": "phu",
@@ -90075,6 +90075,12 @@
             },
             {
               "ten": "Phá Toái",
+              "hoa": null,
+              "nhom": "phu",
+              "brightness": ""
+            },
+            {
+              "ten": "Thiên Quan",
               "hoa": null,
               "nhom": "phu",
               "brightness": ""
@@ -90281,12 +90287,6 @@
             },
             {
               "ten": "Cô Thần",
-              "hoa": null,
-              "nhom": "phu",
-              "brightness": ""
-            },
-            {
-              "ten": "Thiên Phúc",
               "hoa": null,
               "nhom": "phu",
               "brightness": ""
@@ -90660,6 +90660,12 @@
               "brightness": ""
             },
             {
+              "ten": "Thiên Phúc",
+              "hoa": null,
+              "nhom": "phu",
+              "brightness": ""
+            },
+            {
               "ten": "Địa Giải",
               "hoa": null,
               "nhom": "phu",
@@ -90868,12 +90874,6 @@
               "brightness": ""
             },
             {
-              "ten": "Thiên Quan",
-              "hoa": null,
-              "nhom": "phu",
-              "brightness": ""
-            },
-            {
               "ten": "Giải Thần",
               "hoa": null,
               "nhom": "phu",
@@ -90931,6 +90931,12 @@
             },
             {
               "ten": "Phá Toái",
+              "hoa": null,
+              "nhom": "phu",
+              "brightness": ""
+            },
+            {
+              "ten": "Thiên Quan",
               "hoa": null,
               "nhom": "phu",
               "brightness": ""
@@ -91143,12 +91149,6 @@
             },
             {
               "ten": "Cô Thần",
-              "hoa": null,
-              "nhom": "phu",
-              "brightness": ""
-            },
-            {
-              "ten": "Thiên Phúc",
               "hoa": null,
               "nhom": "phu",
               "brightness": ""
@@ -91522,6 +91522,12 @@
               "brightness": ""
             },
             {
+              "ten": "Thiên Phúc",
+              "hoa": null,
+              "nhom": "phu",
+              "brightness": ""
+            },
+            {
               "ten": "Địa Giải",
               "hoa": null,
               "nhom": "phu",
@@ -91724,12 +91730,6 @@
               "brightness": ""
             },
             {
-              "ten": "Thiên Quan",
-              "hoa": null,
-              "nhom": "phu",
-              "brightness": ""
-            },
-            {
               "ten": "Giải Thần",
               "hoa": null,
               "nhom": "phu",
@@ -91799,6 +91799,12 @@
             },
             {
               "ten": "Phá Toái",
+              "hoa": null,
+              "nhom": "phu",
+              "brightness": ""
+            },
+            {
+              "ten": "Thiên Quan",
               "hoa": null,
               "nhom": "phu",
               "brightness": ""
@@ -92005,12 +92011,6 @@
             },
             {
               "ten": "Cô Thần",
-              "hoa": null,
-              "nhom": "phu",
-              "brightness": ""
-            },
-            {
-              "ten": "Thiên Phúc",
               "hoa": null,
               "nhom": "phu",
               "brightness": ""
@@ -92384,6 +92384,12 @@
               "brightness": ""
             },
             {
+              "ten": "Thiên Phúc",
+              "hoa": null,
+              "nhom": "phu",
+              "brightness": ""
+            },
+            {
               "ten": "Địa Giải",
               "hoa": null,
               "nhom": "phu",
@@ -92586,12 +92592,6 @@
               "brightness": ""
             },
             {
-              "ten": "Thiên Quan",
-              "hoa": null,
-              "nhom": "phu",
-              "brightness": ""
-            },
-            {
               "ten": "Giải Thần",
               "hoa": null,
               "nhom": "phu",
@@ -92661,6 +92661,12 @@
             },
             {
               "ten": "Phá Toái",
+              "hoa": null,
+              "nhom": "phu",
+              "brightness": ""
+            },
+            {
+              "ten": "Thiên Quan",
               "hoa": null,
               "nhom": "phu",
               "brightness": ""
@@ -92873,12 +92879,6 @@
             },
             {
               "ten": "Cô Thần",
-              "hoa": null,
-              "nhom": "phu",
-              "brightness": ""
-            },
-            {
-              "ten": "Thiên Phúc",
               "hoa": null,
               "nhom": "phu",
               "brightness": ""
@@ -93252,6 +93252,12 @@
               "brightness": ""
             },
             {
+              "ten": "Thiên Phúc",
+              "hoa": null,
+              "nhom": "phu",
+              "brightness": ""
+            },
+            {
               "ten": "Địa Giải",
               "hoa": null,
               "nhom": "phu",
@@ -93484,12 +93490,6 @@
               "brightness": ""
             },
             {
-              "ten": "Thiên Quan",
-              "hoa": null,
-              "nhom": "phu",
-              "brightness": ""
-            },
-            {
               "ten": "Giải Thần",
               "hoa": null,
               "nhom": "phu",
@@ -93553,6 +93553,12 @@
             },
             {
               "ten": "Phá Toái",
+              "hoa": null,
+              "nhom": "phu",
+              "brightness": ""
+            },
+            {
+              "ten": "Thiên Quan",
               "hoa": null,
               "nhom": "phu",
               "brightness": ""
@@ -93747,12 +93753,6 @@
             },
             {
               "ten": "Cô Thần",
-              "hoa": null,
-              "nhom": "phu",
-              "brightness": ""
-            },
-            {
-              "ten": "Thiên Phúc",
               "hoa": null,
               "nhom": "phu",
               "brightness": ""
@@ -94114,6 +94114,12 @@
               "brightness": ""
             },
             {
+              "ten": "Thiên Phúc",
+              "hoa": null,
+              "nhom": "phu",
+              "brightness": ""
+            },
+            {
               "ten": "Địa Giải",
               "hoa": null,
               "nhom": "phu",
@@ -94346,12 +94352,6 @@
               "brightness": ""
             },
             {
-              "ten": "Thiên Quan",
-              "hoa": null,
-              "nhom": "phu",
-              "brightness": ""
-            },
-            {
               "ten": "Giải Thần",
               "hoa": null,
               "nhom": "phu",
@@ -94415,6 +94415,12 @@
             },
             {
               "ten": "Phá Toái",
+              "hoa": null,
+              "nhom": "phu",
+              "brightness": ""
+            },
+            {
+              "ten": "Thiên Quan",
               "hoa": null,
               "nhom": "phu",
               "brightness": ""
@@ -94609,12 +94615,6 @@
             },
             {
               "ten": "Cô Thần",
-              "hoa": null,
-              "nhom": "phu",
-              "brightness": ""
-            },
-            {
-              "ten": "Thiên Phúc",
               "hoa": null,
               "nhom": "phu",
               "brightness": ""
@@ -94976,6 +94976,12 @@
               "brightness": ""
             },
             {
+              "ten": "Thiên Phúc",
+              "hoa": null,
+              "nhom": "phu",
+              "brightness": ""
+            },
+            {
               "ten": "Địa Giải",
               "hoa": null,
               "nhom": "phu",
@@ -95214,12 +95220,6 @@
               "brightness": ""
             },
             {
-              "ten": "Thiên Quan",
-              "hoa": null,
-              "nhom": "phu",
-              "brightness": ""
-            },
-            {
               "ten": "Giải Thần",
               "hoa": null,
               "nhom": "phu",
@@ -95271,6 +95271,12 @@
             },
             {
               "ten": "Phá Toái",
+              "hoa": null,
+              "nhom": "phu",
+              "brightness": ""
+            },
+            {
+              "ten": "Thiên Quan",
               "hoa": null,
               "nhom": "phu",
               "brightness": ""
@@ -95471,12 +95477,6 @@
             },
             {
               "ten": "Cô Thần",
-              "hoa": null,
-              "nhom": "phu",
-              "brightness": ""
-            },
-            {
-              "ten": "Thiên Phúc",
               "hoa": null,
               "nhom": "phu",
               "brightness": ""
@@ -95838,6 +95838,12 @@
               "brightness": ""
             },
             {
+              "ten": "Thiên Phúc",
+              "hoa": null,
+              "nhom": "phu",
+              "brightness": ""
+            },
+            {
               "ten": "Địa Giải",
               "hoa": null,
               "nhom": "phu",
@@ -96076,12 +96082,6 @@
               "brightness": ""
             },
             {
-              "ten": "Thiên Quan",
-              "hoa": null,
-              "nhom": "phu",
-              "brightness": ""
-            },
-            {
               "ten": "Giải Thần",
               "hoa": null,
               "nhom": "phu",
@@ -96133,6 +96133,12 @@
             },
             {
               "ten": "Phá Toái",
+              "hoa": null,
+              "nhom": "phu",
+              "brightness": ""
+            },
+            {
+              "ten": "Thiên Quan",
               "hoa": null,
               "nhom": "phu",
               "brightness": ""
@@ -96327,12 +96333,6 @@
             },
             {
               "ten": "Cô Thần",
-              "hoa": null,
-              "nhom": "phu",
-              "brightness": ""
-            },
-            {
-              "ten": "Thiên Phúc",
               "hoa": null,
               "nhom": "phu",
               "brightness": ""
@@ -96700,6 +96700,12 @@
               "brightness": ""
             },
             {
+              "ten": "Thiên Phúc",
+              "hoa": null,
+              "nhom": "phu",
+              "brightness": ""
+            },
+            {
               "ten": "Địa Giải",
               "hoa": null,
               "nhom": "phu",
@@ -96914,12 +96920,6 @@
               "brightness": ""
             },
             {
-              "ten": "Thiên Quan",
-              "hoa": null,
-              "nhom": "phu",
-              "brightness": ""
-            },
-            {
               "ten": "Thiên Thương",
               "hoa": null,
               "nhom": "phu",
@@ -96983,6 +96983,12 @@
             },
             {
               "ten": "Phá Toái",
+              "hoa": null,
+              "nhom": "phu",
+              "brightness": ""
+            },
+            {
+              "ten": "Thiên Quan",
               "hoa": null,
               "nhom": "phu",
               "brightness": ""
@@ -97189,12 +97195,6 @@
             },
             {
               "ten": "Cô Thần",
-              "hoa": null,
-              "nhom": "phu",
-              "brightness": ""
-            },
-            {
-              "ten": "Thiên Phúc",
               "hoa": null,
               "nhom": "phu",
               "brightness": ""
@@ -97562,6 +97562,12 @@
               "brightness": ""
             },
             {
+              "ten": "Thiên Phúc",
+              "hoa": null,
+              "nhom": "phu",
+              "brightness": ""
+            },
+            {
               "ten": "Địa Giải",
               "hoa": null,
               "nhom": "phu",
@@ -97776,12 +97782,6 @@
               "brightness": ""
             },
             {
-              "ten": "Thiên Quan",
-              "hoa": null,
-              "nhom": "phu",
-              "brightness": ""
-            },
-            {
               "ten": "Thiên Thương",
               "hoa": null,
               "nhom": "phu",
@@ -97851,6 +97851,12 @@
             },
             {
               "ten": "Phá Toái",
+              "hoa": null,
+              "nhom": "phu",
+              "brightness": ""
+            },
+            {
+              "ten": "Thiên Quan",
               "hoa": null,
               "nhom": "phu",
               "brightness": ""
@@ -98051,12 +98057,6 @@
             },
             {
               "ten": "Cô Thần",
-              "hoa": null,
-              "nhom": "phu",
-              "brightness": ""
-            },
-            {
-              "ten": "Thiên Phúc",
               "hoa": null,
               "nhom": "phu",
               "brightness": ""
@@ -98418,6 +98418,12 @@
               "brightness": ""
             },
             {
+              "ten": "Thiên Phúc",
+              "hoa": null,
+              "nhom": "phu",
+              "brightness": ""
+            },
+            {
               "ten": "Địa Giải",
               "hoa": null,
               "nhom": "phu",
@@ -98644,12 +98650,6 @@
               "brightness": ""
             },
             {
-              "ten": "Thiên Quan",
-              "hoa": null,
-              "nhom": "phu",
-              "brightness": ""
-            },
-            {
               "ten": "Thiên Tài",
               "hoa": null,
               "nhom": "phu",
@@ -98719,6 +98719,12 @@
             },
             {
               "ten": "Phá Toái",
+              "hoa": null,
+              "nhom": "phu",
+              "brightness": ""
+            },
+            {
+              "ten": "Thiên Quan",
               "hoa": null,
               "nhom": "phu",
               "brightness": ""
@@ -98907,12 +98913,6 @@
             },
             {
               "ten": "Cô Thần",
-              "hoa": null,
-              "nhom": "phu",
-              "brightness": ""
-            },
-            {
-              "ten": "Thiên Phúc",
               "hoa": null,
               "nhom": "phu",
               "brightness": ""
@@ -99286,6 +99286,12 @@
               "brightness": ""
             },
             {
+              "ten": "Thiên Phúc",
+              "hoa": null,
+              "nhom": "phu",
+              "brightness": ""
+            },
+            {
               "ten": "Địa Giải",
               "hoa": null,
               "nhom": "phu",
@@ -99518,12 +99524,6 @@
               "brightness": ""
             },
             {
-              "ten": "Thiên Quan",
-              "hoa": null,
-              "nhom": "phu",
-              "brightness": ""
-            },
-            {
               "ten": "Thiên Tài",
               "hoa": null,
               "nhom": "phu",
@@ -99593,6 +99593,12 @@
             },
             {
               "ten": "Phá Toái",
+              "hoa": null,
+              "nhom": "phu",
+              "brightness": ""
+            },
+            {
+              "ten": "Thiên Quan",
               "hoa": null,
               "nhom": "phu",
               "brightness": ""
@@ -99775,12 +99781,6 @@
             },
             {
               "ten": "Cô Thần",
-              "hoa": null,
-              "nhom": "phu",
-              "brightness": ""
-            },
-            {
-              "ten": "Thiên Phúc",
               "hoa": null,
               "nhom": "phu",
               "brightness": ""
@@ -100154,6 +100154,12 @@
               "brightness": ""
             },
             {
+              "ten": "Thiên Phúc",
+              "hoa": null,
+              "nhom": "phu",
+              "brightness": ""
+            },
+            {
               "ten": "Địa Giải",
               "hoa": null,
               "nhom": "phu",
@@ -100416,12 +100422,6 @@
               "brightness": ""
             },
             {
-              "ten": "Thiên Quan",
-              "hoa": null,
-              "nhom": "phu",
-              "brightness": ""
-            },
-            {
               "ten": "Thiên Sứ",
               "hoa": null,
               "nhom": "phu",
@@ -100497,6 +100497,12 @@
             },
             {
               "ten": "Phá Toái",
+              "hoa": null,
+              "nhom": "phu",
+              "brightness": ""
+            },
+            {
+              "ten": "Thiên Quan",
               "hoa": null,
               "nhom": "phu",
               "brightness": ""
@@ -100643,12 +100649,6 @@
             },
             {
               "ten": "Cô Thần",
-              "hoa": null,
-              "nhom": "phu",
-              "brightness": ""
-            },
-            {
-              "ten": "Thiên Phúc",
               "hoa": null,
               "nhom": "phu",
               "brightness": ""
@@ -101016,6 +101016,12 @@
               "brightness": ""
             },
             {
+              "ten": "Thiên Phúc",
+              "hoa": null,
+              "nhom": "phu",
+              "brightness": ""
+            },
+            {
               "ten": "Địa Giải",
               "hoa": null,
               "nhom": "phu",
@@ -101290,12 +101296,6 @@
               "brightness": ""
             },
             {
-              "ten": "Thiên Quan",
-              "hoa": null,
-              "nhom": "phu",
-              "brightness": ""
-            },
-            {
               "ten": "Thiên Sứ",
               "hoa": null,
               "nhom": "phu",
@@ -101365,6 +101365,12 @@
             },
             {
               "ten": "Phá Toái",
+              "hoa": null,
+              "nhom": "phu",
+              "brightness": ""
+            },
+            {
+              "ten": "Thiên Quan",
               "hoa": null,
               "nhom": "phu",
               "brightness": ""
@@ -101511,12 +101517,6 @@
             },
             {
               "ten": "Cô Thần",
-              "hoa": null,
-              "nhom": "phu",
-              "brightness": ""
-            },
-            {
-              "ten": "Thiên Phúc",
               "hoa": null,
               "nhom": "phu",
               "brightness": ""
@@ -101884,6 +101884,12 @@
               "brightness": ""
             },
             {
+              "ten": "Thiên Phúc",
+              "hoa": null,
+              "nhom": "phu",
+              "brightness": ""
+            },
+            {
               "ten": "Đẩu Quân",
               "hoa": null,
               "nhom": "phu",
@@ -102164,12 +102170,6 @@
               "brightness": ""
             },
             {
-              "ten": "Thiên Quan",
-              "hoa": null,
-              "nhom": "phu",
-              "brightness": ""
-            },
-            {
               "ten": "Giải Thần",
               "hoa": null,
               "nhom": "phu",
@@ -102227,6 +102227,12 @@
             },
             {
               "ten": "Phá Toái",
+              "hoa": null,
+              "nhom": "phu",
+              "brightness": ""
+            },
+            {
+              "ten": "Thiên Quan",
               "hoa": null,
               "nhom": "phu",
               "brightness": ""
@@ -102379,12 +102385,6 @@
             },
             {
               "ten": "Cô Thần",
-              "hoa": null,
-              "nhom": "phu",
-              "brightness": ""
-            },
-            {
-              "ten": "Thiên Phúc",
               "hoa": null,
               "nhom": "phu",
               "brightness": ""
@@ -102740,6 +102740,12 @@
               "brightness": ""
             },
             {
+              "ten": "Thiên Phúc",
+              "hoa": null,
+              "nhom": "phu",
+              "brightness": ""
+            },
+            {
               "ten": "Đẩu Quân",
               "hoa": null,
               "nhom": "phu",
@@ -103026,12 +103032,6 @@
               "brightness": ""
             },
             {
-              "ten": "Thiên Quan",
-              "hoa": null,
-              "nhom": "phu",
-              "brightness": ""
-            },
-            {
               "ten": "Giải Thần",
               "hoa": null,
               "nhom": "phu",
@@ -103089,6 +103089,12 @@
             },
             {
               "ten": "Phá Toái",
+              "hoa": null,
+              "nhom": "phu",
+              "brightness": ""
+            },
+            {
+              "ten": "Thiên Quan",
               "hoa": null,
               "nhom": "phu",
               "brightness": ""
@@ -103241,12 +103247,6 @@
             },
             {
               "ten": "Cô Thần",
-              "hoa": null,
-              "nhom": "phu",
-              "brightness": ""
-            },
-            {
-              "ten": "Thiên Phúc",
               "hoa": null,
               "nhom": "phu",
               "brightness": ""
