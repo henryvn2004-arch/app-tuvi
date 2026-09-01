@@ -338,6 +338,9 @@
     ga.src='https://www.googletagmanager.com/gtag/js?id=G-F4XNRS2XT0'; document.head.appendChild(ga);
     window.dataLayer=window.dataLayer||[]; function gtag(){dataLayer.push(arguments);} window.gtag=gtag;
     gtag('js',new Date()); gtag('config','G-F4XNRS2XT0');
+    // Google Ads tag riêng (khác G-F4XNRS2XT0 của GA4) — Google Ads yêu cầu cài
+    // trực tiếp trên mọi trang để đọc được conversion, không chỉ qua GA4 import.
+    gtag('config','AW-18419617290');
   }
   // Meta (Facebook) Pixel — cùng lý do bỏ qua navigator.webdriver như GA4 ở trên,
   // tránh bộ E2E Playwright đổ traffic giả vào pixel quảng cáo.
