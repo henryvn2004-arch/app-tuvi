@@ -31,13 +31,6 @@ tsconfig.tsbuildinfo
 !.claude/skills/
 !.claude/agents/
 
-# Oracle đối chiếu an sao (scripts/oracle/) — mã nguồn CỦA NGƯỜI KHÁC
-# ("An Sao - Tử Vi Thiên Lương", shareidea2020@gmail.com), dùng làm TRỌNG TÀI
-# kiểm công thức, KHÔNG phải nguồn nhập của sản phẩm. Không commit mã của họ
-# vào repo mình — xem scripts/oracle/vendor/README.md để lấy file.
-/scripts/oracle/vendor/*.js
-/scripts/oracle/vendor/*.html
-
 # Local data, generated outputs & scratch
 /qr/
 /scripts/out/

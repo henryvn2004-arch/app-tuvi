@@ -83,10 +83,9 @@ export default [
       'payos-v2/',
       'run_embed.py',
       'setup_playwright.sh',
-      // Mã CỦA NGƯỜI KHÁC, không commit (xem scripts/oracle/vendor/README.md)
-      // — nhưng ai làm theo README đặt file này cục bộ thì `npm run lint`
-      // không được vỡ vì nó, nên ignore tường minh ở đây thay vì chỉ dựa
-      // vào .gitignore (ESLint flat config không tự đọc .gitignore).
+      // Mã CỦA NGƯỜI KHÁC (xem scripts/oracle/vendor/README.md) — bản gốc,
+      // không sửa, không lint theo luật của repo mình. Cùng lý do với
+      // `tuvi-engine/`/`remotion/`.
       'scripts/oracle/vendor/',
     ],
   },

@@ -1,42 +1,38 @@
-# Oracle vendor — KHÔNG commit vào git
+# Oracle vendor
 
-Thư mục này chứa (cục bộ, gitignore) mã nguồn của **"An Sao — Tử Vi Thiên
-Lương"** (shareidea2020@gmail.com), một ứng dụng độc lập được chia sẻ để tham
-khảo. Repo này dùng nó làm **TRỌNG TÀI đối chiếu công thức** trong lúc sửa
-`public/tuvi-ansao-engine.js` — không phải nguồn nhập của sản phẩm, không
-được import vào bất kỳ route/trang nào.
+Thư mục này chứa mã nguồn của **"An Sao — Tử Vi Thiên Lương"**
+(shareidea2020@gmail.com), một ứng dụng độc lập được tác giả chia sẻ công
+khai để tham khảo. Repo này dùng nó làm **TRỌNG TÀI đối chiếu công thức**
+trong lúc sửa `public/tuvi-ansao-engine.js` — không phải nguồn nhập của sản
+phẩm, không được import vào bất kỳ route/trang nào của `tuviminhbao.com`.
 
-## Vì sao KHÔNG commit
+## Vì sao commit thẳng vào git
 
-Đây là mã của người khác. Dùng nội bộ để đối chiếu là một chuyện; chép nguyên
-514KB vào lịch sử git của một sản phẩm thương mại là chuyện khác — kể cả khi
-chỉ dùng trong test. Nên: file `.js`/`.html` trong thư mục này bị `.gitignore`
-chặn (`/scripts/oracle/vendor/*.js`, `*.html`); chỉ file `README.md` này được
-commit.
-
-**Kết quả đối chiếu (số liệu, vị trí sao, ngày âm) không bị chặn** — đó là dữ
-kiện tính toán, không phải mã nguồn của họ. `scripts/oracle/fixtures/*.json`
-được commit bình thường.
-
-## Cách lấy file để chạy oracle cục bộ
-
-1. Xin lại link Google Drive gốc (chủ sở hữu đã chia sẻ công khai), hoặc liên
-   hệ `shareidea2020@gmail.com`.
-2. Tải file `.html`, đặt tại `scripts/oracle/vendor/an-sao-thien-luong.html`
-   **hoặc** bóc riêng phần `<script>…</script>` ra
-   `scripts/oracle/vendor/an-sao-thien-luong.js`.
-3. `scripts/oracle/load.mjs` tự dò cả hai tên file, ưu tiên `.js` nếu có cả
-   hai (đỡ phải bóc `<script>` mỗi lần).
-
-Thiếu file → các script `check:oracle-*` báo lỗi rõ ràng và thoát, **không**
-báo đỏ IM LẶNG như thiếu dữ liệu thật. `check:laso-golden` (đối chiếu với
-fixture đã đóng băng của CHÍNH engine mình) không cần file này — đó là bộ dò
-CI chính, chạy được ở mọi máy không có file oracle.
+Ban đầu file này bị gitignore (dùng cục bộ, không commit) vì đây là mã của
+người khác chia sẻ để dùng thử, không kèm giấy phép mã nguồn mở tường minh —
+"chia sẻ công khai" và "được phép chép vào repo thương mại" là hai chuyện
+khác nhau. Chủ sản phẩm (Henry) đã xem xét và quyết định chấp nhận rủi ro
+đó, cho commit thẳng — quyết định này thuộc về chủ sản phẩm, không phải kỹ
+thuật. File `an-sao-thien-luong.js` trong thư mục này **là bản gốc, KHÔNG
+sửa** (kiểm bằng đối chiếu công thức + benchmark thật trong quá trình tích
+hợp Thiên Lương — xem `docs/nhat-ky/`).
 
 ## Phạm vi dùng
 
-Chỉ dùng để SO SÁNH khi sửa công thức an sao (xem `docs/nhat-ky/` mục tích
-hợp Thiên Lương). Không import vào `lib/`, `app/`, hay `public/`. Không chép
-công thức của họ nguyên văn vào code sản phẩm — công thức đã được viết lại
-độc lập dựa trên phần đối chiếu, trừ thuật toán lịch âm Meeus/Hồ Ngọc Đức
-(kiến thức công khai).
+Chỉ dùng để SO SÁNH khi sửa công thức an sao. Không import vào `lib/`,
+`app/`, hay `public/`. Không chép công thức của họ nguyên văn vào code sản
+phẩm — công thức đã được viết lại độc lập dựa trên phần đối chiếu, trừ thuật
+toán lịch âm Meeus/Hồ Ngọc Đức (kiến thức công khai, không phải tài sản
+riêng của tác giả).
+
+## Cách dùng
+
+`scripts/oracle/load.mjs` tự dò `an-sao-thien-luong.js` (ưu tiên) hoặc
+`an-sao-thien-luong.html` (bóc `<script>`) trong thư mục này.
+
+- `npm run oracle:ansao` — quét vét cạn 518.400 tổ hợp an sao, so với engine
+  hiện tại.
+- `npm run oracle:lunar` — đối chiếu lịch âm theo quy tắc lịch sử VN.
+
+Thiếu file → hai lệnh trên báo lỗi rõ ràng và thoát. `check:lasogolden`
+(cổng CI chính) không phụ thuộc file này.
