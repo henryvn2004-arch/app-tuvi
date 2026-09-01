@@ -55,6 +55,7 @@
     "check:nhatky": "node scripts/check-nhatky-index.mjs",
     "check:slug": "node scripts/check-slug.mjs",
     "check:lasogolden": "node scripts/check-laso-golden.mjs",
+    "check:refbenchmarks": "node scripts/check-reference-benchmarks.mjs",
     "gen:lasogolden": "node scripts/gen-laso-golden.mjs",
     "oracle:ansao": "node scripts/oracle/check-ansao-exhaustive.mjs",
     "oracle:lunar": "node scripts/oracle/report-lunar-diff.mjs"

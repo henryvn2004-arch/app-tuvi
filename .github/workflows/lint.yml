@@ -261,6 +261,14 @@ jobs:
       - name: Lá số vàng — vị trí sao không trôi khỏi fixture
         run: npm run check:lasogolden
 
+      # 3 ca lấy TRỰC TIẾP từ bộ tự-kiểm của tác giả bản Thiên Lương (không
+      # tính lại qua oracle loader — chép nguyên giá trị họ tự khẳng định).
+      # Xác nhận ĐỘC LẬP với check:lasogolden ở trên: golden fixture đóng
+      # băng từ CHÍNH engine mình nên không bắt được nếu công thức đã sai
+      # ngay từ đầu; 3 ca này thì có.
+      - name: 3 lá số vàng — xác nhận độc lập với tác giả bản Thiên Lương
+        run: npm run check:refbenchmarks
+
       # Đối chiếu VÉT CẠN 518.400 tổ hợp an sao với oracle tham khảo (bản
       # "An Sao - Tử Vi Thiên Lương", scripts/oracle/vendor/) — mọi lệch phải
       # rơi đúng vào danh sách 9 điểm đã biết (Kình/Đà, Đào Hoa, Thiên
