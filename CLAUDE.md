@@ -294,13 +294,20 @@ Mỗi luật dưới đây sinh ra từ một lần cắn thật. Cột cuối l
   chính danh sách của nguồn (4.392 khoá mẫu vẫn bỏ lọt 10 tên).
 - **Bảng dịch dựng từ MỘT nguồn thì chỉ phủ nguồn đó** — đã cắn 3 lần (chữ Hán,
   tên hành tinh). Cắm bộ dò rò rỉ mỗi lần đấu vào nguồn chữ mới.
-- **Bảng âm lịch chỉ phủ `1900-01-31 → 2100-12-31`.** Ngoài tầm: bản vanilla
+- **Bảng âm lịch chỉ phủ `1900-01-01 → 2100-12-31`.** Ngoài tầm: bản vanilla
   (`public/tuvi-ansao-engine.js`) trả **`null`**, bản TS (`tuvi-engine`) **ném
   `RangeError`** — cố ý khác nhau theo nơi gọi, nhưng BIÊN phải khớp. Bản cũ
   `return {day:1,month:1,year:yy}` làm MỌI ngày dương của một năm trước 1900 ra
   CÙNG một lá số, im lặng. **Mọi lượt import ngày sinh từ nguồn NGOÀI phải gọi
   `isLunarSupported()` trước.** `npm run check:lunar` ·
   `nhat-ky/2026-08.md` "solarToLunar BỊA lá số".
+- **`_LUNAR_TABLE` (cả 2 bản) SINH bằng thuật toán chính xác của oracle Thiên
+  Lương (có ΔT) + quy tắc múi giờ lịch sử VN (UTC+8 trước 1968-01-01, UTC+7 từ
+  đó) — KHÔNG gõ tay/chép từ thư viện ngoài nữa (P1, 2026-09). Tết Ất Sửu 1985
+  lệch lịch TQ **cả một tháng** (21/1 chứ không phải 20/2) — bằng chứng bảng cũ
+  sai thật, không phải tiểu tiết. Cần sinh lại → `scripts/gen-lunar-table.mjs`
+  rồi `scripts/apply-lunar-table.mjs`; `npm run oracle:lunar` gate CI đối chiếu
+  vét cạn 1900-2100, đừng sửa tay bảng rồi bỏ qua bước này.
 - **Bản vanilla BỎ cờ `isLeap`** ⇒ ngày trong tháng nhuận đụng khoá với tháng
   thường (đo được: 336/365 ngày phân biệt ở năm có nhuận). **Nợ CỐ Ý, đừng sửa
   mò** — tháng nhuận là chuyện cổ pháp. `check:lunar` ghim hiện trạng: đổi là đỏ.

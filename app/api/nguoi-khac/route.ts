@@ -63,7 +63,10 @@ const TOOL_ID = 'nguoi-khac';
  * ⚠️ Cố ý KHÔNG nhét vào `lasoKey`: đổi khoá là mồ côi cả cache LẪN
  * `userOwnsLaso` ⇒ người đã trả tiền bị tính lại.
  */
-const SHAPE = 2;
+// P1 (2026-09): bump vì `_LUNAR_TABLE` sinh lại theo oracle Thiên Lương — GIÁ
+// TRỊ lá số của người sinh vào ngày lệch bảng cũ đổi, không phải cấu trúc
+// payload (fingerprint giữ nguyên). Xem docs/nhat-ky/2026-09.md.
+const SHAPE = 3;
 
 /** Vân tay CẤU TRÚC — `npm run check:cacheshape` canh khớp với `SHAPE` ở trên. */
 const SHAPE_FINGERPRINT = 'f61088b7da86';

@@ -86,7 +86,10 @@ interface HuongDan {
  * `userOwnsLaso` — người đã trả tiền bị tính lại. Khoá giữ nguyên nên lượt dựng
  * lại vẫn miễn phí đúng cho họ.
  */
-const SHAPE = 2;
+// P1 (2026-09): bump vì `_LUNAR_TABLE` sinh lại theo oracle Thiên Lương — GIÁ
+// TRỊ lá số của người sinh vào ngày lệch bảng cũ đổi, không phải cấu trúc
+// payload (fingerprint giữ nguyên). Xem docs/nhat-ky/2026-09.md.
+const SHAPE = 3;
 
 /**
  * Vân tay CẤU TRÚC hồ sơ engine (`computeDayCon`) — nguồn của `meta()` ở dưới.

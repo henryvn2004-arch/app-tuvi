@@ -62,14 +62,14 @@ describe('solarToLunar — biên bảng âm lịch', () => {
   // year:yy}` nên MỌI ngày dương trước 1900 quy về CÙNG một ngày âm —
   // 1/1/1898, 15/6/1898 và 31/12/1898 đều ra "AL 1/1/1898". Im lặng, không lỗi.
   it('biên suy từ bảng, không gõ tay', () => {
-    expect(LUNAR_MIN_YMD).toBe(19000131);
+    expect(LUNAR_MIN_YMD).toBe(19000101);
     expect(LUNAR_MAX_YMD).toBe(21001231);
   });
 
   it('ném RangeError khi TRƯỚC biên (không bịa mùng 1 tháng 1)', () => {
     expect(() => solarToLunar(1, 1, 1898)).toThrow(RangeError);
     expect(() => solarToLunar(15, 6, 1899)).toThrow(RangeError);
-    expect(() => solarToLunar(30, 1, 1900)).toThrow(RangeError); // ngay trước mốc đầu
+    expect(() => solarToLunar(31, 12, 1899)).toThrow(RangeError); // ngay trước mốc đầu
   });
 
   it('ném RangeError khi SAU biên', () => {
@@ -82,7 +82,7 @@ describe('solarToLunar — biên bảng âm lịch', () => {
   });
 
   it('isLunarSupported khớp với biên', () => {
-    expect(isLunarSupported(30, 1, 1900)).toBe(false);
+    expect(isLunarSupported(31, 12, 1899)).toBe(false);
     expect(isLunarSupported(31, 1, 1900)).toBe(true);
     expect(isLunarSupported(31, 12, 2100)).toBe(true);
     expect(isLunarSupported(1, 1, 2101)).toBe(false);
