@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-167 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+168 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 **Bốn file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
 ```bash
@@ -11,7 +11,7 @@ sed -n '120,190p' docs/nhat-ky/2026-08.md    # đọc đúng đoạn, đừng ca
 
 | file | số mục | dung lượng |
 |---|---:|---:|
-| `2026-09.md` | 3 | 22,532 B |
+| `2026-09.md` | 4 | 26,568 B |
 | `2026-08.md` | 147 | 1,018,512 B |
 | `2026-07.md` | 12 | 154,531 B |
 | `track-cu.md` | 5 | 89,354 B |
@@ -25,7 +25,8 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
-| 1 | 2026-09 | `2026-09.md` | 🎣 Ví dụ thật trước form landing `/app/luan-giai` — và một con số tôi đã báo SAI |
+| 1 | 2026-09 | `2026-09.md` | ✂️ 72% bản luận ĐÃ BÁN có phần cụt giữa câu — không dòng code nào đọc `stop_reason` |
+| 2 | 2026-09 | `2026-09.md` | 🎣 Ví dụ thật trước form landing `/app/luan-giai` — và một con số tôi đã báo SAI |
 | 1 | 2026-09 | `2026-09.md` | 🎯 Google Ads có traffic thật, 0 sign up — track.js không bắt gclid, đếm lẫn vào "(none)" |
 | 1 | 2026-08 | `2026-08.md` | 👤 Guest checkout bằng Supabase Anonymous Sign-ins |
 | 1 | 2026-08 | `2026-08.md` | 🩹 `.hkl-src` lộ code ra ngoài + hook thật sang Chu Trình Cuộc Đời |

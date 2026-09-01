@@ -280,7 +280,21 @@ async function runPost(request: NextRequest) {
     // provider:'anthropic' (chốt Henry 2026-08-24): Vận Hạn 12 Tháng Tới thuộc
     // nhóm tool "luận giải" quan trọng → Opus 5 primary thay vì Gemini Flash
     // mặc định toàn site (xem lib/llm/complete.ts CANONICAL_ORDER).
-    const rr = await llmTextFull({ system: systemForLLM, prompt, maxTokens: maxTok, cacheSystem, provider: 'anthropic' });
+    let rr = await llmTextFull({ system: systemForLLM, prompt, maxTokens: maxTok, cacheSystem, provider: 'anthropic' });
+    // Cùng lớp lỗi với lasotuvi/route.ts (xem chú thích dài ở đó): output chạm
+    // trần `max_tokens` là bị API cắt GIỮA CÂU, mà trước 2026-09 không nhánh
+    // provider nào đọc `stop_reason` nên bản cụt đi thẳng tới khách đã trả tiền.
+    // Tool này dùng CHUNG cơ chế trần token đó nên dính y hệt — vá một route mà
+    // bỏ route kia là để nguyên lỗi ở nửa còn lại.
+    if (rr.truncated) {
+      console.error(`[van-han-nam] phần ${phan} bị cắt ở trần ${maxTok} — sinh lại với ${maxTok * 2}`);
+      try {
+        const retry = await llmTextFull({ system: systemForLLM, prompt, maxTokens: maxTok * 2, cacheSystem, provider: 'anthropic' });
+        if (!retry.truncated || retry.text.length > rr.text.length) rr = retry;
+      } catch (e) {
+        console.error(`[van-han-nam] sinh lại phần ${phan} hỏng, giữ bản đầu:`, (e as Error).message);
+      }
+    }
     // tool_id = ĐÚNG `tool_pricing.tool_id` để bucket chi phí ghép được với
     // bucket doanh thu (xem tool_canon() trong CLAUDE.md).
     void logLlmUsage(

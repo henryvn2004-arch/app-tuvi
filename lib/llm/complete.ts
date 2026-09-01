@@ -129,6 +129,18 @@ function buildGeminiBody(o: LlmTextOpts, maxTokens: number) {
 
 interface RawLlmResult {
   text: string;
+  /** TRUE khi provider báo output bị CẮT vì chạm trần `max_tokens` — không phải
+   * lỗi mạng, không phải model viết xong. Chữ trả về vẫn là chữ THẬT nhưng cụt
+   * giữa câu.
+   *
+   * 🔴 VÌ SAO PHẢI CÓ TRƯỜNG NÀY: trước 2026-09 không một nhánh provider nào
+   * đọc `stop_reason`/`finishReason`, nên mọi lượt bị cắt đi thẳng vào sản phẩm
+   * mà KHÔNG có gì báo. Đo trên 46 bản luận đã bán: **77/974 phần (7,9%) kết
+   * thúc giữa câu, 33/46 bản (72%) dính ít nhất một phần** — nặng nhất là phần
+   * 1 (33,3%) và phần 14 (17,8%), tức đúng mấy phần văn dài nhất. Không có cờ
+   * này thì lớp lỗi đó vô hình theo đúng nghĩa đen.
+   * Xem docs/nhat-ky/2026-09.md. */
+  truncated?: boolean;
   usage: {
     input_tokens: number;
     output_tokens: number;
@@ -154,8 +166,19 @@ async function geminiText(o: LlmTextOpts, maxTokens: number): Promise<RawLlmResu
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const t = (j?.candidates?.[0]?.content?.parts as any[] | undefined)?.map((p) => p.text).filter(Boolean).join('') || '';
   if (!t) throw new Error('gemini: completion rỗng');
+  // Đối ứng của `stop_reason==='max_tokens'` bên Anthropic (xem anthropicText).
+  // Phần lớn 77 phần cụt đo được là từ thời Gemini/Kimi primary, nên nhánh này
+  // BẮT BUỘC phải có cờ y hệt — vá mỗi Anthropic là vá nửa vời.
+  const truncated = j?.candidates?.[0]?.finishReason === 'MAX_TOKENS';
+  if (truncated) {
+    console.error(
+      `[llm] gemini CẮT GIỮA CHỪNG (finishReason=MAX_TOKENS): max_tokens=${maxTokens}, ` +
+        `output_tokens=${j?.usageMetadata?.candidatesTokenCount}, chữ=${t.length}, kết thúc="…${t.slice(-40)}"`
+    );
+  }
   return {
     text: t,
+    truncated,
     usage: {
       input_tokens: j?.usageMetadata?.promptTokenCount || 0,
       output_tokens: j?.usageMetadata?.candidatesTokenCount || 0,
@@ -320,10 +343,22 @@ async function anthropicText(o: LlmTextOpts, maxTokens: number): Promise<RawLlmR
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const t = (j?.content as any[] | undefined)?.map((b) => b.text).filter(Boolean).join('') || '';
   if (!t) throw new Error('anthropic: completion rỗng');
+  // `stop_reason==='max_tokens'` = API đã CẮT output giữa chừng. Đây là tín hiệu
+  // chính thức của Anthropic, không phải suy đoán từ dấu câu. KHÔNG ném lỗi:
+  // chữ đã sinh vẫn dùng được và người dùng đã trả tiền cho nó — nhưng phải kêu
+  // to để còn biết mà nâng trần, thay vì im lặng giao hàng cụt như trước.
+  const truncated = j?.stop_reason === 'max_tokens';
+  if (truncated) {
+    console.error(
+      `[llm] anthropic CẮT GIỮA CHỪNG (stop_reason=max_tokens): max_tokens=${maxTokens}, ` +
+        `output_tokens=${j?.usage?.output_tokens}, chữ=${t.length}, kết thúc="…${t.slice(-40)}"`
+    );
+  }
   return {
     // Nối lại dấu '{' của prefill (xem buildAnthropicBody) — API chỉ trả phần
     // model viết TIẾP, không lặp lại phần đã mồi.
     text: o.json ? '{' + t : t,
+    truncated,
     usage: {
       input_tokens: j?.usage?.input_tokens || 0,
       output_tokens: j?.usage?.output_tokens || 0,
@@ -398,6 +433,10 @@ export interface LlmTextFullResult {
    * Đo tại đây để mọi route chỉ việc chuyển tiếp — bắt 10 chỗ gọi tự bấm giờ
    * thì sớm muộn có chỗ quên, mà chỗ quên đó im lặng. */
   durationMs: number;
+  /** Output bị CẮT vì chạm trần `max_tokens` (xem `RawLlmResult.truncated`).
+   * Route nào giao văn bản dài cho người đã trả tiền thì PHẢI đọc cờ này —
+   * không đọc thì bản cụt đi thẳng tới khách y như trước 2026-09. */
+  truncated: boolean;
 }
 
 /**
@@ -416,6 +455,7 @@ export async function llmTextFull(o: LlmTextOpts): Promise<LlmTextFullResult> {
       return {
         text: r.text,
         usage: r.usage,
+        truncated: !!r.truncated,
         provider: p as 'gemini' | 'anthropic' | 'kimi',
         model: p === 'kimi' ? KIMI_MODEL : p === 'gemini' ? GEMINI_MODEL : ANTHROPIC_MODEL,
         durationMs: Date.now() - t0,

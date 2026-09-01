@@ -323,7 +323,34 @@ async function runPost(request: NextRequest) {
     // `chat.standalone_provider` — khoá đó vẫn quyết định primary cho mọi
     // route standalone khác. Cũng giữ nguyên hiệu quả `cacheSystem` (breakpoint
     // Anthropic) vì nhánh Anthropic giờ LUÔN được gọi ở lượt đầu.
-    const r = await llmTextFull({ system: systemForLLM, prompt, maxTokens: maxTok, cacheSystem: true, provider: 'anthropic' });
+    let r = await llmTextFull({ system: systemForLLM, prompt, maxTokens: maxTok, cacheSystem: true, provider: 'anthropic' });
+
+    // ── Bị CẮT giữa câu → sinh lại MỘT lần với trần gấp đôi ────────────────
+    // Đo 2026-09 trên 46 bản luận ĐÃ BÁN: 77/974 phần (7,9%) kết thúc giữa câu,
+    // 33/46 bản (72%) dính ít nhất một phần — nặng nhất đúng mấy phần văn dài
+    // (phần 1: 33,3%, phần 14: 17,8%). Suốt thời gian đó KHÔNG nhánh provider
+    // nào đọc `stop_reason`, nên bản cụt đi thẳng tới khách mà không có gì báo.
+    //
+    // VÌ SAO SINH LẠI CHỨ KHÔNG NÂNG ĐỀU TRẦN: nâng đều chạm vào chi phí của
+    // CẢ 92% lượt đang bình thường, mà trần đúng cho từng phần thì chưa ai đo.
+    // Sinh lại chỉ nổ đúng ~8% lượt thật sự hỏng, tự nhắm mục tiêu, và chặn ở
+    // MỘT lần — cắt tiếp lần hai thì giao bản dài nhất lấy được còn hơn quay
+    // vòng đốt tiền. Trần đúng để chốt sau, khi log `[llm] … CẮT GIỮA CHỪNG`
+    // đủ số liệu cho từng phần.
+    if (r.truncated) {
+      console.error(`[lasotuvi] phần ${phan} bị cắt ở trần ${maxTok} — sinh lại với ${maxTok * 2}`);
+      try {
+        const retry = await llmTextFull({ system: systemForLLM, prompt, maxTokens: maxTok * 2, cacheSystem: true, provider: 'anthropic' });
+        // Chỉ nhận bản mới khi nó THẬT SỰ khá hơn: hết cụt, hoặc chí ít dài hơn.
+        // Lượt hai vẫn có thể cụt (văn dài hơn trần mới) — lúc đó bản dài hơn
+        // vẫn là bản ít thiệt cho người đọc hơn.
+        if (!retry.truncated || retry.text.length > r.text.length) r = retry;
+      } catch (e) {
+        // Sinh lại hỏng thì GIỮ bản đầu — khách đã trả tiền, có chữ cụt vẫn hơn
+        // không có gì. Nhưng phải kêu, đừng nuốt (luật `catch {}` rỗng trong CLAUDE.md).
+        console.error(`[lasotuvi] sinh lại phần ${phan} hỏng, giữ bản đầu:`, (e as Error).message);
+      }
+    }
     const text = r.text;
     // tool_id ĐÚNG `tool_pricing.tool_id` để bucket chi phí ghép được với bucket
     // doanh thu (xem tool_canon() trong CLAUDE.md). Phần 1-13 (tổng quan + 12
