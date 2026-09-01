@@ -178,7 +178,8 @@ export function loadOracle() {
   } catch (e) {
     throw new Error(
       `Nạp oracle thất bại (mã của họ ném lỗi khi eval): ${e.message}\n` +
-        `Kiểm scripts/oracle/vendor/an-sao-thien-luong.js còn nguyên vẹn không.`
+        `Kiểm scripts/oracle/vendor/an-sao-thien-luong.js còn nguyên vẹn không.`,
+      { cause: e }
     );
   } finally {
     console.error = realConsoleError;
