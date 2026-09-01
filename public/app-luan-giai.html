@@ -16,6 +16,12 @@
 .form-card{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);max-width:640px}
 .form-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:3px}
 .form-card p.sub{font-size:12.5px;color:var(--text-lt);margin-bottom:14px}
+/* Ví dụ thật đứng TRƯỚC form nhập — cho khách nguội (Ads, chưa từng biết
+   site) thấy giá trị TRƯỚC khi bị đòi giờ sinh, xem chú thích ở renderDemoTeaser().
+   max-width khớp .form-card để không lệch mép khi cả hai xếp chồng. */
+.demo-wrap{max-width:640px;margin-bottom:18px}
+.demo-head{font-size:10.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text-lt);margin-bottom:8px}
+.demo-cta{font-size:12.5px;color:var(--gold-soft);font-weight:600;margin-top:10px;text-align:center}
 .frow{display:flex;gap:11px;flex-wrap:wrap;align-items:flex-end;margin-bottom:12px}
 .fg{display:flex;flex-direction:column;gap:5px}
 .fg label{font-size:10.5px;font-weight:600;color:var(--text-lt);letter-spacing:.04em;text-transform:uppercase}
@@ -161,6 +167,7 @@
     <div class="ws-body">
       <div id="introHost"></div>
       <div id="shellRecent"></div>
+      <div class="demo-wrap" id="demoTeaser" style="display:none"></div>
       <div class="form-card" id="birthPanel">
         <h2>Nhập thông tin để lập lá số &amp; luận giải</h2>
         <p class="sub">Đọc trọn 13 phần lá số: tổng quan và luận riêng từng cung trong 12 cung, cách cục, điểm mạnh yếu. Bạn từng xem lướt lá số đâu đó mà chưa hiểu hết ý nghĩa. Dùng khi muốn một bản luận đầy đủ, không phải vài dòng qua loa.</p>
@@ -230,6 +237,7 @@ TuviForm.render('tuviFormHost', {mode:'compact', gioitinh:'nam'});
   var raw;
   try{ raw=sessionStorage.getItem('app_pending_birth'); sessionStorage.removeItem('app_pending_birth'); }catch(e){ return; }
   if(!raw) return;
+  window.__tvmbSkipDemo=true; // sắp auto-chạy luôn (điền từ trang chủ) — khỏi cần ví dụ, xem gate ở cuối file
   var pending;
   try{ pending=JSON.parse(raw); }catch(e){ return; }
   if(!pending||!pending.fd||!pending.fd.ngay||!pending.fd.thang||!pending.fd.nam) return;
@@ -273,6 +281,7 @@ function doLuan(){
     document.getElementById('miniChart').innerHTML=renderGrid(ls,fd);
     if(window.mountIcons) window.mountIcons(document.getElementById('miniChart')); // ô giữa mang span [data-icon]
     document.getElementById('birthPanel').style.display='none';
+    var _dt=document.getElementById('demoTeaser'); if(_dt) _dt.style.display='none'; // đã có lá số thật, khỏi cần ví dụ nữa
     document.getElementById('lgPanel').style.display='block';
     document.getElementById('btnEdit').style.display='';
     document.getElementById('btnBatTu').style.display='';
@@ -309,6 +318,7 @@ function doLuan(){
   }catch(e){
     document.getElementById('lgBody').innerHTML='<div class="laso-error">Lỗi khi luận giải: '+esc(e.message)+'</div>';
     document.getElementById('birthPanel').style.display='none';
+    var _dtErr=document.getElementById('demoTeaser'); if(_dtErr) _dtErr.style.display='none';
     document.getElementById('lgPanel').style.display='block';
     if(window.AiLoadingSteps)AiLoadingSteps.scrollToResult('lgPanel');
     if(window.console)console.error(e);
@@ -586,6 +596,59 @@ function buildTeaserHtml(label,ls){
   return '<div class="lg-teaser"><div class="lg-teaser-score" style="color:'+col+'">'+(t!=null?t:'—')+'<small>/10</small></div>'+
     '<div class="lg-teaser-line">'+line+' Cách cục, quy tắc và ý nghĩa từng sao đầy đủ của cung này nằm trong bản đầy đủ.</div></div>';
 }
+// ── Ví dụ thật trước form (2026-09) ──────────────────────────────────────
+// Henry: traffic Google Ads PMax bounce 72% gần như tức khắc (median 0.1s),
+// chỉ 2.5% chạy thử tool — nghi "vào thấy bắt nhập form thấy phiền nên out"
+// (đối chiếu Search ads cùng ngày: run_pct cao hơn ~8 lần dù ít traffic hơn,
+// khớp giả thuyết search có intent còn PMax tò mò). Chèn MỘT lá số ví dụ THẬT
+// (tính bằng chính engine, KHÔNG bịa số) phía TRÊN form, để khách nguội thấy
+// giá trị trước khi bị đòi giờ sinh — thay vì đoán mù rồi rebuild.
+// Ngày sinh ví dụ CỐ Ý cố định (không đổi theo namxem/random) — demo phải
+// giống nhau mỗi lượt tải để không đo lẫn vào các phép so A/B khác sau này.
+function renderDemoTeaser(){
+  var host=document.getElementById('demoTeaser');
+  if(!host) return;
+  try{
+    var gioAmIdx=3; // giờ Mão (5h–7h)
+    var conv=convertDuongToAm(5,5,1995,6);
+    conv.gioIdx=gioAmIdx;
+    var ls=anSaoLaSo({ngayAL:conv.amLich.day,thangAL:conv.amLich.month,namAL:conv.amLich.year,canNam:conv.canNam,chiNam:conv.chiNam,gioIdx:gioAmIdx,gioitinh:'nu',namXem:new Date().getFullYear()});
+    var arr=[];
+    CUNG_ORDER.forEach(function(cn){ var t=cungTotal(ls.cungScores&&ls.cungScores[cn]); if(t!=null)arr.push({cn:cn,t:t}); });
+    if(!arr.length) return; // engine không trả điểm được — bỏ qua demo, đừng hiện khối rỗng
+    var overall=Math.round(arr.reduce(function(a,b){return a+b.t},0)/arr.length*10)/10;
+    arr.sort(function(a,b){return b.t-a.t;});
+    var strong=arr[0], weak=arr[arr.length-1];
+    var col=scoreColor(overall);
+    // Dùng chung khối .lg-teaser (đã có sẵn ở buildTeaserHtml) cho CẢ điểm
+    // tổng quan lẫn 2 cung — tránh nhét 1 thẻ vào .scores (grid 3 cột), thẻ
+    // đơn lẻ chỉ chiếm 1/3 bề rộng nên nhãn dài bị .lb cắt bớt (đã thấy khi
+    // mở bằng trình duyệt, sửa ở đây thay vì viết thêm CSS riêng).
+    var overallHtml='<div class="lg-teaser"><div class="lg-teaser-score" style="color:'+col+'">'+overall+'<small>/10</small></div>'+
+      '<div class="lg-teaser-line">Điểm tổng quan lá số ví dụ này — tính từ 6 chiều đánh giá trên cả 12 cung.</div></div>';
+    var lines=[overallHtml, buildTeaserHtml('Cung '+strong.cn,ls)];
+    if(weak&&weak.cn!==strong.cn) lines.push(buildTeaserHtml('Cung '+weak.cn,ls));
+    host.innerHTML=
+      '<div class="demo-head">Ví dụ thật từ hệ thống — chưa phải lá số của bạn</div>'+
+      '<div class="card">'+lines.join('<div style="border-top:1px solid var(--line);margin:8px 0"></div>')+'</div>'+
+      '<div class="demo-cta">↓ Nhập giờ sinh của bạn để xem lá số thật — không phải ví dụ</div>';
+    host.style.display='block';
+    if(window.mountIcons) window.mountIcons(host);
+    if(window.Track) Track.event('preview_shown',{from:'landing_demo'});
+  }catch(e){ if(window.console) console.error(e); } // demo hỏng thì thôi, KHÔNG được chặn form thật phía dưới
+}
+// Gate: bỏ qua demo nếu (1) sắp auto-chạy lá số thật từ trang chủ, hoặc
+// (2) khách đã có lá số cũ (Shell.getRememberedBirth) — cả hai đều không phải
+// khách nguội lần đầu. setTimeout(...,0) để chạy SAU khi cả script này (gồm
+// CUNG_ORDER/buildTeaserHtml phía trên, khai báo var hoisted nhưng PHẢI gán
+// xong) đã thực thi hết — gọi thẳng ngay đây thì CUNG_ORDER còn undefined.
+setTimeout(function(){
+  try{
+    if(window.__tvmbSkipDemo) return;
+    if(window.Shell&&Shell.getRememberedBirth&&Shell.getRememberedBirth()) return;
+    renderDemoTeaser();
+  }catch(e){}
+},0);
 // Bật/tắt ĐỒNG LOẠT khoá-mini cho CẢ 24 phần (luôn nằm trong DOM ngay từ đầu,
 // không còn khái niệm "backfill dần" như bản trước). Gọi khi biết chắc trạng
 // thái: `true` ngay khi `_renderUnlockBlock` xác nhận CHƯA mở; `false` ngay
