@@ -83,7 +83,9 @@ function cacheExtra(moiLo: string, namXem: number): string {
 // Thiên Trù/Thiên Quan/Thiên Phúc), cùng lý do GIÁ TRỊ đổi, không phải cấu trúc.
 // P3 (2026-09): bump tiếp — đổi Kình-Đà + Tứ Hóa can Canh sang trường phái
 // Thiên Lương, cùng lý do GIÁ TRỊ đổi, không phải cấu trúc.
-const SHAPE = 5;
+// P4 (2026-09): bump tiếp — La-Võng đổi từ 2 sao cố định Thìn/Tuất sang nhãn
+// theo Đà La, cùng lý do GIÁ TRỊ đổi, không phải cấu trúc.
+const SHAPE = 6;
 /* Lịch sử bump:
    1 → 2 (lượt vá tuổi thật, #475): thêm khoá `laTreEm` mà trang đọc để ẩn nhãn
    lứa, thêm `xungHo` cho từng lứa, thêm hẳn lứa `vaodoi` (19–25) kèm 9 khối

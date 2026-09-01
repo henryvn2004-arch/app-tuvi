@@ -8,8 +8,9 @@
 // KHÔNG sửa engine. Cổng kiểm CI: mọi lệch NGOÀI danh sách trường phái còn lại
 // (KNOWN_DIVERGENT_STARS bên dưới) phải làm script này THOÁT KHÁC 0. P2 đã sửa
 // 5 bảng tra sai (Đào Hoa/Thiên Quan/Thiên Phúc/Thiên Trù/Lưu Hà); P3 đã sửa
-// Kình-Đà + Tứ Hóa can Canh — set hiện RỖNG. La-Võng+độ sáng còn treo (xem
-// docs/nhat-ky/2026-09.md).
+// Kình-Đà + Tứ Hóa can Canh; P4 đã sửa La-Võng (đổi từ sao cố định sang nhãn
+// theo Đà La, xem check:lavong) — set hiện RỖNG, không còn điểm lệch trường
+// phái nào đang treo. Xem docs/nhat-ky/2026-09.md.
 //
 // Cần scripts/oracle/vendor/ (không commit) — thiếu thì thoát 0 kèm cảnh
 // báo, không phải lỗi cứng (đây là công cụ tuỳ chọn với người không có file).

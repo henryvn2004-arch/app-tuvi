@@ -294,6 +294,15 @@ jobs:
       - name: Oracle — đối chiếu vét cạn Tiểu Hạn với bản Thiên Lương
         run: npm run oracle:tieuhan
 
+      # P4: Thiên La/Địa Võng đổi từ 2 sao CỐ ĐỊNH tại Thìn/Tuất (mọi lá số)
+      # sang NHÃN của Đà La (chỉ hiện khi Đà La rơi đúng Thìn/Tuất) theo
+      # trường phái Thiên Lương. Không cần oracle vendor — tự nhất quán
+      # (Thiên La ⟺ Đà La@Thìn, Địa Võng ⟺ Đà La@Tuất) nên là `check:`,
+      # không phải `oracle:`. Đà La chỉ phụ thuộc (canNam, gioitinh) → vét
+      # cạn 240 ca là phủ hết miền.
+      - name: La-Võng khớp Đà La (Thiên Lương) trên toàn miền
+        run: npm run check:lavong
+
   typecheck:
     runs-on: ubuntu-latest
     timeout-minutes: 10

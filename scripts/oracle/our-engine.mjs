@@ -118,7 +118,19 @@ export function placeStarsFast({ ngayAL, thangAL, canNam, chiNam, gioIdx, gioiti
   const tuHoa = TU_HOA[canNam] || {};
   const tuanTriet = getTuanTriet(canChiNam, canNam);
 
-  const allStars = { ...chinhTinh, ...thaiTue, ...locTon, ...trangSinh, ...lucSat, ...phuTinh };
+  // La-Võng — P4 (2026-09): bản sao tay, giữ khớp public/tuvi-ansao-engine.js.
+  const laVong = {};
+  if (lucSat['Đà La'] === DIA_CHI.indexOf('Thìn')) laVong['Thiên La'] = lucSat['Đà La'];
+  else if (lucSat['Đà La'] === DIA_CHI.indexOf('Tuất')) laVong['Địa Võng'] = lucSat['Đà La'];
+  const allStars = {
+    ...chinhTinh,
+    ...thaiTue,
+    ...locTon,
+    ...trangSinh,
+    ...lucSat,
+    ...phuTinh,
+    ...laVong,
+  };
   const tuHoaMap = {};
   for (const [hoa, star] of Object.entries(tuHoa)) tuHoaMap[star] = hoa;
 

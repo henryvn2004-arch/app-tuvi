@@ -59,7 +59,8 @@
     "gen:lasogolden": "node scripts/gen-laso-golden.mjs",
     "oracle:ansao": "node scripts/oracle/check-ansao-exhaustive.mjs",
     "oracle:lunar": "node scripts/oracle/report-lunar-diff.mjs",
-    "oracle:tieuhan": "node scripts/oracle/verify-tieuhan.mjs"
+    "oracle:tieuhan": "node scripts/oracle/verify-tieuhan.mjs",
+    "check:lavong": "node scripts/check-la-vong.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.112.3",
