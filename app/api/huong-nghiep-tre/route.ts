@@ -81,7 +81,9 @@ function cacheExtra(moiLo: string, namXem: number): string {
 // payload (fingerprint giữ nguyên). Xem docs/nhat-ky/2026-09.md.
 // P2 (2026-09): bump tiếp — sửa 5 bảng tra sao lệch oracle (Đào Hoa/Lưu Hà/
 // Thiên Trù/Thiên Quan/Thiên Phúc), cùng lý do GIÁ TRỊ đổi, không phải cấu trúc.
-const SHAPE = 4;
+// P3 (2026-09): bump tiếp — đổi Kình-Đà + Tứ Hóa can Canh sang trường phái
+// Thiên Lương, cùng lý do GIÁ TRỊ đổi, không phải cấu trúc.
+const SHAPE = 5;
 /* Lịch sử bump:
    1 → 2 (lượt vá tuổi thật, #475): thêm khoá `laTreEm` mà trang đọc để ẩn nhãn
    lứa, thêm `xungHo` cho từng lứa, thêm hẳn lứa `vaodoi` (19–25) kèm 9 khối

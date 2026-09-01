@@ -399,10 +399,13 @@ const HOA_LINH_KHOI = {
 function anLucSat(canNam, chiNam, gioIdx, locTonIdx, amDuong, gioitinh) {
   const thuận = (amDuong==='dương'&&gioitinh==='nam')||(amDuong==='âm'&&gioitinh==='nu');
 
-  // Kình Dương: sau Lộc Tồn 1 (thuận chiều)
-  const kinhDuong = mod12(locTonIdx + 1);
-  // Đà La: trước Lộc Tồn 1 (nghịch chiều)
-  const daLa = mod12(locTonIdx - 1);
+  // Kình Dương / Đà La — P3 (2026-09): đổi sang trường phái Thiên Lương, đảo
+  // chiều theo âm-dương×giới (trước đây CỐ ĐỊNH luôn +1/-1 bất kể thuận nghịch).
+  // Dương Nam/Âm Nữ (thuận): Kình sau Lộc Tồn 1, Đà trước Lộc Tồn 1 — như cũ.
+  // Âm Nam/Dương Nữ (nghịch): đảo ngược — Kình trước, Đà sau.
+  const kdDir = thuận ? 1 : -1;
+  const kinhDuong = mod12(locTonIdx + kdDir);
+  const daLa = mod12(locTonIdx - kdDir);
   // Địa Kiếp: Hợi=Tý, đếm thuận đến giờ
   const diaKiep = mod12(dcIdx('Hợi') + gioIdx);
   // Địa Không: Hợi=Tý, đếm nghịch đến giờ
@@ -576,7 +579,9 @@ const TU_HOA = {
   'Đinh': {'Lộc':'Thái Âm','Quyền':'Thiên Đồng','Khoa':'Thiên Cơ','Kỵ':'Cự Môn'},
   'Mậu': {'Lộc':'Tham Lang','Quyền':'Thái Âm','Khoa':'Hữu Bật','Kỵ':'Thiên Cơ'},
   'Kỷ':  {'Lộc':'Vũ Khúc','Quyền':'Tham Lang','Khoa':'Thiên Lương','Kỵ':'Văn Khúc'},
-  'Canh': {'Lộc':'Thái Dương','Quyền':'Vũ Khúc','Khoa':'Thái Âm','Kỵ':'Thiên Đồng'},
+  // P3 (2026-09): Khoa/Kỵ đảo lại theo Thiên Lương (trước là Thái Âm/Thiên
+  // Đồng, oracle gán ngược Thiên Đồng/Thái Âm) — đo được lệch đúng 1/10 can.
+  'Canh': {'Lộc':'Thái Dương','Quyền':'Vũ Khúc','Khoa':'Thiên Đồng','Kỵ':'Thái Âm'},
   'Tân': {'Lộc':'Cự Môn','Quyền':'Thái Dương','Khoa':'Văn Khúc','Kỵ':'Văn Xương'},
   'Nhâm': {'Lộc':'Thiên Lương','Quyền':'Tử Vi','Khoa':'Tả Phụ','Kỵ':'Vũ Khúc'},
   'Quý': {'Lộc':'Phá Quân','Quyền':'Cự Môn','Khoa':'Thái Âm','Kỵ':'Tham Lang'},
@@ -634,17 +639,22 @@ function tinhDaiVan(menhIdx, cuc, amDuong, gioitinh) {
 
 // ─── TIỂU HẠN ────────────────────────────────────────────────
 // Lưu niên tiểu vận
+// Cung khởi theo tam hợp chi năm sinh — KHÔNG phân biệt giới (bảng nam/nữ
+// vốn giống hệt nhau, gộp lại cho khỏi hiểu lầm là giới ảnh hưởng điểm khởi).
 const TIEU_HAN_KHOI = {
-  'nam': {'Dần':'Thìn','Ngọ':'Thìn','Tuất':'Thìn','Tỵ':'Mùi','Dậu':'Mùi','Sửu':'Mùi','Thân':'Tuất','Tý':'Tuất','Thìn':'Tuất','Hợi':'Sửu','Mão':'Sửu','Mùi':'Sửu'},
-  'nu':  {'Dần':'Thìn','Ngọ':'Thìn','Tuất':'Thìn','Tỵ':'Mùi','Dậu':'Mùi','Sửu':'Mùi','Thân':'Tuất','Tý':'Tuất','Thìn':'Tuất','Hợi':'Sửu','Mão':'Sửu','Mùi':'Sửu'},
+  'Dần':'Thìn','Ngọ':'Thìn','Tuất':'Thìn','Tỵ':'Mùi','Dậu':'Mùi','Sửu':'Mùi',
+  'Thân':'Tuất','Tý':'Tuất','Thìn':'Tuất','Hợi':'Sửu','Mão':'Sửu','Mùi':'Sửu',
 };
 
-function tinhTieuHan(chiNamSinh, gioitinh, tuoiXem) {
-  // Cung khởi = tuổi 1, đếm thuận (nam) / nghịch (nữ) theo tuổi
-  const startDC = TIEU_HAN_KHOI[gioitinh][chiNamSinh];
+// P3 (2026-09): chiều đếm đổi sang trường phái Thiên Lương — Dương Nam/Âm Nữ
+// thuận, Âm Nam/Dương Nữ nghịch (trước đây CỐ ĐỊNH theo giới: nam luôn thuận,
+// nữ luôn nghịch, bất kể âm dương năm sinh).
+function tinhTieuHan(chiNamSinh, gioitinh, tuoiXem, amDuong) {
+  const startDC = TIEU_HAN_KHOI[chiNamSinh];
   const startIdx = dcIdx(startDC);
   const offset = (tuoiXem - 1) % 12;
-  return gioitinh === 'nam' ? mod12(startIdx + offset) : mod12(startIdx - offset);
+  const thuận = (amDuong === 'dương' && gioitinh === 'nam') || (amDuong === 'âm' && gioitinh === 'nu');
+  return thuận ? mod12(startIdx + offset) : mod12(startIdx - offset);
 }
 
 // Lưu đại hạn
@@ -1999,7 +2009,7 @@ function anSaoLaSo({ ngayAL, thangAL, namAL, canNam, chiNam, gioIdx, gioitinh, n
   const tuoiXem = namXem - namSinhDL + 1;
   // Chi năm xem
   const chiNamXem = DIA_CHI[(namXem + 8) % 12];
-  const tieuHanIdx = tinhTieuHan(chiNam, gioitinh, tuoiXem);
+  const tieuHanIdx = tinhTieuHan(chiNam, gioitinh, tuoiXem, amDuong);
   // Lưu niên đại hạn: từ cung ĐV hiện tại đếm tới chi năm xem
   const daiVanHienTaiObj = daiVans.find(v => tuoiXem >= v.tuoiStart && tuoiXem <= v.tuoiEnd);
   const ageIndex = daiVanHienTaiObj ? tuoiXem - daiVanHienTaiObj.tuoiStart : 0;
@@ -2355,7 +2365,7 @@ function anSaoLaSo({ ngayAL, thangAL, namAL, canNam, chiNam, gioIdx, gioitinh, n
   const tuoiXem = namXem - namSinhDL + 1;
   // Chi năm xem
   const chiNamXem = DIA_CHI[(namXem + 8) % 12];
-  const tieuHanIdx = tinhTieuHan(chiNam, gioitinh, tuoiXem);
+  const tieuHanIdx = tinhTieuHan(chiNam, gioitinh, tuoiXem, amDuong);
   // Lưu niên đại hạn: từ cung ĐV hiện tại đếm tới chi năm xem
   const daiVanHienTaiObj = daiVans.find(v => tuoiXem >= v.tuoiStart && tuoiXem <= v.tuoiEnd);
   const ageIndex = daiVanHienTaiObj ? tuoiXem - daiVanHienTaiObj.tuoiStart : 0;
@@ -4694,7 +4704,7 @@ function tinhTieuVanScores(ls, gioitinh, amDuong, chiNam, namSinhDL) {
   // (mod12(2-chiIdx)) lệch quy tắc tam hợp ở 10/12 chi → tieuVanScores &
   // tra_tieu_van báo sai cung tiểu hạn. Nay gọi lại nguồn duy nhất, hết drift.
   function getTieuHanCungIdx(tuoi) {
-    return tinhTieuHan(chiNam, gioitinh, tuoi);
+    return tinhTieuHan(chiNam, gioitinh, tuoi, amDuong);
   }
 
   // ── Build spline ──────────────────────────────────────────────
