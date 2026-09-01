@@ -207,9 +207,10 @@ jobs:
       - name: Engine Số Đẹp — deterministic, khớp nguồn, không lẫn tầng
         run: npm run check:sodep
 
-      # Biên bảng âm lịch (1900-01-31 → 2100-12-31). Bản cũ của `solarToLunar`
-      # BỊA ra {day:1,month:1,year:yy} khi ra ngoài biên — im lặng, không lỗi —
-      # nên MỌI ngày dương của một năm trước 1900 quy về CÙNG một lá số.
+      # Biên bảng âm lịch (1900-01-01 → 2100-12-31, mở rộng sau P1 — xem oracle:lunar
+      # bên dưới). Bản cũ của `solarToLunar` BỊA ra {day:1,month:1,year:yy} khi ra
+      # ngoài biên — im lặng, không lỗi — nên MỌI ngày dương của một năm trước 1900
+      # quy về CÙNG một lá số.
       - name: Biên âm lịch — ngoài tầm phải trả null/ném, không bịa lá số
         run: npm run check:lunar
 
@@ -276,6 +277,14 @@ jobs:
       # là bug thật. ~90-170s vì quét cả miền, không phải mẫu.
       - name: Oracle — đối chiếu vét cạn an sao với bản Thiên Lương
         run: npm run oracle:ansao
+
+      # P1: _LUNAR_TABLE (vanilla + tuvi-engine) được SINH bằng thuật toán
+      # chính xác của oracle (có hiệu chỉnh ΔT) + quy tắc múi giờ lịch sử VN
+      # (UTC+8 trước 1968-01-01, UTC+7 từ đó — Tết Ất Sửu 1985 lệch lịch TQ cả
+      # một tháng: 21/1 chứ không phải 20/2). Đối chiếu VÉT CẠN 1900-2100, trừ
+      # đúng 4 tháng có bug đếm ngày CỦA oracle (đã biết, xem script).
+      - name: Oracle — đối chiếu vét cạn lịch âm 1900-2100 với bản Thiên Lương
+        run: npm run oracle:lunar
 
   typecheck:
     runs-on: ubuntu-latest

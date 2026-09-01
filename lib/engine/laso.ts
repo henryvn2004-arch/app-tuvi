@@ -96,7 +96,7 @@ function loadEngine() {
 
 /**
  * Ngày dương → (can chi năm · tháng ÂL · ngày ÂL). `null` khi NGOÀI TẦM bảng
- * âm lịch (1900-01-31 → 2100-12-31).
+ * âm lịch (1900-01-01 → 2100-12-31).
  *
  * Dùng cho feature "Ai Sinh Cùng Ngày Với Bạn": khoá gom lá số là ÂM LỊCH chứ
  * không phải ngày dương — an sao chỉ phụ thuộc (can chi năm · tháng ÂL · ngày

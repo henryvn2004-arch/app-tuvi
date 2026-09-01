@@ -76,7 +76,10 @@ function cacheExtra(moiLo: string, namXem: number): string {
  * `userOwnsLaso` — người đã trả tiền bị tính lại. Khoá giữ nguyên nên lượt dựng
  * lại vẫn miễn phí đúng cho họ.
  */
-const SHAPE = 2;
+// P1 (2026-09): bump vì `_LUNAR_TABLE` sinh lại theo oracle Thiên Lương — GIÁ
+// TRỊ lá số của người sinh vào ngày lệch bảng cũ đổi, không phải cấu trúc
+// payload (fingerprint giữ nguyên). Xem docs/nhat-ky/2026-09.md.
+const SHAPE = 3;
 /* Lịch sử bump:
    1 → 2 (lượt vá tuổi thật, #475): thêm khoá `laTreEm` mà trang đọc để ẩn nhãn
    lứa, thêm `xungHo` cho từng lứa, thêm hẳn lứa `vaodoi` (19–25) kèm 9 khối

@@ -1,15 +1,18 @@
 #!/usr/bin/env node
 // scripts/oracle/report-lunar-diff.mjs
 // ============================================================
-// CÔNG CỤ ĐO cho P1 (chưa sửa engine) — KHÔNG phải check:* pass/fail.
+// P1 ĐÃ XONG — bây giờ là bộ dò CI thật (exit non-zero khi lệch), không còn
+// là công cụ đo tuỳ chọn. `_LUNAR_TABLE` (cả `public/tuvi-ansao-engine.js`
+// lẫn `tuvi-engine/src/lunar/convert.ts`) được SINH bằng chính thuật toán của
+// oracle "An Sao - Tử Vi Thiên Lương" (có hiệu chỉnh ΔT) cộng quy tắc múi giờ
+// lịch sử VN: UTC+8 cho ngày dương < 1968-01-01, UTC+7 từ đó — VN đổi mốc này
+// thật (nguồn: suckhoedoisong.vn, hanoimoi.vn; Tết Ất Sửu 1985 lệch lịch TQ
+// một tháng nguyên — 21/1/1985 chứ không phải 20/2/1985). Xem
+// scripts/gen-lunar-table.mjs. Bộ dò này canh bảng KHÔNG trôi khỏi oracle nữa.
 //
-// So `_LUNAR_TABLE` hiện tại (public/tuvi-ansao-engine.js) với oracle chạy
-// theo QUY TẮC LỊCH SỬ VIỆT NAM: múi giờ tham chiếu là UTC+8 cho ngày dương
-// < 1968-01-01, UTC+7 từ đó — vì Việt Nam đổi mốc này thật (xem workplan +
-// nguồn: suckhoedoisong.vn, hanoimoi.vn, Tết Ất Sửu 1985 lệch TQ 1 tháng).
-//
-// Cần scripts/oracle/vendor/ — nếu thiếu, script tự thoát 0 kèm cảnh báo rõ
-// (đây là công cụ tuỳ chọn, không gate CI).
+// Cần scripts/oracle/vendor/ — nếu thiếu, tự thoát 0 kèm cảnh báo rõ (vendor
+// không commit vào một số máy/CI khác — xem README ở đó); nhưng khi có mặt,
+// MỌI lệch ngoài 4 "ngày rác" đã biết của oracle đều FAIL.
 // ============================================================
 
 import { readFileSync } from 'node:fs';
@@ -30,7 +33,7 @@ try {
   O = loadOracle();
 } catch (e) {
   console.log('⚠ ' + e.message);
-  console.log('  (bỏ qua report-lunar-diff — đây là công cụ tuỳ chọn, không gate CI)');
+  console.log('  (bỏ qua oracle:lunar — thiếu scripts/oracle/vendor/, không gate được ở máy này)');
   process.exit(0);
 }
 
@@ -82,16 +85,29 @@ function tzForVN(d, m, y) {
   return y * 10000 + m * 100 + d < VN_SWITCH_YMD ? 8 : 7;
 }
 
-const START = jdFromDate(1, 2, 1900);
+// 4 "ngày rác" đã biết của oracle: nó tự trả day:0 đúng vào ngày tháng âm mới
+// bắt đầu (bug đếm ngày CỦA HỌ, không phải của bảng ta) — và vì bug đó, CẢ
+// THÁNG chứa ngày rác này bị lệch 1 so với oracle (ta luôn = oracle.day + 1,
+// đã verify khi sinh bảng: scripts/gen-lunar-table.mjs dùng ranh giới THÁNG,
+// không dùng field day của oracle, nên bảng của ta KHÔNG kế thừa bug này).
+// Liệt kê theo [năm dương, tháng dương bắt đầu ngày rác] để loại đúng phạm vi
+// — không loại rộng hơn mức cần.
+const KNOWN_ORACLE_DAY_BUG_MONTHS = new Set([
+  '1939-3', // ngày rác 19/4/1939 → tháng 3 âm lịch 1939
+  '1947-2', // ngày rác 22/3/1947 → tháng 2 nhuận âm lịch 1947
+  '2054-4', // ngày rác 7/5/2054 → tháng 4 âm lịch 2054
+  '2062-3', // ngày rác 9/4/2062 → tháng 3 âm lịch 2062
+]);
+
+const START = jdFromDate(1, 1, 1900);
 const END = jdFromDate(31, 12, 2100);
 
 let total = 0,
   nDay = 0,
   nMonth = 0,
   nYear = 0,
-  nOracleZeroDay = 0;
-const yearsTouched = new Set();
-const zeroDayDates = [];
+  nKnownBugSkipped = 0;
+const unexpected = [];
 
 for (let jd = START; jd <= END; jd++) {
   const [d, m, y] = fromJd(jd);
@@ -100,43 +116,50 @@ for (let jd = START; jd <= END; jd++) {
   total++;
   const tz = tzForVN(d, m, y);
   const a = O.solarToLunar(d, m, y, tz);
-  if (!a) continue; // không nên xảy ra trong 1900-2100, ghi nhận nếu có
-  if (a.day === 0) {
-    nOracleZeroDay++;
-    zeroDayDates.push(`${d}/${m}/${y}`);
-    continue; // ngày rác của oracle — không tính vào so sánh
-  }
-  if (a.day !== b.day || a.month !== b.month || a.year !== b.year) {
+  if (!a) continue; // không nên xảy ra trong 1900-2100
+
+  if (a.month !== b.month || a.year !== b.year) {
     if (a.year !== b.year) nYear++;
-    else if (a.month !== b.month) nMonth++;
-    else nDay++;
-    yearsTouched.add(y);
+    else nMonth++;
+    if (unexpected.length < 20) {
+      unexpected.push(
+        `${d}/${m}/${y}: bảng=${b.day}/${b.month}/${b.year} oracle=${a.day}/${a.month}/${a.year}`
+      );
+    }
+    continue;
+  }
+  if (a.day !== b.day) {
+    const key = `${a.year}-${a.month}`;
+    if (KNOWN_ORACLE_DAY_BUG_MONTHS.has(key) && b.day === a.day + 1) {
+      nKnownBugSkipped++;
+      continue;
+    }
+    nDay++;
+    if (unexpected.length < 20) {
+      unexpected.push(
+        `${d}/${m}/${y}: bảng=${b.day}/${b.month}/${b.year} oracle=${a.day}/${a.month}/${a.year}`
+      );
+    }
   }
 }
 
-const totalDiff = nDay + nMonth + nYear;
-const years = [...yearsTouched].sort((x, y) => x - y);
+const totalUnexpected = nDay + nMonth + nYear;
 
-console.log('=== Đối chiếu lịch âm: bảng hiện tại vs oracle (quy tắc lịch sử VN) ===\n');
-console.log(`Tổng ngày dò (1900-02-01 → 2100-12-31): ${total}`);
-console.log(`Lệch NGÀY âm  : ${nDay}`);
-console.log(`Lệch THÁNG âm : ${nMonth}   ← xoay cả 12 cung`);
-console.log(`Lệch NĂM âm   : ${nYear}   ← sai can chi, Cục, Lộc Tồn, Tứ Hóa`);
-console.log(`Tổng lệch     : ${totalDiff} (${((totalDiff / total) * 100).toFixed(2)}%)`);
-console.log(`Chạm ${years.length} năm dương, từ ${years[0]} đến ${years[years.length - 1]}`);
-console.log(
-  `  trước 1968: ${years.filter((y) => y < 1968).length} năm | từ 1968: ${years.filter((y) => y >= 1968).length} năm`
-);
+console.log('=== oracle:lunar — bảng lịch âm hiện tại vs oracle (quy tắc lịch sử VN) ===\n');
+console.log(`Tổng ngày dò (1900-01-01 → 2100-12-31): ${total}`);
+console.log(`Đã loại (bug đếm ngày CỦA ORACLE, 4 tháng đã biết): ${nKnownBugSkipped}`);
+console.log(`Lệch NGÀY (ngoài phạm vi đã biết) : ${nDay}`);
+console.log(`Lệch THÁNG (xoay cả 12 cung)       : ${nMonth}`);
+console.log(`Lệch NĂM (sai can chi/Cục/Lộc Tồn) : ${nYear}`);
 
-if (nOracleZeroDay) {
-  console.log(
-    `\n⚠ Oracle trả ngày âm = 0 (ngày rác, đã BỎ QUA khỏi so sánh) tại: ${zeroDayDates.join(', ')}`
+if (totalUnexpected > 0) {
+  console.error(`\n✗ oracle:lunar — ${totalUnexpected} ngày LỆCH không nằm trong phạm vi đã biết:`);
+  console.error(unexpected.join('\n'));
+  console.error(
+    '\nBảng lịch âm đã trôi khỏi oracle — kiểm scripts/gen-lunar-table.mjs / apply-lunar-table.mjs có bị chạy lại đúng cách không.'
   );
-  console.log(
-    '  Đây là lỗi đã biết của oracle (19/4/1939, 22/3/1947) — không dùng oracle làm trọng tài ở các ngày này.'
-  );
+  process.exit(1);
 }
-
 console.log(
-  '\n(Đây là công cụ ĐO — không sửa engine, không exit non-zero. Dùng để đối chiếu khi làm P1.)'
+  '\n✓ oracle:lunar — bảng lịch âm khớp 100% oracle (trừ đúng 4 tháng có bug đếm ngày của họ).'
 );
