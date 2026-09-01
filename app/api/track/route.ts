@@ -62,6 +62,16 @@ const ALLOWED = new Set([
   // window.onerror/unhandledrejection, đã lọc nhiễu + chặn lũ ở CLIENT trước
   // khi tới đây; server không cần xử gì thêm ngoài cho nó qua allowlist.
   'js_error',
+  // Mức đọc — hai bậc còn thiếu để phân biệt "rời ngay" với "đọc rồi mới rời".
+  // Trước đợt này MỌI event đều bắn lúc tải trang, nên hai hành vi đó cho ra dữ
+  // liệu y hệt nhau: đo được 114/162 khách Google Ads chỉ có page_view+tool_open
+  // và KHÔNG có cách nào biết họ ở lại bao lâu (xem docs/nhat-ky/2026-09.md).
+  //   scroll_depth = đã cuộn qua nửa trang (mốc 50%, giữ dấu vết khi lượt tổng
+  //                  kết không kịp gửi)
+  //   page_dwell   = chốt cuối lượt xem: meta.sec (giây tab ĐANG HIỆN) +
+  //                  meta.max_pct (cuộn xa nhất). Chỉ chốt ở lượt ẩn tab ĐẦU
+  //                  TIÊN — đừng đọc `sec` thành tổng thời gian cả phiên.
+  'scroll_depth', 'page_dwell',
 ]);
 
 // Coi là "vừa đăng ký" nếu tài khoản tạo trong 15 phút gần đây (né tính nhầm

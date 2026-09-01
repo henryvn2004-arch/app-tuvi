@@ -81,6 +81,24 @@ jobs:
             npx lhci autorun
           fi
 
+      # Lượt MOBILE cho trang đang chạy quảng cáo (lighthouserc.mobile.json).
+      # Chỉ chạy ở deployment PRODUCTION (và workflow_dispatch) vì config đó ghim
+      # URL prod — bản preview vẫn do lượt desktop phía trên lo.
+      #
+      # `continue-on-error` CÓ CHỦ ĐÍCH, đi kèm ngưỡng 'warn' trong config: mục
+      # tiêu lúc này là LẤY ĐƯỢC SỐ cho một trang chưa từng được đo, không phải
+      # dựng thêm một cổng chặn khi chưa biết baseline. Siết lên 'error' + bỏ cờ
+      # này sau khi có vài lượt đo thật.
+      - name: Run Lighthouse CI (mobile — trang quảng cáo)
+        if: >
+          github.event_name == 'workflow_dispatch' ||
+          github.event.deployment.environment == 'production' ||
+          github.event.deployment.environment == 'Production'
+        continue-on-error: true
+        env:
+          LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
+        run: npx lhci autorun --config=lighthouserc.mobile.json
+
       # 🔑 `include-hidden-files` BẮT BUỘC ở đây: `.lighthouseci/` bắt đầu bằng
       # dấu chấm, mà upload-artifact loại file ẩn theo mặc định ⇒ từ trước tới
       # nay bước này luôn kết thúc bằng "No files were found" và artifact báo
