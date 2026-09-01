@@ -9,6 +9,28 @@
 (function () {
   'use strict';
 
+  // ── Google tag (GA4 + Google Ads) ─────────────────────────────────
+  // Toàn bộ 35 trang /app/* nạp nav.js ở chế độ `data-icons-only`, mà chế độ
+  // đó CỐ Ý bỏ qua khối gtag của nav.js (xem nav.js#298) — nhưng shell.js
+  // (khung dùng chung cho đúng các trang đó) lại chưa bao giờ tự bù lại,
+  // nên suốt từ trước tới giờ GA4/Google Ads KHÔNG THẤY GÌ trên toàn bộ mặt
+  // sản phẩm chính, chỉ thấy các trang marketing/tools tĩnh nạp nav.js bình
+  // thường. Lộ ra khi Google Ads quét `/app/luan-giai` tìm Google tag và báo
+  // "Not installed yet" dù nav.js đã có sẵn đúng đoạn này ở nơi khác.
+  // Mẫu bootstrap giống hệt nav.js#336 để dùng chung một breakpoint dataLayer;
+  // `gtag-js` là ID chung nên nav.js/shell.js không nạp trùng nếu cả hai cùng
+  // có mặt trên một trang. Bỏ qua navigator.webdriver — cùng lý do chặn bot
+  // E2E như nav.js.
+  if (!document.getElementById('gtag-js') && !window.navigator.webdriver) {
+    var _ga = document.createElement('script'); _ga.id = 'gtag-js'; _ga.async = true;
+    _ga.src = 'https://www.googletagmanager.com/gtag/js?id=G-F4XNRS2XT0'; document.head.appendChild(_ga);
+    window.dataLayer = window.dataLayer || [];
+    window.gtag = function () { window.dataLayer.push(arguments); };
+    window.gtag('js', new Date());
+    window.gtag('config', 'G-F4XNRS2XT0');
+    window.gtag('config', 'AW-18419617290');
+  }
+
   // ── NGUỒN DUY NHẤT: danh sách công cụ (render cả sidebar lẫn Cmd+K) ──
   // ── DANH SÁCH CÔNG CỤ — dựng TỪ DỮ LIỆU, không còn mảng chép tay ──
   //
