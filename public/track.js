@@ -51,10 +51,22 @@
   function currentTouch() {
     var q = {};
     try { new URLSearchParams(location.search).forEach(function (v, k) { q[k] = v; }); } catch (e) { /* ignore */ }
+    // Google Ads auto-tagging (mặc định của tài khoản, KHÔNG cấu hình UTM thủ
+    // công) chỉ gắn gclid/gad_source/gad_campaignid vào URL đích, không có
+    // utm_source — thiếu dòng này thì mọi click Ads rơi lẫn vào "(none)" cùng
+    // organic/direct thật, không cách nào tách lại được trong báo cáo
+    // (marketing_campaigns/user_attribution). Suy ra utm_source=google/medium=cpc
+    // khi có gclid mà chưa có utm_source (không ghi đè nếu trang đã tự gắn UTM).
+    var utmSource = q.utm_source || null, utmMedium = q.utm_medium || null, utmCampaign = q.utm_campaign || null;
+    if (!utmSource && q.gclid) {
+      utmSource = 'google';
+      utmMedium = 'cpc';
+      utmCampaign = q.gad_campaignid || null;
+    }
     return {
-      utm_source: q.utm_source || null,
-      utm_medium: q.utm_medium || null,
-      utm_campaign: q.utm_campaign || null,
+      utm_source: utmSource,
+      utm_medium: utmMedium,
+      utm_campaign: utmCampaign,
       utm_term: q.utm_term || null,
       utm_content: q.utm_content || null,
       referrer: document.referrer || null,

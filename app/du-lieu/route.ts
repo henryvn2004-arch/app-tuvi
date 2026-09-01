@@ -212,7 +212,7 @@ ul{margin:0 0 10px 20px;color:var(--text-mid)}li{margin-bottom:5px}
   </section>
 </div>
 <script src="/footer.js"></script>
-<script src="/track.js?v=3" defer></script><script src="/nav.js?v=24" defer></script>
+<script src="/track.js?v=4" defer></script><script src="/nav.js?v=24" defer></script>
 </body>
 </html>`;
 

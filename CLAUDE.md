@@ -344,6 +344,12 @@ Mỗi luật dưới đây sinh ra từ một lần cắn thật. Cột cuối l
   luận người dùng không quan tâm.** `invite_shown` = 0 suốt 17 ngày hoá ra vì lời
   mời chỉ cắm ở 1 trong 2 tấm tường mà người hết Lượng gặp
   (`docs/nhat-ky/2026-08.md`, mục "Dọn thư viện").
+- **Google Ads auto-tagging gắn `gclid`, KHÔNG gắn UTM** — `track.js` suy
+  `utm_source=google, utm_medium=cpc` từ `gclid` khi trang chưa tự có `utm_source`
+  (`currentTouch()`). Thiếu suy luận này thì mọi click Ads rơi lẫn vào `(none)`
+  cùng traffic direct/organic thật, KHÔNG tách lại được — nhìn báo cáo tổng sẽ
+  tưởng nhầm "Ads không ra traffic" trong khi nó ra thật, chỉ không được gắn nhãn.
+  `docs/nhat-ky/2026-09.md` "Google Ads có traffic thật, 0 sign up".
 - **Bộ lọc của một bậc phễu phải theo kịp mọi đường mới thêm vào bậc đó** —
   `viral_loop_funnel` lọc cứng `meta.from='share'` nên mù hẳn với đường B2
   (`share_form`): số không sai công thức, nó ĐẾM HỤT.
