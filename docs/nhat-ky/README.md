@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-167 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+168 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 **Bốn file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
 ```bash
@@ -11,7 +11,7 @@ sed -n '120,190p' docs/nhat-ky/2026-08.md    # đọc đúng đoạn, đừng ca
 
 | file | số mục | dung lượng |
 |---|---:|---:|
-| `2026-09.md` | 3 | 14,493 B |
+| `2026-09.md` | 4 | 19,833 B |
 | `2026-08.md` | 147 | 1,018,512 B |
 | `2026-07.md` | 12 | 154,531 B |
 | `track-cu.md` | 5 | 89,354 B |
@@ -192,3 +192,4 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 | 158 | 2026-08 | `2026-08.md` | 📉 Meta Pixel chưa từng bắn Purchase/CompleteRegistration — Henry tắt ads vì "chả convert" |
 | 159 | 2026-09 | `2026-09.md` | 🌙 P1 — sinh lại `_LUNAR_TABLE` bằng thuật toán chính xác của oracle, không chỉ "sửa tz 1968" |
 | 160 | 2026-09 | `2026-09.md` | ⭐ P2 — sửa 5 bảng tra sao lệch oracle: đúng 1-2 dòng sai/bảng, không phải công thức sai |
+| 161 | 2026-09 | `2026-09.md` | 🧭 P3 — Kình-Đà + Tiểu Hạn + Tứ Hóa can Canh sang trường phái Thiên Lương; La-Võng dời sang P4 |

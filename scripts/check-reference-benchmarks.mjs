@@ -97,19 +97,18 @@ const CASES = [
     note:
       'Chỉ so phần placement độc lập trường phái. BỎ tieuRing/annualMonths/lưuĐạiHạn/Át Chủ ' +
       '— engine hiện tại chưa có các tầng đó (Nhánh C). Kình/Đà là ca ÂM NAM (Kỷ=âm+Nam) — ' +
-      'trường phái Thiên Lương ĐẢO chiều so với Nam phái cố định hiện tại (P3 chưa làm) → chỉ ' +
-      'báo THÔNG TIN, không fail.',
+      'P3 đã đổi Kình-Đà sang trường phái Thiên Lương (đảo chiều theo âm dương năm sinh), nay ' +
+      'assert CỨNG luôn.',
     input: { d: 2, m: 8, y: 1979, hour: 8, gender: 'nam' },
     expected: {
       menhIdx: 3, // oracle menh=4 → 3
       thanIdx: 11, // oracle than=12 → 11
       cucNumber: 6,
       locTonIdx: 6, // oracle Lộc Tồn=7 → 6, KHÔNG phụ thuộc trường phái
-    },
-    knownDivergentInfo: {
-      // Trường phái Thiên Lương (P3 chưa làm) — chỉ log, không fail.
-      kinhDuongIdx: 5, // oracle Kình Dương=6 → 5
-      daLaIdx: 7, // oracle Đà La=8 → 7
+      chinhTinh: {
+        'Kình Dương': 5, // oracle Kình Dương=6 → 5 (Thiên Lương, khớp từ P3)
+        'Đà La': 7, // oracle Đà La=8 → 7 (Thiên Lương, khớp từ P3)
+      },
     },
   },
 ];

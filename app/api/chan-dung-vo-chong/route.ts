@@ -54,7 +54,9 @@ const TOOL_ID = 'chan-dung-vo-chong';
 // payload (fingerprint giữ nguyên). Xem docs/nhat-ky/2026-09.md.
 // P2 (2026-09): bump tiếp — sửa 5 bảng tra sao lệch oracle (Đào Hoa/Lưu Hà/
 // Thiên Trù/Thiên Quan/Thiên Phúc), cùng lý do GIÁ TRỊ đổi, không phải cấu trúc.
-const SHAPE = 3;
+// P3 (2026-09): bump tiếp — đổi Kình-Đà + Tứ Hóa can Canh sang trường phái
+// Thiên Lương, cùng lý do GIÁ TRỊ đổi, không phải cấu trúc.
+const SHAPE = 4;
 
 /** Vân tay CẤU TRÚC — `npm run check:cacheshape` canh khớp với `SHAPE` ở trên. */
 const SHAPE_FINGERPRINT = '8cfee3e40522';
