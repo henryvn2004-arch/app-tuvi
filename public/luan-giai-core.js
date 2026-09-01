@@ -14,15 +14,77 @@
   var TONG_PHAN = 24;
   var CAN10 = ['Giáp', 'Ất', 'Bính', 'Đinh', 'Mậu', 'Kỷ', 'Canh', 'Tân', 'Nhâm', 'Quý'];
   var CHI12 = ['Tý', 'Sửu', 'Dần', 'Mão', 'Thìn', 'Tỵ', 'Ngọ', 'Mùi', 'Thân', 'Dậu', 'Tuất', 'Hợi'];
-  // Can của cung đại vận suy từ Can năm sinh (ngũ hổ độn) — CÙNG công thức
+  // Can của MỘT cung bất kỳ suy từ Can năm sinh (ngũ hổ độn) — CÙNG công thức
   // _getCungCan của laso-chart.js (dán nhãn can-chi trên bàn lá số), viết lại
-  // tại chỗ để file này không phụ thuộc thứ tự nạp script khác.
+  // tại chỗ để file này không phụ thuộc thứ tự nạp script khác. Trả -1 nếu
+  // không tra được (canChiNam thiếu hoặc diaChi lạ).
+  function cungCanIdx(ls, diaChi) {
+    var canNam = ((ls && ls.canChiNam) || '').split(' ')[0];
+    var ci = CAN10.indexOf(canNam), di = CHI12.indexOf(diaChi);
+    if (ci < 0 || di < 0) return -1;
+    return ((ci % 5) * 2 + di) % 10;
+  }
+  // Can của cung đại vận — dùng chung cungCanIdx ở trên.
   function canChiDaiVan(ls, dv) {
     if (!dv || !dv.diaChi) return '';
-    var canNam = ((ls && ls.canChiNam) || '').split(' ')[0];
-    var ci = CAN10.indexOf(canNam), di = CHI12.indexOf(dv.diaChi);
-    if (ci < 0 || di < 0) return dv.diaChi;
-    return CAN10[((ci % 5) * 2 + di) % 10] + ' ' + dv.diaChi;
+    var ci = cungCanIdx(ls, dv.diaChi);
+    if (ci < 0) return dv.diaChi;
+    return CAN10[ci] + ' ' + dv.diaChi;
+  }
+
+  // Bảng Tứ Hóa theo Can — Y HỆT TU_HOA trong public/tuvi-ansao-engine.js (giữ
+  // đồng bộ khi engine đổi, vd P3 2026-09 đã sửa Khoa/Kỵ của Canh theo Thiên
+  // Lương). Dùng cho khối "Tứ Hóa Phi Tinh" — áp bảng này lên CAN CỦA TỪNG
+  // CUNG (không phải can năm sinh) để tìm 4 sao Lộc/Quyền/Khoa/Kỵ "bay" ra từ
+  // chính cung đó, rồi tra các sao ấy hiện đang nằm ở cung nào ("phi nhập").
+  var TU_HOA = {
+    'Giáp': { Lộc: 'Liêm Trinh', Quyền: 'Phá Quân', Khoa: 'Vũ Khúc', Kỵ: 'Thái Dương' },
+    'Ất': { Lộc: 'Thiên Cơ', Quyền: 'Thiên Lương', Khoa: 'Tử Vi', Kỵ: 'Thái Âm' },
+    'Bính': { Lộc: 'Thiên Đồng', Quyền: 'Thiên Cơ', Khoa: 'Văn Xương', Kỵ: 'Liêm Trinh' },
+    'Đinh': { Lộc: 'Thái Âm', Quyền: 'Thiên Đồng', Khoa: 'Thiên Cơ', Kỵ: 'Cự Môn' },
+    'Mậu': { Lộc: 'Tham Lang', Quyền: 'Thái Âm', Khoa: 'Hữu Bật', Kỵ: 'Thiên Cơ' },
+    'Kỷ': { Lộc: 'Vũ Khúc', Quyền: 'Tham Lang', Khoa: 'Thiên Lương', Kỵ: 'Văn Khúc' },
+    'Canh': { Lộc: 'Thái Dương', Quyền: 'Vũ Khúc', Khoa: 'Thiên Đồng', Kỵ: 'Thái Âm' },
+    'Tân': { Lộc: 'Cự Môn', Quyền: 'Thái Dương', Khoa: 'Văn Khúc', Kỵ: 'Văn Xương' },
+    'Nhâm': { Lộc: 'Thiên Lương', Quyền: 'Tử Vi', Khoa: 'Tả Phụ', Kỵ: 'Vũ Khúc' },
+    'Quý': { Lộc: 'Phá Quân', Quyền: 'Cự Môn', Khoa: 'Thái Âm', Kỵ: 'Tham Lang' },
+  };
+  var HOA_ORDER = ['Lộc', 'Quyền', 'Khoa', 'Kỵ'];
+
+  // Khối "Tứ Hóa Phi Tinh" (tự hóa Bắc Phái, tầng MỆNH BÀN — dùng can của
+  // CHÍNH cung đang xét, không phải can năm sinh hay can đại vận/lưu niên;
+  // các tầng đó theo can khác, ngoài phạm vi khối này). 4 sao Lộc/Quyền/
+  // Khoa/Kỵ suy từ can cung → tra vị trí HIỆN TẠI của từng sao (ls.palaces)
+  // → "phi nhập" đúng cung đó. Tự hóa (sao bay về lại CHÍNH cung phát) được
+  // đánh dấu riêng. Trả '' nếu không tra được can cung hoặc không có sao nào.
+  function buildTuHoaPhiTinhHtml(cungForPhan, ls) {
+    var pal = (ls.palaces || []).find(function (p) { return p.cungName === cungForPhan; });
+    if (!pal) return '';
+    var ci = cungCanIdx(ls, pal.diaChi);
+    if (ci < 0) return '';
+    var canCung = CAN10[ci];
+    var hosts = TU_HOA[canCung];
+    if (!hosts) return '';
+    function findStarPalace(name) {
+      return (ls.palaces || []).find(function (p) {
+        return (p.stars || []).some(function (s) { return s.ten === name; });
+      });
+    }
+    var rows = HOA_ORDER.map(function (hoa) {
+      var star = hosts[hoa];
+      var target = star ? findStarPalace(star) : null;
+      if (!target) return null;
+      return { hoa: hoa, star: star, target: target, self: target.cungName === cungForPhan };
+    }).filter(Boolean);
+    if (!rows.length) return '';
+    var h = '<div class="pregen-block"><div class="pregen-title"><span class="ic-inline" data-icon-emoji="🚀" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">🚀</span> Tứ Hóa Phi Tinh (can cung ' + canCung + ')</div>';
+    rows.forEach(function (r) {
+      var cls = r.hoa === 'Kỵ' ? 'yn-hung' : 'yn-cat';
+      var selfBadge = r.self ? ' <span style="color:#7B3FA0;font-weight:700">[TỰ HÓA]</span>' : '';
+      h += '<div class="pregen-yn ' + cls + '">Hóa ' + r.hoa + ': <b>' + r.star + '</b> → phi nhập cung <b>' + r.target.cungName + '</b> (' + r.target.diaChi + ')' + selfBadge + '</div>';
+    });
+    h += '</div>';
+    return h;
   }
   var PHAN_LABELS_BASE = [
     '',
@@ -150,6 +212,7 @@
         });
         preGenHtml += `</div>`;
       }
+      preGenHtml += buildTuHoaPhiTinhHtml(cungForPhan, _astrolabe);
       if (sc) {
         const METRICS = ['thienVan','canCo','mayMan','phuTro','binhYen','benVung'];
         const MV = ['Thiên Vận','Căn Cơ','May Mắn','Phù Trợ','Bình Yên','Bền Vững'];
@@ -316,7 +379,7 @@
     });
   }
 
-  var API = { TONG_PHAN: TONG_PHAN, PHAN_LABELS_BASE: PHAN_LABELS_BASE, phanLabels: phanLabels, buildPreGenHtml: buildPreGenHtml, buildCungStarHtml: buildCungStarHtml, renderInlineDaiVanLineChart: renderInlineDaiVanLineChart };
+  var API = { TONG_PHAN: TONG_PHAN, PHAN_LABELS_BASE: PHAN_LABELS_BASE, phanLabels: phanLabels, buildPreGenHtml: buildPreGenHtml, buildCungStarHtml: buildCungStarHtml, buildTuHoaPhiTinhHtml: buildTuHoaPhiTinhHtml, renderInlineDaiVanLineChart: renderInlineDaiVanLineChart };
   if (typeof module !== 'undefined' && module.exports) module.exports = API;
   else root.LuanGiaiCore = API;
 })(typeof window !== 'undefined' ? window : globalThis);
