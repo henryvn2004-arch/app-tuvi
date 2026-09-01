@@ -22,7 +22,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 const DIR = path.join(process.cwd(), 'docs', 'nhat-ky');
-const FILES = ['2026-08.md', '2026-07.md', 'track-cu.md'];
+const FILES = ['2026-09.md', '2026-08.md', '2026-07.md', 'track-cu.md'];
 const problems = [];
 
 // ── Đếm mục có thật trong từng file ─────────────────────────────────────────
