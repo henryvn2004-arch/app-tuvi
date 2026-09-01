@@ -22,10 +22,18 @@ const ROOT = process.cwd();
 const g = globalThis;
 g.window = g;
 if (!g.location) {
-  g.location = { protocol: 'https:', hostname: 'tuviminhbao.com', href: 'https://tuviminhbao.com/' };
+  g.location = {
+    protocol: 'https:',
+    hostname: 'tuviminhbao.com',
+    href: 'https://tuviminhbao.com/',
+  };
 }
 const engineSrc = readFileSync(join(ROOT, 'public', 'tuvi-ansao-engine.js'), 'utf-8');
-const E = new Function('window', 'globalThis', engineSrc + '\nreturn {anSaoLaSo, convertDuongToAm};')(g, g);
+const E = new Function(
+  'window',
+  'globalThis',
+  engineSrc + '\nreturn {anSaoLaSo, convertDuongToAm};'
+)(g, g);
 
 // 4 ngày sinh trải điều kiện (giống bộ mẫu của check-laso-markers.mjs, cộng
 // thêm 1 ca năm nhuận để phủ biên) — nhân với đủ 12 giờ × 2 giới.
@@ -68,7 +76,12 @@ function sanitize(ls) {
     thanIdx: ls.thanIdx,
     napAmHanh: ls.napAmHanh,
     menhThaiTue: ls.menhThaiTue,
-    daiVans: ls.daiVans.map((v) => ({ cungIdx: v.cungIdx, diaChi: v.diaChi, tuoiStart: v.tuoiStart, tuoiEnd: v.tuoiEnd })),
+    daiVans: ls.daiVans.map((v) => ({
+      cungIdx: v.cungIdx,
+      diaChi: v.diaChi,
+      tuoiStart: v.tuoiStart,
+      tuoiEnd: v.tuoiEnd,
+    })),
     tieuHanIdx: ls.tieuHanIdx,
     chiNamXem: ls.chiNamXem,
     luuNienDaiHanIdx: ls.luuNienDaiHanIdx,
@@ -81,7 +94,8 @@ for (const [d, m, y] of BIRTH_DATES) {
   for (let gi = 0; gi < 12; gi++) {
     for (const gender of GENDERS) {
       const conv = E.convertDuongToAm(d, m, y, GIO_HOURS[gi]);
-      if (!conv) throw new Error(`convertDuongToAm thất bại cho ${d}/${m}/${y} — ngoài biên bảng lịch âm?`);
+      if (!conv)
+        throw new Error(`convertDuongToAm thất bại cho ${d}/${m}/${y} — ngoài biên bảng lịch âm?`);
       const al = conv.amLich;
       const ls = E.anSaoLaSo({
         ngayAL: al.day,

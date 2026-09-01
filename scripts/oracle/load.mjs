@@ -174,7 +174,15 @@ export function loadOracle() {
   const realConsoleError = console.error;
   console.error = () => {};
   try {
-    oracle = fn(document, window, navigator, noop, (f) => 0, (f) => 0, window.getComputedStyle);
+    oracle = fn(
+      document,
+      window,
+      navigator,
+      noop,
+      (f) => 0,
+      (f) => 0,
+      window.getComputedStyle
+    );
   } catch (e) {
     throw new Error(
       `Nạp oracle thất bại (mã của họ ném lỗi khi eval): ${e.message}\n` +
@@ -220,7 +228,8 @@ function findYearForCanChi(canNam, chiNam) {
     }
   }
   const y = canChiToYearCache.get(`${canNam}-${chiNam}`);
-  if (y == null) throw new Error(`Không tìm được năm dương cho can=${canNam} chi=${chiNam} trong 60 năm dò`);
+  if (y == null)
+    throw new Error(`Không tìm được năm dương cho can=${canNam} chi=${chiNam} trong 60 năm dò`);
   return y;
 }
 

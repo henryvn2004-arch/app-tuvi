@@ -32,13 +32,20 @@ try {
 
 const CAN = ['Giáp', 'Ất', 'Bính', 'Đinh', 'Mậu', 'Kỷ', 'Canh', 'Tân', 'Nhâm', 'Quý'];
 const CHI = ['Tý', 'Sửu', 'Dần', 'Mão', 'Thìn', 'Tỵ', 'Ngọ', 'Mùi', 'Thân', 'Dậu', 'Tuất', 'Hợi'];
-const CUC_NUMBER = { 'Thủy Nhị Cục': 2, 'Mộc Tam Cục': 3, 'Kim Tứ Cục': 4, 'Thổ Ngũ Cục': 5, 'Hỏa Lục Cục': 6 };
+const CUC_NUMBER = {
+  'Thủy Nhị Cục': 2,
+  'Mộc Tam Cục': 3,
+  'Kim Tứ Cục': 4,
+  'Thổ Ngũ Cục': 5,
+  'Hỏa Lục Cục': 6,
+};
 
 // ── B1: tự đối chứng fast-path với bản thật (KHÔNG tin fast-path mù quáng) ──
 function selfCheckFastPathMatchesReal() {
   const starSetOf = (palaces) => {
     const out = [];
-    for (const p of palaces) for (const s of p.stars) out.push(`${p.idx}:${s.ten}:${s.hoa || ''}:${s.brightness}`);
+    for (const p of palaces)
+      for (const s of p.stars) out.push(`${p.idx}:${s.ten}:${s.hoa || ''}:${s.brightness}`);
     return out.sort().join('|');
   };
   let n = 0,
@@ -50,11 +57,25 @@ function selfCheckFastPathMatchesReal() {
         for (let ld = 1; ld <= 30; ld += 7) {
           for (let gi = 0; gi < 12; gi += 3) {
             for (const gender of ['nam', 'nu']) {
-              const args = { ngayAL: ld, thangAL: lm, namAL: 1990, canNam: CAN[ci], chiNam: CHI[cj], gioIdx: gi, gioitinh: gender, namXem: 2020 };
+              const args = {
+                ngayAL: ld,
+                thangAL: lm,
+                namAL: 1990,
+                canNam: CAN[ci],
+                chiNam: CHI[cj],
+                gioIdx: gi,
+                gioitinh: gender,
+                namXem: 2020,
+              };
               const full = anSaoLaSoFull(args);
               const fast = placeStarsFast(args);
               n++;
-              if (starSetOf(full.palaces) !== starSetOf(fast.palaces) || full.menhIdx !== fast.menhIdx || full.thanIdx !== fast.thanIdx || full.cuc !== fast.cuc) {
+              if (
+                starSetOf(full.palaces) !== starSetOf(fast.palaces) ||
+                full.menhIdx !== fast.menhIdx ||
+                full.thanIdx !== fast.thanIdx ||
+                full.cuc !== fast.cuc
+              ) {
                 bad++;
               }
             }
@@ -64,8 +85,12 @@ function selfCheckFastPathMatchesReal() {
     }
   }
   if (bad) {
-    console.error(`✗ FATAL: placeStarsFast() LỆCH với anSaoLaSo() thật trên ${bad}/${n} mẫu tự đối chứng.`);
-    console.error('  our-engine.mjs đã trôi khỏi public/tuvi-ansao-engine.js thật — SỬA our-engine.mjs trước khi tin kết quả quét vét cạn.');
+    console.error(
+      `✗ FATAL: placeStarsFast() LỆCH với anSaoLaSo() thật trên ${bad}/${n} mẫu tự đối chứng.`
+    );
+    console.error(
+      '  our-engine.mjs đã trôi khỏi public/tuvi-ansao-engine.js thật — SỬA our-engine.mjs trước khi tin kết quả quét vét cạn.'
+    );
     process.exit(1);
   }
   console.log(`✓ Tự đối chứng: placeStarsFast() khớp anSaoLaSo() thật trên ${n}/${n} mẫu.`);
@@ -155,25 +180,49 @@ for (let ci = 0; ci < 10; ci++) {
 
             // Mệnh / Thân / Cục
             if (ours.menhIdx !== oracle.menh - 1 || ours.thanIdx !== oracle.than - 1) {
-              menhThanCucMismatch.push({ ...ctx, kind: 'menh/than', ours: [ours.menhIdx, ours.thanIdx], oracle: [oracle.menh - 1, oracle.than - 1] });
+              menhThanCucMismatch.push({
+                ...ctx,
+                kind: 'menh/than',
+                ours: [ours.menhIdx, ours.thanIdx],
+                oracle: [oracle.menh - 1, oracle.than - 1],
+              });
             }
             if (CUC_NUMBER[ours.cuc] !== oracle.cuc.number) {
-              menhThanCucMismatch.push({ ...ctx, kind: 'cuc', ours: ours.cuc, oracle: oracle.cuc.name });
+              menhThanCucMismatch.push({
+                ...ctx,
+                kind: 'cuc',
+                ours: ours.cuc,
+                oracle: oracle.cuc.name,
+              });
             }
 
             // Tuần / Triệt (oracle 1-indexed -> trừ 1 để so idx 0-indexed)
-            const ourTuan = ours.palaces.filter((p) => p.stars.some((s) => s.ten === 'Tuần' || s.ten === 'Tuần+Triệt')).map((p) => p.idx).sort();
-            const ourTriet = ours.palaces.filter((p) => p.stars.some((s) => s.ten === 'Triệt' || s.ten === 'Tuần+Triệt')).map((p) => p.idx).sort();
+            const ourTuan = ours.palaces
+              .filter((p) => p.stars.some((s) => s.ten === 'Tuần' || s.ten === 'Tuần+Triệt'))
+              .map((p) => p.idx)
+              .sort();
+            const ourTriet = ours.palaces
+              .filter((p) => p.stars.some((s) => s.ten === 'Triệt' || s.ten === 'Tuần+Triệt'))
+              .map((p) => p.idx)
+              .sort();
             const oracleTuan = [...oracle.marks.tuan].map((x) => x - 1).sort();
             const oracleTriet = [...oracle.marks.triet].map((x) => x - 1).sort();
-            if (JSON.stringify(ourTuan) !== JSON.stringify(oracleTuan) || JSON.stringify(ourTriet) !== JSON.stringify(oracleTriet)) {
-              tuanTrietMismatch.push({ ...ctx, ours: { tuan: ourTuan, triet: ourTriet }, oracle: { tuan: oracleTuan, triet: oracleTriet } });
+            if (
+              JSON.stringify(ourTuan) !== JSON.stringify(oracleTuan) ||
+              JSON.stringify(ourTriet) !== JSON.stringify(oracleTriet)
+            ) {
+              tuanTrietMismatch.push({
+                ...ctx,
+                ours: { tuan: ourTuan, triet: ourTriet },
+                oracle: { tuan: oracleTuan, triet: oracleTriet },
+              });
             }
 
             // Vị trí sao — union tên hai bên, đã chuẩn hoá alias
             const ourPos = starPositionMap(ours.palaces, { includeHoa: true });
             const oraclePos = new Map();
-            for (const [name, branch1] of Object.entries(oracle.positions)) oraclePos.set(norm(name), branch1 - 1);
+            for (const [name, branch1] of Object.entries(oracle.positions))
+              oraclePos.set(norm(name), branch1 - 1);
 
             const allNames = new Set([...ourPos.keys(), ...oraclePos.keys()]);
             for (const name of allNames) {
@@ -191,7 +240,12 @@ for (let ci = 0; ci < 10; ci++) {
                 if (KNOWN_DIVERGENT_STARS.has(name)) {
                   knownDivergenceCount.set(name, (knownDivergenceCount.get(name) || 0) + 1);
                 } else {
-                  unexpected.push({ ...ctx, star: name, ours: ourPos.get(name), oracle: oraclePos.get(name) });
+                  unexpected.push({
+                    ...ctx,
+                    star: name,
+                    ours: ourPos.get(name),
+                    oracle: oraclePos.get(name),
+                  });
                 }
               }
             }
@@ -214,7 +268,9 @@ let failed = false;
 
 if (menhThanCucMismatch.length) {
   failed = true;
-  console.error(`\n✗ Mệnh/Thân/Cục lệch ở ${menhThanCucMismatch.length} tổ hợp (KHÔNG nằm trong 9 điểm đã biết):`);
+  console.error(
+    `\n✗ Mệnh/Thân/Cục lệch ở ${menhThanCucMismatch.length} tổ hợp (KHÔNG nằm trong 9 điểm đã biết):`
+  );
   for (const m of menhThanCucMismatch.slice(0, 5)) console.error('   ', JSON.stringify(m));
 }
 if (tuanTrietMismatch.length) {
@@ -224,26 +280,36 @@ if (tuanTrietMismatch.length) {
 }
 if (unknownNameOnOurSide.size) {
   failed = true;
-  console.error(`\n✗ Tên sao CHỈ ta có, KHÔNG trong danh sách đã biết (${[...OURS_ONLY_EXPECTED].join(', ')}):`);
+  console.error(
+    `\n✗ Tên sao CHỈ ta có, KHÔNG trong danh sách đã biết (${[...OURS_ONLY_EXPECTED].join(', ')}):`
+  );
   console.error('   ', [...unknownNameOnOurSide].join(', '));
 }
 if (unknownNameOnOracleSide.size) {
   failed = true;
-  console.error(`\n✗ Tên sao CHỈ oracle có, KHÔNG trong danh sách đã biết (${[...ORACLE_ONLY_EXPECTED].join(', ')}):`);
+  console.error(
+    `\n✗ Tên sao CHỈ oracle có, KHÔNG trong danh sách đã biết (${[...ORACLE_ONLY_EXPECTED].join(', ')}):`
+  );
   console.error('   ', [...unknownNameOnOracleSide].join(', '));
 }
 if (unexpected.length) {
   failed = true;
   const byStar = new Map();
   for (const u of unexpected) byStar.set(u.star, (byStar.get(u.star) || 0) + 1);
-  console.error(`\n✗ LỆCH VỊ TRÍ NGOÀI danh sách 9 điểm đã biết — ${unexpected.length} tổ hợp, ${byStar.size} tên sao:`);
+  console.error(
+    `\n✗ LỆCH VỊ TRÍ NGOÀI danh sách 9 điểm đã biết — ${unexpected.length} tổ hợp, ${byStar.size} tên sao:`
+  );
   for (const [name, count] of byStar) console.error(`   ${name}: ${count}/${total}`);
   console.error('  Ví dụ:');
   for (const u of unexpected.slice(0, 8)) console.error('   ', JSON.stringify(u));
 }
 
 if (failed) {
-  console.error('\n✗ check-ansao-exhaustive: có lệch KHÔNG giải thích được — điều tra trước khi làm P1-P4.');
+  console.error(
+    '\n✗ check-ansao-exhaustive: có lệch KHÔNG giải thích được — điều tra trước khi làm P1-P4.'
+  );
   process.exit(1);
 }
-console.log('\n✓ check-ansao-exhaustive: mọi lệch đều nằm trong 9 điểm đã biết. Không có regression bất ngờ.');
+console.log(
+  '\n✓ check-ansao-exhaustive: mọi lệch đều nằm trong 9 điểm đã biết. Không có regression bất ngờ.'
+);

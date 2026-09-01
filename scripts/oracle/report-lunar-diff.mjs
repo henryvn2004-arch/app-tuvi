@@ -38,7 +38,11 @@ try {
 const g = globalThis;
 g.window = g;
 if (!g.location) {
-  g.location = { protocol: 'https:', hostname: 'tuviminhbao.com', href: 'https://tuviminhbao.com/' };
+  g.location = {
+    protocol: 'https:',
+    hostname: 'tuviminhbao.com',
+    href: 'https://tuviminhbao.com/',
+  };
 }
 const engineSrc = readFileSync(join(ROOT, 'public', 'tuvi-ansao-engine.js'), 'utf-8');
 const ours = new Function('window', 'globalThis', engineSrc + '\nreturn {solarToLunar};')(g, g);
@@ -48,7 +52,15 @@ function jdFromDate(d, m, y) {
   const a = Math.floor((14 - m) / 12);
   const yy = y + 4800 - a;
   const mm = m + 12 * a - 3;
-  return d + Math.floor((153 * mm + 2) / 5) + 365 * yy + Math.floor(yy / 4) - Math.floor(yy / 100) + Math.floor(yy / 400) - 32045;
+  return (
+    d +
+    Math.floor((153 * mm + 2) / 5) +
+    365 * yy +
+    Math.floor(yy / 4) -
+    Math.floor(yy / 100) +
+    Math.floor(yy / 400) -
+    32045
+  );
 }
 function fromJd(jd) {
   const a = jd + 32044;
@@ -112,11 +124,19 @@ console.log(`Lệch THÁNG âm : ${nMonth}   ← xoay cả 12 cung`);
 console.log(`Lệch NĂM âm   : ${nYear}   ← sai can chi, Cục, Lộc Tồn, Tứ Hóa`);
 console.log(`Tổng lệch     : ${totalDiff} (${((totalDiff / total) * 100).toFixed(2)}%)`);
 console.log(`Chạm ${years.length} năm dương, từ ${years[0]} đến ${years[years.length - 1]}`);
-console.log(`  trước 1968: ${years.filter((y) => y < 1968).length} năm | từ 1968: ${years.filter((y) => y >= 1968).length} năm`);
+console.log(
+  `  trước 1968: ${years.filter((y) => y < 1968).length} năm | từ 1968: ${years.filter((y) => y >= 1968).length} năm`
+);
 
 if (nOracleZeroDay) {
-  console.log(`\n⚠ Oracle trả ngày âm = 0 (ngày rác, đã BỎ QUA khỏi so sánh) tại: ${zeroDayDates.join(', ')}`);
-  console.log('  Đây là lỗi đã biết của oracle (19/4/1939, 22/3/1947) — không dùng oracle làm trọng tài ở các ngày này.');
+  console.log(
+    `\n⚠ Oracle trả ngày âm = 0 (ngày rác, đã BỎ QUA khỏi so sánh) tại: ${zeroDayDates.join(', ')}`
+  );
+  console.log(
+    '  Đây là lỗi đã biết của oracle (19/4/1939, 22/3/1947) — không dùng oracle làm trọng tài ở các ngày này.'
+  );
 }
 
-console.log('\n(Đây là công cụ ĐO — không sửa engine, không exit non-zero. Dùng để đối chiếu khi làm P1.)');
+console.log(
+  '\n(Đây là công cụ ĐO — không sửa engine, không exit non-zero. Dùng để đối chiếu khi làm P1.)'
+);

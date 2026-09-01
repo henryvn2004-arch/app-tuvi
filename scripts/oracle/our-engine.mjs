@@ -34,7 +34,11 @@ export function loadOurEngine() {
   const g = globalThis;
   g.window = g;
   if (!g.location) {
-    g.location = { protocol: 'https:', hostname: 'tuviminhbao.com', href: 'https://tuviminhbao.com/' };
+    g.location = {
+      protocol: 'https:',
+      hostname: 'tuviminhbao.com',
+      href: 'https://tuviminhbao.com/',
+    };
   }
   const src = readFileSync(join(ROOT, 'public', 'tuvi-ansao-engine.js'), 'utf-8');
 
@@ -71,7 +75,24 @@ export function loadOurEngine() {
  */
 export function placeStarsFast({ ngayAL, thangAL, canNam, chiNam, gioIdx, gioitinh }) {
   const E = loadOurEngine();
-  const { DIA_CHI, TEN_CUNG, mod12: m12, dinhCungMenh, dinhCungThan, lapCuc, anChinhTinh, anThaiTue, anLocTon, anTrangSinh, anLucSat, anPhuTinh, TU_HOA, getTuanTriet, getStarBrightness, NAP_AM } = E;
+  const {
+    DIA_CHI,
+    TEN_CUNG,
+    mod12: m12,
+    dinhCungMenh,
+    dinhCungThan,
+    lapCuc,
+    anChinhTinh,
+    anThaiTue,
+    anLocTon,
+    anTrangSinh,
+    anLucSat,
+    anPhuTinh,
+    TU_HOA,
+    getTuanTriet,
+    getStarBrightness,
+    NAP_AM,
+  } = E;
 
   const amDuong = ['Giáp', 'Bính', 'Mậu', 'Canh', 'Nhâm'].includes(canNam) ? 'dương' : 'âm';
   const canChiNam = `${canNam} ${chiNam}`;

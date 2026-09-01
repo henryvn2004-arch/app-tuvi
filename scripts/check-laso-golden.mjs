@@ -27,10 +27,18 @@ const fail = (msg) => {
 const g = globalThis;
 g.window = g;
 if (!g.location) {
-  g.location = { protocol: 'https:', hostname: 'tuviminhbao.com', href: 'https://tuviminhbao.com/' };
+  g.location = {
+    protocol: 'https:',
+    hostname: 'tuviminhbao.com',
+    href: 'https://tuviminhbao.com/',
+  };
 }
 const engineSrc = readFileSync(join(ROOT, 'public', 'tuvi-ansao-engine.js'), 'utf-8');
-const E = new Function('window', 'globalThis', engineSrc + '\nreturn {anSaoLaSo, convertDuongToAm};')(g, g);
+const E = new Function(
+  'window',
+  'globalThis',
+  engineSrc + '\nreturn {anSaoLaSo, convertDuongToAm};'
+)(g, g);
 
 const GIO_HOURS = [23, 1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21];
 
@@ -45,7 +53,10 @@ try {
 }
 
 function starSetKey(stars) {
-  return stars.map((s) => `${s.ten}:${s.hoa || ''}:${s.nhom}:${s.brightness}`).sort().join('|');
+  return stars
+    .map((s) => `${s.ten}:${s.hoa || ''}:${s.nhom}:${s.brightness}`)
+    .sort()
+    .join('|');
 }
 
 let checkedPalaces = 0;
@@ -74,18 +85,41 @@ for (const fx of fixtures) {
   }
 
   const want = fx.output;
-  const SCALAR_FIELDS = ['canChiNam', 'napAm', 'amDuong', 'cuc', 'canMenh', 'menhDC', 'thanDC', 'menhIdx', 'thanIdx', 'napAmHanh', 'tieuHanIdx', 'chiNamXem', 'luuNienDaiHanIdx'];
+  const SCALAR_FIELDS = [
+    'canChiNam',
+    'napAm',
+    'amDuong',
+    'cuc',
+    'canMenh',
+    'menhDC',
+    'thanDC',
+    'menhIdx',
+    'thanIdx',
+    'napAmHanh',
+    'tieuHanIdx',
+    'chiNamXem',
+    'luuNienDaiHanIdx',
+  ];
   for (const f of SCALAR_FIELDS) {
     if (JSON.stringify(ls[f]) !== JSON.stringify(want[f])) {
-      fail(`${label}: trường "${f}" lệch — fixture=${JSON.stringify(want[f])} vs hiện tại=${JSON.stringify(ls[f])}`);
+      fail(
+        `${label}: trường "${f}" lệch — fixture=${JSON.stringify(want[f])} vs hiện tại=${JSON.stringify(ls[f])}`
+      );
     }
   }
 
   if (JSON.stringify(want.menhThaiTue) !== JSON.stringify(ls.menhThaiTue)) {
-    fail(`${label}: menhThaiTue lệch — fixture=${JSON.stringify(want.menhThaiTue)} vs hiện tại=${JSON.stringify(ls.menhThaiTue)}`);
+    fail(
+      `${label}: menhThaiTue lệch — fixture=${JSON.stringify(want.menhThaiTue)} vs hiện tại=${JSON.stringify(ls.menhThaiTue)}`
+    );
   }
 
-  const gotDaiVans = ls.daiVans.map((v) => ({ cungIdx: v.cungIdx, diaChi: v.diaChi, tuoiStart: v.tuoiStart, tuoiEnd: v.tuoiEnd }));
+  const gotDaiVans = ls.daiVans.map((v) => ({
+    cungIdx: v.cungIdx,
+    diaChi: v.diaChi,
+    tuoiStart: v.tuoiStart,
+    tuoiEnd: v.tuoiEnd,
+  }));
   if (JSON.stringify(gotDaiVans) !== JSON.stringify(want.daiVans)) {
     fail(`${label}: daiVans (cung/tuổi khởi) lệch`);
   }
@@ -97,11 +131,21 @@ for (const fx of fixtures) {
       fail(`${label}: mất cung idx=${wp.idx}`);
       continue;
     }
-    if (gp.diaChi !== wp.diaChi || gp.cungName !== wp.cungName || gp.isMenh !== wp.isMenh || gp.isThan !== wp.isThan) {
+    if (
+      gp.diaChi !== wp.diaChi ||
+      gp.cungName !== wp.cungName ||
+      gp.isMenh !== wp.isMenh ||
+      gp.isThan !== wp.isThan
+    ) {
       fail(`${label}: cung idx=${wp.idx} — diaChi/cungName/isMenh/isThan lệch`);
     }
     checkedStars += wp.stars.length;
-    const gotStars = gp.stars.map((s) => ({ ten: s.ten, hoa: s.hoa, nhom: s.nhom, brightness: s.brightness }));
+    const gotStars = gp.stars.map((s) => ({
+      ten: s.ten,
+      hoa: s.hoa,
+      nhom: s.nhom,
+      brightness: s.brightness,
+    }));
     if (starSetKey(gotStars) !== starSetKey(wp.stars)) {
       const wantSet = new Set(wp.stars.map((s) => s.ten));
       const gotSet = new Set(gotStars.map((s) => s.ten));
@@ -110,12 +154,17 @@ for (const fx of fixtures) {
       const changedBrightnessOrHoa = wp.stars
         .filter((s) => gotSet.has(s.ten))
         .map((s) => ({ want: s, got: gotStars.find((g2) => g2.ten === s.ten) }))
-        .filter(({ want: w2, got: g2 }) => w2.hoa !== g2.hoa || w2.brightness !== g2.brightness || w2.nhom !== g2.nhom);
+        .filter(
+          ({ want: w2, got: g2 }) =>
+            w2.hoa !== g2.hoa || w2.brightness !== g2.brightness || w2.nhom !== g2.nhom
+        );
       fail(
         `${label}: cung idx=${wp.idx} (${wp.cungName}) sao lệch — ` +
           (missing.length ? `mất: ${missing.join(',')} ` : '') +
           (extra.length ? `thừa: ${extra.join(',')} ` : '') +
-          (changedBrightnessOrHoa.length ? `đổi hoa/sáng-tối: ${changedBrightnessOrHoa.map((c) => c.want.ten).join(',')}` : '')
+          (changedBrightnessOrHoa.length
+            ? `đổi hoa/sáng-tối: ${changedBrightnessOrHoa.map((c) => c.want.ten).join(',')}`
+            : '')
       );
     }
   }
@@ -126,7 +175,9 @@ console.log(`Đã kiểm ${fixtures.length} lá số, ${checkedPalaces} cung, ${
 if (failed) {
   console.error(`\n✗ check:laso-golden — ${failed} lệch so với fixture đã đóng băng.`);
   console.error('  Nếu đây là thay đổi CỐ Ý (đang làm P1-P4 theo workplan): đối chiếu với');
-  console.error('  scripts/oracle/check-ansao-exhaustive.mjs trước, rồi mới `node scripts/gen-laso-golden.mjs` để cập nhật fixture.');
+  console.error(
+    '  scripts/oracle/check-ansao-exhaustive.mjs trước, rồi mới `node scripts/gen-laso-golden.mjs` để cập nhật fixture.'
+  );
   process.exit(1);
 }
 console.log('\n✓ check:laso-golden — khớp fixture, không có trôi vị trí sao.');
