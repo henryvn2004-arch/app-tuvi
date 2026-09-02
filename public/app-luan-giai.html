@@ -16,11 +16,12 @@
 .form-card{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);max-width:640px}
 .form-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:3px}
 .form-card p.sub{font-size:12.5px;color:var(--text-lt);margin-bottom:14px}
-/* Lối vào BẢN MẪU — một dòng gọn đứng TRƯỚC form, cho khách nguội (Ads, chưa
-   từng biết site) một đường xem sản phẩm thật mà không phải khai giờ sinh.
-   CỐ Ý chỉ một dòng, không phải một khối to: form vẫn là nhân vật chính (các
-   trang cùng ngành chuyển đổi tốt — AstroSeek, Cafe Astrology — đều để form
-   làm trung tâm), đây chỉ là cửa phụ cho người còn ngờ. Xem openSample(). */
+/* Nút mời xem BẢN MẪU. ⚠️ Từ 2026-09-02 đây là ĐƯỜNG PHỤ, không phải đường
+   chính: khách nguội vào trang là bản mẫu TỰ MỞ luôn (xem cổng ở cuối file).
+   Nút này chỉ hiện ở hai lúc — khách đã bấm "Xem lá số của tôi" quay về form,
+   hoặc lượt tự mở HỎNG. Bản trước để nó làm đường chính, và Henry chỉ ra đúng
+   chỗ sai: khách bấm vào tool vẫn gặp form đòi giờ sinh trước, tức cái rào
+   chưa gỡ được gì. Bản mẫu chỉ ăn thua khi nó là thứ ĐẦU TIÊN khách thấy. */
 .samp-cta{max-width:640px;margin-bottom:14px;font-size:13px;color:var(--text-lt);display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 .samp-cta button{background:none;border:1px solid var(--gold-soft);color:var(--gold-soft);border-radius:8px;padding:7px 14px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit}
 .samp-cta button:disabled{opacity:.6;cursor:default}
@@ -658,7 +659,13 @@ function closeSample(){
   var lg=document.getElementById('lgPanel'); if(lg) lg.style.display='none';
 }
 
-function openSample(btn){
+// `auto=true`: lượt TỰ MỞ lúc vào trang (khách nguội thấy bản mẫu ngay, không
+// phải bấm gì). `auto=false`: khách tự bấm nút từ form.
+// Hai chế độ khác nhau ở CÁCH HỎNG, và đó là cả lý do phải tách:
+//   · tự bấm  → hỏng thì PHẢI nói (im lặng = khách tưởng nút chết)
+//   · tự mở   → hỏng thì PHẢI im (alert lúc vào trang là tệ hơn không có gì);
+//               chỉ lặng lẽ hiện nút để khách còn đường thử lại.
+function openSample(btn,auto){
   var reset=function(){ if(btn){ btn.disabled=false; btn.textContent=SAMPLE_CTA; } };
   if(btn){ btn.disabled=true; btn.textContent='Đang mở…'; }
   var p=_sampleData ? Promise.resolve(_sampleData)
@@ -666,17 +673,24 @@ function openSample(btn){
         if(!r.ok) throw new Error('HTTP '+r.status);
         return r.json();
       }).then(function(j){ _sampleData=j; return j; });
-  p.then(function(s){ renderSample(s); reset(); })
+  p.then(function(s){
+     // 🪤 Lượt tự mở là BẤT ĐỒNG BỘ: từ lúc bắt đầu fetch tới lúc đáp xuống,
+     // khách có thể đã có lá số THẬT (đến qua ?auto=1, hoặc điền form nhanh
+     // tay). Không chốt lại ở đây thì bản mẫu đè lên lá số thật của họ — và
+     // đè kèm thanh "đây là bản mẫu", tức là nói dối họ về chính lá số họ vừa
+     // xem. Bấm tay thì không có cửa này (khách bấm sau khi trang đã yên).
+     if(auto&&(_astrolabe||window.__tvmbSkipDemo)) return;
+     renderSample(s,auto); reset();
+   })
    .catch(function(e){
      reset();
      if(window.console) console.error('sample:',e);
-     // Hỏng thì nói thẳng, KHÔNG im lặng — im lặng thì khách bấm rồi tưởng
-     // nút chết, còn tệ hơn không có nút.
+     if(auto){ var c=document.getElementById('sampCta'); if(c) c.style.display='flex'; return; }
      alert('Chưa mở được bản mẫu. Bạn thử lại giúp, hoặc nhập giờ sinh để xem lá số thật.');
    });
 }
 
-function renderSample(s){
+function renderSample(s,auto){
   var b=(s&&s.birth)||{};
   if(b.ngay==null||b.thang==null||b.nam==null){ throw new Error('file mẫu thiếu ngày sinh'); }
   var gioIdx=b.gio_idx!=null?b.gio_idx:0;
@@ -716,11 +730,19 @@ function renderSample(s){
   panel.insertBefore(bar,panel.firstChild);
 
   panel.style.display='block';
+  // Bản mẫu THAY form chứ không nằm dưới form. Để form ở trên thì thứ khách
+  // gặp đầu tiên vẫn là ô đòi giờ sinh — đúng cái rào mà bản mẫu sinh ra để
+  // gỡ. Đường quay lại là nút trên thanh dính (sampleToForm).
+  document.getElementById('birthPanel').style.display='none';
+  var _sc=document.getElementById('sampCta'); if(_sc) _sc.style.display='none';
   document.getElementById('btnEdit').style.display='none';   // "Sửa thông tin" vô nghĩa với bản mẫu
   document.getElementById('btnBatTu').style.display='none';
   _sampleOpen=true;
-  if(window.AiLoadingSteps) AiLoadingSteps.scrollToResult('lgPanel');
-  if(window.Track) Track.event('preview_shown',{meta:{from:'sample_full'}});
+  // Lượt TỰ MỞ đã ở đầu trang rồi, cuộn thêm là cướp quyền cuộn của khách.
+  if(!auto&&window.AiLoadingSteps) AiLoadingSteps.scrollToResult('lgPanel');
+  // Tách nhãn auto/click: gộp một nhãn thì lượt sau đọc phễu không biết bản mẫu
+  // được XEM vì tự hiện hay vì khách chủ động bấm — hai hành vi khác hẳn nhau.
+  if(window.Track) Track.event('preview_shown',{meta:{from:auto?'sample_auto':'sample_click'}});
 }
 
 // Từ bản mẫu quay về form. KHÔNG dùng showForm() trực tiếp vì còn phải gỡ thanh
@@ -729,6 +751,7 @@ function sampleToForm(){
   closeSample();
   showForm();
   var f=document.getElementById('birthPanel');
+  var c=document.getElementById('sampCta'); if(c) c.style.display='flex'; // còn đường xem lại mẫu
   if(f&&f.scrollIntoView) f.scrollIntoView({behavior:'smooth',block:'start'});
   if(window.Track) Track.event('cta_click',{meta:{from:'sample_to_form'}});
 }
@@ -739,11 +762,11 @@ function sampleToForm(){
 // đây thì TONG_PHAN/CHI còn undefined).
 setTimeout(function(){
   try{
-    if(window.__tvmbSkipDemo) return;
-    if(window.Shell&&Shell.getRememberedBirth&&Shell.getRememberedBirth()) return;
-    var cta=document.getElementById('sampCta');
-    if(cta) cta.style.display='flex';
-  }catch(e){}
+    if(window.__tvmbSkipDemo) return;                                    // sắp auto-chạy lá số thật (điền từ trang chủ)
+    if(window.Shell&&Shell.autoRun&&Shell.autoRun()) return;             // đến qua ?auto=1
+    if(window.Shell&&Shell.getRememberedBirth&&Shell.getRememberedBirth()) return; // khách quen, đã biết sản phẩm
+    openSample(null,true);
+  }catch(e){ if(window.console) console.error('sample gate:',e); }
 },0);
 // Bật/tắt ĐỒNG LOẠT khoá-mini cho CẢ 24 phần (luôn nằm trong DOM ngay từ đầu,
 // không còn khái niệm "backfill dần" như bản trước). Gọi khi biết chắc trạng
