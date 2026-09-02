@@ -196,17 +196,37 @@
     '🔑':'lock','🧹':'trash-2',
   };
 
+  // 🔴 Bảng ICONS chỉ có `viewBox`, KHÔNG có `width`/`height` — cỡ hoàn toàn
+  // trông vào CSS `.ic>svg{width:1em;height:1em}`, mà đó là bộ chọn con TRỰC
+  // TIẾP. Ai chèn SVG trần (không bọc `.ic`/`.ic-inline`) là mất luôn sợi dây
+  // đó, và SVG không cỡ thì trình duyệt cho nở HẾT bề ngang khối chứa. Hỏng im
+  // lặng và hỏng CỠ KHỔNG LỒ — đã ra tới prod một lần: khối "Nguồn" dưới bản
+  // luận hiện một quyển sách to bằng nửa màn hình điện thoại.
+  // Gắn cỡ nội tại 1em cho MỌI đường trả về: CSS của `.ic` (và của khối chứa,
+  // vd `.cv-popup-icon svg{...}`) vẫn thắng thuộc tính, nên chỗ đang đúng không
+  // đổi gì; chỗ chèn trần thì từ nở-full thành 1em. Sửa ở đây thay vì đi bọc
+  // từng chỗ gọi vì chỗ gọi còn sinh thêm, mà cái bẫy thì không tự mất đi.
+  function sized(svg) {
+    // ⚠️ KHÔNG dùng indexOf('width=') để dò: MỌI icon Lucide đều mang
+    // `stroke-width="2"`, chuỗi đó CHỨA 'width=' nên guard sẽ khớp nhầm và bỏ
+    // qua toàn bộ — bản vá đầu tiên dính đúng lỗi này, bài kiểm bắt được.
+    // Phải soi thuộc tính width THẬT trên chính thẻ <svg>.
+    return /<svg[^>]*\swidth\s*=/i.test(String(svg))
+      ? svg
+      : String(svg).replace(/^<svg\s/i, '<svg width="1em" height="1em" ');
+  }
+
   function iconHtml(raw, fallback) {
-    if (!raw) return fallback || ICONS['sparkles'] || '';
-    if (ICONS[raw]) return ICONS[raw];
+    if (!raw) return sized(fallback || ICONS['sparkles'] || '');
+    if (ICONS[raw]) return sized(ICONS[raw]);
     var key = EMOJI_TO_ICON[raw];
-    if (key && ICONS[key]) return ICONS[key];
-    if (String(raw).charAt(0) === '<') return raw; // đã là SVG dựng sẵn
+    if (key && ICONS[key]) return sized(ICONS[key]);
+    if (String(raw).charAt(0) === '<') return sized(raw); // đã là SVG dựng sẵn
     // Glyph lạ (icon mới thêm dưới DB mà bảng trên chưa biết) → trả về ICON dự
     // phòng chứ KHÔNG trả glyph thô: `tool_pricing.icon` do admin gõ tay nên
     // luôn có thể xuất hiện ký tự mới, và mỗi lần như vậy trước đây là một con
     // emoji lọt thẳng ra giao diện.
-    return fallback || ICONS['sparkles'] || '';
+    return sized(fallback || ICONS['sparkles'] || '');
   }
   window.EMOJI_TO_ICON = EMOJI_TO_ICON;
   window.iconHtml = iconHtml;
@@ -303,7 +323,7 @@
   // Thay vì đẻ bảng icon thứ hai trong shell.js (28 icon, tên khác hẳn, thiếu
   // 11/15 icon cần dùng — đúng cái "hai bảng trôi khỏi nhau" đã cảnh báo),
   // mấy trang đó nạp CHÍNH file này kèm `data-icons-only`:
-  //     <script src="/nav.js?v=23" data-icons-only></script>
+  //     <script src="/nav.js?v=25" data-icons-only></script>
   // Lúc đó nav.js CHỈ cấp ICONS/iconHtml/mountIcons/EMOJI_TO_ICON + CSS icon,
   // rồi dừng — KHÔNG dựng thanh nav, KHÔNG chèn GA4, KHÔNG chèn conversion.js,
   // KHÔNG chèn auth.js. Một nguồn icon duy nhất cho cả site.

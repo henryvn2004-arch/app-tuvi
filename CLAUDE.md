@@ -141,7 +141,13 @@ mục + `mountIcons()`), nạp trên gần như mọi trang, export ra `window.I
   trong CTA). Chúng ăn `currentColor`, là phần của nhận diện — đổi là phá theme.
 - **KHÔNG áp dụng** cho prompt gửi LLM (emoji ở đó là chỉ dẫn định dạng cho
   model) và tin Telegram admin (Telegram không render SVG).
-- Thêm icon → sửa `ICONS` trong nav.js **và bump `nav.js?v=` trên cả 89 file**.
+- Thêm icon → sửa `ICONS` trong nav.js **và bump `nav.js?v=` trên cả cây `public/`**
+  (201 chỗ / 145 file — nhớ cả `public/tools/`, quét mỗi tầng một là sót).
+- **`iconHtml()` trả SVG có sẵn `width="1em"`** (từ 2026-09-02). Trước đó nó trả
+  SVG KHÔNG CỠ, chỉ sống nhờ CSS `.ic>svg` — bộ chọn con TRỰC TIẾP — nên chèn
+  trần ở đâu là nở HẾT bề ngang ở đó, hỏng im lặng và hỏng cỡ khổng lồ (đã ra
+  prod: quyển sách nửa màn hình ở khối "Nguồn"). ⚠️ Dò `width` trên SVG thì
+  ĐỪNG dùng `indexOf('width=')` — mọi icon Lucide có `stroke-width=`, khớp nhầm.
 - **Trang KHÔNG có nav bar** (27 trang shell + 2 trang admin) nạp CHÍNH `nav.js`
   ở **chế độ chỉ-icon**: `<script src="/nav.js?v=22" data-icons-only></script>`
   → chỉ cấp icon + CSS, KHÔNG dựng nav, KHÔNG chèn GA4/`conversion.js`/`auth.js`.
