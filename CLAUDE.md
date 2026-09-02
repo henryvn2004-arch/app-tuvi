@@ -141,7 +141,13 @@ mục + `mountIcons()`), nạp trên gần như mọi trang, export ra `window.I
   trong CTA). Chúng ăn `currentColor`, là phần của nhận diện — đổi là phá theme.
 - **KHÔNG áp dụng** cho prompt gửi LLM (emoji ở đó là chỉ dẫn định dạng cho
   model) và tin Telegram admin (Telegram không render SVG).
-- Thêm icon → sửa `ICONS` trong nav.js **và bump `nav.js?v=` trên cả 89 file**.
+- Thêm icon → sửa `ICONS` trong nav.js **và bump `nav.js?v=` trên cả cây `public/`**
+  (201 chỗ / 145 file — nhớ cả `public/tools/`, quét mỗi tầng một là sót).
+- **`iconHtml()` trả SVG có sẵn `width="1em"`** (từ 2026-09-02). Trước đó nó trả
+  SVG KHÔNG CỠ, chỉ sống nhờ CSS `.ic>svg` — bộ chọn con TRỰC TIẾP — nên chèn
+  trần ở đâu là nở HẾT bề ngang ở đó, hỏng im lặng và hỏng cỡ khổng lồ (đã ra
+  prod: quyển sách nửa màn hình ở khối "Nguồn"). ⚠️ Dò `width` trên SVG thì
+  ĐỪNG dùng `indexOf('width=')` — mọi icon Lucide có `stroke-width=`, khớp nhầm.
 - **Trang KHÔNG có nav bar** (27 trang shell + 2 trang admin) nạp CHÍNH `nav.js`
   ở **chế độ chỉ-icon**: `<script src="/nav.js?v=22" data-icons-only></script>`
   → chỉ cấp icon + CSS, KHÔNG dựng nav, KHÔNG chèn GA4/`conversion.js`/`auth.js`.
@@ -420,7 +426,13 @@ Mỗi luật dưới đây sinh ra từ một lần cắn thật. Cột cuối l
   tác dụng chờ) ⇒ dùng web-first assertion (`toBeVisible`, `expect.poll`). Đây là
   nguyên nhân 42% lượt smoke prod đỏ oan suốt 6 ngày.
 - **Playwright đặt `navigator.webdriver=true`** ⇒ `track.js` tự no-op; muốn đo
-  đường của người thật phải `defineProperty` cho nó về `false`.
+  đường của người thật phải `defineProperty` cho nó về `false`. **Tour onboarding
+  trong `app-home.html` dùng CÙNG cơ chế** (`if(navigator.webdriver) return;`) —
+  quên giả cờ này là bài kiểm xanh oan vì chẳng đo gì cả.
+- **`devices['iPhone 13']` mặc định `browserType:'webkit'`** mà máy chỉ có
+  chromium ⇒ báo "Executable doesn't exist at .../webkit-2336", không nói gì về
+  device. Khai tay `viewport/isMobile/hasTouch/userAgent`. Chromium chạy dưới
+  root cần `--no-sandbox`.
 - **`innerText` trả chữ HOA** khi phần tử có `text-transform:uppercase`.
 - **Stub thiếu trường ⇒ đo nhầm ĐƯỜNG LÙI** mà vẫn xanh — lấy shape THẲNG từ code,
   đừng bịa. `.single()` của supabase-js chờ MỘT object, trả mảng là phía gọi vỡ.
@@ -445,6 +457,18 @@ Mỗi luật dưới đây sinh ra từ một lần cắn thật. Cột cuối l
 - Job tên `build` trong danh sách check là `build-android.yml`, KHÔNG phải `next build`.
 - Artifact có đường dẫn bắt đầu bằng dấu chấm (`.lighthouseci/`) cần
   `include-hidden-files: true`, nếu không mất im lặng.
+
+### Overlay / popup bám phần tử
+- **Đặt popup theo một phần tử thì phải KẸP CỨNG vào vùng nhìn thấy SAU khi đã
+  chọn trên/dưới.** Chọn xong gán thẳng là đủ để nhốt người dùng: điểm neo nằm
+  ngoài màn thì popup văng theo, nút đóng ra ngoài mép, không còn đường thoát.
+  Đo được: neo ở 1072px trên màn 844 → nút nằm dưới đáy 204px.
+- **`window.innerHeight` KHÔNG phải vùng nhìn thấy trên iOS Safari** — nó tính cả
+  dải nằm SAU thanh công cụ dưới cùng. Dùng `visualViewport.height/offsetTop`.
+- **Điểm neo phải được kéo vào tầm nhìn trước khi vẽ** — `offsetParent!==null`
+  chỉ nói phần tử có trong layout, không nói nó đang được nhìn thấy.
+- **Mọi overlay chặn đường phải có đường thoát không phụ thuộc vị trí** (Esc).
+  `nhat-ky/2026-09.md` "Tour onboarding nhốt người dùng".
 
 ### Tiếng Việt
 - **Dò chuỗi thô trên văn tiếng Việt là sai lớp.** Đã trả giá: `\bcon\b` khớp "con

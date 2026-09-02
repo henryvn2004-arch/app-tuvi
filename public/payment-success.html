@@ -109,9 +109,9 @@ body {
 </div>
 
 <script src="/auth.js?v=2"></script>
-<script src="/nav.js?v=22" data-icons-only></script>
+<script src="/nav.js?v=25" data-icons-only></script>
 <script>
-// `nav.js?v=22` ở chế độ `data-icons-only` CỐ Ý không nạp Meta Pixel (xem
+// `nav.js?v=25` ở chế độ `data-icons-only` CỐ Ý không nạp Meta Pixel (xem
 // nav.js#297). Nhưng đây là trang XÁC NHẬN THANH TOÁN — đúng nơi PHẢI bắn
 // Purchase, nên khởi tạo pixel riêng ở đây thay vì trông chờ nav.js. Cùng
 // pixel ID với nav.js, cùng lý do bỏ qua `navigator.webdriver` (bộ E2E chạy
@@ -125,7 +125,7 @@ if (!document.getElementById('fb-pixel-js') && !navigator.webdriver) {
   window.fbq('init', '1747342186469684');
   window.fbq('track', 'PageView');
 }
-// `nav.js?v=22` ở chế độ `data-icons-only` CŨNG bỏ qua GA4 (xem nav.js#336) —
+// `nav.js?v=25` ở chế độ `data-icons-only` CŨNG bỏ qua GA4 (xem nav.js#336) —
 // cùng lý do như fbq ở trên: đây là trang XÁC NHẬN THANH TOÁN, đúng nơi phải
 // bắn sự kiện `purchase` để Google Ads (import Key Event từ GA4) đo được
 // conversion. Không nơi nào khác trong repo từng gọi gtag('event','purchase').

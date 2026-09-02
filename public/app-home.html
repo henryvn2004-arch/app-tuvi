@@ -241,7 +241,7 @@
    backdrop không bắt sự kiện — xem pointer-events trong JS). */
 .tour-spot{position:fixed;border-radius:14px;box-shadow:0 0 0 4px rgba(201,168,76,.6),0 0 0 3000px rgba(6,26,46,.46);z-index:901;pointer-events:none;transition:top .25s,left .25s,width .25s,height .25s;animation:tourPulse 1.8s ease-in-out infinite}
 @keyframes tourPulse{0%,100%{box-shadow:0 0 0 4px rgba(201,168,76,.6),0 0 0 3000px rgba(6,26,46,.46)}50%{box-shadow:0 0 0 7px rgba(201,168,76,.35),0 0 0 3000px rgba(6,26,46,.46)}}
-.tour-pop{position:fixed;z-index:902;background:var(--white);border:1px solid var(--gold-soft);border-radius:14px;padding:15px 17px;width:290px;max-width:calc(100vw - 24px);box-shadow:0 14px 34px rgba(6,26,46,.24);transition:top .25s,left .25s}
+.tour-pop{position:fixed;z-index:902;overflow-y:auto;-webkit-overflow-scrolling:touch;background:var(--white);border:1px solid var(--gold-soft);border-radius:14px;padding:15px 17px;width:290px;max-width:calc(100vw - 24px);box-shadow:0 14px 34px rgba(6,26,46,.24);transition:top .25s,left .25s}
 .tour-step{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-soft);font-weight:700;margin-bottom:6px}
 .tour-t{font-family:var(--serif);font-size:14.5px;font-weight:600;color:var(--heading);margin-bottom:5px;line-height:1.35}
 .tour-d{font-size:12px;color:var(--text-mid);line-height:1.55;margin-bottom:13px}
@@ -347,7 +347,7 @@
 <script src="/poster.js?v=5" defer></script>
 <script src="/tool-prices.js?v=5"></script>
 <script src="/auth.js?v=2"></script>
-  <script src="/nav.js?v=24" data-icons-only></script>
+  <script src="/nav.js?v=25" data-icons-only></script>
 <script src="/shell.js?v=85"></script>
 <script>
 function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
@@ -1630,15 +1630,19 @@ function renderAllTools(d) {
     return (e && e.offsetParent!==null) ? e : null;
   }
 
-  var _i=-1, _spot=null, _pop=null;
+  var _i=-1, _spot=null, _pop=null, _scrolled=false;
+
+  // Vùng NHÌN THẤY THẬT. `window.innerHeight` trên iOS Safari tính cả dải nằm
+  // SAU thanh công cụ dưới cùng của trình duyệt, nên đặt trong innerHeight vẫn
+  // có thể bị thanh đó che. `visualViewport` mới là con số người dùng thấy.
+  function viewport(){
+    var vv=window.visualViewport;
+    return vv ? {top:vv.offsetTop, left:vv.offsetLeft, h:vv.height, w:vv.width}
+              : {top:0, left:0, h:window.innerHeight, w:window.innerWidth};
+  }
 
   function place(target,data,isLast){
-    var r=target.getBoundingClientRect();
     var pad=6;
-    _spot.style.left=(r.left-pad)+'px';
-    _spot.style.top=(r.top-pad)+'px';
-    _spot.style.width=(r.width+pad*2)+'px';
-    _spot.style.height=(r.height+pad*2)+'px';
 
     _pop.innerHTML='<div class="tour-step">Bước '+(_i+1)+'/'+STEPS.length+'</div>'
       +'<div class="tour-t">'+esc2(data.t)+'</div>'
@@ -1646,14 +1650,49 @@ function renderAllTools(d) {
       +'<div class="tour-row"><button class="tour-skip" type="button" id="tourSkip">Bỏ qua</button>'
       +'<button class="tour-next" type="button" id="tourNext">'+(isLast?'Đã hiểu, khám phá thôi':'Tiếp →')+'</button></div>';
 
-    // Đặt popup DƯỚI phần tử đích; hết chỗ dưới thì đặt LÊN trên — luôn kẹp
-    // trong viewport để không tràn ra ngoài màn hình nhỏ.
-    var popH=_pop.offsetHeight||160, popW=_pop.offsetWidth||290;
-    var top=r.bottom+14;
-    if(top+popH>window.innerHeight-10) top=Math.max(10,r.top-14-popH);
-    var left=Math.min(Math.max(12,r.left), window.innerWidth-popW-12);
-    _pop.style.top=top+'px';
-    _pop.style.left=left+'px';
+    // 🪤 findTarget() chỉ đòi phần tử CÓ TRONG LAYOUT, KHÔNG đòi nó trong tầm
+    // nhìn. Neo nằm ngoài màn thì (a) vòng sáng chỉ vào chỗ không ai thấy, và
+    // (b) popup bị đẩy ra theo. Kéo neo vào giữa màn trước đã. `_scrolled` để
+    // scrollIntoView (sinh sự kiện scroll → onResize → place) không tự gọi lại
+    // chính nó thành vòng lặp.
+    var vp0=viewport(), r0=target.getBoundingClientRect();
+    if(!_scrolled && (r0.top<vp0.top || r0.bottom>vp0.top+vp0.h)){
+      _scrolled=true;
+      try{ target.scrollIntoView({block:'center',behavior:'auto'}); }catch(e){ try{ target.scrollIntoView(); }catch(e2){} }
+    }
+
+    function position(){
+      var vp=viewport(), r=target.getBoundingClientRect();
+      _spot.style.left=(r.left-pad)+'px';
+      _spot.style.top=(r.top-pad)+'px';
+      _spot.style.width=(r.width+pad*2)+'px';
+      _spot.style.height=(r.height+pad*2)+'px';
+
+      // Popup cao hơn cả vùng nhìn thấy thì cho nó tự cuộn bên trong — thà đọc
+      // phải cuộn còn hơn nút bấm nằm ngoài màn.
+      _pop.style.maxHeight=Math.max(120,vp.h-20)+'px';
+
+      var popH=_pop.offsetHeight||160, popW=_pop.offsetWidth||290;
+      var top=r.bottom+14;
+      if(top+popH>vp.top+vp.h-10) top=r.top-14-popH;   // hết chỗ dưới → đặt lên trên
+      // 🔴 KẸP CỨNG vào vùng nhìn thấy. Bản trước thiếu đúng bước này: chọn
+      // xong trên/dưới là gán thẳng, nên neo nằm dưới mép màn thì popup văng
+      // theo và NÚT "Bỏ qua"/"Tiếp" ra ngoài màn — người dùng kẹt trong tour,
+      // không còn đường thoát. Đo được: neo ở 1072px trên màn 844 → nút nằm
+      // dưới đáy 204px.
+      var minTop=vp.top+10, maxTop=vp.top+vp.h-popH-10;
+      if(maxTop<minTop) maxTop=minTop;
+      _pop.style.top=Math.min(Math.max(top,minTop),maxTop)+'px';
+
+      var minLeft=vp.left+12, maxLeft=vp.left+vp.w-popW-12;
+      if(maxLeft<minLeft) maxLeft=minLeft;
+      _pop.style.left=Math.min(Math.max(r.left,minLeft),maxLeft)+'px';
+    }
+
+    position();
+    // Đo lại ở khung hình sau: webfont/ảnh đáp xuống muộn làm popup CAO HƠN lúc
+    // đo đầu, mà lúc đó phép kẹp đã tính theo chiều cao cũ.
+    if(window.requestAnimationFrame) requestAnimationFrame(position);
 
     document.getElementById('tourSkip').onclick=finish;
     document.getElementById('tourNext').onclick=function(){ step(_i+1); };
@@ -1663,7 +1702,7 @@ function renderAllTools(d) {
     if(i>=STEPS.length){ finish(); return; }
     var data=STEPS[i], target=findTarget(data.sel);
     if(!target){ step(i+1); return; } // phần tử chưa có lúc này → bỏ qua bước đó, đừng đứng khựng
-    _i=i;
+    _i=i; _scrolled=false;
     place(target,data,i===STEPS.length-1);
   }
 
@@ -1671,8 +1710,24 @@ function renderAllTools(d) {
     markSeen();
     if(_spot){ _spot.remove(); _spot=null; }
     if(_pop){ _pop.remove(); _pop=null; }
-    window.removeEventListener('resize',onResize);
+    bindWatchers(false);
   }
+
+  // 🪤 Trang /app cuộn trong #ws chứ không cuộn window → phải nghe 'scroll' ở
+  // pha CAPTURE trên document, gắn vào window là không bao giờ nổ (bẫy đã ghi
+  // trong CLAUDE.md). visualViewport đổi khi thanh công cụ iOS thu/giãn — không
+  // nghe thì popup đứng yên trong lúc vùng nhìn thấy co lại quanh nó.
+  function bindWatchers(on){
+    var m=on?'addEventListener':'removeEventListener';
+    window[m]('resize',onResize);
+    document[m]('scroll',onResize,true);
+    if(window.visualViewport){ window.visualViewport[m]('resize',onResize); window.visualViewport[m]('scroll',onResize); }
+    document[m]('keydown',onKey);
+  }
+
+  // Đường thoát cuối: Esc luôn đóng được tour, kể cả khi vì lý do nào đó nút
+  // vẫn không bấm tới. Rẻ, và đúng thứ đã thiếu lúc Henry bị kẹt.
+  function onKey(e){ if(e.key==='Escape'||e.keyCode===27) finish(); }
 
   function onResize(){
     if(_i<0||_i>=STEPS.length) return;
@@ -1692,7 +1747,7 @@ function renderAllTools(d) {
     _pop=document.createElement('div'); _pop.className='tour-pop';
     document.body.appendChild(_spot);
     document.body.appendChild(_pop);
-    window.addEventListener('resize',onResize);
+    bindWatchers(true);
     step(0);
   }
 
