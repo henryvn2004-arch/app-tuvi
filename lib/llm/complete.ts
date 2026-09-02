@@ -87,6 +87,26 @@ export interface LlmTextOpts {
    * (vd cron viết bài muốn Kimi dù DB đang ưu tiên Gemini cho toàn site).
    */
   provider?: 'kimi' | 'anthropic' | 'gemini';
+  /** Độ "nghĩ" của model cho ĐÚNG lượt này — map thẳng sang
+   * `output_config.effort` của Anthropic. CHỈ nhánh Anthropic đọc field này;
+   * Gemini/Kimi bỏ qua. Bỏ trống = mặc định của model (`high`).
+   *
+   * Vì sao có: Opus 5 TỰ BẬT thinking, và token nghĩ ăn CHUNG `max_tokens`
+   * với token chữ (xem docs/nhat-ky/2026-09.md "Token NGHĨ ăn chung trần").
+   * Đo trên 48 bản, prompt thật + 2 lá số thật, 8 phần:
+   *     mặc định (high) 1281 token / 1163 chữ   — 1,101 token mỗi chữ
+   *     effort 'low'     779 token / 1219 chữ   — 0,639 token mỗi chữ
+   * tức RẺ HƠN 39% mà chữ ra còn NHIỀU HƠN. Chấm mù 16 cặp không tìm ra
+   * khác biệt chất lượng (8–6–2, đúng mức tung đồng xu).
+   *
+   * ⚠️ ĐỪNG thay bằng `thinking:{type:'disabled'}` cho rẻ thêm ~2%: tài liệu
+   * Anthropic ghi rõ Opus 5 tắt hẳn thinking thì có thể RÒ THẺ `<thinking>`
+   * ra chính văn (và viết tool call vào văn bản thay vì `tool_use` block).
+   * Bài này BÁN cho khách. `effort:'low'` giữ thinking bật nên không dính,
+   * mà vẫn lấy 97% khoản tiết kiệm. `disabled` còn bị API từ chối (400) khi
+   * effort là `xhigh`/`max`.
+   */
+  effort?: 'low' | 'medium' | 'high' | 'xhigh' | 'max';
 }
 
 // ─── Gemini ────────────────────────────────────────────────────
@@ -327,6 +347,8 @@ function buildAnthropicBody(o: LlmTextOpts, maxTokens: number, stream: boolean) 
       ? [{ type: 'text', text: o.system, cache_control: { type: 'ephemeral', ttl: '1h' } }]
       : o.system;
   }
+  // `effort` phải nằm TRONG `output_config`, không phải field top-level.
+  if (o.effort) body.output_config = { effort: o.effort };
   if (stream) body.stream = true;
   return body;
 }
