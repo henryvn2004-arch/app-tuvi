@@ -302,6 +302,96 @@
     reportJsError('unhandledrejection', msg, null, null, null, stack);
   });
 
+  // ============================================================
+  // ĐO MỨC ĐỌC — độ cuộn + thời gian ở lại (2026-09).
+  //
+  // VÌ SAO CẦN: trước đợt này track.js chỉ bắn page_view + tool_open, và CẢ HAI
+  // đều bắn lúc TẢI TRANG. Hệ quả: người đọc 3 phút rồi bỏ đi và người bấm back
+  // sau 1 giây cho ra dữ liệu Y HỆT NHAU. Đo được 2026-09-01: 114/162 khách
+  // Google Ads chỉ có đúng 2 event đó — và tôi đã suýt đọc thành "khách rời sau
+  // 0.1 giây" (SAI: 0.19s là khoảng cách giữa hai event lúc load, không phải
+  // thời gian ở lại). Không có khối này thì mọi tranh luận "landing dở hay
+  // landing chậm" đều là đoán, xem docs/nhat-ky/2026-09.md.
+  //
+  // 🪤 BẪY ĐÃ NÉ: trang /app/* KHÔNG cuộn window — chúng cuộn TRONG #ws (xem
+  // shell.js, và bindJump() ở app-luan-giai.html nghe scroll trên chính #ws).
+  // Gắn listener vào window là vĩnh viễn 0 trên đúng nhóm trang đang chạy
+  // quảng cáo — đúng lớp lỗi "xanh oan" mà CLAUDE.md cảnh báo. Sự kiện scroll
+  // KHÔNG nổi bọt, nhưng CÓ đi qua pha capture, nên nghe capture trên document
+  // là bắt được cả window lẫn mọi phần tử con.
+  //
+  // NGÂN SÁCH EVENT: cố ý chỉ 2 dòng/lượt xem (một mốc 50% + một dòng tổng kết)
+  // thay vì rải 25/50/75/100. `page_dwell` đã chở sẵn `max_pct` nên độ cuộn
+  // chính xác nằm gọn trong MỘT dòng; mốc 50% giữ lại chỉ để còn dấu vết khi
+  // lượt tổng kết không kịp gửi (trình duyệt bị OS giết).
+  //
+  // ⚠️ HẠN CHẾ ĐÃ BIẾT: chỉ chốt MỘT lần, ở lượt ẩn tab ĐẦU TIÊN. Người rời đi
+  // rồi quay lại đọc tiếp thì phần sau không được cộng — cố ý đổi lấy "mỗi lượt
+  // xem đúng một dòng". Đừng đọc `sec` thành tổng thời gian của cả phiên.
+  // ============================================================
+  if (!quiet) {
+    var _dwellSent = false;
+    var _maxPct = 0;
+    var _half = false;
+    var _visibleMs = 0;
+    var _lastTick = Date.now();
+    var _wasVisible = !document.hidden;
+
+    // Cuộn tới đâu, tính theo MÉP DƯỚI khung nhìn (đọc hết trang = 100%).
+    function _pctOf(el) {
+      var st, sh, ch;
+      if (!el || el === document || el === window || el === document.documentElement || el === document.body) {
+        st = window.pageYOffset || document.documentElement.scrollTop || 0;
+        sh = document.documentElement.scrollHeight || 0;
+        ch = window.innerHeight || 0;
+      } else {
+        st = el.scrollTop; sh = el.scrollHeight; ch = el.clientHeight;
+      }
+      // Trang ngắn hơn khung nhìn thì KHÔNG cuộn được — trả 0, đừng trả 100:
+      // "đọc hết" và "không có gì để cuộn" là hai chuyện khác hẳn nhau.
+      if (!sh || sh <= ch) return 0;
+      var p = Math.round(((st + ch) / sh) * 100);
+      return p < 0 ? 0 : p > 100 ? 100 : p;
+    }
+
+    document.addEventListener('scroll', function (e) {
+      var p = _pctOf(e.target);
+      if (p > _maxPct) _maxPct = p;
+      if (!_half && _maxPct >= 50) { _half = true; event('scroll_depth', { meta: { pct: 50 } }); }
+    }, true);
+
+    // Chỉ cộng thời gian lúc tab ĐANG HIỆN — tab nằm nền cả tiếng không phải là
+    // "đọc một tiếng".
+    //
+    // 🪤 `_wasVisible` KHÔNG thừa, đừng rút gọn thành `if (!document.hidden)`:
+    // lượt chốt cuối chạy TRONG handler visibilitychange, lúc đó `document.hidden`
+    // ĐÃ = true rồi, nên đoạn vừa đọc xong sẽ không được cộng và MỌI lượt đo đều
+    // ra sec=0. Khoảng thời gian vừa trôi thuộc về trạng thái TRƯỚC sự kiện, nên
+    // phải nhớ trạng thái đó lại. Đã dính đúng lỗi này lúc thử bằng trình duyệt.
+    function _tick() {
+      var now = Date.now();
+      if (_wasVisible) _visibleMs += now - _lastTick;
+      _lastTick = now;
+      _wasVisible = !document.hidden;
+    }
+
+    function _sendDwell() {
+      if (_dwellSent) return;
+      _tick();
+      _dwellSent = true;
+      event('page_dwell', { meta: { sec: Math.round(_visibleMs / 1000), max_pct: _maxPct } });
+    }
+
+    // visibilitychange là tín hiệu ĐÁNG TIN trên mobile; pagehide/unload nhiều
+    // trình duyệt di động bỏ qua hẳn. Giữ cả hai, `_dwellSent` chống gửi đôi
+    // (pagehide còn bắn lại khi trang vào bfcache).
+    document.addEventListener('visibilitychange', function () {
+      _tick();
+      if (document.hidden) _sendDwell();
+    });
+    window.addEventListener('pagehide', _sendDwell);
+  }
+
   // Tự động page_view mỗi lần tải trang (trừ trang kỹ thuật — xem TRACK_QUIET).
   if (!quiet) event('page_view');
 })();

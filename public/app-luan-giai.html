@@ -16,6 +16,23 @@
 .form-card{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);max-width:640px}
 .form-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:3px}
 .form-card p.sub{font-size:12.5px;color:var(--text-lt);margin-bottom:14px}
+/* Lối vào BẢN MẪU — một dòng gọn đứng TRƯỚC form, cho khách nguội (Ads, chưa
+   từng biết site) một đường xem sản phẩm thật mà không phải khai giờ sinh.
+   CỐ Ý chỉ một dòng, không phải một khối to: form vẫn là nhân vật chính (các
+   trang cùng ngành chuyển đổi tốt — AstroSeek, Cafe Astrology — đều để form
+   làm trung tâm), đây chỉ là cửa phụ cho người còn ngờ. Xem openSample(). */
+.samp-cta{max-width:640px;margin-bottom:14px;font-size:13px;color:var(--text-lt);display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.samp-cta button{background:none;border:1px solid var(--gold-soft);color:var(--gold-soft);border-radius:8px;padding:7px 14px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit}
+.samp-cta button:disabled{opacity:.6;cursor:default}
+/* Thanh DÍNH theo màn hình khi đang mở bản mẫu. Phải dính, không được là cái
+   tiêu đề trên đầu rồi cuộn mất: bản mẫu giờ đầy đủ và giống hệt bản thật, nên
+   người đọc rất dễ tưởng đang đọc lá số CỦA MÌNH — đọc Cung Phu Thê của người
+   khác rồi tưởng là hôn nhân mình thì hỏng niềm tin nặng hơn mọi lợi ích mà
+   khối này mang lại. Đây là yêu cầu ĐÚNG/SAI, không phải yêu cầu thẩm mỹ. */
+.samp-bar{position:sticky;top:var(--ws-top-h,69px);z-index:6;background:var(--navy);color:#fff;border-radius:10px;padding:10px 14px;margin-bottom:16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;box-shadow:var(--shadow)}
+.samp-bar .sb-txt{flex:1;min-width:180px;font-size:12.5px;line-height:1.5}
+.samp-bar .sb-txt b{color:var(--gold)}
+.samp-bar button{flex:0 0 auto;background:var(--gold);color:var(--navy);border:none;border-radius:8px;padding:7px 14px;font-size:12.5px;font-weight:700;cursor:pointer;font-family:var(--serif)}
 .frow{display:flex;gap:11px;flex-wrap:wrap;align-items:flex-end;margin-bottom:12px}
 .fg{display:flex;flex-direction:column;gap:5px}
 .fg label{font-size:10.5px;font-weight:600;color:var(--text-lt);letter-spacing:.04em;text-transform:uppercase}
@@ -161,6 +178,10 @@
     <div class="ws-body">
       <div id="introHost"></div>
       <div id="shellRecent"></div>
+      <div class="samp-cta" id="sampCta" style="display:none">
+        <span>Chưa muốn khai giờ sinh?</span>
+        <button type="button" id="btnSample" onclick="openSample(this)">Xem thử một bản mẫu đầy đủ →</button>
+      </div>
       <div class="form-card" id="birthPanel">
         <h2>Nhập thông tin để lập lá số &amp; luận giải</h2>
         <p class="sub">Đọc trọn 13 phần lá số: tổng quan và luận riêng từng cung trong 12 cung, cách cục, điểm mạnh yếu. Bạn từng xem lướt lá số đâu đó mà chưa hiểu hết ý nghĩa. Dùng khi muốn một bản luận đầy đủ, không phải vài dòng qua loa.</p>
@@ -230,6 +251,7 @@ TuviForm.render('tuviFormHost', {mode:'compact', gioitinh:'nam'});
   var raw;
   try{ raw=sessionStorage.getItem('app_pending_birth'); sessionStorage.removeItem('app_pending_birth'); }catch(e){ return; }
   if(!raw) return;
+  window.__tvmbSkipDemo=true; // sắp auto-chạy luôn (điền từ trang chủ) — khỏi cần ví dụ, xem gate ở cuối file
   var pending;
   try{ pending=JSON.parse(raw); }catch(e){ return; }
   if(!pending||!pending.fd||!pending.fd.ngay||!pending.fd.thang||!pending.fd.nam) return;
@@ -258,6 +280,9 @@ function doLuan(){
   var fdIn=TuviForm.getData();
   var name=fdIn.hoten, gioitinh=fdIn.gioitinh, dd=fdIn.ngay, mm=fdIn.thang, yyyy=fdIn.nam, hh=fdIn.gioHour, pp=fdIn.gioPhut, gioAmIdx=fdIn.gioIdx;
   if(!dd||!mm||!yyyy){ alert('Vui lòng nhập đầy đủ ngày, tháng, năm sinh.'); return; }
+  // Dọn bản mẫu TRƯỚC khi dựng lá số thật — bỏ bước này thì thanh "đây là bản
+  // mẫu" còn dính lại trên kết quả thật của khách, tức là nói dối họ.
+  if(_sampleOpen) closeSample();
   btn.disabled=true;btn.textContent='Đang luận…';
   try{
     var gioChi=CHI[gioAmIdx];
@@ -273,6 +298,7 @@ function doLuan(){
     document.getElementById('miniChart').innerHTML=renderGrid(ls,fd);
     if(window.mountIcons) window.mountIcons(document.getElementById('miniChart')); // ô giữa mang span [data-icon]
     document.getElementById('birthPanel').style.display='none';
+    var _sc=document.getElementById('sampCta'); if(_sc) _sc.style.display='none'; // đã có lá số thật, khỏi mời xem mẫu nữa
     document.getElementById('lgPanel').style.display='block';
     document.getElementById('btnEdit').style.display='';
     document.getElementById('btnBatTu').style.display='';
@@ -309,6 +335,7 @@ function doLuan(){
   }catch(e){
     document.getElementById('lgBody').innerHTML='<div class="laso-error">Lỗi khi luận giải: '+esc(e.message)+'</div>';
     document.getElementById('birthPanel').style.display='none';
+    var _scErr=document.getElementById('sampCta'); if(_scErr) _scErr.style.display='none';
     document.getElementById('lgPanel').style.display='block';
     if(window.AiLoadingSteps)AiLoadingSteps.scrollToResult('lgPanel');
     if(window.console)console.error(e);
@@ -586,6 +613,138 @@ function buildTeaserHtml(label,ls){
   return '<div class="lg-teaser"><div class="lg-teaser-score" style="color:'+col+'">'+(t!=null?t:'—')+'<small>/10</small></div>'+
     '<div class="lg-teaser-line">'+line+' Cách cục, quy tắc và ý nghĩa từng sao đầy đủ của cung này nằm trong bản đầy đủ.</div></div>';
 }
+// ══════════════════════════════════════════════════════════════════════
+// BẢN MẪU ĐẦY ĐỦ (2026-09) — khách bấm MỘT phát là đọc được nguyên bản luận
+// của một lá số mẫu, không phải khai giờ sinh trước.
+//
+// VÌ SAO: đo 2026-09-01 trên 162 khách Google Ads — 70% chỉ có đúng 1 pageview,
+// chỉ 2.5% từng bấm chạy thử. Tức phần lớn rời đi trước khi thấy sản phẩm là
+// gì. Bản trước của khối này là một teaser 3 dòng, nhưng 3 dòng thì không khác
+// mấy phần teaser đã có SẴN sau khi chạy — không chứng minh được điều cần
+// chứng minh. Nay khoe hẳn bản thật.
+//
+// 🔑 KHÔNG sợ "cho không mất khách": bản mẫu là lá số NGƯỜI KHÁC. Đọc Cung Phu
+// Thê của người mẫu không nói gì về hôn nhân của chính người đọc — nó chứng
+// minh CHẤT LƯỢNG mà không thay thế được bản của họ. Đây là chỗ khác hẳn một
+// sản phẩm phần mềm, nơi bản demo dùng được luôn.
+//
+// 🔑 TẢI KHI BẤM, KHÔNG NHÚNG SẴN: phần lời AI của một bản đầy đủ nặng ~35 KB.
+// Nhúng vào trang là bắt CẢ 100% khách tải thêm, kể cả ~97% không bao giờ bấm —
+// trong khi trang này đã phải tải 318 KB JS chặn render trước khi form dùng
+// được. Tải khi bấm nên trang không nặng thêm một byte nào.
+//
+// 🔑 CHỈ CHỞ LỜI AI, KHÔNG CHỞ LÁ SỐ: file mẫu chứa ngày giờ sinh + lời luận.
+// Toàn bộ lá số, điểm 12 cung, cách cục được engine (đã nạp sẵn trên trang)
+// TÍNH LẠI tại chỗ, 0đ, 0 byte. Nhờ vậy bản mẫu chạy đúng cùng đường render
+// với bản thật — nó KHÔNG phải ảnh chụp, nó là sản phẩm thật với dữ liệu khác.
+//
+// ⚠️ Khi chưa có lời AI (file mẫu thiếu `luan_giai`), khối này vẫn chạy: hiện
+// đủ 13 phần + toàn bộ phần engine. Đổ lời AI vào sau KHÔNG phải sửa code.
+// ══════════════════════════════════════════════════════════════════════
+var SAMPLE_URL='/samples/luan-giai.json';
+var SAMPLE_CTA='Xem thử một bản mẫu đầy đủ →';
+var _sampleData=null;   // nhớ sau lượt tải đầu, bấm lại không tải lại
+var _sampleOpen=false;
+
+// Dọn sạch dấu vết bản mẫu. Gọi TRƯỚC khi render lá số thật — nếu không, bản
+// mẫu và bản thật đứng chồng nhau, đúng lớp lỗi đã vấp một lần trong ngày với
+// khối teaser cũ.
+function closeSample(){
+  _sampleOpen=false;
+  var bar=document.getElementById('sampBar'); if(bar) bar.remove();
+  ['lgBody','lgScores','lgJump','miniChart','hookHost','cnsHost'].forEach(function(id){
+    var el=document.getElementById(id); if(el) el.innerHTML='';
+  });
+  var lg=document.getElementById('lgPanel'); if(lg) lg.style.display='none';
+}
+
+function openSample(btn){
+  var reset=function(){ if(btn){ btn.disabled=false; btn.textContent=SAMPLE_CTA; } };
+  if(btn){ btn.disabled=true; btn.textContent='Đang mở…'; }
+  var p=_sampleData ? Promise.resolve(_sampleData)
+    : fetch(SAMPLE_URL).then(function(r){
+        if(!r.ok) throw new Error('HTTP '+r.status);
+        return r.json();
+      }).then(function(j){ _sampleData=j; return j; });
+  p.then(function(s){ renderSample(s); reset(); })
+   .catch(function(e){
+     reset();
+     if(window.console) console.error('sample:',e);
+     // Hỏng thì nói thẳng, KHÔNG im lặng — im lặng thì khách bấm rồi tưởng
+     // nút chết, còn tệ hơn không có nút.
+     alert('Chưa mở được bản mẫu. Bạn thử lại giúp, hoặc nhập giờ sinh để xem lá số thật.');
+   });
+}
+
+function renderSample(s){
+  var b=(s&&s.birth)||{};
+  if(b.ngay==null||b.thang==null||b.nam==null){ throw new Error('file mẫu thiếu ngày sinh'); }
+  var gioIdx=b.gio_idx!=null?b.gio_idx:0;
+  var namXem=b.nam_xem||new Date().getFullYear();
+  var conv=convertDuongToAm(b.ngay,b.thang,b.nam,b.gio_hour!=null?b.gio_hour:0);
+  conv.gioIdx=gioIdx;
+  var ls=anSaoLaSo({ngayAL:conv.amLich.day,thangAL:conv.amLich.month,namAL:conv.amLich.year,
+    canNam:conv.canNam,chiNam:conv.chiNam,gioIdx:gioIdx,gioitinh:b.gioitinh||'nu',namXem:namXem});
+  var ten=s.person_name||'người trong bản mẫu';
+  var fd={name:ten,gioitinh:b.gioitinh||'nu',dd:b.ngay,mm:b.thang,yyyy:b.nam,
+    hh:b.gio_hour||0,pp:0,gioChi:CHI[gioIdx],amLich:conv.amLich};
+
+  // `true` = mở khoá HẾT. Đây là bản KHOE, không phải bản bán: chặn nó lại thì
+  // khách vẫn chỉ thấy đúng thứ họ đã thấy, tức là không chứng minh được gì.
+  renderLuan(ls,fd,namXem,true);
+  document.getElementById('miniChart').innerHTML=renderGrid(ls,fd);
+  if(window.mountIcons) window.mountIcons(document.getElementById('miniChart'));
+  _paintSecLocks(false); // bản mẫu không mời mua ở từng phần
+
+  // Đổ lời AI (nếu file mẫu đã có) vào đúng ô mà bản trả tiền dùng.
+  var lg=s.luan_giai||{};
+  for(var p=1;p<=TONG_PHAN;p++){
+    var host=document.getElementById('claude-content-'+p);
+    var txt=lg[String(p)];
+    if(host&&txt){ host.innerHTML=renderMarkdown(txt); host.style.display='block'; }
+  }
+
+  // Thanh DÍNH — xem chú thích .samp-bar trong <style>. Đặt vào đầu #lgPanel
+  // để nó nằm trong vùng cuộn của kết quả.
+  var panel=document.getElementById('lgPanel');
+  var old=document.getElementById('sampBar'); if(old) old.remove();
+  var bar=document.createElement('div');
+  bar.className='samp-bar'; bar.id='sampBar';
+  bar.innerHTML='<div class="sb-txt">Đây là <b>BẢN MẪU</b> — lá số của <b>'+esc(ten)+'</b> ('+
+    b.ngay+'/'+b.thang+'/'+b.nam+'), không phải của bạn.</div>'+
+    '<button type="button" onclick="sampleToForm()">Xem lá số của tôi →</button>';
+  panel.insertBefore(bar,panel.firstChild);
+
+  panel.style.display='block';
+  document.getElementById('btnEdit').style.display='none';   // "Sửa thông tin" vô nghĩa với bản mẫu
+  document.getElementById('btnBatTu').style.display='none';
+  _sampleOpen=true;
+  if(window.AiLoadingSteps) AiLoadingSteps.scrollToResult('lgPanel');
+  if(window.Track) Track.event('preview_shown',{meta:{from:'sample_full'}});
+}
+
+// Từ bản mẫu quay về form. KHÔNG dùng showForm() trực tiếp vì còn phải gỡ thanh
+// dính và dọn DOM của bản mẫu.
+function sampleToForm(){
+  closeSample();
+  showForm();
+  var f=document.getElementById('birthPanel');
+  if(f&&f.scrollIntoView) f.scrollIntoView({behavior:'smooth',block:'start'});
+  if(window.Track) Track.event('cta_click',{meta:{from:'sample_to_form'}});
+}
+
+// Chỉ mời xem bản mẫu với khách NGUỘI: (1) không phải lượt auto-chạy từ trang
+// chủ, (2) chưa có lá số cũ. Khách quen đã biết sản phẩm rồi, mời nữa là rác.
+// setTimeout(...,0) để chạy SAU khi cả script này gán xong biến (gọi thẳng ở
+// đây thì TONG_PHAN/CHI còn undefined).
+setTimeout(function(){
+  try{
+    if(window.__tvmbSkipDemo) return;
+    if(window.Shell&&Shell.getRememberedBirth&&Shell.getRememberedBirth()) return;
+    var cta=document.getElementById('sampCta');
+    if(cta) cta.style.display='flex';
+  }catch(e){}
+},0);
 // Bật/tắt ĐỒNG LOẠT khoá-mini cho CẢ 24 phần (luôn nằm trong DOM ngay từ đầu,
 // không còn khái niệm "backfill dần" như bản trước). Gọi khi biết chắc trạng
 // thái: `true` ngay khi `_renderUnlockBlock` xác nhận CHƯA mở; `false` ngay

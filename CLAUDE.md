@@ -265,6 +265,14 @@ Mỗi luật dưới đây sinh ra từ một lần cắn thật. Cột cuối l
   `console.error`, nếu không lỗi bay ra rồi bị nuốt trọn.
 
 ### ✍️ Prompt LLM
+- **`max_tokens` KHÔNG phải trần cho phần CHỮ — Opus 5 tự bật `thinking` và token
+  nghĩ ăn CHUNG trần đó.** `buildAnthropicBody` không truyền `thinking`, mặc định
+  của model là BẬT ⇒ mọi lượt trả về `[thinking, text]`. Đo thật: phần 4 tốn 1160
+  token cho 920 chữ khi bật, 570 token cho 993 chữ khi tắt — phần nghĩ ăn ~500–900
+  token, trần hiệu dụng cho văn chỉ còn **~40–55%** con số ghi trong code. Đặt trần
+  mới thì phải cộng `THINK_BUDGET` (xem `app/api/lasotuvi/route.ts`), và **đừng đọc
+  `max_tokens` như số chữ tối đa**. Đây là nguyên nhân gốc của 7,9% phần luận bị
+  cắt giữa câu trên hàng đã bán. `docs/nhat-ky/2026-09.md` "Token NGHĨ ăn chung trần".
 - **Mỗi prompt đúng MỘT nguồn bố cục.** Ba họ KHÔNG dùng lẫn: `arcCore` (rail
   chat, mang bối cảnh "vừa đọc xong bản luận", ngân sách 120–180 từ) · `arcDoc`
   (bản luận giải dài) · `arcGiong` (bản trả JSON có schema — chỉ chở GIỌNG, đụng
@@ -344,6 +352,14 @@ Mỗi luật dưới đây sinh ra từ một lần cắn thật. Cột cuối l
   luận người dùng không quan tâm.** `invite_shown` = 0 suốt 17 ngày hoá ra vì lời
   mời chỉ cắm ở 1 trong 2 tấm tường mà người hết Lượng gặp
   (`docs/nhat-ky/2026-08.md`, mục "Dọn thư viện").
+- **Khoảng cách giữa hai event ĐỀU BẮN LÚC LOAD không phải "thời gian ở lại".**
+  `max(ts)-min(ts)` của khách chỉ có `page_view`+`tool_open` luôn ≈ 0 theo ĐỊNH
+  NGHĨA — đã đọc nhầm thành "rời sau 0.1 giây" và suýt chỉ đạo một lượt thiết kế
+  lại landing. Muốn nói về dwell thì phải có dụng cụ đo dwell: nay có
+  `scroll_depth` + `page_dwell` (`meta.sec`/`meta.max_pct`) trong `track.js`.
+  🪤 Trang `/app/*` cuộn trong `#ws`, KHÔNG cuộn window — nghe `scroll` ở pha
+  **capture** trên `document`, gắn vào window là vĩnh viễn 0.
+  `docs/nhat-ky/2026-09.md` "một con số tôi đã báo SAI".
 - **Google Ads auto-tagging gắn `gclid`, KHÔNG gắn UTM** — `track.js` suy
   `utm_source=google, utm_medium=cpc` từ `gclid` khi trang chưa tự có `utm_source`
   (`currentTouch()`). Thiếu suy luận này thì mọi click Ads rơi lẫn vào `(none)`

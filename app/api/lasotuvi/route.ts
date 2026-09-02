@@ -298,8 +298,22 @@ async function runPost(request: NextRequest) {
     // Henry chốt 2026-08-20: nâng ĐỀU 50% mọi trần token trong repo — retest
     // sau khi bật Kimi K3 primary bắt được bản luận giải bị CẮT NGANG giữa
     // câu (model sinh vượt trần rồi API cắt sạch, không phải lỗi mạng).
-    const maxTok = phan === 1 ? 3000 : phan === 14 ? 4500 : phan === 24 ? 2100
-      : (phan >= 2 && phan <= 13) ? 1650 : (phan >= 15 && phan <= 23) ? 1650 : 1500;
+    //
+    // 2026-09-02 — mấy con số dưới đây KHÔNG phải trần cho phần CHỮ. Đo bằng
+    // prompt thật + lá số thật trên API Anthropic (xem docs/nhat-ky/2026-09.md
+    // "Token NGHĨ ăn chung trần"): `buildAnthropicBody` KHÔNG truyền `thinking`,
+    // mà Opus 5 mặc định TỰ BẬT nó — mọi lượt trả về đều có block
+    // [thinking, text], và token nghĩ ăn chung `max_tokens` với token chữ.
+    //   phần 4, trần 1650: bật thinking 1160 token cho 920 chữ
+    //                      tắt thinking  570 token cho 993 chữ  ← nhiều chữ hơn, nửa token
+    //   phần 1  1713 vs  777 · phần 2 1431 vs 831 · phần 14 1703 vs 1219
+    // Tức phần nghĩ ăn ~500–900 token, trần hiệu dụng cho văn chỉ còn ~40–55%
+    // con số ghi ở đây. Đó là cơ chế sinh ra 7,9% phần cụt giữa câu trên hàng
+    // đã bán. CỘNG THÊM đúng phần đã đo thay vì đoán một con số tròn — và cộng
+    // TƯỜNG MINH để lượt sau đọc là biết ngay nó dùng vào việc gì.
+    const THINK_BUDGET = 900;
+    const maxTok = THINK_BUDGET + (phan === 1 ? 3000 : phan === 14 ? 4500 : phan === 24 ? 2100
+      : (phan >= 2 && phan <= 13) ? 1650 : (phan >= 15 && phan <= 23) ? 1650 : 1500);
 
     // Prompt caching (Code #1, xem CLAUDE.md track tối ưu chi phí Opus):
     // `systemForLLM` = SYSTEM_PROMPT + TOÀN VĂN lá số (buildPromptCached),
@@ -323,7 +337,34 @@ async function runPost(request: NextRequest) {
     // `chat.standalone_provider` — khoá đó vẫn quyết định primary cho mọi
     // route standalone khác. Cũng giữ nguyên hiệu quả `cacheSystem` (breakpoint
     // Anthropic) vì nhánh Anthropic giờ LUÔN được gọi ở lượt đầu.
-    const r = await llmTextFull({ system: systemForLLM, prompt, maxTokens: maxTok, cacheSystem: true, provider: 'anthropic' });
+    let r = await llmTextFull({ system: systemForLLM, prompt, maxTokens: maxTok, cacheSystem: true, provider: 'anthropic' });
+
+    // ── Bị CẮT giữa câu → sinh lại MỘT lần với trần gấp đôi ────────────────
+    // Đo 2026-09 trên 46 bản luận ĐÃ BÁN: 77/974 phần (7,9%) kết thúc giữa câu,
+    // 33/46 bản (72%) dính ít nhất một phần — nặng nhất đúng mấy phần văn dài
+    // (phần 1: 33,3%, phần 14: 17,8%). Suốt thời gian đó KHÔNG nhánh provider
+    // nào đọc `stop_reason`, nên bản cụt đi thẳng tới khách mà không có gì báo.
+    //
+    // VÌ SAO SINH LẠI CHỨ KHÔNG NÂNG ĐỀU TRẦN: nâng đều chạm vào chi phí của
+    // CẢ 92% lượt đang bình thường, mà trần đúng cho từng phần thì chưa ai đo.
+    // Sinh lại chỉ nổ đúng ~8% lượt thật sự hỏng, tự nhắm mục tiêu, và chặn ở
+    // MỘT lần — cắt tiếp lần hai thì giao bản dài nhất lấy được còn hơn quay
+    // vòng đốt tiền. Trần đúng để chốt sau, khi log `[llm] … CẮT GIỮA CHỪNG`
+    // đủ số liệu cho từng phần.
+    if (r.truncated) {
+      console.error(`[lasotuvi] phần ${phan} bị cắt ở trần ${maxTok} — sinh lại với ${maxTok * 2}`);
+      try {
+        const retry = await llmTextFull({ system: systemForLLM, prompt, maxTokens: maxTok * 2, cacheSystem: true, provider: 'anthropic' });
+        // Chỉ nhận bản mới khi nó THẬT SỰ khá hơn: hết cụt, hoặc chí ít dài hơn.
+        // Lượt hai vẫn có thể cụt (văn dài hơn trần mới) — lúc đó bản dài hơn
+        // vẫn là bản ít thiệt cho người đọc hơn.
+        if (!retry.truncated || retry.text.length > r.text.length) r = retry;
+      } catch (e) {
+        // Sinh lại hỏng thì GIỮ bản đầu — khách đã trả tiền, có chữ cụt vẫn hơn
+        // không có gì. Nhưng phải kêu, đừng nuốt (luật `catch {}` rỗng trong CLAUDE.md).
+        console.error(`[lasotuvi] sinh lại phần ${phan} hỏng, giữ bản đầu:`, (e as Error).message);
+      }
+    }
     const text = r.text;
     // tool_id ĐÚNG `tool_pricing.tool_id` để bucket chi phí ghép được với bucket
     // doanh thu (xem tool_canon() trong CLAUDE.md). Phần 1-13 (tổng quan + 12
