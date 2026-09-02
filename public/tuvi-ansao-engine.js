@@ -399,10 +399,13 @@ const HOA_LINH_KHOI = {
 function anLucSat(canNam, chiNam, gioIdx, locTonIdx, amDuong, gioitinh) {
   const thuận = (amDuong==='dương'&&gioitinh==='nam')||(amDuong==='âm'&&gioitinh==='nu');
 
-  // Kình Dương: sau Lộc Tồn 1 (thuận chiều)
-  const kinhDuong = mod12(locTonIdx + 1);
-  // Đà La: trước Lộc Tồn 1 (nghịch chiều)
-  const daLa = mod12(locTonIdx - 1);
+  // Kình Dương / Đà La — P3 (2026-09): đổi sang trường phái Thiên Lương, đảo
+  // chiều theo âm-dương×giới (trước đây CỐ ĐỊNH luôn +1/-1 bất kể thuận nghịch).
+  // Dương Nam/Âm Nữ (thuận): Kình sau Lộc Tồn 1, Đà trước Lộc Tồn 1 — như cũ.
+  // Âm Nam/Dương Nữ (nghịch): đảo ngược — Kình trước, Đà sau.
+  const kdDir = thuận ? 1 : -1;
+  const kinhDuong = mod12(locTonIdx + kdDir);
+  const daLa = mod12(locTonIdx - kdDir);
   // Địa Kiếp: Hợi=Tý, đếm thuận đến giờ
   const diaKiep = mod12(dcIdx('Hợi') + gioIdx);
   // Địa Không: Hợi=Tý, đếm nghịch đến giờ
@@ -454,8 +457,9 @@ function anPhuTinh(canNam, chiNam, thangAL, ngayAL, gioIdx, locTonIdx) {
   const thienKhoi = dcIdx(KHOI[canNam]);
   const thienViet = dcIdx(VIET[canNam]);
 
-  // Đào Hoa
-  const DAO_HOA = {'Tý':'Dậu','Ngọ':'Mão','Mão':'Tý','Dậu':'Ngọ','Dần':'Mão','Thân':'Dậu','Tỵ':'Ngọ','Hợi':'Tý','Thìn':'Dậu','Tuất':'Mão','Sửu':'Tuất','Mùi':'Tý'};
+  // Đào Hoa — P2 (2026-09): Sửu Tuất→Ngọ, khớp oracle Thiên Lương (findThienMa+7).
+  // Cũ đo được: 43200/518400 (8,3%) lệch, đúng 1/12 chi — chỉ Sửu sai.
+  const DAO_HOA = {'Tý':'Dậu','Ngọ':'Mão','Mão':'Tý','Dậu':'Ngọ','Dần':'Mão','Thân':'Dậu','Tỵ':'Ngọ','Hợi':'Tý','Thìn':'Dậu','Tuất':'Mão','Sửu':'Ngọ','Mùi':'Tý'};
   const daoHoa = dcIdx(DAO_HOA[chiNam] || 'Tý');
 
   // Thiên Mã
@@ -474,12 +478,14 @@ function anPhuTinh(canNam, chiNam, thangAL, ngayAL, gioIdx, locTonIdx) {
   const HOA_CAI = {'Tý':'Thìn','Thân':'Thìn','Thìn':'Thìn','Ngọ':'Tuất','Dần':'Tuất','Tuất':'Tuất','Tỵ':'Sửu','Dậu':'Sửu','Sửu':'Sửu','Hợi':'Mùi','Mão':'Mùi','Mùi':'Mùi'};
   const hoaCai = dcIdx(HOA_CAI[chiNam] || 'Tý');
 
-  // Lưu Hà
-  const LUU_HA = {'Giáp':'Dậu','Ất':'Tuất','Bính':'Mùi','Đinh':'Thân','Mậu':'Tý','Kỷ':'Ngọ','Canh':'Mão','Tân':'Thìn','Nhâm':'Hợi','Quý':'Dần'};
+  // Lưu Hà — P2 (2026-09): Mậu Tý→Tỵ, khớp oracle Thiên Lương (findLuuHaThienTru).
+  // Cũ đo được: 51840/518400 (10,0%) lệch, đúng 1/10 can — chỉ Mậu sai.
+  const LUU_HA = {'Giáp':'Dậu','Ất':'Tuất','Bính':'Mùi','Đinh':'Thân','Mậu':'Tỵ','Kỷ':'Ngọ','Canh':'Mão','Tân':'Thìn','Nhâm':'Hợi','Quý':'Dần'};
   const luuHa = dcIdx(LUU_HA[canNam] || 'Tý');
 
-  // Thiên Trù
-  const THIEN_TRU = {'Giáp':'Tỵ','Đinh':'Tỵ','Canh':'Tỵ','Ất':'Ngọ','Mậu':'Ngọ','Tân':'Ngọ','Bính':'Tý','Kỷ':'Thân','Nhâm':'Dậu','Quý':'Tuất'};
+  // Thiên Trù — P2 (2026-09): Canh Tỵ→Dần, khớp oracle Thiên Lương (findLuuHaThienTru).
+  // Cũ đo được: 51840/518400 (10,0%) lệch, đúng 1/10 can — chỉ Canh sai.
+  const THIEN_TRU = {'Giáp':'Tỵ','Đinh':'Tỵ','Canh':'Dần','Ất':'Ngọ','Mậu':'Ngọ','Tân':'Ngọ','Bính':'Tý','Kỷ':'Thân','Nhâm':'Dậu','Quý':'Tuất'};
   const thienTru = dcIdx(THIEN_TRU[canNam] || 'Tý');
 
 
@@ -499,8 +505,11 @@ function anPhuTinh(canNam, chiNam, thangAL, ngayAL, gioIdx, locTonIdx) {
   const quaTu      = dcIdx(QUA_TU[chiNam]      || 'Tý');
 
   // ── Bổ sung sao theo can năm ──
-  const THIEN_QUAN = {'Giáp':'Mùi','Ất':'Mùi','Bính':'Thìn','Đinh':'Dần','Mậu':'Mão','Kỷ':'Dậu','Canh':'Hợi','Tân':'Dậu','Nhâm':'Tuất','Quý':'Ngọ'};
-  const THIEN_PHUC = {'Giáp':'Dậu','Ất':'Dậu','Bính':'Thân','Đinh':'Hợi','Mậu':'Mão','Kỷ':'Dần','Canh':'Ngọ','Tân':'Tỵ','Nhâm':'Ngọ','Quý':'Tỵ'};
+  // Thiên Quan/Thiên Phúc — P2 (2026-09): Ất/Bính sai (khớp oracle Thiên Lương
+  // findQuanPhuc). Cũ đo được: 103680/518400 (20,0%) lệch mỗi sao, đúng 2/10
+  // can — Ất+Bính sai (Ất từng lặp giá trị của Giáp; Bính chép nhầm giá trị khác).
+  const THIEN_QUAN = {'Giáp':'Mùi','Ất':'Thìn','Bính':'Tỵ','Đinh':'Dần','Mậu':'Mão','Kỷ':'Dậu','Canh':'Hợi','Tân':'Dậu','Nhâm':'Tuất','Quý':'Ngọ'};
+  const THIEN_PHUC = {'Giáp':'Dậu','Ất':'Thân','Bính':'Tý','Đinh':'Hợi','Mậu':'Mão','Kỷ':'Dần','Canh':'Ngọ','Tân':'Tỵ','Nhâm':'Ngọ','Quý':'Tỵ'};
   const thienQuan  = dcIdx(THIEN_QUAN[canNam] || 'Tý');
   const thienPhuc  = dcIdx(THIEN_PHUC[canNam] || 'Tý');
   // Thiên Không = cùng cung Thiếu Dương trong vòng Thái Tuế (offset 1 từ Thái Tuế)
@@ -539,9 +548,8 @@ function anPhuTinh(canNam, chiNam, thangAL, ngayAL, gioIdx, locTonIdx) {
   const duongPhu = mod12(locTonIdx - 7);  // Lộc Tồn=T1, đếm nghịch tới T8
   const bacSy    = locTonIdx;             // Bác Sỹ = cùng cung Lộc Tồn
 
-  // ── Sao cố định ──
-  const thienLa    = dcIdx('Thìn');  // cố định tại Thìn
-  const diaVong    = dcIdx('Tuất');  // cố định tại Tuất
+  // Thiên La/Địa Võng KHÔNG còn ở đây — P4 (2026-09): không phải sao cố định,
+  // xem laVong trong anSaoLaSo (phụ thuộc vị trí thật của Đà La từ anLucSat).
 
   return {
     'Tả Phụ':taPhu,'Hữu Bật':huuBat,'Văn Xương':vanXuong,'Văn Khúc':vanKhuc,
@@ -558,7 +566,6 @@ function anPhuTinh(canNam, chiNam, thangAL, ngayAL, gioIdx, locTonIdx) {
     'Thiên Hình':thienHinh,'Thiên Riêu':thienRieu,'Thiên Y':thienY,
     'Thai Phụ':thaiPhu,'Phong Cáo':phongCao,
     'Quốc Ấn':quocAn,'Đường Phù':duongPhu,'Bác Sỹ':bacSy,
-    'Thiên La':thienLa,'Địa Võng':diaVong,
   };
 }
 
@@ -570,7 +577,9 @@ const TU_HOA = {
   'Đinh': {'Lộc':'Thái Âm','Quyền':'Thiên Đồng','Khoa':'Thiên Cơ','Kỵ':'Cự Môn'},
   'Mậu': {'Lộc':'Tham Lang','Quyền':'Thái Âm','Khoa':'Hữu Bật','Kỵ':'Thiên Cơ'},
   'Kỷ':  {'Lộc':'Vũ Khúc','Quyền':'Tham Lang','Khoa':'Thiên Lương','Kỵ':'Văn Khúc'},
-  'Canh': {'Lộc':'Thái Dương','Quyền':'Vũ Khúc','Khoa':'Thái Âm','Kỵ':'Thiên Đồng'},
+  // P3 (2026-09): Khoa/Kỵ đảo lại theo Thiên Lương (trước là Thái Âm/Thiên
+  // Đồng, oracle gán ngược Thiên Đồng/Thái Âm) — đo được lệch đúng 1/10 can.
+  'Canh': {'Lộc':'Thái Dương','Quyền':'Vũ Khúc','Khoa':'Thiên Đồng','Kỵ':'Thái Âm'},
   'Tân': {'Lộc':'Cự Môn','Quyền':'Thái Dương','Khoa':'Văn Khúc','Kỵ':'Văn Xương'},
   'Nhâm': {'Lộc':'Thiên Lương','Quyền':'Tử Vi','Khoa':'Tả Phụ','Kỵ':'Vũ Khúc'},
   'Quý': {'Lộc':'Phá Quân','Quyền':'Cự Môn','Khoa':'Thái Âm','Kỵ':'Tham Lang'},
@@ -628,17 +637,22 @@ function tinhDaiVan(menhIdx, cuc, amDuong, gioitinh) {
 
 // ─── TIỂU HẠN ────────────────────────────────────────────────
 // Lưu niên tiểu vận
+// Cung khởi theo tam hợp chi năm sinh — KHÔNG phân biệt giới (bảng nam/nữ
+// vốn giống hệt nhau, gộp lại cho khỏi hiểu lầm là giới ảnh hưởng điểm khởi).
 const TIEU_HAN_KHOI = {
-  'nam': {'Dần':'Thìn','Ngọ':'Thìn','Tuất':'Thìn','Tỵ':'Mùi','Dậu':'Mùi','Sửu':'Mùi','Thân':'Tuất','Tý':'Tuất','Thìn':'Tuất','Hợi':'Sửu','Mão':'Sửu','Mùi':'Sửu'},
-  'nu':  {'Dần':'Thìn','Ngọ':'Thìn','Tuất':'Thìn','Tỵ':'Mùi','Dậu':'Mùi','Sửu':'Mùi','Thân':'Tuất','Tý':'Tuất','Thìn':'Tuất','Hợi':'Sửu','Mão':'Sửu','Mùi':'Sửu'},
+  'Dần':'Thìn','Ngọ':'Thìn','Tuất':'Thìn','Tỵ':'Mùi','Dậu':'Mùi','Sửu':'Mùi',
+  'Thân':'Tuất','Tý':'Tuất','Thìn':'Tuất','Hợi':'Sửu','Mão':'Sửu','Mùi':'Sửu',
 };
 
-function tinhTieuHan(chiNamSinh, gioitinh, tuoiXem) {
-  // Cung khởi = tuổi 1, đếm thuận (nam) / nghịch (nữ) theo tuổi
-  const startDC = TIEU_HAN_KHOI[gioitinh][chiNamSinh];
+// P3 (2026-09): chiều đếm đổi sang trường phái Thiên Lương — Dương Nam/Âm Nữ
+// thuận, Âm Nam/Dương Nữ nghịch (trước đây CỐ ĐỊNH theo giới: nam luôn thuận,
+// nữ luôn nghịch, bất kể âm dương năm sinh).
+function tinhTieuHan(chiNamSinh, gioitinh, tuoiXem, amDuong) {
+  const startDC = TIEU_HAN_KHOI[chiNamSinh];
   const startIdx = dcIdx(startDC);
   const offset = (tuoiXem - 1) % 12;
-  return gioitinh === 'nam' ? mod12(startIdx + offset) : mod12(startIdx - offset);
+  const thuận = (amDuong === 'dương' && gioitinh === 'nam') || (amDuong === 'âm' && gioitinh === 'nu');
+  return thuận ? mod12(startIdx + offset) : mod12(startIdx - offset);
 }
 
 // Lưu đại hạn
@@ -1993,7 +2007,7 @@ function anSaoLaSo({ ngayAL, thangAL, namAL, canNam, chiNam, gioIdx, gioitinh, n
   const tuoiXem = namXem - namSinhDL + 1;
   // Chi năm xem
   const chiNamXem = DIA_CHI[(namXem + 8) % 12];
-  const tieuHanIdx = tinhTieuHan(chiNam, gioitinh, tuoiXem);
+  const tieuHanIdx = tinhTieuHan(chiNam, gioitinh, tuoiXem, amDuong);
   // Lưu niên đại hạn: từ cung ĐV hiện tại đếm tới chi năm xem
   const daiVanHienTaiObj = daiVans.find(v => tuoiXem >= v.tuoiStart && tuoiXem <= v.tuoiEnd);
   const ageIndex = daiVanHienTaiObj ? tuoiXem - daiVanHienTaiObj.tuoiStart : 0;
@@ -2003,7 +2017,14 @@ function anSaoLaSo({ ngayAL, thangAL, namAL, canNam, chiNam, gioIdx, gioitinh, n
   const daiVanHienTai = daiVans.find(v => tuoiXem >= v.tuoiStart && tuoiXem <= v.tuoiEnd);
 
   // 8. Build palaces
-  const allStars = { ...chinhTinh, ...thaiTue, ...locTon, ...trangSinh, ...lucSat, ...phuTinh };
+  // La-Võng — P4 (2026-09): Thiên La/Địa Võng KHÔNG phải sao cố định, chỉ là
+  // NHÃN của Đà La khi rơi đúng Thìn (→"Thiên La") hoặc Tuất (→"Địa Võng"),
+  // theo trường phái Thiên Lương (trước đây cố định luôn hiện ở Thìn VÀ Tuất
+  // cho MỌI lá số, bất kể Đà La ở đâu).
+  const laVong = {};
+  if (lucSat['Đà La'] === dcIdx('Thìn')) laVong['Thiên La'] = lucSat['Đà La'];
+  else if (lucSat['Đà La'] === dcIdx('Tuất')) laVong['Địa Võng'] = lucSat['Đà La'];
+  const allStars = { ...chinhTinh, ...thaiTue, ...locTon, ...trangSinh, ...lucSat, ...phuTinh, ...laVong };
 
   // Apply tứ hóa labels
   const tuHoaMap = {}; // starName → hoa
@@ -2349,7 +2370,7 @@ function anSaoLaSo({ ngayAL, thangAL, namAL, canNam, chiNam, gioIdx, gioitinh, n
   const tuoiXem = namXem - namSinhDL + 1;
   // Chi năm xem
   const chiNamXem = DIA_CHI[(namXem + 8) % 12];
-  const tieuHanIdx = tinhTieuHan(chiNam, gioitinh, tuoiXem);
+  const tieuHanIdx = tinhTieuHan(chiNam, gioitinh, tuoiXem, amDuong);
   // Lưu niên đại hạn: từ cung ĐV hiện tại đếm tới chi năm xem
   const daiVanHienTaiObj = daiVans.find(v => tuoiXem >= v.tuoiStart && tuoiXem <= v.tuoiEnd);
   const ageIndex = daiVanHienTaiObj ? tuoiXem - daiVanHienTaiObj.tuoiStart : 0;
@@ -2359,7 +2380,14 @@ function anSaoLaSo({ ngayAL, thangAL, namAL, canNam, chiNam, gioIdx, gioitinh, n
   const daiVanHienTai = daiVans.find(v => tuoiXem >= v.tuoiStart && tuoiXem <= v.tuoiEnd);
 
   // 8. Build palaces
-  const allStars = { ...chinhTinh, ...thaiTue, ...locTon, ...trangSinh, ...lucSat, ...phuTinh };
+  // La-Võng — P4 (2026-09): Thiên La/Địa Võng KHÔNG phải sao cố định, chỉ là
+  // NHÃN của Đà La khi rơi đúng Thìn (→"Thiên La") hoặc Tuất (→"Địa Võng"),
+  // theo trường phái Thiên Lương (trước đây cố định luôn hiện ở Thìn VÀ Tuất
+  // cho MỌI lá số, bất kể Đà La ở đâu).
+  const laVong = {};
+  if (lucSat['Đà La'] === dcIdx('Thìn')) laVong['Thiên La'] = lucSat['Đà La'];
+  else if (lucSat['Đà La'] === dcIdx('Tuất')) laVong['Địa Võng'] = lucSat['Đà La'];
+  const allStars = { ...chinhTinh, ...thaiTue, ...locTon, ...trangSinh, ...lucSat, ...phuTinh, ...laVong };
 
   // Apply tứ hóa labels
   const tuHoaMap = {}; // starName → hoa
@@ -4688,7 +4716,7 @@ function tinhTieuVanScores(ls, gioitinh, amDuong, chiNam, namSinhDL) {
   // (mod12(2-chiIdx)) lệch quy tắc tam hợp ở 10/12 chi → tieuVanScores &
   // tra_tieu_van báo sai cung tiểu hạn. Nay gọi lại nguồn duy nhất, hết drift.
   function getTieuHanCungIdx(tuoi) {
-    return tinhTieuHan(chiNam, gioitinh, tuoi);
+    return tinhTieuHan(chiNam, gioitinh, tuoi, amDuong);
   }
 
   // ── Build spline ──────────────────────────────────────────────

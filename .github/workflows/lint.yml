@@ -271,10 +271,11 @@ jobs:
         run: npm run check:refbenchmarks
 
       # Đối chiếu VÉT CẠN 518.400 tổ hợp an sao với oracle tham khảo (bản
-      # "An Sao - Tử Vi Thiên Lương", scripts/oracle/vendor/) — mọi lệch phải
-      # rơi đúng vào danh sách 9 điểm đã biết (Kình/Đà, Đào Hoa, Thiên
-      # Quan/Phúc, Thiên Trù, Lưu Hà, Tứ Hóa can Canh); lệch NGOÀI danh sách
-      # là bug thật. ~90-170s vì quét cả miền, không phải mẫu.
+      # "An Sao - Tử Vi Thiên Lương", scripts/oracle/vendor/) — P2 (5 điểm
+      # bảng-tra-sai) + P3 (Kình/Đà, Tứ Hóa can Canh) đã sửa hết, danh sách
+      # trường phái/bảng-tra còn RỖNG (La-Võng dời P4, xem
+      # docs/nhat-ky/2026-09.md). Mọi lệch giờ là bug thật.
+      # ~90-170s vì quét cả miền, không phải mẫu.
       - name: Oracle — đối chiếu vét cạn an sao với bản Thiên Lương
         run: npm run oracle:ansao
 
@@ -285,6 +286,22 @@ jobs:
       # đúng 4 tháng có bug đếm ngày CỦA oracle (đã biết, xem script).
       - name: Oracle — đối chiếu vét cạn lịch âm 1900-2100 với bản Thiên Lương
         run: npm run oracle:lunar
+
+      # P3: Tiểu Hạn đổi sang trường phái Thiên Lương (Dương Nam/Âm Nữ thuận,
+      # Âm Nam/Dương Nữ nghịch — trước CỐ ĐỊNH theo giới). Không phải "sao" nên
+      # ngoài check-ansao-exhaustive.mjs — đối chiếu riêng vét cạn 60 can-chi ×
+      # 2 giới × 12 tuổi (1.440 ca) với oracle.
+      - name: Oracle — đối chiếu vét cạn Tiểu Hạn với bản Thiên Lương
+        run: npm run oracle:tieuhan
+
+      # P4: Thiên La/Địa Võng đổi từ 2 sao CỐ ĐỊNH tại Thìn/Tuất (mọi lá số)
+      # sang NHÃN của Đà La (chỉ hiện khi Đà La rơi đúng Thìn/Tuất) theo
+      # trường phái Thiên Lương. Không cần oracle vendor — tự nhất quán
+      # (Thiên La ⟺ Đà La@Thìn, Địa Võng ⟺ Đà La@Tuất) nên là `check:`,
+      # không phải `oracle:`. Đà La chỉ phụ thuộc (canNam, gioitinh) → vét
+      # cạn 240 ca là phủ hết miền.
+      - name: La-Võng khớp Đà La (Thiên Lương) trên toàn miền
+        run: npm run check:lavong
 
   typecheck:
     runs-on: ubuntu-latest

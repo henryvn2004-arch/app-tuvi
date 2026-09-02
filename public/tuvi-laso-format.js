@@ -197,6 +197,34 @@
       return `${label} (w:${w>0?'+':''}${w})`;
     }
 
+    // Tứ Hóa Phi Tinh (tự hóa, tầng MỆNH BÀN) cho MỘT cung — dùng can của
+    // CHÍNH cung đó (Ngũ Hổ Độn, không phải can năm sinh) để tra 4 sao
+    // Lộc/Quyền/Khoa/Kỵ "bay" ra, rồi tra các sao ấy hiện đang nằm cung nào
+    // ("phi nhập"). CÙNG cơ chế với buildTuHoaPhiTinhHtml() trong
+    // public/luan-giai-core.js (khối hiển thị panel) — ở ĐÓ dựng HTML cho
+    // người xem, ở ĐÂY dựng 1 dòng text cho model đọc; hai nơi PHẢI cho cùng
+    // kết quả trên cùng lá số, đổi công thức một bên nhớ đổi bên kia.
+    // TU_HOA/THIEN_CAN/DIA_CHI là global từ tuvi-ansao-engine.js (file này đã
+    // phụ thuộc load-order của engine sẵn — xem STAR_DATA ở đầu file).
+    function _tuHoaPhiTinh(ls, p) {
+      const canNam = (ls.canChiNam || '').split(' ')[0];
+      const ci = THIEN_CAN.indexOf(canNam), di = DIA_CHI.indexOf(p.diaChi);
+      if (ci < 0 || di < 0) return '';
+      const canCung = THIEN_CAN[((ci % 5) * 2 + di) % 10];
+      const hosts = TU_HOA[canCung];
+      if (!hosts) return '';
+      const parts = ['Lộc', 'Quyền', 'Khoa', 'Kỵ'].map(hoa => {
+        const star = hosts[hoa];
+        if (!star) return null;
+        const target = ls.palaces.find(pp => (pp.stars || []).some(s => s.ten === star));
+        if (!target) return null;
+        const selfTag = target.cungName === p.cungName ? '[TỰ HÓA]' : '';
+        return `${hoa}→${star} tại ${target.cungName}(${target.diaChi})${selfTag}`;
+      }).filter(Boolean);
+      if (!parts.length) return '';
+      return `  [TỨ HÓA PHI TINH] (can cung ${canCung}): ${parts.join(' | ')}`;
+    }
+
     // 12 cung + tam phương tứ chính
     lines.push(MARKERS.cung);
     for (const p of ls.palaces) {
@@ -231,6 +259,8 @@
         lines.push(`  Chính tinh: ${chinh}`);
       }
       if (phu) lines.push(`  Phụ tinh: ${phu}`);
+      const tuHoaPhi = _tuHoaPhiTinh(ls, p);
+      if (tuHoaPhi) lines.push(tuHoaPhi);
       // Tam phương tứ chính — Tuần/Triệt chỉ ảnh hưởng cung đó, không ảnh hưởng sang cung khác
       if (p.tamHopCungs && p.tamHopCungs.length) {
         const hasTuanTriet = c => c.stars?.some(s => s.nhom === 'tuan_triet');

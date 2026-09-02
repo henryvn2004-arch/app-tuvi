@@ -1385,7 +1385,7 @@ a.sao-link:hover{opacity:1;border-bottom-style:solid}
 .v2-can-chi{font-size:9px;color:#777;font-weight:500;width:100%;text-align:left}
 .v2-cung-name{font-size:10px;color:#222;font-weight:700;text-transform:uppercase;text-align:center;width:100%;letter-spacing:.5px;display:flex;align-items:center;justify-content:center;gap:4px;flex-wrap:wrap}
 .v2-badge-than{font-size:8px;background:#555;color:#fff;padding:1px 4px;border-radius:2px}
-.v2-chinh-area{margin-bottom:4px;text-align:center}
+.v2-chinh-area{margin-bottom:4px;text-align:center;min-height:35px}
 .v2-chinh-item{font-family:'Noto Serif',Georgia,serif;font-size:12.5px;font-weight:700;line-height:1.4;text-align:center}
 .v2-phu-area{flex:1;display:grid;grid-template-columns:1fr 1fr;gap:0 4px;align-content:start}
 .v2-phu-col{display:flex;flex-direction:column;gap:1px}

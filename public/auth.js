@@ -785,6 +785,12 @@ async function submitAuth() {
     closeAuthModal();
     if (_currentTab === 'signup') {
       try { window.fbq && window.fbq('track', 'CompleteRegistration'); } catch (e) {}
+      // Google Ads đang dùng 3 conversion action "Sign-up (Page load ...)" tự
+      // sinh — đếm MỌI lượt tải trang /app là signup, không phải tài khoản
+      // thật được tạo. Bắn đúng sự kiện GA4 khuyến nghị ('sign_up') ngay tại
+      // lượt đăng ký THÀNH CÔNG để Henry đổi Ads sang đo cái này thay vì đo
+      // lượt tải trang.
+      try { window.gtag && window.gtag('event', 'sign_up', { method: 'email' }); } catch (e) {}
       // Show free credits welcome banner
       _showFreeCreditsWelcome();
     }
