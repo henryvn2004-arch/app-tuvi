@@ -280,10 +280,14 @@ async function runPost(request: NextRequest) {
     // bật thinking, token nghĩ ăn chung trần này (chú thích dài ở route kia).
     const THINK_BUDGET = 900;
     const maxTok = THINK_BUDGET + (phan === 1 ? 3000 : phan === 2 ? 4500 : phan === 4 ? 2100 : 1800);
+    // EFFORT: cùng lý do và cùng số đo với lasotuvi/route.ts (chú thích dài ở
+    // đó và ở `effort` trong lib/llm/complete.ts). Hai route dùng CHUNG cơ chế
+    // trần token nên phải đi cùng mức, lệch nhau là hai đường tiền khác giá.
+    const EFFORT = 'low' as const;
     // provider:'anthropic' (chốt Henry 2026-08-24): Vận Hạn 12 Tháng Tới thuộc
     // nhóm tool "luận giải" quan trọng → Opus 5 primary thay vì Gemini Flash
     // mặc định toàn site (xem lib/llm/complete.ts CANONICAL_ORDER).
-    let rr = await llmTextFull({ system: systemForLLM, prompt, maxTokens: maxTok, cacheSystem, provider: 'anthropic' });
+    let rr = await llmTextFull({ system: systemForLLM, prompt, maxTokens: maxTok, cacheSystem, provider: 'anthropic', effort: EFFORT });
     // Cùng lớp lỗi với lasotuvi/route.ts (xem chú thích dài ở đó): output chạm
     // trần `max_tokens` là bị API cắt GIỮA CÂU, mà trước 2026-09 không nhánh
     // provider nào đọc `stop_reason` nên bản cụt đi thẳng tới khách đã trả tiền.
@@ -292,7 +296,7 @@ async function runPost(request: NextRequest) {
     if (rr.truncated) {
       console.error(`[van-han-nam] phần ${phan} bị cắt ở trần ${maxTok} — sinh lại với ${maxTok * 2}`);
       try {
-        const retry = await llmTextFull({ system: systemForLLM, prompt, maxTokens: maxTok * 2, cacheSystem, provider: 'anthropic' });
+        const retry = await llmTextFull({ system: systemForLLM, prompt, maxTokens: maxTok * 2, cacheSystem, provider: 'anthropic', effort: EFFORT });
         if (!retry.truncated || retry.text.length > rr.text.length) rr = retry;
       } catch (e) {
         console.error(`[van-han-nam] sinh lại phần ${phan} hỏng, giữ bản đầu:`, (e as Error).message);

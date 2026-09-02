@@ -273,6 +273,13 @@ Mỗi luật dưới đây sinh ra từ một lần cắn thật. Cột cuối l
   mới thì phải cộng `THINK_BUDGET` (xem `app/api/lasotuvi/route.ts`), và **đừng đọc
   `max_tokens` như số chữ tối đa**. Đây là nguyên nhân gốc của 7,9% phần luận bị
   cắt giữa câu trên hàng đã bán. `docs/nhat-ky/2026-09.md` "Token NGHĨ ăn chung trần".
+- **Route văn dài chạy `output_config.effort:'low'` — CHỌN CÓ ĐO, đừng đổi mò.**
+  A/B mù 48 bản: `low` rẻ hơn 39% output token mà chữ ra NHIỀU hơn, 16 cặp chấm mù
+  không phân biệt được chất lượng. `effort` nằm TRONG `output_config`, đặt sai chỗ
+  thì API bỏ qua IM LẶNG. ⚠️ **Đừng đổi sang `thinking:{type:'disabled'}` cho rẻ
+  thêm 2%** — Opus 5 tắt hẳn thinking có thể RÒ THẺ `<thinking>` ra chính văn, mà
+  văn này bán cho khách; `disabled` còn bị 400 ở effort `xhigh`/`max`. Và `THINK_BUDGET`
+  vẫn phải giữ: 7/16 lượt model vẫn nghĩ. `nhat-ky/2026-09.md` "A/B mù 48 bản".
 - **Mỗi prompt đúng MỘT nguồn bố cục.** Ba họ KHÔNG dùng lẫn: `arcCore` (rail
   chat, mang bối cảnh "vừa đọc xong bản luận", ngân sách 120–180 từ) · `arcDoc`
   (bản luận giải dài) · `arcGiong` (bản trả JSON có schema — chỉ chở GIỌNG, đụng

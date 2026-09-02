@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-174 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+175 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 **Bốn file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
 ```bash
@@ -11,7 +11,7 @@ sed -n '120,190p' docs/nhat-ky/2026-08.md    # đọc đúng đoạn, đừng ca
 
 | file | số mục | dung lượng |
 |---|---:|---:|
-| `2026-09.md` | 10 | 59,047 B |
+| `2026-09.md` | 11 | 64,987 B |
 | `2026-08.md` | 147 | 1,018,512 B |
 | `2026-07.md` | 12 | 154,531 B |
 | `track-cu.md` | 5 | 89,354 B |
@@ -25,6 +25,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
+| 1 | 2026-09 | `2026-09.md` | 💸 A/B mù 48 bản: hạ `effort` xuống `low` — rẻ 39%, chữ ra nhiều hơn |
 | 1 | 2026-09 | `2026-09.md` | 🧠 Token NGHĨ ăn chung trần với token CHỮ — nguyên nhân gốc của 7,9% phần cụt |
 | 1 | 2026-09 | `2026-09.md` | ✂️ 72% bản luận ĐÃ BÁN có phần cụt giữa câu — không dòng code nào đọc `stop_reason` |
 | 2 | 2026-09 | `2026-09.md` | 🎣 Ví dụ thật trước form landing `/app/luan-giai` — và một con số tôi đã báo SAI |

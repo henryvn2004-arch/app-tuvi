@@ -314,6 +314,14 @@ async function runPost(request: NextRequest) {
     const THINK_BUDGET = 900;
     const maxTok = THINK_BUDGET + (phan === 1 ? 3000 : phan === 14 ? 4500 : phan === 24 ? 2100
       : (phan >= 2 && phan <= 13) ? 1650 : (phan >= 15 && phan <= 23) ? 1650 : 1500);
+    // 2026-09-02 — hạ độ nghĩ cho ĐÚNG nhóm route văn dài này. A/B mù 48 bản
+    // (2 lá số × 8 phần × 3 nhánh, prompt thật): effort 'low' rẻ hơn 39%
+    // output token mà chữ ra còn nhiều hơn, 16 cặp chấm mù không phân biệt
+    // được chất lượng (8–6–2). Lý do chọn 'low' thay vì tắt hẳn thinking —
+    // và vì sao THINK_BUDGET vẫn phải giữ (7/16 lượt model vẫn nghĩ) — ghi ở
+    // `effort` trong lib/llm/complete.ts. Đừng hạ tiếp xuống mức thấp hơn mà
+    // chưa đo: dưới 'low' không còn nấc nào, muốn rẻ nữa là phải đổi model.
+    const EFFORT = 'low' as const;
 
     // Prompt caching (Code #1, xem CLAUDE.md track tối ưu chi phí Opus):
     // `systemForLLM` = SYSTEM_PROMPT + TOÀN VĂN lá số (buildPromptCached),
@@ -337,7 +345,7 @@ async function runPost(request: NextRequest) {
     // `chat.standalone_provider` — khoá đó vẫn quyết định primary cho mọi
     // route standalone khác. Cũng giữ nguyên hiệu quả `cacheSystem` (breakpoint
     // Anthropic) vì nhánh Anthropic giờ LUÔN được gọi ở lượt đầu.
-    let r = await llmTextFull({ system: systemForLLM, prompt, maxTokens: maxTok, cacheSystem: true, provider: 'anthropic' });
+    let r = await llmTextFull({ system: systemForLLM, prompt, maxTokens: maxTok, cacheSystem: true, provider: 'anthropic', effort: EFFORT });
 
     // ── Bị CẮT giữa câu → sinh lại MỘT lần với trần gấp đôi ────────────────
     // Đo 2026-09 trên 46 bản luận ĐÃ BÁN: 77/974 phần (7,9%) kết thúc giữa câu,
@@ -354,7 +362,7 @@ async function runPost(request: NextRequest) {
     if (r.truncated) {
       console.error(`[lasotuvi] phần ${phan} bị cắt ở trần ${maxTok} — sinh lại với ${maxTok * 2}`);
       try {
-        const retry = await llmTextFull({ system: systemForLLM, prompt, maxTokens: maxTok * 2, cacheSystem: true, provider: 'anthropic' });
+        const retry = await llmTextFull({ system: systemForLLM, prompt, maxTokens: maxTok * 2, cacheSystem: true, provider: 'anthropic', effort: EFFORT });
         // Chỉ nhận bản mới khi nó THẬT SỰ khá hơn: hết cụt, hoặc chí ít dài hơn.
         // Lượt hai vẫn có thể cụt (văn dài hơn trần mới) — lúc đó bản dài hơn
         // vẫn là bản ít thiệt cho người đọc hơn.
