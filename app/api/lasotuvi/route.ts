@@ -298,8 +298,22 @@ async function runPost(request: NextRequest) {
     // Henry chốt 2026-08-20: nâng ĐỀU 50% mọi trần token trong repo — retest
     // sau khi bật Kimi K3 primary bắt được bản luận giải bị CẮT NGANG giữa
     // câu (model sinh vượt trần rồi API cắt sạch, không phải lỗi mạng).
-    const maxTok = phan === 1 ? 3000 : phan === 14 ? 4500 : phan === 24 ? 2100
-      : (phan >= 2 && phan <= 13) ? 1650 : (phan >= 15 && phan <= 23) ? 1650 : 1500;
+    //
+    // 2026-09-02 — mấy con số dưới đây KHÔNG phải trần cho phần CHỮ. Đo bằng
+    // prompt thật + lá số thật trên API Anthropic (xem docs/nhat-ky/2026-09.md
+    // "Token NGHĨ ăn chung trần"): `buildAnthropicBody` KHÔNG truyền `thinking`,
+    // mà Opus 5 mặc định TỰ BẬT nó — mọi lượt trả về đều có block
+    // [thinking, text], và token nghĩ ăn chung `max_tokens` với token chữ.
+    //   phần 4, trần 1650: bật thinking 1160 token cho 920 chữ
+    //                      tắt thinking  570 token cho 993 chữ  ← nhiều chữ hơn, nửa token
+    //   phần 1  1713 vs  777 · phần 2 1431 vs 831 · phần 14 1703 vs 1219
+    // Tức phần nghĩ ăn ~500–900 token, trần hiệu dụng cho văn chỉ còn ~40–55%
+    // con số ghi ở đây. Đó là cơ chế sinh ra 7,9% phần cụt giữa câu trên hàng
+    // đã bán. CỘNG THÊM đúng phần đã đo thay vì đoán một con số tròn — và cộng
+    // TƯỜNG MINH để lượt sau đọc là biết ngay nó dùng vào việc gì.
+    const THINK_BUDGET = 900;
+    const maxTok = THINK_BUDGET + (phan === 1 ? 3000 : phan === 14 ? 4500 : phan === 24 ? 2100
+      : (phan >= 2 && phan <= 13) ? 1650 : (phan >= 15 && phan <= 23) ? 1650 : 1500);
 
     // Prompt caching (Code #1, xem CLAUDE.md track tối ưu chi phí Opus):
     // `systemForLLM` = SYSTEM_PROMPT + TOÀN VĂN lá số (buildPromptCached),

@@ -276,7 +276,10 @@ async function runPost(request: NextRequest) {
     // Trần token mượn đúng mức của phần tương ứng bên Luận Giải; phần tháng
     // (140–180 từ) dùng chung mức của phần cung/đại vận.
     // Nâng 50% cùng đợt với lasotuvi/route.ts (Henry chốt 2026-08-20).
-    const maxTok = phan === 1 ? 3000 : phan === 2 ? 4500 : phan === 4 ? 2100 : 1800;
+    // THINK_BUDGET: cùng lý do và cùng số đo với lasotuvi/route.ts — Opus 5 tự
+    // bật thinking, token nghĩ ăn chung trần này (chú thích dài ở route kia).
+    const THINK_BUDGET = 900;
+    const maxTok = THINK_BUDGET + (phan === 1 ? 3000 : phan === 2 ? 4500 : phan === 4 ? 2100 : 1800);
     // provider:'anthropic' (chốt Henry 2026-08-24): Vận Hạn 12 Tháng Tới thuộc
     // nhóm tool "luận giải" quan trọng → Opus 5 primary thay vì Gemini Flash
     // mặc định toàn site (xem lib/llm/complete.ts CANONICAL_ORDER).
