@@ -420,7 +420,13 @@ Mỗi luật dưới đây sinh ra từ một lần cắn thật. Cột cuối l
   tác dụng chờ) ⇒ dùng web-first assertion (`toBeVisible`, `expect.poll`). Đây là
   nguyên nhân 42% lượt smoke prod đỏ oan suốt 6 ngày.
 - **Playwright đặt `navigator.webdriver=true`** ⇒ `track.js` tự no-op; muốn đo
-  đường của người thật phải `defineProperty` cho nó về `false`.
+  đường của người thật phải `defineProperty` cho nó về `false`. **Tour onboarding
+  trong `app-home.html` dùng CÙNG cơ chế** (`if(navigator.webdriver) return;`) —
+  quên giả cờ này là bài kiểm xanh oan vì chẳng đo gì cả.
+- **`devices['iPhone 13']` mặc định `browserType:'webkit'`** mà máy chỉ có
+  chromium ⇒ báo "Executable doesn't exist at .../webkit-2336", không nói gì về
+  device. Khai tay `viewport/isMobile/hasTouch/userAgent`. Chromium chạy dưới
+  root cần `--no-sandbox`.
 - **`innerText` trả chữ HOA** khi phần tử có `text-transform:uppercase`.
 - **Stub thiếu trường ⇒ đo nhầm ĐƯỜNG LÙI** mà vẫn xanh — lấy shape THẲNG từ code,
   đừng bịa. `.single()` của supabase-js chờ MỘT object, trả mảng là phía gọi vỡ.
@@ -445,6 +451,18 @@ Mỗi luật dưới đây sinh ra từ một lần cắn thật. Cột cuối l
 - Job tên `build` trong danh sách check là `build-android.yml`, KHÔNG phải `next build`.
 - Artifact có đường dẫn bắt đầu bằng dấu chấm (`.lighthouseci/`) cần
   `include-hidden-files: true`, nếu không mất im lặng.
+
+### Overlay / popup bám phần tử
+- **Đặt popup theo một phần tử thì phải KẸP CỨNG vào vùng nhìn thấy SAU khi đã
+  chọn trên/dưới.** Chọn xong gán thẳng là đủ để nhốt người dùng: điểm neo nằm
+  ngoài màn thì popup văng theo, nút đóng ra ngoài mép, không còn đường thoát.
+  Đo được: neo ở 1072px trên màn 844 → nút nằm dưới đáy 204px.
+- **`window.innerHeight` KHÔNG phải vùng nhìn thấy trên iOS Safari** — nó tính cả
+  dải nằm SAU thanh công cụ dưới cùng. Dùng `visualViewport.height/offsetTop`.
+- **Điểm neo phải được kéo vào tầm nhìn trước khi vẽ** — `offsetParent!==null`
+  chỉ nói phần tử có trong layout, không nói nó đang được nhìn thấy.
+- **Mọi overlay chặn đường phải có đường thoát không phụ thuộc vị trí** (Esc).
+  `nhat-ky/2026-09.md` "Tour onboarding nhốt người dùng".
 
 ### Tiếng Việt
 - **Dò chuỗi thô trên văn tiếng Việt là sai lớp.** Đã trả giá: `\bcon\b` khớp "con
