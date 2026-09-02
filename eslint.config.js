@@ -12,6 +12,11 @@ const projectGlobals = {
   anSaoTuBinh: 'writable',
   CACH_CUC_ALL: 'writable',
   STAR_DATA: 'writable',
+  // public/tuvi-ansao-engine.js — dùng bởi public/tuvi-laso-format.js (khối
+  // Tứ Hóa Phi Tinh), cùng cách STAR_DATA đã dùng ở trên.
+  THIEN_CAN: 'writable',
+  DIA_CHI: 'writable',
+  TU_HOA: 'writable',
   menhTamPhuong: 'writable',
   domainScores: 'writable',
   tubinhCachCucSpecial: 'writable',
