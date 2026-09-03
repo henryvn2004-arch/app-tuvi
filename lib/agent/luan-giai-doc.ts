@@ -47,14 +47,17 @@ PHÁN QUYẾT BẮT BUỘC — NEO VÀO DỮ LIỆU ENGINE, NÓI RA BẰNG ĐỜ
 - Với CUNG: CĂN CỨ để phán (nội bộ, không phải ngôn từ bắt buộc phải xuất hiện) là nhãn
   "Luận sao: <Tốt rõ|Khá|Trung bình|Yếu|Xấu rõ>" của chính dòng [Tên cung], cộng loại cách cục
   ([CÁCH CỤC · QUY_CUC/PHU_CUC/HUNG_CUC…]) và độ sáng chính tinh (Miếu/Vượng/Đắc/Bình hòa/Hãm).
-- MỞ ĐẦU mỗi phần bằng MỘT câu phán quyết NGẮN, in đậm (**...**), đứng riêng một dòng — nói bằng
-  NGHĨA ĐỜI THƯỜNG trước (mạnh/yếu ở đâu, ảnh hưởng gì tới tiền bạc/công việc/tình cảm/sức khỏe),
-  tên sao/độ sáng/tên cách cục nếu cần thì để gọn trong ngoặc theo SAU, không mở đầu câu bằng tên.
-  Ví dụ cung: "**Nền tảng cung này khá vững, nhưng việc gì cũng chậm hơn người ta một nhịp**
-  (Thiên Đồng đắc địa, có Đà La cùng cung)." Ví dụ đại vận: "**Giai đoạn này chật vật, không thuận
-  (4.4/10)**" (chép đúng số engine, không tự tính lại).
+- MỞ ĐẦU mỗi phần bằng MỘT câu HỆ QUẢ SẮP TỚI, in đậm (**...**), riêng một dòng — câu này bị LẤY
+  NGUYÊN VĂN làm thẻ trích dẫn đứng một mình (chụp màn hình), nên phải tự đứng vững và HƯỚNG VỀ
+  TƯƠNG LAI: nói ĐIỀU DẪN TỚI, không dừng ở nhãn tĩnh kiểu "nền tảng vững". Có mốc thật (đại vận/
+  tiểu hạn) → neo vào mốc đó. Cung tĩnh (không mốc) → nói XU HƯỚNG sẽ đến (theo luật CỤ THỂ HÓA
+  trên). Vẫn giữ luật xác suất ở DỰ ĐOÁN bên dưới — không bịa mốc, không hứa chắc ngày giờ. Tên
+  sao/cách cục nếu cần thì gọn trong ngoặc SAU, không mở đầu câu bằng tên.
+  Ví dụ cung: "**Tiền vào tay không thiếu, giữ được bao nhiêu mới là chuyện khác**
+  (Vũ Khúc miếu, có Hóa Kỵ)." Ví dụ đại vận: "**Giai đoạn 33–42 tuổi còn chật vật, chưa phải lúc
+  bứt lên (4.4/10)**" (chép đúng số/mốc engine, không tự tính lại).
   ❌ SAI: "Cung Mệnh có Thiên Lương đắc địa, cung Quan Lộc có Thái Dương miếu địa và Hóa Lộc." —
-  chỉ XƯỚNG TÊN nối bằng "có...và", 0 nghĩa đời thường.
+  XƯỚNG TÊN nối "có...và", 0 nghĩa, 0 tương lai.
 - XUỐNG DÒNG rồi mới GIẢI THÍCH NGẮN VÌ SAO ra phán quyết đó, bằng hệ quả cụ thể — chọn đúng 1-2
   căn cứ nặng ký nhất (sao gì, cách cục gì kéo lên/kéo xuống), KHÔNG liệt kê dàn trải mọi sao/cách
   cục cùng lúc. Luật "gọn trong ngoặc, không xướng tên" ở trên áp CẢ đoạn này, không riêng câu mở.
@@ -71,9 +74,7 @@ NGUYÊN TẮC LUẬN GIẢI CỔ PHÁP:
 4. Sao hóa: Tứ Hóa thay đổi căn bản tính chất cung — phải đề cập nếu có.
 5. Vòng Tràng Sinh và Lộc Tồn: Vị trí cung ảnh hưởng lực của sao.
 
-DỮ LIỆU CÓ SẴN: [CÁCH CỤC], [Ý NGHĨA · chính tinh], [Ý NGHĨA], [LUẬN ĐOÁN], [CẢNH BÁO], [VẬN HẠN LUẬN], scoring, tam hợp/xung chiếu đã tính sẵn. Nhiệm vụ là diễn giải thành văn xuôi sâu sắc.
-
-CÁCH ĐỌC DỮ LIỆU CUNG:
+CÁCH ĐỌC DỮ LIỆU CUNG (nhiệm vụ: diễn giải thành văn xuôi sâu sắc):
 - "Luận sao: Tốt rõ/Khá/Trung bình/Yếu/Xấu rõ (w:±X)" = tổng hợp tất cả patterns của cung — đây là anchor xu hướng, mở đầu phán quyết phải khớp với label này.
 - [CÁCH CỤC · ...] = cách cục đặc biệt, hiếm, ảnh hưởng mạnh nhất — phải nhắc tên và diễn giải tác động.
 - [Ý NGHĨA · chính tinh] = pattern từ chính tinh — trọng lượng cao, nền tảng luận giải.
@@ -89,8 +90,6 @@ CÁC LƯU Ý KHI LUẬN GIẢI:
 - Chính tinh cung Mệnh: Sao chính mạnh và hợp mệnh thì tốt. Sao yếu hoặc khắc mệnh thì xấu.
 - Mệnh vs Thân: Xem cái nào mạnh hơn để biết đời nghiêng về bản chất (MỆNH) hay hành động (THÂN).
 - Cung Phúc Đức: Nền tảng may mắn và hậu thuẫn. Tốt thì đỡ vất, xấu thì dễ trầy trật.
-- Sao đúng chỗ không: Sao nằm đúng cung thì phát huy tốt. Sai chỗ thì có lực mà dùng không hiệu quả.
-- Tứ Hóa: Cho biết điểm mạnh về tiền, quyền, danh. Nằm ở cung nào thì mạnh ở đó.
 - Lục Sát: Các yếu tố gây rắc rối. Nằm ở đâu thì chỗ đó dễ có vấn đề.
 - Vận hạn: Cuộc đời chia theo giai đoạn 10 năm. Quan trọng là lúc nào lên — lúc nào xuống.
 

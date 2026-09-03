@@ -141,6 +141,9 @@
 .claude-content .md-table{width:100%;border-collapse:collapse;font-size:12.5px}
 .claude-content .md-table th{background:var(--navy);color:#fff;padding:8px 10px;text-align:left;font-size:10px;text-transform:uppercase;letter-spacing:.05em}
 .claude-content .md-table td{padding:7px 10px;border-bottom:1px solid var(--line)}
+.lg-card{background:var(--paper);border-left:3px solid var(--gold-soft);border-radius:6px;padding:12px 15px;margin-bottom:14px}
+.lg-card-eyebrow{font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--gold-soft);margin-bottom:5px}
+.lg-card-line{font-family:var(--serif);font-size:16px;line-height:1.5;color:var(--heading);font-weight:600}
 .laso-error{font-size:12.5px;color:var(--tx-red);padding:8px 0}
 .lg-unlock{background:var(--white);border:1px solid var(--gold-soft);border-radius:11px;padding:18px 20px;margin-bottom:22px;text-align:center}
 .lg-unlock p{font-size:12.5px;color:var(--text-lt);margin-top:8px}
@@ -725,10 +728,9 @@ function renderSample(s,auto){
 
   // Đổ lời AI (nếu file mẫu đã có) vào đúng ô mà bản trả tiền dùng.
   var lg=s.luan_giai||{};
+  var _lbSample=LuanGiaiCore.phanLabels(ls)||{};
   for(var p=1;p<=TONG_PHAN;p++){
-    var host=document.getElementById('claude-content-'+p);
-    var txt=lg[String(p)];
-    if(host&&txt){ host.innerHTML=renderMarkdown(txt); host.style.display='block'; }
+    fillClaudeContent(document.getElementById('claude-content-'+p),lg[String(p)],_lbSample[p]);
   }
 
   // Thanh DÍNH — xem chú thích .samp-bar trong <style>. Đặt vào đầu #lgPanel
@@ -963,6 +965,35 @@ function renderMarkdown(text){
   return out;
 }
 
+// ── Thẻ trích dẫn (lg-card) — TÁI DÙNG câu mở đã có, KHÔNG gọi LLM thêm ──
+// Henry: card lấy từ câu phán quyết mở đầu mỗi phần (đã được viết theo hướng
+// dự báo/hệ quả sắp tới — xem SYSTEM_PROMPT `lib/agent/luan-giai-doc.ts`),
+// hook để chụp màn hình/chia sẻ. KHÔNG sinh riêng lượt gọi model: bóc thẳng
+// dòng `**...**` ĐẦU TIÊN của chính văn bản phần đó. Free hết, đứng cùng nội
+// dung đã trả tiền — không thêm khoá nào nữa.
+// Best-effort: không khớp được regex (model lệch định dạng lượt nào đó) thì
+// im lặng không dựng, KHÔNG chặn phần luận thật hiện ra.
+function _extractLeadLine(text){
+  // Bold ĐẦU DÒNG — không đòi hết dòng chỉ có mỗi phần bold: mẫu phổ biến
+  // nhất là "**câu phán quyết** (tên sao gọn trong ngoặc)." nối liền cùng
+  // dòng (đúng ví dụ trong SYSTEM_PROMPT) — đòi `$` ngay sau `**` bỏ sót
+  // đúng những dòng phổ biến nhất, đã bắt được khi thử với dữ liệu thật.
+  var m=/^\*\*(.+?)\*\*/m.exec(String(text||''));
+  return m?m[1].trim():null;
+}
+function _cardHtml(line,label){
+  if(!line)return '';
+  return '<div class="lg-card"><div class="lg-card-eyebrow">'+esc(label||'')+'</div>'+
+    '<div class="lg-card-line">“'+esc(line)+'”</div></div>';
+}
+// Cửa DUY NHẤT đổ lời AI vào `claude-content` — 3 nơi gọi (bản mẫu, cache đã
+// mua, vừa luận xong) đều qua đây để card không rơi rớt ở một trong ba đường.
+function fillClaudeContent(box,text,label){
+  if(!box||!text)return;
+  box.style.display='block';
+  box.innerHTML=_cardHtml(_extractLeadLine(text),label)+renderMarkdown(text);
+}
+
 // Đọc thẳng laso_public (anon REST key, đọc CÔNG KHAI được — bảng phục vụ link
 // chia sẻ) — CHỈ được gọi SAU khi đã xác nhận đúng người đang xem là người đã
 // TRẢ TIỀN cho ĐÚNG slug này (`/api/payment?action=check`, user-scoped qua
@@ -983,10 +1014,9 @@ function _renderCachedLuanGiai(store){
   // (Pha 3: renderLuan lúc doLuan() KHÔNG còn mặc định mở cho người đăng nhập
   // nữa, nên nhánh "đã trả tiền" phải tự mở lại, không ăn theo mặc định cũ).
   _luanGiaiStore=store;
+  var _lbCached=LuanGiaiCore.phanLabels(_astrolabe)||{};
   for(var p=1;p<=TONG_PHAN;p++){
-    var box=document.getElementById('claude-content-'+p);
-    var text=store[p]||store[String(p)];
-    if(box&&text){ box.style.display='block'; box.innerHTML=renderMarkdown(text); }
+    fillClaudeContent(document.getElementById('claude-content-'+p),store[p]||store[String(p)],_lbCached[p]);
   }
   document.getElementById('lgUnlock').style.display='none';
   document.getElementById('lgProgress').style.display='none';
@@ -1237,7 +1267,7 @@ async function _runPhanLuanGiai(p){
     }
     _luanGiaiStore[p]=data.luanGiai;
     doneWait();
-    if(box)box.innerHTML=renderMarkdown(data.luanGiai);
+    fillClaudeContent(box,data.luanGiai,(LuanGiaiCore.phanLabels(_astrolabe)||{})[p]);
     return true;
   }catch(e){
     doneWait();
