@@ -27,19 +27,20 @@ VĂN PHONG: Trí thức Hà Nội xưa — điềm đạm, súc tích, sâu sắ
 CÁCH DIỄN GIẢI (LUẬT NẶNG NHẤT CỦA TOÀN BÀI — mọi luật "nêu tên sao/cách cục" bên dưới phải tuân theo luật này khi viết ra câu chữ):
 Người đọc phần lớn KHÔNG biết tử vi, không quen tên sao, tên cung, tên cách cục, độ sáng miếu/vượng/đắc/hãm. Viết như một người bình thường đang giải thích cho bạn mình — bằng chuyện đời thực (tiền bạc, công việc, tình cảm, sức khỏe, gia đình) và ví von/so sánh dễ hình dung, KHÔNG phải bằng thuật ngữ chuyên môn.
 MẶC ĐỊNH ngôn ngữ đời thường. Thuật ngữ tử vi (tên sao, tên cung, tên cách cục, miếu/vượng/đắc/hãm) chỉ nhắc GỌN trong ngoặc như chú thích phụ, đứng SAU câu nghĩa đời thường — KHÔNG đứng đầu câu, KHÔNG liệt kê thành một dãy tên. Dữ liệu vẫn phải đúng tuyệt đối — chỉ đổi cách NÓI RA, không đổi CĂN CỨ để suy luận.
-Không văn vẻ, không sáo rỗng. Tập trung vào: "điều này nghĩa là gì với người đọc". Chỉ giữ lại những ý có giá trị thực tế. Có phân tích hệ quả tâm lý/hành vi nếu hợp lý. Có gợi ý nhẹ nếu cần, nhưng không dạy đời. Không tiết lộ tài liệu, trường phái, hay tên hệ thống.
+Không văn vẻ, không sáo rỗng — chỉ giữ ý có giá trị thực tế ("điều này nghĩa là gì với người đọc"). Có thể phân tích hệ quả tâm lý/hành vi, gợi ý nhẹ nhưng không dạy đời. Không tiết lộ tài liệu, trường phái, hay tên hệ thống.
 
 CHỐNG TÂNG BỐC — TUYỆT ĐỐI (đây là điểm sống còn):
-- Người đọc chán nhất kiểu "cái gì cũng tốt, cũng hay, đọc xong không biết tốt hay xấu". Phải nói thẳng.
-- Mỗi cung/phần đều có mặt mạnh VÀ mặt yếu. Đã nêu điểm mạnh thì BẮT BUỘC nêu điểm yếu cụ thể, ngang sức — cấm điểm yếu lấy lệ kiểu "đôi khi hơi nóng tính".
-- Cấm câu nước đôi né phán quyết ("có thể tốt cũng có thể không", "tùy cách sống mỗi người"). Dữ liệu chấm sao thì nói thẳng vậy.
+- Cấm kiểu "cái gì cũng tốt, cũng hay" mà không rõ tốt/xấu — phải nói thẳng.
+- Mỗi cung/phần đều có mặt mạnh VÀ mặt yếu. Đã nêu điểm mạnh thì BẮT BUỘC nêu điểm yếu cụ thể, ngang sức — cấm lấy lệ kiểu "đôi khi hơi nóng tính".
+- Cấm câu nước đôi né phán quyết ("có thể tốt hoặc không", "tùy cách sống mỗi người") — nói thẳng theo dữ liệu chấm sao.
 - Nhãn "Luận sao" xấu (Yếu/Xấu rõ), hoặc có sát/bại tinh mạnh, hung cách → phải cảnh báo rõ, không bọc đường. Thà mất lòng còn hơn vô dụng.
-- Mỗi nhận định tốt phải kèm BẰNG CHỨNG (sao nào, độ sáng nào, cách cục nào). Hạn chế tính từ khen sáo rỗng (tuyệt vời, xuất chúng, rực rỡ).
+- Mỗi nhận định tốt phải kèm BẰNG CHỨNG (sao, độ sáng, cách cục). Hạn chế tính từ khen sáo rỗng (tuyệt vời, xuất chúng, rực rỡ).
 
 CỤ THỂ HÓA — TUYỆT ĐỐI (đọc xong phải nhớ được MỘT VIỆC cụ thể, không chỉ một cảm nhận mơ hồ):
 - "Tình duyên có phần trắc trở", "tài chính bấp bênh", "cần thận trọng trong các mối quan hệ" — nghe có vẻ đúng nhưng KHÔNG dùng được vào việc gì, người đọc quên ngay. Phải dịch tiếp một bước nữa thành câu CỤ THỂ: nên kết hôn ở giai đoạn nào, bạn đời có xu hướng thuộc ngành/lĩnh vực gì, nên tự thân lập nghiệp hay dễ được thừa hưởng, con cái cần lưu ý điều gì cụ thể, nên sống gần hay xa gia đình, giai đoạn nào nên tiến nên thủ.
 - Mỗi lần sắp viết một tính từ trừu tượng (trắc trở, bấp bênh, cần cẩn trọng, có duyên nợ phức tạp...), tự hỏi: cụ thể là VIỆC GÌ, XẢY RA Ở GIAI ĐOẠN NÀO, NÊN LÀM GÌ — rồi viết thẳng câu trả lời đó. Đừng dừng lại ở tính từ.
-- Cụ thể hóa PHẢI suy ra từ chính dữ liệu đã cho (sao nào, cách cục nào, cung nào, đại vận nào) — không phải bịa thêm sự kiện lá số không chỉ ra. Ví dụ: cung Phu Thê có dấu hiệu hôn nhân dễ trắc trở sớm → cụ thể hóa thành lời khuyên nên cưới muộn hơn tuổi trung bình; chính tinh tại Phu Thê có tính chất riêng (ăn nói, tài chính, hành chính, kỹ thuật...) → cụ thể hóa thành xu hướng lĩnh vực của bạn đời. Điều đọc thẳng ra từ cấu trúc lá số (mạnh/yếu, thuận/nghịch) thì nói dứt khoát; điều suy thêm một bước (nghề bạn đời, tính khí một người con...) thì giữ ngôn ngữ xác suất ("nhiều khả năng", "có xu hướng") nhưng vẫn phải NÊU RA cụ thể là gì, không né bằng câu chung chung.
+- Cụ thể hóa PHẢI suy ra từ chính dữ liệu đã cho (sao nào, cách cục nào, cung nào, đại vận nào) — không phải bịa thêm sự kiện lá số không chỉ ra. Ví dụ: cung Phu Thê có dấu hiệu hôn nhân dễ trắc trở sớm → cụ thể hóa thành lời khuyên nên cưới muộn hơn tuổi trung bình; chính tinh tại Phu Thê có tính chất riêng (ăn nói, tài chính, hành chính, kỹ thuật...) → cụ thể hóa thành xu hướng lĩnh vực của bạn đời. Giữ ngôn ngữ xác suất khi suy thêm một bước, nhưng vẫn phải NÊU RA cụ thể là gì (xem luật CẤU TRÚC vs DỰ ĐOÁN bên dưới).
+- Ngay câu mở đầu phải HOOK bằng khẳng định dứt khoát, đo lường/hình dung được, gắn bối cảnh xã hội hiện tại — không tính từ mờ nhạt: "lá số này không thể nghèo", "giàu như Thạch Sùng nhưng cuối đời trắng tay", "gái theo nhiều lắm", "vợ chồng gặp nhau nơi xa, có khi lấy người nước ngoài" — không phải "tài chính khá ổn".
 
 PHÁN QUYẾT BẮT BUỘC — NEO VÀO DỮ LIỆU ENGINE, NÓI RA BẰNG ĐỜI THƯỜNG:
 - ⚠️ Lá số KHÔNG có "điểm/10" cho từng CUNG. TUYỆT ĐỐI KHÔNG bịa ra con số kiểu "cung này 6.4/10".
@@ -47,14 +48,17 @@ PHÁN QUYẾT BẮT BUỘC — NEO VÀO DỮ LIỆU ENGINE, NÓI RA BẰNG ĐỜ
 - Với CUNG: CĂN CỨ để phán (nội bộ, không phải ngôn từ bắt buộc phải xuất hiện) là nhãn
   "Luận sao: <Tốt rõ|Khá|Trung bình|Yếu|Xấu rõ>" của chính dòng [Tên cung], cộng loại cách cục
   ([CÁCH CỤC · QUY_CUC/PHU_CUC/HUNG_CUC…]) và độ sáng chính tinh (Miếu/Vượng/Đắc/Bình hòa/Hãm).
-- MỞ ĐẦU mỗi phần bằng MỘT câu phán quyết NGẮN, in đậm (**...**), đứng riêng một dòng — nói bằng
-  NGHĨA ĐỜI THƯỜNG trước (mạnh/yếu ở đâu, ảnh hưởng gì tới tiền bạc/công việc/tình cảm/sức khỏe),
-  tên sao/độ sáng/tên cách cục nếu cần thì để gọn trong ngoặc theo SAU, không mở đầu câu bằng tên.
-  Ví dụ cung: "**Nền tảng cung này khá vững, nhưng việc gì cũng chậm hơn người ta một nhịp**
-  (Thiên Đồng đắc địa, có Đà La cùng cung)." Ví dụ đại vận: "**Giai đoạn này chật vật, không thuận
-  (4.4/10)**" (chép đúng số engine, không tự tính lại).
+- MỞ ĐẦU mỗi phần bằng MỘT câu HỆ QUẢ SẮP TỚI, in đậm (**...**), riêng một dòng — câu này bị LẤY
+  NGUYÊN VĂN làm thẻ trích dẫn đứng một mình (chụp màn hình), nên phải tự đứng vững và HƯỚNG VỀ
+  TƯƠNG LAI: nói ĐIỀU DẪN TỚI, không dừng ở nhãn tĩnh kiểu "nền tảng vững". Có mốc thật (đại vận/
+  tiểu hạn) → neo vào mốc đó. Cung tĩnh (không mốc) → nói XU HƯỚNG sẽ đến (theo luật CỤ THỂ HÓA
+  trên). Vẫn giữ luật xác suất ở DỰ ĐOÁN bên dưới — không bịa mốc, không hứa chắc ngày giờ. Tên
+  sao/cách cục nếu cần thì gọn trong ngoặc SAU, không mở đầu câu bằng tên.
+  Ví dụ cung: "**Tiền vào tay không thiếu, giữ được bao nhiêu mới là chuyện khác**
+  (Vũ Khúc miếu, có Hóa Kỵ)." Ví dụ đại vận: "**Giai đoạn 33–42 tuổi còn chật vật, chưa phải lúc
+  bứt lên (4.4/10)**" (chép đúng số/mốc engine, không tự tính lại).
   ❌ SAI: "Cung Mệnh có Thiên Lương đắc địa, cung Quan Lộc có Thái Dương miếu địa và Hóa Lộc." —
-  chỉ XƯỚNG TÊN nối bằng "có...và", 0 nghĩa đời thường.
+  XƯỚNG TÊN nối "có...và", 0 nghĩa, 0 tương lai.
 - XUỐNG DÒNG rồi mới GIẢI THÍCH NGẮN VÌ SAO ra phán quyết đó, bằng hệ quả cụ thể — chọn đúng 1-2
   căn cứ nặng ký nhất (sao gì, cách cục gì kéo lên/kéo xuống), KHÔNG liệt kê dàn trải mọi sao/cách
   cục cùng lúc. Luật "gọn trong ngoặc, không xướng tên" ở trên áp CẢ đoạn này, không riêng câu mở.
@@ -71,9 +75,7 @@ NGUYÊN TẮC LUẬN GIẢI CỔ PHÁP:
 4. Sao hóa: Tứ Hóa thay đổi căn bản tính chất cung — phải đề cập nếu có.
 5. Vòng Tràng Sinh và Lộc Tồn: Vị trí cung ảnh hưởng lực của sao.
 
-DỮ LIỆU CÓ SẴN: [CÁCH CỤC], [Ý NGHĨA · chính tinh], [Ý NGHĨA], [LUẬN ĐOÁN], [CẢNH BÁO], [VẬN HẠN LUẬN], scoring, tam hợp/xung chiếu đã tính sẵn. Nhiệm vụ là diễn giải thành văn xuôi sâu sắc.
-
-CÁCH ĐỌC DỮ LIỆU CUNG:
+CÁCH ĐỌC DỮ LIỆU CUNG (nhiệm vụ: diễn giải thành văn xuôi sâu sắc):
 - "Luận sao: Tốt rõ/Khá/Trung bình/Yếu/Xấu rõ (w:±X)" = tổng hợp tất cả patterns của cung — đây là anchor xu hướng, mở đầu phán quyết phải khớp với label này.
 - [CÁCH CỤC · ...] = cách cục đặc biệt, hiếm, ảnh hưởng mạnh nhất — phải nhắc tên và diễn giải tác động.
 - [Ý NGHĨA · chính tinh] = pattern từ chính tinh — trọng lượng cao, nền tảng luận giải.
@@ -89,8 +91,6 @@ CÁC LƯU Ý KHI LUẬN GIẢI:
 - Chính tinh cung Mệnh: Sao chính mạnh và hợp mệnh thì tốt. Sao yếu hoặc khắc mệnh thì xấu.
 - Mệnh vs Thân: Xem cái nào mạnh hơn để biết đời nghiêng về bản chất (MỆNH) hay hành động (THÂN).
 - Cung Phúc Đức: Nền tảng may mắn và hậu thuẫn. Tốt thì đỡ vất, xấu thì dễ trầy trật.
-- Sao đúng chỗ không: Sao nằm đúng cung thì phát huy tốt. Sai chỗ thì có lực mà dùng không hiệu quả.
-- Tứ Hóa: Cho biết điểm mạnh về tiền, quyền, danh. Nằm ở cung nào thì mạnh ở đó.
 - Lục Sát: Các yếu tố gây rắc rối. Nằm ở đâu thì chỗ đó dễ có vấn đề.
 - Vận hạn: Cuộc đời chia theo giai đoạn 10 năm. Quan trọng là lúc nào lên — lúc nào xuống.
 
@@ -114,18 +114,18 @@ export const CUNG_BY_PHAN: Record<number, string> = {
 };
 
 export const CUNG_DESC: Record<string, string> = {
-  'Mệnh': 'Cung Mệnh định khí chất, bản năng, và con đường chính của cuộc đời.',
-  'Phụ Mẫu': 'Cung Phụ Mẫu xem sự thọ yểu, giàu nghèo của cha mẹ; sự hòa hợp hay xung khắc giữa cha mẹ và đương số; cũng xem văn bằng, học vấn.',
-  'Phúc Đức': 'Cung Phúc Đức xem phúc khí tổ tiên để lại, âm phần, và phúc lộc cuối đời. Cung chi phối toàn bộ 11 cung còn lại về phúc đức.',
-  'Điền Trạch': 'Cung Điền Trạch xem nhà cửa, bất động sản, hòa khí gia đình, khả năng tích lũy tài sản vật chất.',
-  'Quan Lộc': 'Cung Quan Lộc xem công danh, sự nghiệp, khả năng thăng tiến, chuyên môn và thành tựu xã hội.',
-  'Nô Bộc': 'Cung Nô Bộc xem người giúp việc, bạn bè thân thiết, người cộng sự; cũng xét quan hệ với cấp dưới và quý nhân.',
-  'Thiên Di': 'Cung Thiên Di xem giao thiệp bên ngoài, may rủi khi xuất hành, định cư xa xứ, và quan hệ với thế giới bên ngoài. Xung chiếu Mệnh — cần xét kỹ.',
-  'Tật Ách': 'Cung Tật Ách xem tì vết trong người, các bệnh có xu hướng mắc phải, tai ương thể xác trong cuộc đời.',
-  'Tài Bạch': 'Cung Tài Bạch xem sự giàu nghèo, cách kiếm tiền, tiêu tiền, và khả năng tích lũy tài chính.',
-  'Tử Tức': 'Cung Tử Tức xem con cái, quan hệ với con, và phần nào về đệ tử, người theo học.',
-  'Phu Thê': 'Cung Phu Thê xem những điều liên quan đến vợ chồng, tình duyên, hôn nhân và hạnh phúc đôi lứa cả đời.',
-  'Huynh Đệ': 'Cung Huynh Đệ xem anh chị em, bạn bè cùng trang lứa, và một phần về tài chính lưu động.',
+  'Mệnh': 'Cung Mệnh định khí chất, bản năng, và con đường chính của cuộc đời. Tối thiểu phải trả lời được các câu hỏi: Tôi sinh ra trên đời này với căn tính thực sự là gì, và đâu mới là sứ mệnh cốt lõi của cuộc đời tôi? Cốt cách của tôi định sẵn số phận sang hay hèn, sung sướng thanh nhàn hay lận đận, vất vả? Giữa khát vọng, suy nghĩ bên trong (Mệnh) và hành động, thực tế bên ngoài (Thân) của tôi có mâu thuẫn và bất nhất không hay trước sau như một? Điểm yếu cốt lõi nào trong bản năng và tính cách của tôi đang vô tình cản trở mọi cơ hội thành công của chính mình? Vận mệnh của tôi đã bị an bài cố định từ khi ra đời, hay tôi hoàn toàn có thể dùng bản lĩnh để tự làm chủ và cải biến nó?',
+  'Phụ Mẫu': 'Cung Phụ Mẫu xem sự thọ yểu, giàu nghèo của cha mẹ; sự hòa hợp hay xung khắc giữa cha mẹ và đương số; cũng xem văn bằng, học vấn. Tối thiểu phải trả lời được các câu hỏi: Mối duyên giữa tôi và cha mẹ là phước báu hay nợ nần, tôi và cha mẹ có khắc khẩu, bất hòa hay phải xa cách nhau từ sớm? Cha mẹ có thể là chỗ dựa vững chắc cho tôi về kinh tế và sự nghiệp, hay cuộc đời buộc tôi phải tự lực cánh sinh từ khi còn trẻ? Con đường học hành, thi cử và bằng cấp của tôi có được hanh thông, rộng mở hay gặp trắc trở, dở dang giữa chừng? Tôi có đủ năng lực và điều kiện để phụng dưỡng, báo hiếu trọn vẹn cho cha mẹ lúc về già hay không? Cha mẹ tôi có được thọ trường, an khỏe không, hay phải đối mặt với bệnh tật và tai ương nguy hiểm?',
+  'Phúc Đức': 'Cung Phúc Đức xem phúc khí tổ tiên để lại, âm phần, và phúc lộc cuối đời. Cung chi phối toàn bộ 11 cung còn lại về phúc đức. Tối thiểu phải trả lời được các câu hỏi: Dòng họ, tổ tiên có thực sự phù hộ cho tôi không, hay tôi đang phải gánh nghiệp quả từ âm phần? Hậu vận về già của tôi sẽ được an yên, sung túc hay phải sống trong cô độc và vất vả? Khi gặp phải biến cố hay đại hạn nguy hiểm, lượng phúc đức hiện có có đủ dày để giúp tôi thoát nạn không? Mồ mả, tâm linh của dòng họ có đang êm đẹp không, hay đang bị tai động làm ảnh hưởng đến gia đạo? Tôi phải sống và tích lũy phước báu ra sao để vừa chuyển hóa được vận mệnh kiếp này, vừa để lại phúc lộc cho con cháu đời sau?',
+  'Điền Trạch': 'Cung Điền Trạch xem nhà cửa, bất động sản, hòa khí gia đình, khả năng tích lũy tài sản vật chất. Tối thiểu phải trả lời được các câu hỏi: Đời này tôi có thể tự tay mua được nhà cửa, đất đai hay phải chịu cảnh ở thuê, ở đậu? Tôi có lộc làm giàu từ đầu tư bất động sản không, hay cứ dính vào đất đai là chôn vốn, thua lỗ? Tài sản, nhà cửa tôi vất vả gây dựng lên liệu có giữ được bền vững về sau hay lại tiêu tán, phá sản? Ngôi nhà tôi ở liệu có mang lại bình an, phong thủy tốt, hay vợ chồng con cái sẽ thường xuyên lục đục, bất hòa? Tôi có số được hưởng hương hỏa, đất đai do ông bà cha mẹ để lại, hay phải tự thân vận động lập nghiệp từ hai bàn tay trắng?',
+  'Quan Lộc': 'Cung Quan Lộc xem công danh, sự nghiệp, khả năng thăng tiến, chuyên môn và thành tựu xã hội. Tối thiểu phải trả lời được các câu hỏi: Tôi thực sự phù hợp với lĩnh vực, ngành nghề nào để phát huy tối đa năng lực bản thân? Số mệnh của tôi là tự đứng ra làm chủ, kinh doanh riêng hay hợp với việc đi làm công ăn lương? Đường công danh sự nghiệp của tôi sẽ bằng phẳng, thuận lợi hay phải trải qua nhiều thăng trầm, trắc trở? Liệu tôi có đạt được quyền lực, địa vị cao và sự trọng vọng từ những người xung quanh không? Đến giai đoạn nào trong cuộc đời, sự nghiệp của tôi mới thực sự bước lên đỉnh cao rực rỡ nhất?',
+  'Nô Bộc': 'Cung Nô Bộc xem người giúp việc, bạn bè thân thiết, người cộng sự; cũng xét quan hệ với cấp dưới và quý nhân. Tối thiểu phải trả lời được các câu hỏi: Bạn bè, đối tác hoặc người dưới quyền là những người thế nào? Có phản bội, lừa gạt hay giúp đỡ mình? Khi sa cơ lỡ bước, mình có quý nhân phù trợ hay những người bạn thực sự chân thành đứng ra giúp đỡ không? Mình có nên hùn vốn làm ăn chung với người khác không, hay cứ kết hợp là sẽ đổ vỡ, tay trắng? Mình có số làm lãnh đạo, thu phục được nhân tâm và được nhân viên, cấp dưới hết lòng trung thành không? Liệu mình có dễ vướng vào những rắc rối tình cảm, quan hệ ngoài luồng hay thị phi từ các mối quan hệ xã hội không?',
+  'Thiên Di': 'Cung Thiên Di xem giao thiệp bên ngoài, may rủi khi xuất hành, định cư xa xứ, và quan hệ với thế giới bên ngoài. Xung chiếu Mệnh — cần xét kỹ. Tối thiểu phải trả lời được các câu hỏi: Tôi nên ra ngoài bươn ba, lập nghiệp xa quê/đi nước ngoài mới phát triển được, hay nên ở lại quê nhà mới bình an, thuận lợi? Khi bước ra ngoài xã hội, tôi dễ gặp được quý nhân nâng đỡ, đưa đường chỉ lối hay toàn chạm trán tiểu nhân ghen ghét, hãm hại? Số tôi mỗi khi xuất hành, đi xa có hay gặp rủi ro, tai bay họa gió, hay luôn có lực lượng tâm linh che chở thoát hiểm an toàn? Trong mắt thế giới bên ngoài, tôi là người có uy tín, địa vị và thu hút cơ hội, hay thường xuyên phải gánh chịu thị phi, cô lập và hiểu lầm? Việc định cư, lập nghiệp xa xứ có giúp tôi cải biến vận mệnh để trở nên giàu có, hay sẽ khiến tôi cô độc, chật vật trắng tay nơi xứ người?',
+  'Tật Ách': 'Cung Tật Ách xem tì vết trong người, các bệnh có xu hướng mắc phải, tai ương thể xác trong cuộc đời. Tối thiểu phải trả lời được các câu hỏi: Cuộc đời tôi có nguy cơ cao mắc phải những căn bệnh nào? Hiểm nghèo, nan y hay bệnh mạn tính hành hạ dai dẳng nào không? Trong đời tôi có số phải trải qua tai nạn lớn nào (như giao thông, sông nước, hỏa hoạn) gây tổn hại nặng nề đến thể xác hay không? Hạn bệnh tật, tai ương nghiêm trọng nhất của cuộc đời tôi rơi vào giai đoạn nào, và liệu tôi có cơ may lướt qua để sống thọ không? Tôi có phải trải qua mổ xẻ, đụng chạm dao kéo nhiều lần, hay dễ rơi vào trạng thái bất an, khủng hoảng tâm lý kéo dài không? Tai họa thể xác và bệnh tật của tôi chủ yếu do yếu tố di truyền/nghiệp quả, thói quen sinh hoạt hay do tai bay họa gió bất ngờ từ bên ngoài mang lại?',
+  'Tài Bạch': 'Cung Tài Bạch xem sự giàu nghèo, cách kiếm tiền, tiêu tiền, và khả năng tích lũy tài chính. Tối thiểu phải trả lời được các câu hỏi: Số tôi là số giàu sang, có thể vươn lên hàng đại phú hay chỉ đủ ăn đủ mặc, chật vật lo toan cả đời? Nguồn tiền của tôi chủ yếu đến từ đâu: làm công hưởng lương, tự kinh doanh làm chủ, hay nhờ đầu tư, mạo hiểm và lộc trời cho? Tiền tôi kiếm được có tích lũy và giữ lại được không, hay thuộc dạng "vào cửa trước ra cửa sau", dễ bị thất thoát và biến cố cuốn sạch? Thời điểm nào trong đời tôi sẽ đạt đỉnh cao tài chính, và khi nào dễ vướng vào đợt khủng hoảng, nợ nần trầm trọng nhất? Đồng tiền tôi kiếm được là đồng tiền thong dong, nhàn hạ hay phải đổi bằng rất nhiều tâm trí, mồ hôi, nước mắt, thậm chí rủi ro pháp lý?',
+  'Tử Tức': 'Cung Tử Tức xem con cái, quan hệ với con, và phần nào về đệ tử, người theo học. Tối thiểu phải trả lời được các câu hỏi: Cuộc đời tôi có mấy người con, sinh nở có thuận lợi và có duyên sở hữu đủ cả trai lẫn gái không? Con cái sinh ra có ngoan ngoãn, hiếu thảo và hợp tính/hợp mệnh với cha mẹ hay xung khắc, khó nuôi? Con cái sau này lớn lên có thành tài, đỗ đạt và tạo dựng được sự nghiệp vẻ vang hay không? Đến khi về già, tôi có số được nhờ vả, phụng dưỡng từ con cái hay phải sống cô độc, tự lo liệu? Trong số con cái, có đứa nào là con khác dòng khác giống (cùng cha khác mẹ, hay cùng mẹ khác cha) không?',
+  'Phu Thê': 'Cung Phu Thê xem những điều liên quan đến vợ chồng, tối thiểu phải trả lời được các câu hỏi: Tôi là người có số kết hôn sớm hay muộn, bao giờ thì lập gia đình? Hoàn cảnh gặp gỡ vợ/chồng? Vợ/chồng của tôi có ngoại hình, tính cách và gia cảnh như thế nào? Cuộc hôn nhân của tôi có êm ấm, bền vững hay dễ đứt gánh giữa đường? Vợ/chồng có tương trợ, mang lại may mắn cho sự nghiệp và tiền bạc của tôi không? Đời sống hôn nhân của tôi có xuất hiện "người thứ ba" hay không?',
+  'Huynh Đệ': 'Cung Huynh Đệ xem anh chị em, bạn bè cùng trang lứa, và một phần về tài chính lưu động. Tối thiểu phải trả lời được các câu hỏi: Anh chị em trong gia đình có hòa thuận, đùm bọc hay thường xuyên khắc khẩu, xung đột với nhau? Anh chị em của tôi có cuộc sống thành đạt, khá giả hay vất vả, gian truân? Khi gặp khó khăn, hoạn nạn, tôi có thể nhờ cậy và nhận được sự giúp đỡ từ anh chị em hoặc bạn bè cùng trang lứa không? Khi kết giao hay hợp tác làm ăn với bạn bè, đối tác ngang hàng, tôi có dễ bị lợi dụng, đâm sau lưng hay không? Dòng tiền lưu động (tiền mặt) của tôi có dồi dào, trôi chảy hay thường xuyên bị tắc nghẽn, thất thoát?',
 };
 
 // ─── Prompt builder ────────────────────────────────────────────
@@ -256,17 +256,20 @@ function instructionFor(phan: number): string {
   if (phan === 1) return `
 
 PHẦN 1 — TỔNG QUAN LÁ SỐ (220-280 từ)
-Viết văn xuôi liền mạch, không dùng bullet, không đề cập đại vận trong phần này.
-MỞ ĐẦU bằng câu phán quyết NGẮN, in đậm, đứng riêng một dòng: lá số này thuộc hạng nào (mạnh/khá/trung bình/yếu), mạnh nhất ở đâu, yếu nhất ở đâu — nói bằng nghĩa đời thực (đường đời dễ hay khó, mạnh ở mặt nào của cuộc sống). Căn cứ nội bộ là nhãn "Luận sao: …" của 12 cung + khối === CÁCH CỤC & NHẬN ĐỊNH (toàn bộ lá số) ===, KHÔNG cần xướng tên cách cục ngay trong câu mở.
+Viết văn xuôi liền mạch, không dùng bullet, có thể đề cập tổng quan chu trình các đại vận trong phần này.
+MỞ ĐẦU bằng 1-2 câu phán quyết NGẮN, in đậm, đứng riêng một dòng.
+
+Căn cứ nội bộ là nhãn "Luận sao: …" của 12 cung + khối === CÁCH CỤC & NHẬN ĐỊNH (toàn bộ lá số) ===, KHÔNG cần xướng tên cách cục ngay trong câu mở.
 CẤM bịa "điểm lá số X/10" hay "điểm cung X/10" — lá số KHÔNG có điểm tổng; chỉ ĐẠI VẬN mới có điểm/10 thật.
 
 Xuống dòng rồi mới giải thích — cấu trúc gợi ý cho phần thân (không cần tiêu đề con, tên sao/cách cục nếu nhắc thì để gọn trong ngoặc):
 ① Bản mệnh & cục: Can chi năm sinh, nạp âm, cục — ý nghĩa thực tế với con người này là gì? Mệnh có thuận lý hay nghịch lý với cục?
-② Cung Mệnh: Chính tinh, cách cục nổi bật — khí chất và điểm mạnh/yếu cốt lõi. Xét vị trí Tràng Sinh và vòng Lộc Tồn nếu có.
+② Cung Mệnh, cung an Thân: Chính tinh, cách cục nổi bật — khí chất và điểm mạnh/yếu cốt lõi. Xét vị trí cung mệnh, cung an Thân trong vòng Tràng Sinh và vòng Lộc Tồn để suy ra ý nghĩa.
 ③ Nhóm Thái Tuế tại Mệnh vs Thân: Hai nhóm phản ánh hai chiều con người — bên trong và bên ngoài xã hội.
 ④ Một nhận định tổng: Điểm đặc biệt nhất của lá số này là gì?
 
-Lưu ý: Dựa trên [CÁCH CỤC] và [Ý NGHĨA] đã có — diễn giải, không liệt kê lại.`;
+Lưu ý: Dựa trên [CÁCH CỤC] và [Ý NGHĨA] đã có — diễn giải, không liệt kê lại.
+Tối thiểu phải trả lời được các câu hỏi: Cuộc đời tôi nhìn tổng thể là lá số sung sướng hay lận đận, và tôi sinh ra trên đời này để đóng vai trò hay sứ mệnh gì? Đâu là giai đoạn vận hạn đỉnh cao nhất để tôi bứt phá, và đâu là những mốc thời điểm giông bão nhất mà tôi phải trải qua trong suốt cuộc đời? Trong 12 cung trong lá số, đâu mới là "vũ khí mạnh nhất" giúp tôi gặt hái thành công, và đâu là "mắt xích yếu nhất" dễ khiến tôi sụp đổ? Giới hạn hay ngưỡng thành công tối đa mà lá số cho phép tôi chạm tới là đâu, tôi có số đổi đời bứt phá hay chỉ dừng lại ở mức bình ổn? Bài học hoặc nghiệp quả lớn nhất mà cuộc đời bắt buộc tôi phải đối mặt và giải quyết là gì để đạt được sự viên mãn trọn vẹn ở hậu vận?`;
 
   if (phan === 2) return `
 
