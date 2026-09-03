@@ -208,6 +208,10 @@
         <div class="lg-unlock" id="lgUnlock" style="display:none"></div>
         <div class="lg-progress" id="lgProgress" style="display:none"></div>
         <div class="lg-body" id="lgBody"></div>
+        <!-- Cross-sell "Xem lá số cho người thân" (NguoiThan.mount) — đứng
+             TRƯỚC khối trivia cnsHost, cùng lý do: phần phụ, dựng SAU khi bản
+             luận đã xong, hỏng thì tự trống. -->
+        <div id="ntHost"></div>
         <!-- "Ai Sinh Cùng Ngày Với Bạn" — miễn phí, 0 token LLM. Rỗng cho tới
              khi có kết quả; hỏng mạng/API thì tự ẩn, không làm hỏng bản luận
              giải phía trên. -->
@@ -229,6 +233,7 @@ window.SHELL_INTRO={key:'luan-giai',title:'Luận giải Tử Vi',desc:'Đọc t
 <script src="/tools-shared/vn-timezone.js?v=1"></script>
 <script src="/tuvi-form.js?v=2"></script>
 <script src="/tools-shared/cung-ngay-sinh.js?v=2"></script>
+<script src="/tools-shared/nguoi-than.js?v=1"></script>
 <script src="/auth.js?v=2"></script>
 <script src="/tuvi-paywall.js?v=22"></script>
 <script src="/tools-shared/hook-charts.js?v=1"></script>
@@ -306,7 +311,14 @@ function doLuan(){
     // Form dài hơn màn hình (nhất là mobile) thì lúc bấm nút, khung kết quả
     // vừa hiện ra nằm ngoài khung nhìn — cuộn lên để thấy ngay có gì vừa chạy.
     if(window.AiLoadingSteps)AiLoadingSteps.scrollToResult('lgPanel');
-    Shell.rememberBirth(Object.assign({}, fdIn, {namxem:namxem}));
+    // Chủ thể là NGƯỜI THÂN (đến từ khối "Xem lá số cho người thân") → chỉ ghi
+    // vào Sổ lá số kèm nhãn, KHÔNG rememberBirth (xem chú thích ở khai báo
+    // _subjectLabel). Chủ thể là chính người dùng (mặc định) → như cũ.
+    if(_subjectLabel){
+      try{ if(window.UserCharts) UserCharts.save(Object.assign({}, fdIn, {namxem:namxem}), _subjectLabel); }catch(e){}
+    }else{
+      Shell.rememberBirth(Object.assign({}, fdIn, {namxem:namxem}));
+    }
     if(window.SHELL_INTRO)Shell.dismissIntro(window.SHELL_INTRO.key);
     Shell.setContext({
       birth:{day:dd,month:mm,year:yyyy,hourBranch:gioAmIdx,gender:gioitinh,name:name||undefined},
@@ -333,6 +345,7 @@ function doLuan(){
     // đó qua tools-shared/vn-timezone.js) — cùng hệ quy chiếu với dữ liệu
     // người nổi tiếng, nếu không thì phép so "trùng giờ sinh" vô nghĩa.
     if(window.CungNgaySinh)CungNgaySinh.mount('cnsHost',{ngay:dd,thang:mm,nam:yyyy,gioIdx:gioAmIdx,gioitinh:gioitinh});
+    if(window.NguoiThan)NguoiThan.mount('ntHost',{toolId:'luan-giai',onPick:nguoiThanPick});
   }catch(e){
     document.getElementById('lgBody').innerHTML='<div class="laso-error">Lỗi khi luận giải: '+esc(e.message)+'</div>';
     document.getElementById('birthPanel').style.display='none';
@@ -653,7 +666,7 @@ var _sampleOpen=false;
 function closeSample(){
   _sampleOpen=false;
   var bar=document.getElementById('sampBar'); if(bar) bar.remove();
-  ['lgBody','lgScores','lgJump','miniChart','hookHost','cnsHost'].forEach(function(id){
+  ['lgBody','lgScores','lgJump','miniChart','hookHost','ntHost','cnsHost'].forEach(function(id){
     var el=document.getElementById(id); if(el) el.innerHTML='';
   });
   var lg=document.getElementById('lgPanel'); if(lg) lg.style.display='none';
@@ -833,6 +846,13 @@ function toggleMini(){
 // ══════════════════════════════════════════════════════════════════════
 var _astrolabe=null, _hoTen='', _ngay=0, _thang=0, _nam=0, _gioitinh='nam', _namXem=0, _laSoText=null;
 var _pendingSlug=null, _luanGiaiStore={};
+// Khác null = lượt luận SẮP TỚI là cho NGƯỜI THÂN (nhãn 'Vợ/Chồng'/'Bố'/...),
+// gắn ở nguoiThanPick() bên dưới. doLuan() đọc cờ này để rẽ nhánh: người thân
+// thì lưu vào Sổ lá số kèm nhãn, KHÔNG gọi Shell.rememberBirth (hàm đó khai
+// "lá số này là CỦA CHÍNH người dùng" — gọi nhầm cho người thân là ghi đè
+// localStorage['app_birth'], làm MỌI tool khác quên luôn ngày sinh thật của
+// người dùng, im lặng). Reset về null khi quay lại nhập cho chính mình.
+var _subjectLabel=null;
 // Slug PHẦN LẺ — CHỈ dùng cho mua/kiểm quyền một phần riêng (12 Lượng/phần),
 // KHÔNG đụng `_pendingSlug` (slug BÓ, giữ NGUYÊN định dạng cũ — đổi nó mồ côi
 // cache `laso_public` VÀ quyền sở hữu của người đã mua trước bản vá này, xem
@@ -1270,6 +1290,16 @@ function showForm(){
   document.getElementById('lgUnlock').style.display='none';
   document.getElementById('lgProgress').style.display='none';
   Shell.setShareable(null);
+}
+// Bấm chip trong khối "Xem lá số cho người thân" (NguoiThan.mount ở cuối
+// doLuan). Xoá NGƯỜI khỏi form (giữ năm luận), gắn nhãn cho lượt submit kế
+// tiếp — doLuan() đọc _subjectLabel để rẽ khỏi Shell.rememberBirth.
+function nguoiThanPick(label){
+  _subjectLabel=label;
+  try{ TuviForm.clear(); }catch(e){}
+  showForm();
+  var f=document.getElementById('birthPanel');
+  if(f&&f.scrollIntoView) f.scrollIntoView({behavior:'smooth',block:'start'});
 }
 // điền sẵn ngày sinh đã nhớ (nếu có); tự luận nếu đến qua ?auto=1 (từ nút Lá số).
 // Chạy SAU khi shell.js render rail (boot ở DOMContentLoaded) để Shell.setContext không lỗi.

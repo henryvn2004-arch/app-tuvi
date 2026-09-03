@@ -412,11 +412,20 @@ window.TuviForm = (() => {
     updateGioAmDisplay(prefix);
   }
 
+  // Xoá NGƯỜI, giữ NGÀY LUẬN (namXem) — namXem là thiết lập của trang (năm
+  // đang xem), không phải dữ kiện của người đang nhập, đổi chủ thể không nên
+  // đụng vào. Dùng khi form cần trống để nhập một người KHÁC (vd tool đang
+  // xem xong lá số vợ, giờ nhập tiếp cho bố mẹ).
+  function clear(prefix = '') {
+    setData({ hoten: '', ngay: '', thang: '', nam: '', gioitinh: 'nam', gioHour: 0, gioPhut: 0 }, prefix);
+  }
+
   // ── Public API ───────────────────────────────────────────────
   return {
     render,
     getData,
     setData,
+    clear,
     _update:    (prefix = '') => { (_updaters[prefix] || _updaters[''] || (() => {}))(); },
     _toggleUtc: (prefix = '') => toggleUtc(prefix),
     _toggleTip: (iconEl) => toggleTip(iconEl),

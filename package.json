@@ -52,6 +52,7 @@
     "check:tooltip": "node scripts/check-tooltip.mjs",
     "check:celebanh": "node scripts/check-celeb-anh.mjs",
     "check:cns": "node scripts/check-cns.mjs",
+    "check:nguoithan": "node scripts/check-nguoithan.mjs",
     "check:nhatky": "node scripts/check-nhatky-index.mjs",
     "check:slug": "node scripts/check-slug.mjs",
     "check:lasogolden": "node scripts/check-laso-golden.mjs",
