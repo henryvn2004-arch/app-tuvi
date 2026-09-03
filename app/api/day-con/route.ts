@@ -180,13 +180,13 @@ async function buildReport(
         // nên nới lên — chạm trần là JSON cụt và cả lượt rơi vào nhánh thử lại.
         // Nâng thêm 50% cùng đợt (Henry chốt 2026-08-20).
         maxTokens: 6600,
-        // provider:'anthropic' (chốt Henry 2026-08-24): Dạy Con Theo Lá Số
-        // thuộc nhóm tool "luận giải" quan trọng → Opus 5 primary (xem
-        // lib/llm/complete.ts CANONICAL_ORDER). Lưu ý: `jsonSchema` KHÔNG có
-        // tác dụng ép shape ở nhánh Anthropic (chỉ Gemini đọc field này) — vẫn
-        // an toàn nhờ cơ chế `nudge` retry sẵn có ở hàm này khi JSON sai định
-        // dạng.
-        provider: 'anthropic',
+        // 🔻 GỠ ép `provider:'anthropic'` (chốt Henry 2026-09-03) — Gemini 3.8
+        // Flash primary, Opus 5 lùi xuống lưới đỡ ngay sau. Số đo đầy đủ ở
+        // app/api/lasotuvi/route.ts. Lật ngược không cần deploy:
+        // `chat.standalone_provider` trong app_config.
+        // 🎁 Được thêm: `jsonSchema` phía trên CHỈ nhánh Gemini đọc — hồi ép
+        // Anthropic nó nằm không, JSON đúng shape chỉ nhờ `nudge` retry. Nay
+        // primary là Gemini nên schema có tác dụng thật ngay lượt đầu.
       });
       void logLlmUsage(TOOL_ID, r.model, {
         input_tokens: r.usage.input_tokens,

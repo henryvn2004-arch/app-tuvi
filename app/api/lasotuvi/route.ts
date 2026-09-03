@@ -338,14 +338,21 @@ async function runPost(request: NextRequest) {
     // route này KHÔNG ghi một dòng `llm_usage` nào, nên Luận Giải — tool bán
     // chạy nhất (1.500 Lượng / 3 người) — hoàn toàn vô hình trong panel Biên
     // Lợi Nhuận, và cũng không có số nào để đặt ETA cho 24 phần.
-    // `provider:'anthropic'` (chốt Henry 2026-08-24): Luận Giải Lá Số + Chu
-    // Trình Cuộc Đời (phan>13, cùng route) nằm trong nhóm tool "luận giải"
-    // quan trọng → Opus 5 primary thay vì Gemini Flash mặc định toàn site (xem
-    // lib/llm/complete.ts). Ép ở ĐÚNG lệnh gọi này, KHÔNG đụng
-    // `chat.standalone_provider` — khoá đó vẫn quyết định primary cho mọi
-    // route standalone khác. Cũng giữ nguyên hiệu quả `cacheSystem` (breakpoint
-    // Anthropic) vì nhánh Anthropic giờ LUÔN được gọi ở lượt đầu.
-    let r = await llmTextFull({ system: systemForLLM, prompt, maxTokens: maxTok, cacheSystem: true, provider: 'anthropic', effort: EFFORT });
+    // 🔻 GỠ ép `provider:'anthropic'` (chốt Henry 2026-09-03, thay chốt
+    // 2026-08-24). Primary nay là Gemini 3.8 Flash, Opus 5 lùi xuống lưới đỡ
+    // NGAY SAU (CANONICAL_ORDER, xem lib/llm/complete.ts). Căn cứ — 104 lượt
+    // gọi THẬT, 4 lá số × 2 model × 13 phần, cùng input/prompt/ngân sách token,
+    // cùng hình chạy prod (phần 1 riêng → bể 3 song song):
+    //   chi phí/lá số  Opus 11.215đ  vs  Gemini 2.669đ   (rẻ 4,2×)
+    //   khách chờ      Opus    102s  vs  Gemini    16s   (nhanh 6,2×)
+    //   0 lỗi · 0 phần cụt · 0 bịa điểm/10 · 0 nhắc sao không có trong lá số
+    //   — ở CẢ HAI. Chấm mù 52 cặp không tách được chất văn.
+    // ⚠️ `effort` và THINK_BUDGET trong `maxTok` GIỮ NGUYÊN dù Gemini bỏ qua
+    // chúng: đó là ngân sách của nhánh Opus khi Gemini chết. Dọn đi là lượt
+    // fallback bị cắt giữa câu.
+    // Lật ngược KHÔNG cần deploy: đổi `chat.standalone_provider` trong
+    // app_config sang 'anthropic'. Chi tiết: nhat-ky/2026-09.md.
+    let r = await llmTextFull({ system: systemForLLM, prompt, maxTokens: maxTok, cacheSystem: true, effort: EFFORT });
 
     // ── Bị CẮT giữa câu → sinh lại MỘT lần với trần gấp đôi ────────────────
     // Đo 2026-09 trên 46 bản luận ĐÃ BÁN: 77/974 phần (7,9%) kết thúc giữa câu,
@@ -362,7 +369,7 @@ async function runPost(request: NextRequest) {
     if (r.truncated) {
       console.error(`[lasotuvi] phần ${phan} bị cắt ở trần ${maxTok} — sinh lại với ${maxTok * 2}`);
       try {
-        const retry = await llmTextFull({ system: systemForLLM, prompt, maxTokens: maxTok * 2, cacheSystem: true, provider: 'anthropic', effort: EFFORT });
+        const retry = await llmTextFull({ system: systemForLLM, prompt, maxTokens: maxTok * 2, cacheSystem: true, effort: EFFORT });
         // Chỉ nhận bản mới khi nó THẬT SỰ khá hơn: hết cụt, hoặc chí ít dài hơn.
         // Lượt hai vẫn có thể cụt (văn dài hơn trần mới) — lúc đó bản dài hơn
         // vẫn là bản ít thiệt cho người đọc hơn.

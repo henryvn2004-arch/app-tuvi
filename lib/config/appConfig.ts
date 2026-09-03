@@ -39,10 +39,12 @@ export interface ChatConfig {
    * /api/lasotuvi, tuong-mat, phong-thuy, tubinh, xem-tuoi, van-han-nam,
    * day-con, huong-nghiep-tre. 'gemini' hoặc 'anthropic'. Còn lại xếp theo
    * `CANONICAL_ORDER` của lib/llm/complete.ts — Kimi K3 LUÔN đứng cuối (không
-   * ổn định, chỉ làm lưới đỡ cuối cùng, xem chốt Henry 2026-08-24). Một số
-   * route "luận giải" quan trọng tự ép `provider:'anthropic'` NGAY TẠI lệnh
-   * gọi (LlmTextOpts.provider), bỏ qua khoá này cho ĐÚNG lượt đó. Đổi khoá
-   * này qua app_config 'chat.standalone_provider' — không deploy.
+   * ổn định, chỉ làm lưới đỡ cuối cùng, xem chốt Henry 2026-08-24).
+   * 🔑 Từ 2026-09-03 KHÔNG route nào còn ép `provider` tại lệnh gọi nữa, nên
+   * khoá này quyết định primary cho TOÀN BỘ route standalone — đổi nó là đổi
+   * cả sáu tool luận giải cùng lúc, KHÔNG cần deploy. (Muốn lật riêng MỘT
+   * tool thì phải ép lại `LlmTextOpts.provider` ở đúng route đó — cơ chế vẫn
+   * còn, chỉ đang không ai dùng.)
    */
   standaloneProvider: string;
   /**
@@ -97,8 +99,8 @@ export const DEFAULTS: ChatConfig = {
   // nó user dùng nhiều. Mà opus api thì mắc lắm" — rail chat (lượt hỏi-đáp
   // lặp lại nhiều lần/phiên qua /api/v1/chat) có LƯU LƯỢNG cao hơn hẳn các
   // route luận giải một-lần (lasotuvi/tubinh/xem-tuoi/van-han-nam/day-con/
-  // huong-nghiep-tre — các route ĐÓ vẫn giữ `provider:'anthropic'` ép tại
-  // lệnh gọi, KHÔNG đụng, vì đó không phải "chat"). Opus 5 vẫn còn — chỉ
+  // huong-nghiep-tre — các route ĐÓ hồi ấy còn ép `provider:'anthropic'` tại
+  // lệnh gọi; tới 2026-09-03 đã gỡ nốt, nay cả site cùng một thứ tự). Opus 5 vẫn còn — chỉ
   // không còn là PRIMARY cho bất kỳ kịch bản rail nào; nó vẫn là lưới đỡ nếu
   // Gemini lỗi (xem lib/agent/run.ts "FALLBACK NGƯỢC"), Kimi K3 luôn cuối
   // cùng. Giá trị dưới đây chỉ là fallback-khi-Supabase-không-đọc-được — DB

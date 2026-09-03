@@ -149,12 +149,13 @@ async function buildReport(
         json: true,
         jsonSchema: HUONG_NGHIEP_TRE_SCHEMA,
         maxTokens: 4800, // nâng 50% cùng đợt (Henry chốt 2026-08-20)
-        // provider:'anthropic' (chốt Henry 2026-08-24): Hướng Nghiệp Sớm Cho
-        // Con thuộc nhóm tool "luận giải" quan trọng → Opus 5 primary (xem
-        // lib/llm/complete.ts CANONICAL_ORDER). `jsonSchema` không ép được ở
-        // nhánh Anthropic (chỉ Gemini đọc) — cơ chế `nudge` retry sẵn có ở hàm
-        // này vẫn bắt được JSON sai định dạng.
-        provider: 'anthropic',
+        // 🔻 GỠ ép `provider:'anthropic'` (chốt Henry 2026-09-03) — Gemini 3.8
+        // Flash primary, Opus 5 lùi xuống lưới đỡ ngay sau. Số đo đầy đủ ở
+        // app/api/lasotuvi/route.ts. Lật ngược không cần deploy:
+        // `chat.standalone_provider` trong app_config.
+        // 🎁 Được thêm: `jsonSchema` phía trên CHỈ nhánh Gemini đọc — hồi ép
+        // Anthropic nó nằm không, JSON đúng shape chỉ nhờ `nudge` retry. Nay
+        // primary là Gemini nên schema có tác dụng thật ngay lượt đầu.
       });
       void logLlmUsage(
         TOOL_ID,
