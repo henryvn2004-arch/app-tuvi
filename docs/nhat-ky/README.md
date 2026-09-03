@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-178 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+179 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 176 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 **Bốn file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
@@ -12,7 +12,7 @@ sed -n '120,190p' docs/nhat-ky/2026-08.md    # đọc đúng đoạn, đừng ca
 
 | file | số mục | dung lượng |
 |---|---:|---:|
-| `2026-09.md` | 14 | 76,134 B |
+| `2026-09.md` | 15 | 76,134 B |
 | `2026-09.md` | 12 | 69,014 B |
 | `2026-08.md` | 147 | 1,018,512 B |
 | `2026-07.md` | 12 | 154,531 B |
@@ -27,6 +27,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
+| 1 | 2026-09 | `2026-09.md` | 💰 Giá Gemini ghi bằng NỬA giá thật · lên 3.8 Flash · tách khối đại vận |
 | 1 | 2026-09 | `2026-09.md` | 📖 `iconHtml()` trả SVG KHÔNG CỠ — chèn trần ở đâu là nở full ở đó |
 | 1 | 2026-09 | `2026-09.md` | 🔒 Tour onboarding nhốt người dùng trên mobile — thiếu đúng MỘT bước kẹp |
 | 1 | 2026-09 | `2026-09.md` | 🚪 Bản mẫu TỰ MỞ — nút bấm không gỡ được cái rào nó sinh ra để gỡ |
