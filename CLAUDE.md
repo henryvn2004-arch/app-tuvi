@@ -65,12 +65,26 @@ grep mò — repo có file 400 KB+ (`public/tuvi-ansao-engine.js`, `public/admin
 - **`lib/agent/run.ts`** — `runAgent`, vòng lặp tool-use, ghi `llm_usage`.
 - **`lib/agent/tools.ts`** — định nghĩa tool + `TOOLS_INSTRUCTION`.
 - **`lib/agent/luan-giai-doc.ts`** — prompt Luận Giải 24 phần (`buildPromptCached`,
-  qua `cachedSystemFor`). **`cachedSystemFor` là nguồn DUY NHẤT cho `system` khi
-  bật `cacheSystem`** — Luận Giải 24 phần LẪN Vận Hạn 12 Tháng (cả 16 phần, kể
-  từ `nhat-ky/2026-08.md` mục "Vận Hạn 12 Tháng Tới ăn theo Code #1") đều gọi
-  hàm này để chia CHUNG một breakpoint Anthropic; tự ghép chuỗi tay ở nơi khác
-  là cache miss ngay lượt đầu.
-- **`lib/agent/usage.ts`** — bảng giá model → `cost_vnd`.
+  qua `cachedSystemFor`). **`cachedSystemFor(laSoText, phan?)` là nguồn DUY NHẤT
+  cho `system` khi bật `cacheSystem`** — Luận Giải, Chu Trình Cuộc Đời LẪN Vận
+  Hạn 12 Tháng đều gọi hàm này; tự ghép chuỗi tay ở nơi khác là cache miss ngay
+  lượt đầu. `phan` quyết định CỤM CACHE, và có đúng **3 cụm**: `phan`≤13 nhận lá
+  số đã bỏ chi tiết đại vận (`stripDaiVanDetail` — khối đó là 47,7% lá số mà
+  phần 1-13 không dùng); `phan` 14-24 và **bỏ trống** (đường `buildPromptThang`
+  của van-han-nam) nhận toàn văn. Bỏ trống = toàn văn là CỐ Ý: quên truyền thì
+  tốn token, không thiếu dữ liệu. `nhat-ky/2026-09.md` mục "Giá Gemini ghi bằng
+  NỬA giá thật".
+- **`lib/agent/usage.ts`** — bảng giá model → `cost_vnd`. ⚠️ **Giá phải TRA
+  bảng giá nhà cung cấp, cấm gõ từ trí nhớ** — dòng `gemini-2.5-flash` từng ghi
+  0.15/1.25 (giá Gemini **2.0**) nên mọi `cost_vnd` Gemini ghi bằng ĐÚNG MỘT
+  NỬA suốt nhiều tháng, im lặng tuyệt đối vì model có trong bảng nên không rơi
+  vào nhánh fallback nào. Sai số kiểu này luôn nghiêng về phía **thổi phồng biên
+  LN**, nên đường hụt-bảng-giá phải nghiêng ngược lại: fallback theo họ lấy mức
+  ĐẮT NHẤT trong họ, không trỏ vào một model cụ thể. Giá khuyến mãi có hạn
+  (3.8 Flash ×2 từ 01/01/2027) phải ghi mốc ngay tại dòng đó.
+  🪤 `GEMINI_MODEL` có **HAI** dòng mặc định (`lib/llm/complete.ts` +
+  `lib/agent/providers/gemini.ts`) — sửa một chỗ là khi env trống hai nhánh chạy
+  hai model khác nhau, không có gì báo.
 - **`lib/llm/json.ts` `parseLlmJson()`** — NGUỒN DUY NHẤT để bóc JSON từ output
   LLM. `JSON.parse` trần đã hỏng cả lượt (15–35%/tháng, xem `nhat-ky/2026-08.md`
   mục "topic-topup") mỗi khi model chèn câu dẫn/ghi chú/fence quanh JSON. Mọi

@@ -335,14 +335,14 @@ async function runPost(request: NextRequest) {
   const userPrompt = docs ? prompt + '\n\n=== TÀI LIỆU THAM KHẢO ===\n' + docs : prompt;
 
   try {
-    // provider:'anthropic' (chốt Henry 2026-08-24): bản luận giải 9 phần Xem
-    // Tuổi Vợ Chồng / Xem Tuổi Làm Ăn thuộc nhóm tool quan trọng → Opus 5
-    // primary (xem lib/llm/complete.ts CANONICAL_ORDER).
+    // 🔻 GỠ ép `provider:'anthropic'` (chốt Henry 2026-09-03) — Gemini 3.8
+    // Flash primary, Opus 5 lùi xuống lưới đỡ ngay sau. Số đo và lý do đầy đủ
+    // ở app/api/lasotuvi/route.ts (cùng lượt chốt). Lật ngược không cần deploy:
+    // `chat.standalone_provider` trong app_config.
     const luanGiai = await llmText({
       system: LUAN_GIAI_TUONG_HOP_SYSTEM,
       prompt: userPrompt,
       maxTokens: 1800,
-      provider: 'anthropic',
     });
     return ok({ luanGiai });
   } catch (e: unknown) {

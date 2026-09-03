@@ -516,11 +516,12 @@ export async function runAgent(
   // nó user dùng nhiều. Mà opus api thì mắc lắm" — carve-out 'anthropic' cho
   // cong-so/day-con/huong-nghiep-tre/than-so-hoc/tu-binh/xem-tuoi/xem-lam-an
   // đã bị GỠ khỏi `chat.provider_routes`; TẤT CẢ kịch bản rail giờ mặc định
-  // 'gemini'. Các route luận giải MỘT-LẦN (lasotuvi/tubinh/xem-tuoi 9-phần/
-  // van-han-nam/day-con/huong-nghiep-tre) không đụng — chúng ép
-  // `provider:'anthropic'` NGAY TẠI lệnh gọi (lib/llm/complete.ts), không đọc
-  // `chat.provider_routes`, không phải "chat" nên không nằm trong lượt gỡ
-  // này. Opus 5 vẫn là lưới đỡ NGAY SAU nếu Gemini chết (xem khối "FALLBACK
+  // 'gemini'. Hồi ấy các route luận giải MỘT-LẦN (lasotuvi/tubinh/xem-tuoi
+  // 9-phần/van-han-nam/day-con/huong-nghiep-tre) không nằm trong lượt gỡ vì
+  // chúng ép `provider:'anthropic'` ngay tại lệnh gọi, không đọc
+  // `chat.provider_routes`. 🔴 2026-09-03 đã gỡ nốt sáu chỗ ép đó → nay rail
+  // chat và tool luận giải chạy CÙNG một thứ tự provider (số đo ở
+  // app/api/lasotuvi/route.ts). Opus 5 vẫn là lưới đỡ NGAY SAU nếu Gemini chết (xem khối "FALLBACK
   // NGƯỢC" bên dưới), Kimi vẫn luôn cuối cùng. Lật ngược được không cần
   // deploy: `chat.standalone_provider` (lib/llm/complete.ts, luồng
   // /api/lasotuvi) và `chat.provider_routes` (dưới đây) đều đọc từ

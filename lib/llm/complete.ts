@@ -11,8 +11,14 @@
 // 🔴 LIVE 2026-08-24 (chốt Henry): Kimi K3 chạy KHÔNG ỔN ĐỊNH (hay chậm/
 // timeout) → CANONICAL_ORDER đặt Kimi CỐ ĐỊNH ở cuối chuỗi, bất kể ai làm
 // primary. Mặc định toàn site: Gemini Flash primary → Opus 5 → Kimi K3.
-// Vài tool "luận giải" quan trọng (xem `providerOrder`) ép primary='anthropic'
-// qua `LlmTextOpts.provider` ở đúng route đó → Opus 5 → Gemini Flash → Kimi K3.
+// 🔴 LIVE 2026-09-03 (chốt Henry): các route "luận giải" một-lần
+// (lasotuvi/van-han-nam/tubinh/xem-tuoi/day-con/huong-nghiep-tre) đã GỠ ép
+// primary='anthropic' → nay CẢ SITE, tool lẫn rail chat, cùng một thứ tự:
+// Gemini 3.8 Flash → Opus 5 → Kimi K3. Cơ chế override `LlmTextOpts.provider`
+// vẫn còn nguyên nhưng HIỆN KHÔNG route nào dùng.
+// Căn cứ (104 lượt gọi thật, 4 lá số × 2 model × 13 phần, cùng input/prompt):
+// Opus 11.215đ & 102s vs Gemini 2.669đ & 16s mỗi lá số — rẻ 4,2× nhanh 6,2×,
+// mà 0 lỗi / 0 phần cụt / 0 bịa số ở CẢ HAI. Xem nhat-ky/2026-09.md.
 //
 // Hỗ trợ:
 //   - llmText           : non-stream text (+ ảnh vision, + hội thoại nhiều lượt)
@@ -26,7 +32,13 @@ import { toGeminiTools } from '@/lib/agent/providers/gemini';
 import { toKimiTools } from '@/lib/agent/providers/kimi';
 
 const GEMINI_KEY = process.env.GEMINI_API_KEY || '';
-const GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-2.5-flash';
+// 2026-09-02: 2.5-flash → 3.8-flash. Cùng họ Flash, đắt hơn (0.30/2.50 →
+// 0.75/3.75 mỗi 1M) nhưng viết tiếng Việt hơn hẳn — đo trên 13 phần Luận
+// Giải của một lá số thật: 2.5-flash tâng bốc và tự mâu thuẫn với nhãn
+// engine (viết "giữ được bền, không dễ thất thoát" cho cung có Hóa Kỵ hội
+// sát), 3.8-flash thì không. Vẫn rẻ hơn Opus 5 ~6,7 lần cả hai chiều.
+// 🗓 Giá 3.8-flash ×2 từ 01/01/2027 — xem MODEL_PRICING trong lib/agent/usage.ts.
+const GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-3.8-flash';
 const GEMINI_BASE = 'https://generativelanguage.googleapis.com/v1beta/models';
 const ANTHROPIC_KEY = process.env.ANTHROPIC_API_KEY || '';
 // Opus 5. Đứng thứ 1 (primary, các tool "luận giải" quan trọng) hoặc thứ 2
@@ -416,9 +428,9 @@ function anthropicChunkText(raw: string): string {
 // CỐ Ý đặt Kimi CUỐI mảng này, cách DUY NHẤT để nó luôn là lưới đỡ CUỐI CÙNG
 // dù primary là ai. Với DB `chat.standalone_provider='gemini'` (mặc định toàn
 // site) → Gemini Flash primary, Opus 5 secondary-1, Kimi K3 secondary-2. Vài
-// route "luận giải" quan trọng tự ép `provider:'anthropic'` ở lệnh gọi (xem
-// `LlmTextOpts.provider`) → Opus 5 primary, Gemini Flash secondary-1, Kimi K3
-// vẫn secondary-2 (không cần đụng mảng, override chỉ đẩy 1 phần tử lên đầu).
+// route CÓ THỂ ép primary bằng `LlmTextOpts.provider` (override chỉ đẩy 1 phần
+// tử lên đầu, không đụng mảng) — nhưng từ 2026-09-03 KHÔNG route nào còn dùng:
+// cả site chạy Gemini primary. Xem chú thích đầu file.
 // Kimi thiếu key thì `kimiText`/`openKimiStream` tự ném lỗi ngay, vòng
 // thử-provider-kế-tiếp bên dưới xử lý y như mọi lỗi khác.
 const CANONICAL_ORDER = ['anthropic', 'gemini', 'kimi'];
