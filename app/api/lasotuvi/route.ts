@@ -312,8 +312,15 @@ async function runPost(request: NextRequest) {
     // đã bán. CỘNG THÊM đúng phần đã đo thay vì đoán một con số tròn — và cộng
     // TƯỜNG MINH để lượt sau đọc là biết ngay nó dùng vào việc gì.
     const THINK_BUDGET = 900;
+    // phan 2-13 nới 1650→2400 (2026-09-03, Henry): 11 phần cung (3-13) nới từ
+    // 120-160→350-400 từ (thêm bộ câu hỏi trọng tâm mỗi cung + mỗi đoạn tự có
+    // câu hook riêng — CUNG_DESC/PARAGRAPH_HOOK_RULE, lib/agent/luan-giai-doc.ts).
+    // 1650 chỉ vừa đủ cho ~300 từ đo được trước đó (phần 2 mẫu thật 291 từ,
+    // KHÔNG cụt) — 400 từ mà model hay overshoot thêm 10-30% thì sát trần cũ,
+    // rủi ro cụt giữa câu (đúng bệnh đã đo 7,9%, xem chú thích trên). Phần 2
+    // (Mệnh) vẫn giữ nguyên 220-280 từ, dư chỗ trong cùng ngân sách — không hại.
     const maxTok = THINK_BUDGET + (phan === 1 ? 3000 : phan === 14 ? 4500 : phan === 24 ? 2100
-      : (phan >= 2 && phan <= 13) ? 1650 : (phan >= 15 && phan <= 23) ? 1650 : 1500);
+      : (phan >= 2 && phan <= 13) ? 2400 : (phan >= 15 && phan <= 23) ? 1650 : 1500);
     // 2026-09-02 — hạ độ nghĩ cho ĐÚNG nhóm route văn dài này. A/B mù 48 bản
     // (2 lá số × 8 phần × 3 nhánh, prompt thật): effort 'low' rẻ hơn 39%
     // output token mà chữ ra còn nhiều hơn, 16 cặp chấm mù không phân biệt

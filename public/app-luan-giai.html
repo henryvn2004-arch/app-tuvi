@@ -135,6 +135,7 @@
 .claude-content p{color:var(--text-mid);line-height:1.75;margin-bottom:12px;font-size:13.5px}
 .claude-content p:last-child{margin-bottom:0}
 .claude-content strong{color:var(--text)}
+.claude-content strong.hook{background:var(--gold-lt);border-radius:3px;padding:0 3px;box-decoration-break:clone;-webkit-box-decoration-break:clone}
 .claude-content em{color:var(--gold-soft);font-style:italic}
 .claude-content h3{font-family:var(--serif);font-size:14.5px;font-weight:600;color:var(--heading);margin:14px 0 8px}
 .claude-content .md-table-wrap{overflow-x:auto;margin:12px 0}
@@ -958,7 +959,13 @@ function renderMarkdown(text){
         .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
         .replace(/\*(.+?)\*/g,'<em>$1</em>');
       if(l.indexOf('<h')===0)out+=l;
-      else if(l.trim())out+='<p>'+l+'</p>';
+      else if(l.trim()){
+        // Câu in đậm ĐỨNG ĐẦU đoạn = câu tóm tắt/hook riêng của đoạn đó (mỗi
+        // đoạn model viết đều mở bằng một câu vậy — xem PARAGRAPH_HOOK_RULE,
+        // lib/agent/luan-giai-doc.ts) — tô nổi khác với bold giữa câu (vd tên
+        // sao gọn trong ngoặc), không đụng `_extractLeadLine`/`.lg-card` phía trên.
+        out+='<p>'+l.replace(/^<strong>/,'<strong class="hook">')+'</p>';
+      }
     }
   });
   if(inTable)flushTable();

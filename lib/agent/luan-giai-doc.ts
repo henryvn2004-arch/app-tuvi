@@ -128,6 +128,14 @@ export const CUNG_DESC: Record<string, string> = {
   'Huynh Đệ': 'Cung Huynh Đệ xem anh chị em, bạn bè cùng trang lứa, và một phần về tài chính lưu động. Tối thiểu phải trả lời được các câu hỏi: Anh chị em trong gia đình có hòa thuận, đùm bọc hay thường xuyên khắc khẩu, xung đột với nhau? Anh chị em của tôi có cuộc sống thành đạt, khá giả hay vất vả, gian truân? Khi gặp khó khăn, hoạn nạn, tôi có thể nhờ cậy và nhận được sự giúp đỡ từ anh chị em hoặc bạn bè cùng trang lứa không? Khi kết giao hay hợp tác làm ăn với bạn bè, đối tác ngang hàng, tôi có dễ bị lợi dụng, đâm sau lưng hay không? Dòng tiền lưu động (tiền mặt) của tôi có dồi dào, trôi chảy hay thường xuyên bị tắc nghẽn, thất thoát?',
 };
 
+// Henry 2026-09-03: mỗi đoạn xuống dòng cũng phải mở bằng một câu hook riêng —
+// không chỉ câu mở đầu cả phần — để đọc lướt vẫn bắt được ý mỗi đoạn (UI tô
+// nổi câu này, xem `renderMarkdown`/`.lg-card` trong app-luan-giai.html). MỘT
+// nguồn chung, nội suy vào mọi nhánh của `instructionFor` — sửa một chỗ,
+// khỏi 6 nhánh trôi khỏi nhau.
+const PARAGRAPH_HOOK_RULE =
+  'Mỗi đoạn xuống dòng trong phần thân (không riêng câu mở đầu cả phần) cũng bắt đầu bằng một câu NGẮN in đậm (**...**), tóm tắt/hook đúng ý đoạn đó — cùng chuẩn với câu mở đầu (khẳng định cụ thể, đo lường/hình dung được, không tính từ mờ nhạt). Có bao nhiêu đoạn thì có bấy nhiêu câu in đậm như vậy, mỗi câu đứng đầu đúng đoạn của nó, không dồn hết vào câu mở đầu.';
+
 // ─── Prompt builder ────────────────────────────────────────────
 /**
  * Cắt lá số theo phần đang luận. Hoisted ra module scope để
@@ -255,18 +263,19 @@ export function laSoContextFull(laSoText: string): string {
 function instructionFor(phan: number): string {
   if (phan === 1) return `
 
-PHẦN 1 — TỔNG QUAN LÁ SỐ (220-280 từ)
+PHẦN 1 — TỔNG QUAN LÁ SỐ (400-480 từ)
 Viết văn xuôi liền mạch, không dùng bullet, có thể đề cập tổng quan chu trình các đại vận trong phần này.
 MỞ ĐẦU bằng 1-2 câu phán quyết NGẮN, in đậm, đứng riêng một dòng.
 
 Căn cứ nội bộ là nhãn "Luận sao: …" của 12 cung + khối === CÁCH CỤC & NHẬN ĐỊNH (toàn bộ lá số) ===, KHÔNG cần xướng tên cách cục ngay trong câu mở.
 CẤM bịa "điểm lá số X/10" hay "điểm cung X/10" — lá số KHÔNG có điểm tổng; chỉ ĐẠI VẬN mới có điểm/10 thật.
 
-Xuống dòng rồi mới giải thích — cấu trúc gợi ý cho phần thân (không cần tiêu đề con, tên sao/cách cục nếu nhắc thì để gọn trong ngoặc):
+Xuống dòng rồi mới giải thích, chia thành 2-4 đoạn riêng (không dồn thành một khối) — mỗi đoạn gom vài ý trong dàn dưới đây, không cần tiêu đề con, tên sao/cách cục nếu nhắc thì để gọn trong ngoặc:
 ① Bản mệnh & cục: Can chi năm sinh, nạp âm, cục — ý nghĩa thực tế với con người này là gì? Mệnh có thuận lý hay nghịch lý với cục?
 ② Cung Mệnh, cung an Thân: Chính tinh, cách cục nổi bật — khí chất và điểm mạnh/yếu cốt lõi. Xét vị trí cung mệnh, cung an Thân trong vòng Tràng Sinh và vòng Lộc Tồn để suy ra ý nghĩa.
 ③ Nhóm Thái Tuế tại Mệnh vs Thân: Hai nhóm phản ánh hai chiều con người — bên trong và bên ngoài xã hội.
 ④ Một nhận định tổng: Điểm đặc biệt nhất của lá số này là gì?
+${PARAGRAPH_HOOK_RULE}
 
 Lưu ý: Dựa trên [CÁCH CỤC] và [Ý NGHĨA] đã có — diễn giải, không liệt kê lại.
 Tối thiểu phải trả lời được các câu hỏi: Cuộc đời tôi nhìn tổng thể là lá số sung sướng hay lận đận, và tôi sinh ra trên đời này để đóng vai trò hay sứ mệnh gì? Đâu là giai đoạn vận hạn đỉnh cao nhất để tôi bứt phá, và đâu là những mốc thời điểm giông bão nhất mà tôi phải trải qua trong suốt cuộc đời? Trong 12 cung trong lá số, đâu mới là "vũ khí mạnh nhất" giúp tôi gặt hái thành công, và đâu là "mắt xích yếu nhất" dễ khiến tôi sụp đổ? Giới hạn hay ngưỡng thành công tối đa mà lá số cho phép tôi chạm tới là đâu, tôi có số đổi đời bứt phá hay chỉ dừng lại ở mức bình ổn? Bài học hoặc nghiệp quả lớn nhất mà cuộc đời bắt buộc tôi phải đối mặt và giải quyết là gì để đạt được sự viên mãn trọn vẹn ở hậu vận?`;
@@ -278,10 +287,11 @@ ${CUNG_DESC['Mệnh']}
 
 MỞ ĐẦU bằng câu phán quyết NGẮN, in đậm, đứng riêng một dòng — nói bằng nghĩa đời thực (khí chất người này thế nào, đường đời thuận hay trắc trở). Căn cứ nội bộ (không cần xướng ngay trong câu mở): nhãn "Luận sao: …" của dòng [Mệnh] + cách cục + độ sáng chính tinh.
 CẤM bịa "điểm cung X/10" — lá số KHÔNG có điểm cho từng cung, chỉ ĐẠI VẬN mới có điểm/10 thật.
-Xuống dòng rồi viết văn xuôi súc tích, đi thẳng vào tính cách và số phận bằng ngôn ngữ đời thường (tên sao/cách cục nếu nhắc thì gọn trong ngoặc):
+Xuống dòng rồi viết văn xuôi súc tích, chia 2-4 đoạn riêng, đi thẳng vào tính cách và số phận bằng ngôn ngữ đời thường (tên sao/cách cục nếu nhắc thì gọn trong ngoặc):
 ① Bản chất cốt lõi: người này là kiểu người gì, dựa trên chính tinh tại Mệnh và cách cục ([CÁCH CỤC], [Ý NGHĨA]) — đây là điểm sống còn của lá số, diễn giải thật rõ tác động thực tế.
 ② Sao phụ, chỉ khi thực sự ảnh hưởng: dịch thẳng ra hệ quả (dễ có quý nhân giúp, dễ vướng thị phi, hay trắc trở đường học vấn...), không cần liệt kê hết tên.
 ③ Điểm mạnh và điểm cần cảnh giác trong con người và cuộc đời.
+${PARAGRAPH_HOOK_RULE}
 
 Xét thêm cung Thiên Di (xung chiếu Mệnh) — ảnh hưởng gì đến tính cách bên ngoài?`;
 
@@ -290,14 +300,16 @@ Xét thêm cung Thiên Di (xung chiếu Mệnh) — ảnh hưởng gì đến t�
     const cungDesc = CUNG_DESC[cung] || '';
     return `
 
-PHẦN ${phan} — CUNG ${cung.toUpperCase()} (120-160 từ)
+PHẦN ${phan} — CUNG ${cung.toUpperCase()} (350-400 từ)
 ${cungDesc}
 
 MỞ ĐẦU bằng câu phán quyết NGẮN, in đậm, đứng riêng một dòng — nói bằng nghĩa đời thực (tốt/khá/trung bình/yếu ở lĩnh vực này là thế nào), tên sao/cách cục KHÔNG mở đầu câu, để gọn trong ngoặc nếu cần. Căn cứ nội bộ: nhãn "Luận sao: …" của dòng [${cung}] + cách cục + độ sáng chính tinh. Cấm né tránh.
 CẤM bịa "điểm cung X/10" — lá số KHÔNG có điểm cho từng cung, chỉ ĐẠI VẬN mới có điểm/10 thật.
-Xuống dòng rồi viết 1-2 đoạn giải thích ngắn, dễ hiểu — không liệt kê dàn trải:
+Xuống dòng rồi viết 2-4 đoạn riêng (đủ chỗ trả lời hết bộ câu hỏi trọng tâm ở trên, mỗi đoạn đào sâu 1-2 câu, không nhồi hết vào một đoạn):
 ① Nhận định chính: dựa trên [CÁCH CỤC] và [Ý NGHĨA] — dịch ra hệ quả cụ thể, đây là phần quan trọng nhất.
-② Kết luận thực tế: 1-2 câu về tác động cụ thể trong cuộc đời người này (chỉ nhắc tam phương tứ chính khi nó thật sự đổi kết quả).
+② Đào sâu các câu hỏi trọng tâm còn lại bằng dẫn chứng cụ thể từ dữ liệu — không bịa thêm sự kiện lá số không chỉ ra.
+③ Kết luận thực tế: 1-2 câu về tác động cụ thể trong cuộc đời người này (chỉ nhắc tam phương tứ chính khi nó thật sự đổi kết quả).
+${PARAGRAPH_HOOK_RULE}
 
 Không liệt kê lại tên sao, không mô tả lại dữ liệu thô. Nếu cung vô chính diệu thì nói rõ phải mượn cung xung chiếu để luận (không cần nhắc chữ "xung chiếu" nếu diễn được bằng câu thường).`;
   }
@@ -318,7 +330,8 @@ JSON chart (BẮT BUỘC, đủ 9 điểm):
 {"labels":["ĐV1 x-y","ĐV2 x-y","ĐV3 x-y","ĐV4 x-y","ĐV5 x-y","ĐV6 x-y","ĐV7 x-y","ĐV8 x-y","ĐV9 x-y"],"scores":[s1,s2,s3,s4,s5,s6,s7,s8,s9]}
 \`\`\`
 
-Nhận xét tổng (120-160 từ), viết bằng ngôn ngữ đời thường, đọc là hiểu ngay: giai đoạn nào dễ thở nhất, giai đoạn nào chật vật nhất, xu hướng chung của cuộc đời theo thời gian. Nếu người đang trong đại vận nào thì nhận xét thêm về giai đoạn hiện tại. Không cần liệt kê lại số liệu đã có trong bảng.`;
+Nhận xét tổng (120-160 từ), viết bằng ngôn ngữ đời thường, đọc là hiểu ngay: giai đoạn nào dễ thở nhất, giai đoạn nào chật vật nhất, xu hướng chung của cuộc đời theo thời gian. Nếu người đang trong đại vận nào thì nhận xét thêm về giai đoạn hiện tại. Không cần liệt kê lại số liệu đã có trong bảng.
+${PARAGRAPH_HOOK_RULE}`;
 
   if (phan >= 15 && phan <= 23) {
     const dvNum = phan - 14;
@@ -345,7 +358,8 @@ thuật ngữ. Căn cứ: dòng "Scoring: … Tổng=X" của ĐV${dvNum} (chép
 tính lại; số thấp thì nói thẳng là giai đoạn khó, không né).
 Xuống dòng rồi viết 1-2 đoạn giải thích ngắn, dễ hiểu, bằng ngôn ngữ đời thường:
 ① Vì sao: dịch "[LUẬN ĐOÁN]"/"[CẢNH BÁO]" thành chuyện đời thực — không liệt kê lại nguyên văn, không xướng tên sao/cách cục trừ khi cần cho rõ nghĩa (thì để gọn trong ngoặc).
-② Kết luận thực tế: 1-2 câu tác động cụ thể + gợi ý nhẹ nếu cần.`;
+② Kết luận thực tế: 1-2 câu tác động cụ thể + gợi ý nhẹ nếu cần.
+${PARAGRAPH_HOOK_RULE}`;
   }
 
   if (phan === 24) return `
@@ -364,6 +378,7 @@ dịch ra hệ quả cụ thể, không cần liệt kê từng cung/sao đã x�
 thì để gọn trong ngoặc. Đại hạn tốt thì cái xấu của tiểu hạn cũng đỡ nặng, ngược
 lại đại hạn xấu thì cái tốt của tiểu hạn cũng giảm bớt — phản ánh đúng chiều đó.
 ② Cơ hội và rủi ro: 1-2 điểm thuận + 1-2 điểm cần cẩn thận cụ thể, rồi một câu khuyên ngắn cho năm này.
+${PARAGRAPH_HOOK_RULE}
 
 Không giải thích lý thuyết. Đi thẳng vào tác động với người này.`;
 
