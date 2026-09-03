@@ -90,6 +90,10 @@
 .vh-unlock{background:var(--white);border:1px solid var(--gold-soft);border-radius:11px;padding:18px 20px;margin-bottom:22px;text-align:center}
 .vh-unlock p{font-size:12.5px;color:var(--text-lt);margin-top:8px}
 .vh-progress{font-size:12.5px;color:var(--text-lt);margin-bottom:16px;padding:10px 0;border-bottom:1px solid var(--line)}
+.lg-calc{margin-bottom:2px}
+.lg-calc summary{cursor:pointer;font-size:12px;color:var(--text-lt);font-weight:600;padding:2px 0}
+.lg-calc summary:hover{color:var(--gold-soft)}
+.lg-calc[open] summary{margin-bottom:8px}
 </style>
 </head>
 <body>
@@ -309,9 +313,18 @@ function render(ls){
   var PRE=[null,1,14,14+dvSo,24];   // phần 1–4 → phần tương ứng bên Luận Giải
   var S=[];
   for(var p=1;p<=_tongPhan;p++){
-    var body = p<=4
-      ? (LuanGiaiCore.buildPreGenHtml(PRE[p],ls) || '<div class="phan-empty">Phần này luận theo tổng thể lá số — bấm nút dưới để trợ lý luận sâu.</div>')
-      : renderThang(_khung.thangs[p-5]);
+    var body;
+    if(p<=4){
+      // Khối TÍNH TOÁN (deterministic — cách cục/điểm số/quy tắc) GẤP LẠI mặc
+      // định — cùng khuôn với app-luan-giai.html/app-chu-trinh-cuoc-doi.html
+      // (buildPhanSection): người dùng chạy tool là để đọc LUẬN GIẢI, không
+      // phải đọc lại dữ liệu thô đã hiện trên lá số phía trên.
+      var pre=LuanGiaiCore.buildPreGenHtml(PRE[p],ls);
+      var raw=pre||'<div class="phan-empty">Phần này luận theo tổng thể lá số — bấm nút dưới để trợ lý luận sâu.</div>';
+      body=pre?('<details class="lg-calc"><summary>Xem cơ sở tính toán</summary>'+raw+'</details>'):raw;
+    }else{
+      body=renderThang(_khung.thangs[p-5]);
+    }
     // `part:p>1?p:null` → bấm chỉ mở ĐÚNG phần đó (16 Lượng/phần,
     // tool_pricing.credits_per_part), KHÔNG mở cả bó — khác nút banner đầu
     // trang, nút đó VẪN mở trọn 250 Lượng. Phần 1 (tổng quan lá số) giữ CTA

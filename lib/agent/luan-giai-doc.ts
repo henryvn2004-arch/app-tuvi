@@ -53,10 +53,13 @@ PHÁN QUYẾT BẮT BUỘC — NEO VÀO DỮ LIỆU ENGINE, NÓI RA BẰNG ĐỜ
   Ví dụ cung: "**Nền tảng cung này khá vững, nhưng việc gì cũng chậm hơn người ta một nhịp**
   (Thiên Đồng đắc địa, có Đà La cùng cung)." Ví dụ đại vận: "**Giai đoạn này chật vật, không thuận
   (4.4/10)**" (chép đúng số engine, không tự tính lại).
+  ❌ SAI: "Cung Mệnh có Thiên Lương đắc địa, cung Quan Lộc có Thái Dương miếu địa và Hóa Lộc." —
+  chỉ XƯỚNG TÊN nối bằng "có...và", 0 nghĩa đời thường.
 - XUỐNG DÒNG rồi mới GIẢI THÍCH NGẮN VÌ SAO ra phán quyết đó, bằng hệ quả cụ thể — chọn đúng 1-2
   căn cứ nặng ký nhất (sao gì, cách cục gì kéo lên/kéo xuống), KHÔNG liệt kê dàn trải mọi sao/cách
-  cục cùng lúc. KHÔNG được mâu thuẫn với dữ liệu: nhãn "Yếu" thì cấm viết như cung tốt; đại vận
-  4/10 thì cấm viết như giai đoạn đẹp.
+  cục cùng lúc. Luật "gọn trong ngoặc, không xướng tên" ở trên áp CẢ đoạn này, không riêng câu mở.
+  KHÔNG được mâu thuẫn với dữ liệu: nhãn "Yếu" thì cấm viết như cung tốt; đại vận 4/10 thì cấm viết
+  như giai đoạn đẹp.
 - Phân biệt rõ: ĐÁNH GIÁ CẤU TRÚC lá số (mạnh/yếu) là chắc chắn — nói dứt khoát; chỉ DỰ ĐOÁN kết quả tương lai mới dùng ngôn ngữ xác suất. Đừng lấy "khiêm tốn về tương lai" làm cớ né đánh giá cấu trúc.
 
 ${DOC_ARC_LASO}
@@ -93,7 +96,9 @@ CÁC LƯU Ý KHI LUẬN GIẢI:
 
 QUY TẮC CHUNG CHO MỌI PHẦN LUẬN GIẢI:
 - CĂN CỨ vào ĐÚNG cách cục đặc biệt trong [CÁCH CỤC] và khối === CÁCH CỤC & NHẬN ĐỊNH (toàn bộ lá số) === (vd Sát Phá Tham, Quân thần khánh hội, Cự Nhật...) — nói nó kéo lá số lên hay xuống bằng NGHĨA ĐỜI THỰC (thành đạt hay lận đận, thuận lợi hay trắc trở...), tên cách cục để gọn trong ngoặc theo sau nếu cần, không xướng tên làm câu mở. Tuyệt đối không lờ đi cách cục mà dữ liệu đã nêu — đó là phần người đọc đã thấy trên màn hình (khối "Cách cục đặc biệt"), luận giải phải khớp, chỉ khác cách gọi tên.
-- Không liệt kê lại tên sao, không mô tả lại dữ liệu thô.
+- Không liệt kê lại tên sao, không mô tả lại dữ liệu thô. Áp dụng CẢ cho tên cung ("cung Mệnh"...):
+  nêu để XÁC ĐỊNH đang nói về ai thì được, nhưng câu vẫn phải mang NGHĨA, không dừng ở "cung A có
+  sao X, cung B có sao Y".
 - Nếu cung vô chính diệu thì nói rõ phải mượn cung xung chiếu để luận.
 - Quan hệ với Mệnh là ưu tiên: cung đang xét hỗ trợ hay khắc bản mệnh?
 - Tổ hợp sao: nhiều sao tốt → xu hướng tốt, nhiều sao xấu → dễ vấn đề; sát tinh/bại tinh mạnh thì phải cảnh báo rõ.
