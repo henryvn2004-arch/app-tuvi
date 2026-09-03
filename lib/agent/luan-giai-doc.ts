@@ -263,7 +263,7 @@ export function laSoContextFull(laSoText: string): string {
 function instructionFor(phan: number): string {
   if (phan === 1) return `
 
-PHẦN 1 — TỔNG QUAN LÁ SỐ (220-280 từ)
+PHẦN 1 — TỔNG QUAN LÁ SỐ (400-480 từ)
 Viết văn xuôi liền mạch, không dùng bullet, có thể đề cập tổng quan chu trình các đại vận trong phần này.
 MỞ ĐẦU bằng 1-2 câu phán quyết NGẮN, in đậm, đứng riêng một dòng.
 
