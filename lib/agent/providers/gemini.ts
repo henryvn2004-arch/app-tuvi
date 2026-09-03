@@ -20,7 +20,9 @@ const GEMINI_KEY = process.env.GEMINI_API_KEY || '';
 // pháp (KHÔNG bịa sao, không lẫn miếu/hãm như Flash-Lite), tiếng Việt sát
 // Sonnet; vẫn rẻ ~85% so Sonnet. Đổi model không cần sửa code: đặt env
 // GEMINI_MODEL (vd 'gemini-2.5-flash-lite' cho tool nhẹ nếu muốn tiết kiệm thêm).
-const GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-2.5-flash';
+// Mặc định PHẢI khớp lib/llm/complete.ts — hai file cùng đọc một env, lệch
+// mặc định là hai nhánh chạy hai model khác nhau khi env trống.
+const GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-3.8-flash';
 const GEMINI_BASE = 'https://generativelanguage.googleapis.com/v1beta/models';
 
 // Kịch bản AN TOÀN cho Gemini: prose-thuần, dữ liệu đã tính sẵn, KHÔNG cần

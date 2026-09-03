@@ -39,7 +39,20 @@ const MODEL_PRICING: Record<string, { input: number; output: number }> = {
   'claude-opus-4-8': { input: 5, output: 25 },
   'claude-opus-4-7': { input: 5, output: 25 },
   'claude-haiku-4-5': { input: 1, output: 5 },
-  'gemini-2.5-flash': { input: 0.15, output: 1.25 }, // backup-2
+  // ⚠️ Giá Gemini tra ở https://ai.google.dev/gemini-api/docs/pricing — ĐỪNG
+  // gõ từ trí nhớ. Dòng 2.5-flash từng ghi 0.15/1.25 (đó là giá Gemini **2.0**
+  // Flash) suốt nhiều tháng ⇒ MỌI `cost_vnd` của Gemini ghi bằng ĐÚNG MỘT NỬA,
+  // và không có gì báo vì hàm này không bao giờ ném. Đo lại 2026-09-02 trên 424
+  // lượt/90 ngày: ghi sổ 15.686đ, giá thật 31.360đ. Sai số nằm ở PHÍA THỔI
+  // PHỒNG BIÊN LN — đúng thứ file này tự dặn ở đầu là phải tránh.
+  // Các dòng đã ghi trong `events` KHÔNG được tính lại (giá chốt lúc ghi) —
+  // panel Biên LN đọc ngược về trước 2026-09-02 vẫn là số cũ.
+  'gemini-2.5-flash': { input: 0.30, output: 2.50 },
+  // Primary Gemini từ 2026-09-02. 🗓 GIÁ KHUYẾN MÃI CÓ HẠN: $0.75/$3.75 tới
+  // 31/12/2026, từ 01/01/2027 thành **$1.50/$7.50** (Google in thẳng hai mốc
+  // trên bảng giá). Tới hạn phải sửa hai số này, nếu không lại rơi đúng vào
+  // bệnh "ghi sổ bằng nửa giá thật" vừa vá ở trên.
+  'gemini-3.8-flash': { input: 0.75, output: 3.75 },
   // Primary (chốt Henry 2026-08-20). $3/$15 mỗi 1M cache-miss input/output —
   // Moonshot còn có tầng cache-hit $0.30/1M nhưng LlmUsage không tách được
   // hit/miss ở đây → tính bảo thủ theo giá cache-miss (không thổi phồng cache
@@ -47,7 +60,17 @@ const MODEL_PRICING: Record<string, { input: number; output: number }> = {
   'kimi-k3': { input: 3, output: 15 },
 };
 const DEFAULT_PRICING = MODEL_PRICING['claude-sonnet-4-6'];
-const DEFAULT_GEMINI_PRICING = MODEL_PRICING['gemini-2.5-flash'];
+/** Model `gemini-*` KHÔNG có dòng riêng (vd pin `GEMINI_MODEL` sang bản khác)
+ * → lấy mức ĐẮT NHẤT trong họ, không lấy dòng của một model cụ thể.
+ * Vì sao: đường hụt-bảng-giá phải nghiêng về phía tính DƯ, không tính THIẾU.
+ * Tính thiếu là thổi phồng biên LN mà không có gì báo — đúng lớp lỗi vừa vá ở
+ * dòng `gemini-2.5-flash`. Thêm model đắt hơn vào bảng thì mốc này tự nâng theo. */
+const DEFAULT_GEMINI_PRICING = Object.entries(MODEL_PRICING)
+  .filter(([m]) => m.startsWith('gemini'))
+  .reduce(
+    (a, [, p]) => ({ input: Math.max(a.input, p.input), output: Math.max(a.output, p.output) }),
+    { input: 0, output: 0 },
+  );
 const DEFAULT_KIMI_PRICING = MODEL_PRICING['kimi-k3'];
 const USD_TO_VND = 25_000; // khớp tỷ giá quy đổi topup hiện có trong hệ thống
 

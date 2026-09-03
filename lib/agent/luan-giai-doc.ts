@@ -379,8 +379,67 @@ export function buildPrompt(phan: number, laSoText: string, docs?: string): stri
 }
 
 /**
- * `system` DÙNG CHUNG CACHE — SYSTEM_PROMPT + TOÀN VĂN lá số, KHÔNG phụ thuộc
- * `phan`/`docs`. Đây là phần BẤT BIẾN THEO NGƯỜI (không theo phần đang luận)
+ * Bỏ CHI TIẾT của khối `=== 9 ĐẠI VẬN ===`, GIỮ nguyên phần đầu khối (tiêu đề
+ * + dòng ghi chú cấm-dùng-điểm-ĐV-để-chấm-cung) và dòng `ĐVn:` + `Scoring:`
+ * của cả 9 đại vận. Mọi khối khác của lá số giữ nguyên từng byte.
+ *
+ * 🔑 VÌ SAO: hai tool đã TÁCH từ 2026-08 (phần 1–13 = "Luận Giải Lá Số", phần
+ * 14–24 = "Chu Trình Cuộc Đời") nhưng INPUT thì chưa — `cachedSystemFor` vẫn
+ * gửi toàn văn cho cả hai. Đo trên lá số thật `nham-than-26-03-1992-nu-gio-hoi`:
+ * khối 9 đại vận chi tiết là 14.016/29.403 ký tự = **47,7% cả lá số**, mà
+ * `instructionFor(1..13)` không hề nhắc tới nó — 13 lượt gọi cùng ghi rồi đọc
+ * lại một khối không ai đọc. Cắt còn dòng điểm: 29.403 → 16.071 ký tự.
+ *
+ * ⚠️ GIỮ dòng điểm, đừng cắt sạch: bản luận ĐANG BÁN có trích số thật của đại
+ * vận trong phần cung (phần 12 viết "đoạn căng nhất… (3.8/10), qua 36 mới dịu")
+ * — cắt hết là mất đúng thứ làm bản luận có mốc thời gian.
+ * ⚠️ GIỮ dòng ghi chú ngay dưới tiêu đề: nó chính là luật "TUYỆT ĐỐI KHÔNG
+ * dùng điểm đại vận để chấm hay làm điểm yếu của một CUNG". Bỏ điểm-mà-giữ-luật
+ * thì thừa; giữ điểm-mà-bỏ-luật thì model lấy 3.8/10 chấm luôn cho cung.
+ *
+ * Hụt mốc thì TRẢ NGUYÊN lá số + `console.error` — không im lặng (cùng lớp bẫy
+ * `findIndex` trả -1 đã làm bộ cắt câm 2 tháng, xem `trimLaSo` ngay trên).
+ */
+export function stripDaiVanDetail(laSoText: string): string {
+  if (!laSoText) return laSoText;
+  const lines = laSoText.split('\n');
+  const findMark = (m: string) => lines.findIndex((l) => l.trimStart().startsWith(m));
+  const dvIdx = findMark('=== 9 ĐẠI VẬN');
+  if (dvIdx < 0) {
+    console.error(
+      '[luan-giai-doc] stripDaiVanDetail: KHÔNG thấy mốc "=== 9 ĐẠI VẬN" → trả NGUYÊN lá số ' +
+        '(phần 1-13 sẽ tốn token như cũ, không sai kết quả). Kiểm public/tuvi-laso-format.js (MARKERS).',
+    );
+    return laSoText;
+  }
+  const ccIdx = findMark('=== CÁCH CỤC & NHẬN ĐỊNH');
+  const dvEnd = ccIdx > dvIdx ? ccIdx : lines.length;
+  const dvLines = lines.slice(dvIdx, dvEnd);
+  // Phần đầu khối = từ tiêu đề tới ngay trước dòng "ĐV1:" (gồm dòng ghi chú).
+  const firstDv = dvLines.findIndex((l) => /^ĐV\d+:/.test(l));
+  if (firstDv < 0) {
+    console.error(
+      '[luan-giai-doc] stripDaiVanDetail: có mốc "=== 9 ĐẠI VẬN" nhưng KHÔNG có dòng "ĐVn:" nào → ' +
+        'trả NGUYÊN lá số. Kiểm định dạng khối đại vận trong public/tuvi-laso-format.js.',
+    );
+    return laSoText;
+  }
+  const keep = dvLines
+    .slice(firstDv)
+    .filter((l) => /^ĐV\d+:/.test(l) || l.trimStart().startsWith('Scoring:'));
+  return [
+    ...lines.slice(0, dvIdx),
+    ...dvLines.slice(0, firstDv),
+    '(Bản này CHỈ giữ điểm từng đại vận để neo mốc thời gian. Chi tiết sao, luận đoán và',
+    'cảnh báo của từng đại vận KHÔNG thuộc phần đang luận — đừng nhắc tới thứ không có ở đây.)',
+    ...keep,
+    ...lines.slice(dvEnd),
+  ].join('\n');
+}
+
+/**
+ * `system` DÙNG CHUNG CACHE — SYSTEM_PROMPT + lá số, KHÔNG phụ thuộc
+ * `docs`. Đây là phần BẤT BIẾN THEO NGƯỜI (không theo phần đang luận)
  * nên MỌI lượt gọi của CÙNG một lá số — 24 phần Luận Giải LẪN 16 phần "Vận
  * Hạn 12 Tháng Tới" (4 phần đầu QUA `buildPromptCached`, 12 phần tháng qua
  * `buildPromptThang` ở `app/api/van-han-nam/route.ts`) — PHẢI dùng
@@ -389,19 +448,49 @@ export function buildPrompt(phan: number, laSoText: string, docs?: string): stri
  * byte là Anthropic coi là prefix khác, cache miss, mất hết lợi ích chia sẻ
  * (xem CLAUDE.md track tối ưu chi phí Opus, "Code #1" + phần vá "Vận Hạn 12
  * Tháng Tới").
+ *
+ * `phan` quyết định lá số gửi kèm là bản NÀO — và vì thế quyết định luôn CỤM
+ * CACHE. Cùng một cụm thì mọi lượt phải truyền `phan` cùng nhóm:
+ *   · `phan` 1–13  → lá số đã bỏ chi tiết đại vận (`stripDaiVanDetail`).
+ *                    Đúng một cụm cho cả 13 phần của tool "Luận Giải Lá Số".
+ *   · `phan` 14–24 → TOÀN VĂN. Một cụm cho 11 phần "Chu Trình Cuộc Đời".
+ *   · KHÔNG truyền → TOÀN VĂN. Đây là đường của `buildPromptThang`
+ *                    (`app/api/van-han-nam/route.ts`, 12 phần tháng) — nó
+ *                    phải khớp cụm với phần 2/3/4 của chính tool đó, mà 3
+ *                    phần ấy map sang `phan` 14 / 14+n / 24 nên là TOÀN VĂN.
+ * Hướng mặc định CỐ Ý là toàn văn: quên truyền `phan` thì tốn token, KHÔNG
+ * thiếu dữ liệu — hỏng về phía đắt chứ không hỏng về phía sai.
+ *
+ * ⚠️ Hệ quả đã cân nhắc: `van-han-nam` phần 1 map sang `phan` 1 nên nay dùng
+ * bản đã cắt, GIỐNG HỆT phần 1 của Luận Giải — hai tool vẫn không trôi khỏi
+ * nhau ở cùng một phần (đúng luật ghi ở đầu `van-han-nam/route.ts`), đổi lại
+ * tool đó có 2 cụm cache thay vì 1. Thực tế gần như không tốn thêm: phần 1
+ * của nó hầu hết đọc thẳng từ `laso_public.luan_giai` qua
+ * `readCachedLuanGiaiPhan`, không gọi LLM.
  */
-export function cachedSystemFor(laSoText: string): string {
+export function cachedSystemFor(laSoText: string, phan?: number): string {
+  // Nhãn phải nói ĐÚNG thứ đang gửi. Để nguyên "(ĐẦY ĐỦ, KHÔNG CẮT)" trên bản
+  // đã cắt là tự dạy model rằng phần đại vận vốn chỉ có bấy nhiêu — nó sẽ luận
+  // như thể lá số THIẾU dữ liệu thay vì hiểu là phần đó không thuộc bài này.
+  if (phan != null && phan <= 13) {
+    return (
+      SYSTEM_PROMPT +
+      '\n\n=== LÁ SỐ (đủ 12 cung + cách cục; khối đại vận CHỈ có điểm) ===\n' +
+      stripDaiVanDetail(laSoText)
+    );
+  }
   return SYSTEM_PROMPT + '\n\n' + laSoContextFull(laSoText);
 }
 
 /**
  * Bản DÙNG CHUNG CACHE của `buildPrompt` — xem CLAUDE.md track tối ưu chi phí
  * Opus, "Code #1". Khác `buildPrompt` ở HAI chỗ:
- *   1. Lá số KHÔNG cắt theo `trimLaSo` — gửi TOÀN VĂN cho mọi phần, để nhiều
- *      lượt gọi (24 phần Luận Giải, hoặc 16 phần của Vận Hạn 12 Tháng) chia
- *      đúng MỘT prefix giống hệt nhau. Cắt khác nhau theo từng `phan` (như
- *      `buildPrompt`) là phá cache ngay từ lượt thứ hai — Anthropic khớp
- *      prefix TUYỆT ĐỐI, lệch một byte là cache miss cả khối.
+ *   1. Lá số KHÔNG cắt theo `trimLaSo` (bộ cắt đó ra một lát khác nhau cho
+ *      TỪNG `phan` → phá cache ngay lượt thứ hai; Anthropic khớp prefix TUYỆT
+ *      ĐỐI, lệch một byte là miss cả khối). Chỉ có đúng MỘT phép cắt được
+ *      phép ở đây: `stripDaiVanDetail` cho `phan` 1-13 — nó cho ra chuỗi
+ *      GIỐNG HỆT NHAU ở cả 13 phần nên vẫn là một prefix duy nhất. Xem
+ *      `cachedSystemFor`.
  *   2. Lá số dời sang `system` (bất biến theo NGƯỜI, không theo `phan`) — chỉ
  *      `system` mới được đóng dấu `cache_control` (xem `buildAnthropicBody`
  *      trong `lib/llm/complete.ts`). `prompt` trả về CHỈ còn phần đổi theo
@@ -419,7 +508,9 @@ export function buildPromptCached(
 ): { system: string; prompt: string } {
   const docsSection = docs ? '=== TÀI LIỆU THAM KHẢO ===\n' + docs + '\n\n' : '';
   return {
-    system: cachedSystemFor(laSoText),
+    // Truyền `phan` để phần 1-13 nhận lá số đã bỏ chi tiết đại vận — xem
+    // `cachedSystemFor`. Bỏ tham số này là quay về gửi toàn văn cho mọi phần.
+    system: cachedSystemFor(laSoText, phan),
     prompt: docsSection + instructionFor(phan),
   };
 }

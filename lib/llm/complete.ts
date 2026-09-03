@@ -26,7 +26,13 @@ import { toGeminiTools } from '@/lib/agent/providers/gemini';
 import { toKimiTools } from '@/lib/agent/providers/kimi';
 
 const GEMINI_KEY = process.env.GEMINI_API_KEY || '';
-const GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-2.5-flash';
+// 2026-09-02: 2.5-flash → 3.8-flash. Cùng họ Flash, đắt hơn (0.30/2.50 →
+// 0.75/3.75 mỗi 1M) nhưng viết tiếng Việt hơn hẳn — đo trên 13 phần Luận
+// Giải của một lá số thật: 2.5-flash tâng bốc và tự mâu thuẫn với nhãn
+// engine (viết "giữ được bền, không dễ thất thoát" cho cung có Hóa Kỵ hội
+// sát), 3.8-flash thì không. Vẫn rẻ hơn Opus 5 ~6,7 lần cả hai chiều.
+// 🗓 Giá 3.8-flash ×2 từ 01/01/2027 — xem MODEL_PRICING trong lib/agent/usage.ts.
+const GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-3.8-flash';
 const GEMINI_BASE = 'https://generativelanguage.googleapis.com/v1beta/models';
 const ANTHROPIC_KEY = process.env.ANTHROPIC_API_KEY || '';
 // Opus 5. Đứng thứ 1 (primary, các tool "luận giải" quan trọng) hoặc thứ 2
