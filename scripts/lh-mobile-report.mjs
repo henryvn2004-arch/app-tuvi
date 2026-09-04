@@ -67,20 +67,64 @@ function ten(url) {
   }
 }
 
-const manifestPath = path.join(DIR, 'manifest.json');
-if (!fs.existsSync(manifestPath)) {
-  console.log(`Không thấy ${manifestPath} — lhci chưa chạy hoặc chạy hỏng.`);
+// 🔴 `lhci` CHỈ ghi `manifest.json` khi `upload.target` là `filesystem`. Với
+// `temporary-public-storage` (config chẩn đoán đang dùng) thư mục chỉ có
+// `lhr-<timestamp>.json` + `links.json` — đọc manifest là rơi vào nhánh "chưa
+// chạy" trong khi lhci đã chạy xong sạch sẽ. Đã cắn đúng một lượt CI.
+// Nên: đọc THẲNG các file lhr, gom theo URL, lấy lượt TRUNG VỊ theo điểm
+// performance (đúng cách lhci chọn lượt đại diện).
+if (!fs.existsSync(DIR)) {
+  console.log(`Không thấy thư mục ${DIR} — lhci chưa chạy.`);
   process.exit(0);
 }
-const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
-const daiDien = manifest.filter((m) => m.isRepresentativeRun);
-// Nếu không lượt nào được đánh dấu đại diện (numberOfRuns=1 vẫn có), lấy tất.
-const rows = daiDien.length ? daiDien : manifest;
+const files = fs
+  .readdirSync(DIR)
+  .filter((f) => /^lhr-.*\.json$/.test(f))
+  .map((f) => path.join(DIR, f));
+if (!files.length) {
+  console.log(`Không thấy file lhr-*.json trong ${DIR} — lhci chạy hỏng.`);
+  process.exit(0);
+}
+
+const theoUrl = new Map();
+for (const f of files) {
+  let lhr;
+  try {
+    lhr = JSON.parse(fs.readFileSync(f, 'utf8'));
+  } catch (e) {
+    console.log(`  (không đọc được ${f}: ${e.message})`);
+    continue;
+  }
+  const url = lhr.requestedUrl || lhr.finalDisplayedUrl || lhr.finalUrl || f;
+  if (!theoUrl.has(url)) theoUrl.set(url, []);
+  theoUrl.get(url).push(lhr);
+}
+
+// Lượt đại diện = trung vị theo điểm performance. Số chẵn lượt thì lấy lượt
+// THẤP hơn: báo cáo chẩn đoán nghiêng về phía xấu còn hơn nghiêng về phía đẹp.
+const rows = [];
+for (const [url, ds] of theoUrl) {
+  ds.sort(
+    (a, b) => (a.categories?.performance?.score ?? 0) - (b.categories?.performance?.score ?? 0)
+  );
+  const lhr = ds[Math.floor((ds.length - 1) / 2)];
+  rows.push({
+    url,
+    lhr,
+    soLuot: ds.length,
+    summary: {
+      performance: lhr.categories?.performance?.score,
+      accessibility: lhr.categories?.accessibility?.score,
+      'best-practices': lhr.categories?.['best-practices']?.score,
+      seo: lhr.categories?.seo?.score,
+    },
+  });
+}
 
 console.log('\n════════ ĐIỂM THEO TRANG (mobile 390×844, simulate) ════════');
 console.log('Perf  A11y  BP   SEO   Trang');
 for (const r of rows) {
-  const s = r.summary || {};
+  const s = r.summary;
   console.log(
     `${pct(s.performance)} ${pct(s.accessibility)} ${pct(s['best-practices'])} ${pct(s.seo)}  ${ten(r.url)}`
   );
@@ -89,13 +133,7 @@ for (const r of rows) {
 console.log('\n════════ SỐ ĐO ════════');
 const lhrs = new Map();
 for (const r of rows) {
-  let lhr;
-  try {
-    lhr = JSON.parse(fs.readFileSync(r.jsonPath, 'utf8'));
-  } catch (e) {
-    console.log(`  (không đọc được ${r.jsonPath}: ${e.message})`);
-    continue;
-  }
+  const lhr = r.lhr;
   lhrs.set(r.url, lhr);
   const parts = METRICS.map(([id, ten]) => {
     const a = lhr.audits?.[id];
