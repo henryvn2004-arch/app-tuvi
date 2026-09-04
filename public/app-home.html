@@ -72,6 +72,31 @@
 .inv-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
 .inv-code{flex:1 1 190px;min-width:0;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.5px;color:var(--text);background:var(--paper-2);border:1px dashed var(--gold-soft);border-radius:9px;padding:9px 11px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .inv-btn{flex:0 0 auto;background:linear-gradient(135deg,var(--gold-soft),var(--gold));color:#2a1e05;border:none;border-radius:9px;padding:9px 15px;font-size:12.5px;font-weight:700;cursor:pointer;font-family:inherit}
+/* ── KHUNG CHỜ KHỐI MỜI BẠN ────────────────────────────────────────────────
+   Dùng LẠI đúng .inv-card/.inv-t/.inv-d/.inv-row nên chiều cao do CSS thật
+   quyết, không do một con số tự đặt. `.inv-d` để đúng BA dòng vì thẻ khách
+   thật xuống 3 dòng ở bề ngang 346px (đo ở 390×844).
+
+   🐞 Vì sao cần: `#inviteCard` rỗng ở lần vẽ đầu và chỉ được đổ sau khi
+   `whenAuthReady` → `Auth.getFreshToken()` xong. Với khách vô danh, đường đó
+   đi qua `_refreshViaServer()` tức MỘT VÒNG MẠNG tới `/api/auth/session`
+   (chính cú 401 thấy ở console mọi trang) — nên khối này chèn vào rất muộn và
+   đẩy mọi thứ bên dưới. Lighthouse mobile đo `/app` CLS 0,45-0,61. */
+/* Thanh xám vẽ bằng BACKGROUND, không bằng chiều cao/lề của chính phần tử:
+   mỗi `.sk` vẫn là một dòng chữ `&nbsp;` nên nó cao ĐÚNG bằng một dòng thật,
+   còn khoảng hở giữa các thanh là phần nền không tô. Thêm `margin` để lấy khe
+   hở là cộng thêm chiều cao — đo được +6px cho ba dòng, tức lại lệch. */
+.inv-skel .sk{display:block;color:transparent;
+  background:linear-gradient(var(--line),var(--line)) no-repeat left center/100% 13px}
+.inv-skel .inv-t .sk{background-size:64% 15px}
+.inv-skel .inv-d .sk:last-child{background-size:72% 13px}
+/* `line-height` ghim TAY: <span> thừa hưởng 1.55 của thẻ còn <button> thật
+   dùng `normal` của trình duyệt — chênh 5,4px nếu để mặc. */
+.inv-skel .sk-btn{background:var(--line);color:transparent;cursor:default;line-height:14px}
+@keyframes invSkPulse{0%,100%{opacity:1}50%{opacity:.5}}
+@media(prefers-reduced-motion:no-preference){
+  .inv-skel .sk,.inv-skel .sk-btn{animation:invSkPulse 1.4s ease-in-out infinite}
+}
 .inv-btn:hover{filter:brightness(1.06)}
 .inv-btn.ghost{background:none;color:var(--text-mid);border:1px solid var(--line);font-weight:600}
 .inv-note{font-size:11.5px;color:var(--text-lt);margin-top:9px;line-height:1.5}
@@ -328,7 +353,16 @@
              xem gì", còn "Xem tất cả công cụ" GIỮ NGƯỜI TRONG SHELL (không còn
              trỏ ra /cong-cu ở ngoài shell), collapse mặc định, bấm mới dựng. -->
         <div id="nextCard"></div>
-        <div id="inviteCard"></div>
+        <!-- Khung chờ giữ sẵn chỗ của thẻ "Mời bạn". Viết TĨNH: khối thật chỉ
+             đổ được sau một vòng mạng (xem .inv-skel trong <style>), nên nếu
+             chỗ này rỗng thì lần vẽ đầu cao 0px và mọi thứ dưới nó bị đẩy. -->
+        <div id="inviteCard" aria-busy="true">
+          <div class="inv-card inv-skel" aria-hidden="true">
+            <div class="inv-t"><span class="sk">&nbsp;</span></div>
+            <div class="inv-d"><span class="sk">&nbsp;</span><span class="sk">&nbsp;</span><span class="sk">&nbsp;</span></div>
+            <div class="inv-row"><span class="inv-btn sk-btn">&nbsp;</span></div>
+          </div>
+        </div>
         <div class="all-tools-wrap">
           <button class="all-tools" id="allToolsBtn" type="button" aria-expanded="false" aria-controls="allToolsPanel">Xem tất cả công cụ <span class="all-tools-chev" aria-hidden="true">→</span></button>
           <div class="all-tools-panel" id="allToolsPanel" hidden></div>
@@ -513,6 +547,7 @@ if (window.ToolPrices) ToolPrices.load().then(function (d) { if (d) renderNext(d
         'Mỗi người đăng ký qua mã của bạn thì bạn được cộng thêm.</div>' +
       '<div class="inv-row"><button class="inv-btn" type="button" id="invSignup">Tạo tài khoản</button></div>' +
       '</div>';
+    host.removeAttribute('aria-busy');
     var b = document.getElementById('invSignup');
     if (b) b.onclick = function () {
       // `Auth.require` mở modal đăng nhập/đăng ký rồi gọi callback khi xong.
@@ -548,6 +583,7 @@ if (window.ToolPrices) ToolPrices.load().then(function (d) { if (d) renderNext(d
         ? '<div class="inv-note">Đã mời được <b>' + rewarded + '</b> người · nhận <b>' + earned + ' Lượng</b>.</div>'
         : '') +
       '</div>';
+    host.removeAttribute('aria-busy');
     var btn = document.getElementById('invCopy');
     if (btn) btn.onclick = function () {
       var done = function () { btn.textContent = 'Đã chép ✓'; setTimeout(function () { btn.textContent = 'Chép link'; }, 1800); };
@@ -585,7 +621,12 @@ if (window.ToolPrices) ToolPrices.load().then(function (d) { if (d) renderNext(d
       return fetch('/api/payment?action=my-referral', { headers: { Authorization: 'Bearer ' + tk } })
         .then(function (r) { return r.ok ? r.json() : null; })
         .then(function (d) { if (d && d.code) renderMember(d); else renderGuest(); });
-    }).catch(function () { /* đọc hụt → không đoán, để trống */ });
+    }).catch(function () {
+      // Đọc hụt → không đoán, để TRỐNG như trước. Phải dọn tay vì chỗ này giờ
+      // khởi đầu bằng khung chờ: bỏ quên là nó nhấp nháy vĩnh viễn.
+      host.innerHTML = '';
+      host.removeAttribute('aria-busy');
+    });
   });
 })();
 
