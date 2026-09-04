@@ -98,6 +98,32 @@ body{font-family:Arial,sans-serif;background:var(--bg-soft);color:var(--text);mi
 .pkg-card.featured .btn-pkg:hover{background:#7d6230}
 .btn-pkg:disabled{opacity:.6;cursor:not-allowed}
 
+/* ── KHUNG CHỜ GÓI NẠP ─────────────────────────────────────────────────────
+   Dùng LẠI đúng lớp `.pkg-card` + các lớp con thật, chỉ thay chữ bằng thanh
+   xám. Đó mới là mục đích: chiều cao khung chờ KHỚP thẻ thật, nên lúc dữ liệu
+   về không có gì bị đẩy đi.
+
+   🐞 Đây là bản vá cho một cú nhảy ĐO ĐƯỢC: `#packages` rỗng ở lần vẽ đầu rồi
+   phình ra 4 thẻ (1 cột trên điện thoại ≈ 1000px) — Lighthouse mobile ghi
+   CLS 0,337 cho trang này, trong đó 0,320 là `.custom-card` bị đẩy xuống. Trên
+   trang THU TIỀN, nội dung nhảy dưới ngón tay nghĩa là bấm trúng gói khác.
+   Đo lại bằng: Actions → Lighthouse CI → mobile_audit = true. */
+.pkg-skel{pointer-events:none}
+.pkg-skel .sk{display:block;margin:0 auto;background:var(--border-lt);border-radius:4px;color:transparent}
+.pkg-skel .sk-ic{width:28px;height:28px;border-radius:50%}
+.pkg-skel .pkg-name .sk{width:52%}
+.pkg-skel .pkg-price .sk{width:70%}
+.pkg-skel .pkg-credits .sk{width:44%}
+.pkg-skel .pkg-rate .sk{width:62%}
+.pkg-skel .pkg-note .sk{width:58%}
+.pkg-skel .sk-btn{background:var(--border-lt);color:transparent}
+/* Nhấp nháy để đọc ra "đang tải" chứ không phải "hỏng". Keyframe khai TẠI CHỖ:
+   trang này tự chứa toàn bộ style, xem scripts/check-keyframes.mjs. */
+@keyframes skPulse{0%,100%{opacity:1}50%{opacity:.5}}
+@media(prefers-reduced-motion:no-preference){
+  .pkg-skel .sk,.pkg-skel .sk-btn{animation:skPulse 1.4s ease-in-out infinite}
+}
+
 /* ── CUSTOM TOPUP (thứ yếu — gói là đường mặc định, đây là lối cho ai muốn
       một số tiền cụ thể; đơn giá nay bằng bậc gói nên không thiệt) ── */
 .custom-card{background:#fff;border:1px solid var(--border-lt);border-radius:12px;padding:1.1rem 1.4rem;margin-bottom:2.5rem;display:flex;align-items:center;gap:1.25rem;flex-wrap:wrap}
@@ -224,7 +250,17 @@ body{font-family:Arial,sans-serif;background:var(--bg-soft);color:var(--text);mi
     </div>
 
     <div id="pendingBanner" style="display:none"></div>
-    <div class="packages" id="packages"></div>
+    <!-- Khung chờ giữ sẵn chỗ cho 4 thẻ gói. Viết TĨNH ở đây chứ không dựng
+         bằng JS: `loadPackages()` phải await `ToolPrices.load()` nên nếu chỗ
+         này rỗng thì lần vẽ đầu cao 0px, và mọi thứ bên dưới bị đẩy khi dữ
+         liệu về. `renderPackages()` đọc lại nguyên khối này làm bản gốc để
+         khôi phục khi đọc hụt bảng giá — một nguồn duy nhất, không chép đôi. -->
+    <div class="packages" id="packages" aria-busy="true" aria-label="Đang tải bảng giá">
+      <div class="pkg-card pkg-skel"><div class="pkg-icon"><span class="sk sk-ic"></span></div><div class="pkg-name"><span class="sk">&nbsp;</span></div><div class="pkg-price"><span class="sk">&nbsp;</span></div><div class="pkg-credits"><span class="sk">&nbsp;</span></div><div class="pkg-rate"><span class="sk">&nbsp;</span></div><div class="pkg-note"><span class="sk">&nbsp;</span></div><div class="btn-pkg sk-btn">&nbsp;</div></div>
+      <div class="pkg-card pkg-skel"><div class="pkg-icon"><span class="sk sk-ic"></span></div><div class="pkg-name"><span class="sk">&nbsp;</span></div><div class="pkg-price"><span class="sk">&nbsp;</span></div><div class="pkg-credits"><span class="sk">&nbsp;</span></div><div class="pkg-rate"><span class="sk">&nbsp;</span></div><div class="pkg-note"><span class="sk">&nbsp;</span></div><div class="btn-pkg sk-btn">&nbsp;</div></div>
+      <div class="pkg-card pkg-skel"><div class="pkg-icon"><span class="sk sk-ic"></span></div><div class="pkg-name"><span class="sk">&nbsp;</span></div><div class="pkg-price"><span class="sk">&nbsp;</span></div><div class="pkg-credits"><span class="sk">&nbsp;</span></div><div class="pkg-rate"><span class="sk">&nbsp;</span></div><div class="pkg-note"><span class="sk">&nbsp;</span></div><div class="btn-pkg sk-btn">&nbsp;</div></div>
+      <div class="pkg-card pkg-skel"><div class="pkg-icon"><span class="sk sk-ic"></span></div><div class="pkg-name"><span class="sk">&nbsp;</span></div><div class="pkg-price"><span class="sk">&nbsp;</span></div><div class="pkg-credits"><span class="sk">&nbsp;</span></div><div class="pkg-rate"><span class="sk">&nbsp;</span></div><div class="pkg-note"><span class="sk">&nbsp;</span></div><div class="btn-pkg sk-btn">&nbsp;</div></div>
+    </div>
 
     <div class="custom-card">
       <div class="custom-label">
@@ -341,6 +377,11 @@ const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFz
 // rồi "64 lá số" trong khi mua được 16). Chưa đọc được giá thì trang hiện
 // khung chờ, KHÔNG hiện số phỏng đoán.
 const FALLBACK_PACKAGES = [];
+// Khung chờ gói: giữ nguyên văn khối viết tĩnh trong HTML để `renderPackages()`
+// khôi phục được khi đọc hụt bảng giá. Đọc từ DOM chứ KHÔNG chép markup lần
+// hai vào đây — hai bản sẽ trôi khỏi nhau, và bản trôi thì cao sai, tức lại
+// đúng cú nhảy mà nó sinh ra để chặn.
+const PKG_SKEL_HTML = document.getElementById('packages').innerHTML;
 const PKG_ICONS = ['leaf', 'star', 'gem', 'crown'];
 // Chưa có cột `featured` dưới DB → gói thứ HAI theo sort_order là gói được làm
 // nổi (đúng gói mà bản cũ viết cứng), và cũng là gói dùng để quy đổi đ/Lượng
@@ -414,10 +455,13 @@ function renderPackages() {
   // Chưa đọc được `credit_packages` → khung chờ. CỐ Ý không vẽ gói phỏng đoán:
   // đây là trang thu tiền, hiện sai số Lượng còn tệ hơn hiện chậm.
   if (!list.length) {
-    document.getElementById('packages').innerHTML =
-      '<div class="state-msg" style="grid-column:1/-1">'
-      + '<span data-icon="rotate-cw" class="spin"></span> Đang tải bảng giá…</div>';
-    mount(document.getElementById('packages'));
+    // Trả về KHUNG CHỜ, không phải một dòng "Đang tải…": dòng chữ đó cao ~85px
+    // còn bốn thẻ thật cao ~1000px trên điện thoại, nên nó chỉ dời cú nhảy chứ
+    // không bỏ được. Khung chờ cao đúng bằng thẻ thật thì không có gì để nhảy.
+    const el = document.getElementById('packages');
+    el.setAttribute('aria-busy', 'true');
+    el.setAttribute('aria-label', 'Đang tải bảng giá');
+    if (!el.querySelector('.pkg-skel')) el.innerHTML = PKG_SKEL_HTML;
     return;
   }
   // "Rẻ hơn N%" so với gói có ĐƠN GIÁ CAO NHẤT trong chính bảng này — mốc tự
@@ -454,7 +498,10 @@ function renderPackages() {
       + '<span>' + (isBank ? 'Chuyển khoản' : 'PayPal') + '</span></button>'
       + '</div>';
   }).join('');
-  mount(document.getElementById('packages'));
+  const el = document.getElementById('packages');
+  el.removeAttribute('aria-busy');
+  el.removeAttribute('aria-label');
+  mount(el);
 }
 
 /** Nhãn gốc của nút — để khôi phục sau khi nhả trạng thái "đang kết nối". */
