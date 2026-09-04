@@ -496,11 +496,24 @@ export const MAU_ARC_CHUNG = mauArc(
 //   · luật thuật ngữ (tên riêng để trong ngoặc, không mở đầu câu)
 //   · ngân sách từ của từng phần
 // Viết lại chúng ở đây là dựng bản thứ hai rồi hai bản trôi khỏi nhau.
+//
+// 2026-09-04 (Henry): thêm khối "NHÃN TÍNH CHẤT" — luận giải lá số đã có tự
+// gắn nhãn [TỐT]/[CẢNH BÁO]/[TRUNG TÍNH] trước câu hook (PR #680/#681, để tô
+// màu thẻ trích dẫn kiểu Facebook caption, xem `app-luan-giai.html`). Đặt
+// NGAY TRONG `arcDoc` (thay vì lặp lại riêng ở từng file) để LAN tự động ra cả
+// 5 bản dùng chung khối này — Bát Tự, Phu Thê, Xem Tuổi/Làm Ăn, Bút Tướng vốn
+// đã có câu "MỞ ĐẦU... câu chốt in đậm" riêng, chỉ thiếu đúng cái nhãn màu.
+// ⚠️ Khối mới +~610 ký tự cho CẢ 5 bản — cả 5 đều đã sát trần
+// (`scripts/check-prompt-budget.mjs`, mục DOC_FILES), nên nới trần cùng lượt
+// theo đúng biên ~10% đã dùng trước đó, không phải nới tuỳ tiện.
 const arcDoc = (o: { canCu: string; moc: string; duBao: string; phepDich: string }) => `── BA THỨ BẮT BUỘC CÓ TRONG MỖI PHẦN (BỔ SUNG cho luật phán quyết ở trên, KHÔNG thay nó) ──
 Viết LIỀN MẠCH trong văn xuôi. TUYỆT ĐỐI không in tên ba mục này ra màn hình, không đánh số, không tách thành tiêu đề.
 - HÀNH VI ĐỜI THƯỜNG (1–2 việc): việc cụ thể tới mức người đọc tự soi ra mình — "hay nhận việc rồi ôm một mình", "cãi xong là im mấy ngày", "tiền vào tay là có chỗ gọi tên ngay". Phải mọc ra từ ${o.canCu} của CHÍNH phần đang viết, KHÔNG phải câu chung chung ai đọc cũng thấy đúng. Chật chỗ thì lấy MỘT cái đắt nhất.
 - MỘT CÂU LẬT (đặt NGAY SAU phần giải thích, trước câu kết): lật góc nhìn — cái người đọc tưởng là chỗ yếu hoá ra là chỗ dùng được, hoặc chỗ tưởng là may lại có cái giá của nó. Đây KHÔNG phải mục tuỳ chọn: ${o.moc} Chỉ được BỎ khi phần đó thật sự không có gì để lật; đã lật thì phải bám dữ kiện, tuyệt đối không nói ngược cho kêu.
 - MỘT–HAI DỰ BÁO (đặt NGAY SAU câu lật, SÁT câu kết — để câu hành động ở cuối là việc làm được CHO chính dự báo này): chuyện gì nhiều khả năng tới (thăng chức, đổi việc, quan hệ căng lên hay dịu xuống). Phải mọc ra từ dữ kiện của CHÍNH phần đang viết. ${o.duBao} Nói bằng ngôn ngữ xác suất ("nhiều khả năng", "có xu hướng"), KHÔNG hứa chắc, KHÔNG doạ. Không có căn cứ thì BỎ HẲN — thà thiếu một dự báo còn hơn bịa một cái mốc.
+
+── NHÃN TÍNH CHẤT MỖI CÂU HOOK ──
+Câu mở đầu mỗi phần (nếu bài đã yêu cầu câu chốt/phán quyết in đậm) LUÔN kèm một nhãn tính chất trong ngoặc vuông NGAY TRƯỚC dấu ** mở: [TỐT] (tin vui/thuận lợi), [CẢNH BÁO] (tin xấu/rủi ro/cần đề phòng), [TRUNG TÍNH] (trung lập). Mọi đoạn xuống dòng KHÁC trong phần cũng mở bằng một câu NGẮN in đậm tương tự — cùng chuẩn cụ thể, đo lường/hình dung được — kèm đúng một trong ba nhãn trên. Có bao nhiêu đoạn thì có bấy nhiêu câu hook, mỗi câu đứng đầu đúng đoạn của nó, không dồn hết vào một câu. Nhãn đứng NGOÀI dấu **, viết ĐÚNG một trong ba từ, không lặp nhãn ở chỗ khác.
 
 ── GIỌNG ──
 Viết như đang NÓI với người ngồi đối diện — chêm khẩu ngữ tự nhiên (thì, à, này, nhé, đấy, cơ, chứ), mỗi đoạn 1–2 cái. KHÔNG chêm vào câu phán quyết in đậm, không chêm vào câu chốt.

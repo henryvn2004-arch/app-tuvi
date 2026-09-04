@@ -279,32 +279,28 @@ const DOC_FILES = {
   // Prompt 24 phần DỜI khỏi route sang lib (tool "Vận Hạn 12 Tháng Tới" dùng
   // lại 4 phần đầu; Next chặn export lạ trong route file). Nội dung KHÔNG đổi
   // — A/B đã chứng minh 24 prompt trùng khít từng byte.
-  'lib/agent/luan-giai-doc.ts': { name: 'SYSTEM_PROMPT', cap: 11800, arc: 'DOC_ARC_LASO' },
-  'app/api/tubinh/route.ts': { name: 'SYSTEM_PROMPT_TUBINH', cap: 9400, arc: 'DOC_ARC_TUBINH' },
-  // Nới 6600 → 7000 (2026-08-19): `arcDoc` thêm lớp DỰ BÁO (+~590 ký tự cho MỌI
-  // bản luận giải). Lá số và Tử Bình còn dư chỗ; hai bản dưới thì không.
-  // ⚖️ Chọn nới thay vì cắt luật sẵn có: đây là prompt TRẢ TIỀN, mà không có căn
-  // cứ nào nói luật nào trong đó đáng cắt — cắt mò một luật đang chạy đúng thì
-  // rủi ro hơn hẳn việc nới một con số có ghi lý do.
+  // Nới 11800 → 13700, 9400 → 10900, 7000 → 8200, 3100 → 4000, 6900 → 7900
+  // (2026-09-04, CẢ 5 bản cùng lượt): `arcDoc` thêm khối "NHÃN TÍNH CHẤT MỖI
+  // CÂU HOOK" ([TỐT]/[CẢNH BÁO]/[TRUNG TÍNH] trước câu hook, cho thẻ trích dẫn
+  // màu kiểu Facebook caption) — +609 ký tự đo THẬT cho MỖI bản, vì cả 5 đều
+  // nội suy chung `arcDoc()`. Cả 5 bản đều đã sát trần (95-100%) từ đợt DỰ BÁO
+  // trước, không còn chỗ trống nào để hấp thụ khối mới ⇒ bắt buộc nới cả 5,
+  // không phải nới tuỳ tiện. Biên vẫn giữ ~10% như các lần nới trước.
+  'lib/agent/luan-giai-doc.ts': { name: 'SYSTEM_PROMPT', cap: 13700, arc: 'DOC_ARC_LASO' },
+  'app/api/tubinh/route.ts': { name: 'SYSTEM_PROMPT_TUBINH', cap: 10900, arc: 'DOC_ARC_TUBINH' },
   'lib/agent/phu-the-luan-giai.ts': {
     name: 'PHU_THE_LUAN_GIAI_SYSTEM_PROMPT',
-    cap: 7000,
+    cap: 8200,
     arc: 'DOC_ARC_PHU_THE',
   },
-  // Nới 2400 → 3100 (2026-08-19), tỉ lệ nhảy nhiều nhất (+23%) KHÔNG phải vì nó
-  // phình bất thường mà vì nó vốn MỎNG NHẤT (2358) — cùng một khối 590 ký tự thì
-  // ở đây chiếm tỉ lệ lớn hơn hẳn ba bản kia.
   'app/api/xem-tuoi/route.ts': {
     name: 'LUAN_GIAI_TUONG_HOP_SYSTEM',
-    cap: 3100,
+    cap: 4000,
     arc: 'DOC_ARC_TUONG_HOP',
   },
-  // Thêm 2026-08-25: bút tướng (SP_BUT_TUONG) từng thiếu HẲN lớp hook/twist —
-  // Henry đọc thấy dài mà nhạt, đúng bệnh 4 bản kia từng có trước khi gắn arc.
-  // Cap 6900 = mức thực đo lúc thêm `DOC_ARC_BUT_TUONG` (6272) + biên ~10%.
   'app/api/but-tuong/route.js': {
     name: 'SP_BUT_TUONG',
-    cap: 6900,
+    cap: 7900,
     arc: 'DOC_ARC_BUT_TUONG',
   },
 };

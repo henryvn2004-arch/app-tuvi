@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"></noscript>
-<link rel="stylesheet" href="/shell.css?v=31">
+<link rel="stylesheet" href="/shell.css?v=32">
 <style>
 .form-card{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);max-width:640px}
 .form-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:3px}
@@ -463,10 +463,27 @@ async function _doGenerate(freeRerun) {
 }
 
 // esc() dùng chung từ /laso-chart.js (đã load ở trên) — không khai lại.
+// Nhãn tính chất model tự gắn NGAY TRƯỚC câu hook mỗi đoạn (khối "NHÃN TÍNH
+// CHẤT MỖI CÂU HOOK" trong `arcDoc()`, lib/agent/prompts.ts) — tách thành thẻ
+// trích dẫn màu (.fb-card, xem shell.css), cùng cơ chế với app-luan-giai.html.
+var HOOK_TAG_CLASS = { 'TỐT': 'fb-tot', 'CẢNH BÁO': 'fb-canhbao', 'TRUNG TÍNH': 'fb-trungtinh' };
 function mdBoldParas(text) {
-  return String(text || '').split(/\n{2,}/).map(function (p) {
-    return '<p style="margin:0 0 12px">' + esc(p.trim()).replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>') + '</p>';
-  }).join('');
+  var out = '', pendingLead = '';
+  function flushPending() { if (pendingLead) { out += '<p style="margin:0 0 12px">' + pendingLead + '</p>'; pendingLead = ''; } }
+  String(text || '').split(/\n{2,}/).forEach(function (p) {
+    var m = /^\[(TỐT|CẢNH BÁO|TRUNG TÍNH)\]\s*\*\*(.+?)\*\*([\s\S]*)$/.exec(p.trim());
+    if (m) {
+      flushPending();
+      var cls = HOOK_TAG_CLASS[m[1]] || 'fb-trungtinh';
+      out += '<div class="fb-card ' + cls + '">“' + esc(m[2].trim()) + '”</div>';
+      pendingLead = esc(m[3].trim()).replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+      return;
+    }
+    out += '<p style="margin:0 0 12px">' + (pendingLead ? pendingLead + ' ' : '') + esc(p.trim()).replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>') + '</p>';
+    pendingLead = '';
+  });
+  flushPending();
+  return out;
 }
 
 // ── Tách render theo ĐƯỜNG TIỀN, không theo bố cục (W1b) ────────────────────

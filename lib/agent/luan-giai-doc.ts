@@ -128,22 +128,14 @@ export const CUNG_DESC: Record<string, string> = {
   'Huynh Đệ': 'Cung Huynh Đệ xem anh chị em, bạn bè cùng trang lứa, và một phần về tài chính lưu động. Tối thiểu phải trả lời được các câu hỏi: Anh chị em trong gia đình có hòa thuận, đùm bọc hay thường xuyên khắc khẩu, xung đột với nhau? Anh chị em của tôi có cuộc sống thành đạt, khá giả hay vất vả, gian truân? Khi gặp khó khăn, hoạn nạn, tôi có thể nhờ cậy và nhận được sự giúp đỡ từ anh chị em hoặc bạn bè cùng trang lứa không? Khi kết giao hay hợp tác làm ăn với bạn bè, đối tác ngang hàng, tôi có dễ bị lợi dụng, đâm sau lưng hay không? Dòng tiền lưu động (tiền mặt) của tôi có dồi dào, trôi chảy hay thường xuyên bị tắc nghẽn, thất thoát?',
 };
 
-// Henry 2026-09-03: mỗi đoạn xuống dòng cũng phải mở bằng một câu hook riêng —
-// không chỉ câu mở đầu cả phần (câu này NẰM TRONG đoạn đầu tiên nên tự động
-// ăn theo luật dưới, khỏi phải sửa thêm ở SYSTEM_PROMPT) — để đọc lướt vẫn bắt
-// được ý mỗi đoạn, kiểu thẻ caption Facebook (UI dựng thẻ `.fb-card`, xem
-// `renderMarkdown` trong app-luan-giai.html). MỘT nguồn chung, nội suy vào
-// mọi nhánh của `instructionFor` — sửa một chỗ, khỏi 6 nhánh trôi khỏi nhau.
-//
-// 2026-09-03 (tiếp): thêm nhãn tính chất [TỐT]/[CẢNH BÁO]/[TRUNG TÍNH] đứng
-// trước mỗi câu hook, để tô màu thẻ theo sentiment — model tự chấm NGAY trong
-// lượt sinh này, KHÔNG cần một lượt gọi LLM riêng để phân loại (rẻ hơn hẳn so
-// với gọi thêm; cũng KHÔNG dò từ khoá thô phía client — tiếng Việt dò chuỗi
-// thô sai lớp, xem CLAUDE.md mục "Tiếng Việt"). Tái dùng đúng 3 nhãn đã có
-// tiền lệ trong SYSTEM_PROMPT (nhãn "Luận sao", tag [LUẬN ĐOÁN]/[CẢNH BÁO] của
-// Đại Vận) — không bịa thêm khái niệm mới.
-const PARAGRAPH_HOOK_RULE =
-  'Mỗi đoạn xuống dòng trong phần thân (kể cả đoạn chứa câu mở đầu cả phần) đều bắt đầu bằng một câu NGẮN in đậm (**...**), tóm tắt/hook đúng ý đoạn đó — cùng chuẩn khẳng định cụ thể, đo lường/hình dung được, không tính từ mờ nhạt. Có bao nhiêu đoạn thì có bấy nhiêu câu in đậm như vậy, mỗi câu đứng đầu đúng đoạn của nó, không dồn hết vào một câu. NGAY TRƯỚC dấu ** mở của MỖI câu đó, gắn một nhãn tính chất trong ngoặc vuông: [TỐT] nếu đoạn mang tin vui/thuận lợi, [CẢNH BÁO] nếu mang tin xấu/rủi ro/cần đề phòng, [TRUNG TÍNH] nếu chỉ mô tả trung lập, không rõ tốt/xấu. Ví dụ ĐÚNG định dạng: [TỐT] **Câu hook...** (giải thích tiếp theo sau, không đặt trong nhãn). Nhãn đứng NGOÀI dấu **, viết ĐÚNG một trong ba từ trên, không lặp lại nhãn ở chỗ khác trong đoạn.';
+// 2026-09-03/04 (Henry): mỗi đoạn xuống dòng cũng phải mở bằng một câu hook
+// riêng kèm nhãn [TỐT]/[CẢNH BÁO]/[TRUNG TÍNH] — kiểu thẻ caption Facebook
+// (UI dựng thẻ `.fb-card`, xem `renderMarkdown` trong app-luan-giai.html).
+// Luật này ĐÃ DỜI vào khối "NHÃN TÍNH CHẤT MỖI CÂU HOOK" trong `arcDoc()`
+// (`lib/agent/prompts.ts`) để lan tự động ra cả 5 bản luận giải dài dùng
+// chung arcDoc (Lá Số, Bát Tự, Phu Thê, Xem Tuổi/Làm Ăn, Bút Tướng) thay vì
+// chỉ riêng file này — xem `${DOC_ARC_LASO}` ở SYSTEM_PROMPT trên. Từng có
+// một bản `PARAGRAPH_HOOK_RULE` riêng ở đây, đã gỡ vì trùng.
 
 // ─── Prompt builder ────────────────────────────────────────────
 /**
@@ -284,7 +276,6 @@ Xuống dòng rồi mới giải thích, chia thành 2-4 đoạn riêng (không 
 ② Cung Mệnh, cung an Thân: Chính tinh, cách cục nổi bật — khí chất và điểm mạnh/yếu cốt lõi. Xét vị trí cung mệnh, cung an Thân trong vòng Tràng Sinh và vòng Lộc Tồn để suy ra ý nghĩa.
 ③ Nhóm Thái Tuế tại Mệnh vs Thân: Hai nhóm phản ánh hai chiều con người — bên trong và bên ngoài xã hội.
 ④ Một nhận định tổng: Điểm đặc biệt nhất của lá số này là gì?
-${PARAGRAPH_HOOK_RULE}
 
 Lưu ý: Dựa trên [CÁCH CỤC] và [Ý NGHĨA] đã có — diễn giải, không liệt kê lại.
 Tối thiểu phải trả lời được các câu hỏi: Cuộc đời tôi nhìn tổng thể là lá số sung sướng hay lận đận, và tôi sinh ra trên đời này để đóng vai trò hay sứ mệnh gì? Đâu là giai đoạn vận hạn đỉnh cao nhất để tôi bứt phá, và đâu là những mốc thời điểm giông bão nhất mà tôi phải trải qua trong suốt cuộc đời? Trong 12 cung trong lá số, đâu mới là "vũ khí mạnh nhất" giúp tôi gặt hái thành công, và đâu là "mắt xích yếu nhất" dễ khiến tôi sụp đổ? Giới hạn hay ngưỡng thành công tối đa mà lá số cho phép tôi chạm tới là đâu, tôi có số đổi đời bứt phá hay chỉ dừng lại ở mức bình ổn? Bài học hoặc nghiệp quả lớn nhất mà cuộc đời bắt buộc tôi phải đối mặt và giải quyết là gì để đạt được sự viên mãn trọn vẹn ở hậu vận?`;
@@ -300,7 +291,6 @@ Xuống dòng rồi viết văn xuôi súc tích, chia 2-4 đoạn riêng, đi t
 ① Bản chất cốt lõi: người này là kiểu người gì, dựa trên chính tinh tại Mệnh và cách cục ([CÁCH CỤC], [Ý NGHĨA]) — đây là điểm sống còn của lá số, diễn giải thật rõ tác động thực tế.
 ② Sao phụ, chỉ khi thực sự ảnh hưởng: dịch thẳng ra hệ quả (dễ có quý nhân giúp, dễ vướng thị phi, hay trắc trở đường học vấn...), không cần liệt kê hết tên.
 ③ Điểm mạnh và điểm cần cảnh giác trong con người và cuộc đời.
-${PARAGRAPH_HOOK_RULE}
 
 Xét thêm cung Thiên Di (xung chiếu Mệnh) — ảnh hưởng gì đến tính cách bên ngoài?`;
 
@@ -318,7 +308,6 @@ Xuống dòng rồi viết 2-4 đoạn riêng (đủ chỗ trả lời hết b�
 ① Nhận định chính: dựa trên [CÁCH CỤC] và [Ý NGHĨA] — dịch ra hệ quả cụ thể, đây là phần quan trọng nhất.
 ② Đào sâu các câu hỏi trọng tâm còn lại bằng dẫn chứng cụ thể từ dữ liệu — không bịa thêm sự kiện lá số không chỉ ra.
 ③ Kết luận thực tế: 1-2 câu về tác động cụ thể trong cuộc đời người này (chỉ nhắc tam phương tứ chính khi nó thật sự đổi kết quả).
-${PARAGRAPH_HOOK_RULE}
 
 Không liệt kê lại tên sao, không mô tả lại dữ liệu thô. Nếu cung vô chính diệu thì nói rõ phải mượn cung xung chiếu để luận (không cần nhắc chữ "xung chiếu" nếu diễn được bằng câu thường).`;
   }
@@ -339,8 +328,7 @@ JSON chart (BẮT BUỘC, đủ 9 điểm):
 {"labels":["ĐV1 x-y","ĐV2 x-y","ĐV3 x-y","ĐV4 x-y","ĐV5 x-y","ĐV6 x-y","ĐV7 x-y","ĐV8 x-y","ĐV9 x-y"],"scores":[s1,s2,s3,s4,s5,s6,s7,s8,s9]}
 \`\`\`
 
-Nhận xét tổng (120-160 từ), viết bằng ngôn ngữ đời thường, đọc là hiểu ngay: giai đoạn nào dễ thở nhất, giai đoạn nào chật vật nhất, xu hướng chung của cuộc đời theo thời gian. Nếu người đang trong đại vận nào thì nhận xét thêm về giai đoạn hiện tại. Không cần liệt kê lại số liệu đã có trong bảng.
-${PARAGRAPH_HOOK_RULE}`;
+Nhận xét tổng (120-160 từ), viết bằng ngôn ngữ đời thường, đọc là hiểu ngay: giai đoạn nào dễ thở nhất, giai đoạn nào chật vật nhất, xu hướng chung của cuộc đời theo thời gian. Nếu người đang trong đại vận nào thì nhận xét thêm về giai đoạn hiện tại. Không cần liệt kê lại số liệu đã có trong bảng.`;
 
   if (phan >= 15 && phan <= 23) {
     const dvNum = phan - 14;
@@ -367,8 +355,7 @@ thuật ngữ. Căn cứ: dòng "Scoring: … Tổng=X" của ĐV${dvNum} (chép
 tính lại; số thấp thì nói thẳng là giai đoạn khó, không né).
 Xuống dòng rồi viết 1-2 đoạn giải thích ngắn, dễ hiểu, bằng ngôn ngữ đời thường:
 ① Vì sao: dịch "[LUẬN ĐOÁN]"/"[CẢNH BÁO]" thành chuyện đời thực — không liệt kê lại nguyên văn, không xướng tên sao/cách cục trừ khi cần cho rõ nghĩa (thì để gọn trong ngoặc).
-② Kết luận thực tế: 1-2 câu tác động cụ thể + gợi ý nhẹ nếu cần.
-${PARAGRAPH_HOOK_RULE}`;
+② Kết luận thực tế: 1-2 câu tác động cụ thể + gợi ý nhẹ nếu cần.`;
   }
 
   if (phan === 24) return `
@@ -387,7 +374,6 @@ dịch ra hệ quả cụ thể, không cần liệt kê từng cung/sao đã x�
 thì để gọn trong ngoặc. Đại hạn tốt thì cái xấu của tiểu hạn cũng đỡ nặng, ngược
 lại đại hạn xấu thì cái tốt của tiểu hạn cũng giảm bớt — phản ánh đúng chiều đó.
 ② Cơ hội và rủi ro: 1-2 điểm thuận + 1-2 điểm cần cẩn thận cụ thể, rồi một câu khuyên ngắn cho năm này.
-${PARAGRAPH_HOOK_RULE}
 
 Không giải thích lý thuyết. Đi thẳng vào tác động với người này.`;
 

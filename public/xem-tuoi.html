@@ -37,6 +37,14 @@ html { overflow-x: hidden; }
   --red:       #C0392B;
   --green:     #1E6B3C;
 }
+/* Thẻ trích dẫn kiểu Facebook caption cho câu hook — trang này KHÔNG nạp
+   shell.css (trang standalone cũ), nên khai riêng thay vì phụ thuộc token
+   của shell (--sans/--heading không tồn tại ở đây). Màu khớp bản gốc trong
+   shell.css để đồng nhất giữa các tool, chỉ đổi token thành giá trị cứng. */
+.fb-card{border-radius:14px;padding:30px 26px;margin:16px 0 18px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;font-weight:700;font-size:clamp(19px,5.4vw,27px);line-height:1.4;letter-spacing:.015em;text-align:center}
+.fb-tot{background:#E8F5EC;color:#1E6B3C}
+.fb-canhbao{background:#FBEAE7;color:#C0392B}
+.fb-trungtinh{background:var(--gold-lt);color:var(--navy)}
 body { font-family: Arial, sans-serif; background: var(--bg); color: var(--text); font-size: 16px; line-height: 1.6; -webkit-font-smoothing: antialiased; }
 
 /* NAV */
@@ -1404,6 +1412,33 @@ function jumpTo(idx){
   if(a)a.scrollIntoView({behavior:'smooth',block:'start'});
 }
 
+// Nhãn tính chất model tự gắn NGAY TRƯỚC câu hook mỗi đoạn (khối "NHÃN TÍNH
+// CHẤT MỖI CÂU HOOK" trong `arcDoc()`, lib/agent/prompts.ts) — tách thành thẻ
+// trích dẫn màu (.fb-card, xem shell.css), cùng cơ chế với app-luan-giai.html.
+// Trang này trước đây chỉ tách đoạn theo `\n\n` mà KHÔNG đổi `**...**` sang
+// in đậm — sửa luôn ở đây vì nếu không, đoạn thường sẽ hiện dấu ** trần ngay
+// cạnh thẻ card đã tô màu đẹp, rất lệch mắt.
+const HOOK_TAG_CLASS = { 'TỐT': 'fb-tot', 'CẢNH BÁO': 'fb-canhbao', 'TRUNG TÍNH': 'fb-trungtinh' };
+function renderLuanGiaiParas(text) {
+  const inline = (s) => s.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>').replace(/\*(.+?)\*/g, '<em>$1</em>');
+  let out = '', pendingLead = '';
+  const flushPending = () => { if (pendingLead) { out += `<p style="margin-bottom:12px">${pendingLead}</p>`; pendingLead = ''; } };
+  String(text || '').split('\n\n').filter(Boolean).forEach((p) => {
+    const m = /^\[(TỐT|CẢNH BÁO|TRUNG TÍNH)\]\s*\*\*(.+?)\*\*([\s\S]*)$/.exec(p.trim());
+    if (m) {
+      flushPending();
+      const cls = HOOK_TAG_CLASS[m[1]] || 'fb-trungtinh';
+      out += `<div class="fb-card ${cls}">"${m[2].trim()}"</div>`;
+      pendingLead = inline(m[3]).trim();
+      return;
+    }
+    out += `<p style="margin-bottom:12px">${pendingLead ? pendingLead + ' ' : ''}${inline(p)}</p>`;
+    pendingLead = '';
+  });
+  flushPending();
+  return out;
+}
+
 async function luanGiaiSection(idx,m,result){
   const {nameA,nameB,naA,naB,lsA,lsB}=result;
   const palMenhA=lsA.palaces?.find(p=>p.isMenh),palMenhB=lsB.palaces?.find(p=>p.isMenh);
@@ -1534,7 +1569,7 @@ Viết 300-350 từ văn xuôi. Nhận định tổng quan, điểm mạnh, đi�
     const text=data.luanGiai||'';
     _xemTuoiStore[idx] = text; // accumulate for save
     const el=document.getElementById('luangiai-'+idx);
-    if(el)el.innerHTML=text.split('\n\n').filter(Boolean).map(p=>`<p style="margin-bottom:12px">${p}</p>`).join('');
+    if(el)el.innerHTML=renderLuanGiaiParas(text);
   } catch(e) {
     const el=document.getElementById('luangiai-'+idx);
     if(el)el.innerHTML='<span style="color:var(--text-lt);font-size:12px">Không thể kết nối luận giải.</span>';

@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"></noscript>
-<link rel="stylesheet" href="/shell.css?v=31">
+<link rel="stylesheet" href="/shell.css?v=32">
 <link rel="stylesheet" href="/laso-chart.css?v=3">
 <style>
 /* Center riêng của trang Chu Trình Cuộc Đời — CÙNG khuôn CSS với app-luan-giai.html
@@ -504,6 +504,10 @@ var QUERIES={
   24: function(){ return 'tiểu hạn lưu niên '+(_astrolabe&&_astrolabe.chiNamXem||'')+' '+(_astrolabe&&_astrolabe.palaces[_astrolabe.tieuHanIdx]&&_astrolabe.palaces[_astrolabe.tieuHanIdx].cungName||'')+' vận hiện tại'; },
 };
 
+// Nhãn tính chất model tự gắn NGAY TRƯỚC câu hook mỗi đoạn (khối "NHÃN TÍNH
+// CHẤT MỖI CÂU HOOK" trong `arcDoc()`, lib/agent/prompts.ts) — tra ra class
+// CSS màu (.fb-card, xem shell.css). Cùng cơ chế với app-luan-giai.html.
+var HOOK_TAG_CLASS={ 'TỐT':'fb-tot', 'CẢNH BÁO':'fb-canhbao', 'TRUNG TÍNH':'fb-trungtinh' };
 function renderMarkdown(text){
   var lines=text.split('\n'), out='', inTable=false, rows=[];
   function flushTable(){
@@ -518,20 +522,32 @@ function renderMarkdown(text){
     out+='</table></div>';
     rows=[]; inTable=false;
   }
+  function inline(s){ return s.replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/\*(.+?)\*/g,'<em>$1</em>'); }
+  // Dẫn chứng "(cách ...)." sau câu hook thường đứng riêng dòng — chờ ghép
+  // vào đoạn giải thích kế tiếp thành MỘT <p>, xem app-luan-giai.html.
+  var pendingLead='';
+  function flushPending(){ if(pendingLead){ out+='<p>'+pendingLead+'</p>'; pendingLead=''; } }
   lines.forEach(function(line){
-    if(line.trim().indexOf('|')===0){ inTable=true; rows.push(line.trim()); }
+    if(line.trim().indexOf('|')===0){ flushPending(); inTable=true; rows.push(line.trim()); }
     else{
       if(inTable)flushTable();
-      var l=line
-        .replace(/^## (.+)$/,'<h3>$1</h3>')
-        .replace(/^### (.+)$/,'<h3>$1</h3>')
-        .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
-        .replace(/\*(.+?)\*/g,'<em>$1</em>');
-      if(l.indexOf('<h')===0)out+=l;
-      else if(l.trim())out+='<p>'+l+'</p>';
+      var h=line.replace(/^## (.+)$/,'<h3>$1</h3>').replace(/^### (.+)$/,'<h3>$1</h3>');
+      if(h.indexOf('<h')===0){ flushPending(); out+=h; return; }
+      if(!line.trim())return;
+      var m=/^\[(TỐT|CẢNH BÁO|TRUNG TÍNH)\]\s*\*\*(.+?)\*\*([\s\S]*)$/.exec(line.trim());
+      if(m){
+        flushPending();
+        var cls=HOOK_TAG_CLASS[m[1]]||'fb-trungtinh';
+        out+='<div class="fb-card '+cls+'">“'+esc(m[2].trim())+'”</div>';
+        pendingLead=inline(m[3]).trim();
+        return;
+      }
+      out+='<p>'+(pendingLead?pendingLead+' ':'')+inline(line)+'</p>';
+      pendingLead='';
     }
   });
   if(inTable)flushTable();
+  flushPending();
   return out;
 }
 

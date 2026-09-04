@@ -453,6 +453,24 @@ font-family:inherit}
 .sh-gal-note button:disabled{opacity:.6;cursor:default}
 
 /* ══════════════════════════════════════════════════════════════════════
+   THẺ TRÍCH DẪN — kiểu Facebook caption, dùng chung mọi bản luận giải dài
+   ══════════════════════════════════════════════════════════════════════
+   Dời từ `app-luan-giai.html` (PR #681) về ĐÂY 2026-09-04 — đợt nhóm A gắn
+   nhãn [TỐT]/[CẢNH BÁO]/[TRUNG TÍNH] cho 5 bản luận giải dùng chung `arcDoc`
+   (Lá Số/Chu Trình Cuộc Đời/Vận Hạn Năm · Bát Tự · Phu Thê · Xem Tuổi/Làm Ăn ·
+   Bút Tướng). MỘT nguồn CSS — mỗi trang chỉ cần tự thêm đoạn parse `[TAG]
+   **...**` trong `renderMarkdown` riêng của nó (xem `HOOK_TAG_CLASS` +
+   `app-luan-giai.html` làm mẫu), KHÔNG chép lại 3 dòng màu này thêm lần nào
+   nữa — chép là drift màu giữa các trang, y hệt bẫy `.claude-content` đã bị
+   trùng lặp trước đó. */
+.fb-card{border-radius:14px;padding:30px 26px;margin:16px 0 18px;font-family:var(--sans);font-weight:700;font-size:clamp(19px,5.4vw,27px);line-height:1.4;letter-spacing:.015em;text-align:center}
+.fb-tot{background:#E8F5EC;color:#1E6B3C}
+.fb-canhbao{background:#FBEAE7;color:#C0392B}
+.fb-trungtinh{background:var(--gold-lt);color:var(--heading)}
+:root[data-theme="dark"] .fb-tot{background:#15291D;color:#5FBF87}
+:root[data-theme="dark"] .fb-canhbao{background:#301C19;color:#F08A7A}
+
+/* ══════════════════════════════════════════════════════════════════════
    IN / LƯU PDF — LUẬT CỦA SHELL, KHÔNG PHẢI CỦA TỪNG TOOL
    ══════════════════════════════════════════════════════════════════════
    Trước đây đúng 3 tool (luan-giai · bat-tu · xem-tuoi) tự chép một khối
