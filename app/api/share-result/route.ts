@@ -60,14 +60,18 @@ export async function POST(request: NextRequest) {
   // nhồi rác qua endpoint công khai này.
   // Phân tích TRƯỚC hai nhánh kind vì nhánh `text` cần biết có blocks hay không
   // mới quyết định được là "rỗng thật" — xem ghi chú ngay dưới.
+  // 8→30 block, 4000→6000 ký tự/block: `Shell.domShareBlocks()` (shell.js) giờ
+  // tách mỗi PHẦN của tool luận sâu (luận giải/bát tự/chu trình cuộc đời/xem
+  // tuổi, tới 13 phần + 1 block tiêu đề) thành 1 block riêng — 8 cũ cắt mất
+  // quá nửa số phần trong im lặng (`.slice` không báo lỗi).
   let blocks: Array<{ header: string | null; image: string | null; text: string | null }> | null = null;
   if (Array.isArray(b.blocks) && b.blocks.length) {
-    const parsed = (b.blocks as unknown[]).slice(0, 8).map((raw) => {
+    const parsed = (b.blocks as unknown[]).slice(0, 30).map((raw) => {
       const r = (raw && typeof raw === 'object' ? raw : {}) as Record<string, unknown>;
       const header = r.header ? String(r.header).slice(0, 120) : null;
       const imageRaw = r.image ? String(r.image).slice(0, 500) : '';
       const image = /^https:\/\//.test(imageRaw) ? imageRaw : null;
-      const text = r.text ? String(r.text).trim().slice(0, 4000) : null;
+      const text = r.text ? String(r.text).trim().slice(0, 6000) : null;
       return { header, image, text };
     }).filter((blk) => blk.header || blk.image || blk.text);
     if (parsed.length) blocks = parsed;
