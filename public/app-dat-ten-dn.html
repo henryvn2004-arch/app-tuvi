@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"></noscript>
-<link rel="stylesheet" href="/shell.css?v=32">
+<link rel="stylesheet" href="/shell.css?v=33">
 <style>
 .form-card{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);max-width:600px}
 .form-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:3px}
@@ -218,9 +218,18 @@ function doDatTenDn(){
 var _dtHoTen='', _dtNamSinh=0, _dtInfoChu=null, _dtLinhVuc='', _dtLoaiHinh='';
 TuviPaywall.init({product:'dat-ten-dn'});
 
+// Mỗi tên gợi ý là MỘT dòng "**[Tên]** — chi tiết" (định dạng đã ép trong
+// prompt) — tách thành thẻ nhỏ `.fb-item` (xem shell.css) để đọc lướt danh
+// sách dễ hơn. KHÔNG dùng `.fb-card` (poster to, dành cho 1 câu trích duy
+// nhất trong văn dài) — danh sách 12 tên không có trục tốt/xấu để tô màu.
 function renderMarkdownDt(md){
   return md
     .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    // PHẢI chạy TRƯỚC bước bọc <p> chung (dưới) và trước bước đổi **bold**
+    // chung, vì nó tự xử lý cả in đậm của riêng dòng tên.
+    .replace(/^\*\*(.+?)\*\*\s*[—–-]\s*(.*)$/gm,function(_,name,rest){
+      return '<div class="fb-item"><b>'+name+'</b> — '+rest+'</div>';
+    })
     .replace(/^## (.+)$/gm,'<h2>$1</h2>')
     .replace(/^### (.+)$/gm,'<h3>$1</h3>')
     .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
@@ -229,10 +238,10 @@ function renderMarkdownDt(md){
     .replace(/^- (.+)$/gm,'<li>$1</li>')
     .replace(/(<li>[^]*?<\/li>\n?)+/g,function(s){return '<ul>'+s+'</ul>';})
     .replace(/\n\n+/g,'</p><p>')
-    .replace(/^(?!<[hublp])(.+)$/gm,'<p>$1</p>')
+    .replace(/^(?!<[hublpd])(.+)$/gm,'<p>$1</p>')
     .replace(/<p><\/p>/g,'')
-    .replace(/<p>(<[hul])/g,'$1')
-    .replace(/(<\/[hul][^>]*>)<\/p>/g,'$1');
+    .replace(/<p>(<[huld])/g,'$1')
+    .replace(/(<\/[huld][^>]*>)<\/p>/g,'$1');
 }
 
 async function initiateDatTenDnChuyenSau(){

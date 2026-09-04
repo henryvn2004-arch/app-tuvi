@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"></noscript>
-<link rel="stylesheet" href="/shell.css?v=32">
+<link rel="stylesheet" href="/shell.css?v=33">
 <style>
 .form-card{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);max-width:860px}
 .form-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:3px}
@@ -59,7 +59,8 @@
 .nk-item:last-child{padding-bottom:0}
 .nk-item .viec{font-size:13px;line-height:1.7;color:#2a2118}
 .nk-item .vidu{font-size:12.5px;line-height:1.7;color:#5a5145;font-style:italic;margin-top:4px}
-.nk-motcau{margin-top:0;padding:14px 16px;background:#FBF8F1;border:1px solid #EADFC8;border-radius:10px;font-family:var(--serif);font-size:15px;line-height:1.75;color:#061A2E;font-weight:700}
+/* Câu chốt "Nếu Chỉ Nhớ Một Câu" dùng thẳng .fb-card.fb-trungtinh (shell.css)
+   — không khai riêng nữa, tránh trôi khỏi kiểu poster đã chốt cho cả site. */
 /* C1 — dòng "đọc từ N dữ kiện" + câu cổ thư nguyên văn. */
 .nk-coso{font-size:12.3px;line-height:1.75;color:#5a5145;margin:0 0 11px;padding-bottom:10px;border-bottom:1px dashed #E8DFC8}
 .nk-coso b{color:#2a2118}
@@ -230,7 +231,7 @@
         <div class="res-block" id="endBlock" style="display:none">
           <div class="res-block-header"><span class="res-block-title">Nếu Chỉ Nhớ Một Câu</span></div>
           <div class="res-block-body">
-            <div class="nk-motcau" id="motCau"></div>
+            <div class="fb-card fb-trungtinh" id="motCau"></div>
           </div>
         </div>
 
