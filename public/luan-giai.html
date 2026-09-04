@@ -3112,6 +3112,7 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
         <div class="center-row"><span class="ic-inline" data-icon="calendar" data-icon-emoji="📅" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">📅</span> ${conv.amLich ? conv.amLich.day+'/'+conv.amLich.month+'/'+conv.amLich.year : ''} (Âm Lịch) · giờ ${conv.gioChi||''}</div>
         <div class="center-row"><span class="ic-inline" data-icon="cake" data-icon-emoji="🎂" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">🎂</span> ${ls.tuoiXem} tuổi (âm lịch)</div>
         <div class="center-row"><span class="ic-inline" data-icon="user" data-icon-emoji="⚧" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">⚧</span> Giới tính: ${gioitinh === 'nam' ? 'Nam' : 'Nữ'}</div>
+        ${conv.amDuongNam ? `<div class="center-row">${conv.amDuongNam === 'dương' ? 'Dương' : 'Âm'} ${gioitinh === 'nam' ? 'Nam' : 'Nữ'} · Âm Dương ${(conv.amDuongNam === 'dương') === (gioitinh === 'nam') ? 'Thuận Lý' : 'Nghịch Lý'}</div>` : ''}
         <hr class="center-divider">
         <div class="center-row">Năm: <b style="color:var(--navy)">${ls.canChiNam}</b> &nbsp;·&nbsp; Mệnh: <b style="color:var(--navy)">${NAP_AM_FULL[ls.canChiNam] || ls.napAm}</b></div>
         <div class="center-row">Cục: <b style="color:var(--navy)">${ls.cuc}</b> &nbsp;·&nbsp; Mệnh: <b style="color:var(--navy)">${ls.menhDC}</b> · Thân: <b style="color:var(--navy)">${ls.thanDC}</b></div>

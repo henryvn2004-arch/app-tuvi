@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"></noscript>
-<link rel="stylesheet" href="/shell.css?v=30">
+<link rel="stylesheet" href="/shell.css?v=31">
 <link rel="stylesheet" href="/laso-chart.css?v=3">
 <style>
 /* Center riêng của trang Vận Hạn 12 Tháng — mượn khuôn app-luan-giai.html */
@@ -163,7 +163,7 @@ window.SHELL_INTRO={key:'van-han-nam',title:'Vận Hạn 12 Tháng Tới',desc:'
 <script src="/tools-shared/hook-facts.js?v=1"></script>
 <script src="/tools-shared/hook-layer.js?v=2"></script>
 <script src="/nav.js?v=25" data-icons-only></script>
-<script src="/shell.js?v=85"></script>
+<script src="/shell.js?v=86"></script>
 <script src="/tools-shared/ai-loading-steps.js?v=9"></script>
 <script src="/tools-shared/phan-pool.js?v=1"></script>
 <script>
@@ -237,7 +237,7 @@ async function doXem(){
 
     render(ls);
     mountHook(ls);
-    document.getElementById('miniChart').innerHTML=renderGrid(ls,{name:name,gioitinh:gioitinh,dd:dd,mm:mm,yyyy:yyyy,hh:hh,gioChi:CHI[gioAmIdx],amLich:conv.amLich});
+    document.getElementById('miniChart').innerHTML=renderGrid(ls,{name:name,gioitinh:gioitinh,dd:dd,mm:mm,yyyy:yyyy,hh:hh,gioChi:CHI[gioAmIdx],amLich:conv.amLich,amDuongNam:conv.amDuongNam});
     if(window.mountIcons) window.mountIcons(document.getElementById('miniChart'));
     document.getElementById('birthPanel').style.display='none';
     document.getElementById('vhPanel').style.display='block';

@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"></noscript>
-<link rel="stylesheet" href="/shell.css?v=30">
+<link rel="stylesheet" href="/shell.css?v=31">
 <link rel="stylesheet" href="/laso-chart.css?v=3">
 <style>
 /* Center riêng của trang Luận giải */
@@ -254,7 +254,7 @@ window.SHELL_INTRO={key:'luan-giai',title:'Luận giải Tử Vi',desc:'Đọc t
 <script src="/tools-shared/hook-facts.js?v=1"></script>
 <script src="/tools-shared/hook-layer.js?v=2"></script>
   <script src="/nav.js?v=25" data-icons-only></script>
-<script src="/shell.js?v=85"></script>
+<script src="/shell.js?v=86"></script>
 <script src="/tools-shared/ai-loading-steps.js?v=9"></script>
 <script src="/tools-shared/phan-pool.js?v=1"></script>
 <script>
@@ -308,12 +308,12 @@ function doLuan(){
     var gioChi=CHI[gioAmIdx];
     var conv=convertDuongToAm(dd,mm,yyyy,hh);conv.gioIdx=gioAmIdx;
     var ls=anSaoLaSo({ngayAL:conv.amLich.day,thangAL:conv.amLich.month,namAL:conv.amLich.year,canNam:conv.canNam,chiNam:conv.chiNam,gioIdx:gioAmIdx,gioitinh:gioitinh,namXem:namxem});
-    var fd={name:name,gioitinh:gioitinh,dd:dd,mm:mm,yyyy:yyyy,hh:hh,pp:pp,gioChi:gioChi,amLich:conv.amLich};
+    var fd={name:name,gioitinh:gioitinh,dd:dd,mm:mm,yyyy:yyyy,hh:hh,pp:pp,gioChi:gioChi,amLich:conv.amLich,amDuongNam:conv.amDuongNam};
     // ── Globals cho khối "Luận giải chuyên sâu AI" (gate+RAG+stream+PDF, port từ luan-giai.html) ──
     ls._conv=conv; ls._hoTen=name;
     _astrolabe=ls; _hoTen=name; _ngay=dd; _thang=mm; _nam=yyyy; _gioitinh=gioitinh; _namXem=namxem;
     _laSoText=formatLaSoV2(ls,conv); ls._laSoText=_laSoText;
-    var _sum=renderLuan(ls,fd,namxem);
+    renderLuan(ls,fd,namxem);
     mountHook(ls);
     document.getElementById('miniChart').innerHTML=renderGrid(ls,fd);
     if(window.mountIcons) window.mountIcons(document.getElementById('miniChart')); // ô giữa mang span [data-icon]
@@ -340,17 +340,19 @@ function doLuan(){
       greeting:'Bản luận của **'+(name||'bạn')+'** đã sẵn sàng. Hỏi tôi để đào sâu bất kỳ phần nào — 12 cung, cách cục, tứ hóa.',
       chips:buildLuanChips(ls,namxem)
     });
-    // Chia sẻ: tóm tắt tổng quan lá số (cục/nạp âm/điểm/cách cục) — dữ liệu
-    // THẬT đã tính, không phải dump 24 phần luận giải (quá dài cho 1 link share).
-    var _shareLines=[(name||'Lá số')+' · '+dd+'/'+mm+'/'+yyyy+' · '+(gioitinh==='nam'?'Nam':'Nữ')];
-    _shareLines.push('Cục: '+(ls.cuc||'—')+' · Nạp âm: '+(ls.napAm||'—'));
-    _shareLines.push('Điểm tổng quan lá số: '+(_sum.overall!=null?_sum.overall+'/10':'—')+(_sum.dvTong!=null?' · Đại vận hiện tại: '+_sum.dvTong+'/10':''));
-    if(ls.cachCuc&&ls.cachCuc.length) _shareLines.push('\nCách cục nổi bật: '+ls.cachCuc.map(function(c){return c.ten+(c.moTa?' — '+c.moTa:'');}).join('; '));
+    // Chia sẻ: TOÀN BỘ nội dung đang hiển thị trên màn hình (`liveText:true`
+    // → Shell đọc lại DOM ngay lúc bấm nút Chia Sẻ, không đóng băng lúc này —
+    // xem chú thích ở `currentShare()` trong shell.js). Dòng `text` dưới đây
+    // chỉ là tiêu đề mở đầu cố định, KHÔNG phải toàn bộ nội dung chia sẻ.
+    // Khoá-mini (.tpw-real-lock/phần chưa mở, .tpw-seclock/nút mời mua) đã bị
+    // shell tự loại khỏi bản đọc DOM, nên phần CHƯA trả tiền không lọt ra.
+    var _shareHead=(name||'Lá số')+' · '+dd+'/'+mm+'/'+yyyy+' · '+(gioitinh==='nam'?'Nam':'Nữ')+' · Cục: '+(ls.cuc||'—')+' · Nạp âm: '+(ls.napAm||'—');
     Shell.setShareable({
       kind:'text',
       toolId:'luan-giai',
       title:'Lá số của '+(name||'tôi'),
-      text:_shareLines.join('\n')
+      text:_shareHead,
+      liveText:true
     });
     initLuanGiaiGate(ls);
     // Mục "Ai Sinh Cùng Ngày Với Bạn". Đặt SAU khi bản luận đã dựng xong: nó
@@ -728,7 +730,7 @@ function renderSample(s,auto){
     canNam:conv.canNam,chiNam:conv.chiNam,gioIdx:gioIdx,gioitinh:b.gioitinh||'nu',namXem:namXem});
   var ten=s.person_name||'người trong bản mẫu';
   var fd={name:ten,gioitinh:b.gioitinh||'nu',dd:b.ngay,mm:b.thang,yyyy:b.nam,
-    hh:b.gio_hour||0,pp:0,gioChi:CHI[gioIdx],amLich:conv.amLich};
+    hh:b.gio_hour||0,pp:0,gioChi:CHI[gioIdx],amLich:conv.amLich,amDuongNam:conv.amDuongNam};
 
   // `true` = mở khoá HẾT. Đây là bản KHOE, không phải bản bán: chặn nó lại thì
   // khách vẫn chỉ thấy đúng thứ họ đã thấy, tức là không chứng minh được gì.

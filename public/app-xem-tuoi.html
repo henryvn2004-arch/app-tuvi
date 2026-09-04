@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"></noscript>
-<link rel="stylesheet" href="/shell.css?v=30">
+<link rel="stylesheet" href="/shell.css?v=31">
 <link rel="stylesheet" href="/laso-chart.css?v=3">
 <style>
 .form-card{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);max-width:720px}
@@ -157,7 +157,7 @@
 <script src="/auth.js?v=2"></script>
 <script src="/tuvi-paywall.js?v=22"></script>
   <script src="/nav.js?v=25" data-icons-only></script>
-<script src="/shell.js?v=85"></script>
+<script src="/shell.js?v=86"></script>
 <script src="/tools-shared/ai-loading-steps.js?v=9"></script>
 <script>
 // ── MODE: 1 trang phục vụ 3 route — /app/xem-tuoi (vợ chồng), /app/xem-lam-an
@@ -228,7 +228,7 @@ function computeLs(pr,namxem){
   var ls=anSaoLaSo({ngayAL:conv.amLich.day,thangAL:conv.amLich.month,namAL:conv.amLich.year,canNam:conv.canNam,chiNam:conv.chiNam,gioIdx:gioAmIdx,gioitinh:pr.gioitinh,namXem:namxem});
   ls.chiNam=conv.chiNam; // anSaoLaSo không re-expose chiNam ở top-level → gắn lại (như xem-tuoi.html)
   // fd cho renderGrid (laso-chart.js) — vẽ lá số đầy đủ 12 cung như trang standalone.
-  var fd={name:pr.hoten,gioitinh:pr.gioitinh,dd:pr.ngay,mm:pr.thang,yyyy:pr.nam,hh:pr.gioHour,pp:pr.gioPhut,gioChi:(typeof CHI!=='undefined'?CHI[gioAmIdx]:''),amLich:conv.amLich};
+  var fd={name:pr.hoten,gioitinh:pr.gioitinh,dd:pr.ngay,mm:pr.thang,yyyy:pr.nam,hh:pr.gioHour,pp:pr.gioPhut,gioChi:(typeof CHI!=='undefined'?CHI[gioAmIdx]:''),amLich:conv.amLich,amDuongNam:conv.amDuongNam};
   return {ls:ls,hourBranch:gioAmIdx,fd:fd};
 }
 
@@ -257,24 +257,21 @@ function doCompat(){
       greeting:MODE.greetVerb+' **'+esc(nameA)+'** và **'+esc(nameB)+'** — hòa hợp **'+r.total+'/100**. Hỏi tôi để luận sâu bất kỳ chiều nào nhé.',
       chips:buildCompatChips(r,MODE)
     });
-    // Chia sẻ: tóm tắt tương hợp (can chi/nạp âm/cung mệnh mỗi người + 8 yếu
-    // tố + tổng điểm) — dữ liệu THẬT từ r (TuongHop.calcTuongHop), gọn hơn
-    // prompt AI đầy đủ (buildPhanPrompt idx=0) vốn có thêm câu lệnh cho LLM.
+    // Chia sẻ: TOÀN BỘ nội dung đang hiển thị trên màn hình (`liveText:true`
+    // → xem chú thích ở `currentShare()` trong shell.js) — không chỉ 8 yếu tố
+    // + điểm, mà cả phần AI luận sâu từng chiều KHI ĐÃ MỞ KHOÁ. `text` dưới
+    // đây chỉ là tiêu đề mở đầu cố định.
     var palMenhA=r.lsA.palaces&&r.lsA.palaces.find(function(p){return p.isMenh;});
     var palMenhB=r.lsB.palaces&&r.lsB.palaces.find(function(p){return p.isMenh;});
-    var _cpLines=[
-      nameA+': '+r.lsA.canChiNam+' · Nạp Âm '+r.naA+' · Cung Mệnh '+(palMenhA?palMenhA.diaChi:'?'),
-      nameB+': '+r.lsB.canChiNam+' · Nạp Âm '+r.naB+' · Cung Mệnh '+(palMenhB?palMenhB.diaChi:'?'),
-      '',
-    ];
-    (r.items||[]).forEach(function(it){ _cpLines.push(it.label+': '+it.score+'/10 — '+it.detail); });
-    _cpLines.push('');
-    _cpLines.push('Tổng điểm '+MODE.verb.toLowerCase()+': '+r.total+'/100');
+    var _cpHead=nameA+': '+r.lsA.canChiNam+' · Nạp Âm '+r.naA+' · Cung Mệnh '+(palMenhA?palMenhA.diaChi:'?')+
+      '\n'+nameB+': '+r.lsB.canChiNam+' · Nạp Âm '+r.naB+' · Cung Mệnh '+(palMenhB?palMenhB.diaChi:'?')+
+      '\nTổng điểm '+MODE.verb.toLowerCase()+': '+r.total+'/100';
     Shell.setShareable({
       kind:'text',
       toolId:MODE.active,
       title:MODE.verb+' '+nameA+' × '+nameB,
-      text:_cpLines.join('\n')
+      text:_cpHead,
+      liveText:true
     });
     initXemTuoiGate(r,nameA,nameB);
   }catch(e){

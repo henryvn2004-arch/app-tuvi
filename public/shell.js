@@ -1278,7 +1278,28 @@
   // lưới đỡ tới lượt chạy SAU (khung kết quả ẩn rồi hiện lại).
   var _shareMuted = false;
 
-  function currentShare() { return shareable || autoShare; }
+  // `liveText:true` (tool khai qua `setShareable`) — text KHÔNG đóng băng lúc
+  // tool gọi `setShareable`, mà đọc lại DOM MỖI LẦN currentShare() được hỏi (tức
+  // ngay lúc người dùng bấm nút Chia Sẻ). Trước đây `shareable` một khi đã set
+  // thì đóng băng vĩnh viễn, đè luôn `autoShare` — nên tool nào chốt sớm (ngay
+  // lúc vừa tính lá số, TRƯỚC khi phần AI trả phí kịp mở khoá/stream xong) thì
+  // dù người dùng có đọc hết bài trả phí rồi mới bấm Chia Sẻ vẫn chỉ share được
+  // đúng bản chụp cũ. Đọc DOM sống tại đây thì Chia Sẻ luôn khớp ĐÚNG những gì
+  // đang HIỂN THỊ trên màn hình người bấm (khoá-mini `.tpw-real-lock`/
+  // `[data-tpw-seclock]` đã bị `domShareText` loại trừ ở `SHARE_SKIP_SEL`, nên
+  // phần CHƯA trả tiền không lọt vào dù còn nằm trong DOM).
+  function currentShare() {
+    var s = shareable || autoShare;
+    if (s && s.liveText && s.kind === 'text') {
+      var host = wsResultHost();
+      var domText = host ? domShareText(host) : '';
+      // `s.text` (nếu tool có truyền) đứng vai dòng đầu cố định (thường là tóm
+      // tắt "tên · ngày sinh · giới tính" không đổi trong lượt) + nối bản DOM
+      // sống phía sau — không dùng domText đơn độc vì nó không có dòng mở đầu.
+      if (domText) s = Object.assign({}, s, { text: (s.text ? s.text.trim() + '\n\n' : '') + domText });
+    }
+    return s;
+  }
 
   // Vùng kết quả của workspace. `null` = trang chưa khai → shell KHÔNG tự
   // động gì cả, hành vi y hệt bản cũ (không hồi quy cho trang lạ).
@@ -1297,10 +1318,20 @@
   // Những gì KHÔNG được rơi vào bản chia sẻ tự suy: điều khiển (nút/ô nhập),
   // tường trả phí (chia sẻ ra ngoài đúng lời mời trả tiền thì vô nghĩa), thẻ
   // giới thiệu, và mọi khối trang tự khai là riêng tư bằng `data-share-skip`.
+  // 🔑 `.tpw-real-lock` (luan-giai/chu-trinh-cuoc-doi/day-con/huong-nghiep-tre/
+  // nguoi-khac — khoá-mini `tuvi-paywall.js`) chỉ LÀM MỜ bằng CSS, chữ thật vẫn
+  // nằm nguyên trong DOM cho tới khi trả tiền — thiếu dòng này thì bản chia sẻ
+  // tự suy phát free nội dung ĐÃ KHOÁ cho người chưa trả tiền. `[data-tpw-seclock]`
+  // chỉ là nút mời mua (CTA), không phải nội dung.
   var SHARE_SKIP_SEL = 'script,style,noscript,button,input,textarea,select,option,svg,form,canvas,' +
-    '.ws-actions,.intro-card,.tpw-lock-veil,.tpw-lock-blur,.tpw-wall,.tpw-prev,[data-share-skip],[aria-hidden="true"]';
+    '.ws-actions,.intro-card,.tpw-lock-veil,.tpw-lock-blur,.tpw-wall,.tpw-prev,.tpw-real-lock,' +
+    '[data-tpw-seclock],[data-share-skip],[aria-hidden="true"]';
   var SHARE_BLOCK_TAG = /^(P|DIV|SECTION|ARTICLE|HEADER|FOOTER|LI|TR|H1|H2|H3|H4|H5|H6|BLOCKQUOTE|PRE|TABLE|UL|OL|DL|DT|DD|BR|HR)$/;
-  var SHARE_TEXT_CAP = 4000;
+  // 4000 cũ đủ cho kết quả 1 dòng (tương hợp, bát trạch…) nhưng cắt cụt giữa
+  // câu với tool nhiều phần đã mở khoá (luận giải/bát tự/chu trình cuộc đời/xem
+  // tuổi, xem `liveText` ở `currentShare()`) — server (`app/api/share-result`)
+  // giữ cùng con số này, đổi một bên là bên kia cắt hụt trong im lặng.
+  var SHARE_TEXT_CAP = 40000;
 
   function domShareText(host) {
     var buf = [], line = [], chars = 0;
@@ -1361,6 +1392,8 @@
       imageUrl: o.imageUrl || null,
       text: text,
       blocks: blocks,
+      // `liveText:true` — xem chú thích ở `currentShare()`.
+      liveText: !!o.liveText,
     };
   }
 
@@ -1682,8 +1715,14 @@
   //
   // Chỉ dựng khi ĐÃ ĐĂNG NHẬP: endpoint PATCH đối chiếu `owner_user_id`, link
   // tạo lúc ẩn danh không ai sửa được nên hứa một nút bấm không ăn là hứa hụt.
-  function galleryNotice(shareId) {
+  //
+  // `optedOut` — server tự đặt `gallery_opt_out=true` lúc tạo (không phải cờ
+  // client gửi) cho vài tool chia sẻ TOÀN VĂN nội dung đã trả tiền (xem
+  // `GALLERY_OPT_OUT_TOOLS` ở `app/api/share-result/route.ts`) — bản đó KHÔNG
+  // lên `/thu-vien`, nên báo "cũng hiện trong Thư viện chung" ở đây là NÓI SAI.
+  function galleryNotice(shareId, optedOut) {
     try {
+      if (optedOut) return;
       var host = document.querySelector('.ws-actions');
       if (!host || !getToken() || !shareId) return;
       var old = document.getElementById('shGalNote'); if (old) old.remove();
@@ -1738,13 +1777,13 @@
       .then(function (j) {
         reEnable();
         if (!j || !j.url) { alert('Không tạo được link chia sẻ, thử lại sau.'); return; }
-        cb(withViralParams(location.origin + j.url, s.toolId), s, j.id);
+        cb(withViralParams(location.origin + j.url, s.toolId), s, j.id, !!j.galleryOptOut);
       })
       .catch(function () { reEnable(); alert('Lỗi mạng khi tạo link chia sẻ.'); });
   }
   function shareWorkspace() {
     var btn = document.getElementById('wsShareBtn');
-    fetchShareUrl(btn, function (url, s, shareId) {
+    fetchShareUrl(btn, function (url, s, shareId, galleryOptOut) {
       var onMedium = function (m) { track('share', { tool_id: s.toolId, meta: { medium: m, kind: 'workspace', with_ref: !!_refCode } }); };
       var shareTxt = 'Xem kết quả này trên Tử Vi Minh Bảo:';
       var modalOpts = { title: 'Chia sẻ ' + s.title, desc: 'Ai có link đều xem được kết quả này.', shareText: shareTxt + ' ' };
@@ -1753,7 +1792,7 @@
       // Zalo…) BỎ LUÔN url đi kèm, người nhận chỉ thấy ảnh, không bấm vào đâu
       // được. Ảnh vẫn hiện đẹp nhờ OG:image khi link được unfurl.
       shareLink(url, { title: s.title + ' — Tử Vi Minh Bảo', text: shareTxt, url: url }, modalOpts, onMedium);
-      galleryNotice(shareId);
+      galleryNotice(shareId, galleryOptOut);
     });
   }
 

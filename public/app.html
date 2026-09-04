@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"></noscript>
-<link rel="stylesheet" href="/shell.css?v=30">
+<link rel="stylesheet" href="/shell.css?v=31">
 <link rel="stylesheet" href="/laso-chart.css?v=3">
 <style>
 /* Center riêng của trang Lá số */
@@ -84,7 +84,7 @@ window.SHELL_INTRO={key:'la-so',title:'Lá số Tử Vi Đẩu Số',desc:'Nhậ
 <script src="/tools-shared/cung-ngay-sinh.js?v=2"></script>
 <script src="/auth.js?v=2"></script>
   <script src="/nav.js?v=25" data-icons-only></script>
-<script src="/shell.js?v=85"></script>
+<script src="/shell.js?v=86"></script>
 <script>
 // ── Form nhập (dùng chung TuviForm — có "Sinh ở ngoài Việt Nam?" + parity giờ
 // sinh lịch sử với standalone) ──
@@ -102,7 +102,7 @@ function doAnSao(){
     var gioChi=CHI[gioIdx];
     var conv=convertDuongToAm(ngay,thang,nam,gioHour);conv.gioIdx=gioIdx;
     var ls=anSaoLaSo({ngayAL:conv.amLich.day,thangAL:conv.amLich.month,namAL:conv.amLich.year,canNam:conv.canNam,chiNam:conv.chiNam,gioIdx:gioIdx,gioitinh:gioitinh,namXem:namxem});
-    var fd={name:name,gioitinh:gioitinh,dd:ngay,mm:thang,yyyy:nam,hh:gioHour,pp:gioPhut,gioChi:gioChi,amLich:conv.amLich};
+    var fd={name:name,gioitinh:gioitinh,dd:ngay,mm:thang,yyyy:nam,hh:gioHour,pp:gioPhut,gioChi:gioChi,amLich:conv.amLich,amDuongNam:conv.amDuongNam};
     document.getElementById('lasoContainer').innerHTML=renderGrid(ls,fd);
     if(window.mountIcons) window.mountIcons(document.getElementById('lasoContainer')); // ô giữa mang span [data-icon]
     document.getElementById('birthBar').innerHTML=
