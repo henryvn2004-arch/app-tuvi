@@ -441,6 +441,10 @@ async function analyze(){
   finally{document.getElementById('btnAnalyze').disabled=false;document.getElementById('loading').classList.remove('show');}
 }
 
+// Chữ AI viết (outfit, tên màu) trước đây chèn thẳng vào innerHTML không qua
+// escape — vá ở đây (2026-09-04), cùng dịp làm fb-card cho Nhóm B.
+function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
 function renderResults(d){
   const menhHanh=d.menhHanh||'Thổ';
   const ngayHanh=d.ngayHanh||'Thổ';
@@ -467,7 +471,7 @@ function renderResults(d){
   const outfit=d.outfit||{};
   OUTFIT_META.forEach(({key,icon,cat})=>{
     if(!outfit[key])return;
-    og.innerHTML+=`<div class="outfit-item"><div class="outfit-icon ic" data-icon="${icon}"></div><div class="outfit-cat">${cat}</div><div class="outfit-desc">${outfit[key]}</div></div>`;
+    og.innerHTML+=`<div class="outfit-item"><div class="outfit-icon ic" data-icon="${icon}"></div><div class="outfit-cat">${esc(cat)}</div><div class="outfit-desc">${esc(outfit[key])}</div></div>`;
   });
   window.mountIcons && window.mountIcons(og);
 
@@ -495,7 +499,7 @@ function renderColorRow(id,colors,isAvoid){
   const el=document.getElementById(id); el.innerHTML='';
   colors.forEach(name=>{
     const hex=COLOR_HEX[name]||'#888';
-    el.innerHTML+=`<div class="chip${isAvoid?' avoid':''}"><div class="chip-swatch" style="background:${hex}"></div><div class="chip-name">${name}</div></div>`;
+    el.innerHTML+=`<div class="chip${isAvoid?' avoid':''}"><div class="chip-swatch" style="background:${hex}"></div><div class="chip-name">${esc(name)}</div></div>`;
   });
 }
 
