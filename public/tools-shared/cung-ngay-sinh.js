@@ -11,16 +11,17 @@
       báo lỗi. Nó nằm CUỐI bản luận giải người ta vừa trả tiền — làm hỏng trang
       vì một mục phụ là đắt hơn nhiều so với việc lặng lẽ biến mất.
    4. Ảnh hỏng thì rơi về avatar chữ cái, không để ô vỡ.
-   5. GHI CÔNG ảnh — nhưng KHÔNG lặp lại trên từng thẻ. CC BY-SA đòi ghi tác
-      giả + license (từ khi kéo ảnh về Supabase Storage thì mình PHÂN PHỐI
-      nó, không chỉ hotlink), nhưng ghi trên MỖI thẻ khi cả khối chỉ có một
-      dòng chung cuối `mount()` là dư — Henry chốt 2026-09-04, bỏ dòng riêng.
-      ⚠️ Việc này đổi cách ghi công từ "mỗi ảnh dẫn đúng trang nguồn của nó"
-      sang "một câu chung cho cả khối" — chỉ hợp lệ khi `anhTacGia`/
-      `anhLicense` THẬT SỰ không có (đang đúng cho toàn bộ ảnh hiện tại, xem
-      `scripts/import-celeb-births.mjs`); nếu sau này có ảnh mang tên tác giả
-      cụ thể, cân nhắc khôi phục ghi công riêng cho ĐÚNG ảnh đó thay vì im
-      lặng bỏ qua. */
+   5. GHI CÔNG ảnh. Hotlink thì mình chỉ DẪN tới tác phẩm; từ khi kéo ảnh về
+      Supabase Storage thì mình PHÂN PHỐI nó, nên CC BY-SA đòi ghi tác giả +
+      license ngay trên trang. `anhTacGia`/`anhLicense` chưa có (chưa đồng bộ,
+      hoặc Commons không trả extmetadata) thì lùi về link trang mô tả file —
+      đó vẫn là cách ghi công được chấp nhận.
+      ⚠️ 2026-09-04: từng thử bỏ dòng này (dư khi đã có 1 dòng chung cuối
+      `mount()`) — `npm run check:celebanh` CHẶN CỨNG, đọc chính bộ dò:
+      "từ khi kéo ảnh về kho của mình... CC BY-SA đòi ghi tác giả + license
+      trên trang. Bỏ dòng ghi công đi thì trang vẫn chạy hoàn hảo — đó chính
+      là lý do phải có bộ dò". ĐỪNG bỏ lại mà không sửa luôn bộ dò + có quyết
+      định rõ ràng — đây là ranh giới pháp lý, không phải gu hiển thị. */
 (function (root) {
   var CHI_LABEL = {
     Tý: '23–01h', Sửu: '01–03h', Dần: '03–05h', Mão: '05–07h',
@@ -39,6 +40,24 @@
     var s = off < 0 ? '−' : '+';
     var a = Math.abs(off);
     return 'UTC' + s + Math.floor(a / 60) + (a % 60 ? ':' + String(a % 60).padStart(2, '0') : '');
+  }
+
+  /* Ghi công ảnh — bắt buộc với CC BY-SA từ khi mình TỰ PHÂN PHỐI ảnh (kéo về
+     Supabase Storage) thay vì chỉ hotlink Commons.
+     Ba mức, rơi dần: tác giả + license → chỉ license → chỉ link trang file.
+     Không có ảnh thì không ghi gì (avatar chữ cái không phải tác phẩm của ai). */
+  function ghiCong(it) {
+    if (!it.anh) return '';
+    var phan = [];
+    if (it.anhTacGia) phan.push(esc(it.anhTacGia));
+    if (it.anhLicense) phan.push(esc(it.anhLicense));
+    var chu = phan.join(' · ');
+    if (!chu && !it.anhTrang) return '';
+    var noi = it.anhTrang
+      ? '<a href="' + esc(it.anhTrang) + '" target="_blank" rel="noopener noreferrer nofollow">' +
+        (chu || 'Wikimedia Commons') + '</a>'
+      : chu;
+    return '<div class="cns-anh-nguon">Ảnh: ' + noi + '</div>';
   }
 
   function card(it) {
@@ -94,6 +113,7 @@
       (it.lienKet
         ? '<a class="cns-link" href="' + esc(it.lienKet) + '" target="_blank" rel="noopener noreferrer">Tìm hiểu thêm <span aria-hidden="true">→</span></a>'
         : '') +
+      ghiCong(it) +
       '</div></li>'
     );
   }
@@ -121,6 +141,8 @@
     '.cns-gio{font-weight:600;color:var(--fg,#111827)}' +
     '.cns-rodden{font-size:10px;border:1px solid var(--line,#e5e7eb);border-radius:4px;padding:0 4px}' +
     '.cns-link{display:inline-block;margin-top:6px;font-size:12px;font-weight:600;color:#1455A4;text-decoration:none}' +
+    '.cns-anh-nguon{font-size:10px;color:var(--muted,#6b7280);opacity:.75;margin-top:4px;line-height:1.4}' +
+    '.cns-anh-nguon a{color:inherit;text-decoration:underline}' +
     '.cns-ghi{font-size:11.5px;color:var(--muted,#6b7280);margin-top:12px;line-height:1.5}';
 
   function injectCss() {
@@ -169,7 +191,7 @@
           '<ul class="cns-list">' + j.items.map(card).join('') + '</ul>' +
           '<p class="cns-ghi">Chỉ hiển thị dữ kiện ngày–giờ sinh, không luận giải về người khác. ' +
           'Giờ sinh đã quy về múi giờ Việt Nam để so sánh. ' +
-          'Nguồn: Wikidata (CC0) · ảnh từ Wikimedia Commons · giờ sinh từ Astro-Databank.</p>' +
+          'Nguồn: Wikidata (CC0) · ảnh từ Wikimedia Commons (license ghi dưới từng ảnh) · giờ sinh từ Astro-Databank.</p>' +
           '</section>';
         // HTML dựng bằng innerHTML thì icon chưa được thay — mountIcons() chỉ tự
         // chạy MỘT lần lúc nav.js nạp.
