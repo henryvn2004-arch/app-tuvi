@@ -3392,6 +3392,39 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
     return h;
   }
 
+  // ── Tứ Hóa Phi Tinh (tự hóa, tầng MỆNH BÀN) cho MỘT cung — ĐỒNG NHẤT với
+  // buildTuHoaPhiTinhHtml của luan-giai-core.js (shell /app/luan-giai),
+  // _tuHoaPhiTinh của tuvi-laso-format.js (laSoText/prompt AI), và
+  // tuHoaPhiTinhHtml của app/la-so/[slug]/route.ts (trang SEO) — cùng công
+  // thức ở BỐN nơi, đổi một chỗ nhớ đổi cả bốn. THIEN_CAN/DIA_CHI/TU_HOA là
+  // global của /tuvi-ansao-engine.js (đã nạp trước ở <script> phía trên).
+  function _tuHoaPhiTinhHtml(cungForPhan, astro) {
+    const pal = (astro.palaces || []).find(p => p.cungName === cungForPhan);
+    if (!pal) return '';
+    const canNam = (astro.canChiNam || '').split(' ')[0];
+    const ci = THIEN_CAN.indexOf(canNam), di = DIA_CHI.indexOf(pal.diaChi);
+    if (ci < 0 || di < 0) return '';
+    const canCung = THIEN_CAN[((ci % 5) * 2 + di) % 10];
+    const hosts = TU_HOA[canCung];
+    if (!hosts) return '';
+    const findStarPalace = name => (astro.palaces || []).find(p => (p.stars || []).some(s => s.ten === name));
+    const rows = ['Lộc', 'Quyền', 'Khoa', 'Kỵ'].map(hoa => {
+      const star = hosts[hoa];
+      const target = star ? findStarPalace(star) : null;
+      if (!target) return null;
+      return { hoa, star, target, self: target.cungName === cungForPhan };
+    }).filter(Boolean);
+    if (!rows.length) return '';
+    let h = `<div class="pregen-block"><div class="pregen-title"><span class="ic-inline" data-icon-emoji="🚀" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">🚀</span> Tứ Hóa Phi Tinh (can cung ${canCung})</div>`;
+    rows.forEach(r => {
+      const cls = r.hoa === 'Kỵ' ? 'yn-hung' : 'yn-cat';
+      const selfBadge = r.self ? ' <span style="color:#7B3FA0;font-weight:700">[TỰ HÓA]</span>' : '';
+      h += `<div class="pregen-yn ${cls}">Hóa ${r.hoa}: <b>${r.star}</b> → phi nhập cung <b>${r.target.cungName}</b> (${r.target.diaChi})${selfBadge}</div>`;
+    });
+    h += `</div>`;
+    return h;
+  }
+
   // ── buildPreGenHtml(phan) — tách từ loadNextPhan, dùng cho tất cả 24 phần ──
   function buildPreGenHtml(phan) {
     if (!_astrolabe) return '';
@@ -3442,6 +3475,7 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
         });
         preGenHtml += `</div>`;
       }
+      preGenHtml += _tuHoaPhiTinhHtml(cungForPhan, _astrolabe);
       if (sc) {
         const METRICS = ['thienVan','canCo','mayMan','phuTro','binhYen','benVung'];
         const MV = ['Thiên Vận','Căn Cơ','May Mắn','Phù Trợ','Bình Yên','Bền Vững'];

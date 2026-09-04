@@ -422,7 +422,14 @@ function appLuanGiaiHref(p: IsrParams | null): string {
 // ────────────────────────────────────────────────────────────────────────────
 // ISR: engine loader (singleton per serverless instance)
 // ────────────────────────────────────────────────────────────────────────────
-let engineCache: { convertDuongToAm: (...a: unknown[]) => unknown; anSaoLaSo: (...a: unknown[]) => unknown; phanTichCungYNghia: (...a: unknown[]) => Record<string,string[]> } | null = null;
+let engineCache: {
+  convertDuongToAm: (...a: unknown[]) => unknown;
+  anSaoLaSo: (...a: unknown[]) => unknown;
+  phanTichCungYNghia: (...a: unknown[]) => Record<string,string[]>;
+  THIEN_CAN: string[];
+  DIA_CHI: string[];
+  TU_HOA: Record<string, Record<string,string>>;
+} | null = null;
 
 function loadEngine() {
   if (engineCache) return engineCache;
@@ -434,7 +441,7 @@ function loadEngine() {
   if (!g.location) {
     g.location = { protocol:'https:', hostname:'tuviminhbao.com', host:'tuviminhbao.com', port:'', href:'https://tuviminhbao.com/', pathname:'/', search:'', hash:'' };
   }
-  engineCache = (new Function('window','globalThis', code + '\nreturn{convertDuongToAm,anSaoLaSo,phanTichCungYNghia};'))(g,g) as typeof engineCache;
+  engineCache = (new Function('window','globalThis', code + '\nreturn{convertDuongToAm,anSaoLaSo,phanTichCungYNghia,THIEN_CAN,DIA_CHI,TU_HOA};'))(g,g) as typeof engineCache;
   return engineCache!;
 }
 
@@ -842,6 +849,37 @@ function render24Sections(ls: Rec, params: IsrParams): string {
   const _chiNam = CHI_NAMES[params.chiIdx];
   const _lsBase = { palaces: ls.palaces, menhDC: ls.menhDC, thanDC: ls.thanDC, amDuong: ls.amDuong, napAmHanh: ls.napAmHanh, chiNam: _chiNam };
 
+  // Tứ Hóa Phi Tinh — CÙNG công thức với buildTuHoaPhiTinhHtml (luan-giai-core.js),
+  // _tuHoaPhiTinh (tuvi-laso-format.js) và _tuHoaPhiTinhHtml (luan-giai.html); đổi
+  // một chỗ nhớ đổi cả bốn. THIEN_CAN/DIA_CHI/TU_HOA lấy từ loadEngine() ở trên.
+  function tuHoaPhiTinhHtml(cungName: string): string {
+    const palace = palaces.find(p => p.cungName === cungName) as Rec | undefined;
+    if (!palace) return '';
+    const ci = _engine.THIEN_CAN.indexOf(_canNam);
+    const di = _engine.DIA_CHI.indexOf(String(palace.diaChi || ''));
+    if (ci < 0 || di < 0) return '';
+    const canCung = _engine.THIEN_CAN[((ci % 5) * 2 + di) % 10];
+    const hosts = _engine.TU_HOA[canCung];
+    if (!hosts) return '';
+    const rows = (['Lộc', 'Quyền', 'Khoa', 'Kỵ'] as const).map(hoa => {
+      const star = hosts[hoa];
+      if (!star) return null;
+      const target = palaces.find(p => ((p.stars as Rec[]) || []).some(s => s.ten === star)) as Rec | undefined;
+      if (!target) return null;
+      const self = target.cungName === cungName;
+      return { hoa, star, target, self };
+    }).filter(Boolean) as { hoa: string; star: string; target: Rec; self: boolean }[];
+    if (!rows.length) return '';
+    let h = `<div style="margin-bottom:8px"><div style="font-size:11px;font-weight:600;color:#9A7B3A;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">🚀 Tứ Hóa Phi Tinh (can cung ${esc(canCung)})</div>`;
+    rows.forEach(r => {
+      const col = r.hoa === 'Kỵ' ? '#f87171' : '#86efac';
+      const selfBadge = r.self ? ` <span style="color:#7B3FA0;font-weight:700">[TỰ HÓA]</span>` : '';
+      h += `<div style="font-size:12px;color:${col};padding:2px 0;line-height:1.5">Hóa ${esc(r.hoa)}: <strong>${starLink(r.star, esc(r.star))}</strong> → phi nhập cung <strong>${esc(String(r.target.cungName||''))}</strong> (${esc(String(r.target.diaChi||''))})${selfBadge}</div>`;
+    });
+    h += `</div>`;
+    return h;
+  }
+
   const cungSecs = CUNG_12.map((cungName, i) => {
     const palace    = palaces.find(p => p.cungName === cungName) as Rec|undefined;
     const majStars  = palace ? ((palace.majorStars as Rec[])||[]) : [];
@@ -952,6 +990,9 @@ function render24Sections(ls: Rec, params: IsrParams): string {
       });
       body += `</div>`;
     }
+
+    // Tứ Hóa Phi Tinh
+    body += tuHoaPhiTinhHtml(cungName);
 
     // Score bars 6 chiều
     if (sc) body += scoreBars6(cungName);
