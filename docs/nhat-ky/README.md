@@ -1,7 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-181 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
-176 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+182 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 **Bốn file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
 ```bash
@@ -12,8 +11,7 @@ sed -n '120,190p' docs/nhat-ky/2026-08.md    # đọc đúng đoạn, đừng ca
 
 | file | số mục | dung lượng |
 |---|---:|---:|
-| `2026-09.md` | 17 | 76,134 B |
-| `2026-09.md` | 12 | 69,014 B |
+| `2026-09.md` | 18 | 97,767 B |
 | `2026-08.md` | 147 | 1,018,512 B |
 | `2026-07.md` | 12 | 154,531 B |
 | `track-cu.md` | 5 | 89,354 B |
@@ -27,6 +25,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
+| 1 | 2026-09 | `2026-09.md` | 🔍 Nút Chia Sẻ 4 tool luận sâu: từ "tóm tắt 3-4 dòng" thành "y hệt màn hình đang xem" |
 | 1 | 2026-09 | `2026-09.md` | 🔍 Tử Bình: Opus cắt giữa câu 17% — chưa ai thấy vì tool chưa có lượt nào |
 | 1 | 2026-09 | `2026-09.md` | 🔀 Gemini 3.8 Flash lên primary cho toàn bộ luận giải, Opus 5 xuống lưới đỡ |
 | 1 | 2026-09 | `2026-09.md` | 💰 Giá Gemini ghi bằng NỬA giá thật · lên 3.8 Flash · tách khối đại vận |

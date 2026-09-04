@@ -157,7 +157,7 @@
 <script src="/auth.js?v=2"></script>
 <script src="/tuvi-paywall.js?v=22"></script>
   <script src="/nav.js?v=25" data-icons-only></script>
-<script src="/shell.js?v=85"></script>
+<script src="/shell.js?v=86"></script>
 <script src="/tools-shared/ai-loading-steps.js?v=9"></script>
 <script>
 // ── MODE: 1 trang phục vụ 3 route — /app/xem-tuoi (vợ chồng), /app/xem-lam-an
@@ -257,24 +257,21 @@ function doCompat(){
       greeting:MODE.greetVerb+' **'+esc(nameA)+'** và **'+esc(nameB)+'** — hòa hợp **'+r.total+'/100**. Hỏi tôi để luận sâu bất kỳ chiều nào nhé.',
       chips:buildCompatChips(r,MODE)
     });
-    // Chia sẻ: tóm tắt tương hợp (can chi/nạp âm/cung mệnh mỗi người + 8 yếu
-    // tố + tổng điểm) — dữ liệu THẬT từ r (TuongHop.calcTuongHop), gọn hơn
-    // prompt AI đầy đủ (buildPhanPrompt idx=0) vốn có thêm câu lệnh cho LLM.
+    // Chia sẻ: TOÀN BỘ nội dung đang hiển thị trên màn hình (`liveText:true`
+    // → xem chú thích ở `currentShare()` trong shell.js) — không chỉ 8 yếu tố
+    // + điểm, mà cả phần AI luận sâu từng chiều KHI ĐÃ MỞ KHOÁ. `text` dưới
+    // đây chỉ là tiêu đề mở đầu cố định.
     var palMenhA=r.lsA.palaces&&r.lsA.palaces.find(function(p){return p.isMenh;});
     var palMenhB=r.lsB.palaces&&r.lsB.palaces.find(function(p){return p.isMenh;});
-    var _cpLines=[
-      nameA+': '+r.lsA.canChiNam+' · Nạp Âm '+r.naA+' · Cung Mệnh '+(palMenhA?palMenhA.diaChi:'?'),
-      nameB+': '+r.lsB.canChiNam+' · Nạp Âm '+r.naB+' · Cung Mệnh '+(palMenhB?palMenhB.diaChi:'?'),
-      '',
-    ];
-    (r.items||[]).forEach(function(it){ _cpLines.push(it.label+': '+it.score+'/10 — '+it.detail); });
-    _cpLines.push('');
-    _cpLines.push('Tổng điểm '+MODE.verb.toLowerCase()+': '+r.total+'/100');
+    var _cpHead=nameA+': '+r.lsA.canChiNam+' · Nạp Âm '+r.naA+' · Cung Mệnh '+(palMenhA?palMenhA.diaChi:'?')+
+      '\n'+nameB+': '+r.lsB.canChiNam+' · Nạp Âm '+r.naB+' · Cung Mệnh '+(palMenhB?palMenhB.diaChi:'?')+
+      '\nTổng điểm '+MODE.verb.toLowerCase()+': '+r.total+'/100';
     Shell.setShareable({
       kind:'text',
       toolId:MODE.active,
       title:MODE.verb+' '+nameA+' × '+nameB,
-      text:_cpLines.join('\n')
+      text:_cpHead,
+      liveText:true
     });
     initXemTuoiGate(r,nameA,nameB);
   }catch(e){
