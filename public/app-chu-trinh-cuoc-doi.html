@@ -194,7 +194,7 @@ window.SHELL_INTRO={key:'chu-trinh-cuoc-doi',title:'Chu Trình Cuộc Đời',de
 <script src="/tools-shared/hook-facts.js?v=1"></script>
 <script src="/tools-shared/hook-layer.js?v=2"></script>
   <script src="/nav.js?v=25" data-icons-only></script>
-<script src="/shell.js?v=85"></script>
+<script src="/shell.js?v=86"></script>
 <script src="/tools-shared/ai-loading-steps.js?v=9"></script>
 <script src="/tools-shared/phan-pool.js?v=1"></script>
 <script>
@@ -220,7 +220,7 @@ function doLuan(){
     ls._conv=conv; ls._hoTen=name;
     _astrolabe=ls; _hoTen=name; _ngay=dd; _thang=mm; _nam=yyyy; _gioitinh=gioitinh; _namXem=namxem;
     _laSoText=formatLaSoV2(ls,conv); ls._laSoText=_laSoText;
-    var _sum=renderLuan(ls,fd,namxem);
+    renderLuan(ls,fd,namxem);
     document.getElementById('miniChart').innerHTML=renderGrid(ls,fd);
     if(window.mountIcons) window.mountIcons(document.getElementById('miniChart')); // ô giữa mang span [data-icon]
     document.getElementById('birthPanel').style.display='none';
@@ -240,16 +240,17 @@ function doLuan(){
       greeting:'9 đại vận và tiểu vận năm '+namxem+' của **'+(name||'bạn')+'** đã sẵn sàng. Hỏi tôi để đào sâu giai đoạn nào trong đời bạn quan tâm.',
       chips:buildChuTrinhChips(ls,namxem)
     });
-    // Chia sẻ: tóm tắt đại vận hiện tại + tiểu vận năm xem — dữ liệu THẬT đã
-    // tính, không phải dump 11 phần luận giải (quá dài cho 1 link share).
-    var _shareLines=[(name||'Lá số')+' · '+dd+'/'+mm+'/'+yyyy+' · '+(gioitinh==='nam'?'Nam':'Nữ')];
-    _shareLines.push('Cục: '+(ls.cuc||'—')+' · Nạp âm: '+(ls.napAm||'—'));
-    _shareLines.push('Đại vận hiện tại: '+(_sum.dvTong!=null?_sum.dvTong+'/10':'—')+(_sum.tvCungName?' · Tiểu vận năm '+namxem+': cung '+_sum.tvCungName:''));
+    // Chia sẻ: TOÀN BỘ nội dung đang hiển thị trên màn hình (`liveText:true`
+    // → xem chú thích ở `currentShare()` trong shell.js). `text` dưới đây chỉ
+    // là tiêu đề mở đầu cố định; khoá-mini chưa mở đã bị shell tự loại khỏi
+    // bản đọc DOM nên phần CHƯA trả tiền không lọt ra.
+    var _shareHead=(name||'Lá số')+' · '+dd+'/'+mm+'/'+yyyy+' · '+(gioitinh==='nam'?'Nam':'Nữ')+' · Cục: '+(ls.cuc||'—')+' · Nạp âm: '+(ls.napAm||'—');
     Shell.setShareable({
       kind:'text',
       toolId:'chu-trinh-cuoc-doi',
       title:'Chu trình cuộc đời của '+(name||'tôi'),
-      text:_shareLines.join('\n')
+      text:_shareHead,
+      liveText:true
     });
     initLuanGiaiGate(ls);
   }catch(e){
