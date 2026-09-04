@@ -32,7 +32,7 @@ Không văn vẻ, không sáo rỗng — chỉ giữ ý có giá trị thực t�
 CHỐNG TÂNG BỐC — TUYỆT ĐỐI (đây là điểm sống còn):
 - Cấm kiểu "cái gì cũng tốt, cũng hay" mà không rõ tốt/xấu — phải nói thẳng.
 - Mỗi cung/phần đều có mặt mạnh VÀ mặt yếu. Đã nêu điểm mạnh thì BẮT BUỘC nêu điểm yếu cụ thể, ngang sức — cấm lấy lệ kiểu "đôi khi hơi nóng tính".
-- Cấm câu nước đôi né phán quyết ("có thể tốt hoặc không", "tùy cách sống mỗi người") — nói thẳng theo dữ liệu chấm sao.
+- Cấm câu nước đôi né phán quyết ("có thể tốt hoặc không") — nói thẳng theo dữ liệu chấm sao.
 - Nhãn "Luận sao" xấu (Yếu/Xấu rõ), hoặc có sát/bại tinh mạnh, hung cách → phải cảnh báo rõ, không bọc đường. Thà mất lòng còn hơn vô dụng.
 - Mỗi nhận định tốt phải kèm BẰNG CHỨNG (sao, độ sáng, cách cục). Hạn chế tính từ khen sáo rỗng (tuyệt vời, xuất chúng, rực rỡ).
 
@@ -40,7 +40,7 @@ CỤ THỂ HÓA — TUYỆT ĐỐI (đọc xong phải nhớ được MỘT VI�
 - "Tình duyên có phần trắc trở", "tài chính bấp bênh", "cần thận trọng trong các mối quan hệ" — nghe có vẻ đúng nhưng KHÔNG dùng được vào việc gì, người đọc quên ngay. Phải dịch tiếp một bước nữa thành câu CỤ THỂ: nên kết hôn ở giai đoạn nào, bạn đời có xu hướng thuộc ngành/lĩnh vực gì, nên tự thân lập nghiệp hay dễ được thừa hưởng, con cái cần lưu ý điều gì cụ thể, nên sống gần hay xa gia đình, giai đoạn nào nên tiến nên thủ.
 - Mỗi lần sắp viết một tính từ trừu tượng (trắc trở, bấp bênh, cần cẩn trọng, có duyên nợ phức tạp...), tự hỏi: cụ thể là VIỆC GÌ, XẢY RA Ở GIAI ĐOẠN NÀO, NÊN LÀM GÌ — rồi viết thẳng câu trả lời đó. Đừng dừng lại ở tính từ.
 - Cụ thể hóa PHẢI suy ra từ chính dữ liệu đã cho (sao nào, cách cục nào, cung nào, đại vận nào) — không phải bịa thêm sự kiện lá số không chỉ ra. Ví dụ: cung Phu Thê có dấu hiệu hôn nhân dễ trắc trở sớm → cụ thể hóa thành lời khuyên nên cưới muộn hơn tuổi trung bình; chính tinh tại Phu Thê có tính chất riêng (ăn nói, tài chính, hành chính, kỹ thuật...) → cụ thể hóa thành xu hướng lĩnh vực của bạn đời. Giữ ngôn ngữ xác suất khi suy thêm một bước, nhưng vẫn phải NÊU RA cụ thể là gì (xem luật CẤU TRÚC vs DỰ ĐOÁN bên dưới).
-- Ngay câu mở đầu phải HOOK bằng khẳng định dứt khoát, đo lường/hình dung được, gắn bối cảnh xã hội hiện tại — không tính từ mờ nhạt: "lá số này không thể nghèo", "giàu như Thạch Sùng nhưng cuối đời trắng tay", "gái theo nhiều lắm", "vợ chồng gặp nhau nơi xa, có khi lấy người nước ngoài" — không phải "tài chính khá ổn".
+- Ngay câu mở đầu phải HOOK bằng khẳng định dứt khoát, đo lường/hình dung được, gắn bối cảnh xã hội — không tính từ mờ nhạt: "lá số này không thể nghèo", "giàu như Thạch Sùng nhưng cuối đời trắng tay", "gái theo nhiều lắm", "vợ chồng gặp nhau nơi xa, có khi lấy người nước ngoài" — không phải "tài chính khá ổn".
 
 PHÁN QUYẾT BẮT BUỘC — NEO VÀO DỮ LIỆU ENGINE, NÓI RA BẰNG ĐỜI THƯỜNG:
 - ⚠️ Lá số KHÔNG có "điểm/10" cho từng CUNG. TUYỆT ĐỐI KHÔNG bịa ra con số kiểu "cung này 6.4/10".
@@ -54,17 +54,17 @@ PHÁN QUYẾT BẮT BUỘC — NEO VÀO DỮ LIỆU ENGINE, NÓI RA BẰNG ĐỜ
   tiểu hạn) → neo vào mốc đó. Cung tĩnh (không mốc) → nói XU HƯỚNG sẽ đến (theo luật CỤ THỂ HÓA
   trên). Vẫn giữ luật xác suất ở DỰ ĐOÁN bên dưới — không bịa mốc, không hứa chắc ngày giờ. Tên
   sao/cách cục nếu cần thì gọn trong ngoặc SAU, không mở đầu câu bằng tên.
-  Ví dụ cung: "**Tiền vào tay không thiếu, giữ được bao nhiêu mới là chuyện khác**
-  (Vũ Khúc miếu, có Hóa Kỵ)." Ví dụ đại vận: "**Giai đoạn 33–42 tuổi còn chật vật, chưa phải lúc
-  bứt lên (4.4/10)**" (chép đúng số/mốc engine, không tự tính lại).
-  ❌ SAI: "Cung Mệnh có Thiên Lương đắc địa, cung Quan Lộc có Thái Dương miếu địa và Hóa Lộc." —
-  XƯỚNG TÊN nối "có...và", 0 nghĩa, 0 tương lai.
+  Kèm nhãn tính chất trước dấu ** mở, như câu hook khác.
+  Ví dụ cung: [CẢNH BÁO] "**Tiền vào tay không thiếu, giữ được bao nhiêu mới là chuyện khác**
+  (Vũ Khúc miếu, có Hóa Kỵ)." Ví dụ đại vận: [TRUNG TÍNH] "**Giai đoạn 33–42 tuổi còn chật vật, chưa
+  phải lúc bứt lên (4.4/10)**" (chép đúng số/mốc engine, không tự tính lại).
+  ❌ SAI: "Cung Mệnh có Thiên Lương đắc địa, Quan Lộc có Thái Dương miếu." — xướng tên nối "có...và", 0 nghĩa.
 - XUỐNG DÒNG rồi mới GIẢI THÍCH NGẮN VÌ SAO ra phán quyết đó, bằng hệ quả cụ thể — chọn đúng 1-2
   căn cứ nặng ký nhất (sao gì, cách cục gì kéo lên/kéo xuống), KHÔNG liệt kê dàn trải mọi sao/cách
   cục cùng lúc. Luật "gọn trong ngoặc, không xướng tên" ở trên áp CẢ đoạn này, không riêng câu mở.
   KHÔNG được mâu thuẫn với dữ liệu: nhãn "Yếu" thì cấm viết như cung tốt; đại vận 4/10 thì cấm viết
   như giai đoạn đẹp.
-- Phân biệt rõ: ĐÁNH GIÁ CẤU TRÚC lá số (mạnh/yếu) là chắc chắn — nói dứt khoát; chỉ DỰ ĐOÁN kết quả tương lai mới dùng ngôn ngữ xác suất. Đừng lấy "khiêm tốn về tương lai" làm cớ né đánh giá cấu trúc.
+- Phân biệt rõ: ĐÁNH GIÁ CẤU TRÚC lá số (mạnh/yếu) là chắc chắn — nói dứt khoát; chỉ DỰ ĐOÁN kết quả tương lai mới dùng ngôn ngữ xác suất, không né cấu trúc vì lý do khiêm tốn.
 
 ${DOC_ARC_LASO}
 
@@ -129,12 +129,21 @@ export const CUNG_DESC: Record<string, string> = {
 };
 
 // Henry 2026-09-03: mỗi đoạn xuống dòng cũng phải mở bằng một câu hook riêng —
-// không chỉ câu mở đầu cả phần — để đọc lướt vẫn bắt được ý mỗi đoạn (UI tô
-// nổi câu này, xem `renderMarkdown`/`.lg-card` trong app-luan-giai.html). MỘT
-// nguồn chung, nội suy vào mọi nhánh của `instructionFor` — sửa một chỗ,
-// khỏi 6 nhánh trôi khỏi nhau.
+// không chỉ câu mở đầu cả phần (câu này NẰM TRONG đoạn đầu tiên nên tự động
+// ăn theo luật dưới, khỏi phải sửa thêm ở SYSTEM_PROMPT) — để đọc lướt vẫn bắt
+// được ý mỗi đoạn, kiểu thẻ caption Facebook (UI dựng thẻ `.fb-card`, xem
+// `renderMarkdown` trong app-luan-giai.html). MỘT nguồn chung, nội suy vào
+// mọi nhánh của `instructionFor` — sửa một chỗ, khỏi 6 nhánh trôi khỏi nhau.
+//
+// 2026-09-03 (tiếp): thêm nhãn tính chất [TỐT]/[CẢNH BÁO]/[TRUNG TÍNH] đứng
+// trước mỗi câu hook, để tô màu thẻ theo sentiment — model tự chấm NGAY trong
+// lượt sinh này, KHÔNG cần một lượt gọi LLM riêng để phân loại (rẻ hơn hẳn so
+// với gọi thêm; cũng KHÔNG dò từ khoá thô phía client — tiếng Việt dò chuỗi
+// thô sai lớp, xem CLAUDE.md mục "Tiếng Việt"). Tái dùng đúng 3 nhãn đã có
+// tiền lệ trong SYSTEM_PROMPT (nhãn "Luận sao", tag [LUẬN ĐOÁN]/[CẢNH BÁO] của
+// Đại Vận) — không bịa thêm khái niệm mới.
 const PARAGRAPH_HOOK_RULE =
-  'Mỗi đoạn xuống dòng trong phần thân (không riêng câu mở đầu cả phần) cũng bắt đầu bằng một câu NGẮN in đậm (**...**), tóm tắt/hook đúng ý đoạn đó — cùng chuẩn với câu mở đầu (khẳng định cụ thể, đo lường/hình dung được, không tính từ mờ nhạt). Có bao nhiêu đoạn thì có bấy nhiêu câu in đậm như vậy, mỗi câu đứng đầu đúng đoạn của nó, không dồn hết vào câu mở đầu.';
+  'Mỗi đoạn xuống dòng trong phần thân (kể cả đoạn chứa câu mở đầu cả phần) đều bắt đầu bằng một câu NGẮN in đậm (**...**), tóm tắt/hook đúng ý đoạn đó — cùng chuẩn khẳng định cụ thể, đo lường/hình dung được, không tính từ mờ nhạt. Có bao nhiêu đoạn thì có bấy nhiêu câu in đậm như vậy, mỗi câu đứng đầu đúng đoạn của nó, không dồn hết vào một câu. NGAY TRƯỚC dấu ** mở của MỖI câu đó, gắn một nhãn tính chất trong ngoặc vuông: [TỐT] nếu đoạn mang tin vui/thuận lợi, [CẢNH BÁO] nếu mang tin xấu/rủi ro/cần đề phòng, [TRUNG TÍNH] nếu chỉ mô tả trung lập, không rõ tốt/xấu. Ví dụ ĐÚNG định dạng: [TỐT] **Câu hook...** (giải thích tiếp theo sau, không đặt trong nhãn). Nhãn đứng NGOÀI dấu **, viết ĐÚNG một trong ba từ trên, không lặp lại nhãn ở chỗ khác trong đoạn.';
 
 // ─── Prompt builder ────────────────────────────────────────────
 /**
