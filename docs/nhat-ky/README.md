@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-185 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+186 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 **Bốn file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
 ```bash
@@ -11,7 +11,7 @@ sed -n '120,190p' docs/nhat-ky/2026-08.md    # đọc đúng đoạn, đừng ca
 
 | file | số mục | dung lượng |
 |---|---:|---:|
-| `2026-09.md` | 21 | 108,406 B |
+| `2026-09.md` | 22 | 117,619 B |
 | `2026-08.md` | 147 | 1,018,512 B |
 | `2026-07.md` | 12 | 154,531 B |
 | `track-cu.md` | 5 | 89,354 B |
@@ -25,6 +25,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
+| 1 | 2026-09 | `2026-09.md` | 📱 Rà soát mobile: dựng bộ đo Lighthouse rồi vá 5 chỗ theo đúng thứ nó chỉ |
 | 1 | 2026-09 | `2026-09.md` | 🔧 P2 — `liveText` share đủ chữ nhưng vỡ bố cục: chuyển sang `domShareBlocks` theo từng phần |
 | 1 | 2026-09 | `2026-09.md` | 🀄 Lá số thêm dòng Âm/Dương Nam/Nữ · Thuận/Nghịch Lý — so trực tiếp ảnh phần mềm Thiên Lương |
 | 1 | 2026-09 | `2026-09.md` | 🚀 Tứ Hóa Phi Tinh — box hiển thị lên nốt 2 bề mặt còn thiếu (luan-giai.html + trang SEO) |
