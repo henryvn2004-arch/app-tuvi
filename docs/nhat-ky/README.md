@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-182 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+183 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 **Bốn file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
 ```bash
@@ -11,7 +11,7 @@ sed -n '120,190p' docs/nhat-ky/2026-08.md    # đọc đúng đoạn, đừng ca
 
 | file | số mục | dung lượng |
 |---|---:|---:|
-| `2026-09.md` | 18 | 97,767 B |
+| `2026-09.md` | 19 | 101,559 B |
 | `2026-08.md` | 147 | 1,018,512 B |
 | `2026-07.md` | 12 | 154,531 B |
 | `track-cu.md` | 5 | 89,354 B |
@@ -25,6 +25,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
+| 1 | 2026-09 | `2026-09.md` | 🀄 Lá số thêm dòng Âm/Dương Nam/Nữ · Thuận/Nghịch Lý — so trực tiếp ảnh phần mềm Thiên Lương |
 | 1 | 2026-09 | `2026-09.md` | 🔍 Nút Chia Sẻ 4 tool luận sâu: từ "tóm tắt 3-4 dòng" thành "y hệt màn hình đang xem" |
 | 1 | 2026-09 | `2026-09.md` | 🔍 Tử Bình: Opus cắt giữa câu 17% — chưa ai thấy vì tool chưa có lượt nào |
 | 1 | 2026-09 | `2026-09.md` | 🔀 Gemini 3.8 Flash lên primary cho toàn bộ luận giải, Opus 5 xuống lưới đỡ |

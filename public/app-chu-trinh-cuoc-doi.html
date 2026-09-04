@@ -215,7 +215,7 @@ function doLuan(){
     var gioChi=CHI[gioAmIdx];
     var conv=convertDuongToAm(dd,mm,yyyy,hh);conv.gioIdx=gioAmIdx;
     var ls=anSaoLaSo({ngayAL:conv.amLich.day,thangAL:conv.amLich.month,namAL:conv.amLich.year,canNam:conv.canNam,chiNam:conv.chiNam,gioIdx:gioAmIdx,gioitinh:gioitinh,namXem:namxem});
-    var fd={name:name,gioitinh:gioitinh,dd:dd,mm:mm,yyyy:yyyy,hh:hh,pp:pp,gioChi:gioChi,amLich:conv.amLich};
+    var fd={name:name,gioitinh:gioitinh,dd:dd,mm:mm,yyyy:yyyy,hh:hh,pp:pp,gioChi:gioChi,amLich:conv.amLich,amDuongNam:conv.amDuongNam};
     // ── Globals cho khối "Luận giải chuyên sâu AI" (gate+RAG+stream+PDF, port từ app-luan-giai.html) ──
     ls._conv=conv; ls._hoTen=name;
     _astrolabe=ls; _hoTen=name; _ngay=dd; _thang=mm; _nam=yyyy; _gioitinh=gioitinh; _namXem=namxem;

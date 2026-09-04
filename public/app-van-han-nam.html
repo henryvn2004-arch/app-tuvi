@@ -237,7 +237,7 @@ async function doXem(){
 
     render(ls);
     mountHook(ls);
-    document.getElementById('miniChart').innerHTML=renderGrid(ls,{name:name,gioitinh:gioitinh,dd:dd,mm:mm,yyyy:yyyy,hh:hh,gioChi:CHI[gioAmIdx],amLich:conv.amLich});
+    document.getElementById('miniChart').innerHTML=renderGrid(ls,{name:name,gioitinh:gioitinh,dd:dd,mm:mm,yyyy:yyyy,hh:hh,gioChi:CHI[gioAmIdx],amLich:conv.amLich,amDuongNam:conv.amDuongNam});
     if(window.mountIcons) window.mountIcons(document.getElementById('miniChart'));
     document.getElementById('birthPanel').style.display='none';
     document.getElementById('vhPanel').style.display='block';
