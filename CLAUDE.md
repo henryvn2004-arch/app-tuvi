@@ -472,6 +472,18 @@ Mỗi luật dưới đây sinh ra từ một lần cắn thật. Cột cuối l
 - Artifact có đường dẫn bắt đầu bằng dấu chấm (`.lighthouseci/`) cần
   `include-hidden-files: true`, nếu không mất im lặng.
 
+### Giữ chỗ chống nhảy layout (CLS)
+- **Giữ chỗ chỉ có tác dụng khi khối CÓ MẶT ở lần vẽ đầu.** Nhét khung chờ vào
+  trong một khối đang `display:none` thì không giữ được gì — nó chỉ làm cú chèn
+  NẶNG THÊM (đo được: `/app` 0,595 → 0,827). Quyết định lộ khối phải chạy lúc
+  PHÂN TÍCH HTML, không phải trong `DOMContentLoaded`.
+- **Khung chờ KHÔNG khớp theo nội dung đến từ DB/API** — chép số dòng của một
+  chuỗi nằm ngoài repo thì sửa chuỗi đó là khung chờ trôi, im lặng. Để số dòng
+  cố định, nhắm DƯ chứ không THIẾU (khối co lại thì nội dung dồn LÊN, xa ngón
+  tay). Bỏ `display:none` thì MỌI đường "không dựng được" phải ẩn tay.
+- Đo: Actions → Lighthouse CI → `mobile_audit=true` (thêm host vào
+  `lhci_url_override` để đo preview). `nhat-ky/2026-09.md` mục "Rà soát mobile".
+
 ### Overlay / popup bám phần tử
 - **Đặt popup theo một phần tử thì phải KẸP CỨNG vào vùng nhìn thấy SAU khi đã
   chọn trên/dưới.** Chọn xong gán thẳng là đủ để nhốt người dùng: điểm neo nằm
