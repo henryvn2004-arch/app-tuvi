@@ -41,8 +41,8 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg-soft);color:var
 .cung-name-label{font-size:10px;color:#222;font-weight:700;text-transform:uppercase;text-align:center;width:100%;letter-spacing:.5px}
 .badge-menh,.badge-than{display:inline-block;padding:1px 6px;font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;border-radius:2px;margin-bottom:3px}
 .badge-menh{border:1.5px solid var(--blue);color:var(--blue)}.badge-than{border:1.5px solid #7B3FA0;color:#7B3FA0}
-.chinh-tinh-area{margin-bottom:4px}
-.chinh-tinh-item{font-family:'Noto Serif',serif;font-size:12.5px;font-weight:700;line-height:1.4}
+.chinh-tinh-area{margin-bottom:4px;text-align:center}
+.chinh-tinh-item{font-family:'Noto Serif',serif;font-size:12.5px;font-weight:700;line-height:1.4;text-align:center}
 .phu-tinh-area{flex:1;display:flex;gap:0;align-items:flex-start}
 .phu-tinh-col{flex:1;display:flex;flex-direction:column;gap:0}
 .phu-tinh-col-right{text-align:right}
@@ -185,6 +185,7 @@ function renderCenter(ls, fd) {
     <div class="center-row"><span class="ic-inline" data-icon="calendar" data-icon-emoji="📅" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">📅</span> ${fd.amLich?fd.amLich.day+'/'+fd.amLich.month+'/'+fd.amLich.year:''} (Âm Lịch) · giờ ${fd.gioChi}</div>
     <div class="center-row"><span class="ic-inline" data-icon="cake" data-icon-emoji="🎂" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">🎂</span> ${ls.tuoiXem} tuổi (âm lịch)</div>
     <div class="center-row"><span class="ic-inline" data-icon="user" data-icon-emoji="⚧" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">⚧</span> Giới tính: ${fd.gioitinh==='nam'?'Nam':'Nữ'}</div>
+    ${fd.amDuongNam?`<div class="center-row">${fd.amDuongNam==='dương'?'Dương':'Âm'} ${fd.gioitinh==='nam'?'Nam':'Nữ'} · Âm Dương ${(fd.amDuongNam==='dương')===(fd.gioitinh==='nam')?'Thuận Lý':'Nghịch Lý'}</div>`:''}
     <hr class="center-divider">
     <div class="center-row">Năm: <b style="color:var(--navy)">${ls.canChiNam}</b> &nbsp;·&nbsp; Mệnh: <b style="color:var(--navy)">${NAP_AM_FULL[ls.canChiNam]||ls.napAm}</b></div>
     <div class="center-row">Cục: <b style="color:var(--navy)">${ls.cuc}</b> &nbsp;·&nbsp; Mệnh: <b style="color:var(--navy)">${ls.menhDC}</b> · Thân: <b style="color:var(--navy)">${(()=>{const p=ls.palaces.find(p=>p.diaChi===ls.thanDC);return p?'cư '+p.cungName:ls.thanDC;})()}</b></div>
@@ -247,7 +248,7 @@ function doAnSao(){
     const conv=convertDuongToAm(dd,mm,yyyy,hh);conv.gioIdx=gioAmIdx;
     const{amLich,canNam,chiNam,canChi}=conv;
     const ls=anSaoLaSo({ngayAL:amLich.day,thangAL:amLich.month,namAL:amLich.year,canNam,chiNam,gioIdx:gioAmIdx,gioitinh,namXem:namxem});
-    const fd={name,gioitinh,dd,mm,yyyy,hh,pp,gioChi,amLich,canChi};
+    const fd={name,gioitinh,dd,mm,yyyy,hh,pp,gioChi,amLich,canChi,amDuongNam:conv.amDuongNam};
     document.getElementById('laso-grid-container').innerHTML=renderGrid(ls,fd);
     if(window.mountIcons)window.mountIcons(document.getElementById('laso-grid-container'));
     document.getElementById('grid-title').textContent=`Lá Số: ${name||'—'} — ${dd}/${mm}/${yyyy} ${String(hh).padStart(2,'0')}:${String(pp).padStart(2,'0')} (Giờ ${gioChi})`;

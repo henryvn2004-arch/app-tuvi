@@ -228,7 +228,7 @@ function computeLs(pr,namxem){
   var ls=anSaoLaSo({ngayAL:conv.amLich.day,thangAL:conv.amLich.month,namAL:conv.amLich.year,canNam:conv.canNam,chiNam:conv.chiNam,gioIdx:gioAmIdx,gioitinh:pr.gioitinh,namXem:namxem});
   ls.chiNam=conv.chiNam; // anSaoLaSo không re-expose chiNam ở top-level → gắn lại (như xem-tuoi.html)
   // fd cho renderGrid (laso-chart.js) — vẽ lá số đầy đủ 12 cung như trang standalone.
-  var fd={name:pr.hoten,gioitinh:pr.gioitinh,dd:pr.ngay,mm:pr.thang,yyyy:pr.nam,hh:pr.gioHour,pp:pr.gioPhut,gioChi:(typeof CHI!=='undefined'?CHI[gioAmIdx]:''),amLich:conv.amLich};
+  var fd={name:pr.hoten,gioitinh:pr.gioitinh,dd:pr.ngay,mm:pr.thang,yyyy:pr.nam,hh:pr.gioHour,pp:pr.gioPhut,gioChi:(typeof CHI!=='undefined'?CHI[gioAmIdx]:''),amLich:conv.amLich,amDuongNam:conv.amDuongNam};
   return {ls:ls,hourBranch:gioAmIdx,fd:fd};
 }
 
