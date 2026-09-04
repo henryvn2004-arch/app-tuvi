@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"></noscript>
-<link rel="stylesheet" href="/shell.css?v=32">
+<link rel="stylesheet" href="/shell.css?v=33">
 <style>
 .form-card{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);max-width:860px}
 .form-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:3px}
@@ -69,7 +69,8 @@
 .hn-item:last-child{padding-bottom:0}
 .hn-item .viec{font-size:13px;line-height:1.7;color:#2a2118}
 .hn-item .vsao{font-size:12.5px;line-height:1.7;color:#5a5145;font-style:italic;margin-top:4px}
-.hn-motcau{font-family:var(--serif);font-size:16px;line-height:1.75;color:#061A2E;font-style:italic;text-align:center;padding:6px 10px}
+/* Câu chốt "Nếu Chỉ Nhớ Một Câu" dùng thẳng .fb-card.fb-trungtinh (shell.css)
+   — không khai riêng nữa, tránh trôi khỏi kiểu poster đã chốt cho cả site. */
 .hn-basis-list{margin:0;padding-left:18px}
 .hn-basis-list li{font-size:12.5px;line-height:1.8;color:#4a4a4a;margin-bottom:6px}
 /* Cảnh báo — nền vàng nhạt, KHÔNG dùng đỏ: đây là lời nói thật về lá số, không
@@ -214,7 +215,7 @@
 
           <div class="res-block" id="endBlock" style="display:none">
             <div class="res-block-body">
-              <div class="hn-motcau" id="motCau"></div>
+              <div class="fb-card fb-trungtinh" id="motCau"></div>
             </div>
           </div>
 

@@ -470,6 +470,13 @@ font-family:inherit}
 :root[data-theme="dark"] .fb-tot{background:#15291D;color:#5FBF87}
 :root[data-theme="dark"] .fb-canhbao{background:#301C19;color:#F08A7A}
 
+/* .fb-item — thẻ NHỎ cho từng dòng trong một DANH SÁCH gợi ý (tên/ngày…),
+   khác hẳn .fb-card (poster to, dành cho ĐÚNG MỘT câu trích trong văn bản
+   dài). Danh sách gợi ý không có trục tốt/xấu — toàn bộ đều là lựa chọn được
+   đề xuất — nên chỉ MỘT màu trung tính, không có biến thể fb-tot/fb-canhbao. */
+.fb-item{border-radius:10px;padding:12px 14px;margin:8px 0;background:var(--gold-lt);border-left:3px solid var(--gold-soft)}
+.fb-item b,.fb-item strong{font-family:var(--serif);font-size:14.5px;color:var(--heading)}
+
 /* ══════════════════════════════════════════════════════════════════════
    IN / LƯU PDF — LUẬT CỦA SHELL, KHÔNG PHẢI CỦA TỪNG TOOL
    ══════════════════════════════════════════════════════════════════════
