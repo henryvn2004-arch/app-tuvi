@@ -12,6 +12,10 @@ on:
       lhci_url_override:
         description: 'Override URLs (comma-sep)'
         required: false
+      mobile_audit:
+        description: 'Chạy lượt CHẨN ĐOÁN mobile (8 trang, đủ 4 category) thay cho 2 lượt thường'
+        required: false
+        default: 'false'
 
 permissions:
   contents: read
@@ -67,6 +71,7 @@ jobs:
           fi
 
       - name: Run Lighthouse CI
+        if: github.event.inputs.mobile_audit != 'true'
         env:
           LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
         # Mỗi URL một cờ riêng — `--collect.url="a,b"` không tách thành nhiều URL,
@@ -91,13 +96,34 @@ jobs:
       # này sau khi có vài lượt đo thật.
       - name: Run Lighthouse CI (mobile — trang quảng cáo)
         if: >
-          github.event_name == 'workflow_dispatch' ||
-          github.event.deployment.environment == 'production' ||
-          github.event.deployment.environment == 'Production'
+          github.event.inputs.mobile_audit != 'true' &&
+          (github.event_name == 'workflow_dispatch' ||
+           github.event.deployment.environment == 'production' ||
+           github.event.deployment.environment == 'Production')
         continue-on-error: true
         env:
           LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
         run: npx lhci autorun --config=lighthouserc.mobile.json
+
+      # ── Lượt CHẨN ĐOÁN mobile (bấm tay, mobile_audit=true) ─────────────────
+      # THAY CHO hai lượt trên chứ không cộng thêm: 8 URL × 2 lượt đã ~11 phút,
+      # cộng lượt desktop (12 lượt) là vượt `timeout-minutes: 20` của job.
+      #
+      # `continue-on-error` + không có khối `assert` trong config: đây là bước
+      # ĐO, không phải cổng chặn. Dựng ngưỡng khi chưa có baseline thì chỉ đẻ ra
+      # một bộ dò kêu oan rồi bị tắt đi — CLAUDE.md cấm.
+      - name: Lighthouse mobile — chẩn đoán 8 trang
+        if: github.event.inputs.mobile_audit == 'true'
+        continue-on-error: true
+        env:
+          LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
+        run: npx lhci autorun --config=lighthouserc.mobile-audit.json
+
+      # In thẳng vào log job: artifact `.lighthouseci/` là zip, đọc lại phải tải
+      # + giải nén ngoài CI; log thì đọc được ngay.
+      - name: In bảng kết quả mobile
+        if: ${{ always() && github.event.inputs.mobile_audit == 'true' }}
+        run: node scripts/lh-mobile-report.mjs
 
       # 🔑 `include-hidden-files` BẮT BUỘC ở đây: `.lighthouseci/` bắt đầu bằng
       # dấu chấm, mà upload-artifact loại file ẩn theo mặc định ⇒ từ trước tới

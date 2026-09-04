@@ -1,0 +1,51 @@
+{
+  "//": [
+    "Lighthouse MOBILE — CHẨN ĐOÁN, KHÔNG phải cổng chặn.",
+    "",
+    "Khác `lighthouserc.mobile.json` (cổng gác 2 trang quảng cáo) ở ba điểm, đều",
+    "cố ý:",
+    "  1. KHÔNG có khối `assert` — mục tiêu là LẤY SỐ cho một mặt trận chưa từng",
+    "     được đo, không phải dựng thêm ngưỡng khi chưa biết baseline (đúng luật",
+    "     'bộ dò kêu oan là bộ dò bị tắt đi' trong CLAUDE.md).",
+    "  2. KHÔNG dùng `preset: 'perf'` — preset đó CẮT hết audit ngoài performance,",
+    "     mà chính `accessibility`/`seo`/`best-practices` mới chứa các audit trả",
+    "     lời câu 'UI/UX mobile đã ổn chưa': content-width (tràn ngang),",
+    "     font-size (chữ/ô nhập quá nhỏ), tap-targets + target-size (nút quá bé),",
+    "     color-contrast, meta viewport.",
+    "  3. Phủ 8 trang theo ĐÚNG đường user đi (vào từ Ads → lập lá số → luận giải",
+    "     → gặp paywall → nạp tiền), thay vì 2 trang.",
+    "",
+    "Chạy: Actions → 'Lighthouse CI' → Run workflow → mobile_audit = true.",
+    "Kết quả in thẳng vào log job qua `scripts/lh-mobile-report.mjs`."
+  ],
+  "ci": {
+    "collect": {
+      "url": [
+        "https://www.tuviminhbao.com/",
+        "https://www.tuviminhbao.com/app",
+        "https://www.tuviminhbao.com/app/luan-giai",
+        "https://www.tuviminhbao.com/la-so.html",
+        "https://www.tuviminhbao.com/luan-giai.html",
+        "https://www.tuviminhbao.com/xem-tuoi.html",
+        "https://www.tuviminhbao.com/tu-binh.html",
+        "https://www.tuviminhbao.com/topup.html"
+      ],
+      "numberOfRuns": 2,
+      "settings": {
+        "formFactor": "mobile",
+        "throttlingMethod": "simulate",
+        "screenEmulation": {
+          "mobile": true,
+          "width": 390,
+          "height": 844,
+          "deviceScaleFactor": 3,
+          "disabled": false
+        },
+        "onlyCategories": ["performance", "accessibility", "best-practices", "seo"]
+      }
+    },
+    "upload": {
+      "target": "temporary-public-storage"
+    }
+  }
+}
