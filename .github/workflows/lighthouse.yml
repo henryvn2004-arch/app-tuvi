@@ -10,7 +10,7 @@ on:
   workflow_dispatch:
     inputs:
       lhci_url_override:
-        description: 'Override URLs (comma-sep)'
+        description: 'Override URLs (comma-sep). Khi mobile_audit=true: dùng làm HOST GỐC để ghép 8 đường dẫn của lighthouserc.mobile-audit.json'
         required: false
       mobile_audit:
         description: 'Chạy lượt CHẨN ĐOÁN mobile (8 trang, đủ 4 category) thay cho 2 lượt thường'
@@ -117,7 +117,26 @@ jobs:
         continue-on-error: true
         env:
           LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
-        run: npx lhci autorun --config=lighthouserc.mobile-audit.json
+          INPUT_URL: ${{ github.event.inputs.lhci_url_override }}
+          BYPASS: ${{ secrets.VERCEL_BYPASS_SECRET }}
+        run: |
+          # Config ghim URL PROD. Không có cách ghép sang host khác thì mọi lượt
+          # bấm tay đều đo bản đang chạy — tức đo đúng thứ PR chưa hề đụng tới,
+          # đúng cái bẫy đã vá cho smoke (#463), E2E (#466) và lượt desktop ở
+          # trên. Đưa host vào `lhci_url_override` thì đo bản vừa deploy.
+          #
+          # `lhci-preview-urls.mjs` nhận `LHCI_RC` nên dùng lại được nguyên xi:
+          # nó giữ đúng các ĐƯỜNG DẪN khai trong config và chỉ đổi host, nên
+          # không có bản chép tay nào để trôi.
+          if [ -n "$INPUT_URL" ]; then
+            ARGS=""
+            for u in $(TARGET_URL="$INPUT_URL" LHCI_RC=lighthouserc.mobile-audit.json node scripts/lhci-preview-urls.mjs); do
+              ARGS="$ARGS --collect.url=$u"
+            done
+            npx lhci autorun --config=lighthouserc.mobile-audit.json $ARGS
+          else
+            npx lhci autorun --config=lighthouserc.mobile-audit.json
+          fi
 
       # In thẳng vào log job: artifact `.lighthouseci/` là zip, đọc lại phải tải
       # + giải nén ngoài CI; log thì đọc được ngay.
