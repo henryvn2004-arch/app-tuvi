@@ -253,6 +253,27 @@
 .kh-guest-txt{font-size:12.5px;color:var(--text-mid);line-height:1.5;flex:1;min-width:200px}
 .kh-guest-txt b{color:var(--heading)}
 .kh-guest-btn{flex:0 0 auto;background:var(--red);color:#fff;border:none;border-radius:9px;padding:10px 16px;font-size:12.5px;font-weight:700;font-family:var(--serif);cursor:pointer}
+/* Khung chờ Khởi Hành — cùng cách làm với .sk-tile: dùng lại đúng lớp thật,
+   thanh xám vẽ bằng `background` nên không ăn vào layout, và `line-height` của
+   nút ghim tay vì <span> thừa hưởng khác <button>. Số bước là 3 (tiêu đề thật
+   ghi "3 bước đầu tiên"), mỗi bước để tiêu đề 1 dòng + mô tả 2 dòng — CỐ Ý
+   không khớp theo chữ, vì chữ đến từ `/api/payment?action=khoi-hanh-defs`. */
+.kh-skel .sk{display:block;color:transparent;
+  background:linear-gradient(var(--line),var(--line)) no-repeat left center/100% 11px}
+.kh-skel .kh-eyebrow .sk{background-size:34% 9px}
+.kh-skel .kh-h .sk{background-size:62% 13px}
+.kh-skel .kh-sub .sk:last-child{background-size:48% 11px}
+.kh-skel .kh-t .sk{background-size:56% 12px}
+.kh-skel .kh-d .sk:last-child{background-size:70% 11px}
+.kh-skel .kh-guest-txt .sk:last-child{background-size:64% 11px}
+.kh-skel .kh-num{background:var(--line);border-color:var(--line);color:transparent}
+.kh-skel .kh-go,.kh-skel .kh-guest-btn{background:var(--line);color:transparent;cursor:default}
+.kh-skel .kh-go{line-height:15px}
+.kh-skel .kh-guest-btn{line-height:16px}
+.kh-skel{pointer-events:none}
+@media(prefers-reduced-motion:no-preference){
+  .kh-skel .sk,.kh-skel .kh-num,.kh-skel .kh-go,.kh-skel .kh-guest-btn{animation:tileSkPulse 1.4s ease-in-out infinite}
+}
 .kh-guest-btn:hover{filter:brightness(1.08)}
 @media(max-width:520px){
   .kh-step{flex-wrap:wrap}
@@ -394,7 +415,24 @@
           }catch(e){ /* để run() lo */ }
         })();
         </script>
-        <div id="khoiHanhCard" style="display:none"></div>
+        <!-- Khung chờ: thẻ này lộ ở nhịp hoãn 1,2 giây (xem `khSync`) nên nếu để
+             `display:none` thì nó chèn vào sau lần vẽ đầu và đẩy mọi thứ dưới.
+             MỌI đường không dựng được thẻ đều phải ẩn tay — xem `khHide()`. -->
+        <div id="khoiHanhCard" class="kh-skel" aria-busy="true" aria-label="Đang tải Khởi Hành">
+          <div class="kh-card">
+            <div class="kh-eyebrow"><span class="sk">&nbsp;</span></div>
+            <div class="kh-h"><span class="sk">&nbsp;</span></div>
+            <div class="kh-sub"><span class="sk">&nbsp;</span><span class="sk">&nbsp;</span></div>
+            <div class="kh-bar"><div class="kh-seg"></div><div class="kh-seg"></div><div class="kh-seg"></div></div>
+            <div class="kh-steps">
+              <div class="kh-step"><div class="kh-num"></div><div class="kh-body"><div class="kh-t"><span class="sk">&nbsp;</span></div><div class="kh-d"><span class="sk">&nbsp;</span><span class="sk">&nbsp;</span><span class="sk">&nbsp;</span></div></div><span class="kh-go">&nbsp;</span></div>
+              <div class="kh-step"><div class="kh-num"></div><div class="kh-body"><div class="kh-t"><span class="sk">&nbsp;</span></div><div class="kh-d"><span class="sk">&nbsp;</span><span class="sk">&nbsp;</span><span class="sk">&nbsp;</span></div></div><span class="kh-go">&nbsp;</span></div>
+              <div class="kh-step"><div class="kh-num"></div><div class="kh-body"><div class="kh-t"><span class="sk">&nbsp;</span></div><div class="kh-d"><span class="sk">&nbsp;</span><span class="sk">&nbsp;</span><span class="sk">&nbsp;</span></div></div><span class="kh-go">&nbsp;</span></div>
+            </div>
+            <div class="kh-guest"><div class="kh-guest-txt"><span class="sk">&nbsp;</span><span class="sk">&nbsp;</span></div>
+              <span class="kh-guest-btn">&nbsp;</span></div>
+          </div>
+        </div>
         <!-- Kênh liên lạc — 2 nhiệm vụ CŨ của M3 (bật thông báo/liên kết chat),
              tách tầng riêng: đây là kênh nhắc, không phải bước làm quen. CHỈ
              hiện khi đã đăng nhập — khách vãng lai chưa có ví để mà cộng vào. -->
@@ -1483,14 +1521,14 @@ function renderAllTools(d) {
 
   function renderKhoiHanh(d){
     var host=el('khoiHanhCard'); if(!host) return;
-    var kh=d.khoiHanh; if(!kh) return;
+    var kh=d.khoiHanh; if(!kh){ khHide(); return; }
     if(kh.justGranted) _khGot+=(+kh.credits||0);
     // Badge nhắc trên sidebar (public/shell.js) đọc đúng cờ này — không gọi
     // riêng một API cho mọi trang /app, chỉ đọc lại thứ trang chủ vừa biết.
     try{ localStorage.setItem('tvp_kh_pending', kh.claimed?'0':'1'); }catch(e){}
     // Thưởng đã vào ví → biến mất hẳn. Giữ lại một thẻ toàn dấu tích là chiếm
     // chỗ vĩnh viễn trên màn hình đầu để khoe một việc đã cũ.
-    if(kh.claimed){ host.style.display='none'; return; }
+    if(kh.claimed){ khHide(); return; }
 
     _khSteps=kh.steps||[]; _khActiveDefs=_khSteps;
     var done=0; for(var i=0;i<_khSteps.length;i++) if(_khSteps[i].done) done++;
@@ -1509,15 +1547,31 @@ function renderAllTools(d) {
     h+='</div></div>';
     host.innerHTML=h;
     host.style.display='';
+    khShown(host);
     wireKhSteps(host);
   }
 
   /* Bản KHÁCH VÔ DANH — không gọi `onboarding-sync` (chưa có token để gọi),
      dựng từ `_khGuestDefs` (tĩnh, tải một lần) + tiến độ máy. */
+  /* Thẻ này khởi đầu bằng KHUNG CHỜ (xem markup #khoiHanhCard), nên mọi đường
+     "không dựng được" phải ẩn tay — bỏ quên một đường là khung chờ nhấp nháy
+     vĩnh viễn ở giữa trang. */
+  function khHide(){
+    var h=el('khoiHanhCard'); if(!h) return;
+    h.style.display='none'; h.classList.remove('kh-skel');
+    h.removeAttribute('aria-busy'); h.removeAttribute('aria-label');
+  }
+  function khShown(host){
+    host.classList.remove('kh-skel');
+    host.removeAttribute('aria-busy'); host.removeAttribute('aria-label');
+  }
+
   function renderKhoiHanhGuest(){
     var host=el('khoiHanhCard'); if(!host) return;
     if(!_khGuestDefs||!_khGuestDefs.length){
+      // Lượt đầu: thử nạp lại. Lượt sau vẫn hụt ⇒ ẩn hẳn, KHÔNG bịa nội dung.
       if(!_khDefsRetried){ _khDefsRetried=true; loadKhoiHanhDefs().then(renderKhoiHanhGuest); }
+      else khHide();
       return;
     }
     _khActiveDefs=_khGuestDefs;
@@ -1543,6 +1597,7 @@ function renderAllTools(d) {
       +'<button class="kh-guest-btn" type="button" id="khGuestSignup">Tạo tài khoản</button></div></div>';
     host.innerHTML=h;
     host.style.display='';
+    khShown(host);
     wireKhSteps(host);
     var b=el('khGuestSignup');
     if(b) b.onclick=function(){
@@ -1660,7 +1715,7 @@ function renderAllTools(d) {
     fetch('/api/payment?action=onboarding-sync',{method:'POST',headers:{Authorization:'Bearer '+tk}})
       .then(function(r){ return r.ok?r.json():null; })
       .then(function(d){ if(d){ renderKhoiHanh(d); renderChannels(d); } })
-      .catch(function(){ /* hỏng thì thẻ không hiện — không chặn gì của trang */ })
+      .catch(function(){ khHide(); /* hỏng thì thẻ không hiện — không chặn gì của trang */ })
       .then(function(){ _khBusy=false; });
   }
 
