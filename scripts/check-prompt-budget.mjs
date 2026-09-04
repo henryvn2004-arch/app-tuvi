@@ -275,7 +275,12 @@ if (badScenario.length) {
 //
 // ⚠️ Trần đặt SÁT mức hiện tại + biên ~12%. Nới trần là một QUYẾT ĐỊNH phải ghi
 // lý do, không phải thao tác dọn đường cho một khối mới.
-const DOC_FILES = {
+// 🪤 MẢNG, không phải object-keyed-by-file: từ khi Nhóm C gắn 5 prompt (SP_DIEN
+// … SP_THANH_PRO) cùng chung MỘT file `app/api/tuong-mat/route.js`, key theo
+// đường dẫn file sẽ tự ghi đè lẫn nhau (object chỉ giữ được entry cuối cùng
+// cho cùng một khoá) — mảng cho phép nhiều entry trỏ cùng file mà không mất
+// entry nào. Field `file` lặp lại là CỐ Ý, không phải sao chép nhầm.
+const DOC_FILES = [
   // Prompt 24 phần DỜI khỏi route sang lib (tool "Vận Hạn 12 Tháng Tới" dùng
   // lại 4 phần đầu; Next chặn export lạ trong route file). Nội dung KHÔNG đổi
   // — A/B đã chứng minh 24 prompt trùng khít từng byte.
@@ -286,24 +291,75 @@ const DOC_FILES = {
   // nội suy chung `arcDoc()`. Cả 5 bản đều đã sát trần (95-100%) từ đợt DỰ BÁO
   // trước, không còn chỗ trống nào để hấp thụ khối mới ⇒ bắt buộc nới cả 5,
   // không phải nới tuỳ tiện. Biên vẫn giữ ~10% như các lần nới trước.
-  'lib/agent/luan-giai-doc.ts': { name: 'SYSTEM_PROMPT', cap: 13700, arc: 'DOC_ARC_LASO' },
-  'app/api/tubinh/route.ts': { name: 'SYSTEM_PROMPT_TUBINH', cap: 10900, arc: 'DOC_ARC_TUBINH' },
-  'lib/agent/phu-the-luan-giai.ts': {
+  { file: 'lib/agent/luan-giai-doc.ts', name: 'SYSTEM_PROMPT', cap: 13700, arc: 'DOC_ARC_LASO' },
+  {
+    file: 'app/api/tubinh/route.ts',
+    name: 'SYSTEM_PROMPT_TUBINH',
+    cap: 10900,
+    arc: 'DOC_ARC_TUBINH',
+  },
+  {
+    file: 'lib/agent/phu-the-luan-giai.ts',
     name: 'PHU_THE_LUAN_GIAI_SYSTEM_PROMPT',
     cap: 8200,
     arc: 'DOC_ARC_PHU_THE',
   },
-  'app/api/xem-tuoi/route.ts': {
+  {
+    file: 'app/api/xem-tuoi/route.ts',
     name: 'LUAN_GIAI_TUONG_HOP_SYSTEM',
     cap: 4000,
     arc: 'DOC_ARC_TUONG_HOP',
   },
-  'app/api/but-tuong/route.js': {
+  {
+    file: 'app/api/but-tuong/route.js',
     name: 'SP_BUT_TUONG',
     cap: 7900,
     arc: 'DOC_ARC_BUT_TUONG',
   },
-};
+  // Nhóm C — 5 prompt tướng học trong CÙNG MỘT file `tuong-mat/route.js`, gắn
+  // arc từng cái một (2026-09-04 → …), mỗi cap = mức thực đo lúc gắn arc +
+  // biên ~10%, cùng quy ước với các bản trên.
+  {
+    file: 'app/api/tuong-mat/route.js',
+    name: 'SP_DIEN',
+    cap: 5800,
+    arc: 'DOC_ARC_DIEN_TUONG',
+  },
+  {
+    file: 'app/api/tuong-mat/route.js',
+    name: 'SP_NHAN',
+    cap: 8500,
+    arc: 'DOC_ARC_NHAN_TUONG',
+  },
+  {
+    file: 'app/api/tuong-mat/route.js',
+    name: 'SP_THU',
+    cap: 10000,
+    arc: 'DOC_ARC_THU_TUONG',
+  },
+  {
+    file: 'app/api/tuong-mat/route.js',
+    name: 'SP_THANH',
+    cap: 6600,
+    arc: 'DOC_ARC_THANH_TUONG',
+  },
+  {
+    file: 'app/api/tuong-mat/route.js',
+    name: 'SP_THANH_PRO',
+    cap: 9700,
+    arc: 'DOC_ARC_THANH_TUONG_PRO',
+  },
+  // Khí Sắc — NGOẠI LỆ CỐ Ý: đã có "Dự Báo 1-3 Tháng Tới" riêng (khí sắc đổi
+  // theo ngày/tháng, có trục thời gian thật) nên KHÔNG gọi `arcDoc()` (chồng
+  // nguồn dự báo) — chỉ mượn `NHAN_TINH_CHAT_RULE`. `arc: null` tắt luật
+  // "đúng một DOC_ARC_*" cho riêng entry này, xem đoạn xử lý `spec.arc === null`.
+  {
+    file: 'app/api/tuong-mat/route.js',
+    name: 'SP_KHI_SAC',
+    cap: 6500,
+    arc: null,
+  },
+];
 // Khối bố cục của VĂN LUẬN DÀI. Một bản luận giải chỉ được dùng ĐÚNG MỘT —
 // và tuyệt đối không được kéo thêm arc CHAT vào (nó mang bối cảnh "vừa đọc xong
 // bản luận đầy đủ" + ngân sách 120–180 từ, tức tự mâu thuẫn với chính nó).
@@ -313,6 +369,11 @@ const DOC_BLOCKS = [
   'DOC_ARC_PHU_THE',
   'DOC_ARC_TUONG_HOP',
   'DOC_ARC_BUT_TUONG',
+  'DOC_ARC_DIEN_TUONG',
+  'DOC_ARC_NHAN_TUONG',
+  'DOC_ARC_THU_TUONG',
+  'DOC_ARC_THANH_TUONG',
+  'DOC_ARC_THANH_TUONG_PRO',
 ];
 const CHAT_BLOCKS = [
   'LUAN_ARC',
@@ -323,7 +384,8 @@ const CHAT_BLOCKS = [
 ];
 
 console.log('\n── Bản LUẬN GIẢI ở route: trần + một nguồn bố cục ──');
-for (const [file, spec] of Object.entries(DOC_FILES)) {
+for (const spec of DOC_FILES) {
+  const file = spec.file;
   let fsrc;
   try {
     fsrc = readFileSync(file, 'utf8');
@@ -362,11 +424,21 @@ for (const [file, spec] of Object.entries(DOC_FILES)) {
   const refs = directRefs(body);
   const doc = [...new Set(refs.filter((r) => DOC_BLOCKS.includes(r)))];
   const chat = [...new Set(refs.filter((r) => CHAT_BLOCKS.includes(r)))];
-  if (doc.length !== 1 || doc[0] !== spec.arc)
+  // spec.arc === null: NGOẠI LỆ cố ý (Khí Sắc) — đã có "Dự Báo" riêng, không
+  // được gọi arcDoc() (chồng nguồn dự báo), chỉ mượn NHAN_TINH_CHAT_RULE nên
+  // KHÔNG được kéo bất kỳ DOC_ARC_* nào vào.
+  if (spec.arc === null) {
+    if (doc.length)
+      errors.push(
+        `${spec.name} nội suy ${doc.join(' + ')} nhưng khai arc:null (ngoại lệ, không dùng arcDoc).\n` +
+          `  → Nếu đã gắn arcDoc thật thì đổi spec.arc cho khớp; nếu không thì gỡ khối đó ra.`
+      );
+  } else if (doc.length !== 1 || doc[0] !== spec.arc) {
     errors.push(
       `${spec.name} nội suy ${doc.length ? doc.join(' + ') : '(không có)'} — chờ đúng \`${spec.arc}\`.\n` +
         `  → Mỗi bản luận giải đúng MỘT nguồn bố cục cho văn luận dài.`
     );
+  }
   if (chat.length)
     errors.push(
       `${spec.name} kéo cả arc CHAT vào: ${chat.join(' + ')}.\n` +
