@@ -9,7 +9,12 @@ on:
 jobs:
   lint:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    # 10 cũ quá sát: `npm ci` một mình đã đo được 7-8 phút vài lần gần đây
+    # (đăng ký npm chậm/cache miss, không phải job này chậm đi) — job bị
+    # `cancelled` giữa chừng (thường ngay ở bước build engine cho check:terms),
+    # không phải lỗi thật, và lặp lại y hệt khi re-run. Đã đối chiếu: chính
+    # commit main cũng dính cancelled cùng lý do (không phải riêng PR nào).
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v7
 
@@ -311,7 +316,8 @@ jobs:
 
   typecheck:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    # Cùng lý do với job `lint` ở trên — xem chú thích tại đó.
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v7
 
