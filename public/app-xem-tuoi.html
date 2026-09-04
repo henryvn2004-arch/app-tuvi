@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"></noscript>
-<link rel="stylesheet" href="/shell.css?v=31">
+<link rel="stylesheet" href="/shell.css?v=32">
 <link rel="stylesheet" href="/laso-chart.css?v=3">
 <style>
 .form-card{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);max-width:720px}
@@ -428,6 +428,33 @@ function buildSlug(result,product){
 var _pendingSlug=null, _currentPhan=-1, _xemTuoiStore={}, _compatResult=null, _compatNameA='', _compatNameB='';
 var _xtPace=(window.AiLoadingSteps&&AiLoadingSteps.pacer)?AiLoadingSteps.pacer():null;
 
+// Nhãn tính chất model tự gắn NGAY TRƯỚC câu hook mỗi đoạn (khối "NHÃN TÍNH
+// CHẤT MỖI CÂU HOOK" trong `arcDoc()`, lib/agent/prompts.ts) — tách thành thẻ
+// trích dẫn màu (.fb-card, xem shell.css), cùng cơ chế với app-luan-giai.html.
+// Trang này trước đây chỉ tách đoạn theo `\n\n` mà KHÔNG đổi `**...**` sang
+// in đậm — sửa luôn ở đây vì nếu không, đoạn thường sẽ hiện dấu ** trần ngay
+// cạnh thẻ card đã tô màu đẹp, rất lệch mắt.
+var HOOK_TAG_CLASS={ 'TỐT':'fb-tot', 'CẢNH BÁO':'fb-canhbao', 'TRUNG TÍNH':'fb-trungtinh' };
+function renderLuanGiaiParas(text){
+  function inline(s){ return s.replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/\*(.+?)\*/g,'<em>$1</em>'); }
+  var out='', pendingLead='';
+  function flushPending(){ if(pendingLead){ out+='<p>'+pendingLead+'</p>'; pendingLead=''; } }
+  String(text||'').split('\n\n').filter(Boolean).forEach(function(p){
+    var m=/^\[(TỐT|CẢNH BÁO|TRUNG TÍNH)\]\s*\*\*(.+?)\*\*([\s\S]*)$/.exec(p.trim());
+    if(m){
+      flushPending();
+      var cls=HOOK_TAG_CLASS[m[1]]||'fb-trungtinh';
+      out+='<div class="fb-card '+cls+'">“'+esc(m[2].trim())+'”</div>';
+      pendingLead=inline(m[3]).trim();
+      return;
+    }
+    out+='<p>'+(pendingLead?pendingLead+' ':'')+inline(p)+'</p>';
+    pendingLead='';
+  });
+  flushPending();
+  return out;
+}
+
 // Xây prompt cho 1 phần (idx 0=Tổng Quan, 1-8=từng chiều) — port nguyên từ
 // xem-tuoi.html:luanGiaiSection, dùng chung cho cả xem-tuoi/xem-lam-an.
 function buildPhanPrompt(idx,m,result){
@@ -581,7 +608,7 @@ async function _loadNextPhanAI(){
     _xemTuoiStore[idx]=text;
     _xtPace&&_xtPace.end();   // chỉ ghi nhịp ở nhánh THÀNH CÔNG
     doneWait();
-    if(box)box.innerHTML=text.split('\n\n').filter(Boolean).map(function(p){return '<p>'+p+'</p>';}).join('');
+    if(box)box.innerHTML=renderLuanGiaiParas(text);
   }catch(e){
     doneWait();
     if(box)box.innerHTML='<div class="laso-error">Lỗi khi luận giải phần '+(idx+1)+': '+esc(e.message)+' <button class="btn" onclick="window._xtRetryPhan()">↻ Thử lại</button></div>';

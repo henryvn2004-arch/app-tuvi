@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"></noscript>
-<link rel="stylesheet" href="/shell.css?v=31">
+<link rel="stylesheet" href="/shell.css?v=32">
 <link rel="stylesheet" href="/laso-chart.css?v=3">
 <style>
 /* Center riêng của trang Luận giải */
@@ -148,13 +148,10 @@
    lượt gọi LLM nào. Bóc + tô màu ở `renderMarkdown`. */
 /* Style "editorial/headline/poster" (Henry 2026-09-03): sans-serif đậm, cỡ chữ
    gấp ~2-2.5x thân bài (.claude-content p = 13.5px), canh giữa, đệm đều 4
-   phía, tracking hơi rộng cho thoáng — khác hẳn thân bài (serif, trái). */
-.fb-card{border-radius:14px;padding:30px 26px;margin:16px 0 18px;font-family:var(--sans);font-weight:700;font-size:clamp(19px,5.4vw,27px);line-height:1.4;letter-spacing:.015em;text-align:center}
-.fb-tot{background:#E8F5EC;color:#1E6B3C}
-.fb-canhbao{background:#FBEAE7;color:#C0392B}
-.fb-trungtinh{background:var(--gold-lt);color:var(--heading)}
-:root[data-theme="dark"] .fb-tot{background:#15291D;color:#5FBF87}
-:root[data-theme="dark"] .fb-canhbao{background:#301C19;color:#F08A7A}
+   phía, tracking hơi rộng cho thoáng — khác hẳn thân bài (serif, trái).
+   CSS `.fb-card`/`.fb-tot`/`.fb-canhbao`/`.fb-trungtinh` dời sang `shell.css`
+   2026-09-04 (dùng chung cho cả nhóm tool luận giải dài) — đừng khai lại ở
+   đây, khai lại là hai bản trôi màu khỏi nhau. */
 .laso-error{font-size:12.5px;color:var(--tx-red);padding:8px 0}
 .lg-unlock{background:var(--white);border:1px solid var(--gold-soft);border-radius:11px;padding:18px 20px;margin-bottom:22px;text-align:center}
 .lg-unlock p{font-size:12.5px;color:var(--text-lt);margin-top:8px}

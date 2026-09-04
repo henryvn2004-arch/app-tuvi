@@ -40,6 +40,14 @@
   --gold: #9A7B3A; --gold-lt: #F9F4EB;
   --red: #C0392B; --green: #1E6B3C;
 }
+/* Thẻ trích dẫn kiểu Facebook caption cho câu hook — trang này KHÔNG nạp
+   shell.css (trang standalone cũ), nên khai riêng thay vì phụ thuộc token
+   của shell (--sans/--heading không tồn tại ở đây). Màu khớp bản gốc trong
+   shell.css để đồng nhất giữa các tool, chỉ đổi token thành giá trị cứng. */
+.fb-card{border-radius:14px;padding:30px 26px;margin:16px 0 18px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;font-weight:700;font-size:clamp(19px,5.4vw,27px);line-height:1.4;letter-spacing:.015em;text-align:center}
+.fb-tot{background:#E8F5EC;color:#1E6B3C}
+.fb-canhbao{background:#FBEAE7;color:#C0392B}
+.fb-trungtinh{background:var(--gold-lt);color:var(--navy)}
 body { font-family: Arial, sans-serif; background: var(--bg); color: var(--text); font-size: 16px; line-height: 1.6; -webkit-font-smoothing: antialiased; }
 .page { max-width: 1100px; margin: 0 auto; padding: 0 32px; }
 
@@ -1440,6 +1448,10 @@ select.form-input { cursor: pointer; }
   };
 
   // ─── Markdown renderer (đơn giản, đủ dùng) ────────────────────
+  // Nhãn tính chất model tự gắn NGAY TRƯỚC câu hook mỗi đoạn (khối "NHÃN TÍNH
+  // CHẤT MỖI CÂU HOOK" trong `arcDoc()`, lib/agent/prompts.ts) — tra ra class
+  // CSS màu (.fb-card, xem shell.css). Cùng cơ chế với app-luan-giai.html.
+  const HOOK_TAG_CLASS = { 'TỐT': 'fb-tot', 'CẢNH BÁO': 'fb-canhbao', 'TRUNG TÍNH': 'fb-trungtinh' };
   function renderMarkdown(text) {
     if (!text) return '';
     // Normalize line endings + remove BOM / zero-width chars
@@ -1466,25 +1478,38 @@ select.form-input { cursor: pointer; }
       out += '</table></div>';
       rows = []; inTable = false;
     }
+    const inline = (s) => s.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>').replace(/\*(.+?)\*/g, '<em>$1</em>');
+    let pendingLead = '';
+    const flushPending = () => { if (pendingLead) { out += `<p>${pendingLead}</p>`; pendingLead = ''; } };
     for (const rawLine of lines) {
       const line = rawLine.trim();  // trim per line — robust against leading whitespace
       if (line.startsWith('|')) {
+        flushPending();
         inTable = true;
         rows.push(line);
       } else {
         if (inTable) flushTable();
-        const l = line
+        const h = line
           .replace(/^####\s+(.+)$/, '<h4>$1</h4>')
           .replace(/^###\s+(.+)$/, '<h3>$1</h3>')
           .replace(/^##\s+(.+)$/, '<h2>$1</h2>')
-          .replace(/^#\s+(.+)$/, '<h2>$1</h2>')
-          .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
-          .replace(/\*(.+?)\*/g, '<em>$1</em>');
-        if (l.startsWith('<h')) out += l;
-        else if (line) out += `<p>${l}</p>`;
+          .replace(/^#\s+(.+)$/, '<h2>$1</h2>');
+        if (h.startsWith('<h')) { flushPending(); out += h; continue; }
+        if (!line) continue;
+        const m = /^\[(TỐT|CẢNH BÁO|TRUNG TÍNH)\]\s*\*\*(.+?)\*\*([\s\S]*)$/.exec(line);
+        if (m) {
+          flushPending();
+          const cls = HOOK_TAG_CLASS[m[1]] || 'fb-trungtinh';
+          out += `<div class="fb-card ${cls}">"${m[2].trim()}"</div>`;
+          pendingLead = inline(m[3]).trim();
+          continue;
+        }
+        out += `<p>${pendingLead ? pendingLead + ' ' : ''}${inline(line)}</p>`;
+        pendingLead = '';
       }
     }
     if (inTable) flushTable();
+    flushPending();
     return out;
   }
 
