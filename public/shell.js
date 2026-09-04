@@ -1292,11 +1292,18 @@
     var s = shareable || autoShare;
     if (s && s.liveText && s.kind === 'text') {
       var host = wsResultHost();
-      var domText = host ? domShareText(host) : '';
-      // `s.text` (nếu tool có truyền) đứng vai dòng đầu cố định (thường là tóm
-      // tắt "tên · ngày sinh · giới tính" không đổi trong lượt) + nối bản DOM
-      // sống phía sau — không dùng domText đơn độc vì nó không có dòng mở đầu.
-      if (domText) s = Object.assign({}, s, { text: (s.text ? s.text.trim() + '\n\n' : '') + domText });
+      if (host) {
+        // Tách theo TỪNG PHẦN (mỗi <h1-6> mở một block mới, khớp cấu trúc
+        // <section class="sec"><div class="sec-h"><h3>Tên phần</h3>…) — thay vì
+        // đổ hết vào MỘT chuỗi text phẳng (đọc được nhưng vỡ hết bố cục: card
+        // điểm số, 12-13 phần luận giải dính liền không phân đoạn). `/ket-qua`
+        // đã có sẵn layout `.blk`/`.blk-h` cho blocks có header — dùng lại, không
+        // cần CSS mới. Không dùng innerHTML thô (xem lý do bảo mật ở
+        // app/api/share-result/route.ts — endpoint công khai không nhận HTML).
+        var liveBlocks = domShareBlocks(host);
+        if (s.text && s.text.trim()) liveBlocks.unshift({ header: null, text: s.text.trim() });
+        if (liveBlocks.length) s = Object.assign({}, s, { blocks: liveBlocks });
+      }
     }
     return s;
   }
@@ -1323,15 +1330,27 @@
   // nằm nguyên trong DOM cho tới khi trả tiền — thiếu dòng này thì bản chia sẻ
   // tự suy phát free nội dung ĐÃ KHOÁ cho người chưa trả tiền. `[data-tpw-seclock]`
   // chỉ là nút mời mua (CTA), không phải nội dung.
+  // 🔑 `#miniChart`/`.chart-wrap` (lưới 12 cung thu nhỏ), `.jump` (thanh pill
+  // điều hướng — lặp lại nguyên văn tên 12-13 phần, chỉ có ích khi CÓ layout
+  // để bấm), `.sec-n` (số thứ tự cung trong khung tròn), `.fold-toggle` (nút
+  // "▾ Ẩn lá số") đều là ĐIỀU KHIỂN/TRANG TRÍ — đưa vào bản text là rác không
+  // đọc được (đã đo: dump nguyên bảng tên sao viết hoa dính liền). `.hkl-gate`
+  // là khối mời mua của tầng hook (`hook-layer.js`), cùng vai trò với
+  // `.tpw-seclock` — không phải nội dung.
   var SHARE_SKIP_SEL = 'script,style,noscript,button,input,textarea,select,option,svg,form,canvas,' +
     '.ws-actions,.intro-card,.tpw-lock-veil,.tpw-lock-blur,.tpw-wall,.tpw-prev,.tpw-real-lock,' +
+    '#miniChart,.chart-wrap,.jump,.sec-n,.fold-toggle,.hkl-gate,' +
     '[data-tpw-seclock],[data-share-skip],[aria-hidden="true"]';
   var SHARE_BLOCK_TAG = /^(P|DIV|SECTION|ARTICLE|HEADER|FOOTER|LI|TR|H1|H2|H3|H4|H5|H6|BLOCKQUOTE|PRE|TABLE|UL|OL|DL|DT|DD|BR|HR)$/;
+  var SHARE_HEADING_TAG = /^H[1-6]$/;
   // 4000 cũ đủ cho kết quả 1 dòng (tương hợp, bát trạch…) nhưng cắt cụt giữa
   // câu với tool nhiều phần đã mở khoá (luận giải/bát tự/chu trình cuộc đời/xem
   // tuổi, xem `liveText` ở `currentShare()`) — server (`app/api/share-result`)
   // giữ cùng con số này, đổi một bên là bên kia cắt hụt trong im lặng.
   var SHARE_TEXT_CAP = 40000;
+  // Trần SỐ BLOCK (không phải số ký tự) — luận giải/chu trình cuộc đời có tới
+  // 13 phần + 1 block tiêu đề; server (`share-result/route.ts`) giữ cùng số.
+  var SHARE_BLOCK_CAP = 30;
 
   function domShareText(host) {
     var buf = [], line = [], chars = 0;
@@ -1359,6 +1378,51 @@
     walk(host, 0);
     flush();
     return buf.join('\n').replace(/\n{3,}/g, '\n\n').trim().slice(0, SHARE_TEXT_CAP);
+  }
+
+  // Như `domShareText`, nhưng KHÔNG đổ tất cả vào một chuỗi — mỗi lần gặp
+  // <h1-6> (đúng chỗ mọi tool đặt tên phần: `.sec-h h3`) thì ĐÓNG block đang
+  // gom và MỞ block mới, header = chữ trong heading đó. `/ket-qua` render mỗi
+  // block thành 1 thẻ `.blk` riêng — người nhận thấy 12-13 phần TÁCH BẠCH,
+  // không phải một cục chữ dính liền như bản domShareText phẳng.
+  function domShareBlocks(host) {
+    var blocks = [], curHeader = null, line = [], buf = [], chars = 0;
+    var flushLine = function () { if (line.length) { buf.push(line.join(' ')); line = []; } };
+    var flushBlock = function () {
+      flushLine();
+      var t = buf.join('\n').replace(/\n{3,}/g, '\n\n').trim();
+      buf = [];
+      if (t) blocks.push({ header: curHeader, text: t });
+    };
+    var stop = function () { return chars > SHARE_TEXT_CAP || blocks.length > SHARE_BLOCK_CAP; };
+    var walk = function (el, depth) {
+      if (depth > 24 || stop()) return;
+      var kids = el.childNodes;
+      for (var i = 0; i < kids.length; i++) {
+        if (stop()) return;
+        var n = kids[i];
+        if (n.nodeType === 3) {
+          var t = String(n.nodeValue).replace(/\s+/g, ' ').trim();
+          if (t) { line.push(t); chars += t.length + 1; }
+          continue;
+        }
+        if (n.nodeType !== 1) continue;
+        try { if (n.matches && n.matches(SHARE_SKIP_SEL)) continue; } catch (e) { /* ignore */ }
+        if (!shownEl(n)) continue;
+        if (SHARE_HEADING_TAG.test(n.tagName)) {
+          flushBlock();
+          curHeader = String(n.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 120) || null;
+          continue; // đã lấy hết chữ của heading qua textContent, không cần đi sâu thêm
+        }
+        var isBlock = SHARE_BLOCK_TAG.test(n.tagName);
+        if (isBlock) flushLine();
+        walk(n, depth + 1);
+        if (isBlock) flushLine();
+      }
+    };
+    walk(host, 0);
+    flushBlock();
+    return blocks;
   }
 
   // Tiêu đề mặc định lấy từ CHÍNH thanh tiêu đề workspace — thứ người dùng
