@@ -441,9 +441,19 @@ function resetTool() {
   Shell.setShareable(null);
 }
 
+// Nhãn tính chất model tự gắn NGAY TRƯỚC câu hook mỗi đoạn (khối "NHÃN TÍNH
+// CHẤT MỖI CÂU HOOK" trong `arcDoc()`, lib/agent/prompts.ts) — tách thành thẻ
+// trích dẫn màu (.fb-card, xem shell.css), cùng cơ chế với app-luan-giai.html.
+const HOOK_TAG_CLASS={ 'TỐT':'fb-tot', 'CẢNH BÁO':'fb-canhbao', 'TRUNG TÍNH':'fb-trungtinh' };
 function renderMd(md){
   return md
     .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    // PHẢI chạy TRƯỚC bước bọc <p> chung (dưới) và trước bước đổi **bold**
+    // chung, vì nó tự xử lý cả nhãn LẪN in đậm của riêng câu hook.
+    .replace(/^\[(TỐT|CẢNH BÁO|TRUNG TÍNH)\]\s*\*\*(.+?)\*\*(.*)$/gm,function(_,tag,hook,rest){
+      var cls=HOOK_TAG_CLASS[tag]||'fb-trungtinh';
+      return '<div class="fb-card '+cls+'">"'+hook.trim()+'"</div>'+rest;
+    })
     .replace(/^## (.+)$/gm,'<h2>$1</h2>')
     .replace(/^### (.+)$/gm,'<h3>$1</h3>')
     .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
@@ -452,10 +462,10 @@ function renderMd(md){
     .replace(/^- (.+)$/gm,'<li>$1</li>')
     .replace(/(<li>[^]*?<\/li>\n?)+/g,s=>'<ul>'+s+'</ul>')
     .replace(/\n\n+/g,'</p><p>')
-    .replace(/^(?!<[hublp])(.+)$/gm,'<p>$1</p>')
+    .replace(/^(?!<[hublpd])(.+)$/gm,'<p>$1</p>')
     .replace(/<p><\/p>/g,'')
-    .replace(/<p>(<[hul])/g,'$1')
-    .replace(/(<\/[hul][^>]*>)<\/p>/g,'$1');
+    .replace(/<p>(<[huld])/g,'$1')
+    .replace(/(<\/[huld][^>]*>)<\/p>/g,'$1');
 }
 
 TuviPaywall.init({

@@ -1159,9 +1159,19 @@ async function _doThanhTuongAnalyze() {
   }
 }
 
+// Nhãn tính chất model tự gắn NGAY TRƯỚC câu hook mỗi đoạn (khối "NHÃN TÍNH
+// CHẤT MỖI CÂU HOOK" trong `arcDoc()`, lib/agent/prompts.ts) — tách thành thẻ
+// trích dẫn màu (.fb-card, xem shell.css), cùng cơ chế với app-luan-giai.html.
+const HOOK_TAG_CLASS={ 'TỐT':'fb-tot', 'CẢNH BÁO':'fb-canhbao', 'TRUNG TÍNH':'fb-trungtinh' };
 function renderMarkdown(md){
   let h = md
     .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    // PHẢI chạy TRƯỚC bước tách block (dưới) — mỗi thẻ card đã tự thành một
+    // block riêng (kèm phần đuôi câu, nếu có), khỏi bị bọc thêm <p>.
+    .replace(/^\[(TỐT|CẢNH BÁO|TRUNG TÍNH)\]\s*\*\*(.+?)\*\*(.*)$/gm,function(_,tag,hook,rest){
+      var cls=HOOK_TAG_CLASS[tag]||'fb-trungtinh';
+      return '<div class="fb-card '+cls+'">"'+hook.trim()+'"</div>'+rest;
+    })
     .replace(/^## (.+)$/gm, '<h2>$1</h2>')
     .replace(/^### (.+)$/gm, '<h3>$1</h3>')
     .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
@@ -1169,7 +1179,7 @@ function renderMarkdown(md){
     .replace(/^> (.+)$/gm, '<blockquote>$1</blockquote>');
   const blocks = h.split(/\n\n+/);
   h = blocks.map(b => {
-    if (b.startsWith('<h2') || b.startsWith('<h3') || b.startsWith('<blockquote')) return b;
+    if (b.startsWith('<h2') || b.startsWith('<h3') || b.startsWith('<blockquote') || b.startsWith('<div class="fb-card')) return b;
     return '<p>' + b.replace(/\n/g, '<br>') + '</p>';
   }).join('\n');
   return h;

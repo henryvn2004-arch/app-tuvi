@@ -7,7 +7,14 @@ export const maxDuration = 300;
 // backup switch-được, không đổi prompt/parse/paywall.
 import { llmText, llmStreamResponse } from '@/lib/llm/complete';
 import { withToolOutcome } from '@/lib/ops/tool-outcome';
-import { DOC_ARC_DIEN_TUONG } from '@/lib/agent/prompts';
+import {
+  DOC_ARC_DIEN_TUONG,
+  DOC_ARC_NHAN_TUONG,
+  DOC_ARC_THU_TUONG,
+  DOC_ARC_THANH_TUONG,
+  DOC_ARC_THANH_TUONG_PRO,
+  NHAN_TINH_CHAT_RULE,
+} from '@/lib/agent/prompts';
 
 // ── System Prompts ─────────────────────────────────────────────────────────
 const SP_DIEN = `Bạn là chuyên gia nhân tướng học (面相學) theo truyền thống phương Đông, am hiểu Ma Y Thần Tướng (麻衣神相), Liễu Trang Thần Tướng (柳莊神相) và Thủy Kính Tập (水鏡集).
@@ -117,6 +124,11 @@ Mối tương quan giữa lông mày và mắt trong tổng thể nhãn tướng
 - Lĩnh vực phù hợp theo nhãn tướng này
 - Vận trình giai đoạn 30–40 tuổi (Giám Sát Quan)
 
+- MỞ ĐẦU mỗi phần bằng MỘT câu chốt in đậm neo vào nhãn hình/thần cụ thể của
+  phần đó: phần này mạnh hay yếu, đáng chú ý ở đâu. Rồi mới giải thích vì sao.
+
+${DOC_ARC_NHAN_TUONG}
+
 ## Nguyên Tắc
 - Dùng kiến thức Ma Y Thần Tướng, Liễu Trang Thần Tướng và Nhân Tướng Học thật sự
 - Nêu cả tốt lẫn hung tướng — không tô vẽ
@@ -207,6 +219,12 @@ Gò nào nổi bật, gò nào phẳng/lõm. Ngón tay nào dài/ngắn so với
 - Lĩnh vực nghề nghiệp phù hợp nhất
 - Kết bằng nhắc nhở: tay trái bẩm sinh, tay phải có thể thay đổi theo nỗ lực
 
+- MỞ ĐẦU mỗi phần bằng MỘT câu chốt in đậm neo vào nét quan sát cụ thể của
+  phần đó (hình tướng bàn tay, đường chỉ tay, gò tay): phần này mạnh hay yếu,
+  đáng chú ý ở đâu. Rồi mới giải thích vì sao.
+
+${DOC_ARC_THU_TUONG}
+
 ## Nguyên Tắc
 - Ưu tiên Ngũ Hành Hình Tướng — đây là hệ thống cổ pháp phương Đông thuần túy nhất
 - Kết hợp hợp lý với Đường Chỉ Tay và Gò Tay
@@ -263,6 +281,11 @@ Dựa trên Ngũ Âm, luận giải tính cách, thiên hướng nghề nghiệp
 - Điểm cần lưu ý (PHẢI CÓ — thiếu là không trung thực)
 - Lĩnh vực phù hợp nhất theo thanh tướng
 - Kết bằng: "Thanh tùy tâm sinh — giọng nói có thể rèn luyện theo tâm tính"
+
+- MỞ ĐẦU mỗi phần bằng MỘT câu chốt in đậm neo vào đặc điểm giọng cụ thể của
+  phần đó (Ngũ Âm, thanh/trọc): phần này mạnh hay yếu. Rồi mới giải thích vì sao.
+
+${DOC_ARC_THANH_TUONG}
 
 ## Nguyên Tắc
 - Dựa trên Ngũ Âm cổ pháp thật sự từ Mã Môi, Đạt Ma thiền sư
@@ -367,6 +390,12 @@ Nếu có Hữu Đầu Vô Vĩ, Phá La, Áp Thanh, Nam Nữ Phản Cách → n�
 ## 6. Dưỡng Thanh Dưỡng Khí
 (1 đoạn) Lời khuyên cụ thể: thở bụng (đan điền), tập ngân chữ "A" hằng ngày, tránh nói to khi mệt, uống nước ấm buổi sáng.
 
+MỞ ĐẦU mỗi phần bằng MỘT câu chốt in đậm neo vào chỉ số/nhận định cụ thể của
+phần đó (Ngũ Âm, khí lực, dị cách): phần này mạnh hay yếu. Rồi mới giải thích
+vì sao.
+
+${DOC_ARC_THANH_TUONG_PRO}
+
 ═══════════════════════════════════════════════
 ## QUY TẮC BẮT BUỘC
 
@@ -433,6 +462,16 @@ Luận từng vùng theo thứ tự: Nam Nhạc (trán) → Trung Nhạc (mũi) 
 
 ## 6. Kết — Bình Đán Quan Khí
 (vài dòng) Nhắc rằng khí sắc đổi theo ngày, nên xem lại 1–3 tháng/lần. Kết bằng một câu cổ văn thích hợp, ví dụ *"Bình đán quan khí, khí túc tắc thần viên"* (xem khí lúc bình minh, khí đủ thì thần tròn) hoặc *"Tướng tùy tâm sinh, tướng tùy tâm diệt"* (tướng theo tâm mà sinh, theo tâm mà diệt).
+
+MỞ ĐẦU mỗi phần bằng MỘT câu chốt in đậm neo vào sắc/vùng cụ thể của phần đó
+(ngũ sắc, độ sáng, độ tươi nhuận): phần này cát hay hung. Rồi mới giải thích
+vì sao.
+
+⚠️ KHÔNG dùng khối HÀNH VI ĐỜI THƯỜNG/CÂU LẬT/DỰ BÁO chung của các tool khác
+ở đây — phần 4 "Dự Báo 1–3 Tháng Tới" ở trên ĐÃ là dự báo riêng của Khí Sắc,
+thêm một nguồn dự báo nữa là chồng luật. Chỉ mượn đúng nhãn tính chất:
+
+${NHAN_TINH_CHAT_RULE}
 
 ## Nguyên Tắc Bắt Buộc
 

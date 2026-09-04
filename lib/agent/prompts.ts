@@ -499,21 +499,28 @@ export const MAU_ARC_CHUNG = mauArc(
 //
 // 2026-09-04 (Henry): thêm khối "NHÃN TÍNH CHẤT" — luận giải lá số đã có tự
 // gắn nhãn [TỐT]/[CẢNH BÁO]/[TRUNG TÍNH] trước câu hook (PR #680/#681, để tô
-// màu thẻ trích dẫn kiểu Facebook caption, xem `app-luan-giai.html`). Đặt
-// NGAY TRONG `arcDoc` (thay vì lặp lại riêng ở từng file) để LAN tự động ra cả
-// 5 bản dùng chung khối này — Bát Tự, Phu Thê, Xem Tuổi/Làm Ăn, Bút Tướng vốn
-// đã có câu "MỞ ĐẦU... câu chốt in đậm" riêng, chỉ thiếu đúng cái nhãn màu.
-// ⚠️ Khối mới +~610 ký tự cho CẢ 5 bản — cả 5 đều đã sát trần
-// (`scripts/check-prompt-budget.mjs`, mục DOC_FILES), nên nới trần cùng lượt
-// theo đúng biên ~10% đã dùng trước đó, không phải nới tuỳ tiện.
+// màu thẻ trích dẫn kiểu Facebook caption, xem `app-luan-giai.html`). Tách
+// thành hằng RIÊNG (`NHAN_TINH_CHAT_RULE`) thay vì viết thẳng trong `arcDoc`,
+// để Khí Sắc (tuong-mat/route.js) mượn ĐÚNG khối này mà KHÔNG phải gọi cả
+// `arcDoc()` — Khí Sắc đã có sẵn "Dự Báo 1-3 Tháng Tới" riêng (khí sắc đổi
+// theo ngày/tháng, có trục thời gian thật), gọi `arcDoc()` sẽ chồng thêm một
+// nguồn DỰ BÁO thứ hai. `arcDoc()` vẫn nội suy `${NHAN_TINH_CHAT_RULE}` như
+// cũ nên 6 bản đang dùng nó không đổi một byte.
+export const NHAN_TINH_CHAT_RULE =
+  '── NHÃN TÍNH CHẤT MỖI CÂU HOOK ──\nCâu mở đầu mỗi phần (nếu bài đã yêu cầu câu chốt/phán quyết in đậm) LUÔN kèm một nhãn tính chất trong ngoặc vuông NGAY TRƯỚC dấu ** mở: [TỐT] (tin vui/thuận lợi), [CẢNH BÁO] (tin xấu/rủi ro/cần đề phòng), [TRUNG TÍNH] (trung lập). Mọi đoạn xuống dòng KHÁC trong phần cũng mở bằng một câu NGẮN in đậm tương tự — cùng chuẩn cụ thể, đo lường/hình dung được — kèm đúng một trong ba nhãn trên. Có bao nhiêu đoạn thì có bấy nhiêu câu hook, mỗi câu đứng đầu đúng đoạn của nó, không dồn hết vào một câu. Nhãn đứng NGOÀI dấu **, viết ĐÚNG một trong ba từ, không lặp nhãn ở chỗ khác.';
+
+// ⚠️ Khối "NHÃN TÍNH CHẤT" +~610 ký tự cho mỗi bản dùng `arcDoc` — 5 bản đầu
+// (Lá Số/Bát Tự/Phu Thê/Xem Tuổi-Làm Ăn/Bút Tướng) đều đã sát trần
+// (`scripts/check-prompt-budget.mjs`, mục DOC_FILES) khi thêm khối này, nên
+// nới trần cùng lượt theo đúng biên ~10% đã dùng trước đó, không phải nới
+// tuỳ tiện. Bản mới thêm sau (Nhóm C) đặt cap ngay từ đầu, khỏi phải nới.
 const arcDoc = (o: { canCu: string; moc: string; duBao: string; phepDich: string }) => `── BA THỨ BẮT BUỘC CÓ TRONG MỖI PHẦN (BỔ SUNG cho luật phán quyết ở trên, KHÔNG thay nó) ──
 Viết LIỀN MẠCH trong văn xuôi. TUYỆT ĐỐI không in tên ba mục này ra màn hình, không đánh số, không tách thành tiêu đề.
 - HÀNH VI ĐỜI THƯỜNG (1–2 việc): việc cụ thể tới mức người đọc tự soi ra mình — "hay nhận việc rồi ôm một mình", "cãi xong là im mấy ngày", "tiền vào tay là có chỗ gọi tên ngay". Phải mọc ra từ ${o.canCu} của CHÍNH phần đang viết, KHÔNG phải câu chung chung ai đọc cũng thấy đúng. Chật chỗ thì lấy MỘT cái đắt nhất.
 - MỘT CÂU LẬT (đặt NGAY SAU phần giải thích, trước câu kết): lật góc nhìn — cái người đọc tưởng là chỗ yếu hoá ra là chỗ dùng được, hoặc chỗ tưởng là may lại có cái giá của nó. Đây KHÔNG phải mục tuỳ chọn: ${o.moc} Chỉ được BỎ khi phần đó thật sự không có gì để lật; đã lật thì phải bám dữ kiện, tuyệt đối không nói ngược cho kêu.
 - MỘT–HAI DỰ BÁO (đặt NGAY SAU câu lật, SÁT câu kết — để câu hành động ở cuối là việc làm được CHO chính dự báo này): chuyện gì nhiều khả năng tới (thăng chức, đổi việc, quan hệ căng lên hay dịu xuống). Phải mọc ra từ dữ kiện của CHÍNH phần đang viết. ${o.duBao} Nói bằng ngôn ngữ xác suất ("nhiều khả năng", "có xu hướng"), KHÔNG hứa chắc, KHÔNG doạ. Không có căn cứ thì BỎ HẲN — thà thiếu một dự báo còn hơn bịa một cái mốc.
 
-── NHÃN TÍNH CHẤT MỖI CÂU HOOK ──
-Câu mở đầu mỗi phần (nếu bài đã yêu cầu câu chốt/phán quyết in đậm) LUÔN kèm một nhãn tính chất trong ngoặc vuông NGAY TRƯỚC dấu ** mở: [TỐT] (tin vui/thuận lợi), [CẢNH BÁO] (tin xấu/rủi ro/cần đề phòng), [TRUNG TÍNH] (trung lập). Mọi đoạn xuống dòng KHÁC trong phần cũng mở bằng một câu NGẮN in đậm tương tự — cùng chuẩn cụ thể, đo lường/hình dung được — kèm đúng một trong ba nhãn trên. Có bao nhiêu đoạn thì có bấy nhiêu câu hook, mỗi câu đứng đầu đúng đoạn của nó, không dồn hết vào một câu. Nhãn đứng NGOÀI dấu **, viết ĐÚNG một trong ba từ, không lặp nhãn ở chỗ khác.
+${NHAN_TINH_CHAT_RULE}
 
 ── GIỌNG ──
 Viết như đang NÓI với người ngồi đối diện — chêm khẩu ngữ tự nhiên (thì, à, này, nhé, đấy, cơ, chứ), mỗi đoạn 1–2 cái. KHÔNG chêm vào câu phán quyết in đậm, không chêm vào câu chốt.
@@ -596,6 +603,56 @@ export const DOC_ARC_DIEN_TUONG = arcDoc({
   canCu: 'Tam Đình / Ngũ Quan / bộ vị quan sát được trên khuôn mặt',
   phepDich: `· [Tam Đình] Thượng Đình cao rộng vượt trội, Hạ Đình hẹp và ngắn → ✅ hành vi: "Thời trẻ anh sáng dạ, tiếp thu nhanh hơn bạn bè, nhưng càng về già càng phải tự thân vun vén, ít được nương nhờ con cháu." ❌ "Thượng đình vượng, Hạ đình khuyết, chủ tiên thiên vượng hậu vận suy."
 · [Ngũ Quan · Tỵ] Sống mũi thẳng, chuẩn đầu tròn đầy, hai cánh mũi cân → ✅ câu lật: "Cái tính chắt bóp từng đồng hay bị chê là keo kiệt lại đúng là thứ giữ được của cho anh, chứ không phải giữ mặt." ❌ "Tỵ vận đắc cách, tài bạch quan vượng."`,
+});
+
+// Bản cho NHÃN TƯỚNG (mắt) — tool 2/8 Nhóm C. Căn cứ: nhãn hình cổ pháp
+// (Phượng/Long/Hổ/Ngư/Voi/Khỉ/Lộ/Heo Nhãn), thần, Tam/Tứ Bạch Nhãn — vẫn
+// KHÔNG có trục thời gian như Diện Tướng.
+export const DOC_ARC_NHAN_TUONG = arcDoc({
+  duBao:
+    'Tướng mắt KHÔNG có trục thời gian (hình dạng mắt không đổi theo tuổi trong bài phân tích này) → CHỈ đoán theo ĐIỀU KIỆN ("nếu ánh mắt vẫn giữ kiểu này thì…"), cấm nêu tuổi, năm, hay mốc lịch nào.',
+  moc: 'nhãn hình/thần nhãn xấu rõ (lộ thần, đới sát, Tam/Tứ Bạch Nhãn) → chỉ ra chỗ cái yếu ấy vẫn dùng được vào việc gì; nhãn hình quý cách rõ → chỉ ra cái giá đi kèm.',
+  canCu: 'nhãn hình / thần / tròng mắt quan sát được',
+  phepDich: `· [Nhãn hình] Phượng Nhãn, đuôi mắt nhọn, hai mí rõ, thần ẩn tàng → ✅ hành vi: "Anh nhìn người là để bụng chứ ít khi nói toạc ra ngay, phải thân lắm mới biết anh đang nghĩ gì." ❌ "Phượng nhãn thần ẩn tàng, chủ quý nhi bất phú."
+· [Tam Bạch Nhãn] Lộ lòng trắng phía dưới tròng đen → ✅ câu lật: "Cái ánh mắt hay bị chê là sắc lạnh, đa nghi ấy lại đúng là thứ giúp anh đánh hơi rủi ro trước người khác cả bước." ❌ "Tam bạch nhãn hạ chủ tai hoạ, trắc trở."`,
+});
+
+// Bản cho THỦ TƯỚNG (tay) — tool 3/8 Nhóm C. Căn cứ: Ngũ Hành Hình Tướng bàn
+// tay + Tam Đại Chỉ (Sinh Mệnh/Trí Tuệ/Tình Cảm) + gò tay — cố ý KHÔNG gán
+// tuổi cụ thể cho từng đoạn đường chỉ tay (dù cổ pháp có làm việc này), vì
+// prompt không có dữ liệu đo tuổi từ ảnh để neo vào, tránh bịa mốc.
+export const DOC_ARC_THU_TUONG = arcDoc({
+  duBao:
+    'Thủ tướng KHÔNG gán mốc tuổi cụ thể (ảnh không đo được vị trí tuổi trên từng đường chỉ tay) → CHỈ đoán theo ĐIỀU KIỆN ("nếu vẫn giữ thói quen dùng sức/ra quyết định kiểu này thì…"), cấm nêu tuổi, năm, hay mốc lịch nào.',
+  moc: 'đường chỉ tay đứt/mờ/lệch rõ → chỉ ra chỗ cái yếu ấy vẫn dùng được vào việc gì; đường chỉ tay rõ sâu/gò tay nổi bật → chỉ ra cái giá đi kèm.',
+  canCu: 'Ngũ Hành Hình Tướng bàn tay / Tam Đại Chỉ / gò tay quan sát được',
+  phepDich: `· [Ngũ Hành] Bàn tay Mệnh Kim — lòng bàn tay vuông dày, ngón dài, móng vuông → ✅ hành vi: "Việc gì anh cũng cần rạch ròi đúng sai trước rồi mới bắt tay làm, ghét nhất kiểu nói nước đôi." ❌ "Bàn tay Kim hình, chủ lý trí kiên định."
+· [Đường Trí Tuệ] Tách rời khỏi đường Sinh Mệnh ngay từ gốc → ✅ câu lật: "Cái tính hay tự quyết một mình, không hỏi ý ai, hay bị chê là bảo thủ lại chính là thứ giúp chị không bị người khác kéo lệch hướng." ❌ "Trí tuệ tuyến độc lập chủ cá tính mạnh."`,
+});
+
+// Bản cho THANH TƯỚNG (giọng, bản THƯỜNG, 4 phần) — tool 4/8 Nhóm C. Căn cứ:
+// Ngũ Âm (Kim/Mộc/Thủy/Hỏa/Thổ) + Thanh-Trọc, KHÔNG có dữ liệu đo âm học chi
+// tiết như bản Pro.
+export const DOC_ARC_THANH_TUONG = arcDoc({
+  duBao:
+    'Thanh tướng KHÔNG có trục thời gian (giọng không đổi theo tuổi trong bài phân tích này, trừ khi luyện tập) → CHỈ đoán theo ĐIỀU KIỆN ("nếu vẫn giữ cách nói này thì…"), cấm nêu tuổi, năm, hay mốc lịch nào.',
+  moc: 'giọng phá cách/trọc rõ → chỉ ra chỗ cái yếu ấy vẫn dùng được vào việc gì; giọng chính cách/thanh rõ → chỉ ra cái giá đi kèm.',
+  canCu: 'Ngũ Âm / thanh-trọc của giọng nói quan sát được',
+  phepDich: `· [Ngũ Âm] Giọng Kim — sang sảng, trong trẻo, vang xa → ✅ hành vi: "Anh nói câu nào là dứt khoát câu đó, họp hành ít khi vòng vo, đi thẳng vào vấn đề luôn." ❌ "Giọng Kim âm, chủ cương trực quyết đoán."
+· [Thanh-Trọc] Giọng hơi khàn đục, âm lượng không đều → ✅ câu lật: "Cái giọng hơi khàn hay bị chê là không sang lại chính là thứ khiến người nghe thấy anh gần gũi, dễ mở lời hơn." ❌ "Thanh trọc chủ khó thành đạt."`,
+});
+
+// Bản cho THANH TƯỚNG PRO (giọng, 6 phần, có đo âm học) — tool 5/8 Nhóm C.
+// Khác bản thường ở CĂN CỨ: không chỉ Ngũ Âm mà còn các chỉ số đo được
+// (HNR, jitter, shimmer, sustain…) — nhưng phép dịch vẫn PHẢI né số liệu thô,
+// đúng luật "Không nhắc lại raw data" đã có sẵn trong SP_THANH_PRO.
+export const DOC_ARC_THANH_TUONG_PRO = arcDoc({
+  duBao:
+    'Thanh tướng KHÔNG có trục thời gian (giọng không đổi theo tuổi trong bài phân tích này, trừ khi luyện tập/dưỡng khí) → CHỈ đoán theo ĐIỀU KIỆN, cấm nêu tuổi, năm, hay mốc lịch nào.',
+  moc: 'khí bất túc/dị cách tiện xấu rõ (Phá La, Hữu Đầu Vô Vĩ, Áp Thanh) → chỉ ra chỗ cái yếu ấy vẫn dùng được vào việc gì; Ngũ Âm chính cách/dị cách quý rõ → chỉ ra cái giá đi kèm.',
+  canCu: 'Ngũ Âm / thanh-trọc / khí lực đo được từ chỉ số âm học',
+  phepDich: `· [Khí bất túc] sustainDuration ngắn, shimmer cao → ✅ hành vi: "Nói chuyện lâu một chút là giọng anh đuối hẳn, phải ngừng lấy hơi giữa câu, nhất là lúc thuyết trình dài." ❌ "Khí bất túc, thanh phá do khí khuyết."
+· [Kim Âm chuẩn cách] HNR cao, sustain dài, jitter thấp → ✅ câu lật: "Cái giọng vang như chuông hay khiến người khác dè chừng, tưởng anh nghiêm khắc khó gần, nhưng thực ra chính là thứ giúp anh nói gì người ta cũng nghe theo ngay không cần lặp lại." ❌ "Kim âm chuẩn cách, chủ phú quý quyền uy."`,
 });
 
 // ─── GIỌNG cho BẢN CÓ CẤU TRÚC (họ 2 — JSON schema trả tiền · phong thuỷ · đặt tên · chọn ngày) ───
