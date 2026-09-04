@@ -371,6 +371,29 @@
              CHO CẢ khách vô danh (bậc 0 — tiến độ tính ở máy, xem
              localKhoiHanhSteps) lẫn người đã đăng nhập (server tự kiểm, xem
              lib/onboarding/tasks.ts). Ẩn hẳn khi phần thưởng đã vào ví. -->
+        <!-- 🐞 Chọn khối đầu trang NGAY TRONG LÚC PHÂN TÍCH HTML, tức TRƯỚC lần
+             vẽ đầu. Đây là bản sửa cho một lượt vá HỎNG đã đo được: đặt việc lộ
+             khối vào `revealSlotEarly()` bên trong `run()` là chưa đủ, vì `run()`
+             gắn vào `DOMContentLoaded` — chạy SAU lần vẽ đầu. Khối vẫn chèn muộn,
+             mà nay còn mang theo khung chờ nên cú chèn TO HƠN trước: Lighthouse
+             mobile đo /app từ CLS 0,595 lên 0,827.
+
+             Tín hiệu dùng ở đây đúng bằng `_hasBirth`: `birthSnapshot()` của
+             shell.js đọc chính `localStorage['app_birth']`, không gì khác.
+             `_returning` còn cộng thêm `isLoggedIn()`, nhưng phiên đăng nhập thì
+             KHÔNG đọc đồng bộ được — nhánh đó vẫn do `revealSlotEarly()` trong
+             `run()` và `maybeUpgradeToReturning()` lo, y như trước.
+             Đọc hụt/hỏng JSON → không đụng gì, để `run()` quyết như cũ. -->
+        <script>
+        (function(){
+          try{
+            var b=JSON.parse(localStorage.getItem('app_birth')||'null');
+            var has=!!(b&&(b.ngay||b.day)&&(b.thang||b.month)&&(b.nam||b.year));
+            var el=document.getElementById(has?'todayCard':'welcomeCard');
+            if(el) el.style.display='';
+          }catch(e){ /* để run() lo */ }
+        })();
+        </script>
         <div id="khoiHanhCard" style="display:none"></div>
         <!-- Kênh liên lạc — 2 nhiệm vụ CŨ của M3 (bật thông báo/liên kết chat),
              tách tầng riêng: đây là kênh nhắc, không phải bước làm quen. CHỈ
