@@ -135,16 +135,26 @@
 .claude-content p{color:var(--text-mid);line-height:1.75;margin-bottom:12px;font-size:13.5px}
 .claude-content p:last-child{margin-bottom:0}
 .claude-content strong{color:var(--text)}
-.claude-content strong.hook{background:var(--gold-lt);border-radius:3px;padding:0 3px;box-decoration-break:clone;-webkit-box-decoration-break:clone}
 .claude-content em{color:var(--gold-soft);font-style:italic}
 .claude-content h3{font-family:var(--serif);font-size:14.5px;font-weight:600;color:var(--heading);margin:14px 0 8px}
 .claude-content .md-table-wrap{overflow-x:auto;margin:12px 0}
 .claude-content .md-table{width:100%;border-collapse:collapse;font-size:12.5px}
 .claude-content .md-table th{background:var(--navy);color:#fff;padding:8px 10px;text-align:left;font-size:10px;text-transform:uppercase;letter-spacing:.05em}
 .claude-content .md-table td{padding:7px 10px;border-bottom:1px solid var(--line)}
-.lg-card{background:var(--paper);border-left:3px solid var(--gold-soft);border-radius:6px;padding:12px 15px;margin-bottom:14px}
-.lg-card-eyebrow{font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--gold-soft);margin-bottom:5px}
-.lg-card-line{font-family:var(--serif);font-size:16px;line-height:1.5;color:var(--heading);font-weight:600}
+/* ── Thẻ trích dẫn kiểu "caption Facebook" (2026-09-03, Henry) — MỖI đoạn
+   trong claude-content có một thẻ vậy (không riêng đoạn đầu), màu theo nhãn
+   tính chất [TỐT]/[CẢNH BÁO]/[TRUNG TÍNH] model tự gắn NGAY trong lượt sinh
+   (xem PARAGRAPH_HOOK_RULE, lib/agent/luan-giai-doc.ts) — không tốn thêm
+   lượt gọi LLM nào. Bóc + tô màu ở `renderMarkdown`. */
+/* Style "editorial/headline/poster" (Henry 2026-09-03): sans-serif đậm, cỡ chữ
+   gấp ~2-2.5x thân bài (.claude-content p = 13.5px), canh giữa, đệm đều 4
+   phía, tracking hơi rộng cho thoáng — khác hẳn thân bài (serif, trái). */
+.fb-card{border-radius:14px;padding:30px 26px;margin:16px 0 18px;font-family:var(--sans);font-weight:700;font-size:clamp(19px,5.4vw,27px);line-height:1.4;letter-spacing:.015em;text-align:center}
+.fb-tot{background:#E8F5EC;color:#1E6B3C}
+.fb-canhbao{background:#FBEAE7;color:#C0392B}
+.fb-trungtinh{background:var(--gold-lt);color:var(--heading)}
+:root[data-theme="dark"] .fb-tot{background:#15291D;color:#5FBF87}
+:root[data-theme="dark"] .fb-canhbao{background:#301C19;color:#F08A7A}
 .laso-error{font-size:12.5px;color:var(--tx-red);padding:8px 0}
 .lg-unlock{background:var(--white);border:1px solid var(--gold-soft);border-radius:11px;padding:18px 20px;margin-bottom:22px;text-align:center}
 .lg-unlock p{font-size:12.5px;color:var(--text-lt);margin-top:8px}
@@ -731,7 +741,7 @@ function renderSample(s,auto){
   var lg=s.luan_giai||{};
   var _lbSample=LuanGiaiCore.phanLabels(ls)||{};
   for(var p=1;p<=TONG_PHAN;p++){
-    fillClaudeContent(document.getElementById('claude-content-'+p),lg[String(p)],_lbSample[p]);
+    fillClaudeContent(document.getElementById('claude-content-'+p),lg[String(p)]);
   }
 
   // Thanh DÍNH — xem chú thích .samp-bar trong <style>. Đặt vào đầu #lgPanel
@@ -935,6 +945,10 @@ var QUERIES={
   13: function(){ return 'cung huynh đệ '+_getTamPhuongStars('Huynh Đệ')+' anh chị em'; },
 };
 
+// Nhãn tính chất model tự gắn NGAY TRƯỚC câu hook mỗi đoạn (PARAGRAPH_HOOK_RULE,
+// lib/agent/luan-giai-doc.ts) — KHÔNG tốn thêm lượt gọi LLM nào, model đánh giá
+// luôn trong lúc viết câu đó. Tra ra class CSS màu (.fb-card, xem CSS phía trên).
+var HOOK_TAG_CLASS={ 'TỐT':'fb-tot', 'CẢNH BÁO':'fb-canhbao', 'TRUNG TÍNH':'fb-trungtinh' };
 function renderMarkdown(text){
   var lines=text.split('\n'), out='', inTable=false, rows=[];
   function flushTable(){
@@ -949,56 +963,49 @@ function renderMarkdown(text){
     out+='</table></div>';
     rows=[]; inTable=false;
   }
+  function inline(s){ return s.replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/\*(.+?)\*/g,'<em>$1</em>'); }
+  // Dẫn chứng "(cách ...)." đi ngay sau câu hook thường đứng RIÊNG dòng (model
+  // hay chừa dòng trống trước đoạn giải thích) — chờ ghép vào đoạn kế tiếp
+  // thành MỘT `<p>` thay vì để nó trôi lửng lơ một mình ngay dưới thẻ card.
+  var pendingLead='';
+  function flushPending(){ if(pendingLead){ out+='<p>'+pendingLead+'</p>'; pendingLead=''; } }
   lines.forEach(function(line){
-    if(line.trim().indexOf('|')===0){ inTable=true; rows.push(line.trim()); }
+    if(line.trim().indexOf('|')===0){ flushPending(); inTable=true; rows.push(line.trim()); }
     else{
       if(inTable)flushTable();
-      var l=line
-        .replace(/^## (.+)$/,'<h3>$1</h3>')
-        .replace(/^### (.+)$/,'<h3>$1</h3>')
-        .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
-        .replace(/\*(.+?)\*/g,'<em>$1</em>');
-      if(l.indexOf('<h')===0)out+=l;
-      else if(l.trim()){
-        // Câu in đậm ĐỨNG ĐẦU đoạn = câu tóm tắt/hook riêng của đoạn đó (mỗi
-        // đoạn model viết đều mở bằng một câu vậy — xem PARAGRAPH_HOOK_RULE,
-        // lib/agent/luan-giai-doc.ts) — tô nổi khác với bold giữa câu (vd tên
-        // sao gọn trong ngoặc), không đụng `_extractLeadLine`/`.lg-card` phía trên.
-        out+='<p>'+l.replace(/^<strong>/,'<strong class="hook">')+'</p>';
+      var h=line.replace(/^## (.+)$/,'<h3>$1</h3>').replace(/^### (.+)$/,'<h3>$1</h3>');
+      if(h.indexOf('<h')===0){ flushPending(); out+=h; return; }
+      if(!line.trim())return;
+      // Câu hook có nhãn [TỐT]/[CẢNH BÁO]/[TRUNG TÍNH] đứng đầu đoạn — tách
+      // thành thẻ trích dẫn riêng (kiểu caption Facebook, Henry 2026-09-03),
+      // phần còn lại của dòng (thường là "(cách ...)." trong ngoặc) CHỜ ghép
+      // vào đoạn giải thích kế tiếp, KHÔNG lặp lại câu hook. Best-effort: model
+      // lệch định dạng (thiếu nhãn, sai tên nhãn) thì rơi về render đoạn
+      // thường, không chặn phần luận thật hiện ra — cùng nguyên tắc cũ.
+      var m=/^\[(TỐT|CẢNH BÁO|TRUNG TÍNH)\]\s*\*\*(.+?)\*\*([\s\S]*)$/.exec(line.trim());
+      if(m){
+        flushPending(); // hook liền trước không có đoạn giải thích theo sau — chốt riêng
+        var cls=HOOK_TAG_CLASS[m[1]]||'fb-trungtinh';
+        out+='<div class="fb-card '+cls+'">“'+esc(m[2].trim())+'”</div>';
+        pendingLead=inline(m[3]).trim();
+        return;
       }
+      out+='<p>'+(pendingLead?pendingLead+' ':'')+inline(line)+'</p>';
+      pendingLead='';
     }
   });
   if(inTable)flushTable();
+  flushPending();
   return out;
 }
 
-// ── Thẻ trích dẫn (lg-card) — TÁI DÙNG câu mở đã có, KHÔNG gọi LLM thêm ──
-// Henry: card lấy từ câu phán quyết mở đầu mỗi phần (đã được viết theo hướng
-// dự báo/hệ quả sắp tới — xem SYSTEM_PROMPT `lib/agent/luan-giai-doc.ts`),
-// hook để chụp màn hình/chia sẻ. KHÔNG sinh riêng lượt gọi model: bóc thẳng
-// dòng `**...**` ĐẦU TIÊN của chính văn bản phần đó. Free hết, đứng cùng nội
-// dung đã trả tiền — không thêm khoá nào nữa.
-// Best-effort: không khớp được regex (model lệch định dạng lượt nào đó) thì
-// im lặng không dựng, KHÔNG chặn phần luận thật hiện ra.
-function _extractLeadLine(text){
-  // Bold ĐẦU DÒNG — không đòi hết dòng chỉ có mỗi phần bold: mẫu phổ biến
-  // nhất là "**câu phán quyết** (tên sao gọn trong ngoặc)." nối liền cùng
-  // dòng (đúng ví dụ trong SYSTEM_PROMPT) — đòi `$` ngay sau `**` bỏ sót
-  // đúng những dòng phổ biến nhất, đã bắt được khi thử với dữ liệu thật.
-  var m=/^\*\*(.+?)\*\*/m.exec(String(text||''));
-  return m?m[1].trim():null;
-}
-function _cardHtml(line,label){
-  if(!line)return '';
-  return '<div class="lg-card"><div class="lg-card-eyebrow">'+esc(label||'')+'</div>'+
-    '<div class="lg-card-line">“'+esc(line)+'”</div></div>';
-}
 // Cửa DUY NHẤT đổ lời AI vào `claude-content` — 3 nơi gọi (bản mẫu, cache đã
-// mua, vừa luận xong) đều qua đây để card không rơi rớt ở một trong ba đường.
-function fillClaudeContent(box,text,label){
+// mua, vừa luận xong) đều qua đây để định dạng (nay là thẻ .fb-card) không
+// rơi rớt ở một trong ba đường.
+function fillClaudeContent(box,text){
   if(!box||!text)return;
   box.style.display='block';
-  box.innerHTML=_cardHtml(_extractLeadLine(text),label)+renderMarkdown(text);
+  box.innerHTML=renderMarkdown(text);
 }
 
 // Đọc thẳng laso_public (anon REST key, đọc CÔNG KHAI được — bảng phục vụ link
@@ -1023,7 +1030,7 @@ function _renderCachedLuanGiai(store){
   _luanGiaiStore=store;
   var _lbCached=LuanGiaiCore.phanLabels(_astrolabe)||{};
   for(var p=1;p<=TONG_PHAN;p++){
-    fillClaudeContent(document.getElementById('claude-content-'+p),store[p]||store[String(p)],_lbCached[p]);
+    fillClaudeContent(document.getElementById('claude-content-'+p),store[p]||store[String(p)]);
   }
   document.getElementById('lgUnlock').style.display='none';
   document.getElementById('lgProgress').style.display='none';
@@ -1274,7 +1281,7 @@ async function _runPhanLuanGiai(p){
     }
     _luanGiaiStore[p]=data.luanGiai;
     doneWait();
-    fillClaudeContent(box,data.luanGiai,(LuanGiaiCore.phanLabels(_astrolabe)||{})[p]);
+    fillClaudeContent(box,data.luanGiai);
     return true;
   }catch(e){
     doneWait();
