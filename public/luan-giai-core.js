@@ -5,6 +5,8 @@
    tham số `ls` (output của anSaoLaSo). KHÔNG DOM, KHÔNG AI, KHÔNG paywall.
    Dùng bởi: shell /app/luan-giai (render 24 phần free ở ô giữa). Standalone
    /luan-giai.html vẫn giữ bản inline (DRY hoá sau, PR riêng).
+   Phụ thuộc load-order: TU_HOA (global từ public/tuvi-ansao-engine.js) —
+   khối Tứ Hóa Phi Tinh cần engine nạp TRƯỚC file này.
    renderInlineDaiVanLineChart(ls): vẽ canvas #chart-daivan-overview (phần 14,
    cần Chart.js; tự thoát nếu thiếu Chart) — đúng khuôn
    BatTuCore.renderInlineDaiVanLineChart của bat-tu-core.js.
@@ -32,23 +34,13 @@
     return CAN10[ci] + ' ' + dv.diaChi;
   }
 
-  // Bảng Tứ Hóa theo Can — Y HỆT TU_HOA trong public/tuvi-ansao-engine.js (giữ
-  // đồng bộ khi engine đổi, vd P3 2026-09 đã sửa Khoa/Kỵ của Canh theo Thiên
-  // Lương). Dùng cho khối "Tứ Hóa Phi Tinh" — áp bảng này lên CAN CỦA TỪNG
-  // CUNG (không phải can năm sinh) để tìm 4 sao Lộc/Quyền/Khoa/Kỵ "bay" ra từ
-  // chính cung đó, rồi tra các sao ấy hiện đang nằm ở cung nào ("phi nhập").
-  var TU_HOA = {
-    'Giáp': { Lộc: 'Liêm Trinh', Quyền: 'Phá Quân', Khoa: 'Vũ Khúc', Kỵ: 'Thái Dương' },
-    'Ất': { Lộc: 'Thiên Cơ', Quyền: 'Thiên Lương', Khoa: 'Tử Vi', Kỵ: 'Thái Âm' },
-    'Bính': { Lộc: 'Thiên Đồng', Quyền: 'Thiên Cơ', Khoa: 'Văn Xương', Kỵ: 'Liêm Trinh' },
-    'Đinh': { Lộc: 'Thái Âm', Quyền: 'Thiên Đồng', Khoa: 'Thiên Cơ', Kỵ: 'Cự Môn' },
-    'Mậu': { Lộc: 'Tham Lang', Quyền: 'Thái Âm', Khoa: 'Hữu Bật', Kỵ: 'Thiên Cơ' },
-    'Kỷ': { Lộc: 'Vũ Khúc', Quyền: 'Tham Lang', Khoa: 'Thiên Lương', Kỵ: 'Văn Khúc' },
-    'Canh': { Lộc: 'Thái Dương', Quyền: 'Vũ Khúc', Khoa: 'Thiên Đồng', Kỵ: 'Thái Âm' },
-    'Tân': { Lộc: 'Cự Môn', Quyền: 'Thái Dương', Khoa: 'Văn Khúc', Kỵ: 'Văn Xương' },
-    'Nhâm': { Lộc: 'Thiên Lương', Quyền: 'Tử Vi', Khoa: 'Tả Phụ', Kỵ: 'Vũ Khúc' },
-    'Quý': { Lộc: 'Phá Quân', Quyền: 'Cự Môn', Khoa: 'Thái Âm', Kỵ: 'Tham Lang' },
-  };
+  // TU_HOA là global từ public/tuvi-ansao-engine.js — CÙNG cách
+  // public/tuvi-laso-format.js đã dùng cho khối này (xem comment ở đó +
+  // projectGlobals trong eslint.config.js). File này trước có BẢN CHÉP TAY
+  // riêng, trôi lệch Khoa/Kỵ của Canh với engine suốt từ P2 tới P3 (2026-09)
+  // vì sửa engine không kéo theo sửa bản chép — nay trỏ thẳng về MỘT nguồn.
+  // Cả 3 trang duy nhất nạp file này (app-luan-giai/app-van-han-nam/
+  // app-chu-trinh-cuoc-doi.html) đều nạp tuvi-ansao-engine.js TRƯỚC.
   var HOA_ORDER = ['Lộc', 'Quyền', 'Khoa', 'Kỵ'];
 
   // Khối "Tứ Hóa Phi Tinh" (tự hóa Bắc Phái, tầng MỆNH BÀN — dùng can của
