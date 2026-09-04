@@ -580,6 +580,24 @@ export const DOC_ARC_BUT_TUONG = arcDoc({
 · [Thế đi xuống — đường chân chữ chúc] → ✅ câu lật: "Cái chững lại ở cuối chữ ký nhìn tưởng đuối sức, nhưng lại đúng là chỗ biết dừng đúng lúc, không đâm lao theo lao." ❌ "Thế hạ chủ vận suy, tài lộc đi xuống."`,
 });
 
+// Bản cho DIỆN TƯỚNG (app/api/tuong-mat/route.js, tool 1/6 của Nhóm C — thí
+// điểm trước khi nhân ra Nhãn/Thủ/Thanh/Thanh Pro). Khác 5 bản trên ở CĂN CỨ:
+// không phải sao/can chi/trục đo mà là NÉT TƯỚNG quan sát từ ảnh khuôn mặt
+// (Tam Đình, Ngũ Quan, bộ vị) — vẫn KHÔNG có trục thời gian như Bút Tướng,
+// vì khuôn mặt không đổi theo tuổi trong phạm vi một bài phân tích.
+// ⚠️ KHÔNG dùng cho Khí Sắc — Khí Sắc đã có "Dự Báo 1-3 tháng" riêng (khí sắc
+// đổi theo ngày/tháng, có trục thời gian thật), gắn thêm DỰ BÁO của arc này
+// vào đó là chồng hai nguồn dự báo. Khí Sắc chỉ mượn phần NHÃN TÍNH CHẤT,
+// không gọi `arcDoc()`.
+export const DOC_ARC_DIEN_TUONG = arcDoc({
+  duBao:
+    'Tướng mặt KHÔNG có trục thời gian (khuôn mặt không đổi theo tuổi trong bài phân tích này) → CHỈ đoán theo ĐIỀU KIỆN ("nếu vẫn giữ thói quen/biểu cảm này thì…"), cấm nêu tuổi, năm, hay mốc lịch nào.',
+  moc: 'nét tướng lệch tỷ lệ/nhãn xấu rõ (Tam Đình mất cân, Ngũ Quan hãm) → chỉ ra chỗ cái yếu ấy vẫn dùng được vào việc gì; nét tướng cân đối/đẹp rõ → chỉ ra cái giá đi kèm.',
+  canCu: 'Tam Đình / Ngũ Quan / bộ vị quan sát được trên khuôn mặt',
+  phepDich: `· [Tam Đình] Thượng Đình cao rộng vượt trội, Hạ Đình hẹp và ngắn → ✅ hành vi: "Thời trẻ anh sáng dạ, tiếp thu nhanh hơn bạn bè, nhưng càng về già càng phải tự thân vun vén, ít được nương nhờ con cháu." ❌ "Thượng đình vượng, Hạ đình khuyết, chủ tiên thiên vượng hậu vận suy."
+· [Ngũ Quan · Tỵ] Sống mũi thẳng, chuẩn đầu tròn đầy, hai cánh mũi cân → ✅ câu lật: "Cái tính chắt bóp từng đồng hay bị chê là keo kiệt lại đúng là thứ giữ được của cho anh, chứ không phải giữ mặt." ❌ "Tỵ vận đắc cách, tài bạch quan vượng."`,
+});
+
 // ─── GIỌNG cho BẢN CÓ CẤU TRÚC (họ 2 — JSON schema trả tiền · phong thuỷ · đặt tên · chọn ngày) ───
 //
 // 🔴 KHÔNG dùng `LUAN_ARC` lẫn `arcDoc` ở đây. Cả hai đều khai HÌNH DẠNG (nhịp

@@ -303,6 +303,14 @@ const DOC_FILES = {
     cap: 7900,
     arc: 'DOC_ARC_BUT_TUONG',
   },
+  // Thêm 2026-09-04: Diện Tướng — tool thí điểm đầu tiên của Nhóm C (5 tool
+  // tướng học chưa hề có arc). Cap = mức thực đo lúc gắn `DOC_ARC_DIEN_TUONG`
+  // + biên ~10%, cùng quy ước với 5 bản trên.
+  'app/api/tuong-mat/route.js': {
+    name: 'SP_DIEN',
+    cap: 5800,
+    arc: 'DOC_ARC_DIEN_TUONG',
+  },
 };
 // Khối bố cục của VĂN LUẬN DÀI. Một bản luận giải chỉ được dùng ĐÚNG MỘT —
 // và tuyệt đối không được kéo thêm arc CHAT vào (nó mang bối cảnh "vừa đọc xong
@@ -313,6 +321,7 @@ const DOC_BLOCKS = [
   'DOC_ARC_PHU_THE',
   'DOC_ARC_TUONG_HOP',
   'DOC_ARC_BUT_TUONG',
+  'DOC_ARC_DIEN_TUONG',
 ];
 const CHAT_BLOCKS = [
   'LUAN_ARC',

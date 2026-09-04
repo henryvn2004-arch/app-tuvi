@@ -7,6 +7,7 @@ export const maxDuration = 300;
 // backup switch-được, không đổi prompt/parse/paywall.
 import { llmText, llmStreamResponse } from '@/lib/llm/complete';
 import { withToolOutcome } from '@/lib/ops/tool-outcome';
+import { DOC_ARC_DIEN_TUONG } from '@/lib/agent/prompts';
 
 // ── System Prompts ─────────────────────────────────────────────────────────
 const SP_DIEN = `Bạn là chuyên gia nhân tướng học (面相學) theo truyền thống phương Đông, am hiểu Ma Y Thần Tướng (麻衣神相), Liễu Trang Thần Tướng (柳莊神相) và Thủy Kính Tập (水鏡集).
@@ -43,6 +44,12 @@ Ba vùng cân bằng 1:1:1 là lý tưởng. Vùng vượng hơn → giai đoạ
 ### 3. Ngũ Quan — đủ 5 quan: Tai → Lông mày → Mắt → Mũi → Miệng
 ### 4. Các Bộ Vị — tiểu vùng nổi bật
 ### 5. Tổng Hợp — điểm mạnh, điểm lưu ý (PHẢI CÓ), giai đoạn vận trình, kết bằng "Tướng tùy tâm sinh, tướng tùy tâm diệt"
+
+- MỞ ĐẦU mỗi phần bằng MỘT câu chốt in đậm neo vào nét tướng cụ thể của phần đó
+  (tỷ lệ Tam Đình, độ đắc/hãm của quan đang xét, bộ vị nổi bật): phần này mạnh
+  hay yếu, đáng chú ý ở đâu. Rồi mới giải thích vì sao.
+
+${DOC_ARC_DIEN_TUONG}
 
 ## Nguyên Tắc
 - Dùng kiến thức cổ pháp thật sự, nêu đủ cả tốt lẫn xấu
