@@ -43,6 +43,31 @@
 .tcard .cost{position:absolute;top:11px;right:12px;font-size:10.5px;font-weight:600;color:var(--gold-soft);background:var(--gold-lt);border:1px solid var(--gold-soft);border-radius:20px;padding:1px 8px}
 .tcard .cost.free{color:#fff;background:var(--green);border-color:var(--green)}
 .tcard.ext .tx b::after{content:"↗";font-size:11px;color:var(--text-lt);margin-left:5px;font-family:var(--sans)}
+/* ── KHUNG CHỜ THẺ CÔNG CỤ (#wcCards, #nextCard) ───────────────────────────
+   🐞 Vì sao cần: `navFallback()` đọc localStorage, nên KHÁCH LẦN ĐẦU nhận
+   `null` ⇒ `renderWelcomeCards` / `renderNext` không vẽ gì, hai khối này rỗng
+   tới khi `ToolPrices.load()` trả lời. Lighthouse mobile đo `/app` CLS
+   0,45-0,61; đây là hai trong ba cú nhảy.
+
+   🔑 CỐ Ý không khớp chiều cao theo NỘI DUNG: chữ nằm dưới `tool_pricing`, đo
+   thật ở 390px ra 99/77/99/77px vì câu hỏi dài ngắn khác nhau. Dựng khung chờ
+   theo đúng nếp đó là chép tay một thứ ở DB — sửa mô tả công cụ là khung chờ
+   trôi mà không ai hay. Nên mọi ô đều để HAI dòng: dư ~44px cho cả khối thay
+   vì thiếu ~390px, và không dính gì vào nội dung.
+   Dư (khối co lại) chứ không thiếu (khối nở ra) là có chủ đích: nội dung dồn
+   LÊN thì thứ người ta sắp chạm chạy ra xa ngón tay, không chui vào dưới nó.
+
+   Thanh xám vẽ bằng `background` chứ không bằng chiều cao/lề của phần tử —
+   mỗi `.sk` vẫn là một dòng chữ `&nbsp;` nên cao đúng bằng một dòng thật. */
+.sk-tile .sk,.nx-skel .sk{display:block;color:transparent;
+  background:linear-gradient(var(--line),var(--line)) no-repeat left center/100% 11px}
+.sk-tile .ic,.nx-skel .ic{background:var(--line)!important;color:transparent!important}
+.sk-tile .tx b .sk,.nx-skel b .sk{background-size:58% 13px}
+.sk-tile,.nx-skel{pointer-events:none}
+@keyframes tileSkPulse{0%,100%{opacity:1}50%{opacity:.5}}
+@media(prefers-reduced-motion:no-preference){
+  .sk-tile .sk,.sk-tile .ic,.nx-skel .sk,.nx-skel .ic{animation:tileSkPulse 1.4s ease-in-out infinite}
+}
 /* ── Q1: GỢI Ý THEO HÀNH VI ────────────────────────────────────────────────
    `.nx-why` là lý do — phần đáng giá nhất của khối này. Một thẻ gợi ý không
    nói được VÌ SAO thì đọc như quảng cáo mù (xem lib/tools/suggest-tool.ts). */
@@ -300,7 +325,12 @@
           <div class="wc-eyebrow">Lần đầu ghé Luận Đường</div>
           <div class="wc-title">Đây là nơi bạn lập lá số &amp; hỏi trợ lý AI</div>
           <p class="wc-sub">Chọn một công cụ bên dưới để bắt đầu, hoặc bấm "Hỏi trợ lý" nếu chưa biết bắt đầu từ đâu — trợ lý sẽ hỏi lại và giới thiệu đúng công cụ.</p>
-          <div class="cards" id="wcCards"></div>
+          <div class="cards" id="wcCards" aria-busy="true" aria-label="Đang tải công cụ gợi ý">
+            <a class="tcard sk-tile"><div class="ic"></div><div class="tx"><b><span class="sk">&nbsp;</span></b><span class="sk">&nbsp;</span><span class="sk">&nbsp;</span></div></a>
+            <a class="tcard sk-tile"><div class="ic"></div><div class="tx"><b><span class="sk">&nbsp;</span></b><span class="sk">&nbsp;</span><span class="sk">&nbsp;</span></div></a>
+            <a class="tcard sk-tile"><div class="ic"></div><div class="tx"><b><span class="sk">&nbsp;</span></b><span class="sk">&nbsp;</span><span class="sk">&nbsp;</span></div></a>
+            <a class="tcard sk-tile"><div class="ic"></div><div class="tx"><b><span class="sk">&nbsp;</span></b><span class="sk">&nbsp;</span><span class="sk">&nbsp;</span></div></a>
+          </div>
           <button class="wc-ask" id="welcomeAsk" type="button">✦ Hỏi trợ lý — tôi nên bắt đầu từ đâu?</button>
         </div>
         <div class="today-card" id="todayCard" style="display:none">
@@ -352,7 +382,20 @@
              tại chỗ cho danh mục đầy đủ — khối này chỉ trả lời "tiếp theo nên
              xem gì", còn "Xem tất cả công cụ" GIỮ NGƯỜI TRONG SHELL (không còn
              trỏ ra /cong-cu ở ngoài shell), collapse mặc định, bấm mới dựng. -->
-        <div id="nextCard"></div>
+        <!-- Khung chờ: `pickNext()` trả TỐI ĐA 3 mục nên số ô là cố định,
+             chỉ độ dài chữ mới đổi. Xem chú thích .sk-tile trong <style>. -->
+        <div id="nextCard" class="nx-skel" aria-busy="true" aria-label="Đang tải gợi ý">
+          <div class="next-wrap">
+            <div class="grp-title"><span class="sk">&nbsp;</span></div>
+            <a class="nx-main"><div class="ic"></div>
+              <div class="nx-tx"><b><span class="sk">&nbsp;</span></b>
+                <div class="nx-why"><span class="sk">&nbsp;</span><span class="sk">&nbsp;</span></div></div></a>
+            <div class="nx-more">
+              <a class="nx-item"><div class="ic"></div><div><b><span class="sk">&nbsp;</span></b><span class="sk">&nbsp;</span><span class="sk">&nbsp;</span></div></a>
+              <a class="nx-item"><div class="ic"></div><div><b><span class="sk">&nbsp;</span></b><span class="sk">&nbsp;</span><span class="sk">&nbsp;</span></div></a>
+            </div>
+          </div>
+        </div>
         <!-- Khung chờ giữ sẵn chỗ của thẻ "Mời bạn". Viết TĨNH: khối thật chỉ
              đổ được sau một vòng mạng (xem .inv-skel trong <style>), nên nếu
              chỗ này rỗng thì lần vẽ đầu cao 0px và mọi thứ dưới nó bị đẩy. -->
@@ -495,7 +538,16 @@ function cardIcon(row) { return window.iconHtml ? window.iconHtml(row.icon) : sv
 function renderNext(d) {
   var host = document.getElementById('nextCard'); if (!host) return;
   var picks = pickNext(d);
-  if (!picks.length) { host.innerHTML = ''; return; }
+  if (!picks.length) {
+    // Chưa có dữ liệu (khách lần đầu: `navFallback()` trả null) → GIỮ khung chờ.
+    // Xoá về rỗng ở đây là tự bỏ chỗ đã giữ, rồi khối nở ra lúc dữ liệu về —
+    // đúng cú nhảy mà khung chờ sinh ra để chặn.
+    if (!host.classList.contains('nx-skel')) host.innerHTML = '';
+    return;
+  }
+  host.classList.remove('nx-skel');
+  host.removeAttribute('aria-busy');
+  host.removeAttribute('aria-label');
   var first = picks[0], rest = picks.slice(1);
   var html = '<div class="next-wrap">' +
     '<div class="grp-title">Tiếp theo nên xem gì</div>' +
@@ -654,6 +706,8 @@ function renderWelcomeCards(d){
   var html='';
   for(var i=0;i<WELCOME_PICKS.length;i++) html+=welcomeCardHtml(rows, WELCOME_PICKS[i]);
   host.innerHTML=html;
+  host.removeAttribute('aria-busy');
+  host.removeAttribute('aria-label');
   if(window.mountIcons) window.mountIcons(host);
 }
 renderWelcomeCards(window.ToolPrices ? ToolPrices.navFallback() : null);
@@ -806,6 +860,7 @@ function renderAllTools(d) {
   try{ _birth=(Shell.getRememberedBirth&&Shell.birthToApi)?Shell.birthToApi(Shell.getRememberedBirth()):null; }catch(e){}
   _hasBirth=!!(_birth&&_birth.day&&_birth.month&&_birth.year);
   _returning=_hasBirth||isLoggedIn();
+  revealSlotEarly();
 
   fetchDay(_today,true)
     .then(function(v){ if(v&&v.ok){ if(v.tuan)_week=v.tuan; render(v,_today,_birth,_hasBirth); }
@@ -862,6 +917,21 @@ function renderAllTools(d) {
         if(p.length===3) goDay({y:+p[0],mo:+p[1],d:+p[2]});
       };
     });
+  }
+
+  /* Lộ đúng khối NGAY khi biết, không chờ mạng. Việc CHỌN khối nào là đồng bộ
+     (`_hasBirth` đọc localStorage); chỉ NỘI DUNG của thẻ mới cần `fetchDay`.
+     Trước đây cả hai khối nằm `display:none` tới khi `fetchDay` trả lời rồi
+     `showTodayOrWelcome()` mới lật — tức cả khối đầu trang chèn vào sau một
+     vòng mạng, đẩy mọi thứ bên dưới. Một trong ba cú nhảy CLS đo được trên /app.
+
+     🔑 CỐ Ý không gọi thẳng `showTodayOrWelcome()` ở đây: hàm đó còn đặt
+     `data-rendered`, thứ mà `maybeUpgradeToReturning()` đọc để biết nội dung
+     thẻ đã có THẬT hay chưa. Đặt sớm là nó lật sang một thẻ còn rỗng. */
+  function revealSlotEarly(){
+    var card=el('todayCard'), w=el('welcomeCard');
+    if(_returning){ if(card) card.style.display=''; if(w) w.style.display='none'; }
+    else { if(card) card.style.display='none'; if(w) w.style.display=''; }
   }
 
   /* Chỉ MỘT trong hai khối được thấy: thẻ Vận Hôm Nay (đã quay lại) hay lời
