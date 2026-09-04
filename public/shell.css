@@ -481,6 +481,15 @@ font-family:inherit}
   /* Đừng để một thẻ kết quả bị xẻ đôi qua hai trang giấy. */
   .sec, .card, .res-block, .cs-sec { page-break-inside: avoid; break-inside: avoid; }
 
+  /* Trình duyệt mặc định BỎ hết background khi in (đỡ tốn mực) — mọi khối
+     tô màu (thẻ trích dẫn .fb-card, box "cơ sở tính toán", badge điểm số…)
+     ra bản in/PDF thành nền trắng trơn, chỉ còn chữ. 3 dòng dưới đây từng
+     ĐÃ có sẵn ở 3 trang cũ (luan-giai.html/xem-tuoi.html/xem-lam-an.html)
+     trước khi luật in được gom về ĐÂY cho toàn `/app/*` — luật gom thiếu
+     đúng dòng này, nên mọi tool app-shell mất màu nền khi xuất PDF mà không
+     ai để ý (Henry phát hiện qua bản in thật, 2026-09-04). */
+  * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; color-adjust: exact !important; }
+
   /* Đầu trang in: trên màn hình `.ws-top` mang tên tool, mà nó bị ẩn khi in
      ⇒ bản in không có gì nói nó là cái gì của ai. Shell dựng khối này, kèm
      avatar của chính tool (ảnh trái, tên+dòng lá số phải — cùng bố cục với
