@@ -481,6 +481,15 @@ Mỗi luật dưới đây sinh ra từ một lần cắn thật. Cột cuối l
   chuỗi nằm ngoài repo thì sửa chuỗi đó là khung chờ trôi, im lặng. Để số dòng
   cố định, nhắm DƯ chứ không THIẾU (khối co lại thì nội dung dồn LÊN, xa ngón
   tay). Bỏ `display:none` thì MỌI đường "không dựng được" phải ẩn tay.
+- **CLS chỉ kết luận được bằng prod↔prod.** Preview ĐO HỤT: 5 vòng đều báo
+  `/topup.html` = 0,016, số thật trên prod cùng bản là **0,160** (cú `#statusSlot`
+  rơi ngoài cửa sổ đo). Ngược lại Perf/LCP/TBT thì đừng so prod-cũ ↔ preview-mới:
+  cùng lượt đó `/xem-tuoi.html` tụt 72 → 53 với 0 dòng code đổi.
+- **Box JS chèn vào ĐẦU khung nội dung vừa gây CLS vừa LÀ phần tử LCP** —
+  `.intro-card` (`Shell.introOnce`): CLS 0,198 + Render Delay 5,3s/5,96s. Chữ là
+  hằng số của trang ⇒ dựng tĩnh trong HTML, `introOnce` thấy `.intro-card` đã có
+  thì chỉ điền `#introSrc`, và trang đó khai gọn `SHELL_INTRO={key}` (giữ thêm
+  title/desc trong JS là để hai bản chép trôi khỏi nhau).
 - Đo: Actions → Lighthouse CI → `mobile_audit=true` (thêm host vào
   `lhci_url_override` để đo preview). `nhat-ky/2026-09.md` mục "Rà soát mobile".
 

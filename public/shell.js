@@ -2518,14 +2518,23 @@
     introOnce: function (key, opts) {
       var host = document.getElementById('introHost');
       if (!host) return;
-      host.innerHTML = '<div class="intro-card">' +
-        '<div class="intro-body">' +
-        '<img class="intro-avatar" src="' + this.avatarUrl(key) + '" alt="" loading="lazy" onerror="this.remove()">' +
-        '<div class="intro-text">' +
-        '<div class="intro-t">' + esc(opts.title || '') + '</div>' +
-        '<div class="intro-d">' + (opts.desc || '') + '</div>' +
-        '<div id="introSrc"></div>' +
-        '</div></div></div>';
+      // Trang có thể dựng SẴN box này bằng HTML tĩnh (xem app-luan-giai.html):
+      // chèn bằng JS thì box ra đời SAU lần vẽ đầu, đẩy cả `.ws-body` xuống
+      // (đo trên prod: CLS 0,198 và Render Delay 5,3 giây của LCP — chính
+      // `.intro-d` là phần tử LCP). Thấy box đã có thì KHÔNG dựng lại: dựng lại
+      // là thay phần tử đang hiện bằng phần tử mới y hệt, mất trắng cái lợi.
+      // Trang tĩnh khai `SHELL_INTRO={key:'…'}` (không title/desc) — chữ nằm
+      // trong HTML, MỘT bản duy nhất, không có bản chép để trôi.
+      if (!host.querySelector('.intro-card')) {
+        host.innerHTML = '<div class="intro-card">' +
+          '<div class="intro-body">' +
+          '<img class="intro-avatar" src="' + this.avatarUrl(key) + '" alt="" loading="lazy" onerror="this.remove()">' +
+          '<div class="intro-text">' +
+          '<div class="intro-t">' + esc(opts.title || '') + '</div>' +
+          '<div class="intro-d">' + (opts.desc || '') + '</div>' +
+          '<div id="introSrc"></div>' +
+          '</div></div></div>';
+      }
       // Dòng "Theo <cổ pháp> · phương pháp Tử Vi Minh Bảo" — nạp động, điền
       // sau khi kịp tải; nếu khối intro đã bị đóng trước đó thì bỏ qua.
       ensureToolSourcesJs(function () {
