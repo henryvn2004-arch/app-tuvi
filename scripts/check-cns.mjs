@@ -127,13 +127,11 @@ for (const [ten, m, pat] of mutants) {
 // Thứ tự script: dựng bản đảo ngược rồi xác nhận phép so bắt được.
 const swapped =
   'x<script src="/tools-shared/cung-ngay-sinh.js"></script>y<script src="/tuvi-form.js"></script>z';
-if (
-  !(
-    swapped.search(SRC) >= 0 &&
-    swapped.search(FORM) >= 0 &&
-    swapped.search(SRC) < swapped.search(FORM)
-  )
-) {
+if (!(
+  swapped.search(SRC) >= 0 &&
+  swapped.search(FORM) >= 0 &&
+  swapped.search(SRC) < swapped.search(FORM)
+)) {
   fail('RED-TEAM THẤT BẠI: phép so thứ tự script KHÔNG bắt được bản đảo ngược.');
 } else {
   console.log('   ↳ red-team: "nạp sai thứ tự" bị bắt ✓');
