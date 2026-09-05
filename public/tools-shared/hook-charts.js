@@ -25,8 +25,17 @@ window.HookCharts = (function () {
   // màu shell.css. KHÔNG hardcode hex — 3 tông có sẵn trong bộ thương hiệu,
   // không cần bịa thêm "amber" hay tông nào khác.
   function flagColor(flag) {
-    if (flag === '🟢') return 'var(--green)';
-    if (flag === '🔴') return 'var(--red)';
+    // 🔴 --tx-green/--tx-red chứ KHÔNG phải --green/--red. Hai bộ này TRÙNG
+    // GIÁ TRỊ ở light (#1E6B3C / #C0392B) nên đổi sang không dịch một pixel
+    // nào ở chế độ sáng — nhưng ở dark chỉ bộ --tx-* mới có bản sáng lên
+    // (#5FBF87 / #F08A7A), còn --green giữ nguyên #1E6B3C và tô lên thẻ tối
+    // thì đọc ra ĐEN. Đã thấy tận mắt trên `stageTimeline`: ba cột 7.5 · 7.4 ·
+    // 8.1 ra đen sì trong khi 4.6 · 4.2 vẫn vàng. `lifeArc` dính cùng lỗi từ
+    // trước, cùng hàm này nên vá một chỗ là hết cả hai. Cảnh báo đã ghi sẵn ở
+    // đầu shell.css: --green/--red gánh mặt phẳng NỀN, cần màu nhìn thấy được
+    // ở cả hai theme thì dùng bộ --tx-*.
+    if (flag === '🟢') return 'var(--tx-green)';
+    if (flag === '🔴') return 'var(--tx-red)';
     return 'var(--gold-soft)'; // 🟡 hoặc không rõ — mặc định tông trung tính của brand
   }
 
@@ -216,9 +225,164 @@ window.HookCharts = (function () {
       '.hc-marker-t{font-family:var(--mono,ui-monospace,monospace);font-size:8px;fill:var(--gold-soft)}' +
       '.hc-marker-line{stroke:var(--navy);stroke-width:3}' +
       '@media(prefers-color-scheme:dark){:root:not([data-theme="light"]) .hc-marker-line{stroke:#fff}}' +
-      ':root[data-theme="dark"] .hc-marker-line{stroke:#fff}';
+      ':root[data-theme="dark"] .hc-marker-line{stroke:#fff}' +
+      '.hc-tile{fill:var(--gold-lt);stroke:var(--line);stroke-width:1}' +
+      '.hc-tile-now{stroke:var(--gold);stroke-width:2}' +
+      '.hc-col-now{fill:var(--gold-lt)}' +
+      '.hc-kw{font-family:var(--sans);font-size:11px;font-weight:700;fill:var(--heading)}' +
+      '.hc-kw-sm{font-family:var(--sans);font-size:9px;font-weight:700;fill:var(--heading)}';
     document.head.appendChild(st);
   }
 
-  return { lifeArc, hexRadar, rarityDots, percentileBar, flagColor };
+  /** Nhãn tính chất → biến màu shell.css. Cùng bộ 3 với `.fb-tot/.fb-canhbao/
+   *  .fb-trungtinh` (shell.css) mà 16 trang luận giải đang dùng — KHÔNG bịa
+   *  tông thứ tư ở đây, hai bộ màu lệch nhau thì cùng một tháng đọc ra hai
+   *  màu tuỳ chỗ nhìn. */
+  function mucColor(muc) {
+    if (muc === 'TỐT') return 'var(--tx-green)';
+    if (muc === 'CẢNH BÁO') return 'var(--tx-red)';
+    return 'var(--gold-soft)';
+  }
+
+  // Ô/cột chỉ mang MỘT hình theo mức — mắt đọc hình trước khi đọc màu. Bắt
+  // buộc có, không phải trang trí: cặp đỏ↔vàng của bộ thương hiệu chỉ cách
+  // nhau ΔE 4,9 với người mù màu deutan (đo bằng validator), nên nếu mức chỉ
+  // được mã hoá bằng MÀU thì hai mức đó là một với họ.
+  function mucMark(muc, cx, cy, r) {
+    var col = mucColor(muc);
+    if (muc === 'TỐT') {
+      // tia — hướng lên, đọc là "mở ra"
+      var d = '';
+      for (var i = 0; i < 4; i++) {
+        var a = (-Math.PI / 2) + i * (Math.PI / 4);
+        d += 'M' + (cx - r * Math.cos(a)).toFixed(1) + ',' + (cy - r * Math.sin(a)).toFixed(1) +
+             'L' + (cx + r * Math.cos(a)).toFixed(1) + ',' + (cy + r * Math.sin(a)).toFixed(1);
+      }
+      return '<path d="' + d + '" stroke="' + col + '" stroke-width="1.6" stroke-linecap="round" fill="none"></path>';
+    }
+    if (muc === 'CẢNH BÁO') {
+      // tam giác — hướng lên, đọc là "coi chừng"
+      return '<path d="M' + cx.toFixed(1) + ',' + (cy - r).toFixed(1) +
+        'L' + (cx + r).toFixed(1) + ',' + (cy + r * 0.8).toFixed(1) +
+        'L' + (cx - r).toFixed(1) + ',' + (cy + r * 0.8).toFixed(1) + 'Z" fill="none" stroke="' + col +
+        '" stroke-width="1.6" stroke-linejoin="round"></path>';
+    }
+    // gạch ngang — đọc là "giữ nguyên"
+    return '<line x1="' + (cx - r).toFixed(1) + '" y1="' + cy.toFixed(1) + '" x2="' + (cx + r).toFixed(1) +
+      '" y2="' + cy.toFixed(1) + '" stroke="' + col + '" stroke-width="1.8" stroke-linecap="round"></line>';
+  }
+
+  function _tspans(text, x, y, maxChars, lineH, cls, maxLines, fill) {
+    var words = String(text == null ? '' : text).trim().split(/\s+/).filter(Boolean);
+    var lines = [], cur = '';
+    for (var i = 0; i < words.length; i++) {
+      var t = cur ? cur + ' ' + words[i] : words[i];
+      if (t.length > maxChars && cur) { lines.push(cur); cur = words[i]; } else cur = t;
+    }
+    if (cur) lines.push(cur);
+    if (maxLines && lines.length > maxLines) {
+      lines = lines.slice(0, maxLines);
+      lines[maxLines - 1] = lines[maxLines - 1].replace(/\s*\S*$/, '…');
+    }
+    var out = '';
+    for (var j = 0; j < lines.length; j++) {
+      out += '<text x="' + x + '" y="' + (y + j * lineH).toFixed(1) + '" text-anchor="middle" class="' + cls + '"' +
+        (fill ? ' fill="' + fill + '"' : '') + '>' + esc(lines[j]) + '</text>';
+    }
+    return { html: out, lines: lines.length };
+  }
+
+  /**
+   * Bản Đồ Tháng — lưới N ô, mỗi ô một tháng: nhãn tháng · hình theo mức · TỪ
+   * KHOÁ. Dựng cho "Vận Hạn 12 Tháng Tới" nhưng không khoá vào 12.
+   *
+   * ⚠️ CỐ Ý KHÔNG có điểm/10 trên ô: `lib/engine/van-han-12.ts` chốt chỉ ĐẠI
+   * VẬN mới có điểm thật, gán điểm cho tháng là bịa. Ô mang MỨC + TỪ KHOÁ, hai
+   * thứ do phía gọi cấp (bóc từ nhãn `[TỐT|TỪ KHOÁ]` model đã viết), file này
+   * không tự suy ra mức từ sao — đúng luật "chỉ vẽ" ở đầu file.
+   *
+   * items: [{ nhan, kw, muc ('TỐT'|'CẢNH BÁO'|'TRUNG TÍNH'), now }]
+   */
+  function monthGrid(o) {
+    o = o || {};
+    var items = Array.isArray(o.items) ? o.items : [];
+    if (!items.length) return '';
+    var cols = o.cols || 4;
+    var rows = Math.ceil(items.length / cols);
+    var cw = o.cellW || 132, ch = o.cellH || 108, gap = 7, pad = 4;
+    var w = pad * 2 + cols * cw + (cols - 1) * gap;
+    var h = pad * 2 + rows * ch + (rows - 1) * gap;
+    var g = '';
+    items.forEach(function (it, i) {
+      var cx0 = pad + (i % cols) * (cw + gap);
+      var cy0 = pad + Math.floor(i / cols) * (ch + gap);
+      var midX = cx0 + cw / 2;
+      g += '<rect x="' + cx0 + '" y="' + cy0 + '" width="' + cw + '" height="' + ch +
+        '" rx="9" class="hc-tile' + (it.now ? ' hc-tile-now' : '') + '"></rect>';
+      g += '<text x="' + midX + '" y="' + (cy0 + 19) + '" text-anchor="middle" class="hc-lbl">' +
+        esc(it.nhan) + '</text>';
+      g += mucMark(it.muc, midX, cy0 + 40, 8);
+      var kw = _tspans(it.kw || '', midX, cy0 + 66, 15, 13, 'hc-kw', 3, mucColor(it.muc));
+      g += kw.html;
+      if (it.now) {
+        g += '<text x="' + midX + '" y="' + (cy0 + ch - 8) + '" text-anchor="middle" class="hc-marker-t">bạn ở đây</text>';
+      }
+    });
+    return _wrap(w, h, esc(o.ariaLabel || 'Bản đồ ' + items.length + ' tháng tới'), g);
+  }
+
+  /**
+   * Chặng Đời — N cột, cột cao theo ĐIỂM THẬT của engine, mỗi cột một TỪ KHOÁ.
+   * Dựng cho "Chu Trình Cuộc Đời" (9 đại vận).
+   *
+   * Khác `lifeArc` ở chỗ dùng: `lifeArc` là teaser NHỎ trên đầu trang (chỉ số +
+   * tuổi, cao 128px); cái này là khối ĐỌC/CHIA SẺ trong thân bài, mang thêm từ
+   * khoá và mức. Cùng dữ liệu, hai vai — CỐ Ý không gộp: gộp thì teaser phải
+   * chờ có từ khoá (tức chờ trả tiền) mới vẽ được.
+   *
+   * HAI NGUỒN MÀU, CỐ Ý TÁCH: thân cột (chiều cao VÀ màu) đọc từ ENGINE
+   * (`tong` + `flag`, ngưỡng của chính `scoreDaiVan`); dấu hình và từ khoá đọc
+   * từ NHÃN model viết (`muc`). Trộn hai nguồn vào cùng MỘT kênh thì sinh ra
+   * cảnh cột 6.7 tô đỏ đứng cạnh cột 7.0 tô xanh — người đọc thấy mâu thuẫn mà
+   * không có cách nào biết đó là hai phép đo khác nhau.
+   *
+   * segs: [{ tuoiStart, tuoiEnd, tong (0-10), flag, kw, muc, current }]
+   */
+  function stageTimeline(o) {
+    o = o || {};
+    var segs = Array.isArray(o.segments) ? o.segments : [];
+    if (!segs.length) return '';
+    var n = segs.length;
+    var colW = o.colW || 74, gap = 6, pad = 6;
+    var plotH = o.plotH || 132;
+    var topLbl = 34;                 // số thứ tự + tuổi
+    var kwH = 30;                    // 2 dòng từ khoá
+    var w = pad * 2 + n * colW + (n - 1) * gap;
+    var h = pad + topLbl + kwH + plotH + 26;
+    var base = pad + topLbl + kwH + plotH;
+    var g = '';
+    segs.forEach(function (s, i) {
+      var x0 = pad + i * (colW + gap);
+      var midX = x0 + colW / 2;
+      if (s.current) {
+        g += '<rect x="' + x0 + '" y="' + pad + '" width="' + colW + '" height="' + (h - pad - 6) +
+          '" rx="8" class="hc-col-now"></rect>';
+      }
+      g += '<text x="' + midX + '" y="' + (pad + 14) + '" text-anchor="middle" class="hc-num">' + (i + 1) + '</text>';
+      g += '<text x="' + midX + '" y="' + (pad + 27) + '" text-anchor="middle" class="hc-lbl">' +
+        esc((s.tuoiStart != null ? s.tuoiStart : '') + (s.tuoiEnd != null ? '–' + s.tuoiEnd : '')) + '</text>';
+      g += _tspans(s.kw || '', midX, pad + topLbl + 11, 11, 12, 'hc-kw-sm', 2, mucColor(s.muc)).html;
+      var v = Math.max(0, Math.min(10, Number(s.tong) || 0));
+      var bh = Math.max((v / 10) * plotH, 2);
+      var barW = 18;
+      g += '<rect x="' + (midX - barW / 2).toFixed(1) + '" y="' + (base - bh).toFixed(1) + '" width="' + barW +
+        '" height="' + bh.toFixed(1) + '" rx="4" fill="' + flagColor(s.flag) + '" opacity="0.9"></rect>';
+      g += '<text x="' + midX + '" y="' + (base - bh - 5).toFixed(1) + '" text-anchor="middle" class="hc-num">' +
+        esc(v.toFixed(1)) + '</text>';
+      g += mucMark(s.muc, midX, base + 14, 6);
+    });
+    return _wrap(w, h, esc(o.ariaLabel || 'Biểu đồ ' + n + ' chặng đời'), g);
+  }
+
+  return { lifeArc, hexRadar, rarityDots, percentileBar, flagColor, monthGrid, stageTimeline, mucColor };
 })();
