@@ -150,6 +150,12 @@
         <div id="hookHost"></div>
         <div class="vh-unlock" id="vhUnlock" style="display:none"></div>
         <div class="vh-progress" id="vhProgress" style="display:none"></div>
+        <!-- Bản đồ 12 tháng — dựng NGAY cùng lần vẽ với 16 phần bên dưới, đủ
+             12 ô từ đầu (nhãn tháng là dữ liệu engine, có sẵn và miễn phí).
+             Mức + từ khoá của từng ô điền dần khi phần chữ của tháng đó sinh
+             xong. Khung SVG giữ nguyên tỉ lệ nên thay ruột ô KHÔNG đẩy layout
+             — đó là lý do vẽ sớm chứ không chờ luận xong rồi mới chèn vào. -->
+        <div id="vhMap"></div>
         <div class="vh-body" id="vhBody"></div>
         <!-- "Ai Sinh Cùng Ngày Với Bạn" — miễn phí, 0 token LLM. Hỏng mạng/API
              thì tự ẩn, không làm hỏng khung vận hạn phía trên. -->
@@ -173,7 +179,7 @@ window.SHELL_INTRO={key:'van-han-nam'};</script>
 <script src="/tools-shared/cung-ngay-sinh.js?v=2"></script>
 <script src="/auth.js?v=2"></script>
 <script src="/tuvi-paywall.js?v=22"></script>
-<script src="/tools-shared/hook-charts.js?v=1"></script>
+<script src="/tools-shared/hook-charts.js?v=2"></script>
 <script src="/tools-shared/hook-facts.js?v=1"></script>
 <script src="/tools-shared/hook-layer.js?v=2"></script>
 <script src="/nav.js?v=25" data-icons-only></script>
@@ -351,6 +357,7 @@ function render(ls){
       ask(p<=4?('Luận sâu phần: '+_labels[p]):(_khung.thangs[p-5].nhanDay+' của tôi thế nào?'))+'</div></section>');
   }
   document.getElementById('vhBody').innerHTML=S.join('');
+  _renderMap();
   if(window.mountIcons) window.mountIcons(document.getElementById('vhBody'));
   TuviPaywall.fillPriceSlots(document.getElementById('vhBody'));
   // `part` có mặt (khoá-mini của MỘT tháng/đại vận, p>1) → mở đúng phần đó
@@ -633,6 +640,28 @@ function ragQuery(p){
   if(!t||t.loi) return 'lưu nguyệt hạn vận tháng';
   return 'lưu nguyệt hạn cung '+t.cungNguyetHan+' '+t.chinhTinh.join(' ')+' vận tháng';
 }
+// Bóc nhãn `[TỐT|TỪ KHOÁ]` model gắn ở đầu câu phán quyết. CHỈ lấy nhãn ĐẦU
+// TIÊN của phần: mỗi phần có nhiều đoạn, mỗi đoạn một nhãn, nhưng câu phán
+// quyết của cả tháng là câu mở đầu — lấy nhãn cuối hay gộp lại đều là đọc sai
+// vai của chúng. Không khớp (bản cache cũ chưa có từ khoá, hoặc model quên)
+// thì trả null ⇒ ô giữ trạng thái "chưa luận", KHÔNG đoán bừa một mức.
+var _RX_HOOK=/\[(TỐT|CẢNH BÁO|TRUNG TÍNH)(?:\|([^\]]{0,40}))?\]/;
+function _hookCuaPhan(p){
+  var m=_RX_HOOK.exec(_store[p]||'');
+  if(!m||!m[2]||!m[2].trim())return null;
+  return {muc:m[1],kw:m[2].trim()};
+}
+function _renderMap(){
+  var host=document.getElementById('vhMap');
+  if(!host||!window.HookCharts||!HookCharts.monthGrid||!_khung)return;
+  var items=_khung.thangs.map(function(t,i){
+    var h=_hookCuaPhan(i+5);
+    return {nhan:t.nhan,kw:h?h.kw:'',muc:h?h.muc:null,now:t.dangDienRa};
+  });
+  host.innerHTML=HookCharts.monthGrid({items:items,cols:4,
+    ariaLabel:'Bản đồ '+items.length+' tháng âm tới, mỗi ô một từ khoá'});
+}
+
 // Chạy MỘT phần — gọi từ trong bể (PhanPool) và trực tiếp từ nút "↻ Thử lại".
 async function _runPhanVanHan(p){
   var box=document.getElementById('claude-content-'+p);
@@ -664,6 +693,7 @@ async function _runPhanVanHan(p){
     _store[p]=data.luanGiai;
     doneWait();
     if(box)box.innerHTML=renderMarkdown(data.luanGiai);
+    _renderMap();   // ô của tháng vừa xong đổi từ "chưa luận" sang có mức + từ khoá
     return true;
   }catch(e){
     doneWait();

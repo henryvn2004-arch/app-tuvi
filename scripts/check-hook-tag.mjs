@@ -57,14 +57,26 @@ const PHAI_KHOP = [
 /** Mẫu KHÔNG được khớp — nhãn lạ thì để nguyên đoạn, đừng tô bừa. */
 const KHONG_KHOP = ['[XẤU|X] **nhãn không có thật** đuôi.'];
 
-/** Bóc mọi literal regex có chứa danh sách 3 nhãn ra khỏi một file. */
+/**
+ * Bóc các literal regex BÓC THẺ HOOK ra khỏi một file.
+ *
+ * ⚠️ Chỉ nhận literal có CẢ phần `\*\*` — tức regex thật sự bóc "nhãn + câu
+ * hook in đậm" để dựng thẻ `.fb-card`. Trang còn có regex KHÁC cùng chứa ba
+ * nhãn nhưng khác vai: `_RX_HOOK` ở app-van-han-nam / app-chu-trinh-cuoc-doi
+ * chỉ lấy nhãn + TỪ KHOÁ để dựng ô/cột visual, không đụng tới câu hook. Bản
+ * đầu của bộ dò này quét mọi literal nên báo đỏ 8 lần vào đúng hai regex đó —
+ * kêu oan. Thu hẹp phạm vi còn hơn để nó báo bừa: bộ dò kêu oan là bộ dò bị
+ * tắt đi.
+ */
 function regexTrongFile(src) {
   const out = [];
   // Literal regex nằm trên MỘT dòng ở cả 16 trang; bắt từ `/^\[(TỐT` tới
   // dấu `/` đóng kèm cờ. Không dùng parser JS: 16 file này là HTML lẫn script.
   const re = /\/\^?\\\[\(TỐT\|CẢNH BÁO\|TRUNG TÍNH\)[^\n]*?\/[gimsuy]*/g;
   let m;
-  while ((m = re.exec(src))) out.push(m[0]);
+  while ((m = re.exec(src))) {
+    if (m[0].includes('\\*\\*')) out.push(m[0]);
+  }
   return out;
 }
 

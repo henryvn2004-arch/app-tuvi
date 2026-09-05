@@ -181,6 +181,13 @@
         <div id="hookHost"></div>
         <div class="lg-unlock" id="lgUnlock" style="display:none"></div>
         <div class="lg-progress" id="lgProgress" style="display:none"></div>
+        <!-- 9 chặng đời — dựng NGAY cùng lần vẽ với các phần bên dưới, đủ 9 cột
+             từ đầu (chiều cao lấy điểm engine, có sẵn và miễn phí). Từ khoá của
+             từng chặng điền dần khi phần chữ của đại vận đó sinh xong; khung SVG
+             giữ nguyên tỉ lệ nên thay ruột cột KHÔNG đẩy layout.
+             KHÁC khối #hookHost phía trên: đó là teaser `lifeArc` (chỉ số + tuổi,
+             hé cho người chưa trả tiền); đây là khối đọc/chia sẻ, có từ khoá. -->
+        <div id="lgMap"></div>
         <div class="lg-body" id="lgBody"></div>
         <!-- "Ai Sinh Cùng Ngày Với Bạn" — miễn phí, 0 token LLM. Hỏng mạng/API
              thì tự ẩn, không làm hỏng bản luận phía trên. -->
@@ -204,7 +211,7 @@ window.SHELL_INTRO={key:'chu-trinh-cuoc-doi'};</script>
 <script src="/tools-shared/cung-ngay-sinh.js?v=2"></script>
 <script src="/auth.js?v=2"></script>
 <script src="/tuvi-paywall.js?v=22"></script>
-<script src="/tools-shared/hook-charts.js?v=1"></script>
+<script src="/tools-shared/hook-charts.js?v=2"></script>
 <script src="/tools-shared/hook-facts.js?v=1"></script>
 <script src="/tools-shared/hook-layer.js?v=2"></script>
   <script src="/nav.js?v=25" data-icons-only></script>
@@ -285,6 +292,36 @@ function doLuan(){
 // `app/api/van-han-nam/route.ts` (readCachedLuanGiaiPhan) dùng để đọc lại
 // `laso_public.luan_giai` đã lưu ở đây, cho phần đại vận/tiểu vận của tool
 // "Vận Hạn 12 Tháng Tới". Lẫn lộn hai trục này là hỏng đúng cái cầu nối đó.
+// Bóc nhãn `[TỐT|TỪ KHOÁ]` model gắn ở đầu câu phán quyết của MỘT phần. Chỉ
+// lấy nhãn ĐẦU TIÊN — mỗi phần nhiều đoạn, mỗi đoạn một nhãn, nhưng câu phán
+// quyết của cả đại vận là câu mở đầu. Không khớp (bản cache cũ chưa có từ
+// khoá, hoặc model quên) thì trả null ⇒ cột giữ trạng thái "chưa luận".
+var _RX_HOOK=/\[(TỐT|CẢNH BÁO|TRUNG TÍNH)(?:\|([^\]]{0,40}))?\]/;
+function _hookCuaEp(ep){
+  var m=_RX_HOOK.exec(_luanGiaiStore[ep]||'');
+  if(!m||!m[2]||!m[2].trim())return null;
+  return {muc:m[1],kw:m[2].trim()};
+}
+// 9 đại vận: ĐV thứ i (1-based) nằm ở ENGINE PHAN 14+i ⇒ ep = 15..23. Cắt
+// .slice(0,9) đúng như mọi chart khác của bản luận: daiVans có 12 phần tử
+// nhưng 3 cái cuối (93-122t) không được chấm điểm, vẽ ra chỉ làm nhiễu.
+function _renderArc(){
+  var host=document.getElementById('lgMap');
+  if(!host||!window.HookCharts||!HookCharts.stageTimeline||!_astrolabe)return;
+  var dvs=(_astrolabe.daiVans||[]).slice(0,9);
+  if(!dvs.length)return;
+  var cur=_astrolabe.daiVanHienTai;
+  var segs=dvs.map(function(d,i){
+    var h=_hookCuaEp(15+i);
+    return {tuoiStart:d.tuoiStart,tuoiEnd:d.tuoiEnd,
+      tong:d.scoring?d.scoring.tong:0, flag:d.scoring?d.scoring.flag:'',
+      kw:h?h.kw:'', muc:h?h.muc:null,
+      current:!!(cur&&d.cungIdx===cur.cungIdx&&d.tuoiStart===cur.tuoiStart)};
+  });
+  host.innerHTML=HookCharts.stageTimeline({segments:segs,
+    ariaLabel:'Chín chặng đại vận, cột cao theo điểm engine, mỗi chặng một từ khoá'});
+}
+
 function renderLuan(ls,fd,namxem){
   var dvHT=ls.daiVanHienTai, dvTong=dvHT&&dvHT.scoring?dvHT.scoring.tong:null;
   // Chiều đại vận (Thuận/Nghịch) — CÙNG công thức `thuận` mà chính engine dùng
@@ -312,6 +349,7 @@ function renderLuan(ls,fd,namxem){
     S.push(buildPhanSection(p,ep,LABELS[ep]||('Phần '+ep),ls,p>1&&!loggedIn));
   }
   document.getElementById('lgBody').innerHTML=S.join('');
+  _renderArc();
   // Khối pre-gen mang span [data-icon-emoji]/[data-icon]; nav.js ở chế độ
   // chỉ-icon chỉ quét lúc nạp trang, nên phần chèn sau đó phải gọi lại.
   if(window.mountIcons) window.mountIcons(document.getElementById('lgBody'));
@@ -811,6 +849,7 @@ async function _runPhanLuanGiai(ep){
       return false;
     }
     _luanGiaiStore[ep]=data.luanGiai;
+    _renderArc();   // cột của đại vận vừa xong đổi sang có mức + từ khoá
     doneWait();
     if(box)box.innerHTML=renderMarkdown(data.luanGiai);
     return true;

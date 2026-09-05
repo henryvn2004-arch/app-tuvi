@@ -249,6 +249,15 @@ window.HookCharts = (function () {
   // nhau ΔE 4,9 với người mù màu deutan (đo bằng validator), nên nếu mức chỉ
   // được mã hoá bằng MÀU thì hai mức đó là một với họ.
   function mucMark(muc, cx, cy, r) {
+    // `muc` rỗng = CHƯA LUẬN (ô đã có mặt trên lưới nhưng phần chữ của tháng
+    // đó chưa sinh xong). Vẽ vòng rỗng mờ, KHÔNG rơi về "trung tính" — trung
+    // tính là một phán quyết, còn đây là chưa có phán quyết nào. Nhờ trạng
+    // thái này mà lưới dựng được ngay lần vẽ ĐẦU với đủ số ô, rồi chỉ thay
+    // ruột từng ô — khung không đổi kích thước nên không sinh CLS.
+    if (!muc) {
+      return '<circle cx="' + cx.toFixed(1) + '" cy="' + cy.toFixed(1) + '" r="' + (r * 0.62).toFixed(1) +
+        '" fill="none" stroke="var(--line-2)" stroke-width="1.4"></circle>';
+    }
     var col = mucColor(muc);
     if (muc === 'TỐT') {
       // tia — hướng lên, đọc là "mở ra"
