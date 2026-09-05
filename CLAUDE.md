@@ -270,6 +270,7 @@ Mỗi luật dưới đây sinh ra từ một lần cắn thật. Cột cuối l
 | `tsc` emit `.js` lẫn vào `lib/` | Khai `rootDir` + `outDir` ngoài repo, `git status` lại |
 | TS5112 · TS6064 | tsconfig riêng dùng `include`, không nêu file trên dòng lệnh |
 | `fs.globSync` chỉ có từ Node 22, **CI chạy Node 20** | Duyệt cây bằng tay |
+| Không có `node_modules` thì `npx <tool>` kéo bản **bất kỳ** từ cache, KHÔNG phải bản của repo — đã làm lint đỏ vì prettier 3.8.1 vs 3.9.6 ghim trong lock | Nêu bản trong lockfile: `npx prettier@3.9.6` |
 | `fetch` của Node KHÔNG tự đi qua proxy, `curl` thì có | `NODE_USE_ENV_PROXY=1` (đọc lúc KHỞI ĐỘNG) |
 | `403 CONNECT` = proxy container chặn, **chưa chạm server** | Đừng đọc thành "tài khoản bị khoá" |
 
