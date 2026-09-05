@@ -28,9 +28,9 @@ phải ở v1** — v2 bỏ đường dẫn nội bộ `lib/pdf-parse.js` nên
 - Playwright + Lighthouse SKIP trên Dependabot PR (`if: github.actor != 'dependabot[bot]'`) — Dependabot không có quyền dùng secrets
 
 ## Vercel preview cho Lighthouse
-Hiện tại Lighthouse chạy trên prod URLs hardcoded. Để chạy trên Vercel preview của PR:
-- Trigger workflow_dispatch + truyền `lhci_url_override=https://app-tuvi-git-<branch>.vercel.app/`
-- Hoặc edit `lighthouserc.json` collect.url thành preview URL trước khi merge
+Config ghim URL prod. Đo preview: workflow_dispatch + `lhci_url_override=https://app-tuvi-git-<branch>.vercel.app/`.
+⚠️ ĐỪNG sửa `collect.url` trong config rồi merge — đó đúng là cái bẫy "đo nhầm bản
+đang chạy" đã phải vá 4 lần (smoke #463, E2E #466, Lighthouse desktop, mobile #691).
 
 ## Smoke test issue dedupe + label
 `smoke-prod.yml` cần label `prod-down` (đã tạo). Chỉ tạo issue mới nếu chưa có open issue cùng label — lần fail sau comment vào issue cũ.

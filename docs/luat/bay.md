@@ -32,6 +32,7 @@
 
 | Bẫy | Cách tránh |
 |---|---|
+| `vercel.json` bị kiểm theo **schema nghiêm ngặt** (khoá lạ = hỏng deploy) và CỐ Ý nằm ngoài Prettier | Không chèn khoá `"// ghi chú"`; sửa bằng văn bản tại chỗ, đừng `JSON.stringify` lại |
 | `pkill -f 'xyz'` **tự giết chính nó** (exit 144) — đã vấp ≥5 lần | `pkill -f 'xy[z]'` hoặc bắt PID rồi `kill "$PID"` |
 | Bẫy **cwd**: `cd tuvi-engine && …` giữ lại cwd cho lệnh sau — đã vấp ≥7 lần | Về gốc repo NGAY sau lệnh đó |
 | `$?` sau **pipe** là mã thoát của lệnh CUỐI (`tail`), không phải lệnh mình quan tâm | Hứng ra biến trước, đừng đo sau `\| tail` |
@@ -94,6 +95,14 @@
   chuỗi nằm ngoài repo thì sửa chuỗi đó là khung chờ trôi, im lặng. Để số dòng
   cố định, nhắm DƯ chứ không THIẾU (khối co lại thì nội dung dồn LÊN, xa ngón
   tay). Bỏ `display:none` thì MỌI đường "không dựng được" phải ẩn tay.
+- **`layout-shifts` CÓ ghi nguyên nhân — đọc `subItems[].cause`, đừng suy.** Tôi đã
+  quy oan một cú 0,06 cho web font rồi suy sang cả 49 trang; đọc cause thì trang
+  cùng cấu trúc chỉ có 0,0001 là do font. Cùng một lỗi font cho điểm khác nhau tuỳ
+  CHIỀU CAO trang lúc nó nổ (`boundingRect.height`) — 0,0001 trên trang ngắn,
+  0,2364 khi bản mẫu tự mở làm trang cao 12.480px.
+- **Noto Serif TỰ LƯU TRỮ, `font-display: optional`** (`public/fonts/noto-serif.css`) —
+  `swap` cam kết sẽ swap, tức cam kết sẽ nhảy. Font BIẾN THIÊN ⇒ `font-weight: 100 900`.
+  **Tên file là hợp đồng cache** (`vercel.json` khai `immutable`): đổi font thì đổi tên.
 - **CLS chỉ kết luận được bằng prod↔prod.** Preview ĐO HỤT: 5 vòng đều báo
   `/topup.html` = 0,016, số thật trên prod cùng bản là **0,160** (cú `#statusSlot`
   rơi ngoài cửa sổ đo). Ngược lại Perf/LCP/TBT thì đừng so prod-cũ ↔ preview-mới:

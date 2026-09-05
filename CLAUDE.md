@@ -311,10 +311,8 @@ Mỗi luật dưới đây sinh ra từ một lần cắn thật. Cột cuối l
 - **Messenger** im lặng từ 27/06 — kiểm Page đã publish + có username chưa.
 - **`brand_voice_docs` trên DB vẫn là bản CŨ** — chạy `node scripts/load-brand-voice.mjs`
   ở máy có `OPENAI_API_KEY` (container phiên không có).
-- **`ANTHROPIC_API_KEY` không đọc được trong container — đã đo 3 lần liên tiếp**
-  (trong khi `GEMINI_API_KEY`/`OPENAI_API_KEY` đọc được). Giả thuyết mạnh nhất: đặt
-  ở env Vercel chứ không phải env của Claude Code. ⇒ **bước đo A/B `effort` vẫn bị
-  chặn; đừng đoán mù `effort` rồi code theo phỏng đoán.**
+- **`ANTHROPIC_API_KEY` không đọc được trong container** (`GEMINI_API_KEY`/
+  `OPENAI_API_KEY` thì đọc được) — mọi phép đo phải gọi Anthropic đều chạy ở nơi khác.
 
 ### Nợ kỹ thuật đã ghi nhận
 - `trimLaSo` / `buildPrompt` (bản không cache) là **code chết** — 0 route gọi.

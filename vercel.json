@@ -33,5 +33,11 @@
     { "path": "/api/cron/backlink-check",    "schedule": "45 2 * * *" },
     { "path": "/api/cron/backlink-broken-links", "schedule": "45 1 * * 4" },
     { "path": "/api/cron/growth-accounts", "schedule": "15 1 * * 6" }
+  ],
+  "headers": [
+    {
+      "source": "/fonts/(.*)",
+      "headers": [{ "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }]
+    }
   ]
 }
