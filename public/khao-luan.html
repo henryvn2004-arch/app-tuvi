@@ -82,9 +82,15 @@ body { font-family: 'Be Vietnam Pro', sans-serif; background: var(--bg); color: 
 </style>
 <script src="/share.js"></script>
 <script src="/auth.js?v=2"></script>
-<script src="/nav.js?v=25"></script>
+<!-- `defer` KHÔNG phải tuỳ chọn ở đây: thẻ này nằm trong <head>, mà nav.js
+     chạy ngay ở top level và gọi `document.body.appendChild` (nav.js:379).
+     Không defer thì `document.body` còn null ⇒ nav.js ném TypeError ⇒ trang
+     KHÔNG có thanh nav và `conversion.js` không bao giờ được nạp. 5 trang
+     tools/* khác cũng để nav.js trong <head> nhưng đều có `defer`. -->
+<script src="/nav.js?v=25" defer></script>
 </head>
 <body>
+<div id="nav-ph" style="height:60px;background:#061A2E"></div>
 
 <div class="breadcrumb" id="breadcrumb">
   <a href="/">Trang Chủ</a>

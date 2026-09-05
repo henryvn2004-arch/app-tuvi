@@ -88,6 +88,13 @@ jobs:
       - name: Box giới thiệu tĩnh — SHELL_INTRO chỉ còn key
         run: npm run check:introcard
 
+      # `nav.js` chèn <nav class="topnav"> cao 60px vào ĐẦU <body> sau lần vẽ
+      # đầu. Không giữ chỗ thì mọi thứ dưới tụt 60px = CLS 0,0711 — đúng con số
+      # mà /, /luan-giai.html, /tu-binh.html mang bất động qua 6 lượt đo prod.
+      # Có thẻ #nav-ph thôi CHƯA đủ: thẻ rỗng cao 0px vẫn nhảy đủ.
+      - name: Trang có thanh nav phải giữ chỗ 60px
+        run: npm run check:navph
+
       # Chặn gõ nhầm tên hàm trên `window.Auth`. Gõ nhầm KHÔNG ném lỗi — nó trả
       # undefined và hỏng IM LẶNG. Đã trả giá: `app-gio-sinh` gọi
       # `Auth.getToken()` (không tồn tại; API thật là `getSession()`) nên header
