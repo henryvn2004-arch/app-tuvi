@@ -1496,7 +1496,7 @@ select.form-input { cursor: pointer; }
           .replace(/^#\s+(.+)$/, '<h2>$1</h2>');
         if (h.startsWith('<h')) { flushPending(); out += h; continue; }
         if (!line) continue;
-        const m = /^\[(TỐT|CẢNH BÁO|TRUNG TÍNH)\]\s*\*\*(.+?)\*\*([\s\S]*)$/.exec(line);
+        const m = /^\[(TỐT|CẢNH BÁO|TRUNG TÍNH)(?:\|[^\]]{0,40})?\]\s*\*\*(.+?)\*\*([\s\S]*)$/.exec(line);
         if (m) {
           flushPending();
           const cls = HOOK_TAG_CLASS[m[1]] || 'fb-trungtinh';

@@ -696,7 +696,7 @@ function renderMarkdown(text){
     var h=line.replace(/^## (.+)$/,'<h3>$1</h3>').replace(/^### (.+)$/,'<h3>$1</h3>');
     if(h.indexOf('<h')===0){ flushPending(); out+=h; return; }
     if(!line.trim())return;
-    var m=/^\[(TỐT|CẢNH BÁO|TRUNG TÍNH)\]\s*\*\*(.+?)\*\*([\s\S]*)$/.exec(line.trim());
+    var m=/^\[(TỐT|CẢNH BÁO|TRUNG TÍNH)(?:\|[^\]]{0,40})?\]\s*\*\*(.+?)\*\*([\s\S]*)$/.exec(line.trim());
     if(m){
       flushPending();
       var cls=HOOK_TAG_CLASS[m[1]]||'fb-trungtinh';

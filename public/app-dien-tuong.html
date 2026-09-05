@@ -601,7 +601,7 @@ function renderMarkdown(md) {
     .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
     // PHẢI chạy TRƯỚC bước bọc <p> chung (dưới) và trước bước đổi **bold**
     // chung, vì nó tự xử lý cả nhãn LẪN in đậm của riêng câu hook.
-    .replace(/^\[(TỐT|CẢNH BÁO|TRUNG TÍNH)\]\s*\*\*(.+?)\*\*(.*)$/gm,function(_,tag,hook,rest){
+    .replace(/^\[(TỐT|CẢNH BÁO|TRUNG TÍNH)(?:\|[^\]]{0,40})?\]\s*\*\*(.+?)\*\*(.*)$/gm,function(_,tag,hook,rest){
       var cls=HOOK_TAG_CLASS[tag]||'fb-trungtinh';
       return '<div class="fb-card '+cls+'">"'+hook.trim()+'"</div>'+rest;
     })

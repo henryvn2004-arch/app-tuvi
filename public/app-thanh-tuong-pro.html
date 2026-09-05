@@ -1182,7 +1182,7 @@ function renderMarkdown(md){
     .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
     // PHẢI chạy TRƯỚC bước tách block (dưới) — mỗi thẻ card đã tự thành một
     // block riêng (kèm phần đuôi câu, nếu có), khỏi bị bọc thêm <p>.
-    .replace(/^\[(TỐT|CẢNH BÁO|TRUNG TÍNH)\]\s*\*\*(.+?)\*\*(.*)$/gm,function(_,tag,hook,rest){
+    .replace(/^\[(TỐT|CẢNH BÁO|TRUNG TÍNH)(?:\|[^\]]{0,40})?\]\s*\*\*(.+?)\*\*(.*)$/gm,function(_,tag,hook,rest){
       var cls=HOOK_TAG_CLASS[tag]||'fb-trungtinh';
       return '<div class="fb-card '+cls+'">"'+hook.trim()+'"</div>'+rest;
     })

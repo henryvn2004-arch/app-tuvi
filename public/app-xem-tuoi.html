@@ -440,7 +440,7 @@ function renderLuanGiaiParas(text){
   var out='', pendingLead='';
   function flushPending(){ if(pendingLead){ out+='<p>'+pendingLead+'</p>'; pendingLead=''; } }
   String(text||'').split('\n\n').filter(Boolean).forEach(function(p){
-    var m=/^\[(TỐT|CẢNH BÁO|TRUNG TÍNH)\]\s*\*\*(.+?)\*\*([\s\S]*)$/.exec(p.trim());
+    var m=/^\[(TỐT|CẢNH BÁO|TRUNG TÍNH)(?:\|[^\]]{0,40})?\]\s*\*\*(.+?)\*\*([\s\S]*)$/.exec(p.trim());
     if(m){
       flushPending();
       var cls=HOOK_TAG_CLASS[m[1]]||'fb-trungtinh';

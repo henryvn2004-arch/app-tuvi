@@ -485,7 +485,7 @@ function mdBoldParas(text) {
   var out = '', pendingLead = '';
   function flushPending() { if (pendingLead) { out += '<p style="margin:0 0 12px">' + pendingLead + '</p>'; pendingLead = ''; } }
   String(text || '').split(/\n{2,}/).forEach(function (p) {
-    var m = /^\[(TỐT|CẢNH BÁO|TRUNG TÍNH)\]\s*\*\*(.+?)\*\*([\s\S]*)$/.exec(p.trim());
+    var m = /^\[(TỐT|CẢNH BÁO|TRUNG TÍNH)(?:\|[^\]]{0,40})?\]\s*\*\*(.+?)\*\*([\s\S]*)$/.exec(p.trim());
     if (m) {
       flushPending();
       var cls = HOOK_TAG_CLASS[m[1]] || 'fb-trungtinh';

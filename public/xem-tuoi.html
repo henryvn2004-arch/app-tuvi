@@ -1425,7 +1425,7 @@ function renderLuanGiaiParas(text) {
   let out = '', pendingLead = '';
   const flushPending = () => { if (pendingLead) { out += `<p style="margin-bottom:12px">${pendingLead}</p>`; pendingLead = ''; } };
   String(text || '').split('\n\n').filter(Boolean).forEach((p) => {
-    const m = /^\[(TỐT|CẢNH BÁO|TRUNG TÍNH)\]\s*\*\*(.+?)\*\*([\s\S]*)$/.exec(p.trim());
+    const m = /^\[(TỐT|CẢNH BÁO|TRUNG TÍNH)(?:\|[^\]]{0,40})?\]\s*\*\*(.+?)\*\*([\s\S]*)$/.exec(p.trim());
     if (m) {
       flushPending();
       const cls = HOOK_TAG_CLASS[m[1]] || 'fb-trungtinh';
