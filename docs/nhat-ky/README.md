@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-189 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+190 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 **Bốn file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
 ```bash
@@ -11,7 +11,7 @@ sed -n '120,190p' docs/nhat-ky/2026-08.md    # đọc đúng đoạn, đừng ca
 
 | file | số mục | dung lượng |
 |---|---:|---:|
-| `2026-09.md` | 25 | 132,495 B |
+| `2026-09.md` | 26 | 136,370 B |
 | `2026-08.md` | 147 | 1,018,512 B |
 | `2026-07.md` | 12 | 154,531 B |
 | `track-cu.md` | 5 | 89,354 B |
@@ -25,6 +25,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
+| 1 | 2026-09 | `2026-09.md` | 📐 Mobile vòng 5: nút "✦ Hỏi" khai sai chỗ — 31px dịch trên MỌI trang shell |
 | 1 | 2026-09 | `2026-09.md` | 🔤 Mobile vòng 4: tự lưu trữ Noto Serif + `font-display: optional` |
 | 1 | 2026-09 | `2026-09.md` | 📱 Mobile vòng 3: `.intro-card` tĩnh cho 48 trang còn lại — máy đo, máy sửa |
 | 1 | 2026-09 | `2026-09.md` | 📱 Mobile vòng 2: `#statusSlot` + `.intro-card` — và bằng chứng preview nói dối về CLS |

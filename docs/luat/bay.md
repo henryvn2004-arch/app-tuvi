@@ -103,6 +103,11 @@
 - **Noto Serif TỰ LƯU TRỮ, `font-display: optional`** (`public/fonts/noto-serif.css`) —
   `swap` cam kết sẽ swap, tức cam kết sẽ nhảy. Font BIẾN THIÊN ⇒ `font-weight: 100 900`.
   **Tên file là hợp đồng cache** (`vercel.json` khai `immutable`): đổi font thì đổi tên.
+- **Khối bị JS DI CHUYỂN đi nơi khác cũng là cú nhảy, y như khối chèn muộn.** Nút
+  "✦ Hỏi" khai trong `.ws-top` rồi `moveAskToFab()` rút sang FAB ⇒ `.ws-top` co
+  104,6→73,6px, mọi thứ dưới dịch 31px (0,0336 trên MỌI trang shell). Vá bằng CSS
+  giấu nó đúng lúc nó còn nằm sai chỗ; `layout-shifts` KHÔNG ghi cause cho loại này
+  — dựng lại bằng cách CHẶN `shell.js` để xem trạng thái "lần vẽ đầu".
 - **CLS chỉ kết luận được bằng prod↔prod.** Preview ĐO HỤT: 5 vòng đều báo
   `/topup.html` = 0,016, số thật trên prod cùng bản là **0,160** (cú `#statusSlot`
   rơi ngoài cửa sổ đo). Ngược lại Perf/LCP/TBT thì đừng so prod-cũ ↔ preview-mới:

@@ -108,6 +108,17 @@ body{font-family:var(--sans);background:var(--paper-2);color:var(--text);font-si
 .ws-title b{font-family:var(--serif);font-size:17px;font-weight:600;display:block}
 .ws-title span{font-size:12px;color:var(--text-lt)}
 .ws-actions{margin-left:auto;display:flex;gap:8px}
+/* Nút "✦ Hỏi" (mobile-only) được khai TRONG `.ws-top` ở cả 49 trang shell, rồi
+   `moveAskToFab()` của shell.js rút nó sang cụm FAB nổi. Cú rút đó xảy ra SAU lần
+   vẽ đầu ⇒ `.ws-top` co từ 104,6px xuống 73,6px và MỌI thứ dưới nó dịch lên 31px.
+   Đo trên prod: 0,0336 trên `.ws-body` + 0,0268 trên `.frow` — cú CLS lớn nhất còn
+   lại của lớp trang shell, và nó lặp trên mọi trang.
+   Giấu nó đúng lúc nó còn nằm SAI CHỖ: chọn theo `onclick` — cùng hợp đồng mà
+   `askBtnEl()` đang dùng để tìm nút, không đẻ thêm hợp đồng thứ hai. Rút sang
+   `#wsFab` xong thì bộ chọn hết khớp, nút hiện lại.
+   ⚠️ KHÔNG mất gì khi shell.js hỏng: `onclick` của nút là `Shell.openRail()`, tức
+   nó vốn đã vô dụng nếu shell.js chưa nạp. */
+.ws-top .ws-actions button[onclick*="openRail"]{display:none}
 .btn{font-size:12.5px;border:1px solid var(--line-2);background:var(--white);color:var(--text-mid);border-radius:8px;padding:7px 12px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-family:inherit}
 .btn:hover{border-color:var(--gold-soft);color:var(--text)}
 .btn.pri{background:var(--red);border-color:var(--red);color:#fff}
