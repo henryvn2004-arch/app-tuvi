@@ -188,7 +188,27 @@
       </div>
     </div>
     <div class="ws-body">
-      <div id="introHost"></div>
+      <!-- Box giới thiệu dựng TĨNH (không để `Shell.introOnce` chèn bằng JS).
+           Đo trên prod: chèn muộn đẩy cả `.ws-body` xuống — CLS 0,198 — và
+           chính `.intro-d` là phần tử LCP, Render Delay 5,3 giây. `introOnce`
+           thấy `.intro-card` đã có thì chỉ điền `#introSrc`, không dựng lại.
+           Vì thế `SHELL_INTRO` bên dưới CHỈ khai `key`: chữ nằm đúng ở đây,
+           một bản duy nhất — thêm bản chép trong SHELL_INTRO là để nó trôi. -->
+      <div id="introHost"><div class="intro-card">
+        <div class="intro-body">
+          <img class="intro-avatar" src="/tool-avatars/laso.webp" alt="" onerror="this.remove()">
+          <div class="intro-text">
+            <div class="intro-t">Luận giải Tử Vi</div>
+            <div class="intro-d">Đọc trọn 13 phần lá số: tổng quan và luận riêng từng cung trong 12 cung, cách cục, điểm mạnh yếu. Bạn từng xem lướt lá số đâu đó mà chưa hiểu hết ý nghĩa. Dùng khi muốn một bản luận đầy đủ, không phải vài dòng qua loa.</div>
+            <!-- Dòng "Theo <cổ pháp>…" do `tool-sources.js` điền MUỘN (shell tự nạp
+                 file đó bất đồng bộ). Giữ chỗ đúng 2 dòng chữ 11,5px/1.6 = 36,8px;
+                 `margin-top:9px` đặt luôn ở đây để trùng với lề của khối được
+                 chèn vào (hai lề kề nhau gộp làm một, nên cao trước = cao sau).
+                 Đo: rỗng 45,78px · đã điền 45,78px. -->
+            <div id="introSrc" style="min-height:36.8px;margin-top:9px"></div>
+          </div>
+        </div>
+      </div></div>
       <div id="shellRecent"></div>
       <div class="samp-cta" id="sampCta" style="display:none">
         <span>Chưa muốn khai giờ sinh?</span>
@@ -235,7 +255,7 @@
 </div>
 
 <script>window.SHELL_ACTIVE='luan-giai';window.SHELL_HISTORY=true;
-window.SHELL_INTRO={key:'luan-giai',title:'Luận giải Tử Vi',desc:'Đọc trọn 13 phần lá số: tổng quan và luận riêng từng cung trong 12 cung, cách cục, điểm mạnh yếu. Bạn từng xem lướt lá số đâu đó mà chưa hiểu hết ý nghĩa. Dùng khi muốn một bản luận đầy đủ, không phải vài dòng qua loa.'};</script>
+window.SHELL_INTRO={key:'luan-giai'};</script>
 <script src="/tuvi-ansao-engine.js"></script>
 <script src="/laso-chart.js?v=3"></script>
 <script src="/luan-giai-core.js?v=3"></script>
