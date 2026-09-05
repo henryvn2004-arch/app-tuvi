@@ -108,6 +108,13 @@
   104,6→73,6px, mọi thứ dưới dịch 31px (0,0336 trên MỌI trang shell). Vá bằng CSS
   giấu nó đúng lúc nó còn nằm sai chỗ; `layout-shifts` KHÔNG ghi cause cho loại này
   — dựng lại bằng cách CHẶN `shell.js` để xem trạng thái "lần vẽ đầu".
+- **Một con số CLS ĐỨNG YÊN qua nhiều lượt đo là dấu hiệu, không phải nền.** `/`,
+  `/luan-giai.html`, `/tu-binh.html` mang đúng 0,071 suốt 6 lượt: đó là thanh nav
+  60px do JS chèn vào đầu `<body>` sau lần vẽ đầu (60/844 = 0,0711). Và một cú chèn
+  muộn CÓ SẴN chỉ hiện ra khi thời điểm đổi — số đo nhảy mà 0 dòng code đổi, nên
+  trước khi đổ cho bản vá vừa merge thì phải A/B đúng dòng đó.
+- 🪤 **Mốc THỜI GIAN trong bản dựng lại cục bộ là ảo** — container chặn mạng ngoài
+  nên nhiều cú dồn về ~12,5s. Dùng nó để biết THỨ TỰ, đừng đọc thành "chậm 12 giây".
 - **CLS chỉ kết luận được bằng prod↔prod.** Preview ĐO HỤT: 5 vòng đều báo
   `/topup.html` = 0,016, số thật trên prod cùng bản là **0,160** (cú `#statusSlot`
   rơi ngoài cửa sổ đo). Ngược lại Perf/LCP/TBT thì đừng so prod-cũ ↔ preview-mới:
