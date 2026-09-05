@@ -80,7 +80,21 @@
       </div>
     </div>
     <div class="ws-body">
-      <div id="introHost"></div>
+      <!-- Box giới thiệu dựng TĨNH: chèn bằng JS thì nó ra đời SAU lần vẽ đầu,
+           đẩy cả `.ws-body` xuống VÀ tự làm phần tử LCP (đo trên prod: CLS 0,198,
+           Render Delay 5,3s). `Shell.introOnce` thấy `.intro-card` đã có thì chỉ
+           điền `#introSrc`. Vì thế `SHELL_INTRO` bên dưới CHỈ khai `key` — chữ nằm
+           đúng ở đây, một bản duy nhất, không có bản chép để trôi. -->
+      <div id="introHost"><div class="intro-card">
+        <div class="intro-body">
+          <img class="intro-avatar" src="/tool-avatars/chan-dung-tien-kiep.webp" alt="" onerror="this.remove()">
+          <div class="intro-text">
+            <div class="intro-t">Chân Dung Tiền Kiếp</div>
+            <div class="intro-d">Nhận một chân dung và câu chuyện một đời từ chính lá số bạn. Bạn từng tự hỏi kiếp trước mình là ai, sống ra sao. Dùng khi muốn một câu chuyện để đọc, không chỉ vài dòng luận.</div>
+            <div id="introSrc" style="min-height:73.6px;margin-top:9px"></div>
+          </div>
+        </div>
+      </div></div>
       <div id="shellRecent"></div>
       <div class="form-card" id="birthPanel">
         <h2>Nhập ngày sinh của bạn (dương lịch)</h2>
@@ -175,7 +189,7 @@
 </div>
 
 <script>window.SHELL_ACTIVE='chan-dung-tien-kiep';window.SHELL_HISTORY=true;
-window.SHELL_INTRO={key:'chan-dung-tien-kiep',title:'Chân Dung Tiền Kiếp',desc:'Nhận một chân dung và câu chuyện một đời từ chính lá số bạn. Bạn từng tự hỏi kiếp trước mình là ai, sống ra sao. Dùng khi muốn một câu chuyện để đọc, không chỉ vài dòng luận.'};</script>
+window.SHELL_INTRO={key:'chan-dung-tien-kiep'};</script>
 <script src="/laso-chart.js?v=3"></script>
 <script src="/tools-shared/vn-timezone.js?v=1"></script>
 <script src="/tuvi-form.js?v=2"></script>

@@ -92,7 +92,21 @@
       </div>
     </div>
     <div class="ws-body">
-      <div id="introHost"></div>
+      <!-- Box giới thiệu dựng TĨNH: chèn bằng JS thì nó ra đời SAU lần vẽ đầu,
+           đẩy cả `.ws-body` xuống VÀ tự làm phần tử LCP (đo trên prod: CLS 0,198,
+           Render Delay 5,3s). `Shell.introOnce` thấy `.intro-card` đã có thì chỉ
+           điền `#introSrc`. Vì thế `SHELL_INTRO` bên dưới CHỈ khai `key` — chữ nằm
+           đúng ở đây, một bản duy nhất, không có bản chép để trôi. -->
+      <div id="introHost"><div class="intro-card">
+        <div class="intro-body">
+          <img class="intro-avatar" src="/tool-avatars/trang-phuc-theo-ngay.webp" alt="" onerror="this.remove()">
+          <div class="intro-text">
+            <div class="intro-t">Trang Phục Theo Ngày</div>
+            <div class="intro-d">Gợi ý trang phục hôm nay hợp với vận của bạn. Bạn đứng trước tủ đồ mỗi sáng mà không biết nên mặc gì. Dùng khi có việc quan trọng và muốn chọn đồ có chủ đích.</div>
+            <div id="introSrc" style="min-height:36.8px;margin-top:9px"></div>
+          </div>
+        </div>
+      </div></div>
       <div id="shellRecent"></div>
 
       <div class="tn-card">
@@ -256,7 +270,7 @@
 </div>
 
 <script>window.SHELL_ACTIVE='trang-phuc-theo-ngay';window.SHELL_HISTORY=true;
-window.SHELL_INTRO={key:'trang-phuc-theo-ngay',title:'Trang Phục Theo Ngày',desc:'Gợi ý trang phục hôm nay hợp với vận của bạn. Bạn đứng trước tủ đồ mỗi sáng mà không biết nên mặc gì. Dùng khi có việc quan trọng và muốn chọn đồ có chủ đích.'};</script>
+window.SHELL_INTRO={key:'trang-phuc-theo-ngay'};</script>
 <script src="/auth.js?v=2"></script>
 <script src="/tuvi-paywall.js?v=22"></script>
 <script src="/tools-shared/hook-layer.js?v=2"></script>

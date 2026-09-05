@@ -144,7 +144,21 @@ table.tutru td.row-label{font-size:10.5px;color:#9a8a6a;text-transform:uppercase
       </div>
     </div>
     <div class="ws-body">
-      <div id="introHost"></div>
+      <!-- Box giới thiệu dựng TĨNH: chèn bằng JS thì nó ra đời SAU lần vẽ đầu,
+           đẩy cả `.ws-body` xuống VÀ tự làm phần tử LCP (đo trên prod: CLS 0,198,
+           Render Delay 5,3s). `Shell.introOnce` thấy `.intro-card` đã có thì chỉ
+           điền `#introSrc`. Vì thế `SHELL_INTRO` bên dưới CHỈ khai `key` — chữ nằm
+           đúng ở đây, một bản duy nhất, không có bản chép để trôi. -->
+      <div id="introHost"><div class="intro-card">
+        <div class="intro-body">
+          <img class="intro-avatar" src="/tool-avatars/tu-binh.webp" alt="" onerror="this.remove()">
+          <div class="intro-text">
+            <div class="intro-t">Lá số Bát Tự (Tứ Trụ)</div>
+            <div class="intro-d">Lập bát tự, đọc Nhật Can, Dụng Thần, Cách Cục, Đại Vận của bạn. Bạn nghe mệnh yếu cần bổ mà chưa rõ yếu ở đâu, bổ gì. Dùng khi muốn xem theo trường phái Tứ Trụ, khác cách của Tử Vi.</div>
+            <div id="introSrc" style="min-height:55.2px;margin-top:9px"></div>
+          </div>
+        </div>
+      </div></div>
       <div id="shellRecent"></div>
       <div class="form-card" id="birthPanel">
         <h2>Nhập thông tin ngày sinh (dương lịch)</h2>
@@ -179,7 +193,7 @@ table.tutru td.row-label{font-size:10.5px;color:#9a8a6a;text-transform:uppercase
 </div>
 
 <script>window.SHELL_ACTIVE='bat-tu';window.SHELL_HISTORY=true;
-window.SHELL_INTRO={key:'bat-tu',title:'Lá số Bát Tự (Tứ Trụ)',desc:'Lập bát tự, đọc Nhật Can, Dụng Thần, Cách Cục, Đại Vận của bạn. Bạn nghe mệnh yếu cần bổ mà chưa rõ yếu ở đâu, bổ gì. Dùng khi muốn xem theo trường phái Tứ Trụ, khác cách của Tử Vi.'};</script>
+window.SHELL_INTRO={key:'bat-tu'};</script>
 <script src="/laso-chart.js?v=3"></script>
 <script src="/tubinh-ansao-engine.js?v=5"></script>
 <script src="/tubinh-domain-scores.js?v=2"></script>

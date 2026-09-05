@@ -74,7 +74,21 @@
       </div>
     </div>
     <div class="ws-body">
-      <div id="introHost"></div>
+      <!-- Box giới thiệu dựng TĨNH: chèn bằng JS thì nó ra đời SAU lần vẽ đầu,
+           đẩy cả `.ws-body` xuống VÀ tự làm phần tử LCP (đo trên prod: CLS 0,198,
+           Render Delay 5,3s). `Shell.introOnce` thấy `.intro-card` đã có thì chỉ
+           điền `#introSrc`. Vì thế `SHELL_INTRO` bên dưới CHỈ khai `key` — chữ nằm
+           đúng ở đây, một bản duy nhất, không có bản chép để trôi. -->
+      <div id="introHost"><div class="intro-card">
+        <div class="intro-body">
+          <img class="intro-avatar" src="/tool-avatars/ky-mon.webp" alt="" onerror="this.remove()">
+          <div class="intro-text">
+            <div class="intro-t">Kỳ Môn Độn Giáp</div>
+            <div class="intro-d">Dựng bàn 9 cung theo đúng giờ hiện tại, chỉ hướng nên đi. Bạn sắp ra ngoài gặp việc quan trọng, chưa biết chọn hướng nào. Dùng khi cần biết hôm nay giờ nào tốt, đi hướng nào lợi.</div>
+            <div id="introSrc" style="min-height:55.2px;margin-top:9px"></div>
+          </div>
+        </div>
+      </div></div>
       <div id="shellRecent"></div>
       <div class="form-card" id="birthPanel">
         <h2>Lập bàn cho một thời điểm</h2>
@@ -110,7 +124,7 @@
 </div>
 
 <script>window.SHELL_ACTIVE='ky-mon';window.SHELL_HISTORY=true;
-window.SHELL_INTRO={key:'ky-mon',title:'Kỳ Môn Độn Giáp',desc:'Dựng bàn 9 cung theo đúng giờ hiện tại, chỉ hướng nên đi. Bạn sắp ra ngoài gặp việc quan trọng, chưa biết chọn hướng nào. Dùng khi cần biết hôm nay giờ nào tốt, đi hướng nào lợi.'};</script>
+window.SHELL_INTRO={key:'ky-mon'};</script>
 <script src="/tools-shared/ky-mon.js?v=1"></script>
 <script src="/poster.js?v=5"></script>
 <script src="/auth.js?v=2"></script>

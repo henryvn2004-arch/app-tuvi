@@ -77,7 +77,21 @@
       </div>
     </div>
     <div class="ws-body">
-      <div id="introHost"></div>
+      <!-- Box giới thiệu dựng TĨNH: chèn bằng JS thì nó ra đời SAU lần vẽ đầu,
+           đẩy cả `.ws-body` xuống VÀ tự làm phần tử LCP (đo trên prod: CLS 0,198,
+           Render Delay 5,3s). `Shell.introOnce` thấy `.intro-card` đã có thì chỉ
+           điền `#introSrc`. Vì thế `SHELL_INTRO` bên dưới CHỈ khai `key` — chữ nằm
+           đúng ở đây, một bản duy nhất, không có bản chép để trôi. -->
+      <div id="introHost"><div class="intro-card">
+        <div class="intro-body">
+          <img class="intro-avatar" src="/tool-avatars/xem-tuoi-sinh-con.webp" alt="" onerror="this.remove()">
+          <div class="intro-text">
+            <div class="intro-t">Xem tuổi sinh con</div>
+            <div class="intro-d">Tra năm sinh con hợp địa chi của cả bố và mẹ. Bạn đang cân nhắc năm nào sinh thì thuận cho cả nhà. Dùng khi đang lên kế hoạch có con và muốn tham khảo thêm.</div>
+            <div id="introSrc" style="min-height:36.8px;margin-top:9px"></div>
+          </div>
+        </div>
+      </div></div>
       <div id="shellRecent"></div>
       <div class="form-card" id="birthPanel">
         <h2>Năm sinh của bố và mẹ</h2>
@@ -116,7 +130,7 @@
 </div>
 
 <script>window.SHELL_ACTIVE='sinh-con';window.SHELL_HISTORY=true;
-window.SHELL_INTRO={key:'sinh-con',title:'Xem tuổi sinh con',desc:'Tra năm sinh con hợp địa chi của cả bố và mẹ. Bạn đang cân nhắc năm nào sinh thì thuận cho cả nhà. Dùng khi đang lên kế hoạch có con và muốn tham khảo thêm.'};</script>
+window.SHELL_INTRO={key:'sinh-con'};</script>
 <script src="/tools-shared/xem-tuoi-sinh-con.js?v=1"></script>
 <script src="/auth.js?v=2"></script>
   <script src="/nav.js?v=25" data-icons-only></script>

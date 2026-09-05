@@ -80,6 +80,14 @@ jobs:
       - name: Trang shell nạp đủ khung khởi động
         run: npm run check:shellboot
 
+      # Box giới thiệu `.intro-card` nay dựng TĨNH trong HTML (chèn bằng JS thì
+      # nó vừa đẩy cả `.ws-body` — CLS 0,198 — vừa TỰ LÀM phần tử LCP với Render
+      # Delay 5,3s). `introOnce()` thấy box đã có thì không dựng lại, nên khai
+      # LẠI title/desc trong `SHELL_INTRO` là tạo một bản chép CHẾT: sửa nó
+      # không có tác dụng gì và không có gì báo.
+      - name: Box giới thiệu tĩnh — SHELL_INTRO chỉ còn key
+        run: npm run check:introcard
+
       # Chặn gõ nhầm tên hàm trên `window.Auth`. Gõ nhầm KHÔNG ném lỗi — nó trả
       # undefined và hỏng IM LẶNG. Đã trả giá: `app-gio-sinh` gọi
       # `Auth.getToken()` (không tồn tại; API thật là `getSession()`) nên header

@@ -112,7 +112,21 @@
       </div>
     </div>
     <div class="ws-body">
-      <div id="introHost"></div>
+      <!-- Box giới thiệu dựng TĨNH: chèn bằng JS thì nó ra đời SAU lần vẽ đầu,
+           đẩy cả `.ws-body` xuống VÀ tự làm phần tử LCP (đo trên prod: CLS 0,198,
+           Render Delay 5,3s). `Shell.introOnce` thấy `.intro-card` đã có thì chỉ
+           điền `#introSrc`. Vì thế `SHELL_INTRO` bên dưới CHỈ khai `key` — chữ nằm
+           đúng ở đây, một bản duy nhất, không có bản chép để trôi. -->
+      <div id="introHost"><div class="intro-card">
+        <div class="intro-body">
+          <img class="intro-avatar" src="/tool-avatars/van-han-nam.webp" alt="" onerror="this.remove()">
+          <div class="intro-text">
+            <div class="intro-t">Vận Hạn 12 Tháng Tới</div>
+            <div class="intro-d">Xem đúng 12 tháng tới: cung hạn, sao, cách cục của từng tháng. Bạn muốn biết trước tháng nào nên cẩn thận, tháng nào nên tiến. Dùng khi cần một lịch vận hạn cụ thể cho năm sắp tới.</div>
+            <div id="introSrc"></div>
+          </div>
+        </div>
+      </div></div>
       <div id="shellRecent"></div>
       <div class="form-card" id="birthPanel">
         <h2>Nhập ngày sinh để xem vận hạn 12 tháng tới</h2>
@@ -148,7 +162,7 @@
 </div>
 
 <script>window.SHELL_ACTIVE='van-han-nam';window.SHELL_HISTORY=true;
-window.SHELL_INTRO={key:'van-han-nam',title:'Vận Hạn 12 Tháng Tới',desc:'Xem đúng 12 tháng tới: cung hạn, sao, cách cục của từng tháng. Bạn muốn biết trước tháng nào nên cẩn thận, tháng nào nên tiến. Dùng khi cần một lịch vận hạn cụ thể cho năm sắp tới.'};</script>
+window.SHELL_INTRO={key:'van-han-nam'};</script>
 <script src="/tuvi-ansao-engine.js"></script>
 <script src="/laso-chart.js?v=3"></script>
 <script src="/luan-giai-core.js?v=3"></script>
