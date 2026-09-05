@@ -188,6 +188,9 @@
              KHÁC khối #hookHost phía trên: đó là teaser `lifeArc` (chỉ số + tuổi,
              hé cho người chưa trả tiền); đây là khối đọc/chia sẻ, có từ khoá. -->
         <div id="lgMap"></div>
+        <div class="lg-tai" id="lgTai" style="display:none">
+          <button class="btn" id="lgTaiBtn" onclick="taiAnhArc()">⬇ Tải ảnh chia sẻ (9:16)</button>
+        </div>
         <div class="lg-body" id="lgBody"></div>
         <!-- "Ai Sinh Cùng Ngày Với Bạn" — miễn phí, 0 token LLM. Hỏng mạng/API
              thì tự ẩn, không làm hỏng bản luận phía trên. -->
@@ -212,6 +215,7 @@ window.SHELL_INTRO={key:'chu-trinh-cuoc-doi'};</script>
 <script src="/auth.js?v=2"></script>
 <script src="/tuvi-paywall.js?v=22"></script>
 <script src="/tools-shared/hook-charts.js?v=2"></script>
+<script src="/poster.js?v=5"></script>
 <script src="/tools-shared/hook-facts.js?v=1"></script>
 <script src="/tools-shared/hook-layer.js?v=2"></script>
   <script src="/nav.js?v=25" data-icons-only></script>
@@ -320,6 +324,30 @@ function _renderArc(){
   });
   host.innerHTML=HookCharts.stageTimeline({segments:segs,
     ariaLabel:'Chín chặng đại vận, cột cao theo điểm engine, mỗi chặng một từ khoá'});
+  // Chỉ mời tải ảnh khi đã có ít nhất một chặng mang từ khoá — xem lý do ở
+  // app-van-han-nam.html (poster của khối toàn "chưa luận" là ảnh rỗng).
+  var tai=document.getElementById('lgTai');
+  if(tai) tai.style.display=segs.some(function(x){return x.muc;})?'':'none';
+}
+// Xuất PNG 9:16 — đưa THẲNG chuỗi <svg> đang hiện cho Poster (chế độ `svg`).
+function taiAnhArc(){
+  var host=document.getElementById('lgMap'), btn=document.getElementById('lgTaiBtn');
+  if(!host||!host.innerHTML||!window.Poster)return;
+  var old=btn.textContent; btn.disabled=true; btn.textContent='Đang dựng ảnh…';
+  var T=(Poster.THEME)||{};
+  var dv=_astrolabe&&_astrolabe.daiVanHienTai;
+  Poster.download({
+    svg:host.innerHTML,
+    title:'9 chặng đời',
+    subtitle:(_hoTen||'Lá số')+(dv?' · đang ở chặng '+dv.tuoiStart+'–'+dv.tuoiEnd+' tuổi':''),
+    quote:'Cột cao theo điểm đại vận engine chấm — không phải con số AI đặt ra.',
+    qrUrl:Poster.qrLink('chu-trinh-cuoc-doi','/app/chu-trinh-cuoc-doi'),
+    qrCaption:'Quét mã — xem chu trình của bạn',
+    fonts:['700 40px '+(T.SERIF||'serif'),'600 23px '+(T.SANS||'sans-serif')]
+  },'9-chang-doi-tuviminhbao.png')
+   .then(function(){ if(window.Track)Track.event('poster_download',{tool_id:'chu-trinh-cuoc-doi'}); })
+   .catch(function(){ alert('Chưa dựng được ảnh. Thử lại sau ít giây.'); })
+   .then(function(){ btn.disabled=false; btn.textContent=old; });
 }
 
 function renderLuan(ls,fd,namxem){

@@ -156,6 +156,9 @@
              xong. Khung SVG giữ nguyên tỉ lệ nên thay ruột ô KHÔNG đẩy layout
              — đó là lý do vẽ sớm chứ không chờ luận xong rồi mới chèn vào. -->
         <div id="vhMap"></div>
+        <div class="vh-tai" id="vhTai" style="display:none">
+          <button class="btn" id="vhTaiBtn" onclick="taiAnhMap()">⬇ Tải ảnh chia sẻ (9:16)</button>
+        </div>
         <div class="vh-body" id="vhBody"></div>
         <!-- "Ai Sinh Cùng Ngày Với Bạn" — miễn phí, 0 token LLM. Hỏng mạng/API
              thì tự ẩn, không làm hỏng khung vận hạn phía trên. -->
@@ -180,6 +183,7 @@ window.SHELL_INTRO={key:'van-han-nam'};</script>
 <script src="/auth.js?v=2"></script>
 <script src="/tuvi-paywall.js?v=22"></script>
 <script src="/tools-shared/hook-charts.js?v=2"></script>
+<script src="/poster.js?v=5"></script>
 <script src="/tools-shared/hook-facts.js?v=1"></script>
 <script src="/tools-shared/hook-layer.js?v=2"></script>
 <script src="/nav.js?v=25" data-icons-only></script>
@@ -660,6 +664,31 @@ function _renderMap(){
   });
   host.innerHTML=HookCharts.monthGrid({items:items,cols:4,
     ariaLabel:'Bản đồ '+items.length+' tháng âm tới, mỗi ô một từ khoá'});
+  // Nút tải ảnh chỉ hiện khi ĐÃ có ít nhất một ô mang từ khoá — poster của
+  // một lưới toàn ô "chưa luận" là tấm ảnh rỗng, chia sẻ ra chỉ hại thương hiệu.
+  var tai=document.getElementById('vhTai');
+  if(tai) tai.style.display=items.some(function(i){return i.muc;})?'':'none';
+}
+// Xuất PNG 9:16 — đưa THẲNG chuỗi <svg> lưới đang hiện cho Poster (chế độ
+// `svg`), không vẽ lại bằng canvas: một nguồn bố cục, hai đầu ra. 0đ, không
+// gọi model, không đụng cầu dao ảnh free.
+function taiAnhMap(){
+  var host=document.getElementById('vhMap'), btn=document.getElementById('vhTaiBtn');
+  if(!host||!host.innerHTML||!window.Poster)return;
+  var old=btn.textContent; btn.disabled=true; btn.textContent='Đang dựng ảnh…';
+  var T=(Poster.THEME)||{};
+  Poster.download({
+    svg:host.innerHTML,
+    title:'Vận hạn 12 tháng',
+    subtitle:(_hoTen||'Lá số')+' · '+_khung.tuNhan+' → '+_khung.denNhan+' ('+_khung.duongTu+' – '+_khung.duongDen+')',
+    quote:'Mỗi ô là một tháng ÂM LỊCH — quãng ngày dương ghi trong bản luận.',
+    qrUrl:Poster.qrLink('van-han-nam','/app/van-han-nam'),
+    qrCaption:'Quét mã — xem 12 tháng của bạn',
+    fonts:['700 40px '+(T.SERIF||'serif'),'600 23px '+(T.SANS||'sans-serif')]
+  },'van-han-12-thang-tuviminhbao.png')
+   .then(function(){ if(window.Track)Track.event('poster_download',{tool_id:'van-han-nam'}); })
+   .catch(function(){ alert('Chưa dựng được ảnh. Thử lại sau ít giây.'); })
+   .then(function(){ btn.disabled=false; btn.textContent=old; });
 }
 
 // Chạy MỘT phần — gọi từ trong bể (PhanPool) và trực tiếp từ nút "↻ Thử lại".

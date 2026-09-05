@@ -206,12 +206,14 @@ window.HookCharts = (function () {
       'style="width:100%;height:auto;max-width:' + w + 'px" font-family="inherit">' + inner + '</svg>';
   }
 
-  let _cssInjected = false;
-  function _ensureCss() {
-    if (_cssInjected) return;
-    _cssInjected = true;
-    const st = document.createElement('style');
-    st.textContent =
+  // Thân CSS của mọi khối vẽ, tách thành HẰNG vì có HAI người đọc:
+  //   ① `_ensureCss()` nhét vào <head> cho SVG nằm trong trang;
+  //   ② `cssText()` cho ai bóc chuỗi <svg> ra khỏi trang — `poster.js` chế độ
+  //      `svg` rasterize qua <img>, mà tài liệu SVG độc lập KHÔNG thấy <style>
+  //      của trang. Bản đầu chỉ có đường ①: poster dựng ra mất sạch nhãn tháng
+  //      và số điểm (fill mặc định đen trên thẻ tối), chữ thì rơi về font
+  //      serif rồi tràn ra ngoài ô. Đo được bằng cách dựng PNG thật rồi nhìn.
+  var _CSS =
       '.hc-svg{display:block;margin:0 auto}' +
       '.hc-num{font-family:var(--mono,ui-monospace,monospace);font-size:10px;font-weight:600;fill:var(--text)}' +
       '.hc-lbl{font-family:var(--mono,ui-monospace,monospace);font-size:8.5px;fill:var(--text-lt)}' +
@@ -231,6 +233,18 @@ window.HookCharts = (function () {
       '.hc-col-now{fill:var(--gold-lt)}' +
       '.hc-kw{font-family:var(--sans);font-size:11px;font-weight:700;fill:var(--heading)}' +
       '.hc-kw-sm{font-family:var(--sans);font-size:9px;font-weight:700;fill:var(--heading)}';
+
+  /** Thân CSS để nhúng vào <svg> đứng một mình. Xem lý do ở `_CSS`. */
+  function cssText() {
+    return _CSS;
+  }
+
+  let _cssInjected = false;
+  function _ensureCss() {
+    if (_cssInjected) return;
+    _cssInjected = true;
+    const st = document.createElement('style');
+    st.textContent = _CSS;
     document.head.appendChild(st);
   }
 
@@ -281,6 +295,13 @@ window.HookCharts = (function () {
       '" y2="' + cy.toFixed(1) + '" stroke="' + col + '" stroke-width="1.8" stroke-linecap="round"></line>';
   }
 
+  // ⚠️ `fill` phải đi bằng STYLE NỘI TUYẾN, không phải thuộc tính `fill=`.
+  // Presentation attribute có độ ưu tiên 0 nên MỌI luật CSS chọn theo class
+  // đều đè nó — `.hc-kw{fill:var(--heading)}` trong `_CSS` chính là luật đó.
+  // Bản đầu dùng `fill=` và đo được `getComputedStyle(el).fill` ra đúng màu
+  // của --heading ở CẢ HAI theme: từ khoá KHÔNG hề mang màu mức, tưởng có mà
+  // không có. Chỉ thấy khi đo, nhìn ảnh không chắc được vì --heading ở light
+  // là navy, dễ đọc nhầm thành "chữ đậm bình thường".
   function _tspans(text, x, y, maxChars, lineH, cls, maxLines, fill) {
     var words = String(text == null ? '' : text).trim().split(/\s+/).filter(Boolean);
     var lines = [], cur = '';
@@ -296,7 +317,7 @@ window.HookCharts = (function () {
     var out = '';
     for (var j = 0; j < lines.length; j++) {
       out += '<text x="' + x + '" y="' + (y + j * lineH).toFixed(1) + '" text-anchor="middle" class="' + cls + '"' +
-        (fill ? ' fill="' + fill + '"' : '') + '>' + esc(lines[j]) + '</text>';
+        (fill ? ' style="fill:' + fill + '"' : '') + '>' + esc(lines[j]) + '</text>';
     }
     return { html: out, lines: lines.length };
   }
@@ -393,5 +414,5 @@ window.HookCharts = (function () {
     return _wrap(w, h, esc(o.ariaLabel || 'Biểu đồ ' + n + ' chặng đời'), g);
   }
 
-  return { lifeArc, hexRadar, rarityDots, percentileBar, flagColor, monthGrid, stageTimeline, mucColor };
+  return { lifeArc, hexRadar, rarityDots, percentileBar, flagColor, monthGrid, stageTimeline, mucColor, cssText };
 })();
