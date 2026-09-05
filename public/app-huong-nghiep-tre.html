@@ -100,7 +100,21 @@
       </div>
     </div>
     <div class="ws-body">
-      <div id="introHost"></div>
+      <!-- Box giới thiệu dựng TĨNH: chèn bằng JS thì nó ra đời SAU lần vẽ đầu,
+           đẩy cả `.ws-body` xuống VÀ tự làm phần tử LCP (đo trên prod: CLS 0,198,
+           Render Delay 5,3s). `Shell.introOnce` thấy `.intro-card` đã có thì chỉ
+           điền `#introSrc`. Vì thế `SHELL_INTRO` bên dưới CHỈ khai `key` — chữ nằm
+           đúng ở đây, một bản duy nhất, không có bản chép để trôi. -->
+      <div id="introHost"><div class="intro-card">
+        <div class="intro-body">
+          <img class="intro-avatar" src="/tool-avatars/huong-nghiep-tre.webp" alt="" onerror="this.remove()">
+          <div class="intro-text">
+            <div class="intro-t">Hướng Nghiệp Sớm Cho Con</div>
+            <div class="intro-d">Gợi ý hoạt động nên cho con làm quen theo đúng lứa tuổi. Bạn muốn định hướng sớm cho con nhưng chưa biết bắt đầu từ đâu. Dùng khi muốn tham khảo, không phải để chốt nghề cho con.</div>
+            <div id="introSrc" style="min-height:73.6px;margin-top:9px"></div>
+          </div>
+        </div>
+      </div></div>
       <div id="shellRecent"></div>
 
       <div id="birthPanel">
@@ -263,7 +277,7 @@
 </div>
 
 <script>window.SHELL_ACTIVE='huong-nghiep-tre';window.SHELL_HISTORY=true;
-window.SHELL_INTRO={key:'huong-nghiep-tre',title:'Hướng Nghiệp Sớm Cho Con',desc:'Gợi ý hoạt động nên cho con làm quen theo đúng lứa tuổi. Bạn muốn định hướng sớm cho con nhưng chưa biết bắt đầu từ đâu. Dùng khi muốn tham khảo, không phải để chốt nghề cho con.'};</script>
+window.SHELL_INTRO={key:'huong-nghiep-tre'};</script>
 <script src="/laso-chart.js?v=3"></script>
 <script src="/tools-shared/vn-timezone.js?v=1"></script>
 <script src="/tuvi-form.js?v=2"></script>

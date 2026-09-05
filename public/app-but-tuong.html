@@ -90,7 +90,21 @@
       </div>
     </div>
     <div class="ws-body">
-      <div id="introHost"></div>
+      <!-- Box giới thiệu dựng TĨNH: chèn bằng JS thì nó ra đời SAU lần vẽ đầu,
+           đẩy cả `.ws-body` xuống VÀ tự làm phần tử LCP (đo trên prod: CLS 0,198,
+           Render Delay 5,3s). `Shell.introOnce` thấy `.intro-card` đã có thì chỉ
+           điền `#introSrc`. Vì thế `SHELL_INTRO` bên dưới CHỈ khai `key` — chữ nằm
+           đúng ở đây, một bản duy nhất, không có bản chép để trôi. -->
+      <div id="introHost"><div class="intro-card">
+        <div class="intro-body">
+          <img class="intro-avatar" src="/tool-avatars/but-tuong.webp" alt="" onerror="this.remove()">
+          <div class="intro-text">
+            <div class="intro-t">Bút Tướng AI</div>
+            <div class="intro-d">Ký trực tiếp trên màn hình — AI đo 6 trục cổ pháp thư pháp (Thần·Khí·Cốt·Nhục·Huyết·Thế) và luận chữ ký của bạn.</div>
+            <div id="introSrc"></div>
+          </div>
+        </div>
+      </div></div>
       <div id="shellRecent"></div>
 
       <div class="dt-card" id="inputCard">
@@ -167,7 +181,7 @@
 </div>
 
 <script>window.SHELL_ACTIVE='but-tuong';window.SHELL_HISTORY=true;
-window.SHELL_INTRO={key:'but-tuong',title:'Bút Tướng AI',desc:'Ký trực tiếp trên màn hình — AI đo 6 trục cổ pháp thư pháp (Thần·Khí·Cốt·Nhục·Huyết·Thế) và luận chữ ký của bạn.'};</script>
+window.SHELL_INTRO={key:'but-tuong'};</script>
 <script src="/auth.js?v=2"></script>
 <script src="/tools-shared/but-tuong.js"></script>
 <script src="/tuvi-paywall.js?v=22"></script>

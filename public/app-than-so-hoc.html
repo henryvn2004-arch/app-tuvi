@@ -53,7 +53,21 @@
       </div>
     </div>
     <div class="ws-body">
-      <div id="introHost"></div>
+      <!-- Box giới thiệu dựng TĨNH: chèn bằng JS thì nó ra đời SAU lần vẽ đầu,
+           đẩy cả `.ws-body` xuống VÀ tự làm phần tử LCP (đo trên prod: CLS 0,198,
+           Render Delay 5,3s). `Shell.introOnce` thấy `.intro-card` đã có thì chỉ
+           điền `#introSrc`. Vì thế `SHELL_INTRO` bên dưới CHỈ khai `key` — chữ nằm
+           đúng ở đây, một bản duy nhất, không có bản chép để trôi. -->
+      <div id="introHost"><div class="intro-card">
+        <div class="intro-body">
+          <img class="intro-avatar" src="/tool-avatars/than-so-hoc.webp" alt="" onerror="this.remove()">
+          <div class="intro-text">
+            <div class="intro-t">Thần số học</div>
+            <div class="intro-d">Đọc 11 con số từ ngày sinh: đường đời, đỉnh cao, năm cá nhân. Bạn hay lặp lại cùng một kiểu quyết định sai mà không để ý. Dùng khi muốn hiểu cách mình nghĩ trước khi chọn lại lần nữa.</div>
+            <div id="introSrc" style="min-height:36.8px;margin-top:9px"></div>
+          </div>
+        </div>
+      </div></div>
       <div id="shellRecent"></div>
       <div class="form-card" id="birthPanel">
         <h2>Ngày sinh & tên đầy đủ</h2>
@@ -81,7 +95,7 @@
 </div>
 
 <script>window.SHELL_ACTIVE='than-so-hoc';window.SHELL_HISTORY=true;
-window.SHELL_INTRO={key:'than-so-hoc',title:'Thần số học',desc:'Đọc 11 con số từ ngày sinh: đường đời, đỉnh cao, năm cá nhân. Bạn hay lặp lại cùng một kiểu quyết định sai mà không để ý. Dùng khi muốn hiểu cách mình nghĩ trước khi chọn lại lần nữa.'};</script>
+window.SHELL_INTRO={key:'than-so-hoc'};</script>
 <script src="/tools-shared/than-so-hoc.js?v=2"></script>
 <script src="/auth.js?v=2"></script>
   <script src="/nav.js?v=25" data-icons-only></script>

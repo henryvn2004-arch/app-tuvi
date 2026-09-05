@@ -107,7 +107,21 @@
       </div>
     </div>
     <div class="ws-body">
-      <div id="introHost"></div>
+      <!-- Box giới thiệu dựng TĨNH: chèn bằng JS thì nó ra đời SAU lần vẽ đầu,
+           đẩy cả `.ws-body` xuống VÀ tự làm phần tử LCP (đo trên prod: CLS 0,198,
+           Render Delay 5,3s). `Shell.introOnce` thấy `.intro-card` đã có thì chỉ
+           điền `#introSrc`. Vì thế `SHELL_INTRO` bên dưới CHỈ khai `key` — chữ nằm
+           đúng ở đây, một bản duy nhất, không có bản chép để trôi. -->
+      <div id="introHost"><div class="intro-card">
+        <div class="intro-body">
+          <img class="intro-avatar" src="/tool-avatars/duyen-no-tien-kiep.webp" alt="" onerror="this.remove()">
+          <div class="intro-text">
+            <div class="intro-t">Duyên Nợ Tiền Kiếp</div>
+            <div class="intro-d">Ghép hai lá số, tìm mối duyên kiếp trước giữa bạn và người ấy. Bạn cảm giác quen người này từ lâu dù mới gặp gần đây. Dùng khi muốn một câu chuyện chung cho cả hai người.</div>
+            <div id="introSrc" style="min-height:73.6px;margin-top:9px"></div>
+          </div>
+        </div>
+      </div></div>
       <div id="shellRecent"></div>
       <div class="form-card" id="birthPanel">
         <h2>Nhập ngày sinh (dương lịch)</h2>
@@ -191,7 +205,7 @@
 </div>
 
 <script>window.SHELL_ACTIVE='duyen-no-tien-kiep';window.SHELL_HISTORY=true;
-window.SHELL_INTRO={key:'duyen-no-tien-kiep',title:'Duyên Nợ Tiền Kiếp',desc:'Ghép hai lá số, tìm mối duyên kiếp trước giữa bạn và người ấy. Bạn cảm giác quen người này từ lâu dù mới gặp gần đây. Dùng khi muốn một câu chuyện chung cho cả hai người.'};</script>
+window.SHELL_INTRO={key:'duyen-no-tien-kiep'};</script>
 <script src="/laso-chart.js?v=3"></script>
 <script src="/tools-shared/vn-timezone.js?v=1"></script>
 <script src="/tuvi-form.js?v=2"></script>

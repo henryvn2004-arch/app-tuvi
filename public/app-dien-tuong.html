@@ -67,7 +67,21 @@
       </div>
     </div>
     <div class="ws-body">
-      <div id="introHost"></div>
+      <!-- Box giới thiệu dựng TĨNH: chèn bằng JS thì nó ra đời SAU lần vẽ đầu,
+           đẩy cả `.ws-body` xuống VÀ tự làm phần tử LCP (đo trên prod: CLS 0,198,
+           Render Delay 5,3s). `Shell.introOnce` thấy `.intro-card` đã có thì chỉ
+           điền `#introSrc`. Vì thế `SHELL_INTRO` bên dưới CHỈ khai `key` — chữ nằm
+           đúng ở đây, một bản duy nhất, không có bản chép để trôi. -->
+      <div id="introHost"><div class="intro-card">
+        <div class="intro-body">
+          <img class="intro-avatar" src="/tool-avatars/dien-tuong.webp" alt="" onerror="this.remove()">
+          <div class="intro-text">
+            <div class="intro-t">Diện Tướng AI</div>
+            <div class="intro-d">Đọc nhân tướng học tổng thể từ ảnh khuôn mặt của bạn. Bạn tò mò gương mặt mình đang nói điều gì với người khác. Dùng khi muốn hiểu bản thân qua một góc nhìn khác lời nói.</div>
+            <div id="introSrc" style="min-height:36.8px;margin-top:9px"></div>
+          </div>
+        </div>
+      </div></div>
       <div id="shellRecent"></div>
 
       <div class="dt-card" id="inputCard">
@@ -142,7 +156,7 @@
 </div>
 
 <script>window.SHELL_ACTIVE='dien-tuong';window.SHELL_HISTORY=true;
-window.SHELL_INTRO={key:'dien-tuong',title:'Diện Tướng AI',desc:'Đọc nhân tướng học tổng thể từ ảnh khuôn mặt của bạn. Bạn tò mò gương mặt mình đang nói điều gì với người khác. Dùng khi muốn hiểu bản thân qua một góc nhìn khác lời nói.'};</script>
+window.SHELL_INTRO={key:'dien-tuong'};</script>
 <script src="/auth.js?v=2"></script>
 <script src="/tuvi-paywall.js?v=22"></script>
 <script src="/tools-shared/hook-layer.js?v=2"></script>

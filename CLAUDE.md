@@ -113,11 +113,12 @@ sửa bằng SQL không cần deploy) · `lib/marketing/*` (digest · cảnh bá
 (tường trả phí) · `tool-prices.js` (giá) · `poster.js` (ảnh 9:16 + QR) ·
 `nav.js` (icon dùng chung) · `track.js` (đo) · `referral.js`.
 
-### 32 bộ dò (chạy trong CI lint) — `npm run check:*`
-`prices` `nostore` `groups` `viec` `share` `history` `shellboot` `authapi`
-`giosinh` `keyframes` `hoatdong` `hexagrams` `laso` `railfields` `railwrap`
-`cacheshape` `hao` `motifs` `terms` `publish` `jobs` `token` `prompt` `topics`
-`batrach` `sodep` `lunar` `vntz` `tooltip` `cns` `celebanh` `nhatky`.
+### 38 bộ dò (chạy trong CI lint) — `npm run check:*`
+`prices` `nostore` `groups` `viec` `share` `history` `shellboot` `introcard`
+`authapi` `giosinh` `keyframes` `hoatdong` `hexagrams` `laso` `railfields`
+`railwrap` `cacheshape` `hao` `motifs` `terms` `publish` `jobs` `token`
+`prompt` `topics` `batrach` `sodep` `lunar` `vntz` `tooltip` `cns` `celebanh`
+`nguoithan` `nhatky` `slug` `lasogolden` `refbenchmarks` `lavong`.
 **Bộ dò kêu oan là bộ dò bị tắt đi** — thà thu hẹp còn hơn để nó báo bừa.
 
 ## 📐 QUY ƯỚC BẮT BUỘC (đọc trước khi viết UI mới)
@@ -411,6 +412,10 @@ Mỗi luật dưới đây sinh ra từ một lần cắn thật. Cột cuối l
   (gộp `[slug]`, còn ~20 dòng), rồi lấy mốc giờ bằng `statusCode` + cửa sổ hẹp;
   tìm kiếm toàn văn hay hết giờ, đừng dựa vào. `nhat-ky/2026-08.md` "PayPal live
   lượt đầu".
+- **`git checkout -- <file>` kéo về HEAD, KHÔNG về bản đang sửa** — hoàn tác một
+  đột biến red-team giữa lúc bản sửa còn CHƯA COMMIT là xoá trắng bản sửa của file
+  đó, im lặng. Thứ tự đúng: **commit trước, red-team sau**. Và `grep -c` đếm DÒNG
+  có khớp, không đếm số lần khớp — đếm lần thì `grep -o … | wc -l`.
 - **Đối chứng `origin/main` HẾT HẠN** khi chính PR đó vào main, hoặc khi hạ tầng nó
   neo vào đã đổi. Neo đúng `origin/main` chưa đủ — phải neo đúng cái mình đang so.
 - **Bài kiểm đặt tên theo điều nó THỰC SỰ đo**, không theo điều mình muốn nó đo.
@@ -488,8 +493,9 @@ Mỗi luật dưới đây sinh ra từ một lần cắn thật. Cột cuối l
 - **Box JS chèn vào ĐẦU khung nội dung vừa gây CLS vừa LÀ phần tử LCP** —
   `.intro-card` (`Shell.introOnce`): CLS 0,198 + Render Delay 5,3s/5,96s. Chữ là
   hằng số của trang ⇒ dựng tĩnh trong HTML, `introOnce` thấy `.intro-card` đã có
-  thì chỉ điền `#introSrc`, và trang đó khai gọn `SHELL_INTRO={key}` (giữ thêm
-  title/desc trong JS là để hai bản chép trôi khỏi nhau).
+  thì chỉ điền `#introSrc`, và trang đó khai gọn `SHELL_INTRO={key}` — giữ thêm
+  title/desc trong JS là BẢN CHÉP CHẾT: `introOnce` không dựng lại nên sửa nó
+  không có tác dụng gì và không có gì báo. `npm run check:introcard` canh chỗ này.
 - Đo: Actions → Lighthouse CI → `mobile_audit=true` (thêm host vào
   `lhci_url_override` để đo preview). `nhat-ky/2026-09.md` mục "Rà soát mobile".
 
@@ -576,16 +582,12 @@ cd tuvi-engine && npm run test:coverage
 - `lighthouserc.json` — Lighthouse assertions
 - `.github/dependabot.yml` — weekly npm + actions updates
 
-### Dependency versions (sau khi merge Dependabot tháng 5/2026)
-- next: `^14.2.0` (chưa upgrade lên 16 — xem "Open PRs" bên dưới)
-- @supabase/supabase-js: `^2.106.1`
-- pdf-parse: `^1.1.1` (KHÔNG bump lên v2 — break `scripts/embed-tubinh.mjs`, xem "Open PRs")
-- eslint: `^10.4.0` (flat config)
-- @playwright/test: `^1.60.0`
-- prettier: `^3.8.3`
-- @types/node: `^25.9.1` (root + engine)
-- vitest + @vitest/coverage-v8: `^4.1.7` (engine)
-- GHA actions: checkout@v6, setup-node@v6, upload-artifact@v7
+### Phiên bản gói — TRA `package.json`, đừng đọc ở đây
+Bảng số phiên bản từng nằm ở chỗ này đã **sai** sau vài đợt Dependabot (nó ghi
+`next ^14.2.0` trong khi repo đã ở `^16.3.2`) — bảng chép tay thì luôn trôi, mà
+trôi thì không có gì báo. Số thật ở `package.json` + `tuvi-engine/package.json`.
+Chỉ giữ lại điều KHÔNG đọc được từ đó: **`pdf-parse` phải ở v1** — v2 bỏ đường
+dẫn nội bộ `lib/pdf-parse.js` nên `scripts/embed-tubinh.mjs:20` chết.
 
 ### Known limitations
 - Prettier KHÔNG check HTML files, vanilla `public/*.js`, `app/api/tuong-mat/route.js`, `next.config.mjs`, `vercel.json` — bảo toàn alignment intentional + tránh diff cosmetic lớn
@@ -593,11 +595,6 @@ cd tuvi-engine && npm run test:coverage
 - ESLint `no-useless-assignment` disabled — rule mới trong v9+ flag false positive ở vanilla files (pattern build-then-replace)
 - Sentry alerts chưa setup (skip theo lựa chọn) — nếu cần, configure trong Sentry UI: New issue alert + Error rate spike (>10/5min) + Performance LCP P75 > 4s
 - Playwright + Lighthouse SKIP trên Dependabot PR (`if: github.actor != 'dependabot[bot]'`) — Dependabot không có quyền dùng secrets
-
-### Open Dependabot PRs (chưa xử lý — cần decision)
-- **#13 next 14→16** ⚠️ — local build fail do thiếu env vars, không verify được. Risk cao: Next 15 thay đổi async params/cookies/headers, route handlers cần await. Khuyên: review release notes trên branch riêng trước
-- **#11 pdf-parse 1→2** — v2 bỏ internal path `lib/pdf-parse.js` → break `scripts/embed-tubinh.mjs:20`. Khuyên: close PR, hoặc rewrite script trước khi merge
-- **#1, #2 Vercel bot** (Speed Insights + Web Analytics) — không phải Dependabot, merge nếu muốn analytics
 
 ### Vercel preview cho Lighthouse
 Hiện tại Lighthouse chạy trên prod URLs hardcoded. Để chạy trên Vercel preview của PR:
