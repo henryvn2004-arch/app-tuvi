@@ -55,6 +55,35 @@ body{font-family:Arial,sans-serif;background:var(--bg-soft);color:var(--text);mi
 .welcome-sub{font-size:.85rem;color:var(--text-mid);margin-top:.25rem;line-height:1.6}
 .btn-free{background:var(--navy);color:#fff;font-size:.88rem;font-weight:700;padding:.75rem 1.5rem;border-radius:8px;white-space:nowrap;border:none;cursor:pointer;font-family:inherit;transition:background .2s}
 .btn-free:hover{background:var(--navy-mid)}
+/* ── KHUNG CHỜ Ô SỐ DƯ / QUÀ CHÀO MỪNG ────────────────────────────────────
+   🐞 `#statusSlot` rỗng ở lần vẽ đầu; `loadStatus()` chờ Auth (tới 3 giây) rồi
+   mới gọi `/api/payment?action=signup-bonus` mới đổ thẻ vào — 248px kể cả lề,
+   đẩy TOÀN BỘ trang xuống. Đo prod↔prod sau khi vá `#packages`: CLS còn 0,159,
+   và cú 0,1591 là `section` bị đẩy chứ không phải lưới gói (khung chờ gói đã
+   khớp 0px trên cả 4 gói thật).
+   ⚠️ Năm vòng đo trên PREVIEW đều báo 0,016 — chúng KHÔNG lộ cú này ra. Chỉ
+   prod↔prod mới thấy; đừng tin một mình preview cho CLS.
+
+   Dùng lại đúng `.welcome-card` thật (đo ở 390×844: 216,4px — title 2 dòng,
+   sub 3 dòng, nút 40px, icon 44px; HAI biến thể tiêu đề "Tặng N Lượng…" và
+   "Tặng Lượng miễn phí…" cho CÙNG chiều cao nên không phụ thuộc con số từ
+   `app_config`). Thanh xám vẽ bằng `background` để không ăn vào layout;
+   `line-height` của nút ghim tay vì <span> thừa hưởng khác <button>. */
+.ss-skel{pointer-events:none}
+.ss-skel .sk{display:block;color:transparent;
+  background:linear-gradient(var(--border-lt),var(--border-lt)) no-repeat left center/100% 12px}
+.ss-skel .welcome-title .sk:last-child{background-size:52% 14px}
+.ss-skel .welcome-sub .sk:last-child{background-size:64% 11px}
+.ss-skel .welcome-ic{background:var(--border-lt)}
+.ss-skel .btn-free{background:var(--border-lt);color:transparent;cursor:default;line-height:16px}
+/* 🪤 `.balance-value span{font-size:.9rem}` bắt luôn `<span class="sk">` của
+   khung chờ ⇒ thanh cao 17px thay vì 32px, lệch 15px cả ô. Trả về cỡ của thẻ
+   cha bằng specificity cao hơn. */
+.ss-skel .balance-value .sk{font-size:inherit}
+.ss-skel .balance-link .sk{min-width:80px}
+@media(prefers-reduced-motion:no-preference){
+  .ss-skel .sk,.ss-skel .welcome-ic,.ss-skel .btn-free{animation:skPulse 1.4s ease-in-out infinite}
+}
 
 /* ── SECTION HEAD ── */
 .section-head{display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;margin-bottom:1.4rem}
@@ -231,7 +260,45 @@ body{font-family:Arial,sans-serif;background:var(--bg-soft);color:var(--text);mi
 
   <!-- Số dư (đã đăng nhập) HOẶC quà chào mừng (chưa đăng nhập) — cùng MỘT chỗ,
        thay vì hai khối mà ẩn bớt một cái rồi để lại khoảng trống. -->
-  <div class="status-slot" id="statusSlot"></div>
+  <div class="status-slot" id="statusSlot" aria-busy="true" aria-label="Đang tải">
+    <!-- HAI khung chờ vì ô này đổ MỘT trong hai thẻ khác hẳn chiều cao: quà chào
+         mừng (216,4px, khách vô danh) hay số dư (90,2px, đã đăng nhập). Mặc định
+         hiện bản khách — 86/95 người chạy tool là khách vô danh. -->
+    <div class="welcome-card ss-skel" id="ssGuest" aria-hidden="true">
+      <div class="welcome-ic"></div>
+      <div class="welcome-body">
+        <div class="welcome-title"><span class="sk">&nbsp;</span><span class="sk">&nbsp;</span></div>
+        <div class="welcome-sub"><span class="sk">&nbsp;</span><span class="sk">&nbsp;</span><span class="sk">&nbsp;</span></div>
+      </div>
+      <span class="btn-free">&nbsp;</span>
+    </div>
+    <div class="balance-bar ss-skel" id="ssMember" aria-hidden="true" hidden>
+      <div>
+        <div class="balance-label"><span class="sk">&nbsp;</span></div>
+        <div class="balance-value"><span class="sk">&nbsp;</span></div>
+      </div>
+      <span class="balance-link"><span class="sk">&nbsp;</span></span>
+    </div>
+  </div>
+  <script>
+  /* Chọn khung chờ NGAY TRONG LÚC PHÂN TÍCH HTML — `auth.js` nạp ở <head> phía
+     trên và `initAuth()` của nó là IIFE ĐỒNG BỘ đọc `localStorage`, nên
+     `Auth.isLoggedIn()` đã tin được ở đây.
+
+     🐞 Vì sao phải chọn sớm chứ không đợi `loadStatus()`: giữ chỗ chỉ có tác
+     dụng khi khối CÓ MẶT ở lần vẽ đầu (bài học ghi trong CLAUDE.md — đặt việc
+     lộ khối vào `DOMContentLoaded` từng làm CLS của /app xấu đi 0,595→0,827).
+     Đoán sai bên nào thì ô co/nở 126px, tức vẫn còn cú nhảy.
+
+     Đọc hụt → giữ nguyên bản khách, `loadStatus()` vẫn là bên quyết định cuối. */
+  (function () {
+    try {
+      if (!(window.Auth && Auth.isLoggedIn && Auth.isLoggedIn())) return;
+      document.getElementById('ssGuest').hidden = true;
+      document.getElementById('ssMember').hidden = false;
+    } catch (e) { /* để loadStatus() lo */ }
+  })();
+  </script>
 
   <div id="alertBox" class="alert"></div>
 
@@ -561,6 +628,7 @@ async function loadStatus() {
       + '</div>'
       + '<button class="btn-free" onclick="handleFreeSignup()">Đăng Ký →</button>'
       + '</div>';
+    ssDone(slot);
     mount(slot);
     if (bonus) {
       // Không hứa cứng "tra cứu miễn phí hoàn toàn" ở đây — giá từng công cụ đọc
@@ -579,8 +647,22 @@ async function loadStatus() {
       + '<div class="balance-value">' + (data.balance ?? 0) + ' <span>Lượng</span></div>'
       + '</div>'
       + '<a class="balance-link" href="/profile.html">Xem lịch sử ' + ic('chevron-down') + '</a></div>';
+    ssDone(slot);
     mount(slot);
-  } catch (e) { /* không lấy được số dư thì thôi, đừng chặn cả trang */ }
+  } catch (e) {
+    // Không lấy được số dư thì thôi, đừng chặn cả trang — NHƯNG phải dọn khung
+    // chờ, vì chỗ này giờ khởi đầu bằng nó. Bỏ quên đường này là ô nhấp nháy
+    // vĩnh viễn ở đầu trang thu tiền.
+    slot.innerHTML = '';
+    ssDone(slot);
+    console.error('[topup] đọc số dư hụt:', e);
+  }
+}
+
+/** Gỡ cờ khung chờ của `#statusSlot`. Gọi ở MỌI đường ra của `loadStatus()`. */
+function ssDone(slot) {
+  slot.removeAttribute('aria-busy');
+  slot.removeAttribute('aria-label');
 }
 
 // Vừa trả tiền xong cho ĐÚNG lượt mở khoá đã quăng khách sang đây (xem
