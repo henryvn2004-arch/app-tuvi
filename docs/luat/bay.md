@@ -115,6 +115,15 @@
   trước khi đổ cho bản vá vừa merge thì phải A/B đúng dòng đó.
 - 🪤 **Mốc THỜI GIAN trong bản dựng lại cục bộ là ảo** — container chặn mạng ngoài
   nên nhiều cú dồn về ~12,5s. Dùng nó để biết THỨ TỰ, đừng đọc thành "chậm 12 giây".
+- **Thanh nav do `nav.js` chèn phải được GIỮ CHỖ 60px** (`<div id="nav-ph"
+  style="height:60px;background:#061A2E">`, `npm run check:navph`). Đó là nguồn của
+  0,0711 trên mọi trang standalone. 🪤 Có thẻ `#nav-ph` thôi CHƯA đủ — thẻ RỖNG vẫn
+  cao 0px nên vẫn nhảy đủ; và chiều cao phải là INLINE STYLE vì CSS `.topnav` cũng
+  do chính `nav.js` bơm vào lúc chạy.
+- **`nav.js` trong `<head>` mà thiếu `defer` là trang MẤT SẠCH thanh nav** —
+  nav.js chạy top-level, gọi `document.body.appendChild` khi `body` còn null, ném
+  ở `nav.js:379`, và `conversion.js` cũng không bao giờ được nạp. Hỏng câm: trang
+  vẫn render, chỉ thiếu nav. `check:navph` canh luôn chỗ này.
 - **CLS chỉ kết luận được bằng prod↔prod.** Preview ĐO HỤT: 5 vòng đều báo
   `/topup.html` = 0,016, số thật trên prod cùng bản là **0,160** (cú `#statusSlot`
   rơi ngoài cửa sổ đo). Ngược lại Perf/LCP/TBT thì đừng so prod-cũ ↔ preview-mới:

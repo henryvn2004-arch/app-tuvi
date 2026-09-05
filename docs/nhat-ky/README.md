@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-191 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+192 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 **Bốn file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
 ```bash
@@ -11,7 +11,7 @@ sed -n '120,190p' docs/nhat-ky/2026-08.md    # đọc đúng đoạn, đừng ca
 
 | file | số mục | dung lượng |
 |---|---:|---:|
-| `2026-09.md` | 27 | 139,674 B |
+| `2026-09.md` | 28 | 143,999 B |
 | `2026-08.md` | 147 | 1,018,512 B |
 | `2026-07.md` | 12 | 154,531 B |
 | `track-cu.md` | 5 | 89,354 B |
@@ -25,6 +25,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
+| 1 | 2026-09 | `2026-09.md` | 🧭 Mobile vòng 7: giữ chỗ thanh nav — và một trang mất sạch nav |
 | 1 | 2026-09 | `2026-09.md` | 🧭 Mobile vòng 6: cú 0,071 đứng yên 6 lượt đo hoá ra là thanh nav dựng bằng JS |
 | 1 | 2026-09 | `2026-09.md` | 📐 Mobile vòng 5: nút "✦ Hỏi" khai sai chỗ — 31px dịch trên MỌI trang shell |
 | 1 | 2026-09 | `2026-09.md` | 🔤 Mobile vòng 4: tự lưu trữ Noto Serif + `font-display: optional` |
