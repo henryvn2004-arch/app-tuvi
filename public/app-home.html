@@ -1292,9 +1292,23 @@ function renderAllTools(d) {
       +'<div class="tbad-main">Xung tuổi '+esc(v.xung?v.xung.chi:'—')+'</div>'
       +'<div class="tbad-note">'+esc(badNote)+(badKy?'<br>'+esc(badKy):'')+'</div></div>';
 
-    /* ── Ô NÊN LÀM — điểm từng loại việc lấy thẳng của engine, không tự xếp hạng ── */
+    /* ── Ô NÊN LÀM — điểm từng loại việc lấy thẳng của engine, không tự xếp hạng.
+       🔑 NGÀY KỴ thì ô này KHÔNG liệt kê việc. Engine hạ ngưỡng xuống 5 điểm để
+       ô bớt trống trên ngày lành (31% → 2%), nhưng cùng lúc làm 65/121 ngày kỵ
+       có việc lọt vào — tức thẻ khuyên "Nên làm: Cưới hỏi 5/10" ngay cạnh ô
+       "Cần tránh" đang ghi "cổ pháp kiêng khởi sự". Đo trên 365 ngày của 2026.
+       Chặn ở ĐÂY (tầng trình bày) chứ không ở engine: engine phải trả đúng
+       điểm nó tính được, còn "có nên nói ra không" là việc của mặt hiển thị.
+       Dùng lại `key` của `anhCho()` — cùng một hàm quyết định với tranh và huy
+       hiệu, nên ba thứ không bao giờ nói khác nhau.
+       CỐ Ý chỉ chặn ngày KỴ, không chặn ngày xấu: ngày kỵ là luật CẤM khởi sự
+       nên liệt kê việc là cãi thẳng một luật cứng; còn ngày xấu chỉ là ngày
+       yếu — một việc 7/10 ở đó vẫn là thông tin thật, và điểm hiện ngay bên
+       cạnh đã đủ để người đọc tự cân. */
     var boxGood='<div class="tbox good"><div class="tbox-h"><span class="ic" data-icon="check-circle"></span>Nên làm</div>'
-      +((v.nen&&v.nen.length)
+      +(key==='ky'
+        ? '<div class="tbox-empty">'+esc('Ngày '+(v.ngayKy||[]).join(' + ')+' — cổ pháp kiêng khởi sự. Việc thường ngày vẫn làm bình thường.')+'</div>'
+        :(v.nen&&v.nen.length)
         ? '<div class="tdo">'+v.nen.map(function(x){
             // Điểm hiện KÈM tên việc. Engine hạ ngưỡng từ 7 xuống 6 để ô này
             // bớt trống (55% → 44% số ngày trong năm), nên danh sách nay có cả
