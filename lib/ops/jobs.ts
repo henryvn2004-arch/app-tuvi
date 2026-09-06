@@ -228,6 +228,13 @@ export const JOBS: JobSpec[] = [
   { key: 'growth-accounts', label: 'Entity — nạp sổ + kiểm hồ sơ sống', source: 'vercel', everyMinutes: 7 * D,
     schedule: 'T7 08:15 VN hằng tuần', sink: 'growth_accounts', path: '/api/cron/growth-accounts',
     since: '2026-08-23' },
+  // Rải 120 dòng/ngày viết lại `seo_pages` (category tuong-hop-*) qua
+  // viral-core — xem chú thích ở đầu app/api/cron/viral-seo-pages/route.ts.
+  // `since` = ngày merge: job chưa từng chạy nên cron_runs trống, thiếu mốc
+  // này bộ dò kêu ngay "CHƯA HỀ chạy".
+  { key: 'viral-seo-pages', label: 'Viết lại seo_pages (tương hợp) — viral-core', source: 'vercel',
+    everyMinutes: D, schedule: '11:30 VN hằng ngày', sink: 'seo_pages', path: '/api/cron/viral-seo-pages',
+    since: '2026-09-06' },
 ];
 
 export interface CronRun {

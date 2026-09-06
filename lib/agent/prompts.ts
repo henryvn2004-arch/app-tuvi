@@ -1222,6 +1222,12 @@ ${MAU_ARC}
 
 // Bản đồ chủ đề câu hỏi → cung liên quan (dùng chung extractLasoContext +
 // focusHint). '__daiVan__' = đánh dấu cần kèm đại vận, KHÔNG phải tên cung.
+// Đây cũng là NGUỒN DUY NHẤT cho app/api/xem-tuoi/route.ts (import
+// `relevantPalaces` thẳng từ đây) — trước là bản chép tay riêng, trôi khỏi
+// nhau (thiếu '|đối tác' ở Nô Bộc, thiếu điều kiện năm → __daiVan__). Tử Bình
+// (topicMap ở app/api/tubinh/route.ts) KHÔNG gộp vào đây: nó dò theo tập chủ đề
+// khác hẳn (thần sát, lưu niên...) và trả về field-key nội bộ của batTuData
+// chứ không phải tên cung — gộp sẽ đổi ý nghĩa, không phải dọn trùng lặp.
 const FOCUS_TOPICS: Record<string, string[]> = {
   'tài chính|tài lộc|tiền|thu nhập|làm giàu|tài bạch': ['Tài Bạch', 'Phúc Đức'],
   'sự nghiệp|công việc|nghề|quan lộc|thăng tiến':       ['Quan Lộc', 'Mệnh'],
@@ -1230,7 +1236,7 @@ const FOCUS_TOPICS: Record<string, string[]> = {
   'sức khỏe|bệnh|thân thể|tật ách':                     ['Tật Ách'],
   'nhà đất|bất động sản|điền trạch':                    ['Điền Trạch'],
   'anh em|huynh đệ':                                     ['Huynh Đệ'],
-  'bạn bè|nô bộc|nhân viên':                            ['Nô Bộc'],
+  'bạn bè|nô bộc|nhân viên|đối tác':                    ['Nô Bộc'],
   'du lịch|di chuyển|thiên di|nước ngoài':               ['Thiên Di'],
   'cha mẹ|phụ mẫu':                                      ['Phụ Mẫu'],
   'đại vận|tiểu vận|vận hạn|vận trình':                 ['__daiVan__'],
