@@ -23,6 +23,8 @@ import { llmTextFull, callLLMTools } from '@/lib/llm/complete';
 import { logLlmUsage } from '@/lib/agent/usage';
 import { withToolOutcome } from '@/lib/ops/tool-outcome';
 import { authUserFromRequest } from '@/lib/api/tool-helpers';
+import { previewGate, previewIpHash } from '@/lib/billing/anon-preview';
+import { previewKey, previewCacheGet, previewCachePut } from '@/lib/llm/preview-cache';
 import { hasAnySlugAccess, paywallDisabled } from '@/lib/billing/credits';
 
 // ─── LLM client (Gemini-primary + Anthropic-backup) ────────────
@@ -246,9 +248,9 @@ async function runPost(request: NextRequest) {
 
   if (action === 'chat') return body.stream ? handleChatStream(body) : handleChat(body);
 
-  const { laSoText, phan, docs, hoTen, gioiTinh, slug, bundleSlug } = body as {
+  const { laSoText, phan, docs, hoTen, gioiTinh, slug, bundleSlug, namXem, anonId } = body as {
     laSoText?: string; phan?: number; docs?: string; hoTen?: string; gioiTinh?: string;
-    slug?: string; bundleSlug?: string;
+    slug?: string; bundleSlug?: string; namXem?: number; anonId?: string;
   };
   if (!laSoText || !phan) return err('Thiếu dữ liệu', 400);
   const phanNum = Number(phan);
@@ -276,11 +278,54 @@ async function runPost(request: NextRequest) {
   // lá số/phần này" — bật đường lùi đó là cho qua mọi phần khác của MỌI lá số
   // khác trong 20 phút sau một lượt mua bất kỳ, vì slug PHẦN giờ bắt đầu bằng
   // "laso-" nên đường lùi kia SẼ khớp được nếu lỡ đi qua `toolPaymentDenied`.
-  if (phanNum !== 1 && !paywallDisabled()) {
+  //
+  // 🔴 HARD PAYWALL (2026-09-06) — LẰN RANH FREE DỜI TỪ 1 PHẦN SANG 2.
+  // `FREE_PHAN` là bản xem trước: model chạy THẬT trên lá số của chính khách
+  // TRƯỚC khi họ trả đồng nào, vì đó mới là thứ tạo được cái móc "đúng vl" mà
+  // bảng điểm deterministic không bao giờ tạo được. Phần 3+ vẫn khoá cứng.
+  //
+  // Phần 14-24 (Chu Trình Cuộc Đời, dùng CHUNG route này) KHÔNG có phần xem
+  // trước nào — `phanNum <= FREE_PHAN` tự loại chúng ra vì số phần của chúng
+  // bắt đầu từ 14. Đừng đổi điều kiện thành "phần đầu của tool" nếu chưa dựng
+  // cầu dao/ngân sách riêng cho tool đó.
+  const FREE_PHAN = 2;
+  const isPreview = phanNum <= FREE_PHAN;
+
+  if (!isPreview && !paywallDisabled()) {
     const auth = await authUserFromRequest(request);
     if ('error' in auth) return err(auth.error, auth.status);
     const owns = await hasAnySlugAccess(auth.user.id, [slug, bundleSlug].filter((s): s is string => !!s));
     if (!owns) return err('Lượt dùng này chưa được thanh toán.', 402);
+  }
+
+  // ── Đường XEM TRƯỚC: cache trước, cầu dao sau ────────────────────────────
+  // Thứ tự này BẮT BUỘC (xem lib/llm/preview-cache.ts): trúng cache là 0đ model
+  // nên không được tiêu một suất quota — người tải lại trang ba lần mà hết sạch
+  // `preview.free_runs` thì với họ tool đang hỏng, không phải đang tiết kiệm.
+  //
+  // `pKey` = danh tính đã XÁC THỰC nếu có, ngược lại `anonId` client tự khai.
+  // ⚠️ `anonId` KHÔNG phải danh tính (xoá localStorage là có cái mới) — nó chỉ
+  // là lớp trần thứ nhất; hai lớp IP/ngày và toàn-hệ-thống/ngày trong RPC mới
+  // là thứ chặn người cố tình. Xem _patches/migration-anon-preview.sql.
+  let previewCacheKey = '';
+  if (isPreview && !paywallDisabled()) {
+    previewCacheKey = previewKey({ laSoText, phan: phanNum, namXem, hoTen, gioiTinh });
+    const hit = await previewCacheGet(previewCacheKey);
+    if (hit) return ok({ luanGiai: hit, chartData: null, phan, cached: true });
+
+    const auth = await authUserFromRequest(request);
+    const pKey = 'error' in auth ? (anonId || '') : auth.user.id;
+    const gate = await previewGate(pKey, previewIpHash(request), 'laso');
+    if (!gate.allowed) {
+      // 402 chứ không 429: với client đây KHÔNG phải "thử lại sau" mà là "hết
+      // phần miễn phí, tới lúc trả tiền" — và trang phải dựng đúng tấm tường đó
+      // thay vì hiện một lỗi kỹ thuật. `reason` để phân biệt khi đọc log:
+      // 'key_cap' là người này hết suất (bình thường, đúng thiết kế), còn
+      // 'global_cap'/'error' là cầu dao ngân sách hoặc DB hỏng — hai thứ cần
+      // biết ngay chứ không được lẫn vào nhau.
+      console.error(`[lasotuvi] xem trước bị chặn (${gate.reason}) phần ${phanNum}`);
+      return err('Đã hết lượt xem trước miễn phí.', 402);
+    }
   }
 
   let systemForLLM: string;
@@ -410,6 +455,12 @@ async function runPost(request: NextRequest) {
     const chartMatch = text.match(/```chartdata\s*([\s\S]*?)```/);
     if (chartMatch) { try { chartData = JSON.parse(chartMatch[1].trim()); } catch { /* ignore */ } }
     const luanGiai = text.replace(/```chartdata[\s\S]*?```/, '').trim();
+    // Cất bản xem trước để lượt sau CÙNG lá số + CÙNG tên không đốt lại tiền
+    // model lẫn một suất quota. Chỉ đường xem trước ghi — phần trả phí đã có
+    // `laso_public` (qua /api/save-laso) làm kho của nó.
+    if (previewCacheKey) {
+      previewCachePut({ key: previewCacheKey, toolId: 'laso', phan: phanNum, text: luanGiai });
+    }
     return ok({ luanGiai, chartData, phan });
   } catch (e: unknown) {
     return err((e as Error).message);
