@@ -1152,6 +1152,42 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
       (chart === false ? '' : '<div class="tpw-ph-chart"></div>') + '</div>';
   }
 
+  // ── DANH TÍNH TẠM CỦA KHÁCH CHƯA ĐĂNG NHẬP ────────────────────────────────
+  // Khoá đếm suất `preview.free_runs` của cầu dao xem trước
+  // (lib/billing/anon-preview.ts). ⚠️ KHÔNG phải danh tính: client tự khai, xoá
+  // localStorage là có khoá mới. Vì thế server còn HAI trần nữa (theo IP và
+  // toàn cục) đứng sau — trần này chỉ để một người bình thường không vô tình
+  // đốt hết suất bằng vài lần F5.
+  //
+  // 🔴 KHÔNG đọc `window.Track.anonId` — đã thử và hỏng: `track.js` TỰ NO-OP
+  // (gán `Track={event(){},anonId:null}`) khi nó nghĩ đang bị máy chạy, và nó
+  // cũng chết lặng khi localStorage bị chặn. Lúc đó `anonId` rỗng ⇒ server nhận
+  // `p_key` rỗng ⇒ RPC trả `disabled` ⇒ khách MẤT HẲN bản xem trước, tức mất
+  // đúng cái móc mà cả lượt thay đổi này sinh ra để có. Một tính năng bán hàng
+  // không được phụ thuộc vào một thư viện ĐO có quyền tự tắt.
+  //
+  // DÙNG CHUNG khoá `tvmb_anon` với track.js (cùng một trình duyệt phải là cùng
+  // một danh tính, không đẻ khoá thứ hai). Ai tới trước thì tạo.
+  //
+  // localStorage bị chặn hẳn → id chỉ sống trong bộ nhớ: mỗi lượt tải trang là
+  // một trần ĐỜI mới. Chấp nhận CÓ Ý — hai lớp IP/ngày và toàn-hệ-thống/ngày
+  // vẫn giữ nguyên, và thà nới cho một nhóm nhỏ còn hơn chặn oan họ.
+  var _anonIdMem = '';
+  function previewAnonId() {
+    var mk = function () {
+      try { if (window.crypto && crypto.randomUUID) return crypto.randomUUID(); } catch (e) {}
+      return 'a' + Date.now().toString(36) + Math.random().toString(36).slice(2, 10);
+    };
+    try {
+      var v = localStorage.getItem('tvmb_anon');
+      if (!v) { v = mk(); localStorage.setItem('tvmb_anon', v); }
+      return v;
+    } catch (e) {
+      if (!_anonIdMem) _anonIdMem = mk();
+      return _anonIdMem;
+    }
+  }
+
   function lockBadge(text) {
     _css();
     return '<span class="tpw-lock-badge"><span class="ic-inline" data-icon="lock"></span>' + (text || 'Khoá') + '</span>';
@@ -1167,6 +1203,7 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
     init, getProduct, requireCredits, requireCreditsCached, requireCreditsCachedQuery,
     generateToolSlug, ensureCredits, deductSilent, getBalance, fillPriceSlots,
     mountCostHints, refreshCostHints, lockPreview, isFreeRerun, lockBadge, placeholderHtml,
+    previewAnonId,
     sectionLockHtml, wireSectionLocks, resumeIfPending,
     _banner, _close, _closeLock, _login,
   };

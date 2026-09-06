@@ -283,7 +283,7 @@ window.SHELL_INTRO={key:'luan-giai'};</script>
 <script src="/tools-shared/cung-ngay-sinh.js?v=2"></script>
 <script src="/tools-shared/nguoi-than.js?v=1"></script>
 <script src="/auth.js?v=2"></script>
-<script src="/tuvi-paywall.js?v=22"></script>
+<script src="/tuvi-paywall.js?v=23"></script>
 <script src="/tools-shared/hook-charts.js?v=2"></script>
 <script src="/tools-shared/hook-facts.js?v=1"></script>
 <script src="/tools-shared/hook-layer.js?v=2"></script>
@@ -1148,37 +1148,6 @@ async function initLuanGiaiGate(ls){
   _runFreePreview();
 }
 
-// Định danh trình duyệt cho cầu dao xem trước.
-//
-// 🔴 KHÔNG đọc `window.Track.anonId` — đã thử và hỏng: `track.js` TỰ NO-OP
-// (gán `Track={event(){},anonId:null}`) khi nó nghĩ đang bị máy chạy, và nó
-// cũng chết lặng khi localStorage bị chặn. Lúc đó `anonId` rỗng ⇒ server nhận
-// `p_key` rỗng ⇒ RPC trả `disabled` ⇒ khách MẤT HẲN bản xem trước, tức mất đúng
-// cái móc mà cả lượt thay đổi này sinh ra để có. Một tính năng bán hàng không
-// được phụ thuộc vào một thư viện ĐO có quyền tự tắt.
-//
-// DÙNG CHUNG khoá `tvmb_anon` với track.js (cùng một trình duyệt phải là cùng
-// một danh tính, không đẻ khoá thứ hai). Ai tới trước thì tạo.
-//
-// localStorage bị chặn hẳn → id chỉ sống trong bộ nhớ: mỗi lượt tải trang là
-// một trần ĐỜI mới. Chấp nhận CÓ Ý — hai lớp IP/ngày và toàn-hệ-thống/ngày vẫn
-// giữ nguyên, và thà nới cho một nhóm nhỏ còn hơn chặn oan họ.
-var _anonIdMem=null;
-function _previewAnonId(){
-  var mk=function(){
-    try{ if(window.crypto&&crypto.randomUUID) return crypto.randomUUID(); }catch(e){}
-    return 'a'+Date.now().toString(36)+Math.random().toString(36).slice(2,10);
-  };
-  try{
-    var v=localStorage.getItem('tvmb_anon');
-    if(!v){ v=mk(); localStorage.setItem('tvmb_anon',v); }
-    return v;
-  }catch(e){
-    if(!_anonIdMem) _anonIdMem=mk();
-    return _anonIdMem;
-  }
-}
-
 // ── BẢN XEM TRƯỚC MIỄN PHÍ (hard paywall 2026-09-06) ───────────────────────
 //
 // Đây là thay đổi trọng tâm của cả lượt này. Trước: khách chạy tool xong chỉ
@@ -1466,7 +1435,7 @@ async function _runPhanLuanGiai(p,preview){
     // `anonId` là lớp trần thứ nhất của cầu dao xem trước (lib/billing/anon-preview.ts).
     // Client tự khai nên KHÔNG phải danh tính — server chỉ dùng nó khi request
     // không có token, và vẫn còn hai lớp IP/ngày + toàn-hệ-thống/ngày phía sau.
-    var _anonId=_previewAnonId();
+    var _anonId=TuviPaywall.previewAnonId();
     var resp=await fetch('/api/lasotuvi',{method:'POST',headers:_lgHeaders,body:JSON.stringify({hoTen:_hoTen,ngay:_ngay,thang:_thang,nam:_nam,gioiTinh:_gioitinh,namXem:_namXem,laSoText:_laSoText,phan:p,docs:docs,slug:_partSlug(p),bundleSlug:_pendingSlug,anonId:_anonId})});
     var data=await resp.json();
     if(data.error||!data.luanGiai){

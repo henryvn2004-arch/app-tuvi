@@ -18,6 +18,8 @@ import { refundIfSystemFailure } from '@/lib/ops/refund';
 import { llmTextFull } from '@/lib/llm/complete';
 import { logLlmUsage, logLlmParseFail } from '@/lib/agent/usage';
 import { railFreeGrant, railFreeTurnsPerGen } from '@/lib/billing/viral-budget';
+import { previewGate, previewIpHash } from '@/lib/billing/anon-preview';
+import { previewOf } from '@/lib/llm/preview-fields';
 import { computeLaso, type Laso } from '@/lib/engine/laso';
 import { computeDayCon, resolveMoiLo, type DayConProfile } from '@/lib/engine/day-con';
 import { coSoDoc } from '@/lib/engine/nguoi-khac';
@@ -107,6 +109,48 @@ const SHAPE_FINGERPRINT = '4ec3392fed42';
 /** Cửa DUY NHẤT vào cache của tool này; `shape` khai một lần tại đây. */
 const CACHE = cacheFor(TOOL_ID, SHAPE);
 
+// ── BẢN XEM TRƯỚC (hard paywall Pha 3) ──────────────────────────────────────
+// Danh sách ALLOWLIST — khoá nào KHÔNG có ở đây thì không rời khỏi server.
+// Xem `lib/llm/preview-fields.ts` để biết vì sao là allowlist chứ không phải
+// blocklist.
+//
+// 🔑 CÁCH CHỌN: giữ đúng thứ `renderMetaHead` (khối đầu, vốn đã mở) cần để
+// dựng, cộng HAI trường văn xuôi đầu tiên do model viết. Mọi khối bên dưới
+// (`truc` · `khieu` đủ 8 · `changHoc` · `goiYHoatDong` · `voiChaMeCoSo` · 10
+// trường văn xuôi còn lại) là thứ đang bán.
+//
+// 🔴 `khieu` CỐ Ý VẮNG MẶT dù tầng hook cần nó: hook chỉ hé chất CAO NHẤT, mà
+// gửi cả 8 là dựng lại được nguyên khối `khieuBlock` đang khoá. Thay bằng
+// `khieuTop` — một phần tử, tính riêng ở `previewExtras()`.
+//
+// Tách làm HAI mảnh vì có hai nơi gọi khác nhau: nhánh cầu-dao-chặn chỉ có
+// `meta()` trong tay (chưa gọi model, nên chưa có chữ nào). Gọi `previewOf`
+// bằng cả danh sách ở đó sẽ bắn `console.error` "thiếu conNguoi, chatNoi" mỗi
+// lượt bị chặn — một báo động SAI, và báo động sai lặp lại thì lần sau không ai
+// đọc nữa. Nên nhánh đó dùng `PREVIEW_KEEP_META`.
+const PREVIEW_KEEP_META = [
+  'success',
+  'ten', 'moiLo', 'gioiTinh', 'tuoi', 'namSinh',
+  'kieu', 'kieuPhu', 'lai', 'toaDo', 'hoc',
+] as const;
+/** Hai trường văn xuôi được xem miễn phí — 2/12 đoạn model viết. */
+const PREVIEW_KEEP_PROSE = ['conNguoi', 'chatNoi'] as const;
+const PREVIEW_KEEP = [...PREVIEW_KEEP_META, ...PREVIEW_KEEP_PROSE];
+
+/**
+ * Thứ CHỈ bản xem trước có, không nằm trong payload đầy đủ.
+ *
+ * `coSo` GIỮ LẠI ở bản xem trước dù nó không thuộc `meta()`: nó là câu trích cổ
+ * pháp, dựng ra để đỡ đúng phản đối "AI nó bịa thôi" ở đúng lúc người ta chưa
+ * tin gì và đang cân xem có đáng trả tiền không. Dưới hard paywall thì đó là
+ * thứ CẦN NHẤT chứ không phải thứ đem đi bán — bỏ nó đi là tự tháo lá chắn.
+ * (Câu trích đi qua `locCachCuc` nên không nói về thọ mệnh/bệnh tật của trẻ.)
+ */
+function previewExtras(p: DayConProfile, ls: Laso) {
+  const ks = [...(p.assess.khieu || [])].sort((a, b) => b.diem - a.diem);
+  return { khieuTop: ks[0] || null, coSo: coSoDoc(ls, p) };
+}
+
 /** Phần deterministic trả kèm — client dựng được khung ngay cả khi phần chữ mỏng. */
 function meta(p: DayConProfile, ten: string) {
   return {
@@ -162,6 +206,13 @@ async function buildReport(
   userId: string,
   key: string,
   coLaSoChaMe: boolean,
+  // Lá số gốc — chỉ dùng cho `previewExtras` (câu trích cổ pháp). `runPost`
+  // truyền vào nhưng không đọc tới.
+  ls: Laso,
+  // Lượt XEM TRƯỚC: vẫn gọi model và vẫn ghi cache (để lượt trả tiền sau đó
+  // KHÔNG phải sinh lại — xem `runPost`, nó tra cache trước), nhưng TUYỆT ĐỐI
+  // không chạm hai thứ dưới đây.
+  preview = false,
 ) {
   const prompt = buildDayConPrompt(p, ten);
 
@@ -253,18 +304,50 @@ async function buildReport(
     kieu: p.kieu.id,
     kieu_ten: p.kieu.ten,
   };
-  insertHistoryRow(TOOL_ID, { ...row, user_id: userId, laso_key: key });
-  void railFreeTurnsPerGen().then((n) => railFreeGrant(userId, n)).catch(() => {});
+  // 🔴 HAI DÒNG NÀY LÀ ĐƯỜNG TIỀN, KHÔNG PHẢI GHI SỔ.
+  // `insertHistoryRow` CHÍNH LÀ thứ `userOwnsLaso` đọc để trả lời "người này đã
+  // trả tiền cho lá số đó chưa" (xem lib/portraits/cache.ts) — gọi nó ở lượt
+  // xem trước là phát không cả tool. `railFreeGrant` thì phát Lượng rail.
+  // Cả hai chỉ chạy ở lượt ĐÃ qua `toolPaymentDenied` trong `runPost`.
+  if (!preview) {
+    insertHistoryRow(TOOL_ID, { ...row, user_id: userId, laso_key: key });
+    void railFreeTurnsPerGen().then((n) => railFreeGrant(userId, n)).catch(() => {});
+  }
   // Ghi đè CHỈ ở nhánh dựng-lại-vì-shape-cũ. Không có vế này thì dòng hỏng nằm
   // nguyên và mỗi lượt xem lại đốt thêm một lượt model.
+  //
+  // Ghi cache CẢ ở lượt xem trước là CỐ Ý: `portrait_cache` không mang ngữ
+  // nghĩa sở hữu (ngữ nghĩa đó nằm ở bảng lịch sử), nên dòng này chỉ có tác
+  // dụng làm lượt trả tiền ngay sau đó tốn 0đ model. `created_by` nhận null khi
+  // khách chưa đăng nhập.
   CACHE.put('main', key, { payload, row }, userId);
-  return ok(payload);
+  return preview
+    ? ok({ ...previewOf(payload, PREVIEW_KEEP, TOOL_ID), ...previewExtras(p, ls) })
+    : ok(payload);
 }
 
 /**
- * W1 — TÍNH THỬ MIỄN PHÍ. Xem chú thích dài ở `app/api/nguoi-khac/route.ts`:
- * hàm RIÊNG chứ không phải một cờ trong `runPost`, 0 lượt LLM, không chạm
- * thanh toán / lịch sử / cache, không đòi đăng nhập.
+ * BẢN XEM TRƯỚC — hàm RIÊNG chứ không phải một cờ trong `runPost`: không chạm
+ * thanh toán, không ghi lịch sử, không đòi đăng nhập.
+ *
+ * 🔴 ĐỔI Ở PHA 3 (2026-09-06): trước đây hàm này chạy **0 lượt LLM** và chỉ trả
+ * dữ liệu deterministic, rồi client LÀM MỜ phần dưới bằng `.tpw-real-lock`.
+ * Hai chỗ sai:
+ *   1. Không có một chữ nào model viết về ĐỨA TRẺ CỦA CHÍNH HỌ ⇒ không có gì
+ *      để hook. Đúng cái yếu mà Pha 1 vừa sửa cho Luận Giải, đo được ở đó:
+ *      310 người chạy tool → 22 người bấm mở khoá.
+ *   2. "Làm mờ" nghĩa là nội dung THẬT vẫn nằm trong DOM — view-source hoặc
+ *      tắt CSS là đọc hết. Nay server KHÔNG GỬI phần đó nữa (`PREVIEW_KEEP`),
+ *      nên không còn gì để lộ.
+ *
+ * Thứ tự BẮT BUỘC: tra cache TRƯỚC, xin quota SAU. Trúng cache là 0đ model nên
+ * không được tiêu một suất `preview.free_runs` của chính người đó (xem
+ * lib/llm/preview-cache.ts, cùng luật).
+ *
+ * Cầu dao chặn → KHÔNG báo lỗi, mà lùi về ĐÚNG hành vi cũ (khung deterministic
+ * + tường, không có chữ AI). Bản xem trước là quà; hỏng thì người dùng thấy
+ * đúng thứ họ sẽ thấy nếu tính năng này chưa từng tồn tại, không phải một màn
+ * hình lỗi.
  */
 async function runPreview(request: NextRequest) {
   const body = await parseBody(request);
@@ -274,22 +357,43 @@ async function runPreview(request: NextRequest) {
   const r = computeLaso(birth);
   if (!r.ok || !r.ls) return err(r.error || 'Không lập được lá số.', 400);
   let lsChaMe: Laso | null = null;
-  if (validBirth(body.birthParent)) {
-    const rb = computeLaso(body.birthParent as BirthParams);
+  const birthParent = validBirth(body.birthParent) ? (body.birthParent as BirthParams) : null;
+  if (birthParent) {
+    const rb = computeLaso(birthParent);
     if (rb.ok && rb.ls) lsChaMe = rb.ls;
   }
   const gender = birth.gender === 'nu' ? ('nu' as const) : ('nam' as const);
-  const p = computeDayCon(r.ls, gender, resolveMoiLo(String(body.moiLo || '')), lsChaMe);
-  return ok({
+  const moiLo = resolveMoiLo(String(body.moiLo || ''));
+  const ten = String(body.name || '').trim().slice(0, 60);
+  const p = computeDayCon(r.ls, gender, moiLo, lsChaMe);
+
+  // Khung deterministic — luôn trả, kể cả khi không sinh được chữ nào. Đây là
+  // thứ giữ cho trang có hình hài ngay cả ở nhánh xấu nhất.
+  const khung = {
     success: true,
-    preview: true,
-    ...meta(p, String(body.name || '').trim().slice(0, 60)),
-    // C1 — CHỈ ở lượt tính thử: lá chắn cho phản đối "AI nó bịa thôi", đúng chỗ
-    // người ta chưa tin gì và đang cân xem có đáng trả tiền không. Hàm dùng
-    // CHUNG với `nguoi-khac`, và câu trích cũng đi qua chính `locCachCuc` nên
-    // không nói về thọ mệnh/bệnh tật của một đứa trẻ.
-    coSo: coSoDoc(r.ls, p),
-  });
+    ...previewOf({ success: true, ...meta(p, ten) }, PREVIEW_KEEP_META, TOOL_ID),
+    ...previewExtras(p, r.ls),
+  };
+
+  const key = lasoKey(birth, cacheExtra(moiLo, birthParent));
+  const { cached } = await CACHE.get('main', key);
+  if (cached) {
+    CACHE.touch('main', key);
+    return ok({
+      ...previewOf(cached.payload as Record<string, unknown>, PREVIEW_KEEP, TOOL_ID),
+      ...previewExtras(p, r.ls),
+    });
+  }
+
+  const auth = await authUserFromRequest(request);
+  const pKey = 'error' in auth ? String(body.anonId || '') : auth.user.id;
+  const gate = await previewGate(pKey, previewIpHash(request), TOOL_ID);
+  if (!gate.allowed) {
+    console.error(`[day-con] xem trước bị chặn (${gate.reason})`);
+    return ok(khung);
+  }
+
+  return buildReport(p, ten, 'error' in auth ? '' : auth.user.id, key, Boolean(lsChaMe), r.ls, true);
 }
 
 async function runPost(request: NextRequest) {
@@ -342,7 +446,7 @@ async function runPost(request: NextRequest) {
   const gender = birth.gender === 'nu' ? ('nu' as const) : ('nam' as const);
   const profile = computeDayCon(r.ls, gender, moiLo, lsChaMe);
 
-  const res = await buildReport(profile, ten, auth.user.id, key, Boolean(lsChaMe));
+  const res = await buildReport(profile, ten, auth.user.id, key, Boolean(lsChaMe), r.ls);
   return refundIfSystemFailure(res, {
     toolId: TOOL_ID,
     userId: auth.user.id,
