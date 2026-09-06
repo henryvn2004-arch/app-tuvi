@@ -172,7 +172,7 @@ h1 em{font-style:italic;color:var(--gold)}
   <div class="grid">${cardsHTML}</div>
 
   <div class="cta-box">
-    <p>Muốn nhập ngày sinh khác và nhận luận giải AI chuyên sâu 24 phần?</p>
+    <p>Muốn nhập ngày sinh khác và nhận luận giải chuyên sâu 24 phần?</p>
     <a class="cta-btn" href="/luan-giai.html">Xem Lá Số →</a>
   </div>
 

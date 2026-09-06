@@ -91,7 +91,7 @@
     'oracle': [{ kind: 'co-phap', name: 'Âm Dương, Ngũ Hành, Bát Quái' }, TVMB],
     'boi-bai-tay': [{ kind: 'co-phap', name: 'Bói bài Tây truyền thống (bộ 52 lá)' }, TVMB],
 
-    // ── Phong Cách AI / Làm Đẹp (trang standalone) — lấy đúng tên hệ thống
+    // ── Phong Cách / Làm Đẹp (trang standalone) — lấy đúng tên hệ thống
     // từ system prompt thật trong app/api/tuong-mat/route.js, KHÔNG suy diễn.
     // Mỗi trang phân-tích + tryon dùng CHUNG một khối kết quả trên trang nên
     // đăng ký theo id "phân tích" (đại diện chung cho cả trang).

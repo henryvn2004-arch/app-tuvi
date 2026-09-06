@@ -4,8 +4,8 @@
 <meta charset="UTF-8">
 <link rel="preload" href="/nav.js?v=25" as="script">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Personal Color AI — Tông Màu Cá Nhân | Tử Vi Minh Bảo</title>
-<meta name="description" content="AI phân tích undertone và Personal Color Season — gợi ý màu áo, màu tóc và phụ kiện làm sáng gương mặt nhất. Kết hợp cổ pháp ngũ hành.">
+<title>Personal Color — Tông Màu Cá Nhân | Tử Vi Minh Bảo</title>
+<meta name="description" content="Phân tích undertone và Personal Color Season — gợi ý màu áo, màu tóc và phụ kiện làm sáng gương mặt nhất. Kết hợp cổ pháp ngũ hành.">
 <link rel="canonical" href="https://www.tuviminhbao.com/tools/personal-color.html">
 <link rel="icon" type="image/webp" href="/seal.webp">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -216,7 +216,7 @@ h1,h2,h3{font-family:'Noto Serif',serif;}
   <div class="hero-badge">✦ Personal Color × Cổ Pháp Ngũ Hành</div>
   <img class="hero-avatar" src="/tool-avatars/personal-color.webp" alt="" loading="lazy" onerror="this.remove()">
   <h1>Tông Màu <span>Cá Nhân</span></h1>
-  <p>AI phân tích undertone và season type từ ảnh mặt — gợi ý màu áo, màu tóc và phụ kiện làm sáng gương mặt nhất. Kết hợp cổ pháp bản mệnh.</p>
+  <p>Hệ thống phân tích undertone và season type từ ảnh mặt — gợi ý màu áo, màu tóc và phụ kiện làm sáng gương mặt nhất. Kết hợp cổ pháp bản mệnh.</p>
   <div class="season-strip">
     <div class="season-dot" style="background:#F4A460"></div>
     <div class="season-dot" style="background:#FFD700"></div>
@@ -377,7 +377,7 @@ h1,h2,h3{font-family:'Noto Serif',serif;}
       <div class="card-title"><span class="ic-inline" data-icon-emoji="🪄" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">🪄</span> Thử Trang Phục <span style="font-size:10px;background:#e8f0fe;color:#1455A4;padding:2px 8px;border-radius:10px;margin-left:4px;">20 lượng/lần</span></div>
 
       <div style="font-size:12px;color:var(--text-lt);margin-bottom:10px;line-height:1.5;">
-        Upload ảnh toàn thân → AI thay trang phục đúng màu season <strong id="tryonSeasonLabel"></strong> của bạn
+        Upload ảnh toàn thân → hệ thống thay trang phục đúng màu season <strong id="tryonSeasonLabel"></strong> của bạn
       </div>
 
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;">
@@ -466,11 +466,11 @@ const CONFIDENCE_COLOR = { cao:'#2E8B57', 'trung bình':'#9A7B3A', thấp:'#c039
 let _imgData = null, _mediaType = 'image/jpeg';
 const ANALYSIS_STEPS = [
   { label: 'Tính bản mệnh theo năm sinh', ms: 900 },
-  { label: 'AI phân tích tông da & season màu', ms: 0 },
+  { label: 'Phân tích tông da & season màu', ms: 0 },
 ];
 const TRYON_STEPS = [
   { label: 'Chuẩn bị outfit theo season', ms: 1200 },
-  { label: 'AI đang tạo ảnh outfit mới', ms: 0 },
+  { label: 'Đang tạo ảnh outfit mới', ms: 0 },
 ];
 let _analysisLoadingCtl = null;
 let _tryonLoadingCtl = null;
@@ -756,7 +756,7 @@ async function downloadTryon() {
         <p>Personal Color là hệ thống phân tích màu sắc cá nhân phát triển từ lý thuyết màu sắc của Johannes Itten (Đức, thế kỷ 20), sau đó được phổ biến qua phương pháp "Four Seasons" — phân loại mỗi người vào một mùa (Xuân, Hạ, Thu, Đông) dựa trên tông da (warm/cool), độ tương phản và độ sáng tổng thể.</p>
         <p>Điểm giao thoa với ngũ hành: người tông ấm (warm undertone — vàng, cam nhạt) thường có thiên hướng mệnh Hỏa hoặc Thổ; người tông lạnh (cool undertone — hồng, xanh nhạt) thường gần với mệnh Thủy hoặc Kim. Đây không phải quy tắc tuyệt đối nhưng là điểm khởi đầu thú vị khi kết hợp hai hệ thống tư duy.</p>
         <p>Giá trị thực tế: người mặc đúng tông màu của mình thường được nhận xét là "trông khỏe", "da đẹp" dù không thay đổi bất cứ thứ gì khác. Đây là nguyên tắc mà cả stylist hiện đại lẫn nhân tướng học cổ pháp đều đồng thuận — sự hài hòa tự nhiên giữa màu sắc và cơ địa tạo ra vẻ đẹp bền vững nhất.</p>
-        <p class="kb-links">Xem thêm: <a href="/tools/kieu-toc-ai.html">Tư Vấn Kiểu Tóc &amp; Kính Mắt</a>, <a href="/tools/trang-diem-ai.html">Trang Điểm AI</a>, <a href="/tools/mau-sac-hop-menh.html">Màu Sắc Hợp Mệnh</a></p>
+        <p class="kb-links">Xem thêm: <a href="/tools/kieu-toc-ai.html">Tư Vấn Kiểu Tóc &amp; Kính Mắt</a>, <a href="/tools/trang-diem-ai.html">Trang Điểm</a>, <a href="/tools/mau-sac-hop-menh.html">Màu Sắc Hợp Mệnh</a></p>
       </div>
     </div>
   </div>

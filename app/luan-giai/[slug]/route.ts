@@ -217,7 +217,7 @@ function buildLuanGiaiHTML(ls: Rec, params: IsrParams, slug: string): string {
   const desc    = `Luận giải lá số tử vi ${canChi} ${gioistr.toLowerCase()}, sinh ${dd}/${mm}/${year} giờ ${gioName}. Cung mệnh ${menhName}${menhMaj?` — chính tinh ${menhMaj}`:''}, nạp âm ${napAm}. Phân tích vận hạn năm ${namXem} theo cổ pháp tử vi đẩu số.`.slice(0,160);
   const url     = `${BASE}/luan-giai/${slug}`;
   const lasoUrl = `${BASE}/la-so/${slug}`;
-  const ogImg   = `${BASE}/api/og?${new URLSearchParams({title: title.slice(0,80), sub:'Luận giải AI · Tử Vi Minh Bảo'}).toString()}`;
+  const ogImg   = `${BASE}/api/og?${new URLSearchParams({title: title.slice(0,80), sub:'Luận giải chuyên sâu · Tử Vi Minh Bảo'}).toString()}`;
 
   const schema = JSON.stringify([
     {
@@ -313,7 +313,7 @@ function buildLuanGiaiHTML(ls: Rec, params: IsrParams, slug: string): string {
   // ── Paywall block ─────────────────────────────────────────────────────────
   const paywallHTML = `
     <div style="margin:32px 0;padding:28px 24px;background:linear-gradient(135deg,#061A2E 0%,#0d2d4a 100%);border-radius:12px;color:#fff;text-align:center">
-      <div style="font-size:13px;color:#9A7B3A;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:12px">🔮 Luận giải AI đầy đủ</div>
+      <div style="font-size:13px;color:#9A7B3A;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:12px">🔮 Luận giải chuyên sâu đầy đủ</div>
       <h2 style="font-size:20px;font-weight:700;color:#fff;margin-bottom:12px;line-height:1.4">24 phần phân tích chuyên sâu theo cổ pháp Tử Vi Đẩu Số</h2>
       <p style="font-size:13px;color:#94a3b8;margin-bottom:20px;line-height:1.7">Tính cách · Sự nghiệp · Tài lộc · Tình duyên · Sức khỏe · Gia đình · Phân tích 12 cung · 9 đại vận · Tiểu vận năm ${namXem} · Lời khuyên cụ thể</p>
       <a href="/" style="display:inline-block;background:#9A7B3A;color:#fff;font-size:14px;font-weight:700;padding:12px 28px;border-radius:7px;text-decoration:none;margin-bottom:10px">Xem luận giải đầy đủ →</a>
@@ -372,7 +372,7 @@ h2.sec-title{font-family:'Noto Serif',serif;font-size:16px;text-transform:none;l
 <div id="nav-ph" style="height:60px;background:#061A2E"></div>
 <div class="hero">
   <div class="wrap">
-    <div class="hero-sub">Luận Giải Tử Vi AI</div>
+    <div class="hero-sub">Luận Giải Tử Vi</div>
     <h1>${esc(title)}</h1>
     <div class="hero-meta">${esc(canChiNam)} · Nạp âm ${esc(napAm)} · ${esc(cuc)} · Cung ${esc(menhName)}${menhMaj ? ` — ${esc(menhMaj)}` : ''}</div>
   </div>

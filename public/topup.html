@@ -258,7 +258,7 @@ body{font-family:Arial,sans-serif;background:var(--bg-soft);color:var(--text);mi
   <div class="page-header">
     <div class="eyebrow">Đóng Góp Duy Trì</div>
     <h1>Nạp Lượng để Tra Cứu Mệnh Lý</h1>
-    <p>Lượng là đơn vị dùng cho các công cụ luận giải bằng AI. Mua theo gói, <strong>không hết hạn</strong>, <span id="hdrRate">gói càng lớn càng rẻ</span>.</p>
+    <p>Lượng là đơn vị dùng cho các công cụ luận giải chuyên sâu. Mua theo gói, <strong>không hết hạn</strong>, <span id="hdrRate">gói càng lớn càng rẻ</span>.</p>
   </div>
 
   <!-- Số dư (đã đăng nhập) HOẶC quà chào mừng (chưa đăng nhập) — cùng MỘT chỗ,
@@ -423,7 +423,7 @@ body{font-family:Arial,sans-serif;background:var(--bg-soft);color:var(--text);mi
     </div>
     <div class="faq-item">
       <div class="faq-q">Quà Lượng chào mừng khi đăng ký dùng được gì?</div>
-      <div class="faq-a" id="faqWelcome">Dùng được cho các công cụ luận giải bằng AI và trò chuyện với Trợ lý Luận Đường. Mức phí của từng công cụ hiển thị ngay trên trang công cụ đó.</div>
+      <div class="faq-a" id="faqWelcome">Dùng được cho các công cụ luận giải chuyên sâu và trò chuyện với Trợ lý Luận Đường. Mức phí của từng công cụ hiển thị ngay trên trang công cụ đó.</div>
     </div>
     <div class="faq-item">
       <div class="faq-q">Lượng có dùng chung tài khoản được không?</div>
@@ -431,7 +431,7 @@ body{font-family:Arial,sans-serif;background:var(--bg-soft);color:var(--text);mi
     </div>
     <div class="faq-item">
       <div class="faq-q">Vì sao có thanh toán mà không hoàn toàn miễn phí?</div>
-      <div class="faq-a">Mỗi luận giải bằng AI gọi API mô hình ngôn ngữ lớn (Claude/GPT), tốn khoảng 0.05–0.10 USD mỗi lượt, cộng thêm chi phí lưu trữ và hosting. Lượng là cách giúp dự án tự duy trì để giữ toàn bộ công cụ tra cứu cổ pháp miễn phí cho mọi người.</div>
+      <div class="faq-a">Mỗi luận giải chuyên sâu gọi API mô hình ngôn ngữ lớn (Claude/GPT), tốn khoảng 0.05–0.10 USD mỗi lượt, cộng thêm chi phí lưu trữ và hosting. Lượng là cách giúp dự án tự duy trì để giữ toàn bộ công cụ tra cứu cổ pháp miễn phí cho mọi người.</div>
     </div>
   </section>
 </main>
@@ -627,7 +627,7 @@ async function loadStatus() {
       + '<div class="welcome-ic">' + ic('gift') + '</div>'
       + '<div class="welcome-body">'
       + '<div class="welcome-title">' + (bonus ? 'Tặng ' + bonus + ' Lượng cho thành viên mới' : 'Tặng Lượng miễn phí cho thành viên mới') + '</div>'
-      + '<div class="welcome-sub">Đủ để dùng thử công cụ luận giải bằng AI. Không cần thẻ, không cam kết.</div>'
+      + '<div class="welcome-sub">Đủ để dùng thử công cụ luận giải chuyên sâu. Không cần thẻ, không cam kết.</div>'
       + '</div>'
       + '<button class="btn-free" onclick="handleFreeSignup()">Đăng Ký →</button>'
       + '</div>';
@@ -637,7 +637,7 @@ async function loadStatus() {
       // Không hứa cứng "tra cứu miễn phí hoàn toàn" ở đây — giá từng công cụ đọc
       // từ `tool_pricing` và chỉ nêu ở trang công cụ, nên đổi giá là tự đúng.
       document.getElementById('faqWelcome').textContent = bonus
-        + ' Lượng, dùng được cho các công cụ luận giải bằng AI và trò chuyện với Trợ lý Luận Đường. '
+        + ' Lượng, dùng được cho các công cụ luận giải chuyên sâu và trò chuyện với Trợ lý Luận Đường. '
         + 'Mức phí của từng công cụ hiển thị ngay trên trang công cụ đó.';
     }
     return;
@@ -774,7 +774,7 @@ async function loadToolPricing() {
     const groups = {};
     tools.forEach(t => { (groups[t.category] = groups[t.category] || []).push(t); });
 
-    const catOrder = ['Luận Giải', 'Phong Thủy', 'Xem Tướng', 'Đặt Tên & Ngày', 'Phong Cách AI'];
+    const catOrder = ['Luận Giải', 'Phong Thủy', 'Xem Tướng', 'Đặt Tên & Ngày', 'Phong Cách'];
     const sortedCats = Object.keys(groups).sort((a, b) => {
       const ia = catOrder.indexOf(a), ib = catOrder.indexOf(b);
       return (ia === -1 ? 99 : ia) - (ib === -1 ? 99 : ib);
@@ -826,7 +826,7 @@ async function loadToolPricing() {
         // chép tay ⇒ chỉ nêu tool CHẮC CHẮN còn bật (bản cũ nhắc "tứ trụ" — tool
         // đó đã `enabled=false` từ đợt dọn tool trùng lặp).
         '<strong>' + freeCount + ' công cụ tra cứu cổ pháp không tốn Lượng</strong> (an sao, nạp âm, hoàng đạo, kinh dịch, tarot…). '
-        + 'Chỉ các công cụ luận giải bằng AI mới tính phí.';
+        + 'Chỉ các công cụ luận giải chuyên sâu mới tính phí.';
       const fn = document.getElementById('freeNote');
       fn.style.display = 'flex';
       mount(fn);
@@ -1032,7 +1032,7 @@ function copyRefLink() {
 function shareRef(channel) {
   const el = document.getElementById('refLink');
   const link = el.dataset.url || el.textContent;
-  const msg = `Mình đang dùng Tử Vi Minh Bảo — luận giải lá số bằng AI theo cổ pháp. Đăng ký qua link này để cùng nhận Lượng: ${link}`;
+  const msg = `Mình đang dùng Tử Vi Minh Bảo — luận giải lá số theo cổ pháp. Đăng ký qua link này để cùng nhận Lượng: ${link}`;
   const urls = {
     zalo:      `https://zalo.me/share/url?url=${encodeURIComponent(link)}`,
     messenger: `fb-messenger://share?link=${encodeURIComponent(link)}`,

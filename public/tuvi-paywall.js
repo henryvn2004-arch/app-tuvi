@@ -16,25 +16,25 @@ const TuviPaywall = (() => {
     'tu-binh':             { title: 'Tử Bình Bát Tự' },
     'xem-tuoi':            { title: 'Xem Tuổi Vợ Chồng' },
     'xem-lam-an':          { title: 'Xem Tuổi Làm Ăn' },
-    'dien-tuong':          { title: 'Diện Tướng AI' },
-    'nhan-tuong':          { title: 'Nhãn Tướng AI' },
-    'thu-tuong':           { title: 'Thủ Tướng AI' },
-    'thanh-tuong':         { title: 'Thanh Tướng AI' },
+    'dien-tuong':          { title: 'Diện Tướng' },
+    'nhan-tuong':          { title: 'Nhãn Tướng' },
+    'thu-tuong':           { title: 'Thủ Tướng' },
+    'thanh-tuong':         { title: 'Thanh Tướng' },
     'thanh-tuong-pro':     { title: 'Thanh Tướng Pro' },
     'khi-sac':             { title: 'Khí Sắc — Vận Khí' },
     'phong-thuy':          { title: 'Phong Thủy Nội Thất' },
     'ban-lam-viec':        { title: 'Phong Thủy Bàn Làm Việc' },
     'cua-hang-phong-thuy': { title: 'Phong Thủy Cửa Hàng & VP' },
     'mau-sac-hop-menh':    { title: 'Màu Sắc Hợp Mệnh' },
-    'kieu-toc-phan-tich':  { title: 'Phân Tích Kiểu Tóc AI' },
-    'kieu-toc-tryon':      { title: 'Thử Kiểu Tóc AI' },
-    'trang-phuc-tryon':    { title: 'Thử Trang Phục AI' },
-    'phong-thuy-render':   { title: 'Render Phòng Phong Thủy AI' },
-    'trang-diem-phan-tich':{ title: 'Phân Tích Trang Điểm AI' },
-    'trang-diem-tryon':    { title: 'Thử Trang Điểm AI' },
+    'kieu-toc-phan-tich':  { title: 'Phân Tích Kiểu Tóc' },
+    'kieu-toc-tryon':      { title: 'Thử Kiểu Tóc' },
+    'trang-phuc-tryon':    { title: 'Thử Trang Phục' },
+    'phong-thuy-render':   { title: 'Render Phòng Phong Thủy' },
+    'trang-diem-phan-tich':{ title: 'Phân Tích Trang Điểm' },
+    'trang-diem-tryon':    { title: 'Thử Trang Điểm' },
     'trang-phuc-theo-ngay':{ title: 'Trang Phục Theo Ngày' },
-    'da-lieu-ai':          { title: 'Da Liệu AI Toàn Diện' },
-    'personal-color':      { title: 'Personal Color AI' },
+    'da-lieu-ai':          { title: 'Da Liệu Toàn Diện' },
+    'personal-color':      { title: 'Personal Color' },
     'personal-color-tryon':{ title: 'Personal Color Try-on' },
     'dat-ten-con':         { title: 'Đặt Tên Con' },
     'dat-ten-dn':          { title: 'Đặt Tên Doanh Nghiệp' },
@@ -649,7 +649,7 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
     o = o || {};
     const id = o.id ? ' id="' + _esc(o.id) + '"' : '';
     const part = o.part != null ? ' data-tpw-part="' + Number(o.part) + '"' : '';
-    const label = o.label || 'AI luận sâu phần này';
+    const label = o.label || 'Luận sâu phần này';
     const cta = o.cta || 'Mở bản đầy đủ';
     const product = _esc(o.product || (_cfg && _cfg.product) || '');
     const priceAttr = o.part != null ? 'data-tvp-price-part' : 'data-tvp-price';

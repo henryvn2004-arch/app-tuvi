@@ -4,8 +4,8 @@
 <meta charset="UTF-8">
 <link rel="preload" href="/nav.js?v=25" as="script">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>xLook — Tủ Đồ AI | Tử Vi Minh Bảo</title>
-<meta name="description" content="Quản lý tủ đồ thông minh — AI mix & match outfit theo lịch trình, thời tiết và bản mệnh ngũ hành.">
+<title>xLook — Tủ Đồ | Tử Vi Minh Bảo</title>
+<meta name="description" content="Quản lý tủ đồ thông minh — hệ thống mix & match outfit theo lịch trình, thời tiết và bản mệnh ngũ hành.">
 <link rel="canonical" href="https://www.tuviminhbao.com/tools/xlook.html">
 <link rel="icon" type="image/webp" href="/seal.webp">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -169,7 +169,7 @@ select.form-control{appearance:none;background-image:url("data:image/svg+xml,%3C
 .missing-item::before{content:'→';color:var(--gold);font-size:10px;}
 </style>
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"XLook phân tích những gì?","acceptedAnswer":{"@type":"Answer","text":"XLook sử dụng AI để phân tích tổng thể ngoại hình, bao gồm tỉ lệ khuôn mặt, đặc điểm nổi bật, phong cách phù hợp và các gợi ý cải thiện hình ảnh cá nhân."}},{"@type":"Question","name":"Phân tích ngoại hình bằng AI có chính xác không?","acceptedAnswer":{"@type":"Answer","text":"AI cho kết quả dựa trên các tiêu chuẩn thẩm mỹ được học từ dữ liệu lớn. Kết quả mang tính tham khảo và không phản ánh chuẩn mực tuyệt đối vì vẻ đẹp đa dạng và không bị giới hạn bởi bất kỳ thước đo nào."}},{"@type":"Question","name":"Nên chuẩn bị ảnh như thế nào để phân tích chính xác nhất?","acceptedAnswer":{"@type":"Answer","text":"Dùng ảnh chụp thẳng mặt, ánh sáng đều từ phía trước, không đội mũ hay đeo kính, tóc không che mặt. Ảnh tự nhiên không qua chỉnh sửa filter sẽ cho kết quả phân tích chính xác nhất."}}]}
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"XLook phân tích những gì?","acceptedAnswer":{"@type":"Answer","text":"XLook phân tích tổng thể ngoại hình, bao gồm tỉ lệ khuôn mặt, đặc điểm nổi bật, phong cách phù hợp và các gợi ý cải thiện hình ảnh cá nhân."}},{"@type":"Question","name":"Phân tích ngoại hình có chính xác không?","acceptedAnswer":{"@type":"Answer","text":"Kết quả dựa trên các tiêu chuẩn thẩm mỹ phổ biến. Kết quả mang tính tham khảo và không phản ánh chuẩn mực tuyệt đối vì vẻ đẹp đa dạng và không bị giới hạn bởi bất kỳ thước đo nào."}},{"@type":"Question","name":"Nên chuẩn bị ảnh như thế nào để phân tích chính xác nhất?","acceptedAnswer":{"@type":"Answer","text":"Dùng ảnh chụp thẳng mặt, ánh sáng đều từ phía trước, không đội mũ hay đeo kính, tóc không che mặt. Ảnh tự nhiên không qua chỉnh sửa filter sẽ cho kết quả phân tích chính xác nhất."}}]}
 </script>
 </head>
 <body>
@@ -177,9 +177,9 @@ select.form-control{appearance:none;background-image:url("data:image/svg+xml,%3C
 <div id="nav-placeholder"></div>
 
 <div class="hero">
-  <div class="hero-badge">✦ AI Wardrobe Manager</div>
+  <div class="hero-badge">✦ Quản Lý Tủ Đồ</div>
   <h1>x<span>Look</span></h1>
-  <p>Quản lý tủ đồ thông minh — AI mix & match outfit theo lịch trình, thời tiết và bản mệnh ngũ hành</p>
+  <p>Quản lý tủ đồ thông minh — hệ thống mix & match outfit theo lịch trình, thời tiết và bản mệnh ngũ hành</p>
 </div>
 
 <div class="wrap">
@@ -206,7 +206,7 @@ select.form-control{appearance:none;background-image:url("data:image/svg+xml,%3C
       <div class="empty-state" style="grid-column:1/-1">
         <div class="empty-icon"><span class="ic-inline" data-icon-emoji="👗" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">👗</span></div>
         <div style="font-size:14px;font-weight:600;color:var(--navy);margin-bottom:6px;">Tủ đồ trống</div>
-        <div style="font-size:12px;color:var(--text-lt);">Nhấn "Thêm Đồ" để bắt đầu xây dựng tủ đồ AI</div>
+        <div style="font-size:12px;color:var(--text-lt);">Nhấn "Thêm Đồ" để bắt đầu xây dựng tủ đồ</div>
       </div>
     </div>
   </div>
@@ -289,7 +289,7 @@ select.form-control{appearance:none;background-image:url("data:image/svg+xml,%3C
         </div>
 
         <div class="classify-result" id="classifyResult">
-          <div style="font-size:11px;font-weight:700;color:var(--text-lt);margin-bottom:6px;">AI PHÂN TÍCH</div>
+          <div style="font-size:11px;font-weight:700;color:var(--text-lt);margin-bottom:6px;">PHÂN TÍCH</div>
           <div class="classify-tags" id="classifyTags"></div>
           <div style="font-size:11px;color:var(--text-mid);margin-top:6px;" id="classifyDesc"></div>
         </div>
@@ -307,7 +307,7 @@ select.form-control{appearance:none;background-image:url("data:image/svg+xml,%3C
 
         <div id="addLoading" style="display:none;text-align:center;padding:14px 0;font-size:12px;color:var(--text-lt);">
           <div class="spinner-sm spinner-dark" style="width:22px;height:22px;margin:0 auto 6px;"></div>
-          AI đang phân tích...
+          Đang phân tích...
         </div>
         <div id="addSuccess" style="display:none;background:#f0fff4;border:1px solid #c6e8d0;border-radius:8px;padding:10px 14px;margin-top:10px;font-size:13px;color:#2E8B57;font-weight:600;text-align:center;">
           ✓ Đã thêm vào tủ đồ!
@@ -329,7 +329,7 @@ const OCC_VN = {daily:'Hàng ngày',work:'Đi làm',date:'Hẹn hò',party:'Ti�
 let _wardrobe = [];
 const MIX_STEPS = [
   { label: 'Đọc tủ đồ', ms: 1200 },
-  { label: 'AI tạo gợi ý phối đồ', ms: 0 },
+  { label: 'Tạo gợi ý phối đồ', ms: 0 },
 ];
 let _mixLoadingCtl = null;
 let _addImgData = null, _addMediaType = 'image/jpeg', _addClassified = null;
@@ -647,8 +647,8 @@ window.addEventListener('DOMContentLoaded', async () => {
       <div class="kb-body">
         <p>Trong tư duy mệnh lý truyền thống, cách ăn mặc không chỉ là thẩm mỹ mà còn phản ánh và ảnh hưởng đến năng lượng cá nhân. Màu sắc trang phục, chất liệu và phong cách tổng thể đều có thể được phân tích qua lăng kính ngũ hành để tìm sự hài hòa với mệnh bản thân.</p>
         <p>Tủ đồ lý tưởng theo quan điểm này không phải tủ đồ đắt tiền hay nhiều đồ, mà là tủ đồ <em>hài hòa</em>: có đủ màu sắc tương sinh với mệnh, phù hợp với các dịp khác nhau, và không có quá nhiều màu khắc mệnh. Người mệnh Hỏa nên có nhiều đỏ, cam, xanh lá hơn là đen và xám trong tủ đồ.</p>
-        <p>Kết hợp AI vào quản lý tủ đồ giải quyết bài toán thực tế: có rất nhiều quần áo nhưng mỗi sáng không biết mặc gì. Mix and match theo lịch trình, thời tiết và ngũ hành ngày — đây là cách hiện đại hóa một thực hành đã tồn tại hàng nghìn năm trong văn hóa Á Đông.</p>
-        <p class="kb-links">Xem thêm: <a href="/tools/kieu-toc-ai.html">Tư Vấn Kiểu Tóc &amp; Kính Mắt</a>, <a href="/tools/trang-diem-ai.html">Trang Điểm AI</a>, <a href="/tools/personal-color.html">Personal Color AI</a></p>
+        <p>Kết hợp công nghệ vào quản lý tủ đồ giải quyết bài toán thực tế: có rất nhiều quần áo nhưng mỗi sáng không biết mặc gì. Mix and match theo lịch trình, thời tiết và ngũ hành ngày — đây là cách hiện đại hóa một thực hành đã tồn tại hàng nghìn năm trong văn hóa Á Đông.</p>
+        <p class="kb-links">Xem thêm: <a href="/tools/kieu-toc-ai.html">Tư Vấn Kiểu Tóc &amp; Kính Mắt</a>, <a href="/tools/trang-diem-ai.html">Trang Điểm</a>, <a href="/tools/personal-color.html">Personal Color</a></p>
       </div>
     </div>
   </div>

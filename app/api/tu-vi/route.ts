@@ -185,7 +185,7 @@ body{font-family:'Be Vietnam Pro',Arial,sans-serif;background:var(--bg);color:va
   <div class="article-body">${body}</div>
   <div class="cta-box">
     <h3>Áp dụng cho chính bạn</h3>
-    <p>Luận giải AI chi tiết — tính cách, vận hạn, tình duyên, sự nghiệp theo giờ sinh cụ thể</p>
+    <p>Luận giải chuyên sâu chi tiết — tính cách, vận hạn, tình duyên, sự nghiệp theo giờ sinh cụ thể</p>
     <a class="cta-btn" href="${tool.href}">${escHtml(tool.label)} →</a>
   </div>
   ${relatedHtml}

@@ -297,7 +297,21 @@ export function computeVanNgay(dd: number, mm: number, yy: number): VanNgayResul
     xung: { chi: CHI[xungIdx]!, namSinh: namSinhTheoChi(xungIdx, yy) },
     gio,
     gioTot: gio.filter((g) => g.hoangDao),
-    nen: sorted.filter((s) => s.score >= 7).slice(0, 3).map((s) => pick(s, true)),
+    // Ngưỡng 6, KHÔNG phải 7. Đo trên 365 ngày của 2026 bằng chính engine này:
+    //   >= 7 → ô "Nên làm" TRỐNG 201/365 ngày (55%)
+    //   >= 6 → trống 159/365 (44%), trung bình 2,67 việc/ngày có việc
+    //   >= 5 → trống  79/365 (22%)
+    // Chọn 6 là một đánh đổi CÓ ĐO: 5 lấp được ô nhiều nhất nhưng gọi một việc
+    // 5/10 là "nên làm" thì thẻ đang khuyên quá tay. Vì thế thẻ hiện KÈM ĐIỂM —
+    // người đọc tự thấy 6/10 khác 10/10, chứ không phải nhận một danh sách
+    // phẳng như nhau.
+    // ⚠️ Đổi số này là đổi CẢ tin nhắc hằng ngày lẫn thẻ. `lib/push/daily-message.ts`
+    // CỐ Ý lọc lại >= 7 cho riêng nó — xem chú thích ở đó.
+    // ⚠️ `app/ngay-tot/lich/[year]/[m]/route.ts` có bản >= 7 RIÊNG (nó gọi thẳng
+    // `scoreAllActivities`, không qua đây) và CỐ Ý giữ nguyên: lịch SEO trả lời
+    // "ngày nào tốt để cưới hỏi" nên phải giữ bar cao, khác việc thẻ trả lời
+    // "hôm nay làm được gì".
+    nen: sorted.filter((s) => s.score >= 6).slice(0, 3).map((s) => pick(s, true)),
     // Nên 3 / kiêng 2: thẻ là khối ĐẦU trang chủ, dài thêm một dòng là đẩy
     // danh sách công cụ xuống dưới màn hình đầu tiên trên máy 390px.
     kieng: sorted.filter((s) => s.score <= 3).slice(-2).reverse().map((s) => pick(s, false)),

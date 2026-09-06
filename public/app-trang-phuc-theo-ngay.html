@@ -210,7 +210,7 @@
         </div>
 
         <div class="tn-card" id="tryonCard">
-          <h2><span class="ic" data-icon="sparkles"></span> Thử Trang Phục AI
+          <h2><span class="ic" data-icon="sparkles"></span> Thử Trang Phục
             <span style="font-size:10px;background:var(--gold-lt);color:var(--tx-blue);padding:2px 8px;border-radius:10px;margin-left:4px"><span data-tvp-price="trang-phuc-tryon">…</span> Lượng/lần</span>
           </h2>
 
@@ -358,11 +358,11 @@ let _resultData=null;
 let _tryonImgData=null,_tryonMediaType='image/jpeg',_tryonStyle='cong-so',_tryonResultUrl=null;
 const ANALYSIS_STEPS=[
   {label:'Tính can chi ngày & quan hệ ngũ hành',ms:900},
-  {label:'AI tư vấn trang phục hợp ngày',ms:0},
+  {label:'Tư vấn trang phục hợp ngày',ms:0},
 ];
 const TRYON_STEPS=[
   {label:'Chuẩn bị trang phục theo ngũ hành',ms:1200},
-  {label:'AI đang tạo ảnh trang phục',ms:0},
+  {label:'Đang tạo ảnh trang phục',ms:0},
 ];
 let _analysisLoadingCtl=null;
 let _tryonLoadingCtl=null;
@@ -406,7 +406,7 @@ function mountHook(cc,hanh,rel){
     facts:[{
       tone:tot?'good':(rel.code==='ngay_khac_menh'?'bad':'neutral'),
       title:'Ngày '+cc+' — hành '+hanh,
-      body:rel.text+'. Màu nên mặc, phong cách gợi ý, và trang phục cụ thể theo đúng hành ngày nằm trong bản phân tích AI.',
+      body:rel.text+'. Màu nên mặc, phong cách gợi ý, và trang phục cụ thể theo đúng hành ngày nằm trong bản phân tích chuyên sâu.',
       source:'engine · dayCanChi/getRelation',
     }],
   });
@@ -574,7 +574,7 @@ async function doTryon(){
       document.getElementById('tryonResult').style.display='block';
       window.refreshNavCredits?.();
       Shell.setShareable({
-        kind:'image', title:'Trang phục hợp ngày của tôi (AI try-on)',
+        kind:'image', title:'Trang phục hợp ngày của tôi (thử ảo)',
         imageUrl:data.imageUrl, text:'Mệnh '+_resultData.menhHanh+' · '+_tryonStyle
       });
     }catch(e){_tryonLoadingCtl&&_tryonLoadingCtl.stop();alert('Lỗi: '+(e.message||'Vui lòng thử lại.'));}
