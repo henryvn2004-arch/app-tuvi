@@ -153,8 +153,7 @@ export function renderPage(opts: PageOpts): string {
 <div id="nav-ph" style="height:60px;background:#061A2E"></div>
 <div class="bc">${bcHTML}</div>
 <div class="page">${opts.body}</div>
-<script src="/footer.js"></script>
-<script src="/nav.js?v=24" defer></script>
+<script src="/nav.js?v=26" defer></script>
 </body></html>`;
 }
 

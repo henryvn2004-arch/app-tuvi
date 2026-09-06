@@ -477,72 +477,107 @@
   document.addEventListener('click', closeAll);
 
   // ── Footer ────────────────────────────────────────────────────
+  // Cấu trúc khớp 2 dropdown đang chạy thật trên nav (Khám phá / Cẩm nang):
+  // cột "Công Cụ"/"Tra Cứu" trỏ hub (đọc dữ liệu), không liệt kê tool lẻ nữa.
   var footerCss = [
-    '.site-footer{background:#1A1210;color:rgba(255,255,255,0.5);padding:48px 40px 24px;margin-top:auto}',
+    '.site-footer{background:#1A1210;color:rgba(255,255,255,0.5);padding:44px 40px 22px;margin-top:auto}',
     '.ft-body{max-width:1100px;margin:0 auto}',
-    '.ft-top{display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;gap:40px;padding-bottom:32px;border-bottom:1px solid rgba(255,255,255,0.08);margin-bottom:20px}',
+    '.ft-top{display:grid;grid-template-columns:1.5fr auto 1fr 1fr 1fr;gap:0}',
+    '.ft-top .ft-brand{padding-right:32px}',
+    '.ft-top .ft-col{padding-left:32px}',
+    '.ft-divider{width:1px;align-self:stretch;background:rgba(255,255,255,.08)}',
     '.ft-brand-row{display:flex;align-items:center;gap:10px;margin-bottom:12px}',
     '.ft-brand-row img{width:36px;height:36px;object-fit:contain;border-radius:5px;opacity:0.9}',
     '.ft-brand-name{font-size:14px;font-weight:700;color:rgba(255,255,255,0.85);font-family:Georgia,serif;line-height:1.2}',
     '.ft-brand-zh{font-size:11px;color:#C9A84C}',
     '.ft-tagline{font-size:12px;color:rgba(255,255,255,0.3);line-height:1.7;max-width:240px}',
-    '.ft-col-title{font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#9A7B3A;margin-bottom:14px}',
-    '.ft-col a{display:block;font-size:13px;color:rgba(255,255,255,0.45)!important;text-decoration:none!important;margin-bottom:9px;transition:color .15s;background:none!important;border:none!important;padding:0!important}',
-    '.ft-col a:hover{color:rgba(255,255,255,0.85)!important}',
-    '.ft-bottom{display:flex;justify-content:space-between;align-items:center;font-size:11px;color:rgba(255,255,255,0.2);gap:16px;flex-wrap:wrap}',
-    '.ft-bottom img{width:20px;height:20px;object-fit:contain;opacity:0.25;border-radius:3px}',
-    '.ft-legal{font-size:11px;color:rgba(255,255,255,0.3);line-height:1.7;max-width:260px;margin-top:14px;padding-top:14px;border-top:1px solid rgba(255,255,255,0.05)}',
-    '.ft-legal strong{color:rgba(255,255,255,0.5);font-weight:600}',
-    '.ft-legal-name{font-size:1.5em;line-height:1.4;margin-bottom:6px}',
-    '.ft-disclaimer{font-size:10px;color:rgba(255,255,255,0.15);line-height:1.6;margin-top:12px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.05);text-align:center}',
-    '@media(max-width:900px){.ft-top{grid-template-columns:1fr 1fr;gap:28px}.ft-brand{grid-column:1/-1}}',
-    '@media(max-width:600px){.site-footer{padding:40px 20px 20px}.ft-top{grid-template-columns:1fr 1fr;gap:24px}.ft-brand{grid-column:1/-1}.ft-bottom{flex-direction:column;align-items:flex-start;gap:4px}}'
+    '.ft-legal{margin-top:14px;padding-top:14px;border-top:1px solid rgba(255,255,255,.06);display:flex;flex-direction:column;gap:8px}',
+    '.ft-legal-row{display:flex;align-items:flex-start;gap:9px;font-size:11px;color:rgba(255,255,255,.35);line-height:1.5}',
+    '.ft-legal-row strong{color:rgba(255,255,255,.6);font-weight:600;font-size:11.5px}',
+    '.ft-legal-row .dim{color:rgba(255,255,255,.28)}',
+    '.ft-legal-ic{flex-shrink:0;width:14px;height:14px;margin-top:1px;color:#9A7B3A}',
+    '.ft-legal-ic svg{width:100%;height:100%}',
+    '.ft-social{display:flex;gap:8px;margin-top:16px}',
+    '.ft-soc{width:28px;height:28px;border-radius:50%;border:1px solid rgba(201,168,76,.35);color:#C9A84C;display:flex;align-items:center;justify-content:center;text-decoration:none!important;transition:border-color .15s,background .15s}',
+    '.ft-soc:hover{background:rgba(201,168,76,.1);border-color:#C9A84C}',
+    '.ft-soc svg{width:13px;height:13px}',
+    '.ft-col-title{font-size:10px;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;color:#C9A84C;margin-bottom:16px}',
+    '.ft-col-title i{display:block;width:22px;height:2px;background:#9A7B3A;margin-top:8px;border-radius:2px;font-style:normal}',
+    '.ft-item{display:flex;align-items:center;gap:11px;font-size:13px;color:rgba(255,255,255,.55)!important;text-decoration:none!important;margin-bottom:15px}',
+    '.ft-item:last-child{margin-bottom:0}',
+    '.ft-item:hover{color:rgba(255,255,255,.9)!important}',
+    '.ft-item-ic{flex-shrink:0;width:15px;height:15px;color:#9A7B3A}',
+    '.ft-item-ic svg{width:100%;height:100%}',
+    '.ft-bottom{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;margin-top:32px;padding-top:20px;border-top:1px solid rgba(255,255,255,.08);font-size:11px;color:rgba(255,255,255,.35)}',
+    '.ft-bottom-left{display:flex;align-items:center;gap:9px;flex-wrap:wrap}',
+    '.ft-bottom-left a{color:rgba(255,255,255,.35)!important;text-decoration:none!important;font-size:11px}',
+    '.ft-bottom-left a:hover{color:rgba(255,255,255,.7)!important}',
+    '.ft-sep{color:rgba(255,255,255,.15)}',
+    '.ft-sign{display:flex;align-items:center;gap:10px;color:#C9A84C;opacity:.9}',
+    '.ft-sign span{font-family:Georgia,serif;font-style:italic;font-size:12.5px;letter-spacing:.02em}',
+    '.ft-disclaimer{font-size:9.5px;color:rgba(255,255,255,0.15);line-height:1.6;margin-top:12px;text-align:center}',
+    '.ft-disclaimer a{color:inherit;text-decoration:underline}',
+    '@media(max-width:900px){.ft-top{grid-template-columns:1fr 1fr}.ft-top .ft-brand{grid-column:1/-1;padding-right:0}.ft-divider{display:none}.ft-top .ft-col{padding-left:0}}',
+    '@media(max-width:600px){.site-footer{padding:36px 20px 18px}.ft-top{grid-template-columns:1fr 1fr;gap:20px 16px}.ft-top .ft-brand{grid-column:1/-1}.ft-bottom{flex-direction:column;align-items:flex-start}}'
   ].join('');
 
   if (!document.getElementById('footer-css')) {
     var fs=document.createElement('style'); fs.id='footer-css'; fs.textContent=footerCss; document.head.appendChild(fs);
   }
 
+  function ftItem(href, iconKey, label) {
+    return '<a class="ft-item" href="' + href + '"><span class="ft-item-ic">' + (ICONS[iconKey] || '') + '</span>' + label + '</a>';
+  }
+  function ftLegalRow(iconKey, html) {
+    return '<div class="ft-legal-row"><span class="ft-legal-ic">' + (ICONS[iconKey] || '') + '</span><div>' + html + '</div></div>';
+  }
+  // Chữ ký chân trang — trang trí thuần tuý, không phải icon chức năng nên
+  // không nằm trong bảng ICONS dùng chung.
+  var FT_SIGN_ICON = '<svg viewBox="0 0 120 36" width="84" height="25" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="90" cy="10" r="7" fill="currentColor" stroke="none" opacity=".85"/><path d="M2 32 L26 12 L40 24 L60 6 L78 22 L96 32 Z" opacity=".8"/></svg>';
+
   function injectFooter() {
     var f = '<footer class="site-footer"><div class="ft-body"><div class="ft-top">'
       + '<div class="ft-brand"><div class="ft-brand-row"><img src="/seal.webp" alt=""><div><div class="ft-brand-name">Tử Vi Minh Bảo</div><div class="ft-brand-zh">Tri mệnh lý – Thuận thế hành</div></div></div><div class="ft-tagline">Tử vi đẩu số theo cổ pháp, luận giải chuyên sâu.</div>'
       // Mã số doanh nghiệp CHƯA có trong hồ sơ được cung cấp — KHÔNG bịa số.
       // Bổ sung dòng "MST: ..." ngay khi có, theo Nghị định 52/2013.
-      + '<div class="ft-legal"><div class="ft-legal-name"><strong>Công ty TNHH Kira Tech</strong><br>(Kira Tech Company Limited)</div>'
-      + 'Điện thoại: 0343.848.795<br>'
-      + 'Email: contact@tuviminhbao.com<br>'
-      + 'Địa chỉ: 901 Lê Đức Thọ, Phường An Hội Đông, Thành phố Hồ Chí Minh, Việt Nam</div>'
+      + '<div class="ft-legal">'
+      + ftLegalRow('building-2', '<strong>Công ty TNHH Kira Tech</strong><br><span class="dim">(Kira Tech Company Limited)</span>')
+      + ftLegalRow('pin', '901 Lê Đức Thọ, Phường An Hội Đông,<br>Thành phố Hồ Chí Minh, Việt Nam')
+      + ftLegalRow('mail', 'contact@tuviminhbao.com &nbsp;·&nbsp; 0343.848.795')
       + '</div>'
-      + '<div class="ft-col"><div class="ft-col-title">Tử Vi</div>'
-      + '<a href="/tuvi-chat.html">Tử Vi Chat</a>'
-      + '<a href="/luan-giai.html">Luận Giải Lá Số</a>'
-      + '<a href="/tu-binh.html">Tử Bình Bát Tự</a>'
-      + '<a href="/xem-tuoi.html">Xem Tuổi Vợ Chồng</a>'
-      + '<a href="/tools/an-sao.html">An Sao Lá Số</a>'
-      + '<a href="/nghien-cuu">Nghiên Cứu Tử Vi</a>'
-      + '<a href="/tac-gia">Tác Giả</a>'
-      + '<a href="/blog.html">Khảo Luận</a></div>'
-      + '<div class="ft-col"><div class="ft-col-title">Phong Thủy & Xem Tướng</div>'
-      + '<a href="/tools/phong-thuy.html">Phong Thủy Nội Thất</a>'
-      + '<a href="/tools/bat-trach.html">Hướng Bát Trạch</a>'
-      + '<a href="/tools/tuong-mat-ai.html">Xem Tướng Mặt</a>'
-      + '<a href="/tools/kieu-toc-ai.html">Kiểu Tóc Hợp Tướng</a>'
-      + '<a href="/tools/mau-sac-hop-menh.html">Màu Sắc & Thử Trang Phục</a></div>'
-      + '<div class="ft-col"><div class="ft-col-title">Về Chúng Tôi</div>'
-      + '<a href="/about.html">Giới Thiệu</a>'
-      + '<a href="/resources.html">Tài Liệu</a>'
-      + '<a href="/menh-kho.html">Mệnh Khố</a>'
-      + '<a href="/contact.html">Liên Hệ</a></div>'
+      + '<div class="ft-social">'
+      + '<a href="https://www.facebook.com/profile.php?id=61591272875636" target="_blank" rel="noopener" class="ft-soc" title="Facebook"><span style="font-family:Georgia,serif;font-weight:700;font-style:italic;font-size:13px;line-height:1">f</span></a>'
+      + '<a href="https://www.youtube.com/@tuviminhbao" target="_blank" rel="noopener" class="ft-soc" title="YouTube">' + ICONS['film'] + '</a>'
+      + '<a href="mailto:contact@tuviminhbao.com" class="ft-soc" title="Email">' + ICONS['mail'] + '</a>'
       + '</div>'
-      + '<div class="ft-bottom"><span>© 2026 Tử Vi Minh Bảo — tuviminhbao.com</span>'
-      + '<div style="display:flex;gap:16px;align-items:center;flex-wrap:wrap">'
-      + '<a href="/san-pham-dich-vu.html">Sản Phẩm &amp; Dịch Vụ</a>'
-      + '<a href="/chinh-sach-bao-mat.html">Chính Sách Bảo Mật</a>'
-      + '<a href="/dieu-khoan-dich-vu.html">Điều Khoản Sử Dụng</a>'
-      + '<a href="/huong-dan-thanh-toan.html">Hướng Dẫn Thanh Toán</a>'
-      + '<a href="/mien-tru-trach-nhiem.html">Miễn Trừ Trách Nhiệm</a>'
-      + '<img src="/seal.webp" alt="">'
-      + '</div></div>'
+      + '</div>'
+      + '<div class="ft-divider"></div>'
+      + '<div class="ft-col"><div class="ft-col-title">Công Cụ<i></i></div>'
+      + ftItem('/app', 'message-circle', 'Luận Đường')
+      + ftItem('/luan-giai.html', 'scroll-text', 'Lập Lá Số')
+      + ftItem('/cong-cu', 'layout-grid', 'Tất Cả Công Cụ')
+      + '</div>'
+      + '<div class="ft-col"><div class="ft-col-title">Tra Cứu<i></i></div>'
+      + ftItem('/menh-kho.html', 'gem', 'Mệnh Khố')
+      + ftItem('/ngay-tot', 'calendar-days', 'Ngày Tốt')
+      + ftItem('/thu-vien', 'image', 'Thư Viện')
+      + '</div>'
+      + '<div class="ft-col"><div class="ft-col-title">Về Chúng Tôi<i></i></div>'
+      + ftItem('/about.html', 'info', 'Giới Thiệu')
+      + ftItem('/tac-gia', 'user', 'Tác Giả')
+      + ftItem('/contact.html', 'mail', 'Liên Hệ')
+      + '</div>'
+      + '</div>'
+      + '<div class="ft-bottom">'
+      + '<div class="ft-bottom-left"><span>© 2026 Tử Vi Minh Bảo</span>'
+      + '<span class="ft-sep">·</span><a href="/dieu-khoan-dich-vu.html">Điều Khoản</a>'
+      + '<span class="ft-sep">·</span><a href="/chinh-sach-bao-mat.html">Chính Sách</a>'
+      + '<span class="ft-sep">·</span><a href="/san-pham-dich-vu.html">Sản Phẩm &amp; Dịch Vụ</a>'
+      + '<span class="ft-sep">·</span><a href="/huong-dan-thanh-toan.html">Thanh Toán</a>'
+      + '<span class="ft-sep">·</span><a href="/mien-tru-trach-nhiem.html">Miễn Trừ Trách Nhiệm</a>'
+      + '</div>'
+      + '<div class="ft-sign">' + FT_SIGN_ICON + '<span>Tri mệnh nhi hành — vô ưu vô hoặc</span></div>'
+      + '</div>'
       + '<div class="ft-disclaimer">Nội dung luận giải mang tính tham khảo, không thay thế tư vấn chuyên môn. <a href="/mien-tru-trach-nhiem.html" style="color:inherit;text-decoration:underline">Xem chi tiết</a>.</div>'
       + '</div></footer>';
     var ft=document.createElement('div'); ft.innerHTML=f; document.body.appendChild(ft.firstChild);

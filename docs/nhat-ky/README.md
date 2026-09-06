@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-203 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+205 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 **Bốn file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
 ```bash
@@ -11,7 +11,7 @@ sed -n '120,190p' docs/nhat-ky/2026-08.md    # đọc đúng đoạn, đừng ca
 
 | file | số mục | dung lượng |
 |---|---:|---:|
-| `2026-09.md` | 38 | 194,969 B |
+| `2026-09.md` | 40 | 201,447 B |
 | `2026-08.md` | 148 | 1,024,027 B |
 | `2026-07.md` | 12 | 154,531 B |
 | `track-cu.md` | 5 | 89,354 B |
@@ -26,6 +26,8 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 | # | tháng | file | mục |
 |---:|---|---|---|
 | 1 | 2026-09 | `2026-09.md` | 📢 Baseline TBT phát hiện lỗ Ads: /la-so.html + /la-so-v2.html chạy prod 0 GA4/Ads/Meta Pixel |
+| 1 | 2026-09 | `2026-09.md` | 🧾 Sổ nợ CLAUDE.md — gộp 2/3 bảng chủ đề, dựng cron viết lại `seo_pages` bằng viral-core |
+| 1 | 2026-09 | `2026-09.md` | 🦶 Footer gọn lại theo nav thật — và `footer.js` hoá ra là code chết |
 | 1 | 2026-09 | `2026-09.md` | 📐 Đo khối "TỔ HỢP SAO": bước cắt top-8 trung tính về mã, KHÔNG trung tính về kết quả |
 | 1 | 2026-09 | `2026-09.md` | 🪧 Gỡ "AI" khỏi toàn bộ chữ hiển thị — giữ nguyên ba trang pháp lý |
 | 1 | 2026-09 | `2026-09.md` | 🔈 Mobile vòng 11: nút Gửi của rail không có tên cho trình đọc màn hình |

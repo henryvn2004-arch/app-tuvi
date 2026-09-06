@@ -322,13 +322,14 @@ Mỗi luật dưới đây sinh ra từ một lần cắn thật. Cột cuối l
   ở máy có `OPENAI_API_KEY` (container phiên không có).
 - **`ANTHROPIC_API_KEY` không đọc được trong container** (`GEMINI_API_KEY`/
   `OPENAI_API_KEY` thì đọc được) — mọi phép đo phải gọi Anthropic đều chạy ở nơi khác.
+- **`_patches/migration-seo-pages-viral.sql` chưa áp dụng** — cần chạy TRƯỚC khi
+  cron `viral-seo-pages` (xem dưới) có cột `viral_applied` để ghi vào.
 
 ### Nợ kỹ thuật đã ghi nhận
-- 3 bảng dò chủ đề vẫn là 3 bản chép tay (`check:topics` canh chúng khỏi trôi).
-- `cong-cu.html` giữ bản chép riêng của `EMOJI_TO_ICON`.
-- 5 tool chưa có `SHAPE` riêng đang ở mức 1 — lượt đổi payload đầu tiên phải bump.
-- `seo_pages` (7.080 trang tương hợp) chưa nhận viral-core; đụng `updated_at` của
-  8.958 dòng = `lastmod` toàn site nhảy một lượt ⇒ phải rải theo lô.
+- `seo_pages` (7.080 trang tương hợp) đang được cron `/api/cron/viral-seo-pages`
+  (120 dòng/ngày) viết lại theo viral-core — CHƯA chạy lượt nào (chờ migration
+  ở trên). Rải theo NGÀY chứ không PATCH hàng loạt vì đụng `updated_at` cả
+  8.958 dòng cùng lúc làm `lastmod` toàn site nhảy một lượt.
 
 ## QC & Testing — cấu hình đầy đủ ở `docs/QC.md`
 

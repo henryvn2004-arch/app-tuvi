@@ -192,7 +192,7 @@ th{background:var(--soft);font-weight:600;color:var(--navy);font-size:13px;posit
 <script src="/auth.js"></script>
 </head>
 <body>
-<script src="/track.js?v=4" defer></script><script src="/nav.js?v=24"></script>
+<script src="/track.js?v=4" defer></script><script src="/nav.js?v=26"></script>
 <div class="breadcrumb"><a href="/">Trang Chủ</a> › <a href="/chon-ngay">Chọn Ngày</a> › <span>Kim Lâu</span></div>
 
 <div class="hero">
@@ -259,7 +259,6 @@ ${faq.map((f) => `<div class="faq-q">${esc(f.q)}</div><p>${esc(f.a)}</p>`).join(
 </div>
 
 </div>
-<script src="/footer.js"></script>
 </body></html>`;
 
   return new NextResponse(html, {

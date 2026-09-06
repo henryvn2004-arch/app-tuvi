@@ -12,8 +12,7 @@ import { NextRequest } from 'next/server';
 import { ok, err, options, parseBody } from '@/lib/cors';
 import { llmText, llmStreamResponse } from '@/lib/llm/complete';
 import { withToolOutcome } from '@/lib/ops/tool-outcome';
-import { LUAN_ARC, MAU_ARC, DOC_ARC_TUONG_HOP, ARC_GIONG_NGU_HANH } from '@/lib/agent/prompts';
-import { chuanHoaDauThanh } from '@/lib/vn-text';
+import { LUAN_ARC, MAU_ARC, DOC_ARC_TUONG_HOP, ARC_GIONG_NGU_HANH, relevantPalaces } from '@/lib/agent/prompts';
 
 // ─── Chat system prompts ──────────────────────────────────────
 // ⚠️ ĐÂY LÀ BẢN CHÉP TAY, đứng ngoài `buildChatContext`. Nó phục vụ khung chat
@@ -57,28 +56,11 @@ ${CHAT_RIENG_XEM_TUOI}`;
 function fmtLaso(ls: any, label: string, q: string): string {
   if (!ls) return '';
   const palaces = ls.palaces || [];
-  const topics: Record<string, string[]> = {
-    'tài chính|tài lộc|tiền|thu nhập|làm giàu|tài bạch': ['Tài Bạch', 'Phúc Đức'],
-    'sự nghiệp|công việc|nghề|quan lộc|thăng tiến':       ['Quan Lộc', 'Mệnh'],
-    'tình duyên|hôn nhân|vợ chồng|tình cảm|phu thê':      ['Phu Thê', 'Mệnh'],
-    'con cái|con cháu|tử tức':                             ['Tử Tức'],
-    'sức khỏe|bệnh|thân thể|tật ách':                     ['Tật Ách'],
-    'nhà đất|bất động sản|điền trạch':                    ['Điền Trạch'],
-    'anh em|huynh đệ':                                     ['Huynh Đệ'],
-    'bạn bè|nô bộc|nhân viên|đối tác':                    ['Nô Bộc'],
-    'du lịch|di chuyển|thiên di|nước ngoài':               ['Thiên Di'],
-    'cha mẹ|phụ mẫu':                                      ['Phụ Mẫu'],
-    'đại vận|tiểu vận|vận hạn|vận trình':                 ['__daiVan__'],
-  };
-  // Dò trên bản ĐÃ CHUẨN HOÁ VỊ TRÍ DẤU THANH (lib/vn-text.ts) — "sức khoẻ" và
-  // "sức khỏe" đều đúng chính tả, so chuỗi thô thì gõ lối kia là TRƯỢT IM LẶNG
-  // rồi rơi xuống nhánh mặc định, mất đúng cung câu hỏi nhắm tới.
-  const qn = chuanHoaDauThanh(q);
-  const relevant = new Set(['Mệnh']);
-  for (const [pattern, names] of Object.entries(topics)) {
-    if (new RegExp(chuanHoaDauThanh(pattern), 'i').test(qn)) names.forEach(n => relevant.add(n));
-  }
-  if (relevant.size === 1) ['Quan Lộc', 'Tài Bạch', 'Phu Thê'].forEach(n => relevant.add(n));
+  // Bản đồ chủ đề dùng CHUNG với rail chat (lib/agent/prompts.ts) — trước là
+  // bản chép tay riêng ở đây, trôi khỏi bản kia (thiếu '|đối tác', thiếu điều
+  // kiện năm → __daiVan__). Xem chú thích tại FOCUS_TOPICS (prompts.ts) cho lý
+  // do vì sao topicMap của Tử Bình (app/api/tubinh/route.ts) KHÔNG gộp vào đây.
+  const relevant = relevantPalaces(q);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const starFmt = (s: any): string => {
