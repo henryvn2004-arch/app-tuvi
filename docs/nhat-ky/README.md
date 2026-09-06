@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-193 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+194 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 **Bốn file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
 ```bash
@@ -11,7 +11,7 @@ sed -n '120,190p' docs/nhat-ky/2026-08.md    # đọc đúng đoạn, đừng ca
 
 | file | số mục | dung lượng |
 |---|---:|---:|
-| `2026-09.md` | 29 | 149,681 B |
+| `2026-09.md` | 30 | 158,116 B |
 | `2026-08.md` | 147 | 1,018,512 B |
 | `2026-07.md` | 12 | 154,531 B |
 | `track-cu.md` | 5 | 89,354 B |
@@ -25,6 +25,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
+| 1 | 2026-09 | `2026-09.md` | 🧯 Mobile vòng 9: bản vá vòng 8 không chạy trên prod — chỗ giữ `#tuviFormHost` mới là bản vá thật |
 | 1 | 2026-09 | `2026-09.md` | ⏳ Mobile vòng 8: `#tuviFormHost` không cần khung chờ — chỉ cần `defer` |
 | 1 | 2026-09 | `2026-09.md` | 🧭 Mobile vòng 7: giữ chỗ thanh nav — và một trang mất sạch nav |
 | 1 | 2026-09 | `2026-09.md` | 🧭 Mobile vòng 6: cú 0,071 đứng yên 6 lượt đo hoá ra là thanh nav dựng bằng JS |

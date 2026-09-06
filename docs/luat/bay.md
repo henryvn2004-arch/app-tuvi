@@ -129,11 +129,25 @@
   nav.js chạy top-level, gọi `document.body.appendChild` khi `body` còn null, ném
   ở `nav.js:379`, và `conversion.js` cũng không bao giờ được nạp. Hỏng câm: trang
   vẫn render, chỉ thiếu nav. `check:navph` canh luôn chỗ này.
-- **Script bên thứ ba KHÔNG `defer` đứng trước một khối dựng-lúc-parse là cú nhảy.**
-  `TuviForm.render` chạy trong lúc phân tích HTML; một thẻ CDN chặn parse ngay trước
-  nó ⇒ vẽ lần đầu với `#tuviFormHost` rỗng rồi nhét form 237px vào (0,0315 → 0 khi
-  chỉ thêm `defer`). Chỉ gây NHẢY ở trang có nội dung chèn sau; trang tĩnh thì nó
-  chỉ làm chậm — đo 7 trang chart.js tĩnh: CLS 0 cả hai chiều. `check:formblock`.
+- **Khối dựng bằng JS phải được GIỮ CHỖ, và thủ phạm gần như luôn là script CÙNG
+  ORIGIN.** `TuviForm.render` chạy lúc phân tích HTML nhưng chỉ SAU khi
+  `tuvi-form.js` nạp xong, mà trước nó là 17–524KB script cùng origin cũng chặn
+  parse ⇒ mạng chậm thì `#tuviFormHost` rỗng tới ~4s rồi form 237–305px nhét vào.
+  Chỗ giữ dùng **`:empty`** (tự nhả khi form vào ⇒ đặt HỤT vài px chỉ tốn vài phần
+  vạn, đặt DƯ thì thừa khoảng trắng vĩnh viễn) và phải nằm trong
+  `@media (max-width:…)` vì chiều cao form đổi theo bề rộng (237 ở ≤480px, 168 ở
+  768px — giữ 237 trên màn rộng là khối CO LẠI, vẫn nhảy). `check:formph`.
+  🪤 Một dấu cách bên trong thẻ host là `:empty` hết khớp, chỗ giữ biến mất im lặng.
+- **Dời thẻ script lên sớm KHÔNG làm nó tới sớm** — preload scanner đã tải song
+  song hết; trên đường ống bão hoà, thứ tự thẻ không đổi thời điểm tới. Đo: dời
+  script lên đầu = CLS y hệt (0,0335), chỉ chỗ giữ mới đổi (0,0020).
+- **Bản vá đã ship mà số prod không nhúc nhích thì BẢN VÁ sai, đừng nghi phép đo.**
+  #708 (`defer` cho chart.js) ra prod: `/app/bat-tu` 0,0335 trước và sau, cùng node
+  cùng rect. Con số A/B cục bộ "0,0315 → 0" lớn là vì container chặn hẳn CDN
+  (~12,5s timeout) — tôi đã tự viết luật "mốc thời gian cục bộ là ảo" ở vòng 4 rồi
+  vẫn tin nó khi nó nói điều mình muốn nghe. `defer` vẫn giữ, nhưng là VỆ SINH TỐC
+  ĐỘ (bớt một chặng mạng bên thứ ba), không phải bản vá CLS — `check:formblock` đã
+  đổi lại lý do, vì bộ dò đúng luật mà sai lý do sẽ đẻ ra kết luận sai kế tiếp.
 - **Trang không dùng KHÔNG có nghĩa là thư viện chết** — grep HTML cho 0 lần dùng
   `Chart`, nhưng `bat-tu-core.js`/`luan-giai-core.js` (do chính trang nạp) dùng thật.
   Quét cả file trang NẠP trước khi gỡ. Ở đây gỡ nhầm sẽ hỏng CÂM vì mọi lời gọi đều
