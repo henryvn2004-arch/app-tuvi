@@ -15,6 +15,15 @@
 
 import { test, expect, type Page } from '@playwright/test';
 
+// 🔴 CHẠY Ở TRẠNG THÁI CHƯA ĐĂNG NHẬP — bắt buộc, không phải cho tiện.
+// `playwright.config.ts` gắn `storageState: tests/.auth/user.json` cho project
+// chromium, tức mặc định MỌI bài kiểm chạy như người ĐÃ đăng nhập. Nhưng luồng
+// PR này dựng ra là cho khách nguội từ quảng cáo, và `_renderUnlockBlock` rẽ
+// HAI nhánh khác hẳn nhau theo `_lgLoggedIn()`: đã đăng nhập → một nút phẳng;
+// chưa → `TuviPaywall.lockPreview` dựng `.tpw-lock`. Để mặc định thì bài kiểm
+// đo nhánh KHÔNG phải nhánh đang nói tới, và assert `.tpw-lock` đỏ trên CI
+// trong khi xanh ở máy (máy không có phiên đăng nhập nào).
+
 /** Các lượt gọi `/api/lasotuvi` mà stub bắt được, gắn vào chính `page`. */
 type PreviewCall = { phan: number; anonId?: string };
 type PageWithCalls = Page & { __calls: PreviewCall[] };
@@ -77,6 +86,8 @@ async function run(page: Page) {
   });
   await page.waitForSelector('#lgBody .sec', { timeout: 15000 });
 }
+
+test.use({ storageState: { cookies: [], origins: [] } });
 
 test('bản mẫu KHÔNG tự mở, form đứng trên cùng', async ({ page }) => {
   await stubApis(page);
