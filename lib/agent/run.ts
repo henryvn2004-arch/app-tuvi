@@ -28,6 +28,8 @@ import { CHAT_SYSTEM_LASO, CHAT_SYSTEM_GENERAL, extractLasoContext, buildChatCon
 import { TOOLS_INSTRUCTION } from '@/lib/agent/tools';
 import { type ChatConfig } from '@/lib/config/appConfig';
 import {
+  GEMINI_MODEL,
+  type GeminiUsage,
   geminiEligible,
   geminiProseCapable,
   streamGemini,
@@ -38,6 +40,7 @@ import {
   toGeminiContents,
 } from '@/lib/agent/providers/gemini';
 import {
+  KIMI_MODEL_ID,
   kimiConfigured,
   streamKimi,
   toKimiMessages,
@@ -153,6 +156,37 @@ export interface AgentResult {
 type ProviderOutcome = { ok: true; result: AgentResult } | { ok: false; midStream: boolean };
 
 // ── Agent loop ──────────────────────────────────────────────
+/**
+ * Sổ đo chi phí của MỘT lượt rail — cộng dồn qua mọi vòng tool-use VÀ mọi lần
+ * rơi provider, rồi ghi đúng MỘT dòng `llm_usage` ở `finally` của `runAgent`.
+ *
+ * 🔴 VÌ SAO PHẢI LÀ MỘT Ổ DUY NHẤT NGOÀI THÂN HÀM (đây là bug thật đã ghi sổ
+ * SAI suốt từ lúc có nhánh Gemini, phát hiện 2026-09-06):
+ *
+ *  1. Thân hàm có **9 điểm return** (2 nhánh Gemini, 2 nhánh Kimi, 4 nhánh
+ *     fallback-ngược, 1 nhánh Anthropic) mà lời gọi `logLlmUsage` chỉ nằm ở
+ *     ĐÚNG MỘT điểm — điểm cuối của loop Anthropic. Tám đường còn lại thoát ra
+ *     mà KHÔNG ghi một dòng nào ⇒ mọi lượt rail đi Gemini **vô hình** trong
+ *     bảng chi phí.
+ *  2. Dòng ghi ấy còn chép tay `cfg.model` — tức `app_config['chat.model']`
+ *     = 'claude-opus-5' — BẤT KỂ provider nào thật sự chạy. Nên đúng cái nhánh
+ *     DUY NHẤT có ghi sổ lại dán nhãn Opus cho mọi thứ, và `cost_vnd` tính
+ *     theo bảng giá Opus ($5/$25) cho cả những lượt Gemini ($0.75/$3.75).
+ *
+ * Hai lỗi đó cộng lại làm bảng chi phí nói ngược hẳn sự thật: rail hiện ra là
+ * "100% Opus, ~5.400đ/lượt" trong khi route đã sang Gemini từ 2026-09-03. Đây
+ * đúng họ bẫy mà chính file này cảnh báo ở `callLLMTools` ("chỗ gọi mà chép
+ * tay tên model là ghi sai") — cảnh báo đã có, chỗ gọi vẫn phạm.
+ *
+ * `model` khởi tạo bằng model Anthropic (nhánh mặc định); MỌI nhánh provider
+ * phải tự gán đè khi nó thật sự chạy — xem các chỗ gán `meter.model`.
+ */
+interface TurnMeter {
+  usage: LlmUsage;
+  model: string;
+  t0: number;
+}
+
 export async function runAgent(
   req: ChatRequestV1,
   cfgIn: ChatConfig,
@@ -162,6 +196,39 @@ export async function runAgent(
   // khai userId là ghi/đọc được hồ sơ người khác. null = khách chưa đăng nhập
   // → không đọc, không ghi hồ sơ (và `client.anon_id` KHÔNG phải danh tính).
   userId: string | null = null,
+): Promise<AgentResult> {
+  const meter: TurnMeter = {
+    usage: { input_tokens: 0, cache_creation_input_tokens: 0, cache_read_input_tokens: 0, output_tokens: 0 },
+    model: cfgIn.model,
+    // Đo TRỌN lượt (gồm mọi vòng tool-use và mọi lần rơi provider), vì đó mới
+    // là thời gian người dùng thật sự ngồi chờ — không phải một lượt gọi model.
+    t0: Date.now(),
+  };
+  try {
+    return await runAgentInner(req, cfgIn, send, profiles, userId, meter);
+  } finally {
+    // Tag cost theo scenario.type nếu có (khớp tool_pricing), ngược lại 'chat' —
+    // CHÍNH type mà /api/v1/chat + gate.ts ghi vào credit_transactions cho MỌI
+    // lượt rail (kể cả có lá số) → bucket cost khớp thẳng bucket doanh thu thật.
+    // `finally` chứ không phải sau `return`: lượt ném lỗi giữa chừng VẪN đã tiêu
+    // token thật, bỏ nó là ghi hụt chi phí đúng lúc hệ thống đang hỏng.
+    // 0 token = lượt chưa từng chạm model (thoát sớm, hoặc provider chết trước
+    // byte đầu). Ghi dòng rỗng chỉ làm phình `n` của mọi phép chia chi phí —
+    // và `n` sai thì "trung bình mỗi lượt" sai theo, im lặng.
+    const u = meter.usage;
+    if (u.input_tokens || u.output_tokens || u.cache_read_input_tokens || u.cache_creation_input_tokens) {
+      void logLlmUsage(req.scenario?.type || 'chat', meter.model, u, Date.now() - meter.t0);
+    }
+  }
+}
+
+async function runAgentInner(
+  req: ChatRequestV1,
+  cfgIn: ChatConfig,
+  send: (s: string) => void,
+  profiles: ProfilePort | null,
+  userId: string | null,
+  meter: TurnMeter,
 ): Promise<AgentResult> {
   // Trần token của MỘT lượt rail. 🔴 Trước đây runAgent dùng THẲNG cfg.maxTokens
   // (app_config['chat.max_tokens'], prod = 3000) và BỎ QUA con số mà
@@ -535,6 +602,17 @@ export async function runAgent(
   // tiên thật. `runGeminiTools` còn được nhánh "Anthropic chết → fallback
   // Gemini" gọi lại ở cuối hàm (trong loop streamTurn); `runKimiTools` cũng
   // vậy (lưới đỡ cuối cùng, xem "FALLBACK NGƯỢC").
+  // Ghi nhận provider THẬT đã chạy + cộng usage vào sổ chung. Gọi ở MỌI nhánh
+  // Gemini (prose, tools, và cả hai lượt fallback-ngược) — quên một chỗ là chỗ
+  // đó lại ghi sổ dưới nhãn Anthropic, đúng lỗi vừa vá.
+  const meterGemini = (u: GeminiUsage) => {
+    meter.model = GEMINI_MODEL;
+    meter.usage.input_tokens += u.input_tokens;
+    meter.usage.cache_creation_input_tokens += u.cache_creation_input_tokens;
+    meter.usage.cache_read_input_tokens += u.cache_read_input_tokens;
+    meter.usage.output_tokens += u.output_tokens;
+  };
+
   const runGeminiTools = async (): Promise<ProviderOutcome> => {
     const gTools = toGeminiTools(tools);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -546,7 +624,7 @@ export async function runAgent(
     try {
       for (let round = 0; round <= cfg.maxRounds; round++) {
         const forceAnswer = round === cfg.maxRounds; // vòng cuối: bỏ tool để ép trả lời
-        const turn = await streamGeminiTurn(system, gContents, forceAnswer ? null : gTools, cfg, send);
+        const turn = await streamGeminiTurn(system, gContents, forceAnswer ? null : gTools, cfg, send, meterGemini);
         anyTextSent = anyTextSent || turn.sentText;
 
         if (!forceAnswer && turn.functionCalls.length) {
@@ -603,6 +681,9 @@ export async function runAgent(
     return { ok: false, midStream: false };
   };
 
+  // Kimi chỉ là lưới đỡ cuối cùng và `streamKimi*` chưa trả usage — ghi đúng
+  // TÊN MODEL vẫn hơn hẳn dán nhãn Opus, dù token vẫn đếm hụt (nợ đã biết,
+  // ghi ở đây để lần sau không tưởng là đã đủ).
   const runKimiTools = async (): Promise<ProviderOutcome> => {
     const kTools = toKimiTools(tools);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -651,6 +732,7 @@ export async function runAgent(
       }
       const justBuilt = toolsUsed.includes('lap_la_so') || toolsUsed.includes('mo_la_so');
       const lasoCard = justBuilt && ctx.ls ? renderLasoCard(ctx.ls, ctx.birth) : null;
+      meter.model = KIMI_MODEL_ID;
       return {
         ok: true,
         result: {
@@ -679,7 +761,7 @@ export async function runAgent(
   // "FALLBACK NGƯỢC").
   if (geminiEligible(scenarioType, hasImages, cfg.providerRoutes)) {
     try {
-      suggestions = await streamGemini(system, convo, cfg, send);
+      suggestions = await streamGemini(system, convo, cfg, send, meterGemini);
       return {
         toolsUsed,
         birth: capturedBirth,
@@ -729,10 +811,9 @@ export async function runAgent(
   // stream → gấp đôi output (phần đắt nhất). Nay stream thẳng: nếu model đòi
   // tool thì bắt tool_use ngay trong stream, chạy tool rồi lặp; nếu trả text
   // thẳng thì chính stream đó LÀ câu trả lời (bỏ hẳn call thứ 2).
-  const totalUsage: LlmUsage = { input_tokens: 0, cache_creation_input_tokens: 0, cache_read_input_tokens: 0, output_tokens: 0 };
-  // Đo TRỌN lượt (gồm mọi vòng tool-use), vì đó mới là thời gian người
-  // dùng thật sự ngồi chờ — không phải thời gian của một lượt gọi model.
-  const _turnT0 = Date.now();
+  // Cùng một sổ với các nhánh Gemini/Kimi phía trên — KHÔNG khai biến đếm
+  // riêng ở đây nữa, vì biến riêng chính là thứ làm 8/9 đường thoát ghi hụt.
+  const totalUsage = meter.usage;
   // Mốc để biết loop Anthropic đã LÀM GÌ chưa: nếu nó chết mà chưa chạy tool
   // nào và chưa stream chữ nào thì fallback sang Gemini vẫn SẠCH.
   const toolsBeforeAnthropic = toolsUsed.length;
@@ -762,7 +843,7 @@ export async function runAgent(
       } else if (cleanSoFar && geminiProseCapable(scenarioType, hasImages)) {
         console.error('[runAgent] Anthropic chết → fallback Gemini (prose):', turn.errorBody);
         try {
-          suggestions = await streamGemini(system, convo, cfg, send);
+          suggestions = await streamGemini(system, convo, cfg, send, meterGemini);
           return {
             toolsUsed,
             birth: capturedBirth,
@@ -805,6 +886,7 @@ export async function runAgent(
         } else {
           try {
             suggestions = await streamKimi(system, convo, cfg, send);
+            meter.model = KIMI_MODEL_ID;
             return {
               toolsUsed,
               birth: capturedBirth,
@@ -856,10 +938,6 @@ export async function runAgent(
   // số — không lặp ở các lượt follow-up (lúc đó lá số đã hiện trước đó rồi).
   const justBuilt = toolsUsed.includes('lap_la_so') || toolsUsed.includes('mo_la_so');
   const lasoCard = justBuilt && ctx.ls ? renderLasoCard(ctx.ls, ctx.birth) : null;
-  // Tag cost theo scenario.type nếu có (khớp tool_pricing), ngược lại 'chat' —
-  // CHÍNH type mà /api/v1/chat + gate.ts ghi vào credit_transactions cho MỌI
-  // lượt rail (kể cả có lá số) → bucket cost khớp thẳng bucket doanh thu thật.
-  void logLlmUsage(scenario?.type || 'chat', cfg.model, totalUsage, Date.now() - _turnT0);
   return {
     toolsUsed,
     birth: ctx.birth ?? capturedBirth,
