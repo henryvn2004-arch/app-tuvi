@@ -418,5 +418,51 @@ window.HookCharts = (function () {
     return _wrap(w, h, esc(o.ariaLabel || 'Biểu đồ ' + n + ' chặng đời'), g);
   }
 
-  return { lifeArc, hexRadar, rarityDots, percentileBar, flagColor, monthGrid, stageTimeline, mucColor, cssText };
+
+  /**
+   * Dải Năm — N ô năm, mỗi ô nói ĐƯỢC hay KHÔNG. Dựng cho Kim Lâu (20 năm tới).
+   *
+   * Vì sao cần: bảng 20 dòng trả lời được "năm 2031 thế nào", nhưng câu người
+   * ta thật sự mang tới tool là "năm nào tôi cưới/xây được" — câu đó phải đọc
+   * hết 20 dòng mới thấy. Dải này trả lời nó trong một cái liếc, còn CHI TIẾT
+   * (can chi, đủ ba cờ) vẫn nằm nguyên ở bảng ngay dưới.
+   *
+   * ⚠️ Ô chỉ chở MỘT nhãn — cờ NẶNG NHẤT của năm đó, `+` nếu còn cờ khác. Thứ
+   * tự nặng/nhẹ KHÔNG do hàm này đặt: nó lấy đúng thứ tự mà `kim-lau.js` đã
+   * dùng khi dựng câu `desc` (Kim Lâu trước, rồi Tam Tai, rồi Hoang Ốc). Tự
+   * xếp hạng lại ở đây là đẻ ra nguồn thứ hai nói ngược lại chính câu văn nằm
+   * ngay trên nó.
+   *
+   * years: [{ nam, tuoi, nhan (chuỗi rỗng = sạch), them (bool), now }]
+   */
+  function yearStrip(o) {
+    o = o || {};
+    var ys = Array.isArray(o.years) ? o.years : [];
+    if (!ys.length) return '';
+    var cols = o.cols || 5;
+    var rows = Math.ceil(ys.length / cols);
+    var cw = 84, ch = 68, gap = 6, pad = 4;
+    var w = pad * 2 + cols * cw + (cols - 1) * gap;
+    var h = pad * 2 + rows * ch + (rows - 1) * gap;
+    var g = '';
+    ys.forEach(function (y, i) {
+      var x0 = pad + (i % cols) * (cw + gap);
+      var y0 = pad + Math.floor(i / cols) * (ch + gap);
+      var mid = x0 + cw / 2;
+      var sach = !y.nhan;
+      var muc = sach ? 'TỐT' : 'CẢNH BÁO';
+      g += '<rect x="' + x0 + '" y="' + y0 + '" width="' + cw + '" height="' + ch +
+        '" rx="8" class="hc-tile' + (y.now ? ' hc-tile-now' : '') + '"></rect>';
+      g += '<text x="' + mid + '" y="' + (y0 + 17) + '" text-anchor="middle" class="hc-num">' +
+        esc(y.nam) + '</text>';
+      g += mucMark(muc, mid, y0 + 30, 6);
+      g += _tspans(sach ? 'được' : y.nhan + (y.them ? ' +' : ''),
+        mid, y0 + 45, 12, 11, 'hc-kw-sm', 2, mucColor(muc)).html;
+      g += '<text x="' + (x0 + cw - 5) + '" y="' + (y0 + 13) + '" text-anchor="end" class="hc-lbl">' +
+        esc(y.tuoi) + '</text>';
+    });
+    return _wrap(w, h, esc(o.ariaLabel || 'Dải ' + ys.length + ' năm tới'), g);
+  }
+
+  return { lifeArc, hexRadar, rarityDots, percentileBar, flagColor, monthGrid, stageTimeline, yearStrip, mucColor, cssText };
 })();
