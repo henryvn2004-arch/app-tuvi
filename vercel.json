@@ -32,7 +32,8 @@
     { "path": "/api/cron/backlink-content",  "schedule": "15 2 * * *" },
     { "path": "/api/cron/backlink-check",    "schedule": "45 2 * * *" },
     { "path": "/api/cron/backlink-broken-links", "schedule": "45 1 * * 4" },
-    { "path": "/api/cron/growth-accounts", "schedule": "15 1 * * 6" }
+    { "path": "/api/cron/growth-accounts", "schedule": "15 1 * * 6" },
+    { "path": "/api/cron/viral-seo-pages", "schedule": "30 4 * * *" }
   ],
   "headers": [
     {
