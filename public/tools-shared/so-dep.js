@@ -167,6 +167,8 @@
   }
 
   // ── T3. Ngũ Hành — cùng bảng Lạc Thư với T1, cá nhân hoá nếu có năm sinh ─
+  var HANH = ['Kim', 'Mộc', 'Thủy', 'Hỏa', 'Thổ'];
+
   function tinhNguHanh(digits, namSinh, gioiTinh) {
     var BT = root.BatTrachTool, NA = root.NapAmTool;
     var phanBo = { Kim: 0, Mộc: 0, Thủy: 0, Hỏa: 0, Thổ: 0 };
@@ -187,12 +189,42 @@
       var hopMenh = [];
       if (hanhNapAm && phanBo[hanhNapAm] > 0) hopMenh.push('nạp âm (' + hanhNapAm + ')');
       if (hanhCungPhi && hanhCungPhi !== hanhNapAm && phanBo[hanhCungPhi] > 0) hopMenh.push('cung phi (' + hanhCungPhi + ')');
+      // ── Verdict: HÀNH TRỘI của dãy so sinh/khắc với hành nạp âm bản mệnh ──
+      // 🔴 ĐÃ CẮN (2026-09): luật cũ là `hopMenh.length > 0 ? 'tot' : 'trung'`,
+      // mà `hopMenh` chỉ cần dãy CHỨA MỘT chữ số thuộc hành nạp âm hoặc cung
+      // phi — với 9-10 chữ số rải trên 5 hành thì gần như luôn đúng. Đo 500 số:
+      // tốt 484 · trung 16 · XẤU 0 — nhánh 'xau' không tồn tại trong biểu thức.
+      // T3 chiếm 1/3 phiếu đồng thuận (dòng chữ to nhất màn hình) nên tool bị
+      // kê thêm một phiếu "tốt" gần như miễn phí: `0/3 nói tốt` chỉ ra 4/500 lần.
+      // `0888888888` (thiếu 4/5 hành) vẫn hiện "3/3 trường phái cổ pháp nói tốt".
+      //
+      // Luật mới xét TỈ TRỌNG chứ không xét SỰ CÓ MẶT: hành nào chiếm nhiều chữ
+      // số nhất mới là hành dãy này mang, rồi so nó với bản mệnh. Hoà (từ 2 hành
+      // cùng đỉnh) ⇒ 'trung' — không có hành nào trội thì không kết luận, chứ
+      // KHÔNG bốc đại một hành. Đo lại trên cùng 500 số: tốt 151 · trung 279 ·
+      // xấu 70; đồng thuận `3/3` rơi 14,4% → 4,4%, `0/3` lên 0,8% → 25,8%.
+      // Quan hệ sinh/khắc lấy từ `NapAmTool.ungDung()` — bảng DUY NHẤT trong
+      // repo, không chép thêm bản thứ hai.
+      var ud = hanhNapAm ? NA.ungDung(hanhNapAm) : null;
+      var dinh = Math.max.apply(null, HANH.map(function (h) { return phanBo[h] || 0; }));
+      var troi = dinh > 0 ? HANH.filter(function (h) { return (phanBo[h] || 0) === dinh; }) : [];
+      var hanhTroi = troi.length === 1 ? troi[0] : null;
+      var quanHe = null;
+      if (hanhTroi && ud) {
+        if (hanhTroi === ud.hanhKy) quanHe = 'khac-menh';
+        else if (hanhTroi === hanhNapAm) quanHe = 'dong-hanh';
+        else if (hanhTroi === ud.hanhMe) quanHe = 'sinh-menh';
+        else quanHe = 'trung';
+      }
       out.banMenh = {
         napAm: napAm.ok ? napAm.data.napAm : null, hanhNapAm: hanhNapAm,
         cungPhi: cung, hanhCungPhi: hanhCungPhi,
         hopMenh: hopMenh,
+        hanhTroi: hanhTroi, quanHeTroi: quanHe,
       };
-      out.verdict = hopMenh.length > 0 ? 'tot' : 'trung';
+      out.verdict = quanHe === 'khac-menh' ? 'xau'
+        : quanHe === 'dong-hanh' || quanHe === 'sinh-menh' ? 'tot'
+        : 'trung';
     }
     return out;
   }
@@ -466,7 +498,7 @@
   // dưới. Hình chở DÁNG, chữ chở SỐ; không nơi nào phải đoán nơi kia.
   function _vanhNguHanhHTML(t3) {
     if (typeof root.HookCharts === 'undefined') return '';
-    var hs = ['Kim', 'Mộc', 'Thủy', 'Hỏa', 'Thổ'];
+    var hs = HANH;
     var v = hs.map(function (h) { return t3.phanBo[h] || 0; });
     var dinh = Math.max.apply(null, v);
     if (!dinh) return '';
@@ -522,7 +554,7 @@
     html += '<div class="sd-section"><div class="sd-section-head">Ngũ Hành <span class="sd-eyebrow">Lạc Thư</span></div>';
     html += _vanhNguHanhHTML(d.t3);
     html += '<div class="sd-phanbo">';
-    ['Kim', 'Mộc', 'Thủy', 'Hỏa', 'Thổ'].forEach(function (h) {
+    HANH.forEach(function (h) {
       html += '<span class="sd-hanh">' + h + ' <b>' + (d.t3.phanBo[h] || 0) + '</b></span>';
     });
     html += '</div>';
@@ -530,7 +562,22 @@
     if (d.t3.banMenh) {
       var bm = d.t3.banMenh;
       html += '<p class="sd-p">Bản mệnh nạp âm <b>' + _esc(bm.napAm) + '</b> (hành ' + _esc(bm.hanhNapAm) + '), cung phi hành ' + _esc(bm.hanhCungPhi) + '. ' +
-        (bm.hopMenh.length ? 'Dãy số có chứa hành hợp mệnh: ' + _esc(bm.hopMenh.join(', ')) + '.' : 'Dãy số CHƯA chứa hành hợp bản mệnh.') + '</p>';
+        (bm.hopMenh.length ? 'Trong dãy có mặt hành hợp mệnh: ' + _esc(bm.hopMenh.join(', ')) + '.' : 'Trong dãy KHÔNG có mặt hành hợp bản mệnh.') + '</p>';
+      // Nói RA vì sao tầng này bỏ phiếu như vậy. Phiếu tính theo HÀNH TRỘI (xem
+      // `tinhNguHanh`), không theo câu "có chứa hành hợp mệnh" ngay trên — hai
+      // câu đứng cạnh nhau mà không nói rõ thì người đọc tưởng câu trên là lý do.
+      var QH = {
+        'khac-menh': ['khắc bản mệnh', 'sd-dg-xau'],
+        'dong-hanh': ['đồng hành với bản mệnh', 'sd-dg-tot'],
+        'sinh-menh': ['sinh bản mệnh', 'sd-dg-tot'],
+        trung: ['không sinh cũng không khắc bản mệnh', ''],
+      };
+      if (bm.hanhTroi && QH[bm.quanHeTroi]) {
+        html += '<div class="sd-p ' + QH[bm.quanHeTroi][1] + '">Hành trội của dãy là <b>' +
+          _esc(bm.hanhTroi) + '</b> — ' + QH[bm.quanHeTroi][0] + ' (' + _esc(bm.hanhNapAm) + '). Phiếu của tầng này tính theo hành trội.</div>';
+      } else if (bm.hanhNapAm) {
+        html += '<div class="sd-p">Không hành nào trội hẳn trong dãy — tầng này không kết luận.</div>';
+      }
     }
     html += '</div>';
 
