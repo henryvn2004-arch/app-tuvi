@@ -207,7 +207,16 @@ window.SHELL_INTRO={key:'chu-trinh-cuoc-doi'};</script>
 <script src="/tuvi-ansao-engine.js"></script>
 <script src="/laso-chart.js?v=3"></script>
 <script src="/luan-giai-core.js?v=3"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
+<!-- `defer` KHÔNG phải tối ưu vặt: không có nó, thẻ này CHẶN parse ngay trước
+     `tuvi-form.js`, nên `TuviForm.render('tuviFormHost', …)` phải chờ một request
+     bên thứ ba xong mới chạy. Trình duyệt vẽ lần đầu với `#tuviFormHost` RỖNG rồi
+     mới nhét form 237px vào ⇒ `.frow` bị đẩy xuống. Đo cục bộ, chỉ đổi mỗi thuộc
+     tính này: CLS 0,0315 → 0 (bat-tu) · 0,0238 → 0 (chu-trinh) · 0,0221 → 0 (van-han).
+     An toàn: mọi lời gọi `Chart` đều nằm trong hàm và có chốt
+     `if (typeof Chart === 'undefined') return`, và các hàm đó chỉ chạy SAU khi
+     người dùng bấm luận — rất lâu sau `DOMContentLoaded`, mốc mà script `defer`
+     chắc chắn đã chạy xong (đã đo: `Chart` là `function` tại DOMContentLoaded). -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js" defer></script>
 <script src="/tuvi-laso-format.js?v=2"></script>
 <script src="/tools-shared/vn-timezone.js?v=1"></script>
 <script src="/tuvi-form.js?v=2"></script>

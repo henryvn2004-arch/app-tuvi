@@ -20,6 +20,7 @@
     "check:history": "node scripts/check-shell-history.mjs",
     "check:introcard": "node scripts/check-intro-card.mjs",
     "check:navph": "node scripts/check-nav-placeholder.mjs",
+    "check:formblock": "node scripts/check-form-blocking-script.mjs",
     "check:shellboot": "node scripts/check-shell-boot.mjs",
     "check:authapi": "node scripts/check-auth-api.mjs",
     "check:giosinh": "node scripts/check-gio-sinh-tuoi.mjs",

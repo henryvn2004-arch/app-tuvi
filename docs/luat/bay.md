@@ -7,6 +7,11 @@
 - **Xanh oan nguy hơn đỏ oan.** Phép so vị trí (`indexOf`) phải kèm assert cái mốc
   CÓ TỒN TẠI — `-1` làm mọi so sánh luôn đúng. `grep "A \|\| B"` là ĐỖ GIẢ (`\|` là
   toán tử HOẶC trong BRE) → dùng `grep -F`.
+- 🪤 **Bộ dò dò theo CHUỖI thì CHÚ THÍCH cũng là mốc — kể cả chú thích của chính bản
+  vá.** `check:formblock` tìm mốc `TuviForm.render('tuviFormHost'`; chú thích giải
+  thích bản vá (đặt trên thẻ script) chứa nguyên văn chuỗi đó ⇒ mốc lùi lên trước
+  thẻ cần soi ⇒ bộ dò XANH OAN, rớt 2/4 đột biến. Bỏ chú thích HTML trước khi dò
+  (thay bằng khoảng trắng cùng độ dài để chỉ số không lệch).
 - **Red-team bộ dò: assert đột biến ĐÃ ăn rồi mới đọc kết quả.** Nhiều lần "pass"
   chỉ vì lệnh thay chuỗi không khớp nên chẳng sửa gì.
 - **Bảng thống kê CẮT TOP-N đọc thành "chưa từng xảy ra".** Log Vercel
@@ -124,6 +129,17 @@
   nav.js chạy top-level, gọi `document.body.appendChild` khi `body` còn null, ném
   ở `nav.js:379`, và `conversion.js` cũng không bao giờ được nạp. Hỏng câm: trang
   vẫn render, chỉ thiếu nav. `check:navph` canh luôn chỗ này.
+- **Script bên thứ ba KHÔNG `defer` đứng trước một khối dựng-lúc-parse là cú nhảy.**
+  `TuviForm.render` chạy trong lúc phân tích HTML; một thẻ CDN chặn parse ngay trước
+  nó ⇒ vẽ lần đầu với `#tuviFormHost` rỗng rồi nhét form 237px vào (0,0315 → 0 khi
+  chỉ thêm `defer`). Chỉ gây NHẢY ở trang có nội dung chèn sau; trang tĩnh thì nó
+  chỉ làm chậm — đo 7 trang chart.js tĩnh: CLS 0 cả hai chiều. `check:formblock`.
+- **Trang không dùng KHÔNG có nghĩa là thư viện chết** — grep HTML cho 0 lần dùng
+  `Chart`, nhưng `bat-tu-core.js`/`luan-giai-core.js` (do chính trang nạp) dùng thật.
+  Quét cả file trang NẠP trước khi gỡ. Ở đây gỡ nhầm sẽ hỏng CÂM vì mọi lời gọi đều
+  có chốt `if (typeof Chart === 'undefined') return`.
+- 🪤 **Đo CHIỀU CAO để kết luận "khối có dựng được không" là sai thước** khi khối cha
+  có thể bị ẩn — `#tuviFormHost` có 8.680 byte HTML mà vẫn cao 0px. Đo nội dung.
 - **CLS chỉ kết luận được bằng prod↔prod.** Preview ĐO HỤT: 5 vòng đều báo
   `/topup.html` = 0,016, số thật trên prod cùng bản là **0,160** (cú `#statusSlot`
   rơi ngoài cửa sổ đo). Ngược lại Perf/LCP/TBT thì đừng so prod-cũ ↔ preview-mới:
