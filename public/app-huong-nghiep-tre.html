@@ -50,6 +50,15 @@
 .hn-h-top{display:flex;align-items:baseline;justify-content:space-between;gap:10px;flex-wrap:wrap}
 .hn-h-ten{font-family:var(--serif);font-size:16px;font-weight:700;color:#061A2E}
 .hn-h-diem{font-size:11.5px;color:#7A5F26;font-weight:700;white-space:nowrap}
+/* Thanh so ĐỘ NGHIÊNG giữa các hướng. Dài theo TỈ LỆ với hướng đứng đầu, KHÔNG
+   theo thang 0–100: `goiY[].diem` là số để XẾP THỨ TỰ (chú thích ngay tại
+   `HuongGoiY` trong lib/engine/huong-nghiep-tre.ts dặn "không bày như độ chính
+   xác"), nên vẽ nó trên trục 0–100 là biến một thứ tự thành một tỉ lệ phần
+   trăm mà engine không hề khẳng định. Neo vào hướng đầu bảng thì thanh chỉ nói
+   đúng một điều: hướng này nghiêng bao nhiêu SO VỚI hướng mạnh nhất. */
+.hn-h-thanh{height:5px;border-radius:3px;background:#EADFC8;margin-top:9px;overflow:hidden}
+.hn-h-thanh i{display:block;height:100%;border-radius:3px;background:#9A7B3A}
+.hn-h-thanh.top i{background:#C9A84C}
 .hn-h-chat{font-size:13px;line-height:1.78;color:#2a2118;margin-top:6px}
 .hn-h-vi{font-size:12px;line-height:1.7;color:#5a5145;margin-top:8px}
 .hn-chips{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px}
@@ -741,10 +750,17 @@ function renderMetaRest(data) {
 function renderMeta(data) { renderMetaHead(data); renderMetaRest(data); }
 
 /** Một thẻ thiên hướng. `full` = có hoạt động + việc nên/tránh (đã trả tiền). */
-function _huongHtml(h, full, showDiem) {
+function _huongHtml(h, full, showDiem, dinhBang) {
   var s = '<div class="hn-h"><div class="hn-h-top"><div class="hn-h-ten">' + esc(h.ten) + '</div>' +
-    (showDiem ? '<div class="hn-h-diem">độ nghiêng ' + (h.diem || 0) + '</div>' : '') + '</div>' +
-    '<div class="hn-h-chat">' + esc(h.chat) + '</div>';
+    (showDiem ? '<div class="hn-h-diem">độ nghiêng ' + (h.diem || 0) + '</div>' : '') + '</div>';
+  // Thanh chỉ vẽ khi có ÍT NHẤT HAI hướng để so — một thanh đứng một mình
+  // không so với cái gì, chỉ làm người đọc tưởng đó là thang đo tuyệt đối.
+  if (dinhBang > 0 && h.diem > 0) {
+    var pct = Math.max(4, Math.min(100, (h.diem / dinhBang) * 100));
+    s += '<div class="hn-h-thanh' + (h.diem >= dinhBang ? ' top' : '') + '" role="img" aria-label="Độ nghiêng ' +
+      Math.round(pct) + ' phần trăm so với thiên hướng đứng đầu"><i style="width:' + pct.toFixed(1) + '%"></i></div>';
+  }
+  s += '<div class="hn-h-chat">' + esc(h.chat) + '</div>';
   if (h.vi && h.vi.length) {
     s += '<div class="hn-h-vi"><b>Vì:</b> ' + esc(h.vi.join(' · ')) + '</div>';
   }
@@ -796,8 +812,11 @@ function renderProse(data) {
 
   var hs = data.huong || [];
   if (hs.length) {
+    // Đỉnh bảng = điểm CAO NHẤT trong CHÍNH bộ đang hiện, không phải hằng số:
+    // `diem` là độ nghiêng tương đối, hai lá số khác nhau có trần khác nhau.
+    var dinhBang = hs.length > 1 ? Math.max.apply(null, hs.map(function (h) { return h.diem || 0; })) : 0;
     document.getElementById('baHuong').innerHTML = hs.map(function (h, i) {
-      return _huongHtml(h, true, i === 0);
+      return _huongHtml(h, true, i === 0, dinhBang);
     }).join('');
     document.getElementById('baHuongBlock').style.display = 'block';
     // Thiên hướng đứng đầu nay đã có bản ĐẦY ĐỦ ở khối dưới — giấu khối tính
