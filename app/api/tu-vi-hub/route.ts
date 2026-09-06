@@ -186,7 +186,7 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--te
 <script src="/auth.js"></script>
 </head>
 <body>
-<script src="/track.js?v=4" defer></script><script src="/nav.js?v=24"></script>
+<script src="/track.js?v=4" defer></script><script src="/nav.js?v=26"></script>
 <div class="breadcrumb"><a href="/">Trang Chủ</a> › <span>${esc(meta.h1)}</span></div>
 <div class="hub-hero">
   <div class="hub-hero-icon"><span class="ic-inline" data-icon-emoji="${meta.icon}" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">${meta.icon}</span></div>
@@ -195,7 +195,6 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--te
   <a class="hub-hero-cta" href="/">Xem Tử Vi Của Bạn →</a>
 </div>
 <div class="hub-wrap">${gridHtml}${pagerHtml}</div>
-<script src="/footer.js"></script>
 </body></html>`;
 }
 

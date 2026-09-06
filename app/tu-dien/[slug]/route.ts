@@ -218,8 +218,7 @@ body{font-family:Arial,sans-serif;background:var(--bg);color:var(--text);min-hei
     <a class="cta-btn" href="/">Xem Tử Vi →</a>
   </div>
 </article>
-<script src="/footer.js"></script>
-<script src="/track.js?v=4" defer></script><script src="/nav.js?v=24" defer></script>
+<script src="/track.js?v=4" defer></script><script src="/nav.js?v=26" defer></script>
 </body></html>`;
 
   return new NextResponse(html, {
