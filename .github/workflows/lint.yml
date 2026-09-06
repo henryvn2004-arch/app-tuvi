@@ -103,6 +103,14 @@ jobs:
       - name: Form khai sinh phải có chỗ giữ
         run: npm run check:formph
 
+      # Nạp font qua Google Fonts là HAI vòng cross-origin trước khi chữ có mặt
+      # chữ đúng, nên font gần như luôn về sau lần vẽ đầu ⇒ swap ⇒ nhảy. Đọc
+      # đích danh `subItems[].cause` của audit `layout-shifts` trên prod:
+      # /la-so.html 0,0108 do 6 file `bevietnampro`. Preload phải có
+      # `crossorigin` kể cả khi cùng origin — thiếu là tải HAI lần, hỏng câm.
+      - name: Font thân bài/tiêu đề phải tự lưu trữ
+        run: npm run check:font
+
       # Cùng vùng, nhưng là VỆ SINH TỐC ĐỘ chứ không phải bản vá CLS: script bên
       # thứ ba không `defer` đứng trước lời dựng form thêm hẳn một chặng mạng vào
       # đường tới hạn. (#708 từng ship `defer` như một bản vá CLS — prod không

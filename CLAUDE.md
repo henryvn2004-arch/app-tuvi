@@ -108,9 +108,9 @@ sửa bằng SQL không cần deploy) · `lib/marketing/*` (digest · cảnh bá
 (tường trả phí) · `tool-prices.js` (giá) · `poster.js` (ảnh 9:16 + QR) ·
 `nav.js` (icon dùng chung) · `track.js` (đo) · `referral.js`.
 
-### 41 bộ dò (chạy trong CI lint) — `npm run check:*`
+### 42 bộ dò (chạy trong CI lint) — `npm run check:*`
 `prices` `nostore` `groups` `viec` `share` `history` `shellboot` `introcard` `navph`
-`formph` `formblock`
+`formph` `formblock` `font`
 `authapi` `giosinh` `keyframes` `hoatdong` `hexagrams` `laso` `railfields`
 `railwrap` `cacheshape` `hao` `motifs` `terms` `publish` `jobs` `token`
 `prompt` `topics` `batrach` `sodep` `lunar` `vntz` `tooltip` `cns` `celebanh`

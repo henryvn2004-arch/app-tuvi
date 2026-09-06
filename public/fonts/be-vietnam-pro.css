@@ -1,0 +1,90 @@
+/* Be Vietnam Pro tự lưu trữ — KHÔNG gọi Google Fonts nữa.
+
+   VÌ SAO. Đây là font THÂN BÀI của 25 trang tĩnh. Nạp qua Google Fonts thì
+   chữ chỉ đúng mặt sau HAI vòng cross-origin (fonts.googleapis.com lấy CSS →
+   fonts.gstatic.com lấy woff2), nên nó gần như luôn về SAU lần vẽ đầu ⇒ swap ⇒
+   nhảy. Đo trên prod: 0,0108 ở `/la-so.html`, hạng mục CLS lớn nhất còn lại
+   của cả site sau khi đã vá form.
+
+   ⚠️ CỐ Ý GIỮ `swap`, KHÔNG dùng `optional` như Noto Serif. Noto Serif là font
+   TIÊU ĐỀ: mất nó một lượt thì trang xấu đi chút. Be Vietnam Pro là font THÂN
+   BÀI: `optional` nghĩa là khách Ads ghé lần đầu trên mạng chậm đọc cả trang
+   bằng font dự phòng — đổi hẳn diện mạo sản phẩm để lấy vài phần nghìn CLS.
+   Cách khác rẻ hơn: tự lưu trữ + `<link rel=preload>` cho hai file 400. Cùng
+   origin, ~12KB mỗi file, khởi động ngay lúc phân tích HTML nên gần như luôn
+   thắng cuộc đua với lần vẽ đầu — không có swap thì không có nhảy, mà mặt chữ
+   vẫn luôn đúng.
+
+   ⚠️ Chỉ giữ subset `latin` + `vietnamese`, bỏ `latin-ext` — cùng lý do đã ghi
+   ở `noto-serif.css`.
+
+   4 cân nặng vì hai biến thể đang dùng trong repo: `wght@300;400;500;600`
+   (38 chỗ) và `wght@300;400;500` (12 chỗ). Trình duyệt chỉ tải cân nặng nào
+   trang thật sự dùng, nên gộp một file CSS cho cả hai là an toàn.
+
+   Cập nhật font → ĐỔI TÊN FILE, vì `vercel.json` khai `immutable` cho /fonts/.
+   `unicode-range` chép NGUYÊN VĂN từ CSS của Google, đừng gõ tay. */
+@font-face {
+  font-family: 'Be Vietnam Pro';
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url(/fonts/be-vietnam-pro-latin-300.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Be Vietnam Pro';
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url(/fonts/be-vietnam-pro-vietnamese-300.woff2) format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+@font-face {
+  font-family: 'Be Vietnam Pro';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(/fonts/be-vietnam-pro-latin-400.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Be Vietnam Pro';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(/fonts/be-vietnam-pro-vietnamese-400.woff2) format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+@font-face {
+  font-family: 'Be Vietnam Pro';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(/fonts/be-vietnam-pro-latin-500.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Be Vietnam Pro';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(/fonts/be-vietnam-pro-vietnamese-500.woff2) format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+@font-face {
+  font-family: 'Be Vietnam Pro';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(/fonts/be-vietnam-pro-latin-600.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Be Vietnam Pro';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(/fonts/be-vietnam-pro-vietnamese-600.woff2) format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
