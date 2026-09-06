@@ -196,6 +196,9 @@
           </div>
 
           <!-- TRẢ TIỀN từ đây trở xuống -->
+          <!-- CHỈ hai đoạn miễn phí (Pha 3) — cả khối này KHÔNG còn "TRẢ TIỀN
+               từ đây" như chú thích cũ, đúng hai trường trong `PREVIEW_KEEP_PROSE`
+               (route.ts) đứng ở đây. -->
           <div class="res-block" id="proseTopBlock" style="display:none">
             <div class="res-block-header"><span class="res-block-title">Nhìn Ra Con</span></div>
             <div class="res-block-body">
@@ -402,7 +405,7 @@ async function analyze() {
     var r = await fetch('/api/huong-nghiep-tre?preview=1', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ birth: b, name: b.name || '', moiLo: lo })
+      body: JSON.stringify({ birth: b, name: b.name || '', moiLo: lo, anonId: TuviPaywall.previewAnonId() })
     });
     prev = await r.json();
     if (!r.ok || !prev.success) throw new Error(prev.error || 'Lỗi ' + r.status);
@@ -427,9 +430,11 @@ async function analyze() {
 
   // Trẻ em: đây là đường có bán. Đăng nhập rồi → bấm nút là CHẠY THẬT ngay
   // (case 1), bỏ hẳn bản xem trước — chốt Lượng rồi mới vẽ ĐẦY ĐỦ trong
-  // `_doGenerate`. Chưa đăng nhập (case 2) → dựng tầng đầu (hero) MỞ + thiên
-  // hướng/chất người/cơ sở lá số (0đ, có sẵn trong payload preview) dựng THẬT
-  // nhưng LÀM MỜ — không ẩn hẳn khỏi DOM. Phần AI viết riêng vẫn sau tấm khoá.
+  // `_doGenerate`. Chưa đăng nhập (case 2) → BẢN XEM TRƯỚC: server đã gọi
+  // model thật và chỉ gửi về `nhinRaCon`/`viSaoHuongNay` (xem
+  // `PREVIEW_KEEP_PROSE` trong route.ts) cộng phần deterministic vốn đã miễn
+  // phí (thiên hướng nổi nhất/chất người/cơ sở lá số). Mọi khối trả phí còn
+  // lại dựng thành Ô GIỮ CHỖ.
   if (!_hnLoggedIn()) {
     _loadingCtl && _loadingCtl.stop();
     document.getElementById('loading').style.display = 'none';
@@ -437,7 +442,8 @@ async function analyze() {
     document.getElementById('btnEdit').style.display = '';
     renderMetaHead(prev);
     renderMetaRest(prev);
-    _hnLockRestBlocks(true);
+    renderProse(prev);   // chỉ nhinRaCon/viSaoHuongNay có mặt; các nhánh `if` khác tự trượt
+    _hnLockBlocks(prev);
     mountHook(prev);
     if (window.SHELL_INTRO) Shell.dismissIntro(window.SHELL_INTRO.key);
     _renderLockWall(lo);
@@ -457,35 +463,60 @@ async function analyze() {
   await TuviPaywall.requireCredits(_currentSlug, function () { return _doGenerate(false, lo); });
 }
 
-// Khối deterministic mà `renderMetaRest` quản (đã có sẵn trong payload
-// preview, 0đ) — khoá bằng cách làm mờ CHÍNH các khối này, không đụng khối chỉ
-// tồn tại sau khi có AI viết riêng (loBlock/doBlock/... không nằm trong danh
-// sách vì renderMetaRest không đụng tới chúng).
-var HN_REST_BLOCK_IDS = ['huongDauBlock', 'chatBlock', 'basisBlock'];
-function _hnLockRestBlocks(locked) {
-  HN_REST_BLOCK_IDS.forEach(function (id) {
-    var block = document.getElementById(id);
-    if (!block || block.style.display === 'none') return;
+// Các khối BỊ KHOÁ ở bản xem trước, theo ĐÚNG thứ tự chúng đứng trên trang.
+// `huongDauBlock`/`chatBlock`/`basisBlock` CỐ Ý VẮNG — nội dung của chúng vốn
+// đã miễn phí/0đ (`renderMetaRest`), làm mờ một thứ đang miễn phí chỉ gây
+// confuse chứ không bảo vệ được gì. Phần tử thứ hai (biểu đồ giả) đều `false`:
+// không khối nào ở đây có bảng/thanh đo trong bản thật.
+var HN_LOCKED_BLOCKS = [
+  ['loBlock', false],
+  ['baHuongBlock', false],
+  ['doBlock', false],
+  ['noiBlock', false],
+  ['mocBlock', false],
+  ['endBlock', false],
+];
+
+/** Dựng khung rỗng + ô giữ chỗ cho mọi khối đang khoá. */
+function _hnLockBlocks(data) {
+  HN_LOCKED_BLOCKS.forEach(function (b, i) {
+    var block = document.getElementById(b[0]);
+    if (!block) return;
     var body = block.querySelector('.res-block-body');
-    var oldBadge = block.querySelector('.tpw-lock-badge');
-    if (oldBadge) oldBadge.remove();
-    if (locked) {
-      body.classList.add('tpw-real-lock');
-      var titleEl = block.querySelector('.res-block-title');
-      if (titleEl) titleEl.insertAdjacentHTML('afterend', TuviPaywall.lockBadge('Khoá'));
-    } else {
-      body.classList.remove('tpw-real-lock');
-    }
+    if (!body || body.querySelector('.tpw-ph-host')) return;
+    body.classList.add('tpw-locked');
+    body.insertAdjacentHTML('beforeend',
+      '<div class="tpw-ph-host">' + TuviPaywall.placeholderHtml(i, b[1]) + '</div>');
+    var titleEl = block.querySelector('.res-block-title');
+    if (titleEl) titleEl.insertAdjacentHTML('afterend', TuviPaywall.lockBadge('Khoá'));
+    block.style.display = 'block';
   });
   if (window.mountIcons) window.mountIcons(document.getElementById('resPanel'));
 }
 
+/** Gỡ sạch dấu vết khoá. Gọi ở `_openPanel` (đầu MỌI lượt) chứ không chỉ ở
+ *  lượt trả tiền — bấm "Xem Bé Khác" sau một lượt xem trước thì khung rỗng cũ
+ *  còn nguyên, và ô giữ chỗ sẽ đứng lẫn vào giữa nội dung thật. */
+function _hnUnlockBlocks() {
+  HN_LOCKED_BLOCKS.forEach(function (b) {
+    var block = document.getElementById(b[0]);
+    if (!block) return;
+    var body = block.querySelector('.res-block-body');
+    if (body) body.classList.remove('tpw-locked');
+    var ph = block.querySelector('.tpw-ph-host');
+    if (ph) ph.remove();
+    var badge = block.querySelector('.tpw-lock-badge');
+    if (badge) badge.remove();
+  });
+}
+
 // Hé đúng MỘT trong danh sách "Chất Người Đọc Ra Từ Lá Số" (mục đầu, đã xếp
-// nổi bật nhất — xem `xepChieu` trong lib/engine/huong-nghiep-tre.ts) — không
-// dựng lại cả `chatBlock` (đã LÀM MỜ ngay bên dưới) và không lộ `huongDau`
-// đầy đủ (khối riêng, cũng đang mờ). Không có điểm số kèm — `chatNguoi[].cao`
-// là một câu mô tả, không phải con số; trang tự bỏ `diem` của `huongDau` ở
-// đúng chỗ này (`_huongHtml(hd,false,false)`), hook không tự ý thêm lại.
+// nổi bật nhất — xem `xepChieu` trong lib/engine/huong-nghiep-tre.ts).
+// `chatBlock`/`huongDauBlock` đã dựng RÕ ngay bên dưới (miễn phí, không khoá)
+// — hook chỉ nhắc lại đúng MỘT mặt để mở vòng tò mò sớm hơn, trước khi cuộn
+// tới. Không có điểm số kèm — `chatNguoi[].cao` là một câu mô tả, không phải
+// con số; trang tự bỏ `diem` của `huongDau` ở đúng chỗ này
+// (`_huongHtml(hd,false,false)`), hook không tự ý thêm lại.
 function mountHook(data) {
   var host = document.getElementById('hookHost');
   if (!host || !window.HookLayer) return;
@@ -521,6 +552,7 @@ function _renderLockWall(lo) {
 }
 
 function _openPanel() {
+  _hnUnlockBlocks();
   document.getElementById('birthPanel').style.display = 'none';
   document.getElementById('resPanel').style.display = 'block';
   document.getElementById('loading').style.display = 'block';
@@ -568,7 +600,6 @@ async function _doGenerate(freeRerun, lo) {
     if (!res.ok || !data.success) throw new Error(data.error || 'Lỗi ' + res.status);
     renderMeta(data);
     renderProse(data);
-    _hnLockRestBlocks(false); // mở khoá nếu trước đó đã mờ ở lượt xem trước
     _loadingCtl && _loadingCtl.finish();
     document.getElementById('loading').style.display = 'none';
     document.getElementById('card').style.display = 'block';
@@ -656,10 +687,10 @@ function _banGiaoNguoiLon(data) {
 // Tách theo ĐƯỜNG TIỀN: `renderMetaHead` là phần đầu (hero — tên, tuổi, kiểu,
 // dòng lá số) — thứ khách CHƯA đăng ký cũng được xem MỞ. `renderMetaRest` là
 // mọi khối deterministic còn lại (thiên hướng nổi nhất, chất người, cơ sở lá
-// số) — LUÔN dựng thật vào DOM; khách chưa đăng ký chỉ khác ở chỗ
-// `_hnLockRestBlocks(true)` làm mờ chúng SAU khi dựng (xem analyze()).
-// `renderMeta` = cả hai, dùng cho đường đã đăng nhập/đã trả và cho lá số
-// người lớn (không bán, không gate).
+// số) — LUÔN MIỄN PHÍ và LUÔN dựng RÕ (không còn khái niệm "khoá" ở các khối
+// này từ Pha 3 — làm mờ một thứ đang miễn phí chỉ gây confuse). `renderMeta` =
+// cả hai, dùng cho đường đã đăng nhập/đã trả và cho lá số người lớn (không
+// bán, không gate).
 function renderMetaHead(data) {
   // Bỏ trống ô tên thì tiêu đề rơi về một cách gọi — mà "Con" dán lên một lá số
   // 43 tuổi thì vẫn đúng chỗ Henry báo, chỉ khác một dòng.
