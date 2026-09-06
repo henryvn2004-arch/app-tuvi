@@ -324,7 +324,9 @@ Mỗi luật dưới đây sinh ra từ một lần cắn thật. Cột cuối l
   `OPENAI_API_KEY` thì đọc được) — mọi phép đo phải gọi Anthropic đều chạy ở nơi khác.
 
 ### Nợ kỹ thuật đã ghi nhận
-- `trimLaSo` / `buildPrompt` (bản không cache) là **code chết** — 0 route gọi.
+- `trimLaSo` · `buildPrompt` · `laSoContextFor` — 0 route gọi, nhưng **GIỮ CỐ Ý**
+  làm đường lùi (lý do + ngày ghi ngay tại chỗ trong `luan-giai-doc.ts`). Đừng
+  "dọn" mà chưa hỏi — thiếu `laSoContextFor` ở dòng cũ đã làm một lượt tra nhầm.
 - 3 bảng dò chủ đề vẫn là 3 bản chép tay (`check:topics` canh chúng khỏi trôi).
 - `cong-cu.html` giữ bản chép riêng của `EMOJI_TO_ICON`.
 - 5 tool chưa có `SHAPE` riêng đang ở mức 1 — lượt đổi payload đầu tiên phải bump.
