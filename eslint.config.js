@@ -36,6 +36,11 @@ const projectGlobals = {
   // public/tool-prices.js — nguồn danh mục + giá dùng chung, nạp động ở nhiều
   // trang (shell.js và tuvi-paywall.js tự chèn thẻ script khi trang chưa có).
   ToolPrices: 'readonly',
+  // public/tools-shared/hook-charts.js — poster.js đọc `HookCharts.cssText()`
+  // để nhúng CSS vào <svg> khi rasterize (SVG đứng một mình không thấy <style>
+  // của trang). Có bảo vệ `window.HookCharts && ...` tại chỗ gọi vì 6 trang
+  // nạp poster.js mà KHÔNG nạp hook-charts.js.
+  HookCharts: 'readonly',
 };
 
 const sharedRules = {

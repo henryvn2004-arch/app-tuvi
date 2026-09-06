@@ -942,8 +942,96 @@
     });
   }
 
+  /* ── Chế độ SVG ────────────────────────────────────────────────────────────
+     Nhận thẳng chuỗi <svg> mà `tools-shared/hook-charts.js` đã dựng cho trang,
+     rồi rasterize vào vùng nghệ thuật. Vì sao KHÔNG vẽ lại bằng canvas cho
+     mỗi khối: bố cục sẽ có BẢN THỨ HAI, và hai bản sẽ trôi khỏi nhau đúng như
+     3 bảng Bát Trạch chép tay đã trôi. Một nguồn bố cục, hai đầu ra.
+
+     Hai việc phải làm trước khi rasterize:
+     ① Thay `var(--x)` bằng màu THẬT. SVG nạp qua <img> là tài liệu ĐỘC LẬP —
+        không thấy biến CSS của trang, để nguyên `var(...)` là mọi nét mất màu.
+     ② Bảng màu ở đây là bảng của POSTER (nền navy cố định), KHÔNG phải màu
+        đang hiện trên trang: poster luôn nền tối kể cả khi người dùng đang xem
+        chế độ sáng, nên lấy `getComputedStyle` của trang là ra chữ tối trên
+        nền tối. Đây là lý do bảng dưới viết tay chứ không đọc từ DOM.
+
+     Data URL cùng origin nên KHÔNG làm canvas "tainted" — không cần nhánh
+     proxy như ảnh chân dung. */
+  var SVG_PALETTE = {
+    '--tx-green': '#5FBF87',
+    '--tx-red': '#F08A7A',
+    '--green': '#5FBF87',
+    '--red': '#F08A7A',
+    '--gold': GOLD,
+    '--gold-soft': GOLD,
+    '--gold-lt': '#0D2237',
+    '--line': '#1E3A55',
+    '--line-2': '#27496B',
+    '--navy': NAVY,
+    '--heading': GOLD_SOFT,
+    '--text': GOLD_SOFT,
+    '--text-mid': '#C9D6E2',
+    '--text-lt': '#8FA6BC',
+    '--white': NAVY,
+    '--paper': NAVY,
+    '--paper-2': NAVY,
+    '--sans': SANS,
+    '--serif': SERIF,
+    '--mono': 'ui-monospace, monospace',
+  };
+
+  function svgForPoster(svg) {
+    var out = String(svg || '').replace(/var\(\s*(--[a-z0-9-]+)\s*(?:,[^)]*)?\)/gi, function (m, name) {
+      // Biến lạ (trang thêm token mới mà quên khai ở đây) → tông vàng thương
+      // hiệu, KHÔNG để nguyên `var(...)`: nét mất màu hoàn toàn còn khó thấy
+      // hơn nét sai tông một chút.
+      return Object.prototype.hasOwnProperty.call(SVG_PALETTE, name) ? SVG_PALETTE[name] : GOLD_SOFT;
+    });
+    // <img> cần kích thước nội tại. `_wrap` của hook-charts chỉ đặt viewBox +
+    // style width:100% — trong tài liệu độc lập thì style đó vô nghĩa và một
+    // số trình duyệt rơi về 300×150, méo hết bố cục.
+    var vb = out.match(/viewBox="0 0 ([\d.]+) ([\d.]+)"/);
+    if (vb && !/<svg[^>]*\swidth=/.test(out)) {
+      out = out.replace('<svg', '<svg width="' + vb[1] + '" height="' + vb[2] + '"');
+    }
+    if (!/xmlns=/.test(out)) out = out.replace('<svg', '<svg xmlns="http://www.w3.org/2000/svg"');
+    // ③ Nhúng CSS của khối vẽ VÀO TRONG svg. `hook-charts.js` bơm <style> vào
+    //    <head> của TRANG, còn tài liệu SVG nạp qua <img> đứng một mình nên
+    //    không thấy nó: thiếu bước này thì nhãn tháng và số điểm mất sạch (fill
+    //    mặc định đen trên thẻ tối) và chữ rơi về serif rồi tràn ra ngoài ô.
+    //    Đo được bằng cách dựng PNG thật rồi nhìn — không hàm nào báo lỗi.
+    var css = window.HookCharts && HookCharts.cssText ? HookCharts.cssText() : '';
+    if (css) {
+      css = css.replace(/var\(\s*(--[a-z0-9-]+)\s*(?:,[^)]*)?\)/gi, function (m, name) {
+        return Object.prototype.hasOwnProperty.call(SVG_PALETTE, name) ? SVG_PALETTE[name] : GOLD_SOFT;
+      });
+      out = out.replace(/(<svg[^>]*>)/, '$1<style>' + css + '</style>');
+    }
+    return out;
+  }
+
+  /** Hàm vẽ ĐỒNG BỘ: đặt ảnh SVG đã nạp vào giữa khung, giữ đúng tỉ lệ. */
+  function drawFitted(img) {
+    return function (ctx, box) {
+      var pad = 56;
+      var maxW = box.w - pad * 2, maxH = box.h - pad * 2;
+      var sc = Math.min(maxW / img.width, maxH / img.height);
+      var dw = img.width * sc, dh = img.height * sc;
+      ctx.drawImage(img, box.x + (box.w - dw) / 2, box.y + (box.h - dh) / 2, dw, dh);
+    };
+  }
+
   function build(opts) {
     if (!opts) return Promise.reject(new Error('no_opts'));
+    // Chế độ SVG: rasterize chuỗi <svg> của trang rồi đi tiếp bằng đúng đường
+    // của chế độ VẼ. Cũng không chạm mạng (data URL), nên không có nhánh CORS.
+    if (opts.svg) {
+      var src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svgForPoster(opts.svg));
+      return loadImage(src, false).then(function (img) {
+        return toBlob(opts, drawFitted(img));
+      });
+    }
     // Chế độ VẼ: không chạm mạng, nên cũng không có nhánh dự phòng CORS nào.
     if (typeof opts.draw === 'function') return toBlob(opts, opts.draw);
     if (!opts.imageUrl) return Promise.reject(new Error('no_image'));

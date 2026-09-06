@@ -46,6 +46,7 @@
     "check:jobs": "node scripts/check-cron-jobs.mjs",
     "check:token": "node scripts/check-token-freshness.mjs",
     "check:prompt": "node scripts/check-prompt-budget.mjs",
+    "check:hooktag": "node scripts/check-hook-tag.mjs",
     "check:topics": "node scripts/check-topic-patterns.mjs",
     "check:batrach": "node scripts/check-bat-trach.mjs",
     "check:sodep": "node scripts/check-so-dep.mjs",

@@ -1006,7 +1006,7 @@ function renderMarkdown(text){
       // vào đoạn giải thích kế tiếp, KHÔNG lặp lại câu hook. Best-effort: model
       // lệch định dạng (thiếu nhãn, sai tên nhãn) thì rơi về render đoạn
       // thường, không chặn phần luận thật hiện ra — cùng nguyên tắc cũ.
-      var m=/^\[(TỐT|CẢNH BÁO|TRUNG TÍNH)\]\s*\*\*(.+?)\*\*([\s\S]*)$/.exec(line.trim());
+      var m=/^\[(TỐT|CẢNH BÁO|TRUNG TÍNH)(?:\|[^\]]{0,40})?\]\s*\*\*(.+?)\*\*([\s\S]*)$/.exec(line.trim());
       if(m){
         flushPending(); // hook liền trước không có đoạn giải thích theo sau — chốt riêng
         var cls=HOOK_TAG_CLASS[m[1]]||'fb-trungtinh';

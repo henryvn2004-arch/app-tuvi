@@ -187,7 +187,7 @@ window.SHELL_INTRO={key:'chan-dung-vo-chong'};</script>
 <script src="/tuvi-form.js?v=2"></script>
 <script src="/tools-shared/cung-ngay-sinh.js?v=2"></script>
 <script src="/tuvi-paywall.js?v=22"></script>
-<script src="/tools-shared/hook-charts.js?v=1"></script>
+<script src="/tools-shared/hook-charts.js?v=2"></script>
 <script src="/tools-shared/hook-facts.js?v=1"></script>
 <script src="/tools-shared/hook-layer.js?v=2"></script>
 <script src="/auth.js?v=2"></script>
@@ -485,7 +485,7 @@ function mdBoldParas(text) {
   var out = '', pendingLead = '';
   function flushPending() { if (pendingLead) { out += '<p style="margin:0 0 12px">' + pendingLead + '</p>'; pendingLead = ''; } }
   String(text || '').split(/\n{2,}/).forEach(function (p) {
-    var m = /^\[(TỐT|CẢNH BÁO|TRUNG TÍNH)\]\s*\*\*(.+?)\*\*([\s\S]*)$/.exec(p.trim());
+    var m = /^\[(TỐT|CẢNH BÁO|TRUNG TÍNH)(?:\|[^\]]{0,40})?\]\s*\*\*(.+?)\*\*([\s\S]*)$/.exec(p.trim());
     if (m) {
       flushPending();
       var cls = HOOK_TAG_CLASS[m[1]] || 'fb-trungtinh';

@@ -213,6 +213,12 @@ jobs:
       - name: Ngân sách prompt lá số (chống phình + một nguồn bố cục)
         run: npm run check:prompt
 
+      # Prompt đổi `[TỐT]` → `[TỐT|TỪ KHOÁ]` mà 16 regex chép tay ở public/ vẫn
+      # là `\]` dính sau nhóm ⇒ thẻ caption mất màu VÀ nhãn hiện thô ra cho
+      # người đã trả tiền, không lỗi nào bắn ra. Đã cắn 2026-09-05 (PR #702).
+      - name: Nhãn tính chất — 16 trang đọc được cả dạng cũ lẫn dạng có từ khoá
+        run: npm run check:hooktag
+
       - name: Bộ dò chủ đề câu hỏi (mẫu phải là cụm đủ nghĩa, không âm tiết đơn)
         run: npm run check:topics
 
