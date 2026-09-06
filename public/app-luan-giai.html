@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Luận giải Tử Vi — Tử Vi Minh Bảo</title>
-<meta name="description" content="Lập lá số Tử Vi 12 cung rồi luận giải chuyên sâu theo điểm số cổ pháp: chính tinh, cách cục, tứ hóa từng cung — và hỏi trợ lý AI đào sâu từng phần.">
+<meta name="description" content="Lập lá số Tử Vi 12 cung rồi luận giải chuyên sâu theo điểm số cổ pháp: chính tinh, cách cục, tứ hóa từng cung — và hỏi trợ lý Luận Đường đào sâu từng phần.">
 <link rel="icon" type="image/webp" href="/seal.webp">
 <link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
@@ -141,7 +141,7 @@
 .lg-related-link:hover{border-color:var(--gold-soft)}
 .lg-related-link b{display:block;font-size:12.5px;color:var(--heading);font-family:var(--serif);font-weight:600}
 .lg-related-link span{display:block;font-size:11.5px;color:var(--text-lt);margin-top:2px}
-/* ── Luận giải chuyên sâu bằng AI (paid, port từ luan-giai.html — gate+RAG+stream+PDF) ── */
+/* ── Luận giải chuyên sâu (paid, port từ luan-giai.html — gate+RAG+stream+PDF) ── */
 .claude-content{margin-top:10px;padding-top:10px;border-top:1px dashed var(--line-2)}
 .claude-content p{color:var(--text-mid);line-height:1.75;margin-bottom:12px;font-size:13.5px}
 .claude-content p:last-child{margin-bottom:0}
@@ -498,7 +498,7 @@ function mountHook(ls){
       facts:facts,
       gate:{
         tieuDe:'Bản đầy đủ trả lời làm gì với nó',
-        items:['12 phần còn lại — luận riêng từng cung trong 12 cung theo cổ pháp','Luận giải chuyên sâu viết riêng bằng AI theo cổ pháp'],
+        items:['12 phần còn lại — luận riêng từng cung trong 12 cung theo cổ pháp','Luận giải chuyên sâu viết riêng theo cổ pháp'],
         onUnlock:function(){ return initiateLuanGiaiChuyenSau(); }
       }
     });
@@ -539,7 +539,7 @@ var CUNG_TOOL_LINKS={
     {path:'/app/bat-trach',label:'Hướng Bát Trạch',note:'Soi thêm 8 hướng tốt xấu từ chính cung Mệnh này'}
   ],
   'Cung Điền Trạch':[
-    {path:'/app/phong-thuy',label:'Phong Thủy Nội Thất',note:'Chụp ảnh phòng để AI chấm điểm bố trí'}
+    {path:'/app/phong-thuy',label:'Phong Thủy Nội Thất',note:'Chụp ảnh phòng để hệ thống chấm điểm bố trí'}
   ],
   'Cung Quan Lộc':[
     {path:'/app/cong-so',label:'Tử Vi Công Sở',note:'Đọc lại đúng lá số này bằng ngôn ngữ công việc'}
@@ -596,7 +596,7 @@ function buildPhanSection(phan,label,ls,locked){
     bodyHtml=pre?('<details class="lg-calc"><summary>Xem cơ sở tính toán</summary>'+raw+'</details>'):raw;
     tag='';
   }
-  // Khoá-mini (ẨN mặc định) — mỗi phần đều CÓ một đoạn luận riêng do AI viết,
+  // Khoá-mini (ẨN mặc định) — mỗi phần đều CÓ một đoạn luận riêng do hệ thống viết,
   // nhưng chỉ hiện khối này SAU khi biết chắc phần đó CHƯA mở (`_paintSecLocks`,
   // gọi từ `_renderUnlockBlock`). `part:phan` (chỉ gắn khi phan>1, phần 1 luôn
   // free nên không có khối này) → bấm chỉ mở ĐÚNG phần đó (12 Lượng), KHÔNG
@@ -885,7 +885,7 @@ function toggleMini(){
 }
 
 // ══════════════════════════════════════════════════════════════════════
-// Luận giải chuyên sâu bằng AI — port từ public/luan-giai.html (gate Lượng
+// Luận giải chuyên sâu — port từ public/luan-giai.html (gate Lượng
 // qua TuviPaywall + RAG /api/search + generate /api/lasotuvi (24 phần,
 // tuần tự) + lưu /api/save-laso + Tải PDF). Giữ nguyên tên biến/hàm gốc
 // (_astrolabe, toSlugAscii, QUERIES, renderMarkdown...) để dễ đối chiếu —
@@ -1047,7 +1047,7 @@ function fillClaudeContent(box,text){
 // chia sẻ) — CHỈ được gọi SAU khi đã xác nhận đúng người đang xem là người đã
 // TRẢ TIỀN cho ĐÚNG slug này (`/api/payment?action=check`, user-scoped qua
 // server). Bỏ bước đó thì bất kỳ ai gõ đúng ngày sinh của một lá số ĐÃ TỪNG có
-// người khác trả tiền luận giải sẽ đọc được trọn 24 phần AI miễn phí — slug là
+// người khác trả tiền luận giải sẽ đọc được trọn 24 phần luận giải miễn phí — slug là
 // hàm thuần của ngày sinh, không gắn với người dùng nào.
 async function _fetchCachedLuanGiai(slug){
   try{
@@ -1138,7 +1138,7 @@ function _renderUnlockBlock(){
   // DOM) cũng bật khoá-mini của chính nó, để cuộn qua khỏi banner vẫn còn chỗ mở.
   _paintSecLocks(true);
   if(_lgLoggedIn()){
-    host.innerHTML='<button class="btn-go" id="btnUnlock" onclick="initiateLuanGiaiChuyenSau()">✦ Luận giải chuyên sâu bằng AI — <span data-tvp-price="laso">…</span> Lượng →</button>'+
+    host.innerHTML='<button class="btn-go" id="btnUnlock" onclick="initiateLuanGiaiChuyenSau()">✦ Luận giải chuyên sâu — <span data-tvp-price="laso">…</span> Lượng →</button>'+
       '<p>Viết riêng cho lá số này theo cổ pháp — 13 phần: tổng quan và luận riêng từng cung trong 12 cung.</p>';
     TuviPaywall.fillPriceSlots(host);
     // Vừa quay về từ lượt nạp Lượng thành công (đã đăng nhập nên KHÔNG còn đi
@@ -1150,7 +1150,7 @@ function _renderUnlockBlock(){
   TuviPaywall.lockPreview({
     host:host,
     title:'⊙ Bản luận đầy đủ chưa mở',
-    items:['12 phần còn lại — luận riêng từng cung trong 12 cung theo cổ pháp','Luận giải chuyên sâu viết riêng bằng AI theo cổ pháp'],
+    items:['12 phần còn lại — luận riêng từng cung trong 12 cung theo cổ pháp','Luận giải chuyên sâu viết riêng theo cổ pháp'],
     cta:'Đăng ký để mở bản luận đầy đủ',
     slug:function(){return _pendingSlug;},
     onUnlock:function(){ return _startLuanGiaiAI(); },

@@ -1286,7 +1286,7 @@ async function handleAdminTopicQueueDelete(request: NextRequest, body: Record<st
 // đọc thẳng bằng sbGet) + trạng thái configured của provider/infra keys
 // (chỉ trả boolean, KHÔNG BAO GIỜ trả giá trị thật của secret).
 const ENV_KEY_GROUPS: { label: string; items: { key: string; label: string }[] }[] = [
-  { label: 'AI Providers', items: [
+  { label: 'Nhà cung cấp mô hình', items: [
     { key: 'ANTHROPIC_API_KEY', label: 'Anthropic (Claude — agent chat)' },
     { key: 'GEMINI_API_KEY', label: 'Google Gemini (route rời + backup)' },
     { key: 'OPENAI_API_KEY', label: 'OpenAI (embeddings RAG)' },

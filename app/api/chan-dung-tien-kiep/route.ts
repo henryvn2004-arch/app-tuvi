@@ -255,7 +255,7 @@ async function handleStory(birth: BirthParams, userId: string, key: string, eraI
   };
 
   let res = await askStory(false);
-  if (!res) return err('Lỗi AI khi viết câu chuyện. Vui lòng thử lại.', 500);
+  if (!res) return err('Lỗi hệ thống khi viết câu chuyện. Vui lòng thử lại.', 500);
   let parsed = parseLlmJson(res.raw) as StoryJson | null;
 
   // Parse hỏng → THỬ LẠI MỘT LƯỢT. Trước đây fail là trả lỗi luôn, người dùng
@@ -268,7 +268,7 @@ async function handleStory(birth: BirthParams, userId: string, key: string, eraI
     );
     void logLlmParseFail('chan-dung-tien-kiep', res.model, t, 1);
     res = await askStory(true);
-    if (!res) return err('Lỗi AI khi viết câu chuyện. Vui lòng thử lại.', 500);
+    if (!res) return err('Lỗi hệ thống khi viết câu chuyện. Vui lòng thử lại.', 500);
     parsed = parseLlmJson(res.raw) as StoryJson | null;
   }
   // biDanh (vế thơ) là phần TRANG TRÍ — thiếu vẫn hiển thị được vì danh xưng
@@ -280,7 +280,7 @@ async function handleStory(birth: BirthParams, userId: string, key: string, eraI
       `[chan-dung-tien-kiep] parse hỏng LẦN 2 (len=${t.length}, đầu=${JSON.stringify(t.slice(0, 160))})`,
     );
     void logLlmParseFail('chan-dung-tien-kiep', res.model, t, 2);
-    return err('Lỗi phân tích kết quả AI.', 500);
+    return err('Lỗi phân tích kết quả trả về.', 500);
   }
 
   // Ghép nhãn giai đoạn/vai trò kịch (deterministic, do engine chốt) vào từng

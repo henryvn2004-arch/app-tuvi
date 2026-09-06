@@ -47,7 +47,7 @@ var TOOL_CONFIGS = [
     name:  'Chọn Ngày Tốt',
     icon:  '📅',
     color: '#9A7B3A',
-    desc:  'AI chọn ngày tốt — cưới hỏi, khai trương, ký HĐ...',
+    desc:  'Chọn ngày tốt — cưới hỏi, khai trương, ký HĐ...',
     suggs: ['Ngày nào tốt nhất?', 'Tháng này có ngày hợp không?', 'Tránh ngày giờ nào?', 'Giải thích kết quả'],
   },
   {
@@ -55,7 +55,7 @@ var TOOL_CONFIGS = [
     name:  'Đặt Tên Con',
     icon:  '✏️',
     color: '#7B3F00',
-    desc:  'AI đặt tên theo ngũ hành bố mẹ và năm sinh con',
+    desc:  'Đặt tên theo ngũ hành bố mẹ và năm sinh con',
     suggs: ['Đặt thêm 5 tên khác', 'Giải thích ý nghĩa tên', 'Tên nào hợp ngũ hành nhất?', 'Tên có chữ đệm gì?'],
   },
 ];

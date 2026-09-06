@@ -1,6 +1,6 @@
 /* ============================================================
    shell.js — Khung app-shell dùng chung cho mọi trang /app/*.
-   Render sidebar + rail Trợ lý AI + command palette từ MỘT nguồn
+   Render sidebar + rail Trợ lý Luận Đường + command palette từ MỘT nguồn
    cấu hình TOOLS, lo chat SSE (/api/v1/chat), theme, mobile, auth.
    Trang tool chỉ cần: khai window.SHELL_ACTIVE = '<id>' rồi gọi
    Shell.setContext({...}) khi có lá số/kịch bản để bật rail.
@@ -454,7 +454,7 @@
     var host = document.getElementById('shell-sidebar');
     if (!host) return;
     var h = '';
-    h += '<a class="sb-brand" href="/"><img class="seal" src="/seal.webp" alt="Tử Vi Minh Bảo"><div class="brand-txt"><b>Tử Vi Minh Bảo</b><span>Mệnh Lý AI</span></div></a>';
+    h += '<a class="sb-brand" href="/"><img class="seal" src="/seal.webp" alt="Tử Vi Minh Bảo"><div class="brand-txt"><b>Tử Vi Minh Bảo</b><span>Mệnh Lý</span></div></a>';
     // Tracker "đang online / lượt hỏi hôm nay" — MÔ PHỎNG (xem ghi chú ⚠️ ở
     // simulatePulse()). `_pulseData` được seed TRƯỚC lần renderSidebar() đầu
     // (boot()) nên luôn có số ngay từ khung hình đầu; fallback "…" chỉ phòng

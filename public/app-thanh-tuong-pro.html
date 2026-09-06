@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Thanh Tướng Pro — Tử Vi Minh Bảo</title>
-<meta name="description" content="Bốn bài đo giọng nói chuyên sâu — AI phân tích Ngũ Âm theo Ma Y Thần Tướng, Thần Tướng Toàn Biên, Thủy Kính Tập.">
+<meta name="description" content="Bốn bài đo giọng nói chuyên sâu — hệ thống phân tích Ngũ Âm theo Ma Y Thần Tướng, Thần Tướng Toàn Biên, Thủy Kính Tập.">
 <link rel="icon" type="image/webp" href="/seal.webp">
 <link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
@@ -173,7 +173,7 @@
 
       <div class="dt-card" id="resultsCard" data-ws-result style="display:none">
         <h2>Phân Tích Thanh Tướng Chuyên Sâu</h2>
-        <p class="sub">AI · Ngũ Âm Cổ Pháp · Ma Y · Thần Tướng Toàn Biên · Thủy Kính Tập</p>
+        <p class="sub">Ngũ Âm Cổ Pháp · Ma Y · Thần Tướng Toàn Biên · Thủy Kính Tập</p>
         <div class="dt-result" id="resultsPanel"></div>
       </div>
     </div>
@@ -193,7 +193,7 @@ function initThanhTuongPro(){
   Shell.setContext({
     label:'Thanh Tướng Pro',
     placeholder:'Hỏi thầy về thanh tướng…',
-    greeting:'Chào bạn. Chọn giới tính, nhập tuổi rồi làm 4 bài đo giọng ở khung bên trái — AI sẽ phân tích chuyên sâu 12 chỉ số âm học. Sau khi có kết quả, cứ hỏi tôi thêm.',
+    greeting:'Chào bạn. Chọn giới tính, nhập tuổi rồi làm 4 bài đo giọng ở khung bên trái — hệ thống sẽ phân tích chuyên sâu 12 chỉ số âm học. Sau khi có kết quả, cứ hỏi tôi thêm.',
     chips:['Jitter và Shimmer là gì?','HNR thấp nói lên điều gì?','Khác gì bản Thanh Tướng thường?']
   });
 }
@@ -1155,7 +1155,7 @@ async function _doThanhTuongAnalyze() {
     }
 
     if (!content) {
-      resultsPanel.innerHTML = '<p style="color:#C0392B;padding:20px;text-align:center">Không nhận được nội dung từ AI. Thử lại.</p>';
+      resultsPanel.innerHTML = '<p style="color:#C0392B;padding:20px;text-align:center">Không nhận được nội dung trả về. Thử lại.</p>';
     } else {
       _saveTuongReading('thanh-tuong-pro', content, null, null);
       // Chia sẻ CHỈ text luận giải của AI — KHÔNG đính kèm bản ghi âm giọng

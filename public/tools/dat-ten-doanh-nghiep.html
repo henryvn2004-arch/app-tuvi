@@ -62,7 +62,7 @@
   <div class="page">
     <div class="eyebrow">Công Cụ Đặt Tên · Thương Hiệu & Doanh Nghiệp</div>
     <h1>Đặt Tên Doanh Nghiệp<br><em>Theo Ngũ Hành</em></h1>
-    <p>AI gợi ý 12 tên thương hiệu/công ty phù hợp ngũ hành chủ doanh nghiệp và ngành nghề — Thuần Việt, Hán Việt và kết hợp.</p>
+    <p>Hệ thống gợi ý 12 tên thương hiệu/công ty phù hợp ngũ hành chủ doanh nghiệp và ngành nghề — Thuần Việt, Hán Việt và kết hợp.</p>
   </div>
 </div>
 
@@ -165,7 +165,7 @@
     <div class="res-block">
       <div class="res-block-header">
         <span class="res-block-title">12 Tên Gợi Ý Theo Ngũ Hành</span>
-        <span style="font-size:11px;color:var(--text-lt)">AI · Lục Thập Hoa Giáp · Hán Việt học</span>
+        <span style="font-size:11px;color:var(--text-lt)">Lục Thập Hoa Giáp · Hán Việt học</span>
       </div>
       <div class="res-block-body">
         <div id="aiResult" class="md-result"></div>
@@ -256,7 +256,7 @@ async function _doAnalyze(hoTen, ns, info, lv, lh) {
   document.getElementById('analyzeBtn').disabled = true;
   document.getElementById('result-section').classList.add('active');
   const el = document.getElementById('aiResult');
-  el.innerHTML = '<div class="ai-loading"><span class="ai-loading-icon"><span class="ic-inline" data-icon-emoji="🏢" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">🏢</span></span><div class="ai-loading-text">AI đang gợi ý tên doanh nghiệp...<br><span style="font-size:12px;opacity:.7">Thường mất 15–25 giây</span></div></div>';
+  el.innerHTML = '<div class="ai-loading"><span class="ai-loading-icon"><span class="ic-inline" data-icon-emoji="🏢" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">🏢</span></span><div class="ai-loading-text">Đang gợi ý tên doanh nghiệp...<br><span style="font-size:12px;opacity:.7">Thường mất 15–25 giây</span></div></div>';
   document.getElementById('result-section').scrollIntoView({behavior:'smooth',block:'start'});
   document.getElementById('error-msg').classList.remove('active');
 

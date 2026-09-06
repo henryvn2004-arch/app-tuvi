@@ -11,7 +11,7 @@
 //   var ctl = AiLoadingSteps.mount('mountId', [
 //     { label: 'Lập lá số & xác định cung Phu Thê', ms: 900 },
 //     { label: 'Luận giải cung Phu Thê', ms: 4500 },
-//     { label: 'AI đang vẽ chân dung', ms: 0 }, // bước cuối: ms không dùng
+//     { label: 'Đang vẽ chân dung', ms: 0 }, // bước cuối: ms không dùng
 //   ]);
 //   ctl.start();
 //   // ... await fetch(...)

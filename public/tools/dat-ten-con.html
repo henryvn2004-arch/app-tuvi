@@ -62,7 +62,7 @@
   <div class="page">
     <div class="eyebrow">Công Cụ Đặt Tên · Ngũ Hành Học</div>
     <h1>Đặt Tên Con<br><em>Theo Ngũ Hành</em></h1>
-    <p>AI gợi ý 12 tên phù hợp ngũ hành nạp âm bố mẹ và năm sinh con — kèm chữ Hán, ý nghĩa và lý do cụ thể.</p>
+    <p>Hệ thống gợi ý 12 tên phù hợp ngũ hành nạp âm bố mẹ và năm sinh con — kèm chữ Hán, ý nghĩa và lý do cụ thể.</p>
   </div>
 </div>
 
@@ -96,7 +96,7 @@
       <div class="form-group">
         <label class="form-label">Họ con (họ + tên đệm nếu có)</label>
         <input class="form-input" id="ho" type="text" placeholder="VD: Nguyễn Minh" maxlength="30" oninput="onFormChange()">
-        <div class="form-hint">AI sẽ ghép tên vào sau họ này</div>
+        <div class="form-hint">Hệ thống sẽ ghép tên vào sau họ này</div>
       </div>
       <div class="form-group">
         <label class="form-label">Giới tính</label>
@@ -153,7 +153,7 @@
     <div class="res-block">
       <div class="res-block-header">
         <span class="res-block-title">12 Tên Gợi Ý Theo Ngũ Hành</span>
-        <span style="font-size:11px;color:var(--text-lt)">AI · Lục Thập Hoa Giáp · Hán Việt học</span>
+        <span style="font-size:11px;color:var(--text-lt)">Lục Thập Hoa Giáp · Hán Việt học</span>
       </div>
       <div class="res-block-body">
         <div id="aiResult" class="md-result"></div>
@@ -257,7 +257,7 @@ async function _doAnalyze(ho, gt, con, infoC, infoB, infoM, bo, me) {
   document.getElementById('analyzeBtn').disabled = true;
   document.getElementById('result-section').classList.add('active');
   const el = document.getElementById('aiResult');
-  el.innerHTML = '<div class="ai-loading"><span class="ai-loading-icon"><span class="ic-inline" data-icon-emoji="✨" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">✨</span></span><div class="ai-loading-text">AI đang gợi ý tên con...<br><span style="font-size:12px;opacity:.7">Thường mất 15–25 giây</span></div></div>';
+  el.innerHTML = '<div class="ai-loading"><span class="ai-loading-icon"><span class="ic-inline" data-icon-emoji="✨" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">✨</span></span><div class="ai-loading-text">Đang gợi ý tên con...<br><span style="font-size:12px;opacity:.7">Thường mất 15–25 giây</span></div></div>';
   document.getElementById('result-section').scrollIntoView({behavior:'smooth',block:'start'});
   document.getElementById('error-msg').classList.remove('active');
 

@@ -118,7 +118,7 @@ ul{margin:0 0 10px 20px;color:var(--text-mid)}li{margin-bottom:5px}
   <div class="hero">
     <div class="eyebrow">Free MCP server · No API key</div>
     <h1>MCP Server <em>Tử Vi</em></h1>
-    <p>Cắm vào Claude, Cursor hay VS Code là hỏi thẳng về lá số — máy lập lá số bằng engine cổ pháp rồi đưa số liệu cho AI của bạn luận. <b>Không cần API key, không cài đặt gì.</b></p>
+    <p>Cắm vào Claude, Cursor hay VS Code là hỏi thẳng về lá số — máy lập lá số bằng engine cổ pháp rồi đưa số liệu cho trợ lý của bạn luận. <b>Không cần API key, không cài đặt gì.</b></p>
     <p class="en">Free public MCP server for Tử Vi Đẩu Số (Zi Wei Dou Shu) — the Vietnamese/Chinese natal chart system. Deterministic engine, no LLM on our side, no key.</p>
   </div>
 
@@ -137,7 +137,7 @@ ul{margin:0 0 10px 20px;color:var(--text-mid)}li{margin-bottom:5px}
       <thead><tr><th>Tool</th><th>Làm gì</th><th>Tham số</th></tr></thead>
       <tbody>${toolRows}</tbody>
     </table></div>
-    <p style="margin-top:10px">Mọi tool đều <b>tra bảng thuần</b> — engine tính, server <b>không gọi mô hình ngôn ngữ nào</b>. Số liệu trả về là dữ kiện; phần luận là AI của bạn viết.</p>
+    <p style="margin-top:10px">Mọi tool đều <b>tra bảng thuần</b> — engine tính, server <b>không gọi mô hình ngôn ngữ nào</b>. Số liệu trả về là dữ kiện; phần luận là trợ lý của bạn viết.</p>
   </section>
 
   <section>

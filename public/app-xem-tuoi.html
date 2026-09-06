@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Xem tuổi vợ chồng — Tử Vi Minh Bảo</title>
-<meta name="description" content="So tuổi vợ chồng theo lá số Tử Vi: điểm hòa hợp 8 chiều (tuổi, ngũ hành, tư tưởng, quan hệ, con cái, tài chính) — và hỏi trợ lý AI luận sâu.">
+<meta name="description" content="So tuổi vợ chồng theo lá số Tử Vi: điểm hòa hợp 8 chiều (tuổi, ngũ hành, tư tưởng, quan hệ, con cái, tài chính) — và hỏi trợ lý Luận Đường luận sâu.">
 <link rel="icon" type="image/webp" href="/seal.webp">
 <link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
@@ -78,7 +78,7 @@
 .jump::-webkit-scrollbar{display:none}
 .jump a{white-space:nowrap;font-size:12px;color:var(--text-mid);border:1px solid var(--line-2);border-radius:20px;padding:4px 11px;cursor:pointer;background:var(--white)}
 .jump a.on{background:var(--navy);color:#fff;border-color:var(--navy)}
-/* ── Luận giải chuyên sâu bằng AI (paid, port từ xem-tuoi.html/xem-lam-an.html — gate+RAG+PDF) ── */
+/* ── Luận giải chuyên sâu (paid, port từ xem-tuoi.html/xem-lam-an.html — gate+RAG+PDF) ── */
 .claude-content{margin-top:10px;padding-top:10px;border-top:1px dashed var(--line-2)}
 .claude-content p{color:var(--text-mid);line-height:1.75;margin-bottom:12px;font-size:13.5px}
 .claude-content p:last-child{margin-bottom:0}
@@ -126,7 +126,7 @@
         <div class="who-row" id="xtWho"></div>
         <div class="jump" id="xtJump"></div>
         <div class="xt-unlock" id="xtUnlock" style="display:none">
-          <button class="btn-go" id="btnUnlock" onclick="initiateXemTuoiChuyenSau()">✦ Luận giải chuyên sâu bằng AI — <span data-tvp-price="xem-tuoi">…</span> Lượng →</button>
+          <button class="btn-go" id="btnUnlock" onclick="initiateXemTuoiChuyenSau()">✦ Luận giải chuyên sâu — <span data-tvp-price="xem-tuoi">…</span> Lượng →</button>
           <p>Viết riêng cho hai người này theo cổ pháp — tổng quan và từng chiều hòa hợp.</p>
         </div>
         <div class="xt-progress" id="xtProgress" style="display:none"></div>
@@ -264,7 +264,7 @@ function doCompat(){
     });
     // Chia sẻ: TOÀN BỘ nội dung đang hiển thị trên màn hình (`liveText:true`
     // → xem chú thích ở `currentShare()` trong shell.js) — không chỉ 8 yếu tố
-    // + điểm, mà cả phần AI luận sâu từng chiều KHI ĐÃ MỞ KHOÁ. `text` dưới
+    // + điểm, mà cả phần hệ thống luận sâu từng chiều KHI ĐÃ MỞ KHOÁ. `text` dưới
     // đây chỉ là tiêu đề mở đầu cố định.
     var palMenhA=r.lsA.palaces&&r.lsA.palaces.find(function(p){return p.isMenh;});
     var palMenhB=r.lsB.palaces&&r.lsB.palaces.find(function(p){return p.isMenh;});
@@ -439,7 +439,7 @@ function bindJump(){
 }
 
 // ══════════════════════════════════════════════════════════════════════
-// Luận giải chuyên sâu bằng AI — port từ public/xem-tuoi.html (gate Lượng
+// Luận giải chuyên sâu — port từ public/xem-tuoi.html (gate Lượng
 // qua TuviPaywall + RAG /api/search + generate /api/xem-tuoi (9 phần tuần
 // tự, JSON) + lưu /api/history?action=save_xem_tuoi + Tải PDF). Chỉ bật cho
 // mode xem-tuoi/xem-lam-an — tuong-hop free, không gate (đúng standalone).

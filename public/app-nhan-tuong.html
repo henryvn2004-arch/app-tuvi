@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Nhãn Tướng AI — Tử Vi Minh Bảo</title>
-<meta name="description" content="Tải hoặc chụp ảnh mặt — AI phân tích nhãn tướng (đôi mắt) theo Ma Y Thần Tướng, Liễu Trang Thần Tướng.">
+<title>Nhãn Tướng — Tử Vi Minh Bảo</title>
+<meta name="description" content="Tải hoặc chụp ảnh mặt — hệ thống phân tích nhãn tướng (đôi mắt) theo Ma Y Thần Tướng, Liễu Trang Thần Tướng.">
 <link rel="icon" type="image/webp" href="/seal.webp">
 <link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
@@ -65,7 +65,7 @@
   <main class="ws" id="ws">
     <div class="ws-top">
       <button class="btn mobile-only" onclick="document.getElementById('shell-sidebar').classList.toggle('open');window.shellSyncBackdrop&&shellSyncBackdrop()" aria-label="Menu">☰</button>
-      <div class="ws-title"><b>Nhãn Tướng AI</b><span>Xem tướng mắt theo cổ pháp — <span data-tvp-price="nhan-tuong">…</span> Lượng</span></div>
+      <div class="ws-title"><b>Nhãn Tướng</b><span>Xem tướng mắt theo cổ pháp — <span data-tvp-price="nhan-tuong">…</span> Lượng</span></div>
       <div class="ws-actions">
         <button class="btn mobile-only" onclick="Shell.openRail()">✦ Hỏi</button>
       </div>
@@ -80,7 +80,7 @@
         <div class="intro-body">
           <img class="intro-avatar" src="/tool-avatars/nhan-tuong.webp" alt="" onerror="this.remove()">
           <div class="intro-text">
-            <div class="intro-t">Nhãn Tướng AI</div>
+            <div class="intro-t">Nhãn Tướng</div>
             <div class="intro-d">Đọc tướng mắt theo Liễu Trang Thần Tướng từ ảnh của bạn. Bạn nghe đôi mắt biết nói mà chưa rõ mắt mình đang nói gì. Dùng khi muốn hiểu tính cách qua một chi tiết nhỏ trên gương mặt.</div>
             <div id="introSrc" style="min-height:36.8px;margin-top:9px"></div>
           </div>
@@ -92,7 +92,7 @@
         <h2>Tải ảnh khuôn mặt</h2>
         <p class="sub">Đọc tướng mắt theo Liễu Trang Thần Tướng từ ảnh của bạn. Bạn nghe đôi mắt biết nói mà chưa rõ mắt mình đang nói gì. Dùng khi muốn hiểu tính cách qua một chi tiết nhỏ trên gương mặt.</p>
         <p class="price-note" data-tvp-price-label="nhan-tuong">…</p>
-        <div class="dt-privacy"><span class="ic" data-icon="lock"></span><div>Ảnh chỉ gửi tới AI để phân tích, không lưu trên server. Chụp thẳng mặt, đủ sáng — hệ thống sẽ tự zoom vào vùng mắt.</div></div>
+        <div class="dt-privacy"><span class="ic" data-icon="lock"></span><div>Ảnh chỉ gửi tới máy chủ để phân tích, không lưu trên server. Chụp thẳng mặt, đủ sáng — hệ thống sẽ tự zoom vào vùng mắt.</div></div>
 
         <div class="dt-input-tabs">
           <button class="dt-input-tab active" onclick="switchTab('upload',this)"><span class="ic" data-icon="folder"></span> Tải Ảnh Lên</button>
@@ -148,7 +148,7 @@
 
       <div class="dt-card" id="resultCard" data-ws-result style="display:none;margin-top:16px">
         <h2>Phân Tích Nhãn Tướng Học</h2>
-        <p class="sub">AI · Ma Y Thần Tướng · Nhãn Pháp cổ pháp</p>
+        <p class="sub">Ma Y Thần Tướng · Nhãn Pháp cổ pháp</p>
         <div id="aiResult" class="dt-result"></div>
         <div style="text-align:center;margin-top:8px">
           <button class="btn-cancel" onclick="resetTool()">Phân Tích Ảnh Khác</button>
@@ -170,7 +170,7 @@ window.SHELL_INTRO={key:'nhan-tuong'};</script>
 <script>
 function initNhanTuong(){
   Shell.setContext({
-    label:'Nhãn Tướng AI',
+    label:'Nhãn Tướng',
     placeholder:'Hỏi thầy về nhãn tướng…',
     greeting:'Chào bạn. Tải hoặc chụp ảnh khuôn mặt ở khung bên trái, tôi sẽ zoom vào đôi mắt và phân tích theo Nhãn Pháp cổ truyền. Sau khi có kết quả, cứ hỏi tôi thêm.',
     chips:['Phượng nhãn là gì?','Tam Bạch Nhãn có ý nghĩa gì?','Ánh mắt nói lên điều gì?']
@@ -297,13 +297,13 @@ function mountHook() {
   let title, body;
   if (_irisNote && _irisNote.includes('lệch lên')) {
     title = 'Tròng mắt hơi lệch lên — có thể Tam Bạch Nhãn Hạ';
-    body = 'Đo trực tiếp từ ảnh bằng MediaPipe (vị trí tròng mắt so với mí trên/dưới). Ý nghĩa đầy đủ theo Ma Y Thần Tướng nằm trong bản phân tích AI.';
+    body = 'Đo trực tiếp từ ảnh bằng MediaPipe (vị trí tròng mắt so với mí trên/dưới). Ý nghĩa đầy đủ theo Ma Y Thần Tướng nằm trong bản phân tích chuyên sâu.';
   } else if (_irisNote && _irisNote.includes('lệch xuống')) {
     title = 'Tròng mắt hơi lệch xuống — có thể Tam Bạch Nhãn Thượng';
-    body = 'Đo trực tiếp từ ảnh bằng MediaPipe (vị trí tròng mắt so với mí trên/dưới). Ý nghĩa đầy đủ theo Ma Y Thần Tướng nằm trong bản phân tích AI.';
+    body = 'Đo trực tiếp từ ảnh bằng MediaPipe (vị trí tròng mắt so với mí trên/dưới). Ý nghĩa đầy đủ theo Ma Y Thần Tướng nằm trong bản phân tích chuyên sâu.';
   } else {
     title = 'Vị trí tròng mắt: cân đối';
-    body = 'Đo trực tiếp từ ảnh bằng MediaPipe. Nhãn hình, thần khí và các chi tiết khác nằm trong bản phân tích AI.';
+    body = 'Đo trực tiếp từ ảnh bằng MediaPipe. Nhãn hình, thần khí và các chi tiết khác nằm trong bản phân tích chuyên sâu.';
   }
   window.HookLayer.mount(host, {
     tool: 'nhan-tuong',
@@ -443,7 +443,7 @@ async function analyze() {
 async function _doAnalyze() {
   document.getElementById('resultCard').style.display='block';
   const aiResultEl = document.getElementById('aiResult');
-  aiResultEl.innerHTML='<div class="dt-loading"><span class="dt-loading-icon ic" data-icon="eye"></span><div class="dt-loading-text">AI đang phân tích nhãn tướng...<br><span style="font-size:12px;opacity:.7">Thường mất 15–20 giây</span></div></div>';
+  aiResultEl.innerHTML='<div class="dt-loading"><span class="dt-loading-icon ic" data-icon="eye"></span><div class="dt-loading-text">Đang phân tích nhãn tướng...<br><span style="font-size:12px;opacity:.7">Thường mất 15–20 giây</span></div></div>';
   window.mountIcons && window.mountIcons(aiResultEl);
   document.getElementById('resultCard').scrollIntoView({behavior:'smooth',block:'start'});
 

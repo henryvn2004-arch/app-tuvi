@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Chu Trình Cuộc Đời — Tử Vi Minh Bảo</title>
-<meta name="description" content="Soi 9 đại vận trọn đời và tiểu vận năm nay theo điểm số cổ pháp: thiên thời, địa lợi, nhân hòa từng chặng — và hỏi trợ lý AI đào sâu giai đoạn nào bạn quan tâm.">
+<meta name="description" content="Soi 9 đại vận trọn đời và tiểu vận năm nay theo điểm số cổ pháp: thiên thời, địa lợi, nhân hòa từng chặng — và hỏi trợ lý Luận Đường đào sâu giai đoạn nào bạn quan tâm.">
 <link rel="icon" type="image/webp" href="/seal.webp">
 <link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
@@ -116,7 +116,7 @@
 .lg-related-link:hover{border-color:var(--gold-soft)}
 .lg-related-link b{display:block;font-size:12.5px;color:var(--heading);font-family:var(--serif);font-weight:600}
 .lg-related-link span{display:block;font-size:11.5px;color:var(--text-lt);margin-top:2px}
-/* ── Luận giải chuyên sâu bằng AI (paid, port từ app-luan-giai.html — gate+RAG+stream+PDF) ── */
+/* ── Luận giải chuyên sâu (paid, port từ app-luan-giai.html — gate+RAG+stream+PDF) ── */
 .claude-content{margin-top:10px;padding-top:10px;border-top:1px dashed var(--line-2)}
 .claude-content p{color:var(--text-mid);line-height:1.75;margin-bottom:12px;font-size:13.5px}
 .claude-content p:last-child{margin-bottom:0}
@@ -362,7 +362,7 @@ function taiAnhArc(){
     svg:host.innerHTML,
     title:'9 chặng đời',
     subtitle:(_hoTen||'Lá số')+(dv?' · đang ở chặng '+dv.tuoiStart+'–'+dv.tuoiEnd+' tuổi':''),
-    quote:'Cột cao theo điểm đại vận engine chấm — không phải con số AI đặt ra.',
+    quote:'Cột cao theo điểm đại vận engine chấm — không phải con số phỏng đoán.',
     qrUrl:Poster.qrLink('chu-trinh-cuoc-doi','/app/chu-trinh-cuoc-doi'),
     qrCaption:'Quét mã — xem chu trình của bạn',
     fonts:['700 40px '+(T.SERIF||'serif'),'600 23px '+(T.SANS||'sans-serif')]
@@ -547,7 +547,7 @@ function toggleMini(){
 }
 
 // ══════════════════════════════════════════════════════════════════════
-// Luận giải chuyên sâu bằng AI — port từ app-luan-giai.html (gate Lượng qua
+// Luận giải chuyên sâu — port từ app-luan-giai.html (gate Lượng qua
 // TuviPaywall + RAG /api/search + generate /api/lasotuvi (11 phần, engine
 // phan 14-24) + lưu /api/save-laso + Tải PDF). Giữ nguyên tên biến/hàm gốc
 // (_astrolabe, toSlugAscii, QUERIES, renderMarkdown...) để dễ đối chiếu với
@@ -740,7 +740,7 @@ function _renderUnlockBlock(){
   _paintSecLocks(true);
   mountHook(_astrolabe);
   if(_lgLoggedIn()){
-    host.innerHTML='<button class="btn-go" id="btnUnlock" onclick="initiateLuanGiaiChuyenSau()">✦ Luận giải chuyên sâu bằng AI — <span data-tvp-price="chu-trinh-cuoc-doi">…</span> Lượng →</button>'+
+    host.innerHTML='<button class="btn-go" id="btnUnlock" onclick="initiateLuanGiaiChuyenSau()">✦ Luận giải chuyên sâu — <span data-tvp-price="chu-trinh-cuoc-doi">…</span> Lượng →</button>'+
       '<p>Viết riêng cho lá số này theo cổ pháp — 11 phần: tổng quan đại vận, luận riêng từng đại vận trong 9 đại vận, và tiểu vận năm xem.</p>';
     TuviPaywall.fillPriceSlots(host);
     // Vừa quay về từ lượt nạp Lượng thành công (đã đăng nhập nên KHÔNG còn đi
@@ -752,7 +752,7 @@ function _renderUnlockBlock(){
   TuviPaywall.lockPreview({
     host:host,
     title:'⊙ Bản luận đầy đủ chưa mở',
-    items:['9 đại vận còn lại — luận riêng từng chặng theo cổ pháp','Tiểu vận năm xem — luận riêng theo cổ pháp','Luận giải chuyên sâu viết riêng bằng AI theo cổ pháp'],
+    items:['9 đại vận còn lại — luận riêng từng chặng theo cổ pháp','Tiểu vận năm xem — luận riêng theo cổ pháp','Luận giải chuyên sâu viết riêng theo cổ pháp'],
     cta:'Đăng ký để mở bản luận đầy đủ',
     slug:function(){return _pendingSlug;},
     onUnlock:function(){ renderLuan(_astrolabe,{},_namXem); return _startLuanGiaiAI(); },

@@ -283,7 +283,7 @@ async function handleGenerate(request: NextRequest, body: Record<string, unknown
       cache_read_input_tokens: 0,
     }, llmRes.durationMs);
   } catch {
-    return err('Lỗi AI mô tả chân dung. Vui lòng thử lại.', 500);
+    return err('Lỗi khi mô tả chân dung. Vui lòng thử lại.', 500);
   }
   const parsed = parseLlmJson(raw) as {
     imagePrompt?: string;
@@ -294,7 +294,7 @@ async function handleGenerate(request: NextRequest, body: Record<string, unknown
     foreignSpouseHint?: boolean;
     sameSexHint?: boolean;
   } | null;
-  if (!parsed?.imagePrompt || !parsed?.description) return err('Lỗi phân tích kết quả AI.', 500);
+  if (!parsed?.imagePrompt || !parsed?.description) return err('Lỗi phân tích kết quả trả về.', 500);
 
   // Cách cục (LLM đọc từ (B)/(C), ưu tiên (C) — luận giải Phu Thê đầy đủ) ưu
   // tiên hơn heuristic sao thuần túy (starAgeOffset) — chỉ fallback về sao khi

@@ -5,9 +5,9 @@
 <link rel="preload" href="/nav.js?v=25" as="script">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
 <title>Tử Vi Chat — Hỏi Đáp Lá Số | Tử Vi Minh Bảo</title>
-<meta name="description" content="Chat về lá số Tử Vi Đẩu Số với AI — an sao, luận giải từng cung, xem vận hạn. Lưu nhiều lá số cho bản thân và người thân."/>
+<meta name="description" content="Chat về lá số Tử Vi Đẩu Số với trợ lý Luận Đường — an sao, luận giải từng cung, xem vận hạn. Lưu nhiều lá số cho bản thân và người thân."/>
 <meta property="og:title" content="Tử Vi Chat — Hỏi Đáp Lá Số | Tử Vi Minh Bảo"/>
-<meta property="og:description" content="Chat về lá số Tử Vi Đẩu Số với AI — an sao, luận giải từng cung, xem vận hạn."/>
+<meta property="og:description" content="Chat về lá số Tử Vi Đẩu Số với trợ lý Luận Đường — an sao, luận giải từng cung, xem vận hạn."/>
 <meta property="og:url" content="https://www.tuviminhbao.com/tuvi-chat.html"/>
 <meta property="og:image" content="https://www.tuviminhbao.com/og-image.webp"/>
 <meta name="twitter:card" content="summary_large_image"/>
@@ -1673,7 +1673,7 @@ var TuviTTS = (function() {
     var thangOpts = [1,2,3,4,5,6,7,8,9,10,11,12].map(function(i){return '<option value="'+i+'">'+(i<10?'0':'')+i+'</option>';}).join('');
     var namOpts   = [0,1,2,3,4,5].map(function(i){return '<option value="'+(curY+i)+'">'+(curY+i)+'</option>';}).join('');
     inner.innerHTML =
-      '<div class="wa-form-intro">Nhập thông tin để AI phân tích và chọn <strong>ngày tốt</strong> theo tuổi và sự kiện.</div>' +
+      '<div class="wa-form-intro">Nhập thông tin để máy chủ phân tích và chọn <strong>ngày tốt</strong> theo tuổi và sự kiện.</div>' +
       '<div class="tc-sf-group">' +
         '<label class="tc-sf-label">Sự kiện</label>' +
         '<select id="tc-cn-sukien" class="tc-sf-select">' +
@@ -1821,7 +1821,7 @@ var TuviTTS = (function() {
   function renderDatTenConForm() {
     var inner = document.querySelector('.wa-form-inner');
     inner.innerHTML =
-      '<div class="wa-form-intro">Nhập thông tin để AI <strong>đặt tên con</strong> theo ngũ hành bố mẹ và năm sinh.</div>' +
+      '<div class="wa-form-intro">Nhập thông tin để <strong>đặt tên con</strong> theo ngũ hành bố mẹ và năm sinh.</div>' +
       '<div class="tc-sf-group">' +
         '<label class="tc-sf-label">Họ (của bé)</label>' +
         '<input type="text" id="tc-dt-ho" class="tc-sf-input" placeholder="VD: Nguyễn">' +

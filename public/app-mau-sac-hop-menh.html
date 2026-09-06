@@ -309,11 +309,11 @@ function calcGua(y,g){let s=String(y).split('').reduce((a,c)=>a+parseInt(c),0);w
 let _gua=null;
 const ANALYSIS_STEPS=[
   {label:'Tính quái số & nạp âm bản mệnh',ms:900},
-  {label:'AI tư vấn màu sắc & phối đồ',ms:0},
+  {label:'Tư vấn màu sắc & phối đồ',ms:0},
 ];
 const TRYON_STEPS=[
   {label:'Chuẩn bị trang phục theo mệnh',ms:1200},
-  {label:'AI đang tạo ảnh trang phục',ms:0},
+  {label:'Đang tạo ảnh trang phục',ms:0},
 ];
 let _analysisLoadingCtl=null;
 let _tryonLoadingCtl=null;
@@ -339,7 +339,7 @@ function mountHook(na){
     facts:[{
       tone:'good',
       title:'Mệnh '+na+' — màu chính nên mặc: '+mau,
-      body:'Bảng đủ (màu phụ, màu nên tránh) và hướng dẫn phối đồ theo dịp/vai trò nằm trong bản phân tích AI.',
+      body:'Bảng đủ (màu phụ, màu nên tránh) và hướng dẫn phối đồ theo dịp/vai trò nằm trong bản phân tích chuyên sâu.',
       source:'engine · NH_COLORS['+na+']',
     }],
   });
@@ -610,7 +610,7 @@ async function _doTryonCall() {
     document.getElementById('tryonResult').style.display = 'block';
     document.getElementById('tryonStep2').style.display = 'block';
     Shell.setShareable({
-      kind:'image', title:'Trang phục hợp mệnh của tôi (AI try-on)',
+      kind:'image', title:'Trang phục hợp mệnh của tôi (thử ảo)',
       imageUrl:data.imageUrl, text:(styleLabels[_tryonStyle]||_tryonStyle)+' · Mệnh '+_napAmHanh
     });
   } catch(e) {

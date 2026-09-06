@@ -640,13 +640,13 @@ Dùng các số đo này để xác định hình dạng khuôn mặt CHÍNH XÁ
       maxTokens: 1500,
     });
   } catch (_) {
-    return Response.json({ error: 'Lỗi AI.' }, { status: 500 });
+    return Response.json({ error: 'Lỗi hệ thống.' }, { status: 500 });
   }
   try {
     const parsed = JSON.parse(text.replace(/```json|```/g, '').trim());
     return Response.json(parsed);
   } catch (_) {
-    return Response.json({ error: 'Lỗi phân tích kết quả AI.' }, { status: 500 });
+    return Response.json({ error: 'Lỗi phân tích kết quả trả về.' }, { status: 500 });
   }
 }
 
@@ -684,9 +684,9 @@ async function handleKieuTocTryon(body) {
   }
 }
 
-// ── End Kiểu Tóc AI ─────────────────────────────────────────────────────────
+// ── End Kiểu Tóc ─────────────────────────────────────────────────────────
 
-// ── Trang Điểm AI ────────────────────────────────────────────────────────────
+// ── Trang Điểm ────────────────────────────────────────────────────────────
 
 // Makeup styles: Asian aesthetic taxonomy
 const MAKEUP_STYLES = {
@@ -827,7 +827,7 @@ Theo cổ pháp, người mệnh ${napAmHanh} hợp với phong cách: ${menhMak
       maxTokens: 1200,
     });
   } catch (_) {
-    return Response.json({ error: 'Lỗi AI.' }, { status: 500 });
+    return Response.json({ error: 'Lỗi hệ thống.' }, { status: 500 });
   }
   try {
     const parsed = JSON.parse(text.replace(/```json|```/g, '').trim());
@@ -840,7 +840,7 @@ Theo cổ pháp, người mệnh ${napAmHanh} hợp với phong cách: ${menhMak
     }
     return Response.json(parsed);
   } catch (_) {
-    return Response.json({ error: 'Lỗi phân tích kết quả AI.' }, { status: 500 });
+    return Response.json({ error: 'Lỗi phân tích kết quả trả về.' }, { status: 500 });
   }
 }
 
@@ -866,7 +866,7 @@ async function handleTrangDiemTryon(body) {
 }
 
 
-// ── Da Liệu AI ────────────────────────────────────────────────────────────────
+// ── Da Liệu ────────────────────────────────────────────────────────────────
 
 // Ngũ tạng → da (Đông y)
 // Phế chủ bì mao (Phổi chủ da/lông)
@@ -1005,20 +1005,20 @@ Phần an_uong cũng phải tính đến mệnh ${menhHanh} (VD: mệnh Hỏa c�
       maxTokens: 2000,
     });
   } catch (_) {
-    return Response.json({ error: 'Lỗi AI.' }, { status: 500 });
+    return Response.json({ error: 'Lỗi hệ thống.' }, { status: 500 });
   }
   try {
     const parsed = JSON.parse(text.replace(/```json|```/g, '').trim());
     if (menhHanh) { parsed.menhHanh = menhHanh; parsed.menhFull = menhFull; parsed.canChi = canChi; }
     return Response.json(parsed);
   } catch(_) {
-    return Response.json({ error: 'Lỗi phân tích kết quả AI.' }, { status: 500 });
+    return Response.json({ error: 'Lỗi phân tích kết quả trả về.' }, { status: 500 });
   }
 }
 
-// ── End Da Liệu AI ────────────────────────────────────────────────────────────
+// ── End Da Liệu ────────────────────────────────────────────────────────────
 
-// ── Personal Color AI ─────────────────────────────────────────────────────────
+// ── Personal Color ─────────────────────────────────────────────────────────
 
 // 4 mùa × undertone
 const PC_SEASONS = {
@@ -1173,7 +1173,7 @@ Nếu kết quả phân tích ảnh cho phép, ưu tiên season này. Nếu tôn
       maxTokens: 1200,
     });
   } catch (_) {
-    return Response.json({ error: 'Lỗi AI.' }, { status: 500 });
+    return Response.json({ error: 'Lỗi hệ thống.' }, { status: 500 });
   }
   try {
     const parsed = JSON.parse(raw.replace(/```json|```/g, '').trim());
@@ -1244,7 +1244,7 @@ async function handleWardrobeAdd(request, body) {
       maxTokens: 400,
     });
   } catch (_) {
-    return Response.json({ error: 'Lỗi AI phân tích.' }, { status: 500 });
+    return Response.json({ error: 'Lỗi khi phân tích kết quả.' }, { status: 500 });
   }
   let classified = {};
   try {
@@ -1366,7 +1366,7 @@ Quy tắc:
   try {
     mixText = await llmText({ prompt, maxTokens: 1000 });
   } catch (_) {
-    return Response.json({ error: 'Lỗi AI.' }, { status: 500 });
+    return Response.json({ error: 'Lỗi hệ thống.' }, { status: 500 });
   }
   try {
     const parsed = JSON.parse(mixText?.replace(/```json|```/g,'').trim() || '{}');
@@ -1408,7 +1408,7 @@ async function handleWardrobeDelete(request, body) {
 
 // ── End xLook Wardrobe AI ─────────────────────────────────────────────────────
 
-// ── End Personal Color AI ─────────────────────────────────────────────────────
+// ── End Personal Color ─────────────────────────────────────────────────────
 
 // Personal Color Try-on
 const PC_OUTFIT_DESC = {
@@ -1444,7 +1444,7 @@ async function handlePersonalColorTryon(body) {
 }
 
 
-// ── End Trang Điểm AI ─────────────────────────────────────────────────────────
+// ── End Trang Điểm ─────────────────────────────────────────────────────────
 
 const PROMPTS = {
   'dien-tuong': SP_DIEN,
