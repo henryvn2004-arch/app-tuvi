@@ -525,7 +525,7 @@
         '<button class="rail-attach" id="railAttach" data-act="attach" data-tip="Lập lá số trước đã" aria-label="Gửi ảnh" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:17px;height:17px"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="1.6"/><path d="m21 15-5-5L5 21"/></svg></button>' +
         '<input type="file" id="railFile" accept="image/*" multiple hidden>' +
         '<textarea id="railInput" rows="1" placeholder="Lập lá số để bắt đầu hỏi…" disabled></textarea>' +
-        '<button class="send" id="railSend" disabled data-act="send"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px"><path d="M22 2 11 13M22 2l-7 20-4-9-9-4z"/></svg></button></div>';
+        '<button class="send" id="railSend" disabled data-act="send" data-tip="Gửi" aria-label="Gửi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px"><path d="M22 2 11 13M22 2l-7 20-4-9-9-4z"/></svg></button></div>';
     host.querySelector('[data-act="send"]').addEventListener('click', sendMsg);
     host.querySelector('[data-act="newchat"]').addEventListener('click', newChat);
     var _hb = host.querySelector('[data-act="history"]'); if (_hb) _hb.addEventListener('click', toggleHistPanel);
