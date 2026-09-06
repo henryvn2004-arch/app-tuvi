@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-198 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+199 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 **Bốn file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
 ```bash
@@ -11,7 +11,7 @@ sed -n '120,190p' docs/nhat-ky/2026-08.md    # đọc đúng đoạn, đừng ca
 
 | file | số mục | dung lượng |
 |---|---:|---:|
-| `2026-09.md` | 34 | 175,586 B |
+| `2026-09.md` | 35 | 180,038 B |
 | `2026-08.md` | 147 | 1,018,512 B |
 | `2026-07.md` | 12 | 154,531 B |
 | `track-cu.md` | 5 | 89,354 B |
@@ -25,6 +25,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
+| 1 | 2026-09 | `2026-09.md` | 💵 Pha 2 hard paywall — 1 Lượng ≈ 500đ, giữ giá gói và nâng số Lượng |
 | 1 | 2026-09 | `2026-09.md` | 💰 Hard paywall Pha 1 — Luận Giải cho đọc thật 2 phần rồi mới dựng tường |
 | 1 | 2026-09 | `2026-09.md` | 📊 Sổ chi phí rail nói ngược sự thật: 9/9 đường thoát ghi sai hoặc không ghi |
 | 1 | 2026-09 | `2026-09.md` | 🔈 Mobile vòng 11: nút Gửi của rail không có tên cho trình đọc màn hình |
