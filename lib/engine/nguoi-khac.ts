@@ -613,6 +613,10 @@ export function coSoDoc(ls: Laso, p: { matDoc: { cung: string; sao: string[] }[]
   };
 }
 
+// 🔴 ĐỔI Ở PHA 3 hard paywall (2026-09): `tinhKhi` + `chamNoc` nay MIỄN PHÍ
+// (xem `PREVIEW_KEEP_PROSE` trong route.ts) — hai mục đó KHÔNG còn được liệt
+// vào danh sách "đang khoá" nữa, nếu không tường sẽ mời mở khoá một thứ người
+// đọc đã thấy rồi ở phía trên nó.
 export function khoiKhoa(p: NguoiKhacProfile): { id: string; tieuDe: string }[] {
   const k: { id: string; tieuDe: string }[] = [];
 
@@ -621,7 +625,6 @@ export function khoiKhoa(p: NguoiKhacProfile): { id: string; tieuDe: string }[] 
   if (p.viec.id !== 'hieu-them') {
     k.push({ id: 'keHoach', tieuDe: `Cách đi cho việc: ${p.viec.label.replace(/^Sắp |^Phải |^Cần |^Muốn /, '')}` });
   }
-  k.push({ id: 'tinhKhi', tieuDe: `Người kiểu ${p.kieu.ten} này vận hành thế nào trong đời thật` });
 
   // A1 — ba mặt đọc bị giữ lại. `id` là `matDoc`, một trường CÓ THẬT trong
   // payload trả tiền, đúng luật cứng của A2. Tiêu đề gọi ĐÍCH DANH cung và
@@ -639,7 +642,6 @@ export function khoiKhoa(p: NguoiKhacProfile): { id: string; tieuDe: string }[] 
     });
   }
   k.push({ id: 'coiTrong', tieuDe: 'Họ coi trọng cái gì — và sợ mất cái gì' });
-  k.push({ id: 'chamNoc', tieuDe: 'Điều làm người này khó chịu nhất' });
   k.push({ id: 'nenNoi', tieuDe: 'Ba việc nên nói, kèm câu nói thật để dùng luôn' });
   k.push({ id: 'tranhNoi', tieuDe: 'Ba câu tuyệt đối đừng nói với người này' });
   k.push({
