@@ -21,9 +21,13 @@
    HTML, nhưng chỉ SAU khi `tuvi-form.js` nạp xong — mà đứng trước nó là cả một dãy
    script CÙNG ORIGIN cũng chặn parse (17KB–524KB tuỳ trang), nên trên mạng chậm lần
    vẽ đầu #tuviFormHost còn RỖNG tới ~3,5–6,5s. `:empty` để chỗ giữ TỰ NHẢ ngay khi
-   form vào ⇒ không bao giờ thừa khoảng trắng. Số 239px/480px là ĐO,
+   form vào ⇒ không bao giờ thừa khoảng trắng.
+   🪤 Số này là KHOẢNG CÁCH tới khối kế tiếp, KHÔNG phải chiều cao của host:
+   `margin-bottom` của `.frow` cuối bên trong host THOÁT RA NGOÀI (margin collapse)
+   nên nó đẩy `.frow` phía dưới thêm 12–13px mà `getBoundingClientRect().height`
+   không hề thấy. Đo bằng chiều cao là hụt đúng chỗ đó. Số 252px/480px là ĐO,
    xem docs/nhat-ky/2026-09.md vòng 9. */
-@media (max-width:480px){#tuviFormHost:empty{min-height:239px}}
+@media (max-width:480px){#tuviFormHost:empty{min-height:252px}}
 .fg{display:flex;flex-direction:column;gap:5px}
 .fg label{font-size:10.5px;font-weight:600;color:var(--text-lt);letter-spacing:.04em;text-transform:uppercase}
 .fg input,.fg select{border:1px solid var(--line-2);border-radius:7px;padding:8px 10px;font-size:13.5px;font-family:inherit;color:var(--text);background:var(--paper);outline:none;transition:.15s}

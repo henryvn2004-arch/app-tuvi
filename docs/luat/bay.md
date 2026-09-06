@@ -138,6 +138,11 @@
   `@media (max-width:…)` vì chiều cao form đổi theo bề rộng (237 ở ≤480px, 168 ở
   768px — giữ 237 trên màn rộng là khối CO LẠI, vẫn nhảy). `check:formph`.
   🪤 Một dấu cách bên trong thẻ host là `:empty` hết khớp, chỗ giữ biến mất im lặng.
+- **Giữ chỗ thì đo KHOẢNG CÁCH tới khối kế tiếp, ĐỪNG đo chiều cao khối đó.**
+  `margin-bottom` của con CUỐI thoát ra ngoài khối cha (margin collapse) nên nó đẩy
+  khối sau xuống mà `getBoundingClientRect().height` không thấy: host cao 237,17
+  nhưng khoảng cách thật là 249,17. Đo hụt đúng một margin — đủ nhỏ để đọc nhầm
+  thành sai số làm tròn rồi bỏ qua (còn lại 0,001 trên prod cho tới khi vá đúng).
 - **Dời thẻ script lên sớm KHÔNG làm nó tới sớm** — preload scanner đã tải song
   song hết; trên đường ống bão hoà, thứ tự thẻ không đổi thời điểm tới. Đo: dời
   script lên đầu = CLS y hệt (0,0335), chỉ chỗ giữ mới đổi (0,0020).
