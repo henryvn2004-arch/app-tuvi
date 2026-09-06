@@ -165,6 +165,7 @@ Mỗi luật dưới đây sinh ra từ một lần cắn thật. Cột cuối l
 | **Chống trùng: dòng SỔ đi TRƯỚC làm mutex, cộng tiền SAU** — mutex chỉ có thật khi có UNIQUE đỡ bên dưới | `ignore-duplicates` không có UNIQUE là vô hiệu IM LẶNG ⇒ ví tăng hai lần, sổ một dòng |
 | **Chuỗi khai với cổng thanh toán và chuỗi bảo khách ghi phải là MỘT** — server quyết, client chỉ hiện lại | Hai nguồn cho một đơn ⇒ khách gõ đúng theo màn hình mà tiền không ai nhận |
 | **Lỗi cổng thanh toán có HAI người đọc** — khách nhận câu tiếng Việt nói làm gì tiếp, mình nhận `details[0].issue` + `debug_id` trong `console.error` | `message` của PayPal là một câu chung cho mọi lỗi 422 ⇒ không ai lần ra nguyên nhân |
+| **Webhook PayPal phải đăng ký dưới ĐÚNG app sở hữu `PAYPAL_CLIENT_ID`** — kiểm bằng cách so Client ID trên trang app CHỨA webhook với biến đang chạy, từng ký tự | Mỗi REST app một hàng đợi sự kiện RIÊNG. Webhook nằm nhầm app thì endpoint vẫn đúng, PayPal vẫn ping được bằng Simulator, mà **0 sự kiện thật** — đã ăn 7 lượt nạp live. Đếm app bằng mắt không cứu được: tài khoản có sẵn app `NVP SOAP Webhooks` do PayPal tự dựng | `nhat-ky/2026-08.md` "Webhook PayPal câm" |
 
 ### 💾 Cache kết quả — `docs/luat/tien.md`
 - **Đổi CẤU TRÚC payload ⇒ BẮT BUỘC bump `SHAPE`.** `portrait_cache` khoá theo LÁ
