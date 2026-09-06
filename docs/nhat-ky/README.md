@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-199 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+201 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 **Bốn file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
 ```bash
@@ -11,7 +11,7 @@ sed -n '120,190p' docs/nhat-ky/2026-08.md    # đọc đúng đoạn, đừng ca
 
 | file | số mục | dung lượng |
 |---|---:|---:|
-| `2026-09.md` | 35 | 182,161 B |
+| `2026-09.md` | 37 | 190,020 B |
 | `2026-08.md` | 147 | 1,018,512 B |
 | `2026-07.md` | 12 | 154,531 B |
 | `track-cu.md` | 5 | 89,354 B |
@@ -28,6 +28,8 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 | 1 | 2026-09 | `2026-09.md` | 📐 Đo khối "TỔ HỢP SAO": bước cắt top-8 trung tính về mã, KHÔNG trung tính về kết quả |
 | 1 | 2026-09 | `2026-09.md` | 🪧 Gỡ "AI" khỏi toàn bộ chữ hiển thị — giữ nguyên ba trang pháp lý |
 | 1 | 2026-09 | `2026-09.md` | 🔈 Mobile vòng 11: nút Gửi của rail không có tên cho trình đọc màn hình |
+| 1 | 2026-09 | `2026-09.md` | 🔠 Mobile vòng 13: Be Vietnam Pro tự lưu trữ — và một nhánh A/B là ảo hoàn toàn |
+| 1 | 2026-09 | `2026-09.md` | 🎈 Mobile vòng 12: `#wsFab` — giả thuyết sai, bản vá thật là giữ chỗ 200px |
 | 1 | 2026-09 | `2026-09.md` | 📏 Mobile vòng 10: prod xác nhận vòng 9 — phần dư 0,001 là margin thoát ra ngoài |
 | 1 | 2026-09 | `2026-09.md` | 🧯 Mobile vòng 9: bản vá vòng 8 không chạy trên prod — chỗ giữ `#tuviFormHost` mới là bản vá thật |
 | 1 | 2026-09 | `2026-09.md` | ⏳ Mobile vòng 8: `#tuviFormHost` không cần khung chờ — chỉ cần `defer` |
