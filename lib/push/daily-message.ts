@@ -54,11 +54,13 @@ export function buildDailyPushMessage(day?: { d: number; m: number; y: number })
     // Bỏ "an táng" khỏi gợi ý của TIN PUSH: trên thẻ nó nằm trong bảng chọn
     // ngày nên đọc bình thường, còn bắn thẳng vào màn hình khoá mỗi sáng thì
     // thành một lời chúc rất khó đỡ. Thẻ vẫn giữ đủ.
-    // Lọc lại `diem >= 7` cho RIÊNG tin push. `computeVanNgay` đã hạ ngưỡng
-    // xuống 6 để ô "Nên làm" trên thẻ bớt trống (55% → 44% số ngày, đo trên
-    // 2026) — nhưng thẻ là thứ người ta CHỦ ĐỘNG mở và đọc kèm điểm, còn đây
-    // là một dòng bắn thẳng vào màn hình khoá mỗi sáng, không có chỗ cho điểm.
-    // Giữ bar cao ở đây để tin nhắc không hạ giá theo.
+    // Lọc lại `diem >= 7` cho RIÊNG tin push — và nay QUAN TRỌNG HƠN TRƯỚC.
+    // `computeVanNgay` đã hạ ngưỡng xuống 5 để ô "Nên làm" trên thẻ bớt trống
+    // (trên ngày lành: 31% → 2% số ngày, đo trên 2026). Thẻ là thứ người ta
+    // CHỦ ĐỘNG mở, đọc kèm ĐIỂM, và có ô "Cần tránh" ngay bên cạnh để đối
+    // chiếu. Còn đây là MỘT dòng bắn thẳng vào màn hình khoá lúc 7h sáng,
+    // không có điểm, không có ngữ cảnh — "hợp cưới hỏi" ở đó mà thật ra là
+    // 5/10 thì thành một lời khuyên sai. Giữ bar 7.
     const goi = v.nen.filter((x) => x.diem >= 7 && !/an táng/i.test(x.ten)).slice(0, 2);
     if (goi.length) parts.push(`hợp ${goi.map((x) => x.ten.toLowerCase()).join(', ')}`);
   }
