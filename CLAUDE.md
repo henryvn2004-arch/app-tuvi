@@ -324,9 +324,8 @@ Mỗi luật dưới đây sinh ra từ một lần cắn thật. Cột cuối l
   `OPENAI_API_KEY` thì đọc được) — mọi phép đo phải gọi Anthropic đều chạy ở nơi khác.
 
 ### Nợ kỹ thuật đã ghi nhận
-- 3 bảng dò chủ đề vẫn là 3 bản chép tay (`check:topics` canh chúng khỏi trôi).
-- `cong-cu.html` giữ bản chép riêng của `EMOJI_TO_ICON`.
-- 5 tool chưa có `SHAPE` riêng đang ở mức 1 — lượt đổi payload đầu tiên phải bump.
+- 3 bảng dò chủ đề vẫn là 3 bản chép tay, CỐ Ý chưa gộp (khác KHOÁ theo bề mặt:
+  'suckhoe' vs 'Tật Ách') — `check:topics` canh chúng khỏi trôi thêm nữa.
 - `seo_pages` (7.080 trang tương hợp) chưa nhận viral-core; đụng `updated_at` của
   8.958 dòng = `lastmod` toàn site nhảy một lượt ⇒ phải rải theo lô.
 
