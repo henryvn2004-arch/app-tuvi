@@ -9,7 +9,7 @@
 <link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/fonts/noto-serif.css?v=1">
-<link rel="stylesheet" href="/shell.css?v=33">
+<link rel="stylesheet" href="/shell.css?v=34">
 <style>
 .form-card{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);max-width:860px}
 .form-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:3px}
@@ -169,15 +169,6 @@
 .hd-box ul{margin:0 0 0 16px;padding:0}
 .hd-box li{font-size:12.4px;line-height:1.7;color:#2a2118;margin-bottom:4px}
 .hd-ask{margin-top:9px;font-size:12.4px;line-height:1.72;color:#5a5145;background:#F6F2E8;border-radius:7px;padding:8px 10px}
-/* Khối bị khoá ở bản xem trước: GIẤU HẲN mọi con của `.res-block-body` rồi
-   chèn MỘT ô giữ chỗ. Cố ý không làm mờ nội dung thật — vừa hiện vừa che thì
-   người đọc phải đoán xem chỗ mờ có phải thứ mình cần không, mà nội dung thật
-   vẫn nằm trong DOM để ai cũng đọc được bằng view-source. Nay server không gửi
-   phần đó nữa, ở đây chỉ còn cái khung.
-   `!important` là để đè `style="display:block"` mà lượt render TRƯỚC đó có thể
-   đã gắn vào (bấm Xem Bé Khác rồi chạy lại). Mở khoá thì gỡ chính class này,
-   nên không có gì kẹt lại. */
-.res-block-body.dc-locked > *:not(.dc-ph-host){display:none!important}
 </style>
 </head>
 <body>
@@ -582,10 +573,10 @@ function _dcLockBlocks(coLaSoChaMe) {
     var block = document.getElementById(b[0]);
     if (!block) return;
     var body = block.querySelector('.res-block-body');
-    if (!body || body.querySelector('.dc-ph-host')) return;
-    body.classList.add('dc-locked');
+    if (!body || body.querySelector('.tpw-ph-host')) return;
+    body.classList.add('tpw-locked');
     body.insertAdjacentHTML('beforeend',
-      '<div class="dc-ph-host">' + TuviPaywall.placeholderHtml(i, b[1]) + '</div>');
+      '<div class="tpw-ph-host">' + TuviPaywall.placeholderHtml(i, b[1]) + '</div>');
     var titleEl = block.querySelector('.res-block-title');
     if (titleEl) titleEl.insertAdjacentHTML('afterend', TuviPaywall.lockBadge('Khoá'));
     block.style.display = 'block';
@@ -601,8 +592,8 @@ function _dcUnlockBlocks() {
     var block = document.getElementById(b[0]);
     if (!block) return;
     var body = block.querySelector('.res-block-body');
-    if (body) body.classList.remove('dc-locked');
-    var ph = block.querySelector('.dc-ph-host');
+    if (body) body.classList.remove('tpw-locked');
+    var ph = block.querySelector('.tpw-ph-host');
     if (ph) ph.remove();
     var badge = block.querySelector('.tpw-lock-badge');
     if (badge) badge.remove();

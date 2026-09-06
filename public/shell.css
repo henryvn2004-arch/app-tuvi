@@ -571,3 +571,12 @@ font-family:inherit}
 }
 /* Ngoài lúc in thì khối đầu/chân trang in KHÔNG tồn tại trên màn hình. */
 .ws-print-head, .ws-print-foot { display: none; }
+
+/* Ô GIỮ CHỖ hard paywall Pha 3 (dùng chung — không chép sang từng trang tool).
+   Khi một `.res-block-body` mang class `.tpw-locked`, giấu HẲN mọi con của nó
+   TRỪ `.tpw-ph-host` (nơi trang chèn `TuviPaywall.placeholderHtml()`). Cố ý
+   giấu hẳn thay vì làm mờ: làm mờ vẫn để nội dung THẬT nằm trong DOM, view-
+   source hoặc tắt CSS là đọc hết. `!important` đè `style="display:block"` một
+   lượt render trước có thể đã gắn (bấm "xem lại"/"xem khác" rồi chạy lại lượt
+   xem trước) — mở khoá thì gỡ chính class `.tpw-locked`, không có gì kẹt lại. */
+.res-block-body.tpw-locked > *:not(.tpw-ph-host) { display: none !important; }

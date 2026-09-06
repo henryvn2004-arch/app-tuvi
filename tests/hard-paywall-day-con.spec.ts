@@ -147,7 +147,7 @@ test('khối khoá dựng khung rỗng + ô giữ chỗ, không có khối "Hai 
   await run(page);
 
   // 9 khối khoá (10 trừ `withBlock` — không nhập lá số cha/mẹ).
-  await expect(page.locator('#resPanel .dc-ph-host')).toHaveCount(9);
+  await expect(page.locator('#resPanel .tpw-ph-host')).toHaveCount(9);
   await expect(page.locator('#withBlock')).toBeHidden();
   await expect(page.locator('#trucBlock .tpw-ph')).toBeVisible();
   await expect(page.locator('#trucBlock .tpw-lock-badge')).toBeVisible();
@@ -155,7 +155,7 @@ test('khối khoá dựng khung rỗng + ô giữ chỗ, không có khối "Hai 
   // Con của `.res-block-body` bị giấu HẲN, kể cả mấy dòng ghi chú tĩnh —
   // để lại một câu chú thích lơ lửng trên ô giữ chỗ thì đọc thành lỗi render.
   await expect(page.locator('#trucBlock .fw-note')).toBeHidden();
-  await expect(page.locator('#trucBlock .res-block-body')).toHaveClass(/dc-locked/);
+  await expect(page.locator('#trucBlock .res-block-body')).toHaveClass(/tpw-locked/);
 
   // Tường phải dựng THẬT (không phải div rỗng khai sẵn) và phải nói GIÁ.
   await expect(page.locator('#dcLockHost .tpw-lock')).toBeVisible();
@@ -180,15 +180,15 @@ test('cầu dao chặn → lùi về khung cũ, không màn hình lỗi', async 
 test('trả tiền xong: ô giữ chỗ biến mất, nội dung thật thế chỗ', async ({ page }) => {
   await stubApis(page);
   await run(page);
-  await expect(page.locator('#resPanel .dc-ph-host')).toHaveCount(9);
+  await expect(page.locator('#resPanel .tpw-ph-host')).toHaveCount(9);
 
   // Bỏ qua requireCredits (đường tiền có bài kiểm riêng) — đo chuyện SAU khi
   // trừ tiền: `_doGenerate` phải gỡ sạch dấu vết khoá.
   await page.evaluate(() => (window as unknown as { _doGenerate(f: boolean, lo: string): Promise<void> })._doGenerate(false, 'hoc'));
   await expect(page.locator('#dinhHuong')).toContainText('CHỮ TRẢ PHÍ định hướng', { timeout: 15000 });
 
-  await expect(page.locator('#resPanel .dc-ph-host')).toHaveCount(0);
+  await expect(page.locator('#resPanel .tpw-ph-host')).toHaveCount(0);
   await expect(page.locator('#resPanel .tpw-lock-badge')).toHaveCount(0);
-  await expect(page.locator('#resPanel .dc-locked')).toHaveCount(0);
+  await expect(page.locator('#resPanel .tpw-locked')).toHaveCount(0);
   await expect(page.locator('#trucBlock .fw-note')).toBeVisible();
 });
