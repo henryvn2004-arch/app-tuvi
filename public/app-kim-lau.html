@@ -34,6 +34,7 @@
 .res-tag-bad{background:#fef0ef;color:#C0392B;border:1px solid #f5c0bc}
 .res-tag-warn{background:#fdf6e9;color:#9A7B3A;border:1px solid #e8d9b0}
 .res-block-body [style*="var(--text-mid)"]{color:#444!important}
+.kl-dai{margin-bottom:12px;overflow-x:auto}
 .kl-scroll{overflow-x:auto}
 .kl-table{width:100%;border-collapse:collapse;font-size:13px;background:#fff;min-width:420px}
 .kl-table th{background:#061A2E;color:#fff;padding:10px 16px;text-align:left;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase}
@@ -92,6 +93,7 @@
         </div>
         <div class="res-block">
           <div class="res-block-header"><span class="res-block-title">Bảng Tra 20 Năm Tới</span></div>
+          <div class="kl-dai" id="klDai"></div>
           <div class="kl-scroll"><table class="kl-table" id="klTable"><thead><tr><th>Năm DL</th><th>Tuổi Ta</th><th>Can Chi</th><th>Tình Trạng</th></tr></thead><tbody id="klBody"></tbody></table></div>
         </div>
         <div class="ask" data-ask="Trong 20 năm tới, năm nào đẹp nhất để làm nhà / cưới hỏi cho tuổi tôi? Năm phạm Kim Lâu/Tam Tai/Hoang Ốc thì hóa giải thế nào (mượn tuổi)?">✦ Hỏi trợ lý năm đẹp & cách hóa giải</div>
@@ -105,6 +107,7 @@
 <script>window.SHELL_ACTIVE='kim-lau';window.SHELL_HISTORY=true;
 window.SHELL_INTRO={key:'kim-lau'};</script>
 <script src="/tools-shared/kim-lau.js?v=1"></script>
+<script src="/tools-shared/hook-charts.js?v=2"></script>
 <script src="/auth.js?v=2"></script>
   <script src="/nav.js?v=25" data-icons-only></script>
 <script src="/shell.js?v=87"></script>
@@ -112,6 +115,28 @@ window.SHELL_INTRO={key:'kim-lau'};</script>
 // Ô giữa dùng CHUNG module /tools-shared/kim-lau.js với trang standalone
 // /kim-lau → kết quả y hệt, sửa 1 chỗ 2 nơi cập nhật. Rail nhận
 // chính data module tính (nhất quán với ô giữa).
+// Dải 20 năm — đọc CHÍNH `data.rows` mà bảng ngay dưới đang đọc, không tính lại
+// gì cả. Bảng trả lời "năm 2031 thế nào"; dải trả lời "năm nào tôi làm được" —
+// câu người ta thật sự mang tới tool, mà bảng bắt đọc hết 20 dòng mới thấy.
+//
+// ⚠️ Ô chỉ chở MỘT nhãn: cờ nặng nhất, `+` nếu năm đó còn cờ khác. Thứ tự
+// nặng/nhẹ lấy ĐÚNG thứ tự `kim-lau.js` đã dùng khi dựng câu `desc` (Kim Lâu
+// trước, rồi Tam Tai, rồi Hoang Ốc) — tự xếp lại ở đây là đẻ ra nguồn thứ hai
+// nói ngược lại chính câu văn nằm trên nó.
+function renderDai(d){
+  var host=document.getElementById('klDai');
+  if(!host) return;
+  if(typeof HookCharts==='undefined'){ host.innerHTML=''; return; }
+  var years=(d.rows||[]).map(function(rw){
+    var co=[];
+    if(rw.kimLau) co.push('Kim Lâu' + (rw.kimLauLoai ? ' ' + rw.kimLauLoai : ''));
+    if(rw.tamTai) co.push('Tam Tai');
+    if(rw.hoangOc) co.push('Hoang Ốc');
+    return {nam:rw.year, tuoi:rw.tuoiTa, nhan:co[0]||'', them:co.length>1, now:rw.year===d.namHienTai};
+  });
+  host.innerHTML=HookCharts.yearStrip({years:years,ariaLabel:'Dải 20 năm tới — năm nào làm được'});
+}
+
 function calculate(){
   var by=parseInt(document.getElementById('birthYear').value);
   var err=document.getElementById('error-msg');
@@ -121,6 +146,7 @@ function calculate(){
   document.getElementById('resTitle').textContent=r.resTitleText;
   document.getElementById('currentBox').innerHTML=r.currentBoxHTML;
   document.getElementById('klBody').innerHTML=r.rowsHTML;
+  renderDai(r.data);
   document.getElementById('birthPanel').style.display='none';
   document.getElementById('resPanel').style.display='block';
   document.getElementById('btnEdit').style.display='';
