@@ -228,10 +228,10 @@ a { color: var(--blue); text-decoration: none; }
 .hc-cat-ic { width: 25px; height: 25px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; flex-shrink: 0; }
 .hc-cat-ic .ic { width: 13px; height: 13px; }
 .hc-cat-lb { font-size: 10px; font-weight: 600; color: var(--text-mid); white-space: nowrap; }
-.hc-cat:nth-child(1) .hc-cat-ic { background: #1455A4; }
-.hc-cat:nth-child(2) .hc-cat-ic { background: #C4436B; }
-.hc-cat:nth-child(3) .hc-cat-ic { background: #1E6B3C; }
-.hc-cat:nth-child(4) .hc-cat-ic { background: #9A7B3A; }
+.hc-cat:nth-child(1) .hc-cat-ic { background: #9A7B3A; }
+.hc-cat:nth-child(2) .hc-cat-ic { background: #1455A4; }
+.hc-cat:nth-child(3) .hc-cat-ic { background: #C4436B; }
+.hc-cat:nth-child(4) .hc-cat-ic { background: #1E6B3C; }
 .hc-cat:nth-child(5) .hc-cat-ic { background: #5B3E96; }
 .hc-birth-submit {
   width: 100%; margin-top: 2px; background: var(--navy); color: var(--gold-bright);
@@ -439,16 +439,15 @@ a { color: var(--blue); text-decoration: none; }
             </div>
             <!-- Chip dựng SẴN trong HTML, KHÔNG để JS render — dựng bằng JS
                  sau khi tải sẽ đội CLS trên điện thoại.
-                 ⚠️ Sửa/thêm chip: giữ ĐỒNG BỘ với `_TOOL_ROUTE` trong khối
-                 script dưới, và kiểm tool còn `enabled=true` trong
-                 `tool_pricing` — chip trỏ tool vừa tắt là link chết. -->
-            <div class="hc-chips-label">Hoặc hỏi thẳng một việc</div>
+                 Link THẲNG tới tool thật qua href (không qua pending-ask) —
+                 sửa/thêm chip chỉ cần đổi href + kiểm route còn sống. -->
+            <div class="hc-chips-label">Hoặc chọn thẳng công cụ</div>
             <div class="hc-chips-inner" id="hc-chips">
-              <a class="hc-cat" data-tool="laso" data-ask="Năm nay công việc làm ăn thế nào?" href="/app/luan-giai"><span class="hc-cat-ic"><span class="ic" data-icon="briefcase"></span></span><span class="hc-cat-lb">Công việc</span></a>
-              <a class="hc-cat" data-tool="xem-tuoi" data-ask="Tôi và người yêu có hợp nhau không?" href="/app/xem-tuoi"><span class="hc-cat-ic"><span class="ic" data-icon="heart"></span></span><span class="hc-cat-lb">Tình duyên</span></a>
-              <a class="hc-cat" data-tool="huong-nghiep-tre" data-ask="Con tôi hợp với ngành nghề gì?" href="/app/huong-nghiep-tre"><span class="hc-cat-ic"><span class="ic" data-icon="baby"></span></span><span class="hc-cat-lb">Con cái</span></a>
-              <a class="hc-cat" data-tool="chan-dung-vo-chong" data-ask="Chồng tương lai của tôi trông thế nào?" href="/app/chan-dung-vo-chong"><span class="hc-cat-ic"><span class="ic" data-icon="users"></span></span><span class="hc-cat-lb">Tương lai</span></a>
-              <a class="hc-cat" data-tool="xem-lam-an" data-ask="Tôi làm ăn với người này có hợp không?" href="/app/xem-lam-an"><span class="hc-cat-ic"><span class="ic" data-icon="handshake"></span></span><span class="hc-cat-lb">Làm ăn</span></a>
+              <a class="hc-cat" data-tool="laso" href="/app/luan-giai"><span class="hc-cat-ic"><span class="ic" data-icon="star"></span></span><span class="hc-cat-lb">Luận giải</span></a>
+              <a class="hc-cat" data-tool="van-han-nam" href="/app/van-han-nam"><span class="hc-cat-ic"><span class="ic" data-icon="calendar-days"></span></span><span class="hc-cat-lb">Vận 12 tháng</span></a>
+              <a class="hc-cat" data-tool="xem-tuoi" href="/app/xem-tuoi"><span class="hc-cat-ic"><span class="ic" data-icon="heart-handshake"></span></span><span class="hc-cat-lb">Vợ chồng</span></a>
+              <a class="hc-cat" data-tool="day-con" href="/app/day-con"><span class="hc-cat-ic"><span class="ic" data-icon="baby"></span></span><span class="hc-cat-lb">Dạy con</span></a>
+              <a class="hc-cat" data-tool="chu-trinh-cuoc-doi" href="/app/chu-trinh-cuoc-doi"><span class="hc-cat-ic"><span class="ic" data-icon="rotate-cw"></span></span><span class="hc-cat-lb">Cuộc đời</span></a>
             </div>
           </div>
         </div>
@@ -704,12 +703,12 @@ if (typeof TuviPaywall !== 'undefined') {
 
   var chipsBox = document.getElementById('hc-chips');
   if (chipsBox) {
+    // Link thẳng tới tool (href thật) — chỉ đo lượt bấm, không chặn điều
+    // hướng mặc định của thẻ <a>.
     chipsBox.addEventListener('click', function (e) {
       var c = e.target.closest('.hc-cat');
       if (!c) return;
-      if (e.metaKey || e.ctrlKey || e.shiftKey) return; // cho phép mở tab mới
-      e.preventDefault();
-      go(c.getAttribute('data-ask') || '', c.getAttribute('data-tool') || 'laso');
+      try { window.Track && window.Track.event && window.Track.event('cta_click', { tool_id: c.getAttribute('data-tool') || 'laso', meta: { has_q: false, from: 'hero' } }); } catch (err) { /* ignore */ }
     });
   }
 
