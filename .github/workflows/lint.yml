@@ -95,6 +95,13 @@ jobs:
       - name: Trang có thanh nav phải giữ chỗ 60px
         run: npm run check:navph
 
+      # `TuviForm.render` chạy NGAY trong lúc phân tích HTML — đó là thứ khiến form
+      # có mặt ở lần vẽ đầu. Một script bên thứ ba không `defer` đứng TRƯỚC nó thì
+      # chặn parse: vẽ lần đầu với #tuviFormHost rỗng, rồi form 237px nhét vào đẩy
+      # .frow xuống (đo: CLS 0,0315 → 0 khi chỉ thêm mỗi `defer`).
+      - name: Form sinh không bị script bên thứ ba chặn
+        run: npm run check:formblock
+
       # Chặn gõ nhầm tên hàm trên `window.Auth`. Gõ nhầm KHÔNG ném lỗi — nó trả
       # undefined và hỏng IM LẶNG. Đã trả giá: `app-gio-sinh` gọi
       # `Auth.getToken()` (không tồn tại; API thật là `getSession()`) nên header
