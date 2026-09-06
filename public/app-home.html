@@ -213,6 +213,13 @@
 .tdo-row{display:flex;align-items:center;gap:10px;font-size:15px;font-weight:600;color:var(--heading)}
 .tdo-row .ic{width:20px;height:20px;flex:0 0 auto;color:var(--ok-tx)}
 .tdo-row .ic svg{width:100%;height:100%;display:block}
+.tdo-ten{flex:1;min-width:0}
+/* Điểm của engine (0-10) hiện ngay cạnh việc: danh sách nay chứa cả 6/10 lẫn
+   10/10, không ghi điểm là gộp hai thứ khác hẳn nhau thành một danh sách phẳng.
+   Nhạt hơn tên việc — nó là chú thích, không phải thứ đọc trước. */
+.tdo-diem{flex:0 0 auto;font-size:11.5px;font-weight:700;color:var(--ok-tx);opacity:.72;
+  font-variant-numeric:tabular-nums}
+.tdo-diem::after{content:"/10";font-weight:400;opacity:.7}
 .thr{display:flex;flex-direction:column}
 .thr-row{display:flex;align-items:baseline;justify-content:space-between;gap:10px;padding:7px 0;border-bottom:1px solid var(--hr-line)}
 .thr-row:last-child{border-bottom:0;padding-bottom:0}
@@ -233,6 +240,7 @@
   .tbad-note{font-size:11.5px}
   .tdo{gap:7px}
   .tdo-row{font-size:13.5px;gap:8px}
+  .tdo-diem{font-size:10.5px}
   .tdo-row .ic{width:17px;height:17px}
   .tbox-empty{font-size:11.5px}
   .tbox.hour{grid-column:1/-1}
@@ -1288,8 +1296,13 @@ function renderAllTools(d) {
     var boxGood='<div class="tbox good"><div class="tbox-h"><span class="ic" data-icon="check-circle"></span>Nên làm</div>'
       +((v.nen&&v.nen.length)
         ? '<div class="tdo">'+v.nen.map(function(x){
+            // Điểm hiện KÈM tên việc. Engine hạ ngưỡng từ 7 xuống 6 để ô này
+            // bớt trống (55% → 44% số ngày trong năm), nên danh sách nay có cả
+            // việc 6/10 lẫn 10/10 — không ghi điểm là gộp hai thứ khác hẳn
+            // nhau thành một danh sách phẳng, tức thẻ đang khuyên quá tay.
             return '<div class="tdo-row"><span class="ic" data-icon="'+(VIEC_ICON[x.ten]||'check-circle')
-              +'"></span>'+esc(x.ten)+'</div>'; }).join('')+'</div>'
+              +'"></span><span class="tdo-ten">'+esc(x.ten)+'</span>'
+              +(x.diem?'<b class="tdo-diem">'+x.diem+'</b>':'')+'</div>'; }).join('')+'</div>'
         : '<div class="tbox-empty">Hôm nay không việc trọng đại nào được điểm cao — để dành sang ngày khác.</div>')
       +'</div>';
 
