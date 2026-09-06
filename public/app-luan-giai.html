@@ -90,32 +90,6 @@
 .lg-teaser-score{font-family:var(--serif);font-size:22px;font-weight:700;flex:0 0 auto;min-width:44px;text-align:center;line-height:1.25}
 .lg-teaser-score small{font-size:12px;color:var(--text-lt);font-family:var(--sans);font-weight:400}
 .lg-teaser-line{color:var(--text-mid);line-height:1.68;padding-top:2px}
-/* ── Ô GIỮ CHỖ của phần đang khoá (hard paywall 2026-09) ────────────────────
-   Henry chốt: "che hết luôn, đừng vừa hiện vừa che sẽ confuse user". Bản trước
-   hiện một dòng teaser THẬT (điểm + tên cách cục) rồi gắn badge Khoá cạnh tiêu
-   đề — người đọc không phân biệt được đâu là phần mình đã có, đâu là phần chưa
-   mua, nên vừa hụt hẫng vừa không thấy lý do trả tiền.
-   Nay: KHÔNG một chữ thật nào trong DOM, chỉ hình dạng của thứ sẽ tới (mấy vạch
-   chữ + một khối biểu đồ). Hình dạng vẫn phải ĐÚNG với bản thật — vạch quá ngắn
-   thì trông như phần đó chẳng có gì, tức là tự hạ giá món đang bán.
-   ⚠️ Placeholder KHÔNG được cao hơn nội dung thật quá nhiều: `_paintPartUnlocked`
-   thay đúng node này bằng bản mở, chênh lệch chiều cao càng lớn thì cú nhảy
-   layout lúc mở khoá càng nặng (cùng họ bẫy CLS đã ghi trong CLAUDE.md). */
-.lg-tension{margin:18px 0 0;padding:14px 16px;border-left:3px solid var(--red);border-radius:0 9px 9px 0;background:#FDF6F4;color:var(--text-mid);font-size:14.5px;line-height:1.7}
-.lg-tension b{color:var(--heading);font-weight:700}
-.lg-ph{position:relative;padding:2px 0;user-select:none;pointer-events:none}
-.lg-ph i{display:block;height:11px;border-radius:6px;background:linear-gradient(90deg,#e4ddcd,#f2ede2);margin-bottom:11px}
-.lg-ph i:last-of-type{margin-bottom:0}
-.lg-ph-chart{height:74px;border-radius:9px;margin-top:14px;background:
-  linear-gradient(90deg,#ece6da 0 22%,transparent 22%) 0 100%/100% 34% no-repeat,
-  linear-gradient(90deg,transparent 26%,#e4ddcd 26% 46%,transparent 46%) 0 100%/100% 62% no-repeat,
-  linear-gradient(90deg,transparent 50%,#ece6da 50% 70%,transparent 70%) 0 100%/100% 45% no-repeat,
-  linear-gradient(90deg,transparent 74%,#e4ddcd 74%) 0 100%/100% 78% no-repeat,
-  #faf7f0}
-@media(prefers-reduced-motion:no-preference){
-  .lg-ph i,.lg-ph-chart{animation:lg-ph-pulse 2.4s ease-in-out infinite}
-}
-@keyframes lg-ph-pulse{0%,100%{opacity:1}50%{opacity:.62}}
 .em{color:var(--gold-soft);font-weight:600}
 .cung-row{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--line)}
 .cung-row:last-child{border-bottom:none}
@@ -668,11 +642,10 @@ function buildPhanSection(phan,label,ls,locked){
 // đây cho "đỡ trống", và thế là quay về đúng bản cũ. Chữ ký hàm là chỗ chặn
 // việc đó rẻ nhất.
 function buildLockedPlaceholderHtml(phan){
-  // Số vạch xê dịch theo phần để 11 ô không xếp thành một khối lặp y hệt nhau —
-  // đều tăm tắp thì đọc ra "ảnh nền trang trí", không ra "chữ đang bị che".
-  var rows=[[96,88,93,70],[94,86,91,74,62],[97,84,90,68]][phan%3];
-  var bars=rows.map(function(w){ return '<i style="width:'+w+'%"></i>'; }).join('');
-  return '<div class="lg-ph" aria-hidden="true">'+bars+'<div class="lg-ph-chart"></div></div>';
+  // Uỷ quyền cho `TuviPaywall.placeholderHtml` — bản chép riêng ở trang này đã
+  // gỡ khi app-day-con cần đúng thứ đó (Pha 3). Hai bản chép tay của cùng một
+  // thứ là đường trôi lệch quen thuộc của repo này.
+  return TuviPaywall.placeholderHtml(phan);
 }
 
 // Câu TẠO CĂNG THẲNG đặt ở cuối phần đọc miễn phí — bậc 4 trong luồng

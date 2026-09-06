@@ -137,10 +137,10 @@ test('phần 1-2 sinh chữ THẬT, phần 3+ chỉ còn ô giữ chỗ', async 
   expect(calls(page)[0].anonId).toBeTruthy();
 
   // Phần 3+: ô giữ chỗ, KHÔNG chữ thật nào lọt vào DOM.
-  await expect(page.locator('#sec-3 .lg-ph')).toBeVisible();
+  await expect(page.locator('#sec-3 .tpw-ph')).toBeVisible();
   const sec3 = await page.locator('#sec-3 .card').innerText();
   expect(sec3).not.toMatch(/\/10/);
-  expect(await page.locator('#lgBody .lg-ph').count()).toBe(11);
+  expect(await page.locator('#lgBody .tpw-ph').count()).toBe(11);
 });
 
 test('tường + câu căng thẳng đứng NGAY DƯỚI phần 2', async ({ page }) => {
@@ -195,5 +195,5 @@ test('trả tiền xong: KHÔNG sinh lại phần đã đọc free, tường kh�
   await expect(page.locator('#lgTension')).toHaveCount(1);
   await expect(page.locator('#claude-content-1')).toContainText('Chữ AI của phần 1');
   await expect(page.locator('#claude-content-2')).toContainText('Chữ AI của phần 2');
-  await expect(page.locator('#lgBody .lg-ph')).toHaveCount(0);    // hết ô giữ chỗ
+  await expect(page.locator('#lgBody .tpw-ph')).toHaveCount(0);    // hết ô giữ chỗ
 });
