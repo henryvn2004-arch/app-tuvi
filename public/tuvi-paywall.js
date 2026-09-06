@@ -559,8 +559,15 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
       // quà chào mừng vì chưa phải tài khoản thật). Đường lùi "Đăng nhập" dành
       // riêng cho ai ĐÃ có tài khoản/số dư từ trước — thiếu link này thì họ bị
       // đẩy vào một phiên ẩn danh MỚI (0 Lượng) thay vì số dư thật đang có.
-      money = 'Bấm mở là trả tiền và đọc ngay, không cần đăng ký trước. ' +
-        '<a onclick="TuviPaywall._login()">Đã có tài khoản? Đăng nhập</a>';
+      // 🔴 PHẢI NÓI GIÁ ở đây (hard paywall 2026-09-06). Bản cũ chỉ viết "bấm
+      // mở là trả tiền và đọc ngay" — với khách đã đăng nhập thì nhánh dưới có
+      // con số, còn khách VÔ DANH (đúng nhóm đến từ quảng cáo, và nay là nhóm
+      // gặp tường ĐÔNG NHẤT vì hard paywall chặn mọi người) thì bị mời "trả
+      // tiền" mà không biết bao nhiêu. Giá đọc từ `tool_pricing` như mọi chỗ
+      // khác; đọc hụt thì hàm này đã dừng từ trên (`_priceUnknown`), nên tới
+      // được đây là chắc chắn có số thật, không phải số đoán.
+      money = 'Mở đầy đủ tốn <b>' + cost + ' Lượng</b> · bấm mở là trả tiền và đọc ngay, ' +
+        'không cần đăng ký trước. <a onclick="TuviPaywall._login()">Đã có tài khoản? Đăng nhập</a>';
     } else if (balance < cost) {
       money = 'Bạn còn <b>' + balance + '</b> · cần <b>' + cost + '</b> — thiếu ' + (cost - balance) +
         ', <a href="/topup.html" onclick="' + _topupClick('preview', cost - balance) + '">nạp thêm →</a>';
