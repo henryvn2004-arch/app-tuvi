@@ -693,12 +693,47 @@ async function renderPendingBanner() {
       if (row && row.label) label = row.label;
     }
   } catch (e) { /* giữ nhãn chung chung */ }
+  const exact = prefillCustomFor(pending.need);
   host.innerHTML = ic('lock', 'ic') +
     '<span>Bạn đang mở khoá <b>' + esc(label) + '</b> — còn thiếu <b>' + pending.need + ' Lượng</b>. '
-    + 'Gói được đánh dấu bên dưới vừa đủ cho lượt này.</span>';
+    + (exact
+        ? 'Ô <b>nạp số tiền tự chọn</b> đã điền sẵn <b>' + vnd(exact) + '</b> — vừa đủ, không phải mua cả gói.'
+        : 'Gói được đánh dấu bên dưới vừa đủ cho lượt này.')
+    + '</span>';
   host.className = 'pending-banner';
   host.style.display = 'flex';
   mount(host);
+}
+
+/**
+ * Điền sẵn ô nạp lẻ đúng số tiền còn thiếu. Trả về số tiền đã điền, hoặc null
+ * nếu không điền được (chưa đọc được bảng giá, hoặc ô không có trên trang).
+ *
+ * 🔑 VÌ SAO ĐÁNG LÀM: dưới hard paywall, người gặp tường phần lớn là khách
+ * NGUỘI từ quảng cáo — họ vừa đọc 2 phần luận về chính mình và muốn đọc nốt,
+ * không phải người đang muốn "nạp tài khoản". Bắt họ chọn giữa bốn gói
+ * 199k–999k để mua một thứ đáng ~120k là dựng thêm một quyết định ngay ở bậc
+ * cuối phễu. Ô nạp lẻ (tối thiểu 50.000đ) vốn đã có sẵn và đơn giá bám đúng
+ * bậc gói — chỉ là chưa ai điền hộ con số vào.
+ *
+ * ⚠️ Làm tròn LÊN nghìn: làm tròn xuống là thiếu đúng 1 Lượng, khách trả tiền
+ * xong vẫn ăn tường — đúng vòng "trả tiền mà không nhận được hàng".
+ * ⚠️ Chưa đọc được bảng giá → KHÔNG đoán, trả null và giữ nguyên câu cũ về gói.
+ * Cùng luật fail-closed với `_priceUnknown` trong tuvi-paywall.js.
+ */
+function prefillCustomFor(need) {
+  const inp = document.getElementById('customInput');
+  const n = Number(need) || 0;
+  if (!inp || n <= 0) return null;
+  const q = quoteCustom(50000);           // đơn giá bậc vào cửa
+  if (!q || !q.vndPerCredit) return null;
+  const MIN = 50000;
+  let amount = Math.ceil((n * q.vndPerCredit) / 1000) * 1000;
+  if (amount < MIN) amount = MIN;
+  if (amount > 5000000) return null;      // ngoài khoảng ô nhận — để khách tự chọn gói
+  inp.value = String(amount);
+  onCustomInput();
+  return amount;
 }
 
 // Banner huỷ thanh toán — tách khỏi loadStatus để không phụ thuộc trạng thái đăng nhập.
@@ -1017,9 +1052,13 @@ else mount();
 
 setMethod('bank');
 checkCancelledPayment();
-renderPendingBanner();
 loadStatus().then(loadReferralInfo).then(showPromoSection);
-loadPackages().then(loadToolPricing);
+// 🪤 `renderPendingBanner` phải chạy SAU `loadPackages`, không phải song song:
+// nó gọi `prefillCustomFor` → `quoteCustom` → `pkgList()`, mà `State.packages`
+// chỉ được đổ trong `loadPackages`. Gọi trước thì bảng gói còn RỖNG, `quoteCustom`
+// trả null và ô nạp lẻ lặng lẽ không được điền — hỏng đúng kiểu không ai thấy,
+// vì banner vẫn hiện (chỉ là hiện câu dự phòng về gói).
+loadPackages().then(loadToolPricing).then(renderPendingBanner);
 </script>
 
 <!-- ── payOS Bank Transfer Modal ─────────────────────────── -->
