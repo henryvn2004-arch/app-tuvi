@@ -118,8 +118,13 @@ const CONSUMERS = ['lib/agent/luan-giai-doc.ts', 'lib/agent/phu-the-luan-giai.ts
 // Mốc do CHÍNH route chèn vào prompt (không phải formatter dựng) → miễn trừ,
 // kèm lý do ngay tại chỗ để lần sau khỏi phải đi tra.
 const ROUTE_OWNED = new Set([
-  '=== LÁ SỐ ===', // buildPrompt() bọc quanh laSoText
-  '=== TÀI LIỆU THAM KHẢO ===', // buildPrompt() nối khối RAG
+  // `buildPrompt()`/`laSoContextFor()` — nguồn cũ của mốc trần này — đã XOÁ
+  // (2026-09-06, Henry chốt). Miễn trừ VẪN cần dù nguồn cũ không còn: đây là
+  // vỏ prompt do lượt gọi hiện tại (buildPromptCached ở dưới) tự chèn, không
+  // phải thứ formatter dựng, nên đối chiếu với output là sai lớp.
+  '=== LÁ SỐ ===',
+  // Sống thật: `buildPromptCached()` + van-han-nam · lasotuvi · tubinh · xem-tuoi.
+  '=== TÀI LIỆU THAM KHẢO ===',
 ]);
 const sample0 = samples[0].text;
 const sampleLines0 = sample0.split('\n');
