@@ -141,6 +141,39 @@ for (const p of files) {
   }
 }
 
+// ── Luật 2: mọi trang nạp `hook-charts.js` phải CÙNG một `?v=` ───────────────
+// 🔴 ĐÃ CẮN (2026-09-06): bump `?v=1` → `?v=2` cho cả 5 trang, nhưng lượt
+// red-team bộ dò ngay sau đó chạy `git checkout -- public/app-luan-giai.html`
+// để gỡ đột biến — mà lúc ấy bản bump CHƯA commit, nên lệnh đó kéo file về HEAD
+// và xoá trắng luôn bump của đúng trang này. 4 trang ở v=2, một trang ở v=1:
+// trang lẻ loi kia giữ file trong cache trình duyệt, tức bản vá màu cờ ở dark
+// mode KHÔNG tới nó. Không lỗi nào bắn ra, và `check:hooktag` bản đầu cũng
+// không thấy vì nó chỉ soi regex.
+// (Đây đúng cái bẫy CLAUDE.md đã ghi: "commit TRƯỚC, red-team SAU".)
+const VER_RX = /hook-charts\.js\?v=(\d+)/g;
+const vers = new Map();
+for (const f of readdirSync(DIR)) {
+  if (!f.endsWith('.html') && !f.endsWith('.js')) continue;
+  const src = readFileSync(join(DIR, f), 'utf8');
+  let m;
+  while ((m = VER_RX.exec(src))) {
+    if (!vers.has(m[1])) vers.set(m[1], []);
+    vers.get(m[1]).push('public/' + f);
+  }
+}
+if (vers.size > 1) {
+  console.error('✗ hook-charts.js?v= KHÔNG đồng bộ giữa các trang:');
+  for (const [v, files] of [...vers.entries()].sort()) {
+    console.error(`    v=${v} → ${files.join(', ')}`);
+  }
+  console.error(
+    '  Trang ở phiên bản CŨ giữ file trong cache trình duyệt ⇒ mọi bản vá nằm\n' +
+      '  trong hook-charts.js không tới nó. Bump ĐỦ CẢ CÂY public/, không chỉ\n' +
+      '  trang mình đang sửa.'
+  );
+  loi++;
+}
+
 if (loi) {
   console.error(`\n✗ check:hooktag — ${loi} lỗi trên ${files.length} trang.`);
   process.exit(1);

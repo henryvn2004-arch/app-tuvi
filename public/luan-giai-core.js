@@ -78,6 +78,36 @@
     h += '</div>';
     return h;
   }
+  // Thứ tự 12 trục của vành cung — CỐ ĐỊNH, không đọc `Object.keys(cungScores)`:
+  // thứ tự khoá của object là thứ tự an sao, đổi engine là hình xoay theo mà
+  // không ai báo, và hai lá số cạnh nhau sẽ không so hình được với nhau nữa.
+  // Nhãn rút còn MỘT chữ đầu (Mệnh · Phụ · Phúc…) — 12 nhãn quanh một vòng nhỏ,
+  // để nguyên "Điền Trạch" là chữ chồng lên nhau.
+  var CUNG_TRUC = [
+    ['Mệnh', 'Mệnh'], ['Phụ Mẫu', 'Phụ'], ['Phúc Đức', 'Phúc'], ['Điền Trạch', 'Điền'],
+    ['Quan Lộc', 'Quan'], ['Nô Bộc', 'Nô'], ['Thiên Di', 'Di'], ['Tật Ách', 'Tật'],
+    ['Tài Bạch', 'Tài'], ['Tử Tức', 'Tử'], ['Phu Thê', 'Phối'], ['Huynh Đệ', 'Huynh'],
+  ];
+
+  /** Vành 12 cung. Trả '' nếu thiếu HookCharts hoặc thiếu điểm — khối chữ phía
+   *  sau vẫn đứng được một mình, không để trang vỡ vì một hình. */
+  function buildCungRadarHtml(ls) {
+    if (!window.HookCharts || !HookCharts.hexRadar) return '';
+    var sc = (ls && ls.cungScores) || null;
+    if (!sc) return '';
+    var dims = CUNG_TRUC.map(function (x) {
+      var v = sc[x[0]] && sc[x[0]].tong;
+      return { label: x[1], value: typeof v === 'number' ? v : 0 };
+    });
+    if (!dims.some(function (d) { return d.value > 0; })) return '';
+    return (
+      '<div style="margin:6px 0 10px">' +
+      HookCharts.hexRadar({ dims: dims, size: 260, max: 10,
+        ariaLabel: 'Vành mười hai cung, trục nào dày là cung đó mạnh hơn' }) +
+      '</div>'
+    );
+  }
+
   var PHAN_LABELS_BASE = [
     '',
     'Tổng Quan Lá Số',
@@ -172,6 +202,18 @@
         const top3 = Object.entries(_astrolabe.cungScores).map(([c,sc])=>[c,METRICS.reduce((s,m)=>s+sc[m],0)]).sort((a,b)=>b[1]-a[1]).slice(0,3);
         const bot3 = Object.entries(_astrolabe.cungScores).map(([c,sc])=>[c,METRICS.reduce((s,m)=>s+sc[m],0)]).sort((a,b)=>a[1]-b[1]).slice(0,3);
         preGenHtml += `<div class="pregen-block"><div class="pregen-title"><span class="ic-inline" data-icon-emoji="📊" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">📊</span> Điểm mạnh / yếu nổi bật</div>`;
+        // Vành 12 cung — CÙNG con số mà hai dòng "Mạnh nhất / Yếu nhất" ngay
+        // dưới đang đọc (`cungScores[cung].tong`), chỉ đổi cách đọc: hai dòng
+        // chữ nêu được 6/12 cung, hình nêu cả 12 và cho thấy KHOẢNG CÁCH giữa
+        // chúng — thứ mà danh sách top3/bot3 không nói ra.
+        //
+        // ⚠️ CỐ Ý KHÔNG in số lên từng trục: `SYSTEM_PROMPT` cấm bản luận nói
+        // "cung này x/10" (mà `cungScores` KHÔNG nằm trong `formatLaSoV2`, nên
+        // model thật sự không có con số đó). In số lên hình là dựng một nguồn
+        // thứ hai nói ngược lại chính bài luận bên dưới nó. Hình chỉ nói TƯƠNG
+        // QUAN — cung nào dày, cung nào mỏng — đúng vai của một cái radar.
+        // Giữ hai dòng chữ: chúng GỌI TÊN cung, hình thì không.
+        preGenHtml += buildCungRadarHtml(_astrolabe);
         preGenHtml += `<div class="pregen-row"><span class="pregen-good">Mạnh nhất: ${top3.map(([c,s])=>`${c} (${s.toFixed(0)})`).join(', ')}</span></div>`;
         preGenHtml += `<div class="pregen-row"><span class="pregen-bad">Yếu nhất: ${bot3.map(([c,s])=>`${c} (${s.toFixed(0)})`).join(', ')}</span></div>`;
         preGenHtml += `</div>`;
