@@ -46,6 +46,8 @@
 .sec-n{width:26px;height:26px;flex:0 0 auto;border-radius:7px;background:var(--navy);color:var(--gold);font-family:var(--serif);font-size:13px;display:flex;align-items:center;justify-content:center;font-weight:600}
 .sec-h h3{font-family:var(--serif);font-size:18px;font-weight:600}
 .card{background:var(--white);border:1px solid var(--line);border-radius:11px;padding:6px 17px;box-shadow:var(--shadow)}
+.compat-radar{padding:14px 0 4px;border-bottom:1px solid var(--line)}
+.cr-cap{margin-top:6px;font-size:11.5px;line-height:1.5;color:var(--text-lt);text-align:center}
 .fac{padding:13px 0;border-bottom:1px solid var(--line)}
 .fac:last-child{border-bottom:none}
 .fac-top{display:flex;align-items:center;gap:10px;margin-bottom:7px}
@@ -152,6 +154,7 @@
 <script src="/laso-chart.js?v=3"></script>
 <script src="/tuvi-ansao-engine.js"></script>
 <script src="/tuong-hop.js?v=1"></script>
+<script src="/tools-shared/hook-charts.js?v=2"></script>
 <script src="/tools-shared/vn-timezone.js?v=1"></script>
 <script src="/tuvi-form.js?v=2"></script>
 <script src="/auth.js?v=2"></script>
@@ -285,6 +288,28 @@ function doCompat(){
   }
 }
 
+// ── Vành 8 chiều — dựng bằng HookCharts.hexRadar (tools-shared/hook-charts.js).
+// CÙNG con số mà 8 thanh ngay dưới đang đọc (`items[].score`), chỉ đổi cách
+// đọc: thanh trả lời "chiều này bao nhiêu", vành trả lời "cặp này lệch về
+// phía nào" — thứ mà 8 thanh xếp dọc không cho thấy.
+// Thứ tự trục CỐ ĐỊNH theo thứ tự `items` (chính là thứ tự các thanh bên
+// dưới), KHÔNG sort theo điểm: sort thì hai cặp cạnh nhau hết so hình với
+// nhau được, mà so hình mới là lý do vẽ vành.
+// ⚠️ Vành vẽ ĐIỂM THÔ 0-10, CHƯA nhân trọng số. Trọng số (×10%…×20%) chỉ góp
+// vào tổng /100 và vẫn hiện nguyên ở từng thanh — caption phải nói ra, nếu
+// không hình ngầm bảo "8 chiều nặng ngang nhau" và cãi lại chính các thanh.
+function compatRadarHtml(r){
+  if(typeof HookCharts==='undefined') return '';
+  var dims=r.items.filter(function(m){return typeof m.score==='number';})
+    .map(function(m){return {label:m.label,value:m.score};});
+  if(dims.length<3) return '';
+  var svg=HookCharts.hexRadar({dims:dims,max:10,size:280,ariaLabel:'Vành '+dims.length+' chiều tương hợp'});
+  if(!svg) return '';
+  return '<div class="compat-radar">'+svg+
+    '<div class="cr-cap">'+dims.length+' chiều cùng thang 0–10. Trọng số góp vào tổng '+
+    r.total+'/100 nằm ở từng thanh bên dưới.</div></div>';
+}
+
 function renderCompat(r,nameA,nameB,fdA,fdB){
   var col=meterColor(r.total);
   document.getElementById('xtVerdict').innerHTML=
@@ -329,7 +354,7 @@ function renderCompat(r,nameA,nameB,fdA,fdB){
   // 9 phần (0=Tổng quan gộp 8 chiều, 1-8=từng chiều riêng) — port khung PHAN_LABELS
   // của xem-tuoi.html/xem-lam-an.html, mỗi phần có slot claude-content cho AI + nút hỏi rail.
   var S=[];
-  var overviewBody=r.items.map(factorRowHtml).join('');
+  var overviewBody=compatRadarHtml(r)+r.items.map(factorRowHtml).join('');
   S.push(sec(0,PHAN_LABELS[0],'','<div class="card">'+overviewBody+'</div>'+secLock(0)+'<div class="claude-content" id="claude-content-0" style="display:none"></div>'+ask('Luận tổng quan mức độ hòa hợp của '+nameA+' và '+nameB)));
   r.items.forEach(function(m,i){
     var idx=i+1;
