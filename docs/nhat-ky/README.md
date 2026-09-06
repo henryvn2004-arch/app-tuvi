@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-201 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+202 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 **Bốn file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
 ```bash
@@ -12,7 +12,7 @@ sed -n '120,190p' docs/nhat-ky/2026-08.md    # đọc đúng đoạn, đừng ca
 | file | số mục | dung lượng |
 |---|---:|---:|
 | `2026-09.md` | 37 | 190,020 B |
-| `2026-08.md` | 147 | 1,018,512 B |
+| `2026-08.md` | 148 | 1,024,027 B |
 | `2026-07.md` | 12 | 154,531 B |
 | `track-cu.md` | 5 | 89,354 B |
 
@@ -59,6 +59,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 | 1 | 2026-08 | `2026-08.md` | 👤 Guest checkout bằng Supabase Anonymous Sign-ins |
 | 1 | 2026-08 | `2026-08.md` | 🩹 `.hkl-src` lộ code ra ngoài + hook thật sang Chu Trình Cuộc Đời |
 | 1 | 2026-08 | `2026-08.md` | 🎣 Teaser luận giải: điểm số suông không tò mò + 3 thẻ điểm vỡ dòng trên màn hẹp |
+| 1 | 2026-08 | `2026-08.md` | 💳 Webhook PayPal câm — sự kiện chỉ giao cho webhook thuộc ĐÚNG app đã tạo đơn |
 | 1 | 2026-08 | `2026-08.md` | 🔓 Pha 5 — 7/10 tool "ineligible" hoá ra CÓ dữ liệu free bị bỏ phí |
 | 2 | 2026-08 | `2026-08.md` | 🏁 Pha 4 — "Làm hết đi": 7 tool thêm hook, 7 tool skip vì ĐÃ hook sẵn, 10 tool loại |
 | 3 | 2026-08 | `2026-08.md` | 📚 Dọn thư viện + 🔴 lời mời chỉ nằm trên MỘT trong HAI tường (2026-08-26) |
