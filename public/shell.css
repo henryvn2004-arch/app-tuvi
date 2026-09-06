@@ -141,10 +141,20 @@ body{font-family:var(--sans);background:var(--paper-2);color:var(--text);font-si
    thì cụm nút mới hạ cánh sát mép phải WORKSPACE. Ở ≤900px rail là drawer
    NẰM NGOÀI luồng (không chiếm cột) nên khối responsive bên dưới ghi đè lại
    `right:14px` — không trừ `--rail-w` nữa. */
-.ws-fab{position:fixed;right:calc(var(--rail-w) + 16px);bottom:calc(16px + env(safe-area-inset-bottom));z-index:40;display:flex;flex-direction:column;align-items:center;gap:8px}
+.ws-fab{position:fixed;right:calc(var(--rail-w) + 16px);bottom:calc(16px + env(safe-area-inset-bottom));z-index:40;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:8px;min-height:200px;pointer-events:none}
+/* GIỮ CHỖ 200px = 4 nút 44px + 3 khe 8px, tức khối tối đa (Hỏi · Chia sẻ ·
+   Facebook · PDF). Khối neo theo `bottom`, nên KHÔNG giữ chỗ thì mỗi lần có
+   thêm nút, mép TRÊN dâng lên và `#wsFab` đổi rect ⇒ đo được 0,0049 CLS trên
+   prod (/app/luan-giai): top 722→566, cao 44→200.
+   🪤 Đã đo: chỉ đổi THỨ TỰ chèn nút không chữa được con số này — nó tính trên
+   rect của chính khối chứa, không phải trên nút nào dịch. (Đổi thứ tự vẫn
+   giữ, vì nó chữa cú nhảy MẮT THẤY: nút Hỏi trước đây bị đẩy lên 156px.)
+   `pointer-events:none` là BẮT BUỘC đi kèm: 200px đó gần như luôn có phần
+   rỗng, mà khối `position:fixed` nằm trên nội dung — không tắt thì vùng rỗng
+   nuốt cú chạm của người dùng. Nút bật lại `auto` ngay dưới đây. */
 /* Icon-only, tròn, đều cỡ — chữ dồn hết vào tooltip (`data-tip`, xem khối
    `.tip` bên dưới) thay vì nằm cạnh icon. */
-.ws-fab .btn{width:44px;height:44px;padding:0;justify-content:center;border-radius:50%;background:var(--white);box-shadow:var(--shadow-lg);position:relative}
+.ws-fab .btn{width:44px;height:44px;padding:0;justify-content:center;border-radius:50%;background:var(--white);box-shadow:var(--shadow-lg);position:relative;pointer-events:auto}
 .ws-fab .btn svg{width:19px;height:19px;flex:0 0 auto}
 .ws-fab .fbtn-fb{background:#1877F2;border-color:#1877F2;color:#fff}
 .ws-fab .fbtn-fb:hover{background:#1466d6;border-color:#1466d6;color:#fff}
