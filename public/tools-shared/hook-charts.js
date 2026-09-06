@@ -216,7 +216,11 @@ window.HookCharts = (function () {
   var _CSS =
       '.hc-svg{display:block;margin:0 auto}' +
       '.hc-num{font-family:var(--mono,ui-monospace,monospace);font-size:10px;font-weight:600;fill:var(--text)}' +
-      '.hc-lbl{font-family:var(--mono,ui-monospace,monospace);font-size:8.5px;fill:var(--text-lt)}' +
+      // 🔴 SANS chứ KHÔNG mono. `.hc-lbl` chở CHỮ TIẾNG VIỆT (tên cung ở vành 12
+      // cung, nhãn tháng ở bản đồ tháng), mà stack mono mặc định thiếu glyph tổ
+      // hợp: đo trên bản dựng thật, 'Tử' vỡ ra thành 'Tư' + dấu móc rời. Số thì
+      // vẫn để `.hc-num` mono cho thẳng cột.
+      '.hc-lbl{font-family:var(--sans);font-size:8.5px;fill:var(--text-lt)}' +
       '.hc-cap{font-family:var(--sans);font-size:11.5px;fill:var(--text-mid)}' +
       '.hc-grid{stroke:var(--line-2);stroke-width:1}' +
       '.hc-grid-fill{fill:none;stroke:var(--line-2);stroke-width:1}' +
