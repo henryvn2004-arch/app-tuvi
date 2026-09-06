@@ -16,6 +16,13 @@
 .form-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:3px}
 .form-card p.sub{font-size:12.5px;color:var(--text-lt);margin-bottom:14px}
 .frow{display:flex;gap:11px;flex-wrap:wrap;align-items:flex-end;margin-bottom:12px}
+/* Giữ chỗ cho form khai sinh. `TuviForm.render` chạy ngay trong lúc phân tích
+   HTML, nhưng chỉ SAU khi `tuvi-form.js` nạp xong — mà đứng trước nó là cả một dãy
+   script CÙNG ORIGIN cũng chặn parse (17KB–524KB tuỳ trang), nên trên mạng chậm lần
+   vẽ đầu #tuviFormHost còn RỖNG tới ~3,5–6,5s. `:empty` để chỗ giữ TỰ NHẢ ngay khi
+   form vào ⇒ không bao giờ thừa khoảng trắng. Số 237px/480px là ĐO,
+   xem docs/nhat-ky/2026-09.md vòng 9. */
+@media (max-width:480px){#tuviFormHost:empty{min-height:237px}}
 .fg{display:flex;flex-direction:column;gap:5px}
 .fg label{font-size:10.5px;font-weight:600;color:var(--text-lt);letter-spacing:.04em;text-transform:uppercase}
 .fg input,.fg select{border:1px solid var(--line-2);border-radius:7px;padding:8px 10px;font-size:13.5px;font-family:inherit;color:var(--text);background:var(--paper);outline:none}
@@ -199,11 +206,13 @@ window.SHELL_INTRO={key:'bat-tu'};</script>
 <script src="/tubinh-domain-scores.js?v=2"></script>
 <script src="/tubinh-cach-cuc-special.js?v=2"></script>
 <script src="/bat-tu-core.js?v=2"></script>
-<!-- `defer` KHÔNG phải tối ưu vặt: không có nó, thẻ này CHẶN parse ngay trước
-     `tuvi-form.js`, nên `TuviForm.render('tuviFormHost', …)` phải chờ một request
-     bên thứ ba xong mới chạy. Trình duyệt vẽ lần đầu với `#tuviFormHost` RỖNG rồi
-     mới nhét form 237px vào ⇒ `.frow` bị đẩy xuống. Đo cục bộ, chỉ đổi mỗi thuộc
-     tính này: CLS 0,0315 → 0 (bat-tu) · 0,0238 → 0 (chu-trinh) · 0,0221 → 0 (van-han).
+<!-- `defer` ở đây là VỆ SINH TỐC ĐỘ, KHÔNG phải bản vá CLS. Không có nó, thẻ này
+     chặn parse ngay trước `tuvi-form.js`, tức thêm hẳn một chặng mạng tới bên thứ
+     ba vào đường tới hạn của form. Nhưng cú nhảy `.frow` thì nó KHÔNG chữa: prod
+     trước và sau #708 đều 0,0335, cùng node cùng rect. Số "0,0315 → 0" đo cục bộ
+     hồi đó là ảo — nó lớn vì container chặn hẳn CDN (~12,5s timeout), không phải
+     vì `defer`. Nguyên nhân thật là dãy script CÙNG ORIGIN phía trên, và bản vá
+     thật là chỗ giữ `#tuviFormHost:empty` khai trong <style> của trang.
      An toàn: mọi lời gọi `Chart` đều nằm trong hàm và có chốt
      `if (typeof Chart === 'undefined') return`, và các hàm đó chỉ chạy SAU khi
      người dùng bấm luận — rất lâu sau `DOMContentLoaded`, mốc mà script `defer`

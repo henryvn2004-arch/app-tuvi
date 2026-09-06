@@ -95,10 +95,18 @@ jobs:
       - name: Trang có thanh nav phải giữ chỗ 60px
         run: npm run check:navph
 
-      # `TuviForm.render` chạy NGAY trong lúc phân tích HTML — đó là thứ khiến form
-      # có mặt ở lần vẽ đầu. Một script bên thứ ba không `defer` đứng TRƯỚC nó thì
-      # chặn parse: vẽ lần đầu với #tuviFormHost rỗng, rồi form 237px nhét vào đẩy
-      # .frow xuống (đo: CLS 0,0315 → 0 khi chỉ thêm mỗi `defer`).
+      # `TuviForm.render` chạy NGAY trong lúc phân tích HTML, nhưng chỉ SAU khi
+      # `tuvi-form.js` nạp xong — mà trước nó là 17–524KB script CÙNG ORIGIN cũng
+      # chặn parse. Trên mạng chậm, lần vẽ đầu #tuviFormHost còn rỗng tới ~4s rồi
+      # form 237–305px nhét vào đẩy .frow xuống (prod: 0,0315 ở /app/bat-tu).
+      # Chỗ giữ dùng `:empty` nên TỰ NHẢ khi form vào, không để lại khoảng trắng.
+      - name: Form khai sinh phải có chỗ giữ
+        run: npm run check:formph
+
+      # Cùng vùng, nhưng là VỆ SINH TỐC ĐỘ chứ không phải bản vá CLS: script bên
+      # thứ ba không `defer` đứng trước lời dựng form thêm hẳn một chặng mạng vào
+      # đường tới hạn. (#708 từng ship `defer` như một bản vá CLS — prod không
+      # đổi một phần nghìn nào; xem docs/nhat-ky/2026-09.md vòng 9.)
       - name: Form sinh không bị script bên thứ ba chặn
         run: npm run check:formblock
 

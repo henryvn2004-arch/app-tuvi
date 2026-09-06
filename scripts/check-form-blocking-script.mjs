@@ -3,20 +3,23 @@
  * Trang có form sinh dựng bằng JS thì KHÔNG được có script bên thứ ba chặn
  * parse đứng trước lời gọi dựng form.
  *
- * 🔴 VÌ SAO. `TuviForm.render('tuviFormHost', …)` chạy ngay trong lúc phân tích
- * HTML — đó là điều khiến form CÓ MẶT ở lần vẽ đầu và không gây nhảy layout.
- * Một thẻ `<script src="https://…">` không `defer`/`async` đứng TRƯỚC nó thì
- * chặn parse: trình duyệt vẽ lần đầu với `#tuviFormHost` còn RỖNG, rồi mới nhét
- * form 237px vào ⇒ `.frow` bị đẩy xuống.
+ * 🔴 VÌ SAO — và ĐÂY KHÔNG PHẢI bản vá CLS. `TuviForm.render('tuviFormHost', …)`
+ * chạy ngay trong lúc phân tích HTML, nhưng chỉ SAU khi `tuvi-form.js` nạp xong.
+ * Một thẻ `<script src="https://…">` không `defer`/`async` đứng TRƯỚC nó thì cắm
+ * thêm hẳn một chặng mạng tới bên thứ ba vào đường tới hạn của form — đắt, và
+ * không đổi lấy gì. Bộ dò này canh đúng điều đó: TỐC ĐỘ.
  *
- * Đo cục bộ, chỉ đổi mỗi thuộc tính `defer` của thẻ chart.js:
- *   app-bat-tu            CLS 0,0315 → 0
- *   app-chu-trinh-cuoc-doi     0,0238 → 0
- *   app-van-han-nam            0,0221 → 0
+ * ⚠️ SỬA MỘT GHI CHÉP SAI. Bản đầu của file này khai `defer` chữa được cú nhảy
+ * `.frow`, kèm số "0,0315 → 0". Sai. Ship ở #708 rồi đo prod: `/app/bat-tu`
+ * 0,0335 trước và sau, CÙNG node CÙNG rect. Con số cục bộ đó lớn vì container
+ * chặn hẳn CDN (~12,5s timeout) chứ không phải vì `defer` — đúng loại "mốc thời
+ * gian cục bộ là ảo" mà chính tôi đã ghi vào `docs/luat/bay.md` rồi vẫn tin.
+ * Nguyên nhân thật là dãy script CÙNG ORIGIN (17–524KB) đứng trước
+ * `tuvi-form.js`; bản vá thật là chỗ giữ `#tuviFormHost:empty`
+ * (`scripts/check-form-placeholder.mjs`). Xem `docs/nhat-ky/2026-09.md` vòng 9.
  *
- * ⚠️ CỐ Ý chỉ soi trang CÓ `TuviForm.render`. Script chặn parse trên trang nội
- * dung TĨNH cũng làm chậm, nhưng KHÔNG gây nhảy (đo 7 trang chart.js khác: CLS 0
- * cả khi có lẫn không có `defer`) — đòi `defer` ở đó là bộ dò kêu oan.
+ * ⚠️ CỐ Ý chỉ soi trang CÓ `TuviForm.render` — trang tĩnh không có gì để chờ nên
+ * đòi `defer` ở đó là bộ dò kêu oan.
  *
  * 🪤 Đừng "sửa" bằng cách gỡ thư viện: `Chart` CÓ được dùng thật, trong
  * `bat-tu-core.js` và `luan-giai-core.js`. Chúng chỉ dùng nó bên trong hàm và
@@ -67,7 +70,7 @@ for (const p of files) {
     const url = (m[0].match(/src="([^"]+)"/) || [])[1];
     fail(
       `${rel}: script bên thứ ba CHẶN parse đứng trước lời dựng form — ${url}\n` +
-        `   ⇒ lần vẽ đầu #tuviFormHost còn rỗng, form 237px nhét vào sau đẩy .frow xuống.\n` +
+        `   ⇒ form phải chờ thêm một chặng mạng tới bên thứ ba mới dựng được.\n` +
         `   Thêm \`defer\` (đừng gỡ thư viện — Chart có được dùng thật, chỉ dùng muộn).`
     );
   }
