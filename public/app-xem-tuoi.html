@@ -47,6 +47,7 @@
 .sec-h h3{font-family:var(--serif);font-size:18px;font-weight:600}
 .card{background:var(--white);border:1px solid var(--line);border-radius:11px;padding:6px 17px;box-shadow:var(--shadow)}
 .compat-radar{padding:14px 0 4px;border-bottom:1px solid var(--line)}
+.cr-tai{margin-top:10px;text-align:center}
 .cr-cap{margin-top:6px;font-size:11.5px;line-height:1.5;color:var(--text-lt);text-align:center}
 .fac{padding:13px 0;border-bottom:1px solid var(--line)}
 .fac:last-child{border-bottom:none}
@@ -155,6 +156,7 @@
 <script src="/tuvi-ansao-engine.js"></script>
 <script src="/tuong-hop.js?v=1"></script>
 <script src="/tools-shared/hook-charts.js?v=2"></script>
+<script src="/poster.js?v=5"></script>
 <script src="/tools-shared/vn-timezone.js?v=1"></script>
 <script src="/tuvi-form.js?v=2"></script>
 <script src="/auth.js?v=2"></script>
@@ -298,6 +300,42 @@ function doCompat(){
 // ⚠️ Vành vẽ ĐIỂM THÔ 0-10, CHƯA nhân trọng số. Trọng số (×10%…×20%) chỉ góp
 // vào tổng /100 và vẫn hiện nguyên ở từng thanh — caption phải nói ra, nếu
 // không hình ngầm bảo "8 chiều nặng ngang nhau" và cãi lại chính các thanh.
+// Xuất PNG 9:16 — đưa THẲNG chuỗi <svg> vành đang hiện cho Poster (chế độ
+// `svg`), không vẽ lại bằng canvas: một nguồn bố cục, hai đầu ra. 0đ, không
+// gọi model, không đụng cầu dao ảnh free.
+//
+// Đặt nút NGAY DƯỚI vành chứ không cạnh CTA "Rủ … xem ngay" ở đầu trang: hai
+// nút cùng nói chuyện chia sẻ mà đứng cạnh nhau thì tranh nhau, và cái đáng
+// chụp là VÀNH chứ không phải con số tổng.
+//
+// `_compatResult` do `renderCompat` đặt — nếu chưa có thì chưa tính xong.
+function taiAnhVanh(){
+  var host=document.getElementById('compatVanh'), btn=document.getElementById('crTaiBtn');
+  if(!host||!host.innerHTML||!window.Poster||!_vanhInfo)return;
+  var r=_vanhInfo;
+  var old=btn.textContent; btn.disabled=true; btn.textContent='Đang dựng ảnh…';
+  var T=(Poster.THEME)||{};
+  var items=(r.items||[]).filter(function(m){return typeof m.score==='number';});
+  var cao=items.slice().sort(function(a,b){return b.score-a.score;})[0];
+  var thap=items.slice().sort(function(a,b){return a.score-b.score;})[0];
+  Poster.download({
+    svg:host.innerHTML,
+    title:MODE.title,
+    subtitle:(r.nameA||'A')+' × '+(r.nameB||'B')+' — '+r.total+'/100',
+    // Nêu chiều CAO nhất và THẤP nhất: đó là hai thứ người xem ảnh hỏi ngay,
+    // mà vành thì cho thấy dáng chứ không gọi tên trục.
+    quote:cao&&thap?('Mạnh nhất: '+cao.label+' ('+cao.score+'/10) · Yếu nhất: '+thap.label+' ('+thap.score+'/10)'):'',
+    qrUrl:Poster.qrLink(MODE.active,'/app/'+MODE.active),
+    qrCaption:'Quét mã — so tuổi của bạn',
+    fonts:['700 40px '+(T.SERIF||'serif'),'600 23px '+(T.SANS||'sans-serif')]
+  },MODE.active+'-tuviminhbao.png')
+   .then(function(){ if(window.Track)Track.event('poster_download',{tool_id:MODE.active}); })
+   .catch(function(){ alert('Chưa dựng được ảnh. Thử lại sau ít giây.'); })
+   .then(function(){ btn.disabled=false; btn.textContent=old; });
+}
+
+var _vanhInfo=null;
+
 function compatRadarHtml(r){
   if(typeof HookCharts==='undefined') return '';
   var dims=r.items.filter(function(m){return typeof m.score==='number';})
@@ -305,9 +343,12 @@ function compatRadarHtml(r){
   if(dims.length<3) return '';
   var svg=HookCharts.hexRadar({dims:dims,max:10,size:280,ariaLabel:'Vành '+dims.length+' chiều tương hợp'});
   if(!svg) return '';
-  return '<div class="compat-radar">'+svg+
+  _vanhInfo=r;
+  return '<div class="compat-radar"><div id="compatVanh">'+svg+'</div>'+
     '<div class="cr-cap">'+dims.length+' chiều cùng thang 0–10. Trọng số góp vào tổng '+
-    r.total+'/100 nằm ở từng thanh bên dưới.</div></div>';
+    r.total+'/100 nằm ở từng thanh bên dưới.</div>'+
+    '<div class="cr-tai"><button type="button" class="btn" id="crTaiBtn" ' +
+    'onclick="taiAnhVanh()">⬇ Tải ảnh chia sẻ (9:16)</button></div></div>';
 }
 
 function renderCompat(r,nameA,nameB,fdA,fdB){
