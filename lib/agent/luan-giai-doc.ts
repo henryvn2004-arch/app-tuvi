@@ -139,95 +139,6 @@ export const CUNG_DESC: Record<string, string> = {
 
 // ─── Prompt builder ────────────────────────────────────────────
 /**
- * Cắt lá số theo phần đang luận. Hoisted ra module scope để
- * `laSoContextFor` dùng lại — trước đây nó nằm lồng trong `buildPrompt`.
- */
-function trimLaSo(text: string, phan: number): string {
-  if (!text) return text;
-  const lines = text.split('\n');
-  // Dò theo TIỀN TỐ, không đòi khớp cả dòng: mốc từng bị nối thêm ghi chú
-  // (" (lịch trình THỜI GIAN…)") làm `includes('=== 9 ĐẠI VẬN ===')` trả -1,
-  // bộ cắt câm và cả lá số 22K ký tự đi thẳng vào prompt phần 14–24.
-  const findMark = (m: string) => lines.findIndex(l => l.trimStart().startsWith(m));
-  const dvIdx   = findMark('=== 9 ĐẠI VẬN');
-  const ccIdx   = findMark('=== CÁCH CỤC & NHẬN ĐỊNH');
-  const cungIdx = findMark('=== 12 CUNG');
-  // KHÔNG im lặng khi hụt mốc: `findIndex` trả -1 là giá trị hợp lệ nên lỗi
-  // này không ném, không log, chỉ làm bản luận nhạt đi — mất 2 tháng mới lộ.
-  if (dvIdx < 0 || ccIdx < 0 || cungIdx < 0) {
-    console.error(
-      `[lasotuvi] laSoText THIẾU MỐC SECTION (phần ${phan}): ` +
-      `daiVan=${dvIdx} cachCuc=${ccIdx} cung=${cungIdx}. ` +
-      `Bộ cắt sẽ trả nguyên lá số → prompt bị pha loãng. ` +
-      `Kiểm public/tuvi-laso-format.js (MARKERS) + scripts/check-laso-markers.mjs.`,
-    );
-  }
-  const headerLines = cungIdx > 0 ? lines.slice(0, cungIdx) : lines.slice(0, 8);
-  // Khối cách cục đặc biệt (Sát Phá Tham, Quân thần khánh hội...) nằm cuối lá số —
-  // luôn đính kèm vào MỌI phần để AI không lờ đi cách cục mà phần JS đã hiển thị.
-  const ccBlock = ccIdx > 0 ? '\n\n' + lines.slice(ccIdx).join('\n') : '';
-
-  if (phan <= 2) {
-    const end = dvIdx > 0 ? dvIdx : (ccIdx > 0 ? ccIdx : lines.length);
-    return lines.slice(0, end).join('\n') + ccBlock;
-  }
-  if (phan >= 3 && phan <= 13) {
-    const CUNG_NAME = ['','','Mệnh','Phụ Mẫu','Phúc Đức','Điền Trạch','Quan Lộc',
-      'Nô Bộc','Thiên Di','Tật Ách','Tài Bạch','Tử Tức','Phu Thê','Huynh Đệ'][phan];
-    const result = [...headerLines, ''];
-    const cutEnd = dvIdx > 0 ? dvIdx : (ccIdx > 0 ? ccIdx : lines.length);
-    const cungLines = lines.slice(cungIdx > 0 ? cungIdx : 0, cutEnd);
-    const startI = cungLines.findIndex(l => l.startsWith(`[${CUNG_NAME}]`));
-    if (startI >= 0) {
-      const endI = cungLines.findIndex((l, i) => i > startI && l.startsWith('[') && !l.startsWith('[CÁCH') && !l.startsWith('[Ý') && !l.startsWith('[LUẬN'));
-      // Cung ĐỨNG CUỐI không có mốc kết thúc → lấy tới hết khối 12 CUNG, KHÔNG
-      // lấy mù 30 dòng: hồi mốc đại vận hỏng, `cungLines` chạy tới tận cách cục
-      // nên 30 dòng đó nuốt luôn đầu khối đại vận (đo được: cung Thiên Di dính).
-      const block = endI > 0 ? cungLines.slice(startI, endI) : cungLines.slice(startI);
-      return result.concat(block).join('\n') + ccBlock;
-    }
-    return lines.slice(0, cutEnd).join('\n') + ccBlock;
-  }
-  if (phan === 14 || phan === 24) {
-    if (dvIdx > 0) {
-      const dvEnd = ccIdx > dvIdx ? ccIdx : lines.length;
-      return headerLines.join('\n') + '\n' + lines.slice(dvIdx, dvEnd).join('\n') + ccBlock;
-    }
-  }
-  if (phan >= 15 && phan <= 23) {
-    const dvNum = phan - 14;
-    if (dvIdx > 0) {
-      const dvEnd = ccIdx > dvIdx ? ccIdx : lines.length;
-      const dvLines = lines.slice(dvIdx, dvEnd);
-      const target = 'ĐV' + dvNum + ':';
-      const startI = dvLines.findIndex(l => l.startsWith(target));
-      if (startI >= 0) {
-        const endI = dvLines.findIndex((l, i) => i > startI && /^ĐV\d+:/.test(l));
-        const dvBlock = endI > 0 ? dvLines.slice(startI, endI) : dvLines.slice(startI, startI + 25);
-        return headerLines.join('\n') + '\n\n' + dvBlock.join('\n') + ccBlock;
-      }
-    }
-  }
-  return text;
-}
-
-/**
- * Phần "=== LÁ SỐ ===" mà `buildPrompt(phan)` đặt trước câu lệnh luận — tức
- * ĐÚNG lát lá số hợp với phần đó (phần 24 lấy đầu lá số + khối 9 đại vận +
- * cách cục).
- *
- * ⚠️ KHÔNG còn chỗ gọi nào (2026-08-23) — tool "Vận Hạn 12 Tháng Tới" đã
- * chuyển sang `laSoContextFull` (gửi toàn văn, không cắt) sau khi đo thấy phần
- * tiết kiệm token của `trimLaSo(24)` nhỏ mà đổi lại mất khả năng đối chiếu
- * Mệnh/11 cung còn lại. GIỮ hàm này (không xoá) làm đường lùi có sẵn nếu sau
- * này cần trim lại theo `phan` — `buildPrompt` (dùng chung `trimLaSo`) cũng
- * đang ở tình trạng tương tự, xem chú thích tại đó.
- */
-export function laSoContextFor(phan: number, laSoText: string): string {
-  return '=== LÁ SỐ ===\n' + trimLaSo(laSoText, phan);
-}
-
-/**
  * Bản KHÔNG CẮT của `laSoContextFor` — gửi TOÀN VĂN lá số thay vì trimLaSo.
  *
  * 🔑 Đo thật trên lá số mẫu (2026-08-23, Henry hỏi lại "trim còn thiếu dữ liệu
@@ -378,22 +289,6 @@ lại đại hạn xấu thì cái tốt của tiểu hạn cũng giảm bớt �
 Không giải thích lý thuyết. Đi thẳng vào tác động với người này.`;
 
   return `\nPhần ${phan}: Luận giải theo lá số.`;
-}
-
-/**
- * Preamble "=== LÁ SỐ ===" (đã cắt theo `phan`) + tài liệu tham khảo. ĐÂY là
- * phần đổi CHỮ theo từng `phan` (mỗi phan một lát cắt lá số khác nhau) — vì
- * thế KHÔNG dùng được làm breakpoint cache của `buildPromptCached` (breakpoint
- * cache đòi prefix giống hệt byte-for-byte giữa các lượt gọi).
- */
-function promptCtx(phan: number, laSoText: string, docs?: string): string {
-  const trimmedLaSo = trimLaSo(laSoText, phan);
-  const docsSection = docs ? '\n\n=== TÀI LIỆU THAM KHẢO ===\n' + docs : '';
-  return '=== LÁ SỐ ===\n' + trimmedLaSo + docsSection;
-}
-
-export function buildPrompt(phan: number, laSoText: string, docs?: string): string {
-  return promptCtx(phan, laSoText, docs) + instructionFor(phan);
 }
 
 /**
