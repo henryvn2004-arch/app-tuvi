@@ -7,7 +7,7 @@
   var DATA = {
 
     default: [
-      { stars: 5, text: '"Đọc phần đại vận xong tôi ngồi im một lúc. Đúng y chang những gì đã xảy ra 3 năm nay, kể cả mấy chuyện tưởng không liên quan. Chưa thấy AI nào viết tử vi mà không bị chung chung như vậy."', name: 'Nguyễn T.H.', city: 'Hà Nội', date: 'Tháng 2, 2026' },
+      { stars: 5, text: '"Đọc phần đại vận xong tôi ngồi im một lúc. Đúng y chang những gì đã xảy ra 3 năm nay, kể cả mấy chuyện tưởng không liên quan. Chưa thấy nơi nào viết tử vi mà không bị chung chung như vậy."', name: 'Nguyễn T.H.', city: 'Hà Nội', date: 'Tháng 2, 2026' },
       { stars: 5, text: '"Năm nay tiểu vận nó nói cung Tài Bạch có biến động, cần cẩn thận cuối quý 2. Tôi suýt đầu tư một khoản lớn đúng lúc đó — may đọc xong dừng lại. Tháng sau thị trường rớt thật."', name: 'Trần M.K.', city: 'TP.HCM', date: 'Tháng 1, 2026' },
       { stars: 5, text: '"Cái hay là nó tách từng giai đoạn 10 năm rõ ràng, không gộp chung một đống. Đại vận tôi đang chạy mà nó mô tả tính chất vượng suy — đúng với thực tế đến mức hơi rùng mình."', name: 'Lê Q.B.', city: 'Đà Nẵng', date: 'Tháng 3, 2026' },
       { stars: 5, text: '"Tôi hay xem với một thầy tử vi quen, lần này thử Tử Vi Minh Bảo xem sao. Xu hướng đại vận hai bên ra gần giống nhau. Phần tiểu vận còn chi tiết hơn, nhất là phần sự nghiệp theo từng năm."', name: 'Phạm H.A.', city: 'Hải Phòng', date: 'Tháng 3, 2026' },
@@ -38,7 +38,7 @@
       { stars: 5, text: '"Tôi xem cho cả nhóm bạn, mỗi người một tấm ảnh. Kết quả ra hoàn toàn khác nhau và đúng với từng người. Phần sự nghiệp và tài lộc theo tướng mặt — nhiều cái khớp với thực tế."', name: 'Trần P.K.', city: 'Hà Nội', date: 'Tháng 2, 2026' },
       { stars: 5, text: '"Phân tích mắt và lông mày — mô tả đúng kiểu tôi ra quyết định và cách xử lý cảm xúc. Không phải kiểu viết chung chung ai cũng vào được."', name: 'Lê M.A.', city: 'Đà Nẵng', date: 'Tháng 1, 2026' },
       { stars: 5, text: '"Phần xem tướng miệng và cằm mô tả đúng tính cách người thân tôi đang muốn hiểu hơn. Đọc xong biết cách tiếp cận khác đi trong các cuộc trò chuyện khó."', name: 'Phạm T.L.', city: 'Cần Thơ', date: 'Tháng 3, 2026' },
-      { stars: 5, text: '"Tôi hay xem tướng mặt theo sách, lần này thử công cụ AI xem sao. Phân tích chuẩn theo Ma Y Thần Tướng, không pha tạp kiểu Tây. Phần luận giải cũng mạch lạc."', name: 'Võ Q.B.', city: 'TP.HCM', date: 'Tháng 2, 2026' },
+      { stars: 5, text: '"Tôi hay xem tướng mặt theo sách, lần này thử công cụ trên mạng xem sao. Phân tích chuẩn theo Ma Y Thần Tướng, không pha tạp kiểu Tây. Phần luận giải cũng mạch lạc."', name: 'Võ Q.B.', city: 'TP.HCM', date: 'Tháng 2, 2026' },
       { stars: 4, text: '"Xem tướng tay thêm vào nữa thì hoàn hảo. Riêng phần mặt thì rất tốt — chi tiết, có nguồn gốc cổ pháp rõ ràng, không kiểu viết đại."', name: 'Đinh H.T.', city: 'Hà Nội', date: 'Tháng 1, 2026' },
     ],
 

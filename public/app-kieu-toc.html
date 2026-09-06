@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Kiểu Tóc & Kính Mắt Hợp Tướng Mặt — Tử Vi Minh Bảo</title>
-<meta name="description" content="Chụp ảnh khuôn mặt — AI phân tích hình dạng và gợi ý kiểu tóc phù hợp theo nhân tướng học. Thử kiểu tóc ngay trên ảnh bằng Replicate AI.">
+<meta name="description" content="Chụp ảnh khuôn mặt — hệ thống phân tích hình dạng và gợi ý kiểu tóc phù hợp theo nhân tướng học. Thử kiểu tóc ngay trên ảnh.">
 <link rel="icon" type="image/webp" href="/seal.webp">
 <link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
@@ -86,7 +86,7 @@
   <main class="ws" id="ws">
     <div class="ws-top">
       <button class="btn mobile-only" onclick="document.getElementById('shell-sidebar').classList.toggle('open');window.shellSyncBackdrop&&shellSyncBackdrop()" aria-label="Menu">☰</button>
-      <div class="ws-title"><b>Kiểu Tóc &amp; Kính Mắt Hợp Tướng Mặt</b><span>AI phân tích hình dạng khuôn mặt, gợi ý kiểu tóc + thử ngay trên ảnh</span></div>
+      <div class="ws-title"><b>Kiểu Tóc &amp; Kính Mắt Hợp Tướng Mặt</b><span>Hệ thống phân tích hình dạng khuôn mặt, gợi ý kiểu tóc + thử ngay trên ảnh</span></div>
       <div class="ws-actions">
         <button class="btn mobile-only" onclick="Shell.openRail()">✦ Hỏi</button>
       </div>
@@ -124,7 +124,7 @@
 
         <div class="privacy-notice">
           <span class="ic" data-icon="lock"></span>
-          <div><strong>Quyền riêng tư:</strong> Ảnh chỉ gửi đến AI để phân tích, không lưu trên server của chúng tôi. Replicate xử lý và trả về ảnh kết quả, không lưu trữ lâu dài.</div>
+          <div><strong>Quyền riêng tư:</strong> Ảnh chỉ gửi đến máy chủ để phân tích, không lưu trên server của chúng tôi. Replicate xử lý và trả về ảnh kết quả, không lưu trữ lâu dài.</div>
         </div>
 
         <div class="input-tabs" style="margin-top:20px">
@@ -376,11 +376,11 @@ let _tryonImgUrl = null;
 let _selectedStyleId = null;
 const ANALYSIS_STEPS = [
   { label: 'Đo khuôn mặt bằng MediaPipe', ms: 1000 },
-  { label: 'AI phân tích hình dạng khuôn mặt', ms: 0 },
+  { label: 'Phân tích hình dạng khuôn mặt', ms: 0 },
 ];
 const TRYON_STEPS = [
   { label: 'Chuẩn bị ảnh & prompt', ms: 1200 },
-  { label: 'AI đang tạo ảnh kiểu tóc mới', ms: 0 },
+  { label: 'Đang tạo ảnh kiểu tóc mới', ms: 0 },
 ];
 let _analysisLoadingCtl = null;
 let _tryonLoadingCtl = null;
@@ -469,7 +469,7 @@ function mountHook(m) {
     facts: [{
       tone: 'neutral',
       title: 'Tỷ lệ rộng/cao khuôn mặt: ' + r + ' — xu hướng ' + shape,
-      body: 'Đo trực tiếp từ ảnh bằng MediaPipe. Danh sách kiểu tóc & kính mắt xếp hạng theo khuôn mặt của bạn nằm trong bản phân tích AI.',
+      body: 'Đo trực tiếp từ ảnh bằng MediaPipe. Danh sách kiểu tóc & kính mắt xếp hạng theo khuôn mặt của bạn nằm trong bản phân tích chuyên sâu.',
       source: 'engine · MediaPipe FaceMesh',
     }],
   });
@@ -794,7 +794,7 @@ async function _doTryOn(styleId, meta, type = 'hair') {
     document.getElementById('tryonResult').style.display = 'block';
     _saveTryonReading(styleId, data.imageUrl);
     Shell.setShareable({
-      kind: 'image', title: 'Kiểu tóc mới của tôi (AI try-on)',
+      kind: 'image', title: 'Kiểu tóc mới của tôi (thử ảo)',
       imageUrl: data.imageUrl, text: 'Thử kiểu tóc: ' + (meta?.name || styleId)
     });
   } catch(e) {

@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Phong Thủy Nội Thất — Tử Vi Minh Bảo</title>
-<meta name="description" content="Chụp ảnh phòng, AI phân tích phong thủy Bát Trạch — điểm trước/sau, sơ đồ bố trí, đề xuất và render phòng bằng AI.">
+<meta name="description" content="Chụp ảnh phòng, hệ thống phân tích phong thủy Bát Trạch — điểm trước/sau, sơ đồ bố trí, đề xuất và render phòng.">
 <link rel="icon" type="image/webp" href="/seal.webp">
 <link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
@@ -117,7 +117,7 @@
   <main class="ws" id="ws">
     <div class="ws-top">
       <button class="btn mobile-only" onclick="document.getElementById('shell-sidebar').classList.toggle('open');window.shellSyncBackdrop&&shellSyncBackdrop()" aria-label="Menu">☰</button>
-      <div class="ws-title"><b>Phong Thủy Nội Thất</b><span>Chụp ảnh phòng — AI chấm điểm Bát Trạch, đề xuất bố trí</span></div>
+      <div class="ws-title"><b>Phong Thủy Nội Thất</b><span>Chụp ảnh phòng — hệ thống chấm điểm Bát Trạch, đề xuất bố trí</span></div>
       <div class="ws-actions">
         <button class="btn mobile-only" onclick="Shell.openRail()">✦ Hỏi</button>
       </div>
@@ -254,10 +254,10 @@
         </div>
 
         <div class="pt-card" id="renderCard" style="display:none">
-          <h2><span class="ic" data-icon="home"></span> Render Phòng Phong Thủy Bằng AI
+          <h2><span class="ic" data-icon="home"></span> Render Phòng Phong Thủy
             <span style="font-size:10px;background:var(--gold-lt);color:var(--tx-blue);padding:2px 8px;border-radius:10px;font-weight:600"><span data-tvp-price="phong-thuy-render">…</span> Lượng</span>
           </h2>
-          <p class="sub">AI sẽ render lại ảnh phòng của bạn theo màu sắc ngũ hành và bố trí phong thủy tối ưu.</p>
+          <p class="sub">Hệ thống sẽ render lại ảnh phòng của bạn theo màu sắc ngũ hành và bố trí phong thủy tối ưu.</p>
 
           <div id="renderIdle">
             <button class="render-btn" id="btnRender" onclick="doRoomRender()"><span class="ic" data-icon="sparkles"></span> Render Phòng Theo Phong Thủy</button>
@@ -270,7 +270,7 @@
           <div id="renderResult" style="display:none">
             <div class="render-ba">
               <div class="render-ba-col"><div class="render-ba-label">Ảnh gốc</div><img id="renderBefore" class="render-ba-img" src="" alt="Trước"></div>
-              <div class="render-ba-col"><div class="render-ba-label">Sau phong thủy AI</div><img id="renderAfter" class="render-ba-img" src="" alt="Sau"></div>
+              <div class="render-ba-col"><div class="render-ba-label">Sau phong thủy</div><img id="renderAfter" class="render-ba-img" src="" alt="Sau"></div>
             </div>
             <div style="display:flex;gap:8px">
               <button onclick="downloadRender()" style="flex:1;padding:10px;background:var(--green);color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit">⬇ Tải Ảnh</button>
@@ -336,12 +336,12 @@ function getFIcon(id){return '<span class="ic" data-icon="'+(ITEM_ICON[id]||'pac
 
 let _gua=null,_img64=null,_imgType='image/jpeg';
 const ANALYSIS_STEPS=[
-  {label:'AI nhận diện đồ vật trong ảnh',ms:6000},
-  {label:'AI phân tích Bát Trạch & đưa đề xuất',ms:0},
+  {label:'Nhận diện đồ vật trong ảnh',ms:6000},
+  {label:'Phân tích Bát Trạch & đưa đề xuất',ms:0},
 ];
 const RENDER_STEPS=[
   {label:'Chuẩn bị prompt render theo ngũ hành',ms:1200},
-  {label:'AI đang render lại phòng',ms:0},
+  {label:'Đang render lại phòng',ms:0},
 ];
 let _analysisLoadingCtl=null;
 let _renderLoadingCtl=null;
@@ -472,7 +472,7 @@ function renderResults(data){
     greeting:'Điểm phong thủy hiện tại: **'+before+'/100**, sau điều chỉnh có thể lên **'+after+'/100**. Bạn muốn hỏi thêm về đề xuất nào?',
     chips:['Vì sao điểm hiện tại thấp?','Ưu tiên làm gì trước?','Vật phẩm nào nên mua trước?']
   });
-  // Chia sẻ (chưa có ảnh AI render lúc này — CHỈ text điểm+lời khuyên; KHÔNG
+  // Chia sẻ (chưa có ảnh hệ thống render lúc này — CHỈ text điểm+lời khuyên; KHÔNG
   // dùng ảnh phòng thật của user vì lý do riêng tư). Nâng cấp lên kind='image'
   // khi _doRenderCall() xong (ảnh AI "sau phong thủy", không phải ảnh thật).
   _ptBefore=before; _ptAfter=after; _ptAdvice=analysis.generalAdvice||'';
@@ -543,7 +543,7 @@ async function _doRenderCall() {
     Shell.setShareable({
       kind: 'image',
       toolId: 'phong-thuy',
-      title: 'Phòng của tôi sau khi Phong Thủy hóa bằng AI',
+      title: 'Phòng của tôi sau khi Phong Thủy hóa',
       imageUrl: data.imageUrl,
       text: (_ptBefore != null ? 'Điểm phong thủy hiện tại: ' + _ptBefore + '/100' + (_ptAfter > _ptBefore ? ' — sau điều chỉnh có thể lên ' + _ptAfter + '/100' : '') : '') + (_ptAdvice ? '\n\n' + _ptAdvice : ''),
     });

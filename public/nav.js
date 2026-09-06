@@ -421,7 +421,7 @@
     + '<a class="nav-logo" href="/"><img src="/seal.webp" alt="">'
     + '<div><div class="name">Tử Vi Minh Bảo</div><div class="url">Tri mệnh lý – Thuận thế hành</div></div></a>'
     + '<div class="nav-links" id="nav-links">'
-    + '<a class="nav-link nav-cta-ld' + (isActive('/app')?' active':'') + '" href="/app" title="Lập lá số và hỏi trợ lý AI — vào đây để dùng công cụ">✦ Luận Đường</a>'
+    + '<a class="nav-link nav-cta-ld' + (isActive('/app')?' active':'') + '" href="/app" title="Lập lá số và hỏi trợ lý Luận Đường — vào đây để dùng công cụ">✦ Luận Đường</a>'
     + dd_kp
     + dd_cn
     + '</div>'
@@ -505,7 +505,7 @@
 
   function injectFooter() {
     var f = '<footer class="site-footer"><div class="ft-body"><div class="ft-top">'
-      + '<div class="ft-brand"><div class="ft-brand-row"><img src="/seal.webp" alt=""><div><div class="ft-brand-name">Tử Vi Minh Bảo</div><div class="ft-brand-zh">Tri mệnh lý – Thuận thế hành</div></div></div><div class="ft-tagline">Tử vi đẩu số theo cổ pháp, luận giải bằng AI.</div>'
+      + '<div class="ft-brand"><div class="ft-brand-row"><img src="/seal.webp" alt=""><div><div class="ft-brand-name">Tử Vi Minh Bảo</div><div class="ft-brand-zh">Tri mệnh lý – Thuận thế hành</div></div></div><div class="ft-tagline">Tử vi đẩu số theo cổ pháp, luận giải chuyên sâu.</div>'
       // Mã số doanh nghiệp CHƯA có trong hồ sơ được cung cấp — KHÔNG bịa số.
       // Bổ sung dòng "MST: ..." ngay khi có, theo Nghị định 52/2013.
       + '<div class="ft-legal"><div class="ft-legal-name"><strong>Công ty TNHH Kira Tech</strong><br>(Kira Tech Company Limited)</div>'

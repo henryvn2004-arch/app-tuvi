@@ -115,7 +115,7 @@ export async function GET(req: NextRequest, ctx: { params: Promise<{ id: string 
   const firstBlockImage = hasBlocks ? (row.blocks as ShareBlock[]).find((b) => b.image)?.image || '' : '';
   const teaserSrc = firstBlockText || row.text_content || '';
   const teaser = teaserSrc.replace(/[*#\n]/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 180)
-    || (isImage || firstBlockImage ? 'Xem kết quả AI luận từ lá số Tử Vi — Tử Vi Minh Bảo.' : '');
+    || (isImage || firstBlockImage ? 'Xem kết quả trả về luận từ lá số Tử Vi — Tử Vi Minh Bảo.' : '');
   const desc = esc(teaser || 'Luận giải Tử Vi bởi Tử Vi Minh Bảo.');
 
   // OG image: ưu tiên ảnh THẬT (block đầu có ảnh, hoặc image_url phẳng) — dùng
@@ -294,7 +294,7 @@ body{font-family:var(--sans);background:var(--paper2);color:var(--text);line-hei
     </div>
   </div>
   <div class="foot"><a href="${SITE}/thu-vien">Xem thêm bản luận khác →</a><br>
-    © 2026 Tử Vi Minh Bảo · <a href="${SITE}/app">tuviminhbao.com</a> — Lá số được lập bằng engine cổ pháp; phần luận giải do AI thực hiện trên chính dữ liệu đó.</div>
+    © 2026 Tử Vi Minh Bảo · <a href="${SITE}/app">tuviminhbao.com</a> — Lá số được lập bằng engine cổ pháp; phần luận giải do hệ thống thực hiện trên chính dữ liệu đó.</div>
 </div>
 ${GA4_TRACK_SNIPPET}
 <script>

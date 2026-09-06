@@ -1,7 +1,7 @@
 {
   "name": "Tử Vi Minh Bảo",
   "short_name": "Tử Vi MB",
-  "description": "Cổng mệnh lý AI · Tử vi · Tử bình · Tướng số · Phong thủy theo cổ pháp",
+  "description": "Cổng mệnh lý · Tử vi · Tử bình · Tướng số · Phong thủy theo cổ pháp",
   "start_url": "/?utm_source=pwa",
   "display": "standalone",
   "background_color": "#061A2E",

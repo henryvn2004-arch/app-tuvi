@@ -75,10 +75,10 @@ async function liveStats(): Promise<Stat[]> {
 }
 
 const BOILERPLATE_NGAN =
-  'Tử Vi Minh Bảo (tuviminhbao.com) là cổng mệnh lý trực tuyến tiếng Việt: lá số được lập bằng engine tất định theo cổ pháp, AI chỉ luận giải trên số liệu đã tính chứ không tự sinh dữ liệu.';
+  'Tử Vi Minh Bảo (tuviminhbao.com) là cổng mệnh lý trực tuyến tiếng Việt: lá số được lập bằng engine tất định theo cổ pháp, phần luận chỉ diễn giải trên số liệu đã tính chứ không tự sinh dữ liệu.';
 
 const BOILERPLATE_DAI =
-  'Tử Vi Minh Bảo (tuviminhbao.com) là cổng mệnh lý trực tuyến tiếng Việt, gộp Tử Vi Đẩu Số, Tử Bình, tướng số và phong thuỷ vào một chỗ. Điểm khác biệt kỹ thuật nằm ở ranh giới giữa máy tính và AI: toàn bộ phần AN SAO — vị trí 12 cung, chính tinh, phụ tinh, tứ hoá, đại vận, tiểu hạn — do một engine tất định tính ra theo đúng cổ pháp, cho cùng một đầu vào luôn ra cùng một kết quả. AI chỉ được LUẬN GIẢI trên bộ số đã tính đó, và bị cấm tự bịa thêm sao hay cách cục nào. Nhờ tách bạch như vậy, mọi con số trên trang đều kiểm chứng lại được bằng tay theo sách.';
+  'Tử Vi Minh Bảo (tuviminhbao.com) là cổng mệnh lý trực tuyến tiếng Việt, gộp Tử Vi Đẩu Số, Tử Bình, tướng số và phong thuỷ vào một chỗ. Điểm khác biệt kỹ thuật nằm ở ranh giới giữa phần TÍNH và phần LUẬN: toàn bộ phần AN SAO — vị trí 12 cung, chính tinh, phụ tinh, tứ hoá, đại vận, tiểu hạn — do một engine tất định tính ra theo đúng cổ pháp, cho cùng một đầu vào luôn ra cùng một kết quả. Phần luận chỉ được DIỄN GIẢI trên bộ số đã tính đó, và bị cấm tự bịa thêm sao hay cách cục nào. Nhờ tách bạch như vậy, mọi con số trên trang đều kiểm chứng lại được bằng tay theo sách.';
 
 export async function GET() {
   const [org, stats] = await Promise.all([orgNode({ standalone: true }), liveStats()]);
@@ -189,8 +189,8 @@ ul{margin:0 0 12px 20px;color:var(--text-mid)}li{margin-bottom:6px}
 
   <section>
     <h2>Câu chuyện kỹ thuật</h2>
-    <h3>Ranh giới giữa engine và AI</h3>
-    <p>Phần lớn ứng dụng bói toán dùng AI viết thẳng ra lời phán. Ở đây thì ngược lại: một engine tất định lo toàn bộ phần <b>an sao</b> theo cổ pháp, còn AI chỉ được <b>luận giải</b> trên bộ số đã tính. Cùng một ngày sinh luôn ra cùng một lá số, và người biết xem tử vi có thể lấy sách ra đối chiếu từng cung.</p>
+    <h3>Ranh giới giữa phần tính và phần luận</h3>
+    <p>Phần lớn ứng dụng bói toán để máy viết thẳng ra lời phán. Ở đây thì ngược lại: một engine tất định lo toàn bộ phần <b>an sao</b> theo cổ pháp, phần diễn giải chỉ được <b>luận</b> trên bộ số đã tính. Cùng một ngày sinh luôn ra cùng một lá số, và người biết xem tử vi có thể lấy sách ra đối chiếu từng cung.</p>
     <h3>Một lỗi công thức tự phát hiện — và vì sao nó đáng kể</h3>
     <p>Tháng 8/2026, khi rà lại công thức <b>Kim Lâu</b> (phép xem tuổi làm nhà, cưới hỏi), chúng tôi phát hiện bản đang chạy dùng chu kỳ 5 thay vì chu kỳ 9 theo cổ pháp. Đo lại trên dải tuổi 18–80: <b>46% số tuổi ra kết quả khác</b> — trong đó 16 tuổi trước đó bị báo là "bình thường" trong khi thực tế phạm Kim Lâu. Lỗi đã sửa, và cách sửa được ghi công khai trong nhật ký kỹ thuật của dự án.</p>
     <p>Chi tiết đó đáng kể vì nó là thứ một sản phẩm bói toán thường không tự nói ra: ở đây công thức <b>kiểm chứng được</b>, nên sai thì lộ ra và sửa được — khác hẳn một lời phán không ai đối chiếu nổi.</p>
@@ -200,7 +200,7 @@ ul{margin:0 0 12px 20px;color:var(--text-mid)}li{margin-bottom:6px}
     <h2>Có thể hỏi/viết về</h2>
     <ul>
       <li>Số hoá cổ thư tử vi: chuyển luật an sao trong sách thành mã chạy được, và những chỗ các bản sách nói khác nhau.</li>
-      <li>Ranh giới đạo đức khi AI luận mệnh: những điều hệ thống bị <b>cấm</b> nói (đoán bệnh, đoán đỗ trượt cho trẻ em, phán về hôn nhân của người vắng mặt).</li>
+      <li>Ranh giới đạo đức khi hệ thống luận mệnh: những điều hệ thống bị <b>cấm</b> nói (đoán bệnh, đoán đỗ trượt cho trẻ em, phán về hôn nhân của người vắng mặt).</li>
       <li>Vì sao một sản phẩm mệnh lý lại cần bộ kiểm thử tự động, và những lỗi mà bộ kiểm bắt được.</li>
       <li>Người Việt tra cứu gì nhiều nhất, theo dữ liệu tìm kiếm thật.</li>
     </ul>

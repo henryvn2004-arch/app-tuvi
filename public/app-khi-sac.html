@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Khí Sắc AI — Tử Vi Minh Bảo</title>
-<meta name="description" content="Chụp ảnh khuôn mặt — AI luận khí sắc theo Ma Y Thần Tướng: Ấn Đường, Ngũ Nhạc, dự báo vận khí 1–3 tháng tới.">
+<title>Khí Sắc — Tử Vi Minh Bảo</title>
+<meta name="description" content="Chụp ảnh khuôn mặt — hệ thống luận khí sắc theo Ma Y Thần Tướng: Ấn Đường, Ngũ Nhạc, dự báo vận khí 1–3 tháng tới.">
 <link rel="icon" type="image/webp" href="/seal.webp">
 <link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
@@ -53,7 +53,7 @@
   <main class="ws" id="ws">
     <div class="ws-top">
       <button class="btn mobile-only" onclick="document.getElementById('shell-sidebar').classList.toggle('open');window.shellSyncBackdrop&&shellSyncBackdrop()" aria-label="Menu">☰</button>
-      <div class="ws-title"><b>Khí Sắc AI</b><span>Vận khí 1–3 tháng qua Ấn Đường và Ngũ Nhạc — <span data-tvp-price="khi-sac">…</span> Lượng</span></div>
+      <div class="ws-title"><b>Khí Sắc</b><span>Vận khí 1–3 tháng qua Ấn Đường và Ngũ Nhạc — <span data-tvp-price="khi-sac">…</span> Lượng</span></div>
       <div class="ws-actions">
         <button class="btn mobile-only" onclick="Shell.openRail()">✦ Hỏi</button>
       </div>
@@ -68,7 +68,7 @@
         <div class="intro-body">
           <img class="intro-avatar" src="/tool-avatars/khi-sac.webp" alt="" onerror="this.remove()">
           <div class="intro-text">
-            <div class="intro-t">Khí Sắc AI</div>
+            <div class="intro-t">Khí Sắc</div>
             <div class="intro-d">Đọc khí sắc trên khuôn mặt, luận vận khí 1 đến 3 tháng tới. Bạn gần đây trông mệt mỏi hoặc lại thấy tươi tắn hẳn lên. Dùng khi muốn biết trước xu hướng vận khí ngắn hạn sắp tới.</div>
             <div id="introSrc" style="min-height:36.8px;margin-top:9px"></div>
           </div>
@@ -80,7 +80,7 @@
         <h2>Xem Khí Sắc</h2>
         <p class="sub">Đọc khí sắc trên khuôn mặt, luận vận khí 1 đến 3 tháng tới. Bạn gần đây trông mệt mỏi hoặc lại thấy tươi tắn hẳn lên. Dùng khi muốn biết trước xu hướng vận khí ngắn hạn sắp tới.</p>
         <p class="price-note" data-tvp-price-label="khi-sac">…</p>
-        <div class="ks-privacy"><span class="ic" data-icon="lock" style="font-size:16px"></span><div>Ảnh chỉ gửi tới AI để phân tích, không lưu trên server. Chụp buổi sáng hoặc chiều, không makeup, không filter.</div></div>
+        <div class="ks-privacy"><span class="ic" data-icon="lock" style="font-size:16px"></span><div>Ảnh chỉ gửi tới máy chủ để phân tích, không lưu trên server. Chụp buổi sáng hoặc chiều, không makeup, không filter.</div></div>
 
         <label class="upload-area" id="upload-area" for="file-input">
           <div id="upload-placeholder">
@@ -104,10 +104,10 @@
       <div class="results-section" id="results-section">
         <div class="ks-card" data-ws-result>
           <h2>Khí Sắc Luận</h2>
-          <p class="sub">AI · Ma Y Thần Tướng cổ pháp</p>
+          <p class="sub">Ma Y Thần Tướng cổ pháp</p>
           <div id="results-loading" class="results-loading">
             <div class="big-spinner"></div>
-            <div class="loading-text">Đang quan sát khí sắc từ ảnh của bạn — vui lòng chờ khoảng 30 giây...<br><span style="font-size:12px;color:var(--text-lt)">AI đang phân tích sắc trên Ấn Đường và 5 vùng Ngũ Nhạc.</span></div>
+            <div class="loading-text">Đang quan sát khí sắc từ ảnh của bạn — vui lòng chờ khoảng 30 giây...<br><span style="font-size:12px;color:var(--text-lt)">Đang phân tích sắc trên Ấn Đường và 5 vùng Ngũ Nhạc.</span></div>
           </div>
           <article class="results-content" id="results-content" style="display:none"></article>
           <div style="text-align:center;margin-top:8px" id="results-actions" style="display:none">
@@ -130,7 +130,7 @@ window.SHELL_INTRO={key:'khi-sac'};</script>
 <script>
 function initKhiSac(){
   Shell.setContext({
-    label:'Khí Sắc AI',
+    label:'Khí Sắc',
     placeholder:'Hỏi thầy về khí sắc…',
     greeting:'Chào bạn. Tải ảnh khuôn mặt ở khung bên trái, tôi sẽ luận khí sắc theo Ma Y Thần Tướng. Sau khi có kết quả, cứ hỏi tôi thêm bất cứ điều gì.',
     chips:['Ấn Đường là gì?','5 sắc Ngũ Hành nghĩa là gì?','Khí sắc khác Diện Tướng thế nào?']
@@ -280,7 +280,7 @@ async function _doAnalyze() {
       }
     }
 
-    if (!full) throw new Error('AI không trả về kết quả.');
+    if (!full) throw new Error('Máy chủ không trả về kết quả.');
     contentEl.innerHTML = renderMarkdown(full);
     document.getElementById('results-actions').style.display = 'block';
     _saveKhiSacReading(full);

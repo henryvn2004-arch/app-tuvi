@@ -207,7 +207,7 @@ async function buildReport(
     Boolean(clean(v?.conNguoi)) && Array.isArray(v?.nenLam) && v.nenLam.length > 0;
 
   let res = await ask(false);
-  if (!res) return err('Lỗi AI khi dựng bản luận. Vui lòng thử lại.', 500);
+  if (!res) return err('Lỗi hệ thống khi dựng bản luận. Vui lòng thử lại.', 500);
   let parsed = parseLlmJson(res.text) as HuongDan | null;
 
   if (!okShape(parsed)) {
@@ -215,14 +215,14 @@ async function buildReport(
     console.error(`[day-con] parse hỏng (len=${t.length}, đuôi=${JSON.stringify(t.slice(-60))}) — thử lại`);
     void logLlmParseFail(TOOL_ID, res.model, t, 1);
     res = await ask(true);
-    if (!res) return err('Lỗi AI khi dựng bản luận. Vui lòng thử lại.', 500);
+    if (!res) return err('Lỗi hệ thống khi dựng bản luận. Vui lòng thử lại.', 500);
     parsed = parseLlmJson(res.text) as HuongDan | null;
   }
   if (!okShape(parsed)) {
     const t = String(res.text || '');
     console.error(`[day-con] parse hỏng LẦN 2 (len=${t.length}, đầu=${JSON.stringify(t.slice(0, 160))})`);
     void logLlmParseFail(TOOL_ID, res.model, t, 2);
-    return err('Lỗi phân tích kết quả AI.', 500);
+    return err('Lỗi phân tích kết quả trả về.', 500);
   }
 
   const payload = {

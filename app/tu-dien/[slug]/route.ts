@@ -214,7 +214,7 @@ body{font-family:Arial,sans-serif;background:var(--bg);color:var(--text);min-hei
   <div class="cta-box">
     <div class="cta-box-label">Tử Vi Minh Bảo</div>
     <h3>Xem Lá Số Của Bạn</h3>
-    <p>Áp dụng kiến thức cổ pháp vào lá số cá nhân — luận giải AI chi tiết 24 phần.</p>
+    <p>Áp dụng kiến thức cổ pháp vào lá số cá nhân — luận giải chuyên sâu chi tiết 24 phần.</p>
     <a class="cta-btn" href="/">Xem Tử Vi →</a>
   </div>
 </article>
