@@ -15,12 +15,17 @@
 
 import { test, expect, type Page } from '@playwright/test';
 
+/** Các lượt gọi `/api/lasotuvi` mà stub bắt được, gắn vào chính `page`. */
+type PreviewCall = { phan: number; anonId?: string };
+type PageWithCalls = Page & { __calls: PreviewCall[] };
+const calls = (page: Page): PreviewCall[] => (page as PageWithCalls).__calls;
+
 // Stub ĐẦY ĐỦ shape mà client đọc — stub thiếu trường thì bài kiểm xanh oan vì
 // nó đo đường lùi chứ không đo đường thật (bẫy đã ghi trong CLAUDE.md).
 async function stubApis(page: Page, opts?: { blockPreview?: boolean }) {
   opts = opts || {};
-  const calls: { phan: number; anonId?: string }[] = [];
-  (page as any).__calls = calls;
+  const recorded: PreviewCall[] = [];
+  (page as PageWithCalls).__calls = recorded;
 
   // Catch-all ĐỨNG TRƯỚC (page.route đăng ký SAU được ưu tiên).
   await page.route('**/rest/v1/**', (r) => r.fulfill({ status: 200, contentType: 'application/json', body: '[]' }));
@@ -39,7 +44,7 @@ async function stubApis(page: Page, opts?: { blockPreview?: boolean }) {
 
   await page.route('**/api/lasotuvi**', async (r) => {
     const body = JSON.parse(r.request().postData() || '{}');
-    calls.push(body);
+    recorded.push(body);
     if (opts.blockPreview && body.phan <= 2) {
       return r.fulfill({ status: 402, contentType: 'application/json', body: JSON.stringify({ error: 'Đã hết lượt xem trước miễn phí.' }) });
     }
@@ -55,10 +60,20 @@ async function run(page: Page) {
   // KHÔNG giả cờ webdriver: để track.js no-op ĐÚNG như khi người thật chặn đo.
   // Đây chính là ca phải chạy được — anonId của paywall không được phụ thuộc Track.
   await page.goto('/app-luan-giai.html');
-  await page.waitForFunction(() => window.TuviForm && typeof window.doLuan === 'function');
+  // Điền qua `TuviForm.setData` chứ không gõ vào từng ô: ngày/tháng/năm là
+  // <select> do tuvi-form.js dựng, và hình dạng form đó đổi thì bài kiểm gãy vì
+  // một lý do chẳng liên quan gì tới paywall.
+  await page.waitForFunction(() => {
+    const w = window as unknown as { TuviForm?: unknown; doLuan?: unknown };
+    return !!w.TuviForm && typeof w.doLuan === 'function';
+  });
   await page.evaluate(() => {
-    window.TuviForm.setData({ hoten: 'Kiểm Thử', gioitinh: 'nam', ngay: 15, thang: 6, nam: 1990, gioHour: 9, gioPhut: 0, gioIdx: 5 });
-    window.doLuan();
+    const w = window as unknown as {
+      TuviForm: { setData(d: Record<string, unknown>): void };
+      doLuan(): void;
+    };
+    w.TuviForm.setData({ hoten: 'Kiểm Thử', gioitinh: 'nam', ngay: 15, thang: 6, nam: 1990, gioHour: 9, gioPhut: 0, gioIdx: 5 });
+    w.doLuan();
   });
   await page.waitForSelector('#lgBody .sec', { timeout: 15000 });
 }
@@ -79,9 +94,9 @@ test('phần 1-2 sinh chữ THẬT, phần 3+ chỉ còn ô giữ chỗ', async 
   await expect(page.locator('#claude-content-2')).toContainText('Chữ AI của phần 2', { timeout: 15000 });
 
   // Đúng 2 lượt gọi model, đúng phần 1 và 2, có mang anonId.
-  const parts = (page as any).__calls.map((c) => c.phan).sort();
+  const parts = calls(page).map((c: PreviewCall) => c.phan).sort();
   expect(parts).toEqual([1, 2]);
-  expect((page as any).__calls[0].anonId).toBeTruthy();
+  expect(calls(page)[0].anonId).toBeTruthy();
 
   // Phần 3+: ô giữ chỗ, KHÔNG chữ thật nào lọt vào DOM.
   await expect(page.locator('#sec-3 .lg-ph')).toBeVisible();
@@ -104,7 +119,8 @@ test('tường + câu căng thẳng đứng NGAY DƯỚI phần 2', async ({ pag
     const ids = ['sec-2', 'lgTension', 'lgUnlock', 'sec-3'];
     const els = ids.map((i) => document.getElementById(i));
     if (els.some((e) => !e)) return 'MISSING';
-    return els.every((e, i) => i === 0 || (els[i - 1].compareDocumentPosition(e) & Node.DOCUMENT_POSITION_FOLLOWING))
+    const seq = els as HTMLElement[];
+    return seq.every((e, i) => i === 0 || !!(seq[i - 1].compareDocumentPosition(e) & Node.DOCUMENT_POSITION_FOLLOWING))
       ? 'OK' : 'SAI THỨ TỰ';
   });
   expect(order).toBe('OK');
@@ -115,7 +131,7 @@ test('cầu dao chặn xem trước → im lặng, tường vẫn nguyên', asyn
   await run(page);
   await page.waitForTimeout(1200);
   // Hỏng phần 1 thì KHÔNG đốt tiếp phần 2.
-  expect((page as any).__calls.map((c) => c.phan)).toEqual([1]);
+  expect(calls(page).map((c: PreviewCall) => c.phan)).toEqual([1]);
   await expect(page.locator('#claude-content-1')).toBeHidden();
   await expect(page.locator('#lgUnlock')).toBeVisible();
   await expect(page.locator('.laso-error')).toHaveCount(0);
@@ -126,14 +142,14 @@ test('trả tiền xong: KHÔNG sinh lại phần đã đọc free, tường kh�
   await page.route('**/api/save-laso', (r) => r.fulfill({ status: 200, body: '{}' }));
   await run(page);
   await expect(page.locator('#claude-content-2')).toContainText('Chữ AI của phần 2', { timeout: 15000 });
-  (page as any).__calls.length = 0;
+  calls(page).length = 0;
 
   // Bỏ qua requireCredits (đã có bài kiểm riêng cho đường tiền) — cái cần đo ở
   // đây là chuyện xảy ra SAU khi trừ tiền thành công.
-  await page.evaluate(() => window._startLuanGiaiAI());
-  await page.waitForFunction(() => /hoàn tất|lỗi/.test(document.getElementById('lgProgress').textContent), { timeout: 30000 });
+  await page.evaluate(() => (window as unknown as { _startLuanGiaiAI(): Promise<void> })._startLuanGiaiAI());
+  await page.waitForFunction(() => /hoàn tất|lỗi/.test(document.getElementById('lgProgress')!.textContent!), { timeout: 30000 });
 
-  const parts = (page as any).__calls.map((c) => c.phan).sort((a, b) => a - b);
+  const parts = calls(page).map((c: PreviewCall) => c.phan).sort((a: number, b: number) => a - b);
   expect(parts).toEqual([3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]);   // 1 và 2 KHÔNG chạy lại
 
   // renderLuan(...,true) ghi đè #lgBody — hai node tĩnh phải sống sót.
