@@ -452,6 +452,31 @@
     });
   }
 
+  // ── Vành ngũ hành — CHỈ vẽ khi trang có nạp `tools-shared/hook-charts.js`.
+  // `/tools/so-dep.html` dùng `tools.css` (thiếu --line-2/--sans/--gold-soft),
+  // nên CỐ Ý không nạp bên đó: biến CSS hụt thì `stroke:var(--line-2)` rơi về
+  // `none` và nhãn rớt về font mặc định — hỏng IM LẶNG, không lỗi nào bắn ra.
+  //
+  // ⚠️ Thang chuẩn hoá theo CHÍNH dãy này (max = hành nhiều chữ số nhất), KHÔNG
+  // theo độ dài dãy. Đây là dữ liệu THÀNH PHẦN: 9 chữ số chia cho 5 hành nên
+  // hành trội thường chỉ 3 (đo 500 dãy: p10=2 · median=3 · p90=5 · max=7). Lấy
+  // độ dài làm trần thì dãy nào cũng co lại còn ~1/3 vành, hết đọc được hình.
+  // Chuẩn hoá theo dãy làm nổi đúng câu hỏi của tầng này — "dãy nghiêng hành
+  // nào, hụt hành nào" — còn CON SỐ chính xác vẫn nằm nguyên ở hàng chữ ngay
+  // dưới. Hình chở DÁNG, chữ chở SỐ; không nơi nào phải đoán nơi kia.
+  function _vanhNguHanhHTML(t3) {
+    if (typeof root.HookCharts === 'undefined') return '';
+    var hs = ['Kim', 'Mộc', 'Thủy', 'Hỏa', 'Thổ'];
+    var v = hs.map(function (h) { return t3.phanBo[h] || 0; });
+    var dinh = Math.max.apply(null, v);
+    if (!dinh) return '';
+    var svg = root.HookCharts.hexRadar({
+      dims: hs.map(function (h, i) { return { label: h, value: v[i] }; }),
+      max: dinh, size: 220, ariaLabel: 'Vành ngũ hành của dãy số',
+    });
+    return svg ? '<div class="sd-vanh">' + svg + '</div>' : '';
+  }
+
   function ketQuaHTML(data) {
     var d = data;
     var dt = d.dongThuan;
@@ -495,6 +520,7 @@
 
     // T3 Ngũ Hành
     html += '<div class="sd-section"><div class="sd-section-head">Ngũ Hành <span class="sd-eyebrow">Lạc Thư</span></div>';
+    html += _vanhNguHanhHTML(d.t3);
     html += '<div class="sd-phanbo">';
     ['Kim', 'Mộc', 'Thủy', 'Hỏa', 'Thổ'].forEach(function (h) {
       html += '<span class="sd-hanh">' + h + ' <b>' + (d.t3.phanBo[h] || 0) + '</b></span>';
