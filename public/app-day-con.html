@@ -700,6 +700,10 @@ function _renderLockWall(lo) {
 }
 
 function _openPanel() {
+  // CHỖ DUY NHẤT gỡ khoá — và cố ý đặt ở ĐẦU mọi lượt chứ không ở nhánh trả
+  // tiền. Mọi đường dựng kết quả (trả tiền, xem lại miễn phí, `resumeIfPending`
+  // sau khi nạp Lượng, bấm "Xem Bé Khác") đều đi qua đây, nên một dòng ở đây
+  // thay cho bốn dòng rải rác — và không có đường nào quên.
   _dcUnlockBlocks();
   document.getElementById('birthPanel').style.display = 'none';
   document.getElementById('resPanel').style.display = 'block';
@@ -756,7 +760,6 @@ async function _doGenerate(freeRerun, lo) {
     if (!res.ok || !data.success) throw new Error(data.error || 'Lỗi ' + res.status);
     renderMeta(data);
     renderProse(data);
-    _dcUnlockBlocks(); // gỡ ô giữ chỗ nếu trước đó là bản xem trước
     _loadingCtl && _loadingCtl.finish();
     document.getElementById('loading').style.display = 'none';
     document.getElementById('card').style.display = 'block';
