@@ -227,7 +227,7 @@ export const vanHanTool: McpTool = {
       blocks,
       note: blocks.length
         ? undefined
-        : 'Không có tổ hợp sao chéo tầng nổi bật cho năm này — phần luận do AI của bạn diễn giải từ dữ liệu cung/sao ở trên.',
+        : 'Không có tổ hợp sao chéo tầng nổi bật cho năm này — phần luận do trợ lý của bạn diễn giải từ dữ liệu cung/sao ở trên.',
     };
   },
 };
