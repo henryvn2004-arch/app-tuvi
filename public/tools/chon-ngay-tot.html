@@ -63,7 +63,7 @@
   <div class="page">
     <div class="eyebrow">Công Cụ Phong Thủy · Chọn Ngày Lành</div>
     <h1>Chọn Ngày Tốt<br><em>Theo Ngũ Hành</em></h1>
-    <p>AI phân tích khoảng thời gian phù hợp cho sự kiện quan trọng — cưới hỏi, khai trương, ký hợp đồng, mua nhà — dựa trên ngũ hành và nguyên lý địa chi.</p>
+    <p>Hệ thống phân tích khoảng thời gian phù hợp cho sự kiện quan trọng — cưới hỏi, khai trương, ký hợp đồng, mua nhà — dựa trên ngũ hành và nguyên lý địa chi.</p>
   </div>
 </div>
 
@@ -75,7 +75,7 @@
         <div class="xt-intro-row"><img class="xt-avatar" src="/tool-avatars/chon-ngay-tot.webp" alt="" loading="lazy" onerror="this.remove()"><div class="xt-intro-text">
           <h2 class="xt-h2">Chọn Ngày Theo Nguyên Lý —<br>Không Phải Tra Sách</h2>
           <p class="xt-body">Việc chọn ngày tốt đầy đủ cần tra Thông Thư hoặc Lịch Vạn Niên cho từng ngày cụ thể — công cụ này không làm điều đó.</p>
-          <p class="xt-body">Thay vào đó, AI phân tích theo <strong>nguyên lý ngũ hành và địa chi</strong>: xét sinh khắc can chi người chính với tháng mục tiêu, tìm khoảng ngày địa chi thuận (Lục Hợp, Tam Hợp), và gợi ý theo đặc tính từng loại sự kiện.</p></div></div>
+          <p class="xt-body">Thay vào đó, hệ thống phân tích theo <strong>nguyên lý ngũ hành và địa chi</strong>: xét sinh khắc can chi người chính với tháng mục tiêu, tìm khoảng ngày địa chi thuận (Lục Hợp, Tam Hợp), và gợi ý theo đặc tính từng loại sự kiện.</p></div></div>
         <div class="xt-factors">
           <div class="xt-factor-title">Cơ Sở Phân Tích</div>
           <div class="xt-factor-item"><span class="xt-factor-num">①</span><span class="xt-factor-label">Ngũ Hành Nạp Âm</span><span class="xt-factor-desc">Hành của người chính → tìm ngày can chi tương sinh, tránh xung khắc</span></div>
@@ -180,7 +180,7 @@
     <div class="res-block">
       <div class="res-block-header">
         <span class="res-block-title">Gợi Ý Ngày Tốt</span>
-        <span style="font-size:11px;color:var(--text-lt)">AI · Ngũ Hành · Địa Chi học</span>
+        <span style="font-size:11px;color:var(--text-lt)">Ngũ Hành · Địa Chi học</span>
       </div>
       <div class="res-block-body">
         <div id="aiResult" class="md-result"></div>
@@ -283,7 +283,7 @@ async function _doAnalyze(suKien, hoTen, ns, info, thang, nam) {
   document.getElementById('analyzeBtn').disabled = true;
   document.getElementById('result-section').classList.add('active');
   const el = document.getElementById('aiResult');
-  el.innerHTML = '<div class="ai-loading"><span class="ai-loading-icon"><span class="ic-inline" data-icon-emoji="📅" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">📅</span></span><div class="ai-loading-text">AI đang phân tích ngày tốt...<br><span style="font-size:12px;opacity:.7">Thường mất 15–25 giây</span></div></div>';
+  el.innerHTML = '<div class="ai-loading"><span class="ai-loading-icon"><span class="ic-inline" data-icon-emoji="📅" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">📅</span></span><div class="ai-loading-text">Đang phân tích ngày tốt...<br><span style="font-size:12px;opacity:.7">Thường mất 15–25 giây</span></div></div>';
   document.getElementById('result-section').scrollIntoView({behavior:'smooth',block:'start'});
   document.getElementById('error-msg').classList.remove('active');
 

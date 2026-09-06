@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Đặt tên doanh nghiệp — Tử Vi Minh Bảo</title>
-<meta name="description" content="Đặt tên công ty, thương hiệu, cửa hàng hợp mệnh chủ và ngành nghề theo ngũ hành nạp âm — hỏi trợ lý AI gợi ý tên và luận ý nghĩa, phong thủy tên.">
+<meta name="description" content="Đặt tên công ty, thương hiệu, cửa hàng hợp mệnh chủ và ngành nghề theo ngũ hành nạp âm — hỏi trợ lý Luận Đường gợi ý tên và luận ý nghĩa, phong thủy tên.">
 <link rel="icon" type="image/webp" href="/seal.webp">
 <link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
@@ -33,7 +33,7 @@
 .note b{color:var(--text)}
 .ask{margin-top:12px;display:inline-flex;align-items:center;gap:7px;font-size:12.5px;color:var(--gold-soft);border:1px dashed var(--gold-soft);border-radius:8px;padding:7px 12px;cursor:pointer;background:var(--gold-lt);font-family:inherit}
 .laso-error{color:var(--tx-red);padding:14px;border:1px solid var(--red);border-radius:10px;background:var(--white)}
-/* ── Gợi ý tên chuyên sâu bằng AI (paid, port từ tools/dat-ten-doanh-nghiep.html — gate+SSE, không PDF) ── */
+/* ── Gợi ý tên chuyên sâu (paid, port từ tools/dat-ten-doanh-nghiep.html — gate+SSE, không PDF) ── */
 .dt-unlock{background:var(--white);border:1px solid var(--gold-soft);border-radius:11px;padding:18px 20px;margin-top:16px;text-align:center}
 .dt-unlock p{font-size:12.5px;color:var(--text-lt);margin-top:8px}
 .dt-result{margin-top:18px}
@@ -127,8 +127,8 @@
              chọn khi đặt tên DN) thành một câu nổi bật ngay trước CTA. -->
         <div id="hookHost"></div>
         <div class="dt-unlock" id="dtUnlock">
-          <button class="btn-go" id="btnUnlock" onclick="initiateDatTenDnChuyenSau()">✦ Gợi ý tên doanh nghiệp bằng AI — <span data-tvp-price="dat-ten-dn">…</span> Lượng →</button>
-          <p>AI đọc ngũ hành nạp âm chủ + ngành nghề, gợi ý 12 tên chia 3 nhóm: Thuần Việt / Hán Việt / Kết Hợp.</p>
+          <button class="btn-go" id="btnUnlock" onclick="initiateDatTenDnChuyenSau()">✦ Gợi ý tên doanh nghiệp — <span data-tvp-price="dat-ten-dn">…</span> Lượng →</button>
+          <p>Hệ thống đọc ngũ hành nạp âm chủ + ngành nghề, gợi ý 12 tên chia 3 nhóm: Thuần Việt / Hán Việt / Kết Hợp.</p>
         </div>
         <div class="dt-result" id="dtResult"></div>
       </div>
@@ -154,7 +154,7 @@ function hanhSinhCho(h){ for(var k in SINH){ if(SINH[k]===h)return k; } return h
 
 // Trang này KHÔNG có gì đang mờ/khoá — nền can chi hiện rõ hết. Hook chỉ
 // nhấn lại đúng kết luận vừa tính (hành nên chọn cho tên DN) thành một fact
-// nổi bật ngay trước CTA "AI gợi ý tên".
+// nổi bật ngay trước CTA "Gợi ý tên".
 function mountHook(iChu,nganh){
   var host=document.getElementById('hookHost');
   if(!host||!window.HookLayer)return;
@@ -165,7 +165,7 @@ function mountHook(iChu,nganh){
     facts:[{
       tone:'good',
       title:'Hành nên chọn khi đặt tên DN: '+hanhCanBo,
-      body:'Mệnh chủ nạp âm '+iChu.napAm+' — hành '+iChu.hanh+'. Tên nên mang hành '+hanhCanBo+' (tương sinh) hoặc '+iChu.hanh+' (đồng hành), hợp khí chất ngành '+nganh.toLowerCase()+'. Tên cụ thể chia 3 nhóm nằm trong bản gợi ý AI.',
+      body:'Mệnh chủ nạp âm '+iChu.napAm+' — hành '+iChu.hanh+'. Tên nên mang hành '+hanhCanBo+' (tương sinh) hoặc '+iChu.hanh+' (đồng hành), hợp khí chất ngành '+nganh.toLowerCase()+'. Tên cụ thể chia 3 nhóm nằm trong bản gợi ý chuyên sâu.',
       source:'engine · CanChi.ccInfo',
     }],
   });
@@ -219,7 +219,7 @@ function doDatTenDn(){
   }finally{ btn.disabled=false; }
 }
 // ══════════════════════════════════════════════════════════════════════
-// Gợi ý tên chuyên sâu bằng AI — port từ public/tools/dat-ten-doanh-nghiep.html
+// Gợi ý tên chuyên sâu — port từ public/tools/dat-ten-doanh-nghiep.html
 // (gate Lượng qua TuviPaywall + generate /api/xem-tuoi?action=dat-ten-doanh-nghiep,
 // SSE 'delta' format — không RAG, không PDF, không lưu kết quả). Mỗi lần bấm
 // luôn trừ Lượng mới (generateToolSlug nhúng Date.now()).
@@ -267,7 +267,7 @@ async function _doDatTenDnAI(){
   var btn=document.getElementById('btnUnlock');
   if(btn)btn.disabled=true;
   var el=document.getElementById('dtResult');
-  el.innerHTML='<div class="phan-empty">'+(window.iconHtml?window.iconHtml('building-2'):'')+' AI đang gợi ý tên doanh nghiệp… thường mất 15–25 giây</div>';
+  el.innerHTML='<div class="phan-empty">'+(window.iconHtml?window.iconHtml('building-2'):'')+' Đang gợi ý tên doanh nghiệp… thường mất 15–25 giây</div>';
   el.scrollIntoView({behavior:'smooth',block:'nearest'});
   try{
     var res=await fetch('/api/xem-tuoi?action=dat-ten-doanh-nghiep',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({

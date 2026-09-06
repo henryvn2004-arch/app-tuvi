@@ -175,7 +175,7 @@ h1,h2,h3{font-family:'Noto Serif',serif;}
       <div class="ti-factor"><span class="ti-factor-num">②</span><div class="ti-factor-body"><div class="ti-factor-label">Hướng Dẫn Trang Phục</div><div class="ti-factor-desc">Áo, quần, giày, túi, phụ kiện — màu cụ thể cho từng loại, kèm màu nên tránh</div></div></div>
       <div class="ti-factor"><span class="ti-factor-num">③</span><div class="ti-factor-body"><div class="ti-factor-label">Màu Theo Dịp</div><div class="ti-factor-desc">Phỏng vấn, hẹn hò, gặp đối tác kinh doanh, đi làm hàng ngày — tối ưu theo bối cảnh</div></div></div>
       <div class="ti-factor"><span class="ti-factor-num">④</span><div class="ti-factor-body"><div class="ti-factor-label">Gợi Ý Phối Đồ</div><div class="ti-factor-desc">3 combo hoàn chỉnh với điểm phong thủy, mô tả phong cách và lý do theo Ngũ Hành</div></div></div>
-      <div class="ti-factor"><span class="ti-factor-num">⑤</span><div class="ti-factor-body"><div class="ti-factor-label">Thử Trang Phục AI</div><div class="ti-factor-desc">Upload ảnh của bạn, chọn phong cách — Replicate AI render outfit đúng màu mệnh lên ảnh thật</div></div></div>
+      <div class="ti-factor"><span class="ti-factor-num">⑤</span><div class="ti-factor-body"><div class="ti-factor-label">Thử Trang Phục</div><div class="ti-factor-desc">Upload ảnh của bạn, chọn phong cách — hệ thống render outfit đúng màu mệnh lên ảnh thật</div></div></div>
       <div class="ti-note"><span class="ic" data-icon="lightbulb"></span> Màu sắc theo Nạp Âm áp dụng chủ yếu cho trang phục đi ra ngoài và các dịp quan trọng. Màu mặc ở nhà ít ảnh hưởng hơn.</div>
     </div>
   </div>
@@ -277,7 +277,7 @@ h1,h2,h3{font-family:'Noto Serif',serif;}
 
     <!-- TRY-ON TRANG PHỤC -->
     <div class="card" id="tryonCard">
-      <div class="card-title"><span class="ic-inline" data-icon-emoji="👗" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">👗</span> Thử Trang Phục Theo Mệnh <span style="font-size:10px;background:#e8f0fe;color:#1455A4;padding:2px 8px;border-radius:10px;font-weight:600;margin-left:4px;">AI · 20 lượng/lần</span></div>
+      <div class="card-title"><span class="ic-inline" data-icon-emoji="👗" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">👗</span> Thử Trang Phục Theo Mệnh <span style="font-size:10px;background:#e8f0fe;color:#1455A4;padding:2px 8px;border-radius:10px;font-weight:600;margin-left:4px;">20 lượng/lần</span></div>
 
       <!-- Step 1: Upload -->
       <div id="tryonStep1">
@@ -371,11 +371,11 @@ function calcGua(y,g){let s=String(y).split('').reduce((a,c)=>a+parseInt(c),0);w
 let _gua=null;
 const ANALYSIS_STEPS=[
   {label:'Tính quái số & nạp âm bản mệnh',ms:900},
-  {label:'AI tư vấn màu sắc & phối đồ',ms:0},
+  {label:'Tư vấn màu sắc & phối đồ',ms:0},
 ];
 const TRYON_STEPS=[
   {label:'Chuẩn bị trang phục theo mệnh',ms:1200},
-  {label:'AI đang tạo ảnh trang phục',ms:0},
+  {label:'Đang tạo ảnh trang phục',ms:0},
 ];
 let _analysisLoadingCtl=null;
 let _tryonLoadingCtl=null;
@@ -670,7 +670,7 @@ TuviPaywall.init({ product: 'mau-sac-hop-menh' });
         <p>Ngũ hành gắn liền với năm màu sắc nguyên bản: <strong>Mộc — Xanh lá</strong>, <strong>Hỏa — Đỏ</strong>, <strong>Thổ — Vàng đất</strong>, <strong>Kim — Trắng, bạc</strong>, <strong>Thủy — Đen, xanh navy</strong>. Người mang mệnh nạp âm nào thì hành đó, và màu sắc tương sinh (hành sinh ra hành của mình) được xem là màu hỗ trợ năng lượng tốt nhất.</p>
         <p>Ví dụ: người mệnh Hỏa hưởng lợi từ màu Mộc (xanh lá — Mộc sinh Hỏa) và màu Hỏa (đỏ, cam — cùng hành). Nên tránh màu Thủy (đen, xanh đậm — Thủy khắc Hỏa). Người mệnh Kim nên dùng Thổ (vàng, nâu — Thổ sinh Kim) và tránh Hỏa (đỏ — Hỏa khắc Kim).</p>
         <p>Trong thực hành hàng ngày, không cần mặc toàn bộ trang phục một màu — điểm nhấn màu hợp mệnh ở áo ngoài, khăn, phụ kiện là đủ. Đây ít nhiều có cơ sở tâm lý học màu sắc: màu sắc ảnh hưởng đến trạng thái tinh thần, và mặc màu mình "yêu thích theo bản năng" thường là màu phù hợp với cơ địa cá nhân.</p>
-        <p class="kb-links">Xem thêm: <a href="/tools/nap-am.html">Nạp Âm Ngũ Hành</a>, <a href="/tools/trang-phuc-theo-ngay.html">Trang Phục Theo Ngày</a>, <a href="/tools/personal-color.html">Personal Color AI</a></p>
+        <p class="kb-links">Xem thêm: <a href="/tools/nap-am.html">Nạp Âm Ngũ Hành</a>, <a href="/tools/trang-phuc-theo-ngay.html">Trang Phục Theo Ngày</a>, <a href="/tools/personal-color.html">Personal Color</a></p>
       </div>
     </div>
   </div>

@@ -208,7 +208,7 @@ async function runPost(request: NextRequest) {
 
   // ── Khung 12 tháng — DETERMINISTIC, MIỄN PHÍ, không cần đăng nhập ──
   // Cùng lý do với tầng tra bảng của các tool khác: 0 lượt LLM, 0đ. Tường chỉ
-  // đứng trên phần CHỮ do AI viết.
+  // đứng trên phần CHỮ do hệ thống viết.
   if (action === 'khung') {
     return ok({
       khung: buildKhung12Thang(ls as AnyRec, tuNgay, tuThang, tuNam),

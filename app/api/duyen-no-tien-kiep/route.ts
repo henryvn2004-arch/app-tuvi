@@ -277,7 +277,7 @@ async function handleStory(grp: BondGroup, userId: string) {
   };
 
   let res = await askStory(false);
-  if (!res) return err('Lỗi AI khi viết câu chuyện. Vui lòng thử lại.', 500);
+  if (!res) return err('Lỗi hệ thống khi viết câu chuyện. Vui lòng thử lại.', 500);
   let parsed = parseLlmJson(res.raw) as StoryJson | null;
 
   if (!okShape(parsed)) {
@@ -287,7 +287,7 @@ async function handleStory(grp: BondGroup, userId: string) {
     );
     void logLlmParseFail(TOOL_ID, res.model, t, 1);
     res = await askStory(true);
-    if (!res) return err('Lỗi AI khi viết câu chuyện. Vui lòng thử lại.', 500);
+    if (!res) return err('Lỗi hệ thống khi viết câu chuyện. Vui lòng thử lại.', 500);
     parsed = parseLlmJson(res.raw) as StoryJson | null;
   }
   if (!okShape(parsed)) {
@@ -296,7 +296,7 @@ async function handleStory(grp: BondGroup, userId: string) {
       `[duyen-no-tien-kiep] parse hỏng LẦN 2 (len=${t.length}, đầu=${JSON.stringify(t.slice(0, 160))})`,
     );
     void logLlmParseFail(TOOL_ID, res.model, t, 2);
-    return err('Lỗi phân tích kết quả AI.', 500);
+    return err('Lỗi phân tích kết quả trả về.', 500);
   }
 
   // Nhãn hồi lấy của BOND_ACTS (cố định) chứ không dùng nhãn LLM tự nghĩ — mọi

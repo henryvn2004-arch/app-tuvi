@@ -54,11 +54,11 @@
     { id:'la-ban',        url:'/tools/la-ban-phong-thuy.html',   icon:'🧭', name:'La Bàn Phong Thủy',        cat:['phongthu'],                     tags:['la bàn','hướng','phong thủy'] },
     // AI Ngoại Hình
     { id:'kieu-toc',      url:'/tools/kieu-toc-ai.html',         icon:'💇', name:'Tư Vấn Kiểu Tóc & Kính Mắt', cat:['ngoai-hinh'],               tags:['kiểu tóc','kính mắt','tướng mặt','ai'] },
-    { id:'trang-diem',    url:'/tools/trang-diem-ai.html',       icon:'💄', name:'Trang Điểm AI',             cat:['ngoai-hinh'],                   tags:['trang điểm','makeup','ai','làm đẹp'] },
-    { id:'personal-color',url:'/tools/personal-color.html',      icon:'🎨', name:'Personal Color AI',         cat:['ngoai-hinh','tinh-cach'],       tags:['personal color','tông màu','màu sắc','ai'] },
-    { id:'xlook',         url:'/tools/xlook.html',               icon:'👗', name:'xLook — Tủ Đồ AI',          cat:['ngoai-hinh'],                   tags:['tủ đồ','phong cách','ai','thời trang'] },
+    { id:'trang-diem',    url:'/tools/trang-diem-ai.html',       icon:'💄', name:'Trang Điểm',             cat:['ngoai-hinh'],                   tags:['trang điểm','makeup','ai','làm đẹp'] },
+    { id:'personal-color',url:'/tools/personal-color.html',      icon:'🎨', name:'Personal Color',         cat:['ngoai-hinh','tinh-cach'],       tags:['personal color','tông màu','màu sắc','ai'] },
+    { id:'xlook',         url:'/tools/xlook.html',               icon:'👗', name:'xLook — Tủ Đồ',          cat:['ngoai-hinh'],                   tags:['tủ đồ','phong cách','ai','thời trang'] },
     { id:'trang-phuc',    url:'/tools/trang-phuc-theo-ngay.html',icon:'👔', name:'Trang Phục Theo Ngày',      cat:['ngoai-hinh','ngaytot'],         tags:['trang phục','phong cách','ngày tốt'] },
-    { id:'da-lieu',       url:'/tools/da-lieu-ai.html',          icon:'🧴', name:'Da Liễu AI',                cat:['ngoai-hinh'],                   tags:['da liễu','da mặt','ai','sức khỏe'] },
+    { id:'da-lieu',       url:'/tools/da-lieu-ai.html',          icon:'🧴', name:'Da Liễu',                cat:['ngoai-hinh'],                   tags:['da liễu','da mặt','ai','sức khỏe'] },
     // Thanh Tướng Pro
     { id:'thanh-tuong-pro',url:'/tools/thanh-tuong-pro.html',   icon:'🎙', name:'Thanh Tướng Pro',           cat:['tuong','tinh-cach'],            tags:['giọng nói','thanh tướng','chuyên sâu'] },
   ];

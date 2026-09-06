@@ -688,7 +688,7 @@ Trả về JSON thuần túy:
     // Nâng 50% cùng đợt (Henry chốt 2026-08-20).
     raw = await llmText({ system: ARC_GIONG_NGU_HANH, prompt, maxTokens: 1500 });
   } catch {
-    return err('Lỗi AI.', 500);
+    return err('Lỗi hệ thống.', 500);
   }
   try {
     const parsed = JSON.parse(raw.replace(/```json|```/g, '').trim());

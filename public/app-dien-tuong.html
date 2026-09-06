@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Diện Tướng AI — Tử Vi Minh Bảo</title>
-<meta name="description" content="Tải hoặc chụp ảnh khuôn mặt — AI phân tích nhân tướng học cổ pháp Ma Y Thần Tướng: Tam Đình, Ngũ Quan, các bộ vị quan trọng.">
+<title>Diện Tướng — Tử Vi Minh Bảo</title>
+<meta name="description" content="Tải hoặc chụp ảnh khuôn mặt — hệ thống phân tích nhân tướng học cổ pháp Ma Y Thần Tướng: Tam Đình, Ngũ Quan, các bộ vị quan trọng.">
 <link rel="icon" type="image/webp" href="/seal.webp">
 <link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
@@ -61,7 +61,7 @@
   <main class="ws" id="ws">
     <div class="ws-top">
       <button class="btn mobile-only" onclick="document.getElementById('shell-sidebar').classList.toggle('open');window.shellSyncBackdrop&&shellSyncBackdrop()" aria-label="Menu">☰</button>
-      <div class="ws-title"><b>Diện Tướng AI</b><span>Xem tướng khuôn mặt theo cổ pháp — <span data-tvp-price="dien-tuong">…</span> Lượng</span></div>
+      <div class="ws-title"><b>Diện Tướng</b><span>Xem tướng khuôn mặt theo cổ pháp — <span data-tvp-price="dien-tuong">…</span> Lượng</span></div>
       <div class="ws-actions">
         <button class="btn mobile-only" onclick="Shell.openRail()">✦ Hỏi</button>
       </div>
@@ -76,7 +76,7 @@
         <div class="intro-body">
           <img class="intro-avatar" src="/tool-avatars/dien-tuong.webp" alt="" onerror="this.remove()">
           <div class="intro-text">
-            <div class="intro-t">Diện Tướng AI</div>
+            <div class="intro-t">Diện Tướng</div>
             <div class="intro-d">Đọc nhân tướng học tổng thể từ ảnh khuôn mặt của bạn. Bạn tò mò gương mặt mình đang nói điều gì với người khác. Dùng khi muốn hiểu bản thân qua một góc nhìn khác lời nói.</div>
             <div id="introSrc" style="min-height:36.8px;margin-top:9px"></div>
           </div>
@@ -88,7 +88,7 @@
         <h2>Tải ảnh khuôn mặt</h2>
         <p class="sub">Đọc nhân tướng học tổng thể từ ảnh khuôn mặt của bạn. Bạn tò mò gương mặt mình đang nói điều gì với người khác. Dùng khi muốn hiểu bản thân qua một góc nhìn khác lời nói.</p>
         <p class="price-note" data-tvp-price-label="dien-tuong">…</p>
-        <div class="dt-privacy"><span class="ic" data-icon="lock"></span><div>Ảnh chỉ gửi tới AI để phân tích, không lưu trên server. Chụp thẳng mặt, đủ sáng, không che mặt cho kết quả chính xác nhất.</div></div>
+        <div class="dt-privacy"><span class="ic" data-icon="lock"></span><div>Ảnh chỉ gửi tới máy chủ để phân tích, không lưu trên server. Chụp thẳng mặt, đủ sáng, không che mặt cho kết quả chính xác nhất.</div></div>
 
         <div class="dt-input-tabs">
           <button class="dt-input-tab active" onclick="switchTab('upload',this)"><span class="ic" data-icon="folder"></span> Tải Ảnh Lên</button>
@@ -143,7 +143,7 @@
 
       <div class="dt-card" id="resultCard" data-ws-result style="display:none;margin-top:16px">
         <h2>Phân Tích Nhân Tướng Học</h2>
-        <p class="sub">AI · Ma Y Thần Tướng cổ pháp</p>
+        <p class="sub">Ma Y Thần Tướng cổ pháp</p>
         <div id="aiResult" class="dt-result"></div>
         <div style="text-align:center;margin-top:8px">
           <button class="btn-cancel" onclick="resetTool()">Phân Tích Ảnh Khác</button>
@@ -165,7 +165,7 @@ window.SHELL_INTRO={key:'dien-tuong'};</script>
 <script>
 function initDienTuong(){
   Shell.setContext({
-    label:'Diện Tướng AI',
+    label:'Diện Tướng',
     placeholder:'Hỏi thầy về tướng mặt…',
     greeting:'Chào bạn. Tải hoặc chụp ảnh khuôn mặt ở khung bên trái, tôi sẽ phân tích theo nhân tướng học cổ pháp. Sau khi có kết quả, cứ hỏi tôi thêm bất cứ điều gì.',
     chips:['Tam Đình là gì?','Ngũ Quan gồm những gì?','Tướng mặt có thay đổi được không?']
@@ -273,7 +273,7 @@ function mountHook() {
     facts: [{
       tone: 'neutral',
       title: m[0],
-      body: 'Đo trực tiếp từ ảnh bằng MediaPipe — Thượng/Trung/Hạ Đình chia đúng theo landmark khuôn mặt của bạn. Luận giải đầy đủ theo Ma Y Thần Tướng nằm trong bản phân tích AI.',
+      body: 'Đo trực tiếp từ ảnh bằng MediaPipe — Thượng/Trung/Hạ Đình chia đúng theo landmark khuôn mặt của bạn. Luận giải đầy đủ theo Ma Y Thần Tướng nằm trong bản phân tích chuyên sâu.',
       source: 'engine · MediaPipe FaceMesh',
     }],
   });
@@ -534,7 +534,7 @@ async function _doAnalyze() {
   document.getElementById('resultCard').style.display='block';
   const aiResultEl = document.getElementById('aiResult');
   aiResultEl.innerHTML=
-    '<div class="dt-loading"><span class="dt-loading-icon ic" data-icon="sparkles"></span><div class="dt-loading-text">AI đang phân tích tướng mặt...<br><span style="font-size:12px;opacity:.7">Thường mất 15–25 giây</span></div></div>';
+    '<div class="dt-loading"><span class="dt-loading-icon ic" data-icon="sparkles"></span><div class="dt-loading-text">Đang phân tích tướng mặt...<br><span style="font-size:12px;opacity:.7">Thường mất 15–25 giây</span></div></div>';
   window.mountIcons && window.mountIcons(aiResultEl);
   document.getElementById('resultCard').scrollIntoView({behavior:'smooth',block:'start'});
 
@@ -569,7 +569,7 @@ async function _doAnalyze() {
         }catch(e){ if(e.message&&!e.message.includes('JSON')) throw e; }
       }
     }
-    if(!full) throw new Error('AI không trả về kết quả.');
+    if(!full) throw new Error('Máy chủ không trả về kết quả.');
     el.innerHTML=renderMarkdown(full);
     _saveTuongReading('dien-tuong', full, _imageData, _mediaType);
     // Chia sẻ CHỈ text luận giải của AI — KHÔNG bao giờ đính kèm ảnh khuôn mặt

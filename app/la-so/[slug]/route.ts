@@ -1,6 +1,6 @@
 // app/la-so/[slug]/route.ts
 // Priority:
-//   1. laso_public  (user-paid, full AI luận giải)
+//   1. laso_public  (user-paid, full hệ thống luận giải)
 //   2. laso_pregen  (old pre-generated batch)
 //   3. ISR compute  (new 438K pages: {can-chi}-{dd}-{mm}-{yyyy}-gio-{gio}-{gioi}-{namXem})
 //   4. Redirect to menh-kho
@@ -257,7 +257,7 @@ body{font-family:'Be Vietnam Pro',Arial,sans-serif;background:var(--bg);color:va
   ${scoresHTML ? `<div class="section"><div class="section-title"><span class="ic-inline" data-icon-emoji="📊" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">📊</span> Điểm 6 Chiều Từng Cung</div><div class="scores-grid">${scoresHTML}</div></div>` : ''}
   ${contentHTML ? `<div class="section"><div class="body-content">${contentHTML}</div></div>` : ''}
   <div class="cta-box">
-    <h3>Luận Giải AI Đầy Đủ — 24 Phần</h3>
+    <h3>Luận Giải Chuyên Sâu Đầy Đủ — 24 Phần</h3>
     <p>Luận giải chuyên sâu về tính cách, sự nghiệp, tình duyên, vận hạn theo cổ pháp Tử Vi Đẩu Số — ngày giờ sinh đã điền sẵn, không phải nhập lại.</p>
     <a class="cta-btn" href="${appLuanGiaiHref(parseIsrSlug(slug))}">Xem Luận Giải →</a>
   </div>
@@ -836,7 +836,7 @@ function render24Sections(ls: Rec, params: IsrParams): string {
     b1 += `</div>`;
   }
   if (!b1) b1 = `<p>Lá số không có cách cục đặc biệt. Phân tích dựa trên từng sao và sự phối hợp giữa các cung.</p>`;
-  b1 += cta('Xem luận giải AI đầy đủ lá số này');
+  b1 += cta('Xem luận giải chuyên sâu đầy đủ lá số này');
   const s1 = sec(1, b1);
 
   // ── Sections 2–13: 12 Cung ───────────────────────────────────────────────
@@ -997,7 +997,7 @@ function render24Sections(ls: Rec, params: IsrParams): string {
     // Score bars 6 chiều
     if (sc) body += scoreBars6(cungName);
 
-    body += cta(`Xem luận giải AI chi tiết ${cungName}`);
+    body += cta(`Xem luận giải chuyên sâu chi tiết ${cungName}`);
     return sec(i+2, body);
   });
 
@@ -1022,7 +1022,7 @@ function render24Sections(ls: Rec, params: IsrParams): string {
   } else {
     b14 = `<p>Không có dữ liệu đại vận.</p>`;
   }
-  b14 += cta('Xem luận giải AI toàn bộ đại vận');
+  b14 += cta('Xem luận giải chuyên sâu toàn bộ đại vận');
   const s14 = sec(14, b14);
 
   // ── Sections 15–23: Đại Vận 1–9 ──────────────────────────────────────────
@@ -1149,7 +1149,7 @@ function render24Sections(ls: Rec, params: IsrParams): string {
     }
 
     if (!body) body = `<p style="color:#888;font-style:italic">Không đủ dữ liệu để phân tích đại vận này.</p>`;
-    body += cta(`Xem luận giải AI đại vận ${dvIdx+1}`);
+    body += cta(`Xem luận giải chuyên sâu đại vận ${dvIdx+1}`);
 
     // Return with dynamic title including canChi + age
     return `<div class="s24" id="s${phanNum}">
@@ -1206,7 +1206,7 @@ function render24Sections(ls: Rec, params: IsrParams): string {
     b24 += `</div>`;
   }
   if (!b24) b24 = `<p>Không tìm thấy dữ liệu tiểu vận năm ${namXem}.</p>`;
-  b24 += cta(`Xem luận giải AI tiểu vận năm ${namXem}`);
+  b24 += cta(`Xem luận giải chuyên sâu tiểu vận năm ${namXem}`);
   const s24 = sec(24, b24);
 
   return [s1, ...cungSecs, s14, ...dvSecs, s24].join('\n');
@@ -1476,9 +1476,9 @@ a.sao-link:hover{opacity:1;border-bottom-style:solid}
 
     <div>
       <div class="cta-box">
-        <h3>Luận Giải AI — 24 Phần</h3>
+        <h3>Luận Giải Chuyên Sâu — 24 Phần</h3>
         <p>Phân tích chuyên sâu tính cách, sự nghiệp, tình duyên, vận hạn năm ${namXem} — ngày giờ sinh đã điền sẵn, không phải nhập lại.</p>
-        <a class="cta-btn" href="${appLuanGiaiHref(params)}">Xem Luận Giải AI →</a>
+        <a class="cta-btn" href="${appLuanGiaiHref(params)}">Xem Luận Giải Chuyên Sâu →</a>
       </div>
 
       <div id="share-bar-isr"></div>

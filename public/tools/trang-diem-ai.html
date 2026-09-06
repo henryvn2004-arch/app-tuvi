@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <link rel="preload" href="/nav.js?v=25" as="script">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Trang Điểm AI — Tử Vi Minh Bảo</title>
+<title>Trang Điểm — Tử Vi Minh Bảo</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
@@ -279,7 +279,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg-soft); color: va
 #canvas { display: none; }
 </style>
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"AI tư vấn trang điểm hoạt động như thế nào?","acceptedAnswer":{"@type":"Answer","text":"AI phân tích hình dạng khuôn mặt, tông da và các đặc điểm từ ảnh chụp, sau đó đề xuất kỹ thuật và sản phẩm trang điểm phù hợp để làm nổi bật điểm đẹp và cân bằng tỉ lệ khuôn mặt."}},{"@type":"Question","name":"Trang điểm có thể thay đổi vận khí theo phong thủy không?","acceptedAnswer":{"@type":"Answer","text":"Theo nhân tướng học, trang điểm đúng cách có thể tăng cường điểm mạnh trên khuôn mặt. Làm nổi bật vầng trán sáng hoặc điểm nhấn vào điền trạch cung được cho là có ảnh hưởng tích cực đến vận khí."}},{"@type":"Question","name":"Màu son môi nào hợp với từng tông da?","acceptedAnswer":{"@type":"Answer","text":"Da ngăm hợp son cam đất, nâu đỏ, berry. Da vàng ấm hợp son đào, hồng san hô, nâu nhạt. Da sáng hợp hầu hết màu son; đặc biệt đỏ cổ điển và hồng lạnh tôn da nhất."}}]}
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Tư vấn trang điểm hoạt động như thế nào?","acceptedAnswer":{"@type":"Answer","text":"Phân tích hình dạng khuôn mặt, tông da và các đặc điểm từ ảnh chụp, sau đó đề xuất kỹ thuật và sản phẩm trang điểm phù hợp để làm nổi bật điểm đẹp và cân bằng tỉ lệ khuôn mặt."}},{"@type":"Question","name":"Trang điểm có thể thay đổi vận khí theo phong thủy không?","acceptedAnswer":{"@type":"Answer","text":"Theo nhân tướng học, trang điểm đúng cách có thể tăng cường điểm mạnh trên khuôn mặt. Làm nổi bật vầng trán sáng hoặc điểm nhấn vào điền trạch cung được cho là có ảnh hưởng tích cực đến vận khí."}},{"@type":"Question","name":"Màu son môi nào hợp với từng tông da?","acceptedAnswer":{"@type":"Answer","text":"Da ngăm hợp son cam đất, nâu đỏ, berry. Da vàng ấm hợp son đào, hồng san hô, nâu nhạt. Da sáng hợp hầu hết màu son; đặc biệt đỏ cổ điển và hồng lạnh tôn da nhất."}}]}
 </script>
 </head>
 <body>
@@ -287,7 +287,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg-soft); color: va
 <div id="nav-placeholder"></div>
 
 <div class="hero">
-  <div class="hero-badge">✦ Công cụ làm đẹp AI</div>
+  <div class="hero-badge">✦ Công cụ làm đẹp</div>
   <img class="hero-avatar" src="/tool-avatars/trang-diem-phan-tich.webp" alt="" loading="lazy" onerror="this.remove()">
   <h1>Trang Điểm <span>Hợp Tướng</span></h1>
   <p>Phân tích tướng mặt theo cổ pháp — gợi ý phong cách makeup châu Á phù hợp với mệnh và tướng số của bạn</p>
@@ -404,11 +404,11 @@ const FACE_EMOJI = { oval:'🥚', round:'⭕', square:'⬜', heart:'🫀', oblon
 
 const ANALYSIS_STEPS = [
   { label: 'Tính nạp âm bản mệnh', ms: 900 },
-  { label: 'AI phân tích khuôn mặt & gợi ý phong cách trang điểm', ms: 0 },
+  { label: 'Phân tích khuôn mặt & gợi ý phong cách trang điểm', ms: 0 },
 ];
 const TRYON_STEPS = [
   { label: 'Chuẩn bị prompt trang điểm', ms: 1200 },
-  { label: 'AI đang tạo ảnh trang điểm mới', ms: 0 },
+  { label: 'Đang tạo ảnh trang điểm mới', ms: 0 },
 ];
 let _analysisLoadingCtl = null;
 let _tryonLoadingCtl = null;
@@ -717,7 +717,7 @@ window.addEventListener('load', () => {
         <p>Trong nhân tướng học, khuôn mặt được đọc theo ngũ hành: mắt thuộc Mộc (sắc bén, linh hoạt), mũi thuộc Thổ (nền tảng, tài lộc), tai thuộc Thủy (trí tuệ, phúc thọ), lông mày thuộc Mộc (chí khí, anh em), miệng thuộc Thổ và Thủy (lời nói, phúc duyên). Trang điểm — theo quan điểm này — là cách điều chỉnh sự cân bằng ngũ hành trên khuôn mặt.</p>
         <p>Ứng dụng thực tế: người mày thưa (Mộc yếu) có thể vẽ mày dày hơn để tăng chí khí; người môi nhạt (Thổ và Thủy nhạt) dùng son để tăng phúc duyên. Đây không phải thay đổi tướng số mà là <em>tôn lên</em> những gì đã có — khác với ngụy trang hay che giấu.</p>
         <p>Điều thú vị là makeup artist giỏi và thầy tướng số đều nói một điều tương tự: trang điểm tốt nhất là trang điểm làm người đó "trông ra chính mình nhất". Sự hài hòa, không phải sự hoàn hảo theo tiêu chuẩn bên ngoài, mới là đích đến của cả nghệ thuật trang điểm lẫn nhân tướng học.</p>
-        <p class="kb-links">Xem thêm: <a href="/tools/kieu-toc-ai.html">Tư Vấn Kiểu Tóc &amp; Kính Mắt</a>, <a href="/tools/personal-color.html">Personal Color AI</a>, <a href="/tools/xlook.html">xLook — Tủ Đồ AI</a></p>
+        <p class="kb-links">Xem thêm: <a href="/tools/kieu-toc-ai.html">Tư Vấn Kiểu Tóc &amp; Kính Mắt</a>, <a href="/tools/personal-color.html">Personal Color</a>, <a href="/tools/xlook.html">xLook — Tủ Đồ</a></p>
       </div>
     </div>
   </div>
