@@ -18,11 +18,24 @@ import { test, expect, type Page } from '@playwright/test';
 // 🔴 CHẠY Ở TRẠNG THÁI CHƯA ĐĂNG NHẬP — bắt buộc, không phải cho tiện.
 // `playwright.config.ts` gắn `storageState: tests/.auth/user.json` cho project
 // chromium, tức mặc định MỌI bài kiểm chạy như người ĐÃ đăng nhập. Nhưng luồng
-// PR này dựng ra là cho khách nguội từ quảng cáo, và `_renderUnlockBlock` rẽ
-// HAI nhánh khác hẳn nhau theo `_lgLoggedIn()`: đã đăng nhập → một nút phẳng;
-// chưa → `TuviPaywall.lockPreview` dựng `.tpw-lock`. Để mặc định thì bài kiểm
-// đo nhánh KHÔNG phải nhánh đang nói tới, và assert `.tpw-lock` đỏ trên CI
-// trong khi xanh ở máy (máy không có phiên đăng nhập nào).
+// PR này dựng cho khách nguội từ quảng cáo, và `_renderUnlockBlock` rẽ HAI
+// nhánh khác hẳn theo `_lgLoggedIn()`: đã đăng nhập → một nút phẳng; chưa →
+// `TuviPaywall.lockPreview` dựng `.tpw-lock`. Để mặc định thì bài kiểm đo nhánh
+// KHÔNG phải nhánh nó nói tới, và đỏ trên CI trong khi xanh ở máy.
+//
+// 🪤 CÁCH SAI ĐÃ THỬ (đo trên CI, 5/5 đỏ): `test.use({ storageState: {cookies:
+// [], origins: []} })`. Cùng cái file `tests/.auth/user.json` đó chở HAI thứ —
+// phiên đăng nhập của APP **và cookie `_vercel_jwt`**, tức vé qua cửa Vercel
+// Authentication của preview (xem `tests/auth.setup.ts`). Xoá sạch storageState
+// là vứt luôn vé, mọi lượt `goto` đâm vào tường đăng nhập của Vercel.
+//
+// 🪤 Xoá phiên khỏi localStorage cũng KHÔNG đủ: `auth.js` có đường lùi sang
+// cookie JS rồi cookie server khi localStorage trống (chống iOS ITP).
+//
+// CÁCH ĐÚNG: khoá `window.Auth` ở trạng thái CHƯA đăng nhập bằng
+// `defineProperty writable:false` — đúng kỹ thuật CLAUDE.md ghi cho việc ghim
+// `Auth` (gán thường bị chính `auth.js` đè lúc nó nạp). Cookie Vercel giữ
+// nguyên, chỉ trạng thái đăng nhập của APP bị ghim.
 
 /** Các lượt gọi `/api/lasotuvi` mà stub bắt được, gắn vào chính `page`. */
 type PreviewCall = { phan: number; anonId?: string };
@@ -66,6 +79,22 @@ async function stubApis(page: Page, opts?: { blockPreview?: boolean }) {
 }
 
 async function run(page: Page) {
+  // Ghim CHƯA đăng nhập — xem khối chú thích đầu file. Phủ đúng 8 hàm mà trang
+  // + shell + paywall thật sự gọi (`grep -oh 'Auth\.[a-zA-Z]*'`), không nhiều
+  // hơn: stub thừa thì che mất lỗi, stub thiếu thì trang ném lỗi ở chỗ khác.
+  await page.addInitScript(() => {
+    const loggedOut = {
+      isLoggedIn: () => false,
+      isRestoring: () => false,
+      getUser: () => null,
+      getSession: () => null,
+      getFreshToken: async () => null,
+      refresh: async () => null,
+      require: (cb?: () => void) => { void cb; },
+      signInAnonymously: async () => false,
+    };
+    Object.defineProperty(window, 'Auth', { value: loggedOut, writable: false, configurable: false });
+  });
   // KHÔNG giả cờ webdriver: để track.js no-op ĐÚNG như khi người thật chặn đo.
   // Đây chính là ca phải chạy được — anonId của paywall không được phụ thuộc Track.
   await page.goto('/app-luan-giai.html');
@@ -86,8 +115,6 @@ async function run(page: Page) {
   });
   await page.waitForSelector('#lgBody .sec', { timeout: 15000 });
 }
-
-test.use({ storageState: { cookies: [], origins: [] } });
 
 test('bản mẫu KHÔNG tự mở, form đứng trên cùng', async ({ page }) => {
   await stubApis(page);
