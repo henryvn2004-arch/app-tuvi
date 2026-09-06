@@ -1542,6 +1542,27 @@
     return host;
   }
 
+  // Nút MỚI của FAB phải vào TRƯỚC nút Hỏi, không phải `appendChild`.
+  //
+  // 🔴 VÌ SAO. `.ws-fab` neo theo `bottom` và xếp cột: mép DƯỚI đứng yên, khối
+  // cao lên thì mép TRÊN dâng lên. Nút Hỏi có mặt từ lúc boot, còn Chia sẻ /
+  // Facebook / PDF chỉ hiện khi đã có kết quả — `appendChild` đặt chúng BÊN
+  // DƯỚI nút Hỏi nên nút Hỏi bị đẩy LÊN. Đo trên prod: khối 44px → 200px,
+  // `prev [332,722,44,44] → cur [332,566,44,200]`, CLS 0,0049 ở /app/luan-giai.
+  //
+  // Và đây KHÔNG chỉ là chuyện điểm Lighthouse: cú nở xảy ra vài giây sau khi
+  // người dùng bấm luận — quá xa cửa sổ 500ms của `hadRecentInput` — nên nó
+  // tính vào CLS thật của MỌI lượt chạy tool, không riêng trang tự mở bản mẫu.
+  //
+  // Chèn trước nút Hỏi thì nút Hỏi nằm đáy và ĐỨNG YÊN, khối nở lên vùng trống
+  // phía trên: nút mới xuất hiện ở chỗ trước đó không có gì ⇒ không cú nhảy nào.
+  // Đây cũng là bố cục đúng hơn: thứ LUÔN có mặt thì ghim ở điểm neo cố định.
+  function fabAdd(host, btn) {
+    var ask = askBtnEl();
+    if (ask && ask.parentNode === host) host.insertBefore(btn, ask);
+    else host.appendChild(btn); // trang không có nút Hỏi — giữ nguyên nếp cũ
+  }
+
   // ── LƯU PDF — cùng vòng đời với nút Chia sẻ ──────────────────────────
   // Trước đây đúng 3/33 tool có nút PDF, mỗi tool tự dựng một thanh riêng
   // trong nội dung + tự chép một khối @media print. Nay shell lo cả hai:
@@ -1562,7 +1583,7 @@
     btn.setAttribute('data-tip', 'Lưu PDF'); btn.setAttribute('aria-label', 'Lưu PDF');
     btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M12 3v11m0 0 4-4m-4 4-4-4"/><path d="M4 17v2.5A1.5 1.5 0 0 0 5.5 21h13a1.5 1.5 0 0 0 1.5-1.5V17"/></svg>';
     btn.addEventListener('click', printWorkspace);
-    host.appendChild(btn);
+    fabAdd(host, btn);
     ensureQrJs(function () {}); // nạp trước lặng lẽ — lúc bấm in thường đã sẵn
   }
   // Nạp `/tools-shared/qr.js` (window.QR) ĐỘNG, cùng lối `ensureToolSourcesJs`
@@ -1764,7 +1785,7 @@
       btn.setAttribute('data-tip', 'Chia sẻ'); btn.setAttribute('aria-label', 'Chia sẻ');
       btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><circle cx="18" cy="5" r="2.6"/><circle cx="6" cy="12" r="2.6"/><circle cx="18" cy="19" r="2.6"/><path d="m8.3 10.7 7.4-4.4M8.3 13.3l7.4 4.4"/></svg>';
       btn.addEventListener('click', shareWorkspace);
-      host.appendChild(btn);
+      fabAdd(host, btn);
     }
   }
   // ── C3 — BÁO CHO NGƯỜI CHIA SẺ BIẾT, VÀ CHO HỌ ĐƯỜNG ẨN ─────────────────
@@ -1876,7 +1897,7 @@
     btn.setAttribute('data-tip', 'Đăng Facebook'); btn.setAttribute('aria-label', 'Đăng Facebook');
     btn.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 12.06C22 6.53 17.52 2.04 12 2.04S2 6.53 2 12.06c0 5 3.66 9.13 8.44 9.88v-6.99H7.9v-2.89h2.54V9.85c0-2.5 1.49-3.9 3.77-3.9 1.09 0 2.24.2 2.24.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56v1.88h2.78l-.45 2.89h-2.33v6.99c4.78-.75 8.44-4.88 8.44-9.88z"/></svg>';
     btn.addEventListener('click', postFacebook);
-    host.appendChild(btn);
+    fabAdd(host, btn);
   }
   function postFacebook() {
     var btn = document.getElementById('wsFbBtn');

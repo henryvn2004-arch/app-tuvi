@@ -108,13 +108,13 @@ sửa bằng SQL không cần deploy) · `lib/marketing/*` (digest · cảnh bá
 (tường trả phí) · `tool-prices.js` (giá) · `poster.js` (ảnh 9:16 + QR) ·
 `nav.js` (icon dùng chung) · `track.js` (đo) · `referral.js`.
 
-### 41 bộ dò (chạy trong CI lint) — `npm run check:*`
+### 43 bộ dò (chạy trong CI lint) — `npm run check:*`
 `prices` `nostore` `groups` `viec` `share` `history` `shellboot` `introcard` `navph`
-`formph` `formblock`
+`formph` `formblock` `font`
 `authapi` `giosinh` `keyframes` `hoatdong` `hexagrams` `laso` `railfields`
 `railwrap` `cacheshape` `hao` `motifs` `terms` `publish` `jobs` `token`
 `prompt` `topics` `batrach` `sodep` `lunar` `vntz` `tooltip` `cns` `celebanh`
-`nguoithan` `nhatky` `slug` `lasogolden` `refbenchmarks` `lavong`.
+`nguoithan` `nhatky` `slug` `lasogolden` `refbenchmarks` `lavong` `hooktag`.
 **Bộ dò kêu oan là bộ dò bị tắt đi** — thà thu hẹp còn hơn để nó báo bừa.
 
 ## 📐 QUY ƯỚC BẮT BUỘC (đọc trước khi viết UI mới)
@@ -134,6 +134,8 @@ sửa bằng SQL không cần deploy) · `lib/marketing/*` (digest · cảnh bá
   emoji trong dữ liệu đưa qua `window.iconHtml(raw)`. GIỮ ký tự đơn sắc theo font
   (`→ ← ✦ ★ ✓ ✗ ✕ ⚠ ☰`). KHÔNG áp dụng cho prompt LLM và tin Telegram admin.
   Thêm icon → sửa `ICONS` **và bump `nav.js?v=` trên cả cây `public/`**.
+  Nút CHỈ có icon: **cấm báo trạng thái bằng `textContent`** — lệnh đó xoá luôn
+  `<svg>` bên trong; đổi `data-icon` rồi gọi lại `mountIcons`.
   Luật đầy đủ + 4 bẫy đã vấp: `docs/ICONS.md`.
 - **Dùng thử rail cho khách CHƯA đăng nhập** — `/api/v1/chat` không 401 cứng nữa;
   3 trần độc lập (`anon.rail_trial_turns` · `rail_ip_daily_cap` · `rail_global_daily_cap`,
@@ -291,6 +293,11 @@ Mỗi luật dưới đây sinh ra từ một lần cắn thật. Cột cuối l
   từ DB/API, nhắm DƯ chứ không THIẾU · **CLS chỉ kết luận được bằng prod↔prod**
   (preview đo hụt 0,016 vs 0,160 thật) · box JS chèn vào ĐẦU khung nội dung vừa
   gây CLS vừa LÀ phần tử LCP ⇒ dựng tĩnh trong HTML (`npm run check:introcard`).
+- **Khối trong `.ws` co theo bề rộng CỘT, KHÔNG theo viewport** — desktop `.ws`
+  chỉ còn ~360px sau khi trừ sidebar 246 + rail 336, nên `@media(max-width:600px)`
+  KHÔNG BAO GIỜ khớp: layout desktop nhồi trong cột hẹp. Khai `container-type`
+  ở khối cha rồi hỏi `@container`. ⚠️ `srcset`+`sizes` thì NGƯỢC LẠI — nó chỉ
+  hiểu viewport, hai thứ lệch nhau khi rail mở.
 - **Overlay:** popup bám phần tử phải **KẸP CỨNG vào vùng nhìn thấy SAU khi chọn
   trên/dưới** (đã nhốt người dùng thật) · `window.innerHeight` KHÔNG phải vùng
   nhìn thấy trên iOS Safari → `visualViewport` · mọi overlay chặn đường phải có

@@ -62,7 +62,7 @@ export async function orgNode(opts: OrgNodeOptions = {}): Promise<Record<string,
     url: SEO_BASE,
     logo: { '@type': 'ImageObject', url: `${SEO_BASE}/seal.webp` },
     description:
-      'Cổng mệnh lý AI — lá số lập bằng engine tất định theo cổ pháp, AI chỉ luận trên số đã tính, không tự sinh dữ liệu.',
+      'Cổng mệnh lý — lá số lập bằng engine tất định theo cổ pháp, phần luận chỉ diễn giải trên số đã tính, không tự sinh dữ liệu.',
     areaServed: ['VN', 'US', 'AU', 'CA'],
     inLanguage: 'vi',
   };
