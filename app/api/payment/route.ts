@@ -84,6 +84,34 @@ const BANK_BY_BIN: Record<string, string> = {
   '546035': 'Ubank by VPBank', '963388': 'TNEX',
 };
 
+// 🔑 Mã app VietQR (dùng để dựng deep link `dl.vietqr.io/pay?...&ba=<so_tk>@<ma>`)
+// — KHÁC bảng tên hiển thị ở trên, tra từ `https://api.vietqr.io/v2/banks` (field `code`).
+const BANK_CODE_BY_BIN: Record<string, string> = {
+  '970400': 'sgicb',  '970403': 'stb',
+  '970405': 'vba',    '970406': 'vikki',
+  '970407': 'tcb',    '970408': 'gpb',
+  '970409': 'bab',    '970410': 'scvn',
+  '970412': 'pvcb',   '970414': 'mbv',
+  '970415': 'icb',    '970416': 'acb',
+  '970418': 'bidv',   '970419': 'ncb',
+  '970422': 'mb',     '970423': 'tpb',
+  '970424': 'shbvn',  '970425': 'abb',
+  '970426': 'msb',    '970427': 'vab',
+  '970428': 'nab',    '970429': 'scb',
+  '970430': 'pgb',    '970431': 'eib',
+  '970432': 'vpb',    '970433': 'vietbank',
+  '970434': 'ivb',    '970436': 'vcb',
+  '970437': 'hdb',    '970438': 'bvb',
+  '970439': 'pbvn',   '970440': 'seab',
+  '970441': 'vib',    '970442': 'hlbvn',
+  '970443': 'shb',    '970444': 'cbb',
+  '970446': 'coopbank', '970448': 'ocb',
+  '970449': 'lpb',    '970452': 'klb',
+  '970454': 'vccb',   '970457': 'wvn',
+  '970458': 'uob',    '546034': 'cake',
+  '546035': 'ubank',  '963388': 'timo',
+};
+
 function createPayOSSignature(data: Record<string, unknown>): string {
   const checksumKey = process.env.PAYOS_CHECKSUM_KEY!;
   const str = Object.keys(data).sort().map(k => `${k}=${data[k]}`).join('&');
@@ -708,9 +736,10 @@ async function handleCreateBank(body: Record<string, unknown>): Promise<Response
     const d = payosData.data;
     const bin = String(d.bin || '');
     const bankName = BANK_BY_BIN[bin] || null;
+    const bankCode = BANK_CODE_BY_BIN[bin] || null;
     if (bin && !bankName) console.warn('[create-bank] BIN chua co trong BANK_BY_BIN:', bin);
     return ok({ orderCode, checkoutUrl: d.checkoutUrl, accountNumber: d.accountNumber,
-      accountName: d.accountName, bin: d.bin, bankName, amountVND,
+      accountName: d.accountName, bin: d.bin, bankName, bankCode, amountVND,
       credits, label, description });
   } catch (e: unknown) { return err((e as Error).message); }
 }
