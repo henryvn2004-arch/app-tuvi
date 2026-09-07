@@ -207,7 +207,7 @@ window.SHELL_INTRO={key:'van-han-nam'};</script>
 <script src="/tuvi-form.js?v=2"></script>
 <script src="/tools-shared/cung-ngay-sinh.js?v=2"></script>
 <script src="/auth.js?v=2"></script>
-<script src="/tuvi-paywall.js?v=25"></script>
+<script src="/tuvi-paywall.js?v=26"></script>
 <script src="/tools-shared/hook-charts.js?v=2"></script>
 <script src="/poster.js?v=5"></script>
 <script src="/tools-shared/hook-facts.js?v=1"></script>
@@ -734,7 +734,7 @@ async function _runPhanVanHan(p){
     box.innerHTML='<div class="phan-empty">Đang luận…</div>';
     if(window.AiLoadingSteps&&AiLoadingSteps.mountWait){
       w=AiLoadingSteps.mountWait(box,{label:'Đang luận '+(_labels[p]||('phần '+p))+'…',
-        expectSec:(_pace&&_pace.perPartSec())||0,expectText:(_pace&&_pace.perPartText())||''});
+        expectSec:(_pace&&_pace.perPartSec())||0,expectText:(_pace&&_pace.perPartText())||'',center:true});
       w.start();
     }
   }

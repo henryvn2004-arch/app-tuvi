@@ -161,7 +161,7 @@
 <script src="/tools-shared/vn-timezone.js?v=1"></script>
 <script src="/tuvi-form.js?v=2"></script>
 <script src="/auth.js?v=2"></script>
-<script src="/tuvi-paywall.js?v=25"></script>
+<script src="/tuvi-paywall.js?v=26"></script>
   <script src="/nav.js?v=26" data-icons-only></script><script src="/shell.js?v=87"></script>
 <script src="/tools-shared/ai-loading-steps.js?v=10"></script>
 <script>
@@ -691,7 +691,7 @@ async function _loadNextPhanAI(){
     box.innerHTML='<div class="phan-empty">Đang luận giải…</div>';
     if(window.AiLoadingSteps&&AiLoadingSteps.mountWait){
       w=AiLoadingSteps.mountWait(box,{label:'Đang luận giải phần '+(idx+1)+'…',
-        expectSec:(_xtPace&&_xtPace.perPartSec())||0,expectText:(_xtPace&&_xtPace.perPartText())||''});
+        expectSec:(_xtPace&&_xtPace.perPartSec())||0,expectText:(_xtPace&&_xtPace.perPartText())||'',center:true});
       w.start();
     }
   }
