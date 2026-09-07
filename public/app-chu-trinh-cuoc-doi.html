@@ -802,6 +802,17 @@ async function initLuanGiaiGate(ls){
   if(hasAccess){
     var cached=await _fetchCachedLuanGiai(_pendingSlug);
     if(cached){ _renderCachedLuanGiai(cached); return; }
+    // 🐞 (2026-09-07, phát hiện lúc chạy final-test thật) ĐÃ trả tiền nhưng
+    // CHƯA có cache — ca thật: lượt sinh trước bị ngắt giữa chừng (đóng tab/
+    // mất mạng trước khi PhanPool chạy xong `_saveLuanGiaiResult`). Rơi về
+    // `_renderUnlockBlock()` bên dưới sẽ hiện LẠI nút "— 250 Lượng →" y hệt
+    // người chưa mua — `requireCredits` tự chặn thu đôi (re-access check)
+    // nên bấm vào KHÔNG mất thêm Lượng thật, nhưng GIAO DIỆN nói dối khách là
+    // sắp trả tiền lần nữa. Mở khoá + sinh lại NGAY tại đây, miễn phí, vì
+    // `hasAccess` đã xác nhận rồi — đừng bắt khách tự bấm qua cửa trả-tiền-giả.
+    renderLuan(ls,fd,namxem);
+    _startLuanGiaiAI();
+    return;
   }
   _renderUnlockBlock();
   // Hard paywall (2026-09-07): chạy model THẬT cho phần 1 (engine phan 14)
