@@ -264,6 +264,28 @@ function retryResultImage() {
 
 TuviForm.render('tuviFormHost', {mode:'compact', gioitinh:'nam', showNamXem:true});
 
+// Quay lại từ lượt nạp Lượng (hết Lượng ngay lúc bấm — xem
+// `TuviPaywall._insufficient`/`resumeIfPending`). Trang MULTI-PAGE (điều
+// hướng cứng sang /topup.html rồi quay lại), nên form + `_lastBirth` vừa tính
+// mất sạch khi tải lại. `analyze()` tự lưu form ngay khi validate xong; đọc
+// lại + tự gọi `analyze()` khi quay về với `?tpwResume=1`.
+var CDTK_RESUME_KEY = 'cdtk_pending_resume';
+(function () {
+  var url;
+  try { url = new URL(location.href); } catch (e) { return; }
+  if (url.searchParams.get('tpwResume') !== '1') return;
+  var raw;
+  try { raw = sessionStorage.getItem(CDTK_RESUME_KEY); sessionStorage.removeItem(CDTK_RESUME_KEY); } catch (e) { return; }
+  if (!raw) return;
+  var fd;
+  try { fd = JSON.parse(raw); } catch (e) { return; }
+  if (!fd || !fd.ngay || !fd.thang || !fd.nam) return;
+  TuviForm.setData(fd);
+  var runAutoAnalyze = function () { if (typeof analyze === 'function') analyze(); };
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', runAutoAnalyze);
+  else runAutoAnalyze();
+})();
+
 function showError(msg) {
   var e = document.getElementById('error-msg');
   if (msg) { e.textContent = msg; e.classList.add('active'); } else { e.classList.remove('active'); }
@@ -286,6 +308,10 @@ async function analyze() {
   // name: form có ô "Họ và tên" nhưng trước đây bị bỏ rơi ở đây, nên dòng
   // tóm tắt lá số (trên trang lẫn trong link chia sẻ) không biết của ai.
   // Kèm luôn vào birth để rail cũng xưng hô đúng tên.
+  // Lưu lại NGAY để `?tpwResume=1` (xem `CDTK_RESUME_KEY` ở đầu file) khôi
+  // phục được form này không cần gõ lại.
+  try { sessionStorage.setItem(CDTK_RESUME_KEY, JSON.stringify(fdIn)); } catch (e) { /* ignore */ }
+
   _lastBirth = { day: dd, month: mm, year: yyyy, hourBranch: gioAmIdx, gender: gender, isLunar: false,
     name: (fdIn.hoten || '').trim() || undefined };
   _currentSlug = TuviPaywall.generateToolSlug('chan-dung-tien-kiep-' + dd + '-' + mm + '-' + yyyy);

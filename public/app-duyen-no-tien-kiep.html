@@ -338,6 +338,34 @@ try {
   if (_remembered) TuviForm.setData(_remembered, 'a');
 } catch (e) { /* không có shell / chưa nhớ gì — bỏ qua */ }
 
+// Quay lại từ lượt nạp Lượng (hết Lượng ngay lúc bấm "Xem Duyên Nợ" — xem
+// `TuviPaywall._insufficient`/`resumeIfPending` trong tuvi-paywall.js). Trang
+// này KHÔNG gọi `resumeIfPending` (tool 1 cú bấm, không có tường khoá đứng
+// sẵn để tự bấm lại) và là MULTI-PAGE (điều hướng CỨNG sang /topup.html rồi
+// quay lại), nên cả N form vừa gõ (2-5 người) mất sạch khi tải lại. Cùng mẫu
+// `LG_RESUME_KEY` ở app-luan-giai.html: `analyze()` tự lưu dữ liệu MỌI ô đang
+// có ngay khi bấm "Xem Duyên Nợ" thành công (validate xong), đọc lại khi quay
+// về với `?tpwResume=1` rồi tự gọi lại `analyze()` — không cần nhớ `_currentSlug`
+// cũ vì `generateToolSlug` sinh slug MỚI mỗi lượt gọi, `requireCreditsCachedQuery`
+// tự nhận ra đây là cùng nhóm lá số nếu có xem lại miễn phí.
+var DN_RESUME_KEY = 'dntk_pending_resume';
+(function () {
+  var url;
+  try { url = new URL(location.href); } catch (e) { return; }
+  if (url.searchParams.get('tpwResume') !== '1') return;
+  var raw;
+  try { raw = sessionStorage.getItem(DN_RESUME_KEY); sessionStorage.removeItem(DN_RESUME_KEY); } catch (e) { return; }
+  if (!raw) return;
+  var forms;
+  try { forms = JSON.parse(raw); } catch (e) { return; }
+  if (!Array.isArray(forms) || forms.length < 2) return;
+  while (_slots.length < forms.length) addPerson();
+  for (var i = 0; i < forms.length; i++) TuviForm.setData(forms[i], SLOT_KEYS[i]);
+  var runAutoAnalyze = function () { if (typeof analyze === 'function') analyze(); };
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', runAutoAnalyze);
+  else runAutoAnalyze();
+})();
+
 function showError(msg) {
   var e = document.getElementById('error-msg');
   if (msg) { e.textContent = msg; e.classList.add('active'); } else { e.classList.remove('active'); }
@@ -487,6 +515,10 @@ async function analyze() {
   }
   if (births.length < 2) { showError('Cần ít nhất hai lá số.'); return; }
   _lastBirths = births;
+
+  // Lưu lại NGAY để `?tpwResume=1` (quay về sau khi nạp Lượng, xem
+  // `DN_RESUME_KEY` ở đầu file) khôi phục được đủ N form này không cần gõ lại.
+  try { sessionStorage.setItem(DN_RESUME_KEY, JSON.stringify(_slots.map(function (k) { return TuviForm.getData(k); }))); } catch (e) { /* ignore */ }
 
   // ⚠️ TIỀN TỐ PHẢI LÀ ĐÚNG `tool_id`, không được rút gọn. `hasRecentToolPayment`
   // (lib/billing/credits.ts) — lưới an toàn chống "đã trả tiền mà vẫn ăn 402" —

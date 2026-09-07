@@ -258,6 +258,29 @@ function retryResultImage() {
 // (mode:'full'): Họ và tên + Giới tính + Năm xem vận + ngày giờ sinh.
 TuviForm.render('tuviFormHost', {mode:'compact', gioitinh:'nam', showNamXem:true});
 
+// Quay lại từ lượt nạp Lượng (hết Lượng ngay lúc bấm — xem
+// `TuviPaywall._insufficient`/`resumeIfPending`). Trang MULTI-PAGE (điều
+// hướng cứng sang /topup.html rồi quay lại), nên form + `_lastBirth` vừa tính
+// mất sạch khi tải lại. `analyze()` tự lưu form ngay khi validate xong; đọc
+// lại + tự gọi `analyze()` khi quay về với `?tpwResume=1` — `analyze()` tự
+// biết đăng nhập hay chưa (guest checkout đã có phiên anon) và đi đúng nhánh.
+var CDVC_RESUME_KEY = 'cdvc_pending_resume';
+(function () {
+  var url;
+  try { url = new URL(location.href); } catch (e) { return; }
+  if (url.searchParams.get('tpwResume') !== '1') return;
+  var raw;
+  try { raw = sessionStorage.getItem(CDVC_RESUME_KEY); sessionStorage.removeItem(CDVC_RESUME_KEY); } catch (e) { return; }
+  if (!raw) return;
+  var fd;
+  try { fd = JSON.parse(raw); } catch (e) { return; }
+  if (!fd || !fd.ngay || !fd.thang || !fd.nam) return;
+  TuviForm.setData(fd);
+  var runAutoAnalyze = function () { if (typeof analyze === 'function') analyze(); };
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', runAutoAnalyze);
+  else runAutoAnalyze();
+})();
+
 function showError(msg) {
   var e = document.getElementById('error-msg');
   if (msg) { e.textContent = msg; e.classList.add('active'); } else { e.classList.remove('active'); }
@@ -287,6 +310,10 @@ async function analyze() {
   var fdIn = TuviForm.getData();
   var gender = fdIn.gioitinh, dd = fdIn.ngay, mm = fdIn.thang, yyyy = fdIn.nam, gioAmIdx = fdIn.gioIdx;
   if (!dd || !mm || !yyyy) { showError('Vui lòng nhập đầy đủ ngày tháng năm sinh.'); return; }
+
+  // Lưu lại NGAY để `?tpwResume=1` (xem `CDVC_RESUME_KEY` ở đầu file) khôi
+  // phục được form này không cần gõ lại.
+  try { sessionStorage.setItem(CDVC_RESUME_KEY, JSON.stringify(fdIn)); } catch (e) { /* ignore */ }
 
   _lastBirth = { day: dd, month: mm, year: yyyy, hourBranch: gioAmIdx, gender: gender, isLunar: false };
   _currentSlug = TuviPaywall.generateToolSlug('chan-dung-vo-chong-' + dd + '-' + mm + '-' + yyyy);
