@@ -323,7 +323,7 @@ async function runPost(request: NextRequest) {
   if (isPreview && !paywallDisabled()) {
     previewCacheKey = previewKey({ laSoText, phan: phanNum, namXem, hoTen, gioiTinh });
     const hit = await previewCacheGet(previewCacheKey);
-    if (hit) return ok({ luanGiai: hit, chartData: null, phan, cached: true });
+    if (hit) return ok({ luanGiai: hit, phan, cached: true });
 
     const auth = await authUserFromRequest(request);
     const pKey = 'error' in auth ? (anonId || '') : auth.user.id;
@@ -463,9 +463,6 @@ async function runPost(request: NextRequest) {
       r.durationMs,
     );
 
-    let chartData = null;
-    const chartMatch = text.match(/```chartdata\s*([\s\S]*?)```/);
-    if (chartMatch) { try { chartData = JSON.parse(chartMatch[1].trim()); } catch { /* ignore */ } }
     const luanGiai = text.replace(/```chartdata[\s\S]*?```/, '').trim();
     // Cất bản xem trước để lượt sau CÙNG lá số + CÙNG tên không đốt lại tiền
     // model lẫn một suất quota. Chỉ đường xem trước ghi — phần trả phí đã có
@@ -473,7 +470,7 @@ async function runPost(request: NextRequest) {
     if (previewCacheKey) {
       previewCachePut({ key: previewCacheKey, toolId: previewToolId, phan: phanNum, text: luanGiai });
     }
-    return ok({ luanGiai, chartData, phan });
+    return ok({ luanGiai, phan });
   } catch (e: unknown) {
     return err((e as Error).message);
   }

@@ -2332,10 +2332,6 @@ select.form-input { cursor: pointer; }
       // Store luận giải for this phan
       _luanGiaiStore[_currentPhan] = data.luanGiai || '';
 
-      if (_currentPhan === 14) {
-        console.log('chartData received:', data.chartData);
-      }
-
       // ── Render Bar 12 cung + Wheel of Life (phan 1) ──────────────
       if (_currentPhan === 1 && _astrolabe?.cungScores) {
         setTimeout(() => {
