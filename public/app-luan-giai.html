@@ -231,7 +231,7 @@
         <p class="price-note" data-tvp-price-label="laso">…</p>
         <div id="tuviFormHost"></div>
         <div class="frow" style="margin-bottom:0">
-          <div class="fg" style="width:90px"><label>Năm luận</label><input type="number" id="inpNamxem" value="2026" min="1900" max="2100"></div>
+          <div class="fg" style="width:90px"><label>Năm luận</label><select id="inpNamxem"></select></div>
           <button class="btn-go" id="btnGo" onclick="doLuan()">Luận giải →</button>
         </div>
       </div>
@@ -279,6 +279,7 @@ window.SHELL_INTRO={key:'luan-giai'};</script>
 <script src="/tuvi-laso-format.js?v=2"></script>
 <script src="/tools-shared/vn-timezone.js?v=1"></script>
 <script src="/tuvi-form.js?v=2"></script>
+<script src="/tools-shared/nam-luan-select.js?v=1"></script>
 <script src="/tools-shared/cung-ngay-sinh.js?v=2"></script>
 <script src="/tools-shared/nguoi-than.js?v=1"></script>
 <script src="/auth.js?v=2"></script>
@@ -294,6 +295,7 @@ window.SHELL_INTRO={key:'luan-giai'};</script>
 // ── Form nhập (dùng chung TuviForm — có "Sinh ở ngoài Việt Nam?" + parity giờ
 // sinh lịch sử với standalone) ──
 TuviForm.render('tuviFormHost', {mode:'compact', gioitinh:'nam'});
+NamLuanSelect.mount('inpNamxem');
 
 // Nhận ngày sinh gửi từ form trên trang chủ (`heroBirthSubmit`, public/index.html)
 // — CÙNG mẫu sessionStorage handoff với `app_pending_ask` mà shell.js đọc,
