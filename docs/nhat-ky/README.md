@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-210 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+211 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 **Bốn file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
 ```bash
@@ -11,7 +11,7 @@ sed -n '120,190p' docs/nhat-ky/2026-08.md    # đọc đúng đoạn, đừng ca
 
 | file | số mục | dung lượng |
 |---|---:|---:|
-| `2026-09.md` | 45 | 231,282 B |
+| `2026-09.md` | 46 | 233,247 B |
 | `2026-08.md` | 148 | 1,024,027 B |
 | `2026-07.md` | 12 | 154,531 B |
 | `track-cu.md` | 5 | 89,354 B |
@@ -31,6 +31,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 | 1 | 2026-09 | `2026-09.md` | 💵 Pha 2 hard paywall — 1 Lượng ≈ 500đ, giữ giá gói và nâng số Lượng |
 | 1 | 2026-09 | `2026-09.md` | 💰 Hard paywall Pha 1 — Luận Giải cho đọc thật 2 phần rồi mới dựng tường |
 | 1 | 2026-09 | `2026-09.md` | 📊 Sổ chi phí rail nói ngược sự thật: 9/9 đường thoát ghi sai hoặc không ghi |
+| 1 | 2026-09 | `2026-09.md` | 🩹 Áp migration `viral_applied` lên prod — và lý do "tránh lastmod" hoá ra sai |
 | 1 | 2026-09 | `2026-09.md` | 🧾 Sổ nợ CLAUDE.md — gộp 2/3 bảng chủ đề, dựng cron viết lại `seo_pages` bằng viral-core |
 | 1 | 2026-09 | `2026-09.md` | 🦶 Footer gọn lại theo nav thật — và `footer.js` hoá ra là code chết |
 | 1 | 2026-09 | `2026-09.md` | 📐 Đo khối "TỔ HỢP SAO": bước cắt top-8 trung tính về mã, KHÔNG trung tính về kết quả |
