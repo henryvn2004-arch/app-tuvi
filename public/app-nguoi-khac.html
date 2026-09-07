@@ -306,7 +306,7 @@ window.SHELL_INTRO={key:'nguoi-khac'};</script>
 <script src="/tools-shared/vn-timezone.js?v=1"></script>
 <script src="/tuvi-form.js?v=2"></script>
 <script src="/tools-shared/cung-ngay-sinh.js?v=2"></script>
-<script src="/tuvi-paywall.js?v=28"></script>
+<script src="/tuvi-paywall.js?v=29"></script>
 <script src="/tools-shared/hook-layer.js?v=2"></script>
 <script src="/auth.js?v=2"></script>
   <script src="/nav.js?v=26" data-icons-only></script>
@@ -538,30 +538,40 @@ async function analyze() {
   // ⚠️ Slug PHẢI bắt đầu bằng ĐÚNG `tool_id` (luật đã trả giá ở Duyên Nợ).
   _currentSlug = TuviPaywall.generateToolSlug('nguoi-khac-' + qh + '-' + viec + '-' + b.day + b.month + b.year);
 
-  if (!_nkLoggedIn()) { return _runAnonPreview(b, self, qh, viec); }
-
-  // Đã trả tiền cho đúng lá số này từ trước → mở thẳng, không trừ lại.
-  var free = false;
-  try { free = await TuviPaywall.isFreeRerun('/api/nguoi-khac', _cacheQuery(b, self, qh, viec)); } catch (e) { free = false; }
-  if (free) {
-    TuviPaywall._banner('✓ Bạn đã xem bản này rồi — mở lại, không trừ Lượng');
-    await _doGenerate(true, qh, viec);
-    return;
+  // 🔴 (2026-09-07) Trước đây khách ĐÃ đăng nhập nhưng CHƯA trả tiền bị bỏ qua
+  // thẳng bản xem trước — bấm nút là trả tiền luôn, khác hẳn laso/CTCD/
+  // van-han-nam (ai cũng thấy free-preview trước khi trả tiền). Henry chốt
+  // generalize: chỉ còn MỘT ca mở thẳng không qua preview — đã trả tiền cho
+  // đúng lá số này từ trước (chỉ có thể xảy ra khi đã đăng nhập).
+  if (_nkLoggedIn()) {
+    var free = false;
+    try { free = await TuviPaywall.isFreeRerun('/api/nguoi-khac', _cacheQuery(b, self, qh, viec)); } catch (e) { free = false; }
+    if (free) {
+      TuviPaywall._banner('✓ Bạn đã xem bản này rồi — mở lại, không trừ Lượng');
+      await _doGenerate(true, qh, viec);
+      return;
+    }
   }
-  await TuviPaywall.requireCredits(_currentSlug, function () { return _doGenerate(false, qh, viec); });
+  return _runAnonPreview(b, self, qh, viec);
 }
 
-// Khách chưa đăng nhập: BẢN XEM TRƯỚC. Server chạy model thật rồi cắt payload
-// (`PREVIEW_KEEP_PROSE`), nên ở đây chỉ dựng được đúng phần được gửi. Không có
-// nhánh nào ở client quyết định giấu gì — thứ bị khoá đơn giản là KHÔNG CÓ
-// trong `data`.
+// BẢN XEM TRƯỚC — dùng cho MỌI khách chưa trả tiền, đăng nhập hay chưa (tên
+// hàm giữ từ hồi chỉ khách vô danh gọi tới, xem chú thích ở `analyze()`).
+// Server chạy model thật rồi cắt payload (`PREVIEW_KEEP_PROSE`), nên ở đây
+// chỉ dựng được đúng phần được gửi. Không có nhánh nào ở client quyết định
+// giấu gì — thứ bị khoá đơn giản là KHÔNG CÓ trong `data`.
 async function _runAnonPreview(b, self, qh, viec) {
   _openPanel();
   document.getElementById('loading').style.display = 'none';
   try {
+    // Đã đăng nhập → gửi kèm Bearer, để cầu dao xem-trước phía server tính
+    // suất theo user_id thay vì IP/anonId dùng chung với khách vô danh.
+    var _nkTk = _nkLoggedIn() ? window.Auth.getSession()?.access_token : null;
+    var _nkHeaders = { 'Content-Type': 'application/json' };
+    if (_nkTk) _nkHeaders.Authorization = 'Bearer ' + _nkTk;
     var res = await fetch('/api/nguoi-khac?preview=1', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: _nkHeaders,
       body: JSON.stringify({
         birth: b, birthSelf: self || undefined, name: b.name || '', quanHe: qh, viec: viec,
         anonId: TuviPaywall.previewAnonId(),
@@ -609,12 +619,26 @@ function mountHook(data) {
   });
 }
 
+// Nút phẳng cho khách ĐÃ đăng nhập (xem `_renderLockWall`) — đọc lại
+// `quanHe`/`viecCanLam` tại lúc bấm thay vì đóng gói vào chuỗi `onclick`.
+function _nkUnlockLoggedIn() {
+  var qh = document.getElementById('quanHe').value;
+  var viec = document.getElementById('viecCanLam').value;
+  return TuviPaywall.requireCredits(_currentSlug, function () { return _doGenerate(false, qh, viec); });
+}
 function _renderLockWall(qh, viec, khoaRaw) {
   var khoa = (khoaRaw || []).map(function (k) { return k.tieuDe; });
   if (!khoa.length) khoa = NK_KHOA_FALLBACK;
   var host = document.getElementById('nkLockHost');
   host.style.display = 'block';
   host.innerHTML = '';
+  // Đã đăng nhập (chỉ còn thiếu tiền, không thiếu tài khoản) → nút phẳng, bỏ
+  // qua màn "Đăng ký" — cùng mẫu app-chu-trinh-cuoc-doi.html `_renderUnlockBlock`.
+  if (_nkLoggedIn()) {
+    host.innerHTML = '<button class="btn-go" type="button" onclick="_nkUnlockLoggedIn()">✦ Xem cẩm nang đầy đủ — <span data-tvp-price="nguoi-khac">…</span> Lượng →</button>';
+    TuviPaywall.fillPriceSlots(host);
+    return;
+  }
   TuviPaywall.lockPreview({
     host: host,
     title: 'Còn ' + khoa.length + ' phần chưa mở về người này',

@@ -296,7 +296,7 @@ window.SHELL_INTRO={key:'huong-nghiep-tre'};</script>
 <script src="/tools-shared/vn-timezone.js?v=1"></script>
 <script src="/tuvi-form.js?v=2"></script>
 <script src="/tools-shared/cung-ngay-sinh.js?v=2"></script>
-<script src="/tuvi-paywall.js?v=28"></script>
+<script src="/tuvi-paywall.js?v=29"></script>
 <script src="/tools-shared/hook-layer.js?v=2"></script>
 <script src="/auth.js?v=2"></script>
   <script src="/nav.js?v=26" data-icons-only></script>
@@ -402,9 +402,11 @@ async function analyze() {
   _last = b;
   _currentSlug = TuviPaywall.generateToolSlug('huong-nghiep-tre-' + lo + '-' + b.day + b.month + b.year);
 
-  // Luôn cần một lượt XEM TRƯỚC (0đ, không đăng nhập) để biết `laTreEm` —
-  // chốt "người lớn không bán, không trừ Lượng" phải đứng TRƯỚC mọi lượt gate
-  // credit.
+  // Luôn cần một lượt XEM TRƯỚC để biết `laTreEm` — chốt "người lớn không
+  // bán, không trừ Lượng" phải đứng TRƯỚC mọi lượt gate credit. Chạy cho MỌI
+  // khách (đăng nhập hay chưa) — gửi kèm Bearer khi đã đăng nhập để cầu dao
+  // xem-trước phía server tính suất theo user_id thay vì IP/anonId dùng
+  // chung với khách vô danh.
   _openPanel();
   _loadingCtl = AiLoadingSteps.mount('loadingSteps', HN_STEPS);
   _loadingCtl.start();
@@ -412,9 +414,12 @@ async function analyze() {
   AiLoadingSteps.scrollToResult('loading');
   var prev;
   try {
+    var _hnTk = _hnLoggedIn() ? window.Auth.getSession()?.access_token : null;
+    var _hnHeaders = { 'Content-Type': 'application/json' };
+    if (_hnTk) _hnHeaders.Authorization = 'Bearer ' + _hnTk;
     var r = await fetch('/api/huong-nghiep-tre?preview=1', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: _hnHeaders,
       body: JSON.stringify({ birth: b, name: b.name || '', moiLo: lo, anonId: TuviPaywall.previewAnonId() })
     });
     prev = await r.json();
@@ -438,39 +443,39 @@ async function analyze() {
     return;
   }
 
-  // Trẻ em: đây là đường có bán. Đăng nhập rồi → bấm nút là CHẠY THẬT ngay
-  // (case 1), bỏ hẳn bản xem trước — chốt Lượng rồi mới vẽ ĐẦY ĐỦ trong
-  // `_doGenerate`. Chưa đăng nhập (case 2) → BẢN XEM TRƯỚC: server đã gọi
-  // model thật và chỉ gửi về `nhinRaCon`/`viSaoHuongNay` (xem
-  // `PREVIEW_KEEP_PROSE` trong route.ts) cộng phần deterministic vốn đã miễn
-  // phí (thiên hướng nổi nhất/chất người/cơ sở lá số). Mọi khối trả phí còn
-  // lại dựng thành Ô GIỮ CHỖ.
-  if (!_hnLoggedIn()) {
-    _loadingCtl && _loadingCtl.stop();
-    document.getElementById('loading').style.display = 'none';
-    document.getElementById('card').style.display = 'block';
-    document.getElementById('btnEdit').style.display = '';
-    renderMetaHead(prev);
-    renderMetaRest(prev);
-    renderProse(prev);   // chỉ nhinRaCon/viSaoHuongNay có mặt; các nhánh `if` khác tự trượt
-    _hnLockBlocks(prev);
-    mountHook(prev);
-    if (window.SHELL_INTRO) Shell.dismissIntro(window.SHELL_INTRO.key);
-    _renderLockWall(lo);
-    _mountCnsHuongNghiep(b);
-    return;
+  // Trẻ em: đây là đường có bán. Đã trả tiền cho đúng lá số này từ trước
+  // (chỉ có thể xảy ra khi đã đăng nhập) → mở thẳng bản đầy đủ, bỏ qua bản
+  // xem trước vừa tính — không lãng phí lượt model, `_doGenerate` tra cache
+  // trước khi gọi lại LLM và trúng ngay kết quả preview vừa sinh.
+  // 🔴 (2026-09-07) Trước đây khách CHƯA đăng nhập mới thấy bản xem trước;
+  // khách ĐÃ đăng nhập bị bỏ qua thẳng tới trả tiền. Henry chốt generalize:
+  // ai cũng thấy xem-trước trước khi trả tiền, trừ khi đã trả tiền rồi.
+  if (_hnLoggedIn()) {
+    var free = false;
+    try { free = await TuviPaywall.isFreeRerun('/api/huong-nghiep-tre', _cacheQuery(b, lo)); } catch (e) { free = false; }
+    if (free) {
+      TuviPaywall._banner('✓ Bạn đã xem bản này rồi — mở lại, không trừ Lượng');
+      await _doGenerate(true, lo);
+      return;
+    }
   }
 
-  var free = false;
-  try { free = await TuviPaywall.isFreeRerun('/api/huong-nghiep-tre', _cacheQuery(b, lo)); } catch (e) { free = false; }
-  if (free) {
-    TuviPaywall._banner('✓ Bạn đã xem bản này rồi — mở lại, không trừ Lượng');
-    await _doGenerate(true, lo);
-    return;
-  }
+  // BẢN XEM TRƯỚC — dùng cho mọi khách chưa trả tiền: server đã gọi model
+  // thật và chỉ gửi về `nhinRaCon`/`viSaoHuongNay` (xem `PREVIEW_KEEP_PROSE`
+  // trong route.ts) cộng phần deterministic vốn đã miễn phí (thiên hướng nổi
+  // nhất/chất người/cơ sở lá số). Mọi khối trả phí còn lại dựng thành Ô GIỮ CHỖ.
   _loadingCtl && _loadingCtl.stop();
-  _closePanel();
-  await TuviPaywall.requireCredits(_currentSlug, function () { return _doGenerate(false, lo); });
+  document.getElementById('loading').style.display = 'none';
+  document.getElementById('card').style.display = 'block';
+  document.getElementById('btnEdit').style.display = '';
+  renderMetaHead(prev);
+  renderMetaRest(prev);
+  renderProse(prev);   // chỉ nhinRaCon/viSaoHuongNay có mặt; các nhánh `if` khác tự trượt
+  _hnLockBlocks(prev);
+  mountHook(prev);
+  if (window.SHELL_INTRO) Shell.dismissIntro(window.SHELL_INTRO.key);
+  _renderLockWall(lo);
+  _mountCnsHuongNghiep(b);
 }
 
 // Các khối BỊ KHOÁ ở bản xem trước, theo ĐÚNG thứ tự chúng đứng trên trang.
@@ -544,10 +549,23 @@ function mountHook(data) {
   });
 }
 
+// Nút phẳng cho khách ĐÃ đăng nhập (xem `_renderLockWall`) — đọc lại `moiLo`
+// tại lúc bấm thay vì đóng gói `lo` vào chuỗi `onclick`.
+function _hnUnlockLoggedIn() {
+  var lo = document.getElementById('moiLo').value;
+  return TuviPaywall.requireCredits(_currentSlug, function () { return _doGenerate(false, lo); });
+}
 function _renderLockWall(lo) {
   var host = document.getElementById('hnLockHost');
   host.style.display = 'block';
   host.innerHTML = '';
+  // Đã đăng nhập (chỉ còn thiếu tiền, không thiếu tài khoản) → nút phẳng, bỏ
+  // qua màn "Đăng ký" — cùng mẫu app-chu-trinh-cuoc-doi.html `_renderUnlockBlock`.
+  if (_hnLoggedIn()) {
+    host.innerHTML = '<button class="btn-go" type="button" onclick="_hnUnlockLoggedIn()">✦ Xem bản định hướng đầy đủ — <span data-tvp-price="huong-nghiep-tre">…</span> Lượng →</button>';
+    TuviPaywall.fillPriceSlots(host);
+    return;
+  }
   TuviPaywall.lockPreview({
     host: host,
     title: '⊙ Bản định hướng đầy đủ chưa mở',
