@@ -243,6 +243,22 @@ body{font-family:Arial,sans-serif;background:var(--bg-soft);color:var(--text);mi
 .bm-status [data-icon]{width:15px;height:15px}
 .btn-modal{background:var(--navy);color:#fff;border:none;padding:.6rem 1.4rem;border-radius:6px;cursor:pointer;font-size:.88rem;font-family:inherit;font-weight:600}
 .btn-modal:hover{background:var(--navy-mid)}
+
+/* ── PENDING UNLOCK MODAL — khách vô danh hết Lượng ngay lúc mở khoá được
+   quăng thẳng sang trang này qua `?...` + `sessionStorage` (xem `_insufficient`
+   trong tuvi-paywall.js). Trước đây chỉ có `.pending-banner` (một dòng nằm
+   TRONG trang, dưới nút chuyển-khoản/PayPal) — dễ lướt qua, khách không biết
+   phải cuộn xuống đâu để nạp. Pop-up này chặn màn hình NGAY khi trang vừa
+   tải, nói rõ đang mở khoá gì/cần bao nhiêu, và cho bấm thẳng MỘT nút để trả
+   tiền luôn — không bắt tự tìm gói + tự bấm "Chuyển khoản" như cũ. */
+.pm-need{font-size:.88rem;color:var(--text-mid);line-height:1.65;margin-bottom:1.2rem}
+.pm-need b{color:var(--navy)}
+.pm-actions{display:flex;flex-direction:column;gap:.6rem}
+.pm-actions .btn-pkg{padding:.85rem 1rem}
+.pm-actions .btn-outline{width:100%;justify-content:center;padding:.85rem 1rem;background:#fff;color:var(--navy);border:1.5px solid var(--navy);border-radius:8px;font-size:.88rem;font-weight:700;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:.45rem;transition:background .2s}
+.pm-actions .btn-outline:hover{background:var(--bg-soft)}
+.pm-actions [data-icon]{width:16px;height:16px}
+.pm-skip{margin-top:.95rem;background:none;border:none;color:var(--text-lt);font-size:.8rem;text-decoration:underline;cursor:pointer;font-family:inherit}
 </style>
 <script src="/track.js?v=5"></script>
 <script>try{window.Track&&window.Track.event&&window.Track.event('topup_start',{meta:{from:'topup_page'}})}catch(e){}</script>
@@ -702,6 +718,44 @@ async function renderPendingBanner() {
   host.className = 'pending-banner';
   host.style.display = 'flex';
   mount(host);
+
+  showPendingModal(pending, label, exact);
+}
+
+// Pop-up CHẶN MÀN HÌNH khi vừa quay lại từ tường "Không đủ Lượng" — banner
+// tĩnh ở trên dễ bị lướt qua (Henry báo đúng ca này: khách không biết đang
+// nạp cho gì/bao nhiêu, không có nút bấm thẳng). Pop-up nói rõ TÊN CÔNG CỤ +
+// SỐ TIỀN, và cho bấm MỘT nút trả tiền ngay — không bắt tự dò gói/tự bấm nút
+// "Chuyển khoản" ở dưới như trước. `pmBank`/`pmPaypal` tái dùng ĐÚNG luồng
+// thanh toán package/custom đã có (`setMethod` + `payPackage`), không mở
+// đường thanh toán riêng — sai một chỗ là hỏng cả hai nơi.
+function showPendingModal(pending, label, exact) {
+  const modal = document.getElementById('pendingModal');
+  if (!modal) return;
+  let amount = null, pkgId = null;
+  if (exact != null) {
+    amount = exact; pkgId = 'custom';
+  } else {
+    const idx = pkgIndexFor(pending.need);
+    const pkg = idx >= 0 ? pkgList()[idx] : null;
+    if (pkg) { amount = pkg.amount_vnd; pkgId = pkg.package_id; }
+  }
+  // Chưa đọc được giá/gói nào đủ → đừng mở pop-up với một số tiền đoán mò,
+  // banner tĩnh phía trên vẫn còn đó làm đường lùi.
+  if (amount == null || !pkgId) return;
+
+  document.getElementById('pmTitle').textContent = 'Bạn đang mở khoá ' + label;
+  document.getElementById('pmNeed').innerHTML =
+    'Cần thêm <b>' + pending.need + ' Lượng</b> để dùng tiếp — nạp <b>' + vnd(amount) + '</b> là đủ, '
+    + 'mở ra ngay sau khi thanh toán xong.';
+  document.getElementById('pmBank').onclick = () => { closePendingModal(); setMethod('bank'); payPackage(pkgId); };
+  document.getElementById('pmPaypal').onclick = () => { closePendingModal(); setMethod('paypal'); payPackage(pkgId); };
+  modal.classList.add('show');
+  mount(modal);
+}
+function closePendingModal() {
+  const modal = document.getElementById('pendingModal');
+  if (modal) modal.classList.remove('show');
 }
 
 /**
@@ -1061,6 +1115,20 @@ loadStatus().then(loadReferralInfo).then(showPromoSection);
 loadPackages().then(loadToolPricing).then(renderPendingBanner);
 </script>
 
+<!-- ── Ý định mở khoá (khách hết Lượng ngay lúc bấm mở, quăng sang đây) ──── -->
+<div id="pendingModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="pmTitle">
+  <div class="modal">
+    <button class="modal-close" onclick="closePendingModal()" aria-label="Đóng"><span data-icon="x"></span></button>
+    <div class="modal-title" id="pmTitle">Bạn đang mở khoá…</div>
+    <div class="pm-need" id="pmNeed"></div>
+    <div class="pm-actions">
+      <button type="button" class="btn-pkg" id="pmBank"><span data-icon="landmark"></span> Chuyển khoản QR</button>
+      <button type="button" class="btn-outline" id="pmPaypal"><span data-icon="credit-card"></span> PayPal / Thẻ</button>
+    </div>
+    <button type="button" class="pm-skip" onclick="closePendingModal()">Để sau, tự chọn gói bên dưới</button>
+  </div>
+</div>
+
 <!-- ── payOS Bank Transfer Modal ─────────────────────────── -->
 <div id="bankModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="bmTitle">
   <div class="modal">
@@ -1218,6 +1286,16 @@ loadPackages().then(loadToolPricing).then(renderPendingBanner);
     if (e.key === 'Escape' && document.getElementById('bankModal').classList.contains('show')) closeBankModal();
   });
 })();
+
+// `pendingModal` (xem `showPendingModal`) — cùng mẫu backdrop-click/Escape với
+// bankModal ở trên. Đăng ký Ở ĐÂY (không phải trong script khai `closePendingModal`
+// phía trên `<div id="pendingModal">`) vì đúng lúc đó element chưa vào DOM —
+// `getElementById` trả null, gọi `.addEventListener` trên đó ném lỗi và cắt
+// ngang mọi lệnh top-level còn lại trong script đó, kể cả `loadPackages().then(...)`.
+document.getElementById('pendingModal').addEventListener('click', function(e){ if (e.target === this) closePendingModal(); });
+document.addEventListener('keydown', function(e){
+  if (e.key === 'Escape' && document.getElementById('pendingModal').classList.contains('show')) closePendingModal();
+});
 </script>
 
 </body>
