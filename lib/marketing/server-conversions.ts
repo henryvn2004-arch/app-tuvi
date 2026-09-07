@@ -19,6 +19,7 @@
 // ============================================================
 
 import { createHash } from 'crypto';
+import { waitUntil } from '@vercel/functions';
 
 const GA4_MEASUREMENT_ID = 'G-F4XNRS2XT0';
 const GA4_MP_API_SECRET = process.env.GA4_MP_API_SECRET || '';
@@ -108,15 +109,25 @@ async function sendMetaPurchase(userId: string, transactionId: string, valueVnd:
 }
 
 /**
- * Bắn "đã mua thật" sang GA4 + Meta. Fire-and-forget CỐ Ý — không await ở nơi
- * gọi, không được làm chậm hay làm hỏng phản hồi thanh toán nếu Google/Meta
- * sập hoặc chậm. Lỗi chỉ vào `console.error`, không ném ra ngoài.
+ * Bắn "đã mua thật" sang GA4 + Meta. Không await ở nơi gọi — không được làm
+ * chậm hay làm hỏng phản hồi thanh toán nếu Google/Meta sập hoặc chậm. Lỗi
+ * chỉ vào `console.error`, không ném ra ngoài.
+ *
+ * 🔴 PHẢI bọc `waitUntil` (đã dùng ở app/api/channels/messenger/route.ts cho
+ * đúng bài toán này) — hàm serverless của Vercel ĐÓNG BĂNG ngay sau khi
+ * response được trả, promise chưa `await` mất luôn cơ hội chạy tiếp. Thiếu
+ * dòng này là bug thật đã cắn: lượt nạp 87 Lượng qua chuyển khoản 07/09 log
+ * "paid" bình thường nhưng GA4/Meta không hề nhận được `purchase`.
  */
 export function fireServerPurchase(userId: string, transactionId: string, valueVnd: number): void {
-  sendGA4Purchase(userId, transactionId, valueVnd).catch((e) =>
-    console.error('[server-conversions] GA4 exception', e),
-  );
-  sendMetaPurchase(userId, transactionId, valueVnd).catch((e) =>
-    console.error('[server-conversions] Meta exception', e),
+  waitUntil(
+    Promise.all([
+      sendGA4Purchase(userId, transactionId, valueVnd).catch((e) =>
+        console.error('[server-conversions] GA4 exception', e),
+      ),
+      sendMetaPurchase(userId, transactionId, valueVnd).catch((e) =>
+        console.error('[server-conversions] Meta exception', e),
+      ),
+    ]).then(() => undefined),
   );
 }
