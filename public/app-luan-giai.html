@@ -284,7 +284,7 @@ window.SHELL_INTRO={key:'luan-giai'};</script>
 <script src="/tools-shared/cung-ngay-sinh.js?v=2"></script>
 <script src="/tools-shared/nguoi-than.js?v=1"></script>
 <script src="/auth.js?v=2"></script>
-<script src="/tuvi-paywall.js?v=25"></script>
+<script src="/tuvi-paywall.js?v=26"></script>
 <script src="/tools-shared/hook-charts.js?v=2"></script>
 <script src="/tools-shared/hook-facts.js?v=1"></script>
 <script src="/tools-shared/hook-layer.js?v=2"></script>
@@ -321,6 +321,46 @@ NamLuanSelect.mount('inpNamxem');
   // setTimeout) nếu trang đã tải xong (readyState khác 'loading') — lúc đó
   // shell.js cũng đã boot() ngay rồi, chờ thêm chỉ trễ vô ích.
   var runAutoLuan = function(){ if(typeof doLuan==='function') doLuan(); };
+  window.__tvmbAutoLuanDone=true;
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', runAutoLuan);
+  else runAutoLuan();
+})();
+
+// Quay lại từ lượt nạp Lượng (xem `TuviPaywall._insufficient`/`resumeIfPending`)
+// sau khi đã hết Lượng ngay lúc mở khoá — trang này là MULTI-PAGE (điều hướng
+// CỨNG sang /topup.html rồi quay lại), không phải SPA, nên toàn bộ lá số vừa
+// tính (_astrolabe, form vừa gõ) MẤT SẠCH khi tải lại. `resumeIfPending` (gọi
+// trong `_renderUnlockBlock`) chỉ tự chạy tiếp được NẾU đã có lá số trên màn
+// hình — thiếu bước này thì khách nạp tiền xong quay về gặp lại form TRỐNG,
+// phải gõ lại và bấm "Luận giải" rồi bấm mở khoá LẦN NỮA (bug đã báo). Cùng
+// mẫu sessionStorage handoff với `app_pending_birth` ở trên, khác ở nguồn ghi
+// (`doLuan()` tự lưu mỗi lượt lập lá số thành công, xem `LG_RESUME_KEY` bên
+// dưới) và điều kiện đọc (`?tpwResume=1`, do `topup.html` gắn vào sau khi trả
+// tiền thành công — xem `resumeToTool`).
+var LG_RESUME_KEY='lg_pending_resume';
+(function(){
+  if(window.__tvmbAutoLuanDone) return; // app_pending_birth ở trên đã tự chạy — khỏi chạy trùng
+  var url;
+  try{ url=new URL(location.href); }catch(e){ return; }
+  if(url.searchParams.get('tpwResume')!=='1') return;
+  var raw;
+  try{ raw=sessionStorage.getItem(LG_RESUME_KEY); sessionStorage.removeItem(LG_RESUME_KEY); }catch(e){ return; }
+  if(!raw) return;
+  window.__tvmbSkipDemo=true;
+  var saved;
+  try{ saved=JSON.parse(raw); }catch(e){ return; }
+  if(!saved||!saved.fd||!saved.fd.ngay||!saved.fd.thang||!saved.fd.nam) return;
+  TuviForm.setData(saved.fd);
+  if(saved.namxem){ var ny=document.getElementById('inpNamxem'); if(ny) ny.value=String(saved.namxem); }
+  // `_subjectLabel` được khai `var _subjectLabel=null` xa hơn TRONG CÙNG script
+  // này — gán TRƯỚC lúc đó sẽ bị dòng khai đè lại về null (var có initializer
+  // luôn chạy khi tới lượt nó, hoisting chỉ hoãn phần khai báo). runAutoLuan()
+  // luôn chạy sau (DOMContentLoaded, hoặc trang đã tải xong thì lúc đó dòng
+  // khai cũng đã chạy rồi), nên gán trong đó là an toàn.
+  var runAutoLuan=function(){
+    if(saved.subjectLabel) _subjectLabel=saved.subjectLabel;
+    if(typeof doLuan==='function') doLuan();
+  };
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', runAutoLuan);
   else runAutoLuan();
 })();
@@ -336,6 +376,11 @@ function doLuan(){
   var fdIn=TuviForm.getData();
   var name=fdIn.hoten, gioitinh=fdIn.gioitinh, dd=fdIn.ngay, mm=fdIn.thang, yyyy=fdIn.nam, hh=fdIn.gioHour, pp=fdIn.gioPhut, gioAmIdx=fdIn.gioIdx;
   if(!dd||!mm||!yyyy){ alert('Vui lòng nhập đầy đủ ngày, tháng, năm sinh.'); return; }
+  // Lưu lại NGAY để `?tpwResume=1` (quay về sau khi nạp Lượng, xem IIFE
+  // `LG_RESUME_KEY` ở đầu file) khôi phục được đúng form này mà không cần bấm
+  // "Luận giải" lần hai — ghi mỗi lượt lập lá số thành công, không riêng lượt
+  // sắp hết Lượng, vì lúc gõ form ta chưa biết trước lượt nào sẽ hết Lượng.
+  try{ sessionStorage.setItem(LG_RESUME_KEY, JSON.stringify({fd:fdIn, namxem:namxem, subjectLabel:_subjectLabel||null})); }catch(e){ /* ignore */ }
   // Dọn bản mẫu TRƯỚC khi dựng lá số thật — bỏ bước này thì thanh "đây là bản
   // mẫu" còn dính lại trên kết quả thật của khách, tức là nói dối họ.
   if(_sampleOpen) closeSample();
@@ -1418,8 +1463,12 @@ async function _runPhanLuanGiai(p,preview){
     box.style.display='block';
     box.innerHTML='<div class="phan-empty">Đang luận giải…</div>';
     if(window.AiLoadingSteps&&AiLoadingSteps.mountWait){
+      // `center`/`orbSize`/`fast` — cùng chỉnh với app-chu-trinh-cuoc-doi.html
+      // (Henry: "canh vòng tròn ngay giữa khung, to hơn, glow nhanh hơn để
+      // thấy rõ đang chạy"); trang này bị bỏ sót lúc port, orb dạt mép trái.
       w=AiLoadingSteps.mountWait(box,{label:(preview?'Đang luận giải phần '+p+' (miễn phí)…':'Đang luận giải phần '+p+'…'),
-        expectSec:(_pace&&_pace.perPartSec())||0,expectText:(_pace&&_pace.perPartText())||''});
+        expectSec:(_pace&&_pace.perPartSec())||0,expectText:(_pace&&_pace.perPartText())||'',
+        center:true,orbSize:96,fast:true});
       w.start();
     }
   }
