@@ -184,13 +184,11 @@ async function capture() {
     const data = await res.json();
 
     if (data.success) {
-      // `status==='already_completed'` nghĩa là webhook (hoặc tab khác) đã chốt
-      // đơn này trước — bắn Purchase lần nữa ở đây là TÍNH TRÙNG doanh thu trong
-      // Ads Manager dù không có đồng nào mới về. Chỉ bắn ở lượt CHỐT THẬT.
-      if (data.status !== 'already_completed') {
-        try { window.fbq && window.fbq('track', 'Purchase', { value: data.amountVnd || 0, currency: 'VND' }); } catch (e) {}
-        try { window.gtag && window.gtag('event', 'purchase', { transaction_id: ppToken, value: data.amountVnd || 0, currency: 'VND' }); } catch (e) {}
-      }
+      // Purchase KHÔNG còn bắn ở đây — webhook PayPal thường chốt đơn TRƯỚC khi
+      // trang này kịp load, nên `status==='already_completed'` gần như luôn
+      // đúng và Purchase gần như không bao giờ bắn được (đo thật: 0/12 lượt
+      // nạp trong 90 ngày). Server bắn thay, đúng MỘT lần, ngay tại điểm cộng
+      // tiền thật duy nhất — xem lib/marketing/server-conversions.ts.
       showSuccess(slug, data.credits || 0, data.balance || 0);
     } else {
       showError(data.error || 'Thanh toán thất bại. Vui lòng liên hệ hỗ trợ.');

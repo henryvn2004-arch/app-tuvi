@@ -2,6 +2,7 @@
 // payOS webhook — tự động add credits khi user chuyển khoản thành công
 import { NextRequest } from 'next/server';
 import crypto from 'crypto';
+import { fireServerPurchase } from '@/lib/marketing/server-conversions';
 
 const CHECKSUM_KEY = process.env.PAYOS_CHECKSUM_KEY!;
 const SUPABASE_URL = process.env.SUPABASE_URL!;
@@ -81,6 +82,23 @@ export async function POST(request: NextRequest) {
     }
 
     console.log(`[bank-webhook] paid orderCode=${orderCode} credits=${row.credits} newBal=${row.balance}`);
+
+    // RPC không trả `user_id` (RETURNS TABLE cố tình gọn — đừng thêm cột vào
+    // đó, xem _patches/migration-bank-settle.sql). Đọc riêng, không đụng RPC
+    // đường tiền. Best-effort: lỗi ở đây không được làm hỏng phản hồi webhook.
+    try {
+      const uidRes = await fetch(
+        `${SUPABASE_URL}/rest/v1/bank_orders?order_code=eq.${encodeURIComponent(orderCode)}&select=user_id`,
+        { headers: SB, cache: 'no-store' },
+      );
+      const uidRows = uidRes.ok ? ((await uidRes.json()) as { user_id: string }[]) : [];
+      const userId = uidRows[0]?.user_id;
+      if (userId) fireServerPurchase(userId, orderCode, amountVnd);
+      else console.error('[bank-webhook] không tìm được user_id để bắn Purchase, orderCode=', orderCode);
+    } catch (e) {
+      console.error('[bank-webhook] lỗi tra user_id cho Purchase', e);
+    }
+
     return Response.json({ success: true });
 
   } catch (e: unknown) {
