@@ -248,7 +248,7 @@ window.SHELL_INTRO={key:'chu-trinh-cuoc-doi'};</script>
 <script src="/tools-shared/nam-luan-select.js?v=1"></script>
 <script src="/tools-shared/cung-ngay-sinh.js?v=2"></script>
 <script src="/auth.js?v=2"></script>
-<script src="/tuvi-paywall.js?v=25"></script>
+<script src="/tuvi-paywall.js?v=26"></script>
 <script src="/tools-shared/hook-charts.js?v=2"></script>
 <script src="/poster.js?v=5"></script>
 <script src="/tools-shared/hook-facts.js?v=1"></script>
@@ -262,6 +262,31 @@ window.SHELL_INTRO={key:'chu-trinh-cuoc-doi'};</script>
 // sinh lịch sử với standalone) ──
 TuviForm.render('tuviFormHost', {mode:'compact', gioitinh:'nam'});
 NamLuanSelect.mount('inpNamxem');
+
+// Quay lại từ lượt nạp Lượng (hết Lượng ngay lúc mở khoá — xem
+// `TuviPaywall._insufficient`/`resumeIfPending` trong tuvi-paywall.js). Trang
+// này là MULTI-PAGE (điều hướng CỨNG sang /topup.html rồi quay lại), không
+// phải SPA, nên lá số vừa tính và form vừa gõ MẤT SẠCH khi tải lại —
+// `resumeIfPending` chỉ tự chạy tiếp được NẾU đã có lá số trên màn hình. Cùng
+// mẫu với `LG_RESUME_KEY` ở app-luan-giai.html: `doLuan()` tự lưu form mỗi
+// lượt lập lá số thành công, đọc lại khi quay về với `?tpwResume=1`.
+var LG_RESUME_KEY='ctcd_pending_resume';
+(function(){
+  var url;
+  try{ url=new URL(location.href); }catch(e){ return; }
+  if(url.searchParams.get('tpwResume')!=='1') return;
+  var raw;
+  try{ raw=sessionStorage.getItem(LG_RESUME_KEY); sessionStorage.removeItem(LG_RESUME_KEY); }catch(e){ return; }
+  if(!raw) return;
+  var saved;
+  try{ saved=JSON.parse(raw); }catch(e){ return; }
+  if(!saved||!saved.fd||!saved.fd.ngay||!saved.fd.thang||!saved.fd.nam) return;
+  TuviForm.setData(saved.fd);
+  if(saved.namxem){ var ny=document.getElementById('inpNamxem'); if(ny) ny.value=String(saved.namxem); }
+  var runAutoLuan=function(){ if(typeof doLuan==='function') doLuan(); };
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', runAutoLuan);
+  else runAutoLuan();
+})();
 
 // ── Nút "Xem mẫu" + "Hướng dẫn" — mở PDF mẫu (lá số + toàn bộ 11 phần, sinh
 // sẵn bằng scripts/gen-tool-sample.mjs) và video demo (quay tay, CHƯA làm —
@@ -288,6 +313,9 @@ function doLuan(){
   var fdIn=TuviForm.getData();
   var name=fdIn.hoten, gioitinh=fdIn.gioitinh, dd=fdIn.ngay, mm=fdIn.thang, yyyy=fdIn.nam, hh=fdIn.gioHour, pp=fdIn.gioPhut, gioAmIdx=fdIn.gioIdx;
   if(!dd||!mm||!yyyy){ alert('Vui lòng nhập đầy đủ ngày, tháng, năm sinh.'); return; }
+  // Lưu lại NGAY để `?tpwResume=1` (quay về sau khi nạp Lượng, xem
+  // `LG_RESUME_KEY` ở đầu file) khôi phục được đúng form này không cần gõ lại.
+  try{ sessionStorage.setItem(LG_RESUME_KEY, JSON.stringify({fd:fdIn, namxem:namxem})); }catch(e){ /* ignore */ }
   btn.disabled=true;btn.textContent='Đang luận…';
   try{
     var gioChi=CHI[gioAmIdx];

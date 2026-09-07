@@ -777,6 +777,11 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
   // ── Insufficient ──────────────────────────────────────────────
   function _insufficient(cost, balance, slug) {
     const need = cost - balance;
+    // 🔴 PHẢI NÓI GIÁ VNĐ ở đây (hard paywall 2026-09-06) — cùng luật với
+    // `lockPreview`. `vndLabel` tự trả '' khi chưa đọc được `credit_packages`,
+    // khi đó KHÔNG hiện ngoặc rỗng, không đoán số.
+    const needVndLbl = window.ToolPrices ? window.ToolPrices.vndLabel(need) : '';
+    const needVndSuffix = needVndLbl ? ' (' + needVndLbl + ')' : '';
     // Ghi Ý ĐỊNH trước khi khách rời trang đi nạp — xem `resumeIfPending`.
     // `returnUrl` chụp CHÍNH XÁC url hiện tại (kể cả birth params trên URL nếu
     // trang đó dùng) để quay lại đúng chỗ, không phải trang tool trần.
@@ -791,7 +796,7 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
     } catch (e) { /* sessionStorage đầy/bị chặn — vẫn hiện tường như cũ, chỉ mất phần tự-quay-lại */ }
     const shown =
       _softLock(
-        '<div class="tpw-lock-t">⊙ Còn thiếu ' + need + ' Lượng</div>' +
+        '<div class="tpw-lock-t">⊙ Còn thiếu ' + need + ' Lượng' + needVndSuffix + '</div>' +
         '<div class="tpw-lock-s">Bạn còn <b>' + balance + '</b> · thao tác này tốn <b>' + cost + '</b>' +
         '<br>Nạp thêm là mở ra ngay.</div>' +
         '<a class="tpw-btn topup" href="/topup.html" onclick="' + _topupClick('paywall', need) + '">Nạp Lượng →</a>' +
@@ -820,11 +825,11 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
       return;
     }
     _open(
-      '<div class="tpw-hd"><div class="tpw-hd-t">⊙ Không đủ Lượng</div><div class="tpw-hd-s">Cần thêm ' + need + ' lượng</div></div>' +
+      '<div class="tpw-hd"><div class="tpw-hd-t">⊙ Không đủ Lượng</div><div class="tpw-hd-s">Cần thêm ' + need + ' lượng' + needVndSuffix + '</div></div>' +
       '<div class="tpw-center">' +
-        '<div class="tpw-msg">Số dư: <strong>' + balance + ' lượng</strong> · Cần: <strong>' + cost + ' lượng</strong><br>' +
-        '<span style="font-size:12px;color:#999">Nạp thêm credits để tiếp tục.</span></div>' +
-        '<a class="tpw-btn topup" href="/topup.html" onclick="' + _topupClick('paywall', need) + '">Nạp Credits →</a>' +
+        '<div class="tpw-msg">Số dư: <strong>' + balance + ' lượng</strong> · Cần: <strong>' + cost + ' lượng</strong>' + needVndSuffix + '<br>' +
+        '<span style="font-size:12px;color:#999">Nạp thêm Lượng để tiếp tục.</span></div>' +
+        '<a class="tpw-btn topup" href="/topup.html" onclick="' + _topupClick('paywall', need) + '">Nạp Lượng →</a>' +
       '</div>' +
       '<div class="tpw-ft"><button class="tpw-btn cancel" onclick="TuviPaywall._close()">Đóng</button></div>'
     );
