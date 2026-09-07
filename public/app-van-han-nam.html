@@ -106,6 +106,10 @@
 .lg-calc summary{cursor:pointer;font-size:12px;color:var(--text-lt);font-weight:600;padding:2px 0}
 .lg-calc summary:hover{color:var(--gold-soft)}
 .lg-calc[open] summary{margin-bottom:8px}
+/* CTA lặp lại trong mỗi phần khoá (2026-09-07, cùng mẫu app-chu-trinh-cuoc-doi.html)
+   — đứng ngay dưới văn mẫu mờ của chính phần đó, để cuộn sâu vẫn còn chỗ bấm. */
+.lg-cta-repeat{margin-top:14px;text-align:center}
+.lg-cta-repeat .btn-go{width:100%;max-width:360px}
 </style>
 </head>
 <body>
@@ -255,6 +259,10 @@ function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,
 
 var _astrolabe=null,_hoTen='',_ngay=0,_thang=0,_nam=0,_gioitinh='nam',_laSoText=null;
 var _khung=null,_labels=null,_tongPhan=0,_pendingSlug=null,_store={};
+// Văn MẪU (dummy, 16 phần) — sinh sẵn bằng scripts/gen-tool-sample.mjs cho MỘT
+// lá số mẫu khác (public/samples/van-han-nam-dummy.json), khoá theo LOCAL p
+// (1-16), khớp đúng số hiển thị của trang này. `null` = chưa tải xong.
+var DUMMY_VH=null;
 var _pace=(window.AiLoadingSteps&&AiLoadingSteps.pacer)?AiLoadingSteps.pacer():null;
 // Số phần chạy song song — xem lý do chọn 3 trong tools-shared/phan-pool.js.
 var PHAN_CONCURRENCY=3;
@@ -267,6 +275,14 @@ function toSlugAscii(str){
     .replace(/[^a-z0-9\-]/g,'-').replace(/-+/g,'-').replace(/^-|-$/g,'');
 }
 function _loggedIn(){ return !!(window.Auth&&window.Auth.isLoggedIn&&window.Auth.isLoggedIn()); }
+// Tải văn mẫu — hỏng mạng thì IM LẶNG rơi về {} (không có văn mẫu để hiện,
+// không chặn luồng chính, tool vẫn chạy như trước khi có blur).
+function _loadDummyVH(){
+  if(DUMMY_VH) return Promise.resolve(DUMMY_VH);
+  return fetch('/samples/van-han-nam-dummy.json').then(function(r){ return r.json(); })
+    .then(function(j){ DUMMY_VH=j||{}; return DUMMY_VH; })
+    .catch(function(){ DUMMY_VH={}; return DUMMY_VH; });
+}
 
 async function doXem(){
   var btn=document.getElementById('btnGo');
@@ -283,6 +299,9 @@ async function doXem(){
     _astrolabe=ls;_hoTen=name;_ngay=dd;_thang=mm;_nam=yyyy;_gioitinh=gioitinh;
     _laSoText=formatLaSoV2(ls,conv); ls._laSoText=_laSoText;
 
+    // Văn mẫu (dummy, 16 phần) tải SONG SONG với khung 12 tháng — cả hai đều
+    // cần xong trước khi render() dựng DOM.
+    var dummyPending=_loadDummyVH();
     // Khung 12 tháng tính ở SERVER (nguồn duy nhất của phép nguyệt hạn — dùng
     // chung với rail chat và thẻ Vận Ngày). 0 lượt LLM, 0đ, không cần đăng nhập.
     var kr=await fetch('/api/van-han-nam?action=khung',{method:'POST',headers:{'Content-Type':'application/json'},
@@ -293,6 +312,7 @@ async function doXem(){
     var t0=_khung.thangs[0];
     TOOL_TYPE='van-han-nam-al'+t0.namAL+'-'+String(t0.thangAL).padStart(2,'0')+(t0.isLeap?'n':'');
 
+    await dummyPending;
     render(ls);
     mountHook(ls);
     document.getElementById('miniChart').innerHTML=renderGrid(ls,{name:name,gioitinh:gioitinh,dd:dd,mm:mm,yyyy:yyyy,hh:hh,gioChi:CHI[gioAmIdx],amLich:conv.amLich,amDuongNam:conv.amDuongNam});
@@ -383,24 +403,33 @@ function render(ls){
     }else{
       body=renderThang(_khung.thangs[p-5]);
     }
-    // `part:p>1?p:null` → bấm chỉ mở ĐÚNG phần đó (16 Lượng/phần,
-    // tool_pricing.credits_per_part), KHÔNG mở cả bó — khác nút banner đầu
-    // trang, nút đó VẪN mở trọn 250 Lượng. Phần 1 (tổng quan lá số) giữ CTA
-    // "Mở bản đầy đủ" như cũ — cùng quy ước với app-chu-trinh-cuoc-doi.html/
-    // app-luan-giai.html: không bán lẻ tổng quan, bấm là mở cả bó.
-    var lock=TuviPaywall.sectionLockHtml({id:'sec-ai-lock-'+p,product:'van-han-nam',part:p>1?p:null,
-      cta:p>1?'Mở phần này':'Mở bản đầy đủ'});
+    // 🔴 (2026-09-07) Bỏ hẳn khoá-mini bán LẺ từng phần (16 Lượng/phần) —
+    // Henry chốt chỉ còn MỘT nút mở cả bó, cùng mẫu app-chu-trinh-cuoc-doi.html.
+    // Mỗi phần hiện SẴN văn MẪU (dummy, lá số MẪU khác — DUMMY_VH, khoá theo
+    // LOCAL p 1-16, khớp đúng số hiển thị của trang này) làm MỜ bằng
+    // `.tpw-real-lock`, để lộ ĐỘ DÀI bản luận thật mà không lộ chữ thật của
+    // NGƯỜI ĐANG XEM. `_unlockOnePart`/`_partSlug` GIỮ NGUYÊN trong file
+    // (không xoá, không còn nút nào gọi) — cùng lý do CTCD.
+    var dummy=(DUMMY_VH&&DUMMY_VH[p])?renderMarkdown(DUMMY_VH[p]):'';
+    var claudeBox='<div class="claude-content'+(dummy?' tpw-real-lock':'')+'" id="claude-content-'+p+'" style="display:'+(dummy?'block':'none')+'">'+dummy+'</div>';
+    // CTA LẶP LẠI — đứng ngay dưới văn mẫu mờ của chính phần đó, gọi THẲNG
+    // `initiateAI()` (không cần hàm bọc riêng như CTCD `_triggerUnlockAll`:
+    // trang này không khoá nội dung deterministic theo đăng nhập nên không
+    // phải render lại DOM sau khi đăng ký/đăng nhập xong).
+    var ctaRepeat=dummy
+      ? '<div class="lg-cta-repeat" id="vh-cta-'+p+'"><button class="btn-go" type="button" onclick="initiateAI()">✦ Mở toàn bộ vận hạn 12 tháng — <span data-tvp-price="van-han-nam">…</span> Lượng →</button></div>'
+      : '';
     S.push('<section class="sec" id="sec-'+p+'"><div class="sec-h"><div class="sec-n">'+p+'</div><h3>'+esc(_labels[p]||('Phần '+p))+'</h3></div>'+
-      '<div class="card">'+body+lock+'<div class="claude-content" id="claude-content-'+p+'" style="display:none"></div>'+
+      '<div class="card">'+body+claudeBox+ctaRepeat+
       ask(p<=4?('Luận sâu phần: '+_labels[p]):(_khung.thangs[p-5].nhanDay+' của tôi thế nào?'))+'</div></section>');
   }
   document.getElementById('vhBody').innerHTML=S.join('');
   _renderMap();
   if(window.mountIcons) window.mountIcons(document.getElementById('vhBody'));
   TuviPaywall.fillPriceSlots(document.getElementById('vhBody'));
-  // `part` có mặt (khoá-mini của MỘT tháng/đại vận, p>1) → mở đúng phần đó
-  // (16 Lượng). `part` vắng mặt (banner đầu trang, hoặc khoá-mini phần 1) →
-  // mở cả bó (250 Lượng), hành vi CŨ giữ nguyên.
+  // `sectionLockHtml`/`wireSectionLocks` không còn phần tử `[data-tpw-seclock]`
+  // nào để bắt — giữ lời gọi này VÔ HẠI (no-op) phòng khi có lượt roll-back,
+  // cùng quy ước app-chu-trinh-cuoc-doi.html.
   TuviPaywall.wireSectionLocks(document.getElementById('vhBody'), function(part){
     return part!=null ? _unlockOnePart(part) : initiateAI();
   });
@@ -497,7 +526,18 @@ function toggleMini(){
 
 // ── Cổng Lượng + sinh AI (khuôn app-luan-giai.html) ──────────────────────
 function _paintSecLocks(show){
-  for(var p=1;p<=_tongPhan;p++){ var el=document.getElementById('sec-ai-lock-'+p); if(el)el.style.display=show?'flex':'none'; }
+  // `sec-ai-lock-`+p không còn phần tử nào khớp (khoá-mini bán lẻ đã bỏ) —
+  // vòng lặp giữ nguyên phòng lượt roll-back, cùng quy ước CTCD. `_hideCtaVH`
+  // mới là việc THẬT: gỡ CTA lặp lại khi chữ thật sắp/đã ghi đè văn mẫu.
+  for(var p=1;p<=_tongPhan;p++){
+    var el=document.getElementById('sec-ai-lock-'+p);
+    if(el)el.style.display=show?'flex':'none';
+    if(!show) _hideCtaVH(p);
+  }
+}
+function _hideCtaVH(p){
+  var el=document.getElementById('vh-cta-'+p);
+  if(el) el.style.display='none';
 }
 async function _fetchCached(slug){
   try{
@@ -511,7 +551,7 @@ function _renderCached(store){
   _store=store;
   for(var p=1;p<=_tongPhan;p++){
     var box=document.getElementById('claude-content-'+p),text=store[p]||store[String(p)];
-    if(box&&text){ box.style.display='block'; box.innerHTML=renderMarkdown(text); }
+    if(box&&text){ box.style.display='block'; box.classList.remove('tpw-real-lock'); box.innerHTML=renderMarkdown(text); }
   }
   document.getElementById('vhUnlock').style.display='none';
   document.getElementById('vhProgress').style.display='none';
@@ -537,6 +577,12 @@ async function initGate(){
   if(hasAccess){
     var cached=await _fetchCached(_pendingSlug);
     if(cached){ _renderCached(cached); return; }
+    // 🐞 Đã trả tiền nhưng CHƯA có cache (lượt trước bị ngắt giữa chừng trước
+    // khi PhanPool ghi xong `_saveResult`) — cùng bản vá app-chu-trinh-cuoc-doi.html
+    // (2026-09-07): mở khoá + sinh lại NGAY, miễn phí (hasAccess đã xác nhận
+    // rồi), đừng bắt khách bấm lại qua cửa trả-tiền-giả.
+    await _startAI();
+    return;
   }
   _renderUnlockBlock();
 }
@@ -731,6 +777,10 @@ async function _runPhanVanHan(p){
   var w=null;
   if(box){
     box.style.display='block';
+    // Chữ THẬT sắp đổ vào — gỡ lớp mờ của văn MẪU (nếu có) NGAY LÚC NÀY, không
+    // đợi có kết quả: giữ mờ trong lúc "Đang luận…" là còn hiện văn mẫu PHÍA
+    // DƯỚI orb chờ, gây rối (cùng mẫu app-chu-trinh-cuoc-doi.html).
+    box.classList.remove('tpw-real-lock');
     box.innerHTML='<div class="phan-empty">Đang luận…</div>';
     if(window.AiLoadingSteps&&AiLoadingSteps.mountWait){
       w=AiLoadingSteps.mountWait(box,{label:'Đang luận '+(_labels[p]||('phần '+p))+'…',
