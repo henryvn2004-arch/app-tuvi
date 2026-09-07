@@ -41,6 +41,11 @@ const projectGlobals = {
   // của trang). Có bảo vệ `window.HookCharts && ...` tại chỗ gọi vì 6 trang
   // nạp poster.js mà KHÔNG nạp hook-charts.js.
   HookCharts: 'readonly',
+  // public/tools-shared/pchip.js — public/tuvi-laso-format.js (buildDaiVanLines)
+  // và lib/engine/laso.ts (loadEngine) nạp file này vào CÙNG scope trước khi
+  // chạy, nên `Pchip` là biến tự do hợp lệ tại runtime dù ESLint lint TỪNG file
+  // riêng lẻ không thấy khai báo — cùng lớp với HookCharts/TU_HOA ở trên.
+  Pchip: 'readonly',
 };
 
 const sharedRules = {

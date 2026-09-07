@@ -22,6 +22,8 @@
 <script src="/tools-shared/vn-timezone.js?v=1"></script>
 <script src="/tuvi-form.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="/tools-shared/pchip.js?v=1"></script>
+<script src="/tools-shared/daivan-chart.js?v=1"></script>
 <style>
 .pregen-block{background:#F5F5F5;border:1px solid #e0e0e0;border-radius:8px;padding:12px 16px;margin:12px 0}
 .pregen-title{font-size:11px;font-weight:600;color:#1a3a6a;text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px}
@@ -347,13 +349,13 @@ function luanGiai() {
     setTimeout(()=>{
       // Line chart
       const ctx=document.getElementById('chart-daivan');
-      if (ctx&&typeof Chart!=='undefined') {
+      if (ctx&&typeof Chart!=='undefined'&&window.DaiVanChart) {
         const dvs9=dvs.slice(0,9);
-        new Chart(ctx,{
-          type:'line',
-          data:{labels:dvs9.map((dv,i)=>`ĐV${i+1}\n${dv.tuoiStart}–${dv.tuoiEnd}t`),datasets:[{label:'Điểm Vận',data:dvs9.map(dv=>dv.scoring?.tong||0),borderColor:'#2F5BEA',backgroundColor:'rgba(20,85,164,0.08)',pointBackgroundColor:dvs9.map(dv=>(dv.scoring?.tong||0)>=7?'#1FA3D6':(dv.scoring?.tong||0)>=5?'#1A3A5C':'#C0392B'),pointRadius:6,tension:.4,fill:true}]},
-          options:{responsive:true,plugins:{legend:{display:false},title:{display:true,text:'Vận Trình Toàn Đời',font:{size:15,weight:'bold'},color:'#061A2E'}},scales:{y:{min:0,max:10,title:{display:true,text:'Điểm vận'}},x:{title:{display:true,text:'Đại vận'}}}}
-        });
+        new Chart(ctx, window.DaiVanChart.buildSingle(dvs9, {
+          title:'Vận Trình Toàn Đời',
+          yTitle:'Điểm vận',
+          xTitle:'Tuổi',
+        }));
       }
       renderTimelinePhan14(ls);
       if (ls.tieuVanScores?.length) renderCandlestick('candle-90yr', ls.tieuVanScores, {candleW:9,height:360}, ls);
