@@ -810,7 +810,7 @@ async function initLuanGiaiGate(ls){
     // nên bấm vào KHÔNG mất thêm Lượng thật, nhưng GIAO DIỆN nói dối khách là
     // sắp trả tiền lần nữa. Mở khoá + sinh lại NGAY tại đây, miễn phí, vì
     // `hasAccess` đã xác nhận rồi — đừng bắt khách tự bấm qua cửa trả-tiền-giả.
-    renderLuan(ls,fd,namxem);
+    renderLuan(ls,{},_namXem);
     _startLuanGiaiAI();
     return;
   }
