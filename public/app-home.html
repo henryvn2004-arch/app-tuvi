@@ -1200,10 +1200,45 @@ function renderAllTools(d) {
   /* ── Bảng TRA cho phần trình bày ─────────────────────────────────────────
      Đều là ánh xạ TRÌNH BÀY, khoá bằng giá trị API đã trả — không tính lại gì. */
 
-  /* Việc nên làm → icon. Khoá là `nen[].ten` (ACTIVITY_META.name của engine). */
-  var VIEC_ICON={'Cưới hỏi':'heart','Khai trương':'store','Nhập trạch':'home',
-    'Khởi công xây dựng':'landmark','Xuất hành':'compass','Cầu tài':'briefcase',
-    'Sinh con':'baby','An táng':'flower','Đào giếng':'droplet','Sửa nhà':'landmark'};
+  /* Việc nên làm → NHÃN thẻ + icon. Khoá là `nen[].ten` (ACTIVITY_META.name).
+     🔑 ĐỔI TÊN Ở ĐÂY, KHÔNG ĐỔI TRONG ENGINE. Cùng chuỗi `ACTIVITY_META.name`
+     đang chở hai việc khác cần đúng từ cổ: SEO `/ngay-tot/<viec>` lấy nó làm
+     H1 + <title> (chính từ khoá người ta gõ), và công cụ Hoàng lịch đọc thẳng
+     `nen[].ten` của `computeVanNgay` — ở một cuốn hoàng lịch thì "Nhập trạch",
+     "An táng" là đúng chỗ. Chỉ THẺ trang chủ mới cần giọng đời thường.
+     `null` = ẨN khỏi thẻ: ba việc này không thuộc về khối đầu trang chủ. Giá đã
+     đo trên 365 ngày 2026 — ô trống trên ngày lành 2% → 5%; riêng Sinh con
+     chưa từng lọt top-3 (0/365) và Đào giếng chỉ 9 ngày, nên gần như free.
+     ⚠️ NHÃN ĐO BẰNG PIXEL, KHÔNG ĐẾM KÝ TỰ. Cột tên chỉ rộng **61px** ở máy
+     360px và 76px ở máy 390px — đo trên chính trang này, sau khi trừ icon,
+     hai khe gap và ô điểm; ước theo số ký tự lệch gần gấp đôi. Nhãn quá khổ
+     không vỡ layout, nó xuống hai dòng và làm hai ô lệch chiều cao.
+     Bề rộng đã đo @360px: Cưới hỏi 57 · Nhà mới 55 · Xây nhà 52 · Đi xa 33 ·
+     Ký kết 41 · Sửa nhà 55 — vừa hết. "Khai trương" 79px là ngoại lệ CỐ Ý:
+     không có từ đời thường nào ngắn hơn mà không đổi nghĩa, và nó vốn đã
+     xuống dòng ở bản đang chạy nên giữ nguyên không phải hồi quy. */
+  var VIEC_NHAN={'Cưới hỏi':'Cưới hỏi','Khai trương':'Khai trương',
+    'Nhập trạch':'Nhà mới','Khởi công xây dựng':'Xây nhà',
+    'Xuất hành':'Đi xa','Cầu tài':'Ký kết','Sửa nhà':'Sửa nhà',
+    'An táng':null,'Đào giếng':null,'Sinh con':null};
+  /* Khoá bằng nhãn ĐÃ đổi — `vietChoThe()` chạy trước mọi lượt vẽ. */
+  var VIEC_ICON={'Cưới hỏi':'heart','Khai trương':'store','Nhà mới':'home',
+    'Xây nhà':'landmark','Đi xa':'compass','Ký kết':'briefcase',
+    'Sửa nhà':'landmark'};
+
+  /* Lọc + đổi tên + cắt 3, MỘT LẦN ngay đầu render, để thẻ · rail · bản chia sẻ
+     không bao giờ gọi khác tên nhau. Idempotent: chạy lại trên mảng đã đổi thì
+     nhãn mới không còn trong `VIEC_NHAN` nên rơi về `x.ten` và giữ nguyên.
+     🔑 CẮT 3 Ở ĐÂY, SAU khi lọc — engine CỐ Ý trả tới 6 (xem `van-ngay.ts`).
+     Cắt trước khi lọc là để việc bị ẩn ăn mất một chỗ: 34/365 ngày thẻ hiện 2
+     dòng thay vì 3. */
+  function vietChoThe(nen){
+    return (nen||[]).filter(function(x){ return VIEC_NHAN[x.ten]!==null; })
+      .map(function(x){
+        var nhan=VIEC_NHAN[x.ten];
+        return nhan&&nhan!==x.ten ? {ten:nhan,diem:x.diem,vi:x.vi} : x;
+      }).slice(0,3);
+  }
   /* `gioTot[].viec` của engine dài 3 vế — ô Giờ đẹp chỉ có chỗ cho một NHÃN.
      Khoá bằng `gioTot[].sao` (12 thần), API đã trả sẵn. */
   var GIO_NHAN={'Thanh Long':'Việc lớn','Minh Đường':'Gặp gỡ','Kim Quỹ':'Tiền bạc',
@@ -1264,6 +1299,9 @@ function renderAllTools(d) {
 
   /* ── Vẽ thẻ đầy đủ ─────────────────────────────────────────────────────── */
   function render(v,td,birth,hasBirth){
+    // Đổi tên + ẩn TRƯỚC khi gán `_viewing`: rail (`vietNen`) và bản chia sẻ
+    // đọc lại chính `_viewing`, nên làm ở đây là ba mặt cùng một danh sách.
+    v.nen=vietChoThe(v.nen);
     _viewing=v;
     var key=anhCho(v);
     var isToday=!_today||(td.d===_today.d&&td.mo===_today.mo&&td.y===_today.y);
@@ -1310,14 +1348,15 @@ function renderAllTools(d) {
         ? '<div class="tbox-empty">'+esc('Ngày '+(v.ngayKy||[]).join(' + ')+' — cổ pháp kiêng khởi sự. Việc thường ngày vẫn làm bình thường.')+'</div>'
         :(v.nen&&v.nen.length)
         ? '<div class="tdo">'+v.nen.map(function(x){
-            // Điểm hiện KÈM tên việc. Engine hạ ngưỡng từ 7 xuống 6 để ô này
-            // bớt trống (55% → 44% số ngày trong năm), nên danh sách nay có cả
-            // việc 6/10 lẫn 10/10 — không ghi điểm là gộp hai thứ khác hẳn
-            // nhau thành một danh sách phẳng, tức thẻ đang khuyên quá tay.
+            // Điểm hiện KÈM tên việc. Engine hạ ngưỡng xuống 5 để ô này bớt
+            // trống, nên danh sách nay có cả việc 5/10 lẫn 10/10 — không ghi
+            // điểm là gộp hai thứ khác hẳn nhau thành một danh sách phẳng, tức
+            // thẻ đang khuyên quá tay.
+            // `x.ten` ở đây đã là nhãn của `vietChoThe()`, không phải tên engine.
             return '<div class="tdo-row"><span class="ic" data-icon="'+(VIEC_ICON[x.ten]||'check-circle')
               +'"></span><span class="tdo-ten">'+esc(x.ten)+'</span>'
               +(x.diem?'<b class="tdo-diem">'+x.diem+'</b>':'')+'</div>'; }).join('')+'</div>'
-        : '<div class="tbox-empty">Hôm nay không việc trọng đại nào được điểm cao — để dành sang ngày khác.</div>')
+        : '<div class="tbox-empty">Hôm nay không việc lớn nào được điểm cao — để dành sang ngày khác.</div>')
       +'</div>';
 
     /* ── Ô GIỜ ĐẸP — giờ tốt mà không nói để làm gì thì không dùng được ── */

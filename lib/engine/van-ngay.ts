@@ -323,9 +323,19 @@ export function computeVanNgay(dd: number, mm: number, yy: number): VanNgayResul
     // `scoreAllActivities`, không qua đây) và CỐ Ý giữ nguyên: lịch SEO trả lời
     // "ngày nào tốt để cưới hỏi" nên phải giữ bar cao, khác việc thẻ trả lời
     // "hôm nay làm được gì".
-    nen: sorted.filter((s) => s.score >= 5).slice(0, 3).map((s) => pick(s, true)),
-    // Nên 3 / kiêng 2: thẻ là khối ĐẦU trang chủ, dài thêm một dòng là đẩy
-    // danh sách công cụ xuống dưới màn hình đầu tiên trên máy 390px.
+    //
+    // 🔑 CẮT 6 CHỨ KHÔNG PHẢI 3, dù thẻ chỉ hiện 3. Thẻ ẨN ba việc (An táng ·
+    // Đào giếng · Sinh con) ở tầng trình bày — `vietChoThe()` trong
+    // `public/app-home.html` — nên nếu ở đây cắt đúng 3 thì một việc bị ẩn ăn
+    // mất một CHỖ và thẻ hiện thiếu dòng: đo trên 365 ngày 2026 là **34 ngày**
+    // hiện 2 dòng thay vì 3. Cắt 6 luôn đủ dư vì chỉ có 3 việc bị ẩn. Bên tiêu
+    // thụ tự cắt lại 3.
+    // ⚠️ Chỉ HAI nơi đọc `nen` này: `/api/van-ngay` (thẻ) và
+    // `lib/push/daily-message.ts`. Hoàng lịch có `nen` RIÊNG dựng từ
+    // `lib/almanac/day.ts` (`recommends`) — không dính.
+    nen: sorted.filter((s) => s.score >= 5).slice(0, 6).map((s) => pick(s, true)),
+    // Kiêng 2: thẻ là khối ĐẦU trang chủ, dài thêm một dòng là đẩy danh sách
+    // công cụ xuống dưới màn hình đầu tiên trên máy 390px.
     kieng: sorted.filter((s) => s.score <= 3).slice(-2).reverse().map((s) => pick(s, false)),
     mau: { hanh: canHanh, list: mauList },
     huong: { hyThan: HY_THAN[canIdx]!, taiThan: TAI_THAN[canIdx]! },
