@@ -85,7 +85,17 @@ body { font-family: sans-serif; display:flex; align-items:center; justify-conten
       try {
         var did = localStorage.getItem('tvc_device_id');
         if (!did) { did = (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : ('d' + Date.now() + Math.random().toString(36).slice(2)); localStorage.setItem('tvc_device_id', did); }
-        fetch('/api/signup-signal', { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + access_token }, body: JSON.stringify({ fp: did }), keepalive: true }).catch(function () {});
+        fetch('/api/signup-signal', { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + access_token }, body: JSON.stringify({ fp: did }), keepalive: true })
+          // Lượt gọi ĐẦU TIÊN thành công cho user_id này (idempotent theo PK) là
+          // tín hiệu "tài khoản Google mới" — bắn 'signup' (khác 'login' ở trên)
+          // để track.js đổ sang GA4 sign_up + Meta CompleteRegistration.
+          .then(function (r) { return r.json(); })
+          .then(function (data) {
+            if (data && data.ok && !data.already) {
+              try { if (window.Track && window.Track.event) window.Track.event('signup'); } catch (e) { /* ignore */ }
+            }
+          })
+          .catch(function () {});
       } catch (e) { /* ignore */ }
       window.location.href = _dest();
     })
