@@ -206,6 +206,45 @@
     }, 400);
   }
 
+  // ============================================================
+  // Cầu nối sang Meta Pixel (fbq) — Google Ads 2026-09 chạy sai mục tiêu
+  // (click thay vì purchase) lộ ra một lỗ y hệt bên Meta: track.js CHƯA từng
+  // gọi fbq('track', ...) cho bất kỳ event nghiệp vụ nào — nav.js chỉ tự bắn
+  // 'PageView'. Không có tín hiệu tool_run/preview_shown/signup thì Meta chỉ
+  // tối ưu được theo lượt xem trang, đúng gốc của 0,5-18% chạy tool trên 5.200
+  // khách quảng cáo tuần 2026-08-29→09-01 mà 0đ doanh thu. Xem docs/nhat-ky/2026-09.md.
+  //
+  // Chỉ map 3 event có ý nghĩa phễu thật cho Meta (không đổ hết 24 loại event
+  // sang — js_error/scroll_depth/page_dwell không phải tín hiệu tối ưu quảng
+  // cáo), và ưu tiên STANDARD EVENT của Meta thay vì trackCustom: standard event
+  // được xếp sẵn vào nhóm tối ưu hoá (Lead/CompleteRegistration/ViewContent),
+  // Ads Manager mới dùng được làm Conversion goal ngay khi chọn objective.
+  var FB_EVENTS = { tool_run: 'Lead', preview_shown: 'ViewContent', signup: 'CompleteRegistration' };
+  var fbQueue = [], fbTimer = null, fbTries = 0;
+
+  function fbFlush() {
+    if (typeof window.fbq !== 'function') return false;
+    while (fbQueue.length) {
+      var name = fbQueue.shift();
+      try { window.fbq('track', name); } catch (e) { /* ignore */ }
+    }
+    if (fbTimer) { clearInterval(fbTimer); fbTimer = null; }
+    return true;
+  }
+
+  function fbSend(type) {
+    var name = FB_EVENTS[type];
+    if (!name) return;
+    fbQueue.push(name);
+    if (fbFlush() || fbTimer) return;
+    fbTimer = setInterval(function () {
+      if (fbFlush() || ++fbTries >= 25) {
+        if (fbTimer) { clearInterval(fbTimer); fbTimer = null; }
+        if (fbTries >= 25) fbQueue.length = 0;
+      }
+    }, 400);
+  }
+
   function event(type, props) {
     props = props || {};
     var e = {
@@ -225,6 +264,7 @@
     for (var k in props) { if (Object.prototype.hasOwnProperty.call(props, k)) e[k] = props[k]; }
     send([e]);
     try { ga4Send(type, props); } catch (err) { /* GA4 hỏng không được kéo theo beacon nội bộ */ }
+    try { fbSend(type); } catch (err) { /* Meta Pixel hỏng không được kéo theo beacon nội bộ */ }
   }
 
   window.Track = { event: event, anonId: anonId, sessionId: sid };
