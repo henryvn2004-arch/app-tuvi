@@ -129,9 +129,11 @@ if (!document.getElementById('fb-pixel-js') && !navigator.webdriver) {
   window.fbq('track', 'PageView');
 }
 // `nav.js?v=25` ở chế độ `data-icons-only` CŨNG bỏ qua GA4 (xem nav.js#336) —
-// cùng lý do như fbq ở trên: đây là trang XÁC NHẬN THANH TOÁN, đúng nơi phải
-// bắn sự kiện `purchase` để Google Ads (import Key Event từ GA4) đo được
-// conversion. Không nơi nào khác trong repo từng gọi gtag('event','purchase').
+// nạp riêng ở đây để trang XÁC NHẬN THANH TOÁN vẫn có page_view/PageView cơ
+// bản. Event `purchase`/`Purchase` KHÔNG bắn ở đây (và không ở topup.html) —
+// bắn phía SERVER (lib/marketing/server-conversions.ts), đúng một lần, ngay
+// tại điểm cộng tiền thật. Bắn thêm ở client là tính trùng doanh thu — đã đo
+// được thật (2 event GA4 cho 1 giao dịch trước khi gỡ khỏi topup.html).
 if (!document.getElementById('gtag-js') && !navigator.webdriver) {
   var ga = document.createElement('script'); ga.id = 'gtag-js'; ga.async = true;
   ga.src = 'https://www.googletagmanager.com/gtag/js?id=G-F4XNRS2XT0'; document.head.appendChild(ga);
