@@ -413,6 +413,32 @@ try {
 
 onQuanHeChange();
 
+// Quay lại từ lượt nạp Lượng (hết Lượng ngay lúc bấm — xem
+// `TuviPaywall._insufficient`/`resumeIfPending`). Trang MULTI-PAGE (điều
+// hướng cứng sang /topup.html rồi quay lại), nên cả 2 form + lựa chọn quan hệ/
+// việc cần làm mất sạch khi tải lại. `analyze()` tự lưu ngay khi validate
+// xong; đọc lại + tự gọi `analyze()` khi quay về với `?tpwResume=1`.
+var NK_RESUME_KEY = 'nk_pending_resume';
+(function () {
+  var url;
+  try { url = new URL(location.href); } catch (e) { return; }
+  if (url.searchParams.get('tpwResume') !== '1') return;
+  var raw;
+  try { raw = sessionStorage.getItem(NK_RESUME_KEY); sessionStorage.removeItem(NK_RESUME_KEY); } catch (e) { return; }
+  if (!raw) return;
+  var saved;
+  try { saved = JSON.parse(raw); } catch (e) { return; }
+  if (!saved || !saved.fd || !saved.fd.ngay || !saved.fd.thang || !saved.fd.nam) return;
+  TuviForm.setData(saved.fd, '');
+  if (saved.fdSelf) TuviForm.setData(saved.fdSelf, 'self');
+  if (saved.qh) document.getElementById('quanHe').value = saved.qh;
+  onQuanHeChange();
+  if (saved.viec) document.getElementById('viecCanLam').value = saved.viec;
+  var runAutoAnalyze = function () { if (typeof analyze === 'function') analyze(); };
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', runAutoAnalyze);
+  else runAutoAnalyze();
+})();
+
 // Không có dòng này thì `_cfg.product` rỗng ⇒ paywall không tra được giá, hiện
 // hộp "chưa đọc được bảng giá" và tool KHÔNG chạy. Test trang bắt đúng chỗ này.
 TuviPaywall.init({ product: 'nguoi-khac', slug: function () { return _currentSlug; } });
@@ -498,6 +524,14 @@ async function analyze() {
   var viec = document.getElementById('viecCanLam').value;
   var self = _birthOf('self');
   _last = b; _lastSelf = self; _lastViec = viec;
+
+  // Lưu lại NGAY để `?tpwResume=1` (xem `NK_RESUME_KEY` ở đầu file) khôi phục
+  // được cả 2 form + lựa chọn quan hệ/việc cần làm, không cần gõ lại.
+  try {
+    sessionStorage.setItem(NK_RESUME_KEY, JSON.stringify({
+      fd: TuviForm.getData(''), fdSelf: TuviForm.getData('self'), qh: qh, viec: viec,
+    }));
+  } catch (e) { /* ignore */ }
   // 🔑 `viec` vào slug: slug là thứ `hasRecentToolPayment` dò để biết lượt này
   // đã trả tiền chưa. Hai việc khác nhau là hai món hàng khác nhau — dùng chung
   // slug thì mở bản thứ hai không mất Lượng.
