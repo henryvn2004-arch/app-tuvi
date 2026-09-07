@@ -973,6 +973,22 @@ const SECTION_TEASERS = [
 ];
 const WEIGHTS = [0,0.10,0.10,0.20,0.10,0.20,0.10,0.15,0.05];
 const CUNG_MAP = [null,null,null,'Mệnh',null,'Phu Thê','Tử Tức','Tài Bạch',null];
+// Câu hỏi trọng tâm RIÊNG từng yếu tố (idx 1-8) — trước đây cả 8 yếu tố khác
+// hẳn nhau (Xét Tuổi/Ngũ Hành/Tư Tưởng/Tính Cách/Quan Hệ/Con Cái/Tài Chính/
+// Vận Hành) dùng CHUNG một câu lệnh "Tác động thực tế, 1 điểm lưu ý" — quá
+// chung chung nên câu trả lời hay lạc đề/mơ hồ. Mỗi câu hỏi phải suy được từ
+// đúng dữ liệu đã gửi cho idx đó (xem `lines` trong luanGiaiSection).
+const SECTION_QUESTIONS = [
+  '',
+  'Hai người có hợp tuổi để tiến tới hôn nhân/gắn bó lâu dài không? Chênh lệch nạp âm này ai nên nhường, chiều ai nhiều hơn?',
+  'Ngũ hành hai người tương sinh giúp đỡ nhau hay tương khắc dễ va chạm? Ai nên chủ động nhường để giữ hòa khí?',
+  'Hai người có cùng chí hướng, quan điểm sống hay dễ bất đồng vì suy nghĩ khác biệt? Ai thường là người quyết định chính?',
+  'Tính cách hai người hòa hợp trong sinh hoạt hàng ngày hay dễ va chạm vì tính khí trái ngược? Ai nóng ai nguội, ai nên nhường lúc cãi vã?',
+  'Đời sống tình cảm, vợ chồng đôi bên có bền chặt, gắn bó hay tiềm ẩn nguy cơ rạn nứt, nhạt phai? Ai chung thủy, gắn bó hơn?',
+  'Hai người có thuận lợi về đường con cái không — dễ có con, con cái ngoan hay vất vả? Con sinh ra hợp tính cha hay mẹ hơn?',
+  'Kết hợp tài chính, làm ăn chung mang lại lợi ích hay dễ hao tổn, bất đồng vì tiền? Ai nên là người giữ tay hòm chìa khóa?',
+  'Giai đoạn hiện tại của cả hai có đang thuận lợi để tiến xa (cưới, làm ăn chung, mua nhà) hay nên chờ thêm? Ai đang gặp vận khó hơn cần được đỡ đần?',
+];
 
 // RAG helpers — tam phương tứ chính
 const _TH = {'Dần':['Ngọ','Tuất'],'Ngọ':['Dần','Tuất'],'Tuất':['Dần','Ngọ'],'Thân':['Tý','Thìn'],'Tý':['Thân','Thìn'],'Thìn':['Thân','Tý'],'Tỵ':['Dậu','Sửu'],'Dậu':['Tỵ','Sửu'],'Sửu':['Tỵ','Dậu'],'Hợi':['Mão','Mùi'],'Mão':['Hợi','Mùi'],'Mùi':['Hợi','Mão']};
@@ -1543,7 +1559,9 @@ Viết 300-350 từ văn xuôi. Nhận định tổng quan, điểm mạnh, đi�
       }
     }
 
-    prompt='Luận giải "'+m.label+'" — tương quan lá số '+nameA+' và '+nameB+':\n'+lines.join('\n')+'\n\nViết 150-200 từ văn xuôi. Tác động thực tế, 1 điểm lưu ý. Dùng tên thật.';
+    const focusQ = SECTION_QUESTIONS[idx] || '';
+    prompt='Luận giải "'+m.label+'" — tương quan lá số '+nameA+' và '+nameB+':\n'+lines.join('\n')+
+      '\n\nViết 180-230 từ văn xuôi.'+(focusQ?' Tối thiểu phải trả lời được: '+focusQ:'')+' Tác động thực tế, 1 điểm lưu ý. Dùng tên thật.';
   }
   // Mark muc-luc as loading NOW (when actually calling AI)
   const _mlBtn=document.getElementById('ml-'+idx);

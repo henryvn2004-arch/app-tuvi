@@ -970,6 +970,20 @@ const SECTION_TEASERS = [
 ];
 const WEIGHTS = [0,0.10,0.10,0.20,0.10,0.20,0.10,0.15,0.05];
 const CUNG_MAP = [null,null,null,'Mệnh',null,'Nô Bộc',null,'Tài Bạch',null]; // idx6=Thân cung (special)
+// Câu hỏi trọng tâm RIÊNG từng yếu tố (idx 1-8) — trước đây cả 8 yếu tố khác
+// hẳn nhau dùng CHUNG một câu lệnh "Tác động thực tế, 1 điểm lưu ý" — quá
+// chung chung. Bối cảnh tool này là HỢP TÁC LÀM ĂN (không phải vợ chồng).
+const SECTION_QUESTIONS = [
+  '',
+  'Hai người có hợp tuổi để hợp tác làm ăn lâu dài không? Chênh lệch nạp âm này ai nên nhường, ai nên là người cầm trịch?',
+  'Ngũ hành hai người tương sinh hỗ trợ công việc hay tương khắc dễ va chạm? Ai nên chủ động nhường để hợp tác suôn sẻ?',
+  'Hai người có cùng tầm nhìn, mục tiêu kinh doanh hay dễ bất đồng vì quan điểm khác biệt? Ai nên là người quyết định chính?',
+  'Tính cách hai người hòa hợp khi làm việc cùng nhau hay dễ va chạm vì tính khí trái ngược? Ai nóng ai nguội, ai nên nhường lúc bất đồng?',
+  'Hợp tác làm ăn với người này mang lại lợi ích, quý nhân đỡ đần hay dễ bị lợi dụng, phản bội? Có nên hùn vốn lâu dài không?',
+  'Giao tiếp, trao đổi công việc giữa hai người thuận lợi, dễ hiểu ý nhau hay dễ hiểu lầm, tranh cãi? Nên trao đổi trực tiếp hay qua trung gian?',
+  'Góp vốn, kết hợp tài chính làm ăn chung mang lại lợi ích hay dễ hao tổn, bất đồng vì tiền? Ai nên là người giữ tay hòm chìa khóa?',
+  'Giai đoạn hiện tại của cả hai có đang thuận lợi để hợp tác, mở rộng làm ăn hay nên chờ thêm? Ai đang gặp vận khó hơn cần được đỡ đần?',
+];
 
 // RAG helpers — tam phương tứ chính
 const _TH = {'Dần':['Ngọ','Tuất'],'Ngọ':['Dần','Tuất'],'Tuất':['Dần','Ngọ'],'Thân':['Tý','Thìn'],'Tý':['Thân','Thìn'],'Thìn':['Thân','Tý'],'Tỵ':['Dậu','Sửu'],'Dậu':['Tỵ','Sửu'],'Sửu':['Tỵ','Dậu'],'Hợi':['Mão','Mùi'],'Mão':['Hợi','Mùi'],'Mùi':['Hợi','Mão']};
@@ -1542,7 +1556,7 @@ async function luanGiaiSection(idx,m,result){
   let prompt='';
   if(idx===0){
     const itemsText=result.items.map((item,i)=>(i+1)+'. '+item.label+': '+item.score+'/10 — '+item.detail).join('\n');
-    prompt=`Phân tích tương quan lá số vợ chồng theo Tử Vi Đẩu Số cổ pháp:
+    prompt=`Phân tích tương quan lá số hợp tác làm ăn theo Tử Vi Đẩu Số cổ pháp:
 ${nameA}: ${lsA.canChiNam} · Nạp Âm ${naA} · Cung Mệnh ${palMenhA?.diaChi||'?'} · Chính tinh: ${(palMenhA?.majorStars||[]).map(s=>s.ten).join(', ')||'VCD'}
 ${nameB}: ${lsB.canChiNam} · Nạp Âm ${naB} · Cung Mệnh ${palMenhB?.diaChi||'?'} · Chính tinh: ${(palMenhB?.majorStars||[]).map(s=>s.ten).join(', ')||'VCD'}
 
@@ -1638,7 +1652,9 @@ Viết 300-350 từ văn xuôi. Nhận định tổng quan, điểm mạnh, đi�
       }
     }
 
-    prompt='Luận giải "'+m.label+'" — tương quan lá số '+nameA+' và '+nameB+':\n'+lines.join('\n')+'\n\nViết 150-200 từ văn xuôi. Tác động thực tế, 1 điểm lưu ý. Dùng tên thật.';
+    const focusQ = SECTION_QUESTIONS[idx] || '';
+    prompt='Luận giải "'+m.label+'" — tương quan lá số '+nameA+' và '+nameB+':\n'+lines.join('\n')+
+      '\n\nViết 180-230 từ văn xuôi.'+(focusQ?' Tối thiểu phải trả lời được: '+focusQ:'')+' Tác động thực tế, 1 điểm lưu ý. Dùng tên thật.';
   }
   // Mark muc-luc as loading NOW (when actually calling AI)
   const _mlBtn=document.getElementById('ml-'+idx);
