@@ -70,7 +70,7 @@ QUY TẮC CHUNG CHO MỌI PHẦN LUẬN GIẢI:
 - ${XUNG_HO_RULE}`;
 
 const PHU_THE_DESC =
-  'Cung Phu Thê xem những điều liên quan đến vợ chồng, tình duyên, hôn nhân và hạnh phúc đôi lứa cả đời.';
+  'Cung Phu Thê xem những điều liên quan đến vợ chồng, tình duyên, hôn nhân và hạnh phúc đôi lứa cả đời. Tối thiểu phải trả lời được các câu hỏi: Người bạn đời của tôi có tính cách, con người ra sao — dễ chịu, chu đáo hay nóng nảy, gia trưởng? Cuộc hôn nhân của tôi sau này có êm ấm, hạnh phúc hay dễ cãi vã, xung đột kéo dài? Hôn nhân này có bền vững đi trọn đời hay dễ đứt gánh, ly tán giữa đường? Bạn đời có tương trợ, mang lại may mắn cho sự nghiệp và tiền bạc của tôi, hay ngược lại kéo tôi xuống, thậm chí hại tôi? Đời sống hôn nhân của tôi có nguy cơ xuất hiện "người thứ ba" hay không? Nhìn chung tôi là người có số lập gia đình thuận lợi, dễ dàng hay lận đận, trắc trở về đường tình duyên?';
 
 // Trích riêng khối "[Phu Thê] ... Tam hợp ... Xung chiếu ..." + header (can
 // chi/nạp âm/mệnh/thân) + khối cách cục toàn cục — mirror ĐÚNG nhánh
@@ -124,13 +124,13 @@ export function buildPhuTheLuanGiaiPrompt(laSoText: string, hoTen?: string, gioi
     ctx +
     `
 
-PHẦN — CUNG PHU THÊ (150-220 từ)
+PHẦN — CUNG PHU THÊ (200-260 từ)
 ${PHU_THE_DESC}
 
 MỞ ĐẦU bằng câu phán quyết in đậm neo vào nhãn "Luận sao" của cung Phu Thê (tốt/khá/trung bình/yếu + lý do ngắn). Cấm né tránh.
-Viết 2-3 đoạn văn xuôi súc tích. Cấu trúc:
-① Nhận định chính: Dựa trên [CÁCH CỤC] và [Ý NGHĨA] tại Phu Thê — đây là phần quan trọng nhất, diễn giải thật rõ.
-② Tam phương: Xét sao ở cung tam hợp/xung chiếu có hỗ trợ hay phá cách không (duyên đến sớm/muộn, hòa hợp/xung khắc, xa cách...).
+Viết 2-3 đoạn văn xuôi súc tích, đủ chỗ đào sâu bộ câu hỏi trọng tâm ở trên (chọn 2-3 câu sát nhất với dữ liệu, không nhồi hết). Cấu trúc:
+① Nhận định chính: Dựa trên [CÁCH CỤC] và [Ý NGHĨA] tại Phu Thê — đây là phần quan trọng nhất, diễn giải thật rõ con người/tính cách bạn đời và mức độ hạnh phúc, bền vững của hôn nhân.
+② Tam phương: Xét sao ở cung tam hợp/xung chiếu có hỗ trợ hay phá cách không (hòa hợp/xung khắc, tương trợ sự nghiệp-tiền bạc hay ngược lại, nguy cơ người thứ ba...).
 ③ Kết luận thực tế: 1-2 câu về tác động cụ thể tới hôn nhân người này. TUYỆT ĐỐI KHÔNG ước lượng hay nêu số tuổi/số năm chênh lệch cụ thể với bạn đời (không nói "hơn khoảng X tuổi", không chốt số năm) — đây là đoạn văn xuôi hiển thị cho người đọc, không phải nơi tính toán tuổi tác.
 
 Không liệt kê lại tên sao, không mô tả lại dữ liệu thô. Nếu cung vô chính diệu thì nói rõ phải mượn cung xung chiếu để luận.`

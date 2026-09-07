@@ -170,7 +170,10 @@ async function handleGenerate(request: NextRequest, body: Record<string, unknown
     const llmRes = await llmTextFull({
       system: PHU_THE_LUAN_GIAI_SYSTEM_PROMPT,
       prompt: buildPhuTheLuanGiaiPrompt(laSoText, undefined, userGender),
-      maxTokens: 1350, // nâng 50% cùng đợt (Henry chốt 2026-08-20)
+      // 1350→1750 (2026-09-07, Henry): PHU_THE_DESC nới 150-220→200-260 từ +
+      // thêm bộ câu hỏi trọng tâm (lib/agent/phu-the-luan-giai.ts) — trần
+      // token tăng theo tỉ lệ từ tăng, tránh sát mép gây cắt giữa câu.
+      maxTokens: 1750,
     });
     phuTheLuanGiai = llmRes.text.trim();
     void logLlmUsage('chan-dung-vo-chong', llmRes.model, {
