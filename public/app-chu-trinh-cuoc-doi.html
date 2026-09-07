@@ -130,7 +130,12 @@
 .laso-error{font-size:12.5px;color:var(--tx-red);padding:8px 0}
 .lg-unlock{background:var(--white);border:1px solid var(--gold-soft);border-radius:11px;padding:18px 20px;margin-bottom:22px;text-align:center}
 .lg-unlock p{font-size:12.5px;color:var(--text-lt);margin-top:8px}
-.lg-unlock .tpw-vnd{font-size:12px;font-weight:400;opacity:.8}
+.lg-unlock .tpw-vnd,.lg-cta-repeat .tpw-vnd{font-size:12px;font-weight:400;opacity:.8}
+/* CTA lặp lại trong mỗi phần khoá (2026-09-07) — bản GỌN của .lg-unlock,
+   đứng ngay dưới văn mẫu mờ của chính phần đó (không lặp lại tiêu đề/danh
+   sách, chỉ nút) để cuộn sâu vẫn còn chỗ bấm mở, không phải cuộn ngược lên. */
+.lg-cta-repeat{margin-top:14px;text-align:center}
+.lg-cta-repeat .btn-go{width:100%;max-width:360px}
 .lg-progress{font-size:12.5px;color:var(--text-lt);margin-bottom:16px;padding:10px 0;border-bottom:1px solid var(--line)}
 /* Khách chưa đăng ký: phần 2-11 vẫn hiện ĐỦ cấu trúc (tiêu đề, để thấy có
    11 phần thật) — nội dung bên trong thay bằng Ô GIỮ CHỖ thật sự KHÔNG một
@@ -246,7 +251,7 @@ window.SHELL_INTRO={key:'chu-trinh-cuoc-doi'};</script>
 <script src="/tools-shared/hook-layer.js?v=2"></script>
   <script src="/nav.js?v=26" data-icons-only></script>
 <script src="/shell.js?v=87"></script>
-<script src="/tools-shared/ai-loading-steps.js?v=9"></script>
+<script src="/tools-shared/ai-loading-steps.js?v=10"></script>
 <script src="/tools-shared/phan-pool.js?v=1"></script>
 <script>
 // ── Form nhập (dùng chung TuviForm — có "Sinh ở ngoài Việt Nam?" + parity giờ
@@ -408,12 +413,18 @@ function renderLuan(ls,fd,namxem){
   // Khối pre-gen mang span [data-icon-emoji]/[data-icon]; nav.js ở chế độ
   // chỉ-icon chỉ quét lúc nạp trang, nên phần chèn sau đó phải gọi lại.
   if(window.mountIcons) window.mountIcons(document.getElementById('lgBody'));
-  // 🔴 (2026-09-07) `lgBody` không còn ô giá/khoá-mini nào của riêng từng
-  // phần (bỏ hẳn nút "Mở phần này" — xem buildPhanSection) — hai lời gọi dưới
-  // đây thành no-op VÔ HẠI, giữ lại để không phải sửa nếu có lượt roll-back
-  // dựng lại nút đó. Giá + khoá-mở DUY NHẤT nay nằm ở banner `#lgUnlock`
-  // (`_renderUnlockBlock`, gọi `TuviPaywall.fillPriceSlots(host)` riêng).
-  TuviPaywall.fillPriceSlots(document.getElementById('lgBody'));
+  // 🔴 (2026-09-07) Bỏ hẳn nút "Mở phần này" riêng từng phần (nút mua LẺ) —
+  // `TuviPaywall.wireSectionLocks` bên dưới thành no-op VÔ HẠI (không còn
+  // `[data-tpw-seclock]` nào để bắt), giữ lại phòng khi có lượt roll-back.
+  // Thay vào đó MỖI phần khoá (3-11) mang một CTA LẶP LẠI (`.lg-cta-repeat`,
+  // xem buildPhanSection) — Henry: "box blur nào cũng phải hiện CTA" để cuộn
+  // sâu vẫn thấy đường mở, nhưng TẤT CẢ đều gọi `_triggerUnlockAll()`, tức
+  // vẫn ĐÚNG MỘT hành động mua (mở cả bó), không phải mua lẻ từng phần.
+  // `fillPriceSlots`/`_fillVndSlots` quét CẢ `lgBody` nên tự điền giá cho mọi
+  // CTA lặp cùng lúc với banner đầu trang.
+  TuviPaywall.fillPriceSlots(document.getElementById('lgBody')).then(function(){
+    _fillVndSlots(document.getElementById('lgBody'),'chu-trinh-cuoc-doi');
+  });
   TuviPaywall.wireSectionLocks(document.getElementById('lgBody'), function(part){
     return part!=null ? _unlockOnePart(part) : initiateLuanGiaiChuyenSau();
   });
@@ -508,11 +519,10 @@ function buildPhanSection(p,ep,label,ls,locked){
   // Gợi ý tool khác CHỈ hiện khi phần này KHÔNG bị khoá (khối tính toán thật).
   var related=locked?'':phanRelatedHtml(ep);
   // 🔴 (2026-09-07) KHÔNG còn nút "Mở phần này" riêng từng đại vận (23
-  // Lượng/phần) — Henry chốt bỏ hẳn kiểu mở-từng-mục, thay bằng ĐÚNG MỘT nút
-  // mở cả bó ở banner đầu trang (`#lgUnlock`, xem `_renderUnlockBlock`). Hàm
-  // `_unlockOnePart`/API mua-lẻ-phần GIỮ NGUYÊN trong file (không xoá) —
-  // không còn nút nào gọi tới nên là code chết vô hại, không phải đường sống
-  // cần dọn ngay trong bản thử này.
+  // Lượng/phần) — Henry chốt bỏ hẳn kiểu mở-từng-mục. Hàm `_unlockOnePart`/
+  // API mua-lẻ-phần GIỮ NGUYÊN trong file (không xoá) — không còn nút nào
+  // gọi tới nên là code chết vô hại, không phải đường sống cần dọn ngay
+  // trong bản thử này.
   //
   // `claude-content-`+ep (ENGINE phan) — khớp đúng khoá `_luanGiaiStore`/cache
   // van-han-nam, xem chú thích ở đầu renderLuan(). Phần 1-2 (p<=2, luôn free)
@@ -523,11 +533,26 @@ function buildPhanSection(p,ep,label,ls,locked){
   // THẬT ghi đè ngay khi mua cả bó hoặc đọc lại cache (không cần dọn tay).
   var dummy=(p>=3&&DUMMY_CTCD[ep])?renderMarkdown(DUMMY_CTCD[ep]):'';
   var claudeBox='<div class="claude-content'+(dummy?' tpw-real-lock':'')+'" id="claude-content-'+ep+'" style="display:'+(dummy?'block':'none')+'">'+dummy+'</div>';
-  return sec(p,label,tag,'<div class="card">'+bodyHtml+claudeBox+related+ask('Luận sâu phần: '+label)+'</div>');
+  // CTA LẶP LẠI (2026-09-07, Henry: "box blur nào cũng phải hiện CTA như box
+  // thứ 3" — tức banner `#lgUnlock`) — mỗi phần khoá (3-11) tự mang một lời
+  // mời mở, đứng NGAY DƯỚI văn mẫu mờ của chính nó, để cuộn qua khỏi banner
+  // đầu trang vẫn còn chỗ bấm. Gọi `_triggerUnlockAll()` (KHÔNG phải
+  // `initiateLuanGiaiChuyenSau()` thẳng — hàm đó bỏ qua bước `renderLuan()`
+  // lại vì nó chỉ được gọi khi ĐÃ chắc chắn đăng nhập; CTA lặp này còn hiện
+  // cho khách ẩn danh, nên phải tự lo bước mở khoá DOM sau khi đăng ký xong,
+  // xem `_triggerUnlockAll`). Vẫn ĐÚNG MỘT hành động (mở cả bó), không mở lẻ.
+  var ctaRepeat=dummy
+    ? '<div class="lg-cta-repeat" id="lg-cta-'+p+'"><button class="btn-go" type="button" onclick="_triggerUnlockAll()">✦ Mở toàn bộ bản luận — <span data-tvp-price="chu-trinh-cuoc-doi">…</span> Lượng <span class="tpw-vnd" data-tvp-price-vnd="chu-trinh-cuoc-doi"></span> →</button></div>'
+    : '';
+  return sec(p,label,tag,'<div class="card">'+bodyHtml+claudeBox+ctaRepeat+related+ask('Luận sâu phần: '+label)+'</div>');
 }
+// Gỡ CẢ badge "Khoá" LẪN CTA lặp lại của phần p — gọi cùng lúc, cùng lý do
+// (chữ THẬT đã ghi đè, không còn gì để mời mở nữa).
 function _hideSecBadge(p){
   var el=document.getElementById('sec-badge-'+p);
   if(el) el.style.display='none';
+  var cta=document.getElementById('lg-cta-'+p);
+  if(cta) cta.style.display='none';
 }
 // `show=false` (đã trả tiền / đọc lại cache) → gỡ badge "Khoá" của mọi phần
 // 3-11 luôn thể — nội dung dummy mờ sắp bị chữ THẬT ghi đè ngay sau đó, badge
@@ -836,7 +861,7 @@ function _renderUnlockBlock(){
   if(_lgLoggedIn()){
     host.innerHTML='<button class="btn-go" id="btnUnlock" onclick="initiateLuanGiaiChuyenSau()">✦ Luận giải chuyên sâu — <span data-tvp-price="chu-trinh-cuoc-doi">…</span> Lượng <span class="tpw-vnd" data-tvp-price-vnd="chu-trinh-cuoc-doi"></span> →</button>'+
       '<p>Viết riêng cho lá số này theo cổ pháp — 11 phần: tổng quan đại vận, luận riêng từng đại vận trong 9 đại vận, và tiểu vận năm xem.</p>';
-    TuviPaywall.fillPriceSlots(host).then(function(){ _fillVndSlot(host,'chu-trinh-cuoc-doi'); });
+    TuviPaywall.fillPriceSlots(host).then(function(){ _fillVndSlots(host,'chu-trinh-cuoc-doi'); });
     // Vừa quay về từ lượt nạp Lượng thành công (đã đăng nhập nên KHÔNG còn đi
     // qua lockPreview nữa, nhánh này mới là nút thật) → tự chạy tiếp.
     TuviPaywall.resumeIfPending(_pendingSlug, initiateLuanGiaiChuyenSau);
@@ -852,16 +877,18 @@ function _renderUnlockBlock(){
     onUnlock:function(){ renderLuan(_astrolabe,{},_namXem); return _startLuanGiaiAI(); },
   });
 }
-// Ghi "(~X đ)" cạnh số Lượng của banner mở-cả-bó — `lockPreview()` (nhánh
-// chưa đăng nhập) đã tự làm việc này trong tuvi-paywall.js; banner LOGGED-IN
-// ở trên KHÔNG đi qua đó nên phải tự điền. `ToolPrices.vndLabel` trả '' khi
-// chưa đọc được `credit_packages` — lúc đó KHÔNG hiện gì, không đoán số.
-function _fillVndSlot(host,product){
-  var el=host&&host.querySelector('[data-tvp-price-vnd]');
-  if(!el||!window.ToolPrices) return;
+// Ghi "(~X đ)" cạnh số Lượng — `lockPreview()` (nhánh chưa đăng nhập) đã tự
+// làm việc này trong tuvi-paywall.js; banner LOGGED-IN + các CTA lặp lại
+// trong từng phần (2026-09-07, Henry: "box blur nào cũng phải hiện CTA")
+// KHÔNG đi qua đó nên phải tự điền. Dùng querySelectorAll vì nay có NHIỀU ô
+// (banner đầu trang + 9 CTA lặp). `ToolPrices.vndLabel` trả '' khi chưa đọc
+// được `credit_packages` — lúc đó KHÔNG hiện gì, không đoán số.
+function _fillVndSlots(host,product){
+  if(!host||!window.ToolPrices) return;
+  var els=host.querySelectorAll('[data-tvp-price-vnd]');
   var cost=window.ToolPrices.get(product);
   var lbl=cost!=null?window.ToolPrices.vndLabel(cost):'';
-  el.textContent=lbl?('('+lbl+')'):'';
+  els.forEach(function(el){ el.textContent=lbl?('('+lbl+')'):''; });
 }
 
 // Slug PHẦN LẺ — CHỈ dùng cho mua/kiểm quyền một phần riêng (23 Lượng/phần),
@@ -925,6 +952,20 @@ async function _unlockOnePart(p){
 
 async function initiateLuanGiaiChuyenSau(){
   await TuviPaywall.requireCredits(_pendingSlug, async function(){ await _startLuanGiaiAI(); });
+}
+// Dùng cho CTA LẶP LẠI trong từng phần khoá (buildPhanSection) — khác
+// `initiateLuanGiaiChuyenSau` ở đúng một chỗ: CTA đó còn hiện cho khách ẨN
+// DANH (chưa chắc đã đăng nhập), nên sau khi `requireCredits` xác nhận đã có
+// quyền (đăng ký/đăng nhập xong), phải gọi lại `renderLuan` để mở khoá DOM
+// (đổi `locked` từ true→false) TRƯỚC khi sinh AI — cùng mẫu `onUnlock` của
+// `TuviPaywall.lockPreview` ở `_renderUnlockBlock`. Gọi khi ĐÃ đăng nhập vẫn
+// an toàn: `_startLuanGiaiAI` tự đổ lại chữ đã có trong `_luanGiaiStore` vào
+// DOM mới sau khi `renderLuan` vẽ lại.
+async function _triggerUnlockAll(){
+  await TuviPaywall.requireCredits(_pendingSlug, async function(){
+    renderLuan(_astrolabe,{},_namXem);
+    await _startLuanGiaiAI();
+  });
 }
 async function _startLuanGiaiAI(){
   document.getElementById('lgUnlock').style.display='none';
@@ -1006,8 +1047,12 @@ async function _runPhanLuanGiai(ep,preview){
     box.classList.remove('tpw-real-lock');
     box.innerHTML='<div class="phan-empty">Đang luận giải…</div>';
     if(window.AiLoadingSteps&&AiLoadingSteps.mountWait){
+      // Henry: canh vòng tròn ngay giữa khung, to hơn, glow nhanh hơn để thấy
+      // rõ đang chạy — `center`/`orbSize`/`fast` là modifier RIÊNG (mặc định
+      // không đổi), không ảnh hưởng các trang khác đang gọi mountWait.
       w=AiLoadingSteps.mountWait(box,{label:(preview?'Đang luận giải phần '+p+' (miễn phí)…':'Đang luận giải phần '+p+'…'),
-        expectSec:(_pace&&_pace.perPartSec())||0,expectText:(_pace&&_pace.perPartText())||''});
+        expectSec:(_pace&&_pace.perPartSec())||0,expectText:(_pace&&_pace.perPartText())||'',
+        center:true,orbSize:96,fast:true});
       w.start();
     }
   }
