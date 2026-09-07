@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-221 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+222 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 **Bốn file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
 ```bash
@@ -25,6 +25,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
+| 1 | 2026-09 | `2026-09.md` | 🐞 Round chạy thật cuối — 2 lỗi paywall thật tìm thấy trên Chu Trình Cuộc Đời, đã vá |
 | 1 | 2026-09 | `2026-09.md` | 🧰 Chuẩn bị "round chạy thật cuối" — mở rộng script sinh mẫu sang 5 tool nữa |
 | 1 | 2026-09 | `2026-09.md` | 🎬 Chu Trình Cuộc Đời — CTA lặp lại mỗi box mờ, orb to/giữa/nhanh, script sinh mẫu |
 | 1 | 2026-09 | `2026-09.md` | 🔑 Gemini 429 trong sandbox KHÔNG phải hết credit thật — key riêng của phiên |
