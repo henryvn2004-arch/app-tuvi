@@ -343,11 +343,8 @@ async function runPost(request: NextRequest) {
       r.durationMs,
     );
 
-    let chartData = null;
-    const chartMatch = text.match(/```chartdata\s*([\s\S]*?)```/);
-    if (chartMatch) { try { chartData = JSON.parse(chartMatch[1].trim()); } catch { /* ignore */ } }
     const luanGiai = text.replace(/```chartdata[\s\S]*?```/, '').trim();
-    return ok({ luanGiai, chartData, phan });
+    return ok({ luanGiai, phan });
   } catch (e: unknown) {
     return err((e as Error).message);
   }

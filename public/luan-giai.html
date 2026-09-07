@@ -2343,10 +2343,6 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
       // Store luận giải for this phan
       _luanGiaiStore[_currentPhan] = data.luanGiai || '';
 
-      if (_currentPhan === 14) {
-        console.log('chartData received:', data.chartData);
-      }
-
       // ── Render Bar 12 cung + Wheel of Life (phan 1) ──────────────
       if (_currentPhan === 1 && _astrolabe?.cungScores) {
         setTimeout(() => {
@@ -2671,14 +2667,12 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
       }
 
       if (_currentPhan === 14 && _astrolabe?.daiVans) {
-        // Build chartData từ daiVans scoring (fallback nếu Claude không trả về chartdata)
+        // Chart luôn dựng từ scoring engine — Engine là nguồn số DUY NHẤT, LLM không được tính lại (xem CLAUDE.md)
         const _dvs14 = _astrolabe.daiVans.slice(0,9);
-        const _chartDataFinal = (data.chartData && data.chartData.scores?.length === 9)
-          ? data.chartData
-          : {
-              labels: _dvs14.map((dv,i) => `ĐV${i+1} ${dv.tuoiStart}-${dv.tuoiEnd}`),
-              scores: _dvs14.map(dv => dv.scoring?.tong ?? 5),
-            };
+        const _chartDataFinal = {
+          labels: _dvs14.map((dv,i) => `ĐV${i+1} ${dv.tuoiStart}-${dv.tuoiEnd}`),
+          scores: _dvs14.map(dv => dv.scoring?.tong ?? 5),
+        };
         setTimeout(() => {
           const ctx = document.getElementById('chart-daivan');
           if (!ctx) { console.warn('canvas not found'); return; }

@@ -305,11 +305,6 @@ do engine tính — CHÉP ĐÚNG con số đó, TUYỆT ĐỐI KHÔNG tự tính
 Bảng tổng hợp ĐV1 đến ĐV9:
 | ĐV | Tuổi | Cung | TT | ĐL | NH | Tổng | Flag |
 
-JSON chart (BẮT BUỘC, đủ 9 điểm):
-\`\`\`chartdata
-{"labels":["ĐV1 x-y","ĐV2 x-y","ĐV3 x-y","ĐV4 x-y","ĐV5 x-y","ĐV6 x-y","ĐV7 x-y","ĐV8 x-y","ĐV9 x-y"],"scores":[s1,s2,s3,s4,s5,s6,s7,s8,s9]}
-\`\`\`
-
 Nhận xét tổng (120-160 từ), viết bằng ngôn ngữ đời thường, đọc là hiểu ngay: giai đoạn nào dễ thở nhất, giai đoạn nào chật vật nhất, xu hướng chung của cuộc đời theo thời gian. Nếu người đang trong đại vận nào thì nhận xét thêm về giai đoạn hiện tại. Không cần liệt kê lại số liệu đã có trong bảng.`;
 
   if (phan >= 15 && phan <= 23) {
