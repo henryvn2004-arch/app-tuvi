@@ -284,20 +284,40 @@ async function runPost(request: NextRequest) {
   // TRƯỚC khi họ trả đồng nào, vì đó mới là thứ tạo được cái móc "đúng vl" mà
   // bảng điểm deterministic không bao giờ tạo được. Phần 3+ vẫn khoá cứng.
   //
-  // 🔴 (2026-09-07) Chu Trình Cuộc Đời (phần 14-24, dùng CHUNG route này) nay
-  // có ĐÚNG MỘT phần xem trước: ENGINE PHẦN 14 ("Tổng quan đại vận" — phần cục
-  // bộ 1 của tool, xem app-chu-trinh-cuoc-doi.html) — hook tương đương phần 1
-  // của Luận Giải. CỐ Ý hẹp: chỉ đúng con số 14, KHÔNG generalize thành "phần
-  // đầu của mỗi tool dùng chung route" — 10 phần còn lại (15-24) vẫn khoá cứng
-  // như trước. `preview.free_runs`/`ip_daily_cap`/`global_daily_cap`
-  // (_patches/migration-anon-preview.sql) là NGÂN SÁCH DÙNG CHUNG cho mọi
-  // tool_id xem trước (laso/chu-trinh-cuoc-doi/day-con/...) — một người đã hết
-  // suất ĐỜI ở tool này thì cũng hết ở tool kia, đây là THIẾT KẾ (một ngân sách
-  // "làm quen sản phẩm" cho cả trang), không phải bug cần tách theo tool_id.
+  // 🔴 (2026-09-07, nới 2026-09-07) Chu Trình Cuộc Đời (phần 14-24, dùng CHUNG
+  // route này) nay có HAI phần xem trước: ENGINE PHẦN 14 ("Tổng quan đại vận",
+  // phần cục bộ 1) + PHẦN 15 ("Đại Vận 1", phần cục bộ 2) — cùng lằn ranh
+  // 1→2 phần mà Henry đã chốt cho tool "laso" (xem `FREE_PHAN` ngay trên).
+  // 9 phần còn lại (16-24) vẫn khoá cứng như trước — khối locked của client
+  // (app-chu-trinh-cuoc-doi.html) nay gộp CHUNG một tường blur, KHÔNG còn nút
+  // mở riêng từng phần, nên KHÔNG generalize xa hơn 15. `preview.free_runs`/
+  // `ip_daily_cap`/`global_daily_cap` (_patches/migration-anon-preview.sql) là
+  // NGÂN SÁCH DÙNG CHUNG cho mọi tool_id xem trước (laso/chu-trinh-cuoc-doi/
+  // day-con/...) — một người đã hết suất ĐỜI ở tool này thì cũng hết ở tool
+  // kia, đây là THIẾT KẾ (một ngân sách "làm quen sản phẩm" cho cả trang),
+  // không phải bug cần tách theo tool_id.
   const FREE_PHAN = 2;
-  const FREE_PHAN_CTCD = 14;
-  const isPreview = phanNum <= FREE_PHAN || phanNum === FREE_PHAN_CTCD;
-  const previewToolId = phanNum === FREE_PHAN_CTCD ? 'chu-trinh-cuoc-doi' : 'laso';
+  const FREE_PHAN_CTCD_MIN = 14;
+  const FREE_PHAN_CTCD_MAX = 15;
+  const isCtcdPreview = phanNum >= FREE_PHAN_CTCD_MIN && phanNum <= FREE_PHAN_CTCD_MAX;
+  let isPreview = phanNum <= FREE_PHAN || isCtcdPreview;
+  const previewToolId = isCtcdPreview ? 'chu-trinh-cuoc-doi' : 'laso';
+
+  // 🐞 (2026-09-07, phát hiện lúc chạy final-test thật) Phần 14-15 của
+  // Chu Trình Cuộc Đời KHÔNG chỉ là "xem trước trước khi mua" — chúng còn NẰM
+  // TRONG bó 11 phần đã bán. Khách ĐÃ MUA cả bó mà cache thiếu đúng 2 phần này
+  // (lượt sinh trước bị ngắt giữa chừng) sẽ bị cầu dao xem-trước (ngân sách
+  // CHUNG toàn site, trần ĐỜI chỉ 3 lượt) chặn MÃI MÃI dù đã trả tiền — nút
+  // "↻ Thử lại" không bao giờ qua được vì suất đã hết, và họ không có đường
+  // nào khác để lấy lại đúng 2/11 phần đã trả tiền. Khách ĐÃ SỞ HỮU bundleSlug
+  // thì không còn là "xem trước" nữa — cho đi thẳng đường trả-tiền-thường,
+  // đừng tiêu một suất quota vốn không phải để dành cho ca này.
+  if (isCtcdPreview && bundleSlug) {
+    const previewAuth = await authUserFromRequest(request);
+    if (!('error' in previewAuth) && (await hasAnySlugAccess(previewAuth.user.id, [bundleSlug]))) {
+      isPreview = false;
+    }
+  }
 
   if (!isPreview && !paywallDisabled()) {
     const auth = await authUserFromRequest(request);
@@ -319,7 +339,7 @@ async function runPost(request: NextRequest) {
   if (isPreview && !paywallDisabled()) {
     previewCacheKey = previewKey({ laSoText, phan: phanNum, namXem, hoTen, gioiTinh });
     const hit = await previewCacheGet(previewCacheKey);
-    if (hit) return ok({ luanGiai: hit, chartData: null, phan, cached: true });
+    if (hit) return ok({ luanGiai: hit, phan, cached: true });
 
     const auth = await authUserFromRequest(request);
     const pKey = 'error' in auth ? (anonId || '') : auth.user.id;
@@ -372,8 +392,15 @@ async function runPost(request: NextRequest) {
     // KHÔNG cụt) — 400 từ mà model hay overshoot thêm 10-30% thì sát trần cũ,
     // rủi ro cụt giữa câu (đúng bệnh đã đo 7,9%, xem chú thích trên). Phần 2
     // (Mệnh) vẫn giữ nguyên 220-280 từ, dư chỗ trong cùng ngân sách — không hại.
+    // phan 15-23 nới 1650→2300→2500 (2026-09-07, Henry, 2 lượt cùng ngày):
+    // lượt 1 thêm DAI_VAN_DESC (bộ câu hỏi trọng tâm riêng từng ĐV, cùng cấu
+    // trúc CUNG_DESC) + bước "đào sâu câu hỏi trọng tâm", 120-160→200-250 từ.
+    // Lượt 2 merge với PR #745/#751 (base, "3 QUÃNG TRONG ĐẠI VẬN" — narrative
+    // diễn biến theo thời gian trong chính ĐV, nội suy PCHIP) — bố cục giờ có
+    // 4 mục (① vì sao ② 3 quãng thời gian ③ đào sâu câu hỏi trọng tâm ④ kết
+    // luận) thay vì 2-3, nên nới thêm 200-250→220-270 từ, trần cộng theo.
     const maxTok = THINK_BUDGET + (phan === 1 ? 3000 : phan === 14 ? 4500 : phan === 24 ? 2100
-      : (phan >= 2 && phan <= 13) ? 2400 : (phan >= 15 && phan <= 23) ? 1650 : 1500);
+      : (phan >= 2 && phan <= 13) ? 2400 : (phan >= 15 && phan <= 23) ? 2500 : 1500);
     // 2026-09-02 — hạ độ nghĩ cho ĐÚNG nhóm route văn dài này. A/B mù 48 bản
     // (2 lá số × 8 phần × 3 nhánh, prompt thật): effort 'low' rẻ hơn 39%
     // output token mà chữ ra còn nhiều hơn, 16 cặp chấm mù không phân biệt
@@ -459,9 +486,6 @@ async function runPost(request: NextRequest) {
       r.durationMs,
     );
 
-    let chartData = null;
-    const chartMatch = text.match(/```chartdata\s*([\s\S]*?)```/);
-    if (chartMatch) { try { chartData = JSON.parse(chartMatch[1].trim()); } catch { /* ignore */ } }
     const luanGiai = text.replace(/```chartdata[\s\S]*?```/, '').trim();
     // Cất bản xem trước để lượt sau CÙNG lá số + CÙNG tên không đốt lại tiền
     // model lẫn một suất quota. Chỉ đường xem trước ghi — phần trả phí đã có
@@ -469,7 +493,7 @@ async function runPost(request: NextRequest) {
     if (previewCacheKey) {
       previewCachePut({ key: previewCacheKey, toolId: previewToolId, phan: phanNum, text: luanGiai });
     }
-    return ok({ luanGiai, chartData, phan });
+    return ok({ luanGiai, phan });
   } catch (e: unknown) {
     return err((e as Error).message);
   }

@@ -983,8 +983,10 @@ select.form-input { cursor: pointer; }
 <script src="/tools-shared/vn-timezone.js?v=1"></script>
 <script src="/tuvi-form.js?v=2"></script>
 <script src="/tools-shared/cung-ngay-sinh.js?v=2"></script>
-<script src="/tuvi-paywall.js?v=24"></script>
+<script src="/tuvi-paywall.js?v=26"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="/tools-shared/pchip.js?v=1"></script>
+<script src="/tools-shared/daivan-chart.js?v=1"></script>
 <script>
   // Load cach cuc DB
   let CACH_CUC_DB = [];
@@ -1594,25 +1596,12 @@ select.form-input { cursor: pointer; }
       if (_astrolabe?.daiVans) {
         const dvs14 = _astrolabe.daiVans.slice(0,9);
         const chartDvCtx = document.getElementById('chart-daivan');
-        if (chartDvCtx && typeof Chart !== 'undefined') {
-          new Chart(chartDvCtx, {
-            type:'line',
-            data:{
-              labels: dvs14.map((dv,i)=>`ĐV${i+1}
-${dv.tuoiStart}-${dv.tuoiEnd}t`),
-              datasets:[{
-                label:'Điểm Vận', data:dvs14.map(dv=>dv.scoring?.tong||0),
-                borderColor:'#2F5BEA', backgroundColor:'rgba(20,85,164,0.08)',
-                pointBackgroundColor:dvs14.map(dv=>dv.scoring?.tong>=7?'#1FA3D6':dv.scoring?.tong>=5?'#1A3A5C':'#C0392B'),
-                pointRadius:6, tension:0.4, fill:true,
-              }]
-            },
-            options:{
-              responsive:true,
-              plugins:{legend:{display:false},title:{display:true,text:'Vận Trình Toàn Đời',font:{size:15,weight:'bold'},color:'#061A2E'}},
-              scales:{y:{min:0,max:10,title:{display:true,text:'Điểm vận'}},x:{title:{display:true,text:'Đại vận'}}}
-            }
-          });
+        if (chartDvCtx && typeof Chart !== 'undefined' && window.DaiVanChart) {
+          new Chart(chartDvCtx, window.DaiVanChart.buildSingle(dvs14, {
+            title:'Vận Trình Toàn Đời',
+            yTitle:'Điểm vận',
+            xTitle:'Tuổi',
+          }));
         }
         renderTimelinePhan14(_astrolabe);
       }
@@ -2343,10 +2332,6 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
       // Store luận giải for this phan
       _luanGiaiStore[_currentPhan] = data.luanGiai || '';
 
-      if (_currentPhan === 14) {
-        console.log('chartData received:', data.chartData);
-      }
-
       // ── Render Bar 12 cung + Wheel of Life (phan 1) ──────────────
       if (_currentPhan === 1 && _astrolabe?.cungScores) {
         setTimeout(() => {
@@ -2671,46 +2656,19 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
       }
 
       if (_currentPhan === 14 && _astrolabe?.daiVans) {
-        // Build chartData từ daiVans scoring (fallback nếu Claude không trả về chartdata)
+        // daiVans (điểm engine) là NGUỒN DUY NHẤT cho chart — `data.chartData` do
+        // Claude trả trước đây đã bỏ dùng để tránh model tự bịa số, chart luôn
+        // dựng lại từ scoring.tong thật.
         const _dvs14 = _astrolabe.daiVans.slice(0,9);
-        const _chartDataFinal = (data.chartData && data.chartData.scores?.length === 9)
-          ? data.chartData
-          : {
-              labels: _dvs14.map((dv,i) => `ĐV${i+1} ${dv.tuoiStart}-${dv.tuoiEnd}`),
-              scores: _dvs14.map(dv => dv.scoring?.tong ?? 5),
-            };
         setTimeout(() => {
           const ctx = document.getElementById('chart-daivan');
           if (!ctx) { console.warn('canvas not found'); return; }
-          new Chart(ctx, {
-            type: 'line',
-            data: {
-              labels: _chartDataFinal.labels,
-              datasets: [{
-                label: 'Điểm Vận',
-                data: _chartDataFinal.scores,
-                borderColor: '#2F5BEA',
-                backgroundColor: 'rgba(20,85,164,0.08)',
-                pointBackgroundColor: _chartDataFinal.scores.map(s =>
-                  s >= 7 ? '#1FA3D6' : s >= 5 ? '#1A3A5C' : '#C0392B'
-                ),
-                pointRadius: 6,
-                tension: 0.4,
-                fill: true,
-              }]
-            },
-            options: {
-              responsive: true,
-              plugins: {
-                legend: { display: false },
-                title: { display: true, text: 'Vận Trình Toàn Đời', font: { size: 15, weight: 'bold' }, color: '#061A2E' }
-              },
-              scales: {
-                y: { min: 0, max: 10, title: { display: true, text: 'Điểm vận' } },
-                x: { title: { display: true, text: 'Đại vận' } }
-              }
-            }
-          });
+          if (!window.DaiVanChart) return;
+          new Chart(ctx, window.DaiVanChart.buildSingle(_dvs14, {
+            title: 'Vận Trình Toàn Đời',
+            yTitle: 'Điểm vận',
+            xTitle: 'Tuổi',
+          }));
         }, 150);
       }
       body.appendChild(section);
@@ -4183,7 +4141,7 @@ TuviPaywall.init({
 </div>
 
 <script src="/nav.js?v=26"></script>
-<script src="/tools-shared/ai-loading-steps.js?v=9"></script>
+<script src="/tools-shared/ai-loading-steps.js?v=10"></script>
 <script>
 /* Chờ luận giải 24 phần là quãng chờ MỘT CỤC ≥10 giây ⇒ orb, thay spinner 28px
    (luật ở đầu tools-shared/ai-loading-steps.js). Giữ nguyên cơ chế bật/tắt

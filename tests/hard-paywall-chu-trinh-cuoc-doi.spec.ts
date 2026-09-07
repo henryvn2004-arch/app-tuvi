@@ -1,14 +1,20 @@
 // Hard paywall — /app/chu-trinh-cuoc-doi, tool anh em của Luận Giải Tử Vi
 // (dùng CHUNG backend /api/lasotuvi, phan 14-24).
 //
-// 🔴 (2026-09-07) Nâng lên mẫu Pha 3: phần 1 (local, engine phan 14 — "Tổng
-// quan đại vận") nay có bản xem trước MIỄN PHÍ THẬT — model chạy ngay khi
-// vào trang, không cần bấm gì, đúng cơ chế `FREE_PHAN_CTCD` trong
-// app/api/lasotuvi/route.ts + `_runFreePreviewCTCD` trong
-// app-chu-trinh-cuoc-doi.html. Trước bản này phạm vi chỉ dừng ở vá bug
-// "làm mờ nội dung miễn phí" (`.tpw-real-lock` phủ lên cách cục/điểm số) —
-// bài kiểm đó vẫn giữ nguyên ở đây, cộng thêm bộ mới cho phần xem trước.
-// 10 phần còn lại (15-24) vẫn khoá cứng, 0 thay đổi.
+// 🔴 (2026-09-07) Nâng lên mẫu Pha 3: phần 1+2 (local, engine phan 14 "Tổng
+// quan đại vận" + 15 "Đại Vận 1") nay có bản xem trước MIỄN PHÍ THẬT — model
+// chạy ngay khi vào trang, không cần bấm gì, đúng cơ chế
+// `FREE_PHAN_CTCD_MIN/MAX` trong app/api/lasotuvi/route.ts +
+// `_runFreePreviewCTCD` trong app-chu-trinh-cuoc-doi.html.
+//
+// 🔴 (2026-09-07, cùng ngày) Đổi tiếp: BỎ nút "Mở phần này" riêng từng phần
+// (9 phần 3-11 không còn `#sec-ai-lock-N`) — chỉ còn ĐÚNG MỘT nút mở cả bó
+// (`#lgUnlock`, dời xuống dưới phần 2). 9 phần đó (không phải 10 nữa, vì
+// phần 2 đã free) nay hiện văn MẪU (dummy) làm mờ bằng `.tpw-real-lock` —
+// CỐ Ý, khác hẳn bug cũ mà bài kiểm này từng canh ("không .tpw-real-lock ở
+// đâu cả"). Luật MỚI: `.tpw-real-lock` chỉ được phép xuất hiện trên
+// `.claude-content` của phần 3-11 (văn mẫu), TUYỆT ĐỐI không trên khối
+// deterministic (`.tpw-ph` vẫn phải rỗng-hoàn-toàn như cũ).
 
 import { test, expect, type Page } from '@playwright/test';
 
@@ -111,41 +117,54 @@ async function runLoggedIn(page: Page) {
   await page.waitForSelector('#sec-1', { timeout: 15000 });
 }
 
-test('phần 1 (engine 14) sinh chữ AI THẬT tự động, không cần bấm gì', async ({ page }) => {
+test('phần 1+2 (engine 14+15) sinh chữ AI THẬT tự động, không cần bấm gì', async ({ page }) => {
   await stubApis(page);
   await run(page);
   await expect(page.locator('#claude-content-14')).toContainText('Chữ AI của phần 14', { timeout: 15000 });
+  await expect(page.locator('#claude-content-15')).toContainText('Chữ AI của phần 15', { timeout: 15000 });
 
-  // Đúng 1 lượt gọi model (phần 1), có mang anonId — cầu dao xem trước tính
-  // theo anonId cho khách chưa đăng nhập.
+  // Đúng 2 lượt gọi model (phần 1+2), TUẦN TỰ, cả hai đều mang anonId — cầu
+  // dao xem trước tính theo anonId cho khách chưa đăng nhập.
   const parts = calls(page).map((c) => c.phan);
-  expect(parts).toEqual([14]);
+  expect(parts).toEqual([14, 15]);
   expect(calls(page)[0].anonId).toBeTruthy();
+  expect(calls(page)[1].anonId).toBeTruthy();
 });
 
-test('phần 1 không còn khoá-mini (đã free) — 10 phần còn lại vẫn khoá cứng, không .tpw-real-lock', async ({ page }) => {
+test('phần 1+2 không còn khoá-mini (đã free) — 9 phần còn lại khoá cứng + văn mẫu MỜ, không nút riêng', async ({ page }) => {
   await stubApis(page);
   await run(page);
   await expect(page.locator('#claude-content-14')).toContainText('Chữ AI', { timeout: 15000 });
+  await expect(page.locator('#claude-content-15')).toContainText('Chữ AI', { timeout: 15000 });
 
-  // Phần 1: không có gì để mời mua nữa.
-  await expect(page.locator('#sec-ai-lock-1')).toHaveCount(0);
-  await expect(page.locator('#sec-1 .tpw-ph')).toHaveCount(0);
-  await expect(page.locator('#sec-1 .tpw-lock-badge')).toHaveCount(0);
-
-  // 10 phần (2-11) đều có ô giữ chỗ + huy hiệu khoá + khoá-mini.
-  for (let p = 2; p <= 11; p++) {
-    await expect(page.locator(`#sec-${p} .tpw-ph`)).toBeVisible();
-    await expect(page.locator(`#sec-${p} .tpw-lock-badge`)).toBeVisible();
-    await expect(page.locator(`#sec-ai-lock-${p}`)).toBeVisible();
+  // Phần 1+2: không có gì để mời mua nữa.
+  for (const p of [1, 2]) {
+    await expect(page.locator(`#sec-${p} .tpw-ph`)).toHaveCount(0);
+    await expect(page.locator(`#sec-${p} .tpw-lock-badge`)).toHaveCount(0);
+    await expect(page.locator(`#sec-${p} .claude-content`)).not.toHaveClass(/tpw-real-lock/);
   }
 
-  // Bug Pha 1 đã sửa trước đây: không còn khối nào dùng cách làm mờ cũ.
-  await expect(page.locator('.tpw-real-lock')).toHaveCount(0);
-  expect(await page.locator('#lgBody .tpw-ph').count()).toBe(10);
+  // 9 phần (3-11) đều có ô giữ chỗ (khối tính toán — rỗng hoàn toàn, luật cũ
+  // "che hết luôn" giữ nguyên) + huy hiệu khoá — nhưng KHÔNG còn nút
+  // "Mở phần này" riêng (Henry 2026-09-07: bỏ hẳn mở-từng-mục).
+  for (let p = 3; p <= 11; p++) {
+    await expect(page.locator(`#sec-${p} .tpw-ph`)).toBeVisible();
+    await expect(page.locator(`#sec-${p} .tpw-lock-badge`)).toBeVisible();
+    await expect(page.locator(`#sec-ai-lock-${p}`)).toHaveCount(0);
+    // Văn MẪU (dummy) hiện SẴN, làm mờ — không phải ô rỗng như khối tính
+    // toán. Đây là thiết kế MỚI, khác hẳn bug Pha 1 cũ (làm mờ NỘI DUNG THẬT
+    // của chính người đang xem) — văn mẫu KHÔNG thuộc về lá số đang xem.
+    const cc = page.locator(`#sec-${p} .claude-content`);
+    await expect(cc).toHaveClass(/tpw-real-lock/);
+    await expect(cc).not.toBeEmpty();
+  }
+
+  expect(await page.locator('#lgBody .tpw-ph').count()).toBe(9);
+  expect(await page.locator('#lgBody [id^="sec-ai-lock-"]').count()).toBe(0);
+  expect(await page.locator('.tpw-real-lock').count()).toBe(9);
 });
 
-test('tường đứng NGAY DƯỚI phần 1, có giá', async ({ page }) => {
+test('tường đứng NGAY DƯỚI phần 2, có giá', async ({ page }) => {
   await stubApis(page);
   await run(page);
   await expect(page.locator('#lgUnlock .tpw-lock')).toBeVisible();
@@ -153,7 +172,7 @@ test('tường đứng NGAY DƯỚI phần 1, có giá', async ({ page }) => {
   await expect(page.locator('.tpw-overlay')).toHaveCount(0);
 
   const order = await page.evaluate(() => {
-    const ids = ['sec-1', 'lgUnlock', 'sec-2'];
+    const ids = ['sec-1', 'sec-2', 'lgUnlock', 'sec-3'];
     const els = ids.map((i) => document.getElementById(i));
     if (els.some((e) => !e)) return 'MISSING';
     const seq = els as HTMLElement[];
@@ -173,10 +192,15 @@ test('cầu dao chặn xem trước → im lặng, tường vẫn nguyên', asyn
   await expect(page.locator('.laso-error')).toHaveCount(0);
 });
 
-test('trả tiền xong: KHÔNG sinh lại phần 1 đã đọc free, tường không bị xoá', async ({ page }) => {
+test('trả tiền xong: KHÔNG sinh lại phần 1+2 đã đọc free, tường không bị xoá', async ({ page }) => {
   await stubApis(page);
   await runLoggedIn(page);
   await expect(page.locator('#claude-content-14')).toContainText('Chữ AI', { timeout: 15000 });
+  // PHẢI chờ ĐỦ CẢ phần 2 (gọi TUẦN TỰ sau phần 1, xem `_runFreePreviewCTCD`)
+  // trước khi xoá `calls` — chờ thiếu là đua nước rút: lượt gọi phần 15 có
+  // thể rơi vào SAU dòng xoá, lẫn vào mảng `parts` bên dưới rồi báo sai ngẫu
+  // nhiên (flaky), không liên quan gì tới thứ bài kiểm này thật sự muốn đo.
+  await expect(page.locator('#claude-content-15')).toContainText('Chữ AI', { timeout: 15000 });
   calls(page).length = 0;
 
   // Bỏ qua requireCredits (đường tiền có bài kiểm riêng) — cái cần đo ở đây
@@ -185,9 +209,12 @@ test('trả tiền xong: KHÔNG sinh lại phần 1 đã đọc free, tường k
   await page.waitForFunction(() => /hoàn tất|lỗi/.test(document.getElementById('lgProgress')!.textContent!), { timeout: 30000 });
 
   const parts = calls(page).map((c) => c.phan).sort((a, b) => a - b);
-  expect(parts).toEqual([15, 16, 17, 18, 19, 20, 21, 22, 23, 24]); // 14 KHÔNG chạy lại
+  expect(parts).toEqual([16, 17, 18, 19, 20, 21, 22, 23, 24]); // 14+15 KHÔNG chạy lại
 
   await expect(page.locator('#lgUnlock')).toHaveCount(1);
   await expect(page.locator('#claude-content-14')).toContainText('Chữ AI của phần 14');
   await expect(page.locator('#lgBody .tpw-ph')).toHaveCount(0); // hết ô giữ chỗ
+  // Văn MẪU (dummy) của phần 3-11 đã bị chữ THẬT ghi đè — không còn khối nào
+  // làm mờ nữa.
+  await expect(page.locator('.tpw-real-lock')).toHaveCount(0);
 });

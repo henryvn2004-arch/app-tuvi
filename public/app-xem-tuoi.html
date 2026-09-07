@@ -155,14 +155,15 @@
 <script src="/laso-chart.js?v=3"></script>
 <script src="/tuvi-ansao-engine.js"></script>
 <script src="/tuong-hop.js?v=1"></script>
+<script src="/tuong-hop-lam-an.js?v=1"></script>
 <script src="/tools-shared/hook-charts.js?v=2"></script>
 <script src="/poster.js?v=5"></script>
 <script src="/tools-shared/vn-timezone.js?v=1"></script>
 <script src="/tuvi-form.js?v=2"></script>
 <script src="/auth.js?v=2"></script>
-<script src="/tuvi-paywall.js?v=24"></script>
+<script src="/tuvi-paywall.js?v=26"></script>
   <script src="/nav.js?v=26" data-icons-only></script><script src="/shell.js?v=87"></script>
-<script src="/tools-shared/ai-loading-steps.js?v=9"></script>
+<script src="/tools-shared/ai-loading-steps.js?v=10"></script>
 <script>
 // ── MODE: 1 trang phục vụ 3 route — /app/xem-tuoi (vợ chồng), /app/xem-lam-an
 // (hợp tác làm ăn), /app/tuong-hop (hai người bất kỳ). Cùng bộ máy calcTuongHop;
@@ -246,7 +247,7 @@ function doCompat(){
     var nameA=A.hoten||'Người A',nameB=B.hoten||'Người B';
     var ca=computeLs(A,namxem),cb=computeLs(B,namxem);
     ca.fd.name=nameA; cb.fd.name=nameB;
-    var r=TuongHop.calcTuongHop(ca.ls,cb.ls,nameA,nameB);
+    var r=(MODE_KEY==='xem-lam-an'?TuongHopLamAn:TuongHop).calcTuongHop(ca.ls,cb.ls,nameA,nameB);
     renderCompat(r,nameA,nameB,ca.fd,cb.fd);
     document.getElementById('birthPanel').style.display='none';
     document.getElementById('xtPanel').style.display='block';
@@ -442,15 +443,52 @@ function bindJump(){
 // qua TuviPaywall + RAG /api/search + generate /api/xem-tuoi (9 phần tuần
 // tự, JSON) + lưu /api/history?action=save_xem_tuoi + Tải PDF). Chỉ bật cho
 // mode xem-tuoi/xem-lam-an — tuong-hop free, không gate (đúng standalone).
-// Dùng NGUYÊN prompt/nhãn của xem-tuoi.html cho CẢ xem-lam-an — khớp với
-// free layer đã dùng chung TuongHop.calcTuongHop (Phu Thê/Tử Tức) cho cả 2
-// mode từ trước (xem tuong-hop.js), không port riêng công thức Nô Bộc của
-// xem-lam-an.html standalone để tránh lệch giữa số liệu hiện free và văn
-// AI sinh ra (mode đó vốn đã là bản "render gọn" theo comment gốc).
+//
+// 2026-09-07 (Henry, qua Claude): TRƯỚC đây dùng NGUYÊN prompt/nhãn/engine
+// của bản VỢ CHỒNG cho CẢ xem-lam-an (comment cũ giải thích: "khớp với free
+// layer đã dùng chung TuongHop.calcTuongHop") — nhưng đó là lỗi thật, không
+// chỉ lệch prompt: section header/breakdown số cũng hiện "Quan Hệ"/"Con Cái"
+// (cung Phu Thê/Tử Tức) cho một tool HỢP TÁC LÀM ĂN, đúng ra phải là "Đối
+// Tác"/"Giao Tiếp" (cung Nô Bộc/Thân) như bản standalone xem-lam-an.html đã
+// làm (`calcTuongHop` inline riêng ở đó). Đã tách bản đó thành
+// `public/tuong-hop-lam-an.js` (KHÔNG đụng bản inline standalone — xem chú
+// thích trong file mới) để app-shell chọn đúng engine theo `MODE_KEY`.
 // ══════════════════════════════════════════════════════════════════════
 var PAID_MODES={'xem-tuoi':true,'xem-lam-an':true};
-var PHAN_LABELS=['Tổng Quan','Xét Tuổi','Ngũ Hành','Tư Tưởng','Tính Cách','Quan Hệ','Con Cái','Tài Chính','Vận Hành'];
-var CUNG_MAP=[null,null,null,'Mệnh',null,'Phu Thê','Tử Tức','Tài Bạch',null];
+var PHAN_LABELS_BY_MODE={
+  'xem-lam-an':['Tổng Quan','Xét Tuổi','Ngũ Hành','Tư Tưởng','Tính Cách','Đối Tác','Giao Tiếp','Tài Chính','Vận Hạn'],
+};
+var CUNG_MAP_BY_MODE={
+  'xem-lam-an':[null,null,null,'Mệnh',null,'Nô Bộc',null,'Tài Bạch',null],
+};
+var PHAN_LABELS=PHAN_LABELS_BY_MODE[MODE_KEY]||['Tổng Quan','Xét Tuổi','Ngũ Hành','Tư Tưởng','Tính Cách','Quan Hệ','Con Cái','Tài Chính','Vận Hành'];
+var CUNG_MAP=CUNG_MAP_BY_MODE[MODE_KEY]||[null,null,null,'Mệnh',null,'Phu Thê','Tử Tức','Tài Bạch',null];
+// Câu hỏi trọng tâm RIÊNG từng yếu tố (idx 1-8), riêng theo mode — port từ
+// xem-tuoi.html/xem-lam-an.html:SECTION_QUESTIONS, xem chú thích ở đó.
+var SECTION_QUESTIONS_BY_MODE={
+  'xem-lam-an':[
+    '',
+    'Hai người có hợp tuổi để hợp tác làm ăn lâu dài không? Chênh lệch nạp âm này ai nên nhường, ai nên là người cầm trịch?',
+    'Ngũ hành hai người tương sinh hỗ trợ công việc hay tương khắc dễ va chạm? Ai nên chủ động nhường để hợp tác suôn sẻ?',
+    'Hai người có cùng tầm nhìn, mục tiêu kinh doanh hay dễ bất đồng vì quan điểm khác biệt? Ai nên là người quyết định chính?',
+    'Tính cách hai người hòa hợp khi làm việc cùng nhau hay dễ va chạm vì tính khí trái ngược? Ai nóng ai nguội, ai nên nhường lúc bất đồng?',
+    'Hợp tác làm ăn với người này mang lại lợi ích, quý nhân đỡ đần hay dễ bị lợi dụng, phản bội? Có nên hùn vốn lâu dài không?',
+    'Giao tiếp, trao đổi công việc giữa hai người thuận lợi, dễ hiểu ý nhau hay dễ hiểu lầm, tranh cãi? Nên trao đổi trực tiếp hay qua trung gian?',
+    'Góp vốn, kết hợp tài chính làm ăn chung mang lại lợi ích hay dễ hao tổn, bất đồng vì tiền? Ai nên là người giữ tay hòm chìa khóa?',
+    'Giai đoạn hiện tại của cả hai có đang thuận lợi để hợp tác, mở rộng làm ăn hay nên chờ thêm? Ai đang gặp vận khó hơn cần được đỡ đần?',
+  ],
+};
+var SECTION_QUESTIONS=SECTION_QUESTIONS_BY_MODE[MODE_KEY]||[
+  '',
+  'Hai người có hợp tuổi để tiến tới hôn nhân/gắn bó lâu dài không? Chênh lệch nạp âm này ai nên nhường, chiều ai nhiều hơn?',
+  'Ngũ hành hai người tương sinh giúp đỡ nhau hay tương khắc dễ va chạm? Ai nên chủ động nhường để giữ hòa khí?',
+  'Hai người có cùng chí hướng, quan điểm sống hay dễ bất đồng vì suy nghĩ khác biệt? Ai thường là người quyết định chính?',
+  'Tính cách hai người hòa hợp trong sinh hoạt hàng ngày hay dễ va chạm vì tính khí trái ngược? Ai nóng ai nguội, ai nên nhường lúc cãi vã?',
+  'Đời sống tình cảm, vợ chồng đôi bên có bền chặt, gắn bó hay tiềm ẩn nguy cơ rạn nứt, nhạt phai? Ai chung thủy, gắn bó hơn?',
+  'Hai người có thuận lợi về đường con cái không — dễ có con, con cái ngoan hay vất vả? Con sinh ra hợp tính cha hay mẹ hơn?',
+  'Kết hợp tài chính, làm ăn chung mang lại lợi ích hay dễ hao tổn, bất đồng vì tiền? Ai nên là người giữ tay hòm chìa khóa?',
+  'Giai đoạn hiện tại của cả hai có đang thuận lợi để tiến xa (cưới, làm ăn chung, mua nhà) hay nên chờ thêm? Ai đang gặp vận khó hơn cần được đỡ đần?',
+];
 var _TH_XT={'Dần':['Ngọ','Tuất'],'Ngọ':['Dần','Tuất'],'Tuất':['Dần','Ngọ'],'Thân':['Tý','Thìn'],'Tý':['Thân','Thìn'],'Thìn':['Thân','Tý'],'Tỵ':['Dậu','Sửu'],'Dậu':['Tỵ','Sửu'],'Sửu':['Tỵ','Dậu'],'Hợi':['Mão','Mùi'],'Mão':['Hợi','Mùi'],'Mùi':['Hợi','Mão']};
 var _XC_XT={'Tý':'Ngọ','Ngọ':'Tý','Sửu':'Mùi','Mùi':'Sửu','Dần':'Thân','Thân':'Dần','Mão':'Dậu','Dậu':'Mão','Thìn':'Tuất','Tuất':'Thìn','Tỵ':'Hợi','Hợi':'Tỵ'};
 function _tpStars(ls,cungName){
@@ -528,7 +566,7 @@ function buildPhanPrompt(idx,m,result){
   var palMenhB=lsB.palaces&&lsB.palaces.find(function(p){return p.isMenh;});
   if(idx===0){
     var itemsText=result.items.map(function(item,i){return (i+1)+'. '+item.label+': '+item.score+'/10 — '+item.detail;}).join('\n');
-    return 'Phân tích tương quan lá số vợ chồng theo Tử Vi Đẩu Số cổ pháp:\n'+
+    return 'Phân tích tương quan lá số '+(MODE_KEY==='xem-lam-an'?'hợp tác làm ăn':'vợ chồng')+' theo Tử Vi Đẩu Số cổ pháp:\n'+
       nameA+': '+lsA.canChiNam+' · Nạp Âm '+result.naA+' · Cung Mệnh '+(palMenhA?palMenhA.diaChi:'?')+' · Chính tinh: '+((palMenhA&&palMenhA.majorStars||[]).map(function(s){return s.ten;}).join(', ')||'VCD')+'\n'+
       nameB+': '+lsB.canChiNam+' · Nạp Âm '+result.naB+' · Cung Mệnh '+(palMenhB?palMenhB.diaChi:'?')+' · Chính tinh: '+((palMenhB&&palMenhB.majorStars||[]).map(function(s){return s.ten;}).join(', ')||'VCD')+'\n\n'+
       'Kết quả 8 yếu tố:\n'+itemsText+'\nTổng điểm tương hợp: '+result.total+'/100\n\n'+
@@ -601,7 +639,9 @@ function buildPhanPrompt(idx,m,result){
       if(xauB.length)lines.push('Cần lưu ý: '+xauB.join(' | '));
     }
   }
-  return 'Luận giải "'+m.label+'" — tương quan lá số '+nameA+' và '+nameB+':\n'+lines.join('\n')+'\n\nViết 150-200 từ văn xuôi. Tác động thực tế, 1 điểm lưu ý. Dùng tên thật.';
+  var focusQ=SECTION_QUESTIONS[idx]||'';
+  return 'Luận giải "'+m.label+'" — tương quan lá số '+nameA+' và '+nameB+':\n'+lines.join('\n')+
+    '\n\nViết 180-230 từ văn xuôi.'+(focusQ?' Tối thiểu phải trả lời được: '+focusQ:'')+' Tác động thực tế, 1 điểm lưu ý. Dùng tên thật.';
 }
 
 async function initXemTuoiGate(result,nameA,nameB){
@@ -651,7 +691,7 @@ async function _loadNextPhanAI(){
     box.innerHTML='<div class="phan-empty">Đang luận giải…</div>';
     if(window.AiLoadingSteps&&AiLoadingSteps.mountWait){
       w=AiLoadingSteps.mountWait(box,{label:'Đang luận giải phần '+(idx+1)+'…',
-        expectSec:(_xtPace&&_xtPace.perPartSec())||0,expectText:(_xtPace&&_xtPace.perPartText())||''});
+        expectSec:(_xtPace&&_xtPace.perPartSec())||0,expectText:(_xtPace&&_xtPace.perPartText())||'',center:true});
       w.start();
     }
   }

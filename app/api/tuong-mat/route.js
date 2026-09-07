@@ -50,7 +50,12 @@ Ba vùng cân bằng 1:1:1 là lý tưởng. Vùng vượng hơn → giai đoạ
 ### 2. Tam Đình — Thượng → Trung → Hạ, tỷ lệ và giai đoạn vận mệnh
 ### 3. Ngũ Quan — đủ 5 quan: Tai → Lông mày → Mắt → Mũi → Miệng
 ### 4. Các Bộ Vị — tiểu vùng nổi bật
-### 5. Tổng Hợp — điểm mạnh, điểm lưu ý (PHẢI CÓ), giai đoạn vận trình, kết bằng "Tướng tùy tâm sinh, tướng tùy tâm diệt"
+### 5. Tổng Hợp
+- Điểm mạnh, điểm cần lưu ý theo tướng học (PHẢI CÓ cả hai)
+- Giai đoạn vận trình nào (thời trẻ/trung niên/hậu vận theo Tam Đình) thuận lợi nhất, giai đoạn nào cần cẩn trọng
+- Lĩnh vực, nghề nghiệp phù hợp nhất với khí chất và tướng cách này
+- Tài lộc, quan lộc tổng quan nhìn qua Tài Bạch Quan (mũi) và Lục Phủ
+Kết bằng "Tướng tùy tâm sinh, tướng tùy tâm diệt"
 
 - MỞ ĐẦU mỗi phần bằng MỘT câu chốt in đậm neo vào nét tướng cụ thể của phần đó
   (tỷ lệ Tam Đình, độ đắc/hãm của quan đang xét, bộ vị nổi bật): phần này mạnh

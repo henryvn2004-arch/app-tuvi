@@ -1,0 +1,37 @@
+{
+  "keHoach": "Để đề xuất lọt tai sếp này, bạn phải bắt đầu bằng bức tranh tổng thể và lý do tại sao phương án này giúp cả đội sáng giá hơn. Trình bày theo thứ tự: bối cảnh chung, ý tưởng cốt lõi, rồi để ngỏ 2 lựa chọn nhờ sếp cố vấn chốt lại chứ đừng đặt họ vào thế đã rồi. Tuyệt đối tránh đưa ra một bản kế hoạch đóng đinh không có kẽ hở cho sếp thể hiện tư duy chiến lược. Họ cần thấy dấu ấn định hướng của mình trong đó thì mới hào hứng gật đầu duyệt ngay.",
+  "tinhKhi": "Anh Minh là mẫu sếp có đầu óc xoay xở cực nhanh, nhìn ra nước đi chiến lược và rất giỏi dùng lý lẽ để thuyết phục người khác. Nhiều người tưởng tính sếp hay nói nhiều là ôm đồm, nhưng thực chất trong các cuộc họp bế tắc, chính khả năng diễn giải mạch lạc của sếp lại tháo ngòi được mọi điểm nghẽn. Sếp thích cảm giác đứng ở vai quân sư dẫn đường, chỉ cần cấp dưới biết cách gợi mở đúng vấn đề là sếp sẽ dốc lòng chỉ bảo.",
+  "chamNoc": "Sếp cực kỳ dị ứng với việc cấp dưới làm qua quýt, đưa việc theo kiểu giao khoán sự vụ mà không có góc nhìn tổng thể. Đặt sếp vào thế đã rồi hoặc ngắt lời khi sếp đang phân tích chiến lược sẽ chạm đúng vào nỗi sợ bị giảm tầm ảnh hưởng đấy.",
+  "coiTrong": "Sếp coi trọng sự sắc sảo, năng lực tư duy thấu đáo và danh tiếng chuyên môn của bản thân trước tập thể. Thứ sếp ngại nhất là bị coi là người đứng ngoài cuộc, không đóng góp được giá trị định hướng nào cho dự án.",
+  "nenNoi": [
+    {
+      "viec": "Nhờ sếp cố vấn đường hướng trước khi chốt chi tiết.",
+      "vidu": "\"Em có khung sườn cho dự án này, nhưng ở góc độ chiến lược thì em rất cần anh Minh góp ý giúp em 2 phương án này xem hướng nào thông hơn ạ.\""
+    },
+    {
+      "viec": "Đề cao vai trò dẫn dắt và tầm nhìn của sếp trong kết quả chung.",
+      "vidu": "\"Đúng như định hướng anh chỉ hôm trước, bên đối tác đã xuôi theo cách tiếp cận này rồi đấy anh.\""
+    },
+    {
+      "viec": "Tóm tắt logic mạch lạc trước khi đi vào số liệu chi tiết.",
+      "vidu": "\"Em xin phép tóm tắt logic cốt lõi trong 2 phút trước, rồi anh xem qua phần bảng biểu chi tiết sau nhé.\""
+    }
+  ],
+  "tranhNoi": [
+    {
+      "viec": "Đưa ra phương án đóng đinh ép sếp chỉ được chọn một.",
+      "vidu": "\"Bên em tính hết rồi, giờ chỉ có duy nhất cách này thôi, anh ký duyệt giúp em luôn nhé.\""
+    },
+    {
+      "viec": "Báo cáo vụn vặt, thiếu bức tranh tổng thể và lý do cốt lõi.",
+      "vidu": "\"Em cũng không rõ vì sao sếp tổng giao việc này, nhưng họ giục quá nên em cứ đưa anh duyệt đại cơ.\""
+    },
+    {
+      "viec": "Phản bác công khai lập luận của sếp giữa cuộc họp.",
+      "vidu": "\"Anh nói thế là không thực tế đâu, làm sao mà triển khai được như anh nghĩ chứ.\""
+    }
+  ],
+  "thoiDiem": "Đại vận 34–43 tuổi của sếp đang có lực đẩy rất mạnh với điểm 7/10, năm nay cát tinh lấn át sát tinh nên tâm thế sếp rất muốn khẳng định vị thế và quyền hạn. Đây là thời điểm rất thuận để mang các đề xuất lớn đến trình, chỉ cần gắn được quyền lợi và sự uy tín của sếp vào kế hoạch là sếp sẽ hỗ trợ tối đa.",
+  "voiBan": "",
+  "motCau": "Muốn sếp duyệt việc, hãy mang đến một bài toán mở và xin sếp đúng một nước cờ định đoạt."
+}

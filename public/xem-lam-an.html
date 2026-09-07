@@ -12,12 +12,14 @@
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/fonts/noto-serif.css?v=1">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
+<script src="/tools-shared/pchip.js?v=1"></script>
+<script src="/tools-shared/daivan-chart.js?v=1"></script>
 <script src="/tuvi-ansao-engine.js"></script>
 <script src="/auth.js?v=2"></script>
 <script src="/tools-shared/vn-timezone.js?v=1"></script>
 <script src="/tuvi-form.js?v=2"></script>
 <script src="/tuvi-grid.js?v=3"></script>
-<script src="/tuvi-paywall.js?v=24"></script>
+<script src="/tuvi-paywall.js?v=26"></script>
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
@@ -970,6 +972,20 @@ const SECTION_TEASERS = [
 ];
 const WEIGHTS = [0,0.10,0.10,0.20,0.10,0.20,0.10,0.15,0.05];
 const CUNG_MAP = [null,null,null,'Mệnh',null,'Nô Bộc',null,'Tài Bạch',null]; // idx6=Thân cung (special)
+// Câu hỏi trọng tâm RIÊNG từng yếu tố (idx 1-8) — trước đây cả 8 yếu tố khác
+// hẳn nhau dùng CHUNG một câu lệnh "Tác động thực tế, 1 điểm lưu ý" — quá
+// chung chung. Bối cảnh tool này là HỢP TÁC LÀM ĂN (không phải vợ chồng).
+const SECTION_QUESTIONS = [
+  '',
+  'Hai người có hợp tuổi để hợp tác làm ăn lâu dài không? Chênh lệch nạp âm này ai nên nhường, ai nên là người cầm trịch?',
+  'Ngũ hành hai người tương sinh hỗ trợ công việc hay tương khắc dễ va chạm? Ai nên chủ động nhường để hợp tác suôn sẻ?',
+  'Hai người có cùng tầm nhìn, mục tiêu kinh doanh hay dễ bất đồng vì quan điểm khác biệt? Ai nên là người quyết định chính?',
+  'Tính cách hai người hòa hợp khi làm việc cùng nhau hay dễ va chạm vì tính khí trái ngược? Ai nóng ai nguội, ai nên nhường lúc bất đồng?',
+  'Hợp tác làm ăn với người này mang lại lợi ích, quý nhân đỡ đần hay dễ bị lợi dụng, phản bội? Có nên hùn vốn lâu dài không?',
+  'Giao tiếp, trao đổi công việc giữa hai người thuận lợi, dễ hiểu ý nhau hay dễ hiểu lầm, tranh cãi? Nên trao đổi trực tiếp hay qua trung gian?',
+  'Góp vốn, kết hợp tài chính làm ăn chung mang lại lợi ích hay dễ hao tổn, bất đồng vì tiền? Ai nên là người giữ tay hòm chìa khóa?',
+  'Giai đoạn hiện tại của cả hai có đang thuận lợi để hợp tác, mở rộng làm ăn hay nên chờ thêm? Ai đang gặp vận khó hơn cần được đỡ đần?',
+];
 
 // RAG helpers — tam phương tứ chính
 const _TH = {'Dần':['Ngọ','Tuất'],'Ngọ':['Dần','Tuất'],'Tuất':['Dần','Ngọ'],'Thân':['Tý','Thìn'],'Tý':['Thân','Thìn'],'Thìn':['Thân','Tý'],'Tỵ':['Dậu','Sửu'],'Dậu':['Tỵ','Sửu'],'Sửu':['Tỵ','Dậu'],'Hợi':['Mão','Mùi'],'Mão':['Hợi','Mùi'],'Mùi':['Hợi','Mão']};
@@ -1243,34 +1259,14 @@ function renderRadar(lsA,lsB,nameA,nameB){
 
 function renderDvOverlay2(lsA,lsB,nameA,nameB,canvasId){
   const dvA=(lsA.daiVans||[]).slice(0,9),dvB=(lsB.daiVans||[]).slice(0,9);
-  if(!dvA.length||!dvB.length)return;
-  const labels=dvA.map((dv,i)=>`ĐV${i+1} ${dv.tuoiStart}-${dv.tuoiEnd}`);
+  if(!dvA.length||!dvB.length||!window.DaiVanChart)return;
   const ctx=document.getElementById(canvasId);
   if(!ctx)return;
-  new Chart(ctx,{
-    type:'line',
-    data:{labels,datasets:[
-      {label:nameA,data:dvA.map(d=>d.scoring?.tong??5),borderColor:'var(--color-a)',backgroundColor:'rgba(224,85,85,0.05)',pointRadius:5,tension:0.4,fill:true},
-      {label:nameB,data:dvB.map(d=>d.scoring?.tong??5),borderColor:'var(--color-b)',backgroundColor:'rgba(59,125,216,0.05)',pointRadius:5,tension:0.4,fill:true},
-    ]},
-    options:{responsive:true,plugins:{legend:{display:true},title:{display:true,text:'Vận Trình Toàn Đời — Đối Chiếu',font:{size:13,weight:'bold'}}},scales:{y:{min:0,max:10}}},
-  });
+  new Chart(ctx, window.DaiVanChart.buildOverlay(dvA,dvB,{nameA,nameB}));
 }
 
 function renderDvOverlay(lsA,lsB,nameA,nameB){
-  const dvA=(lsA.daiVans||[]).slice(0,9),dvB=(lsB.daiVans||[]).slice(0,9);
-  if(!dvA.length||!dvB.length)return;
-  const labels=dvA.map((dv,i)=>`ĐV${i+1} ${dv.tuoiStart}-${dv.tuoiEnd}`);
-  const ctx=document.getElementById('chart-dv-overlay');
-  if(!ctx)return;
-  new Chart(ctx,{
-    type:'line',
-    data:{labels,datasets:[
-      {label:nameA,data:dvA.map(d=>d.scoring?.tong??5),borderColor:'var(--color-a)',backgroundColor:'rgba(224,85,85,0.05)',pointRadius:5,tension:0.4,fill:true},
-      {label:nameB,data:dvB.map(d=>d.scoring?.tong??5),borderColor:'var(--color-b)',backgroundColor:'rgba(59,125,216,0.05)',pointRadius:5,tension:0.4,fill:true},
-    ]},
-    options:{responsive:true,plugins:{legend:{display:true},title:{display:true,text:'Vận Trình Toàn Đời — Đối Chiếu',font:{size:13,weight:'bold'}}},scales:{y:{min:0,max:10}}},
-  });
+  renderDvOverlay2(lsA,lsB,nameA,nameB,'chart-dv-overlay');
 }
 
 function buildTongQuan(result){
@@ -1542,7 +1538,7 @@ async function luanGiaiSection(idx,m,result){
   let prompt='';
   if(idx===0){
     const itemsText=result.items.map((item,i)=>(i+1)+'. '+item.label+': '+item.score+'/10 — '+item.detail).join('\n');
-    prompt=`Phân tích tương quan lá số vợ chồng theo Tử Vi Đẩu Số cổ pháp:
+    prompt=`Phân tích tương quan lá số hợp tác làm ăn theo Tử Vi Đẩu Số cổ pháp:
 ${nameA}: ${lsA.canChiNam} · Nạp Âm ${naA} · Cung Mệnh ${palMenhA?.diaChi||'?'} · Chính tinh: ${(palMenhA?.majorStars||[]).map(s=>s.ten).join(', ')||'VCD'}
 ${nameB}: ${lsB.canChiNam} · Nạp Âm ${naB} · Cung Mệnh ${palMenhB?.diaChi||'?'} · Chính tinh: ${(palMenhB?.majorStars||[]).map(s=>s.ten).join(', ')||'VCD'}
 
@@ -1638,7 +1634,9 @@ Viết 300-350 từ văn xuôi. Nhận định tổng quan, điểm mạnh, đi�
       }
     }
 
-    prompt='Luận giải "'+m.label+'" — tương quan lá số '+nameA+' và '+nameB+':\n'+lines.join('\n')+'\n\nViết 150-200 từ văn xuôi. Tác động thực tế, 1 điểm lưu ý. Dùng tên thật.';
+    const focusQ = SECTION_QUESTIONS[idx] || '';
+    prompt='Luận giải "'+m.label+'" — tương quan lá số '+nameA+' và '+nameB+':\n'+lines.join('\n')+
+      '\n\nViết 180-230 từ văn xuôi.'+(focusQ?' Tối thiểu phải trả lời được: '+focusQ:'')+' Tác động thực tế, 1 điểm lưu ý. Dùng tên thật.';
   }
   // Mark muc-luc as loading NOW (when actually calling AI)
   const _mlBtn=document.getElementById('ml-'+idx);
@@ -1900,7 +1898,7 @@ function toggleDropdown(btn){const menu=btn.nextElementSibling;const isOpen=menu
 document.addEventListener('click',e=>{if(!e.target.closest('.nav-dropdown')){document.querySelectorAll('.nav-dropdown-menu').forEach(m=>m.classList.remove('open'));document.querySelectorAll('.nav-dropdown-btn').forEach(b=>b.classList.remove('open'));}});
 </script>
 <script src="/nav.js?v=26"></script>
-<script src="/tools-shared/ai-loading-steps.js?v=9"></script>
+<script src="/tools-shared/ai-loading-steps.js?v=10"></script>
 <script src="/chatbot.js"></script>
 <script>
   window._tuviChatConfig = {

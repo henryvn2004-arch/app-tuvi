@@ -14,6 +14,7 @@
 .form-card{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);max-width:860px}
 .form-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:3px}
 .form-card p.sub{font-size:12.5px;color:var(--text-lt);margin-bottom:14px}
+.sample-link{display:inline-block;font-size:12.5px;color:var(--tx-blue);margin-bottom:12px}
 .frow{display:flex;gap:11px;flex-wrap:wrap;align-items:flex-end;margin-bottom:12px}
 .fg{display:flex;flex-direction:column;gap:5px}
 .fg label{font-size:10.5px;font-weight:600;color:var(--text-lt);letter-spacing:.04em;text-transform:uppercase}
@@ -108,8 +109,9 @@
       <div id="shellRecent"></div>
       <div class="form-card" id="birthPanel">
         <h2>Ngày sinh của người bạn muốn hiểu</h2>
-        <p class="sub">Lá Số Người Khác lập lá số Tử Vi cho một người bạn cần hiểu rõ hơn. Đoán sai ý sếp, hiểu lầm người yêu, mất lòng đối tác — chỉ vì chưa từng biết họ đang nghĩ theo kiểu người nào? Nhập ngày giờ sinh người đó, nhận cẩm nang nên nói gì, nên tránh gì.</p>
+        <p class="sub">Nhập ngày giờ sinh người đó, mối quan hệ và việc bạn đang cần làm với họ. Hệ thống phân tích lá số của người đó theo đúng việc bạn nêu. Nhận về cách người này vận hành, nên nói gì, nên tránh gì và kế hoạch cụ thể.</p>
         <p class="price-note" data-tvp-price-label="nguoi-khac">…</p>
+        <div id="sampleLinkHost"></div>
 
         <div class="frow nk-qh">
           <div class="fg" style="flex:1">
@@ -304,12 +306,12 @@ window.SHELL_INTRO={key:'nguoi-khac'};</script>
 <script src="/tools-shared/vn-timezone.js?v=1"></script>
 <script src="/tuvi-form.js?v=2"></script>
 <script src="/tools-shared/cung-ngay-sinh.js?v=2"></script>
-<script src="/tuvi-paywall.js?v=24"></script>
+<script src="/tuvi-paywall.js?v=26"></script>
 <script src="/tools-shared/hook-layer.js?v=2"></script>
 <script src="/auth.js?v=2"></script>
   <script src="/nav.js?v=26" data-icons-only></script>
 <script src="/shell.js?v=87"></script>
-<script src="/tools-shared/ai-loading-steps.js?v=9"></script>
+<script src="/tools-shared/ai-loading-steps.js?v=10"></script>
 <script>
 
 var _currentSlug = '';
@@ -387,6 +389,14 @@ function onQuanHeChange() {
 // prefix 'self' — hai bản độc lập nhờ `prefix` của TuviForm, không chép tay.
 TuviForm.render('formHost', { mode: 'compact', prefix: '', gioitinh: 'nam', showName: true });
 TuviForm.render('formHostSelf', { mode: 'compact', prefix: 'self', gioitinh: 'nam', showName: false });
+
+// Nút "Xem mẫu" — PDF sinh bằng LLM thật cho 1 lá số mẫu (scripts/gen-tool-sample.mjs).
+(function(){
+  var host=document.getElementById('sampleLinkHost');
+  if(!host) return;
+  var url='https://dciwkfdqhhddeymlisey.supabase.co/storage/v1/object/public/samples/mau-nguoi-khac.pdf';
+  host.innerHTML='<a href="'+url+'" target="_blank" rel="noopener" class="sample-link">↗ Xem mẫu (PDF, lá số khác)</a>';
+})();
 
 // 🔑 Lá số shell đang nhớ là lá số CỦA NGƯỜI DÙNG → điền vào form 'self', KHÔNG
 // điền vào form chính. Đây là tool DUY NHẤT mà form chính là của người khác;

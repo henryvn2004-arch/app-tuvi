@@ -362,55 +362,28 @@
   // #C0392B). Không có canvas / thiếu Chart.js / thiếu daiVans → im lặng bỏ
   // qua (DOM chưa có phần 14, hoặc Chart.js chưa nạp).
   function renderInlineDaiVanLineChart(ls) {
-    if (typeof Chart === 'undefined' || !ls) return;
+    if (typeof Chart === 'undefined' || !ls || !window.DaiVanChart) return;
     var canvas = (typeof document !== 'undefined') ? document.getElementById('chart-daivan-overview') : null;
     var dvs = (ls.daiVans || []).slice(0, 9);
     if (!canvas || !dvs.length) return;
     var cur = ls.daiVanHienTai;
-    var labels = dvs.map(function (dv, i) { return 'ĐV' + (i + 1) + ' (' + dv.tuoiStart + '-' + dv.tuoiEnd + 't)'; });
-    var scores = dvs.map(function (dv) { return dv.scoring ? dv.scoring.tong : 0; });
     if (root._lgDaiVanChart) { try { root._lgDaiVanChart.destroy(); } catch (e) {} }
-    root._lgDaiVanChart = new Chart(canvas.getContext('2d'), {
-      type: 'line',
-      data: {
-        labels: labels,
-        datasets: [{
-          label: 'Điểm Vận',
-          data: scores,
-          borderColor: '#9A7B3A',
-          backgroundColor: 'rgba(154,123,58,0.15)',
-          fill: true,
-          tension: 0.35,
-          pointRadius: 6,
-          pointHoverRadius: 8,
-          pointBackgroundColor: dvs.map(function (dv) { return cur && dv.cungIdx === cur.cungIdx ? '#C0392B' : '#061A2E'; }),
-          pointBorderColor: '#fff',
-          pointBorderWidth: 2,
-        }],
-      },
-      options: {
-        responsive: true, maintainAspectRatio: false,
-        scales: {
-          y: { min: 0, max: 10, ticks: { stepSize: 2, font: { size: 11 } } },
-          x: { ticks: { font: { size: 10 }, maxRotation: 30, minRotation: 0 } },
-        },
-        plugins: {
-          legend: { display: false },
-          tooltip: { callbacks: {
-            title: function (items) { return labels[items[0].dataIndex]; },
-            label: function (item) {
-              var dv = dvs[item.dataIndex];
-              var palace = ls.palaces && ls.palaces[dv.cungIdx];
-              return [
-                (palace ? 'Cung ' + palace.cungName + ' (' + canChiDaiVan(ls, dv) + ')' : canChiDaiVan(ls, dv)),
-                'Điểm: ' + (dv.scoring ? dv.scoring.tong : '—') + '/10',
-                dv.tuoiStart + '-' + dv.tuoiEnd + ' tuổi',
-              ];
-            },
-          } },
-        },
+    var config = window.DaiVanChart.buildSingle(dvs, {
+      lineColor: '#9A7B3A',
+      fillColor: 'rgba(154,123,58,0.15)',
+      markerColor: '#061A2E',
+      activeColor: '#C0392B',
+      isCurrent: function (dv) { return !!(cur && dv.cungIdx === cur.cungIdx); },
+      maintainAspectRatio: false,
+      tooltipExtra: function (dv) {
+        var palace = ls.palaces && ls.palaces[dv.cungIdx];
+        return [
+          (palace ? 'Cung ' + palace.cungName + ' (' + canChiDaiVan(ls, dv) + ')' : canChiDaiVan(ls, dv)),
+          dv.tuoiStart + '-' + dv.tuoiEnd + ' tuổi',
+        ];
       },
     });
+    root._lgDaiVanChart = new Chart(canvas.getContext('2d'), config);
   }
 
   var API = { TONG_PHAN: TONG_PHAN, PHAN_LABELS_BASE: PHAN_LABELS_BASE, phanLabels: phanLabels, buildPreGenHtml: buildPreGenHtml, buildCungStarHtml: buildCungStarHtml, buildTuHoaPhiTinhHtml: buildTuHoaPhiTinhHtml, renderInlineDaiVanLineChart: renderInlineDaiVanLineChart };
