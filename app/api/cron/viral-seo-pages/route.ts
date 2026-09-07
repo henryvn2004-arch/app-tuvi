@@ -33,10 +33,14 @@ const SUPABASE_URL = process.env.SUPABASE_URL!;
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY!;
 
 // 7.080 dòng / ~120 dòng-mỗi-ngày ≈ 59 ngày. Cố ý CHẬM: đây là viết lại nội
-// dung ĐÃ index, không phải trang mới — không có gì gấp, và rải nhiều ngày là
-// ĐIỀU KIỆN để tránh `lastmod` toàn site nhảy một lượt (xem migration kèm job
-// này). Nếu cần nhanh hơn, tăng con số này chứ ĐỪNG thêm suất chạy/ngày — mỗi
-// suất là một lượt PATCH `content`, tăng suất/ngày mới thật sự làm lastmod dồn cục.
+// dung ĐÃ index, không phải trang mới — không có gì gấp.
+//
+// ⚠️ ĐÍNH CHÍNH (đọc lại schema thật sau khi merge): `seo_pages` KHÔNG có cột
+// `updated_at`, và `lib/seo/lastmod.ts` chỉ đọc `created_at` cho lastmod của
+// bảng này — PATCH ở đây không đụng `created_at` nên KHÔNG hề làm lastmod
+// nhảy, khác với lý do ban đầu ghi trong migration/CLAUDE.md (chép theo dòng
+// nợ kỹ thuật cũ mà chưa đối chiếu schema thật). Vẫn giữ rải chậm — lý do THẬT
+// là chi phí LLM theo lượt và muốn theo dõi chất lượng dần, không phải SEO.
 const BATCH_PER_RUN = 120;
 // Concurrency cho LLM call — thấp hơn hẳn CONC=20 mặc định của
 // rewrite-tuvi-compat.mjs vì đây là gọi LLM thật (giây/lượt), không phải
