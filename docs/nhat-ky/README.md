@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-224 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+226 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 **Bốn file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
 ```bash
@@ -11,7 +11,7 @@ sed -n '120,190p' docs/nhat-ky/2026-08.md    # đọc đúng đoạn, đừng ca
 
 | file | số mục | dung lượng |
 |---|---:|---:|
-| `2026-09.md` | 59 | 285,394 B |
+| `2026-09.md` | 61 | 291,891 B |
 | `2026-08.md` | 148 | 1,024,027 B |
 | `2026-07.md` | 12 | 154,531 B |
 | `track-cu.md` | 5 | 89,354 B |
@@ -25,6 +25,8 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
+| 1 | 2026-09 | `2026-09.md` | 🖼️ Chân Dung Vợ Chồng: ảnh dummy sai phong cách + xác nhận lại đường unlock |
+| 1 | 2026-09 | `2026-09.md` | 💰 Sàn giá 50.000đ/tool — nâng 35 tool đang bán dưới sàn lên 100 Lượng |
 | 1 | 2026-09 | `2026-09.md` | 🐛 Bấm "Mở bản đầy đủ" không chạy gì: tấm khoá mềm dựng vào chỗ đã ẩn |
 | 1 | 2026-09 | `2026-09.md` | 🐛 Anonymous user hết Lượng giữa chừng: mất trắng form + tường thiếu giá VNĐ + orb lệch mép |
 | 1 | 2026-09 | `2026-09.md` | 🐞 Round chạy thật cuối — 2 lỗi paywall thật tìm thấy trên Chu Trình Cuộc Đời, đã vá |
