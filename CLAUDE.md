@@ -146,6 +146,10 @@ sửa bằng SQL không cần deploy) · `lib/marketing/*` (digest · cảnh bá
   đường phát thưởng phải tự kiểm `user.is_anonymous` trước khi cấp**, thiếu một
   chỗ là cày vô hạn. Khác hẳn `anon-trial.ts` — đừng lẫn hai khái niệm "ẩn danh".
   `docs/luat/tien.md`.
+- **Chữ hiển thị: KHÔNG nhắc "AI"/"trí tuệ nhân tạo" như điểm nổi bật** — có
+  dùng AI thật nhưng đó không phải POD, khoe ra là tự xếp chung rổ với hàng
+  trăm app bói toán "AI" khác. Viết theo cổ pháp/engine/hệ thống thay vào. Ba
+  trang pháp lý là NGOẠI LỆ cố ý. Bộ từ thay + bẫy đã vấp: `docs/luat/chu-hien-thi.md`.
 
 ---
 

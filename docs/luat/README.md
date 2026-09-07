@@ -16,6 +16,7 @@ sed -n '40,80p' docs/luat/tien.md      # đọc đúng đoạn, đừng cat cả
 | `engine-cophap.md` | bảng âm lịch · khoá "cùng lá số" · Bát Trạch · cổ pháp đang treo |
 | `postgres.md` | `RETURNS TABLE` · UPSERT ví · SECURITY DEFINER · `catch {}` rỗng |
 | `bay.md` | phương pháp đo · shell · Playwright · CI · CLS · overlay · tiếng Việt |
+| `chu-hien-thi.md` | KHÔNG nhắc "AI" trong chữ hiển thị · bộ từ thay thế · ngoại lệ pháp lý |
 | `../ICONS.md` | luật icon đầy đủ |
 | `../QC.md` | cấu hình QC, giới hạn đã biết, dựng máy mới |
 
