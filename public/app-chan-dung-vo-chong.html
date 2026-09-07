@@ -134,6 +134,10 @@
              xem. -->
         <div id="cdvcLockHost" style="display:none;margin-bottom:16px"></div>
 
+        <!-- Ảnh minh hoạ MỜ, đúng giới tính bạn đời (2026-09-07) — xem chú
+             thích đầy đủ ở `_showDummyPortrait` phía dưới. -->
+        <div id="dummyPortraitHost" style="display:none;margin-bottom:16px"></div>
+
         <div class="res-block" id="morphBlock" style="display:none">
           <div class="res-block-header"><span class="res-block-title">Hình Thể Suy Từ Sao Tại Phu Thê</span></div>
           <div class="res-block-body">
@@ -197,7 +201,7 @@ window.SHELL_INTRO={key:'chan-dung-vo-chong'};</script>
 <script src="/tools-shared/vn-timezone.js?v=1"></script>
 <script src="/tuvi-form.js?v=2"></script>
 <script src="/tools-shared/cung-ngay-sinh.js?v=2"></script>
-<script src="/tuvi-paywall.js?v=23"></script>
+<script src="/tuvi-paywall.js?v=24"></script>
 <script src="/tools-shared/hook-charts.js?v=2"></script>
 <script src="/tools-shared/hook-facts.js?v=1"></script>
 <script src="/tools-shared/hook-layer.js?v=2"></script>
@@ -322,6 +326,7 @@ async function _runAnonPreview() {
     document.getElementById('btnEdit').style.display = '';
     if (window.SHELL_INTRO) Shell.dismissIntro(window.SHELL_INTRO.key);
     _renderLockWall();
+    _showDummyPortrait(data.spouseGender);
     _mountCnsVoChong(_lastBirth);
   } catch (e) {
     _closePanel();
@@ -368,11 +373,32 @@ function _renderLockWall() {
   });
 }
 
+// Ảnh minh hoạ MỜ, đúng giới tính BẠN ĐỜI (2026-09-07, Henry chốt "dùng ảnh
+// dummy xong blur nó đi, chú ý nam/nữ") — `data.spouseGender` đã có SẴN, 0đ,
+// từ chính lượt xem trước deterministic (`computeSpouseMorphology`, không
+// qua LLM) nên không cần lượt gọi nào thêm để biết giới tính đúng. Ảnh thật
+// (gpt-image-2, ~1.161đ/lượt) chỉ sinh SAU khi trả tiền — khác bản chữ, ảnh
+// không rẻ để "cho xem thật trước", nên đây là ảnh TĨNH minh hoạ, không phải
+// suy đoán diện mạo bạn đời thật. Host RIÊNG (không tái dùng `portraitBlock`)
+// vì khối đó còn chứa mô tả/hoàn cảnh gặp gỡ (chữ AI, chưa nên lộ) — tách
+// host giữ ảnh dummy đơn giản hơn là khoá từng phần con bên trong.
+function _showDummyPortrait(gender) {
+  var host = document.getElementById('dummyPortraitHost');
+  if (!host) return;
+  host.style.display = 'block';
+  host.innerHTML =
+    TuviPaywall.lockBadge('Ảnh minh hoạ — chưa mở') +
+    '<img src="' + TuviPaywall.dummyPortraitUrl(gender) + '" class="tpw-real-lock" ' +
+    'alt="Ảnh minh hoạ (mờ) — mở khoá để xem chân dung thật" ' +
+    'style="display:block;margin-top:8px;max-width:260px;width:100%;border-radius:12px">';
+}
+
 function _openPanel() {
   document.getElementById('birthPanel').style.display = 'none';
   document.getElementById('resPanel').style.display = 'block';
   document.getElementById('loading').style.display = 'block';
   document.getElementById('cdvcLockHost').style.display = 'none';
+  document.getElementById('dummyPortraitHost').style.display = 'none';
   ['phuTheBlock', 'morphBlock', 'portraitBlock', 'luanGiaiBlock'].forEach(function (id) {
     document.getElementById(id).style.display = 'none';
   });

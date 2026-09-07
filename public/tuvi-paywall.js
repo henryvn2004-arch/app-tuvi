@@ -1193,6 +1193,18 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
     return '<span class="tpw-lock-badge"><span class="ic-inline" data-icon="lock"></span>' + (text || 'Khoá') + '</span>';
   }
 
+  // ── Ảnh minh hoạ MỜ cho 3 tool sinh ảnh (2026-09-07, Henry chốt) ─────────
+  // "Xem trước" cho ảnh KHÁC bản chữ: không có "phần 1/phần 2" để cắt, và
+  // sinh thật (gpt-image-2) tốn ~1.161đ/lượt — không rẻ như 243đ/phần văn bản
+  // nên KHÔNG sinh ảnh thật miễn phí. Thay vào đó: một ảnh DUMMY tĩnh (Pixabay,
+  // giấy phép cho phép dùng thương mại — public/img/portrait-preview/), làm mờ
+  // bằng .tpw-real-lock, đúng GIỚI TÍNH (nam/nữ) để không lạc quẻ — Henry: "chú
+  // ý nam/nữ". Ảnh THẬT của từng người chỉ sinh sau khi trả tiền; đây chỉ tạo
+  // cảm giác "có sẵn, đang chờ mở khoá", không phải suy đoán diện mạo thật.
+  function dummyPortraitUrl(gender) {
+    return gender === 'nu' ? '/img/portrait-preview/dummy-nu.webp' : '/img/portrait-preview/dummy-nam.webp';
+  }
+
   /** Tool id của trang này (`init({product})`). null = chưa init.
    *  Có để feedback.js gắn lá phiếu 👍/👎 vào ĐÚNG tool mà paywall vừa tính
    *  tiền — một nguồn, nên không thể lệch giữa "trừ Lượng của tool A" và
@@ -1203,7 +1215,7 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
     init, getProduct, requireCredits, requireCreditsCached, requireCreditsCachedQuery,
     generateToolSlug, ensureCredits, deductSilent, getBalance, fillPriceSlots,
     mountCostHints, refreshCostHints, lockPreview, isFreeRerun, lockBadge, placeholderHtml,
-    previewAnonId,
+    previewAnonId, dummyPortraitUrl,
     sectionLockHtml, wireSectionLocks, resumeIfPending,
     _banner, _close, _closeLock, _login,
   };

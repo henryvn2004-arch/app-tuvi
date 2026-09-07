@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-214 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+216 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 **Bốn file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
 ```bash
@@ -11,7 +11,7 @@ sed -n '120,190p' docs/nhat-ky/2026-08.md    # đọc đúng đoạn, đừng ca
 
 | file | số mục | dung lượng |
 |---|---:|---:|
-| `2026-09.md` | 49 | 247,933 B |
+| `2026-09.md` | 51 | 254,735 B |
 | `2026-08.md` | 148 | 1,024,027 B |
 | `2026-07.md` | 12 | 154,531 B |
 | `track-cu.md` | 5 | 89,354 B |
@@ -25,6 +25,8 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
+| 1 | 2026-09 | `2026-09.md` | 🖼️ Sửa nguồn ảnh dummy: Pixabay → sinh THẬT bằng chính pipeline sản phẩm |
+| 1 | 2026-09 | `2026-09.md` | 🖼️ Pha 4 (chốt): ảnh minh hoạ MỜ cho 3 tool sinh ảnh — đúng giới tính, 0đ |
 | 1 | 2026-09 | `2026-09.md` | 🎁 Pha 4: free-preview thật cho Chu Trình Cuộc Đời — phần 1 (engine 14) đọc AI miễn phí |
 | 1 | 2026-09 | `2026-09.md` | 🔴 Pha 4: `/api/van-han-nam` KHÔNG có chốt thanh toán — curl thẳng là AI miễn phí vô hạn |
 | 1 | 2026-09 | `2026-09.md` | 🔧 Pha 4 (khởi động): chu-trinh-cuoc-doi vẫn làm mờ nội dung miễn phí — bug Pha 1 sót lại |
