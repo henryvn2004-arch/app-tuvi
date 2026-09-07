@@ -16,6 +16,7 @@
 .form-card{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);max-width:640px}
 .form-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:3px}
 .form-card p.sub{font-size:12.5px;color:var(--text-lt);margin-bottom:14px}
+.sample-link{display:inline-block;font-size:12.5px;color:var(--tx-blue);margin-bottom:12px}
 .frow{display:flex;gap:11px;flex-wrap:wrap;align-items:flex-end;margin-bottom:12px}
 /* Giữ chỗ cho form khai sinh. `TuviForm.render` chạy ngay trong lúc phân tích
    HTML, nhưng chỉ SAU khi `tuvi-form.js` nạp xong — mà đứng trước nó là cả một dãy
@@ -143,6 +144,7 @@
         <h2>Nhập ngày sinh để xem vận hạn 12 tháng tới</h2>
         <p class="sub" id="fmSub">Vận Hạn 12 Tháng Tới luận vận trình của bạn theo từng tháng trong năm. Muốn biết trước tháng nào tài chính bấp bênh, tháng nào tình duyên dễ sóng gió để chủ động phòng tránh? Từ lá số của bạn, nhận lịch vận hạn chi tiết 12 tháng — tính theo ÂM LỊCH, kèm ngày dương lịch tương ứng.</p>
         <p class="price-note" data-tvp-price-label="van-han-nam">…</p>
+        <div id="sampleLinkHost"></div>
         <div id="tuviFormHost"></div>
         <div class="frow" style="margin-bottom:0">
           <button class="btn-go" id="btnGo" onclick="doXem()">Xem vận hạn →</button>
@@ -215,6 +217,14 @@ window.SHELL_INTRO={key:'van-han-nam'};</script>
 <script>
 TuviForm.render('tuviFormHost', {mode:'compact', gioitinh:'nam'});
 TuviPaywall.init({product:'van-han-nam'});
+
+// Nút "Xem mẫu" — PDF sinh bằng LLM thật cho 1 lá số mẫu (scripts/gen-tool-sample.mjs).
+(function(){
+  var host=document.getElementById('sampleLinkHost');
+  if(!host) return;
+  var url='https://dciwkfdqhhddeymlisey.supabase.co/storage/v1/object/public/samples/mau-van-han-nam.pdf';
+  host.innerHTML='<a href="'+url+'" target="_blank" rel="noopener" class="sample-link">↗ Xem mẫu (PDF, lá số khác)</a>';
+})();
 
 // ── Mốc thời gian: THÁNG HIỆN TẠI theo giờ VN ────────────────────────────
 // Khung 12 tháng neo vào tháng người dùng ĐANG XEM, không phải tháng Giêng —

@@ -10,8 +10,9 @@
  * ⚠️ CHẠY Ở NƠI CÓ ĐỦ 3 BIẾN MÔI TRƯỜNG THẬT (không chạy được trong sandbox
  * phiên này — xem docs/nhat-ky/2026-09.md mục "Chu Trình Cuộc Đời"):
  *   GEMINI_API_KEY (hoặc ANTHROPIC_API_KEY/KIMIK3_API_KEY) — sinh văn bản
- *   SUPABASE_URL + SUPABASE_SERVICE_KEY — upload PDF (bucket `tool-samples`,
- *     tự tạo public nếu chưa có — xem hướng dẫn cuối file khi chạy lần đầu)
+ *   SUPABASE_URL + SUPABASE_SERVICE_KEY — upload PDF (bucket `samples`, ĐÃ
+ *     SỐNG trên prod — public/tuvi-form.js đang trỏ tới file mau-luan-giai-la-so.pdf
+ *     trong đúng bucket này; script chỉ upsert thêm/đè file, không tạo bucket mới)
  *
  * Chạy bằng `tsx` (KHÔNG dùng `tsc --ignoreConfig` như gen-tool-avatars.mjs:
  * cây import ở đây sâu và dùng alias `@/...`, tsc bỏ qua tsconfig thì không
@@ -114,7 +115,7 @@ const TOOL_CONFIGS = {
     },
     outJson: join(ROOT, 'public/samples/chu-trinh-cuoc-doi-dummy.json'),
     pdfTitle: 'Chu Trình Cuộc Đời — Bản mẫu',
-    storagePath: 'chu-trinh-cuoc-doi/sample.pdf',
+    storagePath: 'mau-chu-trinh-cuoc-doi.pdf',
   },
   laso: {
     kind: 'phan',
@@ -146,7 +147,10 @@ const TOOL_CONFIGS = {
     },
     outJson: join(ROOT, 'public/samples/laso-dummy.json'),
     pdfTitle: 'Luận Giải Lá Số — Bản mẫu',
-    storagePath: 'laso/sample.pdf',
+    // Tên file TRÙNG với file đã sống trên prod (bucket `samples`, xem
+    // public/tuvi-form.js dòng ~334) — script này SINH LẠI bằng LLM thật rồi
+    // `upsert` đè lên đúng chỗ, không tạo file mới/mồ côi.
+    storagePath: 'mau-luan-giai-la-so.pdf',
   },
   'van-han-nam': {
     kind: 'phan-thang',
@@ -189,7 +193,7 @@ const TOOL_CONFIGS = {
     },
     outJson: join(ROOT, 'public/samples/van-han-nam-dummy.json'),
     pdfTitle: 'Vận Hạn Năm Tới — Bản mẫu',
-    storagePath: 'van-han-nam/sample.pdf',
+    storagePath: 'mau-van-han-nam.pdf',
   },
   'day-con': {
     kind: 'json',
@@ -214,7 +218,7 @@ const TOOL_CONFIGS = {
     fieldOrder: DAY_CON_SCHEMA.propertyOrdering,
     outJson: join(ROOT, 'public/samples/day-con-dummy.json'),
     pdfTitle: 'Dạy Con Theo Lá Số — Bản mẫu',
-    storagePath: 'day-con/sample.pdf',
+    storagePath: 'mau-day-con.pdf',
   },
   'nguoi-khac': {
     kind: 'json',
@@ -240,7 +244,7 @@ const TOOL_CONFIGS = {
     fieldOrder: NGUOI_KHAC_SCHEMA.propertyOrdering,
     outJson: join(ROOT, 'public/samples/nguoi-khac-dummy.json'),
     pdfTitle: 'Lá Số Người Khác — Bản mẫu',
-    storagePath: 'nguoi-khac/sample.pdf',
+    storagePath: 'mau-nguoi-khac.pdf',
   },
   'huong-nghiep-tre': {
     kind: 'json',
@@ -262,7 +266,7 @@ const TOOL_CONFIGS = {
     fieldOrder: HUONG_NGHIEP_TRE_SCHEMA.propertyOrdering,
     outJson: join(ROOT, 'public/samples/huong-nghiep-tre-dummy.json'),
     pdfTitle: 'Hướng Nghiệp Sớm Cho Con — Bản mẫu',
-    storagePath: 'huong-nghiep-tre/sample.pdf',
+    storagePath: 'mau-huong-nghiep-tre.pdf',
   },
   // 🔴 nhan-mach CỐ Ý KHÔNG khai ở đây — Henry đã chốt tool này KHÔNG cần
   // bước xem-trước/blur (nhóm 2-8 người, không phải một-prompt đơn lẻ).
@@ -310,6 +314,23 @@ async function runOne(toolId) {
     `✓ Lá số mẫu: ${cfg.sampleBirth.day}/${cfg.sampleBirth.month}/${cfg.sampleBirth.year}, ${cfg.sampleBirth.gender}, xem ${cfg.namXem}`
   );
 
+  if (cfg.kind === 'json') {
+    // `outJson` là bản DUMMY đã lọc bớt `freeFields` — nạp lại nó làm cache
+    // sẽ làm PDF thiếu đúng mấy trường đó. Cache cho việc "đã gọi LLM chưa"
+    // phải là bản THÔ, đầy đủ, tách riêng khỏi outJson.
+    const rawCachePath = join(ROOT, '.tool-samples', `${toolId}-raw.json`);
+    let payload = null;
+    if (existsSync(rawCachePath)) {
+      try {
+        payload = JSON.parse(readFileSync(rawCachePath, 'utf8'));
+      } catch {
+        payload = null;
+      }
+    }
+    await runJsonTool(toolId, cfg, ls, { payload }, rawCachePath);
+    return;
+  }
+
   let store = {};
   if (existsSync(cfg.outJson)) {
     try {
@@ -317,11 +338,6 @@ async function runOne(toolId) {
     } catch {
       store = {};
     }
-  }
-
-  if (cfg.kind === 'json') {
-    await runJsonTool(toolId, cfg, ls, store);
-    return;
   }
   await runPhanTool(toolId, cfg, ls, laSoText, store);
 }
@@ -414,7 +430,7 @@ async function runPhanTool(toolId, cfg, ls, laSoText, store) {
 }
 
 // ── Tool MỘT LƯỢT JSON (day-con, nguoi-khac, huong-nghiep-tre) ─────────────
-async function runJsonTool(toolId, cfg, ls, store) {
+async function runJsonTool(toolId, cfg, ls, store, rawCachePath) {
   async function gen() {
     if (!FORCE && store.payload) {
       console.log('  đã có JSON mẫu, bỏ qua (dùng --force để sinh lại)');
@@ -437,6 +453,8 @@ async function runJsonTool(toolId, cfg, ls, store) {
       process.exit(1);
     }
     store.payload = parsed;
+    mkdirSync(dirname(rawCachePath), { recursive: true });
+    writeFileSync(rawCachePath, JSON.stringify(parsed, null, 2));
     console.log(`  OK (model ${r.model}, ${Object.keys(parsed).length} trường)`);
   }
 
@@ -528,13 +546,19 @@ ${bodyHtml}
 </body></html>`;
 
   console.log('✓ Dựng HTML xong, đang render PDF…');
-  const browser = await chromium.launch();
+  // `PW_CHROMIUM_PATH` là lối thoát cho môi trường có Chromium cài sẵn ở một
+  // đường dẫn khác chuẩn Playwright (một số sandbox CI) — không set thì giữ
+  // hành vi mặc định y hệt trước (`chromium.launch()` tự tìm bản đã tải).
+  const browser = await chromium.launch(
+    process.env.PW_CHROMIUM_PATH ? { executablePath: process.env.PW_CHROMIUM_PATH } : {}
+  );
   const page = await browser.newPage();
   await page.setContent(html, { waitUntil: 'load' });
   const pdfBuffer = await page.pdf({ format: 'A4', margin: { top: '20px', bottom: '20px' } });
   await browser.close();
 
-  const localPdfPath = join(ROOT, `.tool-samples-${toolId}.pdf`);
+  const localPdfPath = join(ROOT, '.tool-samples', `${toolId}.pdf`);
+  mkdirSync(dirname(localPdfPath), { recursive: true });
   writeFileSync(localPdfPath, pdfBuffer);
   console.log(`✓ PDF tạm: ${localPdfPath} (${(pdfBuffer.length / 1024).toFixed(0)} KB)`);
 
@@ -543,14 +567,10 @@ ${bodyHtml}
   const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY);
 
   const cfg2 = TOOL_CONFIGS[toolId];
-  const BUCKET = 'tool-samples';
-  const { error: bucketErr } = await supabase.storage.createBucket(BUCKET, { public: true });
-  if (bucketErr && !/already exists/i.test(bucketErr.message || '')) {
-    console.error(
-      '⚠ Không tạo được bucket (có thể đã có sẵn, kiểm tra tay nếu upload lỗi tiếp):',
-      bucketErr.message
-    );
-  }
+  // Bucket `samples` ĐÃ SỐNG trên prod (public, chứa mau-luan-giai-la-so.pdf
+  // dùng bởi public/tuvi-form.js) — dùng LẠI đúng bucket đó, không tạo bucket
+  // mới. `storagePath` mỗi tool đã đặt tên theo đúng khuôn `mau-<tool>.pdf`.
+  const BUCKET = 'samples';
 
   const { error: uploadErr } = await supabase.storage
     .from(BUCKET)

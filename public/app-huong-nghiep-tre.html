@@ -14,6 +14,7 @@
 .form-card{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);max-width:860px}
 .form-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:3px}
 .form-card p.sub{font-size:12.5px;color:var(--text-lt);margin-bottom:14px}
+.sample-link{display:inline-block;font-size:12.5px;color:var(--tx-blue);margin-bottom:12px}
 .frow{display:flex;gap:11px;flex-wrap:wrap;align-items:flex-end;margin-bottom:12px}
 .fg{display:flex;flex-direction:column;gap:5px}
 .fg label{font-size:10.5px;font-weight:600;color:var(--text-lt);letter-spacing:.04em;text-transform:uppercase}
@@ -131,6 +132,7 @@
           <h2>Hướng Nghiệp Sớm Cho Con</h2>
           <p class="sub">Hướng Nghiệp Sớm Cho Con gợi ý hoạt động nên cho con làm quen theo lứa tuổi. Sợ con lớn lên chọn sai nghề, khổ vì tiền bạc hay lận đận sự nghiệp như chính mình từng trải? Nhập ngày giờ sinh của con, nhận gợi ý hoạt động phù hợp từng giai đoạn.</p>
           <p class="price-note" data-tvp-price-label="huong-nghiep-tre">…</p>
+          <div id="sampleLinkHost"></div>
           <div id="formHost"></div>
           <div class="frow">
             <div class="fg" style="flex:1">
@@ -336,6 +338,14 @@ function onMoiLoChange() {
 }
 
 TuviForm.render('formHost', { mode: 'compact', prefix: '', gioitinh: 'nam', showName: true });
+
+// Nút "Xem mẫu" — PDF sinh bằng LLM thật cho 1 lá số mẫu (scripts/gen-tool-sample.mjs).
+(function(){
+  var host=document.getElementById('sampleLinkHost');
+  if(!host) return;
+  var url='https://dciwkfdqhhddeymlisey.supabase.co/storage/v1/object/public/samples/mau-huong-nghiep-tre.pdf';
+  host.innerHTML='<a href="'+url+'" target="_blank" rel="noopener" class="sample-link">↗ Xem mẫu (PDF, lá số khác)</a>';
+})();
 
 // 🔑 CỐ Ý KHÔNG gọi `Shell.prefillForm()`: lá số shell đang nhớ là lá số CỦA
 // NGƯỜI DÙNG, mà form này là của CON. Đổ vào là người ta bấm luôn rồi nhận bản
