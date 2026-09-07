@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-217 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+220 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 **Bốn file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
 ```bash
@@ -11,7 +11,7 @@ sed -n '120,190p' docs/nhat-ky/2026-08.md    # đọc đúng đoạn, đừng ca
 
 | file | số mục | dung lượng |
 |---|---:|---:|
-| `2026-09.md` | 52 | 259,908 B |
+| `2026-09.md` | 55 | 259,908 B |
 | `2026-08.md` | 148 | 1,024,027 B |
 | `2026-07.md` | 12 | 154,531 B |
 | `track-cu.md` | 5 | 89,354 B |
@@ -25,6 +25,9 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
+| 1 | 2026-09 | `2026-09.md` | 🎬 Chu Trình Cuộc Đời — CTA lặp lại mỗi box mờ, orb to/giữa/nhanh, script sinh mẫu |
+| 1 | 2026-09 | `2026-09.md` | 🔑 Gemini 429 trong sandbox KHÔNG phải hết credit thật — key riêng của phiên |
+| 1 | 2026-09 | `2026-09.md` | 🖼️ Chu Trình Cuộc Đời — 1 nút mở cả bó thay 9 nút riêng, blur nội dung THẬT thay ô rỗng |
 | 1 | 2026-09 | `2026-09.md` | 🗣️ Ô "Nên làm" nói tiếng đời thường — và cái bẫy "cắt trước khi lọc" |
 | 1 | 2026-09 | `2026-09.md` | 🖼️ Sửa nguồn ảnh dummy: Pixabay → sinh THẬT bằng chính pipeline sản phẩm |
 | 1 | 2026-09 | `2026-09.md` | 🖼️ Pha 4 (chốt): ảnh minh hoạ MỜ cho 3 tool sinh ảnh — đúng giới tính, 0đ |
