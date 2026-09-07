@@ -31,6 +31,18 @@
     window.gtag('config', 'AW-18419617290');
   }
 
+  // ── Microsoft Clarity ──────────────────────────────────────────────
+  // Cùng lý do như khối GA4 ở trên: nav.js#data-icons-only bỏ qua Clarity nên
+  // shell.js phải tự bù cho toàn bộ trang /app/*. `clarity-js` là ID chung với
+  // nav.js để không nạp trùng khi cả hai cùng có mặt.
+  if (!document.getElementById('clarity-js') && !window.navigator.webdriver) {
+    (function (c, l, a, r, i, t, y) {
+      c[a] = c[a] || function () { (c[a].q = c[a].q || []).push(arguments); };
+      t = l.createElement(r); t.id = 'clarity-js'; t.async = 1; t.src = 'https://www.clarity.ms/tag/' + i;
+      y = l.getElementsByTagName(r)[0]; y.parentNode.insertBefore(t, y);
+    })(window, document, 'clarity', 'script', 'yececqbfbv');
+  }
+
   // ── NGUỒN DUY NHẤT: danh sách công cụ (render cả sidebar lẫn Cmd+K) ──
   // ── DANH SÁCH CÔNG CỤ — dựng TỪ DỮ LIỆU, không còn mảng chép tay ──
   //
