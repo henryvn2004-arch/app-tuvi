@@ -10,7 +10,7 @@
 
 import { test, expect, type Page } from '@playwright/test';
 
-type PreviewCall = { anonId?: string; moiLo?: string };
+type PreviewCall = { anonId?: string; moiLo?: string; authHeader?: string | null };
 type PageWithCalls = Page & { __calls: PreviewCall[] };
 const calls = (page: Page): PreviewCall[] => (page as PageWithCalls).__calls;
 
@@ -78,26 +78,39 @@ async function stubApis(page: Page, opts?: { previewBody?: object }) {
     }
     const body = JSON.parse(r.request().postData() || '{}');
     const preview = url.searchParams.get('preview') === '1';
-    if (preview) recorded.push(body);
+    if (preview) recorded.push({ ...body, authHeader: r.request().headers()['authorization'] ?? null });
     return r.fulfill({ status: 200, contentType: 'application/json',
       body: JSON.stringify(preview ? (opts?.previewBody ?? PREVIEW_PAYLOAD) : FULL_PAYLOAD) });
   });
 }
 
-async function run(page: Page) {
-  await page.addInitScript(() => {
-    const loggedOut = {
-      isLoggedIn: () => false,
-      isRestoring: () => false,
-      getUser: () => null,
-      getSession: () => null,
-      getFreshToken: async () => null,
-      refresh: async () => null,
-      require: (cb?: () => void) => { void cb; },
-      signInAnonymously: async () => false,
-    };
-    Object.defineProperty(window, 'Auth', { value: loggedOut, writable: false, configurable: false });
-  });
+async function run(page: Page, opts?: { loggedIn?: boolean }) {
+  // (2026-09-07) `loggedIn:true` đo nhánh MỚI: đã đăng nhập nhưng chưa trả
+  // tiền cũng phải thấy bản xem trước, không còn bị bỏ qua thẳng tới trả tiền.
+  await page.addInitScript((loggedIn) => {
+    const stub = loggedIn
+      ? {
+          isLoggedIn: () => true,
+          isRestoring: () => false,
+          getUser: () => ({ id: 'test-user-id' }),
+          getSession: () => ({ access_token: 'FAKE_TOKEN' }),
+          getFreshToken: async () => 'FAKE_TOKEN',
+          refresh: async () => 'FAKE_TOKEN',
+          require: (cb?: () => void) => { if (cb) cb(); },
+          signInAnonymously: async () => false,
+        }
+      : {
+          isLoggedIn: () => false,
+          isRestoring: () => false,
+          getUser: () => null,
+          getSession: () => null,
+          getFreshToken: async () => null,
+          refresh: async () => null,
+          require: (cb?: () => void) => { void cb; },
+          signInAnonymously: async () => false,
+        };
+    Object.defineProperty(window, 'Auth', { value: stub, writable: false, configurable: false });
+  }, !!opts?.loggedIn);
   await page.goto('/app-huong-nghiep-tre.html');
   await page.waitForFunction(() => {
     const w = window as unknown as { TuviForm?: unknown; analyze?: unknown };
@@ -177,4 +190,24 @@ test('trả tiền xong: ô giữ chỗ biến mất, nội dung thật thế ch
   await expect(page.locator('#resPanel .tpw-ph-host')).toHaveCount(0);
   await expect(page.locator('#resPanel .tpw-lock-badge')).toHaveCount(0);
   await expect(page.locator('#resPanel .tpw-locked')).toHaveCount(0);
+});
+
+// (2026-09-07) Henry chốt generalize: trước đây khách ĐÃ đăng nhập nhưng
+// CHƯA trả tiền bị bỏ qua thẳng bản xem trước (nhánh `!_hnLoggedIn()` cũ).
+// Nay phải thấy ĐÚNG bản xem trước như khách vô danh, chỉ khác ở tường mở
+// khoá (nút phẳng, không phải màn "Đăng ký").
+test('đã đăng nhập nhưng CHƯA trả tiền: vẫn thấy bản xem trước, tường là nút phẳng', async ({ page }) => {
+  await stubApis(page);
+  await run(page, { loggedIn: true });
+
+  await expect(page.locator('#nhinRaCon')).toContainText('ĐOẠN VĂN MIỄN PHÍ MỘT');
+  await expect(page.locator('#viSaoHuongNay')).toContainText('ĐOẠN VĂN MIỄN PHÍ HAI');
+  const html = await page.content();
+  expect(html).not.toContain('CHỮ TRẢ PHÍ');
+
+  expect(calls(page)[0].authHeader).toBe('Bearer FAKE_TOKEN');
+
+  await expect(page.locator('#hnLockHost')).not.toContainText('Đăng ký');
+  await expect(page.locator('#hnLockHost button')).toBeVisible();
+  await expect(page.locator('#hnLockHost')).toContainText('60 Lượng');
 });

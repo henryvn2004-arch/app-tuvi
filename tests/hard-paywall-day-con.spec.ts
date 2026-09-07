@@ -12,7 +12,7 @@
 
 import { test, expect, type Page } from '@playwright/test';
 
-type PreviewCall = { anonId?: string; moiLo?: string };
+type PreviewCall = { anonId?: string; moiLo?: string; authHeader?: string | null };
 type PageWithCalls = Page & { __calls: PreviewCall[] };
 const calls = (page: Page): PreviewCall[] => (page as PageWithCalls).__calls;
 
@@ -80,28 +80,41 @@ async function stubApis(page: Page, opts?: { previewBody?: object }) {
     }
     const body = JSON.parse(r.request().postData() || '{}');
     const preview = url.searchParams.get('preview') === '1';
-    if (preview) recorded.push(body);
+    if (preview) recorded.push({ ...body, authHeader: r.request().headers()['authorization'] ?? null });
     return r.fulfill({ status: 200, contentType: 'application/json',
       body: JSON.stringify(preview ? (opts?.previewBody ?? PREVIEW_PAYLOAD) : FULL_PAYLOAD) });
   });
 }
 
-async function run(page: Page) {
+async function run(page: Page, opts?: { loggedIn?: boolean }) {
   // Ghim CHƯA đăng nhập — `analyze()` rẽ nhánh theo `_dcLoggedIn()`, để mặc
   // định thì bài kiểm đo nhánh đã-đăng-nhập chứ không đo bản xem trước.
-  await page.addInitScript(() => {
-    const loggedOut = {
-      isLoggedIn: () => false,
-      isRestoring: () => false,
-      getUser: () => null,
-      getSession: () => null,
-      getFreshToken: async () => null,
-      refresh: async () => null,
-      require: (cb?: () => void) => { void cb; },
-      signInAnonymously: async () => false,
-    };
-    Object.defineProperty(window, 'Auth', { value: loggedOut, writable: false, configurable: false });
-  });
+  // (2026-09-07) `loggedIn:true` đo nhánh MỚI: đã đăng nhập nhưng chưa trả
+  // tiền cũng phải thấy bản xem trước, không còn bị bỏ qua thẳng tới trả tiền.
+  await page.addInitScript((loggedIn) => {
+    const stub = loggedIn
+      ? {
+          isLoggedIn: () => true,
+          isRestoring: () => false,
+          getUser: () => ({ id: 'test-user-id' }),
+          getSession: () => ({ access_token: 'FAKE_TOKEN' }),
+          getFreshToken: async () => 'FAKE_TOKEN',
+          refresh: async () => 'FAKE_TOKEN',
+          require: (cb?: () => void) => { if (cb) cb(); },
+          signInAnonymously: async () => false,
+        }
+      : {
+          isLoggedIn: () => false,
+          isRestoring: () => false,
+          getUser: () => null,
+          getSession: () => null,
+          getFreshToken: async () => null,
+          refresh: async () => null,
+          require: (cb?: () => void) => { void cb; },
+          signInAnonymously: async () => false,
+        };
+    Object.defineProperty(window, 'Auth', { value: stub, writable: false, configurable: false });
+  }, !!opts?.loggedIn);
   // KHÔNG giả cờ webdriver: track.js phải được phép no-op y như với người thật
   // chặn đo — `TuviPaywall.previewAnonId()` không được phụ thuộc vào nó.
   await page.goto('/app-day-con.html');
@@ -191,4 +204,27 @@ test('trả tiền xong: ô giữ chỗ biến mất, nội dung thật thế ch
   await expect(page.locator('#resPanel .tpw-lock-badge')).toHaveCount(0);
   await expect(page.locator('#resPanel .tpw-locked')).toHaveCount(0);
   await expect(page.locator('#trucBlock .fw-note')).toBeVisible();
+});
+
+// (2026-09-07) Henry chốt generalize: trước đây khách ĐÃ đăng nhập nhưng
+// CHƯA trả tiền bị bỏ qua thẳng bản xem trước (bấm nút là trả tiền luôn).
+// Nay phải thấy ĐÚNG bản xem trước như khách vô danh, chỉ khác ở tường mở
+// khoá (nút phẳng, không phải màn "Đăng ký" — đã có tài khoản rồi).
+test('đã đăng nhập nhưng CHƯA trả tiền: vẫn thấy bản xem trước, tường là nút phẳng', async ({ page }) => {
+  await stubApis(page);
+  await run(page, { loggedIn: true });
+
+  await expect(page.locator('#conNguoi')).toContainText('ĐOẠN VĂN MIỄN PHÍ MỘT');
+  await expect(page.locator('#chatNoiTop')).toContainText('ĐOẠN VĂN MIỄN PHÍ HAI');
+  const html = await page.content();
+  expect(html).not.toContain('CHỮ TRẢ PHÍ');
+
+  // Gửi kèm Bearer — cầu dao xem-trước tính suất theo user_id, không dùng
+  // chung IP/anonId với khách vô danh.
+  expect(calls(page)[0].authHeader).toBe('Bearer FAKE_TOKEN');
+
+  // Tường: nút phẳng, KHÔNG còn màn "Đăng ký" (đã có tài khoản).
+  await expect(page.locator('#dcLockHost')).not.toContainText('Đăng ký');
+  await expect(page.locator('#dcLockHost button')).toBeVisible();
+  await expect(page.locator('#dcLockHost')).toContainText('60 Lượng');
 });

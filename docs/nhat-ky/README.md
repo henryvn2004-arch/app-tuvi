@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-224 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+225 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 **Bốn file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
 ```bash
@@ -11,7 +11,7 @@ sed -n '120,190p' docs/nhat-ky/2026-08.md    # đọc đúng đoạn, đừng ca
 
 | file | số mục | dung lượng |
 |---|---:|---:|
-| `2026-09.md` | 59 | 285,712 B |
+| `2026-09.md` | 60 | 290,291 B |
 | `2026-08.md` | 148 | 1,024,027 B |
 | `2026-07.md` | 12 | 154,531 B |
 | `track-cu.md` | 5 | 89,354 B |
@@ -25,6 +25,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
+| 1 | 2026-09 | `2026-09.md` | 🎁 day-con/nguoi-khac/huong-nghiep-tre — khách ĐÃ đăng nhập cũng được xem bản xem trước trước khi trả tiền |
 | 1 | 2026-09 | `2026-09.md` | 🖼️ Vận Hạn 12 Tháng Tới — bỏ bán lẻ từng phần, chuyển sang blur+CTA gộp như Chu Trình Cuộc Đời |
 | 1 | 2026-09 | `2026-09.md` | 🐛 Anonymous user hết Lượng giữa chừng: mất trắng form + tường thiếu giá VNĐ + orb lệch mép |
 | 1 | 2026-09 | `2026-09.md` | 🐞 Round chạy thật cuối — 2 lỗi paywall thật tìm thấy trên Chu Trình Cuộc Đời, đã vá |
