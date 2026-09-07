@@ -159,19 +159,24 @@ window.TuviForm = (() => {
   }
 
   // ── Build option strings (shared) ───────────────────────────
+  // Năm sinh: 1900–2070, mặc định 1985 nằm ĐÚNG GIỮA danh sách (85 năm mỗi
+  // bên) — thao tác một tay trên điện thoại thì mở dropdown là thấy ngay giá
+  // trị mặc định ở giữa màn, không phải cuộn tìm.
+  const NAM_MIN = 1900, NAM_MAX = 2070, NAM_DEFAULT = 1985;
   function buildOptions() {
-    let gioOpts = '', phutOpts = '', ngayOpts = '<option value="">Ngày</option>', thangOpts = '<option value="">Tháng</option>';
+    let gioOpts = '', phutOpts = '', ngayOpts = '<option value="">Ngày</option>', thangOpts = '<option value="">Tháng</option>', namOpts = '';
     for (let i = 0; i <= 23; i++) gioOpts  += `<option value="${i}">${String(i).padStart(2,'0')}</option>`;
     for (let i = 0; i <= 59; i++) phutOpts += `<option value="${i}">${String(i).padStart(2,'0')}</option>`;
     for (let i = 1; i <= 31; i++) ngayOpts  += `<option value="${i}">${i}</option>`;
     for (let i = 1; i <= 12; i++) thangOpts += `<option value="${i}">${i}</option>`;
+    for (let i = NAM_MIN; i <= NAM_MAX; i++) namOpts += `<option value="${i}"${i===NAM_DEFAULT?' selected':''}>${i}</option>`;
     const utcOpts = UTC_OPTIONS.map(o => `<option value="${o.v}"${o.selected?' selected':''}>${o.l}</option>`).join('');
-    return { gioOpts, phutOpts, ngayOpts, thangOpts, utcOpts };
+    return { gioOpts, phutOpts, ngayOpts, thangOpts, namOpts, utcOpts };
   }
 
   // ── Person fields block (dùng chung cho cả full và person mode) ──
   function buildPersonFields(prefix, opts, defaultGioitinh = 'nam', showNameYear = true) {
-    const { gioOpts, phutOpts, ngayOpts, thangOpts, utcOpts } = opts;
+    const { gioOpts, phutOpts, ngayOpts, thangOpts, namOpts, utcOpts } = opts;
     const pf = prefix ? `'${prefix}'` : "''";
     return `
     ${showNameYear ? `
@@ -191,7 +196,7 @@ window.TuviForm = (() => {
       <div class="form-row-3">
         <select class="form-input" id="${pid('ngay',prefix)}" oninput="TuviForm._update(${pf})">${ngayOpts}</select>
         <select class="form-input" id="${pid('thang',prefix)}" oninput="TuviForm._update(${pf})">${thangOpts}</select>
-        <input class="form-input" type="number" id="${pid('nam',prefix)}" placeholder="1990" min="1900" max="2099" oninput="TuviForm._update(${pf})" />
+        <select class="form-input" id="${pid('nam',prefix)}" oninput="TuviForm._update(${pf})">${namOpts}</select>
       </div>
     </div>
     <div class="form-group">
@@ -225,7 +230,7 @@ window.TuviForm = (() => {
 
   // ── Compact fields (dùng .frow/.fg/.tooltip đã có sẵn của trang app-shell gọi) ──
   function buildCompactPersonFields(prefix, opts, defaultGioitinh = 'nam', showName = true, showNamXem = false) {
-    const { gioOpts, phutOpts, ngayOpts, thangOpts, utcOpts } = opts;
+    const { gioOpts, phutOpts, ngayOpts, thangOpts, namOpts, utcOpts } = opts;
     const pf = prefix ? `'${prefix}'` : "''";
     const namXemDefault = new Date().getFullYear();
     return `
@@ -242,7 +247,7 @@ window.TuviForm = (() => {
     <div class="frow">
       <div class="fg" style="width:74px"><label>Ngày</label><select id="${pid('ngay',prefix)}" oninput="TuviForm._update(${pf})">${ngayOpts}</select></div>
       <div class="fg" style="width:82px"><label>Tháng</label><select id="${pid('thang',prefix)}" oninput="TuviForm._update(${pf})">${thangOpts}</select></div>
-      <div class="fg" style="width:90px"><label>Năm</label><input type="number" id="${pid('nam',prefix)}" placeholder="1990" min="1900" max="2099" oninput="TuviForm._update(${pf})"></div>
+      <div class="fg" style="width:90px"><label>Năm</label><select id="${pid('nam',prefix)}" oninput="TuviForm._update(${pf})">${namOpts}</select></div>
       <div class="fg" style="width:70px"><label style="display:flex;align-items:center;gap:3px">Giờ<span class="tvf-tooltip-wrap"><span class="tvf-tooltip-icon" onclick="event.stopPropagation();TuviForm._toggleTip(this)">?</span>${TOOLTIP_CONTENT}</span></label><select id="${pid('tvf-gio',prefix)}" oninput="TuviForm._update(${pf})">${gioOpts}</select></div>
       <div class="fg" style="width:70px"><label>Phút</label><select id="${pid('tvf-phut',prefix)}" oninput="TuviForm._update(${pf})">${phutOpts}</select></div>
       <div class="tvf-gio-am-wrap"><span class="tvf-gio-am" id="${pid('tvf-gio-am',prefix)}">Giờ âm: Tý</span><span class="tvf-gio-vn" id="${pid('tvf-gio-vn',prefix)}"></span></div>
