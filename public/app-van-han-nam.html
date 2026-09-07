@@ -141,7 +141,7 @@
       <div id="shellRecent"></div>
       <div class="form-card" id="birthPanel">
         <h2>Nhập ngày sinh để xem vận hạn 12 tháng tới</h2>
-        <p class="sub" id="fmSub">Vận Hạn 12 Tháng Tới luận vận trình của bạn theo từng tháng trong năm. Muốn biết trước tháng nào tài chính bấp bênh, tháng nào tình duyên dễ sóng gió để chủ động phòng tránh? Từ lá số của bạn, nhận lịch vận hạn chi tiết 12 tháng — tính theo ÂM LỊCH, kèm ngày dương lịch tương ứng.</p>
+        <p class="sub" id="fmSub">Nhập họ tên, giới tính và ngày giờ sinh của bạn. Hệ thống tính lá số rồi luận vận hạn theo từng tháng âm lịch. Nhận về đại vận hiện tại, tiểu vận năm nay và luận riêng đủ 12 tháng.</p>
         <p class="price-note" data-tvp-price-label="van-han-nam">…</p>
         <div id="tuviFormHost"></div>
         <div class="frow" style="margin-bottom:0">
@@ -185,7 +185,9 @@
 window.SHELL_INTRO={key:'van-han-nam'};</script>
 <script src="/tuvi-ansao-engine.js"></script>
 <script src="/laso-chart.js?v=3"></script>
-<script src="/luan-giai-core.js?v=3"></script>
+<script src="/tools-shared/pchip.js?v=1"></script>
+<script src="/tools-shared/daivan-chart.js?v=1"></script>
+<script src="/luan-giai-core.js?v=4"></script>
 <!-- `defer` ở đây là VỆ SINH TỐC ĐỘ, KHÔNG phải bản vá CLS. Không có nó, thẻ này
      chặn parse ngay trước `tuvi-form.js`, tức thêm hẳn một chặng mạng tới bên thứ
      ba vào đường tới hạn của form. Nhưng cú nhảy `.frow` thì nó KHÔNG chữa: prod
@@ -203,14 +205,14 @@ window.SHELL_INTRO={key:'van-han-nam'};</script>
 <script src="/tuvi-form.js?v=2"></script>
 <script src="/tools-shared/cung-ngay-sinh.js?v=2"></script>
 <script src="/auth.js?v=2"></script>
-<script src="/tuvi-paywall.js?v=24"></script>
+<script src="/tuvi-paywall.js?v=25"></script>
 <script src="/tools-shared/hook-charts.js?v=2"></script>
 <script src="/poster.js?v=5"></script>
 <script src="/tools-shared/hook-facts.js?v=1"></script>
 <script src="/tools-shared/hook-layer.js?v=2"></script>
 <script src="/nav.js?v=26" data-icons-only></script>
 <script src="/shell.js?v=87"></script>
-<script src="/tools-shared/ai-loading-steps.js?v=9"></script>
+<script src="/tools-shared/ai-loading-steps.js?v=10"></script>
 <script src="/tools-shared/phan-pool.js?v=1"></script>
 <script>
 TuviForm.render('tuviFormHost', {mode:'compact', gioitinh:'nam'});

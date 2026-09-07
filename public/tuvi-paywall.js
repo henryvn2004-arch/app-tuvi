@@ -158,6 +158,14 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
 .tpw-msg{font-size:13px;color:#444;line-height:1.65;margin-bottom:14px}
 .tpw-center{padding:18px 22px;text-align:center}
 .tpw-banner{position:fixed;top:72px;left:50%;transform:translateX(-50%);background:#1E6B3C;color:#fff;padding:9px 22px;border-radius:8px;font-size:13px;font-weight:600;z-index:9999;box-shadow:0 4px 16px rgba(0,0,0,.18);white-space:nowrap;pointer-events:none;animation:tpw-fade .25s ease}
+@keyframes tpw-spin{to{transform:rotate(360deg)}}
+.tpw-spin{display:inline-block;width:13px;height:13px;flex:none;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;vertical-align:-2px;animation:tpw-spin .7s linear infinite}
+.tpw-btn.loading{cursor:wait;opacity:.85}
+.tpw-btn.loading .tpw-spin{margin-right:7px}
+/* Toast "đang xử lý" TOÀN CỤC khi requireCredits() đang chạy — bấm nút nào
+   trong ~58 trang tool gọi hàm này cũng thấy phản hồi ngay, không cần từng
+   trang tự lo spinner riêng cho nút của nó. */
+.tpw-busy{position:fixed;top:72px;left:50%;transform:translateX(-50%);background:#061A2E;color:#fff;padding:9px 20px;border-radius:8px;font-size:13px;font-weight:600;z-index:9999;box-shadow:0 4px 16px rgba(0,0,0,.18);white-space:nowrap;pointer-events:none;display:flex;align-items:center;gap:8px;animation:tpw-fade .2s ease}
 .tpw-hint{margin-top:7px;font-size:12.5px;line-height:1.55;color:#6b6b6b;font-family:inherit}
 .tpw-hint b{color:#061A2E;font-weight:700}
 .tpw-hint.low{color:#8a3a2c}
@@ -281,7 +289,7 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
       if (!el) {
         el = document.createElement('script');
         el.id = '_tvmb_prices_js';
-        el.src = '/tool-prices.js?v=5';
+        el.src = '/tool-prices.js?v=6';
         document.head.appendChild(el);
       }
       el.addEventListener('load', () => resolve());
@@ -571,6 +579,11 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
     if (cost == null) { _priceUnknown(); return false; }
     let balance = null;
     try { balance = await getBalance(); } catch (e) { balance = null; }
+    // Quy đổi ra VNĐ ngay cạnh số Lượng — Henry: "unlock thì ghi giá lượng -
+    // VNĐ luôn để user biết". `vndLabel` tự trả '' khi chưa đọc được
+    // `credit_packages` — khi đó KHÔNG hiện ngoặc rỗng, không đoán số.
+    const vndLbl = window.ToolPrices ? window.ToolPrices.vndLabel(cost) : '';
+    const vndSuffix = vndLbl ? ' (' + vndLbl + ')' : '';
 
     let money;
     if (balance == null) {
@@ -586,13 +599,13 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
       // tiền" mà không biết bao nhiêu. Giá đọc từ `tool_pricing` như mọi chỗ
       // khác; đọc hụt thì hàm này đã dừng từ trên (`_priceUnknown`), nên tới
       // được đây là chắc chắn có số thật, không phải số đoán.
-      money = 'Mở đầy đủ tốn <b>' + cost + ' Lượng</b> · bấm mở là trả tiền và đọc ngay, ' +
+      money = 'Mở đầy đủ tốn <b>' + cost + ' Lượng</b>' + vndSuffix + ' · bấm mở là trả tiền và đọc ngay, ' +
         'không cần đăng ký trước. <a onclick="TuviPaywall._login()">Đã có tài khoản? Đăng nhập</a>';
     } else if (balance < cost) {
-      money = 'Bạn còn <b>' + balance + '</b> · cần <b>' + cost + '</b> — thiếu ' + (cost - balance) +
+      money = 'Bạn còn <b>' + balance + '</b> · cần <b>' + cost + '</b>' + vndSuffix + ' — thiếu ' + (cost - balance) +
         ', <a href="/topup.html" onclick="' + _topupClick('preview', cost - balance) + '">nạp thêm →</a>';
     } else {
-      money = 'Bạn còn <b>' + balance + ' Lượng</b> · mở đầy đủ tốn <b>' + cost + '</b>';
+      money = 'Bạn còn <b>' + balance + ' Lượng</b> · mở đầy đủ tốn <b>' + cost + '</b>' + vndSuffix;
     }
 
     const items = (o.items || []).map((t) => '<li>' + _esc(t) + '</li>').join('');
@@ -631,7 +644,8 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
         try {
           if (window.Track) window.Track.event('unlock_click', { tool_id: product, meta: { cost: cost } });
         } catch (e) { /* đo hỏng không được chặn lượt mua */ }
-        requireCredits(slug, runUnlock);
+        _setBtnLoading(btn, true);
+        requireCredits(slug, runUnlock).finally(function () { _setBtnLoading(btn, false); });
       });
     }
 
@@ -817,6 +831,41 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
   }
 
   // ── Banner ────────────────────────────────────────────────────
+  // ── Spinner cho ĐÚNG nút vừa bấm (dùng ở lockPreview, nơi đã có sẵn `btn`) ──
+  function _setBtnLoading(btn, on) {
+    if (!btn) return;
+    if (on) {
+      if (btn.dataset.tpwLabel == null) btn.dataset.tpwLabel = btn.innerHTML;
+      btn.disabled = true;
+      btn.classList.add('loading');
+      btn.innerHTML = '<span class="tpw-spin" aria-hidden="true"></span>' + btn.dataset.tpwLabel;
+    } else {
+      btn.classList.remove('loading');
+      btn.disabled = false;
+      if (btn.dataset.tpwLabel != null) { btn.innerHTML = btn.dataset.tpwLabel; delete btn.dataset.tpwLabel; }
+    }
+  }
+
+  // ── Toast "đang xử lý" toàn cục cho requireCredits() ──────────────────
+  // requireCredits tự ĐỆ QUY (mở phiên ẩn danh xong gọi lại chính nó) nên
+  // đếm LƯỢT thay vì bật/tắt thẳng true/false — tắt sớm ở lượt trong sẽ giật
+  // mất spinner của lượt ngoài đang còn chờ.
+  var _busyEl = null, _busyDepth = 0;
+  function _busy(on) {
+    _busyDepth += on ? 1 : -1;
+    if (_busyDepth < 0) _busyDepth = 0;
+    if (_busyDepth > 0) {
+      if (_busyEl) return;
+      _busyEl = document.createElement('div');
+      _busyEl.className = 'tpw-busy';
+      _busyEl.innerHTML = '<span class="tpw-spin" aria-hidden="true"></span><span>Đang xử lý…</span>';
+      document.body.appendChild(_busyEl);
+    } else if (_busyEl) {
+      _busyEl.remove();
+      _busyEl = null;
+    }
+  }
+
   function _banner(msg) {
     const o = document.getElementById('_tpw_banner');
     if (o) o.remove();
@@ -865,65 +914,76 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
       return;
     }
 
-    // 2. Giá — chưa biết thì DỪNG. Bỏ hộp thoại xác nhận rồi nên con số trên
-    // nút là thứ cuối cùng người dùng đọc; chạy tiếp bằng một giá đoán là trừ
-    // Lượng cho một mức họ chưa từng nhìn thấy.
-    const { cost, title } = await _price();
-    if (cost == null) { _priceUnknown(); return; }
-
-    // 3. Re-access check (same slug = already paid)
-    if (slug) {
-      try {
-        const r = await fetch('/api/payment?action=check&slug=' + encodeURIComponent(slug) + '&userId=' + encodeURIComponent(userId));
-        const d = await r.json();
-        if (d.hasAccess) { await callback(); return; }
-      } catch(e) {}
-    }
-
-    // 4. Balance check
-    let balance = 0;
+    // Toast "Đang xử lý…" TOÀN CỤC từ đây — đúng khoảng lặng im trước đây:
+    // 2-4 lượt fetch (giá/kiểm quyền/số dư/trừ) không có gì báo, người dùng
+    // tưởng bấm không ăn rồi thoát trang. Tắt lại NGAY TRƯỚC khi gọi callback
+    // (không đợi finally) vì callback thường là lượt sinh AI 15-20s, trang đã
+    // tự có khung chờ riêng cho đoạn đó — chồng thêm toast này là thừa.
+    _busy(true);
     try {
-      const r = await fetch('/api/payment?action=balance&userId=' + encodeURIComponent(userId));
-      const d = await r.json();
-      balance = d.balance ?? 0;
-    } catch(e) {}
+      // 2. Giá — chưa biết thì DỪNG. Bỏ hộp thoại xác nhận rồi nên con số trên
+      // nút là thứ cuối cùng người dùng đọc; chạy tiếp bằng một giá đoán là trừ
+      // Lượng cho một mức họ chưa từng nhìn thấy.
+      const { cost, title } = await _price();
+      if (cost == null) { _priceUnknown(); return; }
 
-    if (balance < cost) { _insufficient(cost, balance, slug); return; }
-
-    // 5. Trừ → callback. KHÔNG hỏi xác nhận: giá đã ghi sẵn trên chính nút bấm
-    // và trong danh sách công cụ (và cả hai nay đọc từ `tool_pricing`, xem
-    // _fillPriceSlots) — hộp thoại chỉ lặp lại con số người dùng vừa đọc.
-    // Hộp thoại DUY NHẤT còn giữ là lúc KHÔNG ĐỦ Lượng (_insufficient, ở trên)
-    // và lúc chạm trần lượt tặng (_capReached) — hai ca người dùng cần biết vì
-    // sao không chạy được và đi đâu để nạp.
-    try {
-      const res = await fetch('/api/payment?action=deduct', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
-        body: JSON.stringify({
-          amount: cost,
-          product: _cfg?.product || '',
-          toolType: TOOL_TYPE[_cfg?.product] || ('use_' + (_cfg?.product || 'unknown')),
-          slug: slug || '',
-          description: title,
-        }),
-      });
-      const data = await res.json();
-
-      if (data.success || data.alreadyPaid) {
-        window.refreshNavCredits && window.refreshNavCredits();
-        _banner('✓ Đã trừ ' + cost + ' lượng · Còn lại ' + (data.balance ?? (balance - cost)) + ' lượng');
-        await callback();
-        return;
+      // 3. Re-access check (same slug = already paid)
+      if (slug) {
+        try {
+          const r = await fetch('/api/payment?action=check&slug=' + encodeURIComponent(slug) + '&userId=' + encodeURIComponent(userId));
+          const d = await r.json();
+          if (d.hasAccess) { _busy(false); await callback(); return; }
+        } catch(e) {}
       }
-      if (data.insufficientBalance) { _insufficient(cost, balance, slug); return; }
-      // Chạm trần lượt dùng thử miễn phí trong ngày (cầu dao ngân sách ảnh
-      // free). KHÔNG phải lỗi và KHÔNG mất Lượng — server chặn trước khi trừ
-      // — nên nói tử tế, đừng ném alert 'Lỗi:' làm người ta tưởng hỏng.
-      if (data.capReached) { _capReached(data.message); return; }
-      alert('Lỗi: ' + (data.error || 'Vui lòng thử lại.'));
-    } catch(e) {
-      alert('Lỗi kết nối: ' + e.message);
+
+      // 4. Balance check
+      let balance = 0;
+      try {
+        const r = await fetch('/api/payment?action=balance&userId=' + encodeURIComponent(userId));
+        const d = await r.json();
+        balance = d.balance ?? 0;
+      } catch(e) {}
+
+      if (balance < cost) { _insufficient(cost, balance, slug); return; }
+
+      // 5. Trừ → callback. KHÔNG hỏi xác nhận: giá đã ghi sẵn trên chính nút bấm
+      // và trong danh sách công cụ (và cả hai nay đọc từ `tool_pricing`, xem
+      // _fillPriceSlots) — hộp thoại chỉ lặp lại con số người dùng vừa đọc.
+      // Hộp thoại DUY NHẤT còn giữ là lúc KHÔNG ĐỦ Lượng (_insufficient, ở trên)
+      // và lúc chạm trần lượt tặng (_capReached) — hai ca người dùng cần biết vì
+      // sao không chạy được và đi đâu để nạp.
+      try {
+        const res = await fetch('/api/payment?action=deduct', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+          body: JSON.stringify({
+            amount: cost,
+            product: _cfg?.product || '',
+            toolType: TOOL_TYPE[_cfg?.product] || ('use_' + (_cfg?.product || 'unknown')),
+            slug: slug || '',
+            description: title,
+          }),
+        });
+        const data = await res.json();
+
+        if (data.success || data.alreadyPaid) {
+          window.refreshNavCredits && window.refreshNavCredits();
+          _banner('✓ Đã trừ ' + cost + ' lượng · Còn lại ' + (data.balance ?? (balance - cost)) + ' lượng');
+          _busy(false);
+          await callback();
+          return;
+        }
+        if (data.insufficientBalance) { _insufficient(cost, balance, slug); return; }
+        // Chạm trần lượt dùng thử miễn phí trong ngày (cầu dao ngân sách ảnh
+        // free). KHÔNG phải lỗi và KHÔNG mất Lượng — server chặn trước khi trừ
+        // — nên nói tử tế, đừng ném alert 'Lỗi:' làm người ta tưởng hỏng.
+        if (data.capReached) { _capReached(data.message); return; }
+        alert('Lỗi: ' + (data.error || 'Vui lòng thử lại.'));
+      } catch(e) {
+        alert('Lỗi kết nối: ' + e.message);
+      }
+    } finally {
+      _busy(false);
     }
   }
 

@@ -258,7 +258,7 @@ Nhận xét tổng (120-160 từ), viết bằng ngôn ngữ đời thường, �
     const dvDesc = DAI_VAN_DESC[dvNum] || '';
     return `
 
-PHẦN ${phan} — ĐẠI VẬN ${dvNum} (200-250 từ)
+PHẦN ${phan} — ĐẠI VẬN ${dvNum} (220-270 từ)
 ${dvDesc}
 
 Khối "ĐV${dvNum}:" trong === 9 ĐẠI VẬN === là dữ liệu DUY NHẤT được dùng cho phần này —
@@ -273,6 +273,9 @@ hết ra cho người đọc — chọn 1-2 điểm nặng ký nhất mà dịch
 - "[TAM PHƯƠNG TỨ CHÍNH · CÁT/SÁT/BẠI]", "[TUẦN/TRIỆT án ngữ]", "[CÁCH CỤC LIÊN
   QUAN]" chỉ dùng KHI nó thật sự đổi kết luận (đỡ được gì / phá chỗ nào) — không
   phải liệt kê đủ cho có, và không tự suy tam hợp ngoài khối này.
+- "[3 QUÃNG TRONG ĐẠI VẬN]" là điểm ƯỚC TÍNH nội suy giữa ĐV${dvNum} và 2 vận liền
+  kề (không phải điểm engine chấm riêng cho từng năm) — dùng để biết ĐÚNG CHIỀU
+  diễn biến trong 10 năm này, KHÔNG đọc số thập phân ra cho người đọc.
 - CẤM bịa sao/luận đoán không có trong khối này.
 - Bộ câu hỏi trọng tâm ở trên phải suy TỪ dữ liệu ĐV${dvNum} (tuổi, cung, luận đoán,
   cảnh báo) — câu nào dữ liệu không đủ căn cứ trực tiếp thì trả lời bằng xu hướng
@@ -282,11 +285,21 @@ MỞ ĐẦU bằng câu phán quyết NGẮN, in đậm, đứng riêng một d�
 thực (giai đoạn này dễ thở hay chật vật, nên tiến hay nên giữ), không mở đầu bằng
 thuật ngữ. Căn cứ: dòng "Scoring: … Tổng=X" của ĐV${dvNum} (chép đúng số, không tự
 tính lại; số thấp thì nói thẳng là giai đoạn khó, không né).
-Xuống dòng rồi viết 2-3 đoạn giải thích, dễ hiểu, bằng ngôn ngữ đời thường (đủ chỗ
-đào sâu bộ câu hỏi trọng tâm ở trên, không nhồi hết vào một đoạn):
+Xuống dòng rồi viết 3-4 đoạn giải thích, dễ hiểu, bằng ngôn ngữ đời thường (đủ chỗ
+đào sâu bộ câu hỏi trọng tâm ở trên VÀ tả diễn biến theo 3 quãng, không nhồi hết
+vào một đoạn):
 ① Vì sao: dịch "[LUẬN ĐOÁN]"/"[CẢNH BÁO]" thành chuyện đời thực — không liệt kê lại nguyên văn, không xướng tên sao/cách cục trừ khi cần cho rõ nghĩa (thì để gọn trong ngoặc).
-② Đào sâu 2-3 câu hỏi trọng tâm sát nhất với dữ liệu ĐV${dvNum} — dẫn chứng cụ thể, không bịa thêm.
-③ Kết luận thực tế: 1-2 câu tác động cụ thể + gợi ý nhẹ nếu cần.`;
+② Diễn biến theo thời gian TRONG chính ĐV${dvNum}: 10 năm này KHÔNG đổi tốt/xấu
+đồng loạt ngay từ năm đầu — tả theo 3 chặng như "[3 QUÃNG TRONG ĐẠI VẬN]" chỉ ra
+(so điểm chặng đầu/giữa/cuối để biết đang ĐI XUỐNG, ĐI LÊN hay CHẠM ĐÁY/ĐỈNH ở
+đâu): chặng ĐẦU còn hưởng/chịu dư ảnh hưởng của vận TRƯỚC nên chưa đổi ngay, chặng
+GIỮA mới là lúc thấy rõ nhất bản chất tốt/xấu của chính ĐV${dvNum}, chặng CUỐI bắt
+đầu ngả dần theo hướng của vận SAU. Viết 1 câu ngắn nêu đúng chiều đó (vd "mấy năm
+đầu vẫn còn ổn, sang giữa vận mới bắt đầu chững lại, rồi hồi lại dần về cuối"),
+không liệt kê số hay tên năm cụ thể.
+③ Đào sâu 1-2 câu hỏi trọng tâm sát nhất với dữ liệu ĐV${dvNum} (từ bộ câu hỏi ở
+trên) — dẫn chứng cụ thể, không bịa thêm.
+④ Kết luận thực tế: 1-2 câu tác động cụ thể + gợi ý nhẹ nếu cần.`;
   }
 
   if (phan === 24) return `
