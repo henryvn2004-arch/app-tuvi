@@ -376,8 +376,15 @@ async function runPost(request: NextRequest) {
     // KHÔNG cụt) — 400 từ mà model hay overshoot thêm 10-30% thì sát trần cũ,
     // rủi ro cụt giữa câu (đúng bệnh đã đo 7,9%, xem chú thích trên). Phần 2
     // (Mệnh) vẫn giữ nguyên 220-280 từ, dư chỗ trong cùng ngân sách — không hại.
+    // phan 15-23 nới 1650→2300→2500 (2026-09-07, Henry, 2 lượt cùng ngày):
+    // lượt 1 thêm DAI_VAN_DESC (bộ câu hỏi trọng tâm riêng từng ĐV, cùng cấu
+    // trúc CUNG_DESC) + bước "đào sâu câu hỏi trọng tâm", 120-160→200-250 từ.
+    // Lượt 2 merge với PR #745/#751 (base, "3 QUÃNG TRONG ĐẠI VẬN" — narrative
+    // diễn biến theo thời gian trong chính ĐV, nội suy PCHIP) — bố cục giờ có
+    // 4 mục (① vì sao ② 3 quãng thời gian ③ đào sâu câu hỏi trọng tâm ④ kết
+    // luận) thay vì 2-3, nên nới thêm 200-250→220-270 từ, trần cộng theo.
     const maxTok = THINK_BUDGET + (phan === 1 ? 3000 : phan === 14 ? 4500 : phan === 24 ? 2100
-      : (phan >= 2 && phan <= 13) ? 2400 : (phan >= 15 && phan <= 23) ? 1650 : 1500);
+      : (phan >= 2 && phan <= 13) ? 2400 : (phan >= 15 && phan <= 23) ? 2500 : 1500);
     // 2026-09-02 — hạ độ nghĩ cho ĐÚNG nhóm route văn dài này. A/B mù 48 bản
     // (2 lá số × 8 phần × 3 nhánh, prompt thật): effort 'low' rẻ hơn 39%
     // output token mà chữ ra còn nhiều hơn, 16 cặp chấm mù không phân biệt

@@ -73,7 +73,7 @@ Nếu dữ liệu có dòng "Chữ ký dựa theo chữ": chỉ dùng để gọ
 Nhắc rằng chữ ký phản ánh trạng thái tâm lý lúc ký — thư thái hay bức bối — không phải một bản án cố định. Đây là lời cổ nhân (Tôn Quá Đình), không phải câu an ủi suông.
 
 ### 5. Tổng Hợp
-Điểm mạnh, điểm cần luyện (PHẢI CÓ, dùng đúng gợi ý đã cho nếu có), kết bằng "Thư giả, tâm hoạ dã" (chữ là hoạ đồ của tâm).
+Điểm mạnh, điểm cần luyện (PHẢI CÓ, dùng đúng gợi ý đã cho nếu có). Tối thiểu phải trả lời được: Chữ ký này cho người đối diện (đối tác, khách hàng, người ký hợp đồng cùng) ấn tượng đầu tiên thế nào — đáng tin cậy, cẩn trọng, phóng khoáng hay vội vàng, thiếu chắc chắn? Nếu chỉ được luyện lại MỘT điểm duy nhất trong chữ ký để "vượng" hơn theo cổ pháp, nên tập trung vào đâu và luyện thế nào? Kết bằng "Thư giả, tâm hoạ dã" (chữ là hoạ đồ của tâm).
 
 PHÁN QUYẾT BẮT BUỘC — NEO VÀO SỐ ĐÃ ĐO:
 - MỞ ĐẦU mỗi phần bằng MỘT câu chốt in đậm neo vào con số đã đo (điểm tổng, điểm trục /100, hay tỉ lệ ngũ hành nét): phần này mạnh hay yếu, đáng chú ý ở đâu. Rồi mới giải thích vì sao.
