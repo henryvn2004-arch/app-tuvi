@@ -18,6 +18,7 @@
 .form-card{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);max-width:640px}
 .form-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:3px}
 .form-card p.sub{font-size:12.5px;color:var(--text-lt);margin-bottom:14px}
+.sample-link{display:inline-block;font-size:12.5px;color:var(--tx-blue);margin-bottom:12px}
 .frow{display:flex;gap:11px;flex-wrap:wrap;align-items:flex-end;margin-bottom:12px}
 /* Giữ chỗ cho form khai sinh. `TuviForm.render` chạy ngay trong lúc phân tích
    HTML, nhưng chỉ SAU khi `tuvi-form.js` nạp xong — mà đứng trước nó là cả một dãy
@@ -181,6 +182,7 @@
         <h2>Nhập thông tin để lập lá số &amp; luận chu trình cuộc đời</h2>
         <p class="sub">Chu Trình Cuộc Đời soi 9 đại vận trọn đời và tiểu vận năm nay từ lá số của bạn. Có giai đoạn tiền bạc, tình duyên, sự nghiệp cùng lúc xuống dốc — mà chẳng biết đó là vận hạn hay do mình? Từ lá số có sẵn, nhận bản đồ trọn đời: giai đoạn nào thuận, giai đoạn nào cần cẩn trọng.</p>
         <p class="price-note" data-tvp-price-label="chu-trinh-cuoc-doi">…</p>
+        <div id="sampleLinkHost"></div>
         <div id="tuviFormHost"></div>
         <div class="frow" style="margin-bottom:0">
           <div class="fg" style="width:90px"><label>Năm luận</label><select id="inpNamxem"></select></div>
@@ -258,6 +260,23 @@ window.SHELL_INTRO={key:'chu-trinh-cuoc-doi'};</script>
 // sinh lịch sử với standalone) ──
 TuviForm.render('tuviFormHost', {mode:'compact', gioitinh:'nam'});
 NamLuanSelect.mount('inpNamxem');
+
+// ── Nút "Xem mẫu" + "Hướng dẫn" — mở PDF mẫu (lá số + toàn bộ 11 phần, sinh
+// sẵn bằng scripts/gen-tool-sample.mjs) và video demo (quay tay, CHƯA làm —
+// Henry đánh dấu "nếu tiện", ưu tiên sau PDF+văn mẫu). Cả hai để TRỐNG khi
+// chưa có asset thật — ẨN hẳn thay vì trỏ link chết, cùng luật "đọc hụt thì
+// từ chối, không đoán/không hiện thứ hỏng" của CLAUDE.md. Điền URL vào đây
+// sau khi chạy script/quay video xong.
+var SAMPLE_PDF_URL='';
+var DEMO_VIDEO_URL='';
+(function(){
+  var host=document.getElementById('sampleLinkHost');
+  if(!host) return;
+  var links=[];
+  if(SAMPLE_PDF_URL) links.push('<a href="'+SAMPLE_PDF_URL+'" target="_blank" rel="noopener" class="sample-link">↗ Xem mẫu (PDF, lá số khác)</a>');
+  if(DEMO_VIDEO_URL) links.push('<a href="'+DEMO_VIDEO_URL+'" target="_blank" rel="noopener" class="sample-link">▶ Hướng dẫn (video)</a>');
+  host.innerHTML=links.join(' &nbsp;·&nbsp; ');
+})();
 
 function scoreColor(t){ return t>=7?'var(--green)':t>=5?'var(--gold-soft)':'var(--red)'; }
 
