@@ -439,11 +439,24 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
   let _lockEl = null;
   function _closeLock() { if (_lockEl) { _lockEl.remove(); _lockEl = null; } }
 
+  // `offsetParent === null` là cách rẻ nhất để biết một phần tử ĐANG bị một tổ
+  // tiên nào đó giấu (`display:none`) — khác "cuộn khỏi màn hình", trường hợp
+  // đó vẫn có offsetParent nên không bị loại oan (đã có `scrollIntoView` lo).
+  // Cần kiểm vì nhiều tool (chan-dung-vo-chong, chan-dung-tien-kiep,
+  // duyen-no-tien-kiep, nguoi-khac, day-con…) chỉ khai `data-tvp-price` trên
+  // NÚT trong `#birthPanel` — panel đó bị ẩn ngay khi có kết quả xem trước, nên
+  // neo cũ (`_hintAnchors`) trỏ vào một nút đã giấu. Không kiểm là tấm khoá mềm
+  // dựng ĐÚNG DOM nhưng KHÔNG AI THẤY — bấm "Mở khoá" xong tường biến mất mà
+  // không có gì thay thế, y hệt như nút không phản hồi.
+  function _visible(el) { return !!(el && el.offsetParent !== null); }
+
   function _softLock(inner) {
-    const declared = document.querySelector('[data-tvp-lock]');
+    const declaredEl = document.querySelector('[data-tvp-lock]');
+    const declared = declaredEl && _visible(declaredEl) ? declaredEl : null;
     const btn = _hintAnchors[(_cfg && _cfg.product) || ''] || null;
-    const after = btn && (btn._tpwHint && btn._tpwHint.isConnected ? btn._tpwHint : btn);
-    if (!declared && (!after || !after.parentNode)) return false;
+    const afterEl = btn && (btn._tpwHint && btn._tpwHint.isConnected ? btn._tpwHint : btn);
+    const after = afterEl && afterEl.parentNode && _visible(afterEl) ? afterEl : null;
+    if (!declared && !after) return false;
     _css();
     _closeLock();
     _lockEl = document.createElement('div');
