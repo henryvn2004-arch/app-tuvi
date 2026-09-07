@@ -2014,7 +2014,7 @@
   // Trạng thái ví cho rail. `price` để null nghĩa là CHƯA BIẾT giá → đồng hồ im
   // lặng thay vì đoán. Đoán giá rồi hiện sai số câu là nói sai với người dùng
   // ngay trên thứ họ dùng để quyết định.
-  var _rc = { balance: null, price: null, freeTurns: 0, lasoPrice: null, vndPerCredit: 1000, loaded: false,
+  var _rc = { balance: null, price: null, freeTurns: 0, lasoPrice: null, vndPerCredit: 500, loaded: false,
               anon: false, anonLeft: null, anonCap: 0 };
 
   // anon_id do track.js sinh (localStorage 'tvmb_anon'). Chỉ để đếm lượt DÙNG
@@ -2059,7 +2059,7 @@
           _rc.anonLeft = typeof d.anonTrialLeft === 'number' ? d.anonTrialLeft : null;
           _rc.anonCap = d.anonTrialCap || 0;
           _rc.lasoPrice = typeof d.lasoPrice === 'number' ? d.lasoPrice : null;
-          _rc.vndPerCredit = d.vndPerCredit || 1000;
+          _rc.vndPerCredit = d.vndPerCredit || 500;
           _rc.loaded = true;
           renderRailMeter();
           return;
@@ -2069,7 +2069,7 @@
         _rc.price = typeof d.railPrice === 'number' ? d.railPrice : null;
         _rc.lasoPrice = typeof d.lasoPrice === 'number' ? d.lasoPrice : null;
         _rc.freeTurns = d.freeTurns || 0;
-        _rc.vndPerCredit = d.vndPerCredit || 1000;
+        _rc.vndPerCredit = d.vndPerCredit || 500;
         _rc.loaded = true;
         renderRailMeter();
         paintSidebarBalance();
@@ -2169,7 +2169,7 @@
   }
 
   function creditVnd(c) {
-    var v = Math.ceil((c * (_rc.vndPerCredit || 1000)) / 1000) * 1000;
+    var v = Math.ceil((c * (_rc.vndPerCredit || 500)) / 1000) * 1000;
     return v.toLocaleString('vi-VN') + 'đ';
   }
 

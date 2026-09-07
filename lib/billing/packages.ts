@@ -22,11 +22,21 @@ export interface CreditPackage {
 // giá cũ). Đợt tăng giá 2026-08-30 (Khởi Đầu 99k→199k, Phổ Thông 199k→399k,
 // Cao Cấp 499k→699k, VIP giữ 999k nhưng tăng Lượng) đã cập nhật `credit_packages`
 // — sửa NƠI NÀY theo, đừng để hai nguồn lệch nhau.
+//
+// 🔴 2026-09-06 (Pha 2 hard paywall, Henry chốt "1 lượng = 500VND"): GIÁ TIỀN
+// GIỮ NGUYÊN, chỉ nâng số Lượng mỗi gói — 250→350 · 600→800 · 1200→1600 ·
+// 2000→2700. Mục đích là hạ giá THẬT của một bản luận cho khách quảng cáo:
+// Luận Giải 150 Lượng qua ô nạp lẻ từ 120.000đ xuống 86.000đ.
+//
+// ⚠️ THỨ TỰ TRIỂN KHAI: bảng này lên TRƯỚC, `credit_packages` trên DB sửa SAU
+// (ngược với thói quen "data trước"). Trong khoảng giữa, DB vẫn trả số CŨ và
+// đó mới là số đúng với thứ đang thu; đường lùi này chỉ chạy khi DB đọc hụt,
+// và lúc đó cấp DƯ vài chục Lượng còn hơn cấp HỤT cho người vừa trả tiền.
 const FALLBACK: Record<string, CreditPackage> = {
-  '50':  { packageId: '50',  credits: 250,  amountVnd: 199_000, amountUsd: '8.00',  label: 'Khởi Đầu' },
-  '120': { packageId: '120', credits: 600,  amountVnd: 399_000, amountUsd: '16.00', label: 'Phổ Thông' },
-  '350': { packageId: '350', credits: 1200, amountVnd: 699_000, amountUsd: '28.00', label: 'Cao Cấp' },
-  '800': { packageId: '800', credits: 2000, amountVnd: 999_000, amountUsd: '40.00', label: 'VIP' },
+  '50':  { packageId: '50',  credits: 350,  amountVnd: 199_000, amountUsd: '8.00',  label: 'Khởi Đầu' },
+  '120': { packageId: '120', credits: 800,  amountVnd: 399_000, amountUsd: '16.00', label: 'Phổ Thông' },
+  '350': { packageId: '350', credits: 1600, amountVnd: 699_000, amountUsd: '28.00', label: 'Cao Cấp' },
+  '800': { packageId: '800', credits: 2700, amountVnd: 999_000, amountUsd: '40.00', label: 'VIP' },
 };
 
 const TTL_MS = 60_000;
@@ -145,7 +155,11 @@ export function invalidatePackages() {
  */
 export async function vndPerCredit(): Promise<number> {
   const pkgs = Object.values(await getPackages()).filter((p) => p.credits > 0 && p.amountVnd > 0);
-  if (!pkgs.length) return 1000;
+  // Bảng gói rỗng HOÀN TOÀN (cả DB lẫn FALLBACK) — gần như không xảy ra, nhưng
+  // con số ở đây vẫn phải bám thang giá đang chạy. Để 1000 sau đợt 2026-09-06
+  // là thổi giá 1 Lượng lên GẤP ĐÔI mức thật (499đ), tức mọi chỗ quy đổi
+  // Lượng→VNĐ nói gấp đôi mà không có gì báo.
+  if (!pkgs.length) return 500;
   // getPackages() không giữ `sort_order` → sắp theo amountVnd tăng dần, cùng
   // thứ tự mà sort_order đang thể hiện (gói rẻ nhất trước).
   const byPrice = [...pkgs].sort((a, b) => a.amountVnd - b.amountVnd);

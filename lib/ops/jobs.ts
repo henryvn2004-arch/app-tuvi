@@ -149,7 +149,8 @@ export const JOBS: JobSpec[] = [
   // `since` từng ghi '2026-07-30' — SAI, code merge 01/08 21:57 VN (PR #347).
   // Chính dòng này đẻ ra cảnh báo giả lúc 22:00 cùng ngày; xem chú thích `since`.
   { key: 'prune-anon-trial', label: 'Dọn nhật ký dùng thử', source: 'vercel', everyMinutes: D,
-    schedule: '09:00 VN hằng ngày', sink: 'anon_rail_hits', path: '/api/cron/prune-anon-trial',
+    schedule: '09:00 VN hằng ngày', sink: 'anon_rail_hits + anon_preview_hits + luan_preview_cache',
+    path: '/api/cron/prune-anon-trial',
     since: '2026-08-01' },
   // `since` = ngày merge: job chưa từng chạy nên không có dòng nào trong
   // cron_runs; thiếu mốc này thì bộ dò lập tức kêu "CHƯA HỀ chạy" — đúng loại

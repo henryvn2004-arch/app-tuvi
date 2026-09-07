@@ -22,7 +22,7 @@ const GEMINI_KEY = process.env.GEMINI_API_KEY || '';
 // GEMINI_MODEL (vd 'gemini-2.5-flash-lite' cho tool nhẹ nếu muốn tiết kiệm thêm).
 // Mặc định PHẢI khớp lib/llm/complete.ts — hai file cùng đọc một env, lệch
 // mặc định là hai nhánh chạy hai model khác nhau khi env trống.
-const GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-3.8-flash';
+export const GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-3.8-flash';
 const GEMINI_BASE = 'https://generativelanguage.googleapis.com/v1beta/models';
 
 // Kịch bản AN TOÀN cho Gemini: prose-thuần, dữ liệu đã tính sẵn, KHÔNG cần
@@ -45,6 +45,14 @@ export const GEMINI_PROSE_SCENARIOS = new Set<string>([
   // Gemini. CHƯA TEST THỰC TẾ 3 kịch bản này qua Gemini — theo dõi chất lượng
   // câu trả lời sau khi bật.
   'cong-so', 'day-con', 'huong-nghiep-tre',
+  // 'nhan-mach' (Sổ Nhân Mạch) — CÙNG dạng data-driven qua wrapper text như
+  // 3 dòng trên (`nhanMachRailWrapper` nối text vào system, không khai tool).
+  // Nó là kịch bản DUY NHẤT trong `ScenarioType` (lib/contract/v1.ts) vắng mặt
+  // ở cả ba nhóm Gemini, nên `geminiEligible` trả false và mọi lượt rail của
+  // nó rơi thẳng xuống Opus 5 — bất kể `chat.provider_routes._default='gemini'`.
+  // Ba nhóm này là ALLOWLIST: thêm kịch bản mới vào `ScenarioType` mà quên
+  // thêm vào đây là nó âm thầm chạy Opus, không có gì báo.
+  'nhan-mach',
 ]);
 
 // Kịch bản VISION (đọc ảnh): nhân tướng qua ảnh mặt + phong thủy qua ảnh nhà.
@@ -89,6 +97,42 @@ export function geminiProseCapable(scenarioType: string, hasImages: boolean): bo
   if (!inProse && !inVision) return false;
   if (hasImages && !inVision) return false;
   return true;
+}
+
+/**
+ * Usage THẬT của một lượt Gemini, đã đổi sang shape `LlmUsage` của
+ * lib/agent/usage.ts (Anthropic-style 4 trường) để run.ts cộng dồn chung một
+ * biến với nhánh Anthropic, khỏi phải có hai đường tính tiền.
+ *
+ * 🔴 VÌ SAO PHẢI CÓ: trước bản này hai hàm stream dưới đây KHÔNG trả usage, và
+ * run.ts return SỚM ngay sau khi chúng chạy xong — tức MỌI lượt rail đi Gemini
+ * không ghi một dòng `llm_usage` nào. Bảng chi phí vì thế chỉ còn thấy nhánh
+ * Anthropic, và người đọc kết luận ngược hẳn sự thật ("rail đang chạy Opus").
+ *
+ * Gemini không có cache write/read hai tầng như Anthropic: `cachedContentTokenCount`
+ * là token ĐƯỢC đọc lại từ cache, ánh xạ sang `cache_read_input_tokens`; phần
+ * còn lại của `promptTokenCount` mới là input tính tiền đầy đủ. Không bịa
+ * `cache_creation_input_tokens` (Gemini không báo) — để 0.
+ */
+export interface GeminiUsage {
+  input_tokens: number;
+  cache_creation_input_tokens: number;
+  cache_read_input_tokens: number;
+  output_tokens: number;
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function readUsage(evt: any): GeminiUsage | null {
+  const u = evt?.usageMetadata;
+  if (!u) return null;
+  const cached = Number(u.cachedContentTokenCount) || 0;
+  const prompt = Number(u.promptTokenCount) || 0;
+  return {
+    input_tokens: Math.max(0, prompt - cached),
+    cache_creation_input_tokens: 0,
+    cache_read_input_tokens: cached,
+    output_tokens: Number(u.candidatesTokenCount) || 0,
+  };
 }
 
 const RETRYABLE = new Set([429, 500, 502, 503, 504]);
@@ -140,6 +184,9 @@ export async function streamGemini(
   convo: any[],
   cfg: ChatConfig,
   send: (s: string) => void,
+  // Gemini gửi `usageMetadata` trong CHUNK CUỐI của stream — bắt tại chỗ rồi
+  // đẩy ngược ra, vì sau khi hàm này trả về thì không còn cách nào hỏi lại.
+  onUsage?: (u: GeminiUsage) => void,
 ): Promise<string[]> {
   const contents = toGeminiContents(convo);
   if (!contents.length) throw new Error('gemini: convo rỗng');
@@ -228,6 +275,8 @@ export async function streamGemini(
         if (!json || json === '[DONE]') continue;
         try {
           const evt = JSON.parse(json);
+          const u = readUsage(evt);
+          if (u && onUsage) onUsage(u);
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           const parts = evt?.candidates?.[0]?.content?.parts as any[] | undefined;
           if (parts) {
@@ -362,6 +411,7 @@ export async function streamGeminiTurn(
   geminiTools: any[] | null,
   cfg: ChatConfig,
   send: (s: string) => void,
+  onUsage?: (u: GeminiUsage) => void,
 ): Promise<{
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   functionCalls: { name: string; args: any }[];
@@ -453,6 +503,8 @@ export async function streamGeminiTurn(
         if (!json || json === '[DONE]') continue;
         try {
           const evt = JSON.parse(json);
+          const u = readUsage(evt);
+          if (u && onUsage) onUsage(u);
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           const parts = evt?.candidates?.[0]?.content?.parts as any[] | undefined;
           if (parts) {

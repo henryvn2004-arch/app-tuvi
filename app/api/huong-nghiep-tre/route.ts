@@ -19,6 +19,8 @@ import { refundIfSystemFailure } from '@/lib/ops/refund';
 import { llmTextFull } from '@/lib/llm/complete';
 import { logLlmUsage, logLlmParseFail } from '@/lib/agent/usage';
 import { railFreeGrant, railFreeTurnsPerGen } from '@/lib/billing/viral-budget';
+import { previewGate, previewIpHash } from '@/lib/billing/anon-preview';
+import { previewOf } from '@/lib/llm/preview-fields';
 import { computeLaso } from '@/lib/engine/laso';
 import {
   computeHuongNghiepTre,
@@ -129,11 +131,48 @@ function normMuc(arr: unknown, max: number): { viec: string; viSao: string }[] {
     .filter((m) => m.viec);
 }
 
+// ── BẢN XEM TRƯỚC (hard paywall Pha 3) ──────────────────────────────────────
+// Miễn phí ĐÚNG 2/8 trường văn xuôi: `nhinRaCon` (chân dung đứa trẻ) +
+// `viSaoHuongNay` (vì sao lá số nghiêng về hướng này) — cùng lý do đã chọn ở
+// day-con/nguoi-khac: hai đoạn đọc xong là hook. `loLang` CỐ Ý VẪN KHOÁ dù nó
+// trả lời thẳng điều cha mẹ đang lo và là "mục họ đọc trước tiên" — đúng vì
+// thế nó là sản phẩm, không phải quà.
+const PREVIEW_KEEP_PROSE = ['nhinRaCon', 'viSaoHuongNay'] as const;
+
+/** Dựng bản xem trước từ payload ĐẦY ĐỦ — dùng CHUNG cho cả nhánh cache-hit lẫn
+ *  nhánh vừa sinh xong trong `runPreview`. `previewOf` chỉ chạy trên phần văn
+ *  xuôi tách riêng, không chạy trên cả `full`: `full` còn mang `huong` (đủ 3
+ *  hướng, xem `hoSoDayDu`) — trường đó đã bị `hoSoTinhThu` tự cắt xuống còn
+ *  `huongDau` (1 hướng), chạy allowlist trên `full` sẽ liệt `huong` vào
+ *  `previewLocked` dù `hoSoTinhThu` đã lo việc đó theo cách khác. */
+function previewShape(full: Record<string, unknown>, p: HuongNghiepTreProfile) {
+  const proseFields = {
+    nhinRaCon: full.nhinRaCon,
+    viSaoHuongNay: full.viSaoHuongNay,
+    batDauTuDau: full.batDauTuDau,
+    tranhLam: full.tranhLam,
+    noiTheNao: full.noiTheNao,
+    loLang: full.loLang,
+    mocKeTiep: full.mocKeTiep,
+    motCau: full.motCau,
+  };
+  return {
+    success: true,
+    preview: true,
+    ten: String(full.ten || ''),
+    ...hoSoTinhThu(p),
+    ...previewOf(proseFields, PREVIEW_KEEP_PROSE, TOOL_ID),
+  };
+}
+
 async function buildReport(
   p: HuongNghiepTreProfile,
   ten: string,
   userId: string,
   key: string,
+  // Lượt XEM TRƯỚC: vẫn gọi model và vẫn ghi cache (để lượt trả tiền sau đó
+  // KHÔNG phải sinh lại), nhưng TUYỆT ĐỐI không chạm hai thứ dưới đây.
+  preview = false,
 ) {
   const prompt = buildHuongNghiepTrePrompt(p, ten);
 
@@ -227,12 +266,19 @@ async function buildReport(
     huong: p.huong.goiY[0]?.id || '',
     huong_ten: p.huong.goiY[0]?.ten || '',
   };
-  insertHistoryRow(TOOL_ID, { ...row, user_id: userId, laso_key: key });
-  void railFreeTurnsPerGen().then((n) => railFreeGrant(userId, n)).catch(() => {});
-  // Ghi đè CHỈ ở nhánh dựng-lại-vì-shape-cũ. Không có vế này thì dòng hỏng nằm
-  // nguyên và mỗi lượt xem lại đốt thêm một lượt model.
+  // 🔴 HAI DÒNG NÀY LÀ ĐƯỜNG TIỀN, KHÔNG PHẢI GHI SỔ — cùng luật đã áp cho
+  // day-con/nguoi-khac: `insertHistoryRow` chính là thứ `userOwnsLaso` đọc để
+  // trả lời "người này đã trả tiền cho lá số đó chưa", và `railFreeGrant` phát
+  // Lượng rail. Gọi cả hai ở lượt xem trước là phát không cả tool.
+  if (!preview) {
+    insertHistoryRow(TOOL_ID, { ...row, user_id: userId, laso_key: key });
+    void railFreeTurnsPerGen().then((n) => railFreeGrant(userId, n)).catch(() => {});
+  }
+  // Ghi đè CẢ ở lượt xem trước — CỐ Ý, xem chú thích tương ứng ở day-con.
+  // (Đồng thời vẫn giữ tác dụng gốc: nhánh dựng-lại-vì-shape-cũ không nằm mãi
+  // ở trạng thái hỏng.)
   CACHE.put('main', key, { payload, row }, userId);
-  return ok(payload);
+  return preview ? ok(previewShape(payload, p)) : ok(payload);
 }
 
 /**
@@ -251,13 +297,34 @@ async function runPreview(request: NextRequest) {
   const r = computeLaso(birth);
   if (!r.ok || !r.ls) return err(r.error || 'Không lập được lá số.', 400);
   const gender = birth.gender === 'nu' ? ('nu' as const) : ('nam' as const);
-  const p = computeHuongNghiepTre(r.ls, gender, resolveMoiLo(String(body.moiLo || '')));
-  return ok({
-    success: true,
-    preview: true,
-    ten: String(body.name || '').trim().slice(0, 60),
-    ...hoSoTinhThu(p),
-  });
+  const moiLo = resolveMoiLo(String(body.moiLo || ''));
+  const ten = String(body.name || '').trim().slice(0, 60);
+  const p = computeHuongNghiepTre(r.ls, gender, moiLo);
+
+  const khung = { success: true, preview: true, ten, ...hoSoTinhThu(p) };
+
+  // Lá số đã trưởng thành: KHÔNG monetize (xem chốt chặn ở `runPost`) nên
+  // KHÔNG gọi model ở đây — client tự bàn giao sang trang khác ngay khi thấy
+  // `laTreEm===false`, chưa từng chạm tới `_doGenerate`. Giữ nguyên hành vi
+  // 0 lượt LLM đã có từ trước cho ca này.
+  if (!p.laTreEm) return ok(khung);
+
+  const key = lasoKey(birth, cacheExtra(moiLo, p.namXem));
+  const { cached } = await CACHE.get('main', key);
+  if (cached) {
+    CACHE.touch('main', key);
+    return ok(previewShape(cached.payload as Record<string, unknown>, p));
+  }
+
+  const auth = await authUserFromRequest(request);
+  const pKey = 'error' in auth ? String(body.anonId || '') : auth.user.id;
+  const gate = await previewGate(pKey, previewIpHash(request), TOOL_ID);
+  if (!gate.allowed) {
+    console.error(`[huong-nghiep-tre] xem trước bị chặn (${gate.reason})`);
+    return ok(khung);
+  }
+
+  return buildReport(p, ten, 'error' in auth ? '' : auth.user.id, key, true);
 }
 
 async function runPost(request: NextRequest) {

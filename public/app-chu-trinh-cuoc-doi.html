@@ -9,7 +9,7 @@
 <link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/fonts/noto-serif.css?v=1">
-<link rel="stylesheet" href="/shell.css?v=33">
+<link rel="stylesheet" href="/shell.css?v=34">
 <link rel="stylesheet" href="/laso-chart.css?v=3">
 <style>
 /* Center riêng của trang Chu Trình Cuộc Đời — CÙNG khuôn CSS với app-luan-giai.html
@@ -132,9 +132,11 @@
 .lg-unlock p{font-size:12.5px;color:var(--text-lt);margin-top:8px}
 .lg-progress{font-size:12.5px;color:var(--text-lt);margin-bottom:16px;padding:10px 0;border-bottom:1px solid var(--line)}
 /* Khách chưa đăng ký: phần 2-11 vẫn hiện ĐỦ cấu trúc (tiêu đề, để thấy có
-   11 phần thật) — chỉ NỘI DUNG bên trong bị làm mờ bằng .tpw-real-lock +
-   badge .tpw-lock-badge (dùng chung, khai trong tuvi-paywall.js), KHÔNG phải
-   ẩn hẳn khỏi DOM. */
+   11 phần thật) — nội dung bên trong thay bằng Ô GIỮ CHỖ thật sự KHÔNG một
+   chữ nào (`TuviPaywall.placeholderHtml`), không phải làm mờ nội dung thật
+   như bản trước (Henry: "che hết luôn, đừng vừa hiện vừa che"). Cùng bản vá
+   `app-luan-giai.html` (tool anh em, xem buildLockedPlaceholderHtml ở đó) đã
+   làm — trang này lúc đó bị bỏ sót. */
 </style>
 </head>
 <body>
@@ -236,7 +238,7 @@ window.SHELL_INTRO={key:'chu-trinh-cuoc-doi'};</script>
 <script src="/tools-shared/nam-luan-select.js?v=1"></script>
 <script src="/tools-shared/cung-ngay-sinh.js?v=2"></script>
 <script src="/auth.js?v=2"></script>
-<script src="/tuvi-paywall.js?v=22"></script>
+<script src="/tuvi-paywall.js?v=23"></script>
 <script src="/tools-shared/hook-charts.js?v=2"></script>
 <script src="/poster.js?v=5"></script>
 <script src="/tools-shared/hook-facts.js?v=1"></script>
@@ -455,20 +457,25 @@ function phanRelatedHtml(ep){
     }).join('')
     +'</div>';
 }
-// `locked` = khách chưa đăng ký + không phải phần 1 → nội dung DETERMINISTIC
-// thật vẫn dựng vào DOM như bình thường (tiêu đề luôn thấy được, đủ 11 phần),
-// chỉ CHÍNH `body` bị bọc trong .tpw-real-lock để CSS làm mờ + gắn badge 🔒
-// cạnh tiêu đề — khoá-mini AI (`lock`) và nút hỏi trợ lý đứng NGOÀI khối mờ đó
-// nên luôn đọc được/bấm được dù nội dung phía trên có bị mờ hay không.
+// `locked` = khách chưa đăng ký + không phải phần 1 → tiêu đề vẫn dựng vào
+// DOM như bình thường (thấy đủ 11 phần thật), nhưng KHÔNG render
+// `LuanGiaiCore.buildPreGenHtml` (deterministic — cách cục/điểm số/quy tắc)
+// vào DOM luôn — thay bằng ô giữ chỗ, không một chữ thật nào (đúng mẫu
+// `buildLockedPlaceholderHtml` của app-luan-giai.html). Khoá-mini AI (`lock`)
+// và nút hỏi trợ lý đứng NGOÀI ô giữ chỗ nên luôn đọc được/bấm được.
 function buildPhanSection(p,ep,label,ls,locked){
-  var pre=LuanGiaiCore.buildPreGenHtml(ep,ls);
-  var raw=pre||'<div class="phan-empty">Phần này luận theo tổng thể lá số — bấm nút dưới để trợ lý luận sâu.</div>';
-  // Khối TÍNH TOÁN (deterministic — cách cục/điểm số/quy tắc) GẤP LẠI mặc định
-  // — xem lý do đầy đủ ở app-luan-giai.html (buildPhanSection). CHỈ áp cho
-  // phần KHÔNG bị khoá.
-  var body=(pre&&!locked)?('<details class="lg-calc"><summary>Xem cơ sở tính toán</summary>'+raw+'</details>'):raw;
-  var bodyHtml=locked?'<div class="tpw-real-lock">'+body+'</div>':body;
-  var tag=locked?TuviPaywall.lockBadge('Khoá'):'';
+  var bodyHtml,tag;
+  if(locked){
+    bodyHtml=TuviPaywall.placeholderHtml(p);
+    tag=TuviPaywall.lockBadge('Khoá');
+  }else{
+    var pre=LuanGiaiCore.buildPreGenHtml(ep,ls);
+    var raw=pre||'<div class="phan-empty">Phần này luận theo tổng thể lá số — bấm nút dưới để trợ lý luận sâu.</div>';
+    // Khối TÍNH TOÁN (deterministic — cách cục/điểm số/quy tắc) GẤP LẠI mặc
+    // định — xem lý do đầy đủ ở app-luan-giai.html (buildPhanSection).
+    bodyHtml=pre?('<details class="lg-calc"><summary>Xem cơ sở tính toán</summary>'+raw+'</details>'):raw;
+    tag='';
+  }
   // Khoá-mini (ẨN mặc định) — id dùng LOCAL p (chỉ để `_paintSecLocks` bật/tắt
   // đồng loạt, không cần khớp gì bên ngoài trang này). `part:p>1?p:null` →
   // bấm chỉ mở ĐÚNG phần đó (23 Lượng/phần, tool_pricing.credits_per_part),

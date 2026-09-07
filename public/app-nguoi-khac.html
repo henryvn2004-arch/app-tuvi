@@ -9,7 +9,7 @@
 <link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/fonts/noto-serif.css?v=1">
-<link rel="stylesheet" href="/shell.css?v=33">
+<link rel="stylesheet" href="/shell.css?v=34">
 <style>
 .form-card{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);max-width:860px}
 .form-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:3px}
@@ -173,30 +173,45 @@
               </div>
               <div class="nk-sub">Câu hỏi chạy ngầm trong đầu họ</div>
               <div class="nk-chips" id="cauHoiChips"></div>
-              <!-- Khối của việc người hỏi đang vướng. Đứng TRƯỚC phần mô tả
-                   tính cách: đó là thứ họ trả tiền để lấy, và là thứ duy nhất
-                   bản tính thử không thể có (nó cần dữ kiện do chính họ cấp). -->
-              <div id="keHoachBlock" style="display:none">
-                <div class="nk-sub" id="keHoachTitle"></div>
-                <p class="nk-para" id="keHoach"></p>
-              </div>
+              <!-- CHỈ hai đoạn miễn phí — hard paywall Pha 3 (xem
+                   `PREVIEW_KEEP_PROSE` trong route.ts). `coiTrong` không còn
+                   đứng ở đây, nó là khối khoá riêng (`coiTrongBlock`) bên dưới. -->
               <div id="proseTop" style="display:none">
-                <div class="nk-sub">Con người này vận hành thế nào</div>
-                <p class="nk-para" id="tinhKhi"></p>
-                <div class="nk-sub">Điều họ coi trọng</div>
-                <p class="nk-para" id="coiTrong"></p>
-                <div class="nk-sub">Điều làm họ khó chịu</div>
-                <p class="nk-para" id="chamNoc"></p>
+                <div id="tinhKhiWrap" style="display:none">
+                  <div class="nk-sub">Con người này vận hành thế nào</div>
+                  <p class="nk-para" id="tinhKhi"></p>
+                </div>
+                <div id="chamNocWrap" style="display:none">
+                  <div class="nk-sub">Điều làm họ khó chịu</div>
+                  <p class="nk-para" id="chamNoc"></p>
+                </div>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- Khối hook (1 fact) — CHỈ dựng ở lượt xem trước khách chưa đăng
-             nhập (xem `mountHook`), giữa hero và tấm khoá. Không dựng lại
-             "Cơ Sở Trong Lá Số" (khối đó đã LÀM MỜ ngay bên dưới) — hé đúng
-             chính tinh cung Mệnh, đúng phần route.ts tự gọi là "bằng chứng
-             engine đọc thật" (không phải "hàng", xem chú thích `meta()`). -->
+        <!-- Khối của việc người hỏi đang vướng — thứ DUY NHẤT đổi theo việc cụ
+             thể họ đang cần làm, tức thứ bản xem trước không thể có kể cả về
+             nguyên tắc. Đứng ĐẦU danh sách khoá, cùng thứ tự `khoiKhoa()` xếp
+             nó lên đầu — đây là món hàng giá trị nhất, đáng làm thứ khoá đầu
+             tiên người ta thấy. -->
+        <div class="res-block" id="keHoachBlock" style="display:none">
+          <div class="res-block-header"><span class="res-block-title" id="keHoachTitle"></span></div>
+          <div class="res-block-body"><p class="nk-para" id="keHoach"></p></div>
+        </div>
+
+        <!-- Tách khỏi `proseTop` ở Pha 3: `coiTrong` vẫn là phần trả phí, nên
+             nó đứng làm MỘT khối khoá riêng — không còn vừa hiện vừa che giữa
+             hai đoạn miễn phí như bản cũ. -->
+        <div class="res-block" id="coiTrongBlock" style="display:none">
+          <div class="res-block-header"><span class="res-block-title">Điều Họ Coi Trọng</span></div>
+          <div class="res-block-body"><p class="nk-para" id="coiTrong"></p></div>
+        </div>
+
+        <!-- Khối hook (1 fact) — CHỈ dựng ở bản xem trước của khách chưa đăng
+             nhập (xem `mountHook`), giữa hero và tấm khoá — hé đúng chính tinh
+             cung Mệnh, đúng phần route.ts tự gọi là "bằng chứng engine đọc
+             thật" (không phải "hàng", xem chú thích `meta()`). -->
         <div id="hookHost"></div>
         <div id="nkLockHost" style="display:none;margin-bottom:16px"></div>
 
@@ -289,7 +304,7 @@ window.SHELL_INTRO={key:'nguoi-khac'};</script>
 <script src="/tools-shared/vn-timezone.js?v=1"></script>
 <script src="/tuvi-form.js?v=2"></script>
 <script src="/tools-shared/cung-ngay-sinh.js?v=2"></script>
-<script src="/tuvi-paywall.js?v=22"></script>
+<script src="/tuvi-paywall.js?v=23"></script>
 <script src="/tools-shared/hook-layer.js?v=2"></script>
 <script src="/auth.js?v=2"></script>
   <script src="/nav.js?v=26" data-icons-only></script>
@@ -437,14 +452,18 @@ function _cacheQuery(b, self, qh, viec) {
   return q;
 }
 
-// ── W1 (khách chưa đăng nhập): xem trước MIỄN PHÍ trước khi trả Lượng ──────
+// ── Bản xem trước (hard paywall Pha 3): server gọi model THẬT ──────────────
 //
 // Đăng nhập rồi → bấm nút là CHẠY THẬT ngay: trừ Lượng (0đ nếu free) rồi chạy
-// trọn bản cẩm nang, không có màn xem trước nào chen giữa. Chưa đăng nhập →
-// dựng tầng đầu (tên/kiểu người) MỞ + phần "Cơ sở lá số" dựng THẬT nhưng LÀM
-// MỜ (deterministic/0đ, không phải ẩn hẳn khỏi DOM); phần AI viết riêng (Nói
-// thế nào/Lúc này họ ở đâu/Người này với bạn) chưa có nội dung nào để mờ nên
-// vẫn đứng sau tấm khoá `lockPreview`, CTA đăng ký Lượng miễn phí.
+// trọn bản cẩm nang, không có màn xem trước nào chen giữa.
+//
+// Chưa đăng nhập → server vẫn gọi model thật nhưng chỉ gửi về `tinhKhi` +
+// `chamNoc` (2/9 đoạn văn, xem `PREVIEW_KEEP_PROSE` trong route.ts) cộng phần
+// deterministic vốn đã miễn phí (tên/kiểu người/2 mặt đọc/cơ sở lá số). Mọi
+// khối trả phí còn lại (kế hoạch riêng cho việc cụ thể, họ coi trọng gì, nên/
+// tránh nói gì, lúc nào đưa việc tới, với bạn ra sao, câu chốt) dựng thành Ô
+// GIỮ CHỖ — không còn "làm mờ nội dung thật" như bản trước (nội dung thật lúc
+// đó vẫn nằm trong DOM, view-source là đọc hết).
 //
 // Tường khoá nêu ĐÍCH DANH từng khối chưa mở khi server trả `khoa` (sinh từ
 // chính lá số vừa tính, `khoiKhoa` trong lib/engine/nguoi-khac.ts) — danh sách
@@ -452,8 +471,7 @@ function _cacheQuery(b, self, qh, viec) {
 // Mảng dưới chỉ là đường lùi khi payload cũ (còn trong cache trình duyệt)
 // không mang `khoa`.
 var NK_KHOA_FALLBACK = [
-  'Con người này vận hành thế nào',
-  'Điều họ coi trọng · điều làm họ khó chịu',
+  'Họ coi trọng cái gì — và sợ mất cái gì',
   'Nên nói gì — 3 việc kèm câu nói thật',
   'Tránh nói gì — 3 việc kèm câu nói thật',
   'Lúc nào nên đưa việc lớn tới',
@@ -489,9 +507,10 @@ async function analyze() {
   await TuviPaywall.requireCredits(_currentSlug, function () { return _doGenerate(false, qh, viec); });
 }
 
-// Khách chưa đăng nhập: gọi thẳng tầng deterministic (0đ, không cần đăng nhập
-// — server route `?preview=1` không đòi auth), dựng phần đầu MỞ + cơ sở lá số
-// LÀM MỜ. Phần AI viết riêng đứng sau tấm khoá (không có gì để mờ, chưa sinh).
+// Khách chưa đăng nhập: BẢN XEM TRƯỚC. Server chạy model thật rồi cắt payload
+// (`PREVIEW_KEEP_PROSE`), nên ở đây chỉ dựng được đúng phần được gửi. Không có
+// nhánh nào ở client quyết định giấu gì — thứ bị khoá đơn giản là KHÔNG CÓ
+// trong `data`.
 async function _runAnonPreview(b, self, qh, viec) {
   _openPanel();
   document.getElementById('loading').style.display = 'none';
@@ -499,15 +518,18 @@ async function _runAnonPreview(b, self, qh, viec) {
     var res = await fetch('/api/nguoi-khac?preview=1', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ birth: b, birthSelf: self || undefined, name: b.name || '', quanHe: qh, viec: viec }),
+      body: JSON.stringify({
+        birth: b, birthSelf: self || undefined, name: b.name || '', quanHe: qh, viec: viec,
+        anonId: TuviPaywall.previewAnonId(),
+      }),
     });
     var data = await res.json();
     if (!res.ok || !data.success) throw new Error(data.error || 'Lỗi ' + res.status);
     _lastData = data;
     renderMetaHead(data);
-    // Cơ sở lá số đã deterministic/0đ trong payload preview → dựng THẬT (không
-    // để trống), chỉ làm mờ. Xem comment trên renderMetaBasis.
-    renderMetaBasis(data, true);
+    renderProse(data);      // chỉ tinhKhi/chamNoc có mặt; các nhánh `if` khác tự trượt
+    renderMetaBasis(data);  // cơ sở lá số MIỄN PHÍ, dựng rõ — không còn làm mờ
+    _nkLockBlocks(data);
     mountHook(data);
     document.getElementById('card').style.display = 'block';
     document.getElementById('btnEdit').style.display = '';
@@ -522,9 +544,9 @@ async function _runAnonPreview(b, self, qh, viec) {
 
 // Hé đúng chính tinh cung Mệnh — MỘT trong "2/5 mặt đọc" đã có trong payload
 // xem trước (chỉ tên sao, KHÔNG kèm cachCuc/diem — route.ts tự nói tên sao là
-// "bằng chứng engine đọc thật", cachCuc mới là "hàng"). Không dựng lại cả
-// basisBlock (đã LÀM MỜ ngay bên dưới) và không đụng tới matDoc[1] (Phúc
-// Đức) hay coSo/trichDan — cả hai vẫn nằm trong khối mờ.
+// "bằng chứng engine đọc thật", cachCuc mới là "hàng"). `basisBlock` đã dựng
+// cả 2/5 mặt này (miễn phí, không khoá) ngay phía dưới — hook chỉ nhắc lại
+// đúng MỘT mặt bằng widget riêng để mở vòng tò mò sớm hơn, trước khi cuộn tới.
 function mountHook(data) {
   var host = document.getElementById('hookHost');
   if (!host || !window.HookLayer) return;
@@ -559,13 +581,68 @@ function _renderLockWall(qh, viec, khoaRaw) {
   });
 }
 
+// Các khối BỊ KHOÁ ở bản xem trước, theo ĐÚNG thứ tự chúng đứng trên trang.
+// Phần tử thứ hai = có vẽ ô biểu đồ giả hay không trong ô giữ chỗ — không khối
+// nào ở đây có bảng/biểu đồ trong bản thật (toàn văn xuôi hoặc danh sách ngắn)
+// nên tất cả đều `false`.
+// `basisBlock` CỐ Ý VẮNG: nội dung của nó (coSo + 2/5 mặt đọc) đã miễn phí,
+// xem `renderMetaBasis`.
+var NK_LOCKED_BLOCKS = [
+  ['keHoachBlock', false],
+  ['coiTrongBlock', false],
+  ['sayBlock', false],
+  ['timeBlock', false],
+  ['withBlock', false],
+  ['endBlock', false],
+];
+
+/** Dựng khung rỗng + ô giữ chỗ cho mọi khối đang khoá.
+ *  `keHoachBlock` BỎ HẲN khi người hỏi không nêu việc cụ thể (`hieu-them`) —
+ *  bản thật cũng ẩn khối đó, để nó ở đây là hứa thứ trả tiền xong cũng không
+ *  có. `withBlock` BỎ HẲN khi không nhập lá số của người hỏi, cùng lý do. */
+function _nkLockBlocks(data) {
+  var viec = data.viec || {};
+  NK_LOCKED_BLOCKS.forEach(function (b, i) {
+    if (b[0] === 'keHoachBlock' && (!viec.id || viec.id === 'hieu-them')) return;
+    if (b[0] === 'withBlock' && !_lastSelf) return;
+    var block = document.getElementById(b[0]);
+    if (!block) return;
+    var body = block.querySelector('.res-block-body');
+    if (!body || body.querySelector('.tpw-ph-host')) return;
+    body.classList.add('tpw-locked');
+    body.insertAdjacentHTML('beforeend',
+      '<div class="tpw-ph-host">' + TuviPaywall.placeholderHtml(i, b[1]) + '</div>');
+    var titleEl = block.querySelector('.res-block-title');
+    if (titleEl) titleEl.insertAdjacentHTML('afterend', TuviPaywall.lockBadge('Khoá'));
+    block.style.display = 'block';
+  });
+  if (window.mountIcons) window.mountIcons(document.getElementById('resPanel'));
+}
+
+/** Gỡ sạch dấu vết khoá. Gọi ở `_openPanel` (đầu MỌI lượt) chứ không chỉ ở
+ *  lượt trả tiền — bấm "Xem Người Khác" sau một lượt xem trước thì khung rỗng
+ *  cũ còn nguyên, và ô giữ chỗ sẽ đứng lẫn vào giữa nội dung thật. */
+function _nkUnlockBlocks() {
+  NK_LOCKED_BLOCKS.forEach(function (b) {
+    var block = document.getElementById(b[0]);
+    if (!block) return;
+    var body = block.querySelector('.res-block-body');
+    if (body) body.classList.remove('tpw-locked');
+    var ph = block.querySelector('.tpw-ph-host');
+    if (ph) ph.remove();
+    var badge = block.querySelector('.tpw-lock-badge');
+    if (badge) badge.remove();
+  });
+}
+
 function _openPanel() {
+  _nkUnlockBlocks();
   document.getElementById('birthPanel').style.display = 'none';
   document.getElementById('resPanel').style.display = 'block';
   document.getElementById('loading').style.display = 'block';
   document.getElementById('card').style.display = 'none';
   document.getElementById('nkLockHost').style.display = 'none';
-  ['keHoachBlock', 'sayBlock', 'timeBlock', 'withBlock', 'endBlock', 'basisBlock', 'lockBlock'].forEach(function (id) {
+  ['keHoachBlock', 'coiTrongBlock', 'sayBlock', 'timeBlock', 'withBlock', 'endBlock', 'basisBlock', 'lockBlock'].forEach(function (id) {
     document.getElementById(id).style.display = 'none';
   });
   document.getElementById('proseTop').style.display = 'none';
@@ -715,10 +792,10 @@ function renderMetaHead(data) {
   }).join('');
 }
 
-// `locked` = khách chưa đăng ký → nội dung THẬT vẫn dựng vào DOM (deterministic,
-// 0đ, đã có sẵn trong payload preview) nhưng bọc trong .tpw-real-lock để CSS
-// làm mờ + badge 🔒 cạnh tiêu đề — không phải ẩn hẳn khối này như bản trước.
-function renderMetaBasis(data, locked) {
+// Chạy trên CẢ HAI đường và luôn hiện RÕ — không còn khái niệm "khoá" ở khối
+// này từ Pha 3: nội dung của nó (coSo + 2/5 mặt đọc) vốn đã 0đ/miễn phí, làm
+// mờ một thứ đang miễn phí chỉ gây confuse chứ không bảo vệ được gì.
+function renderMetaBasis(data) {
   // ⚠️ HÀM NÀY CHẠY TRÊN CẢ HAI ĐƯỜNG và payload hai bên KHÁC NHAU (A1):
   // lượt tính thử chỉ có 2/5 mặt đọc, mỗi mặt CHỈ CÓ TÊN SAO, và KHÔNG có
   // `than`/`daiVan`/`vanNam`. Mọi chỗ dưới đây phải giữ nguyên lối canh `if` —
@@ -787,19 +864,7 @@ function renderMetaBasis(data, locked) {
     } else {
       moreHost.style.display = 'none';
     }
-    var block = document.getElementById('basisBlock');
-    block.style.display = 'block';
-    var body = block.querySelector('.res-block-body');
-    var oldBadge = block.querySelector('.tpw-lock-badge');
-    if (oldBadge) oldBadge.remove();
-    if (locked) {
-      body.classList.add('tpw-real-lock');
-      var titleEl = block.querySelector('.res-block-title');
-      if (titleEl) titleEl.insertAdjacentHTML('afterend', TuviPaywall.lockBadge('Khoá'));
-      if (window.mountIcons) window.mountIcons(block);
-    } else {
-      body.classList.remove('tpw-real-lock');
-    }
+    document.getElementById('basisBlock').style.display = 'block';
   }
 }
 
@@ -820,20 +885,36 @@ function _mountInviteCta() {
 function renderMeta(data) { renderMetaHead(data); renderMetaBasis(data); }
 
 function renderProse(data) {
-  // Chỉ hiện khi người hỏi có nêu việc cụ thể — server đã bỏ mục này ở ca
-  // 'hieu-them', không có thì ẩn hẳn chứ không lấp bằng câu chung chung.
-  var kh = data.keHoach || '';
-  if (kh) {
-    document.getElementById('keHoachTitle').textContent =
-      'Cách đi cho việc: ' + ((data.viec || {}).label || 'bạn đang cần làm');
-    document.getElementById('keHoach').textContent = kh;
-    document.getElementById('keHoachBlock').style.display = 'block';
+  // Tiêu đề đặt theo VIỆC, không theo có chữ hay chưa — bản xem trước chưa có
+  // `keHoach` (đang khoá) nhưng vẫn cần tiêu đề đứng cạnh ô giữ chỗ. Server đã
+  // bỏ hẳn mục này ở ca 'hieu-them' (KHÔNG có việc cụ thể) — cả tiêu đề lẫn
+  // khối đều ẩn, chứ không lấp bằng câu chung chung.
+  var viec = data.viec || {};
+  if (viec.id && viec.id !== 'hieu-them') {
+    document.getElementById('keHoachTitle').textContent = 'Cách đi cho việc: ' + (viec.label || 'bạn đang cần làm');
+    if (data.keHoach) {
+      document.getElementById('keHoach').textContent = data.keHoach;
+      document.getElementById('keHoachBlock').style.display = 'block';
+    }
   }
 
-  document.getElementById('tinhKhi').textContent = data.tinhKhi || '';
-  document.getElementById('coiTrong').textContent = data.coiTrong || '';
-  document.getElementById('chamNoc').textContent = data.chamNoc || '';
-  document.getElementById('proseTop').style.display = 'block';
+  // Hai đoạn miễn phí (Pha 3) — mỗi đoạn có wrapper riêng để ẩn ĐÚNG đoạn
+  // thiếu, không kéo cả `proseTop` xuống khi chỉ một trong hai có mặt.
+  if (data.tinhKhi) {
+    document.getElementById('tinhKhi').textContent = data.tinhKhi;
+    document.getElementById('tinhKhiWrap').style.display = 'block';
+  }
+  if (data.chamNoc) {
+    document.getElementById('chamNoc').textContent = data.chamNoc;
+    document.getElementById('chamNocWrap').style.display = 'block';
+  }
+  if (data.tinhKhi || data.chamNoc) document.getElementById('proseTop').style.display = 'block';
+
+  // `coiTrong` tách khỏi `proseTop` ở Pha 3 — nay là khối khoá riêng.
+  if (data.coiTrong) {
+    document.getElementById('coiTrong').textContent = data.coiTrong;
+    document.getElementById('coiTrongBlock').style.display = 'block';
+  }
 
   var nen = _mucHtml(data.nenNoi), tranh = _mucHtml(data.tranhNoi);
   if (nen || tranh) {

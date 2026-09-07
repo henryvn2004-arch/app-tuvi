@@ -15,6 +15,10 @@ import type { ChatConfig } from '@/lib/config/appConfig';
 
 const KIMI_KEY = process.env.KIMIK3_API_KEY || '';
 const KIMI_MODEL = process.env.KIMI_MODEL || 'kimi-k3';
+/** Tên model THẬT của nhánh này — run.ts ghi vào `llm_usage` khi Kimi chạy.
+ *  Xuất ra thay vì để run.ts chép tay chuỗi 'kimi-k3': chép tay là đường đã
+ *  làm mọi lượt rail bị dán nhãn sai model (xem `TurnMeter` trong run.ts). */
+export const KIMI_MODEL_ID = KIMI_MODEL;
 const KIMI_URL = 'https://api.moonshot.ai/v1/chat/completions';
 
 export function kimiConfigured(): boolean {

@@ -211,6 +211,26 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
    đọc được. KHÔNG dùng .tpw-real-lock cho phần chưa có gì để làm mờ (ảnh/
    truyện AI chưa sinh) — lúc đó dùng lockPreview() như cũ. */
 .tpw-real-lock{filter:blur(5px);opacity:.65;user-select:none;pointer-events:none}
+/* ── Ô GIỮ CHỖ cho phần đang khoá — DÙNG CHUNG (hard paywall 2026-09-06) ──────
+   Khác hẳn .tpw-real-lock ngay trên: cái đó làm MỜ nội dung THẬT vẫn nằm trong
+   DOM, tức view-source hoặc tắt CSS là đọc hết. Cái này không có nội dung nào
+   để lộ — chỉ hình dạng của thứ sẽ tới.
+   Henry chốt: "che hết luôn, đừng vừa hiện vừa che sẽ confuse user."
+   ⚠️ Đừng cao hơn nội dung thật quá nhiều: lúc mở khoá, node này bị thay bằng
+   bản thật, chênh lệch càng lớn thì cú nhảy layout càng nặng. */
+.tpw-ph{position:relative;padding:2px 0;user-select:none;pointer-events:none}
+.tpw-ph i{display:block;height:11px;border-radius:6px;background:linear-gradient(90deg,#e4ddcd,#f2ede2);margin-bottom:11px}
+.tpw-ph i:last-of-type{margin-bottom:0}
+.tpw-ph-chart{height:74px;border-radius:9px;margin-top:14px;background:
+  linear-gradient(90deg,#ece6da 0 22%,transparent 22%) 0 100%/100% 34% no-repeat,
+  linear-gradient(90deg,transparent 26%,#e4ddcd 26% 46%,transparent 46%) 0 100%/100% 62% no-repeat,
+  linear-gradient(90deg,transparent 50%,#ece6da 50% 70%,transparent 70%) 0 100%/100% 45% no-repeat,
+  linear-gradient(90deg,transparent 74%,#e4ddcd 74%) 0 100%/100% 78% no-repeat,
+  #faf7f0}
+@media(prefers-reduced-motion:no-preference){
+  .tpw-ph i,.tpw-ph-chart{animation:tpw-ph-pulse 2.4s ease-in-out infinite}
+}
+@keyframes tpw-ph-pulse{0%,100%{opacity:1}50%{opacity:.62}}
 .tpw-lock-badge{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;color:#9A7B3A;border:1px solid #9A7B3A;border-radius:20px;padding:2px 9px}
 .tpw-lock-badge .ic-inline{width:.9em;height:.9em}
 /* ── Khoá NHỎ trong TỪNG PHẦN (tool nhiều mục: luận giải/bát tự/xem tuổi) ──
@@ -559,8 +579,15 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
       // quà chào mừng vì chưa phải tài khoản thật). Đường lùi "Đăng nhập" dành
       // riêng cho ai ĐÃ có tài khoản/số dư từ trước — thiếu link này thì họ bị
       // đẩy vào một phiên ẩn danh MỚI (0 Lượng) thay vì số dư thật đang có.
-      money = 'Bấm mở là trả tiền và đọc ngay, không cần đăng ký trước. ' +
-        '<a onclick="TuviPaywall._login()">Đã có tài khoản? Đăng nhập</a>';
+      // 🔴 PHẢI NÓI GIÁ ở đây (hard paywall 2026-09-06). Bản cũ chỉ viết "bấm
+      // mở là trả tiền và đọc ngay" — với khách đã đăng nhập thì nhánh dưới có
+      // con số, còn khách VÔ DANH (đúng nhóm đến từ quảng cáo, và nay là nhóm
+      // gặp tường ĐÔNG NHẤT vì hard paywall chặn mọi người) thì bị mời "trả
+      // tiền" mà không biết bao nhiêu. Giá đọc từ `tool_pricing` như mọi chỗ
+      // khác; đọc hụt thì hàm này đã dừng từ trên (`_priceUnknown`), nên tới
+      // được đây là chắc chắn có số thật, không phải số đoán.
+      money = 'Mở đầy đủ tốn <b>' + cost + ' Lượng</b> · bấm mở là trả tiền và đọc ngay, ' +
+        'không cần đăng ký trước. <a onclick="TuviPaywall._login()">Đã có tài khoản? Đăng nhập</a>';
     } else if (balance < cost) {
       money = 'Bạn còn <b>' + balance + '</b> · cần <b>' + cost + '</b> — thiếu ' + (cost - balance) +
         ', <a href="/topup.html" onclick="' + _topupClick('preview', cost - balance) + '">nạp thêm →</a>';
@@ -1105,6 +1132,62 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
   // làm mờ bằng .tpw-real-lock — dùng chung để nhiều trang không tự vẽ mỗi
   // nơi một kiểu. `mountIcons` (nav.js) phải chạy lại sau khi chèn (span
   // data-icon chỉ tự dựng lúc nạp trang).
+  /**
+   * Ô GIỮ CHỖ cho một khối đang khoá — KHÔNG nhận dữ liệu, và đó là cả điểm.
+   *
+   * Chữ ký hàm là chỗ chặn rẻ nhất việc ai đó nhét một con số thật vào cho "đỡ
+   * trống": bản trước ở app-luan-giai.html in ra điểm 6 chiều + tên cách cục
+   * rồi dán badge Khoá lên cạnh, và người đọc không tách được đâu là phần mình
+   * đang có, đâu là phần chưa mua.
+   *
+   * `seed` chỉ xê dịch SỐ VẠCH để N ô cạnh nhau không xếp thành một khối lặp y
+   * hệt — đều tăm tắp thì đọc ra "ảnh nền trang trí", không ra "chữ đang bị che".
+   * `chart` bật dải biểu đồ giả cho khối vốn có hình.
+   */
+  function placeholderHtml(seed, chart) {
+    var rows = [[96, 88, 93, 70], [94, 86, 91, 74, 62], [97, 84, 90, 68]][Math.abs(Number(seed) || 0) % 3];
+    var bars = rows.map(function (w) { return '<i style="width:' + w + '%"></i>'; }).join('');
+    _css();
+    return '<div class="tpw-ph" aria-hidden="true">' + bars +
+      (chart === false ? '' : '<div class="tpw-ph-chart"></div>') + '</div>';
+  }
+
+  // ── DANH TÍNH TẠM CỦA KHÁCH CHƯA ĐĂNG NHẬP ────────────────────────────────
+  // Khoá đếm suất `preview.free_runs` của cầu dao xem trước
+  // (lib/billing/anon-preview.ts). ⚠️ KHÔNG phải danh tính: client tự khai, xoá
+  // localStorage là có khoá mới. Vì thế server còn HAI trần nữa (theo IP và
+  // toàn cục) đứng sau — trần này chỉ để một người bình thường không vô tình
+  // đốt hết suất bằng vài lần F5.
+  //
+  // 🔴 KHÔNG đọc `window.Track.anonId` — đã thử và hỏng: `track.js` TỰ NO-OP
+  // (gán `Track={event(){},anonId:null}`) khi nó nghĩ đang bị máy chạy, và nó
+  // cũng chết lặng khi localStorage bị chặn. Lúc đó `anonId` rỗng ⇒ server nhận
+  // `p_key` rỗng ⇒ RPC trả `disabled` ⇒ khách MẤT HẲN bản xem trước, tức mất
+  // đúng cái móc mà cả lượt thay đổi này sinh ra để có. Một tính năng bán hàng
+  // không được phụ thuộc vào một thư viện ĐO có quyền tự tắt.
+  //
+  // DÙNG CHUNG khoá `tvmb_anon` với track.js (cùng một trình duyệt phải là cùng
+  // một danh tính, không đẻ khoá thứ hai). Ai tới trước thì tạo.
+  //
+  // localStorage bị chặn hẳn → id chỉ sống trong bộ nhớ: mỗi lượt tải trang là
+  // một trần ĐỜI mới. Chấp nhận CÓ Ý — hai lớp IP/ngày và toàn-hệ-thống/ngày
+  // vẫn giữ nguyên, và thà nới cho một nhóm nhỏ còn hơn chặn oan họ.
+  var _anonIdMem = '';
+  function previewAnonId() {
+    var mk = function () {
+      try { if (window.crypto && crypto.randomUUID) return crypto.randomUUID(); } catch (e) {}
+      return 'a' + Date.now().toString(36) + Math.random().toString(36).slice(2, 10);
+    };
+    try {
+      var v = localStorage.getItem('tvmb_anon');
+      if (!v) { v = mk(); localStorage.setItem('tvmb_anon', v); }
+      return v;
+    } catch (e) {
+      if (!_anonIdMem) _anonIdMem = mk();
+      return _anonIdMem;
+    }
+  }
+
   function lockBadge(text) {
     _css();
     return '<span class="tpw-lock-badge"><span class="ic-inline" data-icon="lock"></span>' + (text || 'Khoá') + '</span>';
@@ -1119,7 +1202,8 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
   return {
     init, getProduct, requireCredits, requireCreditsCached, requireCreditsCachedQuery,
     generateToolSlug, ensureCredits, deductSilent, getBalance, fillPriceSlots,
-    mountCostHints, refreshCostHints, lockPreview, isFreeRerun, lockBadge,
+    mountCostHints, refreshCostHints, lockPreview, isFreeRerun, lockBadge, placeholderHtml,
+    previewAnonId,
     sectionLockHtml, wireSectionLocks, resumeIfPending,
     _banner, _close, _closeLock, _login,
   };

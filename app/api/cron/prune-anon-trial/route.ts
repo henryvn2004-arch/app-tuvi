@@ -1,5 +1,12 @@
 // app/api/cron/prune-anon-trial/route.ts
-// Dọn nhật ký lượt rail DÙNG THỬ của khách vô danh (`anon_rail_hits`).
+// Dọn nhật ký lượt DÙNG THỬ của khách vô danh — nay là BA bảng:
+//   · `anon_rail_hits`      — lượt rail dùng thử (từ 2026-07)
+//   · `anon_preview_hits`   — lượt sinh bản luận xem trước (hard paywall 2026-09)
+//   · `luan_preview_cache`  — chính bản xem trước đã sinh, giữ 30 ngày
+//
+// Gộp vào ĐÚNG job này thay vì đẻ cron mới: cùng mục đích (dọn rác đếm-theo-
+// ngày), cùng nhịp, và `lib/ops/jobs.ts` giữ nguyên một dòng thay vì ba. Thêm
+// cron mới còn tốn một suất trong trần cron của Vercel cho một việc 20ms.
 //
 // Bảng đó chỉ tồn tại để đếm "bao nhiêu lượt trong NGÀY HÔM NAY" theo IP và
 // theo toàn hệ thống — tức mọi dòng quá 2 ngày là rác thuần. Không dọn thì nó
@@ -37,21 +44,33 @@ async function handle(request: NextRequest) {
     return NextResponse.json({ ok: true, skipped: 'missing supabase env' });
   }
 
-  const res = await fetch(`${SUPABASE_URL}/rest/v1/rpc/anon_rail_hits_prune`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      apikey: SUPABASE_KEY,
-      Authorization: `Bearer ${SUPABASE_KEY}`,
-    },
-    body: '{}',
-    cache: 'no-store',
-  });
-  if (!res.ok) {
-    // Ném lên cho withCronLog ghi status=error — im lặng nuốt lỗi ở đây là biến
-    // một cron chết thành một cron "chạy tốt mà chẳng dọn gì".
-    throw new Error(`anon_rail_hits_prune HTTP ${res.status}: ${(await res.text()).slice(0, 200)}`);
-  }
-  const deleted = Number(await res.json()) || 0;
-  return NextResponse.json({ ok: true, deleted });
+  // Chạy TUẦN TỰ và ném ở lượt hỏng ĐẦU TIÊN: `withCronLog` ghi status=error,
+  // đúng thứ cần thấy. Gom lỗi rồi báo cuối là biến "một bảng không dọn được"
+  // thành một dòng log lẫn giữa hai bảng đã dọn xong.
+  const prune = async (fn: string): Promise<number> => {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/rpc/${fn}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        apikey: SUPABASE_KEY,
+        Authorization: `Bearer ${SUPABASE_KEY}`,
+      },
+      body: '{}',
+      cache: 'no-store',
+    });
+    if (!res.ok) {
+      // Ném lên cho withCronLog ghi status=error — im lặng nuốt lỗi ở đây là biến
+      // một cron chết thành một cron "chạy tốt mà chẳng dọn gì".
+      throw new Error(`${fn} HTTP ${res.status}: ${(await res.text()).slice(0, 200)}`);
+    }
+    return Number(await res.json()) || 0;
+  };
+
+  const deleted = await prune('anon_rail_hits_prune');
+  const previewHits = await prune('anon_preview_hits_prune');
+  const previewCache = await prune('luan_preview_cache_prune');
+  // `deleted` giữ NGUYÊN tên và ý nghĩa cũ (chỉ `anon_rail_hits`) — panel vận
+  // hành và mọi dòng cron_runs cũ đọc khoá này; đổi nghĩa nó là làm lệch im
+  // lặng mọi con số đã ghi trước đây.
+  return NextResponse.json({ ok: true, deleted, previewHits, previewCache });
 }
