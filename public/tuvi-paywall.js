@@ -253,7 +253,30 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
 .tpw-seclock-i{flex:0 0 auto;color:#C9A84C;font-size:13px}
 .tpw-seclock-t{flex:1;min-width:0}
 .tpw-seclock-p{flex:0 0 auto;font-weight:700;color:#C9A84C;white-space:nowrap}
-@media(max-width:480px){.tpw-seclock{flex-wrap:wrap}.tpw-seclock-p{width:100%;text-align:right}}`;
+@media(max-width:480px){.tpw-seclock{flex-wrap:wrap}.tpw-seclock-p{width:100%;text-align:right}}
+/* ── QR chuyển khoản TẠI CHỖ cho khách vô danh (2026-09-07) — thay vì điều
+   hướng sang /topup.html, bấm "Mở khoá" khi hết Lượng hiện thẳng modal QR
+   ngay trên trang tool; quét xong tự chạy tiếp, không rời trang. Khách ĐÃ
+   đăng nhập không đụng gì (vẫn tường cũ dẫn sang /topup.html). Cùng bố cục
+   với modal chuyển khoản của topup.html (bankModal/.bm-*) — đổi tên lớp để
+   không đụng CSS cục bộ của trang đó khi cả hai cùng nạp (không xảy ra trong
+   thực tế, nhưng rẻ để tránh trùng tên). */
+.tpw-qr-backdrop{display:none;position:fixed;inset:0;background:rgba(6,26,46,.62);z-index:9997;align-items:center;justify-content:center;padding:1rem}
+.tpw-qr-backdrop.show{display:flex}
+.tpw-qr-modal{background:#fff;border-radius:14px;padding:1.9rem 1.75rem;max-width:400px;width:100%;text-align:center;position:relative;box-shadow:0 8px 40px rgba(0,0,0,.25);max-height:92vh;overflow-y:auto;font-family:inherit}
+.tpw-qr-close{position:absolute;top:10px;right:12px;background:none;border:none;cursor:pointer;color:#999;padding:6px;border-radius:6px;font-size:16px;line-height:1}
+.tpw-qr-close:hover{background:#f5f5f5;color:#333}
+.tpw-qr-title{font-family:'Noto Serif',Georgia,serif;font-size:1.05rem;font-weight:700;color:#061A2E;margin-bottom:4px}
+.tpw-qr-credits{font-size:.85rem;color:#666;margin-bottom:12px}
+.tpw-qr-amount{font-family:'Noto Serif',Georgia,serif;font-size:1.5rem;font-weight:700;color:#9A7B3A;margin-bottom:14px}
+.tpw-qr-box{margin:0 auto 14px;width:190px;height:190px;background:#f5f5f5;border-radius:8px;overflow:hidden;display:flex;align-items:center;justify-content:center;color:#999;font-size:.8rem}
+.tpw-qr-box img{width:190px;height:190px;object-fit:contain}
+.tpw-qr-info{background:#f5f5f5;border-radius:8px;padding:10px 14px;font-size:.82rem;text-align:left;margin-bottom:10px;line-height:1.8;color:#333}
+.tpw-qr-hint{font-size:.75rem;color:#666;margin-bottom:12px;line-height:1.7}
+.tpw-qr-warn{color:#C0392B;font-weight:600}
+.tpw-qr-status{font-size:.88rem;color:#444;margin-bottom:12px;display:flex;align-items:center;justify-content:center;gap:.4rem;min-height:1.3rem}
+.tpw-qr-btn{background:#061A2E;color:#C9A84C;border:none;padding:.6rem 1.4rem;border-radius:6px;cursor:pointer;font-size:.88rem;font-family:inherit;font-weight:600}
+.tpw-qr-btn:hover{background:#0D3B5E}`;
     document.head.appendChild(s);
   }
 
@@ -787,9 +810,183 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
       'TuviPaywall._close();TuviPaywall._closeLock()';
   }
 
+  // ── QR chuyển khoản TẠI CHỖ cho khách vô danh ────────────────────
+  // Henry (2026-09-07): "user anonymous thì click unlock pop-up thanh toán
+  // hiện lên luôn ... quét xong unlock chạy luôn, ko dẫn đi đâu nữa. User
+  // signin thì trừ lượng rồi chạy (như hiện tại)". Cùng payOS/VietQR đã dùng
+  // ở topup.html (`action=create-bank`/`check-bank`), chỉ khác chỗ hiện: một
+  // modal dựng bằng JS ngay trên trang tool thay vì điều hướng sang trang
+  // riêng. Sau khi `check-bank` báo `paid`, gọi lại CHÍNH `requireCredits`
+  // (đệ quy) — số dư lúc đó đã đủ nên nó tự trừ + chạy `callback`, không cần
+  // chép lại logic trừ tiền ở đây.
+  function _isAnonymous() {
+    return !!(window.Auth && window.Auth.isAnonymous && window.Auth.isAnonymous());
+  }
+
+  let _qrTimer = null, _qrOrderCode = null, _qrLastFocus = null;
+
+  function _qrEl() {
+    let el = document.getElementById('tpw-qr-backdrop');
+    if (el) return el;
+    el = document.createElement('div');
+    el.id = 'tpw-qr-backdrop';
+    el.className = 'tpw-qr-backdrop';
+    el.setAttribute('role', 'dialog');
+    el.setAttribute('aria-modal', 'true');
+    el.innerHTML =
+      '<div class="tpw-qr-modal">' +
+        '<button class="tpw-qr-close" type="button" aria-label="Đóng">✕</button>' +
+        '<div class="tpw-qr-title">Chuyển Khoản Ngân Hàng</div>' +
+        '<div class="tpw-qr-credits" id="tpw-qr-credits"></div>' +
+        '<div class="tpw-qr-amount" id="tpw-qr-amount"></div>' +
+        '<div class="tpw-qr-box" id="tpw-qr-box"></div>' +
+        '<div class="tpw-qr-info" id="tpw-qr-info"></div>' +
+        '<div class="tpw-qr-hint">Mở app ngân hàng → Quét QR hoặc chuyển khoản thủ công<br>' +
+          '<span class="tpw-qr-warn">⚠ Giữ nguyên nội dung CK để xác nhận tự động</span></div>' +
+        '<div class="tpw-qr-status" id="tpw-qr-status"></div>' +
+        '<button class="tpw-qr-btn" type="button" id="tpw-qr-manual">Tôi đã chuyển khoản</button>' +
+      '</div>';
+    document.body.appendChild(el);
+    el.querySelector('.tpw-qr-close').addEventListener('click', _closeQr);
+    el.querySelector('#tpw-qr-manual').addEventListener('click', () => _qrPoll(true));
+    el.addEventListener('click', (e) => { if (e.target === el) _closeQr(); });
+    return el;
+  }
+
+  function _qrStatus(text, spin) {
+    const el = document.getElementById('tpw-qr-status');
+    if (el) el.innerHTML = (spin ? '<span class="tpw-spin" aria-hidden="true"></span>' : '') + '<span>' + _esc(text) + '</span>';
+  }
+
+  function _qrEscHandler(e) { if (e.key === 'Escape') _closeQr(); }
+  function _qrVisHandler() { if (document.visibilityState === 'visible' && _qrOrderCode) _qrPoll(false); }
+
+  function _closeQr() {
+    clearInterval(_qrTimer); _qrTimer = null; _qrOrderCode = null;
+    const el = document.getElementById('tpw-qr-backdrop');
+    if (el) el.classList.remove('show');
+    document.removeEventListener('keydown', _qrEscHandler);
+    document.removeEventListener('visibilitychange', _qrVisHandler);
+    if (_qrLastFocus && _qrLastFocus.focus) _qrLastFocus.focus();
+  }
+
+  let _qrResumeSlug = null, _qrResumeCallback = null;
+
+  async function _qrPoll(manual) {
+    if (!_qrOrderCode) return;
+    try {
+      const r = await fetch('/api/payment?action=check-bank&orderCode=' + _qrOrderCode);
+      const d = await r.json();
+      if (d.paid) {
+        clearInterval(_qrTimer); _qrTimer = null;
+        _qrStatus('Thanh toán thành công! Đang tiếp tục…', false);
+        const slug = _qrResumeSlug, callback = _qrResumeCallback;
+        setTimeout(() => {
+          _closeQr();
+          window.refreshNavCredits && window.refreshNavCredits();
+          _banner('✓ Nạp thành công ' + d.credits + ' Lượng');
+          requireCredits(slug, callback);
+        }, 1200);
+      } else if (manual) {
+        _qrStatus('Chưa ghi nhận. Chờ thêm vài giây…', false);
+      }
+    } catch (e) { if (manual) _qrStatus('Lỗi kiểm tra. Thử lại.', false); }
+  }
+
+  /**
+   * Quy đổi số Lượng còn thiếu → VNĐ cần nạp qua QR, ĐỒNG BỘ (không chờ
+   * mạng) để `_insufficient` quyết được ngay có mở modal QR hay rơi về tường
+   * `/topup.html` cũ. `null` khi chưa đọc được `credit_packages` (đơn giá
+   * quy đổi) hoặc số tiền ngoài tầm nạp tuỳ chọn của `create-bank`
+   * (50.000đ–5.000.000đ) — cả hai đều KHÔNG được đoán bừa, cùng luật CLAUDE.md.
+   */
+  function _qrAmountFor(needCredits) {
+    const rate = window.ToolPrices ? window.ToolPrices.vndPerCredit() : null;
+    if (rate == null) return null;
+    let amountVnd = Math.ceil((needCredits * rate) / 1000) * 1000;
+    if (amountVnd < 50000) amountVnd = 50000;
+    if (amountVnd > 5000000) return null;
+    return amountVnd;
+  }
+
+  /** Mở modal QR cho đúng `amountVnd` (đã quy đổi bởi `_qrAmountFor`), gắn với
+   *  lượt mở khoá đang chờ (`slug`/`callback`). */
+  async function _openBankQr(amountVnd, slug, callback) {
+    const userId = window.Auth?.getUser()?.id || '';
+    if (!userId) return;
+
+    _qrResumeSlug = slug; _qrResumeCallback = callback;
+    const el = _qrEl();
+    document.getElementById('tpw-qr-box').textContent = 'Đang tải QR…';
+    document.getElementById('tpw-qr-info').innerHTML = '';
+    document.getElementById('tpw-qr-amount').textContent = '';
+    document.getElementById('tpw-qr-credits').textContent = '';
+    _qrStatus('Đang tạo mã QR…', true);
+    _qrOrderCode = null;
+    _qrLastFocus = document.activeElement;
+    el.classList.add('show');
+    document.addEventListener('keydown', _qrEscHandler);
+    document.addEventListener('visibilitychange', _qrVisHandler);
+
+    try {
+      const r = await fetch('/api/payment?action=create-bank', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ packageId: 'custom', userId, customAmountVnd: amountVnd }),
+      });
+      const d = await r.json();
+      if (!r.ok) throw new Error(d.error || 'Lỗi tạo đơn');
+      _qrOrderCode = d.orderCode;
+
+      document.getElementById('tpw-qr-credits').textContent = d.credits + ' Lượng';
+      document.getElementById('tpw-qr-amount').textContent =
+        new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(d.amountVND);
+
+      // Nội dung CK đến TỪ SERVER — cùng luật đã vá ở topup.html (một chuỗi
+      // cho cả hai phía, không tự dựng lại ở client).
+      const memo = d.description || ('TVMB' + _qrOrderCode);
+      const qrUrl = 'https://api.vietqr.io/image/' + d.bin + '-' + d.accountNumber + '-compact2.jpg?amount=' + d.amountVND
+        + '&addInfo=' + encodeURIComponent(memo) + '&accountName=' + encodeURIComponent(d.accountName || '');
+      const qrBox = document.getElementById('tpw-qr-box');
+      qrBox.textContent = '';
+      const img = new Image();
+      img.alt = 'Mã QR chuyển khoản';
+      img.onerror = () => {
+        qrBox.innerHTML = '<a href="' + _esc(d.checkoutUrl || '#') + '" target="_blank" rel="noopener" style="font-size:.8rem;color:#1455A4">Mở trang thanh toán →</a>';
+      };
+      img.src = qrUrl;
+      qrBox.appendChild(img);
+
+      document.getElementById('tpw-qr-info').innerHTML =
+        '<b>Ngân hàng:</b> ' + _esc(d.bankName || (d.bin ? 'BIN ' + d.bin : '—')) + '<br>' +
+        '<b>Số TK:</b> ' + _esc(d.accountNumber || '—') + '<br>' +
+        '<b>Chủ TK:</b> ' + _esc(d.accountName || '—') + '<br>' +
+        '<b>Nội dung CK:</b> <span style="font-weight:700;color:#061A2E">' + _esc(memo) + '</span>';
+
+      _qrStatus('Đang chờ thanh toán…', false);
+      let cnt = 0;
+      clearInterval(_qrTimer);
+      _qrTimer = setInterval(() => {
+        cnt++;
+        if (cnt > 300) { clearInterval(_qrTimer); _qrTimer = null; _qrStatus('Hết giờ chờ.', false); return; }
+        _qrPoll(false);
+      }, 3000);
+    } catch (e) {
+      _qrStatus(e.message || 'Lỗi tạo đơn', false);
+    }
+  }
+
   // ── Insufficient ──────────────────────────────────────────────
-  function _insufficient(cost, balance, slug) {
+  function _insufficient(cost, balance, slug, callback) {
     const need = cost - balance;
+    // Khách vô danh (`callback` luôn có mặt — `requireCredits` là nơi DUY
+    // NHẤT gọi hàm này kèm callback) → QR tại chỗ thay hẳn tường cũ, không
+    // rời trang. `_qrAmountFor` trả `null` khi chưa đọc được giá quy đổi hoặc
+    // số tiền ngoài tầm nạp tuỳ chọn (50k–5tr) — ca đó rơi tiếp xuống tường
+    // `/topup.html` như cũ, không bịa số.
+    if (callback && _isAnonymous()) {
+      const amountVnd = _qrAmountFor(need);
+      if (amountVnd != null) { _openBankQr(amountVnd, slug, callback); return; }
+    }
     // 🔴 PHẢI NÓI GIÁ VNĐ ở đây (hard paywall 2026-09-06) — cùng luật với
     // `lockPreview`. `vndLabel` tự trả '' khi chưa đọc được `credit_packages`,
     // khi đó KHÔNG hiện ngoặc rỗng, không đoán số.
@@ -962,7 +1159,7 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
         balance = d.balance ?? 0;
       } catch(e) {}
 
-      if (balance < cost) { _insufficient(cost, balance, slug); return; }
+      if (balance < cost) { _insufficient(cost, balance, slug, callback); return; }
 
       // 5. Trừ → callback. KHÔNG hỏi xác nhận: giá đã ghi sẵn trên chính nút bấm
       // và trong danh sách công cụ (và cả hai nay đọc từ `tool_pricing`, xem
@@ -991,7 +1188,7 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
           await callback();
           return;
         }
-        if (data.insufficientBalance) { _insufficient(cost, balance, slug); return; }
+        if (data.insufficientBalance) { _insufficient(cost, balance, slug, callback); return; }
         // Chạm trần lượt dùng thử miễn phí trong ngày (cầu dao ngân sách ảnh
         // free). KHÔNG phải lỗi và KHÔNG mất Lượng — server chặn trước khi trừ
         // — nên nói tử tế, đừng ném alert 'Lỗi:' làm người ta tưởng hỏng.
