@@ -192,7 +192,7 @@
     if (window.Track) { flushTrack(); return; }
     if (document.getElementById('tvmb-track-js')) return;
     var s = document.createElement('script');
-    s.id = 'tvmb-track-js'; s.src = '/track.js?v=4'; s.async = true;
+    s.id = 'tvmb-track-js'; s.src = '/track.js?v=5'; s.async = true;
     s.onload = flushTrack;
     (document.head || document.documentElement).appendChild(s);
   }
