@@ -477,14 +477,19 @@ function buildPhanSection(p,ep,label,ls,locked){
     tag='';
   }
   // Khoá-mini (ẨN mặc định) — id dùng LOCAL p (chỉ để `_paintSecLocks` bật/tắt
-  // đồng loạt, không cần khớp gì bên ngoài trang này). `part:p>1?p:null` →
-  // bấm chỉ mở ĐÚNG phần đó (23 Lượng/phần, tool_pricing.credits_per_part),
-  // KHÔNG mở cả bó — khác nút "✦ Luận giải chuyên sâu…" ở banner đầu trang,
-  // nút đó VẪN mở trọn 250 Lượng cho ai muốn xem hết luôn. Phần 1 (tổng quan
-  // đại vận) giữ CTA "Mở bản đầy đủ" như cũ — không bán lẻ tổng quan, bấm là
-  // mở cả bó. `wireSectionLocks` ở dưới đọc lại `part` để rẽ nhánh đúng hàm.
-  var lock=TuviPaywall.sectionLockHtml({id:'sec-ai-lock-'+p,product:'chu-trinh-cuoc-doi',part:p>1?p:null,
-    cta:p>1?'Mở phần này':'Mở bản đầy đủ'});
+  // đồng loạt, không cần khớp gì bên ngoài trang này). `part:p` → bấm chỉ mở
+  // ĐÚNG phần đó (23 Lượng/phần, tool_pricing.credits_per_part), KHÔNG mở cả
+  // bó — khác nút "✦ Luận giải chuyên sâu…" ở banner đầu trang, nút đó VẪN mở
+  // trọn 250 Lượng cho ai muốn xem hết luôn. `wireSectionLocks` ở dưới đọc lại
+  // `part` để rẽ nhánh đúng hàm.
+  // 🔴 (2026-09-07) Phần 1 (tổng quan đại vận, engine phan 14) nay có bản xem
+  // trước MIỄN PHÍ thật (`_runFreePreviewCTCD`, gọi từ `initLuanGiaiGate`) —
+  // cùng lý do đã áp cho phan 1-2 của Luận Giải. KHÔNG còn gì để mời mua ở
+  // phần này nữa nên KHÔNG dựng khoá-mini (chuỗi rỗng), giống hệt cách
+  // app-luan-giai.html bỏ khoá cho `phan<=FREE_PHAN`.
+  var lock=p>1
+    ? TuviPaywall.sectionLockHtml({id:'sec-ai-lock-'+p,product:'chu-trinh-cuoc-doi',part:p,cta:'Mở phần này'})
+    : '';
   // Gợi ý tool khác CHỈ hiện khi phần này KHÔNG bị khoá.
   var related=locked?'':phanRelatedHtml(ep);
   // `claude-content-`+ep (ENGINE phan) — khớp đúng khoá `_luanGiaiStore`/cache
@@ -718,6 +723,27 @@ async function initLuanGiaiGate(ls){
     if(cached){ _renderCachedLuanGiai(cached); return; }
   }
   _renderUnlockBlock();
+  // Hard paywall (2026-09-07): chạy model THẬT cho phần 1 (engine phan 14)
+  // NGAY, không đợi ai bấm gì — cùng mẫu `_runFreePreview` của
+  // app-luan-giai.html. Không `await`: tường phải đứng sẵn từ trước, phần chữ
+  // đổ xuống sau.
+  _runFreePreviewCTCD();
+}
+
+// ── BẢN XEM TRƯỚC MIỄN PHÍ phần 1 (2026-09-07) ─────────────────────────────
+// Chỉ ĐÚNG MỘT phần (engine phan 14, "Tổng quan đại vận") — xem lý do hẹp
+// phạm vi ở app/api/lasotuvi/route.ts (FREE_PHAN_CTCD). Hỏng thì IM: đây là
+// quà, không phải hàng đã bán — `_runPhanLuanGiai` tự vẽ ô lỗi kèm nút Thử
+// lại, không cần xử lý gì thêm ở đây.
+var _previewRanCTCD=false;
+async function _runFreePreviewCTCD(){
+  if(_previewRanCTCD) return;
+  _previewRanCTCD=true;
+  var ok=await _runPhanLuanGiai(14,true);
+  if(!ok){
+    var box=document.getElementById('claude-content-14');
+    if(box){ box.style.display='none'; box.innerHTML=''; }
+  }
 }
 
 // Đã đăng nhập → nút phẳng, gate credit rồi chạy thẳng; renderLuan() đã dựng
@@ -741,9 +767,20 @@ function mountHook(ls){
   });
 }
 
+// `#lgUnlock` khai TĨNH ngay TRƯỚC `#lgBody` trong HTML (đứng trên cả 11
+// phần) — đúng chỗ cho bản "0 phần free" cũ, nhưng nay phần 1 đọc thật miễn
+// phí nên tường phải đứng SAU nó, không phải trước. Dời bằng DOM vì `#sec-1`
+// do `renderLuan` dựng lại mỗi lượt bằng innerHTML — đặt tĩnh trong HTML thì
+// lượt render sau xoá mất.
+function _moveWallBelowFree(host){
+  var anchor=document.getElementById('sec-1');
+  if(!anchor||!anchor.parentNode||!host) return;
+  anchor.insertAdjacentElement('afterend',host);
+}
 function _renderUnlockBlock(){
   var host=document.getElementById('lgUnlock');
   host.style.display='block';
+  _moveWallBelowFree(host);
   // Bấm được nay không chỉ ở banner đầu trang — cả 11 phần (luôn nằm trong
   // DOM) cũng bật khoá-mini của chính nó, để cuộn qua khỏi banner vẫn còn chỗ mở.
   _paintSecLocks(true);
@@ -837,15 +874,32 @@ async function _startLuanGiaiAI(){
   // chữ (sinh SONG SONG, không theo đúng thứ tự 1→11). Để chúng sáng đèn
   // "chưa mở" trong lúc đang luận là mời bấm lại một lượt mua đã xảy ra rồi.
   _paintSecLocks(false);
-  _luanGiaiStore={};
+  // 🔑 GIỮ NGUYÊN `_luanGiaiStore` (bản cũ `={}` ở đây) — phần 1 (engine 14)
+  // có thể ĐÃ được sinh MIỄN PHÍ ở `_runFreePreviewCTCD` và người dùng vừa đọc
+  // xong. Xoá đi là trả tiền model lần thứ hai cho đúng thứ đang nằm trên màn
+  // hình. Nhánh khách vô danh vừa đăng ký (`onUnlock` ở `_renderUnlockBlock`)
+  // gọi lại `renderLuan` NGAY TRƯỚC khi tới đây để mở khoá DOM — việc đó xoá
+  // sạch `#claude-content-14` dù `_luanGiaiStore` (biến JS, không phải DOM)
+  // không đổi, nên phải đổ lại chữ đã có vào ô mới. Cùng mẫu app-luan-giai.html.
+  for(var _pp=1;_pp<=TONG_PHAN;_pp++){
+    var _ep=13+_pp;
+    var _box=document.getElementById('claude-content-'+_ep);
+    if(_box&&_luanGiaiStore[_ep]){ _box.style.display='block'; _box.innerHTML=renderMarkdown(_luanGiaiStore[_ep]); }
+  }
   _pace&&_pace.reset();
   // 🔑 BẮT BUỘC bắn PHẦN 1 (ep=14) RIÊNG LẺ trước khi mở bể song song — cùng
   // lý do đã ghi ở app-luan-giai.html: /api/lasotuvi cache `system` (SYSTEM_PROMPT
   // + lá số đầy đủ) theo breakpoint Anthropic, dùng CHUNG cho cả 24 engine phan
   // của một lá số (tool này chỉ chạm phan 14-24). Mồi phan 14 trước để ghi
   // cache, rồi bể (phan 15-24) mới cache-hit thay vì cả 3 lượt đầu cùng miss.
-  document.getElementById('lgProgress').textContent='Đang luận giải phần 1 / '+TONG_PHAN+'...';
-  var primeOk=await _runPhanLuanGiai(14);
+  // Phần 1 THƯỜNG đã có sẵn từ bản xem trước ⇒ khỏi mồi lại (vừa tốn tiền vừa
+  // tốn ~5 giây chờ) — chỉ mồi khi nó thiếu thật (bản xem trước bị cầu dao
+  // chặn, hoặc người đã mua quay lại chưa từng xem qua bản xem trước).
+  var primeOk=true;
+  if(!_luanGiaiStore[14]){
+    document.getElementById('lgProgress').textContent='Đang luận giải phần 1 / '+TONG_PHAN+'...';
+    primeOk=await _runPhanLuanGiai(14);
+  }
   var result=await PhanPool.run({
     total:TONG_PHAN,
     concurrency:PHAN_CONCURRENCY,
@@ -854,9 +908,14 @@ async function _startLuanGiaiAI(){
     pace:_pace,
     // PhanPool gọi runPart bằng LOCAL p (1-11, khớp id `sec-`+p để cuộn trang
     // đúng chỗ) — đổi sang ep NGAY tại đây, chỗ DUY NHẤT hai trục gặp nhau.
-    // Phần 1 (ep=14) đã chạy ở lượt mồi trên — chỉ TRẢ LẠI kết quả đó, không
-    // gọi lại API (gọi lại là tốn thêm một lượt model vô ích).
-    runPart:function(p){ var ep=13+p; return ep===14?Promise.resolve(primeOk):_runPhanLuanGiai(ep); },
+    // Phần đã có chữ (mồi ở trên, hoặc sinh miễn phí trước paywall) chỉ TRẢ
+    // LẠI kết quả — gọi lại API là tốn thêm một lượt model cho thứ đã nằm sẵn.
+    runPart:function(p){
+      var ep=13+p;
+      if(ep===14) return Promise.resolve(primeOk||!!_luanGiaiStore[14]);
+      if(_luanGiaiStore[ep]) return Promise.resolve(true);
+      return _runPhanLuanGiai(ep);
+    },
   });
   if(result.ok){
     document.getElementById('lgProgress').textContent='✓ Luận giải hoàn tất';
@@ -869,7 +928,10 @@ async function _startLuanGiaiAI(){
 // Chạy MỘT phần — nhận ENGINE PHAN (ep, 14-24), gọi từ trong bể (đã đổi từ
 // local p) và trực tiếp từ nút "↻ Thử lại" (giữ nguyên ep để retry đúng
 // engine phan đã lỗi). Trả true/false, KHÔNG throw ra ngoài.
-async function _runPhanLuanGiai(ep){
+// `preview=true` (chỉ ep=14, gọi từ `_runFreePreviewCTCD`) → hỏng thì IM,
+// không vẽ ô lỗi/nút Thử lại — đây là quà chưa ai trả tiền, không phải hàng
+// đã bán. Cùng cờ `preview` app-luan-giai.html dùng cho `_runPhanLuanGiai`.
+async function _runPhanLuanGiai(ep,preview){
   var p=ep-13; // chỉ dùng để CHỮ HIỂN THỊ khớp badge local (1-11) trên section
   var box=document.getElementById('claude-content-'+ep);
   // Chờ MỘT CỤC (không stream) và tốn hơn 10 giây ⇒ orb, theo luật ở đầu
@@ -881,7 +943,7 @@ async function _runPhanLuanGiai(ep){
     box.style.display='block';
     box.innerHTML='<div class="phan-empty">Đang luận giải…</div>';
     if(window.AiLoadingSteps&&AiLoadingSteps.mountWait){
-      w=AiLoadingSteps.mountWait(box,{label:'Đang luận giải phần '+p+'…',
+      w=AiLoadingSteps.mountWait(box,{label:(preview?'Đang luận giải phần '+p+' (miễn phí)…':'Đang luận giải phần '+p+'…'),
         expectSec:(_pace&&_pace.perPartSec())||0,expectText:(_pace&&_pace.perPartText())||''});
       w.start();
     }
@@ -900,11 +962,14 @@ async function _runPhanLuanGiai(ep){
     var _ccTk=(window.Auth&&window.Auth.isLoggedIn())?window.Auth.getSession().access_token:null;
     var _ccHeaders={'Content-Type':'application/json'};
     if(_ccTk)_ccHeaders['Authorization']='Bearer '+_ccTk;
-    var resp=await fetch('/api/lasotuvi',{method:'POST',headers:_ccHeaders,body:JSON.stringify({hoTen:_hoTen,ngay:_ngay,thang:_thang,nam:_nam,gioiTinh:_gioitinh,namXem:_namXem,laSoText:_laSoText,phan:ep,docs:docs,bundleSlug:_pendingSlug})});
+    // `anonId` chỉ có tác dụng ở phan=14 (xem trước, chưa đăng nhập) — cầu dao
+    // ở server bỏ qua field này với mọi phan khác. Xem TuviPaywall.previewAnonId
+    // + lib/billing/anon-preview.ts.
+    var resp=await fetch('/api/lasotuvi',{method:'POST',headers:_ccHeaders,body:JSON.stringify({hoTen:_hoTen,ngay:_ngay,thang:_thang,nam:_nam,gioiTinh:_gioitinh,namXem:_namXem,laSoText:_laSoText,phan:ep,docs:docs,bundleSlug:_pendingSlug,anonId:TuviPaywall.previewAnonId()})});
     var data=await resp.json();
     if(data.error||!data.luanGiai){
       doneWait();
-      if(box)box.innerHTML='<div class="laso-error">Lỗi khi luận giải phần '+p+'. <button class="btn" onclick="window._lgRetryPhan('+ep+')">↻ Thử lại</button></div>';
+      if(box)box.innerHTML=preview?'':'<div class="laso-error">Lỗi khi luận giải phần '+p+'. <button class="btn" onclick="window._lgRetryPhan('+ep+')">↻ Thử lại</button></div>';
       return false;
     }
     _luanGiaiStore[ep]=data.luanGiai;
@@ -914,7 +979,7 @@ async function _runPhanLuanGiai(ep){
     return true;
   }catch(e){
     doneWait();
-    if(box)box.innerHTML='<div class="laso-error">Lỗi phần '+p+': '+esc(e.message)+' <button class="btn" onclick="window._lgRetryPhan('+ep+')">↻ Thử lại</button></div>';
+    if(box)box.innerHTML=preview?'':'<div class="laso-error">Lỗi phần '+p+': '+esc(e.message)+' <button class="btn" onclick="window._lgRetryPhan('+ep+')">↻ Thử lại</button></div>';
     return false;
   }
 }

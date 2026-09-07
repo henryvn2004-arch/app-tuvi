@@ -284,12 +284,20 @@ async function runPost(request: NextRequest) {
   // TRƯỚC khi họ trả đồng nào, vì đó mới là thứ tạo được cái móc "đúng vl" mà
   // bảng điểm deterministic không bao giờ tạo được. Phần 3+ vẫn khoá cứng.
   //
-  // Phần 14-24 (Chu Trình Cuộc Đời, dùng CHUNG route này) KHÔNG có phần xem
-  // trước nào — `phanNum <= FREE_PHAN` tự loại chúng ra vì số phần của chúng
-  // bắt đầu từ 14. Đừng đổi điều kiện thành "phần đầu của tool" nếu chưa dựng
-  // cầu dao/ngân sách riêng cho tool đó.
+  // 🔴 (2026-09-07) Chu Trình Cuộc Đời (phần 14-24, dùng CHUNG route này) nay
+  // có ĐÚNG MỘT phần xem trước: ENGINE PHẦN 14 ("Tổng quan đại vận" — phần cục
+  // bộ 1 của tool, xem app-chu-trinh-cuoc-doi.html) — hook tương đương phần 1
+  // của Luận Giải. CỐ Ý hẹp: chỉ đúng con số 14, KHÔNG generalize thành "phần
+  // đầu của mỗi tool dùng chung route" — 10 phần còn lại (15-24) vẫn khoá cứng
+  // như trước. `preview.free_runs`/`ip_daily_cap`/`global_daily_cap`
+  // (_patches/migration-anon-preview.sql) là NGÂN SÁCH DÙNG CHUNG cho mọi
+  // tool_id xem trước (laso/chu-trinh-cuoc-doi/day-con/...) — một người đã hết
+  // suất ĐỜI ở tool này thì cũng hết ở tool kia, đây là THIẾT KẾ (một ngân sách
+  // "làm quen sản phẩm" cho cả trang), không phải bug cần tách theo tool_id.
   const FREE_PHAN = 2;
-  const isPreview = phanNum <= FREE_PHAN;
+  const FREE_PHAN_CTCD = 14;
+  const isPreview = phanNum <= FREE_PHAN || phanNum === FREE_PHAN_CTCD;
+  const previewToolId = phanNum === FREE_PHAN_CTCD ? 'chu-trinh-cuoc-doi' : 'laso';
 
   if (!isPreview && !paywallDisabled()) {
     const auth = await authUserFromRequest(request);
@@ -315,7 +323,7 @@ async function runPost(request: NextRequest) {
 
     const auth = await authUserFromRequest(request);
     const pKey = 'error' in auth ? (anonId || '') : auth.user.id;
-    const gate = await previewGate(pKey, previewIpHash(request), 'laso');
+    const gate = await previewGate(pKey, previewIpHash(request), previewToolId);
     if (!gate.allowed) {
       // 402 chứ không 429: với client đây KHÔNG phải "thử lại sau" mà là "hết
       // phần miễn phí, tới lúc trả tiền" — và trang phải dựng đúng tấm tường đó
@@ -459,7 +467,7 @@ async function runPost(request: NextRequest) {
     // model lẫn một suất quota. Chỉ đường xem trước ghi — phần trả phí đã có
     // `laso_public` (qua /api/save-laso) làm kho của nó.
     if (previewCacheKey) {
-      previewCachePut({ key: previewCacheKey, toolId: 'laso', phan: phanNum, text: luanGiai });
+      previewCachePut({ key: previewCacheKey, toolId: previewToolId, phan: phanNum, text: luanGiai });
     }
     return ok({ luanGiai, chartData, phan });
   } catch (e: unknown) {
