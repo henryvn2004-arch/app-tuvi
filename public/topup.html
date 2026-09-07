@@ -754,8 +754,9 @@ function checkCancelledPayment() {
         if (!d.paid) return;
         loadStatus();
         showAlert('success', `Nạp thành công ${d.credits} Lượng!`);
-        try { window.fbq && window.fbq('track', 'Purchase', { value: d.amountVND, currency: 'VND' }); } catch (e) {}
-        try { window.gtag && window.gtag('event', 'purchase', { transaction_id: p.get('orderCode'), value: d.amountVND, currency: 'VND' }); } catch (e) {}
+        // Purchase KHÔNG bắn ở đây nữa — server bắn thay tại bank-webhook, đúng
+        // MỘT lần, ngay khi cộng tiền thật. Bắn thêm ở đây là tính trùng doanh
+        // thu (đo thật: 2 event cho 1 giao dịch trước khi gỡ dòng này).
         resumeToTool();
       })
       .catch(() => {});
@@ -1191,8 +1192,9 @@ loadPackages().then(loadToolPricing).then(renderPendingBanner);
       if (d.paid) {
         clearInterval(_timer);
         status('check-circle', 'Thanh toán thành công! Đang cập nhật…');
-        try { window.fbq && window.fbq('track', 'Purchase', { value: d.amountVND, currency: 'VND' }); } catch (e) {}
-        try { window.gtag && window.gtag('event', 'purchase', { transaction_id: _oc, value: d.amountVND, currency: 'VND' }); } catch (e) {}
+        // Purchase KHÔNG bắn ở đây nữa — cùng lý do với checkCancelledPayment()
+        // phía trên: server (bank-webhook → fireServerPurchase) đã bắn đúng
+        // MỘT lần rồi, đo thật đã thấy tính trùng khi để cả hai cùng chạy.
         setTimeout(() => {
           closeBankModal();
           loadStatus();
