@@ -437,7 +437,9 @@ function saveSession(data) {
   // 🔑 Đăng nhập/đăng ký cũng phải hẹn giờ xoay token — thiếu dòng này thì phiên
   // vừa tạo chết sau ~1 giờ mà không có gì gia hạn (lỗi rail đòi đăng nhập lại).
   _scheduleRefresh(data);
-  if (data.access_token) sendSignupSignal(data.access_token);
+  // isAnon: phiên khách ẨN DANH (guest checkout) KHÔNG phải đăng ký thật — chặn
+  // ở đây, không phải trong sendSignupSignal, vì server không biết is_anonymous.
+  if (data.access_token) sendSignupSignal(data.access_token, !!(_user && _user.is_anonymous));
   // Marketing: gắn user_id + snapshot attribution (first-touch) lên tài khoản.
   // track.js đọc token vừa lưu trong localStorage; server phân biệt signup mới.
   try { if (window.Track && window.Track.event) window.Track.event('login'); } catch (e) { /* ignore */ }
@@ -457,14 +459,27 @@ function _deviceId() {
     return d;
   } catch (e) { return ''; }
 }
-function sendSignupSignal(token) {
+function sendSignupSignal(token, isAnon) {
   try {
     fetch('/api/signup-signal', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
       body: JSON.stringify({ fp: _deviceId() }),
       keepalive: true,
-    }).catch(function () {});
+    })
+      // Idempotent theo user (PK signup_signals.user_id): lượt gọi ĐẦU TIÊN thành
+      // công cho một user_id là tín hiệu DUY NHẤT đáng tin cho "tài khoản mới" —
+      // đây là nơi bắn Track.event('signup') (GA4 sign_up + Meta CompleteRegistration
+      // qua track.js). Thiếu bước này, hai map đó trong track.js không bao giờ chạy
+      // vì chỉ có Track.event('login') được gọi ở saveSession(). Bỏ qua khi isAnon
+      // (guest checkout) — đó không phải đăng ký thật.
+      .then(function (r) { return r.json(); })
+      .then(function (data) {
+        if (!isAnon && data && data.ok && !data.already) {
+          try { if (window.Track && window.Track.event) window.Track.event('signup'); } catch (e) { /* ignore */ }
+        }
+      })
+      .catch(function () {});
   } catch (e) { /* ignore */ }
 }
 window.sendSignupSignal = sendSignupSignal;
