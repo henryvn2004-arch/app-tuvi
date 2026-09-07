@@ -1271,15 +1271,28 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
     return '<span class="tpw-lock-badge"><span class="ic-inline" data-icon="lock"></span>' + (text || 'Khoá') + '</span>';
   }
 
-  // ── Ảnh minh hoạ MỜ cho 3 tool sinh ảnh (2026-09-07, Henry chốt) ─────────
+  // ── Ảnh minh hoạ MỜ cho tool sinh ảnh (2026-09-07, Henry chốt) ─────────
   // "Xem trước" cho ảnh KHÁC bản chữ: không có "phần 1/phần 2" để cắt, và
   // sinh thật (gpt-image-2) tốn ~1.161đ/lượt — không rẻ như 243đ/phần văn bản
-  // nên KHÔNG sinh ảnh thật miễn phí. Thay vào đó: một ảnh DUMMY tĩnh (Pixabay,
-  // giấy phép cho phép dùng thương mại — public/img/portrait-preview/), làm mờ
+  // nên KHÔNG sinh ảnh thật miễn phí. Thay vào đó: một ảnh DUMMY tĩnh, làm mờ
   // bằng .tpw-real-lock, đúng GIỚI TÍNH (nam/nữ) để không lạc quẻ — Henry: "chú
   // ý nam/nữ". Ảnh THẬT của từng người chỉ sinh sau khi trả tiền; đây chỉ tạo
   // cảm giác "có sẵn, đang chờ mở khoá", không phải suy đoán diện mạo thật.
-  function dummyPortraitUrl(gender) {
+  //
+  // 🔴 Cặp ảnh ở `public/img/portrait-preview/dummy-{nam,nu}.webp` vẽ theo
+  // phong cách CỔ ĐIỂN (tranh cung đình/đền — đúng nét vẽ của `chan-dung-tien-kiep`
+  // và `duyen-no-tien-kiep`, cả hai đều ra ảnh "tiền kiếp"). `chan-dung-vo-chong`
+  // sinh ảnh THẬT theo phong cách HOÀN TOÀN khác (ultra-realistic modern editorial
+  // photograph — xem `app/api/chan-dung-vo-chong/route.ts`) nên dùng chung cặp ảnh
+  // đó là ảnh minh hoạ SAI PHONG CÁCH, gây hụt hẫng đúng thứ một bản xem trước
+  // phải tránh (bài học đã ghi ở docs/nhat-ky/2026-09.md "Sửa nguồn ảnh dummy").
+  // Chưa có cặp ảnh riêng đúng phong cách cho `chan-dung-vo-chong` (cần sinh
+  // qua ĐÚNG pipeline gpt-image-2 của chính tool đó, không làm được trong môi
+  // trường không có OPENAI/GEMINI key) — trả `null` cho các tool CHƯA có cặp
+  // ảnh khớp phong cách, để nơi gọi tự bỏ qua thay vì hiện ảnh sai.
+  var DUMMY_PORTRAIT_TOOLS = { 'chan-dung-tien-kiep': 1, 'duyen-no-tien-kiep': 1 };
+  function dummyPortraitUrl(gender, tool) {
+    if (tool && !DUMMY_PORTRAIT_TOOLS[tool]) return null;
     return gender === 'nu' ? '/img/portrait-preview/dummy-nu.webp' : '/img/portrait-preview/dummy-nam.webp';
   }
 

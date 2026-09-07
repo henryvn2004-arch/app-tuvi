@@ -201,7 +201,7 @@ window.SHELL_INTRO={key:'chan-dung-vo-chong'};</script>
 <script src="/tools-shared/vn-timezone.js?v=1"></script>
 <script src="/tuvi-form.js?v=2"></script>
 <script src="/tools-shared/cung-ngay-sinh.js?v=2"></script>
-<script src="/tuvi-paywall.js?v=27"></script>
+<script src="/tuvi-paywall.js?v=28"></script>
 <script src="/tools-shared/hook-charts.js?v=2"></script>
 <script src="/tools-shared/hook-facts.js?v=1"></script>
 <script src="/tools-shared/hook-layer.js?v=2"></script>
@@ -382,13 +382,22 @@ function _renderLockWall() {
 // suy đoán diện mạo bạn đời thật. Host RIÊNG (không tái dùng `portraitBlock`)
 // vì khối đó còn chứa mô tả/hoàn cảnh gặp gỡ (chữ AI, chưa nên lộ) — tách
 // host giữ ảnh dummy đơn giản hơn là khoá từng phần con bên trong.
+//
+// 🔴 `dummyPortraitUrl(gender, 'chan-dung-vo-chong')` trả `null`: cặp ảnh
+// dùng chung ở đây vẽ theo phong cách CỔ ĐIỂN của chan-dung-tien-kiep/
+// duyen-no-tien-kiep, không khớp phong cách "ultra-realistic modern editorial
+// photograph" mà tool này thật sự sinh ra — hiện ảnh sai phong cách còn tệ
+// hơn không hiện gì (đúng bài học ở docs/nhat-ky/2026-09.md "Sửa nguồn ảnh
+// dummy"). Không có cặp ảnh riêng đúng phong cách thì bỏ qua khối này, chỉ
+// còn tường khoá chữ (`_renderLockWall`) — không tự chế ảnh giả để lấp chỗ.
 function _showDummyPortrait(gender) {
   var host = document.getElementById('dummyPortraitHost');
-  if (!host) return;
+  var url = TuviPaywall.dummyPortraitUrl(gender, 'chan-dung-vo-chong');
+  if (!host || !url) return;
   host.style.display = 'block';
   host.innerHTML =
     TuviPaywall.lockBadge('Ảnh minh hoạ — chưa mở') +
-    '<img src="' + TuviPaywall.dummyPortraitUrl(gender) + '" class="tpw-real-lock" ' +
+    '<img src="' + url + '" class="tpw-real-lock" ' +
     'alt="Ảnh minh hoạ (mờ) — mở khoá để xem chân dung thật" ' +
     'style="display:block;margin-top:8px;max-width:260px;width:100%;border-radius:12px">';
 }
