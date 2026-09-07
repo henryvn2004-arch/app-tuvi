@@ -8,11 +8,16 @@
 -- `lib/content/viral-core.ts` (không tiêu đề con, mở bằng hook, có twist, chốt
 -- hành động). Cron mới `/api/cron/viral-seo-pages` viết lại bằng LLM theo đúng
 -- arc đó; cột này là con trỏ TIẾN ĐỘ để cron không viết lại dòng đã xong, và để
--- rải việc ra nhiều ngày thay vì đụng cả 7.080 dòng `updated_at` một lượt (sẽ
--- làm `lastmod` toàn site nhảy — xem CLAUDE.md §Cache/SEO).
+-- rải việc ra nhiều ngày thay vì viết hết trong một lượt.
 --
--- ⚠️ ÁP DỤNG PATCH NÀY TRƯỚC KHI DEPLOY route mới — thiếu cột thì PATCH của
--- cron sẽ lỗi 400 (unknown column) ngay lượt chạy đầu tiên.
+-- ⚠️ ĐÍNH CHÍNH: lý do "rải theo ngày" ban đầu ghi là tránh `lastmod` toàn site
+-- nhảy — SAI, vì `seo_pages` không có cột `updated_at` và `lib/seo/lastmod.ts`
+-- chỉ đọc `created_at` (PATCH không đụng tới) cho bảng này. Lý do THẬT là chi
+-- phí LLM theo lượt gọi + muốn theo dõi chất lượng dần, không phải SEO.
+--
+-- ✅ ĐÃ ÁP DỤNG lên prod (project "Tử Vi Minh Bảo") 2026-09-06 qua Supabase MCP
+-- — giữ file này làm hồ sơ migration, không cần chạy lại (mọi câu lệnh đều
+-- `if not exists`/idempotent).
 -- ============================================================
 
 alter table public.seo_pages
