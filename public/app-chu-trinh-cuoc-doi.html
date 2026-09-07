@@ -767,11 +767,16 @@ async function initLuanGiaiGate(ls){
   _runFreePreviewCTCD();
 }
 
-// ── BẢN XEM TRƯỚC MIỄN PHÍ phần 1 (2026-09-07) ─────────────────────────────
-// Chỉ ĐÚNG MỘT phần (engine phan 14, "Tổng quan đại vận") — xem lý do hẹp
-// phạm vi ở app/api/lasotuvi/route.ts (FREE_PHAN_CTCD). Hỏng thì IM: đây là
-// quà, không phải hàng đã bán — `_runPhanLuanGiai` tự vẽ ô lỗi kèm nút Thử
-// lại, không cần xử lý gì thêm ở đây.
+// ── BẢN XEM TRƯỚC MIỄN PHÍ phần 1+2 (2026-09-07, nới từ 1 phần) ────────────
+// ĐÚNG HAI phần (engine phan 14 "Tổng quan đại vận" + 15 "Đại Vận 1") — xem
+// FREE_PHAN_CTCD_MIN/MAX ở app/api/lasotuvi/route.ts. Gọi TUẦN TỰ, không song
+// song: phần 1 mồi cache `system` (breakpoint Anthropic khi fallback về
+// Opus) — song song hai lượt đầu là cache-miss cả hai.
+// Hỏng thì IM: đây là quà, không phải hàng đã bán — `_runPhanLuanGiai` tự vẽ
+// ô lỗi kèm nút Thử lại, không cần xử lý gì thêm ở đây. Phần 1 hỏng (hết suất
+// xem trước, hay lỗi mạng) → DỪNG LUÔN, không thử phần 2: cùng một cầu dao
+// ngân sách nên phần 2 chắc chắn cũng bị chặn, gọi tiếp chỉ tốn một lượt mạng
+// vô ích.
 var _previewRanCTCD=false;
 async function _runFreePreviewCTCD(){
   if(_previewRanCTCD) return;
@@ -780,12 +785,8 @@ async function _runFreePreviewCTCD(){
   if(!ok14){
     var box14=document.getElementById('claude-content-14');
     if(box14){ box14.style.display='none'; box14.innerHTML=''; }
+    return;
   }
-  // 🔴 (nới 2026-09-07) Phần 2 (engine phan 15, "Đại Vận 1") nay CŨNG xem
-  // trước miễn phí — cùng lằn ranh 1→2 phần mà tool "laso" đã có, xem
-  // FREE_PHAN_CTCD_MAX ở app/api/lasotuvi/route.ts. Gọi TUẦN TỰ sau phần 1,
-  // không song song: phần 1 đã mồi cache `system` (breakpoint Anthropic khi
-  // fallback về Opus) — song song hai lượt đầu là cache-miss cả hai.
   var ok15=await _runPhanLuanGiai(15,true);
   if(!ok15){
     var box15=document.getElementById('claude-content-15');
