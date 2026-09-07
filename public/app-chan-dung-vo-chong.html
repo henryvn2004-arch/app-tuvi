@@ -327,6 +327,7 @@ async function _runAnonPreview() {
     if (window.SHELL_INTRO) Shell.dismissIntro(window.SHELL_INTRO.key);
     _renderLockWall();
     _showDummyPortrait(data.spouseGender);
+    _showLuanGiaiSkeleton();
     _mountCnsVoChong(_lastBirth);
   } catch (e) {
     _closePanel();
@@ -391,6 +392,26 @@ function _showDummyPortrait(gender) {
     '<img src="' + TuviPaywall.dummyPortraitUrl(gender) + '" class="tpw-real-lock" ' +
     'alt="Ảnh minh hoạ (mờ) — mở khoá để xem chân dung thật" ' +
     'style="display:block;margin-top:8px;max-width:260px;width:100%;border-radius:12px">';
+}
+
+// Box "Luận Giải Cung Phu Thê" MỜ (2026-09-07) — trước đây `luanGiaiBlock`
+// nằm `display:none` HOÀN TOÀN ở tầng xem-trước, người xem chỉ thấy đúng một
+// dòng liệt kê trong tường khoá chung (`_renderLockWall`), không có gì gợi ý
+// "đây là một đoạn văn thật, đã viết sẵn, đang chờ mở khoá" — dễ hiểu lầm là
+// tính năng chưa có. Dựng vài dòng giả làm mờ (đúng khối `.tpw-lock-blur` đã
+// dùng cho tường khoá/ảnh dummy) NGAY TRONG chính box thật, để hình dạng và
+// vị trí khớp 100% với box sẽ hiện sau khi mở khoá — không phải một box khác.
+function _showLuanGiaiSkeleton() {
+  var block = document.getElementById('luanGiaiBlock');
+  var text = document.getElementById('luanGiaiText');
+  if (!block || !text) return;
+  text.innerHTML =
+    TuviPaywall.lockBadge('Luận giải — chưa mở') +
+    '<div class="tpw-lock-blur" aria-hidden="true" style="margin-top:10px">' +
+      '<i style="width:96%"></i><i style="width:88%"></i><i style="width:93%"></i>' +
+      '<i style="width:70%"></i><i style="width:91%"></i><i style="width:58%"></i>' +
+    '</div>';
+  block.style.display = 'block';
 }
 
 function _openPanel() {
