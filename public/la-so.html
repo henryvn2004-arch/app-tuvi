@@ -478,5 +478,32 @@ document.addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.tagName!=='
 document.addEventListener('DOMContentLoaded', loadFromSlug);
 </script>
 <script src="/nav.js?v=26" data-icons-only></script>
+<script>
+// `nav.js` ở chế độ `data-icons-only` CỐ Ý không chèn GA4/Ads/Meta Pixel
+// (đúng cho 27 trang shell — đã có qua shell.js — và 2 trang admin, không cần
+// đo). Nhưng đây là TRANG LÁ SỐ CÔNG KHAI, đích thật của traffic Ads. Baseline
+// TBT (2026-09-06) phát hiện nó chạy prod với 0 GA4/Ads/Meta Pixel — mất trắng
+// attribution từ lúc trang này tồn tại. Khởi tạo riêng ở đây, cùng ID với
+// nav.js, cùng lý do bỏ qua `navigator.webdriver` (bộ E2E chạy thẳng vào trang
+// này). Giữ NGUYÊN VĂN theo bản đã dùng ở payment-success.html.
+if (!document.getElementById('fb-pixel-js') && !navigator.webdriver) {
+  (function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+  n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.id='fb-pixel-js';t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)})(window,
+  document,'script','https://connect.facebook.net/en_US/fbevents.js');
+  window.fbq('init', '1747342186469684');
+  window.fbq('track', 'PageView');
+}
+if (!document.getElementById('gtag-js') && !navigator.webdriver) {
+  var ga = document.createElement('script'); ga.id = 'gtag-js'; ga.async = true;
+  ga.src = 'https://www.googletagmanager.com/gtag/js?id=G-F4XNRS2XT0'; document.head.appendChild(ga);
+  window.dataLayer = window.dataLayer || [];
+  window.gtag = function () { window.dataLayer.push(arguments); };
+  window.gtag('js', new Date());
+  window.gtag('config', 'G-F4XNRS2XT0');
+  window.gtag('config', 'AW-18419617290');
+}
+</script>
 </body>
 </html>
