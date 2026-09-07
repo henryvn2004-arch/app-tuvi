@@ -25,6 +25,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
+| 1 | 2026-09 | `2026-09.md` | 💰 Sàn giá 50.000đ/tool — nâng 35 tool đang bán dưới sàn lên 100 Lượng |
 | 1 | 2026-09 | `2026-09.md` | 🐛 Anonymous user hết Lượng giữa chừng: mất trắng form + tường thiếu giá VNĐ + orb lệch mép |
 | 1 | 2026-09 | `2026-09.md` | 🐞 Round chạy thật cuối — 2 lỗi paywall thật tìm thấy trên Chu Trình Cuộc Đời, đã vá |
 | 1 | 2026-09 | `2026-09.md` | 🧰 Chuẩn bị "round chạy thật cuối" — mở rộng script sinh mẫu sang 5 tool nữa |
