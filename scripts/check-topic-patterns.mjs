@@ -15,9 +15,14 @@
 // THẬT SỰ là âm tiết đứng riêng nên biên từ vẫn khớp. Biên từ chỉ cứu ngôn ngữ
 // viết liền. Cách vá đúng là dùng CỤM ĐỦ NGHĨA ('quan lộc', 'sao xấu').
 //
-// ⚠️ Ba bảng này là BA BẢN CHÉP TAY (cố ý chưa gộp — chúng trả về KHOÁ khác
-// nhau: 'suckhoe' vs 'Tật Ách'). Bộ dò canh cả ba để chúng không trôi khỏi nhau
-// ở đúng chỗ đã cắn.
+// ⚠️ Từng là BA BẢN CHÉP TAY — 2026-09 gộp 2/3: FOCUS_TOPICS (prompts.ts) và
+// `topics` cũ ở app/api/xem-tuoi/route.ts dùng CÙNG khoá (tên cung) và đã trôi
+// khỏi nhau thật (thiếu '|đối tác', thiếu điều kiện năm → __daiVan__) — nay
+// xem-tuoi import thẳng `relevantPalaces` từ prompts.ts, không còn bảng riêng.
+// `topicMap` ở app/api/tubinh/route.ts CỐ Ý còn đứng riêng: nó trả KHOÁ khác
+// hẳn ('suckhoe' vs 'Tật Ách') vì Tử Bình không map theo 12 cung — gộp vào sẽ
+// đổi ý nghĩa, không phải dọn trùng lặp. Bộ dò canh CẢ HAI để chúng không trôi
+// khỏi nhau ở đúng chỗ đã cắn.
 import fs from 'node:fs';
 
 // Âm tiết đơn PHỔ BIẾN trong ngữ cảnh khác hẳn chủ đề nó định dò.
@@ -45,11 +50,6 @@ const BANG = [
     'app/api/tubinh/route.ts',
     'topicMap',
     /const topicMap: Record<string, string\[\]> = \{([\s\S]*?)\n {2}\};/,
-  ],
-  [
-    'app/api/xem-tuoi/route.ts',
-    'topics',
-    /const topics: Record<string, string\[\]> = \{([\s\S]*?)\n {2}\};/,
   ],
 ];
 

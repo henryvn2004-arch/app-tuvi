@@ -391,49 +391,22 @@
 }
 
   function renderInlineDaiVanLineChart(bt) {
-  if (typeof Chart === 'undefined') return;
+  if (typeof Chart === 'undefined' || !window.DaiVanChart) return;
   const canvas = document.getElementById('phan12-line-chart');
   if (!canvas || !bt?.daiVans?.length) return;
-  const labels = bt.daiVans.map((dv, i) => `ĐV${i+1} (${dv.tuoiStart}-${dv.tuoiEnd}t)`);
-  const scores = bt.daiVans.map(dv => dv.score);
   const cur = bt.daiVanHienTai;
   if (window._phan12Line) try { window._phan12Line.destroy(); } catch(e) {}
-  window._phan12Line = new Chart(canvas.getContext('2d'), {
-    type: 'line',
-    data: {
-      labels,
-      datasets: [{
-        label: 'Điểm Đại Vận',
-        data: scores,
-        borderColor: '#9A7B3A',
-        backgroundColor: 'rgba(154,123,58,0.15)',
-        fill: true,
-        tension: 0.35,
-        pointRadius: 6,
-        pointHoverRadius: 8,
-        pointBackgroundColor: bt.daiVans.map((dv, i) => cur && cur.idx === i ? '#C0392B' : '#061A2E'),
-        pointBorderColor: '#fff',
-        pointBorderWidth: 2,
-      }]
-    },
-    options: {
-      responsive: true, maintainAspectRatio: false,
-      scales: {
-        y: { min: 0, max: 10, ticks: { stepSize: 2, font: { size: 11 } } },
-        x: { ticks: { font: { size: 10 }, maxRotation: 30, minRotation: 0 } },
-      },
-      plugins: {
-        legend: { display: false },
-        tooltip: { callbacks: {
-          title: (items) => labels[items[0].dataIndex],
-          label: (item) => {
-            const dv = bt.daiVans[item.dataIndex];
-            return [`${dv.can} ${dv.chi} (${dv.thapThanCan})`, `Score: ${dv.score}/10 — ${dv.label}`, `${dv.namStart}-${dv.namEnd}`];
-          }
-        } }
-      }
-    }
+  const config = window.DaiVanChart.buildSingle(bt.daiVans, {
+    getScore: dv => dv.score,
+    lineColor: '#9A7B3A',
+    fillColor: 'rgba(154,123,58,0.15)',
+    markerColor: '#061A2E',
+    activeColor: '#C0392B',
+    isCurrent: (dv, i) => !!(cur && cur.idx === i),
+    maintainAspectRatio: false,
+    tooltipExtra: dv => [`${dv.can} ${dv.chi} (${dv.thapThanCan})`, dv.label, `${dv.namStart}-${dv.namEnd}`],
   });
+  window._phan12Line = new Chart(canvas.getContext('2d'), config);
 }
 
   root.BatTuCore = { TONG_PHAN: TONG_PHAN, PHAN_LABELS: PHAN_LABELS, buildPreGenForPhan: buildPreGenForPhan, renderInlineDomainRadar: renderInlineDomainRadar, renderInlineDaiVanLineChart: renderInlineDaiVanLineChart };

@@ -679,14 +679,14 @@ async function runPost(request: NextRequest) {
     .join('\n\n');
 
   try {
-    // provider:'anthropic' (chốt Henry 2026-08-24): bản luận giải 16 phần Tử
-    // Bình Bát Tự thuộc nhóm tool quan trọng → Opus 5 primary (xem
-    // lib/llm/complete.ts CANONICAL_ORDER). Lưu ý: đây là override PROVIDER
-    // (llmStreamResponse opts), khác `'anthropic'` truyền làm THAM SỐ THỨ HAI
-    // (`format`, chọn byte-shape SSE tu-binh.html parse) — hai chữ 'anthropic'
-    // trùng tên nhưng khác vai trò.
+    // 🔻 GỠ ép `provider:'anthropic'` (chốt Henry 2026-09-03) — Gemini 3.8
+    // Flash primary, Opus 5 lùi xuống lưới đỡ ngay sau. Số đo và lý do đầy đủ
+    // ở app/api/lasotuvi/route.ts (cùng lượt chốt). Lật ngược không cần deploy:
+    // `chat.standalone_provider` trong app_config.
+    // ⚠️ `'anthropic'` còn lại ở THAM SỐ THỨ HAI bên dưới KHÔNG phải provider —
+    // đó là `format`, chọn byte-shape SSE mà tu-binh.html parse. Giữ nguyên.
     return await llmStreamResponse(
-      { system: SYSTEM_PROMPT_TUBINH, prompt: userPrompt, maxTokens: phanInfo.maxTokens, provider: 'anthropic' },
+      { system: SYSTEM_PROMPT_TUBINH, prompt: userPrompt, maxTokens: phanInfo.maxTokens },
       'anthropic',
       { 'X-Phan': String(phanNum), 'X-Phan-Ten': encodeURIComponent(phanInfo.ten) },
     );

@@ -14,6 +14,26 @@ import { ok, err, options, parseBody } from '@/lib/cors';
 const SUPABASE_URL = process.env.SUPABASE_URL!;
 const SUPABASE_KEY = process.env.SUPABASE_ANON_KEY!;
 
+// Henry chốt (2026-09-04): 4 tool này giờ chia sẻ TOÀN BỘ nội dung đang hiện
+// trên màn hình người bấm (`liveText` ở shell.js), gồm cả phần luận AI đã trả
+// tiền khi người đó đã mở khoá — KHÔNG còn là 1 dòng tóm tắt vô hại. `/thu-vien`
+// tự động liệt kê MỌI bản chia sẻ trừ khi `gallery_opt_out=true`
+// (`migration-gallery.sql`), nên nếu không chặn ở đây thì nội dung trả tiền của
+// một người sẽ tự lên thư viện công khai cho MỌI khách vãng lai đọc free — ngoài
+// ý người trả tiền cho phần đó, không phải chỉ người họ CHỦ ĐỘNG gửi link cho.
+// Đặt server-side (không phải cờ client tự gửi): sai một chỗ gọi client là lộ
+// lại đúng lỗ này, còn quên thêm tool mới vào set dưới thì nó tự lên thư viện —
+// SAI VỀ PHÍA AN TOÀN hơn (thà thiếu 1 tool trong thư viện còn hơn lộ nội dung
+// trả tiền), nên chỉ CHẶN cho tool đã biết chắc, không suy diễn theo `kind`.
+const GALLERY_OPT_OUT_TOOLS = new Set([
+  'luan-giai',
+  'bat-tu',
+  'chu-trinh-cuoc-doi',
+  'xem-tuoi',
+  'xem-lam-an',
+  'tuong-hop',
+]);
+
 function makeId(len = 10): string {
   const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
   const buf = new Uint8Array(len);
@@ -40,14 +60,18 @@ export async function POST(request: NextRequest) {
   // nhồi rác qua endpoint công khai này.
   // Phân tích TRƯỚC hai nhánh kind vì nhánh `text` cần biết có blocks hay không
   // mới quyết định được là "rỗng thật" — xem ghi chú ngay dưới.
+  // 8→30 block, 4000→6000 ký tự/block: `Shell.domShareBlocks()` (shell.js) giờ
+  // tách mỗi PHẦN của tool luận sâu (luận giải/bát tự/chu trình cuộc đời/xem
+  // tuổi, tới 13 phần + 1 block tiêu đề) thành 1 block riêng — 8 cũ cắt mất
+  // quá nửa số phần trong im lặng (`.slice` không báo lỗi).
   let blocks: Array<{ header: string | null; image: string | null; text: string | null }> | null = null;
   if (Array.isArray(b.blocks) && b.blocks.length) {
-    const parsed = (b.blocks as unknown[]).slice(0, 8).map((raw) => {
+    const parsed = (b.blocks as unknown[]).slice(0, 30).map((raw) => {
       const r = (raw && typeof raw === 'object' ? raw : {}) as Record<string, unknown>;
       const header = r.header ? String(r.header).slice(0, 120) : null;
       const imageRaw = r.image ? String(r.image).slice(0, 500) : '';
       const image = /^https:\/\//.test(imageRaw) ? imageRaw : null;
-      const text = r.text ? String(r.text).trim().slice(0, 4000) : null;
+      const text = r.text ? String(r.text).trim().slice(0, 6000) : null;
       return { header, image, text };
     }).filter((blk) => blk.header || blk.image || blk.text);
     if (parsed.length) blocks = parsed;
@@ -66,7 +90,10 @@ export async function POST(request: NextRequest) {
     const t = String(b.text || '').trim().slice(0, 6000);
     if (t) textContent = t;
   } else {
-    textContent = String(b.text || '').trim().slice(0, 4000) || null;
+    // 40000 (không phải 4000 cũ) — khớp `SHARE_TEXT_CAP` ở shell.js: tool nhiều
+    // phần (luận giải/bát tự/chu trình cuộc đời/xem tuổi) nay chia sẻ TOÀN BỘ
+    // nội dung đang hiện trên màn hình (`liveText`), không còn là 1 dòng tóm tắt.
+    textContent = String(b.text || '').trim().slice(0, 40000) || null;
     // ⚠️ `blocks` MỘT MÌNH là nội dung hợp lệ — /ket-qua render blocks trước,
     // `text_content` chỉ là đường lùi. Trước đây nhánh này đòi bằng được `text`
     // nên tool nào chia sẻ bằng blocks mà không kèm text đều ăn 400. Đã cắn
@@ -97,9 +124,13 @@ export async function POST(request: NextRequest) {
         image_url: imageUrl,
         text_content: textContent,
         blocks,
+        gallery_opt_out: GALLERY_OPT_OUT_TOOLS.has(toolId),
       });
       if (!error) {
-        return ok({ id, url: `/ket-qua/${id}` });
+        // `galleryOptOut` trong response: để client KHÔNG báo nhầm "bản này
+        // cũng hiện trong Thư viện chung" (`galleryNotice()` ở shell.js) cho
+        // đúng những tool server vừa tự ẩn ở trên.
+        return ok({ id, url: `/ket-qua/${id}`, galleryOptOut: GALLERY_OPT_OUT_TOOLS.has(toolId) });
       }
       if (!String(error.message || '').match(/duplicate|unique/i)) {
         console.error('[share-result] insert error', error.message);

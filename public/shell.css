@@ -60,7 +60,11 @@ body{font-family:var(--sans);background:var(--paper-2);color:var(--text);font-si
 .sb-brand{display:flex;align-items:center;gap:11px;padding:14px 16px;text-decoration:none}
 .seal{width:34px;height:34px;border-radius:7px;object-fit:cover;border:1px solid rgba(201,168,76,.45);flex:0 0 auto;display:block}
 .brand-txt b{font-family:var(--serif);font-size:14.5px;color:#fff;font-weight:600;display:block;line-height:1.2}
-.brand-txt span{font-size:9.5px;color:var(--gold);letter-spacing:.32em;text-transform:uppercase}
+/* Slogan, KHÔNG hoa + KHÔNG giãn chữ rộng: cột chữ chỉ còn 169px (246 − đệm 32
+   − dấu ấn 34 − khe 11). Chữ hoa với letter-spacing .32em tràn ngay ở chuỗi 28
+   ký tự này. Cỡ chữ + giãn ở đây khớp `.ft-brand-zh` / `.nav-logo .url` trong
+   nav.js — cùng một slogan thì để cùng một lối trình bày. */
+.brand-txt span{font-size:9.5px;color:var(--gold);letter-spacing:.04em;white-space:nowrap}
 .sb-pulse{margin:2px 16px 8px;padding-bottom:9px;border-bottom:1px solid var(--sb-line);display:flex;flex-direction:column;gap:4px}
 .sb-pulse[hidden]{display:none}
 .sbp-row{display:flex;align-items:center;gap:6px;font-size:11.5px;color:var(--sb-txt-dim)}
@@ -108,6 +112,17 @@ body{font-family:var(--sans);background:var(--paper-2);color:var(--text);font-si
 .ws-title b{font-family:var(--serif);font-size:17px;font-weight:600;display:block}
 .ws-title span{font-size:12px;color:var(--text-lt)}
 .ws-actions{margin-left:auto;display:flex;gap:8px}
+/* Nút "✦ Hỏi" (mobile-only) được khai TRONG `.ws-top` ở cả 49 trang shell, rồi
+   `moveAskToFab()` của shell.js rút nó sang cụm FAB nổi. Cú rút đó xảy ra SAU lần
+   vẽ đầu ⇒ `.ws-top` co từ 104,6px xuống 73,6px và MỌI thứ dưới nó dịch lên 31px.
+   Đo trên prod: 0,0336 trên `.ws-body` + 0,0268 trên `.frow` — cú CLS lớn nhất còn
+   lại của lớp trang shell, và nó lặp trên mọi trang.
+   Giấu nó đúng lúc nó còn nằm SAI CHỖ: chọn theo `onclick` — cùng hợp đồng mà
+   `askBtnEl()` đang dùng để tìm nút, không đẻ thêm hợp đồng thứ hai. Rút sang
+   `#wsFab` xong thì bộ chọn hết khớp, nút hiện lại.
+   ⚠️ KHÔNG mất gì khi shell.js hỏng: `onclick` của nút là `Shell.openRail()`, tức
+   nó vốn đã vô dụng nếu shell.js chưa nạp. */
+.ws-top .ws-actions button[onclick*="openRail"]{display:none}
 .btn{font-size:12.5px;border:1px solid var(--line-2);background:var(--white);color:var(--text-mid);border-radius:8px;padding:7px 12px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-family:inherit}
 .btn:hover{border-color:var(--gold-soft);color:var(--text)}
 .btn.pri{background:var(--red);border-color:var(--red);color:#fff}
@@ -130,10 +145,20 @@ body{font-family:var(--sans);background:var(--paper-2);color:var(--text);font-si
    thì cụm nút mới hạ cánh sát mép phải WORKSPACE. Ở ≤900px rail là drawer
    NẰM NGOÀI luồng (không chiếm cột) nên khối responsive bên dưới ghi đè lại
    `right:14px` — không trừ `--rail-w` nữa. */
-.ws-fab{position:fixed;right:calc(var(--rail-w) + 16px);bottom:calc(16px + env(safe-area-inset-bottom));z-index:40;display:flex;flex-direction:column;align-items:center;gap:8px}
+.ws-fab{position:fixed;right:calc(var(--rail-w) + 16px);bottom:calc(16px + env(safe-area-inset-bottom));z-index:40;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:8px;min-height:200px;pointer-events:none}
+/* GIỮ CHỖ 200px = 4 nút 44px + 3 khe 8px, tức khối tối đa (Hỏi · Chia sẻ ·
+   Facebook · PDF). Khối neo theo `bottom`, nên KHÔNG giữ chỗ thì mỗi lần có
+   thêm nút, mép TRÊN dâng lên và `#wsFab` đổi rect ⇒ đo được 0,0049 CLS trên
+   prod (/app/luan-giai): top 722→566, cao 44→200.
+   🪤 Đã đo: chỉ đổi THỨ TỰ chèn nút không chữa được con số này — nó tính trên
+   rect của chính khối chứa, không phải trên nút nào dịch. (Đổi thứ tự vẫn
+   giữ, vì nó chữa cú nhảy MẮT THẤY: nút Hỏi trước đây bị đẩy lên 156px.)
+   `pointer-events:none` là BẮT BUỘC đi kèm: 200px đó gần như luôn có phần
+   rỗng, mà khối `position:fixed` nằm trên nội dung — không tắt thì vùng rỗng
+   nuốt cú chạm của người dùng. Nút bật lại `auto` ngay dưới đây. */
 /* Icon-only, tròn, đều cỡ — chữ dồn hết vào tooltip (`data-tip`, xem khối
    `.tip` bên dưới) thay vì nằm cạnh icon. */
-.ws-fab .btn{width:44px;height:44px;padding:0;justify-content:center;border-radius:50%;background:var(--white);box-shadow:var(--shadow-lg);position:relative}
+.ws-fab .btn{width:44px;height:44px;padding:0;justify-content:center;border-radius:50%;background:var(--white);box-shadow:var(--shadow-lg);position:relative;pointer-events:auto}
 .ws-fab .btn svg{width:19px;height:19px;flex:0 0 auto}
 .ws-fab .fbtn-fb{background:#1877F2;border-color:#1877F2;color:#fff}
 .ws-fab .fbtn-fb:hover{background:#1466d6;border-color:#1466d6;color:#fff}
@@ -395,6 +420,20 @@ body{font-family:var(--sans);background:var(--paper-2);color:var(--text);font-si
 @media (max-width:900px){
   /* iOS Safari tự zoom khi focus field <16px và hay không zoom lại → 16px chặn hẳn. */
   .rail-in textarea{font-size:16px}
+  /* …và CÙNG LÝ DO cho mọi ô nhập trong vùng làm việc. Luật trên đã có từ lâu
+     nhưng chỉ vá đúng MỘT phần tử; trong khi 53 trang `app-*.html` đều khai
+     `.fg input,.fg select{font-size:13.5px}` (app-home 12.5px, app-but-tuong
+     12px) — kể cả ô nhập ngày sinh của `/app/luan-giai`, trang nhận 100% click
+     Google Ads. Tức iOS phóng to trang ở đúng lúc người ta đang gõ, rồi không
+     thu lại.
+     🔑 Vì sao là `.shell .ws` chứ không phải `.ws`: `.ws input` cũng chỉ nặng
+     (0,1,1) ngang `.fg input`, mà `<style>` của từng trang nằm SAU thẻ <link>
+     shell.css nên hoà thì trang thắng. Thêm `.shell` cho lên (0,2,1) là thắng
+     chắc, khỏi phải sửa 53 file.
+     Các trang cũ (`la-so.html`, `profile.html`, `tu-binh.html`, `xem-tuoi.html`)
+     và `admin.css` đã tự vá 16px từ trước — chỗ này chỉ bù cho lớp `/app`.
+     Chỉ áp trên mobile; desktop giữ nguyên 13.5px vì ở đó không có zoom. */
+  .shell .ws input,.shell .ws select,.shell .ws textarea{font-size:16px}
   .shell{grid-template-columns:1fr}
   .sb{position:fixed;left:0;top:0;bottom:0;width:270px;z-index:60;transform:translateX(-100%);transition:transform .25s}
   .sb.open{transform:none}
@@ -453,6 +492,31 @@ font-family:inherit}
 .sh-gal-note button:disabled{opacity:.6;cursor:default}
 
 /* ══════════════════════════════════════════════════════════════════════
+   THẺ TRÍCH DẪN — kiểu Facebook caption, dùng chung mọi bản luận giải dài
+   ══════════════════════════════════════════════════════════════════════
+   Dời từ `app-luan-giai.html` (PR #681) về ĐÂY 2026-09-04 — đợt nhóm A gắn
+   nhãn [TỐT]/[CẢNH BÁO]/[TRUNG TÍNH] cho 5 bản luận giải dùng chung `arcDoc`
+   (Lá Số/Chu Trình Cuộc Đời/Vận Hạn Năm · Bát Tự · Phu Thê · Xem Tuổi/Làm Ăn ·
+   Bút Tướng). MỘT nguồn CSS — mỗi trang chỉ cần tự thêm đoạn parse `[TAG]
+   **...**` trong `renderMarkdown` riêng của nó (xem `HOOK_TAG_CLASS` +
+   `app-luan-giai.html` làm mẫu), KHÔNG chép lại 3 dòng màu này thêm lần nào
+   nữa — chép là drift màu giữa các trang, y hệt bẫy `.claude-content` đã bị
+   trùng lặp trước đó. */
+.fb-card{border-radius:14px;padding:30px 26px;margin:16px 0 18px;font-family:var(--sans);font-weight:700;font-size:clamp(19px,5.4vw,27px);line-height:1.4;letter-spacing:.015em;text-align:center}
+.fb-tot{background:#E8F5EC;color:#1E6B3C}
+.fb-canhbao{background:#FBEAE7;color:#C0392B}
+.fb-trungtinh{background:var(--gold-lt);color:var(--heading)}
+:root[data-theme="dark"] .fb-tot{background:#15291D;color:#5FBF87}
+:root[data-theme="dark"] .fb-canhbao{background:#301C19;color:#F08A7A}
+
+/* .fb-item — thẻ NHỎ cho từng dòng trong một DANH SÁCH gợi ý (tên/ngày…),
+   khác hẳn .fb-card (poster to, dành cho ĐÚNG MỘT câu trích trong văn bản
+   dài). Danh sách gợi ý không có trục tốt/xấu — toàn bộ đều là lựa chọn được
+   đề xuất — nên chỉ MỘT màu trung tính, không có biến thể fb-tot/fb-canhbao. */
+.fb-item{border-radius:10px;padding:12px 14px;margin:8px 0;background:var(--gold-lt);border-left:3px solid var(--gold-soft)}
+.fb-item b,.fb-item strong{font-family:var(--serif);font-size:14.5px;color:var(--heading)}
+
+/* ══════════════════════════════════════════════════════════════════════
    IN / LƯU PDF — LUẬT CỦA SHELL, KHÔNG PHẢI CỦA TỪNG TOOL
    ══════════════════════════════════════════════════════════════════════
    Trước đây đúng 3 tool (luan-giai · bat-tu · xem-tuoi) tự chép một khối
@@ -481,6 +545,15 @@ font-family:inherit}
   /* Đừng để một thẻ kết quả bị xẻ đôi qua hai trang giấy. */
   .sec, .card, .res-block, .cs-sec { page-break-inside: avoid; break-inside: avoid; }
 
+  /* Trình duyệt mặc định BỎ hết background khi in (đỡ tốn mực) — mọi khối
+     tô màu (thẻ trích dẫn .fb-card, box "cơ sở tính toán", badge điểm số…)
+     ra bản in/PDF thành nền trắng trơn, chỉ còn chữ. 3 dòng dưới đây từng
+     ĐÃ có sẵn ở 3 trang cũ (luan-giai.html/xem-tuoi.html/xem-lam-an.html)
+     trước khi luật in được gom về ĐÂY cho toàn `/app/*` — luật gom thiếu
+     đúng dòng này, nên mọi tool app-shell mất màu nền khi xuất PDF mà không
+     ai để ý (Henry phát hiện qua bản in thật, 2026-09-04). */
+  * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; color-adjust: exact !important; }
+
   /* Đầu trang in: trên màn hình `.ws-top` mang tên tool, mà nó bị ẩn khi in
      ⇒ bản in không có gì nói nó là cái gì của ai. Shell dựng khối này, kèm
      avatar của chính tool (ảnh trái, tên+dòng lá số phải — cùng bố cục với
@@ -502,3 +575,12 @@ font-family:inherit}
 }
 /* Ngoài lúc in thì khối đầu/chân trang in KHÔNG tồn tại trên màn hình. */
 .ws-print-head, .ws-print-foot { display: none; }
+
+/* Ô GIỮ CHỖ hard paywall Pha 3 (dùng chung — không chép sang từng trang tool).
+   Khi một `.res-block-body` mang class `.tpw-locked`, giấu HẲN mọi con của nó
+   TRỪ `.tpw-ph-host` (nơi trang chèn `TuviPaywall.placeholderHtml()`). Cố ý
+   giấu hẳn thay vì làm mờ: làm mờ vẫn để nội dung THẬT nằm trong DOM, view-
+   source hoặc tắt CSS là đọc hết. `!important` đè `style="display:block"` một
+   lượt render trước có thể đã gắn (bấm "xem lại"/"xem khác" rồi chạy lại lượt
+   xem trước) — mở khoá thì gỡ chính class `.tpw-locked`, không có gì kẹt lại. */
+.res-block-body.tpw-locked > *:not(.tpw-ph-host) { display: none !important; }

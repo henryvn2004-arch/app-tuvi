@@ -207,7 +207,15 @@ export async function GET(req: NextRequest) {
       anhTacGia: row.image_credit,
       anhLicense: row.image_license,
       anhTrang: commonsFilePage(row.image_file),
-      lienKet: row.wiki_url,
+      // Luôn trỏ tới bài EN qua trang chuyển hướng CỦA Wikidata — không phải
+      // link vi.wikipedia lưu sẵn ở `wiki_url`. Lý do: `wiki_url` ưu tiên bài
+      // vi (chỉ 25.905/272.783 dòng có), phần lớn KHÔNG tồn tại bài .vi nên
+      // link vỡ; đi lại 350k dòng để đổi sang enTitle tốn ngang một lượt scrape
+      // Wikidata mới. `Special:GoToLinkedPage/enwiki/<qid>` giải quyết bằng
+      // MỘT field đã có sẵn trên mọi dòng (`qid`) — 302 sang bài EN nếu có,
+      // không có thì Wikidata tự hiện trang báo "chưa có bài" (đã kiểm bằng
+      // curl), không bao giờ 404 thẳng như link .vi bịa trước đây.
+      lienKet: `https://www.wikidata.org/wiki/Special:GoToLinkedPage/enwiki/${row.qid}`,
     };
   });
 

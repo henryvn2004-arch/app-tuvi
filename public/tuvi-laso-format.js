@@ -73,6 +73,51 @@
       if (sc.nhanHoa?.boMenh) out.push(`  Bộ Mệnh: ${sc.nhanHoa.boMenh} → Bộ ĐV: ${sc.nhanHoa.boVan}`);
     }
 
+    // [3 QUÃNG TRONG ĐẠI VẬN] — MỘT đại vận 10 năm KHÔNG đổi tốt/xấu đồng loạt
+    // ngay từ năm đầu: dùng lại ĐÚNG công thức nội suy PCHIP của biểu đồ
+    // (public/tools-shared/pchip.js, đơn điệu — không vọt ra ngoài khoảng 2
+    // mốc kề) để ước tính điểm TỪNG NĂM từ "Tổng" của ĐV này và 2 vận liền kề,
+    // rồi chia 10 năm theo tỉ lệ 30/40/30 (quãng đầu/cuối ngắn, quãng giữa dài
+    // hơn — quãng giữa mới chạm rõ nhất cái tốt/xấu của chính vận này, quãng
+    // đầu còn dư ảnh hưởng vận TRƯỚC, quãng cuối bắt đầu ngả theo vận SAU).
+    // Chỉ thêm khi KHÔNG compact (bản 9-vận gọn dùng cho phần 1-13/tóm tắt
+    // không cần chi tiết này — `stripDaiVanDetail` cũng đã lọc dòng này ra).
+    // FAIL-SOFT: thiếu Pchip hoặc thiếu điểm ≥2 vận thì bỏ qua dòng, không vẽ ra số sai.
+    if (!opts.compact && typeof Pchip !== 'undefined' && dv.tuoiStart != null && dv.tuoiEnd != null) {
+      var _allPts = (ls.daiVans || [])
+        .map(function (d) { return { x: (d.tuoiStart + d.tuoiEnd) / 2, y: d.scoring ? d.scoring.tong : null }; })
+        .filter(function (p) { return typeof p.y === 'number'; });
+      if (_allPts.length >= 2) {
+        var _start = dv.tuoiStart, _end = dv.tuoiEnd, _len = _end - _start + 1;
+        var _n1 = Math.max(1, Math.round(_len * 0.3));
+        var _n3 = Math.max(1, Math.round(_len * 0.3));
+        var _n2 = _len - _n1 - _n3;
+        if (_n2 < 1) { _n2 = 1; _n3 = Math.max(1, _len - _n1 - _n2); }
+        var _bounds = [
+          [_start, _start + _n1 - 1],
+          [_start + _n1, _start + _n1 + _n2 - 1],
+          [_start + _n1 + _n2, _end],
+        ];
+        // Dùng thẳng evalAt (không qua pchipSeries) — pchipSeries chỉ sinh điểm
+        // TRONG khoảng [mốc đầu, mốc cuối], nên ĐV1 (chưa có vận trước) và ĐV9
+        // (chưa có vận sau) sẽ hụt đúng quãng đầu/cuối của CHÍNH nó. evalAt giữ
+        // phẳng ngoài khoảng — hợp lý: đầu đời/cuối đời không có mốc xa hơn để
+        // nội suy thì lấy điểm của chính vận đó làm nền.
+        var _xs = _allPts.map(function (p) { return p.x; });
+        var _ys = _allPts.map(function (p) { return p.y; });
+        var _ms = Pchip.slopes(_xs, _ys);
+        var _phaseStr = _bounds.map(function (b) {
+          var a = b[0], z = b[1], ys = [];
+          for (var y = a; y <= z; y++) {
+            var v = Pchip.evalAt(_xs, _ys, _ms, y);
+            if (v != null) ys.push(Math.round(v * 10) / 10);
+          }
+          return (a === z ? a + 't' : a + '-' + z + 't') + ':' + ys.join('→');
+        }).join(' | ');
+        out.push(`  [3 QUÃNG TRONG ĐẠI VẬN, điểm ƯỚC TÍNH từng năm (nội suy từ vận liền kề, KHÔNG phải điểm engine chấm riêng)]: ${_phaseStr}`);
+      }
+    }
+
     out.push(`  Chính tinh: ${chinh||'(vô chính diệu)'}`);
     if ((p.majorStars||[]).length === 0 && p.xungChieuCung) {
       const muon = (p.xungChieuCung.majorStars||[]).map(s => s.ten + (s.brightness?`(${s.brightness})`:'')).join(' ');
@@ -197,6 +242,34 @@
       return `${label} (w:${w>0?'+':''}${w})`;
     }
 
+    // Tứ Hóa Phi Tinh (tự hóa, tầng MỆNH BÀN) cho MỘT cung — dùng can của
+    // CHÍNH cung đó (Ngũ Hổ Độn, không phải can năm sinh) để tra 4 sao
+    // Lộc/Quyền/Khoa/Kỵ "bay" ra, rồi tra các sao ấy hiện đang nằm cung nào
+    // ("phi nhập"). CÙNG cơ chế với buildTuHoaPhiTinhHtml() trong
+    // public/luan-giai-core.js (khối hiển thị panel) — ở ĐÓ dựng HTML cho
+    // người xem, ở ĐÂY dựng 1 dòng text cho model đọc; hai nơi PHẢI cho cùng
+    // kết quả trên cùng lá số, đổi công thức một bên nhớ đổi bên kia.
+    // TU_HOA/THIEN_CAN/DIA_CHI là global từ tuvi-ansao-engine.js (file này đã
+    // phụ thuộc load-order của engine sẵn — xem STAR_DATA ở đầu file).
+    function _tuHoaPhiTinh(ls, p) {
+      const canNam = (ls.canChiNam || '').split(' ')[0];
+      const ci = THIEN_CAN.indexOf(canNam), di = DIA_CHI.indexOf(p.diaChi);
+      if (ci < 0 || di < 0) return '';
+      const canCung = THIEN_CAN[((ci % 5) * 2 + di) % 10];
+      const hosts = TU_HOA[canCung];
+      if (!hosts) return '';
+      const parts = ['Lộc', 'Quyền', 'Khoa', 'Kỵ'].map(hoa => {
+        const star = hosts[hoa];
+        if (!star) return null;
+        const target = ls.palaces.find(pp => (pp.stars || []).some(s => s.ten === star));
+        if (!target) return null;
+        const selfTag = target.cungName === p.cungName ? '[TỰ HÓA]' : '';
+        return `${hoa}→${star} tại ${target.cungName}(${target.diaChi})${selfTag}`;
+      }).filter(Boolean);
+      if (!parts.length) return '';
+      return `  [TỨ HÓA PHI TINH] (can cung ${canCung}): ${parts.join(' | ')}`;
+    }
+
     // 12 cung + tam phương tứ chính
     lines.push(MARKERS.cung);
     for (const p of ls.palaces) {
@@ -231,6 +304,8 @@
         lines.push(`  Chính tinh: ${chinh}`);
       }
       if (phu) lines.push(`  Phụ tinh: ${phu}`);
+      const tuHoaPhi = _tuHoaPhiTinh(ls, p);
+      if (tuHoaPhi) lines.push(tuHoaPhi);
       // Tam phương tứ chính — Tuần/Triệt chỉ ảnh hưởng cung đó, không ảnh hưởng sang cung khác
       if (p.tamHopCungs && p.tamHopCungs.length) {
         const hasTuanTriet = c => c.stars?.some(s => s.nhom === 'tuan_triet');

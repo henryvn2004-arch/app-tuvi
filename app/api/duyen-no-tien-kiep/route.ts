@@ -67,7 +67,16 @@ const TOOL_ID = 'duyen-no-tien-kiep';
  * ⚠️ Cố ý KHÔNG nhét vào `lasoKey`: đổi khoá là mồ côi cả cache LẪN
  * `userOwnsLaso` ⇒ người đã trả tiền bị tính lại.
  */
-const SHAPE = 1;
+// P1 (2026-09): bump vì `_LUNAR_TABLE` sinh lại theo oracle Thiên Lương — GIÁ
+// TRỊ lá số của người sinh vào ngày lệch bảng cũ đổi, không phải cấu trúc
+// payload (fingerprint giữ nguyên). Xem docs/nhat-ky/2026-09.md.
+// P2 (2026-09): bump tiếp — sửa 5 bảng tra sao lệch oracle (Đào Hoa/Lưu Hà/
+// Thiên Trù/Thiên Quan/Thiên Phúc), cùng lý do GIÁ TRỊ đổi, không phải cấu trúc.
+// P3 (2026-09): bump tiếp — đổi Kình-Đà + Tứ Hóa can Canh sang trường phái
+// Thiên Lương, cùng lý do GIÁ TRỊ đổi, không phải cấu trúc.
+// P4 (2026-09): bump tiếp — La-Võng đổi từ 2 sao cố định Thìn/Tuất sang nhãn
+// theo Đà La, cùng lý do GIÁ TRỊ đổi, không phải cấu trúc.
+const SHAPE = 5;
 
 /** Vân tay CẤU TRÚC — `npm run check:cacheshape` canh khớp với `SHAPE` ở trên. */
 const SHAPE_FINGERPRINT = '7e1e42a5757a';
@@ -268,7 +277,7 @@ async function handleStory(grp: BondGroup, userId: string) {
   };
 
   let res = await askStory(false);
-  if (!res) return err('Lỗi AI khi viết câu chuyện. Vui lòng thử lại.', 500);
+  if (!res) return err('Lỗi hệ thống khi viết câu chuyện. Vui lòng thử lại.', 500);
   let parsed = parseLlmJson(res.raw) as StoryJson | null;
 
   if (!okShape(parsed)) {
@@ -278,7 +287,7 @@ async function handleStory(grp: BondGroup, userId: string) {
     );
     void logLlmParseFail(TOOL_ID, res.model, t, 1);
     res = await askStory(true);
-    if (!res) return err('Lỗi AI khi viết câu chuyện. Vui lòng thử lại.', 500);
+    if (!res) return err('Lỗi hệ thống khi viết câu chuyện. Vui lòng thử lại.', 500);
     parsed = parseLlmJson(res.raw) as StoryJson | null;
   }
   if (!okShape(parsed)) {
@@ -287,7 +296,7 @@ async function handleStory(grp: BondGroup, userId: string) {
       `[duyen-no-tien-kiep] parse hỏng LẦN 2 (len=${t.length}, đầu=${JSON.stringify(t.slice(0, 160))})`,
     );
     void logLlmParseFail(TOOL_ID, res.model, t, 2);
-    return err('Lỗi phân tích kết quả AI.', 500);
+    return err('Lỗi phân tích kết quả trả về.', 500);
   }
 
   // Nhãn hồi lấy của BOND_ACTS (cố định) chứ không dùng nhãn LLM tự nghĩ — mọi

@@ -114,3 +114,68 @@ test.describe('Mobile — Lá Số grid', () => {
     }
   });
 });
+
+// ── Tour onboarding: nút "Bỏ qua"/"Tiếp" phải LUÔN nằm trong màn ────────────
+// Henry mở prod bằng iPhone và bị KẸT: thẻ hướng dẫn nằm đè lên đáy màn hình,
+// hai nút nằm dưới mép, kéo không tới ⇒ không có đường nào thoát khỏi tour.
+// Căn nguyên là công thức đặt vị trí trong app-home.html: findTarget() chỉ đòi
+// điểm neo CÓ TRONG LAYOUT chứ không đòi nó trong tầm nhìn, và sau khi chọn
+// đặt-trên hay đặt-dưới thì KHÔNG có bước kẹp nào. Neo nằm ngoài màn ⇒ popup
+// văng theo. Đo được lúc đó: neo ở 1072px trên màn 844 → nút nằm dưới đáy 204px.
+test.describe('Mobile — tour onboarding', () => {
+  // 🪤 app-home.html có `if(navigator.webdriver) return;` — tour tự tắt khi bị
+  // lái tự động. Không giả cờ này thì bài kiểm xanh oan vì chẳng đo gì cả.
+  test.beforeEach(async ({ page }) => {
+    await page.addInitScript(() => {
+      Object.defineProperty(navigator, 'webdriver', { get: () => false });
+    });
+  });
+
+  test('điểm neo NGOÀI MÀN vẫn không đẩy nút ra khỏi màn', async ({ page }) => {
+    await page.goto('/app');
+    await page.evaluate(() => {
+      try { localStorage.clear(); } catch (e) { /* Safari riêng tư */ }
+    });
+    await page.reload();
+    await expect(page.locator('.tour-pop')).toBeVisible({ timeout: 45000 });
+
+    const m = await page.evaluate(async () => {
+      // Dời điểm neo xuống dưới mép màn rồi bắn 'resize' → chạy lại đúng place()
+      const card = document.querySelector('#khoiHanhCard') as HTMLElement | null;
+      if (card) {
+        const cur = card.getBoundingClientRect().top;
+        const mt = parseFloat(getComputedStyle(card).marginTop) || 0;
+        card.style.marginTop = mt + (window.innerHeight + 260 - cur) + 'px';
+      }
+      window.dispatchEvent(new Event('resize'));
+      await new Promise((r) => setTimeout(r, 500));
+      const pop = document.querySelector('.tour-pop') as HTMLElement | null;
+      const next = document.getElementById('tourNext');
+      const skip = document.getElementById('tourSkip');
+      if (!pop || !next || !skip) return null;
+      return {
+        popTop: pop.getBoundingClientRect().top,
+        popBottom: pop.getBoundingClientRect().bottom,
+        nextBottom: next.getBoundingClientRect().bottom,
+        skipBottom: skip.getBoundingClientRect().bottom,
+        vh: window.innerHeight,
+      };
+    });
+    expect(m, 'tour phải còn mở để đo được').not.toBeNull();
+    expect(m!.popTop).toBeGreaterThanOrEqual(0);
+    expect(m!.nextBottom).toBeLessThanOrEqual(m!.vh);
+    expect(m!.skipBottom).toBeLessThanOrEqual(m!.vh);
+    await expect(page.locator('#tourNext')).toBeVisible();
+  });
+
+  test('Esc luôn đóng được tour', async ({ page }) => {
+    await page.goto('/app');
+    await page.evaluate(() => {
+      try { localStorage.clear(); } catch (e) { /* Safari riêng tư */ }
+    });
+    await page.reload();
+    await expect(page.locator('.tour-pop')).toBeVisible({ timeout: 45000 });
+    await page.keyboard.press('Escape');
+    await expect(page.locator('.tour-pop')).toHaveCount(0);
+  });
+});

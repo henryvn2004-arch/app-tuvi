@@ -5,13 +5,13 @@
 <script src="https://js.sentry-cdn.com/f884fb7e9d257df10ecb6dbe562141cb.min.js" crossorigin="anonymous" defer></script>
 <link rel="icon" type="image/webp" href="/seal.webp">
 <link rel="apple-touch-icon" href="/seal.webp">
-<meta name="description" content="Tử Bình Bát Tự cổ pháp, luận giải bằng AI — phân tích tứ trụ, thập thần, dụng thần, cách cục, đại vận và lưu niên. Tri mệnh lý — Thuận thế hành.">
+<meta name="description" content="Tử Bình Bát Tự cổ pháp, luận giải chuyên sâu — phân tích tứ trụ, thập thần, dụng thần, cách cục, đại vận và lưu niên. Tri mệnh lý — Thuận thế hành.">
 <meta name="keywords" content="tử bình, bát tự, tứ trụ, dụng thần, cách cục, đại vận, luận giải tử bình, tử bình minh bảo">
 <link rel="canonical" href="https://www.tuviminhbao.com/tu-binh.html">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tử Bình Bát Tự AI — Luận Giải Tứ Trụ Chuyên Sâu | Tử Vi Minh Bảo</title>
-<meta property="og:title" content="Tử Bình Bát Tự AI — Luận Giải Tứ Trụ Chuyên Sâu">
-<meta property="og:description" content="Bát Tự cổ pháp, luận giải bằng AI — tứ trụ, thập thần, dụng thần, cách cục, đại vận và lưu niên.">
+<title>Tử Bình Bát Tự — Luận Giải Tứ Trụ Chuyên Sâu | Tử Vi Minh Bảo</title>
+<meta property="og:title" content="Tử Bình Bát Tự — Luận Giải Tứ Trụ Chuyên Sâu">
+<meta property="og:description" content="Bát Tự cổ pháp, luận giải chuyên sâu — tứ trụ, thập thần, dụng thần, cách cục, đại vận và lưu niên.">
 <meta property="og:image" content="https://www.tuviminhbao.com/seal.webp">
 <meta property="og:url" content="https://www.tuviminhbao.com/tu-binh.html">
 <meta property="og:type" content="website">
@@ -21,9 +21,9 @@
 {
   "@context": "https://schema.org",
   "@type": "Service",
-  "name": "Luận Giải Tử Bình Bát Tự bằng AI",
+  "name": "Luận Giải Tử Bình Bát Tự",
   "provider": { "@type": "Organization", "@id": "https://www.tuviminhbao.com/bao-chi#organization", "name": "Tử Vi Minh Bảo", "url": "https://www.tuviminhbao.com" },
-  "description": "Luận giải Tử Bình Bát Tự theo cổ pháp Tử Bình Chân Thuyên + Trích Thiên Tủy, kết hợp trí tuệ nhân tạo. 16 phần phân tích chuyên sâu.",
+  "description": "Luận giải Tử Bình Bát Tự theo cổ pháp Tử Bình Chân Thuyên + Trích Thiên Tủy. 16 phần phân tích chuyên sâu.",
   "serviceType": "Mệnh lý học — Tử Bình Bát Tự",
   "areaServed": "VN",
   "inLanguage": "vi"
@@ -40,6 +40,14 @@
   --gold: #9A7B3A; --gold-lt: #F9F4EB;
   --red: #C0392B; --green: #1E6B3C;
 }
+/* Thẻ trích dẫn kiểu Facebook caption cho câu hook — trang này KHÔNG nạp
+   shell.css (trang standalone cũ), nên khai riêng thay vì phụ thuộc token
+   của shell (--sans/--heading không tồn tại ở đây). Màu khớp bản gốc trong
+   shell.css để đồng nhất giữa các tool, chỉ đổi token thành giá trị cứng. */
+.fb-card{border-radius:14px;padding:30px 26px;margin:16px 0 18px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;font-weight:700;font-size:clamp(19px,5.4vw,27px);line-height:1.4;letter-spacing:.015em;text-align:center}
+.fb-tot{background:#E8F5EC;color:#1E6B3C}
+.fb-canhbao{background:#FBEAE7;color:#C0392B}
+.fb-trungtinh{background:var(--gold-lt);color:var(--navy)}
 body { font-family: Arial, sans-serif; background: var(--bg); color: var(--text); font-size: 16px; line-height: 1.6; -webkit-font-smoothing: antialiased; }
 .page { max-width: 1100px; margin: 0 auto; padding: 0 32px; }
 
@@ -271,19 +279,22 @@ select.form-input { cursor: pointer; }
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
+<script src="/tools-shared/pchip.js?v=1"></script>
+<script src="/tools-shared/daivan-chart.js?v=1"></script>
 <script src="/auth.js?v=2"></script>
 <script src="/share.js"></script>
 
 </head>
 <body>
+<div id="nav-ph" style="height:60px;background:#061A2E"></div>
 
 <div class="hero">
   <div class="page">
     <div>
       <div class="hero-eyebrow">紫微明寶 · TỬ BÌNH</div>
-      <h1>Tử Bình Bát Tự<br>Luận Giải Bằng AI</h1>
+      <h1>Tử Bình Bát Tự<br>Luận Giải Chuyên Sâu</h1>
       <p>Bát Tự — bốn cột Năm, Tháng, Ngày, Giờ — phản ánh khí của trời đất tại thời điểm bạn sinh ra. Tử Bình là cách đọc Bát Tự để hiểu mệnh, vận, và hướng đi.</p>
-      <p>Luận giải theo cổ pháp <em>Tử Bình Chân Thuyên</em> và <em>Trích Thiên Tủy</em>, kết hợp AI — 16 phần phân tích chuyên sâu, từ tổng quan Nhật Can đến Đại Vận từng giai đoạn cuộc đời.</p>
+      <p>Luận giải theo cổ pháp <em>Tử Bình Chân Thuyên</em> và <em>Trích Thiên Tủy</em>, 16 phần phân tích chuyên sâu, từ tổng quan Nhật Can đến Đại Vận từng giai đoạn cuộc đời.</p>
     </div>
     <div class="hero-right">
       <div class="hero-stat">
@@ -331,7 +342,7 @@ select.form-input { cursor: pointer; }
         <div class="intro-step-row">
           <div class="intro-step-num gold">3</div>
           <div>
-            <div class="intro-step-title">16 phần luận giải AI</div>
+            <div class="intro-step-title">16 phần luận giải chuyên sâu</div>
             <div class="intro-step-desc">Tổng quan, cách cục, từng nhóm Thập Thần, tình duyên, sức khỏe, Đại Vận — luận giải chuyên sâu, không bullet, văn phong cổ điển.</div>
           </div>
         </div>
@@ -396,10 +407,10 @@ select.form-input { cursor: pointer; }
       <div id="tvc-paywall-overlay" style="position:absolute; inset:0; background:rgba(255,255,255,0.96); backdrop-filter:blur(2px); z-index:50; display:flex; align-items:center; justify-content:center; padding:40px 20px;">
         <div style="max-width:480px; text-align:center; padding:32px 24px; background:#fff; border:2px solid var(--gold); position:relative;">
           <div style="font-size:32px; margin-bottom:14px;"><span class="ic" data-icon="message-circle"></span></div>
-          <div class="paywall-eyebrow">紫微明寶 · Vấn Đáp AI</div>
+          <div class="paywall-eyebrow">紫微明寶 · Vấn Đáp</div>
           <div class="paywall-title" style="font-size:20px;">Hỏi đáp trực tiếp với Bát Tự của bạn</div>
           <div class="paywall-desc" style="font-size:13px;">
-            Sau khi mở khóa luận giải, bạn có thể đặt câu hỏi trực tiếp về Nhật Can, Dụng Thần, Đại Vận hay bất kỳ chi tiết nào — AI trả lời dựa trên chính Bát Tự của bạn.
+            Sau khi mở khóa luận giải, bạn có thể đặt câu hỏi trực tiếp về Nhật Can, Dụng Thần, Đại Vận hay bất kỳ chi tiết nào — hệ thống trả lời dựa trên chính Bát Tự của bạn.
           </div>
           <div class="paywall-features">
             <div class="paywall-feature">Hỏi về Nhật Can &amp; Dụng Thần</div>
@@ -429,10 +440,10 @@ select.form-input { cursor: pointer; }
 <script src="/tubinh-domain-scores.js?v=2"></script>
 <script src="/tools-shared/vn-timezone.js?v=1"></script>
 <script src="/tuvi-form.js?v=2"></script>
-<script src="/tools-shared/cung-ngay-sinh.js?v=1"></script>
-<script src="/tuvi-paywall.js?v=22"></script>
+<script src="/tools-shared/cung-ngay-sinh.js?v=2"></script>
+<script src="/tuvi-paywall.js?v=25"></script>
 <script src="/chatbot.js"></script>
-<script src="/nav.js?v=24"></script>
+<script src="/nav.js?v=26"></script>
 
 <script>
 (function() {
@@ -813,7 +824,7 @@ select.form-input { cursor: pointer; }
               <div class="paywall-feature">Tình duyên, Sức khỏe</div>
               <div class="paywall-feature">Hình Xung Hại Hợp &amp; Thần Sát</div>
               <div class="paywall-feature">9 Đại Vận + Lưu Niên</div>
-              <div class="paywall-feature">Vấn đáp AI không giới hạn</div>
+              <div class="paywall-feature">Vấn đáp không giới hạn</div>
             </div>
             <div class="paywall-price">100 <span style="font-size:18px;font-weight:400">Lượng</span></div>
             <div class="paywall-price-note">≈ 250.000đ · Lưu vĩnh viễn trong tài khoản</div>
@@ -1377,49 +1388,22 @@ select.form-input { cursor: pointer; }
 
   // Render line chart for phần 12 (after DOM ready)
   function renderInlineDaiVanLineChart(bt) {
-    if (typeof Chart === 'undefined') return;
+    if (typeof Chart === 'undefined' || !window.DaiVanChart) return;
     const canvas = document.getElementById('phan12-line-chart');
     if (!canvas || !bt?.daiVans?.length) return;
-    const labels = bt.daiVans.map((dv, i) => `ĐV${i+1} (${dv.tuoiStart}-${dv.tuoiEnd}t)`);
-    const scores = bt.daiVans.map(dv => dv.score);
     const cur = bt.daiVanHienTai;
     if (window._phan12Line) try { window._phan12Line.destroy(); } catch(e) {}
-    window._phan12Line = new Chart(canvas.getContext('2d'), {
-      type: 'line',
-      data: {
-        labels,
-        datasets: [{
-          label: 'Điểm Đại Vận',
-          data: scores,
-          borderColor: '#9A7B3A',
-          backgroundColor: 'rgba(154,123,58,0.15)',
-          fill: true,
-          tension: 0.35,
-          pointRadius: 6,
-          pointHoverRadius: 8,
-          pointBackgroundColor: bt.daiVans.map((dv, i) => cur && cur.idx === i ? '#C0392B' : '#061A2E'),
-          pointBorderColor: '#fff',
-          pointBorderWidth: 2,
-        }]
-      },
-      options: {
-        responsive: true, maintainAspectRatio: false,
-        scales: {
-          y: { min: 0, max: 10, ticks: { stepSize: 2, font: { size: 11 } } },
-          x: { ticks: { font: { size: 10 }, maxRotation: 30, minRotation: 0 } },
-        },
-        plugins: {
-          legend: { display: false },
-          tooltip: { callbacks: {
-            title: (items) => labels[items[0].dataIndex],
-            label: (item) => {
-              const dv = bt.daiVans[item.dataIndex];
-              return [`${dv.can} ${dv.chi} (${dv.thapThanCan})`, `Score: ${dv.score}/10 — ${dv.label}`, `${dv.namStart}-${dv.namEnd}`];
-            }
-          } }
-        }
-      }
+    const config = window.DaiVanChart.buildSingle(bt.daiVans, {
+      getScore: dv => dv.score,
+      lineColor: '#9A7B3A',
+      fillColor: 'rgba(154,123,58,0.15)',
+      markerColor: '#061A2E',
+      activeColor: '#C0392B',
+      isCurrent: (dv, i) => !!(cur && cur.idx === i),
+      maintainAspectRatio: false,
+      tooltipExtra: dv => [`${dv.can} ${dv.chi} (${dv.thapThanCan})`, dv.label, `${dv.namStart}-${dv.namEnd}`],
     });
+    window._phan12Line = new Chart(canvas.getContext('2d'), config);
   }
 
   function updateMucLuc(phan, status) {
@@ -1440,6 +1424,10 @@ select.form-input { cursor: pointer; }
   };
 
   // ─── Markdown renderer (đơn giản, đủ dùng) ────────────────────
+  // Nhãn tính chất model tự gắn NGAY TRƯỚC câu hook mỗi đoạn (khối "NHÃN TÍNH
+  // CHẤT MỖI CÂU HOOK" trong `arcDoc()`, lib/agent/prompts.ts) — tra ra class
+  // CSS màu (.fb-card, xem shell.css). Cùng cơ chế với app-luan-giai.html.
+  const HOOK_TAG_CLASS = { 'TỐT': 'fb-tot', 'CẢNH BÁO': 'fb-canhbao', 'TRUNG TÍNH': 'fb-trungtinh' };
   function renderMarkdown(text) {
     if (!text) return '';
     // Normalize line endings + remove BOM / zero-width chars
@@ -1466,25 +1454,38 @@ select.form-input { cursor: pointer; }
       out += '</table></div>';
       rows = []; inTable = false;
     }
+    const inline = (s) => s.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>').replace(/\*(.+?)\*/g, '<em>$1</em>');
+    let pendingLead = '';
+    const flushPending = () => { if (pendingLead) { out += `<p>${pendingLead}</p>`; pendingLead = ''; } };
     for (const rawLine of lines) {
       const line = rawLine.trim();  // trim per line — robust against leading whitespace
       if (line.startsWith('|')) {
+        flushPending();
         inTable = true;
         rows.push(line);
       } else {
         if (inTable) flushTable();
-        const l = line
+        const h = line
           .replace(/^####\s+(.+)$/, '<h4>$1</h4>')
           .replace(/^###\s+(.+)$/, '<h3>$1</h3>')
           .replace(/^##\s+(.+)$/, '<h2>$1</h2>')
-          .replace(/^#\s+(.+)$/, '<h2>$1</h2>')
-          .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
-          .replace(/\*(.+?)\*/g, '<em>$1</em>');
-        if (l.startsWith('<h')) out += l;
-        else if (line) out += `<p>${l}</p>`;
+          .replace(/^#\s+(.+)$/, '<h2>$1</h2>');
+        if (h.startsWith('<h')) { flushPending(); out += h; continue; }
+        if (!line) continue;
+        const m = /^\[(TỐT|CẢNH BÁO|TRUNG TÍNH)(?:\|[^\]]{0,40})?\]\s*\*\*(.+?)\*\*([\s\S]*)$/.exec(line);
+        if (m) {
+          flushPending();
+          const cls = HOOK_TAG_CLASS[m[1]] || 'fb-trungtinh';
+          out += `<div class="fb-card ${cls}">"${m[2].trim()}"</div>`;
+          pendingLead = inline(m[3]).trim();
+          continue;
+        }
+        out += `<p>${pendingLead ? pendingLead + ' ' : ''}${inline(line)}</p>`;
+        pendingLead = '';
       }
     }
     if (inTable) flushTable();
+    flushPending();
     return out;
   }
 

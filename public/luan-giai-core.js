@@ -5,6 +5,8 @@
    tham số `ls` (output của anSaoLaSo). KHÔNG DOM, KHÔNG AI, KHÔNG paywall.
    Dùng bởi: shell /app/luan-giai (render 24 phần free ở ô giữa). Standalone
    /luan-giai.html vẫn giữ bản inline (DRY hoá sau, PR riêng).
+   Phụ thuộc load-order: TU_HOA (global từ public/tuvi-ansao-engine.js) —
+   khối Tứ Hóa Phi Tinh cần engine nạp TRƯỚC file này.
    renderInlineDaiVanLineChart(ls): vẽ canvas #chart-daivan-overview (phần 14,
    cần Chart.js; tự thoát nếu thiếu Chart) — đúng khuôn
    BatTuCore.renderInlineDaiVanLineChart của bat-tu-core.js.
@@ -14,16 +16,98 @@
   var TONG_PHAN = 24;
   var CAN10 = ['Giáp', 'Ất', 'Bính', 'Đinh', 'Mậu', 'Kỷ', 'Canh', 'Tân', 'Nhâm', 'Quý'];
   var CHI12 = ['Tý', 'Sửu', 'Dần', 'Mão', 'Thìn', 'Tỵ', 'Ngọ', 'Mùi', 'Thân', 'Dậu', 'Tuất', 'Hợi'];
-  // Can của cung đại vận suy từ Can năm sinh (ngũ hổ độn) — CÙNG công thức
+  // Can của MỘT cung bất kỳ suy từ Can năm sinh (ngũ hổ độn) — CÙNG công thức
   // _getCungCan của laso-chart.js (dán nhãn can-chi trên bàn lá số), viết lại
-  // tại chỗ để file này không phụ thuộc thứ tự nạp script khác.
+  // tại chỗ để file này không phụ thuộc thứ tự nạp script khác. Trả -1 nếu
+  // không tra được (canChiNam thiếu hoặc diaChi lạ).
+  function cungCanIdx(ls, diaChi) {
+    var canNam = ((ls && ls.canChiNam) || '').split(' ')[0];
+    var ci = CAN10.indexOf(canNam), di = CHI12.indexOf(diaChi);
+    if (ci < 0 || di < 0) return -1;
+    return ((ci % 5) * 2 + di) % 10;
+  }
+  // Can của cung đại vận — dùng chung cungCanIdx ở trên.
   function canChiDaiVan(ls, dv) {
     if (!dv || !dv.diaChi) return '';
-    var canNam = ((ls && ls.canChiNam) || '').split(' ')[0];
-    var ci = CAN10.indexOf(canNam), di = CHI12.indexOf(dv.diaChi);
-    if (ci < 0 || di < 0) return dv.diaChi;
-    return CAN10[((ci % 5) * 2 + di) % 10] + ' ' + dv.diaChi;
+    var ci = cungCanIdx(ls, dv.diaChi);
+    if (ci < 0) return dv.diaChi;
+    return CAN10[ci] + ' ' + dv.diaChi;
   }
+
+  // TU_HOA là global từ public/tuvi-ansao-engine.js — CÙNG cách
+  // public/tuvi-laso-format.js đã dùng cho khối này (xem comment ở đó +
+  // projectGlobals trong eslint.config.js). File này trước có BẢN CHÉP TAY
+  // riêng, trôi lệch Khoa/Kỵ của Canh với engine suốt từ P2 tới P3 (2026-09)
+  // vì sửa engine không kéo theo sửa bản chép — nay trỏ thẳng về MỘT nguồn.
+  // Cả 3 trang duy nhất nạp file này (app-luan-giai/app-van-han-nam/
+  // app-chu-trinh-cuoc-doi.html) đều nạp tuvi-ansao-engine.js TRƯỚC.
+  var HOA_ORDER = ['Lộc', 'Quyền', 'Khoa', 'Kỵ'];
+
+  // Khối "Tứ Hóa Phi Tinh" (tự hóa Bắc Phái, tầng MỆNH BÀN — dùng can của
+  // CHÍNH cung đang xét, không phải can năm sinh hay can đại vận/lưu niên;
+  // các tầng đó theo can khác, ngoài phạm vi khối này). 4 sao Lộc/Quyền/
+  // Khoa/Kỵ suy từ can cung → tra vị trí HIỆN TẠI của từng sao (ls.palaces)
+  // → "phi nhập" đúng cung đó. Tự hóa (sao bay về lại CHÍNH cung phát) được
+  // đánh dấu riêng. Trả '' nếu không tra được can cung hoặc không có sao nào.
+  function buildTuHoaPhiTinhHtml(cungForPhan, ls) {
+    var pal = (ls.palaces || []).find(function (p) { return p.cungName === cungForPhan; });
+    if (!pal) return '';
+    var ci = cungCanIdx(ls, pal.diaChi);
+    if (ci < 0) return '';
+    var canCung = CAN10[ci];
+    var hosts = TU_HOA[canCung];
+    if (!hosts) return '';
+    function findStarPalace(name) {
+      return (ls.palaces || []).find(function (p) {
+        return (p.stars || []).some(function (s) { return s.ten === name; });
+      });
+    }
+    var rows = HOA_ORDER.map(function (hoa) {
+      var star = hosts[hoa];
+      var target = star ? findStarPalace(star) : null;
+      if (!target) return null;
+      return { hoa: hoa, star: star, target: target, self: target.cungName === cungForPhan };
+    }).filter(Boolean);
+    if (!rows.length) return '';
+    var h = '<div class="pregen-block"><div class="pregen-title"><span class="ic-inline" data-icon-emoji="🚀" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">🚀</span> Tứ Hóa Phi Tinh (can cung ' + canCung + ')</div>';
+    rows.forEach(function (r) {
+      var cls = r.hoa === 'Kỵ' ? 'yn-hung' : 'yn-cat';
+      var selfBadge = r.self ? ' <span style="color:#7B3FA0;font-weight:700">[TỰ HÓA]</span>' : '';
+      h += '<div class="pregen-yn ' + cls + '">Hóa ' + r.hoa + ': <b>' + r.star + '</b> → phi nhập cung <b>' + r.target.cungName + '</b> (' + r.target.diaChi + ')' + selfBadge + '</div>';
+    });
+    h += '</div>';
+    return h;
+  }
+  // Thứ tự 12 trục của vành cung — CỐ ĐỊNH, không đọc `Object.keys(cungScores)`:
+  // thứ tự khoá của object là thứ tự an sao, đổi engine là hình xoay theo mà
+  // không ai báo, và hai lá số cạnh nhau sẽ không so hình được với nhau nữa.
+  // Nhãn rút còn MỘT chữ đầu (Mệnh · Phụ · Phúc…) — 12 nhãn quanh một vòng nhỏ,
+  // để nguyên "Điền Trạch" là chữ chồng lên nhau.
+  var CUNG_TRUC = [
+    ['Mệnh', 'Mệnh'], ['Phụ Mẫu', 'Phụ'], ['Phúc Đức', 'Phúc'], ['Điền Trạch', 'Điền'],
+    ['Quan Lộc', 'Quan'], ['Nô Bộc', 'Nô'], ['Thiên Di', 'Di'], ['Tật Ách', 'Tật'],
+    ['Tài Bạch', 'Tài'], ['Tử Tức', 'Tử'], ['Phu Thê', 'Phối'], ['Huynh Đệ', 'Huynh'],
+  ];
+
+  /** Vành 12 cung. Trả '' nếu thiếu HookCharts hoặc thiếu điểm — khối chữ phía
+   *  sau vẫn đứng được một mình, không để trang vỡ vì một hình. */
+  function buildCungRadarHtml(ls) {
+    if (!window.HookCharts || !HookCharts.hexRadar) return '';
+    var sc = (ls && ls.cungScores) || null;
+    if (!sc) return '';
+    var dims = CUNG_TRUC.map(function (x) {
+      var v = sc[x[0]] && sc[x[0]].tong;
+      return { label: x[1], value: typeof v === 'number' ? v : 0 };
+    });
+    if (!dims.some(function (d) { return d.value > 0; })) return '';
+    return (
+      '<div style="margin:6px 0 10px">' +
+      HookCharts.hexRadar({ dims: dims, size: 260, max: 10,
+        ariaLabel: 'Vành mười hai cung, trục nào dày là cung đó mạnh hơn' }) +
+      '</div>'
+    );
+  }
+
   var PHAN_LABELS_BASE = [
     '',
     'Tổng Quan Lá Số',
@@ -118,6 +202,18 @@
         const top3 = Object.entries(_astrolabe.cungScores).map(([c,sc])=>[c,METRICS.reduce((s,m)=>s+sc[m],0)]).sort((a,b)=>b[1]-a[1]).slice(0,3);
         const bot3 = Object.entries(_astrolabe.cungScores).map(([c,sc])=>[c,METRICS.reduce((s,m)=>s+sc[m],0)]).sort((a,b)=>a[1]-b[1]).slice(0,3);
         preGenHtml += `<div class="pregen-block"><div class="pregen-title"><span class="ic-inline" data-icon-emoji="📊" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">📊</span> Điểm mạnh / yếu nổi bật</div>`;
+        // Vành 12 cung — CÙNG con số mà hai dòng "Mạnh nhất / Yếu nhất" ngay
+        // dưới đang đọc (`cungScores[cung].tong`), chỉ đổi cách đọc: hai dòng
+        // chữ nêu được 6/12 cung, hình nêu cả 12 và cho thấy KHOẢNG CÁCH giữa
+        // chúng — thứ mà danh sách top3/bot3 không nói ra.
+        //
+        // ⚠️ CỐ Ý KHÔNG in số lên từng trục: `SYSTEM_PROMPT` cấm bản luận nói
+        // "cung này x/10" (mà `cungScores` KHÔNG nằm trong `formatLaSoV2`, nên
+        // model thật sự không có con số đó). In số lên hình là dựng một nguồn
+        // thứ hai nói ngược lại chính bài luận bên dưới nó. Hình chỉ nói TƯƠNG
+        // QUAN — cung nào dày, cung nào mỏng — đúng vai của một cái radar.
+        // Giữ hai dòng chữ: chúng GỌI TÊN cung, hình thì không.
+        preGenHtml += buildCungRadarHtml(_astrolabe);
         preGenHtml += `<div class="pregen-row"><span class="pregen-good">Mạnh nhất: ${top3.map(([c,s])=>`${c} (${s.toFixed(0)})`).join(', ')}</span></div>`;
         preGenHtml += `<div class="pregen-row"><span class="pregen-bad">Yếu nhất: ${bot3.map(([c,s])=>`${c} (${s.toFixed(0)})`).join(', ')}</span></div>`;
         preGenHtml += `</div>`;
@@ -150,6 +246,7 @@
         });
         preGenHtml += `</div>`;
       }
+      preGenHtml += buildTuHoaPhiTinhHtml(cungForPhan, _astrolabe);
       if (sc) {
         const METRICS = ['thienVan','canCo','mayMan','phuTro','binhYen','benVung'];
         const MV = ['Thiên Vận','Căn Cơ','May Mắn','Phù Trợ','Bình Yên','Bền Vững'];
@@ -265,58 +362,31 @@
   // #C0392B). Không có canvas / thiếu Chart.js / thiếu daiVans → im lặng bỏ
   // qua (DOM chưa có phần 14, hoặc Chart.js chưa nạp).
   function renderInlineDaiVanLineChart(ls) {
-    if (typeof Chart === 'undefined' || !ls) return;
+    if (typeof Chart === 'undefined' || !ls || !window.DaiVanChart) return;
     var canvas = (typeof document !== 'undefined') ? document.getElementById('chart-daivan-overview') : null;
     var dvs = (ls.daiVans || []).slice(0, 9);
     if (!canvas || !dvs.length) return;
     var cur = ls.daiVanHienTai;
-    var labels = dvs.map(function (dv, i) { return 'ĐV' + (i + 1) + ' (' + dv.tuoiStart + '-' + dv.tuoiEnd + 't)'; });
-    var scores = dvs.map(function (dv) { return dv.scoring ? dv.scoring.tong : 0; });
     if (root._lgDaiVanChart) { try { root._lgDaiVanChart.destroy(); } catch (e) {} }
-    root._lgDaiVanChart = new Chart(canvas.getContext('2d'), {
-      type: 'line',
-      data: {
-        labels: labels,
-        datasets: [{
-          label: 'Điểm Vận',
-          data: scores,
-          borderColor: '#9A7B3A',
-          backgroundColor: 'rgba(154,123,58,0.15)',
-          fill: true,
-          tension: 0.35,
-          pointRadius: 6,
-          pointHoverRadius: 8,
-          pointBackgroundColor: dvs.map(function (dv) { return cur && dv.cungIdx === cur.cungIdx ? '#C0392B' : '#061A2E'; }),
-          pointBorderColor: '#fff',
-          pointBorderWidth: 2,
-        }],
-      },
-      options: {
-        responsive: true, maintainAspectRatio: false,
-        scales: {
-          y: { min: 0, max: 10, ticks: { stepSize: 2, font: { size: 11 } } },
-          x: { ticks: { font: { size: 10 }, maxRotation: 30, minRotation: 0 } },
-        },
-        plugins: {
-          legend: { display: false },
-          tooltip: { callbacks: {
-            title: function (items) { return labels[items[0].dataIndex]; },
-            label: function (item) {
-              var dv = dvs[item.dataIndex];
-              var palace = ls.palaces && ls.palaces[dv.cungIdx];
-              return [
-                (palace ? 'Cung ' + palace.cungName + ' (' + canChiDaiVan(ls, dv) + ')' : canChiDaiVan(ls, dv)),
-                'Điểm: ' + (dv.scoring ? dv.scoring.tong : '—') + '/10',
-                dv.tuoiStart + '-' + dv.tuoiEnd + ' tuổi',
-              ];
-            },
-          } },
-        },
+    var config = window.DaiVanChart.buildSingle(dvs, {
+      lineColor: '#9A7B3A',
+      fillColor: 'rgba(154,123,58,0.15)',
+      markerColor: '#061A2E',
+      activeColor: '#C0392B',
+      isCurrent: function (dv) { return !!(cur && dv.cungIdx === cur.cungIdx); },
+      maintainAspectRatio: false,
+      tooltipExtra: function (dv) {
+        var palace = ls.palaces && ls.palaces[dv.cungIdx];
+        return [
+          (palace ? 'Cung ' + palace.cungName + ' (' + canChiDaiVan(ls, dv) + ')' : canChiDaiVan(ls, dv)),
+          dv.tuoiStart + '-' + dv.tuoiEnd + ' tuổi',
+        ];
       },
     });
+    root._lgDaiVanChart = new Chart(canvas.getContext('2d'), config);
   }
 
-  var API = { TONG_PHAN: TONG_PHAN, PHAN_LABELS_BASE: PHAN_LABELS_BASE, phanLabels: phanLabels, buildPreGenHtml: buildPreGenHtml, buildCungStarHtml: buildCungStarHtml, renderInlineDaiVanLineChart: renderInlineDaiVanLineChart };
+  var API = { TONG_PHAN: TONG_PHAN, PHAN_LABELS_BASE: PHAN_LABELS_BASE, phanLabels: phanLabels, buildPreGenHtml: buildPreGenHtml, buildCungStarHtml: buildCungStarHtml, buildTuHoaPhiTinhHtml: buildTuHoaPhiTinhHtml, renderInlineDaiVanLineChart: renderInlineDaiVanLineChart };
   if (typeof module !== 'undefined' && module.exports) module.exports = API;
   else root.LuanGiaiCore = API;
 })(typeof window !== 'undefined' ? window : globalThis);

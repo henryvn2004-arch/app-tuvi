@@ -297,9 +297,45 @@ export function computeVanNgay(dd: number, mm: number, yy: number): VanNgayResul
     xung: { chi: CHI[xungIdx]!, namSinh: namSinhTheoChi(xungIdx, yy) },
     gio,
     gioTot: gio.filter((g) => g.hoangDao),
-    nen: sorted.filter((s) => s.score >= 7).slice(0, 3).map((s) => pick(s, true)),
-    // Nên 3 / kiêng 2: thẻ là khối ĐẦU trang chủ, dài thêm một dòng là đẩy
-    // danh sách công cụ xuống dưới màn hình đầu tiên trên máy 390px.
+    // Ngưỡng 5. Đo trên 365 ngày của 2026 bằng chính engine này — ô "Nên làm"
+    // TRỐNG bao nhiêu ngày:
+    //          TỔNG            ngày TỐT/BÌNH (199)   ngày KỴ/XẤU (166)
+    //   >= 7   201/365 (55%)   62/199 (31%)          139/166 (84%)
+    //   >= 6   159/365 (44%)   41/199 (21%)          118/166 (71%)
+    //   >= 5    79/365 (22%)    3/199 ( 2%)           76/166 (46%)
+    //
+    // 🔑 Cột giữa mới là cột đáng đọc. Ô này chỉ có việc phải lấp trên ngày
+    // LÀNH — ngày kỵ/xấu thì thẻ đang bảo người ta ĐỪNG khởi sự, ô trống ở đó
+    // là đúng chứ không phải thiếu. Ở ngưỡng 5, ngày lành gần như luôn có việc
+    // (trống 2%), nên con số 22% ở cột tổng gần như dồn hết vào nhóm kỵ/xấu.
+    //
+    // ⚠️ Hạ tới 5 sinh ra một mặt trái ĐÃ ĐO: 90/365 ngày (25%) sẽ có huy hiệu
+    // kỵ/xấu MÀ ô "Nên làm" vẫn liệt kê việc — gấp đôi mức của ngưỡng 6 (48
+    // ngày). Nặng nhất là ngày kỵ: 65/121 ngày kỵ khuyên ngược đúng dòng "cổ
+    // pháp kiêng khởi sự" nằm ngay ô bên cạnh. Vì thế THẺ chặn ô này trên ngày
+    // kỵ (xem `anhCho()` trong public/app-home.html) — chặn ở tầng TRÌNH BÀY,
+    // không chặn ở đây: engine phải trả đúng điểm nó tính được, còn "có nên
+    // nói ra không" là việc của mặt hiển thị.
+    //
+    // ⚠️ Đổi số này là đổi CẢ tin nhắc hằng ngày lẫn thẻ. `lib/push/daily-message.ts`
+    // CỐ Ý lọc lại >= 7 cho riêng nó — xem chú thích ở đó.
+    // ⚠️ `app/ngay-tot/lich/[year]/[m]/route.ts` có bản >= 7 RIÊNG (nó gọi thẳng
+    // `scoreAllActivities`, không qua đây) và CỐ Ý giữ nguyên: lịch SEO trả lời
+    // "ngày nào tốt để cưới hỏi" nên phải giữ bar cao, khác việc thẻ trả lời
+    // "hôm nay làm được gì".
+    //
+    // 🔑 CẮT 6 CHỨ KHÔNG PHẢI 3, dù thẻ chỉ hiện 3. Thẻ ẨN ba việc (An táng ·
+    // Đào giếng · Sinh con) ở tầng trình bày — `vietChoThe()` trong
+    // `public/app-home.html` — nên nếu ở đây cắt đúng 3 thì một việc bị ẩn ăn
+    // mất một CHỖ và thẻ hiện thiếu dòng: đo trên 365 ngày 2026 là **34 ngày**
+    // hiện 2 dòng thay vì 3. Cắt 6 luôn đủ dư vì chỉ có 3 việc bị ẩn. Bên tiêu
+    // thụ tự cắt lại 3.
+    // ⚠️ Chỉ HAI nơi đọc `nen` này: `/api/van-ngay` (thẻ) và
+    // `lib/push/daily-message.ts`. Hoàng lịch có `nen` RIÊNG dựng từ
+    // `lib/almanac/day.ts` (`recommends`) — không dính.
+    nen: sorted.filter((s) => s.score >= 5).slice(0, 6).map((s) => pick(s, true)),
+    // Kiêng 2: thẻ là khối ĐẦU trang chủ, dài thêm một dòng là đẩy danh sách
+    // công cụ xuống dưới màn hình đầu tiên trên máy 390px.
     kieng: sorted.filter((s) => s.score <= 3).slice(-2).reverse().map((s) => pick(s, false)),
     mau: { hanh: canHanh, list: mauList },
     huong: { hyThan: HY_THAN[canIdx]!, taiThan: TAI_THAN[canIdx]! },

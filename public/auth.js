@@ -10,6 +10,22 @@ const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsI
 const SESSION_KEY = 'tuvi_session';
 const USER_KEY    = 'tuvi_user';
 
+// Facebook (và Instagram) mở link quảng cáo trong WEBVIEW RIÊNG của nó, không
+// phải Chrome/Safari thật. Google CHỦ ĐỘNG chặn OAuth từ UA nhận diện được là
+// webview nhúng (trả về lỗi "This browser or app may not be secure" —
+// disallowed_useragent) — chặn cả redirect toàn trang, không riêng popup.
+// Đo trên traffic Facebook Ads thật (2026-08-30): 1.639/1.640 khách vào từ
+// utm_source=fb khớp UA này. Hệ quả đo được: 12 lượt bấm mở khoá trên Chu
+// Trình Cuộc Đời chỉ ra ĐÚNG 1 signup — 11 người bấm "Tiếp tục với Google"
+// (nút đầu tiên, nổi nhất) rồi kẹt ở trang cảnh báo của Google, không tự tìm
+// xuống form email bên dưới. KHÔNG sửa mò regex này — nó đã đối chiếu đúng
+// bằng số liệu, không phải suy đoán.
+function _isEmbeddedWebview() {
+  try {
+    return /FBAN|FBAV|FB_IAB|FBIOS|Instagram/i.test(navigator.userAgent || '');
+  } catch (e) { return false; }
+}
+
 // ── Cookie helpers — lưu refresh_token 6 tháng để sống sót ITP trên iOS Safari ──
 function _setCookie(name, value, days) {
   const d = new Date();
@@ -211,6 +227,10 @@ window.Auth = {
   isRestoring: () => _restoring,
   getUser:     () => _user,
   getSession:  () => _session,
+  // Phiên "guest checkout" (xem signInAnonymously) — chưa thêm email/mật khẩu.
+  isAnonymous: () => !!(_user && _user.is_anonymous),
+  signInAnonymously: signInAnonymously,
+  claimAccount: claimAccount,
 
   // ── Cách ĐÚNG để lấy Bearer token trước một lượt gọi API ────────────
   // `getSession().access_token` là ẢNH CHỤP: nó trả token kể cả khi token ĐÃ
@@ -231,6 +251,13 @@ window.Auth = {
   },
 
   signOut: async function() {
+    // Đăng xuất một phiên ẨN DANH chưa lưu = MẤT hẳn (không mật khẩu/email nào
+    // để đăng nhập lại đúng phiên đó) — khác đăng xuất tài khoản thường (đăng
+    // nhập lại được). Hỏi lại một câu, đừng để mất Lượng trong một cú bấm nhầm.
+    if (_user && _user.is_anonymous) {
+      var okToLeave = window.confirm('Bạn chưa lưu tài khoản — đăng xuất sẽ MẤT toàn bộ Lượng và lịch sử. Vẫn đăng xuất?');
+      if (!okToLeave) return;
+    }
     if (_session) {
       await fetch(`${SUPA_URL}/auth/v1/logout`, {
         method: 'POST',
@@ -273,6 +300,68 @@ async function signUpEmail(email, password) {
   if (data.access_token) {
     saveSession(data);
   }
+  return data;
+}
+
+// ── Guest checkout: phiên ẨN DANH, không hỏi gì ──
+//
+// Dùng khi khách bấm "mở khoá trả tiền" mà CHƯA từng đăng nhập — thay vì chặn
+// bằng modal đăng ký ngay, tạo một phiên thật (có user_id, có JWT, dùng được
+// với mọi RPC/route hiện có) TRONG ÂM THẦM rồi cho trả tiền luôn. Nếu quay lại
+// sau/muốn giữ, họ "Lưu tài khoản" (claimAccount) — NÂNG CẤP TẠI CHỖ cùng
+// user_id, không mất Lượng/lịch sử, không phải "hợp nhất 2 tài khoản".
+//
+// Cần bật "Allow anonymous sign-ins" ở Supabase Dashboard (Authentication →
+// Sign In / Up → Anonymous) — CHƯA bật thì gọi `POST /auth/v1/signup` với body
+// rỗng trả lỗi `anonymous_provider_disabled`, hàm này trả `false`, nơi gọi tự
+// rơi về đường cũ (hiện modal đăng ký) — an toàn để ship trước khi bật cờ đó.
+//
+// 🔴 TRƯỚC KHI bật cờ này, `handle_new_user_signup()` (trigger cấp quà chào
+// mừng lúc đăng ký) PHẢI đã chặn `is_anonymous` — nếu không mỗi phiên ẩn danh
+// (tạo được bằng xoá cookie, không cần email/OTP) tự ăn luôn 20-40 Lượng free,
+// cày vô hạn. Xem _patches/migration-anon-checkout-no-signup-bonus.sql.
+async function signInAnonymously() {
+  try {
+    var anonId = null;
+    try { anonId = localStorage.getItem('tvmb_anon'); } catch (e) { /* ignore */ }
+    var res = await fetch(`${SUPA_URL}/auth/v1/signup`, {
+      method: 'POST',
+      headers: { 'apikey': SUPA_KEY, 'Content-Type': 'application/json' },
+      // `data` gắn vào user_metadata NẾU GoTrue chấp nhận cho lượt ẩn danh —
+      // best-effort nối lại nguồn UTM (track.js) với user_id mới, không quan
+      // trọng bằng chính lượt đăng nhập nên KHÔNG throw nếu bị bỏ qua.
+      body: JSON.stringify(anonId ? { data: { source_anon_id: anonId } } : {}),
+    });
+    var data = await res.json();
+    if (!res.ok || !data.access_token) return false;
+    saveSession(data);
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+
+// ── "Lưu tài khoản" — gắn email/mật khẩu vào phiên ẨN DANH đang có ──
+//
+// KHÔNG phải signUpEmail (tạo user MỚI) — đây là `PUT /auth/v1/user` trên
+// CHÍNH session ẩn danh hiện tại, GoTrue nâng cấp tại chỗ (giữ nguyên user_id
+// ⇒ giữ nguyên Lượng/lịch sử/quyền đã mua). Tuỳ cấu hình "Confirm email" của
+// dự án, `is_anonymous` có thể chỉ chuyển `false` SAU khi khách bấm link xác
+// nhận trong email — không coi im lặng đây là "đã xác nhận".
+async function claimAccount(email, password) {
+  var token = await _ensureFreshToken();
+  if (!token) throw new Error('Phiên đã hết hạn. Vui lòng thử lại.');
+  var res = await fetch(`${SUPA_URL}/auth/v1/user`, {
+    method: 'PUT',
+    headers: { 'apikey': SUPA_KEY, 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+    body: JSON.stringify({ email: email, password: password }),
+  });
+  var data = await res.json();
+  if (!res.ok) throw new Error(data.error_description || data.msg || 'Không lưu được tài khoản.');
+  // Cập nhật `_user` tại chỗ (email mới) — session token KHÔNG đổi, chỉ user đổi.
+  _user = data;
+  try { localStorage.setItem(USER_KEY, JSON.stringify(_user)); } catch (e) { /* ignore */ }
+  updateNavUI();
   return data;
 }
 
@@ -348,7 +437,9 @@ function saveSession(data) {
   // 🔑 Đăng nhập/đăng ký cũng phải hẹn giờ xoay token — thiếu dòng này thì phiên
   // vừa tạo chết sau ~1 giờ mà không có gì gia hạn (lỗi rail đòi đăng nhập lại).
   _scheduleRefresh(data);
-  if (data.access_token) sendSignupSignal(data.access_token);
+  // isAnon: phiên khách ẨN DANH (guest checkout) KHÔNG phải đăng ký thật — chặn
+  // ở đây, không phải trong sendSignupSignal, vì server không biết is_anonymous.
+  if (data.access_token) sendSignupSignal(data.access_token, !!(_user && _user.is_anonymous));
   // Marketing: gắn user_id + snapshot attribution (first-touch) lên tài khoản.
   // track.js đọc token vừa lưu trong localStorage; server phân biệt signup mới.
   try { if (window.Track && window.Track.event) window.Track.event('login'); } catch (e) { /* ignore */ }
@@ -368,14 +459,27 @@ function _deviceId() {
     return d;
   } catch (e) { return ''; }
 }
-function sendSignupSignal(token) {
+function sendSignupSignal(token, isAnon) {
   try {
     fetch('/api/signup-signal', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
       body: JSON.stringify({ fp: _deviceId() }),
       keepalive: true,
-    }).catch(function () {});
+    })
+      // Idempotent theo user (PK signup_signals.user_id): lượt gọi ĐẦU TIÊN thành
+      // công cho một user_id là tín hiệu DUY NHẤT đáng tin cho "tài khoản mới" —
+      // đây là nơi bắn Track.event('signup') (GA4 sign_up + Meta CompleteRegistration
+      // qua track.js). Thiếu bước này, hai map đó trong track.js không bao giờ chạy
+      // vì chỉ có Track.event('login') được gọi ở saveSession(). Bỏ qua khi isAnon
+      // (guest checkout) — đó không phải đăng ký thật.
+      .then(function (r) { return r.json(); })
+      .then(function (data) {
+        if (!isAnon && data && data.ok && !data.already) {
+          try { if (window.Track && window.Track.event) window.Track.event('signup'); } catch (e) { /* ignore */ }
+        }
+      })
+      .catch(function () {});
   } catch (e) { /* ignore */ }
 }
 window.sendSignupSignal = sendSignupSignal;
@@ -390,8 +494,9 @@ function updateNavUI() {
     ? 'position:fixed;top:10px;right:52px;height:40px;display:flex;align-items:center;z-index:199'
     : 'position:fixed;top:0;right:56px;height:60px;display:flex;align-items:center;z-index:300';
   if (_session && _user) {
+    const isAnon = !!_user.is_anonymous;
     const email = _user.email || '';
-    const name  = _user.user_metadata?.full_name || _user.user_metadata?.name || '';
+    const name  = isAnon ? 'Khách' : (_user.user_metadata?.full_name || _user.user_metadata?.name || '');
     const avatar= _user.user_metadata?.avatar_url || _user.user_metadata?.picture || '';
     const initial = (name || email).charAt(0).toUpperCase();
     navEl.innerHTML = `
@@ -411,7 +516,7 @@ function updateNavUI() {
         <div id="nav-profile-menu" style="display:none;position:absolute;right:0;top:44px;background:#fff;border:1px solid #ddd;border-radius:10px;padding:8px 0;min-width:200px;box-shadow:0 8px 28px rgba(0,0,0,.14);z-index:1000">
           <div style="padding:11px 16px;border-bottom:1px solid #f0f0f0">
             <div style="font-size:12px;font-weight:700;color:#333">${name || 'Tài khoản'}</div>
-            <div style="font-size:11px;color:#999;margin-top:2px">${email}</div>
+            <div style="font-size:11px;color:#999;margin-top:2px">${isAnon ? 'Chưa lưu tài khoản' : email}</div>
           </div>
           <div style="padding:10px 16px;border-bottom:1px solid #f0f0f0;display:flex;align-items:center;justify-content:space-between">
             <div>
@@ -420,6 +525,7 @@ function updateNavUI() {
             </div>
             <a href="/topup.html" style="background:#c9a84c;color:#061A2E;font-size:11px;font-weight:700;padding:5px 10px;border-radius:5px;text-decoration:none" onmouseover="this.style.background='#f0d080'" onmouseout="this.style.background='#c9a84c'">+ Nạp</a>
           </div>
+          ${isAnon ? `<button onclick="window.showClaimModal&&showClaimModal();document.getElementById('nav-profile-menu').style.display='none'" style="display:flex;align-items:center;gap:6px;width:100%;padding:9px 16px;font-size:13px;font-weight:700;color:#9A7B3A;background:#FBF8F1;border:none;border-bottom:1px solid #f0f0f0;text-align:left;cursor:pointer;font-family:inherit">⚠ Lưu tài khoản — tránh mất Lượng</button>` : ''}
           <a href="/profile.html" style="display:block;padding:9px 16px;font-size:13px;color:#333;text-decoration:none" onmouseover="this.style.background='#f8f8f8'" onmouseout="this.style.background=''">Hồ sơ của tôi</a>
           <div style="border-top:1px solid #f0f0f0;margin-top:4px"></div>
           <button onclick="Auth.signOut()" style="display:block;width:100%;padding:9px 16px;font-size:13px;color:#C0392B;background:none;border:none;text-align:left;cursor:pointer;font-family:inherit" onmouseover="this.style.background='#fff5f5'" onmouseout="this.style.background=''">Đăng xuất</button>
@@ -475,21 +581,27 @@ function showAuthModal(callback) {
         <div style="font-family:Georgia,serif;font-size:16px;font-weight:700;color:#CC2200">Tử Vi Minh Bảo</div><div style="font-size:11px;color:#999;margin-top:2px;font-style:italic">Tri mệnh lý – Thuận thế hành</div>
       </div>
 
-      <!-- Google OAuth -->
-      <button onclick="signInGoogle()" style="width:100%;padding:11px;border:1.5px solid #ddd;border-radius:8px;background:#fff;display:flex;align-items:center;justify-content:center;gap:10px;font-size:13px;cursor:pointer;font-family:inherit;margin-bottom:8px;transition:border-color 0.15s" onmouseover="this.style.borderColor='#4285f4'" onmouseout="this.style.borderColor='#ddd'">
-        <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z"/><path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z"/><path fill="#FBBC05" d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332z"/><path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z"/></svg>
-        Tiếp tục với Google
-      </button>
-      <button onclick="signInFacebook()" style="width:100%;padding:11px;border:1.5px solid #ddd;border-radius:8px;background:#fff;display:flex;align-items:center;justify-content:center;gap:10px;font-size:13px;cursor:pointer;font-family:inherit;margin-bottom:16px;transition:border-color 0.15s" onmouseover="this.style.borderColor='#1877F2'" onmouseout="this.style.borderColor='#ddd'">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="#1877F2"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
-        Tiếp tục với Facebook
-      </button>
+      <!-- Google/Facebook OAuth — ẨN khi mở trong webview nhúng của FB/IG, xem
+           _isEmbeddedWebview(). Cả hai nhà cung cấp đều không tin cậy được ở
+           đó (Google chặn hẳn UA webview), nên đường DUY NHẤT còn lại là form
+           email bên dưới — ẩn cả khối để khỏi mời bấm vào một nút chắc chắn kẹt. -->
+      <div id="auth-oauth-block">
+        <button onclick="signInGoogle()" style="width:100%;padding:11px;border:1.5px solid #ddd;border-radius:8px;background:#fff;display:flex;align-items:center;justify-content:center;gap:10px;font-size:13px;cursor:pointer;font-family:inherit;margin-bottom:8px;transition:border-color 0.15s" onmouseover="this.style.borderColor='#4285f4'" onmouseout="this.style.borderColor='#ddd'">
+          <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z"/><path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z"/><path fill="#FBBC05" d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332z"/><path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z"/></svg>
+          Tiếp tục với Google
+        </button>
+        <button onclick="signInFacebook()" style="width:100%;padding:11px;border:1.5px solid #ddd;border-radius:8px;background:#fff;display:flex;align-items:center;justify-content:center;gap:10px;font-size:13px;cursor:pointer;font-family:inherit;margin-bottom:16px;transition:border-color 0.15s" onmouseover="this.style.borderColor='#1877F2'" onmouseout="this.style.borderColor='#ddd'">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="#1877F2"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+          Tiếp tục với Facebook
+        </button>
 
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
-        <div style="flex:1;height:1px;background:#eee"></div>
-        <span style="font-size:12px;color:#aaa">hoặc</span>
-        <div style="flex:1;height:1px;background:#eee"></div>
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
+          <div style="flex:1;height:1px;background:#eee"></div>
+          <span style="font-size:12px;color:#aaa">hoặc</span>
+          <div style="flex:1;height:1px;background:#eee"></div>
+        </div>
       </div>
+      <p id="auth-webview-note" style="display:none;font-size:12px;color:#7A5F26;background:#FBF8F1;border:1px solid #EADFC8;border-radius:8px;padding:9px 12px;margin-bottom:14px;line-height:1.6">Bạn đang mở trong ứng dụng Facebook/Instagram nên đăng nhập Google/Facebook không dùng được ở đây — dùng email bên dưới, chỉ mất chưa tới 1 phút.</p>
 
       <!-- Email form -->
       <div id="auth-form">
@@ -510,6 +622,15 @@ function showAuthModal(callback) {
 
   document.body.appendChild(modal);
   modal.addEventListener('click', e => { if (e.target === modal) closeAuthModal(); });
+  if (_isEmbeddedWebview()) {
+    const oauthBlock = document.getElementById('auth-oauth-block');
+    if (oauthBlock) oauthBlock.style.display = 'none';
+    const note = document.getElementById('auth-webview-note');
+    if (note) note.style.display = 'block';
+    // Khách bấm quảng cáo hầu như luôn là người MỚI — mở thẳng tab Đăng ký để
+    // khỏi phải tự bấm qua, và để họ thấy ngay có Lượng tặng.
+    if (_currentTab !== 'signup') switchTab('signup');
+  }
   setTimeout(() => document.getElementById('auth-email')?.focus(), 100);
   _prefillPromo();
 }
@@ -538,6 +659,64 @@ function closeAuthModal() {
   if (m) m.style.display = 'none';
   _pendingCallback = null;
 }
+
+// ── "Lưu tài khoản" — modal RIÊNG, nhỏ, KHÔNG dùng chung DOM với showAuthModal
+// (tránh đụng logic tab đăng nhập/đăng ký đang chạy tốt). Chỉ có ở đây khi
+// đang là phiên ẩn danh (xem `TuviPaywall`/`updateNavUI` — nơi gọi tự kiểm).
+function showClaimModal() {
+  if (document.getElementById('claim-modal')) {
+    document.getElementById('claim-modal').style.display = 'flex';
+    return;
+  }
+  const modal = document.createElement('div');
+  modal.id = 'claim-modal';
+  modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px';
+  modal.innerHTML = `
+    <div style="background:#fff;border-radius:14px;padding:32px;width:100%;max-width:380px;position:relative;box-shadow:0 20px 60px rgba(0,0,0,0.3)">
+      <button onclick="closeClaimModal()" style="position:absolute;top:14px;right:14px;background:none;border:none;font-size:20px;cursor:pointer;color:#aaa;line-height:1">×</button>
+      <div style="font-family:Georgia,serif;font-size:17px;font-weight:700;color:#061A2E;margin-bottom:6px">Lưu tài khoản</div>
+      <p style="font-size:12.5px;color:#7a705f;line-height:1.6;margin-bottom:18px">Bạn đang dùng phiên tạm — Lượng và lịch sử đang giữ ở đây sẽ MẤT nếu xoá trình duyệt hoặc đổi máy. Thêm email + mật khẩu để giữ lại, không mất gì đang có.</p>
+      <input id="claim-email" type="email" placeholder="Email" style="width:100%;padding:10px 14px;border:1.5px solid #ddd;border-radius:8px;font-size:14px;font-family:inherit;margin-bottom:10px;outline:none" onfocus="this.style.borderColor='#061A2E'" onblur="this.style.borderColor='#ddd'">
+      <input id="claim-password" type="password" placeholder="Mật khẩu (ít nhất 6 ký tự)" style="width:100%;padding:10px 14px;border:1.5px solid #ddd;border-radius:8px;font-size:14px;font-family:inherit;margin-bottom:10px;outline:none" onfocus="this.style.borderColor='#061A2E'" onblur="this.style.borderColor='#ddd'" onkeydown="if(event.key==='Enter')submitClaim()">
+      <div id="claim-error" style="color:#C0392B;font-size:12px;margin-bottom:8px;display:none"></div>
+      <button id="claim-submit" onclick="submitClaim()" style="width:100%;padding:11px;background:#061A2E;color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit">Lưu tài khoản</button>
+    </div>`;
+  document.body.appendChild(modal);
+  modal.addEventListener('click', e => { if (e.target === modal) closeClaimModal(); });
+  setTimeout(() => document.getElementById('claim-email')?.focus(), 100);
+}
+
+function closeClaimModal() {
+  const m = document.getElementById('claim-modal');
+  if (m) m.style.display = 'none';
+}
+
+async function submitClaim() {
+  const email = document.getElementById('claim-email').value.trim();
+  const pass  = document.getElementById('claim-password').value;
+  const errEl = document.getElementById('claim-error');
+  const btn   = document.getElementById('claim-submit');
+  if (!email || !pass) { errEl.textContent = 'Vui lòng điền email và mật khẩu.'; errEl.style.display = 'block'; return; }
+  if (pass.length < 6) { errEl.textContent = 'Mật khẩu ít nhất 6 ký tự.'; errEl.style.display = 'block'; return; }
+  errEl.style.display = 'none';
+  btn.textContent = '...'; btn.disabled = true;
+  try {
+    await claimAccount(email, pass);
+    closeClaimModal();
+    try { window.fbq && window.fbq('track', 'CompleteRegistration'); } catch (e) {}
+    const msg = '✓ Đã lưu — kiểm tra email để xác nhận nếu được yêu cầu';
+    if (window.TuviPaywall && window.TuviPaywall._banner) window.TuviPaywall._banner(msg);
+    else alert(msg);
+  } catch (e) {
+    errEl.textContent = e.message || 'Không lưu được. Vui lòng thử lại.';
+    errEl.style.display = 'block';
+  } finally {
+    btn.textContent = 'Lưu tài khoản'; btn.disabled = false;
+  }
+}
+window.showClaimModal = showClaimModal;
+window.closeClaimModal = closeClaimModal;
+window.submitClaim = submitClaim;
 
 let _currentTab = 'signin';
 function switchTab(tab) {
@@ -620,6 +799,13 @@ async function submitAuth() {
     }
     closeAuthModal();
     if (_currentTab === 'signup') {
+      try { window.fbq && window.fbq('track', 'CompleteRegistration'); } catch (e) {}
+      // Google Ads đang dùng 3 conversion action "Sign-up (Page load ...)" tự
+      // sinh — đếm MỌI lượt tải trang /app là signup, không phải tài khoản
+      // thật được tạo. Bắn đúng sự kiện GA4 khuyến nghị ('sign_up') ngay tại
+      // lượt đăng ký THÀNH CÔNG để Henry đổi Ads sang đo cái này thay vì đo
+      // lượt tải trang.
+      try { window.gtag && window.gtag('event', 'sign_up', { method: 'email' }); } catch (e) {}
       // Show free credits welcome banner
       _showFreeCreditsWelcome();
     }

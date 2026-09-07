@@ -8,16 +8,19 @@
 <meta name="description" content="Phân tích tương quan hợp khắc giữa hai lá số theo Tử Vi Đẩu Số — xem tuổi vợ chồng, tương hợp cung Mệnh, Phu Thê, Tài Bạch, Tử Tức.">
 <link rel="icon" type="image/webp" href="/seal.webp">
 <link rel="apple-touch-icon" href="/seal.webp">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"></noscript>
+<link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/fonts/noto-serif.css?v=1">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
+<script src="/tools-shared/pchip.js?v=1"></script>
+<script src="/tools-shared/daivan-chart.js?v=1"></script>
 <script src="/tuvi-ansao-engine.js"></script>
 <script src="/tuong-hop.js?v=2"></script>
 <script src="/auth.js?v=2"></script>
 <script src="/tools-shared/vn-timezone.js?v=1"></script>
 <script src="/tuvi-form.js?v=2"></script>
 <script src="/tuvi-grid.js?v=3"></script>
-<script src="/tuvi-paywall.js?v=22"></script>
+<script src="/tuvi-paywall.js?v=25"></script>
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { overflow-x: hidden; }
@@ -37,6 +40,14 @@ html { overflow-x: hidden; }
   --red:       #C0392B;
   --green:     #1E6B3C;
 }
+/* Thẻ trích dẫn kiểu Facebook caption cho câu hook — trang này KHÔNG nạp
+   shell.css (trang standalone cũ), nên khai riêng thay vì phụ thuộc token
+   của shell (--sans/--heading không tồn tại ở đây). Màu khớp bản gốc trong
+   shell.css để đồng nhất giữa các tool, chỉ đổi token thành giá trị cứng. */
+.fb-card{border-radius:14px;padding:30px 26px;margin:16px 0 18px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;font-weight:700;font-size:clamp(19px,5.4vw,27px);line-height:1.4;letter-spacing:.015em;text-align:center}
+.fb-tot{background:#E8F5EC;color:#1E6B3C}
+.fb-canhbao{background:#FBEAE7;color:#C0392B}
+.fb-trungtinh{background:var(--gold-lt);color:var(--navy)}
 body { font-family: Arial, sans-serif; background: var(--bg); color: var(--text); font-size: 16px; line-height: 1.6; -webkit-font-smoothing: antialiased; }
 
 /* NAV */
@@ -692,17 +703,18 @@ select.form-input { cursor: pointer; }
 </style>
 </head>
 <body>
+<div id="nav-ph" style="height:60px;background:#061A2E"></div>
 
 <div class="hero-tuoi">
   <div class="eyebrow">Tử Vi Minh Bảo</div>
   <h1>Xem Tuổi Vợ Chồng</h1>
-  <p>Phân tích tương quan hợp khắc giữa hai lá số theo Tử Vi Đẩu Số cổ pháp — an sao, tính điểm 8 yếu tố và luận giải AI 9 phần.</p>
+  <p>Phân tích tương quan hợp khắc giữa hai lá số theo Tử Vi Đẩu Số cổ pháp — an sao, tính điểm 8 yếu tố và luận giải chuyên sâu 9 phần.</p>
   <div style="display:flex;gap:24px;justify-content:center;margin-top:20px;flex-wrap:wrap">
     <div style="text-align:center"><div style="font-size:22px;font-family:'Noto Serif',serif;color:#fff;font-weight:700">8</div><div style="font-size:11px;color:#8BAACC;letter-spacing:1px">Yếu tố</div></div>
     <div style="width:1px;background:rgba(255,255,255,0.15)"></div>
     <div style="text-align:center"><div style="font-size:22px;font-family:'Noto Serif',serif;color:#fff;font-weight:700">9</div><div style="font-size:11px;color:#8BAACC;letter-spacing:1px">Phần luận giải</div></div>
     <div style="width:1px;background:rgba(255,255,255,0.15)"></div>
-    <div style="text-align:center"><div style="font-size:22px;font-family:'Noto Serif',serif;color:#fff;font-weight:700">AI</div><div style="font-size:11px;color:#8BAACC;letter-spacing:1px">Cổ pháp + Sonnet</div></div>
+    <div style="text-align:center"><div style="font-size:22px;font-family:'Noto Serif',serif;color:#fff;font-weight:700">✦</div><div style="font-size:11px;color:#8BAACC;letter-spacing:1px">Theo cổ pháp</div></div>
   </div>
 </div>
 
@@ -717,7 +729,7 @@ select.form-input { cursor: pointer; }
         <div>
           <h2 class="xt-h2">Xem Tuổi Vợ Chồng<br>theo Tử Vi Đẩu Số</h2>
           <p class="xt-body">Trong Tử Vi Đẩu Số cổ pháp, sự tương hợp giữa hai người không chỉ đơn thuần là hợp tuổi địa chi hay ngũ hành — mà còn được xét qua tương quan cung Mệnh, cung Phu Thê, cách cục, vòng Thái Tuế và đại vận của từng người.</p>
-          <p class="xt-body">Công cụ này an sao đầy đủ cho cả hai lá số, tính điểm tương hợp theo 8 yếu tố có trọng số, và dùng AI luận giải từng chiều — giúp bạn hiểu rõ hơn những điểm mạnh cần phát huy và những điểm cần lưu ý trong mối quan hệ.</p>
+          <p class="xt-body">Công cụ này an sao đầy đủ cho cả hai lá số, tính điểm tương hợp theo 8 yếu tố có trọng số, và luận giải từng chiều — giúp bạn hiểu rõ hơn những điểm mạnh cần phát huy và những điểm cần lưu ý trong mối quan hệ.</p>
         </div>
         <div class="xt-factors">
           <div class="xt-factor-title">8 Yếu Tố Phân Tích</div>
@@ -758,8 +770,8 @@ select.form-input { cursor: pointer; }
         <div class="xt-step">
           <div class="xt-step-num">3</div>
           <div class="xt-step-body">
-            <div class="xt-step-title">AI luận giải 9 phần</div>
-            <div class="xt-step-desc">Từng yếu tố được AI phân tích riêng — từ tổng quan đến từng cung, vận hành — dựa trên dữ liệu pre-generated của lá số.</div>
+            <div class="xt-step-title">Hệ thống luận giải 9 phần</div>
+            <div class="xt-step-desc">Từng yếu tố được hệ thống phân tích riêng — từ tổng quan đến từng cung, vận hành — dựa trên dữ liệu pre-generated của lá số.</div>
           </div>
         </div>
       </div>
@@ -789,7 +801,7 @@ select.form-input { cursor: pointer; }
         Điền thông tin cả hai người rồi bấm phân tích tương quan.
       </p>
       <button class="btn-submit" id="btn-analyze" onclick="analyze()"><span class="ic" data-icon="scale"></span> Phân Tích Tương Quan</button>
-      <div style="font-size:11px;color:var(--text-lt);text-align:center;margin-top:10px">9 phần phân tích · Luận giải bằng AI</div>
+      <div style="font-size:11px;color:var(--text-lt);text-align:center;margin-top:10px">9 phần phân tích · Luận giải chuyên sâu</div>
     </div>
   </div>
   <div id="error-msg" class="error-msg" style="margin-top:12px"></div>
@@ -866,11 +878,11 @@ select.form-input { cursor: pointer; }
     <div id="tvc-paywall-overlay" class="tvc-paywall-overlay">
       <div class="tvc-paywall-inner">
         <div class="tvc-paywall-icon"><span class="ic-inline" data-icon-emoji="💬" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">💬</span></div>
-        <div class="tvc-paywall-eyebrow">紫微明寶 · Vấn Đáp AI</div>
+        <div class="tvc-paywall-eyebrow">紫微明寶 · Vấn Đáp</div>
         <div class="tvc-paywall-title">Hỏi đáp trực tiếp với 2 lá số của bạn</div>
         <div class="tvc-paywall-desc">
           Sau khi mở khóa, bạn có thể đặt câu hỏi trực tiếp về tương hợp, xung khắc
-          hay bất kỳ khía cạnh nào — AI sẽ trả lời dựa trên chính 2 lá số vừa xem.
+          hay bất kỳ khía cạnh nào — trợ lý sẽ trả lời dựa trên chính 2 lá số vừa xem.
         </div>
         <div class="tvc-paywall-features">
             <div class="tvc-paywall-feature">Hỏi về tương hợp 2 lá số</div>
@@ -1138,34 +1150,14 @@ function renderRadar(lsA,lsB,nameA,nameB){
 
 function renderDvOverlay2(lsA,lsB,nameA,nameB,canvasId){
   const dvA=(lsA.daiVans||[]).slice(0,9),dvB=(lsB.daiVans||[]).slice(0,9);
-  if(!dvA.length||!dvB.length)return;
-  const labels=dvA.map((dv,i)=>`ĐV${i+1} ${dv.tuoiStart}-${dv.tuoiEnd}`);
+  if(!dvA.length||!dvB.length||!window.DaiVanChart)return;
   const ctx=document.getElementById(canvasId);
   if(!ctx)return;
-  new Chart(ctx,{
-    type:'line',
-    data:{labels,datasets:[
-      {label:nameA,data:dvA.map(d=>d.scoring?.tong??5),borderColor:'var(--color-a)',backgroundColor:'rgba(224,85,85,0.05)',pointRadius:5,tension:0.4,fill:true},
-      {label:nameB,data:dvB.map(d=>d.scoring?.tong??5),borderColor:'var(--color-b)',backgroundColor:'rgba(59,125,216,0.05)',pointRadius:5,tension:0.4,fill:true},
-    ]},
-    options:{responsive:true,plugins:{legend:{display:true},title:{display:true,text:'Vận Trình Toàn Đời — Đối Chiếu',font:{size:13,weight:'bold'}}},scales:{y:{min:0,max:10}}},
-  });
+  new Chart(ctx, window.DaiVanChart.buildOverlay(dvA,dvB,{nameA,nameB}));
 }
 
 function renderDvOverlay(lsA,lsB,nameA,nameB){
-  const dvA=(lsA.daiVans||[]).slice(0,9),dvB=(lsB.daiVans||[]).slice(0,9);
-  if(!dvA.length||!dvB.length)return;
-  const labels=dvA.map((dv,i)=>`ĐV${i+1} ${dv.tuoiStart}-${dv.tuoiEnd}`);
-  const ctx=document.getElementById('chart-dv-overlay');
-  if(!ctx)return;
-  new Chart(ctx,{
-    type:'line',
-    data:{labels,datasets:[
-      {label:nameA,data:dvA.map(d=>d.scoring?.tong??5),borderColor:'var(--color-a)',backgroundColor:'rgba(224,85,85,0.05)',pointRadius:5,tension:0.4,fill:true},
-      {label:nameB,data:dvB.map(d=>d.scoring?.tong??5),borderColor:'var(--color-b)',backgroundColor:'rgba(59,125,216,0.05)',pointRadius:5,tension:0.4,fill:true},
-    ]},
-    options:{responsive:true,plugins:{legend:{display:true},title:{display:true,text:'Vận Trình Toàn Đời — Đối Chiếu',font:{size:13,weight:'bold'}}},scales:{y:{min:0,max:10}}},
-  });
+  renderDvOverlay2(lsA,lsB,nameA,nameB,'chart-dv-overlay');
 }
 
 function buildTongQuan(result){
@@ -1404,6 +1396,33 @@ function jumpTo(idx){
   if(a)a.scrollIntoView({behavior:'smooth',block:'start'});
 }
 
+// Nhãn tính chất model tự gắn NGAY TRƯỚC câu hook mỗi đoạn (khối "NHÃN TÍNH
+// CHẤT MỖI CÂU HOOK" trong `arcDoc()`, lib/agent/prompts.ts) — tách thành thẻ
+// trích dẫn màu (.fb-card, xem shell.css), cùng cơ chế với app-luan-giai.html.
+// Trang này trước đây chỉ tách đoạn theo `\n\n` mà KHÔNG đổi `**...**` sang
+// in đậm — sửa luôn ở đây vì nếu không, đoạn thường sẽ hiện dấu ** trần ngay
+// cạnh thẻ card đã tô màu đẹp, rất lệch mắt.
+const HOOK_TAG_CLASS = { 'TỐT': 'fb-tot', 'CẢNH BÁO': 'fb-canhbao', 'TRUNG TÍNH': 'fb-trungtinh' };
+function renderLuanGiaiParas(text) {
+  const inline = (s) => s.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>').replace(/\*(.+?)\*/g, '<em>$1</em>');
+  let out = '', pendingLead = '';
+  const flushPending = () => { if (pendingLead) { out += `<p style="margin-bottom:12px">${pendingLead}</p>`; pendingLead = ''; } };
+  String(text || '').split('\n\n').filter(Boolean).forEach((p) => {
+    const m = /^\[(TỐT|CẢNH BÁO|TRUNG TÍNH)(?:\|[^\]]{0,40})?\]\s*\*\*(.+?)\*\*([\s\S]*)$/.exec(p.trim());
+    if (m) {
+      flushPending();
+      const cls = HOOK_TAG_CLASS[m[1]] || 'fb-trungtinh';
+      out += `<div class="fb-card ${cls}">"${m[2].trim()}"</div>`;
+      pendingLead = inline(m[3]).trim();
+      return;
+    }
+    out += `<p style="margin-bottom:12px">${pendingLead ? pendingLead + ' ' : ''}${inline(p)}</p>`;
+    pendingLead = '';
+  });
+  flushPending();
+  return out;
+}
+
 async function luanGiaiSection(idx,m,result){
   const {nameA,nameB,naA,naB,lsA,lsB}=result;
   const palMenhA=lsA.palaces?.find(p=>p.isMenh),palMenhB=lsB.palaces?.find(p=>p.isMenh);
@@ -1516,7 +1535,7 @@ Viết 300-350 từ văn xuôi. Nhận định tổng quan, điểm mạnh, đi�
   // Show TuviGrid loading in section
   const _lgEl = document.getElementById('luangiai-'+idx);
   if (_lgEl) _lgEl.innerHTML = TuviGrid.loadingHtml(
-    (PHAN_LABELS[idx]||'') + ' — đang luận giải...', 'AI đang phân tích tương quan...'
+    (PHAN_LABELS[idx]||'') + ' — đang luận giải...', 'Đang phân tích tương quan...'
   , { orb: true });
 
   try{
@@ -1534,7 +1553,7 @@ Viết 300-350 từ văn xuôi. Nhận định tổng quan, điểm mạnh, đi�
     const text=data.luanGiai||'';
     _xemTuoiStore[idx] = text; // accumulate for save
     const el=document.getElementById('luangiai-'+idx);
-    if(el)el.innerHTML=text.split('\n\n').filter(Boolean).map(p=>`<p style="margin-bottom:12px">${p}</p>`).join('');
+    if(el)el.innerHTML=renderLuanGiaiParas(text);
   } catch(e) {
     const el=document.getElementById('luangiai-'+idx);
     if(el)el.innerHTML='<span style="color:var(--text-lt);font-size:12px">Không thể kết nối luận giải.</span>';
@@ -1769,9 +1788,8 @@ async function analyze(){
 function toggleDropdown(btn){const menu=btn.nextElementSibling;const isOpen=menu.classList.contains('open');document.querySelectorAll('.nav-dropdown-menu').forEach(m=>m.classList.remove('open'));document.querySelectorAll('.nav-dropdown-btn').forEach(b=>b.classList.remove('open'));if(!isOpen){menu.classList.add('open');btn.classList.add('open');}}
 document.addEventListener('click',e=>{if(!e.target.closest('.nav-dropdown')){document.querySelectorAll('.nav-dropdown-menu').forEach(m=>m.classList.remove('open'));document.querySelectorAll('.nav-dropdown-btn').forEach(b=>b.classList.remove('open'));}});
 </script>
-<script src="/nav.js?v=24"></script>
-<script src="/footer.js"></script>
-<script src="/tools-shared/ai-loading-steps.js?v=9"></script>
+<script src="/nav.js?v=26"></script>
+<script src="/tools-shared/ai-loading-steps.js?v=10"></script>
 <script src="/chatbot.js"></script>
 <script>
   window._tuviChatConfig = {

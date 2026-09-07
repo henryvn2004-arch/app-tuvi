@@ -2,21 +2,21 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<link rel="preload" href="/nav.js?v=24" as="script">
+<link rel="preload" href="/nav.js?v=26" as="script">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
 <title>Tử Vi Chat — Hỏi Đáp Lá Số | Tử Vi Minh Bảo</title>
-<meta name="description" content="Chat về lá số Tử Vi Đẩu Số với AI — an sao, luận giải từng cung, xem vận hạn. Lưu nhiều lá số cho bản thân và người thân."/>
+<meta name="description" content="Chat về lá số Tử Vi Đẩu Số với trợ lý Luận Đường — an sao, luận giải từng cung, xem vận hạn. Lưu nhiều lá số cho bản thân và người thân."/>
 <meta property="og:title" content="Tử Vi Chat — Hỏi Đáp Lá Số | Tử Vi Minh Bảo"/>
-<meta property="og:description" content="Chat về lá số Tử Vi Đẩu Số với AI — an sao, luận giải từng cung, xem vận hạn."/>
+<meta property="og:description" content="Chat về lá số Tử Vi Đẩu Số với trợ lý Luận Đường — an sao, luận giải từng cung, xem vận hạn."/>
 <meta property="og:url" content="https://www.tuviminhbao.com/tuvi-chat.html"/>
 <meta property="og:image" content="https://www.tuviminhbao.com/og-image.webp"/>
 <meta name="twitter:card" content="summary_large_image"/>
 <link rel="canonical" href="https://www.tuviminhbao.com/tuvi-chat.html">
 <link rel="icon" type="image/webp" href="/seal.webp">
 <link rel="manifest" href="/manifest.json">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet"></noscript>
+<link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/fonts/noto-serif.css?v=1">
 <script src="/tuvi-ansao-engine.js"></script>
 <script src="/tools-shared/vn-timezone.js?v=1"></script>
 <script src="/tuvi-form.js?v=2"></script>
@@ -617,6 +617,7 @@ select.form-input{
 </style>
 </head>
 <body>
+<div id="nav-ph" style="height:60px;background:#061A2E"></div>
 <div id="site-nav"></div>
 
 <div class="wa-app" id="wa-app">
@@ -731,9 +732,8 @@ select.form-input{
   <div class="wa-dd-item wa-dd-del" id="ctx-delete">Xóa hội thoại</div>
 </div>
 
-<script src="/nav.js?v=24"></script>
-<script src="/tuvi-paywall.js?v=22"></script>
-<script>
+<script src="/nav.js?v=26"></script>
+<script src="/tuvi-paywall.js?v=25"></script><script>
 /* ── TuviTTS: Vietnamese TTS via /api/tts (MS Edge Neural, free) ── */
 var TuviTTS = (function() {
   var _audio    = null;   // current HTMLAudioElement
@@ -1672,7 +1672,7 @@ var TuviTTS = (function() {
     var thangOpts = [1,2,3,4,5,6,7,8,9,10,11,12].map(function(i){return '<option value="'+i+'">'+(i<10?'0':'')+i+'</option>';}).join('');
     var namOpts   = [0,1,2,3,4,5].map(function(i){return '<option value="'+(curY+i)+'">'+(curY+i)+'</option>';}).join('');
     inner.innerHTML =
-      '<div class="wa-form-intro">Nhập thông tin để AI phân tích và chọn <strong>ngày tốt</strong> theo tuổi và sự kiện.</div>' +
+      '<div class="wa-form-intro">Nhập thông tin để máy chủ phân tích và chọn <strong>ngày tốt</strong> theo tuổi và sự kiện.</div>' +
       '<div class="tc-sf-group">' +
         '<label class="tc-sf-label">Sự kiện</label>' +
         '<select id="tc-cn-sukien" class="tc-sf-select">' +
@@ -1820,7 +1820,7 @@ var TuviTTS = (function() {
   function renderDatTenConForm() {
     var inner = document.querySelector('.wa-form-inner');
     inner.innerHTML =
-      '<div class="wa-form-intro">Nhập thông tin để AI <strong>đặt tên con</strong> theo ngũ hành bố mẹ và năm sinh.</div>' +
+      '<div class="wa-form-intro">Nhập thông tin để <strong>đặt tên con</strong> theo ngũ hành bố mẹ và năm sinh.</div>' +
       '<div class="tc-sf-group">' +
         '<label class="tc-sf-label">Họ (của bé)</label>' +
         '<input type="text" id="tc-dt-ho" class="tc-sf-input" placeholder="VD: Nguyễn">' +

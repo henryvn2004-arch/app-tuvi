@@ -6,10 +6,10 @@
 <title>Dạy Con Theo Lá Số — Tử Vi Minh Bảo</title>
 <meta name="description" content="Nhập lá số của con — nhận cách con tiếp thu, cách ra bài để con chịu làm, kiểu kỷ luật phản tác dụng, và chỗ cha mẹ với con hay va nhau.">
 <link rel="icon" type="image/webp" href="/seal.webp">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"></noscript>
-<link rel="stylesheet" href="/shell.css?v=30">
+<link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/fonts/noto-serif.css?v=1">
+<link rel="stylesheet" href="/shell.css?v=34">
 <style>
 .form-card{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);max-width:860px}
 .form-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:3px}
@@ -58,7 +58,8 @@
 .dc-item:last-child{padding-bottom:0}
 .dc-item .viec{font-size:13px;line-height:1.7;color:#2a2118}
 .dc-item .vidu{font-size:12.5px;line-height:1.7;color:#5a5145;font-style:italic;margin-top:4px}
-.dc-motcau{margin-top:0;padding:14px 16px;background:#FBF8F1;border:1px solid #EADFC8;border-radius:10px;font-family:var(--serif);font-size:15px;line-height:1.75;color:#061A2E;font-weight:700}
+/* Câu chốt "Nếu Chỉ Nhớ Một Câu" dùng thẳng .fb-card.fb-trungtinh (shell.css)
+   — không khai riêng nữa, tránh trôi khỏi kiểu poster đã chốt cho cả site. */
 .dc-coso{font-size:12.3px;line-height:1.75;color:#5a5145;margin:0 0 11px;padding-bottom:10px;border-bottom:1px dashed #E8DFC8}
 .dc-coso b{color:#2a2118}
 .dc-quote{margin-top:8px;padding:9px 12px;background:#FBF8F1;border-left:3px solid #C9AE6A;border-radius:0 8px 8px 0;font-size:12.4px;line-height:1.72;color:#4a4034}
@@ -185,11 +186,25 @@
       </div>
     </div>
     <div class="ws-body">
-      <div id="introHost"></div>
+      <!-- Box giới thiệu dựng TĨNH: chèn bằng JS thì nó ra đời SAU lần vẽ đầu,
+           đẩy cả `.ws-body` xuống VÀ tự làm phần tử LCP (đo trên prod: CLS 0,198,
+           Render Delay 5,3s). `Shell.introOnce` thấy `.intro-card` đã có thì chỉ
+           điền `#introSrc`. Vì thế `SHELL_INTRO` bên dưới CHỈ khai `key` — chữ nằm
+           đúng ở đây, một bản duy nhất, không có bản chép để trôi. -->
+      <div id="introHost"><div class="intro-card">
+        <div class="intro-body">
+          <img class="intro-avatar" src="/tool-avatars/day-con.webp" alt="" onerror="this.remove()">
+          <div class="intro-text">
+            <div class="intro-t">Dạy Con Theo Lá Số</div>
+            <div class="intro-d">Dạy Con Theo Lá Số đọc con tiếp thu kiểu nào, kỷ luật nào phản tác dụng. Lo con lớn lên khổ vì tiền bạc hay sự nghiệp lận đận, mà cách dạy hiện tại có khi đang đi ngược với con? Nhập ngày giờ sinh của con, nhận cách tiếp cận phù hợp với con.</div>
+            <div id="introSrc" style="min-height:73.6px;margin-top:9px"></div>
+          </div>
+        </div>
+      </div></div>
       <div id="shellRecent"></div>
       <div class="form-card" id="birthPanel">
         <h2>Ngày sinh của con</h2>
-        <p class="sub">Đọc con tiếp thu kiểu nào, kỷ luật nào phản tác dụng với con. Bạn dạy mãi một cách mà con vẫn không nghe theo. Dùng khi cách dạy cũ không còn hiệu quả với con nữa.</p>
+        <p class="sub">Chọn điều bạn đang lo và nhập ngày giờ sinh của con. Hệ thống phân tích lá số của con theo đúng điều đó. Nhận về con là người thế nào, cách dạy phù hợp và việc nên làm ngay từ tối nay.</p>
         <p class="price-note" data-tvp-price-label="day-con">…</p>
 
         <div class="frow dc-lo">
@@ -244,15 +259,19 @@
                    phía trên đã nói đúng câu đó, in hai lần đọc thành lộn xộn. -->
               <div id="proseTop" style="display:none">
                 <p class="dc-para" id="conNguoi" style="margin-top:16px"></p>
+                <!-- CHỈ ở bản xem trước. Đường đã trả tiền in `chatNoi` ở đúng
+                     chỗ của nó trong khối "Tám Chất Năng Khiếu" — mà khối đó
+                     đang khoá, nên đoạn văn phải có một chỗ đứng bên ngoài. -->
+                <p class="dc-para" id="chatNoiTop" style="display:none;margin-top:12px"></p>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- Khối hook (1 fact) — CHỈ dựng ở lượt tính thử khách chưa đăng
-             nhập (xem `mountHook`), giữa hero và tấm khoá. Không dựng lại 5
-             trục/8 chất (khối đó đã LÀM MỜ ngay bên dưới, `_dcLockRestBlocks`)
-             — hook chỉ hé MỘT chất năng khiếu, không phải cả bảng đang mờ. -->
+        <!-- Khối hook (1 fact) — CHỈ dựng ở bản xem trước của khách chưa đăng
+             nhập (xem `mountHook`), giữa hero và tấm khoá. Hé ĐÚNG một chất
+             năng khiếu: server chỉ gửi `khieuTop` chứ không gửi cả 8 chất, nên
+             ở đây không có cách nào dựng lại khối `khieuBlock` đang khoá. -->
         <div id="hookHost"></div>
         <div id="dcLockHost" style="display:none;margin-bottom:16px"></div>
 
@@ -363,7 +382,7 @@
         <div class="res-block" id="endBlock" style="display:none">
           <div class="res-block-header"><span class="res-block-title">Nếu Chỉ Nhớ Một Câu</span></div>
           <div class="res-block-body">
-            <div class="dc-motcau" id="motCau"></div>
+            <div class="fb-card fb-trungtinh" id="motCau"></div>
           </div>
         </div>
 
@@ -397,17 +416,17 @@
 </div>
 
 <script>window.SHELL_ACTIVE='day-con';window.SHELL_HISTORY=true;
-window.SHELL_INTRO={key:'day-con',title:'Dạy Con Theo Lá Số',desc:'Đọc con tiếp thu kiểu nào, kỷ luật nào phản tác dụng với con. Bạn dạy mãi một cách mà con vẫn không nghe theo. Dùng khi cách dạy cũ không còn hiệu quả với con nữa.'};</script>
+window.SHELL_INTRO={key:'day-con'};</script>
 <script src="/laso-chart.js?v=3"></script>
 <script src="/tools-shared/vn-timezone.js?v=1"></script>
 <script src="/tuvi-form.js?v=2"></script>
-<script src="/tools-shared/cung-ngay-sinh.js?v=1"></script>
-<script src="/tuvi-paywall.js?v=22"></script>
-<script src="/tools-shared/hook-layer.js?v=1"></script>
+<script src="/tools-shared/cung-ngay-sinh.js?v=2"></script>
+<script src="/tuvi-paywall.js?v=25"></script>
+<script src="/tools-shared/hook-layer.js?v=2"></script>
 <script src="/auth.js?v=2"></script>
-  <script src="/nav.js?v=24" data-icons-only></script>
-<script src="/shell.js?v=85"></script>
-<script src="/tools-shared/ai-loading-steps.js?v=9"></script>
+  <script src="/nav.js?v=26" data-icons-only></script>
+<script src="/shell.js?v=87"></script>
+<script src="/tools-shared/ai-loading-steps.js?v=10"></script>
 <script>
 
 var _currentSlug = '';
@@ -502,12 +521,12 @@ function _cacheQuery(b, self, lo) {
 function _dcLoggedIn() { return !!(window.Auth && window.Auth.isLoggedIn && window.Auth.isLoggedIn()); }
 
 // Đăng nhập rồi → bấm nút là CHẠY THẬT ngay (case 1), có Lượng (hoặc đã trả
-// cho đúng lá số này) thì chạy thẳng bản đầy đủ, không có màn "tính thử" nào
-// chen giữa. Chưa đăng nhập (case 2) → dựng tầng đầu MỞ + toàn bộ khối
-// deterministic (5 trục/8 chất/hoạt động/cách dạy/chặng đi học/cơ sở lá số,
-// vốn 0đ) dựng THẬT nhưng LÀM MỜ — không phải ẩn hẳn khỏi DOM. Phần AI viết
-// riêng (định hướng, lo lắng, nên/tránh tối nay) chưa có gì để mờ nên vẫn
-// đứng sau tấm khoá `lockPreview`.
+// cho đúng lá số này) thì chạy thẳng bản đầy đủ, không có màn nào chen giữa.
+//
+// Chưa đăng nhập (case 2) → BẢN XEM TRƯỚC (hard paywall Pha 3): server vẫn gọi
+// model thật, nhưng chỉ gửi về khối chân dung + 2/12 đoạn văn (`PREVIEW_KEEP`
+// trong route.ts). Mọi khối còn lại dựng ra dưới dạng Ô GIỮ CHỖ — không có nội
+// dung thật nào trong DOM để làm mờ nữa.
 async function analyze() {
   showError('');
   var b = _birthOf('');
@@ -529,33 +548,62 @@ async function analyze() {
   await TuviPaywall.requireCredits(_currentSlug, function () { return _doGenerate(false, lo); });
 }
 
-// Khối deterministic mà `renderMetaRest` quản (đã có sẵn trong payload
-// preview, 0đ) — khoá bằng cách làm mờ CHÍNH các khối này, không đụng tới khối
-// nào chỉ tồn tại sau khi có AI viết riêng (loBlock/dhBlock/doBlock/endBlock
-// không nằm trong danh sách vì renderMetaRest không đụng tới chúng).
-var DC_REST_BLOCK_IDS = ['trucBlock', 'khieuBlock', 'hdBlock', 'howCardsBlock', 'changBlock', 'withBlock', 'basisBlock'];
-function _dcLockRestBlocks(locked) {
-  DC_REST_BLOCK_IDS.forEach(function (id) {
-    var block = document.getElementById(id);
-    if (!block || block.style.display === 'none') return;
+// Các khối BỊ KHOÁ ở bản xem trước, theo ĐÚNG thứ tự chúng đứng trên trang —
+// thứ tự đó là chỉ số truyền cho `placeholderHtml(i)`, vốn xoay vòng 3 dáng
+// vạch khác nhau. Sai thứ tự thì hai khối cạnh nhau ra y hệt nhau, đọc thành
+// lỗi render chứ không thành "còn nhiều thứ ở dưới".
+// Phần tử thứ hai = có vẽ ô biểu đồ giả hay không: chỉ những khối mà bản thật
+// CÓ hình/bảng mới vẽ, khối thuần văn xuôi thì không — hứa một biểu đồ không
+// tồn tại là bán sai hàng.
+// `basisBlock` CỐ Ý VẮNG: `coSo` (câu trích cổ pháp) vẫn miễn phí, xem
+// `renderCoSo`.
+var DC_LOCKED_BLOCKS = [
+  ['trucBlock', true], ['khieuBlock', true], ['loBlock', false], ['dhBlock', false],
+  ['howCardsBlock', true], ['doBlock', false], ['hdBlock', true],
+  ['changBlock', true], ['withBlock', false], ['endBlock', false],
+];
+
+/** Dựng khung rỗng + ô giữ chỗ cho mọi khối đang khoá.
+ *  `coLaSoChaMe=false` thì BỎ HẲN "Hai Bên Với Nhau" — bản thật cũng ẩn khối đó
+ *  khi không có lá số cha/mẹ, nên để nó ở đây là hứa một thứ trả tiền xong
+ *  cũng không có. */
+function _dcLockBlocks(coLaSoChaMe) {
+  DC_LOCKED_BLOCKS.forEach(function (b, i) {
+    if (b[0] === 'withBlock' && !coLaSoChaMe) return;
+    var block = document.getElementById(b[0]);
+    if (!block) return;
     var body = block.querySelector('.res-block-body');
-    var oldBadge = block.querySelector('.tpw-lock-badge');
-    if (oldBadge) oldBadge.remove();
-    if (locked) {
-      body.classList.add('tpw-real-lock');
-      var titleEl = block.querySelector('.res-block-title');
-      if (titleEl) titleEl.insertAdjacentHTML('afterend', TuviPaywall.lockBadge('Khoá'));
-    } else {
-      body.classList.remove('tpw-real-lock');
-    }
+    if (!body || body.querySelector('.tpw-ph-host')) return;
+    body.classList.add('tpw-locked');
+    body.insertAdjacentHTML('beforeend',
+      '<div class="tpw-ph-host">' + TuviPaywall.placeholderHtml(i, b[1]) + '</div>');
+    var titleEl = block.querySelector('.res-block-title');
+    if (titleEl) titleEl.insertAdjacentHTML('afterend', TuviPaywall.lockBadge('Khoá'));
+    block.style.display = 'block';
   });
   if (window.mountIcons) window.mountIcons(document.getElementById('resPanel'));
 }
 
-// Khách chưa đăng nhập: gọi tầng deterministic (0đ, không cần đăng nhập), dựng
-// phần đầu MỞ + toàn bộ renderMetaRest LÀM MỜ. Phần AI viết riêng (định
-// hướng/lo lắng/nên-tránh tối nay) đứng sau tấm khoá — chưa sinh nên không có
-// gì để mờ.
+/** Gỡ sạch dấu vết khoá. Gọi ở `_openPanel` (đầu MỌI lượt) chứ không chỉ ở
+ *  lượt trả tiền: bấm "Xem Bé Khác" sau một lượt xem trước thì khung rỗng cũ
+ *  còn nguyên, và ô giữ chỗ sẽ đứng lẫn vào giữa nội dung thật. */
+function _dcUnlockBlocks() {
+  DC_LOCKED_BLOCKS.forEach(function (b) {
+    var block = document.getElementById(b[0]);
+    if (!block) return;
+    var body = block.querySelector('.res-block-body');
+    if (body) body.classList.remove('tpw-locked');
+    var ph = block.querySelector('.tpw-ph-host');
+    if (ph) ph.remove();
+    var badge = block.querySelector('.tpw-lock-badge');
+    if (badge) badge.remove();
+  });
+}
+
+// Khách chưa đăng nhập: BẢN XEM TRƯỚC. Server chạy model thật rồi cắt payload
+// (`PREVIEW_KEEP`), nên ở đây chỉ dựng được đúng phần được gửi — khối chân
+// dung + 2 đoạn văn + câu trích cổ pháp. Không có nhánh nào ở client quyết
+// định giấu gì: thứ bị khoá đơn giản là KHÔNG CÓ trong `data`.
 async function _runAnonPreview(b, self, lo) {
   _openPanel();
   document.getElementById('loading').style.display = 'none';
@@ -563,13 +611,30 @@ async function _runAnonPreview(b, self, lo) {
     var res = await fetch('/api/day-con?preview=1', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ birth: b, birthParent: self || undefined, name: b.name || '', moiLo: lo }),
+      // `anonId` = khoá đếm suất của cầu dao xem trước. Thiếu nó thì server
+      // nhận `p_key` rỗng ⇒ RPC trả `disabled` ⇒ MỌI khách chưa đăng nhập rơi
+      // về khung deterministic, đúng thứ Pha 3 sinh ra để bỏ.
+      body: JSON.stringify({
+        birth: b, birthParent: self || undefined, name: b.name || '', moiLo: lo,
+        anonId: TuviPaywall.previewAnonId(),
+      }),
     });
     var data = await res.json();
     if (!res.ok || !data.success) throw new Error(data.error || 'Lỗi ' + res.status);
     renderMetaHead(data);
-    renderMetaRest(data);
-    _dcLockRestBlocks(true);
+    renderProse(data);      // chỉ `conNguoi` có mặt; 10 nhánh `if` còn lại tự trượt
+    if (data.chatNoi) {
+      var ct = document.getElementById('chatNoiTop');
+      ct.textContent = data.chatNoi;
+      ct.style.display = 'block';
+    }
+    if (renderCoSo(data)) {
+      document.getElementById('basisList').innerHTML = '';
+      document.getElementById('basisMore').style.display = 'none';
+      document.getElementById('basisBlock').style.display = 'block';
+    }
+    _dcLockBlocks(!!self);
+    _syncSections();
     mountHook(data);
     document.getElementById('card').style.display = 'block';
     document.getElementById('btnEdit').style.display = '';
@@ -582,16 +647,15 @@ async function _runAnonPreview(b, self, lo) {
   }
 }
 
-// Hé đúng MỘT trong 8 chất năng khiếu (điểm cao nhất) — không dựng lại cả
-// bảng 8 chất (khối đó đã LÀM MỜ ngay bên dưới cho tới khi trả tiền) và không
-// lộ phần AI viết riêng (định hướng/lo lắng/nên-tránh — đúng phần đang bán).
-// `data.khieu` đã có sẵn trong payload tính thử (0 lượt LLM, xem `meta()`
-// trong route.ts) — không cần gọi thêm gì.
+// Hé đúng MỘT trong 8 chất năng khiếu (điểm cao nhất).
+// 🔑 Đọc `data.khieuTop` chứ KHÔNG phải `data.khieu`: bản xem trước không còn
+// gửi cả 8 chất (`PREVIEW_KEEP` trong route.ts), server tự chọn sẵn quán quân
+// và gửi đúng một phần tử. Đổi lại thành `data.khieu` là hook im lặng biến mất
+// — `undefined || []` không ném lỗi nào.
 function mountHook(data) {
   var host = document.getElementById('hookHost');
   if (!host || !window.HookLayer) return;
-  var ks = (data.khieu || []).slice().sort(function (a, b) { return b.diem - a.diem; });
-  var top = ks[0];
+  var top = data.khieuTop;
   if (!top) return;
   window.HookLayer.mount(host, {
     tool: 'day-con',
@@ -615,6 +679,7 @@ function _renderLockWall(lo) {
     host: host,
     title: '⊙ Bản hướng dẫn đầy đủ chưa mở',
     items: [
+      'Năm trục tính khí + tám chất năng khiếu, chấm theo lá số con',
       'Định hướng môi trường học + phương pháp dạy hợp với con',
       'Làm gì từ tối nay — nên làm và nên tránh',
       'Điều bạn đang lo, viết riêng theo lá số con',
@@ -626,6 +691,11 @@ function _renderLockWall(lo) {
 }
 
 function _openPanel() {
+  // CHỖ DUY NHẤT gỡ khoá — và cố ý đặt ở ĐẦU mọi lượt chứ không ở nhánh trả
+  // tiền. Mọi đường dựng kết quả (trả tiền, xem lại miễn phí, `resumeIfPending`
+  // sau khi nạp Lượng, bấm "Xem Bé Khác") đều đi qua đây, nên một dòng ở đây
+  // thay cho bốn dòng rải rác — và không có đường nào quên.
+  _dcUnlockBlocks();
   document.getElementById('birthPanel').style.display = 'none';
   document.getElementById('resPanel').style.display = 'block';
   document.getElementById('loading').style.display = 'block';
@@ -637,7 +707,7 @@ function _openPanel() {
    'basisBlock'].forEach(function (id) {
     document.getElementById(id).style.display = 'none';
   });
-  ['proseTop', 'changNay', 'voiChaMe', 'chatNoi', 'hoatDongVi', 'vaoBangGi'].forEach(function (id) {
+  ['proseTop', 'changNay', 'voiChaMe', 'chatNoi', 'chatNoiTop', 'hoatDongVi', 'vaoBangGi'].forEach(function (id) {
     document.getElementById(id).style.display = 'none';
   });
 }
@@ -681,7 +751,6 @@ async function _doGenerate(freeRerun, lo) {
     if (!res.ok || !data.success) throw new Error(data.error || 'Lỗi ' + res.status);
     renderMeta(data);
     renderProse(data);
-    _dcLockRestBlocks(false); // mở khoá nếu trước đó đã mờ ở lượt tính thử
     _loadingCtl && _loadingCtl.finish();
     document.getElementById('loading').style.display = 'none';
     document.getElementById('card').style.display = 'block';
@@ -913,11 +982,12 @@ function renderHoatDong(h) {
 }
 
 // Tách theo ĐƯỜNG TIỀN: `renderMetaHead` là phần đầu (tên + kiểu người + dấu
-// hiệu ở nhà) — thứ khách CHƯA đăng ký cũng được xem MỞ. `renderMetaRest` là
-// mọi khối deterministic còn lại (5 trục, 8 chất, hoạt động, cách dạy, chặng
-// đi học, cơ sở lá số) — LUÔN dựng thật vào DOM cho cả hai case; khách chưa
-// đăng ký chỉ khác ở chỗ `_dcLockRestBlocks(true)` làm mờ chúng SAU khi dựng
-// (xem _runAnonPreview). `renderMeta` = cả hai, dùng cho đường đã đăng nhập.
+// hiệu ở nhà) — thứ khách CHƯA đăng ký cũng được xem MỞ, nên nó là hàm DUY
+// NHẤT trong họ này mà `_runAnonPreview` gọi tới.
+// `renderMetaRest` là mọi khối deterministic còn lại (5 trục, 8 chất, hoạt
+// động, cách dạy, chặng đi học, các dòng cơ sở) — thuộc phần TRẢ PHÍ từ Pha 3,
+// và dữ liệu của nó KHÔNG có trong payload xem trước, nên gọi nó ở đường đó chỉ
+// dựng ra một loạt khối rỗng. `renderMeta` = cả hai, dùng cho đường đã trả tiền.
 function renderMetaHead(data) {
   var kieu = data.kieu || {};
   var hoc = data.hoc || {};
@@ -942,6 +1012,35 @@ function renderMetaHead(data) {
   document.getElementById('dauHieuChips').innerHTML = (hoc.dauHieu || []).map(function (c) {
     return '<span class="dc-chip">' + esc(c) + '</span>';
   }).join('');
+}
+
+// C1 — bày engine ra: câu trích cổ pháp + số dữ kiện lá số. CHỈ có ở payload
+// XEM TRƯỚC; bản đã trả tiền không gửi `coSo` nên khối tự ẩn, không phải canh
+// thêm điều kiện nào.
+//
+// 🔑 GIỮ MIỄN PHÍ dưới hard paywall là CỐ Ý: nó là lá chắn cho đúng một câu
+// phản đối — "máy nó bịa thôi" — và câu đó bật ra ở đúng lúc người ta chưa tin
+// gì mà đang cân xem có trả tiền không. Đem nó vào phần bán là tự tháo lá chắn
+// khỏi chỗ duy nhất nó có việc để làm.
+//
+// Trả về true nếu có dựng ra gì — nhánh xem trước dùng để quyết định có mở
+// `basisBlock` hay không (`basisList` khi đó rỗng vì các dòng cơ sở là phần
+// trả phí).
+function renderCoSo(data) {
+  var cs = data.coSo, csEl = document.getElementById('coSoDoc');
+  if (!(cs && cs.tong > 0)) { csEl.style.display = 'none'; return false; }
+  var h = 'Bản này đọc từ <b>' + cs.tong + ' dữ kiện</b> lập ra từ chính ngày giờ sinh bạn nhập — ' +
+    cs.soSao + ' sao an trên 12 cung, ' + cs.soCachCuc + ' cách cục, ' + cs.soDaiVan + ' chặng đại vận. ' +
+    'Không có bước nào đoán mò: đổi một chi tiết trong ngày sinh là cả bảng trên đổi theo.';
+  // ⚠️ Câu trích là NGUYÊN VĂN cổ thư kèm nguồn — `esc()` cả cụm, tuyệt đối
+  // không nội suy vào HTML thô.
+  if (cs.trichDan) {
+    h += '<div class="dc-quote">' + esc(cs.trichDan.cau) +
+      '<span class="src">— sách dẫn về sao ' + esc(cs.trichDan.sao) + ' tại cung Mệnh</span></div>';
+  }
+  csEl.innerHTML = h;
+  csEl.style.display = 'block';
+  return true;
 }
 
 function renderMetaRest(data) {
@@ -1025,24 +1124,7 @@ function renderMetaRest(data) {
     else if (v.huong) bit.push('đà ' + esc(v.huong));
     rows.push('<li><b>Vận năm ' + v.nam + '</b> — ' + (bit.join(' · ') || 'chưa chấm') + '</li>');
   }
-  // C1 — bày engine ra. Chỉ có ở payload TÍNH THỬ; bản đã trả tiền không gửi
-  // `coSo` nên khối này tự ẩn, không phải canh thêm điều kiện nào.
-  var cs = data.coSo, csEl = document.getElementById('coSoDoc');
-  if (cs && cs.tong > 0) {
-    var h = 'Bản này đọc từ <b>' + cs.tong + ' dữ kiện</b> lập ra từ chính ngày giờ sinh bạn nhập — ' +
-      cs.soSao + ' sao an trên 12 cung, ' + cs.soCachCuc + ' cách cục, ' + cs.soDaiVan + ' chặng đại vận. ' +
-      'Không có bước nào đoán mò: đổi một chi tiết trong ngày sinh là cả bảng trên đổi theo.';
-    // ⚠️ Câu trích là NGUYÊN VĂN cổ thư kèm nguồn — `esc()` cả cụm, tuyệt đối
-    // không nội suy vào HTML thô.
-    if (cs.trichDan) {
-      h += '<div class="dc-quote">' + esc(cs.trichDan.cau) +
-        '<span class="src">— sách dẫn về sao ' + esc(cs.trichDan.sao) + ' tại cung Mệnh</span></div>';
-    }
-    csEl.innerHTML = h;
-    csEl.style.display = 'block';
-  } else {
-    csEl.style.display = 'none';
-  }
+  renderCoSo(data);
 
   // Bày đủ ĐỂ CHỨNG MINH máy đọc đúng lá số — không bày HẾT để đọc xong là no.
   // 2 mục đầu đứng mở sẵn làm bằng chứng; phần còn lại gói trong <details>

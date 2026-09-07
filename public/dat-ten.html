@@ -6,7 +6,10 @@
 <meta name="description" content="Đặt tên con và tên doanh nghiệp theo ngũ hành mệnh: tên phù hợp bản mệnh, số nét chữ tốt và ý nghĩa đẹp.">
 <link rel="canonical" href="https://www.tuviminhbao.com/dat-ten">
 <link rel="icon" type="image/webp" href="/seal.webp">
-<link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;600&family=Be+Vietnam+Pro:wght@300;400;500;600&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;600&family=Be+Vietnam+Pro:wght@300;400;500;600&display=swap" rel="stylesheet"></noscript>
+<link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/fonts/noto-serif.css?v=1">
+<link rel="preload" href="/fonts/be-vietnam-pro-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin><link rel="preload" href="/fonts/be-vietnam-pro-latin-400.woff2" as="font" type="font/woff2" crossorigin><link rel="preload" href="/fonts/be-vietnam-pro-vietnamese-600.woff2" as="font" type="font/woff2" crossorigin><link rel="preload" href="/fonts/be-vietnam-pro-latin-600.woff2" as="font" type="font/woff2" crossorigin><link rel="stylesheet" href="/fonts/be-vietnam-pro.css?v=1">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{--navy:#061A2E;--gold:#9A7B3A;--text-lt:#777;--border-lt:#E8E8E8;--bg:#FFFFFF;--bg-soft:#F5F4F0}
@@ -40,7 +43,8 @@ body{font-family:'Be Vietnam Pro',Arial,sans-serif;background:var(--bg);color:#1
 <script src="/auth.js?v=2"></script>
 </head>
 <body>
-<script src="/nav.js?v=24"></script>
+<div id="nav-ph" style="height:60px;background:#061A2E"></div>
+<script src="/nav.js?v=26"></script>
 <div class="bc"><a href="/">Trang Chủ</a><span>›</span><span>Đặt Tên</span></div>
 
 <div class="hub-hero">
@@ -56,19 +60,19 @@ body{font-family:'Be Vietnam Pro',Arial,sans-serif;background:var(--bg);color:#1
 
 <div class="hub-body">
   <div class="hub-section">
-    <h2 class="hub-sec-title">Công Cụ Đặt Tên AI</h2>
+    <h2 class="hub-sec-title">Công Cụ Đặt Tên</h2>
     <div class="tool-grid">
       <a class="tool-card" href="/tools/dat-ten-con.html">
         <div class="tool-card-icon"><span class="ic-inline" data-icon-emoji="👶" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">👶</span></div>
         <div class="tool-card-title">Đặt Tên Con Theo Ngũ Hành</div>
-        <div class="tool-card-desc">Nhập ngày sinh, giờ sinh và họ — AI gợi ý tên con phù hợp ngũ hành mệnh, ý nghĩa đẹp và âm thanh hài hòa với họ tên.</div>
-        <span class="tool-card-badge">AI Gợi Ý</span>
+        <div class="tool-card-desc">Nhập ngày sinh, giờ sinh và họ — hệ thống gợi ý tên con phù hợp ngũ hành mệnh, ý nghĩa đẹp và âm thanh hài hòa với họ tên.</div>
+        <span class="tool-card-badge">Gợi Ý</span>
       </a>
       <a class="tool-card" href="/tools/dat-ten-doanh-nghiep.html">
         <div class="tool-card-icon"><span class="ic-inline" data-icon-emoji="🏢" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">🏢</span></div>
         <div class="tool-card-title">Đặt Tên Doanh Nghiệp</div>
         <div class="tool-card-desc">Đặt tên công ty theo ngũ hành mệnh chủ, lĩnh vực kinh doanh và phong thủy tên thương hiệu.</div>
-        <span class="tool-card-badge">AI Gợi Ý</span>
+        <span class="tool-card-badge">Gợi Ý</span>
       </a>
       <a class="tool-card" href="/tools/ngu-hanh-ten.html">
         <div class="tool-card-icon"><span class="ic-inline" data-icon-emoji="✍️" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">✍️</span></div>
@@ -89,6 +93,5 @@ body{font-family:'Be Vietnam Pro',Arial,sans-serif;background:var(--bg);color:#1
     </div>
   </div>
 </div>
-<script src="/footer.js"></script>
 </body>
 </html>

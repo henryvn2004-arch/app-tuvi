@@ -78,3 +78,8 @@ adb.csv
 
 # Ảnh chụp kiểm khối "Ai Sinh Cùng Ngày" — sinh lại khi cần
 cns.png
+
+# Bảng lịch âm trung gian giữa scripts/gen-lunar-table.mjs và apply-lunar-table.mjs
+# (P1) — dữ liệu ĐÃ nằm trong public/tuvi-ansao-engine.js + tuvi-engine/src/lunar/
+# convert.ts, commit thêm bản này là trùng nguồn. Sinh lại bằng gen-lunar-table.mjs.
+scripts/fixtures/lunar-table-new.json

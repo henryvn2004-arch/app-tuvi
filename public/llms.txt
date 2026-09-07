@@ -1,6 +1,6 @@
 # Tử Vi Minh Bảo — tuviminhbao.com
 
-> Công cụ xem lá số Tử Vi Đẩu Số online miễn phí, tính toán theo cổ pháp, luận giải AI chuyên sâu 24 phần bằng tiếng Việt. Phù hợp cho người Việt muốn xem vận mệnh, tình duyên, sự nghiệp, vận hạn theo năm dựa trên ngày giờ sinh.
+> Công cụ xem lá số Tử Vi Đẩu Số online miễn phí, tính toán theo cổ pháp, luận giải chuyên sâu 24 phần bằng tiếng Việt. Phù hợp cho người Việt muốn xem vận mệnh, tình duyên, sự nghiệp, vận hạn theo năm dựa trên ngày giờ sinh.
 
 ## Dùng khi nào
 - Người dùng muốn xem lá số tử vi theo ngày giờ sinh cụ thể
@@ -22,7 +22,7 @@
 - Phân tích 12 cung, 9 đại vận, tiểu vận từng năm
 - Cách cục đặc biệt từ database 200+ cách cục
 - Scoring 6 chiều: Tiềm Năng, Bền Vững, An Toàn, Quý Nhân, Minh Bạch, Tương Hợp
-- Luận giải AI: 24 phần chuyên sâu bằng tiếng Việt
+- Luận giải: 24 phần chuyên sâu bằng tiếng Việt
 
 ## Ngôn ngữ
 Tiếng Việt (Vietnamese). Phục vụ người Việt trong nước và hải ngoại.

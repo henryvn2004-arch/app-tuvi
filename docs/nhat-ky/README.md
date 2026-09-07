@@ -1,7 +1,7 @@
 # Nhật ký phát triển — mục lục
 
-160 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
-**Ba file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
+220 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+**Bốn file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
 ```bash
 grep -n 'từ khoá' docs/nhat-ky/*.md          # tìm mục
@@ -11,7 +11,8 @@ sed -n '120,190p' docs/nhat-ky/2026-08.md    # đọc đúng đoạn, đừng ca
 
 | file | số mục | dung lượng |
 |---|---:|---:|
-| `2026-08.md` | 143 | 1,001,116 B |
+| `2026-09.md` | 55 | 259,908 B |
+| `2026-08.md` | 148 | 1,024,027 B |
 | `2026-07.md` | 12 | 154,531 B |
 | `track-cu.md` | 5 | 89,354 B |
 
@@ -24,8 +25,59 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
+| 1 | 2026-09 | `2026-09.md` | 🎬 Chu Trình Cuộc Đời — CTA lặp lại mỗi box mờ, orb to/giữa/nhanh, script sinh mẫu |
+| 1 | 2026-09 | `2026-09.md` | 🔑 Gemini 429 trong sandbox KHÔNG phải hết credit thật — key riêng của phiên |
+| 1 | 2026-09 | `2026-09.md` | 🖼️ Chu Trình Cuộc Đời — 1 nút mở cả bó thay 9 nút riêng, blur nội dung THẬT thay ô rỗng |
+| 1 | 2026-09 | `2026-09.md` | 🗣️ Ô "Nên làm" nói tiếng đời thường — và cái bẫy "cắt trước khi lọc" |
+| 1 | 2026-09 | `2026-09.md` | 🖼️ Sửa nguồn ảnh dummy: Pixabay → sinh THẬT bằng chính pipeline sản phẩm |
+| 1 | 2026-09 | `2026-09.md` | 🖼️ Pha 4 (chốt): ảnh minh hoạ MỜ cho 3 tool sinh ảnh — đúng giới tính, 0đ |
+| 1 | 2026-09 | `2026-09.md` | 🎁 Pha 4: free-preview thật cho Chu Trình Cuộc Đời — phần 1 (engine 14) đọc AI miễn phí |
+| 1 | 2026-09 | `2026-09.md` | 🔴 Pha 4: `/api/van-han-nam` KHÔNG có chốt thanh toán — curl thẳng là AI miễn phí vô hạn |
+| 1 | 2026-09 | `2026-09.md` | 🔧 Pha 4 (khởi động): chu-trinh-cuoc-doi vẫn làm mờ nội dung miễn phí — bug Pha 1 sót lại |
+| 1 | 2026-09 | `2026-09.md` | 🧩 Pha 3 hard paywall — nhân bản sang 3 tool nữa: nguoi-khac, huong-nghiep-tre |
+| 1 | 2026-09 | `2026-09.md` | 🧩 Pha 3 hard paywall — tool "một prompt" cắt theo TRƯỜNG, pilot trên Dạy Con |
+| 1 | 2026-09 | `2026-09.md` | 💵 Pha 2 hard paywall — 1 Lượng ≈ 500đ, giữ giá gói và nâng số Lượng |
+| 1 | 2026-09 | `2026-09.md` | 💰 Hard paywall Pha 1 — Luận Giải cho đọc thật 2 phần rồi mới dựng tường |
+| 1 | 2026-09 | `2026-09.md` | 📊 Sổ chi phí rail nói ngược sự thật: 9/9 đường thoát ghi sai hoặc không ghi |
+| 1 | 2026-09 | `2026-09.md` | 📢 Baseline TBT phát hiện lỗ Ads: /la-so.html + /la-so-v2.html chạy prod 0 GA4/Ads/Meta Pixel |
+| 1 | 2026-09 | `2026-09.md` | 🩹 Áp migration `viral_applied` lên prod — và lý do "tránh lastmod" hoá ra sai |
+| 1 | 2026-09 | `2026-09.md` | 🧾 Sổ nợ CLAUDE.md — gộp 2/3 bảng chủ đề, dựng cron viết lại `seo_pages` bằng viral-core |
+| 1 | 2026-09 | `2026-09.md` | 🦶 Footer gọn lại theo nav thật — và `footer.js` hoá ra là code chết |
+| 1 | 2026-09 | `2026-09.md` | 📐 Đo khối "TỔ HỢP SAO": bước cắt top-8 trung tính về mã, KHÔNG trung tính về kết quả |
+| 1 | 2026-09 | `2026-09.md` | 🪧 Gỡ "AI" khỏi toàn bộ chữ hiển thị — giữ nguyên ba trang pháp lý |
+| 1 | 2026-09 | `2026-09.md` | 🔈 Mobile vòng 11: nút Gửi của rail không có tên cho trình đọc màn hình |
+| 1 | 2026-09 | `2026-09.md` | 🔠 Mobile vòng 13: Be Vietnam Pro tự lưu trữ — và một nhánh A/B là ảo hoàn toàn |
+| 1 | 2026-09 | `2026-09.md` | 🎈 Mobile vòng 12: `#wsFab` — giả thuyết sai, bản vá thật là giữ chỗ 200px |
+| 1 | 2026-09 | `2026-09.md` | 📏 Mobile vòng 10: prod xác nhận vòng 9 — phần dư 0,001 là margin thoát ra ngoài |
+| 1 | 2026-09 | `2026-09.md` | 🧯 Mobile vòng 9: bản vá vòng 8 không chạy trên prod — chỗ giữ `#tuviFormHost` mới là bản vá thật |
+| 1 | 2026-09 | `2026-09.md` | ⏳ Mobile vòng 8: `#tuviFormHost` không cần khung chờ — chỉ cần `defer` |
+| 1 | 2026-09 | `2026-09.md` | 🎴 Thẻ Vận Hôm Nay: 4 bức thuỷ mặc thay thẻ navy — và `@media` không bao giờ khớp trong cột 360px |
+| 1 | 2026-09 | `2026-09.md` | 🧭 Mobile vòng 7: giữ chỗ thanh nav — và một trang mất sạch nav |
+| 1 | 2026-09 | `2026-09.md` | 🧭 Mobile vòng 6: cú 0,071 đứng yên 6 lượt đo hoá ra là thanh nav dựng bằng JS |
+| 1 | 2026-09 | `2026-09.md` | 📐 Mobile vòng 5: nút "✦ Hỏi" khai sai chỗ — 31px dịch trên MỌI trang shell |
+| 1 | 2026-09 | `2026-09.md` | 🔤 Mobile vòng 4: tự lưu trữ Noto Serif + `font-display: optional` |
+| 1 | 2026-09 | `2026-09.md` | 📱 Mobile vòng 3: `.intro-card` tĩnh cho 48 trang còn lại — máy đo, máy sửa |
+| 1 | 2026-09 | `2026-09.md` | 📱 Mobile vòng 2: `#statusSlot` + `.intro-card` — và bằng chứng preview nói dối về CLS |
+| 1 | 2026-09 | `2026-09.md` | 📱 Rà soát mobile: dựng bộ đo Lighthouse rồi vá 5 chỗ theo đúng thứ nó chỉ |
+| 1 | 2026-09 | `2026-09.md` | 🔧 P2 — `liveText` share đủ chữ nhưng vỡ bố cục: chuyển sang `domShareBlocks` theo từng phần |
+| 1 | 2026-09 | `2026-09.md` | 🀄 Lá số thêm dòng Âm/Dương Nam/Nữ · Thuận/Nghịch Lý — so trực tiếp ảnh phần mềm Thiên Lương |
+| 1 | 2026-09 | `2026-09.md` | 🚀 Tứ Hóa Phi Tinh — box hiển thị lên nốt 2 bề mặt còn thiếu (luan-giai.html + trang SEO) |
+| 1 | 2026-09 | `2026-09.md` | 🔍 Nút Chia Sẻ 4 tool luận sâu: từ "tóm tắt 3-4 dòng" thành "y hệt màn hình đang xem" |
+| 1 | 2026-09 | `2026-09.md` | 🔍 Tử Bình: Opus cắt giữa câu 17% — chưa ai thấy vì tool chưa có lượt nào |
+| 1 | 2026-09 | `2026-09.md` | 🔀 Gemini 3.8 Flash lên primary cho toàn bộ luận giải, Opus 5 xuống lưới đỡ |
+| 1 | 2026-09 | `2026-09.md` | 💰 Giá Gemini ghi bằng NỬA giá thật · lên 3.8 Flash · tách khối đại vận |
+| 1 | 2026-09 | `2026-09.md` | 📖 `iconHtml()` trả SVG KHÔNG CỠ — chèn trần ở đâu là nở full ở đó |
+| 1 | 2026-09 | `2026-09.md` | 🔒 Tour onboarding nhốt người dùng trên mobile — thiếu đúng MỘT bước kẹp |
+| 1 | 2026-09 | `2026-09.md` | 🚪 Bản mẫu TỰ MỞ — nút bấm không gỡ được cái rào nó sinh ra để gỡ |
+| 1 | 2026-09 | `2026-09.md` | 💸 A/B mù 48 bản: hạ `effort` xuống `low` — rẻ 39%, chữ ra nhiều hơn |
+| 1 | 2026-09 | `2026-09.md` | 🧠 Token NGHĨ ăn chung trần với token CHỮ — nguyên nhân gốc của 7,9% phần cụt |
+| 1 | 2026-09 | `2026-09.md` | ✂️ 72% bản luận ĐÃ BÁN có phần cụt giữa câu — không dòng code nào đọc `stop_reason` |
+| 2 | 2026-09 | `2026-09.md` | 🎣 Ví dụ thật trước form landing `/app/luan-giai` — và một con số tôi đã báo SAI |
+| 1 | 2026-09 | `2026-09.md` | 🎯 Google Ads có traffic thật, 0 sign up — track.js không bắt gclid, đếm lẫn vào "(none)" |
+| 1 | 2026-08 | `2026-08.md` | 👤 Guest checkout bằng Supabase Anonymous Sign-ins |
 | 1 | 2026-08 | `2026-08.md` | 🩹 `.hkl-src` lộ code ra ngoài + hook thật sang Chu Trình Cuộc Đời |
 | 1 | 2026-08 | `2026-08.md` | 🎣 Teaser luận giải: điểm số suông không tò mò + 3 thẻ điểm vỡ dòng trên màn hẹp |
+| 1 | 2026-08 | `2026-08.md` | 💳 Webhook PayPal câm — sự kiện chỉ giao cho webhook thuộc ĐÚNG app đã tạo đơn |
 | 1 | 2026-08 | `2026-08.md` | 🔓 Pha 5 — 7/10 tool "ineligible" hoá ra CÓ dữ liệu free bị bỏ phí |
 | 2 | 2026-08 | `2026-08.md` | 🏁 Pha 4 — "Làm hết đi": 7 tool thêm hook, 7 tool skip vì ĐÃ hook sẵn, 10 tool loại |
 | 3 | 2026-08 | `2026-08.md` | 📚 Dọn thư viện + 🔴 lời mời chỉ nằm trên MỘT trong HAI tường (2026-08-26) |
@@ -184,3 +236,12 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 | 153 | 2026-08 | `2026-08.md` | 🎭 Tracker "đang online" — MÔ PHỎNG nới biên độ lên hàng nghìn, tick 5-10s |
 | 154 | 2026-08 | `2026-08.md` | 📮 Hộp Thư Góp Ý trong Tài khoản — chọn KHÔNG làm chatbot sản phẩm |
 | 155 | 2026-08 | `2026-08.md` | 👍👎 Lớp 1 — nút góp ý gắn NGAY dưới bản luận giải |
+| 156 | 2026-08 | `2026-08.md` | 🔐 Chốt đơn chuyển khoản nguyên tử + một chuỗi nội dung CK duy nhất |
+| 157 | 2026-08 | `2026-08.md` | 🔐 Đợt 3 vá `search_path` SECDEF — 2/3 hàm là HỒI QUY, không phải hàm mới |
+| 158 | 2026-08 | `2026-08.md` | 📉 Meta Pixel chưa từng bắn Purchase/CompleteRegistration — Henry tắt ads vì "chả convert" |
+| 159 | 2026-09 | `2026-09.md` | 🌙 P1 — sinh lại `_LUNAR_TABLE` bằng thuật toán chính xác của oracle, không chỉ "sửa tz 1968" |
+| 160 | 2026-09 | `2026-09.md` | ⭐ P2 — sửa 5 bảng tra sao lệch oracle: đúng 1-2 dòng sai/bảng, không phải công thức sai |
+| 161 | 2026-09 | `2026-09.md` | 🧭 P3 — Kình-Đà + Tiểu Hạn + Tứ Hóa can Canh sang trường phái Thiên Lương; La-Võng dời sang P4 |
+| 162 | 2026-09 | `2026-09.md` | 🕸️ P4 — La-Võng: từ 2 sao cố định Thìn/Tuất sang NHÃN của Đà La |
+| 163 | 2026-09 | `2026-09.md` | 🚀 Tứ Hóa Phi Tinh + 2 vá hiển thị mobile trên lá số |
+| 164 | 2026-09 | `2026-09.md` | 🔌 Tứ Hóa Phi Tinh — nối dữ kiện vào prompt luận giải |

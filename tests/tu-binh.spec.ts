@@ -35,13 +35,12 @@ test.describe('Tu Binh Regression paywall', () => {
 });
 
 // Điền ĐỦ các trường bắt buộc của form Tử Bình như người dùng thật:
-// hoten (text) + nam (number) KHÔNG phải <select> nên fillVisibleSelects
-// bỏ sót → analyze() bị chặn ở validation, DOM không render. Phải điền tay.
+// hoten (text) KHÔNG phải <select> nên fillVisibleSelects bỏ sót → analyze()
+// bị chặn ở validation, DOM không render. Phải điền tay. `nam` (năm sinh) giờ
+// là <select> (đồng bộ với Ngày/Tháng) nên fillVisibleSelects đã tự khớp.
 async function fillRequired(page: any) {
   const hoten = page.locator('#hoten');
   if (await hoten.count() && await hoten.first().isVisible()) await hoten.first().fill('Nguyễn Văn Test');
-  const nam = page.locator('#nam');
-  if (await nam.count() && await nam.first().isVisible()) await nam.first().fill('1990');
   await fillVisibleSelects(page);
 }
 

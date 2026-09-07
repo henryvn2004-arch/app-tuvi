@@ -91,7 +91,7 @@
     'oracle': [{ kind: 'co-phap', name: 'Âm Dương, Ngũ Hành, Bát Quái' }, TVMB],
     'boi-bai-tay': [{ kind: 'co-phap', name: 'Bói bài Tây truyền thống (bộ 52 lá)' }, TVMB],
 
-    // ── Phong Cách AI / Làm Đẹp (trang standalone) — lấy đúng tên hệ thống
+    // ── Phong Cách / Làm Đẹp (trang standalone) — lấy đúng tên hệ thống
     // từ system prompt thật trong app/api/tuong-mat/route.js, KHÔNG suy diễn.
     // Mỗi trang phân-tích + tryon dùng CHUNG một khối kết quả trên trang nên
     // đăng ký theo id "phân tích" (đại diện chung cho cả trang).
@@ -160,7 +160,7 @@
     if (!l && !opts.prefix) return '';
     return '<div class="tvmb-src-note" data-share-skip style="margin-top:16px;padding:14px 18px;background:#FBF3DE;border:1px solid #e8d9b0;border-radius:10px;font-size:12.5px;line-height:1.68;color:#5a5145">' +
       (opts.prefix ? opts.prefix + '<br><br>' : '') +
-      (l ? (window.iconHtml ? window.iconHtml('book-open') : '') + ' <b>Nguồn:</b> ' + l + ' ' : '') +
+      (l ? (window.iconHtml ? '<span class="ic-inline">' + window.iconHtml('book-open') + '</span>' : '') + ' <b>Nguồn:</b> ' + l + ' ' : '') +
       '<a href="/nguon-du-lieu.html" target="_blank" rel="noopener" style="color:#9A7B3A">Xem đầy đủ nguồn dữ liệu →</a>' +
       '</div>';
   }

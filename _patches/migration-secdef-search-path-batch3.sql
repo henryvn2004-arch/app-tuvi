@@ -1,0 +1,47 @@
+-- Đợt 3 ghim search_path cho SECURITY DEFINER: 3 hàm hồi quy về 'public' trần
+-- (Đợt 1 — 7 hàm để TRỐNG hẳn · Đợt 2 — 44 hàm còn lại: xem hai file cùng thư mục)
+--
+-- Cảnh báo tự động 16:01 29/08/2026 bắt lại ĐÚNG 2 hàm đã vá ở đợt 2
+-- (`tool_funnel`, `tool_funnel_lac`) cộng 1 hàm mới (`social_proof_approve`).
+-- Đã ĐO trực tiếp trên prod trước khi vá — không phải suy đoán từ cảnh báo:
+--   select coalesce(array_to_string(proconfig,','),'(none)') from pg_proc ...
+--   ⇒ cả 3 hàm ở đúng 'search_path=public', KHÔNG có pg_temp.
+--
+-- 🔑 VÌ SAO 2 HÀM ĐÃ VÁ Ở ĐỢT 2 LẠI HỒI QUY:
+--   Đợt 2 vá bằng `ALTER FUNCTION ... SET search_path` chạy THẲNG trên DB —
+--   không sửa lại `CREATE OR REPLACE` gốc trong `migration-tool-funnel.sql`
+--   (vẫn còn `set search_path = public` trần). `CREATE OR REPLACE FUNCTION`
+--   thay TOÀN BỘ proconfig, không cộng dồn với ALTER đã chạy trước đó — nên
+--   bất kỳ lần nào file migration đó được chạy lại (sửa `tool_canon`, deploy
+--   lại từ đầu…) là xoá sạch bản vá mà không ai để ý.
+--   ⇒ ALTER vá tại chỗ và CREATE OR REPLACE trong file nguồn PHẢI đi cùng
+--   nhau — vá xong trên DB mà không sửa lại file nguồn là vá NỬA VỜI, chỉ
+--   sống tới lần deploy lại kế tiếp. (Xem CLAUDE.md mục Postgres/RPC.)
+--   `social_proof_approve` thì đơn giản là hàm MỚI viết sau đợt 2, viết
+--   `set search_path = public` trần ngay từ đầu — bỏ sót quy ước, không phải
+--   hồi quy.
+--
+-- ⚠️ ĐÃ ÁP TRỰC TIẾP LÊN PROD (dciwkfdqhhddeymlisey) qua Supabase MCP trước
+-- khi tạo file này — file này là BẢN GHI + đường ĐẢO cho môi trường khác
+-- (staging/branch), không phải bước còn treo. File nguồn (`migration-social-
+-- proof.sql`, `migration-tool-funnel.sql`) đã sửa `set search_path = public`
+-- → `set search_path = public, pg_temp` trong cùng PR để lần deploy lại
+-- không hồi quy nữa.
+--
+-- Đo ACL trước khi vá (giữ nguyên tinh thần đợt 2 — vá này là gia cố phòng
+-- thủ theo chiều sâu, KHÔNG phải lỗ đang hở): 0/3 hàm anon/authenticated gọi
+-- được (chỉ service_role).
+--
+-- Đi từ 'public' → 'public, pg_temp' là phép CHỈ THÊM — xem lý luận đầy đủ ở
+-- `migration-secdef-search-path-batch2.sql`. Cả 3 hàm không đụng bảng tạm.
+alter function public.social_proof_approve(uuid, integer, text)      set search_path = public, pg_temp;
+alter function public.tool_funnel(timestamptz, timestamptz)          set search_path = public, pg_temp;
+alter function public.tool_funnel_lac(timestamptz, timestamptz)      set search_path = public, pg_temp;
+
+-- Verify:
+--   select security_audit(500,5,10)->>'ham_thieu_search_path';  -- phải = []
+--   select p.oid::regprocedure, array_to_string(p.proconfig,' | ')
+--     from pg_proc p join pg_namespace n on n.oid=p.pronamespace
+--    where n.nspname='public'
+--      and p.proname in ('social_proof_approve','tool_funnel','tool_funnel_lac');
+--   -- cả 3 dòng phải có 'pg_temp' trong proconfig

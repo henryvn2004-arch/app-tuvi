@@ -4,18 +4,29 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Lá số Bát Tự — Tử Vi Minh Bảo</title>
-<meta name="description" content="Lập tứ trụ Bát Tự theo cổ pháp Tử Bình: nhật can, cường nhược, dụng thần, cách cục, đại vận, lưu niên — và hỏi trợ lý AI đào sâu từng phần.">
+<meta name="description" content="Lập tứ trụ Bát Tự theo cổ pháp Tử Bình: nhật can, cường nhược, dụng thần, cách cục, đại vận, lưu niên — và hỏi trợ lý Luận Đường đào sâu từng phần.">
 <link rel="icon" type="image/webp" href="/seal.webp">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"></noscript>
-<link rel="stylesheet" href="/shell.css?v=30">
+<link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/fonts/noto-serif.css?v=1">
+<link rel="stylesheet" href="/shell.css?v=34">
 <style>
 /* Center riêng của trang Bát Tự */
 .form-card{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);max-width:640px}
 .form-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:3px}
 .form-card p.sub{font-size:12.5px;color:var(--text-lt);margin-bottom:14px}
 .frow{display:flex;gap:11px;flex-wrap:wrap;align-items:flex-end;margin-bottom:12px}
+/* Giữ chỗ cho form khai sinh. `TuviForm.render` chạy ngay trong lúc phân tích
+   HTML, nhưng chỉ SAU khi `tuvi-form.js` nạp xong — mà đứng trước nó là cả một dãy
+   script CÙNG ORIGIN cũng chặn parse (17KB–524KB tuỳ trang), nên trên mạng chậm lần
+   vẽ đầu #tuviFormHost còn RỖNG tới ~3,5–6,5s. `:empty` để chỗ giữ TỰ NHẢ ngay khi
+   form vào ⇒ không bao giờ thừa khoảng trắng.
+   🪤 Số này là KHOẢNG CÁCH tới khối kế tiếp, KHÔNG phải chiều cao của host:
+   `margin-bottom` của `.frow` cuối bên trong host THOÁT RA NGOÀI (margin collapse)
+   nên nó đẩy `.frow` phía dưới thêm 12–13px mà `getBoundingClientRect().height`
+   không hề thấy. Đo bằng chiều cao là hụt đúng chỗ đó. Số 249px/480px là ĐO,
+   xem docs/nhat-ky/2026-09.md vòng 9. */
+@media (max-width:480px){#tuviFormHost:empty{min-height:249px}}
 .fg{display:flex;flex-direction:column;gap:5px}
 .fg label{font-size:10.5px;font-weight:600;color:var(--text-lt);letter-spacing:.04em;text-transform:uppercase}
 .fg input,.fg select{border:1px solid var(--line-2);border-radius:7px;padding:8px 10px;font-size:13.5px;font-family:inherit;color:var(--text);background:var(--paper);outline:none}
@@ -112,7 +123,7 @@ table.tutru td.row-label{font-size:10.5px;color:#9a8a6a;text-transform:uppercase
 .pregen-domain-reasons{font-size:11px;color:var(--text-lt);margin-top:4px;padding-left:122px;line-height:1.5}
 @media (max-width:800px){.pregen-domain-reasons{padding-left:0}}
 .phan-empty{font-size:12.5px;color:var(--text-lt);font-style:italic;padding:4px 0}
-/* ── Luận giải chuyên sâu bằng AI (paid, port từ tu-binh.html — gate+RAG+SSE stream+PDF) ── */
+/* ── Luận giải chuyên sâu (paid, port từ tu-binh.html — gate+RAG+SSE stream+PDF) ── */
 .claude-content{margin-top:10px;padding-top:10px;border-top:1px dashed var(--line-2)}
 .claude-content p{color:var(--text-mid);line-height:1.75;margin-bottom:12px;font-size:13.5px}
 .claude-content p:last-child{margin-bottom:0}
@@ -144,15 +155,29 @@ table.tutru td.row-label{font-size:10.5px;color:#9a8a6a;text-transform:uppercase
       </div>
     </div>
     <div class="ws-body">
-      <div id="introHost"></div>
+      <!-- Box giới thiệu dựng TĨNH: chèn bằng JS thì nó ra đời SAU lần vẽ đầu,
+           đẩy cả `.ws-body` xuống VÀ tự làm phần tử LCP (đo trên prod: CLS 0,198,
+           Render Delay 5,3s). `Shell.introOnce` thấy `.intro-card` đã có thì chỉ
+           điền `#introSrc`. Vì thế `SHELL_INTRO` bên dưới CHỈ khai `key` — chữ nằm
+           đúng ở đây, một bản duy nhất, không có bản chép để trôi. -->
+      <div id="introHost"><div class="intro-card">
+        <div class="intro-body">
+          <img class="intro-avatar" src="/tool-avatars/tu-binh.webp" alt="" onerror="this.remove()">
+          <div class="intro-text">
+            <div class="intro-t">Lá số Bát Tự (Tứ Trụ)</div>
+            <div class="intro-d">Lá số Bát Tự (Tứ Trụ) lập bát tự, đọc Nhật Can, Dụng Thần, Cách Cục, Đại Vận. Sức khoẻ yếu, tiền bạc khó tụ mà nghe nói mệnh thiếu hành gì đó, chẳng ai chỉ rõ thiếu cái gì để bổ? Nhập ngày giờ sinh, nhận lá số Bát Tự đầy đủ theo trường phái Tứ Trụ.</div>
+            <div id="introSrc" style="min-height:55.2px;margin-top:9px"></div>
+          </div>
+        </div>
+      </div></div>
       <div id="shellRecent"></div>
       <div class="form-card" id="birthPanel">
         <h2>Nhập thông tin ngày sinh (dương lịch)</h2>
-        <p class="sub">Lập bát tự, đọc Nhật Can, Dụng Thần, Cách Cục, Đại Vận của bạn. Bạn nghe mệnh yếu cần bổ mà chưa rõ yếu ở đâu, bổ gì. Dùng khi muốn xem theo trường phái Tứ Trụ, khác cách của Tử Vi.</p>
+        <p class="sub">Nhập họ tên, giới tính, ngày giờ sinh và năm muốn luận. Hệ thống lập tứ trụ rồi luận theo cổ pháp Tử Bình. Nhận về 16 phần: cách cục, Thập Thần, tình duyên, sức khoẻ, đại vận và lưu niên.</p>
         <p class="price-note" data-tvp-price-label="tu-binh">…</p>
         <div id="tuviFormHost"></div>
         <div class="frow" style="margin-bottom:0">
-          <div class="fg" style="width:90px"><label>Năm luận</label><input type="number" id="inpNamxem" value="2026" min="1900" max="2100"></div>
+          <div class="fg" style="width:90px"><label>Năm luận</label><select id="inpNamxem"></select></div>
           <button class="btn-go" id="btnGo" onclick="doBatTu()">Lập Bát Tự →</button>
         </div>
       </div>
@@ -163,7 +188,7 @@ table.tutru td.row-label{font-size:10.5px;color:#9a8a6a;text-transform:uppercase
         <div class="tutru-wrap"><table class="tutru" id="tutruTable"></table></div>
         <div class="jump" id="btJump"></div>
         <div class="bt-unlock" id="btUnlock" style="display:none">
-          <button class="btn-go" id="btnUnlock" onclick="initiateBatTuChuyenSau()">✦ Luận giải chuyên sâu bằng AI — <span data-tvp-price="tu-binh">…</span> Lượng →</button>
+          <button class="btn-go" id="btnUnlock" onclick="initiateBatTuChuyenSau()">✦ Luận giải chuyên sâu — <span data-tvp-price="tu-binh">…</span> Lượng →</button>
           <p>Viết riêng cho tứ trụ này theo cổ pháp Tử Bình — 16 phần: cách cục, thập thần, đại vận, lưu niên.</p>
         </div>
         <div class="bt-progress" id="btProgress" style="display:none"></div>
@@ -179,20 +204,33 @@ table.tutru td.row-label{font-size:10.5px;color:#9a8a6a;text-transform:uppercase
 </div>
 
 <script>window.SHELL_ACTIVE='bat-tu';window.SHELL_HISTORY=true;
-window.SHELL_INTRO={key:'bat-tu',title:'Lá số Bát Tự (Tứ Trụ)',desc:'Lập bát tự, đọc Nhật Can, Dụng Thần, Cách Cục, Đại Vận của bạn. Bạn nghe mệnh yếu cần bổ mà chưa rõ yếu ở đâu, bổ gì. Dùng khi muốn xem theo trường phái Tứ Trụ, khác cách của Tử Vi.'};</script>
+window.SHELL_INTRO={key:'bat-tu'};</script>
 <script src="/laso-chart.js?v=3"></script>
 <script src="/tubinh-ansao-engine.js?v=5"></script>
 <script src="/tubinh-domain-scores.js?v=2"></script>
 <script src="/tubinh-cach-cuc-special.js?v=2"></script>
-<script src="/bat-tu-core.js?v=2"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
+<script src="/tools-shared/pchip.js?v=1"></script>
+<script src="/tools-shared/daivan-chart.js?v=1"></script>
+<script src="/bat-tu-core.js?v=3"></script>
+<!-- `defer` ở đây là VỆ SINH TỐC ĐỘ, KHÔNG phải bản vá CLS. Không có nó, thẻ này
+     chặn parse ngay trước `tuvi-form.js`, tức thêm hẳn một chặng mạng tới bên thứ
+     ba vào đường tới hạn của form. Nhưng cú nhảy `.frow` thì nó KHÔNG chữa: prod
+     trước và sau #708 đều 0,0335, cùng node cùng rect. Số "0,0315 → 0" đo cục bộ
+     hồi đó là ảo — nó lớn vì container chặn hẳn CDN (~12,5s timeout), không phải
+     vì `defer`. Nguyên nhân thật là dãy script CÙNG ORIGIN phía trên, và bản vá
+     thật là chỗ giữ `#tuviFormHost:empty` khai trong <style> của trang.
+     An toàn: mọi lời gọi `Chart` đều nằm trong hàm và có chốt
+     `if (typeof Chart === 'undefined') return`, và các hàm đó chỉ chạy SAU khi
+     người dùng bấm luận — rất lâu sau `DOMContentLoaded`, mốc mà script `defer`
+     chắc chắn đã chạy xong (đã đo: `Chart` là `function` tại DOMContentLoaded). -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js" defer></script>
 <script src="/tools-shared/vn-timezone.js?v=1"></script>
 <script src="/tuvi-form.js?v=2"></script>
-<script src="/tools-shared/cung-ngay-sinh.js?v=1"></script>
+<script src="/tools-shared/nam-luan-select.js?v=1"></script>
+<script src="/tools-shared/cung-ngay-sinh.js?v=2"></script>
 <script src="/auth.js?v=2"></script>
-<script src="/tuvi-paywall.js?v=22"></script>
-  <script src="/nav.js?v=24" data-icons-only></script>
-<script src="/shell.js?v=85"></script>
+<script src="/tuvi-paywall.js?v=25"></script>
+  <script src="/nav.js?v=26" data-icons-only></script><script src="/shell.js?v=87"></script>
 <script>
 // Bát Tự dùng ĐÚNG giờ đại diện của địa chi giờ (23,1,3,…) để tứ trụ trên
 // trang KHỚP TUYỆT ĐỐI với bát tự server tính cho rail (server map hourBranch
@@ -202,6 +240,7 @@ var GIO_REP=[23,1,3,5,7,9,11,13,15,17,19,21];
 // ── Form nhập (dùng chung TuviForm — có "Sinh ở ngoài Việt Nam?" + parity giờ
 // sinh lịch sử với standalone) ──
 TuviForm.render('tuviFormHost', {mode:'compact', gioitinh:'nam'});
+NamLuanSelect.mount('inpNamxem');
 function scoreColor(t){ return t>=6.5?'var(--green)':t>=4?'var(--gold-soft)':'var(--red)'; }
 var HANH_COLOR={'Mộc':'var(--green)','Hỏa':'var(--red)','Thổ':'var(--gold-soft)','Kim':'#8a8a8a','Thủy':'var(--blue)'};
 
@@ -245,19 +284,17 @@ function doBatTu(){
       greeting:'Tứ trụ của **'+(name||'bạn')+'** đã sẵn sàng. Hỏi tôi về nhật can, dụng thần, cách cục hay đại vận nhé.',
       chips:buildBatTuChips(bt)
     });
-    // Chia sẻ: tóm tắt tứ trụ (nhật can/cường nhược/cách cục/đại vận) — dữ
-    // liệu THẬT đã tính, gọn hơn nhiều so với formatBatTuToText (dump kỹ thuật
-    // cho AI context, không phù hợp hiển thị công khai).
-    var _btLines=[(name||'Tứ trụ')+' · '+dd+'/'+mm+'/'+yyyy+' · '+(gioitinh==='nam'?'Nam':'Nữ')];
-    _btLines.push('Nhật Can: '+bt.nhatCan+' ('+bt.nhatCanHanh+')');
-    if(bt.cuongNhuoc) _btLines.push('Cường nhược nhật can: '+bt.cuongNhuoc.score+'/10 — '+bt.cuongNhuoc.label);
-    if(bt.cachCuc&&bt.cachCuc.primary) _btLines.push('Cách cục: '+bt.cachCuc.primary);
-    if(bt.daiVanHienTai) _btLines.push('Đại vận hiện tại ('+bt.daiVanHienTai.tuoiStart+'–'+bt.daiVanHienTai.tuoiEnd+'t): '+bt.daiVanHienTai.score+'/10');
+    // Chia sẻ: TOÀN BỘ nội dung đang hiển thị trên màn hình (`liveText:true`
+    // → xem chú thích ở `currentShare()` trong shell.js), KHÔNG phải
+    // formatBatTuToText (dump kỹ thuật cho AI context, không phù hợp hiển thị
+    // công khai). `text` dưới đây chỉ là tiêu đề mở đầu cố định.
+    var _btHead=(name||'Tứ trụ')+' · '+dd+'/'+mm+'/'+yyyy+' · '+(gioitinh==='nam'?'Nam':'Nữ')+' · Nhật Can: '+bt.nhatCan+' ('+bt.nhatCanHanh+')';
     Shell.setShareable({
       kind:'text',
       toolId:'bat-tu',
       title:'Tứ trụ Bát Tự của '+(name||'tôi'),
-      text:_btLines.join('\n')
+      text:_btHead,
+      liveText:true
     });
     initBatTuGate(bt);
   }catch(e){
@@ -291,7 +328,7 @@ function renderBatTu(bt,namxem){
     var pre=BatTuCore.buildPreGenForPhan(phan,bt);
     var body=pre||'<div class="phan-empty">Phần này luận theo tổng thể tứ trụ — bấm nút dưới để trợ lý luận sâu.</div>';
     // Khoá-mini (ẨN mặc định, xem chú thích ở _paintSecLocksBt) — mỗi phần
-    // trong 16 phần đều có một đoạn luận riêng do AI viết, nhưng banner mở
+    // trong 16 phần đều có một đoạn luận riêng do hệ thống viết, nhưng banner mở
     // khoá ở đầu trang cuộn qua là mất; khối này lặp lại ở MỌI phần.
     var lock=TuviPaywall.sectionLockHtml({id:'sec-ai-lock-'+phan,product:'tu-binh'});
     S.push(sec(phan,label,'','<div class="card">'+body+lock+'<div class="claude-content" id="claude-content-'+phan+'" style="display:none"></div>'+ask('Luận sâu phần: '+label)+'</div>'));
@@ -372,7 +409,7 @@ function bindJump(count){
 }
 
 // ══════════════════════════════════════════════════════════════════════
-// Luận giải chuyên sâu bằng AI — port từ public/tu-binh.html (gate Lượng
+// Luận giải chuyên sâu — port từ public/tu-binh.html (gate Lượng
 // qua TuviPaywall + RAG grouped /api/tubinh?action=search + generate
 // /api/tubinh (16 phần, tuần tự, SSE stream) + lưu /api/save-laso +
 // Tải PDF). Giữ nguyên tên biến/hàm gốc để dễ đối chiếu — theo quyết định
@@ -667,6 +704,10 @@ function buildPregenContextForPhan(phan,bt){
   return lines.join('\n');
 }
 
+// Nhãn tính chất model tự gắn NGAY TRƯỚC câu hook mỗi đoạn (khối "NHÃN TÍNH
+// CHẤT MỖI CÂU HOOK" trong `arcDoc()`, lib/agent/prompts.ts) — tra ra class
+// CSS màu (.fb-card, xem shell.css). Cùng cơ chế với app-luan-giai.html.
+var HOOK_TAG_CLASS={ 'TỐT':'fb-tot', 'CẢNH BÁO':'fb-canhbao', 'TRUNG TÍNH':'fb-trungtinh' };
 function renderMarkdown(text){
   var lines=text.split('\n'), out='', inTable=false, rows=[];
   function flushTable(){
@@ -681,20 +722,30 @@ function renderMarkdown(text){
     out+='</table></div>';
     rows=[]; inTable=false;
   }
+  function inline(s){ return s.replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/\*(.+?)\*/g,'<em>$1</em>'); }
+  var pendingLead='';
+  function flushPending(){ if(pendingLead){ out+='<p>'+pendingLead+'</p>'; pendingLead=''; } }
   lines.forEach(function(line){
-    if(line.trim().indexOf('|')===0){ inTable=true; rows.push(line.trim()); }
+    if(line.trim().indexOf('|')===0){ flushPending(); inTable=true; rows.push(line.trim()); }
     else{
       if(inTable)flushTable();
-      var l=line
-        .replace(/^## (.+)$/,'<h3>$1</h3>')
-        .replace(/^### (.+)$/,'<h3>$1</h3>')
-        .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
-        .replace(/\*(.+?)\*/g,'<em>$1</em>');
-      if(l.indexOf('<h')===0)out+=l;
-      else if(l.trim())out+='<p>'+l+'</p>';
+      var h=line.replace(/^## (.+)$/,'<h3>$1</h3>').replace(/^### (.+)$/,'<h3>$1</h3>');
+      if(h.indexOf('<h')===0){ flushPending(); out+=h; return; }
+      if(!line.trim())return;
+      var m=/^\[(TỐT|CẢNH BÁO|TRUNG TÍNH)(?:\|[^\]]{0,40})?\]\s*\*\*(.+?)\*\*([\s\S]*)$/.exec(line.trim());
+      if(m){
+        flushPending();
+        var cls=HOOK_TAG_CLASS[m[1]]||'fb-trungtinh';
+        out+='<div class="fb-card '+cls+'">“'+esc(m[2].trim())+'”</div>';
+        pendingLead=inline(m[3]).trim();
+        return;
+      }
+      out+='<p>'+(pendingLead?pendingLead+' ':'')+inline(line)+'</p>';
+      pendingLead='';
     }
   });
   if(inTable)flushTable();
+  flushPending();
   return out;
 }
 

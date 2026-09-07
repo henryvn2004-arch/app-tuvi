@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<link rel="preload" href="/nav.js?v=24" as="script">
+<link rel="preload" href="/nav.js?v=26" as="script">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>An Sao Lá Số Tử Vi — Tra Cứu Vị Trí 108 Sao | Tử Vi Minh Bảo</title>
 <meta property="og:title" content="An Sao Lá Số Tử Vi — Tra Cứu Vị Trí 108 Sao | Tử Vi Minh Bảo"/>
@@ -21,7 +21,8 @@
 <script src="/tools-shared/vn-timezone.js?v=1"></script>
 <script src="/tuvi-form.js"></script>
 <script src="/tuvi-grid.js?v=3"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<!-- Chart.js ĐÃ GỠ: chuỗi "Chart" không xuất hiện lần nào trong trang này,
+     và không script nào nó nạp có dùng tới. Cùng bệnh với app-luan-giai. -->
 <link rel="stylesheet" href="/tools/tools.css">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -222,14 +223,14 @@ select.form-input{cursor:pointer}
     <!-- Paywall CTA -->
     <div class="paywall-gate">
       <div class="paywall-eyebrow">Luận Giải Chuyên Sâu</div>
-      <div class="paywall-title">Mở khóa 24 phần luận giải AI</div>
-      <div class="paywall-desc">Từ tổng quan bản mệnh, từng cung, 9 đại vận đến tiểu vận năm nay — phân tích chuyên sâu theo cổ pháp, viết bằng AI.</div>
+      <div class="paywall-title">Mở khóa 24 phần luận giải chuyên sâu</div>
+      <div class="paywall-desc">Từ tổng quan bản mệnh, từng cung, 9 đại vận đến tiểu vận năm nay — phân tích chuyên sâu theo cổ pháp, viết.</div>
       <div class="paywall-features">
         <div class="paywall-feature">Tổng quan bản mệnh & khí chất</div>
         <div class="paywall-feature">Phân tích 12 cung chi tiết</div>
         <div class="paywall-feature">Luận giải 9 đại vận</div>
         <div class="paywall-feature">Tiểu vận năm hiện tại</div>
-        <div class="paywall-feature">Vấn đáp AI không giới hạn</div>
+        <div class="paywall-feature">Vấn đáp không giới hạn</div>
         <div class="paywall-feature">Xuất PDF, lưu mãi</div>
       </div>
       <div class="paywall-price-note">Thanh toán bằng credits · Truy cập vĩnh viễn · Credits không hết hạn</div>
@@ -335,6 +336,6 @@ TuviForm.render('tuvi-form-container', { onSubmit: luanGiai, submitLabel: 'An Sa
 </section>
 <script src="/testimonials.js"></script>
 <script src="/related-tools.js?v=2"></script>
-<script src="/nav.js?v=24" defer></script>
+<script src="/nav.js?v=26" defer></script>
 </body>
 </html>

@@ -78,6 +78,7 @@ let engineCache: {
 
 function loadEngine() {
   if (engineCache) return engineCache;
+  const pchipCode = readFileSync(join(process.cwd(), 'public', 'tools-shared', 'pchip.js'), 'utf-8');
   const code = readFileSync(join(process.cwd(), 'public', 'tuvi-ansao-engine.js'), 'utf-8');
   const formatCode = readFileSync(join(process.cwd(), 'public', 'tuvi-laso-format.js'), 'utf-8');
   const g = globalThis as Rec;
@@ -85,10 +86,14 @@ function loadEngine() {
   if (!g.location) {
     g.location = { protocol: 'https:', hostname: 'tuviminhbao.com', host: 'tuviminhbao.com', port: '', href: 'https://tuviminhbao.com/', pathname: '/', search: '', hash: '' };
   }
+  // pchipCode TRƯỚC tuvi-laso-format.js: buildDaiVanLines đọc `Pchip` (đặt qua
+  // `window.Pchip=`, cùng cách STAR_DATA của engine.js resolve — xem comment ở
+  // khai báo `engineCache` trên) để nội suy "3 QUÃNG TRONG ĐẠI VẬN" cho prompt
+  // Chu Trình Cuộc Đời — MỘT nguồn công thức với biểu đồ client (pchip.js).
   engineCache = (new Function(
     'window',
     'globalThis',
-    code + '\n' + formatCode +
+    pchipCode + '\n' + code + '\n' + formatCode +
       '\nreturn{convertDuongToAm,anSaoLaSo,formatLaSoV2:window.formatLaSoV2,buildDaiVanLines:window.buildDaiVanLines};',
   ))(g, g) as typeof engineCache;
   return engineCache!;
@@ -96,7 +101,7 @@ function loadEngine() {
 
 /**
  * Ngày dương → (can chi năm · tháng ÂL · ngày ÂL). `null` khi NGOÀI TẦM bảng
- * âm lịch (1900-01-31 → 2100-12-31).
+ * âm lịch (1900-01-01 → 2100-12-31).
  *
  * Dùng cho feature "Ai Sinh Cùng Ngày Với Bạn": khoá gom lá số là ÂM LỊCH chứ
  * không phải ngày dương — an sao chỉ phụ thuộc (can chi năm · tháng ÂL · ngày

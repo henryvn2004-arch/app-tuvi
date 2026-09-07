@@ -4,17 +4,28 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Chân Dung Vợ Chồng — Tử Vi Minh Bảo</title>
-<meta name="description" content="AI phân tích cung Phu Thê trong lá số rồi vẽ chân dung người bạn đời kèm mô tả tính cách, phong thái.">
+<meta name="description" content="Phân tích cung Phu Thê trong lá số rồi vẽ chân dung người bạn đời kèm mô tả tính cách, phong thái.">
 <link rel="icon" type="image/webp" href="/seal.webp">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"></noscript>
-<link rel="stylesheet" href="/shell.css?v=30">
+<link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/fonts/noto-serif.css?v=1">
+<link rel="stylesheet" href="/shell.css?v=34">
 <style>
 .form-card{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);max-width:640px}
 .form-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:3px}
 .form-card p.sub{font-size:12.5px;color:var(--text-lt);margin-bottom:14px}
 .frow{display:flex;gap:11px;flex-wrap:wrap;align-items:flex-end;margin-bottom:12px}
+/* Giữ chỗ cho form khai sinh. `TuviForm.render` chạy ngay trong lúc phân tích
+   HTML, nhưng chỉ SAU khi `tuvi-form.js` nạp xong — mà đứng trước nó là cả một dãy
+   script CÙNG ORIGIN cũng chặn parse (17KB–524KB tuỳ trang), nên trên mạng chậm lần
+   vẽ đầu #tuviFormHost còn RỖNG tới ~3,5–6,5s. `:empty` để chỗ giữ TỰ NHẢ ngay khi
+   form vào ⇒ không bao giờ thừa khoảng trắng.
+   🪤 Số này là KHOẢNG CÁCH tới khối kế tiếp, KHÔNG phải chiều cao của host:
+   `margin-bottom` của `.frow` cuối bên trong host THOÁT RA NGOÀI (margin collapse)
+   nên nó đẩy `.frow` phía dưới thêm 12–13px mà `getBoundingClientRect().height`
+   không hề thấy. Đo bằng chiều cao là hụt đúng chỗ đó. Số 317px/432px là ĐO,
+   xem docs/nhat-ky/2026-09.md vòng 9. */
+@media (max-width:432px){#tuviFormHost:empty{min-height:317px}}
 .fg{display:flex;flex-direction:column;gap:5px}
 .fg label{font-size:10.5px;font-weight:600;color:var(--text-lt);letter-spacing:.04em;text-transform:uppercase}
 .fg input,.fg select{border:1px solid var(--line-2);border-radius:7px;padding:8px 10px;font-size:13.5px;font-family:inherit;color:var(--text);background:var(--paper);outline:none}
@@ -67,11 +78,25 @@
       </div>
     </div>
     <div class="ws-body">
-      <div id="introHost"></div>
+      <!-- Box giới thiệu dựng TĨNH: chèn bằng JS thì nó ra đời SAU lần vẽ đầu,
+           đẩy cả `.ws-body` xuống VÀ tự làm phần tử LCP (đo trên prod: CLS 0,198,
+           Render Delay 5,3s). `Shell.introOnce` thấy `.intro-card` đã có thì chỉ
+           điền `#introSrc`. Vì thế `SHELL_INTRO` bên dưới CHỈ khai `key` — chữ nằm
+           đúng ở đây, một bản duy nhất, không có bản chép để trôi. -->
+      <div id="introHost"><div class="intro-card">
+        <div class="intro-body">
+          <img class="intro-avatar" src="/tool-avatars/chan-dung-vo-chong.webp" alt="" onerror="this.remove()">
+          <div class="intro-text">
+            <div class="intro-t">Chân Dung Vợ Chồng</div>
+            <div class="intro-d">Chân Dung Vợ Chồng vẽ chân dung người bạn đời tương lai từ cung Phu Thê của bạn. Sợ chọn nhầm người, để rồi khổ vì tiền bạc hay tình cảm suốt phần đời còn lại? Từ lá số có sẵn, nhận chân dung và mô tả tính khí người ấy.</div>
+            <div id="introSrc" style="min-height:73.6px;margin-top:9px"></div>
+          </div>
+        </div>
+      </div></div>
       <div id="shellRecent"></div>
       <div class="form-card" id="birthPanel">
         <h2>Nhập ngày sinh của bạn (dương lịch)</h2>
-        <p class="sub">Vẽ chân dung người bạn đời tương lai từ cung Phu Thê của bạn. Bạn tò mò người ấy sẽ trông ra sao, tính khí thế nào. Dùng khi muốn một hình ảnh cụ thể, không chỉ vài dòng luận chữ.</p>
+        <p class="sub">Dùng lá số đã lập, không cần nhập thêm gì khác. Hệ thống đọc riêng cung Phu Thê rồi dựng chân dung người bạn đời tương lai. Nhận về hình thể suy từ sao, ảnh chân dung và luận giải chi tiết cung Phu Thê.</p>
         <p class="price-note" data-tvp-price-label="chan-dung-vo-chong">…</p>
         <div id="tuviFormHost"></div>
         <div class="frow" style="margin-bottom:0">
@@ -109,12 +134,16 @@
              xem. -->
         <div id="cdvcLockHost" style="display:none;margin-bottom:16px"></div>
 
+        <!-- Ảnh minh hoạ MỜ, đúng giới tính bạn đời (2026-09-07) — xem chú
+             thích đầy đủ ở `_showDummyPortrait` phía dưới. -->
+        <div id="dummyPortraitHost" style="display:none;margin-bottom:16px"></div>
+
         <div class="res-block" id="morphBlock" style="display:none">
           <div class="res-block-header"><span class="res-block-title">Hình Thể Suy Từ Sao Tại Phu Thê</span></div>
           <div class="res-block-body">
             <div class="cdvc-pt-row" id="morphCore"></div>
             <table class="cdvc-morph"><tbody id="morphRows"></tbody></table>
-            <div class="cdvc-note">Bảng trên là tra bảng cổ pháp trên chính lá số của bạn — chưa qua AI.</div>
+            <div class="cdvc-note">Bảng trên là tra bảng cổ pháp trên chính lá số của bạn — chưa qua bước luận giải.</div>
           </div>
         </div>
         <div class="res-block" id="portraitBlock" style="display:none">
@@ -138,7 +167,7 @@
                 </div>
               </div>
               <div style="width:100%;margin-top:6px;background:#FBF3DE;border:1px solid #e8d9b0;border-radius:8px;padding:12px 14px;font-size:12.5px;line-height:1.6;color:#5a5145">
-                <span class="ic" data-icon="lightbulb"></span> Chân dung này chỉ mang tính minh hoạ và tham khảo, được AI mô phỏng từ đặc điểm hình dáng gắn với chính tinh, phụ tinh tại cung Phu Thê trong lá số của bạn — không phải ảnh chụp hay dự đoán chính xác diện mạo người bạn đời ngoài đời thực. Để có kết quả sát thực hơn, cần đối chiếu thêm với lá số thật của người đó.
+                <span class="ic" data-icon="lightbulb"></span> Chân dung này chỉ mang tính minh hoạ và tham khảo, được hệ thống mô phỏng từ đặc điểm hình dáng gắn với chính tinh, phụ tinh tại cung Phu Thê trong lá số của bạn — không phải ảnh chụp hay dự đoán chính xác diện mạo người bạn đời ngoài đời thực. Để có kết quả sát thực hơn, cần đối chiếu thêm với lá số thật của người đó.
               </div>
               <div class="compat-invite" id="cdvcInviteBlock" style="width:100%;display:none">
                 <div class="ci-t" id="cdvcInviteText"></div>
@@ -167,19 +196,19 @@
 </div>
 
 <script>window.SHELL_ACTIVE='chan-dung-vo-chong';window.SHELL_HISTORY=true;
-window.SHELL_INTRO={key:'chan-dung-vo-chong',title:'Chân Dung Vợ Chồng',desc:'Vẽ chân dung người bạn đời tương lai từ cung Phu Thê của bạn. Bạn tò mò người ấy sẽ trông ra sao, tính khí thế nào. Dùng khi muốn một hình ảnh cụ thể, không chỉ vài dòng luận chữ.'};</script>
+window.SHELL_INTRO={key:'chan-dung-vo-chong'};</script>
 <script src="/laso-chart.js?v=3"></script>
 <script src="/tools-shared/vn-timezone.js?v=1"></script>
 <script src="/tuvi-form.js?v=2"></script>
-<script src="/tools-shared/cung-ngay-sinh.js?v=1"></script>
-<script src="/tuvi-paywall.js?v=22"></script>
-<script src="/tools-shared/hook-charts.js?v=1"></script>
+<script src="/tools-shared/cung-ngay-sinh.js?v=2"></script>
+<script src="/tuvi-paywall.js?v=25"></script>
+<script src="/tools-shared/hook-charts.js?v=2"></script>
 <script src="/tools-shared/hook-facts.js?v=1"></script>
-<script src="/tools-shared/hook-layer.js?v=1"></script>
+<script src="/tools-shared/hook-layer.js?v=2"></script>
 <script src="/auth.js?v=2"></script>
-  <script src="/nav.js?v=24" data-icons-only></script>
-<script src="/shell.js?v=85"></script>
-<script src="/tools-shared/ai-loading-steps.js?v=9"></script>
+  <script src="/nav.js?v=26" data-icons-only></script>
+<script src="/shell.js?v=87"></script>
+<script src="/tools-shared/ai-loading-steps.js?v=10"></script>
 <script src="/tools-shared/portrait-recover.js?v=2"></script>
 <script>
 var _currentSlug = '';
@@ -190,7 +219,7 @@ var CDVC_STEPS = [
   { label: 'Lập lá số & xác định cung Phu Thê', ms: 900 },
   { label: 'Luận giải cung Phu Thê', ms: 4500 },
   { label: 'Phác thảo mô tả & ước lượng tuổi bạn đời', ms: 3200 },
-  { label: 'AI đang vẽ chân dung (thường 45–60 giây)', ms: 0 },
+  { label: 'Đang vẽ chân dung (thường 45–60 giây)', ms: 0 },
 ];
 var _loadingCtl = null;
 var _imgRetryTimer = null;
@@ -297,6 +326,7 @@ async function _runAnonPreview() {
     document.getElementById('btnEdit').style.display = '';
     if (window.SHELL_INTRO) Shell.dismissIntro(window.SHELL_INTRO.key);
     _renderLockWall();
+    _showDummyPortrait(data.spouseGender);
     _mountCnsVoChong(_lastBirth);
   } catch (e) {
     _closePanel();
@@ -343,11 +373,32 @@ function _renderLockWall() {
   });
 }
 
+// Ảnh minh hoạ MỜ, đúng giới tính BẠN ĐỜI (2026-09-07, Henry chốt "dùng ảnh
+// dummy xong blur nó đi, chú ý nam/nữ") — `data.spouseGender` đã có SẴN, 0đ,
+// từ chính lượt xem trước deterministic (`computeSpouseMorphology`, không
+// qua LLM) nên không cần lượt gọi nào thêm để biết giới tính đúng. Ảnh thật
+// (gpt-image-2, ~1.161đ/lượt) chỉ sinh SAU khi trả tiền — khác bản chữ, ảnh
+// không rẻ để "cho xem thật trước", nên đây là ảnh TĨNH minh hoạ, không phải
+// suy đoán diện mạo bạn đời thật. Host RIÊNG (không tái dùng `portraitBlock`)
+// vì khối đó còn chứa mô tả/hoàn cảnh gặp gỡ (chữ AI, chưa nên lộ) — tách
+// host giữ ảnh dummy đơn giản hơn là khoá từng phần con bên trong.
+function _showDummyPortrait(gender) {
+  var host = document.getElementById('dummyPortraitHost');
+  if (!host) return;
+  host.style.display = 'block';
+  host.innerHTML =
+    TuviPaywall.lockBadge('Ảnh minh hoạ — chưa mở') +
+    '<img src="' + TuviPaywall.dummyPortraitUrl(gender) + '" class="tpw-real-lock" ' +
+    'alt="Ảnh minh hoạ (mờ) — mở khoá để xem chân dung thật" ' +
+    'style="display:block;margin-top:8px;max-width:260px;width:100%;border-radius:12px">';
+}
+
 function _openPanel() {
   document.getElementById('birthPanel').style.display = 'none';
   document.getElementById('resPanel').style.display = 'block';
   document.getElementById('loading').style.display = 'block';
   document.getElementById('cdvcLockHost').style.display = 'none';
+  document.getElementById('dummyPortraitHost').style.display = 'none';
   ['phuTheBlock', 'morphBlock', 'portraitBlock', 'luanGiaiBlock'].forEach(function (id) {
     document.getElementById(id).style.display = 'none';
   });
@@ -463,10 +514,27 @@ async function _doGenerate(freeRerun) {
 }
 
 // esc() dùng chung từ /laso-chart.js (đã load ở trên) — không khai lại.
+// Nhãn tính chất model tự gắn NGAY TRƯỚC câu hook mỗi đoạn (khối "NHÃN TÍNH
+// CHẤT MỖI CÂU HOOK" trong `arcDoc()`, lib/agent/prompts.ts) — tách thành thẻ
+// trích dẫn màu (.fb-card, xem shell.css), cùng cơ chế với app-luan-giai.html.
+var HOOK_TAG_CLASS = { 'TỐT': 'fb-tot', 'CẢNH BÁO': 'fb-canhbao', 'TRUNG TÍNH': 'fb-trungtinh' };
 function mdBoldParas(text) {
-  return String(text || '').split(/\n{2,}/).map(function (p) {
-    return '<p style="margin:0 0 12px">' + esc(p.trim()).replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>') + '</p>';
-  }).join('');
+  var out = '', pendingLead = '';
+  function flushPending() { if (pendingLead) { out += '<p style="margin:0 0 12px">' + pendingLead + '</p>'; pendingLead = ''; } }
+  String(text || '').split(/\n{2,}/).forEach(function (p) {
+    var m = /^\[(TỐT|CẢNH BÁO|TRUNG TÍNH)(?:\|[^\]]{0,40})?\]\s*\*\*(.+?)\*\*([\s\S]*)$/.exec(p.trim());
+    if (m) {
+      flushPending();
+      var cls = HOOK_TAG_CLASS[m[1]] || 'fb-trungtinh';
+      out += '<div class="fb-card ' + cls + '">“' + esc(m[2].trim()) + '”</div>';
+      pendingLead = esc(m[3].trim()).replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+      return;
+    }
+    out += '<p style="margin:0 0 12px">' + (pendingLead ? pendingLead + ' ' : '') + esc(p.trim()).replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>') + '</p>';
+    pendingLead = '';
+  });
+  flushPending();
+  return out;
 }
 
 // ── Tách render theo ĐƯỜNG TIỀN, không theo bố cục (W1b) ────────────────────

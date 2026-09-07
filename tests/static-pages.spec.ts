@@ -112,8 +112,9 @@ test.describe('Topup — nút mua', () => {
 
   test('giá tiền hiển thị đúng format', async ({ page }) => {
     const content = await page.content();
-    // Các mức giá VND
-    expect(content).toMatch(/99[.,]000|99000/);
+    // Các mức giá VND (tăng 2026-08-30 — Khởi Đầu 199k, Phổ Thông 399k, xem
+    // _patches/migration-credit-packages-reprice-2026-08.sql)
     expect(content).toMatch(/199[.,]000|199000/);
+    expect(content).toMatch(/399[.,]000|399000/);
   });
 });

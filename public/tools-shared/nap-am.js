@@ -101,6 +101,10 @@
       mauKy: MAU[khacMinh] + ' (' + khacMinh + ' khắc ' + hanh + ')',
       phuongVi: PHUONG[hanh],
       hanhHop: me + ' · ' + hanh,
+      // `hanhMe` là TRẦN (chỉ tên hành), khác `hanhHop` vốn là chuỗi để HIỆN.
+      // Thêm vì `so-dep.js` cần so sinh/khắc bằng mã: bóc `hanhHop.split(' · ')`
+      // là lấy chuỗi hiển thị làm API — đổi câu chữ một phát là hỏng im lặng.
+      hanhMe: me,
       hanhKy: khacMinh,
       hanhHao: con + ' (mình sinh nó — hao khí, không phải xấu)',
       hanhMinhKhac: minhKhac,

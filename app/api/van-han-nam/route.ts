@@ -22,6 +22,8 @@ import type { LunarMonthSpan } from '@/lib/engine/van-ngay';
 import { llmTextFull } from '@/lib/llm/complete';
 import { logLlmUsage } from '@/lib/agent/usage';
 import { withToolOutcome } from '@/lib/ops/tool-outcome';
+import { authUserFromRequest } from '@/lib/api/tool-helpers';
+import { hasAnySlugAccess, paywallDisabled } from '@/lib/billing/credits';
 import type { BirthParams } from '@/lib/contract/v1';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -102,7 +104,7 @@ PHẦN ${4 + stt} — NGUYỆT VẬN ${nhanThangALDay(span)} (140-180 từ)
 
 ⚠️ CĂN CỨ NỘI BỘ, BẮT BUỘC BÁM ĐÚNG (dùng để KHÔNG bịa, không phải để liệt kê hết cho người đọc):
 - Cung nguyệt hạn + sao tọa thủ/xung chiếu/tam hợp của ĐÚNG khối "${nhan}" ở trên. TRỌNG SỐ: tọa thủ nặng nhất → xung chiếu → tam hợp. Cung vô chính diệu thì MƯỢN chính tinh tam hợp/xung để luận.
-- Nếu khối trên có "TỔ HỢP SAO" thì ƯU TIÊN luận theo tổ hợp — ý nghĩa rõ hơn từng sao lẻ.
+- Nếu khối trên có "TỔ HỢP SAO" thì ƯU TIÊN luận theo tổ hợp — ý nghĩa rõ hơn từng sao lẻ. ĐẾM số dòng [tốt] và số dòng [xấu] trong khối đó: câu phán quyết mở đầu phải NGẢ THEO BÊN NHIỀU HƠN (nhiều [tốt] hơn ⇒ nhãn [TỐT], nhiều [xấu] hơn ⇒ [CẢNH BÁO], chênh nhau ≤1 ⇒ [TRUNG TÍNH]). Đây là bảng engine chấm cho ĐÚNG tháng này — nói ngược lại nó là bịa.
 - Tháng ÂM LỊCH này là MỘT khối liền: một cung nguyệt hạn, một nền tiểu hạn cho cả tháng. KHÔNG chẻ "nửa đầu tháng thế này, nửa sau thế kia" — không có căn cứ nào cho phép chẻ.
 - 🗓 MỐC THỜI GIAN NÓI VỚI NGƯỜI ĐỌC PHẢI LÀ NGÀY DƯƠNG: họ sống theo lịch dương. Mở đầu hoặc trong câu đầu phải nhắc quãng ${dmyTu} – ${dmyDen}; muốn nói "đầu tháng" / "giữa tháng" / "cuối tháng" thì kèm ngày dương cụ thể nằm TRONG quãng đó. CẤM nêu ngày dương ngoài quãng này, và CẤM gọi nó là "tháng ${span.tu.m} dương lịch" (tháng âm không trùng tháng dương).
 - CẤM bịa "điểm tháng X/10" — chỉ ĐẠI VẬN mới có điểm/10 thật. Điểm đại vận chỉ dùng để chỉnh BIÊN ĐỘ: đại vận cao thì cái tốt bung rực rỡ và cái xấu đỡ nặng; đại vận thấp thì ngược lại.
@@ -208,7 +210,7 @@ async function runPost(request: NextRequest) {
 
   // ── Khung 12 tháng — DETERMINISTIC, MIỄN PHÍ, không cần đăng nhập ──
   // Cùng lý do với tầng tra bảng của các tool khác: 0 lượt LLM, 0đ. Tường chỉ
-  // đứng trên phần CHỮ do AI viết.
+  // đứng trên phần CHỮ do hệ thống viết.
   if (action === 'khung') {
     return ok({
       khung: buildKhung12Thang(ls as AnyRec, tuNgay, tuThang, tuNam),
@@ -221,6 +223,29 @@ async function runPost(request: NextRequest) {
   const phan = Number(body.phan);
   if (!(phan >= 1 && phan <= TONG_PHAN)) return err('Phần không hợp lệ.', 400);
   const docs = body.docs ? String(body.docs) : undefined;
+
+  // 🔴 CHỐT CHẶN THANH TOÁN PHÍA SERVER (2026-09-07) — route này KHÔNG có gate
+  // nào từ lúc sinh ra, thanh toán chỉ tồn tại ở CLIENT (`requireCredits`/
+  // `ensureCredits` gọi TRƯỚC khi fetch). Curl thẳng endpoint (biết ngày sinh,
+  // KHÔNG cần đăng nhập) sinh TRỌN 16 phần AI, không giới hạn, 0đ — đúng lỗ đã
+  // vá ở app/api/lasotuvi/route.ts (Chốt chặn thanh toán PHÍA SERVER). 0 phần
+  // xem trước cho tool này — client bán TRỌN phần 1 trong bó ("không bán lẻ
+  // tổng quan, bấm là mở cả bó", xem app-van-han-nam.html `render`), khác
+  // Luận Giải nên KHÔNG copy `FREE_PHAN` sang đây.
+  //
+  // Dùng `hasAnySlugAccess` (khớp CHÍNH XÁC), KHÔNG `toolPaymentDenied` — lý do
+  // giống hệt chú thích ở lasotuvi/route.ts: tool CHIA PHẦN (bó 250 Lượng HOẶC
+  // lẻ 16 Lượng/phần) nên "vừa trả cho van-han-nam" (đường lùi theo tiền tố
+  // tool_id của `toolPaymentDenied`) không chứng minh được đã trả cho ĐÚNG lá
+  // số + đúng phần này.
+  const slug = body.slug ? String(body.slug) : '';
+  const bundleSlug = body.bundleSlug ? String(body.bundleSlug) : '';
+  if (!paywallDisabled()) {
+    const auth = await authUserFromRequest(request);
+    if ('error' in auth) return err(auth.error, auth.status);
+    const owns = await hasAnySlugAccess(auth.user.id, [slug, bundleSlug].filter(Boolean));
+    if (!owns) return err('Lượt dùng này chưa được thanh toán.', 402);
+  }
 
   // Phần 1-4 trùng Y HỆT 4 phần của Luận Giải/Chu Trình Cuộc Đời — thử đọc lại
   // trước khi gọi LLM. Phần 1 (tổng quan) tra slug 'laso'; phần 2-4 (đại vận +
@@ -276,11 +301,33 @@ async function runPost(request: NextRequest) {
     // Trần token mượn đúng mức của phần tương ứng bên Luận Giải; phần tháng
     // (140–180 từ) dùng chung mức của phần cung/đại vận.
     // Nâng 50% cùng đợt với lasotuvi/route.ts (Henry chốt 2026-08-20).
-    const maxTok = phan === 1 ? 3000 : phan === 2 ? 4500 : phan === 4 ? 2100 : 1800;
-    // provider:'anthropic' (chốt Henry 2026-08-24): Vận Hạn 12 Tháng Tới thuộc
-    // nhóm tool "luận giải" quan trọng → Opus 5 primary thay vì Gemini Flash
-    // mặc định toàn site (xem lib/llm/complete.ts CANONICAL_ORDER).
-    const rr = await llmTextFull({ system: systemForLLM, prompt, maxTokens: maxTok, cacheSystem, provider: 'anthropic' });
+    // THINK_BUDGET: cùng lý do và cùng số đo với lasotuvi/route.ts — Opus 5 tự
+    // bật thinking, token nghĩ ăn chung trần này (chú thích dài ở route kia).
+    const THINK_BUDGET = 900;
+    const maxTok = THINK_BUDGET + (phan === 1 ? 3000 : phan === 2 ? 4500 : phan === 4 ? 2100 : 1800);
+    // EFFORT: cùng lý do và cùng số đo với lasotuvi/route.ts (chú thích dài ở
+    // đó và ở `effort` trong lib/llm/complete.ts). Hai route dùng CHUNG cơ chế
+    // trần token nên phải đi cùng mức, lệch nhau là hai đường tiền khác giá.
+    const EFFORT = 'low' as const;
+    // 🔻 GỠ ép `provider:'anthropic'` (chốt Henry 2026-09-03) — Gemini 3.8
+    // Flash primary, Opus 5 lùi xuống lưới đỡ ngay sau. Số đo và lý do đầy đủ
+    // ở app/api/lasotuvi/route.ts (cùng lượt chốt). Lật ngược không cần deploy:
+    // `chat.standalone_provider` trong app_config.
+    let rr = await llmTextFull({ system: systemForLLM, prompt, maxTokens: maxTok, cacheSystem, effort: EFFORT });
+    // Cùng lớp lỗi với lasotuvi/route.ts (xem chú thích dài ở đó): output chạm
+    // trần `max_tokens` là bị API cắt GIỮA CÂU, mà trước 2026-09 không nhánh
+    // provider nào đọc `stop_reason` nên bản cụt đi thẳng tới khách đã trả tiền.
+    // Tool này dùng CHUNG cơ chế trần token đó nên dính y hệt — vá một route mà
+    // bỏ route kia là để nguyên lỗi ở nửa còn lại.
+    if (rr.truncated) {
+      console.error(`[van-han-nam] phần ${phan} bị cắt ở trần ${maxTok} — sinh lại với ${maxTok * 2}`);
+      try {
+        const retry = await llmTextFull({ system: systemForLLM, prompt, maxTokens: maxTok * 2, cacheSystem, effort: EFFORT });
+        if (!retry.truncated || retry.text.length > rr.text.length) rr = retry;
+      } catch (e) {
+        console.error(`[van-han-nam] sinh lại phần ${phan} hỏng, giữ bản đầu:`, (e as Error).message);
+      }
+    }
     // tool_id = ĐÚNG `tool_pricing.tool_id` để bucket chi phí ghép được với
     // bucket doanh thu (xem tool_canon() trong CLAUDE.md).
     void logLlmUsage(

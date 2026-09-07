@@ -134,8 +134,9 @@ const MONEY_GATES = ['que_images.gen', 'chan_dung_thu.gen'] as const;
 
 /**
  * Khoá đã GỠ CÓ CHỦ ĐÍCH. Sống lại nghĩa là có code đang đọc lại khoá chết rồi
- * im lặng rơi về mặc định SAI 20% (giá thật 829đ, mặc định cũ 1000đ) — loại lỗi
- * không ném exception, không ai thấy.
+ * im lặng rơi về mặc định SAI (giá thật đọc từ `credit_packages` — 665đ tại
+ * thời điểm viết dòng này, đổi theo mỗi lần sửa giá gói — mặc định cũ 1000đ)
+ * — loại lỗi không ném exception, không ai thấy.
  */
 const DEAD_CONFIG_KEYS = ['credits.vnd_per_credit'] as const;
 

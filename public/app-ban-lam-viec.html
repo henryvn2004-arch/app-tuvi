@@ -4,12 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Phong Thủy Bàn Làm Việc — Tử Vi Minh Bảo</title>
-<meta name="description" content="Chụp ảnh góc làm việc — AI phân tích phong thủy Bát Trạch, hướng ngồi, đề xuất bố trí hợp bản mệnh để tăng hiệu suất.">
+<meta name="description" content="Chụp ảnh góc làm việc — hệ thống phân tích phong thủy Bát Trạch, hướng ngồi, đề xuất bố trí hợp bản mệnh để tăng hiệu suất.">
 <link rel="icon" type="image/webp" href="/seal.webp">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"></noscript>
-<link rel="stylesheet" href="/shell.css?v=30">
+<link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/fonts/noto-serif.css?v=1">
+<link rel="stylesheet" href="/shell.css?v=34">
 <style>
 .pt-card{background:var(--white);border:1px solid var(--line);border-radius:14px;padding:20px 22px;box-shadow:var(--shadow);max-width:680px;margin-bottom:16px}
 .pt-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:4px;display:flex;align-items:center;gap:8px}
@@ -102,13 +102,27 @@
   <main class="ws" id="ws">
     <div class="ws-top">
       <button class="btn mobile-only" onclick="document.getElementById('shell-sidebar').classList.toggle('open');window.shellSyncBackdrop&&shellSyncBackdrop()" aria-label="Menu">☰</button>
-      <div class="ws-title"><b>Phong Thủy Bàn Làm Việc</b><span>Chụp ảnh góc làm việc — AI chấm điểm hướng ngồi theo Bát Trạch</span></div>
+      <div class="ws-title"><b>Phong Thủy Bàn Làm Việc</b><span>Chụp ảnh góc làm việc — hệ thống chấm điểm hướng ngồi theo Bát Trạch</span></div>
       <div class="ws-actions">
         <button class="btn mobile-only" onclick="Shell.openRail()">✦ Hỏi</button>
       </div>
     </div>
     <div class="ws-body">
-      <div id="introHost"></div>
+      <!-- Box giới thiệu dựng TĨNH: chèn bằng JS thì nó ra đời SAU lần vẽ đầu,
+           đẩy cả `.ws-body` xuống VÀ tự làm phần tử LCP (đo trên prod: CLS 0,198,
+           Render Delay 5,3s). `Shell.introOnce` thấy `.intro-card` đã có thì chỉ
+           điền `#introSrc`. Vì thế `SHELL_INTRO` bên dưới CHỈ khai `key` — chữ nằm
+           đúng ở đây, một bản duy nhất, không có bản chép để trôi. -->
+      <div id="introHost"><div class="intro-card">
+        <div class="intro-body">
+          <img class="intro-avatar" src="/tool-avatars/ban-lam-viec.webp" alt="" onerror="this.remove()">
+          <div class="intro-text">
+            <div class="intro-t">Phong Thủy Bàn Làm Việc</div>
+            <div class="intro-d">Phong Thủy Bàn Làm Việc đọc phong thủy chỗ ngồi làm việc từ ảnh bạn chụp. Ngồi làm cả ngày mà lương không tăng, sự nghiệp ì ạch — có khi nào do chính hướng bàn làm việc? Chụp ảnh góc làm việc, nhận phân tích chỗ nào đang cản, nên đổi thế nào.</div>
+            <div id="introSrc" style="min-height:55.2px;margin-top:9px"></div>
+          </div>
+        </div>
+      </div></div>
       <div id="shellRecent"></div>
 
       <div class="pt-card">
@@ -156,7 +170,7 @@
 
       <div class="pt-card">
         <h2><span class="pt-num">2</span> Chụp / Tải Ảnh</h2>
-        <p class="sub">Chụp ảnh bàn làm việc, xem cách kê có đang cản đường thăng tiến. Bạn ngồi mãi một chỗ mà công việc cứ ì ạch không lên. Dùng khi muốn sắp lại bàn làm việc cho thuận hơn.</p>
+        <p class="sub">Cho biết năm sinh, giới tính, mục đích sử dụng, hướng cửa sổ và chụp ảnh góc làm việc. Hệ thống phân tích ảnh theo phong thủy bản mệnh của bạn. Nhận về điểm phong thủy trước – sau, hướng ngồi và đề xuất điều chỉnh.</p>
         <p class="price-note" data-tvp-price-label="ban-lam-viec">…</p>
         <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click()" ondragover="onDrag(event,1)" ondragleave="onDrag(event,0)" ondrop="onDrop(event)">
           <input type="file" id="fileInput" accept="image/*" onchange="onFile(event)">
@@ -225,10 +239,10 @@
         </div>
 
         <div class="pt-card" id="renderCard" style="display:none">
-          <h2><span class="ic" data-icon="monitor"></span> Render Không Gian Làm Việc Bằng AI
+          <h2><span class="ic" data-icon="monitor"></span> Render Không Gian Làm Việc
             <span style="font-size:10px;background:var(--gold-lt);color:var(--tx-blue);padding:2px 8px;border-radius:10px;font-weight:600"><span data-tvp-price="phong-thuy-render">…</span> Lượng</span>
           </h2>
-          <p class="sub">AI render lại góc làm việc theo màu ngũ hành bản mệnh và bố trí tối ưu.</p>
+          <p class="sub">Hệ thống render lại góc làm việc theo màu ngũ hành bản mệnh và bố trí tối ưu.</p>
 
           <div id="renderIdle">
             <button class="render-btn" id="btnRender" onclick="doRoomRender()"><span class="ic" data-icon="sparkles"></span> Render Không Gian Theo Phong Thủy</button>
@@ -241,7 +255,7 @@
           <div id="renderResult" style="display:none">
             <div class="render-ba">
               <div class="render-ba-col"><div class="render-ba-label">Ảnh gốc</div><img id="renderBefore" class="render-ba-img" src="" alt="Trước"></div>
-              <div class="render-ba-col"><div class="render-ba-label">Sau phong thủy AI</div><img id="renderAfter" class="render-ba-img" src="" alt="Sau"></div>
+              <div class="render-ba-col"><div class="render-ba-label">Sau phong thủy</div><img id="renderAfter" class="render-ba-img" src="" alt="Sau"></div>
             </div>
             <div style="display:flex;gap:8px">
               <button onclick="downloadRender()" style="flex:1;padding:10px;background:var(--green);color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit"><span class="ic" data-icon="chevron-down"></span> Tải Ảnh</button>
@@ -263,12 +277,11 @@
 </div>
 
 <script>window.SHELL_ACTIVE='ban-lam-viec';window.SHELL_HISTORY=true;
-window.SHELL_INTRO={key:'ban-lam-viec',title:'Phong Thủy Bàn Làm Việc',desc:'Chụp ảnh bàn làm việc, xem cách kê có đang cản đường thăng tiến. Bạn ngồi mãi một chỗ mà công việc cứ ì ạch không lên. Dùng khi muốn sắp lại bàn làm việc cho thuận hơn.'};</script>
+window.SHELL_INTRO={key:'ban-lam-viec'};</script>
 <script src="/auth.js?v=2"></script>
-<script src="/tuvi-paywall.js?v=22"></script>
-  <script src="/nav.js?v=24" data-icons-only></script>
-<script src="/shell.js?v=85"></script>
-<script src="/tools-shared/ai-loading-steps.js?v=9"></script>
+<script src="/tuvi-paywall.js?v=25"></script>
+  <script src="/nav.js?v=26" data-icons-only></script><script src="/shell.js?v=87"></script>
+<script src="/tools-shared/ai-loading-steps.js?v=10"></script>
 <script src="/tools-shared/bat-trach.js?v=2"></script>
 <script>
 function initBanLamViec(){
@@ -296,12 +309,12 @@ function calcGua(y,g){return BatTrachTool.getCungMenh(y,g==='male'?'nam':'nu');}
 
 let _gua=null,_img64=null,_imgType='image/jpeg';
 const ANALYSIS_STEPS=[
-  {label:'AI nhận diện đồ vật trong ảnh',ms:6000},
-  {label:'AI phân tích Bát Trạch & đưa đề xuất',ms:0},
+  {label:'Nhận diện đồ vật trong ảnh',ms:6000},
+  {label:'Phân tích Bát Trạch & đưa đề xuất',ms:0},
 ];
 const RENDER_STEPS=[
   {label:'Chuẩn bị prompt render theo ngũ hành',ms:1200},
-  {label:'AI đang render không gian mới',ms:0},
+  {label:'Đang render không gian mới',ms:0},
 ];
 let _analysisLoadingCtl=null;
 let _renderLoadingCtl=null;
@@ -477,7 +490,7 @@ async function _doRenderCall(){
     document.getElementById('renderResult').style.display='block';
     document.getElementById('renderIdle').style.display='block';
     Shell.setShareable({
-      kind:'image', toolId:'ban-lam-viec', title:'Bàn làm việc của tôi sau khi Phong Thủy hóa bằng AI',
+      kind:'image', toolId:'ban-lam-viec', title:'Bàn làm việc của tôi sau khi Phong Thủy hóa',
       imageUrl:data.imageUrl,
       text:(_ptBefore!=null?'Điểm phong thủy hiện tại: '+_ptBefore+'/100'+(_ptAfter>_ptBefore?' — sau điều chỉnh có thể lên '+_ptAfter+'/100':''):'')+(_ptAdvice?'\n\n'+_ptAdvice:'')
     });

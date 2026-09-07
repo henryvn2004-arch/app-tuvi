@@ -23,6 +23,8 @@ import { llmTextFull, callLLMTools } from '@/lib/llm/complete';
 import { logLlmUsage } from '@/lib/agent/usage';
 import { withToolOutcome } from '@/lib/ops/tool-outcome';
 import { authUserFromRequest } from '@/lib/api/tool-helpers';
+import { previewGate, previewIpHash } from '@/lib/billing/anon-preview';
+import { previewKey, previewCacheGet, previewCachePut } from '@/lib/llm/preview-cache';
 import { hasAnySlugAccess, paywallDisabled } from '@/lib/billing/credits';
 
 // ─── LLM client (Gemini-primary + Anthropic-backup) ────────────
@@ -246,9 +248,9 @@ async function runPost(request: NextRequest) {
 
   if (action === 'chat') return body.stream ? handleChatStream(body) : handleChat(body);
 
-  const { laSoText, phan, docs, hoTen, gioiTinh, slug, bundleSlug } = body as {
+  const { laSoText, phan, docs, hoTen, gioiTinh, slug, bundleSlug, namXem, anonId } = body as {
     laSoText?: string; phan?: number; docs?: string; hoTen?: string; gioiTinh?: string;
-    slug?: string; bundleSlug?: string;
+    slug?: string; bundleSlug?: string; namXem?: number; anonId?: string;
   };
   if (!laSoText || !phan) return err('Thiếu dữ liệu', 400);
   const phanNum = Number(phan);
@@ -276,11 +278,66 @@ async function runPost(request: NextRequest) {
   // lá số/phần này" — bật đường lùi đó là cho qua mọi phần khác của MỌI lá số
   // khác trong 20 phút sau một lượt mua bất kỳ, vì slug PHẦN giờ bắt đầu bằng
   // "laso-" nên đường lùi kia SẼ khớp được nếu lỡ đi qua `toolPaymentDenied`.
-  if (phanNum !== 1 && !paywallDisabled()) {
+  //
+  // 🔴 HARD PAYWALL (2026-09-06) — LẰN RANH FREE DỜI TỪ 1 PHẦN SANG 2.
+  // `FREE_PHAN` là bản xem trước: model chạy THẬT trên lá số của chính khách
+  // TRƯỚC khi họ trả đồng nào, vì đó mới là thứ tạo được cái móc "đúng vl" mà
+  // bảng điểm deterministic không bao giờ tạo được. Phần 3+ vẫn khoá cứng.
+  //
+  // 🔴 (2026-09-07, nới 2026-09-07) Chu Trình Cuộc Đời (phần 14-24, dùng CHUNG
+  // route này) nay có HAI phần xem trước: ENGINE PHẦN 14 ("Tổng quan đại vận",
+  // phần cục bộ 1) + PHẦN 15 ("Đại Vận 1", phần cục bộ 2) — cùng lằn ranh
+  // 1→2 phần mà Henry đã chốt cho tool "laso" (xem `FREE_PHAN` ngay trên).
+  // 9 phần còn lại (16-24) vẫn khoá cứng như trước — khối locked của client
+  // (app-chu-trinh-cuoc-doi.html) nay gộp CHUNG một tường blur, KHÔNG còn nút
+  // mở riêng từng phần, nên KHÔNG generalize xa hơn 15. `preview.free_runs`/
+  // `ip_daily_cap`/`global_daily_cap` (_patches/migration-anon-preview.sql) là
+  // NGÂN SÁCH DÙNG CHUNG cho mọi tool_id xem trước (laso/chu-trinh-cuoc-doi/
+  // day-con/...) — một người đã hết suất ĐỜI ở tool này thì cũng hết ở tool
+  // kia, đây là THIẾT KẾ (một ngân sách "làm quen sản phẩm" cho cả trang),
+  // không phải bug cần tách theo tool_id.
+  const FREE_PHAN = 2;
+  const FREE_PHAN_CTCD_MIN = 14;
+  const FREE_PHAN_CTCD_MAX = 15;
+  const isCtcdPreview = phanNum >= FREE_PHAN_CTCD_MIN && phanNum <= FREE_PHAN_CTCD_MAX;
+  const isPreview = phanNum <= FREE_PHAN || isCtcdPreview;
+  const previewToolId = isCtcdPreview ? 'chu-trinh-cuoc-doi' : 'laso';
+
+  if (!isPreview && !paywallDisabled()) {
     const auth = await authUserFromRequest(request);
     if ('error' in auth) return err(auth.error, auth.status);
     const owns = await hasAnySlugAccess(auth.user.id, [slug, bundleSlug].filter((s): s is string => !!s));
     if (!owns) return err('Lượt dùng này chưa được thanh toán.', 402);
+  }
+
+  // ── Đường XEM TRƯỚC: cache trước, cầu dao sau ────────────────────────────
+  // Thứ tự này BẮT BUỘC (xem lib/llm/preview-cache.ts): trúng cache là 0đ model
+  // nên không được tiêu một suất quota — người tải lại trang ba lần mà hết sạch
+  // `preview.free_runs` thì với họ tool đang hỏng, không phải đang tiết kiệm.
+  //
+  // `pKey` = danh tính đã XÁC THỰC nếu có, ngược lại `anonId` client tự khai.
+  // ⚠️ `anonId` KHÔNG phải danh tính (xoá localStorage là có cái mới) — nó chỉ
+  // là lớp trần thứ nhất; hai lớp IP/ngày và toàn-hệ-thống/ngày trong RPC mới
+  // là thứ chặn người cố tình. Xem _patches/migration-anon-preview.sql.
+  let previewCacheKey = '';
+  if (isPreview && !paywallDisabled()) {
+    previewCacheKey = previewKey({ laSoText, phan: phanNum, namXem, hoTen, gioiTinh });
+    const hit = await previewCacheGet(previewCacheKey);
+    if (hit) return ok({ luanGiai: hit, phan, cached: true });
+
+    const auth = await authUserFromRequest(request);
+    const pKey = 'error' in auth ? (anonId || '') : auth.user.id;
+    const gate = await previewGate(pKey, previewIpHash(request), previewToolId);
+    if (!gate.allowed) {
+      // 402 chứ không 429: với client đây KHÔNG phải "thử lại sau" mà là "hết
+      // phần miễn phí, tới lúc trả tiền" — và trang phải dựng đúng tấm tường đó
+      // thay vì hiện một lỗi kỹ thuật. `reason` để phân biệt khi đọc log:
+      // 'key_cap' là người này hết suất (bình thường, đúng thiết kế), còn
+      // 'global_cap'/'error' là cầu dao ngân sách hoặc DB hỏng — hai thứ cần
+      // biết ngay chứ không được lẫn vào nhau.
+      console.error(`[lasotuvi] xem trước bị chặn (${gate.reason}) phần ${phanNum}`);
+      return err('Đã hết lượt xem trước miễn phí.', 402);
+    }
   }
 
   let systemForLLM: string;
@@ -298,8 +355,37 @@ async function runPost(request: NextRequest) {
     // Henry chốt 2026-08-20: nâng ĐỀU 50% mọi trần token trong repo — retest
     // sau khi bật Kimi K3 primary bắt được bản luận giải bị CẮT NGANG giữa
     // câu (model sinh vượt trần rồi API cắt sạch, không phải lỗi mạng).
-    const maxTok = phan === 1 ? 3000 : phan === 14 ? 4500 : phan === 24 ? 2100
-      : (phan >= 2 && phan <= 13) ? 1650 : (phan >= 15 && phan <= 23) ? 1650 : 1500;
+    //
+    // 2026-09-02 — mấy con số dưới đây KHÔNG phải trần cho phần CHỮ. Đo bằng
+    // prompt thật + lá số thật trên API Anthropic (xem docs/nhat-ky/2026-09.md
+    // "Token NGHĨ ăn chung trần"): `buildAnthropicBody` KHÔNG truyền `thinking`,
+    // mà Opus 5 mặc định TỰ BẬT nó — mọi lượt trả về đều có block
+    // [thinking, text], và token nghĩ ăn chung `max_tokens` với token chữ.
+    //   phần 4, trần 1650: bật thinking 1160 token cho 920 chữ
+    //                      tắt thinking  570 token cho 993 chữ  ← nhiều chữ hơn, nửa token
+    //   phần 1  1713 vs  777 · phần 2 1431 vs 831 · phần 14 1703 vs 1219
+    // Tức phần nghĩ ăn ~500–900 token, trần hiệu dụng cho văn chỉ còn ~40–55%
+    // con số ghi ở đây. Đó là cơ chế sinh ra 7,9% phần cụt giữa câu trên hàng
+    // đã bán. CỘNG THÊM đúng phần đã đo thay vì đoán một con số tròn — và cộng
+    // TƯỜNG MINH để lượt sau đọc là biết ngay nó dùng vào việc gì.
+    const THINK_BUDGET = 900;
+    // phan 2-13 nới 1650→2400 (2026-09-03, Henry): 11 phần cung (3-13) nới từ
+    // 120-160→350-400 từ (thêm bộ câu hỏi trọng tâm mỗi cung + mỗi đoạn tự có
+    // câu hook riêng — CUNG_DESC/PARAGRAPH_HOOK_RULE, lib/agent/luan-giai-doc.ts).
+    // 1650 chỉ vừa đủ cho ~300 từ đo được trước đó (phần 2 mẫu thật 291 từ,
+    // KHÔNG cụt) — 400 từ mà model hay overshoot thêm 10-30% thì sát trần cũ,
+    // rủi ro cụt giữa câu (đúng bệnh đã đo 7,9%, xem chú thích trên). Phần 2
+    // (Mệnh) vẫn giữ nguyên 220-280 từ, dư chỗ trong cùng ngân sách — không hại.
+    const maxTok = THINK_BUDGET + (phan === 1 ? 3000 : phan === 14 ? 4500 : phan === 24 ? 2100
+      : (phan >= 2 && phan <= 13) ? 2400 : (phan >= 15 && phan <= 23) ? 1650 : 1500);
+    // 2026-09-02 — hạ độ nghĩ cho ĐÚNG nhóm route văn dài này. A/B mù 48 bản
+    // (2 lá số × 8 phần × 3 nhánh, prompt thật): effort 'low' rẻ hơn 39%
+    // output token mà chữ ra còn nhiều hơn, 16 cặp chấm mù không phân biệt
+    // được chất lượng (8–6–2). Lý do chọn 'low' thay vì tắt hẳn thinking —
+    // và vì sao THINK_BUDGET vẫn phải giữ (7/16 lượt model vẫn nghĩ) — ghi ở
+    // `effort` trong lib/llm/complete.ts. Đừng hạ tiếp xuống mức thấp hơn mà
+    // chưa đo: dưới 'low' không còn nấc nào, muốn rẻ nữa là phải đổi model.
+    const EFFORT = 'low' as const;
 
     // Prompt caching (Code #1, xem CLAUDE.md track tối ưu chi phí Opus):
     // `systemForLLM` = SYSTEM_PROMPT + TOÀN VĂN lá số (buildPromptCached),
@@ -316,14 +402,48 @@ async function runPost(request: NextRequest) {
     // route này KHÔNG ghi một dòng `llm_usage` nào, nên Luận Giải — tool bán
     // chạy nhất (1.500 Lượng / 3 người) — hoàn toàn vô hình trong panel Biên
     // Lợi Nhuận, và cũng không có số nào để đặt ETA cho 24 phần.
-    // `provider:'anthropic'` (chốt Henry 2026-08-24): Luận Giải Lá Số + Chu
-    // Trình Cuộc Đời (phan>13, cùng route) nằm trong nhóm tool "luận giải"
-    // quan trọng → Opus 5 primary thay vì Gemini Flash mặc định toàn site (xem
-    // lib/llm/complete.ts). Ép ở ĐÚNG lệnh gọi này, KHÔNG đụng
-    // `chat.standalone_provider` — khoá đó vẫn quyết định primary cho mọi
-    // route standalone khác. Cũng giữ nguyên hiệu quả `cacheSystem` (breakpoint
-    // Anthropic) vì nhánh Anthropic giờ LUÔN được gọi ở lượt đầu.
-    const r = await llmTextFull({ system: systemForLLM, prompt, maxTokens: maxTok, cacheSystem: true, provider: 'anthropic' });
+    // 🔻 GỠ ép `provider:'anthropic'` (chốt Henry 2026-09-03, thay chốt
+    // 2026-08-24). Primary nay là Gemini 3.8 Flash, Opus 5 lùi xuống lưới đỡ
+    // NGAY SAU (CANONICAL_ORDER, xem lib/llm/complete.ts). Căn cứ — 104 lượt
+    // gọi THẬT, 4 lá số × 2 model × 13 phần, cùng input/prompt/ngân sách token,
+    // cùng hình chạy prod (phần 1 riêng → bể 3 song song):
+    //   chi phí/lá số  Opus 11.215đ  vs  Gemini 2.669đ   (rẻ 4,2×)
+    //   khách chờ      Opus    102s  vs  Gemini    16s   (nhanh 6,2×)
+    //   0 lỗi · 0 phần cụt · 0 bịa điểm/10 · 0 nhắc sao không có trong lá số
+    //   — ở CẢ HAI. Chấm mù 52 cặp không tách được chất văn.
+    // ⚠️ `effort` và THINK_BUDGET trong `maxTok` GIỮ NGUYÊN dù Gemini bỏ qua
+    // chúng: đó là ngân sách của nhánh Opus khi Gemini chết. Dọn đi là lượt
+    // fallback bị cắt giữa câu.
+    // Lật ngược KHÔNG cần deploy: đổi `chat.standalone_provider` trong
+    // app_config sang 'anthropic'. Chi tiết: nhat-ky/2026-09.md.
+    let r = await llmTextFull({ system: systemForLLM, prompt, maxTokens: maxTok, cacheSystem: true, effort: EFFORT });
+
+    // ── Bị CẮT giữa câu → sinh lại MỘT lần với trần gấp đôi ────────────────
+    // Đo 2026-09 trên 46 bản luận ĐÃ BÁN: 77/974 phần (7,9%) kết thúc giữa câu,
+    // 33/46 bản (72%) dính ít nhất một phần — nặng nhất đúng mấy phần văn dài
+    // (phần 1: 33,3%, phần 14: 17,8%). Suốt thời gian đó KHÔNG nhánh provider
+    // nào đọc `stop_reason`, nên bản cụt đi thẳng tới khách mà không có gì báo.
+    //
+    // VÌ SAO SINH LẠI CHỨ KHÔNG NÂNG ĐỀU TRẦN: nâng đều chạm vào chi phí của
+    // CẢ 92% lượt đang bình thường, mà trần đúng cho từng phần thì chưa ai đo.
+    // Sinh lại chỉ nổ đúng ~8% lượt thật sự hỏng, tự nhắm mục tiêu, và chặn ở
+    // MỘT lần — cắt tiếp lần hai thì giao bản dài nhất lấy được còn hơn quay
+    // vòng đốt tiền. Trần đúng để chốt sau, khi log `[llm] … CẮT GIỮA CHỪNG`
+    // đủ số liệu cho từng phần.
+    if (r.truncated) {
+      console.error(`[lasotuvi] phần ${phan} bị cắt ở trần ${maxTok} — sinh lại với ${maxTok * 2}`);
+      try {
+        const retry = await llmTextFull({ system: systemForLLM, prompt, maxTokens: maxTok * 2, cacheSystem: true, effort: EFFORT });
+        // Chỉ nhận bản mới khi nó THẬT SỰ khá hơn: hết cụt, hoặc chí ít dài hơn.
+        // Lượt hai vẫn có thể cụt (văn dài hơn trần mới) — lúc đó bản dài hơn
+        // vẫn là bản ít thiệt cho người đọc hơn.
+        if (!retry.truncated || retry.text.length > r.text.length) r = retry;
+      } catch (e) {
+        // Sinh lại hỏng thì GIỮ bản đầu — khách đã trả tiền, có chữ cụt vẫn hơn
+        // không có gì. Nhưng phải kêu, đừng nuốt (luật `catch {}` rỗng trong CLAUDE.md).
+        console.error(`[lasotuvi] sinh lại phần ${phan} hỏng, giữ bản đầu:`, (e as Error).message);
+      }
+    }
     const text = r.text;
     // tool_id ĐÚNG `tool_pricing.tool_id` để bucket chi phí ghép được với bucket
     // doanh thu (xem tool_canon() trong CLAUDE.md). Phần 1-13 (tổng quan + 12
@@ -344,6 +464,12 @@ async function runPost(request: NextRequest) {
     );
 
     const luanGiai = text.replace(/```chartdata[\s\S]*?```/, '').trim();
+    // Cất bản xem trước để lượt sau CÙNG lá số + CÙNG tên không đốt lại tiền
+    // model lẫn một suất quota. Chỉ đường xem trước ghi — phần trả phí đã có
+    // `laso_public` (qua /api/save-laso) làm kho của nó.
+    if (previewCacheKey) {
+      previewCachePut({ key: previewCacheKey, toolId: previewToolId, phan: phanNum, text: luanGiai });
+    }
     return ok({ luanGiai, phan });
   } catch (e: unknown) {
     return err((e as Error).message);

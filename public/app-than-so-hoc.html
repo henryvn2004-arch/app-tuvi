@@ -4,12 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Thần số học — Tử Vi Minh Bảo</title>
-<meta name="description" content="Tính 11 chỉ số Thần Số Học: Đường Đời, Định Mệnh, Linh Hồn, Sứ Mệnh, Ngày Sinh, Thái Độ, Trưởng Thành, biểu đồ ngày sinh, nợ nghiệp quật, năm cá nhân, đỉnh cao & thử thách. Hỏi trợ lý AI luận sâu.">
+<meta name="description" content="Tính 11 chỉ số Thần Số Học: Đường Đời, Định Mệnh, Linh Hồn, Sứ Mệnh, Ngày Sinh, Thái Độ, Trưởng Thành, biểu đồ ngày sinh, nợ nghiệp quật, năm cá nhân, đỉnh cao & thử thách. Hỏi trợ lý Luận Đường luận sâu.">
 <link rel="icon" type="image/webp" href="/seal.webp">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"></noscript>
-<link rel="stylesheet" href="/shell.css?v=30">
+<link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/fonts/noto-serif.css?v=1">
+<link rel="stylesheet" href="/shell.css?v=34">
 <style>
 .form-card{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);max-width:600px}
 .form-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:3px}
@@ -53,11 +53,25 @@
       </div>
     </div>
     <div class="ws-body">
-      <div id="introHost"></div>
+      <!-- Box giới thiệu dựng TĨNH: chèn bằng JS thì nó ra đời SAU lần vẽ đầu,
+           đẩy cả `.ws-body` xuống VÀ tự làm phần tử LCP (đo trên prod: CLS 0,198,
+           Render Delay 5,3s). `Shell.introOnce` thấy `.intro-card` đã có thì chỉ
+           điền `#introSrc`. Vì thế `SHELL_INTRO` bên dưới CHỈ khai `key` — chữ nằm
+           đúng ở đây, một bản duy nhất, không có bản chép để trôi. -->
+      <div id="introHost"><div class="intro-card">
+        <div class="intro-body">
+          <img class="intro-avatar" src="/tool-avatars/than-so-hoc.webp" alt="" onerror="this.remove()">
+          <div class="intro-text">
+            <div class="intro-t">Thần số học</div>
+            <div class="intro-d">Thần số học đọc 11 con số từ ngày sinh: đường đời, đỉnh cao, năm cá nhân. Yêu sai người, tiêu tiền sai chỗ, chọn việc sai hướng — toàn những quyết định bạn cứ lặp lại dù biết là sai? Nhập ngày sinh, nhận các con số chủ đạo để hiểu cách mình đang nghĩ, đang chọn.</div>
+            <div id="introSrc" style="min-height:36.8px;margin-top:9px"></div>
+          </div>
+        </div>
+      </div></div>
       <div id="shellRecent"></div>
       <div class="form-card" id="birthPanel">
         <h2>Ngày sinh & tên đầy đủ</h2>
-        <p class="sub">Đọc 11 con số từ ngày sinh: đường đời, đỉnh cao, năm cá nhân. Bạn hay lặp lại cùng một kiểu quyết định sai mà không để ý. Dùng khi muốn hiểu cách mình nghĩ trước khi chọn lại lần nữa.</p>
+        <p class="sub">Nhập ngày sinh và họ tên đầy đủ của bạn. Hệ thống tính các chỉ số theo hệ Pythagoras. Nhận về Đường Đời, Định Mệnh, Linh Hồn, Sứ Mệnh và năm cá nhân hiện tại.</p>
         <p class="price-note" data-tvp-price-label="than-so-hoc">…</p>
         <div class="frow">
           <div class="fg" style="width:74px"><label>Ngày</label><input type="number" id="ngay" placeholder="15" min="1" max="31"></div>
@@ -81,11 +95,11 @@
 </div>
 
 <script>window.SHELL_ACTIVE='than-so-hoc';window.SHELL_HISTORY=true;
-window.SHELL_INTRO={key:'than-so-hoc',title:'Thần số học',desc:'Đọc 11 con số từ ngày sinh: đường đời, đỉnh cao, năm cá nhân. Bạn hay lặp lại cùng một kiểu quyết định sai mà không để ý. Dùng khi muốn hiểu cách mình nghĩ trước khi chọn lại lần nữa.'};</script>
+window.SHELL_INTRO={key:'than-so-hoc'};</script>
 <script src="/tools-shared/than-so-hoc.js?v=2"></script>
 <script src="/auth.js?v=2"></script>
-  <script src="/nav.js?v=24" data-icons-only></script>
-<script src="/shell.js?v=85"></script>
+  <script src="/nav.js?v=26" data-icons-only></script>
+<script src="/shell.js?v=87"></script>
 <script>
 // Ô giữa dùng CHUNG module /tools-shared/than-so-hoc.js với trang standalone.
 function calculate(){

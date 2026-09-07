@@ -1,0 +1,61 @@
+{
+  "//": [
+    "Lighthouse MOBILE — cho ĐÚNG trang đang ăn tiền quảng cáo.",
+    "",
+    "VÌ SAO TÁCH KHỎI lighthouserc.json: file kia đặt preset 'desktop' cho TOÀN BỘ",
+    "url, và 4 url của nó không có /app/luan-giai. Tức là tới 2026-09-01, trang",
+    "nhận 100% click Google Ads chưa từng được đo tốc độ lần nào, lại càng không",
+    "đo trên mobile — trong khi đo được 318 KB (đã nén) JS chặn render qua 18 thẻ",
+    "<script> đồng bộ, và các ô nhập của form chỉ tồn tại SAU khi chỗ đó chạy xong",
+    "(TuviForm.render). Xem docs/nhat-ky/2026-09.md.",
+    "",
+    "🔴 NGƯỠNG ĐANG Ở MỨC 'warn' CÓ CHỦ ĐÍCH: chưa có một phép đo mobile nào cho",
+    "trang này nên chưa biết baseline. Đặt 'error' lúc này là dựng một bộ dò kêu",
+    "oan ngay ngày đầu rồi bị tắt đi — đúng thứ CLAUDE.md cấm. Chạy vài lượt lấy",
+    "số thật TRƯỚC, rồi mới siết lên 'error' quanh mức đo được.",
+    "",
+    "Chỉ nhắm URL prod: workflow gọi config này ở nhánh deployment production.",
+    "Bản preview vẫn dùng lighthouserc.json qua scripts/lhci-preview-urls.mjs —",
+    "cố ý không đụng script đó để khỏi phải giữ hai nguồn đường dẫn."
+  ],
+  "ci": {
+    "collect": {
+      "url": ["https://www.tuviminhbao.com/app/luan-giai", "https://www.tuviminhbao.com/"],
+      "numberOfRuns": 2,
+      "settings": {
+        "preset": "perf",
+        "formFactor": "mobile",
+        "throttlingMethod": "simulate",
+        "screenEmulation": {
+          "mobile": true,
+          "width": 390,
+          "height": 844,
+          "deviceScaleFactor": 3,
+          "disabled": false
+        },
+        "onlyCategories": ["performance"]
+      }
+    },
+    "assert": {
+      "assertions": {
+        "categories:performance": ["warn", { "minScore": 0.5, "aggregationMethod": "median" }],
+        "first-contentful-paint": [
+          "warn",
+          { "maxNumericValue": 3000, "aggregationMethod": "median" }
+        ],
+        "largest-contentful-paint": [
+          "warn",
+          { "maxNumericValue": 4000, "aggregationMethod": "median" }
+        ],
+        "total-blocking-time": ["warn", { "maxNumericValue": 600, "aggregationMethod": "median" }],
+        "cumulative-layout-shift": [
+          "warn",
+          { "maxNumericValue": 0.1, "aggregationMethod": "median" }
+        ]
+      }
+    },
+    "upload": {
+      "target": "temporary-public-storage"
+    }
+  }
+}

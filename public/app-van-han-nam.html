@@ -6,10 +6,10 @@
 <title>Vận Hạn 12 Tháng Tới — Tử Vi Minh Bảo</title>
 <meta name="description" content="Xem vận hạn 12 tháng tới tính từ hôm nay: tiểu vận năm và nguyệt vận từng tháng theo cung hạn, sao và cách cục vận — luận riêng từng tháng theo cổ pháp.">
 <link rel="icon" type="image/webp" href="/seal.webp">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"></noscript>
-<link rel="stylesheet" href="/shell.css?v=30">
+<link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/fonts/noto-serif.css?v=1">
+<link rel="stylesheet" href="/shell.css?v=34">
 <link rel="stylesheet" href="/laso-chart.css?v=3">
 <style>
 /* Center riêng của trang Vận Hạn 12 Tháng — mượn khuôn app-luan-giai.html */
@@ -17,6 +17,17 @@
 .form-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:3px}
 .form-card p.sub{font-size:12.5px;color:var(--text-lt);margin-bottom:14px}
 .frow{display:flex;gap:11px;flex-wrap:wrap;align-items:flex-end;margin-bottom:12px}
+/* Giữ chỗ cho form khai sinh. `TuviForm.render` chạy ngay trong lúc phân tích
+   HTML, nhưng chỉ SAU khi `tuvi-form.js` nạp xong — mà đứng trước nó là cả một dãy
+   script CÙNG ORIGIN cũng chặn parse (17KB–524KB tuỳ trang), nên trên mạng chậm lần
+   vẽ đầu #tuviFormHost còn RỖNG tới ~3,5–6,5s. `:empty` để chỗ giữ TỰ NHẢ ngay khi
+   form vào ⇒ không bao giờ thừa khoảng trắng.
+   🪤 Số này là KHOẢNG CÁCH tới khối kế tiếp, KHÔNG phải chiều cao của host:
+   `margin-bottom` của `.frow` cuối bên trong host THOÁT RA NGOÀI (margin collapse)
+   nên nó đẩy `.frow` phía dưới thêm 12–13px mà `getBoundingClientRect().height`
+   không hề thấy. Đo bằng chiều cao là hụt đúng chỗ đó. Số 249px/480px là ĐO,
+   xem docs/nhat-ky/2026-09.md vòng 9. */
+@media (max-width:480px){#tuviFormHost:empty{min-height:249px}}
 .fg{display:flex;flex-direction:column;gap:5px}
 .fg label{font-size:10.5px;font-weight:600;color:var(--text-lt);letter-spacing:.04em;text-transform:uppercase}
 .fg input,.fg select{border:1px solid var(--line-2);border-radius:7px;padding:8px 10px;font-size:13.5px;font-family:inherit;color:var(--text);background:var(--paper);outline:none}
@@ -90,6 +101,10 @@
 .vh-unlock{background:var(--white);border:1px solid var(--gold-soft);border-radius:11px;padding:18px 20px;margin-bottom:22px;text-align:center}
 .vh-unlock p{font-size:12.5px;color:var(--text-lt);margin-top:8px}
 .vh-progress{font-size:12.5px;color:var(--text-lt);margin-bottom:16px;padding:10px 0;border-bottom:1px solid var(--line)}
+.lg-calc{margin-bottom:2px}
+.lg-calc summary{cursor:pointer;font-size:12px;color:var(--text-lt);font-weight:600;padding:2px 0}
+.lg-calc summary:hover{color:var(--gold-soft)}
+.lg-calc[open] summary{margin-bottom:8px}
 </style>
 </head>
 <body>
@@ -108,11 +123,25 @@
       </div>
     </div>
     <div class="ws-body">
-      <div id="introHost"></div>
+      <!-- Box giới thiệu dựng TĨNH: chèn bằng JS thì nó ra đời SAU lần vẽ đầu,
+           đẩy cả `.ws-body` xuống VÀ tự làm phần tử LCP (đo trên prod: CLS 0,198,
+           Render Delay 5,3s). `Shell.introOnce` thấy `.intro-card` đã có thì chỉ
+           điền `#introSrc`. Vì thế `SHELL_INTRO` bên dưới CHỈ khai `key` — chữ nằm
+           đúng ở đây, một bản duy nhất, không có bản chép để trôi. -->
+      <div id="introHost"><div class="intro-card">
+        <div class="intro-body">
+          <img class="intro-avatar" src="/tool-avatars/van-han-nam.webp" alt="" onerror="this.remove()">
+          <div class="intro-text">
+            <div class="intro-t">Vận Hạn 12 Tháng Tới</div>
+            <div class="intro-d">Vận Hạn 12 Tháng Tới luận vận trình của bạn theo từng tháng trong năm. Muốn biết trước tháng nào tài chính bấp bênh, tháng nào tình duyên dễ sóng gió để chủ động phòng tránh? Từ lá số của bạn, nhận lịch vận hạn chi tiết 12 tháng.</div>
+            <div id="introSrc"></div>
+          </div>
+        </div>
+      </div></div>
       <div id="shellRecent"></div>
       <div class="form-card" id="birthPanel">
         <h2>Nhập ngày sinh để xem vận hạn 12 tháng tới</h2>
-        <p class="sub" id="fmSub">Xem đúng 12 tháng tới: cung hạn, sao, cách cục của từng tháng. Bạn muốn biết trước tháng nào nên cẩn thận, tháng nào nên tiến. Dùng khi cần một lịch vận hạn cụ thể cho năm sắp tới — tính theo tháng ÂM LỊCH, mỗi tháng ghi rõ quãng ngày dương lịch tương ứng.</p>
+        <p class="sub" id="fmSub">Nhập họ tên, giới tính và ngày giờ sinh của bạn. Hệ thống tính lá số rồi luận vận hạn theo từng tháng âm lịch. Nhận về đại vận hiện tại, tiểu vận năm nay và luận riêng đủ 12 tháng.</p>
         <p class="price-note" data-tvp-price-label="van-han-nam">…</p>
         <div id="tuviFormHost"></div>
         <div class="frow" style="margin-bottom:0">
@@ -132,6 +161,15 @@
         <div id="hookHost"></div>
         <div class="vh-unlock" id="vhUnlock" style="display:none"></div>
         <div class="vh-progress" id="vhProgress" style="display:none"></div>
+        <!-- Bản đồ 12 tháng — dựng NGAY cùng lần vẽ với 16 phần bên dưới, đủ
+             12 ô từ đầu (nhãn tháng là dữ liệu engine, có sẵn và miễn phí).
+             Mức + từ khoá của từng ô điền dần khi phần chữ của tháng đó sinh
+             xong. Khung SVG giữ nguyên tỉ lệ nên thay ruột ô KHÔNG đẩy layout
+             — đó là lý do vẽ sớm chứ không chờ luận xong rồi mới chèn vào. -->
+        <div id="vhMap"></div>
+        <div class="vh-tai" id="vhTai" style="display:none">
+          <button class="btn" id="vhTaiBtn" onclick="taiAnhMap()">⬇ Tải ảnh chia sẻ (9:16)</button>
+        </div>
         <div class="vh-body" id="vhBody"></div>
         <!-- "Ai Sinh Cùng Ngày Với Bạn" — miễn phí, 0 token LLM. Hỏng mạng/API
              thì tự ẩn, không làm hỏng khung vận hạn phía trên. -->
@@ -144,23 +182,37 @@
 </div>
 
 <script>window.SHELL_ACTIVE='van-han-nam';window.SHELL_HISTORY=true;
-window.SHELL_INTRO={key:'van-han-nam',title:'Vận Hạn 12 Tháng Tới',desc:'Xem đúng 12 tháng tới: cung hạn, sao, cách cục của từng tháng. Bạn muốn biết trước tháng nào nên cẩn thận, tháng nào nên tiến. Dùng khi cần một lịch vận hạn cụ thể cho năm sắp tới.'};</script>
+window.SHELL_INTRO={key:'van-han-nam'};</script>
 <script src="/tuvi-ansao-engine.js"></script>
 <script src="/laso-chart.js?v=3"></script>
-<script src="/luan-giai-core.js?v=3"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
+<script src="/tools-shared/pchip.js?v=1"></script>
+<script src="/tools-shared/daivan-chart.js?v=1"></script>
+<script src="/luan-giai-core.js?v=4"></script>
+<!-- `defer` ở đây là VỆ SINH TỐC ĐỘ, KHÔNG phải bản vá CLS. Không có nó, thẻ này
+     chặn parse ngay trước `tuvi-form.js`, tức thêm hẳn một chặng mạng tới bên thứ
+     ba vào đường tới hạn của form. Nhưng cú nhảy `.frow` thì nó KHÔNG chữa: prod
+     trước và sau #708 đều 0,0335, cùng node cùng rect. Số "0,0315 → 0" đo cục bộ
+     hồi đó là ảo — nó lớn vì container chặn hẳn CDN (~12,5s timeout), không phải
+     vì `defer`. Nguyên nhân thật là dãy script CÙNG ORIGIN phía trên, và bản vá
+     thật là chỗ giữ `#tuviFormHost:empty` khai trong <style> của trang.
+     An toàn: mọi lời gọi `Chart` đều nằm trong hàm và có chốt
+     `if (typeof Chart === 'undefined') return`, và các hàm đó chỉ chạy SAU khi
+     người dùng bấm luận — rất lâu sau `DOMContentLoaded`, mốc mà script `defer`
+     chắc chắn đã chạy xong (đã đo: `Chart` là `function` tại DOMContentLoaded). -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js" defer></script>
 <script src="/tuvi-laso-format.js?v=2"></script>
 <script src="/tools-shared/vn-timezone.js?v=1"></script>
 <script src="/tuvi-form.js?v=2"></script>
-<script src="/tools-shared/cung-ngay-sinh.js?v=1"></script>
+<script src="/tools-shared/cung-ngay-sinh.js?v=2"></script>
 <script src="/auth.js?v=2"></script>
-<script src="/tuvi-paywall.js?v=22"></script>
-<script src="/tools-shared/hook-charts.js?v=1"></script>
+<script src="/tuvi-paywall.js?v=25"></script>
+<script src="/tools-shared/hook-charts.js?v=2"></script>
+<script src="/poster.js?v=5"></script>
 <script src="/tools-shared/hook-facts.js?v=1"></script>
-<script src="/tools-shared/hook-layer.js?v=1"></script>
-<script src="/nav.js?v=24" data-icons-only></script>
-<script src="/shell.js?v=85"></script>
-<script src="/tools-shared/ai-loading-steps.js?v=9"></script>
+<script src="/tools-shared/hook-layer.js?v=2"></script>
+<script src="/nav.js?v=26" data-icons-only></script>
+<script src="/shell.js?v=87"></script>
+<script src="/tools-shared/ai-loading-steps.js?v=10"></script>
 <script src="/tools-shared/phan-pool.js?v=1"></script>
 <script>
 TuviForm.render('tuviFormHost', {mode:'compact', gioitinh:'nam'});
@@ -233,7 +285,7 @@ async function doXem(){
 
     render(ls);
     mountHook(ls);
-    document.getElementById('miniChart').innerHTML=renderGrid(ls,{name:name,gioitinh:gioitinh,dd:dd,mm:mm,yyyy:yyyy,hh:hh,gioChi:CHI[gioAmIdx],amLich:conv.amLich});
+    document.getElementById('miniChart').innerHTML=renderGrid(ls,{name:name,gioitinh:gioitinh,dd:dd,mm:mm,yyyy:yyyy,hh:hh,gioChi:CHI[gioAmIdx],amLich:conv.amLich,amDuongNam:conv.amDuongNam});
     if(window.mountIcons) window.mountIcons(document.getElementById('miniChart'));
     document.getElementById('birthPanel').style.display='none';
     document.getElementById('vhPanel').style.display='block';
@@ -309,18 +361,39 @@ function render(ls){
   var PRE=[null,1,14,14+dvSo,24];   // phần 1–4 → phần tương ứng bên Luận Giải
   var S=[];
   for(var p=1;p<=_tongPhan;p++){
-    var body = p<=4
-      ? (LuanGiaiCore.buildPreGenHtml(PRE[p],ls) || '<div class="phan-empty">Phần này luận theo tổng thể lá số — bấm nút dưới để trợ lý luận sâu.</div>')
-      : renderThang(_khung.thangs[p-5]);
-    var lock=TuviPaywall.sectionLockHtml({id:'sec-ai-lock-'+p,product:'van-han-nam'});
+    var body;
+    if(p<=4){
+      // Khối TÍNH TOÁN (deterministic — cách cục/điểm số/quy tắc) GẤP LẠI mặc
+      // định — cùng khuôn với app-luan-giai.html/app-chu-trinh-cuoc-doi.html
+      // (buildPhanSection): người dùng chạy tool là để đọc LUẬN GIẢI, không
+      // phải đọc lại dữ liệu thô đã hiện trên lá số phía trên.
+      var pre=LuanGiaiCore.buildPreGenHtml(PRE[p],ls);
+      var raw=pre||'<div class="phan-empty">Phần này luận theo tổng thể lá số — bấm nút dưới để trợ lý luận sâu.</div>';
+      body=pre?('<details class="lg-calc"><summary>Xem cơ sở tính toán</summary>'+raw+'</details>'):raw;
+    }else{
+      body=renderThang(_khung.thangs[p-5]);
+    }
+    // `part:p>1?p:null` → bấm chỉ mở ĐÚNG phần đó (16 Lượng/phần,
+    // tool_pricing.credits_per_part), KHÔNG mở cả bó — khác nút banner đầu
+    // trang, nút đó VẪN mở trọn 250 Lượng. Phần 1 (tổng quan lá số) giữ CTA
+    // "Mở bản đầy đủ" như cũ — cùng quy ước với app-chu-trinh-cuoc-doi.html/
+    // app-luan-giai.html: không bán lẻ tổng quan, bấm là mở cả bó.
+    var lock=TuviPaywall.sectionLockHtml({id:'sec-ai-lock-'+p,product:'van-han-nam',part:p>1?p:null,
+      cta:p>1?'Mở phần này':'Mở bản đầy đủ'});
     S.push('<section class="sec" id="sec-'+p+'"><div class="sec-h"><div class="sec-n">'+p+'</div><h3>'+esc(_labels[p]||('Phần '+p))+'</h3></div>'+
       '<div class="card">'+body+lock+'<div class="claude-content" id="claude-content-'+p+'" style="display:none"></div>'+
       ask(p<=4?('Luận sâu phần: '+_labels[p]):(_khung.thangs[p-5].nhanDay+' của tôi thế nào?'))+'</div></section>');
   }
   document.getElementById('vhBody').innerHTML=S.join('');
+  _renderMap();
   if(window.mountIcons) window.mountIcons(document.getElementById('vhBody'));
   TuviPaywall.fillPriceSlots(document.getElementById('vhBody'));
-  TuviPaywall.wireSectionLocks(document.getElementById('vhBody'), initiateAI);
+  // `part` có mặt (khoá-mini của MỘT tháng/đại vận, p>1) → mở đúng phần đó
+  // (16 Lượng). `part` vắng mặt (banner đầu trang, hoặc khoá-mini phần 1) →
+  // mở cả bó (250 Lượng), hành vi CŨ giữ nguyên.
+  TuviPaywall.wireSectionLocks(document.getElementById('vhBody'), function(part){
+    return part!=null ? _unlockOnePart(part) : initiateAI();
+  });
   try{ LuanGiaiCore.renderInlineDaiVanLineChart(ls); }catch(e){ if(window.console)console.warn(e); }
   renderJump();
   wireAsk(document.getElementById('vhBody'));
@@ -462,7 +535,7 @@ function _renderUnlockBlock(){
   host.style.display='block';
   _paintSecLocks(true);
   if(_loggedIn()){
-    host.innerHTML='<button class="btn-go" id="btnUnlock" onclick="initiateAI()">✦ Luận vận hạn 12 tháng bằng AI — <span data-tvp-price="van-han-nam">…</span> Lượng →</button>'+
+    host.innerHTML='<button class="btn-go" id="btnUnlock" onclick="initiateAI()">✦ Luận vận hạn 12 tháng — <span data-tvp-price="van-han-nam">…</span> Lượng →</button>'+
       '<p>Viết riêng cho lá số này: tổng quan, hành trình đại vận, đại vận và tiểu vận hiện tại, rồi từng tháng một trong 12 tháng tới.</p>';
     TuviPaywall.fillPriceSlots(host);
     return;
@@ -477,6 +550,64 @@ function _renderUnlockBlock(){
     onUnlock:function(){ return _startAI(); },
   });
 }
+
+// Slug PHẦN LẺ — CHỈ dùng cho mua/kiểm quyền một phần riêng (16 Lượng/phần),
+// KHÔNG đụng `_pendingSlug` (slug BÓ, đã mang TOOL_TYPE làm mốc tháng, giữ
+// NGUYÊN định dạng cũ — đổi là mồ côi quyền sở hữu của người đã mua trọn bó
+// trước bản vá này). Slug PHẦN là dạng MỚI, dựng ĐÚNG luật "slug phải bắt đầu
+// bằng tool_id" ngay từ đầu — cùng khuôn `_partSlug` của app-luan-giai.html/
+// app-chu-trinh-cuoc-doi.html.
+function _partSlug(p){
+  return _pendingSlug?('van-han-nam-p'+String(p).padStart(2,'0')+'-'+_pendingSlug):null;
+}
+function _hideSecLock(p){
+  var el=document.getElementById('sec-ai-lock-'+p);
+  if(el) el.style.display='none';
+}
+// Mở MỘT tháng/đại vận riêng lẻ — port từ `_unlockOnePart` app-luan-giai.html.
+// Trang này không khoá nội dung deterministic theo đăng nhập (khác laso/
+// chu-trinh) — vào được hàm này là đã đăng nhập, chỉ cần ẩn khoá-mini rồi
+// chạy AI cho đúng phần đó.
+async function _unlockOnePart(p){
+  if(!_loggedIn()){
+    if(window.showAuthModal) window.showAuthModal(function(){ _unlockOnePart(p); });
+    else if(window.Auth&&window.Auth.require) window.Auth.require(function(){ _unlockOnePart(p); });
+    return;
+  }
+  var uid=window.Auth.getUser()&&window.Auth.getUser().id;
+  var slug=_partSlug(p);
+  try{
+    var rc=await fetch('/api/payment?action=check&slug='+encodeURIComponent(slug)+'&userId='+encodeURIComponent(uid||''));
+    var rd=await rc.json();
+    if(rd&&rd.hasAccess){ _hideSecLock(p); await _runPhanVanHan(p); return; }
+  }catch(e){}
+
+  await (window.ToolPrices&&window.ToolPrices.load?window.ToolPrices.load():Promise.resolve());
+  var partPrice=window.ToolPrices?window.ToolPrices.partPrice('van-han-nam'):null;
+  // Đọc hụt giá → TỪ CHỐI chạy, không đoán (luật cứng CLAUDE.md).
+  if(partPrice==null){ alert('Chưa đọc được giá phần này, vui lòng thử lại.'); return; }
+
+  var gate=await TuviPaywall.ensureCredits({product:'van-han-nam', cost:partPrice});
+  if(!gate.ok) return; // ensureCredits đã tự hiện UI thiếu Lượng/giá chưa đọc được
+
+  var token=window.Auth.getSession&&window.Auth.getSession()&&window.Auth.getSession().access_token;
+  var labelForDesc=(_labels&&_labels[p])||('Phần '+p);
+  try{
+    var res=await fetch('/api/payment?action=deduct',{method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+(token||'')},
+      body:JSON.stringify({toolType:'use_van_han_nam', product:'van-han-nam', part:p, amount:partPrice,
+        slug:slug, description:'Vận Hạn 12 Tháng Tới — '+labelForDesc})});
+    var data=await res.json();
+    if(!data.success){
+      alert(data.insufficientBalance?'Không đủ Lượng — vui lòng nạp thêm.':'Có lỗi khi mở phần này, thử lại.');
+      return;
+    }
+    window.refreshNavCredits&&window.refreshNavCredits();
+    _hideSecLock(p);
+    await _runPhanVanHan(p);
+  }catch(e){ alert('Có lỗi khi mở phần này, thử lại.'); }
+}
+
 async function initiateAI(){
   await TuviPaywall.requireCredits(_pendingSlug, async function(){ await _startAI(); });
 }
@@ -537,6 +668,53 @@ function ragQuery(p){
   if(!t||t.loi) return 'lưu nguyệt hạn vận tháng';
   return 'lưu nguyệt hạn cung '+t.cungNguyetHan+' '+t.chinhTinh.join(' ')+' vận tháng';
 }
+// Bóc nhãn `[TỐT|TỪ KHOÁ]` model gắn ở đầu câu phán quyết. CHỈ lấy nhãn ĐẦU
+// TIÊN của phần: mỗi phần có nhiều đoạn, mỗi đoạn một nhãn, nhưng câu phán
+// quyết của cả tháng là câu mở đầu — lấy nhãn cuối hay gộp lại đều là đọc sai
+// vai của chúng. Không khớp (bản cache cũ chưa có từ khoá, hoặc model quên)
+// thì trả null ⇒ ô giữ trạng thái "chưa luận", KHÔNG đoán bừa một mức.
+var _RX_HOOK=/\[(TỐT|CẢNH BÁO|TRUNG TÍNH)(?:\|([^\]]{0,40}))?\]/;
+function _hookCuaPhan(p){
+  var m=_RX_HOOK.exec(_store[p]||'');
+  if(!m||!m[2]||!m[2].trim())return null;
+  return {muc:m[1],kw:m[2].trim()};
+}
+function _renderMap(){
+  var host=document.getElementById('vhMap');
+  if(!host||!window.HookCharts||!HookCharts.monthGrid||!_khung)return;
+  var items=_khung.thangs.map(function(t,i){
+    var h=_hookCuaPhan(i+5);
+    return {nhan:t.nhan,kw:h?h.kw:'',muc:h?h.muc:null,now:t.dangDienRa};
+  });
+  host.innerHTML=HookCharts.monthGrid({items:items,cols:4,
+    ariaLabel:'Bản đồ '+items.length+' tháng âm tới, mỗi ô một từ khoá'});
+  // Nút tải ảnh chỉ hiện khi ĐÃ có ít nhất một ô mang từ khoá — poster của
+  // một lưới toàn ô "chưa luận" là tấm ảnh rỗng, chia sẻ ra chỉ hại thương hiệu.
+  var tai=document.getElementById('vhTai');
+  if(tai) tai.style.display=items.some(function(i){return i.muc;})?'':'none';
+}
+// Xuất PNG 9:16 — đưa THẲNG chuỗi <svg> lưới đang hiện cho Poster (chế độ
+// `svg`), không vẽ lại bằng canvas: một nguồn bố cục, hai đầu ra. 0đ, không
+// gọi model, không đụng cầu dao ảnh free.
+function taiAnhMap(){
+  var host=document.getElementById('vhMap'), btn=document.getElementById('vhTaiBtn');
+  if(!host||!host.innerHTML||!window.Poster)return;
+  var old=btn.textContent; btn.disabled=true; btn.textContent='Đang dựng ảnh…';
+  var T=(Poster.THEME)||{};
+  Poster.download({
+    svg:host.innerHTML,
+    title:'Vận hạn 12 tháng',
+    subtitle:(_hoTen||'Lá số')+' · '+_khung.tuNhan+' → '+_khung.denNhan+' ('+_khung.duongTu+' – '+_khung.duongDen+')',
+    quote:'Mỗi ô là một tháng ÂM LỊCH — quãng ngày dương ghi trong bản luận.',
+    qrUrl:Poster.qrLink('van-han-nam','/app/van-han-nam'),
+    qrCaption:'Quét mã — xem 12 tháng của bạn',
+    fonts:['700 40px '+(T.SERIF||'serif'),'600 23px '+(T.SANS||'sans-serif')]
+  },'van-han-12-thang-tuviminhbao.png')
+   .then(function(){ if(window.Track)Track.event('poster_download',{tool_id:'van-han-nam'}); })
+   .catch(function(){ alert('Chưa dựng được ảnh. Thử lại sau ít giây.'); })
+   .then(function(){ btn.disabled=false; btn.textContent=old; });
+}
+
 // Chạy MỘT phần — gọi từ trong bể (PhanPool) và trực tiếp từ nút "↻ Thử lại".
 async function _runPhanVanHan(p){
   var box=document.getElementById('claude-content-'+p);
@@ -557,8 +735,16 @@ async function _runPhanVanHan(p){
       var sr=await fetch('/api/search',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({query:ragQuery(p),matchCount:p===1?10:7})});
       docs=(await sr.json()).docs||'';
     }catch(e){}
-    var resp=await fetch('/api/van-han-nam',{method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({birth:_birthPayload(),tuNgay:TU_NGAY,tuThang:TU_THANG,tuNam:TU_NAM,phan:p,docs:docs})});
+    // slug/bundleSlug → server soát quyền sở hữu (đã trả tiền cho ĐÚNG phần
+    // này hoặc cả bó) trước khi gọi model — xem chú thích trong
+    // app/api/van-han-nam/route.ts. Không gửi là server từ chối 402 dù đã trả
+    // tiền, vì không còn gì để soát.
+    var _vhTk=(window.Auth&&window.Auth.isLoggedIn())?window.Auth.getSession().access_token:null;
+    var _vhHeaders={'Content-Type':'application/json'};
+    if(_vhTk)_vhHeaders['Authorization']='Bearer '+_vhTk;
+    var resp=await fetch('/api/van-han-nam',{method:'POST',headers:_vhHeaders,
+      body:JSON.stringify({birth:_birthPayload(),tuNgay:TU_NGAY,tuThang:TU_THANG,tuNam:TU_NAM,phan:p,docs:docs,
+        slug:_partSlug(p),bundleSlug:_pendingSlug})});
     var data=await resp.json();
     if(data.error||!data.luanGiai){
       doneWait();
@@ -568,6 +754,7 @@ async function _runPhanVanHan(p){
     _store[p]=data.luanGiai;
     doneWait();
     if(box)box.innerHTML=renderMarkdown(data.luanGiai);
+    _renderMap();   // ô của tháng vừa xong đổi từ "chưa luận" sang có mức + từ khoá
     return true;
   }catch(e){
     doneWait();
@@ -587,13 +774,31 @@ window._vhRetry=function(p){
   });
 };
 
+// Nhãn tính chất model tự gắn NGAY TRƯỚC câu hook mỗi đoạn (khối "NHÃN TÍNH
+// CHẤT MỖI CÂU HOOK" trong `arcDoc()`, lib/agent/prompts.ts) — tra ra class
+// CSS màu (.fb-card, xem shell.css). Cùng cơ chế với app-luan-giai.html.
+var HOOK_TAG_CLASS={ 'TỐT':'fb-tot', 'CẢNH BÁO':'fb-canhbao', 'TRUNG TÍNH':'fb-trungtinh' };
 function renderMarkdown(text){
   var lines=String(text||'').split('\n'),out='';
+  function inline(s){ return s.replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/\*(.+?)\*/g,'<em>$1</em>'); }
+  var pendingLead='';
+  function flushPending(){ if(pendingLead){ out+='<p>'+pendingLead+'</p>'; pendingLead=''; } }
   lines.forEach(function(line){
-    var l=line.replace(/^## (.+)$/,'<h3>$1</h3>').replace(/^### (.+)$/,'<h3>$1</h3>')
-      .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/\*(.+?)\*/g,'<em>$1</em>');
-    if(l.indexOf('<h')===0)out+=l; else if(l.trim())out+='<p>'+l+'</p>';
+    var h=line.replace(/^## (.+)$/,'<h3>$1</h3>').replace(/^### (.+)$/,'<h3>$1</h3>');
+    if(h.indexOf('<h')===0){ flushPending(); out+=h; return; }
+    if(!line.trim())return;
+    var m=/^\[(TỐT|CẢNH BÁO|TRUNG TÍNH)(?:\|[^\]]{0,40})?\]\s*\*\*(.+?)\*\*([\s\S]*)$/.exec(line.trim());
+    if(m){
+      flushPending();
+      var cls=HOOK_TAG_CLASS[m[1]]||'fb-trungtinh';
+      out+='<div class="fb-card '+cls+'">“'+esc(m[2].trim())+'”</div>';
+      pendingLead=inline(m[3]).trim();
+      return;
+    }
+    out+='<p>'+(pendingLead?pendingLead+' ':'')+inline(line)+'</p>';
+    pendingLead='';
   });
+  flushPending();
   return out;
 }
 

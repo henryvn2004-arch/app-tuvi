@@ -9,7 +9,12 @@ on:
 jobs:
   lint:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    # 10 cũ quá sát: `npm ci` một mình đã đo được 7-8 phút vài lần gần đây
+    # (đăng ký npm chậm/cache miss, không phải job này chậm đi) — job bị
+    # `cancelled` giữa chừng (thường ngay ở bước build engine cho check:terms),
+    # không phải lỗi thật, và lặp lại y hệt khi re-run. Đã đối chiếu: chính
+    # commit main cũng dính cancelled cùng lý do (không phải riêng PR nào).
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v7
 
@@ -74,6 +79,44 @@ jobs:
       # `auth.js` hộ; trang shell phải tự khai.
       - name: Trang shell nạp đủ khung khởi động
         run: npm run check:shellboot
+
+      # Box giới thiệu `.intro-card` nay dựng TĨNH trong HTML (chèn bằng JS thì
+      # nó vừa đẩy cả `.ws-body` — CLS 0,198 — vừa TỰ LÀM phần tử LCP với Render
+      # Delay 5,3s). `introOnce()` thấy box đã có thì không dựng lại, nên khai
+      # LẠI title/desc trong `SHELL_INTRO` là tạo một bản chép CHẾT: sửa nó
+      # không có tác dụng gì và không có gì báo.
+      - name: Box giới thiệu tĩnh — SHELL_INTRO chỉ còn key
+        run: npm run check:introcard
+
+      # `nav.js` chèn <nav class="topnav"> cao 60px vào ĐẦU <body> sau lần vẽ
+      # đầu. Không giữ chỗ thì mọi thứ dưới tụt 60px = CLS 0,0711 — đúng con số
+      # mà /, /luan-giai.html, /tu-binh.html mang bất động qua 6 lượt đo prod.
+      # Có thẻ #nav-ph thôi CHƯA đủ: thẻ rỗng cao 0px vẫn nhảy đủ.
+      - name: Trang có thanh nav phải giữ chỗ 60px
+        run: npm run check:navph
+
+      # `TuviForm.render` chạy NGAY trong lúc phân tích HTML, nhưng chỉ SAU khi
+      # `tuvi-form.js` nạp xong — mà trước nó là 17–524KB script CÙNG ORIGIN cũng
+      # chặn parse. Trên mạng chậm, lần vẽ đầu #tuviFormHost còn rỗng tới ~4s rồi
+      # form 237–305px nhét vào đẩy .frow xuống (prod: 0,0315 ở /app/bat-tu).
+      # Chỗ giữ dùng `:empty` nên TỰ NHẢ khi form vào, không để lại khoảng trắng.
+      - name: Form khai sinh phải có chỗ giữ
+        run: npm run check:formph
+
+      # Nạp font qua Google Fonts là HAI vòng cross-origin trước khi chữ có mặt
+      # chữ đúng, nên font gần như luôn về sau lần vẽ đầu ⇒ swap ⇒ nhảy. Đọc
+      # đích danh `subItems[].cause` của audit `layout-shifts` trên prod:
+      # /la-so.html 0,0108 do 6 file `bevietnampro`. Preload phải có
+      # `crossorigin` kể cả khi cùng origin — thiếu là tải HAI lần, hỏng câm.
+      - name: Font thân bài/tiêu đề phải tự lưu trữ
+        run: npm run check:font
+
+      # Cùng vùng, nhưng là VỆ SINH TỐC ĐỘ chứ không phải bản vá CLS: script bên
+      # thứ ba không `defer` đứng trước lời dựng form thêm hẳn một chặng mạng vào
+      # đường tới hạn. (#708 từng ship `defer` như một bản vá CLS — prod không
+      # đổi một phần nghìn nào; xem docs/nhat-ky/2026-09.md vòng 9.)
+      - name: Form sinh không bị script bên thứ ba chặn
+        run: npm run check:formblock
 
       # Chặn gõ nhầm tên hàm trên `window.Auth`. Gõ nhầm KHÔNG ném lỗi — nó trả
       # undefined và hỏng IM LẶNG. Đã trả giá: `app-gio-sinh` gọi
@@ -193,6 +236,12 @@ jobs:
       - name: Ngân sách prompt lá số (chống phình + một nguồn bố cục)
         run: npm run check:prompt
 
+      # Prompt đổi `[TỐT]` → `[TỐT|TỪ KHOÁ]` mà 16 regex chép tay ở public/ vẫn
+      # là `\]` dính sau nhóm ⇒ thẻ caption mất màu VÀ nhãn hiện thô ra cho
+      # người đã trả tiền, không lỗi nào bắn ra. Đã cắn 2026-09-05 (PR #702).
+      - name: Nhãn tính chất — 16 trang đọc được cả dạng cũ lẫn dạng có từ khoá
+        run: npm run check:hooktag
+
       - name: Bộ dò chủ đề câu hỏi (mẫu phải là cụm đủ nghĩa, không âm tiết đơn)
         run: npm run check:topics
 
@@ -207,9 +256,10 @@ jobs:
       - name: Engine Số Đẹp — deterministic, khớp nguồn, không lẫn tầng
         run: npm run check:sodep
 
-      # Biên bảng âm lịch (1900-01-31 → 2100-12-31). Bản cũ của `solarToLunar`
-      # BỊA ra {day:1,month:1,year:yy} khi ra ngoài biên — im lặng, không lỗi —
-      # nên MỌI ngày dương của một năm trước 1900 quy về CÙNG một lá số.
+      # Biên bảng âm lịch (1900-01-01 → 2100-12-31, mở rộng sau P1 — xem oracle:lunar
+      # bên dưới). Bản cũ của `solarToLunar` BỊA ra {day:1,month:1,year:yy} khi ra
+      # ngoài biên — im lặng, không lỗi — nên MỌI ngày dương của một năm trước 1900
+      # quy về CÙNG một lá số.
       - name: Biên âm lịch — ngoài tầm phải trả null/ném, không bịa lá số
         run: npm run check:lunar
 
@@ -232,6 +282,12 @@ jobs:
       - name: Khối "Ai Sinh Cùng Ngày" cắm đúng trên mọi trang đã bật
         run: npm run check:cns
 
+      # Khối "Xem lá số cho người thân" cũng best-effort như trên: hỏng thì tự
+      # ẩn, im lặng hệt lỗi mạng — gỡ container/nạp sai thứ tự/mất lời gọi
+      # mount đều không đổi màu CI nếu thiếu bộ dò này.
+      - name: Khối "Xem lá số cho người thân" cắm đúng trên mọi trang đã bật
+        run: npm run check:nguoithan
+
       # Ảnh người nổi tiếng đi qua BA chặng (Storage → Commons → avatar chữ) và
       # cả ba đều "trông vẫn chạy" khi hỏng. Thêm nữa: kéo ảnh về kho của mình
       # nghĩa là mình PHÂN PHỐI tác phẩm, nên ghi công CC BY-SA là bắt buộc —
@@ -253,9 +309,59 @@ jobs:
       - name: Slug thanh toán đúng tiền tố tool_id
         run: npm run check:slug
 
+      # Cổng hồi quy AN SAO — so lại 120 lá số cố định trong
+      # scripts/fixtures/laso-golden.json với engine hiện tại. Trước bộ dò
+      # này, không có gì trong repo so GIÁ TRỊ vị trí sao thật (check:laso
+      # chỉ so khung chữ, check:cacheshape chỉ so đường dẫn khoá) — đổi hết
+      # vị trí sao vẫn CI xanh 100%. Xem docs/nhat-ky mục tích hợp Thiên Lương.
+      - name: Lá số vàng — vị trí sao không trôi khỏi fixture
+        run: npm run check:lasogolden
+
+      # 3 ca lấy TRỰC TIẾP từ bộ tự-kiểm của tác giả bản Thiên Lương (không
+      # tính lại qua oracle loader — chép nguyên giá trị họ tự khẳng định).
+      # Xác nhận ĐỘC LẬP với check:lasogolden ở trên: golden fixture đóng
+      # băng từ CHÍNH engine mình nên không bắt được nếu công thức đã sai
+      # ngay từ đầu; 3 ca này thì có.
+      - name: 3 lá số vàng — xác nhận độc lập với tác giả bản Thiên Lương
+        run: npm run check:refbenchmarks
+
+      # Đối chiếu VÉT CẠN 518.400 tổ hợp an sao với oracle tham khảo (bản
+      # "An Sao - Tử Vi Thiên Lương", scripts/oracle/vendor/) — P2 (5 điểm
+      # bảng-tra-sai) + P3 (Kình/Đà, Tứ Hóa can Canh) đã sửa hết, danh sách
+      # trường phái/bảng-tra còn RỖNG (La-Võng dời P4, xem
+      # docs/nhat-ky/2026-09.md). Mọi lệch giờ là bug thật.
+      # ~90-170s vì quét cả miền, không phải mẫu.
+      - name: Oracle — đối chiếu vét cạn an sao với bản Thiên Lương
+        run: npm run oracle:ansao
+
+      # P1: _LUNAR_TABLE (vanilla + tuvi-engine) được SINH bằng thuật toán
+      # chính xác của oracle (có hiệu chỉnh ΔT) + quy tắc múi giờ lịch sử VN
+      # (UTC+8 trước 1968-01-01, UTC+7 từ đó — Tết Ất Sửu 1985 lệch lịch TQ cả
+      # một tháng: 21/1 chứ không phải 20/2). Đối chiếu VÉT CẠN 1900-2100, trừ
+      # đúng 4 tháng có bug đếm ngày CỦA oracle (đã biết, xem script).
+      - name: Oracle — đối chiếu vét cạn lịch âm 1900-2100 với bản Thiên Lương
+        run: npm run oracle:lunar
+
+      # P3: Tiểu Hạn đổi sang trường phái Thiên Lương (Dương Nam/Âm Nữ thuận,
+      # Âm Nam/Dương Nữ nghịch — trước CỐ ĐỊNH theo giới). Không phải "sao" nên
+      # ngoài check-ansao-exhaustive.mjs — đối chiếu riêng vét cạn 60 can-chi ×
+      # 2 giới × 12 tuổi (1.440 ca) với oracle.
+      - name: Oracle — đối chiếu vét cạn Tiểu Hạn với bản Thiên Lương
+        run: npm run oracle:tieuhan
+
+      # P4: Thiên La/Địa Võng đổi từ 2 sao CỐ ĐỊNH tại Thìn/Tuất (mọi lá số)
+      # sang NHÃN của Đà La (chỉ hiện khi Đà La rơi đúng Thìn/Tuất) theo
+      # trường phái Thiên Lương. Không cần oracle vendor — tự nhất quán
+      # (Thiên La ⟺ Đà La@Thìn, Địa Võng ⟺ Đà La@Tuất) nên là `check:`,
+      # không phải `oracle:`. Đà La chỉ phụ thuộc (canNam, gioitinh) → vét
+      # cạn 240 ca là phủ hết miền.
+      - name: La-Võng khớp Đà La (Thiên Lương) trên toàn miền
+        run: npm run check:lavong
+
   typecheck:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    # Cùng lý do với job `lint` ở trên — xem chú thích tại đó.
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v7
 

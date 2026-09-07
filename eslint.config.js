@@ -12,6 +12,11 @@ const projectGlobals = {
   anSaoTuBinh: 'writable',
   CACH_CUC_ALL: 'writable',
   STAR_DATA: 'writable',
+  // public/tuvi-ansao-engine.js — dùng bởi public/tuvi-laso-format.js (khối
+  // Tứ Hóa Phi Tinh), cùng cách STAR_DATA đã dùng ở trên.
+  THIEN_CAN: 'writable',
+  DIA_CHI: 'writable',
+  TU_HOA: 'writable',
   menhTamPhuong: 'writable',
   domainScores: 'writable',
   tubinhCachCucSpecial: 'writable',
@@ -31,6 +36,16 @@ const projectGlobals = {
   // public/tool-prices.js — nguồn danh mục + giá dùng chung, nạp động ở nhiều
   // trang (shell.js và tuvi-paywall.js tự chèn thẻ script khi trang chưa có).
   ToolPrices: 'readonly',
+  // public/tools-shared/hook-charts.js — poster.js đọc `HookCharts.cssText()`
+  // để nhúng CSS vào <svg> khi rasterize (SVG đứng một mình không thấy <style>
+  // của trang). Có bảo vệ `window.HookCharts && ...` tại chỗ gọi vì 6 trang
+  // nạp poster.js mà KHÔNG nạp hook-charts.js.
+  HookCharts: 'readonly',
+  // public/tools-shared/pchip.js — public/tuvi-laso-format.js (buildDaiVanLines)
+  // và lib/engine/laso.ts (loadEngine) nạp file này vào CÙNG scope trước khi
+  // chạy, nên `Pchip` là biến tự do hợp lệ tại runtime dù ESLint lint TỪNG file
+  // riêng lẻ không thấy khai báo — cùng lớp với HookCharts/TU_HOA ở trên.
+  Pchip: 'readonly',
 };
 
 const sharedRules = {
@@ -83,6 +98,10 @@ export default [
       'payos-v2/',
       'run_embed.py',
       'setup_playwright.sh',
+      // Mã CỦA NGƯỜI KHÁC (xem scripts/oracle/vendor/README.md) — bản gốc,
+      // không sửa, không lint theo luật của repo mình. Cùng lý do với
+      // `tuvi-engine/`/`remotion/`.
+      'scripts/oracle/vendor/',
     ],
   },
 

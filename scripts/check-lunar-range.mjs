@@ -89,7 +89,7 @@ if (tsRows.length) {
 for (const [d, m, y, nhan] of [
   [1, 1, 1898, 'trước biên'],
   [15, 6, 1899, 'trước biên'],
-  [30, 1, 1900, 'ngay trước mốc đầu'],
+  [31, 12, 1899, 'ngay trước mốc đầu'],
   [1, 1, 2101, 'sau biên'],
 ]) {
   const r = V.solarToLunar(d, m, y);

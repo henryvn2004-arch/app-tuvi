@@ -6,10 +6,10 @@
 <title>Trang Phục Theo Ngày — Tử Vi Minh Bảo</title>
 <meta name="description" content="Tư vấn màu sắc trang phục theo can-chi ngày và bản mệnh — cổ pháp Ngũ Hành Nạp Âm.">
 <link rel="icon" type="image/webp" href="/seal.webp">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"></noscript>
-<link rel="stylesheet" href="/shell.css?v=30">
+<link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/fonts/noto-serif.css?v=1">
+<link rel="stylesheet" href="/shell.css?v=34">
 <style>
 .tn-card{background:var(--white);border:1px solid var(--line);border-radius:14px;padding:20px 22px;box-shadow:var(--shadow);max-width:760px;margin-bottom:16px}
 .tn-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:4px;display:flex;align-items:center;gap:8px}
@@ -92,12 +92,26 @@
       </div>
     </div>
     <div class="ws-body">
-      <div id="introHost"></div>
+      <!-- Box giới thiệu dựng TĨNH: chèn bằng JS thì nó ra đời SAU lần vẽ đầu,
+           đẩy cả `.ws-body` xuống VÀ tự làm phần tử LCP (đo trên prod: CLS 0,198,
+           Render Delay 5,3s). `Shell.introOnce` thấy `.intro-card` đã có thì chỉ
+           điền `#introSrc`. Vì thế `SHELL_INTRO` bên dưới CHỈ khai `key` — chữ nằm
+           đúng ở đây, một bản duy nhất, không có bản chép để trôi. -->
+      <div id="introHost"><div class="intro-card">
+        <div class="intro-body">
+          <img class="intro-avatar" src="/tool-avatars/trang-phuc-theo-ngay.webp" alt="" onerror="this.remove()">
+          <div class="intro-text">
+            <div class="intro-t">Trang Phục Theo Ngày</div>
+            <div class="intro-d">Trang Phục Theo Ngày gợi ý màu, kiểu đồ hợp vận khí hôm nay của bạn. Có ngày ăn mặc chỉn chu vẫn thất bại, có ngày xuề xoà lại gặp may — bạn có tin đó là do vận khí không hợp? Nhập ngày sinh, nhận gợi ý trang phục cho hôm nay — màu nên mặc, màu nên tránh.</div>
+            <div id="introSrc" style="min-height:36.8px;margin-top:9px"></div>
+          </div>
+        </div>
+      </div></div>
       <div id="shellRecent"></div>
 
       <div class="tn-card">
         <h2><span class="ic" data-icon="calendar"></span> Thông Tin</h2>
-        <p class="sub">Gợi ý trang phục hôm nay hợp với vận của bạn. Bạn đứng trước tủ đồ mỗi sáng mà không biết nên mặc gì. Dùng khi có việc quan trọng và muốn chọn đồ có chủ đích.</p>
+        <p class="sub">Nhập năm sinh, giới tính, ngày cần mặc và mục đích ra ngoài. Hệ thống đối chiếu vận khí ngày đó với bản mệnh của bạn. Nhận về màu nên mặc, màu nên tránh và gợi ý trang phục cụ thể.</p>
         <p class="price-note" data-tvp-price-label="trang-phuc-theo-ngay">…</p>
 
         <div class="pt-row">
@@ -196,7 +210,7 @@
         </div>
 
         <div class="tn-card" id="tryonCard">
-          <h2><span class="ic" data-icon="sparkles"></span> Thử Trang Phục AI
+          <h2><span class="ic" data-icon="sparkles"></span> Thử Trang Phục
             <span style="font-size:10px;background:var(--gold-lt);color:var(--tx-blue);padding:2px 8px;border-radius:10px;margin-left:4px"><span data-tvp-price="trang-phuc-tryon">…</span> Lượng/lần</span>
           </h2>
 
@@ -256,13 +270,13 @@
 </div>
 
 <script>window.SHELL_ACTIVE='trang-phuc-theo-ngay';window.SHELL_HISTORY=true;
-window.SHELL_INTRO={key:'trang-phuc-theo-ngay',title:'Trang Phục Theo Ngày',desc:'Gợi ý trang phục hôm nay hợp với vận của bạn. Bạn đứng trước tủ đồ mỗi sáng mà không biết nên mặc gì. Dùng khi có việc quan trọng và muốn chọn đồ có chủ đích.'};</script>
+window.SHELL_INTRO={key:'trang-phuc-theo-ngay'};</script>
 <script src="/auth.js?v=2"></script>
-<script src="/tuvi-paywall.js?v=22"></script>
-<script src="/tools-shared/hook-layer.js?v=1"></script>
-  <script src="/nav.js?v=24" data-icons-only></script>
-<script src="/shell.js?v=85"></script>
-<script src="/tools-shared/ai-loading-steps.js?v=9"></script>
+<script src="/tuvi-paywall.js?v=25"></script>
+<script src="/tools-shared/hook-layer.js?v=2"></script>
+  <script src="/nav.js?v=26" data-icons-only></script>
+<script src="/shell.js?v=87"></script>
+<script src="/tools-shared/ai-loading-steps.js?v=10"></script>
 <script>
 function initTrangPhucNgay(){
   Shell.setContext({
@@ -344,11 +358,11 @@ let _resultData=null;
 let _tryonImgData=null,_tryonMediaType='image/jpeg',_tryonStyle='cong-so',_tryonResultUrl=null;
 const ANALYSIS_STEPS=[
   {label:'Tính can chi ngày & quan hệ ngũ hành',ms:900},
-  {label:'AI tư vấn trang phục hợp ngày',ms:0},
+  {label:'Tư vấn trang phục hợp ngày',ms:0},
 ];
 const TRYON_STEPS=[
   {label:'Chuẩn bị trang phục theo ngũ hành',ms:1200},
-  {label:'AI đang tạo ảnh trang phục',ms:0},
+  {label:'Đang tạo ảnh trang phục',ms:0},
 ];
 let _analysisLoadingCtl=null;
 let _tryonLoadingCtl=null;
@@ -392,7 +406,7 @@ function mountHook(cc,hanh,rel){
     facts:[{
       tone:tot?'good':(rel.code==='ngay_khac_menh'?'bad':'neutral'),
       title:'Ngày '+cc+' — hành '+hanh,
-      body:rel.text+'. Màu nên mặc, phong cách gợi ý, và trang phục cụ thể theo đúng hành ngày nằm trong bản phân tích AI.',
+      body:rel.text+'. Màu nên mặc, phong cách gợi ý, và trang phục cụ thể theo đúng hành ngày nằm trong bản phân tích chuyên sâu.',
       source:'engine · dayCanChi/getRelation',
     }],
   });
@@ -441,6 +455,10 @@ async function analyze(){
   finally{document.getElementById('btnAnalyze').disabled=false;document.getElementById('loading').classList.remove('show');}
 }
 
+// Chữ AI viết (outfit, tên màu) trước đây chèn thẳng vào innerHTML không qua
+// escape — vá ở đây (2026-09-04), cùng dịp làm fb-card cho Nhóm B.
+function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
 function renderResults(d){
   const menhHanh=d.menhHanh||'Thổ';
   const ngayHanh=d.ngayHanh||'Thổ';
@@ -467,7 +485,7 @@ function renderResults(d){
   const outfit=d.outfit||{};
   OUTFIT_META.forEach(({key,icon,cat})=>{
     if(!outfit[key])return;
-    og.innerHTML+=`<div class="outfit-item"><div class="outfit-icon ic" data-icon="${icon}"></div><div class="outfit-cat">${cat}</div><div class="outfit-desc">${outfit[key]}</div></div>`;
+    og.innerHTML+=`<div class="outfit-item"><div class="outfit-icon ic" data-icon="${icon}"></div><div class="outfit-cat">${esc(cat)}</div><div class="outfit-desc">${esc(outfit[key])}</div></div>`;
   });
   window.mountIcons && window.mountIcons(og);
 
@@ -495,7 +513,7 @@ function renderColorRow(id,colors,isAvoid){
   const el=document.getElementById(id); el.innerHTML='';
   colors.forEach(name=>{
     const hex=COLOR_HEX[name]||'#888';
-    el.innerHTML+=`<div class="chip${isAvoid?' avoid':''}"><div class="chip-swatch" style="background:${hex}"></div><div class="chip-name">${name}</div></div>`;
+    el.innerHTML+=`<div class="chip${isAvoid?' avoid':''}"><div class="chip-swatch" style="background:${hex}"></div><div class="chip-name">${esc(name)}</div></div>`;
   });
 }
 
@@ -556,7 +574,7 @@ async function doTryon(){
       document.getElementById('tryonResult').style.display='block';
       window.refreshNavCredits?.();
       Shell.setShareable({
-        kind:'image', title:'Trang phục hợp ngày của tôi (AI try-on)',
+        kind:'image', title:'Trang phục hợp ngày của tôi (thử ảo)',
         imageUrl:data.imageUrl, text:'Mệnh '+_resultData.menhHanh+' · '+_tryonStyle
       });
     }catch(e){_tryonLoadingCtl&&_tryonLoadingCtl.stop();alert('Lỗi: '+(e.message||'Vui lòng thử lại.'));}

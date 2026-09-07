@@ -4,12 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Kim Lâu & Tam Tai — Tử Vi Minh Bảo</title>
-<meta name="description" content="Xem tuổi làm nhà, cưới hỏi có phạm Kim Lâu, Tam Tai, Hoang Ốc không theo tuổi ta — bảng tra 20 năm tới. Hỏi trợ lý AI cách hóa giải.">
+<meta name="description" content="Xem tuổi làm nhà, cưới hỏi có phạm Kim Lâu, Tam Tai, Hoang Ốc không theo tuổi ta — bảng tra 20 năm tới. Hỏi trợ lý Luận Đường cách hóa giải.">
 <link rel="icon" type="image/webp" href="/seal.webp">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"></noscript>
-<link rel="stylesheet" href="/shell.css?v=30">
+<link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/fonts/noto-serif.css?v=1">
+<link rel="stylesheet" href="/shell.css?v=34">
 <style>
 .form-card{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);max-width:600px}
 .form-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:3px}
@@ -34,6 +34,7 @@
 .res-tag-bad{background:#fef0ef;color:#C0392B;border:1px solid #f5c0bc}
 .res-tag-warn{background:#fdf6e9;color:#9A7B3A;border:1px solid #e8d9b0}
 .res-block-body [style*="var(--text-mid)"]{color:#444!important}
+.kl-dai{margin-bottom:12px;overflow-x:auto}
 .kl-scroll{overflow-x:auto}
 .kl-table{width:100%;border-collapse:collapse;font-size:13px;background:#fff;min-width:420px}
 .kl-table th{background:#061A2E;color:#fff;padding:10px 16px;text-align:left;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase}
@@ -58,11 +59,25 @@
       </div>
     </div>
     <div class="ws-body">
-      <div id="introHost"></div>
+      <!-- Box giới thiệu dựng TĨNH: chèn bằng JS thì nó ra đời SAU lần vẽ đầu,
+           đẩy cả `.ws-body` xuống VÀ tự làm phần tử LCP (đo trên prod: CLS 0,198,
+           Render Delay 5,3s). `Shell.introOnce` thấy `.intro-card` đã có thì chỉ
+           điền `#introSrc`. Vì thế `SHELL_INTRO` bên dưới CHỈ khai `key` — chữ nằm
+           đúng ở đây, một bản duy nhất, không có bản chép để trôi. -->
+      <div id="introHost"><div class="intro-card">
+        <div class="intro-body">
+          <img class="intro-avatar" src="/tool-avatars/kim-lau.webp" alt="" onerror="this.remove()">
+          <div class="intro-text">
+            <div class="intro-t">Kim Lâu &amp; Tam Tai</div>
+            <div class="intro-d">Kim Lâu & Tam Tai kiểm tra tuổi bạn có phạm Kim Lâu hay Tam Tai không. Cưới hỏi, làm nhà mà lỡ phạm tuổi xung thì tiền mất, sức khoẻ hao — sợ vậy mà chưa tra kỹ bao giờ? Nhập năm sinh, nhận kết luận rõ ràng trước khi cưới hỏi, động thổ.</div>
+            <div id="introSrc" style="min-height:18.4px;margin-top:9px"></div>
+          </div>
+        </div>
+      </div></div>
       <div id="shellRecent"></div>
       <div class="form-card" id="birthPanel">
         <h2>Năm sinh (dương lịch)</h2>
-        <p class="sub">Kiểm tra tuổi bạn có phạm Kim Lâu hay Tam Tai hay không. Bạn định cưới, làm nhà nhưng sợ tuổi xung mà chưa tra kỹ. Dùng khi sắp làm việc lớn: cưới hỏi, động thổ, khai trương.</p>
+        <p class="sub">Nhập năm sinh dương lịch của bạn. Hệ thống đối chiếu năm đó theo cổ pháp Kim Lâu, Tam Tai, Hoang Ốc. Nhận về kết luận năm hiện tại và bảng tra sẵn cho 20 năm tới.</p>
         <p class="price-note" data-tvp-price-label="kim-lau">…</p>
         <div class="frow" style="margin-bottom:4px">
           <div class="fg" style="width:150px"><label>Năm sinh dương lịch</label><input type="number" id="birthYear" placeholder="1990" min="1900" max="2010"></div>
@@ -78,6 +93,7 @@
         </div>
         <div class="res-block">
           <div class="res-block-header"><span class="res-block-title">Bảng Tra 20 Năm Tới</span></div>
+          <div class="kl-dai" id="klDai"></div>
           <div class="kl-scroll"><table class="kl-table" id="klTable"><thead><tr><th>Năm DL</th><th>Tuổi Ta</th><th>Can Chi</th><th>Tình Trạng</th></tr></thead><tbody id="klBody"></tbody></table></div>
         </div>
         <div class="ask" data-ask="Trong 20 năm tới, năm nào đẹp nhất để làm nhà / cưới hỏi cho tuổi tôi? Năm phạm Kim Lâu/Tam Tai/Hoang Ốc thì hóa giải thế nào (mượn tuổi)?">✦ Hỏi trợ lý năm đẹp & cách hóa giải</div>
@@ -89,15 +105,38 @@
 </div>
 
 <script>window.SHELL_ACTIVE='kim-lau';window.SHELL_HISTORY=true;
-window.SHELL_INTRO={key:'kim-lau',title:'Kim Lâu & Tam Tai',desc:'Kiểm tra tuổi bạn có phạm Kim Lâu hay Tam Tai hay không. Bạn định cưới, làm nhà nhưng sợ tuổi xung mà chưa tra kỹ. Dùng khi sắp làm việc lớn: cưới hỏi, động thổ, khai trương.'};</script>
-<script src="/tools-shared/kim-lau.js?v=1"></script>
+window.SHELL_INTRO={key:'kim-lau'};</script>
+<script src="/tools-shared/kim-lau.js?v=2"></script>
+<script src="/tools-shared/hook-charts.js?v=2"></script>
 <script src="/auth.js?v=2"></script>
-  <script src="/nav.js?v=24" data-icons-only></script>
-<script src="/shell.js?v=85"></script>
+  <script src="/nav.js?v=26" data-icons-only></script>
+<script src="/shell.js?v=87"></script>
 <script>
 // Ô giữa dùng CHUNG module /tools-shared/kim-lau.js với trang standalone
 // /kim-lau → kết quả y hệt, sửa 1 chỗ 2 nơi cập nhật. Rail nhận
 // chính data module tính (nhất quán với ô giữa).
+// Dải 20 năm — đọc CHÍNH `data.rows` mà bảng ngay dưới đang đọc, không tính lại
+// gì cả. Bảng trả lời "năm 2031 thế nào"; dải trả lời "năm nào tôi làm được" —
+// câu người ta thật sự mang tới tool, mà bảng bắt đọc hết 20 dòng mới thấy.
+//
+// ⚠️ Ô chỉ chở MỘT nhãn: cờ nặng nhất, `+` nếu năm đó còn cờ khác. Thứ tự
+// nặng/nhẹ lấy ĐÚNG thứ tự `kim-lau.js` đã dùng khi dựng câu `desc` (Kim Lâu
+// trước, rồi Tam Tai, rồi Hoang Ốc) — tự xếp lại ở đây là đẻ ra nguồn thứ hai
+// nói ngược lại chính câu văn nằm trên nó.
+function renderDai(d){
+  var host=document.getElementById('klDai');
+  if(!host) return;
+  if(typeof HookCharts==='undefined'){ host.innerHTML=''; return; }
+  var years=(d.rows||[]).map(function(rw){
+    var co=[];
+    if(rw.kimLau) co.push('Kim Lâu' + (rw.kimLauLoai ? ' ' + rw.kimLauLoai : ''));
+    if(rw.tamTai) co.push('Tam Tai');
+    if(rw.hoangOc) co.push('Hoang Ốc');
+    return {nam:rw.year, tuoi:rw.tuoiTa, nhan:co[0]||'', them:co.length>1, now:rw.year===d.namHienTai};
+  });
+  host.innerHTML=HookCharts.yearStrip({years:years,ariaLabel:'Dải 20 năm tới — năm nào làm được'});
+}
+
 function calculate(){
   var by=parseInt(document.getElementById('birthYear').value);
   var err=document.getElementById('error-msg');
@@ -107,6 +146,7 @@ function calculate(){
   document.getElementById('resTitle').textContent=r.resTitleText;
   document.getElementById('currentBox').innerHTML=r.currentBoxHTML;
   document.getElementById('klBody').innerHTML=r.rowsHTML;
+  renderDai(r.data);
   document.getElementById('birthPanel').style.display='none';
   document.getElementById('resPanel').style.display='block';
   document.getElementById('btnEdit').style.display='';

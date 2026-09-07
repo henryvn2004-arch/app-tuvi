@@ -15,7 +15,13 @@
       Supabase Storage thì mình PHÂN PHỐI nó, nên CC BY-SA đòi ghi tác giả +
       license ngay trên trang. `anhTacGia`/`anhLicense` chưa có (chưa đồng bộ,
       hoặc Commons không trả extmetadata) thì lùi về link trang mô tả file —
-      đó vẫn là cách ghi công được chấp nhận. */
+      đó vẫn là cách ghi công được chấp nhận.
+      ⚠️ 2026-09-04: từng thử bỏ dòng này (dư khi đã có 1 dòng chung cuối
+      `mount()`) — `npm run check:celebanh` CHẶN CỨNG, đọc chính bộ dò:
+      "từ khi kéo ảnh về kho của mình... CC BY-SA đòi ghi tác giả + license
+      trên trang. Bỏ dòng ghi công đi thì trang vẫn chạy hoàn hảo — đó chính
+      là lý do phải có bộ dò". ĐỪNG bỏ lại mà không sửa luôn bộ dò + có quyết
+      định rõ ràng — đây là ranh giới pháp lý, không phải gu hiển thị. */
 (function (root) {
   var CHI_LABEL = {
     Tý: '23–01h', Sửu: '01–03h', Dần: '03–05h', Mão: '05–07h',
@@ -62,8 +68,12 @@
     // giá trị thuộc tính và vỡ thẻ (đã vấp — 3 SyntaxError, ảnh hỏng không rơi
     // về avatar). Đánh dấu bằng data-attribute rồi gắn handler bằng JS sau khi
     // innerHTML xong. Đây đúng bẫy CLAUDE.md ghi ở mục Icon.
+    // KHÔNG `loading="lazy"`: khối này nằm CUỐI trang, dưới màn hình đầu tiên.
+    // Nút "Lưu PDF" gọi thẳng `window.print()` — Chrome không tự tải ảnh lazy
+    // chưa từng cuộn tới trước khi in, nên bản PDF ra 5 ô trống dù trang đang
+    // xem trên màn hình vẫn hiện đủ ảnh (đã đo trên bản in thật, 2026-09-04).
     var anh = it.anh
-      ? '<img class="cns-anh" src="' + esc(it.anh) + '" alt="" loading="lazy" data-cns-chu="' + initial + '">'
+      ? '<img class="cns-anh" src="' + esc(it.anh) + '" alt="" data-cns-chu="' + initial + '">'
       : '<div class="cns-anh cns-chu">' + initial + '</div>';
 
     var GIOITINH_LABEL = { nam: 'Nam', nu: 'Nữ' };

@@ -4,12 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Ngày Tốt Trong Tháng — Tử Vi Minh Bảo</title>
-<meta name="description" content="Lịch ngày tốt/xấu cả tháng theo âm lịch — Tam Nương, Nguyệt Kị, Dương Công Kị. Hỏi trợ lý AI chọn ngày đẹp cho cưới hỏi, khởi công.">
+<meta name="description" content="Lịch ngày tốt/xấu cả tháng theo âm lịch — Tam Nương, Nguyệt Kị, Dương Công Kị. Hỏi trợ lý Luận Đường chọn ngày đẹp cho cưới hỏi, khởi công.">
 <link rel="icon" type="image/webp" href="/seal.webp">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"></noscript>
-<link rel="stylesheet" href="/shell.css?v=30">
+<link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/fonts/noto-serif.css?v=1">
+<link rel="stylesheet" href="/shell.css?v=34">
 <style>
 .form-card{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);max-width:600px}
 .form-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:3px}
@@ -61,11 +61,25 @@
       </div>
     </div>
     <div class="ws-body">
-      <div id="introHost"></div>
+      <!-- Box giới thiệu dựng TĨNH: chèn bằng JS thì nó ra đời SAU lần vẽ đầu,
+           đẩy cả `.ws-body` xuống VÀ tự làm phần tử LCP (đo trên prod: CLS 0,198,
+           Render Delay 5,3s). `Shell.introOnce` thấy `.intro-card` đã có thì chỉ
+           điền `#introSrc`. Vì thế `SHELL_INTRO` bên dưới CHỈ khai `key` — chữ nằm
+           đúng ở đây, một bản duy nhất, không có bản chép để trôi. -->
+      <div id="introHost"><div class="intro-card">
+        <div class="intro-body">
+          <img class="intro-avatar" src="/tool-avatars/ngay-tot.webp" alt="" onerror="this.remove()">
+          <div class="intro-text">
+            <div class="intro-t">Ngày tốt trong tháng</div>
+            <div class="intro-d">Ngày tốt trong tháng liệt kê những ngày tốt, xếp rõ theo từng ngày trong tháng. Ký hợp đồng, khai trương đúng ngày xấu rồi mọi việc trục trặc, tiền bạc thất thoát không rõ nguyên do? Chọn tháng, nhận danh sách ngày tốt để lên lịch cả tháng.</div>
+            <div id="introSrc" style="min-height:55.2px;margin-top:9px"></div>
+          </div>
+        </div>
+      </div></div>
       <div id="shellRecent"></div>
       <div class="form-card" id="birthPanel">
         <h2>Tháng cần xem (dương lịch)</h2>
-        <p class="sub">Liệt kê những ngày tốt trong tháng này, xếp theo từng ngày. Bạn cứ định làm việc lớn rồi phải dời vì gặp ngày xấu. Dùng khi lên kế hoạch cho cả tháng, không chỉ một ngày.</p>
+        <p class="sub">Chọn tháng và năm dương lịch bạn cần xem. Hệ thống tự tính lịch và đối chiếu ngày tốt xấu. Nhận về lịch cả tháng, mỗi ngày đánh dấu tốt, cần lưu ý hay nên kỵ.</p>
         <p class="price-note" data-tvp-price-label="ngay-tot">…</p>
         <div class="frow" style="margin-bottom:4px">
           <div class="fg"><label>Tháng</label><input type="number" id="thang" min="1" max="12" placeholder="1–12"></div>
@@ -99,13 +113,13 @@
 </div>
 
 <script>window.SHELL_ACTIVE='ngay-tot';window.SHELL_HISTORY=true;
-window.SHELL_INTRO={key:'ngay-tot',title:'Ngày tốt trong tháng',desc:'Liệt kê những ngày tốt trong tháng này, xếp theo từng ngày. Bạn cứ định làm việc lớn rồi phải dời vì gặp ngày xấu. Dùng khi lên kế hoạch cho cả tháng, không chỉ một ngày.'};</script>
+window.SHELL_INTRO={key:'ngay-tot'};</script>
 <script src="/tuvi-ansao-engine.js"></script>
 <script src="/tools-shared/ngay-tot.js?v=2"></script>
 <script src="/tools-shared/hoang-lich.js?v=1"></script>
 <script src="/auth.js?v=2"></script>
-  <script src="/nav.js?v=24" data-icons-only></script>
-<script src="/shell.js?v=85"></script>
+  <script src="/nav.js?v=26" data-icons-only></script>
+<script src="/shell.js?v=87"></script>
 <script>
 // Ô giữa dùng CHUNG /tools-shared/ngay-tot.js với /tools/ngay-tot.html.
 function calculate(){

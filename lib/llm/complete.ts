@@ -11,8 +11,14 @@
 // 🔴 LIVE 2026-08-24 (chốt Henry): Kimi K3 chạy KHÔNG ỔN ĐỊNH (hay chậm/
 // timeout) → CANONICAL_ORDER đặt Kimi CỐ ĐỊNH ở cuối chuỗi, bất kể ai làm
 // primary. Mặc định toàn site: Gemini Flash primary → Opus 5 → Kimi K3.
-// Vài tool "luận giải" quan trọng (xem `providerOrder`) ép primary='anthropic'
-// qua `LlmTextOpts.provider` ở đúng route đó → Opus 5 → Gemini Flash → Kimi K3.
+// 🔴 LIVE 2026-09-03 (chốt Henry): các route "luận giải" một-lần
+// (lasotuvi/van-han-nam/tubinh/xem-tuoi/day-con/huong-nghiep-tre) đã GỠ ép
+// primary='anthropic' → nay CẢ SITE, tool lẫn rail chat, cùng một thứ tự:
+// Gemini 3.8 Flash → Opus 5 → Kimi K3. Cơ chế override `LlmTextOpts.provider`
+// vẫn còn nguyên nhưng HIỆN KHÔNG route nào dùng.
+// Căn cứ (104 lượt gọi thật, 4 lá số × 2 model × 13 phần, cùng input/prompt):
+// Opus 11.215đ & 102s vs Gemini 2.669đ & 16s mỗi lá số — rẻ 4,2× nhanh 6,2×,
+// mà 0 lỗi / 0 phần cụt / 0 bịa số ở CẢ HAI. Xem nhat-ky/2026-09.md.
 //
 // Hỗ trợ:
 //   - llmText           : non-stream text (+ ảnh vision, + hội thoại nhiều lượt)
@@ -26,7 +32,13 @@ import { toGeminiTools } from '@/lib/agent/providers/gemini';
 import { toKimiTools } from '@/lib/agent/providers/kimi';
 
 const GEMINI_KEY = process.env.GEMINI_API_KEY || '';
-const GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-2.5-flash';
+// 2026-09-02: 2.5-flash → 3.8-flash. Cùng họ Flash, đắt hơn (0.30/2.50 →
+// 0.75/3.75 mỗi 1M) nhưng viết tiếng Việt hơn hẳn — đo trên 13 phần Luận
+// Giải của một lá số thật: 2.5-flash tâng bốc và tự mâu thuẫn với nhãn
+// engine (viết "giữ được bền, không dễ thất thoát" cho cung có Hóa Kỵ hội
+// sát), 3.8-flash thì không. Vẫn rẻ hơn Opus 5 ~6,7 lần cả hai chiều.
+// 🗓 Giá 3.8-flash ×2 từ 01/01/2027 — xem MODEL_PRICING trong lib/agent/usage.ts.
+const GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-3.8-flash';
 const GEMINI_BASE = 'https://generativelanguage.googleapis.com/v1beta/models';
 const ANTHROPIC_KEY = process.env.ANTHROPIC_API_KEY || '';
 // Opus 5. Đứng thứ 1 (primary, các tool "luận giải" quan trọng) hoặc thứ 2
@@ -87,6 +99,26 @@ export interface LlmTextOpts {
    * (vd cron viết bài muốn Kimi dù DB đang ưu tiên Gemini cho toàn site).
    */
   provider?: 'kimi' | 'anthropic' | 'gemini';
+  /** Độ "nghĩ" của model cho ĐÚNG lượt này — map thẳng sang
+   * `output_config.effort` của Anthropic. CHỈ nhánh Anthropic đọc field này;
+   * Gemini/Kimi bỏ qua. Bỏ trống = mặc định của model (`high`).
+   *
+   * Vì sao có: Opus 5 TỰ BẬT thinking, và token nghĩ ăn CHUNG `max_tokens`
+   * với token chữ (xem docs/nhat-ky/2026-09.md "Token NGHĨ ăn chung trần").
+   * Đo trên 48 bản, prompt thật + 2 lá số thật, 8 phần:
+   *     mặc định (high) 1281 token / 1163 chữ   — 1,101 token mỗi chữ
+   *     effort 'low'     779 token / 1219 chữ   — 0,639 token mỗi chữ
+   * tức RẺ HƠN 39% mà chữ ra còn NHIỀU HƠN. Chấm mù 16 cặp không tìm ra
+   * khác biệt chất lượng (8–6–2, đúng mức tung đồng xu).
+   *
+   * ⚠️ ĐỪNG thay bằng `thinking:{type:'disabled'}` cho rẻ thêm ~2%: tài liệu
+   * Anthropic ghi rõ Opus 5 tắt hẳn thinking thì có thể RÒ THẺ `<thinking>`
+   * ra chính văn (và viết tool call vào văn bản thay vì `tool_use` block).
+   * Bài này BÁN cho khách. `effort:'low'` giữ thinking bật nên không dính,
+   * mà vẫn lấy 97% khoản tiết kiệm. `disabled` còn bị API từ chối (400) khi
+   * effort là `xhigh`/`max`.
+   */
+  effort?: 'low' | 'medium' | 'high' | 'xhigh' | 'max';
 }
 
 // ─── Gemini ────────────────────────────────────────────────────
@@ -129,6 +161,18 @@ function buildGeminiBody(o: LlmTextOpts, maxTokens: number) {
 
 interface RawLlmResult {
   text: string;
+  /** TRUE khi provider báo output bị CẮT vì chạm trần `max_tokens` — không phải
+   * lỗi mạng, không phải model viết xong. Chữ trả về vẫn là chữ THẬT nhưng cụt
+   * giữa câu.
+   *
+   * 🔴 VÌ SAO PHẢI CÓ TRƯỜNG NÀY: trước 2026-09 không một nhánh provider nào
+   * đọc `stop_reason`/`finishReason`, nên mọi lượt bị cắt đi thẳng vào sản phẩm
+   * mà KHÔNG có gì báo. Đo trên 46 bản luận đã bán: **77/974 phần (7,9%) kết
+   * thúc giữa câu, 33/46 bản (72%) dính ít nhất một phần** — nặng nhất là phần
+   * 1 (33,3%) và phần 14 (17,8%), tức đúng mấy phần văn dài nhất. Không có cờ
+   * này thì lớp lỗi đó vô hình theo đúng nghĩa đen.
+   * Xem docs/nhat-ky/2026-09.md. */
+  truncated?: boolean;
   usage: {
     input_tokens: number;
     output_tokens: number;
@@ -154,8 +198,19 @@ async function geminiText(o: LlmTextOpts, maxTokens: number): Promise<RawLlmResu
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const t = (j?.candidates?.[0]?.content?.parts as any[] | undefined)?.map((p) => p.text).filter(Boolean).join('') || '';
   if (!t) throw new Error('gemini: completion rỗng');
+  // Đối ứng của `stop_reason==='max_tokens'` bên Anthropic (xem anthropicText).
+  // Phần lớn 77 phần cụt đo được là từ thời Gemini/Kimi primary, nên nhánh này
+  // BẮT BUỘC phải có cờ y hệt — vá mỗi Anthropic là vá nửa vời.
+  const truncated = j?.candidates?.[0]?.finishReason === 'MAX_TOKENS';
+  if (truncated) {
+    console.error(
+      `[llm] gemini CẮT GIỮA CHỪNG (finishReason=MAX_TOKENS): max_tokens=${maxTokens}, ` +
+        `output_tokens=${j?.usageMetadata?.candidatesTokenCount}, chữ=${t.length}, kết thúc="…${t.slice(-40)}"`
+    );
+  }
   return {
     text: t,
+    truncated,
     usage: {
       input_tokens: j?.usageMetadata?.promptTokenCount || 0,
       output_tokens: j?.usageMetadata?.candidatesTokenCount || 0,
@@ -304,6 +359,8 @@ function buildAnthropicBody(o: LlmTextOpts, maxTokens: number, stream: boolean) 
       ? [{ type: 'text', text: o.system, cache_control: { type: 'ephemeral', ttl: '1h' } }]
       : o.system;
   }
+  // `effort` phải nằm TRONG `output_config`, không phải field top-level.
+  if (o.effort) body.output_config = { effort: o.effort };
   if (stream) body.stream = true;
   return body;
 }
@@ -320,10 +377,22 @@ async function anthropicText(o: LlmTextOpts, maxTokens: number): Promise<RawLlmR
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const t = (j?.content as any[] | undefined)?.map((b) => b.text).filter(Boolean).join('') || '';
   if (!t) throw new Error('anthropic: completion rỗng');
+  // `stop_reason==='max_tokens'` = API đã CẮT output giữa chừng. Đây là tín hiệu
+  // chính thức của Anthropic, không phải suy đoán từ dấu câu. KHÔNG ném lỗi:
+  // chữ đã sinh vẫn dùng được và người dùng đã trả tiền cho nó — nhưng phải kêu
+  // to để còn biết mà nâng trần, thay vì im lặng giao hàng cụt như trước.
+  const truncated = j?.stop_reason === 'max_tokens';
+  if (truncated) {
+    console.error(
+      `[llm] anthropic CẮT GIỮA CHỪNG (stop_reason=max_tokens): max_tokens=${maxTokens}, ` +
+        `output_tokens=${j?.usage?.output_tokens}, chữ=${t.length}, kết thúc="…${t.slice(-40)}"`
+    );
+  }
   return {
     // Nối lại dấu '{' của prefill (xem buildAnthropicBody) — API chỉ trả phần
     // model viết TIẾP, không lặp lại phần đã mồi.
     text: o.json ? '{' + t : t,
+    truncated,
     usage: {
       input_tokens: j?.usage?.input_tokens || 0,
       output_tokens: j?.usage?.output_tokens || 0,
@@ -359,9 +428,9 @@ function anthropicChunkText(raw: string): string {
 // CỐ Ý đặt Kimi CUỐI mảng này, cách DUY NHẤT để nó luôn là lưới đỡ CUỐI CÙNG
 // dù primary là ai. Với DB `chat.standalone_provider='gemini'` (mặc định toàn
 // site) → Gemini Flash primary, Opus 5 secondary-1, Kimi K3 secondary-2. Vài
-// route "luận giải" quan trọng tự ép `provider:'anthropic'` ở lệnh gọi (xem
-// `LlmTextOpts.provider`) → Opus 5 primary, Gemini Flash secondary-1, Kimi K3
-// vẫn secondary-2 (không cần đụng mảng, override chỉ đẩy 1 phần tử lên đầu).
+// route CÓ THỂ ép primary bằng `LlmTextOpts.provider` (override chỉ đẩy 1 phần
+// tử lên đầu, không đụng mảng) — nhưng từ 2026-09-03 KHÔNG route nào còn dùng:
+// cả site chạy Gemini primary. Xem chú thích đầu file.
 // Kimi thiếu key thì `kimiText`/`openKimiStream` tự ném lỗi ngay, vòng
 // thử-provider-kế-tiếp bên dưới xử lý y như mọi lỗi khác.
 const CANONICAL_ORDER = ['anthropic', 'gemini', 'kimi'];
@@ -398,6 +467,10 @@ export interface LlmTextFullResult {
    * Đo tại đây để mọi route chỉ việc chuyển tiếp — bắt 10 chỗ gọi tự bấm giờ
    * thì sớm muộn có chỗ quên, mà chỗ quên đó im lặng. */
   durationMs: number;
+  /** Output bị CẮT vì chạm trần `max_tokens` (xem `RawLlmResult.truncated`).
+   * Route nào giao văn bản dài cho người đã trả tiền thì PHẢI đọc cờ này —
+   * không đọc thì bản cụt đi thẳng tới khách y như trước 2026-09. */
+  truncated: boolean;
 }
 
 /**
@@ -416,6 +489,7 @@ export async function llmTextFull(o: LlmTextOpts): Promise<LlmTextFullResult> {
       return {
         text: r.text,
         usage: r.usage,
+        truncated: !!r.truncated,
         provider: p as 'gemini' | 'anthropic' | 'kimi',
         model: p === 'kimi' ? KIMI_MODEL : p === 'gemini' ? GEMINI_MODEL : ANTHROPIC_MODEL,
         durationMs: Date.now() - t0,

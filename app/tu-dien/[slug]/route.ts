@@ -214,12 +214,11 @@ body{font-family:Arial,sans-serif;background:var(--bg);color:var(--text);min-hei
   <div class="cta-box">
     <div class="cta-box-label">Tử Vi Minh Bảo</div>
     <h3>Xem Lá Số Của Bạn</h3>
-    <p>Áp dụng kiến thức cổ pháp vào lá số cá nhân — luận giải AI chi tiết 24 phần.</p>
+    <p>Áp dụng kiến thức cổ pháp vào lá số cá nhân — luận giải chuyên sâu chi tiết 24 phần.</p>
     <a class="cta-btn" href="/">Xem Tử Vi →</a>
   </div>
 </article>
-<script src="/footer.js"></script>
-<script src="/track.js?v=3" defer></script><script src="/nav.js?v=24" defer></script>
+<script src="/track.js?v=4" defer></script><script src="/nav.js?v=26" defer></script>
 </body></html>`;
 
   return new NextResponse(html, {

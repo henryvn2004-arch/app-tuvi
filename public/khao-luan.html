@@ -17,7 +17,10 @@
 <link rel="icon" type="image/webp" href="/seal.webp">
 <link rel="apple-touch-icon" href="/seal.webp">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;1,400&family=Noto+Serif+SC:wght@400;600&family=Be+Vietnam+Pro:wght@300;400;500&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;1,400&family=Noto+Serif+SC:wght@400;600&family=Be+Vietnam+Pro:wght@300;400;500&display=swap" rel="stylesheet"></noscript>
+<link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/fonts/noto-serif.css?v=1">
+<link rel="preload" href="/fonts/be-vietnam-pro-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin><link rel="preload" href="/fonts/be-vietnam-pro-latin-400.woff2" as="font" type="font/woff2" crossorigin><link rel="preload" href="/fonts/be-vietnam-pro-vietnamese-600.woff2" as="font" type="font/woff2" crossorigin><link rel="preload" href="/fonts/be-vietnam-pro-latin-600.woff2" as="font" type="font/woff2" crossorigin><link rel="stylesheet" href="/fonts/be-vietnam-pro.css?v=1"><link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600&display=swap" rel="stylesheet"></noscript>
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
@@ -79,9 +82,15 @@ body { font-family: 'Be Vietnam Pro', sans-serif; background: var(--bg); color: 
 </style>
 <script src="/share.js"></script>
 <script src="/auth.js?v=2"></script>
-<script src="/nav.js?v=24"></script>
+<!-- `defer` KHÔNG phải tuỳ chọn ở đây: thẻ này nằm trong <head>, mà nav.js
+     chạy ngay ở top level và gọi `document.body.appendChild` (nav.js:379).
+     Không defer thì `document.body` còn null ⇒ nav.js ném TypeError ⇒ trang
+     KHÔNG có thanh nav và `conversion.js` không bao giờ được nạp. 5 trang
+     tools/* khác cũng để nav.js trong <head> nhưng đều có `defer`. -->
+<script src="/nav.js?v=26" defer></script>
 </head>
 <body>
+<div id="nav-ph" style="height:60px;background:#061A2E"></div>
 
 <div class="breadcrumb" id="breadcrumb">
   <a href="/">Trang Chủ</a>

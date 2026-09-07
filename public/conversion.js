@@ -77,7 +77,7 @@ const POPUP_DATA = {
     cta: 'Mở Khóa Luận Giải Đầy Đủ →',
     ctaHref: '#payment-section',
     secondary: 'Để sau vậy',
-    urgency: '<span class="ic-inline" data-icon="lock" data-icon-emoji="🔒" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">🔒</span> Cổ pháp Tử Bình Chân Thuyên · Cá nhân hóa AI · Bảo mật tuyệt đối',
+    urgency: '<span class="ic-inline" data-icon="lock" data-icon-emoji="🔒" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">🔒</span> Cổ pháp Tử Bình Chân Thuyên · Cá nhân hóa theo lá số · Bảo mật tuyệt đối',
   },
   '/xem-tuoi.html': {
     icon: '💑',

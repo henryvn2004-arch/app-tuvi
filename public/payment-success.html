@@ -5,7 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Xác nhận thanh toán — Tử Vi Minh Bảo</title>
 <meta name="robots" content="noindex">
-<link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;600&family=Be+Vietnam+Pro:wght@300;400;500;600&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;600&family=Be+Vietnam+Pro:wght@300;400;500;600&display=swap" rel="stylesheet"></noscript>
+<link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/fonts/noto-serif.css?v=1">
+<link rel="preload" href="/fonts/be-vietnam-pro-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin><link rel="preload" href="/fonts/be-vietnam-pro-latin-400.woff2" as="font" type="font/woff2" crossorigin><link rel="preload" href="/fonts/be-vietnam-pro-vietnamese-600.woff2" as="font" type="font/woff2" crossorigin><link rel="preload" href="/fonts/be-vietnam-pro-latin-600.woff2" as="font" type="font/woff2" crossorigin><link rel="stylesheet" href="/fonts/be-vietnam-pro.css?v=1">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 body {
@@ -109,7 +112,43 @@ body {
 </div>
 
 <script src="/auth.js?v=2"></script>
-<script src="/nav.js?v=22" data-icons-only></script>
+<script src="/nav.js?v=26" data-icons-only></script>
+<script>
+// `nav.js?v=25` ở chế độ `data-icons-only` CỐ Ý không nạp Meta Pixel (xem
+// nav.js#297). Nhưng đây là trang XÁC NHẬN THANH TOÁN — đúng nơi PHẢI bắn
+// Purchase, nên khởi tạo pixel riêng ở đây thay vì trông chờ nav.js. Cùng
+// pixel ID với nav.js, cùng lý do bỏ qua `navigator.webdriver` (bộ E2E chạy
+// thẳng vào trang này — xem tests/static-pages.spec.ts).
+if (!document.getElementById('fb-pixel-js') && !navigator.webdriver) {
+  (function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+  n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.id='fb-pixel-js';t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)})(window,
+  document,'script','https://connect.facebook.net/en_US/fbevents.js');
+  window.fbq('init', '1747342186469684');
+  window.fbq('track', 'PageView');
+}
+// `nav.js?v=25` ở chế độ `data-icons-only` CŨNG bỏ qua GA4 (xem nav.js#336) —
+// cùng lý do như fbq ở trên: đây là trang XÁC NHẬN THANH TOÁN, đúng nơi phải
+// bắn sự kiện `purchase` để Google Ads (import Key Event từ GA4) đo được
+// conversion. Không nơi nào khác trong repo từng gọi gtag('event','purchase').
+if (!document.getElementById('gtag-js') && !navigator.webdriver) {
+  var ga = document.createElement('script'); ga.id = 'gtag-js'; ga.async = true;
+  ga.src = 'https://www.googletagmanager.com/gtag/js?id=G-F4XNRS2XT0'; document.head.appendChild(ga);
+  window.dataLayer = window.dataLayer || [];
+  window.gtag = function () { window.dataLayer.push(arguments); };
+  window.gtag('js', new Date());
+  window.gtag('config', 'G-F4XNRS2XT0');
+  window.gtag('config', 'AW-18419617290');
+}
+if (!document.getElementById('clarity-js') && !navigator.webdriver) {
+  (function (c, l, a, r, i, t, y) {
+    c[a] = c[a] || function () { (c[a].q = c[a].q || []).push(arguments); };
+    t = l.createElement(r); t.id = 'clarity-js'; t.async = 1; t.src = 'https://www.clarity.ms/tag/' + i;
+    y = l.getElementsByTagName(r)[0]; y.parentNode.insertBefore(t, y);
+  })(window, document, 'clarity', 'script', 'yececqbfbv');
+}
+</script>
 <script>
 const params  = new URLSearchParams(window.location.search);
 const slug    = params.get('slug') || '';
@@ -145,6 +184,11 @@ async function capture() {
     const data = await res.json();
 
     if (data.success) {
+      // Purchase KHÔNG còn bắn ở đây — webhook PayPal thường chốt đơn TRƯỚC khi
+      // trang này kịp load, nên `status==='already_completed'` gần như luôn
+      // đúng và Purchase gần như không bao giờ bắn được (đo thật: 0/12 lượt
+      // nạp trong 90 ngày). Server bắn thay, đúng MỘT lần, ngay tại điểm cộng
+      // tiền thật duy nhất — xem lib/marketing/server-conversions.ts.
       showSuccess(slug, data.credits || 0, data.balance || 0);
     } else {
       showError(data.error || 'Thanh toán thất bại. Vui lòng liên hệ hỗ trợ.');
@@ -160,7 +204,33 @@ function getPackageLabel(slug) {
   return labels[id] || '? Credits';
 }
 
+// Ý định mở khoá quăng từ trang tool trước khi đi PayPal (xem `_insufficient`
+// trong tuvi-paywall.js — cùng khoá `tpw_pending_unlock`, cùng gốc site nên
+// sessionStorage sống qua được cả chuyến đi PayPal và quay về). Có ý định
+// khớp → đưa thẳng khách VỀ ĐÚNG tool thay vì tấm thẻ "dùng ngay" chung chung
+// rồi tự trôi về /profile.html — đó chính là chỗ khách phải tự nhớ đường
+// quay lại mà 100% không ai quay lại nổi.
+function pendingUnlock() {
+  let p = null;
+  try { p = JSON.parse(sessionStorage.getItem('tpw_pending_unlock') || 'null'); } catch (e) { return null; }
+  if (!p || !p.returnUrl) return null;
+  if (Date.now() - (Number(p.ts) || 0) > 30 * 60 * 1000) return null;
+  return p;
+}
+
 function showSuccess(slug, credits, balance) {
+  const pending = pendingUnlock();
+  if (pending) {
+    document.getElementById('card').innerHTML = `
+      <div class="icon ic" style="width:1em;height:1em;margin-left:auto;margin-right:auto">${window.iconHtml?window.iconHtml('gift'):''}</div>
+      <div class="title">Nạp credits thành công!</div>
+      <div class="credit-badge">+${credits} Credits<small>Số dư hiện tại: ${balance} credits</small></div>
+      <div class="subtitle">Đang quay lại để mở khoá tiếp…</div>
+    `;
+    const sep = pending.returnUrl.indexOf('?') >= 0 ? '&' : '?';
+    setTimeout(() => { window.location.href = pending.returnUrl + sep + 'tpwResume=1'; }, 1200);
+    return;
+  }
   const label = getPackageLabel(slug);
   document.getElementById('card').innerHTML = `
     <div class="icon ic" style="width:1em;height:1em;margin-left:auto;margin-right:auto">${window.iconHtml?window.iconHtml('gift'):''}</div>

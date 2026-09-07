@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Luận Đường — Tử Vi Minh Bảo</title>
-<meta name="description" content="Luận Đường — không gian mệnh lý AI: lá số Tử Vi, Bát Tự, xem tuổi, đặt tên, chọn ngày — chọn một công cụ để bắt đầu và hỏi trợ lý theo ngữ cảnh.">
+<meta name="description" content="Luận Đường — không gian mệnh lý: lá số Tử Vi, Bát Tự, xem tuổi, đặt tên, chọn ngày — chọn một công cụ để bắt đầu và hỏi trợ lý theo ngữ cảnh.">
 <link rel="icon" type="image/webp" href="/seal.webp">
 <!-- 🔴 BẮT BUỘC cho đường bật thông báo trên iPhone, không phải tag trang trí.
      Apple chỉ mở Web Push cho trang đã "Thêm vào Màn hình chính" và chạy ở chế
@@ -21,12 +21,17 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Tử Vi MB">
 <link rel="apple-touch-icon" href="/seal.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"></noscript>
-<link rel="stylesheet" href="/shell.css?v=30">
+<link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/fonts/noto-serif.css?v=1">
+<link rel="stylesheet" href="/shell.css?v=34">
 <style>
-.home-body{max-width:920px}
+/* Thẻ Vận Hôm Nay phải co theo bề rộng CỘT chứ không theo viewport: trên
+   desktop `.ws` chỉ còn ~360px sau khi trừ sidebar 246px + rail 336px, nên
+   `@media(max-width:600px)` KHÔNG BAO GIỜ khớp và thẻ nhận layout 3 cột
+   trong một cột hẹp — chữ ngày vỡ làm 3 dòng, tranh tràn ra ngoài. Khai
+   container ở đây rồi mọi luật co giãn của thẻ hỏi `@container home`. */
+.home-body{max-width:920px;container:home / inline-size}
 .hero{background:linear-gradient(135deg,var(--navy),#0d2a49);border-radius:16px;padding:26px 28px;margin-bottom:24px;color:#fff;position:relative;overflow:hidden}
 .hero .seal{position:absolute;right:-10px;top:-14px;font-size:150px;line-height:1;color:rgba(212,175,55,.13);font-family:var(--serif);pointer-events:none}
 .hero h1{font-family:var(--serif);font-size:24px;font-weight:700;margin-bottom:7px}
@@ -43,6 +48,31 @@
 .tcard .cost{position:absolute;top:11px;right:12px;font-size:10.5px;font-weight:600;color:var(--gold-soft);background:var(--gold-lt);border:1px solid var(--gold-soft);border-radius:20px;padding:1px 8px}
 .tcard .cost.free{color:#fff;background:var(--green);border-color:var(--green)}
 .tcard.ext .tx b::after{content:"↗";font-size:11px;color:var(--text-lt);margin-left:5px;font-family:var(--sans)}
+/* ── KHUNG CHỜ THẺ CÔNG CỤ (#wcCards, #nextCard) ───────────────────────────
+   🐞 Vì sao cần: `navFallback()` đọc localStorage, nên KHÁCH LẦN ĐẦU nhận
+   `null` ⇒ `renderWelcomeCards` / `renderNext` không vẽ gì, hai khối này rỗng
+   tới khi `ToolPrices.load()` trả lời. Lighthouse mobile đo `/app` CLS
+   0,45-0,61; đây là hai trong ba cú nhảy.
+
+   🔑 CỐ Ý không khớp chiều cao theo NỘI DUNG: chữ nằm dưới `tool_pricing`, đo
+   thật ở 390px ra 99/77/99/77px vì câu hỏi dài ngắn khác nhau. Dựng khung chờ
+   theo đúng nếp đó là chép tay một thứ ở DB — sửa mô tả công cụ là khung chờ
+   trôi mà không ai hay. Nên mọi ô đều để HAI dòng: dư ~44px cho cả khối thay
+   vì thiếu ~390px, và không dính gì vào nội dung.
+   Dư (khối co lại) chứ không thiếu (khối nở ra) là có chủ đích: nội dung dồn
+   LÊN thì thứ người ta sắp chạm chạy ra xa ngón tay, không chui vào dưới nó.
+
+   Thanh xám vẽ bằng `background` chứ không bằng chiều cao/lề của phần tử —
+   mỗi `.sk` vẫn là một dòng chữ `&nbsp;` nên cao đúng bằng một dòng thật. */
+.sk-tile .sk,.nx-skel .sk{display:block;color:transparent;
+  background:linear-gradient(var(--line),var(--line)) no-repeat left center/100% 11px}
+.sk-tile .ic,.nx-skel .ic{background:var(--line)!important;color:transparent!important}
+.sk-tile .tx b .sk,.nx-skel b .sk{background-size:58% 13px}
+.sk-tile,.nx-skel{pointer-events:none}
+@keyframes tileSkPulse{0%,100%{opacity:1}50%{opacity:.5}}
+@media(prefers-reduced-motion:no-preference){
+  .sk-tile .sk,.sk-tile .ic,.nx-skel .sk,.nx-skel .ic{animation:tileSkPulse 1.4s ease-in-out infinite}
+}
 /* ── Q1: GỢI Ý THEO HÀNH VI ────────────────────────────────────────────────
    `.nx-why` là lý do — phần đáng giá nhất của khối này. Một thẻ gợi ý không
    nói được VÌ SAO thì đọc như quảng cáo mù (xem lib/tools/suggest-tool.ts). */
@@ -72,6 +102,31 @@
 .inv-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
 .inv-code{flex:1 1 190px;min-width:0;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.5px;color:var(--text);background:var(--paper-2);border:1px dashed var(--gold-soft);border-radius:9px;padding:9px 11px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .inv-btn{flex:0 0 auto;background:linear-gradient(135deg,var(--gold-soft),var(--gold));color:#2a1e05;border:none;border-radius:9px;padding:9px 15px;font-size:12.5px;font-weight:700;cursor:pointer;font-family:inherit}
+/* ── KHUNG CHỜ KHỐI MỜI BẠN ────────────────────────────────────────────────
+   Dùng LẠI đúng .inv-card/.inv-t/.inv-d/.inv-row nên chiều cao do CSS thật
+   quyết, không do một con số tự đặt. `.inv-d` để đúng BA dòng vì thẻ khách
+   thật xuống 3 dòng ở bề ngang 346px (đo ở 390×844).
+
+   🐞 Vì sao cần: `#inviteCard` rỗng ở lần vẽ đầu và chỉ được đổ sau khi
+   `whenAuthReady` → `Auth.getFreshToken()` xong. Với khách vô danh, đường đó
+   đi qua `_refreshViaServer()` tức MỘT VÒNG MẠNG tới `/api/auth/session`
+   (chính cú 401 thấy ở console mọi trang) — nên khối này chèn vào rất muộn và
+   đẩy mọi thứ bên dưới. Lighthouse mobile đo `/app` CLS 0,45-0,61. */
+/* Thanh xám vẽ bằng BACKGROUND, không bằng chiều cao/lề của chính phần tử:
+   mỗi `.sk` vẫn là một dòng chữ `&nbsp;` nên nó cao ĐÚNG bằng một dòng thật,
+   còn khoảng hở giữa các thanh là phần nền không tô. Thêm `margin` để lấy khe
+   hở là cộng thêm chiều cao — đo được +6px cho ba dòng, tức lại lệch. */
+.inv-skel .sk{display:block;color:transparent;
+  background:linear-gradient(var(--line),var(--line)) no-repeat left center/100% 13px}
+.inv-skel .inv-t .sk{background-size:64% 15px}
+.inv-skel .inv-d .sk:last-child{background-size:72% 13px}
+/* `line-height` ghim TAY: <span> thừa hưởng 1.55 của thẻ còn <button> thật
+   dùng `normal` của trình duyệt — chênh 5,4px nếu để mặc. */
+.inv-skel .sk-btn{background:var(--line);color:transparent;cursor:default;line-height:14px}
+@keyframes invSkPulse{0%,100%{opacity:1}50%{opacity:.5}}
+@media(prefers-reduced-motion:no-preference){
+  .inv-skel .sk,.inv-skel .sk-btn{animation:invSkPulse 1.4s ease-in-out infinite}
+}
 .inv-btn:hover{filter:brightness(1.06)}
 .inv-btn.ghost{background:none;color:var(--text-mid);border:1px solid var(--line);font-weight:600}
 .inv-note{font-size:11.5px;color:var(--text-lt);margin-top:9px;line-height:1.5}
@@ -81,80 +136,247 @@
 .all-tools[aria-expanded="true"] .all-tools-chev{transform:rotate(90deg)}
 .all-tools-panel{margin-top:14px}
 .all-tools-panel .grp-title:first-child{margin-top:0}
-/* ── VẬN HÔM NAY — thẻ hero theo ngày (deterministic, miễn phí) → mồi vào rail luận riêng ── */
-.today-card{position:relative;overflow:hidden;background:linear-gradient(135deg,var(--navy),#0d2a49);border-radius:16px;padding:20px 22px;margin-bottom:22px;color:#fff}
-.today-card .glow{position:absolute;right:-34px;top:-46px;width:190px;height:190px;background:radial-gradient(circle,rgba(201,168,76,.22),transparent 70%);pointer-events:none}
-.today-eyebrow{font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);font-weight:700;margin-bottom:6px}
-.today-date{font-family:var(--serif);font-size:20px;font-weight:600;line-height:1.25;max-width:calc(100% - 92px)}
-.today-date .cc{color:var(--gold-on-navy)}
-.today-hanh{position:absolute;top:20px;right:22px;font-size:11px;font-weight:700;color:#2a1e05;background:linear-gradient(135deg,var(--gold-soft),var(--gold));border-radius:20px;padding:4px 12px;white-space:nowrap}
-/* Nhãn tốt/bình/xấu của ngày — màu là tín hiệu ĐỌC LƯỚT, đừng đổi thành vàng
+/* ── VẬN HÔM NAY — thẻ hero theo ngày (deterministic, miễn phí) → mồi vào rail luận riêng ──
+   Nền SÁNG theo token (`--white`), không còn navy cố định như bản cũ: thẻ nay
+   là một tờ tranh, mà tranh thuỷ mặc thì phải đứng trên nền giấy. */
+.today-card{position:relative;overflow:hidden;background:var(--white);border:1px solid var(--line);
+  border-radius:20px;padding:22px 22px 16px;margin-bottom:22px;color:var(--text);box-shadow:var(--shadow)}
+@container home (max-width:430px){.today-card{padding:16px 14px 13px;border-radius:16px;margin-bottom:18px}}
+/* ── Tranh ngày ──────────────────────────────────────────────────────────
+   4 bức thuỷ mặc trong public/img/van-ngay/, chọn theo dữ liệu engine (xem
+   `anhCho()`). Mép trái + đáy nhoè tan vào nền thẻ bằng mask — cắt thẳng thì
+   nhìn ra ngay là "một cái ảnh dán vào", mà cả điểm của thẻ là nó phải như
+   một tờ tranh.
+   🪤 MỘT gradient duy nhất, toả từ góc phải-trên. Bản đầu ghép hai gradient
+   thẳng rồi giao lại bằng `mask-composite:intersect` — KHÔNG ăn, ảnh vẫn ra
+   hình chữ nhật cạnh sắc. Một lớp thì không cần composite. */
+.today-art{position:absolute;top:0;right:0;width:400px;height:228px;z-index:0;
+  pointer-events:none;user-select:none;
+  -webkit-mask-image:radial-gradient(120% 100% at 100% 0%,#000 26%,rgba(0,0,0,.46) 58%,transparent 82%);
+          mask-image:radial-gradient(120% 100% at 100% 0%,#000 26%,rgba(0,0,0,.46) 58%,transparent 82%)}
+.today-art img{width:100%;height:100%;object-fit:cover;display:block}
+/* Bốn bức đều nền giấy kem. Ở dark KHÔNG hạ xuống thì nó là mảng sáng chói
+   nằm giữa một cái thẻ tối. */
+:root[data-theme="dark"] .today-art{opacity:.46}
+@container home (max-width:520px){.today-art{width:250px;height:168px}}
+/* Triện — chữ đơn, đồng bộ với triện in trong chính 4 bức (福 · 平 · 忍 · 忌). */
+.today-seal{position:absolute;top:18px;right:20px;z-index:2;width:32px;height:32px;border-radius:5px;
+  background:var(--red);color:#fff;font-family:var(--serif);font-size:18px;font-weight:700;
+  display:flex;align-items:center;justify-content:center;box-shadow:0 2px 10px rgba(192,57,43,.35)}
+@container home (max-width:520px){.today-seal{top:13px;right:12px;width:27px;height:27px;font-size:15px}}
+/* Chừa chỗ cho vùng ĐẶC của tranh — mask tắt hẳn ở ~58% bề rộng khung. */
+.today-head{position:relative;z-index:1;padding-right:186px;min-height:120px}
+@container home (max-width:520px){.today-head{padding-right:112px;min-height:100px}}
+.today-eyebrow{font-size:10px;letter-spacing:.26em;text-transform:uppercase;color:var(--text-lt);font-weight:700;margin-bottom:5px}
+.today-date{font-family:var(--serif);font-size:34px;font-weight:700;line-height:1.1;color:var(--heading);letter-spacing:-.01em}
+@container home (max-width:520px){.today-date{font-size:26px}}
+.today-badgerow{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:11px}
+/* Nhãn tốt/bình/xấu/kỵ — màu là tín hiệu ĐỌC LƯỚT, đừng đổi thành một màu
    hết: cả điểm của thẻ là nhìn 1 giây biết hôm nay có nên khởi sự không. */
-.today-hanh.v-tot{background:linear-gradient(135deg,#4c9a6a,#2f7a4d);color:#fff}
-.today-hanh.v-xau{background:linear-gradient(135deg,#c0563f,#a13a25);color:#fff}
-.today-sub{font-size:12.5px;color:rgba(255,255,255,.72);margin:5px 0 13px;line-height:1.5;max-width:540px}
-.today-meta{display:flex;flex-wrap:wrap;gap:5px;margin:0 0 13px}
-.tm-item{font-size:11.5px;color:rgba(255,255,255,.74);background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:6px;padding:3px 9px;white-space:nowrap}
-.tm-item b{color:var(--gold-on-navy);font-weight:600}
-.today-warn{display:flex;gap:8px;align-items:flex-start;font-size:12px;line-height:1.5;color:#ffd9cf;background:rgba(192,86,63,.18);border:1px solid rgba(192,86,63,.42);border-radius:9px;padding:8px 11px;margin-bottom:13px}
-.today-me{background:rgba(201,168,76,.1);border:1px solid rgba(201,168,76,.28);border-radius:10px;padding:11px 13px;margin-bottom:14px}
-.today-me .tme-h{font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--gold);font-weight:700;margin-bottom:5px}
-.today-me .tme-b{font-size:12.5px;color:rgba(255,255,255,.88);line-height:1.55}
-.today-me .tme-b b{color:var(--gold-on-navy);font-weight:600}
+.today-hanh{font-size:13px;font-weight:700;border-radius:22px;padding:5px 16px;white-space:nowrap;
+  background:var(--warn-bg);color:var(--warn-tx)}
+.today-hanh.v-tot{background:var(--ok-bg);color:var(--ok-tx);border:1px solid var(--ok-line)}
+.today-hanh.v-xau{background:var(--no-bg);color:var(--no-tx);border:1px solid var(--no-line)}
+/* Ngày kỵ đặc hơn ngày xấu một bậc — nó là luật CẤM khởi sự, không phải một
+   ngày yếu. */
+.today-hanh.v-ky{background:var(--red);color:#fff}
+.today-dot-sep{width:4px;height:4px;border-radius:50%;background:var(--line-2);flex:0 0 auto}
+.today-sub{font-size:13.5px;color:var(--text-mid);line-height:1.45}
+@container home (max-width:520px){.today-sub{font-size:12.5px;flex-basis:100%}.today-dot-sep{display:none}}
+/* Ba mặt nền tín hiệu. Khai ở đây (không phải shell.css) vì chỉ thẻ này dùng. */
+.today-card{--ok-bg:#F1F8F3;--ok-line:#D5E9DC;--ok-tx:#1E6B3C;
+  --no-bg:#FDF2F2;--no-line:#F5D9D5;--no-tx:#9B2C1C;
+  --hr-bg:#FBF7EC;--hr-line:#EDE1C7;--hr-tx:#7A5E22;
+  --warn-bg:#FBEBC8;--warn-tx:#6B4E12}
+:root[data-theme="dark"] .today-card{--ok-bg:#152219;--ok-line:#26402E;--ok-tx:#5FBF87;
+  --no-bg:#2A1A18;--no-line:#4A2B26;--no-tx:#F08A7A;
+  --hr-bg:#241F14;--hr-line:#3D3421;--hr-tx:#D8BE73;
+  --warn-bg:#3A2E12;--warn-tx:#E7C976}
+/* Mọi khối SAU phần đầu phải nằm TRÊN tranh: tranh là `position:absolute` nên
+   nền của khối tĩnh vẽ ở dưới nó — không nâng thì núi ló lên mặt ô. */
+.today-grid,.today-me,.today-next-h,.today-next,.today-week,.today-cta,.today-foot{position:relative;z-index:1}
+.today-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:16px}
+.tbox{border-radius:14px;padding:14px 15px}
+.tbox.bad{background:var(--no-bg);border:1px solid var(--no-line)}
+.tbox.good{background:var(--ok-bg);border:1px solid var(--ok-line)}
+.tbox.hour{background:var(--hr-bg);border:1px solid var(--hr-line)}
+.tbox-h{display:flex;align-items:center;gap:9px;margin-bottom:11px;
+  font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:700}
+.tbox.bad .tbox-h{color:var(--no-tx)}
+.tbox.good .tbox-h{color:var(--ok-tx)}
+.tbox.hour .tbox-h{color:var(--hr-tx)}
+.tbox-h .ic{width:22px;height:22px;flex:0 0 auto}
+.tbox-h .ic svg{width:100%;height:100%;display:block}
+.tbad-main{font-family:var(--serif);font-size:20px;font-weight:700;color:var(--no-tx);line-height:1.2;margin-bottom:6px}
+.tbad-note{font-size:13px;color:var(--text-lt);line-height:1.45}
+.tdo{display:flex;flex-direction:column;gap:9px}
+.tdo-row{display:flex;align-items:center;gap:10px;font-size:15px;font-weight:600;color:var(--heading)}
+.tdo-row .ic{width:20px;height:20px;flex:0 0 auto;color:var(--ok-tx)}
+.tdo-row .ic svg{width:100%;height:100%;display:block}
+.tdo-ten{flex:1;min-width:0}
+/* Điểm của engine (0-10) hiện ngay cạnh việc: danh sách nay chứa cả 6/10 lẫn
+   10/10, không ghi điểm là gộp hai thứ khác hẳn nhau thành một danh sách phẳng.
+   Nhạt hơn tên việc — nó là chú thích, không phải thứ đọc trước. */
+.tdo-diem{flex:0 0 auto;font-size:11.5px;font-weight:700;color:var(--ok-tx);opacity:.72;
+  font-variant-numeric:tabular-nums}
+.tdo-diem::after{content:"/10";font-weight:400;opacity:.7}
+.thr{display:flex;flex-direction:column}
+.thr-row{display:flex;align-items:baseline;justify-content:space-between;gap:10px;padding:7px 0;border-bottom:1px solid var(--hr-line)}
+.thr-row:last-child{border-bottom:0;padding-bottom:0}
+.thr-row:first-child{padding-top:0}
+.thr-t{font-size:15px;font-weight:700;color:var(--heading);white-space:nowrap}
+.thr-v{font-size:13px;color:var(--text-lt);white-space:nowrap}
+.tbox-empty{font-size:13px;color:var(--text-lt);font-style:italic;line-height:1.45}
+/* Ở máy hẹp CỐ Ý không xếp 3 ô chồng lên nhau: thẻ này là khối ĐẦU của /app,
+   mỗi dòng thêm là một dòng đẩy danh sách công cụ xuống dưới màn hình đầu —
+   đúng lý do engine chỉ trả 3 việc nên / 2 việc kiêng. Cần tránh + Nên làm
+   đứng cạnh nhau, Giờ đẹp nằm ngang hết bề rộng. */
+@container home (max-width:600px){
+  .today-grid{grid-template-columns:1fr 1fr;gap:9px;margin-top:13px}
+  .tbox{padding:11px 11px 12px}
+  .tbox-h{margin-bottom:8px;gap:7px;font-size:10px}
+  .tbox-h .ic{width:17px;height:17px}
+  .tbad-main{font-size:17px;margin-bottom:5px}
+  .tbad-note{font-size:11.5px}
+  .tdo{gap:7px}
+  .tdo-row{font-size:13.5px;gap:8px}
+  .tdo-diem{font-size:10.5px}
+  .tdo-row .ic{width:17px;height:17px}
+  .tbox-empty{font-size:11.5px}
+  .tbox.hour{grid-column:1/-1}
+  .tbox.hour .thr{flex-direction:row;gap:10px}
+  .tbox.hour .thr-row{flex:1;flex-direction:column;align-items:flex-start;gap:1px;
+    border-bottom:0;border-right:1px solid var(--hr-line);padding:0 10px 0 0}
+  .tbox.hour .thr-row:last-child{border-right:0;padding-right:0}
+  .thr-t{font-size:13.5px}
+  .thr-v{font-size:11.5px}
+}
+/* ── Vận riêng của bạn ── */
+.today-me{display:flex;align-items:center;gap:14px;width:100%;text-align:left;margin-top:14px;
+  background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:13px 15px}
+.tme-av{width:52px;height:52px;border-radius:50%;flex:0 0 auto;background:var(--paper-2);
+  border:1px solid var(--line);display:flex;align-items:center;justify-content:center;color:var(--text-lt)}
+.tme-av svg{width:28px;height:28px}
+@container home (max-width:600px){.today-me{margin-top:10px;padding:11px 12px;gap:11px}
+  .tme-av{width:40px;height:40px}.tme-av svg{width:22px;height:22px}}
+.tme-b{flex:1;min-width:0}
+/* Ba dòng này là <span> (nằm trong <button>-safe markup) nên PHẢI ép block —
+   thiếu là nhãn "Vận riêng của bạn" dính liền tiêu đề trên cùng một dòng. */
+.tme-h,.tme-t,.tme-s{display:block}
+.tme-h{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--text-lt);font-weight:700;margin-bottom:3px}
+.tme-t{font-family:var(--serif);font-size:17px;font-weight:700;color:var(--heading);line-height:1.3}
+.tme-t .lt{font-family:var(--sans);font-weight:400;color:var(--text-mid);font-size:15px}
+.tme-t b{color:var(--heading);font-weight:700}
+@container home (max-width:600px){.tme-t{font-size:14.5px}.tme-t .lt{font-size:13px}}
+.tme-s{display:flex;align-items:center;gap:7px;flex-wrap:wrap;font-size:13px;color:var(--text-lt);margin-top:4px}
+@container home (max-width:600px){.tme-s{font-size:11.5px;margin-top:3px}}
+.tme-swatch{display:inline-flex;gap:0}
+.tme-swatch i{width:14px;height:14px;border-radius:50%;border:1.5px solid var(--white);margin-left:-5px}
+.tme-swatch i:first-child{margin-left:0}
 /* Dòng "lá số đang dùng" + nút Đổi — trước đây thẻ luận vận riêng mà KHÔNG nói
    nó đang dựa trên lá số nào, nên lá số sai thì không có đường nào sửa. */
-.tme-src{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:9px;padding-top:9px;border-top:1px solid rgba(201,168,76,.22);font-size:11.5px;color:rgba(255,255,255,.55)}
-.tme-src b{color:rgba(255,255,255,.8);font-weight:600}
-.tme-edit{background:none;border:1px solid rgba(201,168,76,.45);color:var(--gold-on-navy);border-radius:20px;padding:2px 11px;font-size:11px;font-weight:600;cursor:pointer;font-family:inherit}
-.tme-edit:hover{background:rgba(201,168,76,.16)}
-.tme-cta{margin-top:10px;background:linear-gradient(135deg,var(--gold-soft),var(--gold));color:#2a1e05;border:none;border-radius:8px;padding:8px 16px;font-size:12.5px;font-weight:700;cursor:pointer;font-family:inherit}
+.tme-src{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:8px;padding-top:8px;
+  border-top:1px solid var(--line);font-size:11.5px;color:var(--text-lt)}
+.tme-src b{color:var(--text-mid);font-weight:600}
+.tme-edit{background:none;border:1px solid var(--line-2);color:var(--text-mid);border-radius:20px;
+  padding:2px 11px;font-size:11px;font-weight:600;cursor:pointer;font-family:inherit}
+.tme-edit:hover{background:var(--paper-2);border-color:var(--gold-soft);color:var(--heading)}
+.tme-cta{margin-top:10px;background:var(--red);color:#fff;border:none;border-radius:9px;
+  padding:9px 16px;font-size:12.5px;font-weight:700;cursor:pointer;font-family:inherit}
+.tme-cta:hover{filter:brightness(1.06)}
 /* Form nhập lá số ngay trong thẻ. CỐ Ý không đá người dùng sang trang khác:
-   chỗ này là đáy phễu của khối cá nhân, mỗi lần chuyển trang là một lần rơi. */
-.tme-form{margin-top:11px}
+   chỗ này là đáy phễu của khối cá nhân, mỗi lần chuyển trang là một lần rơi.
+   ⚠️ Bản cũ tô cho nền NAVY (chữ trắng, ô trong suốt). Thẻ nay nền sáng nên
+   phải tô lại — để nguyên là chữ trắng trên giấy trắng. */
+.tme-form{margin-top:11px;width:100%}
 .tme-form .frow{display:flex;gap:9px;flex-wrap:wrap;align-items:flex-end;margin-bottom:9px}
 .tme-form .fg{display:flex;flex-direction:column;gap:4px}
-.tme-form .fg label{font-size:9.5px;font-weight:600;color:rgba(255,255,255,.5);letter-spacing:.04em;text-transform:uppercase}
-.tme-form .fg input,.tme-form .fg select{border:1px solid rgba(255,255,255,.2);border-radius:6px;padding:6px 8px;font-size:12.5px;font-family:inherit;color:#fff;background:rgba(255,255,255,.08);outline:none}
-.tme-form .fg option{color:#111;background:#fff}
-.tme-form .fg input:focus,.tme-form .fg select:focus{border-color:var(--gold)}
-.tme-form .tvf-gio-am-wrap,.tme-form .tvf-compact-foreign{font-size:11px;color:rgba(255,255,255,.55)}
+.tme-form .fg label{font-size:9.5px;font-weight:600;color:var(--text-lt);letter-spacing:.04em;text-transform:uppercase}
+.tme-form .fg input,.tme-form .fg select{border:1px solid var(--line-2);border-radius:7px;padding:7px 9px;
+  font-size:12.5px;font-family:inherit;color:var(--text);background:var(--white);outline:none}
+.tme-form .fg input:focus,.tme-form .fg select:focus{border-color:var(--gold-soft)}
+.tme-form .tvf-gio-am-wrap,.tme-form .tvf-compact-foreign{font-size:11px;color:var(--text-lt)}
 .tme-form .tvf-tooltip-wrap{display:none}
 .tme-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-.tme-save{background:linear-gradient(135deg,var(--gold-soft),var(--gold));color:#2a1e05;border:none;border-radius:8px;padding:8px 18px;font-size:12.5px;font-weight:700;cursor:pointer;font-family:inherit}
-.tme-cancel{background:none;border:none;color:rgba(255,255,255,.5);font-size:12px;cursor:pointer;font-family:inherit;text-decoration:underline}
-.tme-err{font-size:11.5px;color:#ffb4a0}
-.today-cols{display:grid;grid-template-columns:1fr 1fr;gap:13px;margin-bottom:15px}
-@media(max-width:560px){.today-cols{grid-template-columns:1fr;gap:11px}}
-.today-hours{margin-bottom:15px}
-.th-label{font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:8px;font-weight:600}
-.th-chips{display:flex;flex-wrap:wrap;gap:6px}
-.th-chip{font-size:12px;background:rgba(201,168,76,.14);border:1px solid rgba(201,168,76,.3);color:var(--gold-on-navy);border-radius:20px;padding:5px 11px;white-space:nowrap}
-.th-chip i{font-style:normal;color:rgba(255,255,255,.6);font-size:11px}
-.tdo-list{display:flex;flex-direction:column;gap:5px}
-.tdo-list span{font-size:12.5px;color:rgba(255,255,255,.85);line-height:1.45}
-.tdo-list span::before{content:"✓";color:#7fc79a;font-weight:700;margin-right:7px}
-.tdo-list.no span::before{content:"✗";color:#e08b76}
-.tdo-empty{font-size:12px;color:rgba(255,255,255,.45);font-style:italic}
+.tme-save{background:var(--red);color:#fff;border:none;border-radius:8px;padding:9px 18px;
+  font-size:12.5px;font-weight:700;cursor:pointer;font-family:inherit}
+.tme-cancel{background:none;border:none;color:var(--text-lt);font-size:12px;cursor:pointer;font-family:inherit;text-decoration:underline}
+.tme-err{font-size:11.5px;color:var(--tx-red)}
+/* ── 3 ngày tới, mở ra được cả 7 ── */
+.today-next-h{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--text-lt);font-weight:700;margin:18px 0 9px}
+@container home (max-width:600px){.today-next-h{margin:14px 0 7px}}
+.today-next{display:grid;grid-template-columns:repeat(3,1fr) auto;gap:10px}
+@container home (max-width:600px){.today-next{grid-template-columns:repeat(3,1fr);gap:7px}}
+.tday{background:var(--white);border:1px solid var(--line);border-radius:13px;padding:11px 8px;
+  display:flex;align-items:center;justify-content:center;gap:9px;cursor:pointer;font:inherit;color:inherit;transition:.13s}
+.tday:hover{border-color:var(--line-2);background:var(--paper)}
+.tday.on{background:var(--ok-bg);border-color:var(--ok-line)}
+.tday.on.v-xau{background:var(--no-bg);border-color:var(--no-line)}
+.tday.on.v-binh{background:var(--hr-bg);border-color:var(--hr-line)}
+.tday .dot{width:12px;height:12px;border-radius:50%;flex:0 0 auto;background:#E0B93C}
+.tday.v-tot .dot{background:#2F8F55}
+.tday.v-xau .dot{background:#E15B4C}
+.tday-tx{text-align:left;line-height:1.2}
+.tday-tx b{display:block;font-size:15px;font-weight:700;color:var(--heading)}
+.tday-tx span{font-size:12px;color:var(--text-lt)}
+.tday.v-tot .tday-tx span{color:var(--ok-tx)}
+.tday.v-xau .tday-tx span{color:var(--no-tx)}
+@container home (max-width:600px){.tday{padding:9px 4px;gap:6px}.tday .dot{width:10px;height:10px}
+  .tday-tx b{font-size:13.5px}.tday-tx span{font-size:10.5px}}
+.tall{background:var(--white);border:1px solid var(--line);border-radius:13px;padding:9px 14px;
+  display:flex;align-items:center;gap:10px;cursor:pointer;font:inherit;color:var(--text-mid);white-space:nowrap;transition:.13s}
+.tall:hover{border-color:var(--line-2);background:var(--paper)}
+.tall .ic{width:20px;height:20px;flex:0 0 auto;color:var(--text-lt)}
+.tall .ic svg{width:100%;height:100%;display:block}
+.tall b{display:block;font-size:13px;color:var(--heading);font-weight:700;line-height:1.25}
+.tall small{font-size:11.5px;color:var(--text-lt)}
+@container home (max-width:600px){
+  .tall{grid-column:1/-1;justify-content:center;padding:8px 12px;margin-top:1px}
+  .tall span{display:flex;gap:5px;align-items:baseline}
+  .tall small{font-size:13px;font-weight:700;color:var(--heading)}
+}
 /* Dải 7 ngày — nhìn 1 giây biết tuần tới hôm nào nên hẹn việc. Bấm vào một ô
    là xem vận ngày đó (vẫn miễn phí, vẫn deterministic). */
-.today-week{margin-bottom:15px}
-.tw-row{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}
-.tw-cell{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:9px;padding:7px 2px 6px;text-align:center;cursor:pointer;font-family:inherit;color:inherit;transition:.13s}
-.tw-cell:hover{background:rgba(255,255,255,.12)}
-.tw-cell.on{border-color:var(--gold);background:rgba(201,168,76,.16)}
-.tw-thu{font-size:10px;color:rgba(255,255,255,.5);font-weight:600}
-.tw-d{font-size:14px;font-weight:600;color:#fff;margin:2px 0 4px;font-family:var(--serif)}
-.tw-dot{width:100%;height:3px;border-radius:2px;background:#8A7A45}
-.tw-cell.v-tot .tw-dot{background:#4c9a6a}
-.tw-cell.v-xau .tw-dot{background:#c0563f}
-.tw-x{font-size:9px;color:#e08b76;margin-top:3px;line-height:1}
-.today-back{background:none;border:none;color:var(--gold-on-navy);font-size:12px;font-family:inherit;cursor:pointer;padding:0;margin-bottom:9px;display:none}
-.today-back:hover{text-decoration:underline}
-.today-cta{display:flex;gap:9px;flex-wrap:wrap}
-.today-ask{flex:1;min-width:190px;background:var(--red);color:#fff;border:none;border-radius:10px;padding:12px 16px;font-size:13.5px;font-weight:600;font-family:var(--serif);cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:8px}
-.today-ask:hover{filter:brightness(1.08)}
-.today-share{background:rgba(255,255,255,.08);color:#fff;border:1px solid rgba(255,255,255,.18);border-radius:10px;padding:12px 16px;font-size:13.5px;font-weight:600;font-family:inherit;cursor:pointer;display:inline-flex;align-items:center;gap:7px;white-space:nowrap}
-.today-share:hover{background:rgba(255,255,255,.14)}
+.today-week{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-top:10px}
+.today-week[hidden]{display:none}
+.tw-cell{background:var(--white);border:1px solid var(--line);border-radius:11px;padding:8px 2px 7px;
+  text-align:center;cursor:pointer;font-family:inherit;color:inherit;transition:.13s}
+.tw-cell:hover{background:var(--paper);border-color:var(--line-2)}
+.tw-cell.on{border-color:var(--gold);background:var(--gold-lt)}
+.tw-thu{font-size:10px;color:var(--text-lt);font-weight:600}
+.tw-d{font-size:14px;font-weight:600;color:var(--heading);margin:2px 0 5px;font-family:var(--serif)}
+.tw-dot{width:100%;height:3px;border-radius:2px;background:#E0B93C}
+.tw-cell.v-tot .tw-dot{background:#2F8F55}
+.tw-cell.v-xau .tw-dot{background:#E15B4C}
+.tw-x{font-size:9px;color:var(--tx-red);margin-top:3px;line-height:1}
+@container home (max-width:600px){.tw-cell{padding:6px 1px 5px;border-radius:9px}
+  .tw-thu{font-size:9px}.tw-d{font-size:12px;margin:1px 0 4px}}
+.today-back{background:none;border:none;color:var(--text-lt);font-size:12.5px;font-family:inherit;
+  cursor:pointer;padding:0;margin-bottom:7px;display:none;text-decoration:underline}
+.today-back:hover{color:var(--heading)}
+.today-cta{display:flex;gap:10px;margin-top:18px}
+@container home (max-width:600px){.today-cta{margin-top:14px;gap:8px}}
+.today-ask{flex:1;background:linear-gradient(180deg,#D4483A,var(--red));color:#fff;border:none;border-radius:14px;
+  padding:16px 20px;font-size:19px;font-weight:700;font-family:var(--serif);cursor:pointer;white-space:nowrap;
+  display:inline-flex;align-items:center;justify-content:center;gap:11px;
+  box-shadow:0 4px 14px rgba(192,57,43,.28);transition:.13s}
+.today-ask:hover{filter:brightness(1.06);box-shadow:0 6px 18px rgba(192,57,43,.34)}
+.today-ask .ic{width:22px;height:22px;flex:0 0 auto}
+.today-ask .ic svg{width:100%;height:100%;display:block}
+@container home (max-width:430px){.today-ask{font-size:16px;padding:14px 10px;gap:8px}.today-ask .ic{width:19px;height:19px}}
+/* Nút biểu tượng: KHÔNG đổi `textContent` để báo trạng thái — làm thế là xoá
+   luôn cái SVG bên trong. Đổi icon qua `flashIcon()` rồi trả về. */
+.today-icbtn{width:56px;flex:0 0 auto;background:var(--paper);border:1px solid var(--line);border-radius:14px;
+  cursor:pointer;color:var(--text-mid);display:flex;align-items:center;justify-content:center;transition:.13s}
+.today-icbtn:hover{background:var(--paper-2);border-color:var(--line-2);color:var(--heading)}
+.today-icbtn svg{width:21px;height:21px;display:block}
+.today-icbtn[disabled]{opacity:.5;cursor:default}
+@container home (max-width:430px){.today-icbtn{width:46px;border-radius:12px}.today-icbtn svg{width:19px;height:19px}}
+.today-foot{display:flex;align-items:center;gap:12px;margin-top:16px}
+.today-foot::before,.today-foot::after{content:"";flex:1;height:1px;background:var(--line)}
+.today-foot span{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--text-lt);white-space:nowrap}
+@container home (max-width:600px){.today-foot{margin-top:13px;gap:9px}
+  .today-foot span{font-size:8.5px;letter-spacing:.09em}}
 /* ── CHÀO LẦN ĐẦU — thay thẻ Vận Hôm Nay cho khách CHƯA có lá số nhớ và CHƯA
    đăng nhập. Nền SÁNG, viền vàng nhạt — cố ý KHÁC hẳn navy của today-card để
    không đọc lẫn với "nội dung ngày" (đây là màn chào, không phải dữ kiện). */
@@ -203,6 +425,27 @@
 .kh-guest-txt{font-size:12.5px;color:var(--text-mid);line-height:1.5;flex:1;min-width:200px}
 .kh-guest-txt b{color:var(--heading)}
 .kh-guest-btn{flex:0 0 auto;background:var(--red);color:#fff;border:none;border-radius:9px;padding:10px 16px;font-size:12.5px;font-weight:700;font-family:var(--serif);cursor:pointer}
+/* Khung chờ Khởi Hành — cùng cách làm với .sk-tile: dùng lại đúng lớp thật,
+   thanh xám vẽ bằng `background` nên không ăn vào layout, và `line-height` của
+   nút ghim tay vì <span> thừa hưởng khác <button>. Số bước là 3 (tiêu đề thật
+   ghi "3 bước đầu tiên"), mỗi bước để tiêu đề 1 dòng + mô tả 2 dòng — CỐ Ý
+   không khớp theo chữ, vì chữ đến từ `/api/payment?action=khoi-hanh-defs`. */
+.kh-skel .sk{display:block;color:transparent;
+  background:linear-gradient(var(--line),var(--line)) no-repeat left center/100% 11px}
+.kh-skel .kh-eyebrow .sk{background-size:34% 9px}
+.kh-skel .kh-h .sk{background-size:62% 13px}
+.kh-skel .kh-sub .sk:last-child{background-size:48% 11px}
+.kh-skel .kh-t .sk{background-size:56% 12px}
+.kh-skel .kh-d .sk:last-child{background-size:70% 11px}
+.kh-skel .kh-guest-txt .sk:last-child{background-size:64% 11px}
+.kh-skel .kh-num{background:var(--line);border-color:var(--line);color:transparent}
+.kh-skel .kh-go,.kh-skel .kh-guest-btn{background:var(--line);color:transparent;cursor:default}
+.kh-skel .kh-go{line-height:15px}
+.kh-skel .kh-guest-btn{line-height:16px}
+.kh-skel{pointer-events:none}
+@media(prefers-reduced-motion:no-preference){
+  .kh-skel .sk,.kh-skel .kh-num,.kh-skel .kh-go,.kh-skel .kh-guest-btn{animation:tileSkPulse 1.4s ease-in-out infinite}
+}
 .kh-guest-btn:hover{filter:brightness(1.08)}
 @media(max-width:520px){
   .kh-step{flex-wrap:wrap}
@@ -241,7 +484,7 @@
    backdrop không bắt sự kiện — xem pointer-events trong JS). */
 .tour-spot{position:fixed;border-radius:14px;box-shadow:0 0 0 4px rgba(201,168,76,.6),0 0 0 3000px rgba(6,26,46,.46);z-index:901;pointer-events:none;transition:top .25s,left .25s,width .25s,height .25s;animation:tourPulse 1.8s ease-in-out infinite}
 @keyframes tourPulse{0%,100%{box-shadow:0 0 0 4px rgba(201,168,76,.6),0 0 0 3000px rgba(6,26,46,.46)}50%{box-shadow:0 0 0 7px rgba(201,168,76,.35),0 0 0 3000px rgba(6,26,46,.46)}}
-.tour-pop{position:fixed;z-index:902;background:var(--white);border:1px solid var(--gold-soft);border-radius:14px;padding:15px 17px;width:290px;max-width:calc(100vw - 24px);box-shadow:0 14px 34px rgba(6,26,46,.24);transition:top .25s,left .25s}
+.tour-pop{position:fixed;z-index:902;overflow-y:auto;-webkit-overflow-scrolling:touch;background:var(--white);border:1px solid var(--gold-soft);border-radius:14px;padding:15px 17px;width:290px;max-width:calc(100vw - 24px);box-shadow:0 14px 34px rgba(6,26,46,.24);transition:top .25s,left .25s}
 .tour-step{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-soft);font-weight:700;margin-bottom:6px}
 .tour-t{font-family:var(--serif);font-size:14.5px;font-weight:600;color:var(--heading);margin-bottom:5px;line-height:1.35}
 .tour-d{font-size:12px;color:var(--text-mid);line-height:1.55;margin-bottom:13px}
@@ -273,50 +516,89 @@
              #todayCard. -->
         <div class="welcome-card" id="welcomeCard" style="display:none">
           <div class="wc-eyebrow">Lần đầu ghé Luận Đường</div>
-          <div class="wc-title">Đây là nơi bạn lập lá số &amp; hỏi trợ lý AI</div>
+          <div class="wc-title">Đây là nơi bạn lập lá số &amp; hỏi trợ lý Luận Đường</div>
           <p class="wc-sub">Chọn một công cụ bên dưới để bắt đầu, hoặc bấm "Hỏi trợ lý" nếu chưa biết bắt đầu từ đâu — trợ lý sẽ hỏi lại và giới thiệu đúng công cụ.</p>
-          <div class="cards" id="wcCards"></div>
+          <div class="cards" id="wcCards" aria-busy="true" aria-label="Đang tải công cụ gợi ý">
+            <a class="tcard sk-tile"><div class="ic"></div><div class="tx"><b><span class="sk">&nbsp;</span></b><span class="sk">&nbsp;</span><span class="sk">&nbsp;</span></div></a>
+            <a class="tcard sk-tile"><div class="ic"></div><div class="tx"><b><span class="sk">&nbsp;</span></b><span class="sk">&nbsp;</span><span class="sk">&nbsp;</span></div></a>
+            <a class="tcard sk-tile"><div class="ic"></div><div class="tx"><b><span class="sk">&nbsp;</span></b><span class="sk">&nbsp;</span><span class="sk">&nbsp;</span></div></a>
+            <a class="tcard sk-tile"><div class="ic"></div><div class="tx"><b><span class="sk">&nbsp;</span></b><span class="sk">&nbsp;</span><span class="sk">&nbsp;</span></div></a>
+          </div>
           <button class="wc-ask" id="welcomeAsk" type="button">✦ Hỏi trợ lý — tôi nên bắt đầu từ đâu?</button>
         </div>
         <div class="today-card" id="todayCard" style="display:none">
-          <div class="glow"></div>
-          <div class="today-hanh" id="todayHanh"></div>
-          <div class="today-eyebrow" id="todayEyebrow">Vận hôm nay</div>
-          <button class="today-back" id="todayBack" type="button">← Về hôm nay</button>
-          <div class="today-date" id="todayDate">—</div>
-          <div class="today-sub" id="todaySub">Số liệu ngày do cổ pháp tính chính xác — hỏi thầy để luận vận riêng cho bạn.</div>
-          <div class="today-meta" id="todayMeta"></div>
-          <div id="todayWarn"></div>
+          <!-- Tranh + triện: dựng RỖNG ở đây rồi mới đổ ảnh trong render(). Khung
+               đã có kích thước cố định từ CSS nên ảnh về muộn cũng không đẩy gì
+               bên dưới — đúng bẫy CLS đã đo trên /app. -->
+          <div class="today-art" id="todayArt" aria-hidden="true"></div>
+          <div class="today-seal" id="todaySeal" aria-hidden="true"></div>
+          <div class="today-head">
+            <button class="today-back" id="todayBack" type="button">← Về hôm nay</button>
+            <div class="today-eyebrow" id="todayEyebrow">Vận hôm nay</div>
+            <div class="today-date" id="todayDate">—</div>
+            <div class="today-badgerow">
+              <span class="today-hanh" id="todayHanh"></span>
+              <span class="today-dot-sep"></span>
+              <span class="today-sub" id="todaySub">Số liệu ngày do cổ pháp tính chính xác — hỏi thầy để luận vận riêng cho bạn.</span>
+            </div>
+          </div>
+          <div class="today-grid" id="todayGrid" style="display:none"></div>
           <div id="todayMe"></div>
-          <div class="today-cols" id="todayCols" style="display:none">
-            <div>
-              <div class="th-label">Nên làm hôm nay</div>
-              <div class="tdo-list" id="todayDo"></div>
-            </div>
-            <div>
-              <div class="th-label">Nên kiêng</div>
-              <div class="tdo-list no" id="todayDont"></div>
-            </div>
-          </div>
-          <div class="today-hours">
-            <div class="th-label">Giờ hoàng đạo — giờ tốt trong ngày</div>
-            <div class="th-chips" id="todayHours"></div>
-          </div>
-          <div class="today-week" id="todayWeek" style="display:none">
-            <div class="th-label">7 ngày tới — bấm để xem ngày đó</div>
-            <div class="tw-row" id="todayWeekRow"></div>
-          </div>
+          <div class="today-next-h" id="todayNextH" style="display:none">3 ngày tới</div>
+          <div class="today-next" id="todayNext" style="display:none"></div>
+          <div class="today-week" id="todayWeek" hidden></div>
           <div class="today-cta">
-            <button class="today-ask" id="todayAsk" type="button">✦ Trò chuyện với Thầy</button>
-            <button class="today-share" id="todayShare" type="button">⇪ Chia sẻ</button>
-            <button class="today-share" id="todayPoster" type="button">⤓ Ảnh</button>
+            <button class="today-ask" id="todayAsk" type="button"><span class="ic" data-icon="sparkles"></span>Hỏi Thầy ngay →</button>
+            <button class="today-icbtn" id="todayShare" type="button" title="Chia sẻ" aria-label="Chia sẻ"><span data-icon="share-2"></span></button>
+            <button class="today-icbtn" id="todayPoster" type="button" title="Tải ảnh 9:16" aria-label="Tải ảnh 9:16"><span data-icon="image"></span></button>
           </div>
+          <div class="today-foot"><span>Mỗi ngày một chỉ dẫn, sống chủ động hơn</span></div>
         </div>
         <!-- KHỞI HÀNH — 3 bước làm quen sản phẩm, thay M3. Dựng bằng JS, hiện
              CHO CẢ khách vô danh (bậc 0 — tiến độ tính ở máy, xem
              localKhoiHanhSteps) lẫn người đã đăng nhập (server tự kiểm, xem
              lib/onboarding/tasks.ts). Ẩn hẳn khi phần thưởng đã vào ví. -->
-        <div id="khoiHanhCard" style="display:none"></div>
+        <!-- 🐞 Chọn khối đầu trang NGAY TRONG LÚC PHÂN TÍCH HTML, tức TRƯỚC lần
+             vẽ đầu. Đây là bản sửa cho một lượt vá HỎNG đã đo được: đặt việc lộ
+             khối vào `revealSlotEarly()` bên trong `run()` là chưa đủ, vì `run()`
+             gắn vào `DOMContentLoaded` — chạy SAU lần vẽ đầu. Khối vẫn chèn muộn,
+             mà nay còn mang theo khung chờ nên cú chèn TO HƠN trước: Lighthouse
+             mobile đo /app từ CLS 0,595 lên 0,827.
+
+             Tín hiệu dùng ở đây đúng bằng `_hasBirth`: `birthSnapshot()` của
+             shell.js đọc chính `localStorage['app_birth']`, không gì khác.
+             `_returning` còn cộng thêm `isLoggedIn()`, nhưng phiên đăng nhập thì
+             KHÔNG đọc đồng bộ được — nhánh đó vẫn do `revealSlotEarly()` trong
+             `run()` và `maybeUpgradeToReturning()` lo, y như trước.
+             Đọc hụt/hỏng JSON → không đụng gì, để `run()` quyết như cũ. -->
+        <script>
+        (function(){
+          try{
+            var b=JSON.parse(localStorage.getItem('app_birth')||'null');
+            var has=!!(b&&(b.ngay||b.day)&&(b.thang||b.month)&&(b.nam||b.year));
+            var el=document.getElementById(has?'todayCard':'welcomeCard');
+            if(el) el.style.display='';
+          }catch(e){ /* để run() lo */ }
+        })();
+        </script>
+        <!-- Khung chờ: thẻ này lộ ở nhịp hoãn 1,2 giây (xem `khSync`) nên nếu để
+             `display:none` thì nó chèn vào sau lần vẽ đầu và đẩy mọi thứ dưới.
+             MỌI đường không dựng được thẻ đều phải ẩn tay — xem `khHide()`. -->
+        <div id="khoiHanhCard" class="kh-skel" aria-busy="true" aria-label="Đang tải Khởi Hành">
+          <div class="kh-card">
+            <div class="kh-eyebrow"><span class="sk">&nbsp;</span></div>
+            <div class="kh-h"><span class="sk">&nbsp;</span></div>
+            <div class="kh-sub"><span class="sk">&nbsp;</span><span class="sk">&nbsp;</span></div>
+            <div class="kh-bar"><div class="kh-seg"></div><div class="kh-seg"></div><div class="kh-seg"></div></div>
+            <div class="kh-steps">
+              <div class="kh-step"><div class="kh-num"></div><div class="kh-body"><div class="kh-t"><span class="sk">&nbsp;</span></div><div class="kh-d"><span class="sk">&nbsp;</span><span class="sk">&nbsp;</span><span class="sk">&nbsp;</span></div></div><span class="kh-go">&nbsp;</span></div>
+              <div class="kh-step"><div class="kh-num"></div><div class="kh-body"><div class="kh-t"><span class="sk">&nbsp;</span></div><div class="kh-d"><span class="sk">&nbsp;</span><span class="sk">&nbsp;</span><span class="sk">&nbsp;</span></div></div><span class="kh-go">&nbsp;</span></div>
+              <div class="kh-step"><div class="kh-num"></div><div class="kh-body"><div class="kh-t"><span class="sk">&nbsp;</span></div><div class="kh-d"><span class="sk">&nbsp;</span><span class="sk">&nbsp;</span><span class="sk">&nbsp;</span></div></div><span class="kh-go">&nbsp;</span></div>
+            </div>
+            <div class="kh-guest"><div class="kh-guest-txt"><span class="sk">&nbsp;</span><span class="sk">&nbsp;</span></div>
+              <span class="kh-guest-btn">&nbsp;</span></div>
+          </div>
+        </div>
         <!-- Kênh liên lạc — 2 nhiệm vụ CŨ của M3 (bật thông báo/liên kết chat),
              tách tầng riêng: đây là kênh nhắc, không phải bước làm quen. CHỈ
              hiện khi đã đăng nhập — khách vãng lai chưa có ví để mà cộng vào. -->
@@ -327,8 +609,30 @@
              tại chỗ cho danh mục đầy đủ — khối này chỉ trả lời "tiếp theo nên
              xem gì", còn "Xem tất cả công cụ" GIỮ NGƯỜI TRONG SHELL (không còn
              trỏ ra /cong-cu ở ngoài shell), collapse mặc định, bấm mới dựng. -->
-        <div id="nextCard"></div>
-        <div id="inviteCard"></div>
+        <!-- Khung chờ: `pickNext()` trả TỐI ĐA 3 mục nên số ô là cố định,
+             chỉ độ dài chữ mới đổi. Xem chú thích .sk-tile trong <style>. -->
+        <div id="nextCard" class="nx-skel" aria-busy="true" aria-label="Đang tải gợi ý">
+          <div class="next-wrap">
+            <div class="grp-title"><span class="sk">&nbsp;</span></div>
+            <a class="nx-main"><div class="ic"></div>
+              <div class="nx-tx"><b><span class="sk">&nbsp;</span></b>
+                <div class="nx-why"><span class="sk">&nbsp;</span><span class="sk">&nbsp;</span></div></div></a>
+            <div class="nx-more">
+              <a class="nx-item"><div class="ic"></div><div><b><span class="sk">&nbsp;</span></b><span class="sk">&nbsp;</span><span class="sk">&nbsp;</span></div></a>
+              <a class="nx-item"><div class="ic"></div><div><b><span class="sk">&nbsp;</span></b><span class="sk">&nbsp;</span><span class="sk">&nbsp;</span></div></a>
+            </div>
+          </div>
+        </div>
+        <!-- Khung chờ giữ sẵn chỗ của thẻ "Mời bạn". Viết TĨNH: khối thật chỉ
+             đổ được sau một vòng mạng (xem .inv-skel trong <style>), nên nếu
+             chỗ này rỗng thì lần vẽ đầu cao 0px và mọi thứ dưới nó bị đẩy. -->
+        <div id="inviteCard" aria-busy="true">
+          <div class="inv-card inv-skel" aria-hidden="true">
+            <div class="inv-t"><span class="sk">&nbsp;</span></div>
+            <div class="inv-d"><span class="sk">&nbsp;</span><span class="sk">&nbsp;</span><span class="sk">&nbsp;</span></div>
+            <div class="inv-row"><span class="inv-btn sk-btn">&nbsp;</span></div>
+          </div>
+        </div>
         <div class="all-tools-wrap">
           <button class="all-tools" id="allToolsBtn" type="button" aria-expanded="false" aria-controls="allToolsPanel">Xem tất cả công cụ <span class="all-tools-chev" aria-hidden="true">→</span></button>
           <div class="all-tools-panel" id="allToolsPanel" hidden></div>
@@ -345,10 +649,10 @@
 <script src="/tools-shared/vn-timezone.js?v=1"></script>
 <script src="/tuvi-form.js?v=2"></script>
 <script src="/poster.js?v=5" defer></script>
-<script src="/tool-prices.js?v=5"></script>
+<script src="/tool-prices.js?v=6"></script>
 <script src="/auth.js?v=2"></script>
-  <script src="/nav.js?v=24" data-icons-only></script>
-<script src="/shell.js?v=85"></script>
+  <script src="/nav.js?v=26" data-icons-only></script>
+<script src="/shell.js?v=87"></script>
 <script>
 function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 var IC={
@@ -461,7 +765,16 @@ function cardIcon(row) { return window.iconHtml ? window.iconHtml(row.icon) : sv
 function renderNext(d) {
   var host = document.getElementById('nextCard'); if (!host) return;
   var picks = pickNext(d);
-  if (!picks.length) { host.innerHTML = ''; return; }
+  if (!picks.length) {
+    // Chưa có dữ liệu (khách lần đầu: `navFallback()` trả null) → GIỮ khung chờ.
+    // Xoá về rỗng ở đây là tự bỏ chỗ đã giữ, rồi khối nở ra lúc dữ liệu về —
+    // đúng cú nhảy mà khung chờ sinh ra để chặn.
+    if (!host.classList.contains('nx-skel')) host.innerHTML = '';
+    return;
+  }
+  host.classList.remove('nx-skel');
+  host.removeAttribute('aria-busy');
+  host.removeAttribute('aria-label');
   var first = picks[0], rest = picks.slice(1);
   var html = '<div class="next-wrap">' +
     '<div class="grp-title">Tiếp theo nên xem gì</div>' +
@@ -513,6 +826,7 @@ if (window.ToolPrices) ToolPrices.load().then(function (d) { if (d) renderNext(d
         'Mỗi người đăng ký qua mã của bạn thì bạn được cộng thêm.</div>' +
       '<div class="inv-row"><button class="inv-btn" type="button" id="invSignup">Tạo tài khoản</button></div>' +
       '</div>';
+    host.removeAttribute('aria-busy');
     var b = document.getElementById('invSignup');
     if (b) b.onclick = function () {
       // `Auth.require` mở modal đăng nhập/đăng ký rồi gọi callback khi xong.
@@ -548,6 +862,7 @@ if (window.ToolPrices) ToolPrices.load().then(function (d) { if (d) renderNext(d
         ? '<div class="inv-note">Đã mời được <b>' + rewarded + '</b> người · nhận <b>' + earned + ' Lượng</b>.</div>'
         : '') +
       '</div>';
+    host.removeAttribute('aria-busy');
     var btn = document.getElementById('invCopy');
     if (btn) btn.onclick = function () {
       var done = function () { btn.textContent = 'Đã chép ✓'; setTimeout(function () { btn.textContent = 'Chép link'; }, 1800); };
@@ -585,7 +900,12 @@ if (window.ToolPrices) ToolPrices.load().then(function (d) { if (d) renderNext(d
       return fetch('/api/payment?action=my-referral', { headers: { Authorization: 'Bearer ' + tk } })
         .then(function (r) { return r.ok ? r.json() : null; })
         .then(function (d) { if (d && d.code) renderMember(d); else renderGuest(); });
-    }).catch(function () { /* đọc hụt → không đoán, để trống */ });
+    }).catch(function () {
+      // Đọc hụt → không đoán, để TRỐNG như trước. Phải dọn tay vì chỗ này giờ
+      // khởi đầu bằng khung chờ: bỏ quên là nó nhấp nháy vĩnh viễn.
+      host.innerHTML = '';
+      host.removeAttribute('aria-busy');
+    });
   });
 })();
 
@@ -613,6 +933,8 @@ function renderWelcomeCards(d){
   var html='';
   for(var i=0;i<WELCOME_PICKS.length;i++) html+=welcomeCardHtml(rows, WELCOME_PICKS[i]);
   host.innerHTML=html;
+  host.removeAttribute('aria-busy');
+  host.removeAttribute('aria-label');
   if(window.mountIcons) window.mountIcons(host);
 }
 renderWelcomeCards(window.ToolPrices ? ToolPrices.navFallback() : null);
@@ -765,6 +1087,7 @@ function renderAllTools(d) {
   try{ _birth=(Shell.getRememberedBirth&&Shell.birthToApi)?Shell.birthToApi(Shell.getRememberedBirth()):null; }catch(e){}
   _hasBirth=!!(_birth&&_birth.day&&_birth.month&&_birth.year);
   _returning=_hasBirth||isLoggedIn();
+  revealSlotEarly();
 
   fetchDay(_today,true)
     .then(function(v){ if(v&&v.ok){ if(v.tuan)_week=v.tuan; render(v,_today,_birth,_hasBirth); }
@@ -804,23 +1127,59 @@ function renderAllTools(d) {
     }).catch(function(){});
   }
 
+  /* Dải ngày — móc quay lại rẻ nhất: nhìn một cái là biết hôm nào nên hẹn
+     việc, bấm vào là xem được ngày đó. Hiện 3 ngày cho gọn (thẻ này là khối
+     ĐẦU trang chủ), mở ra đủ 7 khi bấm.
+     🐞 Nút mở phải gắn lại onclick MỖI lượt render: `todayNext` bị ghi đè
+     innerHTML nên nút cũ đã bị vứt cùng DOM cũ. */
   function renderWeek(cur){
-    var host=el('todayWeek'), row=el('todayWeekRow');
-    if(!_week||!_week.length){ host.style.display='none'; return; }
-    row.innerHTML=_week.map(function(x){
-      var on=(x.d===cur.d&&x.m===cur.mo&&x.y===cur.y);
+    var host=el('todayNext'), head=el('todayNextH'), wk=el('todayWeek');
+    if(!_week||!_week.length){ host.style.display='none'; head.style.display='none'; wk.hidden=true; return; }
+    function cls(x){ return x.tinhChat==='tốt'?'v-tot':x.tinhChat==='xấu'?'v-xau':'v-binh'; }
+    function nhan(x){ return x.bixung?'Xung':x.ngayKy?'Ngày kỵ'
+      :x.tinhChat==='tốt'?'Tốt':x.tinhChat==='xấu'?'Xấu':'Bình'; }
+    function on(x){ return x.d===cur.d&&x.m===cur.mo&&x.y===cur.y; }
+    host.innerHTML=_week.slice(0,3).map(function(x){
+      return '<button type="button" class="tday '+cls(x)+(on(x)?' on':'')+'" data-iso="'+esc(x.iso)+'"'
+        +' title="'+esc(x.canChi)+'"><span class="dot"></span>'
+        +'<span class="tday-tx"><b>'+x.d+'/'+x.m+'</b><span>'+esc(nhan(x))+'</span></span></button>';
+    }).join('')
+      +'<button class="tall" id="todayAll" type="button" aria-expanded="false">'
+      +'<span class="ic" data-icon="calendar-days"></span><span><b>Xem cả</b><small>7 ngày</small></span></button>';
+    wk.innerHTML=_week.map(function(x){
       return '<button type="button" class="tw-cell'+(x.tinhChat==='tốt'?' v-tot':x.tinhChat==='xấu'?' v-xau':'')
-        +(on?' on':'')+'" data-iso="'+esc(x.iso)+'" title="'+esc(x.canChi+' · ngày '+x.tinhChat+(x.ngayKy?' · ngày kỵ':''))+'">'
+        +(on(x)?' on':'')+'" data-iso="'+esc(x.iso)+'" title="'+esc(x.canChi+' · ngày '+x.tinhChat+(x.ngayKy?' · ngày kỵ':''))+'">'
         +'<div class="tw-thu">'+esc(x.thu)+'</div><div class="tw-d">'+x.d+'/'+x.m+'</div>'
         +'<div class="tw-dot"></div>'+(x.bixung?'<div class="tw-x">xung</div>':'')+'</button>';
     }).join('');
-    host.style.display='';
-    Array.prototype.forEach.call(row.querySelectorAll('.tw-cell'),function(b){
+    host.style.display=''; head.style.display='';
+    var all=el('todayAll');
+    all.onclick=function(){
+      var open=wk.hidden;
+      wk.hidden=!open;
+      all.setAttribute('aria-expanded',open?'true':'false');
+    };
+    Array.prototype.forEach.call(document.querySelectorAll('#todayNext .tday, #todayWeek .tw-cell'),function(b){
       b.onclick=function(){
         var p=(b.getAttribute('data-iso')||'').split('-');
         if(p.length===3) goDay({y:+p[0],mo:+p[1],d:+p[2]});
       };
     });
+  }
+
+  /* Lộ đúng khối NGAY khi biết, không chờ mạng. Việc CHỌN khối nào là đồng bộ
+     (`_hasBirth` đọc localStorage); chỉ NỘI DUNG của thẻ mới cần `fetchDay`.
+     Trước đây cả hai khối nằm `display:none` tới khi `fetchDay` trả lời rồi
+     `showTodayOrWelcome()` mới lật — tức cả khối đầu trang chèn vào sau một
+     vòng mạng, đẩy mọi thứ bên dưới. Một trong ba cú nhảy CLS đo được trên /app.
+
+     🔑 CỐ Ý không gọi thẳng `showTodayOrWelcome()` ở đây: hàm đó còn đặt
+     `data-rendered`, thứ mà `maybeUpgradeToReturning()` đọc để biết nội dung
+     thẻ đã có THẬT hay chưa. Đặt sớm là nó lật sang một thẻ còn rỗng. */
+  function revealSlotEarly(){
+    var card=el('todayCard'), w=el('welcomeCard');
+    if(_returning){ if(card) card.style.display=''; if(w) w.style.display='none'; }
+    else { if(card) card.style.display='none'; if(w) w.style.display=''; }
   }
 
   /* Chỉ MỘT trong hai khối được thấy: thẻ Vận Hôm Nay (đã quay lại) hay lời
@@ -838,104 +1197,232 @@ function renderAllTools(d) {
     }
   }
 
+  /* ── Bảng TRA cho phần trình bày ─────────────────────────────────────────
+     Đều là ánh xạ TRÌNH BÀY, khoá bằng giá trị API đã trả — không tính lại gì. */
+
+  /* Việc nên làm → NHÃN thẻ + icon. Khoá là `nen[].ten` (ACTIVITY_META.name).
+     🔑 ĐỔI TÊN Ở ĐÂY, KHÔNG ĐỔI TRONG ENGINE. Cùng chuỗi `ACTIVITY_META.name`
+     đang chở hai việc khác cần đúng từ cổ: SEO `/ngay-tot/<viec>` lấy nó làm
+     H1 + <title> (chính từ khoá người ta gõ), và công cụ Hoàng lịch đọc thẳng
+     `nen[].ten` của `computeVanNgay` — ở một cuốn hoàng lịch thì "Nhập trạch",
+     "An táng" là đúng chỗ. Chỉ THẺ trang chủ mới cần giọng đời thường.
+     `null` = ẨN khỏi thẻ: ba việc này không thuộc về khối đầu trang chủ. Giá đã
+     đo trên 365 ngày 2026 — ô trống trên ngày lành 2% → 5%; riêng Sinh con
+     chưa từng lọt top-3 (0/365) và Đào giếng chỉ 9 ngày, nên gần như free.
+     ⚠️ NHÃN ĐO BẰNG PIXEL, KHÔNG ĐẾM KÝ TỰ. Cột tên chỉ rộng **61px** ở máy
+     360px và 76px ở máy 390px — đo trên chính trang này, sau khi trừ icon,
+     hai khe gap và ô điểm; ước theo số ký tự lệch gần gấp đôi. Nhãn quá khổ
+     không vỡ layout, nó xuống hai dòng và làm hai ô lệch chiều cao.
+     Bề rộng đã đo @360px: Cưới hỏi 57 · Nhà mới 55 · Xây nhà 52 · Đi xa 33 ·
+     Ký kết 41 · Sửa nhà 55 — vừa hết. "Khai trương" 79px là ngoại lệ CỐ Ý:
+     không có từ đời thường nào ngắn hơn mà không đổi nghĩa, và nó vốn đã
+     xuống dòng ở bản đang chạy nên giữ nguyên không phải hồi quy. */
+  var VIEC_NHAN={'Cưới hỏi':'Cưới hỏi','Khai trương':'Khai trương',
+    'Nhập trạch':'Nhà mới','Khởi công xây dựng':'Xây nhà',
+    'Xuất hành':'Đi xa','Cầu tài':'Ký kết','Sửa nhà':'Sửa nhà',
+    'An táng':null,'Đào giếng':null,'Sinh con':null};
+  /* Khoá bằng nhãn ĐÃ đổi — `vietChoThe()` chạy trước mọi lượt vẽ. */
+  var VIEC_ICON={'Cưới hỏi':'heart','Khai trương':'store','Nhà mới':'home',
+    'Xây nhà':'landmark','Đi xa':'compass','Ký kết':'briefcase',
+    'Sửa nhà':'landmark'};
+
+  /* Lọc + đổi tên + cắt 3, MỘT LẦN ngay đầu render, để thẻ · rail · bản chia sẻ
+     không bao giờ gọi khác tên nhau. Idempotent: chạy lại trên mảng đã đổi thì
+     nhãn mới không còn trong `VIEC_NHAN` nên rơi về `x.ten` và giữ nguyên.
+     🔑 CẮT 3 Ở ĐÂY, SAU khi lọc — engine CỐ Ý trả tới 6 (xem `van-ngay.ts`).
+     Cắt trước khi lọc là để việc bị ẩn ăn mất một chỗ: 34/365 ngày thẻ hiện 2
+     dòng thay vì 3. */
+  function vietChoThe(nen){
+    return (nen||[]).filter(function(x){ return VIEC_NHAN[x.ten]!==null; })
+      .map(function(x){
+        var nhan=VIEC_NHAN[x.ten];
+        return nhan&&nhan!==x.ten ? {ten:nhan,diem:x.diem,vi:x.vi} : x;
+      }).slice(0,3);
+  }
+  /* `gioTot[].viec` của engine dài 3 vế — ô Giờ đẹp chỉ có chỗ cho một NHÃN.
+     Khoá bằng `gioTot[].sao` (12 thần), API đã trả sẵn. */
+  var GIO_NHAN={'Thanh Long':'Việc lớn','Minh Đường':'Gặp gỡ','Kim Quỹ':'Tiền bạc',
+    'Thiên Đức':'Gia đạo','Ngọc Đường':'Thi cử','Tư Mệnh':'Khởi sự'};
+  /* Vế đuôi ngắn của "Vận riêng" — rút từ bảng QH đầy đủ bên dưới. */
+  var QH_NGAN={'duoc-sinh':'có người giúp','hoa':'tự chủ được','sinh':'hao lực, giữ sức',
+    'bi-khac':'dễ vướng, làm chậm','khac':'chủ động, tốn công'};
+  /* Tên màu (caNhan.mauCaNhan) → mã màu để chấm tròn. */
+  var MAU_HEX={'xanh lá':'#2F8F55','xanh lục':'#2F8F55','xanh ngọc':'#4FBFA8','xanh dương':'#2E6FBF',
+    'xanh nước biển':'#1F5C9E','đen':'#22262B','trắng':'#EDEDE8','bạc':'#C9CCD1','xám':'#9AA0A6',
+    'vàng':'#E0B93C','nâu':'#8A6A45','nâu đất':'#8A6A45','be':'#D9C9A8',
+    'đỏ':'#D4483A','hồng':'#E17A9A','cam':'#E08A3C','tím':'#7B5EA7'};
+
+  /* ── Tranh ngày ─────────────────────────────────────────────────────────
+     4 bức thuỷ mặc trong public/img/van-ngay/. `anhCho()` là hàm quyết định
+     DUY NHẤT — nó chọn CẢ bức tranh LẪN chữ trên huy hiệu, nên hai thứ không
+     bao giờ nói khác nhau.
+
+     🔑 NGÀY KỴ XÉT TRƯỚC `tinhChat`: `tinhChatNgay()` (lib/engine/van-ngay.ts)
+     chỉ hạ trần tốt→bình khi trúng ngày kỵ, KHÔNG hạ tiếp — nên phần lớn ngày
+     kỵ mang nhãn 'bình'. Chọn theo `tinhChat` thì ~1/3 số ngày (9 ngày mỗi
+     tháng âm: Tam Nương 3·7·13·18·22·27 + Nguyệt Kỵ 5·14·23, cộng Dương Công
+     kỵ nhật) sẽ hiện bức "trời dịu, xóm nhỏ yên ả" ngay cạnh dòng "hoãn việc
+     trọng đại", và huy hiệu vàng "Ngày bình" ngay trên đó. Tranh cãi chữ.
+
+     `caNhan.bixung` CỐ Ý không đổi tranh: nó là tầng CÁ NHÂN, mà tranh nằm ở
+     tầng ngày đang được cache CDN chung (DAY_CACHE, s-maxage=21600 ở
+     app/api/van-ngay/route.ts) — vẽ theo tuổi người xem là phá cache tầng
+     ngày. Việc đó để chữ nói: ô "Cần tránh" đã gọi tên rồi. */
+  var ANH_BASE='/img/van-ngay/', ANH_V='?v=1';
+  var TRIEN={tot:'福',binh:'平',xau:'忍',ky:'忌'};
+  var BADGE={tot:['Ngày tốt',' v-tot'],binh:['Ngày bình',''],
+             xau:['Ngày xấu',' v-xau'],ky:['Ngày kỵ',' v-ky']};
+  function anhCho(v){
+    if(v.ngayKy&&v.ngayKy.length) return 'ky';
+    var t=v.danhGia&&v.danhGia.tinhChat;
+    return t==='tốt'?'tot':t==='xấu'?'xau':'binh';
+  }
+
+  /* Hai cỡ ảnh, để `srcset` tự chọn. Khung tranh là 250px trên máy hẹp và
+     400px trên desktop ⇒ @2x cần 500w và 800w. Một cỡ duy nhất thì hoặc mờ ở
+     desktop, hoặc bắt điện thoại tải file to gấp đôi cho một khung bé.
+     🪤 `sizes` chỉ hiểu media query theo VIEWPORT, còn bề rộng khung tranh do
+     `@container` quyết. Hai thứ lệch nhau ở đúng một ca: desktop mở rail nên
+     cột hẹp (<520px) mà viewport vẫn rộng ⇒ tải 800w cho khung 250px. Chấp
+     nhận thừa ở ca đó, KHÔNG hạ ngưỡng: hạ xuống là điện thoại xoay ngang lại
+     nhận ảnh mờ, mà đó mới là số đông.
+     `width/height` để sẵn dù CSS đã ấn định khung — ảnh chỉ biết mình vẽ gì
+     SAU khi /api/van-ngay trả lời, khung có kích thước từ trước thì cú chèn
+     không đẩy gì bên dưới. */
+  function imgTranh(key){
+    var b=ANH_BASE+'ngay-'+key;
+    return '<img src="'+b+'-800w.webp'+ANH_V+'"'
+      +' srcset="'+b+'-500w.webp'+ANH_V+' 500w, '+b+'-800w.webp'+ANH_V+' 800w"'
+      +' sizes="(max-width:520px) 250px, 400px"'
+      +' alt="" width="800" height="469" decoding="async" draggable="false">';
+  }
+
   /* ── Vẽ thẻ đầy đủ ─────────────────────────────────────────────────────── */
   function render(v,td,birth,hasBirth){
-    var card=el('todayCard');
+    // Đổi tên + ẩn TRƯỚC khi gán `_viewing`: rail (`vietNen`) và bản chia sẻ
+    // đọc lại chính `_viewing`, nên làm ở đây là ba mặt cùng một danh sách.
+    v.nen=vietChoThe(v.nen);
     _viewing=v;
+    var key=anhCho(v);
     var isToday=!_today||(td.d===_today.d&&td.mo===_today.mo&&td.y===_today.y);
     el('todayEyebrow').textContent=isToday?'Vận hôm nay':'Vận ngày '+td.d+'/'+td.mo;
     // 🐞 PHẢI đặt 'block', không phải '': luật CSS của .today-back là
     // `display:none`, nên gán '' chỉ xoá inline style rồi rơi về đúng luật đó —
-    // nút không bao giờ hiện. (Các khối khác trong thẻ ẩn bằng inline
-    // style="display:none" nên gán '' ở đó lại đúng — khác nhau ở chỗ này.)
+    // nút không bao giờ hiện.
     el('todayBack').style.display=isToday?'none':'block';
-    el('todayDate').innerHTML=esc(v.ngay.thu)+' · '+td.d+'/'+td.mo+' — Ngày <span class="cc">'+esc(v.ngay.canChi)+'</span>';
 
-    // Nhãn tốt/xấu thay chỗ nhãn "Hành Kim" cũ: hành ngày là thông tin tra cứu,
-    // còn "hôm nay có nên khởi sự không" mới là thứ người ta mở thẻ để biết.
+    // Tranh + triện. `alt` rỗng + aria-hidden vì nó thuần trang trí: mọi thông
+    // tin nó chở đều đã có bằng chữ ngay bên cạnh (huy hiệu + câu chốt).
+    el('todayArt').innerHTML=imgTranh(key);
+    el('todaySeal').textContent=TRIEN[key];
+
+    el('todayDate').textContent=v.ngay.thu+' · '+td.d+'/'+td.mo;
     var badge=el('todayHanh');
-    badge.textContent=v.danhGia.tinhChat==='tốt'?'Ngày tốt':v.danhGia.tinhChat==='xấu'?'Ngày xấu':'Ngày bình';
-    badge.className='today-hanh'+(v.danhGia.tinhChat==='tốt'?' v-tot':v.danhGia.tinhChat==='xấu'?' v-xau':'');
-
+    badge.textContent=BADGE[key][0];
+    badge.className='today-hanh'+BADGE[key][1];
     el('todaySub').textContent=v.danhGia.nhan;
 
-    var meta=[
-      ['', v.ngay.am],
-      ['Hành ', v.ngay.canHanh],
-      ['Trực ', v.truc.ten],
-      ['Sao ', v.saoNgay.ten],
-      ['Tú ', v.tu.ten]
-    ].map(function(p){ return '<span class="tm-item">'+esc(p[0])+'<b>'+esc(p[1])+'</b></span>'; });
-    if(v.mau&&v.mau.list&&v.mau.list.length) meta.push('<span class="tm-item">Màu hợp <b>'+esc(v.mau.list.slice(0,2).join(', '))+'</b></span>');
-    if(v.huong) meta.push('<span class="tm-item">Tài thần <b>'+esc(v.huong.taiThan)+'</b></span>');
-    el('todayMeta').innerHTML=meta.join('');
+    /* ── Ô CẦN TRÁNH — mục ai cũng đọc vì nó gọi tên trực tiếp một nhóm người ── */
+    var yrs=(v.xung&&v.xung.namSinh||[]).slice(-3).join(', ');
+    var badNote=yrs?'Sinh '+yrs+' — tránh việc lớn hôm nay.':'Tránh việc lớn trong hôm nay.';
+    var badKy=(v.ngayKy&&v.ngayKy.length)?'Trùng '+v.ngayKy.join(' + ')+' — cổ pháp kiêng khởi sự.':'';
+    var boxBad='<div class="tbox bad"><div class="tbox-h"><span class="ic" data-icon="alert-triangle"></span>Cần tránh</div>'
+      +'<div class="tbad-main">Xung tuổi '+esc(v.xung?v.xung.chi:'—')+'</div>'
+      +'<div class="tbad-note">'+esc(badNote)+(badKy?'<br>'+esc(badKy):'')+'</div></div>';
 
-    // Xung tuổi + ngày kỵ — mục ai cũng đọc vì nó gọi tên trực tiếp một nhóm người.
-    var warns=[];
-    if(v.xung&&v.xung.chi){
-      var yrs=(v.xung.namSinh||[]).slice(-4).join(', ');
-      warns.push('Ngày này <b>xung tuổi '+esc(v.xung.chi)+'</b>'+(yrs?' (sinh '+esc(yrs)+')':'')+' — người tuổi này nên lùi việc lớn sang ngày khác.');
-    }
-    if(v.ngayKy&&v.ngayKy.length) warns.push('Trùng <b>'+esc(v.ngayKy.join(' + '))+'</b> — cổ pháp kiêng khởi sự.');
-    el('todayWarn').innerHTML=warns.length
-      ? '<div class="today-warn"><span>⚠</span><span>'+warns.join('<br>')+'</span></div>' : '';
+    /* ── Ô NÊN LÀM — điểm từng loại việc lấy thẳng của engine, không tự xếp hạng.
+       🔑 NGÀY KỴ thì ô này KHÔNG liệt kê việc. Engine hạ ngưỡng xuống 5 điểm để
+       ô bớt trống trên ngày lành (31% → 2%), nhưng cùng lúc làm 65/121 ngày kỵ
+       có việc lọt vào — tức thẻ khuyên "Nên làm: Cưới hỏi 5/10" ngay cạnh ô
+       "Cần tránh" đang ghi "cổ pháp kiêng khởi sự". Đo trên 365 ngày của 2026.
+       Chặn ở ĐÂY (tầng trình bày) chứ không ở engine: engine phải trả đúng
+       điểm nó tính được, còn "có nên nói ra không" là việc của mặt hiển thị.
+       Dùng lại `key` của `anhCho()` — cùng một hàm quyết định với tranh và huy
+       hiệu, nên ba thứ không bao giờ nói khác nhau.
+       CỐ Ý chỉ chặn ngày KỴ, không chặn ngày xấu: ngày kỵ là luật CẤM khởi sự
+       nên liệt kê việc là cãi thẳng một luật cứng; còn ngày xấu chỉ là ngày
+       yếu — một việc 7/10 ở đó vẫn là thông tin thật, và điểm hiện ngay bên
+       cạnh đã đủ để người đọc tự cân. */
+    var boxGood='<div class="tbox good"><div class="tbox-h"><span class="ic" data-icon="check-circle"></span>Nên làm</div>'
+      +(key==='ky'
+        ? '<div class="tbox-empty">'+esc('Ngày '+(v.ngayKy||[]).join(' + ')+' — cổ pháp kiêng khởi sự. Việc thường ngày vẫn làm bình thường.')+'</div>'
+        :(v.nen&&v.nen.length)
+        ? '<div class="tdo">'+v.nen.map(function(x){
+            // Điểm hiện KÈM tên việc. Engine hạ ngưỡng xuống 5 để ô này bớt
+            // trống, nên danh sách nay có cả việc 5/10 lẫn 10/10 — không ghi
+            // điểm là gộp hai thứ khác hẳn nhau thành một danh sách phẳng, tức
+            // thẻ đang khuyên quá tay.
+            // `x.ten` ở đây đã là nhãn của `vietChoThe()`, không phải tên engine.
+            return '<div class="tdo-row"><span class="ic" data-icon="'+(VIEC_ICON[x.ten]||'check-circle')
+              +'"></span><span class="tdo-ten">'+esc(x.ten)+'</span>'
+              +(x.diem?'<b class="tdo-diem">'+x.diem+'</b>':'')+'</div>'; }).join('')+'</div>'
+        : '<div class="tbox-empty">Hôm nay không việc lớn nào được điểm cao — để dành sang ngày khác.</div>')
+      +'</div>';
 
-    // Khối CÁ NHÂN — vế duy nhất khiến thẻ là "của bạn". Không có lá số thì để
-    // trống có chủ đích: chỗ trống đó chính là CTA lập lá số, đừng lấp bằng
-    // câu chung chung.
+    /* ── Ô GIỜ ĐẸP — giờ tốt mà không nói để làm gì thì không dùng được ── */
+    var hours=(v.gioTot||[]).slice(0,3);
+    var boxHour='<div class="tbox hour"><div class="tbox-h"><span class="ic" data-icon="clock"></span>Giờ đẹp</div>'
+      +(hours.length
+        ? '<div class="thr">'+hours.map(function(h){
+            return '<div class="thr-row"><span class="thr-t">'+esc(String(h.range).replace('-',' – '))
+              +'</span><span class="thr-v">'+esc(GIO_NHAN[h.sao]||h.sao||'')+'</span></div>'; }).join('')+'</div>'
+        : '<div class="tbox-empty">Ngày này không có giờ hoàng đạo.</div>')
+      +'</div>';
+    var grid=el('todayGrid');
+    grid.innerHTML=boxBad+boxGood+boxHour;
+    grid.style.display='';
+
+    /* ── Khối CÁ NHÂN — vế duy nhất khiến thẻ là "của bạn". Không có lá số thì
+       để trống có chủ đích: chỗ trống đó chính là CTA lập lá số. ── */
     var me=el('todayMe');
     _meText='';
     if(v.caNhan){
-      var c=v.caNhan, bits=[], plain=[];
-      var head='Ngày hôm nay rơi vào cung '+c.cungNhatHan+(c.diaChiNhatHan?' ('+c.diaChiNhatHan+')':'')
-        +(c.chinhTinh&&c.chinhTinh.length?' — chính tinh '+c.chinhTinh.join(', '):' — vô chính diệu');
-      bits.push('Ngày hôm nay rơi vào <b>cung '+esc(c.cungNhatHan)+'</b>'+(c.diaChiNhatHan?' ('+esc(c.diaChiNhatHan)+')':'')
-        +(c.chinhTinh&&c.chinhTinh.length?' — chính tinh <b>'+esc(c.chinhTinh.join(', '))+'</b>':' — vô chính diệu'));
-      plain.push(head);
-      if(c.bixung){ bits.push('⚠ Ngày <b>xung chính tuổi bạn</b> — nên giữ nhịp, tránh quyết định lớn.'); plain.push('Ngày xung chính tuổi bạn — nên giữ nhịp, tránh quyết định lớn.'); }
-      var QH={'duoc-sinh':'hành ngày <b>sinh cho bản mệnh</b> — thuận, dễ được giúp',
-              'hoa':'hành ngày <b>cùng hành bản mệnh</b> — hòa, tự chủ được',
-              'sinh':'bản mệnh <b>sinh cho hành ngày</b> — hao lực, nên giữ sức',
-              'bi-khac':'hành ngày <b>khắc bản mệnh</b> — dễ vướng, làm chậm lại',
-              'khac':'bản mệnh <b>khắc hành ngày</b> — chủ động được, hơi tốn công'};
-      if(c.quanHeHanh&&QH[c.quanHeHanh]){ bits.push(QH[c.quanHeHanh]+'.'); plain.push(QH[c.quanHeHanh].replace(/<\/?b>/g,'')+'.'); }
-      if(c.mauCaNhan&&c.mauCaNhan.length){ bits.push('Màu hợp bản mệnh bạn: <b>'+esc(c.mauCaNhan.slice(0,3).join(', '))+'</b>.'); plain.push('Màu hợp bản mệnh: '+c.mauCaNhan.slice(0,3).join(', ')+'.'); }
+      var c=v.caNhan, plain=[];
+      var star=(c.chinhTinh&&c.chinhTinh.length)?c.chinhTinh.join(', '):'vô chính diệu';
+      var tail=c.bixung?'xung chính tuổi bạn':(QH_NGAN[c.quanHeHanh]||'');
+      plain.push('Ngày hôm nay rơi vào cung '+c.cungNhatHan+(c.diaChiNhatHan?' ('+c.diaChiNhatHan+')':'')
+        +(c.chinhTinh&&c.chinhTinh.length?' — chính tinh '+c.chinhTinh.join(', '):' — vô chính diệu'));
+      if(c.bixung) plain.push('Ngày xung chính tuổi bạn — nên giữ nhịp, tránh quyết định lớn.');
+      var QH={'duoc-sinh':'hành ngày sinh cho bản mệnh — thuận, dễ được giúp',
+              'hoa':'hành ngày cùng hành bản mệnh — hòa, tự chủ được',
+              'sinh':'bản mệnh sinh cho hành ngày — hao lực, nên giữ sức',
+              'bi-khac':'hành ngày khắc bản mệnh — dễ vướng, làm chậm lại',
+              'khac':'bản mệnh khắc hành ngày — chủ động được, hơi tốn công'};
+      if(c.quanHeHanh&&QH[c.quanHeHanh]) plain.push(QH[c.quanHeHanh]+'.');
+      var mau=(c.mauCaNhan||[]).slice(0,2);
+      if(mau.length) plain.push('Màu hợp bản mệnh: '+mau.join(', ')+'.');
+      // Bản CHỮ THUẦN cho poster — poster vẽ trên canvas nên không dùng lại
+      // được chuỗi có thẻ; dựng song song ngay tại đây để hai bên không bao
+      // giờ nói khác nhau.
       _meText=plain.join(' ');
       // Nói RÕ thẻ đang dựa trên lá số nào + cho đường sửa. Trước đây khối này
       // luận vận riêng mà không hé lộ nguồn, nên lá số sai (hoặc của người khác
       // dùng nhờ máy) thì người xem không hiểu vì sao và không sửa được.
       var srcLine='';
       try{ srcLine=(Shell.birthSummary&&birth)?Shell.birthSummary(birth):''; }catch(e){}
-      me.innerHTML='<div class="today-me"><div class="tme-h">Vận riêng của bạn</div><div class="tme-b">'+bits.join(' ')+'</div>'
-        +'<div class="tme-src"><span>Theo lá số: <b>'+esc(srcLine||'đã lưu trên máy này')+'</b></span>'
-        +'<button class="tme-edit" id="tmeEdit" type="button">Đổi lá số</button></div>'
-        +'<div id="tmeFormHost"></div></div>';
+      me.innerHTML='<div class="today-me"><span class="tme-av" data-icon="user"></span>'
+        +'<span class="tme-b"><span class="tme-h">Vận riêng của bạn</span>'
+        +'<span class="tme-t">'+esc(c.cungNhatHan)+' — '+esc(star)
+        +(tail?' <span class="lt">→ '+esc(tail)+'</span>':'')+'</span>'
+        +(mau.length?'<span class="tme-s">Màu hợp: '+esc(mau.join(', '))+'<span class="tme-swatch">'
+          +mau.map(function(m){ return '<i style="background:'+(MAU_HEX[m]||'#999')+'"></i>'; }).join('')
+          +'</span></span>':'')
+        +'<span class="tme-src"><span>Theo lá số: <b>'+esc(srcLine||'đã lưu trên máy này')+'</b></span>'
+        +'<button class="tme-edit" id="tmeEdit" type="button">Đổi lá số</button></span>'
+        +'<span id="tmeFormHost"></span></span></div>';
     } else {
-      me.innerHTML='<div class="today-me"><div class="tme-h">Vận riêng của bạn</div><div class="tme-b">'
-        +'Trên đây là vận CHUNG của ngày — giống nhau với mọi người. Nhập ngày sinh một lần để thấy hôm nay rơi vào cung nào của riêng bạn.</div>'
-        +'<button class="tme-cta" id="tmeEdit" type="button">✦ Nhập lá số của bạn</button>'
-        +'<div id="tmeFormHost"></div></div>';
+      me.innerHTML='<div class="today-me"><span class="tme-av" data-icon="user"></span>'
+        +'<span class="tme-b"><span class="tme-h">Vận riêng của bạn</span>'
+        +'<span class="tme-t">Trên đây là vận CHUNG của ngày — giống nhau với mọi người.</span>'
+        +'<span class="tme-s">Nhập ngày sinh một lần để thấy hôm nay rơi vào cung nào của riêng bạn.</span>'
+        +'<button class="tme-cta" id="tmeEdit" type="button">Nhập lá số của bạn →</button>'
+        +'<span id="tmeFormHost"></span></span></div>';
     }
     wireBirthForm(td);
 
-    // Nên / Kiêng — lấy thẳng điểm từng loại việc của engine, không tự xếp hạng.
-    var doEl=el('todayDo'), dontEl=el('todayDont');
-    doEl.innerHTML=(v.nen&&v.nen.length)
-      ? v.nen.map(function(x){ return '<span>'+esc(x.ten)+'</span>'; }).join('')
-      : '<div class="tdo-empty">Không có việc trọng đại nào được điểm cao hôm nay.</div>';
-    dontEl.innerHTML=(v.kieng&&v.kieng.length)
-      ? v.kieng.map(function(x){ return '<span>'+esc(x.ten)+'</span>'; }).join('')
-      : '<div class="tdo-empty">Không việc nào bị kiêng nặng.</div>';
-    el('todayCols').style.display='';
-
-    // Giờ tốt KÈM việc nên làm — giờ tốt mà không nói để làm gì thì không dùng được.
-    var hours=(v.gioTot||[]).slice(0,4);
-    el('todayHours').innerHTML=hours.map(function(h){
-      return '<span class="th-chip">'+esc(h.chi)+' · '+esc(h.range)+(h.viec?' <i>'+esc(h.viec)+'</i>':'')+'</span>';
-    }).join('');
-
     renderWeek(td);
     showTodayOrWelcome();
+    if(window.mountIcons) window.mountIcons(el('todayCard'));
     wire(v,td,birth,hasBirth,hours);
     try{ _canChiNam=(v&&v.caNhan&&v.caNhan.canChiNam)||_canChiNam; }catch(e){}
     maybeAskPush(v,isToday,birth);
@@ -1029,19 +1516,34 @@ function renderAllTools(d) {
     };
   }
 
-  /* ── Đường lùi: API hỏng → thẻ tối giản như bản cũ ─────────────────────── */
+  /* ── Đường lùi: API hỏng → thẻ tối giản như bản cũ ───────────────────────
+     HoangDaoTool GIỮ LẠI làm đường lùi: API hỏng thì thẻ vẫn hiện, KHÔNG biến
+     mất (nó là khối đầu trang chủ). Bản lùi chỉ có can chi + giờ hoàng đạo nên
+     KHÔNG có `danhGia`/`ngayKy` ⇒ `anhCho()` rơi về 'binh' — đúng: không biết
+     ngày tốt hay xấu thì đừng vẽ tranh nắng cũng đừng vẽ tranh mưa. */
   function fallback(td,birth,hasBirth){
     if(!window.HoangDaoTool) return;
     var r=HoangDaoTool.compute(td.d,td.mo,td.y); if(!r||!r.ok) return;
     var wd=WD[new Date(td.y,td.mo-1,td.d).getDay()];
-    var hours=(r.data.gioHoangDao||'').split(' · ').slice(0,4).map(function(h){
-      var m=h.match(/^(\S+)\s*\(([^)]+)\)/); return m?{chi:m[1],range:m[2]}:{chi:h,range:''};
+    var hours=(r.data.gioHoangDao||'').split(' · ').slice(0,3).map(function(h){
+      var m=h.match(/^(\S+)\s*\(([^)]+)\)/); return m?{chi:m[1],range:m[2],sao:m[1]}:{chi:h,range:'',sao:''};
     });
-    el('todayDate').innerHTML=esc(wd)+' · '+td.d+'/'+td.mo+' — Ngày <span class="cc">'+esc(r.data.canChiNgay)+'</span>';
-    el('todayHanh').textContent='Hành '+r.data.canHanh;
-    el('todayHours').innerHTML=hours.map(function(h){
-      return '<span class="th-chip">'+esc(h.chi)+(h.range?' · '+esc(h.range):'')+'</span>'; }).join('');
+    el('todayArt').innerHTML=imgTranh('binh');
+    el('todaySeal').textContent=TRIEN.binh;
+    el('todayDate').textContent=wd+' · '+td.d+'/'+td.mo;
+    var badge=el('todayHanh');
+    badge.textContent='Ngày '+r.data.canChiNgay; badge.className='today-hanh';
+    el('todaySub').textContent='Hành '+r.data.canHanh+' — số liệu rút gọn, thử tải lại sau.';
+    var grid=el('todayGrid');
+    grid.innerHTML='<div class="tbox hour" style="grid-column:1/-1">'
+      +'<div class="tbox-h"><span class="ic" data-icon="clock"></span>Giờ đẹp</div>'
+      +(hours.length?'<div class="thr">'+hours.map(function(h){
+          return '<div class="thr-row"><span class="thr-t">'+esc(h.chi)+'</span>'
+            +'<span class="thr-v">'+esc(h.range)+'</span></div>'; }).join('')+'</div>'
+        :'<div class="tbox-empty">Không lấy được giờ hoàng đạo.</div>')+'</div>';
+    grid.style.display='';
     showTodayOrWelcome();
+    if(window.mountIcons) window.mountIcons(el('todayCard'));
     wire({ngay:{canChi:r.data.canChiNgay,canHanh:r.data.canHanh},_flat:r.data},td,birth,hasBirth,hours);
   }
 
@@ -1097,6 +1599,21 @@ function renderAllTools(d) {
                     'Vận hôm nay của con thế nào?','Thời gian tới có gì đáng lưu ý không?'];
 
   /* ── Mồi rail + nút ────────────────────────────────────────────────────── */
+  /* Báo trạng thái cho nút BIỂU TƯỢNG. Bản cũ ghi `btn.textContent='✓ Đã chép
+     link'` — với nút chỉ có icon thì lệnh đó XOÁ LUÔN cái SVG bên trong, nút
+     thành một ô vuông đựng chữ tràn. Đổi icon rồi trả về mới là cách đúng. */
+  function flashIcon(btn,icon,ms){
+    if(!btn) return;
+    var sp=btn.firstElementChild; if(!sp) return;
+    var cu=sp.getAttribute('data-icon');
+    sp.setAttribute('data-icon',icon);
+    if(window.mountIcons) window.mountIcons(btn);
+    setTimeout(function(){
+      sp.setAttribute('data-icon',cu);
+      if(window.mountIcons) window.mountIcons(btn);
+    },ms||1800);
+  }
+
   function wire(v,td,birth,hasBirth,hours){
     var cc=v.ngay.canChi;
     try{
@@ -1112,7 +1629,8 @@ function renderAllTools(d) {
             label:'Trò chuyện với Thầy'+(nm?' · '+nm:''),
             placeholder:'Kể cho thầy nghe…',
             greeting:greetingFor(cc,nm,away,worry),
-            chips:CHIPS_TAM_SU
+            chips:CHIPS_TAM_SU,
+            passive:true
           });
         };
         prime(null);
@@ -1137,7 +1655,8 @@ function renderAllTools(d) {
           scenario:{type:'hoang-dao',data:flat},
           label:'Vận ngày '+td.d+'/'+td.mo,
           greeting:'Hôm nay là ngày **'+cc+'** (hành '+v.ngay.canHanh+'). Bạn định làm việc gì để tôi chọn giờ đẹp? Lập lá số để tôi luận vận riêng cho bạn.',
-          chips:['Hôm nay nên làm gì, tránh gì?','Giờ nào đẹp để xuất hành?','Lập lá số xem vận của tôi','Ngày mai có tốt không?']
+          chips:['Hôm nay nên làm gì, tránh gì?','Giờ nào đẹp để xuất hành?','Lập lá số xem vận của tôi','Ngày mai có tốt không?'],
+          passive:true
         });
       }
     }catch(e){ if(window.console)console.error('[today]',e); }
@@ -1172,7 +1691,7 @@ function renderAllTools(d) {
       var txt='Vận ngày '+td.d+'/'+td.mo+' — Ngày '+cc+' (hành '+v.ngay.canHanh+')'
         +(v.danhGia?', '+v.danhGia.tinhChat:'')+'. Giờ hoàng đạo: '+hlist+'. Xem vận của bạn tại Luận Đường:';
       if(navigator.share){ navigator.share({title:'Vận hôm nay — Tử Vi Minh Bảo',text:txt,url:url}).catch(function(){}); return; }
-      var full=txt+' '+url, done=function(){ var o=shareBtn.textContent; shareBtn.textContent='✓ Đã chép link'; setTimeout(function(){shareBtn.textContent=o;},1800); };
+      var full=txt+' '+url, done=function(){ flashIcon(shareBtn,'check',1800); };
       if(navigator.clipboard){ navigator.clipboard.writeText(full).then(done,function(){}); }
       else { try{ var ta=document.createElement('textarea');ta.value=full;document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove();done(); }catch(e){} }
     };
@@ -1188,7 +1707,7 @@ function renderAllTools(d) {
     posterBtn.style.display=(v.danhGia&&window.Poster&&Poster.downloadDay)?'':'none';
     posterBtn.onclick=function(){
       if(!window.Poster||!Poster.downloadDay||!v.danhGia) return;
-      var o=posterBtn.textContent; posterBtn.disabled=true; posterBtn.textContent='Đang dựng…';
+      posterBtn.disabled=true; flashIcon(posterBtn,'hourglass',60000);
       var rows=[];
       if(v.nen&&v.nen.length) rows.push(['Nên hôm nay', v.nen.map(function(x){return x.ten;}).join(' · ')]);
       if(v.kieng&&v.kieng.length) rows.push(['Nên kiêng', v.kieng.map(function(x){return x.ten;}).join(' · ')]);
@@ -1225,10 +1744,9 @@ function renderAllTools(d) {
       }).catch(function(){
         // Dựng hỏng thì phải NÓI, đừng im lặng — người ta bấm mà không thấy gì
         // là tưởng máy đứng.
-        posterBtn.textContent='✕ Không dựng được'; setTimeout(function(){posterBtn.textContent=o;},2200);
+        posterBtn.disabled=false; flashIcon(posterBtn,'x-circle',2200);
       }).then(function(){
-        posterBtn.disabled=false;
-        if(posterBtn.textContent==='Đang dựng…') posterBtn.textContent=o;
+        posterBtn.disabled=false; flashIcon(posterBtn,'image',0);
       });
     };
   }
@@ -1347,14 +1865,14 @@ function renderAllTools(d) {
 
   function renderKhoiHanh(d){
     var host=el('khoiHanhCard'); if(!host) return;
-    var kh=d.khoiHanh; if(!kh) return;
+    var kh=d.khoiHanh; if(!kh){ khHide(); return; }
     if(kh.justGranted) _khGot+=(+kh.credits||0);
     // Badge nhắc trên sidebar (public/shell.js) đọc đúng cờ này — không gọi
     // riêng một API cho mọi trang /app, chỉ đọc lại thứ trang chủ vừa biết.
     try{ localStorage.setItem('tvp_kh_pending', kh.claimed?'0':'1'); }catch(e){}
     // Thưởng đã vào ví → biến mất hẳn. Giữ lại một thẻ toàn dấu tích là chiếm
     // chỗ vĩnh viễn trên màn hình đầu để khoe một việc đã cũ.
-    if(kh.claimed){ host.style.display='none'; return; }
+    if(kh.claimed){ khHide(); return; }
 
     _khSteps=kh.steps||[]; _khActiveDefs=_khSteps;
     var done=0; for(var i=0;i<_khSteps.length;i++) if(_khSteps[i].done) done++;
@@ -1373,15 +1891,31 @@ function renderAllTools(d) {
     h+='</div></div>';
     host.innerHTML=h;
     host.style.display='';
+    khShown(host);
     wireKhSteps(host);
   }
 
   /* Bản KHÁCH VÔ DANH — không gọi `onboarding-sync` (chưa có token để gọi),
      dựng từ `_khGuestDefs` (tĩnh, tải một lần) + tiến độ máy. */
+  /* Thẻ này khởi đầu bằng KHUNG CHỜ (xem markup #khoiHanhCard), nên mọi đường
+     "không dựng được" phải ẩn tay — bỏ quên một đường là khung chờ nhấp nháy
+     vĩnh viễn ở giữa trang. */
+  function khHide(){
+    var h=el('khoiHanhCard'); if(!h) return;
+    h.style.display='none'; h.classList.remove('kh-skel');
+    h.removeAttribute('aria-busy'); h.removeAttribute('aria-label');
+  }
+  function khShown(host){
+    host.classList.remove('kh-skel');
+    host.removeAttribute('aria-busy'); host.removeAttribute('aria-label');
+  }
+
   function renderKhoiHanhGuest(){
     var host=el('khoiHanhCard'); if(!host) return;
     if(!_khGuestDefs||!_khGuestDefs.length){
+      // Lượt đầu: thử nạp lại. Lượt sau vẫn hụt ⇒ ẩn hẳn, KHÔNG bịa nội dung.
       if(!_khDefsRetried){ _khDefsRetried=true; loadKhoiHanhDefs().then(renderKhoiHanhGuest); }
+      else khHide();
       return;
     }
     _khActiveDefs=_khGuestDefs;
@@ -1407,6 +1941,7 @@ function renderAllTools(d) {
       +'<button class="kh-guest-btn" type="button" id="khGuestSignup">Tạo tài khoản</button></div></div>';
     host.innerHTML=h;
     host.style.display='';
+    khShown(host);
     wireKhSteps(host);
     var b=el('khGuestSignup');
     if(b) b.onclick=function(){
@@ -1524,7 +2059,7 @@ function renderAllTools(d) {
     fetch('/api/payment?action=onboarding-sync',{method:'POST',headers:{Authorization:'Bearer '+tk}})
       .then(function(r){ return r.ok?r.json():null; })
       .then(function(d){ if(d){ renderKhoiHanh(d); renderChannels(d); } })
-      .catch(function(){ /* hỏng thì thẻ không hiện — không chặn gì của trang */ })
+      .catch(function(){ khHide(); /* hỏng thì thẻ không hiện — không chặn gì của trang */ })
       .then(function(){ _khBusy=false; });
   }
 
@@ -1628,15 +2163,19 @@ function renderAllTools(d) {
     return (e && e.offsetParent!==null) ? e : null;
   }
 
-  var _i=-1, _spot=null, _pop=null;
+  var _i=-1, _spot=null, _pop=null, _scrolled=false;
+
+  // Vùng NHÌN THẤY THẬT. `window.innerHeight` trên iOS Safari tính cả dải nằm
+  // SAU thanh công cụ dưới cùng của trình duyệt, nên đặt trong innerHeight vẫn
+  // có thể bị thanh đó che. `visualViewport` mới là con số người dùng thấy.
+  function viewport(){
+    var vv=window.visualViewport;
+    return vv ? {top:vv.offsetTop, left:vv.offsetLeft, h:vv.height, w:vv.width}
+              : {top:0, left:0, h:window.innerHeight, w:window.innerWidth};
+  }
 
   function place(target,data,isLast){
-    var r=target.getBoundingClientRect();
     var pad=6;
-    _spot.style.left=(r.left-pad)+'px';
-    _spot.style.top=(r.top-pad)+'px';
-    _spot.style.width=(r.width+pad*2)+'px';
-    _spot.style.height=(r.height+pad*2)+'px';
 
     _pop.innerHTML='<div class="tour-step">Bước '+(_i+1)+'/'+STEPS.length+'</div>'
       +'<div class="tour-t">'+esc2(data.t)+'</div>'
@@ -1644,14 +2183,49 @@ function renderAllTools(d) {
       +'<div class="tour-row"><button class="tour-skip" type="button" id="tourSkip">Bỏ qua</button>'
       +'<button class="tour-next" type="button" id="tourNext">'+(isLast?'Đã hiểu, khám phá thôi':'Tiếp →')+'</button></div>';
 
-    // Đặt popup DƯỚI phần tử đích; hết chỗ dưới thì đặt LÊN trên — luôn kẹp
-    // trong viewport để không tràn ra ngoài màn hình nhỏ.
-    var popH=_pop.offsetHeight||160, popW=_pop.offsetWidth||290;
-    var top=r.bottom+14;
-    if(top+popH>window.innerHeight-10) top=Math.max(10,r.top-14-popH);
-    var left=Math.min(Math.max(12,r.left), window.innerWidth-popW-12);
-    _pop.style.top=top+'px';
-    _pop.style.left=left+'px';
+    // 🪤 findTarget() chỉ đòi phần tử CÓ TRONG LAYOUT, KHÔNG đòi nó trong tầm
+    // nhìn. Neo nằm ngoài màn thì (a) vòng sáng chỉ vào chỗ không ai thấy, và
+    // (b) popup bị đẩy ra theo. Kéo neo vào giữa màn trước đã. `_scrolled` để
+    // scrollIntoView (sinh sự kiện scroll → onResize → place) không tự gọi lại
+    // chính nó thành vòng lặp.
+    var vp0=viewport(), r0=target.getBoundingClientRect();
+    if(!_scrolled && (r0.top<vp0.top || r0.bottom>vp0.top+vp0.h)){
+      _scrolled=true;
+      try{ target.scrollIntoView({block:'center',behavior:'auto'}); }catch(e){ try{ target.scrollIntoView(); }catch(e2){} }
+    }
+
+    function position(){
+      var vp=viewport(), r=target.getBoundingClientRect();
+      _spot.style.left=(r.left-pad)+'px';
+      _spot.style.top=(r.top-pad)+'px';
+      _spot.style.width=(r.width+pad*2)+'px';
+      _spot.style.height=(r.height+pad*2)+'px';
+
+      // Popup cao hơn cả vùng nhìn thấy thì cho nó tự cuộn bên trong — thà đọc
+      // phải cuộn còn hơn nút bấm nằm ngoài màn.
+      _pop.style.maxHeight=Math.max(120,vp.h-20)+'px';
+
+      var popH=_pop.offsetHeight||160, popW=_pop.offsetWidth||290;
+      var top=r.bottom+14;
+      if(top+popH>vp.top+vp.h-10) top=r.top-14-popH;   // hết chỗ dưới → đặt lên trên
+      // 🔴 KẸP CỨNG vào vùng nhìn thấy. Bản trước thiếu đúng bước này: chọn
+      // xong trên/dưới là gán thẳng, nên neo nằm dưới mép màn thì popup văng
+      // theo và NÚT "Bỏ qua"/"Tiếp" ra ngoài màn — người dùng kẹt trong tour,
+      // không còn đường thoát. Đo được: neo ở 1072px trên màn 844 → nút nằm
+      // dưới đáy 204px.
+      var minTop=vp.top+10, maxTop=vp.top+vp.h-popH-10;
+      if(maxTop<minTop) maxTop=minTop;
+      _pop.style.top=Math.min(Math.max(top,minTop),maxTop)+'px';
+
+      var minLeft=vp.left+12, maxLeft=vp.left+vp.w-popW-12;
+      if(maxLeft<minLeft) maxLeft=minLeft;
+      _pop.style.left=Math.min(Math.max(r.left,minLeft),maxLeft)+'px';
+    }
+
+    position();
+    // Đo lại ở khung hình sau: webfont/ảnh đáp xuống muộn làm popup CAO HƠN lúc
+    // đo đầu, mà lúc đó phép kẹp đã tính theo chiều cao cũ.
+    if(window.requestAnimationFrame) requestAnimationFrame(position);
 
     document.getElementById('tourSkip').onclick=finish;
     document.getElementById('tourNext').onclick=function(){ step(_i+1); };
@@ -1661,7 +2235,7 @@ function renderAllTools(d) {
     if(i>=STEPS.length){ finish(); return; }
     var data=STEPS[i], target=findTarget(data.sel);
     if(!target){ step(i+1); return; } // phần tử chưa có lúc này → bỏ qua bước đó, đừng đứng khựng
-    _i=i;
+    _i=i; _scrolled=false;
     place(target,data,i===STEPS.length-1);
   }
 
@@ -1669,8 +2243,24 @@ function renderAllTools(d) {
     markSeen();
     if(_spot){ _spot.remove(); _spot=null; }
     if(_pop){ _pop.remove(); _pop=null; }
-    window.removeEventListener('resize',onResize);
+    bindWatchers(false);
   }
+
+  // 🪤 Trang /app cuộn trong #ws chứ không cuộn window → phải nghe 'scroll' ở
+  // pha CAPTURE trên document, gắn vào window là không bao giờ nổ (bẫy đã ghi
+  // trong CLAUDE.md). visualViewport đổi khi thanh công cụ iOS thu/giãn — không
+  // nghe thì popup đứng yên trong lúc vùng nhìn thấy co lại quanh nó.
+  function bindWatchers(on){
+    var m=on?'addEventListener':'removeEventListener';
+    window[m]('resize',onResize);
+    document[m]('scroll',onResize,true);
+    if(window.visualViewport){ window.visualViewport[m]('resize',onResize); window.visualViewport[m]('scroll',onResize); }
+    document[m]('keydown',onKey);
+  }
+
+  // Đường thoát cuối: Esc luôn đóng được tour, kể cả khi vì lý do nào đó nút
+  // vẫn không bấm tới. Rẻ, và đúng thứ đã thiếu lúc Henry bị kẹt.
+  function onKey(e){ if(e.key==='Escape'||e.keyCode===27) finish(); }
 
   function onResize(){
     if(_i<0||_i>=STEPS.length) return;
@@ -1690,7 +2280,7 @@ function renderAllTools(d) {
     _pop=document.createElement('div'); _pop.className='tour-pop';
     document.body.appendChild(_spot);
     document.body.appendChild(_pop);
-    window.addEventListener('resize',onResize);
+    bindWatchers(true);
     step(0);
   }
 

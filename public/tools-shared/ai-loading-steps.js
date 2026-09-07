@@ -11,7 +11,7 @@
 //   var ctl = AiLoadingSteps.mount('mountId', [
 //     { label: 'Lập lá số & xác định cung Phu Thê', ms: 900 },
 //     { label: 'Luận giải cung Phu Thê', ms: 4500 },
-//     { label: 'AI đang vẽ chân dung', ms: 0 }, // bước cuối: ms không dùng
+//     { label: 'Đang vẽ chân dung', ms: 0 }, // bước cuối: ms không dùng
 //   ]);
 //   ctl.start();
 //   // ... await fetch(...)
@@ -54,6 +54,18 @@
       '@keyframes ai-spin-rotate{to{transform:rotate(360deg)}}' +
       '.ai-elapsed{margin-top:12px;font-size:11.5px;color:var(--text-lt,#8a8f98);opacity:.75}' +
       '.ai-wait{display:flex;flex-direction:column;gap:9px;align-items:center;width:100%;max-width:260px}' +
+      // `center`: canh giữa cả KHỐI trong khung cha (khung cha rộng hơn 260px,
+      // mặc định orb+chữ dạt về mép trái vì .ai-wait chỉ tự căn giữa NỘI DUNG
+      // của chính nó, không tự căn giữa trong parent). Chỉ bật khi trang gọi
+      // `opts.center:true` — KHÔNG đổi mặc định vì .ai-wait còn được dùng
+      // lồng cạnh chữ khác ở nhiều trang, đổi mặc định là lệch layout nơi đó.
+      '.ai-wait-center{margin:0 auto}' +
+      // `fast`: quầng khói xoay/thở NHANH hơn ~2× — Henry: "glowing nhanh hơn
+      // to hơn để user thấy rõ". Đổi qua modifier riêng, không sửa các hằng số
+      // 2.1s/2.7s gốc (variant 'a' mặc định) vì nhiều trang khác đang chạy
+      // đúng nhịp đó.
+      '.ai-orb-fast .ai-orb-halo{animation-duration:1.05s}' +
+      '.ai-orb-fast .ai-orb-halo i{animation-duration:1.3s}' +
       '.ai-wait-top{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--text-mid,#5a5145)}' +
       '.ai-wait-bar{width:100%;height:4px;border-radius:99px;background:rgba(154,123,58,.18);overflow:hidden}' +
       '.ai-wait-bar i{display:block;height:100%;background:#9A7B3A;border-radius:99px;transition:width .9s linear}' +
@@ -146,8 +158,9 @@
         : v === 'c'
           ? '<i></i><i></i><i></i>'
           : '';
+    var extra = opts.extraClass ? ' ' + opts.extraClass : '';
     return (
-      '<div class="ai-orb ai-orb-' + v + '" style="width:' + size + 'px;height:' + size + 'px">' +
+      '<div class="ai-orb ai-orb-' + v + extra + '" style="width:' + size + 'px;height:' + size + 'px">' +
       (v === 'd' ? '<div class="ai-orb-soft"></div>' : '') +
       '<div class="ai-orb-halo">' + inner + '</div>' +
       '<div class="ai-orb-core">' + ORB_MARK + '</div>' +
@@ -346,7 +359,11 @@
   //   w.note('Mất kết nối — đang thử lấy lại…');   // đổi lời, vẫn chạy đồng hồ
   //
   // opts thêm: { orb: false } quay lại spinner nhỏ như cũ ·
-  //            { variant: 'a'|'b'|'c'|'d' } đổi kiểu quầng sáng.
+  //            { variant: 'a'|'b'|'c'|'d' } đổi kiểu quầng sáng ·
+  //            { orbSize: 62 } đường kính cục sáng (mặc định 62, không đổi
+  //            hành vi trang cũ nếu không truyền) ·
+  //            { center: true } canh giữa cả khối trong khung cha rộng hơn ·
+  //            { fast: true } quầng khói xoay/thở nhanh gấp đôi.
   // ============================================================
   function mountWait(containerOrId, opts) {
     var el = typeof containerOrId === 'string' ? document.getElementById(containerOrId) : containerOrId;
@@ -364,6 +381,7 @@
     var CALM_AFTER = 45; // giây — mốc trấn an khi không có ETA
     var useOrb = opts.orb !== false;
     var variant = opts.variant || 'a';
+    var orbSize = opts.orbSize || 62;
     var timer = null;
     var startedAt = 0;
     var override = '';
@@ -377,8 +395,8 @@
     // từng nấc. Nay chỉ đổi textContent và width.
     function build() {
       el.innerHTML =
-        '<div class="ai-wait">' +
-        (useOrb ? orbHtml({ size: 62, variant: variant }) : '') +
+        '<div class="ai-wait' + (opts.center ? ' ai-wait-center' : '') + '">' +
+        (useOrb ? orbHtml({ size: orbSize, variant: variant, extraClass: opts.fast ? 'ai-orb-fast' : '' }) : '') +
         '<div class="ai-wait-top">' +
         (useOrb ? '' : '<span class="ai-spin"></span>') +
         '<span class="ai-wait-label"></span></div>' +

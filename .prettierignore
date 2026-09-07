@@ -16,6 +16,9 @@ package-lock.json
 tuvi-engine/
 remotion/
 
+# Mã CỦA NGƯỜI KHÁC (scripts/oracle/vendor/) — bản gốc, không sửa/format lại
+scripts/oracle/vendor/*.js
+
 # Generated / vendor data
 public/cach_cuc_all.json
 chunks_all.json

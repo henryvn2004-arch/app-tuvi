@@ -78,7 +78,7 @@ create or replace function public.social_proof_approve(
 ) returns integer
 language plpgsql
 security definer
-set search_path = public
+set search_path = public, pg_temp
 as $$
 declare
   v_user_id uuid;

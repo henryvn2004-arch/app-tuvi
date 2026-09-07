@@ -205,3 +205,28 @@ print("file:",len(f)," lượt:",sum(f.values()))
 for k,v in f.most_common(15): print(f"{v:5d}  {k}")
 PY
 ```
+
+## 8. Hai chốt kỹ thuật thêm sau (2026-09)
+
+**`iconHtml()` trả SVG có sẵn `width="1em"`** (từ 2026-09-02). Trước đó nó trả
+SVG **KHÔNG CỠ**, chỉ sống nhờ CSS `.ic>svg` — bộ chọn con **TRỰC TIẾP** — nên
+chèn trần ở đâu là nở HẾT bề ngang ở đó: hỏng im lặng và hỏng cỡ khổng lồ (đã ra
+prod: quyển sách nửa màn hình ở khối "Nguồn").
+
+> ⚠️ Dò `width` trên SVG thì **ĐỪNG dùng `indexOf('width=')`** — mọi icon Lucide
+> có `stroke-width=`, khớp nhầm.
+
+**`admin*.html` dùng `MutationObserver`** để dựng icon cho mọi nhánh mới chèn
+(210 chỗ `innerHTML`, gọi tay là chắc chắn sót). `mountIcons` bỏ qua phần tử đã
+có `<svg>` nên không lặp vô hạn.
+
+**Cách kiểm ĐÚNG duy nhất:** nhánh dự phòng của span in **emoji thô**, không để
+trống — nên "trang trông vẫn có icon" KHÔNG chứng minh icon đã dựng. Phải hỏi:
+`[data-icon]` nào KHÔNG chứa `<svg>` sau khi tải xong.
+
+**Bump `nav.js?v=`:** đếm bằng lệnh, đừng tin con số chép tay ở §4 (nó trôi mỗi
+đợt thêm trang) — và nhớ quét cả `public/tools/`, quét mỗi tầng một là sót:
+
+```bash
+grep -rl 'nav\.js?v=' public/ app/ | wc -l
+```

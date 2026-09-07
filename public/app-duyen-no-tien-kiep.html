@@ -6,10 +6,10 @@
 <title>Duyên Nợ Tiền Kiếp — Tử Vi Minh Bảo</title>
 <meta name="description" content="Hai đến năm lá số — kiếp trước những người này là gì của nhau. Loại duyên nợ suy từ cổ pháp, câu chuyện 4 hồi và một bức tranh vẽ cả nhóm.">
 <link rel="icon" type="image/webp" href="/seal.webp">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"></noscript>
-<link rel="stylesheet" href="/shell.css?v=30">
+<link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/fonts/noto-serif.css?v=1">
+<link rel="stylesheet" href="/shell.css?v=34">
 <style>
 .form-card{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);max-width:860px}
 .form-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:3px}
@@ -107,11 +107,25 @@
       </div>
     </div>
     <div class="ws-body">
-      <div id="introHost"></div>
+      <!-- Box giới thiệu dựng TĨNH: chèn bằng JS thì nó ra đời SAU lần vẽ đầu,
+           đẩy cả `.ws-body` xuống VÀ tự làm phần tử LCP (đo trên prod: CLS 0,198,
+           Render Delay 5,3s). `Shell.introOnce` thấy `.intro-card` đã có thì chỉ
+           điền `#introSrc`. Vì thế `SHELL_INTRO` bên dưới CHỈ khai `key` — chữ nằm
+           đúng ở đây, một bản duy nhất, không có bản chép để trôi. -->
+      <div id="introHost"><div class="intro-card">
+        <div class="intro-body">
+          <img class="intro-avatar" src="/tool-avatars/duyen-no-tien-kiep.webp" alt="" onerror="this.remove()">
+          <div class="intro-text">
+            <div class="intro-t">Duyên Nợ Tiền Kiếp</div>
+            <div class="intro-d">Duyên Nợ Tiền Kiếp ghép hai lá số, tìm mối duyên kiếp trước giữa bạn và người ấy. Yêu một người mà cảm giác gắn bó sâu đậm hơn bình thường, như thể đã nợ nhau từ kiếp nào? Nhập ngày giờ sinh cả hai, nhận câu chuyện duyên nợ tiền kiếp chung.</div>
+            <div id="introSrc" style="min-height:73.6px;margin-top:9px"></div>
+          </div>
+        </div>
+      </div></div>
       <div id="shellRecent"></div>
       <div class="form-card" id="birthPanel">
         <h2>Nhập ngày sinh (dương lịch)</h2>
-        <p class="sub">Ghép hai lá số, tìm mối duyên kiếp trước giữa bạn và người ấy. Bạn cảm giác quen người này từ lâu dù mới gặp gần đây. Dùng khi muốn một câu chuyện chung cho cả hai người.</p>
+        <p class="sub">Nhập họ tên, giới tính và ngày giờ sinh của những người muốn xem (2–5 người). Hệ thống đối chiếu các lá số rồi dựng thành câu chuyện kèm tranh minh hoạ. Nhận về mối duyên kiếp trước và câu chuyện kể theo 4 hồi.</p>
         <p class="price-note" data-tvp-price-label="duyen-no-tien-kiep">…</p>
 
         <div class="dn-two" id="personGrid"></div>
@@ -122,6 +136,10 @@
         </div>
 
         <div id="hookHost"></div>
+
+        <!-- Ảnh minh hoạ MỜ, đúng giới tính từng người (2026-09-07) — xem
+             chú thích đầy đủ ở `_showDummyPortraits` phía dưới. -->
+        <div id="dummyPortraitHost" style="display:none;margin-top:10px"></div>
 
         <div class="frow" style="margin-bottom:0;margin-top:14px">
           <button class="btn-go" id="btnGo" onclick="analyze()">Xem Duyên Nợ — <span data-tvp-price="duyen-no-tien-kiep">…</span> Lượng →</button>
@@ -191,16 +209,16 @@
 </div>
 
 <script>window.SHELL_ACTIVE='duyen-no-tien-kiep';window.SHELL_HISTORY=true;
-window.SHELL_INTRO={key:'duyen-no-tien-kiep',title:'Duyên Nợ Tiền Kiếp',desc:'Ghép hai lá số, tìm mối duyên kiếp trước giữa bạn và người ấy. Bạn cảm giác quen người này từ lâu dù mới gặp gần đây. Dùng khi muốn một câu chuyện chung cho cả hai người.'};</script>
+window.SHELL_INTRO={key:'duyen-no-tien-kiep'};</script>
 <script src="/laso-chart.js?v=3"></script>
 <script src="/tools-shared/vn-timezone.js?v=1"></script>
 <script src="/tuvi-form.js?v=2"></script>
-<script src="/tuvi-paywall.js?v=22"></script>
-<script src="/tools-shared/hook-layer.js?v=1"></script>
+<script src="/tuvi-paywall.js?v=25"></script>
+<script src="/tools-shared/hook-layer.js?v=2"></script>
 <script src="/auth.js?v=2"></script>
-  <script src="/nav.js?v=24" data-icons-only></script>
-<script src="/shell.js?v=85"></script>
-<script src="/tools-shared/ai-loading-steps.js?v=9"></script>
+  <script src="/nav.js?v=26" data-icons-only></script>
+<script src="/shell.js?v=87"></script>
+<script src="/tools-shared/ai-loading-steps.js?v=10"></script>
 <script src="/tools-shared/portrait-recover.js?v=2"></script>
 <script>
 
@@ -399,10 +417,10 @@ async function _maybeMountHook() {
   var births = [];
   for (var i = 0; i < _slots.length; i++) {
     var b = _birthOf(_slots[i]);
-    if (!b) { document.getElementById('hookHost').innerHTML = ''; _hookQuery = null; return; }
+    if (!b) { document.getElementById('hookHost').innerHTML = ''; _clearDummyPortraits(); _hookQuery = null; return; }
     births.push(b);
   }
-  if (births.length < 2) { document.getElementById('hookHost').innerHTML = ''; _hookQuery = null; return; }
+  if (births.length < 2) { document.getElementById('hookHost').innerHTML = ''; _clearDummyPortraits(); _hookQuery = null; return; }
   var q = _cacheQuery(births);
   if (q === _hookQuery) return;
   _hookQuery = q;
@@ -414,8 +432,9 @@ async function _maybeMountHook() {
     });
     var data = await res.json();
     if (q !== _hookQuery) return; // đã đổi input trong lúc chờ, bỏ kết quả cũ
-    if (!res.ok || !data.success) { document.getElementById('hookHost').innerHTML = ''; return; }
+    if (!res.ok || !data.success) { document.getElementById('hookHost').innerHTML = ''; _clearDummyPortraits(); return; }
     mountHook(data);
+    _showDummyPortraits(births);
   } catch (e) { /* im lặng — đây là hook, không phải luồng chính */ }
 }
 
@@ -433,6 +452,29 @@ function mountHook(data) {
       source: 'engine · computeGroupBond',
     }],
   });
+}
+
+// Ảnh minh hoạ MỜ, MỖI người ĐÚNG giới tính của họ (2026-09-07, Henry chốt
+// "dùng ảnh dummy xong blur nó đi, chú ý nam/nữ") — hiện NGAY khi đủ ≥2 lá
+// số hợp lệ (cùng nhịp với `mountHook`), TRƯỚC khi bấm nút hay trả tiền. Ảnh
+// thật (gpt-image-2, MỘT bức GHÉP cả nhóm, ~1.161đ/lượt) chỉ sinh SAU khi
+// thanh toán — khác bản chữ nên không cho xem thật trước, đây chỉ là hình
+// dạng đang chờ theo đúng số người + giới tính đã nhập, không phải suy đoán
+// diện mạo thật của ai.
+function _showDummyPortraits(births) {
+  var host = document.getElementById('dummyPortraitHost');
+  if (!host) return;
+  host.style.display = 'block';
+  var imgs = births.map(function (b) {
+    return '<img src="' + TuviPaywall.dummyPortraitUrl(b.gender) + '" class="tpw-real-lock" ' +
+      'alt="Ảnh minh hoạ (mờ)" style="width:100px;height:150px;object-fit:cover;border-radius:10px">';
+  }).join('');
+  host.innerHTML = TuviPaywall.lockBadge('Bức tranh chung — minh hoạ') +
+    '<div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:8px">' + imgs + '</div>';
+}
+function _clearDummyPortraits() {
+  var host = document.getElementById('dummyPortraitHost');
+  if (host) { host.style.display = 'none'; host.innerHTML = ''; }
 }
 
 async function analyze() {

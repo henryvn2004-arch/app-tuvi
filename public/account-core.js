@@ -353,7 +353,7 @@ async function copyMcpUrl() {
   setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('ok'); }, 1800);
 }
 async function revokeMcpKey() {
-  if (!confirm('Thu hồi key hiện tại? Kết nối AI đang dùng key cũ sẽ ngừng — bạn sẽ có key mới ngay sau đó.')) return;
+  if (!confirm('Thu hồi key hiện tại? Kết nối Đang dùng key cũ sẽ ngừng — bạn sẽ có key mới ngay sau đó.')) return;
   _mcpShow('checking');
   try {
     await fetch('/api/mcp/key', { method: 'DELETE', headers: { Authorization: `Bearer ${await _tok()}` } });

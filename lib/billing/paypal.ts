@@ -10,6 +10,7 @@
 // ============================================================
 
 import { getPackage, quoteCustomVnd } from './packages';
+import { fireServerPurchase } from '../marketing/server-conversions';
 
 // ⚠️ Mặc định là SANDBOX. Chỉ `PAYPAL_MODE=live` mới đập vào tiền thật — và
 // nhầm chiều nào cũng hỏng IM LẶNG: quên set thì khoá LIVE bắn vào sandbox
@@ -89,7 +90,7 @@ export function humanIssueMessage(issue: string): string {
 
 // ── Chốt một đơn topup ────────────────────────────────────────
 export type SettleOutcome =
-  | { ok: true; credits: number; balance: number; credited: boolean }
+  | { ok: true; credits: number; balance: number; credited: boolean; amountVnd: number }
   | { ok: false; status: number; error: string };
 
 /**
@@ -211,7 +212,10 @@ export async function settlePayPalTopup(
   if (!row) return { ok: false, status: 500, error: 'Không ghi được giao dịch' };
 
   // Thưởng giới thiệu tự fire qua trigger trg_referral_check_on_topup.
-  return { ok: true, credits: pkg.credits, balance: row.balance, credited: row.credited };
+  // Purchase sang GA4/Meta CHỈ bắn ở đây — đúng lần cộng tiền THẬT ĐẦU TIÊN,
+  // dù webhook hay trình duyệt là bên gọi tới. Xem lib/marketing/server-conversions.ts.
+  if (row.credited) fireServerPurchase(userId, orderId, pkg.amountVnd);
+  return { ok: true, credits: pkg.credits, balance: row.balance, credited: row.credited, amountVnd: pkg.amountVnd };
 }
 
 // ── Xác thực webhook ──────────────────────────────────────────

@@ -7,6 +7,14 @@ export const maxDuration = 300;
 // backup switch-được, không đổi prompt/parse/paywall.
 import { llmText, llmStreamResponse } from '@/lib/llm/complete';
 import { withToolOutcome } from '@/lib/ops/tool-outcome';
+import {
+  DOC_ARC_DIEN_TUONG,
+  DOC_ARC_NHAN_TUONG,
+  DOC_ARC_THU_TUONG,
+  DOC_ARC_THANH_TUONG,
+  DOC_ARC_THANH_TUONG_PRO,
+  NHAN_TINH_CHAT_RULE,
+} from '@/lib/agent/prompts';
 
 // ── System Prompts ─────────────────────────────────────────────────────────
 const SP_DIEN = `Bạn là chuyên gia nhân tướng học (面相學) theo truyền thống phương Đông, am hiểu Ma Y Thần Tướng (麻衣神相), Liễu Trang Thần Tướng (柳莊神相) và Thủy Kính Tập (水鏡集).
@@ -43,6 +51,12 @@ Ba vùng cân bằng 1:1:1 là lý tưởng. Vùng vượng hơn → giai đoạ
 ### 3. Ngũ Quan — đủ 5 quan: Tai → Lông mày → Mắt → Mũi → Miệng
 ### 4. Các Bộ Vị — tiểu vùng nổi bật
 ### 5. Tổng Hợp — điểm mạnh, điểm lưu ý (PHẢI CÓ), giai đoạn vận trình, kết bằng "Tướng tùy tâm sinh, tướng tùy tâm diệt"
+
+- MỞ ĐẦU mỗi phần bằng MỘT câu chốt in đậm neo vào nét tướng cụ thể của phần đó
+  (tỷ lệ Tam Đình, độ đắc/hãm của quan đang xét, bộ vị nổi bật): phần này mạnh
+  hay yếu, đáng chú ý ở đâu. Rồi mới giải thích vì sao.
+
+${DOC_ARC_DIEN_TUONG}
 
 ## Nguyên Tắc
 - Dùng kiến thức cổ pháp thật sự, nêu đủ cả tốt lẫn xấu
@@ -109,6 +123,11 @@ Mối tương quan giữa lông mày và mắt trong tổng thể nhãn tướng
 - Điểm vượng và điểm cần lưu ý theo cổ pháp (PHẢI CÓ cả tốt lẫn hung)
 - Lĩnh vực phù hợp theo nhãn tướng này
 - Vận trình giai đoạn 30–40 tuổi (Giám Sát Quan)
+
+- MỞ ĐẦU mỗi phần bằng MỘT câu chốt in đậm neo vào nhãn hình/thần cụ thể của
+  phần đó: phần này mạnh hay yếu, đáng chú ý ở đâu. Rồi mới giải thích vì sao.
+
+${DOC_ARC_NHAN_TUONG}
 
 ## Nguyên Tắc
 - Dùng kiến thức Ma Y Thần Tướng, Liễu Trang Thần Tướng và Nhân Tướng Học thật sự
@@ -200,6 +219,12 @@ Gò nào nổi bật, gò nào phẳng/lõm. Ngón tay nào dài/ngắn so với
 - Lĩnh vực nghề nghiệp phù hợp nhất
 - Kết bằng nhắc nhở: tay trái bẩm sinh, tay phải có thể thay đổi theo nỗ lực
 
+- MỞ ĐẦU mỗi phần bằng MỘT câu chốt in đậm neo vào nét quan sát cụ thể của
+  phần đó (hình tướng bàn tay, đường chỉ tay, gò tay): phần này mạnh hay yếu,
+  đáng chú ý ở đâu. Rồi mới giải thích vì sao.
+
+${DOC_ARC_THU_TUONG}
+
 ## Nguyên Tắc
 - Ưu tiên Ngũ Hành Hình Tướng — đây là hệ thống cổ pháp phương Đông thuần túy nhất
 - Kết hợp hợp lý với Đường Chỉ Tay và Gò Tay
@@ -256,6 +281,11 @@ Dựa trên Ngũ Âm, luận giải tính cách, thiên hướng nghề nghiệp
 - Điểm cần lưu ý (PHẢI CÓ — thiếu là không trung thực)
 - Lĩnh vực phù hợp nhất theo thanh tướng
 - Kết bằng: "Thanh tùy tâm sinh — giọng nói có thể rèn luyện theo tâm tính"
+
+- MỞ ĐẦU mỗi phần bằng MỘT câu chốt in đậm neo vào đặc điểm giọng cụ thể của
+  phần đó (Ngũ Âm, thanh/trọc): phần này mạnh hay yếu. Rồi mới giải thích vì sao.
+
+${DOC_ARC_THANH_TUONG}
 
 ## Nguyên Tắc
 - Dựa trên Ngũ Âm cổ pháp thật sự từ Mã Môi, Đạt Ma thiền sư
@@ -360,6 +390,12 @@ Nếu có Hữu Đầu Vô Vĩ, Phá La, Áp Thanh, Nam Nữ Phản Cách → n�
 ## 6. Dưỡng Thanh Dưỡng Khí
 (1 đoạn) Lời khuyên cụ thể: thở bụng (đan điền), tập ngân chữ "A" hằng ngày, tránh nói to khi mệt, uống nước ấm buổi sáng.
 
+MỞ ĐẦU mỗi phần bằng MỘT câu chốt in đậm neo vào chỉ số/nhận định cụ thể của
+phần đó (Ngũ Âm, khí lực, dị cách): phần này mạnh hay yếu. Rồi mới giải thích
+vì sao.
+
+${DOC_ARC_THANH_TUONG_PRO}
+
 ═══════════════════════════════════════════════
 ## QUY TẮC BẮT BUỘC
 
@@ -426,6 +462,16 @@ Luận từng vùng theo thứ tự: Nam Nhạc (trán) → Trung Nhạc (mũi) 
 
 ## 6. Kết — Bình Đán Quan Khí
 (vài dòng) Nhắc rằng khí sắc đổi theo ngày, nên xem lại 1–3 tháng/lần. Kết bằng một câu cổ văn thích hợp, ví dụ *"Bình đán quan khí, khí túc tắc thần viên"* (xem khí lúc bình minh, khí đủ thì thần tròn) hoặc *"Tướng tùy tâm sinh, tướng tùy tâm diệt"* (tướng theo tâm mà sinh, theo tâm mà diệt).
+
+MỞ ĐẦU mỗi phần bằng MỘT câu chốt in đậm neo vào sắc/vùng cụ thể của phần đó
+(ngũ sắc, độ sáng, độ tươi nhuận): phần này cát hay hung. Rồi mới giải thích
+vì sao.
+
+⚠️ KHÔNG dùng khối HÀNH VI ĐỜI THƯỜNG/CÂU LẬT/DỰ BÁO chung của các tool khác
+ở đây — phần 4 "Dự Báo 1–3 Tháng Tới" ở trên ĐÃ là dự báo riêng của Khí Sắc,
+thêm một nguồn dự báo nữa là chồng luật. Chỉ mượn đúng nhãn tính chất:
+
+${NHAN_TINH_CHAT_RULE}
 
 ## Nguyên Tắc Bắt Buộc
 
@@ -594,13 +640,13 @@ Dùng các số đo này để xác định hình dạng khuôn mặt CHÍNH XÁ
       maxTokens: 1500,
     });
   } catch (_) {
-    return Response.json({ error: 'Lỗi AI.' }, { status: 500 });
+    return Response.json({ error: 'Lỗi hệ thống.' }, { status: 500 });
   }
   try {
     const parsed = JSON.parse(text.replace(/```json|```/g, '').trim());
     return Response.json(parsed);
   } catch (_) {
-    return Response.json({ error: 'Lỗi phân tích kết quả AI.' }, { status: 500 });
+    return Response.json({ error: 'Lỗi phân tích kết quả trả về.' }, { status: 500 });
   }
 }
 
@@ -638,9 +684,9 @@ async function handleKieuTocTryon(body) {
   }
 }
 
-// ── End Kiểu Tóc AI ─────────────────────────────────────────────────────────
+// ── End Kiểu Tóc ─────────────────────────────────────────────────────────
 
-// ── Trang Điểm AI ────────────────────────────────────────────────────────────
+// ── Trang Điểm ────────────────────────────────────────────────────────────
 
 // Makeup styles: Asian aesthetic taxonomy
 const MAKEUP_STYLES = {
@@ -781,7 +827,7 @@ Theo cổ pháp, người mệnh ${napAmHanh} hợp với phong cách: ${menhMak
       maxTokens: 1200,
     });
   } catch (_) {
-    return Response.json({ error: 'Lỗi AI.' }, { status: 500 });
+    return Response.json({ error: 'Lỗi hệ thống.' }, { status: 500 });
   }
   try {
     const parsed = JSON.parse(text.replace(/```json|```/g, '').trim());
@@ -794,7 +840,7 @@ Theo cổ pháp, người mệnh ${napAmHanh} hợp với phong cách: ${menhMak
     }
     return Response.json(parsed);
   } catch (_) {
-    return Response.json({ error: 'Lỗi phân tích kết quả AI.' }, { status: 500 });
+    return Response.json({ error: 'Lỗi phân tích kết quả trả về.' }, { status: 500 });
   }
 }
 
@@ -820,7 +866,7 @@ async function handleTrangDiemTryon(body) {
 }
 
 
-// ── Da Liệu AI ────────────────────────────────────────────────────────────────
+// ── Da Liệu ────────────────────────────────────────────────────────────────
 
 // Ngũ tạng → da (Đông y)
 // Phế chủ bì mao (Phổi chủ da/lông)
@@ -959,20 +1005,20 @@ Phần an_uong cũng phải tính đến mệnh ${menhHanh} (VD: mệnh Hỏa c�
       maxTokens: 2000,
     });
   } catch (_) {
-    return Response.json({ error: 'Lỗi AI.' }, { status: 500 });
+    return Response.json({ error: 'Lỗi hệ thống.' }, { status: 500 });
   }
   try {
     const parsed = JSON.parse(text.replace(/```json|```/g, '').trim());
     if (menhHanh) { parsed.menhHanh = menhHanh; parsed.menhFull = menhFull; parsed.canChi = canChi; }
     return Response.json(parsed);
   } catch(_) {
-    return Response.json({ error: 'Lỗi phân tích kết quả AI.' }, { status: 500 });
+    return Response.json({ error: 'Lỗi phân tích kết quả trả về.' }, { status: 500 });
   }
 }
 
-// ── End Da Liệu AI ────────────────────────────────────────────────────────────
+// ── End Da Liệu ────────────────────────────────────────────────────────────
 
-// ── Personal Color AI ─────────────────────────────────────────────────────────
+// ── Personal Color ─────────────────────────────────────────────────────────
 
 // 4 mùa × undertone
 const PC_SEASONS = {
@@ -1127,7 +1173,7 @@ Nếu kết quả phân tích ảnh cho phép, ưu tiên season này. Nếu tôn
       maxTokens: 1200,
     });
   } catch (_) {
-    return Response.json({ error: 'Lỗi AI.' }, { status: 500 });
+    return Response.json({ error: 'Lỗi hệ thống.' }, { status: 500 });
   }
   try {
     const parsed = JSON.parse(raw.replace(/```json|```/g, '').trim());
@@ -1198,7 +1244,7 @@ async function handleWardrobeAdd(request, body) {
       maxTokens: 400,
     });
   } catch (_) {
-    return Response.json({ error: 'Lỗi AI phân tích.' }, { status: 500 });
+    return Response.json({ error: 'Lỗi khi phân tích kết quả.' }, { status: 500 });
   }
   let classified = {};
   try {
@@ -1320,7 +1366,7 @@ Quy tắc:
   try {
     mixText = await llmText({ prompt, maxTokens: 1000 });
   } catch (_) {
-    return Response.json({ error: 'Lỗi AI.' }, { status: 500 });
+    return Response.json({ error: 'Lỗi hệ thống.' }, { status: 500 });
   }
   try {
     const parsed = JSON.parse(mixText?.replace(/```json|```/g,'').trim() || '{}');
@@ -1362,7 +1408,7 @@ async function handleWardrobeDelete(request, body) {
 
 // ── End xLook Wardrobe AI ─────────────────────────────────────────────────────
 
-// ── End Personal Color AI ─────────────────────────────────────────────────────
+// ── End Personal Color ─────────────────────────────────────────────────────
 
 // Personal Color Try-on
 const PC_OUTFIT_DESC = {
@@ -1398,7 +1444,7 @@ async function handlePersonalColorTryon(body) {
 }
 
 
-// ── End Trang Điểm AI ─────────────────────────────────────────────────────────
+// ── End Trang Điểm ─────────────────────────────────────────────────────────
 
 const PROMPTS = {
   'dien-tuong': SP_DIEN,

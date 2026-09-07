@@ -83,9 +83,9 @@
       // cần để quyết (Kim Lâu Thê thì hoãn cưới, Lục Súc thì nhẹ hơn hẳn).
       var klCau = kl ? 'Năm nay là tuổi Kim Lâu ' + klLoai + ' — ' + KIM_LAU_HAI[klLoai] + ', kiêng cưới hỏi, xây dựng, khởi công lớn.' : '';
       var desc = kl && tt ? klCau + ' Năm nay còn trùng Tam Tai nên cần thận trọng đặc biệt.' : kl ? klCau : ho ? 'Năm nay là tuổi Hoang Ốc — kiêng mua bán và xây nhà.' : 'Năm nay đang trong vận Tam Tai — cẩn thận với các quyết định lớn.';
-      currentBoxHTML = '<div style="background:#fef0ef;border-left:3px solid #c9a84c;padding:14px 16px;border-radius:0 6px 6px 0;margin-bottom:12px"><div style="font-size:13px;font-weight:700;margin-bottom:4px">Năm ' + curYear + ' (Tuổi ' + tuoiTa + ') — ' + getStatusHTML(kl, ho, tt, klLoai) + '</div><div style="font-size:13px;color:var(--text-mid)">' + desc + '</div></div>';
+      currentBoxHTML = '<div style="background:#fef0ef;border-left:3px solid #c9a84c;padding:14px 16px;border-radius:0 6px 6px 0;margin-bottom:12px"><div style="font-size:13px;font-weight:700;margin-bottom:4px;color:#1a1a1a">Năm ' + curYear + ' (Tuổi ' + tuoiTa + ') — ' + getStatusHTML(kl, ho, tt, klLoai) + '</div><div style="font-size:13px;color:#4a4a4a">' + desc + '</div></div>';
     } else {
-      currentBoxHTML = '<div style="background:#eaf4ed;border-left:3px solid #1E6B3C;padding:14px 16px;border-radius:0 6px 6px 0;margin-bottom:12px"><div style="font-size:13px;font-weight:700;margin-bottom:4px">Năm ' + curYear + ' (Tuổi ' + tuoiTa + ') — <span class="res-tag res-tag-good">Bình thường</span></div><div style="font-size:13px;color:var(--text-mid)">Năm nay không có Kim Lâu, Hoang Ốc hay Tam Tai.</div></div>';
+      currentBoxHTML = '<div style="background:#eaf4ed;border-left:3px solid #1E6B3C;padding:14px 16px;border-radius:0 6px 6px 0;margin-bottom:12px"><div style="font-size:13px;font-weight:700;margin-bottom:4px;color:#1a1a1a">Năm ' + curYear + ' (Tuổi ' + tuoiTa + ') — <span class="res-tag res-tag-good">Bình thường</span></div><div style="font-size:13px;color:#4a4a4a">Năm nay không có Kim Lâu, Hoang Ốc hay Tam Tai.</div></div>';
     }
 
     var rowsArr = [], rowsHTML = '';

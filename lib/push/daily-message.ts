@@ -51,10 +51,21 @@ export function buildDailyPushMessage(day?: { d: number; m: number; y: number })
   if (v.ngayKy.length) {
     parts.push(`trùng ${v.ngayKy.join(' + ')}`);
   } else {
-    // Bỏ "an táng" khỏi gợi ý của TIN PUSH: trên thẻ nó nằm trong bảng chọn
-    // ngày nên đọc bình thường, còn bắn thẳng vào màn hình khoá mỗi sáng thì
-    // thành một lời chúc rất khó đỡ. Thẻ vẫn giữ đủ.
-    const goi = v.nen.filter((x) => !/an táng/i.test(x.ten)).slice(0, 2);
+    // Bỏ "an táng" khỏi gợi ý của TIN PUSH: bắn thẳng vào màn hình khoá mỗi
+    // sáng thì nó thành một lời chúc rất khó đỡ.
+    // 📌 Thẻ nay ẨN An táng · Đào giếng · Sinh con (`vietChoThe()` trong
+    // `public/app-home.html`), nên bộ lọc ở đây KHÔNG còn là ngoại lệ riêng
+    // của push — chỉ là bản hẹp hơn. Cố ý không chép đủ ba: quét 2026-2032
+    // (1.726 ngày push) thì Đào giếng / Sinh con **không lần nào** vượt bar 7
+    // để lọt vào câu này, nên thêm hai khoá nữa là code chết.
+    // Lọc lại `diem >= 7` cho RIÊNG tin push — và nay QUAN TRỌNG HƠN TRƯỚC.
+    // `computeVanNgay` đã hạ ngưỡng xuống 5 để ô "Nên làm" trên thẻ bớt trống
+    // (trên ngày lành: 31% → 2% số ngày, đo trên 2026). Thẻ là thứ người ta
+    // CHỦ ĐỘNG mở, đọc kèm ĐIỂM, và có ô "Cần tránh" ngay bên cạnh để đối
+    // chiếu. Còn đây là MỘT dòng bắn thẳng vào màn hình khoá lúc 7h sáng,
+    // không có điểm, không có ngữ cảnh — "hợp cưới hỏi" ở đó mà thật ra là
+    // 5/10 thì thành một lời khuyên sai. Giữ bar 7.
+    const goi = v.nen.filter((x) => x.diem >= 7 && !/an táng/i.test(x.ten)).slice(0, 2);
     if (goi.length) parts.push(`hợp ${goi.map((x) => x.ten.toLowerCase()).join(', ')}`);
   }
   if (v.xung.chi) parts.push(`xung tuổi ${v.xung.chi}`);

@@ -4,12 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Hướng Bát Trạch — Tử Vi Minh Bảo</title>
-<meta name="description" content="Tra 4 hướng đại cát và 4 hướng đại hung theo cung mệnh Bát Trạch — hướng nhà, cửa, bếp, giường hợp mệnh. Hỏi trợ lý AI luận sâu.">
+<meta name="description" content="Tra 4 hướng đại cát và 4 hướng đại hung theo cung mệnh Bát Trạch — hướng nhà, cửa, bếp, giường hợp mệnh. Hỏi trợ lý Luận Đường luận sâu.">
 <link rel="icon" type="image/webp" href="/seal.webp">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"></noscript>
-<link rel="stylesheet" href="/shell.css?v=30">
+<link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/fonts/noto-serif.css?v=1">
+<link rel="stylesheet" href="/shell.css?v=34">
 <style>
 .form-card{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);max-width:600px}
 .form-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:3px}
@@ -78,11 +78,25 @@
       </div>
     </div>
     <div class="ws-body">
-      <div id="introHost"></div>
+      <!-- Box giới thiệu dựng TĨNH: chèn bằng JS thì nó ra đời SAU lần vẽ đầu,
+           đẩy cả `.ws-body` xuống VÀ tự làm phần tử LCP (đo trên prod: CLS 0,198,
+           Render Delay 5,3s). `Shell.introOnce` thấy `.intro-card` đã có thì chỉ
+           điền `#introSrc`. Vì thế `SHELL_INTRO` bên dưới CHỈ khai `key` — chữ nằm
+           đúng ở đây, một bản duy nhất, không có bản chép để trôi. -->
+      <div id="introHost"><div class="intro-card">
+        <div class="intro-body">
+          <img class="intro-avatar" src="/tool-avatars/bat-trach.webp" alt="" onerror="this.remove()">
+          <div class="intro-text">
+            <div class="intro-t">Hướng Bát Trạch</div>
+            <div class="intro-d">Hướng Bát Trạch tính mệnh quái và hướng nhà hợp với bạn theo Bát Trạch. Gia đình lục đục, sức khoẻ hao mòn, tiền bạc khó giữ — mà chưa từng nghĩ có thể do hướng nhà không hợp mệnh? Nhập ngày sinh và giới tính, nhận mệnh quái cùng các hướng tốt – xấu.</div>
+            <div id="introSrc" style="min-height:36.8px;margin-top:9px"></div>
+          </div>
+        </div>
+      </div></div>
       <div id="shellRecent"></div>
       <div class="form-card" id="birthPanel">
         <h2>Năm sinh & giới tính</h2>
-        <p class="sub">Tính mệnh quái và hướng nhà hợp với bạn theo Bát Trạch. Bạn kê bàn, kê giường theo cảm tính mà chưa biết đúng hướng. Dùng khi sắp dọn nhà hoặc sắp xếp lại không gian sống.</p>
+        <p class="sub">Nhập năm sinh và giới tính của bạn. Hệ thống tính mệnh quái theo đúng năm sinh đó. Nhận về mệnh quái, cung và bảng chi tiết 8 hướng tốt – xấu.</p>
         <p class="price-note" data-tvp-price-label="bat-trach">…</p>
         <div class="frow" style="margin-bottom:4px">
           <div class="fg" style="width:120px"><label>Năm sinh dương lịch</label><input type="number" id="year" placeholder="1990" min="1900" max="2010"></div>
@@ -118,11 +132,11 @@
 </div>
 
 <script>window.SHELL_ACTIVE='bat-trach';window.SHELL_HISTORY=true;
-window.SHELL_INTRO={key:'bat-trach',title:'Hướng Bát Trạch',desc:'Tính mệnh quái và hướng nhà hợp với bạn theo Bát Trạch. Bạn kê bàn, kê giường theo cảm tính mà chưa biết đúng hướng. Dùng khi sắp dọn nhà hoặc sắp xếp lại không gian sống.'};</script>
+window.SHELL_INTRO={key:'bat-trach'};</script>
 <script src="/tools-shared/bat-trach.js?v=1"></script>
 <script src="/auth.js?v=2"></script>
-  <script src="/nav.js?v=24" data-icons-only></script>
-<script src="/shell.js?v=85"></script>
+  <script src="/nav.js?v=26" data-icons-only></script>
+<script src="/shell.js?v=87"></script>
 <script>
 // Ô giữa dùng CHUNG module /tools-shared/bat-trach.js với trang standalone.
 function calculate(){

@@ -185,13 +185,12 @@ body{font-family:'Be Vietnam Pro',Arial,sans-serif;background:var(--bg);color:va
   <div class="article-body">${body}</div>
   <div class="cta-box">
     <h3>Áp dụng cho chính bạn</h3>
-    <p>Luận giải AI chi tiết — tính cách, vận hạn, tình duyên, sự nghiệp theo giờ sinh cụ thể</p>
+    <p>Luận giải chuyên sâu chi tiết — tính cách, vận hạn, tình duyên, sự nghiệp theo giờ sinh cụ thể</p>
     <a class="cta-btn" href="${tool.href}">${escHtml(tool.label)} →</a>
   </div>
   ${relatedHtml}
 </article>
-<script src="/footer.js"></script>
-<script src="/track.js?v=3" defer></script><script src="/nav.js?v=24" defer></script>
+<script src="/track.js?v=4" defer></script><script src="/nav.js?v=26" defer></script>
 </body></html>`;
 }
 
@@ -205,7 +204,7 @@ function buildNotFound() {
 <h1 style="color:#061A2E;font-family:Georgia,serif;margin-bottom:16px">Không tìm thấy trang</h1>
 <p style="color:#777;margin-bottom:24px">Trang tử vi này không tồn tại hoặc đã được cập nhật.</p>
 <a href="/" style="color:#1455A4">← Về Trang Chủ</a>
-<script src="/track.js?v=3" defer></script><script src="/nav.js?v=24" defer></script>
+<script src="/track.js?v=4" defer></script><script src="/nav.js?v=26" defer></script>
 </body></html>`;
 }
 

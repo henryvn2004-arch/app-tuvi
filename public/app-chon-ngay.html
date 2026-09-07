@@ -4,12 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Chọn ngày tốt — Tử Vi Minh Bảo</title>
-<meta name="description" content="Chọn ngày giờ tốt hợp tuổi theo can chi cho cưới hỏi, khai trương, nhập trạch, động thổ — hỏi trợ lý AI luận ngày đẹp và ngày cần tránh.">
+<meta name="description" content="Chọn ngày giờ tốt hợp tuổi theo can chi cho cưới hỏi, khai trương, nhập trạch, động thổ — hỏi trợ lý Luận Đường luận ngày đẹp và ngày cần tránh.">
 <link rel="icon" type="image/webp" href="/seal.webp">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"></noscript>
-<link rel="stylesheet" href="/shell.css?v=30">
+<link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/fonts/noto-serif.css?v=1">
+<link rel="stylesheet" href="/shell.css?v=34">
 <style>
 .form-card{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);max-width:600px}
 .form-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:3px}
@@ -32,7 +32,7 @@
 .note b{color:var(--text)}
 .ask{margin-top:12px;display:inline-flex;align-items:center;gap:7px;font-size:12.5px;color:var(--gold-soft);border:1px dashed var(--gold-soft);border-radius:8px;padding:7px 12px;cursor:pointer;background:var(--gold-lt);font-family:inherit}
 .laso-error{color:var(--tx-red);padding:14px;border:1px solid var(--red);border-radius:10px;background:var(--white)}
-/* ── Chọn ngày chuyên sâu bằng AI (paid, port từ tools/chon-ngay-tot.html — gate+SSE, không PDF) ── */
+/* ── Chọn ngày chuyên sâu (paid, port từ tools/chon-ngay-tot.html — gate+SSE, không PDF) ── */
 .dt-unlock{background:var(--white);border:1px solid var(--gold-soft);border-radius:11px;padding:18px 20px;margin-top:16px;text-align:center}
 .dt-unlock p{font-size:12.5px;color:var(--text-lt);margin-top:8px}
 .dt-result{margin-top:18px}
@@ -61,11 +61,25 @@
       </div>
     </div>
     <div class="ws-body">
-      <div id="introHost"></div>
+      <!-- Box giới thiệu dựng TĨNH: chèn bằng JS thì nó ra đời SAU lần vẽ đầu,
+           đẩy cả `.ws-body` xuống VÀ tự làm phần tử LCP (đo trên prod: CLS 0,198,
+           Render Delay 5,3s). `Shell.introOnce` thấy `.intro-card` đã có thì chỉ
+           điền `#introSrc`. Vì thế `SHELL_INTRO` bên dưới CHỈ khai `key` — chữ nằm
+           đúng ở đây, một bản duy nhất, không có bản chép để trôi. -->
+      <div id="introHost"><div class="intro-card">
+        <div class="intro-body">
+          <img class="intro-avatar" src="/tool-avatars/chon-ngay-tot.webp" alt="" onerror="this.remove()">
+          <div class="intro-text">
+            <div class="intro-t">Chọn ngày giờ tốt</div>
+            <div class="intro-d">Chọn ngày giờ tốt gợi ý ngày tốt cho cưới hỏi, làm nhà, khai trương của bạn. Cưới hỏi, khai trương nhằm ngày xấu rồi tiền bạc, hạnh phúc trục trặc — nỗi sợ đó cứ ám ảnh mỗi lần định ngày? Chọn loại việc và khoảng thời gian, nhận danh sách ngày giờ tốt phù hợp.</div>
+            <div id="introSrc" style="min-height:55.2px;margin-top:9px"></div>
+          </div>
+        </div>
+      </div></div>
       <div id="shellRecent"></div>
       <div class="form-card" id="birthPanel">
         <h2>Thông tin chọn ngày</h2>
-        <p class="sub">Gợi ý ngày tốt cho cưới hỏi, làm nhà, khai trương của bạn. Bạn sợ chọn nhầm ngày rồi bị nói động thổ sai giờ. Dùng khi cần chốt một ngày quan trọng sắp tới.</p>
+        <p class="sub">Chọn việc cần xem ngày, nhập tên và năm sinh chủ sự cùng tháng cần xem. Hệ thống tính can chi rồi đối chiếu hợp – xung với tuổi bạn. Nhận về danh sách ngày tốt kèm lý do cụ thể cho từng ngày.</p>
         <p class="price-note" data-tvp-price-label="chon-ngay-tot">…</p>
         <div class="frow">
           <div class="fg" style="flex:2;min-width:160px"><label>Việc cần chọn ngày</label>
@@ -101,8 +115,8 @@
              lặp lại đúng dữ kiện đã có, không bịa thêm. -->
         <div id="hookHost"></div>
         <div class="dt-unlock" id="dtUnlock">
-          <button class="btn-go" id="btnUnlock" onclick="initiateChonNgayChuyenSau()">✦ Chọn ngày chuyên sâu bằng AI — <span data-tvp-price="chon-ngay-tot">…</span> Lượng →</button>
-          <p>AI phân tích can chi tuổi chủ sự + tháng năm dự định, gợi ý các khoảng ngày tốt kèm lý do cụ thể.</p>
+          <button class="btn-go" id="btnUnlock" onclick="initiateChonNgayChuyenSau()">✦ Chọn ngày chuyên sâu — <span data-tvp-price="chon-ngay-tot">…</span> Lượng →</button>
+          <p>Hệ thống phân tích can chi tuổi chủ sự + tháng năm dự định, gợi ý các khoảng ngày tốt kèm lý do cụ thể.</p>
         </div>
         <div class="dt-result" id="dtResult"></div>
       </div>
@@ -113,20 +127,20 @@
 </div>
 
 <script>window.SHELL_ACTIVE='chon-ngay';window.SHELL_HISTORY=true;
-window.SHELL_INTRO={key:'chon-ngay',title:'Chọn ngày giờ tốt',desc:'Gợi ý ngày tốt cho cưới hỏi, làm nhà, khai trương của bạn. Bạn sợ chọn nhầm ngày rồi bị nói động thổ sai giờ. Dùng khi cần chốt một ngày quan trọng sắp tới.'};</script>
+window.SHELL_INTRO={key:'chon-ngay'};</script>
 <script src="/can-chi.js?v=1"></script>
 <script src="/auth.js?v=2"></script>
-<script src="/tuvi-paywall.js?v=22"></script>
-<script src="/tools-shared/hook-layer.js?v=1"></script>
-  <script src="/nav.js?v=24" data-icons-only></script>
-<script src="/shell.js?v=85"></script>
+<script src="/tuvi-paywall.js?v=25"></script>
+<script src="/tools-shared/hook-layer.js?v=2"></script>
+  <script src="/nav.js?v=26" data-icons-only></script>
+<script src="/shell.js?v=87"></script>
 <script>
 function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 (function(){ var t=document.getElementById('inpThang'); for(var i=1;i<=12;i++)t.innerHTML+='<option value="'+i+'">Tháng '+i+'</option>'; var now=new Date(); t.value=String(now.getMonth()+1); document.getElementById('inpNam').value=now.getFullYear(); })();
 
 // Trang này KHÔNG có gì đang mờ/khoá — nền can chi hiện rõ hết. Hook chỉ
 // nhấn lại nền can chi chủ sự thành một fact nổi bật ngay trước CTA "chọn
-// ngày chuyên sâu bằng AI" — không tự suy diễn ngày/chi cụ thể nào hợp.
+// ngày chuyên sâu" — không tự suy diễn ngày/chi cụ thể nào hợp.
 function mountHook(info,thangCC,namCC){
   var host=document.getElementById('hookHost');
   if(!host||!window.HookLayer)return;
@@ -136,7 +150,7 @@ function mountHook(info,thangCC,namCC){
     facts:[{
       tone:'neutral',
       title:'Tuổi chủ sự: '+info.canChi+' — hành '+info.hanh,
-      body:'Tháng dự định '+thangCC+', năm '+namCC+'. Ngày tốt cụ thể kèm giờ hoàng đạo và ngày cần tránh nằm trong bản chọn ngày AI.',
+      body:'Tháng dự định '+thangCC+', năm '+namCC+'. Ngày tốt cụ thể kèm giờ hoàng đạo và ngày cần tránh nằm trong bản chọn ngày chuyên sâu.',
       source:'engine · CanChi.ccInfo',
     }],
   });
@@ -196,7 +210,7 @@ function doChonNgay(){
   }finally{ btn.disabled=false; }
 }
 // ══════════════════════════════════════════════════════════════════════
-// Chọn ngày chuyên sâu bằng AI — port từ public/tools/chon-ngay-tot.html
+// Chọn ngày chuyên sâu — port từ public/tools/chon-ngay-tot.html
 // (gate Lượng qua TuviPaywall + generate /api/xem-tuoi?action=chon-ngay-tot,
 // SSE 'delta' format — không RAG, không PDF, không lưu kết quả). Mỗi lần
 // bấm luôn trừ Lượng mới (generateToolSlug nhúng năm/tháng, không Date.now()
@@ -206,9 +220,18 @@ function doChonNgay(){
 var _dtSuKien='', _dtHoTen='', _dtNamSinh=0, _dtInfo=null, _dtThangCC='', _dtNamCC='', _dtThangNum=0, _dtNamNum=0;
 TuviPaywall.init({product:'chon-ngay-tot'});
 
+// Mỗi khoảng ngày gợi ý là MỘT dòng "**[Ngày X–Y]** — chi tiết" (định dạng
+// đã ép trong prompt) — tách thành thẻ nhỏ `.fb-item` (xem shell.css) để đọc
+// lướt dễ hơn. KHÔNG dùng `.fb-card` (poster to, dành cho 1 câu trích duy
+// nhất trong văn dài) — danh sách khoảng ngày không có trục tốt/xấu để tô màu.
 function renderMarkdownDt(md){
   return md
     .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    // PHẢI chạy TRƯỚC bước bọc <p> chung (dưới) và trước bước đổi **bold**
+    // chung, vì nó tự xử lý cả in đậm của riêng dòng ngày.
+    .replace(/^\*\*(.+?)\*\*\s*[—–-]\s*(.*)$/gm,function(_,name,rest){
+      return '<div class="fb-item"><b>'+name+'</b> — '+rest+'</div>';
+    })
     .replace(/^## (.+)$/gm,'<h2>$1</h2>')
     .replace(/^### (.+)$/gm,'<h3>$1</h3>')
     .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
@@ -217,10 +240,10 @@ function renderMarkdownDt(md){
     .replace(/^- (.+)$/gm,'<li>$1</li>')
     .replace(/(<li>[^]*?<\/li>\n?)+/g,function(s){return '<ul>'+s+'</ul>';})
     .replace(/\n\n+/g,'</p><p>')
-    .replace(/^(?!<[hublp])(.+)$/gm,'<p>$1</p>')
+    .replace(/^(?!<[hublpd])(.+)$/gm,'<p>$1</p>')
     .replace(/<p><\/p>/g,'')
-    .replace(/<p>(<[hul])/g,'$1')
-    .replace(/(<\/[hul][^>]*>)<\/p>/g,'$1');
+    .replace(/<p>(<[huld])/g,'$1')
+    .replace(/(<\/[huld][^>]*>)<\/p>/g,'$1');
 }
 
 async function initiateChonNgayChuyenSau(){
@@ -232,7 +255,7 @@ async function _doChonNgayAI(){
   var btn=document.getElementById('btnUnlock');
   if(btn)btn.disabled=true;
   var el=document.getElementById('dtResult');
-  el.innerHTML='<div class="phan-empty">'+(window.iconHtml?window.iconHtml('calendar'):'')+' AI đang phân tích ngày tốt… thường mất 15–25 giây</div>';
+  el.innerHTML='<div class="phan-empty">'+(window.iconHtml?window.iconHtml('calendar'):'')+' Đang phân tích ngày tốt… thường mất 15–25 giây</div>';
   el.scrollIntoView({behavior:'smooth',block:'nearest'});
   try{
     var res=await fetch('/api/xem-tuoi?action=chon-ngay-tot',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({

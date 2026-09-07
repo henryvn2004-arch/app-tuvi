@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<link rel="preload" href="/nav.js?v=24" as="script">
+<link rel="preload" href="/nav.js?v=26" as="script">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Đại Vận & Vận Trình Tử Vi — Phân Tích Từng Thập Niên | Tử Vi Minh Bảo</title>
 <meta property="og:title" content="Đại Vận & Vận Trình Tử Vi — Phân Tích Từng Thập Niên | Tử Vi Minh Bảo"/>
@@ -22,6 +22,8 @@
 <script src="/tools-shared/vn-timezone.js?v=1"></script>
 <script src="/tuvi-form.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="/tools-shared/pchip.js?v=1"></script>
+<script src="/tools-shared/daivan-chart.js?v=1"></script>
 <style>
 .pregen-block{background:#F5F5F5;border:1px solid #e0e0e0;border-radius:8px;padding:12px 16px;margin:12px 0}
 .pregen-title{font-size:11px;font-weight:600;color:#1a3a6a;text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px}
@@ -68,9 +70,9 @@
       <div class="xt-eyebrow">Công cụ này cho bạn thấy gì?</div>
       <div class="xt-grid-2">
         <div>
-          <h2 class="xt-h2">Vận Trình Toàn Đời —<br>Charts &amp; Scoring, Không Cần AI</h2>
+          <h2 class="xt-h2">Vận Trình Toàn Đời —<br>Charts &amp; Scoring, Không Tốn Lượng</h2>
           <p class="xt-body">Nhập ngày giờ sinh là có ngay toàn bộ dữ liệu đại vận: biểu đồ đường điểm 9 vận, timeline visual theo tuổi, bảng scoring chi tiết Thiên Thời/Địa Lợi/Nhân Hòa, candlestick tiểu vận 90 năm và phân tích chính tinh + luận đoán vận hạn của vận đang chạy.</p>
-          <p class="xt-body">Mọi thứ tính thuần từ engine cổ pháp, không tốn tiền. Nếu muốn đọc <em>ý nghĩa</em> từng đại vận — tại sao giai đoạn đó thuận hay nghịch, nên làm gì trong từng vận — hãy mở khóa 24 phần luận giải AI.</p>
+          <p class="xt-body">Mọi thứ tính thuần từ engine cổ pháp, không tốn tiền. Nếu muốn đọc <em>ý nghĩa</em> từng đại vận — tại sao giai đoạn đó thuận hay nghịch, nên làm gì trong từng vận — hãy mở khóa 24 phần luận giải chuyên sâu.</p>
         </div>
         <div class="xt-factors">
           <div class="xt-factor-title">Bạn nhận được ngay</div>
@@ -347,13 +349,13 @@ function luanGiai() {
     setTimeout(()=>{
       // Line chart
       const ctx=document.getElementById('chart-daivan');
-      if (ctx&&typeof Chart!=='undefined') {
+      if (ctx&&typeof Chart!=='undefined'&&window.DaiVanChart) {
         const dvs9=dvs.slice(0,9);
-        new Chart(ctx,{
-          type:'line',
-          data:{labels:dvs9.map((dv,i)=>`ĐV${i+1}\n${dv.tuoiStart}–${dv.tuoiEnd}t`),datasets:[{label:'Điểm Vận',data:dvs9.map(dv=>dv.scoring?.tong||0),borderColor:'#2F5BEA',backgroundColor:'rgba(20,85,164,0.08)',pointBackgroundColor:dvs9.map(dv=>(dv.scoring?.tong||0)>=7?'#1FA3D6':(dv.scoring?.tong||0)>=5?'#1A3A5C':'#C0392B'),pointRadius:6,tension:.4,fill:true}]},
-          options:{responsive:true,plugins:{legend:{display:false},title:{display:true,text:'Vận Trình Toàn Đời',font:{size:15,weight:'bold'},color:'#061A2E'}},scales:{y:{min:0,max:10,title:{display:true,text:'Điểm vận'}},x:{title:{display:true,text:'Đại vận'}}}}
-        });
+        new Chart(ctx, window.DaiVanChart.buildSingle(dvs9, {
+          title:'Vận Trình Toàn Đời',
+          yTitle:'Điểm vận',
+          xTitle:'Tuổi',
+        }));
       }
       renderTimelinePhan14(ls);
       if (ls.tieuVanScores?.length) renderCandlestick('candle-90yr', ls.tieuVanScores, {candleW:9,height:360}, ls);
@@ -385,6 +387,6 @@ TuviForm.render('tuvi-form-container',{onSubmit:luanGiai,submitLabel:'Xem Đại
 </section>
 <script src="/testimonials.js"></script>
 <script src="/related-tools.js?v=2"></script>
-<script src="/nav.js?v=24" defer></script>
+<script src="/nav.js?v=26" defer></script>
 </body>
 </html>

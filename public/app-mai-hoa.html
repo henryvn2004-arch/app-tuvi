@@ -4,12 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Mai Hoa Dịch Số — Gieo quẻ — Tử Vi Minh Bảo</title>
-<meta name="description" content="Gieo quẻ Mai Hoa Dịch Số bằng một con số hoặc theo thời điểm — quẻ Thể, quẻ Dụng và ngũ hành sinh khắc qua ba chặng chính, hỗ, biến. Hỏi trợ lý AI luận theo câu hỏi.">
+<meta name="description" content="Gieo quẻ Mai Hoa Dịch Số bằng một con số hoặc theo thời điểm — quẻ Thể, quẻ Dụng và ngũ hành sinh khắc qua ba chặng chính, hỗ, biến. Hỏi trợ lý Luận Đường luận theo câu hỏi.">
 <link rel="icon" type="image/webp" href="/seal.webp">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"></noscript>
-<link rel="stylesheet" href="/shell.css?v=30">
+<link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/fonts/noto-serif.css?v=1">
+<link rel="stylesheet" href="/shell.css?v=34">
 <style>
 .form-card{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);max-width:640px}
 .form-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:3px}
@@ -81,11 +81,25 @@
       </div>
     </div>
     <div class="ws-body">
-      <div id="introHost"></div>
+      <!-- Box giới thiệu dựng TĨNH: chèn bằng JS thì nó ra đời SAU lần vẽ đầu,
+           đẩy cả `.ws-body` xuống VÀ tự làm phần tử LCP (đo trên prod: CLS 0,198,
+           Render Delay 5,3s). `Shell.introOnce` thấy `.intro-card` đã có thì chỉ
+           điền `#introSrc`. Vì thế `SHELL_INTRO` bên dưới CHỈ khai `key` — chữ nằm
+           đúng ở đây, một bản duy nhất, không có bản chép để trôi. -->
+      <div id="introHost"><div class="intro-card">
+        <div class="intro-body">
+          <img class="intro-avatar" src="/tool-avatars/mai-hoa.webp" alt="" onerror="this.remove()">
+          <div class="intro-text">
+            <div class="intro-t">Mai Hoa Dịch Số</div>
+            <div class="intro-d">Mai Hoa Dịch Số gieo quẻ bằng số hoặc giờ, đọc Thể và Dụng cho việc bạn hỏi. Đang phân vân một quyết định tiền bạc hay tình cảm quan trọng, mà thời gian lại không cho phép suy nghĩ lâu? Nhập một con số, nhận hai quẻ Thể – Dụng cùng lời luận gọn.</div>
+            <div id="introSrc" style="min-height:18.4px;margin-top:9px"></div>
+          </div>
+        </div>
+      </div></div>
       <div id="shellRecent"></div>
       <div class="form-card" id="birthPanel">
         <h2>Thành tâm nghĩ về việc muốn hỏi</h2>
-        <p class="sub">Gieo quẻ bằng số hoặc giờ, đọc Thể và Dụng cho việc bạn hỏi. Bạn có một việc đang phân vân, muốn một gợi ý thật nhanh. Dùng khi cần đáp án gọn cho một câu hỏi cụ thể.</p>
+        <p class="sub">Gõ câu hỏi nếu có, rồi gieo quẻ theo giờ hiện tại hoặc theo một con số. Hệ thống lập quẻ Thể – Dụng và xác định hào động. Nhận về hào từ tham khảo cùng cách luận theo đúng quẻ vừa gieo.</p>
         <p class="price-note" data-tvp-price-label="mai-hoa">…</p>
         <div class="fg">
           <label>Câu hỏi (tuỳ chọn)</label>
@@ -124,15 +138,15 @@
 </div>
 
 <script>window.SHELL_ACTIVE='mai-hoa';window.SHELL_HISTORY=true;
-window.SHELL_INTRO={key:'mai-hoa',title:'Mai Hoa Dịch Số',desc:'Gieo quẻ bằng số hoặc giờ, đọc Thể và Dụng cho việc bạn hỏi. Bạn có một việc đang phân vân, muốn một gợi ý thật nhanh. Dùng khi cần đáp án gọn cho một câu hỏi cụ thể.'};</script>
+window.SHELL_INTRO={key:'mai-hoa'};</script>
 <script src="/tuvi-ansao-engine.js"></script>
 <script src="/tools-shared/kinh-dich-hao.js?v=1"></script>
 <script src="/tools-shared/kinh-dich.js?v=5"></script>
 <script src="/tools-shared/mai-hoa.js?v=1"></script>
 <script src="/poster.js?v=5"></script>
 <script src="/auth.js?v=2"></script>
-  <script src="/nav.js?v=24" data-icons-only></script>
-<script src="/shell.js?v=85"></script>
+  <script src="/nav.js?v=26" data-icons-only></script>
+<script src="/shell.js?v=87"></script>
 <script>
 // Ô giữa dùng CHUNG module /tools-shared/mai-hoa.js với trang standalone
 // /tools/mai-hoa.html. Trang chỉ lo DOM + nối rail.

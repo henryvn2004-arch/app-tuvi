@@ -2,18 +2,21 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<link rel="preload" href="/nav.js?v=24" as="script">
+<link rel="preload" href="/nav.js?v=26" as="script">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Trang Phục Theo Ngày — Tử Vi Minh Bảo</title>
 <meta name="description" content="Tư vấn màu sắc trang phục theo can-chi ngày và bản mệnh — cổ pháp Ngũ Hành Nạp Âm.">
 <link rel="canonical" href="https://www.tuviminhbao.com/tools/trang-phuc-theo-ngay.html">
 <link rel="icon" type="image/webp" href="/seal.webp">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;600;700&family=DM+Sans:wght@300;400;500&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"></noscript>
+<link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/fonts/noto-serif.css?v=1">
+<link rel="preload" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"></noscript>
 <script src="/auth.js"></script>
-<script src="/tuvi-paywall.js?v=22"></script>
-<script src="/tools-shared/ai-loading-steps.js?v=9"></script>
-<script src="/nav.js?v=24" defer></script>
+<script src="/tuvi-paywall.js?v=23"></script>
+<script src="/tools-shared/ai-loading-steps.js?v=10"></script>
+<script src="/nav.js?v=26" defer></script>
 <link rel="stylesheet" href="/tools/tools.css">
 <style>
 :root {
@@ -151,13 +154,14 @@ h1,h2,h3{font-family:'Noto Serif',serif;}
 </script>
 </head>
 <body>
+<div id="nav-ph" style="height:60px;background:#061A2E"></div>
 <div id="nav-placeholder"></div>
 
 <div class="hero">
   <div class="hero-badge">✦ Ngũ Hành Nạp Âm · Can Chi Ngày</div>
   <img class="hero-avatar" src="/tool-avatars/trang-phuc-theo-ngay.webp" alt="" loading="lazy" onerror="this.remove()">
   <h1>Trang Phục <span>Theo Ngày</span></h1>
-  <p>Nhập ngày đi sự kiện — AI tính can chi ngày, đối chiếu bản mệnh, gợi ý màu sắc + phong cách trang phục chuẩn cổ pháp</p>
+  <p>Nhập ngày đi sự kiện — hệ thống tính can chi ngày, đối chiếu bản mệnh, gợi ý màu sắc + phong cách trang phục chuẩn cổ pháp</p>
   <div class="hero-cost">⟐ <span data-tvp-price="trang-phuc-theo-ngay">…</span> lượng · Can Chi Ngày × Nạp Âm Mệnh</div>
 </div>
 
@@ -277,7 +281,7 @@ h1,h2,h3{font-family:'Noto Serif',serif;}
 
     <!-- Try-on -->
     <div class="card" id="tryonCard">
-      <div class="card-title"><span class="ic-inline" data-icon-emoji="🪄" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">🪄</span> Thử Trang Phục AI <span style="font-size:10px;background:#e8f0fe;color:#1455A4;padding:2px 8px;border-radius:10px;margin-left:4px;">20 lượng/lần</span></div>
+      <div class="card-title"><span class="ic-inline" data-icon-emoji="🪄" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">🪄</span> Thử Trang Phục <span style="font-size:10px;background:#e8f0fe;color:#1455A4;padding:2px 8px;border-radius:10px;margin-left:4px;">20 lượng/lần</span></div>
 
       <div id="tryonStep1">
         <div class="tryon-upload" id="tryonZone"
@@ -407,11 +411,11 @@ let _resultData=null;
 let _tryonImgData=null,_tryonMediaType='image/jpeg',_tryonStyle='cong-so',_tryonResultUrl=null;
 const ANALYSIS_STEPS=[
   {label:'Tính can chi ngày & quan hệ ngũ hành',ms:900},
-  {label:'AI tư vấn trang phục hợp ngày',ms:0},
+  {label:'Tư vấn trang phục hợp ngày',ms:0},
 ];
 const TRYON_STEPS=[
   {label:'Chuẩn bị trang phục theo ngũ hành',ms:1200},
-  {label:'AI đang tạo ảnh trang phục',ms:0},
+  {label:'Đang tạo ảnh trang phục',ms:0},
 ];
 let _analysisLoadingCtl=null;
 let _tryonLoadingCtl=null;
@@ -622,7 +626,7 @@ window.addEventListener('DOMContentLoaded',()=>{
     </div>
   </div>
 </section>
-<script src="/nav.js?v=24" defer></script>
+<script src="/nav.js?v=26" defer></script>
 <script src="/tool-sources.js?v=1"></script>
 <script>
   if (window.ToolSources) {

@@ -5,7 +5,7 @@
  * Vì sao cần bộ dò: đây là lần thứ BA cùng một lớp lỗi — trang shell MỚI chép
  * từ khuôn của một trang cũ và thiếu mất một dòng của khuôn. Không lần nào có
  * lỗi bắn ra, và mỗi lần thiếu một thứ khác nhau:
- *   1. `app-cong-so` + `app-ban-do-sao` thiếu 3 thẻ nạp **Noto Serif** → mọi
+ *   1. `app-cong-so` + `app-ban-do-sao` thiếu thẻ nạp **Noto Serif** → mọi
  *      chỗ dùng `var(--serif)` lặng lẽ rơi về Georgia. Trang vẫn đẹp, chỉ khác
  *      chữ so với 33 trang kia — chỉ lộ khi đặt hai trang cạnh nhau.
  *   2. Bảy tool thiếu `SHELL_HISTORY`/`#shellRecent` → không có đường mở lại
@@ -49,10 +49,22 @@ const REQUIRED = [
     '<script src="/nav.js?v=N" data-icons-only></script>',
     'mọi icon rơi về emoji thô',
   ],
+  // Font TỰ LƯU TRỮ từ 2026-09-05 (trước đó là 3 thẻ preconnect/preload trỏ
+  // Google Fonts). Đổi vì `display=swap` CAM KẾT sẽ swap, tức cam kết sẽ nhảy:
+  // đo trên prod thấy cú swap font là cú CLS lớn nhất toàn site (0,2364 ở
+  // `/app/luan-giai`). Xem `public/fonts/noto-serif.css`.
   [
-    'Noto+Serif',
-    '3 thẻ preconnect/preload font Noto Serif trong <head>',
-    'chữ rơi về Georgia, lệch hẳn 36 trang kia',
+    '/fonts/noto-serif.css',
+    '<link rel="stylesheet" href="/fonts/noto-serif.css?v=N">',
+    'chữ rơi về Georgia, lệch hẳn các trang kia',
+  ],
+  // Preload phải còn: font cùng origin mà không preload thì hiếm khi kịp
+  // khoảng chặn ~100ms của `font-display: optional` ⇒ lượt ghé đầu gần như
+  // luôn thấy font dự phòng. Không lỗi, không cảnh báo — chỉ là sai chữ.
+  [
+    'noto-serif-vietnamese-400.woff2',
+    '<link rel="preload" ... noto-serif-vietnamese-400.woff2 as="font" crossorigin>',
+    'chữ tiếng Việt hiếm khi kịp hiện đúng font ở lượt ghé đầu',
   ],
 ];
 

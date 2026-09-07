@@ -172,14 +172,13 @@ h1 em{font-style:italic;color:var(--gold)}
   <div class="grid">${cardsHTML}</div>
 
   <div class="cta-box">
-    <p>Muốn nhập ngày sinh khác và nhận luận giải AI chuyên sâu 24 phần?</p>
+    <p>Muốn nhập ngày sinh khác và nhận luận giải chuyên sâu 24 phần?</p>
     <a class="cta-btn" href="/luan-giai.html">Xem Lá Số →</a>
   </div>
 
   <p class="note">* Lá số hiển thị vận hạn năm ${NAM_XEM}. Để xem năm khác, dùng công cụ luận giải trực tiếp.</p>
 </div>
-<script src="/footer.js"></script>
-<script src="/track.js?v=3" defer></script><script src="/nav.js?v=24" defer></script>
+<script src="/track.js?v=4" defer></script><script src="/nav.js?v=26" defer></script>
 </body></html>`;
 
   return new NextResponse(html, {

@@ -386,14 +386,14 @@ export const TOOL_AVATARS: ToolAvatarSpec[] = [
   // ── Phong Cách AI — nhân vật là chính, đúng bản chất "soi ảnh bạn" ──
   {
     id: 'da-lieu-ai',
-    label: 'Da Liệu AI Toàn Diện',
+    label: 'Da Liệu Toàn Diện',
     context: 'Soi ảnh da, chỉ ra những vùng đang có vấn đề cần chú ý.',
     centralSubject:
       'A minimal elegant East Asian young woman in gufeng style, in side profile, her cheek marked only by a soft, sparse dot-grid pattern (a few dots gently brighter) — no realistic skin texture. Calm, fresh, quietly confident expression.',
   },
   {
     id: 'kieu-toc-phan-tich',
-    label: 'Phân Tích & Thử Kiểu Tóc AI',
+    label: 'Phân Tích & Thử Kiểu Tóc',
     context: 'Chấm khuôn mặt hợp kiểu tóc nào, thử ngay kiểu mới lên ảnh thật.',
     centralSubject:
       'A minimal elegant East Asian young woman in gufeng style, in side profile, her long hair swept into one elegant flowing curl caught mid-motion, a small pair of scissors resting lightly nearby. Bright, playful, quietly delighted expression.',
@@ -407,21 +407,21 @@ export const TOOL_AVATARS: ToolAvatarSpec[] = [
   },
   {
     id: 'personal-color',
-    label: 'Personal Color AI',
+    label: 'Personal Color',
     context: 'Xác định tông da hợp mùa màu nào trong 4 mùa, thử ngay lên ảnh.',
     centralSubject:
       'A minimal elegant East Asian young woman in gufeng style, in side profile, her face gently touched by one thin line dividing warm from cool — a small sun glyph on one side, a small crescent moon glyph on the other. Bright, curious, quietly pleased expression.',
   },
   {
     id: 'trang-diem-phan-tich',
-    label: 'Phân Tích & Thử Trang Điểm AI',
+    label: 'Phân Tích & Thử Trang Điểm',
     context: 'Gợi ý lối trang điểm hợp gương mặt, thử ngay lên ảnh thật.',
     centralSubject:
       'A minimal elegant East Asian young woman in gufeng style, in side profile, one thin curved line tracing along her cheekbone like a brush stroke, a small slim makeup brush resting near her face. Warm, radiant, quietly delighted expression.',
   },
   {
     id: 'trang-phuc-theo-ngay',
-    label: 'Trang Phục & Thử Đồ AI',
+    label: 'Trang Phục & Thử Đồ',
     context: 'Gợi ý trang phục hôm nay hợp với vận của bạn, thử ngay lên ảnh thật.',
     centralSubject:
       'A minimal elegant East Asian young woman in gufeng style, in side profile, standing beside a slim hanger holding a flowing robe that sways gently, her hand just reaching to touch its sleeve. Bright, anticipatory, quietly pleased expression.',

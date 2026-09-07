@@ -102,7 +102,7 @@ const SB_HEADERS = {
 // cả trong route động. Đây là CỬA XÁC THỰC của toàn bộ /api/payment — gồm cả
 // nhánh admin — nên một phản hồi bị nhớ lại nghĩa là phiên đã huỷ / quyền vừa
 // bị gỡ vẫn qua cửa. Cùng bài học đã trả giá ở `hasSlugAccess`.
-async function getUserFromToken(token: string): Promise<{ id: string; email?: string; created_at?: string } | null> {
+async function getUserFromToken(token: string): Promise<{ id: string; email?: string; created_at?: string; is_anonymous?: boolean } | null> {
   const res = await fetch(`${SUPABASE_URL}/auth/v1/user`, {
     headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${token}` },
     cache: 'no-store',
@@ -352,6 +352,7 @@ async function handleCapture(body: Record<string, unknown>): Promise<Response> {
       success: true,
       credits: out.credits,
       balance: out.balance,
+      amountVnd: out.amountVnd,
       ...(out.credited ? {} : { status: 'already_completed' }),
     });
   } catch (e: unknown) { return err((e as Error).message); }
@@ -665,7 +666,17 @@ async function handleCreateBank(body: Record<string, unknown>): Promise<Response
   }
 
   const orderCode   = Date.now() % 999_999_999;
-  const description = label.substring(0, 25);
+  // 🔑 MỘT chuỗi cho cả hai phía. Bản trước khai với PayOS là `label` cắt 25
+  // ký tự ("Phổ Thông – 240 Luong") trong khi modal lại bảo khách ghi nội dung
+  // CK là `TVMB<orderCode>` — hai chuỗi KHÁC nhau cho cùng một đơn. Hiện vô
+  // hại vì PayOS khớp bằng số tài khoản ảo chứ không bằng nội dung, nhưng đó
+  // là vô hại NHỜ MAY: rơi vào kênh nào khớp bằng nội dung CK là khách gõ
+  // đúng theo màn hình mà tiền không ai nhận.
+  // Chọn `TVMB<orderCode>` chứ không chọn label: ASCII (ô nội dung CK của
+  // ngân hàng hay chối dấu tiếng Việt và dấu –), ngắn (≤13 ký tự, PayOS trần
+  // 25), và tự nó là khoá đối soát. Nhãn đọc được vẫn còn nguyên ở
+  // `bank_orders.label` và ở `credit_transactions.description`.
+  const description = `TVMB${orderCode}`;
   const returnUrl   = `${SITE_URL}/topup.html?payment=success&method=bank&orderCode=${orderCode}`;
   const cancelUrl   = `${SITE_URL}/topup.html?payment=cancelled`;
   const sigData     = { amount: amountVND, cancelUrl, description, orderCode, returnUrl };
@@ -700,7 +711,7 @@ async function handleCreateBank(body: Record<string, unknown>): Promise<Response
     if (bin && !bankName) console.warn('[create-bank] BIN chua co trong BANK_BY_BIN:', bin);
     return ok({ orderCode, checkoutUrl: d.checkoutUrl, accountNumber: d.accountNumber,
       accountName: d.accountName, bin: d.bin, bankName, amountVND,
-      credits, label });
+      credits, label, description });
   } catch (e: unknown) { return err((e as Error).message); }
 }
 
@@ -709,12 +720,12 @@ async function handleCheckBank(sp: URLSearchParams): Promise<Response> {
   const orderCode = sp.get('orderCode') || '';
   if (!orderCode) return err('Missing orderCode', 400);
   const res = await fetch(
-    `${SUPABASE_URL}/rest/v1/bank_orders?order_code=eq.${encodeURIComponent(orderCode)}&select=status,credits&limit=1`,
+    `${SUPABASE_URL}/rest/v1/bank_orders?order_code=eq.${encodeURIComponent(orderCode)}&select=status,credits,amount_vnd&limit=1`,
     { cache: 'no-store', headers: SB_HEADERS }
   );
-  const rows: { status: string; credits: number }[] = res.ok ? await res.json() : [];
+  const rows: { status: string; credits: number; amount_vnd: number }[] = res.ok ? await res.json() : [];
   if (!rows.length) return err('Order not found', 404);
-  return ok({ paid: rows[0].status === 'paid', credits: rows[0].credits });
+  return ok({ paid: rows[0].status === 'paid', credits: rows[0].credits, amountVND: rows[0].amount_vnd });
 }
 
 // ── Route handlers ────────────────────────────────────────────
@@ -1275,7 +1286,7 @@ async function handleAdminTopicQueueDelete(request: NextRequest, body: Record<st
 // đọc thẳng bằng sbGet) + trạng thái configured của provider/infra keys
 // (chỉ trả boolean, KHÔNG BAO GIỜ trả giá trị thật của secret).
 const ENV_KEY_GROUPS: { label: string; items: { key: string; label: string }[] }[] = [
-  { label: 'AI Providers', items: [
+  { label: 'Nhà cung cấp mô hình', items: [
     { key: 'ANTHROPIC_API_KEY', label: 'Anthropic (Claude — agent chat)' },
     { key: 'GEMINI_API_KEY', label: 'Google Gemini (route rời + backup)' },
     { key: 'OPENAI_API_KEY', label: 'OpenAI (embeddings RAG)' },
@@ -2748,6 +2759,11 @@ async function handleOnboardingSync(request: NextRequest): Promise<Response> {
   try {
     const user = await getUserFromToken(userToken);
     if (!user) return err('Invalid token', 401);
+    // Phiên "guest checkout" (Supabase Anonymous, xem lib/billing/packages.ts
+    // hoặc public/auth.js signInAnonymously) chưa phải tài khoản thật — tạo
+    // được bằng cách xoá cookie, không tốn công gì, nên KHÔNG được ăn quà
+    // onboarding "Khởi Hành" (cày vô hạn nếu bỏ chốt này).
+    if (user.is_anonymous) return err('Lưu tài khoản (thêm email) trước khi nhận thưởng này.', 403);
     const state = await syncOnboardingTasks(user.id);
     return ok({ ...state, balance: await getBalance(user.id) });
   } catch (e) {
@@ -2774,6 +2790,10 @@ async function handleReferralRegister(request: NextRequest, body: Record<string,
   try {
     const user = await getUserFromToken(userToken);
     if (!user) return err('Invalid token', 401);
+    // Phiên ẩn danh (guest checkout) tạo được bằng xoá cookie — nếu cho đăng
+    // ký giới thiệu thì một script tạo N phiên rồi tự giới thiệu chéo nhau là
+    // đường farm thưởng referral rẻ nhất, không giới hạn.
+    if (user.is_anonymous) return err('Lưu tài khoản (thêm email) trước khi dùng mã giới thiệu.', 403);
 
     // Chỉ ghi nhận giới thiệu cho TÀI KHOẢN MỚI. Trước đây không có chốt này:
     // một người đã có tài khoản chỉ cần mở link ?ref= của bạn là referrer được
@@ -2938,6 +2958,10 @@ async function handlePromoRedeem(request: NextRequest, body: Record<string, unkn
   try {
     const user = await getUserFromToken(token);
     if (!user) return err('Invalid token', 401);
+    // Cùng lý do chặn ở onboarding-sync/referral-register: phiên ẩn danh tạo
+    // được bằng xoá cookie, không tốn công gì — cho đổi mã ở đây là mở đường
+    // cày quota mã khuyến mãi (mỗi mã thường có trần lượt dùng CHUNG).
+    if (user.is_anonymous) return err('Lưu tài khoản (thêm email) trước khi dùng mã khuyến mãi.', 403);
 
     const rows = (await rpcSafe('promo_code_redeem', { p_user_id: user.id, p_code: code })) as Array<{
       ok: boolean; reason: string; credits: number; code: string;
