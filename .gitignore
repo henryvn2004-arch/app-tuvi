@@ -46,6 +46,11 @@ tsconfig.tsbuildinfo
 # bản final (đã duyệt + optimize webp) mới vào public/tool-avatars/, commit thẳng.
 .tool-avatars/
 
+# PDF tạm + cache JSON thô của scripts/gen-tool-sample.mjs — bản final (dummy
+# JSON đã lọc field free) nằm ở public/samples/, PDF thì upload thẳng Supabase
+# Storage; thư mục này chỉ là bộ nhớ đệm giữa các lượt chạy, không commit.
+.tool-samples/
+
 # Video pipeline — file nặng, KHÔNG commit (deliverable gửi thẳng, không phải nội dung repo)
 remotion/node_modules/
 remotion/out/
