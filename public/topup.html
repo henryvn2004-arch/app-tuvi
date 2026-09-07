@@ -1082,6 +1082,18 @@ loadPackages().then(loadToolPricing).then(renderPendingBanner);
 (function(){
   let _oc = null, _timer = null, _cnt = 0, _lastFocus = null;
 
+  // Trình duyệt throttle setInterval của TAB Ở NỀN (khách rời sang app ngân
+  // hàng để quét QR/chuyển khoản, đúng thao tác bình thường) — poll 3s trên
+  // giấy tờ thực tế giãn ra 15-25s+. Kết quả vẫn đúng cuối cùng (poll tiếp
+  // vẫn thấy `paid`), nhưng khách quay lại tab thấy màn hình đứng yên vài
+  // chục giây trước khi tự cập nhật, tưởng nhầm là đứng hình/lỗi. Bắt sự kiện
+  // quay lại tab để poll ngay, không đợi interval kế tiếp.
+  document.addEventListener('visibilitychange', function () {
+    if (document.visibilityState === 'visible' && _oc && document.getElementById('bankModal').classList.contains('show')) {
+      window.checkBankPoll(false);
+    }
+  });
+
   function status(iconKey, text, spin) {
     const el = document.getElementById('bm-status');
     el.innerHTML = '<span data-icon="' + iconKey + '"' + (spin ? ' class="spin"' : '') + '></span><span>' + esc(text) + '</span>';

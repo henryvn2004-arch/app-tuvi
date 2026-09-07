@@ -27,6 +27,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 |---:|---|---|---|
 | 1 | 2026-09 | `2026-09.md` | 🐛 Bấm "Mở bản đầy đủ" không chạy gì: tấm khoá mềm dựng vào chỗ đã ẩn |
 | 1 | 2026-09 | `2026-09.md` | 🐛 Anonymous user hết Lượng giữa chừng: mất trắng form + tường thiếu giá VNĐ + orb lệch mép |
+| 1 | 2026-09 | `2026-09.md` | 🐞 Round chạy thật cuối — 2 lỗi paywall thật tìm thấy trên Chu Trình Cuộc Đời, đã vá |
 | 1 | 2026-09 | `2026-09.md` | 🧰 Chuẩn bị "round chạy thật cuối" — mở rộng script sinh mẫu sang 5 tool nữa |
 | 1 | 2026-09 | `2026-09.md` | 🎬 Chu Trình Cuộc Đời — CTA lặp lại mỗi box mờ, orb to/giữa/nhanh, script sinh mẫu |
 | 1 | 2026-09 | `2026-09.md` | 🔑 Gemini 429 trong sandbox KHÔNG phải hết credit thật — key riêng của phiên |
