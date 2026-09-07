@@ -22,6 +22,8 @@ import type { LunarMonthSpan } from '@/lib/engine/van-ngay';
 import { llmTextFull } from '@/lib/llm/complete';
 import { logLlmUsage } from '@/lib/agent/usage';
 import { withToolOutcome } from '@/lib/ops/tool-outcome';
+import { authUserFromRequest } from '@/lib/api/tool-helpers';
+import { hasAnySlugAccess, paywallDisabled } from '@/lib/billing/credits';
 import type { BirthParams } from '@/lib/contract/v1';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -221,6 +223,29 @@ async function runPost(request: NextRequest) {
   const phan = Number(body.phan);
   if (!(phan >= 1 && phan <= TONG_PHAN)) return err('Phần không hợp lệ.', 400);
   const docs = body.docs ? String(body.docs) : undefined;
+
+  // 🔴 CHỐT CHẶN THANH TOÁN PHÍA SERVER (2026-09-07) — route này KHÔNG có gate
+  // nào từ lúc sinh ra, thanh toán chỉ tồn tại ở CLIENT (`requireCredits`/
+  // `ensureCredits` gọi TRƯỚC khi fetch). Curl thẳng endpoint (biết ngày sinh,
+  // KHÔNG cần đăng nhập) sinh TRỌN 16 phần AI, không giới hạn, 0đ — đúng lỗ đã
+  // vá ở app/api/lasotuvi/route.ts (Chốt chặn thanh toán PHÍA SERVER). 0 phần
+  // xem trước cho tool này — client bán TRỌN phần 1 trong bó ("không bán lẻ
+  // tổng quan, bấm là mở cả bó", xem app-van-han-nam.html `render`), khác
+  // Luận Giải nên KHÔNG copy `FREE_PHAN` sang đây.
+  //
+  // Dùng `hasAnySlugAccess` (khớp CHÍNH XÁC), KHÔNG `toolPaymentDenied` — lý do
+  // giống hệt chú thích ở lasotuvi/route.ts: tool CHIA PHẦN (bó 250 Lượng HOẶC
+  // lẻ 16 Lượng/phần) nên "vừa trả cho van-han-nam" (đường lùi theo tiền tố
+  // tool_id của `toolPaymentDenied`) không chứng minh được đã trả cho ĐÚNG lá
+  // số + đúng phần này.
+  const slug = body.slug ? String(body.slug) : '';
+  const bundleSlug = body.bundleSlug ? String(body.bundleSlug) : '';
+  if (!paywallDisabled()) {
+    const auth = await authUserFromRequest(request);
+    if ('error' in auth) return err(auth.error, auth.status);
+    const owns = await hasAnySlugAccess(auth.user.id, [slug, bundleSlug].filter(Boolean));
+    if (!owns) return err('Lượt dùng này chưa được thanh toán.', 402);
+  }
 
   // Phần 1-4 trùng Y HỆT 4 phần của Luận Giải/Chu Trình Cuộc Đời — thử đọc lại
   // trước khi gọi LLM. Phần 1 (tổng quan) tra slug 'laso'; phần 2-4 (đại vận +

@@ -733,8 +733,16 @@ async function _runPhanVanHan(p){
       var sr=await fetch('/api/search',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({query:ragQuery(p),matchCount:p===1?10:7})});
       docs=(await sr.json()).docs||'';
     }catch(e){}
-    var resp=await fetch('/api/van-han-nam',{method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({birth:_birthPayload(),tuNgay:TU_NGAY,tuThang:TU_THANG,tuNam:TU_NAM,phan:p,docs:docs})});
+    // slug/bundleSlug → server soát quyền sở hữu (đã trả tiền cho ĐÚNG phần
+    // này hoặc cả bó) trước khi gọi model — xem chú thích trong
+    // app/api/van-han-nam/route.ts. Không gửi là server từ chối 402 dù đã trả
+    // tiền, vì không còn gì để soát.
+    var _vhTk=(window.Auth&&window.Auth.isLoggedIn())?window.Auth.getSession().access_token:null;
+    var _vhHeaders={'Content-Type':'application/json'};
+    if(_vhTk)_vhHeaders['Authorization']='Bearer '+_vhTk;
+    var resp=await fetch('/api/van-han-nam',{method:'POST',headers:_vhHeaders,
+      body:JSON.stringify({birth:_birthPayload(),tuNgay:TU_NGAY,tuThang:TU_THANG,tuNam:TU_NAM,phan:p,docs:docs,
+        slug:_partSlug(p),bundleSlug:_pendingSlug})});
     var data=await resp.json();
     if(data.error||!data.luanGiai){
       doneWait();
