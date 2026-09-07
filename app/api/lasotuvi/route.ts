@@ -284,20 +284,24 @@ async function runPost(request: NextRequest) {
   // TRƯỚC khi họ trả đồng nào, vì đó mới là thứ tạo được cái móc "đúng vl" mà
   // bảng điểm deterministic không bao giờ tạo được. Phần 3+ vẫn khoá cứng.
   //
-  // 🔴 (2026-09-07) Chu Trình Cuộc Đời (phần 14-24, dùng CHUNG route này) nay
-  // có ĐÚNG MỘT phần xem trước: ENGINE PHẦN 14 ("Tổng quan đại vận" — phần cục
-  // bộ 1 của tool, xem app-chu-trinh-cuoc-doi.html) — hook tương đương phần 1
-  // của Luận Giải. CỐ Ý hẹp: chỉ đúng con số 14, KHÔNG generalize thành "phần
-  // đầu của mỗi tool dùng chung route" — 10 phần còn lại (15-24) vẫn khoá cứng
-  // như trước. `preview.free_runs`/`ip_daily_cap`/`global_daily_cap`
-  // (_patches/migration-anon-preview.sql) là NGÂN SÁCH DÙNG CHUNG cho mọi
-  // tool_id xem trước (laso/chu-trinh-cuoc-doi/day-con/...) — một người đã hết
-  // suất ĐỜI ở tool này thì cũng hết ở tool kia, đây là THIẾT KẾ (một ngân sách
-  // "làm quen sản phẩm" cho cả trang), không phải bug cần tách theo tool_id.
+  // 🔴 (2026-09-07, nới 2026-09-07) Chu Trình Cuộc Đời (phần 14-24, dùng CHUNG
+  // route này) nay có HAI phần xem trước: ENGINE PHẦN 14 ("Tổng quan đại vận",
+  // phần cục bộ 1) + PHẦN 15 ("Đại Vận 1", phần cục bộ 2) — cùng lằn ranh
+  // 1→2 phần mà Henry đã chốt cho tool "laso" (xem `FREE_PHAN` ngay trên).
+  // 9 phần còn lại (16-24) vẫn khoá cứng như trước — khối locked của client
+  // (app-chu-trinh-cuoc-doi.html) nay gộp CHUNG một tường blur, KHÔNG còn nút
+  // mở riêng từng phần, nên KHÔNG generalize xa hơn 15. `preview.free_runs`/
+  // `ip_daily_cap`/`global_daily_cap` (_patches/migration-anon-preview.sql) là
+  // NGÂN SÁCH DÙNG CHUNG cho mọi tool_id xem trước (laso/chu-trinh-cuoc-doi/
+  // day-con/...) — một người đã hết suất ĐỜI ở tool này thì cũng hết ở tool
+  // kia, đây là THIẾT KẾ (một ngân sách "làm quen sản phẩm" cho cả trang),
+  // không phải bug cần tách theo tool_id.
   const FREE_PHAN = 2;
-  const FREE_PHAN_CTCD = 14;
-  const isPreview = phanNum <= FREE_PHAN || phanNum === FREE_PHAN_CTCD;
-  const previewToolId = phanNum === FREE_PHAN_CTCD ? 'chu-trinh-cuoc-doi' : 'laso';
+  const FREE_PHAN_CTCD_MIN = 14;
+  const FREE_PHAN_CTCD_MAX = 15;
+  const isCtcdPreview = phanNum >= FREE_PHAN_CTCD_MIN && phanNum <= FREE_PHAN_CTCD_MAX;
+  const isPreview = phanNum <= FREE_PHAN || isCtcdPreview;
+  const previewToolId = isCtcdPreview ? 'chu-trinh-cuoc-doi' : 'laso';
 
   if (!isPreview && !paywallDisabled()) {
     const auth = await authUserFromRequest(request);

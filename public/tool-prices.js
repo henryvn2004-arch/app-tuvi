@@ -193,6 +193,30 @@ window.ToolPrices = (function () {
     return (_data && _data.packages) || [];
   }
 
+  /**
+   * Đơn giá quy đổi 1 Lượng ≈ VNĐ — CÙNG QUY TẮC với `vndPerCredit()` phía
+   * server (lib/billing/packages.ts) và hàm SQL `credit_vnd()`: đơn giá của
+   * gói thứ hai theo giá tăng dần (bậc phổ thông, đại diện nhất), rơi về gói
+   * đầu nếu chỉ có một gói. `null` khi chưa đọc được `credit_packages` — nơi
+   * gọi KHÔNG được đoán bằng một con số cứng, cùng luật với mọi hàm giá khác
+   * ở file này.
+   */
+  function vndPerCredit() {
+    var pkgs = packages();
+    if (!pkgs.length) return null;
+    var byPrice = pkgs.slice().sort(function (a, b) { return a.amount_vnd - b.amount_vnd; });
+    var tier = byPrice[1] || byPrice[0];
+    return tier.credits > 0 ? Math.round(tier.amount_vnd / tier.credits) : null;
+  }
+
+  /** "X Lượng" → chuỗi "~Y đ" làm tròn lên nghìn gần nhất, hoặc '' nếu chưa biết giá. */
+  function vndLabel(credits) {
+    var rate = vndPerCredit();
+    if (rate == null || !isFinite(credits) || credits <= 0) return '';
+    var vnd = Math.ceil((credits * rate) / 1000) * 1000;
+    return '~' + vnd.toLocaleString('vi-VN') + 'đ';
+  }
+
   // ── Nhóm công cụ ──────────────────────────────────────────────────────────
   /** Định nghĩa nhóm, đã sắp theo `sort_order`. Rỗng nếu chưa đọc được. */
   function groups() {
@@ -343,6 +367,8 @@ window.ToolPrices = (function () {
     packages: packages,
     fillSlots: fillSlots,
     partPrice: partPrice,
+    vndPerCredit: vndPerCredit,
+    vndLabel: vndLabel,
     groups: groups,
     groupsOf: groupsOf,
     appPath: appPath,

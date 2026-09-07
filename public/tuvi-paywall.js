@@ -281,7 +281,7 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
       if (!el) {
         el = document.createElement('script');
         el.id = '_tvmb_prices_js';
-        el.src = '/tool-prices.js?v=5';
+        el.src = '/tool-prices.js?v=6';
         document.head.appendChild(el);
       }
       el.addEventListener('load', () => resolve());
@@ -571,6 +571,11 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
     if (cost == null) { _priceUnknown(); return false; }
     let balance = null;
     try { balance = await getBalance(); } catch (e) { balance = null; }
+    // Quy đổi ra VNĐ ngay cạnh số Lượng — Henry: "unlock thì ghi giá lượng -
+    // VNĐ luôn để user biết". `vndLabel` tự trả '' khi chưa đọc được
+    // `credit_packages` — khi đó KHÔNG hiện ngoặc rỗng, không đoán số.
+    const vndLbl = window.ToolPrices ? window.ToolPrices.vndLabel(cost) : '';
+    const vndSuffix = vndLbl ? ' (' + vndLbl + ')' : '';
 
     let money;
     if (balance == null) {
@@ -586,13 +591,13 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
       // tiền" mà không biết bao nhiêu. Giá đọc từ `tool_pricing` như mọi chỗ
       // khác; đọc hụt thì hàm này đã dừng từ trên (`_priceUnknown`), nên tới
       // được đây là chắc chắn có số thật, không phải số đoán.
-      money = 'Mở đầy đủ tốn <b>' + cost + ' Lượng</b> · bấm mở là trả tiền và đọc ngay, ' +
+      money = 'Mở đầy đủ tốn <b>' + cost + ' Lượng</b>' + vndSuffix + ' · bấm mở là trả tiền và đọc ngay, ' +
         'không cần đăng ký trước. <a onclick="TuviPaywall._login()">Đã có tài khoản? Đăng nhập</a>';
     } else if (balance < cost) {
-      money = 'Bạn còn <b>' + balance + '</b> · cần <b>' + cost + '</b> — thiếu ' + (cost - balance) +
+      money = 'Bạn còn <b>' + balance + '</b> · cần <b>' + cost + '</b>' + vndSuffix + ' — thiếu ' + (cost - balance) +
         ', <a href="/topup.html" onclick="' + _topupClick('preview', cost - balance) + '">nạp thêm →</a>';
     } else {
-      money = 'Bạn còn <b>' + balance + ' Lượng</b> · mở đầy đủ tốn <b>' + cost + '</b>';
+      money = 'Bạn còn <b>' + balance + ' Lượng</b> · mở đầy đủ tốn <b>' + cost + '</b>' + vndSuffix;
     }
 
     const items = (o.items || []).map((t) => '<li>' + _esc(t) + '</li>').join('');
