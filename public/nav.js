@@ -362,6 +362,15 @@
     // trực tiếp trên mọi trang để đọc được conversion, không chỉ qua GA4 import.
     gtag('config','AW-18419617290');
   }
+  // Microsoft Clarity — heatmap + session recording, bổ sung cho GA4 chứ không
+  // thay số liệu. Cùng lý do bỏ qua navigator.webdriver như GA4/Pixel ở trên.
+  if (!document.getElementById('clarity-js') && !navigator.webdriver) {
+    (function(c,l,a,r,i,t,y){
+      c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+      t=l.createElement(r);t.id='clarity-js';t.async=1;t.src='https://www.clarity.ms/tag/'+i;
+      y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, 'clarity', 'script', 'yececqbfbv');
+  }
   // Meta (Facebook) Pixel — cùng lý do bỏ qua navigator.webdriver như GA4 ở trên,
   // tránh bộ E2E Playwright đổ traffic giả vào pixel quảng cáo.
   if (!document.getElementById('fb-pixel-js') && !navigator.webdriver) {
