@@ -255,7 +255,7 @@
 .today-me{display:flex;align-items:center;gap:14px;width:100%;text-align:left;margin-top:14px;
   background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:13px 15px}
 .tme-av{width:52px;height:52px;border-radius:50%;flex:0 0 auto;background:var(--paper-2);
-  border:1px solid var(--line);display:flex;align-items:center;justify-content:center;color:var(--text-lt)}
+  border:1px solid var(--line);display:flex;align-items:center;justify-content:center;color:var(--text-lt);object-fit:cover}
 .tme-av svg{width:28px;height:28px}
 @container home (max-width:600px){.today-me{margin-top:10px;padding:11px 12px;gap:11px}
   .tme-av{width:40px;height:40px}.tme-av svg{width:22px;height:22px}}
@@ -1251,6 +1251,13 @@ function renderAllTools(d) {
   /* Vế đuôi ngắn của "Vận riêng" — rút từ bảng QH đầy đủ bên dưới. */
   var QH_NGAN={'duoc-sinh':'có người giúp','hoa':'tự chủ được','sinh':'hao lực, giữ sức',
     'bi-khac':'dễ vướng, làm chậm','khac':'chủ động, tốn công'};
+  /* Tên cung → slug ảnh minh hoạ (public/img/van-rieng/<slug>-<sac-thai>.webp).
+     12 cung CỐ ĐỊNH theo TEN_CUNG (tuvi-engine/src/constants.ts) — khớp đúng
+     key của CUNG_LINH_VUC trong lib/engine/van-ngay.ts, không phải bảng riêng. */
+  var CUNG_SLUG={'Mệnh':'menh','Phụ Mẫu':'phu-mau','Phúc Đức':'phuc-duc',
+    'Điền Trạch':'dien-trach','Quan Lộc':'quan-loc','Nô Bộc':'no-boc',
+    'Thiên Di':'thien-di','Tật Ách':'tat-ach','Tài Bạch':'tai-bach',
+    'Tử Tức':'tu-tuc','Phu Thê':'phu-the','Huynh Đệ':'huynh-de'};
   /* Tên màu (caNhan.mauCaNhan) → mã màu để chấm tròn. */
   var MAU_HEX={'xanh lá':'#2F8F55','xanh lục':'#2F8F55','xanh ngọc':'#4FBFA8','xanh dương':'#2E6FBF',
     'xanh nước biển':'#1F5C9E','đen':'#22262B','trắng':'#EDEDE8','bạc':'#C9CCD1','xám':'#9AA0A6',
@@ -1395,6 +1402,15 @@ function renderAllTools(d) {
       var LOAI_CAU={'tốt':'thuận lợi','xấu':'cần thận trọng','trung':'bình ổn'};
       var tail=c.bixung?'xung chính tuổi bạn':(isKy?'ngày kỵ, hoãn việc lớn'
         :c.cachCuc?(LOAI_CAU[c.cachCuc.loai]||'bình ổn'):(QH_NGAN[c.quanHeHanh]||''));
+      // Sắc thái tranh minh hoạ (tot/binh-thuong/xau) — CÙNG một thứ tự ưu tiên
+      // với `tail` phía trên, để tranh không bao giờ "nói khác" chữ hiển thị.
+      var LOAI_SAC={'tốt':'tot','xấu':'xau','trung':'binh-thuong'};
+      var QH_SAC={'duoc-sinh':'tot','hoa':'tot','sinh':'binh-thuong','bi-khac':'xau','khac':'xau'};
+      var sacThai=c.bixung||isKy?'xau'
+        :c.cachCuc?(LOAI_SAC[c.cachCuc.loai]||'binh-thuong')
+        :(QH_SAC[c.quanHeHanh]||'binh-thuong');
+      var cungSlug=CUNG_SLUG[c.cungNhatHan];
+      var avImg=cungSlug?'/img/van-rieng/'+cungSlug+'-'+sacThai+'.webp':'';
       // Nhãn đầu dòng: mảng đời sống NGẮN (vế đầu trước dấu phẩy của `linhVuc`,
       // vd "tiền bạc, tài chính" → "Tiền bạc") — không hiện tên cung/sao gốc.
       var vucNgan=c.linhVuc?c.linhVuc.split(',')[0]:'';
@@ -1431,7 +1447,9 @@ function renderAllTools(d) {
       // dùng nhờ máy) thì người xem không hiểu vì sao và không sửa được.
       var srcLine='';
       try{ srcLine=(Shell.birthSummary&&birth)?Shell.birthSummary(birth):''; }catch(e){}
-      me.innerHTML='<div class="today-me"><span class="tme-av" data-icon="user"></span>'
+      me.innerHTML='<div class="today-me">'
+        +(avImg?'<img class="tme-av" src="'+avImg+'" alt="" width="52" height="52" loading="lazy">'
+          :'<span class="tme-av" data-icon="user"></span>')
         +'<span class="tme-b"><span class="tme-h">Vận riêng của bạn</span>'
         +'<span class="tme-t">'+esc(vucHoa)
         +(tail?' <span class="lt">→ '+esc(tail)+'</span>':'')+'</span>'
