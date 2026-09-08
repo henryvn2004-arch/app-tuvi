@@ -331,7 +331,7 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
       if (!el) {
         el = document.createElement('script');
         el.id = '_tvmb_prices_js';
-        el.src = '/tool-prices.js?v=6';
+        el.src = '/tool-prices.js?v=7';
         document.head.appendChild(el);
       }
       el.addEventListener('load', () => resolve());
@@ -916,17 +916,38 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
   /**
    * Quy đổi số Lượng còn thiếu → VNĐ cần nạp qua QR, ĐỒNG BỘ (không chờ
    * mạng) để `_insufficient` quyết được ngay có mở modal QR hay rơi về tường
-   * `/topup.html` cũ. `null` khi chưa đọc được `credit_packages` (đơn giá
-   * quy đổi) hoặc số tiền ngoài tầm nạp tuỳ chọn của `create-bank`
-   * (50.000đ–5.000.000đ) — cả hai đều KHÔNG được đoán bừa, cùng luật CLAUDE.md.
+   * `/topup.html` cũ. `null` khi chưa đọc được `credit_packages` hoặc không
+   * có số tiền nào trong tầm nạp tuỳ chọn của `create-bank`
+   * (50.000đ–5.000.000đ) đủ trả — cả hai đều KHÔNG được đoán bừa, cùng luật
+   * CLAUDE.md.
+   *
+   * 🔑 Dò NHỊ PHÂN số tiền nhỏ nhất mà `ToolPrices.quoteCustomVnd()` — CÙNG
+   * công thức `quoteCustomVnd()` server dùng thật ở `create-bank` — trả về
+   * đủ `needCredits`. KHÔNG suy ngược từ `vndPerCredit()` (đơn giá HIỂN THỊ,
+   * bậc gói thứ hai): đơn giá đó rẻ hơn bậc "vào cửa" mà server áp cho các
+   * khoản nạp lẻ dưới giá gói nhỏ nhất — trả đúng số tiền suy ngược kiểu đó
+   * vẫn cấp THIẾU Lượng, hiện ra thành QR nổ lần hai ngay sau khi "thanh
+   * toán thành công" (2026-09-08, Henry báo trên Chu Trình Cuộc Đời).
+   * `quoteCustomVnd(k)` không giảm khi `k` tăng nên dò nhị phân an toàn.
    */
   function _qrAmountFor(needCredits) {
-    const rate = window.ToolPrices ? window.ToolPrices.vndPerCredit() : null;
-    if (rate == null) return null;
-    let amountVnd = Math.ceil((needCredits * rate) / 1000) * 1000;
-    if (amountVnd < 50000) amountVnd = 50000;
-    if (amountVnd > 5000000) return null;
-    return amountVnd;
+    if (!window.ToolPrices || !window.ToolPrices.quoteCustomVnd) return null;
+    const creditsAt = (thousandVnd) => window.ToolPrices.quoteCustomVnd(thousandVnd * 1000);
+    let loK = 50, hiK = 5000; // đơn vị nghìn đồng — khớp trần create-bank
+    const hi = creditsAt(hiK);
+    if (hi == null) return null;     // chưa đọc được credit_packages
+    if (hi < needCredits) return null; // ngay cả trần 5tr cũng không đủ
+    if (creditsAt(loK) >= needCredits) return loK * 1000;
+    // `floor` — KHÔNG đổi sang `ceil`: khi `hiK - loK === 1` thì
+    // `ceil((loK+hiK)/2) === hiK`, nhánh true gán `hiK = hiK` (đứng yên) và
+    // vòng lặp KHÔNG BAO GIỜ thoát (đã tự vấp lúc viết hàm này, xem thân
+    // hàm test trước khi commit). `floor` luôn cho `midK < hiK` nên mỗi
+    // vòng chắc chắn thu hẹp `[loK,hiK]`.
+    while (loK < hiK) {
+      const midK = Math.floor((loK + hiK) / 2);
+      if (creditsAt(midK) >= needCredits) hiK = midK; else loK = midK + 1;
+    }
+    return hiK * 1000;
   }
 
   // `/tools-shared/bank-deeplink.js` dùng CHUNG với topup.html (một nguồn cho

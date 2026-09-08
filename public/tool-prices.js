@@ -217,6 +217,34 @@ window.ToolPrices = (function () {
     return '~' + vnd.toLocaleString('vi-VN') + 'đ';
   }
 
+  /**
+   * Số Lượng cấp cho một khoản nạp lẻ tuỳ ý — CÙNG CÔNG THỨC với
+   * `quoteCustomVnd()` phía server (lib/billing/packages.ts, dùng thật ở
+   * `create-bank`): với tới gói nào thì hưởng đơn giá gói đó (rẻ nhất trong
+   * các gói "với tới"), chưa với tới gói nhỏ nhất thì vào bậc "vào cửa" —
+   * đơn giá CAO NHẤT trong bảng, không phải đơn giá bậc-2 mà `vndPerCredit()`
+   * dùng để HIỂN THỊ. `null` khi chưa đọc được `credit_packages`.
+   *
+   * 🔑 VÌ SAO CÓ HÀM NÀY: `TuviPaywall._qrAmountFor` (QR chuyển khoản tại chỗ)
+   * từng suy amount cần nạp bằng `vndPerCredit()` rồi lấy `needCredits * rate`
+   * — nhưng đơn giá HIỂN THỊ đó rẻ hơn đơn giá THẬT áp cho các khoản nạp lẻ
+   * dưới giá gói nhỏ nhất, nên trả đúng số tiền hiện ra vẫn cấp THIẾU Lượng
+   * → QR nổ lần hai ngay sau khi vừa "thanh toán thành công" (2026-09-08).
+   * Mọi chỗ cần BIẾT TRƯỚC số Lượng cho một số tiền tự chọn phải gọi hàm
+   * này, không suy ngược từ `vndPerCredit()`.
+   */
+  function quoteCustomVnd(amountVnd) {
+    var pkgs = packages();
+    if (!pkgs.length) return null;
+    var rate = function (p) { return p.amount_vnd / p.credits; };
+    var affordable = pkgs.filter(function (p) { return p.amount_vnd <= amountVnd; });
+    var pool = affordable.length ? affordable : pkgs;
+    var tier = pool.reduce(function (best, p) {
+      return (affordable.length ? rate(p) < rate(best) : rate(p) > rate(best)) ? p : best;
+    });
+    return Math.floor(amountVnd / rate(tier));
+  }
+
   // ── Nhóm công cụ ──────────────────────────────────────────────────────────
   /** Định nghĩa nhóm, đã sắp theo `sort_order`. Rỗng nếu chưa đọc được. */
   function groups() {
@@ -369,6 +397,7 @@ window.ToolPrices = (function () {
     partPrice: partPrice,
     vndPerCredit: vndPerCredit,
     vndLabel: vndLabel,
+    quoteCustomVnd: quoteCustomVnd,
     groups: groups,
     groupsOf: groupsOf,
     appPath: appPath,
