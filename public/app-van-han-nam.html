@@ -284,11 +284,43 @@ function _loadDummyVH(){
     .catch(function(){ DUMMY_VH={}; return DUMMY_VH; });
 }
 
+// Quay lại từ lượt nạp Lượng (xem `TuviPaywall._insufficient`/`resumeIfPending`)
+// sau khi đã hết Lượng ngay lúc mở khoá — trang này là MULTI-PAGE (điều hướng
+// CỨNG sang /topup.html rồi quay lại), không phải SPA, nên toàn bộ lá số vừa
+// tính (_astrolabe, form vừa gõ) MẤT SẠCH khi tải lại. `resumeIfPending` (gọi
+// trong `_renderUnlockBlock`) chỉ tự chạy tiếp được NẾU đã có khung 12 tháng
+// trên màn hình — thiếu bước này thì khách nạp tiền xong quay về gặp lại form
+// TRỐNG, phải gõ lại và bấm "Xem vận hạn" rồi bấm mở khoá LẦN NỮA. Cùng mẫu
+// `LG_RESUME_KEY` của app-luan-giai.html: nguồn ghi là `doXem()` tự lưu mỗi
+// lượt tính khung thành công, điều kiện đọc là `?tpwResume=1` (do topup.html
+// gắn vào sau khi trả tiền thành công).
+var VH_RESUME_KEY='vh_pending_resume';
+(function(){
+  var url;
+  try{ url=new URL(location.href); }catch(e){ return; }
+  if(url.searchParams.get('tpwResume')!=='1') return;
+  var raw;
+  try{ raw=sessionStorage.getItem(VH_RESUME_KEY); sessionStorage.removeItem(VH_RESUME_KEY); }catch(e){ return; }
+  if(!raw) return;
+  var saved;
+  try{ saved=JSON.parse(raw); }catch(e){ return; }
+  if(!saved||!saved.fd||!saved.fd.ngay||!saved.fd.thang||!saved.fd.nam) return;
+  TuviForm.setData(saved.fd);
+  var runAutoXem=function(){ if(typeof doXem==='function') doXem(); };
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', runAutoXem);
+  else runAutoXem();
+})();
+
 async function doXem(){
   var btn=document.getElementById('btnGo');
   var fdIn=TuviForm.getData();
   var name=fdIn.hoten,gioitinh=fdIn.gioitinh,dd=fdIn.ngay,mm=fdIn.thang,yyyy=fdIn.nam,hh=fdIn.gioHour,gioAmIdx=fdIn.gioIdx;
   if(!dd||!mm||!yyyy){ alert('Vui lòng nhập đầy đủ ngày, tháng, năm sinh.'); return; }
+  // Lưu lại NGAY để `?tpwResume=1` (quay về sau khi nạp Lượng, xem IIFE
+  // `VH_RESUME_KEY` ở trên) khôi phục được đúng form này mà không cần bấm
+  // "Xem vận hạn" lần hai — ghi mỗi lượt tính khung thành công, không riêng
+  // lượt sắp hết Lượng, vì lúc gõ form ta chưa biết trước lượt nào sẽ hết Lượng.
+  try{ sessionStorage.setItem(VH_RESUME_KEY, JSON.stringify({fd:fdIn})); }catch(e){ /* ignore */ }
   btn.disabled=true;btn.textContent='Đang tính…';
   try{
     var conv=convertDuongToAm(dd,mm,yyyy,hh);conv.gioIdx=gioAmIdx;
@@ -594,6 +626,9 @@ function _renderUnlockBlock(){
     host.innerHTML='<button class="btn-go" id="btnUnlock" onclick="initiateAI()">✦ Luận vận hạn 12 tháng — <span data-tvp-price="van-han-nam">…</span> Lượng →</button>'+
       '<p>Viết riêng cho lá số này: tổng quan, hành trình đại vận, đại vận và tiểu vận hiện tại, rồi từng tháng một trong 12 tháng tới.</p>';
     TuviPaywall.fillPriceSlots(host);
+    // Vừa quay về từ lượt nạp Lượng thành công (đã đăng nhập nên KHÔNG còn đi
+    // qua lockPreview nữa, nhánh này mới là nút thật) → tự chạy tiếp.
+    TuviPaywall.resumeIfPending(_pendingSlug, initiateAI);
     return;
   }
   host.innerHTML='';
