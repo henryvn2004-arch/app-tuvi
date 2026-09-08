@@ -746,7 +746,7 @@ const CUNG_LINH_VUC: Record<string, string> = {
 
 interface CachCucRaw {
   ten?: string; sao?: string[]; cung?: string; loai?: string; doManh?: number;
-  tomTat?: string; phamVi?: string;
+  tomTat?: string; phamVi?: string; dieuKien?: string;
 }
 let cachCucCache: CachCucRaw[] | null = null;
 function loadCachCucAll(): CachCucRaw[] {
@@ -761,12 +761,47 @@ function loadCachCucAll(): CachCucRaw[] {
   return cachCucCache;
 }
 
-function tenSaoCuaCung(list: unknown): Set<string> {
-  return new Set(
-    ((list as AnyRec[]) || [])
-      .map((s) => (typeof s === 'object' && s ? String(s.ten || '') : String(s || '')))
-      .filter(Boolean),
-  );
+/** Tên sao → độ sáng (`star.brightness`: Miếu/Vượng/Đắc/Bình/Hãm/''), của 1 cung. */
+function doSangCuaCung(list: unknown): Map<string, string> {
+  const m = new Map<string, string>();
+  for (const s of (list as AnyRec[]) || []) {
+    const ten = typeof s === 'object' && s ? String(s.ten || '') : String(s || '');
+    if (!ten) continue;
+    m.set(ten, typeof s === 'object' && s ? String(s.brightness || '') : '');
+  }
+  return m;
+}
+
+// Nhận diện điều kiện độ sáng trong `dieuKien` (vd "Miếu địa hay Vượng địa",
+// "hãm địa"). Thứ tự thử DÀI TRƯỚC (đắc địa/lạc hãm/hãm địa/miếu địa/vượng
+// địa/bình hòa) để không cắt nhầm giữa chừng một cụm dài hơn.
+const DO_SANG_TU = [
+  ['đắc địa', 'Đắc'], ['lạc hãm', 'Hãm'], ['hãm địa', 'Hãm'], ['miếu địa', 'Miếu'],
+  ['vượng địa', 'Vượng'], ['bình hòa', 'Bình'], ['miếu', 'Miếu'], ['vượng', 'Vượng'],
+  ['đắc', 'Đắc'], ['hãm', 'Hãm'], ['bình', 'Bình'],
+] as const;
+const KET_NOI_RE = /(hay là|hay|hoặc|và|,)/gi;
+
+/**
+ * `dieuKien` CHỈ nói về độ sáng (không kèm điều kiện khác như mệnh cục/tuổi/
+ * giới tính/vị trí cung) → trả về tập độ sáng được chấp nhận. Còn chữ nào khác
+ * sau khi bóc hết từ độ sáng + từ nối → coi là ĐIỀU KIỆN KHÔNG XÁC MINH ĐƯỢC,
+ * trả `null` để caller loại thẳng cách cục đó — "không hiện còn hơn hiện sai".
+ */
+function doSangYeuCauCua(dieuKien: string): Set<string> | null {
+  const dk = dieuKien.trim();
+  if (!dk) return new Set(); // không có điều kiện — set rỗng, caller hiểu là "luôn khớp"
+  let con = dk;
+  const chapNhan = new Set<string>();
+  for (const [tu, chuan] of DO_SANG_TU) {
+    if (con.toLowerCase().includes(tu)) {
+      chapNhan.add(chuan);
+      con = con.replace(new RegExp(tu, 'gi'), '');
+    }
+  }
+  con = con.replace(KET_NOI_RE, '').trim();
+  if (con) return null; // còn chữ lạ ngoài độ sáng — không xác minh được
+  return chapNhan.size ? chapNhan : null;
 }
 
 /**
@@ -779,14 +814,20 @@ function tenSaoCuaCung(list: unknown): Set<string> {
  * hai phạm vi đó không có tập sao tính sẵn tương ứng, tự dựng thêm hình học
  * cung ở lớp này là đúng thứ luật cứng repo cấm — "không sửa mò một công thức
  * cổ pháp".
+ *
+ * `dieuKien` (537/965 mục có) CHỈ được dùng để LỌC khi nó thuần nói độ sáng
+ * (103 mục — vd "Vũ Khúc Miếu" tốt >< "Vũ Khúc hãm địa" khác nghĩa hẳn, không
+ * lọc là có thể hiện đúng cách cục NGƯỢC với sao thật). 434 mục điều kiện khác
+ * (mệnh cục, tuổi, giới tính…) không tự xác minh an toàn được ở tầng này ⇒ loại
+ * thẳng, không đoán — xem `doSangYeuCauCua`.
  */
 function cachCucChoCung(
   cungName: string,
   palace: AnyRec | undefined,
 ): { ten: string; loai: string; tomTat: string } | null {
   if (!cungName || !palace) return null;
-  const dongCung = tenSaoCuaCung(palace.stars);
-  const tamPhuongTuChinh = tenSaoCuaCung(palace.tuChinhStars);
+  const dongCung = doSangCuaCung(palace.stars);
+  const tamPhuongTuChinh = doSangCuaCung(palace.tuChinhStars);
   let best: { c: CachCucRaw; score: number } | null = null;
   for (const c of loadCachCucAll()) {
     if (c.cung !== cungName || !Array.isArray(c.sao) || !c.sao.length) continue;
@@ -794,7 +835,12 @@ function cachCucChoCung(
       : (c.phamVi === 'tam_hop' || c.phamVi === 'xung_chieu') ? tamPhuongTuChinh
       : null;
     if (!pool) continue; // giáp cung / hội hợp — bỏ qua, xem docstring
-    const ok = c.sao.every((name) => resolveStar(name).some((cand) => pool.has(cand)));
+    const doSang = doSangYeuCauCua(String(c.dieuKien || ''));
+    if (doSang === null) continue; // dieuKien không xác minh được — loại
+    const ok = c.sao.every((name) => resolveStar(name).some((cand) => {
+      if (!pool.has(cand)) return false;
+      return doSang.size === 0 || doSang.has(pool.get(cand) || '');
+    }));
     if (!ok) continue;
     const score = (Number(c.doManh) || 0) + c.sao.length;
     if (!best || score > best.score) best = { c, score };
