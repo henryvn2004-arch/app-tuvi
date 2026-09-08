@@ -96,27 +96,46 @@ const TuviPaywall = (() => {
   const PENDING_KEY = 'tpw_pending_unlock';
   const PENDING_TTL_MS = 30 * 60 * 1000;
 
+  // Dọn ý định đang treo (nếu có) khi một lượt mở khoá đã XONG THẬT — cả
+  // đường "bấm bình thường, không hề rời trang" lẫn đường resume đều phải gọi
+  // qua đây. Thiếu bước này thì đường vui (QR trả tại chỗ, không rời trang,
+  // không đi qua `resumeIfPending` để tự dọn) để sót `PENDING_KEY` cũ trong
+  // sessionStorage — lượt ghé lại CÙNG sản phẩm trong 30 phút sau tự nhận
+  // nhầm là "đang chờ resume" và tự bấm mở khoá lần nữa, không ai yêu cầu.
+  function _clearPending() {
+    try { sessionStorage.removeItem(PENDING_KEY); } catch (e) { /* ignore */ }
+  }
+
   /**
    * Gọi ở trang TOOL sau khi đã dựng lại nút/tường mở khoá — nếu vừa quay về
-   * từ một lượt nạp Lượng THÀNH CÔNG cho ĐÚNG sản phẩm này (`?tpwResume=1` +
-   * ý định còn khớp), tự gọi lại `requireCredits` thay vì bắt bấm nút lần nữa.
-   * An toàn kể cả đoán sai: `requireCredits` tự kiểm đăng nhập/giá/số dư lại
-   * từ đầu, đoán hụt thì chỉ hiện lại đúng tường cũ, không có gì để mất.
+   * từ một lượt nạp Lượng THÀNH CÔNG cho ĐÚNG sản phẩm này, tự gọi lại
+   * `requireCredits` thay vì bắt bấm nút lần nữa. An toàn kể cả đoán sai:
+   * `requireCredits` tự kiểm đăng nhập/giá/số dư lại từ đầu, đoán hụt thì chỉ
+   * hiện lại đúng tường cũ, không có gì để mất.
+   *
+   * Hai đường quay về, MỘT điều kiện đủ (ý định còn khớp + còn hạn):
+   * (a) `?tpwResume=1` — quay lại từ `/topup.html` (điều hướng thật, còn URL).
+   * (b) QR tại chỗ (`_openBankQr`) KHÔNG điều hướng, nên không có cờ này — di
+   *     động rất hay giải phóng tab nền khi khách sang app ngân hàng rồi quay
+   *     lại, tab tải lại TRẮNG trên NGUYÊN url cũ. Trước đây hàm này đòi CẢ
+   *     `resume` LẪN `pending` nên ca (b) không bao giờ tự nối lại được — nạp
+   *     Lượng xong, JS/form mất sạch, "chạy ra blank". Nay CHỈ cần `pending`
+   *     còn khớp sản phẩm + còn hạn là đủ, cờ URL chỉ là một đường TỚI thêm.
    */
   function resumeIfPending(slug, callback) {
     let url;
-    try { url = new URL(location.href); } catch (e) { return false; }
-    const resume = url.searchParams.get('tpwResume') === '1';
+    try { url = new URL(location.href); } catch (e) { url = null; }
+    const resume = !!(url && url.searchParams.get('tpwResume') === '1');
     let pending = null;
     try { pending = JSON.parse(sessionStorage.getItem(PENDING_KEY) || 'null'); } catch (e) { /* ignore */ }
     // Dọn NGAY — ý định chỉ dùng được một lần, kể cả khi hoá ra không khớp,
     // để lỡ tải lại trang không tự bấm lại vô hạn.
-    try { sessionStorage.removeItem(PENDING_KEY); } catch (e) { /* ignore */ }
-    if (resume) {
+    _clearPending();
+    if (resume && url) {
       url.searchParams.delete('tpwResume');
       try { history.replaceState({}, '', url.pathname + url.search + url.hash); } catch (e) { /* ignore */ }
     }
-    if (!resume || !pending) return false;
+    if (!pending) return false;
     const product = (_cfg && _cfg.product) || '';
     if (pending.product !== product) return false;
     if (Date.now() - (Number(pending.ts) || 0) > PENDING_TTL_MS) return false;
@@ -1001,6 +1020,24 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
   // ── Insufficient ──────────────────────────────────────────────
   function _insufficient(cost, balance, slug, callback) {
     const need = cost - balance;
+    // Ghi Ý ĐỊNH trước khi khách RỜI KHỎI luồng hiện tại — xem `resumeIfPending`.
+    // TRƯỚC ĐÂY chỉ ghi ở nhánh tường `/topup.html` bên dưới, nhánh QR tại chỗ
+    // (ngay dưới đây) return SỚM nên bỏ sót — khách vô danh bấm mở khoá, đi
+    // sang app ngân hàng bằng deep link rồi quay lại: di động RẤT hay giải
+    // phóng tab nền khi app kia (ngân hàng) ăn nhiều bộ nhớ, tab tải lại TRẮNG,
+    // JS (form, `_qrOrderCode`, closure `callback`) mất sạch mà KHÔNG có gì để
+    // tự nối lại — nạp Lượng xong "chạy ra blank". Ghi Ở ĐÂY, trước khi rẽ
+    // nhánh, để `resumeIfPending` (không còn bắt buộc `?tpwResume=1`, xem nơi
+    // định nghĩa) tự nối lại được dù rời trang qua ngả nào.
+    try {
+      sessionStorage.setItem(PENDING_KEY, JSON.stringify({
+        product: (_cfg && _cfg.product) || '',
+        slug: slug || '',
+        need, cost,
+        returnUrl: location.href,
+        ts: Date.now(),
+      }));
+    } catch (e) { /* sessionStorage đầy/bị chặn — vẫn hiện tường như cũ, chỉ mất phần tự-quay-lại */ }
     // Khách vô danh (`callback` luôn có mặt — `requireCredits` là nơi DUY
     // NHẤT gọi hàm này kèm callback) → QR tại chỗ thay hẳn tường cũ, không
     // rời trang. `_qrAmountFor` trả `null` khi chưa đọc được giá quy đổi hoặc
@@ -1015,18 +1052,6 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
     // khi đó KHÔNG hiện ngoặc rỗng, không đoán số.
     const needVndLbl = window.ToolPrices ? window.ToolPrices.vndLabel(need) : '';
     const needVndSuffix = needVndLbl ? ' (' + needVndLbl + ')' : '';
-    // Ghi Ý ĐỊNH trước khi khách rời trang đi nạp — xem `resumeIfPending`.
-    // `returnUrl` chụp CHÍNH XÁC url hiện tại (kể cả birth params trên URL nếu
-    // trang đó dùng) để quay lại đúng chỗ, không phải trang tool trần.
-    try {
-      sessionStorage.setItem(PENDING_KEY, JSON.stringify({
-        product: (_cfg && _cfg.product) || '',
-        slug: slug || '',
-        need, cost,
-        returnUrl: location.href,
-        ts: Date.now(),
-      }));
-    } catch (e) { /* sessionStorage đầy/bị chặn — vẫn hiện tường như cũ, chỉ mất phần tự-quay-lại */ }
     const shown =
       _softLock(
         '<div class="tpw-lock-t">⊙ Còn thiếu ' + need + ' Lượng' + needVndSuffix + '</div>' +
@@ -1170,7 +1195,7 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
         try {
           const r = await fetch('/api/payment?action=check&slug=' + encodeURIComponent(slug) + '&userId=' + encodeURIComponent(userId));
           const d = await r.json();
-          if (d.hasAccess) { _busy(false); await callback(); return; }
+          if (d.hasAccess) { _clearPending(); _busy(false); await callback(); return; }
         } catch(e) {}
       }
 
@@ -1205,6 +1230,7 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
         const data = await res.json();
 
         if (data.success || data.alreadyPaid) {
+          _clearPending();
           window.refreshNavCredits && window.refreshNavCredits();
           _banner('✓ Đã trừ ' + cost + ' lượng · Còn lại ' + (data.balance ?? (balance - cost)) + ' lượng');
           _busy(false);
