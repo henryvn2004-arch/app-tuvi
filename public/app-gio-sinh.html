@@ -209,7 +209,7 @@
 <script>window.SHELL_ACTIVE='gio-sinh';window.SHELL_HISTORY=true;
 window.SHELL_INTRO={key:'gio-sinh'};</script>
 
-<script src="/tuvi-paywall.js?v=30"></script>
+<script src="/tuvi-paywall.js?v=31"></script>
 <script src="/tools-shared/hook-layer.js?v=2"></script>
 <!-- ⚠️ BẮT BUỘC. `nav.js` ở chế độ `data-icons-only` RETURN SỚM nên KHÔNG chèn
      `auth.js` — trang shell phải tự khai. Thiếu nó thì `window.Auth` không tồn
@@ -234,6 +234,49 @@ TuviPaywall.init({product:TOOL_ID,slug:function(){return _slug;}});
   CHI.forEach((c,i)=>t.insertAdjacentHTML('beforeend','<option value="'+i+'">Giờ '+c+' ('+KH[i]+')</option>'));
 })();
 
+// ── Quay lại giữa chừng lượt nạp Lượng (QR tại chỗ hoặc /topup.html) ────
+// `_birth` chỉ sống trong biến JS, tính lại mỗi lượt `start()` từ form — mất
+// sạch khi tab tải lại. Trang MULTI-STEP một-lượt-bấm (khác 5 tool đã vá
+// trước: duyen-no-tien-kiep/chan-dung-vo-chong/chan-dung-tien-kiep/nguoi-khac/
+// day-con) nên chưa từng có cơ chế này. Lỗ hổng lộ rõ nhất qua QR tại chỗ
+// (PR #760 + deep link app ngân hàng #763/#764): bấm mở khoá → QR hiện ngay
+// tại trang, không điều hướng đi đâu — nhưng bấm mở app ngân hàng vẫn có thể
+// khiến di động giải phóng tab nền (app ngân hàng ăn nhiều bộ nhớ), quay lại
+// tab tải lại TRẮNG trên NGUYÊN url cũ (không có `?tpwResume=1` để bám vào).
+// Ghi form NGAY khi tính thử xong (`buildLock` gọi `_gsSaveResume`) — không
+// đợi biết trước có hết Lượng hay không, cùng mẫu 5 tool trên. Việc "có nên
+// tự chạy tiếp lượt mở khoá hay không" để `TuviPaywall.resumeIfPending` tự
+// quyết (nó chỉ tự chạy khi CÓ ý định mở khoá thật còn treo — không phải mọi
+// lượt tính thử) — ở đây chỉ cần dựng lại ĐÚNG form rồi gọi lại `start()`.
+const GS_RESUME_KEY='gs_pending_birth', GS_RESUME_TTL_MS=30*60*1000;
+function _gsSaveResume(){
+  if(!_birth) return;
+  try{ sessionStorage.setItem(GS_RESUME_KEY,JSON.stringify({birth:_birth,ts:Date.now()})); }catch(e){ /* ignore */ }
+}
+function _gsClearResume(){
+  try{ sessionStorage.removeItem(GS_RESUME_KEY); }catch(e){ /* ignore */ }
+}
+(function _gsResumeOnLoad(){
+  let raw;
+  try{ raw=sessionStorage.getItem(GS_RESUME_KEY); }catch(e){ return; }
+  if(!raw) return;
+  try{ sessionStorage.removeItem(GS_RESUME_KEY); }catch(e){ /* ignore */ }
+  let pending;
+  try{ pending=JSON.parse(raw); }catch(e){ return; }
+  if(!pending||!pending.birth||!(Date.now()-(Number(pending.ts)||0)<=GS_RESUME_TTL_MS)) return;
+  const b=pending.birth;
+  const run=function(){
+    document.getElementById('gs-ngay').value=b.day;
+    document.getElementById('gs-thang').value=b.month;
+    document.getElementById('gs-nam').value=b.year;
+    document.getElementById('gs-lich').value=b.isLunar?'am':'duong';
+    document.getElementById('gs-gt').value=b.gender;
+    start();
+  };
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',run);
+  else run();
+})();
+
 function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 function showErr(m){const e=document.getElementById('error-msg');e.textContent=m;e.classList.add('active');}
 function clearErr(){document.getElementById('error-msg').classList.remove('active');}
@@ -253,6 +296,7 @@ function _reset(){
   document.getElementById('surveyBlock').style.display='none';
   document.getElementById('resultBlock').style.display='none';
   _answers=[];_lastResult=null;_lastPreview=null;
+  _gsClearResume();
 }
 
 // ── Bước 1: TÍNH THỬ (miễn phí, không đăng nhập) ────────────
@@ -333,13 +377,21 @@ function buildLock(){
   if(!window.TuviPaywall||!TuviPaywall.lockPreview){
     host.innerHTML='<p class="note">Chưa đọc được bảng giá — tải lại trang giúp tôi.</p>';return;
   }
+  // Lưu NGAY khi vừa tính thử xong — không đợi biết trước có hết Lượng hay
+  // không, xem `_gsSaveResume`.
+  _gsSaveResume();
   if(_daDangNhap()){
     if(_lastPreview) _renderGrid(_lastPreview);
     host.innerHTML='<button class="btn-go" id="btnKhaoSat">Bắt đầu khảo sát thu hẹp — <span data-tvp-price="'+TOOL_ID+'">…</span> Lượng →</button>';
     TuviPaywall.fillPriceSlots(host);
+    const runUnlock=function(){return runSurvey();};
     document.getElementById('btnKhaoSat').addEventListener('click',function(){
-      TuviPaywall.requireCredits(_slug,function(){return runSurvey();});
+      TuviPaywall.requireCredits(_slug,runUnlock);
     });
+    // Khách vô danh đã tự mở phiên ẩn danh ở lượt trước (nên `_daDangNhap()`
+    // giờ đọc ra `true`) quay lại giữa chừng lượt nạp Lượng qua QR — xem
+    // `_gsResumeOnLoad`/`resumeIfPending` (tuvi-paywall.js).
+    TuviPaywall.resumeIfPending(_slug,runUnlock);
     return;
   }
   document.getElementById('grid12').innerHTML='';
@@ -415,6 +467,7 @@ function onPaidErr(e){
 // ── Bước 3: KẾT QUẢ ─────────────────────────────────────────
 function renderResult(j){
   _lastResult=j;
+  _gsClearResume();
   const k=j.ketQua;
   document.getElementById('surveyBlock').style.display='none';
   document.getElementById('resultBlock').style.display='';
