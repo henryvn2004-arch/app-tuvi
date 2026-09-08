@@ -27,6 +27,9 @@ import {
 } from '../../tuvi-engine/dist/ngay-tot/index.js';
 import { tinhNguyetHan, tinhNhatHan } from '../../tuvi-engine/dist/van-han/index.js';
 import { solarToLunar } from '../../tuvi-engine/dist/lunar/convert.js';
+import { readFileSync } from 'fs';
+import { join } from 'path';
+import { resolveStar } from '../agent/vanHanCombos';
 
 const CAN = ['Giáp', 'Ất', 'Bính', 'Đinh', 'Mậu', 'Kỷ', 'Canh', 'Tân', 'Nhâm', 'Quý'];
 const CHI = ['Tý', 'Sửu', 'Dần', 'Mão', 'Thìn', 'Tỵ', 'Ngọ', 'Mùi', 'Thân', 'Dậu', 'Tuất', 'Hợi'];
@@ -147,6 +150,10 @@ export interface VanNgayCaNhan {
    * bản trôi khỏi nhau.
    */
   canChiNam: string;
+  /** Nhãn đời sống của cung Nhật Hạn (vd "tiền bạc, tài chính" cho Tài Bạch). */
+  linhVuc: string | null;
+  /** Cách cục khớp tại cung Nhật Hạn hôm nay (đồng cung / tam hợp / xung chiếu), nếu có. */
+  cachCuc: { ten: string; loai: string; tomTat: string } | null;
 }
 
 export interface VanNgayResult {
@@ -719,6 +726,83 @@ export function resolveNguyetHanSegments(
   return { ok: true, tieuHanIdx: act.tieuHanIdx, luuNienIdx: act.luuNienIdx, tv: act.tv, segments };
 }
 
+// Nhãn đời sống của 12 cung — CỐ ĐỊNH theo TEN_CUNG (tuvi-engine/src/constants.ts),
+// không phải suy diễn riêng cho vận ngày. Chỉ dịch tên cung sang chữ người
+// thường đọc được, không đổi ý nghĩa cổ pháp của cung.
+const CUNG_LINH_VUC: Record<string, string> = {
+  'Mệnh': 'bản thân, tâm trạng chung',
+  'Phụ Mẫu': 'cha mẹ, cấp trên, giấy tờ',
+  'Phúc Đức': 'may mắn, tinh thần, cơ hội bất ngờ',
+  'Điền Trạch': 'nhà cửa, tài sản',
+  'Quan Lộc': 'công việc, sự nghiệp',
+  'Nô Bộc': 'bạn bè, đồng nghiệp, đối tác',
+  'Thiên Di': 'đi lại, thay đổi, giao tiếp bên ngoài',
+  'Tật Ách': 'sức khỏe',
+  'Tài Bạch': 'tiền bạc, tài chính',
+  'Tử Tức': 'con cái, chuyện sinh nở',
+  'Phu Thê': 'tình cảm, hôn nhân, đối tác thân thiết',
+  'Huynh Đệ': 'anh chị em, bạn thân',
+};
+
+interface CachCucRaw {
+  ten?: string; sao?: string[]; cung?: string; loai?: string; doManh?: number;
+  tomTat?: string; phamVi?: string;
+}
+let cachCucCache: CachCucRaw[] | null = null;
+function loadCachCucAll(): CachCucRaw[] {
+  if (cachCucCache) return cachCucCache;
+  try {
+    cachCucCache = JSON.parse(
+      readFileSync(join(process.cwd(), 'public', 'cach_cuc_all.json'), 'utf-8'),
+    ) as CachCucRaw[];
+  } catch {
+    cachCucCache = [];
+  }
+  return cachCucCache;
+}
+
+function tenSaoCuaCung(list: unknown): Set<string> {
+  return new Set(
+    ((list as AnyRec[]) || [])
+      .map((s) => (typeof s === 'object' && s ? String(s.ten || '') : String(s || '')))
+      .filter(Boolean),
+  );
+}
+
+/**
+ * Cách cục khớp tại cung Nhật Hạn hôm nay, tra `public/cach_cuc_all.json`
+ * (965 mục, có nguồn — Thái Thứ Lang).
+ *
+ * CHỈ xét 2 phạm vi engine đã tính sẵn cho MỌI cung: `stars` (đồng cung) và
+ * `tuChinhStars` (tam hợp + xung chiếu, gộp sẵn trong `attachTamPhuong` —
+ * tuvi-engine/src/engine.ts). Cố tình BỎ QUA giáp cung / hội hợp (61/965 mục):
+ * hai phạm vi đó không có tập sao tính sẵn tương ứng, tự dựng thêm hình học
+ * cung ở lớp này là đúng thứ luật cứng repo cấm — "không sửa mò một công thức
+ * cổ pháp".
+ */
+function cachCucChoCung(
+  cungName: string,
+  palace: AnyRec | undefined,
+): { ten: string; loai: string; tomTat: string } | null {
+  if (!cungName || !palace) return null;
+  const dongCung = tenSaoCuaCung(palace.stars);
+  const tamPhuongTuChinh = tenSaoCuaCung(palace.tuChinhStars);
+  let best: { c: CachCucRaw; score: number } | null = null;
+  for (const c of loadCachCucAll()) {
+    if (c.cung !== cungName || !Array.isArray(c.sao) || !c.sao.length) continue;
+    const pool = c.phamVi === 'dong_cung' ? dongCung
+      : (c.phamVi === 'tam_hop' || c.phamVi === 'xung_chieu') ? tamPhuongTuChinh
+      : null;
+    if (!pool) continue; // giáp cung / hội hợp — bỏ qua, xem docstring
+    const ok = c.sao.every((name) => resolveStar(name).some((cand) => pool.has(cand)));
+    if (!ok) continue;
+    const score = (Number(c.doManh) || 0) + c.sao.length;
+    if (!best || score > best.score) best = { c, score };
+  }
+  if (!best) return null;
+  return { ten: String(best.c.ten || ''), loai: String(best.c.loai || 'trung'), tomTat: String(best.c.tomTat || '') };
+}
+
 /**
  * Khối cá nhân của thẻ: cung nhật hạn + chính tinh + quan hệ ngũ hành ngày ↔
  * nạp âm mệnh + có bị xung tuổi không.
@@ -757,9 +841,10 @@ export function computeVanNgayCaNhan(
   }
 
   const chiNamSinh = String(lasoData.canChiNam || '').split(' ')[1] || '';
+  const cungNhatHan = String(p.cungName || '');
 
   return {
-    cungNhatHan: String(p.cungName || ''),
+    cungNhatHan,
     diaChiNhatHan: String(p.diaChi || ''),
     chinhTinh,
     cungNguyetHan: String(palaces[r.nguyetHanIdx]?.cungName || ''),
@@ -769,5 +854,7 @@ export function computeVanNgayCaNhan(
     mauCaNhan,
     bixung: !!chiNamSinh && chiNamSinh === day.xung.chi,
     canChiNam: String(lasoData.canChiNam || ''),
+    linhVuc: CUNG_LINH_VUC[cungNhatHan] || null,
+    cachCuc: cachCucChoCung(cungNhatHan, p),
   };
 }

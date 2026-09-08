@@ -47,7 +47,9 @@ const STAR_ALIAS: Record<string, string[]> = {
   'Quý': ['Thiên Quý'], 'Vượng': ['Đế Vượng'], 'Hỉ': ['Hỷ Thần'], 'Mộ': ['Mộ'],
 };
 
-function resolveStar(name: string): string[] {
+// Export để dùng chung ở nơi khác cần khớp tên sao ngắn của cach_cuc_all.json
+// (vd cách cục tại cung Nhật Hạn của thẻ Vận Ngày) — MỘT bảng alias duy nhất.
+export function resolveStar(name: string): string[] {
   return STAR_ALIAS[name] || [name];
 }
 

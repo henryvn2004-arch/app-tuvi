@@ -1379,16 +1379,32 @@ function renderAllTools(d) {
     if(v.caNhan){
       var c=v.caNhan, plain=[];
       var star=(c.chinhTinh&&c.chinhTinh.length)?c.chinhTinh.join(', '):'vô chính diệu';
-      var tail=c.bixung?'xung chính tuổi bạn':(QH_NGAN[c.quanHeHanh]||'');
-      plain.push('Ngày hôm nay rơi vào cung '+c.cungNhatHan+(c.diaChiNhatHan?' ('+c.diaChiNhatHan+')':'')
+      // Ngày Kỵ (key==='ky') là luật CẤM khởi sự, đứng trên quan hệ ngũ hành
+      // ngày↔bản mệnh — không thì tail có thể đọc "chủ động, tốn công" ngay
+      // cạnh ô Cần tránh đang ghi "cổ pháp kiêng khởi sự".
+      var isKy=key==='ky';
+      var tail=c.bixung?'xung chính tuổi bạn':(isKy?'ngày kỵ, hoãn việc lớn':(QH_NGAN[c.quanHeHanh]||''));
+      // `linhVuc` dịch tên cung sang mảng đời sống người thường đọc được (vd
+      // Tài Bạch → "tiền bạc, tài chính") — KHÔNG đổi ý nghĩa cổ pháp của cung,
+      // chỉ thêm chữ. Nguồn: `CUNG_LINH_VUC` trong lib/engine/van-ngay.ts.
+      plain.push('Ngày hôm nay rơi vào cung '+c.cungNhatHan+(c.linhVuc?' ('+c.linhVuc+')':'')
+        +(c.diaChiNhatHan?' ('+c.diaChiNhatHan+')':'')
         +(c.chinhTinh&&c.chinhTinh.length?' — chính tinh '+c.chinhTinh.join(', '):' — vô chính diệu'));
       if(c.bixung) plain.push('Ngày xung chính tuổi bạn — nên giữ nhịp, tránh quyết định lớn.');
+      else if(isKy) plain.push('Hôm nay là ngày kỵ khởi sự — hoãn việc lớn, việc thường ngày vẫn làm bình thường.');
+      // Cách cục tại đúng cung Nhật Hạn hôm nay (đồng cung / tam hợp / xung
+      // chiếu, engine đã tính sẵn — xem `cachCucChoCung` trong van-ngay.ts) —
+      // lớp chi tiết SÂU hơn hẳn câu ngũ hành chung bên dưới, vì đọc thẳng cách
+      // cục thật của đúng cung đang được chiếu, không phải suy diễn ngũ hành.
+      if(c.cachCuc&&c.cachCuc.tomTat) plain.push('Cách cục: '+c.cachCuc.tomTat);
       var QH={'duoc-sinh':'hành ngày sinh cho bản mệnh — thuận, dễ được giúp',
               'hoa':'hành ngày cùng hành bản mệnh — hòa, tự chủ được',
               'sinh':'bản mệnh sinh cho hành ngày — hao lực, nên giữ sức',
               'bi-khac':'hành ngày khắc bản mệnh — dễ vướng, làm chậm lại',
               'khac':'bản mệnh khắc hành ngày — chủ động được, hơi tốn công'};
-      if(c.quanHeHanh&&QH[c.quanHeHanh]) plain.push(QH[c.quanHeHanh]+'.');
+      // Ngày kỵ thì gắn rõ QH chỉ nói về việc thường ngày, không phải cổ vũ
+      // khởi sự lớn.
+      if(c.quanHeHanh&&QH[c.quanHeHanh]) plain.push((isKy&&!c.bixung?'Riêng việc thường ngày, ':'')+QH[c.quanHeHanh]+'.');
       var mau=(c.mauCaNhan||[]).slice(0,2);
       if(mau.length) plain.push('Màu hợp bản mệnh: '+mau.join(', ')+'.');
       // Bản CHỮ THUẦN cho poster — poster vẽ trên canvas nên không dùng lại
@@ -1402,8 +1418,9 @@ function renderAllTools(d) {
       try{ srcLine=(Shell.birthSummary&&birth)?Shell.birthSummary(birth):''; }catch(e){}
       me.innerHTML='<div class="today-me"><span class="tme-av" data-icon="user"></span>'
         +'<span class="tme-b"><span class="tme-h">Vận riêng của bạn</span>'
-        +'<span class="tme-t">'+esc(c.cungNhatHan)+' — '+esc(star)
+        +'<span class="tme-t">'+esc(c.cungNhatHan)+(c.linhVuc?' <span class="lt">('+esc(c.linhVuc)+')</span>':'')+' — '+esc(star)
         +(tail?' <span class="lt">→ '+esc(tail)+'</span>':'')+'</span>'
+        +(c.cachCuc&&c.cachCuc.tomTat?'<span class="tme-s">Cách cục: '+esc(c.cachCuc.tomTat)+'</span>':'')
         +(mau.length?'<span class="tme-s">Màu hợp: '+esc(mau.join(', '))+'<span class="tme-swatch">'
           +mau.map(function(m){ return '<i style="background:'+(MAU_HEX[m]||'#999')+'"></i>'; }).join('')
           +'</span></span>':'')
