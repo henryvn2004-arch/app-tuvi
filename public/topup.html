@@ -241,11 +241,6 @@ body{font-family:Arial,sans-serif;background:var(--bg-soft);color:var(--text);mi
 .bm-warn [data-icon]{width:14px;height:14px}
 .bm-status{font-size:.88rem;color:var(--text-mid);margin-bottom:12px;display:flex;align-items:center;justify-content:center;gap:.45rem;min-height:1.3rem}
 .bm-status [data-icon]{width:15px;height:15px}
-.bm-apps{margin-bottom:14px}
-.bm-apps-label{font-size:.72rem;color:var(--text-lt);margin-bottom:7px}
-.bm-apps-row{display:flex;gap:8px;overflow-x:auto;padding-bottom:2px}
-.bm-app-btn{flex:0 0 auto;display:flex;flex-direction:column;align-items:center;gap:4px;width:56px;text-decoration:none;color:var(--text-mid);font-size:.66rem;line-height:1.2}
-.bm-app-btn img{width:36px;height:36px;border-radius:9px;object-fit:cover;border:1px solid var(--border)}
 .btn-modal{background:var(--navy);color:#fff;border:none;padding:.6rem 1.4rem;border-radius:6px;cursor:pointer;font-size:.88rem;font-family:inherit;font-weight:600}
 .btn-modal:hover{background:var(--navy-mid)}
 
@@ -1142,10 +1137,7 @@ loadPackages().then(loadToolPricing).then(renderPendingBanner);
     <div class="bm-credits" id="bm-credits"></div>
     <div class="bm-amount" id="bm-amount"></div>
     <div class="bm-qr" id="bm-qr"></div>
-    <div class="bm-apps" id="bm-apps" hidden>
-      <div class="bm-apps-label">Hoặc bấm để mở thẳng app ngân hàng (khỏi cần quét):</div>
-      <div class="bm-apps-row" id="bm-apps-row"></div>
-    </div>
+    <div id="bm-apps" hidden></div>
     <div class="bm-info" id="bm-info"></div>
     <div class="bm-hint">
       Mở app ngân hàng → Quét QR hoặc chuyển khoản thủ công<br>
@@ -1156,43 +1148,10 @@ loadPackages().then(loadToolPricing).then(renderPendingBanner);
   </div>
 </div>
 
+<script src="/tools-shared/bank-deeplink.js?v=1"></script>
 <script>
 (function(){
   let _oc = null, _timer = null, _cnt = 0, _lastFocus = null;
-
-  // 🔑 Deep link `dl.vietqr.io/pay` CHỈ mở được app khi duyệt bằng điện thoại
-  // (VietQR API docs, mục "Deeplink App ngân hàng") — trên desktop bấm vào chỉ
-  // ra trang web không app nào bắt được, nên chỉ hiện khối này trên mobile.
-  const IS_MOBILE_APP_LINK = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-  // Danh sách app phổ biến nhất (xếp theo lượt tải hàng tháng, nguồn
-  // api.vietqr.io/v2/android-app-deeplinks) — mb/icb/bidv/acb tự điền được số
-  // TK/số tiền/nội dung (`autofill:1` trong API đó), còn lại chỉ mở app.
-  const BANK_APPS = [
-    { app: 'mb',   name: 'MB Bank',    logo: 'MB' },
-    { app: 'vcb',  name: 'Vietcombank', logo: 'VCB' },
-    { app: 'vba',  name: 'Agribank',   logo: 'VBA' },
-    { app: 'icb',  name: 'VietinBank', logo: 'ICB' },
-    { app: 'bidv', name: 'BIDV',       logo: 'BIDV' },
-    { app: 'tcb',  name: 'Techcombank', logo: 'TCB' },
-    { app: 'vpb',  name: 'VPBank',     logo: 'VPB' },
-    { app: 'acb',  name: 'ACB',        logo: 'ACB' },
-  ];
-
-  function renderBankApps(d, memo) {
-    const wrap = document.getElementById('bm-apps');
-    const row  = document.getElementById('bm-apps-row');
-    if (!IS_MOBILE_APP_LINK || !d.bankCode || !d.accountNumber) { wrap.hidden = true; return; }
-    const ba = encodeURIComponent(d.accountNumber) + '@' + d.bankCode;
-    row.innerHTML = BANK_APPS.map(function (b) {
-      const href = 'https://dl.vietqr.io/pay?app=' + b.app + '&ba=' + ba
-        + '&am=' + encodeURIComponent(d.amountVND) + '&tn=' + encodeURIComponent(memo)
-        + '&bn=' + encodeURIComponent(d.accountName || '');
-      return '<a class="bm-app-btn" href="' + esc(href) + '" target="_blank" rel="noopener">'
-        + '<img src="https://cdn.vietqr.io/img/' + b.logo + '.png" alt="' + esc(b.name) + '" loading="lazy">'
-        + '<span>' + esc(b.name) + '</span></a>';
-    }).join('');
-    wrap.hidden = false;
-  }
 
   // Trình duyệt throttle setInterval của TAB Ở NỀN (khách rời sang app ngân
   // hàng để quét QR/chuyển khoản, đúng thao tác bình thường) — poll 3s trên
@@ -1274,7 +1233,7 @@ loadPackages().then(loadToolPricing).then(renderPendingBanner);
       };
       img.src = qrUrl;
       qrBox.appendChild(img);
-      renderBankApps(d, memo);
+      if (window.BankDeepLink) window.BankDeepLink.render(document.getElementById('bm-apps'), d, memo);
 
       document.getElementById('bm-info').innerHTML =
         // Tên ngân hàng đến TỪ SERVER (suy từ `bin` PayOS trả về), không in cứng:

@@ -840,6 +840,7 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
         '<div class="tpw-qr-credits" id="tpw-qr-credits"></div>' +
         '<div class="tpw-qr-amount" id="tpw-qr-amount"></div>' +
         '<div class="tpw-qr-box" id="tpw-qr-box"></div>' +
+        '<div id="tpw-qr-apps" hidden></div>' +
         '<div class="tpw-qr-info" id="tpw-qr-info"></div>' +
         '<div class="tpw-qr-hint">Mở app ngân hàng → Quét QR hoặc chuyển khoản thủ công<br>' +
           '<span class="tpw-qr-warn">⚠ Giữ nguyên nội dung CK để xác nhận tự động</span></div>' +
@@ -909,6 +910,24 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
     return amountVnd;
   }
 
+  // `/tools-shared/bank-deeplink.js` dùng CHUNG với topup.html (một nguồn cho
+  // khối "mở app ngân hàng") nhưng trang tool không tự có sẵn thẻ <script> đó
+  // như topup.html — tự nạp lười ở đây, chỉ 1 lần dù gọi `_openBankQr` nhiều lần.
+  let _bdlLoading = null;
+  function _loadBankDeepLink() {
+    if (window.BankDeepLink) return Promise.resolve();
+    if (_bdlLoading) return _bdlLoading;
+    _bdlLoading = new Promise((resolve) => {
+      const s = document.createElement('script');
+      s.src = '/tools-shared/bank-deeplink.js?v=1';
+      s.onload = () => resolve();
+      // Fail-open: tải lỗi thì đơn giản không hiện khối deep link, QR vẫn dùng được.
+      s.onerror = () => resolve();
+      document.head.appendChild(s);
+    });
+    return _bdlLoading;
+  }
+
   /** Mở modal QR cho đúng `amountVnd` (đã quy đổi bởi `_qrAmountFor`), gắn với
    *  lượt mở khoá đang chờ (`slug`/`callback`). */
   async function _openBankQr(amountVnd, slug, callback) {
@@ -918,6 +937,7 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
     _qrResumeSlug = slug; _qrResumeCallback = callback;
     const el = _qrEl();
     document.getElementById('tpw-qr-box').textContent = 'Đang tải QR…';
+    document.getElementById('tpw-qr-apps').hidden = true;
     document.getElementById('tpw-qr-info').innerHTML = '';
     document.getElementById('tpw-qr-amount').textContent = '';
     document.getElementById('tpw-qr-credits').textContent = '';
@@ -955,6 +975,9 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
       };
       img.src = qrUrl;
       qrBox.appendChild(img);
+      _loadBankDeepLink().then(() => {
+        if (window.BankDeepLink) window.BankDeepLink.render(document.getElementById('tpw-qr-apps'), d, memo);
+      });
 
       document.getElementById('tpw-qr-info').innerHTML =
         '<b>Ngân hàng:</b> ' + _esc(d.bankName || (d.bin ? 'BIN ' + d.bin : '—')) + '<br>' +
