@@ -127,6 +127,10 @@ export const JOBS: JobSpec[] = [
   { key: 'health-check', label: 'Canh prod còn sống', source: 'vercel', everyMinutes: 30,
     schedule: 'mỗi 30 phút', sink: 'Telegram admin', path: '/api/cron/health-check',
     since: '2026-07-29' },
+  // Cảnh báo lỗi JS phía client gần-thời-gian-thực — xem lib/ops/error-alerts.ts.
+  { key: 'error-alerts', label: 'Cảnh báo lỗi JS (client)', source: 'vercel', everyMinutes: 15,
+    schedule: 'mỗi 15 phút', sink: 'Telegram admin + events', path: '/api/cron/error-alerts',
+    since: '2026-09-08' },
   // `since` = ngày 3 cron này vào `vercel.json` (đo bằng dấu vết build đầu tiên
   // trong `cron_runs`: 2026-07-26 08:32Z). BẮT BUỘC với job TUẦN: sau khi dọn
   // 519 dòng rác build-time (migration-purge-fake-cron-runs.sql),
