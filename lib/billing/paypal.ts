@@ -9,8 +9,10 @@
 // chắc chắn trôi lệch; cái nào sửa trước thì đường kia âm thầm giữ bản cũ.
 // ============================================================
 
+import { waitUntil } from '@vercel/functions';
 import { getPackage, quoteCustomVnd } from './packages';
 import { fireServerPurchase } from '../marketing/server-conversions';
+import { alertNewPayment } from '../admin/alert';
 
 // ⚠️ Mặc định là SANDBOX. Chỉ `PAYPAL_MODE=live` mới đập vào tiền thật — và
 // nhầm chiều nào cũng hỏng IM LẶNG: quên set thì khoá LIVE bắn vào sandbox
@@ -214,7 +216,13 @@ export async function settlePayPalTopup(
   // Thưởng giới thiệu tự fire qua trigger trg_referral_check_on_topup.
   // Purchase sang GA4/Meta CHỈ bắn ở đây — đúng lần cộng tiền THẬT ĐẦU TIÊN,
   // dù webhook hay trình duyệt là bên gọi tới. Xem lib/marketing/server-conversions.ts.
-  if (row.credited) fireServerPurchase(userId, orderId, pkg.amountVnd);
+  if (row.credited) {
+    fireServerPurchase(userId, orderId, pkg.amountVnd);
+    // Henry hỏi 2026-09-08: báo ngay khi có người trả tiền (Telegram+WhatsApp).
+    // `waitUntil` giữ tiến trình sống đủ để gửi xong dù caller (webhook) đã trả
+    // response — cùng lý do fireServerPurchase tự bọc waitUntil bên trong.
+    waitUntil(alertNewPayment({ provider: 'paypal', amountVnd: pkg.amountVnd, credits: pkg.credits, userId }));
+  }
   return { ok: true, credits: pkg.credits, balance: row.balance, credited: row.credited, amountVnd: pkg.amountVnd };
 }
 

@@ -11,6 +11,7 @@ import { NextRequest } from 'next/server';
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import { ok, options, parseBody } from '@/lib/cors';
 import { checkTrackRate } from '@/lib/ops/rate-limit';
+import { alertNewSignup } from '@/lib/admin/alert';
 
 const SUPABASE_URL = process.env.SUPABASE_URL!;
 const SERVICE_KEY = process.env.SUPABASE_SERVICE_KEY!;
@@ -268,6 +269,13 @@ async function upsertAttribution(
         utm_campaign: s(first.utm_campaign, 160),
         referrer: s(first.referrer, 400),
         path: s(first.landing_path, 300),
+      });
+      // Henry hỏi 2026-09-08: báo ngay khi có người đăng ký (Telegram+WhatsApp).
+      // Best-effort, KHÔNG chặn beacon — alertNewSignup tự nuốt lỗi bên trong.
+      await alertNewSignup({
+        utmSource: first.utm_source ? String(first.utm_source) : null,
+        utmMedium: first.utm_medium ? String(first.utm_medium) : null,
+        path: first.landing_path ? String(first.landing_path) : null,
       });
     }
   } catch (err) {

@@ -131,6 +131,11 @@ export const JOBS: JobSpec[] = [
   { key: 'error-alerts', label: 'Cảnh báo lỗi JS (client)', source: 'vercel', everyMinutes: 15,
     schedule: 'mỗi 15 phút', sink: 'Telegram admin + events', path: '/api/cron/error-alerts',
     since: '2026-09-08' },
+  // Digest "dùng tool" mỗi 15 phút — xem lib/ops/tool-usage-alerts.ts. Đăng ký
+  // mới + trả tiền báo NGAY tại chokepoint (lib/admin/alert.ts), KHÔNG qua cron.
+  { key: 'tool-usage-alerts', label: 'Digest dùng tool (15 phút)', source: 'vercel', everyMinutes: 15,
+    schedule: 'mỗi 15 phút', sink: 'Telegram + WhatsApp admin + events', path: '/api/cron/tool-usage-alerts',
+    since: '2026-09-08' },
   // `since` = ngày 3 cron này vào `vercel.json` (đo bằng dấu vết build đầu tiên
   // trong `cron_runs`: 2026-07-26 08:32Z). BẮT BUỘC với job TUẦN: sau khi dọn
   // 519 dòng rác build-time (migration-purge-fake-cron-runs.sql),
