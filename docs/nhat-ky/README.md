@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-231 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+232 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 **Bốn file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
 ```bash
@@ -11,7 +11,7 @@ sed -n '120,190p' docs/nhat-ky/2026-08.md    # đọc đúng đoạn, đừng ca
 
 | file | số mục | dung lượng |
 |---|---:|---:|
-| `2026-09.md` | 66 | 311,584 B |
+| `2026-09.md` | 67 | 316,756 B |
 | `2026-08.md` | 148 | 1,024,027 B |
 | `2026-07.md` | 12 | 154,531 B |
 | `track-cu.md` | 5 | 89,354 B |
@@ -25,6 +25,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
+| 1 | 2026-09 | `2026-09.md` | 🔧 QR chuyển khoản tại chỗ cấp THIẾU Lượng — sai đơn giá quy đổi |
 | 1 | 2026-09 | `2026-09.md` | 💳 QR chuyển khoản tại chỗ cho khách vô danh khi bấm "Mở khoá" |
 | 1 | 2026-09 | `2026-09.md` | 🎁 day-con/nguoi-khac/huong-nghiep-tre — khách ĐÃ đăng nhập cũng được xem bản xem trước trước khi trả tiền |
 | 1 | 2026-09 | `2026-09.md` | 🖼️ Vận Hạn 12 Tháng Tới — bỏ bán lẻ từng phần, chuyển sang blur+CTA gộp như Chu Trình Cuộc Đời |
