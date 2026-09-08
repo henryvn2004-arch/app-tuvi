@@ -133,6 +133,11 @@
 .lg-calc summary{cursor:pointer;font-size:12px;color:var(--text-lt);font-weight:600;padding:2px 0}
 .lg-calc summary:hover{color:var(--gold-soft)}
 .lg-calc[open] summary{margin-bottom:8px}
+/* CTA lặp lại trong mỗi phần khoá (2026-09-08, gộp về 1 nút mở cả bó — cùng
+   mẫu app-van-han-nam.html/app-chu-trinh-cuoc-doi.html) — đứng ngay dưới ô
+   giữ chỗ của chính phần đó, để cuộn sâu vẫn còn chỗ bấm. */
+.lg-cta-repeat{margin-top:14px;text-align:center}
+.lg-cta-repeat .btn-go{width:100%;max-width:360px}
 /* Gợi ý tool khác — chỉ hiện cho cung có mối liên hệ thật xác nhận, xem
    CUNG_TOOL_LINKS/cungRelatedHtml(). */
 .lg-related{margin-top:12px;display:flex;flex-direction:column;gap:6px}
@@ -503,9 +508,10 @@ function renderLuan(ls,fd,namxem,forceUnlocked){
   // Ô giá `data-tvp-price` trong mỗi khoá-mini (sectionLockHtml) vừa được chèn
   // — trang chỉ tự điền giá LÚC TẢI, mấy ô này sinh ra SAU đó nên phải gọi lại.
   TuviPaywall.fillPriceSlots(document.getElementById('lgBody'));
-  // `part` có mặt (khoá-mini của MỘT cung, phan>1) → mở đúng phần đó (12 Lượng).
-  // `part` vắng mặt (banner đầu trang, hoặc khoá-mini của phần 1) → mở cả bó
-  // (150 Lượng), hành vi CŨ giữ nguyên.
+  // `sectionLockHtml`/`wireSectionLocks` không còn phần tử `[data-tpw-seclock]`
+  // nào để bắt (mở-từng-phần bán lẻ đã bỏ, xem `buildPhanSection`) — giữ lời
+  // gọi này VÔ HẠI (no-op) phòng khi có lượt roll-back, cùng quy ước
+  // app-chu-trinh-cuoc-doi.html/app-van-han-nam.html.
   TuviPaywall.wireSectionLocks(document.getElementById('lgBody'), function(part){
     return part!=null ? _unlockOnePart(part) : initiateLuanGiaiChuyenSau();
   });
@@ -652,18 +658,15 @@ function buildPhanSection(phan,label,ls,locked){
     bodyHtml=pre?('<details class="lg-calc"><summary>Xem cơ sở tính toán</summary>'+raw+'</details>'):raw;
     tag='';
   }
-  // Khoá-mini (ẨN mặc định) — mỗi phần đều CÓ một đoạn luận riêng do hệ thống viết,
-  // nhưng chỉ hiện khối này SAU khi biết chắc phần đó CHƯA mở (`_paintSecLocks`,
-  // gọi từ `_renderUnlockBlock`). `part:phan` (chỉ gắn khi phan>1, phần 1 luôn
-  // free nên không có khối này) → bấm chỉ mở ĐÚNG phần đó (12 Lượng), KHÔNG
-  // còn mở cả bó — khác nút "✦ Luận giải chuyên sâu…" ở banner đầu trang, nút
-  // đó VẪN mở trọn 150 Lượng cho ai muốn xem hết luôn. `wireSectionLocks` ở
-  // dưới đọc lại `part` để rẽ nhánh đúng hàm.
-  // `part` chỉ gắn cho phần TRẢ PHÍ (> FREE_PHAN) → bấm mở đúng phần đó
-  // (12 Lượng). Phần 1..FREE_PHAN nay đọc miễn phí nên không có gì để mời mua,
-  // `_paintSecLocks` cũng bỏ qua chúng.
+  // CTA lặp lại (ẨN mặc định, bật bởi `_paintSecLocks` khi `_renderUnlockBlock`
+  // xác nhận CHƯA mở) — Henry 2026-09-08: bỏ hẳn mở-từng-phần bán lẻ (12
+  // Lượng/phần), gộp về ĐÚNG 1 nút mở cả bó (150 Lượng), cùng quyết định đã
+  // áp cho chu-trinh-cuoc-doi/van-han-nam. Gọi THẲNG `initiateLuanGiaiChuyenSau()`
+  // — không còn `part` để rẽ nhánh, mọi CTA trong trang này giờ mở trọn bó.
+  // `_unlockOnePart`/`_partSlug` giữ nguyên trong file (code chết vô hại,
+  // phòng lượt roll-back), cùng quy ước đã dùng khi CTCD/van-han-nam bỏ bán lẻ.
   var lock=phan>FREE_PHAN
-    ? TuviPaywall.sectionLockHtml({id:'sec-ai-lock-'+phan,product:'laso',part:phan,cta:'Mở phần này'})
+    ? '<div class="lg-cta-repeat" id="lg-cta-'+phan+'"><button class="btn-go" type="button" onclick="initiateLuanGiaiChuyenSau()">✦ Mở luận giải chuyên sâu — <span data-tvp-price="laso">…</span> Lượng →</button></div>'
     : '';
   // Gợi ý tool khác CHỈ hiện khi phần này KHÔNG bị khoá — chưa trả tiền thì
   // luận giải của chính cung đó còn chưa đọc được, mời sang tool khác lúc này
@@ -890,10 +893,19 @@ function sampleToForm(){
 // thái: `true` ngay khi `_renderUnlockBlock` xác nhận CHƯA mở; `false` ngay
 // khi bắt đầu sinh AI (đã trả tiền, không còn gì để mời).
 function _paintSecLocks(show){
+  // `sec-ai-lock-`+p không còn phần tử nào khớp (khoá-mini bán lẻ đã bỏ) — vòng
+  // lặp giữ nguyên phòng lượt roll-back, cùng quy ước CTCD/van-han-nam.
+  // `_hideCtaLg` mới là việc THẬT: gỡ CTA lặp lại khi bắt đầu sinh AI (đã trả
+  // tiền, không còn gì để mời).
   for(var p=FREE_PHAN+1;p<=TONG_PHAN;p++){
     var el=document.getElementById('sec-ai-lock-'+p);
     if(el) el.style.display=show?'flex':'none';
+    if(!show) _hideCtaLg(p);
   }
+}
+function _hideCtaLg(p){
+  var el=document.getElementById('lg-cta-'+p);
+  if(el) el.style.display='none';
 }
 function wirePhanAsk(root){
   root.querySelectorAll('[data-ask]').forEach(function(el){

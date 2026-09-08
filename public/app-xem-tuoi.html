@@ -210,6 +210,34 @@ var MODE=MODES[MODE_KEY];
 // + parity giờ sinh lịch sử với standalone) ──
 TuviForm.render('a-fields', {prefix:'a', mode:'compact', gioitinh:'nam'});
 TuviForm.render('b-fields', {prefix:'b', mode:'compact', gioitinh:'nu'});
+
+// Quay lại từ lượt nạp Lượng (xem `TuviPaywall._insufficient`/`resumeIfPending`)
+// sau khi đã hết Lượng ngay lúc mở khoá — trang này là MULTI-PAGE (điều hướng
+// CỨNG sang /topup.html rồi quay lại), không phải SPA, nên cả hai form A/B vừa
+// gõ MẤT SẠCH khi tải lại. `resumeIfPending` (gọi trong `initXemTuoiGate`) chỉ
+// tự chạy tiếp được NẾU đã có kết quả so tuổi trên màn hình — thiếu bước này
+// thì khách nạp tiền xong quay về gặp lại form TRỐNG, phải gõ lại cả hai người
+// rồi bấm mở khoá LẦN NỮA. Cùng mẫu `LG_RESUME_KEY` của app-luan-giai.html:
+// nguồn ghi là `doCompat()` tự lưu mỗi lượt so tuổi thành công, điều kiện đọc
+// là `?tpwResume=1` (do topup.html gắn vào sau khi trả tiền thành công).
+var XT_RESUME_KEY='xt_pending_resume';
+(function(){
+  var url;
+  try{ url=new URL(location.href); }catch(e){ return; }
+  if(url.searchParams.get('tpwResume')!=='1') return;
+  var raw;
+  try{ raw=sessionStorage.getItem(XT_RESUME_KEY); sessionStorage.removeItem(XT_RESUME_KEY); }catch(e){ return; }
+  if(!raw) return;
+  var saved;
+  try{ saved=JSON.parse(raw); }catch(e){ return; }
+  if(!saved||!saved.a||!saved.b||!saved.a.ngay||!saved.b.ngay) return;
+  window.__tvmbXtAutoDone=true; // chặn `_pageInit()` chạy trùng lượt restore lịch sử bên dưới
+  TuviForm.setData(saved.a,'a'); TuviForm.setData(saved.b,'b');
+  var runAutoCompat=function(){ if(typeof doCompat==='function') doCompat(); };
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', runAutoCompat);
+  else runAutoCompat();
+})();
+
 function meterColor(s){ return s>=75?'var(--green)':s>=55?'var(--blue)':s>=35?'var(--gold-soft)':'var(--red)'; }
 function facColor(s){ return s>=8?'var(--green)':s>=6?'var(--blue)':s>=4?'var(--gold-soft)':'var(--red)'; }
 function verdictLabel(s){ return s>=75?'Rất hợp':s>=55?'Khá hợp':s>=35?'Bình hòa':'Cần lưu ý'; }
@@ -241,6 +269,11 @@ function doCompat(){
   var btn=document.getElementById('btnGo');
   var A=readPerson('a'),B=readPerson('b');
   if(!A.ngay||!A.thang||!A.nam||!B.ngay||!B.thang||!B.nam){ alert('Vui lòng nhập đầy đủ ngày, tháng, năm sinh cho cả hai người.'); return; }
+  // Lưu lại NGAY để `?tpwResume=1` (quay về sau khi nạp Lượng, xem IIFE
+  // `XT_RESUME_KEY` ở trên) khôi phục được đúng hai form này mà không cần gõ
+  // lại — ghi mỗi lượt so tuổi thành công, không riêng lượt sắp hết Lượng, vì
+  // lúc gõ form ta chưa biết trước lượt nào sẽ hết Lượng.
+  try{ sessionStorage.setItem(XT_RESUME_KEY, JSON.stringify({a:A, b:B})); }catch(e){ /* ignore */ }
   var namxem=new Date().getFullYear();
   btn.disabled=true;btn.textContent=MODE.btnBusy;
   try{
@@ -647,12 +680,16 @@ function buildPhanPrompt(idx,m,result){
 async function initXemTuoiGate(result,nameA,nameB){
   if(!PAID_MODES[MODE_KEY])return;
   _compatResult=result; _compatNameA=nameA; _compatNameB=nameB;
+  _pendingSlug=buildSlug(result,MODE_KEY);
   _xemTuoiStore={};
   document.getElementById('xtUnlock').style.display='block';
   document.getElementById('xtProgress').style.display='none';
   // Banner đầu trang cuộn qua là mất — bật luôn khoá-mini của cả 9 phần để
   // vẫn còn chỗ mở dù đang đọc phần nào.
   _paintSecLocksXt(true);
+  // Vừa quay về từ lượt nạp Lượng thành công (xem IIFE `XT_RESUME_KEY` ở đầu
+  // file) → tự chạy tiếp, khách không phải bấm "Luận giải chuyên sâu" lần hai.
+  TuviPaywall.resumeIfPending(_pendingSlug, initiateXemTuoiChuyenSau);
 }
 
 async function initiateXemTuoiChuyenSau(){
@@ -765,6 +802,7 @@ function applyMode(){
   document.getElementById('btnGo').textContent=MODE.btn;
 }
 function _pageInit(){ applyMode();
+  if(window.__tvmbXtAutoDone) return; // IIFE `XT_RESUME_KEY` ở đầu file đã tự chạy — khỏi chạy trùng
   // Khôi phục phiên lịch sử: điền lại form 2 người rồi tính lại (FREE) → replay rail.
   var r=window.Shell&&Shell.pendingRestore&&Shell.pendingRestore();
   if(r&&r.form){ Shell.fillForm(r.form); TuviForm._update('a'); TuviForm._update('b'); doCompat(); }
