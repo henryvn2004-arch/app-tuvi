@@ -862,7 +862,8 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
         '<div id="tpw-qr-apps" hidden></div>' +
         '<div class="tpw-qr-info" id="tpw-qr-info"></div>' +
         '<div class="tpw-qr-hint">Mở app ngân hàng → Quét QR hoặc chuyển khoản thủ công<br>' +
-          '<span class="tpw-qr-warn">⚠ Chuyển đủ số tiền vào đúng số TK ở trên — nội dung CK ghi gì cũng được, hệ thống tự nhận theo số TK</span></div>' +
+          '<span class="tpw-qr-warn">⚠ Chuyển ĐÚNG số tiền ở trên (không hơn, không kém) vào đúng số TK — nội dung CK ghi gì cũng được, hệ thống tự nhận theo số TK</span><br>' +
+          'Chuyển xong, quay lại tab này — hệ thống tự nhận diện và chạy tiếp trong vài giây, không cần bấm gì thêm.</div>' +
         '<div class="tpw-qr-status" id="tpw-qr-status"></div>' +
         '<button class="tpw-qr-btn" type="button" id="tpw-qr-manual">Tôi đã chuyển khoản</button>' +
       '</div>';
