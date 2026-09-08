@@ -11,7 +11,7 @@ sed -n '120,190p' docs/nhat-ky/2026-08.md    # đọc đúng đoạn, đừng ca
 
 | file | số mục | dung lượng |
 |---|---:|---:|
-| `2026-09.md` | 70 | 328,765 B |
+| `2026-09.md` | 70 | 332,624 B |
 | `2026-08.md` | 148 | 1,024,027 B |
 | `2026-07.md` | 12 | 154,531 B |
 | `track-cu.md` | 5 | 89,354 B |
@@ -25,7 +25,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
-| 1 | 2026-09 | `2026-09.md` | 🐛 QR chuyển khoản tại chỗ nổ LẦN HAI thật — `_qrPoll` bị gọi trùng, không phải sai công thức giá |
+| 1 | 2026-09 | `2026-09.md` | 🐛 QR chuyển khoản tại chỗ nổ LẦN HAI thật — gọi trùng do race, vá tận gốc CẢ topup.html |
 | 1 | 2026-09 | `2026-09.md` | 📝 QR chuyển khoản tại chỗ: chốt KHÔNG tự xử lý chuyển dư/thiếu, chỉ thêm chữ nhắc |
 | 1 | 2026-09 | `2026-09.md` | 🔧 QR chuyển khoản tại chỗ cấp THIẾU Lượng — sai đơn giá quy đổi |
 | 1 | 2026-09 | `2026-09.md` | 🐛 #760 kiểm tra lại: QR tại chỗ + deep link app ngân hàng — nạp thành công nhưng "chạy ra blank" |
