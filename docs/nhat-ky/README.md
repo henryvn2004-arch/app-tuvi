@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-237 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+238 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 **Bốn file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
 ```bash
@@ -11,7 +11,7 @@ sed -n '120,190p' docs/nhat-ky/2026-08.md    # đọc đúng đoạn, đừng ca
 
 | file | số mục | dung lượng |
 |---|---:|---:|
-| `2026-09.md` | 72 | 339,360 B |
+| `2026-09.md` | 73 | 341,562 B |
 | `2026-08.md` | 148 | 1,024,027 B |
 | `2026-07.md` | 12 | 154,531 B |
 | `track-cu.md` | 5 | 89,354 B |
@@ -25,6 +25,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
+| 1 | 2026-09 | `2026-09.md` | 💸 laso: mua-từng-phần rẻ hơn mua-trọn 94 Lượng — vá bằng `credits_per_part=NULL` |
 | 1 | 2026-09 | `2026-09.md` | 🐛 PDF "Xem mẫu" của 3 tool in tên khoá JSON thô thay vì tiêu đề tiếng Việt |
 | 1 | 2026-09 | `2026-09.md` | 🖼️ Luận Giải Lá Số: bỏ nốt mở-từng-phần bán lẻ — chỗ sót lại của lần hỏi trước |
 | 1 | 2026-09 | `2026-09.md` | 🐛 QR chuyển khoản tại chỗ nổ LẦN HAI thật — gọi trùng do race, vá tận gốc CẢ topup.html |
