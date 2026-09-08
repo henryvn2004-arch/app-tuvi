@@ -9,9 +9,16 @@
    App ngân hàng" — trích: "hiện tại sẽ chưa thể tự động điền các thông tin
    người nhận tiền và số tiền"). Đã đo thật trên máy: bấm vào app KHÔNG có gì
    được điền sẵn, kể cả 5 app JSON báo cờ `autofill:1`. Vì vậy nút ở đây COPY
-   SẴN nội dung CK vào clipboard ngay khi bấm, trước khi mở app — khách dán
-   thay vì phải nhớ/gõ tay. Đừng quảng cáo là "tự điền", chỉ là "mở app + đã
-   copy nội dung".
+   SẴN SỐ TÀI KHOẢN vào clipboard ngay khi bấm, trước khi mở app — khách dán
+   thay vì phải nhớ/gõ tay số TK dài, ngẫu nhiên, mỗi đơn một số khác nhau.
+
+   🔑 KHÔNG copy nội dung CK: `app/api/bank-webhook/route.ts` + RPC
+   `bank_settle_topup` chốt đơn CHỈ bằng `orderCode` (PayOS tự khớp qua SỐ TÀI
+   KHOẢN ẢO — mỗi đơn một số riêng, KHÔNG dùng chung) và số tiền — không đọc
+   nội dung CK ở đâu cả. Nội dung CK mặc định của app ngân hàng vẫn chốt được
+   bình thường, nên số TK (định tuyến tiền đúng đơn) mới là thứ BẮT BUỘC đúng,
+   không phải nội dung. Đừng quảng cáo là "tự điền", chỉ là "mở app + đã copy
+   số TK để dán".
 
    API: window.BankDeepLink.render(container, d, memo)
      - container: một <div> rỗng, module tự vẽ nhãn + hàng nút vào bên trong
@@ -80,12 +87,12 @@
     container.classList.add('bdl-wrap');
     var ba = encodeURIComponent(d.accountNumber) + '@' + d.bankCode;
     container.innerHTML =
-      '<div class="bdl-label">Hoặc mở app ngân hàng (đã copy sẵn nội dung CK, dán vào app):</div>' +
+      '<div class="bdl-label">Hoặc mở app ngân hàng (đã copy sẵn số TK, dán vào app):</div>' +
       '<div class="bdl-row">' + BANK_APPS.map(function (b) {
         var href = 'https://dl.vietqr.io/pay?app=' + b.app + '&ba=' + ba
           + '&am=' + encodeURIComponent(d.amountVND) + '&tn=' + encodeURIComponent(memo)
           + '&bn=' + encodeURIComponent(d.accountName || '');
-        return '<a class="bdl-app-btn" href="' + esc(href) + '" target="_blank" rel="noopener" data-memo="' + esc(memo) + '">'
+        return '<a class="bdl-app-btn" href="' + esc(href) + '" target="_blank" rel="noopener" data-copy="' + esc(d.accountNumber) + '">'
           + '<img src="https://cdn.vietqr.io/img/' + b.logo + '.png" alt="' + esc(b.name) + '" loading="lazy">'
           + '<span>' + esc(b.name) + '</span></a>';
       }).join('') + '</div>';
@@ -93,8 +100,8 @@
       a.addEventListener('click', function () {
         var label = a.querySelector('span');
         var original = label.textContent;
-        copyToClipboard(a.getAttribute('data-memo')).then(function () {
-          label.textContent = 'Đã copy ND';
+        copyToClipboard(a.getAttribute('data-copy')).then(function () {
+          label.textContent = 'Đã copy Số TK';
           setTimeout(function () { label.textContent = original; }, 1500);
         }).catch(function () {});
       });
