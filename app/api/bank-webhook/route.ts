@@ -2,7 +2,9 @@
 // payOS webhook — tự động add credits khi user chuyển khoản thành công
 import { NextRequest } from 'next/server';
 import crypto from 'crypto';
+import { waitUntil } from '@vercel/functions';
 import { fireServerPurchase } from '@/lib/marketing/server-conversions';
+import { alertNewPayment } from '@/lib/admin/alert';
 
 const CHECKSUM_KEY = process.env.PAYOS_CHECKSUM_KEY!;
 const SUPABASE_URL = process.env.SUPABASE_URL!;
@@ -93,8 +95,14 @@ export async function POST(request: NextRequest) {
       );
       const uidRows = uidRes.ok ? ((await uidRes.json()) as { user_id: string }[]) : [];
       const userId = uidRows[0]?.user_id;
-      if (userId) fireServerPurchase(userId, orderCode, amountVnd);
-      else console.error('[bank-webhook] không tìm được user_id để bắn Purchase, orderCode=', orderCode);
+      if (userId) {
+        fireServerPurchase(userId, orderCode, amountVnd);
+        // Henry hỏi 2026-09-08: báo ngay khi có người trả tiền (Telegram+WhatsApp).
+        // `waitUntil` giữ tiến trình sống đủ để gửi xong dù response đã trả về.
+        waitUntil(alertNewPayment({ provider: 'bank', amountVnd, credits: row.credits, userId }));
+      } else {
+        console.error('[bank-webhook] không tìm được user_id để bắn Purchase, orderCode=', orderCode);
+      }
     } catch (e) {
       console.error('[bank-webhook] lỗi tra user_id cho Purchase', e);
     }

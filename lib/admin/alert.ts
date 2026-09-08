@@ -74,3 +74,54 @@ export async function alertNewFeedback(opts: {
     WA_NUMBER ? waSendText(WA_NUMBER, text) : Promise.resolve(),
   ]);
 }
+
+/**
+ * Cảnh báo mỗi khi có TÀI KHOẢN MỚI đăng ký — best-effort, gọi ngay tại
+ * chokepoint DUY NHẤT ghi event `signup` (app/api/track/route.ts
+ * `upsertAttribution`, nhánh tài khoản lần đầu thấy + còn "tươi"). Henry hỏi
+ * 2026-09-08: muốn biết ngay lúc có người đăng ký, không phải chờ mở panel.
+ */
+export async function alertNewSignup(opts: {
+  utmSource?: string | null;
+  utmMedium?: string | null;
+  path?: string | null;
+}): Promise<void> {
+  if (!TG_CHAT_ID && !WA_NUMBER) return;
+  const time = new Date().toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' });
+  const src = [opts.utmSource, opts.utmMedium].filter(Boolean).join('/') || 'trực tiếp';
+  const text =
+    `🆕 Có tài khoản MỚI đăng ký\n` +
+    `Nguồn: ${src}\n` +
+    (opts.path ? `Trang vào: ${opts.path}\n` : '') +
+    `Lúc: ${time}`;
+  await Promise.allSettled([
+    TG_CHAT_ID ? tgSendMessage(TG_CHAT_ID, text) : Promise.resolve(),
+    WA_NUMBER ? waSendText(WA_NUMBER, text) : Promise.resolve(),
+  ]);
+}
+
+/**
+ * Cảnh báo mỗi khi có người TRẢ TIỀN THẬT (nạp Lượng) — best-effort, gọi tại
+ * đúng hai chokepoint cộng Lượng lần ĐẦU TIÊN cho một đơn (`row.credited`):
+ * `lib/billing/paypal.ts` `settlePayPalTopup` và `app/api/bank-webhook/route.ts`
+ * — cùng chỗ đã bắn Purchase GA4/Meta (`fireServerPurchase`), KHÔNG phải mọi
+ * lần webhook được gọi (webhook có thể gọi lại nhiều lần cho cùng một đơn).
+ */
+export async function alertNewPayment(opts: {
+  provider: 'bank' | 'paypal';
+  amountVnd: number;
+  credits: number;
+  userId: string;
+}): Promise<void> {
+  if (!TG_CHAT_ID && !WA_NUMBER) return;
+  const time = new Date().toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' });
+  const text =
+    `💰 CÓ NGƯỜI TRẢ TIỀN — ${opts.provider === 'bank' ? 'chuyển khoản ngân hàng' : 'PayPal'}\n` +
+    `Số tiền: ${opts.amountVnd.toLocaleString('vi-VN')}đ → +${opts.credits} Lượng\n` +
+    `User: ${opts.userId}\n` +
+    `Lúc: ${time}`;
+  await Promise.allSettled([
+    TG_CHAT_ID ? tgSendMessage(TG_CHAT_ID, text) : Promise.resolve(),
+    WA_NUMBER ? waSendText(WA_NUMBER, text) : Promise.resolve(),
+  ]);
+}
