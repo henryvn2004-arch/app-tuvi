@@ -25,6 +25,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
+| 1 | 2026-09 | `2026-09.md` | 🐛 PDF "Xem mẫu" của 3 tool in tên khoá JSON thô thay vì tiêu đề tiếng Việt |
 | 1 | 2026-09 | `2026-09.md` | 📝 QR chuyển khoản tại chỗ: chốt KHÔNG tự xử lý chuyển dư/thiếu, chỉ thêm chữ nhắc |
 | 1 | 2026-09 | `2026-09.md` | 🔧 QR chuyển khoản tại chỗ cấp THIẾU Lượng — sai đơn giá quy đổi |
 | 1 | 2026-09 | `2026-09.md` | 🐛 #760 kiểm tra lại: QR tại chỗ + deep link app ngân hàng — nạp thành công nhưng "chạy ra blank" |
