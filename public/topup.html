@@ -1262,6 +1262,18 @@ loadPackages().then(loadToolPricing).then(renderPendingBanner);
     try {
       const d = await (await fetch(`/api/payment?action=check-bank&orderCode=${_oc}`)).json();
       if (d.paid) {
+        // Khoá NGAY, trước bất kỳ `await` nào khác — `checkBankPoll` bị gọi
+        // TRÙNG từ hai nguồn độc lập (setInterval + visibilitychange ở trên,
+        // CẢ HAI cùng cố ý tồn tại vì lý do throttle-tab-nền đã ghi) trong
+        // đúng khoảng chờ 1500ms bên dưới, lúc `_oc` vẫn còn giá trị cũ (chỉ
+        // bị `closeBankModal()` xoá SAU khi hết chờ). Đây CHÍNH LÀ nguyên
+        // nhân gốc của việc Purchase từng bắn trùng (comment cũ ngay dưới) —
+        // hồi đó chỉ vá triệu chứng (dời bắn Purchase sang server) chứ chưa
+        // vá lỗ hổng gọi trùng này; cùng mẫu bị chép sang QR-tại-chỗ
+        // (`tuvi-paywall.js` `_qrPoll`) và gây `requireCredits()` chạy hai
+        // lần thật (2026-09-08, Henry báo trên `day-con`). Vá tận gốc ở ĐÂY.
+        if (!_oc) return;
+        _oc = null;
         clearInterval(_timer);
         status('check-circle', 'Thanh toán thành công! Đang cập nhật…');
         // Purchase KHÔNG bắn ở đây nữa — cùng lý do với checkCancelledPayment()

@@ -899,6 +899,21 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
       const r = await fetch('/api/payment?action=check-bank&orderCode=' + _qrOrderCode);
       const d = await r.json();
       if (d.paid) {
+        // Khoá NGAY, trước bất kỳ `await` nào khác — `_qrPoll` có thể bị gọi
+        // TRÙNG từ hai nguồn độc lập (setInterval 3s + visibilitychange khi
+        // quay lại tab) trong đúng khoảng chờ 1200ms bên dưới, lúc `_qrOrderCode`
+        // vẫn còn giá trị cũ (chỉ bị `_closeQr()` xoá SAU khi hết chờ). Không
+        // khoá thì CẢ HAI lượt gọi đều thấy `paid:true` và cùng gọi
+        // `requireCredits(slug, callback)` — lượt đầu trừ Lượng chạy tool
+        // xong, lượt SAU đọc lại số dư qua một request riêng (không cùng
+        // transaction với lượt trừ) nên đọc hụt, kết luận "thiếu Lượng" và tự
+        // mở MỘT QR MỚI không ai yêu cầu. Bắt được trên prod: đơn 87 Lượng/
+        // 50.000đ nổi lên 1,4 giây sau khi đơn 100 Lượng vừa trừ thành công
+        // cho `day-con` (Henry báo 2026-09-08). Dòng dưới cho lượt gọi trùng
+        // thấy `_qrOrderCode` đã rỗng và tự thoát ở `if (!_qrOrderCode) return`
+        // đầu hàm.
+        if (!_qrOrderCode) return;
+        _qrOrderCode = null;
         clearInterval(_qrTimer); _qrTimer = null;
         _qrStatus('Thanh toán thành công! Đang tiếp tục…', false);
         const slug = _qrResumeSlug, callback = _qrResumeCallback;
