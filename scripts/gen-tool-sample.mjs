@@ -216,6 +216,22 @@ const TOOL_CONFIGS = {
     // là mọi trường chữ CÒN LẠI.
     freeFields: ['conNguoi', 'chatNoi'],
     fieldOrder: DAY_CON_SCHEMA.propertyOrdering,
+    // Nhãn TRÙNG với `.res-block-title` thật trong app-day-con.html — PDF mẫu
+    // phải đọc như PDF thật, không phải in tên khoá JSON thô.
+    fieldLabels: {
+      conNguoi: 'Con Là Người Thế Nào',
+      chatNoi: 'Chất Nổi Trội',
+      dinhHuong: 'Định Hướng',
+      vaoBangGi: 'Vào Con Bằng Cách Nào',
+      khoaLai: 'Điều Làm Con Khoá Lại',
+      nenLam: 'Nên Làm (Từ Tối Nay)',
+      tranhLam: 'Nên Tránh (Từ Tối Nay)',
+      hoatDong: 'Hoạt Động Nên Cho Con Thử',
+      loLang: 'Điều Bạn Đang Lo',
+      changNay: 'Các Chặng Đi Học',
+      voiChaMe: 'Hai Bên Với Nhau',
+      motCau: 'Nếu Chỉ Nhớ Một Câu',
+    },
     outJson: join(ROOT, 'public/samples/day-con-dummy.json'),
     pdfTitle: 'Dạy Con Theo Lá Số — Bản mẫu',
     storagePath: 'mau-day-con.pdf',
@@ -242,6 +258,20 @@ const TOOL_CONFIGS = {
     // TOÀN BỘ các trường chữ.
     freeFields: [],
     fieldOrder: NGUOI_KHAC_SCHEMA.propertyOrdering,
+    // Nhãn TRÙNG với `.res-block-title` thật trong app-nguoi-khac.html.
+    // `keHoach` có tiêu đề ĐỘNG theo `viec` trên trang thật (`keHoachTitle`)
+    // — bản mẫu không có lựa chọn việc thật của khách nên dùng nhãn chung.
+    fieldLabels: {
+      keHoach: 'Cách Đi Cho Việc Đang Cần',
+      tinhKhi: 'Con Người Này Vận Hành Thế Nào',
+      chamNoc: 'Điều Làm Họ Khó Chịu',
+      coiTrong: 'Điều Họ Coi Trọng',
+      nenNoi: 'Nên Nói',
+      tranhNoi: 'Tránh Nói',
+      thoiDiem: 'Lúc Này Họ Đang Ở Đâu',
+      voiBan: 'Người Này Với Bạn',
+      motCau: 'Nếu Chỉ Nhớ Một Câu',
+    },
     outJson: join(ROOT, 'public/samples/nguoi-khac-dummy.json'),
     pdfTitle: 'Lá Số Người Khác — Bản mẫu',
     storagePath: 'mau-nguoi-khac.pdf',
@@ -264,6 +294,17 @@ const TOOL_CONFIGS = {
     },
     freeFields: [],
     fieldOrder: HUONG_NGHIEP_TRE_SCHEMA.propertyOrdering,
+    // Nhãn TRÙNG với `.res-block-title` thật trong app-huong-nghiep-tre.html.
+    fieldLabels: {
+      nhinRaCon: 'Nhìn Ra Con',
+      viSaoHuongNay: 'Vì Sao Hướng Này',
+      batDauTuDau: 'Bắt Đầu Từ Đâu (Làm Trong Tháng Này)',
+      tranhLam: 'Thôi Làm',
+      noiTheNao: 'Mở Lời Với Con Thế Nào',
+      loLang: 'Điều Bạn Đang Lo',
+      mocKeTiep: 'Sang Lứa Sau Thì Đổi Gì',
+      motCau: 'Nếu Chỉ Nhớ Một Câu',
+    },
     outJson: join(ROOT, 'public/samples/huong-nghiep-tre-dummy.json'),
     pdfTitle: 'Hướng Nghiệp Sớm Cho Con — Bản mẫu',
     storagePath: 'mau-huong-nghiep-tre.pdf',
@@ -477,7 +518,7 @@ async function runJsonTool(toolId, cfg, ls, store, rawCachePath) {
 
   if (!store.payload) await gen();
 
-  const FIELD_LABELS = {}; // không có nhãn tiếng Việt sẵn theo khoá — in tên khoá thô, đủ cho bản mẫu
+  const FIELD_LABELS = cfg.fieldLabels || {};
   const bodyHtml = cfg.fieldOrder
     .filter((k) => store.payload[k])
     .map((k) => {
