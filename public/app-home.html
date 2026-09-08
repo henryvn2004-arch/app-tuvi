@@ -255,7 +255,7 @@
 .today-me{display:flex;align-items:center;gap:14px;width:100%;text-align:left;margin-top:14px;
   background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:13px 15px}
 .tme-av{width:52px;height:52px;border-radius:50%;flex:0 0 auto;background:var(--paper-2);
-  border:1px solid var(--line);display:flex;align-items:center;justify-content:center;color:var(--text-lt)}
+  border:1px solid var(--line);display:flex;align-items:center;justify-content:center;color:var(--text-lt);object-fit:cover}
 .tme-av svg{width:28px;height:28px}
 @container home (max-width:600px){.today-me{margin-top:10px;padding:11px 12px;gap:11px}
   .tme-av{width:40px;height:40px}.tme-av svg{width:22px;height:22px}}
@@ -1240,12 +1240,24 @@ function renderAllTools(d) {
       }).slice(0,3);
   }
   /* `gioTot[].viec` của engine dài 3 vế — ô Giờ đẹp chỉ có chỗ cho một NHÃN.
-     Khoá bằng `gioTot[].sao` (12 thần), API đã trả sẵn. */
-  var GIO_NHAN={'Thanh Long':'Việc lớn','Minh Đường':'Gặp gỡ','Kim Quỹ':'Tiền bạc',
-    'Thiên Đức':'Gia đạo','Ngọc Đường':'Thi cử','Tư Mệnh':'Khởi sự'};
+     Khoá bằng `gioTot[].sao` (12 thần), API đã trả sẵn.
+     🔑 Giờ Hoàng Đạo tính THEO CHI NGÀY (tuvi-engine/src/ngay-tot/engine.ts,
+     `computeGio`), độc lập hoàn toàn với hệ Ngày Kỵ (Tam Nương/Nguyệt Kỵ/Dương
+     Công tính theo NGÀY ÂM LỊCH) — hai hệ cổ pháp riêng, không sai. Nhưng nhãn
+     KHÔNG được trùng đúng chữ mà ô "Cần tránh" đang cấm ("việc lớn", "khởi
+     sự"), không thì đọc như hai ô chọi nhau ngay trên cùng một thẻ.*/
+  var GIO_NHAN={'Thanh Long':'Hanh thông','Minh Đường':'Gặp gỡ','Kim Quỹ':'Tiền bạc',
+    'Thiên Đức':'Gia đạo','Ngọc Đường':'Thi cử','Tư Mệnh':'Xuất hành'};
   /* Vế đuôi ngắn của "Vận riêng" — rút từ bảng QH đầy đủ bên dưới. */
   var QH_NGAN={'duoc-sinh':'có người giúp','hoa':'tự chủ được','sinh':'hao lực, giữ sức',
     'bi-khac':'dễ vướng, làm chậm','khac':'chủ động, tốn công'};
+  /* Tên cung → slug ảnh minh hoạ (public/img/van-rieng/<slug>-<sac-thai>.webp).
+     12 cung CỐ ĐỊNH theo TEN_CUNG (tuvi-engine/src/constants.ts) — khớp đúng
+     key của CUNG_LINH_VUC trong lib/engine/van-ngay.ts, không phải bảng riêng. */
+  var CUNG_SLUG={'Mệnh':'menh','Phụ Mẫu':'phu-mau','Phúc Đức':'phuc-duc',
+    'Điền Trạch':'dien-trach','Quan Lộc':'quan-loc','Nô Bộc':'no-boc',
+    'Thiên Di':'thien-di','Tật Ách':'tat-ach','Tài Bạch':'tai-bach',
+    'Tử Tức':'tu-tuc','Phu Thê':'phu-the','Huynh Đệ':'huynh-de'};
   /* Tên màu (caNhan.mauCaNhan) → mã màu để chấm tròn. */
   var MAU_HEX={'xanh lá':'#2F8F55','xanh lục':'#2F8F55','xanh ngọc':'#4FBFA8','xanh dương':'#2E6FBF',
     'xanh nước biển':'#1F5C9E','đen':'#22262B','trắng':'#EDEDE8','bạc':'#C9CCD1','xám':'#9AA0A6',
@@ -1383,7 +1395,26 @@ function renderAllTools(d) {
       // ngày↔bản mệnh — không thì tail có thể đọc "chủ động, tốn công" ngay
       // cạnh ô Cần tránh đang ghi "cổ pháp kiêng khởi sự".
       var isKy=key==='ky';
-      var tail=c.bixung?'xung chính tuổi bạn':(isKy?'ngày kỵ, hoãn việc lớn':(QH_NGAN[c.quanHeHanh]||''));
+      // Card hiện ra cho người thường đọc — không nhắc thuật ngữ (tên cung, tên
+      // sao Hán Việt, văn cách cục cổ). `loai` cách cục (tốt/xấu/trung) dịch
+      // thẳng sang kết luận ngắn, mạnh, khẳng định; ưu tiên trên ngũ hành vì
+      // cách cục đọc đúng cung đang được chiếu, ngũ hành chỉ là suy diễn chung.
+      var LOAI_CAU={'tốt':'thuận lợi','xấu':'cần thận trọng','trung':'bình ổn'};
+      var tail=c.bixung?'xung chính tuổi bạn':(isKy?'ngày kỵ, hoãn việc lớn'
+        :c.cachCuc?(LOAI_CAU[c.cachCuc.loai]||'bình ổn'):(QH_NGAN[c.quanHeHanh]||''));
+      // Sắc thái tranh minh hoạ (tot/binh-thuong/xau) — CÙNG một thứ tự ưu tiên
+      // với `tail` phía trên, để tranh không bao giờ "nói khác" chữ hiển thị.
+      var LOAI_SAC={'tốt':'tot','xấu':'xau','trung':'binh-thuong'};
+      var QH_SAC={'duoc-sinh':'tot','hoa':'tot','sinh':'binh-thuong','bi-khac':'xau','khac':'xau'};
+      var sacThai=c.bixung||isKy?'xau'
+        :c.cachCuc?(LOAI_SAC[c.cachCuc.loai]||'binh-thuong')
+        :(QH_SAC[c.quanHeHanh]||'binh-thuong');
+      var cungSlug=CUNG_SLUG[c.cungNhatHan];
+      var avImg=cungSlug?'/img/van-rieng/'+cungSlug+'-'+sacThai+'.webp':'';
+      // Nhãn đầu dòng: mảng đời sống NGẮN (vế đầu trước dấu phẩy của `linhVuc`,
+      // vd "tiền bạc, tài chính" → "Tiền bạc") — không hiện tên cung/sao gốc.
+      var vucNgan=c.linhVuc?c.linhVuc.split(',')[0]:'';
+      var vucHoa=vucNgan?vucNgan.charAt(0).toUpperCase()+vucNgan.slice(1):c.cungNhatHan;
       // `linhVuc` dịch tên cung sang mảng đời sống người thường đọc được (vd
       // Tài Bạch → "tiền bạc, tài chính") — KHÔNG đổi ý nghĩa cổ pháp của cung,
       // chỉ thêm chữ. Nguồn: `CUNG_LINH_VUC` trong lib/engine/van-ngay.ts.
@@ -1416,11 +1447,12 @@ function renderAllTools(d) {
       // dùng nhờ máy) thì người xem không hiểu vì sao và không sửa được.
       var srcLine='';
       try{ srcLine=(Shell.birthSummary&&birth)?Shell.birthSummary(birth):''; }catch(e){}
-      me.innerHTML='<div class="today-me"><span class="tme-av" data-icon="user"></span>'
+      me.innerHTML='<div class="today-me">'
+        +(avImg?'<img class="tme-av" src="'+avImg+'" alt="" width="52" height="52" loading="lazy">'
+          :'<span class="tme-av" data-icon="user"></span>')
         +'<span class="tme-b"><span class="tme-h">Vận riêng của bạn</span>'
-        +'<span class="tme-t">'+esc(c.cungNhatHan)+(c.linhVuc?' <span class="lt">('+esc(c.linhVuc)+')</span>':'')+' — '+esc(star)
+        +'<span class="tme-t">'+esc(vucHoa)
         +(tail?' <span class="lt">→ '+esc(tail)+'</span>':'')+'</span>'
-        +(c.cachCuc&&c.cachCuc.tomTat?'<span class="tme-s">Cách cục: '+esc(c.cachCuc.tomTat)+'</span>':'')
         +(mau.length?'<span class="tme-s">Màu hợp: '+esc(mau.join(', '))+'<span class="tme-swatch">'
           +mau.map(function(m){ return '<i style="background:'+(MAU_HEX[m]||'#999')+'"></i>'; }).join('')
           +'</span></span>':'')
