@@ -1388,7 +1388,17 @@ function renderAllTools(d) {
       // ngày↔bản mệnh — không thì tail có thể đọc "chủ động, tốn công" ngay
       // cạnh ô Cần tránh đang ghi "cổ pháp kiêng khởi sự".
       var isKy=key==='ky';
-      var tail=c.bixung?'xung chính tuổi bạn':(isKy?'ngày kỵ, hoãn việc lớn':(QH_NGAN[c.quanHeHanh]||''));
+      // Card hiện ra cho người thường đọc — không nhắc thuật ngữ (tên cung, tên
+      // sao Hán Việt, văn cách cục cổ). `loai` cách cục (tốt/xấu/trung) dịch
+      // thẳng sang kết luận ngắn, mạnh, khẳng định; ưu tiên trên ngũ hành vì
+      // cách cục đọc đúng cung đang được chiếu, ngũ hành chỉ là suy diễn chung.
+      var LOAI_CAU={'tốt':'thuận lợi','xấu':'cần thận trọng','trung':'bình ổn'};
+      var tail=c.bixung?'xung chính tuổi bạn':(isKy?'ngày kỵ, hoãn việc lớn'
+        :c.cachCuc?(LOAI_CAU[c.cachCuc.loai]||'bình ổn'):(QH_NGAN[c.quanHeHanh]||''));
+      // Nhãn đầu dòng: mảng đời sống NGẮN (vế đầu trước dấu phẩy của `linhVuc`,
+      // vd "tiền bạc, tài chính" → "Tiền bạc") — không hiện tên cung/sao gốc.
+      var vucNgan=c.linhVuc?c.linhVuc.split(',')[0]:'';
+      var vucHoa=vucNgan?vucNgan.charAt(0).toUpperCase()+vucNgan.slice(1):c.cungNhatHan;
       // `linhVuc` dịch tên cung sang mảng đời sống người thường đọc được (vd
       // Tài Bạch → "tiền bạc, tài chính") — KHÔNG đổi ý nghĩa cổ pháp của cung,
       // chỉ thêm chữ. Nguồn: `CUNG_LINH_VUC` trong lib/engine/van-ngay.ts.
@@ -1423,9 +1433,8 @@ function renderAllTools(d) {
       try{ srcLine=(Shell.birthSummary&&birth)?Shell.birthSummary(birth):''; }catch(e){}
       me.innerHTML='<div class="today-me"><span class="tme-av" data-icon="user"></span>'
         +'<span class="tme-b"><span class="tme-h">Vận riêng của bạn</span>'
-        +'<span class="tme-t">'+esc(c.cungNhatHan)+(c.linhVuc?' <span class="lt">('+esc(c.linhVuc)+')</span>':'')+' — '+esc(star)
+        +'<span class="tme-t">'+esc(vucHoa)
         +(tail?' <span class="lt">→ '+esc(tail)+'</span>':'')+'</span>'
-        +(c.cachCuc&&c.cachCuc.tomTat?'<span class="tme-s">Cách cục: '+esc(c.cachCuc.tomTat)+'</span>':'')
         +(mau.length?'<span class="tme-s">Màu hợp: '+esc(mau.join(', '))+'<span class="tme-swatch">'
           +mau.map(function(m){ return '<i style="background:'+(MAU_HEX[m]||'#999')+'"></i>'; }).join('')
           +'</span></span>':'')
