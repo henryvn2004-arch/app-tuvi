@@ -457,6 +457,14 @@ function renderLuan(ls,fd,namxem){
     var ep=13+p;
     S.push(buildPhanSection(p,ep,LABELS[ep]||('Phần '+ep),ls,p>2&&!loggedIn));
   }
+  // 🪤 `#lgUnlock` là node TĨNH nhưng `_moveWallBelowFree` (bên dưới) đã dời nó
+  // VÀO trong `#lgBody` (sibling của `#sec-2`). Lượt render sau ghi đè
+  // `innerHTML` là XOÁ HẲN nó khỏi tài liệu — và `_startLuanGiaiAI` (gọi ngay
+  // sau `renderLuan` ở nhánh `onUnlock`) đọc `getElementById('lgUnlock').style`
+  // đầu tiên, nổ null ngay sau khi trả tiền. Đưa về chỗ cũ TRƯỚC khi ghi đè;
+  // `_moveWallBelowFree` sẽ dời lại nếu còn cần. Cùng bẫy đã vá ở
+  // app-luan-giai.html (`_parkWallNodes`).
+  _parkWallNodes();
   document.getElementById('lgBody').innerHTML=S.join('');
   _renderArc();
   // Khối pre-gen mang span [data-icon-emoji]/[data-icon]; nav.js ở chế độ
@@ -909,6 +917,14 @@ function _moveWallBelowFree(host){
   var anchor=document.getElementById('sec-2');
   if(!anchor||!anchor.parentNode||!host) return;
   anchor.insertAdjacentElement('afterend',host);
+}
+// Đưa `#lgUnlock` về lại vị trí khai báo (ngay TRƯỚC `#lgBody`) — gọi trước
+// mọi lượt ghi đè `#lgBody`, xem lý do ở nơi gọi (`renderLuan`).
+function _parkWallNodes(){
+  var body=document.getElementById('lgBody');
+  var host=document.getElementById('lgUnlock');
+  if(!body||!body.parentNode||!host) return;
+  body.parentNode.insertBefore(host,body);
 }
 function _renderUnlockBlock(){
   var host=document.getElementById('lgUnlock');
