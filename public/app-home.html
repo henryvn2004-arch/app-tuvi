@@ -1945,6 +1945,31 @@ if (window.ToolPrices) ToolPrices.load().then(function (d) { if (d) renderSpring
     if(_spot){ _spot.remove(); _spot=null; }
     if(_pop){ _pop.remove(); _pop=null; }
     bindWatchers(false);
+    watchDrawers(false);
+  }
+
+  // 🪤 `.tour-spot`/`.tour-pop` cố ý nổi TRÊN sidebar/rail (z-index 901/902 >
+  // 60) để không bị một drawer khác che mất — nhưng hệ quả là nếu người dùng
+  // TỰ bấm ☰/Trợ lý mở drawer giữa lúc một bước KHÔNG nằm trong drawer đang
+  // hiện (vd bước "#nextCard" ở khung giữa), vòng sáng vẫn đứng yên ở TOẠ ĐỘ
+  // CŨ của neo đó — sidebar mới mở vừa hay che đúng chỗ đó thì vòng sáng
+  // trông như đang khoanh vào một mục sidebar (đã báo qua ảnh chụp: bước
+  // "Thầy đã chọn sẵn" khoanh nhầm vào "Tổng quan"). Sidebar/rail mở tay là
+  // tín hiệu người dùng đã tự đi khám phá — đóng tour luôn, đúng tinh thần
+  // "không chặn thao tác khác của trang" đã có sẵn ở đầu file.
+  var _drawerObs=null;
+  function watchDrawers(on){
+    if(!on){ if(_drawerObs){ _drawerObs.disconnect(); _drawerObs=null; } return; }
+    if(_drawerObs || !window.MutationObserver) return;
+    var targets=[document.getElementById('shell-sidebar'), document.getElementById('shell-rail')].filter(Boolean);
+    if(!targets.length) return;
+    _drawerObs=new MutationObserver(function(muts){
+      for(var i=0;i<muts.length;i++){
+        var el=muts[i].target;
+        if(el && el.classList && el.classList.contains('open')){ finish(); return; }
+      }
+    });
+    targets.forEach(function(t){ _drawerObs.observe(t,{attributes:true,attributeFilter:['class']}); });
   }
 
   // 🪤 Trang /app cuộn trong #ws chứ không cuộn window → phải nghe 'scroll' ở
@@ -1982,6 +2007,7 @@ if (window.ToolPrices) ToolPrices.load().then(function (d) { if (d) renderSpring
     document.body.appendChild(_spot);
     document.body.appendChild(_pop);
     bindWatchers(true);
+    watchDrawers(true);
     step(0);
   }
 
