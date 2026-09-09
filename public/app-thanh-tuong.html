@@ -103,6 +103,11 @@
         </div>
       </div></div>
       <div id="shellRecent"></div>
+      <div class="samp-cta" id="sampCta">
+        <span class="sc-ic" data-icon="lightbulb"></span>
+        <span class="sc-txt"><b>Chưa muốn ghi âm?</b><span>Bạn có thể xem một bản mẫu để trải nghiệm trước.</span></span>
+        <button type="button" id="btnSample" data-sample-tool="thanh-tuong" onclick="SampleHint.open(this)">Xem bản mẫu →</button>
+      </div>
 
       <div class="dt-card" id="inputCard">
         <div class="fc-head"><span class="fc-ic" data-icon="mic"></span><h2>Ghi Âm Giọng Nói</h2></div>
@@ -186,7 +191,8 @@
 window.SHELL_INTRO={key:'thanh-tuong'};</script>
 <script src="/auth.js?v=2"></script>
 <script src="/tuvi-paywall.js?v=33"></script>
-  <script src="/nav.js?v=26" data-icons-only></script><script src="/shell.js?v=90"></script>
+  <script src="/nav.js?v=26" data-icons-only></script><script src="/tools-shared/sample-hint.js?v=1"></script>
+<script src="/shell.js?v=90"></script>
 <script>
 function initThanhTuong(){
   Shell.setContext({

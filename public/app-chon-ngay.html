@@ -76,6 +76,11 @@
         </div>
       </div></div>
       <div id="shellRecent"></div>
+      <div class="samp-cta" id="sampCta">
+        <span class="sc-ic" data-icon="lightbulb"></span>
+        <span class="sc-txt"><b>Chưa muốn khai thông tin?</b><span>Bạn có thể xem một bản mẫu để trải nghiệm trước.</span></span>
+        <button type="button" id="btnSample" data-sample-tool="chon-ngay-tot" onclick="SampleHint.open(this)">Xem bản mẫu →</button>
+      </div>
       <div class="form-card" id="birthPanel">
         <div class="fc-head"><span class="fc-ic" data-icon="calendar"></span><h2>Thông tin chọn ngày</h2></div>
         <p class="sub">Chọn việc cần xem ngày, nhập tên và năm sinh chủ sự cùng tháng cần xem. Hệ thống tính can chi rồi đối chiếu hợp – xung với tuổi bạn.</p>
@@ -154,6 +159,7 @@ window.SHELL_INTRO={key:'chon-ngay'};</script>
 <script src="/tuvi-paywall.js?v=33"></script>
 <script src="/tools-shared/hook-layer.js?v=2"></script>
   <script src="/nav.js?v=26" data-icons-only></script>
+<script src="/tools-shared/sample-hint.js?v=1"></script>
 <script src="/shell.js?v=90"></script>
 <script>
 function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
