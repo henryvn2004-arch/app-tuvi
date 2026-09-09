@@ -1837,16 +1837,6 @@ if (window.ToolPrices) ToolPrices.load().then(function (d) { if (d) renderSpring
   function markSeen(){ try{ localStorage.setItem(TOUR_KEY,'1'); }catch(e){} }
   function esc2(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
-  // `offsetParent===null` bắt cả "không tồn tại" lẫn "tồn tại nhưng
-  // display:none" (Khởi Hành chưa kịp dựng, hoặc bị ẩn vì đã xong) — coi cả
-  // hai là CHƯA CÓ, đừng chỉ vào một khối vô hình.
-  function findTarget(sel){
-    var e=document.querySelector(sel);
-    return (e && e.offsetParent!==null) ? e : null;
-  }
-
-  var _i=-1, _spot=null, _pop=null, _scrolled=false;
-
   // Vùng NHÌN THẤY THẬT. `window.innerHeight` trên iOS Safari tính cả dải nằm
   // SAU thanh công cụ dưới cùng của trình duyệt, nên đặt trong innerHeight vẫn
   // có thể bị thanh đó che. `visualViewport` mới là con số người dùng thấy.
@@ -1855,6 +1845,40 @@ if (window.ToolPrices) ToolPrices.load().then(function (d) { if (d) renderSpring
     return vv ? {top:vv.offsetTop, left:vv.offsetLeft, h:vv.height, w:vv.width}
               : {top:0, left:0, h:window.innerHeight, w:window.innerWidth};
   }
+
+  // `offsetParent===null` bắt cả "không tồn tại" lẫn "tồn tại nhưng
+  // display:none" (Khởi Hành chưa kịp dựng, hoặc bị ẩn vì đã xong) — coi cả
+  // hai là CHƯA CÓ, đừng chỉ vào một khối vô hình. Dùng cho `onResize()`: bước
+  // ĐANG MỞ rồi thì đừng đóng tour giữa chừng chỉ vì một lượt resize đẩy neo ra
+  // khỏi khung nhìn tạm thời (vd bàn phím mobile đóng/mở) — `place()` tự kẹp
+  // popup vào khung nhìn, không cần huỷ bước.
+  function findTarget(sel){
+    var e=document.querySelector(sel);
+    return (e && e.offsetParent!==null) ? e : null;
+  }
+
+  // Soát CHẶT HƠN — dùng khi QUYẾT ĐỊNH có mở một bước MỚI hay không (`step()`
+  // và lượt quét `any` trong `start()`). `offsetParent!==null` chỉ bắt
+  // display:none, KHÔNG bắt sidebar/rail đóng bằng
+  // `transform:translateX(-100%)` trên mobile — neo vẫn "có" trong layout
+  // nhưng nằm hẳn ngoài màn hình bên trái, và (khác kiểu cuộn dọc quá tầm)
+  // `scrollIntoView` trong `place()` KHÔNG kéo nó vào được vì nó là
+  // `position:fixed` bị dịch, không phải bị cuộn qua. Kết quả nếu không chặn ở
+  // đây: vòng sáng chỉ vào chỗ không ai thấy, tooltip nổi lơ lửng không dính
+  // gì tới nút nào (bug mobile 2026-09, ảnh chụp step "Đăng ký"/"Ví Lượng" —
+  // cả hai đều neo bên trong sidebar). Bước nào neo trong drawer đang đóng thì
+  // bỏ qua, y hệt cách bỏ qua bước chưa dựng kịp.
+  function findVisibleTarget(sel){
+    var e=findTarget(sel);
+    if(!e) return null;
+    var r=e.getBoundingClientRect();
+    if(r.width<=0&&r.height<=0) return null;
+    var vp=viewport();
+    if(r.right<=vp.left||r.bottom<=vp.top||r.left>=vp.left+vp.w||r.top>=vp.top+vp.h) return null;
+    return e;
+  }
+
+  var _i=-1, _spot=null, _pop=null, _scrolled=false;
 
   function place(target,data,isLast){
     var pad=6;
@@ -1915,8 +1939,8 @@ if (window.ToolPrices) ToolPrices.load().then(function (d) { if (d) renderSpring
 
   function step(i){
     if(i>=STEPS.length){ finish(); return; }
-    var data=STEPS[i], target=findTarget(data.sel);
-    if(!target){ step(i+1); return; } // phần tử chưa có lúc này → bỏ qua bước đó, đừng đứng khựng
+    var data=STEPS[i], target=findVisibleTarget(data.sel);
+    if(!target){ step(i+1); return; } // chưa dựng kịp HOẶC đang nằm trong drawer đóng → bỏ qua bước đó, đừng đứng khựng
     _i=i; _scrolled=false;
     place(target,data,i===STEPS.length-1);
   }
@@ -1955,7 +1979,7 @@ if (window.ToolPrices) ToolPrices.load().then(function (d) { if (d) renderSpring
     // Không bước nào có điểm neo (trang lỗi, hoặc các khối cùng chưa kịp
     // dựng) → đừng tạo một overlay không trỏ vào đâu cả.
     var any=false;
-    for(var k=0;k<STEPS.length;k++) if(findTarget(STEPS[k].sel)){ any=true; break; }
+    for(var k=0;k<STEPS.length;k++) if(findVisibleTarget(STEPS[k].sel)){ any=true; break; }
     if(!any) return;
 
     _spot=document.createElement('div'); _spot.className='tour-spot';
