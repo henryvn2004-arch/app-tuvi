@@ -61,21 +61,28 @@
           <img class="intro-avatar" src="/tool-avatars/hoang-dao.webp" alt="" onerror="this.remove()">
           <div class="intro-text">
             <div class="intro-t">Giờ Hoàng Đạo</div>
-            <div class="intro-d">Giờ Hoàng Đạo tra giờ hoàng đạo hôm nay, kèm việc nên làm trong giờ đó. Ký hợp đồng, xuất hành đúng giờ xấu rồi tiền bạc, công việc trục trặc mà không biết vì đâu? Chọn ngày cần xem, nhận danh sách giờ tốt và việc nên làm.</div>
+            <div class="intro-d">Tra giờ Hoàng Đạo hôm nay kèm việc nên làm trong giờ đó. Chọn ngày cần xem, nhận danh sách giờ tốt — giờ cần tránh và hoàng lịch đầy đủ.</div>
             <div id="introSrc" style="min-height:55.2px;margin-top:9px"></div>
           </div>
+        </div>
+        <div class="hero-pills">
+          <div class="hero-pill"><span class="hp-ic" data-icon="sun"></span><span>6 giờ tốt<br>nên dùng</span></div>
+          <div class="hero-pill"><span class="hp-ic" data-icon="x-circle"></span><span>6 giờ xấu<br>cần tránh</span></div>
+          <div class="hero-pill"><span class="hp-ic" data-icon="scroll-text"></span><span>Hoàng lịch<br>đầy đủ</span></div>
         </div>
       </div></div>
       <div id="shellRecent"></div>
       <div class="form-card" id="birthPanel">
-        <h2>Ngày cần xem (dương lịch)</h2>
-        <p class="sub">Chọn ngày, tháng, năm dương lịch bạn cần xem. Hệ thống tính giờ hoàng đạo và đối chiếu hoàng lịch ngày đó. Nhận về 6 giờ tốt nên dùng, 6 giờ cần tránh và hoàng lịch đầy đủ.</p>
-        <p class="price-note" data-tvp-price-label="hoang-dao">…</p>
+        <div class="fc-head"><span class="fc-ic" data-icon="sun"></span><h2>Ngày cần xem (dương lịch)</h2></div>
+        <p class="sub">Chọn ngày, tháng, năm dương lịch cần xem. Hệ thống tính giờ hoàng đạo và đối chiếu hoàng lịch ngày đó.</p>
         <div class="frow" style="margin-bottom:4px">
           <div class="fg"><label>Ngày</label><input type="number" id="ngay" min="1" max="31" placeholder="1–31"></div>
           <div class="fg"><label>Tháng</label><input type="number" id="thang" min="1" max="12" placeholder="1–12"></div>
           <div class="fg"><label>Năm</label><input type="number" id="nam" min="1900" max="2100" placeholder="2026"></div>
-          <button class="btn-go" id="btnGo" onclick="calculate()">Xem giờ →</button>
+          <button class="btn-go" id="btnGo" onclick="calculate()">
+            <span class="bg-label"><span class="ic" data-icon="search"></span><b id="btnGoLabel">Xem giờ →</b></span>
+            <small>Miễn phí</small>
+          </button>
         </div>
         <div class="err" id="error-msg"></div>
       </div>

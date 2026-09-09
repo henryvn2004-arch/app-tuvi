@@ -82,20 +82,27 @@
           <img class="intro-avatar" src="/tool-avatars/bat-trach.webp" alt="" onerror="this.remove()">
           <div class="intro-text">
             <div class="intro-t">Hướng Bát Trạch</div>
-            <div class="intro-d">Hướng Bát Trạch tính mệnh quái và hướng nhà hợp với bạn theo Bát Trạch. Gia đình lục đục, sức khoẻ hao mòn, tiền bạc khó giữ — mà chưa từng nghĩ có thể do hướng nhà không hợp mệnh? Nhập ngày sinh và giới tính, nhận mệnh quái cùng các hướng tốt – xấu.</div>
+            <div class="intro-d">Tính mệnh quái và hướng nhà hợp với bạn theo Bát Trạch. Nhập năm sinh và giới tính, nhận mệnh quái cùng các hướng tốt – xấu.</div>
             <div id="introSrc" style="min-height:36.8px;margin-top:9px"></div>
           </div>
+        </div>
+        <div class="hero-pills">
+          <div class="hero-pill"><span class="hp-ic" data-icon="compass"></span><span>Mệnh quái,<br>cung mệnh</span></div>
+          <div class="hero-pill"><span class="hp-ic" data-icon="check-circle"></span><span>4 hướng<br>đại cát</span></div>
+          <div class="hero-pill"><span class="hp-ic" data-icon="x-circle"></span><span>4 hướng<br>đại hung</span></div>
         </div>
       </div></div>
       <div id="shellRecent"></div>
       <div class="form-card" id="birthPanel">
-        <h2>Năm sinh & giới tính</h2>
-        <p class="sub">Nhập năm sinh và giới tính của bạn. Hệ thống tính mệnh quái theo đúng năm sinh đó. Nhận về mệnh quái, cung và bảng chi tiết 8 hướng tốt – xấu.</p>
-        <p class="price-note" data-tvp-price-label="bat-trach">…</p>
+        <div class="fc-head"><span class="fc-ic" data-icon="compass"></span><h2>Năm sinh & giới tính</h2></div>
+        <p class="sub">Nhập năm sinh và giới tính. Hệ thống tính mệnh quái theo đúng năm sinh, trả về mệnh quái, cung và bảng chi tiết 8 hướng tốt – xấu.</p>
         <div class="frow" style="margin-bottom:4px">
           <div class="fg" style="width:120px"><label>Năm sinh dương lịch</label><input type="number" id="year" placeholder="1990" min="1900" max="2010"></div>
           <div class="fg" style="width:110px"><label>Giới tính</label><select id="gender"><option value="nam">Nam</option><option value="nu">Nữ</option></select></div>
-          <button class="btn-go" id="btnGo" onclick="calculate()">Tra hướng Bát Trạch →</button>
+          <button class="btn-go" id="btnGo" onclick="calculate()">
+            <span class="bg-label"><span class="ic" data-icon="compass"></span><b id="btnGoLabel">Tra hướng Bát Trạch →</b></span>
+            <small>Miễn phí</small>
+          </button>
         </div>
         <div class="err" id="error-msg"></div>
       </div>

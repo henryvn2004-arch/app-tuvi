@@ -67,20 +67,27 @@
           <img class="intro-avatar" src="/tool-avatars/ngay-tot.webp" alt="" onerror="this.remove()">
           <div class="intro-text">
             <div class="intro-t">Ngày tốt trong tháng</div>
-            <div class="intro-d">Ngày tốt trong tháng liệt kê những ngày tốt, xếp rõ theo từng ngày trong tháng. Ký hợp đồng, khai trương đúng ngày xấu rồi mọi việc trục trặc, tiền bạc thất thoát không rõ nguyên do? Chọn tháng, nhận danh sách ngày tốt để lên lịch cả tháng.</div>
+            <div class="intro-d">Liệt kê ngày tốt – xấu theo từng ngày trong tháng, xếp rõ theo lịch. Chọn tháng, nhận danh sách ngày tốt để lên lịch cả tháng.</div>
             <div id="introSrc" style="min-height:55.2px;margin-top:9px"></div>
           </div>
+        </div>
+        <div class="hero-pills">
+          <div class="hero-pill"><span class="hp-ic" data-icon="calendar-days"></span><span>Lịch tốt – xấu<br>cả tháng</span></div>
+          <div class="hero-pill"><span class="hp-ic" data-icon="alert-triangle"></span><span>Ngày kỵ<br>cần tránh</span></div>
+          <div class="hero-pill"><span class="hp-ic" data-icon="scroll-text"></span><span>Trực, nhị thập<br>bát tú</span></div>
         </div>
       </div></div>
       <div id="shellRecent"></div>
       <div class="form-card" id="birthPanel">
-        <h2>Tháng cần xem (dương lịch)</h2>
-        <p class="sub">Chọn tháng và năm dương lịch bạn cần xem. Hệ thống tự tính lịch và đối chiếu ngày tốt xấu. Nhận về lịch cả tháng, mỗi ngày đánh dấu tốt, cần lưu ý hay nên kỵ.</p>
-        <p class="price-note" data-tvp-price-label="ngay-tot">…</p>
+        <div class="fc-head"><span class="fc-ic" data-icon="calendar"></span><h2>Tháng cần xem (dương lịch)</h2></div>
+        <p class="sub">Chọn tháng, năm dương lịch. Hệ thống tự tính lịch, đối chiếu ngày tốt xấu — trả về lịch cả tháng đánh dấu tốt, cần lưu ý hay nên kỵ.</p>
         <div class="frow" style="margin-bottom:4px">
           <div class="fg"><label>Tháng</label><input type="number" id="thang" min="1" max="12" placeholder="1–12"></div>
           <div class="fg"><label>Năm</label><input type="number" id="nam" min="2020" max="2030" placeholder="2026"></div>
-          <button class="btn-go" id="btnGo" onclick="calculate()">Xem lịch →</button>
+          <button class="btn-go" id="btnGo" onclick="calculate()">
+            <span class="bg-label"><span class="ic" data-icon="search"></span><b id="btnGoLabel">Xem lịch →</b></span>
+            <small>Miễn phí</small>
+          </button>
         </div>
         <div class="err" id="error-msg"></div>
       </div>

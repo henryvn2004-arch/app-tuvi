@@ -118,9 +118,14 @@
           <img class="intro-avatar" src="/tool-avatars/ban-lam-viec.webp" alt="" onerror="this.remove()">
           <div class="intro-text">
             <div class="intro-t">Phong Thủy Bàn Làm Việc</div>
-            <div class="intro-d">Phong Thủy Bàn Làm Việc đọc phong thủy chỗ ngồi làm việc từ ảnh bạn chụp. Ngồi làm cả ngày mà lương không tăng, sự nghiệp ì ạch — có khi nào do chính hướng bàn làm việc? Chụp ảnh góc làm việc, nhận phân tích chỗ nào đang cản, nên đổi thế nào.</div>
+            <div class="intro-d">Chụp ảnh góc làm việc, hệ thống chấm điểm phong thủy Bát Trạch theo bản mệnh của bạn. Nhận phân tích chỗ nào đang cản vận, nên đổi thế nào.</div>
             <div id="introSrc" style="min-height:55.2px;margin-top:9px"></div>
           </div>
+        </div>
+        <div class="hero-pills">
+          <div class="hero-pill"><span class="hp-ic" data-icon="bar-chart-3"></span><span>Điểm phong thủy<br>trước – sau</span></div>
+          <div class="hero-pill"><span class="hp-ic" data-icon="briefcase"></span><span>Hướng ngồi<br>làm việc</span></div>
+          <div class="hero-pill"><span class="hp-ic" data-icon="settings"></span><span>Đề xuất<br>điều chỉnh</span></div>
         </div>
       </div></div>
       <div id="shellRecent"></div>
@@ -169,9 +174,8 @@
       </div>
 
       <div class="pt-card">
-        <h2><span class="pt-num">2</span> Chụp / Tải Ảnh</h2>
-        <p class="sub">Cho biết năm sinh, giới tính, mục đích sử dụng, hướng cửa sổ và chụp ảnh góc làm việc. Hệ thống phân tích ảnh theo phong thủy bản mệnh của bạn. Nhận về điểm phong thủy trước – sau, hướng ngồi và đề xuất điều chỉnh.</p>
-        <p class="price-note" data-tvp-price-label="ban-lam-viec">…</p>
+        <div class="fc-head"><span class="fc-ic" data-icon="monitor"></span><h2><span class="pt-num">2</span> Chụp / Tải Ảnh</h2></div>
+        <p class="sub">Chụp ảnh góc làm việc sau khi điền năm sinh, giới tính và hướng cửa sổ. Nhận điểm phong thủy trước – sau kèm đề xuất điều chỉnh cụ thể.</p>
         <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click()" ondragover="onDrag(event,1)" ondragleave="onDrag(event,0)" ondrop="onDrop(event)">
           <input type="file" id="fileInput" accept="image/*" onchange="onFile(event)">
           <span class="upload-icon ic" data-icon="monitor" style="font-size:36px;display:block"></span>
@@ -186,9 +190,28 @@
       </div>
 
       <div class="pt-card">
-        <div class="cost-row"><span>Chi phí: <strong><span data-tvp-price="ban-lam-viec">…</span> Lượng</strong></span></div>
+        <div class="cost-box">
+          <div class="cb-l">
+            <span class="cb-ic" data-icon="wallet"></span>
+            <div>
+              <div class="cb-title">Chi phí sử dụng</div>
+              <div class="cb-amt"><span data-tvp-price="ban-lam-viec">…</span> Lượng <span class="vnd" data-tvp-price-vnd="ban-lam-viec"></span> mỗi lượt</div>
+              <div class="cb-pay">
+                <span><span class="ic" data-icon="qr-code"></span> Chuyển khoản (qua QR ngân hàng)</span>
+                <span><span class="ic" data-icon="credit-card"></span> PayPal / Thẻ quốc tế</span>
+              </div>
+            </div>
+          </div>
+          <div class="cb-r">
+            <span class="cb-ic" data-icon="gift"></span>
+            <div class="cb-r-txt">Mua gói để nhận nhiều ưu đãi hơn.<br><a href="/topup.html">Xem các gói ngay →</a></div>
+          </div>
+        </div>
         <div class="error-box" id="errorBox"></div>
-        <button class="btn-analyze" id="btnAnalyze" onclick="doAnalyze()"><span class="ic" data-icon="monitor"></span> Phân Tích Ngay — <span data-tvp-price="ban-lam-viec">…</span> Lượng</button>
+        <button class="btn-go" id="btnAnalyze" onclick="doAnalyze()">
+          <span class="bg-label"><span class="ic" data-icon="monitor"></span><b id="btnAnalyzeLabel">Phân Tích Ngay →</b></span>
+          <small>Tốn <span data-tvp-price="ban-lam-viec">…</span> Lượng <span data-tvp-price-vnd="ban-lam-viec"></span></small>
+        </button>
       </div>
 
       <div class="pt-card loading-overlay" id="loadingOverlay">
@@ -508,6 +531,17 @@ async function downloadRender(){
 }
 
 TuviPaywall.init({ product: 'ban-lam-viec' });
+// Ghi "(~X đ)" cạnh số Lượng trong hộp chi phí + nút CTA — cùng mẫu
+// `_fillVndSlots` của app-luan-giai.html. `ToolPrices.vndLabel` tự trả ''
+// khi chưa đọc được `credit_packages`, lúc đó không hiện gì (không đoán số).
+function _fillVndSlots(host,product){
+  if(!host||!window.ToolPrices) return;
+  var els=host.querySelectorAll('[data-tvp-price-vnd]');
+  var cost=window.ToolPrices.get(product);
+  var lbl=cost!=null?window.ToolPrices.vndLabel(cost):'';
+  els.forEach(function(el){ el.textContent=lbl?('('+lbl+')'):''; });
+}
+TuviPaywall.fillPriceSlots(document).then(function(){ _fillVndSlots(document,'ban-lam-viec'); });
 </script>
 </body>
 </html>
