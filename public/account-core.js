@@ -342,6 +342,17 @@ async function loadHeaderBalance() {
   }
 }
 
+// 2 ô tổng số ở đầu tab Kết Nối — trên đúng 4 kênh có backend thật (AI qua
+// MCP + Telegram + WhatsApp + Messenger). KHÔNG thêm Zalo/Discord: chưa có
+// route liên kết cho hai kênh đó.
+const _connStats = { mcp: false, tg: false, wa: false, msgr: false };
+function updateConnStats() {
+  const ok = (_connStats.mcp ? 1 : 0) + (_connStats.tg ? 1 : 0) + (_connStats.wa ? 1 : 0) + (_connStats.msgr ? 1 : 0);
+  const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+  set('connOkCount', ok + '/4');
+  set('connMissingCount', (4 - ok) + '/4');
+}
+
 // ── AI QUA MCP (self-serve key riêng của user) ──
 function _mcpShow(state) { // 'checking' | 'nokey' | 'ready'
   const c = document.getElementById('mcpChecking');
@@ -351,6 +362,7 @@ function _mcpShow(state) { // 'checking' | 'nokey' | 'ready'
   c.style.display = state === 'checking' ? 'block' : 'none';
   n.style.display = state === 'nokey' ? 'block' : 'none';
   r.style.display = state === 'ready' ? 'block' : 'none';
+  if (state !== 'checking') { _connStats.mcp = state === 'ready'; updateConnStats(); }
 }
 async function loadMcpKey() {
   if (!(await _tok())) return;
@@ -405,8 +417,10 @@ async function loadTelegramLink() {
       headers: { Authorization: `Bearer ${await _tok()}` }
     });
     const d = res.ok ? await res.json() : { linked: false };
+    _connStats.tg = !!d.linked;
+    updateConnStats();
     if (d.linked) {
-      statusEl.textContent = '✓ Đã liên kết — bot Telegram dùng chung ví Lượng này.';
+      statusEl.innerHTML = '✓ Đã liên kết — bot Telegram dùng chung ví Lượng này.' + (d.telegram_user_id ? ' <span class="conn-id">ID: ' + escHtml(String(d.telegram_user_id)) + '</span>' : '');
       btnLink.style.display = 'none';
       btnUnlink.style.display = 'inline-block';
     } else {
@@ -465,8 +479,10 @@ async function loadWhatsappLink() {
       headers: { Authorization: `Bearer ${await _tok()}` }
     });
     const d = res.ok ? await res.json() : { linked: false };
+    _connStats.wa = !!d.linked;
+    updateConnStats();
     if (d.linked) {
-      statusEl.textContent = '✓ Đã liên kết — bot WhatsApp dùng chung ví Lượng này.';
+      statusEl.innerHTML = '✓ Đã liên kết — bot WhatsApp dùng chung ví Lượng này.' + (d.whatsapp_id ? ' <span class="conn-id">ID: ' + escHtml(String(d.whatsapp_id)) + '</span>' : '');
       btnLink.style.display = 'none';
       btnUnlink.style.display = 'inline-block';
     } else {
@@ -525,8 +541,10 @@ async function loadMessengerLink() {
       headers: { Authorization: `Bearer ${await _tok()}` }
     });
     const d = res.ok ? await res.json() : { linked: false };
+    _connStats.msgr = !!d.linked;
+    updateConnStats();
     if (d.linked) {
-      statusEl.textContent = '✓ Đã liên kết — bot Messenger dùng chung ví Lượng này.';
+      statusEl.innerHTML = '✓ Đã liên kết — bot Messenger dùng chung ví Lượng này.' + (d.messenger_id ? ' <span class="conn-id">ID: ' + escHtml(String(d.messenger_id)) + '</span>' : '');
       btnLink.style.display = 'none';
       btnUnlink.style.display = 'inline-block';
     } else {

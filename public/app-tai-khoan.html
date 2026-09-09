@@ -595,7 +595,19 @@
         #tab-ketnoi .conn-revoke{margin-top:.9rem;background:transparent;color:var(--red);border:1px solid var(--revoke-line);padding:.5rem .9rem;border-radius:8px;font-size:.78rem;font-weight:600;cursor:pointer}
         #tab-ketnoi .conn-row{display:flex;align-items:center;gap:.75rem;flex-wrap:wrap;margin-top:.7rem}
         #tab-ketnoi .chan-desc{font-size:.83rem;color:var(--text-mid);line-height:1.5;margin:.55rem 0 0}
+        #tab-ketnoi .conn-id{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.76rem;color:var(--text-lt)}
+        #tab-ketnoi .conn-stats{display:grid;grid-template-columns:repeat(2,1fr);gap:.75rem;margin-bottom:1.15rem}
+        #tab-ketnoi .conn-stat{background:var(--surface);border:1px solid var(--border-lt);border-radius:10px;padding:.85rem 1rem;display:flex;align-items:center;gap:.7rem}
+        #tab-ketnoi .conn-stat-ic{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;flex:none}
+        #tab-ketnoi .conn-stat-ic [data-icon]{width:17px;height:17px}
+        #tab-ketnoi .conn-stat-v{font-family:'Noto Serif',serif;font-size:1.05rem;font-weight:700;color:var(--heading);line-height:1.15;font-variant-numeric:tabular-nums}
+        #tab-ketnoi .conn-stat-l{font-size:.72rem;color:var(--text-lt);margin-top:.1rem}
       </style>
+
+      <div class="conn-stats">
+        <div class="conn-stat"><div class="conn-stat-ic" style="background:var(--chip-green);color:var(--green)"><span data-icon="link"></span></div><div><div class="conn-stat-v" id="connOkCount">0/4</div><div class="conn-stat-l">Đã kết nối</div></div></div>
+        <div class="conn-stat"><div class="conn-stat-ic" style="background:var(--chip-red);color:var(--red)"><span data-icon="message-circle"></span></div><div><div class="conn-stat-v" id="connMissingCount">4/4</div><div class="conn-stat-l">Chưa kết nối</div></div></div>
+      </div>
 
       <p class="conn-intro">Dùng Tử Vi Minh Bảo ở mọi nơi bạn chat — trợ lý Luận Đường riêng, hoặc ngay trong Telegram · WhatsApp · Messenger, tất cả chung một ví Lượng.</p>
 
@@ -879,7 +891,7 @@ window.ACCOUNT_SHELL_CHAT = function () {
   } catch (e) { /* ignore */ }
 };
 </script>
-<script src="/account-core.js?v=7"></script>
+<script src="/account-core.js?v=8"></script>
 <script>
 // Mở đúng tab theo hash (#credits / #ketnoi / #account / #lichsu) khi vào từ sidebar.
 (function(){function openHash(){var h=(location.hash||'').replace('#','');if(h){var b=document.querySelector('[data-tab="'+h+'"]');if(b)b.click();}}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){setTimeout(openHash,300);});else setTimeout(openHash,300);})();
