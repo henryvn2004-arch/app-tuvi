@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-239 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+240 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 **Bốn file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
 ```bash
@@ -11,7 +11,7 @@ sed -n '120,190p' docs/nhat-ky/2026-08.md    # đọc đúng đoạn, đừng ca
 
 | file | số mục | dung lượng |
 |---|---:|---:|
-| `2026-09.md` | 74 | 347,990 B |
+| `2026-09.md` | 75 | 350,802 B |
 | `2026-08.md` | 148 | 1,024,027 B |
 | `2026-07.md` | 12 | 154,531 B |
 | `track-cu.md` | 5 | 89,354 B |
@@ -25,6 +25,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
+| 1 | 2026-09 | `2026-09.md` | 📊 Digest dùng tool thêm mục Top user hoạt động nhiều nhất |
 | 1 | 2026-09 | `2026-09.md` | 📣 Báo NGAY qua Telegram+WhatsApp: đăng ký mới · dùng tool (kể cả ẩn danh) · trả tiền |
 | 1 | 2026-09 | `2026-09.md` | 🚨 Cảnh báo lỗi JS phía client GẦN-THỜI-GIAN-THỰC — nối nốt phần Sentry để dở |
 | 1 | 2026-09 | `2026-09.md` | 🐛 PDF "Xem mẫu" của 3 tool in tên khoá JSON thô thay vì tiêu đề tiếng Việt |
