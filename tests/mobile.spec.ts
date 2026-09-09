@@ -141,7 +141,9 @@ test.describe('Mobile — tour onboarding', () => {
 
     const m = await page.evaluate(async () => {
       // Dời điểm neo xuống dưới mép màn rồi bắn 'resize' → chạy lại đúng place()
-      const card = document.querySelector('#khoiHanhCard') as HTMLElement | null;
+      // Điểm neo bước 1 của tour đổi sang nút Home nổi giữa thanh tab (từ
+      // 2026-09: Khởi Hành dời sang tab Tài khoản, không còn #khoiHanhCard).
+      const card = document.querySelector('.tab-home-btn') as HTMLElement | null;
       if (card) {
         const cur = card.getBoundingClientRect().top;
         const mt = parseFloat(getComputedStyle(card).marginTop) || 0;
