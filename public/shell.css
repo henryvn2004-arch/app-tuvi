@@ -58,10 +58,6 @@ body{font-family:var(--sans);background:var(--paper-2);color:var(--text);font-si
 /* ── SIDEBAR ── */
 .sb{background:linear-gradient(180deg,var(--navy),var(--navy-2));color:var(--sb-txt);display:flex;flex-direction:column;overflow:hidden}
 .sb-brand{display:flex;align-items:center;gap:11px;padding:14px 16px;text-decoration:none}
-/* Trang Luận Đường bỏ hẳn `.sb-brand` (trùng tên hiệu với `.ws-top`, xem
-   renderSidebar() trong shell.js) — khối này chỉ giữ khoảng đệm trên tương
-   đương, để `.kbtn` bên dưới không dính sát mép sidebar. */
-.sb-brand-gap{height:10px}
 .seal{width:34px;height:34px;border-radius:7px;object-fit:cover;border:1px solid rgba(201,168,76,.45);flex:0 0 auto;display:block}
 .brand-txt b{font-family:var(--serif);font-size:14.5px;color:#fff;font-weight:600;display:block;line-height:1.2}
 /* Slogan, KHÔNG hoa + KHÔNG giãn chữ rộng: cột chữ chỉ còn 169px (246 − đệm 32
@@ -70,6 +66,11 @@ body{font-family:var(--sans);background:var(--paper-2);color:var(--text);font-si
    nav.js — cùng một slogan thì để cùng một lối trình bày. */
 .brand-txt span{font-size:9.5px;color:var(--gold);letter-spacing:.04em;white-space:nowrap}
 .sb-pulse{margin:2px 16px 8px;padding-bottom:9px;border-bottom:1px solid var(--sb-line);display:flex;flex-direction:column;gap:4px}
+/* Trang Luận Đường bỏ hẳn `.sb-brand` (trùng tên hiệu với `.ws-top`, xem
+   renderSidebar() trong shell.js) — thay vì để một khối rỗng giữ chỗ, đưa
+   thẳng `.sb-pulse` (đang online/lượt hỏi hôm nay) lên chiếm đúng vị trí đó,
+   tự mang khoảng đệm trên tương đương để không dính sát mép sidebar. */
+.sb-pulse.sb-pulse-top{margin-top:14px}
 .sb-pulse[hidden]{display:none}
 .sbp-row{display:flex;align-items:center;gap:6px;font-size:11.5px;color:var(--sb-txt-dim)}
 .sbp-row b{color:var(--sb-txt);font-weight:600}

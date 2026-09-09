@@ -9,7 +9,7 @@
 <link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/fonts/noto-serif.css?v=1">
-<link rel="stylesheet" href="/shell.css?v=38">
+<link rel="stylesheet" href="/shell.css?v=39">
 <link rel="stylesheet" href="/laso-chart.css?v=3">
 <style>
 .form-card{max-width:720px}
@@ -99,6 +99,11 @@
     <div class="ws-body">
       <div id="introHost"></div>
       <div id="shellRecent"></div>
+      <div class="samp-cta" id="sampCta">
+        <span class="sc-ic" data-icon="lightbulb"></span>
+        <span class="sc-txt"><b>Chưa muốn khai thông tin?</b><span>Bạn có thể xem một bản mẫu để trải nghiệm trước.</span></span>
+        <button type="button" id="btnSample" data-sample-tool="xem-tuoi" onclick="SampleHint.open(this)">Xem bản mẫu →</button>
+      </div>
       <div class="form-card" id="birthPanel">
         <div class="fc-head"><span class="fc-ic" data-icon="heart-handshake"></span><h2 id="fH2">Nhập ngày sinh hai người (dương lịch)</h2></div>
         <p class="sub" id="fSub">Chấm 8 yếu tố tương hợp giữa hai lá số của hai bạn. Bạn nghe hai bên gia đình bàn ra tán vào chuyện tuổi tác. Dùng khi đang tính chuyện cưới xin và cần một câu trả lời rõ.</p>
@@ -177,7 +182,7 @@
 <script src="/tuvi-form.js?v=3"></script>
 <script src="/auth.js?v=2"></script>
 <script src="/tuvi-paywall.js?v=33"></script>
-  <script src="/nav.js?v=26" data-icons-only></script><script src="/shell.js?v=89"></script>
+  <script src="/nav.js?v=26" data-icons-only></script><script src="/tools-shared/sample-hint.js?v=1"></script><script src="/shell.js?v=90"></script>
 <script src="/tools-shared/ai-loading-steps.js?v=10"></script>
 <script>
 // ── MODE: 1 trang phục vụ 3 route — /app/xem-tuoi (vợ chồng), /app/xem-lam-an
@@ -301,6 +306,7 @@ function doCompat(){
     var r=(MODE_KEY==='xem-lam-an'?TuongHopLamAn:TuongHop).calcTuongHop(ca.ls,cb.ls,nameA,nameB);
     renderCompat(r,nameA,nameB,ca.fd,cb.fd);
     document.getElementById('birthPanel').style.display='none';
+    var _scOk=document.getElementById('sampCta'); if(_scOk) _scOk.style.display='none';
     document.getElementById('xtPanel').style.display='block';
     document.getElementById('btnEdit').style.display='';
     // Rail: gửi scenario xem-tuoi (server tự lập 2 lá số từ birthA/birthB).
@@ -333,6 +339,7 @@ function doCompat(){
   }catch(e){
     document.getElementById('xtBody').innerHTML='<div class="laso-error">Lỗi khi so tuổi: '+esc(e.message)+'</div>';
     document.getElementById('birthPanel').style.display='none';
+    var _scErr=document.getElementById('sampCta'); if(_scErr) _scErr.style.display='none';
     document.getElementById('xtPanel').style.display='block';
     document.getElementById('btnEdit').style.display='';
     if(window.console)console.error(e);
@@ -567,6 +574,7 @@ var QUERIES=[
 // Trang này phục vụ 2 mode (xem-tuoi / xem-lam-an) nên ô giá phải trỏ đúng
 // tool đang mở, đừng ghim cứng một id — hai mode có thể lệch giá bất cứ lúc nào.
 document.querySelectorAll('[data-tvp-price]').forEach(function(el){ el.setAttribute('data-tvp-price', MODE_KEY); });
+var _sampleBtn=document.getElementById('btnSample'); if(_sampleBtn) _sampleBtn.setAttribute('data-sample-tool', MODE_KEY);
 if(PAID_MODES[MODE_KEY])TuviPaywall.init({product:MODE_KEY, title: MODE.title});
 
 function toSlugAscii(str){
@@ -796,6 +804,7 @@ function _saveXemTuoiResult(){
 function showForm(){
   document.getElementById('xtPanel').style.display='none';
   document.getElementById('birthPanel').style.display='block';
+  var _sc=document.getElementById('sampCta'); if(_sc) _sc.style.display='flex';
   document.getElementById('btnEdit').style.display='none';
   document.getElementById('xtUnlock').style.display='none';
   document.getElementById('xtProgress').style.display='none';

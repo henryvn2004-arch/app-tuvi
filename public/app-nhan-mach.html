@@ -9,7 +9,7 @@
 <link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/fonts/noto-serif.css?v=1">
-<link rel="stylesheet" href="/shell.css?v=38">
+<link rel="stylesheet" href="/shell.css?v=39">
 <style>
 .form-card{max-width:880px}
 .btn-go:disabled{opacity:.6;cursor:not-allowed}
@@ -104,6 +104,11 @@
         </div>
       </div></div>
       <div id="shellRecent"></div>
+      <div class="samp-cta" id="sampCta">
+        <span class="sc-ic" data-icon="lightbulb"></span>
+        <span class="sc-txt"><b>Chưa muốn khai thông tin?</b><span>Bạn có thể xem một bản mẫu để trải nghiệm trước.</span></span>
+        <button type="button" id="btnSample" data-sample-tool="nhan-mach" onclick="SampleHint.open(this)">Xem bản mẫu →</button>
+      </div>
       <div class="form-card" id="birthPanel">
         <div class="fc-head"><span class="fc-ic" data-icon="users"></span><h2>Chọn người trong sổ</h2></div>
         <p class="sub">Thêm tên, ngày sinh và giới tính từng thành viên vào sổ để phân tích cả nhóm cùng lúc.</p>
@@ -261,7 +266,8 @@ window.SHELL_INTRO={key:'nhan-mach'};</script>
 <script src="/tuvi-paywall.js?v=33"></script>
 <script src="/auth.js?v=2"></script>
   <script src="/nav.js?v=26" data-icons-only></script>
-<script src="/shell.js?v=89"></script>
+<script src="/tools-shared/sample-hint.js?v=1"></script>
+<script src="/shell.js?v=90"></script>
 <script src="/user-charts.js?v=2"></script>
 <script src="/tools-shared/ai-loading-steps.js?v=10"></script>
 <script>

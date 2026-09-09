@@ -471,16 +471,19 @@
     // hiệu đó ngay bên dưới là thừa (Henry chỉ ra qua ảnh chụp mobile, sidebar
     // mở đè lên .ws-top). Các trang tool khác thì `.ws-top` mang tên TOOL (qua
     // `mountToolIcon`), không phải tên hiệu site, nên sidebar vẫn cần khối này.
-    if (ACTIVE !== 'home') {
+    var homeTop = ACTIVE === 'home';
+    if (!homeTop) {
       h += '<a class="sb-brand" href="/"><img class="seal" src="/seal.webp" alt="Tử Vi Minh Bảo"><div class="brand-txt"><b>Tử Vi Minh Bảo</b><span>Tri mệnh lý – Thuận thế hành</span></div></a>';
-    } else {
-      h += '<div class="sb-brand-gap"></div>';
     }
     // Tracker "đang online / lượt hỏi hôm nay" — MÔ PHỎNG (xem ghi chú ⚠️ ở
     // simulatePulse()). `_pulseData` được seed TRƯỚC lần renderSidebar() đầu
     // (boot()) nên luôn có số ngay từ khung hình đầu; fallback "…" chỉ phòng
     // hờ trường hợp gọi renderSidebar() sớm bất thường.
-    h += '<div class="sb-pulse" id="sbPulse"' + (_pulseData ? '' : ' hidden') + '>' +
+    // Trang Home không còn `.sb-brand` (xem trên) — `.sb-pulse-top` bù lại
+    // khoảng đệm trên cùng mà `.sb-brand` từng cho, thay vì để một div rỗng
+    // (Henry: "thay nó bằng 2 cái counter này" — đưa thẳng khối pulse lên
+    // đúng chỗ đó, không chừa khoảng trống riêng).
+    h += '<div class="sb-pulse' + (homeTop ? ' sb-pulse-top' : '') + '" id="sbPulse"' + (_pulseData ? '' : ' hidden') + '>' +
          '<span class="sbp-row"><span class="sbp-dot"></span><b id="sbpOnline">' + (_pulseData ? esc(_pulseData.online.toLocaleString('vi-VN')) : '…') + '</b> đang online</span>' +
          '<span class="sbp-row">' + svg('bolt', 'sbp-ic') + '<b id="sbpPrompts">' + (_pulseData ? esc(_pulseData.promptsToday.toLocaleString('vi-VN')) : '…') + '</b> lượt hỏi hôm nay</span>' +
          '</div>';
