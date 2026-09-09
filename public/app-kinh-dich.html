@@ -105,15 +105,20 @@
           <img class="intro-avatar" src="/tool-avatars/kinh-dich.webp" alt="" onerror="this.remove()">
           <div class="intro-text">
             <div class="intro-t">Kinh Dịch — Gieo quẻ</div>
-            <div class="intro-d">Kinh Dịch gieo một quẻ trong 64 quẻ, đọc đúng hào đang động của bạn. Một quyết định tiền bạc hay tình cảm quan trọng cứ lăn tăn mãi mà không dám dứt khoát? Tập trung vào việc đang hỏi rồi gieo quẻ, nhận lời khuyên cổ xưa cho hiện tại.</div>
+            <div class="intro-d">Kinh Dịch gieo một quẻ trong 64 quẻ bằng 3 đồng xu, đọc đúng hào đang động. Tập trung vào việc đang hỏi rồi gieo, nhận lời khuyên cổ xưa cho quyết định hiện tại.</div>
             <div id="introSrc" style="min-height:18.4px;margin-top:9px"></div>
           </div>
+        </div>
+        <div class="hero-pills">
+          <div class="hero-pill"><span class="hp-ic" data-icon="aperture"></span><span>Quẻ chính<br>&amp; quẻ biến</span></div>
+          <div class="hero-pill"><span class="hp-ic" data-icon="zap"></span><span>Hào động<br>rõ ràng</span></div>
+          <div class="hero-pill"><span class="hp-ic" data-icon="scroll-text"></span><span>Lời quẻ,<br>hào từ</span></div>
         </div>
       </div></div>
       <div id="shellRecent"></div>
       <div class="form-card" id="birthPanel">
-        <h2>Thành tâm nghĩ về việc muốn hỏi</h2>
-        <p class="sub">Tập trung vào câu hỏi rồi gieo quẻ bằng đồng xu đủ 6 lần. Hệ thống xác định hào động và tra đúng quẻ trong 64 quẻ. Nhận về quẻ chính, quẻ biến cùng lời quẻ, hào từ để luận.</p>
+        <div class="fc-head"><span class="fc-ic" data-icon="aperture"></span><h2>Thành tâm nghĩ về việc muốn hỏi</h2></div>
+        <p class="sub">Gieo đủ 6 lần bằng đồng xu, hệ thống tự xác định hào động và tra đúng quẻ trong 64 quẻ — trả quẻ chính, quẻ biến, lời quẻ để luận.</p>
         <p class="price-note" data-tvp-price-label="kinh-dich">…</p>
         <div class="fg">
           <label>Câu hỏi (tuỳ chọn)</label>
@@ -129,7 +134,9 @@
           <div style="font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#777;margin-bottom:4px">Quẻ đang hình thành (từ dưới lên)</div>
           <div class="lines-build" id="linesContainer"></div>
         </div>
-        <button class="btn-go" id="tossBtn" onclick="toss()">✦ Tập Trung &amp; Gieo Hào Đầu Tiên</button>
+        <button class="btn-go" id="tossBtn" onclick="toss()">
+          <span class="bg-label"><span class="ic" data-icon="aperture"></span><b id="tossBtnLabel">Tập Trung &amp; Gieo Hào Đầu Tiên</b></span>
+        </button>
       </div>
 
       <div id="resPanel" data-ws-result>
@@ -138,7 +145,7 @@
         <div id="queAnh"></div>
         <div id="queDoc"></div>
         <div class="ask" data-ask="Luận giúp tôi quẻ này theo đúng câu hỏi: ý nghĩa quẻ chính, hào động và quẻ biến cho thấy điều gì, nên hành động thế nào?">✦ Hỏi trợ lý luận quẻ theo câu hỏi</div>
-        <button class="regieo" onclick="reset()">↺ Gieo quẻ khác</button>
+        <button class="btn-go inline" onclick="reset()"><span class="bg-label"><span class="ic" data-icon="rotate-cw"></span><b>Gieo quẻ khác</b></span></button>
       </div>
     </div>
   </main>
@@ -222,7 +229,7 @@ function addLine(val) {
   const counter = document.getElementById('stepCounter');
   if (step < 6) {
     counter.textContent = `Đã gieo ${step}/6 hào — Bấm để gieo hào ${step + 1}`;
-    document.getElementById('tossBtn').textContent = `✦ Gieo Hào ${step + 1}`;
+    document.getElementById('tossBtnLabel').textContent = `Gieo Hào ${step + 1}`;
   } else {
     counter.textContent = 'Đã đủ 6 hào — Đang xem quẻ...';
     document.getElementById('tossBtn').style.display = 'none';
@@ -274,7 +281,7 @@ function reset() {
   Shell.setShareable(null);
   document.getElementById('stepCounter').textContent = 'Bấm để bắt đầu gieo quẻ — 6 lần gieo, mỗi lần xác định 1 hào';
   const tossBtn = document.getElementById('tossBtn');
-  tossBtn.textContent = '✦ Tập Trung & Gieo Hào Đầu Tiên';
+  document.getElementById('tossBtnLabel').textContent = 'Tập Trung & Gieo Hào Đầu Tiên';
   tossBtn.style.display = 'block';
   tossBtn.disabled = false;
   [0, 1, 2].forEach(i => {

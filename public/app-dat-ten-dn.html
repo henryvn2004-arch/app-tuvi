@@ -66,15 +66,20 @@
           <img class="intro-avatar" src="/tool-avatars/dat-ten-dn.webp" alt="" onerror="this.remove()">
           <div class="intro-text">
             <div class="intro-t">Đặt tên doanh nghiệp</div>
-            <div class="intro-d">Đặt tên doanh nghiệp gợi ý tên công ty hợp ngũ hành và tuổi người chủ. Sợ đặt tên công ty không hợp mệnh khiến việc làm ăn, tiền bạc trục trặc ngay từ đầu? Nhập năm sinh người chủ, nhận 12 gợi ý tên trước khi thành lập.</div>
+            <div class="intro-d">Đặt tên doanh nghiệp gợi ý tên công ty hợp ngũ hành và tuổi người chủ. Nhập năm sinh người chủ, nhận 12 gợi ý tên chia 3 nhóm trước khi thành lập.</div>
             <div id="introSrc" style="min-height:55.2px;margin-top:9px"></div>
           </div>
+        </div>
+        <div class="hero-pills">
+          <div class="hero-pill"><span class="hp-ic" data-icon="sparkles"></span><span>12 gợi ý tên<br>chia 3 nhóm</span></div>
+          <div class="hero-pill"><span class="hp-ic" data-icon="scale"></span><span>Hợp mệnh chủ<br>& ngành nghề</span></div>
+          <div class="hero-pill"><span class="hp-ic" data-icon="building-2"></span><span>Trước khi<br>thành lập</span></div>
         </div>
       </div></div>
       <div id="shellRecent"></div>
       <div class="form-card" id="birthPanel">
-        <h2>Thông tin đặt tên doanh nghiệp</h2>
-        <p class="sub">Nhập năm sinh người chủ, ngành nghề và loại hình kinh doanh. Hệ thống tính nạp âm ngũ hành của chủ rồi gợi tên hợp ngành. Nhận về 12 tên chia 3 nhóm để cân nhắc trước khi thành lập.</p>
+        <div class="fc-head"><span class="fc-ic" data-icon="building-2"></span><h2>Thông tin đặt tên doanh nghiệp</h2></div>
+        <p class="sub">Nhập năm sinh người chủ, ngành nghề và loại hình kinh doanh để tính nạp âm ngũ hành và lập nền đặt tên.</p>
         <p class="price-note" data-tvp-price-label="dat-ten-dn">…</p>
         <div class="frow">
           <div class="fg" style="flex:1;min-width:150px"><label>Tên người chủ (tùy chọn)</label><input type="text" id="inpTenChu" placeholder="Nguyễn Văn A"></div>
@@ -106,10 +111,12 @@
             </select>
           </div>
         </div>
-        <div class="frow" style="margin-bottom:4px">
+        <div class="frow" style="margin-bottom:13px">
           <div class="fg" style="flex:1;min-width:200px"><label>Tên đang cân nhắc (tùy chọn)</label><input type="text" id="inpTenGoiY" placeholder="Để trống nếu muốn được gợi ý mới"></div>
-          <button class="btn-go" id="btnGo" onclick="doDatTenDn()">Lập nền →</button>
         </div>
+        <button class="btn-go" id="btnGo" onclick="doDatTenDn()">
+          <span class="bg-label"><span class="ic" data-icon="building-2"></span><b id="btnGoLabel">Lập nền →</b></span>
+        </button>
       </div>
 
       <div id="resPanel" data-ws-result>
@@ -121,7 +128,27 @@
              chọn khi đặt tên DN) thành một câu nổi bật ngay trước CTA. -->
         <div id="hookHost"></div>
         <div class="dt-unlock" id="dtUnlock">
-          <button class="btn-go" id="btnUnlock" onclick="initiateDatTenDnChuyenSau()">✦ Gợi ý tên doanh nghiệp — <span data-tvp-price="dat-ten-dn">…</span> Lượng →</button>
+          <div class="cost-box">
+            <div class="cb-l">
+              <span class="cb-ic" data-icon="wallet"></span>
+              <div>
+                <div class="cb-title">Chi phí sử dụng</div>
+                <div class="cb-amt"><span data-tvp-price="dat-ten-dn">…</span> Lượng <span class="vnd" data-tvp-price-vnd="dat-ten-dn"></span> mỗi lượt</div>
+                <div class="cb-pay">
+                  <span><span class="ic" data-icon="qr-code"></span> Chuyển khoản (qua QR ngân hàng)</span>
+                  <span><span class="ic" data-icon="credit-card"></span> PayPal / Thẻ quốc tế</span>
+                </div>
+              </div>
+            </div>
+            <div class="cb-r">
+              <span class="cb-ic" data-icon="gift"></span>
+              <div class="cb-r-txt">Mua gói để nhận nhiều ưu đãi hơn.<br><a href="/topup.html">Xem các gói ngay →</a></div>
+            </div>
+          </div>
+          <button class="btn-go" id="btnUnlock" onclick="initiateDatTenDnChuyenSau()">
+            <span class="bg-label"><span class="ic" data-icon="sparkles"></span><b id="btnUnlockLabel">Gợi ý tên doanh nghiệp →</b></span>
+            <small>Tốn <span data-tvp-price="dat-ten-dn">…</span> Lượng <span data-tvp-price-vnd="dat-ten-dn"></span></small>
+          </button>
           <p>Hệ thống đọc ngũ hành nạp âm chủ + ngành nghề, gợi ý 12 tên chia 3 nhóm: Thuần Việt / Hán Việt / Kết Hợp.</p>
         </div>
         <div class="dt-result" id="dtResult"></div>
@@ -225,6 +252,18 @@ function doDatTenDn(){
 // ══════════════════════════════════════════════════════════════════════
 var _dtHoTen='', _dtNamSinh=0, _dtInfoChu=null, _dtLinhVuc='', _dtLoaiHinh='';
 TuviPaywall.init({product:'dat-ten-dn'});
+
+// Ghi "(~X đ)" cạnh số Lượng trong hộp chi phí + nút CTA — cùng mẫu
+// `_fillVndSlots` của app-luan-giai.html. `ToolPrices.vndLabel` tự trả ''
+// khi chưa đọc được `credit_packages`, lúc đó không hiện gì (không đoán số).
+function _fillVndSlots(host,product){
+  if(!host||!window.ToolPrices) return;
+  var els=host.querySelectorAll('[data-tvp-price-vnd]');
+  var cost=window.ToolPrices.get(product);
+  var lbl=cost!=null?window.ToolPrices.vndLabel(cost):'';
+  els.forEach(function(el){ el.textContent=lbl?('('+lbl+')'):''; });
+}
+TuviPaywall.fillPriceSlots(document).then(function(){ _fillVndSlots(document,'dat-ten-dn'); });
 
 // Mỗi tên gợi ý là MỘT dòng "**[Tên]** — chi tiết" (định dạng đã ép trong
 // prompt) — tách thành thẻ nhỏ `.fb-item` (xem shell.css) để đọc lướt danh

@@ -87,15 +87,20 @@
           <img class="intro-avatar" src="/tool-avatars/mai-hoa.webp" alt="" onerror="this.remove()">
           <div class="intro-text">
             <div class="intro-t">Mai Hoa Dịch Số</div>
-            <div class="intro-d">Mai Hoa Dịch Số gieo quẻ bằng số hoặc giờ, đọc Thể và Dụng cho việc bạn hỏi. Đang phân vân một quyết định tiền bạc hay tình cảm quan trọng, mà thời gian lại không cho phép suy nghĩ lâu? Nhập một con số, nhận hai quẻ Thể – Dụng cùng lời luận gọn.</div>
+            <div class="intro-d">Mai Hoa Dịch Số gieo quẻ bằng một con số hoặc theo giờ hiện tại, đọc Thể và Dụng cho việc bạn hỏi. Nhập một con số, nhận hai quẻ Thể – Dụng cùng lời luận gọn.</div>
             <div id="introSrc" style="min-height:18.4px;margin-top:9px"></div>
           </div>
+        </div>
+        <div class="hero-pills">
+          <div class="hero-pill"><span class="hp-ic" data-icon="flower"></span><span>Quẻ Thể<br>&amp; Dụng</span></div>
+          <div class="hero-pill"><span class="hp-ic" data-icon="layout-grid"></span><span>Ba chặng<br>chính–hỗ–biến</span></div>
+          <div class="hero-pill"><span class="hp-ic" data-icon="scroll-text"></span><span>Hào từ &amp;<br>lời luận</span></div>
         </div>
       </div></div>
       <div id="shellRecent"></div>
       <div class="form-card" id="birthPanel">
-        <h2>Thành tâm nghĩ về việc muốn hỏi</h2>
-        <p class="sub">Gõ câu hỏi nếu có, rồi gieo quẻ theo giờ hiện tại hoặc theo một con số. Hệ thống lập quẻ Thể – Dụng và xác định hào động. Nhận về hào từ tham khảo cùng cách luận theo đúng quẻ vừa gieo.</p>
+        <div class="fc-head"><span class="fc-ic" data-icon="flower"></span><h2>Thành tâm nghĩ về việc muốn hỏi</h2></div>
+        <p class="sub">Gieo theo giờ hiện tại hoặc một con số — hệ thống lập quẻ Thể–Dụng, xác định hào động và trả hào từ để luận.</p>
         <p class="price-note" data-tvp-price-label="mai-hoa">…</p>
         <div class="fg">
           <label>Câu hỏi (tuỳ chọn)</label>
@@ -109,7 +114,9 @@
           <label>Con số nảy ra trong đầu</label>
           <input type="number" id="soInput" placeholder="VD: 27" min="1" step="1" inputmode="numeric">
         </div>
-        <button class="btn-go" id="goBtn" onclick="gieo()">✦ Lập Quẻ</button>
+        <button class="btn-go" id="goBtn" onclick="gieo()">
+          <span class="bg-label"><span class="ic" data-icon="flower"></span><b>Lập Quẻ</b></span>
+        </button>
         <div class="mh-err" id="mhErr" style="display:none"></div>
       </div>
 
@@ -121,8 +128,8 @@
         <div id="mhBuoc"></div>
         <div id="mhAnh"></div>
         <div class="mh-tai">
-          <button id="taiBtn" onclick="taiAnh()">⬇ Tải ảnh chia sẻ (9:16)</button>
-          <button onclick="reset()">↺ Gieo quẻ khác</button>
+          <button class="btn-go inline" id="taiBtn" onclick="taiAnh()"><span class="bg-label"><span class="ic" data-icon="save"></span><b id="taiBtnLabel">Tải ảnh chia sẻ (9:16)</b></span></button>
+          <button class="btn-go inline" onclick="reset()"><span class="bg-label"><span class="ic" data-icon="rotate-cw"></span><b>Gieo quẻ khác</b></span></button>
         </div>
         <div class="mh-err" id="mhErr2" style="display:none"></div>
         <div class="ask" data-ask="Luận giúp tôi quẻ Mai Hoa này theo đúng câu hỏi: quan hệ Thể–Dụng nói gì, ba chặng chính–hỗ–biến diễn ra thế nào, nên hành động ra sao?">✦ Hỏi trợ lý luận quẻ theo câu hỏi</div>
@@ -221,9 +228,10 @@ function taiAnh() {
   if (!_r || !window.Poster) return;
   _err('mhErr2', '');
   const btn = document.getElementById('taiBtn');
-  const old = btn.textContent;
+  const lbl = document.getElementById('taiBtnLabel');
+  const old = lbl.textContent;
   btn.disabled = true;
-  btn.textContent = 'Đang dựng ảnh…';
+  lbl.textContent = 'Đang dựng ảnh…';
   MaiHoaTool.loadAnh(_r)
     .then(function (img) {
       const o = MaiHoaTool.posterOpts(_r, document.getElementById('cauHoi').value.trim());
@@ -234,7 +242,7 @@ function taiAnh() {
     })
     .then(function () { if (window.Track) Track.event('poster_download', { tool_id: 'mai-hoa' }); })
     .catch(function () { _err('mhErr2', 'Chưa dựng được ảnh. Thử lại sau ít giây.'); })
-    .then(function () { btn.disabled = false; btn.textContent = old; });
+    .then(function () { btn.disabled = false; lbl.textContent = old; });
 }
 
 function reset() {

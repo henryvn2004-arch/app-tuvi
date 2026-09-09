@@ -93,16 +93,20 @@
           <img class="intro-avatar" src="/tool-avatars/nguoi-khac.webp" alt="" onerror="this.remove()">
           <div class="intro-text">
             <div class="intro-t">Lá Số Người Khác</div>
-            <div class="intro-d">Lá Số Người Khác lập lá số Tử Vi cho một người bạn cần hiểu rõ hơn. Đoán sai ý sếp, hiểu lầm người yêu, mất lòng đối tác — chỉ vì chưa từng biết họ đang nghĩ theo kiểu người nào? Nhập ngày giờ sinh người đó, nhận cẩm nang nên nói gì, nên tránh gì.</div>
+            <div class="intro-d">Lá Số Người Khác lập lá số Tử Vi cho một người bạn cần hiểu rõ hơn. Nhập ngày giờ sinh người đó, nhận cẩm nang nên nói gì, nên tránh gì và kế hoạch cụ thể cho việc bạn đang cần làm với họ.</div>
             <div id="introSrc" style="min-height:73.6px;margin-top:9px"></div>
           </div>
+        </div>
+        <div class="hero-pills">
+          <div class="hero-pill"><span class="hp-ic" data-icon="scroll-text"></span><span>Cẩm nang<br>ứng xử</span></div>
+          <div class="hero-pill"><span class="hp-ic" data-icon="message-circle"></span><span>Nên nói gì<br>tránh nói gì</span></div>
+          <div class="hero-pill"><span class="hp-ic" data-icon="hourglass"></span><span>Lúc nào nên<br>đưa việc lớn</span></div>
         </div>
       </div></div>
       <div id="shellRecent"></div>
       <div class="form-card" id="birthPanel">
-        <h2>Ngày sinh của người bạn muốn hiểu</h2>
-        <p class="sub">Nhập ngày giờ sinh người đó, mối quan hệ và việc bạn đang cần làm với họ. Hệ thống phân tích lá số của người đó theo đúng việc bạn nêu. Nhận về cách người này vận hành, nên nói gì, nên tránh gì và kế hoạch cụ thể.</p>
-        <p class="price-note" data-tvp-price-label="nguoi-khac">…</p>
+        <div class="fc-head"><span class="fc-ic" data-icon="user"></span><h2>Ngày sinh của người bạn muốn hiểu</h2></div>
+        <p class="sub">Nhập ngày giờ sinh người đó, mối quan hệ và việc bạn đang cần làm với họ để phân tích lá số theo đúng việc bạn nêu.</p>
         <div id="sampleLinkHost"></div>
 
         <div class="frow nk-qh">
@@ -147,8 +151,28 @@
           </div>
         </details>
 
-        <div class="frow" style="margin-bottom:0;margin-top:14px">
-          <button class="btn-go" id="btnGo" onclick="analyze()">Xem Cẩm Nang Ứng Xử — <span data-tvp-price="nguoi-khac">…</span> Lượng →</button>
+        <div class="cost-box" style="margin-top:14px">
+          <div class="cb-l">
+            <span class="cb-ic" data-icon="wallet"></span>
+            <div>
+              <div class="cb-title">Chi phí sử dụng</div>
+              <div class="cb-amt"><span data-tvp-price="nguoi-khac">…</span> Lượng <span class="vnd" data-tvp-price-vnd="nguoi-khac"></span> mỗi lượt</div>
+              <div class="cb-pay">
+                <span><span class="ic" data-icon="qr-code"></span> Chuyển khoản (qua QR ngân hàng)</span>
+                <span><span class="ic" data-icon="credit-card"></span> PayPal / Thẻ quốc tế</span>
+              </div>
+            </div>
+          </div>
+          <div class="cb-r">
+            <span class="cb-ic" data-icon="gift"></span>
+            <div class="cb-r-txt">Mua gói để nhận nhiều ưu đãi hơn.<br><a href="/topup.html">Xem các gói ngay →</a></div>
+          </div>
+        </div>
+        <div class="frow" style="margin-bottom:0">
+          <button class="btn-go" id="btnGo" onclick="analyze()">
+            <span class="bg-label"><span class="ic" data-icon="user"></span><b id="btnGoLabel">Xem Cẩm Nang Ứng Xử →</b></span>
+            <small>Tốn <span data-tvp-price="nguoi-khac">…</span> Lượng <span data-tvp-price-vnd="nguoi-khac"></span></small>
+          </button>
         </div>
         <div class="err" id="error-msg"></div>
       </div>
@@ -440,6 +464,18 @@ var NK_RESUME_KEY = 'nk_pending_resume';
 // Không có dòng này thì `_cfg.product` rỗng ⇒ paywall không tra được giá, hiện
 // hộp "chưa đọc được bảng giá" và tool KHÔNG chạy. Test trang bắt đúng chỗ này.
 TuviPaywall.init({ product: 'nguoi-khac', slug: function () { return _currentSlug; } });
+
+// Ghi "(~X đ)" cạnh số Lượng trong hộp chi phí + nút CTA — cùng mẫu
+// `_fillVndSlots` của app-luan-giai.html. `ToolPrices.vndLabel` tự trả ''
+// khi chưa đọc được `credit_packages`, lúc đó không hiện gì (không đoán số).
+function _fillVndSlots(host, product) {
+  if (!host || !window.ToolPrices) return;
+  var els = host.querySelectorAll('[data-tvp-price-vnd]');
+  var cost = window.ToolPrices.get(product);
+  var lbl = cost != null ? window.ToolPrices.vndLabel(cost) : '';
+  els.forEach(function (el) { el.textContent = lbl ? ('(' + lbl + ')') : ''; });
+}
+TuviPaywall.fillPriceSlots(document).then(function () { _fillVndSlots(document, 'nguoi-khac'); });
 
 function showError(msg) {
   var e = document.getElementById('error-msg');

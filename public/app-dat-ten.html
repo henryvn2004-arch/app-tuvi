@@ -66,26 +66,33 @@
           <img class="intro-avatar" src="/tool-avatars/dat-ten-con.webp" alt="" onerror="this.remove()">
           <div class="intro-text">
             <div class="intro-t">Đặt tên con hợp mệnh</div>
-            <div class="intro-d">Đặt tên con hợp mệnh gợi ý tên cho con theo ngũ hành của con, cha và mẹ. Sợ đặt tên không hợp mệnh khiến con vất vả đường tài lộc, sức khoẻ sau này? Nhập ngày sinh cả nhà, nhận 12 gợi ý tên để chọn trước ngày đón con.</div>
+            <div class="intro-d">Đặt tên con hợp mệnh gợi ý tên theo ngũ hành của con, cha và mẹ. Nhập ngày sinh cả nhà, nhận 12 gợi ý tên chia 3 nhóm kèm nghĩa Hán Việt.</div>
             <div id="introSrc" style="min-height:55.2px;margin-top:9px"></div>
           </div>
+        </div>
+        <div class="hero-pills">
+          <div class="hero-pill"><span class="hp-ic" data-icon="sparkles"></span><span>12 gợi ý tên<br>chia 3 nhóm</span></div>
+          <div class="hero-pill"><span class="hp-ic" data-icon="scale"></span><span>Hợp ngũ hành<br>con & bố mẹ</span></div>
+          <div class="hero-pill"><span class="hp-ic" data-icon="scroll-text"></span><span>Kèm nghĩa<br>Hán Việt</span></div>
         </div>
       </div></div>
       <div id="shellRecent"></div>
       <div class="form-card" id="birthPanel">
-        <h2>Thông tin để đặt tên</h2>
-        <p class="sub">Nhập họ và giới tính của con, cùng ngày sinh của con, bố và mẹ. Hệ thống tính nạp âm ngũ hành cả nhà rồi gợi tên phù hợp. Nhận về 12 tên chia 3 nhóm, kèm nghĩa Hán Việt để chọn.</p>
+        <div class="fc-head"><span class="fc-ic" data-icon="baby"></span><h2>Thông tin để đặt tên</h2></div>
+        <p class="sub">Nhập họ, giới tính và năm sinh của con, bố, mẹ để tính nạp âm ngũ hành và lập nền đặt tên.</p>
         <p class="price-note" data-tvp-price-label="dat-ten-con">…</p>
         <div class="frow">
           <div class="fg" style="flex:2;min-width:150px"><label>Họ (của con)</label><input type="text" id="inpHo" placeholder="Nguyễn"></div>
           <div class="fg" style="width:110px"><label>Giới tính con</label><select id="inpGt"><option value="nam">Bé trai</option><option value="nu">Bé gái</option></select></div>
         </div>
-        <div class="frow" style="margin-bottom:4px">
+        <div class="frow" style="margin-bottom:13px">
           <div class="fg" style="width:120px"><label>Năm sinh con</label><input type="number" id="inpNamCon" placeholder="2025" min="1900" max="2100"></div>
           <div class="fg" style="width:120px"><label>Năm sinh bố</label><input type="number" id="inpNamBo" placeholder="1990" min="1900" max="2100"></div>
           <div class="fg" style="width:120px"><label>Năm sinh mẹ</label><input type="number" id="inpNamMe" placeholder="1992" min="1900" max="2100"></div>
-          <button class="btn-go" id="btnGo" onclick="doDatTen()">Lập nền →</button>
         </div>
+        <button class="btn-go" id="btnGo" onclick="doDatTen()">
+          <span class="bg-label"><span class="ic" data-icon="baby"></span><b id="btnGoLabel">Lập nền →</b></span>
+        </button>
       </div>
 
       <div id="resPanel" data-ws-result>
@@ -100,7 +107,27 @@
              mở khoá 12 tên cụ thể. -->
         <div id="hookHost"></div>
         <div class="dt-unlock" id="dtUnlock">
-          <button class="btn-go" id="btnUnlock" onclick="initiateDatTenChuyenSau()">✦ Gợi ý 12 tên hợp mệnh — <span data-tvp-price="dat-ten-con">…</span> Lượng →</button>
+          <div class="cost-box">
+            <div class="cb-l">
+              <span class="cb-ic" data-icon="wallet"></span>
+              <div>
+                <div class="cb-title">Chi phí sử dụng</div>
+                <div class="cb-amt"><span data-tvp-price="dat-ten-con">…</span> Lượng <span class="vnd" data-tvp-price-vnd="dat-ten-con"></span> mỗi lượt</div>
+                <div class="cb-pay">
+                  <span><span class="ic" data-icon="qr-code"></span> Chuyển khoản (qua QR ngân hàng)</span>
+                  <span><span class="ic" data-icon="credit-card"></span> PayPal / Thẻ quốc tế</span>
+                </div>
+              </div>
+            </div>
+            <div class="cb-r">
+              <span class="cb-ic" data-icon="gift"></span>
+              <div class="cb-r-txt">Mua gói để nhận nhiều ưu đãi hơn.<br><a href="/topup.html">Xem các gói ngay →</a></div>
+            </div>
+          </div>
+          <button class="btn-go" id="btnUnlock" onclick="initiateDatTenChuyenSau()">
+            <span class="bg-label"><span class="ic" data-icon="sparkles"></span><b id="btnUnlockLabel">Gợi ý 12 tên hợp mệnh →</b></span>
+            <small>Tốn <span data-tvp-price="dat-ten-con">…</span> Lượng <span data-tvp-price-vnd="dat-ten-con"></span></small>
+          </button>
           <p>Hệ thống đọc ngũ hành nạp âm của con và bố mẹ, gợi ý 12 tên chia 3 nhóm kèm ý nghĩa Hán Việt.</p>
         </div>
         <div class="dt-result" id="dtResult"></div>
@@ -198,6 +225,18 @@ function mountHook(iCon){
 // ══════════════════════════════════════════════════════════════════════
 var _dtHo='', _dtGt='', _dtNamCon=0, _dtInfoC=null, _dtInfoB=null, _dtInfoM=null;
 TuviPaywall.init({product:'dat-ten-con'});
+
+// Ghi "(~X đ)" cạnh số Lượng trong hộp chi phí + nút CTA — cùng mẫu
+// `_fillVndSlots` của app-luan-giai.html. `ToolPrices.vndLabel` tự trả ''
+// khi chưa đọc được `credit_packages`, lúc đó không hiện gì (không đoán số).
+function _fillVndSlots(host,product){
+  if(!host||!window.ToolPrices) return;
+  var els=host.querySelectorAll('[data-tvp-price-vnd]');
+  var cost=window.ToolPrices.get(product);
+  var lbl=cost!=null?window.ToolPrices.vndLabel(cost):'';
+  els.forEach(function(el){ el.textContent=lbl?('('+lbl+')'):''; });
+}
+TuviPaywall.fillPriceSlots(document).then(function(){ _fillVndSlots(document,'dat-ten-con'); });
 
 // Mỗi tên gợi ý là MỘT dòng "**[Tên]** — chi tiết" (định dạng đã ép trong
 // prompt) — tách thành thẻ nhỏ `.fb-item` (xem shell.css) để đọc lướt danh

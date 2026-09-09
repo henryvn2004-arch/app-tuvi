@@ -76,16 +76,21 @@
           <img class="intro-avatar" src="/tool-avatars/oracle.webp" alt="" onerror="this.remove()">
           <div class="intro-text">
             <div class="intro-t">Oracle Phương Đông</div>
-            <div class="intro-d">Oracle Phương Đông rút một lá triết lý phương Đông, đọc một lời khuyên tĩnh tâm. Áp lực tiền bạc, công việc, tình cảm dồn cùng lúc mà chẳng biết nên bắt đầu gỡ rối từ đâu? Rút một lá, nhận lời khuyên ngắn để dừng lại và thở chậm hơn.</div>
+            <div class="intro-d">Oracle Phương Đông rút một lá triết lý phương Đông — Âm Dương, Ngũ Hành, Bát Quái — đọc lời khuyên tĩnh tâm. Rút một lá, nhận lời khuyên ngắn, dừng lại và thở chậm hơn.</div>
             <div id="introSrc" style="min-height:73.6px;margin-top:9px"></div>
           </div>
+        </div>
+        <div class="hero-pills">
+          <div class="hero-pill"><span class="hp-ic" data-icon="sparkles"></span><span>Rút 1, 3<br>hay 5 lá</span></div>
+          <div class="hero-pill"><span class="hp-ic" data-icon="lightbulb"></span><span>Hướng dẫn<br>thực hành</span></div>
+          <div class="hero-pill"><span class="hp-ic" data-icon="aperture"></span><span>Triết lý<br>phương Đông</span></div>
         </div>
       </div></div>
       <div id="shellRecent"></div>
 
       <div class="or-card" id="inputCard">
-        <h2>Chọn Kiểu Rút Bài</h2>
-        <p class="sub">Chọn kiểu rút bài (1, 3 hay 5 lá) và một câu hỏi nếu muốn. Hệ thống rút ngẫu nhiên các lá theo đúng vị trí đã chọn. Nhận về thông điệp, hướng dẫn thực hành và từ khoá cho từng lá.</p>
+        <div class="fc-head"><span class="fc-ic" data-icon="sparkles"></span><h2>Chọn Kiểu Rút Bài</h2></div>
+        <p class="sub">Chọn kiểu rút (1, 3 hay 5 lá) — hệ thống rút ngẫu nhiên, trả thông điệp, hướng dẫn thực hành cho từng lá.</p>
         <p class="price-note" data-tvp-price-label="oracle">…</p>
         <div class="spread-btns">
           <button class="spread-btn active" onclick="setSpread(1,this)"><span class="ic" data-icon="sparkles"></span> 1 Lá — Thông Điệp Hiện Tại</button>
@@ -97,7 +102,9 @@
           <input type="text" id="question" placeholder="VD: Tôi cần nhận ra điều gì trong giai đoạn này?" maxlength="120">
         </div>
         <div style="text-align:center">
-          <button class="draw-btn" id="drawBtn" onclick="draw()">✦ Định Tâm &amp; Rút Bài</button>
+          <button class="btn-go" id="drawBtn" onclick="draw()">
+            <span class="bg-label"><span class="ic" data-icon="sparkles"></span><b id="drawBtnLabel">Định Tâm &amp; Rút Bài</b></span>
+          </button>
         </div>
       </div>
 
@@ -338,7 +345,8 @@ function setSpread(n, btn) {
 
 function draw() {
   const btn = document.getElementById('drawBtn');
-  btn.disabled = true; btn.textContent = '✦ Đang định tâm...';
+  const lbl = document.getElementById('drawBtnLabel');
+  btn.disabled = true; lbl.textContent = 'Đang định tâm...';
   setTimeout(() => {
     const used = new Set(); const picked = [];
     while (picked.length < _spread) {
@@ -347,7 +355,7 @@ function draw() {
     }
     _drawn = picked;
     renderResult();
-    btn.disabled = false; btn.textContent = '✦ Định Tâm & Rút Lại';
+    btn.disabled = false; lbl.textContent = 'Định Tâm & Rút Lại';
   }, 700);
 }
 

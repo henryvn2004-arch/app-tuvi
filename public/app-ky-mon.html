@@ -80,15 +80,20 @@
           <img class="intro-avatar" src="/tool-avatars/ky-mon.webp" alt="" onerror="this.remove()">
           <div class="intro-text">
             <div class="intro-t">Kỳ Môn Độn Giáp</div>
-            <div class="intro-d">Kỳ Môn Độn Giáp dựng bàn 9 cung theo đúng giờ hiện tại, chỉ hướng nên đi. Sắp đàm phán, ký kết một việc quan trọng liên quan tiền bạc mà không chắc chọn đúng giờ, đúng hướng? Bấm dựng bàn ngay, nhận giờ tốt, hướng lợi cho đúng lúc bạn cần.</div>
+            <div class="intro-d">Kỳ Môn Độn Giáp dựng bàn 9 cung theo đúng giờ hiện tại, chỉ rõ hướng nên đi. Bấm dựng bàn ngay, nhận giờ tốt, hướng lợi cho đúng lúc bạn cần.</div>
             <div id="introSrc" style="min-height:55.2px;margin-top:9px"></div>
           </div>
+        </div>
+        <div class="hero-pills">
+          <div class="hero-pill"><span class="hp-ic" data-icon="layout-grid"></span><span>Bàn 9 cung<br>đầy đủ</span></div>
+          <div class="hero-pill"><span class="hp-ic" data-icon="compass"></span><span>Hướng nên đi,<br>hướng nên tránh</span></div>
+          <div class="hero-pill"><span class="hp-ic" data-icon="clock"></span><span>Giờ tốt<br>cho việc</span></div>
         </div>
       </div></div>
       <div id="shellRecent"></div>
       <div class="form-card" id="birthPanel">
-        <h2>Lập bàn cho một thời điểm</h2>
-        <p class="sub">Nêu việc bạn muốn hỏi, để trống thời điểm là lấy ngay giờ hiện tại. Hệ thống dựng bàn 9 cung theo đúng giờ đó. Nhận về cục, trực phù – trực sử và chi tiết từng cung trong bàn.</p>
+        <div class="fc-head"><span class="fc-ic" data-icon="layout-grid"></span><h2>Lập bàn cho một thời điểm</h2></div>
+        <p class="sub">Để trống thời điểm là lấy giờ hiện tại. Hệ thống dựng bàn 9 cung, trả cục, trực phù–trực sử và chi tiết từng cung.</p>
         <p class="price-note" data-tvp-price-label="ky-mon">…</p>
         <div class="fg">
           <label>Việc muốn hỏi (tuỳ chọn)</label>
@@ -98,7 +103,9 @@
           <label>Thời điểm (để trống = bây giờ)</label>
           <input type="datetime-local" id="tInput">
         </div>
-        <button class="btn-go" id="goBtn" onclick="lapBan()">✦ Lập Bàn Kỳ Môn</button>
+        <button class="btn-go" id="goBtn" onclick="lapBan()">
+          <span class="bg-label"><span class="ic" data-icon="layout-grid"></span><b>Lập Bàn Kỳ Môn</b></span>
+        </button>
         <div class="km-err" id="kmErr" style="display:none"></div>
       </div>
 
@@ -107,8 +114,8 @@
         <div id="kmBan"></div>
         <div id="kmChiTiet"></div>
         <div class="km-tai">
-          <button id="taiBtn" onclick="taiAnh()">⬇ Tải ảnh chia sẻ (9:16)</button>
-          <button onclick="reset()">↻ Lập bàn khác</button>
+          <button class="btn-go inline" id="taiBtn" onclick="taiAnh()"><span class="bg-label"><span class="ic" data-icon="save"></span><b id="taiBtnLabel">Tải ảnh chia sẻ (9:16)</b></span></button>
+          <button class="btn-go inline" onclick="reset()"><span class="bg-label"><span class="ic" data-icon="rotate-cw"></span><b>Lập bàn khác</b></span></button>
         </div>
         <div class="km-err" id="kmErr2" style="display:none"></div>
         <div class="ask" data-ask="Luận giúp tôi bàn Kỳ Môn này theo đúng việc tôi hỏi: nên đi hướng nào, giờ này hợp làm gì, hướng nào phải tránh và vì sao?">✦ Hỏi trợ lý luận bàn theo việc của tôi</div>
@@ -194,9 +201,10 @@ function taiAnh() {
   if (!_b || !window.Poster) return;
   _err('kmErr2', '');
   const btn = document.getElementById('taiBtn');
-  const old = btn.textContent;
+  const lbl = document.getElementById('taiBtnLabel');
+  const old = lbl.textContent;
   btn.disabled = true;
-  btn.textContent = 'Đang dựng ảnh…';
+  lbl.textContent = 'Đang dựng ảnh…';
   const o = KyMonTool.posterOpts(_b);
   o.draw = KyMonTool.posterDraw(_b);
   o.qrUrl = Poster.qrLink('ky-mon', '/app/ky-mon');
@@ -204,7 +212,7 @@ function taiAnh() {
   Poster.download(o, 'ky-mon-tuviminhbao.png')
     .then(function () { if (window.Track) Track.event('poster_download', { tool_id: 'ky-mon' }); })
     .catch(function () { _err('kmErr2', 'Chưa dựng được ảnh. Thử lại sau ít giây.'); })
-    .then(function () { btn.disabled = false; btn.textContent = old; });
+    .then(function () { btn.disabled = false; lbl.textContent = old; });
 }
 
 function reset() {

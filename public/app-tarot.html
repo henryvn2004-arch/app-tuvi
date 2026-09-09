@@ -99,16 +99,21 @@ gap:8px;width:fit-content;margin:24px auto}
           <img class="intro-avatar" src="/tool-avatars/tarot.webp" alt="" onerror="this.remove()">
           <div class="intro-text">
             <div class="intro-t">Tarot 78 Lá</div>
-            <div class="intro-d">Tarot 78 Lá rút một lá bài, luận nghĩa cho câu hỏi bạn đang mang. Chuyện tình cảm hay tiền bạc đang rối, hỏi ai cũng chỉ nhận được câu an ủi chung chung? Gõ câu hỏi, rút một lá, nhận lời luận rõ ràng cho đúng điều bạn đang phân vân.</div>
+            <div class="intro-d">Tarot 78 Lá rút bài theo cách trải bạn chọn, luận nghĩa xuôi/ngược cho đúng câu hỏi. Gõ câu hỏi, rút bài, nhận lời luận rõ ràng ngay.</div>
             <div id="introSrc" style="min-height:73.6px;margin-top:9px"></div>
           </div>
+        </div>
+        <div class="hero-pills">
+          <div class="hero-pill"><span class="hp-ic" data-icon="wallet-cards"></span><span>Trải 1, 3<br>hay 10 lá</span></div>
+          <div class="hero-pill"><span class="hp-ic" data-icon="sparkles"></span><span>Xuôi hay<br>ngược nghĩa</span></div>
+          <div class="hero-pill"><span class="hp-ic" data-icon="message-circle"></span><span>Luận theo<br>câu hỏi của bạn</span></div>
         </div>
       </div></div>
       <div id="shellRecent"></div>
 
       <div class="tr-card" id="inputCard">
-        <h2>Chọn Kiểu Trải Bài</h2>
-        <p class="sub">Chọn kiểu trải bài (1, 3 hay 10 lá) và gõ câu hỏi nếu có. Hệ thống rút bài ngẫu nhiên rồi tra nghĩa theo từng vị trí. Nhận về luận giải từng lá bài, xuôi hay ngược, khớp đúng câu hỏi của bạn.</p>
+        <div class="fc-head"><span class="fc-ic" data-icon="wallet-cards"></span><h2>Chọn Kiểu Trải Bài</h2></div>
+        <p class="sub">Chọn kiểu trải (1, 3 hay 10 lá), rút bài ngẫu nhiên, trả luận giải từng lá — xuôi hay ngược — khớp đúng câu hỏi của bạn.</p>
         <p class="price-note" data-tvp-price-label="tarot">…</p>
         <div class="spread-btns">
           <button class="spread-btn active" onclick="setSpread(1,this)"><span class="ic" data-icon="sparkles"></span> 1 Lá — Thông Điệp Hôm Nay</button>
@@ -120,7 +125,9 @@ gap:8px;width:fit-content;margin:24px auto}
           <input type="text" id="question" placeholder="VD: Tình trạng sự nghiệp của tôi hiện tại thế nào?" maxlength="120">
         </div>
         <div style="text-align:center">
-          <button class="draw-btn" id="drawBtn" onclick="draw()">✦ Xáo Bài &amp; Rút</button>
+          <button class="btn-go" id="drawBtn" onclick="draw()">
+            <span class="bg-label"><span class="ic" data-icon="wallet-cards"></span><b id="drawBtnLabel">Xáo Bài &amp; Rút</b></span>
+          </button>
         </div>
         <div class="tr-error" id="error-msg"></div>
       </div>
@@ -522,8 +529,9 @@ function setSpread(n, btn) {
 
 function draw() {
   const btn = document.getElementById('drawBtn');
+  const lbl = document.getElementById('drawBtnLabel');
   btn.disabled = true;
-  btn.textContent = '✦ Đang xáo bài...';
+  lbl.textContent = 'Đang xáo bài...';
   _drawn = [];
 
   setTimeout(() => {
@@ -538,7 +546,7 @@ function draw() {
 
     renderSpread();
     btn.disabled = false;
-    btn.textContent = '✦ Xáo Bài & Rút Lại';
+    lbl.textContent = 'Xáo Bài & Rút Lại';
   }, 800);
 }
 

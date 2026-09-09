@@ -81,22 +81,30 @@
           <img class="intro-avatar" src="/tool-avatars/xem-tuoi-sinh-con.webp" alt="" onerror="this.remove()">
           <div class="intro-text">
             <div class="intro-t">Xem tuổi sinh con</div>
-            <div class="intro-d">Xem tuổi sinh con tra năm sinh con hợp địa chi của cả bố và mẹ. Sợ sinh con nhằm năm tài chính eo hẹp hay sức khoẻ mẹ không thuận, mà chẳng biết dựa vào đâu để chọn? Nhập năm sinh hai vợ chồng, nhận danh sách năm hợp để tham khảo.</div>
+            <div class="intro-d">Đối chiếu địa chi năm sinh của bố và mẹ, tìm năm thuận nhất để sinh con trong 15 năm tới. Nhập năm sinh hai vợ chồng để xem ngay.</div>
             <div id="introSrc" style="min-height:36.8px;margin-top:9px"></div>
           </div>
+        </div>
+        <div class="hero-pills">
+          <div class="hero-pill"><span class="hp-ic" data-icon="scale"></span><span>Lục Hợp · Tam Hợp<br>Lục Xung</span></div>
+          <div class="hero-pill"><span class="hp-ic" data-icon="calendar-days"></span><span>Bảng đủ<br>15 năm tới</span></div>
+          <div class="hero-pill"><span class="hp-ic" data-icon="star"></span><span>Năm thuận nhất<br>để sinh con</span></div>
         </div>
       </div></div>
       <div id="shellRecent"></div>
       <div class="form-card" id="birthPanel">
-        <h2>Năm sinh của bố và mẹ</h2>
-        <p class="sub">Nhập năm sinh của cả bố và mẹ. Hệ thống đối chiếu địa chi hai người qua 15 năm tới. Nhận về bảng đánh giá từng năm và năm thuận nhất để sinh con.</p>
+        <div class="fc-head"><span class="fc-ic" data-icon="baby"></span><h2>Năm sinh của bố và mẹ</h2></div>
+        <p class="sub">Nhập năm sinh bố và mẹ để xem bảng đánh giá 15 năm tới và năm thuận nhất.</p>
         <p class="price-note" data-tvp-price-label="xem-tuoi-sinh-con">…</p>
         <div class="frow" style="margin-bottom:4px">
           <div class="fg" style="width:130px"><label>Năm sinh bố</label><input type="number" id="inpNamBo" placeholder="1990" min="1900" max="2100"></div>
           <div class="fg" style="width:130px"><label>Năm sinh mẹ</label><input type="number" id="inpNamMe" placeholder="1992" min="1900" max="2100"></div>
-          <button class="btn-go" id="btnGo" onclick="doSinhCon()">Xem 15 năm →</button>
         </div>
         <div class="err" id="error-msg"></div>
+        <button class="btn-go" id="btnGo" onclick="doSinhCon()">
+          <span class="bg-label"><span class="ic" data-icon="hourglass"></span><b id="btnGoLabel">Xem 15 năm →</b></span>
+          <small>Miễn phí</small>
+        </button>
       </div>
 
       <div id="resPanel" data-ws-result>

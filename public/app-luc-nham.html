@@ -58,15 +58,20 @@
           <img class="intro-avatar" src="/tool-avatars/luc-nham.webp" alt="" onerror="this.remove()">
           <div class="intro-text">
             <div class="intro-t">Lục Nhâm Giản</div>
-            <div class="intro-d">Lục Nhâm Giản tra một quẻ theo giờ, ngày hiện tại cho việc đang canh cánh. Chuyện tiền bạc hay tình cảm đang khiến bạn mất ngủ, mà không có ai để hỏi ngay lúc này? Bấm tra ngay, nhận lời luận ngắn, đúng trọng tâm việc đang bận lòng.</div>
+            <div class="intro-d">Lục Nhâm Giản tra một quẻ theo đúng giờ, ngày hiện tại — đúng trọng tâm việc đang canh cánh: tiền bạc, tình cảm hay quyết định cần đưa ra ngay. Bấm tra, nhận lời luận ngắn gọn.</div>
             <div id="introSrc" style="min-height:55.2px;margin-top:9px"></div>
           </div>
+        </div>
+        <div class="hero-pills">
+          <div class="hero-pill"><span class="hp-ic" data-icon="layout-grid"></span><span>Tứ khóa<br>tam truyền</span></div>
+          <div class="hero-pill"><span class="hp-ic" data-icon="circle-dot"></span><span>Quý nhân<br>dẫn lối</span></div>
+          <div class="hero-pill"><span class="hp-ic" data-icon="message-circle"></span><span>Luận theo<br>Khảo Biến Chiêm</span></div>
         </div>
       </div></div>
       <div id="shellRecent"></div>
       <div class="form-card" id="birthPanel">
-        <h2>Ngày &amp; giờ cần xem</h2>
-        <p class="sub">Để trống là lấy ngay giờ hiện tại, hoặc tự chọn ngày giờ cần xem. Hệ thống lập khóa Đại Lục Nhâm theo đúng thời điểm đó. Nhận về tứ khóa, tam truyền, quý nhân và lời luận theo Khảo Biến Chiêm.</p>
+        <div class="fc-head"><span class="fc-ic" data-icon="circle-dot"></span><h2>Ngày &amp; giờ cần xem</h2></div>
+        <p class="sub">Để trống là lấy giờ hiện tại. Hệ thống lập khóa Đại Lục Nhâm, trả tứ khóa, tam truyền, quý nhân và lời luận theo Khảo Biến Chiêm.</p>
         <p class="price-note" data-tvp-price-label="luc-nham">…</p>
         <div class="frow">
           <div class="fg"><label>Ngày</label><input type="number" id="ngay" min="1" max="31" placeholder="1–31"></div>
@@ -84,7 +89,9 @@
               <option value="10">Giờ Tuất (19–21h)</option><option value="11">Giờ Hợi (21–23h)</option>
             </select>
           </div>
-          <button class="btn-go" id="btnGo" onclick="calculate()">Xem quẻ →</button>
+          <button class="btn-go" id="btnGo" onclick="calculate()">
+            <span class="bg-label"><span class="ic" data-icon="circle-dot"></span><b>Xem quẻ →</b></span>
+          </button>
         </div>
         <div class="err" id="error-msg"></div>
       </div>

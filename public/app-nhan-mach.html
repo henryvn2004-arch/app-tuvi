@@ -93,16 +93,20 @@
           <img class="intro-avatar" src="/tool-avatars/nhan-mach.webp" alt="" onerror="this.remove()">
           <div class="intro-text">
             <div class="intro-t">Sổ Nhân Mạch</div>
-            <div class="intro-d">Sổ Nhân Mạch đọc lá số cả nhóm, tìm ai hợp ai, ai dễ va chạm với ai. Quản một đội mà người này với người kia cứ va chạm, hiệu suất tụt mãi không rõ vì sao? Thêm ngày sinh từng thành viên, nhận bản đồ nhân sự để sắp xếp lại đội hình.</div>
+            <div class="intro-d">Sổ Nhân Mạch đọc lá số cả nhóm, tìm ai hợp ai, ai dễ va chạm với ai. Thêm ngày sinh từng thành viên, nhận bản đồ nhân sự để sắp xếp lại đội hình.</div>
             <div id="introSrc" style="min-height:73.6px;margin-top:9px"></div>
           </div>
+        </div>
+        <div class="hero-pills">
+          <div class="hero-pill"><span class="hp-ic" data-icon="users"></span><span>Bản đồ<br>cả nhóm</span></div>
+          <div class="hero-pill"><span class="hp-ic" data-icon="scale"></span><span>Cặp dễ<br>giẫm chân</span></div>
+          <div class="hero-pill"><span class="hp-ic" data-icon="hourglass"></span><span>Việc nên làm<br>tuần này</span></div>
         </div>
       </div></div>
       <div id="shellRecent"></div>
       <div class="form-card" id="birthPanel">
-        <h2>Chọn người trong sổ</h2>
-        <p class="sub">Thêm tên, ngày sinh và giới tính của từng thành viên vào sổ. Hệ thống phân tích lá số của cả nhóm cùng lúc. Nhận về tổng quan nhóm, những cặp cần để ý và việc nên làm trong tuần.</p>
-        <p class="price-note" data-tvp-price-label="nhan-mach">…</p>
+        <div class="fc-head"><span class="fc-ic" data-icon="users"></span><h2>Chọn người trong sổ</h2></div>
+        <p class="sub">Thêm tên, ngày sinh và giới tính từng thành viên vào sổ để phân tích cả nhóm cùng lúc.</p>
 
         <div class="nm-list" id="soList"></div>
         <div class="nm-count" id="soCount"></div>
@@ -135,8 +139,28 @@
           </div>
         </details>
 
-        <div class="frow" style="margin-bottom:0;margin-top:14px">
-          <button class="btn-go" id="btnGo" onclick="analyze()">Đọc Cả Sổ — <span data-tvp-price="nhan-mach">…</span> Lượng →</button>
+        <div class="cost-box" style="margin-top:14px">
+          <div class="cb-l">
+            <span class="cb-ic" data-icon="wallet"></span>
+            <div>
+              <div class="cb-title">Chi phí sử dụng</div>
+              <div class="cb-amt"><span data-tvp-price="nhan-mach">…</span> Lượng <span class="vnd" data-tvp-price-vnd="nhan-mach"></span> mỗi lượt</div>
+              <div class="cb-pay">
+                <span><span class="ic" data-icon="qr-code"></span> Chuyển khoản (qua QR ngân hàng)</span>
+                <span><span class="ic" data-icon="credit-card"></span> PayPal / Thẻ quốc tế</span>
+              </div>
+            </div>
+          </div>
+          <div class="cb-r">
+            <span class="cb-ic" data-icon="gift"></span>
+            <div class="cb-r-txt">Mua gói để nhận nhiều ưu đãi hơn.<br><a href="/topup.html">Xem các gói ngay →</a></div>
+          </div>
+        </div>
+        <div class="frow" style="margin-bottom:0">
+          <button class="btn-go" id="btnGo" onclick="analyze()">
+            <span class="bg-label"><span class="ic" data-icon="users"></span><b id="btnGoLabel">Đọc Cả Sổ →</b></span>
+            <small>Tốn <span data-tvp-price="nhan-mach">…</span> Lượng <span data-tvp-price-vnd="nhan-mach"></span></small>
+          </button>
         </div>
         <div class="err" id="error-msg"></div>
       </div>
@@ -287,6 +311,18 @@ try {
 // Không có dòng này thì `_cfg.product` rỗng ⇒ paywall không tra được giá và tool
 // KHÔNG chạy.
 TuviPaywall.init({ product: 'nhan-mach', slug: function () { return _currentSlug; } });
+
+// Ghi "(~X đ)" cạnh số Lượng trong hộp chi phí + nút CTA — cùng mẫu
+// `_fillVndSlots` của app-luan-giai.html. `ToolPrices.vndLabel` tự trả ''
+// khi chưa đọc được `credit_packages`, lúc đó không hiện gì (không đoán số).
+function _fillVndSlots(host, product) {
+  if (!host || !window.ToolPrices) return;
+  var els = host.querySelectorAll('[data-tvp-price-vnd]');
+  var cost = window.ToolPrices.get(product);
+  var lbl = cost != null ? window.ToolPrices.vndLabel(cost) : '';
+  els.forEach(function (el) { el.textContent = lbl ? ('(' + lbl + ')') : ''; });
+}
+TuviPaywall.fillPriceSlots(document).then(function () { _fillVndSlots(document, 'nhan-mach'); });
 
 function showError(msg) {
   var e = document.getElementById('error-msg');
