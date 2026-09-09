@@ -532,9 +532,12 @@
     });
     h += '</nav></div>';
 
-    // "Gần đây" — chỉ hiện khi có dữ liệu thật (xem renderSidebarRecent).
+    // "Gần đây" — chỉ hiện khi có dữ liệu thật (xem renderSidebarRecent). Trỏ
+    // vào tab Lịch Sử (Tài khoản) — nơi liệt kê phiên/lá số/xem tuổi/xem tướng
+    // đã dùng gần đây — KHÔNG phải trang Lá số đã lưu (đó là quản lý sổ theo
+    // nhóm quan hệ, khác việc "vừa xem gì").
     h += '<div class="grp" id="sbRecentGrp" hidden><div class="grp-h" data-act="grp">Gần đây' +
-         '<a class="grp-link" href="/app/so-la-so">Xem tất cả</a></div><nav class="grp-nav" id="sbRecentList"></nav></div>';
+         '<a class="grp-link" href="/app/tai-khoan#lichsu">Xem tất cả</a></div><nav class="grp-nav" id="sbRecentList"></nav></div>';
 
     h += '<div class="sb-spacer"></div>';
     h += '<div class="sb-foot-grp">' +
@@ -605,7 +608,7 @@
       }).slice(0, SB_RECENT_SHOW);
       recentList.innerHTML = sorted.map(function (it) {
         var name = it.label || (it.birth && it.birth.hoten) || 'Chưa đặt tên';
-        return '<a class="rc-row" href="/app/so-la-so">' +
+        return '<a class="rc-row" href="/app/tai-khoan#lichsu">' +
           '<span class="rc-ava">' + esc((name[0] || '?').toUpperCase()) + '</span>' +
           '<span class="rc-tx"><b>' + esc(name) + '</b></span>' +
           '<span class="rc-time">' + esc(relTime(new Date(it.last_used_at).getTime())) + '</span></a>';
