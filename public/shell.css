@@ -110,10 +110,11 @@ button.item{border:none;background:none;font:inherit;text-align:left}
 .rc-time{font-size:10px;color:var(--sb-txt-dim);flex:0 0 auto;white-space:nowrap}
 .sb-spacer{flex:1}
 .sb-foot-grp{padding:8px 8px;border-top:1px solid var(--sb-line)}
-.sb-brandmini{display:flex;flex-direction:column;align-items:center;gap:4px;padding:12px 10px 16px;text-align:center;opacity:.5}
-.sb-brandmini img{width:20px;height:20px;border-radius:5px;object-fit:cover}
-.sb-brandmini b{font-family:var(--serif);font-size:10px;color:#fff;font-weight:600;letter-spacing:.02em}
-.sb-brandmini span{font-size:8.5px;color:var(--sb-txt-dim)}
+.sb-brandmini{display:flex;align-items:center;gap:9px;padding:12px 14px 16px;opacity:.55}
+.sb-brandmini img{width:24px;height:24px;border-radius:6px;object-fit:cover;flex:0 0 auto}
+.sb-brandmini-tx{min-width:0}
+.sb-brandmini b{display:block;font-family:var(--serif);font-size:11px;color:#fff;font-weight:600;letter-spacing:.02em;line-height:1.25;white-space:nowrap}
+.sb-brandmini span{display:block;font-size:9px;color:var(--sb-txt-dim);white-space:nowrap}
 
 /* ── WORKSPACE FRAME ── */
 .ws{background:var(--paper);overflow-y:auto;display:flex;flex-direction:column;position:relative}

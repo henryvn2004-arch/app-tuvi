@@ -545,7 +545,7 @@
          '<button class="item" type="button" data-act="theme">' + svg('sun') + ' Đổi nền</button>' +
          '<a class="item danger" href="#" data-act="signout">' + svg('door-open') + ' Đăng xuất</a>' +
          '</div>';
-    h += '<div class="sb-brandmini"><img src="/seal.webp" alt=""><b>TỬ VI MINH BẢO</b><span>Tri mệnh lý – Thuận thế hành</span></div>';
+    h += '<div class="sb-brandmini"><img src="/seal.webp" alt=""><div class="sb-brandmini-tx"><b>TỬ VI MINH BẢO</b><span>Tri mệnh lý – Thuận thế hành</span></div></div>';
 
     host.innerHTML = h;
     mountToolIcon();
