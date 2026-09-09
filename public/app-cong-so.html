@@ -125,17 +125,21 @@
           <img class="intro-avatar" src="/tool-avatars/cong-so.webp" alt="" onerror="this.remove()">
           <div class="intro-text">
             <div class="intro-t">Tử Vi Công Sở</div>
-            <div class="intro-d">Tử Vi Công Sở đọc kiểu người của bạn ở chỗ làm và cả chặng đường sự nghiệp. Làm mãi một vị trí, lương không tăng, cảm giác sự nghiệp giậm chân tại chỗ mà không rõ nên đổi hướng nào? Từ lá số của bạn, nhận định hướng nghề nghiệp cụ thể hơn.</div>
+            <div class="intro-d">Đọc kiểu người của bạn ở chỗ làm và cả chặng đường sự nghiệp — giúp định hướng nghề nghiệp cụ thể hơn.</div>
             <div id="introSrc" style="min-height:92.0px;margin-top:9px"></div>
           </div>
+        </div>
+        <div class="hero-pills">
+          <div class="hero-pill"><span class="hp-ic" data-icon="briefcase"></span><span>Kiểu người<br>nơi công sở</span></div>
+          <div class="hero-pill"><span class="hp-ic" data-icon="trending-up"></span><span>40 năm,<br>4 chặng</span></div>
+          <div class="hero-pill"><span class="hp-ic" data-icon="users"></span><span>Nhánh nghề,<br>ghép đội</span></div>
         </div>
       </div></div>
       <div id="shellRecent"></div>
 
       <div class="form-card" id="birthPanel">
-        <h2>Ngày giờ sinh và chỗ đứng hiện tại</h2>
-        <p class="sub">Dùng lá số đã lập, chọn thêm vị trí bạn đang ở nơi làm việc. Hệ thống đối chiếu cổ pháp theo đúng vị trí đó. Nhận về kiểu người nơi công sở, nhánh nghề hợp và 40 năm sự nghiệp chia 4 chặng.</p>
-        <p class="price-note" data-tvp-price-label="cong-so">…</p>
+        <div class="fc-head"><span class="fc-ic" data-icon="briefcase"></span><h2>Ngày giờ sinh và chỗ đứng hiện tại</h2></div>
+        <p class="sub">Nhập ngày giờ sinh và vị trí hiện tại. Hệ thống đối chiếu cổ pháp — kiểu người nơi công sở, nhánh nghề hợp và 40 năm sự nghiệp chia 4 chặng.</p>
         <div id="tuviFormHost"></div>
         <div class="frow">
           <div class="fg"><label>Bạn đang ở vị trí nào</label>
@@ -147,8 +151,12 @@
               <option value="dang-tim">Đang tìm việc / chuyển hướng</option>
             </select>
           </div>
-          <button class="btn-go" id="btnGo" onclick="doCongSo()">Dựng hồ sơ →</button>
         </div>
+        <button class="btn-go" id="btnGo" onclick="doCongSo()">
+          <span class="bg-label"><span class="ic" data-icon="briefcase"></span><b id="btnGoLabel">Dựng hồ sơ →</b></span>
+          <small>Miễn phí</small>
+        </button>
+        <p class="sub" style="margin:10px 0 0">Dựng hồ sơ kiểu người + 12 mặt là <b>miễn phí</b>. Mở phần nhánh nghề cụ thể mới tính Lượng.</p>
         <div class="err" id="error-msg"></div>
       </div>
 
@@ -222,10 +230,10 @@ function doCongSo(){
   _err('');
   if(!fd.ngay||!fd.thang||!fd.nam){_err('Vui lòng nhập đủ ngày, tháng, năm sinh.');return;}
   var tt=document.getElementById('trangThai').value;
-  var btn=document.getElementById('btnGo'),old=btn.textContent;
-  btn.disabled=true;btn.textContent='Đang dựng…';
+  var btn=document.getElementById('btnGo'),lbl=document.getElementById('btnGoLabel'),old=lbl?lbl.textContent:'';
+  btn.disabled=true; if(lbl) lbl.textContent='Đang dựng…';
   CongSoTool.lap({ngay:fd.ngay,thang:fd.thang,nam:fd.nam,gio:fd.gioIdx,gioiTinh:fd.gioitinh,trangThai:tt}).then(function(j){
-    btn.disabled=false;btn.textContent=old;
+    btn.disabled=false; if(lbl) lbl.textContent=old;
     if(!j){_err('Chưa dựng được hồ sơ lúc này — vui lòng thử lại.');return;}
     _ho=j.hoSo;_birth=fd;
     var ten=fd.hoten||'Hồ sơ';
@@ -295,6 +303,16 @@ function doCongSo(){
 // ai. Đúng thiết kế của paywall (thà không dựng còn hơn dựng với giá bịa).
 TuviPaywall.init({product:'cong-so',slug:function(){return _slug;}});
 var _slug='';
+// Ghi "(~X đ)" cạnh số Lượng trong nút mở nhánh nghề — cùng mẫu
+// `_fillVndSlots` của app-luan-giai.html. `ToolPrices.vndLabel` tự trả ''
+// khi chưa đọc được `credit_packages`, lúc đó không hiện gì (không đoán số).
+function _fillVndSlots(host,product){
+  if(!host||!window.ToolPrices) return;
+  var els=host.querySelectorAll('[data-tvp-price-vnd]');
+  var cost=window.ToolPrices.get(product);
+  var lbl=cost!=null?window.ToolPrices.vndLabel(cost):'';
+  els.forEach(function(el){ el.textContent=lbl?('('+lbl+')'):''; });
+}
 // Danh sách hiện cho người ĐÃ ĐĂNG NHẬP nhưng chưa mở nhánh — họ đã thấy trọn
 // phần thân (radar/lộ trình/ghép đội), nên chỉ liệt kê đúng phần nhánh.
 var NHANH_KHOA=[
@@ -329,8 +347,8 @@ function dungTuong(){
   if(loggedIn){
     // Đã đăng nhập đã thấy TRỌN radar 12 mặt (bangHTML) — không hook lại nữa,
     // hook chỉ có việc ở màn ĐĂNG KÝ (mountHookAnon dưới).
-    host.innerHTML='<button class="btn-go" id="btnNhanh">Mở phần nhánh nghề — <span data-tvp-price="cong-so">…</span> Lượng →</button>';
-    TuviPaywall.fillPriceSlots(host);
+    host.innerHTML='<button class="btn-go" id="btnNhanh"><span class="bg-label"><span class="ic" data-icon="users"></span><b>Mở phần nhánh nghề →</b></span><small>Tốn <span data-tvp-price="cong-so">…</span> Lượng <span data-tvp-price-vnd="cong-so"></span></small></button>';
+    TuviPaywall.fillPriceSlots(host).then(function(){ _fillVndSlots(host,'cong-so'); });
     document.getElementById('btnNhanh').addEventListener('click',function(){
       TuviPaywall.requireCredits(_slug,moNhanh);
     });

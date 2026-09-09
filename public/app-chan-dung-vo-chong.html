@@ -79,20 +79,42 @@
           <img class="intro-avatar" src="/tool-avatars/chan-dung-vo-chong.webp" alt="" onerror="this.remove()">
           <div class="intro-text">
             <div class="intro-t">Chân Dung Vợ Chồng</div>
-            <div class="intro-d">Chân Dung Vợ Chồng vẽ chân dung người bạn đời tương lai từ cung Phu Thê của bạn. Sợ chọn nhầm người, để rồi khổ vì tiền bạc hay tình cảm suốt phần đời còn lại? Từ lá số có sẵn, nhận chân dung và mô tả tính khí người ấy.</div>
+            <div class="intro-d">Vẽ chân dung người bạn đời tương lai từ cung Phu Thê trong lá số của bạn — kèm mô tả tính khí.</div>
             <div id="introSrc" style="min-height:73.6px;margin-top:9px"></div>
           </div>
+        </div>
+        <div class="hero-pills">
+          <div class="hero-pill"><span class="hp-ic" data-icon="image"></span><span>Ảnh chân dung<br>minh hoạ</span></div>
+          <div class="hero-pill"><span class="hp-ic" data-icon="user"></span><span>Hình thể<br>suy từ sao</span></div>
+          <div class="hero-pill"><span class="hp-ic" data-icon="heart"></span><span>Luận giải<br>cung Phu Thê</span></div>
         </div>
       </div></div>
       <div id="shellRecent"></div>
       <div class="form-card" id="birthPanel">
-        <h2>Nhập ngày sinh của bạn (dương lịch)</h2>
-        <p class="sub">Dùng lá số đã lập, không cần nhập thêm gì khác. Hệ thống đọc riêng cung Phu Thê rồi dựng chân dung người bạn đời tương lai. Nhận về hình thể suy từ sao, ảnh chân dung và luận giải chi tiết cung Phu Thê.</p>
-        <p class="price-note" data-tvp-price-label="chan-dung-vo-chong">…</p>
+        <div class="fc-head"><span class="fc-ic" data-icon="image"></span><h2>Nhập ngày sinh của bạn (dương lịch)</h2></div>
+        <p class="sub">Nhập ngày sinh, không cần thêm gì khác. Hệ thống đọc cung Phu Thê rồi dựng chân dung — hình thể suy từ sao, ảnh và luận giải chi tiết.</p>
         <div id="tuviFormHost"></div>
-        <div class="frow" style="margin-bottom:0">
-          <button class="btn-go" id="btnGo" onclick="analyze()">Vẽ Chân Dung — <span data-tvp-price="chan-dung-vo-chong">…</span> Lượng →</button>
+        <div class="cost-box">
+          <div class="cb-l">
+            <span class="cb-ic" data-icon="wallet"></span>
+            <div>
+              <div class="cb-title">Chi phí sử dụng</div>
+              <div class="cb-amt"><span data-tvp-price="chan-dung-vo-chong">…</span> Lượng <span class="vnd" data-tvp-price-vnd="chan-dung-vo-chong"></span> mỗi lượt</div>
+              <div class="cb-pay">
+                <span><span class="ic" data-icon="qr-code"></span> Chuyển khoản (qua QR ngân hàng)</span>
+                <span><span class="ic" data-icon="credit-card"></span> PayPal / Thẻ quốc tế</span>
+              </div>
+            </div>
+          </div>
+          <div class="cb-r">
+            <span class="cb-ic" data-icon="gift"></span>
+            <div class="cb-r-txt">Mua gói để nhận nhiều ưu đãi hơn.<br><a href="/topup.html">Xem các gói ngay →</a></div>
+          </div>
         </div>
+        <button class="btn-go" id="btnGo" onclick="analyze()">
+          <span class="bg-label"><span class="ic" data-icon="image"></span><b id="btnGoLabel">Vẽ Chân Dung →</b></span>
+          <small>Tốn <span data-tvp-price="chan-dung-vo-chong">…</span> Lượng <span data-tvp-price-vnd="chan-dung-vo-chong"></span></small>
+        </button>
         <div class="err" id="error-msg"></div>
       </div>
 
@@ -248,6 +270,18 @@ function retryResultImage() {
 // sinh lịch sử với standalone). Field khớp ĐÚNG bản standalone tools/chan-dung-vo-chong.html
 // (mode:'full'): Họ và tên + Giới tính + Năm xem vận + ngày giờ sinh.
 TuviForm.render('tuviFormHost', {mode:'compact', gioitinh:'nam', showNamXem:true});
+
+// Ghi "(~X đ)" cạnh số Lượng trong hộp chi phí + nút CTA — cùng mẫu
+// `_fillVndSlots` của app-luan-giai.html. `ToolPrices.vndLabel` tự trả ''
+// khi chưa đọc được `credit_packages`, lúc đó không hiện gì (không đoán số).
+function _fillVndSlots(host,product){
+  if(!host||!window.ToolPrices) return;
+  var els=host.querySelectorAll('[data-tvp-price-vnd]');
+  var cost=window.ToolPrices.get(product);
+  var lbl=cost!=null?window.ToolPrices.vndLabel(cost):'';
+  els.forEach(function(el){ el.textContent=lbl?('('+lbl+')'):''; });
+}
+TuviPaywall.fillPriceSlots(document).then(function(){ _fillVndSlots(document,'chan-dung-vo-chong'); });
 
 // Quay lại từ lượt nạp Lượng (hết Lượng ngay lúc bấm — xem
 // `TuviPaywall._insufficient`/`resumeIfPending`). Trang MULTI-PAGE (điều

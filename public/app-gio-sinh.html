@@ -82,18 +82,22 @@
           <img class="intro-avatar" src="/tool-avatars/gio-sinh.webp" alt="" onerror="this.remove()">
           <div class="intro-text">
             <div class="intro-t">Xác Định Giờ Sinh</div>
-            <div class="intro-d">Xác Định Giờ Sinh lập 12 lá số theo 12 giờ, thu hẹp dần về đúng giờ sinh. Không biết đúng giờ sinh khiến mọi lời luận về tình duyên, sự nghiệp, sức khoẻ của bạn đều trật hướng? Trả lời vài câu hỏi, nhận giờ sinh phù hợp nhất để dùng cho các công cụ khác.</div>
+            <div class="intro-d">Lập 12 lá số theo 12 giờ, thu hẹp dần về đúng giờ sinh — trả lời vài câu hỏi để tìm giờ phù hợp nhất.</div>
             <div id="introSrc" style="min-height:73.6px;margin-top:9px"></div>
           </div>
+        </div>
+        <div class="hero-pills">
+          <div class="hero-pill"><span class="hp-ic" data-icon="hourglass"></span><span>12 lá số<br>khả nghi</span></div>
+          <div class="hero-pill"><span class="hp-ic" data-icon="clock"></span><span>Khảo sát<br>thu hẹp</span></div>
+          <div class="hero-pill"><span class="hp-ic" data-icon="bar-chart-3"></span><span>Xếp hạng<br>độ khớp</span></div>
         </div>
       </div></div>
       <div id="shellRecent"></div>
 
       <div id="birthPanel">
         <div class="form-card">
-          <h2>Xác Định Giờ Sinh</h2>
-          <p class="sub">Nhập <b>ngày tháng năm sinh</b> — giờ sinh chính là thứ cần tìm. Hệ thống lập <b>12 lá số khả nghi</b> rồi thu hẹp dần qua một khảo sát ngắn về sức khoẻ, tính nết. Nhận về danh sách giờ sinh xếp hạng theo độ khớp, chọn giờ khả năng cao nhất để dùng tiếp.</p>
-          <p class="price-note" data-tvp-price-label="gio-sinh">…</p>
+          <div class="fc-head"><span class="fc-ic" data-icon="hourglass"></span><h2>Xác Định Giờ Sinh</h2></div>
+          <p class="sub">Nhập <b>ngày tháng năm sinh</b> — giờ sinh chính là thứ cần tìm. Hệ thống lập <b>12 lá số khả nghi</b>, thu hẹp qua khảo sát ngắn, rồi xếp hạng theo độ khớp.</p>
           <div class="frow">
             <div class="fg"><label for="gs-ngay">Ngày</label><select id="gs-ngay"></select></div>
             <div class="fg"><label for="gs-thang">Tháng</label><select id="gs-thang"></select></div>
@@ -101,9 +105,12 @@
             <div class="fg"><label for="gs-lich">Loại lịch</label><select id="gs-lich"><option value="duong">Dương lịch</option><option value="am">Âm lịch</option></select></div>
             <div class="fg"><label for="gs-gt">Giới tính</label><select id="gs-gt"><option value="nam">Nam</option><option value="nu">Nữ</option></select></div>
           </div>
-          <button class="btn-go" id="btnGo" onclick="start()">Xem 12 giờ khả nghi</button>
+          <button class="btn-go" id="btnGo" onclick="start()">
+            <span class="bg-label"><span class="ic" data-icon="hourglass"></span><b id="btnGoLabel">Xem 12 giờ khả nghi</b></span>
+            <small>Miễn phí</small>
+          </button>
           <div class="err" id="error-msg"></div>
-          <p class="sub" style="margin:12px 0 0">Bước xem 12 lá số khả nghi là <b>miễn phí</b>. Phần khảo sát thu hẹp và bảng xếp hạng mới tính Lượng.</p>
+          <p class="sub" style="margin:12px 0 0">Bước xem 12 lá số khả nghi <b>miễn phí</b>. Khảo sát thu hẹp và bảng xếp hạng mới tính Lượng.</p>
         </div>
       </div>
 
@@ -215,6 +222,17 @@ const TOOL_ID='gio-sinh';
 let _birth=null,_answers=[],_pub=null,_lastResult=null,_slug='';
 TuviPaywall.init({product:TOOL_ID,slug:function(){return _slug;}});
 
+// Ghi "(~X đ)" cạnh số Lượng trong nút khảo sát — cùng mẫu `_fillVndSlots` của
+// app-luan-giai.html. `ToolPrices.vndLabel` tự trả '' khi chưa đọc được
+// `credit_packages`, lúc đó không hiện gì (không đoán số).
+function _fillVndSlots(host,product){
+  if(!host||!window.ToolPrices) return;
+  var els=host.querySelectorAll('[data-tvp-price-vnd]');
+  var cost=window.ToolPrices.get(product);
+  var lbl=cost!=null?window.ToolPrices.vndLabel(cost):'';
+  els.forEach(function(el){ el.textContent=lbl?('('+lbl+')'):''; });
+}
+
 // ── Dựng ô nhập ─────────────────────────────────────────────
 (function initForm(){
   const d=document.getElementById('gs-ngay'),m=document.getElementById('gs-thang'),t=document.getElementById('gs-that');
@@ -299,7 +317,7 @@ async function start(){
   // Slug MANG ngày sinh: đổi ngày sinh là một lượt trả tiền mới, không dùng
   // lại lượt cũ. Tiền tố phải ĐÚNG `gio-sinh` — server chốt lại chỗ này.
   _slug=TuviPaywall.generateToolSlug(TOOL_ID+'-'+b.day+b.month+b.year+b.gender+(b.isLunar?'a':'d'));
-  const btn=document.getElementById('btnGo'); btn.disabled=true; btn.textContent='Đang lập 12 lá số…';
+  const btn=document.getElementById('btnGo'); btn.disabled=true; const _btnGoLb=document.getElementById('btnGoLabel'); if(_btnGoLb) _btnGoLb.textContent='Đang lập 12 lá số…';
   try{
     const r=await fetch('/api/gio-sinh?preview=1',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({birth:b})});
     const j=await r.json();
@@ -313,7 +331,7 @@ async function start(){
       greeting:'Anh/chị chưa chốt được giờ sinh — hỏi tôi về cách phân biệt các giờ khả nghi cũng được.',
       chips:['Vì sao đổi giờ sinh lại đổi cả lá số?','Cung Tật Ách nói lên điều gì?','Không nhớ giờ sinh thì xem tử vi được không?']});
   }catch(e){showErr(e.message||'Có lỗi xảy ra.');}
-  finally{btn.disabled=false;btn.textContent='Xem 12 giờ khả nghi';}
+  finally{btn.disabled=false; const _btnGoLb2=document.getElementById('btnGoLabel'); if(_btnGoLb2) _btnGoLb2.textContent='Xem 12 giờ khả nghi';}
 }
 
 let _lastPreview=null;
@@ -374,8 +392,8 @@ function buildLock(){
   _gsSaveResume();
   if(_daDangNhap()){
     if(_lastPreview) _renderGrid(_lastPreview);
-    host.innerHTML='<button class="btn-go" id="btnKhaoSat">Bắt đầu khảo sát thu hẹp — <span data-tvp-price="'+TOOL_ID+'">…</span> Lượng →</button>';
-    TuviPaywall.fillPriceSlots(host);
+    host.innerHTML='<button class="btn-go" id="btnKhaoSat"><span class="bg-label"><span class="ic" data-icon="clock"></span><b>Bắt đầu khảo sát thu hẹp →</b></span><small>Tốn <span data-tvp-price="'+TOOL_ID+'">…</span> Lượng <span data-tvp-price-vnd="'+TOOL_ID+'"></span></small></button>';
+    TuviPaywall.fillPriceSlots(host).then(function(){ _fillVndSlots(host,TOOL_ID); });
     const runUnlock=function(){return runSurvey();};
     document.getElementById('btnKhaoSat').addEventListener('click',function(){
       TuviPaywall.requireCredits(_slug,runUnlock);

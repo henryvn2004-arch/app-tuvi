@@ -59,15 +59,20 @@
           <img class="intro-avatar" src="/tool-avatars/than-so-hoc.webp" alt="" onerror="this.remove()">
           <div class="intro-text">
             <div class="intro-t">Thần số học</div>
-            <div class="intro-d">Thần số học đọc 11 con số từ ngày sinh: đường đời, đỉnh cao, năm cá nhân. Yêu sai người, tiêu tiền sai chỗ, chọn việc sai hướng — toàn những quyết định bạn cứ lặp lại dù biết là sai? Nhập ngày sinh, nhận các con số chủ đạo để hiểu cách mình đang nghĩ, đang chọn.</div>
+            <div class="intro-d">Đọc 11 con số từ ngày sinh: đường đời, đỉnh cao, năm cá nhân — giúp hiểu cách mình đang nghĩ, đang chọn.</div>
             <div id="introSrc" style="min-height:36.8px;margin-top:9px"></div>
           </div>
+        </div>
+        <div class="hero-pills">
+          <div class="hero-pill"><span class="hp-ic" data-icon="hash"></span><span>11 chỉ số<br>Pythagoras</span></div>
+          <div class="hero-pill"><span class="hp-ic" data-icon="compass"></span><span>Đường Đời,<br>Định Mệnh</span></div>
+          <div class="hero-pill"><span class="hp-ic" data-icon="calendar"></span><span>Năm cá nhân,<br>đỉnh cao</span></div>
         </div>
       </div></div>
       <div id="shellRecent"></div>
       <div class="form-card" id="birthPanel">
-        <h2>Ngày sinh & tên đầy đủ</h2>
-        <p class="sub">Nhập ngày sinh và họ tên đầy đủ của bạn. Hệ thống tính các chỉ số theo hệ Pythagoras. Nhận về Đường Đời, Định Mệnh, Linh Hồn, Sứ Mệnh và năm cá nhân hiện tại.</p>
+        <div class="fc-head"><span class="fc-ic" data-icon="hash"></span><h2>Ngày sinh & tên đầy đủ</h2></div>
+        <p class="sub">Nhập ngày sinh và họ tên đầy đủ. Hệ thống tính theo hệ Pythagoras — Đường Đời, Định Mệnh, Linh Hồn, Sứ Mệnh và năm cá nhân hiện tại.</p>
         <p class="price-note" data-tvp-price-label="than-so-hoc">…</p>
         <div class="frow">
           <div class="fg" style="width:74px"><label>Ngày</label><input type="number" id="ngay" placeholder="15" min="1" max="31"></div>
@@ -76,7 +81,10 @@
           <div class="fg" style="flex:1;min-width:160px"><label>Họ tên đầy đủ</label><input type="text" id="ten" placeholder="Nguyễn Văn An"></div>
         </div>
         <div class="hint">Nhập tên khai sinh đầy đủ — <b>gõ có dấu hay không dấu đều được</b>, kết quả như nhau.</div>
-        <button class="btn-go" id="btnGo" onclick="calculate()">Tính thần số →</button>
+        <button class="btn-go" id="btnGo" onclick="calculate()">
+          <span class="bg-label"><span class="ic" data-icon="hash"></span><b id="btnGoLabel">Tính thần số →</b></span>
+          <small>Miễn phí</small>
+        </button>
         <div class="err" id="error-msg"></div>
       </div>
 
