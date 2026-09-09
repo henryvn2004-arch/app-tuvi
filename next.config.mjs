@@ -38,6 +38,7 @@ const nextConfig = {
       { source: '/app/ban-do-sao',      destination: '/app-ban-do-sao.html'  },
       { source: '/app/cong-so',         destination: '/app-cong-so.html'     },
       { source: '/app/tai-khoan',       destination: '/app-tai-khoan.html'   },
+      { source: '/app/so-la-so',        destination: '/app-so-la-so.html'    },
       { source: '/app/hoang-dao',       destination: '/app-hoang-dao.html'   },
       { source: '/app/ngay-tot',        destination: '/app-ngay-tot.html'    },
       { source: '/app/luc-nham',        destination: '/app-luc-nham.html'    },

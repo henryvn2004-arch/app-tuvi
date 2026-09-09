@@ -25,6 +25,7 @@ const DIR = 'public';
 const EXEMPT = {
   'app-home.html': 'bảng điều khiển, không phải công cụ — không sinh phiên nào',
   'app-tai-khoan.html': 'trang tài khoản, không phải công cụ',
+  'app-so-la-so.html': 'sổ lá số — danh sách + gán nhóm quan hệ, không phải công cụ',
 };
 
 const bad = [];

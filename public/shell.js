@@ -56,6 +56,12 @@
   var FIXED_TOP = { group: 'Luận Đường', open: true, items: [
     { id: 'home', label: 'Tổng quan', href: '/app', icon: 'home' },
   ] };
+  // Nhóm này KHÔNG render thành nav (renderSidebar tự vẽ tay khối "Lá số đã
+  // lưu") — chỉ để mountToolIcon()/Cmd+K/buildCmds() tìm ra icon+href đúng khi
+  // ACTIVE rơi vào trang này, cùng cơ chế FIXED_TOP/FIXED_BOTTOM đã dùng.
+  var FIXED_META = { group: 'Sổ lá số', open: false, items: [
+    { id: 'so-la-so', label: 'Lá số đã lưu', href: '/app/so-la-so', icon: 'folder' },
+  ] };
   var FIXED_BOTTOM = { group: 'Tài khoản', open: true, items: [
     { id: 'vi-luong', label: 'Ví Lượng', href: '/app/tai-khoan#credits', icon: 'wallet', balance: true },
     // Trang Tổng quan (`app-home.html`) vẫn giữ nguyên các thẻ Mời bạn/Nhiệm vụ
@@ -63,15 +69,20 @@
     // khi cần soát lại: đã làm xong Khởi Hành chưa, link mời bạn đâu, mấy lượt
     // "Khoe kết quả" đã nộp tới đâu rồi.
     { id: 'nhiem-vu', label: 'Nhiệm Vụ', href: '/app/tai-khoan#nhiemvu', icon: 'trophy' },
-    { id: 'ho-so',    label: 'Hồ sơ của tôi', href: '/app/tai-khoan', icon: 'user' },
+    { id: 'ket-noi',  label: 'Kết Nối', href: '/app/tai-khoan#ketnoi', icon: 'link' },
+    { id: 'ho-so',    label: 'Tài Khoản & Cài Đặt', href: '/app/tai-khoan#account', icon: 'settings' },
   ] };
 
-  // Bắt đầu bằng CHỈ hai nhóm cố định. Dữ liệu về thì `applyCatalog` chèn các
+  // Bắt đầu bằng CHỈ các nhóm cố định. Dữ liệu về thì `applyCatalog` chèn các
   // nhóm công cụ vào giữa rồi vẽ lại. Sidebar không bao giờ rỗng hoàn toàn —
   // mất điều hướng còn tệ hơn một danh sách đến chậm nửa giây.
-  var TOOLS = [FIXED_TOP, FIXED_BOTTOM];
+  var TOOLS = [FIXED_TOP, FIXED_META, FIXED_BOTTOM];
 
-  /** Dựng lại TOOLS từ danh mục (`d` = ToolPrices.load() hoặc navFallback). */
+  /** Dựng lại TOOLS từ danh mục (`d` = ToolPrices.load() hoặc navFallback).
+   *  🔑 Danh mục công cụ vẫn nạp đầy đủ ở đây dù renderSidebar() không còn vẽ
+   *  các nhóm này ra sidebar nữa (2026-09: danh sách công cụ đã hiện giữa
+   *  trang Trang chủ, lặp lại trong sidebar là thừa) — TOOLS vẫn là NGUỒN DUY
+   *  NHẤT cho Cmd+K và icon ws-top của từng trang tool. */
   function applyCatalog(d) {
     var groups = (d && d.groups) || [];
     var rows = (d && d.rows) || [];
@@ -79,7 +90,7 @@
     if (!groups.length || !inApp.length) return false;
 
     var seen = {};
-    var out = [FIXED_TOP];
+    var out = [FIXED_TOP, FIXED_META];
     groups.forEach(function (g) {
       var items = inApp.filter(function (r) {
         return window.ToolPrices && ToolPrices.groupsOf(r, groups).indexOf(g.key) >= 0;
@@ -461,66 +472,146 @@
     titleEl.parentNode.insertBefore(box, titleEl);
   }
 
+  // Nhóm quan hệ cho "Lá số đã lưu" — CÙNG 4 khoá với `RELATIONS` phía server
+  // (`app/api/charts/route.ts`). Đổi ở đây thì phải đổi cả bên đó.
+  var LASO_RELATIONS = [
+    { key: 'gia_dinh', label: 'Gia đình', icon: 'home' },
+    { key: 'ban_be', label: 'Bạn bè', icon: 'users' },
+    { key: 'dong_nghiep', label: 'Đồng nghiệp', icon: 'briefcase' },
+    { key: 'khac', label: 'Khác', icon: 'folder' },
+  ];
+
+  function groupHtml(title, items, khPending) {
+    var h = '<div class="grp"><div class="grp-h" data-act="grp">' + esc(title) + ' ' + CHEV + '</div><nav class="grp-nav">';
+    items.forEach(function (it) {
+      var active = it.id === ACTIVE ? ' active' : '';
+      var pill = it.balance ? '<span class="pill" id="sbBalance">—</span>' : '';
+      var dot = (khPending && it.id === 'home') ? '<span class="sb-dot" title="Còn việc chưa xong ở Khởi Hành"></span>' : '';
+      h += '<a class="item' + active + '" href="' + it.href + '">' + (it.icon ? svg(it.icon) : '') + ' ' + esc(it.label) + ' ' + pill + dot + '</a>';
+    });
+    h += '</nav></div>';
+    return h;
+  }
+
   // ── RENDER SIDEBAR ──
+  // 2026-09: bỏ danh sách công cụ khỏi sidebar — đã hiện sẵn giữa trang Trang
+  // chủ (springboard), lặp lại ở đây là thừa (TOOLS vẫn giữ ĐẦY ĐỦ dữ liệu cho
+  // Cmd+K/icon ws-top, xem applyCatalog ở trên). Hồ sơ lên đầu thay cho
+  // `.sb-brand` cũ; "Lá số đã lưu" (nhóm theo quan hệ) và "Gần đây" tách khỏi
+  // trang Tài khoản, nạp async qua loadSidebarCharts().
   function renderSidebar() {
     var host = document.getElementById('shell-sidebar');
     if (!host) return;
     var h = '';
-    // Trang Luận Đường (`/app`, ACTIVE==='home') tự vẽ tên hiệu "Tử Vi Minh Bảo"
-    // NGAY trên `.ws-top` (2026-09-08) — sidebar lặp lại y hệt tên+icon+khẩu
-    // hiệu đó ngay bên dưới là thừa (Henry chỉ ra qua ảnh chụp mobile, sidebar
-    // mở đè lên .ws-top). Các trang tool khác thì `.ws-top` mang tên TOOL (qua
-    // `mountToolIcon`), không phải tên hiệu site, nên sidebar vẫn cần khối này.
-    var homeTop = ACTIVE === 'home';
-    if (!homeTop) {
-      h += '<a class="sb-brand" href="/"><img class="seal" src="/seal.webp" alt="Tử Vi Minh Bảo"><div class="brand-txt"><b>Tử Vi Minh Bảo</b><span>Tri mệnh lý – Thuận thế hành</span></div></a>';
-    }
+
+    h += '<a class="sb-profile" href="/app/tai-khoan#account">' +
+         '<div class="ava" id="sbAva">?</div>' +
+         '<div class="sb-profile-tx"><div class="nm" id="sbName">Khách</div><div class="sub" id="sbSub">Đăng nhập →</div></div>' +
+         '<span class="sb-profile-chev">' + CHEV + '</span></a>';
+
     // Tracker "đang online / lượt hỏi hôm nay" — MÔ PHỎNG (xem ghi chú ⚠️ ở
     // simulatePulse()). `_pulseData` được seed TRƯỚC lần renderSidebar() đầu
     // (boot()) nên luôn có số ngay từ khung hình đầu; fallback "…" chỉ phòng
     // hờ trường hợp gọi renderSidebar() sớm bất thường.
-    // Trang Home không còn `.sb-brand` (xem trên) — `.sb-pulse-top` bù lại
-    // khoảng đệm trên cùng mà `.sb-brand` từng cho, thay vì để một div rỗng
-    // (Henry: "thay nó bằng 2 cái counter này" — đưa thẳng khối pulse lên
-    // đúng chỗ đó, không chừa khoảng trống riêng).
-    h += '<div class="sb-pulse' + (homeTop ? ' sb-pulse-top' : '') + '" id="sbPulse"' + (_pulseData ? '' : ' hidden') + '>' +
+    h += '<div class="sb-pulse" id="sbPulse"' + (_pulseData ? '' : ' hidden') + '>' +
          '<span class="sbp-row"><span class="sbp-dot"></span><b id="sbpOnline">' + (_pulseData ? esc(_pulseData.online.toLocaleString('vi-VN')) : '…') + '</b> đang online</span>' +
          '<span class="sbp-row">' + svg('bolt', 'sbp-ic') + '<b id="sbpPrompts">' + (_pulseData ? esc(_pulseData.promptsToday.toLocaleString('vi-VN')) : '…') + '</b> lượt hỏi hôm nay</span>' +
          '</div>';
-    h += '<button class="kbtn" type="button" data-act="cmd">' +
-         '<svg class="ic" style="opacity:.7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4-4"/></svg>' +
-         ' Tìm công cụ, lệnh… <kbd>Ctrl K</kbd></button>';
-    h += '<nav class="sb-nav">';
-    var khPending = khoiHanhPending();
-    TOOLS.forEach(function (g) {
-      var hasActive = g.items.some(function (it) { return it.id === ACTIVE; });
-      var closed = !(g.open || hasActive);
-      h += '<div class="grp' + (closed ? ' closed' : '') + '"><div class="grp-h" data-act="grp">' + esc(g.group) + ' ' + CHEV + '</div>';
-      g.items.forEach(function (it) {
-        var active = it.id === ACTIVE ? ' active' : '';
-        var pill = it.balance ? '<span class="pill" id="sbBalance">—</span>' : '';
-        var dot = (it.id === 'home' && khPending) ? '<span class="sb-dot" title="Còn việc chưa xong ở Khởi Hành"></span>' : '';
-        h += '<a class="item' + active + '" href="' + it.href + '">' + (it.icon ? svg(it.icon) : '') + ' ' + esc(it.label) + ' ' + pill + dot + '</a>';
-      });
-      h += '</div>';
+
+    // "Tổng quan" (đường về `/app`) — vẫn cần trên desktop dù mobile đã có nút
+    // Home riêng ở tabbar dưới. Giữ NGUYÊN item của FIXED_TOP để chấm nhắc
+    // Khởi Hành (khoiHanhPending) đi đúng theo, không tách logic ra hai chỗ.
+    h += groupHtml('Luận Đường', FIXED_TOP.items, khoiHanhPending());
+    h += groupHtml('Tài khoản', FIXED_BOTTOM.items, false);
+
+    // "Lá số đã lưu" — khung tĩnh trước, số đếm thật đổ vào sau (loadSidebarCharts).
+    // Ẩn tới khi biết chắc đã đăng nhập, tránh nháy khung rỗng cho khách vãng lai.
+    h += '<div class="grp" id="sbLasoGrp" hidden><div class="grp-h" data-act="grp">Lá số đã lưu ' + CHEV + '</div><nav class="grp-nav">';
+    LASO_RELATIONS.forEach(function (g) {
+      h += '<a class="item" href="/app/so-la-so?g=' + g.key + '">' + svg(g.icon) + ' ' + esc(g.label) + ' <span class="pill" id="sbLasoCount-' + g.key + '">0</span></a>';
     });
-    h += '</nav>';
-    h += '<button class="sb-theme" type="button" data-act="theme">◐ Đổi nền</button>';
-    h += '<a class="sb-foot" href="/profile"><div class="ava" id="sbAva">?</div><div><div class="nm" id="sbName">Khách</div><div class="sub" id="sbSub">Đăng nhập →</div></div></a>';
+    h += '</nav></div>';
+
+    // "Gần đây" — chỉ hiện khi có dữ liệu thật (xem renderSidebarRecent).
+    h += '<div class="grp" id="sbRecentGrp" hidden><div class="grp-h" data-act="grp">Gần đây' +
+         '<a class="grp-link" href="/app/so-la-so">Xem tất cả</a></div><nav class="grp-nav" id="sbRecentList"></nav></div>';
+
+    h += '<div class="sb-spacer"></div>';
+    h += '<div class="sb-foot-grp">' +
+         '<a class="item" href="/contact.html">' + svg('message-circle') + ' Hỗ trợ</a>' +
+         '<button class="item" type="button" data-act="theme">' + svg('sun') + ' Đổi nền</button>' +
+         '<a class="item danger" href="#" data-act="signout">' + svg('door-open') + ' Đăng xuất</a>' +
+         '</div>';
+    h += '<div class="sb-brandmini"><img src="/seal.webp" alt=""><b>TỬ VI MINH BẢO</b><span>Tri mệnh lý – Thuận thế hành</span></div>';
+
     host.innerHTML = h;
     mountToolIcon();
-    var themeBtn = host.querySelector('[data-act="theme"]');
-    if (themeBtn) themeBtn.addEventListener('click', toggleTheme);
     // group collapse
     host.querySelectorAll('.grp-h').forEach(function (el) {
       el.addEventListener('click', function () { el.parentElement.classList.toggle('closed'); });
     });
-    host.querySelector('[data-act="cmd"]').addEventListener('click', openCmd);
+    var themeBtn = host.querySelector('[data-act="theme"]');
+    if (themeBtn) themeBtn.addEventListener('click', toggleTheme);
+    var signout = host.querySelector('[data-act="signout"]');
+    if (signout) signout.addEventListener('click', function (e) {
+      e.preventDefault();
+      try { window.Auth && Auth.signOut && Auth.signOut(); } catch (err) { /* ignore */ }
+      location.href = '/';
+    });
     // Khối avatar/tên vừa bị dựng lại TRẮNG ("Khách"/"Đăng nhập →") — nếu danh
     // mục tải xong SAU lượt paintAuth() đầu (đua nhau, tuỳ tốc độ mạng) thì tên
     // thật + số dư vừa sơn xong bị đè mất, không có gì sơn lại. Gọi ngay tại
     // đây để đúng bất kể ai chạy trước.
     paintAuth();
+    loadSidebarCharts();
+  }
+
+  // ── SỔ LÁ SỐ TRONG SIDEBAR: đếm theo nhóm + "Gần đây" ──
+  // Dùng CHUNG /api/charts (đã có sẵn cho `user-charts.js`) — không mở thêm
+  // route riêng cho sidebar. Trần 30 dòng của sổ (MAX_CHARTS, xem route) đủ
+  // nhỏ để gộp tại đây, không cần server tính sẵn.
+  var SB_RECENT_SHOW = 5;
+  function sidebarRelationKey(it) {
+    var r = it && it.relation;
+    return LASO_RELATIONS.some(function (g) { return g.key === r; }) ? r : 'khac';
+  }
+  function loadSidebarCharts() {
+    var host = document.getElementById('shell-sidebar');
+    if (!host || !getToken()) return; // khách vãng lai — không có sổ, giữ ẩn
+    freshToken().then(function (tok) {
+      if (!tok) return;
+      return fetch('/api/charts', { headers: { Authorization: 'Bearer ' + tok } })
+        .then(function (r) { return r.ok ? r.json() : null; })
+        .then(function (d) { paintSidebarCharts((d && d.items) || []); });
+    }).catch(function () { /* sổ chỉ là tiện ích — hỏng thì im lặng */ });
+  }
+  function paintSidebarCharts(items) {
+    var grp = document.getElementById('sbLasoGrp');
+    if (grp) {
+      var counts = { gia_dinh: 0, ban_be: 0, dong_nghiep: 0, khac: 0 };
+      items.forEach(function (it) { counts[sidebarRelationKey(it)]++; });
+      LASO_RELATIONS.forEach(function (g) {
+        var el = document.getElementById('sbLasoCount-' + g.key);
+        if (el) el.textContent = counts[g.key];
+      });
+      grp.hidden = false;
+    }
+    var recentGrp = document.getElementById('sbRecentGrp');
+    var recentList = document.getElementById('sbRecentList');
+    if (recentGrp && recentList) {
+      if (!items.length) { recentGrp.hidden = true; return; }
+      var sorted = items.slice().sort(function (a, b) {
+        return new Date(b.last_used_at).getTime() - new Date(a.last_used_at).getTime();
+      }).slice(0, SB_RECENT_SHOW);
+      recentList.innerHTML = sorted.map(function (it) {
+        var name = it.label || (it.birth && it.birth.hoten) || 'Chưa đặt tên';
+        return '<a class="rc-row" href="/app/so-la-so">' +
+          '<span class="rc-ava">' + esc((name[0] || '?').toUpperCase()) + '</span>' +
+          '<span class="rc-tx"><b>' + esc(name) + '</b></span>' +
+          '<span class="rc-time">' + esc(relTime(new Date(it.last_used_at).getTime())) + '</span></a>';
+      }).join('');
+      recentGrp.hidden = false;
+    }
   }
 
   // ── RENDER RAIL ──
@@ -3202,7 +3293,7 @@
       // chốt `_rc.anon=true`, và với máy đã tiêu hết 3 câu dùng thử thì nó hiện
       // "Đã hết câu dùng thử · Đăng ký nhận thêm" cho ĐÚNG một người đang đăng
       // nhập. Lịch sử đã có đường tự lành ở ngay dòng này từ trước; ví thì chưa.
-      if (tok && !hadTok) { hadTok = true; pushLocalToServer(); refreshHistoryUI(); loadRailStatus(); } // đăng nhập vừa sẵn sàng → đẩy local + kéo lịch sử + nạp lại ví
+      if (tok && !hadTok) { hadTok = true; pushLocalToServer(); refreshHistoryUI(); loadRailStatus(); loadSidebarCharts(); } // đăng nhập vừa sẵn sàng → đẩy local + kéo lịch sử + nạp lại ví + sổ lá số
       // Dừng NGAY khi đã bắt được token; còn không thì kiên nhẫn tới ~18 giây.
       // Mốc cũ 9 giây là quá ngắn cho lượt refresh phải đi qua cookie server —
       // quá hạn thì đồng hồ ví kẹt vĩnh viễn ở trạng thái khách vô danh.

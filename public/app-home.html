@@ -1797,7 +1797,9 @@ if (window.ToolPrices) ToolPrices.load().then(function (d) { if (d) renderSpring
       d:'Gõ bất kỳ điều gì đang canh cánh — tình duyên, sự nghiệp, hôm nay nên làm gì — rồi Enter là gửi. Cần lập lá số (bước trước) để mở khoá ô này.'
     },
     {
-      sel:'.kbtn[data-act="cmd"]',
+      // Sidebar bỏ ô tìm riêng (2026-09, đã có ô này trong Trang chủ) — neo
+      // thẳng vào #hbSearchBtn, cùng gọi Shell.openCmd() như .kbtn cũ.
+      sel:'#hbSearchBtn',
       t:'58 công cụ chỉ cách một phím',
       d:'Bấm vào đây hoặc gõ Ctrl K để tìm nhanh: xem tuổi, hợp hôn nhân, vận từng tháng… Mỗi công cụ soi lá số của bạn theo một góc khác.'
     },
@@ -1814,7 +1816,8 @@ if (window.ToolPrices) ToolPrices.load().then(function (d) { if (d) renderSpring
   ];
   if(!isLoggedIn()){
     STEPS.push({
-      sel:'a.sb-foot',
+      // Hồ sơ đã dời lên ĐẦU sidebar (2026-09, thay `.sb-brand`/`.sb-foot` cũ).
+      sel:'a.sb-profile',
       t:'Đăng ký miễn phí, nhận Lượng ngay',
       d:'Không cần thẻ, không cần chờ — có tài khoản là được tặng Lượng để hỏi tiếp, và mọi lá số/lượt hỏi hôm nay được lưu lại đúng chỗ.'
     });
