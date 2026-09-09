@@ -305,7 +305,10 @@
     // Android WebView) tự ném lỗi này khi NÓ gọi postMessage nội bộ — repo
     // không gọi postMessage ở đâu cả (đã grep). Luôn đi kèm fbclid/in-app
     // browser, không có stack (không phải Error thật), không hành động được.
-    if (/error invoking postMessage/i.test(msg) && /java exception/i.test(msg)) return true;
+    // Khớp cả HỌ lỗi ("Java exception was raised…", "Java object is gone"…)
+    // bằng đúng phần tiền tố cố định — hậu tố do WebView tự sinh, đổi tuỳ
+    // phiên bản Android/app, liệt kê từng câu là đuổi theo vô tận.
+    if (/^error invoking postMessage/i.test(msg)) return true;
     // Extension trình duyệt (AdBlock, Grammarly...) ném lỗi trong sandbox
     // riêng của nó, không phải code của site.
     if (src && /^(chrome|moz|safari)-extension:\/\//i.test(src)) return true;
