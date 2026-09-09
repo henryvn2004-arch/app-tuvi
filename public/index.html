@@ -681,7 +681,12 @@ if (typeof TuviPaywall !== 'undefined') {
   // nạp hụt thì `heroFormHost` trống nhưng nút "Vào thẳng Luận Đường" và các
   // chip vẫn còn lối vào khác.
   if (window.TuviForm && document.getElementById('heroFormHost')) {
-    TuviForm.render('heroFormHost', { mode: 'compact', gioitinh: 'nam', showName: false });
+    // pretty:false — trang này KHÔNG nạp shell.css, tự có CSS riêng khớp khối
+    // .frow/.fg cũ (xem #heroFormHost/.hc-birth-form ở <style> trên). Từ khi
+    // pretty:true thành mặc định của mode:'compact' (tuvi-form.js, đợt "1 màn
+    // hình" 2026-09-09), bỏ cờ này ra là form hero rơi vào khối `.tvf-pretty`
+    // lạ hoàn toàn, không khớp CSS riêng ở đây — cả méo hình lẫn CLS trên `/`.
+    TuviForm.render('heroFormHost', { mode: 'compact', gioitinh: 'nam', showName: false, pretty: false });
   }
   var birthSubmit = document.getElementById('heroBirthSubmit');
   if (birthSubmit) {
