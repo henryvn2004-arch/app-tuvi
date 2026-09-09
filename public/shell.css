@@ -259,15 +259,28 @@ body{font-family:var(--sans);background:var(--paper-2);color:var(--text);font-si
 .mobile-only{display:none}
 .shell svg{display:block}
 
-/* ── BOTTOM TAB BAR (mobile) — điều hướng chạm bằng ngón cái. Thay lối
-   "chỉ mở drawer": Trợ lý (rail) + Công cụ (sidebar) chạm 1 phát tới được,
-   thay vì chôn sau hamburger. shell.js chèn #shell-tabbar vào body; chỉ hiện
+/* ── BOTTOM TAB BAR (mobile) — điều hướng chạm bằng ngón cái. 5 mục:
+   Trang chủ (ra tuviminhbao.com) · Trợ lý (rail) · HOME nổi giữa (về thẳng
+   springboard /app từ bất kỳ đâu — bài học từ workshop 2026-09: người dùng
+   xong một tool thì KHÔNG biết bấm vào đâu để quay lại Luận Đường) · Công cụ
+   (sidebar) · Tài khoản. shell.js chèn #shell-tabbar vào body; chỉ hiện
    ≤900px; ẩn khi drawer/cmdk đang mở. Desktop KHÔNG đụng tới. ── */
-.tabbar{display:none;position:fixed;left:0;right:0;bottom:0;z-index:49;grid-template-columns:repeat(4,1fr);background:linear-gradient(180deg,var(--navy-2),var(--navy));border-top:1px solid rgba(201,168,76,.18);padding-bottom:env(safe-area-inset-bottom);box-shadow:0 -6px 20px rgba(6,26,46,.22)}
+.tabbar{display:none;position:fixed;left:0;right:0;bottom:0;z-index:49;grid-template-columns:1fr 1fr 72px 1fr 1fr;align-items:end;background:linear-gradient(180deg,var(--navy-2),var(--navy));border-top:1px solid rgba(201,168,76,.18);padding-bottom:env(safe-area-inset-bottom);box-shadow:0 -6px 20px rgba(6,26,46,.22)}
 .tabbar .tab{appearance:none;-webkit-appearance:none;border:none;background:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;padding:9px 4px 8px;color:var(--sb-txt-dim);font-family:inherit;font-size:10.5px;line-height:1;text-decoration:none;-webkit-tap-highlight-color:transparent}
 .tabbar .tab svg{width:22px;height:22px;display:block;stroke-width:1.7}
 .tabbar .tab.active{color:var(--gold)}
 .tabbar .tab:active{background:rgba(255,255,255,.05)}
+/* Nút Home — CỐ Ý nổi lên trên hàng, không phải một `.tab` như 4 nút còn lại:
+   đây là đường thoát duy nhất từ MỌI trang tool về lại springboard, nên phải
+   là điểm chạm dễ nhất trên thanh (to hơn, tách khỏi nền navy bằng viền vàng
+   khớp màu thương hiệu). `top:-15px` kéo nó lên khỏi hàng mà vẫn nằm trong
+   `.tabbar` để không phải tính lại vị trí tuyệt đối riêng. */
+.tabbar .tab-home{display:flex;flex-direction:column;align-items:center;position:relative;top:-15px}
+.tabbar .tab-home-btn{appearance:none;-webkit-appearance:none;width:52px;height:52px;border-radius:50%;border:4px solid var(--navy);background:linear-gradient(160deg,var(--gold),var(--gold-soft));display:flex;align-items:center;justify-content:center;box-shadow:0 6px 16px rgba(6,26,46,.35);cursor:pointer}
+.tabbar .tab-home-btn svg{width:24px;height:24px;stroke:var(--navy);stroke-width:2}
+.tabbar .tab-home-btn:active{transform:scale(.94)}
+.tabbar .tab-home span{margin-top:3px;font-size:10.5px;color:var(--sb-txt-dim)}
+.tabbar .tab-home.active span{color:var(--gold)}
 
 /* ── EMPTY-STATE INTRO (danh thiếp CỐ ĐỊNH của tool — KHÔNG tự ẩn vĩnh viễn,
    không có nút đóng) ── Bố cục: avatar [trái] — tên tool + mô tả [phải].
