@@ -80,17 +80,21 @@
           <img class="intro-avatar" src="/tool-avatars/nhan-tuong.webp" alt="" onerror="this.remove()">
           <div class="intro-text">
             <div class="intro-t">Nhãn Tướng</div>
-            <div class="intro-d">Nhãn Tướng luận tướng đôi mắt theo Liễu Trang Thần Tướng từ ảnh khuôn mặt bạn. Người ta bảo nhìn mắt biết lòng, mà bạn chưa từng biết đôi mắt mình đang để lộ điều gì về tình duyên, tính cách? Tải ảnh khuôn mặt, nhận bản luận tướng mắt chi tiết theo cổ pháp.</div>
+            <div class="intro-d">Nhãn Tướng luận tướng đôi mắt theo Liễu Trang Thần Tướng từ ảnh khuôn mặt bạn. Tải ảnh, hệ thống tự zoom vào vùng mắt và nhận bản luận hình dạng mắt, ánh mắt, lông mày chi tiết.</div>
             <div id="introSrc" style="min-height:36.8px;margin-top:9px"></div>
           </div>
+        </div>
+        <div class="hero-pills">
+          <div class="hero-pill"><span class="hp-ic" data-icon="camera"></span><span>Tải ảnh hoặc<br>chụp trực tiếp</span></div>
+          <div class="hero-pill"><span class="hp-ic" data-icon="eye"></span><span>Tự zoom<br>vào đôi mắt</span></div>
+          <div class="hero-pill"><span class="hp-ic" data-icon="scroll-text"></span><span>Luận theo<br>Liễu Trang Thần Tướng</span></div>
         </div>
       </div></div>
       <div id="shellRecent"></div>
 
       <div class="dt-card" id="inputCard">
-        <h2>Tải ảnh khuôn mặt</h2>
-        <p class="sub">Tải lên một tấm ảnh rõ khuôn mặt, đặc biệt vùng mắt. Hệ thống phân tích ảnh theo cổ pháp Liễu Trang Thần Tướng. Nhận về luận hình dạng mắt, ánh mắt, lông mày và tổng hợp tính cách, vận trình.</p>
-        <p class="price-note" data-tvp-price-label="nhan-tuong">…</p>
+        <div class="fc-head"><span class="fc-ic" data-icon="eye"></span><h2>Tải ảnh khuôn mặt</h2></div>
+        <p class="sub">Tải một tấm ảnh rõ khuôn mặt, đặc biệt vùng mắt. Hệ thống phân tích theo cổ pháp Liễu Trang Thần Tướng, luận hình dạng mắt, ánh mắt, lông mày và tính cách.</p>
         <div class="dt-privacy"><span class="ic" data-icon="lock"></span><div>Ảnh chỉ gửi tới máy chủ để phân tích, không lưu trên server. Chụp thẳng mặt, đủ sáng — hệ thống sẽ tự zoom vào vùng mắt.</div></div>
 
         <div class="dt-input-tabs">
@@ -139,9 +143,27 @@
 
         <div id="hookHost"></div>
 
-        <div style="text-align:center;margin-top:18px">
-          <button class="btn-go" id="analyzeBtn" onclick="analyze()" disabled><span class="ic" data-icon="eye"></span> Phân Tích Nhãn Tướng — <span data-tvp-price="nhan-tuong">…</span> Lượng</button>
+        <div class="cost-box">
+          <div class="cb-l">
+            <span class="cb-ic" data-icon="wallet"></span>
+            <div>
+              <div class="cb-title">Chi phí sử dụng</div>
+              <div class="cb-amt"><span data-tvp-price="nhan-tuong">…</span> Lượng <span class="vnd" data-tvp-price-vnd="nhan-tuong"></span> mỗi lượt</div>
+              <div class="cb-pay">
+                <span><span class="ic" data-icon="qr-code"></span> Chuyển khoản (qua QR ngân hàng)</span>
+                <span><span class="ic" data-icon="credit-card"></span> PayPal / Thẻ quốc tế</span>
+              </div>
+            </div>
+          </div>
+          <div class="cb-r">
+            <span class="cb-ic" data-icon="gift"></span>
+            <div class="cb-r-txt">Mua gói để nhận nhiều ưu đãi hơn.<br><a href="/topup.html">Xem các gói ngay →</a></div>
+          </div>
         </div>
+        <button class="btn-go" id="analyzeBtn" onclick="analyze()" disabled>
+          <span class="bg-label"><span class="ic" data-icon="eye"></span><b id="analyzeBtnLabel">Phân Tích Nhãn Tướng →</b></span>
+          <small>Tốn <span data-tvp-price="nhan-tuong">…</span> Lượng <span data-tvp-price-vnd="nhan-tuong"></span></small>
+        </button>
         <div class="dt-error" id="error-msg"></div>
       </div>
 
@@ -521,6 +543,15 @@ TuviPaywall.init({
   slug: () => _currentSlug,
   onUnlock: () => {},
 });
+
+function _fillVndSlots(host,product){
+  if(!host||!window.ToolPrices) return;
+  var els=host.querySelectorAll('[data-tvp-price-vnd]');
+  var cost=window.ToolPrices.get(product);
+  var lbl=cost!=null?window.ToolPrices.vndLabel(cost):'';
+  els.forEach(function(el){ el.textContent=lbl?('('+lbl+')'):''; });
+}
+TuviPaywall.fillPriceSlots(document).then(function(){ _fillVndSlots(document,'nhan-tuong'); });
 
 async function _saveTuongReading(tool, resultText, imageData, mediaType) {
   try {

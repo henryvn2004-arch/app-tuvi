@@ -76,17 +76,21 @@
           <img class="intro-avatar" src="/tool-avatars/dien-tuong.webp" alt="" onerror="this.remove()">
           <div class="intro-text">
             <div class="intro-t">Diện Tướng</div>
-            <div class="intro-d">Diện Tướng đọc nhân tướng học tổng thể từ ảnh khuôn mặt của bạn. Tình duyên, sự nghiệp, tiền bạc — gương mặt bạn có đang âm thầm tiết lộ điều gì mà bạn chưa từng để ý? Tải ảnh chân dung, nhận bản luận tính cách, vận trình qua khuôn mặt.</div>
+            <div class="intro-d">Diện Tướng đọc nhân tướng học từ ảnh khuôn mặt: Tam Đình, Ngũ Quan, các bộ vị theo cổ pháp Ma Y Thần Tướng. Tải ảnh chân dung, nhận bản luận tính cách và vận trình.</div>
             <div id="introSrc" style="min-height:36.8px;margin-top:9px"></div>
           </div>
+        </div>
+        <div class="hero-pills">
+          <div class="hero-pill"><span class="hp-ic" data-icon="camera"></span><span>Tải ảnh hoặc<br>chụp trực tiếp</span></div>
+          <div class="hero-pill"><span class="hp-ic" data-icon="layout-grid"></span><span>Đo Tam Đình,<br>Ngũ Quan</span></div>
+          <div class="hero-pill"><span class="hp-ic" data-icon="scroll-text"></span><span>Luận theo<br>Ma Y Thần Tướng</span></div>
         </div>
       </div></div>
       <div id="shellRecent"></div>
 
       <div class="dt-card" id="inputCard">
-        <h2>Tải ảnh khuôn mặt</h2>
-        <p class="sub">Tải lên một tấm ảnh chân dung rõ mặt, chụp thẳng, đủ sáng. Hệ thống phân tích nhân tướng học tổng thể trên ảnh đó. Nhận về luận tam đình, ngũ quan, các bộ vị và tổng hợp tính cách, vận trình.</p>
-        <p class="price-note" data-tvp-price-label="dien-tuong">…</p>
+        <div class="fc-head"><span class="fc-ic" data-icon="camera"></span><h2>Tải ảnh khuôn mặt</h2></div>
+        <p class="sub">Tải một tấm ảnh chân dung chụp thẳng, đủ sáng, rõ mặt. Hệ thống phân tích Tam Đình, Ngũ Quan và các bộ vị, luận tính cách và vận trình.</p>
         <div class="dt-privacy"><span class="ic" data-icon="lock"></span><div>Ảnh chỉ gửi tới máy chủ để phân tích, không lưu trên server. Chụp thẳng mặt, đủ sáng, không che mặt cho kết quả chính xác nhất.</div></div>
 
         <div class="dt-input-tabs">
@@ -134,9 +138,27 @@
              DOM) ngay sau khi nhận diện khuôn mặt xong, trước nút phân tích. -->
         <div id="hookHost"></div>
 
-        <div style="text-align:center;margin-top:18px">
-          <button class="btn-go" id="analyzeBtn" onclick="analyze()" disabled><span class="ic" data-icon="sparkles"></span> Phân Tích Tướng Mặt — <span data-tvp-price="dien-tuong">…</span> Lượng</button>
+        <div class="cost-box">
+          <div class="cb-l">
+            <span class="cb-ic" data-icon="wallet"></span>
+            <div>
+              <div class="cb-title">Chi phí sử dụng</div>
+              <div class="cb-amt"><span data-tvp-price="dien-tuong">…</span> Lượng <span class="vnd" data-tvp-price-vnd="dien-tuong"></span> mỗi lượt</div>
+              <div class="cb-pay">
+                <span><span class="ic" data-icon="qr-code"></span> Chuyển khoản (qua QR ngân hàng)</span>
+                <span><span class="ic" data-icon="credit-card"></span> PayPal / Thẻ quốc tế</span>
+              </div>
+            </div>
+          </div>
+          <div class="cb-r">
+            <span class="cb-ic" data-icon="gift"></span>
+            <div class="cb-r-txt">Mua gói để nhận nhiều ưu đãi hơn.<br><a href="/topup.html">Xem các gói ngay →</a></div>
+          </div>
         </div>
+        <button class="btn-go" id="analyzeBtn" onclick="analyze()" disabled>
+          <span class="bg-label"><span class="ic" data-icon="sparkles"></span><b id="analyzeBtnLabel">Phân Tích Tướng Mặt →</b></span>
+          <small>Tốn <span data-tvp-price="dien-tuong">…</span> Lượng <span data-tvp-price-vnd="dien-tuong"></span></small>
+        </button>
         <div class="dt-error" id="error-msg"></div>
       </div>
 
@@ -623,6 +645,15 @@ TuviPaywall.init({
   slug: () => _currentSlug,
   onUnlock: () => {},
 });
+
+function _fillVndSlots(host,product){
+  if(!host||!window.ToolPrices) return;
+  var els=host.querySelectorAll('[data-tvp-price-vnd]');
+  var cost=window.ToolPrices.get(product);
+  var lbl=cost!=null?window.ToolPrices.vndLabel(cost):'';
+  els.forEach(function(el){ el.textContent=lbl?('('+lbl+')'):''; });
+}
+TuviPaywall.fillPriceSlots(document).then(function(){ _fillVndSlots(document,'dien-tuong'); });
 
 async function _saveTuongReading(tool, resultText, imageData, mediaType) {
   try {

@@ -100,17 +100,21 @@
           <img class="intro-avatar" src="/tool-avatars/thanh-tuong.webp" alt="" onerror="this.remove()">
           <div class="intro-text">
             <div class="intro-t">Thanh Tướng Pro</div>
-            <div class="intro-d">Thanh Tướng Pro phân tích chuyên sâu giọng nói, luận cả vận khí đi kèm. Biết giọng mình hợp nghề gì rồi, nhưng vẫn lăn tăn liệu vận khí công việc, tài chính có đang thuận theo giọng đó? Ghi âm giọng nói, nhận bản luận thanh tướng đầy đủ hơn hẳn bản thường.</div>
+            <div class="intro-d">Thanh Tướng Pro đo 4 bài giọng chuyên sâu (12 chỉ số âm học: Jitter, Shimmer, HNR, formant…), luận Ngũ Âm và khí lực đi kèm — chi tiết hơn hẳn bản Thanh Tướng thường.</div>
             <div id="introSrc" style="min-height:36.8px;margin-top:9px"></div>
           </div>
+        </div>
+        <div class="hero-pills">
+          <div class="hero-pill"><span class="hp-ic" data-icon="mic"></span><span>4 bài đo<br>giọng chuyên sâu</span></div>
+          <div class="hero-pill"><span class="hp-ic" data-icon="bar-chart-3"></span><span>12 chỉ số<br>âm học</span></div>
+          <div class="hero-pill"><span class="hp-ic" data-icon="scroll-text"></span><span>Luận Ngũ Âm<br>và khí lực</span></div>
         </div>
       </div></div>
       <div id="shellRecent"></div>
 
       <div class="dt-card" id="setupCard">
-        <h2>Bước 1 · Thông Tin Cơ Bản</h2>
-        <p class="sub">Ghi âm đủ 4 bài đo theo giới tính và tuổi của bạn. Hệ thống phân tích chuyên sâu từng bài đo. Nhận về luận khí, tính cách, vận mệnh – sự nghiệp và cách dưỡng thanh dưỡng khí.</p>
-        <p class="price-note" data-tvp-price-label="thanh-tuong-pro">…</p>
+        <div class="fc-head"><span class="fc-ic" data-icon="mic"></span><h2>Bước 1 · Thông Tin Cơ Bản</h2></div>
+        <p class="sub">Ghi âm đủ 4 bài đo theo giới tính và tuổi của bạn. Hệ thống phân tích chuyên sâu, luận khí, tính cách, vận mệnh và cách dưỡng thanh dưỡng khí.</p>
         <div class="setup-label">Giới Tính</div>
         <div class="gender-opts" id="genderOpts">
           <div class="gender-opt" data-gender="nam">Nam</div>
@@ -166,8 +170,28 @@
         <div class="warn-card" id="featuresWarn"></div>
       </div>
 
-      <div class="dt-card" id="analyzeWrap" style="display:none;text-align:center">
-        <button class="btn-go" id="analyzeBtn">Luận Giải Thanh Tướng — <span data-tvp-price="thanh-tuong-pro">…</span> Lượng</button>
+      <div class="dt-card" id="analyzeWrap" style="display:none">
+        <div class="cost-box">
+          <div class="cb-l">
+            <span class="cb-ic" data-icon="wallet"></span>
+            <div>
+              <div class="cb-title">Chi phí sử dụng</div>
+              <div class="cb-amt"><span data-tvp-price="thanh-tuong-pro">…</span> Lượng <span class="vnd" data-tvp-price-vnd="thanh-tuong-pro"></span> mỗi lượt</div>
+              <div class="cb-pay">
+                <span><span class="ic" data-icon="qr-code"></span> Chuyển khoản (qua QR ngân hàng)</span>
+                <span><span class="ic" data-icon="credit-card"></span> PayPal / Thẻ quốc tế</span>
+              </div>
+            </div>
+          </div>
+          <div class="cb-r">
+            <span class="cb-ic" data-icon="gift"></span>
+            <div class="cb-r-txt">Mua gói để nhận nhiều ưu đãi hơn.<br><a href="/topup.html">Xem các gói ngay →</a></div>
+          </div>
+        </div>
+        <button class="btn-go" id="analyzeBtn">
+          <span class="bg-label"><span class="ic" data-icon="music"></span><b id="analyzeBtnLabel">Luận Giải Thanh Tướng →</b></span>
+          <small>Tốn <span data-tvp-price="thanh-tuong-pro">…</span> Lượng <span data-tvp-price-vnd="thanh-tuong-pro"></span></small>
+        </button>
       </div>
 
       <div class="dt-card" id="resultsCard" data-ws-result style="display:none">
@@ -1097,7 +1121,7 @@ analyzeBtn.addEventListener('click', async () => {
 
 async function _doThanhTuongAnalyze() {
   analyzeBtn.disabled = true;
-  analyzeBtn.textContent = 'Đang luận giải…';
+  var _analyzeBtnLb = document.getElementById('analyzeBtnLabel'); if (_analyzeBtnLb) _analyzeBtnLb.textContent = 'Đang luận giải…';
   resultsCard.style.display = 'block';
   resultsPanel.innerHTML = '<p class="loading-dots" style="text-align:center;color:var(--text-lt);padding:30px 0">Đang phân tích theo cổ pháp</p>';
   resultsCard.scrollIntoView({behavior:'smooth',block:'start'});
@@ -1161,12 +1185,12 @@ async function _doThanhTuongAnalyze() {
       Shell.setShareable({ kind:'text', toolId:'thanh-tuong-pro', title:'Thanh Tướng Pro của tôi', text:content });
     }
 
-    analyzeBtn.textContent = 'Luận Giải Lại';
+    if (_analyzeBtnLb) _analyzeBtnLb.textContent = 'Luận Giải Lại';
     analyzeBtn.disabled = false;
   } catch (err) {
     console.error(err);
     resultsPanel.innerHTML = '<p style="color:#C0392B;padding:20px;text-align:center">Lỗi: ' + (err.message || err) + '</p>';
-    analyzeBtn.textContent = 'Thử Lại';
+    if (_analyzeBtnLb) _analyzeBtnLb.textContent = 'Thử Lại';
     analyzeBtn.disabled = false;
   }
 }
@@ -1202,6 +1226,15 @@ TuviPaywall.init({
   slug: () => _currentSlug,
   onUnlock: () => {},
 });
+
+function _fillVndSlots(host,product){
+  if(!host||!window.ToolPrices) return;
+  var els=host.querySelectorAll('[data-tvp-price-vnd]');
+  var cost=window.ToolPrices.get(product);
+  var lbl=cost!=null?window.ToolPrices.vndLabel(cost):'';
+  els.forEach(function(el){ el.textContent=lbl?('('+lbl+')'):''; });
+}
+TuviPaywall.fillPriceSlots(document).then(function(){ _fillVndSlots(document,'thanh-tuong-pro'); });
 
 async function _saveTuongReading(tool, resultText, imageData, mediaType) {
   try {

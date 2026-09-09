@@ -77,17 +77,21 @@
           <img class="intro-avatar" src="/tool-avatars/thu-tuong.webp" alt="" onerror="this.remove()">
           <div class="intro-text">
             <div class="intro-t">Thủ Tướng</div>
-            <div class="intro-d">Thủ Tướng đọc chỉ tay theo Ngũ Hành Hình Tướng từ ảnh bàn tay bạn. Sự nghiệp lận đận, tình duyên lỡ dở, sức khoẻ hay đau ốm vặt — những dấu hiệu đó có in sẵn trên bàn tay bạn? Chụp ảnh lòng bàn tay, nhận luận chi tiết sự nghiệp, tình duyên, sức khoẻ.</div>
+            <div class="intro-d">Thủ Tướng đọc chỉ tay theo Ngũ Hành Hình Tướng từ ảnh bàn tay bạn. Chụp ảnh lòng bàn tay, nhận luận tam đại chỉ, đường vận mệnh, gò và ngón tay — sự nghiệp, tình duyên, sức khoẻ.</div>
             <div id="introSrc" style="min-height:36.8px;margin-top:9px"></div>
           </div>
+        </div>
+        <div class="hero-pills">
+          <div class="hero-pill"><span class="hp-ic" data-icon="camera"></span><span>Tải ảnh hoặc<br>chụp trực tiếp</span></div>
+          <div class="hero-pill"><span class="hp-ic" data-icon="hand"></span><span>Đo Tam Đại Chỉ,<br>đường vận mệnh</span></div>
+          <div class="hero-pill"><span class="hp-ic" data-icon="scroll-text"></span><span>Luận theo<br>Ngũ Hành Hình Tướng</span></div>
         </div>
       </div></div>
       <div id="shellRecent"></div>
 
       <div class="dt-card" id="inputCard">
-        <h2>Tải ảnh lòng bàn tay</h2>
-        <p class="sub">Chụp và tải lên một tấm ảnh rõ lòng bàn tay. Hệ thống phân tích đường chỉ tay theo Ngũ Hành Hình Tướng. Nhận về luận giải tam đại chỉ, đường vận mệnh, gò và ngón tay.</p>
-        <p class="price-note" data-tvp-price-label="thu-tuong">…</p>
+        <div class="fc-head"><span class="fc-ic" data-icon="hand"></span><h2>Tải ảnh lòng bàn tay</h2></div>
+        <p class="sub">Chụp và tải một tấm ảnh rõ lòng bàn tay. Hệ thống phân tích đường chỉ tay theo Ngũ Hành Hình Tướng, luận tam đại chỉ, đường vận mệnh, gò và ngón tay.</p>
         <div class="dt-privacy"><span class="ic" data-icon="lock"></span><div>Ảnh chỉ gửi tới máy chủ để phân tích, không lưu trên server. Xòe bàn tay phẳng, lòng bàn tay hướng lên, đủ sáng.</div></div>
 
         <div class="dt-input-tabs">
@@ -137,9 +141,27 @@
           <button class="remove-btn" onclick="removePhoto()">✕ Xoá ảnh</button>
         </div>
 
-        <div style="text-align:center;margin-top:18px">
-          <button class="btn-go" id="analyzeBtn" onclick="analyze()" disabled><span class="ic" data-icon="hand"></span> Phân Tích Thủ Tướng — <span data-tvp-price="thu-tuong">…</span> Lượng</button>
+        <div class="cost-box">
+          <div class="cb-l">
+            <span class="cb-ic" data-icon="wallet"></span>
+            <div>
+              <div class="cb-title">Chi phí sử dụng</div>
+              <div class="cb-amt"><span data-tvp-price="thu-tuong">…</span> Lượng <span class="vnd" data-tvp-price-vnd="thu-tuong"></span> mỗi lượt</div>
+              <div class="cb-pay">
+                <span><span class="ic" data-icon="qr-code"></span> Chuyển khoản (qua QR ngân hàng)</span>
+                <span><span class="ic" data-icon="credit-card"></span> PayPal / Thẻ quốc tế</span>
+              </div>
+            </div>
+          </div>
+          <div class="cb-r">
+            <span class="cb-ic" data-icon="gift"></span>
+            <div class="cb-r-txt">Mua gói để nhận nhiều ưu đãi hơn.<br><a href="/topup.html">Xem các gói ngay →</a></div>
+          </div>
         </div>
+        <button class="btn-go" id="analyzeBtn" onclick="analyze()" disabled>
+          <span class="bg-label"><span class="ic" data-icon="hand"></span><b id="analyzeBtnLabel">Phân Tích Thủ Tướng →</b></span>
+          <small>Tốn <span data-tvp-price="thu-tuong">…</span> Lượng <span data-tvp-price-vnd="thu-tuong"></span></small>
+        </button>
         <div class="dt-error" id="error-msg"></div>
       </div>
 
@@ -485,6 +507,15 @@ TuviPaywall.init({
   slug: () => _currentSlug,
   onUnlock: () => {},
 });
+
+function _fillVndSlots(host,product){
+  if(!host||!window.ToolPrices) return;
+  var els=host.querySelectorAll('[data-tvp-price-vnd]');
+  var cost=window.ToolPrices.get(product);
+  var lbl=cost!=null?window.ToolPrices.vndLabel(cost):'';
+  els.forEach(function(el){ el.textContent=lbl?('('+lbl+')'):''; });
+}
+TuviPaywall.fillPriceSlots(document).then(function(){ _fillVndSlots(document,'thu-tuong'); });
 
 async function _saveTuongReading(tool, resultText, imageData, mediaType) {
   try {

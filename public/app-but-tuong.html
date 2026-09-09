@@ -103,12 +103,17 @@
             <div id="introSrc"></div>
           </div>
         </div>
+        <div class="hero-pills">
+          <div class="hero-pill"><span class="hp-ic" data-icon="pen-line"></span><span>Ký trực tiếp<br>trên màn hình</span></div>
+          <div class="hero-pill"><span class="hp-ic" data-icon="scroll-text"></span><span>Đo 6 trục<br>cổ pháp thư pháp</span></div>
+          <div class="hero-pill"><span class="hp-ic" data-icon="shield-check"></span><span>Không lưu<br>chữ ký</span></div>
+        </div>
       </div></div>
       <div id="shellRecent"></div>
 
       <div class="dt-card" id="inputCard">
-        <h2>Ký chữ ký</h2>
-        <p class="sub">Ký trực tiếp trên màn hình hoặc tải ảnh chữ ký có sẵn. Hệ thống đo 6 trục nét bút — đo miễn phí, luận giải đầy đủ tốn <span data-tvp-price-label="but-tuong">…</span> Lượng. Nhận về luận giải chi tiết từng trục theo cổ pháp thư pháp.</p>
+        <div class="fc-head"><span class="fc-ic" data-icon="pen-line"></span><h2>Ký chữ ký</h2></div>
+        <p class="sub">Ký trực tiếp trên màn hình hoặc tải ảnh chữ ký có sẵn. Hệ thống đo 6 trục nét bút, luận giải theo cổ pháp thư pháp.</p>
         <div class="dt-privacy"><span>🔒</span><div>Chữ ký KHÔNG được lưu — chỉ các chỉ số đo được mới gửi đi luận giải.</div></div>
 
         <div class="dt-input-tabs">
@@ -122,7 +127,7 @@
           <div class="sign-btns">
             <button class="btn-cancel" onclick="clearSign()">Xoá</button>
             <button class="btn-cancel" id="addPassBtn" onclick="addSignPass()" disabled>+ Ký lại lần nữa</button>
-            <button class="btn-go" id="measureBtn" onclick="measureSign()" disabled>Đo Chữ Ký →</button>
+            <button class="btn-go inline" id="measureBtn" onclick="measureSign()" disabled><span class="ic" data-icon="pen-line"></span> Đo Chữ Ký →</button>
           </div>
           <div class="sign-pass-tags" id="passTags"></div>
         </div>
@@ -360,10 +365,29 @@ function renderReport(m) {
   });
   html += '</div>';
   if (m.goiY) html += '<div class="bt-goiy"><strong>Gợi ý:</strong> ' + m.goiY.loi + '</div>';
-  html += '<div style="text-align:center;margin-top:18px"><button class="btn-go" onclick="analyze()">Luận Giải Đầy Đủ — <span data-tvp-price="but-tuong">…</span> Lượng →</button></div>';
+  html += '<div class="cost-box" style="margin-top:18px">'
+    + '<div class="cb-l"><span class="cb-ic" data-icon="wallet"></span><div>'
+    + '<div class="cb-title">Chi phí sử dụng</div>'
+    + '<div class="cb-amt"><span data-tvp-price="but-tuong">…</span> Lượng <span class="vnd" data-tvp-price-vnd="but-tuong"></span> mỗi lượt</div>'
+    + '<div class="cb-pay"><span><span class="ic" data-icon="qr-code"></span> Chuyển khoản (qua QR ngân hàng)</span><span><span class="ic" data-icon="credit-card"></span> PayPal / Thẻ quốc tế</span></div>'
+    + '</div></div>'
+    + '<div class="cb-r"><span class="cb-ic" data-icon="gift"></span><div class="cb-r-txt">Mua gói để nhận nhiều ưu đãi hơn.<br><a href="/topup.html">Xem các gói ngay →</a></div></div>'
+    + '</div>'
+    + '<button class="btn-go" id="butTuongAnalyzeBtn" onclick="analyze()">'
+    + '<span class="bg-label"><span class="ic" data-icon="pen-line"></span><b id="butTuongAnalyzeLabel">Luận Giải Đầy Đủ →</b></span>'
+    + '<small>Tốn <span data-tvp-price="but-tuong">…</span> Lượng <span data-tvp-price-vnd="but-tuong"></span></small>'
+    + '</button>';
   document.getElementById('btReport').innerHTML = html;
   document.getElementById('btReport').style.display = 'block';
-  if (window.TuviPaywall && window.TuviPaywall.fillPriceSlots) window.TuviPaywall.fillPriceSlots(document.getElementById('btReport'));
+  if (window.TuviPaywall && window.TuviPaywall.fillPriceSlots) window.TuviPaywall.fillPriceSlots(document.getElementById('btReport')).then(function(){ _fillVndSlots(document.getElementById('btReport'),'but-tuong'); });
+}
+
+function _fillVndSlots(host,product){
+  if(!host||!window.ToolPrices) return;
+  var els=host.querySelectorAll('[data-tvp-price-vnd]');
+  var cost=window.ToolPrices.get(product);
+  var lbl=cost!=null?window.ToolPrices.vndLabel(cost):'';
+  els.forEach(function(el){ el.textContent=lbl?('('+lbl+')'):''; });
 }
 
 function readBirth() {
