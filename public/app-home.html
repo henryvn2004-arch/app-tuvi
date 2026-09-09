@@ -74,13 +74,6 @@
 .nx-tx b{display:block;font-family:var(--serif);font-size:16px;font-weight:600;color:var(--heading);margin-bottom:4px}
 .nx-why{font-size:12.5px;color:var(--text-mid);line-height:1.55}
 .nx-go{margin-left:auto;flex:0 0 auto;align-self:center;font-size:18px;color:var(--gold-soft)}
-.nx-more{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;margin-top:10px}
-.nx-item{display:flex;gap:10px;align-items:flex-start;background:var(--paper-2);border:1px solid var(--line);border-radius:11px;padding:11px 12px;text-decoration:none;transition:.15s}
-.nx-item:hover{border-color:var(--gold-soft);background:var(--white)}
-.nx-item .ic{width:30px;height:30px;flex:0 0 auto;border-radius:8px;background:var(--navy);color:var(--gold);display:flex;align-items:center;justify-content:center}
-.nx-item .ic svg{width:16px;height:16px}
-.nx-item b{display:block;font-family:var(--serif);font-size:13px;font-weight:600;color:var(--text);margin-bottom:2px}
-.nx-item span{font-size:11.5px;color:var(--text-lt);line-height:1.45}
 /* ── SPRINGBOARD — lưới TOÀN BỘ công cụ, luôn hiện (thay "Xem tất cả công cụ"
    gập lại + wcCards/allTools cũ). Xem `.grid`/.tile*` + section `.tint-*`
    ngay dưới đây, và `renderSpringboard()` trong <script>. */
@@ -392,7 +385,7 @@
   <main class="ws" id="ws">
     <div class="ws-top">
       <button class="btn mobile-only" onclick="document.getElementById('shell-sidebar').classList.toggle('open');window.shellSyncBackdrop&&shellSyncBackdrop()" aria-label="Menu">☰</button>
-      <div class="ws-title"><b>Luận Đường</b><span>Chọn một công cụ mệnh lý để bắt đầu</span></div>
+      <div class="ws-title"><b>Tử Vi Minh Bảo</b><span>Tri mệnh lý – Thuận thế hành</span></div>
     </div>
     <div class="ws-body">
       <div class="home-body">
@@ -413,18 +406,14 @@
             <span>Tìm công cụ — Lá Số, Bát Tự, xem tuổi…</span>
           </button>
         </div>
-        <!-- Khung chờ: `pickNext()` trả TỐI ĐA 3 mục nên số ô là cố định,
-             chỉ độ dài chữ mới đổi. Xem chú thích .nx-skel trong <style>. -->
+        <!-- Khung chờ: `pickNext()` trả ĐÚNG 1 mục nên số ô là cố định, chỉ
+             độ dài chữ mới đổi. Xem chú thích .nx-skel trong <style>. -->
         <div id="nextCard" class="nx-skel" aria-busy="true" aria-label="Đang tải gợi ý">
           <div class="next-wrap">
             <div class="grp-title"><span class="sk">&nbsp;</span></div>
             <a class="nx-main"><div class="ic"></div>
               <div class="nx-tx"><b><span class="sk">&nbsp;</span></b>
                 <div class="nx-why"><span class="sk">&nbsp;</span><span class="sk">&nbsp;</span></div></div></a>
-            <div class="nx-more">
-              <a class="nx-item"><div class="ic"></div><div><b><span class="sk">&nbsp;</span></b><span class="sk">&nbsp;</span><span class="sk">&nbsp;</span></div></a>
-              <a class="nx-item"><div class="ic"></div><div><b><span class="sk">&nbsp;</span></b><span class="sk">&nbsp;</span><span class="sk">&nbsp;</span></div></a>
-            </div>
           </div>
         </div>
         <!-- Lưới springboard — dựng đồng bộ từ `ToolPrices.navFallback()`
@@ -481,6 +470,30 @@
 <script src="/shell.js?v=88"></script>
 <script>
 function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+/* ── Ô icon đầu .ws-top: `mountToolIcon()` (shell.js) tự chèn SVG của tool
+   đang active vào `.ws-avatar` — cho Home nó vẽ icon nhà chung chung, lệch
+   hẳn triện thật vừa đổi vào `.ws-title` bên cạnh. Thay bằng ảnh triện thật.
+
+   🔑 KHÔNG patch một lần: `mountToolIcon()` XOÁ rồi DỰNG LẠI `.ws-avatar` mỗi
+   lần `renderSidebar()` chạy — mà hàm đó chạy TỚI BA LẦN không đồng bộ (boot()
+   → nav-fallback từ localStorage → catalog thật từ mạng, xem `loadCatalog()`),
+   nên patch một lần lúc DOMContentLoaded sẽ bị viết đè ngay sau đó. Theo dõi
+   bằng MutationObserver để tự vá lại mỗi lần `.ws-avatar` bị dựng mới — không
+   đụng shell.js dùng chung cho 52 trang còn lại. */
+(function(){
+  var SEAL='<img src="/seal.webp" alt="Tử Vi Minh Bảo" style="width:100%;height:100%;object-fit:cover;border-radius:inherit;display:block">';
+  function patchWsAvatar(){
+    var av=document.querySelector('.ws-top .ws-avatar');
+    if(av && av.firstElementChild && av.firstElementChild.tagName!=='IMG') av.innerHTML=SEAL;
+  }
+  function start(){
+    patchWsAvatar();
+    var top=document.querySelector('.ws-top');
+    if(top && window.MutationObserver) new MutationObserver(patchWsAvatar).observe(top,{childList:true,subtree:true});
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',start);
+  else start();
+})();
 /* ── Q1: GỢI Ý "TIẾP THEO NÊN XEM GÌ" ─────────────────────────────────────
    Thay cho lưới 58 công cụ dựng từ `tool_groups` trước đây.
 
@@ -534,8 +547,9 @@ function usedMap() {
   try { return (window.Shell && Shell.usedTools) ? Shell.usedTools() : {}; } catch (e) { return {}; }
 }
 
-/* Trả tối đa 3 gợi ý [{row, why}]. Không có dữ liệu danh mục → mảng rỗng và
-   khối tự ẩn: thà không gợi còn hơn dẫn người ta tới một trang không tồn tại. */
+/* Trả ĐÚNG 1 gợi ý [{row, why}] (Henry 2026-09: một lựa chọn rõ ràng thay vì
+   dàn hàng 3). Không có dữ liệu danh mục → mảng rỗng và khối tự ẩn: thà không
+   gợi còn hơn dẫn người ta tới một trang không tồn tại. */
 function pickNext(d) {
   var rows = (d && d.rows) || [];
   if (!rows.length) return [];
@@ -544,7 +558,7 @@ function pickNext(d) {
 
   var used = usedMap(), out = [], taken = {};
   function add(key, why) {
-    if (out.length >= 3 || taken[key] || used[key] || !byKey[key]) return;
+    if (out.length >= 1 || taken[key] || used[key] || !byKey[key]) return;
     taken[key] = 1; out.push({ row: byKey[key], why: why });
   }
 
@@ -577,7 +591,7 @@ function renderNext(d) {
   host.classList.remove('nx-skel');
   host.removeAttribute('aria-busy');
   host.removeAttribute('aria-label');
-  var first = picks[0], rest = picks.slice(1);
+  var first = picks[0];
   var html = '<div class="next-wrap">' +
     '<div class="grp-title">✦ Gợi ý cho bạn</div>' +
     '<a class="nx-main" href="' + esc(first.row.app_path) + '">' +
@@ -586,13 +600,6 @@ function renderNext(d) {
         '<div class="nx-why">' + esc(first.why) + '</div></div>' +
       '<div class="nx-go" aria-hidden="true">›</div>' +
     '</a>';
-  if (rest.length) {
-    html += '<div class="nx-more">' + rest.map(function (p) {
-      return '<a class="nx-item" href="' + esc(p.row.app_path) + '">' +
-        '<div class="ic">' + cardIcon(p.row) + '</div>' +
-        '<div><b>' + esc(p.row.label) + '</b><span>' + esc(p.why) + '</span></div></a>';
-    }).join('') + '</div>';
-  }
   host.innerHTML = html + '</div>';
   if (window.mountIcons) window.mountIcons(host);
 }
@@ -1830,16 +1837,6 @@ if (window.ToolPrices) ToolPrices.load().then(function (d) { if (d) renderSpring
   function markSeen(){ try{ localStorage.setItem(TOUR_KEY,'1'); }catch(e){} }
   function esc2(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
-  // `offsetParent===null` bắt cả "không tồn tại" lẫn "tồn tại nhưng
-  // display:none" (Khởi Hành chưa kịp dựng, hoặc bị ẩn vì đã xong) — coi cả
-  // hai là CHƯA CÓ, đừng chỉ vào một khối vô hình.
-  function findTarget(sel){
-    var e=document.querySelector(sel);
-    return (e && e.offsetParent!==null) ? e : null;
-  }
-
-  var _i=-1, _spot=null, _pop=null, _scrolled=false;
-
   // Vùng NHÌN THẤY THẬT. `window.innerHeight` trên iOS Safari tính cả dải nằm
   // SAU thanh công cụ dưới cùng của trình duyệt, nên đặt trong innerHeight vẫn
   // có thể bị thanh đó che. `visualViewport` mới là con số người dùng thấy.
@@ -1848,6 +1845,40 @@ if (window.ToolPrices) ToolPrices.load().then(function (d) { if (d) renderSpring
     return vv ? {top:vv.offsetTop, left:vv.offsetLeft, h:vv.height, w:vv.width}
               : {top:0, left:0, h:window.innerHeight, w:window.innerWidth};
   }
+
+  // `offsetParent===null` bắt cả "không tồn tại" lẫn "tồn tại nhưng
+  // display:none" (Khởi Hành chưa kịp dựng, hoặc bị ẩn vì đã xong) — coi cả
+  // hai là CHƯA CÓ, đừng chỉ vào một khối vô hình. Dùng cho `onResize()`: bước
+  // ĐANG MỞ rồi thì đừng đóng tour giữa chừng chỉ vì một lượt resize đẩy neo ra
+  // khỏi khung nhìn tạm thời (vd bàn phím mobile đóng/mở) — `place()` tự kẹp
+  // popup vào khung nhìn, không cần huỷ bước.
+  function findTarget(sel){
+    var e=document.querySelector(sel);
+    return (e && e.offsetParent!==null) ? e : null;
+  }
+
+  // Soát CHẶT HƠN — dùng khi QUYẾT ĐỊNH có mở một bước MỚI hay không (`step()`
+  // và lượt quét `any` trong `start()`). `offsetParent!==null` chỉ bắt
+  // display:none, KHÔNG bắt sidebar/rail đóng bằng
+  // `transform:translateX(-100%)` trên mobile — neo vẫn "có" trong layout
+  // nhưng nằm hẳn ngoài màn hình bên trái, và (khác kiểu cuộn dọc quá tầm)
+  // `scrollIntoView` trong `place()` KHÔNG kéo nó vào được vì nó là
+  // `position:fixed` bị dịch, không phải bị cuộn qua. Kết quả nếu không chặn ở
+  // đây: vòng sáng chỉ vào chỗ không ai thấy, tooltip nổi lơ lửng không dính
+  // gì tới nút nào (bug mobile 2026-09, ảnh chụp step "Đăng ký"/"Ví Lượng" —
+  // cả hai đều neo bên trong sidebar). Bước nào neo trong drawer đang đóng thì
+  // bỏ qua, y hệt cách bỏ qua bước chưa dựng kịp.
+  function findVisibleTarget(sel){
+    var e=findTarget(sel);
+    if(!e) return null;
+    var r=e.getBoundingClientRect();
+    if(r.width<=0&&r.height<=0) return null;
+    var vp=viewport();
+    if(r.right<=vp.left||r.bottom<=vp.top||r.left>=vp.left+vp.w||r.top>=vp.top+vp.h) return null;
+    return e;
+  }
+
+  var _i=-1, _spot=null, _pop=null, _scrolled=false;
 
   function place(target,data,isLast){
     var pad=6;
@@ -1908,8 +1939,8 @@ if (window.ToolPrices) ToolPrices.load().then(function (d) { if (d) renderSpring
 
   function step(i){
     if(i>=STEPS.length){ finish(); return; }
-    var data=STEPS[i], target=findTarget(data.sel);
-    if(!target){ step(i+1); return; } // phần tử chưa có lúc này → bỏ qua bước đó, đừng đứng khựng
+    var data=STEPS[i], target=findVisibleTarget(data.sel);
+    if(!target){ step(i+1); return; } // chưa dựng kịp HOẶC đang nằm trong drawer đóng → bỏ qua bước đó, đừng đứng khựng
     _i=i; _scrolled=false;
     place(target,data,i===STEPS.length-1);
   }
@@ -1948,7 +1979,7 @@ if (window.ToolPrices) ToolPrices.load().then(function (d) { if (d) renderSpring
     // Không bước nào có điểm neo (trang lỗi, hoặc các khối cùng chưa kịp
     // dựng) → đừng tạo một overlay không trỏ vào đâu cả.
     var any=false;
-    for(var k=0;k<STEPS.length;k++) if(findTarget(STEPS[k].sel)){ any=true; break; }
+    for(var k=0;k<STEPS.length;k++) if(findVisibleTarget(STEPS[k].sel)){ any=true; break; }
     if(!any) return;
 
     _spot=document.createElement('div'); _spot.className='tour-spot';
