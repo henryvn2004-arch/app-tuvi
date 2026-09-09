@@ -22,6 +22,7 @@ import { buildPromptCached } from '@/lib/agent/luan-giai-doc';
 import { llmTextFull, callLLMTools } from '@/lib/llm/complete';
 import { logLlmUsage } from '@/lib/agent/usage';
 import { withToolOutcome } from '@/lib/ops/tool-outcome';
+import { refundIfSystemFailure } from '@/lib/ops/refund';
 import { authUserFromRequest } from '@/lib/api/tool-helpers';
 import { previewGate, previewIpHash } from '@/lib/billing/anon-preview';
 import { previewKey, previewCacheGet, previewCachePut } from '@/lib/llm/preview-cache';
@@ -319,12 +320,31 @@ async function runPost(request: NextRequest) {
     }
   }
 
+  // Giữ lại danh tính của đường TRẢ PHÍ (không phải xem trước) để hoàn Lượng
+  // nếu lượt này hỏng SAU khi đã xác nhận đã thanh toán — `paidErr` bên dưới
+  // đọc biến này. Đường preview không gán biến này → không có gì để hoàn.
+  let paidAuth: { id: string; isAnonymous: boolean } | null = null;
   if (!isPreview && !paywallDisabled()) {
     const auth = await authUserFromRequest(request);
     if ('error' in auth) return err(auth.error, auth.status);
     const owns = await hasAnySlugAccess(auth.user.id, [slug, bundleSlug].filter((s): s is string => !!s));
     if (!owns) return err('Lượt dùng này chưa được thanh toán.', 402);
+    paidAuth = { id: auth.user.id, isAnonymous: auth.user.isAnonymous };
   }
+  // S3 (track COO) — Henry 2026-09-09: một phần trong 24 phần Luận Giải hỏng
+  // SAU khi đã trả tiền thì phải tự hoàn Lượng, không bắt khách tự phát hiện.
+  // Không biết trước lượt mua đi qua slug PHẦN lẻ hay slug CẢ BÓ nên thử cả
+  // hai — `refundIfSystemFailure` tự bỏ qua slug nào không có gì để hoàn.
+  const paidErr = async (message: string, status = 500): Promise<Response> => {
+    const res = err(message, status);
+    if (!paidAuth) return res;
+    return refundIfSystemFailure(res, {
+      toolId: 'lasotuvi',
+      userId: paidAuth.id,
+      slug: [slug, bundleSlug].filter((s): s is string => !!s),
+      isAnonymous: paidAuth.isAnonymous,
+    });
+  };
 
   // ── Đường XEM TRƯỚC: cache trước, cầu dao sau ────────────────────────────
   // Thứ tự này BẮT BUỘC (xem lib/llm/preview-cache.ts): trúng cache là 0đ model
@@ -365,7 +385,7 @@ async function runPost(request: NextRequest) {
     systemForLLM = cached.system;
     prompt = (nx ? nx + '\n' : '') + cached.prompt;
   }
-  catch (e: unknown) { return err('buildPrompt error: ' + (e as Error).message); }
+  catch (e: unknown) { return paidErr('buildPrompt error: ' + (e as Error).message); }
 
   try {
     // Henry chốt 2026-08-20: nâng ĐỀU 50% mọi trần token trong repo — retest
@@ -495,7 +515,7 @@ async function runPost(request: NextRequest) {
     }
     return ok({ luanGiai, phan });
   } catch (e: unknown) {
-    return err((e as Error).message);
+    return paidErr((e as Error).message);
   }
 }
 

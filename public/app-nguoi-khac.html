@@ -847,6 +847,7 @@ async function _doGenerate(freeRerun, qh, viec) {
       ].filter(Boolean).join('\n'),
     });
   } catch (e) {
+    if (window.TuviPaywall && TuviPaywall.showRefundNotice) TuviPaywall.showRefundNotice(data);
     _loadingCtl && _loadingCtl.stop();
     _closePanel();
     showError('Lỗi: ' + (e.message || 'Không thể kết nối. Vui lòng thử lại.'));

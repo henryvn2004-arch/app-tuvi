@@ -595,6 +595,7 @@ async function _doGenerate(freeRerun) {
     // Xem xong mà hết Lượng → chỗ xin mời bạn (V2.3). Tự ẩn nếu còn đủ Lượng.
     _mountInviteCta();
   } catch (e) {
+    if (window.TuviPaywall && TuviPaywall.showRefundNotice) TuviPaywall.showRefundNotice(data);
     _loadingCtl && _loadingCtl.stop();
     _closePanel();
     showError('Lỗi: ' + (e.message || 'Không thể kết nối. Vui lòng thử lại.'));
