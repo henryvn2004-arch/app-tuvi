@@ -777,7 +777,7 @@ async function loadCredits() {
   try {
     const res = await fetch(
       SUPABASE_URL + '/rest/v1/credit_transactions?user_id=eq.' + encodeURIComponent(_pUser.id) +
-      '&order=created_at.desc&limit=30&select=*',
+      '&order=created_at.desc&limit=100&select=*',
       { headers: { apikey: SUPABASE_ANON, Authorization: 'Bearer ' + (await _tok()) } }
     );
     const txns = res.ok ? await res.json() : [];
@@ -807,23 +807,104 @@ async function loadCredits() {
   }
 }
 
+const VILU_LABELS = { topup:'Nạp Lượng', use_laso:'Luận Giải Lá Số', use_xem_tuoi:'Xem Tuổi Vợ Chồng', use_xem_lam_an:'Xem Tuổi Làm Ăn', admin_grant:'Cấp Lượng (quản trị)', chat:'Hỏi trợ lý' };
+function viluLabel(t) { return VILU_LABELS[t.type] || t.description || t.type; }
+
+let _viluTxns = [];
+let _viluPage = 1;
+let _viluBound = false;
+const VILU_PAGE_SIZE = 10;
+
 function renderTransactions(list) {
+  _viluTxns = list || [];
+  _viluPage = 1;
+
+  // 3 ô tổng số — trên đúng số giao dịch vừa tải (không phải toàn bộ lịch sử).
+  let tongNap = 0, tongChi = 0;
+  _viluTxns.forEach(t => { if (t.amount > 0) tongNap += t.amount; else tongChi += Math.abs(t.amount); });
+  const setStat = (id, v) => { const e = document.getElementById(id); if (e) e.textContent = v; };
+  setStat('viluTongNap', '+' + tongNap);
+  setStat('viluTongChi', '-' + tongChi);
+  setStat('viluSoGD', _viluTxns.length);
+
+  // Dropdown lọc theo loại — liệt kê đúng các `type` có trong dữ liệu, không bịa nhóm.
+  const typeSel = document.getElementById('viluTypeFilter');
+  if (typeSel) {
+    const seen = {}, cur = typeSel.value;
+    let opts = '<option value="">Tất cả loại giao dịch</option>';
+    _viluTxns.forEach(t => {
+      if (t.type && !seen[t.type]) { seen[t.type] = 1; opts += `<option value="${escHtml(t.type)}">${escHtml(viluLabel(t))}</option>`; }
+    });
+    typeSel.innerHTML = opts;
+    typeSel.value = cur;
+  }
+
+  if (!_viluBound) {
+    _viluBound = true;
+    const search = document.getElementById('viluSearch');
+    if (typeSel) typeSel.addEventListener('change', () => { _viluPage = 1; renderViluTable(); });
+    if (search) search.addEventListener('input', () => { _viluPage = 1; renderViluTable(); });
+  }
+
+  renderViluTable();
+}
+
+function renderViluTable() {
   const el = document.getElementById('transactionList');
-  if (!list || list.length === 0) {
+  const pager = document.getElementById('viluPager');
+  if (!el) return;
+  if (!_viluTxns.length) {
     el.innerHTML = '<div style="color:var(--text-lt);font-size:.85rem">Chưa có giao dịch nào.</div>';
+    if (pager) pager.style.display = 'none';
     return;
   }
-  const LABELS = { topup:'Nạp Lượng', use_laso:'Luận Giải Lá Số', use_xem_tuoi:'Xem Tuổi Vợ Chồng', use_xem_lam_an:'Xem Tuổi Làm Ăn' };
-  el.innerHTML = '<div class="purchase-list">' + list.map(t => {
-    const date = new Date(t.created_at).toLocaleDateString('vi-VN',{day:'2-digit',month:'2-digit',year:'numeric'});
-    const isAdd = t.amount > 0;
-    const amtColor = isAdd ? 'var(--green)' : 'var(--red)';
-    const amtStr = (isAdd ? '+' : '') + t.amount + ' cr';
-    const label = LABELS[t.type] || t.description || t.type;
-    return '<div class="purchase-item"><div class="purchase-slug">' + escHtml(label) + '</div>' +
-           '<div class="purchase-amount" style="color:' + amtColor + '">' + amtStr + '</div>' +
-           '<div class="purchase-date">' + date + '</div></div>';
-  }).join('') + '</div>';
+
+  const type = document.getElementById('viluTypeFilter')?.value || '';
+  const q = (document.getElementById('viluSearch')?.value || '').trim().toLowerCase();
+  const filtered = _viluTxns.filter(t => {
+    if (type && t.type !== type) return false;
+    if (q && viluLabel(t).toLowerCase().indexOf(q) === -1) return false;
+    return true;
+  });
+
+  if (!filtered.length) {
+    el.innerHTML = '<div style="color:var(--text-lt);font-size:.85rem">Không có giao dịch khớp bộ lọc.</div>';
+    if (pager) pager.style.display = 'none';
+    return;
+  }
+
+  const totalPages = Math.max(1, Math.ceil(filtered.length / VILU_PAGE_SIZE));
+  _viluPage = Math.min(_viluPage, totalPages);
+  const start = (_viluPage - 1) * VILU_PAGE_SIZE;
+  const pageItems = filtered.slice(start, start + VILU_PAGE_SIZE);
+
+  el.innerHTML = '<div class="vilu-tbl-wrap"><table class="vilu-tbl"><thead><tr>' +
+    '<th>#</th><th>Thời gian</th><th>Loại</th><th>Nội dung</th><th>Số lượng</th><th>Mã giao dịch</th>' +
+    '</tr></thead><tbody>' + pageItems.map((t, i) => {
+      const date = new Date(t.created_at).toLocaleString('vi-VN', { day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit' });
+      const isAdd = t.amount > 0;
+      const loaiColor = isAdd ? 'var(--green)' : 'var(--red)';
+      const loaiText = isAdd ? 'Nạp / Thưởng' : 'Sử dụng';
+      const amtCls = isAdd ? 'pos' : 'neg';
+      const amtStr = (isAdd ? '+' : '') + t.amount;
+      const ma = t.id ? String(t.id).slice(0, 8) : '—';
+      return '<tr><td>' + (start + i + 1) + '</td><td>' + date + '</td>' +
+        '<td style="color:' + loaiColor + ';font-weight:600">' + loaiText + '</td>' +
+        '<td>' + escHtml(viluLabel(t)) + '</td>' +
+        '<td class="vilu-amt ' + amtCls + '">' + amtStr + '</td>' +
+        '<td class="vilu-mono">' + escHtml(ma) + '</td></tr>';
+    }).join('') + '</tbody></table></div>';
+
+  if (pager) {
+    pager.style.display = totalPages > 1 ? 'flex' : 'none';
+    if (totalPages > 1) {
+      pager.innerHTML = '<span>Hiển thị ' + (start + 1) + '–' + Math.min(start + VILU_PAGE_SIZE, filtered.length) + ' / ' + filtered.length + ' giao dịch</span><div class="vilu-pgbtns">' +
+        Array.from({ length: totalPages }, (_, idx) => idx + 1).map(p =>
+          '<button type="button" class="vilu-pgbtn' + (p === _viluPage ? ' active' : '') + '" data-p="' + p + '">' + p + '</button>'
+        ).join('') + '</div>';
+      pager.querySelectorAll('.vilu-pgbtn').forEach(b => b.addEventListener('click', () => { _viluPage = parseInt(b.dataset.p, 10); renderViluTable(); }));
+    }
+  }
 }
 
 // ── RENDER XEM TƯỚNG ──
