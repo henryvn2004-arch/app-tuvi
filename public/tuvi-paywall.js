@@ -1176,6 +1176,37 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
     setTimeout(() => el.remove(), 3100);
   }
 
+  // ── Popup hoàn Lượng khi tool hỏng SAU khi đã trả tiền ──────────────────
+  // Henry 2026-09-09 (khách test thật gặp đúng ca này): trả tiền xong tool
+  // hỏng mà không ai báo là đã hoàn hay chưa. `data` là JSON trả về từ MỘT
+  // route tool đã đi qua `refundIfSystemFailure` (lib/ops/refund.ts) — hàm
+  // đó chỉ gắn `refunded:true` khi ĐÃ hoàn THẬT (không phải shadow/chạm trần
+  // ngày), nên chỉ cần soát đúng cờ này, không tự suy diễn thêm ở đây.
+  function showRefundNotice(data) {
+    if (!data || data.refunded !== true) return;
+    const old = document.getElementById('tpw-refund-modal');
+    if (old) old.remove();
+    const isAnon = !!data.isAnonymous;
+    const credits = data.refundedCredits != null ? data.refundedCredits : '';
+    const modal = document.createElement('div');
+    modal.id = 'tpw-refund-modal';
+    modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:10000;display:flex;align-items:center;justify-content:center;padding:20px';
+    modal.innerHTML =
+      '<div style="background:#fff;border-radius:14px;padding:28px;width:100%;max-width:380px;position:relative;box-shadow:0 20px 60px rgba(0,0,0,0.3)">' +
+        '<button onclick="document.getElementById(\'tpw-refund-modal\').remove()" style="position:absolute;top:14px;right:14px;background:none;border:none;font-size:20px;cursor:pointer;color:#aaa;line-height:1">×</button>' +
+        '<div style="font-family:Georgia,serif;font-size:17px;font-weight:700;color:#061A2E;margin-bottom:8px">Xin lỗi, đã có lỗi xảy ra</div>' +
+        '<p style="font-size:13px;color:#4a4a4a;line-height:1.6;margin-bottom:14px">Lượt này chưa xử lý xong được. Chúng tôi đã hoàn <b>' + credits + ' Lượng</b> vào ví của bạn' + (isAnon ? ' tạm thời' : '') + ' — bạn có thể thử lại sau.</p>' +
+        (isAnon
+          ? '<p style="font-size:12.5px;color:#7a705f;background:#FBF8F1;border:1px solid #EADFC8;border-radius:8px;padding:10px 12px;line-height:1.6;margin-bottom:14px">Ví hiện tại là ví TẠM — Lượng vừa hoàn sẽ MẤT nếu bạn xoá trình duyệt hoặc đổi máy. Đăng ký tài khoản để giữ lại an toàn.</p>' +
+            '<button onclick="document.getElementById(\'tpw-refund-modal\').remove();window.showClaimModal&&showClaimModal()" style="width:100%;padding:11px;background:#061A2E;color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;margin-bottom:8px">Đăng ký để giữ Lượng</button>' +
+            '<button onclick="document.getElementById(\'tpw-refund-modal\').remove()" style="width:100%;padding:10px;background:none;color:#888;border:none;font-size:13px;cursor:pointer;font-family:inherit">Để sau</button>'
+          : '<button onclick="document.getElementById(\'tpw-refund-modal\').remove()" style="width:100%;padding:11px;background:#061A2E;color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit">Đã hiểu</button>') +
+      '</div>';
+    document.body.appendChild(modal);
+    modal.addEventListener('click', function (e) { if (e.target === modal) modal.remove(); });
+    if (window.refreshNavCredits) window.refreshNavCredits();
+  }
+
   // ── Slug generator ────────────────────────────────────────────
   function generateToolSlug(product) {
     const uid = (window.Auth?.getUser()?.id || 'g').slice(0, 8);
@@ -1591,7 +1622,7 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
     mountCostHints, refreshCostHints, lockPreview, isFreeRerun, lockBadge, placeholderHtml,
     previewAnonId, dummyPortraitUrl,
     sectionLockHtml, wireSectionLocks, resumeIfPending,
-    _banner, _close, _closeLock, _login,
+    _banner, _close, _closeLock, _login, showRefundNotice,
   };
 })();
 

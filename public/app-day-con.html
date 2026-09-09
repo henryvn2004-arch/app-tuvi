@@ -945,6 +945,7 @@ async function _doGenerate(freeRerun, lo) {
       text: blocks.map(function (b) { return b.header + '\n' + b.text; }).join('\n\n'),
     });
   } catch (e) {
+    if (window.TuviPaywall && TuviPaywall.showRefundNotice) TuviPaywall.showRefundNotice(data);
     _loadingCtl && _loadingCtl.stop();
     _closePanel();
     showError('Lỗi: ' + (e.message || 'Không thể kết nối. Vui lòng thử lại.'));

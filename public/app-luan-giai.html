@@ -1546,6 +1546,7 @@ async function _runPhanLuanGiai(p,preview){
     var data=await resp.json();
     if(data.error||!data.luanGiai){
       doneWait();
+      if(window.TuviPaywall&&TuviPaywall.showRefundNotice)TuviPaywall.showRefundNotice(data);
       if(box)box.innerHTML=preview?'':'<div class="laso-error">Lỗi khi luận giải phần '+p+'. <button class="btn" onclick="window._lgRetryPhan('+p+')">↻ Thử lại</button></div>';
       return false;
     }

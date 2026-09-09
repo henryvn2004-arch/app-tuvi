@@ -21,7 +21,7 @@ const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY!;
  *  `fetch` toàn cục và nhớ kết quả, tức phiên đã huỷ vẫn qua cửa. */
 export async function authUserFromRequest(
   request: NextRequest,
-): Promise<{ error: string; status: number } | { user: { id: string } }> {
+): Promise<{ error: string; status: number } | { user: { id: string; isAnonymous: boolean } }> {
   const auth = request.headers.get('Authorization');
   if (!auth?.startsWith('Bearer ')) return { error: 'Unauthorized', status: 401 };
   const res = await fetch(`${SUPABASE_URL}/auth/v1/user`, {
@@ -31,7 +31,9 @@ export async function authUserFromRequest(
   if (!res.ok) return { error: 'Unauthorized', status: 401 };
   const u = await res.json();
   if (!u?.id) return { error: 'Unauthorized', status: 401 };
-  return { user: { id: u.id as string } };
+  // `is_anonymous` (Supabase guest checkout) — gắn kèm cho nơi gọi cần phân
+  // biệt khách ẩn danh (popup hoàn Lượng phải nhắc "Lưu tài khoản").
+  return { user: { id: u.id as string, isAnonymous: !!u.is_anonymous } };
 }
 
 /**

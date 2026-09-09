@@ -665,6 +665,7 @@ async function _doGenerate(freeRerun) {
       ],
     });
   } catch (e) {
+    if (window.TuviPaywall && TuviPaywall.showRefundNotice) TuviPaywall.showRefundNotice(data);
     _loadingCtl && _loadingCtl.stop();
     _imgWait && _imgWait.stop();   // truyện hỏng → ẩn cả khung ảnh, đừng để đồng hồ chạy ngầm
     document.getElementById('loading').style.display = 'none';
@@ -714,6 +715,7 @@ async function _doGenerate(freeRerun) {
       }
     }
     _imgWait && _imgWait.stop();
+    if (window.TuviPaywall && TuviPaywall.showRefundNotice) TuviPaywall.showRefundNotice(idata);
     document.getElementById('imgPlaceholder').textContent = 'Không vẽ được bức tranh lần này. Phần câu chuyện phía dưới vẫn đầy đủ.';
     publishShareable('');
   }
