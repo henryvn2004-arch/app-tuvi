@@ -74,13 +74,6 @@
 .nx-tx b{display:block;font-family:var(--serif);font-size:16px;font-weight:600;color:var(--heading);margin-bottom:4px}
 .nx-why{font-size:12.5px;color:var(--text-mid);line-height:1.55}
 .nx-go{margin-left:auto;flex:0 0 auto;align-self:center;font-size:18px;color:var(--gold-soft)}
-.nx-more{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;margin-top:10px}
-.nx-item{display:flex;gap:10px;align-items:flex-start;background:var(--paper-2);border:1px solid var(--line);border-radius:11px;padding:11px 12px;text-decoration:none;transition:.15s}
-.nx-item:hover{border-color:var(--gold-soft);background:var(--white)}
-.nx-item .ic{width:30px;height:30px;flex:0 0 auto;border-radius:8px;background:var(--navy);color:var(--gold);display:flex;align-items:center;justify-content:center}
-.nx-item .ic svg{width:16px;height:16px}
-.nx-item b{display:block;font-family:var(--serif);font-size:13px;font-weight:600;color:var(--text);margin-bottom:2px}
-.nx-item span{font-size:11.5px;color:var(--text-lt);line-height:1.45}
 /* ── SPRINGBOARD — lưới TOÀN BỘ công cụ, luôn hiện (thay "Xem tất cả công cụ"
    gập lại + wcCards/allTools cũ). Xem `.grid`/.tile*` + section `.tint-*`
    ngay dưới đây, và `renderSpringboard()` trong <script>. */
@@ -413,18 +406,14 @@
             <span>Tìm công cụ — Lá Số, Bát Tự, xem tuổi…</span>
           </button>
         </div>
-        <!-- Khung chờ: `pickNext()` trả TỐI ĐA 3 mục nên số ô là cố định,
-             chỉ độ dài chữ mới đổi. Xem chú thích .nx-skel trong <style>. -->
+        <!-- Khung chờ: `pickNext()` trả ĐÚNG 1 mục nên số ô là cố định, chỉ
+             độ dài chữ mới đổi. Xem chú thích .nx-skel trong <style>. -->
         <div id="nextCard" class="nx-skel" aria-busy="true" aria-label="Đang tải gợi ý">
           <div class="next-wrap">
             <div class="grp-title"><span class="sk">&nbsp;</span></div>
             <a class="nx-main"><div class="ic"></div>
               <div class="nx-tx"><b><span class="sk">&nbsp;</span></b>
                 <div class="nx-why"><span class="sk">&nbsp;</span><span class="sk">&nbsp;</span></div></div></a>
-            <div class="nx-more">
-              <a class="nx-item"><div class="ic"></div><div><b><span class="sk">&nbsp;</span></b><span class="sk">&nbsp;</span><span class="sk">&nbsp;</span></div></a>
-              <a class="nx-item"><div class="ic"></div><div><b><span class="sk">&nbsp;</span></b><span class="sk">&nbsp;</span><span class="sk">&nbsp;</span></div></a>
-            </div>
           </div>
         </div>
         <!-- Lưới springboard — dựng đồng bộ từ `ToolPrices.navFallback()`
@@ -534,8 +523,9 @@ function usedMap() {
   try { return (window.Shell && Shell.usedTools) ? Shell.usedTools() : {}; } catch (e) { return {}; }
 }
 
-/* Trả tối đa 3 gợi ý [{row, why}]. Không có dữ liệu danh mục → mảng rỗng và
-   khối tự ẩn: thà không gợi còn hơn dẫn người ta tới một trang không tồn tại. */
+/* Trả ĐÚNG 1 gợi ý [{row, why}] (Henry 2026-09: một lựa chọn rõ ràng thay vì
+   dàn hàng 3). Không có dữ liệu danh mục → mảng rỗng và khối tự ẩn: thà không
+   gợi còn hơn dẫn người ta tới một trang không tồn tại. */
 function pickNext(d) {
   var rows = (d && d.rows) || [];
   if (!rows.length) return [];
@@ -544,7 +534,7 @@ function pickNext(d) {
 
   var used = usedMap(), out = [], taken = {};
   function add(key, why) {
-    if (out.length >= 3 || taken[key] || used[key] || !byKey[key]) return;
+    if (out.length >= 1 || taken[key] || used[key] || !byKey[key]) return;
     taken[key] = 1; out.push({ row: byKey[key], why: why });
   }
 
@@ -577,7 +567,7 @@ function renderNext(d) {
   host.classList.remove('nx-skel');
   host.removeAttribute('aria-busy');
   host.removeAttribute('aria-label');
-  var first = picks[0], rest = picks.slice(1);
+  var first = picks[0];
   var html = '<div class="next-wrap">' +
     '<div class="grp-title">✦ Gợi ý cho bạn</div>' +
     '<a class="nx-main" href="' + esc(first.row.app_path) + '">' +
@@ -586,13 +576,6 @@ function renderNext(d) {
         '<div class="nx-why">' + esc(first.why) + '</div></div>' +
       '<div class="nx-go" aria-hidden="true">›</div>' +
     '</a>';
-  if (rest.length) {
-    html += '<div class="nx-more">' + rest.map(function (p) {
-      return '<a class="nx-item" href="' + esc(p.row.app_path) + '">' +
-        '<div class="ic">' + cardIcon(p.row) + '</div>' +
-        '<div><b>' + esc(p.row.label) + '</b><span>' + esc(p.why) + '</span></div></a>';
-    }).join('') + '</div>';
-  }
   host.innerHTML = html + '</div>';
   if (window.mountIcons) window.mountIcons(host);
 }
