@@ -728,43 +728,97 @@
          mở đường cho /profile.html và /app/tai-khoan trôi lệch nhau. -->
     <div class="tab-content" id="tab-gopy"></div>
 
+    <!-- 4 mục sau đây là ĐÚNG những gì có backend thật: Thông tin cá nhân
+         (email + tên hiển thị, Supabase Auth user_metadata) · Bảo mật (đổi
+         mật khẩu, Supabase Auth) · Giao diện (nút đổi nền đã có ở sidebar,
+         cùng khoá localStorage `app_theme`) · Kết nối & Ứng dụng (trỏ sang
+         tab Kết Nối, không chép lại nội dung). KHÔNG có Thông báo/Ngôn ngữ/
+         Quản lý thiết bị/Dữ liệu & Quyền riêng tư — 4 mục đó cần backend mới
+         hoàn toàn (bảng tuỳ chọn thông báo, i18n, session tracking, luồng
+         xuất/xoá dữ liệu), chưa tồn tại nên không dựng UI rỗng cho chúng. -->
     <div class="tab-content" id="tab-account">
-      <div id="accountContent">
-        <div class="account-section">
-          <h3>Thông tin tài khoản</h3>
-          <div class="form-row">
-            <label>Email</label>
-            <input type="email" id="accEmail" disabled/>
-          </div>
-          <div class="form-row">
-            <label>Tên hiển thị</label>
-            <input type="text" id="accName" placeholder="Nhập tên của bạn"/>
-          </div>
-          <button class="btn-primary" onclick="saveDisplayName()" style="margin-top:.25rem">Lưu Tên</button>
-          <div id="nameAlert"></div>
-        </div>
+      <style>
+        #tab-account .settle{display:grid;grid-template-columns:200px 1fr;gap:1.25rem}
+        #tab-account .setnav{display:flex;flex-direction:column;gap:.15rem}
+        #tab-account .setnav-btn{display:flex;align-items:center;gap:.6rem;padding:.6rem .75rem;border-radius:8px;font-size:.85rem;font-weight:600;color:var(--text-mid);background:none;border:none;text-align:left;cursor:pointer;font-family:inherit;width:100%}
+        #tab-account .setnav-btn:hover{background:var(--bg-soft)}
+        #tab-account .setnav-btn.active{background:var(--gold-lt);color:var(--tx-gold)}
+        #tab-account .setnav-btn [data-icon]{width:15px;height:15px;flex:none}
+        #tab-account .setpane{display:none}
+        #tab-account .setpane.active{display:block}
+        #tab-account .theme-choice{display:flex;gap:.6rem;margin-top:.25rem}
+        #tab-account .theme-btn{flex:1;border:1px solid var(--border-lt);background:var(--surface);border-radius:8px;padding:.75rem;text-align:center;font-size:.85rem;font-weight:600;color:var(--text-mid);cursor:pointer;font-family:inherit}
+        #tab-account .theme-btn.active{border-color:var(--tx-gold);color:var(--tx-gold);background:var(--gold-lt)}
+        @media(max-width:700px){#tab-account .settle{grid-template-columns:1fr}#tab-account .setnav{flex-direction:row;overflow-x:auto}}
+      </style>
 
-        <div class="account-section">
-          <h3>Đổi mật khẩu</h3>
-          <div id="pwdSection">
-          <div class="form-row">
-            <label>Mật khẩu mới</label>
-            <input type="password" id="newPwd" placeholder="Nhập mật khẩu mới"/>
-          </div>
-          <div class="form-row">
-            <label>Xác nhận mật khẩu</label>
-            <input type="password" id="confirmPwd" placeholder="Nhập lại mật khẩu"/>
-          </div>
-          <button class="btn-primary" onclick="changePassword()">Đổi Mật Khẩu</button>
-          <div id="pwdAlert"></div>
-          </div>
-          <div id="pwdOAuthMsg" style="display:none;font-size:.85rem;color:var(--text-lt);padding:.5rem 0">
-            Tài khoản đăng nhập qua OAuth không sử dụng mật khẩu.
-          </div>
-        </div>
+      <div class="settle">
+        <nav class="setnav">
+          <button class="setnav-btn active" type="button" data-pane="info"><span data-icon="user"></span> Thông tin cá nhân</button>
+          <button class="setnav-btn" type="button" data-pane="security"><span data-icon="lock"></span> Bảo mật</button>
+          <button class="setnav-btn" type="button" data-pane="theme"><span data-icon="sun"></span> Giao diện</button>
+          <button class="setnav-btn" type="button" data-pane="conn"><span data-icon="link"></span> Kết nối &amp; Ứng dụng</button>
+        </nav>
 
-        <div class="account-section" style="border:1px solid var(--border-lt);border-radius:var(--radius);padding:1rem 1.2rem;background:var(--gold-lt)">
-          <p style="font-size:.82rem;color:var(--text-mid)"><span data-icon="wallet" style="width:14px;height:14px;vertical-align:-2px"></span> Xem lịch sử giao dịch và số dư Lượng tại tab <strong><a href="#" onclick="document.querySelector('[data-tab=credits]').click();return false" style="color:var(--tx-gold)">Ví Lượng</a></strong>.</p>
+        <div class="setpanes">
+          <div class="setpane active" data-pane="info">
+            <div class="account-section">
+              <h3>Thông tin cá nhân</h3>
+              <div class="form-row">
+                <label>Email</label>
+                <input type="email" id="accEmail" disabled/>
+              </div>
+              <div class="form-row">
+                <label>Tên hiển thị</label>
+                <input type="text" id="accName" placeholder="Nhập tên của bạn"/>
+              </div>
+              <button class="btn-primary" onclick="saveDisplayName()" style="margin-top:.25rem">Lưu Tên</button>
+              <div id="nameAlert"></div>
+            </div>
+            <div class="account-section" style="border:1px solid var(--border-lt);border-radius:var(--radius);padding:1rem 1.2rem;background:var(--gold-lt)">
+              <p style="font-size:.82rem;color:var(--text-mid)"><span data-icon="wallet" style="width:14px;height:14px;vertical-align:-2px"></span> Xem lịch sử giao dịch và số dư Lượng tại tab <strong><a href="#" onclick="document.querySelector('[data-tab=credits]').click();return false" style="color:var(--tx-gold)">Ví Lượng</a></strong>.</p>
+            </div>
+          </div>
+
+          <div class="setpane" data-pane="security">
+            <div class="account-section">
+              <h3>Đổi mật khẩu</h3>
+              <div id="pwdSection">
+              <div class="form-row">
+                <label>Mật khẩu mới</label>
+                <input type="password" id="newPwd" placeholder="Nhập mật khẩu mới"/>
+              </div>
+              <div class="form-row">
+                <label>Xác nhận mật khẩu</label>
+                <input type="password" id="confirmPwd" placeholder="Nhập lại mật khẩu"/>
+              </div>
+              <button class="btn-primary" onclick="changePassword()">Đổi Mật Khẩu</button>
+              <div id="pwdAlert"></div>
+              </div>
+              <div id="pwdOAuthMsg" style="display:none;font-size:.85rem;color:var(--text-lt);padding:.5rem 0">
+                Tài khoản đăng nhập qua OAuth không sử dụng mật khẩu.
+              </div>
+            </div>
+          </div>
+
+          <div class="setpane" data-pane="theme">
+            <div class="account-section">
+              <h3>Giao diện</h3>
+              <p style="font-size:.85rem;color:var(--text-mid);margin-bottom:.5rem">Chọn nền sáng hoặc tối cho toàn bộ Tử Vi Minh Bảo — áp dụng ngay, nhớ cho lần sau.</p>
+              <div class="theme-choice">
+                <button class="theme-btn" type="button" data-theme-choice="light"><span data-icon="sun" style="width:14px;height:14px;vertical-align:-2px"></span> Sáng</button>
+                <button class="theme-btn" type="button" data-theme-choice="dark"><span data-icon="moon" style="width:14px;height:14px;vertical-align:-2px"></span> Tối</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="setpane" data-pane="conn">
+            <div class="account-section">
+              <h3>Kết nối &amp; Ứng dụng</h3>
+              <p style="font-size:.85rem;color:var(--text-mid);margin-bottom:.75rem">Quản lý trợ lý AI (Claude, ChatGPT…) và các kênh chat (Telegram, WhatsApp, Messenger) đang dùng chung ví Lượng của bạn.</p>
+              <button class="btn-primary" onclick="document.querySelector('[data-tab=ketnoi]').click()">Mở tab Kết Nối →</button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -891,7 +945,7 @@ window.ACCOUNT_SHELL_CHAT = function () {
   } catch (e) { /* ignore */ }
 };
 </script>
-<script src="/account-core.js?v=8"></script>
+<script src="/account-core.js?v=9"></script>
 <script>
 // Mở đúng tab theo hash (#credits / #ketnoi / #account / #lichsu) khi vào từ sidebar.
 (function(){function openHash(){var h=(location.hash||'').replace('#','');if(h){var b=document.querySelector('[data-tab="'+h+'"]');if(b)b.click();}}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){setTimeout(openHash,300);});else setTimeout(openHash,300);})();
