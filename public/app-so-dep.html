@@ -88,9 +88,14 @@
           <img class="intro-avatar" src="/tool-avatars/so-dep.webp" alt="" onerror="this.remove()">
           <div class="intro-text">
             <div class="intro-t">Xem số đẹp</div>
-            <div class="intro-d">Xem số đẹp chấm điểm số điện thoại, số nhà, biển số theo 5 trường phái tách bạch: Bát Tinh Bát Trạch, Quẻ Dịch, Ngũ Hành, Âm Dương, dân gian. Đổi số vì sợ phạm tài lộc, phạm sức khoẻ, mà đổi xong vẫn thấp thỏm không yên? Nhập dãy số, nhận điểm riêng từng trường phái, không gộp thành một con số bịa.</div>
+            <div class="intro-d">Chấm điểm số điện thoại, số nhà, biển số theo 5 trường phái tách bạch: Bát Tinh Bát Trạch, Quẻ Dịch, Ngũ Hành, Âm Dương, dân gian. Nhập dãy số, nhận điểm riêng từng trường phái, không gộp thành một con số bịa.</div>
             <div id="introSrc"></div>
           </div>
+        </div>
+        <div class="hero-pills">
+          <div class="hero-pill"><span class="hp-ic" data-icon="hash"></span><span>5 trường phái<br>tách bạch</span></div>
+          <div class="hero-pill"><span class="hp-ic" data-icon="scale"></span><span>Đồng thuận<br>tốt – xấu</span></div>
+          <div class="hero-pill"><span class="hp-ic" data-icon="lightbulb"></span><span>Gợi ý số<br>theo mục tiêu</span></div>
         </div>
       </div></div>
       <div id="shellRecent"></div>
@@ -98,11 +103,14 @@
       <div id="formPanel">
         <div class="sd-box">
           <div class="form-card">
-            <h2>Chấm điểm một dãy số</h2>
-            <p class="sub">Nhập số điện thoại, số nhà hoặc biển số bạn muốn xem. Hệ thống chấm điểm qua 5 trường phái: Bát Tinh, Quẻ Dịch, Ngũ Hành, Âm Dương, dân gian. Nhận về điểm riêng từng trường phái và mức đồng thuận tốt – xấu.</p>
+            <div class="fc-head"><span class="fc-ic" data-icon="hash"></span><h2>Chấm điểm một dãy số</h2></div>
+            <p class="sub">Nhập số điện thoại, số nhà hoặc biển số. Nhận về điểm riêng từng trường phái và mức đồng thuận tốt – xấu.</p>
             <div class="frow">
               <div class="fg" style="width:220px"><label>Dãy số</label><input type="text" id="dg-so" placeholder="0987661234" inputmode="numeric" maxlength="24"></div>
-              <button class="btn-go" id="btnDg" onclick="chamDiem()">Chấm điểm →</button>
+              <button class="btn-go" id="btnDg" onclick="chamDiem()">
+                <span class="bg-label"><span class="ic" data-icon="hash"></span><b>Chấm điểm →</b></span>
+                <small>Miễn phí</small>
+              </button>
             </div>
             <details class="sd-tuychon">
               <summary>Cá nhân hoá theo năm sinh (tuỳ chọn)</summary>
@@ -117,8 +125,8 @@
 
         <div class="sd-box">
           <div class="form-card">
-            <h2>Gợi ý số theo mục tiêu</h2>
-            <p class="sub">Chọn độ dài, đầu số và mục tiêu bạn cần. Hệ thống tự sinh dãy số rồi chấm điểm lại từng dãy. Nhận về danh sách số xếp hạng theo điểm, không dùng danh sách có sẵn.</p>
+            <div class="fc-head"><span class="fc-ic" data-icon="lightbulb"></span><h2>Gợi ý số theo mục tiêu</h2></div>
+            <p class="sub">Chọn độ dài, đầu số và mục tiêu bạn cần. Nhận về danh sách số xếp hạng theo điểm, không dùng danh sách có sẵn.</p>
             <div class="frow">
               <div class="fg" style="width:100px"><label>Độ dài</label><input type="number" id="gy-dodai" value="10" min="4" max="20"></div>
               <div class="fg" style="width:140px"><label>Đầu số (tuỳ chọn)</label><input type="text" id="gy-tienTo" placeholder="090" inputmode="numeric" maxlength="10"></div>
@@ -139,7 +147,12 @@
                 <div class="fg" style="width:110px"><label>Giới tính</label><select id="gy-gioitinh"><option value="nam">Nam</option><option value="nu">Nữ</option></select></div>
               </div>
             </details>
-            <div class="frow" style="margin-top:10px"><button class="btn-go" id="btnGy" onclick="goiYSo()">Gợi ý 5 số →</button></div>
+            <div class="frow" style="margin-top:10px">
+              <button class="btn-go" id="btnGy" onclick="goiYSo()">
+                <span class="bg-label"><span class="ic" data-icon="lightbulb"></span><b>Gợi ý 5 số →</b></span>
+                <small>Miễn phí</small>
+              </button>
+            </div>
             <div class="err" id="gy-err"></div>
           </div>
         </div>

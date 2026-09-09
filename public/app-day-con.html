@@ -189,16 +189,20 @@
           <img class="intro-avatar" src="/tool-avatars/day-con.webp" alt="" onerror="this.remove()">
           <div class="intro-text">
             <div class="intro-t">Dạy Con Theo Lá Số</div>
-            <div class="intro-d">Dạy Con Theo Lá Số đọc con tiếp thu kiểu nào, kỷ luật nào phản tác dụng. Lo con lớn lên khổ vì tiền bạc hay sự nghiệp lận đận, mà cách dạy hiện tại có khi đang đi ngược với con? Nhập ngày giờ sinh của con, nhận cách tiếp cận phù hợp với con.</div>
+            <div class="intro-d">Đọc con tiếp thu kiểu nào, kỷ luật nào phản tác dụng — đúng theo lá số của con. Nhập ngày giờ sinh, nhận cách tiếp cận phù hợp ngay.</div>
             <div id="introSrc" style="min-height:73.6px;margin-top:9px"></div>
           </div>
+        </div>
+        <div class="hero-pills">
+          <div class="hero-pill"><span class="hp-ic" data-icon="scale"></span><span>5 trục<br>tính khí</span></div>
+          <div class="hero-pill"><span class="hp-ic" data-icon="star"></span><span>8 chất<br>năng khiếu</span></div>
+          <div class="hero-pill"><span class="hp-ic" data-icon="compass"></span><span>Định hướng<br>cách dạy</span></div>
         </div>
       </div></div>
       <div id="shellRecent"></div>
       <div class="form-card" id="birthPanel">
-        <h2>Ngày sinh của con</h2>
-        <p class="sub">Chọn điều bạn đang lo và nhập ngày giờ sinh của con. Hệ thống phân tích lá số của con theo đúng điều đó. Nhận về con là người thế nào, cách dạy phù hợp và việc nên làm ngay từ tối nay.</p>
-        <p class="price-note" data-tvp-price-label="day-con">…</p>
+        <div class="fc-head"><span class="fc-ic" data-icon="baby"></span><h2>Ngày sinh của con</h2></div>
+        <p class="sub">Chọn điều đang lo, nhập ngày giờ sinh của con. Nhận cách dạy phù hợp và việc nên làm từ tối nay.</p>
         <div id="sampleLinkHost"></div>
 
         <div class="frow dc-lo">
@@ -229,8 +233,28 @@
           </div>
         </details>
 
+        <div class="cost-box">
+          <div class="cb-l">
+            <span class="cb-ic" data-icon="wallet"></span>
+            <div>
+              <div class="cb-title">Chi phí sử dụng</div>
+              <div class="cb-amt"><span data-tvp-price="day-con">…</span> Lượng <span class="vnd" data-tvp-price-vnd="day-con"></span> mỗi lượt</div>
+              <div class="cb-pay">
+                <span><span class="ic" data-icon="qr-code"></span> Chuyển khoản (qua QR ngân hàng)</span>
+                <span><span class="ic" data-icon="credit-card"></span> PayPal / Thẻ quốc tế</span>
+              </div>
+            </div>
+          </div>
+          <div class="cb-r">
+            <span class="cb-ic" data-icon="gift"></span>
+            <div class="cb-r-txt">Mua gói để nhận nhiều ưu đãi hơn.<br><a href="/topup.html">Xem các gói ngay →</a></div>
+          </div>
+        </div>
         <div class="frow" style="margin-bottom:0;margin-top:14px">
-          <button class="btn-go" id="btnGo" onclick="analyze()">Xem Cách Dạy Con — <span data-tvp-price="day-con">…</span> Lượng →</button>
+          <button class="btn-go" id="btnGo" onclick="analyze()">
+            <span class="bg-label"><span class="ic" data-icon="baby"></span><b>Xem Cách Dạy Con →</b></span>
+            <small>Tốn <span data-tvp-price="day-con">…</span> Lượng <span data-tvp-price-vnd="day-con"></span></small>
+          </button>
         </div>
         <div class="err" id="error-msg"></div>
       </div>
@@ -510,6 +534,16 @@ var DC_RESUME_KEY = 'dc_pending_resume';
 // Không có dòng này thì `_cfg.product` rỗng ⇒ paywall không tra được giá, hiện
 // hộp "chưa đọc được bảng giá" và tool KHÔNG chạy.
 TuviPaywall.init({ product: 'day-con', slug: function () { return _currentSlug; } });
+
+// Ghi "(~X đ)" cạnh số Lượng — cùng mẫu `_fillVndSlots` của app-luan-giai.html.
+function _fillVndSlots(host, product) {
+  if (!host || !window.ToolPrices) return;
+  var els = host.querySelectorAll('[data-tvp-price-vnd]');
+  var cost = window.ToolPrices.get(product);
+  var lbl = cost != null ? window.ToolPrices.vndLabel(cost) : '';
+  els.forEach(function (el) { el.textContent = lbl ? ('(' + lbl + ')') : ''; });
+}
+TuviPaywall.fillPriceSlots(document).then(function () { _fillVndSlots(document, 'day-con'); });
 
 function showError(msg) {
   var e = document.getElementById('error-msg');

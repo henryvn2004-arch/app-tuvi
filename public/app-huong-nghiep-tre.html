@@ -112,18 +112,22 @@
           <img class="intro-avatar" src="/tool-avatars/huong-nghiep-tre.webp" alt="" onerror="this.remove()">
           <div class="intro-text">
             <div class="intro-t">Hướng Nghiệp Sớm Cho Con</div>
-            <div class="intro-d">Hướng Nghiệp Sớm Cho Con gợi ý hoạt động nên cho con làm quen theo lứa tuổi. Sợ con lớn lên chọn sai nghề, khổ vì tiền bạc hay lận đận sự nghiệp như chính mình từng trải? Nhập ngày giờ sinh của con, nhận gợi ý hoạt động phù hợp từng giai đoạn.</div>
+            <div class="intro-d">Gợi ý hoạt động nên cho con làm quen theo lứa tuổi, đọc từ lá số. Nhập ngày giờ sinh của con, nhận gợi ý phù hợp từng giai đoạn.</div>
             <div id="introSrc" style="min-height:73.6px;margin-top:9px"></div>
           </div>
+        </div>
+        <div class="hero-pills">
+          <div class="hero-pill"><span class="hp-ic" data-icon="compass"></span><span>Thiên hướng<br>nổi nhất</span></div>
+          <div class="hero-pill"><span class="hp-ic" data-icon="star"></span><span>3 hướng<br>đáng thử</span></div>
+          <div class="hero-pill"><span class="hp-ic" data-icon="hourglass"></span><span>Việc làm<br>theo lứa tuổi</span></div>
         </div>
       </div></div>
       <div id="shellRecent"></div>
 
       <div id="birthPanel">
         <div class="form-card">
-          <h2>Hướng Nghiệp Sớm Cho Con</h2>
-          <p class="sub">Nhập ngày giờ sinh của con và điều bạn đang lo. Hệ thống phân tích lá số của con theo đúng điều đó. Nhận về thiên hướng nổi nhất, hoạt động nên thử và nên bắt đầu từ đâu.</p>
-          <p class="price-note" data-tvp-price-label="huong-nghiep-tre">…</p>
+          <div class="fc-head"><span class="fc-ic" data-icon="compass"></span><h2>Hướng Nghiệp Sớm Cho Con</h2></div>
+          <p class="sub">Nhập ngày giờ sinh của con và điều bạn đang lo. Nhận về thiên hướng nổi nhất, hoạt động nên thử và nên bắt đầu từ đâu.</p>
           <div id="sampleLinkHost"></div>
           <div id="formHost"></div>
           <div class="frow">
@@ -133,7 +137,27 @@
             </div>
           </div>
           <p class="sub" id="loHint" style="margin-bottom:14px"></p>
-          <button class="btn-go" id="btnGo" onclick="analyze()">Xem thiên hướng của con</button>
+          <div class="cost-box">
+            <div class="cb-l">
+              <span class="cb-ic" data-icon="wallet"></span>
+              <div>
+                <div class="cb-title">Chi phí sử dụng</div>
+                <div class="cb-amt"><span data-tvp-price="huong-nghiep-tre">…</span> Lượng <span class="vnd" data-tvp-price-vnd="huong-nghiep-tre"></span> mỗi lượt</div>
+                <div class="cb-pay">
+                  <span><span class="ic" data-icon="qr-code"></span> Chuyển khoản (qua QR ngân hàng)</span>
+                  <span><span class="ic" data-icon="credit-card"></span> PayPal / Thẻ quốc tế</span>
+                </div>
+              </div>
+            </div>
+            <div class="cb-r">
+              <span class="cb-ic" data-icon="gift"></span>
+              <div class="cb-r-txt">Mua gói để nhận nhiều ưu đãi hơn.<br><a href="/topup.html">Xem các gói ngay →</a></div>
+            </div>
+          </div>
+          <button class="btn-go" id="btnGo" onclick="analyze()">
+            <span class="bg-label"><span class="ic" data-icon="compass"></span><b>Xem thiên hướng của con →</b></span>
+            <small>Tốn <span data-tvp-price="huong-nghiep-tre">…</span> Lượng <span data-tvp-price-vnd="huong-nghiep-tre"></span></small>
+          </button>
           <div class="err" id="error-msg"></div>
         </div>
       </div>
@@ -354,6 +378,16 @@ onMoiLoChange();
 // Không có dòng này thì `_cfg.product` rỗng ⇒ paywall không tra được giá, hiện
 // hộp "chưa đọc được bảng giá" và tool KHÔNG chạy (fail-closed).
 TuviPaywall.init({ product: 'huong-nghiep-tre', slug: function () { return _currentSlug; } });
+
+// Ghi "(~X đ)" cạnh số Lượng — cùng mẫu `_fillVndSlots` của app-luan-giai.html.
+function _fillVndSlots(host, product) {
+  if (!host || !window.ToolPrices) return;
+  var els = host.querySelectorAll('[data-tvp-price-vnd]');
+  var cost = window.ToolPrices.get(product);
+  var lbl = cost != null ? window.ToolPrices.vndLabel(cost) : '';
+  els.forEach(function (el) { el.textContent = lbl ? ('(' + lbl + ')') : ''; });
+}
+TuviPaywall.fillPriceSlots(document).then(function () { _fillVndSlots(document, 'huong-nghiep-tre'); });
 
 function showError(msg) {
   var e = document.getElementById('error-msg');

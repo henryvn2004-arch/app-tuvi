@@ -109,16 +109,20 @@
           <img class="intro-avatar" src="/tool-avatars/ngu-hanh-ten.webp" alt="" onerror="this.remove()">
           <div class="intro-text">
             <div class="intro-t">Ngũ hành tên</div>
-            <div class="intro-d">Ngũ hành tên chấm điểm từng chữ trong tên, xem hợp hay khắc mệnh bạn. Làm ăn lận đận, tình duyên trắc trở — có khi nào do chính cái tên mình đang mang khắc mệnh? Nhập họ tên và ngày sinh, nhận điểm ngũ hành và kết luận hợp hay khắc.</div>
+            <div class="intro-d">Chấm điểm từng chữ trong tên, xem hợp hay khắc mệnh bạn. Nhập họ tên, nhận điểm ngũ hành và kết luận hợp hay khắc — miễn phí.</div>
             <div id="introSrc" style="min-height:55.2px;margin-top:9px"></div>
           </div>
+        </div>
+        <div class="hero-pills">
+          <div class="hero-pill"><span class="hp-ic" data-icon="pen-line"></span><span>Ngũ hành<br>từng chữ</span></div>
+          <div class="hero-pill"><span class="hp-ic" data-icon="bar-chart-3"></span><span>Cân bằng<br>ngũ hành</span></div>
+          <div class="hero-pill"><span class="hp-ic" data-icon="scale"></span><span>Điểm số<br>hợp – khắc</span></div>
         </div>
       </div></div>
       <div id="shellRecent"></div>
       <div class="form-card" id="birthPanel">
-        <h2>Họ và tên đầy đủ</h2>
-        <p class="sub">Nhập họ tên đầy đủ, có thể chọn thêm ngũ hành bản mệnh. Hệ thống tính ngũ hành của từng chữ trong tên. Nhận về biểu đồ cân bằng ngũ hành, điểm số và kết luận hợp hay khắc mệnh.</p>
-        <p class="price-note" data-tvp-price-label="ngu-hanh-ten">…</p>
+        <div class="fc-head"><span class="fc-ic" data-icon="pen-line"></span><h2>Họ và tên đầy đủ</h2></div>
+        <p class="sub">Nhập họ tên đầy đủ, có thể chọn thêm ngũ hành bản mệnh. Nhận về biểu đồ cân bằng ngũ hành, điểm số và kết luận hợp hay khắc mệnh.</p>
         <div class="frow" style="margin-bottom:4px">
           <div class="fg" style="flex:1;min-width:200px"><label>Nhập đủ họ + tên, có dấu, cách nhau bằng dấu cách</label><input type="text" id="tenInput" placeholder="VD: Nguyễn Văn An" maxlength="60"></div>
           <div class="fg" style="width:150px"><label>Ngũ hành bản mệnh (tùy chọn)</label>
@@ -131,7 +135,10 @@
               <option value="Thủy">Thủy</option>
             </select>
           </div>
-          <button class="btn-go" id="btnGo" onclick="calculate()">Tra ngũ hành tên →</button>
+          <button class="btn-go" id="btnGo" onclick="calculate()">
+            <span class="bg-label"><span class="ic" data-icon="pen-line"></span><b>Tra ngũ hành tên →</b></span>
+            <small>Miễn phí</small>
+          </button>
         </div>
         <div class="err" id="error-msg"></div>
       </div>

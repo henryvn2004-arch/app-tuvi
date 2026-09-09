@@ -92,20 +92,44 @@
           <img class="intro-avatar" src="/tool-avatars/chan-dung-tien-kiep.webp" alt="" onerror="this.remove()">
           <div class="intro-text">
             <div class="intro-t">Chân Dung Tiền Kiếp</div>
-            <div class="intro-d">Chân Dung Tiền Kiếp dựng chân dung và câu chuyện một đời từ chính lá số bạn. Có những nỗi sợ, thói quen tình cảm bạn không lý giải nổi — như thể mang theo từ một kiếp sống khác? Từ lá số có sẵn, nhận một câu chuyện tiền kiếp trọn vẹn để đọc.</div>
+            <div class="intro-d">Dựng chân dung và câu chuyện một đời từ chính lá số của bạn, đặt vào một trong 5 nền văn minh Á Đông cổ. Từ lá số có sẵn, nhận một câu chuyện tiền kiếp trọn vẹn để đọc.</div>
             <div id="introSrc" style="min-height:73.6px;margin-top:9px"></div>
           </div>
+        </div>
+        <div class="hero-pills">
+          <div class="hero-pill"><span class="hp-ic" data-icon="image"></span><span>Chân dung<br>vẽ riêng</span></div>
+          <div class="hero-pill"><span class="hp-ic" data-icon="scroll-text"></span><span>Một đời<br>5 hồi</span></div>
+          <div class="hero-pill"><span class="hp-ic" data-icon="landmark"></span><span>5 nền<br>văn minh cổ</span></div>
         </div>
       </div></div>
       <div id="shellRecent"></div>
       <div class="form-card" id="birthPanel">
-        <h2>Nhập ngày sinh của bạn (dương lịch)</h2>
-        <p class="sub">Dùng lá số đã lập, không cần nhập thêm gì khác. Hệ thống phân tích lá số rồi dựng chân dung kèm câu chuyện minh hoạ. Nhận về chân dung, cốt cách và câu chuyện một đời kể theo 5 hồi.</p>
-        <p class="price-note" data-tvp-price-label="chan-dung-tien-kiep">…</p>
+        <div class="fc-head"><span class="fc-ic" data-icon="temple"></span><h2>Nhập ngày sinh của bạn (dương lịch)</h2></div>
+        <p class="sub">Dùng lá số đã lập, không cần nhập thêm gì khác. Nhận về chân dung, cốt cách và câu chuyện một đời kể theo 5 hồi.</p>
         <div id="tuviFormHost"></div>
 
+        <div class="cost-box">
+          <div class="cb-l">
+            <span class="cb-ic" data-icon="wallet"></span>
+            <div>
+              <div class="cb-title">Chi phí sử dụng</div>
+              <div class="cb-amt"><span data-tvp-price="chan-dung-tien-kiep">…</span> Lượng <span class="vnd" data-tvp-price-vnd="chan-dung-tien-kiep"></span> mỗi lượt</div>
+              <div class="cb-pay">
+                <span><span class="ic" data-icon="qr-code"></span> Chuyển khoản (qua QR ngân hàng)</span>
+                <span><span class="ic" data-icon="credit-card"></span> PayPal / Thẻ quốc tế</span>
+              </div>
+            </div>
+          </div>
+          <div class="cb-r">
+            <span class="cb-ic" data-icon="gift"></span>
+            <div class="cb-r-txt">Mua gói để nhận nhiều ưu đãi hơn.<br><a href="/topup.html">Xem các gói ngay →</a></div>
+          </div>
+        </div>
         <div class="frow" style="margin-bottom:0">
-          <button class="btn-go" id="btnGo" onclick="analyze()">Xem Tiền Kiếp — <span data-tvp-price="chan-dung-tien-kiep">…</span> Lượng →</button>
+          <button class="btn-go" id="btnGo" onclick="analyze()">
+            <span class="bg-label"><span class="ic" data-icon="temple"></span><b>Xem Tiền Kiếp →</b></span>
+            <small>Tốn <span data-tvp-price="chan-dung-tien-kiep">…</span> Lượng <span data-tvp-price-vnd="chan-dung-tien-kiep"></span></small>
+          </button>
         </div>
         <div class="err" id="error-msg"></div>
       </div>
@@ -812,6 +836,16 @@ async function _loadHistory() {
 }
 
 TuviPaywall.init({ product: 'chan-dung-tien-kiep', slug: function () { return _currentSlug; } });
+
+// Ghi "(~X đ)" cạnh số Lượng — cùng mẫu `_fillVndSlots` của app-luan-giai.html.
+function _fillVndSlots(host, product) {
+  if (!host || !window.ToolPrices) return;
+  var els = host.querySelectorAll('[data-tvp-price-vnd]');
+  var cost = window.ToolPrices.get(product);
+  var lbl = cost != null ? window.ToolPrices.vndLabel(cost) : '';
+  els.forEach(function (el) { el.textContent = lbl ? ('(' + lbl + ')') : ''; });
+}
+TuviPaywall.fillPriceSlots(document).then(function () { _fillVndSlots(document, 'chan-dung-tien-kiep'); });
 
 // ── B2 — nhận hand-off từ trang chia sẻ `/ket-qua` ───────────────────────────
 // Người mở link của bạn bè nhập ngày sinh NGAY TẠI trang chia sẻ rồi được đưa
