@@ -601,3 +601,70 @@ font-family:inherit}
    lượt render trước có thể đã gắn (bấm "xem lại"/"xem khác" rồi chạy lại lượt
    xem trước) — mở khoá thì gỡ chính class `.tpw-locked`, không có gì kẹt lại. */
 .res-block-body.tpw-locked > *:not(.tpw-ph-host) { display: none !important; }
+
+/* ── Khối form "1 màn hình" dùng chung 45+ trang /app/* (2026-09-09, mẫu
+   iPhone Henry gửi) — TRƯỚC ĐÂY mỗi trang tự chép y hệt `.form-card/.frow/
+   .fg/.btn-go` (31-37 bản gần như byte-for-byte giống nhau trong <style>
+   riêng từng trang). Gom một nguồn ở đây; trang nào cần khác biệt (vd
+   `.form-card{max-width}` tuỳ độ dài nội dung) chỉ override đúng thuộc tính
+   đó trong `<style>` riêng, KHÔNG chép lại nguyên khối. */
+.form-card{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);max-width:640px}
+.form-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:3px}
+.form-card p.sub{font-size:12.5px;color:var(--text-lt);margin-bottom:14px}
+.frow{display:flex;gap:11px;flex-wrap:wrap;align-items:flex-end;margin-bottom:12px}
+.fg{display:flex;flex-direction:column;gap:5px}
+.fg label{font-size:10.5px;font-weight:600;color:var(--text-lt);letter-spacing:.04em;text-transform:uppercase}
+.fg input,.fg select{border:1px solid var(--line-2);border-radius:7px;padding:8px 10px;font-size:13.5px;font-family:inherit;color:var(--text);background:var(--paper);outline:none}
+.fg input:focus,.fg select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(20,85,164,.12)}
+/* Nút chạy tool — nền vàng gradient thay bản đỏ cũ (`background:var(--red)`,
+   đồng loạt trên 37 trang trước đợt này). `.bg-label`/`.ic`/`small` là 3 phần
+   TUỲ CHỌN (icon lấp lánh + nhãn chính + dòng phụ giá) — một `<button
+   class="btn-go">Chữ thường</button>` không có 3 phần đó vẫn hiện đúng hình
+   (nền vàng, bo góc, canh giữa), chỉ thiếu icon/dòng phụ. */
+.btn-go{background:linear-gradient(160deg,var(--gold),var(--gold-soft));color:var(--navy);border:none;border-radius:11px;padding:13px 20px;font-size:14.5px;font-weight:700;cursor:pointer;font-family:var(--serif);width:100%;display:flex;flex-direction:column;align-items:center;gap:3px;box-shadow:var(--shadow)}
+.btn-go .bg-label{display:flex;align-items:center;gap:7px}
+.btn-go .ic{width:16px;height:16px;display:inline-flex}
+.btn-go .ic svg{width:100%;height:100%}
+.btn-go small{font-family:var(--sans);font-weight:600;font-size:11.5px;color:var(--navy);opacity:.78}
+.btn-go:disabled{opacity:.7;cursor:default}
+/* Hero card (`.intro-card`, xem thêm ở trên) — hàng 3 pill tính năng đứng
+   dưới ảnh + mô tả có sẵn. */
+.hero-pills{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:14px}
+.hero-pill{display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center}
+.hero-pill .hp-ic{width:36px;height:36px;border-radius:50%;background:var(--white);border:1px solid var(--gold-soft);color:var(--gold-soft);display:flex;align-items:center;justify-content:center}
+.hero-pill .hp-ic svg{width:18px;height:18px}
+.hero-pill span{font-size:11px;color:var(--text-mid);line-height:1.35}
+/* Tiêu đề `.form-card` có icon dẫn đầu (thay `<h2>` trần) */
+.fc-head{display:flex;align-items:center;gap:10px;margin-bottom:3px}
+.fc-head .fc-ic{flex:0 0 auto;width:34px;height:34px;border-radius:9px;background:var(--navy);color:var(--gold);display:flex;align-items:center;justify-content:center}
+.fc-head .fc-ic svg{width:18px;height:18px}
+.fc-head h2{margin-bottom:0}
+/* Hộp "Chi phí sử dụng" — số Lượng + quy đổi VNĐ + phương thức thanh toán,
+   đứng trước nút CTA. Điền giá qua `data-tvp-price`/`data-tvp-price-vnd`
+   (xem `_fillVndSlots` ở app-luan-giai.html) — KHÔNG chép số cứng. */
+.cost-box{display:flex;gap:14px;flex-wrap:wrap;align-items:center;background:var(--paper);border:1px solid var(--line);border-radius:11px;padding:13px 15px;margin:14px 0}
+.cost-box .cb-l{display:flex;gap:11px;align-items:flex-start;flex:1;min-width:190px}
+.cost-box .cb-ic{flex:0 0 auto;width:32px;height:32px;border-radius:50%;background:var(--gold-lt);color:var(--gold-soft);display:flex;align-items:center;justify-content:center}
+.cost-box .cb-ic svg{width:16px;height:16px}
+.cost-box .cb-title{font-size:11.5px;color:var(--text-lt)}
+.cost-box .cb-amt{font-family:var(--serif);font-size:15px;font-weight:700;color:var(--gold-soft);margin:1px 0 6px}
+.cost-box .cb-amt .vnd{font-family:var(--sans);font-weight:400;font-size:12px;color:var(--text-lt)}
+.cost-box .cb-pay{display:flex;flex-direction:column;gap:3px}
+.cost-box .cb-pay span{font-size:11.5px;color:var(--text-mid);display:flex;align-items:center;gap:5px}
+.cost-box .cb-pay .ic{width:13px;height:13px;color:var(--text-lt);display:inline-flex}
+.cost-box .cb-pay .ic svg{width:100%;height:100%}
+.cost-box .cb-r{flex:0 0 auto;border-left:1px solid var(--line-2);padding-left:14px;display:flex;gap:9px;align-items:center;max-width:210px}
+.cost-box .cb-r .cb-ic{background:var(--white);border:1px solid var(--gold-soft)}
+.cost-box .cb-r-txt{font-size:11.5px;color:var(--text-mid);line-height:1.5}
+.cost-box .cb-r-txt a{color:var(--gold-soft);font-weight:600;text-decoration:none}
+@media(max-width:480px){.cost-box .cb-r{border-left:none;border-top:1px solid var(--line-2);padding:10px 0 0;margin-top:2px;flex-basis:100%;max-width:none}}
+/* Thẻ gợi ý "Xem bản mẫu" (icon bóng đèn + nút pill) — nay chỉ app-luan-giai
+   dùng, để đây làm nguồn chung phòng khi tool khác thêm luồng bản mẫu tương tự. */
+.samp-cta{background:var(--white);border:1px solid var(--line);border-radius:11px;padding:12px 14px;max-width:640px;margin-bottom:14px;font-size:13px;color:var(--text-lt);display:flex;align-items:center;gap:11px;flex-wrap:wrap}
+.samp-cta .sc-ic{flex:0 0 auto;width:34px;height:34px;border-radius:50%;background:var(--gold-lt);color:var(--gold-soft);display:flex;align-items:center;justify-content:center}
+.samp-cta .sc-ic svg{width:17px;height:17px}
+.samp-cta .sc-txt{flex:1;min-width:160px;display:flex;flex-direction:column}
+.samp-cta .sc-txt b{font-size:13px;color:var(--text);font-weight:600}
+.samp-cta .sc-txt span{font-size:11.5px;color:var(--text-lt)}
+.samp-cta button{background:none;border:1px solid var(--gold-soft);color:var(--gold-soft);border-radius:20px;padding:8px 15px;font-size:12.5px;font-weight:600;cursor:pointer;font-family:inherit;flex:0 0 auto;white-space:nowrap}
+.samp-cta button:disabled{opacity:.6;cursor:default}
