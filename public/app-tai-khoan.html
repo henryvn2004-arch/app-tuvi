@@ -500,7 +500,21 @@
         #tab-nhiemvu .sp-status.pending{background:var(--chip-amber);color:var(--tx-amber)}
         #tab-nhiemvu .sp-status.approved{background:var(--chip-green);color:var(--green)}
         #tab-nhiemvu .sp-status.rejected{background:var(--chip-red);color:var(--red)}
+        #tab-nhiemvu .nq-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:.75rem;margin-bottom:1.25rem}
+        #tab-nhiemvu .nq-stat{background:var(--surface);border:1px solid var(--border-lt);border-radius:10px;padding:.85rem 1rem;display:flex;align-items:center;gap:.7rem}
+        #tab-nhiemvu .nq-stat-ic{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;flex:none}
+        #tab-nhiemvu .nq-stat-ic [data-icon]{width:17px;height:17px}
+        #tab-nhiemvu .nq-stat-v{font-family:'Noto Serif',serif;font-size:1.05rem;font-weight:700;color:var(--heading);line-height:1.15;font-variant-numeric:tabular-nums}
+        #tab-nhiemvu .nq-stat-l{font-size:.72rem;color:var(--text-lt);margin-top:.1rem}
+        @media(max-width:640px){#tab-nhiemvu .nq-stats{grid-template-columns:repeat(2,1fr)}}
       </style>
+
+      <div class="nq-stats">
+        <div class="nq-stat"><div class="nq-stat-ic" style="background:var(--chip-green);color:var(--green)"><span data-icon="trophy"></span></div><div><div class="nq-stat-v" id="nqDoneRatio">0/0</div><div class="nq-stat-l">Nhiệm vụ đã hoàn thành</div></div></div>
+        <div class="nq-stat"><div class="nq-stat-ic" style="background:var(--gold-lt);color:var(--tx-gold)"><span data-icon="wallet"></span></div><div><div class="nq-stat-v" id="nqCredits">0</div><div class="nq-stat-l">Lượng đã nhận</div></div></div>
+        <div class="nq-stat"><div class="nq-stat-ic" style="background:var(--chip-blue);color:var(--blue)"><span data-icon="user"></span></div><div><div class="nq-stat-v" id="nqInvited">0</div><div class="nq-stat-l">Bạn đã mời</div></div></div>
+        <div class="nq-stat"><div class="nq-stat-ic" style="background:var(--chip-purple);color:var(--tx-purple)"><span data-icon="link"></span></div><div><div class="nq-stat-v" id="nqShares">0</div><div class="nq-stat-l">Lượt chia sẻ</div></div></div>
+      </div>
 
       <div class="account-section" id="qtCard">
         <h3><span data-icon="trophy" style="width:15px;height:15px;vertical-align:-2px;color:var(--tx-gold)"></span> Khởi Hành</h3>
@@ -865,7 +879,7 @@ window.ACCOUNT_SHELL_CHAT = function () {
   } catch (e) { /* ignore */ }
 };
 </script>
-<script src="/account-core.js?v=6"></script>
+<script src="/account-core.js?v=7"></script>
 <script>
 // Mở đúng tab theo hash (#credits / #ketnoi / #account / #lichsu) khi vào từ sidebar.
 (function(){function openHash(){var h=(location.hash||'').replace('#','');if(h){var b=document.querySelector('[data-tab="'+h+'"]');if(b)b.click();}}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){setTimeout(openHash,300);});else setTimeout(openHash,300);})();
