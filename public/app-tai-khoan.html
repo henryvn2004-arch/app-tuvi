@@ -418,29 +418,50 @@
           </div>
         </div>
       </div>
-      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem;margin-bottom:1.25rem">
-        <a href="/" style="background:var(--surface);border:1px solid var(--border-lt);border-radius:8px;padding:1rem;text-decoration:none;text-align:center;color:var(--heading)">
-          <div style="font-size:1.4rem;margin-bottom:.35rem"><span data-icon="sparkles" style="width:22px;height:22px;color:var(--tx-gold)"></span></div>
-          <div style="font-size:.8rem;font-weight:700">Luận Giải Lá Số</div>
-          <div style="font-size:.72rem;color:var(--tx-gold);font-weight:700;margin-top:.2rem">190 lượng</div>
-        </a>
-        <a href="/xem-tuoi.html" style="background:var(--surface);border:1px solid var(--border-lt);border-radius:8px;padding:1rem;text-decoration:none;text-align:center;color:var(--heading)">
-          <div style="font-size:1.4rem;margin-bottom:.35rem"><span data-icon="heart-handshake" style="width:22px;height:22px;color:var(--tx-gold)"></span></div>
-          <div style="font-size:.8rem;font-weight:700">Xem Tuổi Vợ Chồng</div>
-          <div style="font-size:.72rem;color:var(--tx-gold);font-weight:700;margin-top:.2rem">90 lượng</div>
-        </a>
-        <a href="/xem-lam-an.html" style="background:var(--surface);border:1px solid var(--border-lt);border-radius:8px;padding:1rem;text-decoration:none;text-align:center;color:var(--heading)">
-          <div style="font-size:1.4rem;margin-bottom:.35rem"><span data-icon="briefcase" style="width:22px;height:22px;color:var(--tx-gold)"></span></div>
-          <div style="font-size:.8rem;font-weight:700">Xem Tuổi Làm Ăn</div>
-          <div style="font-size:.72rem;color:var(--tx-gold);font-weight:700;margin-top:.2rem">90 lượng</div>
-        </a>
+      <style>
+        #tab-credits .vilu-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem;margin-bottom:1.25rem}
+        #tab-credits .vilu-stat{background:var(--surface);border:1px solid var(--border-lt);border-radius:10px;padding:.85rem 1rem;display:flex;align-items:center;gap:.7rem}
+        #tab-credits .vilu-stat-ic{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;flex:none}
+        #tab-credits .vilu-stat-ic [data-icon]{width:17px;height:17px}
+        #tab-credits .vilu-stat-v{font-family:'Noto Serif',serif;font-size:1.05rem;font-weight:700;color:var(--heading);line-height:1.15;font-variant-numeric:tabular-nums}
+        #tab-credits .vilu-stat-l{font-size:.72rem;color:var(--text-lt);margin-top:.1rem}
+        #tab-credits .vilu-filters{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1rem}
+        #tab-credits .vilu-filters select,#tab-credits .vilu-filters input{border:1px solid var(--border-lt);border-radius:8px;padding:.5rem .7rem;font-size:.82rem;color:var(--text);background:var(--surface);font-family:inherit}
+        #tab-credits .vilu-filters input{flex:1;min-width:180px}
+        #tab-credits .vilu-tbl-wrap{overflow-x:auto;border:1px solid var(--border-lt);border-radius:10px}
+        #tab-credits table.vilu-tbl{width:100%;border-collapse:collapse;font-size:.82rem;min-width:560px}
+        #tab-credits table.vilu-tbl th{text-align:left;color:var(--text-lt);font-size:.7rem;text-transform:uppercase;letter-spacing:.04em;font-weight:700;padding:.7rem .85rem;border-bottom:1px solid var(--border-lt);white-space:nowrap}
+        #tab-credits table.vilu-tbl td{padding:.7rem .85rem;border-bottom:1px solid var(--border-lt);color:var(--text);vertical-align:middle}
+        #tab-credits table.vilu-tbl tr:last-child td{border-bottom:none}
+        #tab-credits .vilu-amt{font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
+        #tab-credits .vilu-amt.pos{color:var(--green)}
+        #tab-credits .vilu-amt.neg{color:var(--red)}
+        #tab-credits .vilu-mono{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.74rem;color:var(--text-lt)}
+        #tab-credits .vilu-pager{display:flex;align-items:center;justify-content:space-between;margin-top:.85rem;font-size:.8rem;color:var(--text-lt);flex-wrap:wrap;gap:.5rem}
+        #tab-credits .vilu-pgbtns{display:flex;gap:.3rem}
+        #tab-credits .vilu-pgbtn{min-width:28px;height:28px;padding:0 .4rem;border:1px solid var(--border-lt);background:var(--surface);border-radius:6px;font-size:.8rem;color:var(--text-mid);cursor:pointer;font-family:inherit}
+        #tab-credits .vilu-pgbtn.active{background:var(--navy);color:#fff;border-color:var(--navy)}
+        #tab-credits .vilu-pgbtn:disabled{opacity:.4;cursor:default}
+        @media(max-width:640px){#tab-credits .vilu-stats{grid-template-columns:1fr}}
+      </style>
+
+      <div class="vilu-stats">
+        <div class="vilu-stat"><div class="vilu-stat-ic" style="background:var(--chip-green);color:var(--green)"><span data-icon="trending-up"></span></div><div><div class="vilu-stat-v" id="viluTongNap">0</div><div class="vilu-stat-l">Tổng nạp (gần đây)</div></div></div>
+        <div class="vilu-stat"><div class="vilu-stat-ic" style="background:var(--chip-red);color:var(--red)"><span data-icon="trending-up" style="transform:scaleY(-1)"></span></div><div><div class="vilu-stat-v" id="viluTongChi">0</div><div class="vilu-stat-l">Tổng chi (gần đây)</div></div></div>
+        <div class="vilu-stat"><div class="vilu-stat-ic" style="background:var(--chip-blue);color:var(--blue)"><span data-icon="book-open"></span></div><div><div class="vilu-stat-v" id="viluSoGD">0</div><div class="vilu-stat-l">Số giao dịch đã tải</div></div></div>
       </div>
+
       <div class="account-section">
         <p style="font-size:.82rem;color:var(--text-mid)"><span data-icon="link" style="width:14px;height:14px;vertical-align:-2px"></span> Kết nối lá số với trợ lý chat (Claude, ChatGPT…) và các bot Telegram / WhatsApp / Messenger tại tab <strong><a href="#" onclick="document.querySelector('[data-tab=ketnoi]').click();return false" style="color:var(--tx-gold)">Kết Nối</a></strong>.</p>
       </div>
       <div class="account-section">
         <h3>Lịch Sử Giao Dịch</h3>
+        <div class="vilu-filters">
+          <select id="viluTypeFilter"><option value="">Tất cả loại giao dịch</option></select>
+          <input id="viluSearch" placeholder="Tìm theo nội dung…">
+        </div>
         <div id="transactionList"><div style="color:var(--text-lt);font-size:.85rem">Đang tải...</div></div>
+        <div class="vilu-pager" id="viluPager" style="display:none"></div>
       </div>
     </div>
 
@@ -844,7 +865,7 @@ window.ACCOUNT_SHELL_CHAT = function () {
   } catch (e) { /* ignore */ }
 };
 </script>
-<script src="/account-core.js?v=5"></script>
+<script src="/account-core.js?v=6"></script>
 <script>
 // Mở đúng tab theo hash (#credits / #ketnoi / #account / #lichsu) khi vào từ sidebar.
 (function(){function openHash(){var h=(location.hash||'').replace('#','');if(h){var b=document.querySelector('[data-tab="'+h+'"]');if(b)b.click();}}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){setTimeout(openHash,300);});else setTimeout(openHash,300);})();
