@@ -615,6 +615,8 @@ async function loadReferralPanel() {
   if (bar && cap > 0) setTimeout(() => { bar.style.width = Math.min(100, Math.round(used / cap * 100)) + '%'; }, 100);
   document.getElementById('refTotalCount').textContent = d.invited || 0;
   document.getElementById('refEarnedCount').textContent = d.creditsEarned || 0;
+  _nqStats.invited = d.invited || 0;
+  updateNqStats();
 
   const btn = document.getElementById('refCopyBtn');
   if (btn && !btn.dataset.wired) {
@@ -642,6 +644,19 @@ async function loadReferralPanel() {
 // questTaskGo(). Không nội suy chuỗi từ server vào thuộc tính onclick: dấu
 // nháy trong chuỗi là vỡ thẻ (cùng lý do đã ghi ở phần Thầy Nhớ bên dưới).
 var _qtDefs = [];
+
+// 4 ô tổng số ở đầu tab Nhiệm Vụ — mỗi phần (Khởi Hành/kênh liên lạc/mời
+// bạn/chia sẻ) ghi đúng phần của mình rồi gọi lại đây, không suy ra khung
+// "nhiệm vụ hàng ngày/tuần" không có backend đứng sau.
+var _nqStats = { khDone: 0, khTotal: 0, khCredits: 0, chDone: 0, chTotal: 0, chCredits: 0, invited: 0, shares: 0 };
+function updateNqStats() {
+  const s = _nqStats;
+  const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+  set('nqDoneRatio', (s.khDone + s.chDone) + '/' + (s.khTotal + s.chTotal));
+  set('nqCredits', s.khCredits + s.chCredits);
+  set('nqInvited', s.invited);
+  set('nqShares', s.shares);
+}
 
 async function loadQuestTasks() {
   var host = document.getElementById('qtBody');
@@ -673,6 +688,10 @@ function renderQuestTasks(kh) {
   if (!host) return;
   let done = 0;
   for (let i = 0; i < kh.steps.length; i++) if (kh.steps[i].done) done++;
+  _nqStats.khDone = done;
+  _nqStats.khTotal = kh.steps.length;
+  _nqStats.khCredits = kh.claimed ? (+kh.credits || 0) : 0;
+  updateNqStats();
 
   let h = kh.claimed
     ? '<div class="qt-top"><div class="qt-count" style="color:var(--green)">✓ Đã hoàn tất — +' + (+kh.credits || 0) + ' Lượng đã vào ví.</div></div>'
@@ -695,6 +714,10 @@ function renderChannelTasks(indexOffset, tasks) {
   const card = document.getElementById('chCard');
   const host = document.getElementById('chBody');
   if (!card || !host) return;
+  _nqStats.chDone = tasks.filter(function (t) { return t.done; }).length;
+  _nqStats.chTotal = tasks.length;
+  _nqStats.chCredits = tasks.filter(function (t) { return t.done; }).reduce(function (s, t) { return s + (+t.credits || 0); }, 0);
+  updateNqStats();
   if (!tasks.length || tasks.every(function (t) { return t.done; })) { card.style.display = 'none'; return; }
 
   const granted = tasks.filter(function (t) { return t.justGranted; })
@@ -752,6 +775,8 @@ async function loadMyShares() {
 function renderMyShares(list) {
   const host = document.getElementById('spBody');
   if (!host) return;
+  _nqStats.shares = list.length;
+  updateNqStats();
   if (!list.length) {
     host.innerHTML = '<div style="color:var(--text-lt);font-size:.85rem">Bạn chưa chia sẻ lượt nào.</div>';
     return;
