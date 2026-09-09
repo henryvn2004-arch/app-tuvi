@@ -46,6 +46,8 @@ async function initProfile() {
   setupTabs();
   setupHistFilters();
   setupHistSearch();
+  setupAccountSettingsNav();
+  setupThemeChoice();
   loadHeaderBalance();
   if (window.mountIcons) window.mountIcons();
 }
@@ -79,6 +81,41 @@ function setupHistSearch() {
       el.style.display = (!q || el.textContent.toLowerCase().indexOf(q) !== -1) ? '' : 'none';
     });
   });
+}
+
+// Sub-nav trong tab Tài Khoản (Thông tin cá nhân/Bảo mật/Giao diện/Kết nối).
+function setupAccountSettingsNav() {
+  const btns = document.querySelectorAll('#tab-account .setnav-btn');
+  const panes = document.querySelectorAll('#tab-account .setpane');
+  if (!btns.length) return;
+  btns.forEach(btn => btn.addEventListener('click', () => {
+    btns.forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const key = btn.dataset.pane;
+    panes.forEach(p => p.classList.toggle('active', p.dataset.pane === key));
+  }));
+}
+
+// Nút chọn Sáng/Tối trong tab Tài Khoản — dùng CHUNG khoá localStorage
+// `app_theme` với nút "Đổi nền" ở sidebar (shell.js `toggleTheme()`), không
+// dựng cơ chế thứ hai lệch nhau.
+function setupThemeChoice() {
+  const btns = document.querySelectorAll('#tab-account .theme-btn');
+  if (!btns.length) return;
+  function current() {
+    return document.documentElement.dataset.theme || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  }
+  function paint() {
+    const t = current();
+    btns.forEach(b => b.classList.toggle('active', b.dataset.themeChoice === t));
+  }
+  btns.forEach(btn => btn.addEventListener('click', () => {
+    const t = btn.dataset.themeChoice;
+    document.documentElement.dataset.theme = t;
+    try { localStorage.setItem('app_theme', t); } catch (e) { /* ignore */ }
+    paint();
+  }));
+  paint();
 }
 
 // 4 ô tổng số ở đầu tab Lịch Sử — mỗi renderXxx() cập nhật phần của mình rồi gọi lại đây.
