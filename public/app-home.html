@@ -385,7 +385,7 @@
   <main class="ws" id="ws">
     <div class="ws-top">
       <button class="btn mobile-only" onclick="document.getElementById('shell-sidebar').classList.toggle('open');window.shellSyncBackdrop&&shellSyncBackdrop()" aria-label="Menu">☰</button>
-      <div class="ws-title"><b>Luận Đường</b><span>Chọn một công cụ mệnh lý để bắt đầu</span></div>
+      <div class="ws-title"><b>Tử Vi Minh Bảo</b><span>Tri mệnh lý – Thuận thế hành</span></div>
     </div>
     <div class="ws-body">
       <div class="home-body">
@@ -470,6 +470,30 @@
 <script src="/shell.js?v=88"></script>
 <script>
 function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+/* ── Ô icon đầu .ws-top: `mountToolIcon()` (shell.js) tự chèn SVG của tool
+   đang active vào `.ws-avatar` — cho Home nó vẽ icon nhà chung chung, lệch
+   hẳn triện thật vừa đổi vào `.ws-title` bên cạnh. Thay bằng ảnh triện thật.
+
+   🔑 KHÔNG patch một lần: `mountToolIcon()` XOÁ rồi DỰNG LẠI `.ws-avatar` mỗi
+   lần `renderSidebar()` chạy — mà hàm đó chạy TỚI BA LẦN không đồng bộ (boot()
+   → nav-fallback từ localStorage → catalog thật từ mạng, xem `loadCatalog()`),
+   nên patch một lần lúc DOMContentLoaded sẽ bị viết đè ngay sau đó. Theo dõi
+   bằng MutationObserver để tự vá lại mỗi lần `.ws-avatar` bị dựng mới — không
+   đụng shell.js dùng chung cho 52 trang còn lại. */
+(function(){
+  var SEAL='<img src="/seal.webp" alt="Tử Vi Minh Bảo" style="width:100%;height:100%;object-fit:cover;border-radius:inherit;display:block">';
+  function patchWsAvatar(){
+    var av=document.querySelector('.ws-top .ws-avatar');
+    if(av && av.firstElementChild && av.firstElementChild.tagName!=='IMG') av.innerHTML=SEAL;
+  }
+  function start(){
+    patchWsAvatar();
+    var top=document.querySelector('.ws-top');
+    if(top && window.MutationObserver) new MutationObserver(patchWsAvatar).observe(top,{childList:true,subtree:true});
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',start);
+  else start();
+})();
 /* ── Q1: GỢI Ý "TIẾP THEO NÊN XEM GÌ" ─────────────────────────────────────
    Thay cho lưới 58 công cụ dựng từ `tool_groups` trước đây.
 
