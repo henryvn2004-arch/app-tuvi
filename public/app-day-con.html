@@ -460,19 +460,16 @@ function onMoiLoChange() {
 TuviForm.render('formHost', { mode: 'compact', prefix: '', gioitinh: 'nam', showName: true });
 TuviForm.render('formHostSelf', { mode: 'compact', prefix: 'self', gioitinh: 'nam', showName: false });
 
-// Nút "Xem mẫu" — PDF sinh bằng LLM thật cho 1 lá số mẫu (scripts/gen-tool-sample.mjs).
-// 🔴 TẠM ẨN (2026-09) — PDF mẫu hiện chỉ là văn bản thuần, chưa dựng lại đúng
-// khung 5 trục/8 chất/chart như màn hình luận giải thật. Henry chốt: ẩn nút
-// tới khi script sinh PDF mẫu được dựng lại để khớp màn hình. Bật lại: bỏ
-// khối chú thích /* */ dưới đây.
-/*
+// Nút "Xem mẫu" — PDF sinh bằng LLM thật cho 1 lá số mẫu, CHỤP ĐÚNG trang thật
+// qua Playwright (scripts/gen-tool-sample.mjs, hàm renderRealPageAndUpload) —
+// có đủ 5 trục/8 chất/chart như màn hình luận giải thật (2026-09, bật lại sau
+// khi sửa script để chụp trang thay vì tự dựng HTML rời).
 (function(){
   var host=document.getElementById('sampleLinkHost');
   if(!host) return;
   var url='https://dciwkfdqhhddeymlisey.supabase.co/storage/v1/object/public/samples/mau-day-con.pdf';
   host.innerHTML='<a href="'+url+'" target="_blank" rel="noopener" class="sample-link">↗ Xem mẫu (PDF, lá số khác)</a>';
 })();
-*/
 
 // 🔑 Lá số shell đang nhớ là lá số CỦA NGƯỜI DÙNG → điền vào form 'self', KHÔNG
 // điền vào form chính (form chính là của CON). Gọi `Shell.prefillForm()` như các

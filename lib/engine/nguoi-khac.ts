@@ -723,3 +723,72 @@ export function railData(p: NguoiKhacProfile): Record<string, string | number | 
   }
   return d;
 }
+
+/**
+ * Phần deterministic trả kèm — client dựng được khung ngay cả khi phần chữ mỏng.
+ *
+ * `full=false` (đường TÍNH THỬ) cắt hai lớp:
+ *
+ * **A4 — vá lỗ payload.** Bỏ phần MÔ TẢ TÍNH CÁCH của kiểu người (`dongLuc` ·
+ * `datChat` · `manh` · `yeu` · `moiTruongHop` · `moiTruongKy`). Giao diện KHÔNG
+ * vẽ mấy trường đó ở bất kỳ đâu, mà rail thì tự tính lại ở server — tức chúng
+ * chưa từng được client dùng. Nhưng lượt tính thử KHÔNG đòi đăng nhập, nên mở
+ * devtools là có sẵn bản mô tả tính cách đầy đủ, 0đ. Cắt ở tầng payload, đừng
+ * trông vào việc giao diện "quên" vẽ.
+ *
+ * **A1 — cắt dữ liệu ENGINE.** Đây là bước LẤY ĐI, cố ý đi SAU A3 (bước chỉ
+ * THÊM) để phần free mất đi đã có thứ bù vào:
+ *   • `matDoc` còn **2/5 mặt** (`MAT_DOC_PREVIEW` — xem lý do chia ở engine),
+ *     và hai mặt đó chỉ còn TÊN SAO, **không kèm `cachCuc` hay `diem`**. Tên
+ *     sao là thứ đối chiếu được với bất kỳ trang tử vi nào ⇒ đủ chứng minh
+ *     engine đọc thật; còn `cachCuc` là bản diễn giải, tức là hàng.
+ *   • `daiVan` + `vanNam` bỏ hẳn — đó là dữ liệu THỜI ĐIỂM, mà "lúc nào nên đưa
+ *     việc lớn tới" (`thoiDiem`) chính là một khối trả tiền. Phát nguyên liệu
+ *     thô của một khối đang bán là tự bán rẻ nó.
+ *   • `than` + `voiBanCoSo` bỏ — `renderProse` mới dùng tới, tức đường tính thử
+ *     đang chở hai trường không ai vẽ.
+ *
+ * Đường trả tiền GIỮ NGUYÊN hình dạng cả gói — đổi shape payload đã nằm trong
+ * `portrait_cache` không đáng để dọn vài trường thừa.
+ *
+ * Chuyển từ `app/api/nguoi-khac/route.ts` sang đây (2026-09) để
+ * `scripts/gen-tool-sample.mjs` import lại ĐÚNG hàm này thay vì chép tay —
+ * PDF mẫu phải dựng được cùng dữ liệu như màn hình thật.
+ */
+export function meta(p: NguoiKhacProfile, ten: string, full = true) {
+  return {
+    ten,
+    quanHe: { id: p.quanHe.id, label: p.quanHe.label, cungCuaBan: p.quanHe.cungCuaBan },
+    viec: { id: p.viec.id, label: p.viec.label },
+    gioiTinh: p.gioiTinh,
+    kieu: {
+      id: p.kieu.id,
+      ten: p.kieu.ten,
+      tuTuong: p.kieu.tuTuong,
+      motCau: p.kieu.motCau,
+      cauHoi: p.kieu.cauHoi,
+      ...(full
+        ? {
+            dongLuc: p.kieu.dongLuc,
+            datChat: p.kieu.datChat,
+            manh: p.kieu.manh,
+            yeu: p.kieu.yeu,
+            moiTruongHop: p.kieu.moiTruongHop,
+            moiTruongKy: p.kieu.moiTruongKy,
+          }
+        : {}),
+    },
+    kieuPhu: p.kieuPhu ? { id: p.kieuPhu.id, ten: p.kieuPhu.ten, motCau: p.kieuPhu.motCau } : null,
+    lai: p.phan.lai,
+    toaDo: { x: p.phan.xNorm, y: p.phan.yNorm },
+    matDoc: full
+      ? p.matDoc
+      : p.matDoc
+          .filter((m) => (MAT_DOC_PREVIEW as readonly string[]).includes(m.cung))
+          .map((m) => ({ cung: m.cung, nhan: m.nhan, sao: m.sao, muon: m.muon })),
+    ...(full
+      ? { than: p.than, vanNam: p.vanNam, daiVan: p.daiVan, voiBanCoSo: p.voiBan }
+      : {}),
+    namXem: p.namXem,
+  };
+}
