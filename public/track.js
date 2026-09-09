@@ -301,6 +301,11 @@
     // Quirk vô hại của trình duyệt, không phải lỗi của mình — khuyến nghị
     // chuẩn của cả Sentry lẫn cộng đồng là bỏ qua nó.
     if (/ResizeObserver loop/i.test(msg)) return true;
+    // Cầu nối Java<->JS của trình duyệt trong-app (Facebook/Messenger/Zalo
+    // Android WebView) tự ném lỗi này khi NÓ gọi postMessage nội bộ — repo
+    // không gọi postMessage ở đâu cả (đã grep). Luôn đi kèm fbclid/in-app
+    // browser, không có stack (không phải Error thật), không hành động được.
+    if (/error invoking postMessage/i.test(msg) && /java exception/i.test(msg)) return true;
     // Extension trình duyệt (AdBlock, Grammarly...) ném lỗi trong sandbox
     // riêng của nó, không phải code của site.
     if (src && /^(chrome|moz|safari)-extension:\/\//i.test(src)) return true;
