@@ -339,19 +339,16 @@ function onMoiLoChange() {
 
 TuviForm.render('formHost', { mode: 'compact', prefix: '', gioitinh: 'nam', showName: true });
 
-// Nút "Xem mẫu" — PDF sinh bằng LLM thật cho 1 lá số mẫu (scripts/gen-tool-sample.mjs).
-// 🔴 TẠM ẨN (2026-09) — PDF mẫu hiện chỉ là văn bản thuần, chưa dựng lại đúng
-// khung dữ liệu/chart như màn hình luận giải thật. Henry chốt: ẩn nút tới khi
-// script sinh PDF mẫu được dựng lại để khớp màn hình. Bật lại: bỏ khối chú
-// thích /* */ dưới đây.
-/*
+// Nút "Xem mẫu" — PDF sinh bằng LLM thật cho 1 lá số mẫu, CHỤP ĐÚNG trang thật
+// qua Playwright (scripts/gen-tool-sample.mjs, hàm renderRealPageAndUpload) —
+// có đủ chart/card như màn hình luận giải thật (2026-09, bật lại sau khi sửa
+// script để chụp trang thay vì tự dựng HTML rời).
 (function(){
   var host=document.getElementById('sampleLinkHost');
   if(!host) return;
   var url='https://dciwkfdqhhddeymlisey.supabase.co/storage/v1/object/public/samples/mau-huong-nghiep-tre.pdf';
   host.innerHTML='<a href="'+url+'" target="_blank" rel="noopener" class="sample-link">↗ Xem mẫu (PDF, lá số khác)</a>';
 })();
-*/
 
 // 🔑 CỐ Ý KHÔNG gọi `Shell.prefillForm()`: lá số shell đang nhớ là lá số CỦA
 // NGƯỜI DÙNG, mà form này là của CON. Đổ vào là người ta bấm luôn rồi nhận bản

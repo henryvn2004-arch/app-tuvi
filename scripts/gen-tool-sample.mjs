@@ -44,19 +44,19 @@ import { buildPromptThang } from '../lib/agent/van-han-thang.ts';
 import { spans12 } from '../lib/engine/van-han-12.ts';
 import { llmTextFull } from '../lib/llm/complete.ts';
 import { parseLlmJson } from '../lib/api/tool-helpers.ts';
-import { computeDayCon } from '../lib/engine/day-con.ts';
+import { computeDayCon, meta as dayConMeta } from '../lib/engine/day-con.ts';
 import {
   DAY_CON_SYSTEM_PROMPT,
   DAY_CON_SCHEMA,
   buildDayConPrompt,
 } from '../lib/agent/day-con-prompt.ts';
-import { computeNguoiKhac } from '../lib/engine/nguoi-khac.ts';
+import { computeNguoiKhac, meta as nguoiKhacMeta } from '../lib/engine/nguoi-khac.ts';
 import {
   NGUOI_KHAC_SYSTEM_PROMPT,
   NGUOI_KHAC_SCHEMA,
   buildNguoiKhacPrompt,
 } from '../lib/agent/nguoi-khac-prompt.ts';
-import { computeHuongNghiepTre } from '../lib/engine/huong-nghiep-tre.ts';
+import { computeHuongNghiepTre, hoSoDayDu } from '../lib/engine/huong-nghiep-tre.ts';
 import {
   HUONG_NGHIEP_TRE_SYSTEM_PROMPT,
   HUONG_NGHIEP_TRE_SCHEMA,
@@ -216,25 +216,40 @@ const TOOL_CONFIGS = {
     // là mọi trường chữ CÒN LẠI.
     freeFields: ['conNguoi', 'chatNoi'],
     fieldOrder: DAY_CON_SCHEMA.propertyOrdering,
-    // Nhãn TRÙNG với `.res-block-title` thật trong app-day-con.html — PDF mẫu
-    // phải đọc như PDF thật, không phải in tên khoá JSON thô.
-    fieldLabels: {
-      conNguoi: 'Con Là Người Thế Nào',
-      chatNoi: 'Chất Nổi Trội',
-      dinhHuong: 'Định Hướng',
-      vaoBangGi: 'Vào Con Bằng Cách Nào',
-      khoaLai: 'Điều Làm Con Khoá Lại',
-      nenLam: 'Nên Làm (Từ Tối Nay)',
-      tranhLam: 'Nên Tránh (Từ Tối Nay)',
-      hoatDong: 'Hoạt Động Nên Cho Con Thử',
-      loLang: 'Điều Bạn Đang Lo',
-      changNay: 'Các Chặng Đi Học',
-      voiChaMe: 'Hai Bên Với Nhau',
-      motCau: 'Nếu Chỉ Nhớ Một Câu',
-    },
     outJson: join(ROOT, 'public/samples/day-con-dummy.json'),
     pdfTitle: 'Dạy Con Theo Lá Số — Bản mẫu',
     storagePath: 'mau-day-con.pdf',
+    // PDF mẫu giờ CHỤP ĐÚNG trang thật (app-day-con.html) qua Playwright,
+    // không tự dựng HTML rời — `buildFullPayload` phải khớp CHÍNH XÁC hình
+    // dạng `payload` mà `app/api/day-con/route.ts` trả về (`meta()` nay sống
+    // ở `lib/engine/day-con.ts`, import lại thay vì chép).
+    htmlPage: 'app-day-con.html',
+    buildFullPayload(profile, ten, parsed) {
+      const clean = (v) => String(v == null ? '' : v).trim();
+      const normMuc = (arr) =>
+        Array.isArray(arr)
+          ? arr
+              .slice(0, 3)
+              .map((m) => ({ viec: clean(m?.viec), vidu: clean(m?.vidu) }))
+              .filter((m) => m.viec)
+          : [];
+      return {
+        success: true,
+        ...dayConMeta(profile, ten),
+        conNguoi: clean(parsed.conNguoi),
+        chatNoi: clean(parsed.chatNoi),
+        dinhHuong: clean(parsed.dinhHuong),
+        vaoBangGi: clean(parsed.vaoBangGi),
+        khoaLai: clean(parsed.khoaLai),
+        nenLam: normMuc(parsed.nenLam),
+        tranhLam: normMuc(parsed.tranhLam),
+        hoatDong: profile.hoatDong ? clean(parsed.hoatDong) : '',
+        loLang: clean(parsed.loLang),
+        changNay: clean(parsed.changNay),
+        voiChaMe: '', // bản mẫu không có lá số cha/mẹ — cùng luật route thật
+        motCau: clean(parsed.motCau),
+      };
+    },
   },
   'nguoi-khac': {
     kind: 'json',
@@ -258,23 +273,35 @@ const TOOL_CONFIGS = {
     // TOÀN BỘ các trường chữ.
     freeFields: [],
     fieldOrder: NGUOI_KHAC_SCHEMA.propertyOrdering,
-    // Nhãn TRÙNG với `.res-block-title` thật trong app-nguoi-khac.html.
-    // `keHoach` có tiêu đề ĐỘNG theo `viec` trên trang thật (`keHoachTitle`)
-    // — bản mẫu không có lựa chọn việc thật của khách nên dùng nhãn chung.
-    fieldLabels: {
-      keHoach: 'Cách Đi Cho Việc Đang Cần',
-      tinhKhi: 'Con Người Này Vận Hành Thế Nào',
-      chamNoc: 'Điều Làm Họ Khó Chịu',
-      coiTrong: 'Điều Họ Coi Trọng',
-      nenNoi: 'Nên Nói',
-      tranhNoi: 'Tránh Nói',
-      thoiDiem: 'Lúc Này Họ Đang Ở Đâu',
-      voiBan: 'Người Này Với Bạn',
-      motCau: 'Nếu Chỉ Nhớ Một Câu',
-    },
     outJson: join(ROOT, 'public/samples/nguoi-khac-dummy.json'),
     pdfTitle: 'Lá Số Người Khác — Bản mẫu',
     storagePath: 'mau-nguoi-khac.pdf',
+    // Xem chú thích ở `day-con.buildFullPayload` — cùng lối, khớp
+    // `app/api/nguoi-khac/route.ts`.
+    htmlPage: 'app-nguoi-khac.html',
+    buildFullPayload(profile, ten, parsed) {
+      const clean = (v) => String(v == null ? '' : v).trim();
+      const normMuc = (arr) =>
+        Array.isArray(arr)
+          ? arr
+              .slice(0, 3)
+              .map((m) => ({ viec: clean(m?.viec), vidu: clean(m?.vidu) }))
+              .filter((m) => m.viec)
+          : [];
+      return {
+        success: true,
+        ...nguoiKhacMeta(profile, ten),
+        keHoach: profile.viec.id === 'hieu-them' ? '' : clean(parsed.keHoach),
+        tinhKhi: clean(parsed.tinhKhi),
+        chamNoc: clean(parsed.chamNoc),
+        coiTrong: clean(parsed.coiTrong),
+        nenNoi: normMuc(parsed.nenNoi),
+        tranhNoi: normMuc(parsed.tranhNoi),
+        thoiDiem: clean(parsed.thoiDiem),
+        voiBan: '', // bản mẫu không có lá số người xem — cùng luật route thật
+        motCau: clean(parsed.motCau),
+      };
+    },
   },
   'huong-nghiep-tre': {
     kind: 'json',
@@ -294,20 +321,36 @@ const TOOL_CONFIGS = {
     },
     freeFields: [],
     fieldOrder: HUONG_NGHIEP_TRE_SCHEMA.propertyOrdering,
-    // Nhãn TRÙNG với `.res-block-title` thật trong app-huong-nghiep-tre.html.
-    fieldLabels: {
-      nhinRaCon: 'Nhìn Ra Con',
-      viSaoHuongNay: 'Vì Sao Hướng Này',
-      batDauTuDau: 'Bắt Đầu Từ Đâu (Làm Trong Tháng Này)',
-      tranhLam: 'Thôi Làm',
-      noiTheNao: 'Mở Lời Với Con Thế Nào',
-      loLang: 'Điều Bạn Đang Lo',
-      mocKeTiep: 'Sang Lứa Sau Thì Đổi Gì',
-      motCau: 'Nếu Chỉ Nhớ Một Câu',
-    },
     outJson: join(ROOT, 'public/samples/huong-nghiep-tre-dummy.json'),
     pdfTitle: 'Hướng Nghiệp Sớm Cho Con — Bản mẫu',
     storagePath: 'mau-huong-nghiep-tre.pdf',
+    // Xem chú thích ở `day-con.buildFullPayload` — cùng lối, khớp
+    // `app/api/huong-nghiep-tre/route.ts`. `hoSoDayDu` đã export sẵn từ
+    // engine (route thật cũng gọi đúng hàm này), không cần chép.
+    htmlPage: 'app-huong-nghiep-tre.html',
+    buildFullPayload(profile, ten, parsed) {
+      const clean = (v) => String(v == null ? '' : v).trim();
+      const normMuc = (arr, max) =>
+        Array.isArray(arr)
+          ? arr
+              .slice(0, max)
+              .map((m) => ({ viec: clean(m?.viec), viSao: clean(m?.viSao) }))
+              .filter((m) => m.viec)
+          : [];
+      return {
+        success: true,
+        ten,
+        ...hoSoDayDu(profile),
+        nhinRaCon: clean(parsed.nhinRaCon),
+        viSaoHuongNay: clean(parsed.viSaoHuongNay),
+        batDauTuDau: normMuc(parsed.batDauTuDau, 3),
+        tranhLam: normMuc(parsed.tranhLam, 2),
+        noiTheNao: clean(parsed.noiTheNao),
+        loLang: clean(parsed.loLang),
+        mocKeTiep: clean(parsed.mocKeTiep),
+        motCau: clean(parsed.motCau),
+      };
+    },
   },
   // 🔴 nhan-mach CỐ Ý KHÔNG khai ở đây — Henry đã chốt tool này KHÔNG cần
   // bước xem-trước/blur (nhóm 2-8 người, không phải một-prompt đơn lẻ).
@@ -472,13 +515,17 @@ async function runPhanTool(toolId, cfg, ls, laSoText, store) {
 
 // ── Tool MỘT LƯỢT JSON (day-con, nguoi-khac, huong-nghiep-tre) ─────────────
 async function runJsonTool(toolId, cfg, ls, store, rawCachePath) {
+  // Hoist ra ngoài `gen()`: PDF cần `profile` (5 trục/8 chất/...) NGAY CẢ KHI
+  // JSON mẫu đã có sẵn từ cache (`--pdf-only` bỏ qua `gen()` hoàn toàn) — thiếu
+  // dòng này thì `buildFullPayload` không có gì để ghép cùng phần chữ.
+  const profile = cfg.computeProfile(ls);
+
   async function gen() {
     if (!FORCE && store.payload) {
       console.log('  đã có JSON mẫu, bỏ qua (dùng --force để sinh lại)');
       return;
     }
     requireEnv('GEMINI_API_KEY');
-    const profile = cfg.computeProfile(ls);
     const prompt = cfg.buildPrompt(profile, cfg.ten);
     console.log('  đang gọi LLM (json+schema)…');
     const r = await llmTextFull({
@@ -518,30 +565,11 @@ async function runJsonTool(toolId, cfg, ls, store, rawCachePath) {
 
   if (!store.payload) await gen();
 
-  const FIELD_LABELS = cfg.fieldLabels || {};
-  const bodyHtml = cfg.fieldOrder
-    .filter((k) => store.payload[k])
-    .map((k) => {
-      const v = store.payload[k];
-      const label = FIELD_LABELS[k] || k;
-      if (Array.isArray(v)) {
-        const items = v
-          .map(
-            (it) =>
-              `<li>${escapeHtml(it.viec || it.vidu || it.viSao || JSON.stringify(it))}${it.vidu ? ` — <em>${escapeHtml(it.vidu)}</em>` : ''}</li>`
-          )
-          .join('');
-        return `<section><h2>${label}</h2><ul>${items}</ul></section>`;
-      }
-      return `<section><h2>${label}</h2><p>${escapeHtml(String(v))}</p></section>`;
-    })
-    .join('\n');
-
-  await renderAndUpload(toolId, cfg, bodyHtml);
-}
-
-function escapeHtml(s) {
-  return String(s).replace(/[&<>]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' })[c]);
+  // PDF mẫu = CHỤP ĐÚNG trang thật, không tự dựng HTML rời — ghép `profile`
+  // (tra bảng thuần, có 5 trục/8 chất/chart) với phần chữ LLM đúng hình dạng
+  // route thật trả về, rồi tiêm vào `app-<tool>.html` qua Playwright.
+  const fullPayload = cfg.buildFullPayload(profile, cfg.ten, store.payload);
+  await renderRealPageAndUpload(toolId, cfg, fullPayload);
 }
 
 // Chuyển đổi markdown ĐƠN GIẢN → HTML, đủ cho một bản PDF minh hoạ (không
@@ -598,6 +626,15 @@ ${bodyHtml}
   const pdfBuffer = await page.pdf({ format: 'A4', margin: { top: '20px', bottom: '20px' } });
   await browser.close();
 
+  await uploadPdf(toolId, cfg, pdfBuffer);
+}
+
+/**
+ * Lưu PDF tạm ra đĩa rồi upload đè lên bucket `samples` — dùng CHUNG cho cả
+ * hai lối dựng PDF (`renderAndUpload` tự dựng HTML cho tool `phan`,
+ * `renderRealPageAndUpload` chụp trang thật cho tool `json`).
+ */
+async function uploadPdf(toolId, cfg, pdfBuffer) {
   const localPdfPath = join(ROOT, '.tool-samples', `${toolId}.pdf`);
   mkdirSync(dirname(localPdfPath), { recursive: true });
   writeFileSync(localPdfPath, pdfBuffer);
@@ -607,7 +644,6 @@ ${bodyHtml}
   const SUPABASE_SERVICE_KEY = requireEnv('SUPABASE_SERVICE_KEY');
   const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY);
 
-  const cfg2 = TOOL_CONFIGS[toolId];
   // Bucket `samples` ĐÃ SỐNG trên prod (public, chứa mau-luan-giai-la-so.pdf
   // dùng bởi public/tuvi-form.js) — dùng LẠI đúng bucket đó, không tạo bucket
   // mới. `storagePath` mỗi tool đã đặt tên theo đúng khuôn `mau-<tool>.pdf`.
@@ -615,19 +651,128 @@ ${bodyHtml}
 
   const { error: uploadErr } = await supabase.storage
     .from(BUCKET)
-    .upload(cfg2.storagePath, pdfBuffer, { contentType: 'application/pdf', upsert: true });
+    .upload(cfg.storagePath, pdfBuffer, { contentType: 'application/pdf', upsert: true });
   if (uploadErr) {
     console.error('❌ Upload lỗi:', uploadErr.message);
     process.exit(1);
   }
 
-  const { data: urlData } = supabase.storage.from(BUCKET).getPublicUrl(cfg2.storagePath);
+  const { data: urlData } = supabase.storage.from(BUCKET).getPublicUrl(cfg.storagePath);
   console.log(`✓ Đã upload — URL công khai:\n  ${urlData?.publicUrl}`);
   console.log(
     `\nBước cuối (tay): dán URL trên vào SAMPLE_PDF_URL của tool tương ứng trong app-${toolId}.html.`
   );
 }
 
+// ── Server tĩnh cho public/ — CHỈ dùng để chụp PDF mẫu (3 tool `json`) ──────
+// `app-*.html` gọi `/shell.js`, `/shell.css`, `/tools-shared/qr.js`... bằng
+// ĐƯỜNG DẪN TUYỆT ĐỐI, nên phải mở qua http://, không mở bằng file://
+// (đường tuyệt đối dưới file:// trỏ thẳng vào ổ đĩa, luôn 404).
+let _staticServer = null;
+let _staticPort = null;
+async function ensureStaticServer() {
+  if (_staticServer) return _staticPort;
+  const { createServer } = await import('node:http');
+  const { readFile } = await import('node:fs/promises');
+  const PUBLIC_DIR = join(ROOT, 'public');
+  const MIME = {
+    '.html': 'text/html; charset=utf-8',
+    '.js': 'text/javascript; charset=utf-8',
+    '.css': 'text/css; charset=utf-8',
+    '.json': 'application/json; charset=utf-8',
+    '.webp': 'image/webp',
+    '.png': 'image/png',
+    '.jpg': 'image/jpeg',
+    '.jpeg': 'image/jpeg',
+    '.svg': 'image/svg+xml',
+    '.woff2': 'font/woff2',
+    '.woff': 'font/woff',
+    '.ico': 'image/x-icon',
+  };
+  _staticServer = createServer(async (req, res) => {
+    try {
+      const urlPath = decodeURIComponent((req.url || '/').split('?')[0]);
+      const rel = urlPath === '/' ? '/index.html' : urlPath;
+      const filePath = join(PUBLIC_DIR, rel);
+      // Chặn `..` thoát khỏi `public/` — server này chỉ chạy cục bộ trong
+      // lượt sinh mẫu, nhưng vẫn không lý do gì để phục vụ ngoài cây đó.
+      if (!filePath.startsWith(PUBLIC_DIR)) {
+        res.writeHead(403);
+        res.end();
+        return;
+      }
+      const ext = filePath.slice(filePath.lastIndexOf('.'));
+      const buf = await readFile(filePath);
+      res.writeHead(200, { 'Content-Type': MIME[ext] || 'application/octet-stream' });
+      res.end(buf);
+    } catch {
+      res.writeHead(404);
+      res.end('not found');
+    }
+  });
+  await new Promise((resolve) => _staticServer.listen(0, '127.0.0.1', resolve));
+  _staticPort = _staticServer.address().port;
+  console.log(`✓ Server tĩnh public/ tại http://127.0.0.1:${_staticPort}`);
+  return _staticPort;
+}
+
+/**
+ * PDF mẫu cho 3 tool `json` — CHỤP ĐÚNG trang thật (`app-<tool>.html`) thay
+ * vì tự dựng HTML rời, để có luôn chart/card (5 trục · 8 chất...) như bản
+ * PDF thật khách trả tiền tải về (`printWorkspace()` trong `shell.js`).
+ *
+ * Cách làm: mở trang qua server tĩnh, TIÊM THẲNG `fullPayload` bằng cách gọi
+ * lại đúng các hàm trang thật gọi sau khi API trả về (`_openPanel()` mở khối
+ * + gỡ khoá, `renderMeta`/`renderProse` dựng nội dung) — bỏ qua hẳn lượt
+ * submit form/gọi API, không phải mô phỏng lại UI. Sau đó BẤM THẬT nút "Lưu
+ * PDF" (`#wsPdfBtn`, do `shell.js` tự dựng qua `MutationObserver` khi vùng
+ * kết quả đổi) để chạy đúng `printWorkspace()` — dựng đầu/chân trang in +
+ * mở mọi `<details>` qua sự kiện `beforeprint` — rồi chụp bằng chính CSS in
+ * thật (`@media print` trong `shell.css`), không chép lại luật đó ở đây.
+ */
+async function renderRealPageAndUpload(toolId, cfg, fullPayload) {
+  const port = await ensureStaticServer();
+  console.log('✓ Đang mở trang thật, tiêm dữ liệu, chụp PDF…');
+  const browser = await chromium.launch(
+    process.env.PW_CHROMIUM_PATH ? { executablePath: process.env.PW_CHROMIUM_PATH } : {}
+  );
+  const page = await browser.newPage();
+  page.on('pageerror', (e) => console.error('  [lỗi JS trên trang]', e.message));
+  await page.goto(`http://127.0.0.1:${port}/${cfg.htmlPage}`, { waitUntil: 'load' });
+
+  await page.evaluate((data) => {
+    if (typeof window._openPanel === 'function') window._openPanel();
+    window.renderMeta(data);
+    window.renderProse(data);
+    var loading = document.getElementById('loading');
+    if (loading) loading.style.display = 'none';
+    var card = document.getElementById('card');
+    if (card) card.style.display = 'block';
+    var btnEdit = document.getElementById('btnEdit');
+    if (btnEdit) btnEdit.style.display = '';
+  }, fullPayload);
+
+  // Nút "Lưu PDF" do `shell.js` tự dựng qua MutationObserver theo dõi vùng
+  // `[data-ws-result]` — đợi nó xuất hiện rồi bấm, thay vì tự gọi thẳng
+  // `printWorkspace()` (hàm private trong closure của shell.js, không lộ ra
+  // `window`).
+  await page.waitForSelector('#wsPdfBtn', { timeout: 10000 });
+  await page.click('#wsPdfBtn');
+  // `printWorkspace()` có fallback 800ms cho QR chưa tải kịp — đợi dư ra để
+  // chắc đầu/chân trang in đã dựng xong trước khi chụp.
+  await page.waitForTimeout(1300);
+
+  await page.emulateMedia({ media: 'print' });
+  const pdfBuffer = await page.pdf({ format: 'A4', margin: { top: '20px', bottom: '20px' } });
+  await browser.close();
+
+  await uploadPdf(toolId, cfg, pdfBuffer);
+}
+
 for (const id of toolIds) {
   await runOne(id);
 }
+
+// Server tĩnh (nếu có mở, tức có chạy ≥1 tool `json`) giữ process sống —
+// đóng lại để CLI thoát sạch thay vì treo chờ Ctrl+C.
+if (_staticServer) await new Promise((resolve) => _staticServer.close(resolve));
