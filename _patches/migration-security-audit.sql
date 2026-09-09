@@ -56,11 +56,20 @@ begin
   -- 3) Cày Lượng bằng nhiều tài khoản trên CÙNG một thiết bị. `anon_id` nằm
   --    localStorage nên kẻ cày chỉ cần xoá là lách được — cái này bắt loại
   --    lười, không phải loại chuyên. Có còn hơn không, và chi phí gần bằng 0.
+  --    ⚠️ CHỈ đếm tài khoản đã THỰC SỰ nhận `signup_bonus` — đếm mọi tài khoản
+  --    chung thiết bị (kể cả chưa từng nhận thưởng) báo sai tên "cày quà đăng
+  --    ký" cho hộ dùng chung máy/khách trả tiền thật (vấp thật 2026-09-09:
+  --    3 tài khoản chung thiết bị, `bonus_amount=0` cả ba, 2/3 đã nạp tiền).
   select coalesce(json_agg(json_build_object('anon_id', anon_id, 'so_tai_khoan', c)), '[]'::json)
     into v_device
-  from (select anon_id, count(distinct user_id) c from events
-         where anon_id is not null and user_id is not null
-         group by anon_id having count(distinct user_id) >= p_device_users
+  from (select e.anon_id, count(distinct e.user_id) c
+         from events e
+         where e.anon_id is not null and e.user_id is not null
+           and exists (
+             select 1 from credit_transactions ct
+             where ct.user_id = e.user_id and ct.type = 'signup_bonus'
+           )
+         group by e.anon_id having count(distinct e.user_id) >= p_device_users
          order by 2 desc limit 20) d;
 
   -- 4) Một người giới thiệu ôm quá nhiều referee trong thời gian ngắn.
