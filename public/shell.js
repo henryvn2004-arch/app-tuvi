@@ -466,7 +466,16 @@
     var host = document.getElementById('shell-sidebar');
     if (!host) return;
     var h = '';
-    h += '<a class="sb-brand" href="/"><img class="seal" src="/seal.webp" alt="Tử Vi Minh Bảo"><div class="brand-txt"><b>Tử Vi Minh Bảo</b><span>Tri mệnh lý – Thuận thế hành</span></div></a>';
+    // Trang Luận Đường (`/app`, ACTIVE==='home') tự vẽ tên hiệu "Tử Vi Minh Bảo"
+    // NGAY trên `.ws-top` (2026-09-08) — sidebar lặp lại y hệt tên+icon+khẩu
+    // hiệu đó ngay bên dưới là thừa (Henry chỉ ra qua ảnh chụp mobile, sidebar
+    // mở đè lên .ws-top). Các trang tool khác thì `.ws-top` mang tên TOOL (qua
+    // `mountToolIcon`), không phải tên hiệu site, nên sidebar vẫn cần khối này.
+    if (ACTIVE !== 'home') {
+      h += '<a class="sb-brand" href="/"><img class="seal" src="/seal.webp" alt="Tử Vi Minh Bảo"><div class="brand-txt"><b>Tử Vi Minh Bảo</b><span>Tri mệnh lý – Thuận thế hành</span></div></a>';
+    } else {
+      h += '<div class="sb-brand-gap"></div>';
+    }
     // Tracker "đang online / lượt hỏi hôm nay" — MÔ PHỎNG (xem ghi chú ⚠️ ở
     // simulatePulse()). `_pulseData` được seed TRƯỚC lần renderSidebar() đầu
     // (boot()) nên luôn có số ngay từ khung hình đầu; fallback "…" chỉ phòng

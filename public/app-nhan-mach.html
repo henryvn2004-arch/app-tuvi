@@ -9,17 +9,9 @@
 <link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/fonts/noto-serif.css?v=1">
-<link rel="stylesheet" href="/shell.css?v=35">
+<link rel="stylesheet" href="/shell.css?v=38">
 <style>
-.form-card{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);max-width:880px}
-.form-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:3px}
-.form-card p.sub{font-size:12.5px;color:var(--text-lt);margin-bottom:14px}
-.frow{display:flex;gap:11px;flex-wrap:wrap;align-items:flex-end;margin-bottom:12px}
-.fg{display:flex;flex-direction:column;gap:5px}
-.fg label{font-size:10.5px;font-weight:600;color:var(--text-lt);letter-spacing:.04em;text-transform:uppercase}
-.fg input,.fg select{border:1px solid var(--line-2);border-radius:7px;padding:8px 10px;font-size:13.5px;font-family:inherit;color:var(--text);background:var(--paper);outline:none}
-.fg input:focus,.fg select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(20,85,164,.12)}
-.btn-go{background:var(--red);color:#fff;border:none;border-radius:8px;padding:10px 22px;font-size:14px;font-weight:600;cursor:pointer;font-family:var(--serif)}
+.form-card{max-width:880px}
 .btn-go:disabled{opacity:.6;cursor:not-allowed}
 .err{color:var(--tx-red);font-size:13px;margin-top:8px;display:none}
 .err.active{display:block}
@@ -101,16 +93,20 @@
           <img class="intro-avatar" src="/tool-avatars/nhan-mach.webp" alt="" onerror="this.remove()">
           <div class="intro-text">
             <div class="intro-t">Sổ Nhân Mạch</div>
-            <div class="intro-d">Sổ Nhân Mạch đọc lá số cả nhóm, tìm ai hợp ai, ai dễ va chạm với ai. Quản một đội mà người này với người kia cứ va chạm, hiệu suất tụt mãi không rõ vì sao? Thêm ngày sinh từng thành viên, nhận bản đồ nhân sự để sắp xếp lại đội hình.</div>
+            <div class="intro-d">Sổ Nhân Mạch đọc lá số cả nhóm, tìm ai hợp ai, ai dễ va chạm với ai. Thêm ngày sinh từng thành viên, nhận bản đồ nhân sự để sắp xếp lại đội hình.</div>
             <div id="introSrc" style="min-height:73.6px;margin-top:9px"></div>
           </div>
+        </div>
+        <div class="hero-pills">
+          <div class="hero-pill"><span class="hp-ic" data-icon="users"></span><span>Bản đồ<br>cả nhóm</span></div>
+          <div class="hero-pill"><span class="hp-ic" data-icon="scale"></span><span>Cặp dễ<br>giẫm chân</span></div>
+          <div class="hero-pill"><span class="hp-ic" data-icon="hourglass"></span><span>Việc nên làm<br>tuần này</span></div>
         </div>
       </div></div>
       <div id="shellRecent"></div>
       <div class="form-card" id="birthPanel">
-        <h2>Chọn người trong sổ</h2>
-        <p class="sub">Thêm tên, ngày sinh và giới tính của từng thành viên vào sổ. Hệ thống phân tích lá số của cả nhóm cùng lúc. Nhận về tổng quan nhóm, những cặp cần để ý và việc nên làm trong tuần.</p>
-        <p class="price-note" data-tvp-price-label="nhan-mach">…</p>
+        <div class="fc-head"><span class="fc-ic" data-icon="users"></span><h2>Chọn người trong sổ</h2></div>
+        <p class="sub">Thêm tên, ngày sinh và giới tính từng thành viên vào sổ để phân tích cả nhóm cùng lúc.</p>
 
         <div class="nm-list" id="soList"></div>
         <div class="nm-count" id="soCount"></div>
@@ -143,8 +139,28 @@
           </div>
         </details>
 
-        <div class="frow" style="margin-bottom:0;margin-top:14px">
-          <button class="btn-go" id="btnGo" onclick="analyze()">Đọc Cả Sổ — <span data-tvp-price="nhan-mach">…</span> Lượng →</button>
+        <div class="cost-box" style="margin-top:14px">
+          <div class="cb-l">
+            <span class="cb-ic" data-icon="wallet"></span>
+            <div>
+              <div class="cb-title">Chi phí sử dụng</div>
+              <div class="cb-amt"><span data-tvp-price="nhan-mach">…</span> Lượng <span class="vnd" data-tvp-price-vnd="nhan-mach"></span> mỗi lượt</div>
+              <div class="cb-pay">
+                <span><span class="ic" data-icon="qr-code"></span> Chuyển khoản (qua QR ngân hàng)</span>
+                <span><span class="ic" data-icon="credit-card"></span> PayPal / Thẻ quốc tế</span>
+              </div>
+            </div>
+          </div>
+          <div class="cb-r">
+            <span class="cb-ic" data-icon="gift"></span>
+            <div class="cb-r-txt">Mua gói để nhận nhiều ưu đãi hơn.<br><a href="/topup.html">Xem các gói ngay →</a></div>
+          </div>
+        </div>
+        <div class="frow" style="margin-bottom:0">
+          <button class="btn-go" id="btnGo" onclick="analyze()">
+            <span class="bg-label"><span class="ic" data-icon="users"></span><b id="btnGoLabel">Đọc Cả Sổ →</b></span>
+            <small>Tốn <span data-tvp-price="nhan-mach">…</span> Lượng <span data-tvp-price-vnd="nhan-mach"></span></small>
+          </button>
         </div>
         <div class="err" id="error-msg"></div>
       </div>
@@ -241,11 +257,11 @@
 window.SHELL_INTRO={key:'nhan-mach'};</script>
 <script src="/laso-chart.js?v=3"></script>
 <script src="/tools-shared/vn-timezone.js?v=1"></script>
-<script src="/tuvi-form.js?v=2"></script>
+<script src="/tuvi-form.js?v=3"></script>
 <script src="/tuvi-paywall.js?v=33"></script>
 <script src="/auth.js?v=2"></script>
   <script src="/nav.js?v=26" data-icons-only></script>
-<script src="/shell.js?v=88"></script>
+<script src="/shell.js?v=89"></script>
 <script src="/user-charts.js?v=2"></script>
 <script src="/tools-shared/ai-loading-steps.js?v=10"></script>
 <script>
@@ -295,6 +311,18 @@ try {
 // Không có dòng này thì `_cfg.product` rỗng ⇒ paywall không tra được giá và tool
 // KHÔNG chạy.
 TuviPaywall.init({ product: 'nhan-mach', slug: function () { return _currentSlug; } });
+
+// Ghi "(~X đ)" cạnh số Lượng trong hộp chi phí + nút CTA — cùng mẫu
+// `_fillVndSlots` của app-luan-giai.html. `ToolPrices.vndLabel` tự trả ''
+// khi chưa đọc được `credit_packages`, lúc đó không hiện gì (không đoán số).
+function _fillVndSlots(host, product) {
+  if (!host || !window.ToolPrices) return;
+  var els = host.querySelectorAll('[data-tvp-price-vnd]');
+  var cost = window.ToolPrices.get(product);
+  var lbl = cost != null ? window.ToolPrices.vndLabel(cost) : '';
+  els.forEach(function (el) { el.textContent = lbl ? ('(' + lbl + ')') : ''; });
+}
+TuviPaywall.fillPriceSlots(document).then(function () { _fillVndSlots(document, 'nhan-mach'); });
 
 function showError(msg) {
   var e = document.getElementById('error-msg');

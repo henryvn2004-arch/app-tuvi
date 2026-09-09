@@ -9,10 +9,9 @@
 <link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/fonts/noto-serif.css?v=1">
-<link rel="stylesheet" href="/shell.css?v=35">
+<link rel="stylesheet" href="/shell.css?v=38">
 <style>
-.form-card{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);max-width:760px}
-.form-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:3px}
+.form-card{max-width:760px}
 .form-card p.sub{font-size:12.5px;color:var(--text-lt);margin-bottom:14px;line-height:1.65}
 .frow{display:flex;gap:11px;flex-wrap:wrap;align-items:flex-end;margin-bottom:13px}
 /* Giữ chỗ cho form khai sinh. `TuviForm.render` chạy ngay trong lúc phân tích
@@ -26,16 +25,12 @@
    không hề thấy. Đo bằng chiều cao là hụt đúng chỗ đó. Số 252px/480px là ĐO,
    xem docs/nhat-ky/2026-09.md vòng 9. */
 @media (max-width:480px){#tuviFormHost:empty{min-height:252px}}
-.fg{display:flex;flex-direction:column;gap:5px}
-.fg label{font-size:10.5px;font-weight:600;color:var(--text-lt);letter-spacing:.04em;text-transform:uppercase}
-.fg input,.fg select{border:1px solid var(--line-2);border-radius:7px;padding:8px 10px;font-size:13.5px;font-family:inherit;color:var(--text);background:var(--paper);outline:none}
 /* ⚠️ CHỈ nhắm ô CỦA CHÍNH TRANG, không nhắm `.fg select` chung.
    `TuviForm` dựng ngày · tháng · giờ · phút · giới tính thành <select> nằm
    trong ĐÚNG khuôn `.frow`/`.fg` này, nên một luật width nhắm `.fg select` sẽ
    bơm cả năm ô đó lên 200px trong khung rộng 74–90px: chúng tràn ra và đè lên
    nhau, hàng ngày-tháng-năm-giờ-phút thành một đống chữ chồng chéo. */
 #trangThai{min-width:200px}
-.btn-go{background:var(--red);color:#fff;border:none;border-radius:8px;padding:10px 22px;font-size:14px;font-weight:600;cursor:pointer;font-family:var(--serif)}
 .err{color:var(--tx-red);font-size:13px;margin-top:8px;display:none}.err.active{display:block}
 #resPanel{display:none;max-width:880px}
 .res-block{background:var(--white);border:1px solid var(--border-lt);border-radius:10px;overflow:hidden;box-shadow:var(--shadow);margin-bottom:14px}
@@ -130,17 +125,21 @@
           <img class="intro-avatar" src="/tool-avatars/cong-so.webp" alt="" onerror="this.remove()">
           <div class="intro-text">
             <div class="intro-t">Tử Vi Công Sở</div>
-            <div class="intro-d">Tử Vi Công Sở đọc kiểu người của bạn ở chỗ làm và cả chặng đường sự nghiệp. Làm mãi một vị trí, lương không tăng, cảm giác sự nghiệp giậm chân tại chỗ mà không rõ nên đổi hướng nào? Từ lá số của bạn, nhận định hướng nghề nghiệp cụ thể hơn.</div>
+            <div class="intro-d">Đọc kiểu người của bạn ở chỗ làm và cả chặng đường sự nghiệp — giúp định hướng nghề nghiệp cụ thể hơn.</div>
             <div id="introSrc" style="min-height:92.0px;margin-top:9px"></div>
           </div>
+        </div>
+        <div class="hero-pills">
+          <div class="hero-pill"><span class="hp-ic" data-icon="briefcase"></span><span>Kiểu người<br>nơi công sở</span></div>
+          <div class="hero-pill"><span class="hp-ic" data-icon="trending-up"></span><span>40 năm,<br>4 chặng</span></div>
+          <div class="hero-pill"><span class="hp-ic" data-icon="users"></span><span>Nhánh nghề,<br>ghép đội</span></div>
         </div>
       </div></div>
       <div id="shellRecent"></div>
 
       <div class="form-card" id="birthPanel">
-        <h2>Ngày giờ sinh và chỗ đứng hiện tại</h2>
-        <p class="sub">Dùng lá số đã lập, chọn thêm vị trí bạn đang ở nơi làm việc. Hệ thống đối chiếu cổ pháp theo đúng vị trí đó. Nhận về kiểu người nơi công sở, nhánh nghề hợp và 40 năm sự nghiệp chia 4 chặng.</p>
-        <p class="price-note" data-tvp-price-label="cong-so">…</p>
+        <div class="fc-head"><span class="fc-ic" data-icon="briefcase"></span><h2>Ngày giờ sinh và chỗ đứng hiện tại</h2></div>
+        <p class="sub">Nhập ngày giờ sinh và vị trí hiện tại. Hệ thống đối chiếu cổ pháp — kiểu người nơi công sở, nhánh nghề hợp và 40 năm sự nghiệp chia 4 chặng.</p>
         <div id="tuviFormHost"></div>
         <div class="frow">
           <div class="fg"><label>Bạn đang ở vị trí nào</label>
@@ -152,8 +151,12 @@
               <option value="dang-tim">Đang tìm việc / chuyển hướng</option>
             </select>
           </div>
-          <button class="btn-go" id="btnGo" onclick="doCongSo()">Dựng hồ sơ →</button>
         </div>
+        <button class="btn-go" id="btnGo" onclick="doCongSo()">
+          <span class="bg-label"><span class="ic" data-icon="briefcase"></span><b id="btnGoLabel">Dựng hồ sơ →</b></span>
+          <small>Miễn phí</small>
+        </button>
+        <p class="sub" style="margin:10px 0 0">Dựng hồ sơ kiểu người + 12 mặt là <b>miễn phí</b>. Mở phần nhánh nghề cụ thể mới tính Lượng.</p>
         <div class="err" id="error-msg"></div>
       </div>
 
@@ -200,14 +203,14 @@
 window.SHELL_INTRO={key:'cong-so'};</script>
 <script src="/tools-shared/cong-so.js?v=4"></script>
 <script src="/tools-shared/vn-timezone.js?v=1"></script>
-<script src="/tuvi-form.js?v=2"></script>
+<script src="/tuvi-form.js?v=3"></script>
 <script src="/tools-shared/cung-ngay-sinh.js?v=2"></script>
 <script src="/tuvi-paywall.js?v=33"></script>
 <script src="/tools-shared/hook-layer.js?v=2"></script>
 <script src="/poster.js?v=4"></script>
 <script src="/auth.js?v=2"></script>
   <script src="/nav.js?v=26" data-icons-only></script>
-<script src="/shell.js?v=88"></script>
+<script src="/shell.js?v=89"></script>
 <script>
 var _ho=null,_birth=null;
 TuviForm.render('tuviFormHost', {mode:'compact', gioitinh:'nam'});
@@ -227,10 +230,10 @@ function doCongSo(){
   _err('');
   if(!fd.ngay||!fd.thang||!fd.nam){_err('Vui lòng nhập đủ ngày, tháng, năm sinh.');return;}
   var tt=document.getElementById('trangThai').value;
-  var btn=document.getElementById('btnGo'),old=btn.textContent;
-  btn.disabled=true;btn.textContent='Đang dựng…';
+  var btn=document.getElementById('btnGo'),lbl=document.getElementById('btnGoLabel'),old=lbl?lbl.textContent:'';
+  btn.disabled=true; if(lbl) lbl.textContent='Đang dựng…';
   CongSoTool.lap({ngay:fd.ngay,thang:fd.thang,nam:fd.nam,gio:fd.gioIdx,gioiTinh:fd.gioitinh,trangThai:tt}).then(function(j){
-    btn.disabled=false;btn.textContent=old;
+    btn.disabled=false; if(lbl) lbl.textContent=old;
     if(!j){_err('Chưa dựng được hồ sơ lúc này — vui lòng thử lại.');return;}
     _ho=j.hoSo;_birth=fd;
     var ten=fd.hoten||'Hồ sơ';
@@ -300,6 +303,16 @@ function doCongSo(){
 // ai. Đúng thiết kế của paywall (thà không dựng còn hơn dựng với giá bịa).
 TuviPaywall.init({product:'cong-so',slug:function(){return _slug;}});
 var _slug='';
+// Ghi "(~X đ)" cạnh số Lượng trong nút mở nhánh nghề — cùng mẫu
+// `_fillVndSlots` của app-luan-giai.html. `ToolPrices.vndLabel` tự trả ''
+// khi chưa đọc được `credit_packages`, lúc đó không hiện gì (không đoán số).
+function _fillVndSlots(host,product){
+  if(!host||!window.ToolPrices) return;
+  var els=host.querySelectorAll('[data-tvp-price-vnd]');
+  var cost=window.ToolPrices.get(product);
+  var lbl=cost!=null?window.ToolPrices.vndLabel(cost):'';
+  els.forEach(function(el){ el.textContent=lbl?('('+lbl+')'):''; });
+}
 // Danh sách hiện cho người ĐÃ ĐĂNG NHẬP nhưng chưa mở nhánh — họ đã thấy trọn
 // phần thân (radar/lộ trình/ghép đội), nên chỉ liệt kê đúng phần nhánh.
 var NHANH_KHOA=[
@@ -334,8 +347,8 @@ function dungTuong(){
   if(loggedIn){
     // Đã đăng nhập đã thấy TRỌN radar 12 mặt (bangHTML) — không hook lại nữa,
     // hook chỉ có việc ở màn ĐĂNG KÝ (mountHookAnon dưới).
-    host.innerHTML='<button class="btn-go" id="btnNhanh">Mở phần nhánh nghề — <span data-tvp-price="cong-so">…</span> Lượng →</button>';
-    TuviPaywall.fillPriceSlots(host);
+    host.innerHTML='<button class="btn-go" id="btnNhanh"><span class="bg-label"><span class="ic" data-icon="users"></span><b>Mở phần nhánh nghề →</b></span><small>Tốn <span data-tvp-price="cong-so">…</span> Lượng <span data-tvp-price-vnd="cong-so"></span></small></button>';
+    TuviPaywall.fillPriceSlots(host).then(function(){ _fillVndSlots(host,'cong-so'); });
     document.getElementById('btnNhanh').addEventListener('click',function(){
       TuviPaywall.requireCredits(_slug,moNhanh);
     });

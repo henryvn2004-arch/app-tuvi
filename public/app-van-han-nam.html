@@ -9,15 +9,11 @@
 <link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/fonts/noto-serif.css?v=1">
-<link rel="stylesheet" href="/shell.css?v=35">
+<link rel="stylesheet" href="/shell.css?v=38">
 <link rel="stylesheet" href="/laso-chart.css?v=3">
 <style>
 /* Center riêng của trang Vận Hạn 12 Tháng — mượn khuôn app-luan-giai.html */
-.form-card{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);max-width:640px}
-.form-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:3px}
-.form-card p.sub{font-size:12.5px;color:var(--text-lt);margin-bottom:14px}
 .sample-link{display:inline-block;font-size:12.5px;color:var(--tx-blue);margin-bottom:12px}
-.frow{display:flex;gap:11px;flex-wrap:wrap;align-items:flex-end;margin-bottom:12px}
 /* Giữ chỗ cho form khai sinh. `TuviForm.render` chạy ngay trong lúc phân tích
    HTML, nhưng chỉ SAU khi `tuvi-form.js` nạp xong — mà đứng trước nó là cả một dãy
    script CÙNG ORIGIN cũng chặn parse (17KB–524KB tuỳ trang), nên trên mạng chậm lần
@@ -29,11 +25,6 @@
    không hề thấy. Đo bằng chiều cao là hụt đúng chỗ đó. Số 249px/480px là ĐO,
    xem docs/nhat-ky/2026-09.md vòng 9. */
 @media (max-width:480px){#tuviFormHost:empty{min-height:249px}}
-.fg{display:flex;flex-direction:column;gap:5px}
-.fg label{font-size:10.5px;font-weight:600;color:var(--text-lt);letter-spacing:.04em;text-transform:uppercase}
-.fg input,.fg select{border:1px solid var(--line-2);border-radius:7px;padding:8px 10px;font-size:13.5px;font-family:inherit;color:var(--text);background:var(--paper);outline:none}
-.fg input:focus,.fg select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(20,85,164,.12)}
-.btn-go{background:var(--red);color:#fff;border:none;border-radius:8px;padding:10px 22px;font-size:14px;font-weight:600;cursor:pointer;font-family:var(--serif)}
 
 #vhPanel{display:none}
 .vh-body{max-width:860px}
@@ -138,21 +129,26 @@
           <img class="intro-avatar" src="/tool-avatars/van-han-nam.webp" alt="" onerror="this.remove()">
           <div class="intro-text">
             <div class="intro-t">Vận Hạn 12 Tháng Tới</div>
-            <div class="intro-d">Vận Hạn 12 Tháng Tới luận vận trình của bạn theo từng tháng trong năm. Muốn biết trước tháng nào tài chính bấp bênh, tháng nào tình duyên dễ sóng gió để chủ động phòng tránh? Từ lá số của bạn, nhận lịch vận hạn chi tiết 12 tháng.</div>
+            <div class="intro-d">Luận vận trình theo từng tháng trong năm — biết trước tháng nào cần cẩn trọng, tháng nào nên tiến.</div>
             <div id="introSrc"></div>
           </div>
+        </div>
+        <div class="hero-pills">
+          <div class="hero-pill"><span class="hp-ic" data-icon="calendar"></span><span>12 tháng<br>âm lịch tới</span></div>
+          <div class="hero-pill"><span class="hp-ic" data-icon="heart"></span><span>Tình duyên<br>từng tháng</span></div>
+          <div class="hero-pill"><span class="hp-ic" data-icon="dollar-sign"></span><span>Tài chính<br>từng tháng</span></div>
         </div>
       </div></div>
       <div id="shellRecent"></div>
       <div class="form-card" id="birthPanel">
-        <h2>Nhập ngày sinh để xem vận hạn 12 tháng tới</h2>
-        <p class="sub" id="fmSub">Nhập họ tên, giới tính và ngày giờ sinh của bạn. Hệ thống tính lá số rồi luận vận hạn theo từng tháng âm lịch. Nhận về đại vận hiện tại, tiểu vận năm nay và luận riêng đủ 12 tháng.</p>
-        <p class="price-note" data-tvp-price-label="van-han-nam">…</p>
+        <div class="fc-head"><span class="fc-ic" data-icon="calendar"></span><h2>Nhập ngày sinh để xem vận hạn 12 tháng tới</h2></div>
+        <p class="sub" id="fmSub">Nhập ngày giờ sinh. Hệ thống luận vận hạn theo từng tháng âm lịch — đại vận hiện tại, tiểu vận năm nay và luận riêng đủ 12 tháng.</p>
         <div id="sampleLinkHost"></div>
         <div id="tuviFormHost"></div>
-        <div class="frow" style="margin-bottom:0">
-          <button class="btn-go" id="btnGo" onclick="doXem()">Xem vận hạn →</button>
-        </div>
+        <button class="btn-go" id="btnGo" onclick="doXem()">
+          <span class="bg-label"><span class="ic" data-icon="calendar"></span><b id="btnGoLabel">Xem vận hạn →</b></span>
+          <small>Miễn phí</small>
+        </button>
       </div>
 
       <div id="vhPanel" data-ws-result>
@@ -208,7 +204,7 @@ window.SHELL_INTRO={key:'van-han-nam'};</script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js" defer></script>
 <script src="/tuvi-laso-format.js?v=2"></script>
 <script src="/tools-shared/vn-timezone.js?v=1"></script>
-<script src="/tuvi-form.js?v=2"></script>
+<script src="/tuvi-form.js?v=3"></script>
 <script src="/tools-shared/cung-ngay-sinh.js?v=2"></script>
 <script src="/auth.js?v=2"></script>
 <script src="/tuvi-paywall.js?v=33"></script>
@@ -217,12 +213,24 @@ window.SHELL_INTRO={key:'van-han-nam'};</script>
 <script src="/tools-shared/hook-facts.js?v=1"></script>
 <script src="/tools-shared/hook-layer.js?v=2"></script>
 <script src="/nav.js?v=26" data-icons-only></script>
-<script src="/shell.js?v=88"></script>
+<script src="/shell.js?v=89"></script>
 <script src="/tools-shared/ai-loading-steps.js?v=10"></script>
 <script src="/tools-shared/phan-pool.js?v=1"></script>
 <script>
 TuviForm.render('tuviFormHost', {mode:'compact', gioitinh:'nam'});
 TuviPaywall.init({product:'van-han-nam'});
+
+// Ghi "(~X đ)" cạnh số Lượng trong hộp chi phí + nút CTA — cùng mẫu
+// `_fillVndSlots` của app-luan-giai.html. `ToolPrices.vndLabel` tự trả ''
+// khi chưa đọc được `credit_packages`, lúc đó không hiện gì (không đoán số).
+function _fillVndSlots(host,product){
+  if(!host||!window.ToolPrices) return;
+  var els=host.querySelectorAll('[data-tvp-price-vnd]');
+  var cost=window.ToolPrices.get(product);
+  var lbl=cost!=null?window.ToolPrices.vndLabel(cost):'';
+  els.forEach(function(el){ el.textContent=lbl?('('+lbl+')'):''; });
+}
+TuviPaywall.fillPriceSlots(document).then(function(){ _fillVndSlots(document,'van-han-nam'); });
 
 // Nút "Xem mẫu" — PDF sinh bằng LLM thật cho 1 lá số mẫu (scripts/gen-tool-sample.mjs).
 (function(){
@@ -321,7 +329,7 @@ async function doXem(){
   // "Xem vận hạn" lần hai — ghi mỗi lượt tính khung thành công, không riêng
   // lượt sắp hết Lượng, vì lúc gõ form ta chưa biết trước lượt nào sẽ hết Lượng.
   try{ sessionStorage.setItem(VH_RESUME_KEY, JSON.stringify({fd:fdIn})); }catch(e){ /* ignore */ }
-  btn.disabled=true;btn.textContent='Đang tính…';
+  btn.disabled=true; var _btnGoLb=document.getElementById('btnGoLabel'); if(_btnGoLb) _btnGoLb.textContent='Đang tính…';
   try{
     var conv=convertDuongToAm(dd,mm,yyyy,hh);conv.gioIdx=gioAmIdx;
     // namXem = năm của THÁNG ĐANG XEM → đại vận/tiểu hạn "hiện tại" khớp đúng
@@ -373,7 +381,7 @@ async function doXem(){
     if(window.AiLoadingSteps)AiLoadingSteps.scrollToResult('vhPanel');
     if(window.console)console.error(e);
   }finally{
-    btn.disabled=false;btn.textContent='Xem vận hạn →';
+    btn.disabled=false; var _btnGoLb2=document.getElementById('btnGoLabel'); if(_btnGoLb2) _btnGoLb2.textContent='Xem vận hạn →';
   }
 }
 
@@ -623,9 +631,9 @@ function _renderUnlockBlock(){
   host.style.display='block';
   _paintSecLocks(true);
   if(_loggedIn()){
-    host.innerHTML='<button class="btn-go" id="btnUnlock" onclick="initiateAI()">✦ Luận vận hạn 12 tháng — <span data-tvp-price="van-han-nam">…</span> Lượng →</button>'+
+    host.innerHTML='<button class="btn-go" id="btnUnlock" onclick="initiateAI()"><span class="bg-label"><span class="ic" data-icon="sparkles"></span><b>Luận vận hạn 12 tháng →</b></span><small>Tốn <span data-tvp-price="van-han-nam">…</span> Lượng <span data-tvp-price-vnd="van-han-nam"></span></small></button>'+
       '<p>Viết riêng cho lá số này: tổng quan, hành trình đại vận, đại vận và tiểu vận hiện tại, rồi từng tháng một trong 12 tháng tới.</p>';
-    TuviPaywall.fillPriceSlots(host);
+    TuviPaywall.fillPriceSlots(host).then(function(){ _fillVndSlots(host,'van-han-nam'); });
     // Vừa quay về từ lượt nạp Lượng thành công (đã đăng nhập nên KHÔNG còn đi
     // qua lockPreview nữa, nhánh này mới là nút thật) → tự chạy tiếp.
     TuviPaywall.resumeIfPending(_pendingSlug, initiateAI);
@@ -929,7 +937,7 @@ function showForm(){
 
 function _pageInit(){
   document.getElementById('fmSub').textContent=
-    'Xem đúng 12 tháng tới: cung hạn, sao, cách cục của từng tháng. Bạn muốn biết trước tháng nào nên cẩn thận, tháng nào nên tiến. Dùng khi cần một lịch vận hạn cụ thể cho năm sắp tới — tính theo tháng ÂM LỊCH, mỗi tháng ghi rõ quãng ngày dương lịch tương ứng.';
+    'Xem 12 tháng tới theo tháng âm lịch: cung hạn, sao, cách cục từng tháng — kèm quãng ngày dương lịch tương ứng.';
   Shell.prefillForm();
   if(Shell.autoRun()&&document.getElementById('ngay').value)doXem();
 }

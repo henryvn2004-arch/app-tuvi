@@ -9,22 +9,19 @@
 <link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/fonts/noto-serif.css?v=1">
-<link rel="stylesheet" href="/shell.css?v=35">
+<link rel="stylesheet" href="/shell.css?v=38">
 <link rel="stylesheet" href="/laso-chart.css?v=3">
 <style>
-/* Center riêng của trang Luận giải */
-.form-card{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);max-width:640px}
-.form-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:3px}
-.form-card p.sub{font-size:12.5px;color:var(--text-lt);margin-bottom:14px}
+/* `.form-card/.frow/.fg/.btn-go/.hero-pills/.fc-head/.cost-box/.samp-cta` giờ
+   dùng chung từ shell.css (2026-09-09, gom từ 31-37 bản chép gần giống hệt
+   nhau trên toàn `/app/*`) — đừng khai lại ở đây, khai lại là hai bản trôi
+   màu khỏi nhau. Chỉ giữ những gì THẬT SỰ riêng của trang này bên dưới. */
 /* Nút mời xem BẢN MẪU. ⚠️ Từ 2026-09-02 đây là ĐƯỜNG PHỤ, không phải đường
    chính: khách nguội vào trang là bản mẫu TỰ MỞ luôn (xem cổng ở cuối file).
    Nút này chỉ hiện ở hai lúc — khách đã bấm "Xem lá số của tôi" quay về form,
    hoặc lượt tự mở HỎNG. Bản trước để nó làm đường chính, và Henry chỉ ra đúng
    chỗ sai: khách bấm vào tool vẫn gặp form đòi giờ sinh trước, tức cái rào
    chưa gỡ được gì. Bản mẫu chỉ ăn thua khi nó là thứ ĐẦU TIÊN khách thấy. */
-.samp-cta{max-width:640px;margin-bottom:14px;font-size:13px;color:var(--text-lt);display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.samp-cta button{background:none;border:1px solid var(--gold-soft);color:var(--gold-soft);border-radius:8px;padding:7px 14px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit}
-.samp-cta button:disabled{opacity:.6;cursor:default}
 /* Thanh DÍNH theo màn hình khi đang mở bản mẫu. Phải dính, không được là cái
    tiêu đề trên đầu rồi cuộn mất: bản mẫu giờ đầy đủ và giống hệt bản thật, nên
    người đọc rất dễ tưởng đang đọc lá số CỦA MÌNH — đọc Cung Phu Thê của người
@@ -34,7 +31,6 @@
 .samp-bar .sb-txt{flex:1;min-width:180px;font-size:12.5px;line-height:1.5}
 .samp-bar .sb-txt b{color:var(--gold)}
 .samp-bar button{flex:0 0 auto;background:var(--gold);color:var(--navy);border:none;border-radius:8px;padding:7px 14px;font-size:12.5px;font-weight:700;cursor:pointer;font-family:var(--serif)}
-.frow{display:flex;gap:11px;flex-wrap:wrap;align-items:flex-end;margin-bottom:12px}
 /* Giữ chỗ cho form khai sinh. `TuviForm.render` chạy ngay trong lúc phân tích
    HTML, nhưng chỉ SAU khi `tuvi-form.js` nạp xong — mà đứng trước nó là cả một dãy
    script CÙNG ORIGIN cũng chặn parse (17KB–524KB tuỳ trang), nên trên mạng chậm lần
@@ -44,13 +40,11 @@
    `margin-bottom` của `.frow` cuối bên trong host THOÁT RA NGOÀI (margin collapse)
    nên nó đẩy `.frow` phía dưới thêm 12–13px mà `getBoundingClientRect().height`
    không hề thấy. Đo bằng chiều cao là hụt đúng chỗ đó. Số 249px/480px là ĐO,
-   xem docs/nhat-ky/2026-09.md vòng 9. */
-@media (max-width:480px){#tuviFormHost:empty{min-height:249px}}
-.fg{display:flex;flex-direction:column;gap:5px}
-.fg label{font-size:10.5px;font-weight:600;color:var(--text-lt);letter-spacing:.04em;text-transform:uppercase}
-.fg input,.fg select{border:1px solid var(--line-2);border-radius:7px;padding:8px 10px;font-size:13.5px;font-family:inherit;color:var(--text);background:var(--paper);outline:none}
-.fg input:focus,.fg select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(20,85,164,.12)}
-.btn-go{background:var(--red);color:#fff;border:none;border-radius:8px;padding:10px 22px;font-size:14px;font-weight:600;cursor:pointer;font-family:var(--serif)}
+   xem docs/nhat-ky/2026-09.md vòng 9 — nhưng đó là chiều cao khối `.frow/.fg`
+   CŨ. Đợt 2026-09-09 đổi sang `.tvf-pretty` (nhiều hàng hơn, ô cao hơn): số
+   dưới đây là ƯỚC LƯỢNG theo cấu trúc mới, CHƯA đo lại thật trên prod — đo lại
+   rồi thay bằng số đo, đừng tin nó lâu. */
+@media (max-width:480px){#tuviFormHost:empty{min-height:330px}}
 
 #lgPanel{display:none}
 .lg-body{max-width:860px}
@@ -224,21 +218,53 @@
             <div id="introSrc" style="min-height:36.8px;margin-top:9px"></div>
           </div>
         </div>
+        <!-- 3 pill tính năng (Henry 2026-09-09, mẫu iPhone) — chỉ trang trí,
+             không mang dữ liệu động nên dựng tĩnh, không cần JS. -->
+        <div class="hero-pills">
+          <div class="hero-pill"><span class="hp-ic" data-icon="bar-chart-3"></span><span>Tổng quan<br>cuộc đời</span></div>
+          <div class="hero-pill"><span class="hp-ic" data-icon="heart"></span><span>Luận riêng<br>12 cung</span></div>
+          <div class="hero-pill"><span class="hp-ic" data-icon="star"></span><span>Điểm mạnh yếu,<br>gợi ý</span></div>
+        </div>
       </div></div>
       <div id="shellRecent"></div>
       <div class="samp-cta" id="sampCta" style="display:none">
-        <span>Chưa muốn khai giờ sinh?</span>
-        <button type="button" id="btnSample" onclick="openSample(this)">Xem thử một bản mẫu đầy đủ →</button>
+        <span class="sc-ic" data-icon="lightbulb"></span>
+        <span class="sc-txt"><b>Chưa muốn khai giờ sinh?</b><span>Bạn có thể xem một bản mẫu để trải nghiệm trước.</span></span>
+        <button type="button" id="btnSample" onclick="openSample(this)">Xem bản mẫu →</button>
       </div>
       <div class="form-card" id="birthPanel">
-        <h2>Nhập thông tin để lập lá số &amp; luận giải</h2>
+        <div class="fc-head"><span class="fc-ic" data-icon="file-text"></span><h2>Nhập thông tin để lập lá số &amp; luận giải</h2></div>
         <p class="sub">Nhập họ tên, giới tính, ngày giờ sinh và năm muốn luận. Hệ thống tự an sao, lập lá số rồi luận giải từng phần. Nhận về bản luận đủ 13 phần: tổng quan và luận riêng 12 cung.</p>
-        <p class="price-note" data-tvp-price-label="laso">…</p>
         <div id="tuviFormHost"></div>
-        <div class="frow" style="margin-bottom:0">
-          <div class="fg" style="width:90px"><label>Năm luận</label><select id="inpNamxem"></select></div>
-          <button class="btn-go" id="btnGo" onclick="doLuan()">Luận giải →</button>
+        <div class="tvf-pretty" style="margin-top:2px">
+          <div class="tvf-row">
+            <div class="tvf-col" style="flex:0 0 150px">
+              <label class="tvf-lb">Năm muốn luận</label>
+              <div class="tvf-ibox"><span class="tvf-ic" data-icon="calendar"></span><select id="inpNamxem"></select><span class="tvf-chev" data-icon="chevron-down"></span></div>
+            </div>
+          </div>
         </div>
+        <div class="cost-box">
+          <div class="cb-l">
+            <span class="cb-ic" data-icon="wallet"></span>
+            <div>
+              <div class="cb-title">Chi phí sử dụng</div>
+              <div class="cb-amt"><span data-tvp-price="laso">…</span> Lượng <span class="vnd" data-tvp-price-vnd="laso"></span> mỗi lượt</div>
+              <div class="cb-pay">
+                <span><span class="ic" data-icon="qr-code"></span> Chuyển khoản (qua QR ngân hàng)</span>
+                <span><span class="ic" data-icon="credit-card"></span> PayPal / Thẻ quốc tế</span>
+              </div>
+            </div>
+          </div>
+          <div class="cb-r">
+            <span class="cb-ic" data-icon="gift"></span>
+            <div class="cb-r-txt">Mua gói để nhận nhiều ưu đãi hơn.<br><a href="/topup.html">Xem các gói ngay →</a></div>
+          </div>
+        </div>
+        <button class="btn-go" id="btnGo" onclick="doLuan()">
+          <span class="bg-label"><span class="ic" data-icon="sparkles"></span><b id="btnGoLabel">Lập lá số &amp; Luận giải ngay →</b></span>
+          <small>Tốn <span data-tvp-price="laso">…</span> Lượng <span data-tvp-price-vnd="laso"></span></small>
+        </button>
       </div>
 
       <div id="lgPanel" data-ws-result>
@@ -284,7 +310,7 @@ window.SHELL_INTRO={key:'luan-giai'};</script>
      nhận 100% click Google Ads, để vẽ một biểu đồ không bao giờ được vẽ. -->
 <script src="/tuvi-laso-format.js?v=2"></script>
 <script src="/tools-shared/vn-timezone.js?v=1"></script>
-<script src="/tuvi-form.js?v=2"></script>
+<script src="/tuvi-form.js?v=3"></script>
 <script src="/tools-shared/nam-luan-select.js?v=1"></script>
 <script src="/tools-shared/cung-ngay-sinh.js?v=2"></script>
 <script src="/tools-shared/nguoi-than.js?v=1"></script>
@@ -294,7 +320,7 @@ window.SHELL_INTRO={key:'luan-giai'};</script>
 <script src="/tools-shared/hook-facts.js?v=1"></script>
 <script src="/tools-shared/hook-layer.js?v=2"></script>
   <script src="/nav.js?v=26" data-icons-only></script>
-<script src="/shell.js?v=88"></script>
+<script src="/shell.js?v=89"></script>
 <script src="/tools-shared/ai-loading-steps.js?v=10"></script>
 <script src="/tools-shared/phan-pool.js?v=1"></script>
 <script>
@@ -302,6 +328,18 @@ window.SHELL_INTRO={key:'luan-giai'};</script>
 // sinh lịch sử với standalone) ──
 TuviForm.render('tuviFormHost', {mode:'compact', gioitinh:'nam'});
 NamLuanSelect.mount('inpNamxem');
+
+// Ghi "(~X đ)" cạnh số Lượng trong hộp chi phí + nút CTA — cùng mẫu
+// `_fillVndSlots` của app-chu-trinh-cuoc-doi.html. `ToolPrices.vndLabel` tự
+// trả '' khi chưa đọc được `credit_packages`, lúc đó không hiện gì (không đoán số).
+function _fillVndSlots(host,product){
+  if(!host||!window.ToolPrices) return;
+  var els=host.querySelectorAll('[data-tvp-price-vnd]');
+  var cost=window.ToolPrices.get(product);
+  var lbl=cost!=null?window.ToolPrices.vndLabel(cost):'';
+  els.forEach(function(el){ el.textContent=lbl?('('+lbl+')'):''; });
+}
+TuviPaywall.fillPriceSlots(document).then(function(){ _fillVndSlots(document,'laso'); });
 
 // Nhận ngày sinh gửi từ form trên trang chủ (`heroBirthSubmit`, public/index.html)
 // — CÙNG mẫu sessionStorage handoff với `app_pending_ask` mà shell.js đọc,
@@ -389,7 +427,7 @@ function doLuan(){
   // Dọn bản mẫu TRƯỚC khi dựng lá số thật — bỏ bước này thì thanh "đây là bản
   // mẫu" còn dính lại trên kết quả thật của khách, tức là nói dối họ.
   if(_sampleOpen) closeSample();
-  btn.disabled=true;btn.textContent='Đang luận…';
+  btn.disabled=true; var _btnGoLb=document.getElementById('btnGoLabel'); if(_btnGoLb) _btnGoLb.textContent='Đang luận…';
   try{
     var gioChi=CHI[gioAmIdx];
     var conv=convertDuongToAm(dd,mm,yyyy,hh);conv.gioIdx=gioAmIdx;
@@ -457,7 +495,7 @@ function doLuan(){
     if(window.AiLoadingSteps)AiLoadingSteps.scrollToResult('lgPanel');
     if(window.console)console.error(e);
   }finally{
-    btn.disabled=false;btn.textContent='Luận giải →';
+    btn.disabled=false; var _btnGoLb2=document.getElementById('btnGoLabel'); if(_btnGoLb2) _btnGoLb2.textContent='Lập lá số & Luận giải ngay →';
   }
 }
 

@@ -9,17 +9,10 @@
 <link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/fonts/noto-serif.css?v=1">
-<link rel="stylesheet" href="/shell.css?v=35">
+<link rel="stylesheet" href="/shell.css?v=38">
 <style>
-.form-card{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);max-width:640px}
-.form-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:3px}
 .form-card p.sub{font-size:12.5px;color:var(--text-lt);margin-bottom:16px}
 .frow{display:flex;gap:11px;flex-wrap:wrap;align-items:flex-end;margin-bottom:13px}
-.fg{display:flex;flex-direction:column;gap:5px}
-.fg label{font-size:10.5px;font-weight:600;color:var(--text-lt);letter-spacing:.04em;text-transform:uppercase}
-.fg input,.fg select{border:1px solid var(--line-2);border-radius:7px;padding:8px 10px;font-size:13.5px;font-family:inherit;color:var(--text);background:var(--paper);outline:none}
-.fg input:focus,.fg select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(20,85,164,.12)}
-.btn-go{background:var(--red);color:#fff;border:none;border-radius:8px;padding:10px 22px;font-size:14px;font-weight:600;cursor:pointer;font-family:var(--serif)}
 .btn-go:disabled{opacity:.6;cursor:not-allowed}
 .err{color:var(--tx-red);font-size:13px;margin-top:8px;display:none}
 .err.active{display:block}
@@ -95,9 +88,14 @@
           <img class="intro-avatar" src="/tool-avatars/so-dep.webp" alt="" onerror="this.remove()">
           <div class="intro-text">
             <div class="intro-t">Xem số đẹp</div>
-            <div class="intro-d">Xem số đẹp chấm điểm số điện thoại, số nhà, biển số theo 5 trường phái tách bạch: Bát Tinh Bát Trạch, Quẻ Dịch, Ngũ Hành, Âm Dương, dân gian. Đổi số vì sợ phạm tài lộc, phạm sức khoẻ, mà đổi xong vẫn thấp thỏm không yên? Nhập dãy số, nhận điểm riêng từng trường phái, không gộp thành một con số bịa.</div>
+            <div class="intro-d">Chấm điểm số điện thoại, số nhà, biển số theo 5 trường phái tách bạch: Bát Tinh Bát Trạch, Quẻ Dịch, Ngũ Hành, Âm Dương, dân gian. Nhập dãy số, nhận điểm riêng từng trường phái, không gộp thành một con số bịa.</div>
             <div id="introSrc"></div>
           </div>
+        </div>
+        <div class="hero-pills">
+          <div class="hero-pill"><span class="hp-ic" data-icon="hash"></span><span>5 trường phái<br>tách bạch</span></div>
+          <div class="hero-pill"><span class="hp-ic" data-icon="scale"></span><span>Đồng thuận<br>tốt – xấu</span></div>
+          <div class="hero-pill"><span class="hp-ic" data-icon="lightbulb"></span><span>Gợi ý số<br>theo mục tiêu</span></div>
         </div>
       </div></div>
       <div id="shellRecent"></div>
@@ -105,11 +103,14 @@
       <div id="formPanel">
         <div class="sd-box">
           <div class="form-card">
-            <h2>Chấm điểm một dãy số</h2>
-            <p class="sub">Nhập số điện thoại, số nhà hoặc biển số bạn muốn xem. Hệ thống chấm điểm qua 5 trường phái: Bát Tinh, Quẻ Dịch, Ngũ Hành, Âm Dương, dân gian. Nhận về điểm riêng từng trường phái và mức đồng thuận tốt – xấu.</p>
+            <div class="fc-head"><span class="fc-ic" data-icon="hash"></span><h2>Chấm điểm một dãy số</h2></div>
+            <p class="sub">Nhập số điện thoại, số nhà hoặc biển số. Nhận về điểm riêng từng trường phái và mức đồng thuận tốt – xấu.</p>
             <div class="frow">
               <div class="fg" style="width:220px"><label>Dãy số</label><input type="text" id="dg-so" placeholder="0987661234" inputmode="numeric" maxlength="24"></div>
-              <button class="btn-go" id="btnDg" onclick="chamDiem()">Chấm điểm →</button>
+              <button class="btn-go" id="btnDg" onclick="chamDiem()">
+                <span class="bg-label"><span class="ic" data-icon="hash"></span><b>Chấm điểm →</b></span>
+                <small>Miễn phí</small>
+              </button>
             </div>
             <details class="sd-tuychon">
               <summary>Cá nhân hoá theo năm sinh (tuỳ chọn)</summary>
@@ -124,8 +125,8 @@
 
         <div class="sd-box">
           <div class="form-card">
-            <h2>Gợi ý số theo mục tiêu</h2>
-            <p class="sub">Chọn độ dài, đầu số và mục tiêu bạn cần. Hệ thống tự sinh dãy số rồi chấm điểm lại từng dãy. Nhận về danh sách số xếp hạng theo điểm, không dùng danh sách có sẵn.</p>
+            <div class="fc-head"><span class="fc-ic" data-icon="lightbulb"></span><h2>Gợi ý số theo mục tiêu</h2></div>
+            <p class="sub">Chọn độ dài, đầu số và mục tiêu bạn cần. Nhận về danh sách số xếp hạng theo điểm, không dùng danh sách có sẵn.</p>
             <div class="frow">
               <div class="fg" style="width:100px"><label>Độ dài</label><input type="number" id="gy-dodai" value="10" min="4" max="20"></div>
               <div class="fg" style="width:140px"><label>Đầu số (tuỳ chọn)</label><input type="text" id="gy-tienTo" placeholder="090" inputmode="numeric" maxlength="10"></div>
@@ -146,7 +147,12 @@
                 <div class="fg" style="width:110px"><label>Giới tính</label><select id="gy-gioitinh"><option value="nam">Nam</option><option value="nu">Nữ</option></select></div>
               </div>
             </details>
-            <div class="frow" style="margin-top:10px"><button class="btn-go" id="btnGy" onclick="goiYSo()">Gợi ý 5 số →</button></div>
+            <div class="frow" style="margin-top:10px">
+              <button class="btn-go" id="btnGy" onclick="goiYSo()">
+                <span class="bg-label"><span class="ic" data-icon="lightbulb"></span><b>Gợi ý 5 số →</b></span>
+                <small>Miễn phí</small>
+              </button>
+            </div>
             <div class="err" id="gy-err"></div>
           </div>
         </div>
@@ -175,7 +181,7 @@ window.SHELL_INTRO={key:'so-dep'};</script>
 <script src="/tools-shared/hook-charts.js?v=2"></script>
 <script src="/auth.js?v=2"></script>
   <script src="/nav.js?v=26" data-icons-only></script>
-<script src="/shell.js?v=88"></script>
+<script src="/shell.js?v=89"></script>
 <script>
 // Ô giữa dùng CHUNG module /tools-shared/so-dep.js với trang standalone
 // /tools/so-dep.html → kết quả y hệt, tính 100% client-side, 0 lượt gọi LLM.

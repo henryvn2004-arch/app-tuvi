@@ -9,17 +9,13 @@
 <link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/fonts/noto-serif.css?v=1">
-<link rel="stylesheet" href="/shell.css?v=35">
+<link rel="stylesheet" href="/shell.css?v=38">
 <link rel="stylesheet" href="/laso-chart.css?v=3">
 <style>
 /* Center riêng của trang Chu Trình Cuộc Đời — CÙNG khuôn CSS với app-luan-giai.html
    (tách tool nhưng KHÔNG tách khuôn nhìn — buildPreGenHtml của LuanGiaiCore dùng
    chung cho cả hai trang, mất khuôn ở đây là vỡ ngay chỗ đó). */
-.form-card{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);max-width:640px}
-.form-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:3px}
-.form-card p.sub{font-size:12.5px;color:var(--text-lt);margin-bottom:14px}
 .sample-link{display:inline-block;font-size:12.5px;color:var(--tx-blue);margin-bottom:12px}
-.frow{display:flex;gap:11px;flex-wrap:wrap;align-items:flex-end;margin-bottom:12px}
 /* Giữ chỗ cho form khai sinh. `TuviForm.render` chạy ngay trong lúc phân tích
    HTML, nhưng chỉ SAU khi `tuvi-form.js` nạp xong — mà đứng trước nó là cả một dãy
    script CÙNG ORIGIN cũng chặn parse (17KB–524KB tuỳ trang), nên trên mạng chậm lần
@@ -31,11 +27,6 @@
    không hề thấy. Đo bằng chiều cao là hụt đúng chỗ đó. Số 249px/480px là ĐO,
    xem docs/nhat-ky/2026-09.md vòng 9. */
 @media (max-width:480px){#tuviFormHost:empty{min-height:249px}}
-.fg{display:flex;flex-direction:column;gap:5px}
-.fg label{font-size:10.5px;font-weight:600;color:var(--text-lt);letter-spacing:.04em;text-transform:uppercase}
-.fg input,.fg select{border:1px solid var(--line-2);border-radius:7px;padding:8px 10px;font-size:13.5px;font-family:inherit;color:var(--text);background:var(--paper);outline:none}
-.fg input:focus,.fg select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(20,85,164,.12)}
-.btn-go{background:var(--red);color:#fff;border:none;border-radius:8px;padding:10px 22px;font-size:14px;font-weight:600;cursor:pointer;font-family:var(--serif)}
 
 #lgPanel{display:none}
 .lg-body{max-width:860px}
@@ -172,22 +163,29 @@
           <img class="intro-avatar" src="/tool-avatars/chu-trinh-cuoc-doi.webp" alt="" onerror="this.remove()">
           <div class="intro-text">
             <div class="intro-t">Chu Trình Cuộc Đời</div>
-            <div class="intro-d">Chu Trình Cuộc Đời soi 9 đại vận trọn đời và tiểu vận năm nay từ lá số của bạn. Có giai đoạn tiền bạc, tình duyên, sự nghiệp cùng lúc xuống dốc — mà chẳng biết đó là vận hạn hay do mình? Từ lá số có sẵn, nhận bản đồ trọn đời: giai đoạn nào thuận, giai đoạn nào cần cẩn trọng.</div>
+            <div class="intro-d">Soi 9 đại vận trọn đời và tiểu vận năm nay từ lá số của bạn — biết giai đoạn nào thuận, giai đoạn nào cần cẩn trọng.</div>
             <div id="introSrc"></div>
           </div>
+        </div>
+        <div class="hero-pills">
+          <div class="hero-pill"><span class="hp-ic" data-icon="hourglass"></span><span>9 đại vận<br>trọn đời</span></div>
+          <div class="hero-pill"><span class="hp-ic" data-icon="calendar"></span><span>Tiểu vận<br>năm xem</span></div>
+          <div class="hero-pill"><span class="hp-ic" data-icon="compass"></span><span>Chặng thuận,<br>chặng cẩn trọng</span></div>
         </div>
       </div></div>
       <div id="shellRecent"></div>
       <div class="form-card" id="birthPanel">
-        <h2>Nhập thông tin để lập lá số &amp; luận chu trình cuộc đời</h2>
-        <p class="sub">Dùng lá số đã lập của bạn, chỉ cần chọn thêm năm muốn luận. Hệ thống tính 9 đại vận và tiểu vận năm đó rồi luận từng chặng. Nhận về tổng quan đại vận, luận riêng từng chặng và tiểu vận năm xem.</p>
-        <p class="price-note" data-tvp-price-label="chu-trinh-cuoc-doi">…</p>
+        <div class="fc-head"><span class="fc-ic" data-icon="hourglass"></span><h2>Nhập thông tin để lập lá số &amp; luận chu trình cuộc đời</h2></div>
+        <p class="sub">Nhập ngày sinh và năm muốn luận. Hệ thống tính 9 đại vận và tiểu vận năm đó rồi luận từng chặng.</p>
         <div id="sampleLinkHost"></div>
         <div id="tuviFormHost"></div>
         <div class="frow" style="margin-bottom:0">
           <div class="fg" style="width:90px"><label>Năm luận</label><select id="inpNamxem"></select></div>
-          <button class="btn-go" id="btnGo" onclick="doLuan()">Luận giải →</button>
         </div>
+        <button class="btn-go" id="btnGo" onclick="doLuan()">
+          <span class="bg-label"><span class="ic" data-icon="hourglass"></span><b id="btnGoLabel">Luận giải →</b></span>
+          <small>Miễn phí</small>
+        </button>
       </div>
 
       <div id="lgPanel" data-ws-result>
@@ -244,7 +242,7 @@ window.SHELL_INTRO={key:'chu-trinh-cuoc-doi'};</script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js" defer></script>
 <script src="/tuvi-laso-format.js?v=2"></script>
 <script src="/tools-shared/vn-timezone.js?v=1"></script>
-<script src="/tuvi-form.js?v=2"></script>
+<script src="/tuvi-form.js?v=3"></script>
 <script src="/tools-shared/nam-luan-select.js?v=1"></script>
 <script src="/tools-shared/cung-ngay-sinh.js?v=2"></script>
 <script src="/auth.js?v=2"></script>
@@ -254,7 +252,7 @@ window.SHELL_INTRO={key:'chu-trinh-cuoc-doi'};</script>
 <script src="/tools-shared/hook-facts.js?v=1"></script>
 <script src="/tools-shared/hook-layer.js?v=2"></script>
   <script src="/nav.js?v=26" data-icons-only></script>
-<script src="/shell.js?v=88"></script>
+<script src="/shell.js?v=89"></script>
 <script src="/tools-shared/ai-loading-steps.js?v=10"></script>
 <script src="/tools-shared/phan-pool.js?v=1"></script>
 <script>
@@ -262,6 +260,10 @@ window.SHELL_INTRO={key:'chu-trinh-cuoc-doi'};</script>
 // sinh lịch sử với standalone) ──
 TuviForm.render('tuviFormHost', {mode:'compact', gioitinh:'nam'});
 NamLuanSelect.mount('inpNamxem');
+
+// Ghi "(~X đ)" cạnh số Lượng trong hộp chi phí + nút CTA của FORM ĐẦU TRANG
+// (`_fillVndSlots` đã khai sẵn bên dưới, dùng chung cho cả banner unlock).
+TuviPaywall.fillPriceSlots(document).then(function(){ _fillVndSlots(document,'chu-trinh-cuoc-doi'); });
 
 // Quay lại từ lượt nạp Lượng (hết Lượng ngay lúc mở khoá — xem
 // `TuviPaywall._insufficient`/`resumeIfPending` trong tuvi-paywall.js). Trang
@@ -316,7 +318,7 @@ function doLuan(){
   // Lưu lại NGAY để `?tpwResume=1` (quay về sau khi nạp Lượng, xem
   // `LG_RESUME_KEY` ở đầu file) khôi phục được đúng form này không cần gõ lại.
   try{ sessionStorage.setItem(LG_RESUME_KEY, JSON.stringify({fd:fdIn, namxem:namxem})); }catch(e){ /* ignore */ }
-  btn.disabled=true;btn.textContent='Đang luận…';
+  btn.disabled=true; var _btnGoLb=document.getElementById('btnGoLabel'); if(_btnGoLb) _btnGoLb.textContent='Đang luận…';
   try{
     var gioChi=CHI[gioAmIdx];
     var conv=convertDuongToAm(dd,mm,yyyy,hh);conv.gioIdx=gioAmIdx;
@@ -366,7 +368,7 @@ function doLuan(){
     if(window.AiLoadingSteps)AiLoadingSteps.scrollToResult('lgPanel');
     if(window.console)console.error(e);
   }finally{
-    btn.disabled=false;btn.textContent='Luận giải →';
+    btn.disabled=false; var _btnGoLb2=document.getElementById('btnGoLabel'); if(_btnGoLb2) _btnGoLb2.textContent='Luận giải →';
   }
 }
 
@@ -935,7 +937,7 @@ function _renderUnlockBlock(){
   _paintSecLocks(true);
   mountHook(_astrolabe);
   if(_lgLoggedIn()){
-    host.innerHTML='<button class="btn-go" id="btnUnlock" onclick="initiateLuanGiaiChuyenSau()">✦ Luận giải chuyên sâu — <span data-tvp-price="chu-trinh-cuoc-doi">…</span> Lượng <span class="tpw-vnd" data-tvp-price-vnd="chu-trinh-cuoc-doi"></span> →</button>'+
+    host.innerHTML='<button class="btn-go" id="btnUnlock" onclick="initiateLuanGiaiChuyenSau()"><span class="bg-label"><span class="ic" data-icon="sparkles"></span><b>Luận giải chuyên sâu →</b></span><small>Tốn <span data-tvp-price="chu-trinh-cuoc-doi">…</span> Lượng <span data-tvp-price-vnd="chu-trinh-cuoc-doi"></span></small></button>'+
       '<p>Viết riêng cho lá số này theo cổ pháp — 11 phần: tổng quan đại vận, luận riêng từng đại vận trong 9 đại vận, và tiểu vận năm xem.</p>';
     TuviPaywall.fillPriceSlots(host).then(function(){ _fillVndSlots(host,'chu-trinh-cuoc-doi'); });
     // Vừa quay về từ lượt nạp Lượng thành công (đã đăng nhập nên KHÔNG còn đi

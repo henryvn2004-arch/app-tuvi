@@ -9,17 +9,11 @@
 <link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/fonts/noto-serif.css?v=1">
-<link rel="stylesheet" href="/shell.css?v=35">
+<link rel="stylesheet" href="/shell.css?v=38">
 <style>
-.form-card{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);max-width:600px}
-.form-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:3px}
+.form-card{max-width:600px}
 .form-card p.sub{font-size:12.5px;color:var(--text-lt);margin-bottom:16px}
 .frow{display:flex;gap:11px;flex-wrap:wrap;align-items:flex-end;margin-bottom:13px}
-.fg{display:flex;flex-direction:column;gap:5px}
-.fg label{font-size:10.5px;font-weight:600;color:var(--text-lt);letter-spacing:.04em;text-transform:uppercase}
-.fg input,.fg select{border:1px solid var(--line-2);border-radius:7px;padding:8px 10px;font-size:13.5px;font-family:inherit;color:var(--text);background:var(--paper);outline:none}
-.fg input:focus,.fg select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(20,85,164,.12)}
-.btn-go{background:var(--red);color:#fff;border:none;border-radius:8px;padding:10px 22px;font-size:14px;font-weight:600;cursor:pointer;font-family:var(--serif)}
 .btn-go:disabled{opacity:.6;cursor:not-allowed}
 .err{color:var(--tx-red);font-size:13px;margin-top:8px;display:none}
 .err.active{display:block}
@@ -69,19 +63,26 @@
           <img class="intro-avatar" src="/tool-avatars/kim-lau.webp" alt="" onerror="this.remove()">
           <div class="intro-text">
             <div class="intro-t">Kim Lâu &amp; Tam Tai</div>
-            <div class="intro-d">Kim Lâu & Tam Tai kiểm tra tuổi bạn có phạm Kim Lâu hay Tam Tai không. Cưới hỏi, làm nhà mà lỡ phạm tuổi xung thì tiền mất, sức khoẻ hao — sợ vậy mà chưa tra kỹ bao giờ? Nhập năm sinh, nhận kết luận rõ ràng trước khi cưới hỏi, động thổ.</div>
+            <div class="intro-d">Kiểm tra tuổi bạn có phạm Kim Lâu, Tam Tai, Hoang Ốc không trước khi cưới hỏi, làm nhà. Nhập năm sinh, nhận kết luận ngay và bảng tra 20 năm tới.</div>
             <div id="introSrc" style="min-height:18.4px;margin-top:9px"></div>
           </div>
+        </div>
+        <div class="hero-pills">
+          <div class="hero-pill"><span class="hp-ic" data-icon="check-circle"></span><span>Kết luận<br>ngay tức thì</span></div>
+          <div class="hero-pill"><span class="hp-ic" data-icon="calendar"></span><span>Bảng tra<br>20 năm tới</span></div>
+          <div class="hero-pill"><span class="hp-ic" data-icon="home"></span><span>Cưới hỏi,<br>làm nhà</span></div>
         </div>
       </div></div>
       <div id="shellRecent"></div>
       <div class="form-card" id="birthPanel">
-        <h2>Năm sinh (dương lịch)</h2>
-        <p class="sub">Nhập năm sinh dương lịch của bạn. Hệ thống đối chiếu năm đó theo cổ pháp Kim Lâu, Tam Tai, Hoang Ốc. Nhận về kết luận năm hiện tại và bảng tra sẵn cho 20 năm tới.</p>
-        <p class="price-note" data-tvp-price-label="kim-lau">…</p>
+        <div class="fc-head"><span class="fc-ic" data-icon="home"></span><h2>Năm sinh (dương lịch)</h2></div>
+        <p class="sub">Nhập năm sinh dương lịch. Hệ thống đối chiếu theo cổ pháp Kim Lâu, Tam Tai, Hoang Ốc — nhận kết luận và bảng tra 20 năm tới.</p>
         <div class="frow" style="margin-bottom:4px">
           <div class="fg" style="width:150px"><label>Năm sinh dương lịch</label><input type="number" id="birthYear" placeholder="1990" min="1900" max="2010"></div>
-          <button class="btn-go" id="btnGo" onclick="calculate()">Tra Cứu →</button>
+          <button class="btn-go" id="btnGo" onclick="calculate()">
+            <span class="bg-label"><span class="ic" data-icon="search"></span><b id="btnGoLabel">Tra Cứu →</b></span>
+            <small>Miễn phí</small>
+          </button>
         </div>
         <div class="err" id="error-msg"></div>
       </div>
@@ -110,7 +111,7 @@ window.SHELL_INTRO={key:'kim-lau'};</script>
 <script src="/tools-shared/hook-charts.js?v=2"></script>
 <script src="/auth.js?v=2"></script>
   <script src="/nav.js?v=26" data-icons-only></script>
-<script src="/shell.js?v=88"></script>
+<script src="/shell.js?v=89"></script>
 <script>
 // Ô giữa dùng CHUNG module /tools-shared/kim-lau.js với trang standalone
 // /kim-lau → kết quả y hệt, sửa 1 chỗ 2 nơi cập nhật. Rail nhận

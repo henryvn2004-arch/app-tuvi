@@ -9,7 +9,7 @@
 <link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/fonts/noto-serif.css?v=1">
-<link rel="stylesheet" href="/shell.css?v=35">
+<link rel="stylesheet" href="/shell.css?v=38">
 <style>
 .dt-card{background:var(--white);border:1px solid var(--line);border-radius:14px;padding:20px 22px;box-shadow:var(--shadow);max-width:640px}
 .dt-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:4px}
@@ -51,7 +51,6 @@
 .ngu-am-Hoa{background:#FCEBEB;color:#A32D2D;border:1.5px solid #F7C1C1}
 .ngu-am-Tho{background:#FAEEDA;color:#633806;border:1.5px solid #FAC775}
 .status-msg{font-size:13px;color:var(--text-lt);margin-top:10px;text-align:center;min-height:20px}
-.btn-go{background:var(--red);color:#fff;border:none;border-radius:8px;padding:10px 22px;font-size:14px;font-weight:600;cursor:pointer;font-family:var(--serif)}
 .btn-go:disabled{opacity:.55;cursor:not-allowed}
 .btn-cancel{background:none;border:1px solid var(--line-2);border-radius:8px;padding:10px 18px;font-size:13px;color:var(--text-mid);cursor:pointer;font-family:inherit}
 .dt-error{color:var(--tx-red);padding:10px 14px;border:1px solid var(--red);border-radius:8px;background:var(--white);margin-top:12px;display:none;font-size:13px}
@@ -93,17 +92,21 @@
           <img class="intro-avatar" src="/tool-avatars/thanh-tuong.webp" alt="" onerror="this.remove()">
           <div class="intro-text">
             <div class="intro-t">Thanh Tướng</div>
-            <div class="intro-d">Thanh Tướng luận tướng qua giọng nói theo cổ pháp thanh âm học. Phỏng vấn xin việc, thuyết trình trước khách hàng mà cứ cảm giác giọng mình đang khiến người ta chưa tin tưởng? Ghi âm một đoạn ngắn, nhận bản luận giọng hợp nghề gì, nên tránh nghề gì.</div>
+            <div class="intro-d">Thanh Tướng luận tướng qua giọng nói theo cổ pháp thanh âm học. Ghi âm một đoạn ngắn, nhận bản luận Ngũ Âm — giọng hợp nghề gì, nên tránh nghề gì.</div>
             <div id="introSrc" style="min-height:36.8px;margin-top:9px"></div>
           </div>
+        </div>
+        <div class="hero-pills">
+          <div class="hero-pill"><span class="hp-ic" data-icon="mic"></span><span>Ghi âm<br>đoạn thơ ngắn</span></div>
+          <div class="hero-pill"><span class="hp-ic" data-icon="bar-chart-3"></span><span>Đo cao độ,<br>tốc độ, âm sắc</span></div>
+          <div class="hero-pill"><span class="hp-ic" data-icon="scroll-text"></span><span>Luận theo<br>Ngũ Âm cổ pháp</span></div>
         </div>
       </div></div>
       <div id="shellRecent"></div>
 
       <div class="dt-card" id="inputCard">
-        <h2>Ghi Âm Giọng Nói</h2>
-        <p class="sub">Đọc thành tiếng một đoạn mẫu để hệ thống ghi âm. Hệ thống đo chỉ số âm học rồi đối chiếu với Ngũ Âm cổ pháp. Nhận về loại giọng, đặc điểm thanh trọc và luận tính cách, vận mệnh.</p>
-        <p class="price-note" data-tvp-price-label="thanh-tuong">…</p>
+        <div class="fc-head"><span class="fc-ic" data-icon="mic"></span><h2>Ghi Âm Giọng Nói</h2></div>
+        <p class="sub">Đọc thành tiếng đoạn mẫu bên dưới để hệ thống ghi âm và đo chỉ số âm học, đối chiếu với Ngũ Âm cổ pháp.</p>
         <div class="dt-privacy"><span class="ic" data-icon="lock"></span><div>Âm thanh xử lý hoàn toàn trong trình duyệt. Chỉ gửi các chỉ số đo được (không gửi file audio) lên server để máy chủ phân tích.</div></div>
 
         <div class="passage-card">
@@ -141,9 +144,27 @@
           </div>
         </div>
 
-        <div style="text-align:center;margin-top:18px">
-          <button class="btn-go" id="analyzeBtn" onclick="analyze()" disabled><span class="ic" data-icon="music"></span> Phân Tích Thanh Tướng — <span data-tvp-price="thanh-tuong">…</span> Lượng</button>
+        <div class="cost-box">
+          <div class="cb-l">
+            <span class="cb-ic" data-icon="wallet"></span>
+            <div>
+              <div class="cb-title">Chi phí sử dụng</div>
+              <div class="cb-amt"><span data-tvp-price="thanh-tuong">…</span> Lượng <span class="vnd" data-tvp-price-vnd="thanh-tuong"></span> mỗi lượt</div>
+              <div class="cb-pay">
+                <span><span class="ic" data-icon="qr-code"></span> Chuyển khoản (qua QR ngân hàng)</span>
+                <span><span class="ic" data-icon="credit-card"></span> PayPal / Thẻ quốc tế</span>
+              </div>
+            </div>
+          </div>
+          <div class="cb-r">
+            <span class="cb-ic" data-icon="gift"></span>
+            <div class="cb-r-txt">Mua gói để nhận nhiều ưu đãi hơn.<br><a href="/topup.html">Xem các gói ngay →</a></div>
+          </div>
         </div>
+        <button class="btn-go" id="analyzeBtn" onclick="analyze()" disabled>
+          <span class="bg-label"><span class="ic" data-icon="music"></span><b id="analyzeBtnLabel">Phân Tích Thanh Tướng →</b></span>
+          <small>Tốn <span data-tvp-price="thanh-tuong">…</span> Lượng <span data-tvp-price-vnd="thanh-tuong"></span></small>
+        </button>
         <div class="dt-error" id="error-msg"></div>
       </div>
 
@@ -165,7 +186,7 @@
 window.SHELL_INTRO={key:'thanh-tuong'};</script>
 <script src="/auth.js?v=2"></script>
 <script src="/tuvi-paywall.js?v=33"></script>
-  <script src="/nav.js?v=26" data-icons-only></script><script src="/shell.js?v=88"></script>
+  <script src="/nav.js?v=26" data-icons-only></script><script src="/shell.js?v=89"></script>
 <script>
 function initThanhTuong(){
   Shell.setContext({
@@ -706,6 +727,15 @@ TuviPaywall.init({
   slug: () => _currentSlug,
   onUnlock: () => {},
 });
+
+function _fillVndSlots(host,product){
+  if(!host||!window.ToolPrices) return;
+  var els=host.querySelectorAll('[data-tvp-price-vnd]');
+  var cost=window.ToolPrices.get(product);
+  var lbl=cost!=null?window.ToolPrices.vndLabel(cost):'';
+  els.forEach(function(el){ el.textContent=lbl?('('+lbl+')'):''; });
+}
+TuviPaywall.fillPriceSlots(document).then(function(){ _fillVndSlots(document,'thanh-tuong'); });
 
 async function _saveTuongReading(tool, resultText, imageData, mediaType) {
   try {

@@ -9,18 +9,10 @@
 <link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/fonts/noto-serif.css?v=1">
-<link rel="stylesheet" href="/shell.css?v=35">
+<link rel="stylesheet" href="/shell.css?v=38">
 <style>
-.form-card{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);max-width:860px}
-.form-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:3px}
-.form-card p.sub{font-size:12.5px;color:var(--text-lt);margin-bottom:14px}
+.form-card{max-width:860px}
 .sample-link{display:inline-block;font-size:12.5px;color:var(--tx-blue);margin-bottom:12px}
-.frow{display:flex;gap:11px;flex-wrap:wrap;align-items:flex-end;margin-bottom:12px}
-.fg{display:flex;flex-direction:column;gap:5px}
-.fg label{font-size:10.5px;font-weight:600;color:var(--text-lt);letter-spacing:.04em;text-transform:uppercase}
-.fg input,.fg select{border:1px solid var(--line-2);border-radius:7px;padding:8px 10px;font-size:13.5px;font-family:inherit;color:var(--text);background:var(--paper);outline:none}
-.fg input:focus,.fg select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(20,85,164,.12)}
-.btn-go{background:var(--red);color:#fff;border:none;border-radius:8px;padding:10px 22px;font-size:14px;font-weight:600;cursor:pointer;font-family:var(--serif)}
 .btn-go:disabled{opacity:.6;cursor:not-allowed}
 .err{color:var(--tx-red);font-size:13px;margin-top:8px;display:none}
 .err.active{display:block}
@@ -101,16 +93,20 @@
           <img class="intro-avatar" src="/tool-avatars/nguoi-khac.webp" alt="" onerror="this.remove()">
           <div class="intro-text">
             <div class="intro-t">Lá Số Người Khác</div>
-            <div class="intro-d">Lá Số Người Khác lập lá số Tử Vi cho một người bạn cần hiểu rõ hơn. Đoán sai ý sếp, hiểu lầm người yêu, mất lòng đối tác — chỉ vì chưa từng biết họ đang nghĩ theo kiểu người nào? Nhập ngày giờ sinh người đó, nhận cẩm nang nên nói gì, nên tránh gì.</div>
+            <div class="intro-d">Lá Số Người Khác lập lá số Tử Vi cho một người bạn cần hiểu rõ hơn. Nhập ngày giờ sinh người đó, nhận cẩm nang nên nói gì, nên tránh gì và kế hoạch cụ thể cho việc bạn đang cần làm với họ.</div>
             <div id="introSrc" style="min-height:73.6px;margin-top:9px"></div>
           </div>
+        </div>
+        <div class="hero-pills">
+          <div class="hero-pill"><span class="hp-ic" data-icon="scroll-text"></span><span>Cẩm nang<br>ứng xử</span></div>
+          <div class="hero-pill"><span class="hp-ic" data-icon="message-circle"></span><span>Nên nói gì<br>tránh nói gì</span></div>
+          <div class="hero-pill"><span class="hp-ic" data-icon="hourglass"></span><span>Lúc nào nên<br>đưa việc lớn</span></div>
         </div>
       </div></div>
       <div id="shellRecent"></div>
       <div class="form-card" id="birthPanel">
-        <h2>Ngày sinh của người bạn muốn hiểu</h2>
-        <p class="sub">Nhập ngày giờ sinh người đó, mối quan hệ và việc bạn đang cần làm với họ. Hệ thống phân tích lá số của người đó theo đúng việc bạn nêu. Nhận về cách người này vận hành, nên nói gì, nên tránh gì và kế hoạch cụ thể.</p>
-        <p class="price-note" data-tvp-price-label="nguoi-khac">…</p>
+        <div class="fc-head"><span class="fc-ic" data-icon="user"></span><h2>Ngày sinh của người bạn muốn hiểu</h2></div>
+        <p class="sub">Nhập ngày giờ sinh người đó, mối quan hệ và việc bạn đang cần làm với họ để phân tích lá số theo đúng việc bạn nêu.</p>
         <div id="sampleLinkHost"></div>
 
         <div class="frow nk-qh">
@@ -155,8 +151,28 @@
           </div>
         </details>
 
-        <div class="frow" style="margin-bottom:0;margin-top:14px">
-          <button class="btn-go" id="btnGo" onclick="analyze()">Xem Cẩm Nang Ứng Xử — <span data-tvp-price="nguoi-khac">…</span> Lượng →</button>
+        <div class="cost-box" style="margin-top:14px">
+          <div class="cb-l">
+            <span class="cb-ic" data-icon="wallet"></span>
+            <div>
+              <div class="cb-title">Chi phí sử dụng</div>
+              <div class="cb-amt"><span data-tvp-price="nguoi-khac">…</span> Lượng <span class="vnd" data-tvp-price-vnd="nguoi-khac"></span> mỗi lượt</div>
+              <div class="cb-pay">
+                <span><span class="ic" data-icon="qr-code"></span> Chuyển khoản (qua QR ngân hàng)</span>
+                <span><span class="ic" data-icon="credit-card"></span> PayPal / Thẻ quốc tế</span>
+              </div>
+            </div>
+          </div>
+          <div class="cb-r">
+            <span class="cb-ic" data-icon="gift"></span>
+            <div class="cb-r-txt">Mua gói để nhận nhiều ưu đãi hơn.<br><a href="/topup.html">Xem các gói ngay →</a></div>
+          </div>
+        </div>
+        <div class="frow" style="margin-bottom:0">
+          <button class="btn-go" id="btnGo" onclick="analyze()">
+            <span class="bg-label"><span class="ic" data-icon="user"></span><b id="btnGoLabel">Xem Cẩm Nang Ứng Xử →</b></span>
+            <small>Tốn <span data-tvp-price="nguoi-khac">…</span> Lượng <span data-tvp-price-vnd="nguoi-khac"></span></small>
+          </button>
         </div>
         <div class="err" id="error-msg"></div>
       </div>
@@ -304,13 +320,13 @@
 window.SHELL_INTRO={key:'nguoi-khac'};</script>
 <script src="/laso-chart.js?v=3"></script>
 <script src="/tools-shared/vn-timezone.js?v=1"></script>
-<script src="/tuvi-form.js?v=2"></script>
+<script src="/tuvi-form.js?v=3"></script>
 <script src="/tools-shared/cung-ngay-sinh.js?v=2"></script>
 <script src="/tuvi-paywall.js?v=33"></script>
 <script src="/tools-shared/hook-layer.js?v=2"></script>
 <script src="/auth.js?v=2"></script>
   <script src="/nav.js?v=26" data-icons-only></script>
-<script src="/shell.js?v=88"></script>
+<script src="/shell.js?v=89"></script>
 <script src="/tools-shared/ai-loading-steps.js?v=10"></script>
 <script>
 
@@ -445,6 +461,18 @@ var NK_RESUME_KEY = 'nk_pending_resume';
 // Không có dòng này thì `_cfg.product` rỗng ⇒ paywall không tra được giá, hiện
 // hộp "chưa đọc được bảng giá" và tool KHÔNG chạy. Test trang bắt đúng chỗ này.
 TuviPaywall.init({ product: 'nguoi-khac', slug: function () { return _currentSlug; } });
+
+// Ghi "(~X đ)" cạnh số Lượng trong hộp chi phí + nút CTA — cùng mẫu
+// `_fillVndSlots` của app-luan-giai.html. `ToolPrices.vndLabel` tự trả ''
+// khi chưa đọc được `credit_packages`, lúc đó không hiện gì (không đoán số).
+function _fillVndSlots(host, product) {
+  if (!host || !window.ToolPrices) return;
+  var els = host.querySelectorAll('[data-tvp-price-vnd]');
+  var cost = window.ToolPrices.get(product);
+  var lbl = cost != null ? window.ToolPrices.vndLabel(cost) : '';
+  els.forEach(function (el) { el.textContent = lbl ? ('(' + lbl + ')') : ''; });
+}
+TuviPaywall.fillPriceSlots(document).then(function () { _fillVndSlots(document, 'nguoi-khac'); });
 
 function showError(msg) {
   var e = document.getElementById('error-msg');

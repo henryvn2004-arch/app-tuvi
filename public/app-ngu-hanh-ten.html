@@ -9,18 +9,12 @@
 <link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/fonts/noto-serif.css?v=1">
-<link rel="stylesheet" href="/shell.css?v=35">
+<link rel="stylesheet" href="/shell.css?v=38">
 <style>
-.form-card{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);max-width:600px}
-.form-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:3px}
+.form-card{max-width:600px}
 .form-card p.sub{font-size:12.5px;color:var(--text-lt);margin-bottom:16px}
 .frow{display:flex;gap:11px;flex-wrap:wrap;align-items:flex-end;margin-bottom:13px}
-.fg{display:flex;flex-direction:column;gap:5px}
-.fg label{font-size:10.5px;font-weight:600;color:var(--text-lt);letter-spacing:.04em;text-transform:uppercase}
-.fg input,.fg select{border:1px solid var(--line-2);border-radius:7px;padding:8px 10px;font-size:13.5px;font-family:inherit;color:var(--text);background:var(--paper);outline:none}
-.fg input:focus,.fg select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(20,85,164,.12)}
 .hint{font-size:11.5px;color:var(--text-lt);margin-top:-6px;margin-bottom:12px}
-.btn-go{background:var(--red);color:#fff;border:none;border-radius:8px;padding:10px 22px;font-size:14px;font-weight:600;cursor:pointer;font-family:var(--serif)}
 .btn-go:disabled{opacity:.6;cursor:not-allowed}
 .err{color:var(--tx-red);font-size:13px;margin-top:8px;display:none}
 .err.active{display:block}
@@ -115,16 +109,20 @@
           <img class="intro-avatar" src="/tool-avatars/ngu-hanh-ten.webp" alt="" onerror="this.remove()">
           <div class="intro-text">
             <div class="intro-t">Ngũ hành tên</div>
-            <div class="intro-d">Ngũ hành tên chấm điểm từng chữ trong tên, xem hợp hay khắc mệnh bạn. Làm ăn lận đận, tình duyên trắc trở — có khi nào do chính cái tên mình đang mang khắc mệnh? Nhập họ tên và ngày sinh, nhận điểm ngũ hành và kết luận hợp hay khắc.</div>
+            <div class="intro-d">Chấm điểm từng chữ trong tên, xem hợp hay khắc mệnh bạn. Nhập họ tên, nhận điểm ngũ hành và kết luận hợp hay khắc — miễn phí.</div>
             <div id="introSrc" style="min-height:55.2px;margin-top:9px"></div>
           </div>
+        </div>
+        <div class="hero-pills">
+          <div class="hero-pill"><span class="hp-ic" data-icon="pen-line"></span><span>Ngũ hành<br>từng chữ</span></div>
+          <div class="hero-pill"><span class="hp-ic" data-icon="bar-chart-3"></span><span>Cân bằng<br>ngũ hành</span></div>
+          <div class="hero-pill"><span class="hp-ic" data-icon="scale"></span><span>Điểm số<br>hợp – khắc</span></div>
         </div>
       </div></div>
       <div id="shellRecent"></div>
       <div class="form-card" id="birthPanel">
-        <h2>Họ và tên đầy đủ</h2>
-        <p class="sub">Nhập họ tên đầy đủ, có thể chọn thêm ngũ hành bản mệnh. Hệ thống tính ngũ hành của từng chữ trong tên. Nhận về biểu đồ cân bằng ngũ hành, điểm số và kết luận hợp hay khắc mệnh.</p>
-        <p class="price-note" data-tvp-price-label="ngu-hanh-ten">…</p>
+        <div class="fc-head"><span class="fc-ic" data-icon="pen-line"></span><h2>Họ và tên đầy đủ</h2></div>
+        <p class="sub">Nhập họ tên đầy đủ, có thể chọn thêm ngũ hành bản mệnh. Nhận về biểu đồ cân bằng ngũ hành, điểm số và kết luận hợp hay khắc mệnh.</p>
         <div class="frow" style="margin-bottom:4px">
           <div class="fg" style="flex:1;min-width:200px"><label>Nhập đủ họ + tên, có dấu, cách nhau bằng dấu cách</label><input type="text" id="tenInput" placeholder="VD: Nguyễn Văn An" maxlength="60"></div>
           <div class="fg" style="width:150px"><label>Ngũ hành bản mệnh (tùy chọn)</label>
@@ -137,7 +135,10 @@
               <option value="Thủy">Thủy</option>
             </select>
           </div>
-          <button class="btn-go" id="btnGo" onclick="calculate()">Tra ngũ hành tên →</button>
+          <button class="btn-go" id="btnGo" onclick="calculate()">
+            <span class="bg-label"><span class="ic" data-icon="pen-line"></span><b>Tra ngũ hành tên →</b></span>
+            <small>Miễn phí</small>
+          </button>
         </div>
         <div class="err" id="error-msg"></div>
       </div>
@@ -171,7 +172,7 @@ window.SHELL_INTRO={key:'ngu-hanh-ten'};</script>
 <script src="/tools-shared/ngu-hanh-ten.js?v=3"></script>
 <script src="/auth.js?v=2"></script>
   <script src="/nav.js?v=26" data-icons-only></script>
-<script src="/shell.js?v=88"></script>
+<script src="/shell.js?v=89"></script>
 <script>
 // Ô giữa dùng CHUNG module /tools-shared/ngu-hanh-ten.js với trang standalone.
 let _syls = [];
