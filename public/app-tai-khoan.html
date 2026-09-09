@@ -338,7 +338,28 @@
         #tab-lichsu .hist-group-head{display:flex;align-items:center;gap:.5rem;font-size:.8rem;font-weight:800;text-transform:uppercase;letter-spacing:.04em;color:var(--text-lt);margin:0 0 .7rem}
         #tab-lichsu .hist-group-head .gh-ic{display:inline-flex;width:16px;height:16px;color:var(--tx-gold)}
         #tab-lichsu .hist-group-head .gh-ic svg{width:100%;height:100%}
+        #tab-lichsu .hist-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:.75rem;margin-bottom:1.15rem}
+        #tab-lichsu .hist-stat{background:var(--surface);border:1px solid var(--border-lt);border-radius:10px;padding:.85rem 1rem;display:flex;align-items:center;gap:.7rem}
+        #tab-lichsu .hist-stat-ic{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;flex:none}
+        #tab-lichsu .hist-stat-ic [data-icon]{width:17px;height:17px}
+        #tab-lichsu .hist-stat-v{font-family:'Noto Serif',serif;font-size:1.05rem;font-weight:700;color:var(--heading);line-height:1.15}
+        #tab-lichsu .hist-stat-l{font-size:.72rem;color:var(--text-lt);margin-top:.1rem}
+        #tab-lichsu .hist-search-row{margin-bottom:1.15rem}
+        #tab-lichsu .hist-search{width:100%;border:1px solid var(--border-lt);border-radius:999px;padding:.55rem 1.1rem;font-size:.83rem;color:var(--text);background:var(--surface);font-family:inherit}
+        #tab-lichsu .hist-search:focus{outline:2px solid var(--tx-gold);border-color:var(--tx-gold)}
+        @media(max-width:640px){#tab-lichsu .hist-stats{grid-template-columns:repeat(2,1fr)}}
       </style>
+
+      <div class="hist-stats">
+        <div class="hist-stat"><div class="hist-stat-ic" style="background:var(--gold-lt);color:var(--tx-gold)"><span data-icon="sparkles"></span></div><div><div class="hist-stat-v" id="statLasos">0</div><div class="hist-stat-l">Lá Số đã lưu</div></div></div>
+        <div class="hist-stat"><div class="hist-stat-ic" style="background:var(--chip-blue);color:var(--blue)"><span data-icon="heart-handshake"></span></div><div><div class="hist-stat-v" id="statXemTuoi">0</div><div class="hist-stat-l">Lượt Xem Tuổi</div></div></div>
+        <div class="hist-stat"><div class="hist-stat-ic" style="background:var(--chip-purple);color:var(--tx-purple)"><span data-icon="eye"></span></div><div><div class="hist-stat-v" id="statTuong">0</div><div class="hist-stat-l">Lượt Xem Tướng</div></div></div>
+        <div class="hist-stat"><div class="hist-stat-ic" style="background:var(--chip-green);color:var(--green)"><span data-icon="message-circle"></span></div><div><div class="hist-stat-v" id="statChat">0</div><div class="hist-stat-l">Hội thoại</div></div></div>
+      </div>
+
+      <div class="hist-search-row">
+        <input class="hist-search" id="histSearch" placeholder="Tìm theo tên, nội dung…">
+      </div>
 
       <div class="hist-filters">
         <button class="hist-chip active" data-filter="all">Tất cả</button>
@@ -786,6 +807,9 @@ window.ACCOUNT_SHELL_CHAT = function () {
     arr.sort(function (a, b) { return (b.updatedAt || 0) - (a.updatedAt || 0); });
     var badge = document.getElementById('countChat');
     if (badge) { if (arr.length) { badge.style.display = 'inline-block'; badge.textContent = arr.length; } else badge.style.display = 'none'; }
+    window._histCounts = window._histCounts || {};
+    window._histCounts.chat = arr.length;
+    if (window.updateHistStats) window.updateHistStats();
     if (!arr.length) { content.innerHTML = '<div class="empty-state"><div class="icon"><span data-icon="message-circle" style="width:40px;height:40px;color:var(--tx-gold)"></span></div><p>Chưa có hội thoại nào. Mở một công cụ, hỏi trợ lý — phiên sẽ hiện ở đây.</p></div>'; if (window.mountIcons) window.mountIcons(content); return; }
     content.innerHTML = '<div class="chat-list">' + arr.map(function (s) {
       var label = TOOLMAP[s.tool] || s.tool;
@@ -820,7 +844,7 @@ window.ACCOUNT_SHELL_CHAT = function () {
   } catch (e) { /* ignore */ }
 };
 </script>
-<script src="/account-core.js?v=4"></script>
+<script src="/account-core.js?v=5"></script>
 <script>
 // Mở đúng tab theo hash (#credits / #ketnoi / #account / #lichsu) khi vào từ sidebar.
 (function(){function openHash(){var h=(location.hash||'').replace('#','');if(h){var b=document.querySelector('[data-tab="'+h+'"]');if(b)b.click();}}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){setTimeout(openHash,300);});else setTimeout(openHash,300);})();

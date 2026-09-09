@@ -45,6 +45,7 @@ async function initProfile() {
   loadHistory();
   setupTabs();
   setupHistFilters();
+  setupHistSearch();
   loadHeaderBalance();
   if (window.mountIcons) window.mountIcons();
 }
@@ -66,6 +67,29 @@ function setupHistFilters() {
     const f = chip.dataset.filter;
     groups.forEach(g => { g.style.display = (f === 'all' || g.dataset.group === f) ? '' : 'none'; });
   }));
+}
+
+// Ô tìm kiếm trong tab Lịch Sử: lọc theo chữ trên mọi thẻ (không đụng chip nhóm).
+function setupHistSearch() {
+  const input = document.getElementById('histSearch');
+  if (!input) return;
+  input.addEventListener('input', () => {
+    const q = input.value.trim().toLowerCase();
+    document.querySelectorAll('#tab-lichsu .laso-card, #tab-lichsu .xem-item, #tab-lichsu .tuong-card, #tab-lichsu .chat-item').forEach(el => {
+      el.style.display = (!q || el.textContent.toLowerCase().indexOf(q) !== -1) ? '' : 'none';
+    });
+  });
+}
+
+// 4 ô tổng số ở đầu tab Lịch Sử — mỗi renderXxx() cập nhật phần của mình rồi gọi lại đây.
+window._histCounts = window._histCounts || { lasos: 0, xemtuoi: 0, tuong: 0, chat: 0 };
+function updateHistStats() {
+  const c = window._histCounts;
+  const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v || 0; };
+  set('statLasos', c.lasos);
+  set('statXemTuoi', c.xemtuoi);
+  set('statTuong', c.tuong);
+  set('statChat', c.chat);
 }
 
 function renderProfileHeader() {
@@ -173,6 +197,8 @@ function renderLasos(lasos) {
     const badge = document.getElementById('countLasos');
     badge.textContent = count; badge.style.display = '';
   }
+  window._histCounts.lasos = count;
+  updateHistStats();
 
   const el = document.getElementById('lasosContent');
   if (count === 0) {
@@ -196,6 +222,7 @@ function lasoCard(l) {
   // Cung Mệnh + cục hiện ngay subtitle trên card-top
   const menhCuc = [l.cung_menh ? `Mệnh ${l.cung_menh}` : '', l.cuc || ''].filter(Boolean).join(' · ');
   const chinh = l.chinh_tinh ? `<span class="badge blue" style="margin-top:.5rem">${l.chinh_tinh}</span>` : '';
+  const napAm = l.nap_am ? `<span class="badge" style="margin-top:.5rem">${escHtml(l.nap_am)}</span>` : '';
   return `<div class="laso-card" onclick="openLuanModal('${l.slug}','${escHtml(name)}')">
     <div class="card-top">
       <div class="card-avatar">${letter}</div>
@@ -207,7 +234,7 @@ function lasoCard(l) {
     </div>
     <div class="card-body">
       <div class="card-badges" style="margin-bottom:.6rem">
-        ${chinh}
+        ${chinh}${napAm}
       </div>
       <div class="card-date">${ic('calendar',13)} ${date}</div>
       <div class="card-actions">
@@ -227,6 +254,8 @@ function renderXemTuoi(list) {
     const badge = document.getElementById('countXemTuoi');
     badge.textContent = list.length; badge.style.display = '';
   }
+  window._histCounts.xemtuoi = list.length;
+  updateHistStats();
 
   const el = document.getElementById('xemTuoiContent');
   if (list.length === 0) {
@@ -814,6 +843,8 @@ function renderTuong(list) {
     const badge = document.getElementById('countTuong');
     badge.textContent = list.length; badge.style.display = '';
   }
+  window._histCounts.tuong = list.length;
+  updateHistStats();
 
   const el = document.getElementById('tuongContent');
   if (list.length === 0) {
