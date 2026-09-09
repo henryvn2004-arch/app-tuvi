@@ -665,7 +665,12 @@ function buildPhanSection(phan,label,ls,locked){
   // — không còn `part` để rẽ nhánh, mọi CTA trong trang này giờ mở trọn bó.
   // `_unlockOnePart`/`_partSlug` giữ nguyên trong file (code chết vô hại,
   // phòng lượt roll-back), cùng quy ước đã dùng khi CTCD/van-han-nam bỏ bán lẻ.
-  var lock=phan>FREE_PHAN
+  // 🐞 (2026-09-09) PHẢI kèm `locked` — thiếu điều kiện này thì `renderLuan(...,
+  // true)` sau khi trả tiền xong (forceUnlocked, gọi buildPhanSection với
+  // locked=false) vẫn dựng lại đúng nút mời mua này cho mọi phan>FREE_PHAN, đè
+  // lên `_paintSecLocks(false)` vừa ẩn nó — khách trả tiền xong vẫn thấy nút
+  // "Luận giải chuyên sâu — X Lượng" đứng nguyên, tưởng chưa bấm ăn.
+  var lock=(phan>FREE_PHAN&&locked)
     ? '<div class="lg-cta-repeat" id="lg-cta-'+phan+'"><button class="btn-go" type="button" onclick="initiateLuanGiaiChuyenSau()">✦ Mở luận giải chuyên sâu — <span data-tvp-price="laso">…</span> Lượng →</button></div>'
     : '';
   // Gợi ý tool khác CHỈ hiện khi phần này KHÔNG bị khoá — chưa trả tiền thì
