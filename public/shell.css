@@ -538,12 +538,19 @@ font-family:inherit}
    `app-luan-giai.html` làm mẫu), KHÔNG chép lại 3 dòng màu này thêm lần nào
    nữa — chép là drift màu giữa các trang, y hệt bẫy `.claude-content` đã bị
    trùng lặp trước đó. */
-.fb-card{border-radius:14px;padding:30px 26px;margin:16px 0 18px;font-family:var(--sans);font-weight:700;font-size:clamp(19px,5.4vw,27px);line-height:1.4;letter-spacing:.015em;text-align:center}
+.fb-card{position:relative;border-radius:14px;padding:36px 26px 24px;margin:16px 0 18px;font-family:var(--sans);font-weight:700;font-size:clamp(18px,4.8vw,24px);line-height:1.45;letter-spacing:.01em;text-align:center;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+/* Dấu ngoặc kép lớn trang trí ở góc — chữ “ ” đã có sẵn quanh câu trích (JS
+   ghép `“…”` khi dựng .fb-card), đây chỉ là hoạ tiết, không lặp nghĩa. */
+.fb-card::before{content:'\201C';position:absolute;top:2px;left:14px;font-family:Georgia,'Times New Roman',serif;font-size:54px;line-height:1;font-weight:700;color:currentColor;opacity:.22}
+/* Vạch màu dưới câu trích — cùng màu chữ của biến thể, tách caption khỏi
+   đoạn giải thích thường (<p>) đứng ngay sau .fb-card trong DOM. */
+.fb-card::after{content:'';display:block;width:56px;height:3px;margin:14px auto 0;border-radius:2px;background:currentColor;opacity:.4}
 .fb-tot{background:#E8F5EC;color:#1E6B3C}
 .fb-canhbao{background:#FBEAE7;color:#C0392B}
 .fb-trungtinh{background:var(--gold-lt);color:var(--heading)}
 :root[data-theme="dark"] .fb-tot{background:#15291D;color:#5FBF87}
 :root[data-theme="dark"] .fb-canhbao{background:#301C19;color:#F08A7A}
+:root[data-theme="dark"] .fb-card{box-shadow:0 1px 3px rgba(0,0,0,.25)}
 
 /* .fb-item — thẻ NHỎ cho từng dòng trong một DANH SÁCH gợi ý (tên/ngày…),
    khác hẳn .fb-card (poster to, dành cho ĐÚNG MỘT câu trích trong văn bản
