@@ -101,7 +101,7 @@ document.addEventListener('click', function (e) {
   else { try { document.execCommand('copy'); } catch (err) {} done(); }
 });
 </script>
-<script src="/track.js?v=4" defer></script><script src="/nav.js?v=26" defer></script>
+<script src="/track.js?v=4" defer></script><script src="/nav.js?v=27" defer></script>
 </body>
 </html>`;
 
