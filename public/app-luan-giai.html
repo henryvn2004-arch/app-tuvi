@@ -9,7 +9,7 @@
 <link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/fonts/noto-serif.css?v=1">
-<link rel="stylesheet" href="/shell.css?v=41">
+<link rel="stylesheet" href="/shell.css?v=42">
 <link rel="stylesheet" href="/laso-chart.css?v=3">
 <style>
 /* `.form-card/.frow/.fg/.btn-go/.hero-pills/.fc-head/.cost-box/.samp-cta` giờ
@@ -27,10 +27,8 @@
    người đọc rất dễ tưởng đang đọc lá số CỦA MÌNH — đọc Cung Phu Thê của người
    khác rồi tưởng là hôn nhân mình thì hỏng niềm tin nặng hơn mọi lợi ích mà
    khối này mang lại. Đây là yêu cầu ĐÚNG/SAI, không phải yêu cầu thẩm mỹ. */
-.samp-bar{position:sticky;top:var(--ws-top-h,69px);z-index:6;background:var(--navy);color:#fff;border-radius:10px;padding:10px 14px;margin-bottom:16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;box-shadow:var(--shadow)}
-.samp-bar .sb-txt{flex:1;min-width:180px;font-size:12.5px;line-height:1.5}
-.samp-bar .sb-txt b{color:var(--gold)}
-.samp-bar button{flex:0 0 auto;background:var(--gold);color:var(--navy);border:none;border-radius:8px;padding:7px 14px;font-size:12.5px;font-weight:700;cursor:pointer;font-family:var(--serif)}
+/* `.samp-bar` chuyển sang shell.css (2026-09) — dùng chung nhiều trang giờ đã
+   auto-show sample, không khai riêng ở đây nữa. */
 /* Giữ chỗ cho form khai sinh. `TuviForm.render` chạy ngay trong lúc phân tích
    HTML, nhưng chỉ SAU khi `tuvi-form.js` nạp xong — mà đứng trước nó là cả một dãy
    script CÙNG ORIGIN cũng chặn parse (17KB–524KB tuỳ trang), nên trên mạng chậm lần

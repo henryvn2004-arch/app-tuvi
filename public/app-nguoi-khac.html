@@ -9,7 +9,7 @@
 <link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/fonts/noto-serif.css?v=1">
-<link rel="stylesheet" href="/shell.css?v=41">
+<link rel="stylesheet" href="/shell.css?v=42">
 <style>
 .form-card{max-width:860px}
 .sample-link{display:inline-block;font-size:12.5px;color:var(--tx-blue);margin-bottom:12px}
@@ -429,6 +429,20 @@ TuviForm.render('formHostSelf', { mode: 'compact', prefix: 'self', gioitinh: 'na
 (function(){
   var SAMPLE_URL='/samples/nguoi-khac-full.json';
   var _cache=null;
+  function _showSampleBar(){
+    var panel=document.getElementById('resPanel');
+    if(!panel||document.getElementById('sampBar')) return;
+    var bar=document.createElement('div');
+    bar.className='samp-bar'; bar.id='sampBar';
+    bar.innerHTML='<div class="sb-txt">Đây là <b>BẢN MẪU</b> minh hoạ (lá số khác) — chưa phải kết quả của người bạn cần xem.</div>'+
+      '<button type="button" id="sampBarClose">Nhập lá số người đó →</button>';
+    panel.insertBefore(bar,panel.firstChild);
+    document.getElementById('sampBarClose').onclick=function(){
+      var b=document.getElementById('sampBar'); if(b) b.remove();
+      if(typeof window._closePanel==='function') window._closePanel();
+      var cta=document.getElementById('sampCta'); if(cta) cta.style.display='flex';
+    };
+  }
   window.SampleHint.open=function(btn){
     if(btn){ btn.disabled=true; btn.textContent='Đang mở…'; }
     var p=_cache?Promise.resolve(_cache):fetch(SAMPLE_URL).then(function(r){
@@ -442,6 +456,8 @@ TuviForm.render('formHostSelf', { mode: 'compact', prefix: 'self', gioitinh: 'na
       var loading=document.getElementById('loading'); if(loading) loading.style.display='none';
       var card=document.getElementById('card'); if(card) card.style.display='block';
       var be=document.getElementById('btnEdit'); if(be) be.style.display='';
+      var cta=document.getElementById('sampCta'); if(cta) cta.style.display='none';
+      _showSampleBar();
       if(btn){ btn.disabled=false; btn.textContent='Xem bản mẫu →'; }
     }).catch(function(e){
       if(btn){ btn.disabled=false; btn.textContent='Xem bản mẫu →'; }
@@ -449,6 +465,12 @@ TuviForm.render('formHostSelf', { mode: 'compact', prefix: 'self', gioitinh: 'na
       window.alert('Chưa mở được bản mẫu. Thử lại sau nhé.');
     });
   };
+  try {
+    if (!(window.Shell && Shell.autoRun && Shell.autoRun()) &&
+        !(window.Shell && Shell.getRememberedBirth && Shell.getRememberedBirth())) {
+      window.SampleHint.open(null);
+    }
+  } catch (e) { if (window.console) console.error('sample auto-open:', e); }
 })();
 
 // 🔑 Lá số shell đang nhớ là lá số CỦA NGƯỜI DÙNG → điền vào form 'self', KHÔNG
