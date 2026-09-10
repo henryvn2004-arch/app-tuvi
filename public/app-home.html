@@ -1830,6 +1830,19 @@ if (window.ToolPrices) ToolPrices.load().then(function (d) { if (d) renderSpring
 
   function seen(){ try{ return localStorage.getItem(TOUR_KEY)==='1'; }catch(e){ return true; } }
   function markSeen(){ try{ localStorage.setItem(TOUR_KEY,'1'); }catch(e){} }
+
+  // `TOUR_KEY` là cờ THEO TRÌNH DUYỆT — máy mới, trình duyệt ẩn danh, hay xoá
+  // site data đều làm mất cờ dù tài khoản đã dùng app lâu rồi, tour lại hiện
+  // ra cho một "returning user" thật. `user.created_at` (Supabase, đã có sẵn
+  // trong `Auth.getUser()` từ lúc đăng nhập, không cần gọi thêm) mới là tín
+  // hiệu THEO TÀI KHOẢN: tài khoản tạo quá 24h coi như không còn là lần đầu.
+  function isReturningUser(){
+    try{
+      var u=window.Auth&&Auth.getUser&&Auth.getUser();
+      if(!u||!u.created_at) return false;
+      return (Date.now()-new Date(u.created_at).getTime())>24*3600*1000;
+    }catch(e){ return false; }
+  }
   function esc2(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
   // Vùng NHÌN THẤY THẬT. `window.innerHeight` trên iOS Safari tính cả dải nằm
@@ -1995,7 +2008,7 @@ if (window.ToolPrices) ToolPrices.load().then(function (d) { if (d) renderSpring
   }
 
   function start(){
-    if(seen()) return;
+    if(seen()||isReturningUser()) return;
     // Không bước nào có điểm neo (trang lỗi, hoặc các khối cùng chưa kịp
     // dựng) → đừng tạo một overlay không trỏ vào đâu cả.
     var any=false;
