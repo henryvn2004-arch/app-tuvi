@@ -259,12 +259,21 @@ const TOOL_CONFIGS = {
     // laso.html đã có SẴN một cơ chế "Xem bản mẫu" native (openSample/
     // btnSample, đọc `sampleJsonPath` qua fetch) — KHÔNG cần tự gọi
     // renderLuan/_renderCachedLuanGiai tay như 2 tool phan kia. Ghi đè đúng
-    // file JSON đó bằng dữ liệu VỪA sinh rồi bấm chính nút đó — nút "Xem bản
-    // mẫu" trên trang thật cũng SỐNG lại đúng bằng file này, không mồ côi.
+    // file JSON đó bằng dữ liệu VỪA sinh — nút "Xem bản mẫu" trên trang thật
+    // cũng SỐNG lại đúng bằng file này, không mồ côi.
     htmlPage: 'app-luan-giai.html',
     sampleJsonPath: join(ROOT, 'public/samples/luan-giai.json'),
     async injectAndRender(page, store) {
-      await page.click('#btnSample');
+      // 2026-09-10: hard paywall của laso đã bị đảo ngược — trang giờ TỰ MỞ
+      // bản mẫu ngay khi vào (gate cuối app-luan-giai.html gọi
+      // openSample(null,true)), nên #btnSample đã bị ẨN trước khi Playwright
+      // kịp bấm (đúng bẫy `waitForSelector`/`isVisible()` là ảnh chụp tức
+      // thời — CLAUDE.md). KHÔNG bấm nữa, chỉ còn cần đợi kết quả tự lên —
+      // vẫn bấm tay làm phòng hờ nếu auto-open bị gate chặn trong ngữ cảnh lạ.
+      const btn = page.locator('#btnSample');
+      if (await btn.isVisible().catch(() => false)) {
+        await btn.click().catch(() => {});
+      }
       await page.waitForSelector('.samp-bar', { timeout: 15000 });
       await page.waitForFunction(
         () => {
