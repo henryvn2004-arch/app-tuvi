@@ -1,0 +1,48 @@
+{
+  "tongQuan": "Nhóm bạn đang thừa cái đầu nghĩ mưu nhưng lại hụt tay chịu cày cuốc thực thi. Với bạn, Chị Hạnh và Anh Tùng cùng thuộc kiểu Hỗ trợ, việc vẽ kế hoạch hay nhìn nhận vấn đề chạy rất mượt cơ mà dễ tắc tị khi cần ai đó xắn tay làm tới cùng. Gánh nặng chốt hạ nề nếp dồn hết lên vai Em Mai, khiến nhóm nhiều ý tưởng hay nhưng khâu hoàn thiện lại cực kỳ chậm.",
+  "tungNguoi": [
+    {
+      "ten": "Chị Hạnh",
+      "cachLamViec": "Chị Hạnh thích nắm quyền cố vấn và phân tích tình hình, nên đưa việc dưới dạng xin góc nhìn chiến lược chứ đừng vác việc vụn vặt đi hỏi. Chỗ người ta ngỡ chị hay bắt bẻ chi tiết hóa ra lại là mắt xích gỡ rối cực bén mỗi khi cuộc họp bị rối ren đấy.",
+      "noiSao": "\"Dự án này em đang vướng ba hướng đi, cần chị soi giúp rủi ro trước khi chốt sang bước tiếp theo.\""
+    },
+    {
+      "ten": "Anh Tùng",
+      "cachLamViec": "Anh Tùng phản xạ rất lanh lẹ và thích được ghi nhận tiếng nói, nên chia riêng một mảng cho anh tự chủ trình bày chứ đừng can thiệp nửa chừng. Người này nhìn qua tưởng thích tranh giành vị thế, nhưng thực tế khi được giao quyền ngôn luận thì anh ấy bảo vệ nhóm tới cùng chứ chẳng bỏ rơi.",
+      "noiSao": "\"Phần phản biện đối ngoại này cần người sắc sảo như anh đứng ra đại diện, anh phụ trách toàn bộ mảng này nhé.\""
+    },
+    {
+      "ten": "Em Mai",
+      "cachLamViec": "Em Mai làm việc theo tôn ti và quy chuẩn rõ ràng của người cầm trịch, chỉ cần giao đúng đầu mối nguồn lực kèm tiền lệ là tự khắc ráp việc trơn tru. Thấy em có vẻ cứng nhắc phương pháp vậy thôi, chứ đặt vào lúc dự án đang hỗn loạn thì chính kỷ luật thép đó giữ cả đội không vỡ trận.",
+      "noiSao": "\"Anh giao em toàn quyền dựng quy trình và chốt tiến độ mảng này, cứ theo barem chuẩn mà vận hành.\""
+    }
+  ],
+  "capChuY": [
+    {
+      "cap": "Chị Hạnh ↔ Anh Tùng",
+      "viec": "Tách riêng hai người này ra hai mặt trận khác nhau, chớ để cùng ngồi phản biện chung một đề án vì sẽ thành sàn đấu khẩu giẫm chân nhau."
+    },
+    {
+      "cap": "Chị Hạnh ↔ Em Mai",
+      "viec": "Nên ghép Chị Hạnh lo hướng đi chiến lược còn Em Mai phụ trách ráp người triển khai, phân rõ ai là người vạch ý ai là người chốt bước làm."
+    },
+    {
+      "cap": "Anh Tùng ↔ Em Mai",
+      "viec": "Ghép đôi ở các việc cần hoàn thiện hồ sơ: Anh Tùng lo nội dung thuyết phục còn Em Mai siết chặt quy chuẩn vận hành để không sót việc."
+    }
+  ],
+  "loHong": "Nhóm đang thiếu hẳn chất Khai sáng dám liều mở cõi và chất Hợp tác bền bỉ gánh việc hậu trường. Trong lúc chưa bổ sung được ai, Em Mai đang phải oằn mình ôm cả việc dọn dẹp quy chuẩn lẫn giữ guồng chạy thường nhật. Nếu không chia bớt việc sự vụ, người giữ nếp duy nhất của nhóm sẽ rất dễ kiệt sức đấy.",
+  "tuanNay": [
+    {
+      "viec": "Ngồi riêng với Chị Hạnh trong 20 phút để xin ý kiến duyệt khung định hướng lớn của tháng tới."
+    },
+    {
+      "viec": "Thống nhất ranh giới trách nhiệm bằng văn bản với Anh Tùng để phân định rõ phần việc thuyết trình đối ngoại tuần này."
+    },
+    {
+      "viec": "Bàn giao danh sách đầu việc và giao trọn quyền kiểm soát tiến độ cho Em Mai tự lập bảng theo dõi."
+    }
+  ],
+  "voiBan": "Bạn cùng chất quân sư với Chị Hạnh và Anh Tùng nên rất dễ va chạm cái tôi chuyên môn khi bàn thảo phương án. Trong khi đó, tính cách bài bản của Em Mai lại bù khuyết trọn vẹn cho bạn ở khâu thực thi đưa ý tưởng thành hình. Giữ khoảng cách trao đổi rành mạch với hai người ngang và trên, đồng thời nương tựa vào sự chắc chắn của cấp dưới thì guồng làm việc mới êm được.",
+  "motCau": "Ý tưởng chỉ sinh ra tiền khi có người dọn đường và giữ nếp, bớt bàn kế sách lại mà chia việc cho xong."
+}

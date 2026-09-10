@@ -54,6 +54,16 @@ import {
 } from '../lib/agent/day-con-prompt.ts';
 import { computeNguoiKhac, meta as nguoiKhacMeta } from '../lib/engine/nguoi-khac.ts';
 import {
+  computeNhanMach,
+  railData as nhanMachRailData,
+  MAX_NGUOI as NHAN_MACH_MAX_NGUOI,
+} from '../lib/engine/nhan-mach.ts';
+import {
+  NHAN_MACH_SYSTEM_PROMPT,
+  NHAN_MACH_SCHEMA,
+  buildNhanMachPrompt,
+} from '../lib/agent/nhan-mach-prompt.ts';
+import {
   NGUOI_KHAC_SYSTEM_PROMPT,
   NGUOI_KHAC_SCHEMA,
   buildNguoiKhacPrompt,
@@ -127,6 +137,14 @@ const SAMPLE_BOND_PARTNER_BIRTH = {
   isLunar: false,
 };
 const SAMPLE_BOND_PARTNER_NAME = 'Người bạn';
+// Sổ Nhân Mạch (nhan-mach) — SAMPLE_BIRTH là "người xem" (viewer, lsBan), 3
+// đồng nghiệp cố định dưới đây là nhóm mẫu (nguoi[]). Vai đủ đa dạng (sếp/
+// ngang hàng/cấp dưới) để bản mẫu thấy được cả `thieuKieu`/`duaKieu`/`cap`.
+const SAMPLE_NHAN_MACH_GROUP = [
+  { ten: 'Chị Hạnh', vai: 'sep', birth: { day: 4, month: 11, year: 1975, hourBranch: 10, gender: 'nu', isLunar: false } },
+  { ten: 'Anh Tùng', vai: 'dong-nghiep', birth: { day: 19, month: 6, year: 1991, hourBranch: 2, gender: 'nam', isLunar: false } },
+  { ten: 'Em Mai', vai: 'cap-duoi', birth: { day: 8, month: 1, year: 1998, hourBranch: 5, gender: 'nu', isLunar: false } },
+];
 const NAM_XEM = 2026;
 // Giờ DƯƠNG dùng khi cần TÍNH LẠI `ls` ngay TRONG TRÌNH DUYỆT (tool `phan`
 // không có sẵn `window.renderMeta(data)` nhận thẳng object đã tính — chúng gọi
@@ -870,6 +888,93 @@ const TOOL_CONFIGS = {
         tranhNoi: normMuc(parsed.tranhNoi),
         thoiDiem: clean(parsed.thoiDiem),
         voiBan: '', // bản mẫu không có lá số người xem — cùng luật route thật
+        motCau: clean(parsed.motCau),
+      };
+    },
+  },
+  'nhan-mach': {
+    kind: 'json',
+    label: 'Sổ Nhân Mạch',
+    sampleBirth: SAMPLE_BIRTH,
+    namXem: NAM_XEM,
+    systemPrompt: NHAN_MACH_SYSTEM_PROMPT,
+    schema: NHAN_MACH_SCHEMA,
+    maxTokens: 6300,
+    // `computeProfile` nhận `ls` (SAMPLE_BIRTH) làm `lsBan` — LÁ SỐ NGƯỜI XEM,
+    // KHÔNG phải một thành viên trong sổ — rồi tự tính lá số cho 3 đồng nghiệp
+    // mẫu cố định (`SAMPLE_NHAN_MACH_GROUP`, đủ 3 vai sếp/ngang hàng/cấp dưới
+    // để bản mẫu có cả `thieuKieu`/`duaKieu`/`cap`). Đúng đường route thật đi
+    // (POST nhận cả sổ `NguoiVao[]` + `lsBan` tuỳ chọn, app/api/nhan-mach/route.ts).
+    computeProfile(lsBan) {
+      const nguoi = SAMPLE_NHAN_MACH_GROUP.map((m) => {
+        const r = computeLaso(m.birth, NAM_XEM);
+        if (!r.ok || !r.ls) throw new Error(`computeLaso lỗi cho ${m.ten}: ${r.error || ''}`);
+        return { ten: m.ten, vai: m.vai, ls: r.ls, gioiTinh: m.birth.gender === 'nu' ? 'nu' : 'nam' };
+      });
+      return computeNhanMach(nguoi, lsBan, NAM_XEM);
+    },
+    buildPrompt(p) {
+      return buildNhanMachPrompt(p);
+    },
+    // Route thật KHÔNG có bản xem-trước AI riêng — cả object là hàng trả tiền.
+    freeFields: [],
+    fieldOrder: ['tongQuan', 'tungNguoi', 'capChuY', 'loHong', 'tuanNay', 'voiBan', 'motCau'],
+    outJson: join(ROOT, 'public/samples/nhan-mach-dummy.json'),
+    pdfTitle: 'Sổ Nhân Mạch — Bản mẫu',
+    storagePath: 'mau-nhan-mach.pdf',
+    htmlPage: 'app-nhan-mach.html',
+    // `meta()` + phần chữ LLM ghép ĐÚNG hình dạng route thật trả về (chép từ
+    // app/api/nhan-mach/route.ts) — chỉ giữ thành viên có TÊN khớp sổ (cùng
+    // luật lọc `tenHopLe` của route, chặn model bịa thêm người không có thật).
+    buildFullPayload(profile, ten, parsed) {
+      const clean = (v) => String(v == null ? '' : v).trim();
+      const tenHopLe = new Set(profile.thanhVien.map((t) => t.ten));
+      const tungNguoi = (parsed.tungNguoi || [])
+        .map((m) => ({ ten: clean(m?.ten), cachLamViec: clean(m?.cachLamViec), noiSao: clean(m?.noiSao) }))
+        .filter((m) => tenHopLe.has(m.ten))
+        .slice(0, NHAN_MACH_MAX_NGUOI);
+      return {
+        success: true,
+        namXem: profile.namXem,
+        soNguoi: profile.soNguoi,
+        ban: profile.ban
+          ? { kieu: profile.ban.kieu.ten, kieuId: profile.ban.kieu.id, toaDo: profile.ban.toaDo }
+          : null,
+        thanhVien: profile.thanhVien.map((t) => ({
+          ten: t.ten,
+          vai: { id: t.vai.id, label: t.vai.label },
+          gioiTinh: t.gioiTinh,
+          kieu: { id: t.kieu.id, ten: t.kieu.ten, motCau: t.kieu.motCau },
+          kieuPhu: t.kieuPhu ? { id: t.kieuPhu.id, ten: t.kieuPhu.ten } : null,
+          lai: t.lai,
+          toaDo: t.toaDo,
+          chinhTinhMenh: t.chinhTinhMenh,
+          chinhTinhQuanLoc: t.chinhTinhQuanLoc,
+          than: t.than,
+          vanNam: t.vanNam,
+          voiBan: t.voiBan,
+        })),
+        phanBo: profile.phanBo,
+        thieuKieu: profile.thieuKieu.map((k) => ({ id: k.id, ten: k.ten, motCau: k.motCau })),
+        duaKieu: profile.duaKieu ? { id: profile.duaKieu.id, ten: profile.duaKieu.ten } : null,
+        nenTimThem: profile.nenTimThem
+          ? { id: profile.nenTimThem.id, ten: profile.nenTimThem.ten, motCau: profile.nenTimThem.motCau }
+          : null,
+        cap: profile.cap,
+        thuTuTiepCan: profile.thuTuTiepCan,
+        rail: nhanMachRailData(profile),
+        tongQuan: clean(parsed.tongQuan),
+        tungNguoi,
+        capChuY: (parsed.capChuY || [])
+          .slice(0, 4)
+          .map((c) => ({ cap: clean(c?.cap), viec: clean(c?.viec) }))
+          .filter((c) => c.cap && c.viec),
+        loHong: clean(parsed.loHong),
+        tuanNay: (parsed.tuanNay || [])
+          .slice(0, 3)
+          .map((c) => ({ viec: clean(c?.viec) }))
+          .filter((c) => c.viec),
+        voiBan: clean(parsed.voiBan),
         motCau: clean(parsed.motCau),
       };
     },
