@@ -62,13 +62,16 @@ const STYLE = flag('style', null); // null = cả hai
 // ── Nội dung theo chủ đề + sắc thái (chỉ cần đúng 1 nhóm để test style) ────
 const TOPICS = {
   'hon-nhan': {
-    tot: 'A young East Asian couple in simple modern clothes, standing close together by a calm lake at sunrise, smiling warmly at each other, one gently holding the other\'s hand',
-    'canh-bao': 'A young East Asian couple in simple modern clothes, standing a little apart with their backs half-turned to each other near a quiet lake, both looking down in quiet tension, storm clouds gathering over distant mountains',
-    'trung-tinh': 'A young East Asian couple in simple modern clothes, walking side by side along a quiet lakeside path, calm and thoughtful expressions, neither smiling nor troubled',
+    tot: "A young East Asian couple in simple modern clothes, standing close together by a calm lake at sunrise, smiling warmly at each other, one gently holding the other's hand",
+    'canh-bao':
+      'A young East Asian couple in simple modern clothes, standing a little apart with their backs half-turned to each other near a quiet lake, both looking down in quiet tension, storm clouds gathering over distant mountains',
+    'trung-tinh':
+      'A young East Asian couple in simple modern clothes, walking side by side along a quiet lakeside path, calm and thoughtful expressions, neither smiling nor troubled',
   },
 };
 
-const SENT_KEY = { tot: 'tot', 'canh-bao': 'canh-bao', 'trung-tinh': 'trung-tinh' }[SENTIMENT] || 'tot';
+const SENT_KEY =
+  { tot: 'tot', 'canh-bao': 'canh-bao', 'trung-tinh': 'trung-tinh' }[SENTIMENT] || 'tot';
 const scene = (TOPICS[TOPIC] || TOPICS['hon-nhan'])[SENT_KEY];
 
 // ── Style A: ink-wash (image-to-image, giữ style của #774) ────────────────
@@ -148,7 +151,14 @@ async function genFlat() {
   const r = await fetch('https://api.openai.com/v1/images/generations', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${KEY}` },
-    body: JSON.stringify({ model: MODEL, prompt: FLAT_PROMPT, size: SIZE, quality: 'medium', output_format: 'png', n: 1 }),
+    body: JSON.stringify({
+      model: MODEL,
+      prompt: FLAT_PROMPT,
+      size: SIZE,
+      quality: 'medium',
+      output_format: 'png',
+      n: 1,
+    }),
   });
   const giay = ((Date.now() - t0) / 1000).toFixed(1);
   if (!r.ok) {
@@ -167,4 +177,8 @@ async function genFlat() {
 if (!STYLE || STYLE === 'ink-wash') await genInkWash();
 if (!STYLE || STYLE === 'flat') await genFlat();
 
-console.log('\nXong. Xem 2 file trong', OUT, '— gửi lại cho Henry duyệt style trước khi gen hàng loạt.');
+console.log(
+  '\nXong. Xem 2 file trong',
+  OUT,
+  '— gửi lại cho Henry duyệt style trước khi gen hàng loạt.'
+);
