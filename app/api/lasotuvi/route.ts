@@ -303,18 +303,21 @@ async function runPost(request: NextRequest) {
   let isPreview = phanNum <= FREE_PHAN || isCtcdPreview;
   const previewToolId = isCtcdPreview ? 'chu-trinh-cuoc-doi' : 'laso';
 
-  // 🐞 (2026-09-07, phát hiện lúc chạy final-test thật) Phần 14-15 của
-  // Chu Trình Cuộc Đời KHÔNG chỉ là "xem trước trước khi mua" — chúng còn NẰM
-  // TRONG bó 11 phần đã bán. Khách ĐÃ MUA cả bó mà cache thiếu đúng 2 phần này
-  // (lượt sinh trước bị ngắt giữa chừng) sẽ bị cầu dao xem-trước (ngân sách
-  // CHUNG toàn site, trần ĐỜI chỉ 3 lượt) chặn MÃI MÃI dù đã trả tiền — nút
-  // "↻ Thử lại" không bao giờ qua được vì suất đã hết, và họ không có đường
-  // nào khác để lấy lại đúng 2/11 phần đã trả tiền. Khách ĐÃ SỞ HỮU bundleSlug
-  // thì không còn là "xem trước" nữa — cho đi thẳng đường trả-tiền-thường,
-  // đừng tiêu một suất quota vốn không phải để dành cho ca này.
-  if (isCtcdPreview && bundleSlug) {
+  // 🐞 (2026-09-07, phát hiện lúc chạy final-test thật; 2026-09-10 mở rộng
+  // sang phần 1-2 của laso — CÙNG lỗi, khác chỗ) Phần xem-trước KHÔNG chỉ là
+  // "trước khi mua" — chúng còn NẰM TRONG phần/bó đã bán (phần 1-2 của laso
+  // bán lẻ qua `slug`, phần 14-15 của Chu Trình Cuộc Đời nằm trong `bundleSlug`).
+  // Khách ĐÃ MUA mà cache thiếu đúng các phần này (lượt sinh trước bị ngắt
+  // giữa chừng, hoặc trước đây phần 2 còn thuộc diện trả phí) sẽ bị cầu dao
+  // xem-trước (ngân sách CHUNG toàn site, trần ĐỜI) chặn MÃI MÃI dù đã trả
+  // tiền — nút "↻ Thử lại" không bao giờ qua được vì suất đã hết. Khách ĐÃ SỞ
+  // HỮU slug/bundleSlug thì không còn là "xem trước" nữa — cho đi thẳng đường
+  // trả-tiền-thường, đừng tiêu một suất quota vốn không phải để dành cho ca này.
+  const ownedSlugsForPreview = (isCtcdPreview ? [bundleSlug] : [slug, bundleSlug])
+    .filter((s): s is string => !!s);
+  if (isPreview && ownedSlugsForPreview.length) {
     const previewAuth = await authUserFromRequest(request);
-    if (!('error' in previewAuth) && (await hasAnySlugAccess(previewAuth.user.id, [bundleSlug]))) {
+    if (!('error' in previewAuth) && (await hasAnySlugAccess(previewAuth.user.id, ownedSlugsForPreview))) {
       isPreview = false;
     }
   }
