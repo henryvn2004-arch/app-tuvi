@@ -89,6 +89,15 @@ import {
   buildFinalPastLifeImagePrompt,
 } from '../lib/agent/past-life-story.ts';
 import { generatePortraitImage } from '../lib/image/openai-image.ts';
+import { computeGroupBond, groupPairAsBond } from '../lib/engine/past-life-bond.ts';
+import {
+  BOND_ACTS,
+  bondStorySystemPrompt,
+  buildBondStoryPrompt,
+  bondImageSystemPrompt,
+  buildBondImagePrompt,
+  buildFinalBondImagePrompt,
+} from '../lib/agent/past-life-bond-story.ts';
 
 const ROOT = dirname(dirname(fileURLToPath(import.meta.url)));
 const SAMPLE_BIRTH = {
@@ -107,6 +116,17 @@ const SAMPLE_CHILD_BIRTH = {
   gender: 'nu',
   isLunar: false,
 };
+// Người thứ hai cho tool 2 lá số (duyen-no-tien-kiep) — cố định, khác giới
+// với SAMPLE_BIRTH để `computeGroupBond` có đủ hai bên tính mối duyên.
+const SAMPLE_BOND_PARTNER_BIRTH = {
+  day: 22,
+  month: 3,
+  year: 1988,
+  hourBranch: 8,
+  gender: 'nu',
+  isLunar: false,
+};
+const SAMPLE_BOND_PARTNER_NAME = 'Người bạn';
 const NAM_XEM = 2026;
 // Giờ DƯƠNG dùng khi cần TÍNH LẠI `ls` ngay TRONG TRÌNH DUYỆT (tool `phan`
 // không có sẵn `window.renderMeta(data)` nhận thẳng object đã tính — chúng gọi
@@ -597,6 +617,149 @@ const TOOL_CONFIGS = {
         ...pastLifeMeta(profile),
         biDanh: String(parsed.biDanh || ''),
         moTaNhanVat: String(parsed.moTaNhanVat || ''),
+        acts,
+        ketLuan: parsed.ketLuan || '',
+        imageUrl: urlData?.publicUrl,
+      };
+    },
+  },
+  'duyen-no-tien-kiep': {
+    kind: 'json',
+    label: 'Duyên Nợ Tiền Kiếp',
+    sampleBirth: SAMPLE_BIRTH,
+    namXem: NAM_XEM,
+    // Tool 2 lá số — `computeProfile` bỏ qua `ls` (người A) truyền vào (dùng lại
+    // qua `lsA`), tự tính THÊM người B cố định (`SAMPLE_BOND_PARTNER_BIRTH`) rồi
+    // gọi `computeGroupBond` — đúng đường N=2 route thật dùng (`buildBond` →
+    // `computeGroupBond`, app/api/duyen-no-tien-kiep/route.ts).
+    computeProfile(lsA) {
+      const rB = computeLaso(SAMPLE_BOND_PARTNER_BIRTH, NAM_XEM);
+      if (!rB.ok || !rB.ls) throw new Error('computeLaso lỗi cho người thứ 2: ' + (rB.error || ''));
+      const genderA = SAMPLE_BIRTH.gender === 'nu' ? 'nu' : 'nam';
+      const group = computeGroupBond([
+        { ls: lsA, gender: genderA },
+        { ls: rB.ls, gender: 'nu' },
+      ]);
+      return { group, lsA, lsB: rB.ls, names: [SAMPLE_NAME, SAMPLE_BOND_PARTNER_NAME] };
+    },
+    // Pha 1 (truyện) — N=2 đi ĐÚNG đường cũ (`buildBondStoryPrompt`, prompt
+    // trùng khít route thật), y hệt `handleStory()`.
+    buildPrompt(p) {
+      return buildBondStoryPrompt(groupPairAsBond(p.group, p.group.spine), p.names[0], p.names[1]);
+    },
+    systemPrompt: bondStorySystemPrompt(2),
+    // Schema CHÉP từ route thật (`STORY_SCHEMA`, không export) — đổi ở route
+    // thì phải đổi Ở ĐÂY theo, xem app/api/duyen-no-tien-kiep/route.ts.
+    schema: {
+      type: 'OBJECT',
+      properties: {
+        tuaDe: { type: 'STRING' },
+        moTaMoiDuyen: { type: 'STRING' },
+        acts: {
+          type: 'ARRAY',
+          items: {
+            type: 'OBJECT',
+            properties: { title: { type: 'STRING' }, text: { type: 'STRING' } },
+            required: ['title', 'text'],
+          },
+        },
+        ketLuan: { type: 'STRING' },
+      },
+      required: ['tuaDe', 'moTaMoiDuyen', 'acts', 'ketLuan'],
+      propertyOrdering: ['tuaDe', 'moTaMoiDuyen', 'acts', 'ketLuan'],
+    },
+    maxTokens: 6300,
+    freeFields: [],
+    fieldOrder: ['moTaMoiDuyen', 'ketLuan'],
+    outJson: join(ROOT, 'public/samples/duyen-no-tien-kiep-dummy.json'),
+    pdfTitle: 'Duyên Nợ Tiền Kiếp — Bản mẫu',
+    storagePath: 'mau-duyen-no-tien-kiep.pdf',
+    htmlPage: 'app-duyen-no-tien-kiep.html',
+    // Pha 2 (ảnh) — N=2 đi ĐÚNG đường cũ (schema faceA/faceB), y hệt
+    // `handleImage()`. Ghép thêm `bondMeta(group)` (route thật, không export —
+    // chép logic hiển thị tại đây) để trang có ĐỦ field cho `renderStory()`.
+    async buildFullPayload(profile, ten, parsed) {
+      const { group, lsA, lsB, names } = profile;
+      const pairBond = groupPairAsBond(group, group.spine);
+      const morphA = computeMorphologyForPalace(lsA, 'Mệnh');
+      const morphB = computeMorphologyForPalace(lsB, 'Mệnh');
+      let faceA = '';
+      let faceB = '';
+      try {
+        const r = await llmTextFull({
+          system: bondImageSystemPrompt(2),
+          prompt: buildBondImagePrompt(pairBond, morphA, morphB, names[0], names[1]),
+          json: true,
+          jsonSchema: {
+            type: 'OBJECT',
+            properties: { faceA: { type: 'STRING' }, faceB: { type: 'STRING' } },
+            required: ['faceA', 'faceB'],
+          },
+          maxTokens: 1350,
+        });
+        const p = parseLlmJson(r.text);
+        faceA = String(p?.faceA || '').trim();
+        faceB = String(p?.faceB || '').trim();
+      } catch (e) {
+        console.error('  [duyen-no-tien-kiep] tả khuôn mặt lỗi (best-effort):', e.message);
+      }
+      const finalPrompt = buildFinalBondImagePrompt(pairBond, faceA, faceB);
+      console.log('  [duyen-no-tien-kiep] đang sinh ảnh thật (~30-90s)…');
+      const imgRes = await generatePortraitImage({ prompt: finalPrompt, size: '1536x1024' });
+      const SUPABASE_URL = requireEnv('SUPABASE_URL');
+      const SUPABASE_SERVICE_KEY = requireEnv('SUPABASE_SERVICE_KEY');
+      const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY);
+      const path = `samples/duyen-no-tien-kiep-${Date.now()}.png`;
+      const { error: upErr } = await supabase.storage
+        .from('portraits')
+        .upload(path, Buffer.from(imgRes.b64, 'base64'), {
+          contentType: 'image/png',
+          upsert: true,
+        });
+      if (upErr) {
+        console.error('❌ Upload ảnh mẫu lỗi:', upErr.message);
+        process.exit(1);
+      }
+      const { data: urlData } = supabase.storage.from('portraits').getPublicUrl(path);
+      console.log(`  ✓ Ảnh mẫu: ${urlData?.publicUrl}`);
+
+      const nv = (i) => ({
+        ten: group.profiles[i].characterName,
+        danhXung: group.profiles[i].occupation.title,
+        gioiTinh: group.profiles[i].gender,
+      });
+      const sp = group.spine;
+      const acts = BOND_ACTS.map((a, i) => ({
+        index: i + 1,
+        stage: a.stage,
+        title: String(parsed.acts?.[i]?.title || a.stage),
+        text: String(parsed.acts?.[i]?.text || ''),
+      }));
+      return {
+        success: true,
+        bond: {
+          kind: sp.type.kind,
+          label: sp.type.label,
+          gist: sp.type.gist,
+          signals: sp.signals,
+          a: sp.i,
+          b: sp.j,
+        },
+        nhanVats: group.profiles.map((_, i) => nv(i)),
+        capDuyen: group.pairs.map((p) => ({
+          a: p.i,
+          b: p.j,
+          kind: p.type.kind,
+          label: p.type.label,
+          gist: p.type.gist,
+          signals: p.signals,
+          truc: p === sp,
+        })),
+        nhanVatA: nv(0),
+        nhanVatB: nv(1),
+        era: { id: group.era.id, label: group.era.label, ageLabel: group.era.ageLabel },
+        tuaDe: String(parsed.tuaDe || ''),
+        moTaMoiDuyen: String(parsed.moTaMoiDuyen || ''),
         acts,
         ketLuan: parsed.ketLuan || '',
         imageUrl: urlData?.publicUrl,
