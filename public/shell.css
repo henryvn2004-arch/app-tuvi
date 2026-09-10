@@ -554,16 +554,18 @@ font-family:inherit}
 
 /* Ảnh minh hoạ theo chủ đề (public/tools-shared/fbcard-topic.js, PR #807) —
    3 bố cục, chọn ổn định theo hash câu hook (KHÔNG random mỗi lần tải lại).
-   Ảnh nguồn 160×160 webp, public/img/fbcard-topics/. */
-.fbc-badge-wrap{position:relative;margin-top:34px}
-.fbc-badge-wrap .fb-card{padding-top:44px}
-.fbc-badge-wrap .fbc-img{position:absolute;top:0;left:50%;transform:translate(-50%,-50%);width:60px;height:60px;border-radius:50%;object-fit:cover;border:3px solid var(--white);box-shadow:0 2px 8px rgba(0,0,0,.18);z-index:2}
-.fbc-side-row{display:flex;align-items:center;gap:14px;margin:16px 0 18px}
-.fbc-side-row .fbc-img{width:72px;height:72px;border-radius:50%;object-fit:cover;flex:0 0 auto;border:2px solid currentColor;box-shadow:0 2px 8px rgba(0,0,0,.12)}
+   Ảnh nguồn 160×160 webp, public/img/fbcard-topics/ — cỡ hiển thị dưới đây
+   PHẢI ≤160px, quá cỡ đó là phóng to ảnh gốc (mờ). 2026-09-10: Henry báo ảnh
+   60/72px quá nhỏ, nhìn không rõ — bump lên 96/120px + tăng opacity ảnh nền. */
+.fbc-badge-wrap{position:relative;margin-top:52px}
+.fbc-badge-wrap .fb-card{padding-top:62px}
+.fbc-badge-wrap .fbc-img{position:absolute;top:0;left:50%;transform:translate(-50%,-50%);width:96px;height:96px;border-radius:50%;object-fit:cover;border:3px solid var(--white);box-shadow:0 2px 8px rgba(0,0,0,.18);z-index:2}
+.fbc-side-row{display:flex;align-items:center;gap:16px;margin:16px 0 18px}
+.fbc-side-row .fbc-img{width:120px;height:120px;border-radius:50%;object-fit:cover;flex:0 0 auto;border:2px solid currentColor;box-shadow:0 2px 8px rgba(0,0,0,.12)}
 .fbc-side-row .fb-card{flex:1;margin:0;padding:26px 22px 20px}
 .fbc-side-row .fb-card::before{left:10px}
 .fbc-bg-card{overflow:hidden}
-.fbc-bg-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.22;z-index:0}
+.fbc-bg-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.32;z-index:0}
 .fbc-bg-text{position:relative;z-index:1}
 
 /* .fb-item — thẻ NHỎ cho từng dòng trong một DANH SÁCH gợi ý (tên/ngày…),
