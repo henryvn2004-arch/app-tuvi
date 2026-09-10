@@ -24,7 +24,7 @@
 <link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/fonts/noto-serif.css?v=1">
-<link rel="stylesheet" href="/shell.css?v=34">
+<link rel="stylesheet" href="/shell.css?v=40">
 <style>
 /* Thẻ Vận Hôm Nay phải co theo bề rộng CỘT chứ không theo viewport: trên
    desktop `.ws` chỉ còn ~360px sau khi trừ sidebar 246px + rail 336px, nên
@@ -38,21 +38,10 @@
 .hero p{font-size:13.5px;color:rgba(255,255,255,.82);line-height:1.6;max-width:560px}
 .grp-title{font-family:var(--serif);font-size:14px;font-weight:600;color:var(--text-mid);margin:22px 2px 12px;display:flex;align-items:center;gap:9px}
 .grp-title::after{content:"";flex:1;height:1px;background:var(--line)}
-.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
-.tcard{display:flex;gap:12px;align-items:flex-start;background:var(--white);border:1px solid var(--line);border-radius:12px;padding:14px 15px;box-shadow:var(--shadow);text-decoration:none;transition:.15s;position:relative}
-.tcard:hover{border-color:var(--gold-soft);transform:translateY(-1px);box-shadow:0 6px 18px rgba(6,26,46,.09)}
-.tcard .ic{width:38px;height:38px;flex:0 0 auto;border-radius:10px;background:var(--navy);color:var(--gold);display:flex;align-items:center;justify-content:center}
-.tcard .ic svg{width:20px;height:20px}
-.tcard .tx b{display:block;font-family:var(--serif);font-size:14.5px;font-weight:600;color:var(--text);margin-bottom:3px}
-.tcard .tx span{font-size:12px;color:var(--text-lt);line-height:1.5}
-.tcard .cost{position:absolute;top:11px;right:12px;font-size:10.5px;font-weight:600;color:var(--gold-soft);background:var(--gold-lt);border:1px solid var(--gold-soft);border-radius:20px;padding:1px 8px}
-.tcard .cost.free{color:#fff;background:var(--green);border-color:var(--green)}
-.tcard.ext .tx b::after{content:"↗";font-size:11px;color:var(--text-lt);margin-left:5px;font-family:var(--sans)}
-/* ── KHUNG CHỜ THẺ CÔNG CỤ (#wcCards, #nextCard) ───────────────────────────
+/* ── KHUNG CHỜ #nextCard ────────────────────────────────────────────────────
    🐞 Vì sao cần: `navFallback()` đọc localStorage, nên KHÁCH LẦN ĐẦU nhận
-   `null` ⇒ `renderWelcomeCards` / `renderNext` không vẽ gì, hai khối này rỗng
-   tới khi `ToolPrices.load()` trả lời. Lighthouse mobile đo `/app` CLS
-   0,45-0,61; đây là hai trong ba cú nhảy.
+   `null` ⇒ `renderNext` không vẽ gì, khối này rỗng tới khi `ToolPrices.load()`
+   trả lời. Lighthouse mobile đo /app CLS 0,45-0,61; đây là một trong ba cú nhảy.
 
    🔑 CỐ Ý không khớp chiều cao theo NỘI DUNG: chữ nằm dưới `tool_pricing`, đo
    thật ở 390px ra 99/77/99/77px vì câu hỏi dài ngắn khác nhau. Dựng khung chờ
@@ -64,14 +53,14 @@
 
    Thanh xám vẽ bằng `background` chứ không bằng chiều cao/lề của phần tử —
    mỗi `.sk` vẫn là một dòng chữ `&nbsp;` nên cao đúng bằng một dòng thật. */
-.sk-tile .sk,.nx-skel .sk{display:block;color:transparent;
+.nx-skel .sk{display:block;color:transparent;
   background:linear-gradient(var(--line),var(--line)) no-repeat left center/100% 11px}
-.sk-tile .ic,.nx-skel .ic{background:var(--line)!important;color:transparent!important}
-.sk-tile .tx b .sk,.nx-skel b .sk{background-size:58% 13px}
-.sk-tile,.nx-skel{pointer-events:none}
+.nx-skel .ic{background:var(--line)!important;color:transparent!important}
+.nx-skel b .sk{background-size:58% 13px}
+.nx-skel{pointer-events:none}
 @keyframes tileSkPulse{0%,100%{opacity:1}50%{opacity:.5}}
 @media(prefers-reduced-motion:no-preference){
-  .sk-tile .sk,.sk-tile .ic,.nx-skel .sk,.nx-skel .ic{animation:tileSkPulse 1.4s ease-in-out infinite}
+  .nx-skel .sk,.nx-skel .ic{animation:tileSkPulse 1.4s ease-in-out infinite}
 }
 /* ── Q1: GỢI Ý THEO HÀNH VI ────────────────────────────────────────────────
    `.nx-why` là lý do — phần đáng giá nhất của khối này. Một thẻ gợi ý không
@@ -85,57 +74,41 @@
 .nx-tx b{display:block;font-family:var(--serif);font-size:16px;font-weight:600;color:var(--heading);margin-bottom:4px}
 .nx-why{font-size:12.5px;color:var(--text-mid);line-height:1.55}
 .nx-go{margin-left:auto;flex:0 0 auto;align-self:center;font-size:18px;color:var(--gold-soft)}
-.nx-more{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;margin-top:10px}
-.nx-item{display:flex;gap:10px;align-items:flex-start;background:var(--paper-2);border:1px solid var(--line);border-radius:11px;padding:11px 12px;text-decoration:none;transition:.15s}
-.nx-item:hover{border-color:var(--gold-soft);background:var(--white)}
-.nx-item .ic{width:30px;height:30px;flex:0 0 auto;border-radius:8px;background:var(--navy);color:var(--gold);display:flex;align-items:center;justify-content:center}
-.nx-item .ic svg{width:16px;height:16px}
-.nx-item b{display:block;font-family:var(--serif);font-size:13px;font-weight:600;color:var(--text);margin-bottom:2px}
-.nx-item span{font-size:11.5px;color:var(--text-lt);line-height:1.45}
-/* ── Q1: MỜI BẠN ──────────────────────────────────────────────────────────
-   Khác `invite-cta.js` (chỉ hiện khi HẾT Lượng): ở Tổng Quan nó hiện LUÔN —
-   46 link chia sẻ đã tạo mà chỉ 3 người từng bấm nút, nút thắt là chỗ đặt
-   chứ không phải mức thưởng. */
-.inv-card{background:var(--white);border:1px solid var(--line);border-radius:14px;padding:16px 17px;margin-bottom:16px;box-shadow:var(--shadow)}
-.inv-t{font-family:var(--serif);font-size:15px;font-weight:600;color:var(--heading);margin-bottom:5px}
-.inv-d{font-size:12.5px;color:var(--text-mid);line-height:1.55;margin-bottom:12px}
-.inv-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
-.inv-code{flex:1 1 190px;min-width:0;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.5px;color:var(--text);background:var(--paper-2);border:1px dashed var(--gold-soft);border-radius:9px;padding:9px 11px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.inv-btn{flex:0 0 auto;background:linear-gradient(135deg,var(--gold-soft),var(--gold));color:#2a1e05;border:none;border-radius:9px;padding:9px 15px;font-size:12.5px;font-weight:700;cursor:pointer;font-family:inherit}
-/* ── KHUNG CHỜ KHỐI MỜI BẠN ────────────────────────────────────────────────
-   Dùng LẠI đúng .inv-card/.inv-t/.inv-d/.inv-row nên chiều cao do CSS thật
-   quyết, không do một con số tự đặt. `.inv-d` để đúng BA dòng vì thẻ khách
-   thật xuống 3 dòng ở bề ngang 346px (đo ở 390×844).
-
-   🐞 Vì sao cần: `#inviteCard` rỗng ở lần vẽ đầu và chỉ được đổ sau khi
-   `whenAuthReady` → `Auth.getFreshToken()` xong. Với khách vô danh, đường đó
-   đi qua `_refreshViaServer()` tức MỘT VÒNG MẠNG tới `/api/auth/session`
-   (chính cú 401 thấy ở console mọi trang) — nên khối này chèn vào rất muộn và
-   đẩy mọi thứ bên dưới. Lighthouse mobile đo `/app` CLS 0,45-0,61. */
-/* Thanh xám vẽ bằng BACKGROUND, không bằng chiều cao/lề của chính phần tử:
-   mỗi `.sk` vẫn là một dòng chữ `&nbsp;` nên nó cao ĐÚNG bằng một dòng thật,
-   còn khoảng hở giữa các thanh là phần nền không tô. Thêm `margin` để lấy khe
-   hở là cộng thêm chiều cao — đo được +6px cho ba dòng, tức lại lệch. */
-.inv-skel .sk{display:block;color:transparent;
-  background:linear-gradient(var(--line),var(--line)) no-repeat left center/100% 13px}
-.inv-skel .inv-t .sk{background-size:64% 15px}
-.inv-skel .inv-d .sk:last-child{background-size:72% 13px}
-/* `line-height` ghim TAY: <span> thừa hưởng 1.55 của thẻ còn <button> thật
-   dùng `normal` của trình duyệt — chênh 5,4px nếu để mặc. */
-.inv-skel .sk-btn{background:var(--line);color:transparent;cursor:default;line-height:14px}
-@keyframes invSkPulse{0%,100%{opacity:1}50%{opacity:.5}}
-@media(prefers-reduced-motion:no-preference){
-  .inv-skel .sk,.inv-skel .sk-btn{animation:invSkPulse 1.4s ease-in-out infinite}
-}
-.inv-btn:hover{filter:brightness(1.06)}
-.inv-btn.ghost{background:none;color:var(--text-mid);border:1px solid var(--line);font-weight:600}
-.inv-note{font-size:11.5px;color:var(--text-lt);margin-top:9px;line-height:1.5}
-.all-tools{display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:600;color:var(--text-mid);text-decoration:none;border:1px solid var(--line);border-radius:10px;padding:10px 15px;background:var(--white);cursor:pointer;font-family:inherit}
-.all-tools:hover{border-color:var(--gold-soft);color:var(--heading)}
-.all-tools-chev{display:inline-block;transition:transform .2s}
-.all-tools[aria-expanded="true"] .all-tools-chev{transform:rotate(90deg)}
-.all-tools-panel{margin-top:14px}
-.all-tools-panel .grp-title:first-child{margin-top:0}
+/* ── SPRINGBOARD — lưới TOÀN BỘ công cụ, luôn hiện (thay "Xem tất cả công cụ"
+   gập lại + wcCards/allTools cũ). Xem `.grid`/.tile*` + section `.tint-*`
+   ngay dưới đây, và `renderSpringboard()` trong <script>. */
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px 8px}
+@container home (min-width:480px){.grid{grid-template-columns:repeat(6,1fr)}}
+@container home (min-width:720px){.grid{grid-template-columns:repeat(8,1fr)}}
+.tile{display:flex;flex-direction:column;align-items:center;gap:6px;text-decoration:none;background:none;border:none;padding:0}
+.tile-ic{width:52px;height:52px;border-radius:15px;display:flex;align-items:center;justify-content:center;font-size:24px;transition:transform .12s}
+.tile:active .tile-ic{transform:scale(.92)}
+.tile-lb{font-size:10.5px;line-height:1.25;color:var(--text-mid);text-align:center;max-width:76px}
+/* Tint theo NHÓM (`need_tags` đầu tiên) — màu MANG NGHĨA (nhu cầu), không
+   phải trang trí; glyph vẫn đơn sắc (Lucide qua `window.iconHtml`), chỉ nền ô
+   đổi theo nhóm. Bản dark khai lại NGUYÊN VẸN — không suy từ light. */
+.tint-ban-than{background:#F3E7C8;color:#8A6A1E}
+.tint-su-nghiep{background:#DCE8F5;color:#1F4E79}
+.tint-tinh-cam{background:#F6E1DF;color:#9B4A3F}
+.tint-con-cai{background:#E1EEE1;color:#3F6B45}
+.tint-nha-cua{background:#EFE2D3;color:#7A5230}
+.tint-chon-ngay{background:#DCEAE8;color:#2B6E63}
+.tint-hoi-nhanh{background:#E6E1F0;color:#5B4B8A}
+.tint-tuong-mao{background:#EFE0E8;color:#7A4560}
+:root[data-theme="dark"] .tint-ban-than{background:#2b2413;color:#E8C875}
+:root[data-theme="dark"] .tint-su-nghiep{background:#152331;color:#7FB0EE}
+:root[data-theme="dark"] .tint-tinh-cam{background:#301c19;color:#F08A7A}
+:root[data-theme="dark"] .tint-con-cai{background:#15291d;color:#5FBF87}
+:root[data-theme="dark"] .tint-nha-cua{background:#251d13;color:#D2A876}
+:root[data-theme="dark"] .tint-chon-ngay{background:#0f211e;color:#6FC4B6}
+:root[data-theme="dark"] .tint-hoi-nhanh{background:#201a2e;color:#B2A0E8}
+:root[data-theme="dark"] .tint-tuong-mao{background:#2a1a22;color:#DE9DB8}
+/* ── Header springboard (ô tìm) — tên hiệu đã có ở .ws-top, không lặp lại ── */
+.hb-header{display:flex;flex-direction:column;gap:10px;margin-bottom:18px}
+.hb-search{display:flex;align-items:center;gap:8px;width:100%;background:var(--paper-2);border:1px solid var(--line);border-radius:11px;padding:10px 13px;color:var(--text-lt);font-family:inherit;font-size:13px;cursor:pointer;text-align:left}
+.hb-search:hover{border-color:var(--gold-soft)}
+.hb-search svg{width:16px;height:16px;flex:0 0 auto}
+.hb-search span{flex:1}
 /* ── VẬN HÔM NAY — thẻ hero theo ngày (deterministic, miễn phí) → mồi vào rail luận riêng ──
    Nền SÁNG theo token (`--white`), không còn navy cố định như bản cũ: thẻ nay
    là một tờ tranh, mà tranh thuỷ mặc thì phải đứng trên nền giấy. */
@@ -385,108 +358,6 @@
 .today-foot span{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--text-lt);white-space:nowrap}
 @container home (max-width:600px){.today-foot{margin-top:13px;gap:9px}
   .today-foot span{font-size:8.5px;letter-spacing:.09em}}
-/* ── CHÀO LẦN ĐẦU — thay thẻ Vận Hôm Nay cho khách CHƯA có lá số nhớ và CHƯA
-   đăng nhập. Nền SÁNG, viền vàng nhạt — cố ý KHÁC hẳn navy của today-card để
-   không đọc lẫn với "nội dung ngày" (đây là màn chào, không phải dữ kiện). */
-.welcome-card{background:#fff;border:1px solid var(--gold-soft);border-radius:16px;padding:22px 24px;margin-bottom:22px}
-.wc-eyebrow{font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold-soft);font-weight:700;margin-bottom:6px}
-.wc-title{font-family:var(--serif);font-size:19px;font-weight:600;color:var(--heading);margin-bottom:6px;line-height:1.3}
-.wc-sub{font-size:13px;color:var(--text-mid);line-height:1.55;margin-bottom:16px;max-width:580px}
-.welcome-card .cards{margin-bottom:16px}
-/* Thẻ gợi ý dùng LẠI .tcard có sẵn (xem renderHomeCards) nhưng KHÔNG in giá —
-   đây là màn chào đầu tiên, chưa phải lúc nói tới Lượng. */
-.wc-ask{background:var(--red);color:#fff;border:none;border-radius:10px;padding:12px 18px;font-size:13.5px;font-weight:600;font-family:var(--serif);cursor:pointer;display:inline-flex;align-items:center;gap:8px}
-.wc-ask:hover{filter:brightness(1.08)}
-/* ── KHỞI HÀNH — 3 bước, thay M3 ────────────────────────────────────────────
-   CỐ Ý để nền SÁNG + viền vàng, ngược hẳn thẻ Vận hôm nay (navy): hai khối
-   nằm sát nhau, cùng tông là đọc thành một khối dài và mắt trượt qua.
-   `::before` là dấu ấn thương hiệu nhẹ (✦ mờ ở góc) — gợi "cổng vào" chứ
-   không phải một form hành chính. */
-.kh-card{position:relative;overflow:hidden;background:linear-gradient(135deg,#fff,var(--gold-lt));border:1px solid var(--gold-soft);border-radius:16px;padding:18px 20px;margin-bottom:22px}
-.kh-card::before{content:"✦";position:absolute;right:-8px;top:-18px;font-size:96px;line-height:1;color:rgba(201,168,76,.10);font-family:var(--serif);pointer-events:none}
-.kh-eyebrow{font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold-soft);font-weight:700;margin-bottom:6px}
-.kh-h{font-family:var(--serif);font-size:17px;font-weight:600;color:var(--heading);margin-bottom:5px;line-height:1.3}
-.kh-sub{font-size:12.5px;color:var(--text-mid);line-height:1.55;margin-bottom:14px;max-width:480px}
-.kh-sub b{color:var(--heading)}
-/* Thanh 3 đoạn thay cho "1/3" khô khan — nhìn một giây biết còn xa hay gần. */
-.kh-bar{display:flex;gap:5px;margin-bottom:14px}
-.kh-seg{flex:1;height:5px;border-radius:3px;background:rgba(201,168,76,.16)}
-.kh-seg.on{background:linear-gradient(90deg,var(--gold-soft),var(--gold))}
-.kh-got{font-size:12.5px;font-weight:600;color:#2f7a4d;background:#e8f7ee;border:1px solid #a9dcbd;border-radius:8px;padding:8px 11px;margin-bottom:12px;line-height:1.45}
-.kh-steps{display:flex;flex-direction:column;gap:9px}
-.kh-step{display:flex;align-items:flex-start;gap:11px;padding:11px 12px;border:1px solid var(--border-lt);border-radius:11px;background:var(--white)}
-.kh-step.done{border-color:#cfe8da;background:#f6fbf8}
-/* Bước KẾ TIẾP nổi bật bằng viền vàng — trả lời thẳng câu "vậy giờ bấm gì". */
-.kh-step.next{border-color:var(--gold-soft);box-shadow:0 0 0 3px rgba(201,168,76,.14)}
-.kh-num{flex:0 0 auto;width:23px;height:23px;border-radius:50%;border:2px solid var(--border-lt);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--text-lt);margin-top:1px}
-.kh-step.done .kh-num{border-color:#2f7a4d;background:#2f7a4d;color:#fff}
-.kh-step.next .kh-num{border-color:var(--gold-soft);color:var(--gold-soft)}
-.kh-body{flex:1;min-width:0}
-.kh-t{font-size:13.5px;font-weight:600;color:var(--heading);line-height:1.35}
-.kh-step.done .kh-t{color:var(--text-mid)}
-.kh-d{font-size:12px;color:var(--text-mid);line-height:1.5;margin-top:3px}
-.kh-go{flex:0 0 auto;background:linear-gradient(135deg,var(--gold-soft),var(--gold));color:#2a1e05;border:none;border-radius:8px;padding:7px 13px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap;margin-top:1px}
-.kh-go:hover{filter:brightness(1.06)}
-/* Bậc 0 (khách vô danh): tiến độ tính ở máy, thưởng khoá sau nút này —
-   viền đứt để đọc như một ranh giới "còn một bước nữa mới lấy được". */
-.kh-guest{margin-top:13px;padding-top:13px;border-top:1px dashed var(--gold-soft);display:flex;flex-wrap:wrap;align-items:center;gap:10px;justify-content:space-between}
-.kh-guest-txt{font-size:12.5px;color:var(--text-mid);line-height:1.5;flex:1;min-width:200px}
-.kh-guest-txt b{color:var(--heading)}
-.kh-guest-btn{flex:0 0 auto;background:var(--red);color:#fff;border:none;border-radius:9px;padding:10px 16px;font-size:12.5px;font-weight:700;font-family:var(--serif);cursor:pointer}
-/* Khung chờ Khởi Hành — cùng cách làm với .sk-tile: dùng lại đúng lớp thật,
-   thanh xám vẽ bằng `background` nên không ăn vào layout, và `line-height` của
-   nút ghim tay vì <span> thừa hưởng khác <button>. Số bước là 3 (tiêu đề thật
-   ghi "3 bước đầu tiên"), mỗi bước để tiêu đề 1 dòng + mô tả 2 dòng — CỐ Ý
-   không khớp theo chữ, vì chữ đến từ `/api/payment?action=khoi-hanh-defs`. */
-.kh-skel .sk{display:block;color:transparent;
-  background:linear-gradient(var(--line),var(--line)) no-repeat left center/100% 11px}
-.kh-skel .kh-eyebrow .sk{background-size:34% 9px}
-.kh-skel .kh-h .sk{background-size:62% 13px}
-.kh-skel .kh-sub .sk:last-child{background-size:48% 11px}
-.kh-skel .kh-t .sk{background-size:56% 12px}
-.kh-skel .kh-d .sk:last-child{background-size:70% 11px}
-.kh-skel .kh-guest-txt .sk:last-child{background-size:64% 11px}
-.kh-skel .kh-num{background:var(--line);border-color:var(--line);color:transparent}
-.kh-skel .kh-go,.kh-skel .kh-guest-btn{background:var(--line);color:transparent;cursor:default}
-.kh-skel .kh-go{line-height:15px}
-.kh-skel .kh-guest-btn{line-height:16px}
-.kh-skel{pointer-events:none}
-@media(prefers-reduced-motion:no-preference){
-  .kh-skel .sk,.kh-skel .kh-num,.kh-skel .kh-go,.kh-skel .kh-guest-btn{animation:tileSkPulse 1.4s ease-in-out infinite}
-}
-.kh-guest-btn:hover{filter:brightness(1.08)}
-@media(max-width:520px){
-  .kh-step{flex-wrap:wrap}
-  .kh-go{margin-left:34px}
-}
-/* ── KÊNH LIÊN LẠC — 2 nhiệm vụ cũ của M3, tầng riêng nhẹ hơn hẳn Khởi Hành:
-   đây là kênh nhắc, không phải bước làm quen, nên không đáng chiếm cùng mức
-   nổi bật. CHỈ hiện khi đã đăng nhập (xem renderChannels). */
-.ch-card{background:var(--white);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin-bottom:22px}
-.ch-h{font-family:var(--serif);font-size:13.5px;font-weight:600;color:var(--heading);margin-bottom:9px}
-.ch-list{display:flex;flex-direction:column;gap:8px}
-.ch-row{display:flex;align-items:flex-start;gap:10px;padding:9px 11px;border:1px solid var(--border-lt);border-radius:9px}
-.ch-row.done{border-color:#cfe8da;background:#f6fbf8}
-.ch-tick{flex:0 0 auto;width:17px;height:17px;border-radius:50%;border:2px solid var(--border-lt);margin-top:2px}
-.ch-row.done .ch-tick{border-color:#2f7a4d;background:#2f7a4d;position:relative}
-.ch-row.done .ch-tick::after{content:"✓";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:700;line-height:1}
-.ch-body{flex:1;min-width:0}
-.ch-t{font-size:12.5px;font-weight:600;color:var(--heading)}
-.ch-row.done .ch-t{color:var(--text-mid)}
-.ch-d{font-size:11.5px;color:var(--text-lt);line-height:1.45;margin-top:2px}
-.ch-note{font-size:11.5px;line-height:1.5;margin-top:6px;padding:7px 9px;border-radius:7px}
-.ch-note.ok{color:#2f7a4d;background:#e8f7ee;border:1px solid #a9dcbd}
-.ch-note.err{color:#8a4b2a;background:#fdf1e7;border:1px solid #e8c9ae}
-.ch-note.wait{color:var(--text-mid);background:var(--paper-2);border:1px solid var(--border-lt)}
-.ch-pay{flex:0 0 auto;display:flex;flex-direction:column;align-items:flex-end;gap:5px}
-.ch-amt{font-size:11px;font-weight:700;color:var(--gold-soft);white-space:nowrap}
-.ch-row.done .ch-amt{color:#2f7a4d}
-.ch-go{background:none;border:1px solid var(--line);color:var(--text-mid);border-radius:7px;padding:5px 11px;font-size:11.5px;font-weight:600;cursor:pointer;font-family:inherit;white-space:nowrap}
-.ch-go:hover{border-color:var(--gold-soft);color:var(--heading)}
-@media(max-width:520px){
-  .ch-row{flex-wrap:wrap}
-  .ch-pay{flex-direction:row;align-items:center;width:100%;justify-content:space-between;margin-left:27px}
-}
 /* ── CHÀO DẪN — coachmark một lần, KHÔNG chặn thao tác của trang (nền mờ chỉ
    để mắt tập trung, click xuyên qua vẫn được ở phần còn lại của trang vì
    backdrop không bắt sự kiện — xem pointer-events trong JS). */
@@ -510,31 +381,42 @@
   <main class="ws" id="ws">
     <div class="ws-top">
       <button class="btn mobile-only" onclick="document.getElementById('shell-sidebar').classList.toggle('open');window.shellSyncBackdrop&&shellSyncBackdrop()" aria-label="Menu">☰</button>
-      <div class="ws-title"><b>Luận Đường</b><span>Chọn một công cụ mệnh lý để bắt đầu</span></div>
+      <div class="ws-title"><b>Tử Vi Minh Bảo</b><span>Tri mệnh lý – Thuận thế hành</span></div>
     </div>
     <div class="ws-body">
       <div class="home-body">
-        <!-- Chào lần đầu — CHỈ hiện khi CHƯA có lá số nhớ VÀ CHƯA đăng nhập
-             (xem `_returning` trong script bên dưới). Đứng lần đầu vào /app,
-             người ta thấy ngay thẻ Vận Hôm Nay và tưởng đó LÀ công cụ chính,
-             đọc xong không biết đi đâu tiếp. Khối này thay chỗ đó bằng một lời
-             chào + vài công cụ gợi ý + đường mở rail — đúng vai một "tiếp tân".
-             Người ĐANG QUAY LẠI (có lá số hoặc đã đăng ký) không thấy gì đổi:
-             card.style.display toggle giữa hai khối này, KHÔNG đụng logic của
-             #todayCard. -->
-        <div class="welcome-card" id="welcomeCard" style="display:none">
-          <div class="wc-eyebrow">Lần đầu ghé Luận Đường</div>
-          <div class="wc-title">Đây là nơi bạn lập lá số &amp; hỏi trợ lý Luận Đường</div>
-          <p class="wc-sub">Chọn một công cụ bên dưới để bắt đầu, hoặc bấm "Hỏi trợ lý" nếu chưa biết bắt đầu từ đâu — trợ lý sẽ hỏi lại và giới thiệu đúng công cụ.</p>
-          <div class="cards" id="wcCards" aria-busy="true" aria-label="Đang tải công cụ gợi ý">
-            <a class="tcard sk-tile"><div class="ic"></div><div class="tx"><b><span class="sk">&nbsp;</span></b><span class="sk">&nbsp;</span><span class="sk">&nbsp;</span></div></a>
-            <a class="tcard sk-tile"><div class="ic"></div><div class="tx"><b><span class="sk">&nbsp;</span></b><span class="sk">&nbsp;</span><span class="sk">&nbsp;</span></div></a>
-            <a class="tcard sk-tile"><div class="ic"></div><div class="tx"><b><span class="sk">&nbsp;</span></b><span class="sk">&nbsp;</span><span class="sk">&nbsp;</span></div></a>
-            <a class="tcard sk-tile"><div class="ic"></div><div class="tx"><b><span class="sk">&nbsp;</span></b><span class="sk">&nbsp;</span><span class="sk">&nbsp;</span></div></a>
-          </div>
-          <button class="wc-ask" id="welcomeAsk" type="button">✦ Hỏi trợ lý — tôi nên bắt đầu từ đâu?</button>
+        <!-- SPRINGBOARD — workshop 2026-09: 99% khách trên mobile, 46 công cụ
+             giấu sau nút "Xem tất cả" gập lại đo được CHỈ 4,8% người vào /app
+             từng mở tiếp một công cụ nào. Thay bằng: header + ô tìm → gợi ý có
+             LÝ DO (nextCard, giữ nguyên logic cũ) → lưới TOÀN BỘ công cụ luôn
+             hiện, đúng thứ tự Henry chốt (`home_rank`). Khởi Hành/Kênh liên
+             lạc/Mời bạn ĐÃ có bản đầy đủ hơn ở tab "Nhiệm Vụ" (/app/tai-khoan)
+             — bỏ hẳn bản trùng ở đây thay vì giữ hai nguồn trôi khỏi nhau. -->
+        <div class="hb-header">
+          <button class="hb-search" type="button" id="hbSearchBtn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4-4"/></svg>
+            <span>Tìm công cụ — Lá Số, Bát Tự, xem tuổi…</span>
+          </button>
         </div>
-        <div class="today-card" id="todayCard" style="display:none">
+        <!-- Khung chờ: `pickNext()` trả ĐÚNG 1 mục nên số ô là cố định, chỉ
+             độ dài chữ mới đổi. Xem chú thích .nx-skel trong <style>. -->
+        <div id="nextCard" class="nx-skel" aria-busy="true" aria-label="Đang tải gợi ý">
+          <div class="next-wrap">
+            <div class="grp-title"><span class="sk">&nbsp;</span></div>
+            <a class="nx-main"><div class="ic"></div>
+              <div class="nx-tx"><b><span class="sk">&nbsp;</span></b>
+                <div class="nx-why"><span class="sk">&nbsp;</span><span class="sk">&nbsp;</span></div></div></a>
+          </div>
+        </div>
+        <!-- Lưới springboard — dựng đồng bộ từ `ToolPrices.navFallback()`
+             (localStorage) NGAY trong <script> cuối trang, trước khi
+             `ToolPrices.load()` trả lời — không đợi mạng mới có hình dạng. -->
+        <div id="springboard"></div>
+        <!-- Vận Hôm Nay — GIỮ NGUYÊN logic/markup cũ, chỉ dời XUỐNG DƯỚI lưới
+             công cụ: đây không còn là khối ĐẦU trang nên hiện luôn (không cần
+             chọn sớm giữa hai khối như bản trước — welcomeCard đã bỏ, springboard
+             tự làm vai "tiếp tân" cho khách lần đầu). -->
+        <div class="today-card" id="todayCard">
           <!-- Tranh + triện: dựng RỖNG ở đây rồi mới đổ ảnh trong render(). Khung
                đã có kích thước cố định từ CSS nên ảnh về muộn cũng không đẩy gì
                bên dưới — đúng bẫy CLS đã đo trên /app. -->
@@ -562,89 +444,6 @@
           </div>
           <div class="today-foot"><span>Mỗi ngày một chỉ dẫn, sống chủ động hơn</span></div>
         </div>
-        <!-- KHỞI HÀNH — 3 bước làm quen sản phẩm, thay M3. Dựng bằng JS, hiện
-             CHO CẢ khách vô danh (bậc 0 — tiến độ tính ở máy, xem
-             localKhoiHanhSteps) lẫn người đã đăng nhập (server tự kiểm, xem
-             lib/onboarding/tasks.ts). Ẩn hẳn khi phần thưởng đã vào ví. -->
-        <!-- 🐞 Chọn khối đầu trang NGAY TRONG LÚC PHÂN TÍCH HTML, tức TRƯỚC lần
-             vẽ đầu. Đây là bản sửa cho một lượt vá HỎNG đã đo được: đặt việc lộ
-             khối vào `revealSlotEarly()` bên trong `run()` là chưa đủ, vì `run()`
-             gắn vào `DOMContentLoaded` — chạy SAU lần vẽ đầu. Khối vẫn chèn muộn,
-             mà nay còn mang theo khung chờ nên cú chèn TO HƠN trước: Lighthouse
-             mobile đo /app từ CLS 0,595 lên 0,827.
-
-             Tín hiệu dùng ở đây đúng bằng `_hasBirth`: `birthSnapshot()` của
-             shell.js đọc chính `localStorage['app_birth']`, không gì khác.
-             `_returning` còn cộng thêm `isLoggedIn()`, nhưng phiên đăng nhập thì
-             KHÔNG đọc đồng bộ được — nhánh đó vẫn do `revealSlotEarly()` trong
-             `run()` và `maybeUpgradeToReturning()` lo, y như trước.
-             Đọc hụt/hỏng JSON → không đụng gì, để `run()` quyết như cũ. -->
-        <script>
-        (function(){
-          try{
-            var b=JSON.parse(localStorage.getItem('app_birth')||'null');
-            var has=!!(b&&(b.ngay||b.day)&&(b.thang||b.month)&&(b.nam||b.year));
-            var el=document.getElementById(has?'todayCard':'welcomeCard');
-            if(el) el.style.display='';
-          }catch(e){ /* để run() lo */ }
-        })();
-        </script>
-        <!-- Khung chờ: thẻ này lộ ở nhịp hoãn 1,2 giây (xem `khSync`) nên nếu để
-             `display:none` thì nó chèn vào sau lần vẽ đầu và đẩy mọi thứ dưới.
-             MỌI đường không dựng được thẻ đều phải ẩn tay — xem `khHide()`. -->
-        <div id="khoiHanhCard" class="kh-skel" aria-busy="true" aria-label="Đang tải Khởi Hành">
-          <div class="kh-card">
-            <div class="kh-eyebrow"><span class="sk">&nbsp;</span></div>
-            <div class="kh-h"><span class="sk">&nbsp;</span></div>
-            <div class="kh-sub"><span class="sk">&nbsp;</span><span class="sk">&nbsp;</span></div>
-            <div class="kh-bar"><div class="kh-seg"></div><div class="kh-seg"></div><div class="kh-seg"></div></div>
-            <div class="kh-steps">
-              <div class="kh-step"><div class="kh-num"></div><div class="kh-body"><div class="kh-t"><span class="sk">&nbsp;</span></div><div class="kh-d"><span class="sk">&nbsp;</span><span class="sk">&nbsp;</span><span class="sk">&nbsp;</span></div></div><span class="kh-go">&nbsp;</span></div>
-              <div class="kh-step"><div class="kh-num"></div><div class="kh-body"><div class="kh-t"><span class="sk">&nbsp;</span></div><div class="kh-d"><span class="sk">&nbsp;</span><span class="sk">&nbsp;</span><span class="sk">&nbsp;</span></div></div><span class="kh-go">&nbsp;</span></div>
-              <div class="kh-step"><div class="kh-num"></div><div class="kh-body"><div class="kh-t"><span class="sk">&nbsp;</span></div><div class="kh-d"><span class="sk">&nbsp;</span><span class="sk">&nbsp;</span><span class="sk">&nbsp;</span></div></div><span class="kh-go">&nbsp;</span></div>
-            </div>
-            <div class="kh-guest"><div class="kh-guest-txt"><span class="sk">&nbsp;</span><span class="sk">&nbsp;</span></div>
-              <span class="kh-guest-btn">&nbsp;</span></div>
-          </div>
-        </div>
-        <!-- Kênh liên lạc — 2 nhiệm vụ CŨ của M3 (bật thông báo/liên kết chat),
-             tách tầng riêng: đây là kênh nhắc, không phải bước làm quen. CHỈ
-             hiện khi đã đăng nhập — khách vãng lai chưa có ví để mà cộng vào. -->
-        <div id="channelCard" style="display:none"></div>
-        <!-- Q1 — Tổng Quan mới. Trước đây chỗ này là lưới 58 công cụ
-             (`renderHomeCards`). Henry: "ko cần list lại nguyên đống tools nữa".
-             Thay bằng: gợi ý theo HÀNH VI (có lý do) + mã mời + một khối xổ ra
-             tại chỗ cho danh mục đầy đủ — khối này chỉ trả lời "tiếp theo nên
-             xem gì", còn "Xem tất cả công cụ" GIỮ NGƯỜI TRONG SHELL (không còn
-             trỏ ra /cong-cu ở ngoài shell), collapse mặc định, bấm mới dựng. -->
-        <!-- Khung chờ: `pickNext()` trả TỐI ĐA 3 mục nên số ô là cố định,
-             chỉ độ dài chữ mới đổi. Xem chú thích .sk-tile trong <style>. -->
-        <div id="nextCard" class="nx-skel" aria-busy="true" aria-label="Đang tải gợi ý">
-          <div class="next-wrap">
-            <div class="grp-title"><span class="sk">&nbsp;</span></div>
-            <a class="nx-main"><div class="ic"></div>
-              <div class="nx-tx"><b><span class="sk">&nbsp;</span></b>
-                <div class="nx-why"><span class="sk">&nbsp;</span><span class="sk">&nbsp;</span></div></div></a>
-            <div class="nx-more">
-              <a class="nx-item"><div class="ic"></div><div><b><span class="sk">&nbsp;</span></b><span class="sk">&nbsp;</span><span class="sk">&nbsp;</span></div></a>
-              <a class="nx-item"><div class="ic"></div><div><b><span class="sk">&nbsp;</span></b><span class="sk">&nbsp;</span><span class="sk">&nbsp;</span></div></a>
-            </div>
-          </div>
-        </div>
-        <!-- Khung chờ giữ sẵn chỗ của thẻ "Mời bạn". Viết TĨNH: khối thật chỉ
-             đổ được sau một vòng mạng (xem .inv-skel trong <style>), nên nếu
-             chỗ này rỗng thì lần vẽ đầu cao 0px và mọi thứ dưới nó bị đẩy. -->
-        <div id="inviteCard" aria-busy="true">
-          <div class="inv-card inv-skel" aria-hidden="true">
-            <div class="inv-t"><span class="sk">&nbsp;</span></div>
-            <div class="inv-d"><span class="sk">&nbsp;</span><span class="sk">&nbsp;</span><span class="sk">&nbsp;</span></div>
-            <div class="inv-row"><span class="inv-btn sk-btn">&nbsp;</span></div>
-          </div>
-        </div>
-        <div class="all-tools-wrap">
-          <button class="all-tools" id="allToolsBtn" type="button" aria-expanded="false" aria-controls="allToolsPanel">Xem tất cả công cụ <span class="all-tools-chev" aria-hidden="true">→</span></button>
-          <div class="all-tools-panel" id="allToolsPanel" hidden></div>
-        </div>
       </div>
     </div>
   </main>
@@ -655,38 +454,38 @@
 <script>window.SHELL_ACTIVE='home';</script>
 <script src="/tools-shared/hoang-dao.js?v=2"></script>
 <script src="/tools-shared/vn-timezone.js?v=1"></script>
-<script src="/tuvi-form.js?v=2"></script>
+<script src="/tuvi-form.js?v=3"></script>
 <script src="/poster.js?v=5" defer></script>
-<script src="/tool-prices.js?v=7"></script>
+<script src="/tool-prices.js?v=8"></script>
 <script src="/auth.js?v=2"></script>
   <script src="/nav.js?v=26" data-icons-only></script>
-<script src="/shell.js?v=87"></script>
+<script src="/shell.js?v=90"></script>
 <script>
 function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
-var IC={
-  grid:'<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18M15 3v18M3 9h18M3 15h18"/>',
-  rows:'<path d="M4 5h16M4 12h16M4 19h16"/>',
-  doc:'<path d="M4 19V5a2 2 0 0 1 2-2h9l5 5v11a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"/><path d="M8 12h8"/>',
-  heart:'<path d="M12 21s-7-4.6-9.5-9A5.2 5.2 0 0 1 12 6a5.2 5.2 0 0 1 9.5 6c-2.5 4.4-9.5 9-9.5 9z"/>',
-  handshake:'<path d="M8 12l3 3 4-4 3 3"/><path d="M2 10l4-4 5 5"/><path d="M22 10l-4-4-3 3"/>',
-  tag:'<path d="M20 12l-8 8-9-9V4h7z"/><circle cx="7.5" cy="7.5" r="1.3"/>',
-  cal:'<rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/>',
-  home:'<path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/>',
-  compass:'<circle cx="12" cy="12" r="9"/><path d="M15 9l-2 5-4 1 2-5z"/>',
-  face:'<circle cx="12" cy="12" r="9"/><path d="M9 10h.01M15 10h.01M9 15c1 1 5 1 6 0"/>',
-  users:'<circle cx="9" cy="8" r="3.2"/><path d="M3 20a6 6 0 0 1 12 0"/><circle cx="17.5" cy="9" r="2.2"/><path d="M16 20a5 5 0 0 1 5-4.6"/>',
-  baby:'<circle cx="12" cy="9" r="4"/><path d="M8.5 20c0-2.6 7-2.6 7 0"/><path d="M10 8h.01M14 8h.01"/>',
-  yinyang:'<circle cx="12" cy="12" r="9"/><path d="M12 3a4.5 4.5 0 0 0 0 9 4.5 4.5 0 0 1 0 9"/><circle cx="12" cy="7.5" r=".7"/><circle cx="12" cy="16.5" r=".7"/>',
-  hash:'<path d="M4 9h16M4 15h16M10 3 8 21M16 3l-2 18"/>',
-  leaf:'<path d="M11 20A7 7 0 0 1 4 13C4 7 10 4 20 4c0 8-4 12-9 12z"/><path d="M11 20c0-5 2-8 6-10"/>',
-  flower:'<circle cx="12" cy="12" r="2.2"/><path d="M12 9.8V4.6"/><path d="M14.1 10.7l3.7-3.7"/><path d="M14.2 13.3l4.9 1.6"/><path d="M10.8 14l-3 4.2"/><path d="M9.8 12.4L4.6 10.7"/>',
-  eye:'<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/>',
-  hand:'<path d="M8 13V5a1.5 1.5 0 0 1 3 0v6M11 11V3.5a1.5 1.5 0 0 1 3 0V11m0-4.5a1.5 1.5 0 0 1 3 0V12m0 .5V10a1.5 1.5 0 0 1 3 0v5.5c0 3.6-2 6.5-6 6.5h-1.5c-2.6 0-3.6-.9-5.2-3.4L5 15c-.7-1.1.5-2.4 1.7-1.7L8 14"/>',
-  mic:'<rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v4"/>',
-  image:'<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.8"/><path d="m21 15-5-5-9 9"/>',
-  temple:'<path d="m12 3 8 5H4z"/><path d="M3 8h18"/><path d="M6 8v9M18 8v9"/><path d="M10 17v-5h4v5"/><path d="M3 21h18"/>',
-  briefcase:'<rect x="2.5" y="7" width="19" height="13" rx="2"/><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/><path d="M2.5 12.5h19"/>'
-};
+/* ── Ô icon đầu .ws-top: `mountToolIcon()` (shell.js) tự chèn SVG của tool
+   đang active vào `.ws-avatar` — cho Home nó vẽ icon nhà chung chung, lệch
+   hẳn triện thật vừa đổi vào `.ws-title` bên cạnh. Thay bằng ảnh triện thật.
+
+   🔑 KHÔNG patch một lần: `mountToolIcon()` XOÁ rồi DỰNG LẠI `.ws-avatar` mỗi
+   lần `renderSidebar()` chạy — mà hàm đó chạy TỚI BA LẦN không đồng bộ (boot()
+   → nav-fallback từ localStorage → catalog thật từ mạng, xem `loadCatalog()`),
+   nên patch một lần lúc DOMContentLoaded sẽ bị viết đè ngay sau đó. Theo dõi
+   bằng MutationObserver để tự vá lại mỗi lần `.ws-avatar` bị dựng mới — không
+   đụng shell.js dùng chung cho 52 trang còn lại. */
+(function(){
+  var SEAL='<img src="/seal.webp" alt="Tử Vi Minh Bảo" style="width:100%;height:100%;object-fit:cover;border-radius:inherit;display:block">';
+  function patchWsAvatar(){
+    var av=document.querySelector('.ws-top .ws-avatar');
+    if(av && av.firstElementChild && av.firstElementChild.tagName!=='IMG') av.innerHTML=SEAL;
+  }
+  function start(){
+    patchWsAvatar();
+    var top=document.querySelector('.ws-top');
+    if(top && window.MutationObserver) new MutationObserver(patchWsAvatar).observe(top,{childList:true,subtree:true});
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',start);
+  else start();
+})();
 /* ── Q1: GỢI Ý "TIẾP THEO NÊN XEM GÌ" ─────────────────────────────────────
    Thay cho lưới 58 công cụ dựng từ `tool_groups` trước đây.
 
@@ -740,8 +539,9 @@ function usedMap() {
   try { return (window.Shell && Shell.usedTools) ? Shell.usedTools() : {}; } catch (e) { return {}; }
 }
 
-/* Trả tối đa 3 gợi ý [{row, why}]. Không có dữ liệu danh mục → mảng rỗng và
-   khối tự ẩn: thà không gợi còn hơn dẫn người ta tới một trang không tồn tại. */
+/* Trả ĐÚNG 1 gợi ý [{row, why}] (Henry 2026-09: một lựa chọn rõ ràng thay vì
+   dàn hàng 3). Không có dữ liệu danh mục → mảng rỗng và khối tự ẩn: thà không
+   gợi còn hơn dẫn người ta tới một trang không tồn tại. */
 function pickNext(d) {
   var rows = (d && d.rows) || [];
   if (!rows.length) return [];
@@ -750,7 +550,7 @@ function pickNext(d) {
 
   var used = usedMap(), out = [], taken = {};
   function add(key, why) {
-    if (out.length >= 3 || taken[key] || used[key] || !byKey[key]) return;
+    if (out.length >= 1 || taken[key] || used[key] || !byKey[key]) return;
     taken[key] = 1; out.push({ row: byKey[key], why: why });
   }
 
@@ -783,220 +583,77 @@ function renderNext(d) {
   host.classList.remove('nx-skel');
   host.removeAttribute('aria-busy');
   host.removeAttribute('aria-label');
-  var first = picks[0], rest = picks.slice(1);
+  var first = picks[0];
   var html = '<div class="next-wrap">' +
-    '<div class="grp-title">Tiếp theo nên xem gì</div>' +
+    '<div class="grp-title">✦ Gợi ý cho bạn</div>' +
     '<a class="nx-main" href="' + esc(first.row.app_path) + '">' +
       '<div class="ic">' + cardIcon(first.row) + '</div>' +
       '<div class="nx-tx"><b>' + esc(first.row.label) + '</b>' +
         '<div class="nx-why">' + esc(first.why) + '</div></div>' +
       '<div class="nx-go" aria-hidden="true">›</div>' +
     '</a>';
-  if (rest.length) {
-    html += '<div class="nx-more">' + rest.map(function (p) {
-      return '<a class="nx-item" href="' + esc(p.row.app_path) + '">' +
-        '<div class="ic">' + cardIcon(p.row) + '</div>' +
-        '<div><b>' + esc(p.row.label) + '</b><span>' + esc(p.why) + '</span></div></a>';
-    }).join('') + '</div>';
-  }
   host.innerHTML = html + '</div>';
   if (window.mountIcons) window.mountIcons(host);
 }
 renderNext(window.ToolPrices ? ToolPrices.navFallback() : null);
 if (window.ToolPrices) ToolPrices.load().then(function (d) { if (d) renderNext(d); });
 
-/* ── Q1: KHỐI MỜI BẠN ─────────────────────────────────────────────────────
-   Số đo 24/08: 46 link chia sẻ đã tạo, mỗi link kéo TB 1,7 người mở — nhưng
-   chỉ 3 người từng bấm nút Share. Nút thắt là CHỖ ĐẶT, không phải mức thưởng,
-   nên khối này hiện LUÔN ở Tổng Quan (khác invite-cta.js — chỉ hiện lúc hết
-   Lượng, tức lúc người ta đang bực).
+/* ── SPRINGBOARD — lưới TOÀN BỘ công cụ đã bật, luôn hiện (thay hẳn nút
+   "Xem tất cả công cụ" gập lại + lưới wcCards của màn chào cũ). Henry
+   2026-09: 4,8% người vào /app từng mở tiếp một công cụ — số đó phải lên,
+   giấu 46 công cụ sau một nút bấm là nguyên nhân.
 
-   Mọi con số lấy từ SERVER (`my-referral`), không viết cứng: mức thưởng và
-   trần đều chỉnh được bằng một câu SQL. Đọc hụt → khối tự ẩn, KHÔNG đoán. */
-(function () {
-  var host = document.getElementById('inviteCard'); if (!host) return;
-  /* Lấy token qua `getFreshToken()`, KHÔNG qua `getSession().access_token`:
-     cái sau là ẢNH CHỤP, trả token kể cả khi đã hết hạn → server 401 trong khi
-     người dùng vẫn đang đăng nhập (chú thích ngay trong auth.js). */
-  function freshToken() {
-    try {
-      if (window.Auth && Auth.getFreshToken) return Auth.getFreshToken();
-    } catch (e) { /* rơi xuống */ }
-    return Promise.resolve(null);
-  }
-  /* Khách chưa đăng nhập vẫn thấy khối — nhưng phần thưởng khoá sau nút tạo
-     tài khoản. 86/95 người chạy tool đang là khách vô danh; giấu hẳn khối này
-     với họ là bỏ đúng nhóm đông nhất. */
-  function renderGuest() {
-    host.innerHTML = '<div class="inv-card">' +
-      '<div class="inv-t">✦ Mời bạn — cả hai cùng có Lượng</div>' +
-      '<div class="inv-d">Tạo tài khoản để nhận Lượng chào mừng và lấy mã mời của riêng bạn. ' +
-        'Mỗi người đăng ký qua mã của bạn thì bạn được cộng thêm.</div>' +
-      '<div class="inv-row"><button class="inv-btn" type="button" id="invSignup">Tạo tài khoản</button></div>' +
-      '</div>';
-    host.removeAttribute('aria-busy');
-    var b = document.getElementById('invSignup');
-    if (b) b.onclick = function () {
-      // `Auth.require` mở modal đăng nhập/đăng ký rồi gọi callback khi xong.
-      try {
-        if (window.Auth && Auth.require) { Auth.require(function () { location.reload(); }); return; }
-      } catch (e) { /* rơi xuống dưới */ }
-      location.href = '/topup.html';
-    };
-  }
-  function renderMember(d) {
-    var code = d.code;
-    var reward = Number(d.rewardPerInvite) || 0;
-    var cap = Number(d.cap) || 0;
-    var capLeft = Math.max(0, cap - (Number(d.rewardedRecent) || 0));
-    var rewarded = Number(d.rewarded) || 0;
-    var earned = Number(d.creditsEarned) || 0;
-    var url = location.origin + '/app?ref=' + encodeURIComponent(code) +
-      '&utm_source=invite&utm_medium=referral&utm_campaign=home';
-
-    var line = capLeft > 0
-      ? 'Mỗi người đăng ký qua link của bạn: <b>+' + reward + ' Lượng</b> cho bạn' +
-        (capLeft < cap ? ' (còn ' + capLeft + ' lượt được thưởng trong 30 ngày)' : '') + '.'
-      : 'Bạn đã dùng hết lượt mời được thưởng trong 30 ngày qua — quay lại tháng sau nhé.';
-
-    host.innerHTML = '<div class="inv-card">' +
-      '<div class="inv-t">✦ Mời bạn — cả hai cùng có Lượng</div>' +
-      '<div class="inv-d">' + line + '</div>' +
-      '<div class="inv-row">' +
-        '<div class="inv-code" id="invUrl">' + esc(url) + '</div>' +
-        '<button class="inv-btn" type="button" id="invCopy">Chép link</button>' +
-      '</div>' +
-      (rewarded > 0
-        ? '<div class="inv-note">Đã mời được <b>' + rewarded + '</b> người · nhận <b>' + earned + ' Lượng</b>.</div>'
-        : '') +
-      '</div>';
-    host.removeAttribute('aria-busy');
-    var btn = document.getElementById('invCopy');
-    if (btn) btn.onclick = function () {
-      var done = function () { btn.textContent = 'Đã chép ✓'; setTimeout(function () { btn.textContent = 'Chép link'; }, 1800); };
-      try {
-        if (navigator.clipboard && navigator.clipboard.writeText) { navigator.clipboard.writeText(url).then(done, fallback); return; }
-      } catch (e) { /* rơi xuống */ }
-      fallback();
-      function fallback() {
-        // Clipboard API bị chặn (http, quyền) — chọn sẵn chữ để người ta tự Ctrl+C,
-        // đừng im lặng như thể đã chép xong.
-        try {
-          var n = document.getElementById('invUrl'), r = document.createRange();
-          r.selectNodeContents(n); var sel = window.getSelection(); sel.removeAllRanges(); sel.addRange(r);
-          btn.textContent = 'Nhấn Ctrl+C';
-        } catch (e2) { /* thôi */ }
-      }
-    };
-  }
-  /* Đợi `Auth` khôi phục phiên xong rồi mới quyết dựng thẻ nào — hỏi quá sớm
-     thì người ĐANG đăng nhập bị dựng nhầm thẻ khách (đúng bẫy đã ghi ở
-     `loadRailStatus`: token chưa xuất hiện ≠ chưa đăng nhập). Trần 8 giây để
-     máy không có phiên vẫn dựng được thẻ khách thay vì chờ mãi. */
-  function whenAuthReady(cb) {
-    var n = 0;
-    (function tick() {
-      var restoring = false;
-      try { restoring = !!(window.Auth && Auth.isRestoring && Auth.isRestoring()); } catch (e) { /* coi như xong */ }
-      if (!restoring || ++n > 80) { cb(); return; }
-      setTimeout(tick, 100);
-    })();
-  }
-  whenAuthReady(function () {
-    freshToken().then(function (tk) {
-      if (!tk) { renderGuest(); return; }
-      return fetch('/api/payment?action=my-referral', { headers: { Authorization: 'Bearer ' + tk } })
-        .then(function (r) { return r.ok ? r.json() : null; })
-        .then(function (d) { if (d && d.code) renderMember(d); else renderGuest(); });
-    }).catch(function () {
-      // Đọc hụt → không đoán, để TRỐNG như trước. Phải dọn tay vì chỗ này giờ
-      // khởi đầu bằng khung chờ: bỏ quên là nó nhấp nháy vĩnh viễn.
-      host.innerHTML = '';
-      host.removeAttribute('aria-busy');
-    });
-  });
-})();
-
-/* ── 4 công cụ gợi ý cho khối "Chào lần đầu" ──────────────────────────────
-   Chọn CÓ CHỦ ĐÍCH, không phải 4 tool đầu bảng: laso (sản phẩm chính) ·
-   tuong-hop + than-so-hoc (MIỄN PHÍ, dùng thử được ngay không cần trả Lượng)
-   · gio-sinh (tool "cửa ngõ" — không nhớ giờ sinh thì nhiều tool khác không
-   dùng đúng được, xem tooltip trong tuvi-form.js). CỐ Ý không in giá lên các
-   thẻ này (khác .tcard trong renderHomeCards) — đây là màn chào, chưa phải
-   lúc nói tới Lượng. */
-var WELCOME_PICKS=['laso','tuong-hop','gio-sinh','than-so-hoc'];
-function welcomeCardHtml(rows, toolId){
-  var it=null;
-  for(var i=0;i<rows.length;i++){ if(rows[i]&&rows[i].tool_id===toolId){ it=rows[i]; break; } }
-  if(!it||!it.app_path) return '';
-  return '<a class="tcard" href="'+esc(it.app_path)+'">'+
-    '<div class="ic">'+(window.iconHtml?window.iconHtml(it.icon):svg('grid'))+'</div>'+
-    '<div class="tx"><b>'+esc(it.label)+'</b><span>'+esc(it.question||it.description||'')+'</span></div>'+
-    '</a>';
+   Thứ tự = `tool_pricing.home_rank` (sửa trong Admin/SQL, không cần deploy).
+   24 mục đầu là dãy Henry XẾP TAY, CỐ Ý xen kẽ nhiều nhóm nhu cầu — đứng
+   RIÊNG không chia nhóm, vì chia nhóm đè lên là làm ngược đúng thứ tự đó.
+   Phần còn lại rơi về ĐÚNG nhóm của nó (`tool_groups` + `groupsOf` — CÙNG
+   nguồn sidebar dùng, không tự nghĩ ra một cách chia mới). */
+var SPRINGBOARD_MAIN_COUNT = 24;
+/* Tint ô theo nhóm NHU CẦU chính (`need_tags` đầu tiên) — xem 8 lớp `.tint-*`
+   trong <style>. Không khớp lớp nào (nhóm mới thêm chưa kịp gán màu) thì rơi
+   về `ban-than`, KHÔNG để ô trắng không màu. */
+function tileTint(row) {
+  return (String(row.need_tags || '').split(',')[0] || '').trim() || 'ban-than';
 }
-function renderWelcomeCards(d){
-  var host=document.getElementById('wcCards'); if(!host) return;
-  var rows=(d&&d.rows)||[];
-  if(!rows.length) return; // chưa có dữ liệu — giữ nguyên lượt render trước (hoặc trống), đừng xoá về rỗng
-  var html='';
-  for(var i=0;i<WELCOME_PICKS.length;i++) html+=welcomeCardHtml(rows, WELCOME_PICKS[i]);
-  host.innerHTML=html;
-  host.removeAttribute('aria-busy');
-  host.removeAttribute('aria-label');
-  if(window.mountIcons) window.mountIcons(host);
+function tileHtml(row) {
+  return '<a class="tile" href="' + esc(row.app_path) + '">' +
+    '<div class="tile-ic tint-' + esc(tileTint(row)) + '">' + cardIcon(row) + '</div>' +
+    '<span class="tile-lb">' + esc(row.label) + '</span></a>';
 }
-renderWelcomeCards(window.ToolPrices ? ToolPrices.navFallback() : null);
-if(window.ToolPrices) ToolPrices.load().then(function(d){ if(d) renderWelcomeCards(d); });
-
-/* ── "Xem tất cả công cụ" — XỔ TẠI CHỖ, không còn trỏ ra /cong-cu ────────
-   Henry (24/08): thao tác trong shell thì phải giữ người dùng TRONG shell.
-   Sidebar đã có sẵn đúng danh sách này (nhóm theo `tool_groups`, lọc
-   `app_path`) nên dựng lại ở đây bằng CHÍNH nguồn đó (`ToolPrices` +
-   `groupsOf` — cùng hàm shell.js dùng cho sidebar) thay vì chép một mảng
-   riêng — tránh lặp lại bài học "ba mảng tool chép tay trôi khỏi nhau". */
-function allToolCardHtml(row) {
-  var credits = window.ToolPrices ? ToolPrices.get(row.tool_id) : null;
-  var costHtml = row.is_free
-    ? '<span class="cost free">Miễn phí</span>'
-    : (typeof credits === 'number' && credits > 0 ? '<span class="cost">' + credits + ' L</span>' : '');
-  return '<a class="tcard" href="' + esc(row.app_path) + '">' + costHtml +
-    '<div class="ic">' + cardIcon(row) + '</div>' +
-    '<div class="tx"><b>' + esc(row.label) + '</b><span>' + esc(row.question || row.description || '') + '</span></div>' +
-    '</a>';
-}
-function renderAllTools(d) {
-  var host = document.getElementById('allToolsPanel'); if (!host) return;
-  var rows = (d && d.rows) || [];
-  var groups = (d && d.groups) || [];
+function renderSpringboard(d) {
+  var host = document.getElementById('springboard'); if (!host) return;
+  var rows = (d && d.rows) || [], groups = (d && d.groups) || [];
   var inApp = rows.filter(function (r) { return r && r.app_path; });
-  if (!inApp.length) { host.innerHTML = '<p style="font-size:12.5px;color:var(--text-lt);padding:8px 2px 0;">Chưa tải được danh mục — thử lại sau.</p>'; return; }
-  var seen = {}, html = '';
+  if (!inApp.length) return; // chưa có dữ liệu — giữ nguyên lượt render trước (hoặc rỗng), đừng xoá
+  var sorted = inApp.slice().sort(function (a, b) {
+    var ra = a.home_rank == null ? 1e9 : a.home_rank, rb = b.home_rank == null ? 1e9 : b.home_rank;
+    return ra - rb || String(a.label).localeCompare(String(b.label), 'vi');
+  });
+  var main = sorted.slice(0, SPRINGBOARD_MAIN_COUNT);
+  var mainIds = {}; main.forEach(function (r) { mainIds[r.tool_id] = 1; });
+  var rest = sorted.filter(function (r) { return !mainIds[r.tool_id]; });
+
+  var html = '<div class="grp-title">Công cụ chính</div><div class="grid">' + main.map(tileHtml).join('') + '</div>';
+  var seen = {};
   groups.forEach(function (g) {
-    var items = inApp.filter(function (r) { return ToolPrices.groupsOf(r, groups).indexOf(g.key) >= 0; });
+    var items = rest.filter(function (r) { return window.ToolPrices && ToolPrices.groupsOf(r, groups).indexOf(g.key) >= 0; });
     if (!items.length) return;
     items.forEach(function (r) { seen[r.tool_id] = 1; });
-    html += '<div class="grp-title">' + esc(g.title) + '</div><div class="cards">' + items.map(allToolCardHtml).join('') + '</div>';
+    html += '<div class="grp-title">' + esc(g.title) + '</div><div class="grid">' + items.map(tileHtml).join('') + '</div>';
   });
-  var rest = inApp.filter(function (r) { return !seen[r.tool_id]; });
-  if (rest.length) html += '<div class="grp-title">Khác</div><div class="cards">' + rest.map(allToolCardHtml).join('') + '</div>';
+  var other = rest.filter(function (r) { return !seen[r.tool_id]; });
+  if (other.length) html += '<div class="grp-title">Khác</div><div class="grid">' + other.map(tileHtml).join('') + '</div>';
   host.innerHTML = html;
   if (window.mountIcons) window.mountIcons(host);
 }
+renderSpringboard(window.ToolPrices ? ToolPrices.navFallback() : null);
+if (window.ToolPrices) ToolPrices.load().then(function (d) { if (d) renderSpringboard(d); });
+
+/* Ô tìm — mượn ĐÚNG command palette đã có (Ctrl K trên desktop), không dựng
+   một hộp tìm kiếm thứ hai. */
 (function () {
-  var btn = document.getElementById('allToolsBtn'), panel = document.getElementById('allToolsPanel');
-  if (!btn || !panel) return;
-  var loaded = false;
-  btn.addEventListener('click', function () {
-    var open = btn.getAttribute('aria-expanded') !== 'true';
-    btn.setAttribute('aria-expanded', open ? 'true' : 'false');
-    panel.hidden = !open;
-    if (!open || loaded) return;
-    loaded = true;
-    panel.innerHTML = '<p style="font-size:12.5px;color:var(--text-lt);padding:8px 2px 0;">Đang tải…</p>';
-    var cached = window.ToolPrices ? ToolPrices.navFallback() : null;
-    if (cached) renderAllTools(cached);
-    if (window.ToolPrices) ToolPrices.load().then(function (d) { if (d) renderAllTools(d); });
-  });
+  var b = document.getElementById('hbSearchBtn'); if (!b) return;
+  b.addEventListener('click', function () { try { Shell.openCmd(); } catch (e) { /* ignore */ } });
 })();
 </script>
 
@@ -1032,13 +689,6 @@ function renderAllTools(d) {
   function qrLink(){ return Poster.qrLink('van-ngay','/app'); }
 
   var _birth=null, _hasBirth=false, _today=null, _week=null, _viewing=null;
-  // "Returning" = có lá số nhớ trên máy HOẶC đã đăng nhập. Quyết định khối nào
-  // hiện đầu trang: thẻ Vận Hôm Nay (returning) hay lời chào + gợi ý tool
-  // (lần đầu). `_hasBirth` là tín hiệu ĐỒNG BỘ, đáng tin ngay từ đầu; đăng nhập
-  // thì KHÔNG — Auth có thể chưa khôi phục phiên xong lúc `run()` chạy (đúng
-  // bẫy `khSync` đã ghi bên dưới), nên nhánh đó được RE-CHECK ở
-  // `maybeUpgradeToReturning()` trên cùng nhịp hoãn 1,2 giây thay vì tin ngay.
-  var _returning=false;
   function isLoggedIn(){
     try{ var s=window.Auth&&Auth.getSession&&Auth.getSession(); return !!(s&&s.access_token); }catch(e){ return false; }
   }
@@ -1094,8 +744,6 @@ function renderAllTools(d) {
   // VÀ api chỉ hiểu shape contract (day/month/year) → PHẢI đổi, đừng truyền thẳng.
   try{ _birth=(Shell.getRememberedBirth&&Shell.birthToApi)?Shell.birthToApi(Shell.getRememberedBirth()):null; }catch(e){}
   _hasBirth=!!(_birth&&_birth.day&&_birth.month&&_birth.year);
-  _returning=_hasBirth||isLoggedIn();
-  revealSlotEarly();
 
   fetchDay(_today,true)
     .then(function(v){ if(v&&v.ok){ if(v.tuan)_week=v.tuan; render(v,_today,_birth,_hasBirth); }
@@ -1108,21 +756,7 @@ function renderAllTools(d) {
      Vận hôm nay là nội dung chính của màn hình này và không được chờ một lượt
      mạng khác. Hoãn 1,2 giây để `Auth` kịp khôi phục phiên — hỏi token quá sớm
      thì người đã đăng nhập lại bị coi là khách. */
-  setTimeout(function(){ khSync(); maybeUpgradeToReturning(); },1200);
-  }
-
-  /* Ca duy nhất `_returning` có thể sai lúc quyết định lần đầu: đăng nhập
-     rồi nhưng Auth CHƯA khôi phục xong phiên tại thời điểm `run()` chạy (cùng
-     bẫy comment trên `khSync` đã ghi). Re-check trên CÙNG nhịp hoãn — nếu
-     giờ xác nhận đã đăng nhập thì chuyển từ khối chào sang thẻ Vận Hôm Nay.
-     Nội dung thẻ đã render sẵn từ nhánh !hasBirth (vận CHUNG, không phải vận
-     riêng — đúng và hợp lý cho người CHƯA lưu lá số), chỉ đổi khối nào hiện. */
-  function maybeUpgradeToReturning(){
-    if(_returning||!isLoggedIn()) return;
-    _returning=true;
-    var w=el('welcomeCard'), t=el('todayCard');
-    if(w) w.style.display='none';
-    if(t&&t.getAttribute('data-rendered')) t.style.display='';
+  setTimeout(function(){ khSync(); },1200);
   }
 
   /* Chuyển thẻ sang một ngày khác trong dải. Vẫn MIỄN PHÍ, vẫn deterministic —
@@ -1175,35 +809,6 @@ function renderAllTools(d) {
     });
   }
 
-  /* Lộ đúng khối NGAY khi biết, không chờ mạng. Việc CHỌN khối nào là đồng bộ
-     (`_hasBirth` đọc localStorage); chỉ NỘI DUNG của thẻ mới cần `fetchDay`.
-     Trước đây cả hai khối nằm `display:none` tới khi `fetchDay` trả lời rồi
-     `showTodayOrWelcome()` mới lật — tức cả khối đầu trang chèn vào sau một
-     vòng mạng, đẩy mọi thứ bên dưới. Một trong ba cú nhảy CLS đo được trên /app.
-
-     🔑 CỐ Ý không gọi thẳng `showTodayOrWelcome()` ở đây: hàm đó còn đặt
-     `data-rendered`, thứ mà `maybeUpgradeToReturning()` đọc để biết nội dung
-     thẻ đã có THẬT hay chưa. Đặt sớm là nó lật sang một thẻ còn rỗng. */
-  function revealSlotEarly(){
-    var card=el('todayCard'), w=el('welcomeCard');
-    if(_returning){ if(card) card.style.display=''; if(w) w.style.display='none'; }
-    else { if(card) card.style.display='none'; if(w) w.style.display=''; }
-  }
-
-  /* Chỉ MỘT trong hai khối được thấy: thẻ Vận Hôm Nay (đã quay lại) hay lời
-     chào lần đầu. Đánh dấu `data-rendered` để `maybeUpgradeToReturning()` biết
-     nội dung thẻ đã có sẵn thật hay chưa trước khi lật sang hiện nó. */
-  function showTodayOrWelcome(){
-    var card=el('todayCard'), w=el('welcomeCard');
-    if(card) card.setAttribute('data-rendered','1');
-    if(_returning){
-      if(card) card.style.display='';
-      if(w) w.style.display='none';
-    } else {
-      if(card) card.style.display='none';
-      if(w) w.style.display='';
-    }
-  }
 
   /* ── Bảng TRA cho phần trình bày ─────────────────────────────────────────
      Đều là ánh xạ TRÌNH BÀY, khoá bằng giá trị API đã trả — không tính lại gì. */
@@ -1478,7 +1083,6 @@ function renderAllTools(d) {
     wireBirthForm(td);
 
     renderWeek(td);
-    showTodayOrWelcome();
     if(window.mountIcons) window.mountIcons(el('todayCard'));
     wire(v,td,birth,hasBirth,hours);
     try{ _canChiNam=(v&&v.caNhan&&v.caNhan.canChiNam)||_canChiNam; }catch(e){}
@@ -1599,7 +1203,6 @@ function renderAllTools(d) {
             +'<span class="thr-v">'+esc(h.range)+'</span></div>'; }).join('')+'</div>'
         :'<div class="tbox-empty">Không lấy được giờ hoàng đạo.</div>')+'</div>';
     grid.style.display='';
-    showTodayOrWelcome();
     if(window.mountIcons) window.mountIcons(el('todayCard'));
     wire({ngay:{canChi:r.data.canChiNgay,canHanh:r.data.canHanh},_flat:r.data},td,birth,hasBirth,hours);
   }
@@ -2103,8 +1706,15 @@ function renderAllTools(d) {
   }
 
   /* Điểm vào DUY NHẤT: quyết định vẽ bản khách vô danh hay hỏi server, tuỳ có
-     token hay không. Gọi lại được nhiều lần (đổi tab, vừa lưu lá số…). */
+     token hay không. Gọi lại được nhiều lần (đổi tab, vừa lưu lá số…).
+
+     🔑 Khởi Hành/Kênh liên lạc đã CHUYỂN HẲN sang tab "Nhiệm Vụ"
+     (/app/tai-khoan, account-core.js) — #khoiHanhCard/#channelCard không còn
+     trong HTML của trang này. Chặn ngay từ đầu thay vì để mọi hàm render*
+     bên dưới lặng lẽ no-op (chúng đều tự `if(!host) return`): thiếu dòng này
+     thì mỗi lượt vào /app vẫn bắn một POST onboarding-sync vô ích. */
   function khSync(){
+    if(!el('khoiHanhCard')&&!el('channelCard')) return;
     var tk=khToken();
     if(!tk){
       renderKhoiHanhGuest();
@@ -2129,9 +1739,13 @@ function renderAllTools(d) {
   });
 
   // Định nghĩa bậc 0 + câu quà đăng ký không cần chờ auth — tải song song ngay
-  // từ đầu để có sẵn khi `khSync()` chạy lượt đầu (1200ms, xem run()).
-  loadKhoiHanhDefs();
-  loadSignupBonusTxt();
+  // từ đầu để có sẵn khi `khSync()` chạy lượt đầu (1200ms, xem run()). Cùng
+  // guard với `khSync()` ở trên: không có host thì khỏi tải, đỡ 2 lượt mạng
+  // vô ích mỗi lần vào /app.
+  if(el('khoiHanhCard')||el('channelCard')){
+    loadKhoiHanhDefs();
+    loadSignupBonusTxt();
+  }
 
   // Chạy SAU khi shell.boot() render rail (boot hoãn tới DOMContentLoaded).
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',run); else run();
@@ -2170,9 +1784,12 @@ function renderAllTools(d) {
 
   var STEPS=[
     {
-      sel:'#khoiHanhCard',
-      t:'Đây là nơi bạn mở khoá Lượng',
-      d:'Làm 3 việc nhỏ — lập lá số, hỏi Thầy một câu, thử một công cụ — nhận thẳng 15 Lượng, đủ cho lượt luận tiếp theo.'
+      // Khởi Hành đã chuyển sang tab "Nhiệm Vụ" trong Tài khoản (không còn
+      // #khoiHanhCard ở /app) — neo THẲNG vào nút mở tab đó, đúng nơi bấm
+      // được thật, thay vì trỏ vào một khối không còn tồn tại.
+      sel:'.tab-home-btn',
+      t:'Đây là đường về Luận Đường',
+      d:'Bấm vào đây từ BẤT KỲ đâu để quay lại màn hình này. Mở khoá Lượng ở tab Tài khoản → Nhiệm Vụ: lập lá số, hỏi Thầy một câu, thử một công cụ.'
     },
     {
       sel:'#railInput',
@@ -2180,7 +1797,9 @@ function renderAllTools(d) {
       d:'Gõ bất kỳ điều gì đang canh cánh — tình duyên, sự nghiệp, hôm nay nên làm gì — rồi Enter là gửi. Cần lập lá số (bước trước) để mở khoá ô này.'
     },
     {
-      sel:'.kbtn[data-act="cmd"]',
+      // Sidebar bỏ ô tìm riêng (2026-09, đã có ô này trong Trang chủ) — neo
+      // thẳng vào #hbSearchBtn, cùng gọi Shell.openCmd() như .kbtn cũ.
+      sel:'#hbSearchBtn',
       t:'58 công cụ chỉ cách một phím',
       d:'Bấm vào đây hoặc gõ Ctrl K để tìm nhanh: xem tuổi, hợp hôn nhân, vận từng tháng… Mỗi công cụ soi lá số của bạn theo một góc khác.'
     },
@@ -2197,7 +1816,8 @@ function renderAllTools(d) {
   ];
   if(!isLoggedIn()){
     STEPS.push({
-      sel:'a.sb-foot',
+      // Hồ sơ đã dời lên ĐẦU sidebar (2026-09, thay `.sb-brand`/`.sb-foot` cũ).
+      sel:'a.sb-profile',
       t:'Đăng ký miễn phí, nhận Lượng ngay',
       d:'Không cần thẻ, không cần chờ — có tài khoản là được tặng Lượng để hỏi tiếp, và mọi lá số/lượt hỏi hôm nay được lưu lại đúng chỗ.'
     });
@@ -2210,17 +1830,20 @@ function renderAllTools(d) {
 
   function seen(){ try{ return localStorage.getItem(TOUR_KEY)==='1'; }catch(e){ return true; } }
   function markSeen(){ try{ localStorage.setItem(TOUR_KEY,'1'); }catch(e){} }
-  function esc2(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
-  // `offsetParent===null` bắt cả "không tồn tại" lẫn "tồn tại nhưng
-  // display:none" (Khởi Hành chưa kịp dựng, hoặc bị ẩn vì đã xong) — coi cả
-  // hai là CHƯA CÓ, đừng chỉ vào một khối vô hình.
-  function findTarget(sel){
-    var e=document.querySelector(sel);
-    return (e && e.offsetParent!==null) ? e : null;
+  // `TOUR_KEY` là cờ THEO TRÌNH DUYỆT — máy mới, trình duyệt ẩn danh, hay xoá
+  // site data đều làm mất cờ dù tài khoản đã dùng app lâu rồi, tour lại hiện
+  // ra cho một "returning user" thật. `user.created_at` (Supabase, đã có sẵn
+  // trong `Auth.getUser()` từ lúc đăng nhập, không cần gọi thêm) mới là tín
+  // hiệu THEO TÀI KHOẢN: tài khoản tạo quá 24h coi như không còn là lần đầu.
+  function isReturningUser(){
+    try{
+      var u=window.Auth&&Auth.getUser&&Auth.getUser();
+      if(!u||!u.created_at) return false;
+      return (Date.now()-new Date(u.created_at).getTime())>24*3600*1000;
+    }catch(e){ return false; }
   }
-
-  var _i=-1, _spot=null, _pop=null, _scrolled=false;
+  function esc2(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
   // Vùng NHÌN THẤY THẬT. `window.innerHeight` trên iOS Safari tính cả dải nằm
   // SAU thanh công cụ dưới cùng của trình duyệt, nên đặt trong innerHeight vẫn
@@ -2230,6 +1853,40 @@ function renderAllTools(d) {
     return vv ? {top:vv.offsetTop, left:vv.offsetLeft, h:vv.height, w:vv.width}
               : {top:0, left:0, h:window.innerHeight, w:window.innerWidth};
   }
+
+  // `offsetParent===null` bắt cả "không tồn tại" lẫn "tồn tại nhưng
+  // display:none" (Khởi Hành chưa kịp dựng, hoặc bị ẩn vì đã xong) — coi cả
+  // hai là CHƯA CÓ, đừng chỉ vào một khối vô hình. Dùng cho `onResize()`: bước
+  // ĐANG MỞ rồi thì đừng đóng tour giữa chừng chỉ vì một lượt resize đẩy neo ra
+  // khỏi khung nhìn tạm thời (vd bàn phím mobile đóng/mở) — `place()` tự kẹp
+  // popup vào khung nhìn, không cần huỷ bước.
+  function findTarget(sel){
+    var e=document.querySelector(sel);
+    return (e && e.offsetParent!==null) ? e : null;
+  }
+
+  // Soát CHẶT HƠN — dùng khi QUYẾT ĐỊNH có mở một bước MỚI hay không (`step()`
+  // và lượt quét `any` trong `start()`). `offsetParent!==null` chỉ bắt
+  // display:none, KHÔNG bắt sidebar/rail đóng bằng
+  // `transform:translateX(-100%)` trên mobile — neo vẫn "có" trong layout
+  // nhưng nằm hẳn ngoài màn hình bên trái, và (khác kiểu cuộn dọc quá tầm)
+  // `scrollIntoView` trong `place()` KHÔNG kéo nó vào được vì nó là
+  // `position:fixed` bị dịch, không phải bị cuộn qua. Kết quả nếu không chặn ở
+  // đây: vòng sáng chỉ vào chỗ không ai thấy, tooltip nổi lơ lửng không dính
+  // gì tới nút nào (bug mobile 2026-09, ảnh chụp step "Đăng ký"/"Ví Lượng" —
+  // cả hai đều neo bên trong sidebar). Bước nào neo trong drawer đang đóng thì
+  // bỏ qua, y hệt cách bỏ qua bước chưa dựng kịp.
+  function findVisibleTarget(sel){
+    var e=findTarget(sel);
+    if(!e) return null;
+    var r=e.getBoundingClientRect();
+    if(r.width<=0&&r.height<=0) return null;
+    var vp=viewport();
+    if(r.right<=vp.left||r.bottom<=vp.top||r.left>=vp.left+vp.w||r.top>=vp.top+vp.h) return null;
+    return e;
+  }
+
+  var _i=-1, _spot=null, _pop=null, _scrolled=false;
 
   function place(target,data,isLast){
     var pad=6;
@@ -2290,8 +1947,8 @@ function renderAllTools(d) {
 
   function step(i){
     if(i>=STEPS.length){ finish(); return; }
-    var data=STEPS[i], target=findTarget(data.sel);
-    if(!target){ step(i+1); return; } // phần tử chưa có lúc này → bỏ qua bước đó, đừng đứng khựng
+    var data=STEPS[i], target=findVisibleTarget(data.sel);
+    if(!target){ step(i+1); return; } // chưa dựng kịp HOẶC đang nằm trong drawer đóng → bỏ qua bước đó, đừng đứng khựng
     _i=i; _scrolled=false;
     place(target,data,i===STEPS.length-1);
   }
@@ -2301,6 +1958,31 @@ function renderAllTools(d) {
     if(_spot){ _spot.remove(); _spot=null; }
     if(_pop){ _pop.remove(); _pop=null; }
     bindWatchers(false);
+    watchDrawers(false);
+  }
+
+  // 🪤 `.tour-spot`/`.tour-pop` cố ý nổi TRÊN sidebar/rail (z-index 901/902 >
+  // 60) để không bị một drawer khác che mất — nhưng hệ quả là nếu người dùng
+  // TỰ bấm ☰/Trợ lý mở drawer giữa lúc một bước KHÔNG nằm trong drawer đang
+  // hiện (vd bước "#nextCard" ở khung giữa), vòng sáng vẫn đứng yên ở TOẠ ĐỘ
+  // CŨ của neo đó — sidebar mới mở vừa hay che đúng chỗ đó thì vòng sáng
+  // trông như đang khoanh vào một mục sidebar (đã báo qua ảnh chụp: bước
+  // "Thầy đã chọn sẵn" khoanh nhầm vào "Tổng quan"). Sidebar/rail mở tay là
+  // tín hiệu người dùng đã tự đi khám phá — đóng tour luôn, đúng tinh thần
+  // "không chặn thao tác khác của trang" đã có sẵn ở đầu file.
+  var _drawerObs=null;
+  function watchDrawers(on){
+    if(!on){ if(_drawerObs){ _drawerObs.disconnect(); _drawerObs=null; } return; }
+    if(_drawerObs || !window.MutationObserver) return;
+    var targets=[document.getElementById('shell-sidebar'), document.getElementById('shell-rail')].filter(Boolean);
+    if(!targets.length) return;
+    _drawerObs=new MutationObserver(function(muts){
+      for(var i=0;i<muts.length;i++){
+        var el=muts[i].target;
+        if(el && el.classList && el.classList.contains('open')){ finish(); return; }
+      }
+    });
+    targets.forEach(function(t){ _drawerObs.observe(t,{attributes:true,attributeFilter:['class']}); });
   }
 
   // 🪤 Trang /app cuộn trong #ws chứ không cuộn window → phải nghe 'scroll' ở
@@ -2326,11 +2008,11 @@ function renderAllTools(d) {
   }
 
   function start(){
-    if(seen()) return;
+    if(seen()||isReturningUser()) return;
     // Không bước nào có điểm neo (trang lỗi, hoặc các khối cùng chưa kịp
     // dựng) → đừng tạo một overlay không trỏ vào đâu cả.
     var any=false;
-    for(var k=0;k<STEPS.length;k++) if(findTarget(STEPS[k].sel)){ any=true; break; }
+    for(var k=0;k<STEPS.length;k++) if(findVisibleTarget(STEPS[k].sel)){ any=true; break; }
     if(!any) return;
 
     _spot=document.createElement('div'); _spot.className='tour-spot';
@@ -2338,6 +2020,7 @@ function renderAllTools(d) {
     document.body.appendChild(_spot);
     document.body.appendChild(_pop);
     bindWatchers(true);
+    watchDrawers(true);
     step(0);
   }
 

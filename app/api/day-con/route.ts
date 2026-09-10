@@ -21,7 +21,7 @@ import { railFreeGrant, railFreeTurnsPerGen } from '@/lib/billing/viral-budget';
 import { previewGate, previewIpHash } from '@/lib/billing/anon-preview';
 import { previewOf } from '@/lib/llm/preview-fields';
 import { computeLaso, type Laso } from '@/lib/engine/laso';
-import { computeDayCon, resolveMoiLo, type DayConProfile } from '@/lib/engine/day-con';
+import { computeDayCon, resolveMoiLo, meta, type DayConProfile } from '@/lib/engine/day-con';
 import { coSoDoc } from '@/lib/engine/nguoi-khac';
 import { DAY_CON_SYSTEM_PROMPT, DAY_CON_SCHEMA, buildDayConPrompt } from '@/lib/agent/day-con-prompt';
 import type { BirthParams } from '@/lib/contract/v1';
@@ -149,45 +149,6 @@ const PREVIEW_KEEP = [...PREVIEW_KEEP_META, ...PREVIEW_KEEP_PROSE];
 function previewExtras(p: DayConProfile, ls: Laso) {
   const ks = [...(p.assess.khieu || [])].sort((a, b) => b.diem - a.diem);
   return { khieuTop: ks[0] || null, coSo: coSoDoc(ls, p) };
-}
-
-/** Phần deterministic trả kèm — client dựng được khung ngay cả khi phần chữ mỏng. */
-function meta(p: DayConProfile, ten: string) {
-  return {
-    ten,
-    moiLo: { id: p.moiLo.id, label: p.moiLo.label, can: p.moiLo.can },
-    gioiTinh: p.gioiTinh,
-    tuoi: p.tuoi,
-    namSinh: p.namSinh,
-    kieu: {
-      id: p.kieu.id,
-      ten: p.kieu.ten,
-      tuTuong: p.kieu.tuTuong,
-      motCau: p.kieu.motCau,
-      dongLuc: p.kieu.dongLuc,
-    },
-    kieuPhu: p.kieuPhu ? { id: p.kieuPhu.id, ten: p.kieuPhu.ten, motCau: p.kieuPhu.motCau } : null,
-    lai: p.phan.lai,
-    toaDo: { x: p.phan.xNorm, y: p.phan.yNorm },
-    hoc: p.hoc,
-    than: p.than,
-    matDoc: p.matDoc,
-    changHoc: p.changHoc,
-    vanNam: p.vanNam,
-    voiChaMeCoSo: p.voiChaMe,
-    namXem: p.namXem,
-    // Khung "5 Trục · 8 Chất" — tra bảng thuần, 0 lượt LLM ⇒ thuộc phần TÍNH
-    // THỬ MIỄN PHÍ (W1). Tường chỉ đứng trên phần chữ do model viết.
-    truc: p.assess.truc,
-    khieu: p.assess.khieu,
-    khieuNoiBat: p.assess.noiBat.map((k) => k.id),
-    coNoiBat: p.assess.coNoiBat,
-    chatThapNhat: p.assess.canDo,
-    // 🪤 TÊN KHÁC khoá `hoatDong` mà model trả về. `payload` spread `meta()`
-    // TRƯỚC rồi mới gán các khoá chữ — trùng tên là bảng hoạt động bị đè bằng
-    // một đoạn văn, và trang mất hẳn khối gợi ý mà KHÔNG có lỗi nào bắn ra.
-    goiYHoatDong: p.hoatDong,
-  };
 }
 
 const clean = (v: unknown) => String(v == null ? '' : v).trim();

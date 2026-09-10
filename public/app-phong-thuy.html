@@ -9,7 +9,7 @@
 <link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/fonts/noto-serif.css?v=1">
-<link rel="stylesheet" href="/shell.css?v=34">
+<link rel="stylesheet" href="/shell.css?v=40">
 <style>
 .pt-card{background:var(--white);border:1px solid var(--line);border-radius:14px;padding:20px 22px;box-shadow:var(--shadow);max-width:680px;margin-bottom:16px}
 .pt-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:4px;display:flex;align-items:center;gap:8px}
@@ -133,12 +133,22 @@
           <img class="intro-avatar" src="/tool-avatars/phong-thuy.webp" alt="" onerror="this.remove()">
           <div class="intro-text">
             <div class="intro-t">Phong Thủy Nội Thất</div>
-            <div class="intro-d">Phong Thủy Nội Thất đọc phong thủy căn phòng theo Bát Trạch và Ngũ Hành từ ảnh bạn chụp. Gia đình hay cãi vã, tiền bạc cứ ra vào không giữ được — mà chưa từng nghĩ có thể do cách kê đồ trong phòng? Chụp ảnh phòng, nhận phân tích chỗ nào hợp, chỗ nào nên đổi.</div>
+            <div class="intro-d">Phong Thủy Nội Thất đọc phong thủy căn phòng theo Bát Trạch và Ngũ Hành từ ảnh bạn chụp. Chụp ảnh phòng, nhận điểm trước – sau và đề xuất bố trí cụ thể.</div>
             <div id="introSrc" style="min-height:55.2px;margin-top:9px"></div>
           </div>
         </div>
+        <div class="hero-pills">
+          <div class="hero-pill"><span class="hp-ic" data-icon="bar-chart-3"></span><span>Điểm trước<br>– sau</span></div>
+          <div class="hero-pill"><span class="hp-ic" data-icon="layout-grid"></span><span>Sơ đồ bố trí<br>đề xuất</span></div>
+          <div class="hero-pill"><span class="hp-ic" data-icon="camera"></span><span>Render phòng<br>theo phong thủy</span></div>
+        </div>
       </div></div>
       <div id="shellRecent"></div>
+      <div class="samp-cta" id="sampCta">
+        <span class="sc-ic" data-icon="lightbulb"></span>
+        <span class="sc-txt"><b>Chưa muốn khai thông tin & ảnh?</b><span>Bạn có thể xem một bản mẫu để trải nghiệm trước.</span></span>
+        <button type="button" id="btnSample" data-sample-tool="phong-thuy" onclick="SampleHint.open(this)">Xem bản mẫu →</button>
+      </div>
 
       <div class="pt-card">
         <h2><span class="pt-num">1</span> Bản Mệnh &amp; Thông Tin Phòng</h2>
@@ -184,8 +194,8 @@
       </div>
 
       <div class="pt-card">
-        <h2><span class="pt-num">2</span> Chụp / Tải Ảnh Phòng</h2>
-        <p class="sub">Cho biết năm sinh, giới tính, loại phòng, hướng cửa chính và chụp ảnh căn phòng. Hệ thống phân tích ảnh theo Bát Trạch và Ngũ Hành. Nhận về điểm phong thủy trước – sau cùng đề xuất bố trí, vật phẩm nên thêm.</p>
+        <div class="fc-head"><span class="fc-ic" data-icon="camera"></span><h2><span class="pt-num">2</span> Chụp / Tải Ảnh Phòng</h2></div>
+        <p class="sub">Chụp ảnh căn phòng sau khi đã điền năm sinh, giới tính và hướng cửa chính. Nhận về điểm phong thủy trước – sau, đề xuất bố trí và vật phẩm nên thêm.</p>
         <p class="price-note" data-tvp-price-label="phong-thuy">…</p>
         <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click()" ondragover="onDrag(event,1)" ondragleave="onDrag(event,0)" ondrop="onDrop(event)">
           <input type="file" id="fileInput" accept="image/*" onchange="onFile(event)">
@@ -201,9 +211,28 @@
       </div>
 
       <div class="pt-card">
-        <div class="cost-row"><span>Chi phí: <strong><span data-tvp-price="phong-thuy">…</span> Lượng</strong></span></div>
         <div class="error-box" id="errorBox"></div>
-        <button class="btn-analyze" id="btnAnalyze" onclick="doAnalyze()"><span class="ic" data-icon="compass"></span> Phân Tích Phong Thủy — <span data-tvp-price="phong-thuy">…</span> Lượng</button>
+        <div class="cost-box">
+          <div class="cb-l">
+            <span class="cb-ic" data-icon="wallet"></span>
+            <div>
+              <div class="cb-title">Chi phí sử dụng</div>
+              <div class="cb-amt"><span data-tvp-price="phong-thuy">…</span> Lượng <span class="vnd" data-tvp-price-vnd="phong-thuy"></span> mỗi lượt</div>
+              <div class="cb-pay">
+                <span><span class="ic" data-icon="qr-code"></span> Chuyển khoản (qua QR ngân hàng)</span>
+                <span><span class="ic" data-icon="credit-card"></span> PayPal / Thẻ quốc tế</span>
+              </div>
+            </div>
+          </div>
+          <div class="cb-r">
+            <span class="cb-ic" data-icon="gift"></span>
+            <div class="cb-r-txt">Mua gói để nhận nhiều ưu đãi hơn.<br><a href="/topup.html">Xem các gói ngay →</a></div>
+          </div>
+        </div>
+        <button class="btn-go" id="btnAnalyze" onclick="doAnalyze()">
+          <span class="bg-label"><span class="ic" data-icon="compass"></span><b id="btnAnalyzeLabel">Phân Tích Phong Thủy</b></span>
+          <small>Tốn <span data-tvp-price="phong-thuy">…</span> Lượng <span data-tvp-price-vnd="phong-thuy"></span></small>
+        </button>
       </div>
 
       <div class="pt-card loading-overlay" id="loadingOverlay">
@@ -295,7 +324,8 @@
 window.SHELL_INTRO={key:'phong-thuy'};</script>
 <script src="/auth.js?v=2"></script>
 <script src="/tuvi-paywall.js?v=33"></script>
-  <script src="/nav.js?v=26" data-icons-only></script><script src="/shell.js?v=87"></script>
+  <script src="/nav.js?v=26" data-icons-only></script><script src="/tools-shared/sample-hint.js?v=1"></script>
+<script src="/shell.js?v=90"></script>
 <script src="/tools-shared/ai-loading-steps.js?v=10"></script>
 <script src="/tools-shared/bat-trach.js?v=2"></script>
 <script>
@@ -571,6 +601,18 @@ async function downloadRender() {
 }
 
 TuviPaywall.init({ product: 'phong-thuy' });
+
+// Ghi "(~X đ)" cạnh số Lượng trong hộp chi phí + nút CTA — cùng mẫu
+// `_fillVndSlots` của app-luan-giai.html. `ToolPrices.vndLabel` tự trả ''
+// khi chưa đọc được `credit_packages`, lúc đó không hiện gì (không đoán số).
+function _fillVndSlots(host,product){
+  if(!host||!window.ToolPrices) return;
+  var els=host.querySelectorAll('[data-tvp-price-vnd]');
+  var cost=window.ToolPrices.get(product);
+  var lbl=cost!=null?window.ToolPrices.vndLabel(cost):'';
+  els.forEach(function(el){ el.textContent=lbl?('('+lbl+')'):''; });
+}
+TuviPaywall.fillPriceSlots(document).then(function(){ _fillVndSlots(document,'phong-thuy'); });
 </script>
 </body>
 </html>

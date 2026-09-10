@@ -9,17 +9,11 @@
 <link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/fonts/noto-serif.css?v=1">
-<link rel="stylesheet" href="/shell.css?v=34">
+<link rel="stylesheet" href="/shell.css?v=40">
 <style>
-.form-card{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);max-width:600px}
-.form-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:3px}
+.form-card{max-width:600px}
 .form-card p.sub{font-size:12.5px;color:var(--text-lt);margin-bottom:16px}
 .frow{display:flex;gap:11px;flex-wrap:wrap;align-items:flex-end;margin-bottom:13px}
-.fg{display:flex;flex-direction:column;gap:5px}
-.fg label{font-size:10.5px;font-weight:600;color:var(--text-lt);letter-spacing:.04em;text-transform:uppercase}
-.fg input,.fg select{border:1px solid var(--line-2);border-radius:7px;padding:8px 10px;font-size:13.5px;font-family:inherit;color:var(--text);background:var(--paper);outline:none}
-.fg input:focus,.fg select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(20,85,164,.12)}
-.btn-go{background:var(--red);color:#fff;border:none;border-radius:8px;padding:10px 22px;font-size:14px;font-weight:600;cursor:pointer;font-family:var(--serif)}
 .btn-go:disabled{opacity:.6;cursor:not-allowed}
 .err{color:var(--tx-red);font-size:13px;margin-top:8px;display:none}
 .err.active{display:block}
@@ -87,22 +81,30 @@
           <img class="intro-avatar" src="/tool-avatars/xem-tuoi-sinh-con.webp" alt="" onerror="this.remove()">
           <div class="intro-text">
             <div class="intro-t">Xem tuổi sinh con</div>
-            <div class="intro-d">Xem tuổi sinh con tra năm sinh con hợp địa chi của cả bố và mẹ. Sợ sinh con nhằm năm tài chính eo hẹp hay sức khoẻ mẹ không thuận, mà chẳng biết dựa vào đâu để chọn? Nhập năm sinh hai vợ chồng, nhận danh sách năm hợp để tham khảo.</div>
+            <div class="intro-d">Đối chiếu địa chi năm sinh của bố và mẹ, tìm năm thuận nhất để sinh con trong 15 năm tới. Nhập năm sinh hai vợ chồng để xem ngay.</div>
             <div id="introSrc" style="min-height:36.8px;margin-top:9px"></div>
           </div>
+        </div>
+        <div class="hero-pills">
+          <div class="hero-pill"><span class="hp-ic" data-icon="scale"></span><span>Lục Hợp · Tam Hợp<br>Lục Xung</span></div>
+          <div class="hero-pill"><span class="hp-ic" data-icon="calendar-days"></span><span>Bảng đủ<br>15 năm tới</span></div>
+          <div class="hero-pill"><span class="hp-ic" data-icon="star"></span><span>Năm thuận nhất<br>để sinh con</span></div>
         </div>
       </div></div>
       <div id="shellRecent"></div>
       <div class="form-card" id="birthPanel">
-        <h2>Năm sinh của bố và mẹ</h2>
-        <p class="sub">Nhập năm sinh của cả bố và mẹ. Hệ thống đối chiếu địa chi hai người qua 15 năm tới. Nhận về bảng đánh giá từng năm và năm thuận nhất để sinh con.</p>
+        <div class="fc-head"><span class="fc-ic" data-icon="baby"></span><h2>Năm sinh của bố và mẹ</h2></div>
+        <p class="sub">Nhập năm sinh bố và mẹ để xem bảng đánh giá 15 năm tới và năm thuận nhất.</p>
         <p class="price-note" data-tvp-price-label="xem-tuoi-sinh-con">…</p>
         <div class="frow" style="margin-bottom:4px">
           <div class="fg" style="width:130px"><label>Năm sinh bố</label><input type="number" id="inpNamBo" placeholder="1990" min="1900" max="2100"></div>
           <div class="fg" style="width:130px"><label>Năm sinh mẹ</label><input type="number" id="inpNamMe" placeholder="1992" min="1900" max="2100"></div>
-          <button class="btn-go" id="btnGo" onclick="doSinhCon()">Xem 15 năm →</button>
         </div>
         <div class="err" id="error-msg"></div>
+        <button class="btn-go" id="btnGo" onclick="doSinhCon()">
+          <span class="bg-label"><span class="ic" data-icon="hourglass"></span><b id="btnGoLabel">Xem 15 năm →</b></span>
+          <small>Miễn phí</small>
+        </button>
       </div>
 
       <div id="resPanel" data-ws-result>
@@ -134,7 +136,7 @@ window.SHELL_INTRO={key:'sinh-con'};</script>
 <script src="/tools-shared/xem-tuoi-sinh-con.js?v=1"></script>
 <script src="/auth.js?v=2"></script>
   <script src="/nav.js?v=26" data-icons-only></script>
-<script src="/shell.js?v=87"></script>
+<script src="/shell.js?v=90"></script>
 <script>
 function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 var HANH_COLOR={'Mộc':'var(--green)','Hỏa':'var(--red)','Thổ':'var(--gold-soft)','Kim':'#8a8a8a','Thủy':'var(--blue)'};

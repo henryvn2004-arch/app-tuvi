@@ -56,35 +56,40 @@ body{font-family:var(--sans);background:var(--paper-2);color:var(--text);font-si
 .shell{display:grid;grid-template-columns:246px 1fr var(--rail-w);height:100vh;min-height:600px}
 
 /* ── SIDEBAR ── */
-.sb{background:linear-gradient(180deg,var(--navy),var(--navy-2));color:var(--sb-txt);display:flex;flex-direction:column;overflow:hidden}
-.sb-brand{display:flex;align-items:center;gap:11px;padding:14px 16px;text-decoration:none}
+.sb{background:linear-gradient(180deg,var(--navy),var(--navy-2));color:var(--sb-txt);display:flex;flex-direction:column;overflow-y:auto}
+.sb::-webkit-scrollbar{width:8px}.sb::-webkit-scrollbar-thumb{background:rgba(255,255,255,.08);border-radius:8px}
 .seal{width:34px;height:34px;border-radius:7px;object-fit:cover;border:1px solid rgba(201,168,76,.45);flex:0 0 auto;display:block}
-.brand-txt b{font-family:var(--serif);font-size:14.5px;color:#fff;font-weight:600;display:block;line-height:1.2}
-/* Slogan, KHÔNG hoa + KHÔNG giãn chữ rộng: cột chữ chỉ còn 169px (246 − đệm 32
-   − dấu ấn 34 − khe 11). Chữ hoa với letter-spacing .32em tràn ngay ở chuỗi 28
-   ký tự này. Cỡ chữ + giãn ở đây khớp `.ft-brand-zh` / `.nav-logo .url` trong
-   nav.js — cùng một slogan thì để cùng một lối trình bày. */
-.brand-txt span{font-size:9.5px;color:var(--gold);letter-spacing:.04em;white-space:nowrap}
-.sb-pulse{margin:2px 16px 8px;padding-bottom:9px;border-bottom:1px solid var(--sb-line);display:flex;flex-direction:column;gap:4px}
+/* Hồ sơ — đầu sidebar trên MỌI trang (2026-09, thay `.sb-brand`/`.sb-foot` cũ):
+   trước đây tên hiệu lặp lại y hệt `.ws-top` của Trang chủ (Henry chỉ ra qua
+   ảnh chụp mobile), còn hồ sơ cũ lại chỉ nằm ở ĐÁY. Gộp về một khối, đưa lên
+   TRÊN — đúng chỗ người dùng tìm khi cần xem ví/đăng xuất. */
+.sb-profile{display:flex;align-items:center;gap:11px;padding:14px 16px;text-decoration:none;border-bottom:1px solid var(--sb-line)}
+.sb-profile:hover{background:rgba(255,255,255,.03)}
+.sb-profile-tx{flex:1;min-width:0}
+.sb-profile-tx .nm{font-family:var(--serif);font-size:14.5px;color:#fff;font-weight:600;line-height:1.25;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sb-profile-tx .sub{font-size:11px;color:var(--gold);margin-top:2px}
+.sb-profile-chev{color:var(--sb-txt-dim);opacity:.6;flex:0 0 auto;width:14px;height:14px}
+.sb-profile-chev svg{width:100%;height:100%}
+.sb-pulse{margin:10px 16px 8px;padding-bottom:9px;border-bottom:1px solid var(--sb-line);display:flex;flex-direction:column;gap:4px}
 .sb-pulse[hidden]{display:none}
 .sbp-row{display:flex;align-items:center;gap:6px;font-size:11.5px;color:var(--sb-txt-dim)}
 .sbp-row b{color:var(--sb-txt);font-weight:600}
 .sbp-dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:#6fce97;flex:0 0 auto;animation:sbpPulse 1.8s ease-in-out infinite}
 @keyframes sbpPulse{0%,100%{box-shadow:0 0 0 0 rgba(95,191,135,.45)}50%{box-shadow:0 0 0 4px rgba(95,191,135,0)}}
 .sbp-ic{width:12px;height:12px;flex:0 0 auto;opacity:.65;color:var(--gold)}
-.kbtn{margin:6px 12px 4px;display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.05);border:1px solid var(--sb-line);border-radius:9px;padding:8px 11px;color:var(--sb-txt-dim);font-size:12.5px;cursor:pointer;width:calc(100% - 24px);font-family:inherit}
-.kbtn:hover{background:rgba(255,255,255,.08);color:var(--sb-txt)}
-.kbtn kbd{margin-left:auto;font-family:var(--sans);font-size:10px;background:rgba(255,255,255,.09);border:1px solid var(--sb-line);border-radius:4px;padding:2px 6px}
-.sb-nav{flex:1;overflow-y:auto;padding:6px 8px 14px}
-.sb-nav::-webkit-scrollbar{width:8px}.sb-nav::-webkit-scrollbar-thumb{background:rgba(255,255,255,.08);border-radius:8px}
-.grp{margin-top:9px}
-.grp-h{display:flex;align-items:center;gap:7px;padding:6px 10px;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--sb-txt-dim);font-weight:600;cursor:pointer;user-select:none}
+.grp{margin-top:9px;padding:0 8px}
+.grp-h{display:flex;align-items:center;gap:7px;padding:6px 2px;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--sb-txt-dim);font-weight:600;cursor:pointer;user-select:none}
 .grp-h .chev{margin-left:auto;transition:transform .2s;opacity:.5;width:13px;height:13px}
-.grp.closed .chev{transform:rotate(-90deg)}.grp.closed .item{display:none}
-.item{display:flex;align-items:center;gap:10px;padding:7px 10px;border-radius:7px;color:var(--sb-txt);cursor:pointer;font-size:13px;position:relative;text-decoration:none}
+.grp-h .grp-link{margin-left:auto;text-transform:none;letter-spacing:0;font-size:11px;font-weight:600;color:var(--gold-soft);cursor:pointer;text-decoration:none}
+.grp-h .grp-link:hover{color:var(--gold)}
+.grp.closed .chev{transform:rotate(-90deg)}.grp.closed .grp-nav{display:none}
+.item{display:flex;align-items:center;gap:10px;padding:7px 8px;margin:1px 0;border-radius:7px;color:var(--sb-txt);cursor:pointer;font-size:13px;position:relative;text-decoration:none;width:100%;box-sizing:border-box}
+button.item{border:none;background:none;font:inherit;text-align:left}
 .item:hover{background:rgba(255,255,255,.05);color:#fff}
 .item.active{background:linear-gradient(90deg,rgba(201,168,76,.16),rgba(201,168,76,.02));color:#fff;font-weight:500}
 .item.active::before{content:"";position:absolute;left:0;top:6px;bottom:6px;width:3px;border-radius:0 3px 3px 0;background:var(--gold)}
+.item.danger:hover{background:rgba(192,57,43,.14);color:#f0b2a8}
+.item.danger:hover .ic{opacity:.9;color:#f0b2a8}
 .ic{width:15px;height:15px;flex:0 0 auto;opacity:.5}
 .item:hover .ic,.item.active .ic{opacity:.9}.item.active .ic{color:var(--gold)}
 .pill{margin-left:auto;font-size:9.5px;padding:1px 6px;border-radius:20px;background:rgba(30,107,60,.22);color:#6fce97}
@@ -94,12 +99,22 @@ body{font-family:var(--sans);background:var(--paper-2);color:var(--text);font-si
    nhãn nên không phá bố cục có/không có .pill. */
 .sb-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--gold);margin-left:6px;flex:0 0 auto;animation:sbDotPulse 1.8s ease-in-out infinite}
 @keyframes sbDotPulse{0%,100%{box-shadow:0 0 0 0 rgba(201,168,76,.45)}50%{box-shadow:0 0 0 4px rgba(201,168,76,0)}}
-.sb-theme{margin:6px 12px;padding:7px 12px;background:rgba(255,255,255,.04);border:1px solid var(--sb-line);color:var(--sb-txt,#a9bdd0);border-radius:8px;font-size:12px;font-family:inherit;cursor:pointer;text-align:left;transition:background .15s}
-.sb-theme:hover{background:rgba(255,255,255,.08);color:#fff}
-.sb-foot{border-top:1px solid var(--sb-line);padding:10px 14px;display:flex;align-items:center;gap:10px;cursor:pointer;text-decoration:none}
-.sb-foot:hover{background:rgba(255,255,255,.03)}
 .ava{width:29px;height:29px;border-radius:50%;background:linear-gradient(135deg,var(--gold-soft),var(--gold));display:flex;align-items:center;justify-content:center;color:#2a1e05;font-weight:700;font-size:13px;flex:0 0 auto}
-.sb-foot .nm{font-size:12.5px;color:#fff}.sb-foot .sub{font-size:11px;color:var(--gold)}
+/* "Gần đây" (Lá số đã lưu dùng gần nhất) — dòng gọn hơn `.item`, không cần
+   icon riêng vì đã có avatar chữ cái đầu. */
+.rc-row{display:flex;align-items:center;gap:9px;padding:6px 8px;margin:1px 0;border-radius:7px;text-decoration:none;color:var(--sb-txt)}
+.rc-row:hover{background:rgba(255,255,255,.05)}
+.rc-ava{width:24px;height:24px;border-radius:50%;background:linear-gradient(135deg,#2b3a4d,#1a2534);display:flex;align-items:center;justify-content:center;color:var(--sb-txt);font-size:10px;font-weight:700;font-family:var(--serif);flex:0 0 auto}
+.rc-tx{flex:1;min-width:0}
+.rc-tx b{display:block;font-size:12.5px;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rc-time{font-size:10px;color:var(--sb-txt-dim);flex:0 0 auto;white-space:nowrap}
+.sb-spacer{flex:1}
+.sb-foot-grp{padding:8px 8px;border-top:1px solid var(--sb-line)}
+.sb-brandmini{display:flex;align-items:center;gap:9px;padding:12px 14px 16px;opacity:.55}
+.sb-brandmini img{width:24px;height:24px;border-radius:6px;object-fit:cover;flex:0 0 auto}
+.sb-brandmini-tx{min-width:0}
+.sb-brandmini b{display:block;font-family:var(--serif);font-size:11px;color:#fff;font-weight:600;letter-spacing:.02em;line-height:1.25;white-space:nowrap}
+.sb-brandmini span{display:block;font-size:9px;color:var(--sb-txt-dim);white-space:nowrap}
 
 /* ── WORKSPACE FRAME ── */
 .ws{background:var(--paper);overflow-y:auto;display:flex;flex-direction:column;position:relative}
@@ -259,15 +274,28 @@ body{font-family:var(--sans);background:var(--paper-2);color:var(--text);font-si
 .mobile-only{display:none}
 .shell svg{display:block}
 
-/* ── BOTTOM TAB BAR (mobile) — điều hướng chạm bằng ngón cái. Thay lối
-   "chỉ mở drawer": Trợ lý (rail) + Công cụ (sidebar) chạm 1 phát tới được,
-   thay vì chôn sau hamburger. shell.js chèn #shell-tabbar vào body; chỉ hiện
+/* ── BOTTOM TAB BAR (mobile) — điều hướng chạm bằng ngón cái. 5 mục:
+   Trang chủ (ra tuviminhbao.com) · Trợ lý (rail) · HOME nổi giữa (về thẳng
+   springboard /app từ bất kỳ đâu — bài học từ workshop 2026-09: người dùng
+   xong một tool thì KHÔNG biết bấm vào đâu để quay lại Luận Đường) · Công cụ
+   (sidebar) · Tài khoản. shell.js chèn #shell-tabbar vào body; chỉ hiện
    ≤900px; ẩn khi drawer/cmdk đang mở. Desktop KHÔNG đụng tới. ── */
-.tabbar{display:none;position:fixed;left:0;right:0;bottom:0;z-index:49;grid-template-columns:repeat(4,1fr);background:linear-gradient(180deg,var(--navy-2),var(--navy));border-top:1px solid rgba(201,168,76,.18);padding-bottom:env(safe-area-inset-bottom);box-shadow:0 -6px 20px rgba(6,26,46,.22)}
+.tabbar{display:none;position:fixed;left:0;right:0;bottom:0;z-index:49;grid-template-columns:1fr 1fr 72px 1fr 1fr;align-items:end;background:linear-gradient(180deg,var(--navy-2),var(--navy));border-top:1px solid rgba(201,168,76,.18);padding-bottom:env(safe-area-inset-bottom);box-shadow:0 -6px 20px rgba(6,26,46,.22)}
 .tabbar .tab{appearance:none;-webkit-appearance:none;border:none;background:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;padding:9px 4px 8px;color:var(--sb-txt-dim);font-family:inherit;font-size:10.5px;line-height:1;text-decoration:none;-webkit-tap-highlight-color:transparent}
 .tabbar .tab svg{width:22px;height:22px;display:block;stroke-width:1.7}
 .tabbar .tab.active{color:var(--gold)}
 .tabbar .tab:active{background:rgba(255,255,255,.05)}
+/* Nút Home — CỐ Ý nổi lên trên hàng, không phải một `.tab` như 4 nút còn lại:
+   đây là đường thoát duy nhất từ MỌI trang tool về lại springboard, nên phải
+   là điểm chạm dễ nhất trên thanh (to hơn, tách khỏi nền navy bằng viền vàng
+   khớp màu thương hiệu). `top:-15px` kéo nó lên khỏi hàng mà vẫn nằm trong
+   `.tabbar` để không phải tính lại vị trí tuyệt đối riêng. */
+.tabbar .tab-home{display:flex;flex-direction:column;align-items:center;position:relative;top:-15px}
+.tabbar .tab-home-btn{appearance:none;-webkit-appearance:none;width:52px;height:52px;border-radius:50%;border:4px solid var(--navy);background:linear-gradient(160deg,var(--gold),var(--gold-soft));display:flex;align-items:center;justify-content:center;box-shadow:0 6px 16px rgba(6,26,46,.35);cursor:pointer}
+.tabbar .tab-home-btn svg{width:24px;height:24px;stroke:var(--navy);stroke-width:2}
+.tabbar .tab-home-btn:active{transform:scale(.94)}
+.tabbar .tab-home span{margin-top:3px;font-size:10.5px;color:var(--sb-txt-dim)}
+.tabbar .tab-home.active span{color:var(--gold)}
 
 /* ── EMPTY-STATE INTRO (danh thiếp CỐ ĐỊNH của tool — KHÔNG tự ẩn vĩnh viễn,
    không có nút đóng) ── Bố cục: avatar [trái] — tên tool + mô tả [phải].
@@ -435,10 +463,16 @@ body{font-family:var(--sans);background:var(--paper-2);color:var(--text);font-si
      Chỉ áp trên mobile; desktop giữ nguyên 13.5px vì ở đó không có zoom. */
   .shell .ws input,.shell .ws select,.shell .ws textarea{font-size:16px}
   .shell{grid-template-columns:1fr}
-  .sb{position:fixed;left:0;top:0;bottom:0;width:270px;z-index:60;transform:translateX(-100%);transition:transform .25s}
+  /* Chừa đúng chiều cao tabbar (~64px) + safe-area ở ĐÁY cho .sb/.rail/.backdrop
+     — trước đây cả ba phủ tới `bottom:0` rồi che tabbar, buộc phải ẩn hẳn
+     tabbar khi drawer mở (`body.drawer-open .tabbar{display:none}`, đã bỏ).
+     Hệ quả cũ: bấm "Trợ lý" mở rail TOÀN MÀN là mất luôn nút Home — chỉ còn
+     nút Đóng ở đầu rail mà đa số người dùng không thấy (Henry báo qua ảnh
+     chụp). Tabbar giờ LUÔN sticky, mọi trang có shell (Trang chủ, Tài khoản…). */
+  .sb{position:fixed;left:0;top:0;bottom:calc(64px + env(safe-area-inset-bottom));width:270px;z-index:60;transform:translateX(-100%);transition:transform .25s}
   .sb.open{transform:none}
   /* Rail = trợ lý TOÀN MÀN trên điện thoại (was 360px drawer) → cảm giác app thật. */
-  .rail{position:fixed;right:0;top:0;bottom:0;width:100vw;max-width:none;z-index:60;transform:translateX(100%);transition:transform .25s;border-left:none}
+  .rail{position:fixed;right:0;top:0;bottom:calc(64px + env(safe-area-inset-bottom));width:100vw;max-width:none;z-index:60;transform:translateX(100%);transition:transform .25s;border-left:none}
   .rail.open{transform:none}
   .mobile-only{display:inline-flex}
   /* ── Thanh tiêu đề tool (.ws-top) trên điện thoại ────────────────────────
@@ -467,12 +501,14 @@ body{font-family:var(--sans);background:var(--paper-2);color:var(--text);font-si
   .ws-actions{flex:1 0 100%;max-width:100%;margin-left:0;gap:6px;overflow-x:auto;scrollbar-width:none}
   .ws-actions::-webkit-scrollbar{display:none}
   .ws-actions .btn{flex:0 0 auto;white-space:nowrap;padding:7px 10px}
-  .backdrop{position:fixed;inset:0;background:rgba(6,26,46,.4);z-index:55;display:none}
+  /* `bottom` khớp .sb/.rail phía trên — không phủ lên tabbar, để tabbar luôn
+     bấm được trực tiếp (không phải đóng drawer trước mới bấm Home được). */
+  .backdrop{position:fixed;left:0;right:0;top:0;bottom:calc(64px + env(safe-area-inset-bottom));background:rgba(6,26,46,.4);z-index:55;display:none}
   .backdrop.on{display:block}
-  /* Bottom tab: hiện trên mobile, chừa chỗ cuối trang, ẩn khi drawer đang mở. */
+  /* Bottom tab: hiện trên mobile, chừa chỗ cuối trang, LUÔN sticky kể cả khi
+     sidebar/rail đang mở (xem ghi chú ở .sb/.rail phía trên). */
   .tabbar{display:grid}
   .ws-body{padding-bottom:76px}
-  body.drawer-open .tabbar{display:none}
   /* Cụm sticky phải leo lên TRÊN tabbar (~64px + safe-area), và tự ẩn cùng
      lúc với nó khi sidebar/rail đang mở toàn màn — rail phủ kín thì cụm nút
      nổi bên trên chỉ còn là chướng ngại vật. */
@@ -502,12 +538,33 @@ font-family:inherit}
    `app-luan-giai.html` làm mẫu), KHÔNG chép lại 3 dòng màu này thêm lần nào
    nữa — chép là drift màu giữa các trang, y hệt bẫy `.claude-content` đã bị
    trùng lặp trước đó. */
-.fb-card{border-radius:14px;padding:30px 26px;margin:16px 0 18px;font-family:var(--sans);font-weight:700;font-size:clamp(19px,5.4vw,27px);line-height:1.4;letter-spacing:.015em;text-align:center}
+.fb-card{position:relative;border-radius:14px;padding:36px 26px 24px;margin:16px 0 18px;font-family:var(--sans);font-weight:700;font-size:clamp(18px,4.8vw,24px);line-height:1.45;letter-spacing:.01em;text-align:center;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+/* Dấu ngoặc kép lớn trang trí ở góc — chữ “ ” đã có sẵn quanh câu trích (JS
+   ghép `“…”` khi dựng .fb-card), đây chỉ là hoạ tiết, không lặp nghĩa. */
+.fb-card::before{content:'\201C';position:absolute;top:2px;left:14px;font-family:Georgia,'Times New Roman',serif;font-size:54px;line-height:1;font-weight:700;color:currentColor;opacity:.22}
+/* Vạch màu dưới câu trích — cùng màu chữ của biến thể, tách caption khỏi
+   đoạn giải thích thường (<p>) đứng ngay sau .fb-card trong DOM. */
+.fb-card::after{content:'';display:block;width:56px;height:3px;margin:14px auto 0;border-radius:2px;background:currentColor;opacity:.4}
 .fb-tot{background:#E8F5EC;color:#1E6B3C}
 .fb-canhbao{background:#FBEAE7;color:#C0392B}
 .fb-trungtinh{background:var(--gold-lt);color:var(--heading)}
 :root[data-theme="dark"] .fb-tot{background:#15291D;color:#5FBF87}
 :root[data-theme="dark"] .fb-canhbao{background:#301C19;color:#F08A7A}
+:root[data-theme="dark"] .fb-card{box-shadow:0 1px 3px rgba(0,0,0,.25)}
+
+/* Ảnh minh hoạ theo chủ đề (public/tools-shared/fbcard-topic.js, PR #807) —
+   3 bố cục, chọn ổn định theo hash câu hook (KHÔNG random mỗi lần tải lại).
+   Ảnh nguồn 160×160 webp, public/img/fbcard-topics/. */
+.fbc-badge-wrap{position:relative;margin-top:34px}
+.fbc-badge-wrap .fb-card{padding-top:44px}
+.fbc-badge-wrap .fbc-img{position:absolute;top:0;left:50%;transform:translate(-50%,-50%);width:60px;height:60px;border-radius:50%;object-fit:cover;border:3px solid var(--white);box-shadow:0 2px 8px rgba(0,0,0,.18);z-index:2}
+.fbc-side-row{display:flex;align-items:center;gap:14px;margin:16px 0 18px}
+.fbc-side-row .fbc-img{width:72px;height:72px;border-radius:50%;object-fit:cover;flex:0 0 auto;border:2px solid currentColor;box-shadow:0 2px 8px rgba(0,0,0,.12)}
+.fbc-side-row .fb-card{flex:1;margin:0;padding:26px 22px 20px}
+.fbc-side-row .fb-card::before{left:10px}
+.fbc-bg-card{overflow:hidden}
+.fbc-bg-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.22;z-index:0}
+.fbc-bg-text{position:relative;z-index:1}
 
 /* .fb-item — thẻ NHỎ cho từng dòng trong một DANH SÁCH gợi ý (tên/ngày…),
    khác hẳn .fb-card (poster to, dành cho ĐÚNG MỘT câu trích trong văn bản
@@ -584,3 +641,76 @@ font-family:inherit}
    lượt render trước có thể đã gắn (bấm "xem lại"/"xem khác" rồi chạy lại lượt
    xem trước) — mở khoá thì gỡ chính class `.tpw-locked`, không có gì kẹt lại. */
 .res-block-body.tpw-locked > *:not(.tpw-ph-host) { display: none !important; }
+
+/* ── Khối form "1 màn hình" dùng chung 45+ trang /app/* (2026-09-09, mẫu
+   iPhone Henry gửi) — TRƯỚC ĐÂY mỗi trang tự chép y hệt `.form-card/.frow/
+   .fg/.btn-go` (31-37 bản gần như byte-for-byte giống nhau trong <style>
+   riêng từng trang). Gom một nguồn ở đây; trang nào cần khác biệt (vd
+   `.form-card{max-width}` tuỳ độ dài nội dung) chỉ override đúng thuộc tính
+   đó trong `<style>` riêng, KHÔNG chép lại nguyên khối. */
+.form-card{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);max-width:640px}
+.form-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:3px}
+.form-card p.sub{font-size:12.5px;color:var(--text-lt);margin-bottom:14px}
+.frow{display:flex;gap:11px;flex-wrap:wrap;align-items:flex-end;margin-bottom:12px}
+.fg{display:flex;flex-direction:column;gap:5px}
+.fg label{font-size:10.5px;font-weight:600;color:var(--text-lt);letter-spacing:.04em;text-transform:uppercase}
+.fg input,.fg select{border:1px solid var(--line-2);border-radius:7px;padding:8px 10px;font-size:13.5px;font-family:inherit;color:var(--text);background:var(--paper);outline:none}
+.fg input:focus,.fg select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(20,85,164,.12)}
+/* Nút chạy tool — nền vàng gradient thay bản đỏ cũ (`background:var(--red)`,
+   đồng loạt trên 37 trang trước đợt này). `.bg-label`/`.ic`/`small` là 3 phần
+   TUỲ CHỌN (icon lấp lánh + nhãn chính + dòng phụ giá) — một `<button
+   class="btn-go">Chữ thường</button>` không có 3 phần đó vẫn hiện đúng hình
+   (nền vàng, bo góc, canh giữa), chỉ thiếu icon/dòng phụ. */
+.btn-go{background:linear-gradient(160deg,var(--gold),var(--gold-soft));color:var(--navy);border:none;border-radius:11px;padding:13px 20px;font-size:14.5px;font-weight:700;cursor:pointer;font-family:var(--serif);width:100%;display:flex;flex-direction:column;align-items:center;gap:3px;box-shadow:var(--shadow)}
+.btn-go .bg-label{display:flex;align-items:center;gap:7px}
+.btn-go .ic{width:16px;height:16px;display:inline-flex}
+.btn-go .ic svg{width:100%;height:100%}
+.btn-go small{font-family:var(--sans);font-weight:600;font-size:11.5px;color:var(--navy);opacity:.78}
+.btn-go:disabled{opacity:.7;cursor:default}
+/* `.btn-go.inline` — một số trang (chụp ảnh tướng mặt, ký chữ ký…) dùng LẠI
+   `.btn-go` cho nút PHỤ (Chụp lại/Xoá/Đổi ảnh) đứng cạnh nút chính, không
+   phải nút CTA to chạy tool. Full-width + xếp dọc của `.btn-go` gốc làm vỡ
+   những nút phụ đó — thêm modifier THU GỌN LẠI thay vì tách class mới, để
+   không phải sửa lại mọi chỗ đang gọi `.btn-go`. */
+.btn-go.inline{width:auto;flex-direction:row;padding:9px 16px;font-size:13px;box-shadow:none}
+/* Hero card (`.intro-card`, xem thêm ở trên) — hàng 3 pill tính năng đứng
+   dưới ảnh + mô tả có sẵn. */
+.hero-pills{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:14px}
+.hero-pill{display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center}
+.hero-pill .hp-ic{width:36px;height:36px;border-radius:50%;background:var(--white);border:1px solid var(--gold-soft);color:var(--gold-soft);display:flex;align-items:center;justify-content:center}
+.hero-pill .hp-ic svg{width:18px;height:18px}
+.hero-pill span{font-size:11px;color:var(--text-mid);line-height:1.35}
+/* Tiêu đề `.form-card` có icon dẫn đầu (thay `<h2>` trần) */
+.fc-head{display:flex;align-items:center;gap:10px;margin-bottom:3px}
+.fc-head .fc-ic{flex:0 0 auto;width:34px;height:34px;border-radius:9px;background:var(--navy);color:var(--gold);display:flex;align-items:center;justify-content:center}
+.fc-head .fc-ic svg{width:18px;height:18px}
+.fc-head h2{margin-bottom:0}
+/* Hộp "Chi phí sử dụng" — số Lượng + quy đổi VNĐ + phương thức thanh toán,
+   đứng trước nút CTA. Điền giá qua `data-tvp-price`/`data-tvp-price-vnd`
+   (xem `_fillVndSlots` ở app-luan-giai.html) — KHÔNG chép số cứng. */
+.cost-box{display:flex;gap:14px;flex-wrap:wrap;align-items:center;background:var(--paper);border:1px solid var(--line);border-radius:11px;padding:13px 15px;margin:14px 0}
+.cost-box .cb-l{display:flex;gap:11px;align-items:flex-start;flex:1;min-width:190px}
+.cost-box .cb-ic{flex:0 0 auto;width:32px;height:32px;border-radius:50%;background:var(--gold-lt);color:var(--gold-soft);display:flex;align-items:center;justify-content:center}
+.cost-box .cb-ic svg{width:16px;height:16px}
+.cost-box .cb-title{font-size:11.5px;color:var(--text-lt)}
+.cost-box .cb-amt{font-family:var(--serif);font-size:15px;font-weight:700;color:var(--gold-soft);margin:1px 0 6px}
+.cost-box .cb-amt .vnd{font-family:var(--sans);font-weight:400;font-size:12px;color:var(--text-lt)}
+.cost-box .cb-pay{display:flex;flex-direction:column;gap:3px}
+.cost-box .cb-pay span{font-size:11.5px;color:var(--text-mid);display:flex;align-items:center;gap:5px}
+.cost-box .cb-pay .ic{width:13px;height:13px;color:var(--text-lt);display:inline-flex}
+.cost-box .cb-pay .ic svg{width:100%;height:100%}
+.cost-box .cb-r{flex:0 0 auto;border-left:1px solid var(--line-2);padding-left:14px;display:flex;gap:9px;align-items:center;max-width:210px}
+.cost-box .cb-r .cb-ic{background:var(--white);border:1px solid var(--gold-soft)}
+.cost-box .cb-r-txt{font-size:11.5px;color:var(--text-mid);line-height:1.5}
+.cost-box .cb-r-txt a{color:var(--gold-soft);font-weight:600;text-decoration:none}
+@media(max-width:480px){.cost-box .cb-r{border-left:none;border-top:1px solid var(--line-2);padding:10px 0 0;margin-top:2px;flex-basis:100%;max-width:none}}
+/* Thẻ gợi ý "Xem bản mẫu" (icon bóng đèn + nút pill) — nay chỉ app-luan-giai
+   dùng, để đây làm nguồn chung phòng khi tool khác thêm luồng bản mẫu tương tự. */
+.samp-cta{background:var(--white);border:1px solid var(--line);border-radius:11px;padding:12px 14px;max-width:640px;margin-bottom:14px;font-size:13px;color:var(--text-lt);display:flex;align-items:center;gap:11px;flex-wrap:wrap}
+.samp-cta .sc-ic{flex:0 0 auto;width:34px;height:34px;border-radius:50%;background:var(--gold-lt);color:var(--gold-soft);display:flex;align-items:center;justify-content:center}
+.samp-cta .sc-ic svg{width:17px;height:17px}
+.samp-cta .sc-txt{flex:1;min-width:160px;display:flex;flex-direction:column}
+.samp-cta .sc-txt b{font-size:13px;color:var(--text);font-weight:600}
+.samp-cta .sc-txt span{font-size:11.5px;color:var(--text-lt)}
+.samp-cta button{background:none;border:1px solid var(--gold-soft);color:var(--gold-soft);border-radius:20px;padding:8px 15px;font-size:12.5px;font-weight:600;cursor:pointer;font-family:inherit;flex:0 0 auto;white-space:nowrap}
+.samp-cta button:disabled{opacity:.6;cursor:default}

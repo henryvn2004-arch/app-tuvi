@@ -291,6 +291,13 @@ const DOC_FILES = [
   // nội suy chung `arcDoc()`. Cả 5 bản đều đã sát trần (95-100%) từ đợt DỰ BÁO
   // trước, không còn chỗ trống nào để hấp thụ khối mới ⇒ bắt buộc nới cả 5,
   // không phải nới tuỳ tiện. Biên vẫn giữ ~10% như các lần nới trước.
+  //
+  // Nới 4000→4700, 7900→9000, 5800→6800, 6600→7400 (2026-09-10, PR #807):
+  // `NHAN_TINH_CHAT_RULE` thêm mã CHỦ ĐỀ vào cuối từ khoá hiện có
+  // ([TỐT|MỞ LỐI|hon-nhan]) để `.fb-card` chọn đúng ảnh minh hoạ 1 trong 10
+  // nhóm — +375 ký tự đo THẬT, lan ra CẢ 11 bản dưới đây vì cùng nội suy
+  // `NHAN_TINH_CHAT_RULE`. Chỉ 4 bản vượt trần (đã ở 101-106%) mới cần nới —
+  // 7 bản còn lại vẫn dưới trần (95-99%) nên GIỮ NGUYÊN, không nới tuỳ tiện.
   { file: 'lib/agent/luan-giai-doc.ts', name: 'SYSTEM_PROMPT', cap: 13700, arc: 'DOC_ARC_LASO' },
   {
     file: 'app/api/tubinh/route.ts',
@@ -307,13 +314,13 @@ const DOC_FILES = [
   {
     file: 'app/api/xem-tuoi/route.ts',
     name: 'LUAN_GIAI_TUONG_HOP_SYSTEM',
-    cap: 4000,
+    cap: 4700,
     arc: 'DOC_ARC_TUONG_HOP',
   },
   {
     file: 'app/api/but-tuong/route.js',
     name: 'SP_BUT_TUONG',
-    cap: 7900,
+    cap: 9000,
     arc: 'DOC_ARC_BUT_TUONG',
   },
   // Nhóm C — 5 prompt tướng học trong CÙNG MỘT file `tuong-mat/route.js`, gắn
@@ -322,7 +329,7 @@ const DOC_FILES = [
   {
     file: 'app/api/tuong-mat/route.js',
     name: 'SP_DIEN',
-    cap: 5800,
+    cap: 6800,
     arc: 'DOC_ARC_DIEN_TUONG',
   },
   {
@@ -340,7 +347,7 @@ const DOC_FILES = [
   {
     file: 'app/api/tuong-mat/route.js',
     name: 'SP_THANH',
-    cap: 6600,
+    cap: 7400,
     arc: 'DOC_ARC_THANH_TUONG',
   },
   {

@@ -9,17 +9,11 @@
 <link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/fonts/noto-serif.css?v=1">
-<link rel="stylesheet" href="/shell.css?v=34">
+<link rel="stylesheet" href="/shell.css?v=40">
 <style>
-.form-card{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);max-width:600px}
-.form-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:3px}
+.form-card{max-width:600px}
 .form-card p.sub{font-size:12.5px;color:var(--text-lt);margin-bottom:16px}
 .frow{display:flex;gap:11px;flex-wrap:wrap;align-items:flex-end;margin-bottom:13px}
-.fg{display:flex;flex-direction:column;gap:5px}
-.fg label{font-size:10.5px;font-weight:600;color:var(--text-lt);letter-spacing:.04em;text-transform:uppercase}
-.fg input,.fg select{border:1px solid var(--line-2);border-radius:7px;padding:8px 10px;font-size:13.5px;font-family:inherit;color:var(--text);background:var(--paper);outline:none}
-.fg input:focus,.fg select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(20,85,164,.12)}
-.btn-go{background:var(--red);color:#fff;border:none;border-radius:8px;padding:10px 22px;font-size:14px;font-weight:600;cursor:pointer;font-family:var(--serif)}
 .btn-go:disabled{opacity:.6;cursor:not-allowed}
 #resPanel{display:none}
 .res-head{font-family:var(--serif);font-size:15px;font-weight:600;margin-bottom:12px}
@@ -71,16 +65,25 @@
           <img class="intro-avatar" src="/tool-avatars/chon-ngay-tot.webp" alt="" onerror="this.remove()">
           <div class="intro-text">
             <div class="intro-t">Chọn ngày giờ tốt</div>
-            <div class="intro-d">Chọn ngày giờ tốt gợi ý ngày tốt cho cưới hỏi, làm nhà, khai trương của bạn. Cưới hỏi, khai trương nhằm ngày xấu rồi tiền bạc, hạnh phúc trục trặc — nỗi sợ đó cứ ám ảnh mỗi lần định ngày? Chọn loại việc và khoảng thời gian, nhận danh sách ngày giờ tốt phù hợp.</div>
+            <div class="intro-d">Gợi ý ngày tốt cho cưới hỏi, làm nhà, khai trương theo can chi tuổi chủ sự. Chọn loại việc và khoảng thời gian, nhận danh sách ngày giờ tốt phù hợp.</div>
             <div id="introSrc" style="min-height:55.2px;margin-top:9px"></div>
           </div>
         </div>
+        <div class="hero-pills">
+          <div class="hero-pill"><span class="hp-ic" data-icon="calendar-days"></span><span>Danh sách<br>ngày tốt</span></div>
+          <div class="hero-pill"><span class="hp-ic" data-icon="scale"></span><span>Đối chiếu<br>hợp – xung</span></div>
+          <div class="hero-pill"><span class="hp-ic" data-icon="clock"></span><span>Giờ hoàng đạo<br>từng ngày</span></div>
+        </div>
       </div></div>
       <div id="shellRecent"></div>
+      <div class="samp-cta" id="sampCta">
+        <span class="sc-ic" data-icon="lightbulb"></span>
+        <span class="sc-txt"><b>Chưa muốn khai thông tin?</b><span>Bạn có thể xem một bản mẫu để trải nghiệm trước.</span></span>
+        <button type="button" id="btnSample" data-sample-tool="chon-ngay-tot" onclick="SampleHint.open(this)">Xem bản mẫu →</button>
+      </div>
       <div class="form-card" id="birthPanel">
-        <h2>Thông tin chọn ngày</h2>
-        <p class="sub">Chọn việc cần xem ngày, nhập tên và năm sinh chủ sự cùng tháng cần xem. Hệ thống tính can chi rồi đối chiếu hợp – xung với tuổi bạn. Nhận về danh sách ngày tốt kèm lý do cụ thể cho từng ngày.</p>
-        <p class="price-note" data-tvp-price-label="chon-ngay-tot">…</p>
+        <div class="fc-head"><span class="fc-ic" data-icon="calendar"></span><h2>Thông tin chọn ngày</h2></div>
+        <p class="sub">Chọn việc cần xem ngày, nhập tên và năm sinh chủ sự cùng tháng cần xem. Hệ thống tính can chi rồi đối chiếu hợp – xung với tuổi bạn.</p>
         <div class="frow">
           <div class="fg" style="flex:2;min-width:160px"><label>Việc cần chọn ngày</label>
             <select id="inpSuKien">
@@ -100,7 +103,10 @@
           <div class="fg" style="width:120px"><label>Năm sinh</label><input type="number" id="inpNamSinh" placeholder="1990" min="1900" max="2100"></div>
           <div class="fg" style="width:90px"><label>Tháng (DL)</label><select id="inpThang"></select></div>
           <div class="fg" style="width:110px"><label>Năm (DL)</label><input type="number" id="inpNam" value="2026" min="1900" max="2100"></div>
-          <button class="btn-go" id="btnGo" onclick="doChonNgay()">Lập nền →</button>
+          <button class="btn-go" id="btnGo" onclick="doChonNgay()">
+            <span class="bg-label"><span class="ic" data-icon="calendar"></span><b id="btnGoLabel">Lập nền →</b></span>
+            <small>Miễn phí</small>
+          </button>
         </div>
       </div>
 
@@ -115,8 +121,28 @@
              lặp lại đúng dữ kiện đã có, không bịa thêm. -->
         <div id="hookHost"></div>
         <div class="dt-unlock" id="dtUnlock">
-          <button class="btn-go" id="btnUnlock" onclick="initiateChonNgayChuyenSau()">✦ Chọn ngày chuyên sâu — <span data-tvp-price="chon-ngay-tot">…</span> Lượng →</button>
           <p>Hệ thống phân tích can chi tuổi chủ sự + tháng năm dự định, gợi ý các khoảng ngày tốt kèm lý do cụ thể.</p>
+          <div class="cost-box">
+            <div class="cb-l">
+              <span class="cb-ic" data-icon="wallet"></span>
+              <div>
+                <div class="cb-title">Chi phí sử dụng</div>
+                <div class="cb-amt"><span data-tvp-price="chon-ngay-tot">…</span> Lượng <span class="vnd" data-tvp-price-vnd="chon-ngay-tot"></span> mỗi lượt</div>
+                <div class="cb-pay">
+                  <span><span class="ic" data-icon="qr-code"></span> Chuyển khoản (qua QR ngân hàng)</span>
+                  <span><span class="ic" data-icon="credit-card"></span> PayPal / Thẻ quốc tế</span>
+                </div>
+              </div>
+            </div>
+            <div class="cb-r">
+              <span class="cb-ic" data-icon="gift"></span>
+              <div class="cb-r-txt">Mua gói để nhận nhiều ưu đãi hơn.<br><a href="/topup.html">Xem các gói ngay →</a></div>
+            </div>
+          </div>
+          <button class="btn-go" id="btnUnlock" onclick="initiateChonNgayChuyenSau()">
+            <span class="bg-label"><span class="ic" data-icon="sparkles"></span><b id="btnUnlockLabel">Chọn ngày chuyên sâu →</b></span>
+            <small>Tốn <span data-tvp-price="chon-ngay-tot">…</span> Lượng <span data-tvp-price-vnd="chon-ngay-tot"></span></small>
+          </button>
         </div>
         <div class="dt-result" id="dtResult"></div>
       </div>
@@ -133,7 +159,8 @@ window.SHELL_INTRO={key:'chon-ngay'};</script>
 <script src="/tuvi-paywall.js?v=33"></script>
 <script src="/tools-shared/hook-layer.js?v=2"></script>
   <script src="/nav.js?v=26" data-icons-only></script>
-<script src="/shell.js?v=87"></script>
+<script src="/tools-shared/sample-hint.js?v=1"></script>
+<script src="/shell.js?v=90"></script>
 <script>
 function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 (function(){ var t=document.getElementById('inpThang'); for(var i=1;i<=12;i++)t.innerHTML+='<option value="'+i+'">Tháng '+i+'</option>'; var now=new Date(); t.value=String(now.getMonth()+1); document.getElementById('inpNam').value=now.getFullYear(); })();
@@ -219,6 +246,17 @@ function doChonNgay(){
 // ══════════════════════════════════════════════════════════════════════
 var _dtSuKien='', _dtHoTen='', _dtNamSinh=0, _dtInfo=null, _dtThangCC='', _dtNamCC='', _dtThangNum=0, _dtNamNum=0;
 TuviPaywall.init({product:'chon-ngay-tot'});
+// Ghi "(~X đ)" cạnh số Lượng trong hộp chi phí + nút CTA — cùng mẫu
+// `_fillVndSlots` của app-luan-giai.html. `ToolPrices.vndLabel` tự trả ''
+// khi chưa đọc được `credit_packages`, lúc đó không hiện gì (không đoán số).
+function _fillVndSlots(host,product){
+  if(!host||!window.ToolPrices) return;
+  var els=host.querySelectorAll('[data-tvp-price-vnd]');
+  var cost=window.ToolPrices.get(product);
+  var lbl=cost!=null?window.ToolPrices.vndLabel(cost):'';
+  els.forEach(function(el){ el.textContent=lbl?('('+lbl+')'):''; });
+}
+TuviPaywall.fillPriceSlots(document).then(function(){ _fillVndSlots(document,'chon-ngay-tot'); });
 
 // Mỗi khoảng ngày gợi ý là MỘT dòng "**[Ngày X–Y]** — chi tiết" (định dạng
 // đã ép trong prompt) — tách thành thẻ nhỏ `.fb-item` (xem shell.css) để đọc

@@ -8,7 +8,7 @@
 <link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/fonts/noto-serif.css?v=1">
-<link rel="stylesheet" href="/shell.css?v=34"/>
+<link rel="stylesheet" href="/shell.css?v=40"/>
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 <style>
 /* Trang Tài khoản trong shell: 2 cột (sidebar + nội dung, không rail) */
@@ -338,7 +338,28 @@
         #tab-lichsu .hist-group-head{display:flex;align-items:center;gap:.5rem;font-size:.8rem;font-weight:800;text-transform:uppercase;letter-spacing:.04em;color:var(--text-lt);margin:0 0 .7rem}
         #tab-lichsu .hist-group-head .gh-ic{display:inline-flex;width:16px;height:16px;color:var(--tx-gold)}
         #tab-lichsu .hist-group-head .gh-ic svg{width:100%;height:100%}
+        #tab-lichsu .hist-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:.75rem;margin-bottom:1.15rem}
+        #tab-lichsu .hist-stat{background:var(--surface);border:1px solid var(--border-lt);border-radius:10px;padding:.85rem 1rem;display:flex;align-items:center;gap:.7rem}
+        #tab-lichsu .hist-stat-ic{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;flex:none}
+        #tab-lichsu .hist-stat-ic [data-icon]{width:17px;height:17px}
+        #tab-lichsu .hist-stat-v{font-family:'Noto Serif',serif;font-size:1.05rem;font-weight:700;color:var(--heading);line-height:1.15}
+        #tab-lichsu .hist-stat-l{font-size:.72rem;color:var(--text-lt);margin-top:.1rem}
+        #tab-lichsu .hist-search-row{margin-bottom:1.15rem}
+        #tab-lichsu .hist-search{width:100%;border:1px solid var(--border-lt);border-radius:999px;padding:.55rem 1.1rem;font-size:.83rem;color:var(--text);background:var(--surface);font-family:inherit}
+        #tab-lichsu .hist-search:focus{outline:2px solid var(--tx-gold);border-color:var(--tx-gold)}
+        @media(max-width:640px){#tab-lichsu .hist-stats{grid-template-columns:repeat(2,1fr)}}
       </style>
+
+      <div class="hist-stats">
+        <div class="hist-stat"><div class="hist-stat-ic" style="background:var(--gold-lt);color:var(--tx-gold)"><span data-icon="sparkles"></span></div><div><div class="hist-stat-v" id="statLasos">0</div><div class="hist-stat-l">Lá Số đã lưu</div></div></div>
+        <div class="hist-stat"><div class="hist-stat-ic" style="background:var(--chip-blue);color:var(--blue)"><span data-icon="heart-handshake"></span></div><div><div class="hist-stat-v" id="statXemTuoi">0</div><div class="hist-stat-l">Lượt Xem Tuổi</div></div></div>
+        <div class="hist-stat"><div class="hist-stat-ic" style="background:var(--chip-purple);color:var(--tx-purple)"><span data-icon="eye"></span></div><div><div class="hist-stat-v" id="statTuong">0</div><div class="hist-stat-l">Lượt Xem Tướng</div></div></div>
+        <div class="hist-stat"><div class="hist-stat-ic" style="background:var(--chip-green);color:var(--green)"><span data-icon="message-circle"></span></div><div><div class="hist-stat-v" id="statChat">0</div><div class="hist-stat-l">Hội thoại</div></div></div>
+      </div>
+
+      <div class="hist-search-row">
+        <input class="hist-search" id="histSearch" placeholder="Tìm theo tên, nội dung…">
+      </div>
 
       <div class="hist-filters">
         <button class="hist-chip active" data-filter="all">Tất cả</button>
@@ -397,29 +418,50 @@
           </div>
         </div>
       </div>
-      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem;margin-bottom:1.25rem">
-        <a href="/" style="background:var(--surface);border:1px solid var(--border-lt);border-radius:8px;padding:1rem;text-decoration:none;text-align:center;color:var(--heading)">
-          <div style="font-size:1.4rem;margin-bottom:.35rem"><span data-icon="sparkles" style="width:22px;height:22px;color:var(--tx-gold)"></span></div>
-          <div style="font-size:.8rem;font-weight:700">Luận Giải Lá Số</div>
-          <div style="font-size:.72rem;color:var(--tx-gold);font-weight:700;margin-top:.2rem">190 lượng</div>
-        </a>
-        <a href="/xem-tuoi.html" style="background:var(--surface);border:1px solid var(--border-lt);border-radius:8px;padding:1rem;text-decoration:none;text-align:center;color:var(--heading)">
-          <div style="font-size:1.4rem;margin-bottom:.35rem"><span data-icon="heart-handshake" style="width:22px;height:22px;color:var(--tx-gold)"></span></div>
-          <div style="font-size:.8rem;font-weight:700">Xem Tuổi Vợ Chồng</div>
-          <div style="font-size:.72rem;color:var(--tx-gold);font-weight:700;margin-top:.2rem">90 lượng</div>
-        </a>
-        <a href="/xem-lam-an.html" style="background:var(--surface);border:1px solid var(--border-lt);border-radius:8px;padding:1rem;text-decoration:none;text-align:center;color:var(--heading)">
-          <div style="font-size:1.4rem;margin-bottom:.35rem"><span data-icon="briefcase" style="width:22px;height:22px;color:var(--tx-gold)"></span></div>
-          <div style="font-size:.8rem;font-weight:700">Xem Tuổi Làm Ăn</div>
-          <div style="font-size:.72rem;color:var(--tx-gold);font-weight:700;margin-top:.2rem">90 lượng</div>
-        </a>
+      <style>
+        #tab-credits .vilu-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem;margin-bottom:1.25rem}
+        #tab-credits .vilu-stat{background:var(--surface);border:1px solid var(--border-lt);border-radius:10px;padding:.85rem 1rem;display:flex;align-items:center;gap:.7rem}
+        #tab-credits .vilu-stat-ic{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;flex:none}
+        #tab-credits .vilu-stat-ic [data-icon]{width:17px;height:17px}
+        #tab-credits .vilu-stat-v{font-family:'Noto Serif',serif;font-size:1.05rem;font-weight:700;color:var(--heading);line-height:1.15;font-variant-numeric:tabular-nums}
+        #tab-credits .vilu-stat-l{font-size:.72rem;color:var(--text-lt);margin-top:.1rem}
+        #tab-credits .vilu-filters{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1rem}
+        #tab-credits .vilu-filters select,#tab-credits .vilu-filters input{border:1px solid var(--border-lt);border-radius:8px;padding:.5rem .7rem;font-size:.82rem;color:var(--text);background:var(--surface);font-family:inherit}
+        #tab-credits .vilu-filters input{flex:1;min-width:180px}
+        #tab-credits .vilu-tbl-wrap{overflow-x:auto;border:1px solid var(--border-lt);border-radius:10px}
+        #tab-credits table.vilu-tbl{width:100%;border-collapse:collapse;font-size:.82rem;min-width:560px}
+        #tab-credits table.vilu-tbl th{text-align:left;color:var(--text-lt);font-size:.7rem;text-transform:uppercase;letter-spacing:.04em;font-weight:700;padding:.7rem .85rem;border-bottom:1px solid var(--border-lt);white-space:nowrap}
+        #tab-credits table.vilu-tbl td{padding:.7rem .85rem;border-bottom:1px solid var(--border-lt);color:var(--text);vertical-align:middle}
+        #tab-credits table.vilu-tbl tr:last-child td{border-bottom:none}
+        #tab-credits .vilu-amt{font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
+        #tab-credits .vilu-amt.pos{color:var(--green)}
+        #tab-credits .vilu-amt.neg{color:var(--red)}
+        #tab-credits .vilu-mono{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.74rem;color:var(--text-lt)}
+        #tab-credits .vilu-pager{display:flex;align-items:center;justify-content:space-between;margin-top:.85rem;font-size:.8rem;color:var(--text-lt);flex-wrap:wrap;gap:.5rem}
+        #tab-credits .vilu-pgbtns{display:flex;gap:.3rem}
+        #tab-credits .vilu-pgbtn{min-width:28px;height:28px;padding:0 .4rem;border:1px solid var(--border-lt);background:var(--surface);border-radius:6px;font-size:.8rem;color:var(--text-mid);cursor:pointer;font-family:inherit}
+        #tab-credits .vilu-pgbtn.active{background:var(--navy);color:#fff;border-color:var(--navy)}
+        #tab-credits .vilu-pgbtn:disabled{opacity:.4;cursor:default}
+        @media(max-width:640px){#tab-credits .vilu-stats{grid-template-columns:1fr}}
+      </style>
+
+      <div class="vilu-stats">
+        <div class="vilu-stat"><div class="vilu-stat-ic" style="background:var(--chip-green);color:var(--green)"><span data-icon="trending-up"></span></div><div><div class="vilu-stat-v" id="viluTongNap">0</div><div class="vilu-stat-l">Tổng nạp (gần đây)</div></div></div>
+        <div class="vilu-stat"><div class="vilu-stat-ic" style="background:var(--chip-red);color:var(--red)"><span data-icon="trending-up" style="transform:scaleY(-1)"></span></div><div><div class="vilu-stat-v" id="viluTongChi">0</div><div class="vilu-stat-l">Tổng chi (gần đây)</div></div></div>
+        <div class="vilu-stat"><div class="vilu-stat-ic" style="background:var(--chip-blue);color:var(--blue)"><span data-icon="book-open"></span></div><div><div class="vilu-stat-v" id="viluSoGD">0</div><div class="vilu-stat-l">Số giao dịch đã tải</div></div></div>
       </div>
+
       <div class="account-section">
         <p style="font-size:.82rem;color:var(--text-mid)"><span data-icon="link" style="width:14px;height:14px;vertical-align:-2px"></span> Kết nối lá số với trợ lý chat (Claude, ChatGPT…) và các bot Telegram / WhatsApp / Messenger tại tab <strong><a href="#" onclick="document.querySelector('[data-tab=ketnoi]').click();return false" style="color:var(--tx-gold)">Kết Nối</a></strong>.</p>
       </div>
       <div class="account-section">
         <h3>Lịch Sử Giao Dịch</h3>
+        <div class="vilu-filters">
+          <select id="viluTypeFilter"><option value="">Tất cả loại giao dịch</option></select>
+          <input id="viluSearch" placeholder="Tìm theo nội dung…">
+        </div>
         <div id="transactionList"><div style="color:var(--text-lt);font-size:.85rem">Đang tải...</div></div>
+        <div class="vilu-pager" id="viluPager" style="display:none"></div>
       </div>
     </div>
 
@@ -458,7 +500,21 @@
         #tab-nhiemvu .sp-status.pending{background:var(--chip-amber);color:var(--tx-amber)}
         #tab-nhiemvu .sp-status.approved{background:var(--chip-green);color:var(--green)}
         #tab-nhiemvu .sp-status.rejected{background:var(--chip-red);color:var(--red)}
+        #tab-nhiemvu .nq-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:.75rem;margin-bottom:1.25rem}
+        #tab-nhiemvu .nq-stat{background:var(--surface);border:1px solid var(--border-lt);border-radius:10px;padding:.85rem 1rem;display:flex;align-items:center;gap:.7rem}
+        #tab-nhiemvu .nq-stat-ic{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;flex:none}
+        #tab-nhiemvu .nq-stat-ic [data-icon]{width:17px;height:17px}
+        #tab-nhiemvu .nq-stat-v{font-family:'Noto Serif',serif;font-size:1.05rem;font-weight:700;color:var(--heading);line-height:1.15;font-variant-numeric:tabular-nums}
+        #tab-nhiemvu .nq-stat-l{font-size:.72rem;color:var(--text-lt);margin-top:.1rem}
+        @media(max-width:640px){#tab-nhiemvu .nq-stats{grid-template-columns:repeat(2,1fr)}}
       </style>
+
+      <div class="nq-stats">
+        <div class="nq-stat"><div class="nq-stat-ic" style="background:var(--chip-green);color:var(--green)"><span data-icon="trophy"></span></div><div><div class="nq-stat-v" id="nqDoneRatio">0/0</div><div class="nq-stat-l">Nhiệm vụ đã hoàn thành</div></div></div>
+        <div class="nq-stat"><div class="nq-stat-ic" style="background:var(--gold-lt);color:var(--tx-gold)"><span data-icon="wallet"></span></div><div><div class="nq-stat-v" id="nqCredits">0</div><div class="nq-stat-l">Lượng đã nhận</div></div></div>
+        <div class="nq-stat"><div class="nq-stat-ic" style="background:var(--chip-blue);color:var(--blue)"><span data-icon="user"></span></div><div><div class="nq-stat-v" id="nqInvited">0</div><div class="nq-stat-l">Bạn đã mời</div></div></div>
+        <div class="nq-stat"><div class="nq-stat-ic" style="background:var(--chip-purple);color:var(--tx-purple)"><span data-icon="link"></span></div><div><div class="nq-stat-v" id="nqShares">0</div><div class="nq-stat-l">Lượt chia sẻ</div></div></div>
+      </div>
 
       <div class="account-section" id="qtCard">
         <h3><span data-icon="trophy" style="width:15px;height:15px;vertical-align:-2px;color:var(--tx-gold)"></span> Khởi Hành</h3>
@@ -539,7 +595,19 @@
         #tab-ketnoi .conn-revoke{margin-top:.9rem;background:transparent;color:var(--red);border:1px solid var(--revoke-line);padding:.5rem .9rem;border-radius:8px;font-size:.78rem;font-weight:600;cursor:pointer}
         #tab-ketnoi .conn-row{display:flex;align-items:center;gap:.75rem;flex-wrap:wrap;margin-top:.7rem}
         #tab-ketnoi .chan-desc{font-size:.83rem;color:var(--text-mid);line-height:1.5;margin:.55rem 0 0}
+        #tab-ketnoi .conn-id{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.76rem;color:var(--text-lt)}
+        #tab-ketnoi .conn-stats{display:grid;grid-template-columns:repeat(2,1fr);gap:.75rem;margin-bottom:1.15rem}
+        #tab-ketnoi .conn-stat{background:var(--surface);border:1px solid var(--border-lt);border-radius:10px;padding:.85rem 1rem;display:flex;align-items:center;gap:.7rem}
+        #tab-ketnoi .conn-stat-ic{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;flex:none}
+        #tab-ketnoi .conn-stat-ic [data-icon]{width:17px;height:17px}
+        #tab-ketnoi .conn-stat-v{font-family:'Noto Serif',serif;font-size:1.05rem;font-weight:700;color:var(--heading);line-height:1.15;font-variant-numeric:tabular-nums}
+        #tab-ketnoi .conn-stat-l{font-size:.72rem;color:var(--text-lt);margin-top:.1rem}
       </style>
+
+      <div class="conn-stats">
+        <div class="conn-stat"><div class="conn-stat-ic" style="background:var(--chip-green);color:var(--green)"><span data-icon="link"></span></div><div><div class="conn-stat-v" id="connOkCount">0/4</div><div class="conn-stat-l">Đã kết nối</div></div></div>
+        <div class="conn-stat"><div class="conn-stat-ic" style="background:var(--chip-red);color:var(--red)"><span data-icon="message-circle"></span></div><div><div class="conn-stat-v" id="connMissingCount">4/4</div><div class="conn-stat-l">Chưa kết nối</div></div></div>
+      </div>
 
       <p class="conn-intro">Dùng Tử Vi Minh Bảo ở mọi nơi bạn chat — trợ lý Luận Đường riêng, hoặc ngay trong Telegram · WhatsApp · Messenger, tất cả chung một ví Lượng.</p>
 
@@ -660,43 +728,97 @@
          mở đường cho /profile.html và /app/tai-khoan trôi lệch nhau. -->
     <div class="tab-content" id="tab-gopy"></div>
 
+    <!-- 4 mục sau đây là ĐÚNG những gì có backend thật: Thông tin cá nhân
+         (email + tên hiển thị, Supabase Auth user_metadata) · Bảo mật (đổi
+         mật khẩu, Supabase Auth) · Giao diện (nút đổi nền đã có ở sidebar,
+         cùng khoá localStorage `app_theme`) · Kết nối & Ứng dụng (trỏ sang
+         tab Kết Nối, không chép lại nội dung). KHÔNG có Thông báo/Ngôn ngữ/
+         Quản lý thiết bị/Dữ liệu & Quyền riêng tư — 4 mục đó cần backend mới
+         hoàn toàn (bảng tuỳ chọn thông báo, i18n, session tracking, luồng
+         xuất/xoá dữ liệu), chưa tồn tại nên không dựng UI rỗng cho chúng. -->
     <div class="tab-content" id="tab-account">
-      <div id="accountContent">
-        <div class="account-section">
-          <h3>Thông tin tài khoản</h3>
-          <div class="form-row">
-            <label>Email</label>
-            <input type="email" id="accEmail" disabled/>
-          </div>
-          <div class="form-row">
-            <label>Tên hiển thị</label>
-            <input type="text" id="accName" placeholder="Nhập tên của bạn"/>
-          </div>
-          <button class="btn-primary" onclick="saveDisplayName()" style="margin-top:.25rem">Lưu Tên</button>
-          <div id="nameAlert"></div>
-        </div>
+      <style>
+        #tab-account .settle{display:grid;grid-template-columns:200px 1fr;gap:1.25rem}
+        #tab-account .setnav{display:flex;flex-direction:column;gap:.15rem}
+        #tab-account .setnav-btn{display:flex;align-items:center;gap:.6rem;padding:.6rem .75rem;border-radius:8px;font-size:.85rem;font-weight:600;color:var(--text-mid);background:none;border:none;text-align:left;cursor:pointer;font-family:inherit;width:100%}
+        #tab-account .setnav-btn:hover{background:var(--bg-soft)}
+        #tab-account .setnav-btn.active{background:var(--gold-lt);color:var(--tx-gold)}
+        #tab-account .setnav-btn [data-icon]{width:15px;height:15px;flex:none}
+        #tab-account .setpane{display:none}
+        #tab-account .setpane.active{display:block}
+        #tab-account .theme-choice{display:flex;gap:.6rem;margin-top:.25rem}
+        #tab-account .theme-btn{flex:1;border:1px solid var(--border-lt);background:var(--surface);border-radius:8px;padding:.75rem;text-align:center;font-size:.85rem;font-weight:600;color:var(--text-mid);cursor:pointer;font-family:inherit}
+        #tab-account .theme-btn.active{border-color:var(--tx-gold);color:var(--tx-gold);background:var(--gold-lt)}
+        @media(max-width:700px){#tab-account .settle{grid-template-columns:1fr}#tab-account .setnav{flex-direction:row;overflow-x:auto}}
+      </style>
 
-        <div class="account-section">
-          <h3>Đổi mật khẩu</h3>
-          <div id="pwdSection">
-          <div class="form-row">
-            <label>Mật khẩu mới</label>
-            <input type="password" id="newPwd" placeholder="Nhập mật khẩu mới"/>
-          </div>
-          <div class="form-row">
-            <label>Xác nhận mật khẩu</label>
-            <input type="password" id="confirmPwd" placeholder="Nhập lại mật khẩu"/>
-          </div>
-          <button class="btn-primary" onclick="changePassword()">Đổi Mật Khẩu</button>
-          <div id="pwdAlert"></div>
-          </div>
-          <div id="pwdOAuthMsg" style="display:none;font-size:.85rem;color:var(--text-lt);padding:.5rem 0">
-            Tài khoản đăng nhập qua OAuth không sử dụng mật khẩu.
-          </div>
-        </div>
+      <div class="settle">
+        <nav class="setnav">
+          <button class="setnav-btn active" type="button" data-pane="info"><span data-icon="user"></span> Thông tin cá nhân</button>
+          <button class="setnav-btn" type="button" data-pane="security"><span data-icon="lock"></span> Bảo mật</button>
+          <button class="setnav-btn" type="button" data-pane="theme"><span data-icon="sun"></span> Giao diện</button>
+          <button class="setnav-btn" type="button" data-pane="conn"><span data-icon="link"></span> Kết nối &amp; Ứng dụng</button>
+        </nav>
 
-        <div class="account-section" style="border:1px solid var(--border-lt);border-radius:var(--radius);padding:1rem 1.2rem;background:var(--gold-lt)">
-          <p style="font-size:.82rem;color:var(--text-mid)"><span data-icon="wallet" style="width:14px;height:14px;vertical-align:-2px"></span> Xem lịch sử giao dịch và số dư Lượng tại tab <strong><a href="#" onclick="document.querySelector('[data-tab=credits]').click();return false" style="color:var(--tx-gold)">Ví Lượng</a></strong>.</p>
+        <div class="setpanes">
+          <div class="setpane active" data-pane="info">
+            <div class="account-section">
+              <h3>Thông tin cá nhân</h3>
+              <div class="form-row">
+                <label>Email</label>
+                <input type="email" id="accEmail" disabled/>
+              </div>
+              <div class="form-row">
+                <label>Tên hiển thị</label>
+                <input type="text" id="accName" placeholder="Nhập tên của bạn"/>
+              </div>
+              <button class="btn-primary" onclick="saveDisplayName()" style="margin-top:.25rem">Lưu Tên</button>
+              <div id="nameAlert"></div>
+            </div>
+            <div class="account-section" style="border:1px solid var(--border-lt);border-radius:var(--radius);padding:1rem 1.2rem;background:var(--gold-lt)">
+              <p style="font-size:.82rem;color:var(--text-mid)"><span data-icon="wallet" style="width:14px;height:14px;vertical-align:-2px"></span> Xem lịch sử giao dịch và số dư Lượng tại tab <strong><a href="#" onclick="document.querySelector('[data-tab=credits]').click();return false" style="color:var(--tx-gold)">Ví Lượng</a></strong>.</p>
+            </div>
+          </div>
+
+          <div class="setpane" data-pane="security">
+            <div class="account-section">
+              <h3>Đổi mật khẩu</h3>
+              <div id="pwdSection">
+              <div class="form-row">
+                <label>Mật khẩu mới</label>
+                <input type="password" id="newPwd" placeholder="Nhập mật khẩu mới"/>
+              </div>
+              <div class="form-row">
+                <label>Xác nhận mật khẩu</label>
+                <input type="password" id="confirmPwd" placeholder="Nhập lại mật khẩu"/>
+              </div>
+              <button class="btn-primary" onclick="changePassword()">Đổi Mật Khẩu</button>
+              <div id="pwdAlert"></div>
+              </div>
+              <div id="pwdOAuthMsg" style="display:none;font-size:.85rem;color:var(--text-lt);padding:.5rem 0">
+                Tài khoản đăng nhập qua OAuth không sử dụng mật khẩu.
+              </div>
+            </div>
+          </div>
+
+          <div class="setpane" data-pane="theme">
+            <div class="account-section">
+              <h3>Giao diện</h3>
+              <p style="font-size:.85rem;color:var(--text-mid);margin-bottom:.5rem">Chọn nền sáng hoặc tối cho toàn bộ Tử Vi Minh Bảo — áp dụng ngay, nhớ cho lần sau.</p>
+              <div class="theme-choice">
+                <button class="theme-btn" type="button" data-theme-choice="light"><span data-icon="sun" style="width:14px;height:14px;vertical-align:-2px"></span> Sáng</button>
+                <button class="theme-btn" type="button" data-theme-choice="dark"><span data-icon="moon" style="width:14px;height:14px;vertical-align:-2px"></span> Tối</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="setpane" data-pane="conn">
+            <div class="account-section">
+              <h3>Kết nối &amp; Ứng dụng</h3>
+              <p style="font-size:.85rem;color:var(--text-mid);margin-bottom:.75rem">Quản lý trợ lý AI (Claude, ChatGPT…) và các kênh chat (Telegram, WhatsApp, Messenger) đang dùng chung ví Lượng của bạn.</p>
+              <button class="btn-primary" onclick="document.querySelector('[data-tab=ketnoi]').click()">Mở tab Kết Nối →</button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -766,7 +888,7 @@ window.iconHtml=window.iconHtml||function(k){return (window.ICONS&&window.ICONS[
 </script>
 <script src="/auth.js?v=2"></script>
   <script src="/nav.js?v=26" data-icons-only></script>
-<script src="/shell.js?v=87"></script>
+<script src="/shell.js?v=90"></script>
 <script>
 // HỘI THOẠI (shell history) cho tab Lịch Sử của hub Tài khoản: gộp mọi công cụ
 // từ localStorage (app_hist_v1_*) + server (/api/tuvi-chats type app-*). Bấm 1
@@ -786,6 +908,9 @@ window.ACCOUNT_SHELL_CHAT = function () {
     arr.sort(function (a, b) { return (b.updatedAt || 0) - (a.updatedAt || 0); });
     var badge = document.getElementById('countChat');
     if (badge) { if (arr.length) { badge.style.display = 'inline-block'; badge.textContent = arr.length; } else badge.style.display = 'none'; }
+    window._histCounts = window._histCounts || {};
+    window._histCounts.chat = arr.length;
+    if (window.updateHistStats) window.updateHistStats();
     if (!arr.length) { content.innerHTML = '<div class="empty-state"><div class="icon"><span data-icon="message-circle" style="width:40px;height:40px;color:var(--tx-gold)"></span></div><p>Chưa có hội thoại nào. Mở một công cụ, hỏi trợ lý — phiên sẽ hiện ở đây.</p></div>'; if (window.mountIcons) window.mountIcons(content); return; }
     content.innerHTML = '<div class="chat-list">' + arr.map(function (s) {
       var label = TOOLMAP[s.tool] || s.tool;
@@ -820,7 +945,7 @@ window.ACCOUNT_SHELL_CHAT = function () {
   } catch (e) { /* ignore */ }
 };
 </script>
-<script src="/account-core.js?v=4"></script>
+<script src="/account-core.js?v=9"></script>
 <script>
 // Mở đúng tab theo hash (#credits / #ketnoi / #account / #lichsu) khi vào từ sidebar.
 (function(){function openHash(){var h=(location.hash||'').replace('#','');if(h){var b=document.querySelector('[data-tab="'+h+'"]');if(b)b.click();}}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){setTimeout(openHash,300);});else setTimeout(openHash,300);})();

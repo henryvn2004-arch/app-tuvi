@@ -17,7 +17,8 @@
 <script src="/tuvi-ansao-engine.js"></script>
 <script src="/auth.js?v=2"></script>
 <script src="/tools-shared/vn-timezone.js?v=1"></script>
-<script src="/tuvi-form.js?v=2"></script>
+<script src="/tools-shared/fbcard-topic.js?v=1"></script>
+<script src="/tuvi-form.js?v=3"></script>
 <script src="/tuvi-grid.js?v=3"></script>
 <script src="/tuvi-paywall.js?v=33"></script>
 <style>
@@ -46,6 +47,18 @@
 .fb-tot{background:#E8F5EC;color:#1E6B3C}
 .fb-canhbao{background:#FBEAE7;color:#C0392B}
 .fb-trungtinh{background:var(--gold-lt);color:var(--navy)}
+/* 3 bố cục ảnh minh hoạ theo chủ đề (PR #807, public/tools-shared/fbcard-topic.js).
+   Trang này không nạp shell.css nên phải chép lại y hệt — thiếu là ảnh trôi
+   theo flow mặc định (góc trên-trái), không phải lỗi thiết kế. */
+.fbc-badge-wrap{position:relative;margin-top:34px}
+.fbc-badge-wrap .fb-card{padding-top:44px}
+.fbc-badge-wrap .fbc-img{position:absolute;top:0;left:50%;transform:translate(-50%,-50%);width:60px;height:60px;border-radius:50%;object-fit:cover;border:3px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,.18);z-index:2}
+.fbc-side-row{display:flex;align-items:center;gap:14px;margin:16px 0 18px}
+.fbc-side-row .fbc-img{width:72px;height:72px;border-radius:50%;object-fit:cover;flex:0 0 auto;border:2px solid currentColor;box-shadow:0 2px 8px rgba(0,0,0,.12)}
+.fbc-side-row .fb-card{flex:1;margin:0;padding:26px 22px 20px}
+.fbc-bg-card{position:relative;overflow:hidden}
+.fbc-bg-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.22;z-index:0}
+.fbc-bg-text{position:relative;z-index:1}
 body { font-family: Arial, sans-serif; background: var(--bg); color: var(--text); font-size: 16px; line-height: 1.6; -webkit-font-smoothing: antialiased; }
 
 /* NAV */
@@ -1521,7 +1534,7 @@ function renderLuanGiaiParas(text) {
     if (m) {
       flushPending();
       const cls = HOOK_TAG_CLASS[m[1]] || 'fb-trungtinh';
-      out += `<div class="fb-card ${cls}">"${m[2].trim()}"</div>`;
+      out += window.FbCardTopic.cardHtml(cls, window.FbCardTopic.extractTopic(p.trim()), `"${m[2].trim()}"`);
       pendingLead = inline(m[3]).trim();
       return;
     }

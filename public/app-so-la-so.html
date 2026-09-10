@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Lá số đã lưu — Tử Vi Minh Bảo</title>
+<link rel="icon" type="image/webp" href="/seal.webp"/>
+<link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/fonts/noto-serif.css?v=1">
+<link rel="stylesheet" href="/shell.css?v=40"/>
+<style>
+.ws-body{padding:22px 26px 60px;max-width:760px}
+.ls-group{margin-bottom:26px}
+.ls-gh{display:flex;align-items:center;gap:8px;font-family:var(--serif);font-size:15px;font-weight:600;color:var(--heading);margin:0 0 10px}
+.ls-gh .ls-ic{width:16px;height:16px;color:var(--gold-soft);flex:0 0 auto}
+.ls-gh .ls-ic svg{width:100%;height:100%}
+.ls-count{font-size:11.5px;font-weight:700;color:var(--text-lt);background:var(--paper-2);border-radius:20px;padding:1px 9px}
+.ls-empty-g{font-size:12.5px;color:var(--text-lt);border:1px dashed var(--line-2);border-radius:9px;padding:12px 14px;margin:0}
+.ls-rows{display:flex;flex-direction:column;gap:8px}
+.ls-row{display:flex;align-items:center;gap:11px;border:1px solid var(--line);background:var(--white);border-radius:11px;padding:10px 12px}
+.ls-ava{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--gold-soft),var(--gold));display:flex;align-items:center;justify-content:center;color:#2a1e05;font-weight:700;font-size:13.5px;font-family:var(--serif);flex:0 0 auto}
+.ls-tx{flex:1;min-width:0}
+.ls-tx b{display:block;font-size:13.5px;color:var(--heading);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ls-tx span{display:block;font-size:11.5px;color:var(--text-lt);margin-top:1px}
+.ls-sel{font-size:12.5px;color:var(--text-mid);background:var(--paper);border:1px solid var(--line-2);border-radius:7px;padding:6px 8px;font-family:inherit;flex:0 0 auto}
+.ls-del{width:30px;height:30px;border-radius:8px;border:1px solid var(--line-2);background:var(--white);color:var(--text-lt);cursor:pointer;display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+.ls-del:hover{border-color:#e2b6b0;color:#C0392B}
+.ls-del .ls-ic{width:14px;height:14px}
+.ls-del .ls-ic svg{width:100%;height:100%}
+@media(max-width:600px){
+  .ls-row{flex-wrap:wrap}
+  .ls-sel{margin-left:45px}
+}
+</style>
+</head>
+<body>
+
+<div class="shell">
+  <aside class="sb" id="shell-sidebar"></aside>
+  <main class="ws" id="ws">
+    <div class="ws-top">
+      <button class="btn mobile-only" onclick="document.getElementById('shell-sidebar').classList.toggle('open');window.shellSyncBackdrop&&shellSyncBackdrop()" aria-label="Menu">☰</button>
+      <div class="ws-title"><b>Lá số đã lưu</b><span>Sổ lá số theo tài khoản — xếp theo nhóm quan hệ</span></div>
+    </div>
+    <div class="ws-body">
+      <div id="lsLoading" style="padding:3rem 0;text-align:center;color:var(--text-lt);font-size:13px">Đang tải…</div>
+      <div id="lsGuest" style="display:none;padding:3rem 1rem;text-align:center">
+        <p style="color:var(--text-lt);margin-bottom:1rem;font-size:13.5px">Đăng nhập để xem sổ lá số đã lưu.</p>
+        <button class="btn" type="button" onclick="window.showAuthModal && showAuthModal(function(){location.reload();})">Đăng nhập / Đăng ký</button>
+      </div>
+      <div id="lsEmpty" style="display:none;padding:2.5rem 1rem;text-align:center;color:var(--text-lt);font-size:13.5px;line-height:1.7">
+        Chưa có lá số nào trong sổ.<br>Lá số sẽ tự vào đây sau khi bạn nhập ngày sinh ở bất kỳ công cụ nào.
+      </div>
+      <div id="lsGroups"></div>
+    </div>
+  </main>
+</div>
+
+<script src="/nav.js?v=26" data-icons-only></script>
+<script src="/auth.js?v=2"></script>
+<script>window.SHELL_ACTIVE='so-la-so';</script>
+<script src="/shell.js?v=90"></script>
+<script>
+(function(){
+  var RELATIONS = [
+    { key:'gia_dinh',    label:'Gia đình',    icon:'home' },
+    { key:'ban_be',      label:'Bạn bè',      icon:'users' },
+    { key:'dong_nghiep', label:'Đồng nghiệp', icon:'briefcase' },
+    { key:'khac',        label:'Khác',        icon:'folder' },
+  ];
+  function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  function birthShort(b){
+    if(!b) return '';
+    var g = b.gioitinh==='nu' ? 'Nữ' : 'Nam';
+    return g + ' · ' + (b.ngay||'?') + '/' + (b.thang||'?') + '/' + (b.nam||'?');
+  }
+  // NULL/giá trị lạ đều gộp về "khac" khi HIỂN THỊ — dữ liệu gốc trên server
+  // vẫn giữ nguyên (chỉ đổi khi người dùng tự chọn nhóm khác).
+  function groupKey(it){
+    var r = it.relation;
+    return RELATIONS.some(function(g){ return g.key === r; }) ? r : 'khac';
+  }
+  async function token(){
+    try { return (window.Auth && window.Auth.getFreshToken) ? await window.Auth.getFreshToken() : ((window.Auth && window.Auth.getSession && window.Auth.getSession().access_token) || null); }
+    catch(e){ return null; }
+  }
+
+  function render(items){
+    document.getElementById('lsLoading').style.display = 'none';
+    if (!items.length) { document.getElementById('lsEmpty').style.display = 'block'; return; }
+    document.getElementById('lsEmpty').style.display = 'none';
+    var byGroup = {}; RELATIONS.forEach(function(g){ byGroup[g.key] = []; });
+    items.forEach(function(it){ byGroup[groupKey(it)].push(it); });
+
+    var h = '';
+    RELATIONS.forEach(function(g){
+      var rows = byGroup[g.key];
+      h += '<section class="ls-group" id="lsg-' + g.key + '">';
+      h += '<h2 class="ls-gh"><span class="ls-ic" data-icon="' + g.icon + '"></span>' + esc(g.label) + ' <span class="ls-count">' + rows.length + '</span></h2>';
+      if (!rows.length) {
+        h += '<p class="ls-empty-g">Chưa có lá số nào trong nhóm này.</p>';
+      } else {
+        h += '<div class="ls-rows">';
+        rows.forEach(function(it){
+          var name = it.label || (it.birth && it.birth.hoten) || 'Chưa đặt tên';
+          h += '<div class="ls-row">' +
+               '<div class="ls-ava">' + esc((name[0] || '?').toUpperCase()) + '</div>' +
+               '<div class="ls-tx"><b>' + esc(name) + '</b><span>' + esc(birthShort(it.birth)) + '</span></div>' +
+               '<select class="ls-sel" data-id="' + it.id + '">' +
+                 RELATIONS.map(function(g2){ return '<option value="' + g2.key + '"' + (g2.key === groupKey(it) ? ' selected' : '') + '>' + esc(g2.label) + '</option>'; }).join('') +
+               '</select>' +
+               '<button type="button" class="ls-del" data-id="' + it.id + '" title="Xoá khỏi sổ"><span class="ls-ic" data-icon="trash-2"></span></button>' +
+               '</div>';
+        });
+        h += '</div>';
+      }
+      h += '</section>';
+    });
+    document.getElementById('lsGroups').innerHTML = h;
+    if (window.mountIcons) window.mountIcons(document.getElementById('lsGroups'));
+
+    var focus = new URLSearchParams(location.search).get('g');
+    if (focus) { var el = document.getElementById('lsg-' + focus); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+  }
+
+  function onSelect(e){
+    var sel = e.target.closest('.ls-sel'); if (!sel) return;
+    var id = sel.getAttribute('data-id');
+    sel.disabled = true;
+    token().then(function(tok){
+      if (!tok) return null;
+      return fetch('/api/charts?id=' + encodeURIComponent(id), {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + tok },
+        body: JSON.stringify({ relation: sel.value }),
+      });
+    }).then(load).catch(load);
+  }
+  function onDelete(e){
+    var btn = e.target.closest('.ls-del'); if (!btn) return;
+    if (!window.confirm('Xoá lá số này khỏi sổ?')) return;
+    var id = btn.getAttribute('data-id');
+    btn.disabled = true;
+    token().then(function(tok){
+      if (!tok) return null;
+      return fetch('/api/charts?id=' + encodeURIComponent(id), { method: 'DELETE', headers: { Authorization: 'Bearer ' + tok } });
+    }).then(load).catch(load);
+  }
+  document.getElementById('lsGroups').addEventListener('change', onSelect);
+  document.getElementById('lsGroups').addEventListener('click', onDelete);
+
+  function load(){
+    return token().then(function(tok){
+      if (!tok) { document.getElementById('lsLoading').style.display = 'none'; document.getElementById('lsGuest').style.display = 'block'; return; }
+      document.getElementById('lsGuest').style.display = 'none';
+      return fetch('/api/charts', { headers: { Authorization: 'Bearer ' + tok } })
+        .then(function(r){ return r.ok ? r.json() : { items: [] }; })
+        .then(function(d){ render((d && d.items) || []); });
+    }).catch(function(){ document.getElementById('lsLoading').style.display = 'none'; });
+  }
+
+  // auth.js có thể đang khôi phục phiên (refresh token qua cookie) — đợi tối
+  // đa 1.5s trước khi kết luận khách vô danh, cùng nhịp với account-core.js.
+  var deadline = Date.now() + 1500;
+  (function wait(){
+    if ((window.Auth && Auth.isLoggedIn && Auth.isLoggedIn()) || Date.now() > deadline) { load(); return; }
+    setTimeout(wait, 100);
+  })();
+})();
+</script>
+</body>
+</html>

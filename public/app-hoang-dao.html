@@ -9,17 +9,13 @@
 <link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/fonts/noto-serif.css?v=1">
-<link rel="stylesheet" href="/shell.css?v=34">
+<link rel="stylesheet" href="/shell.css?v=40">
 <style>
-.form-card{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);max-width:600px}
-.form-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:3px}
+.form-card{max-width:600px}
 .form-card p.sub{font-size:12.5px;color:var(--text-lt);margin-bottom:16px}
 .frow{display:flex;gap:11px;flex-wrap:wrap;align-items:flex-end;margin-bottom:13px}
-.fg{display:flex;flex-direction:column;gap:5px}
-.fg label{font-size:10.5px;font-weight:600;color:var(--text-lt);letter-spacing:.04em;text-transform:uppercase}
 .fg input{border:1px solid var(--line-2);border-radius:7px;padding:8px 10px;font-size:13.5px;font-family:inherit;color:var(--text);background:var(--paper);outline:none;width:90px}
 .fg input:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(20,85,164,.12)}
-.btn-go{background:var(--red);color:#fff;border:none;border-radius:8px;padding:10px 22px;font-size:14px;font-weight:600;cursor:pointer;font-family:var(--serif)}
 .err{color:var(--tx-red);font-size:13px;margin-top:8px;display:none}.err.active{display:block}
 #resPanel{display:none;max-width:760px}
 .res-block{background:#fff;border:1px solid var(--border-lt);border-radius:10px;overflow:hidden;box-shadow:var(--shadow)}
@@ -65,21 +61,28 @@
           <img class="intro-avatar" src="/tool-avatars/hoang-dao.webp" alt="" onerror="this.remove()">
           <div class="intro-text">
             <div class="intro-t">Giờ Hoàng Đạo</div>
-            <div class="intro-d">Giờ Hoàng Đạo tra giờ hoàng đạo hôm nay, kèm việc nên làm trong giờ đó. Ký hợp đồng, xuất hành đúng giờ xấu rồi tiền bạc, công việc trục trặc mà không biết vì đâu? Chọn ngày cần xem, nhận danh sách giờ tốt và việc nên làm.</div>
+            <div class="intro-d">Tra giờ Hoàng Đạo hôm nay kèm việc nên làm trong giờ đó. Chọn ngày cần xem, nhận danh sách giờ tốt — giờ cần tránh và hoàng lịch đầy đủ.</div>
             <div id="introSrc" style="min-height:55.2px;margin-top:9px"></div>
           </div>
+        </div>
+        <div class="hero-pills">
+          <div class="hero-pill"><span class="hp-ic" data-icon="sun"></span><span>6 giờ tốt<br>nên dùng</span></div>
+          <div class="hero-pill"><span class="hp-ic" data-icon="x-circle"></span><span>6 giờ xấu<br>cần tránh</span></div>
+          <div class="hero-pill"><span class="hp-ic" data-icon="scroll-text"></span><span>Hoàng lịch<br>đầy đủ</span></div>
         </div>
       </div></div>
       <div id="shellRecent"></div>
       <div class="form-card" id="birthPanel">
-        <h2>Ngày cần xem (dương lịch)</h2>
-        <p class="sub">Chọn ngày, tháng, năm dương lịch bạn cần xem. Hệ thống tính giờ hoàng đạo và đối chiếu hoàng lịch ngày đó. Nhận về 6 giờ tốt nên dùng, 6 giờ cần tránh và hoàng lịch đầy đủ.</p>
-        <p class="price-note" data-tvp-price-label="hoang-dao">…</p>
+        <div class="fc-head"><span class="fc-ic" data-icon="sun"></span><h2>Ngày cần xem (dương lịch)</h2></div>
+        <p class="sub">Chọn ngày, tháng, năm dương lịch cần xem. Hệ thống tính giờ hoàng đạo và đối chiếu hoàng lịch ngày đó.</p>
         <div class="frow" style="margin-bottom:4px">
           <div class="fg"><label>Ngày</label><input type="number" id="ngay" min="1" max="31" placeholder="1–31"></div>
           <div class="fg"><label>Tháng</label><input type="number" id="thang" min="1" max="12" placeholder="1–12"></div>
           <div class="fg"><label>Năm</label><input type="number" id="nam" min="1900" max="2100" placeholder="2026"></div>
-          <button class="btn-go" id="btnGo" onclick="calculate()">Xem giờ →</button>
+          <button class="btn-go" id="btnGo" onclick="calculate()">
+            <span class="bg-label"><span class="ic" data-icon="search"></span><b id="btnGoLabel">Xem giờ →</b></span>
+            <small>Miễn phí</small>
+          </button>
         </div>
         <div class="err" id="error-msg"></div>
       </div>
@@ -113,7 +116,7 @@ window.SHELL_INTRO={key:'hoang-dao'};</script>
 <script src="/tools-shared/hoang-lich.js?v=1"></script>
 <script src="/auth.js?v=2"></script>
   <script src="/nav.js?v=26" data-icons-only></script>
-<script src="/shell.js?v=87"></script>
+<script src="/shell.js?v=90"></script>
 <script>
 // Ô giữa dùng CHUNG /tools-shared/hoang-dao.js với /tools/hoang-dao.html.
 function calculate(){

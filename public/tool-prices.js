@@ -37,15 +37,18 @@ window.ToolPrices = (function () {
   // của người đang mở tab, thiếu cột mới mà vẫn còn hạn ⇒ trang dựng ra bằng dữ
   // liệu cụt trong tối đa 2 phút mà không có gì báo. (v2: thêm need_tags/question
   // · v3: thêm app_path/page_path + bảng tool_groups · v4: thêm parts/credits_per_part
-  // — giá theo phần cho tool chia nhỏ như laso)
-  var CACHE_KEY = 'tvmb_prices_v4';
+  // — giá theo phần cho tool chia nhỏ như laso · v5: thêm home_rank — thứ tự
+  // lưới springboard /app, xem public/app-home.html)
+  var CACHE_KEY = 'tvmb_prices_v5';
   var TTL_MS = 120000; // 2 phút — đủ để đi hết một phiên duyệt, đủ ngắn để admin đổi giá thấy ngay
 
   // Bản đọc được LẦN GẦN NHẤT, sống qua phiên (localStorage, khác cache 2 phút
   // ở trên). CHỈ dùng cho điều hướng: sidebar của Luận Đường mà trống thì người
   // dùng mất đường đi khắp app, tệ hơn hẳn một danh sách hơi cũ. Giá thì KHÔNG
   // bao giờ lấy từ đây — luật "đọc hụt thì trả null, không đoán" giữ nguyên.
-  var NAV_KEY = 'tvmb_nav_v3';
+  // v4: thêm home_rank — springboard cần nó để lưới KHÔNG rơi về sort_order
+  // (thứ tự trang giá) trong lúc chờ mạng.
+  var NAV_KEY = 'tvmb_nav_v4';
 
   var _inflight = null;
   var _data = null; // { tools: {id: credits}, packages: [...] }
@@ -94,7 +97,7 @@ window.ToolPrices = (function () {
       // Lấy TRỌN dòng: trang Công Cụ, dashboard và sidebar đều cần nhãn / icon /
       // nhóm / đường dẫn. Một lượt fetch cho mọi nơi thay vì mỗi nơi một lượt.
       _get(
-        'tool_pricing?enabled=eq.true&select=tool_id,label,credits,icon,category,sort_order,is_free,description,need_tags,question,app_path,page_path,parts,credits_per_part&order=sort_order.asc'
+        'tool_pricing?enabled=eq.true&select=tool_id,label,credits,icon,category,sort_order,is_free,description,need_tags,question,app_path,page_path,parts,credits_per_part,home_rank&order=sort_order.asc'
       ),
       _get('credit_packages?enabled=eq.true&select=package_id,credits,amount_vnd,label&order=sort_order.asc'),
       _get('tool_groups?enabled=eq.true&select=key,title,subtitle,icon,sort_order,default_categories&order=sort_order.asc'),
@@ -327,6 +330,7 @@ window.ToolPrices = (function () {
               question: r.question,
               app_path: r.app_path,
               page_path: r.page_path,
+              home_rank: r.home_rank,
             };
           }),
         })

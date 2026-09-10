@@ -9,12 +9,8 @@
 <link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/fonts/noto-serif.css?v=1">
-<link rel="stylesheet" href="/shell.css?v=34">
+<link rel="stylesheet" href="/shell.css?v=40">
 <style>
-.form-card{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);max-width:640px}
-.form-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:3px}
-.form-card p.sub{font-size:12.5px;color:var(--text-lt);margin-bottom:14px}
-.frow{display:flex;gap:11px;flex-wrap:wrap;align-items:flex-end;margin-bottom:12px}
 /* Giữ chỗ cho form khai sinh. `TuviForm.render` chạy ngay trong lúc phân tích
    HTML, nhưng chỉ SAU khi `tuvi-form.js` nạp xong — mà đứng trước nó là cả một dãy
    script CÙNG ORIGIN cũng chặn parse (17KB–524KB tuỳ trang), nên trên mạng chậm lần
@@ -26,11 +22,6 @@
    không hề thấy. Đo bằng chiều cao là hụt đúng chỗ đó. Số 317px/432px là ĐO,
    xem docs/nhat-ky/2026-09.md vòng 9. */
 @media (max-width:432px){#tuviFormHost:empty{min-height:317px}}
-.fg{display:flex;flex-direction:column;gap:5px}
-.fg label{font-size:10.5px;font-weight:600;color:var(--text-lt);letter-spacing:.04em;text-transform:uppercase}
-.fg input,.fg select{border:1px solid var(--line-2);border-radius:7px;padding:8px 10px;font-size:13.5px;font-family:inherit;color:var(--text);background:var(--paper);outline:none}
-.fg input:focus,.fg select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(20,85,164,.12)}
-.btn-go{background:var(--red);color:#fff;border:none;border-radius:8px;padding:10px 22px;font-size:14px;font-weight:600;cursor:pointer;font-family:var(--serif)}
 .btn-go:disabled{opacity:.6;cursor:not-allowed}
 .err{color:var(--tx-red);font-size:13px;margin-top:8px;display:none}
 .err.active{display:block}
@@ -101,20 +92,49 @@
           <img class="intro-avatar" src="/tool-avatars/chan-dung-tien-kiep.webp" alt="" onerror="this.remove()">
           <div class="intro-text">
             <div class="intro-t">Chân Dung Tiền Kiếp</div>
-            <div class="intro-d">Chân Dung Tiền Kiếp dựng chân dung và câu chuyện một đời từ chính lá số bạn. Có những nỗi sợ, thói quen tình cảm bạn không lý giải nổi — như thể mang theo từ một kiếp sống khác? Từ lá số có sẵn, nhận một câu chuyện tiền kiếp trọn vẹn để đọc.</div>
+            <div class="intro-d">Dựng chân dung và câu chuyện một đời từ chính lá số của bạn, đặt vào một trong 5 nền văn minh Á Đông cổ. Từ lá số có sẵn, nhận một câu chuyện tiền kiếp trọn vẹn để đọc.</div>
             <div id="introSrc" style="min-height:73.6px;margin-top:9px"></div>
           </div>
         </div>
+        <div class="hero-pills">
+          <div class="hero-pill"><span class="hp-ic" data-icon="image"></span><span>Chân dung<br>vẽ riêng</span></div>
+          <div class="hero-pill"><span class="hp-ic" data-icon="scroll-text"></span><span>Một đời<br>5 hồi</span></div>
+          <div class="hero-pill"><span class="hp-ic" data-icon="landmark"></span><span>5 nền<br>văn minh cổ</span></div>
+        </div>
       </div></div>
       <div id="shellRecent"></div>
+      <div class="samp-cta" id="sampCta">
+        <span class="sc-ic" data-icon="lightbulb"></span>
+        <span class="sc-txt"><b>Chưa muốn khai thông tin?</b><span>Bạn có thể xem một bản mẫu để trải nghiệm trước.</span></span>
+        <button type="button" id="btnSample" data-sample-tool="chan-dung-tien-kiep" onclick="SampleHint.open(this)">Xem bản mẫu →</button>
+      </div>
       <div class="form-card" id="birthPanel">
-        <h2>Nhập ngày sinh của bạn (dương lịch)</h2>
-        <p class="sub">Dùng lá số đã lập, không cần nhập thêm gì khác. Hệ thống phân tích lá số rồi dựng chân dung kèm câu chuyện minh hoạ. Nhận về chân dung, cốt cách và câu chuyện một đời kể theo 5 hồi.</p>
-        <p class="price-note" data-tvp-price-label="chan-dung-tien-kiep">…</p>
+        <div class="fc-head"><span class="fc-ic" data-icon="temple"></span><h2>Nhập ngày sinh của bạn (dương lịch)</h2></div>
+        <p class="sub">Dùng lá số đã lập, không cần nhập thêm gì khác. Nhận về chân dung, cốt cách và câu chuyện một đời kể theo 5 hồi.</p>
         <div id="tuviFormHost"></div>
 
+        <div class="cost-box">
+          <div class="cb-l">
+            <span class="cb-ic" data-icon="wallet"></span>
+            <div>
+              <div class="cb-title">Chi phí sử dụng</div>
+              <div class="cb-amt"><span data-tvp-price="chan-dung-tien-kiep">…</span> Lượng <span class="vnd" data-tvp-price-vnd="chan-dung-tien-kiep"></span> mỗi lượt</div>
+              <div class="cb-pay">
+                <span><span class="ic" data-icon="qr-code"></span> Chuyển khoản (qua QR ngân hàng)</span>
+                <span><span class="ic" data-icon="credit-card"></span> PayPal / Thẻ quốc tế</span>
+              </div>
+            </div>
+          </div>
+          <div class="cb-r">
+            <span class="cb-ic" data-icon="gift"></span>
+            <div class="cb-r-txt">Mua gói để nhận nhiều ưu đãi hơn.<br><a href="/topup.html">Xem các gói ngay →</a></div>
+          </div>
+        </div>
         <div class="frow" style="margin-bottom:0">
-          <button class="btn-go" id="btnGo" onclick="analyze()">Xem Tiền Kiếp — <span data-tvp-price="chan-dung-tien-kiep">…</span> Lượng →</button>
+          <button class="btn-go" id="btnGo" onclick="analyze()">
+            <span class="bg-label"><span class="ic" data-icon="temple"></span><b>Xem Tiền Kiếp →</b></span>
+            <small>Tốn <span data-tvp-price="chan-dung-tien-kiep">…</span> Lượng <span data-tvp-price-vnd="chan-dung-tien-kiep"></span></small>
+          </button>
         </div>
         <div class="err" id="error-msg"></div>
       </div>
@@ -203,14 +223,15 @@
 window.SHELL_INTRO={key:'chan-dung-tien-kiep'};</script>
 <script src="/laso-chart.js?v=3"></script>
 <script src="/tools-shared/vn-timezone.js?v=1"></script>
-<script src="/tuvi-form.js?v=2"></script>
+<script src="/tuvi-form.js?v=3"></script>
 <script src="/tuvi-paywall.js?v=33"></script>
 <script src="/tools-shared/hook-charts.js?v=2"></script>
 <script src="/tools-shared/hook-facts.js?v=1"></script>
 <script src="/tools-shared/hook-layer.js?v=2"></script>
 <script src="/auth.js?v=2"></script>
   <script src="/nav.js?v=26" data-icons-only></script>
-<script src="/shell.js?v=87"></script>
+<script src="/tools-shared/sample-hint.js?v=1"></script>
+<script src="/shell.js?v=90"></script>
 <script src="/tools-shared/ai-loading-steps.js?v=10"></script>
 <script src="/tools-shared/portrait-recover.js?v=2"></script>
 <script>
@@ -821,6 +842,16 @@ async function _loadHistory() {
 }
 
 TuviPaywall.init({ product: 'chan-dung-tien-kiep', slug: function () { return _currentSlug; } });
+
+// Ghi "(~X đ)" cạnh số Lượng — cùng mẫu `_fillVndSlots` của app-luan-giai.html.
+function _fillVndSlots(host, product) {
+  if (!host || !window.ToolPrices) return;
+  var els = host.querySelectorAll('[data-tvp-price-vnd]');
+  var cost = window.ToolPrices.get(product);
+  var lbl = cost != null ? window.ToolPrices.vndLabel(cost) : '';
+  els.forEach(function (el) { el.textContent = lbl ? ('(' + lbl + ')') : ''; });
+}
+TuviPaywall.fillPriceSlots(document).then(function () { _fillVndSlots(document, 'chan-dung-tien-kiep'); });
 
 // ── B2 — nhận hand-off từ trang chia sẻ `/ket-qua` ───────────────────────────
 // Người mở link của bạn bè nhập ngày sinh NGAY TẠI trang chia sẻ rồi được đưa

@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-241 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+245 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 **Bốn file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
 ```bash
@@ -11,7 +11,7 @@ sed -n '120,190p' docs/nhat-ky/2026-08.md    # đọc đúng đoạn, đừng ca
 
 | file | số mục | dung lượng |
 |---|---:|---:|
-| `2026-09.md` | 76 | 353,059 B |
+| `2026-09.md` | 80 | 363,592 B |
 | `2026-08.md` | 148 | 1,024,027 B |
 | `2026-07.md` | 12 | 154,531 B |
 | `track-cu.md` | 5 | 89,354 B |
@@ -25,6 +25,10 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
+| 1 | 2026-09 | `2026-09.md` | 🐛 Bộ lọc nhiễu "postMessage" (#785) vẫn lọt — neo `^` sai vì browser tự thêm "Uncaught " |
+| 1 | 2026-09 | `2026-09.md` | 🗂️ Sidebar bỏ danh sách công cụ, gộp Hồ sơ lên đầu + Sổ lá số theo nhóm |
+| 1 | 2026-09 | `2026-09.md` | 🚨 `security_audit()` báo giả "cày quà đăng ký" cho hộ dùng chung thiết bị |
+| 1 | 2026-09 | `2026-09.md` | 🖨️ PDF "Xem mẫu" — từ tự dựng HTML rời sang CHỤP ĐÚNG trang thật |
 | 1 | 2026-09 | `2026-09.md` | 📊 Digest dùng tool thêm mục Top user hoạt động nhiều nhất |
 | 1 | 2026-09 | `2026-09.md` | 📣 Báo NGAY qua Telegram+WhatsApp: đăng ký mới · dùng tool (kể cả ẩn danh) · trả tiền |
 | 1 | 2026-09 | `2026-09.md` | 🚨 Cảnh báo lỗi JS phía client GẦN-THỜI-GIAN-THỰC — nối nốt phần Sentry để dở |

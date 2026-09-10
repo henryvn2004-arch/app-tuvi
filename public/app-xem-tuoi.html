@@ -9,23 +9,18 @@
 <link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/fonts/noto-serif.css?v=1">
-<link rel="stylesheet" href="/shell.css?v=34">
+<link rel="stylesheet" href="/shell.css?v=40">
 <link rel="stylesheet" href="/laso-chart.css?v=3">
 <style>
-.form-card{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);max-width:720px}
-.form-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:3px}
-.form-card p.sub{font-size:12.5px;color:var(--text-lt);margin-bottom:14px}
+.form-card{max-width:720px}
 .two{display:flex;gap:16px;flex-wrap:wrap}
 .person{flex:1;min-width:270px;border:1px solid var(--line);border-radius:10px;padding:12px 13px;background:var(--paper)}
 .person h3{font-family:var(--serif);font-size:13.5px;font-weight:600;margin-bottom:10px;display:flex;align-items:center;gap:7px}
 .dotA,.dotB{width:10px;height:10px;border-radius:50%}
 .dotA{background:var(--red)}.dotB{background:var(--blue)}
 .frow{display:flex;gap:9px;flex-wrap:wrap;align-items:flex-end;margin-bottom:11px}
-.fg{display:flex;flex-direction:column;gap:5px}
 .fg label{font-size:10px;font-weight:600;color:var(--text-lt);letter-spacing:.03em;text-transform:uppercase}
 .fg input,.fg select{border:1px solid var(--line-2);border-radius:7px;padding:7px 9px;font-size:13px;font-family:inherit;color:var(--text);background:var(--white);outline:none}
-.fg input:focus,.fg select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(20,85,164,.12)}
-.btn-go{background:var(--red);color:#fff;border:none;border-radius:8px;padding:10px 22px;font-size:14px;font-weight:600;cursor:pointer;font-family:var(--serif);margin-top:14px}
 .btn-go:disabled{opacity:.6;cursor:not-allowed}
 
 #xtPanel{display:none}
@@ -104,8 +99,13 @@
     <div class="ws-body">
       <div id="introHost"></div>
       <div id="shellRecent"></div>
+      <div class="samp-cta" id="sampCta">
+        <span class="sc-ic" data-icon="lightbulb"></span>
+        <span class="sc-txt"><b>Chưa muốn khai thông tin?</b><span>Bạn có thể xem một bản mẫu để trải nghiệm trước.</span></span>
+        <button type="button" id="btnSample" data-sample-tool="xem-tuoi" onclick="SampleHint.open(this)">Xem bản mẫu →</button>
+      </div>
       <div class="form-card" id="birthPanel">
-        <h2 id="fH2">Nhập ngày sinh hai người (dương lịch)</h2>
+        <div class="fc-head"><span class="fc-ic" data-icon="heart-handshake"></span><h2 id="fH2">Nhập ngày sinh hai người (dương lịch)</h2></div>
         <p class="sub" id="fSub">Chấm 8 yếu tố tương hợp giữa hai lá số của hai bạn. Bạn nghe hai bên gia đình bàn ra tán vào chuyện tuổi tác. Dùng khi đang tính chuyện cưới xin và cần một câu trả lời rõ.</p>
         <p class="price-note" id="fSubPrice" data-tvp-price-label="xem-tuoi">…</p>
         <div class="two">
@@ -118,7 +118,27 @@
             <div id="b-fields"></div>
           </div>
         </div>
-        <button class="btn-go" id="btnGo" onclick="doCompat()">So tuổi →</button>
+        <div class="cost-box" id="costBox">
+          <div class="cb-l">
+            <span class="cb-ic" data-icon="wallet"></span>
+            <div>
+              <div class="cb-title">Chi phí sử dụng</div>
+              <div class="cb-amt"><span data-tvp-price="xem-tuoi">…</span> Lượng <span class="vnd" data-tvp-price-vnd="xem-tuoi"></span> mỗi lượt</div>
+              <div class="cb-pay">
+                <span><span class="ic" data-icon="qr-code"></span> Chuyển khoản (qua QR ngân hàng)</span>
+                <span><span class="ic" data-icon="credit-card"></span> PayPal / Thẻ quốc tế</span>
+              </div>
+            </div>
+          </div>
+          <div class="cb-r">
+            <span class="cb-ic" data-icon="gift"></span>
+            <div class="cb-r-txt">Mua gói để nhận nhiều ưu đãi hơn.<br><a href="/topup.html">Xem các gói ngay →</a></div>
+          </div>
+        </div>
+        <button class="btn-go" id="btnGo" onclick="doCompat()">
+          <span class="bg-label"><span class="ic" data-icon="heart-handshake"></span><b id="btnGoLabel">So tuổi →</b></span>
+          <small id="btnGoSub">Tốn <span data-tvp-price="xem-tuoi">…</span> Lượng <span data-tvp-price-vnd="xem-tuoi"></span></small>
+        </button>
       </div>
 
       <div id="xtPanel" data-ws-result>
@@ -143,9 +163,9 @@
   var p=location.pathname;
   var key=p.indexOf('lam-an')>=0?'xem-lam-an':(p.indexOf('tuong-hop')>=0?'tuong-hop':'xem-tuoi');
   var INTRO={
-    'xem-lam-an':{key:'xem-lam-an',title:'Xem tuổi làm ăn',desc:'Chấm 8 yếu tố hợp tác giữa bạn và người sắp làm ăn chung. Bạn sắp góp vốn với ai đó, vẫn còn chút lấn cấn. Dùng khi cần một góc nhìn khách quan trước khi ký kết.'},
-    'tuong-hop':{key:'tuong-hop',title:'Tương hợp tuổi',desc:'Xét nhanh hai tuổi có hợp nhau hay không, chỉ cần năm sinh. Bạn mới quen ai đó và tiện tay tra thử cho vui. Dùng khi cần một câu trả lời nhanh, chưa cần xem sâu.'},
-    'xem-tuoi':{key:'xem-tuoi',title:'Xem tuổi vợ chồng',desc:'Chấm 8 yếu tố tương hợp giữa hai lá số của hai bạn. Bạn nghe hai bên gia đình bàn ra tán vào chuyện tuổi tác. Dùng khi đang tính chuyện cưới xin và cần một câu trả lời rõ.'}
+    'xem-lam-an':{key:'xem-lam-an',title:'Xem tuổi làm ăn',desc:'Chấm 8 yếu tố hợp tác giữa bạn và người sắp làm ăn chung — góc nhìn khách quan trước khi ký kết.'},
+    'tuong-hop':{key:'tuong-hop',title:'Tương hợp tuổi',desc:'Xét nhanh hai tuổi có hợp nhau hay không, chỉ cần năm sinh — câu trả lời tức thì, chưa cần xem sâu.'},
+    'xem-tuoi':{key:'xem-tuoi',title:'Xem tuổi vợ chồng',desc:'Chấm 8 yếu tố tương hợp giữa hai lá số — dùng khi đang tính chuyện cưới xin, cần một câu trả lời rõ.'}
   };
   window.SHELL_ACTIVE=key;
   window.SHELL_HISTORY=true;
@@ -157,12 +177,13 @@
 <script src="/tuong-hop.js?v=1"></script>
 <script src="/tuong-hop-lam-an.js?v=1"></script>
 <script src="/tools-shared/hook-charts.js?v=2"></script>
+<script src="/tools-shared/fbcard-topic.js?v=1"></script>
 <script src="/poster.js?v=5"></script>
 <script src="/tools-shared/vn-timezone.js?v=1"></script>
-<script src="/tuvi-form.js?v=2"></script>
+<script src="/tuvi-form.js?v=3"></script>
 <script src="/auth.js?v=2"></script>
 <script src="/tuvi-paywall.js?v=33"></script>
-  <script src="/nav.js?v=26" data-icons-only></script><script src="/shell.js?v=87"></script>
+  <script src="/nav.js?v=26" data-icons-only></script><script src="/tools-shared/sample-hint.js?v=1"></script><script src="/shell.js?v=90"></script>
 <script src="/tools-shared/ai-loading-steps.js?v=10"></script>
 <script>
 // ── MODE: 1 trang phục vụ 3 route — /app/xem-tuoi (vợ chồng), /app/xem-lam-an
@@ -175,33 +196,36 @@ var MODES={
   title:'Xem tuổi làm ăn', sub:'So hợp hai người khi bắt tay hợp tác',
   docTitle:'Xem tuổi làm ăn — Tử Vi Minh Bảo',
   h2:'Nhập ngày sinh hai đối tác (dương lịch)',
-  formSub:'Chấm 8 yếu tố hợp tác giữa bạn và người sắp làm ăn chung. Bạn sắp góp vốn với ai đó, vẫn còn chút lấn cấn. Dùng khi cần một góc nhìn khách quan trước khi ký kết.',
+  formSub:'Chấm 8 yếu tố hợp tác giữa bạn và người sắp làm ăn chung — góc nhìn khách quan trước khi ký kết.',
   pA:'Đối tác thứ nhất', pB:'Đối tác thứ hai', phA:'Đối tác A', phB:'Đối tác B',
   btn:'Xem hợp tác →', btnBusy:'Đang xét hợp tác…', verb:'Xét hợp tác',
   chips:['Hai người hợp làm ăn chung không?','Ai nên nắm tài chính?','Chiều nào dễ xung đột khi hợp tác?','Nên góp vốn hay chia việc?'],
-  greetVerb:'Đã xét hợp tác'
+  greetVerb:'Đã xét hợp tác',
+  pills:[{ic:'bar-chart-3',lb:'8 chiều<br>hợp tác'},{ic:'wallet',lb:'Ai nên<br>nắm tài chính'},{ic:'scale',lb:'Điểm dễ<br>xung đột'}]
 },
 'tuong-hop':{
   active:'tuong-hop', scenarioType:'tuong-hop',
   title:'Tương hợp tuổi', sub:'So hợp hai người bất kỳ theo cổ pháp',
   docTitle:'Tương hợp tuổi — Tử Vi Minh Bảo',
   h2:'Nhập ngày sinh hai người (dương lịch)',
-  formSub:'Xét nhanh hai tuổi có hợp nhau hay không, chỉ cần năm sinh. Bạn mới quen ai đó và tiện tay tra thử cho vui. Dùng khi cần một câu trả lời nhanh, chưa cần xem sâu.',
+  formSub:'Xét nhanh hai tuổi có hợp nhau hay không, chỉ cần năm sinh — câu trả lời tức thì, chưa cần xem sâu.',
   pA:'Người thứ nhất', pB:'Người thứ hai', phA:'Người A', phB:'Người B',
   btn:'So tương hợp →', btnBusy:'Đang so tương hợp…', verb:'So tương hợp',
   chips:['Hai người này có hợp nhau không?','Hợp nhau ở mặt nào?','Dễ va chạm ở đâu?','Nên giữ khoảng cách hay gắn bó?'],
-  greetVerb:'Đã so tương hợp'
+  greetVerb:'Đã so tương hợp',
+  pills:[{ic:'calendar',lb:'Chỉ cần<br>năm sinh'},{ic:'zap',lb:'Kết quả<br>tức thì'},{ic:'gift',lb:'Miễn phí<br>hoàn toàn'}]
 },
 'xem-tuoi':{
   active:'xem-tuoi', scenarioType:'xem-tuoi',
   title:'Xem tuổi vợ chồng', sub:'So hòa hợp hai lá số theo cổ pháp',
   docTitle:'Xem tuổi vợ chồng — Tử Vi Minh Bảo',
   h2:'Nhập ngày sinh hai người (dương lịch)',
-  formSub:'Chấm 8 yếu tố tương hợp giữa hai lá số của hai bạn. Bạn nghe hai bên gia đình bàn ra tán vào chuyện tuổi tác. Dùng khi đang tính chuyện cưới xin và cần một câu trả lời rõ.',
+  formSub:'Chấm 8 yếu tố tương hợp giữa hai lá số — dùng khi đang tính chuyện cưới xin, cần một câu trả lời rõ.',
   pA:'Người thứ nhất', pB:'Người thứ hai', phA:'Chồng / Người A', phB:'Vợ / Người B',
   btn:'So tuổi →', btnBusy:'Đang so tuổi…', verb:'So tuổi',
   chips:['Hai người có hợp làm vợ chồng không?','Chiều nào đáng lo nhất?','Cách hóa giải điểm khắc?','Đường con cái của hai người thế nào?'],
-  greetVerb:'Đã so tuổi'
+  greetVerb:'Đã so tuổi',
+  pills:[{ic:'bar-chart-3',lb:'8 chiều<br>hòa hợp'},{ic:'baby',lb:'Ngũ hành,<br>con cái'},{ic:'shield-check',lb:'Cách hoá<br>giải khắc'}]
 }
 };
 var MODE=MODES[MODE_KEY];
@@ -275,7 +299,7 @@ function doCompat(){
   // lúc gõ form ta chưa biết trước lượt nào sẽ hết Lượng.
   try{ sessionStorage.setItem(XT_RESUME_KEY, JSON.stringify({a:A, b:B})); }catch(e){ /* ignore */ }
   var namxem=new Date().getFullYear();
-  btn.disabled=true;btn.textContent=MODE.btnBusy;
+  btn.disabled=true;document.getElementById('btnGoLabel').textContent=MODE.btnBusy;
   try{
     var nameA=A.hoten||'Người A',nameB=B.hoten||'Người B';
     var ca=computeLs(A,namxem),cb=computeLs(B,namxem);
@@ -283,6 +307,7 @@ function doCompat(){
     var r=(MODE_KEY==='xem-lam-an'?TuongHopLamAn:TuongHop).calcTuongHop(ca.ls,cb.ls,nameA,nameB);
     renderCompat(r,nameA,nameB,ca.fd,cb.fd);
     document.getElementById('birthPanel').style.display='none';
+    var _scOk=document.getElementById('sampCta'); if(_scOk) _scOk.style.display='none';
     document.getElementById('xtPanel').style.display='block';
     document.getElementById('btnEdit').style.display='';
     // Rail: gửi scenario xem-tuoi (server tự lập 2 lá số từ birthA/birthB).
@@ -315,11 +340,12 @@ function doCompat(){
   }catch(e){
     document.getElementById('xtBody').innerHTML='<div class="laso-error">Lỗi khi so tuổi: '+esc(e.message)+'</div>';
     document.getElementById('birthPanel').style.display='none';
+    var _scErr=document.getElementById('sampCta'); if(_scErr) _scErr.style.display='none';
     document.getElementById('xtPanel').style.display='block';
     document.getElementById('btnEdit').style.display='';
     if(window.console)console.error(e);
   }finally{
-    btn.disabled=false;btn.textContent=MODE.btn;
+    btn.disabled=false;document.getElementById('btnGoLabel').textContent=MODE.btn;
   }
 }
 
@@ -549,6 +575,7 @@ var QUERIES=[
 // Trang này phục vụ 2 mode (xem-tuoi / xem-lam-an) nên ô giá phải trỏ đúng
 // tool đang mở, đừng ghim cứng một id — hai mode có thể lệch giá bất cứ lúc nào.
 document.querySelectorAll('[data-tvp-price]').forEach(function(el){ el.setAttribute('data-tvp-price', MODE_KEY); });
+var _sampleBtn=document.getElementById('btnSample'); if(_sampleBtn) _sampleBtn.setAttribute('data-sample-tool', MODE_KEY);
 if(PAID_MODES[MODE_KEY])TuviPaywall.init({product:MODE_KEY, title: MODE.title});
 
 function toSlugAscii(str){
@@ -580,7 +607,7 @@ function renderLuanGiaiParas(text){
     if(m){
       flushPending();
       var cls=HOOK_TAG_CLASS[m[1]]||'fb-trungtinh';
-      out+='<div class="fb-card '+cls+'">“'+esc(m[2].trim())+'”</div>';
+      out+=window.FbCardTopic.cardHtml(cls,window.FbCardTopic.extractTopic(p.trim()),'“'+esc(m[2].trim())+'”');
       pendingLead=inline(m[3]).trim();
       return;
     }
@@ -778,6 +805,7 @@ function _saveXemTuoiResult(){
 function showForm(){
   document.getElementById('xtPanel').style.display='none';
   document.getElementById('birthPanel').style.display='block';
+  var _sc=document.getElementById('sampCta'); if(_sc) _sc.style.display='flex';
   document.getElementById('btnEdit').style.display='none';
   document.getElementById('xtUnlock').style.display='none';
   document.getElementById('xtProgress').style.display='none';
@@ -799,7 +827,40 @@ function applyMode(){
   document.getElementById('pB').innerHTML='<span class="dotB"></span> '+MODE.pB;
   document.getElementById('a-hoten').placeholder=MODE.phA;
   document.getElementById('b-hoten').placeholder=MODE.phB;
-  document.getElementById('btnGo').textContent=MODE.btn;
+  document.getElementById('btnGoLabel').textContent=MODE.btn;
+  // tuong-hop miễn phí (không nằm trong PAID_MODES) — ẩn hộp chi phí + dòng
+  // phụ giá dưới nút, hai mode còn lại (xem-tuoi/xem-lam-an) mới tốn Lượng.
+  var paid=!!PAID_MODES[MODE_KEY];
+  var cb=document.getElementById('costBox'); if(cb) cb.style.display=paid?'flex':'none';
+  var sub=document.getElementById('btnGoSub'); if(sub) sub.style.display=paid?'':'none';
+  if(paid){
+    TuviPaywall.fillPriceSlots(document).then(function(){ _fillVndSlots(document,MODE_KEY); });
+  }
+  _mountHeroPills();
+}
+// "(~X đ)" cạnh số Lượng trong hộp chi phí + nút CTA — cùng mẫu
+// app-luan-giai.html. `vndLabel` tự trả '' khi chưa đọc được `credit_packages`.
+function _fillVndSlots(host,product){
+  if(!host||!window.ToolPrices) return;
+  var els=host.querySelectorAll('[data-tvp-price-vnd]');
+  var cost=window.ToolPrices.get(product);
+  var lbl=cost!=null?window.ToolPrices.vndLabel(cost):'';
+  els.forEach(function(el){ el.textContent=lbl?('('+lbl+')'):''; });
+}
+// 3 pill tính năng dưới hero card — `.intro-card` do `Shell.introOnce()` dựng
+// ĐỘNG lúc chạy (mỗi mode một tiêu đề/mô tả riêng, không dựng tĩnh sẵn như
+// app-luan-giai.html được), nên chèn pills bằng tay sau khi nó đã tồn tại.
+// Gọi lại vô hại nếu đã có pills (kiểm tra `.hero-pills` trước khi chèn).
+function _mountHeroPills(){
+  var card=document.querySelector('#introHost .intro-card');
+  if(!card||card.querySelector('.hero-pills')) return;
+  var div=document.createElement('div');
+  div.className='hero-pills';
+  div.innerHTML=MODE.pills.map(function(p){
+    return '<div class="hero-pill"><span class="hp-ic" data-icon="'+p.ic+'"></span><span>'+p.lb+'</span></div>';
+  }).join('');
+  card.appendChild(div);
+  if(window.mountIcons) window.mountIcons(div);
 }
 function _pageInit(){ applyMode();
   if(window.__tvmbXtAutoDone) return; // IIFE `XT_RESUME_KEY` ở đầu file đã tự chạy — khỏi chạy trùng

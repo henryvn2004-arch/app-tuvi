@@ -13,10 +13,12 @@
  *   TuviForm.getData('b')
  *   TuviForm.setData(d, 'a')
  *
- * Compact (app-shell "/app/*" — chỉ các trường người, tái dùng .frow/.fg/.btn-go
- * đã có sẵn của trang gọi, KHÔNG có form-grid/cột/nút submit riêng):
+ * Compact (app-shell "/app/*" — chỉ các trường người, KHÔNG có form-grid/cột/
+ * nút submit riêng). Mặc định vẽ khối "1 màn hình" (ô bo góc + icon dẫn đầu):
  *   TuviForm.render('container', { prefix:'', mode:'compact', gioitinh:'nam' })
  *   TuviForm.getData()  → cùng shape với person/full ở trên
+ *   Truyền { pretty:false } để lùi về khối `.frow/.fg` cũ (tái dùng CSS có
+ *   sẵn của trang gọi) — van an toàn, không phải cách dùng khuyến nghị.
  */
 
 window.TuviForm = (() => {
@@ -154,6 +156,27 @@ window.TuviForm = (() => {
 .tvf-compact-foreign { display:flex; align-items:center; gap:6px; font-size:12.5px; color:var(--text-mid); cursor:pointer; white-space:nowrap; padding-bottom:8px; }
 .tvf-compact-foreign input { cursor:pointer; margin:0; }
 .tvf-compact-utc { min-width:220px; }
+/* ── mode:'compact' — khối form "1 màn hình" (Henry 2026-09-09, mẫu iPhone:
+   ô bo góc có icon dẫn đầu). Đây là mặc định MỚI của mode:'compact' — áp
+   dụng cho mọi trang /app/* gọi TuviForm ở chế độ này. Truyền pretty:false
+   để lùi về khối .frow/.fg cũ (van an toàn, không xoá hẳn). ── */
+.tvf-pretty { display:flex; flex-direction:column; gap:13px; margin-bottom:2px; }
+.tvf-pretty .tvf-row { display:flex; gap:10px; flex-wrap:wrap; }
+.tvf-pretty .tvf-col { flex:1; min-width:88px; display:flex; flex-direction:column; gap:5px; }
+.tvf-pretty label.tvf-lb { font-size:10.5px; font-weight:600; color:var(--text-lt); letter-spacing:.04em; text-transform:uppercase; }
+.tvf-pretty .tvf-ibox { position:relative; display:flex; align-items:center; }
+.tvf-pretty .tvf-ibox .tvf-ic { position:absolute; left:10px; width:15px; height:15px; color:var(--text-lt); pointer-events:none; display:flex; }
+.tvf-pretty .tvf-ibox .tvf-ic svg { width:100%; height:100%; }
+.tvf-pretty .tvf-ibox input[type=text], .tvf-pretty .tvf-ibox input[type=number] { width:100%; border:1px solid var(--line-2); border-radius:9px; padding:9px 12px 9px 32px; font-size:13.5px; font-family:inherit; color:var(--text); background:var(--paper); outline:none; }
+.tvf-pretty .tvf-ibox select { width:100%; appearance:none; -webkit-appearance:none; -moz-appearance:none; border:1px solid var(--line-2); border-radius:9px; padding:9px 26px 9px 32px; font-size:13.5px; font-family:inherit; color:var(--text); background:var(--paper); outline:none; }
+.tvf-pretty .tvf-ibox.no-ic select, .tvf-pretty .tvf-ibox.no-ic input { padding-left:12px; }
+.tvf-pretty .tvf-ibox .tvf-chev { position:absolute; right:9px; width:13px; height:13px; color:var(--text-lt); pointer-events:none; display:flex; }
+.tvf-pretty .tvf-ibox input:focus, .tvf-pretty .tvf-ibox select:focus { border-color:var(--blue); box-shadow:0 0 0 3px rgba(20,85,164,.12); }
+.tvf-pretty .tvf-gio-chip { flex:0 0 auto; align-self:flex-end; border:1px solid var(--gold-soft); background:var(--gold-lt); color:var(--gold-soft); border-radius:9px; padding:8.5px 12px; font-size:12px; font-weight:600; white-space:nowrap; display:flex; align-items:center; gap:5px; margin-bottom:0; }
+.tvf-pretty .tvf-gio-vn { flex-basis:100%; }
+.tvf-pretty .tvf-foreign-label { display:flex; align-items:center; gap:8px; font-size:13px; color:var(--text); cursor:pointer; }
+.tvf-pretty .tvf-foreign-label input { width:16px; height:16px; cursor:pointer; margin:0; }
+.tvf-pretty .tvf-foreign-hint { font-size:11.5px; color:var(--text-lt); margin:2px 0 0 24px; }
 `;
     document.head.appendChild(style);
   }
@@ -264,6 +287,67 @@ window.TuviForm = (() => {
     </div>`;
   }
 
+  // ── Compact fields, bản "1 màn hình" (mode:'compact', pretty:true) ──
+  // Ô bo góc + icon dẫn đầu (mockup Henry 2026-09-09). Giới tính GIỮ dropdown
+  // như bản cũ (Henry chốt 2026-09-09, bỏ bản thử 2 nút Nam/Nữ) — chỉ đổi vỏ
+  // ngoài sang cùng khuôn `.tvf-ibox` với các ô khác cho đồng bộ hình.
+  function buildPrettyCompactFields(prefix, opts, defaultGioitinh = 'nam', showName = true, showNamXem = false) {
+    const { gioOpts, phutOpts, ngayOpts, thangOpts, namOpts, utcOpts } = opts;
+    const pf = prefix ? `'${prefix}'` : "''";
+    const isNam = defaultGioitinh !== 'nu';
+    const namXemDefault = new Date().getFullYear();
+    return `
+    <div class="tvf-pretty">
+      <div class="tvf-row">
+        ${showName ? `<div class="tvf-col" style="flex:1.6;min-width:150px">
+          <label class="tvf-lb">Họ và tên</label>
+          <div class="tvf-ibox"><span class="tvf-ic" data-icon="user"></span><input type="text" id="${pid('hoten',prefix)}" placeholder="Ví dụ: Nguyễn Văn A" autocomplete="off"></div>
+        </div>` : ''}
+        <div class="tvf-col" style="flex:0 0 110px">
+          <label class="tvf-lb">Giới tính</label>
+          <div class="tvf-ibox no-ic">
+            <select id="${pid('gioitinh',prefix)}">
+              <option value="nam"${isNam?' selected':''}>Nam</option>
+              <option value="nu"${isNam?'':' selected'}>Nữ</option>
+            </select>
+            <span class="tvf-chev" data-icon="chevron-down"></span>
+          </div>
+        </div>
+        ${showNamXem ? `<div class="tvf-col" style="flex:0 0 110px">
+          <label class="tvf-lb">Năm xem vận</label>
+          <div class="tvf-ibox no-ic"><input type="number" id="${pid('namXem',prefix)}" value="${namXemDefault}" min="1900" max="2100"></div>
+        </div>` : ''}
+      </div>
+      <div class="tvf-row">
+        <div class="tvf-col"><label class="tvf-lb">Ngày sinh</label><div class="tvf-ibox"><span class="tvf-ic" data-icon="calendar"></span><select id="${pid('ngay',prefix)}" oninput="TuviForm._update(${pf})">${ngayOpts}</select><span class="tvf-chev" data-icon="chevron-down"></span></div></div>
+        <div class="tvf-col"><label class="tvf-lb">Tháng sinh</label><div class="tvf-ibox"><span class="tvf-ic" data-icon="calendar"></span><select id="${pid('thang',prefix)}" oninput="TuviForm._update(${pf})">${thangOpts}</select><span class="tvf-chev" data-icon="chevron-down"></span></div></div>
+        <div class="tvf-col"><label class="tvf-lb">Năm sinh</label><div class="tvf-ibox"><span class="tvf-ic" data-icon="calendar"></span><select id="${pid('nam',prefix)}" oninput="TuviForm._update(${pf})">${namOpts}</select><span class="tvf-chev" data-icon="chevron-down"></span></div></div>
+      </div>
+      <div class="tvf-row">
+        <div class="tvf-col" style="flex:0 0 96px"><label class="tvf-lb">Giờ sinh</label><div class="tvf-ibox"><span class="tvf-ic" data-icon="clock"></span><select id="${pid('tvf-gio',prefix)}" oninput="TuviForm._update(${pf})">${gioOpts}</select><span class="tvf-chev" data-icon="chevron-down"></span></div></div>
+        <div class="tvf-col" style="flex:0 0 88px"><label class="tvf-lb">Phút</label><div class="tvf-ibox no-ic"><select id="${pid('tvf-phut',prefix)}" oninput="TuviForm._update(${pf})">${phutOpts}</select><span class="tvf-chev" data-icon="chevron-down"></span></div></div>
+        <div class="tvf-gio-chip">
+          <span id="${pid('tvf-gio-am',prefix)}">Giờ âm: Tý</span>
+          <span class="tvf-tooltip-wrap" style="margin-left:0"><span class="tvf-tooltip-icon" onclick="event.stopPropagation();TuviForm._toggleTip(this)">?</span>${TOOLTIP_CONTENT}</span>
+        </div>
+        <span class="tvf-gio-vn" id="${pid('tvf-gio-vn',prefix)}"></span>
+      </div>
+      <div class="tvf-row">
+        <div style="display:flex;flex-direction:column;gap:5px;width:100%">
+          <label class="tvf-foreign-label">
+            <input type="checkbox" id="${pid('tvf-foreign',prefix)}" onchange="TuviForm._toggleUtc(${pf})">
+            <span>Sinh ở ngoài Việt Nam?</span>
+          </label>
+          <span class="tvf-foreign-hint">Chọn nếu bạn sinh tại nước ngoài để tính múi giờ chính xác hơn.</span>
+          <div class="tvf-col" id="${pid('tvf-utc-wrap',prefix)}" style="display:none;margin:6px 0 0 24px;max-width:280px">
+            <label class="tvf-lb">Múi giờ nơi sinh</label>
+            <div class="tvf-ibox no-ic"><select id="${pid('tvf-utc',prefix)}" oninput="TuviForm._update(${pf})">${utcOpts}</select><span class="tvf-chev" data-icon="chevron-down"></span></div>
+          </div>
+        </div>
+      </div>
+    </div>`;
+  }
+
   // ── render() ─────────────────────────────────────────────────
   function render(containerId, options = {}) {
     injectCss();
@@ -277,6 +361,7 @@ window.TuviForm = (() => {
       showSample    = true,
       showName      = true,       // mode:'compact' only — false nếu tool không cần Họ và tên
       showNamXem    = false,      // mode:'compact' only — true nếu tool cần Năm xem vận (khớp field mode:'full')
+      pretty        = true,       // mode:'compact' only — mặc định khối "1 màn hình" (ô bo góc + icon); false = khối .frow/.fg cũ
     } = options;
 
     const namXemDefault = new Date().getFullYear();
@@ -287,7 +372,9 @@ window.TuviForm = (() => {
 
     if (mode === 'compact') {
       // ── App-shell: chỉ trường người, tái dùng .frow/.fg/.btn-go sẵn có của trang gọi ──
-      html = buildCompactPersonFields(prefix, opts, gioitinh, showName, showNamXem);
+      html = pretty
+        ? buildPrettyCompactFields(prefix, opts, gioitinh, showName, showNamXem)
+        : buildCompactPersonFields(prefix, opts, gioitinh, showName, showNamXem);
     } else if (mode === 'person') {
       // ── Compact: chỉ 1 cột — dùng cho xem-tuoi (2 người cạnh nhau) ──
       html = `<div class="form-col" style="border-right:1px solid var(--border)">

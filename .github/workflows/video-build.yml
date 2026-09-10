@@ -121,6 +121,12 @@ jobs:
       # Playwright cần Chromium để QUAY. Remotion tự tải chrome-headless-shell
       # riêng của nó lúc render — đừng trỏ Remotion vào Chromium này, bản
       # Playwright đã gỡ chế độ headless cũ (xem remotion.config.ts).
+      # Xem chú thích cùng dòng trong playwright.yml — repo apt Google Chrome
+      # có sẵn trên runner đôi lúc Packages.gz lệch hash với Release, làm
+      # `apt-get update` (chạy ngầm trong --with-deps) thoát lỗi dù không cần
+      # gì từ repo đó.
+      - run: sudo rm -f /etc/apt/sources.list.d/google-chrome.list
+
       - name: Cài Chromium cho Playwright
         run: npx playwright install chromium --with-deps
 

@@ -2,6 +2,7 @@
 // SỔ LÁ SỐ theo tài khoản (U4).
 //   GET    /api/charts          — danh sách lá số đã lưu
 //   POST   /api/charts          — lưu / cập nhật một lá số (upsert theo chart_key)
+//   PATCH  /api/charts?id=…     — đổi nhóm quan hệ (relation) của một mục
 //   DELETE /api/charts?id=…     — xoá một mục
 //
 // 🔑 KHÔNG BAO GIỜ ĐƯỢC CHẶN LUỒNG TOOL. Mọi tool vẫn chạy bằng
@@ -42,7 +43,15 @@ async function authUser(request: NextRequest): Promise<{ id: string } | null> {
   return u?.id ? { id: u.id } : null;
 }
 
-const SELECT = 'id,label,birth,chart_key,created_at,last_used_at';
+const SELECT = 'id,label,birth,chart_key,relation,created_at,last_used_at';
+
+// Nhóm quan hệ hợp lệ — sidebar/`/app/so-la-so` chỉ biết vẽ đúng 4 nhóm này.
+// NULL (chưa gán) vẫn được lưu nguyên trạng, gộp vào "Khác" ở tầng hiển thị.
+const RELATIONS = ['gia_dinh', 'ban_be', 'dong_nghiep', 'khac'];
+function normalizeRelation(v: unknown): string | null {
+  const s = String(v == null ? '' : v).trim();
+  return RELATIONS.indexOf(s) >= 0 ? s : null;
+}
 
 async function listCharts(userId: string) {
   const r = await fetch(
@@ -77,6 +86,22 @@ export async function POST(request: NextRequest) {
   const key = chartKey(birth, label);
   const now = new Date().toISOString();
 
+  // `relation` CHỈ đi vào payload khi caller thật sự gửi — mọi tool tự lưu
+  // (bắn-và-quên mỗi lần chạy) đều KHÔNG gửi trường này, và PostgREST
+  // merge-duplicates chỉ SET đúng những cột có mặt trong JSON. Gửi rỗng ở đây
+  // sẽ xoá mất nhóm người dùng đã gán tay mỗi lần một tool chạy lại.
+  const payload: Record<string, unknown> = {
+    user_id: user.id,
+    label,
+    birth,
+    chart_key: key,
+    updated_at: now,
+    last_used_at: now,
+  };
+  if (Object.prototype.hasOwnProperty.call(body, 'relation')) {
+    payload.relation = normalizeRelation(body.relation);
+  }
+
   // Upsert theo (user_id, chart_key) — chạy lại cùng một tool với cùng lá số
   // thì CẬP NHẬT mục cũ, không đẻ thêm dòng. `merge-duplicates` là đường dùng
   // đúng ràng buộc unique đã khai trong migration.
@@ -85,14 +110,7 @@ export async function POST(request: NextRequest) {
     {
       method: 'POST',
       headers: { ...SB, Prefer: 'resolution=merge-duplicates,return=representation' },
-      body: JSON.stringify({
-        user_id: user.id,
-        label,
-        birth,
-        chart_key: key,
-        updated_at: now,
-        last_used_at: now,
-      }),
+      body: JSON.stringify(payload),
     },
   );
   if (!r.ok) {
@@ -127,6 +145,35 @@ async function pruneOverflow(userId: string) {
   } catch {
     /* dọn dẹp hỏng không phải lý do làm hỏng lượt lưu */
   }
+}
+
+// PATCH ?id=… — đổi riêng `relation` của một mục đã có. Tách khỏi POST vì POST
+// upsert theo `chart_key` (cần birth đầy đủ); gán nhóm không có lý do gì phải
+// đèo theo lại toàn bộ ngày sinh.
+export async function PATCH(request: NextRequest) {
+  const user = await authUser(request);
+  if (!user) return err('Unauthorized', 401);
+  const id = new URL(request.url).searchParams.get('id') || '';
+  if (!/^\d+$/.test(id)) return err('Thiếu id.', 400);
+
+  const body = await parseBody(request);
+  if (!Object.prototype.hasOwnProperty.call(body, 'relation')) return err('Thiếu relation.', 400);
+  const relation = normalizeRelation(body.relation);
+
+  // `user_id=eq.` là chốt chặn THẬT — như DELETE bên dưới, thiếu điều kiện này
+  // là ai cũng sửa được mục của người khác chỉ bằng cách đoán id.
+  const r = await fetch(
+    `${SUPABASE_URL}/rest/v1/user_charts?id=eq.${id}&user_id=eq.${user.id}&select=${SELECT}`,
+    {
+      method: 'PATCH',
+      headers: { ...SB, Prefer: 'return=representation' },
+      body: JSON.stringify({ relation, updated_at: new Date().toISOString() }),
+    },
+  );
+  if (!r.ok) return err('Lỗi lưu nhóm.', 500);
+  const rows = await r.json();
+  if (!Array.isArray(rows) || !rows.length) return err('Không tìm thấy.', 404);
+  return ok({ success: true, item: rows[0] });
 }
 
 export async function DELETE(request: NextRequest) {

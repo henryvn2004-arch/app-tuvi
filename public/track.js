@@ -301,6 +301,18 @@
     // Quirk vô hại của trình duyệt, không phải lỗi của mình — khuyến nghị
     // chuẩn của cả Sentry lẫn cộng đồng là bỏ qua nó.
     if (/ResizeObserver loop/i.test(msg)) return true;
+    // Cầu nối Java<->JS của trình duyệt trong-app (Facebook/Messenger/Zalo
+    // Android WebView) tự ném lỗi này khi NÓ gọi postMessage nội bộ — repo
+    // không gọi postMessage ở đâu cả (đã grep). Luôn đi kèm fbclid/in-app
+    // browser, không có stack (không phải Error thật), không hành động được.
+    // Khớp cả HỌ lỗi ("Java exception was raised…", "Java object is gone"…)
+    // bằng đúng phần cụm cố định — hậu tố do WebView tự sinh, đổi tuỳ phiên
+    // bản Android/app, liệt kê từng câu là đuổi theo vô tận.
+    // 🪤 KHÔNG neo `^`: window.onerror trả msg đã có sẵn tiền tố "Uncaught " do
+    // trình duyệt tự thêm khi không ai bắt lỗi ("Uncaught Error: Error invoking
+    // postMessage: …") — bản vá #785 neo đầu chuỗi nên bỏ lọt đúng biến thể nó
+    // định vá, lỗi vẫn lọt ra ngoài dù đã thêm luật.
+    if (/error invoking postMessage/i.test(msg)) return true;
     // Extension trình duyệt (AdBlock, Grammarly...) ném lỗi trong sandbox
     // riêng của nó, không phải code của site.
     if (src && /^(chrome|moz|safari)-extension:\/\//i.test(src)) return true;

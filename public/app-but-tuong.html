@@ -9,7 +9,7 @@
 <link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/fonts/noto-serif.css?v=1">
-<link rel="stylesheet" href="/shell.css?v=34">
+<link rel="stylesheet" href="/shell.css?v=40">
 <style>
 .dt-card{background:var(--white);border:1px solid var(--line);border-radius:14px;padding:20px 22px;box-shadow:var(--shadow);max-width:640px}
 .dt-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:4px}
@@ -19,7 +19,6 @@
 .dt-input-tab.active{color:var(--heading);border-bottom-color:var(--gold)}
 .dt-input-pane{display:none}
 .dt-input-pane.active{display:block}
-.btn-go{background:var(--red);color:#fff;border:none;border-radius:8px;padding:10px 22px;font-size:14px;font-weight:600;cursor:pointer;font-family:var(--serif)}
 .btn-go:disabled{opacity:.55;cursor:not-allowed}
 .btn-cancel{background:none;border:1px solid var(--line-2);border-radius:8px;padding:10px 18px;font-size:13px;color:var(--text-mid);cursor:pointer;font-family:inherit}
 .dt-privacy{display:flex;align-items:flex-start;gap:10px;padding:11px 15px;background:var(--gold-lt);border-radius:8px;border-left:3px solid var(--blue);font-size:12px;color:var(--tx-blue);margin-bottom:16px}
@@ -104,12 +103,22 @@
             <div id="introSrc"></div>
           </div>
         </div>
+        <div class="hero-pills">
+          <div class="hero-pill"><span class="hp-ic" data-icon="pen-line"></span><span>Ký trực tiếp<br>trên màn hình</span></div>
+          <div class="hero-pill"><span class="hp-ic" data-icon="scroll-text"></span><span>Đo 6 trục<br>cổ pháp thư pháp</span></div>
+          <div class="hero-pill"><span class="hp-ic" data-icon="shield-check"></span><span>Không lưu<br>chữ ký</span></div>
+        </div>
       </div></div>
       <div id="shellRecent"></div>
+      <div class="samp-cta" id="sampCta">
+        <span class="sc-ic" data-icon="lightbulb"></span>
+        <span class="sc-txt"><b>Chưa muốn chụp ảnh?</b><span>Bạn có thể xem một bản mẫu để trải nghiệm trước.</span></span>
+        <button type="button" id="btnSample" data-sample-tool="but-tuong" onclick="SampleHint.open(this)">Xem bản mẫu →</button>
+      </div>
 
       <div class="dt-card" id="inputCard">
-        <h2>Ký chữ ký</h2>
-        <p class="sub">Ký trực tiếp trên màn hình hoặc tải ảnh chữ ký có sẵn. Hệ thống đo 6 trục nét bút — đo miễn phí, luận giải đầy đủ tốn <span data-tvp-price-label="but-tuong">…</span> Lượng. Nhận về luận giải chi tiết từng trục theo cổ pháp thư pháp.</p>
+        <div class="fc-head"><span class="fc-ic" data-icon="pen-line"></span><h2>Ký chữ ký</h2></div>
+        <p class="sub">Ký trực tiếp trên màn hình hoặc tải ảnh chữ ký có sẵn. Hệ thống đo 6 trục nét bút, luận giải theo cổ pháp thư pháp.</p>
         <div class="dt-privacy"><span>🔒</span><div>Chữ ký KHÔNG được lưu — chỉ các chỉ số đo được mới gửi đi luận giải.</div></div>
 
         <div class="dt-input-tabs">
@@ -123,7 +132,7 @@
           <div class="sign-btns">
             <button class="btn-cancel" onclick="clearSign()">Xoá</button>
             <button class="btn-cancel" id="addPassBtn" onclick="addSignPass()" disabled>+ Ký lại lần nữa</button>
-            <button class="btn-go" id="measureBtn" onclick="measureSign()" disabled>Đo Chữ Ký →</button>
+            <button class="btn-go inline" id="measureBtn" onclick="measureSign()" disabled><span class="ic" data-icon="pen-line"></span> Đo Chữ Ký →</button>
           </div>
           <div class="sign-pass-tags" id="passTags"></div>
         </div>
@@ -184,8 +193,10 @@
 window.SHELL_INTRO={key:'but-tuong'};</script>
 <script src="/auth.js?v=2"></script>
 <script src="/tools-shared/but-tuong.js"></script>
+<script src="/tools-shared/fbcard-topic.js?v=1"></script>
 <script src="/tuvi-paywall.js?v=33"></script>
-  <script src="/nav.js?v=26" data-icons-only></script><script src="/shell.js?v=87"></script>
+  <script src="/nav.js?v=26" data-icons-only></script><script src="/tools-shared/sample-hint.js?v=1"></script>
+<script src="/shell.js?v=90"></script>
 <script>
 function initButTuong(){
   Shell.setContext({
@@ -361,10 +372,29 @@ function renderReport(m) {
   });
   html += '</div>';
   if (m.goiY) html += '<div class="bt-goiy"><strong>Gợi ý:</strong> ' + m.goiY.loi + '</div>';
-  html += '<div style="text-align:center;margin-top:18px"><button class="btn-go" onclick="analyze()">Luận Giải Đầy Đủ — <span data-tvp-price="but-tuong">…</span> Lượng →</button></div>';
+  html += '<div class="cost-box" style="margin-top:18px">'
+    + '<div class="cb-l"><span class="cb-ic" data-icon="wallet"></span><div>'
+    + '<div class="cb-title">Chi phí sử dụng</div>'
+    + '<div class="cb-amt"><span data-tvp-price="but-tuong">…</span> Lượng <span class="vnd" data-tvp-price-vnd="but-tuong"></span> mỗi lượt</div>'
+    + '<div class="cb-pay"><span><span class="ic" data-icon="qr-code"></span> Chuyển khoản (qua QR ngân hàng)</span><span><span class="ic" data-icon="credit-card"></span> PayPal / Thẻ quốc tế</span></div>'
+    + '</div></div>'
+    + '<div class="cb-r"><span class="cb-ic" data-icon="gift"></span><div class="cb-r-txt">Mua gói để nhận nhiều ưu đãi hơn.<br><a href="/topup.html">Xem các gói ngay →</a></div></div>'
+    + '</div>'
+    + '<button class="btn-go" id="butTuongAnalyzeBtn" onclick="analyze()">'
+    + '<span class="bg-label"><span class="ic" data-icon="pen-line"></span><b id="butTuongAnalyzeLabel">Luận Giải Đầy Đủ →</b></span>'
+    + '<small>Tốn <span data-tvp-price="but-tuong">…</span> Lượng <span data-tvp-price-vnd="but-tuong"></span></small>'
+    + '</button>';
   document.getElementById('btReport').innerHTML = html;
   document.getElementById('btReport').style.display = 'block';
-  if (window.TuviPaywall && window.TuviPaywall.fillPriceSlots) window.TuviPaywall.fillPriceSlots(document.getElementById('btReport'));
+  if (window.TuviPaywall && window.TuviPaywall.fillPriceSlots) window.TuviPaywall.fillPriceSlots(document.getElementById('btReport')).then(function(){ _fillVndSlots(document.getElementById('btReport'),'but-tuong'); });
+}
+
+function _fillVndSlots(host,product){
+  if(!host||!window.ToolPrices) return;
+  var els=host.querySelectorAll('[data-tvp-price-vnd]');
+  var cost=window.ToolPrices.get(product);
+  var lbl=cost!=null?window.ToolPrices.vndLabel(cost):'';
+  els.forEach(function(el){ el.textContent=lbl?('('+lbl+')'):''; });
 }
 
 function readBirth() {
@@ -444,7 +474,7 @@ function renderMd(md){
     // chung, vì nó tự xử lý cả nhãn LẪN in đậm của riêng câu hook.
     .replace(/^\[(TỐT|CẢNH BÁO|TRUNG TÍNH)(?:\|[^\]]{0,40})?\]\s*\*\*(.+?)\*\*(.*)$/gm,function(_,tag,hook,rest){
       var cls=HOOK_TAG_CLASS[tag]||'fb-trungtinh';
-      return '<div class="fb-card '+cls+'">"'+hook.trim()+'"</div>'+rest;
+      return window.FbCardTopic.cardHtml(cls,window.FbCardTopic.extractTopic(_),'"'+hook.trim()+'"')+rest;
     })
     .replace(/^## (.+)$/gm,'<h2>$1</h2>')
     .replace(/^### (.+)$/gm,'<h3>$1</h3>')
