@@ -94,12 +94,17 @@ async function fillAndRun(page: Page) {
     const w = window as unknown as { TuviForm?: unknown; doCompat?: unknown };
     return !!w.TuviForm && typeof w.doCompat === 'function';
   });
+  // Gọi THẲNG `doCompat()` thay vì bấm `#btnGo` — bản mẫu tự mở (2026-09-10,
+  // xem docs/nhat-ky/2026-09.md) có thể đang hiện SẴN cho khách vô danh lúc
+  // trang vừa tải (đúng ý đồ sản phẩm, chỉ bật cho MODE_KEY==='xem-tuoi' —
+  // đúng route bài kiểm này đang mở), che mất `#btnGo` trước khi Playwright
+  // kịp bấm. Cùng mẫu `doLuan()`/`analyze()` các tool anh em đã dùng.
   await page.evaluate(({ a, b }) => {
-    const w = window as unknown as { TuviForm: { setData(d: object, p?: string): void } };
+    const w = window as unknown as { TuviForm: { setData(d: object, p?: string): void }; doCompat(): void };
     w.TuviForm.setData(a, 'a');
     w.TuviForm.setData(b, 'b');
+    w.doCompat();
   }, { a: PERSON_A, b: PERSON_B });
-  await page.click('#btnGo');
   await page.waitForSelector('#xtPanel', { state: 'visible', timeout: 15000 });
 }
 

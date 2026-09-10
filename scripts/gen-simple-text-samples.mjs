@@ -82,7 +82,13 @@ Trước khi gợi ý tên, hãy viết 2–3 câu phân tích ngũ hành của 
   },
   'dat-ten-dn': {
     label: 'Đặt Tên Doanh Nghiệp',
-    sample: { tenChu: 'Trần Văn Bình', namChu: 1985, nganh: 'Ăn uống / F&B / nhà hàng', loaiHinh: 'Công ty', tenGoiY: '' },
+    sample: {
+      tenChu: 'Trần Văn Bình',
+      namChu: 1985,
+      nganh: 'Ăn uống / F&B / nhà hàng',
+      loaiHinh: 'Công ty',
+      tenGoiY: '',
+    },
     outPath: join(ROOT, 'public/samples/dat-ten-dn-sample.json'),
     build(s) {
       const iChu = CanChi.ccInfo(s.namChu);
@@ -111,7 +117,13 @@ Phân tích ngắn ngũ hành phù hợp cho lĩnh vực này, sau đó gợi ý
   },
   'chon-ngay-tot': {
     label: 'Chọn Ngày Tốt',
-    sample: { suKien: 'Khai trương', hoTen: 'Lê Thị Hoa', namSinh: 1990, thangNum: 11, namNum: 2026 },
+    sample: {
+      suKien: 'Khai trương',
+      hoTen: 'Lê Thị Hoa',
+      namSinh: 1990,
+      thangNum: 11,
+      namNum: 2026,
+    },
     outPath: join(ROOT, 'public/samples/chon-ngay-tot-sample.json'),
     build(s) {
       const info = CanChi.ccInfo(s.namSinh);
@@ -165,10 +177,36 @@ async function runOne(toolId) {
 // `hourBranch` = chỉ số CHI giờ sinh (0-11, KHÔNG phải giờ đồng hồ) — HTML
 // wiring (app-xem-tuoi.html) dùng cặp gioIdx/gioHour tương ứng: 3=Mão(6h),
 // 9=Dậu(18h), khớp đúng quy ước `SAMPLE_BIRTH`/`SAMPLE_HH` của gen-tool-sample.mjs.
-const XT_A = { day: 4, month: 12, year: 1989, hourBranch: 3, gender: 'nam', isLunar: false, name: 'Anh Khoa' };
-const XT_B = { day: 17, month: 7, year: 1991, hourBranch: 9, gender: 'nu', isLunar: false, name: 'Chị Linh' };
+const XT_A = {
+  day: 4,
+  month: 12,
+  year: 1989,
+  hourBranch: 3,
+  gender: 'nam',
+  isLunar: false,
+  name: 'Anh Khoa',
+};
+const XT_B = {
+  day: 17,
+  month: 7,
+  year: 1991,
+  hourBranch: 9,
+  gender: 'nu',
+  isLunar: false,
+  name: 'Chị Linh',
+};
 const XT_NAM_XEM = 2026;
-const XT_PHAN_LABELS = ['Tổng Quan', 'Xét Tuổi', 'Ngũ Hành', 'Tư Tưởng', 'Tính Cách', 'Quan Hệ', 'Con Cái', 'Tài Chính', 'Vận Hành'];
+const XT_PHAN_LABELS = [
+  'Tổng Quan',
+  'Xét Tuổi',
+  'Ngũ Hành',
+  'Tư Tưởng',
+  'Tính Cách',
+  'Quan Hệ',
+  'Con Cái',
+  'Tài Chính',
+  'Vận Hành',
+];
 const XT_CUNG_MAP = [null, null, null, 'Mệnh', null, 'Phu Thê', 'Tử Tức', 'Tài Bạch', null];
 const XT_SECTION_QUESTIONS = [
   '',
@@ -190,31 +228,20 @@ MỞ ĐẦU mỗi phần bằng MỘT câu phán quyết NGẮN, in đậm (**..
 
 ${DOC_ARC_TUONG_HOP}`;
 
-const XT_TH = { 'Dần': ['Ngọ', 'Tuất'], 'Ngọ': ['Dần', 'Tuất'], 'Tuất': ['Dần', 'Ngọ'], 'Thân': ['Tý', 'Thìn'], 'Tý': ['Thân', 'Thìn'], 'Thìn': ['Thân', 'Tý'], 'Tỵ': ['Dậu', 'Sửu'], 'Dậu': ['Tỵ', 'Sửu'], 'Sửu': ['Tỵ', 'Dậu'], 'Hợi': ['Mão', 'Mùi'], 'Mão': ['Hợi', 'Mùi'], 'Mùi': ['Hợi', 'Mão'] };
-const XT_XC = { 'Tý': 'Ngọ', 'Ngọ': 'Tý', 'Sửu': 'Mùi', 'Mùi': 'Sửu', 'Dần': 'Thân', 'Thân': 'Dần', 'Mão': 'Dậu', 'Dậu': 'Mão', 'Thìn': 'Tuất', 'Tuất': 'Thìn', 'Tỵ': 'Hợi', 'Hợi': 'Tỵ' };
-function xtStars(ls, cungName) {
-  if (!ls || !ls.palaces) return '';
-  const main = ls.palaces.find((p) => p.cungName === cungName);
-  if (!main) return '';
-  const dc = main.diaChi;
-  const seen = {};
-  const stars = [];
-  [dc].concat(XT_TH[dc] || [], [XT_XC[dc]]).filter(Boolean).forEach((chi) => {
-    const p = ls.palaces.find((p) => p.diaChi === chi);
-    if (p) (p.majorStars || []).forEach((s) => { if (!seen[s.ten]) { seen[s.ten] = 1; stars.push(s.ten); } });
-  });
-  return stars.join(' ');
-}
-
 // Port NGUYÊN VĂN `buildPhanPrompt` (app-xem-tuoi.html) — pure function của
 // `result` (đầu ra `TuongHop.calcTuongHop`), không đụng DOM nên port thẳng
 // được, không cần chạy trong trình duyệt.
 function xtBuildPhanPrompt(idx, m, result) {
-  const nameA = result.nameA, nameB = result.nameB, lsA = result.lsA, lsB = result.lsB;
+  const nameA = result.nameA,
+    nameB = result.nameB,
+    lsA = result.lsA,
+    lsB = result.lsB;
   const palMenhA = lsA.palaces && lsA.palaces.find((p) => p.isMenh);
   const palMenhB = lsB.palaces && lsB.palaces.find((p) => p.isMenh);
   if (idx === 0) {
-    const itemsText = result.items.map((item, i) => `${i + 1}. ${item.label}: ${item.score}/10 — ${item.detail}`).join('\n');
+    const itemsText = result.items
+      .map((item, i) => `${i + 1}. ${item.label}: ${item.score}/10 — ${item.detail}`)
+      .join('\n');
     return `Phân tích tương quan lá số vợ chồng theo Tử Vi Đẩu Số cổ pháp:
 ${nameA}: ${lsA.canChiNam} · Nạp Âm ${result.naA} · Cung Mệnh ${palMenhA ? palMenhA.diaChi : '?'} · Chính tinh: ${((palMenhA && palMenhA.majorStars) || []).map((s) => s.ten).join(', ') || 'VCD'}
 ${nameB}: ${lsB.canChiNam} · Nạp Âm ${result.naB} · Cung Mệnh ${palMenhB ? palMenhB.diaChi : '?'} · Chính tinh: ${((palMenhB && palMenhB.majorStars) || []).map((s) => s.ten).join(', ') || 'VCD'}
@@ -236,59 +263,143 @@ Viết 300-350 từ văn xuôi. Nhận định tổng quan, điểm mạnh, đi�
   const MV = ['Tiềm Năng', 'Bền Vững', 'An Toàn', 'Quý Nhân', 'Minh Bạch', 'Tương Hợp'];
   const fmtSc = (sc) => (sc ? MK.map((k, i) => MV[i] + '=' + sc[k]).join(' · ') : '');
   if (idx === 1) {
-    lines.push('Nạp Âm: ' + nameA + '=' + (lsA.napAm || result.naA) + ' · ' + nameB + '=' + (lsB.napAm || result.naB));
+    lines.push(
+      'Nạp Âm: ' +
+        nameA +
+        '=' +
+        (lsA.napAm || result.naA) +
+        ' · ' +
+        nameB +
+        '=' +
+        (lsB.napAm || result.naB)
+    );
   } else if (idx === 2) {
     lines.push('Hành: ' + nameA + '=' + result.naA + ' · ' + nameB + '=' + result.naB);
   } else if (idx === 3) {
     const ccA = (lsA.cachCuc || []).filter((c) => c.cung === 'Mệnh' || c.cung === '');
     const ccB = (lsB.cachCuc || []).filter((c) => c.cung === 'Mệnh' || c.cung === '');
-    const ynA = ((lsA.cachCucTungCung || {})['Mệnh'] || []);
-    const ynB = ((lsB.cachCucTungCung || {})['Mệnh'] || []);
-    const scA = (lsA.cungScores || {})['Mệnh'], scB = (lsB.cungScores || {})['Mệnh'];
-    if (ccA.length) lines.push('Cách cục Mệnh ' + nameA + ': ' + ccA.map((c) => c.ten + (c.moTa ? ' — ' + c.moTa : '')).join(' | '));
-    if (ccB.length) lines.push('Cách cục Mệnh ' + nameB + ': ' + ccB.map((c) => c.ten + (c.moTa ? ' — ' + c.moTa : '')).join(' | '));
+    const ynA = (lsA.cachCucTungCung || {})['Mệnh'] || [];
+    const ynB = (lsB.cachCucTungCung || {})['Mệnh'] || [];
+    const scA = (lsA.cungScores || {})['Mệnh'],
+      scB = (lsB.cungScores || {})['Mệnh'];
+    if (ccA.length)
+      lines.push(
+        'Cách cục Mệnh ' +
+          nameA +
+          ': ' +
+          ccA.map((c) => c.ten + (c.moTa ? ' — ' + c.moTa : '')).join(' | ')
+      );
+    if (ccB.length)
+      lines.push(
+        'Cách cục Mệnh ' +
+          nameB +
+          ': ' +
+          ccB.map((c) => c.ten + (c.moTa ? ' — ' + c.moTa : '')).join(' | ')
+      );
     if (ynA.length) lines.push('Sao Mệnh ' + nameA + ': ' + ynA.slice(0, 3).join(' | '));
     if (ynB.length) lines.push('Sao Mệnh ' + nameB + ': ' + ynB.slice(0, 3).join(' | '));
     if (scA) lines.push('6 chiều Mệnh ' + nameA + ': ' + fmtSc(scA));
     if (scB) lines.push('6 chiều Mệnh ' + nameB + ': ' + fmtSc(scB));
   } else if (idx === 4) {
-    const ttA = palMenhA && palMenhA.thaiTueNhom, ttB = palMenhB && palMenhB.thaiTueNhom;
+    const ttA = palMenhA && palMenhA.thaiTueNhom,
+      ttB = palMenhB && palMenhB.thaiTueNhom;
     const tsA = palMenhA && (palMenhA.stars || []).find((s) => s.nhom === 'trang_sinh');
     const tsB = palMenhB && (palMenhB.stars || []).find((s) => s.nhom === 'trang_sinh');
     const locA = palMenhA && (palMenhA.stars || []).find((s) => s.ten === 'Lộc Tồn');
     const locB = palMenhB && (palMenhB.stars || []).find((s) => s.ten === 'Lộc Tồn');
-    const NN = { 1: 'Tuế Hổ Phù — ngay thẳng, lý tưởng, đàng hoàng', 2: 'Dương Phù Phúc — sáng suốt, hay cạnh tranh, cần hành thiện', 3: 'Tang Tuế Khách — thông minh, tháo vát, thường làm trái sở nguyện', 4: 'Âm Long Trực — làm công, phụ thuộc, được phúc an lành' };
+    const NN = {
+      1: 'Tuế Hổ Phù — ngay thẳng, lý tưởng, đàng hoàng',
+      2: 'Dương Phù Phúc — sáng suốt, hay cạnh tranh, cần hành thiện',
+      3: 'Tang Tuế Khách — thông minh, tháo vát, thường làm trái sở nguyện',
+      4: 'Âm Long Trực — làm công, phụ thuộc, được phúc an lành',
+    };
     lines.push('Nhóm Thái Tuế ' + nameA + ': ' + (NN[ttA && ttA.nhom] || '?'));
     lines.push('Nhóm Thái Tuế ' + nameB + ': ' + (NN[ttB && ttB.nhom] || '?'));
-    lines.push('Trường Sinh: ' + nameA + '=' + (tsA ? tsA.ten : 'không có') + ' · ' + nameB + '=' + (tsB ? tsB.ten : 'không có'));
-    lines.push('Lộc Tồn tại Mệnh: ' + nameA + '=' + (locA ? 'Có' : 'Không') + ' · ' + nameB + '=' + (locB ? 'Có' : 'Không'));
+    lines.push(
+      'Trường Sinh: ' +
+        nameA +
+        '=' +
+        (tsA ? tsA.ten : 'không có') +
+        ' · ' +
+        nameB +
+        '=' +
+        (tsB ? tsB.ten : 'không có')
+    );
+    lines.push(
+      'Lộc Tồn tại Mệnh: ' +
+        nameA +
+        '=' +
+        (locA ? 'Có' : 'Không') +
+        ' · ' +
+        nameB +
+        '=' +
+        (locB ? 'Có' : 'Không')
+    );
   } else if (idx >= 5 && idx <= 7) {
     const ccA2 = (lsA.cachCuc || []).filter((c) => c.cung === cungName);
     const ccB2 = (lsB.cachCuc || []).filter((c) => c.cung === cungName);
-    const ynA2 = ((lsA.cachCucTungCung || {})[cungName] || []);
-    const ynB2 = ((lsB.cachCucTungCung || {})[cungName] || []);
-    const scA2 = (lsA.cungScores || {})[cungName], scB2 = (lsB.cungScores || {})[cungName];
-    if (ccA2.length) lines.push('Cách cục ' + cungName + ' ' + nameA + ': ' + ccA2.map((c) => c.ten).join(', '));
-    if (ccB2.length) lines.push('Cách cục ' + cungName + ' ' + nameB + ': ' + ccB2.map((c) => c.ten).join(', '));
+    const ynA2 = (lsA.cachCucTungCung || {})[cungName] || [];
+    const ynB2 = (lsB.cachCucTungCung || {})[cungName] || [];
+    const scA2 = (lsA.cungScores || {})[cungName],
+      scB2 = (lsB.cungScores || {})[cungName];
+    if (ccA2.length)
+      lines.push('Cách cục ' + cungName + ' ' + nameA + ': ' + ccA2.map((c) => c.ten).join(', '));
+    if (ccB2.length)
+      lines.push('Cách cục ' + cungName + ' ' + nameB + ': ' + ccB2.map((c) => c.ten).join(', '));
     if (ynA2.length) lines.push('Sao ' + nameA + ': ' + ynA2.slice(0, 3).join(' | '));
     if (ynB2.length) lines.push('Sao ' + nameB + ': ' + ynB2.slice(0, 3).join(' | '));
     if (scA2) lines.push('6 chiều ' + nameA + ': ' + fmtSc(scA2));
     if (scB2) lines.push('6 chiều ' + nameB + ': ' + fmtSc(scB2));
   } else if (idx === 8) {
-    const dvA = lsA.daiVanHienTai, dvB = lsB.daiVanHienTai;
+    const dvA = lsA.daiVanHienTai,
+      dvB = lsB.daiVanHienTai;
     if (dvA) {
       const scDvA = dvA.scoring || {};
-      lines.push('ĐV ' + nameA + ': ' + dvA.diaChi + ' (' + dvA.tuoiStart + '–' + dvA.tuoiEnd + 't) · Tổng=' + scDvA.tong);
-      const totA = (dvA.rules || []).filter((r) => r.type === 'tot').slice(0, 2).map((r) => r.text);
-      const xauA = (dvA.rules || []).filter((r) => r.type === 'xau').slice(0, 2).map((r) => r.text);
+      lines.push(
+        'ĐV ' +
+          nameA +
+          ': ' +
+          dvA.diaChi +
+          ' (' +
+          dvA.tuoiStart +
+          '–' +
+          dvA.tuoiEnd +
+          't) · Tổng=' +
+          scDvA.tong
+      );
+      const totA = (dvA.rules || [])
+        .filter((r) => r.type === 'tot')
+        .slice(0, 2)
+        .map((r) => r.text);
+      const xauA = (dvA.rules || [])
+        .filter((r) => r.type === 'xau')
+        .slice(0, 2)
+        .map((r) => r.text);
       if (totA.length) lines.push('Tốt: ' + totA.join(' | '));
       if (xauA.length) lines.push('Cần lưu ý: ' + xauA.join(' | '));
     }
     if (dvB) {
       const scDvB = dvB.scoring || {};
-      lines.push('ĐV ' + nameB + ': ' + dvB.diaChi + ' (' + dvB.tuoiStart + '–' + dvB.tuoiEnd + 't) · Tổng=' + scDvB.tong);
-      const totB = (dvB.rules || []).filter((r) => r.type === 'tot').slice(0, 2).map((r) => r.text);
-      const xauB = (dvB.rules || []).filter((r) => r.type === 'xau').slice(0, 2).map((r) => r.text);
+      lines.push(
+        'ĐV ' +
+          nameB +
+          ': ' +
+          dvB.diaChi +
+          ' (' +
+          dvB.tuoiStart +
+          '–' +
+          dvB.tuoiEnd +
+          't) · Tổng=' +
+          scDvB.tong
+      );
+      const totB = (dvB.rules || [])
+        .filter((r) => r.type === 'tot')
+        .slice(0, 2)
+        .map((r) => r.text);
+      const xauB = (dvB.rules || [])
+        .filter((r) => r.type === 'xau')
+        .slice(0, 2)
+        .map((r) => r.text);
       if (totB.length) lines.push('Tốt: ' + totB.join(' | '));
       if (xauB.length) lines.push('Cần lưu ý: ' + xauB.join(' | '));
     }
@@ -305,8 +416,10 @@ async function runXemTuoi() {
   requireEnv('GEMINI_API_KEY');
   const rA = computeLaso(XT_A, XT_NAM_XEM);
   const rB = computeLaso(XT_B, XT_NAM_XEM);
-  if (!rA.ok || !rA.ls) throw new Error('computeLaso lỗi cho ' + XT_A.name + ': ' + (rA.error || ''));
-  if (!rB.ok || !rB.ls) throw new Error('computeLaso lỗi cho ' + XT_B.name + ': ' + (rB.error || ''));
+  if (!rA.ok || !rA.ls)
+    throw new Error('computeLaso lỗi cho ' + XT_A.name + ': ' + (rA.error || ''));
+  if (!rB.ok || !rB.ls)
+    throw new Error('computeLaso lỗi cho ' + XT_B.name + ': ' + (rB.error || ''));
   const result = TuongHop.calcTuongHop(rA.ls, rB.ls, XT_A.name, XT_B.name);
   console.log(`✓ Tương hợp: ${result.total}/100`);
 
@@ -327,8 +440,10 @@ async function runXemTuoi() {
     JSON.stringify(
       {
         input: {
-          nameA: XT_A.name, birthA: XT_A,
-          nameB: XT_B.name, birthB: XT_B,
+          nameA: XT_A.name,
+          birthA: XT_A,
+          nameB: XT_B.name,
+          birthB: XT_B,
         },
         texts,
       },

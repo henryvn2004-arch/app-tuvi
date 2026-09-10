@@ -141,9 +141,21 @@ const SAMPLE_BOND_PARTNER_NAME = 'Người bạn';
 // đồng nghiệp cố định dưới đây là nhóm mẫu (nguoi[]). Vai đủ đa dạng (sếp/
 // ngang hàng/cấp dưới) để bản mẫu thấy được cả `thieuKieu`/`duaKieu`/`cap`.
 const SAMPLE_NHAN_MACH_GROUP = [
-  { ten: 'Chị Hạnh', vai: 'sep', birth: { day: 4, month: 11, year: 1975, hourBranch: 10, gender: 'nu', isLunar: false } },
-  { ten: 'Anh Tùng', vai: 'dong-nghiep', birth: { day: 19, month: 6, year: 1991, hourBranch: 2, gender: 'nam', isLunar: false } },
-  { ten: 'Em Mai', vai: 'cap-duoi', birth: { day: 8, month: 1, year: 1998, hourBranch: 5, gender: 'nu', isLunar: false } },
+  {
+    ten: 'Chị Hạnh',
+    vai: 'sep',
+    birth: { day: 4, month: 11, year: 1975, hourBranch: 10, gender: 'nu', isLunar: false },
+  },
+  {
+    ten: 'Anh Tùng',
+    vai: 'dong-nghiep',
+    birth: { day: 19, month: 6, year: 1991, hourBranch: 2, gender: 'nam', isLunar: false },
+  },
+  {
+    ten: 'Em Mai',
+    vai: 'cap-duoi',
+    birth: { day: 8, month: 1, year: 1998, hourBranch: 5, gender: 'nu', isLunar: false },
+  },
 ];
 const NAM_XEM = 2026;
 // Giờ DƯƠNG dùng khi cần TÍNH LẠI `ls` ngay TRONG TRÌNH DUYỆT (tool `phan`
@@ -909,7 +921,12 @@ const TOOL_CONFIGS = {
       const nguoi = SAMPLE_NHAN_MACH_GROUP.map((m) => {
         const r = computeLaso(m.birth, NAM_XEM);
         if (!r.ok || !r.ls) throw new Error(`computeLaso lỗi cho ${m.ten}: ${r.error || ''}`);
-        return { ten: m.ten, vai: m.vai, ls: r.ls, gioiTinh: m.birth.gender === 'nu' ? 'nu' : 'nam' };
+        return {
+          ten: m.ten,
+          vai: m.vai,
+          ls: r.ls,
+          gioiTinh: m.birth.gender === 'nu' ? 'nu' : 'nam',
+        };
       });
       return computeNhanMach(nguoi, lsBan, NAM_XEM);
     },
@@ -930,7 +947,11 @@ const TOOL_CONFIGS = {
       const clean = (v) => String(v == null ? '' : v).trim();
       const tenHopLe = new Set(profile.thanhVien.map((t) => t.ten));
       const tungNguoi = (parsed.tungNguoi || [])
-        .map((m) => ({ ten: clean(m?.ten), cachLamViec: clean(m?.cachLamViec), noiSao: clean(m?.noiSao) }))
+        .map((m) => ({
+          ten: clean(m?.ten),
+          cachLamViec: clean(m?.cachLamViec),
+          noiSao: clean(m?.noiSao),
+        }))
         .filter((m) => tenHopLe.has(m.ten))
         .slice(0, NHAN_MACH_MAX_NGUOI);
       return {
@@ -958,7 +979,11 @@ const TOOL_CONFIGS = {
         thieuKieu: profile.thieuKieu.map((k) => ({ id: k.id, ten: k.ten, motCau: k.motCau })),
         duaKieu: profile.duaKieu ? { id: profile.duaKieu.id, ten: profile.duaKieu.ten } : null,
         nenTimThem: profile.nenTimThem
-          ? { id: profile.nenTimThem.id, ten: profile.nenTimThem.ten, motCau: profile.nenTimThem.motCau }
+          ? {
+              id: profile.nenTimThem.id,
+              ten: profile.nenTimThem.ten,
+              motCau: profile.nenTimThem.motCau,
+            }
           : null,
         cap: profile.cap,
         thuTuTiepCan: profile.thuTuTiepCan,
