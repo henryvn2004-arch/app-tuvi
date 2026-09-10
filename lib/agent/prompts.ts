@@ -509,11 +509,23 @@ export const MAU_ARC_CHUNG = mauArc(
 export const NHAN_TINH_CHAT_RULE =
   '── NHÃN TÍNH CHẤT MỖI CÂU HOOK ──\nCâu mở đầu mỗi phần (nếu bài đã yêu cầu câu chốt/phán quyết in đậm) LUÔN kèm một nhãn tính chất trong ngoặc vuông NGAY TRƯỚC dấu ** mở: [TỐT] (tin vui/thuận lợi), [CẢNH BÁO] (tin xấu/rủi ro/cần đề phòng), [TRUNG TÍNH] (trung lập). Mọi đoạn xuống dòng KHÁC trong phần cũng mở bằng một câu NGẮN in đậm tương tự — cùng chuẩn cụ thể, đo lường/hình dung được — kèm đúng một trong ba nhãn trên. Có bao nhiêu đoạn thì có bấy nhiêu câu hook, mỗi câu đứng đầu đúng đoạn của nó, không dồn hết vào một câu. Nhãn đứng NGOÀI dấu **, viết ĐÚNG một trong ba từ, không lặp nhãn ở chỗ khác.\nNgay sau tên nhãn thêm dấu | rồi MỘT TỪ KHOÁ 1–3 chữ VIẾT HOA: ý của chính đoạn đó rút thành cái tên người đọc nhớ được, KHÔNG phải nói lại tên nhãn và KHÔNG phải tên sao — [TỐT|MỞ LỐI], [CẢNH BÁO|GIỮ TIỀN], [TRUNG TÍNH|CHỜ THỜI], [TỐT|NGƯỜI ĐỠ]. Các đoạn trong cùng một phần không dùng trùng từ khoá.\nNgay sau từ khoá đó thêm một dấu | nữa rồi ĐÚNG MỘT mã chủ đề (chữ thường, không dấu) khớp nội dung đoạn, chọn trong đúng 10 mã: ban-than, hon-nhan, su-nghiep, tai-chinh, con-cai, gia-dinh, nha-cua, suc-khoe, van-han, ten-goi — [TỐT|MỞ LỐI|su-nghiep], [CẢNH BÁO|GIỮ TIỀN|tai-chinh]. Không chắc đoạn thuộc mã nào thì chọn mã GẦN NHẤT, tuyệt đối không bịa mã ngoài danh sách.';
 
+// 2026-09-10 (Henry): thêm câu HOOK kết đoạn để giữ chân đọc tiếp — tách hằng
+// RIÊNG (`HOOK_CHUYEN_DOAN_RULE`) theo đúng khuôn `NHAN_TINH_CHAT_RULE` ở
+// trên, để Khí Sắc mượn thẳng (KHÔNG gọi cả `arcDoc()`, lý do y hệt dòng dưới)
+// mà không phải chép tay. CỐ Ý không bắt hook phải neo dữ liệu THẬT của phần
+// SAU — lúc viết câu này model chưa luận tới phần đó, bắt neo dữ liệu chưa
+// tồn tại là tự mâu thuẫn; hook chỉ cần đúng GIỌNG và đúng KIỂU, không cần
+// đúng NỘI DUNG cụ thể sắp tới.
+export const HOOK_CHUYEN_DOAN_RULE =
+  '── CÂU HOOK KẾT ĐOẠN (giữ chân đọc tiếp) ──\nTrong phần đang viết, chọn 1–2 đoạn xuống dòng gần cuối (ưu tiên đoạn áp chót hoặc đoạn cuối cùng) để câu CUỐI CÙNG của đoạn đó là một CÂU HOOK: bỏ lửng, KHÔNG trả lời ngay trong câu đó, hướng sang điều SẮP nói tới — đoạn kế tiếp trong cùng bài, hoặc phần kế tiếp nếu đây là một phần trong loạt nhiều lượt gọi. Hook KHÔNG cần đúng dữ liệu của phần chưa luận tới (chưa luận thì chưa có gì để neo) — chỉ cần giữ ĐÚNG giọng đang kể, viết như một câu bình thường trong mạch văn, KHÔNG lộ vẻ quảng cáo, KHÔNG viết kiểu meta ("đọc tiếp phần sau", "xem bên dưới", "phần sau sẽ nói").\nChọn ĐÚNG MỘT kiểu cho mỗi câu hook, trong 12 kiểu sau — không lặp kiểu trong cùng phần: khoảng trống tò mò (còn một điều chưa nói hết) · sợ mất (rủi ro nếu bỏ qua) · khan hiếm (thời điểm hiếm, qua là hết) · so sánh xã hội (người cùng cảnh đang ở đâu) · cái tôi/bản sắc (thuộc nhóm nào trong số đông) · tiên đoán (điều nhiều khả năng sắp tới) · giúp quyết định (ngả về lựa chọn nào) · tri thức ẩn (điều ít người để ý) · lật niềm tin cũ (chỗ đang hiểu sai) · quy luật lặp lại (đang lặp lại một vòng cũ) · uy tín cứ liệu (dựa trên số liệu/hệ thống đã chấm — KHÔNG lộ tên hệ thống hay trường phái) · mạch chuyện dang dở (đang ở đoạn nào của hành trình).';
+
 // ⚠️ Khối "NHÃN TÍNH CHẤT" +~610 ký tự cho mỗi bản dùng `arcDoc` — 5 bản đầu
 // (Lá Số/Bát Tự/Phu Thê/Xem Tuổi-Làm Ăn/Bút Tướng) đều đã sát trần
 // (`scripts/check-prompt-budget.mjs`, mục DOC_FILES) khi thêm khối này, nên
 // nới trần cùng lượt theo đúng biên ~10% đã dùng trước đó, không phải nới
 // tuỳ tiện. Bản mới thêm sau (Nhóm C) đặt cap ngay từ đầu, khỏi phải nới.
+// 2026-09-10: `HOOK_CHUYEN_DOAN_RULE` cộng thêm ~1.150 ký tự cho MỌI bản dùng
+// `arcDoc` — xem cap mới ở từng entry `DOC_FILES` (scripts/check-prompt-budget.mjs).
 const arcDoc = (o: { canCu: string; moc: string; duBao: string; phepDich: string }) => `── BA THỨ BẮT BUỘC CÓ TRONG MỖI PHẦN (BỔ SUNG cho luật phán quyết ở trên, KHÔNG thay nó) ──
 Viết LIỀN MẠCH trong văn xuôi. TUYỆT ĐỐI không in tên ba mục này ra màn hình, không đánh số, không tách thành tiêu đề.
 - HÀNH VI ĐỜI THƯỜNG (1–2 việc): việc cụ thể tới mức người đọc tự soi ra mình — "hay nhận việc rồi ôm một mình", "cãi xong là im mấy ngày", "tiền vào tay là có chỗ gọi tên ngay". Phải mọc ra từ ${o.canCu} của CHÍNH phần đang viết, KHÔNG phải câu chung chung ai đọc cũng thấy đúng. Chật chỗ thì lấy MỘT cái đắt nhất.
@@ -521,6 +533,8 @@ Viết LIỀN MẠCH trong văn xuôi. TUYỆT ĐỐI không in tên ba mục n�
 - MỘT–HAI DỰ BÁO (đặt NGAY SAU câu lật, SÁT câu kết — để câu hành động ở cuối là việc làm được CHO chính dự báo này): chuyện gì nhiều khả năng tới (thăng chức, đổi việc, quan hệ căng lên hay dịu xuống). Phải mọc ra từ dữ kiện của CHÍNH phần đang viết. ${o.duBao} Nói bằng ngôn ngữ xác suất ("nhiều khả năng", "có xu hướng"), KHÔNG hứa chắc, KHÔNG doạ. Không có căn cứ thì BỎ HẲN — thà thiếu một dự báo còn hơn bịa một cái mốc.
 
 ${NHAN_TINH_CHAT_RULE}
+
+${HOOK_CHUYEN_DOAN_RULE}
 
 ── GIỌNG ──
 Viết như đang NÓI với người ngồi đối diện — chêm khẩu ngữ tự nhiên (thì, à, này, nhé, đấy, cơ, chứ), mỗi đoạn 1–2 cái. KHÔNG chêm vào câu phán quyết in đậm, không chêm vào câu chốt.
