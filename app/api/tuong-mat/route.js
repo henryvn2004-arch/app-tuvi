@@ -14,6 +14,7 @@ import {
   DOC_ARC_THANH_TUONG,
   DOC_ARC_THANH_TUONG_PRO,
   NHAN_TINH_CHAT_RULE,
+  HOOK_CHUYEN_DOAN_RULE,
 } from '@/lib/agent/prompts';
 
 // ── System Prompts ─────────────────────────────────────────────────────────
@@ -477,6 +478,8 @@ vì sao.
 thêm một nguồn dự báo nữa là chồng luật. Chỉ mượn đúng nhãn tính chất:
 
 ${NHAN_TINH_CHAT_RULE}
+
+${HOOK_CHUYEN_DOAN_RULE}
 
 ## Nguyên Tắc Bắt Buộc
 
