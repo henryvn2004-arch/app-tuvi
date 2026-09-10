@@ -3,9 +3,10 @@
  * Sinh 1 LẦN, dùng cho 3 việc: (a) văn MẪU (dummy) cho khối blur của một tool
  * (xem app-chu-trinh-cuoc-doi.html DUMMY_CTCD) — gọi ĐÚNG pipeline thật của
  * route (cùng hàm build-prompt + llmTextFull), không viết tay; (b) một PDF
- * mẫu (lá số + toàn bộ bản luận của lá số MẪU đó) upload lên Supabase
- * Storage, để làm nút "Xem mẫu" trong form nhập liệu; (c) cùng lượt gọi LLM
- * đó dùng luôn làm bản ghi demo clip (chạy tool thật, không phải giả lập).
+ * mẫu (lá số + toàn bộ bản luận của lá số MẪU đó) — CHỤP ĐÚNG trang thật qua
+ * Playwright (cả 6 tool, xem `htmlPage`/`injectAndRender` trong TOOL_CONFIGS),
+ * upload lên Supabase Storage để làm nút "Xem mẫu" trong form nhập liệu; (c)
+ * cùng lượt gọi LLM đó dùng luôn làm bản ghi demo clip (chạy tool thật).
  *
  * ⚠️ CHẠY Ở NƠI CÓ ĐỦ 3 BIẾN MÔI TRƯỜNG THẬT (không chạy được trong sandbox
  * phiên này — xem docs/nhat-ky/2026-09.md mục "Chu Trình Cuộc Đời"):
@@ -41,7 +42,8 @@ import { createClient } from '@supabase/supabase-js';
 import { computeLaso, formatLaSoV2 } from '../lib/engine/laso.ts';
 import { buildPromptCached } from '../lib/agent/luan-giai-doc.ts';
 import { buildPromptThang } from '../lib/agent/van-han-thang.ts';
-import { spans12 } from '../lib/engine/van-han-12.ts';
+import { spans12, buildKhung12Thang } from '../lib/engine/van-han-12.ts';
+import { nhanThangALDay } from '../lib/engine/van-ngay.ts';
 import { llmTextFull } from '../lib/llm/complete.ts';
 import { parseLlmJson } from '../lib/api/tool-helpers.ts';
 import { computeDayCon, meta as dayConMeta } from '../lib/engine/day-con.ts';
@@ -81,6 +83,14 @@ const SAMPLE_CHILD_BIRTH = {
   isLunar: false,
 };
 const NAM_XEM = 2026;
+// Giờ DƯƠNG dùng khi cần TÍNH LẠI `ls` ngay TRONG TRÌNH DUYỆT (tool `phan`
+// không có sẵn `window.renderMeta(data)` nhận thẳng object đã tính — chúng gọi
+// `anSaoLaSo()` của CHÍNH trang, giống hệt lượt submit form thật, rồi mới rót
+// văn AI vào). 6h rơi đúng chi Mão (5-7h) = SAMPLE_BIRTH.hourBranch (3) — giờ
+// cụ thể không quan trọng vì `conv.gioIdx` bị ghi đè NGAY SAU bằng đúng
+// hourBranch đó, chỉ cần rơi đúng khung 2 tiếng của chi này.
+const SAMPLE_HH = 6;
+const SAMPLE_NAME = 'Người mẫu';
 
 // ── Cấu hình theo tool — thêm tool mới thì thêm một mục ở đây ──────────────
 const TOOL_CONFIGS = {
@@ -116,6 +126,76 @@ const TOOL_CONFIGS = {
     outJson: join(ROOT, 'public/samples/chu-trinh-cuoc-doi-dummy.json'),
     pdfTitle: 'Chu Trình Cuộc Đời — Bản mẫu',
     storagePath: 'mau-chu-trinh-cuoc-doi.pdf',
+    // PDF mẫu CHỤP ĐÚNG trang thật (không tự dựng HTML rời) — gọi lại đúng
+    // các hàm trang tự dùng khi submit form (renderLuan) rồi rót văn AI qua
+    // `_renderCachedLuanGiai` (đúng hàm trang dùng khi đọc lại cache đã trả
+    // tiền), thay vì mô phỏng UI. `store` đã khoá theo ENGINE PHAN (14-24,
+    // đúng `pdfPhanList`) — khớp thẳng khoá `_renderCachedLuanGiai` cần.
+    htmlPage: 'app-chu-trinh-cuoc-doi.html',
+    async injectAndRender(page, store) {
+      await page.evaluate(
+        ({ dd, mm, yyyy, hh, gioAmIdx, gioitinh, namxem, name, store }) => {
+          window.Auth = window.Auth || {};
+          window.Auth.isLoggedIn = function () {
+            return true;
+          };
+          var conv = convertDuongToAm(dd, mm, yyyy, hh);
+          conv.gioIdx = gioAmIdx;
+          var ls = anSaoLaSo({
+            ngayAL: conv.amLich.day,
+            thangAL: conv.amLich.month,
+            namAL: conv.amLich.year,
+            canNam: conv.canNam,
+            chiNam: conv.chiNam,
+            gioIdx: gioAmIdx,
+            gioitinh: gioitinh,
+            namXem: namxem,
+          });
+          var fd = {
+            name: name,
+            gioitinh: gioitinh,
+            dd: dd,
+            mm: mm,
+            yyyy: yyyy,
+            hh: hh,
+            pp: 0,
+            gioChi: CHI[gioAmIdx],
+            amLich: conv.amLich,
+            amDuongNam: conv.amDuongNam,
+          };
+          ls._conv = conv;
+          ls._hoTen = name;
+          window._astrolabe = ls;
+          window._hoTen = name;
+          window._ngay = dd;
+          window._thang = mm;
+          window._nam = yyyy;
+          window._gioitinh = gioitinh;
+          window._namXem = namxem;
+          window._laSoText = formatLaSoV2(ls, conv);
+          ls._laSoText = window._laSoText;
+          window.renderLuan(ls, fd, namxem);
+          document.getElementById('miniChart').innerHTML = window.renderGrid(ls, fd);
+          if (window.mountIcons) window.mountIcons(document.getElementById('miniChart'));
+          document.getElementById('birthPanel').style.display = 'none';
+          document.getElementById('lgPanel').style.display = 'block';
+          document.getElementById('btnEdit').style.display = '';
+          document.getElementById('btnLaSo').style.display = '';
+          window._renderCachedLuanGiai(store);
+        },
+        {
+          dd: SAMPLE_BIRTH.day,
+          mm: SAMPLE_BIRTH.month,
+          yyyy: SAMPLE_BIRTH.year,
+          hh: SAMPLE_HH,
+          gioAmIdx: SAMPLE_BIRTH.hourBranch,
+          gioitinh: SAMPLE_BIRTH.gender,
+          namxem: NAM_XEM,
+          name: SAMPLE_NAME,
+          store,
+        }
+      );
+    },
   },
   laso: {
     kind: 'phan',
@@ -151,6 +231,28 @@ const TOOL_CONFIGS = {
     // public/tuvi-form.js dòng ~334) — script này SINH LẠI bằng LLM thật rồi
     // `upsert` đè lên đúng chỗ, không tạo file mới/mồ côi.
     storagePath: 'mau-luan-giai-la-so.pdf',
+    // laso.html đã có SẴN một cơ chế "Xem bản mẫu" native (openSample/
+    // btnSample, đọc `sampleJsonPath` qua fetch) — KHÔNG cần tự gọi
+    // renderLuan/_renderCachedLuanGiai tay như 2 tool phan kia. Ghi đè đúng
+    // file JSON đó bằng dữ liệu VỪA sinh rồi bấm chính nút đó — nút "Xem bản
+    // mẫu" trên trang thật cũng SỐNG lại đúng bằng file này, không mồ côi.
+    htmlPage: 'app-luan-giai.html',
+    sampleJsonPath: join(ROOT, 'public/samples/luan-giai.json'),
+    async injectAndRender(page, store) {
+      await page.click('#btnSample');
+      await page.waitForSelector('.samp-bar', { timeout: 15000 });
+      await page.waitForFunction(
+        () => {
+          const el = document.getElementById('lgBody');
+          return el && el.textContent && el.textContent.length > 500;
+        },
+        { timeout: 15000 }
+      );
+      // Ảnh minh hoạ chủ đề (fb-card) — không còn `loading=lazy` (đã vá) nhưng
+      // vẫn cho một nhịp để `<img>` kịp nạp trước khi in.
+      await page.waitForTimeout(800);
+      void store; // dữ liệu đã nằm trong sampleJsonPath, không cần tiêm lại
+    },
   },
   'van-han-nam': {
     kind: 'phan-thang',
@@ -194,6 +296,103 @@ const TOOL_CONFIGS = {
     outJson: join(ROOT, 'public/samples/van-han-nam-dummy.json'),
     pdfTitle: 'Vận Hạn Năm Tới — Bản mẫu',
     storagePath: 'mau-van-han-nam.pdf',
+    // Cùng lối "chụp trang thật" như chu-trinh-cuoc-doi — khác một chỗ: trang
+    // này cần thêm `_khung`/`_labels`/`_tongPhan` (khung 12 tháng, tính
+    // DETERMINISTIC ở server thật qua `action=khung`) TRƯỚC khi gọi `render(ls)`
+    // — ở đây gọi thẳng `buildKhung12Thang` (cùng hàm route thật dùng), không
+    // phải mô phỏng gọi API qua network.
+    htmlPage: 'app-van-han-nam.html',
+    async injectAndRender(page, store, ls) {
+      const now = new Date();
+      const tuNgay = now.getDate();
+      const tuThang = now.getMonth() + 1;
+      const tuNam = now.getFullYear();
+      const khung = buildKhung12Thang(ls, tuNgay, tuThang, tuNam);
+      const dv = (ls.daiVans || [])[dvHienTaiSo(ls) - 1];
+      const labels = [
+        '',
+        'Tổng quan lá số',
+        'Hành trình cuộc đời',
+        dv ? `Đại vận hiện tại (${dv.tuoiStart}–${dv.tuoiEnd}t)` : 'Đại vận hiện tại',
+        'Tiểu vận năm nay',
+        ...spans12(tuNgay, tuThang, tuNam).map((s) => nhanThangALDay(s)),
+      ];
+      await page.evaluate(
+        ({
+          dd,
+          mm,
+          yyyy,
+          hh,
+          gioAmIdx,
+          gioitinh,
+          namxem,
+          name,
+          khung,
+          labels,
+          tongPhan,
+          store,
+        }) => {
+          var conv = convertDuongToAm(dd, mm, yyyy, hh);
+          conv.gioIdx = gioAmIdx;
+          var ls = anSaoLaSo({
+            ngayAL: conv.amLich.day,
+            thangAL: conv.amLich.month,
+            namAL: conv.amLich.year,
+            canNam: conv.canNam,
+            chiNam: conv.chiNam,
+            gioIdx: gioAmIdx,
+            gioitinh: gioitinh,
+            namXem: namxem,
+          });
+          ls._conv = conv;
+          ls._hoTen = name;
+          window._astrolabe = ls;
+          window._hoTen = name;
+          window._ngay = dd;
+          window._thang = mm;
+          window._nam = yyyy;
+          window._gioitinh = gioitinh;
+          window._laSoText = formatLaSoV2(ls, conv);
+          ls._laSoText = window._laSoText;
+          window._khung = khung;
+          window._labels = labels;
+          window._tongPhan = tongPhan;
+          window.render(ls);
+          if (typeof window.mountHook === 'function') window.mountHook(ls);
+          document.getElementById('miniChart').innerHTML = window.renderGrid(ls, {
+            name: name,
+            gioitinh: gioitinh,
+            dd: dd,
+            mm: mm,
+            yyyy: yyyy,
+            hh: hh,
+            gioChi: CHI[gioAmIdx],
+            amLich: conv.amLich,
+            amDuongNam: conv.amDuongNam,
+          });
+          if (window.mountIcons) window.mountIcons(document.getElementById('miniChart'));
+          document.getElementById('birthPanel').style.display = 'none';
+          document.getElementById('vhPanel').style.display = 'block';
+          document.getElementById('btnEdit').style.display = '';
+          document.getElementById('btnLuanGiai').style.display = '';
+          window._renderCached(store);
+        },
+        {
+          dd: SAMPLE_BIRTH.day,
+          mm: SAMPLE_BIRTH.month,
+          yyyy: SAMPLE_BIRTH.year,
+          hh: SAMPLE_HH,
+          gioAmIdx: SAMPLE_BIRTH.hourBranch,
+          gioitinh: SAMPLE_BIRTH.gender,
+          namxem: NAM_XEM,
+          name: SAMPLE_NAME,
+          khung,
+          labels,
+          tongPhan: 16,
+          store,
+        }
+      );
+    },
   },
   'day-con': {
     kind: 'json',
@@ -503,14 +702,38 @@ async function runPhanTool(toolId, cfg, ls, laSoText, store) {
     if (!store[ep]) await genPhan(ep);
   }
 
-  const bodyHtml = cfg.pdfPhanList
-    .map(
-      (ep, i) =>
-        `<section><h2>${i + 1}. ${cfg.phanLabels[ep] || 'Phần ' + ep}</h2>${mdToHtml(store[ep] || '')}</section>`
-    )
-    .join('\n');
+  // `laso` đọc lại nội dung qua chính file mẫu tĩnh của nó (`sampleJsonPath`,
+  // dùng bởi cơ chế "Xem bản mẫu" NATIVE của trang) — ghi đè bằng bản VỪA
+  // sinh để cả nút demo trên trang thật LẪN PDF mẫu đều lên đời cùng lúc,
+  // không mồ côi file cũ.
+  if (cfg.sampleJsonPath) {
+    const luanGiai = {};
+    for (const ep of cfg.pdfPhanList) if (store[ep]) luanGiai[String(ep)] = store[ep];
+    mkdirSync(dirname(cfg.sampleJsonPath), { recursive: true });
+    writeFileSync(
+      cfg.sampleJsonPath,
+      JSON.stringify(
+        {
+          person_name: SAMPLE_NAME,
+          birth: {
+            ngay: cfg.sampleBirth.day,
+            thang: cfg.sampleBirth.month,
+            nam: cfg.sampleBirth.year,
+            gio_hour: SAMPLE_HH,
+            gio_idx: cfg.sampleBirth.hourBranch,
+            gioitinh: cfg.sampleBirth.gender,
+            nam_xem: cfg.namXem,
+          },
+          luan_giai: luanGiai,
+        },
+        null,
+        2
+      )
+    );
+    console.log(`✓ Ghi ${cfg.sampleJsonPath}`);
+  }
 
-  await renderAndUpload(toolId, cfg, bodyHtml);
+  await renderRealPhanPageAndUpload(toolId, cfg, ls, store);
 }
 
 // ── Tool MỘT LƯỢT JSON (day-con, nguoi-khac, huong-nghiep-tre) ─────────────
@@ -572,67 +795,10 @@ async function runJsonTool(toolId, cfg, ls, store, rawCachePath) {
   await renderRealPageAndUpload(toolId, cfg, fullPayload);
 }
 
-// Chuyển đổi markdown ĐƠN GIẢN → HTML, đủ cho một bản PDF minh hoạ (không
-// cần khớp pixel-for-pixel với renderMarkdown() phía client).
-function mdToHtml(text) {
-  return text
-    .split('\n\n')
-    .map((block) => {
-      const m = /^\[(TỐT|CẢNH BÁO|TRUNG TÍNH)(?:\|([^\]]{0,40}))?\]\s*\*\*(.+?)\*\*([\s\S]*)$/.exec(
-        block.trim()
-      );
-      if (m) {
-        const cls = m[1] === 'TỐT' ? 'good' : m[1] === 'CẢNH BÁO' ? 'warn' : 'neutral';
-        return `<div class="hook ${cls}">${m[3]}</div><p>${m[4].trim()}</p>`;
-      }
-      if (/^PHẦN \d+/.test(block.trim())) return `<h3>${block.trim()}</h3>`;
-      return `<p>${block.trim().replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')}</p>`;
-    })
-    .join('\n');
-}
-
-async function renderAndUpload(toolId, cfg, bodyHtml) {
-  const html = `<!doctype html><html lang="vi"><head><meta charset="utf-8">
-<style>
-  body{font-family:'Noto Serif',Georgia,serif;color:#1a1a1a;max-width:680px;margin:0 auto;padding:40px}
-  h1{font-size:22px;border-bottom:2px solid #C9A84C;padding-bottom:10px}
-  .sub{color:#8a8f98;font-size:13px;margin-bottom:30px}
-  h2{font-size:16px;color:#061A2E;margin-top:28px}
-  h3{font-size:14px;color:#061A2E}
-  p{font-size:12.5px;line-height:1.7;color:#3a3a3a}
-  ul{padding-left:18px}
-  li{font-size:12.5px;line-height:1.7;color:#3a3a3a;margin-bottom:6px}
-  .hook{font-weight:700;font-size:13px;padding:8px 12px;border-radius:6px;margin:10px 0 6px}
-  .hook.good{background:#eaf6ee;color:#1a6b3a}
-  .hook.warn{background:#fdeceb;color:#c0392b}
-  .hook.neutral{background:#eef2f6;color:#2a5a7a}
-  .watermark{margin-top:40px;padding-top:14px;border-top:1px dashed #ccc;font-size:11px;color:#999;text-align:center}
-</style></head><body>
-<h1>${cfg.pdfTitle}</h1>
-<div class="sub">Lá số mẫu — ${cfg.sampleBirth.day}/${cfg.sampleBirth.month}/${cfg.sampleBirth.year} · ${cfg.sampleBirth.gender === 'nam' ? 'Nam' : 'Nữ'} · Xem vận năm ${cfg.namXem}</div>
-${bodyHtml}
-<div class="watermark">Bản mẫu minh hoạ — tuviminhbao.com</div>
-</body></html>`;
-
-  console.log('✓ Dựng HTML xong, đang render PDF…');
-  // `PW_CHROMIUM_PATH` là lối thoát cho môi trường có Chromium cài sẵn ở một
-  // đường dẫn khác chuẩn Playwright (một số sandbox CI) — không set thì giữ
-  // hành vi mặc định y hệt trước (`chromium.launch()` tự tìm bản đã tải).
-  const browser = await chromium.launch(
-    process.env.PW_CHROMIUM_PATH ? { executablePath: process.env.PW_CHROMIUM_PATH } : {}
-  );
-  const page = await browser.newPage();
-  await page.setContent(html, { waitUntil: 'load' });
-  const pdfBuffer = await page.pdf({ format: 'A4', margin: { top: '20px', bottom: '20px' } });
-  await browser.close();
-
-  await uploadPdf(toolId, cfg, pdfBuffer);
-}
-
 /**
  * Lưu PDF tạm ra đĩa rồi upload đè lên bucket `samples` — dùng CHUNG cho cả
- * hai lối dựng PDF (`renderAndUpload` tự dựng HTML cho tool `phan`,
- * `renderRealPageAndUpload` chụp trang thật cho tool `json`).
+ * hai lối "chụp trang thật" (`renderRealPageAndUpload` cho tool `json`,
+ * `renderRealPhanPageAndUpload` cho tool `phan`/`phan-thang`).
  */
 async function uploadPdf(toolId, cfg, pdfBuffer) {
   const localPdfPath = join(ROOT, '.tool-samples', `${toolId}.pdf`);
@@ -751,6 +917,45 @@ async function renderRealPageAndUpload(toolId, cfg, fullPayload) {
     var btnEdit = document.getElementById('btnEdit');
     if (btnEdit) btnEdit.style.display = '';
   }, fullPayload);
+
+  // Nút "Lưu PDF" do `shell.js` tự dựng qua MutationObserver theo dõi vùng
+  // `[data-ws-result]` — đợi nó xuất hiện rồi bấm, thay vì tự gọi thẳng
+  // `printWorkspace()` (hàm private trong closure của shell.js, không lộ ra
+  // `window`).
+  await page.waitForSelector('#wsPdfBtn', { timeout: 10000 });
+  await page.click('#wsPdfBtn');
+  // `printWorkspace()` có fallback 800ms cho QR chưa tải kịp — đợi dư ra để
+  // chắc đầu/chân trang in đã dựng xong trước khi chụp.
+  await page.waitForTimeout(1300);
+
+  await page.emulateMedia({ media: 'print' });
+  const pdfBuffer = await page.pdf({ format: 'A4', margin: { top: '20px', bottom: '20px' } });
+  await browser.close();
+
+  await uploadPdf(toolId, cfg, pdfBuffer);
+}
+
+/**
+ * PDF mẫu cho 3 tool `phan`/`phan-thang` (chu-trinh-cuoc-doi, laso,
+ * van-han-nam) — cùng triết lý CHỤP TRANG THẬT như `renderRealPageAndUpload`,
+ * nhưng 3 trang này không có `window.renderMeta(data)` nhận thẳng một object
+ * đã tính sẵn: chúng render tiến độ theo từng PHẦN, khoá đăng nhập/trả tiền
+ * ngay trong hàm dựng DOM. Mỗi tool tự khai `injectAndRender(page, store, ls)`
+ * trong TOOL_CONFIGS — gọi ĐÚNG hàm trang tự dùng (`renderLuan`/`render` +
+ * `_renderCachedLuanGiai`/`_renderCached`, hoặc với `laso` là bấm thẳng nút
+ * "Xem bản mẫu" NATIVE của trang) thay vì mô phỏng lại UI ở đây.
+ */
+async function renderRealPhanPageAndUpload(toolId, cfg, ls, store) {
+  const port = await ensureStaticServer();
+  console.log('✓ Đang mở trang thật, tiêm dữ liệu, chụp PDF…');
+  const browser = await chromium.launch(
+    process.env.PW_CHROMIUM_PATH ? { executablePath: process.env.PW_CHROMIUM_PATH } : {}
+  );
+  const page = await browser.newPage();
+  page.on('pageerror', (e) => console.error('  [lỗi JS trên trang]', e.message));
+  await page.goto(`http://127.0.0.1:${port}/${cfg.htmlPage}`, { waitUntil: 'load' });
+
+  await cfg.injectAndRender(page, store, ls);
 
   // Nút "Lưu PDF" do `shell.js` tự dựng qua MutationObserver theo dõi vùng
   // `[data-ws-result]` — đợi nó xuất hiện rồi bấm, thay vì tự gọi thẳng
