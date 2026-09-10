@@ -174,6 +174,11 @@
         </div>
       </div></div>
       <div id="shellRecent"></div>
+      <div class="samp-cta" id="sampCta" style="display:none">
+        <span class="sc-ic" data-icon="lightbulb"></span>
+        <span class="sc-txt"><b>Chưa muốn khai ngày sinh?</b><span>Bạn có thể xem một bản mẫu để trải nghiệm trước.</span></span>
+        <button type="button" id="btnSample" onclick="openSample(this)">Xem bản mẫu →</button>
+      </div>
       <div class="form-card" id="birthPanel">
         <div class="fc-head"><span class="fc-ic" data-icon="hourglass"></span><h2>Nhập thông tin để lập lá số &amp; luận chu trình cuộc đời</h2></div>
         <p class="sub">Nhập ngày sinh và năm muốn luận. Hệ thống tính 9 đại vận và tiểu vận năm đó rồi luận từng chặng.</p>
@@ -308,6 +313,118 @@ var DEMO_VIDEO_URL='';
   host.innerHTML=links.join(' &nbsp;·&nbsp; ');
 })();
 
+// ── Bản mẫu TỰ MỞ (auto-show) — port từ app-luan-giai.html (2026-09-10, xem
+// docs/nhat-ky/2026-09.md). Khác `DUMMY_CTCD` (văn MỜ, dùng để lộ độ dài bản
+// luận cho khách CHƯA trả tiền): đây là VĂN THẬT đủ 11 phần của MỘT lá số mẫu
+// khác ({15/8/1990, nam, giờ Mão, xem 2026} — `SAMPLE_BIRTH` trong
+// scripts/gen-tool-sample.mjs), mở khoá HẾT để chứng minh chất lượng, đọc từ
+// `chu-trinh-cuoc-doi-sample.json` (field `sampleJsonPath` trong script đó).
+var SAMPLE_URL='/samples/chu-trinh-cuoc-doi-sample.json';
+var _sampleData=null, _sampleOpen=false;
+
+function closeSample(){
+  _sampleOpen=false;
+  var bar=document.getElementById('sampBar'); if(bar) bar.remove();
+  ['lgBody','lgScores','lgJump','miniChart','hookHost','cnsHost'].forEach(function(id){
+    var el=document.getElementById(id); if(el) el.innerHTML='';
+  });
+  var lg=document.getElementById('lgPanel'); if(lg) lg.style.display='none';
+}
+
+// `auto=true`: tự mở lúc vào trang, hỏng thì ÂM THẦM hiện lại nút `#sampCta`
+// (không alert). `auto=false`: khách tự bấm, hỏng thì phải NÓI — xem lý do đầy
+// đủ ở app-luan-giai.html (cùng hàm, cùng chú thích).
+function openSample(btn,auto){
+  var reset=function(){ if(btn){ btn.disabled=false; btn.textContent='Xem bản mẫu →'; } };
+  if(btn){ btn.disabled=true; btn.textContent='Đang mở…'; }
+  var p=_sampleData ? Promise.resolve(_sampleData)
+    : fetch(SAMPLE_URL).then(function(r){
+        if(!r.ok) throw new Error('HTTP '+r.status);
+        return r.json();
+      }).then(function(j){ _sampleData=j; return j; });
+  p.then(function(s){
+     // Lượt tự mở là BẤT ĐỒNG BỘ — từ lúc fetch bắt đầu tới lúc đáp xuống,
+     // khách có thể đã có lá số THẬT (đến qua ?auto=1, hoặc điền form nhanh
+     // tay từ _pageInit). Không chốt lại thì bản mẫu đè lên lá số thật của họ.
+     if(auto&&(_astrolabe||window.__tvmbSkipDemo)) return;
+     renderSample(s,auto); reset();
+   })
+   .catch(function(e){
+     reset();
+     if(window.console) console.error('sample:',e);
+     if(auto){ var c=document.getElementById('sampCta'); if(c) c.style.display='flex'; return; }
+     alert('Chưa mở được bản mẫu. Bạn thử lại giúp, hoặc nhập ngày sinh để xem chu trình cuộc đời thật.');
+   });
+}
+
+function renderSample(s,auto){
+  var b=(s&&s.birth)||{};
+  if(b.ngay==null||b.thang==null||b.nam==null){ throw new Error('file mẫu thiếu ngày sinh'); }
+  var gioIdx=b.gio_idx!=null?b.gio_idx:0;
+  var namxem=b.nam_xem||new Date().getFullYear();
+  var conv=convertDuongToAm(b.ngay,b.thang,b.nam,b.gio_hour!=null?b.gio_hour:0);
+  conv.gioIdx=gioIdx;
+  var ls=anSaoLaSo({ngayAL:conv.amLich.day,thangAL:conv.amLich.month,namAL:conv.amLich.year,
+    canNam:conv.canNam,chiNam:conv.chiNam,gioIdx:gioIdx,gioitinh:b.gioitinh||'nam',namXem:namxem});
+  var ten=s.person_name||'người trong bản mẫu';
+  var fd={name:ten,gioitinh:b.gioitinh||'nam',dd:b.ngay,mm:b.thang,yyyy:b.nam,
+    hh:b.gio_hour||0,pp:0,gioChi:CHI[gioIdx],amLich:conv.amLich,amDuongNam:conv.amDuongNam};
+  ls._conv=conv; ls._hoTen=ten;
+  _astrolabe=ls; _hoTen=ten; _ngay=b.ngay; _thang=b.thang; _nam=b.nam; _gioitinh=b.gioitinh||'nam'; _namXem=namxem;
+  _laSoText=formatLaSoV2(ls,conv); ls._laSoText=_laSoText;
+
+  // `true` = mở khoá HẾT (bỏ qua `loggedIn`) — bản mẫu là bản KHOE, không phải
+  // bản bán, xem chú thích `renderLuan`.
+  renderLuan(ls,fd,namxem,true);
+  document.getElementById('miniChart').innerHTML=renderGrid(ls,fd);
+  if(window.mountIcons) window.mountIcons(document.getElementById('miniChart'));
+  try{ var ny=document.getElementById('inpNamxem'); if(ny) ny.value=String(namxem); }catch(e){}
+
+  // Rót lời AI THẬT vào đúng ô — dùng CHUNG hàm trang thật dùng khi khách ĐÃ
+  // trả tiền đọc lại cache: gỡ badge "Khoá" + CTA lặp lại + bỏ mờ
+  // `.tpw-real-lock` cho cả 11 phần, đúng MỘT cửa, không viết lại tay ở đây.
+  _renderCachedLuanGiai(s.luan_giai||{});
+
+  var panel=document.getElementById('lgPanel');
+  var old=document.getElementById('sampBar'); if(old) old.remove();
+  var bar=document.createElement('div');
+  bar.className='samp-bar'; bar.id='sampBar';
+  bar.innerHTML='<div class="sb-txt">Đây là <b>BẢN MẪU</b> — lá số của <b>'+esc(ten)+'</b> ('+
+    b.ngay+'/'+b.thang+'/'+b.nam+'), không phải của bạn.</div>'+
+    '<button type="button" onclick="sampleToForm()">Xem lá số của tôi →</button>';
+  panel.insertBefore(bar,panel.firstChild);
+
+  panel.style.display='block';
+  document.getElementById('birthPanel').style.display='none';
+  var _sc=document.getElementById('sampCta'); if(_sc) _sc.style.display='none';
+  document.getElementById('btnEdit').style.display='none';
+  var _btnLs=document.getElementById('btnLaSo'); if(_btnLs) _btnLs.style.display='none';
+  _sampleOpen=true;
+  if(!auto&&window.AiLoadingSteps) AiLoadingSteps.scrollToResult('lgPanel');
+  if(window.Track) Track.event('preview_shown',{meta:{from:auto?'sample_auto':'sample_click'}});
+}
+
+function sampleToForm(){
+  closeSample();
+  showForm();
+  var f=document.getElementById('birthPanel');
+  var c=document.getElementById('sampCta'); if(c) c.style.display='flex';
+  if(f&&f.scrollIntoView) f.scrollIntoView({behavior:'smooth',block:'start'});
+  if(window.Track) Track.event('cta_click',{meta:{from:'sample_to_form'}});
+}
+
+// Chỉ mời/tự mở bản mẫu với khách NGUỘI — cùng 3 điều kiện với
+// day-con/nguoi-khac/huong-nghiep-tre/chan-dung-vo-chong/chan-dung-tien-kiep/
+// app-luan-giai.html (xem docs/nhat-ky/2026-09.md mục "Auto-show sample...").
+(function(){
+  try{
+    if(window.__tvmbSkipDemo) return;
+    if(window.Shell&&Shell.autoRun&&Shell.autoRun()) return;
+    if(window.Shell&&Shell.getRememberedBirth&&Shell.getRememberedBirth()) return;
+    openSample(null,true);
+  }catch(e){ if(window.console) console.error('sample gate:',e); }
+})();
+
 function scoreColor(t){ return t>=7?'var(--green)':t>=5?'var(--gold-soft)':'var(--red)'; }
 
 function doLuan(){
@@ -434,7 +551,7 @@ function taiAnhArc(){
    .then(function(){ btn.disabled=false; btn.textContent=old; });
 }
 
-function renderLuan(ls,fd,namxem){
+function renderLuan(ls,fd,namxem,forceUnlocked){
   var dvHT=ls.daiVanHienTai, dvTong=dvHT&&dvHT.scoring?dvHT.scoring.tong:null;
   // Chiều đại vận (Thuận/Nghịch) — CÙNG công thức `thuận` mà chính engine dùng
   // để dựng dãy 9 đại vận (tuvi-ansao-engine.js, hàm tinhDaiVan): dương nam/âm
@@ -458,7 +575,7 @@ function renderLuan(ls,fd,namxem){
   var S=[];
   for(var p=1; p<=TONG_PHAN; p++){
     var ep=13+p;
-    S.push(buildPhanSection(p,ep,LABELS[ep]||('Phần '+ep),ls,p>2&&!loggedIn));
+    S.push(buildPhanSection(p,ep,LABELS[ep]||('Phần '+ep),ls,p>2&&!loggedIn&&!forceUnlocked));
   }
   // 🪤 `#lgUnlock` là node TĨNH nhưng `_moveWallBelowFree` (bên dưới) đã dời nó
   // VÀO trong `#lgBody` (sibling của `#sec-2`). Lượt render sau ghi đè

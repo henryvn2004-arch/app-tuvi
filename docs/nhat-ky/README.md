@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-253 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+260 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 **Bốn file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
 ```bash
@@ -11,7 +11,7 @@ sed -n '120,190p' docs/nhat-ky/2026-08.md    # đọc đúng đoạn, đừng ca
 
 | file | số mục | dung lượng |
 |---|---:|---:|
-| `2026-09.md` | 88 | 363,592 B |
+| `2026-09.md` | 95 | 363,592 B |
 | `2026-08.md` | 148 | 1,024,027 B |
 | `2026-07.md` | 12 | 154,531 B |
 | `track-cu.md` | 5 | 89,354 B |
@@ -25,6 +25,13 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
+| 1 | 2026-09 | `2026-09.md` | 🐛 CI đỏ sau loạt auto-show — Playwright `page.click('#btnGo')` đụng độ với bản mẫu tự mở |
+| 1 | 2026-09 | `2026-09.md` | 🏁 Auto-show sample nối xong đủ 14 tool (chốt loạt "nối hết các tool còn lại") |
+| 1 | 2026-09 | `2026-09.md` | ✅ Auto-show sample cho Xem Tuổi — port `buildPhanPrompt` từ JS trình duyệt |
+| 1 | 2026-09 | `2026-09.md` | ✅ Auto-show sample cho Đặt Tên Con/DN + Chọn Ngày Tốt — script sinh mẫu riêng |
+| 1 | 2026-09 | `2026-09.md` | ✅ Auto-show sample cho Sổ Nhân Mạch — thêm TOOL_CONFIGS mới |
+| 1 | 2026-09 | `2026-09.md` | ✅ Auto-show sample cho Duyên Nợ Tiền Kiếp — thêm TOOL_CONFIGS mới |
+| 1 | 2026-09 | `2026-09.md` | ✅ Auto-show sample mở rộng sang Chu Trình Cuộc Đời + Vận Hạn Năm |
 | 1 | 2026-09 | `2026-09.md` | 🔀 Footer "Lập Lá Số" trỏ nhầm `/luan-giai.html` — đổi sang `/app/luan-giai` |
 | 1 | 2026-09 | `2026-09.md` | 🐌 PDF mẫu 3 tool nhiều mục nặng 4,9-5,8 MB — Chromium nhúng lại tài nguyên MỖI trang |
 | 1 | 2026-09 | `2026-09.md` | 🐛 Gen sample laso lần đầu SAU khi bỏ hard paywall — `injectAndRender` bấm nhầm nút đã ẩn |

@@ -54,6 +54,16 @@ import {
 } from '../lib/agent/day-con-prompt.ts';
 import { computeNguoiKhac, meta as nguoiKhacMeta } from '../lib/engine/nguoi-khac.ts';
 import {
+  computeNhanMach,
+  railData as nhanMachRailData,
+  MAX_NGUOI as NHAN_MACH_MAX_NGUOI,
+} from '../lib/engine/nhan-mach.ts';
+import {
+  NHAN_MACH_SYSTEM_PROMPT,
+  NHAN_MACH_SCHEMA,
+  buildNhanMachPrompt,
+} from '../lib/agent/nhan-mach-prompt.ts';
+import {
   NGUOI_KHAC_SYSTEM_PROMPT,
   NGUOI_KHAC_SCHEMA,
   buildNguoiKhacPrompt,
@@ -89,6 +99,15 @@ import {
   buildFinalPastLifeImagePrompt,
 } from '../lib/agent/past-life-story.ts';
 import { generatePortraitImage } from '../lib/image/openai-image.ts';
+import { computeGroupBond, groupPairAsBond } from '../lib/engine/past-life-bond.ts';
+import {
+  BOND_ACTS,
+  bondStorySystemPrompt,
+  buildBondStoryPrompt,
+  bondImageSystemPrompt,
+  buildBondImagePrompt,
+  buildFinalBondImagePrompt,
+} from '../lib/agent/past-life-bond-story.ts';
 
 const ROOT = dirname(dirname(fileURLToPath(import.meta.url)));
 const SAMPLE_BIRTH = {
@@ -107,6 +126,37 @@ const SAMPLE_CHILD_BIRTH = {
   gender: 'nu',
   isLunar: false,
 };
+// Người thứ hai cho tool 2 lá số (duyen-no-tien-kiep) — cố định, khác giới
+// với SAMPLE_BIRTH để `computeGroupBond` có đủ hai bên tính mối duyên.
+const SAMPLE_BOND_PARTNER_BIRTH = {
+  day: 22,
+  month: 3,
+  year: 1988,
+  hourBranch: 8,
+  gender: 'nu',
+  isLunar: false,
+};
+const SAMPLE_BOND_PARTNER_NAME = 'Người bạn';
+// Sổ Nhân Mạch (nhan-mach) — SAMPLE_BIRTH là "người xem" (viewer, lsBan), 3
+// đồng nghiệp cố định dưới đây là nhóm mẫu (nguoi[]). Vai đủ đa dạng (sếp/
+// ngang hàng/cấp dưới) để bản mẫu thấy được cả `thieuKieu`/`duaKieu`/`cap`.
+const SAMPLE_NHAN_MACH_GROUP = [
+  {
+    ten: 'Chị Hạnh',
+    vai: 'sep',
+    birth: { day: 4, month: 11, year: 1975, hourBranch: 10, gender: 'nu', isLunar: false },
+  },
+  {
+    ten: 'Anh Tùng',
+    vai: 'dong-nghiep',
+    birth: { day: 19, month: 6, year: 1991, hourBranch: 2, gender: 'nam', isLunar: false },
+  },
+  {
+    ten: 'Em Mai',
+    vai: 'cap-duoi',
+    birth: { day: 8, month: 1, year: 1998, hourBranch: 5, gender: 'nu', isLunar: false },
+  },
+];
 const NAM_XEM = 2026;
 // Giờ DƯƠNG dùng khi cần TÍNH LẠI `ls` ngay TRONG TRÌNH DUYỆT (tool `phan`
 // không có sẵn `window.renderMeta(data)` nhận thẳng object đã tính — chúng gọi
@@ -151,6 +201,10 @@ const TOOL_CONFIGS = {
     outJson: join(ROOT, 'public/samples/chu-trinh-cuoc-doi-dummy.json'),
     pdfTitle: 'Chu Trình Cuộc Đời — Bản mẫu',
     storagePath: 'mau-chu-trinh-cuoc-doi.pdf',
+    // Trang đã có cơ chế "Xem bản mẫu" native (auto-show, 2026-09-10) — cùng
+    // mẫu `laso` bên dưới: ghi ĐỦ 11 phần (kể cả 14-15, "free" nên KHÔNG có
+    // trong outJson/dummy) vào đây để nút demo trên trang thật đọc.
+    sampleJsonPath: join(ROOT, 'public/samples/chu-trinh-cuoc-doi-sample.json'),
     // PDF mẫu CHỤP ĐÚNG trang thật (không tự dựng HTML rời) — gọi lại đúng
     // các hàm trang tự dùng khi submit form (renderLuan) rồi rót văn AI qua
     // `_renderCachedLuanGiai` (đúng hàm trang dùng khi đọc lại cache đã trả
@@ -599,6 +653,149 @@ const TOOL_CONFIGS = {
       };
     },
   },
+  'duyen-no-tien-kiep': {
+    kind: 'json',
+    label: 'Duyên Nợ Tiền Kiếp',
+    sampleBirth: SAMPLE_BIRTH,
+    namXem: NAM_XEM,
+    // Tool 2 lá số — `computeProfile` bỏ qua `ls` (người A) truyền vào (dùng lại
+    // qua `lsA`), tự tính THÊM người B cố định (`SAMPLE_BOND_PARTNER_BIRTH`) rồi
+    // gọi `computeGroupBond` — đúng đường N=2 route thật dùng (`buildBond` →
+    // `computeGroupBond`, app/api/duyen-no-tien-kiep/route.ts).
+    computeProfile(lsA) {
+      const rB = computeLaso(SAMPLE_BOND_PARTNER_BIRTH, NAM_XEM);
+      if (!rB.ok || !rB.ls) throw new Error('computeLaso lỗi cho người thứ 2: ' + (rB.error || ''));
+      const genderA = SAMPLE_BIRTH.gender === 'nu' ? 'nu' : 'nam';
+      const group = computeGroupBond([
+        { ls: lsA, gender: genderA },
+        { ls: rB.ls, gender: 'nu' },
+      ]);
+      return { group, lsA, lsB: rB.ls, names: [SAMPLE_NAME, SAMPLE_BOND_PARTNER_NAME] };
+    },
+    // Pha 1 (truyện) — N=2 đi ĐÚNG đường cũ (`buildBondStoryPrompt`, prompt
+    // trùng khít route thật), y hệt `handleStory()`.
+    buildPrompt(p) {
+      return buildBondStoryPrompt(groupPairAsBond(p.group, p.group.spine), p.names[0], p.names[1]);
+    },
+    systemPrompt: bondStorySystemPrompt(2),
+    // Schema CHÉP từ route thật (`STORY_SCHEMA`, không export) — đổi ở route
+    // thì phải đổi Ở ĐÂY theo, xem app/api/duyen-no-tien-kiep/route.ts.
+    schema: {
+      type: 'OBJECT',
+      properties: {
+        tuaDe: { type: 'STRING' },
+        moTaMoiDuyen: { type: 'STRING' },
+        acts: {
+          type: 'ARRAY',
+          items: {
+            type: 'OBJECT',
+            properties: { title: { type: 'STRING' }, text: { type: 'STRING' } },
+            required: ['title', 'text'],
+          },
+        },
+        ketLuan: { type: 'STRING' },
+      },
+      required: ['tuaDe', 'moTaMoiDuyen', 'acts', 'ketLuan'],
+      propertyOrdering: ['tuaDe', 'moTaMoiDuyen', 'acts', 'ketLuan'],
+    },
+    maxTokens: 6300,
+    freeFields: [],
+    fieldOrder: ['moTaMoiDuyen', 'ketLuan'],
+    outJson: join(ROOT, 'public/samples/duyen-no-tien-kiep-dummy.json'),
+    pdfTitle: 'Duyên Nợ Tiền Kiếp — Bản mẫu',
+    storagePath: 'mau-duyen-no-tien-kiep.pdf',
+    htmlPage: 'app-duyen-no-tien-kiep.html',
+    // Pha 2 (ảnh) — N=2 đi ĐÚNG đường cũ (schema faceA/faceB), y hệt
+    // `handleImage()`. Ghép thêm `bondMeta(group)` (route thật, không export —
+    // chép logic hiển thị tại đây) để trang có ĐỦ field cho `renderStory()`.
+    async buildFullPayload(profile, ten, parsed) {
+      const { group, lsA, lsB, names } = profile;
+      const pairBond = groupPairAsBond(group, group.spine);
+      const morphA = computeMorphologyForPalace(lsA, 'Mệnh');
+      const morphB = computeMorphologyForPalace(lsB, 'Mệnh');
+      let faceA = '';
+      let faceB = '';
+      try {
+        const r = await llmTextFull({
+          system: bondImageSystemPrompt(2),
+          prompt: buildBondImagePrompt(pairBond, morphA, morphB, names[0], names[1]),
+          json: true,
+          jsonSchema: {
+            type: 'OBJECT',
+            properties: { faceA: { type: 'STRING' }, faceB: { type: 'STRING' } },
+            required: ['faceA', 'faceB'],
+          },
+          maxTokens: 1350,
+        });
+        const p = parseLlmJson(r.text);
+        faceA = String(p?.faceA || '').trim();
+        faceB = String(p?.faceB || '').trim();
+      } catch (e) {
+        console.error('  [duyen-no-tien-kiep] tả khuôn mặt lỗi (best-effort):', e.message);
+      }
+      const finalPrompt = buildFinalBondImagePrompt(pairBond, faceA, faceB);
+      console.log('  [duyen-no-tien-kiep] đang sinh ảnh thật (~30-90s)…');
+      const imgRes = await generatePortraitImage({ prompt: finalPrompt, size: '1536x1024' });
+      const SUPABASE_URL = requireEnv('SUPABASE_URL');
+      const SUPABASE_SERVICE_KEY = requireEnv('SUPABASE_SERVICE_KEY');
+      const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY);
+      const path = `samples/duyen-no-tien-kiep-${Date.now()}.png`;
+      const { error: upErr } = await supabase.storage
+        .from('portraits')
+        .upload(path, Buffer.from(imgRes.b64, 'base64'), {
+          contentType: 'image/png',
+          upsert: true,
+        });
+      if (upErr) {
+        console.error('❌ Upload ảnh mẫu lỗi:', upErr.message);
+        process.exit(1);
+      }
+      const { data: urlData } = supabase.storage.from('portraits').getPublicUrl(path);
+      console.log(`  ✓ Ảnh mẫu: ${urlData?.publicUrl}`);
+
+      const nv = (i) => ({
+        ten: group.profiles[i].characterName,
+        danhXung: group.profiles[i].occupation.title,
+        gioiTinh: group.profiles[i].gender,
+      });
+      const sp = group.spine;
+      const acts = BOND_ACTS.map((a, i) => ({
+        index: i + 1,
+        stage: a.stage,
+        title: String(parsed.acts?.[i]?.title || a.stage),
+        text: String(parsed.acts?.[i]?.text || ''),
+      }));
+      return {
+        success: true,
+        bond: {
+          kind: sp.type.kind,
+          label: sp.type.label,
+          gist: sp.type.gist,
+          signals: sp.signals,
+          a: sp.i,
+          b: sp.j,
+        },
+        nhanVats: group.profiles.map((_, i) => nv(i)),
+        capDuyen: group.pairs.map((p) => ({
+          a: p.i,
+          b: p.j,
+          kind: p.type.kind,
+          label: p.type.label,
+          gist: p.type.gist,
+          signals: p.signals,
+          truc: p === sp,
+        })),
+        nhanVatA: nv(0),
+        nhanVatB: nv(1),
+        era: { id: group.era.id, label: group.era.label, ageLabel: group.era.ageLabel },
+        tuaDe: String(parsed.tuaDe || ''),
+        moTaMoiDuyen: String(parsed.moTaMoiDuyen || ''),
+        acts,
+        ketLuan: parsed.ketLuan || '',
+        imageUrl: urlData?.publicUrl,
+      };
+    },
+  },
   'day-con': {
     kind: 'json',
     label: 'Dạy Con Theo Lá Số',
@@ -703,6 +900,106 @@ const TOOL_CONFIGS = {
         tranhNoi: normMuc(parsed.tranhNoi),
         thoiDiem: clean(parsed.thoiDiem),
         voiBan: '', // bản mẫu không có lá số người xem — cùng luật route thật
+        motCau: clean(parsed.motCau),
+      };
+    },
+  },
+  'nhan-mach': {
+    kind: 'json',
+    label: 'Sổ Nhân Mạch',
+    sampleBirth: SAMPLE_BIRTH,
+    namXem: NAM_XEM,
+    systemPrompt: NHAN_MACH_SYSTEM_PROMPT,
+    schema: NHAN_MACH_SCHEMA,
+    maxTokens: 6300,
+    // `computeProfile` nhận `ls` (SAMPLE_BIRTH) làm `lsBan` — LÁ SỐ NGƯỜI XEM,
+    // KHÔNG phải một thành viên trong sổ — rồi tự tính lá số cho 3 đồng nghiệp
+    // mẫu cố định (`SAMPLE_NHAN_MACH_GROUP`, đủ 3 vai sếp/ngang hàng/cấp dưới
+    // để bản mẫu có cả `thieuKieu`/`duaKieu`/`cap`). Đúng đường route thật đi
+    // (POST nhận cả sổ `NguoiVao[]` + `lsBan` tuỳ chọn, app/api/nhan-mach/route.ts).
+    computeProfile(lsBan) {
+      const nguoi = SAMPLE_NHAN_MACH_GROUP.map((m) => {
+        const r = computeLaso(m.birth, NAM_XEM);
+        if (!r.ok || !r.ls) throw new Error(`computeLaso lỗi cho ${m.ten}: ${r.error || ''}`);
+        return {
+          ten: m.ten,
+          vai: m.vai,
+          ls: r.ls,
+          gioiTinh: m.birth.gender === 'nu' ? 'nu' : 'nam',
+        };
+      });
+      return computeNhanMach(nguoi, lsBan, NAM_XEM);
+    },
+    buildPrompt(p) {
+      return buildNhanMachPrompt(p);
+    },
+    // Route thật KHÔNG có bản xem-trước AI riêng — cả object là hàng trả tiền.
+    freeFields: [],
+    fieldOrder: ['tongQuan', 'tungNguoi', 'capChuY', 'loHong', 'tuanNay', 'voiBan', 'motCau'],
+    outJson: join(ROOT, 'public/samples/nhan-mach-dummy.json'),
+    pdfTitle: 'Sổ Nhân Mạch — Bản mẫu',
+    storagePath: 'mau-nhan-mach.pdf',
+    htmlPage: 'app-nhan-mach.html',
+    // `meta()` + phần chữ LLM ghép ĐÚNG hình dạng route thật trả về (chép từ
+    // app/api/nhan-mach/route.ts) — chỉ giữ thành viên có TÊN khớp sổ (cùng
+    // luật lọc `tenHopLe` của route, chặn model bịa thêm người không có thật).
+    buildFullPayload(profile, ten, parsed) {
+      const clean = (v) => String(v == null ? '' : v).trim();
+      const tenHopLe = new Set(profile.thanhVien.map((t) => t.ten));
+      const tungNguoi = (parsed.tungNguoi || [])
+        .map((m) => ({
+          ten: clean(m?.ten),
+          cachLamViec: clean(m?.cachLamViec),
+          noiSao: clean(m?.noiSao),
+        }))
+        .filter((m) => tenHopLe.has(m.ten))
+        .slice(0, NHAN_MACH_MAX_NGUOI);
+      return {
+        success: true,
+        namXem: profile.namXem,
+        soNguoi: profile.soNguoi,
+        ban: profile.ban
+          ? { kieu: profile.ban.kieu.ten, kieuId: profile.ban.kieu.id, toaDo: profile.ban.toaDo }
+          : null,
+        thanhVien: profile.thanhVien.map((t) => ({
+          ten: t.ten,
+          vai: { id: t.vai.id, label: t.vai.label },
+          gioiTinh: t.gioiTinh,
+          kieu: { id: t.kieu.id, ten: t.kieu.ten, motCau: t.kieu.motCau },
+          kieuPhu: t.kieuPhu ? { id: t.kieuPhu.id, ten: t.kieuPhu.ten } : null,
+          lai: t.lai,
+          toaDo: t.toaDo,
+          chinhTinhMenh: t.chinhTinhMenh,
+          chinhTinhQuanLoc: t.chinhTinhQuanLoc,
+          than: t.than,
+          vanNam: t.vanNam,
+          voiBan: t.voiBan,
+        })),
+        phanBo: profile.phanBo,
+        thieuKieu: profile.thieuKieu.map((k) => ({ id: k.id, ten: k.ten, motCau: k.motCau })),
+        duaKieu: profile.duaKieu ? { id: profile.duaKieu.id, ten: profile.duaKieu.ten } : null,
+        nenTimThem: profile.nenTimThem
+          ? {
+              id: profile.nenTimThem.id,
+              ten: profile.nenTimThem.ten,
+              motCau: profile.nenTimThem.motCau,
+            }
+          : null,
+        cap: profile.cap,
+        thuTuTiepCan: profile.thuTuTiepCan,
+        rail: nhanMachRailData(profile),
+        tongQuan: clean(parsed.tongQuan),
+        tungNguoi,
+        capChuY: (parsed.capChuY || [])
+          .slice(0, 4)
+          .map((c) => ({ cap: clean(c?.cap), viec: clean(c?.viec) }))
+          .filter((c) => c.cap && c.viec),
+        loHong: clean(parsed.loHong),
+        tuanNay: (parsed.tuanNay || [])
+          .slice(0, 3)
+          .map((c) => ({ viec: clean(c?.viec) }))
+          .filter((c) => c.viec),
+        voiBan: clean(parsed.voiBan),
         motCau: clean(parsed.motCau),
       };
     },

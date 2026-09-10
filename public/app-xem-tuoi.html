@@ -578,6 +578,77 @@ document.querySelectorAll('[data-tvp-price]').forEach(function(el){ el.setAttrib
 var _sampleBtn=document.getElementById('btnSample'); if(_sampleBtn) _sampleBtn.setAttribute('data-sample-tool', MODE_KEY);
 if(PAID_MODES[MODE_KEY])TuviPaywall.init({product:MODE_KEY, title: MODE.title});
 
+// ── Bản mẫu TỰ MỞ (auto-show) — cùng cơ chế các tool anh em (2026-09-10, xem
+// docs/nhat-ky/2026-09.md). CHỈ bật cho mode 'xem-tuoi' — bản mẫu sinh riêng
+// bằng `scripts/gen-simple-text-samples.mjs` (9 phần, khung nhãn/cung đúng
+// bản VỢ CHỒNG). Mode 'xem-lam-an' có khung nhãn/cung KHÁC (xem
+// PHAN_LABELS_BY_MODE/CUNG_MAP_BY_MODE ở trên) — dùng chung văn mẫu này cho
+// nó là hiện sai nhãn "Quan Hệ/Con Cái" cho một tool hợp tác làm ăn, đúng lỗi
+// đã ghi trong nhật ký 2026-09-07. Mode 'tuong-hop' đã miễn phí sẵn, không có
+// gì để "mở khoá" nên cũng không cần bản mẫu.
+if(MODE_KEY==='xem-tuoi'){(function () {
+  var SAMPLE_URL = '/samples/xem-tuoi-sample.json';
+  var _cache = null;
+  function _showSampleBar() {
+    var panel = document.getElementById('xtPanel');
+    if (!panel || document.getElementById('sampBar')) return;
+    var bar = document.createElement('div');
+    bar.className = 'samp-bar'; bar.id = 'sampBar';
+    bar.innerHTML = '<div class="sb-txt">Đây là <b>BẢN MẪU</b> minh hoạ (hai người khác) — chưa phải kết quả của bạn.</div>' +
+      '<button type="button" id="sampBarClose">So tuổi của tôi →</button>';
+    panel.insertBefore(bar, panel.firstChild);
+    document.getElementById('sampBarClose').onclick = function () {
+      var b = document.getElementById('sampBar'); if (b) b.remove();
+      showForm();
+      var cta = document.getElementById('sampCta'); if (cta) cta.style.display = 'flex';
+    };
+  }
+  window.SampleHint.open = function (btn) {
+    if (btn) { btn.disabled = true; btn.textContent = 'Đang mở…'; }
+    var p = _cache ? Promise.resolve(_cache) : fetch(SAMPLE_URL).then(function (r) {
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      return r.json();
+    }).then(function (j) { _cache = j; return j; });
+    p.then(function (data) {
+      // Dựng lại `ls`/`r` bằng ĐÚNG hàm trang thật dùng khi khách so tuổi thật
+      // (`computeLs`/`TuongHop.calcTuongHop`/`renderCompat`) — không tự dựng
+      // HTML rời, chỉ bỏ qua bước ĐỌC FORM (`readPerson`) vì dữ liệu đã có sẵn.
+      var bA = data.input.birthA, bB = data.input.birthB;
+      var A = { hoten: data.input.nameA, ngay: bA.day, thang: bA.month, nam: bA.year, gioHour: 6, gioPhut: 0, gioIdx: bA.hourBranch, gioitinh: bA.gender };
+      var B = { hoten: data.input.nameB, ngay: bB.day, thang: bB.month, nam: bB.year, gioHour: 18, gioPhut: 0, gioIdx: bB.hourBranch, gioitinh: bB.gender };
+      var namxem = new Date().getFullYear();
+      var ca = computeLs(A, namxem), cb = computeLs(B, namxem);
+      ca.fd.name = A.hoten; cb.fd.name = B.hoten;
+      var r = TuongHop.calcTuongHop(ca.ls, cb.ls, A.hoten, B.hoten);
+      renderCompat(r, A.hoten, B.hoten, ca.fd, cb.fd);
+      // Rót lời AI THẬT (đủ 9 phần) — mở khoá hết, đúng triết lý "bản mẫu là
+      // bản KHOE" của các tool anh em.
+      for (var idx = 0; idx < PHAN_LABELS.length; idx++) {
+        var box = document.getElementById('claude-content-' + idx);
+        var text = data.texts[idx];
+        if (box && text) { box.style.display = 'block'; box.innerHTML = renderLuanGiaiParas(text); }
+      }
+      _paintSecLocksXt(false);
+      document.getElementById('birthPanel').style.display = 'none';
+      var _sc = document.getElementById('sampCta'); if (_sc) _sc.style.display = 'none';
+      document.getElementById('xtPanel').style.display = 'block';
+      document.getElementById('btnEdit').style.display = '';
+      _showSampleBar();
+      if (btn) { btn.disabled = false; btn.textContent = 'Xem bản mẫu →'; }
+    }).catch(function (e) {
+      if (btn) { btn.disabled = false; btn.textContent = 'Xem bản mẫu →'; }
+      if (window.console) console.error('sample:', e);
+      window.alert('Chưa mở được bản mẫu. Thử lại sau nhé.');
+    });
+  };
+  try {
+    if (!(window.Shell && Shell.autoRun && Shell.autoRun()) &&
+        !(window.Shell && Shell.getRememberedBirth && Shell.getRememberedBirth())) {
+      window.SampleHint.open(null);
+    }
+  } catch (e) { if (window.console) console.error('sample auto-open:', e); }
+})();}
+
 function toSlugAscii(str){
   return String(str||'').toLowerCase().normalize('NFD')
     .replace(/[̀-ͯ]/g,'').replace(/[đĐ]/g,'d')

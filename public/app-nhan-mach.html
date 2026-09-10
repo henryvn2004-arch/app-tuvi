@@ -330,6 +330,58 @@ function _fillVndSlots(host, product) {
 }
 TuviPaywall.fillPriceSlots(document).then(function () { _fillVndSlots(document, 'nhan-mach'); });
 
+// ── Bản mẫu TỰ MỞ (auto-show) — cùng cơ chế day-con/nguoi-khac/huong-nghiep-tre
+// (2026-09-10, xem docs/nhat-ky/2026-09.md). Sổ mẫu: người xem + 3 đồng nghiệp
+// cố định (SAMPLE_NHAN_MACH_GROUP trong scripts/gen-tool-sample.mjs), đủ 3 vai
+// sếp/ngang hàng/cấp dưới. `SampleHint.open` (mặc định chỉ hiện alert
+// placeholder) được ghi đè bằng dữ liệu THẬT — cùng payload PDF dùng.
+(function () {
+  var SAMPLE_URL = '/samples/nhan-mach-full.json';
+  var _cache = null;
+  function _showSampleBar() {
+    var panel = document.getElementById('resPanel');
+    if (!panel || document.getElementById('sampBar')) return;
+    var bar = document.createElement('div');
+    bar.className = 'samp-bar'; bar.id = 'sampBar';
+    bar.innerHTML = '<div class="sb-txt">Đây là <b>BẢN MẪU</b> minh hoạ (sổ khác) — chưa phải sổ của bạn.</div>' +
+      '<button type="button" id="sampBarClose">Nhập sổ của tôi →</button>';
+    panel.insertBefore(bar, panel.firstChild);
+    document.getElementById('sampBarClose').onclick = function () {
+      var b = document.getElementById('sampBar'); if (b) b.remove();
+      if (typeof window._closePanel === 'function') window._closePanel();
+      var cta = document.getElementById('sampCta'); if (cta) cta.style.display = 'flex';
+    };
+  }
+  window.SampleHint.open = function (btn) {
+    if (btn) { btn.disabled = true; btn.textContent = 'Đang mở…'; }
+    var p = _cache ? Promise.resolve(_cache) : fetch(SAMPLE_URL).then(function (r) {
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      return r.json();
+    }).then(function (j) { _cache = j; return j; });
+    p.then(function (data) {
+      if (typeof window._openPanel === 'function') window._openPanel();
+      renderMeta(data);
+      renderProse(data);
+      var loading = document.getElementById('loading'); if (loading) loading.style.display = 'none';
+      var card = document.getElementById('card'); if (card) card.style.display = 'block';
+      var be = document.getElementById('btnEdit'); if (be) be.style.display = '';
+      var cta = document.getElementById('sampCta'); if (cta) cta.style.display = 'none';
+      _showSampleBar();
+      if (btn) { btn.disabled = false; btn.textContent = 'Xem bản mẫu →'; }
+    }).catch(function (e) {
+      if (btn) { btn.disabled = false; btn.textContent = 'Xem bản mẫu →'; }
+      if (window.console) console.error('sample:', e);
+      window.alert('Chưa mở được bản mẫu. Thử lại sau nhé.');
+    });
+  };
+  try {
+    if (!(window.Shell && Shell.autoRun && Shell.autoRun()) &&
+        !(window.Shell && Shell.getRememberedBirth && Shell.getRememberedBirth())) {
+      window.SampleHint.open(null);
+    }
+  } catch (e) { if (window.console) console.error('sample auto-open:', e); }
+})();
+
 function showError(msg) {
   var e = document.getElementById('error-msg');
   if (msg) { e.textContent = msg; e.classList.add('active'); } else { e.classList.remove('active'); }
