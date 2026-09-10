@@ -65,6 +65,13 @@ window.FbCardTopic = (function () {
    * @param {string} cls      fb-tot | fb-canhbao | fb-trungtinh
    * @param {string} topic    kết quả extractTopic(), có thể rỗng
    * @param {string} hookHtml câu hook ĐÃ escape/bọc ngoặc kép, sẵn sàng render
+   *
+   * 🔴 ĐỪNG thêm `loading="lazy"` vào các <img> dưới đây (2026-09-10, Henry
+   * báo ảnh "có cái hiện có cái mất" khi Lưu PDF). `window.print()` không ép
+   * tải ảnh lazy còn NGOÀI viewport một cách nhất quán qua mọi engine — kết
+   * quả luận giải dài có 12-24 mục, đa số card ở dưới màn hình chưa từng được
+   * cuộn tới nên chưa tải, in ra thành trắng. Ảnh gốc chỉ 160×160 webp (4-7KB),
+   * tải eager không đáng kể.
    */
   function cardHtml(cls, topic, hookHtml) {
     var sac = CLS_TO_SAC[cls] || 'trung-tinh';
@@ -75,7 +82,7 @@ window.FbCardTopic = (function () {
       return (
         '<div class="fbc-badge-wrap"><img class="fbc-img" src="' +
         src +
-        '" alt="" width="60" height="60" loading="lazy">' +
+        '" alt="" width="96" height="96">' +
         '<div class="fb-card ' +
         cls +
         '">' +
@@ -87,7 +94,7 @@ window.FbCardTopic = (function () {
       return (
         '<div class="fbc-side-row"><img class="fbc-img" src="' +
         src +
-        '" alt="" width="72" height="72" loading="lazy">' +
+        '" alt="" width="120" height="120">' +
         '<div class="fb-card ' +
         cls +
         '">' +
@@ -100,7 +107,7 @@ window.FbCardTopic = (function () {
       cls +
       ' fbc-bg-card"><img class="fbc-bg-img" src="' +
       src +
-      '" alt="" loading="lazy"><span class="fbc-bg-text">' +
+      '" alt=""><span class="fbc-bg-text">' +
       hookHtml +
       '</span></div>'
     );
