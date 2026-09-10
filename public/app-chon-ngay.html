@@ -258,6 +258,59 @@ function _fillVndSlots(host,product){
 }
 TuviPaywall.fillPriceSlots(document).then(function(){ _fillVndSlots(document,'chon-ngay-tot'); });
 
+// ── Bản mẫu TỰ MỞ (auto-show) — cùng cơ chế app-dat-ten.html (2026-09-10, xem
+// docs/nhat-ky/2026-09.md). Sinh riêng bằng `scripts/gen-simple-text-samples.mjs`
+// (tool này không dùng lá số Tử Vi). Điền form mẫu rồi gọi THẲNG `doChonNgay()`
+// thật (nền can chi tính lại tại chỗ) — chỉ văn AI là đọc sẵn từ file.
+(function () {
+  var SAMPLE_URL = '/samples/chon-ngay-tot-sample.json';
+  var _cache = null;
+  function _showSampleBar() {
+    var panel = document.getElementById('resPanel');
+    if (!panel || document.getElementById('sampBar')) return;
+    var bar = document.createElement('div');
+    bar.className = 'samp-bar'; bar.id = 'sampBar';
+    bar.innerHTML = '<div class="sb-txt">Đây là <b>BẢN MẪU</b> minh hoạ (dữ liệu khác) — chưa phải kết quả của bạn.</div>' +
+      '<button type="button" id="sampBarClose">Nhập thông tin của tôi →</button>';
+    panel.insertBefore(bar, panel.firstChild);
+    document.getElementById('sampBarClose').onclick = function () {
+      var b = document.getElementById('sampBar'); if (b) b.remove();
+      showForm();
+      var cta = document.getElementById('sampCta'); if (cta) cta.style.display = 'flex';
+    };
+  }
+  window.SampleHint.open = function (btn) {
+    if (btn) { btn.disabled = true; btn.textContent = 'Đang mở…'; }
+    var p = _cache ? Promise.resolve(_cache) : fetch(SAMPLE_URL).then(function (r) {
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      return r.json();
+    }).then(function (j) { _cache = j; return j; });
+    p.then(function (data) {
+      var s = data.input;
+      document.getElementById('inpSuKien').value = s.suKien;
+      document.getElementById('inpHoTen').value = s.hoTen;
+      document.getElementById('inpNamSinh').value = s.namSinh;
+      document.getElementById('inpThang').value = String(s.thangNum);
+      document.getElementById('inpNam').value = s.namNum;
+      doChonNgay();
+      document.getElementById('dtResult').innerHTML = renderMarkdownDt(data.text);
+      var cta = document.getElementById('sampCta'); if (cta) cta.style.display = 'none';
+      _showSampleBar();
+      if (btn) { btn.disabled = false; btn.textContent = 'Xem bản mẫu →'; }
+    }).catch(function (e) {
+      if (btn) { btn.disabled = false; btn.textContent = 'Xem bản mẫu →'; }
+      if (window.console) console.error('sample:', e);
+      window.alert('Chưa mở được bản mẫu. Thử lại sau nhé.');
+    });
+  };
+  try {
+    if (!(window.Shell && Shell.autoRun && Shell.autoRun()) &&
+        !(window.Shell && Shell.getRememberedBirth && Shell.getRememberedBirth())) {
+      window.SampleHint.open(null);
+    }
+  } catch (e) { if (window.console) console.error('sample auto-open:', e); }
+})();
+
 // Mỗi khoảng ngày gợi ý là MỘT dòng "**[Ngày X–Y]** — chi tiết" (định dạng
 // đã ép trong prompt) — tách thành thẻ nhỏ `.fb-item` (xem shell.css) để đọc
 // lướt dễ hơn. KHÔNG dùng `.fb-card` (poster to, dành cho 1 câu trích duy
