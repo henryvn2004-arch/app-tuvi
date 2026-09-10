@@ -1,0 +1,108 @@
+{
+  "success": true,
+  "danhXung": "Đại lý tự khanh đi sứ",
+  "characterName": "Somphong Sunthon",
+  "occupation": {
+    "title": "Đại lý tự khanh đi sứ",
+    "desc": "Người đứng đầu việc hình luật của cả nước, tài luận lý và xét đoán bậc nhất — cổ thư chỉ đích danh: nên chuyên về hình luật.",
+    "star": "Thái Dương + Cự Môn đồng cung",
+    "brightness": "",
+    "borrowed": true,
+    "notes": [
+      "Địa Không → có lúc rời bỏ chức phận, ngả về tu hành, ẩn dật hoặc trắng tay làm lại",
+      "Lộc Tồn → nghề nghiệp gắn liền với tiền bạc, bổng lộc dồi dào",
+      "Thiên Mã → chức phận gắn với đi lại, chinh chiến hoặc bôn ba xa xứ"
+    ],
+    "tier": "cao",
+    "tierLabel": "hiển đạt",
+    "tierBreakdown": [
+      "+2 Thái Dương Vượng",
+      "+1 Lộc Tồn",
+      "-1 Địa Không",
+      "+2 cách Thiên Mã Thủ Quan Lộc"
+    ],
+    "source": "Tân Biên 8.5: Cự đồng cung tại Dần — \"công danh hiển hách. Nên chuyên về hình luật, vì có tài luận lý, xét đoán\""
+  },
+  "menh": {
+    "chinhTinh": [
+      "Thiên Cơ (Miếu)",
+      "Thiên Lương (Miếu)"
+    ],
+    "phuTinh": [
+      "Điếu Khách",
+      "Bệnh Phù",
+      "Dưỡng",
+      "Hỏa Tinh (Đắc)",
+      "Phượng Các",
+      "Quả Tú",
+      "Đẩu Quân",
+      "Thiên Thọ",
+      "Giải Thần",
+      "Quốc Ấn"
+    ],
+    "cachCuc": [
+      {
+        "ten": "Thuận Lý — Dương cư Dương vị / Âm cư Âm vị",
+        "loai": "menh_co_ban",
+        "moTa": "Năm sinh và cung Mệnh cùng âm dương → thuận lý, độ số gia tăng.",
+        "chiTiet": "Năm sinh dương, cung Mệnh Thìn cũng dương."
+      }
+    ],
+    "yNghia": [
+      "Thiên Cơ sáng: thông minh, mưu trí, giàu sang, sống lâu",
+      "Cơ Lương Thìn/Tuất: phúc thọ, nhân hậu",
+      "Thiên Lương thủ Mệnh: khoan hòa, sống lâu",
+      "Thiên Lương sáng: thông minh, nhân hậu, giàu sang",
+      "Hỏa/Linh đắc: can đảm, dũng mãnh, chí khí hiên ngang",
+      "[Thiên Lương] Cung Mệnh an tại Tý, Sửu, Dần, Mão, Thìn, Tỵ, Ngọ có Lương tọa thủ, gặp Nguyệt, Linh hội chiếu, là nhiều có tài năng và dĩ nhiên là quý hiển."
+    ]
+  },
+  "thanCungName": "Thiên Di",
+  "portraitAge": 29,
+  "era": {
+    "id": "thai-lan",
+    "label": "Thái Lan cổ",
+    "ageLabel": "thời vương quốc bên sông"
+  },
+  "biDanh": "người phán xử vạn dặm nhưng lỡ độ tàn canh",
+  "moTaNhanVat": "Somphong Sunthon mang trí tuệ trầm mặc và sắc sảo của kẻ sinh ra để vạch ranh giới cho sự thật, thấu triệt luật lệ nhưng lòng dạ luôn hướng về đức khoan hòa. Người ngoài trông vào thường kính nể sự điềm tĩnh và tài mưu tính kín kẽ, nhưng ít ai biết ông luôn ôm một nỗi cô độc sâu kín của kẻ thấy trước sự biến mà bất lực níu giữ nhân tâm. Sức mạnh của ông nằm ở trí tuệ phụ tá bày mưu định đoạt việc lớn, song điểm yếu chí tử lại là sự hao tổn tiền của và những mối dây trói buộc duyên nợ khó dứt. Con người mang mệnh bôn ba ấy đã bước vào một đời dài dằng dặc gió sương bên dòng nước triều dâng.",
+  "acts": [
+    {
+      "index": 1,
+      "stage": "Thiếu thời",
+      "role": "thuong",
+      "title": "Bóng áo vàng bên bờ sông",
+      "text": "Somphong Sunthon sinh ra bên dòng sông Chao Phraya hiền hòa dưới thời vua Ramathibodi I mở mang bờ cõi Ayutthaya. Thuở nhỏ, gia đạo sớm chịu cảnh ly tán, những mùa mưa triền miên khiến mái nhà sàn gỗ tếch của gia đình ông xiêu vẹo vì túng thiếu. Nhìn đoàn sư khất thực đi qua trong làn sương sớm, Somphong thường nép sau vại nước, tự nhủ lòng phải học lấy kinh luật để đổi thay số phận. Tai ương ập đến khi một trận hỏa hoạn thiêu rụi sản nghiệp ít ỏi của mẹ cha, buộc ông phải rời xa quê hương bôn ba kiếm sống. Trong túi nải ra đi chẳng có gì ngoài chiếc nghiên mài mực bằng đá xám do cha để lại, vật theo ông suốt những chặng lận đận đầu đời."
+    },
+    {
+      "index": 2,
+      "stage": "Lập thân",
+      "role": "thuong",
+      "title": "Lập thân chốn nha môn",
+      "text": "Đến tuổi trưởng thành, nhờ tài mưu lược và trí nhớ phi thường về điển chương pháp độ, Somphong Sunthon được cất nhắc vào viện hình án kinh sư. Nơi cửa nha môn ngột ngạt, ông khéo léo gỡ từng mối oan khuất, bày mưu giúp các quan khanh tướng xử lý êm thấm nhiều vụ tranh chấp đất đai phức tạp quanh thành Ayutthaya. Vận thế mở ra, bổng lộc bắt đầu tích tụ trong căn nhà sàn mới dựng, tiếng tăm một viên quan xử án công minh lan khắp lục tỉnh. Dẫu vậy, những chuyến công cán vất vả đường sông nước khiến khí huyết ông suy kiệt, lại thêm người thân đứng tên vay mượn gây tổn hao không ít bạc vàng tích lũy."
+    },
+    {
+      "index": 3,
+      "stage": "Trung niên",
+      "role": "bien-co",
+      "title": "Gông cùm và áo nâu sòng",
+      "text": "Trung niên ập đến như dòng nước lũ cuốn phăng sản nghiệp của Somphong Sunthon. Một vụ án buôn lậu muối qua cửa khẩu biên thùy vỡ lở, ông bị kẻ dưới quyền liên can vu cáo, triều đình giáng chiếu truất sạch phẩm hàm, tống giam vào ngục tối. Mất mát tang tóc dồn dập khi người bạn đời qua đời vì bạo bệnh giữa lúc ông chịu cảnh lao tù, của cải tích cóp bấy lâu đều tan biến sạch trơn. Ra tù với hai bàn tay trắng và thân thể đầy thương tích, Somphong đành gửi gắm thân mình vào chốn thiền môn, nương nhờ bóng chùa mái nhọn dát vàng, hằng ngày lặng ngắm hoa sen trên ao chùa để tìm lại chút thanh thản cho tâm can vỡ nát."
+    },
+    {
+      "index": 4,
+      "stage": "Hậu vận",
+      "role": "dinh-cao",
+      "title": "Sứ giả vạn dặm rạng danh",
+      "text": "Triều đình nổ ra biến động bang giao lớn, vua Ramathibodi I cần người am tường luật lệ để đi sứ đàm phán cống nạp với lân bang. Được triều thần tiến cử, Somphong Sunthon dứt áo nâu, phụng mệnh đảm trách chức Đại lý tự khanh đi sứ, dẫn đoàn voi và thuyền dài vượt rừng Tenasserim hiểm trở. Bằng tài hùng biện sắc sảo và mưu kế ngoại giao kín kẽ, ông mang về hiệp ước hòa hảo cùng danh dự lớn cho vương triều. Bổng lộc cùng phẩm hàm vinh hiển tột cùng được ban trả, con trai ông nhờ đức nghiệp của cha cũng sớm thăng tiến nắm giữ binh quyền nơi cửa ải, khép lại những năm tháng chìm nổi bẽ bàng."
+    },
+    {
+      "index": 5,
+      "stage": "Cuối đời",
+      "role": "thuong",
+      "title": "Trôi dạt phương xa",
+      "text": "Tuổi xế chiều, khi tóc đã bạc trắng như ngọn cỏ lau ven sông Ping, Somphong Sunthon vẫn không có được những ngày an nhàn trong gia thất. Mâu thuẫn tiền bạc với bằng hữu cũ và những chuyến hành hương xa xôi tiếp tục kéo ông rời xa tổ ấm, thân mang nhiều chứng bệnh về tiêu hóa nhưng cốt cách vẫn trầm ổn phi thường. Trong một chuyến xuôi thuyền dài đi tuần thị việc đắp đê nơi trấn xa kinh kỳ, ông trút hơi thở cuối cùng giữa mênh mông sông nước, mắt vẫn hướng về phía kinh thành xa xăm. Chiếc nghiên đá năm xưa nằm lặng lẽ bên mạn thuyền, chứng kiến trọn vẹn một kiếp phong trần tận hiến."
+    }
+  ],
+  "ketLuan": "Dòng đời ấy để lại trong anh hôm nay một trực giác sắc bén, khả năng nhìn thấu bản chất vấn đề và tài lập kế hoạch mà ít ai bì kịp. Đi cùng với đó là nỗi cô đơn thầm kín của kẻ đứng ngoài cuộc chơi quyền lực và nỗi sợ mất mát tài chính vốn luôn chực chờ nhắc nhở anh phải tự lượng sức mình.",
+  "imageUrl": "https://dciwkfdqhhddeymlisey.supabase.co/storage/v1/object/public/portraits/samples/chan-dung-tien-kiep-1789040566612.png"
+}

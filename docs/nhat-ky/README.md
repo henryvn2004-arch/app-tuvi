@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-247 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+248 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 **Bốn file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
 ```bash
@@ -11,7 +11,7 @@ sed -n '120,190p' docs/nhat-ky/2026-08.md    # đọc đúng đoạn, đừng ca
 
 | file | số mục | dung lượng |
 |---|---:|---:|
-| `2026-09.md` | 82 | 363,592 B |
+| `2026-09.md` | 83 | 363,592 B |
 | `2026-08.md` | 148 | 1,024,027 B |
 | `2026-07.md` | 12 | 154,531 B |
 | `track-cu.md` | 5 | 89,354 B |
@@ -25,6 +25,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
+| 1 | 2026-09 | `2026-09.md` | 🖼️ PDF "Xem mẫu" + SampleHint cho 2 tool sinh ẢNH (chan-dung-vo-chong/tien-kiep) |
 | 1 | 2026-09 | `2026-09.md` | 🔓 Gỡ placeholder "Xem bản mẫu" (SampleHint) cho 3 tool đã có PDF mẫu |
 | 1 | 2026-09 | `2026-09.md` | 🖨️ PDF "Xem mẫu" chụp trang thật — mở rộng sang 3 tool `phan` |
 | 1 | 2026-09 | `2026-09.md` | 🐛 Bộ lọc nhiễu "postMessage" (#785) vẫn lọt — neo `^` sai vì browser tự thêm "Uncaught " |

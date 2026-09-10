@@ -285,6 +285,37 @@ function retryResultImage() {
 
 TuviForm.render('tuviFormHost', {mode:'compact', gioitinh:'nam', showNamXem:true});
 
+// Nút "Xem bản mẫu" (khối .samp-cta phía trên form) — override placeholder
+// mặc định của tools-shared/sample-hint.js bằng dữ liệu THẬT: truyện + ảnh
+// sinh sẵn bằng scripts/gen-tool-sample.mjs (CHỤP ĐÚNG trang thật, có sinh
+// ảnh thật — không phải mô phỏng), rót qua renderMeta/renderProse +
+// setResultImage thật của chính trang này.
+(function(){
+  var SAMPLE_URL='/samples/chan-dung-tien-kiep-full.json';
+  var _cache=null;
+  window.SampleHint.open=function(btn){
+    if(btn){ btn.disabled=true; btn.textContent='Đang mở…'; }
+    var p=_cache?Promise.resolve(_cache):fetch(SAMPLE_URL).then(function(r){
+      if(!r.ok) throw new Error('HTTP '+r.status);
+      return r.json();
+    }).then(function(j){ _cache=j; return j; });
+    p.then(function(data){
+      if(typeof window._openPanel==='function') window._openPanel();
+      renderMeta(data);
+      renderProse(data);
+      if(data.imageUrl) setResultImage(data.imageUrl);
+      var loading=document.getElementById('loading'); if(loading) loading.style.display='none';
+      var card=document.getElementById('card'); if(card) card.style.display='block';
+      var be=document.getElementById('btnEdit'); if(be) be.style.display='';
+      if(btn){ btn.disabled=false; btn.textContent='Xem bản mẫu →'; }
+    }).catch(function(e){
+      if(btn){ btn.disabled=false; btn.textContent='Xem bản mẫu →'; }
+      if(window.console) console.error('sample:',e);
+      window.alert('Chưa mở được bản mẫu. Thử lại sau nhé.');
+    });
+  };
+})();
+
 // Quay lại từ lượt nạp Lượng (hết Lượng ngay lúc bấm — xem
 // `TuviPaywall._insufficient`/`resumeIfPending`). Trang MULTI-PAGE (điều
 // hướng cứng sang /topup.html rồi quay lại), nên form + `_lastBirth` vừa tính

@@ -64,6 +64,31 @@ import {
   HUONG_NGHIEP_TRE_SCHEMA,
   buildHuongNghiepTrePrompt,
 } from '../lib/agent/huong-nghiep-tre-prompt.ts';
+import {
+  computeSpouseMorphology,
+  getPhuTheReadout,
+  getPhuTheChinhTinhElement,
+  computeMorphologyForPalace,
+} from '../lib/engine/portrait.ts';
+import {
+  PHU_THE_LUAN_GIAI_SYSTEM_PROMPT,
+  buildPhuTheLuanGiaiPrompt,
+} from '../lib/agent/phu-the-luan-giai.ts';
+import {
+  CHAN_DUNG_VO_CHONG_ANALYSIS_SYSTEM_PROMPT,
+  buildChanDungVoChongAnalysisPrompt,
+  buildFinalPortraitImagePrompt,
+} from '../lib/agent/chan-dung-vo-chong-prompt.ts';
+import { computePastLife, pastLifeMeta } from '../lib/engine/past-life.ts';
+import {
+  PAST_LIFE_STORY_SYSTEM_PROMPT,
+  PAST_LIFE_STORY_SCHEMA,
+  buildPastLifeStoryPrompt,
+  PAST_LIFE_IMAGE_SYSTEM_PROMPT,
+  buildPastLifeImagePrompt,
+  buildFinalPastLifeImagePrompt,
+} from '../lib/agent/past-life-story.ts';
+import { generatePortraitImage } from '../lib/image/openai-image.ts';
 
 const ROOT = dirname(dirname(fileURLToPath(import.meta.url)));
 const SAMPLE_BIRTH = {
@@ -392,6 +417,177 @@ const TOOL_CONFIGS = {
           store,
         }
       );
+    },
+  },
+  'chan-dung-vo-chong': {
+    kind: 'json',
+    label: 'Chân Dung Vợ Chồng',
+    sampleBirth: SAMPLE_BIRTH,
+    namXem: NAM_XEM,
+    // `computeProfile` ở đây KHÔNG thuần đồng bộ — route thật gọi thêm 1 lượt
+    // LLM RIÊNG (luận giải Phu Thê đầy đủ) TRƯỚC lượt phân tích chính, best-
+    // effort giống hệt route.ts (lỗi thì bỏ qua, không chặn cả lượt).
+    async computeProfile(ls) {
+      const userGender = SAMPLE_BIRTH.gender === 'nu' ? 'nu' : 'nam';
+      const morph = computeSpouseMorphology(ls, userGender);
+      const phuThe = getPhuTheReadout(ls);
+      const phuTheElement = getPhuTheChinhTinhElement(ls);
+      let phuTheLuanGiai = '';
+      try {
+        requireEnv('GEMINI_API_KEY');
+        const laSoText = formatLaSoV2(ls);
+        const r = await llmTextFull({
+          system: PHU_THE_LUAN_GIAI_SYSTEM_PROMPT,
+          prompt: buildPhuTheLuanGiaiPrompt(laSoText, undefined, userGender),
+          maxTokens: 1750,
+        });
+        phuTheLuanGiai = r.text.trim();
+      } catch (e) {
+        console.error('  [chan-dung-vo-chong] luận giải Phu Thê lỗi (best-effort):', e.message);
+      }
+      return { morph, phuThe, phuTheElement, userGender, phuTheLuanGiai };
+    },
+    buildPrompt(p) {
+      return buildChanDungVoChongAnalysisPrompt(p.morph, p.phuThe, p.phuTheLuanGiai, p.userGender);
+    },
+    systemPrompt: CHAN_DUNG_VO_CHONG_ANALYSIS_SYSTEM_PROMPT,
+    // Route thật KHÔNG ép `json:true`/`jsonSchema` cho lượt này (đọc JSON từ
+    // text tự do qua `parseLlmJson`) — cố ý để trống `schema`, xem chú thích
+    // ở `runJsonTool`.
+    maxTokens: 1650,
+    freeFields: [],
+    fieldOrder: ['description', 'meetingContext', 'phuTheLuanGiai'],
+    outJson: join(ROOT, 'public/samples/chan-dung-vo-chong-dummy.json'),
+    pdfTitle: 'Chân Dung Vợ Chồng — Bản mẫu',
+    storagePath: 'mau-chan-dung-vo-chong.pdf',
+    htmlPage: 'app-chan-dung-vo-chong.html',
+    // `buildFullPayload` ở đây SINH ẢNH THẬT (route thật cũng làm y vậy) —
+    // tốn thời gian (~30-90s) + một lượt gọi ảnh thật, không có cách nào né.
+    async buildFullPayload(profile, ten, parsed) {
+      const { finalPrompt, spouseAge, spouseGender } = buildFinalPortraitImagePrompt(
+        parsed,
+        profile.morph,
+        profile.phuTheElement,
+        profile.userGender
+      );
+      console.log('  [chan-dung-vo-chong] đang sinh ảnh thật (~30-90s)…');
+      const imgRes = await generatePortraitImage({ prompt: finalPrompt, size: '1024x1536' });
+      const SUPABASE_URL = requireEnv('SUPABASE_URL');
+      const SUPABASE_SERVICE_KEY = requireEnv('SUPABASE_SERVICE_KEY');
+      const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY);
+      const path = `samples/chan-dung-vo-chong-${Date.now()}.png`;
+      const { error: upErr } = await supabase.storage
+        .from('portraits')
+        .upload(path, Buffer.from(imgRes.b64, 'base64'), {
+          contentType: 'image/png',
+          upsert: true,
+        });
+      if (upErr) {
+        console.error('❌ Upload ảnh mẫu lỗi:', upErr.message);
+        process.exit(1);
+      }
+      const { data: urlData } = supabase.storage.from('portraits').getPublicUrl(path);
+      console.log(`  ✓ Ảnh mẫu: ${urlData?.publicUrl}`);
+      return {
+        success: true,
+        imageUrl: urlData?.publicUrl,
+        description: parsed.description,
+        meetingContext: parsed.meetingContext || '',
+        phuTheLuanGiai: profile.phuTheLuanGiai || '',
+        spouseGender,
+        spouseAge,
+        phuThe: profile.phuThe,
+      };
+    },
+  },
+  'chan-dung-tien-kiep': {
+    kind: 'json',
+    label: 'Chân Dung Tiền Kiếp',
+    sampleBirth: SAMPLE_BIRTH,
+    namXem: NAM_XEM,
+    computeProfile(ls) {
+      const gender = SAMPLE_BIRTH.gender === 'nu' ? 'nu' : 'nam';
+      // KHÔNG truyền era → computePastLife tự bốc nền văn minh từ chính lá
+      // số, đúng hành vi route thật (buildProfile trong route.ts).
+      return computePastLife(ls, gender);
+    },
+    // Pha 1 (truyện) — route thật ÉP schema (Gemini responseSchema), khác
+    // chan-dung-vo-chong. `cfg.schema` khai bên dưới để `runJsonTool` truyền
+    // đúng `json:true`+`jsonSchema`.
+    buildPrompt(profile) {
+      return buildPastLifeStoryPrompt(profile);
+    },
+    systemPrompt: PAST_LIFE_STORY_SYSTEM_PROMPT,
+    schema: PAST_LIFE_STORY_SCHEMA,
+    maxTokens: 6300,
+    freeFields: [],
+    fieldOrder: ['moTaNhanVat', 'ketLuan'],
+    outJson: join(ROOT, 'public/samples/chan-dung-tien-kiep-dummy.json'),
+    pdfTitle: 'Chân Dung Tiền Kiếp — Bản mẫu',
+    storagePath: 'mau-chan-dung-tien-kiep.pdf',
+    htmlPage: 'app-chan-dung-tien-kiep.html',
+    // Pha 2 (ảnh) — route thật gọi RIÊNG sau khi đã có `profile` (không cần
+    // văn truyện): 1 lượt LLM tả khuôn mặt (json ép schema nhỏ) rồi ghép
+    // prompt ảnh cuối + sinh ảnh thật + upload, y hệt chan-dung-vo-chong.
+    async buildFullPayload(profile, ten, parsed, ls) {
+      const morph = computeMorphologyForPalace(ls, 'Mệnh');
+      let faceDescriptionEn = '';
+      try {
+        const r = await llmTextFull({
+          system: PAST_LIFE_IMAGE_SYSTEM_PROMPT,
+          prompt: buildPastLifeImagePrompt(profile, morph),
+          json: true,
+          jsonSchema: {
+            type: 'OBJECT',
+            properties: { imagePrompt: { type: 'STRING' } },
+            required: ['imagePrompt'],
+          },
+          maxTokens: 900,
+        });
+        const p = parseLlmJson(r.text);
+        faceDescriptionEn = String(p?.imagePrompt || '').trim();
+      } catch (e) {
+        console.error('  [chan-dung-tien-kiep] tả khuôn mặt lỗi (best-effort):', e.message);
+      }
+      const finalPrompt = buildFinalPastLifeImagePrompt(profile, faceDescriptionEn);
+      console.log('  [chan-dung-tien-kiep] đang sinh ảnh thật (~30-90s)…');
+      const imgRes = await generatePortraitImage({ prompt: finalPrompt, size: '1024x1536' });
+      const SUPABASE_URL = requireEnv('SUPABASE_URL');
+      const SUPABASE_SERVICE_KEY = requireEnv('SUPABASE_SERVICE_KEY');
+      const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY);
+      const path = `samples/chan-dung-tien-kiep-${Date.now()}.png`;
+      const { error: upErr } = await supabase.storage
+        .from('portraits')
+        .upload(path, Buffer.from(imgRes.b64, 'base64'), {
+          contentType: 'image/png',
+          upsert: true,
+        });
+      if (upErr) {
+        console.error('❌ Upload ảnh mẫu lỗi:', upErr.message);
+        process.exit(1);
+      }
+      const { data: urlData } = supabase.storage.from('portraits').getPublicUrl(path);
+      console.log(`  ✓ Ảnh mẫu: ${urlData?.publicUrl}`);
+
+      // Ghép nhãn giai đoạn/vai trò kịch (ENGINE) với chữ LLM viết — đúng
+      // cách handleStory() ghép trong route.ts.
+      const acts = profile.arc.acts.map((a, i) => ({
+        index: a.index,
+        stage: a.stage,
+        role: a.role,
+        title: String(parsed.acts?.[i]?.title || a.stage),
+        text: String(parsed.acts?.[i]?.text || ''),
+      }));
+
+      return {
+        success: true,
+        ...pastLifeMeta(profile),
+        biDanh: String(parsed.biDanh || ''),
+        moTaNhanVat: String(parsed.moTaNhanVat || ''),
+        acts,
+        ketLuan: parsed.ketLuan || '',
+        imageUrl: urlData?.publicUrl,
+      };
     },
   },
   'day-con': {
@@ -740,8 +936,11 @@ async function runPhanTool(toolId, cfg, ls, laSoText, store) {
 async function runJsonTool(toolId, cfg, ls, store, rawCachePath) {
   // Hoist ra ngoài `gen()`: PDF cần `profile` (5 trục/8 chất/...) NGAY CẢ KHI
   // JSON mẫu đã có sẵn từ cache (`--pdf-only` bỏ qua `gen()` hoàn toàn) — thiếu
-  // dòng này thì `buildFullPayload` không có gì để ghép cùng phần chữ.
-  const profile = cfg.computeProfile(ls);
+  // dòng này thì `buildFullPayload` không có gì để ghép cùng phần chữ. `await`
+  // vì một vài tool (chan-dung-vo-chong) cần gọi thêm 1 lượt LLM RIÊNG
+  // (luận giải Phu Thê) ngay trong `computeProfile` — `await` trên giá trị
+  // không phải Promise là no-op, không đổi hành vi của tool đồng bộ.
+  const profile = await cfg.computeProfile(ls);
 
   async function gen() {
     if (!FORCE && store.payload) {
@@ -750,14 +949,23 @@ async function runJsonTool(toolId, cfg, ls, store, rawCachePath) {
     }
     requireEnv('GEMINI_API_KEY');
     const prompt = cfg.buildPrompt(profile, cfg.ten);
-    console.log('  đang gọi LLM (json+schema)…');
-    const r = await llmTextFull({
-      system: cfg.systemPrompt,
-      prompt,
-      json: true,
-      jsonSchema: cfg.schema,
-      maxTokens: cfg.maxTokens,
-    });
+    console.log('  đang gọi LLM…');
+    // `cfg.schema` không phải mọi tool đều có — chan-dung-vo-chong (route
+    // thật) đọc JSON từ text tự do qua `parseLlmJson`, không ép
+    // `json:true`+`jsonSchema` như day-con/nguoi-khac/huong-nghiep-tre. Ép
+    // thêm ở đây là sample CHẠY KHÁC route thật, đúng thứ cả script này sinh
+    // ra để tránh.
+    const r = await llmTextFull(
+      cfg.schema
+        ? {
+            system: cfg.systemPrompt,
+            prompt,
+            json: true,
+            jsonSchema: cfg.schema,
+            maxTokens: cfg.maxTokens,
+          }
+        : { system: cfg.systemPrompt, prompt, maxTokens: cfg.maxTokens }
+    );
     const parsed = parseLlmJson(r.text);
     if (!parsed || typeof parsed !== 'object') {
       console.error('❌ Parse JSON lỗi. Đuôi output:', String(r.text || '').slice(-200));
@@ -790,8 +998,11 @@ async function runJsonTool(toolId, cfg, ls, store, rawCachePath) {
 
   // PDF mẫu = CHỤP ĐÚNG trang thật, không tự dựng HTML rời — ghép `profile`
   // (tra bảng thuần, có 5 trục/8 chất/chart) với phần chữ LLM đúng hình dạng
-  // route thật trả về, rồi tiêm vào `app-<tool>.html` qua Playwright.
-  const fullPayload = cfg.buildFullPayload(profile, cfg.ten, store.payload);
+  // route thật trả về, rồi tiêm vào `app-<tool>.html` qua Playwright. `await`
+  // vì chan-dung-vo-chong/chan-dung-tien-kiep còn phải SINH ẢNH THẬT + upload
+  // ở bước này (route thật cũng làm y vậy) — tool chữ-thuần thì đồng bộ,
+  // `await` trên giá trị thường vẫn no-op.
+  const fullPayload = await cfg.buildFullPayload(profile, cfg.ten, store.payload, ls);
 
   // Nút "Xem bản mẫu" (SampleHint, `public/tools-shared/sample-hint.js`) —
   // trang tự override `SampleHint.open` để fetch file này rồi gọi ĐÚNG
