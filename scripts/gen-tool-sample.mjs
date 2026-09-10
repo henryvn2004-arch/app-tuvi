@@ -151,6 +151,10 @@ const TOOL_CONFIGS = {
     outJson: join(ROOT, 'public/samples/chu-trinh-cuoc-doi-dummy.json'),
     pdfTitle: 'Chu Trình Cuộc Đời — Bản mẫu',
     storagePath: 'mau-chu-trinh-cuoc-doi.pdf',
+    // Trang đã có cơ chế "Xem bản mẫu" native (auto-show, 2026-09-10) — cùng
+    // mẫu `laso` bên dưới: ghi ĐỦ 11 phần (kể cả 14-15, "free" nên KHÔNG có
+    // trong outJson/dummy) vào đây để nút demo trên trang thật đọc.
+    sampleJsonPath: join(ROOT, 'public/samples/chu-trinh-cuoc-doi-sample.json'),
     // PDF mẫu CHỤP ĐÚNG trang thật (không tự dựng HTML rời) — gọi lại đúng
     // các hàm trang tự dùng khi submit form (renderLuan) rồi rót văn AI qua
     // `_renderCachedLuanGiai` (đúng hàm trang dùng khi đọc lại cache đã trả

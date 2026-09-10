@@ -140,6 +140,11 @@
         </div>
       </div></div>
       <div id="shellRecent"></div>
+      <div class="samp-cta" id="sampCta" style="display:none">
+        <span class="sc-ic" data-icon="lightbulb"></span>
+        <span class="sc-txt"><b>Chưa muốn khai ngày sinh?</b><span>Bạn có thể xem một bản mẫu để trải nghiệm trước.</span></span>
+        <button type="button" id="btnSample" onclick="openSample(this)">Xem bản mẫu →</button>
+      </div>
       <div class="form-card" id="birthPanel">
         <div class="fc-head"><span class="fc-ic" data-icon="calendar"></span><h2>Nhập ngày sinh để xem vận hạn 12 tháng tới</h2></div>
         <p class="sub" id="fmSub">Nhập ngày giờ sinh. Hệ thống luận vận hạn theo từng tháng âm lịch — đại vận hiện tại, tiểu vận năm nay và luận riêng đủ 12 tháng.</p>
@@ -292,6 +297,117 @@ function _loadDummyVH(){
     .then(function(j){ DUMMY_VH=j||{}; return DUMMY_VH; })
     .catch(function(){ DUMMY_VH={}; return DUMMY_VH; });
 }
+
+// ── Bản mẫu TỰ MỞ (auto-show) — port từ app-luan-giai.html/app-chu-trinh-cuoc-doi.html
+// (2026-09-10). Tool này KHÔNG bán lẻ (mở cả bó), dummy (`DUMMY_VH`, đã tải qua
+// `_loadDummyVH()` ở trên) đã phủ ĐỦ cả 16 phần — dùng THẲNG làm nội dung "mở
+// khoá hết" của bản mẫu, không cần sinh thêm hay tạo file riêng. Khung 12
+// tháng (`_khung`) không tính được ở client — gọi lại đúng API `action=khung`
+// mà `doXem()` dùng (0 lượt LLM, 0đ, không cần đăng nhập), cho lá số mẫu cố
+// định `SAMPLE_BIRTH_VH` (khớp `SAMPLE_BIRTH` trong scripts/gen-tool-sample.mjs).
+// 🪤 Đặt SAU `TU_NGAY/TU_THANG/TU_NAM`/`_astrolabe`/`DUMMY_VH` — IIFE tự-mở ở
+// cuối khối này gọi `openSample` NGAY LÚC PARSE, đặt trước ba biến đó thì
+// `fetch(...)` xây dựng request với `tuNgay/tuThang/tuNam` toàn `undefined`
+// (khai báo `var` đã hoist nhưng GÁN GIÁ TRỊ thì chưa chạy tới).
+var SAMPLE_BIRTH_VH={ngay:15,thang:8,nam:1990,gio_hour:6,gio_idx:3,gioitinh:'nam'};
+var _sampleOpenVH=false;
+
+function closeSample(){
+  _sampleOpenVH=false;
+  var bar=document.getElementById('sampBar'); if(bar) bar.remove();
+  ['vhBody','vhScores','vhJump','miniChart','hookHost','cnsHost','vhMap'].forEach(function(id){
+    var el=document.getElementById(id); if(el) el.innerHTML='';
+  });
+  var vh=document.getElementById('vhPanel'); if(vh) vh.style.display='none';
+}
+
+// `auto=true`: tự mở lúc vào trang, hỏng thì ÂM THẦM hiện lại `#sampCta`
+// (không alert). `auto=false`: khách tự bấm, hỏng thì phải NÓI — cùng lý do
+// app-luan-giai.html.
+function openSample(btn,auto){
+  var reset=function(){ if(btn){ btn.disabled=false; btn.textContent='Xem bản mẫu →'; } };
+  if(btn){ btn.disabled=true; btn.textContent='Đang mở…'; }
+  Promise.all([
+    _loadDummyVH(),
+    fetch('/api/van-han-nam?action=khung',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({birth:{day:SAMPLE_BIRTH_VH.ngay,month:SAMPLE_BIRTH_VH.thang,year:SAMPLE_BIRTH_VH.nam,hourBranch:SAMPLE_BIRTH_VH.gio_idx,gender:SAMPLE_BIRTH_VH.gioitinh},tuNgay:TU_NGAY,tuThang:TU_THANG,tuNam:TU_NAM})})
+      .then(function(r){ return r.json(); })
+  ]).then(function(res){
+     // Bất đồng bộ (fetch khung) — khách có thể đã có vận hạn THẬT trước khi
+     // đáp xuống (đến qua ?auto=1, hoặc điền form nhanh tay). Không chốt lại
+     // thì bản mẫu đè lên kết quả thật của họ.
+     if(auto&&(_astrolabe||window.__tvmbSkipDemo)) return;
+     var dummy=res[0], kd=res[1];
+     if(!kd||!kd.khung) throw new Error((kd&&kd.error)||'Không dựng được khung mẫu.');
+     renderSample(dummy,kd,auto); reset();
+   })
+   .catch(function(e){
+     reset();
+     if(window.console) console.error('sample:',e);
+     if(auto){ var c=document.getElementById('sampCta'); if(c) c.style.display='flex'; return; }
+     alert('Chưa mở được bản mẫu. Bạn thử lại giúp, hoặc nhập ngày sinh để xem vận hạn thật.');
+   });
+}
+
+function renderSample(dummy,kd,auto){
+  var b=SAMPLE_BIRTH_VH;
+  var conv=convertDuongToAm(b.ngay,b.thang,b.nam,b.gio_hour);
+  conv.gioIdx=b.gio_idx;
+  var ls=anSaoLaSo({ngayAL:conv.amLich.day,thangAL:conv.amLich.month,namAL:conv.amLich.year,
+    canNam:conv.canNam,chiNam:conv.chiNam,gioIdx:b.gio_idx,gioitinh:b.gioitinh,namXem:TU_NAM});
+  ls._conv=conv; ls._hoTen='Người mẫu';
+  _astrolabe=ls; _hoTen='Người mẫu'; _ngay=b.ngay; _thang=b.thang; _nam=b.nam; _gioitinh=b.gioitinh;
+  _laSoText=formatLaSoV2(ls,conv); ls._laSoText=_laSoText;
+  _khung=kd.khung; _labels=kd.labels; _tongPhan=kd.tongPhan;
+
+  render(ls);
+  mountHook(ls);
+  document.getElementById('miniChart').innerHTML=renderGrid(ls,{name:'Người mẫu',gioitinh:b.gioitinh,dd:b.ngay,mm:b.thang,yyyy:b.nam,hh:b.gio_hour,gioChi:CHI[b.gio_idx],amLich:conv.amLich,amDuongNam:conv.amDuongNam});
+  if(window.mountIcons) window.mountIcons(document.getElementById('miniChart'));
+
+  // Rót lời AI (đủ 16 phần, dummy đã KHÔNG mờ nữa) qua ĐÚNG hàm trang thật
+  // dùng khi khách đọc lại cache đã trả tiền — gỡ badge/CTA + bỏ mờ
+  // `.tpw-real-lock`, một cửa duy nhất.
+  _renderCached(dummy||{});
+
+  var panel=document.getElementById('vhPanel');
+  var old=document.getElementById('sampBar'); if(old) old.remove();
+  var bar=document.createElement('div');
+  bar.className='samp-bar'; bar.id='sampBar';
+  bar.innerHTML='<div class="sb-txt">Đây là <b>BẢN MẪU</b> — lá số của <b>Người mẫu</b> ('+
+    b.ngay+'/'+b.thang+'/'+b.nam+'), không phải của bạn.</div>'+
+    '<button type="button" onclick="sampleToForm()">Xem vận hạn của tôi →</button>';
+  panel.insertBefore(bar,panel.firstChild);
+
+  panel.style.display='block';
+  document.getElementById('birthPanel').style.display='none';
+  var _sc=document.getElementById('sampCta'); if(_sc) _sc.style.display='none';
+  document.getElementById('btnEdit').style.display='none';
+  var _btnLg=document.getElementById('btnLuanGiai'); if(_btnLg) _btnLg.style.display='none';
+  _sampleOpenVH=true;
+  if(!auto&&window.AiLoadingSteps) AiLoadingSteps.scrollToResult('vhPanel');
+  if(window.Track) Track.event('preview_shown',{meta:{from:auto?'sample_auto':'sample_click'}});
+}
+
+function sampleToForm(){
+  closeSample();
+  showForm();
+  var f=document.getElementById('birthPanel');
+  var c=document.getElementById('sampCta'); if(c) c.style.display='flex';
+  if(f&&f.scrollIntoView) f.scrollIntoView({behavior:'smooth',block:'start'});
+  if(window.Track) Track.event('cta_click',{meta:{from:'sample_to_form'}});
+}
+
+// Chỉ mời/tự mở bản mẫu với khách NGUỘI — cùng 3 điều kiện với các tool anh
+// em (xem docs/nhat-ky/2026-09.md mục "Auto-show sample...").
+(function(){
+  try{
+    if(window.__tvmbSkipDemo) return;
+    if(window.Shell&&Shell.autoRun&&Shell.autoRun()) return;
+    if(window.Shell&&Shell.getRememberedBirth&&Shell.getRememberedBirth()) return;
+    openSample(null,true);
+  }catch(e){ if(window.console) console.error('sample gate:',e); }
+})();
 
 // Quay lại từ lượt nạp Lượng (xem `TuviPaywall._insufficient`/`resumeIfPending`)
 // sau khi đã hết Lượng ngay lúc mở khoá — trang này là MULTI-PAGE (điều hướng
