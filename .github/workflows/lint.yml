@@ -111,6 +111,14 @@ jobs:
       - name: Font thân bài/tiêu đề phải tự lưu trữ
         run: npm run check:font
 
+      # Chặn tái phát GA4/Clarity/Meta Pixel đổ phiên giả từ CI: `playwright.yml`
+      # nhắm thẳng vào prod mỗi push/PR và `smoke-prod.yml` đo prod mỗi 6h.
+      # `track.js` đã chặn `navigator.webdriver` từ lâu, nhưng `nav.js` bỏ sót
+      # GA4 tới tận 2026-09-06 — hai nguồn đếm hai tập khách khác nhau suốt thời
+      # gian đó, và GA4 landing page top biến thành đúng danh sách URL trong tests/.
+      - name: GA4/Clarity/Meta Pixel đều chặn CI (navigator.webdriver)
+        run: npm run check:webdriver
+
       # Cùng vùng, nhưng là VỆ SINH TỐC ĐỘ chứ không phải bản vá CLS: script bên
       # thứ ba không `defer` đứng trước lời dựng form thêm hẳn một chặng mạng vào
       # đường tới hạn. (#708 từng ship `defer` như một bản vá CLS — prod không

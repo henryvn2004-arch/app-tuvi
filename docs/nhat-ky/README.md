@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-244 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+245 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 **Bốn file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
 ```bash
@@ -11,7 +11,7 @@ sed -n '120,190p' docs/nhat-ky/2026-08.md    # đọc đúng đoạn, đừng ca
 
 | file | số mục | dung lượng |
 |---|---:|---:|
-| `2026-09.md` | 79 | 361,335 B |
+| `2026-09.md` | 80 | 363,592 B |
 | `2026-08.md` | 148 | 1,024,027 B |
 | `2026-07.md` | 12 | 154,531 B |
 | `track-cu.md` | 5 | 89,354 B |
@@ -269,3 +269,4 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 | 162 | 2026-09 | `2026-09.md` | 🕸️ P4 — La-Võng: từ 2 sao cố định Thìn/Tuất sang NHÃN của Đà La |
 | 163 | 2026-09 | `2026-09.md` | 🚀 Tứ Hóa Phi Tinh + 2 vá hiển thị mobile trên lá số |
 | 164 | 2026-09 | `2026-09.md` | 🔌 Tứ Hóa Phi Tinh — nối dữ kiện vào prompt luận giải |
+| 165 | 2026-09 | `2026-09.md` | 🛡️ Bộ dò `check:webdriver` — chặn tái phát GA4/Clarity/Meta Pixel đổ phiên giả từ CI |
