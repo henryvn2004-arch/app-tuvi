@@ -177,6 +177,7 @@
 <script src="/tuong-hop.js?v=1"></script>
 <script src="/tuong-hop-lam-an.js?v=1"></script>
 <script src="/tools-shared/hook-charts.js?v=2"></script>
+<script src="/tools-shared/fbcard-topic.js?v=1"></script>
 <script src="/poster.js?v=5"></script>
 <script src="/tools-shared/vn-timezone.js?v=1"></script>
 <script src="/tuvi-form.js?v=3"></script>
@@ -606,7 +607,7 @@ function renderLuanGiaiParas(text){
     if(m){
       flushPending();
       var cls=HOOK_TAG_CLASS[m[1]]||'fb-trungtinh';
-      out+='<div class="fb-card '+cls+'">“'+esc(m[2].trim())+'”</div>';
+      out+=window.FbCardTopic.cardHtml(cls,window.FbCardTopic.extractTopic(p.trim()),'“'+esc(m[2].trim())+'”');
       pendingLead=inline(m[3]).trim();
       return;
     }

@@ -52,6 +52,13 @@ const PHAI_KHOP = [
     '[TỐT|] **từ khoá rỗng** đuôi.',
     'model lỡ bỏ trống từ khoá — vẫn phải nuốt, đừng phun nhãn ra màn hình',
   ],
+  [
+    'TỐT',
+    'Danh tiếng kéo về',
+    '[TỐT|VẬN NGOẠI GIAO|su-nghiep] **Danh tiếng kéo về** đuôi.',
+    'dạng MỚI NHẤT — thêm mã chủ đề (PR #807, public/tools-shared/fbcard-topic.js) ' +
+      'ở lát cắt thứ 3, VẪN nằm trong nhóm non-capturing (?:…) — không đổi chỉ số nhóm bắt',
+  ],
 ];
 
 /** Mẫu KHÔNG được khớp — nhãn lạ thì để nguyên đoạn, đừng tô bừa. */

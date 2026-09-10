@@ -186,6 +186,7 @@ window.SHELL_INTRO={key:'dien-tuong'};</script>
 <script src="/auth.js?v=2"></script>
 <script src="/tuvi-paywall.js?v=33"></script>
 <script src="/tools-shared/hook-layer.js?v=2"></script>
+<script src="/tools-shared/fbcard-topic.js?v=1"></script>
   <script src="/nav.js?v=26" data-icons-only></script>
 <script src="/tools-shared/sample-hint.js?v=1"></script>
 <script src="/shell.js?v=90"></script>
@@ -630,7 +631,7 @@ function renderMarkdown(md) {
     // chung, vì nó tự xử lý cả nhãn LẪN in đậm của riêng câu hook.
     .replace(/^\[(TỐT|CẢNH BÁO|TRUNG TÍNH)(?:\|[^\]]{0,40})?\]\s*\*\*(.+?)\*\*(.*)$/gm,function(_,tag,hook,rest){
       var cls=HOOK_TAG_CLASS[tag]||'fb-trungtinh';
-      return '<div class="fb-card '+cls+'">"'+hook.trim()+'"</div>'+rest;
+      return window.FbCardTopic.cardHtml(cls,window.FbCardTopic.extractTopic(_),'"'+hook.trim()+'"')+rest;
     })
     .replace(/^## (.+)$/gm,'<h2>$1</h2>')
     .replace(/^### (.+)$/gm,'<h3>$1</h3>')

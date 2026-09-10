@@ -209,6 +209,7 @@ window.SHELL_INTRO={key:'van-han-nam'};</script>
 <script src="/auth.js?v=2"></script>
 <script src="/tuvi-paywall.js?v=33"></script>
 <script src="/tools-shared/hook-charts.js?v=2"></script>
+<script src="/tools-shared/fbcard-topic.js?v=1"></script>
 <script src="/poster.js?v=5"></script>
 <script src="/tools-shared/hook-facts.js?v=1"></script>
 <script src="/tools-shared/hook-layer.js?v=2"></script>
@@ -894,7 +895,7 @@ function renderMarkdown(text){
     if(m){
       flushPending();
       var cls=HOOK_TAG_CLASS[m[1]]||'fb-trungtinh';
-      out+='<div class="fb-card '+cls+'">“'+esc(m[2].trim())+'”</div>';
+      out+=window.FbCardTopic.cardHtml(cls,window.FbCardTopic.extractTopic(line.trim()),'“'+esc(m[2].trim())+'”');
       pendingLead=inline(m[3]).trim();
       return;
     }

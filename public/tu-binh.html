@@ -441,6 +441,7 @@ select.form-input { cursor: pointer; }
 <script src="/tools-shared/vn-timezone.js?v=1"></script>
 <script src="/tuvi-form.js?v=3"></script>
 <script src="/tools-shared/cung-ngay-sinh.js?v=2"></script>
+<script src="/tools-shared/fbcard-topic.js?v=1"></script>
 <script src="/tuvi-paywall.js?v=33"></script>
 <script src="/chatbot.js"></script>
 <script src="/nav.js?v=26"></script>
@@ -1476,7 +1477,7 @@ select.form-input { cursor: pointer; }
         if (m) {
           flushPending();
           const cls = HOOK_TAG_CLASS[m[1]] || 'fb-trungtinh';
-          out += `<div class="fb-card ${cls}">"${m[2].trim()}"</div>`;
+          out += window.FbCardTopic.cardHtml(cls, window.FbCardTopic.extractTopic(line), `"${m[2].trim()}"`);
           pendingLead = inline(m[3]).trim();
           continue;
         }

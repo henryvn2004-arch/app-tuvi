@@ -221,6 +221,7 @@ window.SHELL_INTRO={key:'chan-dung-vo-chong'};</script>
 <script src="/tools-shared/cung-ngay-sinh.js?v=2"></script>
 <script src="/tuvi-paywall.js?v=33"></script>
 <script src="/tools-shared/hook-charts.js?v=2"></script>
+<script src="/tools-shared/fbcard-topic.js?v=1"></script>
 <script src="/tools-shared/hook-facts.js?v=1"></script>
 <script src="/tools-shared/hook-layer.js?v=2"></script>
 <script src="/auth.js?v=2"></script>
@@ -614,7 +615,7 @@ function mdBoldParas(text) {
     if (m) {
       flushPending();
       var cls = HOOK_TAG_CLASS[m[1]] || 'fb-trungtinh';
-      out += '<div class="fb-card ' + cls + '">“' + esc(m[2].trim()) + '”</div>';
+      out += window.FbCardTopic.cardHtml(cls, window.FbCardTopic.extractTopic(p.trim()), '“' + esc(m[2].trim()) + '”');
       pendingLead = esc(m[3].trim()).replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
       return;
     }
