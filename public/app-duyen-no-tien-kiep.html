@@ -825,6 +825,70 @@ function renderStory(data) {
   document.getElementById('storyBlock').style.display = 'block';
 }
 
+// ── Bản mẫu TỰ MỞ (auto-show) — cùng cơ chế day-con/nguoi-khac/huong-nghiep-tre
+// (2026-09-10, xem docs/nhat-ky/2026-09.md). `SampleHint.open` (mặc định trong
+// tools-shared/sample-hint.js chỉ hiện alert placeholder) được ghi đè bằng dữ
+// liệu THẬT — sinh bằng scripts/gen-tool-sample.mjs, cùng payload PDF dùng
+// (`duyen-no-tien-kiep-full.json`).
+// `renderMeta`/`renderProse` là hai tên gọi CHUNG mà `renderRealPageAndUpload`
+// (script sinh PDF mẫu) dùng cho MỌI tool `kind:'json'` — trang này tự đặt tên
+// khác (`renderStory` + `setResultImage`) nên phải có bí danh ở đây; trang thật
+// (khách dùng tool) không gọi hai tên này ở đâu khác.
+window.renderMeta = function (data) { renderStory(data); };
+window.renderProse = function () {};
+(function () {
+  var SAMPLE_URL = '/samples/duyen-no-tien-kiep-full.json';
+  var _cache = null;
+  function _showSampleBar() {
+    var panel = document.getElementById('resPanel');
+    if (!panel || document.getElementById('sampBar')) return;
+    var bar = document.createElement('div');
+    bar.className = 'samp-bar'; bar.id = 'sampBar';
+    bar.innerHTML = '<div class="sb-txt">Đây là <b>BẢN MẪU</b> minh hoạ (lá số khác) — chưa phải kết quả của bạn.</div>' +
+      '<button type="button" id="sampBarClose">Nhập thông tin của tôi →</button>';
+    panel.insertBefore(bar, panel.firstChild);
+    document.getElementById('sampBarClose').onclick = function () {
+      var b = document.getElementById('sampBar'); if (b) b.remove();
+      showForm();
+      var cta = document.getElementById('sampCta'); if (cta) cta.style.display = 'flex';
+    };
+  }
+  window.SampleHint.open = function (btn) {
+    if (btn) { btn.disabled = true; btn.textContent = 'Đang mở…'; }
+    var p = _cache ? Promise.resolve(_cache) : fetch(SAMPLE_URL).then(function (r) {
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      return r.json();
+    }).then(function (j) { _cache = j; return j; });
+    p.then(function (data) {
+      renderStory(data);
+      if (data.imageUrl) setResultImage(data.imageUrl);
+      var loading = document.getElementById('loading'); if (loading) loading.style.display = 'none';
+      var card = document.getElementById('card'); if (card) card.style.display = 'block';
+      document.getElementById('birthPanel').style.display = 'none';
+      document.getElementById('resPanel').style.display = 'block';
+      var be = document.getElementById('btnEdit'); if (be) be.style.display = '';
+      var cta = document.getElementById('sampCta'); if (cta) cta.style.display = 'none';
+      _showSampleBar();
+      if (btn) { btn.disabled = false; btn.textContent = 'Xem bản mẫu →'; }
+    }).catch(function (e) {
+      if (btn) { btn.disabled = false; btn.textContent = 'Xem bản mẫu →'; }
+      if (window.console) console.error('sample:', e);
+      window.alert('Chưa mở được bản mẫu. Thử lại sau nhé.');
+    });
+  };
+  // Tự mở lúc vào trang — bỏ qua khi sắp chạy kết quả thật (?auto=1), khách
+  // quen đã có lá số nhớ sẵn, hoặc đã có kết quả thật trên màn hình
+  // (`_lastStory`, gán trong `_doGenerate()` — phòng khi hàm này được gọi lại
+  // sau khi trang đã có kết quả thật, dù thực tế không xảy ra ở luồng hiện tại).
+  try {
+    if (!(window.Shell && Shell.autoRun && Shell.autoRun()) &&
+        !(window.Shell && Shell.getRememberedBirth && Shell.getRememberedBirth()) &&
+        !_lastStory) {
+      window.SampleHint.open(null);
+    }
+  } catch (e) { if (window.console) console.error('sample auto-open:', e); }
+})();
+
 function publishShareable(imageUrl) {
   var d = _lastStory;
   if (!d) return;

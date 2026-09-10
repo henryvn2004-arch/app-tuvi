@@ -1,0 +1,105 @@
+{
+  "success": true,
+  "bond": {
+    "kind": "ban-huu",
+    "label": "Duyên tao ngộ",
+    "gist": "Hai người từng gặp nhau giữa đường đời, không ràng buộc gì lớn, nhưng lần gặp ấy để lại dấu.",
+    "signals": [
+      {
+        "label": "Địa chi cung Mệnh",
+        "detail": "Mệnh hai người không hợp không xung"
+      },
+      {
+        "label": "Ngũ hành nạp âm",
+        "detail": "Nạp âm Mộc khắc Thổ — Vũ Tố Liên kìm Đỗ Quang Đán"
+      },
+      {
+        "label": "Chính tinh cung Mệnh",
+        "detail": "Chính tinh tại Mệnh hai người không có tương quan đặc biệt"
+      }
+    ],
+    "a": 0,
+    "b": 1
+  },
+  "nhanVats": [
+    {
+      "ten": "Đỗ Quang Đán",
+      "danhXung": "Đại lý tự khanh đi sứ",
+      "gioiTinh": "nam"
+    },
+    {
+      "ten": "Vũ Tố Liên",
+      "danhXung": "Nữ đội trưởng nha dịch",
+      "gioiTinh": "nu"
+    }
+  ],
+  "capDuyen": [
+    {
+      "a": 0,
+      "b": 1,
+      "kind": "ban-huu",
+      "label": "Duyên tao ngộ",
+      "gist": "Hai người từng gặp nhau giữa đường đời, không ràng buộc gì lớn, nhưng lần gặp ấy để lại dấu.",
+      "signals": [
+        {
+          "label": "Địa chi cung Mệnh",
+          "detail": "Mệnh hai người không hợp không xung"
+        },
+        {
+          "label": "Ngũ hành nạp âm",
+          "detail": "Nạp âm Mộc khắc Thổ — Vũ Tố Liên kìm Đỗ Quang Đán"
+        },
+        {
+          "label": "Chính tinh cung Mệnh",
+          "detail": "Chính tinh tại Mệnh hai người không có tương quan đặc biệt"
+        }
+      ],
+      "truc": true
+    }
+  ],
+  "nhanVatA": {
+    "ten": "Đỗ Quang Đán",
+    "danhXung": "Đại lý tự khanh đi sứ",
+    "gioiTinh": "nam"
+  },
+  "nhanVatB": {
+    "ten": "Vũ Tố Liên",
+    "danhXung": "Nữ đội trưởng nha dịch",
+    "gioiTinh": "nu"
+  },
+  "era": {
+    "id": "viet-nam",
+    "label": "Việt Nam cổ",
+    "ageLabel": "thời quân chủ phương Nam"
+  },
+  "tuaDe": "Vệt Mực Qua Bến Nước",
+  "moTaMoiDuyen": "Đỗ Quang Đán là vị quan Đại lý tự quen việc hình luật và những chuyến đi sứ dài ngày, đầu óc sắc sảo nhưng đời trôi dạt theo từng dặm đường thiên lý. Vũ Tố Liên lại là nữ đội trưởng nha dịch can trường nơi cửa huyện, quen áp giải can phạm và gánh lấy bao tiếng bấc tiếng chì từ đám sai nha dưới quyền. Một lần tao ngộ tình cờ giữa chốn bến đò bão táp đã gắn kết hai phận người khác biệt, không sinh nợ sâu nặng nhưng để lại vết hằn khó phai.",
+  "acts": [
+    {
+      "index": 1,
+      "stage": "Gặp gỡ",
+      "title": "Gặp gỡ bên bến đò ngang",
+      "text": "Đầu thời Lê sơ, dưới triều vua Lê Thái Tổ, xứ Kinh Bắc oằn mình trong cảnh tái thiết sau binh lửa. Đỗ Quang Đán mang lệnh triều đình xuôi dòng sông Đáy chuẩn bị cho chuyến đi sứ phương bắc, ngựa dừng chân bên quán nước ven đê. Tiếng quát tháo dội lên từ mé sông khi toán sai nha áp giải tù binh gặp nạn trôi thuyền. Vũ Tố Liên tay siết chặt thừng gai, một mình ghì giữ đám phạm nhân đang nhốn nháo thừa cơ trốn chạy, trong khi thuộc hạ của nàng kẻ lùi bước, người buông lời oán thán. Thấy thế trận rối ren, Đỗ Quang Đán không rút gươm mà bước tới bên gốc đa, lạnh lùng chỉ ra kẽ hở trong đội hình vây bắt và bày mưu siết chặt vòng cung bến nước. Ánh mắt Vũ Tố Liên thoáng ngỡ ngàng khi nhận lấy mẩu mưu kế từ vị quan lạ mặt, ghìm gọn đám phạm vào cọc gỗ."
+    },
+    {
+      "index": 2,
+      "stage": "Ràng buộc",
+      "title": "Mưu sự giữa đình làng",
+      "text": "Vụ trộm kho lương huyện sở buộc hai người phải cùng ngồi lại nơi chái đình làng rợp bóng tre. Đỗ Quang Đán với con mắt xét đoán hình luật tinh tường đã chỉ ra những mối mâu thuẫn trong sổ sách, khuyên nàng cách lập bẫy kẻ gian thay vì dùng roi vọt truy cùng đuổi tận. Vũ Tố Liên dựa vào thế mưu ấy mà dẫn quân vây ráp, bắt gọn thủ phạm, lập công lớn trước nha môn. Nhưng nàng cũng nhận ra người đàn ông này quá thiên về tính toán, đôi lúc sự cẩn mật của chàng khiến nàng thấy nghẹt thở giữa những mớ dây cương phép tắc. Đổi lại, sự quyết liệt đến mức lấn lướt của Tố Liên từng khiến chàng sứ thần phải ngập ngừng lùi bước. Bên cơi trầu cau nhạt khói chiều, họ nhận ra mỗi người đều mang một gánh nặng quá lớn để có thể thực sự dựa hẳn vào nhau."
+    },
+    {
+      "index": 3,
+      "stage": "Bước ngoặt",
+      "title": "Rẽ lối nơi cửa ải",
+      "text": "Biến cố ập đến khi đoàn sứ bộ của Đỗ Quang Đán chuẩn bị tiến về ải Chi Lăng, còn Vũ Tố Liên nhận lệnh áp giải một đoàn tù phạm qua chính con đường hiểm trở ấy. Bão rừng ập xuống làm sạt lở đường núi, lương thảo hao hụt, một nhóm sai nha dưới quyền Tố Liên rắp tâm làm phản để cướp bóc quân nhu. Đỗ Quang Đán dùng tài biện giải và uy thế triều đình để trấn áp lòng người, cứu nàng khỏi mũi thương phản trắc trong gang tấc. Thế nhưng, sau cơn biến loạn, Đỗ Quang Đán nhìn thấy sự mệt mỏi cùng cực của chốn quan trường, tâm ý muốn buông bỏ tất cả để tìm vào chốn thiền môn lánh đời nhen nhóm. Vũ Tố Liên dù hàm ơn sâu sắc vẫn chọn ở lại với thanh đao và chức phận nha dịch gập ghềnh, không thể cùng chàng bước chung một con đường tịch lặng."
+    },
+    {
+      "index": 4,
+      "stage": "Dư âm",
+      "title": "Tiếng chuông chiều tan tác",
+      "text": "Mối duyên khép lại không một lời hẹn ước nơi cổng ngôi chùa làng vùng biên viễn. Trước giờ đoàn sứ thần vượt quan ải, Đỗ Quang Đán trao lại cho Vũ Tố Liên một mảnh trâm gỗ mộc như chút tạ từ của kẻ quen sống đời dời đổi trên lưng ngựa. Vũ Tố Liên nhận lấy, đứng lặng dưới chân cổng thành nhìn theo bóng áo quan viên khuất dần sau bụi mờ biên ải. Chàng tiếp tục những dặm trường đi sứ xa xôi rồi sau này có lúc dứt áo ẩn tu nơi cửa Phật trước khi làm lại sản nghiệp nơi đất khách, còn nàng trở về phủ huyện chìm nổi với phận sự sai nha, đối mặt bao thị phi người đời. Hai người không bao giờ tao ngộ thêm một lần nào nữa, nhưng mảnh trâm gỗ và mưu kế bến sông năm ấy vẫn là dấu vết sắc nét về một người từng bước qua đời họ."
+    }
+  ],
+  "ketLuan": "Dấu tích của lần tao ngộ xưa khiến hai người hôm nay vừa gặp đã thấy quen thuộc và dễ dàng thấu suốt cách nghĩ của nhau khi cùng bàn việc lớn. Tuy nhiên, sự tính toán cẩn mật của anh Đán đôi khi sẽ bị nghẹt lại trước nét quyết đoán có phần áp đặt của chị Liên, tạo nên những khoảng lặng khó lòng dung hòa.",
+  "imageUrl": "https://dciwkfdqhhddeymlisey.supabase.co/storage/v1/object/public/portraits/samples/duyen-no-tien-kiep-1789054763584.png"
+}

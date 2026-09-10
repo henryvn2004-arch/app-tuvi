@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-254 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+255 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 **Bốn file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
 ```bash
@@ -11,7 +11,7 @@ sed -n '120,190p' docs/nhat-ky/2026-08.md    # đọc đúng đoạn, đừng ca
 
 | file | số mục | dung lượng |
 |---|---:|---:|
-| `2026-09.md` | 89 | 363,592 B |
+| `2026-09.md` | 90 | 363,592 B |
 | `2026-08.md` | 148 | 1,024,027 B |
 | `2026-07.md` | 12 | 154,531 B |
 | `track-cu.md` | 5 | 89,354 B |
@@ -25,6 +25,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
+| 1 | 2026-09 | `2026-09.md` | ✅ Auto-show sample cho Duyên Nợ Tiền Kiếp — thêm TOOL_CONFIGS mới |
 | 1 | 2026-09 | `2026-09.md` | ✅ Auto-show sample mở rộng sang Chu Trình Cuộc Đời + Vận Hạn Năm |
 | 1 | 2026-09 | `2026-09.md` | 🔀 Footer "Lập Lá Số" trỏ nhầm `/luan-giai.html` — đổi sang `/app/luan-giai` |
 | 1 | 2026-09 | `2026-09.md` | 🐌 PDF mẫu 3 tool nhiều mục nặng 4,9-5,8 MB — Chromium nhúng lại tài nguyên MỖI trang |
