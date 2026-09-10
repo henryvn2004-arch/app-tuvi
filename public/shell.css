@@ -604,6 +604,15 @@ font-family:inherit}
   /* Đừng để một thẻ kết quả bị xẻ đôi qua hai trang giấy. */
   .sec, .card, .res-block, .cs-sec { page-break-inside: avoid; break-inside: avoid; }
 
+  /* Ảnh minh hoạ chủ đề (fb-card, `tools-shared/fb-card-topic.js`) — đẹp trên
+     màn hình, tốn nặng khi in. Chromium KHÔNG dùng chung một bản nhúng ảnh
+     cho nhiều trang PDF — mỗi lần `<img>` xuất hiện lại ở trang giấy mới là
+     một bản nhúng MỚI, dù cùng file nguồn. Tool nhiều mục (Luận Giải Lá Số,
+     Chu Trình Cuộc Đời, Vận Hạn Năm) có 13-16 thẻ ⇒ PDF mẫu từng nặng
+     4,9-5,8 MB; đo lại sau khi ẩn: giảm ~20%. Ảnh chỉ trang trí, không mang
+     dữ liệu — an toàn bỏ khi in. */
+  .fbc-img, .fbc-bg-img { display: none !important; }
+
   /* Trình duyệt mặc định BỎ hết background khi in (đỡ tốn mực) — mọi khối
      tô màu (thẻ trích dẫn .fb-card, box "cơ sở tính toán", badge điểm số…)
      ra bản in/PDF thành nền trắng trơn, chỉ còn chữ. 3 dòng dưới đây từng
