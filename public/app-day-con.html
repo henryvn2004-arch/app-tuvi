@@ -493,6 +493,36 @@ TuviForm.render('formHostSelf', { mode: 'compact', prefix: 'self', gioitinh: 'na
   host.innerHTML='<a href="'+url+'" target="_blank" rel="noopener" class="sample-link">↗ Xem mẫu (PDF, lá số khác)</a>';
 })();
 
+// Nút "Xem bản mẫu" (khối .samp-cta phía trên form) — override placeholder
+// mặc định của tools-shared/sample-hint.js bằng dữ liệu THẬT: cùng payload
+// PDF ở trên dùng (scripts/gen-tool-sample.mjs ghi ra public/samples/<tool>-
+// full.json), rót thẳng qua renderMeta/renderProse THẬT của trang này —
+// không mở tab mới như link PDF, xem ngay tại chỗ.
+(function(){
+  var SAMPLE_URL='/samples/day-con-full.json';
+  var _cache=null;
+  window.SampleHint.open=function(btn){
+    if(btn){ btn.disabled=true; btn.textContent='Đang mở…'; }
+    var p=_cache?Promise.resolve(_cache):fetch(SAMPLE_URL).then(function(r){
+      if(!r.ok) throw new Error('HTTP '+r.status);
+      return r.json();
+    }).then(function(j){ _cache=j; return j; });
+    p.then(function(data){
+      if(typeof window._openPanel==='function') window._openPanel();
+      renderMeta(data);
+      renderProse(data);
+      var loading=document.getElementById('loading'); if(loading) loading.style.display='none';
+      var card=document.getElementById('card'); if(card) card.style.display='block';
+      var be=document.getElementById('btnEdit'); if(be) be.style.display='';
+      if(btn){ btn.disabled=false; btn.textContent='Xem bản mẫu →'; }
+    }).catch(function(e){
+      if(btn){ btn.disabled=false; btn.textContent='Xem bản mẫu →'; }
+      if(window.console) console.error('sample:',e);
+      window.alert('Chưa mở được bản mẫu. Thử lại sau nhé.');
+    });
+  };
+})();
+
 // 🔑 Lá số shell đang nhớ là lá số CỦA NGƯỜI DÙNG → điền vào form 'self', KHÔNG
 // điền vào form chính (form chính là của CON). Gọi `Shell.prefillForm()` như các
 // tool anh em sẽ đổ lá số của chính họ vào ô "con" rồi người ta bấm luôn.

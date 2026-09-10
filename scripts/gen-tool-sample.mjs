@@ -792,6 +792,16 @@ async function runJsonTool(toolId, cfg, ls, store, rawCachePath) {
   // (tra bảng thuần, có 5 trục/8 chất/chart) với phần chữ LLM đúng hình dạng
   // route thật trả về, rồi tiêm vào `app-<tool>.html` qua Playwright.
   const fullPayload = cfg.buildFullPayload(profile, cfg.ten, store.payload);
+
+  // Nút "Xem bản mẫu" (SampleHint, `public/tools-shared/sample-hint.js`) —
+  // trang tự override `SampleHint.open` để fetch file này rồi gọi ĐÚNG
+  // renderMeta/renderProse thật (không qua PDF), giống hệt cách laso.html tự
+  // cài `openSample()`. Ghi CÙNG payload PDF dùng — một nguồn cho cả hai mặt.
+  const sampleFullJsonPath = join(ROOT, 'public/samples', `${toolId}-full.json`);
+  mkdirSync(dirname(sampleFullJsonPath), { recursive: true });
+  writeFileSync(sampleFullJsonPath, JSON.stringify(fullPayload, null, 2));
+  console.log(`✓ Ghi ${sampleFullJsonPath}`);
+
   await renderRealPageAndUpload(toolId, cfg, fullPayload);
 }
 
@@ -910,6 +920,12 @@ async function renderRealPageAndUpload(toolId, cfg, fullPayload) {
     if (typeof window._openPanel === 'function') window._openPanel();
     window.renderMeta(data);
     window.renderProse(data);
+    // Tool sinh ẢNH (chan-dung-*): `renderProse` của một vài trang đã tự gọi
+    // `setResultImage` bên trong nó (gọi lại ở đây vô hại — idempotent); trang
+    // nào tách riêng (2 pha story/image) thì đây là chỗ DUY NHẤT gọi.
+    if (data.imageUrl && typeof window.setResultImage === 'function') {
+      window.setResultImage(data.imageUrl);
+    }
     var loading = document.getElementById('loading');
     if (loading) loading.style.display = 'none';
     var card = document.getElementById('card');
