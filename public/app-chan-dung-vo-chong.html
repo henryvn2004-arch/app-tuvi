@@ -9,7 +9,7 @@
 <link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/fonts/noto-serif.css?v=1">
-<link rel="stylesheet" href="/shell.css?v=41">
+<link rel="stylesheet" href="/shell.css?v=42">
 <style>
 /* Giữ chỗ cho form khai sinh. `TuviForm.render` chạy ngay trong lúc phân tích
    HTML, nhưng chỉ SAU khi `tuvi-form.js` nạp xong — mà đứng trước nó là cả một dãy
@@ -277,6 +277,57 @@ function retryResultImage() {
 // sinh lịch sử với standalone). Field khớp ĐÚNG bản standalone tools/chan-dung-vo-chong.html
 // (mode:'full'): Họ và tên + Giới tính + Năm xem vận + ngày giờ sinh.
 TuviForm.render('tuviFormHost', {mode:'compact', gioitinh:'nam', showNamXem:true});
+
+// Nút "Xem bản mẫu" (khối .samp-cta phía trên form) — override placeholder
+// mặc định của tools-shared/sample-hint.js bằng dữ liệu THẬT: ảnh + luận giải
+// sinh sẵn bằng scripts/gen-tool-sample.mjs (CHỤP ĐÚNG trang thật, có sinh
+// ảnh thật qua generatePortraitImage — không phải mô phỏng), rót qua
+// renderMeta/renderProse thật của chính trang này.
+(function(){
+  var SAMPLE_URL='/samples/chan-dung-vo-chong-full.json';
+  var _cache=null;
+  function _showSampleBar(){
+    var panel=document.getElementById('resPanel');
+    if(!panel||document.getElementById('sampBar')) return;
+    var bar=document.createElement('div');
+    bar.className='samp-bar'; bar.id='sampBar';
+    bar.innerHTML='<div class="sb-txt">Đây là <b>BẢN MẪU</b> minh hoạ (lá số khác) — chưa phải kết quả của bạn.</div>'+
+      '<button type="button" id="sampBarClose">Nhập lá số của tôi →</button>';
+    panel.insertBefore(bar,panel.firstChild);
+    document.getElementById('sampBarClose').onclick=function(){
+      var b=document.getElementById('sampBar'); if(b) b.remove();
+      if(typeof window._closePanel==='function') window._closePanel();
+      var cta=document.getElementById('sampCta'); if(cta) cta.style.display='flex';
+    };
+  }
+  window.SampleHint.open=function(btn){
+    if(btn){ btn.disabled=true; btn.textContent='Đang mở…'; }
+    var p=_cache?Promise.resolve(_cache):fetch(SAMPLE_URL).then(function(r){
+      if(!r.ok) throw new Error('HTTP '+r.status);
+      return r.json();
+    }).then(function(j){ _cache=j; return j; });
+    p.then(function(data){
+      if(typeof window._openPanel==='function') window._openPanel();
+      renderMeta(data);
+      renderProse(data);
+      document.getElementById('loading').style.display='none';
+      var be=document.getElementById('btnEdit'); if(be) be.style.display='';
+      var cta=document.getElementById('sampCta'); if(cta) cta.style.display='none';
+      _showSampleBar();
+      if(btn){ btn.disabled=false; btn.textContent='Xem bản mẫu →'; }
+    }).catch(function(e){
+      if(btn){ btn.disabled=false; btn.textContent='Xem bản mẫu →'; }
+      if(window.console) console.error('sample:',e);
+      window.alert('Chưa mở được bản mẫu. Thử lại sau nhé.');
+    });
+  };
+  try {
+    if (!(window.Shell && Shell.autoRun && Shell.autoRun()) &&
+        !(window.Shell && Shell.getRememberedBirth && Shell.getRememberedBirth())) {
+      window.SampleHint.open(null);
+    }
+  } catch (e) { if (window.console) console.error('sample auto-open:', e); }
+})();
 
 // Ghi "(~X đ)" cạnh số Lượng trong hộp chi phí + nút CTA — cùng mẫu
 // `_fillVndSlots` của app-luan-giai.html. `ToolPrices.vndLabel` tự trả ''

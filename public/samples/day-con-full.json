@@ -1,0 +1,510 @@
+{
+  "success": true,
+  "ten": "Bé An",
+  "moiLo": {
+    "id": "hoc-hanh",
+    "label": "Học hành sa sút, ngồi vào bàn không nổi",
+    "can": "Cách ra bài và cách bày bàn học hợp với kiểu tiếp thu của đứa trẻ này, thay vì ép thêm giờ."
+  },
+  "gioiTinh": "nu",
+  "tuoi": 11,
+  "namSinh": 2016,
+  "kieu": {
+    "id": "lanh-dao",
+    "ten": "Lãnh đạo",
+    "tuTuong": "Thiếu âm (少陰) — dương ngoài, âm trong",
+    "motCau": "Cầm trịch, sắp người vào đúng chỗ, dựng thứ chạy được lâu",
+    "dongLuc": "Muốn là người nói ra thì người khác tin — có công tín, có chỗ đứng được thừa nhận, không phải hô hào mới có người nghe."
+  },
+  "kieuPhu": null,
+  "lai": false,
+  "toaDo": {
+    "x": 0.552,
+    "y": -0.178
+  },
+  "hoc": {
+    "kieu": "lanh-dao",
+    "tiepThu": "Học theo hệ thống: cần biết cái này nằm ở đâu trong bức tranh lớn thì mới chịu học. Nhảy cóc là nó mất hứng.",
+    "giaoViec": "Cho thời khoá biểu rõ và giữ đúng nó. Giao trọn một phần việc kèm quyền quyết trong phần đó — nó làm rất nghiêm túc phần đã được giao hẳn.",
+    "dongVien": "Ghi nhận trước mặt người khác, và giao thêm trách nhiệm. Với đứa này, được tin tưởng là phần thưởng lớn hơn quà.",
+    "kyLuatHong": "Đổi luật giữa chừng, hoặc phạt kiểu tuỳ hứng. Nó chịu được phạt nặng nhưng không chịu được bất nhất — mất lòng tin là mất luôn nhiều năm.",
+    "hieuNham": "Bị cho là già trước tuổi, hoặc bị nói là \"sĩ diện\". Thật ra nó đang rất sợ mất chỗ đứng trong mắt người nó trọng.",
+    "canHoc": "Được phép làm sai. Nếu cả nhà chỉ khen lúc nó đúng, nó sẽ tránh mọi việc chưa chắc thắng — cái trần đó tự nó đặt cho mình rất sớm.",
+    "dauHieu": [
+      "Thích sắp xếp đồ đạc, hay lập danh sách",
+      "Nhận việc rồi làm tới nơi, ít bỏ dở",
+      "Rất để ý ai được khen, ai bị mắng",
+      "Ngại thử thứ mình chưa chắc làm được"
+    ]
+  },
+  "than": {
+    "cung": "Phúc Đức"
+  },
+  "matDoc": [
+    {
+      "cung": "Mệnh",
+      "nhan": "Cốt cách",
+      "y": "Con người gốc của đứa trẻ — phần không đổi dù đổi trường, đổi bạn",
+      "sao": [
+        "Tử Vi (Bình)",
+        "Tham Lang (Hãm)"
+      ],
+      "muon": true,
+      "cachCuc": [
+        "Khôi/Việt thủ Mệnh: thường trưởng tử, diện mạo thanh tú, thông minh, cao thượng",
+        "[Tử Vi] Cung Mệnh có Tử tọa thủ, cần phải Khoa, Quyền, Lộc hội hợp mới sáng sủa tốt đẹp.",
+        "[Tử Vi] Cung Mệnh có Tử tọa thủ, gặp Quyền, Lộc hội hợp và bị Kình, Đà xâm phạm, cũng vẫn sáng sủa tốt đẹp."
+      ],
+      "diem": 6.7
+    },
+    {
+      "cung": "Phúc Đức",
+      "nhan": "Nền tâm tính",
+      "y": "Cái làm con thấy yên hay thấy bất an; nó vui theo kiểu nào",
+      "sao": [
+        "Vũ Khúc (Hãm)",
+        "Phá Quân (Hãm)"
+      ],
+      "muon": false,
+      "cachCuc": [],
+      "diem": 3
+    },
+    {
+      "cung": "Phụ Mẫu",
+      "nhan": "Con nhìn cha mẹ",
+      "y": "Đứa trẻ tiếp nhận người lớn trong nhà thế nào — mặt hiếm khi ai nói cho cha mẹ biết",
+      "sao": [
+        "Thiên Đồng (Hãm) [Hóa Lộc]"
+      ],
+      "muon": false,
+      "cachCuc": [],
+      "diem": 2.7
+    },
+    {
+      "cung": "Thiên Di",
+      "nhan": "Ra khỏi nhà",
+      "y": "Cách con cư xử ở trường, giữa bạn bè, chỗ lạ",
+      "sao": [
+        "Tử Vi (Bình)",
+        "Tham Lang (Hãm)"
+      ],
+      "muon": false,
+      "cachCuc": [
+        "Tử Tham tại Thiên Di: phiền lòng, tiểu nhân quấy rối, may ít rủi nhiều",
+        "[Tử Vi, Tham Lang] Rời khỏi nhà hay gặp những sự phiền lòng, may ít rủi nhiều, thường có kẻ tiểu nhân theo dõi quấy rối."
+      ],
+      "diem": 3.6
+    },
+    {
+      "cung": "Quan Lộc",
+      "nhan": "Đường học",
+      "y": "Cung học nghiệp — cách con vào việc và chịu được kỷ luật tới đâu",
+      "sao": [
+        "Thiên Phủ (Bình)"
+      ],
+      "muon": false,
+      "cachCuc": [],
+      "diem": 5.9
+    }
+  ],
+  "changHoc": [
+    {
+      "tuoiStart": 6,
+      "tuoiEnd": 15,
+      "namStart": 2021,
+      "namEnd": 2030,
+      "cung": "Mệnh",
+      "sao": [
+        "Tử Vi (Bình)",
+        "Tham Lang (Hãm)"
+      ],
+      "diem": 7.9,
+      "dangChay": true,
+      "nhan": "Quãng chuyển cấp — bắt đầu tự lập"
+    },
+    {
+      "tuoiStart": 16,
+      "tuoiEnd": 25,
+      "namStart": 2031,
+      "namEnd": 2040,
+      "cung": "Huynh Đệ",
+      "sao": [
+        "Thiên Cơ (Hãm) [Hóa Quyền]",
+        "Thái Âm (Hãm)"
+      ],
+      "diem": 4.9,
+      "dangChay": false,
+      "nhan": "Quãng dậy thì — tách khỏi cha mẹ"
+    }
+  ],
+  "vanNam": {
+    "nam": 2026,
+    "khung": {
+      "tuoiStart": 6,
+      "tuoiEnd": 15,
+      "diem": 7.9
+    },
+    "tieuHanCung": "Điền Trạch",
+    "luuNienCung": "Quan Lộc",
+    "catSat": {
+      "cat": 3,
+      "sat": 0,
+      "canCan": "cát nhiều hơn sát"
+    }
+  },
+  "voiChaMeCoSo": null,
+  "namXem": 2026,
+  "truc": [
+    {
+      "id": "huong",
+      "ten": "Hướng năng lượng",
+      "cauHoi": "Con nạp lại sức ở giữa đám đông hay ở chỗ yên?",
+      "diem": 5.7,
+      "nhanThap": "Hướng vào trong",
+      "nhanCao": "Hướng ra ngoài",
+      "nghieng": null,
+      "muc": "can",
+      "cuc": null,
+      "canND": {
+        "bieuHien": "Chơi với bạn được, ở một mình cũng được — tuỳ hôm. Không phải đứa trẻ \"chưa rõ tính\": con dùng được cả hai chế độ.",
+        "dayThe": "Đừng chốt con là hướng nội hay hướng ngoại rồi xếp lịch theo cái nhãn đó. Cứ để xen kẽ một buổi đông người và một buổi yên, rồi nhìn xem sau buổi nào con dễ chịu hơn."
+      },
+      "nguon": "Chính tinh cung Mệnh + cung Thiên Di (cung nói về con khi ra khỏi nhà)"
+    },
+    {
+      "id": "nhip",
+      "ten": "Nhịp phản ứng",
+      "cauHoi": "Con vào việc bằng cách bật lên hay bằng cách ngấm dần?",
+      "diem": 6,
+      "nhanThap": "Chậm mà chắc",
+      "nhanCao": "Nhanh và bung",
+      "nghieng": "cao",
+      "muc": "nhe",
+      "cuc": {
+        "nhan": "Nhanh và bung",
+        "bieuHien": "Nghe xong là làm ngay, hứng lên thì làm rất hăng, hết hứng thì bỏ giữa chừng. Cảm xúc lên xuống rõ.",
+        "dayThe": "Chia việc thành khúc ngắn có mốc kết thúc thấy được. Chốt lúc con đang hứng, đừng chốt lúc đã nguội.",
+        "docNham": "Bị cho là cả thèm chóng chán. Đúng là con nguội nhanh — nhưng đó là vấn đề ĐỘ DÀI của việc, không phải vấn đề ý chí."
+      },
+      "canND": null,
+      "nguon": "Chính tinh cung Mệnh + nhóm sao nhanh/chậm (Hoả · Linh · Kình ↔ Đà · Đồng · Lương) + cung Phúc Đức"
+    },
+    {
+      "id": "nep",
+      "ten": "Nếp và kỷ luật",
+      "cauHoi": "Con chạy tốt hơn trong khuôn có sẵn hay trong khoảng trống tự bày?",
+      "diem": 7.8,
+      "nhanThap": "Tự bày, tuỳ hứng",
+      "nhanCao": "Ngăn nắp, theo nếp",
+      "nghieng": "cao",
+      "muc": "manh",
+      "cuc": {
+        "nhan": "Ngăn nắp, theo nếp",
+        "bieuHien": "Thích danh sách, thích biết trước hôm nay làm gì, khó chịu khi lịch đổi đột ngột. Nhận việc thì làm tới nơi.",
+        "dayThe": "Cho thời khoá biểu rõ và GIỮ ĐÚNG nó. Đổi luật giữa chừng làm hỏng lòng tin của con nhanh hơn là phạt nặng.",
+        "docNham": "Bị cho là cứng nhắc, khó tính. Cái con cần là biết trước — có cái đó thì con linh hoạt hơn nhiều so với người ngoài đoán."
+      },
+      "canND": null,
+      "nguon": "Cung Quan Lộc (cung học nghiệp) — điểm bền vững & căn cơ, cộng nhóm sao chuộng khuôn ↔ nhóm sao phá khuôn"
+    },
+    {
+      "id": "hoa",
+      "ten": "Cách ở với nhóm",
+      "cauHoi": "Trong nhóm bạn, con thường nhường hay con thường giữ ý mình?",
+      "diem": 5.9,
+      "nhanThap": "Giữ ý mình",
+      "nhanCao": "Thuận theo nhóm",
+      "nghieng": "cao",
+      "muc": "nhe",
+      "cuc": {
+        "nhan": "Thuận theo nhóm",
+        "bieuHien": "Dễ chơi với ai cũng được, nhường phần cho bạn, ngại làm mất lòng. Việc nhóm thì nhận phần nặng mà không kể.",
+        "dayThe": "Hỏi riêng \"con thấy thế nào\" và chờ đủ lâu để con trả lời thật. Con nói \"sao cũng được\" nhiều hơn con nghĩ thế.",
+        "docNham": "Bị cho là ngoan, rồi thôi không hỏi nữa. Đó là chỗ nguy: con nuốt vào chứ không phải con không có ý kiến."
+      },
+      "canND": null,
+      "nguon": "Cung Huynh Đệ + cung Nô Bộc (hai cung nói về người ngang hàng và bạn bè) + chính tinh cung Mệnh"
+    },
+    {
+      "id": "nhay",
+      "ten": "Độ nhạy cảm xúc",
+      "cauHoi": "Một câu nói nặng ở lại trong con bao lâu?",
+      "diem": 4.8,
+      "nhanThap": "Lì đòn",
+      "nhanCao": "Nhạy cảm sâu",
+      "nghieng": null,
+      "muc": "can",
+      "cuc": null,
+      "canND": {
+        "bieuHien": "Chuyện thường thì bỏ qua nhanh, nhưng có vài chuyện chạm đúng chỗ là nhớ rất lâu. Ngưỡng của con không đều.",
+        "dayThe": "Cái đáng làm là tìm ra vài chỗ chạm đó (thường là bị so sánh, bị oan, hoặc bị cười trước mặt bạn) rồi tránh đúng mấy chỗ ấy. Không cần giữ ý toàn thời gian."
+      },
+      "nguon": "Cung Phúc Đức (nền tâm tính) + nhóm sao nhạy/lì. ⚠️ Đo khí chất, KHÔNG đo sức khoẻ tâm thần."
+    }
+  ],
+  "khieu": [
+    {
+      "id": "hieu-nguoi",
+      "ten": "Hiểu người & dẫn nhóm",
+      "motCau": "Đọc được người khác đang thấy gì, và biết cách làm nhóm chạy.",
+      "diem": 7.3,
+      "noiBat": true,
+      "dauHieu": [
+        "Biết ngay ai trong nhà đang giận, dù không ai nói",
+        "Bạn hay tìm đến kể chuyện, nhờ phân xử",
+        "Trong nhóm chơi thường là người chia vai",
+        "Đổi cách nói tuỳ người đang nghe"
+      ],
+      "chuY": "Con dễ thành người đứng ra gánh phần dàn xếp cho cả nhóm, kể cả khi chưa đủ tuổi gánh. Dạy con quyền nói \"cái này không phải việc của con\".",
+      "oLop": "Hỏi cô cho con làm việc nhóm thật (có phân vai) không — với chất này, học nhóm không phải phần thưởng, nó là cách học.",
+      "saoDay": [
+        "Tử Vi",
+        "Đào Hoa",
+        "Tham Lang"
+      ]
+    },
+    {
+      "id": "am-nhac",
+      "ten": "Âm nhạc & nhịp điệu",
+      "motCau": "Bắt nhịp và bắt âm nhanh — nghe một lần là thuộc giai điệu.",
+      "diem": 6.7,
+      "noiBat": true,
+      "dauHieu": [
+        "Hát theo đúng nhịp, gõ nhịp khi nghe nhạc",
+        "Nghe ra ai hát sai tông",
+        "Thuộc bài nhanh khi bài có vần, có nhịp",
+        "Nhạy với tiếng động, chỗ ồn quá là khó chịu"
+      ],
+      "chuY": "Đừng vội quy ra \"cho học piano\". Nhịp điệu còn dùng để học ngoại ngữ và học thuộc — thử vài ngả rồi hẵng chọn nhạc cụ.",
+      "oLop": "Hỏi trường có hoạt động nhạc thật (hát tập thể, gõ nhịp, nhạc cụ) hay chỉ có tiết nhạc trên giấy.",
+      "saoDay": [
+        "Đào Hoa",
+        "Tham Lang",
+        "Văn Khúc"
+      ]
+    },
+    {
+      "id": "ngon-ngu",
+      "ten": "Ngôn ngữ & kể chuyện",
+      "motCau": "Vào việc bằng chữ và bằng lời — nghe, đọc, kể lại, tranh luận.",
+      "diem": 5.7,
+      "noiBat": false,
+      "dauHieu": [
+        "Kể chuyện có đầu có đuôi, biết giữ chỗ hồi hộp",
+        "Nhớ lời thoại, nhớ câu hát, nhại giọng người khác",
+        "Hỏi nghĩa của từ lạ, thích chơi chữ",
+        "Học bài nhanh hơn hẳn khi được giảng lại cho người khác nghe"
+      ],
+      "chuY": "Nói giỏi rất dễ bị nhầm là hiểu sâu. Thỉnh thoảng bắt con LÀM thay vì kể, để khoảng cách giữa nói và làm không rộng dần.",
+      "oLop": "Hỏi cô có cho con thuyết trình / đọc to / đóng vai không — lớp nào chỉ chép bài thì chất này của con nằm im cả năm.",
+      "saoDay": [
+        "Văn Khúc",
+        "Phong Cáo",
+        "Thai Phụ"
+      ]
+    },
+    {
+      "id": "van-dong",
+      "ten": "Vận động & khéo tay",
+      "motCau": "Học bằng cơ thể — phải chạm vào, làm thử, làm hỏng rồi mới nhớ.",
+      "diem": 4.3,
+      "noiBat": false,
+      "dauHieu": [
+        "Ngồi yên lâu là ngọ nguậy, nhưng chạy nhảy thì bền",
+        "Tay khéo: tháo lắp, gấp, nặn, buộc",
+        "Bắt chước động tác nhanh, học được bằng cách nhìn rồi làm theo",
+        "Nhớ lâu những việc đã tự tay làm"
+      ],
+      "chuY": "Rất hay bị đọc nhầm thành tăng động rồi bị phạt ngồi yên. Cắt vận động không làm con tập trung hơn — nó làm ngược lại.",
+      "oLop": "Hỏi lớp có đủ giờ ra chơi và giờ thể chất thật không, và con có được đứng lên di chuyển giữa tiết không.",
+      "saoDay": [
+        "Phá Quân",
+        "Tham Lang",
+        "Vũ Khúc"
+      ]
+    },
+    {
+      "id": "suy-luan",
+      "ten": "Suy luận & con số",
+      "motCau": "Vào việc bằng cách tìm quy luật — thích biết vì sao chứ không chịu học vẹt.",
+      "diem": 3.9,
+      "noiBat": false,
+      "dauHieu": [
+        "Hỏi \"tại sao lại thế\" trước khi chịu làm theo",
+        "Thích xếp, phân loại, so sánh, tìm quy luật",
+        "Chơi được các trò cần tính nước đi",
+        "Bực khi người lớn trả lời qua loa cho xong"
+      ],
+      "chuY": "Dễ bị dồn hết vào luyện đề Toán. Chất này là ham tìm quy luật, không phải điểm số môn Toán — ép thi cử sớm là cách nhanh nhất giết nó.",
+      "oLop": "Hỏi cô có cho con làm bài mở (nhiều cách giải, không có sẵn đáp án) không, hay chỉ có bài mẫu.",
+      "saoDay": [
+        "Thiên Phủ",
+        "Vũ Khúc",
+        "Thiên Hình"
+      ]
+    },
+    {
+      "id": "hieu-minh",
+      "ten": "Hiểu mình & tự học",
+      "motCau": "Quay vào bên trong — biết mình đang nghĩ gì, tự đặt câu hỏi lớn sớm.",
+      "diem": 3.8,
+      "noiBat": false,
+      "dauHieu": [
+        "Hỏi những câu rất lớn so với tuổi (chết là gì, vì sao có mình)",
+        "Cần thời gian một mình, và dùng nó thật chứ không lãng phí",
+        "Tự nhận ra mình sai mà không cần ai nói",
+        "Có một thế giới riêng, không phải chuyện gì cũng kể"
+      ],
+      "chuY": "Đừng chữa cái tĩnh lặng này thành \"phải hoà đồng hơn\". Việc cần làm là cho con một chỗ và một giờ yên, rồi hỏi con những câu đáng nghĩ.",
+      "oLop": "Hỏi cô có cho con làm dự án cá nhân dài hơi không, và con có bị ép phát biểu trước lớp không.",
+      "saoDay": [
+        "Thiên Không",
+        "Cô Thần"
+      ]
+    },
+    {
+      "id": "thien-nhien",
+      "ten": "Thiên nhiên & chăm sóc",
+      "motCau": "Nhạy với cây cối, con vật, và với người đang cần được chăm.",
+      "diem": 2.6,
+      "noiBat": false,
+      "dauHieu": [
+        "Xà vào chó mèo, cây cối; nhớ tên từng con vật",
+        "Chăm được một thứ sống trong thời gian dài",
+        "Thích phân loại lá, đá, côn trùng",
+        "Ai trong nhà ốm là con quanh quẩn bên cạnh"
+      ],
+      "chuY": "Chất này bị coi là không liên quan tới học hành nên hay bị bỏ. Nó là nền của y sinh, nông lâm, môi trường — và là cách con học trách nhiệm sớm nhất.",
+      "oLop": "Hỏi trường có góc cây, vật nuôi, hoạt động ngoài trời thật không.",
+      "saoDay": []
+    },
+    {
+      "id": "hinh-khoi",
+      "ten": "Hình khối & thẩm mỹ",
+      "motCau": "Nghĩ bằng hình — nhớ chỗ, nhớ dáng, nhớ màu; đẹp hay xấu là con thấy ngay.",
+      "diem": 2.1,
+      "noiBat": false,
+      "dauHieu": [
+        "Vẽ, tô, xếp hình lâu không chán",
+        "Nhớ đường đi, nhớ đồ để chỗ nào",
+        "Để ý màu áo, cách bày đồ, chỗ nào lệch là thấy",
+        "Hiểu bài nhanh hơn khi có tranh, sơ đồ, mô hình"
+      ],
+      "chuY": "Đây là chất hay bị coi là \"chỉ để chơi\". Nó chính là nền của thiết kế, kiến trúc, kỹ thuật và cả hình học — đừng cắt giờ vẽ để bù giờ học.",
+      "oLop": "Hỏi cô cho con dùng sơ đồ / bản đồ tư duy khi ôn không. Ghi chép toàn chữ là con phải dịch hai lần.",
+      "saoDay": [
+        "Vũ Khúc",
+        "Phá Quân"
+      ]
+    }
+  ],
+  "khieuNoiBat": [
+    "hieu-nguoi",
+    "am-nhac"
+  ],
+  "coNoiBat": true,
+  "chatThapNhat": {
+    "id": "hinh-khoi",
+    "ten": "Hình khối & thẩm mỹ",
+    "motCau": "Nghĩ bằng hình — nhớ chỗ, nhớ dáng, nhớ màu; đẹp hay xấu là con thấy ngay.",
+    "diem": 2.1,
+    "noiBat": false,
+    "dauHieu": [
+      "Vẽ, tô, xếp hình lâu không chán",
+      "Nhớ đường đi, nhớ đồ để chỗ nào",
+      "Để ý màu áo, cách bày đồ, chỗ nào lệch là thấy",
+      "Hiểu bài nhanh hơn khi có tranh, sơ đồ, mô hình"
+    ],
+    "chuY": "Đây là chất hay bị coi là \"chỉ để chơi\". Nó chính là nền của thiết kế, kiến trúc, kỹ thuật và cả hình học — đừng cắt giờ vẽ để bù giờ học.",
+    "oLop": "Hỏi cô cho con dùng sơ đồ / bản đồ tư duy khi ôn không. Ghi chép toàn chữ là con phải dịch hai lần.",
+    "saoDay": [
+      "Vũ Khúc",
+      "Phá Quân"
+    ]
+  },
+  "goiYHoatDong": {
+    "band": "tieu-hoc",
+    "bandLabel": "Tiểu học (khoảng 6–11 tuổi)",
+    "theoChat": [
+      {
+        "id": "hieu-nguoi",
+        "ten": "Hiểu người & dẫn nhóm",
+        "diem": 7.3,
+        "clb": [
+          "Câu lạc bộ kỹ năng sống, hướng đạo sinh",
+          "Môn thể thao ĐỒNG ĐỘI",
+          "Việc có vai trong lớp: tổ trưởng, sao đỏ, luân phiên"
+        ],
+        "nha": [
+          "Cho con tự tổ chức một buổi mời bạn tới nhà chơi",
+          "Khi anh em cãi nhau, giao con làm người phân xử",
+          "Xem phim rồi đoán nhân vật đang nghĩ gì"
+        ],
+        "oLop": "Hỏi cô cho con làm việc nhóm thật (có phân vai) không — với chất này, học nhóm không phải phần thưởng, nó là cách học.",
+        "chuY": "Con dễ thành người đứng ra gánh phần dàn xếp cho cả nhóm, kể cả khi chưa đủ tuổi gánh. Dạy con quyền nói \"cái này không phải việc của con\"."
+      },
+      {
+        "id": "am-nhac",
+        "ten": "Âm nhạc & nhịp điệu",
+        "diem": 6.7,
+        "clb": [
+          "Lớp nhạc cụ: piano, guitar, organ, trống, sáo",
+          "Hợp xướng, đội văn nghệ",
+          "Lớp thanh nhạc cơ bản"
+        ],
+        "nha": [
+          "Nghe một bản nhạc rồi đoán có những nhạc cụ nào",
+          "Đặt bài học khó thành bài hát để thuộc",
+          "Đặt lời mới cho một giai điệu quen"
+        ],
+        "oLop": "Hỏi trường có hoạt động nhạc thật (hát tập thể, gõ nhịp, nhạc cụ) hay chỉ có tiết nhạc trên giấy.",
+        "chuY": "Đừng vội quy ra \"cho học piano\". Nhịp điệu còn dùng để học ngoại ngữ và học thuộc — thử vài ngả rồi hẵng chọn nhạc cụ."
+      }
+    ],
+    "dinhDang": {
+      "nen": "Lớp có lộ trình rõ, có cấp bậc hoặc đai hoặc chứng chỉ, và con được giao hẳn một phần việc có quyền quyết trong phần đó.",
+      "tranh": "Lớp thả tự do không mốc, giáo viên đổi liên tục, luật đổi giữa chừng. Con chịu được khó, nhưng không chịu được bất nhất.",
+      "batDau": "Cho con xem trước lộ trình cả khoá và mốc đầu tiên đạt được sau bao lâu. Biết đích ở đâu thì con vào rất nghiêm túc."
+    },
+    "chuaRo": false,
+    "dangThu": []
+  },
+  "conNguoi": "Bé An mang nếp và kỷ luật ở mức 7.8/10, con rất cần sự ngăn nắp, thích biết trước việc gì sẽ diễn ra và cực kỳ khó chịu khi lịch trình bị đảo lộn. Tuy nhiên, nhịp phản ứng của con lại ở mức 6/10 — nghiêng về nhanh và bung, nghĩa là hứng lên thì con làm rào rào nhưng lại mau nguội nếu việc bị kéo dài lê thê. Người lớn nhìn qua dễ tưởng con cả thèm chóng chán hay bướng bỉnh, nhưng thực ra con chỉ đuối sức khi phải bơi trong một đống bài vở không có hồi kết rõ ràng mà thôi. Cung Mệnh mượn cách Tử Vi, Tham Lang cho thấy sâu thẳm con rất sợ mất thể diện và luôn khao khát được người lớn tin cậy, tôn trọng quyền quyết định của mình.",
+  "chatNoi": "Hai chất nổi rõ nhất ở con là Hiểu người & dẫn nhóm (7.3/10) cùng Âm nhạc & nhịp điệu (6.7/10). Ở nhà, anh chị sẽ thấy con rất tinh ý, nhìn thoáng qua là biết bố mẹ đang vui hay bực, lại rất nhạy với các giai điệu hay vần điệu khi nghe nhạc hoặc học bài. Riêng chất Hình khối & thẩm mỹ ở mức thấp (2.1/10), đây đơn thuần là chỗ con cần được bắc thêm điểm tựa bằng bảng biểu hoặc mẫu sẵn, không phải điểm yếu kém cần đè ra luyện.",
+  "dinhHuong": "Con cực kỳ hợp với môi trường học tập có lộ trình minh bạch, nội quy nhất quán và có các mốc đánh giá rõ ràng để con chinh phục từng chặng. Lớp học có hoạt động nhóm, cho con một vị trí phụ trách cụ thể sẽ kích hoạt tính trách nhiệm rất cao của con. Điều cần canh chừng nhất là đừng để con rơi vào những lớp học thả nổi, luật lệ thay đổi tùy hứng của giáo viên vì con sẽ nhanh chóng mất lòng tin và buông xuôi.",
+  "vaoBangGi": "Muốn con học, người lớn cần cho con thấy bức tranh toàn cảnh và chia nhỏ bài vở thành từng khúc ngắn có mốc kết thúc nhìn thấy được. Hãy đánh vào lòng tự trọng bằng cách trao quyền cho con tự lên lịch và chốt giờ hoàn thành, con sẽ làm rất nghiêm túc để giữ đúng uy tín của mình đấy.",
+  "khoaLai": "Con sẽ lập tức đóng sập cửa lòng nếu người lớn tùy tiện đổi luật, bắt học thêm giờ khi con đã làm xong đúng hẹn, hoặc lớn tiếng chê bai con trước mặt người khác. Kiểu kỷ luật cảm tính và bất nhất sẽ bẻ gãy hoàn toàn động lực học tập của đứa trẻ mang cốt cách này.",
+  "nenLam": [
+    {
+      "viec": "Chia nhỏ bài tập tối nay thành các chặng 20 phút và để con tự tay tích dấu hoàn thành.",
+      "vidu": "\"Mẹ thấy bài hôm nay có 3 phần, con muốn giải quyết phần nào trước trong 20 phút đầu này?\""
+    },
+    {
+      "viec": "Dọn sạch mặt bàn học, chỉ để đúng cuốn sách và bài tập của môn con chuẩn bị làm.",
+      "vidu": "\"Bàn học gọn gàng rồi, con làm xong chặng này thì mình đứng lên nghỉ 5 phút nhé.\""
+    },
+    {
+      "viec": "Công nhận nỗ lực giữ lời hứa của con trước cả nhà sau khi con hoàn thành việc.",
+      "vidu": "\"Hôm nay con đã làm đúng y như thời gian con tự đặt ra, mẹ rất tôn trọng sự tự giác này của con.\""
+    }
+  ],
+  "tranhLam": [
+    {
+      "viec": "Giao thêm bài tập khi thấy con vừa làm xong sớm hơn dự kiến.",
+      "vidu": "\"Làm xong nhanh thế thì ngồi làm thêm năm bài nâng cao này nữa cho nhớ.\""
+    },
+    {
+      "viec": "Ngồi kè kè bên cạnh để chỉ trích từng nét chữ hay từng lỗi sai vụn vặt.",
+      "vidu": "\"Ngồi có tí mà cứ ngọ nguậy, tập trung vào xem nào sao mà lười thế!\""
+    },
+    {
+      "viec": "So sánh con với bạn bè hoặc anh chị em khi điểm số của con chưa như ý.",
+      "vidu": "\"Nhìn bạn bên cạnh xem người ta học đứng đầu lớp kia kìa, con thì cứ tụt lùi.\""
+    }
+  ],
+  "hoatDong": "Các hoạt động đội nhóm có phân vai hoặc lớp nhạc cụ rất hợp để giải tỏa áp lực và rèn tính nhịp điệu cho con. Để rủ con đi buổi đầu, anh chị đừng ép buộc mà hãy cho con xem trước lộ trình rõ ràng rồi hỏi: \"Mẹ thấy lớp này có lộ trình từng cấp rất rõ, mẹ con mình đến xem thử xem con có muốn thử sức không nhé?\"",
+  "loLang": "Chuyện con ngồi vào bàn không nổi không phải vì con lười hay dốt đi, mà do con đang ngợp trước đống bài vở thiếu cấu trúc rõ ràng. Với nếp 7.8/10 kết hợp nhịp phản ứng nhanh 6/10, con không thể ngồi lì hàng giờ liền theo kiểu người lớn bắt ép. Chỉ cần anh chị đổi cách ra bài thành từng khúc ngắn có đích đến và dọn bàn học thật tinh gọn, con sẽ tự giác vào việc ngay.",
+  "changNay": "Ở chặng 6–15 tuổi với chỉ số thuận lợi 7.9/10, đây là thời kỳ vàng để rèn nếp tự lập và phương pháp làm việc có hệ thống cho con. Người lớn chỉ cần làm khung đỡ và giữ đúng cam kết, tuyệt đối không nên quản thúc chi li từng phút để chuẩn bị cho chặng sau con tự bước đi vững vàng.",
+  "voiChaMe": "",
+  "motCau": "Đứa trẻ này không sợ việc khó, nó chỉ sợ người lớn bất nhất và bài vở không có đích dừng."
+}

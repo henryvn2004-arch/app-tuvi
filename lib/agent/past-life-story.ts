@@ -93,6 +93,32 @@ CẤM TUYỆT ĐỐI:
 
 ${XUNG_HO_RULE}`;
 
+/**
+ * Schema ép ở TẦNG API (Gemini responseSchema) — khác hẳn việc dặn shape
+ * trong prompt: model không còn đường trả thiếu khoá hay kèm câu dẫn ngoài
+ * JSON. `title`/`text` để required vì thiếu một trong hai là hồi đó rỗng
+ * trên màn hình. Tách ra đây (2026-09) để scripts/gen-tool-sample.mjs gọi
+ * lại ĐÚNG schema route.ts dùng, không chép tay bản thứ hai.
+ */
+export const PAST_LIFE_STORY_SCHEMA = {
+  type: 'OBJECT',
+  properties: {
+    biDanh: { type: 'STRING' },
+    moTaNhanVat: { type: 'STRING' },
+    acts: {
+      type: 'ARRAY',
+      items: {
+        type: 'OBJECT',
+        properties: { title: { type: 'STRING' }, text: { type: 'STRING' } },
+        required: ['title', 'text'],
+      },
+    },
+    ketLuan: { type: 'STRING' },
+  },
+  required: ['biDanh', 'moTaNhanVat', 'acts', 'ketLuan'],
+  propertyOrdering: ['biDanh', 'moTaNhanVat', 'acts', 'ketLuan'],
+};
+
 /** Prompt viết truyện — nhận profile đã tính sẵn (deterministic). */
 export function buildPastLifeStoryPrompt(profile: PastLifeProfile): string {
   const genderWord = profile.gender === 'nu' ? 'NỮ' : 'NAM';

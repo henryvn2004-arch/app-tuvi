@@ -116,13 +116,17 @@ async function run(page: Page) {
   await page.waitForSelector('#lgBody .sec', { timeout: 15000 });
 }
 
-test('bản mẫu KHÔNG tự mở, form đứng trên cùng', async ({ page }) => {
+// 🔓 2026-09-10: hard paywall của LƯỢT TỰ MỞ bản mẫu đã bị Henry đảo ngược
+// (xem app-luan-giai.html, cổng cuối file + docs/nhat-ky/2026-09.md mục "Đảo
+// ngược hard paywall của laso"). Bài kiểm này giờ khoá lại đúng hành vi MỚI —
+// khách nguội vào trang là bản mẫu tự mở, form ẩn — thay vì hành vi cũ đã gỡ.
+test('bản mẫu TỰ MỞ khi vào trang, form ẩn (đã bỏ hard paywall)', async ({ page }) => {
   await stubApis(page);
   await page.goto('/app-luan-giai.html');
-  await page.waitForTimeout(1500);
-  await expect(page.locator('#birthPanel')).toBeVisible();
-  await expect(page.locator('#sampBar')).toHaveCount(0);
-  await expect(page.locator('#sampCta')).toBeVisible();
+  await page.waitForSelector('#sampBar', { timeout: 15000 });
+  await expect(page.locator('#birthPanel')).toBeHidden();
+  await expect(page.locator('#sampBar')).toHaveCount(1);
+  await expect(page.locator('#sampCta')).toBeHidden();
 });
 
 test('phần 1-2 sinh chữ THẬT, phần 3+ chỉ còn ô giữ chỗ', async ({ page }) => {

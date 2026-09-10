@@ -2557,6 +2557,39 @@ export function computePastLife(ls: Laso, gender: 'nam' | 'nu', era?: Era): Past
   };
 }
 
+/**
+ * Phần deterministic của kết quả tool "Chân Dung Tiền Kiếp" — thứ engine TRA
+ * BẢNG ra, 0 lượt LLM, 0đ. Dùng ở HAI nơi và phải giống hệt nhau: lượt tính
+ * thử miễn phí (W1) và lượt trả tiền — tách ra đây (2026-09, chuyển từ
+ * app/api/chan-dung-tien-kiep/route.ts) để route VÀ script sinh mẫu
+ * (scripts/gen-tool-sample.mjs) cùng gọi một hàm, không chép tay bản thứ hai.
+ */
+export function pastLifeMeta(profile: PastLifeProfile) {
+  return {
+    // Danh xưng chính = chức phận do BẢNG TRA chốt (Tể tướng / Thái y / Quan
+    // án…) — ngắn, cụ thể, người dùng kể lại được. biDanh (LLM) chỉ là vế phụ
+    // hiển thị nhỏ bên dưới.
+    danhXung: profile.occupation.title,
+    characterName: profile.characterName,
+    occupation: {
+      title: profile.occupation.title,
+      desc: profile.occupation.desc,
+      star: profile.occupation.star,
+      brightness: profile.occupation.brightness || '',
+      borrowed: profile.occupation.borrowed,
+      notes: profile.occupation.notes,
+      tier: profile.occupation.tier,
+      tierLabel: profile.occupation.tierLabel,
+      tierBreakdown: profile.occupation.tierBreakdown,
+      source: profile.occupation.source,
+    },
+    menh: profile.readouts.menh,
+    thanCungName: profile.thanCungName,
+    portraitAge: profile.arc.portraitAge,
+    era: { id: profile.era.id, label: profile.era.label, ageLabel: profile.era.ageLabel },
+  };
+}
+
 // ── Format cho prompt LLM ───────────────────────────────────────────────
 const ROLE_LABEL: Record<ActRole, string> = {
   'thuong': 'giai đoạn bình thường',
