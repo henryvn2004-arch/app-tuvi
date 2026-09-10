@@ -152,7 +152,9 @@ for (const [slug, def] of Object.entries(TOPICS)) {
 }
 
 if (!jobs.length) {
-  console.error(`✗ Không khớp --topic ${ONLY_TOPIC}. Danh sách hợp lệ: ${Object.keys(TOPICS).join(', ')}`);
+  console.error(
+    `✗ Không khớp --topic ${ONLY_TOPIC}. Danh sách hợp lệ: ${Object.keys(TOPICS).join(', ')}`
+  );
   process.exit(1);
 }
 
