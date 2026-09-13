@@ -65,16 +65,17 @@
 
   /**
    * Số biến thể bối cảnh ĐÃ VẼ cho mỗi khía cạnh — KHÔNG phải số bối cảnh viết
-   * trong `KHIA_CANH.boiCanh` (luôn là 3). Bắt đầu ở 1 vì Tier A chỉ vẽ v1;
-   * nâng số này CHO TỪNG KHOÁ chỉ sau khi v2/v3 đã thật sự sinh + upload lên
-   * Storage — nâng sớm thì một phần lá số trỏ vào ảnh chưa tồn tại (ẩn ảnh
-   * do `onerror`, không vỡ trang, nhưng người xem thấy phần đó "mất ảnh" so
-   * với phần khác một cách vô cớ).
+   * trong `KHIA_CANH.boiCanh` (luôn là 3). Nâng số này CHO TỪNG KHOÁ chỉ sau
+   * khi biến thể đó đã thật sự sinh + upload lên Storage — nâng sớm thì một
+   * phần lá số trỏ vào ảnh chưa tồn tại (ẩn ảnh do `onerror`, không vỡ trang,
+   * nhưng người xem thấy phần đó "mất ảnh" so với phần khác một cách vô cớ).
+   * Cả 13 khoá lên 2 từ v2 (tierAv2, xem admin route) — sắc "tốt" đọc cảnh
+   * phú quý riêng, "trung"/"xấu" chỉ đổi bối cảnh (`illus-prompt.ts`).
    */
   var VARIANT_COUNT = {
-    menh: 1, 'phu-mau': 1, 'phuc-duc': 1, 'dien-trach': 1, 'quan-loc': 1, 'no-boc': 1,
-    'thien-di': 1, 'tat-ach': 1, 'tai-bach': 1, 'tu-tuc': 1, 'phu-the': 1, 'huynh-de': 1,
-    'tong-quan': 1,
+    menh: 2, 'phu-mau': 2, 'phuc-duc': 2, 'dien-trach': 2, 'quan-loc': 2, 'no-boc': 2,
+    'thien-di': 2, 'tat-ach': 2, 'tai-bach': 2, 'tu-tuc': 2, 'phu-the': 2, 'huynh-de': 2,
+    'tong-quan': 2,
   };
 
   /** Hash chuỗi ổn định (djb2) — CHỈ để chọn biến thể bối cảnh, không cần bền
