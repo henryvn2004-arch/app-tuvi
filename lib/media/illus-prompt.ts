@@ -36,7 +36,7 @@
  * sửa một chữ là cả thư viện trôi khỏi phong cách đã chốt và không ráp được với
  * số ảnh đã vẽ trước đó.
  */
-export const STYLE_LOCK = `Hand-drawn Vietnamese slice-of-life light novel illustration. Soft pencil lineart with slightly rough, imperfect strokes and faint sketch underdrawing left visible. Gentle watercolour washes over flat muted colours — warm cream, soft sage green, dusty blue, pale ochre, faded terracotta — with visible paper grain and small blooms where the wash pools. Warm natural daylight, diffuse and slightly uneven, as if falling through a window. The everyday environment is richly and specifically observed: real ordinary objects that quietly tell a story, drawn with light economical strokes rather than heavily rendered. Depth comes from line weight and wash density only, never from photographic blur. A candid unposed moment, framing slightly off-balance. Quiet, tender, unhurried mood — an ordinary afternoon remembered years later. Consistent visual style, character design, face and hairstyle across every image in the series. No photorealism, no cinematic or dramatic lighting, no 3D, no glossy digital rendering, no thick uniform outlines, no neon or saturated colours, no lens flare, no motion blur.`;
+export const STYLE_LOCK = `Hand-drawn Vietnamese slice-of-life light novel illustration. Soft pencil lineart with slightly rough, imperfect strokes and faint sketch underdrawing left visible. Gentle watercolour washes over flat muted colours, with visible paper grain and small blooms where the wash pools. THE PALETTE IS FIXED AND IDENTICAL IN EVERY IMAGE OF THE SERIES regardless of mood: warm cream paper, soft sage green, dusty blue, pale ochre, faded terracotta, with warm skin tones. Never sepia, never brown-toned, never monochrome, never desaturated to grey — a sad scene uses exactly the same colours as a happy one. The everyday environment is richly and specifically observed: real ordinary objects that quietly tell a story, drawn with light economical strokes rather than heavily rendered. Depth comes from line weight and wash density only, never from photographic blur. A candid unposed moment, framing slightly off-balance. Consistent visual style, character design, face and hairstyle across every image in the series. No photorealism, no cinematic or dramatic lighting, no 3D, no glossy digital rendering, no thick uniform outlines, no neon or saturated colours, no lens flare, no motion blur.`;
 
 /**
  * Luật CHỮ + KHOẢNG TRỐNG — đi kèm MỌI prompt. Vùng trống nằm ở đâu là hợp
@@ -95,20 +95,42 @@ export function nhanVat(gioi: Gioi, tuoi: Tuoi): string {
 }
 
 // ── SẮC THÁI ────────────────────────────────────────────────
-// Sắc thái đổi ÁNH SÁNG · TƯ THẾ · TÌNH TRẠNG BỐI CẢNH. KHÔNG đổi sang nét mặt
-// bi kịch: người ta trả tiền để đọc về đời mình, không phải để bị doạ. Bức
-// "xấu" phải vẫn giữ được phẩm giá — trầm và chật vật, không nước mắt.
-const SAC_THAI: Record<Sac, string> = {
-  tot: 'clear warm late-morning light, the air luminous and still; posture open and settled, attention fully on what is in front of them, a small private contentment; the surroundings tidy and cared-for, plants healthy, small signs that someone looks after this place',
-  trung: 'even soft overcast daylight, neither bright nor grim; posture neutral and mid-motion, attention drifting slightly elsewhere, neither pleased nor troubled; the surroundings ordinary and a little cluttered, nothing wrong and nothing special',
-  xau: 'thin cool light of a late overcast afternoon, colours drawing towards grey, one small lamp working harder than it should; posture closed and tired, shoulders drawn in, gaze turned away from the task at hand; the surroundings worn and disordered, a plant gone dry, things left where they fell — quiet and weary but never melodramatic, no tears, no darkness, the person still dignified',
-};
-
-/** Mức gắn bó với người khác trong khung — đổi theo sắc thái, cho cảnh có ≥2 người. */
-const TUONG_TAC: Record<Sac, string> = {
-  tot: 'the two are turned towards each other, easy and comfortable, sharing the same moment',
-  trung: 'the two share the space but are half-turned away, each occupied with their own thing',
-  xau: 'the two are physically close but disconnected, no eye contact, a clear gap of empty space between them',
+// 🔑 SẮC THÁI NẰM Ở BIỂU CẢM + HOẠT CẢNH NGƯỜI XUNG QUANH, KHÔNG NẰM Ở MÀU.
+//
+// Bản đầu đẩy sắc thái vào ánh sáng và tông màu — hỏng hai đường cùng lúc:
+// bức "xấu" ra nâu sepia lệch hẳn khỏi 12 bức còn lại (đọc liền một bản luận
+// 13 phần thì nhìn như hai bộ tranh khác nhau), còn bức "trung" thì xám đều
+// nên đọc thành "xấu". Nay màu KHOÁ CỨNG trong `STYLE_LOCK` cho cả ba bậc, và
+// việc phân biệt dồn hết sang thứ người ta đọc được ngay: mặt nhân vật đang
+// vui hay đang nghĩ, và quanh họ có ai không.
+//
+// Ánh sáng vẫn đổi nhẹ theo bậc, nhưng chỉ là ĐỘ SÁNG của cùng bảng màu —
+// không được ngả tông.
+const SAC_THAI: Record<Sac, { bieuCam: string; quanhCanh: string; anhSang: string; doVat: string }> = {
+  tot: {
+    bieuCam:
+      'genuinely smiling, eyes bright and creased at the corners, caught mid-laugh or mid-sentence, shoulders open and relaxed, clearly enjoying the moment',
+    quanhCanh:
+      'the people nearby are warm and animated — someone leaning in to talk, someone laughing, someone reaching out a hand; the place is busy with cheerful ordinary activity',
+    anhSang: 'clear warm late-morning sunlight pouring in, everything luminous and fresh',
+    doVat: 'the place is tidy and cared-for: healthy green plants, fresh flowers in a jar, things put back where they belong',
+  },
+  trung: {
+    bieuCam:
+      'an ordinary everyday expression — neither smiling nor troubled, mildly attentive, caught in the middle of a routine task, entirely unremarkable',
+    quanhCanh:
+      'the people nearby are simply getting on with their own day, nobody paying particular attention to anybody; plain daily life, nothing happening',
+    anhSang: 'plain even daylight of a normal day, natural and unremarkable',
+    doVat: 'the place is lived-in and ordinary: a little everyday clutter, nothing broken and nothing special',
+  },
+  xau: {
+    bieuCam:
+      'thoughtful and withdrawn, brow faintly drawn, chin resting on a hand, gaze settled on nothing in particular, deep in worry but composed and dignified — pensive, never weeping, never anguished',
+    quanhCanh:
+      'the space around them is emptier than it should be — others turned away or already gone, an empty chair, nobody sharing the moment',
+    anhSang: 'soft light of a quiet overcast afternoon, gentle and even, the same colours simply a little quieter',
+    doVat: 'the place is worn and let go: a plant gone dry, cups unwashed, papers left where they fell',
+  },
 };
 
 // ── KHÍA CẠNH (cung) → CẢNH + BỐI CẢNH VIỆT NAM ─────────────
@@ -116,15 +138,21 @@ const TUONG_TAC: Record<Sac, string> = {
 // nhờ model diễn mỗi lượt thì hai lần dựng lại ra hai bộ cảnh khác nhau, tốn
 // thêm một lượt gọi mỗi bức, và không ai soát được cảnh TRƯỚC khi đốt tiền vẽ.
 //
+// 🔑 CẢNH VIẾT RIÊNG CHO TỪNG SẮC THÁI, không phải một cảnh chung rồi đổi ánh
+// sáng. "Cung Quan Lộc tốt" và "Cung Quan Lộc xấu" là HAI SỰ VIỆC khác nhau
+// (đang cười nói với đồng nghiệp / ngồi lại một mình sau khi mọi người về),
+// chứ không phải một sự việc chụp dưới hai thứ đèn.
+//
 // `boiCanh` là nguồn BIẾN THỂ: cùng (khía × sắc × giới) nhưng khác bối cảnh thì
 // ra hai bức khác hẳn nhau — chống trùng giữa các lá số mà không phải đổi màu.
+// Bối cảnh tả CHI TIẾT và ĐẶC VIỆT NAM (ghế nhựa thấp, bình trà đá, quạt cây,
+// dây điện chằng chịt, bàn thờ Thần Tài, mái tôn, gạch bông...) — chi tiết đời
+// thường chính là thứ kể chuyện, tả chung chung thì ra tranh stock vô hồn.
 export interface KhiaCanh {
   /** Nhãn tiếng Việt (để đối chiếu bằng mắt lúc duyệt, KHÔNG vào prompt). */
   vi: string;
-  /** Việc nhân vật đang làm — một sự việc NHÌN THẤY ĐƯỢC, không phải lời bình. */
-  canh: string;
-  /** Có người thứ hai trong khung không (quyết định dùng `TUONG_TAC` hay không). */
-  coNguoiKhac?: boolean;
+  /** Sự việc NHÌN THẤY ĐƯỢC, riêng cho từng sắc thái. */
+  canh: Record<Sac, string>;
   /** 3 bối cảnh Việt Nam có thật — chỉ số biến thể `v` chọn một. */
   boiCanh: [string, string, string];
 }
@@ -132,124 +160,171 @@ export interface KhiaCanh {
 export const KHIA_CANH: Record<string, KhiaCanh> = {
   menh: {
     vi: 'Cung Mệnh — bản thân, khí chất',
-    canh: 'alone in a quiet private moment with themselves, sitting still and thinking, a cup of tea going cold nearby',
+    canh: {
+      tot: 'standing and stretching in the early morning with a wide easy smile, raising a hand to greet a neighbour passing by',
+      trung: 'sitting on a low plastic stool with a glass of tea, idly watching the street go by',
+      xau: 'sitting alone on the step, elbows on knees, chin on hand, staring at the ground and thinking hard',
+    },
     boiCanh: [
-      'a small rented room in a narrow Hanoi alley house, morning light through a grilled window',
-      'the rooftop of a Saigon apartment block at first light, water tanks and laundry lines around them',
-      'a window seat on an early intercity bus, the countryside sliding past outside',
+      'the doorway of a narrow tube house in a Hanoi alley: mossy wall, a blue low plastic stool, a bicycle leaning, a cage bird hanging, tangled electric wires overhead',
+      'the rooftop of an old Saigon apartment block at first light: stainless water tanks, laundry lines strung between poles, potted crown-of-thorns in styrofoam boxes, corrugated iron roofs below',
+      'a village front yard in the Mekong Delta: a large glazed water jar, a hammock slung between two areca palms, a mat drying rice in the sun',
     ],
   },
   'phu-mau': {
     vi: 'Cung Phụ Mẫu — cha mẹ',
-    canh: 'sitting with an elderly parent, a pot of tea and two small cups between them',
-    coNguoiKhac: true,
+    canh: {
+      tot: 'laughing with an elderly parent who is patting the back of their hand, a plate of cut fruit and tea between them',
+      trung: 'peeling a pomelo beside an elderly parent, both half-watching a television off-frame',
+      xau: 'sitting beside an elderly parent, neither of them speaking, both gazing off in different directions',
+    },
     boiCanh: [
-      'a family living room with a wooden ancestral altar shelf and a ceiling fan',
-      'a tiled kitchen with low plastic stools and a pot on the stove',
-      'the front step of a countryside house, a courtyard and a water jar beyond',
+      'a family living room: a lacquered wooden ancestral altar on the wall with a small red electric candle, a bloc calendar, a slow ceiling fan, a glass-front cabinet of old cups',
+      'a tiled kitchen: red and blue low plastic stools, a pot steaming on a gas ring, bunches of herbs in a basin, a wall calendar with a landscape photo',
+      'the tiled front step of a countryside house: a courtyard beyond, a water jar with a coconut ladle, a bougainvillea over the gate, a motorbike under a tin awning',
     ],
   },
   'phuc-duc': {
     vi: 'Cung Phúc Đức — phúc phần, gốc rễ tinh thần',
-    canh: 'standing quietly with three lit incense sticks held at the chest, smoke drifting upward',
+    canh: {
+      tot: 'lighting incense with a calm smile while family members behind them arrange an offering tray of fruit and flowers',
+      trung: 'lighting three incense sticks alone, an ordinary act on an ordinary day',
+      xau: 'standing before the altar holding unlit incense, head bowed, lost in thought',
+    },
     boiCanh: [
-      'the courtyard of a small neighbourhood pagoda, moss on the stone',
-      'a modest family ancestral altar with fruit and a small vase of flowers',
-      'under an enormous old banyan tree beside a village communal house',
+      'the courtyard of a small neighbourhood pagoda: moss on stone slabs, a bronze incense urn thick with sticks, yellow flag bunting, a frangipani tree dropping blossom',
+      'a modest family ancestral altar: a brass incense bowl, a five-fruit tray, a vase of chrysanthemums, faded photographs, a small red bulb glowing',
+      'under an enormous banyan beside a village communal house: hanging aerial roots, a low brick wall, worn stone steps, an old woman selling incense from a basket',
     ],
   },
   'dien-trach': {
     vi: 'Cung Điền Trạch — nhà cửa, tài sản',
-    canh: 'hanging washing on a line at home, or standing in a doorway looking back into the room',
+    canh: {
+      tot: 'pegging washing on the line with a smile, calling something cheerful across to a neighbour on the opposite balcony',
+      trung: 'watering the potted plants on the balcony in the ordinary course of the morning',
+      xau: 'standing at the balcony rail looking out, a basket of laundry half-hung and forgotten behind them',
+    },
     boiCanh: [
-      'the balcony of a narrow Saigon tube house, wires and rooftops beyond',
-      'an apartment balcony overlooking a city canal at dusk',
-      'a bare newly-rented flat with cardboard boxes still unopened',
+      'the balcony of a narrow Saigon tube house: an iron security grille, plastic buckets, a mop drying, bundles of electric cable, corrugated roofs and a water tank beyond',
+      'an old apartment block walkway above a city canal: chipped mosaic tiles, orchids in hanging coconut-husk pots, a motorbike helmet on a hook, laundry strung the length of the rail',
+      'a newly rented flat still bare: cardboard boxes unopened, a rolled sleeping mat, a single stool, an electric fan still in its plastic, evening light through unwashed glass',
     ],
   },
   'quan-loc': {
     vi: 'Cung Quan Lộc — sự nghiệp',
-    canh: 'working at a laptop, chin resting on one hand, a notebook and pens spread across the desk',
+    canh: {
+      tot: 'standing at the desk mid-conversation with two colleagues who are laughing, papers spread between them, everyone leaning in',
+      trung: 'working steadily at a laptop, chin resting on one hand, a half-finished glass of iced coffee beside the keyboard',
+      xau: 'sitting back from the closed laptop, hand over mouth, staring past the screen at nothing, the neighbouring desks already emptied',
+    },
     boiCanh: [
-      'an open-plan office in central Saigon, tall windows with a hazy city skyline beyond, colleagues lightly sketched at other desks',
-      'a cramped startup room with whiteboards, a standing fan and too many cables',
-      'a corner table in a street-side Vietnamese coffee shop used as an office, a glass of cà phê sữa đá beside the laptop',
+      'an open-plan office in central Saigon: tall windows with a hazy high-rise skyline, desks of lightly sketched colleagues, a plastic cup of iced coffee sweating on the desk, a pothos trailing off a filing cabinet',
+      'a cramped startup room: whiteboards covered in scribbles, a standing fan, too many cables, instant noodle cups, a small Thần Tài shrine with a red bulb in the corner by the door',
+      'a corner table in a Vietnamese street-side coffee shop used as an office: a glass of cà phê sữa đá with a metal filter, low stools, a tiled floor, motorbikes parked at the kerb beyond the open front',
     ],
   },
   'no-boc': {
     vi: 'Cung Nô Bộc — bạn bè, đồng nghiệp, người xung quanh',
-    canh: 'sharing a meal at a crowded low table with two or three friends, chopsticks in mid-air',
-    coNguoiKhac: true,
+    canh: {
+      tot: 'raising a glass in the middle of a loud happy table, four friends laughing and reaching for the same dish',
+      trung: 'eating at a table with two colleagues, chopsticks moving, the conversation mild and unremarkable',
+      xau: 'sitting at the end of the table while the others talk among themselves, bowl untouched, half turned away',
+    },
     boiCanh: [
-      'a sidewalk eatery with tiny plastic stools spilling onto the pavement, evening',
-      'an office pantry with a kettle, instant noodle cups and a window',
-      'a public park badminton court at dusk, other players in the background',
+      'a sidewalk eatery at night: tiny red and blue plastic stools spilling onto the pavement, a steaming hotpot on a portable gas burner, a jug of iced tea, plastic baskets of herbs, motorbikes parked at the kerb',
+      'an office pantry: an electric kettle, a stack of instant noodle cups, a small fridge covered in magnets, a window with vertical blinds half open',
+      'a public park badminton court at dusk: a sagging net, other players in the background, bicycles leaned against a tree, a bag of shuttlecocks on the bench',
     ],
   },
   'thien-di': {
     vi: 'Cung Thiên Di — đi xa, môi trường bên ngoài',
-    canh: 'waiting with a worn travel bag at their feet, looking out at the way ahead',
+    canh: {
+      tot: 'shouldering a bag with a bright smile, turning back to wave at someone seeing them off',
+      trung: 'sitting with a bag between their feet, checking the time, simply waiting',
+      xau: 'standing apart from the crowd holding a bag, looking back the way they came',
+    },
     boiCanh: [
-      'the departure hall of Tân Sơn Nhất airport, rows of seats and a wall of windows',
-      'the aisle of a night sleeper coach on a mountain road, curtains drawn',
-      'the deck of a small ferry crossing a wide Mekong Delta river, water hyacinth drifting past',
+      'the departure hall of Tân Sơn Nhất airport: rows of steel seats, a wall of glass, families with taped cardboard boxes and woven plastic bags, a floor polisher in the distance',
+      'a night sleeper coach on a mountain road: two tiers of reclining berths, curtains drawn, sandals in a net bag, a small fan clipped above the window',
+      'the deck of a small ferry crossing a wide Mekong river: motorbikes packed nose to tail, water hyacinth drifting past, a woman selling boiled peanuts from a shallow basket',
     ],
   },
   'tat-ach': {
     vi: 'Cung Tật Ách — sức khoẻ, tai ách',
-    canh: 'sitting on a plastic chair holding a folded medical form, waiting to be called',
+    canh: {
+      tot: 'stretching at dawn among a crowd of cheerful elderly exercisers, smiling and keeping up with them',
+      trung: 'sitting in a waiting area holding a folded form, patient and unbothered',
+      xau: 'sitting alone in an empty corridor holding a form, staring at the floor tiles',
+    },
     boiCanh: [
-      'a long hospital corridor lined with blue plastic chairs, fluorescent light',
-      'a small neighbourhood pharmacy at night, glass cabinets of boxes',
-      'a city park at dawn full of elderly people doing slow exercises',
+      'a city park at dawn: rows of elderly people doing slow exercises, a portable speaker, bicycles laid on the grass, a vendor with a bicycle cart of sticky rice',
+      'a long hospital corridor: blue plastic chairs bolted in rows, a numbered ticket display, families with thermoses and plastic bags of food, fluorescent tubes overhead',
+      'a small neighbourhood pharmacy at night: glass cabinets of boxes, a weighing scale by the door, a hand-written price list, a scooter idling outside',
     ],
   },
   'tai-bach': {
     vi: 'Cung Tài Bạch — tiền bạc',
-    canh: 'sitting at a table counting money and receipts, a calculator and a phone beside a mug',
+    canh: {
+      tot: 'handing change to a customer with a broad smile, the stall busy, another customer waiting happily with a basket',
+      trung: 'sorting banknotes into a small tin box at the counter on an ordinary afternoon',
+      xau: 'sitting still in front of a spread of unpaid bills, calculator untouched, chin on hand, deep in thought',
+    },
     boiCanh: [
-      'a wet-market stall at first light, produce stacked in baskets, awning overhead',
-      'the counter of a small family shop, shelves of goods behind',
-      'a kitchen table covered in bills under a bare hanging bulb, late evening',
+      'a wet-market stall at first light: produce stacked in woven baskets, a tarpaulin awning, a hanging scale, a roll of plastic bags, a stool and a metal cash tin',
+      'the counter of a small family shop: shelves of instant noodles and detergent behind, a Thần Tài shrine with a red bulb and an orange on a saucer, a wall-mounted fan, a QR code stand',
+      'a kitchen table in the evening: bills and receipts spread across a floral plastic tablecloth, a calculator, a rice cooker on the counter, a bare bulb on a cord above',
     ],
   },
   'tu-tuc': {
     vi: 'Cung Tử Tức — con cái',
-    canh: 'sitting on the floor playing with a small child among scattered wooden blocks and toy cars',
-    coNguoiKhac: true,
+    canh: {
+      tot: 'laughing on the floor with a small child who is holding a toy plane up in triumph',
+      trung: 'sitting beside a child doing homework, pointing at the page with everyday patience',
+      xau: 'sitting near a child absorbed in something else, hand on knee, watching them and worrying',
+    },
     boiCanh: [
-      'a living room floor covered in toys, a window with city buildings beyond',
-      'the gate of a primary school at pick-up time, other parents waiting',
-      "a child's bedroom at night with a small night light and a drawing taped to the wall",
+      'a living room floor: a woven mat, scattered wooden blocks and toy cars, a child drawing taped to the wall, a standing fan, a window with iron grilles and city rooftops beyond',
+      'a primary school gate at pick-up time: parents waiting on parked motorbikes, helmets dangling, a red flag, a vendor selling fish-shaped snacks from a cart',
+      "a child's bedroom at night: a mosquito net half tucked up, a small night light, a school bag slumped by the door, star stickers on the wardrobe",
     ],
   },
   'phu-the': {
     vi: 'Cung Phu Thê — vợ chồng, tình duyên',
-    canh: 'sitting at a small table with their partner, two drinks between them',
-    coNguoiKhac: true,
+    canh: {
+      tot: 'laughing together over two glasses of iced tea, one of them reaching across to touch the other arm',
+      trung: 'eating dinner together, each half-watching their own phone, comfortable and quiet',
+      xau: 'sitting at the same table with two untouched cups, both looking away in different directions',
+    },
     boiCanh: [
-      'a sidewalk café in the Hanoi Old Quarter in autumn, plane trees and old shutters',
-      'stopped on a motorbike at the rail of a city bridge at dusk, river below',
-      'a small kitchen at dinner time, two bowls set out, steam rising',
+      'a sidewalk café in the Hanoi Old Quarter in autumn: low stools on the pavement, a plane tree, old shuttered windows above, a tray of green tea and sunflower seeds',
+      'stopped on a motorbike at the rail of a city bridge at dusk: helmets still on the wrists, the river below, strings of lights on the far bank, other bikes streaming past',
+      'a small kitchen at dinner time: two bowls of rice set out on a floral tablecloth, a dish of braised fish steaming, a rice cooker venting, a fan turning in the corner',
     ],
   },
   'huynh-de': {
     vi: 'Cung Huynh Đệ — anh chị em',
-    canh: 'sitting side by side on the same step with a sibling, not talking, comfortable',
-    coNguoiKhac: true,
+    canh: {
+      tot: 'joking with a sibling while the two of them carry dishes together, both grinning',
+      trung: 'sitting on the same step as a sibling, each on their phone, an easy silence',
+      xau: 'sitting apart from a sibling on the same step, backs half turned, nothing being said',
+    },
     boiCanh: [
-      'the tiled front steps of a family house, a motorbike parked in the yard',
-      'a shared childhood bedroom with two beds and old posters',
-      'a kitchen during a family gathering, dishes being carried past',
+      'the tiled front steps of a family house: a motorbike parked in the yard, slippers lined up by the door, a bougainvillea over the gate, a dog asleep in the shade',
+      'a shared childhood bedroom: two narrow beds, old posters, a desk with a stack of schoolbooks, a wall fan, afternoon light through a grilled window',
+      'a kitchen during a family gathering: dishes being carried past, a pot of soup on a portable burner, relatives lightly sketched in the doorway, a crate of beer on the floor',
     ],
   },
   'tong-quan': {
     vi: 'Tổng quan lá số — cả cuộc đời',
-    canh: 'standing at the edge of a busy crossing, taking in the whole city before moving',
+    canh: {
+      tot: 'stepping out into the street with an open confident stride, nodding a greeting to people they pass',
+      trung: 'standing at the kerb waiting to cross, one of many in the ordinary flow of the day',
+      xau: 'standing still at the edge of the crowd, looking out over the city, thinking',
+    },
     boiCanh: [
-      'a wide Saigon intersection at golden hour, motorbikes streaming past',
-      'a high bank above the Red River in Hanoi, the city hazy in the distance',
-      'a terraced hillside path in the northern highlands, valleys folding away below',
+      'a wide Saigon intersection at golden hour: a river of motorbikes, helmets and face masks, a traffic light on a yellow pole, shopfront signs and tangled cables above',
+      'the high bank above the Red River in Hanoi: banana plants on the slope, a long bridge in the haze, brick kilns and a scatter of low houses beyond',
+      'a terraced hillside path in the northern highlands: paddies folding away into valley mist, a buffalo on the track below, a woman with a back basket climbing ahead',
     ],
   },
 };
@@ -280,16 +355,18 @@ export function buildIllusPrompt(input: IllusInput): IllusPrompt {
   const kc = KHIA_CANH[khia];
   if (!kc) throw new Error(`illus-prompt: không có khía cạnh "${khia}"`);
   const v = ((Math.max(1, input.v || 1) - 1) % kc.boiCanh.length) + 1;
+  const st = SAC_THAI[sac];
 
   const prompt = [
     STYLE_LOCK,
     '',
     nhanVat(gioi, tuoi) + '.',
     '',
-    `Scene: ${kc.canh}.`,
-    `Environment: ${kc.boiCanh[v - 1]}.`,
-    `Mood and light: ${SAC_THAI[sac]}.`,
-    ...(kc.coNguoiKhac ? [`Interaction: ${TUONG_TAC[sac]}.`] : []),
+    `Scene: ${kc.canh[sac]}.`,
+    `Expression: ${st.bieuCam}.`,
+    `People around them: ${st.quanhCanh}.`,
+    `Environment: ${kc.boiCanh[v - 1]}. ${st.doVat}.`,
+    `Light: ${st.anhSang}.`,
     '',
     'Composition: wide horizontal frame, the character placed off-centre towards the right, seen from a natural eye-level three-quarter angle, room to breathe around them.',
     '',
