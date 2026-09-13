@@ -26,8 +26,14 @@
 .dc-self summary{cursor:pointer;color:#7A5F26;font-weight:600}
 .dc-self .inner{margin-top:10px;border:1px solid var(--line-2);border-radius:10px;padding:12px 13px;background:var(--paper)}
 .dc-self p.hint{font-size:11.5px;color:var(--text-lt);margin-bottom:9px}
-.lg-illus{margin:0 0 10px;border-radius:10px;overflow:hidden;aspect-ratio:1536/1024;background:var(--paper-2,#f2ede4)}
+.lg-illus{position:relative;margin:0 0 10px;border-radius:10px;overflow:hidden;aspect-ratio:1536/1024;background:var(--paper-2,#f2ede4)}
 .lg-illus img{width:100%;height:100%;object-fit:cover;display:block}
+/* Bìa chương (2026-09-13, cùng mẫu app-luan-giai.html) — tool này không có
+   hook AI (markdown+nhãn TỐT/CẢNH BÁO), nên dùng đúng dữ liệu "kiểu" đã tính
+   sẵn (kieu.ten/kieu.motCau) làm caption đè lên ảnh thay vì bịa thêm nguồn. */
+.lg-hookbox{position:absolute;left:14px;right:14px;bottom:14px;max-width:min(440px,calc(100% - 28px));background:var(--white);border-radius:16px;padding:14px 18px 15px;box-shadow:0 8px 22px rgba(6,26,46,.18)}
+.lg-hookbox .lg-hookpill{display:inline-block;font-family:var(--sans);font-size:10.5px;font-weight:700;letter-spacing:.05em;padding:3px 11px;border-radius:20px;margin-bottom:8px}
+.lg-hookbox p{font-family:var(--serif);font-weight:700;font-size:15.5px;line-height:1.44;color:var(--heading);margin:0}
 .dc-hero{text-align:center;padding:2px 6px 14px}
 .dc-name{font-family:var(--serif);font-size:22px;line-height:1.4;color:#061A2E;font-weight:700}
 .dc-role{font-size:12.5px;color:var(--text-lt);margin-top:3px}
@@ -1193,6 +1199,14 @@ function renderMetaHead(data) {
   document.getElementById('dcIllusHost').innerHTML = dayConIllusHtml(data);
   var kieu = data.kieu || {};
   var hoc = data.hoc || {};
+  // Bìa chương: đè kieu.ten/kieu.motCau lên ảnh (nếu có ảnh) thay vì để
+  // riêng thành badge bên dưới — tránh lặp lại cùng một câu hai chỗ.
+  var illusFig = document.getElementById('dcIllusHost').querySelector('.lg-illus');
+  if (illusFig && kieu.motCau) {
+    illusFig.insertAdjacentHTML('beforeend', '<div class="lg-hookbox">' +
+      (kieu.ten ? '<span class="lg-hookpill fb-trungtinh">' + esc(kieu.ten) + '</span>' : '') +
+      '<p>' + esc(kieu.motCau) + '</p></div>');
+  }
   document.getElementById('dcName').textContent = data.ten || 'Con';
   document.getElementById('dcRole').textContent =
     (data.gioiTinh === 'nu' ? 'Bé gái' : 'Bé trai') + (data.tuoi ? ' · ' + data.tuoi + ' tuổi (tuổi mụ)' : '');
@@ -1202,7 +1216,9 @@ function renderMetaHead(data) {
   if (data.lai && data.kieuPhu) {
     badges.push('<span class="dc-badge alt">pha thêm ' + esc(data.kieuPhu.ten) + '</span>');
   }
-  if (kieu.motCau) badges.push('<span class="dc-badge alt">' + esc(kieu.motCau) + '</span>');
+  // kieu.motCau giờ hiện trên ảnh (bìa chương, xem trên) khi có ảnh — chỉ rơi
+  // về badge dưới khi KHÔNG có ảnh (illusFig null), để câu vẫn hiện đâu đó.
+  if (!illusFig && kieu.motCau) badges.push('<span class="dc-badge alt">' + esc(kieu.motCau) + '</span>');
   document.getElementById('dcBadges').innerHTML = badges.join('');
 
   var bl = document.getElementById('birthLine');

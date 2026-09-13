@@ -37,7 +37,13 @@
 .res-block-header{background:var(--navy);padding:12px 16px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
 .res-block-title{color:#fff;font-family:var(--serif);font-size:15px;font-weight:700}
 .res-block-body{padding:16px}
-.lg-illus{margin:0 0 10px;border-radius:10px;overflow:hidden;aspect-ratio:1536/1024;background:var(--paper-2,#f2ede4)}
+.lg-illus{position:relative;margin:0 0 10px;border-radius:10px;overflow:hidden;aspect-ratio:1536/1024;background:var(--paper-2,#f2ede4)}
+/* Bìa chương (2026-09-13, cùng mẫu app-luan-giai.html) — tool này không có
+   hook AI, dùng _ho.kieu.ten/_ho.kieu.motCau (đã tính sẵn) làm caption đè
+   lên ảnh. `resTitle` ở header phía trên vẫn giữ nguyên (không trùng ý). */
+.lg-hookbox{position:absolute;left:14px;right:14px;bottom:14px;max-width:min(440px,calc(100% - 28px));background:var(--white);border-radius:16px;padding:14px 18px 15px;box-shadow:0 8px 22px rgba(6,26,46,.18)}
+.lg-hookbox .lg-hookpill{display:inline-block;font-family:var(--sans);font-size:10.5px;font-weight:700;letter-spacing:.05em;padding:3px 11px;border-radius:20px;margin-bottom:8px}
+.lg-hookbox p{font-family:var(--serif);font-weight:700;font-size:15.5px;line-height:1.44;color:var(--heading);margin:0}
 .lg-illus img{width:100%;height:100%;object-fit:cover;display:block}
 .btn-tai{background:var(--gold-lt);color:var(--gold-soft);border:1px solid var(--gold-soft);border-radius:7px;padding:6px 13px;font-size:12.5px;font-weight:600;cursor:pointer;font-family:inherit}
 .ask{margin-top:6px;display:inline-flex;align-items:center;gap:7px;font-size:12.5px;color:var(--gold-soft);border:1px dashed var(--gold-soft);border-radius:8px;padding:7px 12px;cursor:pointer;background:var(--gold-lt);font-family:inherit}
@@ -231,6 +237,10 @@ TuviForm.render('tuviFormHost', {mode:'compact', gioitinh:'nam'});
 })();
 
 function _err(m){var e=document.getElementById('error-msg');if(!m){e.classList.remove('active');e.textContent='';return;}e.textContent=m;e.classList.add('active');}
+// Trang này KHÔNG nạp laso-chart.js (không cần biểu đồ đó) nên esc() dùng
+// chung của mấy trang khác không có ở đây — khai cục bộ, cùng một dòng đã
+// dùng khắp nơi trong repo.
+function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
 // Banner minh hoạ — Công Sở KHÔNG có cấu trúc 12-cung/phần riêng như Luận
 // Giải, nên chỉ MỘT ảnh đầu trang, sắc thái theo cung Mệnh. Tuổi cố định
@@ -262,6 +272,13 @@ function doCongSo(){
     if(!j){_err('Chưa dựng được hồ sơ lúc này — vui lòng thử lại.');return;}
     _ho=j.hoSo;_birth=fd;
     document.getElementById('csIllusHost').innerHTML=congSoIllusHtml(fd);
+    // Bìa chương: đè kieu.ten/kieu.motCau lên ảnh khi có ảnh — resTitle ở
+    // header phía trên vẫn giữ nguyên (không trùng ý, cỡ chữ nhỏ hơn nhiều).
+    var _csFig=document.getElementById('csIllusHost').querySelector('.lg-illus');
+    if(_csFig&&_ho.kieu&&_ho.kieu.motCau){
+      _csFig.insertAdjacentHTML('beforeend','<div class="lg-hookbox"><span class="lg-hookpill fb-trungtinh">'+
+        esc(_ho.kieu.ten)+'</span><p>'+esc(_ho.kieu.motCau)+'</p></div>');
+    }
     var ten=fd.hoten||'Hồ sơ';
     var loggedIn=window.Auth&&Auth.isLoggedIn&&Auth.isLoggedIn();
     document.getElementById('resTitle').textContent=ten+' · kiểu '+_ho.kieu.ten;
