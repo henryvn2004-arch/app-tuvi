@@ -26,7 +26,15 @@ export const dynamic = 'force-dynamic';
 import { NextRequest } from 'next/server';
 import { generatePortraitImage } from '@/lib/image/openai-image';
 import { logImageUsage } from '@/lib/agent/usage';
-import { buildIllusPrompt, KHIA_CANH, type Sac, type Gioi, type Tuoi } from '@/lib/media/illus-prompt';
+import {
+  buildIllusPrompt,
+  buildThangPrompt,
+  KHIA_CANH,
+  THANG_CANH,
+  type Sac,
+  type Gioi,
+  type Tuoi,
+} from '@/lib/media/illus-prompt';
 import { getConfigValue } from '@/lib/config/appConfig';
 
 const SUPABASE_URL = process.env.SUPABASE_URL!;
@@ -44,6 +52,7 @@ const json = (body: unknown, status = 200) =>
   });
 
 interface Id {
+  kind: 'cung';
   khia: string;
   sac: Sac;
   gioi: Gioi;
@@ -51,19 +60,46 @@ interface Id {
   v: number;
 }
 
-/** "quan-loc:tot:nam" hoặc "quan-loc:tot:nam:trung-nien:v2" → Id. */
-function parseId(s: string): Id | null {
+/** Vận Hạn 12 Tháng — KHÔNG có `sac` (xem lý do ở `THANG_CANH`, illus-prompt.ts). */
+interface ThangId {
+  kind: 'thang';
+  thang: string;
+  gioi: Gioi;
+  tuoi: Tuoi;
+  v: number;
+}
+
+type Pick = Id | ThangId;
+
+const TUOIS: Tuoi[] = ['nhi-dong', 'thanh-nien', 'truong-thanh', 'trung-nien', 'lao-nien'];
+
+/**
+ * "quan-loc:tot:nam" hoặc "quan-loc:tot:nam:trung-nien:v2" → Id (12 cung +
+ * tổng quan). "thang-08:nu" hoặc "thang-08:nu:truong-thanh:v1" → ThangId
+ * (Vận Hạn 12 Tháng, không có phần sắc thái — phân biệt bằng tiền tố "thang-").
+ */
+function parseId(s: string): Pick | null {
   const parts = s.split(':');
+  const khiaOrThang = parts[0];
+  if (khiaOrThang && khiaOrThang.startsWith('thang-')) {
+    if (!THANG_CANH[khiaOrThang]) return null;
+    const [, gioi, tuoi, vRaw] = parts;
+    if (gioi !== 'nam' && gioi !== 'nu') return null;
+    const tuoiVal = (tuoi as Tuoi) || 'truong-thanh';
+    if (!TUOIS.includes(tuoiVal)) return null;
+    const v = vRaw ? Number(String(vRaw).replace(/^v/, '')) : 1;
+    if (!Number.isInteger(v) || v < 1) return null;
+    return { kind: 'thang', thang: khiaOrThang, gioi, tuoi: tuoiVal, v };
+  }
   const [khia, sac, gioi, tuoi, vRaw] = parts;
   if (!khia || !KHIA_CANH[khia]) return null;
   if (sac !== 'tot' && sac !== 'trung' && sac !== 'xau') return null;
   if (gioi !== 'nam' && gioi !== 'nu') return null;
-  const TUOIS: Tuoi[] = ['nhi-dong', 'thanh-nien', 'truong-thanh', 'trung-nien', 'lao-nien'];
   const tuoiVal = (tuoi as Tuoi) || 'truong-thanh';
   if (!TUOIS.includes(tuoiVal)) return null;
   const v = vRaw ? Number(String(vRaw).replace(/^v/, '')) : 1;
   if (!Number.isInteger(v) || v < 1) return null;
-  return { khia, sac, gioi, tuoi: tuoiVal, v };
+  return { kind: 'cung', khia, sac, gioi, tuoi: tuoiVal, v };
 }
 
 const SACS: Sac[] = ['tot', 'trung', 'xau'];
@@ -71,13 +107,25 @@ const GIOIS: Gioi[] = ['nam', 'nu'];
 
 /** Tier A: 13 khía cạnh × 3 sắc thái × 2 giới, v1, người trưởng thành — phủ
  * đúng 13 phần (1 tổng quan + 12 cung) của Luận Giải / Chu Trình Cuộc Đời. */
-function tierA(): Id[] {
-  const out: Id[] = [];
+function tierA(): Pick[] {
+  const out: Pick[] = [];
   for (const khia of Object.keys(KHIA_CANH)) {
     for (const sac of SACS) {
       for (const gioi of GIOIS) {
-        out.push({ khia, sac, gioi, tuoi: 'truong-thanh', v: 1 });
+        out.push({ kind: 'cung', khia, sac, gioi, tuoi: 'truong-thanh', v: 1 });
       }
+    }
+  }
+  return out;
+}
+
+/** Tier Tháng: 12 tháng âm lịch × 2 giới, v1, người trưởng thành — phủ đúng
+ * 12 phần (5-16) của Vận Hạn 12 Tháng chưa có ảnh. */
+function tierThang(): Pick[] {
+  const out: Pick[] = [];
+  for (const thang of Object.keys(THANG_CANH)) {
+    for (const gioi of GIOIS) {
+      out.push({ kind: 'thang', thang, gioi, tuoi: 'truong-thanh', v: 1 });
     }
   }
   return out;
@@ -108,8 +156,9 @@ export async function GET(req: NextRequest) {
   }
 
   const sp = req.nextUrl.searchParams;
-  let pick: Id[];
+  let pick: Pick[];
   if (sp.get('tierA')) pick = tierA();
+  else if (sp.get('tierThang')) pick = tierThang();
   else if (sp.get('ids')) {
     const raw = sp
       .get('ids')!
@@ -119,13 +168,13 @@ export async function GET(req: NextRequest) {
     const parsed = raw.map(parseId);
     const bad = raw.filter((_, i) => !parsed[i]);
     if (bad.length) return json({ ok: false, lyDo: `id không hợp lệ: ${bad.join(', ')}` }, 400);
-    pick = parsed as Id[];
+    pick = parsed as Pick[];
   } else {
     // Mặc định: 2 bức mẫu (đủ để soi phong cách + biên độ sắc thái), cùng
     // tinh thần "SAMPLE" của que-images (không tự ý đốt tiền khi gọi trần).
     pick = [
-      { khia: 'quan-loc', sac: 'tot', gioi: 'nam', tuoi: 'truong-thanh', v: 1 },
-      { khia: 'tai-bach', sac: 'xau', gioi: 'nu', tuoi: 'truong-thanh', v: 1 },
+      { kind: 'cung', khia: 'quan-loc', sac: 'tot', gioi: 'nam', tuoi: 'truong-thanh', v: 1 },
+      { kind: 'cung', khia: 'tai-bach', sac: 'xau', gioi: 'nu', tuoi: 'truong-thanh', v: 1 },
     ];
   }
 
@@ -154,7 +203,7 @@ export async function GET(req: NextRequest) {
     if (chan) break;
     if (daVe >= budget) break;
 
-    const p = buildIllusPrompt(it);
+    const p = it.kind === 'thang' ? buildThangPrompt(it) : buildIllusPrompt(it);
     const path = `${PREFIX}/${p.id}.png`;
     const url = `${SUPABASE_URL}/storage/v1/object/public/${BUCKET}/${path}`;
 

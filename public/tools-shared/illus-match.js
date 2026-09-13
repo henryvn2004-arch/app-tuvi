@@ -3,7 +3,7 @@
 // Chọn ảnh minh hoạ (thư viện `illus-prompt.ts` / `scripts/gen-illus.mjs`)
 // khớp với PHẦN đang hiển thị.
 //
-// Ba hàm công khai:
+// Bốn hàm công khai:
 //   illusUrlForPhan(ls, phan, gioi)     → app-luan-giai.html (Luận Giải Lá Số,
 //     phần 1-13 = tổng quan + 12 cung). `PHAN_TO_KHIA` gắn CỨNG với đúng thứ
 //     tự phần của RIÊNG luan-giai-core.js — không tái dùng cho tool khác.
@@ -15,8 +15,9 @@
 //     3 tool KHÔNG có cấu trúc 12-cung riêng ở client, chỉ 1 banner đầu trang
 //     theo cung Mệnh, tuổi truyền tay (dùng `tuoiBac(tuoiSo)` với tuổi THỰC
 //     của nhân vật, không phải tuổi giữa đại vận).
-// Vận Hạn 12 Tháng (16 phần, theo tháng) CHƯA có hàm nào ở đây — thư viện
-// chưa vẽ cảnh theo mùa/tháng, để đợt sau.
+//   illusUrlForThang(ls, thangAL, gioi) → app-van-han-nam.html (Vận Hạn 12
+//     Tháng, phần 5-16 = 12 tháng âm lịch). KHÔNG có trục sắc thái (xem
+//     `THANG_CANH`, illus-prompt.ts) — chỉ đổi cảnh theo mùa/lễ tiết.
 //
 // `sacThaiCung()` và bảng `KHIA_TO_CUNG` là phần DÙNG CHUNG được thật (đọc
 // theo TÊN CUNG, không theo số phần) — cả hai hàm trên đều gọi qua đó.
@@ -222,10 +223,36 @@
     return buildUrl('tong-quan', sac, gioi, tuoi, seedStr);
   }
 
+  // ── Vận Hạn 12 Tháng ─────────────────────────────────────────────────────
+  // 🔑 KHÔNG có trục sắc thái ở đây — xem lý do (van-han-12.ts từ chối chấm
+  // điểm cho một tháng) trong `THANG_CANH`, illus-prompt.ts. `THANG_SAC` chỉ
+  // là hằng số đứng đúng vị trí "sắc thái" trong tên file 5-phần, không mang
+  // nghĩa sắc thái nào — PHẢI khớp `THANG_SAC` export trong illus-prompt.ts.
+  var THANG_SAC = 'chuan';
+
+  /**
+   * URL ảnh minh hoạ cho MỘT THÁNG ÂM LỊCH (Vận Hạn 12 Tháng) — khoá dựng
+   * bằng công thức, KHÔNG tra bảng (12 tháng = 12 khoá cố định 'thang-01'..
+   * 'thang-12' trong `THANG_CANH`, illus-prompt.ts).
+   *
+   * @param {object} ls
+   * @param {number} thangAL  1-12 (khớp `ThangKhung.thangAL`, van-han-12.ts)
+   * @param {'nam'|'nu'} gioi bắt buộc truyền tay, xem `illusUrlForPhan`
+   * @returns {{url:string, sac:string, khia:string}|null}
+   */
+  function illusUrlForThang(ls, thangAL, gioi) {
+    if (gioi !== 'nam' && gioi !== 'nu') return null;
+    if (typeof thangAL !== 'number' || thangAL < 1 || thangAL > 12) return null;
+    var khia = 'thang-' + (thangAL < 10 ? '0' + thangAL : String(thangAL));
+    var seedStr = String(ls.canChiNam || '') + '|' + String(ls.menhDC || '') + '|' + String(ls.thanDC || '');
+    return buildUrl(khia, THANG_SAC, gioi, 'truong-thanh', seedStr);
+  }
+
   root.IllusMatch = {
     illusUrlForPhan: illusUrlForPhan,
     illusUrlForDaiVan: illusUrlForDaiVan,
     illusUrlForTongQuan: illusUrlForTongQuan,
+    illusUrlForThang: illusUrlForThang,
     sacThaiCung: sacThaiCung,
     tuoiBac: tuoiBac,
     PHAN_TO_KHIA: PHAN_TO_KHIA,

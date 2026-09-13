@@ -47,6 +47,8 @@
 .sec-n{width:26px;height:26px;flex:0 0 auto;border-radius:7px;background:var(--navy);color:var(--gold);font-family:var(--serif);font-size:13px;display:flex;align-items:center;justify-content:center;font-weight:600}
 .sec-h h3{font-family:var(--serif);font-size:18px;font-weight:600}
 .card{background:var(--white);border:1px solid var(--line);border-radius:11px;padding:15px 17px;box-shadow:var(--shadow)}
+.lg-illus{margin:0 0 10px;border-radius:10px;overflow:hidden;aspect-ratio:1536/1024;background:var(--paper-2,#f2ede4)}
+.lg-illus img{width:100%;height:100%;object-fit:cover;display:block}
 .ask{margin-top:11px;display:inline-flex;align-items:center;gap:7px;font-size:12.5px;color:var(--gold-soft);border:1px dashed var(--gold-soft);border-radius:8px;padding:7px 12px;cursor:pointer;background:var(--gold-lt);font-family:inherit}
 .fold-toggle{font-size:12.5px;color:var(--tx-blue);cursor:pointer;margin-bottom:14px;display:inline-block}
 #miniChart{display:block;margin-bottom:20px}
@@ -191,6 +193,8 @@
 <script>window.SHELL_ACTIVE='van-han-nam';window.SHELL_HISTORY=true;
 window.SHELL_INTRO={key:'van-han-nam'};</script>
 <script src="/tuvi-ansao-engine.js"></script>
+<script src="/tools-shared/illus-nguong.js?v=1"></script>
+<script src="/tools-shared/illus-match.js?v=1"></script>
 <script src="/laso-chart.js?v=3"></script>
 <script src="/tools-shared/pchip.js?v=1"></script>
 <script src="/tools-shared/daivan-chart.js?v=1"></script>
@@ -530,6 +534,18 @@ function buildChips(){
   return c;
 }
 
+// Banner minh hoạ — CHỈ phần THÁNG (5-16). Phần 1-4 mượn nội dung Luận Giải/
+// Chu Trình Cuộc Đời vốn đã có banner riêng ở trang gốc, không dựng lại ở
+// đây. Tháng KHÔNG có trục sắc thái (xem `illusUrlForThang`, illus-match.js)
+// — chỉ đổi cảnh theo mùa/lễ tiết, không suy tốt/xấu.
+function illusBannerHtml(t,ls){
+  if(!window.IllusMatch||!t||typeof t.thangAL!=='number') return '';
+  var r=IllusMatch.illusUrlForThang(ls,t.thangAL,_gioitinh);
+  if(!r) return '';
+  return '<figure class="lg-illus"><img src="'+r.url+'" alt="Minh hoạ '+esc(t.nhan||'')+'" loading="lazy"'+
+    ' onerror="this.closest(\'.lg-illus\').remove()"></figure>';
+}
+
 // ── Render 16 phần ───────────────────────────────────────────────────────
 // Phần 1–4 dùng LẠI khối deterministic của bản Luận Giải (LuanGiaiCore) —
 // cùng một dữ liệu thì phải hiện cùng một kiểu. Phần 5–16 là khối THÁNG riêng.
@@ -558,7 +574,8 @@ function render(ls){
       var raw=pre||'<div class="phan-empty">Phần này luận theo tổng thể lá số — bấm nút dưới để trợ lý luận sâu.</div>';
       body=pre?('<details class="lg-calc"><summary>Xem cơ sở tính toán</summary>'+raw+'</details>'):raw;
     }else{
-      body=renderThang(_khung.thangs[p-5]);
+      var t=_khung.thangs[p-5];
+      body=illusBannerHtml(t,ls)+renderThang(t);
     }
     // 🔴 (2026-09-07) Bỏ hẳn khoá-mini bán LẺ từng phần (16 Lượng/phần) —
     // Henry chốt chỉ còn MỘT nút mở cả bó, cùng mẫu app-chu-trinh-cuoc-doi.html.

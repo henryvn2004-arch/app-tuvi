@@ -329,6 +329,175 @@ export const KHIA_CANH: Record<string, KhiaCanh> = {
   },
 };
 
+// ── THÁNG ÂM LỊCH (Vận Hạn 12 Tháng) ─────────────────────────
+// 🔑 KHÔNG CÓ TRỤC SẮC THÁI. `lib/engine/van-han-12.ts` từ chối chấm điểm cho
+// MỘT THÁNG (chú thích thẳng trong file đó: "gán điểm là bịa") — không có
+// flag/ngưỡng nào để đọc như đại vận hay cung. Ảnh tháng vì vậy chỉ đổi CẢNH
+// theo đúng mùa/lễ tiết âm lịch, không suy tốt/xấu.
+//
+// `THANG_SAC` là hằng số CỐ ĐỊNH đứng vào đúng vị trí "sắc thái" trong quy ước
+// tên file 5-phần `<khia>--<sac>--<gioi>--<tuoi>--v<n>` (dùng chung bộ máy
+// buildUrl/parseId/tierA sẵn có của illus-match.js + admin route) — bản thân
+// giá trị này KHÔNG mang nghĩa sắc thái nào, chỉ để khớp đúng số phần tên file.
+export const THANG_SAC = 'chuan';
+
+export interface ThangCanh {
+  /** Nhãn tiếng Việt (để đối chiếu bằng mắt lúc duyệt, KHÔNG vào prompt). */
+  vi: string;
+  /** Sự việc NHÌN THẤY ĐƯỢC — đúng MỘT cảnh, không chia theo sắc thái. */
+  canh: string;
+  /** 3 bối cảnh Việt Nam có thật, đặc trưng tháng/mùa đó — chỉ số biến thể `v` chọn một. */
+  boiCanh: [string, string, string];
+}
+
+export const THANG_CANH: Record<string, ThangCanh> = {
+  'thang-01': {
+    vi: 'Tháng Giêng — Tết',
+    canh: 'walking through a flower market at dawn carrying a small kumquat tree wrapped in red cellophane, exchanging a cheerful nod with a flower seller',
+    boiCanh: [
+      'a flower market street in Hanoi before Tết: rows of peach blossom branches and kumquat trees in red pots, vendors on bicycles loaded with flowers, red envelopes strung on a stall pole',
+      'a Saigon street corner decorated for Tết: a row of yellow mai apricot trees in ceramic pots, red paper lanterns strung overhead, watermelons stacked in a pyramid at a stall',
+      "a countryside family courtyard on Tết morning: a pot of boiled bánh chưng still steaming by the kitchen door, a red altar cloth glimpsed through the doorway, firecracker paper scattered on the ground, relatives arriving on motorbikes",
+    ],
+  },
+  'thang-02': {
+    vi: 'Tháng Hai — lễ hội đầu xuân',
+    canh: 'walking under a fine drizzling spring rain holding a folded conical hat overhead, smiling at the crowd of festival-goers passing by',
+    boiCanh: [
+      'a Northern spring festival ground: a canvas tent stage in the distance, bamboo poles strung with colourful flags, food stalls under plastic tarpaulins in light rain, mud tracked on the grass',
+      'the stone steps up to a hillside pagoda in fine spring drizzle: moss on a low wall, a vendor selling grilled corn under an umbrella, pilgrims in raincoats climbing ahead',
+      'a village communal house yard during a spring festival: a bamboo swing frame being tested by children, a folding table of offerings, a loudspeaker on a pole, umbrellas bobbing across the wet grass',
+    ],
+  },
+  'thang-03': {
+    vi: 'Tháng Ba — Giỗ Tổ, Thanh Minh',
+    canh: 'kneeling to clear weeds from a family grave mound, a small bundle of incense and flowers set down on the grass beside them',
+    boiCanh: [
+      'a countryside cemetery on a Thanh Minh morning: low grave mounds among green rice fields, a red silk-cotton hoa gạo tree in bloom nearby, a bunch of chrysanthemums on the grass',
+      'the base of a giant hoa gạo tree beside a village pond: bright red blossoms scattered on the water, a stone path, a water buffalo grazing on the far bank',
+      'a family gathering at a hillside memorial ground: relatives lightly sketched further off with brooms and offering trays, a folding umbrella stuck in the earth, mist over distant hills',
+    ],
+  },
+  'thang-04': {
+    vi: 'Tháng Tư — đầu hè, sen nở',
+    canh: 'leaning on a windowsill with a cup of iced lotus tea, looking out past stacks of study books at a pond just starting to bloom',
+    boiCanh: [
+      'a room overlooking a lotus pond in early bloom: pink buds among round leaves, a desk piled with textbooks and highlighter pens, a standing fan turning, a cicada husk on the windowsill',
+      'a roadside lotus tea stall beside a pond: bundles of lotus flowers stacked in a basket, a kettle over a small burner, plastic stools, a bicycle parked against the railing',
+      'a schoolyard at the end of the day in early summer heat: a row of parked bicycles, a flame tree just beginning to bud, students clustered around a noticeboard, a fan spinning in an open classroom window',
+    ],
+  },
+  'thang-05': {
+    vi: 'Tháng Năm — Tết Đoan Ngọ',
+    canh: 'sitting down to a small bowl of rượu nếp and green plums early in the morning, fanning themselves with a bamboo hand fan against the heat',
+    boiCanh: [
+      'a kitchen table set for Tết Đoan Ngọ: a bowl of purple sticky rice wine, a plate of green plums and lychees, a bundle of mugwort hung by the door, morning sun already strong through the window',
+      'a wet-market stall on the morning of Đoan Ngọ: baskets of rượu nếp balls, bundles of green mangoes and plums, a woman fanning a tray of glutinous rice cakes, heat shimmer over the tin roofs beyond',
+      'a village courtyard at noon: a large canopy tree offering shade, a hammock strung between two posts, a fan spinning on an extension cord run outdoors, chickens dozing under a cart',
+    ],
+  },
+  'thang-06': {
+    vi: 'Tháng Sáu — cao điểm mùa hè',
+    canh: 'walking barefoot along the shoreline carrying rubber sandals in one hand, squinting cheerfully into the bright glare off the water',
+    boiCanh: [
+      'a Central Vietnam beach at midday: brightly painted basket boats pulled up on the sand, umbrellas made of dried leaves, fishermen mending nets in the shade, haze over the water',
+      'a shaded veranda in peak summer: a hammock strung between porch posts, an electric fan on the floor, a tray of chilled watermelon slices, cicada shells stuck to a tree trunk outside',
+      'a narrow city alley at the height of summer: laundry drooping in still heat, a shaved-ice cart parked at the corner, children queuing with coins, the tarmac shimmering in the distance',
+    ],
+  },
+  'thang-07': {
+    vi: 'Tháng Bảy — Vu Lan, mưa ngâu',
+    canh: 'pinning a red silk rose to their own chest in front of a small mirror, a soft private smile, rain tapping steadily outside',
+    boiCanh: [
+      "the entrance of a neighbourhood pagoda in gentle Ngâu rain: a basket of red and white silk roses for Vu Lan, monks' robes drying under an eave, dripping umbrellas in a stand by the door",
+      'a family altar prepared for Vu Lan: a tray of votive paper offerings, a bowl of fruit, rain streaking the window glass behind, a string of small paper lanterns',
+      'a covered market alley during a Ngâu shower: vendors pulling tarpaulins tighter, a puddle reflecting shopfront lights, a bicycle basket lined with plastic against the rain',
+    ],
+  },
+  'thang-08': {
+    vi: 'Tháng Tám — Trung Thu',
+    canh: "lighting a small paper star lantern's candle at dusk, surrounded by children reaching for their own lanterns",
+    boiCanh: [
+      'a street given over to Trung Thu: stalls strung with paper star lanterns and plastic masks, boxes of mooncakes stacked in cellophane, a lion-dance drum resting against a wall',
+      'a rooftop terrace at moonrise: a low table set with mooncakes, pomelo, and green tea, paper lanterns hung along the railing, city lights spreading below',
+      "a village courtyard for a children's Trung Thu procession: a homemade star lantern on a stick, a paper dragon head propped against a wall, drummers gathering, the full moon rising over the rooftops",
+    ],
+  },
+  'thang-09': {
+    vi: 'Tháng Chín — thu, gió heo may',
+    canh: 'standing at the edge of a field with a light jacket pulled close against the first cool breeze, watching the wind move over the ripening rice',
+    boiCanh: [
+      'the edge of a Red River Delta paddy field turning gold: egrets stepping through the shallows, a scarecrow of plastic bags, a dirt path lined with tall grass swaying in a cool breeze',
+      'a Hanoi lakeside path in early autumn: milk-flower trees dropping small white blossoms, a coffee cart with a striped umbrella, leaves just starting to turn along the path',
+      'a highland terrace path at the edge of ripening rice: layered paddies catching the low autumn sun, a water buffalo cart on the track, mist still clinging to a distant ridge',
+    ],
+  },
+  'thang-10': {
+    vi: 'Tháng Mười — mùa gặt, cốm',
+    canh: 'carrying a bundle of freshly cut rice stalks over one shoulder, wiping sweat from the brow with the back of a hand, smiling toward workers further down the field',
+    boiCanh: [
+      'a golden rice field at the height of harvest: sheaves stacked along the bunds, a threshing machine running, sacks of grain piled on a small trailer, distant figures bent over their sickles',
+      'a cốm-making yard in a village near Hanoi: young green rice grains roasting in a wide pan over a wood fire, a mortar and pestle nearby, bundles wrapped in lotus leaves and tied with straw',
+      'a rural road at dusk after harvest: bicycles loaded with rice sacks, straw spread to dry along the roadside, a haystack beside a brick house, smoke rising from a stove pipe',
+    ],
+  },
+  'thang-11': {
+    vi: 'Tháng Mười Một — đầu đông',
+    canh: 'wrapping both hands around a warm cup of tea on a cool foggy morning, breath faintly visible, watching mist drift over the rooftops',
+    boiCanh: [
+      'a Hanoi street at dawn in early winter fog: a roadside chè stall with a steaming pot, vendors in knit hats and scarves, motorbike headlights faint in the mist',
+      'a highland town market in the cold: baskets of persimmons and cold-season vegetables, breath visible in the air, vendors warming hands over a charcoal brazier',
+      'a family kitchen on a cold morning: a pot of soup steaming on the stove, a heavy curtain hung over the doorway against the draught, a knitted blanket over a chair, fogged-up window glass',
+    ],
+  },
+  'thang-12': {
+    vi: 'Tháng Chạp — chuẩn bị Tết',
+    canh: 'kneeling on a mat carefully folding banana leaves around a mound of glutinous rice, string and knife laid ready beside them',
+    boiCanh: [
+      'a courtyard set up for wrapping bánh chưng: a large pot ready over a wood fire, stacks of banana leaves and bamboo string, a basket of split mung beans, elderly relatives sketched further back tying parcels',
+      'a year-end flower market being set up before dawn: rows of peach and mai branches still wrapped for transport, string lights being tested, a truck unloading potted chrysanthemums',
+      'a house mid-spring-clean before Tết: a stepladder against a freshly wiped altar shelf, a bucket and cloth on the floor, a rolled red paper scroll ready to hang, a calendar torn down to its last page',
+    ],
+  },
+};
+
+/** Khối tả dựng cho MỘT tháng — không có tham số sắc thái, xem lý do ở trên. */
+export interface ThangInput {
+  /** Khoá trong `THANG_CANH`, "thang-01".."thang-12". */
+  thang: string;
+  gioi: Gioi;
+  /** Mặc định `truong-thanh` — cửa sổ 12 tháng không đủ dài để cần đổi tuổi. */
+  tuoi?: Tuoi;
+  /** Biến thể bối cảnh 1..3. Ngoài tầm thì quay vòng. */
+  v?: number;
+}
+
+export function buildThangPrompt(input: ThangInput): IllusPrompt {
+  const { thang, gioi, tuoi = 'truong-thanh' } = input;
+  const tc = THANG_CANH[thang];
+  if (!tc) throw new Error(`illus-prompt: không có tháng "${thang}"`);
+  const v = ((Math.max(1, input.v || 1) - 1) % tc.boiCanh.length) + 1;
+
+  const prompt = [
+    STYLE_LOCK,
+    '',
+    nhanVat(gioi, tuoi) + '.',
+    '',
+    `Scene: ${tc.canh}.`,
+    `Environment: ${tc.boiCanh[v - 1]}.`,
+    '',
+    'Composition: wide horizontal frame, the character placed off-centre towards the right, seen from a natural eye-level three-quarter angle, room to breathe around them.',
+    '',
+    TEXT_SAFE_AREA,
+  ].join('\n');
+
+  return {
+    id: `${thang}--${THANG_SAC}--${gioi}--${tuoi}--v${v}`,
+    nhan: `${tc.vi} · ${gioi} · ${tuoi} · biến thể ${v}`,
+    prompt,
+  };
+}
+
 // ── DỰNG PROMPT ─────────────────────────────────────────────
 
 export interface IllusInput {
