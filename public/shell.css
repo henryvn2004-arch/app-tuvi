@@ -117,7 +117,10 @@ button.item{border:none;background:none;font:inherit;text-align:left}
 .sb-brandmini span{display:block;font-size:9px;color:var(--sb-txt-dim);white-space:nowrap}
 
 /* ── WORKSPACE FRAME ── */
-.ws{background:var(--paper);overflow-y:auto;display:flex;flex-direction:column;position:relative}
+/* `container-type` ở ĐÂY (khối cha), không ở khối con — `.ws` co theo bề rộng
+   CỘT giữa sidebar (246px) và rail (--rail-w), KHÔNG theo viewport (xem bẫy
+   trong CLAUDE.md). `@container ws (...)` bên dưới hỏi đúng bề rộng cột này. */
+.ws{background:var(--paper);overflow-y:auto;display:flex;flex-direction:column;position:relative;container:ws/inline-size}
 .ws-top{position:sticky;top:0;z-index:5;background:var(--paper);border-bottom:1px solid var(--line);padding:12px 22px;display:flex;align-items:center;gap:14px}
 /* Icon cố định cạnh tên tool trên `.ws-top` — xem `mountToolIcon()` trong
    shell.js. Icon (không phải ảnh minh hoạ .intro-avatar): ở cỡ 32-40px một
@@ -724,6 +727,35 @@ font-family:inherit}
 .samp-cta .sc-txt b{font-size:13px;color:var(--text);font-weight:600}
 .samp-cta .sc-txt span{font-size:11.5px;color:var(--text-lt)}
 .samp-cta button{background:none;border:1px solid var(--gold-soft);color:var(--gold-soft);border-radius:20px;padding:8px 15px;font-size:12.5px;font-weight:600;cursor:pointer;font-family:inherit;flex:0 0 auto;white-space:nowrap}
+/* ── Khối "nhập liệu" (`#introHost` + `#shellRecent` + `.samp-cta` +
+   `.form-card`, đứng liền nhau trước kết quả) — bọc trong `.ws-intake` để
+   dùng 2 CỘT khi `.ws` đủ rộng, thay vì một cột 640px canh trái bỏ phí phần
+   còn lại của workspace (đo: rail đóng hoặc màn lớn thừa >600px trắng).
+   MẶC ĐỊNH (hẹp, rail mở — trường hợp phổ biến nhất) KHÔNG đổi gì: các con
+   vẫn xếp dọc đúng thứ tự trong HTML như trước giờ. Chỉ đủ rộng mới chuyển
+   `#shellRecent` sang cột phụ bên phải. Không dùng `@media` vì bề rộng
+   `.ws` không theo viewport (xem bẫy ở trên `.ws{container:...}`).
+   🪤 Ngưỡng PHẢI cách xa breakpoint mobile `@media(max-width:900px)` phía
+   trên (`.shell{grid-template-columns:1fr}`): đúng lúc sidebar+rail gập lại
+   thành drawer, `.ws` NHẢY LÊN gần bằng viewport (900px) — đo được ở 900px
+   VỪA khớp `.ws` VỪA khớp ngưỡng cột, ra 2 cột đè vỡ trên màn hình đúng bằng
+   điện thoại ngang/tablet, tràn ra ngoài rìa. 640(main)+24(gap)+320(side)+
+   44(padding .ws-body) = 1028px là mức TỐI THIỂU không vỡ; 1080 chừa dư và
+   nằm hẳn NGOÀI vùng viewport ≤900 nên không bao giờ trùng nhau. */
+.ws-intake{max-width:1040px}
+@container ws (min-width:1080px){
+  .ws-intake{
+    display:grid;
+    grid-template-columns:minmax(0,640px) minmax(240px,320px);
+    grid-template-areas:"hero side" "samp side" "form side";
+    column-gap:24px;row-gap:16px;
+    align-items:start;
+  }
+  .ws-intake>#introHost{grid-area:hero}
+  .ws-intake>.samp-cta{grid-area:samp;margin-bottom:0}
+  .ws-intake>.form-card{grid-area:form}
+  .ws-intake>#shellRecent{grid-area:side;margin-top:0}
+}
 /* Thanh DÍNH "Đây là BẢN MẪU" — hiện phía trên kết quả khi bản mẫu đang tự mở
    (hoặc mở tay). Chuyển từ app-luan-giai.html (nơi định nghĩa gốc) sang đây
    (2026-09) để dùng chung — nhiều trang giờ auto-show sample lúc vào trang. */
