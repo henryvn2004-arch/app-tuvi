@@ -26,6 +26,8 @@
 .dc-self summary{cursor:pointer;color:#7A5F26;font-weight:600}
 .dc-self .inner{margin-top:10px;border:1px solid var(--line-2);border-radius:10px;padding:12px 13px;background:var(--paper)}
 .dc-self p.hint{font-size:11.5px;color:var(--text-lt);margin-bottom:9px}
+.lg-illus{margin:0 0 10px;border-radius:10px;overflow:hidden;aspect-ratio:1536/1024;background:var(--paper-2,#f2ede4)}
+.lg-illus img{width:100%;height:100%;object-fit:cover;display:block}
 .dc-hero{text-align:center;padding:2px 6px 14px}
 .dc-name{font-family:var(--serif);font-size:22px;line-height:1.4;color:#061A2E;font-weight:700}
 .dc-role{font-size:12.5px;color:var(--text-lt);margin-top:3px}
@@ -270,6 +272,7 @@
           <div class="res-block-body">
             <div id="loading"><div id="loadingSteps"></div></div>
             <div id="card" style="display:none">
+              <div id="dcIllusHost"></div>
               <div class="dc-hero">
                 <div class="dc-name" id="dcName"></div>
                 <div class="dc-role" id="dcRole"></div>
@@ -440,6 +443,10 @@
 
 <script>window.SHELL_ACTIVE='day-con';window.SHELL_HISTORY=true;
 window.SHELL_INTRO={key:'day-con'};</script>
+<script src="/tuvi-ansao-engine.js?v=1"></script>
+<script src="/tuvi-laso-format.js?v=2"></script>
+<script src="/tools-shared/illus-nguong.js?v=1"></script>
+<script src="/tools-shared/illus-match.js?v=1"></script>
 <script src="/laso-chart.js?v=3"></script>
 <script src="/tools-shared/vn-timezone.js?v=1"></script>
 <script src="/tuvi-form.js?v=3"></script>
@@ -1155,7 +1162,35 @@ function renderHoatDong(h) {
 // động, cách dạy, chặng đi học, các dòng cơ sở) — thuộc phần TRẢ PHÍ từ Pha 3,
 // và dữ liệu của nó KHÔNG có trong payload xem trước, nên gọi nó ở đường đó chỉ
 // dựng ra một loạt khối rỗng. `renderMeta` = cả hai, dùng cho đường đã trả tiền.
+// Banner minh hoạ — Dạy Con không đọc lá số con qua `anSaoLaSo()` phía
+// client (server đã lọc chỉ trả `DayConProfile` gọn), nên tự tính LẠI `ls`
+// từ đúng ngày sinh con (`_last`, biến toàn cục do `analyze()` đặt trước khi
+// gọi render này) chỉ để suy sắc thái cung Mệnh — không đụng route/engine.
+// `hour` truyền vào `convertDuongToAm` không ảnh hưởng âm lịch ngày/năm hay
+// can chi năm (chỉ đổi giờ-chi hiển thị, mà ta ghi đè `gioIdx` ngay sau đó
+// bằng đúng `hourBranch` form đã tính) — 0 là an toàn.
+function dayConIllusHtml(data) {
+  if (!window.IllusMatch || !window.anSaoLaSo || !window.convertDuongToAm || !_last) return '';
+  try {
+    var conv = convertDuongToAm(_last.day, _last.month, _last.year, 0);
+    if (!conv) return '';
+    conv.gioIdx = _last.hourBranch;
+    var ls = anSaoLaSo({
+      ngayAL: conv.amLich.day, thangAL: conv.amLich.month, namAL: conv.amLich.year,
+      canNam: conv.canNam, chiNam: conv.chiNam, gioIdx: _last.hourBranch, gioitinh: _last.gender,
+      namXem: new Date().getFullYear(),
+    });
+    var tuoiBac = IllusMatch.tuoiBac(data.tuoi);
+    if (!tuoiBac) return '';
+    var r = IllusMatch.illusUrlForTongQuan(ls, data.gioiTinh, tuoiBac);
+    if (!r) return '';
+    return '<figure class="lg-illus"><img src="' + r.url + '" alt="" loading="eager"' +
+      ' onerror="this.closest(\'.lg-illus\').remove()"></figure>';
+  } catch (e) { console.error('dayConIllusHtml', e); return ''; }
+}
+
 function renderMetaHead(data) {
+  document.getElementById('dcIllusHost').innerHTML = dayConIllusHtml(data);
   var kieu = data.kieu || {};
   var hoc = data.hoc || {};
   document.getElementById('dcName').textContent = data.ten || 'Con';

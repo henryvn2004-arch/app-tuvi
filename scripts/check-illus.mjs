@@ -116,6 +116,18 @@ for (const [k, v] of Object.entries(KHIA_CANH)) {
         fail(`${k}.boiCanh[${i}]: quá ngắn hoặc thiếu — "${b}"`);
     });
   }
+  // canhTot2/boiCanhTot2 (bối cảnh phú quý riêng cho tốt+v2) — nếu khai một
+  // trong hai thì PHẢI khai đủ cả hai (buildIllusPrompt đọc cả cặp cùng lúc,
+  // thiếu một bên là rơi im lặng về boiCanh[1] cũ mà không ai biết).
+  const coTot2 = 'canhTot2' in v || 'boiCanhTot2' in v;
+  if (coTot2) {
+    if (typeof v.canhTot2 !== 'string' || v.canhTot2.trim().length < 20)
+      fail(`${k}.canhTot2: quá ngắn hoặc thiếu — "${v.canhTot2}"`);
+    if (typeof v.boiCanhTot2 !== 'string' || v.boiCanhTot2.trim().length < 20)
+      fail(`${k}.boiCanhTot2: quá ngắn hoặc thiếu — "${v.boiCanhTot2}"`);
+  } else {
+    fail(`${k}: thiếu canhTot2/boiCanhTot2 (mọi khía phải có bộ v2 phú quý cho sắc "tốt")`);
+  }
 }
 
 // ── 3. public/tools-shared/illus-match.js: PHAN_TO_KHIA / KHIA_TO_CUNG / VARIANT_COUNT ──
@@ -261,9 +273,43 @@ if (!Array.isArray(TUOI_MOC) || TUOI_MOC.length !== TUOI_5_BAC.length) {
     fail(`TUOI_MOC phải kết thúc bằng mốc Infinity (bậc tuổi già nhất phải hứng MỌI tuổi còn lại)`);
 }
 
+// ── 6. Vận Hạn 12 Tháng: THANG_CANH trong illus-prompt.ts ───────────────────
+// Khác cung/đại vận, tháng KHÔNG có trục sắc thái (van-han-12.ts từ chối chấm
+// điểm cho một tháng) — `illusUrlForThang` (illus-match.js) DỰNG khoá bằng
+// công thức 'thang-'+pad(thangAL,2) chứ không tra bảng, nên chỉ cần canh đủ
+// ĐÚNG 12 khoá 'thang-01'..'thang-12' là mọi thangAL 1-12 chắc chắn khớp.
+const THANG_CANH = extractConst(ROOT + 'lib/media/illus-prompt.ts', 'THANG_CANH');
+const THANG_KEYS = Object.keys(THANG_CANH).sort();
+const THANG_EXPECTED = Array.from(
+  { length: 12 },
+  (_, i) => `thang-${String(i + 1).padStart(2, '0')}`
+);
+if (JSON.stringify(THANG_KEYS) !== JSON.stringify(THANG_EXPECTED)) {
+  fail(`THANG_CANH phải đúng 12 khoá thang-01..thang-12, đang có: ${THANG_KEYS.join(', ')}`);
+}
+for (const [k, v] of Object.entries(THANG_CANH)) {
+  if (!v || typeof v !== 'object') {
+    fail(`${k}: không phải object`);
+    continue;
+  }
+  if (!v.vi) fail(`${k}: thiếu nhãn tiếng Việt (vi)`);
+  if (typeof v.canh !== 'string' || v.canh.trim().length < 20)
+    fail(`${k}.canh: quá ngắn hoặc thiếu`);
+  if (!Array.isArray(v.boiCanh) || v.boiCanh.length !== 3) {
+    fail(
+      `${k}.boiCanh: phải đúng mảng 3 phần tử, đang có ${Array.isArray(v.boiCanh) ? v.boiCanh.length : 'không phải mảng'}`
+    );
+  } else {
+    v.boiCanh.forEach((b, i) => {
+      if (typeof b !== 'string' || b.trim().length < 20)
+        fail(`${k}.boiCanh[${i}]: quá ngắn hoặc thiếu`);
+    });
+  }
+}
+
 if (bad === 0) {
   console.log(
-    `✅ ${KHIA_KEYS.length} khía cạnh · ${KHIA_KEYS.length * 3} sắc thái · PHẦN↔khía↔cung↔ngưỡng khớp nhau tuyệt đối · đại vận: 3 flag → 3 sắc, ${TUOI_5_BAC.length} bậc tuổi phủ đủ.`
+    `✅ ${KHIA_KEYS.length} khía cạnh · ${KHIA_KEYS.length * 3} sắc thái · PHẦN↔khía↔cung↔ngưỡng khớp nhau tuyệt đối · đại vận: 3 flag → 3 sắc, ${TUOI_5_BAC.length} bậc tuổi phủ đủ · 12 tháng âm lịch đủ khoá · ${KHIA_KEYS.length} khía đủ bộ v2 phú quý (tốt).`
   );
 } else {
   console.error(`\n${bad} lỗi trong thư viện hình minh hoạ — sửa trước khi gen/deploy.`);

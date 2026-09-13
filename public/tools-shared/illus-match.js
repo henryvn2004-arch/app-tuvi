@@ -3,15 +3,21 @@
 // Chọn ảnh minh hoạ (thư viện `illus-prompt.ts` / `scripts/gen-illus.mjs`)
 // khớp với PHẦN đang hiển thị.
 //
-// Hai hàm công khai, hai tool khác nhau:
+// Bốn hàm công khai:
 //   illusUrlForPhan(ls, phan, gioi)     → app-luan-giai.html (Luận Giải Lá Số,
 //     phần 1-13 = tổng quan + 12 cung). `PHAN_TO_KHIA` gắn CỨNG với đúng thứ
 //     tự phần của RIÊNG luan-giai-core.js — không tái dùng cho tool khác.
 //   illusUrlForDaiVan(ls, dvIndex, gioi) → app-chu-trinh-cuoc-doi.html (Chu
 //     Trình Cuộc Đời, đại vận 0-8). Tái dùng cảnh "tong-quan" sẵn có, đổi
 //     TUỔI nhân vật theo tuổi giữa đại vận — không cần vẽ thêm khía cạnh mới.
-// Vận Hạn 12 Tháng (16 phần, theo tháng) CHƯA có hàm nào ở đây — thư viện
-// chưa vẽ cảnh theo mùa/tháng, để đợt sau.
+//   illusUrlForTongQuan(ls, gioi, tuoiBac) → Công Sở / Dạy Con / Hướng Nghiệp
+//     Trẻ (app-cong-so.html, app-day-con.html, app-huong-nghiep-tre.html) —
+//     3 tool KHÔNG có cấu trúc 12-cung riêng ở client, chỉ 1 banner đầu trang
+//     theo cung Mệnh, tuổi truyền tay (dùng `tuoiBac(tuoiSo)` với tuổi THỰC
+//     của nhân vật, không phải tuổi giữa đại vận).
+//   illusUrlForThang(ls, thangAL, gioi) → app-van-han-nam.html (Vận Hạn 12
+//     Tháng, phần 5-16 = 12 tháng âm lịch). KHÔNG có trục sắc thái (xem
+//     `THANG_CANH`, illus-prompt.ts) — chỉ đổi cảnh theo mùa/lễ tiết.
 //
 // `sacThaiCung()` và bảng `KHIA_TO_CUNG` là phần DÙNG CHUNG được thật (đọc
 // theo TÊN CUNG, không theo số phần) — cả hai hàm trên đều gọi qua đó.
@@ -59,16 +65,17 @@
 
   /**
    * Số biến thể bối cảnh ĐÃ VẼ cho mỗi khía cạnh — KHÔNG phải số bối cảnh viết
-   * trong `KHIA_CANH.boiCanh` (luôn là 3). Bắt đầu ở 1 vì Tier A chỉ vẽ v1;
-   * nâng số này CHO TỪNG KHOÁ chỉ sau khi v2/v3 đã thật sự sinh + upload lên
-   * Storage — nâng sớm thì một phần lá số trỏ vào ảnh chưa tồn tại (ẩn ảnh
-   * do `onerror`, không vỡ trang, nhưng người xem thấy phần đó "mất ảnh" so
-   * với phần khác một cách vô cớ).
+   * trong `KHIA_CANH.boiCanh` (luôn là 3). Nâng số này CHO TỪNG KHOÁ chỉ sau
+   * khi biến thể đó đã thật sự sinh + upload lên Storage — nâng sớm thì một
+   * phần lá số trỏ vào ảnh chưa tồn tại (ẩn ảnh do `onerror`, không vỡ trang,
+   * nhưng người xem thấy phần đó "mất ảnh" so với phần khác một cách vô cớ).
+   * Cả 13 khoá lên 2 từ v2 (tierAv2, xem admin route) — sắc "tốt" đọc cảnh
+   * phú quý riêng, "trung"/"xấu" chỉ đổi bối cảnh (`illus-prompt.ts`).
    */
   var VARIANT_COUNT = {
-    menh: 1, 'phu-mau': 1, 'phuc-duc': 1, 'dien-trach': 1, 'quan-loc': 1, 'no-boc': 1,
-    'thien-di': 1, 'tat-ach': 1, 'tai-bach': 1, 'tu-tuc': 1, 'phu-the': 1, 'huynh-de': 1,
-    'tong-quan': 1,
+    menh: 2, 'phu-mau': 2, 'phuc-duc': 2, 'dien-trach': 2, 'quan-loc': 2, 'no-boc': 2,
+    'thien-di': 2, 'tat-ach': 2, 'tai-bach': 2, 'tu-tuc': 2, 'phu-the': 2, 'huynh-de': 2,
+    'tong-quan': 2,
   };
 
   /** Hash chuỗi ổn định (djb2) — CHỈ để chọn biến thể bối cảnh, không cần bền
@@ -190,10 +197,65 @@
     return r;
   }
 
+  /** Bậc tuổi 1/5 cho một TUỔI THỰC bất kỳ (không chỉ tuổi giữa đại vận) —
+   * dùng chung bảng mốc `TUOI_MOC` ở trên, không dựng bảng mốc thứ hai. */
+  function tuoiBac(tuoi) {
+    if (typeof tuoi !== 'number' || !isFinite(tuoi)) return null;
+    return tuoiBacThoDaiVan(tuoi);
+  }
+
+  /**
+   * URL ảnh minh hoạ "tổng quan" theo cung Mệnh — dùng cho các tool KHÔNG có
+   * cấu trúc 12-cung riêng (Công Sở, Dạy Con, Hướng Nghiệp Trẻ): một banner
+   * duy nhất ở đầu trang, sắc thái theo Mệnh, tuổi theo TUỔI THỰC của nhân
+   * vật (khác `illusUrlForDaiVan` — tuổi giữa một đại vận).
+   *
+   * @param {object} ls    lá số nhân vật chính (đã tính bằng `anSaoLaSo`)
+   * @param {'nam'|'nu'} gioi  bắt buộc truyền tay, xem `illusUrlForPhan`
+   * @param {string} tuoi  một trong 5 bậc `Tuoi` — dùng `tuoiBac(tuoiSo)` để suy ra
+   * @returns {{url:string, sac:string, khia:string}|null}
+   */
+  function illusUrlForTongQuan(ls, gioi, tuoi) {
+    if (gioi !== 'nam' && gioi !== 'nu') return null;
+    if (!TUOI_MOC.some(function (m) { return m[1] === tuoi; })) return null;
+    var sac = sacThaiCung(ls, 'Mệnh');
+    if (!sac) return null;
+    var seedStr = String(ls.canChiNam || '') + '|' + String(ls.menhDC || '') + '|' + String(ls.thanDC || '');
+    return buildUrl('tong-quan', sac, gioi, tuoi, seedStr);
+  }
+
+  // ── Vận Hạn 12 Tháng ─────────────────────────────────────────────────────
+  // 🔑 KHÔNG có trục sắc thái ở đây — xem lý do (van-han-12.ts từ chối chấm
+  // điểm cho một tháng) trong `THANG_CANH`, illus-prompt.ts. `THANG_SAC` chỉ
+  // là hằng số đứng đúng vị trí "sắc thái" trong tên file 5-phần, không mang
+  // nghĩa sắc thái nào — PHẢI khớp `THANG_SAC` export trong illus-prompt.ts.
+  var THANG_SAC = 'chuan';
+
+  /**
+   * URL ảnh minh hoạ cho MỘT THÁNG ÂM LỊCH (Vận Hạn 12 Tháng) — khoá dựng
+   * bằng công thức, KHÔNG tra bảng (12 tháng = 12 khoá cố định 'thang-01'..
+   * 'thang-12' trong `THANG_CANH`, illus-prompt.ts).
+   *
+   * @param {object} ls
+   * @param {number} thangAL  1-12 (khớp `ThangKhung.thangAL`, van-han-12.ts)
+   * @param {'nam'|'nu'} gioi bắt buộc truyền tay, xem `illusUrlForPhan`
+   * @returns {{url:string, sac:string, khia:string}|null}
+   */
+  function illusUrlForThang(ls, thangAL, gioi) {
+    if (gioi !== 'nam' && gioi !== 'nu') return null;
+    if (typeof thangAL !== 'number' || thangAL < 1 || thangAL > 12) return null;
+    var khia = 'thang-' + (thangAL < 10 ? '0' + thangAL : String(thangAL));
+    var seedStr = String(ls.canChiNam || '') + '|' + String(ls.menhDC || '') + '|' + String(ls.thanDC || '');
+    return buildUrl(khia, THANG_SAC, gioi, 'truong-thanh', seedStr);
+  }
+
   root.IllusMatch = {
     illusUrlForPhan: illusUrlForPhan,
     illusUrlForDaiVan: illusUrlForDaiVan,
+    illusUrlForTongQuan: illusUrlForTongQuan,
+    illusUrlForThang: illusUrlForThang,
     sacThaiCung: sacThaiCung,
+    tuoiBac: tuoiBac,
     PHAN_TO_KHIA: PHAN_TO_KHIA,
   };
 })(typeof window !== 'undefined' ? window : this);

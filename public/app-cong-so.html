@@ -37,6 +37,8 @@
 .res-block-header{background:var(--navy);padding:12px 16px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
 .res-block-title{color:#fff;font-family:var(--serif);font-size:15px;font-weight:700}
 .res-block-body{padding:16px}
+.lg-illus{margin:0 0 10px;border-radius:10px;overflow:hidden;aspect-ratio:1536/1024;background:var(--paper-2,#f2ede4)}
+.lg-illus img{width:100%;height:100%;object-fit:cover;display:block}
 .btn-tai{background:var(--gold-lt);color:var(--gold-soft);border:1px solid var(--gold-soft);border-radius:7px;padding:6px 13px;font-size:12.5px;font-weight:600;cursor:pointer;font-family:inherit}
 .ask{margin-top:6px;display:inline-flex;align-items:center;gap:7px;font-size:12.5px;color:var(--gold-soft);border:1px dashed var(--gold-soft);border-radius:8px;padding:7px 12px;cursor:pointer;background:var(--gold-lt);font-family:inherit}
 
@@ -169,6 +171,7 @@
           <div class="res-block-body">
             <div class="cs-canvas-wrap"><canvas id="csToaDo"></canvas></div>
             <div class="err" id="taiErr"></div>
+            <div id="csIllusHost"></div>
             <div id="ketQua"></div>
             <!-- Khối hook (1 fact) — CHỈ dựng cho khách CHƯA đăng ký (xem
                  `mountHookAnon`), đứng giữa HEAD và tấm khoá đăng ký. Không
@@ -201,6 +204,10 @@
 
 <script>window.SHELL_ACTIVE='cong-so';window.SHELL_HISTORY=true;
 window.SHELL_INTRO={key:'cong-so'};</script>
+<script src="/tuvi-ansao-engine.js?v=1"></script>
+<script src="/tuvi-laso-format.js?v=2"></script>
+<script src="/tools-shared/illus-nguong.js?v=1"></script>
+<script src="/tools-shared/illus-match.js?v=1"></script>
 <script src="/tools-shared/cong-so.js?v=4"></script>
 <script src="/tools-shared/vn-timezone.js?v=1"></script>
 <script src="/tuvi-form.js?v=3"></script>
@@ -225,6 +232,24 @@ TuviForm.render('tuviFormHost', {mode:'compact', gioitinh:'nam'});
 
 function _err(m){var e=document.getElementById('error-msg');if(!m){e.classList.remove('active');e.textContent='';return;}e.textContent=m;e.classList.add('active');}
 
+// Banner minh hoạ — Công Sở KHÔNG có cấu trúc 12-cung/phần riêng như Luận
+// Giải, nên chỉ MỘT ảnh đầu trang, sắc thái theo cung Mệnh. Tuổi cố định
+// 'truong-thanh' — hồ sơ luôn là người lớn đi làm, không có field tuổi thật.
+function congSoIllusHtml(fd){
+  if(!window.IllusMatch||!window.anSaoLaSo||!window.convertDuongToAm) return '';
+  try{
+    var conv=convertDuongToAm(fd.ngay,fd.thang,fd.nam,fd.gioHour);
+    if(!conv) return '';
+    conv.gioIdx=fd.gioIdx;
+    var ls=anSaoLaSo({ngayAL:conv.amLich.day,thangAL:conv.amLich.month,namAL:conv.amLich.year,
+      canNam:conv.canNam,chiNam:conv.chiNam,gioIdx:fd.gioIdx,gioitinh:fd.gioitinh,namXem:fd.namXem});
+    var r=IllusMatch.illusUrlForTongQuan(ls,fd.gioitinh,'truong-thanh');
+    if(!r) return '';
+    return '<figure class="lg-illus"><img src="'+r.url+'" alt="" loading="eager"'+
+      ' onerror="this.closest(\'.lg-illus\').remove()"></figure>';
+  }catch(e){ console.error('congSoIllusHtml', e); return ''; }
+}
+
 function doCongSo(){
   var fd=TuviForm.getData();
   _err('');
@@ -236,6 +261,7 @@ function doCongSo(){
     btn.disabled=false; if(lbl) lbl.textContent=old;
     if(!j){_err('Chưa dựng được hồ sơ lúc này — vui lòng thử lại.');return;}
     _ho=j.hoSo;_birth=fd;
+    document.getElementById('csIllusHost').innerHTML=congSoIllusHtml(fd);
     var ten=fd.hoten||'Hồ sơ';
     var loggedIn=window.Auth&&Auth.isLoggedIn&&Auth.isLoggedIn();
     document.getElementById('resTitle').textContent=ten+' · kiểu '+_ho.kieu.ten;
