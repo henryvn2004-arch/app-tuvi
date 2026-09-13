@@ -32,17 +32,29 @@ const ROOT = new URL('..', import.meta.url).pathname;
 // nhưng phải NÊU ĐÚNG BẢN trong lockfile: `npx tsc` trần kéo bản bất kỳ còn
 // trong cache, không phải bản của repo (đã làm lint đỏ vì lệch bản một lần).
 const TSC_LOCAL = join(ROOT, 'node_modules/.bin/tsc');
-const TSC_ARGS = ['--ignoreConfig', '--module', 'commonjs', '--target', 'es2022',
-  '--skipLibCheck', '--outDir', null, join(ROOT, 'lib/media/illus-prompt.ts')];
+const TSC_ARGS = [
+  '--ignoreConfig',
+  '--module',
+  'commonjs',
+  '--target',
+  'es2022',
+  '--skipLibCheck',
+  '--outDir',
+  null,
+  join(ROOT, 'lib/media/illus-prompt.ts'),
+];
 const outDir = mkdtempSync(join(tmpdir(), 'illus-prompt-'));
 TSC_ARGS[TSC_ARGS.indexOf(null)] = outDir;
 if (existsSync(TSC_LOCAL)) {
   execFileSync(TSC_LOCAL, TSC_ARGS, { stdio: 'inherit' });
 } else {
-  const ver = JSON.parse(readFileSync(join(ROOT, 'package-lock.json'), 'utf8'))
-    .packages['node_modules/typescript'].version;
+  const ver = JSON.parse(readFileSync(join(ROOT, 'package-lock.json'), 'utf8')).packages[
+    'node_modules/typescript'
+  ].version;
   console.log(`(không có node_modules — dùng npx typescript@${ver} theo lockfile)`);
-  execFileSync('npx', ['--yes', '-p', `typescript@${ver}`, 'tsc', ...TSC_ARGS], { stdio: 'inherit' });
+  execFileSync('npx', ['--yes', '-p', `typescript@${ver}`, 'tsc', ...TSC_ARGS], {
+    stdio: 'inherit',
+  });
 }
 const { buildIllusPrompt, KHIA_CANH } = require(join(outDir, 'illus-prompt.js'));
 if (typeof buildIllusPrompt !== 'function') {
@@ -51,7 +63,10 @@ if (typeof buildIllusPrompt !== 'function') {
 }
 
 const argv = process.argv.slice(2);
-const flag = (n, d) => { const i = argv.indexOf(n); return i >= 0 ? argv[i + 1] : d; };
+const flag = (n, d) => {
+  const i = argv.indexOf(n);
+  return i >= 0 ? argv[i + 1] : d;
+};
 const has = (n) => argv.includes(n);
 const OUT = flag('--out', join(ROOT, '.illus'));
 const SIZE = flag('--size', '1536x1024');
@@ -66,14 +81,28 @@ const MAU = ['quan-loc:tot:nam:truong-thanh:v1', 'tai-bach:xau:nu:truong-thanh:v
 
 function parseId(s) {
   const [khia, sac, gioi, tuoi, vs] = s.split(':');
-  return { khia, sac, gioi, tuoi: tuoi || 'truong-thanh', v: vs ? +String(vs).replace(/^v/, '') : 1 };
+  return {
+    khia,
+    sac,
+    gioi,
+    tuoi: tuoi || 'truong-thanh',
+    v: vs ? +String(vs).replace(/^v/, '') : 1,
+  };
 }
 
 let pick;
-if (has('--id')) pick = flag('--id').split(',').map((s) => parseId(s.trim()));
+if (has('--id'))
+  pick = flag('--id')
+    .split(',')
+    .map((s) => parseId(s.trim()));
 else pick = MAU.map(parseId);
 
-const bad = pick.filter((p) => !KHIA_CANH[p.khia] || !['tot', 'trung', 'xau'].includes(p.sac) || !['nam', 'nu'].includes(p.gioi));
+const bad = pick.filter(
+  (p) =>
+    !KHIA_CANH[p.khia] ||
+    !['tot', 'trung', 'xau'].includes(p.sac) ||
+    !['nam', 'nu'].includes(p.gioi)
+);
 if (bad.length) {
   console.error('Tham số không hợp lệ: ' + JSON.stringify(bad));
   console.error('Khía cạnh hợp lệ: ' + Object.keys(KHIA_CANH).join(' '));
@@ -91,17 +120,33 @@ const prompts = pick.map(buildIllusPrompt);
 console.log(`${prompts.length} bức · ${SIZE} · quality=${QUALITY}${DRY ? ' · DRY-RUN' : ''}`);
 console.log(`Thư mục ra: ${OUT}\n`);
 
-let daVe = 0, boQua = 0, loi = 0;
+let daVe = 0,
+  boQua = 0,
+  loi = 0;
 for (const p of prompts) {
   const dich = join(OUT, `${p.id}.png`);
-  if (DRY) { console.log(`── ${p.nhan}\n${p.prompt}\n`); continue; }
-  if (existsSync(dich)) { boQua++; console.log(`⏭  ${p.id} — đã có, bỏ qua`); continue; }
+  if (DRY) {
+    console.log(`── ${p.nhan}\n${p.prompt}\n`);
+    continue;
+  }
+  if (existsSync(dich)) {
+    boQua++;
+    console.log(`⏭  ${p.id} — đã có, bỏ qua`);
+    continue;
+  }
   try {
     const t0 = Date.now();
     const r = await fetch('https://api.openai.com/v1/images/generations', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${KEY}` },
-      body: JSON.stringify({ model: 'gpt-image-2', prompt: p.prompt, size: SIZE, quality: QUALITY, output_format: 'png', n: 1 }),
+      body: JSON.stringify({
+        model: 'gpt-image-2',
+        prompt: p.prompt,
+        size: SIZE,
+        quality: QUALITY,
+        output_format: 'png',
+        n: 1,
+      }),
     });
     if (!r.ok) {
       const body = (await r.text().catch(() => '')).slice(0, 300);
@@ -123,7 +168,9 @@ for (const p of prompts) {
     // imageOutput $30/1M, quy đổi 25.000đ/USD. KHÔNG gõ giá từ trí nhớ.
     const vnd = Math.round(((textTok * 5 + outTok * 30) / 1e6) * 25000);
     daVe++;
-    console.log(`✅ ${p.id}  ·  ${((Date.now() - t0) / 1000).toFixed(1)}s  ·  ${outTok} token ra  ·  ~${vnd.toLocaleString('vi-VN')}đ`);
+    console.log(
+      `✅ ${p.id}  ·  ${((Date.now() - t0) / 1000).toFixed(1)}s  ·  ${outTok} token ra  ·  ~${vnd.toLocaleString('vi-VN')}đ`
+    );
   } catch (e) {
     loi++;
     console.error(`❌ ${p.id}: ${e.message}`);
