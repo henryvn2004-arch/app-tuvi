@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-260 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+261 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 **Bốn file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
 ```bash
@@ -25,6 +25,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
+| 1 | 2026-09 | `2026-09.md` | 🔢 Thần Số Học 11 → 13 chỉ số — soi đối thủ, chỉ lấy 2 phần THẬT SỰ có giá trị |
 | 1 | 2026-09 | `2026-09.md` | 🐛 CI đỏ sau loạt auto-show — Playwright `page.click('#btnGo')` đụng độ với bản mẫu tự mở |
 | 1 | 2026-09 | `2026-09.md` | 🏁 Auto-show sample nối xong đủ 14 tool (chốt loạt "nối hết các tool còn lại") |
 | 1 | 2026-09 | `2026-09.md` | ✅ Auto-show sample cho Xem Tuổi — port `buildPhanPrompt` từ JS trình duyệt |

@@ -2,6 +2,18 @@
    Nguồn DUY NHẤT cho standalone /tools/than-so-hoc.html + shell /app/than-so-hoc.
    Hệ Pythagoras. window.ThanSoTool = { compute, vnYear }
 
+   ── 2026-09 — MỞ 11 → 13 CHỈ SỐ: Nghề Nghiệp Phù Hợp + Tam Giác Vàng ────
+   Henry soi một trang bán PDF thần số học của đối thủ, kết luận: phần "tách
+   1 đoạn văn thành 4 khối Phân tích/Ưu điểm/Nhược điểm/Lời khuyên" chỉ kéo
+   dài chữ, KHÔNG đáng học theo — CỐ Ý không làm. Hai phần còn lại có giá trị
+   thật, lấy làm tham khảo (không copy nguyên câu chữ):
+   - Nghề Nghiệp Phù Hợp: suy trực tiếp từ Số Đường Đời đã có sẵn, KHÔNG phải
+     chỉ số mới — chỉ là lớp diễn giải mới trên số cũ.
+   - Tam Giác Vàng Hướng Nghiệp: ĐIỂM HAY THẬT của bản đối thủ — ghép 3 số đã
+     tính (Đường Đời/Ngày Sinh/Định Mệnh) thành MỘT bài đọc tổng hợp thay vì
+     liệt kê rời rạc từng số rồi để người đọc tự nối — đúng thứ 11 chỉ số cũ
+     còn thiếu (đọc xong quên ngay vì không có gì buộc chúng lại với nhau).
+
    ── 2026-08 — VÁ 3 LỖI + MỞ 4 → 11 CHỈ SỐ ───────────────────────────────
    1. 🔴 SỐ ĐƯỜNG ĐỜI tính SAI quy ước. Bản cũ cộng TẤT CẢ chữ số một lượt
       (`(dd+mm+yyyy).split('')`). Nguồn thần số học Việt — và Hans Decoz mà
@@ -120,6 +132,23 @@
     7: 'Thiếu 7 — ít khi ngồi yên tự soi mình, hay quyết theo cảm tính. Cần dành khoảng lặng để nghĩ trước khi làm.',
     8: 'Thiếu 8 — lúng túng với tiền bạc và quyền lực, hay bán rẻ công sức. Cần học định giá bản thân và đàm phán.',
     9: 'Thiếu 9 — khó nhìn xa hơn lợi ích trước mắt, dễ tính toán chi ly. Cần một việc cho đi mà không tính công.',
+  };
+
+  // Nghề Nghiệp Phù Hợp — nghề CỤ THỂ theo từng số 1-9/11/22/33, tránh lối
+  // liệt kê chung chung ("hợp nhiều ngành sáng tạo") không đọng lại gì.
+  var CAREER = {
+    1: ['Sáng lập/CEO startup', 'Quản lý dự án', 'Huấn luyện viên, đào tạo', 'Vị trí chỉ huy (quân đội, thể thao)'],
+    2: ['Nhân sự (HR)', 'Tư vấn, trung gian hoà giải', 'Ngoại giao, đối ngoại', 'Trợ lý điều hành, đối tác kinh doanh'],
+    3: ['Sáng tác, biên kịch', 'MC, diễn giả', 'Marketing, truyền thông', 'Thiết kế, nghệ thuật biểu diễn'],
+    4: ['Kế toán, kiểm toán', 'Kỹ sư, xây dựng', 'Quản lý vận hành, logistics', 'Phân tích dữ liệu, công chức'],
+    5: ['Kinh doanh, sales', 'Du lịch, hàng không', 'Báo chí, tổ chức sự kiện', 'Freelancer đa lĩnh vực'],
+    6: ['Giáo viên, giảng dạy', 'Y tế, điều dưỡng', 'Tư vấn tâm lý, công tác xã hội', 'Quản lý nhà hàng/khách sạn, nội thất'],
+    7: ['Nghiên cứu khoa học', 'Lập trình, IT', 'Phân tích chiến lược', 'Dược sĩ, chiêm tinh - học thuật tâm linh'],
+    8: ['Doanh nhân, quản lý cấp cao', 'Tài chính, ngân hàng, đầu tư', 'Bất động sản', 'Luật sư doanh nghiệp'],
+    9: ['Hoạt động xã hội, NGO', 'Giáo dục, y tế cộng đồng', 'Nghệ thuật vị nhân sinh', 'Luật sư nhân quyền, môi trường'],
+    11: ['Nhà trị liệu, huấn luyện phát triển bản thân', 'Giảng viên truyền cảm hứng', 'Tác giả, sáng tạo nội dung có thông điệp'],
+    22: ['Kiến trúc sư, quy hoạch đô thị', 'Sáng lập tổ chức quy mô lớn', 'Kỹ sư trưởng dự án lớn', 'Hoạch định chính sách'],
+    33: ['Đào tạo, giáo dục', 'Chữa lành (y học, tâm lý trị liệu)', 'Lãnh đạo tổ chức thiện nguyện', 'Cố vấn tinh thần'],
   };
 
   // Năm Cá Nhân — vòng 9 năm. Đây là chỉ số DUY NHẤT đổi theo thời gian, và
@@ -358,6 +387,34 @@
     }
     html += '</div>';
 
+    // Nghề nghiệp phù hợp — suy từ Số Đường Đời, KHÔNG phải chỉ số mới, chỉ
+    // là lớp diễn giải mới trên số đã có (xem ghi chú đầu file, 2026-09).
+    html += sectionTitle('Nghề nghiệp phù hợp', 'Suy từ Số Đường Đời ' + duongDoi + ' — hướng công việc năng lượng chủ đạo dễ phát huy nhất, không phải khung đóng cứng.');
+    html += '<div style="padding:4px 24px 18px;font-size:12.5px;color:' + C_TEXT + ';line-height:1.8">' +
+      CAREER[duongDoi].map(function (n) { return '<span class="num-kw" style="display:inline-block;margin:0 6px 6px 0">' + esc(n) + '</span>'; }).join('') +
+      '<div style="margin-top:10px;color:' + C_LT + '">Đây là hướng THUẬN theo năng lượng, không phải giới hạn — nghề ngoài danh sách vẫn tốt nếu công việc hằng ngày cho dùng đúng thế mạnh của số ' + duongDoi + '.</div></div>';
+
+    // Tam Giác Vàng Hướng Nghiệp — ghép 3 số ĐÃ TÍNH (Đường Đời/Ngày Sinh/
+    // Định Mệnh) thành MỘT bài đọc, thay vì để 3 mục rời nhau như phần trên.
+    var tgV = [
+      { label: 'Cống Hiến', sub: '(Đường Đời)', n: duongDoi },
+      { label: 'Tài Năng', sub: '(Ngày Sinh)', n: ngaySinh },
+      { label: 'Sứ Mệnh', sub: '(Định Mệnh)', n: dinhMenh },
+    ];
+    var tgCareerCount = {};
+    tgV.forEach(function (v) { CAREER[v.n].forEach(function (c) { tgCareerCount[c] = (tgCareerCount[c] || 0) + 1; }); });
+    var tgCareerRanked = Object.keys(tgCareerCount).sort(function (a, b) { return tgCareerCount[b] - tgCareerCount[a]; }).slice(0, 4);
+    html += sectionTitle('Tam giác vàng hướng nghiệp', 'Ba số cốt lõi cho hướng sự nghiệp, đọc CHUNG thành một hướng thay vì tách rời.');
+    html += '<div style="padding:4px 24px 6px;display:flex;gap:10px;flex-wrap:wrap">' +
+      tgV.map(function (v) {
+        return '<div style="flex:1;min-width:130px;display:flex;flex-direction:column;align-items:center;gap:6px;padding:12px 8px;border:1px solid ' + C_LINE + ';border-radius:8px">' +
+          circle(v.n, 48) + '<div style="font-size:12px;font-weight:700;color:' + C_NAVY + '">' + esc(v.label) + '</div>' +
+          '<div style="font-size:10px;color:' + C_LT + '">' + esc(v.sub) + '</div></div>';
+      }).join('') + '</div>';
+    html += '<div style="padding:10px 24px 18px;font-size:12.5px;color:' + C_TEXT + ';line-height:1.8">' +
+      '<div>Bạn <b>cống hiến</b> tốt nhất khi được ' + esc(MEANINGS[duongDoi].kw.join(', ').toLowerCase()) + '; <b>tài năng</b> bẩm sinh nghiêng về ' + esc(MEANINGS[ngaySinh].kw.join(', ').toLowerCase()) + '; và <b>thể hiện ra ngoài</b> rõ nhất qua ' + esc(MEANINGS[dinhMenh].kw.join(', ').toLowerCase()) + '. Nghề bền nhất là nơi CẢ BA cùng có đất dùng, không phải nghề chỉ hợp với một trong ba.</div>' +
+      '<div style="margin-top:10px"><b style="color:' + C_NAVY + '">Giao điểm nghề nghiệp của ba số:</b> ' + tgCareerRanked.map(esc).join(', ') + '.</div></div>';
+
     // ── data PHẲNG cho rail ──────────────────────────────────────────────
     var dinhCaoStr = [0, 1, 2, 3].map(function (i) { return 'Chặng ' + (i + 1) + ' (' + mocLabel(i) + '): đỉnh ' + dinhCaoArr[i] + ' / thử thách ' + thuThachArr[i]; }).join(' · ');
 
@@ -386,6 +443,8 @@
         noNghiepQuat: noList.map(function (s) { var p = s.split('|'); return KARMIC_DEBT[parseInt(p[0], 10)].ten + ' ở ' + p[1]; }).join(', ') || '(không có)',
         dinhCaoThuThach: dinhCaoStr,
         changHienTai: idxHienTai >= 0 ? ('Chặng ' + (idxHienTai + 1) + ' — ' + mocLabel(idxHienTai)) : '',
+        ngheNghiepPhuHop: CAREER[duongDoi].join(', '),
+        tamGiacVang: 'Cống Hiến (Đường Đời ' + duongDoi + '): ' + MEANINGS[duongDoi].kw.join('/') + ' · Tài Năng (Ngày Sinh ' + ngaySinh + '): ' + MEANINGS[ngaySinh].kw.join('/') + ' · Sứ Mệnh (Định Mệnh ' + dinhMenh + '): ' + MEANINGS[dinhMenh].kw.join('/') + ' · Giao điểm nghề nghiệp: ' + tgCareerRanked.join(', '),
       },
     };
   }
