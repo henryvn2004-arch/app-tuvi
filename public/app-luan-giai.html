@@ -129,8 +129,16 @@
    chỗ NGAY từ lần vẽ đầu (dựng tĩnh trong chuỗi HTML trước khi gán innerHTML,
    không phải JS chèn sau) nên không gây CLS. Ảnh không tồn tại (khía/sắc/giới
    chưa vẽ) thì `onerror` gỡ hẳn khối — không hiện khung vỡ. */
-.lg-illus{margin:0 0 10px;border-radius:10px;overflow:hidden;aspect-ratio:1536/1024;background:var(--paper-2,#f2ede4)}
+.lg-illus{position:relative;margin:0 0 10px;border-radius:10px;overflow:hidden;aspect-ratio:1536/1024;background:var(--paper-2,#f2ede4)}
 .lg-illus img{width:100%;height:100%;object-fit:cover;display:block}
+/* Bìa chương (2026-09-13): câu hook đè lên banner thay vì đứng card riêng
+   dưới ảnh — dùng đúng khoảng trống TEXT_SAFE_AREA đã chừa sẵn lúc vẽ
+   (lib/media/illus-prompt.ts). Chỉ BOX chữ, không phủ gradient lên cả ảnh —
+   ảnh vẫn thấy rõ ngoài vùng box. Thiếu banner (ảnh lỗi/chưa vẽ) thì
+   renderMarkdown() tự rơi về .fb-card như cũ, xem fillClaudeContent(). */
+.lg-hookbox{position:absolute;left:14px;right:14px;bottom:14px;max-width:min(440px,calc(100% - 28px));background:var(--white);border-radius:16px;padding:14px 18px 15px;box-shadow:0 8px 22px rgba(6,26,46,.18)}
+.lg-hookbox .lg-hookpill{display:inline-block;font-family:var(--sans);font-size:10.5px;font-weight:700;letter-spacing:.05em;padding:3px 11px;border-radius:20px;margin-bottom:8px}
+.lg-hookbox p{font-family:var(--serif);font-weight:700;font-size:15.5px;line-height:1.44;color:var(--heading);margin:0}
 /* CTA lặp lại trong mỗi phần khoá (2026-09-08, gộp về 1 nút mở cả bó — cùng
    mẫu app-van-han-nam.html/app-chu-trinh-cuoc-doi.html) — đứng ngay dưới ô
    giữ chỗ của chính phần đó, để cuộn sâu vẫn còn chỗ bấm. */
@@ -1144,8 +1152,12 @@ var QUERIES={
 // lib/agent/luan-giai-doc.ts) — KHÔNG tốn thêm lượt gọi LLM nào, model đánh giá
 // luôn trong lúc viết câu đó. Tra ra class CSS màu (.fb-card, xem CSS phía trên).
 var HOOK_TAG_CLASS={ 'TỐT':'fb-tot', 'CẢNH BÁO':'fb-canhbao', 'TRUNG TÍNH':'fb-trungtinh' };
-function renderMarkdown(text){
-  var lines=text.split('\n'), out='', inTable=false, rows=[];
+// `illusFig` = figure ảnh banner của phần đang render (null nếu thiếu ảnh).
+// Có ảnh thì câu hook ĐẦU TIÊN đè lên ảnh (bìa chương) thay vì đứng thành
+// card riêng dưới ảnh; hook thứ hai trở đi (hiếm, phòng model lệch định
+// dạng) vẫn rơi về .fb-card như cũ — ảnh chỉ có chỗ cho một khối.
+function renderMarkdown(text,illusFig){
+  var lines=text.split('\n'), out='', inTable=false, rows=[], hookUsed=false;
   function flushTable(){
     if(!rows.length)return;
     out+='<div class="md-table-wrap"><table class="md-table">';
@@ -1181,7 +1193,13 @@ function renderMarkdown(text){
       if(m){
         flushPending(); // hook liền trước không có đoạn giải thích theo sau — chốt riêng
         var cls=HOOK_TAG_CLASS[m[1]]||'fb-trungtinh';
-        out+=window.FbCardTopic.cardHtml(cls,window.FbCardTopic.extractTopic(line.trim()),'“'+esc(m[2].trim())+'”');
+        var hookHtml='“'+esc(m[2].trim())+'”';
+        if(!hookUsed&&illusFig){
+          illusFig.insertAdjacentHTML('beforeend','<div class="lg-hookbox"><span class="lg-hookpill '+cls+'">'+esc(m[1])+'</span><p>'+hookHtml+'</p></div>');
+          hookUsed=true;
+        }else{
+          out+=window.FbCardTopic.cardHtml(cls,window.FbCardTopic.extractTopic(line.trim()),hookHtml);
+        }
         pendingLead=inline(m[3]).trim();
         return;
       }
@@ -1200,7 +1218,17 @@ function renderMarkdown(text){
 function fillClaudeContent(box,text){
   if(!box||!text)return;
   box.style.display='block';
-  box.innerHTML=renderMarkdown(text);
+  // `.lg-illus` là sibling của `.card` (chứa `box`) trong cùng `.sec` — xem
+  // buildPhanSection(). Dọn overlay cũ trước: hàm này gọi lại được (bản mẫu
+  // → cache đã mua → vừa luận xong), không dọn là hook chồng lên nhau.
+  var sec=box.closest('.sec');
+  var illusFig=sec?sec.querySelector('.lg-illus'):null;
+  if(illusFig){
+    var prevBox=illusFig.querySelector('.lg-hookbox');
+    if(prevBox)prevBox.remove();
+  }
+  var bannerOk=!!(illusFig&&illusFig.querySelector('img'));
+  box.innerHTML=renderMarkdown(text,bannerOk?illusFig:null);
 }
 
 // Đọc thẳng laso_public (anon REST key, đọc CÔNG KHAI được — bảng phục vụ link
