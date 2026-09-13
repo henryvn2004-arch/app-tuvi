@@ -125,6 +125,12 @@
 .lg-calc summary{cursor:pointer;font-size:12px;color:var(--text-lt);font-weight:600;padding:2px 0}
 .lg-calc summary:hover{color:var(--gold-soft)}
 .lg-calc[open] summary{margin-bottom:8px}
+/* Banner minh hoạ đầu mỗi phần (thư viện illus-match.js) — `aspect-ratio` giữ
+   chỗ NGAY từ lần vẽ đầu (dựng tĩnh trong chuỗi HTML trước khi gán innerHTML,
+   không phải JS chèn sau) nên không gây CLS. Ảnh không tồn tại (khía/sắc/giới
+   chưa vẽ) thì `onerror` gỡ hẳn khối — không hiện khung vỡ. */
+.lg-illus{margin:0 0 10px;border-radius:10px;overflow:hidden;aspect-ratio:1536/1024;background:var(--paper-2,#f2ede4)}
+.lg-illus img{width:100%;height:100%;object-fit:cover;display:block}
 /* CTA lặp lại trong mỗi phần khoá (2026-09-08, gộp về 1 nút mở cả bó — cùng
    mẫu app-van-han-nam.html/app-chu-trinh-cuoc-doi.html) — đứng ngay dưới ô
    giữ chỗ của chính phần đó, để cuộn sâu vẫn còn chỗ bấm. */
@@ -307,6 +313,11 @@ window.SHELL_INTRO={key:'luan-giai'};</script>
      cố ý không phụ thuộc thư viện nào. 200 KB tải trên MỌI lượt vào trang
      nhận 100% click Google Ads, để vẽ một biểu đồ không bao giờ được vẽ. -->
 <script src="/tuvi-laso-format.js?v=2"></script>
+<!-- Thư viện hình minh hoạ (mỗi phần một bức, khớp sắc thái với "Luận sao").
+     illus-nguong.js chỉ là DỮ LIỆU (ngưỡng); illus-match.js đọc window.xuHuongCungW
+     nên PHẢI đứng SAU tuvi-laso-format.js. -->
+<script src="/tools-shared/illus-nguong.js?v=1"></script>
+<script src="/tools-shared/illus-match.js?v=1"></script>
 <script src="/tools-shared/vn-timezone.js?v=1"></script>
 <script src="/tuvi-form.js?v=3"></script>
 <script src="/tools-shared/nam-luan-select.js?v=1"></script>
@@ -679,6 +690,26 @@ function cungRelatedHtml(label,ls){
 // KHÔNG render `LuanGiaiCore.buildPreGenHtml` (cách cục/6 chiều/quy tắc) vào
 // DOM luôn — chỉ hiện `buildTeaserHtml`, một dòng THẬT tính từ `cungScores`
 // (không bịa), đủ để tin nhưng không đủ để đọc thay bản trả phí.
+// Banner minh hoạ đầu phần (thư viện illus-match.js, chỉ phủ phần 1-13).
+//
+// CHỈ hiện khi CHƯA khoá — cùng nguyên tắc "che hết luôn, đừng vừa hiện vừa
+// che" mà `buildLockedPlaceholderHtml` đã chốt: ảnh tự nó đã lộ sắc thái
+// (ghế trống/mặt trầm ngâm = xấu, ai cũng đọc được không cần chữ), hiện nó ở
+// phần đang khoá là vừa che vừa hé đúng thứ Henry cấm.
+//
+// Thiếu bất kỳ tag nào (`IllusMatch` chưa nạp, khía/sắc/giới không khớp) →
+// `illusUrlForPhan` trả null → trả chuỗi rỗng, KHÔNG dựng khung — đúng luật
+// "đọc hụt thì để … và từ chối chạy", ở đây là "không vẽ gì cả".
+function illusBannerHtml(phan,ls,label){
+  if(!window.IllusMatch) return '';
+  var r=IllusMatch.illusUrlForPhan(ls,phan,_gioitinh);
+  if(!r) return '';
+  // Phần 1 luôn hiện ngay khi trang vừa render (gần đầu #lgBody) — KHÔNG
+  // lazy để nó không trễ nhịp LCP. Phần 2 trở đi cuộn mới tới nên lazy được.
+  var lazyAttr=phan===1?'':' loading="lazy"';
+  return '<figure class="lg-illus"><img src="'+r.url+'" alt="Minh hoạ '+esc(label)+'"'+lazyAttr+
+    ' onerror="this.closest(\'.lg-illus\').remove()"></figure>';
+}
 function buildPhanSection(phan,label,ls,locked){
   var bodyHtml,tag;
   if(locked){
@@ -714,7 +745,8 @@ function buildPhanSection(phan,label,ls,locked){
   // luận giải của chính cung đó còn chưa đọc được, mời sang tool khác lúc này
   // là điều hướng vào chỗ rỗng.
   var related=locked?'':cungRelatedHtml(label,ls);
-  return sec(phan,label,tag,'<div class="card">'+bodyHtml+lock+'<div class="claude-content" id="claude-content-'+phan+'" style="display:none"></div>'+related+ask('Luận sâu phần: '+label)+'</div>');
+  var banner=locked?'':illusBannerHtml(phan,ls,label);
+  return sec(phan,label,tag,banner+'<div class="card">'+bodyHtml+lock+'<div class="claude-content" id="claude-content-'+phan+'" style="display:none"></div>'+related+ask('Luận sâu phần: '+label)+'</div>');
 }
 // Ô GIỮ CHỖ của một phần đang khoá (hard paywall 2026-09-06).
 //

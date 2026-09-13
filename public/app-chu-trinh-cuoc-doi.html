@@ -98,6 +98,10 @@
    "bấm để mở", không cần icon riêng. */
 .lg-calc{margin-bottom:2px}
 .lg-calc summary{cursor:pointer;font-size:12px;color:var(--text-lt);font-weight:600;padding:2px 0}
+/* Banner minh hoạ đại vận — cùng khuôn app-luan-giai.html (aspect-ratio giữ
+   chỗ ngay lần vẽ đầu, dựng tĩnh trong chuỗi HTML, không gây CLS). */
+.lg-illus{margin:0 0 10px;border-radius:10px;overflow:hidden;aspect-ratio:1536/1024;background:var(--paper-2,#f2ede4)}
+.lg-illus img{width:100%;height:100%;object-fit:cover;display:block}
 .lg-calc summary:hover{color:var(--gold-soft)}
 .lg-calc[open] summary{margin-bottom:8px}
 /* Gợi ý tool khác — chỉ hiện cho phần có mối liên hệ thật xác nhận, xem
@@ -246,6 +250,10 @@ window.SHELL_INTRO={key:'chu-trinh-cuoc-doi'};</script>
      chắc chắn đã chạy xong (đã đo: `Chart` là `function` tại DOMContentLoaded). -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js" defer></script>
 <script src="/tuvi-laso-format.js?v=2"></script>
+<!-- Thư viện hình minh hoạ (đại vận — mỗi phần một bức, nhân vật già dần theo
+     tuổi giữa đại vận, sắc thái đọc thẳng flag 🟢/🟡/🔴 đã tính sẵn). -->
+<script src="/tools-shared/illus-nguong.js?v=1"></script>
+<script src="/tools-shared/illus-match.js?v=1"></script>
 <script src="/tools-shared/vn-timezone.js?v=1"></script>
 <script src="/tuvi-form.js?v=3"></script>
 <script src="/tools-shared/nam-luan-select.js?v=1"></script>
@@ -676,6 +684,21 @@ var DUMMY_CTCD={
 // `buildLockedPlaceholderHtml` của app-luan-giai.html, Henry: "che hết luôn,
 // đừng vừa hiện vừa che" — luật này CHỈ áp cho khối tính toán, không áp cho
 // khối luận giải AI ngay dưới, xem chú thích ở đó).
+// Banner minh hoạ đại vận — CHỈ phủ p=2..10 (Đại Vận 1-9, dvIndex=p-2). p=1
+// (Tổng quan đại vận, gộp cả 9) và p=11 (Tiểu Vận Năm Xem) KHÔNG map được về
+// một đại vận/flag duy nhất — trả rỗng, KHÔNG đoán (cùng luật "đọc hụt thì để
+// … và từ chối chạy" của giá Lượng, ở đây là "không vẽ gì cả").
+//
+// CHỈ hiện khi CHƯA khoá — cùng lý do app-luan-giai.html: ảnh tự lộ sắc thái
+// (già + 🔴 = giai đoạn khó), hiện ở phần khoá là vừa che vừa hé.
+function illusBannerHtml(p,ls,label){
+  if(!window.IllusMatch) return '';
+  if(p<2||p>10) return '';
+  var r=IllusMatch.illusUrlForDaiVan(ls,p-2,_gioitinh);
+  if(!r) return '';
+  return '<figure class="lg-illus"><img src="'+r.url+'" alt="Minh hoạ '+esc(label)+'" loading="lazy"'+
+    ' onerror="this.closest(\'.lg-illus\').remove()"></figure>';
+}
 function buildPhanSection(p,ep,label,ls,locked){
   var bodyHtml,tag;
   if(locked){
@@ -721,7 +744,8 @@ function buildPhanSection(p,ep,label,ls,locked){
   var ctaRepeat=dummy
     ? '<div class="lg-cta-repeat" id="lg-cta-'+p+'"><button class="btn-go" type="button" onclick="_triggerUnlockAll()">✦ Mở toàn bộ bản luận — <span data-tvp-price="chu-trinh-cuoc-doi">…</span> Lượng <span class="tpw-vnd" data-tvp-price-vnd="chu-trinh-cuoc-doi"></span> →</button></div>'
     : '';
-  return sec(p,label,tag,'<div class="card">'+bodyHtml+claudeBox+ctaRepeat+related+ask('Luận sâu phần: '+label)+'</div>');
+  var banner=locked?'':illusBannerHtml(p,ls,label);
+  return sec(p,label,tag,banner+'<div class="card">'+bodyHtml+claudeBox+ctaRepeat+related+ask('Luận sâu phần: '+label)+'</div>');
 }
 // Gỡ CẢ badge "Khoá" LẪN CTA lặp lại của phần p — gọi cùng lúc, cùng lý do
 // (chữ THẬT đã ghi đè, không còn gì để mời mở nữa).
