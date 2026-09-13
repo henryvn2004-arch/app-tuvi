@@ -183,6 +183,14 @@ jobs:
       - name: Bảng mô-típ tranh 64 quẻ đầy đủ
         run: npm run check:motifs
 
+      # Thư viện hình minh hoạ: PHẦN (LLM đọc) ↔ khía cạnh (ảnh) ↔ cung ↔ ngưỡng
+      # sắc thái phải khớp NHAU TUYỆT ĐỐI ở bốn nguồn khác nhau (illus-prompt.ts,
+      # luan-giai-doc.ts, illus-match.js, illus-nguong.js). Lệch một khoá là một
+      # phần luận giải âm thầm hiện SAI ảnh (hoặc không hiện ảnh nào) mà không ai
+      # biết cho tới khi có người soát bằng mắt — ảnh vẽ một lần, ~1.100đ/bức.
+      - name: Thư viện hình minh hoạ khớp PHẦN↔khía↔cung↔ngưỡng
+        run: npm run check:illus
+
       # Hợp đồng laSoText ↔ bộ cắt/prompt luận giải. Đổi một mốc section (hay chỉ
       # nối ghi chú vào sau nó) làm `findIndex` trả -1 → bộ cắt CÂM, cả lá số 22K
       # ký tự đi thẳng vào prompt, model tự mò và bỏ qua phần engine đã chấm.
