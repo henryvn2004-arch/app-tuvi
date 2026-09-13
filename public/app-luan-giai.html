@@ -217,6 +217,15 @@
            Vì thế `SHELL_INTRO` bên dưới CHỈ khai `key`: chữ nằm đúng ở đây,
            một bản duy nhất — thêm bản chép trong SHELL_INTRO là để nó trôi. -->
       <div class="ws-intake">
+      <!-- Thanh tiến trình — chỉ hiển thị trạng thái, không bấm được. JS
+           chuyển bước ở `wsStepsSet` (cuối file), gọi tại đúng chỗ trạng thái
+           đã đổi trong code cũ (doLuan/showForm/gate/paywall/kết quả). -->
+      <div class="ws-steps" id="lgSteps">
+        <div class="wss-step active"><span class="wss-n">1</span><span class="wss-l">Nhập thông tin</span></div>
+        <div class="wss-step"><span class="wss-n">2</span><span class="wss-l">Xem trước lá số</span></div>
+        <div class="wss-step"><span class="wss-n">3</span><span class="wss-l">Thanh toán</span></div>
+        <div class="wss-step"><span class="wss-n">4</span><span class="wss-l">Nhận kết quả</span></div>
+      </div>
       <div id="introHost"><div class="intro-card">
         <div class="intro-body">
           <img class="intro-avatar" src="/tool-avatars/laso.webp" alt="" onerror="this.remove()">
@@ -278,6 +287,17 @@
           <span class="bg-label"><span class="ic" data-icon="sparkles"></span><b id="btnGoLabel">Lập lá số &amp; Luận giải ngay →</b></span>
           <small>Tốn <span data-tvp-price="laso">…</span> Lượng <span data-tvp-price-vnd="laso"></span></small>
         </button>
+      </div>
+      <!-- Banner cột phụ — SVG/gradient nội tuyến (xem chú thích `.ws-promo`
+           trong shell.css: chưa có pipeline sinh ảnh mới trong phiên này). -->
+      <div class="ws-promo">
+        <svg viewBox="0 0 200 110" aria-hidden="true">
+          <circle cx="100" cy="34" r="18" fill="var(--gold)" opacity="0.9"/>
+          <path d="M0 90 L45 45 L75 72 L100 40 L130 75 L160 50 L200 90 Z" fill="var(--navy-3)"/>
+          <path d="M0 96 L60 64 L95 86 L140 58 L200 96 Z" fill="rgba(201,168,76,.25)"/>
+        </svg>
+        <p>Mỗi lá số là một hành trình.<br>Hiểu để sống an nhiên.</p>
+        <a href="/blog.html">Khám phá thêm kiến thức →</a>
       </div>
       </div>
 
@@ -433,6 +453,20 @@ var SC_DIMS=['thienVan','canCo','mayMan','phuTro','binhYen','benVung'];
 function cungTotal(sc){ if(!sc)return null; var d=SC_DIMS.map(function(k){return sc[k]}).filter(function(v){return typeof v==='number'}); return d.length?Math.round(d.reduce(function(a,b){return a+b},0)/d.length*10)/10:null; }
 function scoreColor(t){ return t>=7?'var(--green)':t>=5?'var(--gold-soft)':'var(--red)'; }
 
+// Thanh tiến trình (`.ws-steps`, xem shell.css) — chỉ phản ánh trạng thái đã
+// có sẵn trong flow cũ (form → xem trước → paywall → kết quả), không tạo
+// trạng thái mới. `n` các bước TRƯỚC coi là "done" (viền vàng), bước `n`
+// đang "active" (nền navy), các bước sau giữ mặc định.
+function wsStepsSet(n){
+  var el=document.getElementById('lgSteps');
+  if(!el) return;
+  var steps=el.querySelectorAll('.wss-step');
+  for(var i=0;i<steps.length;i++){
+    steps[i].classList.remove('active','done');
+    if(i+1<n) steps[i].classList.add('done');
+    else if(i+1===n) steps[i].classList.add('active');
+  }
+}
 function doLuan(){
   var btn=document.getElementById('btnGo');
   var namxem=parseInt(document.getElementById('inpNamxem').value)||new Date().getFullYear();
@@ -465,6 +499,7 @@ function doLuan(){
     document.getElementById('birthPanel').style.display='none';
     var _sc=document.getElementById('sampCta'); if(_sc) _sc.style.display='none'; // đã có lá số thật, khỏi mời xem mẫu nữa
     document.getElementById('lgPanel').style.display='block';
+    wsStepsSet(2); // Xem trước lá số — điểm số + 2 phần miễn phí sắp hiện ra
     document.getElementById('btnEdit').style.display='';
     document.getElementById('btnBatTu').style.display='';
     // Form dài hơn màn hình (nhất là mobile) thì lúc bấm nút, khung kết quả
@@ -1309,7 +1344,7 @@ async function initLuanGiaiGate(ls){
   }catch(e){hasAccess=false;}
   if(hasAccess){
     var cached=await _fetchCachedLuanGiai(_pendingSlug);
-    if(cached){ renderLuan(ls,null,_namXem,true); _renderCachedLuanGiai(cached); return; }
+    if(cached){ renderLuan(ls,null,_namXem,true); _renderCachedLuanGiai(cached); wsStepsSet(4); return; }
   }
   _renderUnlockBlock();
   // Hard paywall: chạy model THẬT cho FREE_PHAN phần đầu NGAY, không đợi ai
@@ -1376,6 +1411,7 @@ function _paintTension(){
 function _renderUnlockBlock(){
   var host=document.getElementById('lgUnlock');
   host.style.display='block';
+  wsStepsSet(3); // Thanh toán — tường đã dựng, chờ mở khoá
   _moveWallBelowFree(host);
   // Bấm được nay không chỉ ở banner đầu trang — cả 24 phần (luôn nằm trong
   // DOM) cũng bật khoá-mini của chính nó, để cuộn qua khỏi banner vẫn còn chỗ mở.
@@ -1500,6 +1536,7 @@ async function initiateLuanGiaiChuyenSau(){
 async function _startLuanGiaiAI(){
   document.getElementById('lgUnlock').style.display='none';
   document.getElementById('lgProgress').style.display='block';
+  wsStepsSet(4); // Nhận kết quả — đã trả tiền, bắt đầu luận giải đầy đủ
   // Đã trả tiền — tắt hết khoá-mini NGAY, kể cả những phần chưa tới lượt sinh
   // chữ (nay sinh SONG SONG 3 phần/đợt, không còn theo đúng thứ tự 1→24). Để
   // chúng sáng đèn "chưa mở" trong lúc đang luận là mời bấm lại một lượt mua
@@ -1671,6 +1708,7 @@ function showForm(){
   document.getElementById('btnBatTu').style.display='none';
   document.getElementById('lgUnlock').style.display='none';
   document.getElementById('lgProgress').style.display='none';
+  wsStepsSet(1); // về lại Nhập thông tin
   Shell.setShareable(null);
 }
 // Bấm chip trong khối "Xem lá số cho người thân" (NguoiThan.mount ở cuối
