@@ -3,14 +3,18 @@
 // Chọn ảnh minh hoạ (thư viện `illus-prompt.ts` / `scripts/gen-illus.mjs`)
 // khớp với PHẦN đang hiển thị.
 //
-// HIỆN CHỈ RÁP VÀO app-luan-giai.html (Luận Giải Lá Số, phần 1-13 = tổng quan
-// + 12 cung — Tier A của thư viện). `sacThaiCung()` và bảng `KHIA_TO_CUNG` là
-// phần DÙNG CHUNG được thật (đọc theo TÊN CUNG, không theo số phần); còn
-// `PHAN_TO_KHIA`/`illusUrlForPhan()` gắn CỨNG với đúng thứ tự phần 1-13 của
-// RIÊNG luan-giai-core.js. Chu Trình Cuộc Đời (11 phần, toàn bộ về đại vận)
-// và Vận Hạn 12 Tháng (16 phần, theo tháng) đánh số phần theo NGHĨA KHÁC hẳn —
-// muốn ráp vào hai tool đó thì viết bảng phan→khía RIÊNG cho từng tool (Tier B,
-// thư viện chưa vẽ ảnh theo đại vận/tháng), KHÔNG tái dùng thẳng bảng dưới đây.
+// Hai hàm công khai, hai tool khác nhau:
+//   illusUrlForPhan(ls, phan, gioi)     → app-luan-giai.html (Luận Giải Lá Số,
+//     phần 1-13 = tổng quan + 12 cung). `PHAN_TO_KHIA` gắn CỨNG với đúng thứ
+//     tự phần của RIÊNG luan-giai-core.js — không tái dùng cho tool khác.
+//   illusUrlForDaiVan(ls, dvIndex, gioi) → app-chu-trinh-cuoc-doi.html (Chu
+//     Trình Cuộc Đời, đại vận 0-8). Tái dùng cảnh "tong-quan" sẵn có, đổi
+//     TUỔI nhân vật theo tuổi giữa đại vận — không cần vẽ thêm khía cạnh mới.
+// Vận Hạn 12 Tháng (16 phần, theo tháng) CHƯA có hàm nào ở đây — thư viện
+// chưa vẽ cảnh theo mùa/tháng, để đợt sau.
+//
+// `sacThaiCung()` và bảng `KHIA_TO_CUNG` là phần DÙNG CHUNG được thật (đọc
+// theo TÊN CUNG, không theo số phần) — cả hai hàm trên đều gọi qua đó.
 //
 // Phụ thuộc (nạp TRƯỚC file này, cùng thứ tự `app-luan-giai.html` đã dùng):
 //   tuvi-ansao-engine.js  → cần cho `ls.cungScores`, `ls.cachCuc`, ...
@@ -121,17 +125,75 @@
     }
     if (!sac) return null;
 
-    var vCount = VARIANT_COUNT[khia] || 1;
-    // Hạt giống ổn định: can-chi năm sinh + địa chi Mệnh/Thân — không đổi
-    // giữa hai lần tính lá số CÙNG một người, khác nhau giữa hai người khác
-    // nhau (kể cả trùng can-chi năm thì Mệnh/Thân vẫn thường lệch).
     var seedStr = String(ls.canChiNam || '') + '|' + String(ls.menhDC || '') + '|' + String(ls.thanDC || '');
-    var v = (_hash(seedStr + khia) % vCount) + 1;
+    return buildUrl(khia, sac, gioi, 'truong-thanh', seedStr);
+  }
 
-    var id = khia + '--' + sac + '--' + gioi + '--truong-thanh--v' + v;
+  /** Dựng URL từ 5 mảnh đã CHỐT (khoá tag) — dùng chung giữa `illusUrlForPhan`
+   * và `illusUrlForDaiVan`. `seedStr` chỉ cần ổn định theo LÁ SỐ, không cần
+   * theo khía/tuổi — hàm tự trộn thêm khía vào hash. */
+  function buildUrl(khia, sac, gioi, tuoi, seedStr) {
+    var vCount = VARIANT_COUNT[khia] || 1;
+    var v = (_hash(seedStr + khia + tuoi) % vCount) + 1;
+    var id = khia + '--' + sac + '--' + gioi + '--' + tuoi + '--v' + v;
     var url = SUPABASE_URL + '/storage/v1/object/public/' + BUCKET + '/' + PREFIX + '/' + id + '.png';
     return { url: url, sac: sac, khia: khia };
   }
 
-  root.IllusMatch = { illusUrlForPhan: illusUrlForPhan, sacThaiCung: sacThaiCung, PHAN_TO_KHIA: PHAN_TO_KHIA };
+  // ── Đại Vận (Chu Trình Cuộc Đời) ─────────────────────────────────────────
+  // 🔑 SẮC THÁI ĐỌC THẲNG `dv.scoring.flag` — KHÔNG suy ngưỡng riêng như cung.
+  // Khác cung (nhãn "Luận sao" ẩn trong text, phải hoist mới gọi được), đại
+  // vận đã có sẵn flag 🟢/🟡/🔴 HIỂN THỊ THẲNG cho người đọc ngay cạnh "Tổng"
+  // (`luan-giai-core.js`, buildTuHoaPhiTinhHtml) — đây MỚI là nguồn "một
+  // nguồn" đúng nghĩa: ảnh phải khớp đúng cái người ta đã thấy trên màn hình,
+  // không phải một ngưỡng khác tự suy ra cho đều tay hơn.
+  var DAIVAN_FLAG_SAC = { '🟢': 'tot', '🟡': 'trung', '🔴': 'xau' };
+
+  // Mốc tuổi đại diện của 5 bậc `Tuoi` trong illus-prompt.ts — điểm giữa hai
+  // mốc liền kề là ranh giới chọn bậc gần nhất theo tuổi GIỮA đại vận.
+  // Đo trên 6.000 đại vận thật: cả 5 bậc đều rơi vào dùng thật (nhi đồng khi
+  // đại vận 1 rơi cục 2-3, lão niên rất phổ biến ở đại vận 7-9), không bậc
+  // nào là tử lộ.
+  var TUOI_MOC = [
+    [15, 'nhi-dong'],
+    [26, 'thanh-nien'],
+    [42, 'truong-thanh'],
+    [60, 'trung-nien'],
+    [Infinity, 'lao-nien'],
+  ];
+  function tuoiBacThoDaiVan(tuoiGiua) {
+    for (var i = 0; i < TUOI_MOC.length; i++) if (tuoiGiua < TUOI_MOC[i][0]) return TUOI_MOC[i][1];
+    return 'lao-nien';
+  }
+
+  /**
+   * URL ảnh minh hoạ cho MỘT ĐẠI VẬN (Chu Trình Cuộc Đời) — tái dùng cảnh
+   * "tong-quan" (đứng nhìn cả cuộc đời/thời điểm hiện tại), đổi TUỔI nhân vật
+   * theo tuổi giữa đại vận đó nên nhân vật già dần qua 9 bức.
+   *
+   * @param {object} ls
+   * @param {number} dvIndex   0-8 (khớp `ls.daiVans[dvIndex]`)
+   * @param {'nam'|'nu'} gioi  bắt buộc truyền tay, xem `illusUrlForPhan`
+   * @returns {{url:string, sac:string, khia:string, tuoi:string}|null}
+   */
+  function illusUrlForDaiVan(ls, dvIndex, gioi) {
+    if (gioi !== 'nam' && gioi !== 'nu') return null;
+    var dv = ls.daiVans && ls.daiVans[dvIndex];
+    if (!dv || !dv.scoring) return null;
+    var sac = DAIVAN_FLAG_SAC[dv.scoring.flag];
+    if (!sac) return null;
+    if (typeof dv.tuoiStart !== 'number' || typeof dv.tuoiEnd !== 'number') return null;
+    var tuoi = tuoiBacThoDaiVan((dv.tuoiStart + dv.tuoiEnd) / 2);
+    var seedStr = String(ls.canChiNam || '') + '|' + String(ls.menhDC || '') + '|' + String(ls.thanDC || '');
+    var r = buildUrl('tong-quan', sac, gioi, tuoi, seedStr);
+    r.tuoi = tuoi;
+    return r;
+  }
+
+  root.IllusMatch = {
+    illusUrlForPhan: illusUrlForPhan,
+    illusUrlForDaiVan: illusUrlForDaiVan,
+    sacThaiCung: sacThaiCung,
+    PHAN_TO_KHIA: PHAN_TO_KHIA,
+  };
 })(typeof window !== 'undefined' ? window : this);

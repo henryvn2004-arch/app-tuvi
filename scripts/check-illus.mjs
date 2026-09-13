@@ -3,7 +3,7 @@
  * Canh thư viện hình minh hoạ (`lib/media/illus-prompt.ts` +
  * `public/tools-shared/illus-match.js` + `illus-nguong.js`).
  *
- * Vì sao cần: BỐN nguồn phải khớp nhau tuyệt đối mà không có gì BẮT LỖI được
+ * Vì sao cần: NĂM nguồn phải khớp nhau tuyệt đối mà không có gì BẮT LỖI được
  * bằng typecheck (đều là chuỗi/khoá đối tượng) — lệch một khoá là một phần
  * luận giải im lặng KHÔNG hiện ảnh (illusUrlForPhan trả null, đúng thiết kế
  * "thiếu tag thì đừng đoán", nhưng nếu do LỖI GÕ thì không ai biết mà sửa):
@@ -11,9 +11,14 @@
  *   2. `CUNG_BY_PHAN` (luan-giai-doc.ts)  — PHẦN 2-13 → tên cung (prompt LLM đọc)
  *   3. `PHAN_TO_KHIA`/`KHIA_TO_CUNG` (illus-match.js) — PHẦN → khía → cung
  *   4. `ILLUS_NGUONG` (illus-nguong.js)   — ngưỡng SINH cho đúng bộ cung đó
+ *   5. `DAIVAN_FLAG_SAC`/`TUOI_MOC` (illus-match.js) — đại vận (Chu Trình
+ *      Cuộc Đời): flag 🟢/🟡/🔴 → sắc thái phải toàn ánh, mốc tuổi phải phủ
+ *      đúng 5 bậc `Tuoi` mà illus-prompt.ts khai — không có "ngưỡng" ở đây
+ *      (sắc thái đọc thẳng flag đã hiển thị sẵn cho người dùng), nên chỉ
+ *      canh nội tại, không canh chéo nguồn khác như mục 1-4.
  *
- * Fail khi: thiếu khía/sắc/bối cảnh, mô-típ quá ngắn, hoặc BỐN bảng trên
- * không cùng phủ một bộ 12 cung + 1 tổng quan như nhau.
+ * Fail khi: thiếu khía/sắc/bối cảnh, mô-típ quá ngắn, hoặc các bảng trên
+ * không cùng phủ một bộ 12 cung + 1 tổng quan + 5 bậc tuổi như nhau.
  *
  * Chạy: node scripts/check-illus.mjs
  */
@@ -193,9 +198,72 @@ if (!nguongMatch) {
   }
 }
 
+// ── 5. Đại Vận (Chu Trình Cuộc Đời): DAIVAN_FLAG_SAC + TUOI_MOC trong illus-match.js ──
+// Khác cung (ngưỡng SINH từ dữ liệu), đại vận đọc THẲNG flag 🟢/🟡/🔴 đã hiển
+// thị sẵn cho người dùng (luan-giai-core.js) — không có "ngưỡng" để canh chéo
+// nguồn, nên bộ dò ở đây chỉ canh NỘI TẠI: ánh xạ phải toàn ánh (mọi flag có
+// sắc, không sắc nào bỏ trống/trùng) và mốc tuổi phải tăng dần + phủ đủ 5 bậc
+// Tuoi mà illus-prompt.ts khai (đọc thẳng type union, không gõ tay lại danh
+// sách — gõ tay là drift ngay khi illus-prompt.ts thêm/bớt một bậc tuổi).
+const flagMap = extractVar(matchSrc, 'DAIVAN_FLAG_SAC');
+const tuoiMocRaw = matchSrc.match(/var TUOI_MOC\s*=\s*(\[[\s\S]*?\]);/);
+if (!flagMap || !tuoiMocRaw) {
+  console.error(
+    '❌ check-illus: không đọc được DAIVAN_FLAG_SAC/TUOI_MOC từ illus-match.js — bố cục đổi?'
+  );
+  process.exit(1);
+}
+const TUOI_MOC = new Function('return ' + tuoiMocRaw[1])();
+const promptSrc = readFileSync(ROOT + 'lib/media/illus-prompt.ts', 'utf8');
+const tuoiTypeMatch = promptSrc.match(/export type Tuoi\s*=\s*([^;]+);/);
+if (!tuoiTypeMatch) {
+  console.error(
+    '❌ check-illus: không đọc được `export type Tuoi = …` từ illus-prompt.ts — bố cục đổi?'
+  );
+  process.exit(1);
+}
+const TUOI_5_BAC = tuoiTypeMatch[1]
+  .split('|')
+  .map((s) => s.trim().replace(/^'|'$/g, ''))
+  .filter(Boolean);
+
+const FLAGS_3 = ['🟢', '🟡', '🔴'];
+for (const f of FLAGS_3)
+  if (!SAC3.includes(flagMap[f]))
+    fail(`DAIVAN_FLAG_SAC["${f}"]="${flagMap[f]}" không phải tot/trung/xau hợp lệ`);
+const flagKeys = Object.keys(flagMap);
+if (flagKeys.length !== 3 || FLAGS_3.some((f) => !flagKeys.includes(f)))
+  fail(`DAIVAN_FLAG_SAC phải đúng 3 khoá 🟢/🟡/🔴, đang có: ${flagKeys.join(', ')}`);
+const sacTuFlag = new Set(Object.values(flagMap));
+if (sacTuFlag.size !== 3)
+  fail(
+    `DAIVAN_FLAG_SAC ánh xạ TRÙNG sắc thái — mất khả năng phân biệt (3 flag phải ra 3 sắc khác nhau)`
+  );
+
+if (!Array.isArray(TUOI_MOC) || TUOI_MOC.length !== TUOI_5_BAC.length) {
+  fail(
+    `TUOI_MOC có ${Array.isArray(TUOI_MOC) ? TUOI_MOC.length : '?'} mốc, illus-prompt.ts khai ${TUOI_5_BAC.length} bậc Tuoi (${TUOI_5_BAC.join(', ')})`
+  );
+} else {
+  let prevMoc = -Infinity;
+  const tuoiTrongMoc = new Set();
+  for (const [moc, tuoi] of TUOI_MOC) {
+    if (typeof moc !== 'number') fail(`TUOI_MOC: mốc "${moc}" không phải số`);
+    else if (moc <= prevMoc) fail(`TUOI_MOC không tăng dần nghiêm ngặt tại mốc ${moc}`);
+    prevMoc = moc;
+    if (!TUOI_5_BAC.includes(tuoi))
+      fail(`TUOI_MOC nhắc tới bậc tuổi "${tuoi}" không có trong illus-prompt.ts Tuoi`);
+    tuoiTrongMoc.add(tuoi);
+  }
+  for (const t of TUOI_5_BAC)
+    if (!tuoiTrongMoc.has(t)) fail(`TUOI_MOC thiếu bậc tuổi "${t}" (illus-prompt.ts có khai)`);
+  if (TUOI_MOC[TUOI_MOC.length - 1][0] !== Infinity)
+    fail(`TUOI_MOC phải kết thúc bằng mốc Infinity (bậc tuổi già nhất phải hứng MỌI tuổi còn lại)`);
+}
+
 if (bad === 0) {
   console.log(
-    `✅ ${KHIA_KEYS.length} khía cạnh · ${KHIA_KEYS.length * 3} sắc thái · PHẦN↔khía↔cung↔ngưỡng khớp nhau tuyệt đối.`
+    `✅ ${KHIA_KEYS.length} khía cạnh · ${KHIA_KEYS.length * 3} sắc thái · PHẦN↔khía↔cung↔ngưỡng khớp nhau tuyệt đối · đại vận: 3 flag → 3 sắc, ${TUOI_5_BAC.length} bậc tuổi phủ đủ.`
   );
 } else {
   console.error(`\n${bad} lỗi trong thư viện hình minh hoạ — sửa trước khi gen/deploy.`);
