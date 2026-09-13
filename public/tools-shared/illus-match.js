@@ -3,13 +3,18 @@
 // Chọn ảnh minh hoạ (thư viện `illus-prompt.ts` / `scripts/gen-illus.mjs`)
 // khớp với PHẦN đang hiển thị.
 //
-// Hai hàm công khai, hai tool khác nhau:
+// Ba hàm công khai:
 //   illusUrlForPhan(ls, phan, gioi)     → app-luan-giai.html (Luận Giải Lá Số,
 //     phần 1-13 = tổng quan + 12 cung). `PHAN_TO_KHIA` gắn CỨNG với đúng thứ
 //     tự phần của RIÊNG luan-giai-core.js — không tái dùng cho tool khác.
 //   illusUrlForDaiVan(ls, dvIndex, gioi) → app-chu-trinh-cuoc-doi.html (Chu
 //     Trình Cuộc Đời, đại vận 0-8). Tái dùng cảnh "tong-quan" sẵn có, đổi
 //     TUỔI nhân vật theo tuổi giữa đại vận — không cần vẽ thêm khía cạnh mới.
+//   illusUrlForTongQuan(ls, gioi, tuoiBac) → Công Sở / Dạy Con / Hướng Nghiệp
+//     Trẻ (app-cong-so.html, app-day-con.html, app-huong-nghiep-tre.html) —
+//     3 tool KHÔNG có cấu trúc 12-cung riêng ở client, chỉ 1 banner đầu trang
+//     theo cung Mệnh, tuổi truyền tay (dùng `tuoiBac(tuoiSo)` với tuổi THỰC
+//     của nhân vật, không phải tuổi giữa đại vận).
 // Vận Hạn 12 Tháng (16 phần, theo tháng) CHƯA có hàm nào ở đây — thư viện
 // chưa vẽ cảnh theo mùa/tháng, để đợt sau.
 //
@@ -190,10 +195,39 @@
     return r;
   }
 
+  /** Bậc tuổi 1/5 cho một TUỔI THỰC bất kỳ (không chỉ tuổi giữa đại vận) —
+   * dùng chung bảng mốc `TUOI_MOC` ở trên, không dựng bảng mốc thứ hai. */
+  function tuoiBac(tuoi) {
+    if (typeof tuoi !== 'number' || !isFinite(tuoi)) return null;
+    return tuoiBacThoDaiVan(tuoi);
+  }
+
+  /**
+   * URL ảnh minh hoạ "tổng quan" theo cung Mệnh — dùng cho các tool KHÔNG có
+   * cấu trúc 12-cung riêng (Công Sở, Dạy Con, Hướng Nghiệp Trẻ): một banner
+   * duy nhất ở đầu trang, sắc thái theo Mệnh, tuổi theo TUỔI THỰC của nhân
+   * vật (khác `illusUrlForDaiVan` — tuổi giữa một đại vận).
+   *
+   * @param {object} ls    lá số nhân vật chính (đã tính bằng `anSaoLaSo`)
+   * @param {'nam'|'nu'} gioi  bắt buộc truyền tay, xem `illusUrlForPhan`
+   * @param {string} tuoi  một trong 5 bậc `Tuoi` — dùng `tuoiBac(tuoiSo)` để suy ra
+   * @returns {{url:string, sac:string, khia:string}|null}
+   */
+  function illusUrlForTongQuan(ls, gioi, tuoi) {
+    if (gioi !== 'nam' && gioi !== 'nu') return null;
+    if (!TUOI_MOC.some(function (m) { return m[1] === tuoi; })) return null;
+    var sac = sacThaiCung(ls, 'Mệnh');
+    if (!sac) return null;
+    var seedStr = String(ls.canChiNam || '') + '|' + String(ls.menhDC || '') + '|' + String(ls.thanDC || '');
+    return buildUrl('tong-quan', sac, gioi, tuoi, seedStr);
+  }
+
   root.IllusMatch = {
     illusUrlForPhan: illusUrlForPhan,
     illusUrlForDaiVan: illusUrlForDaiVan,
+    illusUrlForTongQuan: illusUrlForTongQuan,
     sacThaiCung: sacThaiCung,
+    tuoiBac: tuoiBac,
     PHAN_TO_KHIA: PHAN_TO_KHIA,
   };
 })(typeof window !== 'undefined' ? window : this);

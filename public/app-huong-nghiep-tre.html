@@ -25,6 +25,8 @@
 .res-block-title{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#061A2E}
 .res-block-body{padding:18px;color:#2a2118}
 #loading{display:none;text-align:center;padding:30px 10px;color:var(--text-lt)}
+.lg-illus{margin:0 0 10px;border-radius:10px;overflow:hidden;aspect-ratio:1536/1024;background:var(--paper-2,#f2ede4)}
+.lg-illus img{width:100%;height:100%;object-fit:cover;display:block}
 .hn-hero{text-align:center;padding:2px 6px 14px}
 .hn-name{font-family:var(--serif);font-size:22px;line-height:1.4;color:#061A2E;font-weight:700}
 .hn-role{font-size:12.5px;color:var(--text-lt);margin-top:3px}
@@ -178,6 +180,7 @@
         <div id="card" style="display:none">
           <div class="res-block">
             <div class="res-block-body">
+              <div id="hnIllusHost"></div>
               <div class="hn-hero">
                 <div class="hn-name" id="heroName"></div>
                 <div class="hn-role" id="heroRole"></div>
@@ -313,6 +316,10 @@
 
 <script>window.SHELL_ACTIVE='huong-nghiep-tre';window.SHELL_HISTORY=true;
 window.SHELL_INTRO={key:'huong-nghiep-tre'};</script>
+<script src="/tuvi-ansao-engine.js?v=1"></script>
+<script src="/tuvi-laso-format.js?v=2"></script>
+<script src="/tools-shared/illus-nguong.js?v=1"></script>
+<script src="/tools-shared/illus-match.js?v=1"></script>
 <script src="/laso-chart.js?v=3"></script>
 <script src="/tools-shared/vn-timezone.js?v=1"></script>
 <script src="/tuvi-form.js?v=3"></script>
@@ -804,7 +811,33 @@ function _banGiaoNguoiLon(data) {
 // này từ Pha 3 — làm mờ một thứ đang miễn phí chỉ gây confuse). `renderMeta` =
 // cả hai, dùng cho đường đã đăng nhập/đã trả và cho lá số người lớn (không
 // bán, không gate).
+// Banner minh hoạ — cùng lý do/cách làm với app-day-con.html: server chỉ trả
+// `HuongNghiepTreProfile` gọn (không có `cungScores`), nên tự tính LẠI `ls`
+// từ đúng ngày sinh (`_last`) chỉ để suy sắc thái cung Mệnh. `hour` truyền
+// vào `convertDuongToAm` không ảnh hưởng âm lịch ngày/năm hay can chi năm —
+// 0 là an toàn vì `gioIdx` bị ghi đè ngay sau bằng `hourBranch` form đã tính.
+function huongNghiepIllusHtml(data) {
+  if (!window.IllusMatch || !window.anSaoLaSo || !window.convertDuongToAm || !_last) return '';
+  try {
+    var conv = convertDuongToAm(_last.day, _last.month, _last.year, 0);
+    if (!conv) return '';
+    conv.gioIdx = _last.hourBranch;
+    var ls = anSaoLaSo({
+      ngayAL: conv.amLich.day, thangAL: conv.amLich.month, namAL: conv.amLich.year,
+      canNam: conv.canNam, chiNam: conv.chiNam, gioIdx: _last.hourBranch, gioitinh: _last.gender,
+      namXem: new Date().getFullYear(),
+    });
+    var tuoiBac = IllusMatch.tuoiBac(data.tuoi);
+    if (!tuoiBac) return '';
+    var r = IllusMatch.illusUrlForTongQuan(ls, data.gioiTinh, tuoiBac);
+    if (!r) return '';
+    return '<figure class="lg-illus"><img src="' + r.url + '" alt="" loading="eager"' +
+      ' onerror="this.closest(\'.lg-illus\').remove()"></figure>';
+  } catch (e) { console.error('huongNghiepIllusHtml', e); return ''; }
+}
+
 function renderMetaHead(data) {
+  document.getElementById('hnIllusHost').innerHTML = huongNghiepIllusHtml(data);
   // Bỏ trống ô tên thì tiêu đề rơi về một cách gọi — mà "Con" dán lên một lá số
   // 43 tuổi thì vẫn đúng chỗ Henry báo, chỉ khác một dòng.
   var ten = data.ten || (data.laTreEm === false ? 'Lá số này' : 'Con');
