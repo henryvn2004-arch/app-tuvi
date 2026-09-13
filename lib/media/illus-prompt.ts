@@ -155,6 +155,15 @@ export interface KhiaCanh {
   canh: Record<Sac, string>;
   /** 3 bối cảnh Việt Nam có thật — chỉ số biến thể `v` chọn một. */
   boiCanh: [string, string, string];
+  /**
+   * Cảnh + bối cảnh RIÊNG cho (sắc "tốt", biến thể v=2) — phú quý rõ rệt (ô
+   * tô, nhà lầu, đi nước ngoài, làm sếp...) để v1/v2 kể hai chuyện khác hẳn,
+   * không chỉ đổi phông. CHỈ áp dụng cho "tốt": "trung"/"xấu" ở v2 vẫn dùng
+   * `canh[sac]` + `boiCanh[1]` như cũ — hai sắc đó đã có bối cảnh riêng cho
+   * từng biến thể rồi, không cần cảnh phú quý (phi lý với "trung"/"xấu").
+   */
+  canhTot2?: string;
+  boiCanhTot2?: string;
 }
 
 export const KHIA_CANH: Record<string, KhiaCanh> = {
@@ -170,6 +179,10 @@ export const KHIA_CANH: Record<string, KhiaCanh> = {
       'the rooftop of an old Saigon apartment block at first light: stainless water tanks, laundry lines strung between poles, potted crown-of-thorns in styrofoam boxes, corrugated iron roofs below',
       'a village front yard in the Mekong Delta: a large glazed water jar, a hammock slung between two areca palms, a mat drying rice in the sun',
     ],
+    canhTot2:
+      'walking into a hotel lobby in a sharply tailored outfit, several staff and guests turning to greet them warmly, a bellhop nodding respectfully and holding the door',
+    boiCanhTot2:
+      'the marble lobby of an upscale hotel: a grand chandelier, a reception desk with orchid arrangements, deep leather armchairs, a doorman in uniform holding open a glass door',
   },
   'phu-mau': {
     vi: 'Cung Phụ Mẫu — cha mẹ',
@@ -183,6 +196,10 @@ export const KHIA_CANH: Record<string, KhiaCanh> = {
       'a tiled kitchen: red and blue low plastic stools, a pot steaming on a gas ring, bunches of herbs in a basin, a wall calendar with a landscape photo',
       'the tiled front step of a countryside house: a courtyard beyond, a water jar with a coconut ladle, a bougainvillea over the gate, a motorbike under a tin awning',
     ],
+    canhTot2:
+      'helping an elderly parent step out of a chauffeured car in front of a five-star hotel entrance, offering an arm, both dressed for a family celebration',
+    boiCanhTot2:
+      'the marble portico of a five-star beachfront hotel: a doorman holding an umbrella, a fountain in the circular driveway, valet cars queued, orchids in tall vases flanking the entrance',
   },
   'phuc-duc': {
     vi: 'Cung Phúc Đức — phúc phần, gốc rễ tinh thần',
@@ -196,6 +213,10 @@ export const KHIA_CANH: Record<string, KhiaCanh> = {
       'a modest family ancestral altar: a brass incense bowl, a five-fruit tray, a vase of chrysanthemums, faded photographs, a small red bulb glowing',
       'under an enormous banyan beside a village communal house: hanging aerial roots, a low brick wall, worn stone steps, an old woman selling incense from a basket',
     ],
+    canhTot2:
+      'standing at the head of a long banquet table during a family reunion, raising a toast while dozens of relatives applaud, a large garlanded ancestral portrait behind',
+    boiCanhTot2:
+      'a grand hall rented for a family reunion banquet: round tables set with red tablecloths, a gold stage backdrop, a towering flower arrangement, waiters in white gloves circulating with trays',
   },
   'dien-trach': {
     vi: 'Cung Điền Trạch — nhà cửa, tài sản',
@@ -209,6 +230,10 @@ export const KHIA_CANH: Record<string, KhiaCanh> = {
       'an old apartment block walkway above a city canal: chipped mosaic tiles, orchids in hanging coconut-husk pots, a motorbike helmet on a hook, laundry strung the length of the rail',
       'a newly rented flat still bare: cardboard boxes unopened, a rolled sleeping mat, a single stool, an electric fan still in its plastic, evening light through unwashed glass',
     ],
+    canhTot2:
+      'standing at the balcony rail of a brand-new high-floor apartment, arms spread wide taking in the skyline view, a housewarming banner and balloons still up behind them',
+    boiCanhTot2:
+      'the wraparound balcony of a high-floor apartment: floor-to-ceiling glass, a small potted olive tree, rattan lounge chairs, the city skyline and river spread out below at dusk',
   },
   'quan-loc': {
     vi: 'Cung Quan Lộc — sự nghiệp',
@@ -222,6 +247,10 @@ export const KHIA_CANH: Record<string, KhiaCanh> = {
       'a cramped startup room: whiteboards covered in scribbles, a standing fan, too many cables, instant noodle cups, a small Thần Tài shrine with a red bulb in the corner by the door',
       'a corner table in a Vietnamese street-side coffee shop used as an office: a glass of cà phê sữa đá with a metal filter, low stools, a tiled floor, motorbikes parked at the kerb beyond the open front',
     ],
+    canhTot2:
+      'shaking hands across a boardroom table with a foreign business partner, both smiling, a translator and colleagues seated around, a city skyline through the glass wall behind',
+    boiCanhTot2:
+      'a glass-walled corner boardroom high in a Saigon tower: a long table with name cards and bottled water, a projector mid-slide, a floor-to-ceiling window overlooking the river and skyline at dusk',
   },
   'no-boc': {
     vi: 'Cung Nô Bộc — bạn bè, đồng nghiệp, người xung quanh',
@@ -235,6 +264,10 @@ export const KHIA_CANH: Record<string, KhiaCanh> = {
       'an office pantry: an electric kettle, a stack of instant noodle cups, a small fridge covered in magnets, a window with vertical blinds half open',
       'a public park badminton court at dusk: a sagging net, other players in the background, bicycles leaned against a tree, a bag of shuttlecocks on the bench',
     ],
+    canhTot2:
+      'hosting a rooftop gathering, glass raised high, surrounded by well-dressed friends applauding a toast, string lights strung overhead against the night skyline',
+    boiCanhTot2:
+      'a rooftop lounge terrace overlooking the city at night: rattan sofas, a small bar cart, string lights woven through potted palms, the skyline glittering beyond the railing',
   },
   'thien-di': {
     vi: 'Cung Thiên Di — đi xa, môi trường bên ngoài',
@@ -248,6 +281,10 @@ export const KHIA_CANH: Record<string, KhiaCanh> = {
       'a night sleeper coach on a mountain road: two tiers of reclining berths, curtains drawn, sandals in a net bag, a small fan clipped above the window',
       'the deck of a small ferry crossing a wide Mekong river: motorbikes packed nose to tail, water hyacinth drifting past, a woman selling boiled peanuts from a shallow basket',
     ],
+    canhTot2:
+      'settling into a wide business-class seat with a glass of champagne offered on a tray, looking out the window at clouds lit gold by the setting sun',
+    boiCanhTot2:
+      'the business-class cabin of a long-haul flight: wide reclining seats with privacy dividers, a folded blanket and slippers laid out, a flight attendant passing with a tray, a golden sunset filling the window',
   },
   'tat-ach': {
     vi: 'Cung Tật Ách — sức khoẻ, tai ách',
@@ -261,6 +298,10 @@ export const KHIA_CANH: Record<string, KhiaCanh> = {
       'a long hospital corridor: blue plastic chairs bolted in rows, a numbered ticket display, families with thermoses and plastic bags of food, fluorescent tubes overhead',
       'a small neighbourhood pharmacy at night: glass cabinets of boxes, a weighing scale by the door, a hand-written price list, a scooter idling outside',
     ],
+    canhTot2:
+      'finishing a set at a private gym with a personal trainer, toweling off with a satisfied grin, a smoothie bar and floor-to-ceiling windows behind',
+    boiCanhTot2:
+      'a private gym club with floor-to-ceiling city views: modern equipment in neat rows, a smoothie bar in the corner, soft recessed lighting, a yoga studio visible through a glass partition',
   },
   'tai-bach': {
     vi: 'Cung Tài Bạch — tiền bạc',
@@ -274,6 +315,10 @@ export const KHIA_CANH: Record<string, KhiaCanh> = {
       'the counter of a small family shop: shelves of instant noodles and detergent behind, a Thần Tài shrine with a red bulb and an orange on a saucer, a wall-mounted fan, a QR code stand',
       'a kitchen table in the evening: bills and receipts spread across a floral plastic tablecloth, a calculator, a rice cooker on the counter, a bare bulb on a cord above',
     ],
+    canhTot2:
+      'standing beside a gleaming black sedan parked in front of a spacious multi-storey home, tossing the car keys once and catching them, a wide satisfied grin',
+    boiCanhTot2:
+      'the paved driveway of a spacious multi-storey home in a new suburb: a glossy black sedan under a car porch, a manicured front garden, wrought-iron gates, a security camera mounted discreetly above',
   },
   'tu-tuc': {
     vi: 'Cung Tử Tức — con cái',
@@ -287,6 +332,10 @@ export const KHIA_CANH: Record<string, KhiaCanh> = {
       'a primary school gate at pick-up time: parents waiting on parked motorbikes, helmets dangling, a red flag, a vendor selling fish-shaped snacks from a cart',
       "a child's bedroom at night: a mosquito net half tucked up, a small night light, a school bag slumped by the door, star stickers on the wardrobe",
     ],
+    canhTot2:
+      'standing proudly beside a child receiving a gold medal on stage, camera flashes popping, a large banner and trophy table behind',
+    boiCanhTot2:
+      'a school auditorium stage set up for an awards ceremony: a red banner with an emblem, a table lined with trophies and medals, parents in the front rows raising phones to take photos',
   },
   'phu-the': {
     vi: 'Cung Phu Thê — vợ chồng, tình duyên',
@@ -300,6 +349,10 @@ export const KHIA_CANH: Record<string, KhiaCanh> = {
       'stopped on a motorbike at the rail of a city bridge at dusk: helmets still on the wrists, the river below, strings of lights on the far bank, other bikes streaming past',
       'a small kitchen at dinner time: two bowls of rice set out on a floral tablecloth, a dish of braised fish steaming, a rice cooker venting, a fan turning in the corner',
     ],
+    canhTot2:
+      'clinking champagne glasses on a candlelit resort balcony overlooking the sea, both dressed elegantly, a small anniversary cake set between them',
+    boiCanhTot2:
+      'a resort balcony suite at dusk overlooking the sea: a small round table set with candles and a cake, rattan chairs, string lights along the railing, the ocean glowing under a setting sun',
   },
   'huynh-de': {
     vi: 'Cung Huynh Đệ — anh chị em',
@@ -313,6 +366,10 @@ export const KHIA_CANH: Record<string, KhiaCanh> = {
       'a shared childhood bedroom: two narrow beds, old posters, a desk with a stack of schoolbooks, a wall fan, afternoon light through a grilled window',
       'a kitchen during a family gathering: dishes being carried past, a pot of soup on a portable burner, relatives lightly sketched in the doorway, a crate of beer on the floor',
     ],
+    canhTot2:
+      'standing together in front of a newly opened family shop, both beaming as they cut a ribbon stretched across the entrance',
+    boiCanhTot2:
+      'the entrance of a newly opened family shop: a ribbon-cutting stand with scissors and a ribbon, potted congratulatory flower arrangements lining the pavement, a small crowd of well-wishers',
   },
   'tong-quan': {
     vi: 'Tổng quan lá số — cả cuộc đời',
@@ -326,6 +383,10 @@ export const KHIA_CANH: Record<string, KhiaCanh> = {
       'the high bank above the Red River in Hanoi: banana plants on the slope, a long bridge in the haze, brick kilns and a scatter of low houses beyond',
       'a terraced hillside path in the northern highlands: paddies folding away into valley mist, a buffalo on the track below, a woman with a back basket climbing ahead',
     ],
+    canhTot2:
+      'striding confidently through the lobby of a modern office tower in a tailored coat, phone in hand, sunlight streaming through the glass facade ahead',
+    boiCanhTot2:
+      'the glass atrium lobby of a modern office tower: a soaring ceiling, polished stone floor reflecting light, a coffee kiosk, sharply dressed people crossing in the background',
   },
 };
 
@@ -526,15 +587,22 @@ export function buildIllusPrompt(input: IllusInput): IllusPrompt {
   const v = ((Math.max(1, input.v || 1) - 1) % kc.boiCanh.length) + 1;
   const st = SAC_THAI[sac];
 
+  // (tốt, v=2) đọc cảnh/bối cảnh phú quý riêng nếu khía đã khai — xem lý do ở
+  // `canhTot2`/`boiCanhTot2` (KhiaCanh). Thiếu khai (chưa viết tới, hoặc future
+  // v3+) thì rơi về `canh[sac]`/`boiCanh[v-1]` như mọi tổ hợp khác.
+  const dungTot2 = sac === 'tot' && v === 2 && !!kc.canhTot2 && !!kc.boiCanhTot2;
+  const canhText = dungTot2 ? kc.canhTot2! : kc.canh[sac];
+  const moiTruong = dungTot2 ? kc.boiCanhTot2! : kc.boiCanh[v - 1];
+
   const prompt = [
     STYLE_LOCK,
     '',
     nhanVat(gioi, tuoi) + '.',
     '',
-    `Scene: ${kc.canh[sac]}.`,
+    `Scene: ${canhText}.`,
     `Expression: ${st.bieuCam}.`,
     `People around them: ${st.quanhCanh}.`,
-    `Environment: ${kc.boiCanh[v - 1]}. ${st.doVat}.`,
+    `Environment: ${moiTruong}. ${st.doVat}.`,
     `Light: ${st.anhSang}.`,
     '',
     'Composition: wide horizontal frame, the character placed off-centre towards the right, seen from a natural eye-level three-quarter angle, room to breathe around them.',

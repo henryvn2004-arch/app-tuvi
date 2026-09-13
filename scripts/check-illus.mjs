@@ -116,6 +116,18 @@ for (const [k, v] of Object.entries(KHIA_CANH)) {
         fail(`${k}.boiCanh[${i}]: quá ngắn hoặc thiếu — "${b}"`);
     });
   }
+  // canhTot2/boiCanhTot2 (bối cảnh phú quý riêng cho tốt+v2) — nếu khai một
+  // trong hai thì PHẢI khai đủ cả hai (buildIllusPrompt đọc cả cặp cùng lúc,
+  // thiếu một bên là rơi im lặng về boiCanh[1] cũ mà không ai biết).
+  const coTot2 = 'canhTot2' in v || 'boiCanhTot2' in v;
+  if (coTot2) {
+    if (typeof v.canhTot2 !== 'string' || v.canhTot2.trim().length < 20)
+      fail(`${k}.canhTot2: quá ngắn hoặc thiếu — "${v.canhTot2}"`);
+    if (typeof v.boiCanhTot2 !== 'string' || v.boiCanhTot2.trim().length < 20)
+      fail(`${k}.boiCanhTot2: quá ngắn hoặc thiếu — "${v.boiCanhTot2}"`);
+  } else {
+    fail(`${k}: thiếu canhTot2/boiCanhTot2 (mọi khía phải có bộ v2 phú quý cho sắc "tốt")`);
+  }
 }
 
 // ── 3. public/tools-shared/illus-match.js: PHAN_TO_KHIA / KHIA_TO_CUNG / VARIANT_COUNT ──
@@ -297,7 +309,7 @@ for (const [k, v] of Object.entries(THANG_CANH)) {
 
 if (bad === 0) {
   console.log(
-    `✅ ${KHIA_KEYS.length} khía cạnh · ${KHIA_KEYS.length * 3} sắc thái · PHẦN↔khía↔cung↔ngưỡng khớp nhau tuyệt đối · đại vận: 3 flag → 3 sắc, ${TUOI_5_BAC.length} bậc tuổi phủ đủ · 12 tháng âm lịch đủ khoá.`
+    `✅ ${KHIA_KEYS.length} khía cạnh · ${KHIA_KEYS.length * 3} sắc thái · PHẦN↔khía↔cung↔ngưỡng khớp nhau tuyệt đối · đại vận: 3 flag → 3 sắc, ${TUOI_5_BAC.length} bậc tuổi phủ đủ · 12 tháng âm lịch đủ khoá · ${KHIA_KEYS.length} khía đủ bộ v2 phú quý (tốt).`
   );
 } else {
   console.error(`\n${bad} lỗi trong thư viện hình minh hoạ — sửa trước khi gen/deploy.`);

@@ -119,6 +119,22 @@ function tierA(): Pick[] {
   return out;
 }
 
+/** Tier A v2: đúng 78 tổ hợp của Tier A, biến thể v2 — bộ ảnh THỨ HAI chống
+ * trùng giữa hai lá số cùng sắc thái. Sắc "tốt" ở v2 đọc cảnh phú quý riêng
+ * (`canhTot2`/`boiCanhTot2`, xem illus-prompt.ts); "trung"/"xấu" v2 vẫn dùng
+ * `canh[sac]` cũ, chỉ đổi bối cảnh theo `boiCanh[1]`. */
+function tierAv2(): Pick[] {
+  const out: Pick[] = [];
+  for (const khia of Object.keys(KHIA_CANH)) {
+    for (const sac of SACS) {
+      for (const gioi of GIOIS) {
+        out.push({ kind: 'cung', khia, sac, gioi, tuoi: 'truong-thanh', v: 2 });
+      }
+    }
+  }
+  return out;
+}
+
 /** Tier Tháng: 12 tháng âm lịch × 2 giới, v1, người trưởng thành — phủ đúng
  * 12 phần (5-16) của Vận Hạn 12 Tháng chưa có ảnh. */
 function tierThang(): Pick[] {
@@ -158,6 +174,7 @@ export async function GET(req: NextRequest) {
   const sp = req.nextUrl.searchParams;
   let pick: Pick[];
   if (sp.get('tierA')) pick = tierA();
+  else if (sp.get('tierAv2')) pick = tierAv2();
   else if (sp.get('tierThang')) pick = tierThang();
   else if (sp.get('ids')) {
     const raw = sp
