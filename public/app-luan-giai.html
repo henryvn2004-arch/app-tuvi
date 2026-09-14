@@ -219,7 +219,6 @@
       <div class="ws-intake">
       <div id="introHost"><div class="intro-card">
         <div class="intro-body">
-          <img class="intro-avatar" src="/tool-avatars/laso.webp" alt="" onerror="this.remove()">
           <div class="intro-text">
             <div class="intro-t">Luận giải Tử Vi</div>
             <!-- Henry 2026-09-14: box này giờ là CÂU HOOK (1-2 câu), không phải mô
@@ -232,6 +231,12 @@
                  Đo: rỗng 45,78px · đã điền 45,78px. -->
             <div id="introSrc" style="min-height:36.8px;margin-top:9px"></div>
           </div>
+          <!-- Banner thủy mặc nhóm "Tử Vi Đẩu Số" (scripts/gen-hero-banners.mjs),
+               thay cho .intro-avatar cũ (icon vuông) — pilot trang này trước khi
+               áp dụng hàng loạt cho 51 tool. Nguồn lưu vĩnh viễn ở Supabase
+               Storage (cùng cách illus/portraits đang phục vụ), không cần chép
+               vào public/. -->
+          <img class="intro-photo" src="https://dciwkfdqhhddeymlisey.supabase.co/storage/v1/object/public/portraits/hero-banners/laso-01.png" alt="" onerror="this.remove()">
         </div>
         <!-- 3 pill tính năng (Henry 2026-09-09, mẫu iPhone) — chỉ trang trí,
              không mang dữ liệu động nên dựng tĩnh, không cần JS. -->

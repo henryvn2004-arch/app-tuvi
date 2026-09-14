@@ -315,6 +315,15 @@ button.item{border:none;background:none;font:inherit;text-align:left}
 .intro-card .intro-d b{color:var(--text)}
 @media(max-width:480px){.intro-card .intro-avatar{width:72px;height:72px;border-radius:12px}}
 
+/* Banner thủy mặc khổ ngang (`scripts/gen-hero-banners.mjs`, dùng CHUNG theo
+   NHÓM cổ pháp — xem lib/media/hero-banner-prompt.ts), thay `.intro-avatar`
+   ở những trang ĐÃ gắn ảnh này (chưa áp dụng hết 51 tool — mỗi trang tự khai
+   `.intro-photo` khi đã chọn xong ảnh nhóm). Nguồn 1536×1024 (khổ RỘNG NHẤT
+   gpt-image-2 hỗ trợ) → hiển thị hẹp/thấp hơn nên object-position:right giữ
+   đúng nhân vật (luôn vẽ lệch phải, có khoảng trống bên trái) trong khung. */
+.intro-card .intro-photo{width:240px;height:160px;border-radius:10px;flex-shrink:0;object-fit:cover;object-position:right center;background:var(--navy)}
+@media(max-width:640px){.intro-card .intro-photo{display:none}}
+
 /* ── HÀNG GỢI Ý CÂU HỎI (chip cố định trên ô nhập rail, cuộn ngang) ── */
 .rail-sugg{padding:8px 13px 0}
 .sugg-row{display:flex;gap:7px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
