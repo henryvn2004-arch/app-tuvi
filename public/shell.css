@@ -696,10 +696,11 @@ font-family:inherit}
      phía trên, đang dùng chung cho MỌI tool.
      2026-09-14: TỪNG có thêm `.lg-illus{break-after:page}` (ảnh đứng riêng 1
      trang trước khi tới chữ) — đo thật cho 43 trang mất 6,4s render + PDF
-     4,3MB (chưa tính ảnh thật, ảnh gốc riêng đã ~3,1MB/tấm). Bỏ luật đó: ảnh
-     nằm chung trang với chữ theo luồng tự nhiên, cắt gần nửa số trang thừa —
-     xem thêm `compressIllusForPrint()` ở shell.js (đổi ảnh sang bản nén
-     ~90-120KB chỉ lúc in) để bù phần cân nặng ảnh thật. */
+     4,3MB (chưa tính ảnh thật, ảnh gốc lúc đó vẫn PNG ~3,1MB/tấm). Bỏ luật
+     đó: ảnh nằm chung trang với chữ theo luồng tự nhiên. Không còn cần nén
+     riêng lúc in nữa — `illus-match.js` giờ trỏ thẳng bản .webp NÉN SẴN
+     (~150KB/tấm, migrate 1 lần khỏi .png gốc) dùng chung cho MỌI nơi, màn
+     hình lẫn PDF. */
   .ws-book-mode .sec { break-before: page; }
   .ws-book-mode .lg-illus { break-inside: avoid; }
 }

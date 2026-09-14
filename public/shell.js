@@ -1839,7 +1839,6 @@
         '<ul class="wsb-toc-list">' + tocHtml + '</ul></div>'
       ) : '');
     host.insertBefore(wrap, host.firstChild);
-    compressIllusForPrint(host);
     return true;
   }
   // Bản in không có `.ws-top` (đã ẩn) nên tự nó không nói được đây là kết quả
@@ -1917,35 +1916,7 @@
     if (!_pdfReopenedDetails) return;
     _pdfReopenedDetails.forEach(function (d) { d.open = false; });
     _pdfReopenedDetails = null;
-    restoreIllusForScreen();
   });
-
-  // ── Ảnh minh hoạ: đổi sang bản NÉN chỉ lúc in ─────────────────────────
-  // 2026-09-14: đo thật — ảnh gốc `illus-match.js` (1536×1024 PNG) nặng
-  // ~3,1MB/tấm, trong khi bề rộng thật khi in chỉ ~700-900px. Cổng biến đổi
-  // ảnh CÓ SẴN của Supabase Storage (`/storage/v1/render/image/...`, đã kiểm
-  // tồn tại — KHÔNG cần bật thêm gì phía Supabase) trả WebP cùng khung hình
-  // chỉ ~90-120KB (giảm ~96%), trình duyệt tự thương lượng WebP qua header
-  // `Accept` sẵn có, không cần tự thêm `&format=`. Chỉ đổi `src` ngay TRƯỚC
-  // khi in (gọi từ `ensurePrintBook()`, sớm hơn `window.print()` cỡ 800ms+
-  // thời gian tải QR, đủ cho ảnh nén kịp nạp) — màn hình vẫn dùng bản gốc,
-  // không đụng trải nghiệm đang chạy tốt. Chỉ áp dụng đúng dạng URL Storage
-  // công khai biết trước; URL lạ thì bỏ qua, an toàn hơn là đoán mò.
-  var ILLUS_OBJECT_RE = /\/storage\/v1\/object\/public\//;
-  function compressIllusForPrint(host) {
-    if (!host) return;
-    host.querySelectorAll('.lg-illus img').forEach(function (img) {
-      if (img.dataset.origSrc || !ILLUS_OBJECT_RE.test(img.src)) return;
-      img.dataset.origSrc = img.src;
-      img.src = img.src.replace(ILLUS_OBJECT_RE, '/storage/v1/render/image/public/') + '?width=900&quality=72';
-    });
-  }
-  function restoreIllusForScreen() {
-    document.querySelectorAll('.lg-illus img[data-orig-src]').forEach(function (img) {
-      img.src = img.dataset.origSrc;
-      delete img.dataset.origSrc;
-    });
-  }
 
   // ══════════════════════════════════════════════════════════════════════
   // ORB TRÊN NÚT HỎI — lời mời, không phải đồ trang trí
