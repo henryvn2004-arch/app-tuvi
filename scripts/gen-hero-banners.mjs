@@ -2,16 +2,20 @@
 /**
  * Sinh ẢNH BANNER CHÍNH (khối hook `.intro-card` đầu trang tool) — tranh thủy
  * mặc khổ ngang, CÓ MÀU — bằng gpt-image-2. Xem `lib/media/hero-banner-prompt.ts`
- * cho phong cách + cảnh từng tool.
+ * cho phong cách + cảnh từng NHÓM (banner dùng CHUNG theo nhóm, không phải
+ * 1 bức/tool — 11 nhóm phủ 52 tool, mỗi nhóm một nhân vật/đạo cụ đúng bản
+ * chất cổ pháp của nhóm đó).
  *
- * Khác `gen-tool-avatars.mjs`: mỗi tool sinh NHIỀU biến thể để duyệt (chưa
- * chốt bức nào), không phải 1 bức/tool.
+ * Khác `gen-tool-avatars.mjs`: mỗi nhóm sinh NHIỀU biến thể để duyệt (chưa
+ * chốt bức nào), không phải 1 bức/nhóm.
  *
  * Chạy ở NƠI CÓ `OPENAI_API_KEY` và ra được Internet:
- *   node scripts/gen-hero-banners.mjs --tool laso --n 15 --dry-run   # chỉ in prompt
- *   node scripts/gen-hero-banners.mjs --tool laso --n 15             # vẽ thật
+ *   node scripts/gen-hero-banners.mjs --group tu-binh --n 15 --dry-run   # chỉ in prompt
+ *   node scripts/gen-hero-banners.mjs --group tu-binh --n 15             # vẽ thật
+ *   node scripts/gen-hero-banners.mjs --tool tu-binh --n 15              # tương đương (tool tự suy ra nhóm)
+ *   node scripts/gen-hero-banners.mjs --all --n 3                        # mẫu 3 bức/nhóm cho TOÀN BỘ 11 nhóm
  *
- * Cờ: --out <thư mục> (mặc định `.hero-banners/<tool>/`) · --size (mặc định
+ * Cờ: --out <thư mục> (mặc định `.hero-banners/<nhóm>/`) · --size (mặc định
  * 1536x1024 — khổ ngang RỘNG NHẤT gpt-image-2 hỗ trợ, không phải panorama thật;
  * crop bằng CSS object-fit ở khối hiển thị) · --quality low|medium|high
  * (mặc định medium) · --model (mặc định gpt-image-2, xem lib/image/openai-image.ts).
@@ -39,13 +43,20 @@ execFileSync(
     '--outDir',
     outDir,
     join(ROOT, 'lib/media/hero-banner-prompt.ts'),
+    join(ROOT, 'lib/media/tool-avatar-prompt.ts'),
   ],
   { stdio: 'inherit' }
 );
-const { HERO_BANNERS, buildHeroBannerPrompt } = require(join(outDir, 'hero-banner-prompt.js'));
-if (!Array.isArray(HERO_BANNERS) || typeof buildHeroBannerPrompt !== 'function') {
+const { HERO_BANNER_GROUPS, resolveHeroGroup, buildHeroBannerPrompt } = require(
+  join(outDir, 'hero-banner-prompt.js')
+);
+if (
+  !Array.isArray(HERO_BANNER_GROUPS) ||
+  typeof resolveHeroGroup !== 'function' ||
+  typeof buildHeroBannerPrompt !== 'function'
+) {
   console.error(
-    '❌ không nạp được HERO_BANNERS/buildHeroBannerPrompt từ bản dịch — dừng trước khi đốt tiền vẽ.'
+    '❌ không nạp được HERO_BANNER_GROUPS/resolveHeroGroup/buildHeroBannerPrompt từ bản dịch — dừng trước khi đốt tiền vẽ.'
   );
   process.exit(1);
 }
@@ -63,24 +74,24 @@ const MODEL = flag('--model', 'gpt-image-2');
 const N = parseInt(flag('--n', '15'), 10);
 const DRY = has('--dry-run');
 
-let pick;
-if (flag('--tool')) {
-  pick = flag('--tool')
-    .split(',')
-    .map((s) => s.trim())
-    .filter(Boolean);
+let groups;
+if (has('--all')) {
+  groups = HERO_BANNER_GROUPS;
 } else {
-  pick = ['laso'];
-}
-
-const byId = new Map(HERO_BANNERS.map((t) => [t.id, t]));
-const bad = pick.filter((id) => !byId.has(id));
-if (bad.length) {
-  console.error(
-    `tool_id chưa có scene trong HERO_BANNERS: ${bad.join(', ')}\n` +
-      'Thêm vào lib/media/hero-banner-prompt.ts trước.'
-  );
-  process.exit(1);
+  const raw = flag('--group') || flag('--tool') || 'laso';
+  try {
+    groups = raw
+      .split(',')
+      .map((s) => s.trim())
+      .filter(Boolean)
+      .map((idOrKey) => resolveHeroGroup(idOrKey));
+  } catch (e) {
+    console.error(`❌ ${e.message}`);
+    process.exit(1);
+  }
+  // Bỏ trùng — nhiều tool cùng --tool có thể suy ra cùng một nhóm.
+  const seen = new Set();
+  groups = groups.filter((g) => (seen.has(g.id) ? false : (seen.add(g.id), true)));
 }
 
 const KEY = process.env.OPENAI_API_KEY || '';
@@ -92,30 +103,29 @@ if (!KEY && !DRY) {
 }
 
 console.log(
-  `${pick.length} tool × ${N} biến thể · ${SIZE} · quality=${QUALITY} · model=${MODEL}${DRY ? ' · DRY-RUN (không gọi API)' : ''}\n`
+  `${groups.length} nhóm × ${N} biến thể · ${SIZE} · quality=${QUALITY} · model=${MODEL}${DRY ? ' · DRY-RUN (không gọi API)' : ''}\n`
 );
 
 let daVe = 0,
   loi = 0;
 
-for (const id of pick) {
-  const t = byId.get(id);
-  const prompt = buildHeroBannerPrompt(t);
-  const outBase = flag('--out', join(ROOT, '.hero-banners', id));
+for (const g of groups) {
+  const prompt = buildHeroBannerPrompt(g);
+  const outBase = flag('--out', join(ROOT, '.hero-banners', g.id));
   mkdirSync(outBase, { recursive: true });
 
   if (DRY) {
-    console.log(`── ${t.id} — ${t.label}\n${prompt}\n`);
+    console.log(`── ${g.id} — ${g.label}\n${prompt}\n`);
     continue;
   }
 
   const already = existsSync(outBase)
     ? readdirSync(outBase).filter((f) => f.endsWith('.png')).length
     : 0;
-  console.log(`── ${t.id}: đã có ${already} bức, vẽ thêm tới ${N}`);
+  console.log(`── ${g.id}: đã có ${already} bức, vẽ thêm tới ${N}`);
 
   for (let i = already + 1; i <= N; i++) {
-    const ten = `${id}-${String(i).padStart(2, '0')}.png`;
+    const ten = `${g.id}-${String(i).padStart(2, '0')}.png`;
     const dich = join(outBase, ten);
     try {
       const r = await fetch('https://api.openai.com/v1/images/generations', {
