@@ -781,16 +781,19 @@ font-family:inherit}
 .ws-steps .wss-step.active .wss-l{color:var(--text);font-weight:600}
 .ws-steps .wss-step.done .wss-l{color:var(--text-mid)}
 @media(max-width:480px){.ws-steps .wss-l{font-size:9.5px;max-width:64px}}
-/* ── Banner cột phụ (cuối `.ws-intake`, dưới `#shellRecent`) — dựng bằng
-   SVG/gradient nội tuyến, KHÔNG phải ảnh — repo chưa có pipeline sinh ảnh
-   minh hoạ khổ ngang mới trong phiên làm việc này (cần OPENAI_API_KEY/
-   GEMINI_API_KEY, không có sẵn ở đây). Đủ dùng tạm; thay bằng ảnh thật qua
-   `scripts/gen-illus.mjs` hoặc tương đương khi có, không cần đổi layout. */
-.ws-promo{background:linear-gradient(160deg,var(--navy),var(--navy-3));border-radius:14px;padding:20px 18px;text-align:center;margin-top:16px}
-.ws-promo svg{width:100%;max-width:200px;height:auto;margin:0 auto 14px;display:block}
-.ws-promo p{font-family:var(--serif);font-size:13.5px;line-height:1.55;color:var(--gold-on-navy);margin-bottom:14px}
-.ws-promo a{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:var(--gold);text-decoration:none;border:1px solid rgba(201,168,76,.4);border-radius:20px;padding:7px 14px}
-.ws-promo a:hover{background:rgba(201,168,76,.14)}
+/* ── Banner cột phụ = thẻ "Giới thiệu" (Henry 2026-09-14, mẫu chụp) — thẻ
+   sáng như `.intro-card`/`.form-card`, KHÔNG dùng hình/SVG minh hoạ (cố ý —
+   Henry: "ko cần hình ảnh gì cả"). Icon vuông navy/gold dùng lại đúng mẫu
+   `.fc-ic`/`.cb-ic` đã có, không bịa màu tím như ảnh mẫu để giữ nhất quán
+   bảng màu thương hiệu. */
+.ws-promo{background:var(--white);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin-top:16px;box-shadow:var(--shadow)}
+.ws-promo .wsp-eyebrow{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.ws-promo .wsp-ic{width:26px;height:26px;border-radius:7px;background:var(--navy);color:var(--gold);display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+.ws-promo .wsp-ic svg{width:14px;height:14px}
+.ws-promo .wsp-eyebrow span:last-child{font-size:10.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-lt)}
+.ws-promo .wsp-title{font-family:var(--serif);font-size:15px;font-weight:600;color:var(--text);margin-bottom:8px}
+.ws-promo .wsp-desc{font-size:13px;color:var(--text-mid);line-height:1.65;margin-bottom:14px}
+.ws-promo .wsp-quote{margin:0;border-left:3px solid var(--gold-soft);padding-left:12px;font-family:var(--serif);font-style:italic;font-size:13px;color:var(--text-mid);line-height:1.6}
 /* Thanh DÍNH "Đây là BẢN MẪU" — hiện phía trên kết quả khi bản mẫu đang tự mở
    (hoặc mở tay). Chuyển từ app-luan-giai.html (nơi định nghĩa gốc) sang đây
    (2026-09) để dùng chung — nhiều trang giờ auto-show sample lúc vào trang. */
