@@ -632,9 +632,77 @@ font-family:inherit}
   .ws-print-foot-l b { display: block; font-family: var(--serif); font-size: 11pt; }
   .ws-print-foot-l span { display: block; font-size: 8.5pt; color: #666; margin-top: 1px; }
   .ws-print-qr { width: 60px; height: 60px; flex-shrink: 0; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+  /* Bìa sách + danh ngôn + mục lục (6 tool có ảnh minh hoạ illus-match.js,
+     xem `ensurePrintBook()` ở shell.js) — dựng kiểu sách chỉ tuyến (線裝書):
+     bìa navy trơn, gáy có chỉ khâu, nhãn giấy chữ ngang + triện, sau đó 1
+     trang danh ngôn rồi 1 trang mục lục, mỗi khối MỘT trang giấy riêng. Dùng
+     `min-height:100vh` để mỗi khối chiếm trọn một trang in (vh trong ngữ
+     cảnh in xấp xỉ khổ trang giấy ở Chromium). */
+  /* `#wsBookCover{display:none}` (ngoài @media print, phía dưới file) ẩn nó
+     trên màn hình — PHẢI mở lại ở đây, không thì con bên trong dù có CSS in
+     đúng cũng ẩn theo cha (đã cắn: cover render đủ trong DOM, `display:none`
+     kế thừa từ cha khiến PDF thật KHÔNG có bìa dù debug DOM thấy có). */
+  #wsBookCover { display: block !important; }
+  .wsb-cover, .wsb-quote, .wsb-toc { break-after: page; break-inside: avoid; min-height: 100vh; box-sizing: border-box; position: relative; }
+  .wsb-cover {
+    background: linear-gradient(155deg, var(--navy-2), var(--navy) 55%, #04121D) !important;
+    -webkit-print-color-adjust: exact; print-color-adjust: exact;
+  }
+  .wsb-spine { position: absolute; left: 14px; top: 0; bottom: 0; width: 40px; }
+  .wsb-spine svg { width: 100%; height: 100%; display: block; }
+  .wsb-label {
+    position: absolute; right: 42px; top: 22%; bottom: 30%; width: 160px;
+    background: #F8F4E9 !important; border: 1.5px solid #142230; padding: 5px;
+    -webkit-print-color-adjust: exact; print-color-adjust: exact;
+  }
+  .wsb-label-in { width: 100%; height: 100%; border: 1px solid #142230; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+  /* `text-wrap:balance` tự chia đều số chữ mỗi dòng — tên tool dài ngắn khác
+     nhau giữa 6 tool (VD "Luận giải Tử Vi" vs "Hướng Nghiệp Trẻ") nên KHÔNG
+     tự chèn `<br>` tay được, phải để trình duyệt cân dòng. */
+  .wsb-label-t { font-family: var(--serif); font-weight: 700; color: #142230; font-size: 15pt; letter-spacing: .02em; line-height: 1.5; text-align: center; padding: 0 6px; text-wrap: balance; }
+  .wsb-seal { margin-top: 14px; width: 22px; height: 22px; background: #B23A2E !important; border-radius: 2px; display: flex; align-items: center; justify-content: center; color: #F8F4E9; font-size: 11px; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .wsb-cover-cap { position: absolute; left: 0; right: 0; bottom: 18%; text-align: center; }
+  .wsb-cover-cap b { display: block; font-size: 8pt; letter-spacing: .22em; color: var(--gold-soft); margin-bottom: 5px; }
+  .wsb-cover-cap span { display: block; font-size: 9pt; color: rgba(249,244,235,.75); letter-spacing: .02em; }
+  .wsb-cover-foot { position: absolute; left: 0; right: 0; bottom: 8%; text-align: center; }
+  .wsb-cover-foot .mk { color: var(--gold); font-size: 11pt; letter-spacing: .3em; margin-bottom: 6px; }
+  .wsb-cover-foot b { display: block; font-family: var(--serif); font-size: 10.5pt; color: var(--gold-lt); letter-spacing: .08em; }
+  .wsb-cover-foot span { display: block; font-size: 7.5pt; color: rgba(249,244,235,.55); margin-top: 3px; }
+
+  .wsb-quote { background: #fff !important; display: flex; align-items: center; justify-content: center; }
+  .wsb-quote-in { max-width: 420px; text-align: center; padding: 0 30px; }
+  .wsb-qmark { font-family: var(--serif); font-size: 34pt; color: var(--gold); line-height: 1; margin-bottom: 4px; opacity: .85; }
+  .wsb-qtxt { font-family: var(--serif); font-style: italic; font-weight: 600; font-size: 15pt; line-height: 1.6; color: var(--navy); }
+  .wsb-qviet { font-family: var(--serif); font-size: 11pt; color: var(--text-mid); margin-top: 12px; line-height: 1.6; }
+  .wsb-qrule { width: 40px; height: 1px; background: var(--gold) !important; margin: 20px auto; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .wsb-qsrc { font-size: 9pt; letter-spacing: .1em; text-transform: uppercase; color: var(--gold-soft); }
+
+  .wsb-toc { background: #fff !important; padding: 15% 46px 0; }
+  .wsb-toc-h { text-align: center; }
+  .wsb-toc-h b { font-size: 8.5pt; letter-spacing: .26em; color: var(--gold-soft); font-weight: 700; }
+  .wsb-toc-h h2 { font-family: var(--serif); font-size: 17pt; color: var(--navy); margin: 6px 0 0; }
+  .wsb-toc-rule { width: 50px; height: 1px; background: var(--gold) !important; margin: 16px auto 22px; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .wsb-toc-list { list-style: none; margin: 0; padding: 0; max-width: 420px; margin-inline: auto; }
+  .wsb-toc-list li { display: flex; align-items: baseline; gap: 8px; font-size: 11pt; color: var(--text); padding: 6px 0; border-bottom: 1px dotted #d8d2c2; }
+  .wsb-toc-n { font-family: var(--serif); font-style: italic; color: var(--gold-soft); font-size: 9.5pt; width: 30px; flex-shrink: 0; }
+  .wsb-toc-t { font-family: var(--serif); flex-shrink: 0; }
+  .wsb-toc-leader { flex: 1; }
+
+  /* Mỗi chương một trang giấy riêng, ảnh minh hoạ đứng MỘT MÌNH trên trang
+     trước đó rồi mới tới trang chữ — đúng nhịp light-novel (ảnh màu trước,
+     chữ sau). `break-after` trên `.lg-illus` đẩy phần còn lại của `.sec`
+     (thẻ `.card`) sang trang kế tiếp dù ảnh nằm SIBLING (luận-giải/chu-trình)
+     hay NẰM TRONG `.card` (vận-hạn-năm) — break-after áp dụng tại điểm ảnh
+     kết thúc trong luồng, không phụ thuộc độ sâu lồng. Scope theo
+     `.ws-book-mode` (chỉ host của 6 tool này) để không đụng `.sec` ở tool
+     khác — xem luật `.sec, .card... {page-break-inside:avoid}` phía trên,
+     đang dùng chung cho MỌI tool. */
+  .ws-book-mode .sec { break-before: page; }
+  .ws-book-mode .lg-illus { break-after: page; break-inside: avoid; }
 }
-/* Ngoài lúc in thì khối đầu/chân trang in KHÔNG tồn tại trên màn hình. */
-.ws-print-head, .ws-print-foot { display: none; }
+/* Ngoài lúc in thì khối đầu/chân trang in, bìa sách KHÔNG tồn tại trên màn hình. */
+.ws-print-head, .ws-print-foot, #wsBookCover { display: none; }
 
 /* Ô GIỮ CHỖ hard paywall Pha 3 (dùng chung — không chép sang từng trang tool).
    Khi một `.res-block-body` mang class `.tpw-locked`, giấu HẲN mọi con của nó
