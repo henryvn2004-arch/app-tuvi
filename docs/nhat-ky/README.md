@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-270 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+271 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 **Bốn file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
 ```bash
@@ -11,7 +11,7 @@ sed -n '120,190p' docs/nhat-ky/2026-08.md    # đọc đúng đoạn, đừng ca
 
 | file | số mục | dung lượng |
 |---|---:|---:|
-| `2026-09.md` | 105 | 436,331 B |
+| `2026-09.md` | 106 | 442,719 B |
 | `2026-08.md` | 148 | 1,024,027 B |
 | `2026-07.md` | 12 | 154,531 B |
 | `track-cu.md` | 5 | 89,354 B |
@@ -25,6 +25,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
+| 1 | 2026-09 | `2026-09.md` | 🔪 Pha 3 vá phễu conversion — cắt giữa phần 2 · ảnh cho phần khoá · mục lục cá nhân · thanh CTA dính |
 | 1 | 2026-09 | `2026-09.md` | 🚪 Pha 2 vá phễu conversion — gỡ auto-open bản mẫu, form là màn hình đầu |
 | 1 | 2026-09 | `2026-09.md` | 💰 Pha 1 vá phễu conversion — hạ giá QR 250→100 Lượng + deep link/copy/đếm ngược lên đầu modal |
 | 1 | 2026-09 | `2026-09.md` | 📧 5 loại email còn thiếu: hoá đơn, PDF luận giải, reminder, cross-sell, broadcast |
