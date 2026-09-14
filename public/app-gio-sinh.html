@@ -9,7 +9,7 @@
 <link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/fonts/noto-serif.css?v=1">
-<link rel="stylesheet" href="/shell.css?v=43">
+<link rel="stylesheet" href="/shell.css?v=44">
 <style>
 .form-card{max-width:860px}
 /* ⚠️ Scope theo ID RIÊNG, KHÔNG nhắm `.fg select` chung — bài học trang Công Sở. */
@@ -79,12 +79,13 @@
            đúng ở đây, một bản duy nhất, không có bản chép để trôi. -->
       <div id="introHost"><div class="intro-card">
         <div class="intro-body">
-          <img class="intro-avatar" src="/tool-avatars/gio-sinh.webp" alt="" onerror="this.remove()">
+          <img class="intro-avatar" src="/tool-avatars/gio-sinh.webp" alt="" style="display:none" onerror="this.remove()">
           <div class="intro-text">
             <div class="intro-t">Xác Định Giờ Sinh</div>
             <div class="intro-d">Lập 12 lá số theo 12 giờ, thu hẹp dần về đúng giờ sinh — trả lời vài câu hỏi để tìm giờ phù hợp nhất.</div>
             <div id="introSrc" style="min-height:73.6px;margin-top:9px"></div>
           </div>
+          <img class="intro-photo" src="https://dciwkfdqhhddeymlisey.supabase.co/storage/v1/object/public/portraits/hero-banners/laso-01.png" alt="" onerror="this.remove()">
         </div>
         <div class="hero-pills">
           <div class="hero-pill"><span class="hp-ic" data-icon="hourglass"></span><span>12 lá số<br>khả nghi</span></div>

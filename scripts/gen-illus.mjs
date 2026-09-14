@@ -6,6 +6,7 @@
  *
  *   node scripts/gen-illus.mjs --mau                    # 2 bức mẫu duyệt phong cách
  *   node scripts/gen-illus.mjs --id quan-loc:tot:nam    # chỉ định <khía>:<sắc>:<giới>[:<tuổi>][:v<n>]
+ *   node scripts/gen-illus.mjs --id xt:tu-tuong:tot:nam # Xem Tuổi — tiền tố "xt:" đọc XEM_TUOI_CANH
  *   node scripts/gen-illus.mjs --mau --dry-run          # chỉ in prompt, KHÔNG gọi API
  *
  * Cờ: --out <thư mục> (mặc định `.illus/`) · --size (mặc định 1536x1024, khổ
@@ -56,9 +57,13 @@ if (existsSync(TSC_LOCAL)) {
     stdio: 'inherit',
   });
 }
-const { buildIllusPrompt, KHIA_CANH } = require(join(outDir, 'illus-prompt.js'));
-if (typeof buildIllusPrompt !== 'function') {
-  console.error('❌ không nạp được buildIllusPrompt — dừng trước khi đốt tiền vẽ.');
+const { buildIllusPrompt, KHIA_CANH, buildXemTuoiPrompt, XEM_TUOI_CANH } = require(
+  join(outDir, 'illus-prompt.js')
+);
+if (typeof buildIllusPrompt !== 'function' || typeof buildXemTuoiPrompt !== 'function') {
+  console.error(
+    '❌ không nạp được buildIllusPrompt/buildXemTuoiPrompt — dừng trước khi đốt tiền vẽ.'
+  );
   process.exit(1);
 }
 
@@ -79,9 +84,14 @@ const DRY = has('--dry-run');
 // vẫn như "tốt" thì cả hệ 3 bậc vô nghĩa.
 const MAU = ['quan-loc:tot:nam:truong-thanh:v1', 'tai-bach:xau:nu:truong-thanh:v3'];
 
+// Tiền tố "xt:" chọn bảng XEM_TUOI_CANH (Xem Tuổi vợ chồng/làm ăn) thay vì
+// KHIA_CANH (12 cung + tổng quan) — hai bảng tách riêng, xem lý do ở
+// illus-prompt.ts. Không tiền tố thì mặc định KHIA_CANH như cũ.
 function parseId(s) {
-  const [khia, sac, gioi, tuoi, vs] = s.split(':');
+  const xemTuoi = s.startsWith('xt:');
+  const [khia, sac, gioi, tuoi, vs] = (xemTuoi ? s.slice(3) : s).split(':');
   return {
+    xemTuoi,
     khia,
     sac,
     gioi,
@@ -99,13 +109,14 @@ else pick = MAU.map(parseId);
 
 const bad = pick.filter(
   (p) =>
-    !KHIA_CANH[p.khia] ||
+    !(p.xemTuoi ? XEM_TUOI_CANH : KHIA_CANH)[p.khia] ||
     !['tot', 'trung', 'xau'].includes(p.sac) ||
     !['nam', 'nu'].includes(p.gioi)
 );
 if (bad.length) {
   console.error('Tham số không hợp lệ: ' + JSON.stringify(bad));
-  console.error('Khía cạnh hợp lệ: ' + Object.keys(KHIA_CANH).join(' '));
+  console.error('Khía cạnh hợp lệ (KHIA_CANH): ' + Object.keys(KHIA_CANH).join(' '));
+  console.error('Khía cạnh hợp lệ (xt: XEM_TUOI_CANH): ' + Object.keys(XEM_TUOI_CANH).join(' '));
   process.exit(1);
 }
 
@@ -116,7 +127,7 @@ if (!KEY && !DRY) {
 }
 
 mkdirSync(OUT, { recursive: true });
-const prompts = pick.map(buildIllusPrompt);
+const prompts = pick.map((p) => (p.xemTuoi ? buildXemTuoiPrompt : buildIllusPrompt)(p));
 console.log(`${prompts.length} bức · ${SIZE} · quality=${QUALITY}${DRY ? ' · DRY-RUN' : ''}`);
 console.log(`Thư mục ra: ${OUT}\n`);
 
