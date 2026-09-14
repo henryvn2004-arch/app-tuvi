@@ -72,6 +72,7 @@
     "check:webdriver": "node scripts/check-analytics-webdriver.mjs"
   },
   "dependencies": {
+    "@react-pdf/renderer": "^4.9.0",
     "@supabase/supabase-js": "^2.112.3",
     "@vercel/functions": "^3.9.5",
     "celestine": "^0.2.1",
