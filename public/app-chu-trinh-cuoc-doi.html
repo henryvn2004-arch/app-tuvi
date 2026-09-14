@@ -477,7 +477,7 @@ function sampleToForm(){
     if(window.__tvmbSkipDemo) return;
     if(window.Shell&&Shell.autoRun&&Shell.autoRun()) return;
     if(window.Shell&&Shell.getRememberedBirth&&Shell.getRememberedBirth()) return;
-    openSample(null,true);
+    var c=document.getElementById('sampCta'); if(c) c.style.display='flex';
   }catch(e){ if(window.console) console.error('sample gate:',e); }
 })();
 
