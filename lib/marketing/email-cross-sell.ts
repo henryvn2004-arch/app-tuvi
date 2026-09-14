@@ -37,7 +37,7 @@ const PAIRS: CrossSellPair[] = [
     toUrl: 'https://tuviminhbao.com/bat-tu.html',
     reason: 'Bạn đã xem Tử Vi Đẩu Số — Bát Tự soi mệnh theo góc Can Chi Tứ Trụ, một lớp phân tích khác bổ trợ cho lá số vừa xem.' },
   { from: 'bat-tu', to: 'luan-giai', toLabel: 'Tử Vi Đẩu Số — Luận Giải',
-    toUrl: 'https://tuviminhbao.com/luan-giai.html',
+    toUrl: 'https://tuviminhbao.com/app/luan-giai',
     reason: 'Bạn đã xem Bát Tự — Luận Giải Tử Vi Đẩu Số cho góc nhìn 12 cung/vận hạn chi tiết theo từng năm.' },
   { from: 'bat-trach', to: 'chon-ngay', toLabel: 'Chọn Ngày Tốt',
     toUrl: 'https://tuviminhbao.com/chon-ngay.html',
