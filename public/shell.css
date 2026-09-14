@@ -748,17 +748,23 @@ font-family:inherit}
     display:grid;
     grid-template-columns:minmax(0,640px) minmax(240px,320px);
     /* Henry 2026-09-14: thanh tiến trình đứng NGAY DƯỚI box mô tả (không còn
-       full-width trên đầu), banner cột phụ đứng TRÊN Phiên gần đây (không
-       còn ở cuối) — `#shellRecent` giờ span 3 hàng (steps/samp/form) để
-       "side" luôn cùng chiều cao với cột chính dù `.ws-promo` đứng riêng
-       ở hàng đầu cột phụ. */
-    grid-template-areas:"hero promo" "steps side" "samp side" "form side";
+       full-width trên đầu). Banner cột phụ (2026-09-14, vòng 2) kéo full-
+       width thành một hàng riêng ngay dưới hero — không còn nhét vừa trong
+       320px của cột phụ — nên `#shellRecent` giờ span 3 hàng (steps/samp/
+       form) thay vì 4. */
+    grid-template-areas:"hero ." "promo promo" "steps side" "samp side" "form side";
     column-gap:24px;row-gap:16px;
     align-items:start;
   }
   .ws-intake>#introHost{grid-area:hero}
   .ws-intake>.ws-steps{grid-area:steps;margin-bottom:0}
-  .ws-intake>.ws-promo{grid-area:promo;margin-top:0}
+  /* Full-width thì bố cục dọc-canh-giữa cũ (giống thẻ 320px) để lại quá
+     nhiều khoảng trắng hai bên chữ — đổi sang hàng ngang: hình bên trái,
+     chữ+nút giãn hết chỗ còn lại. */
+  .ws-intake>.ws-promo{grid-area:promo;margin-top:0;display:flex;align-items:center;gap:24px;text-align:left;padding:16px 28px}
+  .ws-intake>.ws-promo svg{max-width:120px;flex:0 0 auto;margin:0}
+  .ws-intake>.ws-promo p{margin-bottom:0;flex:1;min-width:0}
+  .ws-intake>.ws-promo a{flex:0 0 auto}
   .ws-intake>.samp-cta{grid-area:samp;margin-bottom:0}
   .ws-intake>.form-card{grid-area:form}
   .ws-intake>#shellRecent{grid-area:side;margin-top:0;align-self:start}
