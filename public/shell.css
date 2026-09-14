@@ -747,22 +747,22 @@ font-family:inherit}
   .ws-intake{
     display:grid;
     grid-template-columns:minmax(0,640px) minmax(240px,320px);
-    /* Henry 2026-09-14 (vòng 3, sửa lại): "banner ở trên" Henry muốn kéo dài
-       là BOX MÔ TẢ CÔNG CỤ (`.intro-card`), KHÔNG PHẢI `.ws-promo` — vòng 2
-       hiểu nhầm, đã revert. `.intro-card` giờ span đủ 2 cột (full-width);
-       `.ws-promo` quay lại là thẻ hẹp trong cột phụ, đứng TRÊN Phiên gần đây
-       như vòng 3 gốc đã chốt. */
-    grid-template-areas:"hero hero" "steps promo" "samp side" "form side";
+    /* Henry 2026-09-14 (vòng 4): cột chính (`.ws-main-col`: steps+form) và cột
+       phụ (`.ws-side-col`: promo+samp+phiên gần đây) mỗi bên là MỘT ô lưới
+       (KHÔNG khai grid-area riêng cho từng con bên trong) — con của chúng
+       xếp dọc bằng flow thường + margin sẵn có. Lượt trước gán grid-area cho
+       từng con (steps/form/promo/samp/side riêng) làm hàng "steps/promo"
+       phải cao bằng phần tử cao nhất giữa 2 cột ⇒ `.ws-promo` (cao) đẩy
+       `.form-card` xuống, không còn "sát lên trên" như Henry muốn — bọc theo
+       cột thì mỗi cột tự do cao thấp độc lập, không kéo cột kia theo. */
+    grid-template-areas:"hero hero" "main side";
     column-gap:24px;row-gap:16px;
     align-items:start;
   }
   .ws-intake>#introHost{grid-area:hero}
   .ws-intake>#introHost .intro-card{max-width:none}
-  .ws-intake>.ws-steps{grid-area:steps;margin-bottom:0}
-  .ws-intake>.ws-promo{grid-area:promo;margin-top:0}
-  .ws-intake>.samp-cta{grid-area:samp;margin-bottom:0}
-  .ws-intake>.form-card{grid-area:form}
-  .ws-intake>#shellRecent{grid-area:side;margin-top:0;align-self:start}
+  .ws-intake>.ws-main-col{grid-area:main;min-width:0}
+  .ws-intake>.ws-side-col{grid-area:side;min-width:0}
 }
 /* ── Thanh tiến trình 4 bước (Nhập thông tin → Xem trước lá số → Thanh toán
    → Nhận kết quả) — CHỈ hiển thị trạng thái, KHÔNG điều hướng (không click
