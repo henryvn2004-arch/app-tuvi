@@ -135,6 +135,15 @@ const nextConfig = {
       // thức + bảng tra + hoá giải; để /tools/kim-lau.html sống song song là tự
       // dựng lại đúng cặp URL triệt nhau vừa phải gỡ ở #358.
       { source: '/tools/kim-lau.html', destination: '/kim-lau', permanent: true },
+      // Trang cũ 24-phần (public/luan-giai.html) → bản đang bán thật (13 phần,
+      // /app/luan-giai) — quyết định của Henry (2026-09-14, xem plan productize
+      // luận giải). `permanent:true` ⇒ Next trả 308 (không phải 301 thô — Next
+      // dùng 307/308 để giữ nguyên method của request gốc, xem docs), search
+      // engine coi 308 tương đương 301 khi gộp tín hiệu index/backlink.
+      // Redirects chạy TRƯỚC filesystem/`/public` (docs Next), nên rule này
+      // chặn hẳn `public/luan-giai.html` — file đó xoá luôn trong cùng lượt
+      // này, không để lại 4200+ dòng chết không ai đọc được.
+      { source: '/luan-giai.html', destination: '/app/luan-giai', permanent: true },
     ];
   },
 };

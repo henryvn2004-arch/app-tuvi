@@ -1,10 +1,10 @@
 import { test, expect } from '@playwright/test';
 
-const PAGES = ['/', '/luan-giai.html', '/xem-tuoi.html', '/tu-binh.html', '/phong-thuy.html'];
+const PAGES = ['/', '/app-luan-giai.html', '/xem-tuoi.html', '/tu-binh.html', '/phong-thuy.html'];
 
 test.describe('Navigation', () => {
   test('logo visible và link về trang chủ', async ({ page }) => {
-    await page.goto('/luan-giai.html');
+    await page.goto('/app-luan-giai.html');
     await page.waitForLoadState('networkidle');
     const logo = page.locator('.nav-logo, .nav-brand, a[href="/"], a[href="index.html"]').first();
     await expect(logo).toBeVisible();

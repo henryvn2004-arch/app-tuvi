@@ -4,7 +4,7 @@ import { test, expect } from '@playwright/test';
 
 const KEY_PAGES = [
   { path: '/',                name: 'Homepage' },
-  { path: '/luan-giai.html', name: 'Luận Giải' },
+  { path: '/app-luan-giai.html', name: 'Luận Giải' },
   { path: '/xem-tuoi.html',  name: 'Xem Tuổi' },
   { path: '/tu-binh.html',   name: 'Tử Bình' },
   { path: '/phong-thuy.html',name: 'Phong Thuỷ' },
@@ -64,14 +64,18 @@ test.describe('Mobile — hamburger menu', () => {
 });
 
 // ── Mobile — form usability ───────────────────────────────────────────────────
+// Trang laso THẬT là app-luan-giai.html (/luan-giai.html cũ nay 301 sang
+// /app/luan-giai — Henry, 2026-09-14, xem plan productize luận giải). Form
+// dùng chung TuviForm nhưng host id đổi: #tuvi-form-container (cũ) →
+// #tuviFormHost (mới, xem app-luan-giai.html).
 test.describe('Mobile — Luận Giải form', () => {
   test('form inputs có thể tap và nhập liệu', async ({ page }) => {
-    await page.goto('/luan-giai.html');
+    await page.goto('/app-luan-giai.html');
     await page.waitForLoadState('networkidle');
     await page.waitForFunction('typeof TuviForm !== "undefined"', { timeout: 10_000 });
 
     // Form phải đủ rộng để nhìn thấy trên mobile
-    const container = page.locator('#tuvi-form-container');
+    const container = page.locator('#tuviFormHost');
     await expect(container).toBeVisible({ timeout: 8000 });
 
     const box = await container.boundingBox();
@@ -79,7 +83,7 @@ test.describe('Mobile — Luận Giải form', () => {
   });
 
   test('submit button không bị crop trên mobile', async ({ page }) => {
-    await page.goto('/luan-giai.html');
+    await page.goto('/app-luan-giai.html');
     await page.waitForLoadState('networkidle');
 
     const btn = page.locator('.btn-submit, #tvf-submit-btn').first();
@@ -94,7 +98,7 @@ test.describe('Mobile — Luận Giải form', () => {
 // ── Mobile — lá số grid ───────────────────────────────────────────────────────
 test.describe('Mobile — Lá Số grid', () => {
   test('grid 12 cung không overflow màn hình', async ({ page }) => {
-    await page.goto('/luan-giai.html');
+    await page.goto('/app-luan-giai.html');
     await page.waitForLoadState('networkidle');
     await page.waitForFunction('typeof TuviForm !== "undefined"', { timeout: 10_000 });
 
@@ -102,11 +106,14 @@ test.describe('Mobile — Lá Số grid', () => {
       TuviForm.setData({ hoten: 'Mobile Test', ngay: 15, thang: 7, nam: 1990, gioHour: 7, gioitinh: 'nam', namXem: 2026 })
     `);
     await page.locator('#tvf-submit-btn').click();
-    await page.waitForSelector('#result-section.active', { timeout: 20_000 });
+    // #lgPanel bật display:block + #miniChart (grid 12 cung) đổ chữ NGAY sau
+    // khi engine tính xong — thuần client, không đợi LLM/network (xem doLuan
+    // trong app-luan-giai.html), khác `#result-section.active` của trang cũ.
+    await page.waitForSelector('#lgPanel', { state: 'visible', timeout: 20_000 });
 
-    // Grid has intentional min-width:480px for scrollable mobile UX.
-    // Verify the wrapping container stays within viewport (not the inner grid).
-    const wrap = page.locator('.laso-wrap');
+    // Grid có min-width nội tại cho trải nghiệm cuộn ngang trên mobile.
+    // Verify khung BAO NGOÀI (miniChart) nằm trong viewport, không phải lưới bên trong.
+    const wrap = page.locator('#miniChart');
     const wrapBox = await wrap.boundingBox();
     const viewportWidth = page.viewportSize()?.width ?? 390;
     if (wrapBox) {

@@ -45,7 +45,8 @@ const MODULE = 'public/tools-shared/cung-ngay-sinh.js';
 // không phải chủ thể chắc chắn có mặt. `app-chan-dung-tien-kiep` bỏ vì UI
 // nhiều tầng stream — để lại cho một lượt riêng thay vì cắm vội.
 const PAGES = [
-  'public/luan-giai.html',
+  // 'public/luan-giai.html' XOÁ 2026-09-14 — 301 về /app/luan-giai
+  // (public/app-luan-giai.html, dòng ngay dưới đã cắm khối này từ trước).
   'public/app-luan-giai.html',
   'public/tu-binh.html',
   'public/app-bat-tu.html',
