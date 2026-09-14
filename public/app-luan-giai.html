@@ -217,15 +217,6 @@
            Vì thế `SHELL_INTRO` bên dưới CHỈ khai `key`: chữ nằm đúng ở đây,
            một bản duy nhất — thêm bản chép trong SHELL_INTRO là để nó trôi. -->
       <div class="ws-intake">
-      <!-- Thanh tiến trình — chỉ hiển thị trạng thái, không bấm được. JS
-           chuyển bước ở `wsStepsSet` (cuối file), gọi tại đúng chỗ trạng thái
-           đã đổi trong code cũ (doLuan/showForm/gate/paywall/kết quả). -->
-      <div class="ws-steps" id="lgSteps">
-        <div class="wss-step active"><span class="wss-n">1</span><span class="wss-l">Nhập thông tin</span></div>
-        <div class="wss-step"><span class="wss-n">2</span><span class="wss-l">Xem trước lá số</span></div>
-        <div class="wss-step"><span class="wss-n">3</span><span class="wss-l">Thanh toán</span></div>
-        <div class="wss-step"><span class="wss-n">4</span><span class="wss-l">Nhận kết quả</span></div>
-      </div>
       <div id="introHost"><div class="intro-card">
         <div class="intro-body">
           <img class="intro-avatar" src="/tool-avatars/laso.webp" alt="" onerror="this.remove()">
@@ -248,6 +239,27 @@
           <div class="hero-pill"><span class="hp-ic" data-icon="star"></span><span>Điểm mạnh yếu,<br>gợi ý</span></div>
         </div>
       </div></div>
+      <!-- Thanh tiến trình — chỉ hiển thị trạng thái, không bấm được. JS
+           chuyển bước ở `wsStepsSet` (cuối file), gọi tại đúng chỗ trạng thái
+           đã đổi trong code cũ (doLuan/showForm/gate/paywall/kết quả). -->
+      <div class="ws-steps" id="lgSteps">
+        <div class="wss-step active"><span class="wss-n">1</span><span class="wss-l">Nhập thông tin</span></div>
+        <div class="wss-step"><span class="wss-n">2</span><span class="wss-l">Xem trước lá số</span></div>
+        <div class="wss-step"><span class="wss-n">3</span><span class="wss-l">Thanh toán</span></div>
+        <div class="wss-step"><span class="wss-n">4</span><span class="wss-l">Nhận kết quả</span></div>
+      </div>
+      <!-- Banner cột phụ — SVG/gradient nội tuyến (xem chú thích `.ws-promo`
+           trong shell.css: chưa có pipeline sinh ảnh mới trong phiên này).
+           Đứng TRƯỚC #shellRecent — Henry muốn banner ở TRÊN Phiên gần đây. -->
+      <div class="ws-promo">
+        <svg viewBox="0 0 200 110" aria-hidden="true">
+          <circle cx="100" cy="34" r="18" fill="var(--gold)" opacity="0.9"/>
+          <path d="M0 90 L45 45 L75 72 L100 40 L130 75 L160 50 L200 90 Z" fill="var(--navy-3)"/>
+          <path d="M0 96 L60 64 L95 86 L140 58 L200 96 Z" fill="rgba(201,168,76,.25)"/>
+        </svg>
+        <p>Mỗi lá số là một hành trình.<br>Hiểu để sống an nhiên.</p>
+        <a href="/blog.html">Khám phá thêm kiến thức →</a>
+      </div>
       <div id="shellRecent"></div>
       <div class="samp-cta" id="sampCta" style="display:none">
         <span class="sc-ic" data-icon="lightbulb"></span>
@@ -287,17 +299,6 @@
           <span class="bg-label"><span class="ic" data-icon="sparkles"></span><b id="btnGoLabel">Lập lá số &amp; Luận giải ngay →</b></span>
           <small>Tốn <span data-tvp-price="laso">…</span> Lượng <span data-tvp-price-vnd="laso"></span></small>
         </button>
-      </div>
-      <!-- Banner cột phụ — SVG/gradient nội tuyến (xem chú thích `.ws-promo`
-           trong shell.css: chưa có pipeline sinh ảnh mới trong phiên này). -->
-      <div class="ws-promo">
-        <svg viewBox="0 0 200 110" aria-hidden="true">
-          <circle cx="100" cy="34" r="18" fill="var(--gold)" opacity="0.9"/>
-          <path d="M0 90 L45 45 L75 72 L100 40 L130 75 L160 50 L200 90 Z" fill="var(--navy-3)"/>
-          <path d="M0 96 L60 64 L95 86 L140 58 L200 96 Z" fill="rgba(201,168,76,.25)"/>
-        </svg>
-        <p>Mỗi lá số là một hành trình.<br>Hiểu để sống an nhiên.</p>
-        <a href="/blog.html">Khám phá thêm kiến thức →</a>
       </div>
       </div>
 

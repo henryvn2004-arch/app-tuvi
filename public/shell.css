@@ -747,16 +747,21 @@ font-family:inherit}
   .ws-intake{
     display:grid;
     grid-template-columns:minmax(0,640px) minmax(240px,320px);
-    grid-template-areas:"steps steps" "hero side" "samp side" "form promo";
+    /* Henry 2026-09-14: thanh tiến trình đứng NGAY DƯỚI box mô tả (không còn
+       full-width trên đầu), banner cột phụ đứng TRÊN Phiên gần đây (không
+       còn ở cuối) — `#shellRecent` giờ span 3 hàng (steps/samp/form) để
+       "side" luôn cùng chiều cao với cột chính dù `.ws-promo` đứng riêng
+       ở hàng đầu cột phụ. */
+    grid-template-areas:"hero promo" "steps side" "samp side" "form side";
     column-gap:24px;row-gap:16px;
     align-items:start;
   }
-  .ws-intake>.ws-steps{grid-area:steps;margin-bottom:0}
   .ws-intake>#introHost{grid-area:hero}
+  .ws-intake>.ws-steps{grid-area:steps;margin-bottom:0}
+  .ws-intake>.ws-promo{grid-area:promo;margin-top:0}
   .ws-intake>.samp-cta{grid-area:samp;margin-bottom:0}
   .ws-intake>.form-card{grid-area:form}
   .ws-intake>#shellRecent{grid-area:side;margin-top:0;align-self:start}
-  .ws-intake>.ws-promo{grid-area:promo;align-self:start}
 }
 /* ── Thanh tiến trình 4 bước (Nhập thông tin → Xem trước lá số → Thanh toán
    → Nhận kết quả) — CHỈ hiển thị trạng thái, KHÔNG điều hướng (không click
