@@ -791,7 +791,19 @@ async function submitAuth() {
     } else {
       const d = await signUpEmail(email, pass);
       if (!d.access_token) {
-        showAuthError('Đã gửi email xác nhận — vui lòng kiểm tra hộp thư.');
+        // GoTrue trả response y hệt lượt đăng ký thành công khi email ĐÃ TỒN
+        // TẠI (chống dò email — xem docs Supabase "signUp"), chỉ khác ở chỗ
+        // `identities` rỗng thay vì có dữ liệu thật, và KHÔNG gửi email nào.
+        // Không tách 2 trường hợp này thì người đã có tài khoản bấm "Đăng ký"
+        // lại sẽ bị báo nhầm "đã gửi email xác nhận" trong khi thực ra chẳng
+        // có gì được gửi cả — họ chỉ cần Đăng nhập.
+        if (Array.isArray(d.identities) && d.identities.length === 0) {
+          switchTab('signin');
+          document.getElementById('auth-email').value = email;
+          showAuthError('Email này đã có tài khoản — nhập mật khẩu để đăng nhập.');
+        } else {
+          showAuthError('Đã gửi email xác nhận — vui lòng kiểm tra hộp thư.');
+        }
         btn.textContent = _currentTab === 'signin' ? 'Đăng nhập' : 'Tạo tài khoản';
         btn.disabled = false;
         return;
