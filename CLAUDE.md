@@ -98,6 +98,12 @@ grep mò — repo có file 400 KB+ (`public/tuvi-ansao-engine.js`, `public/admin
 `lib/billing/paypal.ts` (nguồn DUY NHẤT chạm PayPal — `settlePayPalTopup` là
 cửa chung cho CẢ trình duyệt lẫn `app/api/paypal-webhook`, chịu được gọi trùng).
 
+### Email
+`lib/email/send.ts` (nguồn DUY NHẤT gọi Resend — `sendTransactionalEmail` +
+`sendMarketingEmail`) · `lib/email/unsub-token.ts` (ký/xác thực link huỷ) ·
+`app/api/email/unsubscribe` (công khai, không cần đăng nhập). OTP đăng ký đi
+qua Supabase Auth custom SMTP (cấu hình ở Dashboard, KHÔNG phải code).
+
 ### Vận hành
 `lib/ops/jobs.ts` (**sổ job** — thêm cron phải ghi vào đây) · `lib/cron/log.ts`
 `withCronLog` · `lib/config/appConfig.ts` `getConfigValue` (đọc `app_config`,
@@ -217,6 +223,15 @@ Mỗi luật dưới đây sinh ra từ một lần cắn thật. Cột cuối l
   `BatTrachTool` (`tools-shared/bat-trach.js`) là nguồn DUY NHẤT; 3 bản chép tay cũ
   đều sai 12-15/64 ô. `npm run check:batrach`.
 
+### 📧 Email — `docs/luat/email.md`
+- **Mọi email đi qua `lib/email/send.ts`** — không tự `import { Resend }` ở nơi
+  khác. Bỏ qua cửa này là mất mutex chống gửi trùng (`email_log`) lẫn bộ lọc
+  unsubscribe.
+- **`sendMarketingEmail` tự chặn nếu thiếu `EMAIL_UNSUB_SECRET`** (fail-closed)
+  — gửi thư quảng bá thiếu link huỷ là vi phạm Nghị định 91/2020/NĐ-CP.
+- **2 subdomain gửi TÁCH RIÊNG** (`mail.` transactional / `tin.` marketing) —
+  gộp chung thì một khiếu nại spam ở thư quảng bá kéo OTP/hoá đơn vào thư rác.
+
 ### 🚦 Thứ tự deploy
 - **Dữ liệu đi SAU giao diện.** `tool_pricing.enabled=true` chỉ được bật **sau khi
   prod phục vụ được route** — bật trước là 404 cho người thật (đã làm 58 công cụ
@@ -315,6 +330,9 @@ Mỗi luật dưới đây sinh ra từ một lần cắn thật. Cột cuối l
   ở máy có `OPENAI_API_KEY` (container phiên không có).
 - **`ANTHROPIC_API_KEY` không đọc được trong container** (`GEMINI_API_KEY`/
   `OPENAI_API_KEY` thì đọc được) — mọi phép đo phải gọi Anthropic đều chạy ở nơi khác.
+- **Hạ tầng email (2026-09-14)**: code xong, còn 4 việc tay (tài khoản Resend +
+  DNS + 2 env var + SMTP Supabase) trước khi gửi được gì thật. Danh sách đầy
+  đủ ở `docs/luat/email.md`.
 
 ### Nợ kỹ thuật đã ghi nhận
 - `seo_pages` (7.080 trang tương hợp) đang được cron `/api/cron/viral-seo-pages`

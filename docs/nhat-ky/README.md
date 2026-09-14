@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-263 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+264 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 **Bốn file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
 ```bash
@@ -11,7 +11,7 @@ sed -n '120,190p' docs/nhat-ky/2026-08.md    # đọc đúng đoạn, đừng ca
 
 | file | số mục | dung lượng |
 |---|---:|---:|
-| `2026-09.md` | 98 | 405,919 B |
+| `2026-09.md` | 99 | 408,745 B |
 | `2026-08.md` | 148 | 1,024,027 B |
 | `2026-07.md` | 12 | 154,531 B |
 | `track-cu.md` | 5 | 89,354 B |
@@ -25,6 +25,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
+| 1 | 2026-09 | `2026-09.md` | 📧 Hạ tầng email — Resend nguồn duy nhất, chống trùng + unsubscribe |
 | 1 | 2026-09 | `2026-09.md` | 🗂️ Sidebar: slogan xuống hàng · số dư Lượng đậm nét · "Gần đây" → "Công cụ yêu thích" |
 | 1 | 2026-09 | `2026-09.md` | 🖼️ `tong-quan` v2 thiếu ảnh ở 4 bậc tuổi ngoài `truong-thanh` — vẽ bù 24 ảnh |
 | 1 | 2026-09 | `2026-09.md` | 🔢 Thần Số Học 11 → 13 chỉ số — soi đối thủ, chỉ lấy 2 phần THẬT SỰ có giá trị |
