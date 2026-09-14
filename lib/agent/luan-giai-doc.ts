@@ -187,7 +187,7 @@ export function laSoContextFull(laSoText: string): string {
 function instructionFor(phan: number): string {
   if (phan === 1) return `
 
-PHẦN 1 — TỔNG QUAN LÁ SỐ (400-480 từ)
+PHẦN 1 — TỔNG QUAN LÁ SỐ (550-650 từ)
 Viết văn xuôi liền mạch, không dùng bullet, có thể đề cập tổng quan chu trình các đại vận trong phần này.
 MỞ ĐẦU bằng 1-2 câu phán quyết NGẮN, in đậm, đứng riêng một dòng.
 
@@ -207,7 +207,7 @@ MẠCH TRUYỆN XUYÊN SUỐT (đây là phần MỞ của cả bài — 23 ph�
 
   if (phan === 2) return `
 
-PHẦN 2 — CUNG MỆNH (220-280 từ)
+PHẦN 2 — CUNG MỆNH (320-380 từ)
 ${CUNG_DESC['Mệnh']}
 
 MỞ ĐẦU bằng câu phán quyết NGẮN, in đậm, đứng riêng một dòng — nói bằng nghĩa đời thực (khí chất người này thế nào, đường đời thuận hay trắc trở). Căn cứ nội bộ (không cần xướng ngay trong câu mở): nhãn "Luận sao: …" của dòng [Mệnh] + cách cục + độ sáng chính tinh.
@@ -226,7 +226,7 @@ MẠCH TRUYỆN XUYÊN SUỐT: câu hook kết đoạn hướng sang MỘT lĩnh
     const cungDesc = CUNG_DESC[cung] || '';
     return `
 
-PHẦN ${phan} — CUNG ${cung.toUpperCase()} (350-400 từ)
+PHẦN ${phan} — CUNG ${cung.toUpperCase()} (480-550 từ)
 ${cungDesc}
 
 MỞ ĐẦU bằng câu phán quyết NGẮN, in đậm, đứng riêng một dòng — nói bằng nghĩa đời thực (tốt/khá/trung bình/yếu ở lĩnh vực này là thế nào), tên sao/cách cục KHÔNG mở đầu câu, để gọn trong ngoặc nếu cần. Căn cứ nội bộ: nhãn "Luận sao: …" của dòng [${cung}] + cách cục + độ sáng chính tinh. Cấm né tránh.
@@ -252,7 +252,7 @@ do engine tính — CHÉP ĐÚNG con số đó, TUYỆT ĐỐI KHÔNG tự tính
 Bảng tổng hợp ĐV1 đến ĐV9:
 | ĐV | Tuổi | Cung | TT | ĐL | NH | Tổng | Flag |
 
-Nhận xét tổng (120-160 từ), viết bằng ngôn ngữ đời thường, đọc là hiểu ngay: giai đoạn nào dễ thở nhất, giai đoạn nào chật vật nhất, xu hướng chung của cuộc đời theo thời gian. Nếu người đang trong đại vận nào thì nhận xét thêm về giai đoạn hiện tại. Không cần liệt kê lại số liệu đã có trong bảng.
+Nhận xét tổng (180-220 từ), viết bằng ngôn ngữ đời thường, đọc là hiểu ngay: giai đoạn nào dễ thở nhất, giai đoạn nào chật vật nhất, xu hướng chung của cuộc đời theo thời gian. Nếu người đang trong đại vận nào thì nhận xét thêm về giai đoạn hiện tại. Không cần liệt kê lại số liệu đã có trong bảng.
 
 MẠCH TRUYỆN XUYÊN SUỐT: đây là ĐIỂM BẢN LỀ — câu chuyện chuyển từ BỨC CHÂN DUNG TĨNH (12 cung vừa kể) sang DÒNG THỜI GIAN (9 đại vận sắp kể). Câu hook kết đoạn phải đánh dấu rõ bước ngoặt này, hướng thẳng sang đại vận đầu tiên của cuộc đời.`;
 
@@ -261,7 +261,7 @@ MẠCH TRUYỆN XUYÊN SUỐT: đây là ĐIỂM BẢN LỀ — câu chuyện ch
     const dvDesc = DAI_VAN_DESC[dvNum] || '';
     return `
 
-PHẦN ${phan} — ĐẠI VẬN ${dvNum} (220-270 từ)
+PHẦN ${phan} — ĐẠI VẬN ${dvNum} (300-360 từ)
 ${dvDesc}
 
 Khối "ĐV${dvNum}:" trong === 9 ĐẠI VẬN === là dữ liệu DUY NHẤT được dùng cho phần này —
@@ -311,7 +311,7 @@ MẠCH TRUYỆN XUYÊN SUỐT: ${dvNum < 9
 
   if (phan === 24) return `
 
-PHẦN 24 — TIỂU VẬN & NĂM XEM (180-220 từ)
+PHẦN 24 — TIỂU VẬN & NĂM XEM (250-300 từ)
 Quan sát 3 lớp hạn cùng lúc (căn cứ nội bộ, không phải thứ phải liệt kê tên cho
 người đọc): gốc đại vận (10 năm) + tiểu hạn năm đó + lưu niên đại vận. Dữ liệu có
 sẵn: Tiểu hạn (cung + sao), Lưu đại hạn (cung + sao), Đại vận hiện tại.
