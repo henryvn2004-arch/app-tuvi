@@ -149,7 +149,8 @@ if (!DRY) {
   // Giá tra từ lib/agent/usage.ts (IMAGE_MODEL_PRICING) / app/api/admin/illus-images
   // — chỉ là ƯỚC TÍNH, số thật lấy từ events.meta.cost_vnd.
   const GIA_VND = { low: 400, medium: 1100, high: 3500 };
-  const donGia = MODEL === 'gpt-image-1' ? { low: 500, medium: 1625, high: 6313 }[QUALITY] : GIA_VND[QUALITY];
+  const donGia =
+    MODEL === 'gpt-image-1' ? { low: 500, medium: 1625, high: 6313 }[QUALITY] : GIA_VND[QUALITY];
   console.log(`Chi phí ước tính lượt này: ~${(daVe * (donGia || 1100)).toLocaleString('vi-VN')}đ`);
   if (loi) process.exitCode = 1;
 }
