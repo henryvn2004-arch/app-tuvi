@@ -55,6 +55,8 @@ export interface SendEmailInput {
   subject: string;
   html: string;
   userId?: string;
+  /** Đính kèm (vd PDF luận giải). `content` là base64. */
+  attachments?: { filename: string; content: string }[];
 }
 
 export type SendEmailResult =
@@ -132,6 +134,7 @@ async function dispatch(
       to: input.to,
       subject: input.subject,
       html: input.html,
+      ...(input.attachments?.length ? { attachments: input.attachments } : {}),
     });
     if (error) {
       await markResult(input.dedupeKey, { status: 'failed', error: String(error.message || error) });

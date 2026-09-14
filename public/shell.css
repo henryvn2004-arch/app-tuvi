@@ -302,7 +302,7 @@ button.item{border:none;background:none;font:inherit;text-align:left}
    trước khi có banner nhóm — `check-intro-card.mjs` vẫn bắt buộc thẻ này khớp
    `key` nên giữ trong HTML, ẩn hẳn bằng CSS bên dưới chứ không xoá. Toàn bộ
    49 trang box tĩnh giờ đều đã gắn `.intro-photo` (2026-09-14, vòng 5). */
-.intro-card{position:relative;overflow:hidden;background:linear-gradient(180deg,var(--gold-lt),var(--white));border:1px solid var(--gold-soft);border-radius:12px;box-shadow:var(--shadow);margin-bottom:16px;min-height:210px;display:flex;flex-direction:column;justify-content:flex-end}
+.intro-card{position:relative;overflow:hidden;background:linear-gradient(180deg,var(--gold-lt),var(--white));border:1px solid var(--gold-soft);border-radius:12px;box-shadow:var(--shadow);margin-bottom:16px;min-height:230px;display:flex;flex-direction:column;justify-content:flex-end}
 .intro-card .intro-avatar{display:none}
 .intro-card .intro-text{max-width:100%}
 .intro-card .intro-t{font-family:var(--serif);font-size:19px;font-weight:700;color:var(--text);margin-bottom:6px}
@@ -312,11 +312,15 @@ button.item{border:none;background:none;font:inherit;text-align:left}
 /* Banner thủy mặc khổ ngang (`scripts/gen-hero-banners.mjs`, dùng CHUNG theo
    NHÓM cổ pháp — xem lib/media/hero-banner-prompt.ts) — LÀ nền của cả
    `.intro-card`, không phải thumbnail cạnh chữ (Henry 2026-09-14, vòng 5).
-   Nguồn 1536×1024 (khổ RỘNG NHẤT gpt-image-2 hỗ trợ) → object-position:right
-   giữ đúng nhân vật (luôn vẽ lệch phải, có khoảng trống bên trái cho chữ)
-   dù khung hiển thị tỉ lệ khác. `z-index:0` để `::after` (gradient) + chữ
-   đè lên trên. */
-.intro-card .intro-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:right center;z-index:0;background:var(--navy)}
+   Nguồn 1536×1024 (khổ RỘNG NHẤT gpt-image-2 hỗ trợ), nhân vật ĐỨNG đủ người
+   (luôn vẽ lệch phải — xem prompt) → khung banner thấp hơn nhiều so với ảnh
+   gốc nên object-fit:cover crop dọc RẤT nhiều (ví dụ khung 984×230 chỉ còn
+   thấy ~35% chiều cao ảnh gốc). `object-position:right TOP` (không phải
+   `center`) để phần ĐẦU/vai (khớp cành thông khung góc trên-phải trong
+   prompt) luôn còn trong khung — crop mất phần CHÂN thì chấp nhận được,
+   mất ĐẦU thì không (Henry vòng 6: "cắt đầu cắt đuôi"). `z-index:0` để
+   `::after` (gradient) + chữ đè lên trên. */
+.intro-card .intro-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:right top;z-index:0;background:var(--navy)}
 /* Gradient PHỦ từ trái (đục, cùng tông `--paper`) sang phải (trong suốt) —
    đảm bảo chữ đọc được trên MỌI ảnh nhóm mà không cần biết trước tông màu.
    Dùng % thay vì px nên tỉ lệ giữ nguyên ở mọi bề rộng, kể cả mobile. Đứng
@@ -610,8 +614,14 @@ font-family:inherit}
 @media print {
   .sb, .rail, .ws-top, .tabbar, .backdrop, #introHost, #shellRecent,
   .mobile-only, .jump, .ask, .btn, button, input, select, textarea,
-  .tpw-lock-veil, .tpw-lock-blur, .tpw-wall, .tpw-prev,
+  .tpw-lock-veil, .tpw-lock-blur, .tpw-wall, .tpw-prev, .ws-intake,
   [data-print-skip], [data-share-skip] { display: none !important; }
+  /* `.ws-intake` (2026-09-14, ws-steps + ws-promo "Giới thiệu" cột phụ) —
+     nguyên khối nhập liệu/thanh tiến trình trước khi có kết quả, đứng TRƯỚC
+     `[data-ws-result]` trong DOM và KHÔNG bị gỡ khỏi cây sau khi có kết quả
+     (chỉ ẩn/co lại trên màn hình). Thiếu dòng này thì bản in/PDF có thêm 1
+     trang đầu là thanh bước + thẻ giới thiệu — Henry bắt được qua PDF thật
+     trên prod, sandbox không có mạng thật nên không tự bắt được lỗi này. */
 
   /* Bố cục 3 cột chỉ có nghĩa trên màn hình; in thì trải dọc, bỏ mọi khung
      cuộn — nếu không, trang in CẮT ở đúng chiều cao viewport. */
@@ -671,7 +681,7 @@ font-family:inherit}
      trên màn hình — PHẢI mở lại ở đây, không thì con bên trong dù có CSS in
      đúng cũng ẩn theo cha (đã cắn: cover render đủ trong DOM, `display:none`
      kế thừa từ cha khiến PDF thật KHÔNG có bìa dù debug DOM thấy có). */
-  #wsBookCover { display: block !important; }
+  #wsBookCover, #wsBookBack { display: block !important; }
   .wsb-cover, .wsb-quote, .wsb-toc { break-after: page; break-inside: avoid; min-height: 100vh; box-sizing: border-box; position: relative; }
   .wsb-cover {
     background: linear-gradient(155deg, var(--navy-2), var(--navy) 55%, #04121D) !important;
@@ -689,7 +699,7 @@ font-family:inherit}
      nhau giữa 6 tool (VD "Luận giải Tử Vi" vs "Hướng Nghiệp Trẻ") nên KHÔNG
      tự chèn `<br>` tay được, phải để trình duyệt cân dòng. */
   .wsb-label-t { font-family: var(--serif); font-weight: 700; color: #142230; font-size: 15pt; letter-spacing: .02em; line-height: 1.5; text-align: center; padding: 0 6px; text-wrap: balance; }
-  .wsb-seal { margin-top: 14px; width: 22px; height: 22px; background: #B23A2E !important; border-radius: 2px; display: flex; align-items: center; justify-content: center; color: #F8F4E9; font-size: 11px; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .wsb-seal { margin-top: 14px; width: 28px; height: 28px; object-fit: contain; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   .wsb-cover-cap { position: absolute; left: 0; right: 0; bottom: 18%; text-align: center; }
   .wsb-cover-cap b { display: block; font-size: 8pt; letter-spacing: .22em; color: var(--gold-soft); margin-bottom: 5px; }
   .wsb-cover-cap span { display: block; font-size: 9pt; color: rgba(249,244,235,.75); letter-spacing: .02em; }
@@ -717,6 +727,24 @@ font-family:inherit}
   .wsb-toc-t { font-family: var(--serif); flex-shrink: 0; }
   .wsb-toc-leader { flex: 1; }
 
+  /* Bìa cuối — khép quyển sách bằng đúng bộ nhận diện đã dùng ở bìa trước
+     (seal thật `/seal.webp` + QR thật quét về trang), dựng bởi
+     `ensurePrintBackCover()` ở shell.js, LUÔN là trang cuối cùng (appendChild
+     vào host, sau mọi chương). */
+  .wsb-back {
+    break-before: page; min-height: 100vh; box-sizing: border-box;
+    background: linear-gradient(155deg, var(--navy-2), var(--navy) 55%, #04121D) !important;
+    -webkit-print-color-adjust: exact; print-color-adjust: exact;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px;
+  }
+  .wsb-back-seal { width: 64px; height: 64px; object-fit: contain; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .wsb-back-brand { text-align: center; }
+  .wsb-back-brand b { display: block; font-family: var(--serif); font-size: 13pt; color: var(--gold-lt); letter-spacing: .1em; }
+  .wsb-back-brand span { display: block; font-size: 9pt; color: var(--gold-soft); margin-top: 3px; letter-spacing: .06em; }
+  .wsb-back-qr { width: 90px; height: 90px; margin-top: 6px; background: #fff !important; padding: 6px; border-radius: 6px; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .wsb-back-cap { font-size: 8.5pt; color: rgba(249,244,235,.6); margin-top: 4px; }
+  .wsb-back-url { font-family: var(--serif); font-size: 10pt; color: var(--gold-lt); letter-spacing: .04em; }
+
   /* Mỗi chương một trang giấy riêng — đủ tạo nhịp light-novel (bìa/danh
      ngôn/mục lục + mỗi cung mở trang mới) mà không ép thêm 1 trang riêng cho
      ảnh. Scope theo `.ws-book-mode` (chỉ host của 6 tool này) để không đụng
@@ -733,7 +761,7 @@ font-family:inherit}
   .ws-book-mode .lg-illus { break-inside: avoid; }
 }
 /* Ngoài lúc in thì khối đầu/chân trang in, bìa sách KHÔNG tồn tại trên màn hình. */
-.ws-print-head, .ws-print-foot, #wsBookCover { display: none; }
+.ws-print-head, .ws-print-foot, #wsBookCover, #wsBookBack { display: none; }
 
 /* Ô GIỮ CHỖ hard paywall Pha 3 (dùng chung — không chép sang từng trang tool).
    Khi một `.res-block-body` mang class `.tpw-locked`, giấu HẲN mọi con của nó

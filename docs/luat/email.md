@@ -57,25 +57,46 @@ lập 100% cho tới khi lên gói có dedicated IP.
 âm thầm kéo `6.28.0` và cắn engine mismatch không ai báo trước khi CI đỏ. Nâng
 version thì phải nâng Node CI cùng lúc, không chỉ đổi số trong `package.json`.
 
-## Việc tay Henry (chưa làm thì infra này chưa gửi được gì thật)
+## Việc tay Henry — ĐÃ XONG (2026-09-14)
 
-1. Tạo tài khoản Resend, verify domain `tuviminhbao.com` (thêm DNS record
-   SPF/DKIM/DMARC Resend cấp).
-2. Tạo 2 subdomain gửi trong Resend: `mail.` và `tin.`.
-3. Set env Vercel: `RESEND_API_KEY`, `EMAIL_UNSUB_SECRET` (chuỗi bí mật bất kỳ,
-   dùng để ký link huỷ — KHÔNG dùng chung với secret khác).
-   Tuỳ chọn: `EMAIL_FROM_TRANSACTIONAL`, `EMAIL_FROM_MARKETING`, `SITE_URL`
-   (mặc định đã hợp lý, chỉ cần set nếu muốn đổi tên hiển thị người gửi).
-4. Supabase Dashboard → Authentication → SMTP Settings: cắm SMTP relay của
-   Resend (Resend cấp host/port/user/pass riêng cho SMTP, khác API key) — đây
-   là đường OTP đăng ký đi, KHÔNG qua `lib/email/send.ts`.
+Resend account + verify domain + 2 subdomain (`mail.`/`tin.`) + `RESEND_API_KEY`
++ `EMAIL_UNSUB_SECRET` trên Vercel + SMTP Supabase Dashboard đều đã cắm, test
+OTP thật đã nhận được (xem `docs/nhat-ky/2026-09.md`). Còn `EMAIL_FROM_TRANSACTIONAL`/
+`EMAIL_FROM_MARKETING`/`SITE_URL` là tuỳ chọn, mặc định đã hợp lý.
 
-## Chưa làm (cố ý, chờ Henry quyết cụ thể)
+## 6 loại email đang có — nguồn nào gọi, template ở đâu
 
-- Chưa có cron/trigger nào gọi `sendMarketingEmail` — bảng + gateway đã sẵn,
-  nhưng nội dung/điều kiện cross-sell/reminder cụ thể (gửi lúc nào, cho ai,
-  template gì) chưa được chốt nên chưa viết job. Thêm job mới thì nhớ ghi vào
-  `lib/ops/jobs.ts` (sổ job) theo đúng quy ước sẵn có.
-- Chưa có template hoá đơn/PDF luận giải cụ thể — `sendTransactionalEmail`
-  nhận thẳng `html`, ai gọi tự dựng nội dung; chưa tách file template riêng vì
-  chưa có tool nào gọi thật.
+| Loại | Trigger | Gọi qua | Mặc định |
+|---|---|---|---|
+| OTP/confirm signup | Supabase Auth (đăng ký) | SMTP Resend, KHÔNG qua `send.ts` | LUÔN bật |
+| Hoá đơn nạp Lượng | `settlePayPalTopup` + `bank-webhook`, chokepoint `credited` | `lib/email/invoice.ts` → `sendTransactionalEmail` | LUÔN bật |
+| PDF luận giải | Nút "Gửi PDF qua email" (`public/luan-giai.html`) | `app/api/luan-giai/email-pdf` → `lib/pdf/luan-giai.tsx` (react-pdf, KHÔNG Puppeteer) → `sendTransactionalEmail` (đính kèm) | Theo yêu cầu user |
+| Reminder (còn Lượng, idle) | Cron tuần `email-reminder-idle` | `lib/marketing/email-reminder.ts` — dùng lại RPC `dashboard_at_risk` | **TẮT** — `app_config['marketing.email_reminder_idle'].enabledBudgetPerRun` = 0 |
+| Cross-sell (tool liên quan) | Cron tuần `email-cross-sell` | `lib/marketing/email-cross-sell.ts` — RPC `cross_sell_candidates` (cặp tool tay chọn) | **TẮT** — `app_config['marketing.email_cross_sell'].enabledBudgetPerRun` = 0 |
+| Broadcast (admin soạn tay) | `admin.html` → `handleAdminChannelBroadcast` (platform=email) | Nạp `email_broadcast_queue`, cron `email-broadcast-drain` (mỗi 15 phút) rút dần | Sẵn sàng, admin bấm mới gửi |
+
+Reminder/cross-sell khoá TẮT theo đúng khuôn công tắc của autopilot
+(`lib/marketing/autopilot.ts`) — Henry tự bật bằng SQL/app_config sau khi coi
+số liệu `candidates`/`sent` trả về từ vài lượt chạy `dry` (budget=0 vẫn tính
+được `candidates`, chỉ không gửi thật).
+
+## `@react-pdf/renderer` — vì sao phải `serverExternalPackages`
+
+Package này dựng font chuẩn qua subpath import map
+(`#standard-fonts/Helvetica`, khai trong `package.json` của nó) — bundler của
+Next (esbuild/webpack đều vậy) KHÔNG resolve đúng map này khi *bundle* code
+vào route, ném `Cannot find module '#standard-fonts/Helvetica'` lúc chạy.
+Node tự resolve đúng (đọc thẳng `exports` trong `package.json`), nên
+`next.config.mjs` khai `serverExternalPackages: ['@react-pdf/renderer']` để
+Next ĐỂ NGOÀI bundle — route `require()`/`import` thẳng lúc chạy như Node gọi
+trực tiếp. Đã xác minh bằng bản dựng PDF thật (không bundle) trước khi merge.
+
+## Broadcast email — vì sao TÁCH nạp/gửi qua hàng đợi
+
+`app/api/payment` có `maxDuration=30s`. Gửi thẳng cho hàng nghìn user trong
+MỘT request chắc chắn timeout giữa chừng — sổ `email_log` ghi `pending` cho
+phần dở dang mà không ai chốt lại được. Route admin chỉ NẠP
+`email_broadcast_queue` (snapshot email lúc bấm gửi — user đăng ký SAU không
+nhận được, CỐ Ý: một chiến dịch cần tập nhận cố định để đếm "đã gửi/còn lại"
+có nghĩa), cron `email-broadcast-drain` mới thật sự gửi, 200 người/lượt, mỗi
+15 phút. Xem `_patches/migration-email-broadcast-queue.sql`.

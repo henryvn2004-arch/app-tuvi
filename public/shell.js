@@ -1744,17 +1744,43 @@
     try { track('pdf_download', { tool_id: ACTIVE }); } catch (e) { /* ignore */ }
     var isBook = ensurePrintBook();
     if (!isBook) ensurePrintHead(); // bìa sách đã tự mang tên+ngày sinh, khỏi lặp đầu trang cũ
+    var host = wsResultHost();
     var done = false;
     var go = function () {
       if (done) return; done = true;
       ensurePrintFoot();
       window.print();
     };
-    ensureQrJs(go);
-    // Mạng chậm và qr.js chưa kịp tải thì đừng giữ người dùng chờ vô hạn —
-    // in luôn sau 800ms, chân trang khi đó thiếu QR (còn seal + ngày) chứ
-    // không phải không in được gì.
-    setTimeout(go, 800);
+    var pending = 1; // QR — luôn chờ, xem ensureQrJs bên dưới
+    var release = function () { pending--; if (pending <= 0) go(); };
+    ensureQrJs(release);
+    if (isBook && host) {
+      pending++;
+      forceEagerIllusImages(host, release);
+    }
+    // Trần cứng — mạng chậm/QR hoặc ảnh chưa kịp tải thì đừng giữ người dùng
+    // chờ vô hạn. Bìa sách kéo thêm ảnh minh hoạ (giờ đã nén ~150KB/tấm,
+    // xem illus-match.js) nên trần dài hơn bản không-bìa.
+    setTimeout(go, isBook ? 2500 : 800);
+  }
+  // `loading="lazy"` trên ảnh phần 2 trở đi (xem `illusBannerHtml` ở các
+  // trang tool) chỉ tải khi CUỘN TỚI — bấm "Lưu PDF" mà chưa từng cuộn qua
+  // các phần sau thì ảnh CHƯA HỀ được yêu cầu tải, in ngay ra khung trống dù
+  // ảnh gốc hoàn toàn tồn tại (Henry báo 2026-09-14: PDF thật có trang thiếu
+  // ảnh). Gỡ `lazy` ngay trước khi in để trình duyệt tải NGAY bất kể có đang
+  // hiện trên màn hình hay không, rồi CHỜ THẬT SỰ (không đoán mili giây) cho
+  // tới khi tải xong hoặc lỗi mới gọi `cb`.
+  function forceEagerIllusImages(host, cb) {
+    var imgs = Array.prototype.slice.call(host.querySelectorAll('.lg-illus img'));
+    if (!imgs.length) { cb(); return; }
+    var left = imgs.length;
+    var settle = function () { left--; if (left <= 0) cb(); };
+    imgs.forEach(function (img) {
+      if (img.loading === 'lazy') img.loading = 'eager';
+      if (img.complete) { settle(); return; }
+      img.addEventListener('load', settle, { once: true });
+      img.addEventListener('error', settle, { once: true }); // lỗi thì thôi — onerror riêng của ảnh đã tự gỡ khung, đừng giữ in mãi
+    });
   }
   // ── Bìa sách (6 tool có ảnh minh hoạ illus-match.js) ─────────────────
   // 2026-09-14: trước đây "Lưu PDF" chỉ in nguyên màn hình, không có bố cục.
@@ -1823,7 +1849,7 @@
           '<line x1="12" y1="534" x2="34" y2="546" stroke="#F4EFE2" stroke-width="3" stroke-linecap="round"/>' +
           '<line x1="12" y1="738" x2="34" y2="750" stroke="#F4EFE2" stroke-width="3" stroke-linecap="round"/>' +
         '</svg></div>' +
-        '<div class="wsb-label"><div class="wsb-label-in"><div class="wsb-label-t">' + esc(wsTitleText()) + '</div><div class="wsb-seal">✦</div></div></div>' +
+        '<div class="wsb-label"><div class="wsb-label-in"><div class="wsb-label-t">' + esc(wsTitleText()) + '</div><img class="wsb-seal" src="/seal.webp" alt=""></div></div>' +
         (sub ? '<div class="wsb-cover-cap"><b>LÁ SỐ TRỌN ĐỜI</b><span>' + esc(sub) + '</span></div>' : '') +
         '<div class="wsb-cover-foot"><div class="mk">✦</div><b>TỬ VI MINH BẢO</b><span>tuviminhbao.com</span></div>' +
       '</div>' +
@@ -1867,9 +1893,13 @@
   // Chân trang PDF: triện website + tên miền + ngày xuất bên trái, QR quét
   // về trang bên phải — cùng bố cục "triện + QR" đã dùng ở poster ảnh viral
   // (`poster.js`), giữ nhận diện nhất quán giữa ảnh chia sẻ và bản PDF.
+  // Bìa sách (6 tool trong BOOK_QUOTES) dùng bản TRANG BÌA CUỐI riêng
+  // (`ensurePrintBackCover`, seal+QR to bằng cả trang) thay cho thanh chân
+  // trang mỏng này — tránh lặp seal+QR hai lần liền nhau ở cuối tài liệu.
   function ensurePrintFoot() {
     var host = wsResultHost();
     if (!host) return;
+    if (host.classList.contains('ws-book-mode')) { ensurePrintBackCover(host); return; }
     var foot = document.getElementById('wsPrintFoot');
     if (!foot) {
       foot = document.createElement('div');
@@ -1889,6 +1919,31 @@
       var cctx = cv.getContext('2d');
       cctx.clearRect(0, 0, 120, 120);
       window.QR.draw(cctx, link, 0, 0, 120);
+    }
+  }
+  // Trang bìa cuối — khép lại quyển sách bằng đúng bộ nhận diện đã dùng ở bìa
+  // trước (seal thật + QR thật), thay vì chỉ một thanh chân trang mỏng.
+  function ensurePrintBackCover(host) {
+    var back = document.getElementById('wsBookBack');
+    if (!back) {
+      back = document.createElement('div');
+      back.id = 'wsBookBack';
+      back.innerHTML =
+        '<div class="wsb-back">' +
+          '<img class="wsb-back-seal" src="/seal.webp" alt="">' +
+          '<div class="wsb-back-brand"><b>TỬ VI MINH BẢO</b><span>紫微明寶</span></div>' +
+          '<canvas class="wsb-back-qr" id="wsBookBackQrCv" width="140" height="140"></canvas>' +
+          '<div class="wsb-back-cap">Quét mã để quay lại</div>' +
+          '<div class="wsb-back-url">tuviminhbao.com</div>' +
+        '</div>';
+      host.appendChild(back);
+    }
+    var cv = document.getElementById('wsBookBackQrCv');
+    if (cv && window.QR) {
+      var link = Shell.viralUrl('https://tuviminhbao.com/app', ACTIVE, { source: 'pdf', medium: 'print' });
+      var cctx = cv.getContext('2d');
+      cctx.clearRect(0, 0, 140, 140);
+      window.QR.draw(cctx, link, 0, 0, 140);
     }
   }
 
