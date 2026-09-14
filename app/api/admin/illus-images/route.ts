@@ -24,6 +24,7 @@ export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
 import { NextRequest } from 'next/server';
+import sharp from 'sharp';
 import { generatePortraitImage } from '@/lib/image/openai-image';
 import { logImageUsage } from '@/lib/agent/usage';
 import {
@@ -238,6 +239,7 @@ export async function GET(req: NextRequest) {
     try {
       const img = await generatePortraitImage({ prompt: p.prompt, size, quality, model });
       void logImageUsage('illus', img.model, img.usage, img.durationMs);
+      const pngBuf = Buffer.from(img.b64, 'base64');
 
       const up = await fetch(`${SUPABASE_URL}/storage/v1/object/${BUCKET}/${path}`, {
         method: 'POST',
@@ -247,23 +249,24 @@ export async function GET(req: NextRequest) {
           'Content-Type': 'image/png',
           'x-upsert': 'true',
         },
-        // `new Uint8Array(...)` chứ không đưa thẳng base64 string: kiểu
-        // `BodyInit` của fetch không nhận Buffer, dù lúc chạy vẫn được.
-        body: new Uint8Array(Buffer.from(img.b64, 'base64')),
+        // `new Uint8Array(...)` chứ không đưa thẳng Buffer: kiểu `BodyInit`
+        // của fetch không nhận Buffer, dù lúc chạy vẫn được.
+        body: new Uint8Array(pngBuf),
       });
       if (!up.ok) throw new Error('lưu ảnh hỏng: ' + (await up.text().catch(() => '')).slice(0, 200));
 
-      // Bản .webp NÉN SẴN — `illus-match.js` đọc ĐÚNG đuôi này (migrate
-      // 2026-09-14 khỏi .png gốc nặng ~3,1MB/tấm). Dùng lại cổng biến đổi ảnh
-      // có sẵn của Supabase Storage làm việc nén (900px rộng, quality 80,
-      // ~150KB/tấm — đo thật lúc migrate 230 ảnh cũ), không cần thư viện ảnh
-      // riêng. Lỗi bước này KHÔNG chặn cả lượt (PNG gốc đã lưu xong, bức vẫn
-      // dùng được qua route cũ) — chỉ ghi lại lỗi trong `ketQua`.
+      // Bản .webp NÉN SẴN — `illus-match.js` đọc ĐÚNG đuôi này. 🪤 (2026-09-14,
+      // PR #851) Bản ĐẦU dùng cổng biến đổi ảnh của Supabase Storage với
+      // `?width=900` — cổng đó ép cứng RỘNG mà GIỮ NGUYÊN cao gốc thay vì co
+      // theo tỉ lệ, cắt mất ~40% khung ngang trên cả 230 ảnh cũ (Henry chụp
+      // màn hình báo "cắt đầu cắt đuôi", vá bằng `scripts/reencode-illus.mjs`).
+      // Route này giờ encode NGAY TẠI CHỖ bằng `sharp`, GIỮ NGUYÊN kích thước
+      // gốc (chỉ đổi định dạng nén, không resize) — đúng kỹ thuật đã vá, để
+      // ảnh MỚI sinh qua route này không lặp lại đúng lỗi đó. Lỗi bước này
+      // KHÔNG chặn cả lượt (PNG gốc đã lưu xong, bức vẫn dùng được qua route
+      // cũ) — chỉ ghi lại lỗi trong `ketQua`.
       try {
-        const wUrl = `${SUPABASE_URL}/storage/v1/render/image/public/${BUCKET}/${path}?width=900&quality=80`;
-        const wResp = await fetch(wUrl, { headers: { Accept: 'image/webp' } });
-        if (!wResp.ok) throw new Error(`nén webp HTTP ${wResp.status}`);
-        const wBuf = new Uint8Array(await wResp.arrayBuffer());
+        const webpBuf = await sharp(pngBuf).webp({ quality: 82 }).toBuffer();
         const wUp = await fetch(
           `${SUPABASE_URL}/storage/v1/object/${BUCKET}/${path.replace(/\.png$/, '.webp')}`,
           {
@@ -274,7 +277,7 @@ export async function GET(req: NextRequest) {
               'Content-Type': 'image/webp',
               'x-upsert': 'true',
             },
-            body: wBuf,
+            body: new Uint8Array(webpBuf),
           }
         );
         if (!wUp.ok) throw new Error('lưu webp hỏng: ' + (await wUp.text().catch(() => '')).slice(0, 200));
