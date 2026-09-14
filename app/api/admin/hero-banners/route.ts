@@ -50,6 +50,36 @@ const GIA_VND: Record<string, Record<Quality, number>> = {
   'gpt-image-1': { low: 500, medium: 1625, high: 6313 },
 };
 
+// Nén `<path>.png` (đã có trong Storage) thành `.webp` cùng tên, ghi đè —
+// cửa biến đổi ảnh có sẵn của Supabase Storage, không cần thư viện ảnh riêng
+// (cùng khuôn `illus-images/route.ts`). 1200px rộng đủ nét cho khung banner
+// rộng nhất (~1000px CSS, màn retina); quality 78 theo đúng mức đã đo ở
+// illus (900px/80 ⇒ ~150KB/tấm) — banner rộng hơn nên hạ nhẹ quality để bù.
+// Trả về chuỗi lỗi (rỗng nếu ok) — KHÔNG throw, gọi nơi khác tự quyết có
+// chặn cả lượt hay không.
+async function nenWebp(path: string): Promise<string> {
+  try {
+    const wUrl = `${SUPABASE_URL}/storage/v1/render/image/public/${BUCKET}/${path}?width=1200&quality=78`;
+    const wResp = await fetch(wUrl, { headers: { Accept: 'image/webp' } });
+    if (!wResp.ok) throw new Error(`nén webp HTTP ${wResp.status}`);
+    const wBuf = new Uint8Array(await wResp.arrayBuffer());
+    const wUp = await fetch(`${SUPABASE_URL}/storage/v1/object/${BUCKET}/${path.replace(/\.png$/, '.webp')}`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${SUPABASE_KEY}`,
+        apikey: SUPABASE_KEY,
+        'Content-Type': 'image/webp',
+        'x-upsert': 'true',
+      },
+      body: wBuf,
+    });
+    if (!wUp.ok) throw new Error('lưu webp hỏng: ' + (await wUp.text().catch(() => '')).slice(0, 200));
+    return '';
+  } catch (e) {
+    return e instanceof Error ? e.message : 'không rõ';
+  }
+}
+
 export async function GET(req: NextRequest) {
   // Fallback là cổng ĐÓNG — cùng lý do illus-images: hỏng theo hướng "mở" ở
   // đây là tự đốt tiền model, không phải chặn oan người đã trả.
@@ -95,6 +125,10 @@ export async function GET(req: NextRequest) {
   // `?vede=1` — vẽ đè có chủ đích, KHÔNG đổi id. Không có cờ này thì "đã có
   // thì thôi" giữ nguyên bản cũ.
   const veDe = sp.get('vede') === '1';
+  // `?compressOnly=1` — KHÔNG gọi model, chỉ nén lại .png ĐÃ CÓ thành .webp
+  // (dùng khi ảnh đã vẽ xong từ trước, chỉ cần thêm bản nén — không đốt lại
+  // tiền gpt-image-2). Bỏ qua id nào chưa có .png.
+  const compressOnly = sp.get('compressOnly') === '1';
 
   const ketQua: { id: string; url?: string; loi?: string }[] = [];
   let daVe = 0,
@@ -103,11 +137,24 @@ export async function GET(req: NextRequest) {
 
   for (let i = 1; i <= n; i++) {
     if (chan) break;
-    if (daVe >= budget) break;
+    if (!compressOnly && daVe >= budget) break;
 
     const id = `${groupId}-${String(i).padStart(2, '0')}`;
     const path = `${PREFIX}/${id}.png`;
     const url = `${SUPABASE_URL}/storage/v1/object/public/${BUCKET}/${path}`;
+
+    if (compressOnly) {
+      const co = await fetch(url, { method: 'HEAD', cache: 'no-store' }).catch(() => null);
+      if (!co?.ok) {
+        boQua++;
+        continue;
+      }
+      const err = await nenWebp(path);
+      if (err) ketQua.push({ id: id + ' (webp)', loi: err });
+      else daVe++;
+      ketQua.push({ id, url });
+      continue;
+    }
 
     const co = veDe ? null : await fetch(url, { method: 'HEAD', cache: 'no-store' }).catch(() => null);
     if (co?.ok) {
@@ -132,6 +179,12 @@ export async function GET(req: NextRequest) {
       });
       if (!up.ok) throw new Error('lưu ảnh hỏng: ' + (await up.text().catch(() => '')).slice(0, 200));
 
+      // Bản .webp NÉN SẴN — cùng khuôn `illus-images/route.ts` (dùng cổng
+      // biến đổi ảnh có sẵn của Supabase Storage, không cần thư viện riêng).
+      // Lỗi bước này KHÔNG chặn cả lượt — PNG gốc đã lưu xong.
+      const err = await nenWebp(path);
+      if (err) ketQua.push({ id: id + ' (webp)', loi: err });
+
       daVe++;
       ketQua.push({ id, url });
     } catch (e) {
@@ -150,7 +203,7 @@ export async function GET(req: NextRequest) {
     conLai: n - ketQua.length,
     quality,
     model,
-    chiPhiUocTinhVnd: daVe * GIA_VND[model][quality],
+    chiPhiUocTinhVnd: compressOnly ? 0 : daVe * GIA_VND[model][quality],
     anh: ketQua,
   });
 }
