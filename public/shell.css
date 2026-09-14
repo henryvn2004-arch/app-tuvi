@@ -689,17 +689,19 @@ font-family:inherit}
   .wsb-toc-t { font-family: var(--serif); flex-shrink: 0; }
   .wsb-toc-leader { flex: 1; }
 
-  /* Mỗi chương một trang giấy riêng, ảnh minh hoạ đứng MỘT MÌNH trên trang
-     trước đó rồi mới tới trang chữ — đúng nhịp light-novel (ảnh màu trước,
-     chữ sau). `break-after` trên `.lg-illus` đẩy phần còn lại của `.sec`
-     (thẻ `.card`) sang trang kế tiếp dù ảnh nằm SIBLING (luận-giải/chu-trình)
-     hay NẰM TRONG `.card` (vận-hạn-năm) — break-after áp dụng tại điểm ảnh
-     kết thúc trong luồng, không phụ thuộc độ sâu lồng. Scope theo
-     `.ws-book-mode` (chỉ host của 6 tool này) để không đụng `.sec` ở tool
-     khác — xem luật `.sec, .card... {page-break-inside:avoid}` phía trên,
-     đang dùng chung cho MỌI tool. */
+  /* Mỗi chương một trang giấy riêng — đủ tạo nhịp light-novel (bìa/danh
+     ngôn/mục lục + mỗi cung mở trang mới) mà không ép thêm 1 trang riêng cho
+     ảnh. Scope theo `.ws-book-mode` (chỉ host của 6 tool này) để không đụng
+     `.sec` ở tool khác — xem luật `.sec, .card... {page-break-inside:avoid}`
+     phía trên, đang dùng chung cho MỌI tool.
+     2026-09-14: TỪNG có thêm `.lg-illus{break-after:page}` (ảnh đứng riêng 1
+     trang trước khi tới chữ) — đo thật cho 43 trang mất 6,4s render + PDF
+     4,3MB (chưa tính ảnh thật, ảnh gốc riêng đã ~3,1MB/tấm). Bỏ luật đó: ảnh
+     nằm chung trang với chữ theo luồng tự nhiên, cắt gần nửa số trang thừa —
+     xem thêm `compressIllusForPrint()` ở shell.js (đổi ảnh sang bản nén
+     ~90-120KB chỉ lúc in) để bù phần cân nặng ảnh thật. */
   .ws-book-mode .sec { break-before: page; }
-  .ws-book-mode .lg-illus { break-after: page; break-inside: avoid; }
+  .ws-book-mode .lg-illus { break-inside: avoid; }
 }
 /* Ngoài lúc in thì khối đầu/chân trang in, bìa sách KHÔNG tồn tại trên màn hình. */
 .ws-print-head, .ws-print-foot, #wsBookCover { display: none; }
