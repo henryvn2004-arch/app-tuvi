@@ -842,7 +842,7 @@ font-family:inherit}
 .samp-cta .sc-txt{flex:1;min-width:160px;display:flex;flex-direction:column}
 .samp-cta .sc-txt b{font-size:13px;color:var(--text);font-weight:600}
 .samp-cta .sc-txt span{font-size:11.5px;color:var(--text-lt)}
-.samp-cta button{background:none;border:1px solid var(--gold-soft);color:var(--gold-soft);border-radius:20px;padding:8px 15px;font-size:12.5px;font-weight:600;cursor:pointer;font-family:inherit;flex:0 0 auto;white-space:nowrap}
+.samp-cta button,.samp-cta a.sc-btn{background:none;border:1px solid var(--gold-soft);color:var(--gold-soft);border-radius:20px;padding:8px 15px;font-size:12.5px;font-weight:600;cursor:pointer;font-family:inherit;flex:0 0 auto;white-space:nowrap;text-decoration:none;display:inline-block}
 /* ── Khối "nhập liệu" (`#introHost` + `#shellRecent` + `.samp-cta` +
    `.form-card`, đứng liền nhau trước kết quả) — bọc trong `.ws-intake` để
    dùng 2 CỘT khi `.ws` đủ rộng, thay vì một cột 640px canh trái bỏ phí phần
