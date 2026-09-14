@@ -307,9 +307,47 @@ for (const [k, v] of Object.entries(THANG_CANH)) {
   }
 }
 
+// ── 7. Xem Tuổi (vợ chồng/làm ăn): XEM_TUOI_CANH trong illus-prompt.ts ──────
+// Bảng RIÊNG, tách khỏi KHIA_CANH (tool luận về HAI người, không phải một
+// cung của một lá số — xem chú thích tại định nghĩa). Không đối chiếu chéo
+// với CUNG_BY_PHAN/VARIANT_COUNT/ILLUS_NGUONG (không áp dụng), và không bắt
+// buộc canhTot2/boiCanhTot2 (chưa có bối cảnh phú quý riêng cho khía này) —
+// chỉ soát nội tại: đủ nhãn, đủ 3 sắc, đủ 3 bối cảnh, đủ dài.
+const XEM_TUOI_CANH = extractConst(ROOT + 'lib/media/illus-prompt.ts', 'XEM_TUOI_CANH');
+const XT_KEYS = Object.keys(XEM_TUOI_CANH);
+for (const [k, v] of Object.entries(XEM_TUOI_CANH)) {
+  if (!v || typeof v !== 'object') {
+    fail(`XEM_TUOI_CANH.${k}: không phải object`);
+    continue;
+  }
+  if (!v.vi) fail(`XEM_TUOI_CANH.${k}: thiếu nhãn tiếng Việt (vi)`);
+  if (!v.canh || typeof v.canh !== 'object') {
+    fail(`XEM_TUOI_CANH.${k}: thiếu \`canh\` (phải có object 3 khoá tot/trung/xau)`);
+  } else {
+    for (const s of SAC3) {
+      const c = v.canh[s];
+      if (typeof c !== 'string' || c.trim().length < 20)
+        fail(`XEM_TUOI_CANH.${k}.canh.${s}: quá ngắn hoặc thiếu — "${c}"`);
+    }
+    const extra = Object.keys(v.canh).filter((s) => !SAC3.includes(s));
+    if (extra.length)
+      fail(`XEM_TUOI_CANH.${k}.canh: có khoá lạ ngoài tot/trung/xau: ${extra.join(', ')}`);
+  }
+  if (!Array.isArray(v.boiCanh) || v.boiCanh.length !== 3) {
+    fail(
+      `XEM_TUOI_CANH.${k}.boiCanh: phải đúng mảng 3 phần tử, đang có ${Array.isArray(v.boiCanh) ? v.boiCanh.length : 'không phải mảng'}`
+    );
+  } else {
+    v.boiCanh.forEach((b, i) => {
+      if (typeof b !== 'string' || b.trim().length < 20)
+        fail(`XEM_TUOI_CANH.${k}.boiCanh[${i}]: quá ngắn hoặc thiếu — "${b}"`);
+    });
+  }
+}
+
 if (bad === 0) {
   console.log(
-    `✅ ${KHIA_KEYS.length} khía cạnh · ${KHIA_KEYS.length * 3} sắc thái · PHẦN↔khía↔cung↔ngưỡng khớp nhau tuyệt đối · đại vận: 3 flag → 3 sắc, ${TUOI_5_BAC.length} bậc tuổi phủ đủ · 12 tháng âm lịch đủ khoá · ${KHIA_KEYS.length} khía đủ bộ v2 phú quý (tốt).`
+    `✅ ${KHIA_KEYS.length} khía cạnh · ${KHIA_KEYS.length * 3} sắc thái · PHẦN↔khía↔cung↔ngưỡng khớp nhau tuyệt đối · đại vận: 3 flag → 3 sắc, ${TUOI_5_BAC.length} bậc tuổi phủ đủ · 12 tháng âm lịch đủ khoá · ${KHIA_KEYS.length} khía đủ bộ v2 phú quý (tốt) · Xem Tuổi: ${XT_KEYS.length} khía riêng đủ 3 sắc.`
   );
 } else {
   console.error(`\n${bad} lỗi trong thư viện hình minh hoạ — sửa trước khi gen/deploy.`);
