@@ -62,13 +62,14 @@
            Render Delay 5,3s). `Shell.introOnce` thấy `.intro-card` đã có thì chỉ
            điền `#introSrc`. Vì thế `SHELL_INTRO` bên dưới CHỈ khai `key` — chữ nằm
            đúng ở đây, một bản duy nhất, không có bản chép để trôi. -->
+      <div class="ws-intake">
       <div id="introHost"><div class="intro-card">
         <img class="intro-avatar" src="/tool-avatars/khi-sac.webp" alt="" style="display:none" onerror="this.remove()">
         <img class="intro-photo" src="https://dciwkfdqhhddeymlisey.supabase.co/storage/v1/object/public/portraits/hero-banners/xem-tuong-01.webp" alt="" onerror="this.remove()">
         <div class="intro-body">
           <div class="intro-text">
             <div class="intro-t">Khí Sắc</div>
-            <div class="intro-d">Khí Sắc đọc khí sắc trên khuôn mặt theo Ma Y Thần Tướng, luận vận khí 1–3 tháng tới. Tải ảnh mặt chụp trong 24 giờ gần nhất, nhận bản luận Ấn Đường, Ngũ Nhạc và cách dưỡng khí.</div>
+            <div class="intro-d">Khí sắc trên gương mặt thay đổi trước khi vận trình thật sự thay đổi — cổ nhân đọc được điều đó sớm hơn hầu hết mọi dấu hiệu khác. Tải ảnh mặt chụp gần đây, nhận luận giải vận khí 1–3 tháng tới.</div>
             <div id="introSrc" style="min-height:36.8px;margin-top:9px"></div>
           </div>
         </div>
@@ -78,13 +79,17 @@
           <div class="hero-pill"><span class="hp-ic" data-icon="scroll-text"></span><span>Dự báo vận khí<br>1–3 tháng tới</span></div>
         </div>
       </div></div>
-      <div id="shellRecent"></div>
-      <div class="samp-cta" id="sampCta">
-        <span class="sc-ic" data-icon="lightbulb"></span>
-        <span class="sc-txt"><b>Chưa muốn chụp ảnh?</b><span>Bạn có thể xem một bản mẫu để trải nghiệm trước.</span></span>
-        <button type="button" id="btnSample" data-sample-tool="khi-sac" onclick="SampleHint.open(this)">Xem bản mẫu →</button>
+      <div class="ws-main-col">
+      <!-- Thanh tiến trình — chỉ hiển thị trạng thái, không bấm được. Tool này
+           KHÔNG có tầng xem trước miễn phí (khác app-luan-giai) — form nộp
+           ảnh đi thẳng qua gate Lượng rồi ra kết quả, nên chỉ có 3 bước thật.
+           JS chuyển bước ở `wsStepsSet` (cuối file), gọi tại đúng chỗ trạng
+           thái đã đổi trong code cũ (analyze/_doAnalyze/resetTool). -->
+      <div class="ws-steps" id="ksSteps">
+        <div class="wss-step active"><span class="wss-n">1</span><span class="wss-l">Nhập thông tin</span></div>
+        <div class="wss-step"><span class="wss-n">2</span><span class="wss-l">Thanh toán</span></div>
+        <div class="wss-step"><span class="wss-n">3</span><span class="wss-l">Nhận kết quả</span></div>
       </div>
-
       <div class="ks-card" id="inputCard">
         <div class="fc-head"><span class="fc-ic" data-icon="sunrise"></span><h2>Xem Khí Sắc</h2></div>
         <p class="sub">Chụp một tấm ảnh mặt rõ nét trong vòng 24 giờ gần nhất. Hệ thống phân tích Ấn Đường, Ngũ Nhạc, dự báo vận khí 1–3 tháng tới và cách dưỡng khí.</p>
@@ -125,6 +130,21 @@
           <small>Tốn <span data-tvp-price="khi-sac">…</span> Lượng <span data-tvp-price-vnd="khi-sac"></span></small>
         </button>
         <div class="ks-error" id="error-msg"></div>
+      </div>
+      </div>
+      <div class="ws-side-col">
+      <div class="ws-promo">
+        <div class="wsp-eyebrow"><span class="wsp-ic" data-icon="book-open"></span><span>Giới thiệu</span></div>
+        <div class="wsp-title">Khí Sắc</div>
+        <p class="wsp-desc">Ma Y Thần Tướng là một trong những cổ thư nhân tướng học nổi tiếng nhất Trung Hoa, hệ thống hoá cách đọc tính cách và vận mệnh qua các bộ vị trên khuôn mặt như Tam Đình, Ngũ Quan. Liễu Trang Thần Tướng và Thủy Kính Tập là những cổ thư tướng học khác thường được đối chiếu cùng.</p>
+      </div>
+      <div class="samp-cta" id="sampCta">
+        <span class="sc-ic" data-icon="lightbulb"></span>
+        <span class="sc-txt"><b>Chưa muốn chụp ảnh?</b><span>Bạn có thể xem một bản mẫu để trải nghiệm trước.</span></span>
+        <button type="button" id="btnSample" data-sample-tool="khi-sac" onclick="SampleHint.open(this)">Xem bản mẫu →</button>
+      </div>
+      <div id="shellRecent"></div>
+      </div>
       </div>
 
       <div class="results-section" id="results-section">
@@ -174,6 +194,21 @@ let _mediaType = 'image/jpeg';
 let _previewDataUrl = null;
 let _currentSlug = null;
 
+// Thanh tiến trình (`.ws-steps`, xem shell.css) — chỉ phản ánh trạng thái đã
+// có sẵn trong flow cũ (form → paywall → kết quả, KHÔNG có tầng xem trước).
+// `n` các bước TRƯỚC coi là "done" (viền vàng), bước `n` đang "active" (nền
+// navy), các bước sau giữ mặc định.
+function wsStepsSet(n) {
+  var el = document.getElementById('ksSteps');
+  if (!el) return;
+  var steps = el.querySelectorAll('.wss-step');
+  for (var i = 0; i < steps.length; i++) {
+    steps[i].classList.remove('active', 'done');
+    if (i + 1 < n) steps[i].classList.add('done');
+    else if (i + 1 === n) steps[i].classList.add('active');
+  }
+}
+
 function resetTool(clearFile) {
   _imageData = null;
   _previewDataUrl = null;
@@ -192,6 +227,7 @@ function resetTool(clearFile) {
   document.getElementById('results-content').innerHTML = '';
   document.getElementById('results-actions').style.display = 'none';
   Shell.setShareable(null);
+  wsStepsSet(1); // về lại Nhập thông tin
 }
 
 function compressImage(file, maxSize = 1400, quality = 0.88) {
@@ -256,6 +292,7 @@ async function analyze() {
   document.getElementById('error-msg').classList.remove('active');
   document.getElementById('analyze-btn').disabled = true;
   _currentSlug = TuviPaywall.generateToolSlug('khi-sac');
+  wsStepsSet(2); // Thanh toán — gate Lượng đang chạy, chưa có tầng xem trước riêng
   await TuviPaywall.requireCredits(_currentSlug, async () => {
     await _doAnalyze();
   });
@@ -263,6 +300,7 @@ async function analyze() {
 }
 
 async function _doAnalyze() {
+  wsStepsSet(3); // Nhận kết quả — đã trả tiền, bắt đầu luận khí sắc
   const rs = document.getElementById('results-section');
   rs.classList.add('show');
   document.getElementById('results-loading').style.display = 'block';

@@ -71,13 +71,14 @@
            Render Delay 5,3s). `Shell.introOnce` thấy `.intro-card` đã có thì chỉ
            điền `#introSrc`. Vì thế `SHELL_INTRO` bên dưới CHỈ khai `key` — chữ nằm
            đúng ở đây, một bản duy nhất, không có bản chép để trôi. -->
+      <div class="ws-intake">
       <div id="introHost"><div class="intro-card">
         <img class="intro-avatar" src="/tool-avatars/dien-tuong.webp" alt="" style="display:none" onerror="this.remove()">
         <img class="intro-photo" src="https://dciwkfdqhhddeymlisey.supabase.co/storage/v1/object/public/portraits/hero-banners/xem-tuong-01.webp" alt="" onerror="this.remove()">
         <div class="intro-body">
           <div class="intro-text">
             <div class="intro-t">Diện Tướng</div>
-            <div class="intro-d">Diện Tướng đọc nhân tướng học từ ảnh khuôn mặt: Tam Đình, Ngũ Quan, các bộ vị theo cổ pháp Ma Y Thần Tướng. Tải ảnh chân dung, nhận bản luận tính cách và vận trình.</div>
+            <div class="intro-d">Tam Đình, Ngũ Quan trên gương mặt không phải chuyện huyền bí — cổ nhân đã hệ thống hoá thành phép đọc tính cách và vận trình cụ thể. Tải một tấm ảnh chân dung, nhận bản luận theo Ma Y Thần Tướng.</div>
             <div id="introSrc" style="min-height:36.8px;margin-top:9px"></div>
           </div>
         </div>
@@ -87,13 +88,15 @@
           <div class="hero-pill"><span class="hp-ic" data-icon="scroll-text"></span><span>Luận theo<br>Ma Y Thần Tướng</span></div>
         </div>
       </div></div>
-      <div id="shellRecent"></div>
-      <div class="samp-cta" id="sampCta">
-        <span class="sc-ic" data-icon="lightbulb"></span>
-        <span class="sc-txt"><b>Chưa muốn chụp ảnh?</b><span>Bạn có thể xem một bản mẫu để trải nghiệm trước.</span></span>
-        <button type="button" id="btnSample" data-sample-tool="dien-tuong" onclick="SampleHint.open(this)">Xem bản mẫu →</button>
+      <div class="ws-main-col">
+      <!-- Thanh tiến trình — chỉ hiển thị trạng thái, không bấm được. JS
+           chuyển bước ở `wsStepsSet` (cuối file), gọi tại đúng chỗ trạng thái
+           đã đổi (analyze/paywall/_doAnalyze/resetTool). -->
+      <div class="ws-steps" id="wsSteps">
+        <div class="wss-step active"><span class="wss-n">1</span><span class="wss-l">Nhập thông tin</span></div>
+        <div class="wss-step"><span class="wss-n">2</span><span class="wss-l">Thanh toán</span></div>
+        <div class="wss-step"><span class="wss-n">3</span><span class="wss-l">Nhận kết quả</span></div>
       </div>
-
       <div class="dt-card" id="inputCard">
         <div class="fc-head"><span class="fc-ic" data-icon="camera"></span><h2>Tải ảnh khuôn mặt</h2></div>
         <p class="sub">Tải một tấm ảnh chân dung chụp thẳng, đủ sáng, rõ mặt. Hệ thống phân tích Tam Đình, Ngũ Quan và các bộ vị, luận tính cách và vận trình.</p>
@@ -166,6 +169,21 @@
           <small>Tốn <span data-tvp-price="dien-tuong">…</span> Lượng <span data-tvp-price-vnd="dien-tuong"></span></small>
         </button>
         <div class="dt-error" id="error-msg"></div>
+      </div>
+      </div>
+      <div class="ws-side-col">
+      <div class="ws-promo">
+        <div class="wsp-eyebrow"><span class="wsp-ic" data-icon="book-open"></span><span>Giới thiệu</span></div>
+        <div class="wsp-title">Diện Tướng</div>
+        <p class="wsp-desc">Ma Y Thần Tướng là một trong những cổ thư nhân tướng học nổi tiếng nhất Trung Hoa, hệ thống hoá cách đọc tính cách và vận mệnh qua các bộ vị trên khuôn mặt như Tam Đình, Ngũ Quan. Liễu Trang Thần Tướng và Thủy Kính Tập là những cổ thư tướng học khác thường được đối chiếu cùng.</p>
+      </div>
+      <div class="samp-cta" id="sampCta">
+        <span class="sc-ic" data-icon="lightbulb"></span>
+        <span class="sc-txt"><b>Chưa muốn chụp ảnh?</b><span>Bạn có thể xem một bản mẫu để trải nghiệm trước.</span></span>
+        <button type="button" id="btnSample" data-sample-tool="dien-tuong" onclick="SampleHint.open(this)">Xem bản mẫu →</button>
+      </div>
+      <div id="shellRecent"></div>
+      </div>
       </div>
 
       <div class="dt-card" id="resultCard" data-ws-result style="display:none;margin-top:16px">
@@ -553,6 +571,7 @@ async function analyze() {
   document.getElementById('error-msg').classList.remove('active');
   document.getElementById('analyzeBtn').disabled=true;
   _currentSlug = TuviPaywall.generateToolSlug('dien-tuong');
+  wsStepsSet(2); // Thanh toán — tường đã dựng, chờ xác nhận Lượng trước khi gọi API phân tích
   await TuviPaywall.requireCredits(_currentSlug, async () => {
     await _doAnalyze();
   });
@@ -561,6 +580,7 @@ async function analyze() {
 
 async function _doAnalyze() {
   document.getElementById('resultCard').style.display='block';
+  wsStepsSet(3); // Nhận kết quả — đã trả tiền, bắt đầu phân tích
   const aiResultEl = document.getElementById('aiResult');
   aiResultEl.innerHTML=
     '<div class="dt-loading"><span class="dt-loading-icon ic" data-icon="sparkles"></span><div class="dt-loading-text">Đang phân tích tướng mặt...<br><span style="font-size:12px;opacity:.7">Thường mất 15–25 giây</span></div></div>';
@@ -619,6 +639,21 @@ function resetTool() {
   document.getElementById('aiResult').innerHTML='';
   document.getElementById('inputCard').scrollIntoView({behavior:'smooth',block:'start'});
   Shell.setShareable(null);
+  wsStepsSet(1); // về lại tải ảnh
+}
+
+// Thanh tiến trình đầu trang — port từ app-luan-giai.html, chỉ đổi id thanh
+// gắn vào. 3 bước có sẵn trong flow cũ (form → thanh toán → kết quả), không
+// tạo trạng thái mới.
+function wsStepsSet(n){
+  var el=document.getElementById('wsSteps');
+  if(!el) return;
+  var steps=el.querySelectorAll('.wss-step');
+  for(var i=0;i<steps.length;i++){
+    steps[i].classList.remove('active','done');
+    if(i+1<n) steps[i].classList.add('done');
+    else if(i+1===n) steps[i].classList.add('active');
+  }
 }
 
 // Nhãn tính chất model tự gắn NGAY TRƯỚC câu hook mỗi đoạn (khối "NHÃN TÍNH

@@ -77,13 +77,14 @@
            Render Delay 5,3s). `Shell.introOnce` thấy `.intro-card` đã có thì chỉ
            điền `#introSrc`. Vì thế `SHELL_INTRO` bên dưới CHỈ khai `key` — chữ nằm
            đúng ở đây, một bản duy nhất, không có bản chép để trôi. -->
+      <div class="ws-intake">
       <div id="introHost"><div class="intro-card">
         <img class="intro-avatar" src="/tool-avatars/gio-sinh.webp" alt="" style="display:none" onerror="this.remove()">
         <img class="intro-photo" src="https://dciwkfdqhhddeymlisey.supabase.co/storage/v1/object/public/portraits/hero-banners/laso-01.webp" alt="" onerror="this.remove()">
         <div class="intro-body">
           <div class="intro-text">
             <div class="intro-t">Xác Định Giờ Sinh</div>
-            <div class="intro-d">Lập 12 lá số theo 12 giờ, thu hẹp dần về đúng giờ sinh — trả lời vài câu hỏi để tìm giờ phù hợp nhất.</div>
+            <div class="intro-d">Không nhớ chính xác giờ sinh khiến cả lá số Tử Vi dễ sai lệch ngay từ gốc. Trả lời vài câu hỏi để hệ thống thu hẹp dần trong 12 khung giờ, tìm ra giờ sinh gần đúng nhất.</div>
             <div id="introSrc" style="min-height:73.6px;margin-top:9px"></div>
           </div>
         </div>
@@ -93,8 +94,16 @@
           <div class="hero-pill"><span class="hp-ic" data-icon="bar-chart-3"></span><span>Xếp hạng<br>độ khớp</span></div>
         </div>
       </div></div>
-      <div id="shellRecent"></div>
-
+      <div class="ws-main-col">
+      <!-- Thanh tiến trình — chỉ hiển thị trạng thái, không bấm được. JS
+           chuyển bước ở `wsStepsSet` (cuối file), gọi tại đúng chỗ trạng thái
+           đã đổi trong code cũ (start/buildLock/runSurvey/_reset). -->
+      <div class="ws-steps" id="gsSteps">
+        <div class="wss-step active"><span class="wss-n">1</span><span class="wss-l">Nhập thông tin</span></div>
+        <div class="wss-step"><span class="wss-n">2</span><span class="wss-l">Xem 12 giờ khả nghi</span></div>
+        <div class="wss-step"><span class="wss-n">3</span><span class="wss-l">Thanh toán</span></div>
+        <div class="wss-step"><span class="wss-n">4</span><span class="wss-l">Nhận kết quả</span></div>
+      </div>
       <div id="birthPanel">
         <div class="form-card">
           <div class="fc-head"><span class="fc-ic" data-icon="hourglass"></span><h2>Xác Định Giờ Sinh</h2></div>
@@ -113,6 +122,16 @@
           <div class="err" id="error-msg"></div>
           <p class="sub" style="margin:12px 0 0">Bước xem 12 lá số khả nghi <b>miễn phí</b>. Khảo sát thu hẹp và bảng xếp hạng mới tính Lượng.</p>
         </div>
+      </div>
+      </div>
+      <div class="ws-side-col">
+      <div class="ws-promo">
+        <div class="wsp-eyebrow"><span class="wsp-ic" data-icon="book-open"></span><span>Giới thiệu</span></div>
+        <div class="wsp-title">Xác Định Giờ Sinh</div>
+        <p class="wsp-desc">Tử Vi Đẩu Số là một môn mệnh lý cổ truyền Trung Hoa, lập lá số theo giờ sinh âm lịch với 12 cung và hệ thống chính tinh, phụ tinh chiếu mệnh. Môn học được hệ thống hoá qua nhiều đời, phổ biến tại Việt Nam qua bản dịch <i>Tử Vi Đẩu Số Tân Biên</i> của Vân Đằng Thái Thứ Lang.</p>
+      </div>
+      <div id="shellRecent"></div>
+      </div>
       </div>
 
       <!-- `data-ws-result` là giao ước DUY NHẤT với shell. `check:share` canh. -->
@@ -223,6 +242,21 @@ const TOOL_ID='gio-sinh';
 let _birth=null,_answers=[],_pub=null,_lastResult=null,_slug='';
 TuviPaywall.init({product:TOOL_ID,slug:function(){return _slug;}});
 
+// Thanh tiến trình (`.ws-steps`, xem shell.css) — chỉ phản ánh trạng thái đã
+// có sẵn trong flow cũ (form → xem 12 giờ khả nghi → paywall → khảo sát+kết
+// quả), không tạo trạng thái mới. `n` các bước TRƯỚC coi là "done" (viền
+// vàng), bước `n` đang "active" (nền navy), các bước sau giữ mặc định.
+function wsStepsSet(n){
+  var el=document.getElementById('gsSteps');
+  if(!el) return;
+  var steps=el.querySelectorAll('.wss-step');
+  for(var i=0;i<steps.length;i++){
+    steps[i].classList.remove('active','done');
+    if(i+1<n) steps[i].classList.add('done');
+    else if(i+1===n) steps[i].classList.add('active');
+  }
+}
+
 // Ghi "(~X đ)" cạnh số Lượng trong nút khảo sát — cùng mẫu `_fillVndSlots` của
 // app-luan-giai.html. `ToolPrices.vndLabel` tự trả '' khi chưa đọc được
 // `credit_packages`, lúc đó không hiện gì (không đoán số).
@@ -308,6 +342,7 @@ function _reset(){
   document.getElementById('resultBlock').style.display='none';
   _answers=[];_lastResult=null;_lastPreview=null;
   _gsClearResume();
+  wsStepsSet(1); // về lại Nhập thông tin
 }
 
 // ── Bước 1: TÍNH THỬ (miễn phí, không đăng nhập) ────────────
@@ -344,6 +379,7 @@ function renderFree(j){
   document.getElementById('surveyPitch').innerHTML =
     'Với ngày sinh này máy dựng được <b>'+esc(j.soCauHoi)+' câu hỏi</b> riêng — đáp án là các nhóm giờ có dấu hiệu khác nhau của <b>chính ngày này</b>, nên mỗi người một bộ câu khác nhau. Trả lời xong sẽ ra <b>2–3 giờ khả năng cao nhất kèm bằng chứng từng câu</b>.';
   document.getElementById('freeBlock').style.display='';
+  wsStepsSet(2); // Xem 12 giờ khả nghi — bước tính thử miễn phí vừa xong
   mountHook(j);
   buildLock();
 }
@@ -384,6 +420,7 @@ function _renderGrid(j){
 // sát: tấm khoá là CTA đăng ký, không phải chỗ xin thêm Lượng của người đã có
 // ví, nên phải che HẾT phần "có cấu trúc" chứ không chỉ che phần trả tiền.
 function buildLock(){
+  wsStepsSet(3); // Thanh toán — tường đã dựng, chờ mở khoá
   const host=document.getElementById('lockHost');
   if(!window.TuviPaywall||!TuviPaywall.lockPreview){
     host.innerHTML='<p class="note">Chưa đọc được bảng giá — tải lại trang giúp tôi.</p>';return;
@@ -436,6 +473,7 @@ async function post(){
 async function runSurvey(){
   document.getElementById('freeBlock').style.display='none';
   document.getElementById('surveyBlock').style.display='';
+  wsStepsSet(4); // Nhận kết quả — đã trả tiền, bắt đầu khảo sát rồi ra kết quả
   try{ step(await post()); }catch(e){ onPaidErr(e); }
 }
 

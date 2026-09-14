@@ -113,13 +113,14 @@
            Render Delay 5,3s). `Shell.introOnce` thấy `.intro-card` đã có thì chỉ
            điền `#introSrc`. Vì thế `SHELL_INTRO` bên dưới CHỈ khai `key` — chữ nằm
            đúng ở đây, một bản duy nhất, không có bản chép để trôi. -->
+      <div class="ws-intake">
       <div id="introHost"><div class="intro-card">
         <img class="intro-avatar" src="/tool-avatars/cua-hang-phong-thuy.webp" alt="" style="display:none" onerror="this.remove()">
         <img class="intro-photo" src="https://dciwkfdqhhddeymlisey.supabase.co/storage/v1/object/public/portraits/hero-banners/phong-thuy-01.webp" alt="" onerror="this.remove()">
         <div class="intro-body">
           <div class="intro-text">
             <div class="intro-t">Phong Thủy Cửa Hàng &amp; Văn Phòng</div>
-            <div class="intro-d">Chụp ảnh cửa hàng hoặc văn phòng, hệ thống chấm điểm phong thủy bố trí theo Bát Trạch. Nhận phân tích chỗ nào đang cản tài lộc, nên sắp lại thế nào.</div>
+            <div class="intro-d">Buôn bán ế ẩm, nhân viên ra vào liên tục — đôi khi nguyên nhân nằm ngay trong cách bố trí không gian chứ không phải thị trường. Chụp ảnh cửa hàng hoặc văn phòng, nhận phân tích đúng chỗ đang cản tài lộc.</div>
             <div id="introSrc" style="min-height:55.2px;margin-top:9px"></div>
           </div>
         </div>
@@ -129,13 +130,17 @@
           <div class="hero-pill"><span class="hp-ic" data-icon="settings"></span><span>Đề xuất<br>điều chỉnh</span></div>
         </div>
       </div></div>
-      <div id="shellRecent"></div>
-      <div class="samp-cta" id="sampCta">
-        <span class="sc-ic" data-icon="lightbulb"></span>
-        <span class="sc-txt"><b>Chưa muốn khai thông tin & ảnh?</b><span>Bạn có thể xem một bản mẫu để trải nghiệm trước.</span></span>
-        <button type="button" id="btnSample" data-sample-tool="cua-hang-phong-thuy" onclick="SampleHint.open(this)">Xem bản mẫu →</button>
+      <div class="ws-main-col">
+      <!-- Thanh tiến trình — chỉ hiển thị trạng thái, không bấm được. JS
+           chuyển bước ở `wsStepsSet` (cuối file), gọi tại đúng chỗ trạng thái
+           đã đổi trong code cũ (doAnalyze/renderResults/resetAll). Tool này
+           KHÔNG có tầng xem-trước-miễn-phí riêng — requireCredits gate thẳng
+           trước khi gọi model, nên chỉ 3 bước (không có "Xem trước"). -->
+      <div class="ws-steps" id="wsSteps">
+        <div class="wss-step active"><span class="wss-n">1</span><span class="wss-l">Nhập thông tin</span></div>
+        <div class="wss-step"><span class="wss-n">2</span><span class="wss-l">Thanh toán</span></div>
+        <div class="wss-step"><span class="wss-n">3</span><span class="wss-l">Nhận kết quả</span></div>
       </div>
-
       <div class="pt-card">
         <h2><span class="pt-num">1</span> Bản Mệnh &amp; Thông Tin</h2>
         <div class="pt-row">
@@ -221,6 +226,21 @@
 
       <div class="pt-card loading-overlay" id="loadingOverlay">
         <div id="analysisStepsHost"></div>
+      </div>
+      </div>
+      <div class="ws-side-col">
+      <div class="ws-promo">
+        <div class="wsp-eyebrow"><span class="wsp-ic" data-icon="book-open"></span><span>Giới thiệu</span></div>
+        <div class="wsp-title">Phong Thủy Cửa Hàng &amp; Văn Phòng</div>
+        <p class="wsp-desc">Bát Trạch là một trường phái phong thủy cổ truyền, chia nhà ở theo 8 hướng ứng với Bát Quái rồi đối chiếu với mệnh quái của gia chủ để xác định hướng và vị trí tốt – xấu. <i>Bát Trạch Minh Kính</i> là một trong những cổ thư hệ thống hoá phương pháp này.</p>
+      </div>
+      <div class="samp-cta" id="sampCta">
+        <span class="sc-ic" data-icon="lightbulb"></span>
+        <span class="sc-txt"><b>Chưa muốn khai thông tin & ảnh?</b><span>Bạn có thể xem một bản mẫu để trải nghiệm trước.</span></span>
+        <button type="button" id="btnSample" data-sample-tool="cua-hang-phong-thuy" onclick="SampleHint.open(this)">Xem bản mẫu →</button>
+      </div>
+      <div id="shellRecent"></div>
+      </div>
       </div>
 
       <div id="results-section" data-ws-result>
@@ -345,6 +365,20 @@ const RENDER_STEPS=[
 let _analysisLoadingCtl=null;
 let _renderLoadingCtl=null;
 
+// Thanh tiến trình (`.ws-steps`, xem shell.css) — chỉ phản ánh trạng thái đã
+// có sẵn trong flow cũ (form → thanh toán → kết quả), không tạo trạng thái
+// mới. `n` các bước TRƯỚC coi là "done" (viền vàng), bước `n` đang "active"
+// (nền navy), các bước sau giữ mặc định.
+function wsStepsSet(n){
+  var el=document.getElementById('wsSteps');
+  if(!el) return;
+  var steps=el.querySelectorAll('.wss-step');
+  for(var i=0;i<steps.length;i++){
+    steps[i].classList.remove('active','done');
+    if(i+1<n) steps[i].classList.add('done');
+    else if(i+1===n) steps[i].classList.add('active');
+  }
+}
 function onYearChange(){
   const y=parseInt(document.getElementById('namSinh').value);
   const g=document.getElementById('gioiTinh').value;
@@ -362,7 +396,7 @@ function onDrag(e,on){e.preventDefault();document.getElementById('uploadZone').c
 function onDrop(e){e.preventDefault();document.getElementById('uploadZone').classList.remove('drag-over');const f=e.dataTransfer.files[0];if(f&&f.type.startsWith('image/'))processFile(f);}
 function onFile(e){const f=e.target.files[0];if(f)processFile(f);}
 function resetUpload(){_img64=null;document.getElementById('uploadZone').style.display='block';document.getElementById('previewWrap').classList.remove('show');document.getElementById('fileInput').value='';}
-function resetAll(){resetUpload();document.getElementById('results-section').style.display='none';document.getElementById('ws').scrollTo({top:0,behavior:'smooth'});Shell.setShareable(null);}
+function resetAll(){resetUpload();document.getElementById('results-section').style.display='none';wsStepsSet(1);/* về lại Nhập thông tin */document.getElementById('ws').scrollTo({top:0,behavior:'smooth'});Shell.setShareable(null);}
 
 async function processFile(file){
   const{base64,type}=await resizeImg(file);
@@ -393,6 +427,7 @@ async function doAnalyze(){
   _analysisLoadingCtl.start();
 
   try{
+    wsStepsSet(2); // Thanh toán — chờ requireCredits xác nhận trước khi gọi model
     const _currentSlug=TuviPaywall.generateToolSlug('cua-hang-phong-thuy');
     await new Promise((resolve,reject)=>{
       TuviPaywall.requireCredits(_currentSlug,async()=>{
@@ -418,6 +453,7 @@ async function doAnalyze(){
 function showErr(m){const b=document.getElementById('errorBox');b.textContent=m;b.classList.add('show');}
 
 function renderResults(data){
+  wsStepsSet(3); // Nhận kết quả — đã trả tiền, phân tích đã về
   const{detected,analysis}=data;
   const before=analysis.beforeScore||0,after=analysis.afterScore||0;
   document.getElementById('scoreBefore').textContent=before;

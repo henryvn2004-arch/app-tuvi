@@ -61,13 +61,14 @@
            Render Delay 5,3s). `Shell.introOnce` thấy `.intro-card` đã có thì chỉ
            điền `#introSrc`. Vì thế `SHELL_INTRO` bên dưới CHỈ khai `key` — chữ nằm
            đúng ở đây, một bản duy nhất, không có bản chép để trôi. -->
+      <div class="ws-intake">
       <div id="introHost"><div class="intro-card">
         <img class="intro-avatar" src="/tool-avatars/dat-ten-dn.webp" alt="" style="display:none" onerror="this.remove()">
         <img class="intro-photo" src="https://dciwkfdqhhddeymlisey.supabase.co/storage/v1/object/public/portraits/hero-banners/dat-ten-lich-01.webp" alt="" onerror="this.remove()">
         <div class="intro-body">
           <div class="intro-text">
             <div class="intro-t">Đặt tên doanh nghiệp</div>
-            <div class="intro-d">Đặt tên doanh nghiệp gợi ý tên công ty hợp ngũ hành và tuổi người chủ. Nhập năm sinh người chủ, nhận 12 gợi ý tên chia 3 nhóm trước khi thành lập.</div>
+            <div class="intro-d">Một cái tên hợp mệnh có thể theo công ty suốt hành trình khởi nghiệp — chọn cho có rồi sửa sau luôn khó hơn chọn đúng từ đầu. Nhập năm sinh người chủ, nhận 12 gợi ý tên trước khi đăng ký kinh doanh.</div>
             <div id="introSrc" style="min-height:55.2px;margin-top:9px"></div>
           </div>
         </div>
@@ -77,11 +78,15 @@
           <div class="hero-pill"><span class="hp-ic" data-icon="building-2"></span><span>Trước khi<br>thành lập</span></div>
         </div>
       </div></div>
-      <div id="shellRecent"></div>
-      <div class="samp-cta" id="sampCta">
-        <span class="sc-ic" data-icon="lightbulb"></span>
-        <span class="sc-txt"><b>Chưa muốn khai thông tin?</b><span>Bạn có thể xem một bản mẫu để trải nghiệm trước.</span></span>
-        <button type="button" id="btnSample" data-sample-tool="dat-ten-dn" onclick="SampleHint.open(this)">Xem bản mẫu →</button>
+      <div class="ws-main-col">
+      <!-- Thanh tiến trình — chỉ hiển thị trạng thái, không bấm được. JS
+           chuyển bước ở `wsStepsSet` (cuối file), gọi tại đúng chỗ trạng thái
+           đã đổi trong code cũ (doDatTenDn/showForm/gate/paywall/kết quả). -->
+      <div class="ws-steps" id="wsSteps">
+        <div class="wss-step active"><span class="wss-n">1</span><span class="wss-l">Nhập thông tin</span></div>
+        <div class="wss-step"><span class="wss-n">2</span><span class="wss-l">Xem trước nền mệnh chủ</span></div>
+        <div class="wss-step"><span class="wss-n">3</span><span class="wss-l">Thanh toán</span></div>
+        <div class="wss-step"><span class="wss-n">4</span><span class="wss-l">Nhận kết quả</span></div>
       </div>
       <div class="form-card" id="birthPanel">
         <div class="fc-head"><span class="fc-ic" data-icon="building-2"></span><h2>Thông tin đặt tên doanh nghiệp</h2></div>
@@ -123,6 +128,21 @@
         <button class="btn-go" id="btnGo" onclick="doDatTenDn()">
           <span class="bg-label"><span class="ic" data-icon="building-2"></span><b id="btnGoLabel">Lập nền →</b></span>
         </button>
+      </div>
+      </div>
+      <div class="ws-side-col">
+      <div class="ws-promo">
+        <div class="wsp-eyebrow"><span class="wsp-ic" data-icon="book-open"></span><span>Giới thiệu</span></div>
+        <div class="wsp-title">Đặt tên doanh nghiệp</div>
+        <p class="wsp-desc">Ngũ Hành (Kim, Mộc, Thủy, Hỏa, Thổ) là học thuyết cổ Trung Hoa mô tả quy luật tương sinh, tương khắc giữa năm nguyên tố cơ bản, làm nền tảng cho nhiều môn mệnh lý phương Đông. Mỗi âm, chữ hay con số đều có thể quy về một hành để đối chiếu hợp – khắc với bản mệnh.</p>
+      </div>
+      <div class="samp-cta" id="sampCta">
+        <span class="sc-ic" data-icon="lightbulb"></span>
+        <span class="sc-txt"><b>Chưa muốn khai thông tin?</b><span>Bạn có thể xem một bản mẫu để trải nghiệm trước.</span></span>
+        <button type="button" id="btnSample" data-sample-tool="dat-ten-dn" onclick="SampleHint.open(this)">Xem bản mẫu →</button>
+      </div>
+      <div id="shellRecent"></div>
+      </div>
       </div>
 
       <div id="resPanel" data-ws-result>
@@ -224,6 +244,7 @@ function doDatTenDn(){
     document.getElementById('birthPanel').style.display='none';
     document.getElementById('resPanel').style.display='block';
     document.getElementById('btnEdit').style.display='';
+    wsStepsSet(2); // Xem trước nền mệnh chủ — miễn phí, sắp hiện ra
     if(window.SHELL_INTRO)Shell.dismissIntro(window.SHELL_INTRO.key);
     Shell.setContext({
       scenario:{type:'dat-ten-dn',data:{tenChu:tenChu,namChu:namChu,nganh:nganh,loaiHinh:loaiHinh,tenGoiY:tenGoiY}},
@@ -354,11 +375,13 @@ function renderMarkdownDt(md){
 async function initiateDatTenDnChuyenSau(){
   if(!_dtInfoChu||!_dtLinhVuc){ alert('Vui lòng nhập thông tin trước.'); return; }
   var slug=TuviPaywall.generateToolSlug('dat-ten-dn-'+_dtNamSinh);
+  wsStepsSet(3); // Thanh toán — tường đã dựng, chờ mở khoá
   await TuviPaywall.requireCredits(slug, async function(){ await _doDatTenDnAI(); });
 }
 async function _doDatTenDnAI(){
   var btn=document.getElementById('btnUnlock');
   if(btn)btn.disabled=true;
+  wsStepsSet(4); // Nhận kết quả — đã trả tiền, bắt đầu gợi ý tên chuyên sâu
   var el=document.getElementById('dtResult');
   el.innerHTML='<div class="phan-empty">'+(window.iconHtml?window.iconHtml('building-2'):'')+' Đang gợi ý tên doanh nghiệp… thường mất 15–25 giây</div>';
   el.scrollIntoView({behavior:'smooth',block:'nearest'});
@@ -396,10 +419,24 @@ async function _doDatTenDnAI(){
   if(btn)btn.disabled=false;
 }
 
+// Thanh tiến trình đầu trang — port từ app-luan-giai.html, chỉ đổi id thanh
+// gắn vào. 4 bước có sẵn trong flow cũ (form → xem trước nền mệnh chủ →
+// thanh toán → kết quả), không tạo trạng thái mới.
+function wsStepsSet(n){
+  var el=document.getElementById('wsSteps');
+  if(!el) return;
+  var steps=el.querySelectorAll('.wss-step');
+  for(var i=0;i<steps.length;i++){
+    steps[i].classList.remove('active','done');
+    if(i+1<n) steps[i].classList.add('done');
+    else if(i+1===n) steps[i].classList.add('active');
+  }
+}
 function showForm(){
   document.getElementById('resPanel').style.display='none';
   document.getElementById('birthPanel').style.display='block';
   document.getElementById('btnEdit').style.display='none';
+  wsStepsSet(1); // về lại Nhập thông tin
   Shell.setShareable(null);
 }
 </script>

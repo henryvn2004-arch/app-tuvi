@@ -109,13 +109,14 @@
            Render Delay 5,3s). `Shell.introOnce` thấy `.intro-card` đã có thì chỉ
            điền `#introSrc`. Vì thế `SHELL_INTRO` bên dưới CHỈ khai `key` — chữ nằm
            đúng ở đây, một bản duy nhất, không có bản chép để trôi. -->
+      <div class="ws-intake">
       <div id="introHost"><div class="intro-card">
         <img class="intro-avatar" src="/tool-avatars/huong-nghiep-tre.webp" alt="" style="display:none" onerror="this.remove()">
         <img class="intro-photo" src="https://dciwkfdqhhddeymlisey.supabase.co/storage/v1/object/public/portraits/hero-banners/laso-01.webp" alt="" onerror="this.remove()">
         <div class="intro-body">
           <div class="intro-text">
             <div class="intro-t">Hướng Nghiệp Sớm Cho Con</div>
-            <div class="intro-d">Gợi ý hoạt động nên cho con làm quen theo lứa tuổi, đọc từ lá số. Nhập ngày giờ sinh của con, nhận gợi ý phù hợp từng giai đoạn.</div>
+            <div class="intro-d">Ép con học điều con không có duyên chỉ khiến cả hai mệt mỏi thêm. Đọc từ lá số của con để biết nên cho con làm quen với hoạt động gì, đúng từng giai đoạn tuổi.</div>
             <div id="introSrc" style="min-height:73.6px;margin-top:9px"></div>
           </div>
         </div>
@@ -125,13 +126,16 @@
           <div class="hero-pill"><span class="hp-ic" data-icon="hourglass"></span><span>Việc làm<br>theo lứa tuổi</span></div>
         </div>
       </div></div>
-      <div id="shellRecent"></div>
-      <div class="samp-cta" id="sampCta">
-        <span class="sc-ic" data-icon="lightbulb"></span>
-        <span class="sc-txt"><b>Chưa muốn khai thông tin?</b><span>Bạn có thể xem một bản mẫu để trải nghiệm trước.</span></span>
-        <button type="button" id="btnSample" data-sample-tool="huong-nghiep-tre" onclick="SampleHint.open(this)">Xem bản mẫu →</button>
+      <div class="ws-main-col">
+      <!-- Thanh tiến trình — chỉ hiển thị trạng thái, không bấm được. JS
+           chuyển bước ở `wsStepsSet` (cuối file), gọi tại đúng chỗ trạng thái
+           đã đổi trong code cũ (analyze/_renderLockWall/_doGenerate/_closePanel). -->
+      <div class="ws-steps" id="hnSteps">
+        <div class="wss-step active"><span class="wss-n">1</span><span class="wss-l">Nhập thông tin</span></div>
+        <div class="wss-step"><span class="wss-n">2</span><span class="wss-l">Xem trước</span></div>
+        <div class="wss-step"><span class="wss-n">3</span><span class="wss-l">Thanh toán</span></div>
+        <div class="wss-step"><span class="wss-n">4</span><span class="wss-l">Nhận kết quả</span></div>
       </div>
-
       <div id="birthPanel">
         <div class="form-card">
           <div class="fc-head"><span class="fc-ic" data-icon="compass"></span><h2>Hướng Nghiệp Sớm Cho Con</h2></div>
@@ -168,6 +172,21 @@
           </button>
           <div class="err" id="error-msg"></div>
         </div>
+      </div>
+      </div>
+      <div class="ws-side-col">
+      <div class="ws-promo">
+        <div class="wsp-eyebrow"><span class="wsp-ic" data-icon="book-open"></span><span>Giới thiệu</span></div>
+        <div class="wsp-title">Hướng Nghiệp Sớm Cho Con</div>
+        <p class="wsp-desc">Tử Vi Đẩu Số là một môn mệnh lý cổ truyền Trung Hoa, lập lá số theo giờ sinh âm lịch với 12 cung và hệ thống chính tinh, phụ tinh chiếu mệnh. Môn học được hệ thống hoá qua nhiều đời, phổ biến tại Việt Nam qua bản dịch <i>Tử Vi Đẩu Số Tân Biên</i> của Vân Đằng Thái Thứ Lang.</p>
+      </div>
+      <div class="samp-cta" id="sampCta">
+        <span class="sc-ic" data-icon="lightbulb"></span>
+        <span class="sc-txt"><b>Chưa muốn khai thông tin?</b><span>Bạn có thể xem một bản mẫu để trải nghiệm trước.</span></span>
+        <button type="button" id="btnSample" data-sample-tool="huong-nghiep-tre" onclick="SampleHint.open(this)">Xem bản mẫu →</button>
+      </div>
+      <div id="shellRecent"></div>
+      </div>
       </div>
 
       <!-- `data-ws-result` là giao ước DUY NHẤT với shell: nó tự theo dõi khối
@@ -440,6 +459,21 @@ onMoiLoChange();
 // hộp "chưa đọc được bảng giá" và tool KHÔNG chạy (fail-closed).
 TuviPaywall.init({ product: 'huong-nghiep-tre', slug: function () { return _currentSlug; } });
 
+// Thanh tiến trình (`.ws-steps`, xem shell.css) — chỉ phản ánh trạng thái đã
+// có sẵn trong flow cũ (form → xem trước → paywall → kết quả), không tạo
+// trạng thái mới. `n` các bước TRƯỚC coi là "done" (viền vàng), bước `n`
+// đang "active" (nền navy), các bước sau giữ mặc định.
+function wsStepsSet(n) {
+  var el = document.getElementById('hnSteps');
+  if (!el) return;
+  var steps = el.querySelectorAll('.wss-step');
+  for (var i = 0; i < steps.length; i++) {
+    steps[i].classList.remove('active', 'done');
+    if (i + 1 < n) steps[i].classList.add('done');
+    else if (i + 1 === n) steps[i].classList.add('active');
+  }
+}
+
 // Ghi "(~X đ)" cạnh số Lượng — cùng mẫu `_fillVndSlots` của app-luan-giai.html.
 function _fillVndSlots(host, product) {
   if (!host || !window.ToolPrices) return;
@@ -529,6 +563,9 @@ async function analyze() {
     document.getElementById('loading').style.display = 'none';
     document.getElementById('card').style.display = 'block';
     document.getElementById('btnEdit').style.display = '';
+    // Người lớn: KHÔNG bán, không có paywall — bước 2/3 không tồn tại cho
+    // nhánh này, nhảy thẳng "Nhận kết quả" vì đây đã là bản trả lời cuối.
+    wsStepsSet(4);
     renderMeta(prev);
     if (window.SHELL_INTRO) Shell.dismissIntro(window.SHELL_INTRO.key);
     _banGiaoNguoiLon(prev);
@@ -561,6 +598,7 @@ async function analyze() {
   document.getElementById('loading').style.display = 'none';
   document.getElementById('card').style.display = 'block';
   document.getElementById('btnEdit').style.display = '';
+  wsStepsSet(2); // Xem trước — thiên hướng nổi nhất + 2 đoạn miễn phí vừa hiện ra
   renderMetaHead(prev);
   renderMetaRest(prev);
   renderProse(prev);   // chỉ nhinRaCon/viSaoHuongNay có mặt; các nhánh `if` khác tự trượt
@@ -652,6 +690,7 @@ function _renderLockWall(lo) {
   var host = document.getElementById('hnLockHost');
   host.style.display = 'block';
   host.innerHTML = '';
+  wsStepsSet(3); // Thanh toán — tường đã dựng, chờ mở khoá
   // Đã đăng nhập (chỉ còn thiếu tiền, không thiếu tài khoản) → nút phẳng, bỏ
   // qua màn "Đăng ký" — cùng mẫu app-chu-trinh-cuoc-doi.html `_renderUnlockBlock`.
   if (_hnLoggedIn()) {
@@ -689,6 +728,7 @@ function _closePanel() {
   document.getElementById('resPanel').style.display = 'none';
   document.getElementById('birthPanel').style.display = 'block';
   document.getElementById('btnEdit').style.display = 'none';
+  wsStepsSet(1); // về lại Nhập thông tin
   // Quay về form thì bản vừa xem không còn trên màn hình nữa. Shell tự gỡ nút
   // khi vùng `data-ws-result` ẩn đi, nhưng gọi thẳng ở đây là lời khai dứt
   // khoát: lượt này KHÔNG còn gì đáng chia sẻ.
@@ -697,6 +737,7 @@ function _closePanel() {
 
 async function _doGenerate(freeRerun, lo) {
   _openPanel();
+  wsStepsSet(4); // Nhận kết quả — đã trả tiền (hoặc miễn phí lượt lặp lại), bắt đầu dựng bản đầy đủ
   _loadingCtl = AiLoadingSteps.mount('loadingSteps', HN_STEPS);
   _loadingCtl.start();
   // Cuộn lên ngay để thấy có gì vừa chạy, không đứng im.

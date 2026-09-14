@@ -49,13 +49,14 @@
            Render Delay 5,3s). `Shell.introOnce` thấy `.intro-card` đã có thì chỉ
            điền `#introSrc`. Vì thế `SHELL_INTRO` bên dưới CHỈ khai `key` — chữ nằm
            đúng ở đây, một bản duy nhất, không có bản chép để trôi. -->
+      <div class="ws-intake">
       <div id="introHost"><div class="intro-card">
         <img class="intro-avatar" src="/tool-avatars/ban-do-sao.webp" alt="" style="display:none" onerror="this.remove()">
         <img class="intro-photo" src="https://dciwkfdqhhddeymlisey.supabase.co/storage/v1/object/public/portraits/hero-banners/chiem-tinh-tay-01.webp" alt="" onerror="this.remove()">
         <div class="intro-body">
           <div class="intro-text">
             <div class="intro-t">Bản Đồ Sao Lúc Sinh</div>
-            <div class="intro-d">Dựng bánh xe 12 nhà đúng khoảnh khắc bạn chào đời. Nhập ngày giờ nơi sinh, nhận bản đồ sao đầy đủ để lưu và chia sẻ — miễn phí.</div>
+            <div class="intro-d">Mỗi người sinh ra dưới một bầu trời khác nhau — vị trí 12 nhà lúc bạn chào đời nói gì về con người bạn? Dựng bản đồ sao đúng khoảnh khắc ấy, xem và lưu lại miễn phí.</div>
             <div id="introSrc" style="min-height:36.8px;margin-top:9px"></div>
           </div>
         </div>
@@ -65,8 +66,14 @@
           <div class="hero-pill"><span class="hp-ic" data-icon="share-2"></span><span>Góc chiếu<br>nổi bật</span></div>
         </div>
       </div></div>
-      <div id="shellRecent"></div>
-
+      <div class="ws-main-col">
+      <!-- Thanh tiến trình — chỉ 2 bước: tool này miễn phí, không có xem trước
+           lẫn thanh toán (form → kết quả thẳng). JS chuyển bước ở `wsStepsSet`
+           (cuối file), gọi tại đúng chỗ trạng thái đã đổi (lapBanDo/showForm). -->
+      <div class="ws-steps" id="wsSteps">
+        <div class="wss-step active"><span class="wss-n">1</span><span class="wss-l">Nhập thông tin</span></div>
+        <div class="wss-step"><span class="wss-n">2</span><span class="wss-l">Nhận kết quả</span></div>
+      </div>
       <div class="form-card" id="birthPanel">
         <div class="fc-head"><span class="fc-ic" data-icon="sun"></span><h2>Ngày giờ và nơi sinh</h2></div>
         <p class="sub">Nhập chính xác ngày, giờ và nơi sinh. Nhận về 4 trục, vị trí hành tinh, góc chiếu nổi bật và bảng cân bằng nguyên tố.</p>
@@ -88,6 +95,16 @@
           </button>
         </div>
         <div class="err" id="error-msg"></div>
+      </div>
+      </div>
+      <div class="ws-side-col">
+      <div class="ws-promo">
+        <div class="wsp-eyebrow"><span class="wsp-ic" data-icon="book-open"></span><span>Giới thiệu</span></div>
+        <div class="wsp-title">Bản Đồ Sao Lúc Sinh</div>
+        <p class="wsp-desc">Chiêm tinh học phương Tây (Western Astrology) là hệ thống giải đoán dựa trên vị trí các hành tinh và cung hoàng đạo tại thời điểm sinh, chia bầu trời thành 12 nhà tương ứng các lĩnh vực đời sống. Bản đồ sao (natal chart) là công cụ trung tâm để đọc tính cách và xu hướng của một người.</p>
+      </div>
+      <div id="shellRecent"></div>
+      </div>
       </div>
 
       <div id="resPanel" data-ws-result>
@@ -149,6 +166,20 @@ function chonNoi(){
 var _b=null,_in=null;
 function _err(m){var e=document.getElementById('error-msg');if(!m){e.classList.remove('active');e.textContent='';return;}e.textContent=m;e.classList.add('active');}
 
+// Thanh tiến trình (`.ws-steps`, xem shell.css) — chỉ phản ánh trạng thái đã
+// có sẵn trong flow cũ (form → kết quả), không tạo trạng thái mới. `n` các
+// bước TRƯỚC coi là "done" (viền vàng), bước `n` đang "active" (nền navy).
+function wsStepsSet(n){
+  var el=document.getElementById('wsSteps');
+  if(!el) return;
+  var steps=el.querySelectorAll('.wss-step');
+  for(var i=0;i<steps.length;i++){
+    steps[i].classList.remove('active','done');
+    if(i+1<n) steps[i].classList.add('done');
+    else if(i+1===n) steps[i].classList.add('active');
+  }
+}
+
 function lapBanDo(){
   var p={ngay:+document.getElementById('ngay').value,thang:+document.getElementById('thang').value,
     nam:+document.getElementById('nam').value,gio:+document.getElementById('gio').value,
@@ -167,6 +198,7 @@ function lapBanDo(){
     document.getElementById('chiTiet').innerHTML=BanDoSao.bangHTML(_b);
     document.getElementById('birthPanel').style.display='none';
     document.getElementById('resPanel').style.display='block';
+    wsStepsSet(2); // Nhận kết quả — bản đồ sao đã dựng xong
     document.getElementById('btnEdit').style.display='';
     BanDoSao.veVaoCanvas(document.getElementById('wheel'),_b);
     if(window.SHELL_INTRO)Shell.dismissIntro(window.SHELL_INTRO.key);
@@ -214,7 +246,7 @@ function taiAnh(){
     .then(function(){btn.disabled=false;btn.textContent=old;});
 }
 
-function showForm(){document.getElementById('resPanel').style.display='none';document.getElementById('birthPanel').style.display='block';document.getElementById('btnEdit').style.display='none';Shell.setShareable(null);}
+function showForm(){document.getElementById('resPanel').style.display='none';document.getElementById('birthPanel').style.display='block';document.getElementById('btnEdit').style.display='none';wsStepsSet(1);Shell.setShareable(null);}
 ['ngay','thang','nam','gio','phut'].forEach(function(id){document.getElementById(id).addEventListener('keydown',function(e){if(e.key==='Enter')lapBanDo();});});
 window.addEventListener('resize',function(){if(_b)BanDoSao.veVaoCanvas(document.getElementById('wheel'),_b);});
 </script>

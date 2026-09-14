@@ -62,13 +62,14 @@
            Render Delay 5,3s). `Shell.introOnce` thấy `.intro-card` đã có thì chỉ
            điền `#introSrc`. Vì thế `SHELL_INTRO` bên dưới CHỈ khai `key` — chữ nằm
            đúng ở đây, một bản duy nhất, không có bản chép để trôi. -->
+      <div class="ws-intake">
       <div id="introHost"><div class="intro-card">
         <img class="intro-avatar" src="/tool-avatars/ngay-tot.webp" alt="" style="display:none" onerror="this.remove()">
         <img class="intro-photo" src="https://dciwkfdqhhddeymlisey.supabase.co/storage/v1/object/public/portraits/hero-banners/dat-ten-lich-01.webp" alt="" onerror="this.remove()">
         <div class="intro-body">
           <div class="intro-text">
             <div class="intro-t">Ngày tốt trong tháng</div>
-            <div class="intro-d">Liệt kê ngày tốt – xấu theo từng ngày trong tháng, xếp rõ theo lịch. Chọn tháng, nhận danh sách ngày tốt để lên lịch cả tháng.</div>
+            <div class="intro-d">Muốn lên lịch cả tháng mà không biết ngày nào nên tránh, ngày nào thuận tiện để bắt đầu việc quan trọng. Chọn tháng cần xem, nhận ngay danh sách ngày tốt – xấu xếp rõ theo từng ngày.</div>
             <div id="introSrc" style="min-height:55.2px;margin-top:9px"></div>
           </div>
         </div>
@@ -78,7 +79,14 @@
           <div class="hero-pill"><span class="hp-ic" data-icon="scroll-text"></span><span>Trực, nhị thập<br>bát tú</span></div>
         </div>
       </div></div>
-      <div id="shellRecent"></div>
+      <div class="ws-main-col">
+      <!-- Thanh tiến trình — tool này miễn phí, không qua tường thanh toán, nên
+           chỉ có 2 bước (khớp flow thật: form → xem lịch). JS đổi bước ở
+           `wsStepsSet` (cuối file), gọi tại calculate()/showForm(). -->
+      <div class="ws-steps" id="wsSteps">
+        <div class="wss-step active"><span class="wss-n">1</span><span class="wss-l">Nhập thông tin</span></div>
+        <div class="wss-step"><span class="wss-n">2</span><span class="wss-l">Nhận kết quả</span></div>
+      </div>
       <div class="form-card" id="birthPanel">
         <div class="fc-head"><span class="fc-ic" data-icon="calendar"></span><h2>Tháng cần xem (dương lịch)</h2></div>
         <p class="sub">Chọn tháng, năm dương lịch. Hệ thống tự tính lịch, đối chiếu ngày tốt xấu — trả về lịch cả tháng đánh dấu tốt, cần lưu ý hay nên kỵ.</p>
@@ -91,6 +99,16 @@
           </button>
         </div>
         <div class="err" id="error-msg"></div>
+      </div>
+      </div>
+      <div class="ws-side-col">
+      <div class="ws-promo">
+        <div class="wsp-eyebrow"><span class="wsp-ic" data-icon="book-open"></span><span>Giới thiệu</span></div>
+        <div class="wsp-title">Ngày tốt trong tháng</div>
+        <p class="wsp-desc">Hoàng Lịch (lịch vạn niên) là hệ thống lịch cổ Trung Hoa kết hợp Can Chi, Nhị Thập Bát Tú và các sao tốt – xấu để xác định giờ, ngày hoàng đạo phù hợp cho từng loại việc. Đây là cơ sở truyền thống cho việc chọn ngày giờ trong cưới hỏi, khai trương, động thổ.</p>
+      </div>
+      <div id="shellRecent"></div>
+      </div>
       </div>
 
       <div id="resPanel" data-ws-result>
@@ -125,6 +143,19 @@ window.SHELL_INTRO={key:'ngay-tot'};</script>
   <script src="/nav.js?v=27" data-icons-only></script>
 <script src="/shell.js?v=91"></script>
 <script>
+// Thanh tiến trình (`.ws-steps`, xem shell.css) — chỉ phản ánh trạng thái đã
+// có sẵn trong flow cũ (form → kết quả), không tạo trạng thái mới. `n` các
+// bước TRƯỚC coi là "done" (viền vàng), bước `n` đang "active" (nền navy).
+function wsStepsSet(n){
+  var el=document.getElementById('wsSteps');
+  if(!el) return;
+  var steps=el.querySelectorAll('.wss-step');
+  for(var i=0;i<steps.length;i++){
+    steps[i].classList.remove('active','done');
+    if(i+1<n) steps[i].classList.add('done');
+    else if(i+1===n) steps[i].classList.add('active');
+  }
+}
 // Ô giữa dùng CHUNG /tools-shared/ngay-tot.js với /tools/ngay-tot.html.
 function calculate(){
   var _m=+document.getElementById('thang').value,_y=+document.getElementById('nam').value;
@@ -136,6 +167,7 @@ function calculate(){
   document.getElementById('birthPanel').style.display='none';
   document.getElementById('resPanel').style.display='block';
   document.getElementById('btnEdit').style.display='';
+  wsStepsSet(2); // Nhận kết quả — lịch tháng đã hiện, tool này miễn phí
   if(window.SHELL_INTRO)Shell.dismissIntro(window.SHELL_INTRO.key);
   Shell.setContext({
     scenario:{type:'ngay-tot',data:r.data},
@@ -174,7 +206,7 @@ function _trimDayList(s){
   if(arr.length<=8)return s;
   return arr.slice(0,8).join(', ')+' và các ngày khác';
 }
-function showForm(){document.getElementById('resPanel').style.display='none';document.getElementById('birthPanel').style.display='block';document.getElementById('btnEdit').style.display='none';Shell.setShareable(null);}
+function showForm(){document.getElementById('resPanel').style.display='none';document.getElementById('birthPanel').style.display='block';document.getElementById('btnEdit').style.display='none';wsStepsSet(1);Shell.setShareable(null);}
 (function(){var t=new Date();document.getElementById('thang').value=t.getMonth()+1;document.getElementById('nam').value=t.getFullYear();})();
 ['thang','nam'].forEach(function(id){document.getElementById(id).addEventListener('keydown',function(e){if(e.key==='Enter')calculate();});});
 </script>

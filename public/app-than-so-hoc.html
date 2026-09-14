@@ -54,13 +54,14 @@
            Render Delay 5,3s). `Shell.introOnce` thấy `.intro-card` đã có thì chỉ
            điền `#introSrc`. Vì thế `SHELL_INTRO` bên dưới CHỈ khai `key` — chữ nằm
            đúng ở đây, một bản duy nhất, không có bản chép để trôi. -->
+      <div class="ws-intake">
       <div id="introHost"><div class="intro-card">
         <img class="intro-avatar" src="/tool-avatars/than-so-hoc.webp" alt="" style="display:none" onerror="this.remove()">
         <img class="intro-photo" src="https://dciwkfdqhhddeymlisey.supabase.co/storage/v1/object/public/portraits/hero-banners/than-so-hoc-01.webp" alt="" onerror="this.remove()">
         <div class="intro-body">
           <div class="intro-text">
             <div class="intro-t">Thần số học</div>
-            <div class="intro-d">Đọc 13 con số từ ngày sinh: đường đời, đỉnh cao, năm cá nhân, nghề nghiệp phù hợp — giúp hiểu cách mình đang nghĩ, đang chọn.</div>
+            <div class="intro-d">Ngày sinh của bạn ẩn chứa 13 con số riêng — từ đường đời đến năm cá nhân hiện tại — nói lên cách bạn đang nghĩ và đang chọn. Xem ngay để hiểu rõ hơn chính mình.</div>
             <div id="introSrc" style="min-height:36.8px;margin-top:9px"></div>
           </div>
         </div>
@@ -70,7 +71,14 @@
           <div class="hero-pill"><span class="hp-ic" data-icon="calendar"></span><span>Năm cá nhân,<br>đỉnh cao</span></div>
         </div>
       </div></div>
-      <div id="shellRecent"></div>
+      <div class="ws-main-col">
+      <!-- Thanh tiến trình — JS chuyển bước ở `wsStepsSet` (cuối file), gọi
+           tại đúng chỗ trạng thái đã đổi trong flow cũ (calculate/showForm).
+           Tool này MIỄN PHÍ, không có bước Thanh toán — chỉ 2 bước. -->
+      <div class="ws-steps" id="wsSteps">
+        <div class="wss-step active"><span class="wss-n">1</span><span class="wss-l">Nhập thông tin</span></div>
+        <div class="wss-step"><span class="wss-n">2</span><span class="wss-l">Nhận kết quả</span></div>
+      </div>
       <div class="form-card" id="birthPanel">
         <div class="fc-head"><span class="fc-ic" data-icon="hash"></span><h2>Ngày sinh & tên đầy đủ</h2></div>
         <p class="sub">Nhập ngày sinh và họ tên đầy đủ. Hệ thống tính theo hệ Pythagoras — Đường Đời, Định Mệnh, Linh Hồn, Sứ Mệnh và năm cá nhân hiện tại.</p>
@@ -87,6 +95,16 @@
           <small>Miễn phí</small>
         </button>
         <div class="err" id="error-msg"></div>
+      </div>
+      </div>
+      <div class="ws-side-col">
+      <div class="ws-promo">
+        <div class="wsp-eyebrow"><span class="wsp-ic" data-icon="book-open"></span><span>Giới thiệu</span></div>
+        <div class="wsp-title">Thần số học</div>
+        <p class="wsp-desc">Thần số học (Numerology) theo trường phái Pythagoras quy đổi các con số trong ngày sinh và họ tên thành những chỉ số mang ý nghĩa riêng, như Đường Đời hay Đỉnh Cao. Trường phái này bắt nguồn từ tư tưởng của nhà toán học Hy Lạp cổ đại Pythagoras về mối liên hệ giữa con số và vũ trụ.</p>
+      </div>
+      <div id="shellRecent"></div>
+      </div>
       </div>
 
       <div id="resPanel" data-ws-result>
@@ -120,6 +138,7 @@ function calculate(){
   document.getElementById('birthPanel').style.display='none';
   document.getElementById('resPanel').style.display='block';
   document.getElementById('btnEdit').style.display='';
+  wsStepsSet(2); // Nhận kết quả — miễn phí, không có bước Thanh toán
   if(window.SHELL_INTRO)Shell.dismissIntro(window.SHELL_INTRO.key);
   Shell.setContext({
     scenario:{type:'than-so-hoc',data:r.data},
@@ -139,7 +158,21 @@ function showForm(){
   document.getElementById('resPanel').style.display='none';
   document.getElementById('birthPanel').style.display='block';
   document.getElementById('btnEdit').style.display='none';
+  wsStepsSet(1); // về lại Nhập thông tin
   Shell.setShareable(null);
+}
+// Thanh tiến trình (`.ws-steps`) — chỉ phản ánh trạng thái đã có sẵn trong
+// flow cũ (form → kết quả), không tạo trạng thái mới. `n` các bước TRƯỚC coi
+// là "done" (viền vàng), bước `n` đang "active" (nền navy).
+function wsStepsSet(n){
+  var el=document.getElementById('wsSteps');
+  if(!el) return;
+  var steps=el.querySelectorAll('.wss-step');
+  for(var i=0;i<steps.length;i++){
+    steps[i].classList.remove('active','done');
+    if(i+1<n) steps[i].classList.add('done');
+    else if(i+1===n) steps[i].classList.add('active');
+  }
 }
 </script>
 <script>/*SHELL_RESTORE_BOOT*/(function(){function _r(){var r=window.Shell&&Shell.pendingRestore&&Shell.pendingRestore();if(r&&r.form){Shell.fillForm(r.form);calculate();}}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',_r);else _r();})();</script>

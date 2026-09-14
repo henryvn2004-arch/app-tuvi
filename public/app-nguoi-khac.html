@@ -88,13 +88,14 @@
            Render Delay 5,3s). `Shell.introOnce` thấy `.intro-card` đã có thì chỉ
            điền `#introSrc`. Vì thế `SHELL_INTRO` bên dưới CHỈ khai `key` — chữ nằm
            đúng ở đây, một bản duy nhất, không có bản chép để trôi. -->
+      <div class="ws-intake">
       <div id="introHost"><div class="intro-card">
         <img class="intro-avatar" src="/tool-avatars/nguoi-khac.webp" alt="" style="display:none" onerror="this.remove()">
         <img class="intro-photo" src="https://dciwkfdqhhddeymlisey.supabase.co/storage/v1/object/public/portraits/hero-banners/laso-01.webp" alt="" onerror="this.remove()">
         <div class="intro-body">
           <div class="intro-text">
             <div class="intro-t">Lá Số Người Khác</div>
-            <div class="intro-d">Lá Số Người Khác lập lá số Tử Vi cho một người bạn cần hiểu rõ hơn. Nhập ngày giờ sinh người đó, nhận cẩm nang nên nói gì, nên tránh gì và kế hoạch cụ thể cho việc bạn đang cần làm với họ.</div>
+            <div class="intro-d">Hiểu sai một người quan trọng — sếp, đối tác, người yêu — thường là gốc rễ của những va chạm không đáng có. Nhập ngày giờ sinh của họ, nhận cẩm nang nên nói gì, nên tránh gì.</div>
             <div id="introSrc" style="min-height:73.6px;margin-top:9px"></div>
           </div>
         </div>
@@ -104,11 +105,16 @@
           <div class="hero-pill"><span class="hp-ic" data-icon="hourglass"></span><span>Lúc nào nên<br>đưa việc lớn</span></div>
         </div>
       </div></div>
-      <div id="shellRecent"></div>
-      <div class="samp-cta" id="sampCta">
-        <span class="sc-ic" data-icon="lightbulb"></span>
-        <span class="sc-txt"><b>Chưa muốn khai thông tin?</b><span>Bạn có thể xem một bản mẫu để trải nghiệm trước.</span></span>
-        <button type="button" id="btnSample" data-sample-tool="nguoi-khac" onclick="SampleHint.open(this)">Xem bản mẫu →</button>
+      <div class="ws-main-col">
+      <!-- Thanh tiến trình — khớp flow thật: form → xem trước (2/9 đoạn miễn
+           phí) → thanh toán → cẩm nang đầy đủ. JS đổi bước ở `wsStepsSet`
+           (cuối file), gọi tại analyze()/_runAnonPreview/_renderLockWall/
+           _doGenerate/showForm. -->
+      <div class="ws-steps" id="wsSteps">
+        <div class="wss-step active"><span class="wss-n">1</span><span class="wss-l">Nhập thông tin</span></div>
+        <div class="wss-step"><span class="wss-n">2</span><span class="wss-l">Xem trước cẩm nang</span></div>
+        <div class="wss-step"><span class="wss-n">3</span><span class="wss-l">Thanh toán</span></div>
+        <div class="wss-step"><span class="wss-n">4</span><span class="wss-l">Nhận kết quả</span></div>
       </div>
       <div class="form-card" id="birthPanel">
         <div class="fc-head"><span class="fc-ic" data-icon="user"></span><h2>Ngày sinh của người bạn muốn hiểu</h2></div>
@@ -181,6 +187,21 @@
           </button>
         </div>
         <div class="err" id="error-msg"></div>
+      </div>
+      </div>
+      <div class="ws-side-col">
+      <div class="ws-promo">
+        <div class="wsp-eyebrow"><span class="wsp-ic" data-icon="book-open"></span><span>Giới thiệu</span></div>
+        <div class="wsp-title">Lá Số Người Khác</div>
+        <p class="wsp-desc">Tử Vi Đẩu Số là một môn mệnh lý cổ truyền Trung Hoa, lập lá số theo giờ sinh âm lịch với 12 cung và hệ thống chính tinh, phụ tinh chiếu mệnh. Môn học được hệ thống hoá qua nhiều đời, phổ biến tại Việt Nam qua bản dịch <i>Tử Vi Đẩu Số Tân Biên</i> của Vân Đằng Thái Thứ Lang.</p>
+      </div>
+      <div class="samp-cta" id="sampCta">
+        <span class="sc-ic" data-icon="lightbulb"></span>
+        <span class="sc-txt"><b>Chưa muốn khai thông tin?</b><span>Bạn có thể xem một bản mẫu để trải nghiệm trước.</span></span>
+        <button type="button" id="btnSample" data-sample-tool="nguoi-khac" onclick="SampleHint.open(this)">Xem bản mẫu →</button>
+      </div>
+      <div id="shellRecent"></div>
+      </div>
       </div>
 
       <div id="resPanel" data-ws-result style="display:none">
@@ -337,6 +358,20 @@ window.SHELL_INTRO={key:'nguoi-khac'};</script>
 <script src="/tools-shared/ai-loading-steps.js?v=10"></script>
 <script>
 
+// Thanh tiến trình (`.ws-steps`, xem shell.css) — chỉ phản ánh trạng thái đã
+// có sẵn trong flow cũ (form → xem trước → thanh toán → kết quả), không tạo
+// trạng thái mới. `n` các bước TRƯỚC coi là "done" (viền vàng), bước `n`
+// đang "active" (nền navy).
+function wsStepsSet(n) {
+  var el = document.getElementById('wsSteps');
+  if (!el) return;
+  var steps = el.querySelectorAll('.wss-step');
+  for (var i = 0; i < steps.length; i++) {
+    steps[i].classList.remove('active', 'done');
+    if (i + 1 < n) steps[i].classList.add('done');
+    else if (i + 1 === n) steps[i].classList.add('active');
+  }
+}
 var _currentSlug = '';
 var _last = null;
 var _lastSelf = null;
@@ -675,6 +710,7 @@ async function _runAnonPreview(b, self, qh, viec) {
     mountHook(data);
     document.getElementById('card').style.display = 'block';
     document.getElementById('btnEdit').style.display = '';
+    wsStepsSet(2); // Xem trước cẩm nang — 2/9 đoạn miễn phí vừa hiện ra
     if (window.SHELL_INTRO) Shell.dismissIntro(window.SHELL_INTRO.key);
     _renderLockWall(qh, viec, data.khoa);
     _mountCnsNguoiKhac(b);
@@ -720,6 +756,7 @@ function _renderLockWall(qh, viec, khoaRaw) {
   var host = document.getElementById('nkLockHost');
   host.style.display = 'block';
   host.innerHTML = '';
+  wsStepsSet(3); // Thanh toán — tường đã dựng (nút phẳng hoặc lockPreview), chờ mở khoá
   // Đã đăng nhập (chỉ còn thiếu tiền, không thiếu tài khoản) → nút phẳng, bỏ
   // qua màn "Đăng ký" — cùng mẫu app-chu-trinh-cuoc-doi.html `_renderUnlockBlock`.
   if (_nkLoggedIn()) {
@@ -850,6 +887,7 @@ async function _doGenerate(freeRerun, qh, viec) {
     document.getElementById('loading').style.display = 'none';
     document.getElementById('card').style.display = 'block';
     document.getElementById('btnEdit').style.display = '';
+    wsStepsSet(4); // Nhận kết quả — đã trả tiền (hoặc mở lại miễn phí), cẩm nang đầy đủ đã hiện
     if (window.SHELL_INTRO) Shell.dismissIntro(window.SHELL_INTRO.key);
     _loadHistory();
     _mountCnsNguoiKhac(_last);
@@ -1106,6 +1144,7 @@ function showForm() {
   document.getElementById('resPanel').style.display = 'none';
   document.getElementById('birthPanel').style.display = 'block';
   document.getElementById('btnEdit').style.display = 'none';
+  wsStepsSet(1); // về lại Nhập thông tin
   // Quay về form thì gỡ nút Chia sẻ — bản vừa xem không còn trên màn hình nữa.
   Shell.setShareable(null);
 }

@@ -96,19 +96,23 @@
            Render Delay 5,3s). `Shell.introOnce` thấy `.intro-card` đã có thì chỉ
            điền `#introSrc`. Vì thế `SHELL_INTRO` bên dưới CHỈ khai `key` — chữ nằm
            đúng ở đây, một bản duy nhất, không có bản chép để trôi. -->
+      <div class="ws-intake">
       <div id="introHost"><div class="intro-card">
         <img class="intro-avatar" src="/tool-avatars/trang-diem-phan-tich.webp" alt="" style="display:none" onerror="this.remove()">
         <img class="intro-photo" src="https://dciwkfdqhhddeymlisey.supabase.co/storage/v1/object/public/portraits/hero-banners/phong-cach-ai-01.webp" alt="" onerror="this.remove()">
         <div class="intro-body">
           <div class="intro-text">
             <div class="intro-t">Trang Điểm</div>
-            <div class="intro-d">Trang Điểm gợi ý phong cách hợp gương mặt rồi ghép thử ngay lên ảnh thật. Nhìn người khác trang điểm xinh mà mình makeup mãi vẫn thấy thiếu tự tin mỗi lần ra ngoài? Tải ảnh chân dung, nhận gợi ý trang điểm và bản ghép thử trên chính ảnh của bạn.</div>
+            <div class="intro-d">Nhìn người khác trang điểm mà thấy nổi bật, còn mình makeup mãi vẫn thấy thiếu tự tin mỗi lần ra ngoài. Tải ảnh chân dung, nhận gợi ý phong cách hợp gương mặt và bản ghép thử ngay.</div>
             <div id="introSrc" style="min-height:36.8px;margin-top:9px"></div>
           </div>
         </div>
       </div></div>
-      <div id="shellRecent"></div>
-
+      <div class="ws-main-col">
+      <!-- ⚠️ Tool này KHÔNG gắn `.ws-steps`: có HAI cổng Lượng độc lập trong
+           cùng một trang (phân tích phong cách, rồi thử-lại-được từng style
+           trang điểm), không phải một chuỗi 3-4 bước tuyến tính như pilot —
+           gán số bước cứng vào đây sẽ nói sai trạng thái thật. -->
       <div class="td-card">
         <h2><span class="ic" data-icon="camera"></span> Chụp Hoặc Tải Ảnh Khuôn Mặt</h2>
         <p class="sub">Tải lên một tấm ảnh chân dung rõ mặt. Hệ thống phân tích khuôn mặt rồi ghép thử trang điểm ngay trên ảnh. Nhận về phong cách makeup phù hợp, bảng màu môi – mắt – má và ảnh đã ghép thử.</p>
@@ -139,6 +143,16 @@
         <button class="btn-analyze" id="btnAnalyze" onclick="analyze()" disabled>
           <span class="ic" data-icon="palette"></span> Phân Tích Phong Cách — <span data-tvp-price="trang-diem-phan-tich">…</span> Lượng
         </button>
+      </div>
+      </div>
+      <div class="ws-side-col">
+      <div class="ws-promo">
+        <div class="wsp-eyebrow"><span class="wsp-ic" data-icon="book-open"></span><span>Giới thiệu</span></div>
+        <div class="wsp-title">Trang Điểm</div>
+        <p class="wsp-desc">Nhân tướng học phương Đông không chỉ luận vận mệnh mà còn phân loại hình dáng khuôn mặt theo Ngũ Hành (Kim, Mộc, Thủy, Hỏa, Thổ), mỗi hành ứng với một kiểu đường nét đặc trưng. Cách phân loại này được ứng dụng để gợi ý kiểu tóc, trang điểm hài hoà với gương mặt.</p>
+      </div>
+      <div id="shellRecent"></div>
+      </div>
       </div>
 
       <div class="td-card loading-overlay" id="loadingOverlay">

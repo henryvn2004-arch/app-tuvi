@@ -82,13 +82,14 @@
            Render Delay 5,3s). `Shell.introOnce` thấy `.intro-card` đã có thì chỉ
            điền `#introSrc`. Vì thế `SHELL_INTRO` bên dưới CHỈ khai `key` — chữ nằm
            đúng ở đây, một bản duy nhất, không có bản chép để trôi. -->
+      <div class="ws-intake">
       <div id="introHost"><div class="intro-card">
         <img class="intro-avatar" src="/tool-avatars/mai-hoa.webp" alt="" style="display:none" onerror="this.remove()">
         <img class="intro-photo" src="https://dciwkfdqhhddeymlisey.supabase.co/storage/v1/object/public/portraits/hero-banners/kinh-dich-01.webp" alt="" onerror="this.remove()">
         <div class="intro-body">
           <div class="intro-text">
             <div class="intro-t">Mai Hoa Dịch Số</div>
-            <div class="intro-d">Mai Hoa Dịch Số gieo quẻ bằng một con số hoặc theo giờ hiện tại, đọc Thể và Dụng cho việc bạn hỏi. Nhập một con số, nhận hai quẻ Thể – Dụng cùng lời luận gọn.</div>
+            <div class="intro-d">Một con số bất chợt nghĩ ra cũng có thể là khởi đầu của một quẻ dịch. Nhập số đó hoặc để hệ thống lấy theo giờ hiện tại, nhận hai quẻ Thể – Dụng cùng lời luận cho việc bạn đang hỏi.</div>
             <div id="introSrc" style="min-height:18.4px;margin-top:9px"></div>
           </div>
         </div>
@@ -98,7 +99,13 @@
           <div class="hero-pill"><span class="hp-ic" data-icon="scroll-text"></span><span>Hào từ &amp;<br>lời luận</span></div>
         </div>
       </div></div>
-      <div id="shellRecent"></div>
+      <div class="ws-main-col">
+      <!-- Thanh tiến trình — tool này MIỄN PHÍ, không có paywall, chỉ 2 chặng
+           thật: lập quẻ rồi xem kết quả. JS chuyển bước ở `wsStepsSet`. -->
+      <div class="ws-steps" id="wsSteps">
+        <div class="wss-step active"><span class="wss-n">1</span><span class="wss-l">Lập quẻ</span></div>
+        <div class="wss-step"><span class="wss-n">2</span><span class="wss-l">Xem kết quả</span></div>
+      </div>
       <div class="form-card" id="birthPanel">
         <div class="fc-head"><span class="fc-ic" data-icon="flower"></span><h2>Thành tâm nghĩ về việc muốn hỏi</h2></div>
         <p class="sub">Gieo theo giờ hiện tại hoặc một con số — hệ thống lập quẻ Thể–Dụng, xác định hào động và trả hào từ để luận.</p>
@@ -119,6 +126,16 @@
           <span class="bg-label"><span class="ic" data-icon="flower"></span><b>Lập Quẻ</b></span>
         </button>
         <div class="mh-err" id="mhErr" style="display:none"></div>
+      </div>
+      </div>
+      <div class="ws-side-col">
+      <div class="ws-promo">
+        <div class="wsp-eyebrow"><span class="wsp-ic" data-icon="book-open"></span><span>Giới thiệu</span></div>
+        <div class="wsp-title">Mai Hoa Dịch Số</div>
+        <p class="wsp-desc">Mai Hoa Dịch Số là phương pháp gieo quẻ tương truyền do Thiệu Khang Tiết đời Tống đặt nền móng, dựa trên Kinh Dịch nhưng lập quẻ nhanh từ một con số, thời điểm hoặc sự việc bất kỳ. Quẻ được chia thành Thể và Dụng để luận đoán diễn biến sự việc.</p>
+      </div>
+      <div id="shellRecent"></div>
+      </div>
       </div>
 
       <div id="resPanel" data-ws-result>
@@ -154,6 +171,18 @@ window.SHELL_INTRO={key:'mai-hoa'};</script>
 <script>
 // Ô giữa dùng CHUNG module /tools-shared/mai-hoa.js với trang standalone
 // /tools/mai-hoa.html. Trang chỉ lo DOM + nối rail.
+// Thanh tiến trình — tool MIỄN PHÍ, chỉ 2 chặng: lập quẻ / xem kết quả. `n`
+// các bước TRƯỚC coi là "done" (viền vàng), bước `n` đang "active" (nền navy).
+function wsStepsSet(n){
+  var el=document.getElementById('wsSteps');
+  if(!el) return;
+  var steps=el.querySelectorAll('.wss-step');
+  for(var i=0;i<steps.length;i++){
+    steps[i].classList.remove('active','done');
+    if(i+1<n) steps[i].classList.add('done');
+    else if(i+1===n) steps[i].classList.add('active');
+  }
+}
 let _mode = 'gio';
 let _r = null;
 
@@ -200,6 +229,7 @@ function showResult() {
   document.getElementById('birthPanel').style.display = 'none';
   document.getElementById('resPanel').style.display = 'block';
   document.getElementById('btnEdit').style.display = '';
+  wsStepsSet(2); // Xem kết quả — quẻ đã lập xong
   if (window.SHELL_INTRO) Shell.dismissIntro(window.SHELL_INTRO.key);
 
   const d = MaiHoaTool.railData(r, cHoi);
@@ -252,6 +282,7 @@ function reset() {
   document.getElementById('resPanel').style.display = 'none';
   document.getElementById('birthPanel').style.display = 'block';
   document.getElementById('btnEdit').style.display = 'none';
+  wsStepsSet(1); // về lại Lập quẻ
   _err('mhErr', '');
   _err('mhErr2', '');
   Shell.setShareable(null);
