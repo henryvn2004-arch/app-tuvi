@@ -137,7 +137,6 @@
    không còn là con của figure — xem fillClaudeContent()/renderMarkdown().
    Thiếu banner (ảnh lỗi/chưa vẽ) thì renderMarkdown() tự rơi về .fb-card. */
 .lg-hookbox{margin:-4px 0 10px;background:var(--white);border-radius:16px;padding:14px 18px 15px;box-shadow:0 3px 10px rgba(6,26,46,.08)}
-.lg-hookbox .lg-hookpill{display:inline-block;font-family:var(--sans);font-size:10.5px;font-weight:700;letter-spacing:.05em;padding:3px 11px;border-radius:20px;margin-bottom:8px}
 .lg-hookbox p{font-family:var(--serif);font-weight:700;font-size:15.5px;line-height:1.44;color:var(--heading);margin:0}
 /* CTA lặp lại trong mỗi phần khoá (2026-09-08, gộp về 1 nút mở cả bó — cùng
    mẫu app-van-han-nam.html/app-chu-trinh-cuoc-doi.html) — đứng ngay dưới ô
@@ -1255,7 +1254,7 @@ function renderMarkdown(text,illusFig){
         var cls=HOOK_TAG_CLASS[m[1]]||'fb-trungtinh';
         var hookHtml='“'+esc(m[2].trim())+'”';
         if(!hookUsed&&illusFig){
-          illusFig.insertAdjacentHTML('afterend','<div class="lg-hookbox"><span class="lg-hookpill '+cls+'">'+esc(m[1])+'</span><p>'+hookHtml+'</p></div>');
+          illusFig.insertAdjacentHTML('afterend','<div class="lg-hookbox"><p>'+hookHtml+'</p></div>');
           hookUsed=true;
         }else{
           out+=window.FbCardTopic.cardHtml(cls,window.FbCardTopic.extractTopic(line.trim()),hookHtml);
