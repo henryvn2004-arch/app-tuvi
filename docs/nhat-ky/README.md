@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-261 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+262 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 **Bốn file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
 ```bash
@@ -11,7 +11,7 @@ sed -n '120,190p' docs/nhat-ky/2026-08.md    # đọc đúng đoạn, đừng ca
 
 | file | số mục | dung lượng |
 |---|---:|---:|
-| `2026-09.md` | 96 | 400,808 B |
+| `2026-09.md` | 97 | 403,723 B |
 | `2026-08.md` | 148 | 1,024,027 B |
 | `2026-07.md` | 12 | 154,531 B |
 | `track-cu.md` | 5 | 89,354 B |
@@ -26,6 +26,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 | # | tháng | file | mục |
 |---:|---|---|---|
 | 1 | 2026-09 | `2026-09.md` | 🖼️ `tong-quan` v2 thiếu ảnh ở 4 bậc tuổi ngoài `truong-thanh` — vẽ bù 24 ảnh |
+| 1 | 2026-09 | `2026-09.md` | 🔢 Thần Số Học 11 → 13 chỉ số — soi đối thủ, chỉ lấy 2 phần THẬT SỰ có giá trị |
 | 1 | 2026-09 | `2026-09.md` | 🐛 CI đỏ sau loạt auto-show — Playwright `page.click('#btnGo')` đụng độ với bản mẫu tự mở |
 | 1 | 2026-09 | `2026-09.md` | 🏁 Auto-show sample nối xong đủ 14 tool (chốt loạt "nối hết các tool còn lại") |
 | 1 | 2026-09 | `2026-09.md` | ✅ Auto-show sample cho Xem Tuổi — port `buildPhanPrompt` từ JS trình duyệt |
