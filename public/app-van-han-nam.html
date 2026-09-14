@@ -49,13 +49,13 @@
 .card{background:var(--white);border:1px solid var(--line);border-radius:11px;padding:15px 17px;box-shadow:var(--shadow)}
 .lg-illus{position:relative;margin:0 0 10px;border-radius:10px;overflow:hidden;aspect-ratio:1536/1024;background:var(--paper-2,#f2ede4)}
 .lg-illus img{width:100%;height:100%;object-fit:cover;display:block}
-/* Bìa chương (2026-09-13, cùng mẫu app-luan-giai.html): câu hook đè lên
-   banner tháng thay vì card riêng dưới ảnh. Chỉ áp cho luận THẬT (renderMarkdown
-   gọi kèm illusFig) — nhánh văn mẫu mờ (dummy, dòng ~587) KHÔNG có figure sống
-   để chèn vào lúc dựng chuỗi (banner+dummy cùng vào DOM một lượt), nên vẫn
-   giữ .fb-card như cũ, không đổi hành vi ở đó. */
-.lg-hookbox{position:absolute;left:14px;right:14px;bottom:14px;max-width:min(440px,calc(100% - 28px));background:var(--white);border-radius:16px;padding:14px 18px 15px;box-shadow:0 8px 22px rgba(6,26,46,.18)}
-.lg-hookbox .lg-hookpill{display:inline-block;font-family:var(--sans);font-size:10.5px;font-weight:700;letter-spacing:.05em;padding:3px 11px;border-radius:20px;margin-bottom:8px}
+/* Bìa chương (2026-09-13, tách khỏi ảnh 2026-09-14, cùng mẫu app-luan-giai.html):
+   câu hook đứng box RIÊNG ngay dưới banner tháng, không đè lên ảnh nữa —
+   chèn làm sibling SAU `.lg-illus` (insertAdjacentHTML 'afterend'). Chỉ áp
+   cho luận THẬT (renderMarkdown gọi kèm illusFig) — nhánh văn mẫu mờ (dummy,
+   dòng ~587) KHÔNG có figure sống để chèn vào lúc dựng chuỗi (banner+dummy
+   cùng vào DOM một lượt), nên vẫn giữ .fb-card như cũ, không đổi hành vi ở đó. */
+.lg-hookbox{margin:-4px 0 10px;background:var(--white);border-radius:16px;padding:14px 18px 15px;box-shadow:0 3px 10px rgba(6,26,46,.08)}
 .lg-hookbox p{font-family:var(--serif);font-weight:700;font-size:15.5px;line-height:1.44;color:var(--heading);margin:0}
 .ask{margin-top:11px;display:inline-flex;align-items:center;gap:7px;font-size:12.5px;color:var(--gold-soft);border:1px dashed var(--gold-soft);border-radius:8px;padding:7px 12px;cursor:pointer;background:var(--gold-lt);font-family:inherit}
 .fold-toggle{font-size:12.5px;color:var(--tx-blue);cursor:pointer;margin-bottom:14px;display:inline-block}
@@ -1042,7 +1042,7 @@ function renderMarkdown(text,illusFig){
       var cls=HOOK_TAG_CLASS[m[1]]||'fb-trungtinh';
       var hookHtml='“'+esc(m[2].trim())+'”';
       if(!hookUsed&&illusFig){
-        illusFig.insertAdjacentHTML('beforeend','<div class="lg-hookbox"><span class="lg-hookpill '+cls+'">'+esc(m[1])+'</span><p>'+hookHtml+'</p></div>');
+        illusFig.insertAdjacentHTML('afterend','<div class="lg-hookbox"><p>'+hookHtml+'</p></div>');
         hookUsed=true;
       }else{
         out+=window.FbCardTopic.cardHtml(cls,window.FbCardTopic.extractTopic(line.trim()),hookHtml);
@@ -1062,9 +1062,9 @@ function renderMarkdown(text,illusFig){
 function illusFigFor(box){
   var sec=box&&box.closest('.sec');
   var fig=sec?sec.querySelector('.lg-illus'):null;
-  if(!fig)return null;
-  var prev=fig.querySelector('.lg-hookbox');
+  var prev=sec?sec.querySelector('.lg-hookbox'):null;
   if(prev)prev.remove();
+  if(!fig)return null;
   return fig.querySelector('img')?fig:null;
 }
 
