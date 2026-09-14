@@ -85,14 +85,18 @@ test.describe('Mobile — Luận Giải form', () => {
   test('submit button không bị crop trên mobile', async ({ page }) => {
     await page.goto('/app-luan-giai.html');
     await page.waitForLoadState('networkidle');
+    // 🪤 `typeof TuviForm !== "undefined"` chỉ báo MODULE tuvi-form.js đã nạp
+    // xong — KHÔNG báo lời gọi `TuviForm.render('tuviFormHost',...)` (một
+    // <script> RIÊNG, đứng SAU trong tài liệu) đã chạy xong và nút submit đã
+    // thật sự có trong DOM. Đã thử cách đó ở CI thật: đỏ đều 2 lượt liền vì
+    // module định nghĩa xong trước khi lệnh render tới lượt chạy. Đợi thẳng
+    // vào chính selector cần — đúng tín hiệu, không suy luận gián tiếp.
     // app-luan-giai.html nạp nhiều script hơn hẳn trang cũ (illus-nguong/
-    // illus-match/hook-*/report-delivery/...) TRƯỚC khi tới lượt
-    // `TuviForm.render(...)` — đợi TuviForm sẵn sàng trước khi tìm nút, không
-    // thì đúng lúc máy CI tải chậm là bài kiểm đỏ oan dù form vẫn render đúng.
-    await page.waitForFunction('typeof TuviForm !== "undefined"', { timeout: 10_000 });
-
+    // illus-match/hook-*/report-delivery/...) trước khi tới lượt render form
+    // nên timeout dài hơn 8s mặc định, khớp mốc 20s các bài kiểm khác trên
+    // đúng trang này đã dùng (chờ #lgPanel).
     const btn = page.locator('.btn-submit, #tvf-submit-btn').first();
-    await expect(btn).toBeVisible({ timeout: 8000 });
+    await expect(btn).toBeVisible({ timeout: 20_000 });
 
     const box = await btn.boundingBox();
     expect(box?.width).toBeGreaterThan(80);
