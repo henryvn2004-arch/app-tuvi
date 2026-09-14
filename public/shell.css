@@ -920,3 +920,24 @@ font-family:inherit}
 .samp-bar .sb-txt b{color:var(--gold)}
 .samp-bar button{flex:0 0 auto;background:var(--gold);color:var(--navy);border:none;border-radius:8px;padding:7px 14px;font-size:12.5px;font-weight:700;cursor:pointer;font-family:var(--serif)}
 .samp-cta button:disabled{opacity:.6;cursor:default}
+/* ── Thẻ "Báo cáo đã sẵn sàng" — Pha 2 productize luận giải (2026-09) ──
+   Dùng CHUNG cho app-luan-giai.html (laso) + app-chu-trinh-cuoc-doi.html
+   (chu-trinh-cuoc-doi) qua tools-shared/report-delivery.js — một nguồn CSS,
+   một nguồn JS, hai trang cùng gọi. Khối TĨNH có mặt từ lần vẽ đầu, chỉ ẩn
+   bằng [hidden] — KHÔNG chèn muộn bằng JS, tránh đúng cú CLS 0,0049 mà
+   `renderPdfBtn`/`fabAdd` đã phải vá (xem shell.js). */
+.report-ready{border:1px solid var(--line);border-radius:14px;padding:20px;margin:18px 0;background:linear-gradient(180deg,var(--gold-lt),var(--white));text-align:center}
+.report-ready[hidden]{display:none}
+.report-ready .rr-eyebrow{font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold-soft);font-weight:700;margin-bottom:6px}
+.report-ready .rr-title{font-family:var(--serif);font-size:18px;color:var(--navy);font-weight:700;margin-bottom:4px}
+.report-ready .rr-sub{font-size:12.5px;color:var(--text-mid);margin-bottom:16px}
+.report-ready .rr-actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.report-ready .rr-btn{display:inline-flex;align-items:center;gap:7px;border-radius:9px;padding:11px 18px;font-size:13.5px;font-weight:600;font-family:var(--sans);cursor:pointer;border:1.5px solid var(--navy);background:transparent;color:var(--navy);transition:opacity .15s}
+.report-ready .rr-btn.pri{background:linear-gradient(160deg,var(--gold),var(--gold-soft));border-color:transparent;color:var(--navy)}
+.report-ready .rr-btn .ic{width:15px;height:15px;flex:0 0 auto;display:inline-flex}
+.report-ready .rr-btn .ic svg{width:100%;height:100%}
+.report-ready .rr-btn:disabled{opacity:.55;cursor:default}
+.report-ready .rr-btn.sent{border-color:var(--tx-green);color:var(--tx-green)}
+/* Đang dựng — chưa đủ N phần. Spinner thay icon tải, nút vẫn khoá. */
+.rr-spin{width:15px;height:15px;border:2px solid rgba(6,26,46,.18);border-top-color:var(--navy);border-radius:50%;animation:rr-spin .7s linear infinite;flex:0 0 auto}
+@keyframes rr-spin{to{transform:rotate(360deg)}}
