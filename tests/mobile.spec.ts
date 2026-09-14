@@ -85,17 +85,17 @@ test.describe('Mobile — Luận Giải form', () => {
   test('submit button không bị crop trên mobile', async ({ page }) => {
     await page.goto('/app-luan-giai.html');
     await page.waitForLoadState('networkidle');
-    // 🪤 `typeof TuviForm !== "undefined"` chỉ báo MODULE tuvi-form.js đã nạp
-    // xong — KHÔNG báo lời gọi `TuviForm.render('tuviFormHost',...)` (một
-    // <script> RIÊNG, đứng SAU trong tài liệu) đã chạy xong và nút submit đã
-    // thật sự có trong DOM. Đã thử cách đó ở CI thật: đỏ đều 2 lượt liền vì
-    // module định nghĩa xong trước khi lệnh render tới lượt chạy. Đợi thẳng
-    // vào chính selector cần — đúng tín hiệu, không suy luận gián tiếp.
-    // app-luan-giai.html nạp nhiều script hơn hẳn trang cũ (illus-nguong/
-    // illus-match/hook-*/report-delivery/...) trước khi tới lượt render form
-    // nên timeout dài hơn 8s mặc định, khớp mốc 20s các bài kiểm khác trên
-    // đúng trang này đã dùng (chờ #lgPanel).
-    const btn = page.locator('.btn-submit, #tvf-submit-btn').first();
+    // 🪤 app-luan-giai.html gọi `TuviForm.render('tuviFormHost', {mode:'compact'})`
+    // — mode:'compact' KHÔNG dựng `.btn-submit`/`#tvf-submit-btn` (khối đó chỉ
+    // tồn tại ở nhánh mode:'full' của tuvi-form.js, xem `buildFull`/render()).
+    // Compact "tái dùng .frow/.fg/.btn-go sẵn có của trang gọi" đúng như comment
+    // ngay trong tuvi-form.js — nút submit THẬT của trang này là `#btnGo`
+    // (`.btn-go`, `onclick="doLuan()"`), đứng ngoài #tuviFormHost, cùng nút mà
+    // bài kiểm "grid 12 cung" bên dưới gọi gián tiếp qua `doLuan()`. Selector
+    // cũ `.btn-submit, #tvf-submit-btn` không timeout vì tải chậm — nó đỏ vì
+    // phần tử KHÔNG BAO GIỜ tồn tại trên trang này, hai lượt sửa timeout trước
+    // đó đều sai gốc.
+    const btn = page.locator('#btnGo, .btn-go').first();
     await expect(btn).toBeVisible({ timeout: 20_000 });
 
     const box = await btn.boundingBox();
