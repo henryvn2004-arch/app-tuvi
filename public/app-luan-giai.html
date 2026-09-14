@@ -143,6 +143,33 @@
    giữ chỗ của chính phần đó, để cuộn sâu vẫn còn chỗ bấm. */
 .lg-cta-repeat{margin-top:14px;text-align:center}
 .lg-cta-repeat .btn-go{width:100%;max-width:360px}
+/* Pha 3 (2026-09-14) — ảnh cho phần ĐANG KHOÁ: ĐÚNG MỘT banner chung của cả
+   tool (lockedIllusHtml(), không đổi theo cung/sắc thái) làm mờ + gắn nhãn.
+   KHÔNG dùng .tpw-real-lock (tuvi-paywall.js) — class đó dành riêng cho nội
+   dung THẬT bị mờ, ở đây là ảnh trang trí dùng chung nên tách class mới cho
+   rõ ý, tránh đọc nhầm là "có dữ liệu thật đằng sau lớp mờ này". */
+.lg-illus-lock img{filter:blur(4px) saturate(.75);opacity:.55}
+.lg-illus-lock .lg-illus-tag{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%)}
+/* Pha 3 — mục lục cá nhân: chấm vàng đánh dấu ĐÚNG cung `_tensionLine()` đã
+   gọi tên (cung yếu nhất, điểm số ENGINE có sẵn — không phải dữ liệu mới). */
+.jump a.lg-jump-tension{box-shadow:inset 0 0 0 1px #c99a3f}
+.jump a.lg-jump-tension::after{content:'•';color:#c99a3f;margin-left:3px}
+/* Pha 3 — cắt giữa phần 2: ô giữ chỗ NGẮN nối tiếp đúng chỗ chữ dừng, cùng
+   khung .tpw-ph (tuvi-paywall.js) mà các phần khoá khác đang dùng. */
+.lg-cut-continue{margin-top:12px}
+.lg-cut-note{font-size:12px;color:var(--text-lt);text-align:center;margin:0 0 8px}
+/* Cùng màu/kích thước vạch giả của .tpw-ph (tuvi-paywall.js) nhưng class
+   RIÊNG — xem chú thích ở chỗ dựng cutStub (buildPhanSection): dùng chung
+   .tpw-ph làm bài kiểm đếm "11 phần khoá" ăn nhầm ô nối tiếp này thành 12. */
+.lg-cut-bars i{display:block;height:11px;border-radius:6px;background:linear-gradient(90deg,#e4ddcd,#f2ede2);margin-bottom:11px}
+.lg-cut-bars i:last-of-type{margin-bottom:0}
+/* Pha 3 — thanh CTA dính đáy: chỉ hiện SAU khi cuộn qua khỏi tường (xem
+   _wireStickyCta()). z-index dưới .rail/.sb (60) nên rail toàn màn trên mobile
+   tự phủ lên nó, không cần thêm luật ẩn riêng. Mép dưới khớp .tabbar (~64px +
+   safe-area) cùng quy ước .ws-fab/.sb/.rail ở shell.css. */
+.lg-sticky-cta{position:fixed;left:0;right:0;bottom:0;z-index:41;background:var(--white);border-top:1px solid var(--line);padding:10px 16px calc(10px + env(safe-area-inset-bottom));box-shadow:0 -4px 14px rgba(6,26,46,.12);display:none}
+.lg-sticky-cta .btn-go{width:100%;max-width:520px;margin:0 auto;display:block}
+@media(max-width:900px){.lg-sticky-cta{bottom:calc(64px + env(safe-area-inset-bottom))}}
 /* Gợi ý tool khác — chỉ hiện cho cung có mối liên hệ thật xác nhận, xem
    CUNG_TOOL_LINKS/cungRelatedHtml(). */
 .lg-related{margin-top:12px;display:flex;flex-direction:column;gap:6px}
@@ -336,6 +363,15 @@
         <div class="jump" id="lgJump"></div>
         <div class="lg-tension" id="lgTension" style="display:none"></div>
         <div class="lg-unlock" id="lgUnlock" style="display:none"></div>
+        <!-- Pha 3 (2026-09-14) — thanh CTA dính đáy: TĨNH ngay từ đầu (không
+             phải JS chèn sau) để `data-tvp-price` được auto-điền cùng lượt với
+             mọi ô giá khác của trang (tool-prices.js tự quét `document` lúc
+             DOMContentLoaded — xem ghi chú ở đầu tool-prices.js). Ẩn mặc định
+             qua CSS `.lg-sticky-cta{display:none}`; `_wireStickyCta()` bật/tắt
+             bằng `style.display` khi cuộn qua khỏi #lgUnlock. -->
+        <div class="lg-sticky-cta" id="lgStickyCta">
+          <button class="btn-go" type="button" onclick="initiateLuanGiaiChuyenSau('sticky')">✦ Mở luận giải chuyên sâu — <span data-tvp-price="laso">…</span> Lượng →</button>
+        </div>
         <div class="lg-progress" id="lgProgress" style="display:none"></div>
         <div class="lg-body" id="lgBody"></div>
         <!-- Cross-sell "Xem lá số cho người thân" (NguoiThan.mount) — đứng
@@ -634,7 +670,14 @@ function renderLuan(ls,fd,namxem,forceUnlocked){
   // này dừng ở phần 13 nên KHÔNG còn gọi LuanGiaiCore.renderInlineDaiVanLineChart
   // ở đây nữa (phần 14 đã dời sang app-chu-trinh-cuoc-doi.html).
 
-  renderJump(LABELS);
+  // Pha 3 (mục lục cá nhân, 2026-09-14) — cung yếu nhất, cùng nguồn với
+  // _tensionLine() (_worstCung dùng chung) nên câu chữ và chấm đánh dấu trên
+  // mục lục LUÔN chỉ về đúng một phần. ls.cungScores đã tính XONG ở client
+  // (deterministic, không cần AI) nên đánh dấu được NGAY LÚC render, không
+  // phải chờ bản xem trước — cùng dữ liệu score cards/buildLuanChips đã hiện
+  // công khai ở trên, không phải tín hiệu mới.
+  var _worst=_worstCung(ls);
+  renderJump(LABELS,_worst?CUNG_ORDER.indexOf(_worst.cn)+2:null);
   wirePhanAsk(document.getElementById('lgBody'));
   return {overall:overall, dvTong:dvTong};
 }
@@ -777,6 +820,18 @@ function illusBannerHtml(phan,ls,label){
   return '<figure class="lg-illus"><img src="'+r.url+'" alt="Minh hoạ '+esc(label)+'"'+lazyAttr+
     ' onerror="this.closest(\'.lg-illus\').remove()"></figure>';
 }
+// Pha 3 (2026-09-14) — ảnh cho phần ĐANG KHOÁ. KHÁC HẲN illusBannerHtml ngay
+// trên: dùng ĐÚNG MỘT banner của cả tool (hero-banners/laso-01.webp — đã tải
+// sẵn ở `.intro-photo` đầu trang, xem lại nếu cache trình duyệt), GIỐNG HỆT
+// NHAU ở MỌI phần khoá bất kể cung nào/lá số nào — không có gì để rò rỉ vì
+// ảnh không đổi theo sắc thái. Đây là điều kiện bắt buộc để không phạm đúng
+// luật "che hết luôn, đừng vừa hiện vừa che" mà buildLockedPlaceholderHtml đã
+// chốt: một ảnh CỐ ĐỊNH không mang tín hiệu gì về cung đó tốt hay xấu.
+var LOCK_ILLUS_URL='https://dciwkfdqhhddeymlisey.supabase.co/storage/v1/object/public/portraits/hero-banners/laso-01.webp';
+function lockedIllusHtml(){
+  return '<figure class="lg-illus lg-illus-lock"><img src="'+LOCK_ILLUS_URL+'" alt="" loading="lazy"'+
+    ' onerror="this.closest(\'.lg-illus\').remove()"><span class="lg-illus-tag">'+TuviPaywall.lockBadge('Ảnh minh hoạ')+'</span></figure>';
+}
 function buildPhanSection(phan,label,ls,locked){
   var bodyHtml,tag;
   if(locked){
@@ -812,8 +867,22 @@ function buildPhanSection(phan,label,ls,locked){
   // luận giải của chính cung đó còn chưa đọc được, mời sang tool khác lúc này
   // là điều hướng vào chỗ rỗng.
   var related=locked?'':cungRelatedHtml(label,ls);
-  var banner=locked?'':illusBannerHtml(phan,ls,label);
-  return sec(phan,label,tag,banner+'<div class="card">'+bodyHtml+lock+'<div class="claude-content" id="claude-content-'+phan+'" style="display:none"></div>'+related+ask('Luận sâu phần: '+label)+'</div>');
+  var banner=locked?lockedIllusHtml():illusBannerHtml(phan,ls,label);
+  // Pha 3 (2026-09-14, cắt giữa phần 2) — ô nối tiếp ẨN mặc định, chỉ
+  // `_runPhanLuanGiai(FREE_PHAN,true)` bật lên khi bản xem trước THẬT SỰ bị
+  // cắt (xem _truncateMidPart). CHỈ dựng cho đúng phần FREE_PHAN — phần 1 đọc
+  // trọn (mồi cho phần 2), phần 3+ đã có ô giữ chỗ riêng của chính nó.
+  //
+  // 🪤 KHÔNG dùng `TuviPaywall.placeholderHtml()` ở đây dù muốn cùng hình dạng
+  // vạch giả — hàm đó gắn class `.tpw-ph`, và `tests/hard-paywall.spec.ts` đếm
+  // đúng `.tpw-ph` trong `#lgBody` để khẳng định "đúng 11 phần khoá có ô giữ
+  // chỗ" (TONG_PHAN-FREE_PHAN). Ô nối tiếp này không phải một PHẦN KHOÁ — dùng
+  // chung class là đếm nhầm 12, bài kiểm đỏ vì lý do chẳng liên quan gì tới
+  // paywall. `.lg-cut-bars` dựng riêng, cùng màu/kích thước nhưng class khác.
+  var cutStub=(phan===FREE_PHAN)
+    ? '<div class="lg-cut-continue" id="lg-cut-'+phan+'" style="display:none"><div class="lg-cut-note">Phần '+phan+' còn tiếp — mở khoá để đọc trọn vẹn</div><div class="lg-cut-bars" aria-hidden="true"><i></i><i></i><i></i></div></div>'
+    : '';
+  return sec(phan,label,tag,banner+'<div class="card">'+bodyHtml+lock+'<div class="claude-content" id="claude-content-'+phan+'" style="display:none"></div>'+cutStub+related+ask('Luận sâu phần: '+label)+'</div>');
 }
 // Ô GIỮ CHỖ của một phần đang khoá (hard paywall 2026-09-06).
 //
@@ -849,18 +918,54 @@ function buildLockedPlaceholderHtml(phan){
 // 🔑 GỌI ĐÍCH DANH PHẦN ĐANG BỊ CHE: "cung yếu nhất" mà không nói nó nằm ở phần
 // mấy thì người đọc không biết mình đang thiếu cái gì cụ thể. Số phần = vị trí
 // cung đó trong CUNG_ORDER + 1 (phần 1 là tổng quan).
-function _tensionLine(ls){
-  if(!ls||!ls.cungScores) return '';
+// Tách riêng khỏi _tensionLine (Pha 3, mục lục cá nhân) — renderJump() cần
+// ĐÚNG cùng một cung "yếu nhất" để đánh dấu trên thanh mục lục, tính lại bằng
+// một vòng lặp riêng dễ lệch kết quả ở biên (điểm trùng nhau) so với câu chữ
+// đã hiện cho khách đọc. Một nguồn duy nhất thì hai chỗ luôn khớp nhau.
+function _worstCung(ls){
+  if(!ls||!ls.cungScores) return null;
   var worst=null;
   CUNG_ORDER.forEach(function(cn){
     var t=cungTotal(ls.cungScores[cn]);
     if(t==null) return;
     if(!worst||t<worst.t) worst={cn:cn,t:t};
   });
+  return worst;
+}
+function _tensionLine(ls){
+  var worst=_worstCung(ls);
   if(!worst) return '';
   var phan=CUNG_ORDER.indexOf(worst.cn)+2;
   return 'Trong 12 cung của lá số này, <b>cung '+esc(worst.cn)+'</b> chấm <b>'+worst.t+
     '/10</b> — thấp nhất. Phần '+phan+' nói vì sao, nó bung ra vào giai đoạn nào, và hoá giải bằng cách gì.';
+}
+
+// Pha 3 (cắt giữa phần 2, 2026-09-14) — tách văn bản một phần thành các ĐOẠN
+// theo đúng ranh giới câu hook [TỐT]/[CẢNH BÁO]/[TRUNG TÍNH] mà renderMarkdown()
+// đã dùng để dựng .fb-card (mỗi phần luôn 2-4 đoạn kiểu này, xem
+// NHAN_TINH_CHAT_RULE ở lib/agent/prompts.ts) — KHÔNG phân tích cú pháp riêng,
+// dùng chung một biểu thức chính quy để không lệch với renderMarkdown().
+var _HOOK_LINE_RE=/^\[(TỐT|CẢNH BÁO|TRUNG TÍNH)(?:\|[^\]]{0,40})?\]/;
+function _splitParaUnits(text){
+  var lines=text.split('\n'), units=[], cur=null;
+  lines.forEach(function(line){
+    if(_HOOK_LINE_RE.test(line.trim())){ if(cur)units.push(cur); cur=[line]; }
+    else if(cur){ cur.push(line); }
+    else{ cur=[line]; } // chữ mở đầu trước câu hook đầu tiên (hiếm, model lệch định dạng)
+  });
+  if(cur)units.push(cur);
+  return units;
+}
+// Cắt lại quãng NỬA ĐẦU — nếu văn bản chưa đủ 2 đoạn (model lệch định dạng,
+// không tách được) thì TRẢ NGUYÊN VẸN, không cắt liều vào giữa một đoạn.
+function _truncateMidPart(text){
+  var units=_splitParaUnits(text);
+  if(units.length<2) return text;
+  var keep=Math.min(units.length-1,Math.max(1,Math.ceil(units.length/2)));
+  // Mỗi đơn vị là MẢNG dòng — `.join('\n')` của mảng-các-mảng tự nối bằng dấu
+  // phẩy (Array#join mặc định của phần tử là mảng con), phải tự nối TỪNG đơn
+  // vị bằng '\n' trước rồi mới nối các đơn vị với nhau.
+  return units.slice(0,keep).map(function(u){return u.join('\n');}).join('\n\n').replace(/\s+$/,'');
 }
 
 // ══════════════════════════════════════════════════════════════════════
@@ -1052,10 +1157,36 @@ function _paintSecLocks(show){
     if(el) el.style.display=show?'flex':'none';
     if(!show) _hideCtaLg(p);
   }
+  // Pha 3 — thanh CTA dính đáy cũng là một lời mời mua, tắt cùng lúc với mọi
+  // CTA khác khi đã trả tiền (đã sinh AI, không còn gì để mời).
+  if(!show) _hideStickyCta();
 }
 function _hideCtaLg(p){
   var el=document.getElementById('lg-cta-'+p);
   if(el) el.style.display='none';
+}
+// Pha 3 (thanh CTA dính đáy, 2026-09-14) — chỉ hiện SAU khi khách cuộn QUA
+// KHỎI tường (#lgUnlock), vì lúc đó nút mở khoá chính đã trôi khỏi màn hình.
+// Cuộn ở phần 1-2 (trước khi chạm tường) hoặc còn thấy tường thì KHÔNG hiện —
+// tường đã đủ nổi bật, thêm thanh dính lúc đó chỉ là nhiễu.
+var _stickyObs=null;
+function _wireStickyCta(){
+  var bar=document.getElementById('lgStickyCta');
+  var wall=document.getElementById('lgUnlock');
+  var ws=document.getElementById('ws');
+  if(!bar||!wall||!ws||!window.IntersectionObserver) return;
+  if(_stickyObs) _stickyObs.disconnect();
+  _stickyObs=new IntersectionObserver(function(entries){
+    var e=entries[0];
+    var pastWall=!e.isIntersecting&&e.boundingClientRect.top<0;
+    bar.style.display=pastWall?'flex':'none';
+  },{root:ws,threshold:0});
+  _stickyObs.observe(wall);
+}
+function _hideStickyCta(){
+  if(_stickyObs){ _stickyObs.disconnect(); _stickyObs=null; }
+  var bar=document.getElementById('lgStickyCta');
+  if(bar) bar.style.display='none';
 }
 function wirePhanAsk(root){
   root.querySelectorAll('[data-ask]').forEach(function(el){
@@ -1063,8 +1194,14 @@ function wirePhanAsk(root){
     el.addEventListener('click',function(){ Shell.ask(el.getAttribute('data-ask')); });
   });
 }
-function renderJump(LABELS){
-  document.getElementById('lgJump').innerHTML=LABELS.slice(1,TONG_PHAN+1).map(function(l,i){return '<a data-i="'+i+'"'+(i===0?' class="on"':'')+'>'+esc(l)+'</a>'}).join('');
+// `highlightPhan` (Pha 3, mục lục cá nhân) — số phần trùng với _tensionLine(),
+// đánh dấu bằng class riêng, KHÔNG đụng cách `.on` (đang cuộn tới) hoạt động ở
+// bindJump() bên dưới — hai class độc lập, cùng lúc vẫn hợp lệ.
+function renderJump(LABELS,highlightPhan){
+  document.getElementById('lgJump').innerHTML=LABELS.slice(1,TONG_PHAN+1).map(function(l,i){
+    var cls=[]; if(i===0)cls.push('on'); if(highlightPhan&&i+1===highlightPhan)cls.push('lg-jump-tension');
+    return '<a data-i="'+i+'"'+(cls.length?' class="'+cls.join(' ')+'"':'')+'>'+esc(l)+'</a>';
+  }).join('');
   bindJump();
 }
 
@@ -1446,6 +1583,11 @@ function _renderUnlockBlock(){
   // Bấm được nay không chỉ ở banner đầu trang — cả 24 phần (luôn nằm trong
   // DOM) cũng bật khoá-mini của chính nó, để cuộn qua khỏi banner vẫn còn chỗ mở.
   _paintSecLocks(true);
+  // Pha 3 — bắt đầu theo dõi vị trí tường để bật thanh CTA dính đáy đúng lúc
+  // cuộn qua khỏi nó. Gọi ở ĐÂY (một lần, đúng lúc tường vừa dựng xong) chứ
+  // không phải trong renderLuan() — tường có thể chưa tồn tại lúc đó (khách
+  // chưa đọc xong bản xem trước).
+  _wireStickyCta();
   if(_lgLoggedIn()){
     host.innerHTML='<button class="btn-go" id="btnUnlock" onclick="initiateLuanGiaiChuyenSau(\'wall\')">✦ Luận giải chuyên sâu — <span data-tvp-price="laso">…</span> Lượng →</button>'+
       '<p>Bạn vừa đọc 2 phần đầu miễn phí. 11 phần còn lại — mỗi cung một phần luận riêng theo cổ pháp — nằm trong bản đầy đủ.</p>';
@@ -1697,9 +1839,24 @@ async function _runPhanLuanGiai(p,preview){
       if(box)box.innerHTML=preview?'':'<div class="laso-error">Lỗi khi luận giải phần '+p+'. <button class="btn" onclick="window._lgRetryPhan('+p+')">↻ Thử lại</button></div>';
       return false;
     }
+    // GIỮ NGUYÊN bản ĐẦY ĐỦ trong _luanGiaiStore — đây là thứ `_startLuanGiaiAI`
+    // đọc lại sau khi trả tiền (xem ghi chú ở đó), cắt ở đây chỉ ảnh hưởng
+    // ĐÚNG lượt HIỂN THỊ ngay bên dưới, không đụng dữ liệu đã lưu.
     _luanGiaiStore[p]=data.luanGiai;
     doneWait();
-    fillClaudeContent(box,data.luanGiai);
+    // Pha 3 (cắt giữa phần 2, 2026-09-14) — CHỈ cắt đúng lượt xem trước MIỄN
+    // PHÍ của ĐÚNG phần FREE_PHAN; phần 1 và mọi lượt sau khi đã trả tiền đọc
+    // trọn như cũ.
+    if(preview&&p===FREE_PHAN){
+      var _cut=_truncateMidPart(data.luanGiai);
+      fillClaudeContent(box,_cut);
+      if(_cut!==data.luanGiai){
+        var _stub=document.getElementById('lg-cut-'+p);
+        if(_stub) _stub.style.display='block';
+      }
+    }else{
+      fillClaudeContent(box,data.luanGiai);
+    }
     return true;
   }catch(e){
     doneWait();
