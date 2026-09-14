@@ -497,8 +497,8 @@
   // 2026-09: bỏ danh sách công cụ khỏi sidebar — đã hiện sẵn giữa trang Trang
   // chủ (springboard), lặp lại ở đây là thừa (TOOLS vẫn giữ ĐẦY ĐỦ dữ liệu cho
   // Cmd+K/icon ws-top, xem applyCatalog ở trên). Hồ sơ lên đầu thay cho
-  // `.sb-brand` cũ; "Lá số đã lưu" (nhóm theo quan hệ) và "Gần đây" tách khỏi
-  // trang Tài khoản, nạp async qua loadSidebarCharts().
+  // `.sb-brand` cũ; "Lá số đã lưu" (nhóm theo quan hệ, loadSidebarCharts()) và
+  // "Công cụ yêu thích" (top 3 tool_run, loadSidebarFavTools()) đều nạp async.
   function renderSidebar() {
     var host = document.getElementById('shell-sidebar');
     if (!host) return;
@@ -532,12 +532,12 @@
     });
     h += '</nav></div>';
 
-    // "Gần đây" — chỉ hiện khi có dữ liệu thật (xem renderSidebarRecent). Trỏ
-    // vào tab Lịch Sử (Tài khoản) — nơi liệt kê phiên/lá số/xem tuổi/xem tướng
-    // đã dùng gần đây — KHÔNG phải trang Lá số đã lưu (đó là quản lý sổ theo
-    // nhóm quan hệ, khác việc "vừa xem gì").
-    h += '<div class="grp" id="sbRecentGrp" hidden><div class="grp-h" data-act="grp">Gần đây' +
-         '<a class="grp-link" href="/app/tai-khoan#lichsu">Xem tất cả</a></div><nav class="grp-nav" id="sbRecentList"></nav></div>';
+    // "Công cụ yêu thích" — 3 công cụ user CHẠY NHIỀU LẦN NHẤT (đếm qua event
+    // tool_run, xem /api/tool-usage), không phải "vừa mở gần đây". Chỉ hiện khi
+    // có dữ liệu thật (xem paintSidebarFavTools). "Xem tất cả" trỏ về Trang chủ
+    // — nơi đã liệt kê ĐẦY ĐỦ danh mục công cụ (springboard).
+    h += '<div class="grp" id="sbFavGrp" hidden><div class="grp-h" data-act="grp">Công cụ yêu thích' +
+         '<a class="grp-link" href="/app">Xem tất cả</a></div><nav class="grp-nav" id="sbFavList"></nav></div>';
 
     h += '<div class="sb-spacer"></div>';
     h += '<div class="sb-foot-grp">' +
@@ -567,13 +567,13 @@
     // đây để đúng bất kể ai chạy trước.
     paintAuth();
     loadSidebarCharts();
+    loadSidebarFavTools();
   }
 
-  // ── SỔ LÁ SỐ TRONG SIDEBAR: đếm theo nhóm + "Gần đây" ──
+  // ── SỔ LÁ SỐ TRONG SIDEBAR: đếm theo nhóm ──
   // Dùng CHUNG /api/charts (đã có sẵn cho `user-charts.js`) — không mở thêm
   // route riêng cho sidebar. Trần 30 dòng của sổ (MAX_CHARTS, xem route) đủ
   // nhỏ để gộp tại đây, không cần server tính sẵn.
-  var SB_RECENT_SHOW = 5;
   function sidebarRelationKey(it) {
     var r = it && it.relation;
     return LASO_RELATIONS.some(function (g) { return g.key === r; }) ? r : 'khac';
@@ -590,31 +590,54 @@
   }
   function paintSidebarCharts(items) {
     var grp = document.getElementById('sbLasoGrp');
-    if (grp) {
-      var counts = { gia_dinh: 0, ban_be: 0, dong_nghiep: 0, khac: 0 };
-      items.forEach(function (it) { counts[sidebarRelationKey(it)]++; });
-      LASO_RELATIONS.forEach(function (g) {
-        var el = document.getElementById('sbLasoCount-' + g.key);
-        if (el) el.textContent = counts[g.key];
-      });
-      grp.hidden = false;
-    }
-    var recentGrp = document.getElementById('sbRecentGrp');
-    var recentList = document.getElementById('sbRecentList');
-    if (recentGrp && recentList) {
-      if (!items.length) { recentGrp.hidden = true; return; }
-      var sorted = items.slice().sort(function (a, b) {
-        return new Date(b.last_used_at).getTime() - new Date(a.last_used_at).getTime();
-      }).slice(0, SB_RECENT_SHOW);
-      recentList.innerHTML = sorted.map(function (it) {
-        var name = it.label || (it.birth && it.birth.hoten) || 'Chưa đặt tên';
-        return '<a class="rc-row" href="/app/tai-khoan#lichsu">' +
-          '<span class="rc-ava">' + esc((name[0] || '?').toUpperCase()) + '</span>' +
-          '<span class="rc-tx"><b>' + esc(name) + '</b></span>' +
-          '<span class="rc-time">' + esc(relTime(new Date(it.last_used_at).getTime())) + '</span></a>';
-      }).join('');
-      recentGrp.hidden = false;
-    }
+    if (!grp) return;
+    var counts = { gia_dinh: 0, ban_be: 0, dong_nghiep: 0, khac: 0 };
+    items.forEach(function (it) { counts[sidebarRelationKey(it)]++; });
+    LASO_RELATIONS.forEach(function (g) {
+      var el = document.getElementById('sbLasoCount-' + g.key);
+      if (el) el.textContent = counts[g.key];
+    });
+    grp.hidden = false;
+  }
+
+  // ── "CÔNG CỤ YÊU THÍCH" TRONG SIDEBAR: 3 tool user CHẠY NHIỀU LẦN NHẤT ──
+  // Nguồn /api/tool-usage — đếm event `tool_run` trong bảng `events` (cùng
+  // bảng lib/ops/tool-usage-alerts.ts dùng cho digest vận hành). `tool_id` trả
+  // về là SLUG (window.SHELL_ACTIVE) TRÙNG với `id` của mục trong TOOLS, nên
+  // khớp thẳng vào TOOLS đang có sẵn ở client để lấy label/href/icon — không
+  // cần gọi thêm tool_pricing.
+  var SB_FAV_SHOW = 3;
+  function findToolItem(id) {
+    var found = null;
+    TOOLS.forEach(function (g) { g.items.forEach(function (it) { if (it.id === id) found = it; }); });
+    return found;
+  }
+  function loadSidebarFavTools() {
+    var host = document.getElementById('shell-sidebar');
+    if (!host || !getToken()) return; // khách vãng lai — chưa có lịch sử để đếm
+    freshToken().then(function (tok) {
+      if (!tok) return;
+      return fetch('/api/tool-usage', { headers: { Authorization: 'Bearer ' + tok } })
+        .then(function (r) { return r.ok ? r.json() : null; })
+        .then(function (d) { paintSidebarFavTools((d && d.items) || []); });
+    }).catch(function () { /* chỉ là tiện ích — hỏng thì im lặng */ });
+  }
+  function paintSidebarFavTools(items) {
+    var grp = document.getElementById('sbFavGrp');
+    var list = document.getElementById('sbFavList');
+    if (!grp || !list) return;
+    // tool_id có thể trỏ vào công cụ đã bỏ khỏi danh mục (tool_pricing đổi/gỡ)
+    // — bỏ qua để không dẫn tới đường chết, KHÔNG lấy chỗ đó chèn tool khác.
+    var rows = items
+      .map(function (it) { return { count: it.count, tool: findToolItem(it.tool_id) }; })
+      .filter(function (r) { return r.tool; })
+      .slice(0, SB_FAV_SHOW);
+    if (!rows.length) { grp.hidden = true; return; }
+    list.innerHTML = rows.map(function (r) {
+      return '<a class="item" href="' + r.tool.href + '">' + (r.tool.icon ? svg(r.tool.icon) : '') +
+        ' ' + esc(r.tool.label) + ' <span class="pill">' + esc(String(r.count)) + '</span></a>';
+    }).join('');
+    grp.hidden = false;
   }
 
   // ── RENDER RAIL ──
@@ -3024,7 +3047,7 @@
       var known = _rc.balance != null && !_rc.anon;
       var txt = known ? _rc.balance.toLocaleString('vi-VN') : null;
       var sub = document.getElementById('sbSub');
-      if (sub) sub.textContent = txt != null ? (txt + ' Lượng · Nạp thêm →') : 'Xem hồ sơ →';
+      if (sub) sub.innerHTML = txt != null ? ('<b>' + txt + ' Lượng</b> · Nạp thêm →') : 'Xem hồ sơ →';
       var pill = document.getElementById('sbBalance');
       if (pill) pill.textContent = txt != null ? txt : '—';
     } catch (e) { /* ignore */ }
