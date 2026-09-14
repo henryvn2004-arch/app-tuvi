@@ -25,6 +25,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
+| 1 | 2026-09 | `2026-09.md` | 📖 Giọng luận giải Lá Số → light novel + hook mọc từ nội dung thật + cho phép diễn dịch hiện đại |
 | 1 | 2026-09 | `2026-09.md` | 🗂️ Sidebar: slogan xuống hàng · số dư Lượng đậm nét · "Gần đây" → "Công cụ yêu thích" |
 | 1 | 2026-09 | `2026-09.md` | 🖼️ `tong-quan` v2 thiếu ảnh ở 4 bậc tuổi ngoài `truong-thanh` — vẽ bù 24 ảnh |
 | 1 | 2026-09 | `2026-09.md` | 🔢 Thần Số Học 11 → 13 chỉ số — soi đối thủ, chỉ lấy 2 phần THẬT SỰ có giá trị |
