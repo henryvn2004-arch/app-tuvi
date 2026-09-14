@@ -1008,32 +1008,34 @@ function sampleToForm(){
 // chủ, (2) chưa có lá số cũ. Khách quen đã biết sản phẩm rồi, mời nữa là rác.
 // setTimeout(...,0) để chạy SAU khi cả script này gán xong biến (gọi thẳng ở
 // đây thì TONG_PHAN/CHI còn undefined).
-// 🔴 HARD PAYWALL 2026-09-06 — GỠ lượt TỰ MỞ bản mẫu (Henry chốt: "bỏ hẳn
-// auto-open, để form lên trên cùng"). ĐẢO NGƯỢC 2026-09-10 (Henry chốt lại:
-// "bỏ hard paywall") — auto-open TRỞ LẠI, đồng bộ với day-con/nguoi-khac/
-// huong-nghiep-tre/chan-dung-vo-chong/chan-dung-tien-kiep (xem
-// docs/nhat-ky/2026-09.md mục "Auto-show sample..."). Lý do hard paywall dưới
-// đây (vòng tò mò bị bản mẫu tiêu hết trước khi khách gõ ngày sinh của chính
-// mình) VẪN ĐÚNG về nguyên tắc — đây là đánh đổi có ý thức của Henry, không
-// phải quên bài học cũ. Đoạn giải thích cũ GIỮ NGUYÊN làm lý do nếu cần bật
-// lại hard paywall sau này.
+// Pha 2 (vá phễu conversion 2026-09-14) — GỠ lượt TỰ MỞ bản mẫu cho khách MỚI.
+// Lịch sử đã lật hai lần trước lượt này (2026-09-06 gỡ vì hard paywall,
+// 2026-09-10 bật lại khi bỏ hard paywall) — lần này gỡ dựa trên SỐ ĐO thật,
+// không phải một lựa chọn mô hình paywall:
+//   · laso 30 ngày: 2.349 người MỞ trang, chỉ ~147 người MỚI thật sự nhập
+//     form (147/2.349 ≈ 6%) — bản mẫu tự bung chiếm màn hình đầu, form bị đẩy
+//     xuống dưới cùng (`renderSample` set `birthPanel.style.display='none'`).
+//   · Khách Google Ads (96% mobile, đông nhất) ở lại trung vị 4 GIÂY và 50%
+//     rời trong <5 giây — không kịp cuộn qua bản mẫu để thấy form.
+// Bản mẫu tự bung là 13 phần AI ĐẦY ĐỦ của một lá số NGƯỜI KHÁC — cái tạo ra
+// ám ảnh (và ra tiền) chỉ có thể là bản của CHÍNH HỌ, nên tiêu hết vòng tò mò
+// vào bản mẫu trước khi khách gõ ngày sinh là mất đúng thứ cần giữ.
 //
-// Bản mẫu tự bung ra ngay khi vào trang là 13 phần AI ĐẦY ĐỦ của một lá số
-// người khác (~15 KB chữ). Nó được dựng hồi còn freemium, để chứng minh chất
-// lượng cho khách nguội. Dưới hard paywall nó quay ra làm hỏng đúng thứ mô hình
-// mới sống nhờ: người ta tiêu hết vòng tò mò vào một bản luận đọc chùa TRƯỚC
-// khi kịp gõ ngày sinh của chính mình — mà cái tạo ra ám ảnh (và ra tiền) chỉ
-// có thể là bản của CHÍNH HỌ.
+// Layout 2-cột (Henry 2026-09-14, PR #852) đã DỌN SẴN đường lùi: form nay
+// đứng NGAY sau thanh tiến trình, không có gì chen giữa; `#sampCta` (nút xem
+// mẫu) đã có mặt ở cột phụ, mặc định `display:none` — CHỈ VIỆC hiện nó ra
+// thay vì tự mở, không cần dựng UI mới. Escape hatch cho ai vẫn muốn xem mẫu
+// trước khi khai giờ sinh vẫn còn nguyên, chỉ đổi từ "tự động" sang "tự bấm".
 //
-// GIỮ nút bấm tay (`#sampCta`): người còn nghi "AI viết có ra gì không" vẫn cần
-// một đường xem thử tay, ngoài lượt tự mở — hiện lại khi lượt tự mở hỏng, hoặc
-// khi khách bấm "Xem lá số của tôi →" quay về form (sampleToForm).
+// GIỮ NGUYÊN hai điều kiện loại trừ cũ: `?auto=1` (khách đang tự chạy LÁ SỐ
+// THẬT của chính họ) và `getRememberedBirth()` (khách quen) — cả hai không
+// liên quan gì tới bản mẫu, không đổi.
 (function(){
   try{
     if(window.__tvmbSkipDemo) return;                                    // sắp auto-chạy lá số thật (điền từ trang chủ)
     if(window.Shell&&Shell.autoRun&&Shell.autoRun()) return;             // đến qua ?auto=1
     if(window.Shell&&Shell.getRememberedBirth&&Shell.getRememberedBirth()) return; // khách quen, đã biết sản phẩm
-    openSample(null,true);
+    var c=document.getElementById('sampCta'); if(c) c.style.display='flex';
   }catch(e){ if(window.console) console.error('sample gate:',e); }
 })();
 // Bật/tắt ĐỒNG LOẠT khoá-mini cho CẢ 24 phần (luôn nằm trong DOM ngay từ đầu,

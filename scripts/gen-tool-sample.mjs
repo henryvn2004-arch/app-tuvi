@@ -318,12 +318,11 @@ const TOOL_CONFIGS = {
     htmlPage: 'app-luan-giai.html',
     sampleJsonPath: join(ROOT, 'public/samples/luan-giai.json'),
     async injectAndRender(page, store) {
-      // 2026-09-10: hard paywall của laso đã bị đảo ngược — trang giờ TỰ MỞ
-      // bản mẫu ngay khi vào (gate cuối app-luan-giai.html gọi
-      // openSample(null,true)), nên #btnSample đã bị ẨN trước khi Playwright
-      // kịp bấm (đúng bẫy `waitForSelector`/`isVisible()` là ảnh chụp tức
-      // thời — CLAUDE.md). KHÔNG bấm nữa, chỉ còn cần đợi kết quả tự lên —
-      // vẫn bấm tay làm phòng hờ nếu auto-open bị gate chặn trong ngữ cảnh lạ.
+      // Pha 2 (2026-09-14): auto-open bị gỡ (form mới là màn hình đầu, xem
+      // gate cuối app-luan-giai.html) — #btnSample nay hiện SẴN, phải bấm
+      // tay. Giữ nhánh isVisible() thay vì bấm thẳng: đây từng là bẫy NGƯỢC
+      // (auto-open ẩn nút trước khi Playwright kịp bấm, 2026-09-10) — nhánh
+      // điều kiện này chịu được cả hai chiều nếu gate đổi lại lần nữa.
       const btn = page.locator('#btnSample');
       if (await btn.isVisible().catch(() => false)) {
         await btn.click().catch(() => {});
