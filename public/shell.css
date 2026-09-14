@@ -109,7 +109,10 @@ button.item{border:none;background:none;font:inherit;text-align:left}
 .sb-brandmini span{display:block;font-size:9px;color:var(--sb-txt-dim);white-space:normal;line-height:1.35}
 
 /* ── WORKSPACE FRAME ── */
-.ws{background:var(--paper);overflow-y:auto;display:flex;flex-direction:column;position:relative}
+/* `container-type` ở ĐÂY (khối cha), không ở khối con — `.ws` co theo bề rộng
+   CỘT giữa sidebar (246px) và rail (--rail-w), KHÔNG theo viewport (xem bẫy
+   trong CLAUDE.md). `@container ws (...)` bên dưới hỏi đúng bề rộng cột này. */
+.ws{background:var(--paper);overflow-y:auto;display:flex;flex-direction:column;position:relative;container:ws/inline-size}
 .ws-top{position:sticky;top:0;z-index:5;background:var(--paper);border-bottom:1px solid var(--line);padding:12px 22px;display:flex;align-items:center;gap:14px}
 /* Icon cố định cạnh tên tool trên `.ws-top` — xem `mountToolIcon()` trong
    shell.js. Icon (không phải ảnh minh hoạ .intro-avatar): ở cỡ 32-40px một
@@ -303,6 +306,15 @@ button.item{border:none;background:none;font:inherit;text-align:left}
 .intro-card .intro-d{font-size:13px;color:var(--text-mid);line-height:1.65}
 .intro-card .intro-d b{color:var(--text)}
 @media(max-width:480px){.intro-card .intro-avatar{width:72px;height:72px;border-radius:12px}}
+
+/* Banner thủy mặc khổ ngang (`scripts/gen-hero-banners.mjs`, dùng CHUNG theo
+   NHÓM cổ pháp — xem lib/media/hero-banner-prompt.ts), thay `.intro-avatar`
+   ở những trang ĐÃ gắn ảnh này (chưa áp dụng hết 51 tool — mỗi trang tự khai
+   `.intro-photo` khi đã chọn xong ảnh nhóm). Nguồn 1536×1024 (khổ RỘNG NHẤT
+   gpt-image-2 hỗ trợ) → hiển thị hẹp/thấp hơn nên object-position:right giữ
+   đúng nhân vật (luôn vẽ lệch phải, có khoảng trống bên trái) trong khung. */
+.intro-card .intro-photo{width:240px;height:160px;border-radius:10px;flex-shrink:0;object-fit:cover;object-position:right center;background:var(--navy)}
+@media(max-width:640px){.intro-card .intro-photo{display:none}}
 
 /* ── HÀNG GỢI Ý CÂU HỎI (chip cố định trên ô nhập rail, cuộn ngang) ── */
 .rail-sugg{padding:8px 13px 0}
@@ -787,6 +799,73 @@ font-family:inherit}
 .samp-cta .sc-txt b{font-size:13px;color:var(--text);font-weight:600}
 .samp-cta .sc-txt span{font-size:11.5px;color:var(--text-lt)}
 .samp-cta button{background:none;border:1px solid var(--gold-soft);color:var(--gold-soft);border-radius:20px;padding:8px 15px;font-size:12.5px;font-weight:600;cursor:pointer;font-family:inherit;flex:0 0 auto;white-space:nowrap}
+/* ── Khối "nhập liệu" (`#introHost` + `#shellRecent` + `.samp-cta` +
+   `.form-card`, đứng liền nhau trước kết quả) — bọc trong `.ws-intake` để
+   dùng 2 CỘT khi `.ws` đủ rộng, thay vì một cột 640px canh trái bỏ phí phần
+   còn lại của workspace (đo: rail đóng hoặc màn lớn thừa >600px trắng).
+   MẶC ĐỊNH (hẹp, rail mở — trường hợp phổ biến nhất) KHÔNG đổi gì: các con
+   vẫn xếp dọc đúng thứ tự trong HTML như trước giờ. Chỉ đủ rộng mới chuyển
+   `#shellRecent` sang cột phụ bên phải. Không dùng `@media` vì bề rộng
+   `.ws` không theo viewport (xem bẫy ở trên `.ws{container:...}`).
+   🪤 Ngưỡng PHẢI cách xa breakpoint mobile `@media(max-width:900px)` phía
+   trên (`.shell{grid-template-columns:1fr}`): đúng lúc sidebar+rail gập lại
+   thành drawer, `.ws` NHẢY LÊN gần bằng viewport (900px) — đo được ở 900px
+   VỪA khớp `.ws` VỪA khớp ngưỡng cột, ra 2 cột đè vỡ trên màn hình đúng bằng
+   điện thoại ngang/tablet, tràn ra ngoài rìa. 640(main)+24(gap)+320(side)+
+   44(padding .ws-body) = 1028px là mức TỐI THIỂU không vỡ; 1080 chừa dư và
+   nằm hẳn NGOÀI vùng viewport ≤900 nên không bao giờ trùng nhau. */
+.ws-intake{max-width:1040px}
+@container ws (min-width:1080px){
+  .ws-intake{
+    display:grid;
+    grid-template-columns:minmax(0,640px) minmax(240px,320px);
+    /* Henry 2026-09-14 (vòng 4): cột chính (`.ws-main-col`: steps+form) và cột
+       phụ (`.ws-side-col`: promo+samp+phiên gần đây) mỗi bên là MỘT ô lưới
+       (KHÔNG khai grid-area riêng cho từng con bên trong) — con của chúng
+       xếp dọc bằng flow thường + margin sẵn có. Lượt trước gán grid-area cho
+       từng con (steps/form/promo/samp/side riêng) làm hàng "steps/promo"
+       phải cao bằng phần tử cao nhất giữa 2 cột ⇒ `.ws-promo` (cao) đẩy
+       `.form-card` xuống, không còn "sát lên trên" như Henry muốn — bọc theo
+       cột thì mỗi cột tự do cao thấp độc lập, không kéo cột kia theo. */
+    grid-template-areas:"hero hero" "main side";
+    column-gap:24px;row-gap:16px;
+    align-items:start;
+  }
+  .ws-intake>#introHost{grid-area:hero}
+  .ws-intake>#introHost .intro-card{max-width:none}
+  .ws-intake>.ws-main-col{grid-area:main;min-width:0}
+  .ws-intake>.ws-side-col{grid-area:side;min-width:0}
+}
+/* ── Thanh tiến trình 4 bước (Nhập thông tin → Xem trước lá số → Thanh toán
+   → Nhận kết quả) — CHỈ hiển thị trạng thái, KHÔNG điều hướng (không click
+   được: nhảy cóc qua bước 3/4 mà chưa trả tiền là vô nghĩa). Mỗi trang tự
+   gọi `wsStepsSet(el,n)` (định nghĩa cục bộ, vì số bước/tên bước khác nhau
+   theo từng tool) tại đúng thời điểm chuyển trạng thái đã có sẵn trong code
+   (doLuan/showForm/paywall/kết quả) — không thêm trạng thái mới. */
+.ws-steps{display:flex;gap:2px;margin-bottom:16px}
+.ws-steps .wss-step{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;text-align:center;gap:6px;position:relative}
+.ws-steps .wss-step:not(:first-child)::before{content:'';position:absolute;top:13px;right:50%;width:100%;height:1px;background:var(--line-2)}
+.ws-steps .wss-step.done:not(:first-child)::before{background:var(--gold-soft)}
+.ws-steps .wss-n{width:26px;height:26px;border-radius:50%;background:var(--white);border:1px solid var(--line-2);color:var(--text-lt);font-size:11.5px;font-weight:700;font-family:var(--serif);display:flex;align-items:center;justify-content:center;position:relative;z-index:1}
+.ws-steps .wss-step.done .wss-n{background:var(--gold);border-color:var(--gold);color:var(--navy)}
+.ws-steps .wss-step.active .wss-n{background:var(--navy);border-color:var(--navy);color:var(--gold)}
+.ws-steps .wss-l{font-size:10.5px;color:var(--text-lt);line-height:1.3;max-width:96px}
+.ws-steps .wss-step.active .wss-l{color:var(--text);font-weight:600}
+.ws-steps .wss-step.done .wss-l{color:var(--text-mid)}
+@media(max-width:480px){.ws-steps .wss-l{font-size:9.5px;max-width:64px}}
+/* ── Banner cột phụ = thẻ "Giới thiệu" (Henry 2026-09-14, mẫu chụp) — thẻ
+   sáng như `.intro-card`/`.form-card`, KHÔNG dùng hình/SVG minh hoạ (cố ý —
+   Henry: "ko cần hình ảnh gì cả"). Icon vuông navy/gold dùng lại đúng mẫu
+   `.fc-ic`/`.cb-ic` đã có, không bịa màu tím như ảnh mẫu để giữ nhất quán
+   bảng màu thương hiệu. */
+.ws-promo{background:var(--white);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin-top:16px;box-shadow:var(--shadow)}
+.ws-promo .wsp-eyebrow{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.ws-promo .wsp-ic{width:26px;height:26px;border-radius:7px;background:var(--navy);color:var(--gold);display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+.ws-promo .wsp-ic svg{width:14px;height:14px}
+.ws-promo .wsp-eyebrow span:last-child{font-size:10.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-lt)}
+.ws-promo .wsp-title{font-family:var(--serif);font-size:15px;font-weight:600;color:var(--text);margin-bottom:8px}
+.ws-promo .wsp-desc{font-size:13px;color:var(--text-mid);line-height:1.65;margin-bottom:14px}
+.ws-promo .wsp-quote{margin:0;border-left:3px solid var(--gold-soft);padding-left:12px;font-family:var(--serif);font-style:italic;font-size:13px;color:var(--text-mid);line-height:1.6}
 /* Thanh DÍNH "Đây là BẢN MẪU" — hiện phía trên kết quả khi bản mẫu đang tự mở
    (hoặc mở tay). Chuyển từ app-luan-giai.html (nơi định nghĩa gốc) sang đây
    (2026-09) để dùng chung — nhiều trang giờ auto-show sample lúc vào trang. */
