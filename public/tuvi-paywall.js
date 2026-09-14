@@ -882,8 +882,17 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
   function _qrEscHandler(e) { if (e.key === 'Escape') _closeQr(); }
   function _qrVisHandler() { if (document.visibilityState === 'visible' && _qrOrderCode) _qrPoll(false); }
 
+  // Chỉ bắn `qr_close` khi ĐANG còn `_qrOrderCode` (đơn còn treo, chưa ai xác
+  // nhận `paid`) — nhánh thành công trong `_qrPoll` đã tự xoá `_qrOrderCode`
+  // (= null) TRƯỚC khi gọi `_closeQr()` nên tự loại trừ, không cần tham số
+  // riêng phân biệt. Gộp cả lượt MUA THÀNH CÔNG vào `qr_close` thì bậc này
+  // đọc thành "bỏ dở" oan — đúng cái D1 cần tránh.
   function _closeQr() {
-    clearInterval(_qrTimer); _qrTimer = null; _qrOrderCode = null;
+    clearInterval(_qrTimer); _qrTimer = null;
+    if (_qrOrderCode) {
+      try { if (window.Track) window.Track.event('qr_close', { tool_id: (_cfg && _cfg.product) || '' }); } catch (e) { /* đo hỏng không được chặn đóng modal */ }
+    }
+    _qrOrderCode = null;
     const el = document.getElementById('tpw-qr-backdrop');
     if (el) el.classList.remove('show');
     document.removeEventListener('keydown', _qrEscHandler);
@@ -975,7 +984,7 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
     if (_bdlLoading) return _bdlLoading;
     _bdlLoading = new Promise((resolve) => {
       const s = document.createElement('script');
-      s.src = '/tools-shared/bank-deeplink.js?v=1';
+      s.src = '/tools-shared/bank-deeplink.js?v=2';
       s.onload = () => resolve();
       // Fail-open: tải lỗi thì đơn giản không hiện khối deep link, QR vẫn dùng được.
       s.onerror = () => resolve();
@@ -1016,6 +1025,11 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
       document.getElementById('tpw-qr-credits').textContent = d.credits + ' Lượng';
       document.getElementById('tpw-qr-amount').textContent =
         new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(d.amountVND);
+      // Pha 0 — modal đã hiện số tiền THẬT, tách khỏi `unlock_click` (bấm nút
+      // mở khoá) vì giữa hai bậc đó còn phụ thuộc `_qrAmountFor` đọc giá quy
+      // đổi thành công; thiếu bậc này thì không phân biệt được "bấm mở nhưng
+      // rơi về tường /topup.html cũ" khỏi "thấy QR rồi mới bỏ".
+      try { if (window.Track) window.Track.event('qr_shown', { tool_id: (_cfg && _cfg.product) || '', meta: { amount_vnd: d.amountVND, credits: d.credits } }); } catch (e) { /* đo hỏng không được chặn hiện QR */ }
 
       // Nội dung CK đến TỪ SERVER — cùng luật đã vá ở topup.html (một chuỗi
       // cho cả hai phía, không tự dựng lại ở client).
@@ -1032,7 +1046,23 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
       img.src = qrUrl;
       qrBox.appendChild(img);
       _loadBankDeepLink().then(() => {
-        if (window.BankDeepLink) window.BankDeepLink.render(document.getElementById('tpw-qr-apps'), d, memo);
+        const appsEl = document.getElementById('tpw-qr-apps');
+        if (window.BankDeepLink) window.BankDeepLink.render(appsEl, d, memo);
+        // `bdl:click` = module dùng chung (`bank-deeplink.js`) tự bắn khi
+        // khách bấm mở app ngân hàng (đã copy sẵn số TK trước khi điều
+        // hướng) — nghe ở ĐÂY vì chỉ trang tool mới có `_cfg.product` để gắn
+        // vào event, module kia không biết tool nào đang gọi nó.
+        // 🪤 `#tpw-qr-apps` là node TĨNH (`_qrEl()` cache lại, không dựng
+        // mới mỗi lần mở QR) — thiếu cờ `bdlBound` thì mở QR lần hai trong
+        // CÙNG phiên (ví dụ vừa đóng vừa mở lại để thử số tiền khác) gắn
+        // thêm một listener chồng lên, bắn `qr_deeplink_click` HAI LẦN cho
+        // một cú bấm.
+        if (appsEl && !appsEl.dataset.bdlBound) {
+          appsEl.dataset.bdlBound = '1';
+          appsEl.addEventListener('bdl:click', () => {
+            try { if (window.Track) window.Track.event('qr_deeplink_click', { tool_id: (_cfg && _cfg.product) || '' }); } catch (e) { /* đo hỏng không được chặn mở app */ }
+          });
+        }
       });
 
       document.getElementById('tpw-qr-info').innerHTML =

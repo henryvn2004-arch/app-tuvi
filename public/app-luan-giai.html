@@ -377,7 +377,7 @@ window.SHELL_INTRO={key:'luan-giai'};</script>
 <script src="/tools-shared/cung-ngay-sinh.js?v=2"></script>
 <script src="/tools-shared/nguoi-than.js?v=1"></script>
 <script src="/auth.js?v=2"></script>
-<script src="/tuvi-paywall.js?v=33"></script>
+<script src="/tuvi-paywall.js?v=34"></script>
 <script src="/tools-shared/hook-charts.js?v=2"></script>
 <script src="/tools-shared/fbcard-topic.js?v=2"></script>
 <script src="/tools-shared/hook-facts.js?v=1"></script>
@@ -629,7 +629,7 @@ function renderLuan(ls,fd,namxem,forceUnlocked){
   // gọi này VÔ HẠI (no-op) phòng khi có lượt roll-back, cùng quy ước
   // app-chu-trinh-cuoc-doi.html/app-van-han-nam.html.
   TuviPaywall.wireSectionLocks(document.getElementById('lgBody'), function(part){
-    return part!=null ? _unlockOnePart(part) : initiateLuanGiaiChuyenSau();
+    return part!=null ? _unlockOnePart(part) : initiateLuanGiaiChuyenSau('section');
   });
   // Canvas #chart-daivan-overview là của phần 14 (Tổng quan đại vận) — tool
   // này dừng ở phần 13 nên KHÔNG còn gọi LuanGiaiCore.renderInlineDaiVanLineChart
@@ -676,7 +676,7 @@ function mountHook(ls){
       gate:{
         tieuDe:'Bản đầy đủ trả lời làm gì với nó',
         items:['11 cung còn lại — mỗi cung một phần luận riêng, viết theo cổ pháp','Cách cục, tứ hoá và quy tắc của từng cung'],
-        onUnlock:function(){ return initiateLuanGiaiChuyenSau(); }
+        onUnlock:function(){ return initiateLuanGiaiChuyenSau('hook'); }
       }
     });
   });
@@ -807,7 +807,7 @@ function buildPhanSection(phan,label,ls,locked){
   // lên `_paintSecLocks(false)` vừa ẩn nó — khách trả tiền xong vẫn thấy nút
   // "Luận giải chuyên sâu — X Lượng" đứng nguyên, tưởng chưa bấm ăn.
   var lock=(phan>FREE_PHAN&&locked)
-    ? '<div class="lg-cta-repeat" id="lg-cta-'+phan+'"><button class="btn-go" type="button" onclick="initiateLuanGiaiChuyenSau()">✦ Mở luận giải chuyên sâu — <span data-tvp-price="laso">…</span> Lượng →</button></div>'
+    ? '<div class="lg-cta-repeat" id="lg-cta-'+phan+'"><button class="btn-go" type="button" onclick="initiateLuanGiaiChuyenSau(\'section\','+phan+')">✦ Mở luận giải chuyên sâu — <span data-tvp-price="laso">…</span> Lượng →</button></div>'
     : '';
   // Gợi ý tool khác CHỈ hiện khi phần này KHÔNG bị khoá — chưa trả tiền thì
   // luận giải của chính cung đó còn chưa đọc được, mời sang tool khác lúc này
@@ -1409,6 +1409,14 @@ async function _runFreePreview(){
       return;   // hỏng phần 1 thì đừng đốt tiếp tiền cho phần 2
     }
   }
+  // Pha 0 (vá phễu 2026-09) — TRƯỚC đợt này chỉ `lockPreview` (tuvi-paywall.js,
+  // khách CHƯA đăng nhập) bắn `preview_shown{from:'wall'}`; khách ĐÃ đăng
+  // nhập đi qua nhánh `_lgLoggedIn()` của `_renderUnlockBlock` — KHÔNG đi qua
+  // `lockPreview` — nên chưa từng có một `preview_shown` nào cho họ. Bắn
+  // đúng ở đây (cả FREE_PHAN phần đã đọc THẬT, không phải lúc bấm nút) vì
+  // đây là bậc D1 hỏi: "thấy bản xem trước → bấm mở", không có bậc THẤY thì
+  // không tính được tỉ lệ đó cho nhóm đã đăng nhập.
+  try{ if(window.Track) Track.event('preview_shown',{tool_id:'laso',meta:{from:'free'}}); }catch(e){ /* đo hỏng không được chặn hiện tension */ }
   _paintTension();
 }
 
@@ -1440,7 +1448,7 @@ function _renderUnlockBlock(){
   // DOM) cũng bật khoá-mini của chính nó, để cuộn qua khỏi banner vẫn còn chỗ mở.
   _paintSecLocks(true);
   if(_lgLoggedIn()){
-    host.innerHTML='<button class="btn-go" id="btnUnlock" onclick="initiateLuanGiaiChuyenSau()">✦ Luận giải chuyên sâu — <span data-tvp-price="laso">…</span> Lượng →</button>'+
+    host.innerHTML='<button class="btn-go" id="btnUnlock" onclick="initiateLuanGiaiChuyenSau(\'wall\')">✦ Luận giải chuyên sâu — <span data-tvp-price="laso">…</span> Lượng →</button>'+
       '<p>Bạn vừa đọc 2 phần đầu miễn phí. 11 phần còn lại — mỗi cung một phần luận riêng theo cổ pháp — nằm trong bản đầy đủ.</p>';
     TuviPaywall.fillPriceSlots(host);
     // Vừa quay về từ lượt nạp Lượng thành công (đã đăng nhập nên KHÔNG còn đi
@@ -1553,7 +1561,20 @@ async function _unlockOnePart(phan){
   }catch(e){ alert('Có lỗi khi mở phần này, thử lại.'); }
 }
 
-async function initiateLuanGiaiChuyenSau(){
+// Pha 0 (vá phễu 2026-09) — nguồn DUY NHẤT bắn `unlock_click` cho khách ĐÃ
+// ĐĂNG NHẬP: cả nút tường chính (`btnUnlock`, `_renderUnlockBlock`) lẫn CTA
+// lặp lại mỗi phần khoá (`lg-cta-{phan}`, `buildPhanSection`) đều gọi thẳng
+// hàm này, trước đây KHÔNG bắn gì — đo được `unlock_click`=0 trên laso suốt
+// lịch sử `events` dù `credit_transactions` đã bán hàng thật (xem :524).
+// KHÔNG lẫn với khách CHƯA đăng nhập: nhánh đó đi qua `lockPreview`
+// (`tuvi-paywall.js`), tự bắn `unlock_click` trên chính nút của nó và KHÔNG
+// gọi hàm này (onUnlock trỏ thẳng `_startLuanGiaiAI`) — thêm ở đây không đếm
+// trùng đường đó.
+function initiateLuanGiaiChuyenSau(from,part){
+  try{ if(window.Track) Track.event('unlock_click',{tool_id:'laso',meta:{from:from||'wall',part:part}}); }catch(e){ /* đo hỏng không được chặn mở khoá */ }
+  return _initiateLuanGiaiChuyenSauGo();
+}
+async function _initiateLuanGiaiChuyenSauGo(){
   await TuviPaywall.requireCredits(_pendingSlug, async function(){ await _startLuanGiaiAI(); });
 }
 async function _startLuanGiaiAI(){

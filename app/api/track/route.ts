@@ -73,6 +73,17 @@ const ALLOWED = new Set([
   //                  meta.max_pct (cuộn xa nhất). Chỉ chốt ở lượt ẩn tab ĐẦU
   //                  TIÊN — đừng đọc `sec` thành tổng thời gian cả phiên.
   'scroll_depth', 'page_dwell',
+  // Pha 0 (vá phễu 2026-09) — bốn bậc của MODAL QR tại chỗ (`_openBankQr`,
+  // tuvi-paywall.js). Trước đợt này chỉ có `unlock_click` (bấm mở khoá) rồi
+  // im lặng tới `topup_start`/lượt cộng tiền — không tách được "bỏ vì giá"
+  // (thấy QR rồi đóng, không thao tác gì) khỏi "bỏ vì thao tác" (đã bấm deep
+  // link/chép số nhưng KHÔNG quay lại chuyển khoản). Bốn cột tách theo đúng
+  // bốn hành vi khác nhau, đừng gộp — gộp lại thì mất luôn thứ D1 hỏi.
+  //   qr_shown          = modal QR vừa dựng xong, hiện được số tiền
+  //   qr_deeplink_click = bấm nút mở app ngân hàng (mobile)
+  //   qr_copy           = bấm chép số tài khoản HOẶC số tiền
+  //   qr_close          = đóng modal mà CHƯA thấy `paid:true` (bỏ dở)
+  'qr_shown', 'qr_deeplink_click', 'qr_copy', 'qr_close',
 ]);
 
 // Coi là "vừa đăng ký" nếu tài khoản tạo trong 15 phút gần đây (né tính nhầm
