@@ -21,6 +21,7 @@ import { execFileSync } from 'child_process';
 import { tmpdir } from 'os';
 import { join } from 'path';
 import { createRequire } from 'module';
+import sharp from 'sharp';
 
 const require = createRequire(import.meta.url);
 const ROOT = new URL('..', import.meta.url).pathname;
@@ -171,7 +172,16 @@ for (const p of prompts) {
     const j = await r.json();
     const b64 = j?.data?.[0]?.b64_json;
     if (!b64) throw new Error('API không trả ảnh');
-    writeFileSync(dich, Buffer.from(b64, 'base64'));
+    // API trả PNG thô ~3MB/bức (đo thật trên banner đang chạy prod) — nén lại
+    // CÙNG định dạng .png (giữ nguyên hợp đồng đuôi file với illus-match.js,
+    // KHÔNG đổi sang .webp: đổi đuôi là gãy URL của ~150 ảnh đã upload tay,
+    // cần một đợt di dời riêng có key Supabase Storage mới làm được) — đo thật
+    // 3,00MB → 0,99MB (còn ~1/3), ảnh watercolor phẳng màu nên không mất chi
+    // tiết nhìn được bằng mắt ở compressionLevel tối đa.
+    const pngBuf = await sharp(Buffer.from(b64, 'base64'))
+      .png({ compressionLevel: 9, effort: 10 })
+      .toBuffer();
+    writeFileSync(dich, pngBuf);
     const u = j?.usage || {};
     const outTok = u.output_tokens || 0;
     const textTok = u.input_tokens_details?.text_tokens || 0;
@@ -180,7 +190,7 @@ for (const p of prompts) {
     const vnd = Math.round(((textTok * 5 + outTok * 30) / 1e6) * 25000);
     daVe++;
     console.log(
-      `✅ ${p.id}  ·  ${((Date.now() - t0) / 1000).toFixed(1)}s  ·  ${outTok} token ra  ·  ~${vnd.toLocaleString('vi-VN')}đ`
+      `✅ ${p.id}  ·  ${((Date.now() - t0) / 1000).toFixed(1)}s  ·  ${(pngBuf.length / 1024).toFixed(0)}KB  ·  ${outTok} token ra  ·  ~${vnd.toLocaleString('vi-VN')}đ`
     );
   } catch (e) {
     loi++;
