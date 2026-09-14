@@ -9,7 +9,7 @@
 <link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/fonts/noto-serif.css?v=1">
-<link rel="stylesheet" href="/shell.css?v=44">
+<link rel="stylesheet" href="/shell.css?v=45">
 <script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh@0.4/face_mesh.js" crossorigin="anonymous"></script>
 <style>
 .kt-card{background:var(--white);border:1px solid var(--line);border-radius:14px;padding:20px 22px;box-shadow:var(--shadow);max-width:760px;margin-bottom:16px}
@@ -98,14 +98,14 @@
            điền `#introSrc`. Vì thế `SHELL_INTRO` bên dưới CHỈ khai `key` — chữ nằm
            đúng ở đây, một bản duy nhất, không có bản chép để trôi. -->
       <div id="introHost"><div class="intro-card">
+        <img class="intro-avatar" src="/tool-avatars/kieu-toc-phan-tich.webp" alt="" style="display:none" onerror="this.remove()">
+        <img class="intro-photo" src="https://dciwkfdqhhddeymlisey.supabase.co/storage/v1/object/public/portraits/hero-banners/phong-cach-ai-01.png" alt="" onerror="this.remove()">
         <div class="intro-body">
-          <img class="intro-avatar" src="/tool-avatars/kieu-toc-phan-tich.webp" alt="" style="display:none" onerror="this.remove()">
           <div class="intro-text">
             <div class="intro-t">Kiểu Tóc &amp; Kính Mắt Hợp Tướng Mặt</div>
             <div class="intro-d">Kiểu Tóc & Kính Mắt Hợp Tướng Mặt chấm khuôn mặt hợp kiểu nào rồi ghép thử ngay lên ảnh thật. Tốn tiền làm tóc, mua kính mà vẫn thấy không tự tin hơn, thậm chí còn thấy tệ hơn trước? Tải ảnh chân dung, nhận gợi ý và bản ghép thử trước khi ra tiệm.</div>
             <div id="introSrc" style="min-height:36.8px;margin-top:9px"></div>
           </div>
-          <img class="intro-photo" src="https://dciwkfdqhhddeymlisey.supabase.co/storage/v1/object/public/portraits/hero-banners/phong-cach-ai-01.png" alt="" onerror="this.remove()">
         </div>
       </div></div>
       <div id="shellRecent"></div>

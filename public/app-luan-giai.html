@@ -9,7 +9,7 @@
 <link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/fonts/noto-serif.css?v=1">
-<link rel="stylesheet" href="/shell.css?v=44">
+<link rel="stylesheet" href="/shell.css?v=45">
 <link rel="stylesheet" href="/laso-chart.css?v=3">
 <style>
 /* `.form-card/.frow/.fg/.btn-go/.hero-pills/.fc-head/.cost-box/.samp-cta` giờ
@@ -223,6 +223,12 @@
              CHUNG với 34 trang khác chưa gắn ảnh nhóm) — ẩn đi vì `.intro-photo`
              bên dưới đã thay thế vai trò hiển thị, không xoá hẳn khỏi HTML. -->
         <img class="intro-avatar" src="/tool-avatars/laso.webp" alt="" style="display:none" onerror="this.remove()">
+        <!-- Banner thủy mặc nhóm "Tử Vi Đẩu Số" (scripts/gen-hero-banners.mjs) LÀ
+             nền của cả box — không phải thumbnail nhỏ cạnh chữ (Henry 2026-09-14,
+             vòng 5: "cái hình chính là cái banner luôn, ghi chữ đè lên bên trái").
+             `::after` bên dưới (shell.css) phủ lớp gradient để chữ đọc được dù
+             ảnh nhóm nào cũng vậy — không cần biết trước tông màu ảnh. -->
+        <img class="intro-photo" src="https://dciwkfdqhhddeymlisey.supabase.co/storage/v1/object/public/portraits/hero-banners/laso-01.png" alt="" onerror="this.remove()">
         <div class="intro-body">
           <div class="intro-text">
             <div class="intro-t">Luận giải Tử Vi</div>
@@ -236,12 +242,6 @@
                  Đo: rỗng 45,78px · đã điền 45,78px. -->
             <div id="introSrc" style="min-height:36.8px;margin-top:9px"></div>
           </div>
-          <!-- Banner thủy mặc nhóm "Tử Vi Đẩu Số" (scripts/gen-hero-banners.mjs),
-               thay cho .intro-avatar cũ (icon vuông) — pilot trang này trước khi
-               áp dụng hàng loạt cho 51 tool. Nguồn lưu vĩnh viễn ở Supabase
-               Storage (cùng cách illus/portraits đang phục vụ), không cần chép
-               vào public/. -->
-          <img class="intro-photo" src="https://dciwkfdqhhddeymlisey.supabase.co/storage/v1/object/public/portraits/hero-banners/laso-01.png" alt="" onerror="this.remove()">
         </div>
         <!-- 3 pill tính năng (Henry 2026-09-09, mẫu iPhone) — chỉ trang trí,
              không mang dữ liệu động nên dựng tĩnh, không cần JS. -->

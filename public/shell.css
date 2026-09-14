@@ -293,28 +293,44 @@ button.item{border:none;background:none;font:inherit;text-align:left}
 .tabbar .tab-home.active span{color:var(--gold)}
 
 /* ── EMPTY-STATE INTRO (danh thiếp CỐ ĐỊNH của tool — KHÔNG tự ẩn vĩnh viễn,
-   không có nút đóng) ── Bố cục: avatar [trái] — tên tool + mô tả [phải].
-   `.intro-body` là hàng flex; avatar tự nạp từ `/tool-avatars/<key>.webp`
-   (xem `Shell.introOnce` trong shell.js), lỗi 404 (chưa sinh ảnh cho tool đó)
-   thì tự ẩn qua onerror — không để lại ô vỡ ảnh. Avatar cỡ lớn (96/72px) để
-   thấy rõ chi tiết nét vẽ — ảnh gốc 1024×1024 nên phóng cỡ này không vỡ nét. */
-.intro-card{position:relative;background:linear-gradient(180deg,var(--gold-lt),var(--white));border:1px solid var(--gold-soft);border-radius:12px;padding:16px;box-shadow:var(--shadow);margin-bottom:16px;max-width:720px}
-.intro-card .intro-body{display:flex;align-items:flex-start;gap:16px}
-.intro-card .intro-avatar{width:96px;height:96px;border-radius:14px;flex-shrink:0;object-fit:cover;background:var(--navy)}
-.intro-card .intro-text{flex:1;min-width:0}
-.intro-card .intro-t{font-family:var(--serif);font-size:15px;font-weight:600;color:var(--text);margin-bottom:5px}
+   không có nút đóng). Box LÀ banner: `.intro-photo` phủ kín làm nền (position:
+   absolute, xem dưới), `.intro-body`/`.hero-pills` đè lên trên bằng z-index.
+   `overflow:hidden` bo tròn góc ảnh theo `border-radius` của box. `min-height`
+   đặt TRƯỚC khi ảnh tải xong (ảnh không góp vào chiều cao vì đã absolute) nên
+   không có CLS — chữ tĩnh trong HTML quyết định layout ngay từ khung đầu.
+   `.intro-avatar` (icon vuông 96/72px, `/tool-avatars/<key>.webp`) là DI SẢN
+   trước khi có banner nhóm — `check-intro-card.mjs` vẫn bắt buộc thẻ này khớp
+   `key` nên giữ trong HTML, ẩn hẳn bằng CSS bên dưới chứ không xoá. Toàn bộ
+   49 trang box tĩnh giờ đều đã gắn `.intro-photo` (2026-09-14, vòng 5). */
+.intro-card{position:relative;overflow:hidden;background:linear-gradient(180deg,var(--gold-lt),var(--white));border:1px solid var(--gold-soft);border-radius:12px;box-shadow:var(--shadow);margin-bottom:16px;min-height:210px;display:flex;flex-direction:column;justify-content:flex-end}
+.intro-card .intro-avatar{display:none}
+.intro-card .intro-text{max-width:100%}
+.intro-card .intro-t{font-family:var(--serif);font-size:19px;font-weight:700;color:var(--text);margin-bottom:6px}
 .intro-card .intro-d{font-size:13px;color:var(--text-mid);line-height:1.65}
 .intro-card .intro-d b{color:var(--text)}
-@media(max-width:480px){.intro-card .intro-avatar{width:72px;height:72px;border-radius:12px}}
 
 /* Banner thủy mặc khổ ngang (`scripts/gen-hero-banners.mjs`, dùng CHUNG theo
-   NHÓM cổ pháp — xem lib/media/hero-banner-prompt.ts), thay `.intro-avatar`
-   ở những trang ĐÃ gắn ảnh này (chưa áp dụng hết 51 tool — mỗi trang tự khai
-   `.intro-photo` khi đã chọn xong ảnh nhóm). Nguồn 1536×1024 (khổ RỘNG NHẤT
-   gpt-image-2 hỗ trợ) → hiển thị hẹp/thấp hơn nên object-position:right giữ
-   đúng nhân vật (luôn vẽ lệch phải, có khoảng trống bên trái) trong khung. */
-.intro-card .intro-photo{width:240px;height:160px;border-radius:10px;flex-shrink:0;object-fit:cover;object-position:right center;background:var(--navy)}
-@media(max-width:640px){.intro-card .intro-photo{display:none}}
+   NHÓM cổ pháp — xem lib/media/hero-banner-prompt.ts) — LÀ nền của cả
+   `.intro-card`, không phải thumbnail cạnh chữ (Henry 2026-09-14, vòng 5).
+   Nguồn 1536×1024 (khổ RỘNG NHẤT gpt-image-2 hỗ trợ) → object-position:right
+   giữ đúng nhân vật (luôn vẽ lệch phải, có khoảng trống bên trái cho chữ)
+   dù khung hiển thị tỉ lệ khác. `z-index:0` để `::after` (gradient) + chữ
+   đè lên trên. */
+.intro-card .intro-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:right center;z-index:0;background:var(--navy)}
+/* Gradient PHỦ từ trái (đục, cùng tông `--paper`) sang phải (trong suốt) —
+   đảm bảo chữ đọc được trên MỌI ảnh nhóm mà không cần biết trước tông màu.
+   Dùng % thay vì px nên tỉ lệ giữ nguyên ở mọi bề rộng, kể cả mobile. Đứng
+   sau `.intro-photo` trong DOM (thẻ ảnh) nên `::after` của `.intro-card` vẽ
+   trên nó; `.intro-body`/`.hero-pills` có z-index cao hơn nên vẫn trên cùng. */
+.intro-card::after{content:'';position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(90deg,var(--paper) 0%,var(--paper) 52%,rgba(0,0,0,0) 88%)}
+.intro-card .intro-body{position:relative;z-index:2;padding:18px 20px 4px;max-width:72%}
+.intro-card .hero-pills{position:relative;z-index:2;max-width:72%;margin:0;padding:12px 20px 18px}
+@media(max-width:640px){
+  .intro-card{min-height:230px}
+  .intro-card .intro-body{max-width:64%;padding:16px 16px 4px}
+  .intro-card .hero-pills{max-width:64%;padding:10px 16px 16px}
+  .intro-card .intro-t{font-size:17px}
+}
 
 /* ── HÀNG GỢI Ý CÂU HỎI (chip cố định trên ô nhập rail, cuộn ngang) ── */
 .rail-sugg{padding:8px 13px 0}
@@ -832,7 +848,9 @@ font-family:inherit}
     align-items:start;
   }
   .ws-intake>#introHost{grid-area:hero}
-  .ws-intake>#introHost .intro-card{max-width:none}
+  .ws-intake>#introHost .intro-card{min-height:300px}
+  .ws-intake>#introHost .intro-card .intro-body{max-width:52%}
+  .ws-intake>#introHost .intro-card .hero-pills{max-width:52%}
   .ws-intake>.ws-main-col{grid-area:main;min-width:0}
   .ws-intake>.ws-side-col{grid-area:side;min-width:0}
 }
