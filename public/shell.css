@@ -614,8 +614,14 @@ font-family:inherit}
 @media print {
   .sb, .rail, .ws-top, .tabbar, .backdrop, #introHost, #shellRecent,
   .mobile-only, .jump, .ask, .btn, button, input, select, textarea,
-  .tpw-lock-veil, .tpw-lock-blur, .tpw-wall, .tpw-prev,
+  .tpw-lock-veil, .tpw-lock-blur, .tpw-wall, .tpw-prev, .ws-intake,
   [data-print-skip], [data-share-skip] { display: none !important; }
+  /* `.ws-intake` (2026-09-14, ws-steps + ws-promo "Giới thiệu" cột phụ) —
+     nguyên khối nhập liệu/thanh tiến trình trước khi có kết quả, đứng TRƯỚC
+     `[data-ws-result]` trong DOM và KHÔNG bị gỡ khỏi cây sau khi có kết quả
+     (chỉ ẩn/co lại trên màn hình). Thiếu dòng này thì bản in/PDF có thêm 1
+     trang đầu là thanh bước + thẻ giới thiệu — Henry bắt được qua PDF thật
+     trên prod, sandbox không có mạng thật nên không tự bắt được lỗi này. */
 
   /* Bố cục 3 cột chỉ có nghĩa trên màn hình; in thì trải dọc, bỏ mọi khung
      cuộn — nếu không, trang in CẮT ở đúng chiều cao viewport. */
@@ -675,7 +681,7 @@ font-family:inherit}
      trên màn hình — PHẢI mở lại ở đây, không thì con bên trong dù có CSS in
      đúng cũng ẩn theo cha (đã cắn: cover render đủ trong DOM, `display:none`
      kế thừa từ cha khiến PDF thật KHÔNG có bìa dù debug DOM thấy có). */
-  #wsBookCover { display: block !important; }
+  #wsBookCover, #wsBookBack { display: block !important; }
   .wsb-cover, .wsb-quote, .wsb-toc { break-after: page; break-inside: avoid; min-height: 100vh; box-sizing: border-box; position: relative; }
   .wsb-cover {
     background: linear-gradient(155deg, var(--navy-2), var(--navy) 55%, #04121D) !important;
@@ -693,7 +699,7 @@ font-family:inherit}
      nhau giữa 6 tool (VD "Luận giải Tử Vi" vs "Hướng Nghiệp Trẻ") nên KHÔNG
      tự chèn `<br>` tay được, phải để trình duyệt cân dòng. */
   .wsb-label-t { font-family: var(--serif); font-weight: 700; color: #142230; font-size: 15pt; letter-spacing: .02em; line-height: 1.5; text-align: center; padding: 0 6px; text-wrap: balance; }
-  .wsb-seal { margin-top: 14px; width: 22px; height: 22px; background: #B23A2E !important; border-radius: 2px; display: flex; align-items: center; justify-content: center; color: #F8F4E9; font-size: 11px; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .wsb-seal { margin-top: 14px; width: 28px; height: 28px; object-fit: contain; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   .wsb-cover-cap { position: absolute; left: 0; right: 0; bottom: 18%; text-align: center; }
   .wsb-cover-cap b { display: block; font-size: 8pt; letter-spacing: .22em; color: var(--gold-soft); margin-bottom: 5px; }
   .wsb-cover-cap span { display: block; font-size: 9pt; color: rgba(249,244,235,.75); letter-spacing: .02em; }
@@ -721,6 +727,24 @@ font-family:inherit}
   .wsb-toc-t { font-family: var(--serif); flex-shrink: 0; }
   .wsb-toc-leader { flex: 1; }
 
+  /* Bìa cuối — khép quyển sách bằng đúng bộ nhận diện đã dùng ở bìa trước
+     (seal thật `/seal.webp` + QR thật quét về trang), dựng bởi
+     `ensurePrintBackCover()` ở shell.js, LUÔN là trang cuối cùng (appendChild
+     vào host, sau mọi chương). */
+  .wsb-back {
+    break-before: page; min-height: 100vh; box-sizing: border-box;
+    background: linear-gradient(155deg, var(--navy-2), var(--navy) 55%, #04121D) !important;
+    -webkit-print-color-adjust: exact; print-color-adjust: exact;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px;
+  }
+  .wsb-back-seal { width: 64px; height: 64px; object-fit: contain; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .wsb-back-brand { text-align: center; }
+  .wsb-back-brand b { display: block; font-family: var(--serif); font-size: 13pt; color: var(--gold-lt); letter-spacing: .1em; }
+  .wsb-back-brand span { display: block; font-size: 9pt; color: var(--gold-soft); margin-top: 3px; letter-spacing: .06em; }
+  .wsb-back-qr { width: 90px; height: 90px; margin-top: 6px; background: #fff !important; padding: 6px; border-radius: 6px; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .wsb-back-cap { font-size: 8.5pt; color: rgba(249,244,235,.6); margin-top: 4px; }
+  .wsb-back-url { font-family: var(--serif); font-size: 10pt; color: var(--gold-lt); letter-spacing: .04em; }
+
   /* Mỗi chương một trang giấy riêng — đủ tạo nhịp light-novel (bìa/danh
      ngôn/mục lục + mỗi cung mở trang mới) mà không ép thêm 1 trang riêng cho
      ảnh. Scope theo `.ws-book-mode` (chỉ host của 6 tool này) để không đụng
@@ -737,7 +761,7 @@ font-family:inherit}
   .ws-book-mode .lg-illus { break-inside: avoid; }
 }
 /* Ngoài lúc in thì khối đầu/chân trang in, bìa sách KHÔNG tồn tại trên màn hình. */
-.ws-print-head, .ws-print-foot, #wsBookCover { display: none; }
+.ws-print-head, .ws-print-foot, #wsBookCover, #wsBookBack { display: none; }
 
 /* Ô GIỮ CHỖ hard paywall Pha 3 (dùng chung — không chép sang từng trang tool).
    Khi một `.res-block-body` mang class `.tpw-locked`, giấu HẲN mọi con của nó
