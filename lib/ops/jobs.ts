@@ -245,6 +245,22 @@ export const JOBS: JobSpec[] = [
   { key: 'viral-seo-pages', label: 'Viết lại seo_pages (tương hợp) — viral-core', source: 'vercel',
     everyMinutes: D, schedule: '11:30 VN hằng ngày', sink: 'seo_pages', path: '/api/cron/viral-seo-pages',
     since: '2026-09-06' },
+  // Reminder/cross-sell qua EMAIL — MẶC ĐỊNH TẮT (budget=0 trong app_config),
+  // xem lib/marketing/email-reminder.ts / email-cross-sell.ts. `since` = ngày
+  // merge: job chưa từng chạy nên cron_runs trống, thiếu mốc này bộ dò kêu
+  // ngay "CHƯA HỀ chạy".
+  { key: 'email-reminder-idle', label: 'Email — nhắc user còn Lượng (idle)', source: 'vercel',
+    everyMinutes: 7 * D, schedule: 'T3 08:00 VN hằng tuần', sink: 'email_log', path: '/api/cron/email-reminder-idle',
+    since: '2026-09-14' },
+  { key: 'email-cross-sell', label: 'Email — gợi ý tool liên quan', source: 'vercel',
+    everyMinutes: 7 * D, schedule: 'T5 08:00 VN hằng tuần', sink: 'email_log', path: '/api/cron/email-cross-sell',
+    since: '2026-09-14' },
+  // Rút hàng đợi broadcast email nạp từ admin.html — xem
+  // lib/marketing/email-broadcast.ts. Job vẫn "chạy" đều mỗi 15 phút dù không
+  // có hàng đợi (trả `skipped`), khác 2 job trên vốn tắt hẳn bằng app_config.
+  { key: 'email-broadcast-drain', label: 'Email — rút hàng đợi broadcast', source: 'vercel',
+    everyMinutes: 15, schedule: 'mỗi 15 phút', sink: 'email_broadcast_queue', path: '/api/cron/email-broadcast-drain',
+    since: '2026-09-14' },
 ];
 
 export interface CronRun {

@@ -13,6 +13,7 @@ import { waitUntil } from '@vercel/functions';
 import { getPackage, quoteCustomVnd } from './packages';
 import { fireServerPurchase } from '../marketing/server-conversions';
 import { alertNewPayment } from '../admin/alert';
+import { sendInvoiceEmail } from '../email/invoice';
 
 // ⚠️ Mặc định là SANDBOX. Chỉ `PAYPAL_MODE=live` mới đập vào tiền thật — và
 // nhầm chiều nào cũng hỏng IM LẶNG: quên set thì khoá LIVE bắn vào sandbox
@@ -222,6 +223,10 @@ export async function settlePayPalTopup(
     // `waitUntil` giữ tiến trình sống đủ để gửi xong dù caller (webhook) đã trả
     // response — cùng lý do fireServerPurchase tự bọc waitUntil bên trong.
     waitUntil(alertNewPayment({ provider: 'paypal', amountVnd: pkg.amountVnd, credits: pkg.credits, userId }));
+    waitUntil(sendInvoiceEmail({
+      userId, orderId, provider: 'paypal', credits: pkg.credits, amountVnd: pkg.amountVnd,
+      label: pkg.label, balance: row.balance,
+    }));
   }
   return { ok: true, credits: pkg.credits, balance: row.balance, credited: row.credited, amountVnd: pkg.amountVnd };
 }

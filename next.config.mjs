@@ -1,6 +1,14 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   trailingSlash: false,
+  // @react-pdf/renderer (PDF luận giải qua email, lib/pdf/luan-giai.tsx) dựng
+  // font chuẩn qua subpath import map (`#standard-fonts/Helvetica`) — bundler
+  // của Next KHÔNG resolve đúng map đó (đã đo: bundle bằng esbuild ném
+  // `Cannot find module '#standard-fonts/Helvetica'`), trong khi resolver gốc
+  // của Node đọc đúng `exports` trong package.json. Để NGOÀI bundle thì route
+  // gọi thẳng `require()`/`import` lúc chạy, y hệt Node chạy trực tiếp — đã
+  // xác minh bằng bản transpile-only (không bundle) chạy ra PDF thật.
+  serverExternalPackages: ['@react-pdf/renderer'],
   async rewrites() {
     return [
       { source: '/',                    destination: '/index.html'           },

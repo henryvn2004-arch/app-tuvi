@@ -103,6 +103,8 @@ cửa chung cho CẢ trình duyệt lẫn `app/api/paypal-webhook`, chịu đư�
 `sendMarketingEmail`) · `lib/email/unsub-token.ts` (ký/xác thực link huỷ) ·
 `app/api/email/unsubscribe` (công khai, không cần đăng nhập). OTP đăng ký đi
 qua Supabase Auth custom SMTP (cấu hình ở Dashboard, KHÔNG phải code).
+6 loại email (OTP/hoá đơn/PDF/reminder/cross-sell/broadcast), bảng đối chiếu
+trigger↔template↔công tắc bật-tắt: `docs/luat/email.md`.
 
 ### Vận hành
 `lib/ops/jobs.ts` (**sổ job** — thêm cron phải ghi vào đây) · `lib/cron/log.ts`
@@ -330,10 +332,6 @@ Mỗi luật dưới đây sinh ra từ một lần cắn thật. Cột cuối l
   ở máy có `OPENAI_API_KEY` (container phiên không có).
 - **`ANTHROPIC_API_KEY` không đọc được trong container** (`GEMINI_API_KEY`/
   `OPENAI_API_KEY` thì đọc được) — mọi phép đo phải gọi Anthropic đều chạy ở nơi khác.
-- **Hạ tầng email (2026-09-14)**: code xong, còn 4 việc tay (tài khoản Resend +
-  DNS + 2 env var + SMTP Supabase) trước khi gửi được gì thật. Danh sách đầy
-  đủ ở `docs/luat/email.md`.
-
 ### Nợ kỹ thuật đã ghi nhận
 - `seo_pages` (7.080 trang tương hợp) đang được cron `/api/cron/viral-seo-pages`
   (120 dòng/ngày, ~59 ngày) viết lại theo viral-core — migration đã áp dụng

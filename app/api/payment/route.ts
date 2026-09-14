@@ -1044,6 +1044,7 @@ async function handleAdminChannelBroadcast(request: NextRequest, body: Record<st
   const platform = String(body.platform || '');
   const text = String(body.text || '').trim();
   if (!text) return err('Thiếu nội dung', 400);
+  if (platform === 'email') return handleAdminChannelBroadcastEmail(admin, body, text);
   if (platform !== 'telegram') return err('Kênh này chưa hỗ trợ gửi broadcast', 400);
   if (!process.env.TELEGRAM_BOT_TOKEN) return err('Chưa cấu hình TELEGRAM_BOT_TOKEN', 400);
 
@@ -1060,6 +1061,40 @@ async function handleAdminChannelBroadcast(request: NextRequest, body: Record<st
       for (const r of results) { if (r.status === 'fulfilled') sentCount++; else failed++; }
     }
     return ok({ targeted: chatIds.length, sent: sentCount, failed });
+  } catch (e: unknown) { return err((e as Error).message); }
+}
+
+// Email chỉ NẠP hàng đợi ở đây — cron `email-broadcast-drain` mới thực gửi
+// (xem lý do tách ở đầu _patches/migration-email-broadcast-queue.sql: route
+// này có maxDuration=30s, không đủ cho hàng nghìn người trong một request).
+async function handleAdminChannelBroadcastEmail(admin: { email: string }, body: Record<string, unknown>, text: string): Promise<Response> {
+  const subject = String(body.subject || '').trim() || 'Thông báo từ Tử Vi Minh Bảo';
+  const html = text.includes('<') ? text : `<p style="font-size:14px;color:#333;white-space:pre-wrap">${text.replace(/[&<>]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]!))}</p>`;
+
+  try {
+    const perPage = 100;
+    const MAX_PAGES = 100; // trần an toàn 10k user, cùng mốc handleAdminUsers
+    const recipients: { email: string; user_id: string }[] = [];
+    for (let page = 1; page <= MAX_PAGES; page++) {
+      const authRes = await fetch(
+        `${SUPABASE_URL}/auth/v1/admin/users?page=${page}&per_page=${perPage}`,
+        { cache: 'no-store', headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` } },
+      );
+      if (!authRes.ok) throw new Error(`Auth API failed: ${authRes.status}`);
+      const batch = (await authRes.json()).users || [];
+      for (const u of batch) if (u.email) recipients.push({ email: u.email, user_id: u.id });
+      if (batch.length < perPage) break;
+    }
+    if (!recipients.length) return err('Không có user nào để gửi', 400);
+
+    const insRes = await fetch(`${SUPABASE_URL}/rest/v1/email_broadcast_queue`, {
+      method: 'POST',
+      headers: { ...SB_HEADERS, Prefer: 'return=representation' },
+      body: JSON.stringify({ subject, html, created_by: admin.email, recipients, total: recipients.length }),
+    });
+    if (!insRes.ok) throw new Error(await insRes.text());
+    const [row] = await insRes.json();
+    return ok({ queued: recipients.length, queueId: row?.id });
   } catch (e: unknown) { return err((e as Error).message); }
 }
 

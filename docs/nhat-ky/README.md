@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-267 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+268 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 **Bốn file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
 ```bash
@@ -11,7 +11,7 @@ sed -n '120,190p' docs/nhat-ky/2026-08.md    # đọc đúng đoạn, đừng ca
 
 | file | số mục | dung lượng |
 |---|---:|---:|
-| `2026-09.md` | 102 | 423,021 B |
+| `2026-09.md` | 103 | 428,427 B |
 | `2026-08.md` | 148 | 1,024,027 B |
 | `2026-07.md` | 12 | 154,531 B |
 | `track-cu.md` | 5 | 89,354 B |
@@ -25,6 +25,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
+| 1 | 2026-09 | `2026-09.md` | 📧 5 loại email còn thiếu: hoá đơn, PDF luận giải, reminder, cross-sell, broadcast |
 | 1 | 2026-09 | `2026-09.md` | 📊 Pha 0 vá phễu conversion — 4 chỗ đo đang mù: preview_shown/unlock_click khách đăng nhập, bộ event QR, chay_moi |
 | 1 | 2026-09 | `2026-09.md` | 🐛 Đăng ký lại bằng email ĐÃ TỒN TẠI báo nhầm "đã gửi email xác nhận" |
 | 1 | 2026-09 | `2026-09.md` | 📧 Hạ tầng email — Resend nguồn duy nhất, chống trùng + unsubscribe |
