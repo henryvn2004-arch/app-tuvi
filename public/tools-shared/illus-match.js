@@ -143,7 +143,13 @@
     var vCount = VARIANT_COUNT[khia] || 1;
     var v = (_hash(seedStr + khia + tuoi) % vCount) + 1;
     var id = khia + '--' + sac + '--' + gioi + '--' + tuoi + '--v' + v;
-    var url = SUPABASE_URL + '/storage/v1/object/public/' + BUCKET + '/' + PREFIX + '/' + id + '.png';
+    // .webp (900px rộng, quality 80) — bản NÉN SẴN, migrate 2026-09-14 khỏi
+    // .png gốc (1536x1024, trung bình 3,1MB/tấm, đo thật từ storage.objects:
+    // 230 ảnh = 693MB). Bản .png gốc VẪN CÒN trong bucket làm lưu trữ, không
+    // xoá — chỉ đổi URL đang dùng. Không nén lúc chạy (per-request) nữa vì
+    // ảnh đã nhẹ sẵn cho mọi nơi dùng (màn hình lẫn PDF), không cần riêng
+    // một đường cho in ấn.
+    var url = SUPABASE_URL + '/storage/v1/object/public/' + BUCKET + '/' + PREFIX + '/' + id + '.webp';
     return { url: url, sac: sac, khia: khia };
   }
 

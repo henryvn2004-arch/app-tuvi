@@ -253,6 +253,35 @@ export async function GET(req: NextRequest) {
       });
       if (!up.ok) throw new Error('lưu ảnh hỏng: ' + (await up.text().catch(() => '')).slice(0, 200));
 
+      // Bản .webp NÉN SẴN — `illus-match.js` đọc ĐÚNG đuôi này (migrate
+      // 2026-09-14 khỏi .png gốc nặng ~3,1MB/tấm). Dùng lại cổng biến đổi ảnh
+      // có sẵn của Supabase Storage làm việc nén (900px rộng, quality 80,
+      // ~150KB/tấm — đo thật lúc migrate 230 ảnh cũ), không cần thư viện ảnh
+      // riêng. Lỗi bước này KHÔNG chặn cả lượt (PNG gốc đã lưu xong, bức vẫn
+      // dùng được qua route cũ) — chỉ ghi lại lỗi trong `ketQua`.
+      try {
+        const wUrl = `${SUPABASE_URL}/storage/v1/render/image/public/${BUCKET}/${path}?width=900&quality=80`;
+        const wResp = await fetch(wUrl, { headers: { Accept: 'image/webp' } });
+        if (!wResp.ok) throw new Error(`nén webp HTTP ${wResp.status}`);
+        const wBuf = new Uint8Array(await wResp.arrayBuffer());
+        const wUp = await fetch(
+          `${SUPABASE_URL}/storage/v1/object/${BUCKET}/${path.replace(/\.png$/, '.webp')}`,
+          {
+            method: 'POST',
+            headers: {
+              Authorization: `Bearer ${SUPABASE_KEY}`,
+              apikey: SUPABASE_KEY,
+              'Content-Type': 'image/webp',
+              'x-upsert': 'true',
+            },
+            body: wBuf,
+          }
+        );
+        if (!wUp.ok) throw new Error('lưu webp hỏng: ' + (await wUp.text().catch(() => '')).slice(0, 200));
+      } catch (e) {
+        ketQua.push({ id: p.id + ' (webp)', loi: e instanceof Error ? e.message : 'không rõ' });
+      }
+
       daVe++;
       ketQua.push({ id: p.id, url });
     } catch (e) {

@@ -148,6 +148,7 @@ const TOOL_TO_HERO_GROUP: Record<string, string> = {
   'thu-tuong': 'xem-tuong',
   'thanh-tuong': 'xem-tuong',
   'khi-sac': 'xem-tuong',
+  'but-tuong': 'xem-tuong',
 
   // ── Chiêm Tinh Phương Tây ──
   'ban-do-sao': 'chiem-tinh-tay',

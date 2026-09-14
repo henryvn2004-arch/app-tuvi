@@ -216,12 +216,19 @@
            thấy `.intro-card` đã có thì chỉ điền `#introSrc`, không dựng lại.
            Vì thế `SHELL_INTRO` bên dưới CHỈ khai `key`: chữ nằm đúng ở đây,
            một bản duy nhất — thêm bản chép trong SHELL_INTRO là để nó trôi. -->
+      <div class="ws-intake">
       <div id="introHost"><div class="intro-card">
+        <!-- `check-intro-card.mjs` bắt buộc trang có box tĩnh phải giữ đúng
+             <img class="intro-avatar"> khớp SHELL_INTRO.key (cơ chế dùng
+             CHUNG với 34 trang khác chưa gắn ảnh nhóm) — ẩn đi vì `.intro-photo`
+             bên dưới đã thay thế vai trò hiển thị, không xoá hẳn khỏi HTML. -->
+        <img class="intro-avatar" src="/tool-avatars/laso.webp" alt="" style="display:none" onerror="this.remove()">
         <div class="intro-body">
-          <img class="intro-avatar" src="/tool-avatars/laso.webp" alt="" onerror="this.remove()">
           <div class="intro-text">
             <div class="intro-t">Luận giải Tử Vi</div>
-            <div class="intro-d">Luận giải Tử Vi đọc lá số theo giờ sinh, dịch từng cung – sao ra ngôn ngữ dễ hiểu. Công việc bấp bênh, tình duyên trắc trở, tiền bạc hao hụt — mà không biết gốc rễ nằm ở đâu trong lá số? Nhập ngày giờ sinh, nhận bản luận đủ 13 phần: tổng quan, luận riêng 12 cung, cách cục, điểm mạnh yếu.</div>
+            <!-- Henry 2026-09-14: box này giờ là CÂU HOOK (1-2 câu), không phải mô
+                 tả tool nữa — mô tả đầy đủ đã dời sang `.ws-promo` (cột phụ). -->
+            <div class="intro-d">Công việc bấp bênh, tình duyên trắc trở, tiền bạc hao hụt — gốc rễ nằm ở đâu trong lá số của bạn?</div>
             <!-- Dòng "Theo <cổ pháp>…" do `tool-sources.js` điền MUỘN (shell tự nạp
                  file đó bất đồng bộ). Giữ chỗ đúng 2 dòng chữ 11,5px/1.6 = 36,8px;
                  `margin-top:9px` đặt luôn ở đây để trùng với lề của khối được
@@ -229,6 +236,12 @@
                  Đo: rỗng 45,78px · đã điền 45,78px. -->
             <div id="introSrc" style="min-height:36.8px;margin-top:9px"></div>
           </div>
+          <!-- Banner thủy mặc nhóm "Tử Vi Đẩu Số" (scripts/gen-hero-banners.mjs),
+               thay cho .intro-avatar cũ (icon vuông) — pilot trang này trước khi
+               áp dụng hàng loạt cho 51 tool. Nguồn lưu vĩnh viễn ở Supabase
+               Storage (cùng cách illus/portraits đang phục vụ), không cần chép
+               vào public/. -->
+          <img class="intro-photo" src="https://dciwkfdqhhddeymlisey.supabase.co/storage/v1/object/public/portraits/hero-banners/laso-01.png" alt="" onerror="this.remove()">
         </div>
         <!-- 3 pill tính năng (Henry 2026-09-09, mẫu iPhone) — chỉ trang trí,
              không mang dữ liệu động nên dựng tĩnh, không cần JS. -->
@@ -238,12 +251,22 @@
           <div class="hero-pill"><span class="hp-ic" data-icon="star"></span><span>Điểm mạnh yếu,<br>gợi ý</span></div>
         </div>
       </div></div>
-      <div id="shellRecent"></div>
-      <div class="samp-cta" id="sampCta" style="display:none">
-        <span class="sc-ic" data-icon="lightbulb"></span>
-        <span class="sc-txt"><b>Chưa muốn khai giờ sinh?</b><span>Bạn có thể xem một bản mẫu để trải nghiệm trước.</span></span>
-        <button type="button" id="btnSample" onclick="openSample(this)">Xem bản mẫu →</button>
+      <!-- `.ws-main-col`/`.ws-side-col` — CHỈ có tác dụng khi `.ws-intake` là
+           grid (đủ rộng): mỗi cột một ô lưới, cao thấp độc lập với cột kia
+           (xem chú thích trong shell.css). Hẹp/mobile thì đây là div trần,
+           không đổi gì — các con vẫn xếp dọc y hệt thứ tự trong HTML. -->
+      <div class="ws-main-col">
+      <!-- Thanh tiến trình — chỉ hiển thị trạng thái, không bấm được. JS
+           chuyển bước ở `wsStepsSet` (cuối file), gọi tại đúng chỗ trạng thái
+           đã đổi trong code cũ (doLuan/showForm/gate/paywall/kết quả). -->
+      <div class="ws-steps" id="lgSteps">
+        <div class="wss-step active"><span class="wss-n">1</span><span class="wss-l">Nhập thông tin</span></div>
+        <div class="wss-step"><span class="wss-n">2</span><span class="wss-l">Xem trước lá số</span></div>
+        <div class="wss-step"><span class="wss-n">3</span><span class="wss-l">Thanh toán</span></div>
+        <div class="wss-step"><span class="wss-n">4</span><span class="wss-l">Nhận kết quả</span></div>
       </div>
+      <!-- Box nhập thông tin — đứng NGAY SAU thanh tiến trình (Henry 2026-09-14:
+           trước đây có samp-cta chen giữa, nay samp-cta đã dời sang cột phụ). -->
       <div class="form-card" id="birthPanel">
         <div class="fc-head"><span class="fc-ic" data-icon="file-text"></span><h2>Nhập thông tin để lập lá số &amp; luận giải</h2></div>
         <p class="sub">Nhập họ tên, giới tính, ngày giờ sinh và năm muốn luận. Hệ thống tự an sao, lập lá số rồi luận giải từng phần. Nhận về bản luận đủ 13 phần: tổng quan và luận riêng 12 cung.</p>
@@ -277,6 +300,28 @@
           <span class="bg-label"><span class="ic" data-icon="sparkles"></span><b id="btnGoLabel">Lập lá số &amp; Luận giải ngay →</b></span>
           <small>Tốn <span data-tvp-price="laso">…</span> Lượng <span data-tvp-price-vnd="laso"></span></small>
         </button>
+      </div>
+      </div>
+      <div class="ws-side-col">
+      <!-- Banner cột phụ = thẻ "Giới thiệu" (Henry 2026-09-14, theo mẫu chụp) —
+           không hình ảnh/SVG minh hoạ, chỉ icon vuông + chữ (xem chú thích
+           `.ws-promo` trong shell.css). Dùng để MÔ TẢ TOOL (chữ dài dời từ
+           box hook ở trên xuống đây) — box hook phía trên chỉ còn 1-2 câu. -->
+      <div class="ws-promo">
+        <div class="wsp-eyebrow"><span class="wsp-ic" data-icon="book-open"></span><span>Giới thiệu</span></div>
+        <div class="wsp-title">Luận giải Tử Vi</div>
+        <p class="wsp-desc">Luận giải Tử Vi đọc lá số theo giờ sinh, dịch từng cung – sao ra ngôn ngữ dễ hiểu. Nhập ngày giờ sinh, nhận bản luận đủ 13 phần: tổng quan, luận riêng 12 cung, cách cục, điểm mạnh yếu.</p>
+        <blockquote class="wsp-quote">Tử Vi không dự đoán tương lai, mà giúp bạn hiểu mình để lựa chọn tốt hơn.</blockquote>
+      </div>
+      <!-- Xem bản mẫu — dời qua cột phụ, đứng NGAY DƯỚI banner mô tả tool
+           (Henry 2026-09-14). -->
+      <div class="samp-cta" id="sampCta" style="display:none">
+        <span class="sc-ic" data-icon="lightbulb"></span>
+        <span class="sc-txt"><b>Chưa muốn khai giờ sinh?</b><span>Bạn có thể xem một bản mẫu để trải nghiệm trước.</span></span>
+        <button type="button" id="btnSample" onclick="openSample(this)">Xem bản mẫu →</button>
+      </div>
+      <div id="shellRecent"></div>
+      </div>
       </div>
 
       <div id="lgPanel" data-ws-result>
@@ -431,6 +476,20 @@ var SC_DIMS=['thienVan','canCo','mayMan','phuTro','binhYen','benVung'];
 function cungTotal(sc){ if(!sc)return null; var d=SC_DIMS.map(function(k){return sc[k]}).filter(function(v){return typeof v==='number'}); return d.length?Math.round(d.reduce(function(a,b){return a+b},0)/d.length*10)/10:null; }
 function scoreColor(t){ return t>=7?'var(--green)':t>=5?'var(--gold-soft)':'var(--red)'; }
 
+// Thanh tiến trình (`.ws-steps`, xem shell.css) — chỉ phản ánh trạng thái đã
+// có sẵn trong flow cũ (form → xem trước → paywall → kết quả), không tạo
+// trạng thái mới. `n` các bước TRƯỚC coi là "done" (viền vàng), bước `n`
+// đang "active" (nền navy), các bước sau giữ mặc định.
+function wsStepsSet(n){
+  var el=document.getElementById('lgSteps');
+  if(!el) return;
+  var steps=el.querySelectorAll('.wss-step');
+  for(var i=0;i<steps.length;i++){
+    steps[i].classList.remove('active','done');
+    if(i+1<n) steps[i].classList.add('done');
+    else if(i+1===n) steps[i].classList.add('active');
+  }
+}
 function doLuan(){
   var btn=document.getElementById('btnGo');
   var namxem=parseInt(document.getElementById('inpNamxem').value)||new Date().getFullYear();
@@ -463,6 +522,7 @@ function doLuan(){
     document.getElementById('birthPanel').style.display='none';
     var _sc=document.getElementById('sampCta'); if(_sc) _sc.style.display='none'; // đã có lá số thật, khỏi mời xem mẫu nữa
     document.getElementById('lgPanel').style.display='block';
+    wsStepsSet(2); // Xem trước lá số — điểm số + 2 phần miễn phí sắp hiện ra
     document.getElementById('btnEdit').style.display='';
     document.getElementById('btnBatTu').style.display='';
     // Form dài hơn màn hình (nhất là mobile) thì lúc bấm nút, khung kết quả
@@ -1307,7 +1367,7 @@ async function initLuanGiaiGate(ls){
   }catch(e){hasAccess=false;}
   if(hasAccess){
     var cached=await _fetchCachedLuanGiai(_pendingSlug);
-    if(cached){ renderLuan(ls,null,_namXem,true); _renderCachedLuanGiai(cached); return; }
+    if(cached){ renderLuan(ls,null,_namXem,true); _renderCachedLuanGiai(cached); wsStepsSet(4); return; }
   }
   _renderUnlockBlock();
   // Hard paywall: chạy model THẬT cho FREE_PHAN phần đầu NGAY, không đợi ai
@@ -1374,6 +1434,7 @@ function _paintTension(){
 function _renderUnlockBlock(){
   var host=document.getElementById('lgUnlock');
   host.style.display='block';
+  wsStepsSet(3); // Thanh toán — tường đã dựng, chờ mở khoá
   _moveWallBelowFree(host);
   // Bấm được nay không chỉ ở banner đầu trang — cả 24 phần (luôn nằm trong
   // DOM) cũng bật khoá-mini của chính nó, để cuộn qua khỏi banner vẫn còn chỗ mở.
@@ -1498,6 +1559,7 @@ async function initiateLuanGiaiChuyenSau(){
 async function _startLuanGiaiAI(){
   document.getElementById('lgUnlock').style.display='none';
   document.getElementById('lgProgress').style.display='block';
+  wsStepsSet(4); // Nhận kết quả — đã trả tiền, bắt đầu luận giải đầy đủ
   // Đã trả tiền — tắt hết khoá-mini NGAY, kể cả những phần chưa tới lượt sinh
   // chữ (nay sinh SONG SONG 3 phần/đợt, không còn theo đúng thứ tự 1→24). Để
   // chúng sáng đèn "chưa mở" trong lúc đang luận là mời bấm lại một lượt mua
@@ -1669,6 +1731,7 @@ function showForm(){
   document.getElementById('btnBatTu').style.display='none';
   document.getElementById('lgUnlock').style.display='none';
   document.getElementById('lgProgress').style.display='none';
+  wsStepsSet(1); // về lại Nhập thông tin
   Shell.setShareable(null);
 }
 // Bấm chip trong khối "Xem lá số cho người thân" (NguoiThan.mount ở cuối
