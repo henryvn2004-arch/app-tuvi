@@ -404,13 +404,22 @@ export const KHIA_CANH: Record<string, KhiaCanh> = {
     boiCanhTot2:
       'the glass atrium lobby of a modern office tower: a soaring ceiling, polished stone floor reflecting light, a coffee kiosk, sharply dressed people crossing in the background',
   },
+};
 
-  // ── Riêng cho Xem Tuổi (vợ chồng/làm ăn) — LUÔN có một người thứ hai
-  // trong cảnh (đối phương), vì tool này luận về HAI người chứ không phải một
-  // cung của một lá số. Chỉ tả nhân vật chính bằng `nhanVat()`, người thứ hai
-  // giữ vai trò ngầm định trong `canh` (không tên, không mô tả riêng) — đúng
-  // cách `phu-the`/`tu-tuc`/`huynh-de` đã làm, để không phải nhân đôi chi phí
-  // một bộ mô tả nhân vật thứ hai.
+// ── Riêng cho Xem Tuổi (vợ chồng/làm ăn) ─────────────────────
+// KHÔNG gộp vào KHIA_CANH: đó là tập ĐÓNG, khoá cứng đúng 13 khoá (12 cung +
+// tổng quan), đối chiếu chéo với CUNG_BY_PHAN/PHAN_TO_KHIA/VARIANT_COUNT/
+// ILLUS_NGUONG của Luận Giải & Chu Trình Cuộc Đời (`check-illus.mjs`) — nhét
+// thêm khoá vào đó phá cả 3 nguồn kia (đã ăn lỗi CI khi thử). Xem Tuổi luận
+// về HAI người, không phải một cung của MỘT lá số, nên đứng bảng riêng, đúng
+// cách `THANG_CANH` (Vận Hạn 12 Tháng) đã tách khỏi KHIA_CANH.
+//
+// LUÔN có một người thứ hai trong cảnh (đối phương). Chỉ tả nhân vật chính
+// bằng `nhanVat()`, người thứ hai giữ vai trò ngầm định trong `canh` (không
+// tên, không mô tả riêng) — đúng cách `phu-the`/`tu-tuc`/`huynh-de` đã làm,
+// để không phải nhân đôi chi phí một bộ mô tả nhân vật thứ hai. Mọi khía đều
+// bật `chiHaiNguoi` — xem lý do ở định nghĩa cờ đó.
+export const XEM_TUOI_CANH: Record<string, KhiaCanh> = {
   'xet-tuoi': {
     vi: 'Xem Tuổi — so tuổi, nạp âm hai người',
     canh: {
@@ -475,12 +484,54 @@ export const KHIA_CANH: Record<string, KhiaCanh> = {
       xau: 'walking the same street a few steps apart, one glancing back to check on the other who is lagging behind',
     },
     boiCanh: [
-      "a busy wet-market street at morning: baskets of produce spilling onto the pavement, motorbikes weaving past, awnings casting patchy shade",
+      'a busy wet-market street at morning: baskets of produce spilling onto the pavement, motorbikes weaving past, awnings casting patchy shade',
       "a park path at dusk: joggers and cyclists passing, benches under flowering trees, a vendor's cart parked at the entrance",
       'a riverside path at sunset: fishing boats moored along the bank, strings of lights just switching on at riverside stalls, the water catching the last colour of the sky',
     ],
+    chiHaiNguoi: true,
   },
 };
+
+/** Khối tả dựng cho Xem Tuổi — bảng riêng `XEM_TUOI_CANH`, xem lý do ở đó. */
+export interface XemTuoiInput {
+  /** Khoá trong `XEM_TUOI_CANH`. */
+  khia: string;
+  sac: Sac;
+  gioi: Gioi;
+  tuoi?: Tuoi;
+  /** Biến thể bối cảnh 1..3. Ngoài tầm thì quay vòng. */
+  v?: number;
+}
+
+export function buildXemTuoiPrompt(input: XemTuoiInput): IllusPrompt {
+  const { khia, sac, gioi, tuoi = 'truong-thanh' } = input;
+  const kc = XEM_TUOI_CANH[khia];
+  if (!kc) throw new Error(`illus-prompt: không có khía Xem Tuổi "${khia}"`);
+  const v = ((Math.max(1, input.v || 1) - 1) % kc.boiCanh.length) + 1;
+  const st = SAC_THAI[sac];
+
+  const prompt = [
+    STYLE_LOCK,
+    '',
+    nhanVat(gioi, tuoi) + '.',
+    '',
+    `Scene: ${kc.canh[sac]}.`,
+    `Expression: ${st.bieuCam}.`,
+    `People around them: ${kc.chiHaiNguoi ? HAI_NGUOI_QUANH_CANH[sac] : st.quanhCanh}.`,
+    `Environment: ${kc.boiCanh[v - 1]}. ${st.doVat}.`,
+    `Light: ${st.anhSang}.`,
+    '',
+    'Composition: wide horizontal frame, the character placed off-centre towards the right, seen from a natural eye-level three-quarter angle, room to breathe around them.',
+    '',
+    TEXT_SAFE_AREA,
+  ].join('\n');
+
+  return {
+    id: `xt-${khia}--${sac}--${gioi}--${tuoi}--v${v}`,
+    nhan: `${kc.vi} · ${sac} · ${gioi} · ${tuoi} · biến thể ${v}`,
+    prompt,
+  };
+}
 
 // ── THÁNG ÂM LỊCH (Vận Hạn 12 Tháng) ─────────────────────────
 // 🔑 KHÔNG CÓ TRỤC SẮC THÁI. `lib/engine/van-han-12.ts` từ chối chấm điểm cho
@@ -693,7 +744,7 @@ export function buildIllusPrompt(input: IllusInput): IllusPrompt {
     '',
     `Scene: ${canhText}.`,
     `Expression: ${st.bieuCam}.`,
-    `People around them: ${kc.chiHaiNguoi ? HAI_NGUOI_QUANH_CANH[sac] : st.quanhCanh}.`,
+    `People around them: ${st.quanhCanh}.`,
     `Environment: ${moiTruong}. ${st.doVat}.`,
     `Light: ${st.anhSang}.`,
     '',
