@@ -1742,7 +1742,8 @@
   }
   function printWorkspace() {
     try { track('pdf_download', { tool_id: ACTIVE }); } catch (e) { /* ignore */ }
-    ensurePrintHead();
+    var isBook = ensurePrintBook();
+    if (!isBook) ensurePrintHead(); // bìa sách đã tự mang tên+ngày sinh, khỏi lặp đầu trang cũ
     var done = false;
     var go = function () {
       if (done) return; done = true;
@@ -1754,6 +1755,91 @@
     // in luôn sau 800ms, chân trang khi đó thiếu QR (còn seal + ngày) chứ
     // không phải không in được gì.
     setTimeout(go, 800);
+  }
+  // ── Bìa sách (6 tool có ảnh minh hoạ illus-match.js) ─────────────────
+  // 2026-09-14: trước đây "Lưu PDF" chỉ in nguyên màn hình, không có bố cục.
+  // Giờ 6 tool này có ảnh minh hoạ thật nên dựng thêm bìa + trang danh ngôn +
+  // mục lục kiểu sách TRƯỚC nội dung — chỉ áp dụng đúng 6 id trong
+  // `BOOK_QUOTES`, tool khác rơi về `ensurePrintHead()` cũ, không hồi quy
+  // ~30 tool còn lại. Quote lấy từ chính văn cổ (Luận Ngữ/Mạnh Tử/Đạo Đức
+  // Kinh/Tôn Tử Binh Pháp), không bịa.
+  var BOOK_QUOTES = {
+    'luan-giai': { vi: 'Tận kỳ tâm giả, tri kỳ tính dã; tri kỳ tính, tắc tri thiên hĩ.', viet: 'Người thấu tận lòng mình thì biết được tính mình; biết tính mình thì biết được lẽ trời.', src: 'Mạnh Tử · Tận Tâm thượng' },
+    'chu-trinh-cuoc-doi': { vi: 'Tam thập nhi lập, tứ thập nhi bất hoặc, ngũ thập nhi tri thiên mệnh.', viet: 'Ba mươi tuổi lập thân, bốn mươi tuổi hết nghi hoặc, năm mươi tuổi biết mệnh trời.', src: 'Khổng Tử · Luận Ngữ, Vi Chính' },
+    'van-han-nam': { vi: 'Hoạ hề, phúc chi sở ỷ; phúc hề, hoạ chi sở phục.', viet: 'Trong hoạ có mầm phúc, trong phúc có mầm hoạ.', src: 'Lão Tử · Đạo Đức Kinh' },
+    'cong-so': { vi: 'Tri kỷ tri bỉ, bách chiến bất đãi.', viet: 'Biết mình biết người, trăm trận không nguy.', src: 'Tôn Tử · Binh Pháp' },
+    'day-con': { vi: 'Tính tương cận dã, tập tương viễn dã.', viet: 'Tính người vốn gần nhau, do tập nhiễm mà xa nhau.', src: 'Khổng Tử · Luận Ngữ, Dương Hoá' },
+    'huong-nghiep-tre': { vi: 'Tri chi giả bất như hiếu chi giả; hiếu chi giả bất như lạc chi giả.', viet: 'Biết mà làm không bằng thích mà làm; thích mà làm không bằng say mê mà làm.', src: 'Khổng Tử · Luận Ngữ, Ung Dã' }
+  };
+  function toRomanUpper(n) {
+    var map = [[1000, 'M'], [900, 'CM'], [500, 'D'], [400, 'CD'], [100, 'C'], [90, 'XC'], [50, 'L'], [40, 'XL'], [10, 'X'], [9, 'IX'], [5, 'V'], [4, 'IV'], [1, 'I']];
+    var out = '';
+    for (var i = 0; i < map.length; i++) { while (n >= map[i][0]) { out += map[i][1]; n -= map[i][0]; } }
+    return out || 'I';
+  }
+  // Mục lục đọc thẳng DOM đang hiện — dùng chung 1 hàm cho cả 3 dạng chương
+  // đang có ở 6 tool (`.sec` của luận-giải/chu-trình/vận-hạn, `.cs-sec` của
+  // công-sở, `.res-block` của dạy-con/hướng-nghiệp-trẻ), KHÔNG cần biết tool
+  // nào dùng dạng nào — tự thử lần lượt, dạng nào có phần tử thì dùng dạng đó.
+  // `shownEl` lọc đúng khối đang ẩn (chưa mở khoá/chưa tick), tránh mục lục
+  // liệt kê chương không có trong bản in.
+  function bookTocItems(host) {
+    var items = [];
+    host.querySelectorAll('.sec').forEach(function (sec) {
+      var h = sec.querySelector('.sec-h h3');
+      if (h && shownEl(sec)) items.push(h.textContent.trim());
+    });
+    if (!items.length) host.querySelectorAll('.cs-sec').forEach(function (sec) {
+      var h = sec.querySelector('h3');
+      if (h && shownEl(sec)) items.push(h.textContent.trim());
+    });
+    if (!items.length) host.querySelectorAll('.res-block').forEach(function (b) {
+      var h = b.querySelector('.res-block-title');
+      if (h && shownEl(b)) items.push(h.textContent.trim());
+    });
+    return items;
+  }
+  // Dựng bìa + trang danh ngôn + mục lục, chèn lên ĐẦU host. Trả `true` nếu
+  // tool này có bật bìa sách (để `printWorkspace` biết bỏ qua đầu trang cũ).
+  function ensurePrintBook() {
+    var meta = BOOK_QUOTES[ACTIVE];
+    var host = wsResultHost();
+    if (!meta || !host) return false;
+    host.classList.add('ws-book-mode');
+    if (document.getElementById('wsBookCover')) return true; // đã dựng (bấm in lần 2)
+    var sub = shareBirthLines({ birth: (ctx && ctx.birth) || null });
+    var items = bookTocItems(host);
+    var tocHtml = items.map(function (label, i) {
+      return '<li><span class="wsb-toc-n">' + toRomanUpper(i + 1) + '</span><span class="wsb-toc-t">' + esc(label) + '</span><span class="wsb-toc-leader"></span></li>';
+    }).join('');
+    var wrap = document.createElement('div');
+    wrap.id = 'wsBookCover';
+    wrap.innerHTML =
+      '<div class="wsb-cover">' +
+        '<div class="wsb-spine"><svg viewBox="0 0 46 900" preserveAspectRatio="none">' +
+          '<line x1="23" y1="120" x2="23" y2="780" stroke="rgba(249,244,235,.28)" stroke-width="1"/>' +
+          '<line x1="12" y1="126" x2="34" y2="138" stroke="#F4EFE2" stroke-width="3" stroke-linecap="round"/>' +
+          '<line x1="12" y1="330" x2="34" y2="342" stroke="#F4EFE2" stroke-width="3" stroke-linecap="round"/>' +
+          '<line x1="12" y1="534" x2="34" y2="546" stroke="#F4EFE2" stroke-width="3" stroke-linecap="round"/>' +
+          '<line x1="12" y1="738" x2="34" y2="750" stroke="#F4EFE2" stroke-width="3" stroke-linecap="round"/>' +
+        '</svg></div>' +
+        '<div class="wsb-label"><div class="wsb-label-in"><div class="wsb-label-t">' + esc(wsTitleText()) + '</div><div class="wsb-seal">✦</div></div></div>' +
+        (sub ? '<div class="wsb-cover-cap"><b>LÁ SỐ TRỌN ĐỜI</b><span>' + esc(sub) + '</span></div>' : '') +
+        '<div class="wsb-cover-foot"><div class="mk">✦</div><b>TỬ VI MINH BẢO</b><span>tuviminhbao.com</span></div>' +
+      '</div>' +
+      '<div class="wsb-quote"><div class="wsb-quote-in">' +
+        '<div class="wsb-qmark">“</div>' +
+        '<div class="wsb-qtxt">' + esc(meta.vi) + '</div>' +
+        '<div class="wsb-qviet">' + esc(meta.viet) + '</div>' +
+        '<div class="wsb-qrule"></div>' +
+        '<div class="wsb-qsrc">' + esc(meta.src) + '</div>' +
+      '</div></div>' +
+      (items.length ? (
+        '<div class="wsb-toc"><div class="wsb-toc-h"><b>MỤC LỤC</b><h2>' + esc(wsTitleText()) + '</h2></div><div class="wsb-toc-rule"></div>' +
+        '<ul class="wsb-toc-list">' + tocHtml + '</ul></div>'
+      ) : '');
+    host.insertBefore(wrap, host.firstChild);
+    return true;
   }
   // Bản in không có `.ws-top` (đã ẩn) nên tự nó không nói được đây là kết quả
   // gì của ai. Dựng một khối CHỈ hiện lúc in, lấy đúng chữ đang có trên màn
