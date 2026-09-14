@@ -84,6 +84,16 @@ const ALLOWED = new Set([
   //   qr_copy           = bấm chép số tài khoản HOẶC số tiền
   //   qr_close          = đóng modal mà CHƯA thấy `paid:true` (bỏ dở)
   'qr_shown', 'qr_deeplink_click', 'qr_copy', 'qr_close',
+  // Productize luận giải (2026-09) — phễu của thẻ "Báo cáo đã sẵn sàng"
+  // (tools-shared/report-delivery.js, laso + chu-trinh-cuoc-doi). Tách khỏi
+  // `pdf_download`/`unlock_click` có sẵn vì đây là hành vi SAU KHI đã trả
+  // tiền (không phải quyết định mua) — đo được "bao nhiêu % người đã trả
+  // tiền còn quay lại LẤY thứ họ mua" là câu hỏi khác hẳn câu hỏi mua/không.
+  //   report_ready_shown = thẻ vừa hiện trạng thái sẵn sàng (mẫu số)
+  //   report_email_click = bấm "Gửi vào email" (trước khi biết thành/bại)
+  //   report_email_sent  = gửi thành công — mẫu số quan trọng nhất: khách vô
+  //                        danh để lại email thật đổi lấy được cái gì
+  'report_ready_shown', 'report_email_click', 'report_email_sent',
 ]);
 
 // Coi là "vừa đăng ký" nếu tài khoản tạo trong 15 phút gần đây (né tính nhầm

@@ -9,6 +9,15 @@ const nextConfig = {
   // gọi thẳng `require()`/`import` lúc chạy, y hệt Node chạy trực tiếp — đã
   // xác minh bằng bản transpile-only (không bundle) chạy ra PDF thật.
   serverExternalPackages: ['@react-pdf/renderer'],
+  // PDF luận giải nhúng font Be Vietnam Pro (đọc thẳng từ đĩa bằng đường dẫn
+  // fs, xem lib/pdf/luan-giai.tsx) — không có dòng này thì lượt dò file của
+  // Next có thể KHÔNG mang 2 file .ttf vào gói hàm serverless (chúng nằm
+  // trong `public/`, phục vụ tĩnh qua CDN, không mặc định có mặt trong FS lúc
+  // hàm chạy). Thiếu font ⇒ rơi về Helvetica ⇒ mất dấu tiếng Việt HOÀN TOÀN,
+  // đúng lỗi đã cắn (xem docs/nhat-ky/2026-09.md, "PDF câm dấu").
+  outputFileTracingIncludes: {
+    '/api/luan-giai/email-pdf': ['./public/fonts/be-vietnam-pro-400.ttf', './public/fonts/be-vietnam-pro-700.ttf'],
+  },
   async rewrites() {
     return [
       { source: '/',                    destination: '/index.html'           },

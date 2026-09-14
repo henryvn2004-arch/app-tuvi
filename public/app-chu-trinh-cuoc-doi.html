@@ -238,6 +238,24 @@
         <div id="hookHost"></div>
         <div class="lg-unlock" id="lgUnlock" style="display:none"></div>
         <div class="lg-progress" id="lgProgress" style="display:none"></div>
+        <!-- Thẻ "Báo cáo đã sẵn sàng" — Pha 2 productize luận giải (2026-09).
+             TĨNH, ẩn bằng [hidden] (CLS-safe) — tools-shared/report-delivery.js
+             lo toàn bộ hành vi, xem _startLuanGiaiAI/_lgRetryPhan. -->
+        <div class="report-ready" id="lgReportCard" hidden>
+          <div class="rr-eyebrow">紫微明寶 · Báo cáo của bạn</div>
+          <div class="rr-title" id="lgReportTitle">Đang đóng bản báo cáo…</div>
+          <div class="rr-sub" id="lgReportSub"></div>
+          <div class="rr-actions">
+            <button type="button" class="rr-btn pri" id="lgBtnPdf" disabled>
+              <span class="ic" id="lgBtnPdfIcon"><span class="rr-spin"></span></span>
+              <span id="lgBtnPdfLabel">Đang dựng…</span>
+            </button>
+            <button type="button" class="rr-btn" id="lgBtnEmail" disabled>
+              <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7"/><rect x="2" y="4" width="20" height="16" rx="2"/></svg></span>
+              <span id="lgBtnEmailLabel">Gửi vào email</span>
+            </button>
+          </div>
+        </div>
         <!-- 9 chặng đời — dựng NGAY cùng lần vẽ với các phần bên dưới, đủ 9 cột
              từ đầu (chiều cao lấy điểm engine, có sẵn và miễn phí). Từ khoá của
              từng chặng điền dần khi phần chữ của đại vận đó sinh xong; khung SVG
@@ -298,6 +316,7 @@ window.SHELL_INTRO={key:'chu-trinh-cuoc-doi'};</script>
 <script src="/shell.js?v=91"></script>
 <script src="/tools-shared/ai-loading-steps.js?v=10"></script>
 <script src="/tools-shared/phan-pool.js?v=1"></script>
+<script src="/tools-shared/report-delivery.js?v=1"></script>
 <script>
 // ── Form nhập (dùng chung TuviForm — có "Sinh ở ngoài Việt Nam?" + parity giờ
 // sinh lịch sử với standalone) ──
@@ -875,6 +894,10 @@ function toggleMini(){
 // ══════════════════════════════════════════════════════════════════════
 var _astrolabe=null, _hoTen='', _ngay=0, _thang=0, _nam=0, _gioitinh='nam', _namXem=0, _laSoText=null;
 var _pendingSlug=null, _luanGiaiStore={};
+// Thẻ "Báo cáo đã sẵn sàng" — mount MỘT lần lúc trang khởi động (xem
+// _pageInit cuối file), dùng lại ở cả _startLuanGiaiAI (lượt đầu) lẫn
+// _lgRetryPhan (retry phần lỗi cuối cùng). Xem tools-shared/report-delivery.js.
+var _reportHandle=null;
 // Tool "Chu Trình Cuộc Đời" = tổng quan đại vận + 9 đại vận + tiểu vận năm
 // xem (engine phan 14-24). Lá số 12 cung (engine phan 1-13) là tool RIÊNG
 // "Luận Giải Tử Vi" (app-luan-giai.html, tool_id 'laso'). Dùng CHUNG
@@ -1273,6 +1296,12 @@ async function _startLuanGiaiAI(){
     if(_box&&_luanGiaiStore[_ep]){ _box.style.display='block'; _box.classList.remove('tpw-real-lock'); _box.innerHTML=renderMarkdown(_luanGiaiStore[_ep],illusFigFor(_box)); }
   }
   _pace&&_pace.reset();
+  // Thẻ "Báo cáo đã sẵn sàng" — hiện NGAY khi bắt đầu (nút xuất PDF xoay/glow
+  // ngay lúc bấm luận giải, không đợi tới lúc xong). Cùng mẫu app-luan-giai.html.
+  if(_reportHandle){
+    var _doneAtStart=0; for(var _dp=1;_dp<=TONG_PHAN;_dp++)if(_luanGiaiStore[13+_dp])_doneAtStart++;
+    _reportHandle.tick(_doneAtStart,TONG_PHAN);
+  }
   // 🔑 BẮT BUỘC bắn PHẦN 1 (ep=14) RIÊNG LẺ trước khi mở bể song song — cùng
   // lý do đã ghi ở app-luan-giai.html: /api/lasotuvi cache `system` (SYSTEM_PROMPT
   // + lá số đầy đủ) theo breakpoint Anthropic, dùng CHUNG cho cả 24 engine phan
@@ -1292,6 +1321,7 @@ async function _startLuanGiaiAI(){
     progressEl:'lgProgress',
     progressPrefix:'Đang luận giải phần',
     pace:_pace,
+    onProgress:function(done,total){ _reportHandle&&_reportHandle.tick(done,total); },
     // PhanPool gọi runPart bằng LOCAL p (1-11, khớp id `sec-`+p để cuộn trang
     // đúng chỗ) — đổi sang ep NGAY tại đây, chỗ DUY NHẤT hai trục gặp nhau.
     // Phần đã có chữ (mồi ở trên, hoặc sinh miễn phí trước paywall) chỉ TRẢ
@@ -1305,6 +1335,7 @@ async function _startLuanGiaiAI(){
   });
   if(result.ok){
     document.getElementById('lgProgress').textContent='✓ Luận giải hoàn tất';
+    _reportHandle&&_reportHandle.ready(TONG_PHAN);
     _saveLuanGiaiResult();
   }else{
     document.getElementById('lgProgress').textContent=
@@ -1385,6 +1416,7 @@ window._lgRetryPhan=function(ep){
       var n=0; for(var p=1;p<=TONG_PHAN;p++)if(_luanGiaiStore[13+p])n++;
       if(n>=TONG_PHAN){
         document.getElementById('lgProgress').textContent='✓ Luận giải hoàn tất';
+        _reportHandle&&_reportHandle.ready(TONG_PHAN);
         _saveLuanGiaiResult();
       }
     }
@@ -1428,6 +1460,23 @@ function showForm(){
 // Chạy SAU khi shell.js render rail (boot ở DOMContentLoaded) để Shell.setContext không lỗi.
 function _pageInit(){
   Shell.prefillForm();
+  if(window.ReportDelivery){
+    _reportHandle=ReportDelivery.mount({
+      hostId:'lgReportCard', titleId:'lgReportTitle', subId:'lgReportSub',
+      pdfBtnId:'lgBtnPdf', pdfIconId:'lgBtnPdfIcon', pdfLabelId:'lgBtnPdfLabel',
+      mailBtnId:'lgBtnEmail', mailLabelId:'lgBtnEmailLabel',
+      tool:'chu-trinh-cuoc-doi', total:TONG_PHAN,
+      // `p` là LOCAL (1-11) — DOM/label đều khoá theo ENGINE phan (13+p),
+      // cùng trục app-luan-giai.html dùng đã trực tiếp là local p.
+      getBoxId:function(p){ return 'claude-content-'+(13+p); },
+      getLabel:function(p){ return (LuanGiaiCore.phanLabels(_astrolabe)||{})[13+p]||('Phần '+p); },
+      getMeta:function(){ return {
+        hoTen:_hoTen||'',
+        ngaySinh:[_ngay,_thang,_nam].filter(Boolean).join('/'),
+        gioiTinh:_gioitinh==='nam'?'Nam':(_gioitinh==='nu'?'Nữ':(_gioitinh||'')),
+      }; },
+    });
+  }
   if(Shell.autoRun()&&document.getElementById('ngay').value)doLuan();
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',_pageInit);

@@ -20,6 +20,7 @@
 //     progressEl: 'lgProgress',     // id phần tử hiển thị dòng tiến trình
 //     progressPrefix: 'Đang luận giải phần',   // câu chữ riêng từng trang
 //     pace: _pace,                  // pacer() instance (tools-shared/ai-loading-steps.js), tuỳ chọn
+//     onProgress: function (done, total) { ... },   // tuỳ chọn, bắn mỗi khi 1 phần xong
 //     runPart: async function (p) { ... trả true (xong) / false (lỗi) ... },
 //   });
 //   var result = await pool;   // { failed:[số phần lỗi], doneCount, total, ok }
@@ -56,6 +57,11 @@
     var runPart = opts.runPart;
     var pace = opts.pace || null;
     var doScroll = opts.scroll !== false;
+    // Tuỳ chọn — báo (doneCount, total) mỗi khi MỘT phần xong (thành công hay
+    // lỗi đều tính, khớp cách `doneCount` tự đếm bên dưới). Dùng cho UI cần
+    // số phần đã xong THẬT (không phải chuỗi chữ `progressEl` đã định dạng
+    // sẵn) — vd thẻ "Báo cáo đã sẵn sàng", xem tools-shared/report-delivery.js.
+    var onProgress = typeof opts.onProgress === 'function' ? opts.onProgress : null;
     var progressEl = opts.progressEl ? document.getElementById(opts.progressEl) : null;
     var progressPrefix = opts.progressPrefix || 'Đang xử lý phần';
 
@@ -113,6 +119,7 @@
         doneCount++;
         if (ok === false) failed.push(p);
         paint();
+        onProgress && onProgress(doneCount, total);
       }
     }
 

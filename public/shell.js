@@ -2881,6 +2881,11 @@
     // đúng khoảnh khắc tò mò cao nhất thay vì chờ tới thanh công cụ chung.
     // No-op nếu chưa có `currentShare()` (shareWorkspace tự kiểm).
     shareNow: function () { shareWorkspace(); },
+    // Kích hoạt CHÍNH luồng "Lưu PDF" (bìa sách + mục lục + ảnh minh hoạ nếu
+    // có, xem printWorkspace/ensurePrintBook) từ một nút do TRANG tự vẽ —
+    // dùng cho thẻ "Báo cáo đã sẵn sàng" (tools-shared/report-delivery.js).
+    // CÙNG một đường với FAB `wsPdfBtn` — không dựng đường in thứ hai.
+    printNow: function () { printWorkspace(); },
     /**
      * Khung giữa ĐANG có một kết quả thật hay chưa — CÙNG ngưỡng mà nút Chia
      * sẻ / Lưu PDF / dòng ghi nguồn đã dùng (`currentShare()`).
