@@ -4,7 +4,13 @@ const PAGES = ['/', '/app-luan-giai.html', '/xem-tuoi.html', '/tu-binh.html', '/
 
 test.describe('Navigation', () => {
   test('logo visible và link về trang chủ', async ({ page }) => {
-    await page.goto('/app-luan-giai.html');
+    // Trang laso (/app-luan-giai.html) dùng SHELL (sidebar + tab bar riêng,
+    // không phải .topnav/.nav-logo cổ điển) — `a[href="/"]` trên đó khớp
+    // ĐÚNG nhưng là nút `.tab` của thanh tab MOBILE, ẩn trên viewport desktop
+    // mặc định của bài kiểm này. Bài kiểm này đo NAV CHUNG (không riêng gì
+    // laso) nên dùng một trang tĩnh còn giữ layout cổ điển thay vì đi theo
+    // laso vào retire (2026-09-14, xem plan productize luận giải).
+    await page.goto('/xem-tuoi.html');
     await page.waitForLoadState('networkidle');
     const logo = page.locator('.nav-logo, .nav-brand, a[href="/"], a[href="index.html"]').first();
     await expect(logo).toBeVisible();

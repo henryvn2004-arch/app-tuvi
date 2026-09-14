@@ -85,6 +85,11 @@ test.describe('Mobile — Luận Giải form', () => {
   test('submit button không bị crop trên mobile', async ({ page }) => {
     await page.goto('/app-luan-giai.html');
     await page.waitForLoadState('networkidle');
+    // app-luan-giai.html nạp nhiều script hơn hẳn trang cũ (illus-nguong/
+    // illus-match/hook-*/report-delivery/...) TRƯỚC khi tới lượt
+    // `TuviForm.render(...)` — đợi TuviForm sẵn sàng trước khi tìm nút, không
+    // thì đúng lúc máy CI tải chậm là bài kiểm đỏ oan dù form vẫn render đúng.
+    await page.waitForFunction('typeof TuviForm !== "undefined"', { timeout: 10_000 });
 
     const btn = page.locator('.btn-submit, #tvf-submit-btn').first();
     await expect(btn).toBeVisible({ timeout: 8000 });
@@ -100,12 +105,24 @@ test.describe('Mobile — Lá Số grid', () => {
   test('grid 12 cung không overflow màn hình', async ({ page }) => {
     await page.goto('/app-luan-giai.html');
     await page.waitForLoadState('networkidle');
-    await page.waitForFunction('typeof TuviForm !== "undefined"', { timeout: 10_000 });
+    await page.waitForFunction(() => {
+      const w = window as unknown as { TuviForm?: unknown; doLuan?: unknown };
+      return !!w.TuviForm && typeof w.doLuan === 'function';
+    }, { timeout: 10_000 });
 
-    await page.evaluate(`
-      TuviForm.setData({ hoten: 'Mobile Test', ngay: 15, thang: 7, nam: 1990, gioHour: 7, gioitinh: 'nam', namXem: 2026 })
-    `);
-    await page.locator('#tvf-submit-btn').click();
+    // Gọi thẳng `doLuan()` (cùng cách tests/hard-paywall.spec.ts đã dùng ổn
+    // định) thay vì bấm nút submit — bấm nút cần nó "actionable" (không bị
+    // phần tử khác che), mà app-luan-giai.html có thêm FAB/rail nổi trên
+    // layout shell mà trang cũ không có, dễ khiến `.click()` timeout dù nút
+    // vẫn hiển thị đúng. Kết quả cuối giống hệt: cùng hàm `doLuan()` chạy.
+    await page.evaluate(() => {
+      const w = window as unknown as {
+        TuviForm: { setData(d: Record<string, unknown>): void };
+        doLuan(): void;
+      };
+      w.TuviForm.setData({ hoten: 'Mobile Test', ngay: 15, thang: 7, nam: 1990, gioHour: 7, gioitinh: 'nam', namXem: 2026 });
+      w.doLuan();
+    });
     // #lgPanel bật display:block + #miniChart (grid 12 cung) đổ chữ NGAY sau
     // khi engine tính xong — thuần client, không đợi LLM/network (xem doLuan
     // trong app-luan-giai.html), khác `#result-section.active` của trang cũ.
