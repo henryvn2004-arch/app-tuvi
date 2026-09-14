@@ -164,7 +164,23 @@ export interface KhiaCanh {
    */
   canhTot2?: string;
   boiCanhTot2?: string;
+  /**
+   * true = cảnh CHỈ CÓ HAI NGƯỜI (vd. Xem Tuổi — hai lá số đang so, không phải
+   * một cung của MỘT lá số). `SAC_THAI[sac].quanhCanh` mặc định tả một ĐÁM
+   * ĐÔNG xung quanh nhân vật chính (đúng cho Cung Nô Bộc/Huynh Đệ...) — ghép
+   * vào cảnh hai người riêng tư thì model vẽ thừa 2-3 người lạ chen vào, làm
+   * loãng đúng ý "chỉ hai người" (đã thấy ở bản `tu-tuong--tot` mẫu: dư hẳn
+   * 3 người ngồi ké). Bật cờ này để dùng `HAI_NGUOI_QUANH_CANH[sac]` thay thế.
+   */
+  chiHaiNguoi?: boolean;
 }
+
+/** Thay cho `SAC_THAI[sac].quanhCanh` khi `KhiaCanh.chiHaiNguoi` bật. */
+const HAI_NGUOI_QUANH_CANH: Record<Sac, string> = {
+  tot: 'no one else is in the frame — just the two of them, fully absorbed in each other',
+  trung: 'no one else is in the frame — just the two of them, going about this together',
+  xau: 'no one else is in the frame — just the two of them, and no one else to soften the moment',
+};
 
 export const KHIA_CANH: Record<string, KhiaCanh> = {
   menh: {
@@ -388,6 +404,82 @@ export const KHIA_CANH: Record<string, KhiaCanh> = {
     boiCanhTot2:
       'the glass atrium lobby of a modern office tower: a soaring ceiling, polished stone floor reflecting light, a coffee kiosk, sharply dressed people crossing in the background',
   },
+
+  // ── Riêng cho Xem Tuổi (vợ chồng/làm ăn) — LUÔN có một người thứ hai
+  // trong cảnh (đối phương), vì tool này luận về HAI người chứ không phải một
+  // cung của một lá số. Chỉ tả nhân vật chính bằng `nhanVat()`, người thứ hai
+  // giữ vai trò ngầm định trong `canh` (không tên, không mô tả riêng) — đúng
+  // cách `phu-the`/`tu-tuc`/`huynh-de` đã làm, để không phải nhân đôi chi phí
+  // một bộ mô tả nhân vật thứ hai.
+  'xet-tuoi': {
+    vi: 'Xem Tuổi — so tuổi, nạp âm hai người',
+    canh: {
+      tot: 'sitting close together at a table, one finger tracing down a printed lá số sheet while the other leans in smiling, both clearly pleased with what they see',
+      trung: 'sitting side by side comparing two printed lá số sheets spread on the table, expressions unreadable, simply reading',
+      xau: 'sitting across the table from each other, each holding their own printed sheet, brows drawn, not looking up at the other',
+    },
+    boiCanh: [
+      'a home living room table set for a family visit: a tray with a teapot and two cups, an almanac calendar on the wall, an incense stick smouldering nearby, a ceiling fan turning slowly',
+      "the small shopfront table of a neighbourhood fortune-teller: a glass cabinet of incense and talismans behind, a single fluorescent tube overhead, a stack of well-worn almanac books, a cat asleep on the doorstep",
+      'a corner table in a quiet Vietnamese coffee shop: two glasses of cà phê sữa đá sweating rings onto the wood, a shelf of potted succulents, rain streaking the window beside them',
+    ],
+    chiHaiNguoi: true,
+  },
+  'ngu-hanh': {
+    vi: 'Xem Tuổi — ngũ hành tương sinh tương khắc',
+    canh: {
+      tot: 'standing together at the stove, one holding the pan steady while the other adds the seasoning, moving in easy sync',
+      trung: 'standing at the stove taking turns stirring the pot, each waiting patiently for the other',
+      xau: 'standing at the stove elbow to elbow, both reaching for the same spoon at once, neither giving way',
+    },
+    boiCanh: [
+      'a narrow tiled kitchen at dinner time: a gas ring with a pot bubbling, bunches of herbs in a basin, a rice cooker venting steam, a string of garlic hanging from a nail',
+      'a countryside kitchen with a wood-fired stove: a blackened kettle, bundles of firewood stacked by the wall, a cat weaving underfoot, light falling through a gap in the tin roof',
+      'the cramped stall kitchen of a street food cart at dusk: a large simmering pot, stacked bowls, a portable gas burner, motorbikes parked just beyond the tarpaulin awning',
+    ],
+    chiHaiNguoi: true,
+  },
+  'tu-tuong': {
+    vi: 'Xem Tuổi — tư tưởng, cùng chí hướng hay bất đồng',
+    canh: {
+      tot: 'leaning together over an open notebook, both pointing to the same line, nodding at the same time',
+      trung: 'sitting together looking at a notebook, one talking while the other listens, mild and unremarkable',
+      xau: 'sitting with the notebook between them, each pointing to a different page, voices raised without shouting',
+    },
+    boiCanh: [
+      'a living room coffee table cluttered with an open notebook and two mugs: a bookshelf behind, a standing fan, evening light through a curtain',
+      'a corner table in a quiet café: an open notebook and a laptop half-closed, two cups of coffee, a potted plant on the windowsill, soft rain outside',
+      'a shared office desk after hours: papers and an open notebook under a desk lamp, a whiteboard half-covered in scribbles behind, the rest of the office dark and empty',
+    ],
+    chiHaiNguoi: true,
+  },
+  'tinh-cach': {
+    vi: 'Xem Tuổi — tính cách, hoà hợp hay va chạm',
+    canh: {
+      tot: 'sitting together on the sofa laughing at the same joke on the television, shoulders shaking',
+      trung: 'sitting together on the sofa, each scrolling their own phone, comfortable silence',
+      xau: 'sitting on the sofa, one reaching for the remote at the same moment as the other pulls it back, both faces tight',
+    },
+    boiCanh: [
+      'a small apartment living room: a worn sofa, a television on a low cabinet, a laundry rack by the balcony door, a single lamp glowing',
+      'a countryside living room in the evening: a wooden bench, a television on a stand, a mosquito coil smouldering on the floor, moths circling the ceiling light',
+      'a rented studio living room: a futon sofa still a little bare, a television propped on cardboard boxes, a single potted plant by the window, city lights beginning to show outside',
+    ],
+    chiHaiNguoi: true,
+  },
+  'van-hanh': {
+    vi: 'Xem Tuổi — vận hành, giai đoạn hiện tại của cả hai',
+    canh: {
+      tot: 'walking side by side down a bright street, matching stride, one turning to say something that makes the other laugh',
+      trung: 'walking side by side along an ordinary street, both looking ahead, neither hurrying',
+      xau: 'walking the same street a few steps apart, one glancing back to check on the other who is lagging behind',
+    },
+    boiCanh: [
+      "a busy wet-market street at morning: baskets of produce spilling onto the pavement, motorbikes weaving past, awnings casting patchy shade",
+      "a park path at dusk: joggers and cyclists passing, benches under flowering trees, a vendor's cart parked at the entrance",
+      'a riverside path at sunset: fishing boats moored along the bank, strings of lights just switching on at riverside stalls, the water catching the last colour of the sky',
+    ],
+  },
 };
 
 // ── THÁNG ÂM LỊCH (Vận Hạn 12 Tháng) ─────────────────────────
@@ -601,7 +693,7 @@ export function buildIllusPrompt(input: IllusInput): IllusPrompt {
     '',
     `Scene: ${canhText}.`,
     `Expression: ${st.bieuCam}.`,
-    `People around them: ${st.quanhCanh}.`,
+    `People around them: ${kc.chiHaiNguoi ? HAI_NGUOI_QUANH_CANH[sac] : st.quanhCanh}.`,
     `Environment: ${moiTruong}. ${st.doVat}.`,
     `Light: ${st.anhSang}.`,
     '',
