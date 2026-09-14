@@ -92,7 +92,7 @@
         var href = 'https://dl.vietqr.io/pay?app=' + b.app + '&ba=' + ba
           + '&am=' + encodeURIComponent(d.amountVND) + '&tn=' + encodeURIComponent(memo)
           + '&bn=' + encodeURIComponent(d.accountName || '');
-        return '<a class="bdl-app-btn" href="' + esc(href) + '" target="_blank" rel="noopener" data-copy="' + esc(d.accountNumber) + '">'
+        return '<a class="bdl-app-btn" href="' + esc(href) + '" target="_blank" rel="noopener" data-copy="' + esc(d.accountNumber) + '" data-bank="' + esc(b.app) + '">'
           + '<img src="https://cdn.vietqr.io/img/' + b.logo + '.png" alt="' + esc(b.name) + '" loading="lazy">'
           + '<span>' + esc(b.name) + '</span></a>';
       }).join('') + '</div>';
@@ -104,6 +104,13 @@
           label.textContent = 'Đã copy Số TK';
           setTimeout(function () { label.textContent = original; }, 1500);
         }).catch(function () {});
+        // Pha 0 (vá phễu 2026-09) — báo cho nơi GỌI `render()` biết vừa có
+        // click, KHÔNG tự gọi Track ở đây: module này dùng chung cho
+        // topup.html lẫn tuvi-paywall.js, không có `tool_id`/product riêng
+        // để gắn vào event. Nơi gọi tự nghe sự kiện này trên chính
+        // `container` nếu muốn đo — bắn trước khi điều hướng (thẻ <a> vẫn
+        // chạy tiếp bình thường, không `preventDefault`).
+        try { container.dispatchEvent(new CustomEvent('bdl:click', { detail: { bank: a.getAttribute('data-bank') } })); } catch (e) { /* CustomEvent hiếm khi thiếu, fail-open */ }
       });
     });
     container.hidden = false;
