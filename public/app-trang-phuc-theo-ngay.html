@@ -97,6 +97,7 @@
            Render Delay 5,3s). `Shell.introOnce` thấy `.intro-card` đã có thì chỉ
            điền `#introSrc`. Vì thế `SHELL_INTRO` bên dưới CHỈ khai `key` — chữ nằm
            đúng ở đây, một bản duy nhất, không có bản chép để trôi. -->
+      <div class="ws-intake">
       <div id="introHost"><div class="intro-card">
         <img class="intro-avatar" src="/tool-avatars/trang-phuc-theo-ngay.webp" alt="" style="display:none" onerror="this.remove()">
         <img class="intro-photo" src="https://dciwkfdqhhddeymlisey.supabase.co/storage/v1/object/public/portraits/hero-banners/phong-cach-ai-01.webp" alt="" onerror="this.remove()">
@@ -108,8 +109,11 @@
           </div>
         </div>
       </div></div>
-      <div id="shellRecent"></div>
-
+      <div class="ws-main-col">
+      <!-- ⚠️ Tool này KHÔNG gắn `.ws-steps`: có HAI cổng Lượng độc lập trong
+           cùng một trang (xem trang phục hợp ngày, rồi thử-lại-được trang
+           phục trên ảnh thật), không phải một chuỗi 3-4 bước tuyến tính như
+           pilot — gán số bước cứng vào đây sẽ nói sai trạng thái thật. -->
       <div class="tn-card">
         <h2><span class="ic" data-icon="calendar"></span> Thông Tin</h2>
         <p class="sub">Nhập năm sinh, giới tính, ngày cần mặc và mục đích ra ngoài. Hệ thống đối chiếu vận khí ngày đó với bản mệnh của bạn. Nhận về màu nên mặc, màu nên tránh và gợi ý trang phục cụ thể.</p>
@@ -153,6 +157,16 @@
         <button class="btn-analyze" id="btnAnalyze" onclick="analyze()" disabled>
           <span class="ic" data-icon="shirt"></span> Xem Trang Phục Hợp Ngày — <span data-tvp-price="trang-phuc-theo-ngay">…</span> Lượng
         </button>
+      </div>
+      </div>
+      <div class="ws-side-col">
+      <div class="ws-promo">
+        <div class="wsp-eyebrow"><span class="wsp-ic" data-icon="book-open"></span><span>Giới thiệu</span></div>
+        <div class="wsp-title">Trang Phục Theo Ngày</div>
+        <p class="wsp-desc">Trang Phục Theo Ngày gợi ý màu, kiểu đồ hợp vận khí hôm nay của bạn. Có ngày ăn mặc chỉn chu vẫn thất bại, có ngày xuề xoà lại gặp may — bạn có tin đó là do vận khí không hợp? Nhập ngày sinh, nhận gợi ý trang phục cho hôm nay — màu nên mặc, màu nên tránh.</p>
+      </div>
+      <div id="shellRecent"></div>
+      </div>
       </div>
 
       <div class="tn-card loading" id="loading">

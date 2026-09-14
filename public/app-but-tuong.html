@@ -94,6 +94,7 @@
            Render Delay 5,3s). `Shell.introOnce` thấy `.intro-card` đã có thì chỉ
            điền `#introSrc`. Vì thế `SHELL_INTRO` bên dưới CHỈ khai `key` — chữ nằm
            đúng ở đây, một bản duy nhất, không có bản chép để trôi. -->
+      <div class="ws-intake">
       <div id="introHost"><div class="intro-card">
         <img class="intro-avatar" src="/tool-avatars/but-tuong.webp" alt="" style="display:none" onerror="this.remove()">
         <img class="intro-photo" src="https://dciwkfdqhhddeymlisey.supabase.co/storage/v1/object/public/portraits/hero-banners/xem-tuong-01.webp" alt="" onerror="this.remove()">
@@ -110,13 +111,16 @@
           <div class="hero-pill"><span class="hp-ic" data-icon="shield-check"></span><span>Không lưu<br>chữ ký</span></div>
         </div>
       </div></div>
-      <div id="shellRecent"></div>
-      <div class="samp-cta" id="sampCta">
-        <span class="sc-ic" data-icon="lightbulb"></span>
-        <span class="sc-txt"><b>Chưa muốn chụp ảnh?</b><span>Bạn có thể xem một bản mẫu để trải nghiệm trước.</span></span>
-        <button type="button" id="btnSample" data-sample-tool="but-tuong" onclick="SampleHint.open(this)">Xem bản mẫu →</button>
+      <div class="ws-main-col">
+      <!-- Thanh tiến trình — JS chuyển bước ở `wsStepsSet` (cuối file), gọi
+           tại đúng chỗ trạng thái đã đổi (renderReport/analyze/_doAnalyze/
+           resetTool) — cùng mẫu app-luan-giai.html. -->
+      <div class="ws-steps" id="wsSteps">
+        <div class="wss-step active"><span class="wss-n">1</span><span class="wss-l">Nhập thông tin</span></div>
+        <div class="wss-step"><span class="wss-n">2</span><span class="wss-l">Xem trước 6 trục</span></div>
+        <div class="wss-step"><span class="wss-n">3</span><span class="wss-l">Thanh toán</span></div>
+        <div class="wss-step"><span class="wss-n">4</span><span class="wss-l">Nhận kết quả</span></div>
       </div>
-
       <div class="dt-card" id="inputCard">
         <div class="fc-head"><span class="fc-ic" data-icon="pen-line"></span><h2>Ký chữ ký</h2></div>
         <p class="sub">Ký trực tiếp trên màn hình hoặc tải ảnh chữ ký có sẵn. Hệ thống đo 6 trục nét bút, luận giải theo cổ pháp thư pháp.</p>
@@ -174,6 +178,21 @@
 
         <div class="dt-error" id="error-msg"></div>
         <div id="btReport" style="display:none"></div>
+      </div>
+      </div>
+      <div class="ws-side-col">
+      <div class="ws-promo">
+        <div class="wsp-eyebrow"><span class="wsp-ic" data-icon="book-open"></span><span>Giới thiệu</span></div>
+        <div class="wsp-title">Bút Tướng</div>
+        <p class="wsp-desc">Bút Tướng luận chữ ký của bạn theo 6 trục cổ pháp thư pháp: Thần, Khí, Cốt, Nhục, Huyết, Thế. Ký hợp đồng tiền bạc quan trọng mỗi ngày mà chưa từng nghĩ chữ ký của mình đang nói gì về vận mình? Ký trực tiếp trên màn hình, nhận bản luận đủ 6 trục.</p>
+      </div>
+      <div class="samp-cta" id="sampCta">
+        <span class="sc-ic" data-icon="lightbulb"></span>
+        <span class="sc-txt"><b>Chưa muốn chụp ảnh?</b><span>Bạn có thể xem một bản mẫu để trải nghiệm trước.</span></span>
+        <button type="button" id="btnSample" data-sample-tool="but-tuong" onclick="SampleHint.open(this)">Xem bản mẫu →</button>
+      </div>
+      <div id="shellRecent"></div>
+      </div>
       </div>
 
       <div class="dt-card" id="resultCard" data-ws-result style="display:none;margin-top:16px">
@@ -344,6 +363,21 @@ function removeImage() {
   document.getElementById('btReport').style.display = 'none';
 }
 
+// Thanh tiến trình (`.ws-steps`, xem shell.css) — chỉ phản ánh trạng thái đã
+// có sẵn trong flow cũ (form → xem trước → paywall → kết quả), không tạo
+// trạng thái mới. `n` các bước TRƯỚC coi là "done" (viền vàng), bước `n`
+// đang "active" (nền navy), các bước sau giữ mặc định.
+function wsStepsSet(n){
+  var el=document.getElementById('wsSteps');
+  if(!el) return;
+  var steps=el.querySelectorAll('.wss-step');
+  for(var i=0;i<steps.length;i++){
+    steps[i].classList.remove('active','done');
+    if(i+1<n) steps[i].classList.add('done');
+    else if(i+1===n) steps[i].classList.add('active');
+  }
+}
+
 function scoreColor(v) {
   if (v >= 75) return 'var(--gold-soft)';
   if (v >= 50) return 'var(--gold)';
@@ -352,6 +386,8 @@ function scoreColor(v) {
 
 function renderReport(m) {
   if (!m) return;
+  wsStepsSet(2); // Xem trước 6 trục — đo xong, miễn phí
+
   const T = window.BuTuongTool.TRUC_META;
   const H = window.BuTuongTool.NGU_HANH_META;
   const order = window.BuTuongTool.HANH_ORDER;
@@ -413,6 +449,7 @@ function readSignedWord() {
 
 async function analyze() {
   if (!_metrics) return;
+  wsStepsSet(3); // Thanh toán — cổng requireCredits sắp chạy (mở modal nếu thiếu Lượng)
   _currentSlug = TuviPaywall.generateToolSlug('but-tuong');
   _birth = readBirth();
   _signedWord = readSignedWord();
@@ -420,6 +457,7 @@ async function analyze() {
 }
 
 async function _doAnalyze() {
+  wsStepsSet(4); // Nhận kết quả — đã trả tiền, bắt đầu luận giải đầy đủ
   document.getElementById('resultCard').style.display = 'block';
   document.getElementById('aiResult').innerHTML = '<div class="dt-loading"><div class="dt-loading-text">Đang luận bút tướng...<br><span style="font-size:12px;opacity:.7">Thường mất 10–20 giây</span></div></div>';
   document.getElementById('resultCard').scrollIntoView({behavior:'smooth',block:'start'});
@@ -460,6 +498,7 @@ function resetTool() {
   clearSign(); removeImage();
   document.getElementById('resultCard').style.display = 'none';
   document.getElementById('aiResult').innerHTML = '';
+  wsStepsSet(1); // về lại Nhập thông tin
   document.getElementById('inputCard').scrollIntoView({behavior:'smooth',block:'start'});
   Shell.setShareable(null);
 }

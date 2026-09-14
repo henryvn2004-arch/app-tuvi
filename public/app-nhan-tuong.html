@@ -75,6 +75,7 @@
            Render Delay 5,3s). `Shell.introOnce` thấy `.intro-card` đã có thì chỉ
            điền `#introSrc`. Vì thế `SHELL_INTRO` bên dưới CHỈ khai `key` — chữ nằm
            đúng ở đây, một bản duy nhất, không có bản chép để trôi. -->
+      <div class="ws-intake">
       <div id="introHost"><div class="intro-card">
         <img class="intro-avatar" src="/tool-avatars/nhan-tuong.webp" alt="" style="display:none" onerror="this.remove()">
         <img class="intro-photo" src="https://dciwkfdqhhddeymlisey.supabase.co/storage/v1/object/public/portraits/hero-banners/xem-tuong-01.webp" alt="" onerror="this.remove()">
@@ -91,13 +92,15 @@
           <div class="hero-pill"><span class="hp-ic" data-icon="scroll-text"></span><span>Luận theo<br>Liễu Trang Thần Tướng</span></div>
         </div>
       </div></div>
-      <div id="shellRecent"></div>
-      <div class="samp-cta" id="sampCta">
-        <span class="sc-ic" data-icon="lightbulb"></span>
-        <span class="sc-txt"><b>Chưa muốn chụp ảnh?</b><span>Bạn có thể xem một bản mẫu để trải nghiệm trước.</span></span>
-        <button type="button" id="btnSample" data-sample-tool="nhan-tuong" onclick="SampleHint.open(this)">Xem bản mẫu →</button>
+      <div class="ws-main-col">
+      <!-- Thanh tiến trình — tool này KHÔNG có bản xem trước miễn phí (bấm nút
+           là gate credit rồi chạy thẳng), nên chỉ 3 bước. JS đổi bước ở
+           `wsStepsSet` (cuối file), gọi tại analyze()/_doAnalyze/resetTool. -->
+      <div class="ws-steps" id="wsSteps">
+        <div class="wss-step active"><span class="wss-n">1</span><span class="wss-l">Nhập thông tin</span></div>
+        <div class="wss-step"><span class="wss-n">2</span><span class="wss-l">Thanh toán</span></div>
+        <div class="wss-step"><span class="wss-n">3</span><span class="wss-l">Nhận kết quả</span></div>
       </div>
-
       <div class="dt-card" id="inputCard">
         <div class="fc-head"><span class="fc-ic" data-icon="eye"></span><h2>Tải ảnh khuôn mặt</h2></div>
         <p class="sub">Tải một tấm ảnh rõ khuôn mặt, đặc biệt vùng mắt. Hệ thống phân tích theo cổ pháp Liễu Trang Thần Tướng, luận hình dạng mắt, ánh mắt, lông mày và tính cách.</p>
@@ -172,6 +175,21 @@
         </button>
         <div class="dt-error" id="error-msg"></div>
       </div>
+      </div>
+      <div class="ws-side-col">
+      <div class="ws-promo">
+        <div class="wsp-eyebrow"><span class="wsp-ic" data-icon="book-open"></span><span>Giới thiệu</span></div>
+        <div class="wsp-title">Nhãn Tướng</div>
+        <p class="wsp-desc">Nhãn Tướng luận tướng đôi mắt theo Liễu Trang Thần Tướng từ ảnh khuôn mặt bạn. Tải ảnh, hệ thống tự zoom vào vùng mắt và nhận bản luận hình dạng mắt, ánh mắt, lông mày chi tiết.</p>
+      </div>
+      <div class="samp-cta" id="sampCta">
+        <span class="sc-ic" data-icon="lightbulb"></span>
+        <span class="sc-txt"><b>Chưa muốn chụp ảnh?</b><span>Bạn có thể xem một bản mẫu để trải nghiệm trước.</span></span>
+        <button type="button" id="btnSample" data-sample-tool="nhan-tuong" onclick="SampleHint.open(this)">Xem bản mẫu →</button>
+      </div>
+      <div id="shellRecent"></div>
+      </div>
+      </div>
 
       <div class="dt-card" id="resultCard" data-ws-result style="display:none;margin-top:16px">
         <h2>Phân Tích Nhãn Tướng Học</h2>
@@ -211,6 +229,20 @@ if (document.readyState === 'loading') document.addEventListener('DOMContentLoad
 // Port từ public/tools/nhan-tuong-ai.html — MediaPipe FaceMesh eye-zoom
 // + gate Lượng + SSE 'delta' stream tới /api/tuong-mat?action=nhan-tuong.
 // ══════════════════════════════════════════════════════════════════════
+// Thanh tiến trình (`.ws-steps`, xem shell.css) — chỉ phản ánh trạng thái đã
+// có sẵn trong flow cũ (form → thanh toán → kết quả), không tạo trạng thái
+// mới. `n` các bước TRƯỚC coi là "done" (viền vàng), bước `n` đang "active"
+// (nền navy).
+function wsStepsSet(n) {
+  var el = document.getElementById('wsSteps');
+  if (!el) return;
+  var steps = el.querySelectorAll('.wss-step');
+  for (var i = 0; i < steps.length; i++) {
+    steps[i].classList.remove('active', 'done');
+    if (i + 1 < n) steps[i].classList.add('done');
+    else if (i + 1 === n) steps[i].classList.add('active');
+  }
+}
 let _imageData = null, _mediaType = 'image/jpeg', _camStream = null;
 let _mpReady = false, _irisNote = null, _currentSlug = '';
 
@@ -463,6 +495,7 @@ async function analyze() {
   document.getElementById('error-msg').classList.remove('active');
   document.getElementById('analyzeBtn').disabled=true;
   _currentSlug = TuviPaywall.generateToolSlug('nhan-tuong');
+  wsStepsSet(2); // Thanh toán — requireCredits sắp mở cầu dao (đăng nhập/nạp thêm)
   await TuviPaywall.requireCredits(_currentSlug, async () => {
     await _doAnalyze();
   });
@@ -471,6 +504,7 @@ async function analyze() {
 
 async function _doAnalyze() {
   document.getElementById('resultCard').style.display='block';
+  wsStepsSet(3); // Nhận kết quả — đã trả tiền, bắt đầu phân tích nhãn tướng
   const aiResultEl = document.getElementById('aiResult');
   aiResultEl.innerHTML='<div class="dt-loading"><span class="dt-loading-icon ic" data-icon="eye"></span><div class="dt-loading-text">Đang phân tích nhãn tướng...<br><span style="font-size:12px;opacity:.7">Thường mất 15–20 giây</span></div></div>';
   window.mountIcons && window.mountIcons(aiResultEl);
@@ -516,6 +550,7 @@ function resetTool() {
   document.getElementById('resultCard').style.display='none';
   document.getElementById('aiResult').innerHTML='';
   document.getElementById('inputCard').scrollIntoView({behavior:'smooth',block:'start'});
+  wsStepsSet(1); // về lại Nhập thông tin
   Shell.setShareable(null);
 }
 

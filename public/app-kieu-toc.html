@@ -97,6 +97,7 @@
            Render Delay 5,3s). `Shell.introOnce` thấy `.intro-card` đã có thì chỉ
            điền `#introSrc`. Vì thế `SHELL_INTRO` bên dưới CHỈ khai `key` — chữ nằm
            đúng ở đây, một bản duy nhất, không có bản chép để trôi. -->
+      <div class="ws-intake">
       <div id="introHost"><div class="intro-card">
         <img class="intro-avatar" src="/tool-avatars/kieu-toc-phan-tich.webp" alt="" style="display:none" onerror="this.remove()">
         <img class="intro-photo" src="https://dciwkfdqhhddeymlisey.supabase.co/storage/v1/object/public/portraits/hero-banners/phong-cach-ai-01.webp" alt="" onerror="this.remove()">
@@ -108,8 +109,17 @@
           </div>
         </div>
       </div></div>
-      <div id="shellRecent"></div>
-
+      <div class="ws-main-col">
+      <!-- Thanh tiến trình — chỉ hiển thị trạng thái, không bấm được. Tool này
+           KHÔNG có tầng xem trước miễn phí (khác app-luan-giai) — form nộp
+           ảnh đi thẳng qua gate Lượng rồi ra kết quả, nên chỉ có 3 bước thật.
+           JS chuyển bước ở `wsStepsSet` (cuối file), gọi tại đúng chỗ trạng
+           thái đã đổi trong code cũ (analyze/_doPhanTich/resetAll). -->
+      <div class="ws-steps" id="ktSteps">
+        <div class="wss-step active"><span class="wss-n">1</span><span class="wss-l">Nhập thông tin</span></div>
+        <div class="wss-step"><span class="wss-n">2</span><span class="wss-l">Thanh toán</span></div>
+        <div class="wss-step"><span class="wss-n">3</span><span class="wss-l">Nhận kết quả</span></div>
+      </div>
       <div class="kt-card" id="inputSection">
         <h2><span class="ic" data-icon="camera"></span> Tải Ảnh Lên</h2>
         <p class="sub">Chọn giới tính và tải lên một tấm ảnh rõ khuôn mặt. Hệ thống phân tích hình dạng khuôn mặt rồi ghép thử trực tiếp lên ảnh. Nhận về gợi ý kiểu tóc, kiểu kính phù hợp và ảnh đã ghép thử.</p>
@@ -182,6 +192,16 @@
           <span class="ic" data-icon="sparkles"></span> Phân Tích Khuôn Mặt &amp; Gợi Ý Phong Cách — <span data-tvp-price="kieu-toc-phan-tich">…</span> Lượng
         </button>
         <div style="font-size:11px;color:var(--text-lt);text-align:center;margin-top:8px">Phân tích ~5s · Thử kiểu ~25s</div>
+      </div>
+      </div>
+      <div class="ws-side-col">
+      <div class="ws-promo">
+        <div class="wsp-eyebrow"><span class="wsp-ic" data-icon="book-open"></span><span>Giới thiệu</span></div>
+        <div class="wsp-title">Kiểu Tóc &amp; Kính Mắt Hợp Tướng Mặt</div>
+        <p class="wsp-desc">Kiểu Tóc &amp; Kính Mắt Hợp Tướng Mặt chấm khuôn mặt hợp kiểu nào rồi ghép thử ngay lên ảnh thật. Tốn tiền làm tóc, mua kính mà vẫn thấy không tự tin hơn, thậm chí còn thấy tệ hơn trước? Tải ảnh chân dung, nhận gợi ý và bản ghép thử trước khi ra tiệm.</p>
+      </div>
+      <div id="shellRecent"></div>
+      </div>
       </div>
 
       <div class="result-section" id="resultSection">
@@ -375,6 +395,21 @@ let _currentSlug = null;
 let _camStream = null;
 let _tryonImgUrl = null;
 let _selectedStyleId = null;
+
+// Thanh tiến trình (`.ws-steps`, xem shell.css) — chỉ phản ánh trạng thái đã
+// có sẵn trong flow cũ (form → paywall → kết quả, KHÔNG có tầng xem trước).
+// `n` các bước TRƯỚC coi là "done" (viền vàng), bước `n` đang "active" (nền
+// navy), các bước sau giữ mặc định.
+function wsStepsSet(n) {
+  var el = document.getElementById('ktSteps');
+  if (!el) return;
+  var steps = el.querySelectorAll('.wss-step');
+  for (var i = 0; i < steps.length; i++) {
+    steps[i].classList.remove('active', 'done');
+    if (i + 1 < n) steps[i].classList.add('done');
+    else if (i + 1 === n) steps[i].classList.add('active');
+  }
+}
 const ANALYSIS_STEPS = [
   { label: 'Đo khuôn mặt bằng MediaPipe', ms: 1000 },
   { label: 'Phân tích hình dạng khuôn mặt', ms: 0 },
@@ -543,6 +578,7 @@ async function analyze() {
   TuviPaywall.init({ product: 'kieu-toc-phan-tich', slug: () => _currentSlug, onUnlock: () => {} });
   _currentSlug = TuviPaywall.generateToolSlug('kieu-toc-phan-tich');
   _saveStateForAuth();
+  wsStepsSet(2); // Thanh toán — gate Lượng đang chạy, chưa có tầng xem trước riêng
   await TuviPaywall.requireCredits(_currentSlug, async () => {
     await _doPhanTich();
   });
@@ -586,6 +622,7 @@ async function _measureFace(imageDataUrl) {
 }
 
 async function _doPhanTich() {
+  wsStepsSet(3); // Nhận kết quả — đã trả tiền, bắt đầu phân tích khuôn mặt
   const resultSec = document.getElementById('resultSection');
   resultSec.classList.add('active');
   resultSec.style.display = 'block';
@@ -833,6 +870,7 @@ function resetAll() {
   document.getElementById('resultSection').classList.remove('active');
   _analysisResult = null; _tryonImgUrl = null; _selectedStyleId = null;
   Shell.setShareable(null);
+  wsStepsSet(1); // về lại Nhập thông tin
   document.getElementById('inputSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 

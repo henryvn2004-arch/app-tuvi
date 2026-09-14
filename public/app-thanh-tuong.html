@@ -87,6 +87,7 @@
            Render Delay 5,3s). `Shell.introOnce` thấy `.intro-card` đã có thì chỉ
            điền `#introSrc`. Vì thế `SHELL_INTRO` bên dưới CHỈ khai `key` — chữ nằm
            đúng ở đây, một bản duy nhất, không có bản chép để trôi. -->
+      <div class="ws-intake">
       <div id="introHost"><div class="intro-card">
         <img class="intro-avatar" src="/tool-avatars/thanh-tuong.webp" alt="" style="display:none" onerror="this.remove()">
         <img class="intro-photo" src="https://dciwkfdqhhddeymlisey.supabase.co/storage/v1/object/public/portraits/hero-banners/xem-tuong-01.webp" alt="" onerror="this.remove()">
@@ -103,13 +104,17 @@
           <div class="hero-pill"><span class="hp-ic" data-icon="scroll-text"></span><span>Luận theo<br>Ngũ Âm cổ pháp</span></div>
         </div>
       </div></div>
-      <div id="shellRecent"></div>
-      <div class="samp-cta" id="sampCta">
-        <span class="sc-ic" data-icon="lightbulb"></span>
-        <span class="sc-txt"><b>Chưa muốn ghi âm?</b><span>Bạn có thể xem một bản mẫu để trải nghiệm trước.</span></span>
-        <button type="button" id="btnSample" data-sample-tool="thanh-tuong" onclick="SampleHint.open(this)">Xem bản mẫu →</button>
+      <div class="ws-main-col">
+      <!-- Thanh tiến trình — chỉ hiển thị trạng thái, không bấm được. JS
+           chuyển bước ở `wsStepsSet` (cuối file), gọi tại đúng chỗ trạng thái
+           đã đổi trong code cũ (analyze/resetTool/paywall/kết quả). Tool này
+           không có màn "xem trước" tách riêng — đo giọng xong vẫn đứng
+           nguyên ở bước 1 cho tới khi bấm phân tích, nên chỉ 3 bước. -->
+      <div class="ws-steps" id="wsSteps">
+        <div class="wss-step active"><span class="wss-n">1</span><span class="wss-l">Ghi âm giọng nói</span></div>
+        <div class="wss-step"><span class="wss-n">2</span><span class="wss-l">Thanh toán</span></div>
+        <div class="wss-step"><span class="wss-n">3</span><span class="wss-l">Nhận kết quả</span></div>
       </div>
-
       <div class="dt-card" id="inputCard">
         <div class="fc-head"><span class="fc-ic" data-icon="mic"></span><h2>Ghi Âm Giọng Nói</h2></div>
         <p class="sub">Đọc thành tiếng đoạn mẫu bên dưới để hệ thống ghi âm và đo chỉ số âm học, đối chiếu với Ngũ Âm cổ pháp.</p>
@@ -173,6 +178,21 @@
         </button>
         <div class="dt-error" id="error-msg"></div>
       </div>
+      </div>
+      <div class="ws-side-col">
+      <div class="ws-promo">
+        <div class="wsp-eyebrow"><span class="wsp-ic" data-icon="book-open"></span><span>Giới thiệu</span></div>
+        <div class="wsp-title">Thanh Tướng</div>
+        <p class="wsp-desc">Thanh Tướng luận tướng qua giọng nói theo cổ pháp thanh âm học. Ghi âm một đoạn ngắn, nhận bản luận Ngũ Âm — giọng hợp nghề gì, nên tránh nghề gì.</p>
+      </div>
+      <div class="samp-cta" id="sampCta">
+        <span class="sc-ic" data-icon="lightbulb"></span>
+        <span class="sc-txt"><b>Chưa muốn ghi âm?</b><span>Bạn có thể xem một bản mẫu để trải nghiệm trước.</span></span>
+        <button type="button" id="btnSample" data-sample-tool="thanh-tuong" onclick="SampleHint.open(this)">Xem bản mẫu →</button>
+      </div>
+      <div id="shellRecent"></div>
+      </div>
+      </div>
 
       <div class="dt-card" id="resultCard" data-ws-result style="display:none;margin-top:16px">
         <h2>Phân Tích Thanh Tướng Học</h2>
@@ -222,6 +242,21 @@ let _countdownTimer = null;
 let _animFrame = null;
 let _features = null;
 let _currentSlug = '';
+
+// Thanh tiến trình (`.ws-steps`, xem shell.css) — chỉ phản ánh trạng thái đã
+// có sẵn trong flow cũ (ghi âm → thanh toán → kết quả), không tạo trạng thái
+// mới. `n` các bước TRƯỚC coi là "done" (viền vàng), bước `n` đang "active"
+// (nền navy), các bước sau giữ mặc định.
+function wsStepsSet(n){
+  var el=document.getElementById('wsSteps');
+  if(!el) return;
+  var steps=el.querySelectorAll('.wss-step');
+  for(var i=0;i<steps.length;i++){
+    steps[i].classList.remove('active','done');
+    if(i+1<n) steps[i].classList.add('done');
+    else if(i+1===n) steps[i].classList.add('active');
+  }
+}
 
 const RECORD_MS = 14000;
 const COUNTDOWN = 3;
@@ -615,6 +650,7 @@ async function analyze() {
   const errEl = document.getElementById('error-msg');
   errEl.classList.remove('active');
   document.getElementById('analyzeBtn').disabled = true;
+  wsStepsSet(2); // Thanh toán — chốt tường trước khi gọi model
   _currentSlug = TuviPaywall.generateToolSlug('thanh-tuong');
   await TuviPaywall.requireCredits(_currentSlug, async () => {
     await _doAnalyze();
@@ -624,6 +660,7 @@ async function analyze() {
 
 async function _doAnalyze() {
   document.getElementById('resultCard').style.display = 'block';
+  wsStepsSet(3); // Nhận kết quả — đã trả tiền, bắt đầu luận giải
   const aiResultEl = document.getElementById('aiResult');
   aiResultEl.innerHTML = '<div class="dt-loading"><span class="dt-loading-icon ic" data-icon="music"></span><div class="dt-loading-text">Đang luận giải thanh tướng...<br><span style="font-size:12px;opacity:.7">Thường mất 10–15 giây</span></div></div>';
   window.mountIcons && window.mountIcons(aiResultEl);
@@ -702,6 +739,7 @@ function resetTool() {
   document.getElementById('recordIcon').innerHTML = window.iconHtml ? window.iconHtml('mic') : '🎙';
   document.getElementById('recordLabel').textContent = 'Bắt Đầu Thu Âm';
   document.getElementById('inputCard').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  wsStepsSet(1); // về lại Ghi âm giọng nói
   Shell.setShareable(null);
 }
 

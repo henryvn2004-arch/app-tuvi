@@ -168,6 +168,7 @@
            Render Delay 5,3s). `Shell.introOnce` thấy `.intro-card` đã có thì chỉ
            điền `#introSrc`. Vì thế `SHELL_INTRO` bên dưới CHỈ khai `key` — chữ nằm
            đúng ở đây, một bản duy nhất, không có bản chép để trôi. -->
+      <div class="ws-intake">
       <div id="introHost"><div class="intro-card">
         <img class="intro-avatar" src="/tool-avatars/chu-trinh-cuoc-doi.webp" alt="" style="display:none" onerror="this.remove()">
         <img class="intro-photo" src="https://dciwkfdqhhddeymlisey.supabase.co/storage/v1/object/public/portraits/hero-banners/laso-01.webp" alt="" onerror="this.remove()">
@@ -184,11 +185,16 @@
           <div class="hero-pill"><span class="hp-ic" data-icon="compass"></span><span>Chặng thuận,<br>chặng cẩn trọng</span></div>
         </div>
       </div></div>
-      <div id="shellRecent"></div>
-      <div class="samp-cta" id="sampCta" style="display:none">
-        <span class="sc-ic" data-icon="lightbulb"></span>
-        <span class="sc-txt"><b>Chưa muốn khai ngày sinh?</b><span>Bạn có thể xem một bản mẫu để trải nghiệm trước.</span></span>
-        <button type="button" id="btnSample" onclick="openSample(this)">Xem bản mẫu →</button>
+      <div class="ws-main-col">
+      <!-- Thanh tiến trình — chỉ hiển thị trạng thái, không bấm được. JS
+           chuyển bước ở `wsStepsSet` (cuối file), gọi tại đúng chỗ trạng thái
+           đã đổi trong code cũ (doLuan/showForm/gate/paywall/kết quả) — cùng
+           mẫu app-luan-giai.html (tool anh em, cùng flow 4 bước). -->
+      <div class="ws-steps" id="wsSteps">
+        <div class="wss-step active"><span class="wss-n">1</span><span class="wss-l">Nhập thông tin</span></div>
+        <div class="wss-step"><span class="wss-n">2</span><span class="wss-l">Xem trước lá số</span></div>
+        <div class="wss-step"><span class="wss-n">3</span><span class="wss-l">Thanh toán</span></div>
+        <div class="wss-step"><span class="wss-n">4</span><span class="wss-l">Nhận kết quả</span></div>
       </div>
       <div class="form-card" id="birthPanel">
         <div class="fc-head"><span class="fc-ic" data-icon="hourglass"></span><h2>Nhập thông tin để lập lá số &amp; luận chu trình cuộc đời</h2></div>
@@ -202,6 +208,21 @@
           <span class="bg-label"><span class="ic" data-icon="hourglass"></span><b id="btnGoLabel">Luận giải →</b></span>
           <small>Miễn phí</small>
         </button>
+      </div>
+      </div>
+      <div class="ws-side-col">
+      <div class="ws-promo">
+        <div class="wsp-eyebrow"><span class="wsp-ic" data-icon="book-open"></span><span>Giới thiệu</span></div>
+        <div class="wsp-title">Chu Trình Cuộc Đời</div>
+        <p class="wsp-desc">Soi 9 đại vận trọn đời và tiểu vận năm nay từ lá số của bạn — biết giai đoạn nào thuận, giai đoạn nào cần cẩn trọng.</p>
+      </div>
+      <div class="samp-cta" id="sampCta" style="display:none">
+        <span class="sc-ic" data-icon="lightbulb"></span>
+        <span class="sc-txt"><b>Chưa muốn khai ngày sinh?</b><span>Bạn có thể xem một bản mẫu để trải nghiệm trước.</span></span>
+        <button type="button" id="btnSample" onclick="openSample(this)">Xem bản mẫu →</button>
+      </div>
+      <div id="shellRecent"></div>
+      </div>
       </div>
 
       <div id="lgPanel" data-ws-result>
@@ -442,6 +463,20 @@ function sampleToForm(){
 
 function scoreColor(t){ return t>=7?'var(--green)':t>=5?'var(--gold-soft)':'var(--red)'; }
 
+// Thanh tiến trình (`.ws-steps`, xem shell.css) — chỉ phản ánh trạng thái đã
+// có sẵn trong flow cũ (form → xem trước → paywall → kết quả), không tạo
+// trạng thái mới. `n` các bước TRƯỚC coi là "done" (viền vàng), bước `n`
+// đang "active" (nền navy), các bước sau giữ mặc định.
+function wsStepsSet(n){
+  var el=document.getElementById('wsSteps');
+  if(!el) return;
+  var steps=el.querySelectorAll('.wss-step');
+  for(var i=0;i<steps.length;i++){
+    steps[i].classList.remove('active','done');
+    if(i+1<n) steps[i].classList.add('done');
+    else if(i+1===n) steps[i].classList.add('active');
+  }
+}
 function doLuan(){
   var btn=document.getElementById('btnGo');
   var namxem=parseInt(document.getElementById('inpNamxem').value)||new Date().getFullYear();
@@ -466,6 +501,7 @@ function doLuan(){
     if(window.mountIcons) window.mountIcons(document.getElementById('miniChart')); // ô giữa mang span [data-icon]
     document.getElementById('birthPanel').style.display='none';
     document.getElementById('lgPanel').style.display='block';
+    wsStepsSet(2); // Xem trước lá số — điểm số + 2 phần miễn phí sắp hiện ra
     document.getElementById('btnEdit').style.display='';
     document.getElementById('btnLaSo').style.display='';
     // Form dài hơn màn hình (nhất là mobile) thì lúc bấm nút, khung kết quả
@@ -1010,7 +1046,7 @@ async function initLuanGiaiGate(ls){
   }catch(e){hasAccess=false;}
   if(hasAccess){
     var cached=await _fetchCachedLuanGiai(_pendingSlug);
-    if(cached){ _renderCachedLuanGiai(cached); return; }
+    if(cached){ _renderCachedLuanGiai(cached); wsStepsSet(4); return; }
     // 🐞 (2026-09-07, phát hiện lúc chạy final-test thật) ĐÃ trả tiền nhưng
     // CHƯA có cache — ca thật: lượt sinh trước bị ngắt giữa chừng (đóng tab/
     // mất mạng trước khi PhanPool chạy xong `_saveLuanGiaiResult`). Rơi về
@@ -1100,6 +1136,7 @@ function _parkWallNodes(){
 function _renderUnlockBlock(){
   var host=document.getElementById('lgUnlock');
   host.style.display='block';
+  wsStepsSet(3); // Thanh toán — tường đã dựng, chờ mở khoá
   _moveWallBelowFree(host);
   // Bấm được nay không chỉ ở banner đầu trang — cả 11 phần (luôn nằm trong
   // DOM) cũng bật khoá-mini của chính nó, để cuộn qua khỏi banner vẫn còn chỗ mở.
@@ -1217,6 +1254,7 @@ async function _triggerUnlockAll(){
 async function _startLuanGiaiAI(){
   document.getElementById('lgUnlock').style.display='none';
   document.getElementById('lgProgress').style.display='block';
+  wsStepsSet(4); // Nhận kết quả — đã trả tiền, bắt đầu luận giải đầy đủ
   // Đã trả tiền — tắt hết khoá-mini NGAY, kể cả những phần chưa tới lượt sinh
   // chữ (sinh SONG SONG, không theo đúng thứ tự 1→11). Để chúng sáng đèn
   // "chưa mở" trong lúc đang luận là mời bấm lại một lượt mua đã xảy ra rồi.
@@ -1382,6 +1420,7 @@ function showForm(){
   document.getElementById('btnLaSo').style.display='none';
   document.getElementById('lgUnlock').style.display='none';
   document.getElementById('lgProgress').style.display='none';
+  wsStepsSet(1); // về lại Nhập thông tin
   Shell.setShareable(null);
 }
 // điền sẵn ngày sinh đã nhớ (nếu có); tự luận nếu đến qua ?auto=1 (từ nút Lá số).

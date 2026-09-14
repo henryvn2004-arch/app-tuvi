@@ -66,6 +66,7 @@
            Render Delay 5,3s). `Shell.introOnce` thấy `.intro-card` đã có thì chỉ
            điền `#introSrc`. Vì thế `SHELL_INTRO` bên dưới CHỈ khai `key` — chữ nằm
            đúng ở đây, một bản duy nhất, không có bản chép để trôi. -->
+      <div class="ws-intake">
       <div id="introHost"><div class="intro-card">
         <img class="intro-avatar" src="/tool-avatars/nap-am.webp" alt="" style="display:none" onerror="this.remove()">
         <img class="intro-photo" src="https://dciwkfdqhhddeymlisey.supabase.co/storage/v1/object/public/portraits/hero-banners/menh-ly-01.webp" alt="" onerror="this.remove()">
@@ -82,7 +83,13 @@
           <div class="hero-pill"><span class="hp-ic" data-icon="users"></span><span>Tuổi<br>hợp – kỵ</span></div>
         </div>
       </div></div>
-      <div id="shellRecent"></div>
+      <div class="ws-main-col">
+      <!-- Thanh tiến trình — tool này MIỄN PHÍ, không có paywall, chỉ 2 chặng
+           thật: nhập năm sinh rồi xem kết quả. JS chuyển bước ở `wsStepsSet`. -->
+      <div class="ws-steps" id="wsSteps">
+        <div class="wss-step active"><span class="wss-n">1</span><span class="wss-l">Nhập năm sinh</span></div>
+        <div class="wss-step"><span class="wss-n">2</span><span class="wss-l">Xem kết quả</span></div>
+      </div>
       <div class="form-card" id="birthPanel">
         <div class="fc-head"><span class="fc-ic" data-icon="tornado"></span><h2>Năm sinh (dương lịch)</h2></div>
         <p class="sub">Nhập năm sinh của bạn. Nhận về tên mệnh đầy đủ cùng màu, phương vị và tuổi hợp – kỵ.</p>
@@ -94,6 +101,16 @@
           </button>
         </div>
         <div class="err" id="error-msg"></div>
+      </div>
+      </div>
+      <div class="ws-side-col">
+      <div class="ws-promo">
+        <div class="wsp-eyebrow"><span class="wsp-ic" data-icon="book-open"></span><span>Giới thiệu</span></div>
+        <div class="wsp-title">Nạp âm ngũ hành</div>
+        <p class="wsp-desc">Tra mệnh nạp âm, hành, màu và hướng hợp theo năm sinh. Nhập năm sinh, nhận tên mệnh đầy đủ cùng hành, màu, hướng hợp — miễn phí.</p>
+      </div>
+      <div id="shellRecent"></div>
+      </div>
       </div>
 
       <div id="resPanel" data-ws-result>
@@ -117,6 +134,18 @@ window.SHELL_INTRO={key:'nap-am'};</script>
 <script>
 // Ô giữa dùng CHUNG module /tools-shared/nap-am.js với trang standalone
 // /tools/nap-am.html → kết quả y hệt. Rail nhận chính data module tính.
+// Thanh tiến trình — tool MIỄN PHÍ, chỉ 2 chặng: nhập năm sinh / xem kết quả.
+// `n` các bước TRƯỚC coi là "done" (viền vàng), bước `n` đang "active" (nền navy).
+function wsStepsSet(n){
+  var el=document.getElementById('wsSteps');
+  if(!el) return;
+  var steps=el.querySelectorAll('.wss-step');
+  for(var i=0;i<steps.length;i++){
+    steps[i].classList.remove('active','done');
+    if(i+1<n) steps[i].classList.add('done');
+    else if(i+1===n) steps[i].classList.add('active');
+  }
+}
 function calculate(){
   var y=parseInt(document.getElementById('year').value);
   var err=document.getElementById('error-msg');
@@ -129,6 +158,7 @@ function calculate(){
   document.getElementById('birthPanel').style.display='none';
   document.getElementById('resPanel').style.display='block';
   document.getElementById('btnEdit').style.display='';
+  wsStepsSet(2); // Xem kết quả — đã tra xong nạp âm
   if(window.SHELL_INTRO)Shell.dismissIntro(window.SHELL_INTRO.key);
   // Rail nhận CẢ tầng ứng dụng. `extractGenericContext` bỏ IM LẶNG mọi giá trị
   // là object nên phải trải phẳng, không lồng `ungDung` vào làm một khoá con.
@@ -158,6 +188,7 @@ function showForm(){
   document.getElementById('resPanel').style.display='none';
   document.getElementById('birthPanel').style.display='block';
   document.getElementById('btnEdit').style.display='none';
+  wsStepsSet(1); // về lại Nhập năm sinh
   Shell.setShareable(null);
 }
 document.getElementById('year').addEventListener('keydown',function(e){if(e.key==='Enter')calculate();});

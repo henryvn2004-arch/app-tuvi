@@ -105,6 +105,7 @@
            Render Delay 5,3s). `Shell.introOnce` thấy `.intro-card` đã có thì chỉ
            điền `#introSrc`. Vì thế `SHELL_INTRO` bên dưới CHỈ khai `key` — chữ nằm
            đúng ở đây, một bản duy nhất, không có bản chép để trôi. -->
+      <div class="ws-intake">
       <div id="introHost"><div class="intro-card">
         <img class="intro-avatar" src="/tool-avatars/mau-sac-hop-menh.webp" alt="" style="display:none" onerror="this.remove()">
         <img class="intro-photo" src="https://dciwkfdqhhddeymlisey.supabase.co/storage/v1/object/public/portraits/hero-banners/phong-cach-ai-01.webp" alt="" onerror="this.remove()">
@@ -116,7 +117,16 @@
           </div>
         </div>
       </div></div>
-      <div id="shellRecent"></div>
+      <div class="ws-main-col">
+      <!-- Thanh tiến trình — 3 chặng thật của tool này: nhập năm sinh (hook
+           mở ngay trong ô nhập, KHÔNG phải màn hình riêng) → thanh toán (gate
+           `TuviPaywall.requireCredits` trong doAnalyze) → nhận kết quả đầy đủ
+           (renderResults). JS chuyển bước ở `wsStepsSet`. -->
+      <div class="ws-steps" id="wsSteps">
+        <div class="wss-step active"><span class="wss-n">1</span><span class="wss-l">Nhập thông tin</span></div>
+        <div class="wss-step"><span class="wss-n">2</span><span class="wss-l">Thanh toán</span></div>
+        <div class="wss-step"><span class="wss-n">3</span><span class="wss-l">Nhận kết quả</span></div>
+      </div>
 
       <div class="ms-card">
         <h2><span class="ic" data-icon="sparkles"></span> Thông Tin Bản Mệnh</h2>
@@ -149,6 +159,16 @@
 
       <div class="ms-card loading-overlay" id="loadingOverlay">
         <div id="analysisStepsHost"></div>
+      </div>
+      </div>
+      <div class="ws-side-col">
+      <div class="ws-promo">
+        <div class="wsp-eyebrow"><span class="wsp-ic" data-icon="book-open"></span><span>Giới thiệu</span></div>
+        <div class="wsp-title">Màu Sắc Hợp Mệnh</div>
+        <p class="wsp-desc">Màu Sắc Hợp Mệnh gợi ý những gam màu hợp mệnh ngũ hành của bạn. Làm ăn ế ẩm, tài lộc không tụ — mà chưa từng nghĩ tới việc màu sắc mình mặc, mình dùng có đang khắc mệnh? Nhập ngày sinh, nhận danh sách màu nên dùng, màu nên tránh.</p>
+      </div>
+      <div id="shellRecent"></div>
+      </div>
       </div>
 
       <div id="results-section" data-ws-result>
@@ -307,6 +327,18 @@ base.forEach(([y,h])=>{NAP_AM_MAP[y]=h;NAP_AM_MAP[y+1]=h;});
 
 function calcGua(y,g){let s=String(y).split('').reduce((a,c)=>a+parseInt(c),0);while(s>=10)s=String(s).split('').reduce((a,c)=>a+parseInt(c),0);let r;if(g==='male'){r=y>=2000?9-s:10-s;if(r<=0)r+=9;if(r===5)r=2;}else{r=y>=2000?s+6:s+5;while(r>=10)r=String(r).split('').reduce((a,c)=>a+parseInt(c),0);if(r===5)r=8;}return r;}
 
+// Thanh tiến trình — 3 chặng: Nhập thông tin / Thanh toán / Nhận kết quả. `n`
+// các bước TRƯỚC coi là "done" (viền vàng), bước `n` đang "active" (nền navy).
+function wsStepsSet(n){
+  var el=document.getElementById('wsSteps');
+  if(!el) return;
+  var steps=el.querySelectorAll('.wss-step');
+  for(var i=0;i<steps.length;i++){
+    steps[i].classList.remove('active','done');
+    if(i+1<n) steps[i].classList.add('done');
+    else if(i+1===n) steps[i].classList.add('active');
+  }
+}
 let _gua=null;
 const ANALYSIS_STEPS=[
   {label:'Tính quái số & nạp âm bản mệnh',ms:900},
@@ -360,7 +392,7 @@ function onYearChange(){
   mountHook(na);
 }
 
-function resetAll(){document.getElementById('results-section').style.display='none';document.getElementById('ws').scrollTo({top:0,behavior:'smooth'});Shell.setShareable(null);}
+function resetAll(){document.getElementById('results-section').style.display='none';document.getElementById('ws').scrollTo({top:0,behavior:'smooth'});wsStepsSet(1);/* về lại Nhập thông tin */Shell.setShareable(null);}
 
 async function doAnalyze(){
   document.getElementById('errorBox').classList.remove('show');
@@ -377,6 +409,7 @@ async function doAnalyze(){
   _analysisLoadingCtl=AiLoadingSteps.mount('analysisStepsHost',ANALYSIS_STEPS);
   _analysisLoadingCtl.start();
 
+  wsStepsSet(2); // Thanh toán — tường đã dựng, chờ mở khoá
   const _slug=TuviPaywall.generateToolSlug('mau-sac-hop-menh');
   TuviPaywall.init({ product: 'mau-sac-hop-menh' });
   try{
@@ -418,6 +451,7 @@ function clothingTag(color){
 }
 
 function renderResults(data){
+  wsStepsSet(3); // Nhận kết quả — đã trả tiền, bảng màu đầy đủ hiện ra
   const{napAmHanh,colorData,styleGuide:s}=data;
 
   const bg=NH_BG[napAmHanh]||'linear-gradient(135deg,#888,#aaa)';

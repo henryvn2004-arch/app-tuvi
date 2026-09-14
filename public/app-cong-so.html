@@ -122,6 +122,7 @@
            Render Delay 5,3s). `Shell.introOnce` thấy `.intro-card` đã có thì chỉ
            điền `#introSrc`. Vì thế `SHELL_INTRO` bên dưới CHỈ khai `key` — chữ nằm
            đúng ở đây, một bản duy nhất, không có bản chép để trôi. -->
+      <div class="ws-intake">
       <div id="introHost"><div class="intro-card">
         <img class="intro-avatar" src="/tool-avatars/cong-so.webp" alt="" style="display:none" onerror="this.remove()">
         <img class="intro-photo" src="https://dciwkfdqhhddeymlisey.supabase.co/storage/v1/object/public/portraits/hero-banners/laso-01.webp" alt="" onerror="this.remove()">
@@ -138,8 +139,16 @@
           <div class="hero-pill"><span class="hp-ic" data-icon="users"></span><span>Nhánh nghề,<br>ghép đội</span></div>
         </div>
       </div></div>
-      <div id="shellRecent"></div>
-
+      <div class="ws-main-col">
+      <!-- Thanh tiến trình — chỉ hiển thị trạng thái, không bấm được. JS
+           chuyển bước ở `wsStepsSet` (cuối file), gọi tại đúng chỗ trạng thái
+           đã đổi trong code cũ (doCongSo/showForm/dungTuong/moNhanh). -->
+      <div class="ws-steps" id="wsSteps">
+        <div class="wss-step active"><span class="wss-n">1</span><span class="wss-l">Nhập thông tin</span></div>
+        <div class="wss-step"><span class="wss-n">2</span><span class="wss-l">Xem trước hồ sơ</span></div>
+        <div class="wss-step"><span class="wss-n">3</span><span class="wss-l">Thanh toán</span></div>
+        <div class="wss-step"><span class="wss-n">4</span><span class="wss-l">Nhận kết quả</span></div>
+      </div>
       <div class="form-card" id="birthPanel">
         <div class="fc-head"><span class="fc-ic" data-icon="briefcase"></span><h2>Ngày giờ sinh và chỗ đứng hiện tại</h2></div>
         <p class="sub">Nhập ngày giờ sinh và vị trí hiện tại. Hệ thống đối chiếu cổ pháp — kiểu người nơi công sở, nhánh nghề hợp và 40 năm sự nghiệp chia 4 chặng.</p>
@@ -161,6 +170,16 @@
         </button>
         <p class="sub" style="margin:10px 0 0">Dựng hồ sơ kiểu người + 12 mặt là <b>miễn phí</b>. Mở phần nhánh nghề cụ thể mới tính Lượng.</p>
         <div class="err" id="error-msg"></div>
+      </div>
+      </div>
+      <div class="ws-side-col">
+      <div class="ws-promo">
+        <div class="wsp-eyebrow"><span class="wsp-ic" data-icon="book-open"></span><span>Giới thiệu</span></div>
+        <div class="wsp-title">Tử Vi Công Sở</div>
+        <p class="wsp-desc">Đọc kiểu người của bạn ở chỗ làm và cả chặng đường sự nghiệp — giúp định hướng nghề nghiệp cụ thể hơn.</p>
+      </div>
+      <div id="shellRecent"></div>
+      </div>
       </div>
 
       <div id="resPanel" data-ws-result>
@@ -231,6 +250,20 @@ TuviForm.render('tuviFormHost', {mode:'compact', gioitinh:'nam'});
   }catch(e){/* không có gì để điền */}
 })();
 
+// Thanh tiến trình (`.ws-steps`, xem shell.css) — chỉ phản ánh trạng thái đã
+// có sẵn trong flow cũ (form → xem trước hồ sơ → thanh toán → kết quả), không
+// tạo trạng thái mới. `n` các bước TRƯỚC coi là "done" (viền vàng), bước `n`
+// đang "active" (nền navy), các bước sau giữ mặc định.
+function wsStepsSet(n){
+  var el=document.getElementById('wsSteps');
+  if(!el) return;
+  var steps=el.querySelectorAll('.wss-step');
+  for(var i=0;i<steps.length;i++){
+    steps[i].classList.remove('active','done');
+    if(i+1<n) steps[i].classList.add('done');
+    else if(i+1===n) steps[i].classList.add('active');
+  }
+}
 function _err(m){var e=document.getElementById('error-msg');if(!m){e.classList.remove('active');e.textContent='';return;}e.textContent=m;e.classList.add('active');}
 
 // Banner minh hoạ — Công Sở KHÔNG có cấu trúc 12-cung/phần riêng như Luận
@@ -272,6 +305,7 @@ function doCongSo(){
     document.getElementById('ketQua').innerHTML = loggedIn ? CongSoTool.bangHTML(_ho) : CongSoTool.headHTML(_ho);
     document.getElementById('birthPanel').style.display='none';
     document.getElementById('resPanel').style.display='block';
+    wsStepsSet(2); // Xem trước hồ sơ — kiểu người (+ 12 mặt nếu đã đăng nhập) đã hiện
     document.getElementById('btnEdit').style.display='';
     document.getElementById('taiBtn').style.display=loggedIn?'':'none';
     // Mục "Ai Sinh Cùng Ngày Với Bạn" — phần phụ, đặt SAU khi hồ sơ đã dựng.
@@ -362,6 +396,7 @@ var HO_SO_KHOA_ANON=[
 // tấm khoá mờ làm CTA đăng ký (visitor chưa có ví để mà trừ), và tấm khoá đó
 // che LUÔN cả phần thân vốn free — chỉ HEAD là còn hiện ngoài tường.
 function dungTuong(){
+  wsStepsSet(3); // Thanh toán — tường/nút gate đã dựng, chờ mở nhánh nghề
   document.getElementById('nhanhHost').innerHTML='';
   var hookHost=document.getElementById('hookHost');
   if(hookHost)hookHost.innerHTML='';
@@ -416,6 +451,7 @@ function mountHookAnon(){
 }
 
 function moNhanh(){
+  wsStepsSet(4); // Nhận kết quả — đã trả tiền, bắt đầu mở phần nhánh nghề
   var host=document.getElementById('nhanhHost');
   host.innerHTML='<div class="cs-note">Đang mở phần nhánh nghề…</div>';
   var tt=document.getElementById('trangThai').value;
@@ -488,7 +524,7 @@ function taiAnh(){
     .then(function(){btn.disabled=false;btn.textContent=old;});
 }
 
-function showForm(){document.getElementById('resPanel').style.display='none';document.getElementById('birthPanel').style.display='block';document.getElementById('btnEdit').style.display='none';Shell.setShareable(null);}
+function showForm(){document.getElementById('resPanel').style.display='none';document.getElementById('birthPanel').style.display='block';document.getElementById('btnEdit').style.display='none';wsStepsSet(1);/* về lại Nhập thông tin */Shell.setShareable(null);}
 window.addEventListener('resize',ve);
 </script>
 </body>

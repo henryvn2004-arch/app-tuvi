@@ -151,6 +151,7 @@ table.tutru td.row-label{font-size:10.5px;color:#9a8a6a;text-transform:uppercase
            Render Delay 5,3s). `Shell.introOnce` thấy `.intro-card` đã có thì chỉ
            điền `#introSrc`. Vì thế `SHELL_INTRO` bên dưới CHỈ khai `key` — chữ nằm
            đúng ở đây, một bản duy nhất, không có bản chép để trôi. -->
+      <div class="ws-intake">
       <div id="introHost"><div class="intro-card">
         <img class="intro-avatar" src="/tool-avatars/tu-binh.webp" alt="" style="display:none" onerror="this.remove()">
         <img class="intro-photo" src="https://dciwkfdqhhddeymlisey.supabase.co/storage/v1/object/public/portraits/hero-banners/tu-binh-01.webp" alt="" onerror="this.remove()">
@@ -167,7 +168,16 @@ table.tutru td.row-label{font-size:10.5px;color:#9a8a6a;text-transform:uppercase
           <div class="hero-pill"><span class="hp-ic" data-icon="calendar"></span><span>Đại Vận,<br>Lưu Niên</span></div>
         </div>
       </div></div>
-      <div id="shellRecent"></div>
+      <div class="ws-main-col">
+      <!-- Thanh tiến trình — JS chuyển bước ở `wsStepsSet` (cuối file), gọi tại
+           đúng chỗ trạng thái đã đổi trong flow cũ (doBatTu/showForm/gate/
+           paywall/kết quả) — cùng mẫu app-luan-giai.html. -->
+      <div class="ws-steps" id="wsSteps">
+        <div class="wss-step active"><span class="wss-n">1</span><span class="wss-l">Nhập thông tin</span></div>
+        <div class="wss-step"><span class="wss-n">2</span><span class="wss-l">Xem trước lá số</span></div>
+        <div class="wss-step"><span class="wss-n">3</span><span class="wss-l">Thanh toán</span></div>
+        <div class="wss-step"><span class="wss-n">4</span><span class="wss-l">Nhận kết quả</span></div>
+      </div>
       <div class="form-card" id="birthPanel">
         <div class="fc-head"><span class="fc-ic" data-icon="scroll-text"></span><h2>Nhập thông tin ngày sinh (dương lịch)</h2></div>
         <p class="sub">Nhập ngày giờ sinh và năm muốn luận. Hệ thống lập tứ trụ, luận theo cổ pháp Tử Bình — 16 phần: cách cục, thập thần, tình duyên, sức khoẻ, đại vận và lưu niên.</p>
@@ -179,6 +189,16 @@ table.tutru td.row-label{font-size:10.5px;color:#9a8a6a;text-transform:uppercase
           <span class="bg-label"><span class="ic" data-icon="scroll-text"></span><b id="btnGoLabel">Lập Bát Tự →</b></span>
           <small>Miễn phí</small>
         </button>
+      </div>
+      </div>
+      <div class="ws-side-col">
+      <div class="ws-promo">
+        <div class="wsp-eyebrow"><span class="wsp-ic" data-icon="book-open"></span><span>Giới thiệu</span></div>
+        <div class="wsp-title">Lá số Bát Tự (Tứ Trụ)</div>
+        <p class="wsp-desc">Lập tứ trụ, đọc Nhật Can, Dụng Thần, Cách Cục, Đại Vận — biết mệnh thiếu hành gì để bổ.</p>
+      </div>
+      <div id="shellRecent"></div>
+      </div>
       </div>
 
       <div id="btPanel" data-ws-result>
@@ -257,6 +277,20 @@ function _fillVndSlots(host,product){
 }
 TuviPaywall.fillPriceSlots(document).then(function(){ _fillVndSlots(document,'tu-binh'); });
 
+// Thanh tiến trình (`.ws-steps`, xem shell.css) — chỉ phản ánh trạng thái đã
+// có sẵn trong flow cũ (form → xem trước → paywall → kết quả), không tạo
+// trạng thái mới. `n` các bước TRƯỚC coi là "done" (viền vàng), bước `n`
+// đang "active" (nền navy), các bước sau giữ mặc định.
+function wsStepsSet(n){
+  var el=document.getElementById('wsSteps');
+  if(!el) return;
+  var steps=el.querySelectorAll('.wss-step');
+  for(var i=0;i<steps.length;i++){
+    steps[i].classList.remove('active','done');
+    if(i+1<n) steps[i].classList.add('done');
+    else if(i+1===n) steps[i].classList.add('active');
+  }
+}
 function scoreColor(t){ return t>=6.5?'var(--green)':t>=4?'var(--gold-soft)':'var(--red)'; }
 var HANH_COLOR={'Mộc':'var(--green)','Hỏa':'var(--red)','Thổ':'var(--gold-soft)','Kim':'#8a8a8a','Thủy':'var(--blue)'};
 
@@ -284,6 +318,7 @@ function doBatTu(){
     for(var y=namxem-2;y<=namxem+3;y++)barSel.innerHTML+='<option value="'+y+'"'+(y===namxem?' selected':'')+'>'+y+'</option>';
     document.getElementById('birthPanel').style.display='none';
     document.getElementById('btPanel').style.display='block';
+    wsStepsSet(2); // Xem trước lá số — tứ trụ + 16 phần miễn phí sắp hiện ra
     document.getElementById('btnEdit').style.display='';
     document.getElementById('btnLuan').style.display='';
     // Mục "Ai Sinh Cùng Ngày Với Bạn" — phần phụ, đặt sau khi tứ trụ đã dựng.
@@ -842,8 +877,8 @@ async function initBatTuGate(bt){
   document.getElementById('btUnlock').style.display='none';
   document.getElementById('btProgress').style.display='none';
   var cached=await _fetchCachedLuanGiai(_pendingSlug);
-  if(cached)_renderCachedLuanGiai(cached);
-  else{ document.getElementById('btUnlock').style.display='block'; _paintSecLocksBt(true); }
+  if(cached){ _renderCachedLuanGiai(cached); wsStepsSet(4); }
+  else{ document.getElementById('btUnlock').style.display='block'; wsStepsSet(3); _paintSecLocksBt(true); } // Thanh toán — tường đã dựng, chờ mở khoá
 }
 
 async function initiateBatTuChuyenSau(){
@@ -852,6 +887,7 @@ async function initiateBatTuChuyenSau(){
 async function _startBatTuAI(){
   document.getElementById('btUnlock').style.display='none';
   document.getElementById('btProgress').style.display='block';
+  wsStepsSet(4); // Nhận kết quả — đã trả tiền, bắt đầu luận giải đầy đủ
   _paintSecLocksBt(false);
   _currentPhan=0; _luanGiaiStore={}; _ragCache={};
   await _loadNextPhanAI();
@@ -923,6 +959,7 @@ function showForm(){
   document.getElementById('btnLuan').style.display='none';
   document.getElementById('btUnlock').style.display='none';
   document.getElementById('btProgress').style.display='none';
+  wsStepsSet(1); // về lại Nhập thông tin
   Shell.setShareable(null);
 }
 // điền sẵn ngày sinh đã nhớ (nếu có); tự lập nếu đến qua ?auto=1.

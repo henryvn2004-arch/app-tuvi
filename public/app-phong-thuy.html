@@ -128,6 +128,7 @@
            Render Delay 5,3s). `Shell.introOnce` thấy `.intro-card` đã có thì chỉ
            điền `#introSrc`. Vì thế `SHELL_INTRO` bên dưới CHỈ khai `key` — chữ nằm
            đúng ở đây, một bản duy nhất, không có bản chép để trôi. -->
+      <div class="ws-intake">
       <div id="introHost"><div class="intro-card">
         <img class="intro-avatar" src="/tool-avatars/phong-thuy.webp" alt="" style="display:none" onerror="this.remove()">
         <img class="intro-photo" src="https://dciwkfdqhhddeymlisey.supabase.co/storage/v1/object/public/portraits/hero-banners/phong-thuy-01.webp" alt="" onerror="this.remove()">
@@ -144,13 +145,15 @@
           <div class="hero-pill"><span class="hp-ic" data-icon="camera"></span><span>Render phòng<br>theo phong thủy</span></div>
         </div>
       </div></div>
-      <div id="shellRecent"></div>
-      <div class="samp-cta" id="sampCta">
-        <span class="sc-ic" data-icon="lightbulb"></span>
-        <span class="sc-txt"><b>Chưa muốn khai thông tin & ảnh?</b><span>Bạn có thể xem một bản mẫu để trải nghiệm trước.</span></span>
-        <button type="button" id="btnSample" data-sample-tool="phong-thuy" onclick="SampleHint.open(this)">Xem bản mẫu →</button>
+      <div class="ws-main-col">
+      <!-- Thanh tiến trình — JS chuyển bước ở `wsStepsSet` (cuối file), gọi
+           tại đúng chỗ trạng thái đã đổi trong flow cũ (doAnalyze/renderResults/
+           resetAll). -->
+      <div class="ws-steps" id="wsSteps">
+        <div class="wss-step active"><span class="wss-n">1</span><span class="wss-l">Nhập thông tin</span></div>
+        <div class="wss-step"><span class="wss-n">2</span><span class="wss-l">Thanh toán</span></div>
+        <div class="wss-step"><span class="wss-n">3</span><span class="wss-l">Nhận kết quả</span></div>
       </div>
-
       <div class="pt-card">
         <h2><span class="pt-num">1</span> Bản Mệnh &amp; Thông Tin Phòng</h2>
         <div class="pt-row">
@@ -234,6 +237,21 @@
           <span class="bg-label"><span class="ic" data-icon="compass"></span><b id="btnAnalyzeLabel">Phân Tích Phong Thủy</b></span>
           <small>Tốn <span data-tvp-price="phong-thuy">…</span> Lượng <span data-tvp-price-vnd="phong-thuy"></span></small>
         </button>
+      </div>
+      </div>
+      <div class="ws-side-col">
+      <div class="ws-promo">
+        <div class="wsp-eyebrow"><span class="wsp-ic" data-icon="book-open"></span><span>Giới thiệu</span></div>
+        <div class="wsp-title">Phong Thủy Nội Thất</div>
+        <p class="wsp-desc">Phong Thủy Nội Thất đọc phong thủy căn phòng theo Bát Trạch và Ngũ Hành từ ảnh bạn chụp. Chụp ảnh phòng, nhận điểm trước – sau và đề xuất bố trí cụ thể.</p>
+      </div>
+      <div class="samp-cta" id="sampCta">
+        <span class="sc-ic" data-icon="lightbulb"></span>
+        <span class="sc-txt"><b>Chưa muốn khai thông tin & ảnh?</b><span>Bạn có thể xem một bản mẫu để trải nghiệm trước.</span></span>
+        <button type="button" id="btnSample" data-sample-tool="phong-thuy" onclick="SampleHint.open(this)">Xem bản mẫu →</button>
+      </div>
+      <div id="shellRecent"></div>
+      </div>
       </div>
 
       <div class="pt-card loading-overlay" id="loadingOverlay">
@@ -340,6 +358,20 @@ function initPhongThuy(){
 }
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initPhongThuy); else initPhongThuy();
 
+// Thanh tiến trình (`.ws-steps`) — chỉ phản ánh trạng thái đã có sẵn trong
+// flow cũ (form → thanh toán → kết quả), không tạo trạng thái mới. `n` các
+// bước TRƯỚC coi là "done" (viền vàng), bước `n` đang "active" (nền navy).
+function wsStepsSet(n){
+  var el=document.getElementById('wsSteps');
+  if(!el) return;
+  var steps=el.querySelectorAll('.wss-step');
+  for(var i=0;i<steps.length;i++){
+    steps[i].classList.remove('active','done');
+    if(i+1<n) steps[i].classList.add('done');
+    else if(i+1===n) steps[i].classList.add('active');
+  }
+}
+
 // ══════════════════════════════════════════════════════════════════════
 // Port từ public/tools/phong-thuy.html — giữ nguyên Bát Trạch calc (Quái
 // số), gate Lượng qua TuviPaywall (product 'phong-thuy' 40đ chấm điểm,
@@ -391,7 +423,7 @@ function onDrag(e,on){e.preventDefault();document.getElementById('uploadZone').c
 function onDrop(e){e.preventDefault();document.getElementById('uploadZone').classList.remove('drag-over');const f=e.dataTransfer.files[0];if(f&&f.type.startsWith('image/'))processFile(f);}
 function onFile(e){const f=e.target.files[0];if(f)processFile(f);}
 function resetUpload(){_img64=null;document.getElementById('uploadZone').style.display='block';document.getElementById('previewWrap').classList.remove('show');document.getElementById('fileInput').value='';}
-function resetAll(){resetUpload();document.getElementById('results-section').style.display='none';document.getElementById('ws').scrollTo({top:0,behavior:'smooth'});}
+function resetAll(){resetUpload();document.getElementById('results-section').style.display='none';wsStepsSet(1);document.getElementById('ws').scrollTo({top:0,behavior:'smooth'});}
 
 async function processFile(file){
   const{base64,type}=await resizeImg(file);_img64=base64;_imgType=type;
@@ -417,6 +449,7 @@ async function doAnalyze(){
   _analysisLoadingCtl=AiLoadingSteps.mount('analysisStepsHost',ANALYSIS_STEPS);
   _analysisLoadingCtl.start();
   const _slug=TuviPaywall.generateToolSlug('phong-thuy');
+  wsStepsSet(2); // Thanh toán — đang gate Lượng trước khi gọi API phân tích
   try{
     await new Promise((resolve,reject)=>{
       TuviPaywall.requireCredits(_slug,async()=>{
@@ -457,6 +490,7 @@ function renderFloorPlan(furniture,recs){
 }
 
 function renderResults(data){
+  wsStepsSet(3); // Nhận kết quả — đã trả tiền, bắt đầu dựng bản phân tích
   const{detected,analysis}=data;
   const before=analysis.beforeScore||0,after=analysis.afterScore||0;
   document.getElementById('scoreBefore').textContent=before;

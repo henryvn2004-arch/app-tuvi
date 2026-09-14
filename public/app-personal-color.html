@@ -125,6 +125,7 @@
            Render Delay 5,3s). `Shell.introOnce` thấy `.intro-card` đã có thì chỉ
            điền `#introSrc`. Vì thế `SHELL_INTRO` bên dưới CHỈ khai `key` — chữ nằm
            đúng ở đây, một bản duy nhất, không có bản chép để trôi. -->
+      <div class="ws-intake">
       <div id="introHost"><div class="intro-card">
         <img class="intro-avatar" src="/tool-avatars/personal-color.webp" alt="" style="display:none" onerror="this.remove()">
         <img class="intro-photo" src="https://dciwkfdqhhddeymlisey.supabase.co/storage/v1/object/public/portraits/hero-banners/phong-cach-ai-01.webp" alt="" onerror="this.remove()">
@@ -136,8 +137,15 @@
           </div>
         </div>
       </div></div>
-      <div id="shellRecent"></div>
-
+      <div class="ws-main-col">
+      <!-- Thanh tiến trình — JS chuyển bước ở `wsStepsSet` (cuối file), gọi
+           tại đúng chỗ trạng thái đã đổi trong flow cũ (analyze/requireCredits/
+           renderResults/resetAll). -->
+      <div class="ws-steps" id="wsSteps">
+        <div class="wss-step active"><span class="wss-n">1</span><span class="wss-l">Nhập thông tin</span></div>
+        <div class="wss-step"><span class="wss-n">2</span><span class="wss-l">Thanh toán</span></div>
+        <div class="wss-step"><span class="wss-n">3</span><span class="wss-l">Nhận kết quả</span></div>
+      </div>
       <div class="pc-card">
         <h2><span class="ic" data-icon="camera"></span> Ảnh Khuôn Mặt</h2>
         <p class="sub">Tải lên một tấm ảnh chân dung rõ mặt, đủ sáng tự nhiên. Hệ thống phân tích tông da rồi ghép thử màu ngay trên ảnh. Nhận về mùa màu của bạn, bảng màu hợp – nên tránh và ảnh đã ghép thử.</p>
@@ -181,6 +189,16 @@
         <button class="btn-analyze" id="btnAnalyze" onclick="analyze()" disabled>
           <span class="ic" data-icon="palette"></span> Phân Tích Personal Color — <span data-tvp-price="personal-color">…</span> Lượng
         </button>
+      </div>
+      </div>
+      <div class="ws-side-col">
+      <div class="ws-promo">
+        <div class="wsp-eyebrow"><span class="wsp-ic" data-icon="book-open"></span><span>Giới thiệu</span></div>
+        <div class="wsp-title">Personal Color</div>
+        <p class="wsp-desc">Personal Color xác định tông da hợp mùa màu nào rồi thử ngay lên ảnh thật. Diện đồ đúng mốt mà vẫn bị chê trông mệt, xỉn màu — vì chưa ai nói bạn thuộc mùa màu nào? Tải ảnh chân dung, nhận mùa màu của bạn và bản ghép thử ngay trên ảnh.</p>
+      </div>
+      <div id="shellRecent"></div>
+      </div>
       </div>
 
       <div class="pc-card loading" id="loading">
@@ -356,6 +374,20 @@ function initPersonalColor(){
 }
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initPersonalColor); else initPersonalColor();
 
+// Thanh tiến trình (`.ws-steps`) — chỉ phản ánh trạng thái đã có sẵn trong
+// flow cũ (form → thanh toán → kết quả), không tạo trạng thái mới. `n` các
+// bước TRƯỚC coi là "done" (viền vàng), bước `n` đang "active" (nền navy).
+function wsStepsSet(n){
+  var el=document.getElementById('wsSteps');
+  if(!el) return;
+  var steps=el.querySelectorAll('.wss-step');
+  for(var i=0;i<steps.length;i++){
+    steps[i].classList.remove('active','done');
+    if(i+1<n) steps[i].classList.add('done');
+    else if(i+1===n) steps[i].classList.add('active');
+  }
+}
+
 // ══════════════════════════════════════════════════════════════════════
 // Port từ public/tools/personal-color.html — giữ nguyên luồng nén ảnh
 // (EXIF fix) + gate Lượng 2 sản phẩm (personal-color + tryon).
@@ -471,6 +503,7 @@ function clearPhoto() {
 
 function resetAll() {
   clearPhoto();
+  wsStepsSet(1); // về lại Nhập thông tin
   document.getElementById('ws').scrollTo({ top: 0, behavior: 'smooth' });
   Shell.setShareable(null);
 }
@@ -488,6 +521,7 @@ async function analyze() {
 
   const slug = TuviPaywall.generateToolSlug('personal-color');
   TuviPaywall.init({ product: 'personal-color' });
+  wsStepsSet(2); // Thanh toán — đang gate Lượng trước khi gọi API phân tích
 
   try {
     await new Promise((resolve, reject) => {
@@ -517,6 +551,7 @@ async function analyze() {
 }
 
 function renderResults(d) {
+  wsStepsSet(3); // Nhận kết quả — đã trả tiền, bắt đầu dựng bản phân tích
   document.getElementById('results').style.display = 'block';
 
   const season = d.season || 'spring_warm';

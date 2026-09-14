@@ -60,6 +60,7 @@
            Render Delay 5,3s). `Shell.introOnce` thấy `.intro-card` đã có thì chỉ
            điền `#introSrc`. Vì thế `SHELL_INTRO` bên dưới CHỈ khai `key` — chữ nằm
            đúng ở đây, một bản duy nhất, không có bản chép để trôi. -->
+      <div class="ws-intake">
       <div id="introHost"><div class="intro-card">
         <img class="intro-avatar" src="/tool-avatars/chon-ngay-tot.webp" alt="" style="display:none" onerror="this.remove()">
         <img class="intro-photo" src="https://dciwkfdqhhddeymlisey.supabase.co/storage/v1/object/public/portraits/hero-banners/dat-ten-lich-01.webp" alt="" onerror="this.remove()">
@@ -76,11 +77,15 @@
           <div class="hero-pill"><span class="hp-ic" data-icon="clock"></span><span>Giờ hoàng đạo<br>từng ngày</span></div>
         </div>
       </div></div>
-      <div id="shellRecent"></div>
-      <div class="samp-cta" id="sampCta">
-        <span class="sc-ic" data-icon="lightbulb"></span>
-        <span class="sc-txt"><b>Chưa muốn khai thông tin?</b><span>Bạn có thể xem một bản mẫu để trải nghiệm trước.</span></span>
-        <button type="button" id="btnSample" data-sample-tool="chon-ngay-tot" onclick="SampleHint.open(this)">Xem bản mẫu →</button>
+      <div class="ws-main-col">
+      <!-- Thanh tiến trình — chỉ hiển thị trạng thái, không bấm được. JS
+           chuyển bước ở `wsStepsSet` (cuối file), gọi tại đúng chỗ trạng thái
+           đã đổi trong code cũ (doChonNgay/showForm/unlock/chuyên sâu AI). -->
+      <div class="ws-steps" id="wsSteps">
+        <div class="wss-step active"><span class="wss-n">1</span><span class="wss-l">Nhập thông tin</span></div>
+        <div class="wss-step"><span class="wss-n">2</span><span class="wss-l">Xem nền can chi</span></div>
+        <div class="wss-step"><span class="wss-n">3</span><span class="wss-l">Thanh toán</span></div>
+        <div class="wss-step"><span class="wss-n">4</span><span class="wss-l">Nhận kết quả</span></div>
       </div>
       <div class="form-card" id="birthPanel">
         <div class="fc-head"><span class="fc-ic" data-icon="calendar"></span><h2>Thông tin chọn ngày</h2></div>
@@ -109,6 +114,21 @@
             <small>Miễn phí</small>
           </button>
         </div>
+      </div>
+      </div>
+      <div class="ws-side-col">
+      <div class="ws-promo">
+        <div class="wsp-eyebrow"><span class="wsp-ic" data-icon="book-open"></span><span>Giới thiệu</span></div>
+        <div class="wsp-title">Chọn ngày giờ tốt</div>
+        <p class="wsp-desc">Gợi ý ngày tốt cho cưới hỏi, làm nhà, khai trương theo can chi tuổi chủ sự. Chọn loại việc và khoảng thời gian, nhận danh sách ngày giờ tốt phù hợp.</p>
+      </div>
+      <div class="samp-cta" id="sampCta">
+        <span class="sc-ic" data-icon="lightbulb"></span>
+        <span class="sc-txt"><b>Chưa muốn khai thông tin?</b><span>Bạn có thể xem một bản mẫu để trải nghiệm trước.</span></span>
+        <button type="button" id="btnSample" data-sample-tool="chon-ngay-tot" onclick="SampleHint.open(this)">Xem bản mẫu →</button>
+      </div>
+      <div id="shellRecent"></div>
+      </div>
       </div>
 
       <div id="resPanel" data-ws-result>
@@ -184,6 +204,20 @@ function mountHook(info,thangCC,namCC){
   });
 }
 
+// Thanh tiến trình (`.ws-steps`, xem shell.css) — chỉ phản ánh trạng thái đã
+// có sẵn trong flow cũ (form → nền can chi → thanh toán → kết quả), không tạo
+// trạng thái mới. `n` các bước TRƯỚC coi là "done" (viền vàng), bước `n`
+// đang "active" (nền navy), các bước sau giữ mặc định.
+function wsStepsSet(n){
+  var el=document.getElementById('wsSteps');
+  if(!el) return;
+  var steps=el.querySelectorAll('.wss-step');
+  for(var i=0;i<steps.length;i++){
+    steps[i].classList.remove('active','done');
+    if(i+1<n) steps[i].classList.add('done');
+    else if(i+1===n) steps[i].classList.add('active');
+  }
+}
 function doChonNgay(){
   var btn=document.getElementById('btnGo');
   var suKien=document.getElementById('inpSuKien').value;
@@ -212,6 +246,7 @@ function doChonNgay(){
     document.getElementById('resPanel').style.display='block';
     document.getElementById('btnEdit').style.display='';
     if(window.SHELL_INTRO)Shell.dismissIntro(window.SHELL_INTRO.key);
+    wsStepsSet(2); // Xem nền can chi — kết quả miễn phí đã hiện, chờ mở phần chuyên sâu
     Shell.setContext({
       scenario:{type:'chon-ngay-tot',data:{suKien:suKien,hoTen:hoTen,namSinh:namSinh,thangNum:thangNum,namNum:namNum}},
       label:'Chọn ngày '+suKien+' · '+hoTen+' · T'+thangNum+'/'+namNum,
@@ -340,10 +375,12 @@ function renderMarkdownDt(md){
 
 async function initiateChonNgayChuyenSau(){
   if(!_dtInfo||!_dtThangNum||!_dtNamNum){ alert('Vui lòng nhập thông tin trước.'); return; }
+  wsStepsSet(3); // Thanh toán — chờ requireCredits xác nhận
   var slug=TuviPaywall.generateToolSlug('chon-ngay-tot-'+_dtNamSinh+'-'+_dtThangNum+'-'+_dtNamNum);
   await TuviPaywall.requireCredits(slug, async function(){ await _doChonNgayAI(); });
 }
 async function _doChonNgayAI(){
+  wsStepsSet(4); // Nhận kết quả — đã trả tiền, bắt đầu phân tích ngày tốt chuyên sâu
   var btn=document.getElementById('btnUnlock');
   if(btn)btn.disabled=true;
   var el=document.getElementById('dtResult');
@@ -387,6 +424,7 @@ function showForm(){
   document.getElementById('resPanel').style.display='none';
   document.getElementById('birthPanel').style.display='block';
   document.getElementById('btnEdit').style.display='none';
+  wsStepsSet(1); // về lại Nhập thông tin
   Shell.setShareable(null);
 }
 </script>

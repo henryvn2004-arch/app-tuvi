@@ -72,6 +72,7 @@
            Render Delay 5,3s). `Shell.introOnce` thấy `.intro-card` đã có thì chỉ
            điền `#introSrc`. Vì thế `SHELL_INTRO` bên dưới CHỈ khai `key` — chữ nằm
            đúng ở đây, một bản duy nhất, không có bản chép để trôi. -->
+      <div class="ws-intake">
       <div id="introHost"><div class="intro-card">
         <img class="intro-avatar" src="/tool-avatars/thu-tuong.webp" alt="" style="display:none" onerror="this.remove()">
         <img class="intro-photo" src="https://dciwkfdqhhddeymlisey.supabase.co/storage/v1/object/public/portraits/hero-banners/xem-tuong-01.webp" alt="" onerror="this.remove()">
@@ -88,13 +89,17 @@
           <div class="hero-pill"><span class="hp-ic" data-icon="scroll-text"></span><span>Luận theo<br>Ngũ Hành Hình Tướng</span></div>
         </div>
       </div></div>
-      <div id="shellRecent"></div>
-      <div class="samp-cta" id="sampCta">
-        <span class="sc-ic" data-icon="lightbulb"></span>
-        <span class="sc-txt"><b>Chưa muốn chụp ảnh?</b><span>Bạn có thể xem một bản mẫu để trải nghiệm trước.</span></span>
-        <button type="button" id="btnSample" data-sample-tool="thu-tuong" onclick="SampleHint.open(this)">Xem bản mẫu →</button>
+      <div class="ws-main-col">
+      <!-- Thanh tiến trình — chỉ hiển thị trạng thái, không bấm được. JS
+           chuyển bước ở `wsStepsSet` (cuối file), gọi tại đúng chỗ trạng thái
+           đã đổi trong code cũ (analyze/resetTool/paywall/kết quả). Tool này
+           không có màn "xem trước" tách riêng — chọn/chụp ảnh xong vẫn đứng
+           nguyên ở bước 1 cho tới khi bấm phân tích, nên chỉ 3 bước. -->
+      <div class="ws-steps" id="wsSteps">
+        <div class="wss-step active"><span class="wss-n">1</span><span class="wss-l">Tải ảnh bàn tay</span></div>
+        <div class="wss-step"><span class="wss-n">2</span><span class="wss-l">Thanh toán</span></div>
+        <div class="wss-step"><span class="wss-n">3</span><span class="wss-l">Nhận kết quả</span></div>
       </div>
-
       <div class="dt-card" id="inputCard">
         <div class="fc-head"><span class="fc-ic" data-icon="hand"></span><h2>Tải ảnh lòng bàn tay</h2></div>
         <p class="sub">Chụp và tải một tấm ảnh rõ lòng bàn tay. Hệ thống phân tích đường chỉ tay theo Ngũ Hành Hình Tướng, luận tam đại chỉ, đường vận mệnh, gò và ngón tay.</p>
@@ -170,6 +175,21 @@
         </button>
         <div class="dt-error" id="error-msg"></div>
       </div>
+      </div>
+      <div class="ws-side-col">
+      <div class="ws-promo">
+        <div class="wsp-eyebrow"><span class="wsp-ic" data-icon="book-open"></span><span>Giới thiệu</span></div>
+        <div class="wsp-title">Thủ Tướng</div>
+        <p class="wsp-desc">Thủ Tướng đọc chỉ tay theo Ngũ Hành Hình Tướng từ ảnh bàn tay bạn. Chụp ảnh lòng bàn tay, nhận luận tam đại chỉ, đường vận mệnh, gò và ngón tay — sự nghiệp, tình duyên, sức khoẻ.</p>
+      </div>
+      <div class="samp-cta" id="sampCta">
+        <span class="sc-ic" data-icon="lightbulb"></span>
+        <span class="sc-txt"><b>Chưa muốn chụp ảnh?</b><span>Bạn có thể xem một bản mẫu để trải nghiệm trước.</span></span>
+        <button type="button" id="btnSample" data-sample-tool="thu-tuong" onclick="SampleHint.open(this)">Xem bản mẫu →</button>
+      </div>
+      <div id="shellRecent"></div>
+      </div>
+      </div>
 
       <div class="dt-card" id="resultCard" data-ws-result style="display:none;margin-top:16px">
         <h2>Phân Tích Thủ Tướng Học</h2>
@@ -209,6 +229,21 @@ if (document.readyState === 'loading') document.addEventListener('DOMContentLoad
 // ══════════════════════════════════════════════════════════════════════
 let _imageData=null, _mediaType='image/jpeg', _camStream=null;
 let _mpHandsReady=false, _handGeoNote=null, _currentSlug='';
+
+// Thanh tiến trình (`.ws-steps`, xem shell.css) — chỉ phản ánh trạng thái đã
+// có sẵn trong flow cũ (tải ảnh → thanh toán → kết quả), không tạo trạng
+// thái mới. `n` các bước TRƯỚC coi là "done" (viền vàng), bước `n` đang
+// "active" (nền navy), các bước sau giữ mặc định.
+function wsStepsSet(n){
+  var el=document.getElementById('wsSteps');
+  if(!el) return;
+  var steps=el.querySelectorAll('.wss-step');
+  for(var i=0;i<steps.length;i++){
+    steps[i].classList.remove('active','done');
+    if(i+1<n) steps[i].classList.add('done');
+    else if(i+1===n) steps[i].classList.add('active');
+  }
+}
 
 function loadHands(cb) {
   if (_mpHandsReady) { cb(null); return; }
@@ -426,6 +461,7 @@ async function analyze() {
   if (!_imageData) return;
   document.getElementById('error-msg').classList.remove('active');
   document.getElementById('analyzeBtn').disabled=true;
+  wsStepsSet(2); // Thanh toán — chốt tường trước khi gọi model
   _currentSlug = TuviPaywall.generateToolSlug('thu-tuong');
   await TuviPaywall.requireCredits(_currentSlug, async () => {
     await _doAnalyze();
@@ -435,6 +471,7 @@ async function analyze() {
 
 async function _doAnalyze() {
   document.getElementById('resultCard').style.display='block';
+  wsStepsSet(3); // Nhận kết quả — đã trả tiền, bắt đầu luận giải
   const aiResultEl = document.getElementById('aiResult');
   aiResultEl.innerHTML='<div class="dt-loading"><span class="dt-loading-icon ic" data-icon="hand"></span><div class="dt-loading-text">Đang đọc chỉ tay...<br><span style="font-size:12px;opacity:.7">Thường mất 15–20 giây</span></div></div>';
   window.mountIcons && window.mountIcons(aiResultEl);
@@ -480,6 +517,7 @@ function resetTool() {
   document.getElementById('resultCard').style.display='none';
   document.getElementById('aiResult').innerHTML='';
   document.getElementById('inputCard').scrollIntoView({behavior:'smooth',block:'start'});
+  wsStepsSet(1); // về lại Tải ảnh bàn tay
   Shell.setShareable(null);
 }
 

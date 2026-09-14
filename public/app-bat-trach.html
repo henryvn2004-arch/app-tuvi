@@ -77,6 +77,7 @@
            Render Delay 5,3s). `Shell.introOnce` thấy `.intro-card` đã có thì chỉ
            điền `#introSrc`. Vì thế `SHELL_INTRO` bên dưới CHỈ khai `key` — chữ nằm
            đúng ở đây, một bản duy nhất, không có bản chép để trôi. -->
+      <div class="ws-intake">
       <div id="introHost"><div class="intro-card">
         <img class="intro-avatar" src="/tool-avatars/bat-trach.webp" alt="" style="display:none" onerror="this.remove()">
         <img class="intro-photo" src="https://dciwkfdqhhddeymlisey.supabase.co/storage/v1/object/public/portraits/hero-banners/phong-thuy-01.webp" alt="" onerror="this.remove()">
@@ -93,7 +94,14 @@
           <div class="hero-pill"><span class="hp-ic" data-icon="x-circle"></span><span>4 hướng<br>đại hung</span></div>
         </div>
       </div></div>
-      <div id="shellRecent"></div>
+      <div class="ws-main-col">
+      <!-- Thanh tiến trình — chỉ 2 bước: tool này miễn phí, không có xem trước
+           lẫn thanh toán (form → kết quả thẳng). JS chuyển bước ở `wsStepsSet`
+           (cuối file), gọi tại đúng chỗ trạng thái đã đổi (calculate/showForm). -->
+      <div class="ws-steps" id="wsSteps">
+        <div class="wss-step active"><span class="wss-n">1</span><span class="wss-l">Nhập thông tin</span></div>
+        <div class="wss-step"><span class="wss-n">2</span><span class="wss-l">Nhận kết quả</span></div>
+      </div>
       <div class="form-card" id="birthPanel">
         <div class="fc-head"><span class="fc-ic" data-icon="compass"></span><h2>Năm sinh & giới tính</h2></div>
         <p class="sub">Nhập năm sinh và giới tính. Hệ thống tính mệnh quái theo đúng năm sinh, trả về mệnh quái, cung và bảng chi tiết 8 hướng tốt – xấu.</p>
@@ -106,6 +114,16 @@
           </button>
         </div>
         <div class="err" id="error-msg"></div>
+      </div>
+      </div>
+      <div class="ws-side-col">
+      <div class="ws-promo">
+        <div class="wsp-eyebrow"><span class="wsp-ic" data-icon="book-open"></span><span>Giới thiệu</span></div>
+        <div class="wsp-title">Hướng Bát Trạch</div>
+        <p class="wsp-desc">Tính mệnh quái và hướng nhà hợp với bạn theo Bát Trạch. Nhập năm sinh và giới tính, nhận mệnh quái cùng các hướng tốt – xấu.</p>
+      </div>
+      <div id="shellRecent"></div>
+      </div>
       </div>
 
       <div id="resPanel" data-ws-result>
@@ -154,6 +172,7 @@ function calculate(){
   document.getElementById('huongBody').innerHTML=r.huongRowsHTML;
   document.getElementById('birthPanel').style.display='none';
   document.getElementById('resPanel').style.display='block';
+  wsStepsSet(2); // Nhận kết quả — mệnh quái + bảng 8 hướng đã tính xong
   document.getElementById('btnEdit').style.display='';
   if(window.SHELL_INTRO)Shell.dismissIntro(window.SHELL_INTRO.key);
   Shell.setContext({
@@ -173,7 +192,22 @@ function showForm(){
   document.getElementById('resPanel').style.display='none';
   document.getElementById('birthPanel').style.display='block';
   document.getElementById('btnEdit').style.display='none';
+  wsStepsSet(1); // về lại Nhập thông tin
   Shell.setShareable(null);
+}
+
+// Thanh tiến trình (`.ws-steps`, xem shell.css) — chỉ phản ánh trạng thái đã
+// có sẵn trong flow cũ (form → kết quả), không tạo trạng thái mới. `n` các
+// bước TRƯỚC coi là "done" (viền vàng), bước `n` đang "active" (nền navy).
+function wsStepsSet(n){
+  var el=document.getElementById('wsSteps');
+  if(!el) return;
+  var steps=el.querySelectorAll('.wss-step');
+  for(var i=0;i<steps.length;i++){
+    steps[i].classList.remove('active','done');
+    if(i+1<n) steps[i].classList.add('done');
+    else if(i+1===n) steps[i].classList.add('active');
+  }
 }
 </script>
 <script>/*SHELL_RESTORE_BOOT*/(function(){function _r(){var r=window.Shell&&Shell.pendingRestore&&Shell.pendingRestore();if(r&&r.form){Shell.fillForm(r.form);calculate();}}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',_r);else _r();})();</script>

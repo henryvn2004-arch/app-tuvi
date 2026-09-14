@@ -83,6 +83,7 @@
            Render Delay 5,3s). `Shell.introOnce` thấy `.intro-card` đã có thì chỉ
            điền `#introSrc`. Vì thế `SHELL_INTRO` bên dưới CHỈ khai `key` — chữ nằm
            đúng ở đây, một bản duy nhất, không có bản chép để trôi. -->
+      <div class="ws-intake">
       <div id="introHost"><div class="intro-card">
         <img class="intro-avatar" src="/tool-avatars/so-dep.webp" alt="" style="display:none" onerror="this.remove()">
         <img class="intro-photo" src="https://dciwkfdqhhddeymlisey.supabase.co/storage/v1/object/public/portraits/hero-banners/menh-ly-01.webp" alt="" onerror="this.remove()">
@@ -99,8 +100,14 @@
           <div class="hero-pill"><span class="hp-ic" data-icon="lightbulb"></span><span>Gợi ý số<br>theo mục tiêu</span></div>
         </div>
       </div></div>
-      <div id="shellRecent"></div>
-
+      <div class="ws-main-col">
+      <!-- Thanh tiến trình — JS chuyển bước ở `wsStepsSet` (cuối file), gọi
+           tại đúng chỗ trạng thái đã đổi trong flow cũ (showResult/showForm).
+           Tool này MIỄN PHÍ, không có bước Thanh toán — chỉ 2 bước. -->
+      <div class="ws-steps" id="wsSteps">
+        <div class="wss-step active"><span class="wss-n">1</span><span class="wss-l">Nhập thông tin</span></div>
+        <div class="wss-step"><span class="wss-n">2</span><span class="wss-l">Nhận kết quả</span></div>
+      </div>
       <div id="formPanel">
         <div class="sd-box">
           <div class="form-card">
@@ -157,6 +164,16 @@
             <div class="err" id="gy-err"></div>
           </div>
         </div>
+      </div>
+      </div>
+      <div class="ws-side-col">
+      <div class="ws-promo">
+        <div class="wsp-eyebrow"><span class="wsp-ic" data-icon="book-open"></span><span>Giới thiệu</span></div>
+        <div class="wsp-title">Xem số đẹp</div>
+        <p class="wsp-desc">Chấm điểm số điện thoại, số nhà, biển số theo 5 trường phái tách bạch: Bát Tinh Bát Trạch, Quẻ Dịch, Ngũ Hành, Âm Dương, dân gian. Nhập dãy số, nhận điểm riêng từng trường phái, không gộp thành một con số bịa.</p>
+      </div>
+      <div id="shellRecent"></div>
+      </div>
       </div>
 
       <div id="resWrap" data-ws-result>
@@ -250,12 +267,27 @@ function showResult(){
   document.getElementById('formPanel').style.display='none';
   document.getElementById('resWrap').style.display='block';
   document.getElementById('btnEdit').style.display='';
+  wsStepsSet(2); // Nhận kết quả — miễn phí, không có bước Thanh toán
 }
 function showForm(){
   document.getElementById('resWrap').style.display='none';
   document.getElementById('formPanel').style.display='block';
   document.getElementById('btnEdit').style.display='none';
+  wsStepsSet(1); // về lại Nhập thông tin
   Shell.setShareable(null);
+}
+// Thanh tiến trình (`.ws-steps`) — chỉ phản ánh trạng thái đã có sẵn trong
+// flow cũ (form → kết quả), không tạo trạng thái mới. `n` các bước TRƯỚC coi
+// là "done" (viền vàng), bước `n` đang "active" (nền navy).
+function wsStepsSet(n){
+  var el=document.getElementById('wsSteps');
+  if(!el) return;
+  var steps=el.querySelectorAll('.wss-step');
+  for(var i=0;i<steps.length;i++){
+    steps[i].classList.remove('active','done');
+    if(i+1<n) steps[i].classList.add('done');
+    else if(i+1===n) steps[i].classList.add('active');
+  }
 }
 document.getElementById('dg-so').addEventListener('keydown',function(e){if(e.key==='Enter')chamDiem();});
 // Bấm vào một số gợi ý → chấm điểm chi tiết luôn cho số đó, khỏi phải chép tay sang ô trên.

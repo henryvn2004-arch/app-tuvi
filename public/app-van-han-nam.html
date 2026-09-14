@@ -134,6 +134,7 @@
            Render Delay 5,3s). `Shell.introOnce` thấy `.intro-card` đã có thì chỉ
            điền `#introSrc`. Vì thế `SHELL_INTRO` bên dưới CHỈ khai `key` — chữ nằm
            đúng ở đây, một bản duy nhất, không có bản chép để trôi. -->
+      <div class="ws-intake">
       <div id="introHost"><div class="intro-card">
         <img class="intro-avatar" src="/tool-avatars/van-han-nam.webp" alt="" style="display:none" onerror="this.remove()">
         <img class="intro-photo" src="https://dciwkfdqhhddeymlisey.supabase.co/storage/v1/object/public/portraits/hero-banners/laso-01.webp" alt="" onerror="this.remove()">
@@ -150,11 +151,15 @@
           <div class="hero-pill"><span class="hp-ic" data-icon="dollar-sign"></span><span>Tài chính<br>từng tháng</span></div>
         </div>
       </div></div>
-      <div id="shellRecent"></div>
-      <div class="samp-cta" id="sampCta" style="display:none">
-        <span class="sc-ic" data-icon="lightbulb"></span>
-        <span class="sc-txt"><b>Chưa muốn khai ngày sinh?</b><span>Bạn có thể xem một bản mẫu để trải nghiệm trước.</span></span>
-        <button type="button" id="btnSample" onclick="openSample(this)">Xem bản mẫu →</button>
+      <div class="ws-main-col">
+      <!-- Thanh tiến trình — chỉ hiển thị trạng thái, không bấm được. JS
+           chuyển bước ở `wsStepsSet` (cuối file), gọi tại đúng chỗ trạng thái
+           đã đổi trong code cũ (doXem/showForm/initGate/paywall/kết quả). -->
+      <div class="ws-steps" id="wsSteps">
+        <div class="wss-step active"><span class="wss-n">1</span><span class="wss-l">Nhập thông tin</span></div>
+        <div class="wss-step"><span class="wss-n">2</span><span class="wss-l">Xem trước lá số</span></div>
+        <div class="wss-step"><span class="wss-n">3</span><span class="wss-l">Thanh toán</span></div>
+        <div class="wss-step"><span class="wss-n">4</span><span class="wss-l">Nhận kết quả</span></div>
       </div>
       <div class="form-card" id="birthPanel">
         <div class="fc-head"><span class="fc-ic" data-icon="calendar"></span><h2>Nhập ngày sinh để xem vận hạn 12 tháng tới</h2></div>
@@ -165,6 +170,21 @@
           <span class="bg-label"><span class="ic" data-icon="calendar"></span><b id="btnGoLabel">Xem vận hạn →</b></span>
           <small>Miễn phí</small>
         </button>
+      </div>
+      </div>
+      <div class="ws-side-col">
+      <div class="ws-promo">
+        <div class="wsp-eyebrow"><span class="wsp-ic" data-icon="book-open"></span><span>Giới thiệu</span></div>
+        <div class="wsp-title">Vận Hạn 12 Tháng Tới</div>
+        <p class="wsp-desc">Luận vận trình theo từng tháng trong năm — biết trước tháng nào cần cẩn trọng, tháng nào nên tiến.</p>
+      </div>
+      <div class="samp-cta" id="sampCta" style="display:none">
+        <span class="sc-ic" data-icon="lightbulb"></span>
+        <span class="sc-txt"><b>Chưa muốn khai ngày sinh?</b><span>Bạn có thể xem một bản mẫu để trải nghiệm trước.</span></span>
+        <button type="button" id="btnSample" onclick="openSample(this)">Xem bản mẫu →</button>
+      </div>
+      <div id="shellRecent"></div>
+      </div>
       </div>
 
       <div id="vhPanel" data-ws-result>
@@ -282,6 +302,21 @@ var CUNG_ORDER=['Mệnh','Phụ Mẫu','Phúc Đức','Điền Trạch','Quan L�
 var SC_DIMS=['thienVan','canCo','mayMan','phuTro','binhYen','benVung'];
 function cungTotal(sc){ if(!sc)return null; var d=SC_DIMS.map(function(k){return sc[k]}).filter(function(v){return typeof v==='number'}); return d.length?Math.round(d.reduce(function(a,b){return a+b},0)/d.length*10)/10:null; }
 function scoreColor(t){ return t>=7?'var(--green)':t>=5?'var(--gold-soft)':'var(--red)'; }
+
+// Thanh tiến trình (`.ws-steps`, xem shell.css) — chỉ phản ánh trạng thái đã
+// có sẵn trong flow cũ (form → xem trước → paywall → kết quả), không tạo
+// trạng thái mới. `n` các bước TRƯỚC coi là "done" (viền vàng), bước `n`
+// đang "active" (nền navy), các bước sau giữ mặc định.
+function wsStepsSet(n){
+  var el=document.getElementById('wsSteps');
+  if(!el) return;
+  var steps=el.querySelectorAll('.wss-step');
+  for(var i=0;i<steps.length;i++){
+    steps[i].classList.remove('active','done');
+    if(i+1<n) steps[i].classList.add('done');
+    else if(i+1===n) steps[i].classList.add('active');
+  }
+}
 function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
 var _astrolabe=null,_hoTen='',_ngay=0,_thang=0,_nam=0,_gioitinh='nam',_laSoText=null;
@@ -489,6 +524,7 @@ async function doXem(){
     if(window.mountIcons) window.mountIcons(document.getElementById('miniChart'));
     document.getElementById('birthPanel').style.display='none';
     document.getElementById('vhPanel').style.display='block';
+    wsStepsSet(2); // Xem trước lá số — khung 12 tháng + văn mẫu sắp hiện ra
     document.getElementById('btnEdit').style.display='';
     document.getElementById('btnLuanGiai').style.display='';
     if(window.AiLoadingSteps)AiLoadingSteps.scrollToResult('vhPanel');
@@ -759,7 +795,7 @@ async function initGate(){
   }catch(e){hasAccess=false;}
   if(hasAccess){
     var cached=await _fetchCached(_pendingSlug);
-    if(cached){ _renderCached(cached); return; }
+    if(cached){ _renderCached(cached); wsStepsSet(4); return; }
     // 🐞 Đã trả tiền nhưng CHƯA có cache (lượt trước bị ngắt giữa chừng trước
     // khi PhanPool ghi xong `_saveResult`) — cùng bản vá app-chu-trinh-cuoc-doi.html
     // (2026-09-07): mở khoá + sinh lại NGAY, miễn phí (hasAccess đã xác nhận
@@ -772,6 +808,7 @@ async function initGate(){
 function _renderUnlockBlock(){
   var host=document.getElementById('vhUnlock');
   host.style.display='block';
+  wsStepsSet(3); // Thanh toán — tường đã dựng, chờ mở khoá
   _paintSecLocks(true);
   if(_loggedIn()){
     host.innerHTML='<button class="btn-go" id="btnUnlock" onclick="initiateAI()"><span class="bg-label"><span class="ic" data-icon="sparkles"></span><b>Luận vận hạn 12 tháng →</b></span><small>Tốn <span data-tvp-price="van-han-nam">…</span> Lượng <span data-tvp-price-vnd="van-han-nam"></span></small></button>'+
@@ -856,6 +893,7 @@ async function initiateAI(){
 async function _startAI(){
   document.getElementById('vhUnlock').style.display='none';
   document.getElementById('vhProgress').style.display='block';
+  wsStepsSet(4); // Nhận kết quả — đã trả tiền, bắt đầu luận giải đầy đủ
   _paintSecLocks(false);
   _store={};
   _pace&&_pace.reset();
@@ -1095,6 +1133,7 @@ function showForm(){
   document.getElementById('btnLuanGiai').style.display='none';
   document.getElementById('vhUnlock').style.display='none';
   document.getElementById('vhProgress').style.display='none';
+  wsStepsSet(1); // về lại Nhập thông tin
   Shell.setShareable(null);
 }
 
