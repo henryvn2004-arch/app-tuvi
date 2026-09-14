@@ -91,3 +91,7 @@ scripts/fixtures/lunar-table-new.json
 
 # Ảnh minh hoạ sinh bằng scripts/gen-illus.mjs — asset nặng, không commit
 .illus/
+
+# Ảnh banner chính (khối hook `.intro-card`) sinh bằng scripts/gen-hero-banners.mjs
+# khi thử nghiệm — bản final (đã duyệt + optimize) mới vào public/, commit thẳng.
+.hero-banners/
