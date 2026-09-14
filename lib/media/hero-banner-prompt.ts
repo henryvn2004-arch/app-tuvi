@@ -187,12 +187,19 @@ const byId = new Map(HERO_BANNER_GROUPS.map((g) => [g.id, g]));
  * Ném lỗi rõ ràng nếu tool chưa khai — tốt hơn âm thầm rơi về nhóm sai.
  */
 export function resolveHeroGroup(idOrKey: string): HeroBannerGroupSpec {
+  // idOrKey có thể là ID NHÓM thẳng (route nhận cả ?group=) — tra trước khi
+  // coi nó là tool_id, không thì 6/11 nhóm không trùng tên với tool nào
+  // (xem-tuong, chiem-tinh-tay, dat-ten-lich, menh-ly, phong-cach-ai, boi-bai)
+  // sẽ luôn ném lỗi dù gọi đúng ?group=<id nhóm>.
+  const direct = byId.get(idOrKey);
+  if (direct) return direct;
+
   const resolved = TOOL_AVATAR_ALIAS[idOrKey] || idOrKey;
   const groupId = TOOL_TO_HERO_GROUP[resolved];
   const group = groupId ? byId.get(groupId) : undefined;
   if (!group) {
     throw new Error(
-      `resolveHeroGroup: tool "${idOrKey}" (resolved "${resolved}") chưa có trong TOOL_TO_HERO_GROUP.`
+      `resolveHeroGroup: "${idOrKey}" (resolved "${resolved}") không phải id nhóm và cũng chưa có trong TOOL_TO_HERO_GROUP.`
     );
   }
   return group;
