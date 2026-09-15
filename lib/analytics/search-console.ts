@@ -256,3 +256,51 @@ export async function getSearchConsoleSnapshot(
     range: { from, to },
   };
 }
+
+/** Một dòng/ngày cho ext_metrics_daily (docs/GROWTH-DATA-PLAN.md bậc 1). */
+export interface GscDailyRow {
+  date: string; // YYYY-MM-DD
+  clicks: number;
+  impressions: number;
+  ctr: number;
+  position: number;
+}
+
+/**
+ * Snapshot theo NGÀY cho [from, to] — khác `getSearchConsoleSnapshot` (tổng +
+ * top query/page cho digest đọc trực tiếp), hàm này trả MỘT DÒNG MỖI NGÀY để
+ * cron ghi vào kho.
+ *
+ * Cố ý gọi lại mỗi ngày cho một CỬA SỔ NGẮN (không chỉ đúng 1 ngày): dữ liệu
+ * GSC trễ 2–3 ngày và tiếp tục điền dần, nên các ngày gần nhất trong cửa sổ sẽ
+ * còn thiếu ở lượt gọi hôm nay và được điền đủ ở lượt gọi 2-3 ngày sau — upsert
+ * theo (source, entity, stat_date) tự làm việc đó, không cần logic "chờ đủ".
+ */
+export async function getSearchConsoleDaily(
+  from: string,
+  to: string,
+  siteHint = 'tuviminhbao.com',
+): Promise<GscDailyRow[] | null> {
+  const token = await getGoogleAccessToken(SCOPE);
+  if (!token) return null;
+
+  const siteUrl = await pickSite(token, siteHint);
+  if (!siteUrl) return null;
+  const site = encodeURIComponent(siteUrl);
+
+  const res = await gscFetch<{ rows?: ApiRow[] }>(token, `/sites/${site}/searchAnalytics/query`, {
+    startDate: from,
+    endDate: to,
+    dimensions: ['date'],
+    rowLimit: MAX_ROWS,
+  });
+  if (!res) return null;
+
+  return (res.rows || []).map((r) => ({
+    date: r.keys?.[0] || '',
+    clicks: Number(r.clicks || 0),
+    impressions: Number(r.impressions || 0),
+    ctr: Number(r.ctr || 0),
+    position: Number(r.position || 0),
+  }));
+}
