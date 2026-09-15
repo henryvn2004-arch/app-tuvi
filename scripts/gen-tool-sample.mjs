@@ -69,6 +69,7 @@ import {
   buildNguoiKhacPrompt,
 } from '../lib/agent/nguoi-khac-prompt.ts';
 import { computeHuongNghiepTre, hoSoDayDu } from '../lib/engine/huong-nghiep-tre.ts';
+import { computeCongSo, hoSoTinhThu, railData, railDataDayDu } from '../lib/engine/cong-so.ts';
 import {
   HUONG_NGHIEP_TRE_SYSTEM_PROMPT,
   HUONG_NGHIEP_TRE_SCHEMA,
@@ -1052,8 +1053,103 @@ const TOOL_CONFIGS = {
       };
     },
   },
-  // 🔴 nhan-mach CỐ Ý KHÔNG khai ở đây — Henry đã chốt tool này KHÔNG cần
-  // bước xem-trước/blur (nhóm 2-8 người, không phải một-prompt đơn lẻ).
+  // ── Tool 'native' — không LLM/không dummy JSON, xem hàm runOne() ─────────
+  'cong-so': {
+    kind: 'native',
+    label: 'Tử Vi Công Sở & Hướng Nghiệp',
+    sampleBirth: SAMPLE_BIRTH,
+    namXem: NAM_XEM,
+    pdfTitle: 'Tử Vi Công Sở — Bản mẫu',
+    storagePath: 'mau-cong-so.pdf',
+    // Tool NÀY 0 LƯỢT LLM (app/api/cong-so/route.ts: "Tool này 0 lượt LLM")
+    // — hồ sơ hoàn toàn tra bảng từ `computeCongSo`. Không có gì để "sinh mẫu"
+    // cả — PDF mẫu chỉ là chụp lại đúng trang thật với NGÀY SINH mẫu, không
+    // cần gọi LLM. `injectAndRender` chặn thẳng `/api/cong-so` (GET+POST) trả
+    // về kết quả `computeCongSo` tính SẴN ở Node — khỏi cần server Next.js
+    // thật chạy cùng (server tĩnh của script này chỉ phục vụ `public/`).
+    htmlPage: 'app-cong-so.html',
+    async injectAndRender(page, store, ls) {
+      const profile = computeCongSo(ls, 'nhan-vien', NAM_XEM);
+      const head = hoSoTinhThu(profile);
+      const railHead = railData(profile);
+      const railFull = railDataDayDu(profile);
+      await page.route('**/api/cong-so**', async (route) => {
+        const isPost = route.request().method() === 'POST';
+        await route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify(
+            isPost
+              ? { ok: true, hoSo: profile, rail: railFull, tinhThu: false }
+              : { ok: true, hoSo: head, rail: railHead, tinhThu: true }
+          ),
+        });
+      });
+      await page.evaluate(
+        (fd) => {
+          window.Auth = window.Auth || {};
+          window.Auth.isLoggedIn = function () {
+            return true;
+          };
+          window.Auth.getSession = function () {
+            return { access_token: 'sample' };
+          };
+          window.TuviForm = window.TuviForm || {};
+          window.TuviForm.getData = function () {
+            return fd;
+          };
+        },
+        {
+          hoten: SAMPLE_NAME,
+          ngay: SAMPLE_BIRTH.day,
+          thang: SAMPLE_BIRTH.month,
+          nam: SAMPLE_BIRTH.year,
+          gioIdx: SAMPLE_BIRTH.hourBranch,
+          gioHour: SAMPLE_HH,
+          gioPhut: 0,
+          gioitinh: SAMPLE_BIRTH.gender,
+        }
+      );
+      await page.evaluate(() => {
+        document.getElementById('trangThai').value = 'nhan-vien';
+        window.doCongSo();
+      });
+      await page.waitForSelector('#resPanel', { state: 'visible', timeout: 15000 });
+      // Mở luôn tầng NHÁNH (trả phí) — bản mẫu phải "khoe" trọn, không dừng ở
+      // tầng miễn phí. `moNhanh()` gọi lại chính route đã chặn ở trên.
+      await page.evaluate(() => window.moNhanh());
+      await page.waitForSelector('#nhanhHost .cs-sec', { timeout: 15000 });
+    },
+  },
+  'xem-tuoi': {
+    kind: 'native',
+    label: 'Xem Tuổi Vợ Chồng',
+    sampleBirth: SAMPLE_BIRTH,
+    namXem: NAM_XEM,
+    pdfTitle: 'Xem Tuổi Vợ Chồng — Bản mẫu',
+    storagePath: 'mau-xem-tuoi.pdf',
+    // Trang ĐÃ có sẵn dữ liệu mẫu + cơ chế "Xem bản mẫu" native hoàn chỉnh
+    // (`public/samples/xem-tuoi-sample.json`, tự cài `SampleHint.open` y hệt
+    // laso — không qua module `sample-hint.js` dùng chung). PDF mẫu chỉ cần
+    // bấm ĐÚNG nút đó rồi chụp, không sinh gì mới — tránh mồ côi bản mẫu
+    // trong-trang đang sống nếu tự sinh riêng một bản khác cho PDF.
+    htmlPage: 'app-xem-tuoi.html',
+    async injectAndRender(page) {
+      const btn = page.locator('#btnSample');
+      if (await btn.isVisible().catch(() => false)) {
+        await btn.click().catch(() => {});
+      }
+      await page.waitForSelector('#xtPanel', { state: 'visible', timeout: 15000 });
+      await page.waitForFunction(
+        () => {
+          const el = document.getElementById('claude-content-0');
+          return el && el.textContent && el.textContent.length > 200;
+        },
+        { timeout: 15000 }
+      );
+      await page.waitForTimeout(500);
+    },
+  },
 };
 
 // ── CLI ─────────────────────────────────────────────────────────────────
@@ -1112,6 +1208,16 @@ async function runOne(toolId) {
       }
     }
     await runJsonTool(toolId, cfg, ls, { payload }, rawCachePath);
+    return;
+  }
+
+  // 'native' — tool KHÔNG cần LLM/dummy JSON gì cả: hoặc 0 lượt LLM (cong-so,
+  // thuần tra bảng), hoặc đã có sẵn dữ liệu mẫu đứng riêng (xem-tuoi, dùng
+  // lại `public/samples/xem-tuoi-sample.json` cho nút "Xem bản mẫu" native —
+  // không đi qua vòng sinh/`outJson` chung). `injectAndRender(page, {}, ls)`
+  // tự lo mọi thứ (mock API/Auth nếu cần), cùng chữ ký với tool `phan`.
+  if (cfg.kind === 'native') {
+    await renderRealPhanPageAndUpload(toolId, cfg, ls, {});
     return;
   }
 
