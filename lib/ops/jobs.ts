@@ -262,6 +262,13 @@ export const JOBS: JobSpec[] = [
   { key: 'email-cross-sell', label: 'Email — gợi ý tool liên quan', source: 'vercel',
     everyMinutes: 7 * D, schedule: 'T5 08:00 VN hằng tuần', sink: 'email_log', path: '/api/cron/email-cross-sell',
     since: '2026-09-14' },
+  // "Đơn rơi" — nhắc user đã bấm mở khoá một tool nhưng chưa hoàn tất mua,
+  // xem lib/marketing/email-abandoned-checkout.ts. MẶC ĐỊNH TẮT (budget=0).
+  // Chạy NGÀY (khác 2 job trên chạy TUẦN) vì đây là khẩn cấp giờ/ngày, không
+  // phải tuần — segment tự hết hạn sau `maxAgeHours` (mặc định 72h).
+  { key: 'email-abandoned-checkout', label: 'Email — đơn rơi (bấm mở khoá chưa mua)', source: 'vercel',
+    everyMinutes: D, schedule: '10:15 VN hằng ngày', sink: 'email_log', path: '/api/cron/email-abandoned-checkout',
+    since: '2026-09-15' },
   // Rút hàng đợi broadcast email nạp từ admin.html — xem
   // lib/marketing/email-broadcast.ts. Job vẫn "chạy" đều mỗi 15 phút dù không
   // có hàng đợi (trả `skipped`), khác 2 job trên vốn tắt hẳn bằng app_config.

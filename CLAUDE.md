@@ -116,14 +116,14 @@ sửa bằng SQL không cần deploy) · `lib/marketing/*` (digest · cảnh bá
 (tường trả phí) · `tool-prices.js` (giá) · `poster.js` (ảnh 9:16 + QR) ·
 `nav.js` (icon dùng chung) · `track.js` (đo) · `referral.js`.
 
-### 45 bộ dò (chạy trong CI lint) — `npm run check:*`
+### 46 bộ dò (chạy trong CI lint) — `npm run check:*`
 `prices` `nostore` `groups` `viec` `share` `history` `shellboot` `introcard` `navph`
 `formph` `formblock` `font`
 `authapi` `giosinh` `keyframes` `hoatdong` `hexagrams` `laso` `railfields`
 `railwrap` `cacheshape` `hao` `motifs` `illus` `terms` `publish` `jobs` `token`
 `prompt` `topics` `batrach` `sodep` `lunar` `vntz` `tooltip` `cns` `celebanh`
 `nguoithan` `nhatky` `slug` `lasogolden` `refbenchmarks` `lavong` `hooktag`
-`webdriver`.
+`webdriver` `payossig`.
 **Bộ dò kêu oan là bộ dò bị tắt đi** — thà thu hẹp còn hơn để nó báo bừa.
 
 ## 📐 QUY ƯỚC BẮT BUỘC (đọc trước khi viết UI mới)
@@ -169,6 +169,7 @@ Mỗi luật dưới đây sinh ra từ một lần cắn thật. Cột cuối l
 | **Chuỗi khai với cổng thanh toán và chuỗi bảo khách ghi phải là MỘT** — server quyết, client chỉ hiện lại | Hai nguồn cho một đơn ⇒ khách gõ đúng theo màn hình mà tiền không ai nhận |
 | **Lỗi cổng thanh toán có HAI người đọc** — khách nhận câu tiếng Việt nói làm gì tiếp, mình nhận `details[0].issue` + `debug_id` trong `console.error` | `message` của PayPal là một câu chung cho mọi lỗi 422 ⇒ không ai lần ra nguyên nhân |
 | **Webhook PayPal phải đăng ký dưới ĐÚNG app sở hữu `PAYPAL_CLIENT_ID`** — kiểm bằng cách so Client ID trên trang app CHỨA webhook với biến đang chạy, từng ký tự | Mỗi REST app một hàng đợi sự kiện RIÊNG. Webhook nằm nhầm app thì endpoint vẫn đúng, PayPal vẫn ping được bằng Simulator, mà **0 sự kiện thật** — đã ăn 7 lượt nạp live. Đếm app bằng mắt không cứu được: tài khoản có sẵn app `NVP SOAP Webhooks` do PayPal tự dựng | `nhat-ky/2026-08.md` "Webhook PayPal câm" |
+| **Chữ ký payOS PHẢI qua `lib/billing/payos.ts`**, không tự viết `${k}=${data[k]}` — template literal biến `null` thành chuỗi `"null"` trong khi payOS ký bằng chuỗi RỖNG | Field null chỉ xuất hiện tuỳ KÊNH CHUYỂN (ví điện tử không luôn điền đủ `counterAccountBankName`/số TK như app ngân hàng) ⇒ lỗi chỉ rơi vào MỘT SỐ giao dịch, test tay bằng bank app luôn "qua" nên tưởng nhầm là lỗi checksum key. `npm run check:payossig` | `nhat-ky/2026-09.md` "invalid signature webhook payOS tái phát" |
 
 ### 💾 Cache kết quả — `docs/luat/tien.md`
 - **Đổi CẤU TRÚC payload ⇒ BẮT BUỘC bump `SHAPE`.** `portrait_cache` khoá theo LÁ

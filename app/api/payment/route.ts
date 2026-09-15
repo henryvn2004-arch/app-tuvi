@@ -1,4 +1,3 @@
-import crypto from 'crypto';
 // app/api/payment/route.ts
 // GET  /api/payment?action=balance&userId=xxx
 // GET  /api/payment?action=check&slug=xxx&userId=xxx
@@ -9,6 +8,7 @@ export const maxDuration = 15;
 
 import { NextRequest } from 'next/server';
 import { ok, err, options, parseBody } from '@/lib/cors';
+import { signPayOSData } from '@/lib/billing/payos';
 import { getPackages, quoteCustomVnd, vndPerCredit } from '@/lib/billing/packages';
 // Mọi thứ chạm PayPal ở MỘT chỗ (lib/billing/paypal) — webhook dùng chung bản
 // đó, nên không có hai đường tiền song song để mà trôi lệch.
@@ -17,6 +17,7 @@ import { getToolPrice, getToolParts } from '@/lib/billing/pricing';
 import { hasSlugAccess } from '@/lib/billing/credits';
 import { freeGenGate, FREE_GEN_CAP_MESSAGE, railFreeRemaining, railFreeGrant, railBonusTurnsPerPurchase } from '@/lib/billing/viral-budget';
 import { anonTrialStatus } from '@/lib/billing/anon-trial';
+import { voucherListActive, voucherConsume, pickBestVoucher } from '@/lib/billing/vouchers';
 import { getToolRevenue } from '@/lib/marketing/tool-profit';
 import { syncOnboardingTasks, KHOI_HANH_STEPS } from '@/lib/onboarding/tasks';
 import { getConfigValue } from '@/lib/config/appConfig';
@@ -112,13 +113,6 @@ const BANK_CODE_BY_BIN: Record<string, string> = {
   '970458': 'uob',    '546034': 'cake',
   '546035': 'ubank',  '963388': 'timo',
 };
-
-function createPayOSSignature(data: Record<string, unknown>): string {
-  const checksumKey = process.env.PAYOS_CHECKSUM_KEY!;
-  const str = Object.keys(data).sort().map(k => `${k}=${data[k]}`).join('&');
-  return crypto.createHmac('sha256', checksumKey).update(str).digest('hex');
-}
-
 
 // ── Helpers ───────────────────────────────────────────────────
 const SB_HEADERS = {
@@ -452,9 +446,23 @@ async function handleDeduct(request: NextRequest, body: Record<string, unknown>)
       }
     }
 
+    // ── VÍ ƯU ĐÃI: tự áp voucher lợi nhất, KHÔNG cần client chọn tay ──
+    // Chỉ áp khi có `product` (tool_id thật) — giống điều kiện `freeGenGate`
+    // ở trên. Giảm giá không bao giờ làm khách trả NHIỀU hơn `amount` gốc.
+    let voucherPick: ReturnType<typeof pickBestVoucher> = null;
+    if (product) {
+      try {
+        const vouchers = await voucherListActive(user.id);
+        voucherPick = pickBestVoucher(vouchers, product, amount);
+      } catch {
+        // best-effort — lỗi đọc voucher thì tính giá gốc, không chặn mua
+      }
+    }
+    const chargeAmount = voucherPick ? amount - voucherPick.discount : amount;
+
     let newBal: number;
     try {
-      newBal = await rpc('deduct_credits', { p_user_id: user.id, p_amount: amount });
+      newBal = await rpc('deduct_credits', { p_user_id: user.id, p_amount: chargeAmount });
     } catch (e: unknown) {
       if ((e as Error).message?.includes('insufficient_balance')) {
         return ok({ success: false, insufficientBalance: true, balance: await getBalance(user.id) });
@@ -462,7 +470,30 @@ async function handleDeduct(request: NextRequest, body: Record<string, unknown>)
       throw e;
     }
 
-    await logTransaction({ userId: user.id, amount: -amount, type: toolType, description, slug: slug || undefined });
+    await logTransaction({
+      userId: user.id,
+      amount: -chargeAmount,
+      type: toolType,
+      description: voucherPick
+        ? `${description} [voucher ${voucherPick.voucher.voucherId} -${voucherPick.discount}L]`
+        : description,
+      slug: slug || undefined,
+    });
+
+    // Tiêu voucher SAU khi đã trừ tiền thành công — CỐ Ý, không đảo thứ tự.
+    // Nếu bước này thất bại (đua 2 tab cùng bấm cùng lúc, hiếm), khách ĐÃ trả
+    // đúng giá đã giảm rồi và không bị hoàn tác: thà "hào phóng nhầm" một lần
+    // còn hơn thu đủ giá gốc mà vẫn đốt mất voucher hợp lệ của họ.
+    if (voucherPick) {
+      try {
+        const r = await voucherConsume(user.id, voucherPick.voucher.userVoucherId, amount, slug || product);
+        if (!r.ok) {
+          console.error('[voucher_consume] không tiêu được sau khi đã trừ giá giảm:', r.reason, voucherPick.voucher.voucherId, user.id);
+        }
+      } catch (e: unknown) {
+        console.error('[voucher_consume] lỗi:', (e as Error).message);
+      }
+    }
 
     // Quà kèm: mọi lượt mua tool THÀNH CÔNG tặng thêm lượt rail (dùng CHUNG
     // cơ chế "lượt rail tặng" đã có, xem ghi chú ở viral-budget.ts) — biến
@@ -471,7 +502,11 @@ async function handleDeduct(request: NextRequest, body: Record<string, unknown>)
     // trễ hay lỗi làm chậm/hỏng phản hồi thanh toán chính.
     void railBonusTurnsPerPurchase().then((n) => railFreeGrant(user.id, n)).catch(() => {});
 
-    return ok({ success: true, balance: newBal });
+    return ok({
+      success: true,
+      balance: newBal,
+      ...(voucherPick ? { voucherApplied: { id: voucherPick.voucher.voucherId, discount: voucherPick.discount } } : {}),
+    });
 
   } catch (e: unknown) { return err((e as Error).message); }
 }
@@ -726,7 +761,7 @@ async function handleCreateBank(body: Record<string, unknown>): Promise<Response
         'x-client-id':  process.env.PAYOS_CLIENT_ID!,
         'x-api-key':    process.env.PAYOS_API_KEY!,
       },
-      body: JSON.stringify({ ...sigData, signature: createPayOSSignature(sigData) }),
+      body: JSON.stringify({ ...sigData, signature: signPayOSData(sigData, process.env.PAYOS_CHECKSUM_KEY!) }),
     });
     const payosData = await res.json();
     if (payosData.code !== '00') return err(payosData.desc || 'payOS error');
