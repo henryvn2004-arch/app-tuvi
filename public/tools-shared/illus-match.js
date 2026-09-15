@@ -211,14 +211,15 @@
 
   // Mốc tuổi đại diện của 5 bậc `Tuoi` trong illus-prompt.ts — điểm giữa hai
   // mốc liền kề là ranh giới chọn bậc gần nhất theo tuổi GIỮA đại vận.
-  // Đo trên 6.000 đại vận thật: cả 5 bậc đều rơi vào dùng thật (nhi đồng khi
-  // đại vận 1 rơi cục 2-3, lão niên rất phổ biến ở đại vận 7-9), không bậc
-  // nào là tử lộ.
+  // truong-thanh = 20-45, trung-nien = 46-65 (2026-09-15, theo yêu cầu: đa số
+  // user rơi vào hai bậc này nên cần ranh giới rộng và rõ hơn khoảng 26-41/
+  // 42-59 cũ) — nhi-dong/thanh-nien/lao-nien lùi/tiến theo cho khỏi chồng lấn,
+  // không đổi ý nghĩa.
   var TUOI_MOC = [
     [15, 'nhi-dong'],
-    [26, 'thanh-nien'],
-    [42, 'truong-thanh'],
-    [60, 'trung-nien'],
+    [20, 'thanh-nien'],
+    [46, 'truong-thanh'],
+    [66, 'trung-nien'],
     [Infinity, 'lao-nien'],
   ];
   function tuoiBacThoDaiVan(tuoiGiua) {
