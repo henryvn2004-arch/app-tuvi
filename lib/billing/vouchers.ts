@@ -12,9 +12,12 @@
 //     chọn tay. Thứ tự cố ý: trừ Lượng giá đã giảm TRƯỚC, tiêu voucher SAU —
 //     đua 2 tab cùng lúc thì thà "hào phóng nhầm" còn hơn thu đủ giá mà vẫn
 //     đốt mất voucher của khách. Xem chú thích tại chỗ gọi.
+//   - `runEmailReminderIdle()` (lib/marketing/email-reminder.ts) CẤP voucher
+//     "hoi-sinh-7d" kèm email nhắc user còn Lượng, im lặng lâu — SAU khi gửi
+//     email thành công, gate riêng bằng `voucherEnabled` (khác khoá bật email).
 //
-// Trigger CẤP tự động khác (đơn rơi, hồi sinh, sinh nhật…) CHƯA làm — để
-// từng cái riêng, mỗi cái một PR.
+// Trigger CẤP tự động khác (đơn rơi, sinh nhật…) CHƯA làm — để từng cái
+// riêng, mỗi cái một PR.
 //
 // Mọi hàm ở đây "báo cáo/best-effort" theo ĐÚNG quy ước file — record/read
 // không throw; nhưng `voucherConsume` là ĐƯỜNG TIỀN nên lỗi mạng phải rõ
