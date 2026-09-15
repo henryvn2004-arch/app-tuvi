@@ -1409,6 +1409,32 @@ async function ensureStaticServer() {
 }
 
 /**
+ * Đợi ảnh minh hoạ (`.lg-illus img`, bìa sách 6 tool có `BOOK_QUOTES` trong
+ * shell.js) tải THẬT xong sau khi bấm "Lưu PDF" — `forceEagerIllusImages()`
+ * trong shell.js gỡ `loading="lazy"` rồi CHỜ sự kiện load/error thật (trần
+ * cứng riêng của nó là 2500ms cho tool có bìa sách), không phải một khoảng
+ * nghỉ cố định. Bản cũ ở đây `waitForTimeout(1300)` < trần đó ⇒ chụp PDF
+ * TRƯỚC khi ảnh (Supabase Storage, mạng thật) kịp tải, in ra khung trống
+ * (Henry báo 2026-09-14, ảnh `<figure class="lg-illus">` rỗng — không phải
+ * `onerror` xoá khung, ảnh đơn giản là CHƯA tải xong lúc `page.pdf()` chạy).
+ */
+async function waitForIllusImages(page) {
+  try {
+    await page.waitForFunction(
+      () => {
+        const imgs = Array.prototype.slice.call(document.querySelectorAll('.lg-illus img'));
+        return imgs.every((img) => img.complete);
+      },
+      { timeout: 8000 }
+    );
+  } catch {
+    console.error('  ⚠ Ảnh minh hoạ chưa tải hết sau 8s — chụp PDF luôn, có thể thiếu vài khung.');
+  }
+  // Chân/đầu trang in + QR còn cần một nhịp ngắn sau khi ảnh xong.
+  await page.waitForTimeout(600);
+}
+
+/**
  * PDF mẫu cho 3 tool `json` — CHỤP ĐÚNG trang thật (`app-<tool>.html`) thay
  * vì tự dựng HTML rời, để có luôn chart/card (5 trục · 8 chất...) như bản
  * PDF thật khách trả tiền tải về (`printWorkspace()` trong `shell.js`).
@@ -1456,9 +1482,7 @@ async function renderRealPageAndUpload(toolId, cfg, fullPayload) {
   // `window`).
   await page.waitForSelector('#wsPdfBtn', { timeout: 10000 });
   await page.click('#wsPdfBtn');
-  // `printWorkspace()` có fallback 800ms cho QR chưa tải kịp — đợi dư ra để
-  // chắc đầu/chân trang in đã dựng xong trước khi chụp.
-  await page.waitForTimeout(1300);
+  await waitForIllusImages(page);
 
   await page.emulateMedia({ media: 'print' });
   const pdfBuffer = await page.pdf({ format: 'A4', margin: { top: '20px', bottom: '20px' } });
@@ -1495,9 +1519,7 @@ async function renderRealPhanPageAndUpload(toolId, cfg, ls, store) {
   // `window`).
   await page.waitForSelector('#wsPdfBtn', { timeout: 10000 });
   await page.click('#wsPdfBtn');
-  // `printWorkspace()` có fallback 800ms cho QR chưa tải kịp — đợi dư ra để
-  // chắc đầu/chân trang in đã dựng xong trước khi chụp.
-  await page.waitForTimeout(1300);
+  await waitForIllusImages(page);
 
   await page.emulateMedia({ media: 'print' });
   const pdfBuffer = await page.pdf({ format: 'A4', margin: { top: '20px', bottom: '20px' } });
