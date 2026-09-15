@@ -165,7 +165,8 @@ export interface KhiaCanh {
   canhTot2?: string;
   boiCanhTot2?: string;
   /**
-   * Cảnh + bối cảnh RIÊNG cho tuổi "trung-niên" (40-60), 12 khía ngoài
+   * Cảnh + bối cảnh RIÊNG cho tuổi "trung-niên" (46-65, xem `TUOI_MOC` ở
+   * illus-match.js), 12 khía ngoài
    * tổng-quan — KHÔNG chỉ đổi tuổi nhân vật qua `nhanVat()`, mà đổi cả SỰ
    * VIỆC lẫn MÔI TRƯỜNG: "tốt" ở tuổi này là phú quý đã THÀNH HÌNH (nhà lầu,
    * xe hơi, du lịch châu Âu), khác hẳn "mới bắt đầu" của `canhTot2`; "trung"/

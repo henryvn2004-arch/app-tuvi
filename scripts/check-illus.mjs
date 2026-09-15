@@ -129,7 +129,8 @@ for (const [k, v] of Object.entries(KHIA_CANH)) {
     fail(`${k}: thiếu canhTot2/boiCanhTot2 (mọi khía phải có bộ v2 phú quý cho sắc "tốt")`);
   }
   // trungNien (2026-09-15) — 12 khía ngoài tổng-quan PHẢI có (bối cảnh riêng
-  // cho tuổi 40-60, xem KhiaCanh.trungNien); tổng-quan CỐ Ý KHÔNG có, đã phủ
+  // cho tuổi 46-65, xem KhiaCanh.trungNien và TUOI_MOC ở illus-match.js);
+  // tổng-quan CỐ Ý KHÔNG có, đã phủ
   // đủ 5 bậc tuổi từ trước bằng cảnh chung (PR #826) — khai thêm ở đây là hai
   // nguồn giẫm nhau, illusUrlForPhan (illus-match.js) chỉ đọc một trong hai.
   if (k === 'tong-quan') {
