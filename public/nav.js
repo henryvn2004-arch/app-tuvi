@@ -323,7 +323,7 @@
   // Thay vì đẻ bảng icon thứ hai trong shell.js (28 icon, tên khác hẳn, thiếu
   // 11/15 icon cần dùng — đúng cái "hai bảng trôi khỏi nhau" đã cảnh báo),
   // mấy trang đó nạp CHÍNH file này kèm `data-icons-only`:
-  //     <script src="/nav.js?v=27" data-icons-only></script>
+  //     <script src="/nav.js?v=28" data-icons-only></script>
   // Lúc đó nav.js CHỈ cấp ICONS/iconHtml/mountIcons/EMOJI_TO_ICON + CSS icon,
   // rồi dừng — KHÔNG dựng thanh nav, KHÔNG chèn GA4, KHÔNG chèn conversion.js,
   // KHÔNG chèn auth.js. Một nguồn icon duy nhất cho cả site.
