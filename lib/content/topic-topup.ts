@@ -376,7 +376,13 @@ interface DemandItem {
 interface QueueRow {
   topic: string;
   type: string;
-  master_id?: string;
+  /**
+   * ⚠️ KHÔNG được để optional. PostgREST ghi HÀNG LOẠT đòi MỌI object trong
+   * mảng có CÙNG BỘ KHOÁ — thiếu một khoá ở một dòng là cả lượt ghi 400
+   * `PGRST102 All object keys must match`, không ghi được dòng nào. Dòng
+   * khao-luan không có thầy vẫn phải mang `master_id: null` cho đủ bộ khoá.
+   */
+  master_id: string | null;
   article_type: string;
   priority: number;
   status: string;
@@ -773,7 +779,10 @@ export async function runTopicTopup(
     ...nghienCuu.map((topic, i) => ({
       topic,
       type: SURFACES['nghien-cuu'].queueType,
-      master_id: masters[i],
+      // `?? null` chứ không để trống: `masters` ngắn hơn thì khoá phải VẪN
+      // còn (JSON.stringify xoá hẳn khoá `undefined` → lệch bộ khoá → PGRST102).
+      // Dòng null vẫn bị `rows` lọc bỏ bên dưới y như trước.
+      master_id: masters[i] ?? null,
       article_type: 'hoc-thuat',
       priority: 3, // thấp hơn 5 mặc định → chủ đề có cầu được viết TRƯỚC tồn kho cũ
       status: 'pending',
@@ -781,6 +790,7 @@ export async function runTopicTopup(
     ...khaoLuan.map(topic => ({
       topic,
       type: SURFACES['khao-luan'].queueType,
+      master_id: null,
       article_type: 'hoc-thuat',
       priority: 3,
       status: 'pending',
@@ -788,6 +798,7 @@ export async function runTopicTopup(
     ...khaoLuanTamly.map(topic => ({
       topic,
       type: SURFACES['khao-luan-tamly'].queueType,
+      master_id: null,
       article_type: 'hoc-thuat',
       priority: 3,
       status: 'pending',

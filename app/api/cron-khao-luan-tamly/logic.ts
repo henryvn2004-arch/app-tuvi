@@ -262,6 +262,14 @@ const TAMLY_DUP_THRESHOLD = 0.7;
 
 export interface TamLyRunResult {
   message: string;
+  /**
+   * Có mặt ⇒ lượt này KHÔNG làm gì (chạm trần tuần hoặc hàng đợi rỗng). Route
+   * spread thẳng field này vào response — đó là hợp đồng CHUNG `withCronLog`
+   * đọc để chốt status='skip' thay vì 'ok' (xem lib/cron/log.ts `runOnce`).
+   * Thiếu nó thì `skipStreak` không bao giờ đếm được, đúng cách nhánh
+   * `topic-topup` ⇒ 3 job viết bài này cạn nguồn 45 ngày mà vẫn báo 'ok'.
+   */
+  skipped?: string;
   results: { written: number; saved: number; blocked: number; errors: string[] };
 }
 
@@ -285,13 +293,14 @@ export async function processOneRun(): Promise<TamLyRunResult> {
     if (doneRecent >= cap) {
       return {
         message: `Đã chạm trần tuần (${doneRecent}/${cap} chủ đề đã xong trong 7 ngày qua) — bỏ qua lượt này`,
+        skipped: 'chạm trần tuần',
         results,
       };
     }
   }
 
   const topic = await popOneTopic();
-  if (!topic) return { message: 'No pending topics', results };
+  if (!topic) return { message: 'No pending topics', skipped: 'không có chủ đề pending', results };
 
   try {
     const ctx = await ragSearch(topic.topic);
