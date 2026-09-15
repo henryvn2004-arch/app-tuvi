@@ -4157,14 +4157,20 @@ function renderDashMargin(m) {
   `;
   if (byTool.length) {
     html += `<div class="table-wrap" style="margin-top:14px"><table>
-      <thead><tr><th>Loại kịch bản</th><th style="text-align:right">Lượt</th><th style="text-align:right">Chi phí LLM</th></tr></thead>
-      <tbody>${byTool.map((t) => `<tr>
+      <thead><tr><th>Tool</th><th style="text-align:right">Lượt gọi model</th><th style="text-align:right">Chi phí LLM</th><th style="text-align:right">Doanh thu</th><th style="text-align:right">Lợi nhuận</th></tr></thead>
+      <tbody>${byTool.map((t) => {
+        const hasRevenue = t.profit_vnd != null;
+        const profitColor = !hasRevenue ? 'var(--text-lt)' : t.profit_vnd >= 0 ? 'var(--green)' : 'var(--red)';
+        return `<tr>
         <td class="td-title">${escHtmlLocal(t.tool_id)}</td>
         <td style="text-align:right" class="tabular">${(t.requests || 0).toLocaleString()}</td>
         <td style="text-align:right" class="tabular">${fmtVndFull(t.cost_vnd)}</td>
-      </tr>`).join('')}</tbody>
+        <td style="text-align:right" class="tabular">${hasRevenue ? fmtVndFull(t.revenue_vnd) : '—'}</td>
+        <td style="text-align:right" class="tabular"><span style="color:${profitColor}">${hasRevenue ? fmtVndFull(t.profit_vnd) : '—'}</span></td>
+      </tr>`;
+      }).join('')}</tbody>
     </table></div>
-    <div class="panel-sub" style="padding:10px 0 0;font-size:.68rem;color:var(--text-lt)">Chỉ bucket <span class="mono">chat</span> có doanh thu khớp thật (billing rail tính phẳng theo tin nhắn, không tách theo kịch bản) — các mục còn lại chỉ để so sánh chi phí tương đối, chưa suy ra biên LN riêng.</div>`;
+    <div class="panel-sub" style="padding:10px 0 0;font-size:.68rem;color:var(--text-lt)">"Doanh thu" = Lượng đã TIÊU cho đúng tool đó (từ <span class="mono">credit_transactions.type</span>) quy đổi theo đơn giá bình quân hiện hành — cùng quy ước với ô "Doanh thu" phía trên, không phải tiền mặt nạp đúng lúc đó. "—" ở Doanh thu/Lợi nhuận nghĩa là tool này KHÔNG có dòng chi tiêu nào khớp được trong kỳ (nội dung nội bộ như <span class="mono">illus</span>/<span class="mono">viral-seo-pages</span>, hoặc chưa từng bán) — chưa đo được, không phải bằng 0.</div>`;
   } else {
     html += `<div class="empty">Chưa có dữ liệu chi phí — tính năng vừa bật, sẽ tự có số sau khi có lượt chat mới.</div>`;
   }

@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-277 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+279 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 **Bốn file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
 ```bash
@@ -11,7 +11,7 @@ sed -n '120,190p' docs/nhat-ky/2026-08.md    # đọc đúng đoạn, đừng ca
 
 | file | số mục | dung lượng |
 |---|---:|---:|
-| `2026-09.md` | 112 | 476,564 B |
+| `2026-09.md` | 114 | 484,827 B |
 | `2026-08.md` | 148 | 1,024,027 B |
 | `2026-07.md` | 12 | 154,531 B |
 | `track-cu.md` | 5 | 89,354 B |
@@ -25,6 +25,8 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
+| 1 | 2026-09 | `2026-09.md` | 🎁 Quà rail kèm mỗi lượt mua tool — Pha 1 của plan "marketing kiểu Shopee" |
+| 1 | 2026-09 | `2026-09.md` | 📊 Sổ lợi nhuận theo tool — Pha 0 của plan "marketing kiểu Shopee" |
 | 1 | 2026-09 | `2026-09.md` | 🏷️ Khuyến mãi giá tool có thời hạn + lịch marketing theo mùa |
 | 1 | 2026-09 | `2026-09.md` | 💸 S3 lên LIVE — hoàn Lượng thật + popup báo khách khi tool trả phí hỏng |
 | 1 | 2026-09 | `2026-09.md` | 🚪 Pha 2 vá phễu conversion bỏ sót 12 trang — auto-open bản mẫu vẫn sống |
