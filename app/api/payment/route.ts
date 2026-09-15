@@ -1,4 +1,3 @@
-import crypto from 'crypto';
 // app/api/payment/route.ts
 // GET  /api/payment?action=balance&userId=xxx
 // GET  /api/payment?action=check&slug=xxx&userId=xxx
@@ -9,6 +8,7 @@ export const maxDuration = 15;
 
 import { NextRequest } from 'next/server';
 import { ok, err, options, parseBody } from '@/lib/cors';
+import { signPayOSData } from '@/lib/billing/payos';
 import { getPackages, quoteCustomVnd, vndPerCredit } from '@/lib/billing/packages';
 // Mọi thứ chạm PayPal ở MỘT chỗ (lib/billing/paypal) — webhook dùng chung bản
 // đó, nên không có hai đường tiền song song để mà trôi lệch.
@@ -113,13 +113,6 @@ const BANK_CODE_BY_BIN: Record<string, string> = {
   '970458': 'uob',    '546034': 'cake',
   '546035': 'ubank',  '963388': 'timo',
 };
-
-function createPayOSSignature(data: Record<string, unknown>): string {
-  const checksumKey = process.env.PAYOS_CHECKSUM_KEY!;
-  const str = Object.keys(data).sort().map(k => `${k}=${data[k]}`).join('&');
-  return crypto.createHmac('sha256', checksumKey).update(str).digest('hex');
-}
-
 
 // ── Helpers ───────────────────────────────────────────────────
 const SB_HEADERS = {
@@ -768,7 +761,7 @@ async function handleCreateBank(body: Record<string, unknown>): Promise<Response
         'x-client-id':  process.env.PAYOS_CLIENT_ID!,
         'x-api-key':    process.env.PAYOS_API_KEY!,
       },
-      body: JSON.stringify({ ...sigData, signature: createPayOSSignature(sigData) }),
+      body: JSON.stringify({ ...sigData, signature: signPayOSData(sigData, process.env.PAYOS_CHECKSUM_KEY!) }),
     });
     const payosData = await res.json();
     if (payosData.code !== '00') return err(payosData.desc || 'payOS error');

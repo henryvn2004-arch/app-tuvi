@@ -69,7 +69,8 @@
     "oracle:lunar": "node scripts/oracle/report-lunar-diff.mjs",
     "oracle:tieuhan": "node scripts/oracle/verify-tieuhan.mjs",
     "check:lavong": "node scripts/check-la-vong.mjs",
-    "check:webdriver": "node scripts/check-analytics-webdriver.mjs"
+    "check:webdriver": "node scripts/check-analytics-webdriver.mjs",
+    "check:payossig": "node scripts/check-payos-signature.mjs"
   },
   "dependencies": {
     "@react-pdf/renderer": "^4.9.0",

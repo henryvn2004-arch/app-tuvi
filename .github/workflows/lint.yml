@@ -374,6 +374,16 @@ jobs:
       - name: La-Võng khớp Đà La (Thiên Lương) trên toàn miền
         run: npm run check:lavong
 
+      # Chữ ký payOS (webhook + tạo đơn) phải build chuỗi giống HỆT thuật toán
+      # chính thức của payOS (deep-sort key TRƯỚC, null/undefined → CHUỖI RỖNG
+      # chứ không phải "null"/"undefined"). Bug này đã cắn thật (PR #882):
+      # field null chỉ xuất hiện tuỳ kênh chuyển (ví điện tử như Viettel Money
+      # không luôn điền đủ counterAccountBankName/số TK), nên lỗi CHỈ rơi vào
+      # một số giao dịch — mọi lần test tay bằng chuyển khoản ngân hàng thường
+      # đều qua trót lọt.
+      - name: Chữ ký payOS khớp thuật toán chính thức (null → rỗng, deep-sort)
+        run: npm run check:payossig
+
   typecheck:
     runs-on: ubuntu-latest
     # Cùng lý do với job `lint` ở trên — xem chú thích tại đó.

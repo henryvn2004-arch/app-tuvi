@@ -1,11 +1,11 @@
 // app/api/bank-webhook/route.ts
 // payOS webhook — tự động add credits khi user chuyển khoản thành công
 import { NextRequest } from 'next/server';
-import crypto from 'crypto';
 import { waitUntil } from '@vercel/functions';
 import { fireServerPurchase } from '@/lib/marketing/server-conversions';
 import { alertNewPayment } from '@/lib/admin/alert';
 import { sendInvoiceEmail } from '@/lib/email/invoice';
+import { verifyPayOSSignature } from '@/lib/billing/payos';
 
 const CHECKSUM_KEY = process.env.PAYOS_CHECKSUM_KEY!;
 const SUPABASE_URL = process.env.SUPABASE_URL!;
@@ -16,16 +16,6 @@ const SB = {
   'apikey': SUPABASE_KEY,
   'Authorization': `Bearer ${SUPABASE_KEY}`,
 };
-
-function verifySignature(body: Record<string, unknown>): boolean {
-  const data = body.data as Record<string, unknown> | undefined;
-  const signature = body.signature as string | undefined;
-  if (!data || !signature) return false;
-  const sorted = Object.keys(data).sort();
-  const str = sorted.map(k => `${k}=${data[k]}`).join('&');
-  const expected = crypto.createHmac('sha256', CHECKSUM_KEY).update(str).digest('hex');
-  return expected === signature;
-}
 
 type SettleRow = { credited: boolean; reason: string; balance: number; credits: number };
 
@@ -56,7 +46,7 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
 
-    if (!verifySignature(body)) {
+    if (!verifyPayOSSignature(body, CHECKSUM_KEY)) {
       console.error('[bank-webhook] invalid signature');
       return Response.json({ error: 'Invalid signature' }, { status: 400 });
     }
