@@ -18,6 +18,12 @@
 //    bước cuối: áp dụng thật + prefix 🤖.
 // 4. Mọi hành động LIVE đều có cooldown riêng (đọc lại autopilot_actions) —
 //    không có action nào lặp lại tự do.
+// 5. `hadConsistentPriorRuns()` — lớp "khởi động" cho action có MỘT target cố
+//    định lặp lại (hiện chỉ price_adjust/rail-message): đề xuất phải lặp lại
+//    ≥N lượt liên tiếp mới được tự áp lần đầu, tránh một chu kỳ nhiễu biến
+//    ngay thành hành động thật. KHÔNG áp dụng cho promo_grant/segment_nudge
+//    (target đổi mỗi lượt theo segment "at-risk" — không có "lượt trước" để
+//    so; hai loại đó dựa vào budget/lượt + cooldown/user + trần user/lượt).
 // ============================================================
 
 import { getConfigValue } from '@/lib/config/appConfig';
@@ -101,6 +107,41 @@ export async function inCooldown(actionType: AutopilotActionType, target: string
     if (!res.ok) return false;
     const rows: unknown[] = await res.json();
     return rows.length > 0;
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * "Khởi động" — đòi ÍT NHẤT `minPriorRuns` lượt log TRƯỚC ĐÓ (shadow hoặc
+ * live đều tính, cùng action_type+target) trong `windowDays` ngày gần đây
+ * mới cho phép lượt NÀY chuyển sang live. Ngăn "một chu kỳ bất thường" biến
+ * ngay thành một hành động thật ngay lần đầu autopilot được bật — action
+ * phải đã ĐỀ XUẤT cùng một việc nhiều lượt liên tiếp trước đó (dữ liệu bền,
+ * không phải nhiễu một lần) mới được tự áp dụng.
+ *
+ * ⚠️ Chỉ hợp lý cho hành động có ĐÚNG MỘT target lặp lại đều đặn (vd
+ * price_adjust trên 'rail-message', cron chạy hằng tuần) — promo_grant/
+ * segment_nudge nhắm TỪNG USER khác nhau mỗi lượt (segment "at-risk" đổi
+ * theo tuần), "target" không lặp lại nên không có "lượt trước" để so; hai
+ * loại đó đã có lớp an toàn RIÊNG phù hợp hơn (budget/lượt + cooldown/user +
+ * trần user/lượt) — KHÔNG áp dụng hàm này cho chúng.
+ */
+export async function hadConsistentPriorRuns(
+  actionType: AutopilotActionType,
+  target: string,
+  minPriorRuns: number,
+  windowDays: number,
+): Promise<boolean> {
+  const since = new Date(Date.now() - windowDays * 86_400_000).toISOString();
+  try {
+    const res = await fetch(
+      `${SUPABASE_URL}/rest/v1/autopilot_actions?action_type=eq.${actionType}&target=eq.${encodeURIComponent(target)}&ts=gte.${since}&select=id&order=ts.desc&limit=${minPriorRuns}`,
+      { cache: 'no-store', headers: SB_HEADERS },
+    );
+    if (!res.ok) return false;
+    const rows: unknown[] = await res.json();
+    return rows.length >= minPriorRuns;
   } catch {
     return false;
   }

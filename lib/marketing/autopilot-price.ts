@@ -13,9 +13,15 @@
 // cần con người, rủi ro/lợi ích không đối xứng — sai thì mất doanh thu ngay,
 // đúng thì lợi ích chậm/khó đo). Có bounds cứng (app_config, tool PHẢI được
 // khai báo rõ mới đủ điều kiện) + cooldown 14 ngày/tool.
+//
+// 2026-09-15: thêm lớp "khởi động" (hadConsistentPriorRuns, lib/marketing/
+// autopilot.ts) — dù đã bật autopilot + hết cooldown, đề xuất tăng giá vẫn
+// phải LẶP LẠI liên tiếp ≥2 lượt cron (2 tuần) trước khi được tự áp dụng
+// thật lần đầu. Ngăn một tuần margin âm bất thường biến ngay thành một lần
+// tăng giá — margin phải xấu BỀN, không phải nhiễu một lượt.
 // ============================================================
 
-import { callRpc, getConfig, isAutopilotEnabled, inCooldown, logAutopilotAction, SB_HEADERS } from './autopilot';
+import { callRpc, getConfig, isAutopilotEnabled, inCooldown, hadConsistentPriorRuns, logAutopilotAction, SB_HEADERS } from './autopilot';
 
 const SUPABASE_URL = process.env.SUPABASE_URL!;
 
@@ -31,6 +37,11 @@ type PriceBoundsConfig = Record<string, PriceBound>;
 const MARGIN_FLOOR_VND = 200_000; // mẫu tối thiểu 7N để tránh nhiễu số nhỏ
 const COOLDOWN_DAYS = 14;
 const ELIGIBLE_TOOL_ID = 'rail-message';
+// Khởi động: cron chạy TUẦN (T2) nên 2 lượt liên tiếp = 2 tuần margin âm liền
+// nhau, không phải một tuần nhiễu. 21 ngày (~3 chu kỳ) đủ co giãn cho lịch
+// cron lệch vài ngày, không đủ để "lượt rất cũ" vẫn được tính là còn hiệu lực.
+const WARMUP_MIN_PRIOR_RUNS = 2;
+const WARMUP_WINDOW_DAYS = 21;
 
 interface ToolPricingRow {
   tool_id: string;
@@ -97,7 +108,12 @@ export async function runPriceAutopilot(): Promise<PriceAutopilotResult> {
 
   const enabled = await isAutopilotEnabled();
   const cooling = enabled && (await inCooldown('price_adjust', ELIGIBLE_TOOL_ID, COOLDOWN_DAYS));
-  const mode: 'shadow' | 'live' = enabled && !cooling ? 'live' : 'shadow';
+  // Khởi động: dù đã bật + hết cooldown, LƯỢT ĐẦU (và lượt kế, tới khi đủ
+  // WARMUP_MIN_PRIOR_RUNS lượt log liên tiếp cùng đề xuất tăng) vẫn ở shadow
+  // — đề xuất phải "sống sót" qua vài chu kỳ mới được tự áp dụng thật.
+  const warmedUp =
+    enabled && !cooling && (await hadConsistentPriorRuns('price_adjust', ELIGIBLE_TOOL_ID, WARMUP_MIN_PRIOR_RUNS, WARMUP_WINDOW_DAYS));
+  const mode: 'shadow' | 'live' = enabled && !cooling && warmedUp ? 'live' : 'shadow';
   const reason = `Margin rail-message ÂM ${marginVnd.toLocaleString('vi-VN')}đ trong 7 ngày qua (doanh thu ${margin.chat_revenue_vnd.toLocaleString('vi-VN')}đ, chi phí ${margin.chat_cost_vnd.toLocaleString('vi-VN')}đ).`;
 
   if (mode === 'live') {
@@ -111,10 +127,17 @@ export async function runPriceAutopilot(): Promise<PriceAutopilotResult> {
     before: { credits: current },
     after: { credits: proposed },
     reason,
-    meta: { chat_cost_vnd: margin.chat_cost_vnd, chat_revenue_vnd: margin.chat_revenue_vnd, cooling },
+    meta: { chat_cost_vnd: margin.chat_cost_vnd, chat_revenue_vnd: margin.chat_revenue_vnd, cooling, warmedUp },
   });
 
-  const verb = mode === 'live' ? 'ĐÃ tăng' : cooling ? 'ĐỀ XUẤT (đang cooldown 14N, chưa áp)' : 'ĐỀ XUẤT (đang tắt autopilot)';
+  const verb =
+    mode === 'live'
+      ? 'ĐÃ tăng'
+      : cooling
+        ? 'ĐỀ XUẤT (đang cooldown 14N, chưa áp)'
+        : !enabled
+          ? 'ĐỀ XUẤT (đang tắt autopilot)'
+          : `ĐỀ XUẤT (đang khởi động — cần ${WARMUP_MIN_PRIOR_RUNS} lượt liên tiếp mới tự áp, xem autopilot_actions)`;
   return {
     ran: true,
     proposal: `${verb} giá rail-message: ${current} → ${proposed} Lượng. ${reason}`,
