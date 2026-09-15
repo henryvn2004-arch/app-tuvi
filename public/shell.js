@@ -3041,6 +3041,15 @@
         openTopupModal();
         streaming = false; setSend(true); messages.pop(); return;
       }
+      if (res.status === 422) {
+        // Bậc 0 (server: app/api/v1/chat/route.ts) — đã hỏi quá vài câu mà vẫn
+        // chưa có lá số/kịch bản. KHÔNG mở modal (không phải paywall, không phải
+        // đăng nhập) — chỉ trỏ về form ngay trên trang, đã luôn sẵn đó.
+        var _hostForm = document.getElementById('tuviFormHost');
+        typing.innerHTML = '<p>Nhập ngày sinh ' + (_hostForm ? 'ở form phía trên' : 'để bắt đầu') + ' để thầy luận đúng trên lá số của bạn nhé — hỏi chung chung hoài thì không khác gì hỏi một chatbot thường.</p>';
+        if (_hostForm) { try { _hostForm.scrollIntoView({ behavior: 'smooth', block: 'center' }); } catch (e) { /* ignore */ } }
+        streaming = false; setSend(true); messages.pop(); return;
+      }
       if (!res.ok) throw new Error('HTTP ' + res.status);
       var reader = res.body.getReader(), dec = new TextDecoder(), buf = '';
       while (true) {
