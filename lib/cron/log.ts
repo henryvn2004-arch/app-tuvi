@@ -5,6 +5,29 @@
 // /api/payment?action=admin-cron-runs. Cặp với panel "Cron & Jobs" (admin.html).
 //
 // ============================================================
+// TỰ DỌN DÒNG TREO (2026-09-15) — vì sao mỗi lượt tự đóng vết CỦA CHÍNH NÓ
+//
+// `evaluateJobs` (lib/ops/jobs.ts) ĐỌC cờ `stuck` từ một dòng `running` quá
+// hạn, nhưng trước bản này KHÔNG AI GHI LẠI cho dòng đó xong — nó nằm `running`
+// vĩnh viễn trong `cron_runs`. Đo trên prod 15/09: 13 dòng treo từ 17/08 tới
+// 14/09, tất cả đều là dấu vết lượt bị GIẾT NGANG (deploy cutover hoặc hết
+// maxDuration — 2/3 dòng của `email-broadcast-drain` có `started_at` trùng
+// TỪNG MILI-GIÂY với một dòng `skip` hoàn tất ngay cạnh, tức cùng một lượt bị
+// chạy đúp lúc deploy, một bản chết giữa chừng).
+//
+// Không dòng nào trong 13 dòng đó đang là "lượt gần nhất" của job (mọi job đều
+// có lượt khoẻ sau đó) nên `overdue`/`stuck` hiện tại KHÔNG bị che — nhưng nếu
+// một job THỰC SỰ chết ngay sau một lượt bị giết ngang, dòng treo đó sẽ là
+// lượt gần nhất mãi mãi và không ai chốt lại cho nó xong.
+//
+// `closeStaleRunning` gọi TRƯỚC khi ghi nhịp tim mới của job: mỗi job tự dọn
+// vết TREO CỦA CHÍNH NÓ (khớp `job_key`) ở lượt kế tiếp, nên job nào còn chạy
+// đều sẽ tự lành trong tối đa 1 chu kỳ, không cần thêm cron riêng để quét.
+// Job đã NGỪNG hẳn (route gỡ, xoá khỏi vercel.json) thì dòng treo của nó không
+// ai dọn — chấp nhận được, đó là dấu vết lịch sử của một job không còn chạy.
+// ============================================================
+//
+// ============================================================
 // NHỊP TIM (2026-07-30) — vì sao ghi dòng `running` TRƯỚC khi chạy
 //
 // Bản trước chỉ ghi MỘT dòng, SAU khi handler xong. Nó bắt được exception (bọc
@@ -30,6 +53,11 @@
 // không bao giờ kêu nữa. Sửa `evaluateJobs` và sửa file này là MỘT việc, đừng
 // tách ra.
 // ============================================================
+
+// `jobs.ts` không import gì (file thuần), nên import ngược từ đây an toàn —
+// không vòng lặp. Dùng CHUNG một hằng số với `evaluateJobs().stuck`: ngưỡng
+// "coi như đã chết" và ngưỡng "tự dọn" phải khớp nhau, đừng để hai con số.
+import { STALE_RUNNING_MINUTES } from '@/lib/ops/jobs';
 
 export type CronRunStatus = 'ok' | 'error' | 'skip' | 'running';
 
@@ -120,6 +148,37 @@ async function deleteCronRun(id: number): Promise<void> {
     });
   } catch {
     /* nuốt */
+  }
+}
+
+/**
+ * Chốt các dòng `running` TREO của CHÍNH job này (`job_key` khớp, quá
+ * `STALE_RUNNING_MINUTES`) thành `error`. Gọi TRƯỚC khi ghi nhịp tim mới nên
+ * không bao giờ đụng tới dòng của chính lượt đang chạy (`started_at` của nó
+ * luôn SAU mốc cắt). Xem giải thích đầy đủ ở đầu file.
+ *
+ * Best-effort — nuốt lỗi, không được phép cản lượt chạy thật.
+ */
+async function closeStaleRunning(job_key: string): Promise<void> {
+  const env = sbEnv();
+  if (!env) return;
+  const cutoff = new Date(Date.now() - STALE_RUNNING_MINUTES * 60000).toISOString();
+  try {
+    await fetch(
+      `${env.url}/rest/v1/cron_runs?job_key=eq.${encodeURIComponent(job_key)}&status=eq.running&started_at=lt.${cutoff}`,
+      {
+        method: 'PATCH',
+        headers: sbHeaders(env.key, 'return=minimal'),
+        signal: AbortSignal.timeout(SB_TIMEOUT_MS),
+        body: JSON.stringify({
+          status: 'error',
+          finished_at: new Date().toISOString(),
+          note: 'giết ngang — dòng treo được lượt sau tự dọn',
+        }),
+      },
+    );
+  } catch {
+    /* nuốt: dọn dẹp không được phép cản lượt chạy thật */
   }
 }
 
@@ -261,6 +320,12 @@ export async function withCronLog(
 
   const started_at = new Date().toISOString();
   const t0 = Date.now();
+
+  // Dọn vết TREO của chính job này TRƯỚC khi ghi nhịp tim mới — xem
+  // `closeStaleRunning` + giải thích đầu file. `started_at` tính ở dòng trên
+  // nên dòng nhịp tim của CHÍNH lượt này chưa tồn tại lúc quét, không tự đóng
+  // nhầm chính mình.
+  await closeStaleRunning(job_key);
 
   // Nhịp tim: ghi TRƯỚC khi chạy, để lượt bị giết ngang vẫn còn dấu.
   const runId = await logCronRun({
