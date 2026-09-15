@@ -106,7 +106,13 @@ async function fillTuviForm(page, prefix, { ten, d, m, y } = {}) {
   const p = prefix ? prefix + '-' : '';
   await pick(page, `#${p}ngay`, d ?? MAU.ngay);
   await pick(page, `#${p}thang`, m ?? MAU.thang);
-  await typeSlow(page, `#${p}nam`, y ?? MAU.nam);
+  // ⚠️ `nam` CŨNG là `<select>` (public/tuvi-form.js dòng khai `id="nam"`),
+  // giống hệt `ngay`/`thang` — KHÔNG phải input tự do như bản trước tưởng.
+  // `typeSlow` gọi `.fill()`, mà Playwright chặn `.fill()` trên `<select>`
+  // ("Element is not an <input>..."), làm CẢ `an-sao` LẪN `tuong-hop` trượt
+  // (đo 07/09 · 14/09: cùng một thông báo lỗi). Đổi sang `pick()` như hai
+  // trường kia.
+  await pick(page, `#${p}nam`, y ?? MAU.nam);
   if (ten !== null) await typeSlow(page, `#${p}hoten`, ten ?? MAU.ten, 70);
 }
 
