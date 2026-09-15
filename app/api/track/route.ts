@@ -94,6 +94,13 @@ const ALLOWED = new Set([
   //   report_email_sent  = gửi thành công — mẫu số quan trọng nhất: khách vô
   //                        danh để lại email thật đổi lấy được cái gì
   'report_ready_shown', 'report_email_click', 'report_email_sent',
+  // Pha 5 (2026-09) — "đời sống sau báo cáo": nút "Gửi lại PDF" ở tab Lịch Sử
+  // (account-core.js), KHÁC hẳn report_email_* ở trên (đó là ngay-sau-khi-
+  // sinh-xong; đây là quay lại NHIỀU NGÀY sau, đo được có bao nhiêu người còn
+  // cần lấy lại báo cáo đã mua sau khi rời trang ban đầu).
+  //   report_resend_click = bấm "Gửi lại PDF" ở lịch sử
+  //   report_resend_sent  = gửi lại thành công
+  'report_resend_click', 'report_resend_sent',
 ]);
 
 // Coi là "vừa đăng ký" nếu tài khoản tạo trong 15 phút gần đây (né tính nhầm
