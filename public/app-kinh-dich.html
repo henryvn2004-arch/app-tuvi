@@ -32,17 +32,17 @@
 .line-yin{display:flex;gap:8px}
 .line-yin span{width:35px;height:12px;background:#061A2E;border-radius:2px}
 .line-changing .line-yang,.line-changing .line-yin span{background:#c9a84c}
-.line-num{width:16px;font-size:10px;color:#777;text-align:right}
+.line-num{width:16px;font-size:10px;color:#666;text-align:right}
 .line-tag{font-size:9px;font-weight:700;letter-spacing:1px;padding:1px 5px;border-radius:2px;margin-left:4px}
 .lt-change{background:#fff8e6;color:#9A7B3A;border:1px solid #c9a84c}
 /* Quẻ display */
 .que-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:6px}
 .que-card{border:1px solid #E8E8E8;border-radius:8px;padding:20px;background:#fff}
 .que-card.primary{border-color:#061A2E;background:#f5f7fa}
-.que-eyebrow{font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#777;margin-bottom:10px}
+.que-eyebrow{font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#666;margin-bottom:10px}
 .que-symbol{font-size:64px;line-height:1;margin-bottom:8px;color:#061A2E}
 .que-name{font-size:22px;font-weight:700;color:#061A2E;margin-bottom:4px;font-family:var(--serif)}
-.que-zh{font-size:14px;color:#777;margin-bottom:12px}
+.que-zh{font-size:14px;color:#666;margin-bottom:12px}
 .que-meaning{font-size:13px;font-weight:600;color:#444;margin-bottom:10px}
 .que-guidance{font-size:14px;color:#444;line-height:1.8}
 .fortune-badge{display:inline-block;font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:4px 10px;border-radius:2px;margin-bottom:14px}
@@ -51,7 +51,7 @@
 .fb-canh{background:#f5c0bc;color:#C0392B}
 @media(max-width:600px){.que-grid{grid-template-columns:1fr}}
 #resPanel{display:none;max-width:760px}
-.cauhoi-disp{font-size:13px;color:#777;font-style:italic;margin-bottom:16px;text-align:center}
+.cauhoi-disp{font-size:13px;color:#666;font-style:italic;margin-bottom:16px;text-align:center}
 .ask{margin-top:16px;display:inline-flex;align-items:center;gap:7px;font-size:12.5px;color:var(--gold-soft);border:1px dashed var(--gold-soft);border-radius:8px;padding:7px 12px;cursor:pointer;background:var(--gold-lt);font-family:inherit}
 .regieo{margin-top:10px;font-size:12.5px;color:var(--tx-blue);cursor:pointer;background:none;border:none;font-family:inherit;text-decoration:underline;display:block}
 
@@ -147,7 +147,7 @@
           <div class="coin" id="coin2">?</div>
         </div>
         <div id="linesBuild" class="line-vis" style="display:none">
-          <div style="font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#777;margin-bottom:4px">Quẻ đang hình thành (từ dưới lên)</div>
+          <div style="font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#666;margin-bottom:4px">Quẻ đang hình thành (từ dưới lên)</div>
           <div class="lines-build" id="linesContainer"></div>
         </div>
         <button class="btn-go" id="tossBtn" onclick="toss()">

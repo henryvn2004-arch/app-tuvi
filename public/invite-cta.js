@@ -48,7 +48,7 @@
       '.ivc-b{border:none;cursor:pointer;font-weight:700;font-size:13px;padding:9px 15px;border-radius:7px;' +
         'background:#061A2E;color:#C9A84C;font-family:inherit}' +
       '.ivc-b.alt{background:#fff;color:#061A2E;border:1.5px solid #061A2E}' +
-      '.ivc-p{margin-top:11px;padding-top:10px;border-top:1px dashed #E0DBCC;font-size:12px;color:#7a7a7a}' +
+      '.ivc-p{margin-top:11px;padding-top:10px;border-top:1px dashed #E0DBCC;font-size:12px;color:#666666}' +
       '.ivc-p b{color:#061A2E}';
     document.head.appendChild(st);
   }
