@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-280 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+281 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 **Bốn file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
 ```bash
@@ -11,7 +11,7 @@ sed -n '120,190p' docs/nhat-ky/2026-08.md    # đọc đúng đoạn, đừng ca
 
 | file | số mục | dung lượng |
 |---|---:|---:|
-| `2026-09.md` | 115 | 487,337 B |
+| `2026-09.md` | 116 | 489,583 B |
 | `2026-08.md` | 148 | 1,024,027 B |
 | `2026-07.md` | 12 | 154,531 B |
 | `track-cu.md` | 5 | 89,354 B |
@@ -25,6 +25,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
+| 1 | 2026-09 | `2026-09.md` | 💰 Nâng giá rail-message 5 → 10 Lượng — Pha 1c của plan "marketing kiểu Shopee" |
 | 1 | 2026-09 | `2026-09.md` | 🚪 Bậc 0 cổng rail — Pha 1b của plan "marketing kiểu Shopee" |
 | 1 | 2026-09 | `2026-09.md` | 🎁 Quà rail kèm mỗi lượt mua tool — Pha 1 của plan "marketing kiểu Shopee" |
 | 1 | 2026-09 | `2026-09.md` | 📊 Sổ lợi nhuận theo tool — Pha 0 của plan "marketing kiểu Shopee" |
