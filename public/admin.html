@@ -4926,8 +4926,8 @@ const CONVERSION_TACTICS = [
     note: 'Giới thiệu bạn bè + mã KM có trần lượt dùng — chi phí thu hút gần 0, đã chạy ở khối "Khuyến Mãi & Referral" và "Mã Khuyến Mãi".' },
   { status: 'live', title: 'Dùng thử miễn phí có trần (rail)',
     note: 'Khách chưa đăng nhập được thử rail chat trong 3 trần độc lập trước khi phải trả — cho nếm trước khi bán.' },
-  { status: 'new', title: 'Ưu đãi 24-48h tài khoản mới',
-    note: 'Giảm giá RIÊNG cho 24-48h đầu sau đăng ký (khác đợt KM theo mùa) — đánh đúng lúc hứng thú cao nhất, tạo cảm giác "bỏ lỡ là mất".' },
+  { status: 'live', title: 'Ưu đãi 24-48h tài khoản mới',
+    note: 'Voucher "chào sân 48h" (lib/billing/vouchers.ts, migration-voucher-welcome-48h.sql) — cấp tự động qua handle_new_user_signup(): giảm 30% (trần 50 Lượng), hết hạn 48 giờ sau đăng ký, áp tự động lúc thanh toán qua pickBestVoucher().' },
   { status: 'live', title: 'Nhắc phiên dở dang',
     note: 'Trigger "đơn rơi 24h" (lib/marketing/email-abandoned-checkout.ts) — user đã bấm mở khoá tool nhưng chưa mua thì được nhắc qua email + voucher 15%. Mặc định TẮT, xem tab "Tăng Trưởng" để bật.' },
   { status: 'new', title: 'Bằng chứng xã hội cạnh nút mua',
@@ -4935,9 +4935,9 @@ const CONVERSION_TACTICS = [
   { status: 'new', title: 'Bundle chéo sau kết quả miễn phí',
     note: 'Ngay sau khi xem xong 1 tool rẻ/miễn phí, gợi ý mua GHÉP tool liên quan (VD Luận Giải + Vận Hạn Năm) với giá rẻ hơn mua riêng từng cái.' },
   { status: 'new', title: 'Risk reversal cho lượt mua đầu',
-    note: 'Cam kết "luận không đúng — hoàn Lượng" cho lần mua đầu tiên, giảm nỗi sợ trả tiền oan cho người chưa quen mua xem bói online.' },
+    note: 'Cam kết "luận không đúng — hoàn Lượng" cho lần mua đầu tiên, giảm nỗi sợ trả tiền oan cho người chưa quen mua xem bói online. (Có lib/ops/refund.ts hoàn Lượng khi tool LỖI KỸ THUẬT — khác mục đích này, không tính là đã làm.)' },
   { status: 'new', title: 'Khan hiếm THẬT, không giả',
-    note: 'Thay vì giảm giá cho tất cả, giới hạn số SUẤT giá KM/ngày qua promo_codes.max_uses ("chỉ còn X suất hôm nay") — FOMO có căn cứ thật, không phải đếm ngược giả.' },
+    note: 'Thay vì giảm giá cho tất cả, giới hạn số SUẤT giá KM/ngày qua promo_codes.max_uses ("chỉ còn X suất hôm nay") — FOMO có căn cứ thật, không phải đếm ngược giả. (Cột max_uses/used_count đã có, nhưng handlePromoInfo CỐ Ý không trả ra ngoài — coi là ngân sách nội bộ; muốn bật cần cờ riêng cho mã nào ĐƯỢC hiện số, không mặc định lộ hết.)' },
 ];
 
 function renderConversionTactics() {
