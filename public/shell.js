@@ -2838,12 +2838,12 @@
           '<div id="introSrc"></div>' +
           '</div></div></div>';
       }
-      // Dòng "Theo <cổ pháp> · phương pháp Tử Vi Minh Bảo" — nạp động, điền
-      // sau khi kịp tải; nếu khối intro đã bị đóng trước đó thì bỏ qua.
-      ensureToolSourcesJs(function () {
-        var slot = document.getElementById('introSrc');
-        if (slot) slot.innerHTML = window.ToolSources.introHtml(key);
-      });
+      // Dòng "Theo <cổ pháp>..." KHÔNG còn điền vào banner nữa (Henry
+      // 2026-09-14: cho banner gọn lại) — `#introSrc` giữ lại rỗng vì
+      // `check-intro-card.mjs` vẫn bắt buộc thẻ này có mặt trên 49 trang
+      // tĩnh. Dòng nguồn/cổ pháp đầy đủ vẫn còn ở CUỐI kết quả qua
+      // `maybeAppendSrcNote()` — chỉ bỏ bản rút gọn trong banner, không bỏ
+      // minh bạch nguồn.
     },
     // Gọi khi trang đã chạy (có kết quả): ẩn intro cho LƯỢT XEM này (không
     // nhớ qua localStorage) — box quay lại mỗi khi mở trang mới.

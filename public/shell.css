@@ -321,6 +321,20 @@ button.item{border:none;background:none;font:inherit;text-align:left}
    mất ĐẦU thì không (Henry vòng 6: "cắt đầu cắt đuôi"). `z-index:0` để
    `::after` (gradient) + chữ đè lên trên. */
 .intro-card .intro-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:right top;z-index:0;background:var(--navy)}
+/* Henry 2026-09-14 (vòng 7, "banner vẫn bị lệch" trên /app/cong-so): min-height
+   230/300 phía trên tính RA chỉ còn thấy ~44-57% chiều cao ảnh gốc ở bề rộng
+   card thực tế (đo bằng ảnh marker giả — xem scripts/_diag-banner-crop.mjs,
+   không commit) — cắt mất cả mặt trời/núi ở giữa ảnh, không chỉ riêng phần
+   chân như dự tính ở vòng 6. Bề rộng card KHÔNG đổi (bị chặn trần bởi
+   `.ws-intake{max-width:1040px}` và `minmax(0,640px)` ở dưới), nên chỉ có thể
+   sửa bằng cách tăng CHIỀU CAO card để khung nhìn thấy nhiều ảnh hơn theo
+   chiều dọc — nút "đầu" giữ nguyên vị trí (`object-position` không đổi),
+   chỉ kéo dài khung để lộ thêm phần dưới. Ngưỡng 640 cố ý xa hẳn breakpoint
+   sập-mobile 900px (xem bẫy `.ws-intake` phía trên) — điện thoại thật (ws
+   ~360-430px) không chạm ngưỡng này, giữ nguyên hiện trạng "mobile ok". */
+@container ws (min-width:640px){
+  .intro-card{min-height:420px}
+}
 /* Gradient PHỦ từ trái (đục, cùng tông `--paper`) sang phải (trong suốt) —
    đảm bảo chữ đọc được trên MỌI ảnh nhóm mà không cần biết trước tông màu.
    Dùng % thay vì px nên tỉ lệ giữ nguyên ở mọi bề rộng, kể cả mobile. Đứng
@@ -876,7 +890,7 @@ font-family:inherit}
     align-items:start;
   }
   .ws-intake>#introHost{grid-area:hero}
-  .ws-intake>#introHost .intro-card{min-height:300px}
+  .ws-intake>#introHost .intro-card{min-height:460px}
   .ws-intake>#introHost .intro-card .intro-body{max-width:52%}
   .ws-intake>#introHost .intro-card .hero-pills{max-width:52%}
   .ws-intake>.ws-main-col{grid-area:main;min-width:0}
