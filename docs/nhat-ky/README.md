@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-296 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+297 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 **Bốn file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
 ```bash
@@ -11,7 +11,7 @@ sed -n '120,190p' docs/nhat-ky/2026-08.md    # đọc đúng đoạn, đừng ca
 
 | file | số mục | dung lượng |
 |---|---:|---:|
-| `2026-09.md` | 131 | 550,973 B |
+| `2026-09.md` | 132 | 554,642 B |
 | `2026-08.md` | 148 | 1,024,027 B |
 | `2026-07.md` | 12 | 154,531 B |
 | `track-cu.md` | 5 | 89,354 B |
@@ -25,6 +25,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
+| 1 | 2026-09 | `2026-09.md` | 📊 Lượt cron `ext-metrics` đầu tiên — Clarity xác nhận field thật, Meta Ads lộ lỗi quyền token |
 | 1 | 2026-09 | `2026-09.md` | 🧹 Dọn bảng "Thủ Thuật Chuyển Đổi Ngoài Giá" — audit 4 mục `new` còn lại, phát hiện thêm 1 mục lỗi thời |
 | 1 | 2026-09 | `2026-09.md` | 🤖 Autopilot — lớp "khởi động" trước khi tự áp giá thật lần đầu — Pha 5 (cuối) của plan "marketing kiểu Shopee" |
 | 1 | 2026-09 | `2026-09.md` | 📅 Lịch Marketing 59 Ngày — đẩy Tương Hợp khớp nhịp cron viral-seo-pages — Pha 4 của plan "marketing kiểu Shopee" |

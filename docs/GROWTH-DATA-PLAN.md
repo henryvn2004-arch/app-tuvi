@@ -270,8 +270,8 @@ song song.
 |---|---|---|
 | **0** | Link GA4 ↔ Google Ads | 🔴 TREO — việc tay Henry, chưa làm |
 | **1** | `ext_metrics_daily` + cron + GA4/GSC | ✅ PR #868 |
-| **2** | Clarity | ✅ PR #868 (field beyond sessions/bot chưa verify — xem PR #868) |
-| **3** | Meta Ads Insights | ✅ PR #868 (khoá join utm_campaign↔campaign ID CHƯA verify — xem engine.ts) |
+| **2** | Clarity | ✅ Field VERIFY xong bằng response thật (2026-09-16) — Traffic/RageClick/DeadClick/ScrollDepth đã parse |
+| **3** | Meta Ads Insights | 🔴 TREO — token thiếu quyền `ads_read` thật (lỗi 400 `#100`), việc tay Henry: gán ad account cho System User RỒI mới generate token |
 | **4** | `campaign_funnel_daily` RPC + `lib/growth/engine.ts` (gọi `tool-profit.ts`) | ✅ PR này — KHÔNG có vitest (repo không có vitest ở root, xem nhật ký) |
 | **5** | `marketing_insights` + `lib/growth/findings.ts` + cron `growth-insights` (06:00 VN) | ✅ PR này |
 | **6** | Telegram (cmo-digest, additive) · anomaly-alerts (additive) đã nối. Orchestrator import: chưa có gì để nối (orchestrator chưa code). Autopilot: cố ý KHÔNG nối (§8) | ✅ PR này (2/4 người đọc thật, 2 còn lại out-of-scope/chưa tồn tại) |

@@ -13,14 +13,22 @@
 //     dòng Clarity như một ngày lịch chính xác.
 //   • Tối đa 3 dimension/request, không phân trang, trần 1.000 dòng.
 //
-// 🔑 CHƯA VERIFY được response thật — sandbox dev KHÔNG gọi được `clarity.ms`
-// (domain bị chặn ở egress proxy, xác nhận 2026-09-15, kể cả có token thật).
-// Tài liệu công khai chỉ xác nhận CHẮC field của metric "Traffic"
-// (totalSessionCount/totalBotSessionCount, thấy lặp lại giống nhau ở nhiều
-// dòng ví dụ). Metric khác (ScrollDepth/RageClickCount/DeadClickCount…) CHƯA
-// có field chắc chắn — CỐ Ý không tự bịa tên field (đúng luật "nghi sai thì
-// ghi lại, không sửa mò"). `raw` giữ nguyên toàn bộ response để đối chiếu
-// bằng dữ liệu thật ở lượt cron đầu tiên, rồi vá phần parse còn thiếu sau.
+// ✅ ĐÃ VERIFY bằng response THẬT — lượt cron đầu tiên (2026-09-16 05:00 VN,
+// `ext_metrics_daily` source='clarity' stat_date=2026-09-15). Field field
+// dưới đây lấy nguyên tên/hình dạng từ response đó, không suy đoán:
+//   • Traffic: {distinctUserCount, totalSessionCount, totalBotSessionCount,
+//     pagesPerSessionPercentage} — đúng như tài liệu đã xác nhận trước đó.
+//   • RageClickCount/DeadClickCount: information là 1 dòng
+//     {subTotal, pagesViews, sessionsCount, sessionsWithMetricPercentage,
+//     sessionsWithoutMetricPercentage} — subTotal là SỐ LƯỢT CLICK, không
+//     phải số session.
+//   • ScrollDepth: information là 1 dòng {averageScrollDepth} — SỐ TRUNG
+//     BÌNH (0-100), không có cấu trúc session-count như hai metric trên.
+// Field khác thấy trong response (ExcessiveScroll/QuickbackClick/
+// ScriptErrorCount/ErrorClickCount/EngagementTime/Browser/Device/OS/
+// Country/PageTitle/ReferrerUrl/PopularPages) CHƯA parse — `raw` vẫn giữ
+// nguyên toàn bộ response nếu cần đọc thêm sau, không phải vì nghi ngờ tên
+// field (đã có bằng chứng thật, khác tình trạng "chưa verify" trước đây).
 // ============================================================
 
 const BASE = 'https://www.clarity.ms/export-data/api/v1/project-live-insights';
@@ -32,10 +40,19 @@ interface ClarityMetricBlock {
 }
 
 export interface ClaritySnapshot {
-  /** Field ĐÃ verify qua tài liệu (metric "Traffic"). null = không có dòng nào. */
   totalSessions: number | null;
   totalBotSessions: number | null;
-  /** Toàn bộ response, KHÔNG qua parse — nguồn để vá thêm field sau. */
+  /** Số lượt rage click (subTotal, KHÔNG phải số session). null = metric vắng mặt. */
+  rageClickCount: number | null;
+  /** % session có ít nhất 1 rage click. */
+  rageClickSessionPct: number | null;
+  deadClickCount: number | null;
+  deadClickSessionPct: number | null;
+  /** Trung bình % cuộn trang (0-100). */
+  avgScrollDepth: number | null;
+  /** Toàn bộ response, KHÔNG qua parse — field chưa parse (Excessive Scroll,
+   * Quickback Click, Script/Error Click, breakdown Browser/Device/...) vẫn
+   * đọc được ở đây khi cần, không phải vì nghi ngờ tên field. */
   raw: ClarityMetricBlock[];
 }
 
@@ -55,13 +72,28 @@ export async function getClaritySnapshot(): Promise<ClaritySnapshot | null> {
     }
     const blocks = (await res.json()) as ClarityMetricBlock[];
 
-    const traffic = blocks.find((b) => b.metricName === 'Traffic');
-    const rows = traffic?.information || [];
-    const sum = (key: string) => rows.reduce((s, r) => s + Number(r[key] ?? 0), 0);
+    const metric = (name: string) => blocks.find((b) => b.metricName === name)?.information || [];
+    const sum = (rows: Array<Record<string, unknown>>, key: string) =>
+      rows.reduce((s, r) => s + Number(r[key] ?? 0), 0);
+    // sessionsWithMetricPercentage/averageScrollDepth là số ĐÃ TÍNH SẴN của
+    // Clarity cho cửa sổ gọi — lấy dòng ĐẦU (numOfDays=1 luôn trả đúng 1
+    // dòng/metric), không cộng dồn percentage qua nhiều dòng như subTotal.
+    const firstNum = (rows: Array<Record<string, unknown>>, key: string) =>
+      rows.length ? Number(rows[0][key] ?? 0) : null;
+
+    const traffic = metric('Traffic');
+    const rage = metric('RageClickCount');
+    const dead = metric('DeadClickCount');
+    const scroll = metric('ScrollDepth');
 
     return {
-      totalSessions: rows.length ? sum('totalSessionCount') : null,
-      totalBotSessions: rows.length ? sum('totalBotSessionCount') : null,
+      totalSessions: traffic.length ? sum(traffic, 'totalSessionCount') : null,
+      totalBotSessions: traffic.length ? sum(traffic, 'totalBotSessionCount') : null,
+      rageClickCount: rage.length ? sum(rage, 'subTotal') : null,
+      rageClickSessionPct: firstNum(rage, 'sessionsWithMetricPercentage'),
+      deadClickCount: dead.length ? sum(dead, 'subTotal') : null,
+      deadClickSessionPct: firstNum(dead, 'sessionsWithMetricPercentage'),
+      avgScrollDepth: firstNum(scroll, 'averageScrollDepth'),
       raw: blocks,
     };
   } catch (e) {

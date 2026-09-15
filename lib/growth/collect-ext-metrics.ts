@@ -159,10 +159,19 @@ async function collectClarity(): Promise<SourceOutcome> {
         source: 'clarity',
         entity: '_total',
         stat_date: date,
-        // sessions/bot_sessions: field ĐÃ verify. `raw`: nguyên văn response,
-        // đọc thêm rage/dead click/scroll depth từ đây khi có dữ liệu thật
-        // để đối chiếu tên field (xem chú thích ở clarity.ts).
-        metrics: { sessions: snap.totalSessions, bot_sessions: snap.totalBotSessions, raw: snap.raw },
+        // Field đã verify bằng response thật (2026-09-16, xem clarity.ts).
+        // `raw` vẫn giữ nguyên response cho field chưa parse (breakdown
+        // Browser/Device/OS/...).
+        metrics: {
+          sessions: snap.totalSessions,
+          bot_sessions: snap.totalBotSessions,
+          rage_click_count: snap.rageClickCount,
+          rage_click_session_pct: snap.rageClickSessionPct,
+          dead_click_count: snap.deadClickCount,
+          dead_click_session_pct: snap.deadClickSessionPct,
+          avg_scroll_depth: snap.avgScrollDepth,
+          raw: snap.raw,
+        },
         dims: {},
       },
     ];
