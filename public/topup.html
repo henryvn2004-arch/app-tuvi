@@ -1283,7 +1283,13 @@ loadPackages().then(loadToolPricing).then(renderPendingBanner);
           closeBankModal();
           loadStatus();
           showAlert('success', `Nạp thành công ${d.credits} Lượng!`);
-          resumeToTool(400);
+          const resumed = resumeToTool(400);
+          // Không có tool đang chờ resume (khách ghé thẳng trang này) → còn ở
+          // lại đủ lâu để thấy modal. Có resume thì trang điều hướng đi ngay,
+          // modal chỉ chớp qua — bỏ qua, nhường lại cho paywall trong-trang.
+          if (!resumed && window.Auth && window.Auth.isAnonymous && window.Auth.isAnonymous() && window.showClaimModal) {
+            setTimeout(() => window.showClaimModal(), 600);
+          }
         }, 1500);
       } else if (manual) {
         status('clock', 'Chưa ghi nhận. Chờ thêm vài giây…');
