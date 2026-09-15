@@ -576,11 +576,16 @@ async function analyze() {
     '✓ Bạn đã xem duyên nợ của nhóm lá số này — mở lại, không trừ Lượng');
 }
 
-async function _doGenerate(freeRerun) {
+// Tách riêng phần MỞ khung kết quả — cùng quy ước `_openPanel()` mà
+// nhan-mach/day-con/nguoi-khac dùng, để `renderRealPageAndUpload` (script sinh
+// PDF mẫu, gọi `window._openPanel()` nếu có TRƯỚC khi tiêm data) mở được
+// `#resPanel` (`data-ws-result`) — thiếu hàm này thì panel giữ nguyên
+// `display:none`, `shell.js` không bao giờ thấy để tiêm nút "Lưu PDF"
+// (`#wsPdfBtn`), script chờ vô ích rồi timeout.
+function _openPanel() {
   document.getElementById('birthPanel').style.display = 'none';
   document.getElementById('resPanel').style.display = 'block';
   document.getElementById('loading').style.display = 'block';
-  wsStepsSet(3); // Nhận kết quả — đã qua cầu dao (trả tiền hoặc xem lại miễn phí), bắt đầu dựng câu chuyện
   document.getElementById('card').style.display = 'none';
   document.getElementById('storyBlock').style.display = 'none';
   document.getElementById('eraLine').style.display = 'none';
@@ -590,6 +595,11 @@ async function _doGenerate(freeRerun) {
   document.getElementById('imgActions').style.display = 'none';
   document.getElementById('resultImg').style.display = 'none';
   document.getElementById('imgPlaceholder').style.display = 'flex';
+}
+
+async function _doGenerate(freeRerun) {
+  _openPanel();
+  wsStepsSet(3); // Nhận kết quả — đã qua cầu dao (trả tiền hoặc xem lại miễn phí), bắt đầu dựng câu chuyện
   // Pha ảnh chạy tiếp ~50 giây SAU khi truyện đã hiện và bảng bước đã tắt —
   // không có đồng hồ chạy thì khung ảnh nhìn như treo. Bọc `if` vì bản
   // ai-loading-steps.js còn nằm trong cache trình duyệt có thể chưa có hàm này;

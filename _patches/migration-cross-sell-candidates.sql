@@ -34,4 +34,5 @@ as $$
   limit p_limit;
 $$;
 
+revoke all on function public.cross_sell_candidates(text, text, int) from public, anon, authenticated;
 grant execute on function public.cross_sell_candidates(text, text, int) to service_role;

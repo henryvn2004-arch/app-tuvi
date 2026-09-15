@@ -77,6 +77,14 @@ export interface JobSpec {
    * đúng cái bẫy "9 job hiện nút bấm rồi trả về Unknown job" đã ghi ở trên.
    */
   workflow?: string;
+  /**
+   * Ngưỡng "coi như đã chết" riêng cho job này (phút), ghi đè
+   * `STALE_RUNNING_MINUTES`. CHỈ dùng cho job có thời gian chạy thật vượt xa
+   * mức chung — `video-build` (GitHub Actions, render clip) đo được 48-98
+   * phút/lượt, gấp 3-6 lần trần chung 15 phút, nên mọi lượt ĐANG chạy đều bị
+   * báo "CHẾT GIỮA LƯỢT" oan trong lúc nó vẫn khoẻ.
+   */
+  staleMinutes?: number;
 }
 
 const H = 60;
@@ -227,9 +235,13 @@ export const JOBS: JobSpec[] = [
    * ⚠️ KHÔNG khai `path`: admin không kích được workflow GitHub, hiện nút "Chạy
    * ngay" rồi báo lỗi là tái lập đúng cái bẫy 9-nút-chết đã ghi ở trên.
    */
+  // `staleMinutes: 180` — đo thật 4 lượt gần nhất: 48-98 phút/lượt (render
+  // Playwright + Remotion, không phải Vercel serverless). Trần chung 15 phút
+  // (STALE_RUNNING_MINUTES) cho MỌI lượt render đang chạy dở thành "chết giữa
+  // lượt" — báo động sai đúng vào lúc job khoẻ nhất. `docs/nhat-ky/2026-09.md`.
   { key: 'video-build', label: 'Dựng clip 9:16', source: 'actions', everyMinutes: 7 * D,
     schedule: 'T2 08:00 VN hằng tuần', sink: 'clips (Storage) + media_assets',
-    workflow: 'video-build.yml', since: '2026-08-18' },
+    workflow: 'video-build.yml', since: '2026-08-18', staleMinutes: 180 },
   // Track Backlink — máy soạn, người tự tay dán/gửi (xem đầu
   // _patches/migration-backlinks.sql). `since` = ngày merge: cả ba job chưa
   // từng chạy nên cron_runs trống, thiếu mốc này bộ dò kêu ngay "CHƯA HỀ chạy".
@@ -305,6 +317,39 @@ export interface CronRun {
  * nhận về 1000, nên đây là mức cao nhất còn trung thực.
  */
 export const CRON_RUNS_LIMIT = 1000;
+
+/**
+ * `cron_runs` gần nhất, tối đa `perJob` dòng CHO MỖI job_key (RPC
+ * `ops_recent_cron_runs`, xem `_patches/migration-ops-recent-cron-runs.sql`).
+ *
+ * THAY cho việc query thẳng "top N dòng gần nhất của TOÀN BẢNG" (đúng con số
+ * `CRON_RUNS_LIMIT` cũ): job chạy mỗi 15 phút (error-alerts, tool-usage-alerts,
+ * email-broadcast-drain) đủ sức sinh ~250 dòng/ngày, đẩy job TUẦN ra khỏi cửa
+ * sổ 1000 dòng chỉ sau 3-4 ngày — `evaluateJobs` đọc thành "CHƯA HỀ chạy" cho
+ * một job vẫn `ok` đều đặn. Lấy theo job_key thì job ồn ào không đụng được tới
+ * cửa sổ của job khác.
+ *
+ * Best-effort: hỏng thì trả [], `evaluateJobs` lùi về "chưa có log" cho mọi
+ * job — không được phép kéo sập panel Vận Hành hay digest.
+ */
+export async function fetchRecentCronRuns(perJob = 50): Promise<CronRun[]> {
+  const url = process.env.SUPABASE_URL;
+  const key = process.env.SUPABASE_SERVICE_KEY;
+  if (!url || !key) return [];
+  try {
+    const res = await fetch(`${url}/rest/v1/rpc/ops_recent_cron_runs`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', apikey: key, Authorization: `Bearer ${key}` },
+      body: JSON.stringify({ p_per_job: perJob }),
+      cache: 'no-store',
+    });
+    if (!res.ok) return [];
+    const rows = await res.json();
+    return Array.isArray(rows) ? rows : [];
+  } catch {
+    return [];
+  }
+}
 
 /**
  * Lịch sử chạy pg_cron, trả về ĐÚNG shape `CronRun` để gộp thẳng vào mảng
@@ -506,7 +551,9 @@ export function evaluateJobs(runs: CronRun[], firstSeen: Record<string, string> 
     const awaitingFirstRun =
       !last && Number.isFinite(anchorMs) && now - anchorMs < spec.everyMinutes * 1.5 * 60000;
 
-    const stuck = last?.status === 'running' && now - lastMs > STALE_RUNNING_MINUTES * 60000;
+    const stuck =
+      last?.status === 'running' &&
+      now - lastMs > (spec.staleMinutes ?? STALE_RUNNING_MINUTES) * 60000;
     const failing = last?.status === 'error';
 
     return {

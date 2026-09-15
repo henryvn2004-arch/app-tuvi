@@ -39,7 +39,19 @@ async function handle(request: NextRequest) {
     ok: true,
     built: r.built.length,
     due: r.due,
-    skipped: r.skipped.length,
+    skippedCount: r.skipped.length,
     stoppedReason: r.stoppedReason,
+    // ⚠️ `skipped` là hợp đồng CHUNG cho withCronLog (lib/cron/log.ts): string/`true`
+    // = "cả lượt này không làm gì". TRƯỚC ĐÂY nhét thẳng `r.skipped.length` (một
+    // SỐ) vào đây — số > 0 là truthy nên MỌI lượt có ít nhất 1 cơ hội bị bỏ qua
+    // bị ghi 'skip', kể cả lượt đã soạn được nội dung khác (built.length > 0).
+    // Chỉ báo "không làm gì" khi thật sự không soạn được cái nào.
+    skipped:
+      r.built.length === 0
+        ? r.stoppedReason ||
+          (r.due === 0
+            ? 'không có cơ hội nào đang "new"'
+            : `0/${r.due} cơ hội soạn được (${r.skipped.length} bị bỏ qua)`)
+        : undefined,
   });
 }
