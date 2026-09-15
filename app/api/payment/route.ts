@@ -21,7 +21,7 @@ import { voucherListActive, voucherConsume, pickBestVoucher } from '@/lib/billin
 import { getToolRevenue } from '@/lib/marketing/tool-profit';
 import { syncOnboardingTasks, KHOI_HANH_STEPS } from '@/lib/onboarding/tasks';
 import { getConfigValue } from '@/lib/config/appConfig';
-import { CRON_RUNS_LIMIT, JOBS, evaluateJobs, fetchPgcronRuns, syncJobFirstSeen } from '@/lib/ops/jobs';
+import { CRON_RUNS_LIMIT, JOBS, evaluateJobs, fetchPgcronRuns, syncJobFirstSeen, type CronRun } from '@/lib/ops/jobs';
 import { checkEnv } from '@/lib/ops/preflight';
 import { logCronRun } from '@/lib/cron/log';
 import { tgSendMessage } from '@/lib/channels/telegram';
@@ -1559,6 +1559,7 @@ export async function GET(request: NextRequest) {
   if (action === 'signup-bonus') return handleSignupBonus();
   if (action === 'admin-viral') return handleAdminViral(request, searchParams);
   if (action === 'admin-tool-funnel') return handleAdminToolFunnel(request, searchParams);
+  if (action === 'admin-growth') return handleAdminGrowth(request);
   if (action === 'admin-content-catalog') return handleAdminContentCatalog(request, searchParams);
   if (action === 'admin-content-one') return handleAdminContentOne(request, searchParams);
   if (action === 'admin-content-pack') return handleAdminContentPack(request, searchParams);
@@ -1986,6 +1987,98 @@ async function handleAdminToolFunnel(request: NextRequest, sp: URLSearchParams):
   try {
     const [rows, lac] = await Promise.all([rpc('tool_funnel'), rpc('tool_funnel_lac')]);
     return ok({ rows, lac, from: from.toISOString(), to: to.toISOString() });
+  } catch (e: unknown) { return err((e as Error).message); }
+}
+
+// ── GET: admin-growth (tab "Tăng Trưởng") — tổng hợp hiệu quả 3 trigger
+// voucher tự động (chào sân 48h/hồi sinh 7 ngày/đơn rơi 24h — xem
+// lib/billing/vouchers.ts), đoạn "đơn rơi" đang chờ nhắc, và trạng thái 3 job
+// email liên quan (bật/tắt qua app_config + lần chạy gần nhất) — để Henry
+// quyết bật công tắc nào mà không phải tự vào Supabase chạy SQL.
+//
+// CỐ Ý không tạo RPC mới: `voucher_defs`/`user_vouchers`/`email_log` đều nhỏ
+// (tính năng mới ra ngày 2026-09-15) nên gộp thẳng trong TypeScript rẻ hơn
+// một migration cho một bảng tổng hợp sẽ lỗi thời ngay khi thêm voucher thứ 4.
+async function handleAdminGrowth(request: NextRequest): Promise<Response> {
+  const token = (request.headers.get('Authorization') || '').replace('Bearer ', '').trim();
+  const admin = await verifyAdmin(token);
+  if (!admin) return err('Unauthorized', 403);
+
+  const since30d = new Date(Date.now() - 30 * 864e5).toISOString();
+  // Đúng 3 job email marketing hiện có (lib/ops/jobs.ts) — không dùng
+  // `email-broadcast-drain` (không liên quan trigger voucher).
+  const EMAIL_JOB_KEYS = ['email-reminder-idle', 'email-cross-sell', 'email-abandoned-checkout'];
+
+  try {
+    const [defsRes, uvRes, abandoned, cfgRes, logRes, runsRes] = await Promise.all([
+      fetch(
+        `${SUPABASE_URL}/rest/v1/voucher_defs?select=id,label,kind,value,max_discount_credits,enabled&order=id`,
+        { headers: SB_HEADERS, cache: 'no-store' },
+      ),
+      fetch(
+        `${SUPABASE_URL}/rest/v1/user_vouchers?select=voucher_id,redeemed_at,redeemed_discount_credits&limit=1000`,
+        { headers: SB_HEADERS, cache: 'no-store' },
+      ),
+      rpcSafe('dashboard_abandoned_checkout', { p_limit: 10 }),
+      fetch(
+        `${SUPABASE_URL}/rest/v1/app_config?key=in.(marketing.email_reminder_idle,marketing.email_cross_sell,marketing.email_abandoned_checkout)&select=key,value`,
+        { headers: SB_HEADERS, cache: 'no-store' },
+      ),
+      fetch(
+        `${SUPABASE_URL}/rest/v1/email_log?select=template,status&kind=eq.marketing&created_at=gte.${since30d}&limit=1000`,
+        { headers: SB_HEADERS, cache: 'no-store' },
+      ),
+      fetch(
+        `${SUPABASE_URL}/rest/v1/cron_runs?job_key=in.(${EMAIL_JOB_KEYS.join(',')})&select=job_key,status,started_at&order=started_at.desc&limit=300`,
+        { headers: SB_HEADERS, cache: 'no-store' },
+      ),
+    ]);
+
+    const defs = (defsRes.ok ? await defsRes.json() : []) as {
+      id: string; label: string; kind: string; value: number; max_discount_credits: number | null; enabled: boolean;
+    }[];
+    const uv = (uvRes.ok ? await uvRes.json() : []) as {
+      voucher_id: string; redeemed_at: string | null; redeemed_discount_credits: number | null;
+    }[];
+    const cfgRows = (cfgRes.ok ? await cfgRes.json() : []) as { key: string; value: unknown }[];
+    const logRows = (logRes.ok ? await logRes.json() : []) as { template: string; status: string }[];
+    const runs = (runsRes.ok ? await runsRes.json() : []) as CronRun[];
+
+    const cfgByKey = new Map(cfgRows.map((r) => [r.key, r.value]));
+
+    // Hiệu quả từng voucher: cấp/tiêu đọc thẳng từ user_vouchers, KHÔNG tự tính
+    // lại số Lượng giảm — `redeemed_discount_credits` do RPC voucher_consume ghi,
+    // đây chỉ CỘNG lại con số đã có (đúng luật "server quyết, không suy diễn").
+    const vouchers = defs.map((d) => {
+      const granted = uv.filter((u) => u.voucher_id === d.id);
+      const redeemed = granted.filter((u) => u.redeemed_at);
+      const discountCreditsTotal = redeemed.reduce((s, u) => s + Number(u.redeemed_discount_credits || 0), 0);
+      return {
+        id: d.id, label: d.label, kind: d.kind, value: d.value, maxDiscount: d.max_discount_credits,
+        enabled: d.enabled, granted: granted.length, redeemed: redeemed.length, discountCreditsTotal,
+      };
+    });
+
+    // Config raw theo TỪNG khoá app_config — `null` nghĩa là chưa có dòng
+    // trong DB, tức đang chạy fallback mặc định TẮT trong chính module đó
+    // (lib/marketing/email-reminder.ts v.v.), không phải "lỗi đọc".
+    const emailConfig: Record<string, unknown> = {
+      'email-reminder-idle': cfgByKey.get('marketing.email_reminder_idle') ?? null,
+      'email-cross-sell': cfgByKey.get('marketing.email_cross_sell') ?? null,
+      'email-abandoned-checkout': cfgByKey.get('marketing.email_abandoned_checkout') ?? null,
+    };
+
+    const emailSent30d: Record<string, { sent: number; failed: number }> = {};
+    for (const r of logRows) {
+      const c = emailSent30d[r.template] || { sent: 0, failed: 0 };
+      if (r.status === 'sent') c.sent++;
+      else if (r.status === 'failed') c.failed++;
+      emailSent30d[r.template] = c;
+    }
+
+    const jobs = evaluateJobs(runs).filter((j) => EMAIL_JOB_KEYS.includes(j.key));
+
+    return ok({ vouchers, abandonedSegment: abandoned, emailConfig, emailSent30d, jobs });
   } catch (e: unknown) { return err((e as Error).message); }
 }
 
