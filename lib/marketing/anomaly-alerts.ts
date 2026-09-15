@@ -10,6 +10,8 @@
 // Gọi bởi app/api/cron/anomaly-alerts/route.ts (Vercel cron, mỗi 3 giờ).
 // ============================================================
 
+import { getLatestGrowthFindings } from '@/lib/growth/findings';
+
 const SUPABASE_URL = process.env.SUPABASE_URL!;
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY!;
 const SB_HEADERS = {
@@ -572,6 +574,22 @@ export async function checkAnomalies(): Promise<{ fired: FiredAlert[]; checked: 
         });
       }
     }
+  }
+
+  // ── Bậc 6 Growth Data Plan — findings ads/campaign severity='act' ────────
+  // ĐỌC LẠI marketing_insights (đã tính XONG bởi lib/growth/engine.ts +
+  // findings.ts, cron growth-insights 06:00 VN), KHÔNG tự suy ngưỡng ở đây —
+  // đúng khuôn "anomaly-alerts đọc lại RPC/bảng đã có, không thêm luật mới"
+  // của M0.3. Cooldown DÙNG CHUNG `th.cooldownHours` (20h): cron nguồn chỉ
+  // chạy 1 lần/ngày nên khoá 20h vừa đủ để không báo lại đúng finding cũ mỗi
+  // 3 giờ, mà vẫn kịp báo lại nếu ngày mai finding đổi severity/số.
+  checked.push('growth_insights');
+  const growthFindings = await getLatestGrowthFindings(); // tự fail-open, không throw
+  for (const f of growthFindings) {
+    if (f.severity !== 'act') continue;
+    const key = `growth_insight:${f.findingKey}`;
+    if (inCooldown(key)) continue;
+    fired.push({ key, text: `📊 ${f.headline}` });
   }
 
   // CỐ Ý KHÔNG đóng dấu cooldown ở đây — xem commitAnomalyCooldown() bên dưới.

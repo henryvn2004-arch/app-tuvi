@@ -10,6 +10,7 @@
 import { llmText } from '@/lib/llm/complete';
 import { getGa4Breakdown, type Ga4Breakdown } from '@/lib/analytics/ga4';
 import { getSearchConsoleSnapshot, type GscSnapshot } from '@/lib/analytics/search-console';
+import { getLatestGrowthFindings, type Finding } from '@/lib/growth/findings';
 
 const SUPABASE_URL = process.env.SUPABASE_URL!;
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY!;
@@ -70,6 +71,14 @@ interface CmoSnapshot {
    * và đọc thành "không có gì" trong khi thực ra chỉ là mẫu quá mỏng.
    */
   gsc: GscSnapshot | null;
+  /**
+   * Bậc 6 của docs/GROWTH-DATA-PLAN.md — findings ads/campaign đã tính XONG
+   * bởi lib/growth/engine.ts + findings.ts (CAC/CPA/ROAS, cổng mẫu ≥30 đã áp
+   * SẴN trong `metrics`, xem lib/growth/engine.ts::sampleGate). Rỗng khi
+   * chưa có run nào (`app/api/cron/growth-insights` chưa chạy lần nào) hoặc
+   * run gần nhất không thấy gì đáng báo — KHÔNG phải "chưa nối ads".
+   */
+  growthFindings: Finding[];
 }
 
 // Snapshot 7 ngày gần nhất SO VỚI 7 ngày trước đó (WoW) — đủ để LLM thấy xu
@@ -85,6 +94,7 @@ async function buildSnapshot(): Promise<CmoSnapshot> {
     funnelThisWeek, funnelPrevWeek, sourcesThisWeek, engagement,
     revenueThisWeek, revenuePrevWeek, margin, channelHealth, atRisk,
     signupTruthThisWeek, signupTruthPrevWeek, trafficQuality, ga4, gsc,
+    growthFindings,
   ] = await Promise.all([
     callRpc('marketing_funnel', { p_from: d(7), p_to: d(0) }),
     callRpc('marketing_funnel', { p_from: d(14), p_to: d(7) }),
@@ -110,6 +120,10 @@ async function buildSnapshot(): Promise<CmoSnapshot> {
     // ngày vì dữ liệu GSC luôn trễ 2–3 ngày; lấy tới hôm nay là tự tạo ra một
     // cái dốc đi xuống giả ở cuối. Best-effort như GA4.
     getSearchConsoleSnapshot(day(31), day(3)).catch(() => null),
+    // Bậc 6 Growth Data Plan — findings ads/campaign ĐÃ TÍNH XONG (CAC/CPA/
+    // ROAS, cổng mẫu ≥30 đã áp). getLatestGrowthFindings() tự fail-open
+    // (lỗi/rỗng → []), .catch() ở đây chỉ phòng thêm, không kéo sập digest.
+    getLatestGrowthFindings().catch(() => []),
   ]);
 
   const funnel = funnelThisWeek as { visitors?: unknown; visitors_human?: unknown };
@@ -126,6 +140,7 @@ async function buildSnapshot(): Promise<CmoSnapshot> {
         }
       : null,
     gsc,
+    growthFindings,
   };
 }
 
@@ -237,7 +252,18 @@ VỀ KHỐI "gsc" (Google Search Console, 28 ngày, KẾT THÚC TRƯỚC 3 NGÀY
 - KHÔNG kết luận "Google chưa index" chỉ vì impressions thấp — báo cáo Lập chỉ mục KHÔNG có trong API,
   nên số ở đây là cận dưới. Nói "chưa hiện ra trong tìm kiếm" thì đúng, nói "chưa được index" là vượt
   quá dữ liệu.
-- Ngày cuối trong khoảng vẫn có thể thiếu do độ trễ — TUYỆT ĐỐI không đọc phần đuôi thành "đang sụt".`;
+- Ngày cuối trong khoảng vẫn có thể thiếu do độ trễ — TUYỆT ĐỐI không đọc phần đuôi thành "đang sụt".
+
+VỀ KHỐI "growthFindings" (bậc 6 Growth Data Plan — findings ads/campaign):
+- Đây là mảng VIỆC đã tính XONG bởi code (CAC/CPA/ROAS, cổng mẫu ≥30 đã áp) — CHỈ đọc lại
+  "headline" và số trong "metrics", TUYỆT ĐỐI không tự tính lại hay tự suy % từ các số đó.
+- Mảng RỖNG nghĩa là "không có finding nào đủ mẫu để báo" — nói thẳng câu đó nếu được hỏi về
+  ads, KHÔNG suy diễn thành "ads đang tốt" hay "chưa nối được ads" (hai kết luận đó cần dữ liệu
+  khác, xem CmoSnapshot ở code).
+- "severity":"act" là việc CẦN LÀM NGAY (thêm hẳn vào "⚠️ Điểm nghẽn" hoặc mở gạch đầu dòng riêng
+  nếu có), "watch" là đáng để mắt nhưng chưa gấp, "info" thường bỏ qua trừ khi không còn gì khác.
+- "suggested_action" là ĐỀ XUẤT cho Henry TỰ BẤM, KHÔNG phải việc hệ thống đã/sẽ tự làm — đừng
+  viết như thể hành động đó đã xảy ra.`;
 
 export interface CmoDigestResult {
   text: string;

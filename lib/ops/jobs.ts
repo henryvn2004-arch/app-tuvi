@@ -214,6 +214,11 @@ export const JOBS: JobSpec[] = [
   { key: 'ext-metrics', label: 'Kéo GA4 + GSC + Clarity + Meta Ads', source: 'vercel', everyMinutes: D,
     schedule: '05:00 VN hằng ngày', sink: 'ext_metrics_daily', path: '/api/cron/ext-metrics',
     since: '2026-09-15' },
+  // 06:00 VN — SAU ext-metrics (05:00) một giờ, để có ads spend hôm qua mới
+  // nhất trước khi engine (lib/growth/engine.ts) join với phễu nội bộ.
+  { key: 'growth-insights', label: 'Engine tăng trưởng — CAC/CPA/ROAS theo campaign + findings', source: 'vercel',
+    everyMinutes: D, schedule: '06:00 VN hằng ngày', sink: 'marketing_insights', path: '/api/cron/growth-insights',
+    since: '2026-09-15' },
   /*
    * Job ĐẦU TIÊN chạy ngoài Vercel/Supabase — nó ở GitHub Actions.
    *

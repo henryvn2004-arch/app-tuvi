@@ -1,14 +1,20 @@
 # Growth Data Plan — Thu thập · Phân tích · Phân phối
 
-**Trạng thái:** CHỐT PHẠM VI (Henry: "B" — bậc 0→6) · **Ngày:** 2026-09-15
+**Trạng thái:** BẬC 0→6 ĐÃ CODE XONG (bậc 0 vẫn treo — việc tay Henry) · **Ngày cập
+nhật:** 2026-09-15
 **Thay thế:** Windsor.ai (kéo GA4/Clarity/FB Ads/Google Ads — không ổn định, tốn phí,
 và KHÔNG hề nối vào bất cứ nguồn nào trong repo)
-**Người đọc kết quả:** Telegram (cmo-digest hiện tại) · **Marketing orchestrator**
-(đang xây ở PR #865, `claude/jolly-faraday-qeodq1`) · `anomaly-alerts` · `autopilot`
+**Người đọc kết quả:** Telegram (`cmo-digest`, đã nối bậc 6a) · **Marketing
+orchestrator** (CHƯA có code trong repo — `lib/marketing/orchestrator.ts` không tồn
+tại, chỉ có đề xuất chưa chốt scope ở `docs/COO-ORCHESTRATOR-SCOPE.md`; đọc
+findings qua `getLatestGrowthFindings()`, IMPORT thẳng, khi nào orchestrator được
+code) · `anomaly-alerts` (đã nối bậc 6c) · `autopilot` (KHÔNG nối — hành động
+trên tài khoản ads nằm ngoài phạm vi B, xem §8)
 
-Chưa code gì ngoài file này. Đây là bản để cả phiên hiện tại lẫn phiên
-orchestrator đọc CHUNG — một nguồn cho một kế hoạch, đúng luật đã ghi ở
-`docs/coo-daily-routine-prompt.md`.
+Bậc 1-3 (thu thập) landed ở PR #868. Bậc 4-6 (engine + findings +
+phân phối) landed ở PR này — xem `docs/nhat-ky/2026-09.md` mục tương ứng cho
+diễn biến/số đo/bẫy. File này giữ nguyên vai trò MỤC LỤC + THIẾT KẾ, không lặp
+lại nhật ký.
 
 ---
 
@@ -260,23 +266,18 @@ song song.
 
 ## 9. Lộ trình đã chốt (phạm vi B: bậc 0→6)
 
-| Bậc | Nội dung | Công | Tay Henry |
-|---|---|---|---|
-| **0** | Link GA4 ↔ Google Ads | 0 | 10 phút |
-| **1** | `ext_metrics_daily` + cron + GA4/GSC | ~1 buổi | — |
-| **2** | Clarity | ~150 dòng | API token |
-| **3** | Meta Ads Insights | ~150 dòng | System User token `ads_read` |
-| **4** | `campaign_daily` view + `lib/growth/engine.ts` (gọi `tool-profit.ts`) + vitest | ~1 ngày | — |
-| **5** | `marketing_insights` + findings + event `growth_insight` | ~1 buổi | — |
-| **6** | Nối 4 người đọc (Telegram / orchestrator import / anomaly-alerts / autopilot) | ~1 buổi | — |
+| Bậc | Nội dung | Trạng thái |
+|---|---|---|
+| **0** | Link GA4 ↔ Google Ads | 🔴 TREO — việc tay Henry, chưa làm |
+| **1** | `ext_metrics_daily` + cron + GA4/GSC | ✅ PR #868 |
+| **2** | Clarity | ✅ PR #868 (field beyond sessions/bot chưa verify — xem PR #868) |
+| **3** | Meta Ads Insights | ✅ PR #868 (khoá join utm_campaign↔campaign ID CHƯA verify — xem engine.ts) |
+| **4** | `campaign_funnel_daily` RPC + `lib/growth/engine.ts` (gọi `tool-profit.ts`) | ✅ PR này — KHÔNG có vitest (repo không có vitest ở root, xem nhật ký) |
+| **5** | `marketing_insights` + `lib/growth/findings.ts` + cron `growth-insights` (06:00 VN) | ✅ PR này |
+| **6** | Telegram (cmo-digest, additive) · anomaly-alerts (additive) đã nối. Orchestrator import: chưa có gì để nối (orchestrator chưa code). Autopilot: cố ý KHÔNG nối (§8) | ✅ PR này (2/4 người đọc thật, 2 còn lại out-of-scope/chưa tồn tại) |
 
 Bậc 7 (Google Ads API trực tiếp) — NGOÀI phạm vi B, chỉ làm nếu bậc 0 không
 đủ chi tiết (cần keyword/search-term level).
-
-**Phụ thuộc PR #865:** engine (bậc 4) và phần nối orchestrator (bậc 6) đụng
-đúng vùng `lib/marketing/tool-profit.ts` + `handleAdminDashboardV2`. Cắt
-nhánh làm việc từ `claude/jolly-faraday-qeodq1` (hoặc chờ #865 merge vào
-main trước) để không phải giải xung đột ở file đường tiền.
 
 Chi phí vận hành thêm: **$0**. Token LLM cho digest có khả năng GIẢM vì
 digest thôi nuốt snapshot thô.
