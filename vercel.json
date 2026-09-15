@@ -38,7 +38,8 @@
     { "path": "/api/cron/viral-seo-pages", "schedule": "30 4 * * *" },
     { "path": "/api/cron/email-reminder-idle", "schedule": "0 1 * * 2" },
     { "path": "/api/cron/email-cross-sell", "schedule": "0 1 * * 4" },
-    { "path": "/api/cron/email-broadcast-drain", "schedule": "*/15 * * * *" }
+    { "path": "/api/cron/email-broadcast-drain", "schedule": "*/15 * * * *" },
+    { "path": "/api/cron/email-abandoned-checkout", "schedule": "15 3 * * *" }
   ],
   "headers": [
     {
