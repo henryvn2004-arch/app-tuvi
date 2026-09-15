@@ -15,8 +15,9 @@ import { getPackages, quoteCustomVnd, vndPerCredit } from '@/lib/billing/package
 import { PAYPAL_BASE, PAYPAL_CURRENCY, VND_PER_USD, getPayPalToken, humanIssueMessage, settlePayPalTopup } from '@/lib/billing/paypal';
 import { getToolPrice, getToolParts } from '@/lib/billing/pricing';
 import { hasSlugAccess } from '@/lib/billing/credits';
-import { freeGenGate, FREE_GEN_CAP_MESSAGE, railFreeRemaining } from '@/lib/billing/viral-budget';
+import { freeGenGate, FREE_GEN_CAP_MESSAGE, railFreeRemaining, railFreeGrant, railBonusTurnsPerPurchase } from '@/lib/billing/viral-budget';
 import { anonTrialStatus } from '@/lib/billing/anon-trial';
+import { getToolRevenue } from '@/lib/marketing/tool-profit';
 import { syncOnboardingTasks, KHOI_HANH_STEPS } from '@/lib/onboarding/tasks';
 import { getConfigValue } from '@/lib/config/appConfig';
 import { CRON_RUNS_LIMIT, JOBS, evaluateJobs, fetchPgcronRuns, syncJobFirstSeen } from '@/lib/ops/jobs';
@@ -462,6 +463,14 @@ async function handleDeduct(request: NextRequest, body: Record<string, unknown>)
     }
 
     await logTransaction({ userId: user.id, amount: -amount, type: toolType, description, slug: slug || undefined });
+
+    // Quà kèm: mọi lượt mua tool THÀNH CÔNG tặng thêm lượt rail (dùng CHUNG
+    // cơ chế "lượt rail tặng" đã có, xem ghi chú ở viral-budget.ts) — biến
+    // rail thành đặc quyền đi kèm sản phẩm thật thay vì bán lẻ đơn thuần.
+    // Fire-and-forget SAU khi đã trả lời client: không được để một RPC phụ
+    // trễ hay lỗi làm chậm/hỏng phản hồi thanh toán chính.
+    void railBonusTurnsPerPurchase().then((n) => railFreeGrant(user.id, n)).catch(() => {});
+
     return ok({ success: true, balance: newBal });
 
   } catch (e: unknown) { return err((e as Error).message); }
@@ -2629,7 +2638,7 @@ async function handleAdminDashboardV2(request: NextRequest): Promise<Response> {
   };
 
   try {
-    const [engagement, contentRevenue, atRisk, khTotal, kh7d, ncTotal, nc7d, ytTotal, yt7d, channelHealth, margin, jsErrors] = await Promise.all([
+    const [engagement, contentRevenue, atRisk, khTotal, kh7d, ncTotal, nc7d, ytTotal, yt7d, channelHealth, margin, jsErrors, toolRevenue] = await Promise.all([
       callRpc('dashboard_engagement', { p_days: 30 }),
       callRpc('dashboard_content_revenue', { p_from: from.toISOString(), p_to: to.toISOString() }),
       callRpc('dashboard_at_risk', { p_idle_days: 14, p_min_events: 3, p_limit: 20 }),
@@ -2642,14 +2651,41 @@ async function handleAdminDashboardV2(request: NextRequest): Promise<Response> {
       callRpc('channel_error_rate', { p_hours: 24 }),
       callRpc('dashboard_margin', { p_from: from.toISOString(), p_to: to.toISOString() }),
       callRpc('js_error_top', { p_hours: 24, p_limit: 30 }),
+      getToolRevenue(from.toISOString()),
     ]);
+
+    // Ghép doanh thu (toolRevenue, đọc credit_transactions) vào `by_tool`
+    // (cost-only, RPC dashboard_margin) — RPC KHÔNG có vế doanh thu riêng cho
+    // từng tool (chỉ 'chat' có `chat_revenue_vnd` ở object cha). Union theo
+    // tool_id CẢ HAI phía: một tool có doanh thu nhưng logging cost hụt (0
+    // dòng llm_usage) vẫn phải HIỆN RA — biến mất là che giấu đúng lỗ hổng
+    // cần thấy, không phải dọn bảng cho gọn.
+    const byToolCost = (margin as { by_tool?: { tool_id: string; requests: number; cost_vnd: number }[] })?.by_tool || [];
+    const allToolIds = new Set<string>([...byToolCost.map((t) => t.tool_id), ...toolRevenue.keys()]);
+    const byToolProfit = [...allToolIds].map((toolId) => {
+      const c = byToolCost.find((t) => t.tool_id === toolId);
+      const r = toolRevenue.get(toolId);
+      const costVnd = Number(c?.cost_vnd) || 0;
+      const revenueVnd = r?.revenueVnd || 0;
+      return {
+        tool_id: toolId,
+        requests: Number(c?.requests) || 0,
+        cost_vnd: costVnd,
+        spend_count: r?.spendCount || 0,
+        revenue_vnd: revenueVnd,
+        // null (không phải 0) khi tool này KHÔNG có dòng doanh thu nào —
+        // "chưa đo được" khác hẳn "lợi nhuận bằng không". Admin đọc `—`
+        // thay vì tưởng nhầm tool đang hoà vốn.
+        profit_vnd: r ? revenueVnd - costVnd : null,
+      };
+    }).sort((a, b) => (b.profit_vnd ?? -Infinity) - (a.profit_vnd ?? -Infinity) || b.cost_vnd - a.cost_vnd);
 
     return ok({
       engagement,
       contentRevenue,
       atRisk,
       channelHealth,
-      margin,
+      margin: { ...(margin as object), by_tool: byToolProfit },
       jsErrors,
       content: {
         khaoLuan:  { total: khTotal, last7d: kh7d },

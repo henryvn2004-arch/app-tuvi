@@ -112,7 +112,7 @@
    *                           hàm này đã sẵn biến giới tính từ form (vd
    *                           `_gioitinh` trong app-luan-giai.html) — truyền
    *                           thẳng biến đó vào.
-   * @returns {{url:string, sac:string, khia:string}|null}
+   * @returns {{url:string, printUrl:string, sac:string, khia:string}|null}
    */
   function illusUrlForPhan(ls, phan, gioi) {
     var khia = PHAN_TO_KHIA[phan];
@@ -143,14 +143,30 @@
     var vCount = VARIANT_COUNT[khia] || 1;
     var v = (_hash(seedStr + khia + tuoi) % vCount) + 1;
     var id = khia + '--' + sac + '--' + gioi + '--' + tuoi + '--v' + v;
-    // .webp (900px rộng, quality 80) — bản NÉN SẴN, migrate 2026-09-14 khỏi
-    // .png gốc (1536x1024, trung bình 3,1MB/tấm, đo thật từ storage.objects:
-    // 230 ảnh = 693MB). Bản .png gốc VẪN CÒN trong bucket làm lưu trữ, không
-    // xoá — chỉ đổi URL đang dùng. Không nén lúc chạy (per-request) nữa vì
-    // ảnh đã nhẹ sẵn cho mọi nơi dùng (màn hình lẫn PDF), không cần riêng
-    // một đường cho in ấn.
-    var url = SUPABASE_URL + '/storage/v1/object/public/' + BUCKET + '/' + PREFIX + '/' + id + '.webp';
-    return { url: url, sac: sac, khia: khia };
+    // .webp (1536x1024, quality 82) — bản NÉN SẴN cho MÀN HÌNH, migrate
+    // 2026-09-14 khỏi .png gốc (trung bình 3,1MB/tấm, đo thật từ
+    // storage.objects: 230 ảnh = 693MB). Bản .png gốc VẪN CÒN trong bucket
+    // làm lưu trữ, không xoá.
+    //
+    // 🪤 `-print.jpg` (2026-09-15): ban đầu nghĩ ảnh nhẹ sẵn thì dùng chung
+    // luôn cho cả in ấn, không cần đường riêng — SAI. Chromium `page.pdf()`/
+    // `window.print()` khi nhúng ảnh vào PDF KHÔNG giữ nguyên byte WebP đã
+    // nén — Skia giải mã rồi nhúng lại gần-như-lossless, một PDF Luận Giải
+    // Lá Số (13 ảnh 1536x1024) đo được ~41MB dù mỗi ảnh nguồn chỉ ~270KB
+    // (vượt luôn trần dung lượng bucket `samples`). Sinh thêm bản nhỏ hơn
+    // hẳn (`scripts/gen-illus-print.mjs`, resize theo TỈ LỆ — không ép một
+    // chiều như bug crop 900x1024 đã vá ở #851) cho `img[data-print-src]` —
+    // `forceEagerIllusImages()` (shell.js) tự SWAP `img.src` ngay trước khi
+    // in. 🪤 Hai bẫy đã vấp: (1) `<picture><source media="print">` chọn
+    // nguồn lúc CHÈN VÀO DOM (còn ở chế độ màn hình), `page.emulateMedia()`
+    // của Playwright đổi SAU đó không kích hoạt lại — đo lại PDF không nhỏ
+    // đi chút nào, phải swap `img.src` bằng JS thay vì dựa `<picture>`. (2)
+    // Đổi `-print` sang WebP xong PDF vẫn ~10MB — đo cục bộ (13 ảnh, không
+    // qua mạng): Chromium nhúng WebP gần-như-lossless (~6,5MB/13 ảnh 640px)
+    // nhưng nhúng JPEG gần NGUYÊN KHỐI (~0,6MB/13 ảnh cùng cỡ, rẻ hơn ~10
+    // lần) — `-print` PHẢI là `.jpg`, `.webp` màn hình giữ nguyên.
+    var base = SUPABASE_URL + '/storage/v1/object/public/' + BUCKET + '/' + PREFIX + '/' + id;
+    return { url: base + '.webp', printUrl: base + '-print.jpg', sac: sac, khia: khia };
   }
 
   // ── Đại Vận (Chu Trình Cuộc Đời) ─────────────────────────────────────────
@@ -187,7 +203,7 @@
    * @param {object} ls
    * @param {number} dvIndex   0-8 (khớp `ls.daiVans[dvIndex]`)
    * @param {'nam'|'nu'} gioi  bắt buộc truyền tay, xem `illusUrlForPhan`
-   * @returns {{url:string, sac:string, khia:string, tuoi:string}|null}
+   * @returns {{url:string, printUrl:string, sac:string, khia:string, tuoi:string}|null}
    */
   function illusUrlForDaiVan(ls, dvIndex, gioi) {
     if (gioi !== 'nam' && gioi !== 'nu') return null;
@@ -219,7 +235,7 @@
    * @param {object} ls    lá số nhân vật chính (đã tính bằng `anSaoLaSo`)
    * @param {'nam'|'nu'} gioi  bắt buộc truyền tay, xem `illusUrlForPhan`
    * @param {string} tuoi  một trong 5 bậc `Tuoi` — dùng `tuoiBac(tuoiSo)` để suy ra
-   * @returns {{url:string, sac:string, khia:string}|null}
+   * @returns {{url:string, printUrl:string, sac:string, khia:string}|null}
    */
   function illusUrlForTongQuan(ls, gioi, tuoi) {
     if (gioi !== 'nam' && gioi !== 'nu') return null;
@@ -245,7 +261,7 @@
    * @param {object} ls
    * @param {number} thangAL  1-12 (khớp `ThangKhung.thangAL`, van-han-12.ts)
    * @param {'nam'|'nu'} gioi bắt buộc truyền tay, xem `illusUrlForPhan`
-   * @returns {{url:string, sac:string, khia:string}|null}
+   * @returns {{url:string, printUrl:string, sac:string, khia:string}|null}
    */
   function illusUrlForThang(ls, thangAL, gioi) {
     if (gioi !== 'nam' && gioi !== 'nu') return null;

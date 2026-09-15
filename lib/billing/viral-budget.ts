@@ -26,6 +26,20 @@
 //
 // Mọi thứ đọc từ `app_config` (`viral.*`) nên chỉnh được bằng SQL, không deploy.
 // Xem _patches/migration-viral-budget.sql.
+//
+// 🔴 2026-09-15 (M1 track marketing "kiểu Shopee" — rail đang LỖ đơn lẻ,
+// 4.614đ chi phí/lượt vs 2.500đ giá bán, đo `lib/marketing/tool-profit.ts`):
+// thêm nguồn cấp rail_free_turns THỨ HAI — `rail.purchase_bonus_turns`
+// (`railBonusTurnsPerPurchase`, gọi từ `handleDeduct` sau MỌI lượt mua tool
+// thành công). KHÔNG dùng chung khoá `viral.free_rail_turns` — khoá đó là
+// ngân sách THÍ NGHIỆM CÓ TRẦN $15/tháng của viral loop (ảnh free), còn đây
+// là quà kèm một lượt mua THẬT (đã có doanh thu đỡ, không cần trần ngân
+// sách riêng). Dùng CHUNG bảng/RPC `rail_free_turns`/`rail_free_grant` —
+// RPC đã `greatest()` (không ghi đè giảm) nên hai nguồn cấp CỘNG SINH an
+// toàn, không cần sửa gì ở DB. Cố tình CHƯA đụng tới việc bán lẻ rail theo
+// tin nhắn (`tool_pricing['rail-message']`, trừ Lượng trực tiếp trong
+// `/api/v1/chat`) — đó là quyết định rộng hơn (giữ giá đã sửa hay bỏ hẳn),
+// cần Henry chốt riêng.
 // ============================================================
 
 import { getConfigValue } from '@/lib/config/appConfig';
@@ -99,6 +113,15 @@ export async function railFreeGrant(userId: string, n: number): Promise<number> 
 export async function railFreeConsume(userId: string): Promise<boolean> {
   if (!userId) return false;
   return rpc<boolean>('rail_free_consume', { p_user_id: userId }, false);
+}
+
+/** Số lượt rail tặng kèm MỖI lượt mua tool thành công (0 = tắt). Mặc định 5 —
+ *  ngay cả tool rẻ nhất đã đo (laso, ~300đ chi phí/lượt) vẫn dư sức đỡ 5 lượt
+ *  rail (~4.614đ chi phí/lượt, đo `lib/marketing/tool-profit.ts`) từ biên đã
+ *  thu; Henry tự chỉnh qua `app_config['rail.purchase_bonus_turns']`. */
+export async function railBonusTurnsPerPurchase(): Promise<number> {
+  const n = Number(await getConfigValue<number>('rail.purchase_bonus_turns', 5));
+  return Number.isFinite(n) && n > 0 ? Math.floor(n) : 0;
 }
 
 /** Còn bao nhiêu lượt rail tặng (để cổng paywall không chặn oan người hết Lượng

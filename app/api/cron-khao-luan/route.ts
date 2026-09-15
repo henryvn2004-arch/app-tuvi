@@ -178,7 +178,13 @@ async function handle(request: NextRequest) {
   const startTime = Date.now();
 
   const topics = await popTopics(ARTICLES_PER_RUN);
-  if (!topics.length) return ok({ message: 'No pending topics', results });
+  // `skipped` (không phải chỉ `message`) — đây là hợp đồng CHUNG `withCronLog`
+  // đọc để chốt status='skip' thay vì 'ok' (xem lib/cron/log.ts `runOnce`).
+  // Thiếu nó thì hàng đợi cạn 45 ngày liền vẫn báo 'ok' mỗi lượt — đúng cách
+  // `topic_queue` đứng từ 01/08 mà không job dò nào (`skipStreak`) thấy được.
+  if (!topics.length) {
+    return ok({ message: 'No pending topics', skipped: 'không có chủ đề pending', results });
+  }
 
   for (const t of topics as {id:string;topic:string;type:string}[]) {
     if (Date.now() - startTime > 240000) { await updateStatus(t.id, 'pending'); break; }

@@ -1770,17 +1770,42 @@
   // ảnh). Gỡ `lazy` ngay trước khi in để trình duyệt tải NGAY bất kể có đang
   // hiện trên màn hình hay không, rồi CHỜ THẬT SỰ (không đoán mili giây) cho
   // tới khi tải xong hoặc lỗi mới gọi `cb`.
+  // 🪤 2026-09-15: đợt đầu đổi sang `<picture><source media="print">` cho ảnh
+  // minh hoạ — KHÔNG ăn thua. `<picture>` chọn nguồn NGAY LÚC chèn vào DOM
+  // (lúc đó vẫn ở chế độ màn hình); `page.emulateMedia({media:'print'})` của
+  // Playwright đổi SAU đó không kích hoạt lại thuật toán chọn nguồn — PDF vẫn
+  // nhúng đúng ảnh màn hình cỡ lớn (đo lại: 42440KB → 42435KB, coi như không
+  // đổi). Đổi hẳn sang tự SWAP `img.src` bằng JS ngay tại đây — chắc chắn với
+  // cả Playwright (`page.pdf()`) lẫn khách thật bấm "Lưu PDF"/Ctrl+P, không
+  // phụ thuộc thời điểm trình duyệt tự chọn nguồn. `data-print-src` do
+  // `illusBannerHtml`-các-trang gắn sẵn (trỏ `<id>-print.webp`, nhỏ hơn hẳn —
+  // xem `illus-match.js` `printUrl` + `scripts/gen-illus-print.mjs`).
   function forceEagerIllusImages(host, cb) {
     var imgs = Array.prototype.slice.call(host.querySelectorAll('.lg-illus img'));
     if (!imgs.length) { cb(); return; }
     var left = imgs.length;
     var settle = function () { left--; if (left <= 0) cb(); };
+    var swapped = [];
     imgs.forEach(function (img) {
+      if (img.dataset && img.dataset.printSrc && img.src !== img.dataset.printSrc) {
+        img.dataset.screenSrc = img.src; // nhớ lại để phục hồi sau khi hộp thoại in đóng
+        img.src = img.dataset.printSrc;
+        swapped.push(img);
+      }
       if (img.loading === 'lazy') img.loading = 'eager';
       if (img.complete) { settle(); return; }
       img.addEventListener('load', settle, { once: true });
       img.addEventListener('error', settle, { once: true }); // lỗi thì thôi — onerror riêng của ảnh đã tự gỡ khung, đừng giữ in mãi
     });
+    // Trả lại ảnh cỡ lớn cho màn hình sau khi in xong — cùng mẫu
+    // beforeprint/afterprint đã dùng cho `<details>` ở trên, không đụng cách
+    // đó. Không fire được trong Playwright headless thì cũng vô hại (trang
+    // đóng ngay sau khi chụp PDF, không cần phục hồi).
+    if (swapped.length) {
+      window.addEventListener('afterprint', function restore() {
+        swapped.forEach(function (img) { if (img.dataset.screenSrc) img.src = img.dataset.screenSrc; });
+      }, { once: true });
+    }
   }
   // ── Bìa sách (6 tool có ảnh minh hoạ illus-match.js) ─────────────────
   // 2026-09-14: trước đây "Lưu PDF" chỉ in nguyên màn hình, không có bố cục.
@@ -3039,6 +3064,15 @@
         } catch (e) { /* ignore */ }
         typing.innerHTML = '<p>Đã hết lượt hỏi. Lá số vẫn xem miễn phí — bạn có thể xem <a href="/app/luan-giai" style="color:var(--blue);font-weight:600">bản Luận Giải trọn ' + LG_PHAN.length + ' mục</a> hoặc <a href="/topup.html" style="color:var(--blue);font-weight:600">nạp thêm</a> để hỏi tiếp.</p>';
         openTopupModal();
+        streaming = false; setSend(true); messages.pop(); return;
+      }
+      if (res.status === 422) {
+        // Bậc 0 (server: app/api/v1/chat/route.ts) — đã hỏi quá vài câu mà vẫn
+        // chưa có lá số/kịch bản. KHÔNG mở modal (không phải paywall, không phải
+        // đăng nhập) — chỉ trỏ về form ngay trên trang, đã luôn sẵn đó.
+        var _hostForm = document.getElementById('tuviFormHost');
+        typing.innerHTML = '<p>Nhập ngày sinh ' + (_hostForm ? 'ở form phía trên' : 'để bắt đầu') + ' để thầy luận đúng trên lá số của bạn nhé — hỏi chung chung hoài thì không khác gì hỏi một chatbot thường.</p>';
+        if (_hostForm) { try { _hostForm.scrollIntoView({ behavior: 'smooth', block: 'center' }); } catch (e) { /* ignore */ } }
         streaming = false; setSend(true); messages.pop(); return;
       }
       if (!res.ok) throw new Error('HTTP ' + res.status);

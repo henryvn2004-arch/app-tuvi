@@ -25,7 +25,7 @@ import {
 } from '@/lib/contract/v1';
 import { buildToolDefs } from '@/lib/tools/registry';
 import { runAgent } from '@/lib/agent/run';
-import { getChatConfig } from '@/lib/config/appConfig';
+import { getChatConfig, getConfigValue } from '@/lib/config/appConfig';
 import { getRailPrice } from '@/lib/billing/pricing';
 import { chatLogOutcome } from '@/lib/channels/store';
 import {
@@ -90,6 +90,28 @@ export async function POST(request: NextRequest) {
 
   const req: ChatRequestV1 = parsed.value;
   const cfg = await getChatConfig();
+
+  // ── Bậc 0: chưa có lá số/scenario mà hội thoại đã dài ──────────
+  // Vì sao ĐẶT TRƯỚC paywall pre-check: chặn ở đây tiết kiệm CẢ HAI ngân sách
+  // (lượt dùng thử anon lẫn Lượng balance) — chặn sau khi đã tiêu là quá muộn.
+  // KHÔNG chặn ngay tin đầu: `CHAT_SYSTEM_GENERAL` được thiết kế để chủ động
+  // hỏi ngày sinh NGAY trong hội thoại rồi tự gọi `lap_la_so` — chặn cứng từ
+  // tin đầu là đá vào chính cơ chế onboarding này. Chỉ chặn khi đã quá
+  // `rail.no_context_msg_cap` tin mà vẫn chưa hội tụ về một lá số/kịch bản —
+  // đúng lúc mô tả "thói quen vào là chat, chưa nhập thông tin" kéo dài thật.
+  // `scenario` (tool phi-lá-số: xem-tuoi, tu-binh, …) đã có context ngay từ
+  // tin đầu nên KHÔNG bao giờ chạm cổng này.
+  if (!req.birth && !req.scenario) {
+    const userMsgCount = (req.messages || []).filter((m) => m.role === 'user').length;
+    const noContextCap = await getConfigValue<number>('rail.no_context_msg_cap', 3);
+    if (noContextCap > 0 && userMsgCount > noContextCap) {
+      return jsonError(
+        'need_birth_info',
+        'Nhập ngày sinh ở form phía trên để thầy luận đúng trên lá số của bạn nhé — hỏi chung chung hoài thì không khác gì hỏi một chatbot thường.',
+        422,
+      );
+    }
+  }
 
   // ── Paywall pre-check (trước khi mở stream) ───────────────────
   // Chỉ tính phí khi paywall bật VÀ giá cấu hình > 0. Trừ Lượng SAU
