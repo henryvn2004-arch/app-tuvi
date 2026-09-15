@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-282 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+283 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 **Bốn file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
 ```bash
@@ -11,7 +11,7 @@ sed -n '120,190p' docs/nhat-ky/2026-08.md    # đọc đúng đoạn, đừng ca
 
 | file | số mục | dung lượng |
 |---|---:|---:|
-| `2026-09.md` | 117 | 495,397 B |
+| `2026-09.md` | 118 | 497,749 B |
 | `2026-08.md` | 148 | 1,024,027 B |
 | `2026-07.md` | 12 | 154,531 B |
 | `track-cu.md` | 5 | 89,354 B |
@@ -27,6 +27,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 |---:|---|---|---|
 | 1 | 2026-09 | `2026-09.md` | 📊 Bậc 2+3 của Growth Data Plan — Clarity + Meta Ads vào `ext_metrics_daily` |
 | 1 | 2026-09 | `2026-09.md` | 📊 Bậc 1 của Growth Data Plan — thay Windsor.ai, tự kéo GA4 + Search Console vào `ext_metrics_daily` |
+| 1 | 2026-09 | `2026-09.md` | 📏 Luận Giải Lá Số vẫn "ngắn" sau đợt nới ngân sách trước — gốc là luật, không phải số |
 | 1 | 2026-09 | `2026-09.md` | 🚪 Bậc 0 cổng rail — Pha 1b của plan "marketing kiểu Shopee" |
 | 1 | 2026-09 | `2026-09.md` | 🎁 Quà rail kèm mỗi lượt mua tool — Pha 1 của plan "marketing kiểu Shopee" |
 | 1 | 2026-09 | `2026-09.md` | 📊 Sổ lợi nhuận theo tool — Pha 0 của plan "marketing kiểu Shopee" |

@@ -207,15 +207,15 @@ MẠCH TRUYỆN XUYÊN SUỐT (đây là phần MỞ của cả bài — 23 ph�
 
   if (phan === 2) return `
 
-PHẦN 2 — CUNG MỆNH (320-380 từ)
+PHẦN 2 — CUNG MỆNH (420-480 từ)
 ${CUNG_DESC['Mệnh']}
 
 MỞ ĐẦU bằng câu phán quyết NGẮN, in đậm, đứng riêng một dòng — nói bằng nghĩa đời thực (khí chất người này thế nào, đường đời thuận hay trắc trở). Căn cứ nội bộ (không cần xướng ngay trong câu mở): nhãn "Luận sao: …" của dòng [Mệnh] + cách cục + độ sáng chính tinh.
 CẤM bịa "điểm cung X/10" — lá số KHÔNG có điểm cho từng cung, chỉ ĐẠI VẬN mới có điểm/10 thật.
-Xuống dòng rồi viết văn xuôi súc tích, chia 2-4 đoạn riêng, đi thẳng vào tính cách và số phận bằng ngôn ngữ đời thường (tên sao/cách cục nếu nhắc thì gọn trong ngoặc):
+Xuống dòng rồi viết văn xuôi súc tích, chia 4-5 đoạn riêng (đủ chỗ trả lời HẾT bộ câu hỏi trọng tâm ở trên — KHÔNG được bỏ sót câu nào, kể cả trả lời ngắn), đi thẳng vào tính cách và số phận bằng ngôn ngữ đời thường (tên sao/cách cục nếu nhắc thì gọn trong ngoặc):
 ① Bản chất cốt lõi: người này là kiểu người gì, dựa trên chính tinh tại Mệnh và cách cục ([CÁCH CỤC], [Ý NGHĨA]) — đây là điểm sống còn của lá số, diễn giải thật rõ tác động thực tế.
-② Sao phụ, chỉ khi thực sự ảnh hưởng: dịch thẳng ra hệ quả (dễ có quý nhân giúp, dễ vướng thị phi, hay trắc trở đường học vấn...), không cần liệt kê hết tên.
-③ Điểm mạnh và điểm cần cảnh giác trong con người và cuộc đời.
+② → ④ Lần lượt trả lời TỪNG câu hỏi còn lại trong bộ câu hỏi trọng tâm ở trên (câu nào dữ liệu không đủ căn cứ trực tiếp thì trả lời bằng xu hướng chung suy ra được, KHÔNG được lờ đi hay gộp qua loa nhiều câu vào một câu chung chung) — sao phụ chỉ nhắc khi thực sự ảnh hưởng tới câu trả lời, không cần liệt kê hết tên.
+⑤ Điểm mạnh và điểm cần cảnh giác trong con người và cuộc đời.
 
 Xét thêm cung Thiên Di (xung chiếu Mệnh) — ảnh hưởng gì đến tính cách bên ngoài?
 
@@ -226,15 +226,15 @@ MẠCH TRUYỆN XUYÊN SUỐT: câu hook kết đoạn hướng sang MỘT lĩnh
     const cungDesc = CUNG_DESC[cung] || '';
     return `
 
-PHẦN ${phan} — CUNG ${cung.toUpperCase()} (480-550 từ)
+PHẦN ${phan} — CUNG ${cung.toUpperCase()} (650-750 từ)
 ${cungDesc}
 
 MỞ ĐẦU bằng câu phán quyết NGẮN, in đậm, đứng riêng một dòng — nói bằng nghĩa đời thực (tốt/khá/trung bình/yếu ở lĩnh vực này là thế nào), tên sao/cách cục KHÔNG mở đầu câu, để gọn trong ngoặc nếu cần. Căn cứ nội bộ: nhãn "Luận sao: …" của dòng [${cung}] + cách cục + độ sáng chính tinh. Cấm né tránh.
 CẤM bịa "điểm cung X/10" — lá số KHÔNG có điểm cho từng cung, chỉ ĐẠI VẬN mới có điểm/10 thật.
-Xuống dòng rồi viết 2-4 đoạn riêng (đủ chỗ trả lời hết bộ câu hỏi trọng tâm ở trên, mỗi đoạn đào sâu 1-2 câu, không nhồi hết vào một đoạn):
+Xuống dòng rồi viết 4-6 đoạn riêng (đủ chỗ trả lời HẾT bộ câu hỏi trọng tâm ở trên — KHÔNG được bỏ sót câu nào, mỗi đoạn đào sâu 1-2 câu hỏi, không nhồi hết vào một đoạn):
 ① Nhận định chính: dựa trên [CÁCH CỤC] và [Ý NGHĨA] — dịch ra hệ quả cụ thể, đây là phần quan trọng nhất.
-② Đào sâu các câu hỏi trọng tâm còn lại bằng dẫn chứng cụ thể từ dữ liệu — không bịa thêm sự kiện lá số không chỉ ra.
-③ Kết luận thực tế: 1-2 câu về tác động cụ thể trong cuộc đời người này (chỉ nhắc tam phương tứ chính khi nó thật sự đổi kết quả).
+② → ④ Lần lượt trả lời TỪNG câu hỏi còn lại trong bộ câu hỏi trọng tâm ở trên bằng dẫn chứng cụ thể từ dữ liệu (câu nào dữ liệu không đủ căn cứ trực tiếp thì trả lời bằng xu hướng chung suy ra được — KHÔNG được lờ đi hay gộp qua loa nhiều câu vào một câu chung chung) — không bịa thêm sự kiện lá số không chỉ ra.
+⑤ Kết luận thực tế: 1-2 câu về tác động cụ thể trong cuộc đời người này (chỉ nhắc tam phương tứ chính khi nó thật sự đổi kết quả).
 
 Không liệt kê lại tên sao, không mô tả lại dữ liệu thô. Nếu cung vô chính diệu thì nói rõ phải mượn cung xung chiếu để luận (không cần nhắc chữ "xung chiếu" nếu diễn được bằng câu thường).
 
@@ -261,7 +261,7 @@ MẠCH TRUYỆN XUYÊN SUỐT: đây là ĐIỂM BẢN LỀ — câu chuyện ch
     const dvDesc = DAI_VAN_DESC[dvNum] || '';
     return `
 
-PHẦN ${phan} — ĐẠI VẬN ${dvNum} (300-360 từ)
+PHẦN ${phan} — ĐẠI VẬN ${dvNum} (450-520 từ)
 ${dvDesc}
 
 Khối "ĐV${dvNum}:" trong === 9 ĐẠI VẬN === là dữ liệu DUY NHẤT được dùng cho phần này —
@@ -288,9 +288,9 @@ MỞ ĐẦU bằng câu phán quyết NGẮN, in đậm, đứng riêng một d�
 thực (giai đoạn này dễ thở hay chật vật, nên tiến hay nên giữ), không mở đầu bằng
 thuật ngữ. Căn cứ: dòng "Scoring: … Tổng=X" của ĐV${dvNum} (chép đúng số, không tự
 tính lại; số thấp thì nói thẳng là giai đoạn khó, không né).
-Xuống dòng rồi viết 3-4 đoạn giải thích, dễ hiểu, bằng ngôn ngữ đời thường (đủ chỗ
-đào sâu bộ câu hỏi trọng tâm ở trên VÀ tả diễn biến theo 3 quãng, không nhồi hết
-vào một đoạn):
+Xuống dòng rồi viết 5-7 đoạn giải thích, dễ hiểu, bằng ngôn ngữ đời thường (đủ chỗ
+trả lời HẾT bộ câu hỏi trọng tâm ở trên — KHÔNG được bỏ sót câu nào — VÀ tả diễn
+biến theo 3 quãng, không nhồi hết vào một đoạn):
 ① Vì sao: dịch "[LUẬN ĐOÁN]"/"[CẢNH BÁO]" thành chuyện đời thực — không liệt kê lại nguyên văn, không xướng tên sao/cách cục trừ khi cần cho rõ nghĩa (thì để gọn trong ngoặc).
 ② Diễn biến theo thời gian TRONG chính ĐV${dvNum}: 10 năm này KHÔNG đổi tốt/xấu
 đồng loạt ngay từ năm đầu — tả theo 3 chặng như "[3 QUÃNG TRONG ĐẠI VẬN]" chỉ ra
@@ -300,9 +300,12 @@ GIỮA mới là lúc thấy rõ nhất bản chất tốt/xấu của chính Đ
 đầu ngả dần theo hướng của vận SAU. Viết 1 câu ngắn nêu đúng chiều đó (vd "mấy năm
 đầu vẫn còn ổn, sang giữa vận mới bắt đầu chững lại, rồi hồi lại dần về cuối"),
 không liệt kê số hay tên năm cụ thể.
-③ Đào sâu 1-2 câu hỏi trọng tâm sát nhất với dữ liệu ĐV${dvNum} (từ bộ câu hỏi ở
-trên) — dẫn chứng cụ thể, không bịa thêm.
-④ Kết luận thực tế: 1-2 câu tác động cụ thể + gợi ý nhẹ nếu cần.
+③ → ⑤ Lần lượt trả lời TỪNG câu hỏi còn lại trong bộ câu hỏi trọng tâm ở trên
+(không cần dài dòng mỗi câu, nhưng câu nào suy được từ dữ liệu ĐV${dvNum} thì
+BẮT BUỘC phải trả lời — câu nào dữ liệu không đủ căn cứ trực tiếp thì trả lời
+ngắn bằng xu hướng chung, KHÔNG được lờ đi hay gộp qua loa nhiều câu vào một câu
+chung chung) — dẫn chứng cụ thể, không bịa thêm.
+⑥ Kết luận thực tế: 1-2 câu tác động cụ thể + gợi ý nhẹ nếu cần.
 
 MẠCH TRUYỆN XUYÊN SUỐT: ${dvNum < 9
       ? `câu hook kết đoạn hướng sang đại vận KẾ TIẾP (ĐV${dvNum + 1}) theo đúng dòng thời gian — dòng đời đang chảy tới, không phải đứng yên.`
