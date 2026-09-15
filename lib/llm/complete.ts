@@ -56,6 +56,18 @@ const KIMI_KEY = process.env.KIMIK3_API_KEY || '';
 const KIMI_MODEL = process.env.KIMI_MODEL || 'kimi-k3';
 const KIMI_URL = 'https://api.moonshot.ai/v1/chat/completions';
 
+// Không hàm completion nào trong file này từng có timeout — một provider TREO
+// (không lỗi, không trả) thì `fetch` chờ tới khi PLATFORM giết ngang cả hàm
+// (Vercel `maxDuration`), không phải khi provider trả lời. Route cron đi qua
+// `withCronLog` thì dòng nhịp tim `running` treo tới lượt kế tiếp mới tự dọn
+// được (`closeStaleRunning`, lib/cron/log.ts) — đo thật 15/09: `kimi` treo ở
+// `cron-khao-luan-tamly` (maxDuration=300s) làm dòng `running` treo tới tận
+// lượt lịch kế tiếp. Kimi đã ghi nhận "hay chậm/timeout" (xem CANONICAL_ORDER)
+// nhưng vòng lặp fallback CHỈ bắt được lỗi NÉM RA — một cuộc gọi treo không
+// bao giờ ném gì để mà bắt. Timeout ở đây biến "treo" thành "lỗi trong
+// `order.length`s", vòng lặp fallback vốn đã có tự lo phần còn lại.
+const LLM_FETCH_TIMEOUT_MS = 120_000;
+
 export interface LlmImage {
   data: string; // base64 (không kèm data: prefix)
   mediaType?: string; // vd 'image/jpeg'
@@ -192,6 +204,7 @@ async function geminiText(o: LlmTextOpts, maxTokens: number): Promise<RawLlmResu
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(buildGeminiBody(o, maxTokens)),
+    signal: AbortSignal.timeout(LLM_FETCH_TIMEOUT_MS),
   });
   if (!r.ok) throw new Error(`gemini ${r.status}: ${(await r.text()).slice(0, 200)}`);
   const j = await r.json();
@@ -282,6 +295,7 @@ async function kimiText(o: LlmTextOpts, maxTokens: number): Promise<RawLlmResult
     method: 'POST',
     headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${KIMI_KEY}` },
     body: JSON.stringify(body),
+    signal: AbortSignal.timeout(LLM_FETCH_TIMEOUT_MS),
   });
   if (!r.ok) throw new Error(`kimi ${r.status}: ${(await r.text()).slice(0, 200)}`);
   const j = await r.json();
@@ -371,6 +385,7 @@ async function anthropicText(o: LlmTextOpts, maxTokens: number): Promise<RawLlmR
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'x-api-key': ANTHROPIC_KEY, 'anthropic-version': '2023-06-01' },
     body: JSON.stringify(buildAnthropicBody(o, maxTokens, false)),
+    signal: AbortSignal.timeout(LLM_FETCH_TIMEOUT_MS),
   });
   if (!r.ok) throw new Error(`anthropic ${r.status}: ${(await r.text()).slice(0, 200)}`);
   const j = await r.json();
