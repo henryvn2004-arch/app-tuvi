@@ -9,7 +9,7 @@
 <link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/fonts/noto-serif.css?v=1">
-<link rel="stylesheet" href="/shell.css?v=41">
+<link rel="stylesheet" href="/shell.css?v=46">
 <style>
 .form-card{max-width:600px}
 .form-card p.sub{font-size:12.5px;color:var(--text-lt);margin-bottom:16px}
@@ -104,13 +104,15 @@
            Render Delay 5,3s). `Shell.introOnce` thấy `.intro-card` đã có thì chỉ
            điền `#introSrc`. Vì thế `SHELL_INTRO` bên dưới CHỈ khai `key` — chữ nằm
            đúng ở đây, một bản duy nhất, không có bản chép để trôi. -->
+      <div class="ws-intake">
       <div id="introHost"><div class="intro-card">
+        <img class="intro-avatar" src="/tool-avatars/ngu-hanh-ten.webp" alt="" style="display:none" onerror="this.remove()">
+        <img class="intro-photo" src="https://dciwkfdqhhddeymlisey.supabase.co/storage/v1/object/public/portraits/hero-banners/menh-ly-01.webp" alt="" onerror="this.remove()">
         <div class="intro-body">
-          <img class="intro-avatar" src="/tool-avatars/ngu-hanh-ten.webp" alt="" onerror="this.remove()">
           <div class="intro-text">
             <div class="intro-t">Ngũ hành tên</div>
-            <div class="intro-d">Chấm điểm từng chữ trong tên, xem hợp hay khắc mệnh bạn. Nhập họ tên, nhận điểm ngũ hành và kết luận hợp hay khắc — miễn phí.</div>
-            <div id="introSrc" style="min-height:55.2px;margin-top:9px"></div>
+            <div class="intro-d">Một cái tên gọi hằng ngày cũng mang ngũ hành riêng — hợp hay khắc với mệnh bạn là điều ít ai từng kiểm tra. Nhập họ tên, nhận điểm ngũ hành và kết luận rõ ràng, miễn phí.</div>
+            <div id="introSrc"></div>
           </div>
         </div>
         <div class="hero-pills">
@@ -119,7 +121,14 @@
           <div class="hero-pill"><span class="hp-ic" data-icon="scale"></span><span>Điểm số<br>hợp – khắc</span></div>
         </div>
       </div></div>
-      <div id="shellRecent"></div>
+      <div class="ws-main-col">
+      <!-- Thanh tiến trình — tool này miễn phí, không qua tường thanh toán, nên
+           chỉ có 2 bước (khớp flow thật: form → kết quả). JS đổi bước ở
+           `wsStepsSet` (cuối file), gọi tại calculate()/showForm(). -->
+      <div class="ws-steps" id="wsSteps">
+        <div class="wss-step active"><span class="wss-n">1</span><span class="wss-l">Nhập thông tin</span></div>
+        <div class="wss-step"><span class="wss-n">2</span><span class="wss-l">Nhận kết quả</span></div>
+      </div>
       <div class="form-card" id="birthPanel">
         <div class="fc-head"><span class="fc-ic" data-icon="pen-line"></span><h2>Họ và tên đầy đủ</h2></div>
         <p class="sub">Nhập họ tên đầy đủ, có thể chọn thêm ngũ hành bản mệnh. Nhận về biểu đồ cân bằng ngũ hành, điểm số và kết luận hợp hay khắc mệnh.</p>
@@ -140,7 +149,26 @@
             <small>Miễn phí</small>
           </button>
         </div>
+        <div class="cost-box">
+          <div class="cb-l">
+            <span class="cb-ic" data-icon="wallet"></span>
+            <div>
+              <div class="cb-title">Chi phí sử dụng</div>
+              <div class="cb-amt" data-tvp-price-label="ngu-hanh-ten">…</div>
+            </div>
+          </div>
+        </div>
         <div class="err" id="error-msg"></div>
+      </div>
+      </div>
+      <div class="ws-side-col">
+      <div class="ws-promo">
+        <div class="wsp-eyebrow"><span class="wsp-ic" data-icon="book-open"></span><span>Giới thiệu</span></div>
+        <div class="wsp-title">Ngũ hành tên</div>
+        <p class="wsp-desc">Ngũ Hành (Kim, Mộc, Thủy, Hỏa, Thổ) là học thuyết cổ Trung Hoa mô tả quy luật tương sinh, tương khắc giữa năm nguyên tố cơ bản, làm nền tảng cho nhiều môn mệnh lý phương Đông. Mỗi âm, chữ hay con số đều có thể quy về một hành để đối chiếu hợp – khắc với bản mệnh.</p>
+      </div>
+      <div id="shellRecent"></div>
+      </div>
       </div>
 
       <div id="resPanel" data-ws-result>
@@ -172,8 +200,21 @@ window.SHELL_INTRO={key:'ngu-hanh-ten'};</script>
 <script src="/tools-shared/ngu-hanh-ten.js?v=3"></script>
 <script src="/auth.js?v=2"></script>
   <script src="/nav.js?v=27" data-icons-only></script>
-<script src="/shell.js?v=90"></script>
+<script src="/shell.js?v=91"></script>
 <script>
+// Thanh tiến trình (`.ws-steps`, xem shell.css) — chỉ phản ánh trạng thái đã
+// có sẵn trong flow cũ (form → kết quả), không tạo trạng thái mới. `n` các
+// bước TRƯỚC coi là "done" (viền vàng), bước `n` đang "active" (nền navy).
+function wsStepsSet(n) {
+  var el = document.getElementById('wsSteps');
+  if (!el) return;
+  var steps = el.querySelectorAll('.wss-step');
+  for (var i = 0; i < steps.length; i++) {
+    steps[i].classList.remove('active', 'done');
+    if (i + 1 < n) steps[i].classList.add('done');
+    else if (i + 1 === n) steps[i].classList.add('active');
+  }
+}
 // Ô giữa dùng CHUNG module /tools-shared/ngu-hanh-ten.js với trang standalone.
 let _syls = [];
 
@@ -188,6 +229,7 @@ function calculate() {
   document.getElementById('birthPanel').style.display = 'none';
   document.getElementById('resPanel').style.display = 'block';
   document.getElementById('btnEdit').style.display = '';
+  wsStepsSet(2); // Nhận kết quả — điểm ngũ hành đã hiện, tool này miễn phí
   if (window.SHELL_INTRO) Shell.dismissIntro(window.SHELL_INTRO.key);
   syncShell(menh);
   document.querySelectorAll('#resPanel [data-ask]').forEach(function (el) { el.addEventListener('click', function () { Shell.ask(el.getAttribute('data-ask')); }); });
@@ -275,6 +317,7 @@ function showForm() {
   document.getElementById('resPanel').style.display = 'none';
   document.getElementById('birthPanel').style.display = 'block';
   document.getElementById('btnEdit').style.display = 'none';
+  wsStepsSet(1); // về lại Nhập thông tin
   Shell.setShareable(null);
 }
 </script>

@@ -132,8 +132,17 @@ async function fillAndRun(page: Page) {
     const w = window as unknown as { TuviForm?: unknown; doXem?: unknown };
     return !!w.TuviForm && typeof w.doXem === 'function';
   });
-  await page.evaluate((b) => (window as unknown as { TuviForm: { setData(d: object): void } }).TuviForm.setData(b), BIRTH);
-  await page.click('#btnGo');
+  // Gọi THẲNG `doXem()` thay vì bấm `#btnGo` — bản mẫu tự mở (2026-09-10, xem
+  // docs/nhat-ky/2026-09.md) có thể đang hiện SẴN cho khách vô danh lúc trang
+  // vừa tải (đúng ý đồ sản phẩm), che mất `#btnGo` trước khi Playwright kịp
+  // bấm. Cùng mẫu `doLuan()`/`analyze()` các tool anh em
+  // (hard-paywall-chu-trinh-cuoc-doi.spec.ts/hard-paywall-day-con.spec.ts) đã
+  // dùng — đo ĐÚNG luồng logic, không phụ thuộc UI nào đang hiện lúc đó.
+  await page.evaluate((b) => {
+    const w = window as unknown as { TuviForm: { setData(d: object): void }; doXem(): void };
+    w.TuviForm.setData(b);
+    w.doXem();
+  }, BIRTH);
   await page.waitForSelector('#vhPanel', { state: 'visible', timeout: 15000 });
 }
 

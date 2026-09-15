@@ -9,7 +9,7 @@
 <link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/fonts/noto-serif.css?v=1">
-<link rel="stylesheet" href="/shell.css?v=41">
+<link rel="stylesheet" href="/shell.css?v=46">
 <style>
 .bt-card{background:var(--white);border:1px solid var(--line);border-radius:14px;padding:20px 22px;box-shadow:var(--shadow);max-width:760px}
 .bt-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:4px}
@@ -71,13 +71,15 @@
            Render Delay 5,3s). `Shell.introOnce` thấy `.intro-card` đã có thì chỉ
            điền `#introSrc`. Vì thế `SHELL_INTRO` bên dưới CHỈ khai `key` — chữ nằm
            đúng ở đây, một bản duy nhất, không có bản chép để trôi. -->
+      <div class="ws-intake">
       <div id="introHost"><div class="intro-card">
+        <img class="intro-avatar" src="/tool-avatars/boi-bai-tay.webp" alt="" style="display:none" onerror="this.remove()">
+        <img class="intro-photo" src="https://dciwkfdqhhddeymlisey.supabase.co/storage/v1/object/public/portraits/hero-banners/boi-bai-01.webp" alt="" onerror="this.remove()">
         <div class="intro-body">
-          <img class="intro-avatar" src="/tool-avatars/boi-bai-tay.webp" alt="" onerror="this.remove()">
           <div class="intro-text">
             <div class="intro-t">Bói Bài Tây</div>
-            <div class="intro-d">Bói Bài Tây rút bài kiểu ông bà hay xem, đoán hướng đi sắp tới. Rút một lá theo trực giác, nhận lời đoán ngắn — nhẹ nhàng như ngày xưa.</div>
-            <div id="introSrc" style="min-height:73.6px;margin-top:9px"></div>
+            <div class="intro-d">Không cần hiểu hết 78 lá, chỉ cần một câu hỏi đang vướng trong đầu. Rút một lá theo trực giác, nhận lời đoán ngắn gọn — nhẹ nhàng như những buổi bói bài ngày xưa của bà, của mẹ.</div>
+            <div id="introSrc"></div>
           </div>
         </div>
         <div class="hero-pills">
@@ -86,12 +88,26 @@
           <div class="hero-pill"><span class="hp-ic" data-icon="compass"></span><span>Lối bói<br>dân gian</span></div>
         </div>
       </div></div>
-      <div id="shellRecent"></div>
-
+      <div class="ws-main-col">
+      <!-- Thanh tiến trình — chỉ 2 bước: tool này miễn phí, không có thanh
+           toán; form (chọn kiểu trải) ở lại trên màn hình cả sau khi có kết
+           quả (không có bước "sửa thông tin" riêng). -->
+      <div class="ws-steps" id="wsSteps">
+        <div class="wss-step active"><span class="wss-n">1</span><span class="wss-l">Nhập thông tin</span></div>
+        <div class="wss-step"><span class="wss-n">2</span><span class="wss-l">Nhận kết quả</span></div>
+      </div>
       <div class="bt-card" id="inputCard">
         <div class="fc-head"><span class="fc-ic" data-icon="spade"></span><h2>Chọn Kiểu Rút Bài</h2></div>
         <p class="sub">Chọn kiểu trải (1, 3 hay 5 lá) — hệ thống rút ngẫu nhiên, trả luận giải từng lá theo tình cảm, sự nghiệp và tài chính.</p>
-        <p class="price-note" data-tvp-price-label="boi-bai-tay">…</p>
+        <div class="cost-box">
+          <div class="cb-l">
+            <span class="cb-ic" data-icon="wallet"></span>
+            <div>
+              <div class="cb-title">Chi phí sử dụng</div>
+              <div class="cb-amt" data-tvp-price-label="boi-bai-tay">…</div>
+            </div>
+          </div>
+        </div>
         <div class="spread-btns">
           <button class="spread-btn active" onclick="setSpread(1,this)">1 Lá — Thông Điệp Hôm Nay</button>
           <button class="spread-btn" onclick="setSpread(3,this)">3 Lá — Tình Trạng · Thách Thức · Kết Quả</button>
@@ -106,6 +122,16 @@
             <span class="bg-label"><span class="ic" data-icon="spade"></span><b id="drawBtnLabel">Xáo Bài &amp; Rút</b></span>
           </button>
         </div>
+      </div>
+      </div>
+      <div class="ws-side-col">
+      <div class="ws-promo">
+        <div class="wsp-eyebrow"><span class="wsp-ic" data-icon="book-open"></span><span>Giới thiệu</span></div>
+        <div class="wsp-title">Bói Bài Tây</div>
+        <p class="wsp-desc">Bói bài Tây truyền thống dùng bộ 52 lá bài Tây thông thường thay vì bộ bài Tarot chuyên dụng, phổ biến trong văn hoá dân gian ở nhiều nước phương Tây và cả Việt Nam. Mỗi lá được gán một ý nghĩa riêng theo chất và số, dùng để đoán hướng đi sắp tới.</p>
+      </div>
+      <div id="shellRecent"></div>
+      </div>
       </div>
 
       <div class="result-section" id="result-section" data-ws-result style="margin-top:16px">
@@ -122,8 +148,8 @@
 <script>window.SHELL_ACTIVE='boi-bai-tay';window.SHELL_HISTORY=true;
 window.SHELL_INTRO={key:'boi-bai-tay'};</script>
 <script src="/auth.js?v=2"></script>
-<script src="/tuvi-paywall.js?v=33"></script>
-  <script src="/nav.js?v=27" data-icons-only></script><script src="/shell.js?v=90"></script>
+<script src="/tuvi-paywall.js?v=35"></script>
+  <script src="/nav.js?v=27" data-icons-only></script><script src="/shell.js?v=91"></script>
 <script>
 function initBoiBaiTay(){
   Shell.setContext({
@@ -220,6 +246,20 @@ const SPREAD_LABELS = {
   ]
 };
 
+// Thanh tiến trình (`.ws-steps`, xem shell.css) — chỉ phản ánh trạng thái đã
+// có sẵn trong flow cũ (form → kết quả), không tạo trạng thái mới. `n` các
+// bước TRƯỚC coi là "done" (viền vàng), bước `n` đang "active" (nền navy).
+function wsStepsSet(n){
+  var el=document.getElementById('wsSteps');
+  if(!el) return;
+  var steps=el.querySelectorAll('.wss-step');
+  for(var i=0;i<steps.length;i++){
+    steps[i].classList.remove('active','done');
+    if(i+1<n) steps[i].classList.add('done');
+    else if(i+1===n) steps[i].classList.add('active');
+  }
+}
+
 let _spread = 1, _drawn = [];
 
 function setSpread(n, btn) {
@@ -245,6 +285,7 @@ function draw() {
 }
 
 function renderResult() {
+  wsStepsSet(2); // Nhận kết quả — bài đã rút và luận xong
   const q = document.getElementById('question').value.trim();
   document.getElementById('questionDisplay').textContent = q ? `"${q}"` : '';
   const spread = SPREAD_LABELS[_spread];

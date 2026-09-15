@@ -1275,7 +1275,7 @@ async function fetchRelatedArticles(cungMenh: string, chinhTinh: string): Promis
   //    trang trí, và chính chuỗi đó kéo dài request tới mức Vercel giết.
   if (keywords.length && left() > 0) {
     const ors = keywords
-      .map((kw) => `tags.cs.%7B%22${encodeURIComponent(kw)}%22%7D`)
+      .map((kw) => `tags.cs.%5B%22${encodeURIComponent(kw)}%22%5D`)
       .join(',');
     const r = await sbFetch<ArticleStub>(
       `${SB_URL}/rest/v1/master_articles?or=(${ors})&select=slug,title,excerpt&${PUBLISHED_ONLY}&order=created_at.desc&limit=4`,

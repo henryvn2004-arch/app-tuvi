@@ -73,6 +73,27 @@ const ALLOWED = new Set([
   //                  meta.max_pct (cuộn xa nhất). Chỉ chốt ở lượt ẩn tab ĐẦU
   //                  TIÊN — đừng đọc `sec` thành tổng thời gian cả phiên.
   'scroll_depth', 'page_dwell',
+  // Pha 0 (vá phễu 2026-09) — bốn bậc của MODAL QR tại chỗ (`_openBankQr`,
+  // tuvi-paywall.js). Trước đợt này chỉ có `unlock_click` (bấm mở khoá) rồi
+  // im lặng tới `topup_start`/lượt cộng tiền — không tách được "bỏ vì giá"
+  // (thấy QR rồi đóng, không thao tác gì) khỏi "bỏ vì thao tác" (đã bấm deep
+  // link/chép số nhưng KHÔNG quay lại chuyển khoản). Bốn cột tách theo đúng
+  // bốn hành vi khác nhau, đừng gộp — gộp lại thì mất luôn thứ D1 hỏi.
+  //   qr_shown          = modal QR vừa dựng xong, hiện được số tiền
+  //   qr_deeplink_click = bấm nút mở app ngân hàng (mobile)
+  //   qr_copy           = bấm chép số tài khoản HOẶC số tiền
+  //   qr_close          = đóng modal mà CHƯA thấy `paid:true` (bỏ dở)
+  'qr_shown', 'qr_deeplink_click', 'qr_copy', 'qr_close',
+  // Productize luận giải (2026-09) — phễu của thẻ "Báo cáo đã sẵn sàng"
+  // (tools-shared/report-delivery.js, laso + chu-trinh-cuoc-doi). Tách khỏi
+  // `pdf_download`/`unlock_click` có sẵn vì đây là hành vi SAU KHI đã trả
+  // tiền (không phải quyết định mua) — đo được "bao nhiêu % người đã trả
+  // tiền còn quay lại LẤY thứ họ mua" là câu hỏi khác hẳn câu hỏi mua/không.
+  //   report_ready_shown = thẻ vừa hiện trạng thái sẵn sàng (mẫu số)
+  //   report_email_click = bấm "Gửi vào email" (trước khi biết thành/bại)
+  //   report_email_sent  = gửi thành công — mẫu số quan trọng nhất: khách vô
+  //                        danh để lại email thật đổi lấy được cái gì
+  'report_ready_shown', 'report_email_click', 'report_email_sent',
 ]);
 
 // Coi là "vừa đăng ký" nếu tài khoản tạo trong 15 phút gần đây (né tính nhầm

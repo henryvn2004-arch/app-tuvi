@@ -1,6 +1,23 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   trailingSlash: false,
+  // @react-pdf/renderer (PDF luận giải qua email, lib/pdf/luan-giai.tsx) dựng
+  // font chuẩn qua subpath import map (`#standard-fonts/Helvetica`) — bundler
+  // của Next KHÔNG resolve đúng map đó (đã đo: bundle bằng esbuild ném
+  // `Cannot find module '#standard-fonts/Helvetica'`), trong khi resolver gốc
+  // của Node đọc đúng `exports` trong package.json. Để NGOÀI bundle thì route
+  // gọi thẳng `require()`/`import` lúc chạy, y hệt Node chạy trực tiếp — đã
+  // xác minh bằng bản transpile-only (không bundle) chạy ra PDF thật.
+  serverExternalPackages: ['@react-pdf/renderer'],
+  // PDF luận giải nhúng font Be Vietnam Pro (đọc thẳng từ đĩa bằng đường dẫn
+  // fs, xem lib/pdf/luan-giai.tsx) — không có dòng này thì lượt dò file của
+  // Next có thể KHÔNG mang 2 file .ttf vào gói hàm serverless (chúng nằm
+  // trong `public/`, phục vụ tĩnh qua CDN, không mặc định có mặt trong FS lúc
+  // hàm chạy). Thiếu font ⇒ rơi về Helvetica ⇒ mất dấu tiếng Việt HOÀN TOÀN,
+  // đúng lỗi đã cắn (xem docs/nhat-ky/2026-09.md, "PDF câm dấu").
+  outputFileTracingIncludes: {
+    '/api/luan-giai/email-pdf': ['./public/fonts/be-vietnam-pro-400.ttf', './public/fonts/be-vietnam-pro-700.ttf'],
+  },
   async rewrites() {
     return [
       { source: '/',                    destination: '/index.html'           },
@@ -118,6 +135,15 @@ const nextConfig = {
       // thức + bảng tra + hoá giải; để /tools/kim-lau.html sống song song là tự
       // dựng lại đúng cặp URL triệt nhau vừa phải gỡ ở #358.
       { source: '/tools/kim-lau.html', destination: '/kim-lau', permanent: true },
+      // Trang cũ 24-phần (public/luan-giai.html) → bản đang bán thật (13 phần,
+      // /app/luan-giai) — quyết định của Henry (2026-09-14, xem plan productize
+      // luận giải). `permanent:true` ⇒ Next trả 308 (không phải 301 thô — Next
+      // dùng 307/308 để giữ nguyên method của request gốc, xem docs), search
+      // engine coi 308 tương đương 301 khi gộp tín hiệu index/backlink.
+      // Redirects chạy TRƯỚC filesystem/`/public` (docs Next), nên rule này
+      // chặn hẳn `public/luan-giai.html` — file đó xoá luôn trong cùng lượt
+      // này, không để lại 4200+ dòng chết không ai đọc được.
+      { source: '/luan-giai.html', destination: '/app/luan-giai', permanent: true },
     ];
   },
 };

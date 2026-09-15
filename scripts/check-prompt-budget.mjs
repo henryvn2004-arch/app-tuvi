@@ -298,29 +298,37 @@ const DOC_FILES = [
   // nhóm — +375 ký tự đo THẬT, lan ra CẢ 11 bản dưới đây vì cùng nội suy
   // `NHAN_TINH_CHAT_RULE`. Chỉ 4 bản vượt trần (đã ở 101-106%) mới cần nới —
   // 7 bản còn lại vẫn dưới trần (95-99%) nên GIỮ NGUYÊN, không nới tuỳ tiện.
-  { file: 'lib/agent/luan-giai-doc.ts', name: 'SYSTEM_PROMPT', cap: 13700, arc: 'DOC_ARC_LASO' },
+  //
+  // Nới 13700→15800, 10900→13000, 8200→10300, 4700→6100, 9000→10400,
+  // 6800→8200, 8500→10600, 10000→12100, 7400→8800, 9700→11800, 6500→8400
+  // (2026-09-10): `HOOK_CHUYEN_DOAN_RULE` (câu hook kết đoạn, 12 kiểu) —
+  // +~1.150 ký tự đo THẬT, lan ra CẢ 11 bản vì cùng nội suy `arcDoc()`
+  // (riêng SP_KHI_SAC mượn thẳng như `NHAN_TINH_CHAT_RULE`, không qua arcDoc).
+  // CẢ 11 bản đều vượt trần lần này (105-117%) nên nới đồng loạt, biên ~10%
+  // trên mức đo thật — đúng quy ước các lần nới trước.
+  { file: 'lib/agent/luan-giai-doc.ts', name: 'SYSTEM_PROMPT', cap: 15800, arc: 'DOC_ARC_LASO' },
   {
     file: 'app/api/tubinh/route.ts',
     name: 'SYSTEM_PROMPT_TUBINH',
-    cap: 10900,
+    cap: 13000,
     arc: 'DOC_ARC_TUBINH',
   },
   {
     file: 'lib/agent/phu-the-luan-giai.ts',
     name: 'PHU_THE_LUAN_GIAI_SYSTEM_PROMPT',
-    cap: 8200,
+    cap: 10300,
     arc: 'DOC_ARC_PHU_THE',
   },
   {
     file: 'app/api/xem-tuoi/route.ts',
     name: 'LUAN_GIAI_TUONG_HOP_SYSTEM',
-    cap: 4700,
+    cap: 6100,
     arc: 'DOC_ARC_TUONG_HOP',
   },
   {
     file: 'app/api/but-tuong/route.js',
     name: 'SP_BUT_TUONG',
-    cap: 9000,
+    cap: 10400,
     arc: 'DOC_ARC_BUT_TUONG',
   },
   // Nhóm C — 5 prompt tướng học trong CÙNG MỘT file `tuong-mat/route.js`, gắn
@@ -329,31 +337,31 @@ const DOC_FILES = [
   {
     file: 'app/api/tuong-mat/route.js',
     name: 'SP_DIEN',
-    cap: 6800,
+    cap: 8200,
     arc: 'DOC_ARC_DIEN_TUONG',
   },
   {
     file: 'app/api/tuong-mat/route.js',
     name: 'SP_NHAN',
-    cap: 8500,
+    cap: 10600,
     arc: 'DOC_ARC_NHAN_TUONG',
   },
   {
     file: 'app/api/tuong-mat/route.js',
     name: 'SP_THU',
-    cap: 10000,
+    cap: 12100,
     arc: 'DOC_ARC_THU_TUONG',
   },
   {
     file: 'app/api/tuong-mat/route.js',
     name: 'SP_THANH',
-    cap: 7400,
+    cap: 8800,
     arc: 'DOC_ARC_THANH_TUONG',
   },
   {
     file: 'app/api/tuong-mat/route.js',
     name: 'SP_THANH_PRO',
-    cap: 9700,
+    cap: 11800,
     arc: 'DOC_ARC_THANH_TUONG_PRO',
   },
   // Khí Sắc — NGOẠI LỆ CỐ Ý: đã có "Dự Báo 1-3 Tháng Tới" riêng (khí sắc đổi
@@ -363,7 +371,7 @@ const DOC_FILES = [
   {
     file: 'app/api/tuong-mat/route.js',
     name: 'SP_KHI_SAC',
-    cap: 6500,
+    cap: 8400,
     arc: null,
   },
 ];

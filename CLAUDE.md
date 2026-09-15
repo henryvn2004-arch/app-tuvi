@@ -98,6 +98,14 @@ grep mò — repo có file 400 KB+ (`public/tuvi-ansao-engine.js`, `public/admin
 `lib/billing/paypal.ts` (nguồn DUY NHẤT chạm PayPal — `settlePayPalTopup` là
 cửa chung cho CẢ trình duyệt lẫn `app/api/paypal-webhook`, chịu được gọi trùng).
 
+### Email
+`lib/email/send.ts` (nguồn DUY NHẤT gọi Resend — `sendTransactionalEmail` +
+`sendMarketingEmail`) · `lib/email/unsub-token.ts` (ký/xác thực link huỷ) ·
+`app/api/email/unsubscribe` (công khai, không cần đăng nhập). OTP đăng ký đi
+qua Supabase Auth custom SMTP (cấu hình ở Dashboard, KHÔNG phải code).
+6 loại email (OTP/hoá đơn/PDF/reminder/cross-sell/broadcast), bảng đối chiếu
+trigger↔template↔công tắc bật-tắt: `docs/luat/email.md`.
+
 ### Vận hành
 `lib/ops/jobs.ts` (**sổ job** — thêm cron phải ghi vào đây) · `lib/cron/log.ts`
 `withCronLog` · `lib/config/appConfig.ts` `getConfigValue` (đọc `app_config`,
@@ -108,11 +116,11 @@ sửa bằng SQL không cần deploy) · `lib/marketing/*` (digest · cảnh bá
 (tường trả phí) · `tool-prices.js` (giá) · `poster.js` (ảnh 9:16 + QR) ·
 `nav.js` (icon dùng chung) · `track.js` (đo) · `referral.js`.
 
-### 44 bộ dò (chạy trong CI lint) — `npm run check:*`
+### 45 bộ dò (chạy trong CI lint) — `npm run check:*`
 `prices` `nostore` `groups` `viec` `share` `history` `shellboot` `introcard` `navph`
 `formph` `formblock` `font`
 `authapi` `giosinh` `keyframes` `hoatdong` `hexagrams` `laso` `railfields`
-`railwrap` `cacheshape` `hao` `motifs` `terms` `publish` `jobs` `token`
+`railwrap` `cacheshape` `hao` `motifs` `illus` `terms` `publish` `jobs` `token`
 `prompt` `topics` `batrach` `sodep` `lunar` `vntz` `tooltip` `cns` `celebanh`
 `nguoithan` `nhatky` `slug` `lasogolden` `refbenchmarks` `lavong` `hooktag`
 `webdriver`.
@@ -120,37 +128,26 @@ sửa bằng SQL không cần deploy) · `lib/marketing/*` (digest · cảnh bá
 
 ## 📐 QUY ƯỚC BẮT BUỘC (đọc trước khi viết UI mới)
 
-- **💰 Giá Lượng: client KHÔNG chép số.** Nguồn duy nhất là `tool_pricing` +
-  `credit_packages`, sửa trong Admin (không cần deploy); UI hiện bằng
-  `<span data-tvp-price="<tool_id>">`, đọc qua `public/tool-prices.js`. Đọc hụt
-  → để `…` và paywall **từ chối chạy**, KHÔNG đoán. Chỉ `admin.html` được fetch
-  thẳng hai bảng đó. `npm run check:prices` · `docs/luat/tien.md`.
-- **Giá trị 1 Lượng SUY TỪ `credit_packages`** (gói bậc hai theo `sort_order` =
-  399.000/600 = **665đ**). ⚠️ `app_config['credits.vnd_per_credit']` **ĐÃ GỠ** —
-  đọc lại khoá đó không ném lỗi, nó im lặng rơi về `1000`. Ba nơi phải sửa kèm
-  nhau: SQL `credit_vnd()` · `vndPerCredit()` · `FALLBACK` (`lib/billing/packages.ts`).
-  `docs/luat/tien.md`.
-- **Icon: KHÔNG dùng emoji màu.** `public/nav.js` là bộ icon dùng chung
-  (`data-icon="wallet"`); dựng bằng `innerHTML` thì phải gọi lại `window.mountIcons(el)`;
-  emoji trong dữ liệu đưa qua `window.iconHtml(raw)`. GIỮ ký tự đơn sắc theo font
-  (`→ ← ✦ ★ ✓ ✗ ✕ ⚠ ☰`). KHÔNG áp dụng cho prompt LLM và tin Telegram admin.
-  Thêm icon → sửa `ICONS` **và bump `nav.js?v=` trên cả cây `public/`**.
-  Nút CHỈ có icon: **cấm báo trạng thái bằng `textContent`** — lệnh đó xoá luôn
-  `<svg>` bên trong; đổi `data-icon` rồi gọi lại `mountIcons`.
-  Luật đầy đủ + 4 bẫy đã vấp: `docs/ICONS.md`.
-- **Dùng thử rail cho khách CHƯA đăng nhập** — `/api/v1/chat` không 401 cứng nữa;
-  3 trần độc lập (`anon.rail_trial_turns` · `rail_ip_daily_cap` · `rail_global_daily_cap`,
-  đặt = 0 là TẮT), **fail-CLOSED**, chặn ảnh, tiêu quota ngay khi cấp phép.
-  ⚠️ `client.anon_id` do client tự khai — KHÔNG phải danh tính. `docs/luat/tien.md`.
-- **Guest checkout (Supabase Anonymous Sign-ins)** — `requireCredits()` tự mở
-  phiên ẩn danh THẬT trong `auth.users`; tạo được bằng cách xoá cookie ⇒ **MỌI
-  đường phát thưởng phải tự kiểm `user.is_anonymous` trước khi cấp**, thiếu một
-  chỗ là cày vô hạn. Khác hẳn `anon-trial.ts` — đừng lẫn hai khái niệm "ẩn danh".
-  `docs/luat/tien.md`.
-- **Chữ hiển thị: KHÔNG nhắc "AI"/"trí tuệ nhân tạo" như điểm nổi bật** — có
-  dùng AI thật nhưng đó không phải POD, khoe ra là tự xếp chung rổ với hàng
-  trăm app bói toán "AI" khác. Viết theo cổ pháp/engine/hệ thống thay vào. Ba
-  trang pháp lý là NGOẠI LỆ cố ý. Bộ từ thay + bẫy đã vấp: `docs/luat/chu-hien-thi.md`.
+- **💰 Giá Lượng: client KHÔNG chép số.** Nguồn duy nhất `tool_pricing`+`credit_packages`
+  (Admin, không deploy) · UI qua `public/tool-prices.js` (`data-tvp-price`) · đọc hụt
+  → `…` + paywall **từ chối chạy** · chỉ `admin.html` fetch thẳng. `npm run check:prices` · `docs/luat/tien.md`.
+- **Giá trị 1 Lượng SUY TỪ `credit_packages`** (gói bậc hai/`sort_order` = 399.000/600 = **665đ**)
+  · `app_config['credits.vnd_per_credit']` **ĐÃ GỠ**, đọc lại rơi im lặng về `1000` · sửa kèm
+  cả ba: SQL `credit_vnd()` · `vndPerCredit()` · `FALLBACK` (`lib/billing/packages.ts`). `docs/luat/tien.md`.
+- **Icon: KHÔNG dùng emoji màu** — bộ dùng chung `public/nav.js` (`data-icon="wallet"`)
+  · dựng bằng `innerHTML` → gọi lại `window.mountIcons(el)` · giữ ký tự đơn sắc theo font
+  (`→ ← ✦ ★ ✓ ✗ ✕ ⚠ ☰`), không áp dụng cho prompt LLM/Telegram admin · thêm icon → sửa
+  `ICONS` **và bump `nav.js?v=`** · nút CHỈ-icon **cấm `textContent`** (xoá mất `<svg>`).
+  Luật đầy đủ + bẫy: `docs/ICONS.md`.
+- **Dùng thử rail cho khách CHƯA đăng nhập** — `/api/v1/chat` không 401 cứng; 3 trần độc lập
+  (`anon.rail_trial_turns` · `rail_ip_daily_cap` · `rail_global_daily_cap`, =0 là TẮT), **fail-CLOSED**,
+  chặn ảnh, tiêu quota ngay khi cấp phép. ⚠️ `client.anon_id` KHÔNG phải danh tính. `docs/luat/tien.md`.
+- **Guest checkout (Supabase Anonymous Sign-ins)** — `requireCredits()` tự mở phiên ẩn danh
+  THẬT trong `auth.users` (tạo được bằng xoá cookie) ⇒ **MỌI đường phát thưởng phải tự kiểm
+  `user.is_anonymous` trước khi cấp**, thiếu một chỗ là cày vô hạn. Khác `anon-trial.ts`. `docs/luat/tien.md`.
+- **Chữ hiển thị: KHÔNG nhắc "AI"/"trí tuệ nhân tạo" như điểm nổi bật** — có dùng AI thật
+  nhưng khoe ra là tự xếp chung rổ với hàng trăm app bói toán "AI" khác; viết theo cổ pháp/
+  engine/hệ thống thay vào. Ba trang pháp lý là NGOẠI LỆ. `docs/luat/chu-hien-thi.md`.
 
 ---
 
@@ -194,10 +191,9 @@ Mỗi luật dưới đây sinh ra từ một lần cắn thật. Cột cuối l
 - **`max_tokens` KHÔNG phải trần cho phần CHỮ** — Opus 5 tự bật `thinking`, token
   nghĩ ăn CHUNG trần đó (đo: trần hiệu dụng cho văn chỉ còn **~40–55%**). Đặt trần
   mới phải cộng `THINK_BUDGET`. Đây là gốc của 7,9% phần luận bị cắt giữa câu.
-- **Route văn dài chạy `output_config.effort:'low'` — CHỌN CÓ ĐO, đừng đổi mò**
-  (A/B mù 48 bản: rẻ hơn 39% output token mà chữ ra NHIỀU hơn). `effort` nằm TRONG
-  `output_config`, đặt sai chỗ thì API bỏ qua IM LẶNG. ⚠️ Đừng đổi sang
-  `thinking:{type:'disabled'}`: Opus 5 có thể RÒ thẻ `<thinking>` ra chính văn.
+- **Route văn dài chạy `output_config.effort:'low'` — CHỌN CÓ ĐO, đừng đổi mò** (rẻ hơn 39%
+  output token mà chữ ra NHIỀU hơn); đặt sai chỗ (ngoài `output_config`) thì API bỏ qua IM LẶNG.
+  ⚠️ Đừng đổi sang `thinking:{type:'disabled'}`: Opus 5 có thể RÒ thẻ `<thinking>` ra chính văn.
 - **Mỗi prompt đúng MỘT nguồn bố cục.** `arcCore` (rail chat) · `arcDoc` (bản luận
   dài) · `arcGiong` (JSON có schema — chỉ chở GIỌNG). `npm run check:prompt`.
 - **Càng thêm luật thì luật càng mất tác dụng** (đo: 75% prompt từng là luật giọng,
@@ -228,6 +224,15 @@ Mỗi luật dưới đây sinh ra từ một lần cắn thật. Cột cuối l
 - **Bảng ĐỐI XỨNG tự kiểm được, không cần nguồn ngoài** (A nhìn B = B nhìn A).
   `BatTrachTool` (`tools-shared/bat-trach.js`) là nguồn DUY NHẤT; 3 bản chép tay cũ
   đều sai 12-15/64 ô. `npm run check:batrach`.
+
+### 📧 Email — `docs/luat/email.md`
+- **Mọi email đi qua `lib/email/send.ts`** — không tự `import { Resend }` ở nơi
+  khác. Bỏ qua cửa này là mất mutex chống gửi trùng (`email_log`) lẫn bộ lọc
+  unsubscribe.
+- **`sendMarketingEmail` tự chặn nếu thiếu `EMAIL_UNSUB_SECRET`** (fail-closed)
+  — gửi thư quảng bá thiếu link huỷ là vi phạm Nghị định 91/2020/NĐ-CP.
+- **2 subdomain gửi TÁCH RIÊNG** (`mail.` transactional / `tin.` marketing) —
+  gộp chung thì một khiếu nại spam ở thư quảng bá kéo OTP/hoá đơn vào thư rác.
 
 ### 🚦 Thứ tự deploy
 - **Dữ liệu đi SAU giao diện.** `tool_pricing.enabled=true` chỉ được bật **sau khi
@@ -327,7 +332,6 @@ Mỗi luật dưới đây sinh ra từ một lần cắn thật. Cột cuối l
   ở máy có `OPENAI_API_KEY` (container phiên không có).
 - **`ANTHROPIC_API_KEY` không đọc được trong container** (`GEMINI_API_KEY`/
   `OPENAI_API_KEY` thì đọc được) — mọi phép đo phải gọi Anthropic đều chạy ở nơi khác.
-
 ### Nợ kỹ thuật đã ghi nhận
 - `seo_pages` (7.080 trang tương hợp) đang được cron `/api/cron/viral-seo-pages`
   (120 dòng/ngày, ~59 ngày) viết lại theo viral-core — migration đã áp dụng

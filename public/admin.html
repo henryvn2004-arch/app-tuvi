@@ -1533,18 +1533,23 @@
           <div class="panel-header"><div class="panel-title"><svg class="pt-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>Gửi Tin (Broadcast)</div></div>
           <div class="panel-body">
             <div class="form-label">Kênh</div>
-            <select class="form-control" id="bc-platform" style="max-width:260px;margin-bottom:.6rem">
+            <select class="form-control" id="bc-platform" style="max-width:260px;margin-bottom:.6rem" onchange="document.getElementById('bc-subject-row').style.display = this.value === 'email' ? '' : 'none'">
               <option value="telegram">Telegram</option>
+              <option value="email">Email (broadcast — hàng đợi, gửi dần)</option>
               <option value="messenger" disabled>Messenger (chưa hỗ trợ gửi tự do)</option>
               <option value="whatsapp" disabled>WhatsApp (chưa hỗ trợ gửi tự do)</option>
               <option value="zalo" disabled>Zalo (chưa tích hợp)</option>
             </select>
+            <div id="bc-subject-row" style="display:none">
+              <div class="form-label">Tiêu đề email</div>
+              <input class="form-control" id="bc-subject" maxlength="200" style="margin-bottom:.6rem" placeholder="Thông báo từ Tử Vi Minh Bảo">
+            </div>
             <div class="form-label">Nội dung</div>
             <textarea class="form-control" id="bc-text" rows="4" maxlength="3500" oninput="document.getElementById('bc-count').textContent = this.value.length + ' ký tự'"></textarea>
             <div class="char-count" id="bc-count">0 ký tự</div>
             <div style="margin-top:.6rem;display:flex;align-items:center;gap:.75rem;flex-wrap:wrap">
               <button class="btn btn-gold btn-sm" onclick="sendBroadcast(this)">Gửi Tin →</button>
-              <span style="font-size:.72rem;color:var(--text-lt)">Gửi thật tới TOÀN BỘ user từng chat trên kênh này — không thu hồi được.</span>
+              <span style="font-size:.72rem;color:var(--text-lt)">Telegram gửi thật tới TOÀN BỘ user từng chat trên kênh này. Email chỉ NẠP hàng đợi — cron rút dần theo lô (~200/15 phút), tự lọc user đã huỷ đăng ký. Cả hai đều KHÔNG thu hồi được.</span>
             </div>
           </div>
         </div>
@@ -2725,15 +2730,20 @@ async function loadChannels() {
 async function sendBroadcast(btn) {
   const platform = document.getElementById('bc-platform').value;
   const text = document.getElementById('bc-text').value.trim();
+  const subject = document.getElementById('bc-subject').value.trim();
   if (!text) { toast('Nhập nội dung trước đã', 'error'); return; }
-  if (!confirm(`Gửi tin này tới TOÀN BỘ user đã từng chat trên kênh "${platform}"?\n\nHành động này KHÔNG thể thu hồi.`)) return;
+  const confirmMsg = platform === 'email'
+    ? 'Nạp email này vào hàng đợi gửi TOÀN BỘ user có tài khoản?\n\nCron sẽ gửi dần trong vài giờ tới. KHÔNG thể thu hồi.'
+    : `Gửi tin này tới TOÀN BỘ user đã từng chat trên kênh "${platform}"?\n\nHành động này KHÔNG thể thu hồi.`;
+  if (!confirm(confirmMsg)) return;
   const old = btn.innerHTML;
   btn.disabled = true; btn.innerHTML = '<span class="spinner" style="border-color:rgba(0,0,0,.2);border-top-color:currentColor"></span> Đang gửi…';
   try {
-    const res = await apiPost('admin-channel-broadcast', { platform, text });
+    const res = await apiPost('admin-channel-broadcast', platform === 'email' ? { platform, text, subject } : { platform, text });
     if (res && !res.error) {
-      toast(`Đã gửi ${res.sent}/${res.targeted} (lỗi ${res.failed})`, res.failed ? 'error' : 'success');
+      toast(platform === 'email' ? `Đã nạp hàng đợi: ${res.queued} user` : `Đã gửi ${res.sent}/${res.targeted} (lỗi ${res.failed})`, res.failed ? 'error' : 'success');
       document.getElementById('bc-text').value = '';
+      document.getElementById('bc-subject').value = '';
       document.getElementById('bc-count').textContent = '0 ký tự';
     } else {
       toast('Lỗi: ' + (res.error || 'không rõ'), 'error');
@@ -4539,7 +4549,7 @@ function renderToolFunnel(host, rows, lac) {
       <td><b>${escHtmlLocal(r.nhan || r.tool_id)}</b>${kho ? ' <span class="badge badge-red">chưa ai mua</span>' : ''}
         <div style="font-size:.7rem;color:var(--text-lt)">${escHtmlLocal(r.tool_id)} · ${free ? 'miễn phí' : r.gia + ' Lượng'}</div></td>
       <td style="text-align:right">${r.mo}</td>
-      <td style="text-align:right">${r.chay}<div style="font-size:.68rem;color:var(--text-lt)">${pct(r.chay, r.mo)}</div></td>
+      <td style="text-align:right">${r.chay_moi}<div style="font-size:.68rem;color:var(--text-lt)">mới · ${pct(r.chay_moi, r.mo)}<br>tổng ${r.chay}</div></td>
       <td style="text-align:right">${coThu ? r.thu : '—'}</td>
       <td style="text-align:right">${coThu ? r.bam_mo + '<div style="font-size:.68rem;color:var(--text-lt)">' + pct(r.bam_mo, r.thu) + '</div>' : '—'}</td>
       <td style="text-align:right">${free ? '—' : Number(r.loi_moi) || 0}</td>
@@ -4564,6 +4574,8 @@ function renderToolFunnel(host, rows, lac) {
       </tr></thead><tbody>${body}</tbody></table></div>
     <div style="margin-top:10px;font-size:.72rem;color:var(--text-lt);line-height:1.7">
       Mọi cột đếm <b>người</b> (đã đăng nhập tính theo tài khoản, chưa thì theo trình duyệt) — trừ cột Lượng.
+      <br><b>Chạy</b> = số MỚI tự nhập ngày sinh (loại lượt <code>?auto=1</code> của khách quen có lá số nhớ sẵn);
+      <b>tổng</b> ở dòng dưới gộp cả hai. So sánh <b>Mở → Chạy</b> phải dùng số MỚI — số tổng làm tool trông khoẻ hơn thật.
       Cột <b>Tính thử</b> / <b>Bấm mở</b> chỉ có ở tool đã làm W1; tool khác để gạch ngang chứ không phải 0.
       Dòng tô đỏ = tool trả phí có <b>≥${NGUONG} người mở mà chưa ai mua</b>.
       <br><b>Lời mời</b> = số người ĐÃ THẤY lời mời giới thiệu trên tường khoá.

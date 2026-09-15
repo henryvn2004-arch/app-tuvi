@@ -11,7 +11,7 @@ const STATIC_PAGES = [
     '/',
     '/nghien-cuu',            // master articles listing
     '/tac-gia',               // author listing
-    '/luan-giai.html',        // core product page
+    '/app/luan-giai',         // core product page (301 từ /luan-giai.html cũ, 2026-09-14)
     '/tu-vi',                 // SEO pages index
     '/tu-dien',               // từ điển index
     '/about.html',

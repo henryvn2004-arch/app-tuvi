@@ -594,7 +594,7 @@ a { color: var(--blue); text-decoration: none; }
 <!-- ─── SCRIPTS ──────────────────────────────────────────── -->
 <script src="/track.js?v=8"></script>
 <script src="/auth.js?v=2"></script>
-<script src="/tuvi-paywall.js?v=33"></script>
+<script src="/tuvi-paywall.js?v=35"></script>
 <script src="/nav.js?v=27"></script><script src="/referral.js?v=1"></script>
 <script src="/tools-shared/vn-timezone.js?v=1"></script>
 <script src="/tuvi-form.js"></script>
@@ -730,7 +730,12 @@ if (typeof TuviPaywall !== 'undefined') {
 
   /* ── Dữ liệu tool (thật, tên/route khớp repo) ─────────────────────── */
   var TOOLS = [
-    { ic: '▦', title: 'Luận giải Tử Vi', desc: 'Lập lá số 12 cung, chính tinh, cách cục, đại vận — rồi luận giải chuyên sâu.', tool: 'laso' },
+    // 🔑 Lệch văn phong CÓ CHỦ Ý với các card khác trong lưới (Henry chốt,
+    // 2026-09-14, xem plan productize luận giải) — mọi card khác tả NỘI DUNG
+    // tool, riêng card này thêm bản PDF + tốc độ giao vì đây là tool trả phí
+    // NẶNG nhất (150 Lượng) và trước đó user không rõ trả tiền xong nhận được
+    // gì (đúng câu hỏi gốc của Henry).
+    { ic: '▦', title: 'Luận giải Tử Vi', desc: 'Lập lá số 12 cung, chính tinh, cách cục, đại vận — rồi luận giải chuyên sâu. Nhận bản PDF trong vài phút, tải về hoặc gửi qua email.', tool: 'laso' },
     { ic: '☰', title: 'Lá số Bát Tự', desc: 'Tứ trụ Tử Bình: nhật can, dụng thần, cách cục, đại vận theo tiết khí.', tool: 'bat-tu' },
     { ic: '♡', title: 'Xem tuổi & tương hợp', desc: 'Vợ chồng, làm ăn — so hai lá số theo 8 chiều hợp khắc.', tool: 'xem-tuoi' },
     { ic: '仕', title: 'Tử Vi Công Sở', desc: 'Đọc kiểu người ở chỗ làm, mạnh yếu 12 mặt, 4 chặng 40 năm sự nghiệp.', tool: 'cong-so' },

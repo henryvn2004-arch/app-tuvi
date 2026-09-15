@@ -1,0 +1,322 @@
+{
+  "success": true,
+  "namXem": 2026,
+  "soNguoi": 3,
+  "ban": {
+    "kieu": "Hỗ trợ",
+    "kieuId": "ho-tro",
+    "toaDo": {
+      "x": -0.974,
+      "y": 0.349
+    }
+  },
+  "thanhVien": [
+    {
+      "ten": "Chị Hạnh",
+      "vai": {
+        "id": "sep",
+        "label": "Sếp / cấp trên"
+      },
+      "gioiTinh": "nu",
+      "kieu": {
+        "id": "ho-tro",
+        "ten": "Hỗ trợ",
+        "motCau": "Nghĩ ra đường đi, nói cho người khác hiểu, làm quân sư"
+      },
+      "kieuPhu": null,
+      "lai": false,
+      "toaDo": {
+        "x": -0.549,
+        "y": 0.174
+      },
+      "chinhTinhMenh": [
+        "Thiên Đồng (Hãm)",
+        "Cự Môn (Hãm)"
+      ],
+      "chinhTinhQuanLoc": [
+        "Thiên Cơ (Vượng) [Hóa Lộc]"
+      ],
+      "than": "Tài Bạch",
+      "vanNam": {
+        "nam": 2026,
+        "khung": {
+          "tuoiStart": 46,
+          "tuoiEnd": 55,
+          "diem": 3.5
+        },
+        "tieuHanCung": "Điền Trạch",
+        "luuNienCung": "Phụ Mẫu",
+        "catSat": {
+          "cat": 3,
+          "sat": 3,
+          "canCan": "cát sát cân nhau"
+        }
+      },
+      "voiBan": {
+        "cung": "Phụ Mẫu",
+        "sao": [
+          "Tử Vi (Miếu)",
+          "Thất Sát (Vượng)"
+        ],
+        "kieuTen": "Lãnh đạo",
+        "cungTinh": true
+      }
+    },
+    {
+      "ten": "Anh Tùng",
+      "vai": {
+        "id": "dong-nghiep",
+        "label": "Đồng nghiệp ngang hàng"
+      },
+      "gioiTinh": "nam",
+      "kieu": {
+        "id": "ho-tro",
+        "ten": "Hỗ trợ",
+        "motCau": "Nghĩ ra đường đi, nói cho người khác hiểu, làm quân sư"
+      },
+      "kieuPhu": null,
+      "lai": false,
+      "toaDo": {
+        "x": -0.974,
+        "y": 0.349
+      },
+      "chinhTinhMenh": [
+        "Thiên Cơ (Miếu)",
+        "Thiên Lương (Miếu)"
+      ],
+      "chinhTinhQuanLoc": [
+        "Thái Dương (Vượng) [Hóa Quyền]",
+        "Cự Môn (Vượng) [Hóa Lộc]"
+      ],
+      "than": "Quan Lộc",
+      "vanNam": {
+        "nam": 2026,
+        "khung": {
+          "tuoiStart": 32,
+          "tuoiEnd": 41,
+          "diem": 3.3
+        },
+        "tieuHanCung": "Phu Thê",
+        "luuNienCung": "Phúc Đức",
+        "catSat": {
+          "cat": 5,
+          "sat": 4,
+          "canCan": "cát nhiều hơn sát"
+        }
+      },
+      "voiBan": {
+        "cung": "Huynh Đệ",
+        "sao": [
+          "Thiên Tướng (Hãm)"
+        ],
+        "kieuTen": "Lãnh đạo",
+        "cungTinh": true
+      }
+    },
+    {
+      "ten": "Em Mai",
+      "vai": {
+        "id": "cap-duoi",
+        "label": "Cấp dưới / người mình quản"
+      },
+      "gioiTinh": "nu",
+      "kieu": {
+        "id": "lanh-dao",
+        "ten": "Lãnh đạo",
+        "motCau": "Cầm trịch, sắp người vào đúng chỗ, dựng thứ chạy được lâu"
+      },
+      "kieuPhu": null,
+      "lai": false,
+      "toaDo": {
+        "x": 0.974,
+        "y": -0.625
+      },
+      "chinhTinhMenh": [
+        "Tử Vi (Miếu)",
+        "Thiên Phủ (Miếu)"
+      ],
+      "chinhTinhQuanLoc": [
+        "Liêm Trinh (Vượng)",
+        "Thiên Tướng (Vượng)"
+      ],
+      "than": "Phu Thê",
+      "vanNam": {
+        "nam": 2026,
+        "khung": {
+          "tuoiStart": 25,
+          "tuoiEnd": 34,
+          "diem": 3.7
+        },
+        "tieuHanCung": "Quan Lộc",
+        "luuNienCung": "Phu Thê",
+        "catSat": {
+          "cat": 2,
+          "sat": 2,
+          "canCan": "cát sát cân nhau"
+        }
+      },
+      "voiBan": {
+        "cung": "Nô Bộc",
+        "sao": [
+          "Liêm Trinh (Hãm)",
+          "Phá Quân (Hãm)"
+        ],
+        "kieuTen": "Khai sáng",
+        "cungTinh": false
+      }
+    }
+  ],
+  "phanBo": [
+    {
+      "kieu": "khai-sang",
+      "ten": "Khai sáng",
+      "soNguoi": 0,
+      "ten_nguoi": []
+    },
+    {
+      "kieu": "lanh-dao",
+      "ten": "Lãnh đạo",
+      "soNguoi": 1,
+      "ten_nguoi": [
+        "Em Mai"
+      ]
+    },
+    {
+      "kieu": "ho-tro",
+      "ten": "Hỗ trợ",
+      "soNguoi": 2,
+      "ten_nguoi": [
+        "Chị Hạnh",
+        "Anh Tùng"
+      ]
+    },
+    {
+      "kieu": "hop-tac",
+      "ten": "Hợp tác",
+      "soNguoi": 0,
+      "ten_nguoi": []
+    }
+  ],
+  "thieuKieu": [
+    {
+      "id": "khai-sang",
+      "ten": "Khai sáng",
+      "motCau": "Mở đường, phá cục, chịu được rủi ro mà người khác né"
+    },
+    {
+      "id": "hop-tac",
+      "ten": "Hợp tác",
+      "motCau": "Giữ cho guồng chạy, gánh phần không ai muốn gánh, bền"
+    }
+  ],
+  "duaKieu": {
+    "id": "ho-tro",
+    "ten": "Hỗ trợ"
+  },
+  "nenTimThem": {
+    "id": "lanh-dao",
+    "ten": "Lãnh đạo",
+    "motCau": "Cầm trịch, sắp người vào đúng chỗ, dựng thứ chạy được lâu"
+  },
+  "cap": [
+    {
+      "a": "Chị Hạnh",
+      "b": "Anh Tùng",
+      "loai": "giam-chan",
+      "vi": "Cùng kiểu Hỗ trợ — nghĩ giống nhau nên hợp lúc cần dồn sức, nhưng giao cùng một loại việc là giẫm chân và tranh phần."
+    },
+    {
+      "a": "Chị Hạnh",
+      "b": "Em Mai",
+      "loai": "bu-nhau",
+      "vi": "Hỗ trợ và Lãnh đạo khác tính âm/dương — một bên xông, một bên giữ. Ghép được, miễn là chia rõ ai quyết phần nào."
+    },
+    {
+      "a": "Anh Tùng",
+      "b": "Em Mai",
+      "loai": "bu-nhau",
+      "vi": "Hỗ trợ và Lãnh đạo khác tính âm/dương — một bên xông, một bên giữ. Ghép được, miễn là chia rõ ai quyết phần nào."
+    }
+  ],
+  "thuTuTiepCan": [
+    {
+      "ten": "Em Mai",
+      "khungDiem": 3.7,
+      "canCan": 0,
+      "moTa": "2026: khung đại vận 25–34 tuổi 3.7/10; cát 2/sát 2 — cát sát cân nhau"
+    },
+    {
+      "ten": "Chị Hạnh",
+      "khungDiem": 3.5,
+      "canCan": 0,
+      "moTa": "2026: khung đại vận 46–55 tuổi 3.5/10; cát 3/sát 3 — cát sát cân nhau"
+    },
+    {
+      "ten": "Anh Tùng",
+      "khungDiem": 3.3,
+      "canCan": 1,
+      "moTa": "2026: khung đại vận 32–41 tuổi 3.3/10; cát 5/sát 4 — cát nhiều hơn sát"
+    }
+  ],
+  "rail": {
+    "soNguoiTrongSo": 3,
+    "danhSachNguoi": "Chị Hạnh (Sếp / cấp trên) — kiểu Hỗ trợ, vận năm 2026: khung đại vận 46–55 tuổi 3.5/10; cát 3/sát 3 — cát sát cân nhau | Anh Tùng (Đồng nghiệp ngang hàng) — kiểu Hỗ trợ, vận năm 2026: khung đại vận 32–41 tuổi 3.3/10; cát 5/sát 4 — cát nhiều hơn sát | Em Mai (Cấp dưới / người mình quản) — kiểu Lãnh đạo, vận năm 2026: khung đại vận 25–34 tuổi 3.7/10; cát 2/sát 2 — cát sát cân nhau",
+    "luatVanNam": "Riêng NĂM thì KHÔNG có điểm — đừng gán \"điểm/10\" cho năm. Điểm trên là của KHUNG đại vận, nó chỉ nới hay bó BIÊN ĐỘ (khung cao thì cái tốt của năm bung rõ, cái khó nhẹ bớt; khung thấp thì ngược lại). Tốt/xấu của năm đọc ở cán cân cát/sát. Cung tiểu hạn và lưu niên CỐ Ý không đưa cho bạn — đừng đoán tên chúng, và đừng luận sức khoẻ/tiền riêng/nhà cửa của người này.",
+    "phanBoKieu": "Lãnh đạo: 1 (Em Mai) | Hỗ trợ: 2 (Chị Hạnh, Anh Tùng)",
+    "kieuCuaBan": "Hỗ trợ",
+    "kieuDoiDangThieu": "Khai sáng — Mở đường, phá cục, chịu được rủi ro mà người khác né | Hợp tác — Giữ cho guồng chạy, gánh phần không ai muốn gánh, bền",
+    "kieuDangDu": "Hỗ trợ (chiếm quá nửa nhóm)",
+    "kieuNenTimThem": "Lãnh đạo — Cầm trịch, sắp người vào đúng chỗ, dựng thứ chạy được lâu",
+    "capDeGiamChan": "Chị Hạnh ↔ Anh Tùng — Cùng kiểu Hỗ trợ — nghĩ giống nhau nên hợp lúc cần dồn sức, nhưng giao cùng một loại việc là giẫm chân và tranh phần.",
+    "capDeBuNhau": "Chị Hạnh ↔ Em Mai — Hỗ trợ và Lãnh đạo khác tính âm/dương — một bên xông, một bên giữ. Ghép được, miễn là chia rõ ai quyết phần nào. | Anh Tùng ↔ Em Mai — Hỗ trợ và Lãnh đạo khác tính âm/dương — một bên xông, một bên giữ. Ghép được, miễn là chia rõ ai quyết phần nào.",
+    "thuTuTiepCan": "Em Mai (khung đại vận 3.7/10) → Chị Hạnh (khung đại vận 3.5/10) → Anh Tùng (khung đại vận 3.3/10)",
+    "luatThuTuTiepCan": "Thứ tự trên xếp theo điểm KHUNG ĐẠI VẬN rồi tới cán cân cát/sát của năm. Đây là gợi ý THỜI ĐIỂM tiếp cận, KHÔNG phải bảng xếp hạng mức quan trọng của từng người, và NĂM không có điểm riêng — đừng gán \"điểm/10\" cho năm của ai.",
+    "nguoiNayTrongLaSoBan": "Chị Hạnh: cung Phụ Mẫu của bạn — Tử Vi (Miếu), Thất Sát (Vượng), cùng tính âm/dương (dễ va) | Anh Tùng: cung Huynh Đệ của bạn — Thiên Tướng (Hãm), cùng tính âm/dương (dễ va) | Em Mai: cung Nô Bộc của bạn — Liêm Trinh (Hãm), Phá Quân (Hãm), khác tính âm/dương (dễ bù)"
+  },
+  "tongQuan": "Nhóm bạn đang thừa cái đầu nghĩ mưu nhưng lại hụt tay chịu cày cuốc thực thi. Với bạn, Chị Hạnh và Anh Tùng cùng thuộc kiểu Hỗ trợ, việc vẽ kế hoạch hay nhìn nhận vấn đề chạy rất mượt cơ mà dễ tắc tị khi cần ai đó xắn tay làm tới cùng. Gánh nặng chốt hạ nề nếp dồn hết lên vai Em Mai, khiến nhóm nhiều ý tưởng hay nhưng khâu hoàn thiện lại cực kỳ chậm.",
+  "tungNguoi": [
+    {
+      "ten": "Chị Hạnh",
+      "cachLamViec": "Chị Hạnh thích nắm quyền cố vấn và phân tích tình hình, nên đưa việc dưới dạng xin góc nhìn chiến lược chứ đừng vác việc vụn vặt đi hỏi. Chỗ người ta ngỡ chị hay bắt bẻ chi tiết hóa ra lại là mắt xích gỡ rối cực bén mỗi khi cuộc họp bị rối ren đấy.",
+      "noiSao": "\"Dự án này em đang vướng ba hướng đi, cần chị soi giúp rủi ro trước khi chốt sang bước tiếp theo.\""
+    },
+    {
+      "ten": "Anh Tùng",
+      "cachLamViec": "Anh Tùng phản xạ rất lanh lẹ và thích được ghi nhận tiếng nói, nên chia riêng một mảng cho anh tự chủ trình bày chứ đừng can thiệp nửa chừng. Người này nhìn qua tưởng thích tranh giành vị thế, nhưng thực tế khi được giao quyền ngôn luận thì anh ấy bảo vệ nhóm tới cùng chứ chẳng bỏ rơi.",
+      "noiSao": "\"Phần phản biện đối ngoại này cần người sắc sảo như anh đứng ra đại diện, anh phụ trách toàn bộ mảng này nhé.\""
+    },
+    {
+      "ten": "Em Mai",
+      "cachLamViec": "Em Mai làm việc theo tôn ti và quy chuẩn rõ ràng của người cầm trịch, chỉ cần giao đúng đầu mối nguồn lực kèm tiền lệ là tự khắc ráp việc trơn tru. Thấy em có vẻ cứng nhắc phương pháp vậy thôi, chứ đặt vào lúc dự án đang hỗn loạn thì chính kỷ luật thép đó giữ cả đội không vỡ trận.",
+      "noiSao": "\"Anh giao em toàn quyền dựng quy trình và chốt tiến độ mảng này, cứ theo barem chuẩn mà vận hành.\""
+    }
+  ],
+  "capChuY": [
+    {
+      "cap": "Chị Hạnh ↔ Anh Tùng",
+      "viec": "Tách riêng hai người này ra hai mặt trận khác nhau, chớ để cùng ngồi phản biện chung một đề án vì sẽ thành sàn đấu khẩu giẫm chân nhau."
+    },
+    {
+      "cap": "Chị Hạnh ↔ Em Mai",
+      "viec": "Nên ghép Chị Hạnh lo hướng đi chiến lược còn Em Mai phụ trách ráp người triển khai, phân rõ ai là người vạch ý ai là người chốt bước làm."
+    },
+    {
+      "cap": "Anh Tùng ↔ Em Mai",
+      "viec": "Ghép đôi ở các việc cần hoàn thiện hồ sơ: Anh Tùng lo nội dung thuyết phục còn Em Mai siết chặt quy chuẩn vận hành để không sót việc."
+    }
+  ],
+  "loHong": "Nhóm đang thiếu hẳn chất Khai sáng dám liều mở cõi và chất Hợp tác bền bỉ gánh việc hậu trường. Trong lúc chưa bổ sung được ai, Em Mai đang phải oằn mình ôm cả việc dọn dẹp quy chuẩn lẫn giữ guồng chạy thường nhật. Nếu không chia bớt việc sự vụ, người giữ nếp duy nhất của nhóm sẽ rất dễ kiệt sức đấy.",
+  "tuanNay": [
+    {
+      "viec": "Ngồi riêng với Chị Hạnh trong 20 phút để xin ý kiến duyệt khung định hướng lớn của tháng tới."
+    },
+    {
+      "viec": "Thống nhất ranh giới trách nhiệm bằng văn bản với Anh Tùng để phân định rõ phần việc thuyết trình đối ngoại tuần này."
+    },
+    {
+      "viec": "Bàn giao danh sách đầu việc và giao trọn quyền kiểm soát tiến độ cho Em Mai tự lập bảng theo dõi."
+    }
+  ],
+  "voiBan": "Bạn cùng chất quân sư với Chị Hạnh và Anh Tùng nên rất dễ va chạm cái tôi chuyên môn khi bàn thảo phương án. Trong khi đó, tính cách bài bản của Em Mai lại bù khuyết trọn vẹn cho bạn ở khâu thực thi đưa ý tưởng thành hình. Giữ khoảng cách trao đổi rành mạch với hai người ngang và trên, đồng thời nương tựa vào sự chắc chắn của cấp dưới thì guồng làm việc mới êm được.",
+  "motCau": "Ý tưởng chỉ sinh ra tiền khi có người dọn đường và giữ nếp, bớt bàn kế sách lại mà chia việc cho xong."
+}

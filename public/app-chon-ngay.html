@@ -9,7 +9,7 @@
 <link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/fonts/noto-serif.css?v=1">
-<link rel="stylesheet" href="/shell.css?v=41">
+<link rel="stylesheet" href="/shell.css?v=46">
 <style>
 .form-card{max-width:600px}
 .form-card p.sub{font-size:12.5px;color:var(--text-lt);margin-bottom:16px}
@@ -60,13 +60,15 @@
            Render Delay 5,3s). `Shell.introOnce` thấy `.intro-card` đã có thì chỉ
            điền `#introSrc`. Vì thế `SHELL_INTRO` bên dưới CHỈ khai `key` — chữ nằm
            đúng ở đây, một bản duy nhất, không có bản chép để trôi. -->
+      <div class="ws-intake">
       <div id="introHost"><div class="intro-card">
+        <img class="intro-avatar" src="/tool-avatars/chon-ngay-tot.webp" alt="" style="display:none" onerror="this.remove()">
+        <img class="intro-photo" src="https://dciwkfdqhhddeymlisey.supabase.co/storage/v1/object/public/portraits/hero-banners/dat-ten-lich-01.webp" alt="" onerror="this.remove()">
         <div class="intro-body">
-          <img class="intro-avatar" src="/tool-avatars/chon-ngay-tot.webp" alt="" onerror="this.remove()">
           <div class="intro-text">
             <div class="intro-t">Chọn ngày giờ tốt</div>
-            <div class="intro-d">Gợi ý ngày tốt cho cưới hỏi, làm nhà, khai trương theo can chi tuổi chủ sự. Chọn loại việc và khoảng thời gian, nhận danh sách ngày giờ tốt phù hợp.</div>
-            <div id="introSrc" style="min-height:55.2px;margin-top:9px"></div>
+            <div class="intro-d">Cưới hỏi, làm nhà, khai trương — chọn nhầm ngày là chuyện nhiều người tiếc cả đời không sửa được. Chọn loại việc và khoảng thời gian, nhận ngay danh sách ngày giờ hợp tuổi chủ sự.</div>
+            <div id="introSrc"></div>
           </div>
         </div>
         <div class="hero-pills">
@@ -75,11 +77,15 @@
           <div class="hero-pill"><span class="hp-ic" data-icon="clock"></span><span>Giờ hoàng đạo<br>từng ngày</span></div>
         </div>
       </div></div>
-      <div id="shellRecent"></div>
-      <div class="samp-cta" id="sampCta">
-        <span class="sc-ic" data-icon="lightbulb"></span>
-        <span class="sc-txt"><b>Chưa muốn khai thông tin?</b><span>Bạn có thể xem một bản mẫu để trải nghiệm trước.</span></span>
-        <button type="button" id="btnSample" data-sample-tool="chon-ngay-tot" onclick="SampleHint.open(this)">Xem bản mẫu →</button>
+      <div class="ws-main-col">
+      <!-- Thanh tiến trình — chỉ hiển thị trạng thái, không bấm được. JS
+           chuyển bước ở `wsStepsSet` (cuối file), gọi tại đúng chỗ trạng thái
+           đã đổi trong code cũ (doChonNgay/showForm/unlock/chuyên sâu AI). -->
+      <div class="ws-steps" id="wsSteps">
+        <div class="wss-step active"><span class="wss-n">1</span><span class="wss-l">Nhập thông tin</span></div>
+        <div class="wss-step"><span class="wss-n">2</span><span class="wss-l">Xem nền can chi</span></div>
+        <div class="wss-step"><span class="wss-n">3</span><span class="wss-l">Thanh toán</span></div>
+        <div class="wss-step"><span class="wss-n">4</span><span class="wss-l">Nhận kết quả</span></div>
       </div>
       <div class="form-card" id="birthPanel">
         <div class="fc-head"><span class="fc-ic" data-icon="calendar"></span><h2>Thông tin chọn ngày</h2></div>
@@ -108,6 +114,21 @@
             <small>Miễn phí</small>
           </button>
         </div>
+      </div>
+      </div>
+      <div class="ws-side-col">
+      <div class="ws-promo">
+        <div class="wsp-eyebrow"><span class="wsp-ic" data-icon="book-open"></span><span>Giới thiệu</span></div>
+        <div class="wsp-title">Chọn ngày giờ tốt</div>
+        <p class="wsp-desc">Hoàng Lịch (lịch vạn niên) là hệ thống lịch cổ Trung Hoa kết hợp Can Chi, Nhị Thập Bát Tú và các sao tốt – xấu để xác định giờ, ngày hoàng đạo phù hợp cho từng loại việc. Đây là cơ sở truyền thống cho việc chọn ngày giờ trong cưới hỏi, khai trương, động thổ.</p>
+      </div>
+      <div class="samp-cta" id="sampCta">
+        <span class="sc-ic" data-icon="lightbulb"></span>
+        <span class="sc-txt"><b>Chưa muốn khai thông tin?</b><span>Bạn có thể xem một bản mẫu để trải nghiệm trước.</span></span>
+        <button type="button" id="btnSample" data-sample-tool="chon-ngay-tot" onclick="SampleHint.open(this)">Xem bản mẫu →</button>
+      </div>
+      <div id="shellRecent"></div>
+      </div>
       </div>
 
       <div id="resPanel" data-ws-result>
@@ -156,11 +177,11 @@
 window.SHELL_INTRO={key:'chon-ngay'};</script>
 <script src="/can-chi.js?v=1"></script>
 <script src="/auth.js?v=2"></script>
-<script src="/tuvi-paywall.js?v=33"></script>
+<script src="/tuvi-paywall.js?v=35"></script>
 <script src="/tools-shared/hook-layer.js?v=2"></script>
   <script src="/nav.js?v=27" data-icons-only></script>
 <script src="/tools-shared/sample-hint.js?v=1"></script>
-<script src="/shell.js?v=90"></script>
+<script src="/shell.js?v=91"></script>
 <script>
 function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 (function(){ var t=document.getElementById('inpThang'); for(var i=1;i<=12;i++)t.innerHTML+='<option value="'+i+'">Tháng '+i+'</option>'; var now=new Date(); t.value=String(now.getMonth()+1); document.getElementById('inpNam').value=now.getFullYear(); })();
@@ -183,6 +204,20 @@ function mountHook(info,thangCC,namCC){
   });
 }
 
+// Thanh tiến trình (`.ws-steps`, xem shell.css) — chỉ phản ánh trạng thái đã
+// có sẵn trong flow cũ (form → nền can chi → thanh toán → kết quả), không tạo
+// trạng thái mới. `n` các bước TRƯỚC coi là "done" (viền vàng), bước `n`
+// đang "active" (nền navy), các bước sau giữ mặc định.
+function wsStepsSet(n){
+  var el=document.getElementById('wsSteps');
+  if(!el) return;
+  var steps=el.querySelectorAll('.wss-step');
+  for(var i=0;i<steps.length;i++){
+    steps[i].classList.remove('active','done');
+    if(i+1<n) steps[i].classList.add('done');
+    else if(i+1===n) steps[i].classList.add('active');
+  }
+}
 function doChonNgay(){
   var btn=document.getElementById('btnGo');
   var suKien=document.getElementById('inpSuKien').value;
@@ -211,6 +246,7 @@ function doChonNgay(){
     document.getElementById('resPanel').style.display='block';
     document.getElementById('btnEdit').style.display='';
     if(window.SHELL_INTRO)Shell.dismissIntro(window.SHELL_INTRO.key);
+    wsStepsSet(2); // Xem nền can chi — kết quả miễn phí đã hiện, chờ mở phần chuyên sâu
     Shell.setContext({
       scenario:{type:'chon-ngay-tot',data:{suKien:suKien,hoTen:hoTen,namSinh:namSinh,thangNum:thangNum,namNum:namNum}},
       label:'Chọn ngày '+suKien+' · '+hoTen+' · T'+thangNum+'/'+namNum,
@@ -258,6 +294,59 @@ function _fillVndSlots(host,product){
 }
 TuviPaywall.fillPriceSlots(document).then(function(){ _fillVndSlots(document,'chon-ngay-tot'); });
 
+// ── Bản mẫu TỰ MỞ (auto-show) — cùng cơ chế app-dat-ten.html (2026-09-10, xem
+// docs/nhat-ky/2026-09.md). Sinh riêng bằng `scripts/gen-simple-text-samples.mjs`
+// (tool này không dùng lá số Tử Vi). Điền form mẫu rồi gọi THẲNG `doChonNgay()`
+// thật (nền can chi tính lại tại chỗ) — chỉ văn AI là đọc sẵn từ file.
+(function () {
+  var SAMPLE_URL = '/samples/chon-ngay-tot-sample.json';
+  var _cache = null;
+  function _showSampleBar() {
+    var panel = document.getElementById('resPanel');
+    if (!panel || document.getElementById('sampBar')) return;
+    var bar = document.createElement('div');
+    bar.className = 'samp-bar'; bar.id = 'sampBar';
+    bar.innerHTML = '<div class="sb-txt">Đây là <b>BẢN MẪU</b> minh hoạ (dữ liệu khác) — chưa phải kết quả của bạn.</div>' +
+      '<button type="button" id="sampBarClose">Nhập thông tin của tôi →</button>';
+    panel.insertBefore(bar, panel.firstChild);
+    document.getElementById('sampBarClose').onclick = function () {
+      var b = document.getElementById('sampBar'); if (b) b.remove();
+      showForm();
+      var cta = document.getElementById('sampCta'); if (cta) cta.style.display = 'flex';
+    };
+  }
+  window.SampleHint.open = function (btn) {
+    if (btn) { btn.disabled = true; btn.textContent = 'Đang mở…'; }
+    var p = _cache ? Promise.resolve(_cache) : fetch(SAMPLE_URL).then(function (r) {
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      return r.json();
+    }).then(function (j) { _cache = j; return j; });
+    p.then(function (data) {
+      var s = data.input;
+      document.getElementById('inpSuKien').value = s.suKien;
+      document.getElementById('inpHoTen').value = s.hoTen;
+      document.getElementById('inpNamSinh').value = s.namSinh;
+      document.getElementById('inpThang').value = String(s.thangNum);
+      document.getElementById('inpNam').value = s.namNum;
+      doChonNgay();
+      document.getElementById('dtResult').innerHTML = renderMarkdownDt(data.text);
+      var cta = document.getElementById('sampCta'); if (cta) cta.style.display = 'none';
+      _showSampleBar();
+      if (btn) { btn.disabled = false; btn.textContent = 'Xem bản mẫu →'; }
+    }).catch(function (e) {
+      if (btn) { btn.disabled = false; btn.textContent = 'Xem bản mẫu →'; }
+      if (window.console) console.error('sample:', e);
+      window.alert('Chưa mở được bản mẫu. Thử lại sau nhé.');
+    });
+  };
+  try {
+    if (!(window.Shell && Shell.autoRun && Shell.autoRun()) &&
+        !(window.Shell && Shell.getRememberedBirth && Shell.getRememberedBirth())) {
+      var c = document.getElementById('sampCta'); if (c) c.style.display = 'flex';
+    }
+  } catch (e) { if (window.console) console.error('sample auto-open:', e); }
+})();
+
 // Mỗi khoảng ngày gợi ý là MỘT dòng "**[Ngày X–Y]** — chi tiết" (định dạng
 // đã ép trong prompt) — tách thành thẻ nhỏ `.fb-item` (xem shell.css) để đọc
 // lướt dễ hơn. KHÔNG dùng `.fb-card` (poster to, dành cho 1 câu trích duy
@@ -286,10 +375,12 @@ function renderMarkdownDt(md){
 
 async function initiateChonNgayChuyenSau(){
   if(!_dtInfo||!_dtThangNum||!_dtNamNum){ alert('Vui lòng nhập thông tin trước.'); return; }
+  wsStepsSet(3); // Thanh toán — chờ requireCredits xác nhận
   var slug=TuviPaywall.generateToolSlug('chon-ngay-tot-'+_dtNamSinh+'-'+_dtThangNum+'-'+_dtNamNum);
   await TuviPaywall.requireCredits(slug, async function(){ await _doChonNgayAI(); });
 }
 async function _doChonNgayAI(){
+  wsStepsSet(4); // Nhận kết quả — đã trả tiền, bắt đầu phân tích ngày tốt chuyên sâu
   var btn=document.getElementById('btnUnlock');
   if(btn)btn.disabled=true;
   var el=document.getElementById('dtResult');
@@ -333,6 +424,7 @@ function showForm(){
   document.getElementById('resPanel').style.display='none';
   document.getElementById('birthPanel').style.display='block';
   document.getElementById('btnEdit').style.display='none';
+  wsStepsSet(1); // về lại Nhập thông tin
   Shell.setShareable(null);
 }
 </script>

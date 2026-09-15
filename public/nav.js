@@ -563,7 +563,7 @@
       + '<div class="ft-divider"></div>'
       + '<div class="ft-col"><div class="ft-col-title">Công Cụ<i></i></div>'
       + ftItem('/app', 'message-circle', 'Luận Đường')
-      + ftItem('/luan-giai.html', 'scroll-text', 'Lập Lá Số')
+      + ftItem('/app/luan-giai', 'scroll-text', 'Lập Lá Số')
       + ftItem('/cong-cu', 'layout-grid', 'Tất Cả Công Cụ')
       + '</div>'
       + '<div class="ft-col"><div class="ft-col-title">Tra Cứu<i></i></div>'

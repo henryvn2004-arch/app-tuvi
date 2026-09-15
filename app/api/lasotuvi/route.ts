@@ -402,6 +402,16 @@ async function runPost(request: NextRequest) {
     // diễn biến theo thời gian trong chính ĐV, nội suy PCHIP) — bố cục giờ có
     // 4 mục (① vì sao ② 3 quãng thời gian ③ đào sâu câu hỏi trọng tâm ④ kết
     // luận) thay vì 2-3, nên nới thêm 200-250→220-270 từ, trần cộng theo.
+    // 2026-09-14 (Henry) — nới ngân sách TỪ trong `instructionFor()` (vd cung
+    // 350-400→480-550 từ) nhưng CỐ Ý KHÔNG cộng trần ở đây. Đo thật trên 24
+    // phần của 1 lá số thật (script sinh trực tiếp qua buildPromptCached +
+    // llmTextFull, Gemini): MỌI phần đã tự overshoot ngân sách từ CŨ 30-70%
+    // (có phần tới +156%) mà 0/24 phần chạm `finishReason: MAX_TOKENS` — tức
+    // trần hiện tại còn dư rất nhiều so với chữ thực sinh ra (vd phần 14: trần
+    // 5400 token, chữ thật chỉ dùng ~500-550). "Cụt ý" người đọc thấy là do
+    // ngân sách TỪ khiêm tốn, không phải do trần — xem docs/nhat-ky/2026-09.md.
+    // Ngân sách mới vẫn còn cách trần rất xa nên không cần nới; nới mù ở đây
+    // là tốn thêm mà không giải quyết gì cả.
     const maxTok = THINK_BUDGET + (phan === 1 ? 3000 : phan === 14 ? 4500 : phan === 24 ? 2100
       : (phan >= 2 && phan <= 13) ? 2400 : (phan >= 15 && phan <= 23) ? 2500 : 1500);
     // 2026-09-02 — hạ độ nghĩ cho ĐÚNG nhóm route văn dài này. A/B mù 48 bản

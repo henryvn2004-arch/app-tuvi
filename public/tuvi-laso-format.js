@@ -38,6 +38,54 @@
     return [...items].sort((a, b) => (_hasChinhTinh(a)?0:1) - (_hasChinhTinh(b)?0:1));
   }
 
+  // ── Xu hướng định tính "Luận sao" (w) — NGUỒN DUY NHẤT ────────────────────
+  // Trước ở SCOPE RIÊNG bên trong formatLaSoV2 (không gọi được từ nơi khác).
+  // Hoist lên module scope vì `illus-match.js` (thư viện hình minh hoạ) cần
+  // GỌI ĐÚNG công thức này để chọn ảnh tốt/trung/xấu khớp với chữ LLM đọc —
+  // viết lại công thức ở chỗ khác là hai nguồn trôi nhau không ai biết.
+  const _GOOD_KW = ['phú quý','giàu','tài lộc','quý nhân','sang','thành đạt','hiển','lộc','phúc',
+    'thọ','an khang','thịnh','vinh','sáng sủa','may mắn','thuận','hanh thông','tốt','được'];
+  const _BAD_KW  = ['vất vả','khổ','gian nan','khó khăn','hung','tai nạn','tai họa','tai ương',
+    'nguy','nghèo','túng','hao tài','tán','mất của','bệnh','tật','ốm','yếu','cô đơn',
+    'lẻ loi','yểu','chết','suy','bại','hao','tổn','thiệt','dâm','ngang trái'];
+  const _CC_W = { quy_cuc:3, phu_cuc:2, than_cu:1, tap_cuc:1, trung_cuc:0, hung_cuc:-3 };
+
+  function _sentimentW(text) {
+    const t = (text||'').toLowerCase();
+    let w = 0;
+    _GOOD_KW.forEach(k => { if (t.includes(k)) w += 0.4; });
+    _BAD_KW.forEach(k  => { if (t.includes(k)) w -= 0.4; });
+    return Math.max(-2, Math.min(2, w));
+  }
+  function _xuHuong(ccItems, ynItems) {
+    let w = 0;
+    (ccItems||[]).forEach(c => { w += _CC_W[c.loai] || 0; });
+    (ynItems||[]).forEach(y => { w += _sentimentW(y) * 0.5; });
+    w = Math.round(w * 10) / 10;
+    const label = w >= 4 ? 'Tốt rõ' : w >= 2 ? 'Khá' : w >= 0 ? 'Trung bình' : w >= -2 ? 'Yếu' : 'Xấu rõ';
+    return `${label} (w:${w>0?'+':''}${w})`;
+  }
+  // Cách cục ghép ≥2 cung ghi "X/Y" (vd Triệt Đáo Kim Cung = "Quan Lộc/Nô Bộc").
+  function _inCung(rc, cn) { return String(rc || '').split('/').includes(cn); }
+
+  /**
+   * Số w THÔ (không kèm nhãn) của MỘT cung — dùng để CHỌN ẢNH minh hoạ khớp
+   * đúng giọng "Luận sao" mà LLM đọc, KHÔNG dùng `ls.cungScores[cung].tong`
+   * (đã đo: tương quan hai nguồn chỉ r=0,23 — xem `scripts/gen-illus-nguong.mjs`).
+   * @param {object} ls
+   * @param {string} cungName tên cung tiếng Việt, vd 'Mệnh'
+   * @returns {number|null} null nếu lá số không có cung này
+   */
+  function xuHuongCungW(ls, cungName) {
+    const p = (ls.palaces || []).find(pp => pp.cungName === cungName);
+    if (!p) return null;
+    const ccThis = ls.cachCuc ? ls.cachCuc.filter(r => _inCung(r.cung, cungName)) : [];
+    const ynRaw = (ls.cachCucTungCung && ls.cachCucTungCung[cungName]) || [];
+    const xh = _xuHuong(ccThis, ynRaw);
+    const m = /w:([+-]?[\d.]+)/.exec(xh);
+    return m ? parseFloat(m[1]) : 0;
+  }
+
   /**
    * Dựng khối text cho MỘT đại vận — NGUỒN DUY NHẤT cho cả ba đường tiêu thụ:
    * luận giải 24 phần (client), lasoTextFull (server), và rail chat
@@ -217,30 +265,9 @@
     // quyết nay neo vào nhãn "Luận sao" định tính + cách cục + độ sáng sao.)
 
     // ── Helpers for pattern ranking + synthesis ──────────────────────────────
-    // (_CT_SET / _hasChinhTinh / _sortYn nay ở scope module — dùng chung với
-    // buildDaiVanLines, không giữ bản thứ hai ở đây.)
-    const _GOOD_KW = ['phú quý','giàu','tài lộc','quý nhân','sang','thành đạt','hiển','lộc','phúc',
-      'thọ','an khang','thịnh','vinh','sáng sủa','may mắn','thuận','hanh thông','tốt','được'];
-    const _BAD_KW  = ['vất vả','khổ','gian nan','khó khăn','hung','tai nạn','tai họa','tai ương',
-      'nguy','nghèo','túng','hao tài','tán','mất của','bệnh','tật','ốm','yếu','cô đơn',
-      'lẻ loi','yểu','chết','suy','bại','hao','tổn','thiệt','dâm','ngang trái'];
-    const _CC_W = { quy_cuc:3, phu_cuc:2, than_cu:1, tap_cuc:1, trung_cuc:0, hung_cuc:-3 };
-
-    function _sentimentW(text) {
-      const t = (text||'').toLowerCase();
-      let w = 0;
-      _GOOD_KW.forEach(k => { if (t.includes(k)) w += 0.4; });
-      _BAD_KW.forEach(k  => { if (t.includes(k)) w -= 0.4; });
-      return Math.max(-2, Math.min(2, w));
-    }
-    function _xuHuong(ccItems, ynItems) {
-      let w = 0;
-      (ccItems||[]).forEach(c => { w += _CC_W[c.loai] || 0; });
-      (ynItems||[]).forEach(y => { w += _sentimentW(y) * 0.5; });
-      w = Math.round(w * 10) / 10;
-      const label = w >= 4 ? 'Tốt rõ' : w >= 2 ? 'Khá' : w >= 0 ? 'Trung bình' : w >= -2 ? 'Yếu' : 'Xấu rõ';
-      return `${label} (w:${w>0?'+':''}${w})`;
-    }
+    // (_CT_SET / _hasChinhTinh / _sortYn / _GOOD_KW / _BAD_KW / _CC_W /
+    // _sentimentW / _xuHuong / _inCung nay ở scope module — dùng chung với
+    // buildDaiVanLines và xuHuongCungW, không giữ bản thứ hai ở đây.)
 
     // Tứ Hóa Phi Tinh (tự hóa, tầng MỆNH BÀN) cho MỘT cung — dùng can của
     // CHÍNH cung đó (Ngũ Hổ Độn, không phải can năm sinh) để tra 4 sao
@@ -277,9 +304,8 @@
       // theo thời gian, không thuộc bản chất cung. Để riêng ở mục "9 ĐẠI VẬN".
       const chinh = p.majorStars.map(s => s.ten + (s.brightness?`(${s.brightness})`:'') + (s.hoa?`[${s.hoa}]`:'')).join(' ');
       const phu = p.stars.filter(s=>s.nhom!=='chinh').map(s => s.ten + (s.hoa?`[${s.hoa}]`:'')).join(' ');
-      // Cách cục + patterns cho cung này. Cách phủ ≥2 cung có cung GHÉP "X/Y"
-      // (vd Triệt Đáo Kim Cung = "Quan Lộc/Nô Bộc") → tách '/' kiểm tra thành viên.
-      const _inCung = (rc, cn) => String(rc || '').split('/').includes(cn);
+      // Cách cục + patterns cho cung này. `_inCung` (module scope) tách '/' để
+      // khớp cung GHÉP "X/Y" (vd Triệt Đáo Kim Cung = "Quan Lộc/Nô Bộc").
       const _ccThis = ls.cachCuc ? ls.cachCuc.filter(r => _inCung(r.cung, p.cungName)) : [];
       const _ynRaw  = (ls.cachCucTungCung && ls.cachCucTungCung[p.cungName]) || [];
       const _ynSorted = _sortYn(_ynRaw);
@@ -353,5 +379,6 @@
     window.formatLaSoV2 = formatLaSoV2;
     window.buildDaiVanLines = buildDaiVanLines;
     window.LASO_MARKERS = MARKERS;
+    window.xuHuongCungW = xuHuongCungW;
   }
 })();

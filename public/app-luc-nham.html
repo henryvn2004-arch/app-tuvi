@@ -9,7 +9,7 @@
 <link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/fonts/noto-serif.css?v=1">
-<link rel="stylesheet" href="/shell.css?v=41">
+<link rel="stylesheet" href="/shell.css?v=46">
 <style>
 .form-card{max-width:600px}
 .form-card p.sub{font-size:12.5px;color:var(--text-lt);margin-bottom:16px}
@@ -53,13 +53,15 @@
            Render Delay 5,3s). `Shell.introOnce` thấy `.intro-card` đã có thì chỉ
            điền `#introSrc`. Vì thế `SHELL_INTRO` bên dưới CHỈ khai `key` — chữ nằm
            đúng ở đây, một bản duy nhất, không có bản chép để trôi. -->
+      <div class="ws-intake">
       <div id="introHost"><div class="intro-card">
+        <img class="intro-avatar" src="/tool-avatars/luc-nham.webp" alt="" style="display:none" onerror="this.remove()">
+        <img class="intro-photo" src="https://dciwkfdqhhddeymlisey.supabase.co/storage/v1/object/public/portraits/hero-banners/kinh-dich-01.webp" alt="" onerror="this.remove()">
         <div class="intro-body">
-          <img class="intro-avatar" src="/tool-avatars/luc-nham.webp" alt="" onerror="this.remove()">
           <div class="intro-text">
             <div class="intro-t">Lục Nhâm Giản</div>
-            <div class="intro-d">Lục Nhâm Giản tra một quẻ theo đúng giờ, ngày hiện tại — đúng trọng tâm việc đang canh cánh: tiền bạc, tình cảm hay quyết định cần đưa ra ngay. Bấm tra, nhận lời luận ngắn gọn.</div>
-            <div id="introSrc" style="min-height:55.2px;margin-top:9px"></div>
+            <div class="intro-d">Đang phân vân chuyện tiền bạc, tình cảm hay một quyết định cần chốt ngay — tra một quẻ đúng theo giờ, ngày hiện tại để trả lời đúng trọng tâm đó. Nhận lời luận ngắn gọn, đi thẳng vào việc bạn đang hỏi.</div>
+            <div id="introSrc"></div>
           </div>
         </div>
         <div class="hero-pills">
@@ -68,11 +70,25 @@
           <div class="hero-pill"><span class="hp-ic" data-icon="message-circle"></span><span>Luận theo<br>Khảo Biến Chiêm</span></div>
         </div>
       </div></div>
-      <div id="shellRecent"></div>
+      <div class="ws-main-col">
+      <!-- Thanh tiến trình — tool này MIỄN PHÍ, không có paywall, chỉ 2 chặng
+           thật: nhập ngày giờ rồi xem kết quả. JS chuyển bước ở `wsStepsSet`. -->
+      <div class="ws-steps" id="wsSteps">
+        <div class="wss-step active"><span class="wss-n">1</span><span class="wss-l">Nhập ngày giờ</span></div>
+        <div class="wss-step"><span class="wss-n">2</span><span class="wss-l">Xem kết quả</span></div>
+      </div>
       <div class="form-card" id="birthPanel">
         <div class="fc-head"><span class="fc-ic" data-icon="circle-dot"></span><h2>Ngày &amp; giờ cần xem</h2></div>
         <p class="sub">Để trống là lấy giờ hiện tại. Hệ thống lập khóa Đại Lục Nhâm, trả tứ khóa, tam truyền, quý nhân và lời luận theo Khảo Biến Chiêm.</p>
-        <p class="price-note" data-tvp-price-label="luc-nham">…</p>
+        <div class="cost-box">
+          <div class="cb-l">
+            <span class="cb-ic" data-icon="wallet"></span>
+            <div>
+              <div class="cb-title">Chi phí sử dụng</div>
+              <div class="cb-amt" data-tvp-price-label="luc-nham">…</div>
+            </div>
+          </div>
+        </div>
         <div class="frow">
           <div class="fg"><label>Ngày</label><input type="number" id="ngay" min="1" max="31" placeholder="1–31"></div>
           <div class="fg"><label>Tháng</label><input type="number" id="thang" min="1" max="12" placeholder="1–12"></div>
@@ -94,6 +110,16 @@
           </button>
         </div>
         <div class="err" id="error-msg"></div>
+      </div>
+      </div>
+      <div class="ws-side-col">
+      <div class="ws-promo">
+        <div class="wsp-eyebrow"><span class="wsp-ic" data-icon="book-open"></span><span>Giới thiệu</span></div>
+        <div class="wsp-title">Lục Nhâm Giản</div>
+        <p class="wsp-desc">Lục Nhâm là một trong Tam Thức của thuật số cổ Trung Hoa, dùng bàn Thiên Bàn – Địa Bàn phối theo giờ và ngày hiện tại để lập quẻ. Phép đoán tập trung vào việc cụ thể đang hỏi, dựa trên vị trí của Thiên Tướng trên bàn.</p>
+      </div>
+      <div id="shellRecent"></div>
+      </div>
       </div>
 
       <div id="resPanel" data-ws-result>
@@ -119,13 +145,25 @@ window.SHELL_INTRO={key:'luc-nham'};</script>
 <script src="/tools-shared/dai-luc-nham.js?v=1"></script>
 <script src="/auth.js?v=2"></script>
   <script src="/nav.js?v=27" data-icons-only></script>
-<script src="/shell.js?v=90"></script>
+<script src="/shell.js?v=91"></script>
 <script>
 // Ô giữa dùng CHUNG /tools-shared/luc-nham.js với /tools/luc-nham.html.
 // `luc-nham.js` nay CHỈ kiểm ngày + dựng tiêu đề. Phần thần tướng lấy từ
 // /api/liuren — xem chú thích đầu `dai-luc-nham.js` về vì sao KHÔNG dùng lại
 // bánh xe thiên tướng cũ (công thức đoán, chưa verify được).
 function _khiTu(d,m,y,g){var hh=(g*2)%24;return new Date(Date.UTC(+y,+m-1,+d,hh-7,0,0));}
+// Thanh tiến trình — tool MIỄN PHÍ, chỉ 2 chặng: nhập ngày giờ / xem kết quả.
+// `n` các bước TRƯỚC coi là "done" (viền vàng), bước `n` đang "active" (nền navy).
+function wsStepsSet(n){
+  var el=document.getElementById('wsSteps');
+  if(!el) return;
+  var steps=el.querySelectorAll('.wss-step');
+  for(var i=0;i<steps.length;i++){
+    steps[i].classList.remove('active','done');
+    if(i+1<n) steps[i].classList.add('done');
+    else if(i+1===n) steps[i].classList.add('active');
+  }
+}
 function calculate(){
   var _d=document.getElementById('ngay').value,_m=document.getElementById('thang').value,
       _y=document.getElementById('nam').value,_g=+document.getElementById('gio').value||0;
@@ -137,6 +175,7 @@ function calculate(){
   document.getElementById('birthPanel').style.display='none';
   document.getElementById('resPanel').style.display='block';
   document.getElementById('btnEdit').style.display='';
+  wsStepsSet(2); // Xem kết quả — khóa đã lập xong
   if(window.SHELL_INTRO)Shell.dismissIntro(window.SHELL_INTRO.key);
   document.querySelectorAll('#resPanel [data-ask]').forEach(function(el){el.addEventListener('click',function(){Shell.ask(el.getAttribute('data-ask'));});});
 
@@ -165,7 +204,7 @@ function calculate(){
     });
   });
 }
-function showForm(){document.getElementById('resPanel').style.display='none';document.getElementById('birthPanel').style.display='block';document.getElementById('btnEdit').style.display='none';Shell.setShareable(null);}
+function showForm(){document.getElementById('resPanel').style.display='none';document.getElementById('birthPanel').style.display='block';document.getElementById('btnEdit').style.display='none';wsStepsSet(1);/* về lại Nhập ngày giờ */Shell.setShareable(null);}
 (function(){var t=new Date();document.getElementById('ngay').value=t.getDate();document.getElementById('thang').value=t.getMonth()+1;document.getElementById('nam').value=t.getFullYear();var h=t.getHours();document.getElementById('gio').value=Math.floor(((h*60+60)%(24*60))/120)%12;})();
 ['ngay','thang','nam'].forEach(function(id){document.getElementById(id).addEventListener('keydown',function(e){if(e.key==='Enter')calculate();});});
 </script>

@@ -9,7 +9,7 @@
 <link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/fonts/noto-serif.css?v=1">
-<link rel="stylesheet" href="/shell.css?v=41">
+<link rel="stylesheet" href="/shell.css?v=46">
 <style>
 .pt-card{background:var(--white);border:1px solid var(--line);border-radius:14px;padding:20px 22px;box-shadow:var(--shadow);max-width:680px;margin-bottom:16px}
 .pt-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:4px;display:flex;align-items:center;gap:8px}
@@ -113,13 +113,15 @@
            Render Delay 5,3s). `Shell.introOnce` thấy `.intro-card` đã có thì chỉ
            điền `#introSrc`. Vì thế `SHELL_INTRO` bên dưới CHỈ khai `key` — chữ nằm
            đúng ở đây, một bản duy nhất, không có bản chép để trôi. -->
+      <div class="ws-intake">
       <div id="introHost"><div class="intro-card">
+        <img class="intro-avatar" src="/tool-avatars/ban-lam-viec.webp" alt="" style="display:none" onerror="this.remove()">
+        <img class="intro-photo" src="https://dciwkfdqhhddeymlisey.supabase.co/storage/v1/object/public/portraits/hero-banners/phong-thuy-01.webp" alt="" onerror="this.remove()">
         <div class="intro-body">
-          <img class="intro-avatar" src="/tool-avatars/ban-lam-viec.webp" alt="" onerror="this.remove()">
           <div class="intro-text">
             <div class="intro-t">Phong Thủy Bàn Làm Việc</div>
-            <div class="intro-d">Chụp ảnh góc làm việc, hệ thống chấm điểm phong thủy Bát Trạch theo bản mệnh của bạn. Nhận phân tích chỗ nào đang cản vận, nên đổi thế nào.</div>
-            <div id="introSrc" style="min-height:55.2px;margin-top:9px"></div>
+            <div class="intro-d">Ngồi cả ngày ở một góc bàn mà công việc vẫn trì trệ, ý tưởng cạn dần — đôi khi vấn đề không nằm ở năng lực mà ở chính cách bạn đang ngồi. Chụp một tấm ảnh góc làm việc, hệ thống chỉ ra đúng chỗ đang cản vận.</div>
+            <div id="introSrc"></div>
           </div>
         </div>
         <div class="hero-pills">
@@ -128,13 +130,15 @@
           <div class="hero-pill"><span class="hp-ic" data-icon="settings"></span><span>Đề xuất<br>điều chỉnh</span></div>
         </div>
       </div></div>
-      <div id="shellRecent"></div>
-      <div class="samp-cta" id="sampCta">
-        <span class="sc-ic" data-icon="lightbulb"></span>
-        <span class="sc-txt"><b>Chưa muốn khai thông tin & ảnh?</b><span>Bạn có thể xem một bản mẫu để trải nghiệm trước.</span></span>
-        <button type="button" id="btnSample" data-sample-tool="ban-lam-viec" onclick="SampleHint.open(this)">Xem bản mẫu →</button>
+      <div class="ws-main-col">
+      <!-- Thanh tiến trình — 3 bước: form → thanh toán (gate ẩn trong
+           doAnalyze/requireCredits, không có bước xem trước riêng) → kết quả.
+           JS chuyển bước ở `wsStepsSet` (cuối file). -->
+      <div class="ws-steps" id="wsSteps">
+        <div class="wss-step active"><span class="wss-n">1</span><span class="wss-l">Nhập thông tin</span></div>
+        <div class="wss-step"><span class="wss-n">2</span><span class="wss-l">Thanh toán</span></div>
+        <div class="wss-step"><span class="wss-n">3</span><span class="wss-l">Nhận kết quả</span></div>
       </div>
-
       <div class="pt-card">
         <h2><span class="pt-num">1</span> Bản Mệnh &amp; Thông Tin</h2>
         <div class="pt-row">
@@ -222,6 +226,21 @@
       <div class="pt-card loading-overlay" id="loadingOverlay">
         <div id="analysisStepsHost"></div>
       </div>
+      </div>
+      <div class="ws-side-col">
+      <div class="ws-promo">
+        <div class="wsp-eyebrow"><span class="wsp-ic" data-icon="book-open"></span><span>Giới thiệu</span></div>
+        <div class="wsp-title">Phong Thủy Bàn Làm Việc</div>
+        <p class="wsp-desc">Bát Trạch là một trường phái phong thủy cổ truyền, chia nhà ở theo 8 hướng ứng với Bát Quái rồi đối chiếu với mệnh quái của gia chủ để xác định hướng và vị trí tốt – xấu. <i>Bát Trạch Minh Kính</i> là một trong những cổ thư hệ thống hoá phương pháp này.</p>
+      </div>
+      <div class="samp-cta" id="sampCta">
+        <span class="sc-ic" data-icon="lightbulb"></span>
+        <span class="sc-txt"><b>Chưa muốn khai thông tin & ảnh?</b><span>Bạn có thể xem một bản mẫu để trải nghiệm trước.</span></span>
+        <button type="button" id="btnSample" data-sample-tool="ban-lam-viec" onclick="SampleHint.open(this)">Xem bản mẫu →</button>
+      </div>
+      <div id="shellRecent"></div>
+      </div>
+      </div>
 
       <div id="results-section" data-ws-result>
         <div class="pt-card">
@@ -307,9 +326,9 @@
 <script>window.SHELL_ACTIVE='ban-lam-viec';window.SHELL_HISTORY=true;
 window.SHELL_INTRO={key:'ban-lam-viec'};</script>
 <script src="/auth.js?v=2"></script>
-<script src="/tuvi-paywall.js?v=33"></script>
+<script src="/tuvi-paywall.js?v=35"></script>
   <script src="/nav.js?v=27" data-icons-only></script><script src="/tools-shared/sample-hint.js?v=1"></script>
-<script src="/shell.js?v=90"></script>
+<script src="/shell.js?v=91"></script>
 <script src="/tools-shared/ai-loading-steps.js?v=10"></script>
 <script src="/tools-shared/bat-trach.js?v=2"></script>
 <script>
@@ -365,7 +384,21 @@ function onDrag(e,on){e.preventDefault();document.getElementById('uploadZone').c
 function onDrop(e){e.preventDefault();document.getElementById('uploadZone').classList.remove('drag-over');const f=e.dataTransfer.files[0];if(f&&f.type.startsWith('image/'))processFile(f);}
 function onFile(e){const f=e.target.files[0];if(f)processFile(f);}
 function resetUpload(){_img64=null;document.getElementById('uploadZone').style.display='block';document.getElementById('previewWrap').classList.remove('show');document.getElementById('fileInput').value='';}
-function resetAll(){resetUpload();document.getElementById('results-section').style.display='none';document.getElementById('ws').scrollTo({top:0,behavior:'smooth'});Shell.setShareable(null);}
+function resetAll(){resetUpload();document.getElementById('results-section').style.display='none';wsStepsSet(1);document.getElementById('ws').scrollTo({top:0,behavior:'smooth'});Shell.setShareable(null);}
+
+// Thanh tiến trình (`.ws-steps`, xem shell.css) — chỉ phản ánh trạng thái đã
+// có sẵn trong flow cũ (form → thanh toán → kết quả), không tạo trạng thái
+// mới. `n` các bước TRƯỚC coi là "done" (viền vàng), bước `n` đang "active".
+function wsStepsSet(n){
+  var el=document.getElementById('wsSteps');
+  if(!el) return;
+  var steps=el.querySelectorAll('.wss-step');
+  for(var i=0;i<steps.length;i++){
+    steps[i].classList.remove('active','done');
+    if(i+1<n) steps[i].classList.add('done');
+    else if(i+1===n) steps[i].classList.add('active');
+  }
+}
 
 async function processFile(file){
   const{base64,type}=await resizeImg(file);
@@ -394,6 +427,7 @@ async function doAnalyze(){
   document.getElementById('results-section').style.display='none';
   _analysisLoadingCtl=AiLoadingSteps.mount('analysisStepsHost',ANALYSIS_STEPS);
   _analysisLoadingCtl.start();
+  wsStepsSet(2); // Thanh toán — cổng requireCredits sắp chạy (mở modal nếu thiếu Lượng)
 
   try{
     const _currentSlug=TuviPaywall.generateToolSlug('ban-lam-viec');
@@ -421,6 +455,7 @@ async function doAnalyze(){
 function showErr(m){const b=document.getElementById('errorBox');b.textContent=m;b.classList.add('show');}
 
 function renderResults(data){
+  wsStepsSet(3); // Nhận kết quả — đã trả tiền, phân tích trả về thành công
   const{detected,analysis}=data;
   const before=analysis.beforeScore||0,after=analysis.afterScore||0;
   document.getElementById('scoreBefore').textContent=before;

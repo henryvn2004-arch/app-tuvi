@@ -9,7 +9,7 @@
 <link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/fonts/noto-serif.css?v=1">
-<link rel="stylesheet" href="/shell.css?v=41">
+<link rel="stylesheet" href="/shell.css?v=46">
 <style>
 .dl-card{background:var(--white);border:1px solid var(--line);border-radius:14px;padding:20px 22px;box-shadow:var(--shadow);max-width:760px;margin-bottom:16px}
 .dl-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:4px;display:flex;align-items:center;gap:8px}
@@ -117,18 +117,27 @@
            Render Delay 5,3s). `Shell.introOnce` thấy `.intro-card` đã có thì chỉ
            điền `#introSrc`. Vì thế `SHELL_INTRO` bên dưới CHỈ khai `key` — chữ nằm
            đúng ở đây, một bản duy nhất, không có bản chép để trôi. -->
+      <div class="ws-intake">
       <div id="introHost"><div class="intro-card">
+        <img class="intro-avatar" src="/tool-avatars/da-lieu-ai.webp" alt="" style="display:none" onerror="this.remove()">
+        <img class="intro-photo" src="https://dciwkfdqhhddeymlisey.supabase.co/storage/v1/object/public/portraits/hero-banners/phong-cach-ai-01.webp" alt="" onerror="this.remove()">
         <div class="intro-body">
-          <img class="intro-avatar" src="/tool-avatars/da-lieu-ai.webp" alt="" onerror="this.remove()">
           <div class="intro-text">
             <div class="intro-t">Da Liệu Toàn Diện</div>
-            <div class="intro-d">Da Liệu Toàn Diện soi ảnh da mặt, chỉ ra những vùng đang có vấn đề cần chú ý. Sức khoẻ làn da xuống cấp mà cứ đổ tại tuổi tác, chưa từng soi kỹ xem vấn đề thật sự nằm ở đâu? Tải ảnh da mặt, nhận phân tích khách quan trước khi mua mỹ phẩm.</div>
-            <div id="introSrc" style="min-height:36.8px;margin-top:9px"></div>
+            <div class="intro-d">Da xuống cấp mà cứ đổ tại tuổi tác, trong khi vấn đề thật có thể nằm ở nơi bạn chưa từng soi kỹ. Tải một tấm ảnh da mặt, nhận phân tích khách quan trước khi chi tiền cho mỹ phẩm mới.</div>
+            <div id="introSrc"></div>
           </div>
         </div>
       </div></div>
-      <div id="shellRecent"></div>
-
+      <div class="ws-main-col">
+      <!-- Thanh tiến trình — chỉ hiển thị trạng thái, không bấm được. JS
+           chuyển bước ở `wsStepsSet` (cuối file), gọi tại đúng chỗ trạng thái
+           đã đổi (analyze/paywall/renderResults/resetAll). -->
+      <div class="ws-steps" id="wsSteps">
+        <div class="wss-step active"><span class="wss-n">1</span><span class="wss-l">Nhập thông tin</span></div>
+        <div class="wss-step"><span class="wss-n">2</span><span class="wss-l">Thanh toán</span></div>
+        <div class="wss-step"><span class="wss-n">3</span><span class="wss-l">Nhận kết quả</span></div>
+      </div>
       <div class="dl-card">
         <h2><span class="ic" data-icon="camera"></span> Ảnh Da Mặt</h2>
         <p class="sub">Tải lên một tấm ảnh da mặt rõ nét, không trang điểm. Hệ thống phân tích tình trạng từng vùng da trên ảnh. Nhận về đánh giá da, luận theo Đông y và gợi ý thực dưỡng, mỹ phẩm phù hợp.</p>
@@ -171,6 +180,16 @@
         <button class="btn-analyze" id="btnAnalyze" onclick="analyze()" disabled>
           <span class="ic" data-icon="leaf"></span> Phân Tích Da Toàn Diện — <span data-tvp-price="da-lieu-ai">…</span> Lượng
         </button>
+      </div>
+      </div>
+      <div class="ws-side-col">
+      <div class="ws-promo">
+        <div class="wsp-eyebrow"><span class="wsp-ic" data-icon="book-open"></span><span>Giới thiệu</span></div>
+        <div class="wsp-title">Da Liệu Toàn Diện</div>
+        <p class="wsp-desc">Tướng học da mặt phương Đông cho rằng tình trạng làn da phản ánh phần nào sức khoẻ nội tại, được đối chiếu cùng các quan sát của da liễu học hiện đại. Cách tiếp cận kết hợp Đông – Tây y này nhìn làn da như một chỉ dấu cần theo dõi, không chỉ đánh giá bằng cảm quan thẩm mỹ.</p>
+      </div>
+      <div id="shellRecent"></div>
+      </div>
       </div>
 
       <div class="dl-card loading" id="loading">
@@ -245,10 +264,10 @@
 <script>window.SHELL_ACTIVE='da-lieu-ai';window.SHELL_HISTORY=true;
 window.SHELL_INTRO={key:'da-lieu-ai'};</script>
 <script src="/auth.js?v=2"></script>
-<script src="/tuvi-paywall.js?v=33"></script>
+<script src="/tuvi-paywall.js?v=35"></script>
 <script src="/tools-shared/hook-layer.js?v=2"></script>
   <script src="/nav.js?v=27" data-icons-only></script>
-<script src="/shell.js?v=90"></script>
+<script src="/shell.js?v=91"></script>
 <script src="/tools-shared/ai-loading-steps.js?v=10"></script>
 <script>
 function initDaLieuAi(){
@@ -349,10 +368,26 @@ function clearPhoto() {
   document.getElementById('results').style.display = 'none';
 }
 
+// Thanh tiến trình đầu trang — port từ app-luan-giai.html, chỉ đổi id thanh
+// gắn vào. 3 bước có sẵn trong flow cũ (form → thanh toán → kết quả), không
+// tạo trạng thái mới. `n` các bước TRƯỚC coi là "done" (viền vàng), bước `n`
+// đang "active" (nền navy), các bước sau giữ mặc định.
+function wsStepsSet(n){
+  var el=document.getElementById('wsSteps');
+  if(!el) return;
+  var steps=el.querySelectorAll('.wss-step');
+  for(var i=0;i<steps.length;i++){
+    steps[i].classList.remove('active','done');
+    if(i+1<n) steps[i].classList.add('done');
+    else if(i+1===n) steps[i].classList.add('active');
+  }
+}
+
 function resetAll() {
   clearPhoto();
   document.getElementById('ws').scrollTo({ top: 0, behavior: 'smooth' });
   Shell.setShareable(null);
+  wsStepsSet(1); // về lại tải ảnh
 }
 
 async function analyze() {
@@ -368,6 +403,7 @@ async function analyze() {
 
   const slug = TuviPaywall.generateToolSlug('da-lieu-ai');
   TuviPaywall.init({ product: 'da-lieu-ai' });
+  wsStepsSet(2); // Thanh toán — tường đã dựng, chờ xác nhận Lượng trước khi gọi API phân tích
 
   try {
     await new Promise((resolve, reject) => {
@@ -398,6 +434,7 @@ async function analyze() {
 
 function renderResults(d) {
   document.getElementById('results').style.display = 'block';
+  wsStepsSet(3); // Nhận kết quả — đã trả tiền, phân tích xong
   const da = d.phan_tich_da || {};
   const dongy = d.dong_y || {};
   const anuong = d.an_uong || {};

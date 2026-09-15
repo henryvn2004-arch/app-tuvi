@@ -100,24 +100,19 @@ button.item{border:none;background:none;font:inherit;text-align:left}
 .sb-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--gold);margin-left:6px;flex:0 0 auto;animation:sbDotPulse 1.8s ease-in-out infinite}
 @keyframes sbDotPulse{0%,100%{box-shadow:0 0 0 0 rgba(201,168,76,.45)}50%{box-shadow:0 0 0 4px rgba(201,168,76,0)}}
 .ava{width:29px;height:29px;border-radius:50%;background:linear-gradient(135deg,var(--gold-soft),var(--gold));display:flex;align-items:center;justify-content:center;color:#2a1e05;font-weight:700;font-size:13px;flex:0 0 auto}
-/* "Gần đây" (Lá số đã lưu dùng gần nhất) — dòng gọn hơn `.item`, không cần
-   icon riêng vì đã có avatar chữ cái đầu. */
-.rc-row{display:flex;align-items:center;gap:9px;padding:6px 8px;margin:1px 0;border-radius:7px;text-decoration:none;color:var(--sb-txt)}
-.rc-row:hover{background:rgba(255,255,255,.05)}
-.rc-ava{width:24px;height:24px;border-radius:50%;background:linear-gradient(135deg,#2b3a4d,#1a2534);display:flex;align-items:center;justify-content:center;color:var(--sb-txt);font-size:10px;font-weight:700;font-family:var(--serif);flex:0 0 auto}
-.rc-tx{flex:1;min-width:0}
-.rc-tx b{display:block;font-size:12.5px;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.rc-time{font-size:10px;color:var(--sb-txt-dim);flex:0 0 auto;white-space:nowrap}
 .sb-spacer{flex:1}
 .sb-foot-grp{padding:8px 8px;border-top:1px solid var(--sb-line)}
 .sb-brandmini{display:flex;align-items:center;gap:9px;padding:12px 14px 16px;opacity:.55}
 .sb-brandmini img{width:24px;height:24px;border-radius:6px;object-fit:cover;flex:0 0 auto}
-.sb-brandmini-tx{min-width:0}
+.sb-brandmini-tx{min-width:0;flex:1}
 .sb-brandmini b{display:block;font-family:var(--serif);font-size:11px;color:#fff;font-weight:600;letter-spacing:.02em;line-height:1.25;white-space:nowrap}
-.sb-brandmini span{display:block;font-size:9px;color:var(--sb-txt-dim);white-space:nowrap}
+.sb-brandmini span{display:block;font-size:9px;color:var(--sb-txt-dim);white-space:normal;line-height:1.35}
 
 /* ── WORKSPACE FRAME ── */
-.ws{background:var(--paper);overflow-y:auto;display:flex;flex-direction:column;position:relative}
+/* `container-type` ở ĐÂY (khối cha), không ở khối con — `.ws` co theo bề rộng
+   CỘT giữa sidebar (246px) và rail (--rail-w), KHÔNG theo viewport (xem bẫy
+   trong CLAUDE.md). `@container ws (...)` bên dưới hỏi đúng bề rộng cột này. */
+.ws{background:var(--paper);overflow-y:auto;display:flex;flex-direction:column;position:relative;container:ws/inline-size}
 .ws-top{position:sticky;top:0;z-index:5;background:var(--paper);border-bottom:1px solid var(--line);padding:12px 22px;display:flex;align-items:center;gap:14px}
 /* Icon cố định cạnh tên tool trên `.ws-top` — xem `mountToolIcon()` trong
    shell.js. Icon (không phải ảnh minh hoạ .intro-avatar): ở cỡ 32-40px một
@@ -298,19 +293,62 @@ button.item{border:none;background:none;font:inherit;text-align:left}
 .tabbar .tab-home.active span{color:var(--gold)}
 
 /* ── EMPTY-STATE INTRO (danh thiếp CỐ ĐỊNH của tool — KHÔNG tự ẩn vĩnh viễn,
-   không có nút đóng) ── Bố cục: avatar [trái] — tên tool + mô tả [phải].
-   `.intro-body` là hàng flex; avatar tự nạp từ `/tool-avatars/<key>.webp`
-   (xem `Shell.introOnce` trong shell.js), lỗi 404 (chưa sinh ảnh cho tool đó)
-   thì tự ẩn qua onerror — không để lại ô vỡ ảnh. Avatar cỡ lớn (96/72px) để
-   thấy rõ chi tiết nét vẽ — ảnh gốc 1024×1024 nên phóng cỡ này không vỡ nét. */
-.intro-card{position:relative;background:linear-gradient(180deg,var(--gold-lt),var(--white));border:1px solid var(--gold-soft);border-radius:12px;padding:16px;box-shadow:var(--shadow);margin-bottom:16px;max-width:720px}
-.intro-card .intro-body{display:flex;align-items:flex-start;gap:16px}
-.intro-card .intro-avatar{width:96px;height:96px;border-radius:14px;flex-shrink:0;object-fit:cover;background:var(--navy)}
-.intro-card .intro-text{flex:1;min-width:0}
-.intro-card .intro-t{font-family:var(--serif);font-size:15px;font-weight:600;color:var(--text);margin-bottom:5px}
+   không có nút đóng). Box LÀ banner: `.intro-photo` phủ kín làm nền (position:
+   absolute, xem dưới), `.intro-body`/`.hero-pills` đè lên trên bằng z-index.
+   `overflow:hidden` bo tròn góc ảnh theo `border-radius` của box. `min-height`
+   đặt TRƯỚC khi ảnh tải xong (ảnh không góp vào chiều cao vì đã absolute) nên
+   không có CLS — chữ tĩnh trong HTML quyết định layout ngay từ khung đầu.
+   `.intro-avatar` (icon vuông 96/72px, `/tool-avatars/<key>.webp`) là DI SẢN
+   trước khi có banner nhóm — `check-intro-card.mjs` vẫn bắt buộc thẻ này khớp
+   `key` nên giữ trong HTML, ẩn hẳn bằng CSS bên dưới chứ không xoá. Toàn bộ
+   49 trang box tĩnh giờ đều đã gắn `.intro-photo` (2026-09-14, vòng 5). */
+.intro-card{position:relative;overflow:hidden;background:linear-gradient(180deg,var(--gold-lt),var(--white));border:1px solid var(--gold-soft);border-radius:12px;box-shadow:var(--shadow);margin-bottom:16px;min-height:230px;display:flex;flex-direction:column;justify-content:flex-end}
+.intro-card .intro-avatar{display:none}
+.intro-card .intro-text{max-width:100%}
+.intro-card .intro-t{font-family:var(--serif);font-size:19px;font-weight:700;color:var(--text);margin-bottom:6px}
 .intro-card .intro-d{font-size:13px;color:var(--text-mid);line-height:1.65}
 .intro-card .intro-d b{color:var(--text)}
-@media(max-width:480px){.intro-card .intro-avatar{width:72px;height:72px;border-radius:12px}}
+
+/* Banner thủy mặc khổ ngang (`scripts/gen-hero-banners.mjs`, dùng CHUNG theo
+   NHÓM cổ pháp — xem lib/media/hero-banner-prompt.ts) — LÀ nền của cả
+   `.intro-card`, không phải thumbnail cạnh chữ (Henry 2026-09-14, vòng 5).
+   Nguồn 1536×1024 (khổ RỘNG NHẤT gpt-image-2 hỗ trợ), nhân vật ĐỨNG đủ người
+   (luôn vẽ lệch phải — xem prompt) → khung banner thấp hơn nhiều so với ảnh
+   gốc nên object-fit:cover crop dọc RẤT nhiều (ví dụ khung 984×230 chỉ còn
+   thấy ~35% chiều cao ảnh gốc). `object-position:right TOP` (không phải
+   `center`) để phần ĐẦU/vai (khớp cành thông khung góc trên-phải trong
+   prompt) luôn còn trong khung — crop mất phần CHÂN thì chấp nhận được,
+   mất ĐẦU thì không (Henry vòng 6: "cắt đầu cắt đuôi"). `z-index:0` để
+   `::after` (gradient) + chữ đè lên trên. */
+.intro-card .intro-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:right top;z-index:0;background:var(--navy)}
+/* Henry 2026-09-14 (vòng 7, "banner vẫn bị lệch" trên /app/cong-so): min-height
+   230/300 phía trên tính RA chỉ còn thấy ~44-57% chiều cao ảnh gốc ở bề rộng
+   card thực tế (đo bằng ảnh marker giả — xem scripts/_diag-banner-crop.mjs,
+   không commit) — cắt mất cả mặt trời/núi ở giữa ảnh, không chỉ riêng phần
+   chân như dự tính ở vòng 6. Bề rộng card KHÔNG đổi (bị chặn trần bởi
+   `.ws-intake{max-width:1040px}` và `minmax(0,640px)` ở dưới), nên chỉ có thể
+   sửa bằng cách tăng CHIỀU CAO card để khung nhìn thấy nhiều ảnh hơn theo
+   chiều dọc — nút "đầu" giữ nguyên vị trí (`object-position` không đổi),
+   chỉ kéo dài khung để lộ thêm phần dưới. Ngưỡng 640 cố ý xa hẳn breakpoint
+   sập-mobile 900px (xem bẫy `.ws-intake` phía trên) — điện thoại thật (ws
+   ~360-430px) không chạm ngưỡng này, giữ nguyên hiện trạng "mobile ok". */
+@container ws (min-width:640px){
+  .intro-card{min-height:420px}
+}
+/* Gradient PHỦ từ trái (đục, cùng tông `--paper`) sang phải (trong suốt) —
+   đảm bảo chữ đọc được trên MỌI ảnh nhóm mà không cần biết trước tông màu.
+   Dùng % thay vì px nên tỉ lệ giữ nguyên ở mọi bề rộng, kể cả mobile. Đứng
+   sau `.intro-photo` trong DOM (thẻ ảnh) nên `::after` của `.intro-card` vẽ
+   trên nó; `.intro-body`/`.hero-pills` có z-index cao hơn nên vẫn trên cùng. */
+.intro-card::after{content:'';position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(90deg,var(--paper) 0%,var(--paper) 52%,rgba(0,0,0,0) 88%)}
+.intro-card .intro-body{position:relative;z-index:2;padding:18px 20px 4px;max-width:72%}
+.intro-card .hero-pills{position:relative;z-index:2;max-width:72%;margin:0;padding:12px 20px 18px}
+@media(max-width:640px){
+  .intro-card{min-height:230px}
+  .intro-card .intro-body{max-width:64%;padding:16px 16px 4px}
+  .intro-card .hero-pills{max-width:64%;padding:10px 16px 16px}
+  .intro-card .intro-t{font-size:17px}
+}
 
 /* ── HÀNG GỢI Ý CÂU HỎI (chip cố định trên ô nhập rail, cuộn ngang) ── */
 .rail-sugg{padding:8px 13px 0}
@@ -590,8 +628,14 @@ font-family:inherit}
 @media print {
   .sb, .rail, .ws-top, .tabbar, .backdrop, #introHost, #shellRecent,
   .mobile-only, .jump, .ask, .btn, button, input, select, textarea,
-  .tpw-lock-veil, .tpw-lock-blur, .tpw-wall, .tpw-prev,
+  .tpw-lock-veil, .tpw-lock-blur, .tpw-wall, .tpw-prev, .ws-intake,
   [data-print-skip], [data-share-skip] { display: none !important; }
+  /* `.ws-intake` (2026-09-14, ws-steps + ws-promo "Giới thiệu" cột phụ) —
+     nguyên khối nhập liệu/thanh tiến trình trước khi có kết quả, đứng TRƯỚC
+     `[data-ws-result]` trong DOM và KHÔNG bị gỡ khỏi cây sau khi có kết quả
+     (chỉ ẩn/co lại trên màn hình). Thiếu dòng này thì bản in/PDF có thêm 1
+     trang đầu là thanh bước + thẻ giới thiệu — Henry bắt được qua PDF thật
+     trên prod, sandbox không có mạng thật nên không tự bắt được lỗi này. */
 
   /* Bố cục 3 cột chỉ có nghĩa trên màn hình; in thì trải dọc, bỏ mọi khung
      cuộn — nếu không, trang in CẮT ở đúng chiều cao viewport. */
@@ -603,6 +647,15 @@ font-family:inherit}
 
   /* Đừng để một thẻ kết quả bị xẻ đôi qua hai trang giấy. */
   .sec, .card, .res-block, .cs-sec { page-break-inside: avoid; break-inside: avoid; }
+
+  /* Ảnh minh hoạ chủ đề (fb-card, `tools-shared/fb-card-topic.js`) — đẹp trên
+     màn hình, tốn nặng khi in. Chromium KHÔNG dùng chung một bản nhúng ảnh
+     cho nhiều trang PDF — mỗi lần `<img>` xuất hiện lại ở trang giấy mới là
+     một bản nhúng MỚI, dù cùng file nguồn. Tool nhiều mục (Luận Giải Lá Số,
+     Chu Trình Cuộc Đời, Vận Hạn Năm) có 13-16 thẻ ⇒ PDF mẫu từng nặng
+     4,9-5,8 MB; đo lại sau khi ẩn: giảm ~20%. Ảnh chỉ trang trí, không mang
+     dữ liệu — an toàn bỏ khi in. */
+  .fbc-img, .fbc-bg-img { display: none !important; }
 
   /* Trình duyệt mặc định BỎ hết background khi in (đỡ tốn mực) — mọi khối
      tô màu (thẻ trích dẫn .fb-card, box "cơ sở tính toán", badge điểm số…)
@@ -631,9 +684,98 @@ font-family:inherit}
   .ws-print-foot-l b { display: block; font-family: var(--serif); font-size: 11pt; }
   .ws-print-foot-l span { display: block; font-size: 8.5pt; color: #666; margin-top: 1px; }
   .ws-print-qr { width: 60px; height: 60px; flex-shrink: 0; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+  /* Bìa sách + danh ngôn + mục lục (6 tool có ảnh minh hoạ illus-match.js,
+     xem `ensurePrintBook()` ở shell.js) — dựng kiểu sách chỉ tuyến (線裝書):
+     bìa navy trơn, gáy có chỉ khâu, nhãn giấy chữ ngang + triện, sau đó 1
+     trang danh ngôn rồi 1 trang mục lục, mỗi khối MỘT trang giấy riêng. Dùng
+     `min-height:100vh` để mỗi khối chiếm trọn một trang in (vh trong ngữ
+     cảnh in xấp xỉ khổ trang giấy ở Chromium). */
+  /* `#wsBookCover{display:none}` (ngoài @media print, phía dưới file) ẩn nó
+     trên màn hình — PHẢI mở lại ở đây, không thì con bên trong dù có CSS in
+     đúng cũng ẩn theo cha (đã cắn: cover render đủ trong DOM, `display:none`
+     kế thừa từ cha khiến PDF thật KHÔNG có bìa dù debug DOM thấy có). */
+  #wsBookCover, #wsBookBack { display: block !important; }
+  .wsb-cover, .wsb-quote, .wsb-toc { break-after: page; break-inside: avoid; min-height: 100vh; box-sizing: border-box; position: relative; }
+  .wsb-cover {
+    background: linear-gradient(155deg, var(--navy-2), var(--navy) 55%, #04121D) !important;
+    -webkit-print-color-adjust: exact; print-color-adjust: exact;
+  }
+  .wsb-spine { position: absolute; left: 14px; top: 0; bottom: 0; width: 40px; }
+  .wsb-spine svg { width: 100%; height: 100%; display: block; }
+  .wsb-label {
+    position: absolute; right: 42px; top: 22%; bottom: 30%; width: 160px;
+    background: #F8F4E9 !important; border: 1.5px solid #142230; padding: 5px;
+    -webkit-print-color-adjust: exact; print-color-adjust: exact;
+  }
+  .wsb-label-in { width: 100%; height: 100%; border: 1px solid #142230; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+  /* `text-wrap:balance` tự chia đều số chữ mỗi dòng — tên tool dài ngắn khác
+     nhau giữa 6 tool (VD "Luận giải Tử Vi" vs "Hướng Nghiệp Trẻ") nên KHÔNG
+     tự chèn `<br>` tay được, phải để trình duyệt cân dòng. */
+  .wsb-label-t { font-family: var(--serif); font-weight: 700; color: #142230; font-size: 15pt; letter-spacing: .02em; line-height: 1.5; text-align: center; padding: 0 6px; text-wrap: balance; }
+  .wsb-seal { margin-top: 14px; width: 28px; height: 28px; object-fit: contain; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .wsb-cover-cap { position: absolute; left: 0; right: 0; bottom: 18%; text-align: center; }
+  .wsb-cover-cap b { display: block; font-size: 8pt; letter-spacing: .22em; color: var(--gold-soft); margin-bottom: 5px; }
+  .wsb-cover-cap span { display: block; font-size: 9pt; color: rgba(249,244,235,.75); letter-spacing: .02em; }
+  .wsb-cover-foot { position: absolute; left: 0; right: 0; bottom: 8%; text-align: center; }
+  .wsb-cover-foot .mk { color: var(--gold); font-size: 11pt; letter-spacing: .3em; margin-bottom: 6px; }
+  .wsb-cover-foot b { display: block; font-family: var(--serif); font-size: 10.5pt; color: var(--gold-lt); letter-spacing: .08em; }
+  .wsb-cover-foot span { display: block; font-size: 7.5pt; color: rgba(249,244,235,.55); margin-top: 3px; }
+
+  .wsb-quote { background: #fff !important; display: flex; align-items: center; justify-content: center; }
+  .wsb-quote-in { max-width: 420px; text-align: center; padding: 0 30px; }
+  .wsb-qmark { font-family: var(--serif); font-size: 34pt; color: var(--gold); line-height: 1; margin-bottom: 4px; opacity: .85; }
+  .wsb-qtxt { font-family: var(--serif); font-style: italic; font-weight: 600; font-size: 15pt; line-height: 1.6; color: var(--navy); }
+  .wsb-qviet { font-family: var(--serif); font-size: 11pt; color: var(--text-mid); margin-top: 12px; line-height: 1.6; }
+  .wsb-qrule { width: 40px; height: 1px; background: var(--gold) !important; margin: 20px auto; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .wsb-qsrc { font-size: 9pt; letter-spacing: .1em; text-transform: uppercase; color: var(--gold-soft); }
+
+  .wsb-toc { background: #fff !important; padding: 15% 46px 0; }
+  .wsb-toc-h { text-align: center; }
+  .wsb-toc-h b { font-size: 8.5pt; letter-spacing: .26em; color: var(--gold-soft); font-weight: 700; }
+  .wsb-toc-h h2 { font-family: var(--serif); font-size: 17pt; color: var(--navy); margin: 6px 0 0; }
+  .wsb-toc-rule { width: 50px; height: 1px; background: var(--gold) !important; margin: 16px auto 22px; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .wsb-toc-list { list-style: none; margin: 0; padding: 0; max-width: 420px; margin-inline: auto; }
+  .wsb-toc-list li { display: flex; align-items: baseline; gap: 8px; font-size: 11pt; color: var(--text); padding: 6px 0; border-bottom: 1px dotted #d8d2c2; }
+  .wsb-toc-n { font-family: var(--serif); font-style: italic; color: var(--gold-soft); font-size: 9.5pt; width: 30px; flex-shrink: 0; }
+  .wsb-toc-t { font-family: var(--serif); flex-shrink: 0; }
+  .wsb-toc-leader { flex: 1; }
+
+  /* Bìa cuối — khép quyển sách bằng đúng bộ nhận diện đã dùng ở bìa trước
+     (seal thật `/seal.webp` + QR thật quét về trang), dựng bởi
+     `ensurePrintBackCover()` ở shell.js, LUÔN là trang cuối cùng (appendChild
+     vào host, sau mọi chương). */
+  .wsb-back {
+    break-before: page; min-height: 100vh; box-sizing: border-box;
+    background: linear-gradient(155deg, var(--navy-2), var(--navy) 55%, #04121D) !important;
+    -webkit-print-color-adjust: exact; print-color-adjust: exact;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px;
+  }
+  .wsb-back-seal { width: 64px; height: 64px; object-fit: contain; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .wsb-back-brand { text-align: center; }
+  .wsb-back-brand b { display: block; font-family: var(--serif); font-size: 13pt; color: var(--gold-lt); letter-spacing: .1em; }
+  .wsb-back-brand span { display: block; font-size: 9pt; color: var(--gold-soft); margin-top: 3px; letter-spacing: .06em; }
+  .wsb-back-qr { width: 90px; height: 90px; margin-top: 6px; background: #fff !important; padding: 6px; border-radius: 6px; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .wsb-back-cap { font-size: 8.5pt; color: rgba(249,244,235,.6); margin-top: 4px; }
+  .wsb-back-url { font-family: var(--serif); font-size: 10pt; color: var(--gold-lt); letter-spacing: .04em; }
+
+  /* Mỗi chương một trang giấy riêng — đủ tạo nhịp light-novel (bìa/danh
+     ngôn/mục lục + mỗi cung mở trang mới) mà không ép thêm 1 trang riêng cho
+     ảnh. Scope theo `.ws-book-mode` (chỉ host của 6 tool này) để không đụng
+     `.sec` ở tool khác — xem luật `.sec, .card... {page-break-inside:avoid}`
+     phía trên, đang dùng chung cho MỌI tool.
+     2026-09-14: TỪNG có thêm `.lg-illus{break-after:page}` (ảnh đứng riêng 1
+     trang trước khi tới chữ) — đo thật cho 43 trang mất 6,4s render + PDF
+     4,3MB (chưa tính ảnh thật, ảnh gốc lúc đó vẫn PNG ~3,1MB/tấm). Bỏ luật
+     đó: ảnh nằm chung trang với chữ theo luồng tự nhiên. Không còn cần nén
+     riêng lúc in nữa — `illus-match.js` giờ trỏ thẳng bản .webp NÉN SẴN
+     (~150KB/tấm, migrate 1 lần khỏi .png gốc) dùng chung cho MỌI nơi, màn
+     hình lẫn PDF. */
+  .ws-book-mode .sec { break-before: page; }
+  .ws-book-mode .lg-illus { break-inside: avoid; }
 }
-/* Ngoài lúc in thì khối đầu/chân trang in KHÔNG tồn tại trên màn hình. */
-.ws-print-head, .ws-print-foot { display: none; }
+/* Ngoài lúc in thì khối đầu/chân trang in, bìa sách KHÔNG tồn tại trên màn hình. */
+.ws-print-head, .ws-print-foot, #wsBookCover, #wsBookBack { display: none; }
 
 /* Ô GIỮ CHỖ hard paywall Pha 3 (dùng chung — không chép sang từng trang tool).
    Khi một `.res-block-body` mang class `.tpw-locked`, giấu HẲN mọi con của nó
@@ -706,13 +848,110 @@ font-family:inherit}
 .cost-box .cb-r-txt{font-size:11.5px;color:var(--text-mid);line-height:1.5}
 .cost-box .cb-r-txt a{color:var(--gold-soft);font-weight:600;text-decoration:none}
 @media(max-width:480px){.cost-box .cb-r{border-left:none;border-top:1px solid var(--line-2);padding:10px 0 0;margin-top:2px;flex-basis:100%;max-width:none}}
-/* Thẻ gợi ý "Xem bản mẫu" (icon bóng đèn + nút pill) — nay chỉ app-luan-giai
-   dùng, để đây làm nguồn chung phòng khi tool khác thêm luồng bản mẫu tương tự. */
+/* Thẻ gợi ý "Xem bản mẫu" (icon bóng đèn + nút pill) — dùng chung nhiều
+   trang (SampleHint, tools-shared/sample-hint.js), giữ ở đây làm nguồn chung. */
 .samp-cta{background:var(--white);border:1px solid var(--line);border-radius:11px;padding:12px 14px;max-width:640px;margin-bottom:14px;font-size:13px;color:var(--text-lt);display:flex;align-items:center;gap:11px;flex-wrap:wrap}
 .samp-cta .sc-ic{flex:0 0 auto;width:34px;height:34px;border-radius:50%;background:var(--gold-lt);color:var(--gold-soft);display:flex;align-items:center;justify-content:center}
 .samp-cta .sc-ic svg{width:17px;height:17px}
 .samp-cta .sc-txt{flex:1;min-width:160px;display:flex;flex-direction:column}
 .samp-cta .sc-txt b{font-size:13px;color:var(--text);font-weight:600}
 .samp-cta .sc-txt span{font-size:11.5px;color:var(--text-lt)}
-.samp-cta button{background:none;border:1px solid var(--gold-soft);color:var(--gold-soft);border-radius:20px;padding:8px 15px;font-size:12.5px;font-weight:600;cursor:pointer;font-family:inherit;flex:0 0 auto;white-space:nowrap}
+.samp-cta button,.samp-cta a.sc-btn{background:none;border:1px solid var(--gold-soft);color:var(--gold-soft);border-radius:20px;padding:8px 15px;font-size:12.5px;font-weight:600;cursor:pointer;font-family:inherit;flex:0 0 auto;white-space:nowrap;text-decoration:none;display:inline-block}
+/* ── Khối "nhập liệu" (`#introHost` + `#shellRecent` + `.samp-cta` +
+   `.form-card`, đứng liền nhau trước kết quả) — bọc trong `.ws-intake` để
+   dùng 2 CỘT khi `.ws` đủ rộng, thay vì một cột 640px canh trái bỏ phí phần
+   còn lại của workspace (đo: rail đóng hoặc màn lớn thừa >600px trắng).
+   MẶC ĐỊNH (hẹp, rail mở — trường hợp phổ biến nhất) KHÔNG đổi gì: các con
+   vẫn xếp dọc đúng thứ tự trong HTML như trước giờ. Chỉ đủ rộng mới chuyển
+   `#shellRecent` sang cột phụ bên phải. Không dùng `@media` vì bề rộng
+   `.ws` không theo viewport (xem bẫy ở trên `.ws{container:...}`).
+   🪤 Ngưỡng PHẢI cách xa breakpoint mobile `@media(max-width:900px)` phía
+   trên (`.shell{grid-template-columns:1fr}`): đúng lúc sidebar+rail gập lại
+   thành drawer, `.ws` NHẢY LÊN gần bằng viewport (900px) — đo được ở 900px
+   VỪA khớp `.ws` VỪA khớp ngưỡng cột, ra 2 cột đè vỡ trên màn hình đúng bằng
+   điện thoại ngang/tablet, tràn ra ngoài rìa. 640(main)+24(gap)+320(side)+
+   44(padding .ws-body) = 1028px là mức TỐI THIỂU không vỡ; 1080 chừa dư và
+   nằm hẳn NGOÀI vùng viewport ≤900 nên không bao giờ trùng nhau. */
+.ws-intake{max-width:1040px}
+@container ws (min-width:1080px){
+  .ws-intake{
+    display:grid;
+    grid-template-columns:minmax(0,640px) minmax(240px,320px);
+    /* Henry 2026-09-14 (vòng 4): cột chính (`.ws-main-col`: steps+form) và cột
+       phụ (`.ws-side-col`: promo+samp+phiên gần đây) mỗi bên là MỘT ô lưới
+       (KHÔNG khai grid-area riêng cho từng con bên trong) — con của chúng
+       xếp dọc bằng flow thường + margin sẵn có. Lượt trước gán grid-area cho
+       từng con (steps/form/promo/samp/side riêng) làm hàng "steps/promo"
+       phải cao bằng phần tử cao nhất giữa 2 cột ⇒ `.ws-promo` (cao) đẩy
+       `.form-card` xuống, không còn "sát lên trên" như Henry muốn — bọc theo
+       cột thì mỗi cột tự do cao thấp độc lập, không kéo cột kia theo. */
+    grid-template-areas:"hero hero" "main side";
+    column-gap:24px;row-gap:16px;
+    align-items:start;
+  }
+  .ws-intake>#introHost{grid-area:hero}
+  .ws-intake>#introHost .intro-card{min-height:460px}
+  .ws-intake>#introHost .intro-card .intro-body{max-width:52%}
+  .ws-intake>#introHost .intro-card .hero-pills{max-width:52%}
+  .ws-intake>.ws-main-col{grid-area:main;min-width:0}
+  .ws-intake>.ws-side-col{grid-area:side;min-width:0}
+}
+/* ── Thanh tiến trình 4 bước (Nhập thông tin → Xem trước lá số → Thanh toán
+   → Nhận kết quả) — CHỈ hiển thị trạng thái, KHÔNG điều hướng (không click
+   được: nhảy cóc qua bước 3/4 mà chưa trả tiền là vô nghĩa). Mỗi trang tự
+   gọi `wsStepsSet(el,n)` (định nghĩa cục bộ, vì số bước/tên bước khác nhau
+   theo từng tool) tại đúng thời điểm chuyển trạng thái đã có sẵn trong code
+   (doLuan/showForm/paywall/kết quả) — không thêm trạng thái mới. */
+.ws-steps{display:flex;gap:2px;margin-bottom:16px}
+.ws-steps .wss-step{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;text-align:center;gap:6px;position:relative}
+.ws-steps .wss-step:not(:first-child)::before{content:'';position:absolute;top:13px;right:50%;width:100%;height:1px;background:var(--line-2)}
+.ws-steps .wss-step.done:not(:first-child)::before{background:var(--gold-soft)}
+.ws-steps .wss-n{width:26px;height:26px;border-radius:50%;background:var(--white);border:1px solid var(--line-2);color:var(--text-lt);font-size:11.5px;font-weight:700;font-family:var(--serif);display:flex;align-items:center;justify-content:center;position:relative;z-index:1}
+.ws-steps .wss-step.done .wss-n{background:var(--gold);border-color:var(--gold);color:var(--navy)}
+.ws-steps .wss-step.active .wss-n{background:var(--navy);border-color:var(--navy);color:var(--gold)}
+.ws-steps .wss-l{font-size:10.5px;color:var(--text-lt);line-height:1.3;max-width:96px}
+.ws-steps .wss-step.active .wss-l{color:var(--text);font-weight:600}
+.ws-steps .wss-step.done .wss-l{color:var(--text-mid)}
+@media(max-width:480px){.ws-steps .wss-l{font-size:9.5px;max-width:64px}}
+/* ── Banner cột phụ = thẻ "Giới thiệu" (Henry 2026-09-14, mẫu chụp) — thẻ
+   sáng như `.intro-card`/`.form-card`, KHÔNG dùng hình/SVG minh hoạ (cố ý —
+   Henry: "ko cần hình ảnh gì cả"). Icon vuông navy/gold dùng lại đúng mẫu
+   `.fc-ic`/`.cb-ic` đã có, không bịa màu tím như ảnh mẫu để giữ nhất quán
+   bảng màu thương hiệu. */
+.ws-promo{background:var(--white);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin-top:16px;box-shadow:var(--shadow)}
+.ws-promo .wsp-eyebrow{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.ws-promo .wsp-ic{width:26px;height:26px;border-radius:7px;background:var(--navy);color:var(--gold);display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+.ws-promo .wsp-ic svg{width:14px;height:14px}
+.ws-promo .wsp-eyebrow span:last-child{font-size:10.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-lt)}
+.ws-promo .wsp-title{font-family:var(--serif);font-size:15px;font-weight:600;color:var(--text);margin-bottom:8px}
+.ws-promo .wsp-desc{font-size:13px;color:var(--text-mid);line-height:1.65;margin-bottom:14px}
+.ws-promo .wsp-quote{margin:0;border-left:3px solid var(--gold-soft);padding-left:12px;font-family:var(--serif);font-style:italic;font-size:13px;color:var(--text-mid);line-height:1.6}
+/* Thanh DÍNH "Đây là BẢN MẪU" — hiện phía trên kết quả khi bản mẫu đang tự mở
+   (hoặc mở tay). Chuyển từ app-luan-giai.html (nơi định nghĩa gốc) sang đây
+   (2026-09) để dùng chung — nhiều trang giờ auto-show sample lúc vào trang. */
+.samp-bar{position:sticky;top:var(--ws-top-h,69px);z-index:6;background:var(--navy);color:#fff;border-radius:10px;padding:10px 14px;margin-bottom:16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;box-shadow:var(--shadow)}
+.samp-bar .sb-txt{flex:1;min-width:180px;font-size:12.5px;line-height:1.5}
+.samp-bar .sb-txt b{color:var(--gold)}
+.samp-bar button{flex:0 0 auto;background:var(--gold);color:var(--navy);border:none;border-radius:8px;padding:7px 14px;font-size:12.5px;font-weight:700;cursor:pointer;font-family:var(--serif)}
 .samp-cta button:disabled{opacity:.6;cursor:default}
+/* ── Thẻ "Báo cáo đã sẵn sàng" — Pha 2 productize luận giải (2026-09) ──
+   Dùng CHUNG cho app-luan-giai.html (laso) + app-chu-trinh-cuoc-doi.html
+   (chu-trinh-cuoc-doi) qua tools-shared/report-delivery.js — một nguồn CSS,
+   một nguồn JS, hai trang cùng gọi. Khối TĨNH có mặt từ lần vẽ đầu, chỉ ẩn
+   bằng [hidden] — KHÔNG chèn muộn bằng JS, tránh đúng cú CLS 0,0049 mà
+   `renderPdfBtn`/`fabAdd` đã phải vá (xem shell.js). */
+.report-ready{border:1px solid var(--line);border-radius:14px;padding:20px;margin:18px 0;background:linear-gradient(180deg,var(--gold-lt),var(--white));text-align:center}
+.report-ready[hidden]{display:none}
+.report-ready .rr-eyebrow{font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold-soft);font-weight:700;margin-bottom:6px}
+.report-ready .rr-title{font-family:var(--serif);font-size:18px;color:var(--navy);font-weight:700;margin-bottom:4px}
+.report-ready .rr-sub{font-size:12.5px;color:var(--text-mid);margin-bottom:16px}
+.report-ready .rr-actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.report-ready .rr-btn{display:inline-flex;align-items:center;gap:7px;border-radius:9px;padding:11px 18px;font-size:13.5px;font-weight:600;font-family:var(--sans);cursor:pointer;border:1.5px solid var(--navy);background:transparent;color:var(--navy);transition:opacity .15s}
+.report-ready .rr-btn.pri{background:linear-gradient(160deg,var(--gold),var(--gold-soft));border-color:transparent;color:var(--navy)}
+.report-ready .rr-btn .ic{width:15px;height:15px;flex:0 0 auto;display:inline-flex}
+.report-ready .rr-btn .ic svg{width:100%;height:100%}
+.report-ready .rr-btn:disabled{opacity:.55;cursor:default}
+.report-ready .rr-btn.sent{border-color:var(--tx-green);color:var(--tx-green)}
+/* Đang dựng — chưa đủ N phần. Spinner thay icon tải, nút vẫn khoá. */
+.rr-spin{width:15px;height:15px;border:2px solid rgba(6,26,46,.18);border-top-color:var(--navy);border-radius:50%;animation:rr-spin .7s linear infinite;flex:0 0 auto}
+@keyframes rr-spin{to{transform:rotate(360deg)}}
