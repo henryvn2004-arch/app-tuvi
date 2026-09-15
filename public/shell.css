@@ -312,29 +312,20 @@ button.item{border:none;background:none;font:inherit;text-align:left}
 /* Banner thủy mặc khổ ngang (`scripts/gen-hero-banners.mjs`, dùng CHUNG theo
    NHÓM cổ pháp — xem lib/media/hero-banner-prompt.ts) — LÀ nền của cả
    `.intro-card`, không phải thumbnail cạnh chữ (Henry 2026-09-14, vòng 5).
-   Nguồn 1536×1024 (khổ RỘNG NHẤT gpt-image-2 hỗ trợ), nhân vật ĐỨNG đủ người
-   (luôn vẽ lệch phải — xem prompt) → khung banner thấp hơn nhiều so với ảnh
-   gốc nên object-fit:cover crop dọc RẤT nhiều (ví dụ khung 984×230 chỉ còn
-   thấy ~35% chiều cao ảnh gốc). `object-position:right TOP` (không phải
-   `center`) để phần ĐẦU/vai (khớp cành thông khung góc trên-phải trong
-   prompt) luôn còn trong khung — crop mất phần CHÂN thì chấp nhận được,
-   mất ĐẦU thì không (Henry vòng 6: "cắt đầu cắt đuôi"). `z-index:0` để
-   `::after` (gradient) + chữ đè lên trên. */
-.intro-card .intro-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:right top;z-index:0;background:var(--navy)}
-/* Henry 2026-09-14 (vòng 7, "banner vẫn bị lệch" trên /app/cong-so): min-height
-   230/300 phía trên tính RA chỉ còn thấy ~44-57% chiều cao ảnh gốc ở bề rộng
-   card thực tế (đo bằng ảnh marker giả — xem scripts/_diag-banner-crop.mjs,
-   không commit) — cắt mất cả mặt trời/núi ở giữa ảnh, không chỉ riêng phần
-   chân như dự tính ở vòng 6. Bề rộng card KHÔNG đổi (bị chặn trần bởi
-   `.ws-intake{max-width:1040px}` và `minmax(0,640px)` ở dưới), nên chỉ có thể
-   sửa bằng cách tăng CHIỀU CAO card để khung nhìn thấy nhiều ảnh hơn theo
-   chiều dọc — nút "đầu" giữ nguyên vị trí (`object-position` không đổi),
-   chỉ kéo dài khung để lộ thêm phần dưới. Ngưỡng 640 cố ý xa hẳn breakpoint
-   sập-mobile 900px (xem bẫy `.ws-intake` phía trên) — điện thoại thật (ws
-   ~360-430px) không chạm ngưỡng này, giữ nguyên hiện trạng "mobile ok". */
-@container ws (min-width:640px){
-  .intro-card{min-height:420px}
-}
+   Nguồn 1536×1024 (khổ RỘNG NHẤT gpt-image-2 hỗ trợ) trong khi khung banner
+   RỘNG hơn nhiều theo TỈ LỆ (aspect ~3-4:1) — `cover` (vòng 5-8) từng phải
+   cắt dọc rất mạnh để phủ kín bề rộng, ăn mất mặt trời/núi ở giữa ảnh dù đã
+   tăng chiều cao card. Henry vòng 9: "resize nhỏ lại, chiều cao bằng banner
+   bình thường, chiều dài không quan trọng, miễn nhìn được FULL hình" — đổi
+   sang `object-fit:contain` (không cắt gì cả, ảnh tự co theo chiều CAO của
+   khung, bề rộng hiển thị hẹp lại theo đúng tỉ lệ gốc 1.5:1) + neo phải
+   (`object-position:right`) để nhân vật luôn sát mép phải. Khoảng trống bên
+   trái (nơi ảnh không phủ tới) hiện màu NỀN của chính `.intro-photo` — đặt
+   TRÙNG tông parchment với `.intro-card` (không dùng `var(--navy)` nữa) nên
+   liền mạch, không có ranh giới. Không cần chiều cao card LỚN như vòng 7 nữa
+   vì `contain` không bao giờ cắt mất phần nào — min-height quay lại mức
+   "bình thường" (xem dưới). */
+.intro-card .intro-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;object-position:right center;z-index:0;background:#F3E7C8}
 /* Gradient PHỦ từ trái (đục, tông PARCHMENT khớp `.intro-card` — không dùng
    `var(--paper)` nữa, xem dưới) sang phải (trong suốt) — đảm bảo chữ đọc được
    trên MỌI ảnh nhóm mà không cần biết trước tông màu. Dùng % thay vì px nên
@@ -899,7 +890,7 @@ font-family:inherit}
     align-items:start;
   }
   .ws-intake>#introHost{grid-area:hero}
-  .ws-intake>#introHost .intro-card{min-height:460px}
+  .ws-intake>#introHost .intro-card{min-height:300px}
   .ws-intake>#introHost .intro-card .intro-body{max-width:52%}
   .ws-intake>#introHost .intro-card .hero-pills{max-width:52%}
   .ws-intake>.ws-main-col{grid-area:main;min-width:0}
