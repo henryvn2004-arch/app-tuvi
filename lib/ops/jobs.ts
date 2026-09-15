@@ -199,10 +199,11 @@ export const JOBS: JobSpec[] = [
   { key: 'content-metrics', label: 'Kéo số liệu nội dung', source: 'vercel', everyMinutes: D,
     schedule: '12:30 VN hằng ngày', sink: 'content_metrics + channel_stats', path: '/api/cron/content-metrics',
     since: '2026-08-11' },
-  // Bậc 1 của docs/GROWTH-DATA-PLAN.md — thay Windsor.ai. Snapshot GA4 + Search
-  // Console mỗi ngày vào ext_metrics_daily; job chưa từng chạy nên `since` = ngày
-  // merge, tránh bộ dò kêu ngay "CHƯA HỀ chạy" (xem chú thích `since` ở trên).
-  { key: 'ext-metrics', label: 'Kéo GA4 + Search Console', source: 'vercel', everyMinutes: D,
+  // Bậc 1-3 của docs/GROWTH-DATA-PLAN.md — thay Windsor.ai. Snapshot GA4 +
+  // Search Console + Clarity + Meta Ads mỗi ngày vào ext_metrics_daily; job
+  // chưa từng chạy nên `since` = ngày merge, tránh bộ dò kêu ngay "CHƯA HỀ
+  // chạy" (xem chú thích `since` ở trên).
+  { key: 'ext-metrics', label: 'Kéo GA4 + GSC + Clarity + Meta Ads', source: 'vercel', everyMinutes: D,
     schedule: '05:00 VN hằng ngày', sink: 'ext_metrics_daily', path: '/api/cron/ext-metrics',
     since: '2026-09-15' },
   /*

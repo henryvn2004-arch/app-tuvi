@@ -1,6 +1,6 @@
 // app/api/cron/ext-metrics/route.ts
-// Bậc 1 của docs/GROWTH-DATA-PLAN.md — kéo GA4 + Search Console vào
-// `ext_metrics_daily` mỗi ngày (thay Windsor.ai). Xem
+// Bậc 1-3 của docs/GROWTH-DATA-PLAN.md — kéo GA4 + Search Console + Clarity +
+// Meta Ads vào `ext_metrics_daily` mỗi ngày (thay Windsor.ai). Xem
 // lib/growth/collect-ext-metrics.ts cho logic thật.
 //
 // Route đọc request.headers (auth CRON_SECRET) nên KHÔNG prerender tĩnh được
@@ -27,14 +27,20 @@ async function handle(request: NextRequest) {
   }
 
   const result = await collectExtMetrics();
-  const note = `GA4 ${result.ga4.ok ? 'ok' : 'lỗi'} (${result.ga4.detail}, ${result.ga4.rows} dòng) · GSC ${
-    result.gsc.ok ? 'ok' : 'lỗi'
-  } (${result.gsc.detail}, ${result.gsc.rows} dòng)`;
+  const sources: Array<[string, (typeof result)[keyof typeof result]]> = [
+    ['GA4', result.ga4],
+    ['GSC', result.gsc],
+    ['Clarity', result.clarity],
+    ['Meta Ads', result.metaAds],
+  ];
+  const note = sources
+    .map(([label, o]) => `${label} ${o.ok ? 'ok' : 'lỗi'} (${o.detail}, ${o.rows} dòng)`)
+    .join(' · ');
 
-  // Nguồn chưa cấu hình vẫn trả `ok:true` (best-effort, xem collectGa4/collectGsc)
-  // — chỉ báo `ok:false` khi một nguồn NÉM LỖI thật, để `withCronLog` phân biệt
-  // đúng "chưa cấu hình" (không phải sự cố) với "API lỗi" (cần xem log).
-  const ok = result.ga4.ok && result.gsc.ok;
+  // Nguồn chưa cấu hình vẫn trả `ok:true` (best-effort, xem collectGa4/collectGsc/
+  // collectClarity/collectMetaAds) — chỉ báo `ok:false` khi một nguồn NÉM LỖI
+  // thật, để `withCronLog` phân biệt đúng "chưa cấu hình" với "API lỗi".
+  const ok = sources.every(([, o]) => o.ok);
 
   return NextResponse.json(ok ? { ok, note } : { ok, error: formatCollectExtMetricsReport(result) });
 }
