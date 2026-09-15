@@ -128,6 +128,37 @@ for (const [k, v] of Object.entries(KHIA_CANH)) {
   } else {
     fail(`${k}: thiếu canhTot2/boiCanhTot2 (mọi khía phải có bộ v2 phú quý cho sắc "tốt")`);
   }
+  // trungNien (2026-09-15) — 12 khía ngoài tổng-quan PHẢI có (bối cảnh riêng
+  // cho tuổi 40-60, xem KhiaCanh.trungNien); tổng-quan CỐ Ý KHÔNG có, đã phủ
+  // đủ 5 bậc tuổi từ trước bằng cảnh chung (PR #826) — khai thêm ở đây là hai
+  // nguồn giẫm nhau, illusUrlForPhan (illus-match.js) chỉ đọc một trong hai.
+  if (k === 'tong-quan') {
+    if (v.trungNien) fail(`tong-quan: KHÔNG được khai trungNien (đã phủ đủ 5 bậc bằng cảnh chung)`);
+  } else if (!v.trungNien || typeof v.trungNien !== 'object') {
+    fail(`${k}: thiếu trungNien (12 khía ngoài tổng-quan phải có bối cảnh riêng cho trung-niên)`);
+  } else {
+    const tn = v.trungNien;
+    if (!tn.canh || typeof tn.canh !== 'object') {
+      fail(`${k}.trungNien: thiếu \`canh\` (phải có object 3 khoá tot/trung/xau)`);
+    } else {
+      for (const s of SAC3) {
+        const c = tn.canh[s];
+        if (typeof c !== 'string' || c.trim().length < 20)
+          fail(`${k}.trungNien.canh.${s}: quá ngắn hoặc thiếu — "${c}"`);
+      }
+    }
+    if (!tn.boiCanh || typeof tn.boiCanh !== 'object') {
+      fail(
+        `${k}.trungNien: thiếu \`boiCanh\` (phải có object 3 khoá tot/trung/xau, KHÔNG phải mảng)`
+      );
+    } else {
+      for (const s of SAC3) {
+        const b = tn.boiCanh[s];
+        if (typeof b !== 'string' || b.trim().length < 20)
+          fail(`${k}.trungNien.boiCanh.${s}: quá ngắn hoặc thiếu — "${b}"`);
+      }
+    }
+  }
 }
 
 // ── 3. public/tools-shared/illus-match.js: PHAN_TO_KHIA / KHIA_TO_CUNG / VARIANT_COUNT ──
@@ -144,11 +175,26 @@ function extractVar(src, name) {
 const PHAN_TO_KHIA = extractVar(matchSrc, 'PHAN_TO_KHIA');
 const KHIA_TO_CUNG = extractVar(matchSrc, 'KHIA_TO_CUNG');
 const VARIANT_COUNT = extractVar(matchSrc, 'VARIANT_COUNT');
-if (!PHAN_TO_KHIA || !KHIA_TO_CUNG || !VARIANT_COUNT) {
+const TRUNG_NIEN_VARIANT_COUNT = extractVar(matchSrc, 'TRUNG_NIEN_VARIANT_COUNT');
+if (!PHAN_TO_KHIA || !KHIA_TO_CUNG || !VARIANT_COUNT || !TRUNG_NIEN_VARIANT_COUNT) {
   console.error(
-    '❌ check-illus: không đọc được PHAN_TO_KHIA/KHIA_TO_CUNG/VARIANT_COUNT từ illus-match.js — bố cục đổi?'
+    '❌ check-illus: không đọc được PHAN_TO_KHIA/KHIA_TO_CUNG/VARIANT_COUNT/TRUNG_NIEN_VARIANT_COUNT từ illus-match.js — bố cục đổi?'
   );
   process.exit(1);
+}
+
+// TRUNG_NIEN_VARIANT_COUNT (illus-match.js) phải đúng bộ khoá với "khía có
+// khai trungNien" (illus-prompt.ts) — trừ tong-quan (xem lý do ở mục 2).
+// Lệch là chọn nhầm số biến thể: đọc `VARIANT_COUNT` mặc định (2) cho khía
+// chỉ mới vẽ 1 tấm trung-niên ⇒ 50% lượt trỏ vào ảnh chưa tồn tại.
+{
+  const tnKeysExpected = KHIA_KEYS.filter((k) => k !== 'tong-quan').sort();
+  const tnKeysActual = Object.keys(TRUNG_NIEN_VARIANT_COUNT).sort();
+  if (JSON.stringify(tnKeysExpected) !== JSON.stringify(tnKeysActual)) {
+    fail(
+      `TRUNG_NIEN_VARIANT_COUNT (illus-match.js) và KHIA_CANH.trungNien (illus-prompt.ts) lệch bộ khoá:\n   chỉ ở TRUNG_NIEN_VARIANT_COUNT: ${tnKeysActual.filter((k) => !tnKeysExpected.includes(k)).join(', ') || '(không)'}\n   chỉ ở KHIA_CANH.trungNien: ${tnKeysExpected.filter((k) => !tnKeysActual.includes(k)).join(', ') || '(không)'}`
+    );
+  }
 }
 
 // PHAN_TO_KHIA (2..13) → KHIA_TO_CUNG phải khớp CHÍNH XÁC CUNG_BY_PHAN (2..13)

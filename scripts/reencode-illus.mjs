@@ -18,7 +18,8 @@
  *   SUPABASE_URL=... SUPABASE_SERVICE_KEY=... node scripts/reencode-illus.mjs
  *   node scripts/reencode-illus.mjs --dry-run              # chỉ liệt kê, không ghi
  *   node scripts/reencode-illus.mjs --local .illus          # thêm cả ảnh local mới gen (upload cả .png lẫn .webp)
- *   node scripts/reencode-illus.mjs --only dien-trach        # lọc theo tiền tố id (test trước khi chạy hết)
+ *   node scripts/reencode-illus.mjs --only dien-trach        # lọc id CHỨA đoạn này (test trước khi chạy hết,
+ *                                                            # cũng dùng để chọn riêng một lứa vd "--only trung-nien")
  */
 import { readFileSync, readdirSync, existsSync } from 'fs';
 import { join, basename } from 'path';
@@ -126,7 +127,7 @@ async function uploadLocal(dir) {
     loi = 0;
   for (const f of files) {
     const id = basename(f, '.png');
-    if (ONLY && !id.startsWith(ONLY)) continue;
+    if (ONLY && !id.includes(ONLY)) continue;
     try {
       const pngBuf = readFileSync(join(dir, f));
       const { webp, width, height } = await toWebpSameSize(pngBuf);
@@ -162,7 +163,7 @@ async function uploadLocal(dir) {
 
 async function main() {
   const ids = await listAllPng();
-  const filtered = ONLY ? ids.filter((id) => id.startsWith(ONLY)) : ids;
+  const filtered = ONLY ? ids.filter((id) => id.includes(ONLY)) : ids;
   console.log(
     `${filtered.length}/${ids.length} ảnh trong Storage${ONLY ? ` (lọc "${ONLY}")` : ''}${DRY ? ' · DRY-RUN' : ''}`
   );

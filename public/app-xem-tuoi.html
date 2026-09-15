@@ -41,6 +41,16 @@
 .sec-n{width:26px;height:26px;flex:0 0 auto;border-radius:7px;background:var(--navy);color:var(--gold);font-family:var(--serif);font-size:13px;display:flex;align-items:center;justify-content:center;font-weight:600}
 .sec-h h3{font-family:var(--serif);font-size:18px;font-weight:600}
 .card{background:var(--white);border:1px solid var(--line);border-radius:11px;padding:6px 17px;box-shadow:var(--shadow)}
+/* Banner minh hoạ đầu mỗi phần + bìa chương (illus-match.js, cùng mẫu đã
+   chốt ở app-luan-giai.html) — `aspect-ratio` giữ chỗ ngay từ lần vẽ đầu
+   (dựng tĩnh trong chuỗi HTML trước khi gán innerHTML) nên không gây CLS.
+   Ảnh không tồn tại (khía/sắc/giới chưa vẽ) thì `onerror` gỡ hẳn khối —
+   không hiện khung vỡ. Câu hook đứng box RIÊNG ngay dưới banner, không đè
+   lên ảnh — xem illusFigFor()/renderLuanGiaiParas(). */
+.lg-illus{position:relative;margin:0 0 10px;border-radius:10px;overflow:hidden;aspect-ratio:1536/1024;background:var(--paper-2,#f2ede4)}
+.lg-illus img{width:100%;height:100%;object-fit:cover;display:block}
+.lg-hookbox{margin:-4px 0 10px;background:var(--white);border-radius:16px;padding:14px 18px 15px;box-shadow:0 3px 10px rgba(6,26,46,.08)}
+.lg-hookbox p{font-family:var(--serif);font-weight:700;font-size:15.5px;line-height:1.44;color:var(--heading);margin:0}
 .compat-radar{padding:14px 0 4px;border-bottom:1px solid var(--line)}
 .cr-tai{margin-top:10px;text-align:center}
 .cr-cap{margin-top:6px;font-size:11.5px;line-height:1.5;color:var(--text-lt);text-align:center}
@@ -176,6 +186,7 @@
 <script src="/tuvi-ansao-engine.js"></script>
 <script src="/tuong-hop.js?v=1"></script>
 <script src="/tuong-hop-lam-an.js?v=1"></script>
+<script src="/tools-shared/illus-match.js?v=2"></script>
 <script src="/tools-shared/hook-charts.js?v=2"></script>
 <script src="/tools-shared/fbcard-topic.js?v=2"></script>
 <script src="/poster.js?v=5"></script>
@@ -454,11 +465,13 @@ function renderCompat(r,nameA,nameB,fdA,fdB){
   // 9 phần (0=Tổng quan gộp 8 chiều, 1-8=từng chiều riêng) — port khung PHAN_LABELS
   // của xem-tuoi.html/xem-lam-an.html, mỗi phần có slot claude-content cho AI + nút hỏi rail.
   var S=[];
+  var gioiVe=fdA&&fdA.gioitinh;
   var overviewBody=compatRadarHtml(r)+r.items.map(factorRowHtml).join('');
-  S.push(sec(0,PHAN_LABELS[0],'','<div class="card">'+overviewBody+'</div>'+secLock(0)+'<div class="claude-content" id="claude-content-0" style="display:none"></div>'+ask('Luận tổng quan mức độ hòa hợp của '+nameA+' và '+nameB)));
+  S.push(sec(0,PHAN_LABELS[0],'',illusBannerHtml(0,r,gioiVe,PHAN_LABELS[0])+'<div class="card">'+overviewBody+'</div>'+secLock(0)+'<div class="claude-content" id="claude-content-0" style="display:none"></div>'+ask('Luận tổng quan mức độ hòa hợp của '+nameA+' và '+nameB)));
   r.items.forEach(function(m,i){
     var idx=i+1;
-    S.push(sec(idx,PHAN_LABELS[idx]||('Phần '+idx),'','<div class="card">'+factorRowHtml(m)+'</div>'+secLock(idx)+'<div class="claude-content" id="claude-content-'+idx+'" style="display:none"></div>'+ask('Luận sâu chiều "'+m.label+'" giữa '+nameA+' và '+nameB)));
+    var lbl=PHAN_LABELS[idx]||('Phần '+idx);
+    S.push(sec(idx,lbl,'',illusBannerHtml(idx,r,gioiVe,lbl)+'<div class="card">'+factorRowHtml(m)+'</div>'+secLock(idx)+'<div class="claude-content" id="claude-content-'+idx+'" style="display:none"></div>'+ask('Luận sâu chiều "'+m.label+'" giữa '+nameA+' và '+nameB)));
   });
   document.getElementById('xtBody').innerHTML=pairH+S.join('');
   if(window.mountIcons) window.mountIcons(document.getElementById('xtBody')); // ô giữa 2 lá số mang span [data-icon]
@@ -472,6 +485,23 @@ function renderCompat(r,nameA,nameB,fdA,fdB){
     TuviPaywall.fillPriceSlots(document.getElementById('xtBody'));
     TuviPaywall.wireSectionLocks(document.getElementById('xtBody'), initiateXemTuoiChuyenSau);
   }
+}
+// Banner minh hoạ đầu mỗi phần (illus-match.js) — Xem Tuổi cần hàm RIÊNG
+// (IllusMatch.illusUrlForXemTuoi) vì sắc thái đọc ĐIỂM SỐ hai người đã hiện
+// trên màn hình (r.total/item.score), không tra ls.cungScores như luan-giai.
+// `gioi` luôn theo giới NGƯỜI A (chính chủ mở tool) — Xem Tuổi không có
+// khái niệm "giới của cặp". Thiếu bất kỳ tag nào (điểm chưa có, giới thiếu,
+// ảnh khía đó chưa vẽ) → trả rỗng, không dựng khung — cùng luật "đọc hụt
+// thì để … và từ chối chạy" của illusBannerHtml (app-luan-giai.html).
+function illusBannerHtml(idx,r,gioi,label){
+  if(!window.IllusMatch) return '';
+  var diem=idx===0?r.total:(r.items[idx-1]&&r.items[idx-1].score);
+  var seedStr=String(r.lsA.canChiNam||'')+'|'+String(r.lsB.canChiNam||'');
+  var u=IllusMatch.illusUrlForXemTuoi(idx,MODE_KEY,gioi,diem,seedStr);
+  if(!u) return '';
+  var lazyAttr=idx===0?'':' loading="lazy"';
+  return '<figure class="lg-illus"><img src="'+u.url+'" alt="Minh hoạ '+esc(label)+'"'+lazyAttr+
+    ' onerror="this.closest(\'.lg-illus\').remove()"></figure>';
 }
 function sec(n,title,tag,inner){ return '<section class="sec" id="sec-'+n+'"><div class="sec-h"><div class="sec-n">'+(n+1)+'</div><h3>'+esc(title)+'</h3>'+(tag?'<span class="tag">'+esc(tag)+'</span>':'')+'</div>'+inner+'</section>'; }
 function ask(t){ return '<div class="ask" data-ask="'+esc(t)+'">✦ Hỏi trợ lý: "'+esc(t)+'"</div>'; }
@@ -626,7 +656,7 @@ if(MODE_KEY==='xem-tuoi'){(function () {
       for (var idx = 0; idx < PHAN_LABELS.length; idx++) {
         var box = document.getElementById('claude-content-' + idx);
         var text = data.texts[idx];
-        if (box && text) { box.style.display = 'block'; box.innerHTML = renderLuanGiaiParas(text); }
+        if (box && text) { box.style.display = 'block'; box.innerHTML = renderLuanGiaiParas(text,illusFigFor(box)); }
       }
       _paintSecLocksXt(false);
       document.getElementById('birthPanel').style.display = 'none';
@@ -669,7 +699,12 @@ var _xtPace=(window.AiLoadingSteps&&AiLoadingSteps.pacer)?AiLoadingSteps.pacer()
 // in đậm — sửa luôn ở đây vì nếu không, đoạn thường sẽ hiện dấu ** trần ngay
 // cạnh thẻ card đã tô màu đẹp, rất lệch mắt.
 var HOOK_TAG_CLASS={ 'TỐT':'fb-tot', 'CẢNH BÁO':'fb-canhbao', 'TRUNG TÍNH':'fb-trungtinh' };
-function renderLuanGiaiParas(text){
+// Bìa chương (cùng mẫu app-luan-giai.html) — câu hook ĐẦU TIÊN của phần đứng
+// box riêng ngay dưới banner (illusFig, xem illusFigFor()) thay vì thẻ
+// .fb-card giữa văn bản. Chỉ áp khi có banner sống (bannerOk); hook thứ 2 trở
+// đi vẫn rơi về .fb-card như cũ — một banner chỉ có một câu hook đứng cạnh.
+function renderLuanGiaiParas(text,illusFig){
+  var hookUsed=false;
   function inline(s){ return s.replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/\*(.+?)\*/g,'<em>$1</em>'); }
   var out='', pendingLead='';
   function flushPending(){ if(pendingLead){ out+='<p>'+pendingLead+'</p>'; pendingLead=''; } }
@@ -678,7 +713,13 @@ function renderLuanGiaiParas(text){
     if(m){
       flushPending();
       var cls=HOOK_TAG_CLASS[m[1]]||'fb-trungtinh';
-      out+=window.FbCardTopic.cardHtml(cls,window.FbCardTopic.extractTopic(p.trim()),'“'+esc(m[2].trim())+'”');
+      var hookHtml='“'+esc(m[2].trim())+'”';
+      if(!hookUsed&&illusFig){
+        illusFig.insertAdjacentHTML('afterend','<div class="lg-hookbox"><p>'+hookHtml+'</p></div>');
+        hookUsed=true;
+      }else{
+        out+=window.FbCardTopic.cardHtml(cls,window.FbCardTopic.extractTopic(p.trim()),hookHtml);
+      }
       pendingLead=inline(m[3]).trim();
       return;
     }
@@ -687,6 +728,18 @@ function renderLuanGiaiParas(text){
   });
   flushPending();
   return out;
+}
+// `.lg-illus` là sibling của `.card` (chứa `box`) trong cùng `.sec` — xem
+// sec()/renderCompat(). Dọn box hook cũ trước khi render lại (gọi lại được:
+// vừa luận xong → mở khoá lại). Trả về figure CHỈ khi còn <img> sống (ảnh
+// lỗi thì onerror đã gỡ khung).
+function illusFigFor(box){
+  var sec=box&&box.closest('.sec');
+  var fig=sec?sec.querySelector('.lg-illus'):null;
+  var prev=sec?sec.querySelector('.lg-hookbox'):null;
+  if(prev)prev.remove();
+  if(!fig)return null;
+  return fig.querySelector('img')?fig:null;
 }
 
 // Xây prompt cho 1 phần (idx 0=Tổng Quan, 1-8=từng chiều) — port nguyên từ
@@ -848,7 +901,7 @@ async function _loadNextPhanAI(){
     _xemTuoiStore[idx]=text;
     _xtPace&&_xtPace.end();   // chỉ ghi nhịp ở nhánh THÀNH CÔNG
     doneWait();
-    if(box)box.innerHTML=renderLuanGiaiParas(text);
+    if(box)box.innerHTML=renderLuanGiaiParas(text,illusFigFor(box));
   }catch(e){
     doneWait();
     if(box)box.innerHTML='<div class="laso-error">Lỗi khi luận giải phần '+(idx+1)+': '+esc(e.message)+' <button class="btn" onclick="window._xtRetryPhan()">↻ Thử lại</button></div>';
