@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-294 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+295 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 **Bốn file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
 ```bash
@@ -11,7 +11,7 @@ sed -n '120,190p' docs/nhat-ky/2026-08.md    # đọc đúng đoạn, đừng ca
 
 | file | số mục | dung lượng |
 |---|---:|---:|
-| `2026-09.md` | 129 | 543,910 B |
+| `2026-09.md` | 130 | 548,159 B |
 | `2026-08.md` | 148 | 1,024,027 B |
 | `2026-07.md` | 12 | 154,531 B |
 | `track-cu.md` | 5 | 89,354 B |
@@ -25,6 +25,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
+| 1 | 2026-09 | `2026-09.md` | 🤖 Autopilot — lớp "khởi động" trước khi tự áp giá thật lần đầu — Pha 5 (cuối) của plan "marketing kiểu Shopee" |
 | 1 | 2026-09 | `2026-09.md` | 📅 Lịch Marketing 59 Ngày — đẩy Tương Hợp khớp nhịp cron viral-seo-pages — Pha 4 của plan "marketing kiểu Shopee" |
 | 1 | 2026-09 | `2026-09.md` | 📊 Bậc 4-6 của Growth Data Plan — engine CAC/CPA/ROAS theo campaign + findings + nối Telegram/anomaly-alerts |
 | 1 | 2026-09 | `2026-09.md` | 📧 Pha 5 productize luận giải — "đời sống sau báo cáo": nút "Gửi lại PDF" ở Lịch Sử |
