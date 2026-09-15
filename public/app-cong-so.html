@@ -246,7 +246,7 @@ window.SHELL_INTRO={key:'cong-so'};</script>
 <script src="/poster.js?v=4"></script>
 <script src="/auth.js?v=2"></script>
   <script src="/nav.js?v=29" data-icons-only></script>
-<script src="/shell.js?v=91"></script>
+<script src="/shell.js?v=92"></script>
 <script>
 var _ho=null,_birth=null;
 TuviForm.render('tuviFormHost', {mode:'compact', gioitinh:'nam'});
@@ -288,7 +288,7 @@ function congSoIllusHtml(fd){
       canNam:conv.canNam,chiNam:conv.chiNam,gioIdx:fd.gioIdx,gioitinh:fd.gioitinh,namXem:fd.namXem});
     var r=IllusMatch.illusUrlForTongQuan(ls,fd.gioitinh,'truong-thanh');
     if(!r) return '';
-    return '<figure class="lg-illus"><img src="'+r.url+'" alt="" loading="eager"'+
+    return '<figure class="lg-illus"><img src="'+r.url+'" data-print-src="'+r.printUrl+'" alt="" loading="eager"'+
       ' onerror="this.closest(\'.lg-illus\').remove()"></figure>';
   }catch(e){ console.error('congSoIllusHtml', e); return ''; }
 }

@@ -322,7 +322,7 @@ window.SHELL_INTRO={key:'chu-trinh-cuoc-doi'};</script>
 <script src="/tools-shared/hook-facts.js?v=1"></script>
 <script src="/tools-shared/hook-layer.js?v=2"></script>
   <script src="/nav.js?v=29" data-icons-only></script>
-<script src="/shell.js?v=91"></script>
+<script src="/shell.js?v=92"></script>
 <script src="/tools-shared/ai-loading-steps.js?v=10"></script>
 <script src="/tools-shared/phan-pool.js?v=1"></script>
 <script src="/tools-shared/report-delivery.js?v=1"></script>
@@ -768,7 +768,7 @@ function illusBannerHtml(p,ls,label){
   if(p<2||p>10) return '';
   var r=IllusMatch.illusUrlForDaiVan(ls,p-2,_gioitinh);
   if(!r) return '';
-  return '<figure class="lg-illus"><img src="'+r.url+'" alt="Minh hoạ '+esc(label)+'" loading="lazy"'+
+  return '<figure class="lg-illus"><img src="'+r.url+'" data-print-src="'+r.printUrl+'" alt="Minh hoạ '+esc(label)+'" loading="lazy"'+
     ' onerror="this.closest(\'.lg-illus\').remove()"></figure>';
 }
 function buildPhanSection(p,ep,label,ls,locked){
