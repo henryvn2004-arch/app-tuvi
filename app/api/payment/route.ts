@@ -5,8 +5,7 @@ import crypto from 'crypto';
 // POST /api/payment?action=topup    { packageId, userId }
 // POST /api/payment?action=capture  { orderId, slug, userId }
 // POST /api/payment?action=deduct   (Authorization: Bearer <token>) { amount, toolType, slug, description }
-// 30s: đủ cho admin-payos-reconcile gọi payOS theo lô (xem handleAdminPayosReconcile).
-export const maxDuration = 30;
+export const maxDuration = 15;
 
 import { NextRequest } from 'next/server';
 import { ok, err, options, parseBody } from '@/lib/cors';
@@ -742,71 +741,6 @@ async function handleCreateBank(body: Record<string, unknown>): Promise<Response
     return ok({ orderCode, checkoutUrl: d.checkoutUrl, accountNumber: d.accountNumber,
       accountName: d.accountName, bin: d.bin, bankName, bankCode, amountVND,
       credits, label, description });
-  } catch (e: unknown) { return err((e as Error).message); }
-}
-
-// ── GET: admin-payos-reconcile ───────────────────────────────
-// Sự cố checksum key (2026-09) làm webhook rớt hàng loạt — không thể suy
-// "đơn nào từng được payOS trả tiền thật" từ log nội bộ (dòng log invalid
-// signature bắn TRƯỚC khi parse orderCode, xem app/api/bank-webhook/route.ts).
-// Nguồn thật duy nhất là chính payOS: gọi "Get Payment Link Information" cho
-// từng đơn `bank_orders.status='pending'` và so `data.status`. READ-ONLY —
-// route này KHÔNG tự chốt; đơn nào payOS báo `PAID` thì admin xem rồi chốt
-// tay từng cái qua RPC `bank_settle_topup` (cùng cửa webhook vẫn dùng).
-async function payOSGetOrder(orderCode: string): Promise<{ status: string; amountPaid: number } | null> {
-  try {
-    const res = await fetch(
-      `https://api-merchant.payos.vn/v2/payment-requests/${encodeURIComponent(orderCode)}`,
-      {
-        headers: {
-          'x-client-id': process.env.PAYOS_CLIENT_ID!,
-          'x-api-key':   process.env.PAYOS_API_KEY!,
-        },
-        cache: 'no-store',
-      },
-    );
-    const j = await res.json();
-    if (j.code !== '00' || !j.data) return null;
-    return { status: String(j.data.status || ''), amountPaid: Number(j.data.amountPaid || 0) };
-  } catch {
-    return null;
-  }
-}
-
-async function handleAdminPayosReconcile(request: NextRequest): Promise<Response> {
-  const token = (request.headers.get('Authorization') || '').replace('Bearer ', '').trim();
-  const admin = await verifyAdmin(token);
-  if (!admin) return err('Unauthorized — admin only', 403);
-
-  try {
-    const res = await fetch(
-      `${SUPABASE_URL}/rest/v1/bank_orders?status=eq.pending` +
-        `&select=order_code,user_id,amount_vnd,credits,label,created_at&order=created_at.desc&limit=200`,
-      { cache: 'no-store', headers: SB_HEADERS },
-    );
-    const pending: {
-      order_code: string; user_id: string; amount_vnd: number;
-      credits: number; label: string; created_at: string;
-    }[] = res.ok ? await res.json() : [];
-
-    // Lô nhỏ — 200 request đồng thời dễ ăn rate-limit/timeout phía payOS.
-    const BATCH = 10;
-    const byCode = new Map<string, { status: string | null; amountPaid: number }>();
-    for (let i = 0; i < pending.length; i += BATCH) {
-      const slice = pending.slice(i, i + BATCH);
-      const results = await Promise.all(slice.map((o) => payOSGetOrder(o.order_code)));
-      slice.forEach((o, idx) => {
-        const r = results[idx];
-        byCode.set(o.order_code, { status: r?.status ?? null, amountPaid: r?.amountPaid ?? 0 });
-      });
-    }
-
-    const withStatus = pending.map((o) => ({ ...o, payos: byCode.get(o.order_code) ?? null }));
-    // ⚠️ payOS trả PAID nhưng site vẫn 'pending' → đúng lỗi vừa vá (webhook rớt).
-    const mismatches = withStatus.filter((o) => o.payos?.status === 'PAID');
-    const lookupFailed = withStatus.filter((o) => o.payos == null).length;
-
-    return ok({ totalPending: pending.length, lookupFailed, mismatches });
   } catch (e: unknown) { return err((e as Error).message); }
 }
 
@@ -1589,7 +1523,6 @@ export async function GET(request: NextRequest) {
   if (action === 'admin-social-proof') return handleAdminSocialProofList(request, searchParams);
   if (action === 'admin-backlinks') return handleAdminBacklinks(request);
   if (action === 'check-bank')  return handleCheckBank(searchParams);
-  if (action === 'admin-payos-reconcile') return handleAdminPayosReconcile(request);
   return err('Invalid action.', 400);
 }
 
