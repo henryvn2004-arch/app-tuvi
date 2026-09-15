@@ -183,7 +183,21 @@ export async function chayCong2(runViralLoop, spec, opts = {}) {
       return { pass: true, spec };
     }
     console.log('\n── CỔNG 2 · CHẾ ĐỘ CẢNH BÁO (không chặn) ────');
-    const kq = await runViralLoop(spec, { skipAudience: false, gate: opts.gate, maxRounds: 1 });
+    // ⚠️ TRY/CATCH BẮT BUỘC — đây là chỗ đã cắn thật (07/09, 24/24 clip trượt).
+    // Nhánh trên chỉ soi được lúc THIẾU khoá; nó không soi được lúc CÓ khoá mà
+    // lượt gọi THẬT SỰ hỏng (Gemini hết quota, backup Anthropic/Kimi thiếu
+    // khoá trong Actions) — `runViralLoop` ném lỗi thẳng ra ngoài, và trước bản
+    // vá này không ai bắt, nên "KHÔNG CHẶN" (đúng lời chú thích phía trên) hoá
+    // ra CHẶN CỨNG: cả tiến trình dựng clip của tool đó chết theo.
+    let kq;
+    try {
+      kq = await runViralLoop(spec, { skipAudience: false, gate: opts.gate, maxRounds: 1 });
+    } catch (e) {
+      console.log(
+        `\n⚠️  Hội đồng KHÔNG CHẤM ĐƯỢC (${e.message}) — không chặn (clip demo công cụ).`
+      );
+      return { pass: true, spec, canhBao: true };
+    }
     inKetQuaVong(kq);
     if (!kq.pass) {
       console.log('\n⚠️  HỘI ĐỒNG CHẤM TRƯỢT — nhưng KHÔNG chặn (clip demo công cụ).');
@@ -202,7 +216,22 @@ export async function chayCong2(runViralLoop, spec, opts = {}) {
   }
 
   console.log('\n── CỔNG 2 · hội đồng người xem ──────────────');
-  const kq = await runViralLoop(spec, { skipAudience: false, gate: opts.gate });
+  // Cùng lý do với nhánh `chiCanhBao` ở trên: có khoá không có nghĩa lượt gọi
+  // sẽ THÀNH — nhà cung cấp hết quota giữa chừng thì `runViralLoop` ném lỗi,
+  // và không bắt ở đây thì đúng cái phân biệt `reason: 'config'` (đầu hàm) mà
+  // `gen-insight.mjs` đang dựa vào để KHÔNG báo "kịch bản dở" sẽ bị bỏ qua —
+  // lỗi văng thẳng ra ngoài, crash tiến trình (đo được 07/09: cả 6 clip insight
+  // trượt vì đúng lỗi này).
+  let kq;
+  try {
+    kq = await runViralLoop(spec, { skipAudience: false, gate: opts.gate });
+  } catch (e) {
+    console.error(`   ❌ Hội đồng KHÔNG CHẤM ĐƯỢC: ${e.message}`);
+    console.error(
+      '   Đây là lỗi NHÀ CUNG CẤP LLM (quota/khoá) giữa chừng, không phải kịch bản dở.'
+    );
+    return { pass: false, spec, reason: 'config' };
+  }
   inKetQuaVong(kq);
 
   if (!kq.pass) {
