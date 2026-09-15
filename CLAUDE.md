@@ -330,6 +330,10 @@ Mỗi luật dưới đây sinh ra từ một lần cắn thật. Cột cuối l
 - **Telegram channel**: thêm bot làm admin + đặt `TELEGRAM_CHANNEL_ID` rồi mới
   thêm `"telegram"` vào `social.channels`.
 - **Messenger** im lặng từ 27/06 — kiểm Page đã publish + có username chưa.
+- **Meta Ads token thiếu quyền `ads_read` thật** — `/insights` trả `400 #100
+  "Tried accessing nonexisting field"` dù `currency` đọc được (token/account
+  ID đúng dạng). Business Settings → System Users: GÁN ad account cho System
+  User trước, generate token SAU. Xem `lib/analytics/meta-ads.ts`.
 - **`brand_voice_docs` trên DB vẫn là bản CŨ** — chạy `node scripts/load-brand-voice.mjs`
   ở máy có `OPENAI_API_KEY` (container phiên không có).
 - **`ANTHROPIC_API_KEY` không đọc được trong container** (`GEMINI_API_KEY`/
