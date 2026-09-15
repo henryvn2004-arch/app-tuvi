@@ -163,6 +163,7 @@ Mỗi luật dưới đây sinh ra từ một lần cắn thật. Cột cuối l
 | **Chốt thanh toán đặt TRƯỚC bước tính/gọi model** | Đặt sau là thu tiền rồi mới từ chối |
 | **Hoàn tiền qua RPC `add_credits`**, không sửa thẳng `user_credits.balance` | Sổ giao dịch phải giải thích được số dư |
 | **Giá Lượng: client KHÔNG chép số** — đọc hụt thì để `…` và **từ chối chạy** | Số CŨ nguy hơn ô đang tải: ô đang tải thì người ta chờ, số cũ thì người ta tin |
+| **Khuyến mãi giá (`sale_credits`) chỉ có hiệu lực khi sửa CẢ `lib/billing/pricing.ts::effectivePrice()` LẪN `tool-prices.js::_saleActive()`** | Sửa một bên là hiện giá giảm nhưng trừ giá gốc (hoặc ngược lại). `docs/luat/tien.md` |
 | **Trần/cầu dao hướng fail phải ngược nhau tuỳ vai** | Gác NGÂN SÁCH → fail-**open**; PHÁT tiền → fail-**closed** |
 | **Chống trùng: dòng SỔ đi TRƯỚC làm mutex, cộng tiền SAU** — mutex chỉ có thật khi có UNIQUE đỡ bên dưới | `ignore-duplicates` không có UNIQUE là vô hiệu IM LẶNG ⇒ ví tăng hai lần, sổ một dòng |
 | **Chuỗi khai với cổng thanh toán và chuỗi bảo khách ghi phải là MỘT** — server quyết, client chỉ hiện lại | Hai nguồn cho một đơn ⇒ khách gõ đúng theo màn hình mà tiền không ai nhận |

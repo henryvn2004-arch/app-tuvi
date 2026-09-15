@@ -38,8 +38,9 @@ window.ToolPrices = (function () {
   // liệu cụt trong tối đa 2 phút mà không có gì báo. (v2: thêm need_tags/question
   // · v3: thêm app_path/page_path + bảng tool_groups · v4: thêm parts/credits_per_part
   // — giá theo phần cho tool chia nhỏ như laso · v5: thêm home_rank — thứ tự
-  // lưới springboard /app, xem public/app-home.html)
-  var CACHE_KEY = 'tvmb_prices_v5';
+  // lưới springboard /app, xem public/app-home.html · v6: thêm sale_credits/
+  // sale_starts_at/sale_ends_at — khuyến mãi có thời hạn, xem ghi chú ở `get()`)
+  var CACHE_KEY = 'tvmb_prices_v6';
   var TTL_MS = 120000; // 2 phút — đủ để đi hết một phiên duyệt, đủ ngắn để admin đổi giá thấy ngay
 
   // Bản đọc được LẦN GẦN NHẤT, sống qua phiên (localStorage, khác cache 2 phút
@@ -80,6 +81,24 @@ window.ToolPrices = (function () {
   }
 
   /**
+   * Khuyến mãi của một dòng `tool_pricing` có đang chạy NGAY LÚC NÀY không —
+   * cùng luật với `effectivePrice()` phía server (lib/billing/pricing.ts):
+   * `sale_credits` phải rẻ hơn `credits`, và trong khung `sale_starts_at`..
+   * `sale_ends_at` (thiếu mốc nào thì mốc đó coi như không giới hạn). CHỈ dùng
+   * để HIỂN THỊ — số Lượng bị trừ thật do server tự đọc lại, không tin số này.
+   */
+  function _saleActive(row) {
+    if (!row) return false;
+    var sale = Number(row.sale_credits);
+    var full = Number(row.credits);
+    if (!isFinite(sale) || !isFinite(full) || sale >= full) return false;
+    var now = Date.now();
+    if (row.sale_starts_at && new Date(row.sale_starts_at).getTime() > now) return false;
+    if (row.sale_ends_at && new Date(row.sale_ends_at).getTime() <= now) return false;
+    return true;
+  }
+
+  /**
    * Trả Promise<{tools, packages} | null>. `null` = KHÔNG đọc được; nơi gọi
    * phải xử lý như "chưa biết giá", tuyệt đối không thay bằng số phỏng đoán.
    */
@@ -97,7 +116,7 @@ window.ToolPrices = (function () {
       // Lấy TRỌN dòng: trang Công Cụ, dashboard và sidebar đều cần nhãn / icon /
       // nhóm / đường dẫn. Một lượt fetch cho mọi nơi thay vì mỗi nơi một lượt.
       _get(
-        'tool_pricing?enabled=eq.true&select=tool_id,label,credits,icon,category,sort_order,is_free,description,need_tags,question,app_path,page_path,parts,credits_per_part,home_rank&order=sort_order.asc'
+        'tool_pricing?enabled=eq.true&select=tool_id,label,credits,icon,category,sort_order,is_free,description,need_tags,question,app_path,page_path,parts,credits_per_part,home_rank,sale_credits,sale_starts_at,sale_ends_at&order=sort_order.asc'
       ),
       _get('credit_packages?enabled=eq.true&select=package_id,credits,amount_vnd,label&order=sort_order.asc'),
       _get('tool_groups?enabled=eq.true&select=key,title,subtitle,icon,sort_order,default_categories&order=sort_order.asc'),
@@ -110,7 +129,9 @@ window.ToolPrices = (function () {
         if (!Array.isArray(toolRows)) return null;
         var tools = {};
         toolRows.forEach(function (x) {
-          if (x && typeof x.tool_id === 'string') tools[x.tool_id] = Number(x.credits);
+          if (x && typeof x.tool_id === 'string') {
+            tools[x.tool_id] = _saleActive(x) ? Number(x.sale_credits) : Number(x.credits);
+          }
         });
         var packages = Array.isArray(pkgRows)
           ? pkgRows
@@ -174,7 +195,21 @@ window.ToolPrices = (function () {
     if (!row) return null;
     if (row.is_free) return 'Miễn phí';
     var v = Number(row.credits);
-    return isFinite(v) && v > 0 ? v + ' Lượng mỗi lượt' : null;
+    if (!isFinite(v) || v <= 0) return null;
+    if (_saleActive(row)) return Number(row.sale_credits) + ' Lượng mỗi lượt (giảm từ ' + v + ')';
+    return v + ' Lượng mỗi lượt';
+  }
+
+  /**
+   * Thông tin khuyến mãi ĐANG CHẠY của một tool, hoặc `null` nếu không có KM
+   * (hết hạn/chưa tới/chưa đọc được). Dùng cho badge/đếm ngược ở trang tool —
+   * `original`/`sale` là số Lượng, `endsAt` là chuỗi ISO hoặc `null` (KM không
+   * có hạn tự tắt, xem `_saleActive`).
+   */
+  function saleInfo(toolId) {
+    var row = _rowFor(toolId);
+    if (!row || !_saleActive(row)) return null;
+    return { original: Number(row.credits), sale: Number(row.sale_credits), endsAt: row.sale_ends_at || null };
   }
 
   /**
@@ -399,6 +434,7 @@ window.ToolPrices = (function () {
     packages: packages,
     fillSlots: fillSlots,
     partPrice: partPrice,
+    saleInfo: saleInfo,
     vndPerCredit: vndPerCredit,
     vndLabel: vndLabel,
     quoteCustomVnd: quoteCustomVnd,

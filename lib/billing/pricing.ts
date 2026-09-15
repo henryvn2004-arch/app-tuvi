@@ -16,6 +16,9 @@ interface PriceRow {
   enabled: boolean;
   parts: number;
   creditsPerPart: number | null;
+  saleCredits: number | null;
+  saleStartsAt: string | null;
+  saleEndsAt: string | null;
 }
 
 const TTL_MS = 60_000;
@@ -29,7 +32,7 @@ async function loadPricing(): Promise<Record<string, PriceRow>> {
   if (SUPABASE_URL && SUPABASE_KEY) {
     try {
       const res = await fetch(
-        `${SUPABASE_URL}/rest/v1/tool_pricing?select=tool_id,credits,enabled,parts,credits_per_part`,
+        `${SUPABASE_URL}/rest/v1/tool_pricing?select=tool_id,credits,enabled,parts,credits_per_part,sale_credits,sale_starts_at,sale_ends_at`,
         { cache: 'no-store',
           headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` },
         });
@@ -37,6 +40,7 @@ async function loadPricing(): Promise<Record<string, PriceRow>> {
         const rows = (await res.json()) as {
           tool_id: string; credits: number; enabled: boolean;
           parts: number | null; credits_per_part: number | null;
+          sale_credits: number | null; sale_starts_at: string | null; sale_ends_at: string | null;
         }[];
         for (const r of rows) {
           if (r && typeof r.tool_id === 'string') {
@@ -45,6 +49,9 @@ async function loadPricing(): Promise<Record<string, PriceRow>> {
               enabled: r.enabled !== false,
               parts: Number(r.parts) || 1,
               creditsPerPart: r.credits_per_part != null ? Number(r.credits_per_part) : null,
+              saleCredits: r.sale_credits != null ? Number(r.sale_credits) : null,
+              saleStartsAt: r.sale_starts_at || null,
+              saleEndsAt: r.sale_ends_at || null,
             };
           }
         }
@@ -58,7 +65,22 @@ async function loadPricing(): Promise<Record<string, PriceRow>> {
 }
 
 /**
- * Giá (Lượng) của 1 tool theo `tool_pricing`.
+ * Giá THẬT của 1 dòng `tool_pricing` NGAY LÚC NÀY — áp khuyến mãi nếu đang
+ * trong khung `sale_starts_at`..`sale_ends_at` và `sale_credits` rẻ hơn giá
+ * gốc. Đây là hàm DUY NHẤT quyết định "khuyến mãi có đang chạy hay không" —
+ * `getToolPrice`/`getRailPrice` và mọi route trừ tiền đi qua nó, nên bulk-tắt
+ * KM trong Admin (xoá `sale_credits`) có hiệu lực NGAY (trong TTL cache) trên
+ * toàn bộ cổng thanh toán, không cần sửa từng route.
+ */
+function effectivePrice(row: PriceRow, now: number): number {
+  if (row.saleCredits == null || row.saleCredits >= row.credits) return row.credits;
+  if (row.saleStartsAt && Date.parse(row.saleStartsAt) > now) return row.credits;
+  if (row.saleEndsAt && Date.parse(row.saleEndsAt) <= now) return row.credits;
+  return row.saleCredits;
+}
+
+/**
+ * Giá (Lượng) của 1 tool theo `tool_pricing`, ĐÃ áp khuyến mãi nếu đang chạy.
  * Trả null nếu tool không có trong bảng, bị tắt (enabled=false), hoặc đọc hụt
  * → nơi gọi fallback về giá mặc định của nó. Lưu ý: credits=0 trả về 0 (miễn phí
  * hợp lệ), KHÁC null.
@@ -66,7 +88,7 @@ async function loadPricing(): Promise<Record<string, PriceRow>> {
 export async function getToolPrice(toolId: string): Promise<number | null> {
   const row = (await loadPricing())[toolId];
   if (!row || row.enabled === false) return null;
-  return row.credits;
+  return effectivePrice(row, Date.now());
 }
 
 export interface ToolParts {
