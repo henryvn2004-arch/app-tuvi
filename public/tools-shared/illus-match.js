@@ -155,9 +155,12 @@
     // Lá Số (13 ảnh 1536x1024) đo được ~41MB dù mỗi ảnh nguồn chỉ ~270KB
     // (vượt luôn trần dung lượng bucket `samples`). Sinh thêm bản nhỏ hơn
     // hẳn (`scripts/gen-illus-print.mjs`, resize theo TỈ LỆ — không ép một
-    // chiều như bug crop 900x1024 đã vá ở #851) chỉ dùng cho `@media print`
-    // qua `<picture><source media="print">` — ảnh nguồn nhỏ thì dù Chromium
-    // nhúng lossless cũng nhỏ theo.
+    // chiều như bug crop 900x1024 đã vá ở #851) cho `img[data-print-src]` —
+    // `forceEagerIllusImages()` (shell.js) tự SWAP `img.src` ngay trước khi
+    // in. 🪤 Thử `<picture><source media="print">` trước, KHÔNG ăn thua:
+    // `<picture>` chọn nguồn lúc CHÈN VÀO DOM (còn ở chế độ màn hình);
+    // `page.emulateMedia({media:'print'})` của Playwright đổi SAU đó không
+    // kích hoạt lại thuật toán chọn nguồn — đo lại PDF không nhỏ đi chút nào.
     var base = SUPABASE_URL + '/storage/v1/object/public/' + BUCKET + '/' + PREFIX + '/' + id;
     return { url: base + '.webp', printUrl: base + '-print.webp', sac: sac, khia: khia };
   }

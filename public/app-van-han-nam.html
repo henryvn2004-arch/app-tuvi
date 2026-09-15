@@ -261,7 +261,7 @@ window.SHELL_INTRO={key:'van-han-nam'};</script>
 <script src="/tools-shared/hook-facts.js?v=1"></script>
 <script src="/tools-shared/hook-layer.js?v=2"></script>
 <script src="/nav.js?v=29" data-icons-only></script>
-<script src="/shell.js?v=91"></script>
+<script src="/shell.js?v=92"></script>
 <script src="/tools-shared/ai-loading-steps.js?v=10"></script>
 <script src="/tools-shared/phan-pool.js?v=1"></script>
 <script>
@@ -596,8 +596,8 @@ function illusBannerHtml(t,ls){
   if(!window.IllusMatch||!t||typeof t.thangAL!=='number') return '';
   var r=IllusMatch.illusUrlForThang(ls,t.thangAL,_gioitinh);
   if(!r) return '';
-  return '<figure class="lg-illus"><picture><source media="print" srcset="'+r.printUrl+'"><img src="'+r.url+'" alt="Minh hoạ '+esc(t.nhan||'')+'" loading="lazy"'+
-    ' onerror="this.closest(\'.lg-illus\').remove()"></picture></figure>';
+  return '<figure class="lg-illus"><img src="'+r.url+'" data-print-src="'+r.printUrl+'" alt="Minh hoạ '+esc(t.nhan||'')+'" loading="lazy"'+
+    ' onerror="this.closest(\'.lg-illus\').remove()"></figure>';
 }
 
 // ── Render 16 phần ───────────────────────────────────────────────────────

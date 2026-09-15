@@ -349,7 +349,7 @@ window.SHELL_INTRO={key:'huong-nghiep-tre'};</script>
 <script src="/auth.js?v=2"></script>
   <script src="/nav.js?v=29" data-icons-only></script>
 <script src="/tools-shared/sample-hint.js?v=1"></script>
-<script src="/shell.js?v=91"></script>
+<script src="/shell.js?v=92"></script>
 <script src="/tools-shared/ai-loading-steps.js?v=10"></script>
 <script>
 
@@ -874,8 +874,8 @@ function huongNghiepIllusHtml(data) {
     if (!tuoiBac) return '';
     var r = IllusMatch.illusUrlForTongQuan(ls, data.gioiTinh, tuoiBac);
     if (!r) return '';
-    return '<figure class="lg-illus"><picture><source media="print" srcset="' + r.printUrl + '"><img src="' + r.url + '" alt="" loading="eager"' +
-      ' onerror="this.closest(\'.lg-illus\').remove()"></picture></figure>';
+    return '<figure class="lg-illus"><img src="' + r.url + '" data-print-src="' + r.printUrl + '" alt="" loading="eager"' +
+      ' onerror="this.closest(\'.lg-illus\').remove()"></figure>';
   } catch (e) { console.error('huongNghiepIllusHtml', e); return ''; }
 }
 
