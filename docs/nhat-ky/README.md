@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-295 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+296 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 **Bốn file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
 ```bash
@@ -11,7 +11,7 @@ sed -n '120,190p' docs/nhat-ky/2026-08.md    # đọc đúng đoạn, đừng ca
 
 | file | số mục | dung lượng |
 |---|---:|---:|
-| `2026-09.md` | 130 | 547,305 B |
+| `2026-09.md` | 131 | 550,973 B |
 | `2026-08.md` | 148 | 1,024,027 B |
 | `2026-07.md` | 12 | 154,531 B |
 | `track-cu.md` | 5 | 89,354 B |
@@ -30,6 +30,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 | 1 | 2026-09 | `2026-09.md` | 📅 Lịch Marketing 59 Ngày — đẩy Tương Hợp khớp nhịp cron viral-seo-pages — Pha 4 của plan "marketing kiểu Shopee" |
 | 1 | 2026-09 | `2026-09.md` | 📊 Bậc 4-6 của Growth Data Plan — engine CAC/CPA/ROAS theo campaign + findings + nối Telegram/anomaly-alerts |
 | 1 | 2026-09 | `2026-09.md` | 📧 Pha 5 productize luận giải — "đời sống sau báo cáo": nút "Gửi lại PDF" ở Lịch Sử |
+| 1 | 2026-09 | `2026-09.md` | 🔓 Mời lưu tài khoản ngay khi guest thanh toán thành công — vá lỗ hổng hoá đơn/reminder câm với guest checkout |
 | 1 | 2026-09 | `2026-09.md` | 📊 Tab Admin "Tăng Trưởng" — hiệu quả 3 trigger voucher + đơn rơi + job email trên MỘT màn hình — Pha 3 của plan "marketing kiểu Shopee" |
 | 1 | 2026-09 | `2026-09.md` | 🎟️ Đơn rơi 24h — trigger cấp tự động THỨ BA, RPC row-level mới cho phễu conversion — Pha 2d của plan "marketing kiểu Shopee" |
 | 1 | 2026-09 | `2026-09.md` | 🎟️ Hồi sinh 7 ngày — trigger cấp tự động THỨ HAI, gắn vào email nhắc user idle — Pha 2c của plan "marketing kiểu Shopee" |
