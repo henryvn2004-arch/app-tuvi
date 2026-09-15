@@ -1,16 +1,14 @@
 #!/usr/bin/env node
 /**
- * Sinh bản ẢNH NHỎ DÀNH RIÊNG CHO IN (`<id>-print.webp`) từ mọi ảnh minh hoạ
+ * Sinh bản ẢNH NHỎ DÀNH RIÊNG CHO IN (`<id>-print.jpg`) từ mọi ảnh minh hoạ
  * đã có trong `portraits/illus/` trên Supabase Storage.
  *
- * Vì sao cần: `.webp` màn hình (1536x1024, ~270KB, xem `illus-match.js`) đã
- * nén tốt cho HIỂN THỊ — nhưng Chromium `page.pdf()`/`window.print()` khi
- * nhúng ảnh vào PDF KHÔNG giữ nguyên byte WebP đã nén (Skia giải mã rồi nhúng
- * lại gần-như-lossless). PDF Luận Giải Lá Số (13 ảnh) đo thật ra ~41MB dù mỗi
- * ảnh nguồn chỉ ~270KB — vượt trần dung lượng bucket `samples`. Ảnh IN ra
- * nhỏ hơn (kích thước PIXEL nhỏ hơn hẳn) thì dù Chromium nhúng lossless cũng
- * nhỏ theo. `illus-match.js` `buildUrl()` đã trả thêm `printUrl` trỏ đúng
- * file này; các trang dùng `<picture><source media="print" srcset=printUrl>`.
+ * Vì sao JPEG chứ không phải WebP (như bản đầu 2026-09-15): đo thật bằng
+ * Playwright cục bộ (13 ảnh 640px, không qua mạng) — Chromium `page.pdf()`
+ * nhúng WebP RÃ RA rồi nén lại gần-như-lossless (13 ảnh → ~6,5MB), còn JPEG
+ * được nhúng gần như nguyên khối (13 ảnh CÙNG kích thước → ~0,6MB, rẻ hơn
+ * ~10 lần). Ảnh minh hoạ MÀN HÌNH (`.webp` trong `buildUrl()`) vẫn giữ
+ * nguyên — JPEG chỉ dùng cho bản `-print`.
  *
  * ⚠️ Resize CHỈ theo CHIỀU RỘNG (sharp tự suy chiều cao giữ tỉ lệ) — KHÔNG ép
  * cả hai chiều. Đây chính là lỗi đã vá ở #851 (900x1024 từ ảnh gốc 1536x1024
@@ -20,10 +18,15 @@
  * Đọc từ `.png` gốc (nguồn thật, không đổi) — không đọc lại từ `.webp` màn
  * hình để tránh nén-chồng-nén (double lossy).
  *
+ * PDF vẫn còn nặng (~4-6MB, không phải 1-2MB): phần CHỮ/bìa/mục lục/font dự
+ * phòng của tài liệu (không đụng ảnh) đã ~4,3MB do Chromium nhúng lại font
+ * RIÊNG trên từng trang in (ghi nhận ở PR #817, chưa vá) — nợ kỹ thuật khác,
+ * không thuộc phạm vi sửa ảnh này.
+ *
  *   SUPABASE_URL=... SUPABASE_SERVICE_KEY=... node scripts/gen-illus-print.mjs
  *   node scripts/gen-illus-print.mjs --dry-run        # chỉ liệt kê, không ghi
  *   node scripts/gen-illus-print.mjs --only dien-trach # lọc theo tiền tố id
- *   node scripts/gen-illus-print.mjs --width 640        # mặc định 640px rộng
+ *   node scripts/gen-illus-print.mjs --width 1024       # mặc định 1024px rộng
  */
 import { createClient } from '@supabase/supabase-js';
 import sharp from 'sharp';
@@ -36,7 +39,7 @@ const flag = (n, d) => {
 const has = (n) => argv.includes(n);
 const DRY = has('--dry-run');
 const ONLY = flag('--only', '');
-const PRINT_WIDTH = parseInt(flag('--width', '640'), 10);
+const PRINT_WIDTH = parseInt(flag('--width', '1024'), 10);
 
 function requireEnv(name) {
   const v = process.env[name];
@@ -70,12 +73,14 @@ async function listAllPng() {
   return all.filter((f) => f.name.endsWith('.png')).map((f) => f.name.replace(/\.png$/, ''));
 }
 
-/** PNG gốc (bytes) → webp NHỎ CHO IN — resize CHỈ theo chiều rộng (sharp tự
- * suy chiều cao), assert tỉ lệ khung hình ra khớp tỉ lệ vào. */
-async function toWebpPrint(pngBuf) {
+/** PNG gốc (bytes) → JPEG NHỎ CHO IN — resize CHỈ theo chiều rộng (sharp tự
+ * suy chiều cao), assert tỉ lệ khung hình ra khớp tỉ lệ vào. JPEG (không
+ * phải WebP) — xem đầu file vì sao: Chromium nhúng JPEG rẻ hơn WebP ~10 lần
+ * trong PDF. */
+async function toJpegPrint(pngBuf) {
   const meta = await sharp(pngBuf).metadata();
-  const webp = await sharp(pngBuf).resize({ width: PRINT_WIDTH }).webp({ quality: 78 }).toBuffer();
-  const outMeta = await sharp(webp).metadata();
+  const jpeg = await sharp(pngBuf).resize({ width: PRINT_WIDTH }).jpeg({ quality: 82 }).toBuffer();
+  const outMeta = await sharp(jpeg).metadata();
   const ratioIn = meta.width / meta.height;
   const ratioOut = outMeta.width / outMeta.height;
   if (Math.abs(ratioIn - ratioOut) / ratioIn > 0.005) {
@@ -83,31 +88,31 @@ async function toWebpPrint(pngBuf) {
       `tỉ lệ khung hình lệch sau resize: vào ${meta.width}x${meta.height} (${ratioIn.toFixed(4)}), ra ${outMeta.width}x${outMeta.height} (${ratioOut.toFixed(4)})`
     );
   }
-  return { webp, width: outMeta.width, height: outMeta.height };
+  return { jpeg, width: outMeta.width, height: outMeta.height };
 }
 
 async function fixOne(id) {
   const pngPath = `${PREFIX}/${id}.png`;
-  const printPath = `${PREFIX}/${id}-print.webp`;
+  const printPath = `${PREFIX}/${id}-print.jpg`;
   const { data: pngBlob, error: dlErr } = await supabase.storage.from(BUCKET).download(pngPath);
   if (dlErr) throw new Error(`tải ${pngPath} lỗi: ${dlErr.message}`);
   const pngBuf = Buffer.from(await pngBlob.arrayBuffer());
-  const { webp, width, height } = await toWebpPrint(pngBuf);
+  const { jpeg, width, height } = await toJpegPrint(pngBuf);
 
   if (DRY) {
-    console.log(`(dry) ${id}: → ${width}x${height} · ${(webp.length / 1024).toFixed(0)}KB`);
-    return { webpBytes: webp.length };
+    console.log(`(dry) ${id}: → ${width}x${height} · ${(jpeg.length / 1024).toFixed(0)}KB`);
+    return { jpegBytes: jpeg.length };
   }
 
-  const up = await supabase.storage.from(BUCKET).upload(printPath, webp, {
-    contentType: 'image/webp',
+  const up = await supabase.storage.from(BUCKET).upload(printPath, jpeg, {
+    contentType: 'image/jpeg',
     cacheControl: CACHE_CONTROL,
     upsert: true,
   });
   if (up.error) throw new Error(`upload ${printPath} lỗi: ${up.error.message}`);
 
-  console.log(`✅ ${id}  ·  ${width}x${height}  ·  ${(webp.length / 1024).toFixed(0)}KB`);
-  return { webpBytes: webp.length };
+  console.log(`✅ ${id}  ·  ${width}x${height}  ·  ${(jpeg.length / 1024).toFixed(0)}KB`);
+  return { jpegBytes: jpeg.length };
 }
 
 async function main() {
@@ -123,7 +128,7 @@ async function main() {
   for (const id of filtered) {
     try {
       const r = await fixOne(id);
-      total += r.webpBytes;
+      total += r.jpegBytes;
       ok++;
     } catch (e) {
       loi++;

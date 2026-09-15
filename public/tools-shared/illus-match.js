@@ -148,7 +148,7 @@
     // storage.objects: 230 ảnh = 693MB). Bản .png gốc VẪN CÒN trong bucket
     // làm lưu trữ, không xoá.
     //
-    // 🪤 `-print.webp` (2026-09-15): ban đầu nghĩ ảnh nhẹ sẵn thì dùng chung
+    // 🪤 `-print.jpg` (2026-09-15): ban đầu nghĩ ảnh nhẹ sẵn thì dùng chung
     // luôn cho cả in ấn, không cần đường riêng — SAI. Chromium `page.pdf()`/
     // `window.print()` khi nhúng ảnh vào PDF KHÔNG giữ nguyên byte WebP đã
     // nén — Skia giải mã rồi nhúng lại gần-như-lossless, một PDF Luận Giải
@@ -157,12 +157,16 @@
     // hẳn (`scripts/gen-illus-print.mjs`, resize theo TỈ LỆ — không ép một
     // chiều như bug crop 900x1024 đã vá ở #851) cho `img[data-print-src]` —
     // `forceEagerIllusImages()` (shell.js) tự SWAP `img.src` ngay trước khi
-    // in. 🪤 Thử `<picture><source media="print">` trước, KHÔNG ăn thua:
-    // `<picture>` chọn nguồn lúc CHÈN VÀO DOM (còn ở chế độ màn hình);
-    // `page.emulateMedia({media:'print'})` của Playwright đổi SAU đó không
-    // kích hoạt lại thuật toán chọn nguồn — đo lại PDF không nhỏ đi chút nào.
+    // in. 🪤 Hai bẫy đã vấp: (1) `<picture><source media="print">` chọn
+    // nguồn lúc CHÈN VÀO DOM (còn ở chế độ màn hình), `page.emulateMedia()`
+    // của Playwright đổi SAU đó không kích hoạt lại — đo lại PDF không nhỏ
+    // đi chút nào, phải swap `img.src` bằng JS thay vì dựa `<picture>`. (2)
+    // Đổi `-print` sang WebP xong PDF vẫn ~10MB — đo cục bộ (13 ảnh, không
+    // qua mạng): Chromium nhúng WebP gần-như-lossless (~6,5MB/13 ảnh 640px)
+    // nhưng nhúng JPEG gần NGUYÊN KHỐI (~0,6MB/13 ảnh cùng cỡ, rẻ hơn ~10
+    // lần) — `-print` PHẢI là `.jpg`, `.webp` màn hình giữ nguyên.
     var base = SUPABASE_URL + '/storage/v1/object/public/' + BUCKET + '/' + PREFIX + '/' + id;
-    return { url: base + '.webp', printUrl: base + '-print.webp', sac: sac, khia: khia };
+    return { url: base + '.webp', printUrl: base + '-print.jpg', sac: sac, khia: khia };
   }
 
   // ── Đại Vận (Chu Trình Cuộc Đời) ─────────────────────────────────────────
