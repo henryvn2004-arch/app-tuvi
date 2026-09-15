@@ -3,7 +3,7 @@
 // Chọn ảnh minh hoạ (thư viện `illus-prompt.ts` / `scripts/gen-illus.mjs`)
 // khớp với PHẦN đang hiển thị.
 //
-// Bốn hàm công khai:
+// Năm hàm công khai:
 //   illusUrlForPhan(ls, phan, gioi)     → app-luan-giai.html (Luận Giải Lá Số,
 //     phần 1-13 = tổng quan + 12 cung). `PHAN_TO_KHIA` gắn CỨNG với đúng thứ
 //     tự phần của RIÊNG luan-giai-core.js — không tái dùng cho tool khác.
@@ -18,6 +18,12 @@
 //   illusUrlForThang(ls, thangAL, gioi) → app-van-han-nam.html (Vận Hạn 12
 //     Tháng, phần 5-16 = 12 tháng âm lịch). KHÔNG có trục sắc thái (xem
 //     `THANG_CANH`, illus-prompt.ts) — chỉ đổi cảnh theo mùa/lễ tiết.
+//   illusUrlForXemTuoi(idx, mode, gioi, diem, seedStr) → app-xem-tuoi.html
+//     (Xem Tuổi vợ chồng/làm ăn/tương hợp, phần 0-8). Luận về HAI người chứ
+//     không một cung của một lá số nên sắc thái đọc thẳng ĐIỂM SỐ đã hiện
+//     (r.total/item.score), không tra `ls.cungScores`. 4/9 khía tái dùng
+//     `KHIA_CANH` qua `buildUrl`, 5/9 khía riêng (`XEM_TUOI_CANH`, tiền tố
+//     id "xt-") — xem `_xtKhiaFor`.
 //
 // `sacThaiCung()` và bảng `KHIA_TO_CUNG` là phần DÙNG CHUNG được thật (đọc
 // theo TÊN CUNG, không theo số phần) — cả hai hàm trên đều gọi qua đó.
@@ -271,11 +277,80 @@
     return buildUrl(khia, THANG_SAC, gioi, 'truong-thanh', seedStr);
   }
 
+  // ── Xem Tuổi (vợ chồng / làm ăn / tương hợp) ────────────────────────────
+  // 5 khía RIÊNG (`XEM_TUOI_CANH`, illus-prompt.ts) — file id tiền tố "xt-"
+  // để tách khỏi namespace `KHIA_CANH` (khoá cứng đúng 13 khoá, xem
+  // check-illus.mjs — nhét thêm khoá vào đó phá cả 3 nguồn đối chiếu chéo).
+  // 4 khía còn lại TÁI DÙNG ảnh cung có sẵn qua `buildUrl` (không vẽ thêm).
+  var XT_VARIANT_COUNT = {
+    'xet-tuoi': 2, 'ngu-hanh': 2, 'tu-tuong': 2, 'tinh-cach': 2, 'van-hanh': 2,
+  };
+
+  /** Phần (0-8, khớp `PHAN_LABELS` app-xem-tuoi.html) → khía + có dùng bảng
+   * `XEM_TUOI_CANH` (tiền tố "xt-") hay tái dùng `KHIA_CANH` (12 cung) không.
+   * Phần 5/6 đổi khía theo mode — vợ chồng (Quan Hệ/Con Cái → Phu Thê/Tử
+   * Tức) khác bản chất làm ăn (Đối Tác/Giao Tiếp → Nô Bộc, gần nghĩa "người
+   * xung quanh, đồng nghiệp" hơn). */
+  function _xtKhiaFor(idx, mode) {
+    switch (idx) {
+      case 0: return { khia: 'tong-quan', xt: false };
+      case 1: return { khia: 'xet-tuoi', xt: true };
+      case 2: return { khia: 'ngu-hanh', xt: true };
+      case 3: return { khia: 'tu-tuong', xt: true };
+      case 4: return { khia: 'tinh-cach', xt: true };
+      case 5: return { khia: mode === 'xem-lam-an' ? 'no-boc' : 'phu-the', xt: false };
+      case 6: return { khia: mode === 'xem-lam-an' ? 'no-boc' : 'tu-tuc', xt: false };
+      case 7: return { khia: 'tai-bach', xt: false };
+      case 8: return { khia: 'van-hanh', xt: true };
+      default: return null;
+    }
+  }
+
+  /** Sắc thái 3 bậc từ ĐIỂM SỐ thật đã hiện cho người dùng (không suy ngưỡng
+   * riêng như cung) — phần 0 đọc `r.total` (0-100, cùng thang `meterColor`),
+   * phần 1-8 đọc `item.score` (0-10, cùng thang `facColor`). Mốc ở đây KHÔNG
+   * cần khớp tuyệt đối hai hàm màu đó (4 bậc màu gộp về 3 bậc sắc thái vẽ
+   * tranh) — chỉ cần cùng HƯỚNG đọc đúng con số đã hiện trên màn hình. */
+  function sacThaiDiem(diem, thang100) {
+    if (typeof diem !== 'number') return null;
+    var tot = thang100 ? 70 : 7, xau = thang100 ? 40 : 3;
+    return diem >= tot ? 'tot' : diem <= xau ? 'xau' : 'trung';
+  }
+
+  /**
+   * URL ảnh minh hoạ cho MỘT PHẦN của Xem Tuổi (vợ chồng/làm ăn/tương hợp).
+   *
+   * @param {number} idx    0-8, khớp `PHAN_LABELS` trong app-xem-tuoi.html
+   * @param {string} mode   MODE_KEY trang đang mở ('xem-tuoi'|'xem-lam-an'|'tuong-hop')
+   * @param {'nam'|'nu'} gioi  giới tính nhân vật trong tranh — trang tự chọn
+   *                           (theo giới người A), bắt buộc truyền tay như
+   *                           `illusUrlForPhan`
+   * @param {number} diem   idx=0 truyền `r.total` (0-100); idx=1-8 truyền
+   *                        `item.score` (0-10)
+   * @param {string} seedStr  chuỗi ổn định theo CẶP lá số (vd canChiNam của
+   *                          cả hai người nối lại) — chỉ để chọn biến thể
+   * @returns {{url:string, sac:string, khia:string}|null}
+   */
+  function illusUrlForXemTuoi(idx, mode, gioi, diem, seedStr) {
+    if (gioi !== 'nam' && gioi !== 'nu') return null;
+    var kh = _xtKhiaFor(idx, mode);
+    if (!kh) return null;
+    var sac = sacThaiDiem(diem, idx === 0);
+    if (!sac) return null;
+    if (!kh.xt) return buildUrl(kh.khia, sac, gioi, 'truong-thanh', seedStr);
+    var vCount = XT_VARIANT_COUNT[kh.khia] || 1;
+    var v = (_hash(seedStr + kh.khia + 'truong-thanh') % vCount) + 1;
+    var id = 'xt-' + kh.khia + '--' + sac + '--' + gioi + '--truong-thanh--v' + v;
+    var url = SUPABASE_URL + '/storage/v1/object/public/' + BUCKET + '/' + PREFIX + '/' + id + '.webp';
+    return { url: url, sac: sac, khia: kh.khia };
+  }
+
   root.IllusMatch = {
     illusUrlForPhan: illusUrlForPhan,
     illusUrlForDaiVan: illusUrlForDaiVan,
     illusUrlForTongQuan: illusUrlForTongQuan,
     illusUrlForThang: illusUrlForThang,
+    illusUrlForXemTuoi: illusUrlForXemTuoi,
     sacThaiCung: sacThaiCung,
     tuoiBac: tuoiBac,
     PHAN_TO_KHIA: PHAN_TO_KHIA,
