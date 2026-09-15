@@ -8,14 +8,14 @@
    ============================================================ */
 :root{
   --navy:#061A2E; --navy-2:#0A2540; --navy-3:#0D3B5E;
-  --gold:#C9A84C; --gold-soft:#9A7B3A; --gold-lt:#F9F4EB;
+  --gold:#C9A84C; --gold-soft:#7C5F26; --gold-lt:#F9F4EB;
   --blue:#1455A4; --red:#C0392B; --green:#1E6B3C; --orange:#D97706;
   /* Token CHỮ tách khỏi token NỀN — --red/--green/--blue là MẶT NỀN của nút
      (.login-btn, .btn-primary...) nên KHÔNG khai lại được ở dark, khai lại là
      nút hoá nhạt. Giá trị light TRÙNG KHÍT bản nền ⇒ light không đổi 1 pixel;
      dark có bản sáng riêng ở khối [data-theme="dark"]. Cùng lối shell.css. */
   --tx-blue:#1455A4; --tx-red:#C0392B; --tx-green:#1E6B3C;
-  --text:#1a1a1a; --text-mid:#4a4a4a; --text-lt:#7a7a7a;
+  --text:#1a1a1a; --text-mid:#4a4a4a; --text-lt:#666666;
   --line:#E6E3DC; --line-2:#D8D4CB; --border:#E6E3DC; --border-lt:#EEE;
   --paper:#FBFAF7; --paper-2:#F4F2EC; --paper-3:#EFEDE6; --white:#fff;
   --bg:#F4F2EC; --bg-soft:#F4F2EC; --card:#fff;

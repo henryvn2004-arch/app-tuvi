@@ -14,14 +14,14 @@
 <link rel="preload" href="/fonts/be-vietnam-pro-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin><link rel="preload" href="/fonts/be-vietnam-pro-latin-400.woff2" as="font" type="font/woff2" crossorigin><link rel="preload" href="/fonts/be-vietnam-pro-vietnamese-600.woff2" as="font" type="font/woff2" crossorigin><link rel="preload" href="/fonts/be-vietnam-pro-latin-600.woff2" as="font" type="font/woff2" crossorigin><link rel="stylesheet" href="/fonts/be-vietnam-pro.css?v=1">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{--navy:#061A2E;--navy-mid:#0D3B5E;--blue:#1455A4;--gold:#9A7B3A;--gold-lt:#F9F4EB;--text:#1a1a1a;--text-mid:#444;--text-lt:#777;--border:#CCCCCC;--border-lt:#E8E8E8;--bg:#FFFFFF;--bg-soft:#F5F4F0;--red:#C0392B;--green:#1E6B3C}
+:root{--navy:#061A2E;--navy-mid:#0D3B5E;--blue:#1455A4;--gold:#7C5F26;--gold-lt:#F9F4EB;--text:#1a1a1a;--text-mid:#444;--text-lt:#666;--border:#CCCCCC;--border-lt:#E8E8E8;--bg:#FFFFFF;--bg-soft:#F5F4F0;--red:#C0392B;--green:#1E6B3C}
 body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg-soft);color:var(--text);min-height:100vh;display:flex;flex-direction:column}
 
 /* NAV */
 .topnav{position:sticky;top:0;z-index:200;background:var(--navy);display:flex;align-items:center;height:60px;padding:0 40px;gap:32px}
 .nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none}
 .nav-logo img{width:38px;height:38px;object-fit:contain;border-radius:5px}
-.nav-logo .name{font-size:16px;font-weight:700;color:#CC2200;font-family:Georgia,serif}
+.nav-logo .name{font-size:16px;font-weight:700;color:#FF4000;font-family:Georgia,serif}
 .nav-links{display:flex;align-items:center;gap:4px}
 .nav-link{color:#8BAACC;font-size:13px;text-decoration:none;padding:6px 12px;border-radius:6px;transition:.15s}
 .nav-link:hover{color:#fff;background:rgba(255,255,255,.07)}
@@ -72,7 +72,7 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg-soft);color:var
 .cung-cell:hover{background:#FFFDF7}
 .cell-center{grid-column:2/4;grid-row:2/4;border:1px solid #888;padding:14px 16px;display:flex;flex-direction:column;justify-content:center;background:#fff;overflow:auto}
 .cell-header{display:flex;flex-direction:column;align-items:center;margin-bottom:4px;gap:2px}
-.can-chi-label{font-size:9px;color:#777;font-weight:500;text-transform:uppercase;width:100%;text-align:left}
+.can-chi-label{font-size:9px;color:#666;font-weight:500;text-transform:uppercase;width:100%;text-align:left}
 .cung-name-label{font-size:10px;color:#222;font-weight:700;text-transform:uppercase;text-align:center;width:100%;letter-spacing:.5px}
 .badge-than{display:inline-block;padding:1px 5px;font-size:8px;font-weight:700;letter-spacing:1px;text-transform:uppercase;border-radius:2px;margin-left:4px;border:1.5px solid #7B3FA0;color:#7B3FA0;vertical-align:middle}
 .chinh-tinh-area{margin-bottom:4px;text-align:center}
@@ -81,7 +81,7 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg-soft);color:var
 .phu-col{flex:1;display:flex;flex-direction:column;gap:1px;min-width:0}
 .phu-tinh-item{font-size:9px;line-height:1.4;font-weight:500;word-break:break-word}
 .cell-footer{display:flex;justify-content:space-between;align-items:flex-end;position:absolute;bottom:3px;left:7px;right:7px;border-top:1px solid #ddd;padding-top:2px}
-.trang-sinh-label{font-size:9px;color:#777;font-weight:500;text-transform:uppercase;letter-spacing:.5px}
+.trang-sinh-label{font-size:9px;color:#666;font-weight:500;text-transform:uppercase;letter-spacing:.5px}
 .dai-van-num{font-size:10px;color:#333;font-weight:700}
 .tuan-tag,.triet-tag{display:inline-block;padding:0 5px;font-size:8px;font-weight:700;letter-spacing:1px;border-radius:2px;text-transform:uppercase;position:absolute;bottom:-1px;left:50%;transform:translateX(-50%);z-index:5}
 .tuan-tag{background:#2c4a00;color:#fff}.triet-tag{background:#4a0000;color:#fff}
@@ -100,7 +100,7 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg-soft);color:var
 
 /* FOOTER */
 .site-footer{background:#1A1210;color:rgba(255,255,255,.5);padding:28px 32px 20px;margin-top:auto}
-.footer-bottom{display:flex;justify-content:space-between;align-items:center;font-size:11px;color:rgba(255,255,255,.25)}
+.footer-bottom{display:flex;justify-content:space-between;align-items:center;font-size:11px;color:rgba(255,255,255,.5)}
 .footer-bottom img{width:20px;height:20px;object-fit:contain;opacity:.3;border-radius:3px}
 
 @media print{
@@ -477,7 +477,7 @@ updateGioAm();
 document.addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.tagName!=='BUTTON')doAnSao();});
 document.addEventListener('DOMContentLoaded', loadFromSlug);
 </script>
-<script src="/nav.js?v=27" data-icons-only></script>
+<script src="/nav.js?v=29" data-icons-only></script>
 <script>
 // `nav.js` ở chế độ `data-icons-only` CỐ Ý không chèn GA4/Ads/Meta Pixel
 // (đúng cho 27 trang shell — đã có qua shell.js — và 2 trang admin, không cần

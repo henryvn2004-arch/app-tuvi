@@ -45,7 +45,7 @@
     }
     .tvc-header-sub {
       font-size: 12px;
-      color: #777;
+      color: #666;
       margin-top: 3px;
       line-height: 1.4;
     }

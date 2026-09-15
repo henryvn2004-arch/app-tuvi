@@ -274,7 +274,7 @@
     '.topnav{position:sticky;top:0;z-index:200;background:#061A2E;display:flex;align-items:center;height:60px;padding:0 40px;gap:28px}',
     '.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;flex-shrink:0}',
     '.nav-logo img{width:38px;height:38px;object-fit:contain;border-radius:5px}',
-    '.nav-logo .name{font-size:16px;font-weight:700;color:#CC2200;font-family:Georgia,serif}',
+    '.nav-logo .name{font-size:16px;font-weight:700;color:#FF4000;font-family:Georgia,serif}',
     '.nav-logo .url{font-size:10px;color:#aaa;letter-spacing:.07em;text-transform:uppercase}',
     '.nav-links{display:flex;align-items:center;gap:2px;flex:1;overflow:visible}',
     '.nav-link{color:#8BAACC;font-size:13px;text-decoration:none;padding:6px 10px;border-radius:6px;transition:all .15s;white-space:nowrap;cursor:pointer;display:inline-flex;align-items:center;gap:4px}',
@@ -323,7 +323,7 @@
   // Thay vì đẻ bảng icon thứ hai trong shell.js (28 icon, tên khác hẳn, thiếu
   // 11/15 icon cần dùng — đúng cái "hai bảng trôi khỏi nhau" đã cảnh báo),
   // mấy trang đó nạp CHÍNH file này kèm `data-icons-only`:
-  //     <script src="/nav.js?v=25" data-icons-only></script>
+  //     <script src="/nav.js?v=29" data-icons-only></script>
   // Lúc đó nav.js CHỈ cấp ICONS/iconHtml/mountIcons/EMOJI_TO_ICON + CSS icon,
   // rồi dừng — KHÔNG dựng thanh nav, KHÔNG chèn GA4, KHÔNG chèn conversion.js,
   // KHÔNG chèn auth.js. Một nguồn icon duy nhất cho cả site.
@@ -499,11 +499,11 @@
     '.ft-brand-row img{width:36px;height:36px;object-fit:contain;border-radius:5px;opacity:0.9}',
     '.ft-brand-name{font-size:14px;font-weight:700;color:rgba(255,255,255,0.85);font-family:Georgia,serif;line-height:1.2}',
     '.ft-brand-zh{font-size:11px;color:#C9A84C}',
-    '.ft-tagline{font-size:12px;color:rgba(255,255,255,0.3);line-height:1.7;max-width:240px}',
+    '.ft-tagline{font-size:12px;color:rgba(255,255,255,0.5);line-height:1.7;max-width:240px}',
     '.ft-legal{margin-top:14px;padding-top:14px;border-top:1px solid rgba(255,255,255,.06);display:flex;flex-direction:column;gap:8px}',
-    '.ft-legal-row{display:flex;align-items:flex-start;gap:9px;font-size:11px;color:rgba(255,255,255,.35);line-height:1.5}',
+    '.ft-legal-row{display:flex;align-items:flex-start;gap:9px;font-size:11px;color:rgba(255,255,255,.5);line-height:1.5}',
     '.ft-legal-row strong{color:rgba(255,255,255,.6);font-weight:600;font-size:11.5px}',
-    '.ft-legal-row .dim{color:rgba(255,255,255,.28)}',
+    '.ft-legal-row .dim{color:rgba(255,255,255,.5)}',
     '.ft-legal-ic{flex-shrink:0;width:14px;height:14px;margin-top:1px;color:#9A7B3A}',
     '.ft-legal-ic svg{width:100%;height:100%}',
     '.ft-social{display:flex;gap:8px;margin-top:16px}',
@@ -517,14 +517,14 @@
     '.ft-item:hover{color:rgba(255,255,255,.9)!important}',
     '.ft-item-ic{flex-shrink:0;width:15px;height:15px;color:#9A7B3A}',
     '.ft-item-ic svg{width:100%;height:100%}',
-    '.ft-bottom{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;margin-top:32px;padding-top:20px;border-top:1px solid rgba(255,255,255,.08);font-size:11px;color:rgba(255,255,255,.35)}',
+    '.ft-bottom{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;margin-top:32px;padding-top:20px;border-top:1px solid rgba(255,255,255,.08);font-size:11px;color:rgba(255,255,255,.5)}',
     '.ft-bottom-left{display:flex;align-items:center;gap:9px;flex-wrap:wrap}',
-    '.ft-bottom-left a{color:rgba(255,255,255,.35)!important;text-decoration:none!important;font-size:11px}',
+    '.ft-bottom-left a{color:rgba(255,255,255,.5)!important;text-decoration:none!important;font-size:11px;display:inline-block;padding:7px 2px}',
     '.ft-bottom-left a:hover{color:rgba(255,255,255,.7)!important}',
-    '.ft-sep{color:rgba(255,255,255,.15)}',
+    '.ft-sep{color:rgba(255,255,255,.5)}',
     '.ft-sign{display:flex;align-items:center;gap:10px;color:#C9A84C;opacity:.9}',
     '.ft-sign span{font-family:Georgia,serif;font-style:italic;font-size:12.5px;letter-spacing:.02em}',
-    '.ft-disclaimer{font-size:9.5px;color:rgba(255,255,255,0.15);line-height:1.6;margin-top:12px;text-align:center}',
+    '.ft-disclaimer{font-size:9.5px;color:rgba(255,255,255,0.5);line-height:1.6;margin-top:12px;text-align:center}',
     '.ft-disclaimer a{color:inherit;text-decoration:underline}',
     '@media(max-width:900px){.ft-top{grid-template-columns:1fr 1fr}.ft-top .ft-brand{grid-column:1/-1;padding-right:0}.ft-divider{display:none}.ft-top .ft-col{padding-left:0}}',
     '@media(max-width:600px){.site-footer{padding:36px 20px 18px}.ft-top{grid-template-columns:1fr 1fr;gap:20px 16px}.ft-top .ft-brand{grid-column:1/-1}.ft-bottom{flex-direction:column;align-items:flex-start}}'
