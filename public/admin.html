@@ -478,6 +478,27 @@
           </div>
         </div>
 
+        <!-- KHỐI · LỊCH MARKETING 59 NGÀY (đẩy Tương Hợp song song đợt SEO viral-seo-pages) -->
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title"><svg class="pt-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01"/></svg>Lịch Marketing 59 Ngày — Đẩy Tương Hợp</div>
+            <span style="font-size:.72rem;color:var(--text-lt)" id="mktcal-progress"></span>
+          </div>
+          <div class="panel-body" style="font-size:.76rem;color:var(--text-lt);padding-bottom:.6rem">
+            Khớp nhịp với cron <code>viral-seo-pages</code> (7.080 trang Tương Hợp Hôn Nhân/Làm Ăn viết lại 120 dòng/ngày,
+            bắt đầu 07/09/2026, ~59 ngày) — SEO đang liên tục có trang MỚI cho đúng 2 tool này, marketing đẩy cùng lúc để
+            traffic mới có chỗ rơi vào. Tool luân phiên theo ngày chẵn/lẻ, góc nội dung xoay vòng 7 ngày (hook → giải
+            thích cách chấm điểm → phản hồi thật → sửa hiểu lầm → CTA giá → hỏi đáp UGC → tổng kết tuần) — <b>đây là GỢI
+            Ý</b>, không tự đăng gì, bấm "Copy" rồi tự dán vào công cụ đăng bài.
+          </div>
+          <div class="table-wrap" style="max-height:480px;overflow-y:auto">
+            <table>
+              <thead><tr><th>Ngày</th><th>Thứ</th><th>Tool</th><th>Góc nội dung</th><th>Gợi ý caption</th><th></th></tr></thead>
+              <tbody id="mktcal-body"></tbody>
+            </table>
+          </div>
+        </div>
+
         <!-- KHỐI · THỦ THUẬT CHUYỂN ĐỔI NGOÀI GIÁ -->
         <div class="panel">
           <div class="panel-header">
@@ -4600,7 +4621,7 @@ let _mktLoadedKey = '';
 let _seasonalRendered = false;
 
 function loadMarketingOnce() {
-  if (!_seasonalRendered) { renderSeasonalCalendar(); renderConversionTactics(); _seasonalRendered = true; }
+  if (!_seasonalRendered) { renderSeasonalCalendar(); renderConversionTactics(); renderMktCalendar59(); _seasonalRendered = true; }
   const f = document.getElementById('mkt-from'), t = document.getElementById('mkt-to');
   const key = (f && f.value || '') + '|' + (t && t.value || '');
   if (key !== '|' && key === _mktLoadedKey) return;
@@ -4801,6 +4822,97 @@ function useSeasonalSuggestion(i) {
   if (pctEl) pctEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
 }
 
+// ── Lịch Marketing 59 Ngày — đẩy Tương Hợp song song đợt SEO viral-seo-pages ──
+// Mốc bắt đầu ĐO ĐƯỢC từ cron_runs (job_key='viral-seo-pages', lượt chạy đầu
+// tiên 2026-09-07 04:30 UTC = 11:30 VN), KHÔNG đoán — xem docs/nhat-ky/2026-09.md.
+// 59 ngày suy từ 7.080 trang (3.540 mỗi category) / 120 dòng/ngày (CLAUDE.md
+// "Nợ kỹ thuật đã ghi nhận"). Thuần TĨNH (không đọc DB, không tự đăng gì) —
+// cùng triết lý với SEASONAL_CALENDAR: chỉ là GỢI Ý, Henry tự copy rồi đăng tay.
+const MKTCAL59_START = '2026-09-07';
+const MKTCAL59_DAYS = 59;
+const MKTCAL59_TOOLS = {
+  'tuong-hop-hon-nhan': 'Tương Hợp Hôn Nhân',
+  'tuong-hop-lam-an': 'Tương Hợp Làm Ăn',
+};
+// Xoay vòng 7 ngày — mỗi ngày MỘT góc nội dung, lặp lại theo tuần. Tool luân
+// phiên chẵn/lẻ (khớp cách viral-seo-pages xen kẽ 2 category theo id ASC).
+const MKTCAL59_PILLARS = [
+  { label: 'Hook — câu chuyện thật', angle: (t) => `Vì sao ${t} lại đúng đến vậy? Kể 1 case thật (ẩn danh) rồi chốt bằng câu hỏi mở cho người xem tự soi cặp của mình.` },
+  { label: 'Giải thích cách chấm điểm', angle: (t) => `Đằng sau con số % hợp của ${t} là gì — 1-2 câu về cổ pháp đứng sau, không lộ hết công thức, chỉ đủ để thấy "có căn cứ, không bịa".` },
+  { label: 'Phản hồi thật', angle: (t) => `Trích 1 câu feedback thật (ẩn danh) của người đã dùng ${t} — ưu tiên câu có chi tiết cụ thể, tránh khen chung chung.` },
+  { label: 'Sửa hiểu lầm', angle: (t) => `3 hiểu lầm phổ biến khi tra ${t} (vd chỉ nhìn tuổi mà quên giờ/tháng sinh) — dạy đúng rồi mới dẫn vào tool.` },
+  { label: 'CTA giá', angle: (t) => `Nhắc giá + link ${t} trực tiếp — kèm voucher đang bật nếu có (tra tab "Tăng Trưởng" trước khi đăng).` },
+  { label: 'Hỏi đáp UGC', angle: (t) => `Mời người theo dõi để lại cặp tuổi ở comment cho ${t}, hẹn trả lời/trích trong bài hôm sau — tăng tương tác thật.` },
+  { label: 'Tổng kết tuần', angle: (t) => `Điểm lại insight thú vị nhất tuần từ ${t} (câu hỏi hay nhất, case bất ngờ nhất) + tease góc nội dung tuần sau.` },
+];
+
+// ⚠️ CỐ Ý không dùng `new Date(...).toDateString()`/getDay()/getDate() kiểu
+// thường — chúng đọc theo múi giờ TRÌNH DUYỆT của người xem, không phải VN
+// (bẫy đã ghi nhiều lần trong CLAUDE.md). Ở đây dùng Date.UTC() làm trục toạ
+// độ NGÀY LỊCH thuần (không phải một thời điểm UTC thật) cho CẢ mốc bắt đầu
+// lẫn "hôm nay quy về VN" (now + 7h rồi cắt về đầu ngày) — nhất quán ở cả hai
+// đầu nên luôn đúng ngày VN dù máy Henry đặt múi giờ nào.
+function _mktcal59StartCal() {
+  const [sy, sm, sd] = MKTCAL59_START.split('-').map(Number);
+  return Date.UTC(sy, sm - 1, sd);
+}
+
+/** Ngày thứ mấy (0-based) kể từ MKTCAL59_START, quy theo VN — có thể âm (chưa
+ *  tới) hoặc ≥ MKTCAL59_DAYS (đã qua). Dùng chung cho cả bảng lẫn dòng trạng thái. */
+function _mktcal59TodayOffset() {
+  const nowVnMidnight = Math.floor((Date.now() + 7 * 3600e3) / 864e5) * 864e5;
+  return Math.round((nowVnMidnight - _mktcal59StartCal()) / 864e5);
+}
+
+function _mktcal59Rows() {
+  const startCal = _mktcal59StartCal();
+  const todayOffset = _mktcal59TodayOffset();
+  const rows = [];
+  for (let i = 0; i < MKTCAL59_DAYS; i++) {
+    const d = new Date(startCal + i * 864e5); // đọc lại bằng getUTC* — xem renderMktCalendar59
+    const toolId = i % 2 === 0 ? 'tuong-hop-hon-nhan' : 'tuong-hop-lam-an';
+    const toolLabel = MKTCAL59_TOOLS[toolId];
+    const pillar = MKTCAL59_PILLARS[i % MKTCAL59_PILLARS.length];
+    rows.push({
+      day: i + 1, date: d, toolId, toolLabel,
+      pillar: pillar.label, caption: pillar.angle(toolLabel),
+      isToday: i === todayOffset,
+    });
+  }
+  return rows;
+}
+
+function renderMktCalendar59() {
+  const body = document.getElementById('mktcal-body');
+  const note = document.getElementById('mktcal-progress');
+  if (!body) return;
+  const rows = _mktcal59Rows();
+  const todayOffset = _mktcal59TodayOffset();
+  if (note) {
+    note.textContent = todayOffset >= 0 && todayOffset < MKTCAL59_DAYS
+      ? `Hôm nay: ngày ${todayOffset + 1}/${MKTCAL59_DAYS}`
+      : (todayOffset < 0 ? 'Chưa tới ngày bắt đầu' : 'Đã qua 59 ngày');
+  }
+  const WD = ['CN', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7'];
+  body.innerHTML = rows.map((r) => `
+    <tr${r.isToday ? ' style="background:rgba(212,175,55,.12)"' : ''}>
+      <td class="tabular">${r.day}${r.isToday ? ' <span class="badge badge-gold">hôm nay</span>' : ''}</td>
+      <td style="color:var(--text-lt);font-size:.72rem">${WD[r.date.getUTCDay()]} ${String(r.date.getUTCDate()).padStart(2, '0')}/${String(r.date.getUTCMonth() + 1).padStart(2, '0')}</td>
+      <td>${escHtmlLocal(r.toolLabel)}</td>
+      <td style="color:var(--text-lt);font-size:.72rem">${escHtmlLocal(r.pillar)}</td>
+      <td style="font-size:.74rem;max-width:380px">${escHtmlLocal(r.caption)}</td>
+      <td><button class="btn btn-outline btn-sm" onclick="mktCal59Copy(${r.day - 1})">Copy</button></td>
+    </tr>`).join('');
+}
+
+async function mktCal59Copy(i) {
+  const r = _mktcal59Rows()[i];
+  if (!r) return;
+  const text = `[Ngày ${r.day}/59 · ${r.toolLabel}] ${r.caption}`;
+  try { await navigator.clipboard.writeText(text); toast('Đã copy', 'success'); }
+  catch { toast('Trình duyệt chặn clipboard — bôi đen tự chép tay', 'error'); }
+}
+
 // ── Thủ thuật chuyển đổi ngoài giá ───────────────────────────────────────
 // Đề xuất cho Henry — liệt kê cái ĐÃ có trong sản phẩm (để không làm lại) và
 // cái CHƯA có (để cân nhắc). Nội dung tĩnh, sửa trực tiếp mảng này khi có ý
@@ -4816,8 +4928,8 @@ const CONVERSION_TACTICS = [
     note: 'Khách chưa đăng nhập được thử rail chat trong 3 trần độc lập trước khi phải trả — cho nếm trước khi bán.' },
   { status: 'new', title: 'Ưu đãi 24-48h tài khoản mới',
     note: 'Giảm giá RIÊNG cho 24-48h đầu sau đăng ký (khác đợt KM theo mùa) — đánh đúng lúc hứng thú cao nhất, tạo cảm giác "bỏ lỡ là mất".' },
-  { status: 'new', title: 'Nhắc phiên dở dang',
-    note: 'Người đã nhập ngày sinh nhưng chưa trả tiền → thêm kịch bản nhắc qua email/Telegram trong 24h, tận dụng hạ tầng reminder/cross-sell đã có (lib/email/send.ts, lib/marketing/email-reminder.ts).' },
+  { status: 'live', title: 'Nhắc phiên dở dang',
+    note: 'Trigger "đơn rơi 24h" (lib/marketing/email-abandoned-checkout.ts) — user đã bấm mở khoá tool nhưng chưa mua thì được nhắc qua email + voucher 15%. Mặc định TẮT, xem tab "Tăng Trưởng" để bật.' },
   { status: 'new', title: 'Bằng chứng xã hội cạnh nút mua',
     note: '"X người đã xem trong tháng này" hoặc trích 1 câu review ngắn ngay cạnh giá — giảm cảm giác rủi ro trước khi bấm.' },
   { status: 'new', title: 'Bundle chéo sau kết quả miễn phí',
