@@ -551,7 +551,7 @@
       // Bổ sung dòng "MST: ..." ngay khi có, theo Nghị định 52/2013.
       + '<div class="ft-legal">'
       + ftLegalRow('building-2', '<strong>Công ty TNHH Kira Tech</strong><br><span class="dim">(Kira Tech Company Limited)</span>')
-      + ftLegalRow('pin', '901 Lê Đức Thọ, Phường An Hội Đông,<br>Thành phố Hồ Chí Minh, Việt Nam')
+      + ftLegalRow('pin', 'Toà nhà Master Building, 41-43 Trần Cao Vân,<br>Phường Xuân Hòa (Quận 3), TP.HCM')
       + ftLegalRow('mail', 'contact@tuviminhbao.com &nbsp;·&nbsp; 0343.848.795')
       + '</div>'
       + '<div class="ft-social">'
