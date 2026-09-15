@@ -70,7 +70,7 @@ OTP thật đã nhận được (xem `docs/nhat-ky/2026-09.md`). Còn `EMAIL_FRO
 |---|---|---|---|
 | OTP/confirm signup | Supabase Auth (đăng ký) | SMTP Resend, KHÔNG qua `send.ts` | LUÔN bật |
 | Hoá đơn nạp Lượng | `settlePayPalTopup` + `bank-webhook`, chokepoint `credited` | `lib/email/invoice.ts` → `sendTransactionalEmail` | LUÔN bật |
-| PDF luận giải | Nút "Gửi PDF qua email" (`public/luan-giai.html`) | `app/api/luan-giai/email-pdf` → `lib/pdf/luan-giai.tsx` (react-pdf, KHÔNG Puppeteer) → `sendTransactionalEmail` (đính kèm) | Theo yêu cầu user |
+| PDF luận giải | Nút "Gửi email" (`public/tools-shared/report-delivery.js`, dùng chung cho `app-luan-giai.html`/`app-chu-trinh-cuoc-doi.html` — `public/luan-giai.html` đã RETIRE, xem `docs/nhat-ky/2026-09.md` "Retire /luan-giai.html") | `app/api/luan-giai/email-pdf` → `lib/pdf/luan-giai.tsx` (react-pdf, KHÔNG Puppeteer) → `sendTransactionalEmail` (đính kèm) | Theo yêu cầu user |
 | Reminder (còn Lượng, idle) | Cron tuần `email-reminder-idle` | `lib/marketing/email-reminder.ts` — dùng lại RPC `dashboard_at_risk` | **TẮT** — `app_config['marketing.email_reminder_idle'].enabledBudgetPerRun` = 0 |
 | Cross-sell (tool liên quan) | Cron tuần `email-cross-sell` | `lib/marketing/email-cross-sell.ts` — RPC `cross_sell_candidates` (cặp tool tay chọn) | **TẮT** — `app_config['marketing.email_cross_sell'].enabledBudgetPerRun` = 0 |
 | Broadcast (admin soạn tay) | `admin.html` → `handleAdminChannelBroadcast` (platform=email) | Nạp `email_broadcast_queue`, cron `email-broadcast-drain` (mỗi 15 phút) rút dần | Sẵn sàng, admin bấm mới gửi |
@@ -90,6 +90,29 @@ Node tự resolve đúng (đọc thẳng `exports` trong `package.json`), nên
 `next.config.mjs` khai `serverExternalPackages: ['@react-pdf/renderer']` để
 Next ĐỂ NGOÀI bundle — route `require()`/`import` thẳng lúc chạy như Node gọi
 trực tiếp. Đã xác minh bằng bản dựng PDF thật (không bundle) trước khi merge.
+
+## Guest checkout không có email — vì sao mời "Lưu tài khoản" NGAY lúc thanh toán xong
+
+Guest checkout (Supabase Anonymous Sign-ins qua `requireCredits()`, xem luật
+ở `CLAUDE.md`/`docs/luat/tien.md`) cho phép thanh toán và giữ Lượng mà KHÔNG
+có email nào trong `auth.users`. Hoá đơn/reminder/cross-sell/broadcast đều
+đã có sẵn kiểm `if (!email) continue` để không crash, nhưng đó là bỏ qua ÂM
+THẦM — khách mất hoá đơn, không có cách nào bị nhắc lại nếu xoá cookie.
+
+Modal "Lưu tài khoản" (`showClaimModal`, `public/auth.js` — nhận `opts`
+{title, desc, submitLabel, callback}, PUT `/auth/v1/user` nâng cấp tại chỗ,
+giữ nguyên `user_id`/Lượng/lịch sử) đã có từ trước nhưng chỉ nằm THỤ ĐỘNG
+trong dropdown menu nav. Từ 2026-09-15 (PR #890), bật CHỦ ĐỘNG thêm ở 2 điểm
+thanh toán thành công của guest:
+- `public/tuvi-paywall.js` `_qrPoll` — QR-tại-chỗ trong trang tool, đường
+  guest checkout CHÍNH (không rời trang).
+- `public/topup.html` `checkBankPoll` — guest ghé thẳng trang nạp; chỉ mời
+  khi `resumeToTool()` trả `false` (không có tool đang chờ resume), vì có
+  thì trang điều hướng đi trong 400ms, mời lúc đó chỉ chớp qua vô ích.
+
+`public/tools-shared/report-delivery.js` (nút "Gửi email" ở PDF luận giải)
+đã tự làm đúng việc này từ trước — mở `showClaimModal` với `callback` để tự
+gửi báo cáo ngay sau khi claim xong, không cần khách bấm lại.
 
 ## Broadcast email — vì sao TÁCH nạp/gửi qua hàng đợi
 
