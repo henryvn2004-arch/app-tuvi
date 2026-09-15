@@ -1003,6 +1003,13 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
           window.refreshNavCredits && window.refreshNavCredits();
           _banner('✓ Nạp thành công ' + d.credits + ' Lượng');
           requireCredits(slug, callback);
+          // Khách vô danh vừa trả tiền thật — đúng lúc động lực giữ Lượng cao
+          // nhất, và cũng là lúc hoá đơn (lib/email/invoice.ts) ÂM THẦM không
+          // gửi được vì auth.users.email rỗng. Mời lưu tài khoản NGAY, không
+          // đợi khách tự mở menu nav mới thấy dòng nhắc nhỏ.
+          if (_isAnonymous() && window.showClaimModal) {
+            setTimeout(() => window.showClaimModal(), 1800);
+          }
         }, 1200);
       } else if (manual) {
         _qrStatus('Chưa ghi nhận. Chờ thêm vài giây…', false);

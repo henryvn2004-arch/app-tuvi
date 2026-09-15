@@ -277,9 +277,43 @@ function lasoCard(l) {
       <div class="card-actions">
         <button class="btn-outline navy" onclick="event.stopPropagation();openLuanModal('${l.slug}','${escHtml(name)}')">${ic('book-open',14)} Xem Lại</button>
         <button class="btn-outline gold" onclick="event.stopPropagation();openChatModal('${l.slug}','${escHtml(name)}','laso')">${ic('message-circle',14)} Chat</button>
+        ${isLuanGiaiPdfSlug(l.slug) ? `<button class="btn-outline" onclick="event.stopPropagation();resendLuanGiaiPdf('${l.slug}',this)">${ic('mail',14)} Gửi PDF</button>` : ''}
       </div>
     </div>
   </div>`;
+}
+
+// 🔑 Chỉ hiện nút cho 2 tool CÓ PDF luận giải (laso/chu-trinh-cuoc-doi) — lọc
+// HIỂN THỊ thôi, quyết định thật (và chặn tool khác) nằm ở server
+// (`classifySlug`, app/api/luan-giai/resend-pdf/route.ts) theo ĐÚNG cùng quy
+// ước tiền tố slug (xem `makeLasoSlug`, lib/engine/laso.ts) — đừng để hai bản
+// trôi khỏi nhau.
+function isLuanGiaiPdfSlug(slug) {
+  return !(slug.indexOf('tu-binh-') === 0 || slug.indexOf('van-han-nam-al') === 0);
+}
+
+// ── GỬI LẠI PDF (Pha 5 — "đời sống sau báo cáo") ──
+async function resendLuanGiaiPdf(slug, btn) {
+  const orig = btn.innerHTML;
+  btn.disabled = true;
+  btn.innerHTML = 'Đang gửi…';
+  try { window.Track && window.Track.event && window.Track.event('report_resend_click'); } catch (e) { /* ignore */ }
+  try {
+    const res = await fetch('/api/luan-giai/resend-pdf', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${await _tok()}` },
+      body: JSON.stringify({ slug }),
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) { alert('Gửi lại chưa thành công: ' + (data.error || 'lỗi không rõ') + '. Thử lại sau ít phút.'); btn.innerHTML = orig; btn.disabled = false; return; }
+    try { window.Track && window.Track.event && window.Track.event('report_resend_sent'); } catch (e) { /* ignore */ }
+    btn.innerHTML = `${ic('check',14)} Đã gửi`;
+    setTimeout(() => { btn.innerHTML = orig; btn.disabled = false; }, 4000);
+  } catch (e) {
+    alert('Gửi lại lỗi: ' + e.message);
+    btn.innerHTML = orig;
+    btn.disabled = false;
+  }
 }
 
 // ── RENDER XEM TUOI ──
