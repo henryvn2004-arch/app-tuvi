@@ -305,27 +305,31 @@ button.item{border:none;background:none;font:inherit;text-align:left}
 .intro-card{position:relative;overflow:hidden;background:linear-gradient(135deg,#F3E7C8,#FBF6E8);border:1px solid var(--gold-soft);border-radius:12px;box-shadow:var(--shadow);margin-bottom:16px;min-height:230px;display:flex;flex-direction:column;justify-content:flex-end}
 .intro-card .intro-avatar{display:none}
 .intro-card .intro-text{max-width:100%}
-.intro-card .intro-t{font-family:var(--serif);font-size:19px;font-weight:700;color:var(--text);margin-bottom:6px}
-.intro-card .intro-d{font-size:13px;color:var(--text-mid);line-height:1.65}
-.intro-card .intro-d b{color:var(--text)}
+/* Henry 2026-09-15 (vòng 10, "wording nhìn cho chuyên nghiệp"): tiêu đề đổi
+   sang tông NÂU ẤM khớp mực thủy mặc (thay vì `var(--text)` đen trung tính)
+   + to hơn cho có sức nặng; mô tả thêm gạch trái kiểu trích dẫn — cùng họ
+   màu với `--gold-soft` để không cần thêm biến mới. */
+.intro-card .intro-t{font-family:var(--serif);font-size:22px;font-weight:700;color:#5B3A1A;margin-bottom:8px}
+.intro-card .intro-d{font-size:13.5px;color:var(--text-mid);line-height:1.7;border-left:3px solid var(--gold-soft);padding-left:14px}
+.intro-card .intro-d b{color:#5B3A1A}
 
 /* Banner thủy mặc khổ ngang (`scripts/gen-hero-banners.mjs`, dùng CHUNG theo
    NHÓM cổ pháp — xem lib/media/hero-banner-prompt.ts) — LÀ nền của cả
    `.intro-card`, không phải thumbnail cạnh chữ (Henry 2026-09-14, vòng 5).
    Nguồn 1536×1024 (khổ RỘNG NHẤT gpt-image-2 hỗ trợ) trong khi khung banner
    RỘNG hơn nhiều theo TỈ LỆ (aspect ~3-4:1) — `cover` (vòng 5-8) từng phải
-   cắt dọc rất mạnh để phủ kín bề rộng, ăn mất mặt trời/núi ở giữa ảnh dù đã
-   tăng chiều cao card. Henry vòng 9: "resize nhỏ lại, chiều cao bằng banner
-   bình thường, chiều dài không quan trọng, miễn nhìn được FULL hình" — đổi
-   sang `object-fit:contain` (không cắt gì cả, ảnh tự co theo chiều CAO của
-   khung, bề rộng hiển thị hẹp lại theo đúng tỉ lệ gốc 1.5:1) + neo phải
-   (`object-position:right`) để nhân vật luôn sát mép phải. Khoảng trống bên
-   trái (nơi ảnh không phủ tới) hiện màu NỀN của chính `.intro-photo` — đặt
-   TRÙNG tông parchment với `.intro-card` (không dùng `var(--navy)` nữa) nên
-   liền mạch, không có ranh giới. Không cần chiều cao card LỚN như vòng 7 nữa
-   vì `contain` không bao giờ cắt mất phần nào — min-height quay lại mức
-   "bình thường" (xem dưới). */
-.intro-card .intro-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;object-position:right center;z-index:0;background:#F3E7C8}
+   cắt dọc rất mạnh, ăn mất mặt trời/núi ở giữa ảnh. Henry vòng 9: "resize nhỏ
+   lại, chiều cao bằng banner bình thường, miễn nhìn được FULL hình" — thay vì
+   `object-fit:contain` (khung ẢNH vẫn to bằng cả card, chỉ NỘI DUNG co lại —
+   để lại một dải trống VÔ HÌNH bên trái mà mask bên dưới không biết đâu mà
+   bám), đặt KÍCH THƯỚC THẬT của khung ảnh khớp đúng nội dung hiển thị:
+   `height:100%` + `aspect-ratio` tự suy ra `width`, neo `top:0;right:0`. Nhờ
+   vậy khung ảnh = đúng vùng tranh nhìn thấy, không còn phần trống vô hình.
+   Henry vòng 10 ("2 hộp riêng biệt, tìm hiệu ứng blend"): `mask-image` phai
+   dần 18% bên trái CHÍNH khung này (nay khớp ảnh nên phai đúng chỗ) — để lộ
+   màu NỀN của `.intro-photo` (đặt TRÙNG tông parchment với `.intro-card`,
+   không dùng `var(--navy)` nữa) mượt dần thay vì một đường cắt cứng. */
+.intro-card .intro-photo{position:absolute;top:0;right:0;width:auto;height:100%;aspect-ratio:1536/1024;object-fit:cover;z-index:0;background:#F3E7C8;-webkit-mask-image:linear-gradient(90deg,transparent 0%,#000 18%);mask-image:linear-gradient(90deg,transparent 0%,#000 18%)}
 /* Gradient PHỦ từ trái (đục, tông PARCHMENT khớp `.intro-card` — không dùng
    `var(--paper)` nữa, xem dưới) sang phải (trong suốt) — đảm bảo chữ đọc được
    trên MỌI ảnh nhóm mà không cần biết trước tông màu. Dùng % thay vì px nên
@@ -818,12 +822,15 @@ font-family:inherit}
    không phải sửa lại mọi chỗ đang gọi `.btn-go`. */
 .btn-go.inline{width:auto;flex-direction:row;padding:9px 16px;font-size:13px;box-shadow:none}
 /* Hero card (`.intro-card`, xem thêm ở trên) — hàng 3 pill tính năng đứng
-   dưới ảnh + mô tả có sẵn. */
+   dưới ảnh + mô tả có sẵn. Vòng 10: nhãn đổi màu NÂU ấm + đậm (khớp `.intro-t`)
+   thay vì xám trung tính, thêm gạch dọc phân cách giữa các pill cho gọn gàng
+   như một hàng thống kê thay vì 3 icon rời rạc. */
 .hero-pills{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:14px}
-.hero-pill{display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center}
+.hero-pill{display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;position:relative}
+.hero-pill:not(:first-child)::before{content:'';position:absolute;left:0;top:4px;bottom:4px;width:1px;background:var(--line-2)}
 .hero-pill .hp-ic{width:36px;height:36px;border-radius:50%;background:var(--white);border:1px solid var(--gold-soft);color:var(--gold-soft);display:flex;align-items:center;justify-content:center}
 .hero-pill .hp-ic svg{width:18px;height:18px}
-.hero-pill span{font-size:11px;color:var(--text-mid);line-height:1.35}
+.hero-pill span{font-size:11px;color:#5B3A1A;font-weight:600;line-height:1.35}
 /* Tiêu đề `.form-card` có icon dẫn đầu (thay `<h2>` trần) */
 .fc-head{display:flex;align-items:center;gap:10px;margin-bottom:3px}
 .fc-head .fc-ic{flex:0 0 auto;width:34px;height:34px;border-radius:9px;background:var(--navy);color:var(--gold);display:flex;align-items:center;justify-content:center}
