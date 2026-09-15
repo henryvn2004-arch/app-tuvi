@@ -185,25 +185,55 @@ export async function maybeRefund(p: {
 
 /**
  * Bọc Response của một route tool TRẢ PHÍ: hỏng vì lỗi HỆ THỐNG thì cân nhắc
- * hoàn Lượng, rồi trả lại CHÍNH Response đó không đổi.
+ * hoàn Lượng, rồi trả lại Response.
  *
  * Dùng lại phân loại của S1 (`reasonFromStatus` + `isUserFault`) nên chỉ một
  * nơi duy nhất định nghĩa "lỗi nào là lỗi hệ thống" — hoàn tiền và bảng Sức
  * Khỏe Tool không bao giờ bất đồng về việc lượt đó có hỏng thật hay không.
+ *
+ * Henry 2026-09-09: khách trả tiền xong tool hỏng mà không biết Lượng có được
+ * hoàn không — phải BÁO NGAY, không bắt họ tự đoán. Vì `maybeRefund` ở trên đã
+ * chạy XONG (thật hoặc shadow) trước khi route trả lời, ta gắn thẳng kết quả
+ * vào BODY của response lỗi này — client khỏi cần vòng gọi thứ hai để biết có
+ * được hoàn hay chưa. CHỈ gắn `refunded:true` khi đã hoàn THẬT (mode='live')
+ * — shadow/chạm trần ngày mà vẫn nói "đã hoàn" là nói dối khách.
+ *
+ * `slug` nhận MỘT hoặc NHIỀU slug ứng viên, thử LẦN LƯỢT tới khi tìm được
+ * slug thực sự bị trừ tiền — cần cho tool chia phần (Luận Giải: một phần có
+ * thể được trả qua slug PHẦN lẻ hoặc slug CẢ BÓ tuỳ đường mua, không biết
+ * trước đường nào cho tới khi tra `credit_transactions`).
  */
 export async function refundIfSystemFailure(
   res: Response,
-  p: { toolId: string; userId: string; slug: string },
+  p: { toolId: string; userId: string; slug: string | string[]; isAnonymous?: boolean },
 ): Promise<Response> {
   const { reasonFromStatus, isUserFault } = await import('./tool-outcome');
   const reason = reasonFromStatus(res.status);
   if (!reason || isUserFault(reason)) return res; // thành công, hoặc lỗi do người dùng
-  try {
-    await maybeRefund({ ...p, reason });
-  } catch {
-    /* hoàn tiền hỏng KHÔNG được đổi phản hồi trả về cho người dùng */
+  const slugs = (Array.isArray(p.slug) ? p.slug : [p.slug]).filter(Boolean);
+  let outcome: RefundOutcome | null = null;
+  for (const slug of slugs) {
+    try {
+      outcome = await maybeRefund({ toolId: p.toolId, userId: p.userId, slug, reason });
+    } catch {
+      outcome = null; /* hoàn tiền hỏng KHÔNG được đổi phản hồi trả về cho người dùng */
+    }
+    if (outcome?.refunded) break;
   }
-  return res;
+  if (!outcome?.refunded) return res;
+  try {
+    const { NextResponse } = await import('next/server');
+    const { CORS_HEADERS } = await import('@/lib/cors');
+    const body = await res.clone().json();
+    const r = NextResponse.json(
+      { ...body, refunded: true, refundedCredits: outcome.credits, isAnonymous: !!p.isAnonymous },
+      { status: res.status },
+    );
+    Object.entries(CORS_HEADERS).forEach(([k, v]) => r.headers.set(k, v));
+    return r;
+  } catch {
+    return res; // body không phải JSON — trả nguyên bản; tiền vẫn đã hoàn thật
+  }
 }
 
 /** Ghi vào `events` để panel Vận Hành đọc — cả lượt shadow lẫn lượt thật. */
