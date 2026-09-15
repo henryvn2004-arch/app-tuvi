@@ -1,0 +1,32 @@
+-- ============================================================
+-- NÂNG GIÁ RAIL-MESSAGE 5 → 10 LƯỢNG — M1 track marketing "kiểu Shopee"
+-- ============================================================
+-- Vì sao: Sổ lợi nhuận theo tool (lib/marketing/tool-profit.ts, PR #865)
+-- lộ ra rail-message bán DƯỚI giá vốn. Đo lại kỹ hơn trước khi tăng (30
+-- ngày, n=120, events.meta.cost_vnd):
+--   trung bình   4.614đ/lượt
+--   TRUNG VỊ     5.102đ/lượt   ← không lệch do vài lượt đắt bất thường,
+--                                 lỗ ĐỀU trên cả lượt "bình thường"
+--   p90          7.568đ/lượt
+-- Giá cũ 5 Lượng ≈ 2.500đ (499đ/Lượng, tính theo gói bậc hai đang bán,
+-- credit_packages package_id='120') chỉ bằng ~49% chi phí trung vị.
+--
+-- Henry chốt raise-price thay vì chặn user có Lượng thật (đã nạp tiền) —
+-- khác hẳn hướng "chỉ mở rail cho user đã mua tool" đã cân nhắc trước đó.
+-- Giữ nguyên "Bậc 0" (rail.no_context_msg_cap, PR #869) — hai việc bổ sung
+-- nhau: Bậc 0 cắt lượt CHƯA HỘI TỤ về lá số (lãng phí bất kể giá), giá mới
+-- fix biên lợi nhuận của lượt ĐÃ hội tụ.
+--
+-- 10 Lượng ≈ 5.000đ — khớp trung vị (hoà vốn lượt điển hình), để lượt rẻ
+-- hơn trung vị bù cho lượt đắt hơn một chút (không đặt tới p90 — rail vẫn
+-- cần rẻ, tần suất cao, không phải món hàng lớn như Luận Giải/Tử Bình).
+--
+-- ⚠️ SỬA CẢ HAI CHỖ (luật đã ghi từ migration-pricing-v2.sql, "Giá rail:
+-- đồng bộ fallback trong app_config"): `/api/v1/chat` đọc `tool_pricing`
+-- TRƯỚC, chỉ rơi về `app_config['chat.cost']` khi đọc hụt (Supabase chớp
+-- một nhịp) — để lệch là đúng bug cũ: người dùng bị trừ SAI giá đúng lúc
+-- Supabase trục trặc.
+-- ============================================================
+
+update public.tool_pricing set credits = 10, updated_at = now() where tool_id = 'rail-message';
+update public.app_config set value = to_jsonb(10) where key = 'chat.cost';
