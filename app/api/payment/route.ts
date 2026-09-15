@@ -15,7 +15,7 @@ import { getPackages, quoteCustomVnd, vndPerCredit } from '@/lib/billing/package
 import { PAYPAL_BASE, PAYPAL_CURRENCY, VND_PER_USD, getPayPalToken, humanIssueMessage, settlePayPalTopup } from '@/lib/billing/paypal';
 import { getToolPrice, getToolParts } from '@/lib/billing/pricing';
 import { hasSlugAccess } from '@/lib/billing/credits';
-import { freeGenGate, FREE_GEN_CAP_MESSAGE, railFreeRemaining } from '@/lib/billing/viral-budget';
+import { freeGenGate, FREE_GEN_CAP_MESSAGE, railFreeRemaining, railFreeGrant, railBonusTurnsPerPurchase } from '@/lib/billing/viral-budget';
 import { anonTrialStatus } from '@/lib/billing/anon-trial';
 import { getToolRevenue } from '@/lib/marketing/tool-profit';
 import { syncOnboardingTasks, KHOI_HANH_STEPS } from '@/lib/onboarding/tasks';
@@ -463,6 +463,14 @@ async function handleDeduct(request: NextRequest, body: Record<string, unknown>)
     }
 
     await logTransaction({ userId: user.id, amount: -amount, type: toolType, description, slug: slug || undefined });
+
+    // Quà kèm: mọi lượt mua tool THÀNH CÔNG tặng thêm lượt rail (dùng CHUNG
+    // cơ chế "lượt rail tặng" đã có, xem ghi chú ở viral-budget.ts) — biến
+    // rail thành đặc quyền đi kèm sản phẩm thật thay vì bán lẻ đơn thuần.
+    // Fire-and-forget SAU khi đã trả lời client: không được để một RPC phụ
+    // trễ hay lỗi làm chậm/hỏng phản hồi thanh toán chính.
+    void railBonusTurnsPerPurchase().then((n) => railFreeGrant(user.id, n)).catch(() => {});
+
     return ok({ success: true, balance: newBal });
 
   } catch (e: unknown) { return err((e as Error).message); }
