@@ -15,13 +15,13 @@
      có giá trị light TRÙNG KHÍT màu gốc (nên light mode không đổi một pixel)
      và có bản sáng ở dark. Dùng thẳng --navy làm chữ thì ở dark ra 1,04:1. */
   --navy:#061A2E; --navy-2:#0A2540; --navy-3:#0D3B5E;
-  --gold:#C9A84C; --gold-soft:#9A7B3A; --gold-lt:#F9F4EB;
+  --gold:#C9A84C; --gold-soft:#7C5F26; --gold-lt:#F9F4EB;
   --blue:#1455A4; --red:#C0392B; --green:#1E6B3C;
   --heading:#061A2E; --tx-blue:#1455A4; --tx-red:#C0392B; --tx-green:#1E6B3C;
   /* Chữ kem trên thẻ NAVY CỐ ĐỊNH (.today-card giữ nguyên nền navy ở cả hai
      theme). CỐ Ý không khai lại ở dark — theo theme là chữ tối trên nền navy. */
   --gold-on-navy:#F9F4EB;
-  --text:#1a1a1a; --text-mid:#4a4a4a; --text-lt:#7a7a7a; --ink:#1a1a1a; --ink-mid:#4a4a4a; --ink-lt:#7a7a7a;
+  --text:#1a1a1a; --text-mid:#4a4a4a; --text-lt:#666666; --ink:#1a1a1a; --ink-mid:#4a4a4a; --ink-lt:#666666;
   --line:#E6E3DC; --line-2:#D8D4CB; --border-lt:#E8E8E8;
   --paper:#FBFAF7; --paper-2:#F4F2EC; --white:#fff;
   --sb-txt:#C9CFD8; --sb-txt-dim:#7d8794; --sb-line:rgba(255,255,255,.07);
@@ -384,7 +384,7 @@ body{font-family:var(--sans);background:var(--paper-2);color:var(--text);font-si
 .rail-meter .rm-sub{opacity:.75}
 .rail-meter .rm-a{color:var(--tx-blue);font-weight:600;text-decoration:none;white-space:nowrap}
 .rail-meter .rm-a:hover{text-decoration:underline}
-.rail-meter.low .rm-t b{color:var(--gold,#9A7B3A)}
+.rail-meter.low .rm-t b{color:var(--gold,#7C5F26)}
 .rail-meter.out .rm-t{color:var(--red,#C0392B);font-weight:600}
 
 /* ── THẺ MỜI TRONG DÒNG HỘI THOẠI ──
