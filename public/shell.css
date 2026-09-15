@@ -302,7 +302,7 @@ button.item{border:none;background:none;font:inherit;text-align:left}
    trước khi có banner nhóm — `check-intro-card.mjs` vẫn bắt buộc thẻ này khớp
    `key` nên giữ trong HTML, ẩn hẳn bằng CSS bên dưới chứ không xoá. Toàn bộ
    49 trang box tĩnh giờ đều đã gắn `.intro-photo` (2026-09-14, vòng 5). */
-.intro-card{position:relative;overflow:hidden;background:linear-gradient(180deg,var(--gold-lt),var(--white));border:1px solid var(--gold-soft);border-radius:12px;box-shadow:var(--shadow);margin-bottom:16px;min-height:230px;display:flex;flex-direction:column;justify-content:flex-end}
+.intro-card{position:relative;overflow:hidden;background:linear-gradient(135deg,#F3E7C8,#FBF6E8);border:1px solid var(--gold-soft);border-radius:12px;box-shadow:var(--shadow);margin-bottom:16px;min-height:230px;display:flex;flex-direction:column;justify-content:flex-end}
 .intro-card .intro-avatar{display:none}
 .intro-card .intro-text{max-width:100%}
 .intro-card .intro-t{font-family:var(--serif);font-size:19px;font-weight:700;color:var(--text);margin-bottom:6px}
@@ -335,12 +335,21 @@ button.item{border:none;background:none;font:inherit;text-align:left}
 @container ws (min-width:640px){
   .intro-card{min-height:420px}
 }
-/* Gradient PHỦ từ trái (đục, cùng tông `--paper`) sang phải (trong suốt) —
-   đảm bảo chữ đọc được trên MỌI ảnh nhóm mà không cần biết trước tông màu.
-   Dùng % thay vì px nên tỉ lệ giữ nguyên ở mọi bề rộng, kể cả mobile. Đứng
-   sau `.intro-photo` trong DOM (thẻ ảnh) nên `::after` của `.intro-card` vẽ
-   trên nó; `.intro-body`/`.hero-pills` có z-index cao hơn nên vẫn trên cùng. */
-.intro-card::after{content:'';position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(90deg,var(--paper) 0%,var(--paper) 52%,rgba(0,0,0,0) 88%)}
+/* Gradient PHỦ từ trái (đục, tông PARCHMENT khớp `.intro-card` — không dùng
+   `var(--paper)` nữa, xem dưới) sang phải (trong suốt) — đảm bảo chữ đọc được
+   trên MỌI ảnh nhóm mà không cần biết trước tông màu. Dùng % thay vì px nên
+   tỉ lệ giữ nguyên ở mọi bề rộng, kể cả mobile. Đứng sau `.intro-photo` trong
+   DOM (thẻ ảnh) nên `::after` của `.intro-card` vẽ trên nó; `.intro-body`/
+   `.hero-pills` có z-index cao hơn nên vẫn trên cùng.
+   Henry 2026-09-15 (vòng 8, "banner trông như dán ảnh đè lên"): dải chuyển
+   CŨ chỉ dài 36 điểm % (52→88) — đủ để chữ đọc được nhưng tạo một MÉP rõ nét
+   ngay chỗ ảnh "hiện ra", nhất là khi ảnh có viền tương phản (núi/cành thông)
+   đúng ngay chỗ đó. Kéo dài thành 62 điểm % (30→92) để ảnh "hiện dần" mượt
+   hơn thay vì lộ mép; đồng thời đổi màu dải phủ khớp tông parchment ấm của
+   `.intro-card` (thay vì `var(--paper)` gần trắng, lệch tông với tranh thủy
+   mặc "aged parchment" — chính lệch tông này, không chỉ độ dài dải, cũng góp
+   phần tạo cảm giác "dán đè" dù dải phủ đã che kín). */
+.intro-card::after{content:'';position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(90deg,#F3E7C8 0%,#F3E7C8 30%,rgba(243,231,200,0) 92%)}
 .intro-card .intro-body{position:relative;z-index:2;padding:18px 20px 4px;max-width:72%}
 .intro-card .hero-pills{position:relative;z-index:2;max-width:72%;margin:0;padding:12px 20px 18px}
 @media(max-width:640px){
