@@ -245,19 +245,19 @@ export async function checkAnomalies(): Promise<{ fired: FiredAlert[]; checked: 
   // xanh. Đây đúng là bộ ba đã để CMO Digest chết 14 ngày mà không ai biết.
   checked.push('job_health', 'env_preflight');
   try {
-    const { evaluateJobs, fetchPgcronRuns, syncJobFirstSeen, CRON_RUNS_LIMIT } = await import('@/lib/ops/jobs');
+    const { evaluateJobs, fetchPgcronRuns, fetchRecentCronRuns, syncJobFirstSeen } = await import(
+      '@/lib/ops/jobs'
+    );
     const { missingCriticalEnv } = await import('@/lib/ops/preflight');
 
-    const runsRes = await fetch(
-      `${SUPABASE_URL}/rest/v1/cron_runs?select=job_key,status,started_at,note` +
-        `&order=started_at.desc&limit=${CRON_RUNS_LIMIT}`,
-      SB_FRESH,
-    );
-    if (runsRes.ok) {
+    // N dòng gần nhất CHO MỖI job_key (không phải top-N toàn bảng) — job chạy
+    // mỗi 15 phút không đẩy được job TUẦN ra khỏi cửa sổ. Xem `fetchRecentCronRuns`.
+    const recentRuns = await fetchRecentCronRuns();
+    {
       // Gộp cả lịch sử pg_cron: job `auto-pipeline` không đi qua withCronLog nên
       // vắng mặt hoàn toàn trong cron_runs, chỉ dựa vào đó thì nó "chưa hề chạy"
       // vĩnh viễn và bắn cảnh báo sai mỗi ngày.
-      const allRuns = [...(await runsRes.json()), ...(await fetchPgcronRuns())];
+      const allRuns = [...recentRuns, ...(await fetchPgcronRuns())];
       // Đây là nơi GHI mốc first-seen: cron này chạy mỗi 3h nên job mới được
       // ghi nhận sớm nhất, và nó cũng chính là nơi bắn cảnh báo — ghi ở đây thì
       // mốc luôn tồn tại trước khi có ai kịp bị kêu oan.
