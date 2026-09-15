@@ -19,8 +19,8 @@ export async function OPTIONS() {
 async function handle(request: NextRequest) {
   const auth = request.headers.get('authorization');
   if (auth !== `Bearer ${process.env.CRON_SECRET}`) return err('Unauthorized', 401);
-  const { message, results } = await processOneRun();
-  return ok({ message, ...results });
+  const { message, skipped, results } = await processOneRun();
+  return ok({ message, skipped, ...results });
 }
 
 export async function GET(request: NextRequest) {

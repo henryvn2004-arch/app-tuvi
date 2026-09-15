@@ -376,7 +376,12 @@ async function handle(request: NextRequest) {
   const startTime = Date.now();
 
   const topics = await popTopics(ARTICLES_PER_RUN) as TopicRow[];
-  if (!topics.length) return ok({ message: 'No pending master-article topics', results });
+  // `skipped` (không phải chỉ `message`) — hợp đồng CHUNG `withCronLog` đọc để
+  // chốt status='skip' thay vì 'ok' (xem lib/cron/log.ts `runOnce`). Thiếu nó
+  // là đúng cách `topic_queue` cạn 45 ngày mà job này vẫn báo 'ok' mỗi lượt.
+  if (!topics.length) {
+    return ok({ message: 'No pending master-article topics', skipped: 'không có chủ đề pending', results });
+  }
 
   for (const t of topics) {
     if (Date.now() - startTime > 52000) { await updateStatus(t.id, 'pending'); break; }
