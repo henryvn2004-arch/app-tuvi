@@ -24,6 +24,33 @@ sessionStorage 2 phút. Hiện giá ở UI = `<span data-tvp-price="<tool_id>">�
 - ⚠️ CỐ Ý không gom quà đăng ký / thưởng giới thiệu vào đây — chúng đến từ
   `app_config`, khác nguồn. Nhét chung vào bộ dò thì nó kêu suốt rồi bị tắt.
 
+## Khuyến mãi giá tool: `sale_credits` có thời hạn, ENFORCE ở server (2026-09-15)
+
+Henry muốn thử giảm giá % có hạn (VD 3 tuần/tháng) thay vì hạ thẳng giá niêm
+yết — giữ neo giá, tạo urgency, tự chỉnh trong Admin. Ba cột mới trên
+`tool_pricing`: `sale_credits` (giá KM — số Lượng cuối cùng, KHÔNG lưu %),
+`sale_starts_at`, `sale_ends_at` (`_patches/migration-tool-sale.sql`).
+
+- **`lib/billing/pricing.ts::effectivePrice()` là nơi DUY NHẤT quyết định KM có
+  đang chạy hay không.** `getToolPrice()` (đường trừ tiền thật ở
+  `app/api/payment/route.ts`) đi qua đây — sửa UI mà quên sửa hàm này là hiện
+  giá giảm nhưng vẫn trừ giá gốc, đúng bệnh cũ của mọi tính năng giá ở file này.
+- Client (`public/tool-prices.js`) tính lại **ĐỘC LẬP** từ raw column
+  (`_saleActive()`), không gọi qua server — chỉ dùng để HIỂN THỊ, số trừ thật do
+  server tự đọc lại. Đổi luật kích hoạt KM (VD nới thêm điều kiện) phải sửa
+  ĐỒNG THỜI cả hai hàm, lệch nhau là hiện một giá, trừ một giá khác.
+- `sale_ends_at = NULL` nghĩa là KHÔNG tự hết hạn — phải tắt tay. Admin UI
+  (khối "Giá Công Cụ") bắt buộc nhập ngày kết thúc khi áp KM hàng loạt vì lý do
+  này; PATCH tay từng dòng vẫn cho phép để trống (rủi ro có ý thức, admin tự
+  chịu).
+- **Bulk-apply tính % → `sale_credits` một lần lúc LƯU**, không lưu % trong DB
+  — tránh phải suy ngược % mỗi lần đọc giá, và tránh trôi khi `credits` gốc đổi
+  sau khi đã đặt KM (giá KM cũ vẫn đứng yên cho tới khi admin bấm lại).
+- Không áp cho giá theo phần (`credits_per_part`) — phạm vi PR đầu chỉ tính giá
+  trọn bó, để dành phần chia nhỏ cho lượt sau nếu cần.
+- `CACHE_KEY` ở `tool-prices.js` đã bump `v5→v6` (thêm 3 cột) — quên bump khi
+  đổi tập cột là bản cache cũ trong sessionStorage thiếu cột mới tối đa 2 phút.
+
 ## Giá trị 1 Lượng: SUY TỪ BẢNG GÓI, không còn hằng số neo
 
 **⚠️ `app_config['credits.vnd_per_credit']` ĐÃ BỊ GỠ** — đừng viết code đọc lại

@@ -454,6 +454,39 @@
           </div>
         </div>
 
+        <!-- KHỐI · LỊCH KHUYẾN MÃI THEO MÙA -->
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title"><svg class="pt-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Lịch Khuyến Mãi Theo Mùa</div>
+            <div class="panel-actions"><span style="font-size:.72rem;color:var(--text-lt)">Gợi ý chỉ ĐIỀN % và ngày vào KHỐI "Giá Công Cụ" (tab Pricing) — không tự áp, admin bấm Lưu mới chạy thật</span></div>
+          </div>
+          <div class="panel-body" style="font-size:.76rem;color:var(--text-lt);padding-bottom:.6rem">
+            Mốc DƯƠNG LỊCH (ngày cố định) thì "Dùng gợi ý" tự điền ngày của NĂM GẦN NHẤT sắp tới. Mốc ÂM LỊCH (Tết,
+            Phật Đản, Vu Lan, Trung Thu, Giỗ Tổ) di chuyển theo năm nên KHÔNG đoán ngày — tự điền % thôi, admin tra
+            lịch âm rồi gõ tay ngày bắt đầu/kết thúc. % giảm áp ĐỒNG LOẠT cho mọi tool đang bật (đúng luật "khuyến mãi
+            một tool thì phải khuyến mãi cả sàn"); cột "Góc marketing" chỉ là gợi ý NỘI DUNG nên nhấn mạnh nhóm công
+            cụ nào trong bài đăng/quảng cáo dịp đó.
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Dịp</th><th>Thời điểm</th><th>% gợi ý</th><th>Số ngày</th><th>Góc marketing</th><th></th></tr></thead>
+              <tbody id="seasonal-calendar-body"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- KHỐI · THỦ THUẬT CHUYỂN ĐỔI NGOÀI GIÁ -->
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title"><svg class="pt-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>Thủ Thuật Chuyển Đổi — Ngoài Giá</div>
+          </div>
+          <div class="panel-body" style="padding-bottom:.6rem">
+            <table style="width:100%;border-collapse:collapse;font-size:.78rem">
+              <tbody id="conversion-tactics-body"></tbody>
+            </table>
+          </div>
+        </div>
+
       </div>
 
       <!-- ── GIỮ CHÂN & DOANH THU ── -->
@@ -762,10 +795,19 @@
               <button class="btn btn-primary btn-sm" onclick="loadPricing()">↻</button>
             </div>
           </div>
+          <div style="display:flex;gap:.5rem;align-items:center;flex-wrap:wrap;padding:.6rem .9rem;border-bottom:1px solid var(--line)">
+            <span style="font-size:.72rem;color:var(--text-lt)">Khuyến mãi hàng loạt — áp % giảm cho MỌI tool đang bật:</span>
+            <input type="number" id="sale-bulk-pct" placeholder="% giảm" min="1" max="95" class="price-input" style="width:80px">
+            <input type="datetime-local" id="sale-bulk-from" class="price-input" style="width:165px" title="Bắt đầu (bỏ trống = ngay)">
+            <span style="font-size:.72rem;color:var(--text-lt)">→</span>
+            <input type="datetime-local" id="sale-bulk-to" class="price-input" style="width:165px" title="Kết thúc (bắt buộc)">
+            <button class="btn btn-gold btn-sm" onclick="applySaleAll()">Áp KM cho mọi tool</button>
+            <button class="btn btn-sm" onclick="clearSaleAll()">Tắt KM mọi tool</button>
+          </div>
           <div class="table-wrap">
             <table>
-              <thead><tr><th>Công Cụ</th><th>Tool ID</th><th>Lượng</th><th>≈ VNĐ</th><th>Free</th><th>Bật</th><th></th></tr></thead>
-              <tbody id="pricing-body"><tr><td colspan="7" class="loading"><span class="spin"></span>Đang tải...</td></tr></tbody>
+              <thead><tr><th>Công Cụ</th><th>Tool ID</th><th>Lượng</th><th>≈ VNĐ</th><th>Free</th><th>Bật</th><th>Giá KM</th><th>KM từ</th><th>KM đến</th><th></th></tr></thead>
+              <tbody id="pricing-body"><tr><td colspan="10" class="loading"><span class="spin"></span>Đang tải...</td></tr></tbody>
             </table>
           </div>
         </div>
@@ -797,7 +839,6 @@
             <div class="loading"><span class="spin"></span>Đang tải...</div>
           </div>
         </div>
-      </div>
 
         <!-- KHỐI 4 · MÃ KHUYẾN MÃI -->
         <div class="panel">
@@ -827,6 +868,7 @@
             Mã đã có người đổi thì <b>không xoá được</b>, hãy TẮT nó.
           </div>
         </div>
+      </div>
 
       <!-- ── CONTENT MANAGER ── -->
       <div class="page" id="page-content">
@@ -4467,12 +4509,142 @@ function mktRange(days) {
  */
 const MKT_PAGES = ['marketing', 'retention', 'distribution'];
 let _mktLoadedKey = '';
+let _seasonalRendered = false;
 
 function loadMarketingOnce() {
+  if (!_seasonalRendered) { renderSeasonalCalendar(); renderConversionTactics(); _seasonalRendered = true; }
   const f = document.getElementById('mkt-from'), t = document.getElementById('mkt-to');
   const key = (f && f.value || '') + '|' + (t && t.value || '');
   if (key !== '|' && key === _mktLoadedKey) return;
   loadMarketing();
+}
+
+// ── Lịch khuyến mãi theo mùa ────────────────────────────────────────────
+// Nội dung TĨNH (không đọc DB) — đây là bảng gợi ý cho admin, KHÔNG phải
+// nguồn giá. "Dùng gợi ý" chỉ điền % + ngày vào ô bulk-apply của khối
+// "Giá Công Cụ" (tab Pricing); admin vẫn phải tự bấm "Áp KM cho mọi tool" ở
+// đó — không có đường nào từ đây tự đổi tool_pricing, tránh một cú bấm nhầm
+// giảm giá cả sàn.
+//
+// `mmdd` = null nghĩa là mốc ÂM LỊCH, di chuyển theo năm — CỐ Ý không đoán
+// ngày dương tương ứng (cùng luật "đọc hụt thì để trống, không đoán" ở
+// public/tool-prices.js). Mốc có `mmdd` thì tự tính ngày của lần xảy ra GẦN
+// NHẤT sắp tới (năm nay hoặc năm sau nếu đã qua), không hardcode năm.
+const SEASONAL_CALENDAR = [
+  { name: 'Tết Dương Lịch', timing: '01/01', mmdd: '01-01', pct: 20, days: 4,
+    angle: 'Khởi đầu năm mới — nhấn Xem Vận Niên Mới / Xem Ngày Tốt cho kế hoạch cả năm.' },
+  { name: 'Tết Nguyên Đán', timing: '23 tháng Chạp → hết Rằm tháng Giêng (âm lịch)', mmdd: null, pct: 35, days: 21,
+    angle: 'Cao điểm NHẤT năm — Xem Tuổi, Vận Hạn Năm, Chọn Ngày Tốt (xuất hành/khai trương), Xem Lá Số cho cả nhà.' },
+  { name: 'Valentine', timing: '14/02', mmdd: '02-14', pct: 25, days: 7,
+    angle: 'Tương Hợp, Duyên Nợ Tiền Kiếp, Chân Dung Vợ Chồng — xem hợp tuổi người yêu.' },
+  { name: 'Quốc Tế Phụ Nữ & Giỗ Tổ Hùng Vương', timing: '08/03 (dương) · 10/03 (âm)', mmdd: '03-08', pct: 20, days: 7,
+    angle: 'Chân Dung, Nhân Tướng, Số Đẹp cho phái nữ; Duyên Nợ Tiền Kiếp/Tổ Tiên cho dịp Giỗ Tổ.' },
+  { name: 'Nghỉ Lễ 30/4 - 1/5', timing: '30/04 → 01/05', mmdd: '04-30', pct: 25, days: 5,
+    angle: 'Kỳ nghỉ dài — đẩy mọi tool giải trí, đặc biệt Xem Tuổi/Tương Hợp cho các chuyến đi chung.' },
+  { name: 'Phật Đản', timing: 'Rằm tháng Tư âm lịch (~tháng 5 dương)', mmdd: null, pct: 20, days: 7,
+    angle: 'Chân Dung Tiền Kiếp, Duyên Nợ Tiền Kiếp — góc tâm linh, nghiệp duyên.' },
+  { name: 'Quốc Tế Thiếu Nhi', timing: '01/06', mmdd: '06-01', pct: 25, days: 7,
+    angle: 'Dạy Con, Xem Tuổi Sinh Con, Đặt Tên Con — phụ huynh quan tâm con cái.' },
+  { name: 'Vu Lan Báo Hiếu', timing: 'Rằm tháng Bảy âm lịch (~tháng 8-9 dương)', mmdd: null, pct: 25, days: 14,
+    angle: 'Duyên Nợ Tiền Kiếp, Chân Dung Tiền Kiếp, Tổ Tiên — báo hiếu, tìm hiểu nghiệp duyên gia đình.' },
+  { name: 'Tết Trung Thu', timing: 'Rằm tháng Tám âm lịch (~tháng 9 dương)', mmdd: null, pct: 20, days: 7,
+    angle: 'Dạy Con, Chân Dung Vợ Chồng — đoàn viên gia đình.' },
+  { name: 'Quốc Khánh 2/9', timing: '02/09', mmdd: '09-02', pct: 20, days: 4,
+    angle: 'Kỳ nghỉ ngắn — đẩy đều mọi nhóm tool, ưu tiên tool đang bán chạy nhất tháng.' },
+  { name: 'Ngày Phụ Nữ Việt Nam', timing: '20/10', mmdd: '10-20', pct: 25, days: 7,
+    angle: 'Chân Dung, Nhân Tướng, Số Đẹp, Tương Hợp — món quà tặng bản thân/người thân nữ.' },
+  { name: 'Ngày Nhà Giáo Việt Nam', timing: '20/11', mmdd: '11-20', pct: 20, days: 7,
+    angle: 'Hướng Nghiệp Trẻ, Dạy Con — định hướng học tập/sự nghiệp con cái.' },
+  { name: 'Giáng Sinh & Tổng Kết Năm', timing: '24/12 → 31/12', mmdd: '12-24', pct: 30, days: 14,
+    angle: 'Mùa mua sắm cuối năm — Vận Hạn Năm (tới), Xem Tuổi, tổng kết + chuẩn bị năm mới.' },
+];
+
+function renderSeasonalCalendar() {
+  const body = document.getElementById('seasonal-calendar-body');
+  if (!body) return;
+  body.innerHTML = SEASONAL_CALENDAR.map((item, i) => `
+    <tr>
+      <td><strong>${item.name}</strong></td>
+      <td style="color:var(--text-lt);font-size:.72rem">${item.timing}</td>
+      <td style="text-align:center">${item.pct}%</td>
+      <td style="text-align:center">${item.days}</td>
+      <td style="color:var(--text-lt);font-size:.72rem">${item.angle}</td>
+      <td><button class="btn btn-primary btn-sm" onclick="useSeasonalSuggestion(${i})">Dùng gợi ý</button></td>
+    </tr>`).join('');
+}
+
+function _seasonalNextOccurrence(mmdd) {
+  const [mm, dd] = mmdd.split('-').map(Number);
+  const now = new Date();
+  let d = new Date(now.getFullYear(), mm - 1, dd, 0, 0, 0);
+  if (d < now) d = new Date(now.getFullYear() + 1, mm - 1, dd, 0, 0, 0);
+  return d;
+}
+
+function _seasonalFmtInput(d) {
+  const p = (n) => String(n).padStart(2, '0');
+  return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}T00:00`;
+}
+
+// Chỉ ĐIỀN sẵn form bulk-apply ở khối "Giá Công Cụ" rồi chuyển sang tab đó —
+// KHÔNG tự PATCH gì cả. Admin đọc lại số trước khi tự bấm "Áp KM cho mọi tool".
+function useSeasonalSuggestion(i) {
+  const item = SEASONAL_CALENDAR[i];
+  if (!item) return;
+  const pctEl = document.getElementById('sale-bulk-pct');
+  const fromEl = document.getElementById('sale-bulk-from');
+  const toEl = document.getElementById('sale-bulk-to');
+  if (pctEl) pctEl.value = item.pct;
+  if (item.mmdd) {
+    const start = _seasonalNextOccurrence(item.mmdd);
+    const end = new Date(start.getTime() + item.days * 864e5);
+    if (fromEl) fromEl.value = _seasonalFmtInput(start);
+    if (toEl) toEl.value = _seasonalFmtInput(end);
+  } else {
+    if (fromEl) fromEl.value = '';
+    if (toEl) toEl.value = '';
+  }
+  goTo('pricing');
+  if (!item.mmdd) alert('Mốc âm lịch — tra lịch âm năm nay rồi tự điền ngày bắt đầu/kết thúc ở khối "Giá Công Cụ".');
+  if (pctEl) pctEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+// ── Thủ thuật chuyển đổi ngoài giá ───────────────────────────────────────
+// Đề xuất cho Henry — liệt kê cái ĐÃ có trong sản phẩm (để không làm lại) và
+// cái CHƯA có (để cân nhắc). Nội dung tĩnh, sửa trực tiếp mảng này khi có ý
+// mới hoặc khi một đề xuất đã được làm (đổi status 'new' → 'live').
+const CONVERSION_TACTICS = [
+  { status: 'live', title: 'Chia nhỏ theo phần',
+    note: 'Lá Số/Chu Trình Cuộc Đời bán được TỪNG PHẦN (12-23 Lượng/phần) thay vì bắt trả trọn gói — hạ rào cản dùng thử, tăng cam kết dần (foot-in-the-door). Xem tool_pricing.parts.' },
+  { status: 'live', title: 'Neo giá + đếm hạn khuyến mãi',
+    note: 'Khi có KM đang chạy, mọi nơi hiện giá tự động đổi sang "X Lượng (giảm từ Y)" qua ToolPrices — không cần sửa từng trang tool.' },
+  { status: 'live', title: 'Referral & mã khuyến mãi',
+    note: 'Giới thiệu bạn bè + mã KM có trần lượt dùng — chi phí thu hút gần 0, đã chạy ở khối "Khuyến Mãi & Referral" và "Mã Khuyến Mãi".' },
+  { status: 'live', title: 'Dùng thử miễn phí có trần (rail)',
+    note: 'Khách chưa đăng nhập được thử rail chat trong 3 trần độc lập trước khi phải trả — cho nếm trước khi bán.' },
+  { status: 'new', title: 'Ưu đãi 24-48h tài khoản mới',
+    note: 'Giảm giá RIÊNG cho 24-48h đầu sau đăng ký (khác đợt KM theo mùa) — đánh đúng lúc hứng thú cao nhất, tạo cảm giác "bỏ lỡ là mất".' },
+  { status: 'new', title: 'Nhắc phiên dở dang',
+    note: 'Người đã nhập ngày sinh nhưng chưa trả tiền → thêm kịch bản nhắc qua email/Telegram trong 24h, tận dụng hạ tầng reminder/cross-sell đã có (lib/email/send.ts, lib/marketing/email-reminder.ts).' },
+  { status: 'new', title: 'Bằng chứng xã hội cạnh nút mua',
+    note: '"X người đã xem trong tháng này" hoặc trích 1 câu review ngắn ngay cạnh giá — giảm cảm giác rủi ro trước khi bấm.' },
+  { status: 'new', title: 'Bundle chéo sau kết quả miễn phí',
+    note: 'Ngay sau khi xem xong 1 tool rẻ/miễn phí, gợi ý mua GHÉP tool liên quan (VD Luận Giải + Vận Hạn Năm) với giá rẻ hơn mua riêng từng cái.' },
+  { status: 'new', title: 'Risk reversal cho lượt mua đầu',
+    note: 'Cam kết "luận không đúng — hoàn Lượng" cho lần mua đầu tiên, giảm nỗi sợ trả tiền oan cho người chưa quen mua xem bói online.' },
+  { status: 'new', title: 'Khan hiếm THẬT, không giả',
+    note: 'Thay vì giảm giá cho tất cả, giới hạn số SUẤT giá KM/ngày qua promo_codes.max_uses ("chỉ còn X suất hôm nay") — FOMO có căn cứ thật, không phải đếm ngược giả.' },
+];
+
+function renderConversionTactics() {
+  const body = document.getElementById('conversion-tactics-body');
+  if (!body) return;
+  body.innerHTML = CONVERSION_TACTICS.map((t) => `
+    <tr style="border-bottom:1px solid var(--line)">
+      <td style="padding:.5rem .4rem;white-space:nowrap;vertical-align:top"><span class="badge ${t.status === 'live' ? 'badge-green' : 'badge-grey'}">${t.status === 'live' ? 'Đã có' : 'Đề xuất'}</span></td>
+      <td style="padding:.5rem .4rem;font-weight:600;white-space:nowrap;vertical-align:top">${t.title}</td>
+      <td style="padding:.5rem .4rem;color:var(--text-lt)">${t.note}</td>
+    </tr>`).join('');
 }
 
 async function loadMarketing() {
@@ -6269,6 +6441,21 @@ let _pricingRows = [];
 
 function fmtVnd(cr) { return (Math.max(0, cr || 0) * VND_PER_CREDIT).toLocaleString('vi-VN') + 'đ'; }
 
+// `datetime-local` input ⇄ ISO — luôn giờ TRÌNH DUYỆT (VN chỉ 1 múi giờ, không
+// DST, nên không cần quy đổi tay). Rỗng/không hợp lệ → null (KHÔNG giới hạn).
+function toLocalInput(iso) {
+  if (!iso) return '';
+  const d = new Date(iso);
+  if (isNaN(d.getTime())) return '';
+  const p = (n) => String(n).padStart(2, '0');
+  return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}T${p(d.getHours())}:${p(d.getMinutes())}`;
+}
+function fromLocalInput(val) {
+  if (!val) return null;
+  const d = new Date(val);
+  return isNaN(d.getTime()) ? null : d.toISOString();
+}
+
 // Nav mở trang Pricing → nạp cả 3 khối. Lấy đơn giá TRƯỚC khi vẽ bảng giá công
 // cụ, không thì bảng hiện bằng mức dự phòng rồi mới đúng.
 async function loadPricingPage() {
@@ -6292,7 +6479,7 @@ async function loadPackageRate() {
 
 async function loadPricing() {
   const body = document.getElementById('pricing-body');
-  body.innerHTML = '<tr><td colspan="7" class="loading"><span class="spin"></span>Đang tải...</td></tr>';
+  body.innerHTML = '<tr><td colspan="10" class="loading"><span class="spin"></span>Đang tải...</td></tr>';
   try {
     const rows = await sbGet('tool_pricing?select=*');
     _pricingRows = rows;
@@ -6302,7 +6489,7 @@ async function loadPricing() {
     const cats = Object.keys(groups).sort((a, b) => (groups[a][0].sort_order || 999) - (groups[b][0].sort_order || 999));
     let html = '';
     cats.forEach(cat => {
-      html += `<tr><td colspan="7" style="background:var(--navy);color:#c9a84c;font-weight:700;font-size:.68rem;text-transform:uppercase;letter-spacing:.08em">${CAT_LABELS[cat] || cat}</td></tr>`;
+      html += `<tr><td colspan="10" style="background:var(--navy);color:#c9a84c;font-weight:700;font-size:.68rem;text-transform:uppercase;letter-spacing:.08em">${CAT_LABELS[cat] || cat}</td></tr>`;
       groups[cat].forEach(r => {
         html += `<tr id="pr-row-${r.tool_id}">
           <td><strong>${r.label || r.tool_id}</strong></td>
@@ -6311,12 +6498,16 @@ async function loadPricing() {
           <td id="pr-vnd-${r.tool_id}" style="color:var(--text-lt);font-size:.72rem">${fmtVnd(r.credits)}</td>
           <td style="text-align:center"><input type="checkbox" id="pr-free-${r.tool_id}" ${r.is_free ? 'checked' : ''}></td>
           <td style="text-align:center"><input type="checkbox" id="pr-en-${r.tool_id}" ${r.enabled ? 'checked' : ''}></td>
+          <td><input type="number" id="pr-sale-${r.tool_id}" value="${r.sale_credits != null ? r.sale_credits : ''}" min="0" placeholder="—" class="price-input" style="width:70px" oninput="updSaleVnd('${r.tool_id}')">
+            <div id="pr-sale-vnd-${r.tool_id}" style="color:var(--text-lt);font-size:.62rem">${r.sale_credits != null ? fmtVnd(r.sale_credits) : ''}</div></td>
+          <td><input type="datetime-local" id="pr-sale-from-${r.tool_id}" value="${toLocalInput(r.sale_starts_at)}" class="price-input" style="width:150px"></td>
+          <td><input type="datetime-local" id="pr-sale-to-${r.tool_id}" value="${toLocalInput(r.sale_ends_at)}" class="price-input" style="width:150px"></td>
           <td><button class="btn btn-primary btn-sm" id="pr-btn-${r.tool_id}" onclick="savePricingRow('${r.tool_id}')">Lưu</button></td>
         </tr>`;
       });
     });
     body.innerHTML = html;
-  } catch (e) { body.innerHTML = `<tr><td colspan="7" class="empty">Lỗi: ${e.message}</td></tr>`; }
+  } catch (e) { body.innerHTML = `<tr><td colspan="10" class="empty">Lỗi: ${e.message}</td></tr>`; }
 }
 
 function updVnd(id) {
@@ -6325,24 +6516,52 @@ function updVnd(id) {
   if (el) el.textContent = fmtVnd(isNaN(cr) ? 0 : cr);
 }
 
+function updSaleVnd(id) {
+  const raw = document.getElementById('pr-sale-' + id)?.value;
+  const el = document.getElementById('pr-sale-vnd-' + id);
+  if (!el) return;
+  const cr = parseInt(raw);
+  el.textContent = raw === '' || isNaN(cr) ? '' : fmtVnd(cr);
+}
+
 function pricingAlert(type, msg) {
   const el = document.getElementById('pricing-alert');
   el.innerHTML = `<div class="alert-box alert-${type === 'success' ? 'success' : 'error'}">${msg}</div>`;
   setTimeout(() => { el.innerHTML = ''; }, 3000);
 }
 
-// PATCH 1 dòng giá (RLS cho phép admin ghi trực tiếp). Cho phép credits = 0.
+// PATCH thẳng vào tool_pricing (RLS cho phép admin ghi trực tiếp) — dùng
+// chung cho sửa 1 dòng lẫn áp/tắt khuyến mãi hàng loạt, tránh lặp lại phần
+// dựng request ở ba nơi.
+async function patchToolPricing(id, fields) {
+  const res = await fetch(`${SB_URL}/rest/v1/tool_pricing?tool_id=eq.${encodeURIComponent(id)}`, {
+    method: 'PATCH',
+    headers: { apikey: SB_ANON, Authorization: `Bearer ${_token}`, 'Content-Type': 'application/json', Prefer: 'return=minimal' },
+    body: JSON.stringify(fields),
+  });
+  if (!res.ok) throw new Error(await res.text());
+}
+
+// PATCH 1 dòng giá, gồm cả khuyến mãi. Cho phép credits = 0. `sale_credits`
+// rỗng → null (tắt KM); có nhập thì phải hợp lệ và rẻ hơn giá gốc, không thì
+// KM coi như không chạy (đúng luật ở lib/billing/pricing.ts::effectivePrice)
+// nhưng vẫn cảnh báo ngay tại đây để admin không tưởng nhầm đã áp KM.
 async function patchPricing(id) {
   const credits = parseInt(document.getElementById('pr-credits-' + id)?.value);
   const enabled = document.getElementById('pr-en-' + id)?.checked;
   const is_free = document.getElementById('pr-free-' + id)?.checked;
   if (isNaN(credits) || credits < 0) throw new Error('Lượng không hợp lệ');
-  const res = await fetch(`${SB_URL}/rest/v1/tool_pricing?tool_id=eq.${encodeURIComponent(id)}`, {
-    method: 'PATCH',
-    headers: { apikey: SB_ANON, Authorization: `Bearer ${_token}`, 'Content-Type': 'application/json', Prefer: 'return=minimal' },
-    body: JSON.stringify({ credits, enabled, is_free, updated_at: new Date().toISOString() }),
+  const saleRaw = document.getElementById('pr-sale-' + id)?.value;
+  const sale_credits = saleRaw === '' || saleRaw == null ? null : parseInt(saleRaw);
+  if (sale_credits != null && (isNaN(sale_credits) || sale_credits < 0)) throw new Error('Giá KM không hợp lệ');
+  if (sale_credits != null && sale_credits >= credits) throw new Error('Giá KM phải rẻ hơn giá gốc');
+  const sale_starts_at = fromLocalInput(document.getElementById('pr-sale-from-' + id)?.value);
+  const sale_ends_at = fromLocalInput(document.getElementById('pr-sale-to-' + id)?.value);
+  if (sale_starts_at && sale_ends_at && sale_starts_at >= sale_ends_at) throw new Error('KM: ngày bắt đầu phải trước ngày kết thúc');
+  await patchToolPricing(id, {
+    credits, enabled, is_free, sale_credits, sale_starts_at, sale_ends_at,
+    updated_at: new Date().toISOString(),
   });
-  if (!res.ok) throw new Error(await res.text());
 }
 
 async function savePricingRow(id) {
@@ -6363,6 +6582,46 @@ async function saveAllPricing() {
   let ok = 0, fail = 0;
   for (const r of _pricingRows) { try { await patchPricing(r.tool_id); ok++; } catch (e) { fail++; } }
   pricingAlert(fail ? 'error' : 'success', `Đã lưu ${ok} mục${fail ? `, lỗi ${fail}` : ''}`);
+}
+
+// Áp một mức % giảm cho MỌI tool đang bật cùng lúc — đúng yêu cầu "làm KM
+// cho một tool thì phải áp đồng loạt", không lệch tool này tool kia. Bắt buộc
+// có ngày kết thúc: KM không hạn là quên tắt (xem ghi chú `sale_ends_at`
+// trong _patches/migration-tool-sale.sql).
+async function applySaleAll() {
+  const pct = parseFloat(document.getElementById('sale-bulk-pct')?.value);
+  if (!isFinite(pct) || pct <= 0 || pct >= 100) return pricingAlert('error', '% giảm không hợp lệ (1-95)');
+  const sale_ends_at = fromLocalInput(document.getElementById('sale-bulk-to')?.value);
+  if (!sale_ends_at) return pricingAlert('error', 'Cần chọn ngày KẾT THÚC — KM không hạn sẽ quên tắt');
+  const sale_starts_at = fromLocalInput(document.getElementById('sale-bulk-from')?.value);
+  if (sale_starts_at && sale_starts_at >= sale_ends_at) return pricingAlert('error', 'Ngày bắt đầu phải trước ngày kết thúc');
+  const targets = _pricingRows.filter(r => r.enabled);
+  if (!targets.length || !confirm(`Áp giảm ${pct}% cho TẤT CẢ ${targets.length} tool đang bật?`)) return;
+  let ok = 0, fail = 0;
+  for (const r of targets) {
+    try {
+      await patchToolPricing(r.tool_id, {
+        sale_credits: Math.max(0, Math.round(r.credits * (1 - pct / 100))),
+        sale_starts_at, sale_ends_at, updated_at: new Date().toISOString(),
+      });
+      ok++;
+    } catch (e) { fail++; }
+  }
+  pricingAlert(fail ? 'error' : 'success', `Đã áp KM cho ${ok} tool${fail ? `, lỗi ${fail}` : ''}`);
+  loadPricing();
+}
+
+async function clearSaleAll() {
+  if (!_pricingRows.length || !confirm('Tắt khuyến mãi cho TẤT CẢ tool?')) return;
+  let ok = 0, fail = 0;
+  for (const r of _pricingRows) {
+    try {
+      await patchToolPricing(r.tool_id, { sale_credits: null, sale_starts_at: null, sale_ends_at: null, updated_at: new Date().toISOString() });
+      ok++;
+    } catch (e) { fail++; }
+  }
+  pricingAlert(fail ? 'error' : 'success', `Đã tắt KM cho ${ok} tool${fail ? `, lỗi ${fail}` : ''}`);
+  loadPricing();
 }
 
 // ── PACKAGES (gói nạp) ──
