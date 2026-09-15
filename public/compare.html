@@ -11,19 +11,19 @@ body{font-family:Arial,sans-serif;font-size:13px;background:var(--bg);color:#1a1
 h1{font-size:1.1rem;color:var(--navy);margin-bottom:1rem}
 .form-row{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:12px;background:#fff;padding:1rem;border-radius:8px;border:1px solid var(--border);align-items:flex-end}
 .field{display:flex;flex-direction:column;gap:3px}
-.field label{font-size:11px;color:#777;text-transform:uppercase}
+.field label{font-size:11px;color:#666;text-transform:uppercase}
 .field input,.field select{padding:5px 8px;border:1px solid var(--border);border-radius:5px;font-size:13px;width:90px}
 .btn{padding:8px 20px;background:var(--navy);color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:13px;font-weight:600}
 .btn-sm{padding:5px 12px;background:#fff;border:1px solid var(--border);border-radius:5px;cursor:pointer;font-size:12px}
 .stats{display:flex;gap:10px;flex-wrap:wrap;margin:1rem 0}
 .stat{background:#fff;border:1px solid var(--border);border-radius:6px;padding:8px 16px;text-align:center}
 .stat-val{font-size:1.4rem;font-weight:700;color:var(--navy)}
-.stat-label{font-size:11px;color:#777}
+.stat-label{font-size:11px;color:#666}
 .stat.red .stat-val{color:var(--red)}
 .stat.green .stat-val{color:var(--green)}
 .controls{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:8px}
 .search{padding:5px 10px;border:1px solid var(--border);border-radius:5px;font-size:12px;width:180px}
-.fbtn{padding:4px 12px;border:1px solid var(--border);border-radius:20px;cursor:pointer;font-size:11px;background:#fff;color:#777}
+.fbtn{padding:4px 12px;border:1px solid var(--border);border-radius:20px;cursor:pointer;font-size:11px;background:#fff;color:#666}
 .fbtn.active{background:var(--navy);color:#fff;border-color:var(--navy)}
 .table-wrap{background:#fff;border:1px solid var(--border);border-radius:8px;overflow:hidden}
 table{width:100%;border-collapse:collapse}
@@ -33,7 +33,7 @@ tr:last-child td{border-bottom:none}
 tr.diff td{background:#fff5f5!important}
 .ref-input{padding:4px 7px;border:1px solid var(--border);border-radius:4px;font-size:12px;width:80px}
 .ref-input:focus{outline:none;border-color:var(--blue)}
-#status{font-size:12px;color:#777;margin-left:8px}
+#status{font-size:12px;color:#666;margin-left:8px}
 </style>
 </head>
 <body>
@@ -63,7 +63,7 @@ tr.diff td{background:#fff5f5!important}
     <button class="fbtn" id="fb_phu">Phụ tinh</button>
     <button class="btn-sm" id="c_copy">📋 Copy sao sai</button>
   </div>
-  <div style="font-size:12px;color:#777;margin-bottom:8px">👉 Nhập cung đúng từ thienluong.net vào cột <b>Ref</b></div>
+  <div style="font-size:12px;color:#666;margin-bottom:8px">👉 Nhập cung đúng từ thienluong.net vào cột <b>Ref</b></div>
   <div class="table-wrap">
     <table>
       <thead><tr><th>Sao</th><th>Loại</th><th>App (cung)</th><th style="width:110px">Ref</th><th>Kết quả</th></tr></thead>
@@ -156,7 +156,7 @@ tr.diff td{background:#fff5f5!important}
         :isDiff?'<span style="color:#C0392B;font-weight:600">✗ sai</span>'
         :'<span style="color:#1E6B3C;font-weight:600">✓ đúng</span>';
       return '<tr class="'+(isDiff?'diff':'')+'"><td><b>'+r.ten+'</b></td>'
-        +'<td style="font-size:11px;color:#777">'+r.loai+'</td>'
+        +'<td style="font-size:11px;color:#666">'+r.loai+'</td>'
         +'<td><b>'+r.cung+'</b> <span style="color:#999;font-size:11px">'+r.cungName+'</span></td>'
         +'<td><input class="ref-input" type="text" value="'+r.ref+'" placeholder="VD: Mão" list="c_dclist" data-idx="'+idx+'"></td>'
         +'<td>'+status+'</td></tr>';
